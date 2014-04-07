@@ -1,7 +1,11 @@
+.metadata/*
+*/.settings/*
+*/test-output/*
 *.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+.project
+.classpath
+/target
+*~
 
 # Package Files #
 *.jar
