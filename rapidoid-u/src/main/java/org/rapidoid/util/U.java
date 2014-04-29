@@ -68,8 +68,7 @@ public class U {
 
 	private static int LOG_LEVEL = INFO;
 
-	private static final String[] LOG_LEVELS = { "TRACE", "DEBUG", "INFO",
-			"WARN", "ERROR", "SEVERE" };
+	private static final String[] LOG_LEVELS = { "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "SEVERE" };
 
 	private static final Map<Class<?>, Object> SINGLETONS = map();
 
@@ -92,9 +91,8 @@ public class U {
 		return U.class.getCanonicalName();
 	}
 
-	private static void log(Appendable out, int level, String msg, String key1,
-			Object value1, String key2, Object value2, String key3,
-			Object value3, int paramsN) {
+	private static void log(Appendable out, int level, String msg, String key1, Object value1, String key2,
+			Object value2, String key3, Object value3, int paramsN) {
 		if (level >= LOG_LEVEL) {
 			try {
 				synchronized (out) {
@@ -135,8 +133,7 @@ public class U {
 		}
 	}
 
-	private static void printKeyValue(Appendable out, String key, Object value)
-			throws IOException {
+	private static void printKeyValue(Appendable out, String key, Object value) throws IOException {
 		out.append(" | ");
 		out.append(key);
 		out.append("=");
@@ -151,10 +148,9 @@ public class U {
 		}
 	}
 
-	private static void log(int level, String msg, String key1, Object value1,
-			String key2, Object value2, String key3, Object value3, int paramsN) {
-		log(System.out, level, msg, key1, value1, key2, value2, key3, value3,
-				paramsN);
+	private static void log(int level, String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3, int paramsN) {
+		log(System.out, level, msg, key1, value1, key2, value2, key3, value3, paramsN);
 	}
 
 	public static void trace(String msg) {
@@ -165,13 +161,12 @@ public class U {
 		log(TRACE, msg, key, value, null, null, null, null, 1);
 	}
 
-	public static void trace(String msg, String key1, Object value1,
-			String key2, Object value2) {
+	public static void trace(String msg, String key1, Object value1, String key2, Object value2) {
 		log(TRACE, msg, key1, value1, key2, value2, null, null, 2);
 	}
 
-	public static void trace(String msg, String key1, Object value1,
-			String key2, Object value2, String key3, Object value3) {
+	public static void trace(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3) {
 		log(TRACE, msg, key1, value1, key2, value2, key3, value3, 3);
 	}
 
@@ -183,13 +178,12 @@ public class U {
 		log(DEBUG, msg, key, value, null, null, null, null, 1);
 	}
 
-	public static void debug(String msg, String key1, Object value1,
-			String key2, Object value2) {
+	public static void debug(String msg, String key1, Object value1, String key2, Object value2) {
 		log(DEBUG, msg, key1, value1, key2, value2, null, null, 2);
 	}
 
-	public static void debug(String msg, String key1, Object value1,
-			String key2, Object value2, String key3, Object value3) {
+	public static void debug(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3) {
 		log(DEBUG, msg, key1, value1, key2, value2, key3, value3, 3);
 	}
 
@@ -201,13 +195,12 @@ public class U {
 		log(INFO, msg, key, value, null, null, null, null, 1);
 	}
 
-	public static void info(String msg, String key1, Object value1,
-			String key2, Object value2) {
+	public static void info(String msg, String key1, Object value1, String key2, Object value2) {
 		log(INFO, msg, key1, value1, key2, value2, null, null, 2);
 	}
 
-	public static void info(String msg, String key1, Object value1,
-			String key2, Object value2, String key3, Object value3) {
+	public static void info(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3) {
 		log(INFO, msg, key1, value1, key2, value2, key3, value3, 3);
 	}
 
@@ -219,13 +212,12 @@ public class U {
 		log(WARN, msg, key, value, null, null, null, null, 1);
 	}
 
-	public static void warn(String msg, String key1, Object value1,
-			String key2, Object value2) {
+	public static void warn(String msg, String key1, Object value1, String key2, Object value2) {
 		log(WARN, msg, key1, value1, key2, value2, null, null, 2);
 	}
 
-	public static void warn(String msg, String key1, Object value1,
-			String key2, Object value2, String key3, Object value3) {
+	public static void warn(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3) {
 		log(WARN, msg, key1, value1, key2, value2, key3, value3, 3);
 	}
 
@@ -241,13 +233,12 @@ public class U {
 		log(ERROR, msg, key, value, null, null, null, null, 1);
 	}
 
-	public static void error(String msg, String key1, Object value1,
-			String key2, Object value2) {
+	public static void error(String msg, String key1, Object value1, String key2, Object value2) {
 		log(ERROR, msg, key1, value1, key2, value2, null, null, 2);
 	}
 
-	public static void error(String msg, String key1, Object value1,
-			String key2, Object value2, String key3, Object value3) {
+	public static void error(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3) {
 		log(ERROR, msg, key1, value1, key2, value2, key3, value3, 3);
 	}
 
@@ -263,13 +254,12 @@ public class U {
 		log(SEVERE, msg, key, value, null, null, null, null, 1);
 	}
 
-	public static void severe(String msg, String key1, Object value1,
-			String key2, Object value2) {
+	public static void severe(String msg, String key1, Object value1, String key2, Object value2) {
 		log(SEVERE, msg, key1, value1, key2, value2, null, null, 2);
 	}
 
-	public static void severe(String msg, String key1, Object value1,
-			String key2, Object value2, String key3, Object value3) {
+	public static void severe(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3) {
 		log(SEVERE, msg, key1, value1, key2, value2, key3, value3, 3);
 	}
 
@@ -455,7 +445,7 @@ public class U {
 			return true;
 		}
 
-		if (a == null) {
+		if (a == null || b == null) {
 			return false;
 		}
 
@@ -491,7 +481,7 @@ public class U {
 
 	public static void save(String filename, String content) {
 		// FIXME
-		throw U.notReady();
+		throw notReady();
 	}
 
 	public static void delete(String filename) {
@@ -574,15 +564,13 @@ public class U {
 		return map;
 	}
 
-	public static <K, V> Map<K, V> map(K key1, V value1, K key2, V value2,
-			K key3, V value3) {
+	public static <K, V> Map<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3) {
 		Map<K, V> map = map(key1, value1, key2, value2);
 		map.put(key3, value3);
 		return map;
 	}
 
-	public static <K, V> Map<K, V> map(K key1, V value1, K key2, V value2,
-			K key3, V value3, K key4, V value4) {
+	public static <K, V> Map<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
 		Map<K, V> map = map(key1, value1, key2, value2, key3, value3);
 		map.put(key4, value4);
 		return map;
@@ -616,8 +604,7 @@ public class U {
 
 	public static Object deserialize(byte[] buf) {
 		try {
-			ObjectInputStream in = new ObjectInputStream(
-					new ByteArrayInputStream(buf));
+			ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(buf));
 			Object obj = in.readObject();
 			in.close();
 			return obj;
@@ -709,8 +696,7 @@ public class U {
 		return new RuntimeException(String.format(message, args));
 	}
 
-	public static RuntimeException rte(String message, Throwable cause,
-			Object... args) {
+	public static RuntimeException rte(String message, Throwable cause, Object... args) {
 		return new RuntimeException(String.format(message, args), cause);
 	}
 
@@ -726,22 +712,19 @@ public class U {
 		}
 	}
 
-	public static void ensure(boolean expectedCondition, String message,
-			long arg) {
+	public static void ensure(boolean expectedCondition, String message, long arg) {
 		if (!expectedCondition) {
 			throw rte(message, arg);
 		}
 	}
 
-	public static void ensure(boolean expectedCondition, String message,
-			Object arg) {
+	public static void ensure(boolean expectedCondition, String message, Object arg) {
 		if (!expectedCondition) {
 			throw rte(message, arg);
 		}
 	}
 
-	public static void ensure(boolean expectedCondition, String message,
-			Object arg1, Object arg2) {
+	public static void ensure(boolean expectedCondition, String message, Object arg1, Object arg2) {
 		if (!expectedCondition) {
 			throw rte(message, arg1, arg2);
 		}
@@ -795,11 +778,9 @@ public class U {
 
 		double avg = ((double) count / (double) ms);
 
-		String avgs = avg > 1 ? Math.round(avg) + "K" : Math.round(avg * 1000)
-				+ "";
+		String avgs = avg > 1 ? Math.round(avg) + "K" : Math.round(avg * 1000) + "";
 
-		String data = String.format("%s: %s in %s ms (%s/sec)", name, count,
-				ms, avgs);
+		String data = String.format("%s: %s in %s ms (%s/sec)", name, count, ms, avgs);
 
 		U.print(data + " | " + getCpuMemStats());
 	}
@@ -813,34 +794,28 @@ public class U {
 		int megs = 1024 * 1024;
 
 		String gcinfo = "";
-		List<GarbageCollectorMXBean> gcs = ManagementFactory
-				.getGarbageCollectorMXBeans();
+		List<GarbageCollectorMXBean> gcs = ManagementFactory.getGarbageCollectorMXBeans();
 		for (GarbageCollectorMXBean gc : gcs) {
-			gcinfo += " | " + gc.getName() + " x " + gc.getCollectionCount()
-					+ " (" + gc.getCollectionTime() + " ms)";
+			gcinfo += " | " + gc.getName() + " x " + gc.getCollectionCount() + " (" + gc.getCollectionTime() + " ms)";
 		}
 
 		String msg = "MEM [total=%s MB, used=%s MB, max=%s MB]%s";
-		return String.format(msg, totalMem / megs, usedMem / megs, maxMem
-				/ megs, gcinfo);
+		return String.format(msg, totalMem / megs, usedMem / megs, maxMem / megs, gcinfo);
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T createProxy(InvocationHandler handler,
-			Class<?>... interfaces) {
-		return ((T) Proxy.newProxyInstance(U.class.getClassLoader(),
-				interfaces, handler));
+	public static <T> T createProxy(InvocationHandler handler, Class<?>... interfaces) {
+		return ((T) Proxy.newProxyInstance(U.class.getClassLoader(), interfaces, handler));
 	}
 
-	public static <T> T implementInterfaces(final Object target,
-			final InvocationHandler handler, Class<?>... interfaces) {
+	public static <T> T implementInterfaces(final Object target, final InvocationHandler handler,
+			Class<?>... interfaces) {
 		final Class<?> targetClass = target.getClass();
 
 		return createProxy(new InvocationHandler() {
 
 			@Override
-			public Object invoke(Object proxy, Method method, Object[] args)
-					throws Throwable {
+			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
 				if (method.getDeclaringClass().isAssignableFrom(targetClass)) {
 					return method.invoke(target, args);
@@ -855,10 +830,8 @@ public class U {
 	public static <T> T tracer(Class<T> interfacee, T implementation) {
 		return createProxy(new InvocationHandler() {
 			@Override
-			public Object invoke(Object target, Method method, Object[] args)
-					throws Throwable {
-				U.print("* called " + method.getName() + " ("
-						+ Arrays.toString(args) + ")");
+			public Object invoke(Object target, Method method, Object[] args) throws Throwable {
+				U.print("* called " + method.getName() + " (" + Arrays.toString(args) + ")");
 				return method.invoke(target, args);
 			}
 		}, interfacee);

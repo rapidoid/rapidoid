@@ -52,24 +52,14 @@
 		<test.jvm.argLine>-server -verbose:gc</test.jvm.argLine>
 	</properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.8</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>1.8.5</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-
 	<modules>
 		<module>rapidoid-u</module>
-		<module>rapidoid-core</module>
+		<module>rapidoid-commons</module>
+		<module>rapidoid-test-commons</module>
+		<module>rapidoid-buffer</module>
+		<module>rapidoid-net</module>
+		<module>rapidoid-demo</module>
+		<module>rapidoid-js</module>
 	</modules>
 
 	<build>
@@ -89,7 +79,7 @@
 				<version>1.6</version>
 				<configuration>
 					<verbose>false</verbose>
-					<licenseName>apache_v2</licenseName>
+        			<licenseName>apache_v2</licenseName>
 					<canUpdateCopyright>true</canUpdateCopyright>
 					<canUpdateDescription>true</canUpdateDescription>
 				</configuration>
