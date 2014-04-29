@@ -3,6 +3,7 @@
 */test-output/*
 *.class
 .project
+.settings
 .classpath
 /target
 *~
