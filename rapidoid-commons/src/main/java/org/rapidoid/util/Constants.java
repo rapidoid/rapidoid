@@ -40,10 +40,12 @@ public interface Constants {
 
 	byte[] LF_ = { LF };
 
-	byte AST = '?';
+	byte ASTERISK = '?';
 
 	byte EQ = '=';
 
 	byte AMP = '&';
+
+	byte COL = ':';
 
 }

@@ -187,7 +187,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 	}
 
 	@Test
-	public void shouldScanData() {
+	public void testScanUntil() {
 		BufGroup bufs = new BufGroup(2);
 		Buf buf = bufs.newBuf();
 
@@ -220,6 +220,34 @@ public class BufTest extends BufferTestCommons implements Constants {
 		eq(buf.get(range), "c");
 
 		isFalse(buf.hasRemaining());
+	}
+
+	@Test
+	public void testScanWhile() {
+		BufGroup bufs = new BufGroup(2);
+		Buf buf = bufs.newBuf();
+
+		buf.append("abc:  xy:");
+
+		buf.position(0);
+		buf.limit(buf.size());
+
+		Range range = new Range();
+
+		buf.scanUntil(COL, range, true);
+		eq(buf.get(range), "abc");
+
+		eq(buf.position(), 4);
+
+		buf.scanWhile(SPACE, range, true);
+		eq(range, 4, 2);
+
+		eq(buf.position(), 6);
+		
+		buf.scanUntil(COL, range, true);
+		eq(buf.get(range), "xy");
+
+		eq(buf.position(), 9);
 	}
 
 	private void checkMatch(Buf buf, int start, int limit, String match, int... positions) {

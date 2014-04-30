@@ -1286,7 +1286,7 @@ public class MultiBuf implements Buf, Constants {
 
 			if (b != value) {
 				range.setStartEnd(start, absPos);
-				position(absPos + 1);
+				position(absPos);
 				return;
 			}
 
@@ -1301,7 +1301,7 @@ public class MultiBuf implements Buf, Constants {
 
 				if (b != value) {
 					range.setStartEnd(start, absPos);
-					position(absPos + 1);
+					position(absPos);
 					return;
 				}
 
@@ -1317,7 +1317,7 @@ public class MultiBuf implements Buf, Constants {
 
 				if (b != value) {
 					range.setStartEnd(start, absPos);
-					position(absPos + 1);
+					position(absPos);
 					return;
 				}
 

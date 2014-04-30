@@ -50,8 +50,7 @@ public abstract class ExchangeProtocol<T extends Exchange> implements Protocol, 
 	@SuppressWarnings("unchecked")
 	@Override
 	public final void beforeWriting(Connection conn, Object tag, int kind) {
-		assert tag != null;
-		assert exchangeType.isAssignableFrom(tag.getClass());
+		assert tag == null || exchangeType.isAssignableFrom(tag.getClass());
 
 		before(conn, (T) tag, kind);
 	}
@@ -62,8 +61,7 @@ public abstract class ExchangeProtocol<T extends Exchange> implements Protocol, 
 	@SuppressWarnings("unchecked")
 	@Override
 	public final void afterWriting(Connection conn, Object tag, int kind) {
-		assert tag != null;
-		assert exchangeType.isAssignableFrom(tag.getClass());
+		assert tag == null || exchangeType.isAssignableFrom(tag.getClass());
 
 		after(conn, (T) tag, kind);
 	}

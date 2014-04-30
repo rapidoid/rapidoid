@@ -21,6 +21,7 @@ package org.rapidoid.net;
  */
 
 import java.io.IOException;
+import java.nio.channels.ClosedSelectorException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.util.Iterator;
@@ -103,17 +104,20 @@ public abstract class AbstractEventLoop extends AbstractLoop {
 			U.error("Select failed!", e);
 		}
 
-		Set<SelectionKey> selectedKeys = selector.selectedKeys();
-		synchronized (selectedKeys) {
+		try {
+			Set<SelectionKey> selectedKeys = selector.selectedKeys();
+			synchronized (selectedKeys) {
 
-			Iterator<?> keys = selectedKeys.iterator();
-			while (keys.hasNext()) {
-				SelectionKey key = (SelectionKey) keys.next();
-				keys.remove();
-				processKey(key);
+				Iterator<?> keys = selectedKeys.iterator();
+				while (keys.hasNext()) {
+					SelectionKey key = (SelectionKey) keys.next();
+					keys.remove();
+					processKey(key);
+				}
 			}
+		} catch (ClosedSelectorException e) {
+			// do nothing
 		}
-
 	}
 
 	protected abstract void doProcessing();
