@@ -37,8 +37,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -975,28 +978,102 @@ public class U {
 		return value == null || !value.isEmpty();
 	}
 
-	public static void connect(String address, int port, F2<Void, BufferedReader, DataOutputStream> logic) {
-		Socket clientSocket = null;
+	public static void connect(String address, int port, F2<Void, BufferedReader, DataOutputStream> protocol) {
+		Socket socket = null;
 
 		try {
-			clientSocket = new Socket(address, port);
-			DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
-			BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			socket = new Socket(address, port);
+			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-			logic.execute(in, out);
+			protocol.execute(in, out);
 
-			clientSocket.close();
+			socket.close();
 		} catch (Exception e) {
 			throw U.rte(e);
 		} finally {
-			if (clientSocket != null) {
+			if (socket != null) {
 				try {
-					clientSocket.close();
+					socket.close();
 				} catch (IOException e) {
 					throw U.rte(e);
 				}
 			}
 		}
+	}
+
+	public static void listen(int port, F2<Void, BufferedReader, DataOutputStream> protocol) {
+		listen(null, port, protocol);
+	}
+
+	public static void listen(String hostname, int port, F2<Void, BufferedReader, DataOutputStream> protocol) {
+		ServerSocket socket = null;
+		try {
+			socket = new ServerSocket();
+			socket.bind(isEmpty(hostname) ? new InetSocketAddress(port) : new InetSocketAddress(hostname, port));
+
+			U.info("Starting TCP/IP server", "host", hostname, "port", port);
+
+			while (true) {
+				final Socket conn = socket.accept();
+
+				BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+
+				try {
+					protocol.execute(in, out);
+				} catch (Exception e) {
+					throw U.rte(e);
+				} finally {
+					conn.close();
+				}
+			}
+		} catch (Exception e) {
+			throw U.rte(e);
+		} finally {
+			if (socket != null) {
+				try {
+					socket.close();
+				} catch (IOException e) {
+					throw U.rte(e);
+				}
+			}
+		}
+	}
+
+	public static void microHttpServer(String hostname, int port, final F2<String, String, List<String>> handler) {
+		listen(hostname, port, new F2<Void, BufferedReader, DataOutputStream>() {
+
+			@Override
+			public Void execute(BufferedReader in, DataOutputStream out) throws Exception {
+				List<String> lines = new ArrayList<String>();
+
+				String line;
+				while ((line = in.readLine()) != null) {
+					if (line.isEmpty()) {
+						break;
+					}
+					lines.add(line);
+				}
+
+				if (!lines.isEmpty()) {
+					String req = lines.get(0);
+					if (req.startsWith("GET /")) {
+						int pos = req.indexOf(' ', 4);
+						String path = URLDecoder.decode(req.substring(4, pos), "UTF-8");
+						String response = handler.execute(path, lines);
+						out.writeBytes(response);
+					} else {
+						out.writeBytes("Only GET requests are supported!");
+					}
+				} else {
+					out.writeBytes("Invalid HTTP request!");
+				}
+
+				return null;
+			}
+
+		});
 	}
 
 }
