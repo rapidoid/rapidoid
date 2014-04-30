@@ -213,6 +213,7 @@ public class RapidoidWorker extends AbstractEventLoop {
 		SocketChannel socketChannel;
 		while ((socketChannel = accepted.poll()) != null) {
 			U.debug("incoming connection", "address", socketChannel.socket().getRemoteSocketAddress());
+
 			try {
 				SelectionKey newKey = socketChannel.register(selector, SelectionKey.OP_READ);
 				RapidoidConnection conn = connections.get();
@@ -238,6 +239,10 @@ public class RapidoidWorker extends AbstractEventLoop {
 			}
 			done.clear();
 		}
+	}
+
+	public void closeAll() {
+		// FIXME implement this
 	}
 
 }

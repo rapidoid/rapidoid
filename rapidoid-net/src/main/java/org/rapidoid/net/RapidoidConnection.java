@@ -151,7 +151,7 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 		listener().onDone(this, tag);
 
 		if (close) {
-			close();
+			close(true);
 		}
 	}
 

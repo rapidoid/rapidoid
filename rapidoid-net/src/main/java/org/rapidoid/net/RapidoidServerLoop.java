@@ -20,7 +20,6 @@ package org.rapidoid.net;
  * #L%
  */
 
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -56,6 +55,8 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 	private final Class<? extends RapidoidHelper> helperClass;
 
 	private final Class<? extends Exchange> exchangeClass;
+
+	private ServerSocketChannel serverSocketChannel;
 
 	public RapidoidServerLoop(ServerConfig config, Protocol protocol, Class<? extends Exchange> exchangeClass,
 			Class<? extends RapidoidHelper> helperClass) {
@@ -106,7 +107,7 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 	}
 
 	private void openSocket() throws IOException {
-		ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+		serverSocketChannel = ServerSocketChannel.open();
 
 		if ((serverSocketChannel.isOpen()) && (selector.isOpen())) {
 
@@ -130,7 +131,7 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 				new Thread(workers[i]).start();
 			}
 		} else {
-			throw new RuntimeException("Cannot open socket!");
+			throw U.rte("Cannot open socket!");
 		}
 	}
 
@@ -142,8 +143,19 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 	@Override
 	public synchronized void stop() {
 		stopLoop();
+
 		for (RapidoidWorker worker : workers) {
+			worker.closeAll();
 			worker.stopLoop();
+		}
+
+		if ((serverSocketChannel.isOpen()) && (selector.isOpen())) {
+			try {
+				selector.close();
+				serverSocketChannel.close();
+			} catch (IOException e) {
+				U.warn("Cannot close socket or selector!", e);
+			}
 		}
 	}
 

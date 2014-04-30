@@ -20,53 +20,92 @@ package org.rapidoid;
  * #L%
  */
 
-import org.rapidoid.Ctx;
-import org.rapidoid.Protocol;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import org.rapidoid.util.F2;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
 public class EchoProtocolTest extends NetTestCommons {
 
-//	@Test
+	@Test
 	public void echo() {
-
 		server(new Protocol() {
 
 			@Override
 			public void process(Ctx ctx) {
-				ctx.write(ctx.readln().toUpperCase());
+				String in = ctx.readln();
+				boolean stop = in.equals("bye");
+
+				ctx.write(in.toUpperCase());
 				ctx.write("\n");
-				ctx.complete(false);
+				ctx.complete(stop);
 			}
 
-		});
+		}, new Runnable() {
+			@Override
+			public void run() {
+				U.connect("localhost", 8080, new F2<Void, BufferedReader, DataOutputStream>() {
+					@Override
+					public Void execute(BufferedReader in, DataOutputStream out) throws IOException {
+						out.writeBytes("hello\n");
+						eq(in.readLine(), "HELLO");
 
-		// FIXME use client instead of manual testing
-		U.sleep(10000000);
+						out.writeBytes("Foo\n");
+						eq(in.readLine(), "FOO");
+
+						out.writeBytes("bye\n");
+						eq(in.readLine(), "BYE");
+
+						return null;
+					}
+				});
+			}
+		});
 	}
 
-//	@Test
+	@Test
 	public void echoAsync() {
 		server(new Protocol() {
 
 			@Override
 			public void process(final Ctx ctx) {
-				final String s = ctx.readln();
+				final String in = ctx.readln();
+				final boolean stop = in.equals("bye");
+
 				U.schedule(new Runnable() {
 
 					@Override
 					public void run() {
-						ctx.write(s.toUpperCase() + "\n");
-						ctx.complete(false);
+						ctx.write(in.toUpperCase() + "\n");
+						ctx.complete(stop);
 					}
 
 				}, 2000);
 			}
 
-		});
+		}, new Runnable() {
+			@Override
+			public void run() {
+				U.connect("localhost", 8080, new F2<Void, BufferedReader, DataOutputStream>() {
+					@Override
+					public Void execute(BufferedReader in, DataOutputStream out) throws IOException {
+						out.writeBytes("a\n");
+						eq(in.readLine(), "A");
 
-		// FIXME use client instead of manual testing
-		U.sleep(10000000);
+						out.writeBytes("bb\n");
+						eq(in.readLine(), "BB");
+
+						out.writeBytes("bye\n");
+						eq(in.readLine(), "BYE");
+						
+						return null;
+					}
+				});
+			}
+		});
 	}
 
 }

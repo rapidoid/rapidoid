@@ -27,11 +27,19 @@ public abstract class NetTestCommons extends TestCommons {
 
 	protected RapidoidServer server;
 
-	protected void server(Protocol protocol) {
+	protected void server(Protocol protocol, Runnable client) {
 		server = Rapidoid.start(protocol);
 
 		U.sleep(300);
 		U.print("----------------------------------------");
+
+		try {
+			client.run();
+		} finally {
+			server.stop();
+		}
+
+		U.info("server finished");
 	}
 
 	protected void shutdown() {
