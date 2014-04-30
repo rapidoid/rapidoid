@@ -69,7 +69,7 @@ public class Rapidoid {
 	}
 
 	public static RapidoidServer bootstrap(Protocol protocol) {
-		U.info("Bootstrapping Rapidoid...");
+		U.info("Bootstrapping Rapidoid Server...");
 
 		CLIConfig config = new CLIConfig(DEFAULT_CONFIG);
 		U.info("Rapidoid config", "config", config);
