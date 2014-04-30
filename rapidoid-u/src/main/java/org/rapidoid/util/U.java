@@ -23,6 +23,7 @@ package org.rapidoid.util;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,6 +37,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.net.Socket;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -271,6 +273,7 @@ public class U {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
+			// do nothing
 		}
 	}
 
@@ -281,6 +284,16 @@ public class U {
 		} catch (InterruptedException e) {
 			Thread.interrupted();
 			return false;
+		}
+	}
+
+	public static void waitFor(Object obj) {
+		try {
+			synchronized (obj) {
+				obj.wait();
+			}
+		} catch (InterruptedException e) {
+			// do nothing
 		}
 	}
 
@@ -956,6 +969,34 @@ public class U {
 	public static int option(String name, int defaultVal) {
 		String n = option(name);
 		return n != null ? Integer.parseInt(n) : defaultVal;
+	}
+
+	public static boolean isEmpty(String value) {
+		return value == null || !value.isEmpty();
+	}
+
+	public static void connect(String address, int port, F2<Void, BufferedReader, DataOutputStream> logic) {
+		Socket clientSocket = null;
+
+		try {
+			clientSocket = new Socket(address, port);
+			DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
+			BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+			logic.execute(in, out);
+
+			clientSocket.close();
+		} catch (Exception e) {
+			throw U.rte(e);
+		} finally {
+			if (clientSocket != null) {
+				try {
+					clientSocket.close();
+				} catch (IOException e) {
+					throw U.rte(e);
+				}
+			}
+		}
 	}
 
 }
