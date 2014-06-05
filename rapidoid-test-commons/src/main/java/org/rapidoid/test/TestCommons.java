@@ -24,12 +24,29 @@ import java.io.File;
 import java.net.URL;
 import java.util.Random;
 
-import org.rapidoid.util.U;
 import org.testng.Assert;
 
 public abstract class TestCommons {
 
 	protected static final Random RND = new Random();
+
+	protected void fail(String msg) {
+		Assert.fail(msg);
+	}
+
+	protected void isNull(Object value) {
+		Assert.assertNull(value);
+	}
+
+	protected void notNull(Object value) {
+		Assert.assertNotNull(value);
+	}
+
+	protected void notNullAll(Object... value) {
+		for (Object object : value) {
+			notNull(object);
+		}
+	}
 
 	protected void isTrue(boolean cond) {
 		Assert.assertTrue(cond);
@@ -37,6 +54,10 @@ public abstract class TestCommons {
 
 	protected void isFalse(boolean cond) {
 		Assert.assertFalse(cond);
+	}
+
+	protected void eq(Object actual, Object expected) {
+		Assert.assertEquals(actual, expected);
 	}
 
 	protected void eq(String actual, String expected) {
@@ -79,12 +100,15 @@ public abstract class TestCommons {
 	}
 
 	protected int rndExcept(int n, int except) {
-		U.ensure(n > 1 || except != 0, "Cannot produce such number!");
-		while (true) {
-			int num = RND.nextInt(n);
-			if (num != except) {
-				return num;
+		if (n > 1 || except != 0) {
+			while (true) {
+				int num = RND.nextInt(n);
+				if (num != except) {
+					return num;
+				}
 			}
+		} else {
+			throw new RuntimeException("Cannot produce such number!");
 		}
 	}
 
@@ -114,6 +138,10 @@ public abstract class TestCommons {
 
 	protected File resourceFile(String filename) {
 		return new File(resource(filename).getFile());
+	}
+
+	protected void hasType(Object instance, Class<?> clazz) {
+		Assert.assertEquals(instance.getClass(), clazz);
 	}
 
 }
