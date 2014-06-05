@@ -53,6 +53,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1488,6 +1489,12 @@ public class U {
 		System.out.println(value);
 	}
 
+	public static void printAll(Collection<?> collection) {
+		for (Object item : collection) {
+			print(item);
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public static synchronized <T> T singleton(Class<T> clazz) {
 		T instance = (T) SINGLETONS.get(clazz);
@@ -1963,4 +1970,53 @@ public class U {
 		}
 	}
 
+	public static List<File> classpath(String packageName, F1<Boolean, File> filter) {
+		ArrayList<File> files = new ArrayList<File>();
+
+		classpath(packageName, files, filter);
+
+		return files;
+	}
+
+	public static void classpath(String packageName, Collection<File> files, F1<Boolean, File> filter) {
+		String name = packageName.replace('.', '/');
+
+		if (name.equals("*")) {
+			name = "";
+		}
+
+		Enumeration<URL> urls;
+		try {
+			urls = Thread.currentThread().getContextClassLoader().getResources(name);
+		} catch (IOException e) {
+			throw rte("Cannot scan: " + name, e);
+		}
+
+		while (urls.hasMoreElements()) {
+			URL url = urls.nextElement();
+			File file = new File(url.getFile());
+
+			getFiles(files, file, filter);
+		}
+	}
+
+	private static void getFiles(Collection<File> files, File file, F1<Boolean, File> filter) {
+		if (file.isDirectory()) {
+			info("scanning directory", "dir", file);
+			for (File f : file.listFiles()) {
+				if (f.isDirectory()) {
+					getFiles(files, f, filter);
+				} else {
+					debug("scanned file", "file", f);
+					try {
+						if (filter == null || filter.execute(f).booleanValue()) {
+							files.add(f);
+						}
+					} catch (Exception e) {
+						throw rte(e);
+					}
+				}
+			}
+		}
+	}
 }
