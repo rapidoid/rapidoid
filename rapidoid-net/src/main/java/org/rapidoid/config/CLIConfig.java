@@ -32,17 +32,17 @@ public class CLIConfig implements ServerConfig {
 
 	@Override
 	public int buf() {
-		return U.option("buf", defaults.buf());
+		return (int) U.option("buf", defaults.buf());
 	}
 
 	@Override
 	public int port() {
-		return U.option("port", defaults.port());
+		return (int) U.option("port", defaults.port());
 	}
 
 	@Override
 	public int workers() {
-		return U.option("workers", defaults.workers());
+		return (int) U.option("workers", defaults.workers());
 	}
 
 	@Override
