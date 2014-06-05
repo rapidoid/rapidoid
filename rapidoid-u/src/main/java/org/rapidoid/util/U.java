@@ -31,10 +31,13 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
+import java.lang.annotation.Annotation;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.InetSocketAddress;
@@ -48,17 +51,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.annotation.Resource;
 
 public class U {
 
@@ -81,19 +90,119 @@ public class U {
 
 	private static long measureStart;
 
-	private static String[] args;
+	private static String[] ARGS;
+
+	private static final Class<U> CLASS = U.class;
+
+	public static final ClassLoader CLASS_LOADER = CLASS.getClassLoader();
+
+	private static final Set<Class<?>> MANAGED_CLASSES = set();
+
+	private static final Set<Object> MANAGED_INSTANCES = set();
+
+	private static final Map<Class<?>, List<Field>> INJECTABLE_FIELDS = autoExpandingMap(new F1<List<Field>, Class<?>>() {
+		@Override
+		public List<Field> execute(Class<?> clazz) throws Exception {
+			List<Field> fields = getFieldsAnnotated(clazz, Resource.class);
+			debug("Retrieved injectable fields", "class", clazz, "fields", fields);
+			return fields;
+		}
+	});
+
+	private static final Map<Class<?>, Set<Object>> INJECTION_PROVIDERS = map();
+
+	private static final Map<String, TypeKind> KINDS = initKinds();
+
+	private static final List<Class<?>> AUTOCREATE = new ArrayList<Class<?>>();
+
+	private static final Map<Class<?>, List<F3<Object, Object, Method, Object[]>>> INTERCEPTORS = map();
+
+	private static Map<String, TypeKind> initKinds() {
+
+		Map<String, TypeKind> kinds = new HashMap<String, TypeKind>();
+
+		kinds.put("boolean", TypeKind.BOOLEAN);
+
+		kinds.put("byte", TypeKind.BYTE);
+
+		kinds.put("char", TypeKind.CHAR);
+
+		kinds.put("short", TypeKind.SHORT);
+
+		kinds.put("int", TypeKind.INT);
+
+		kinds.put("long", TypeKind.LONG);
+
+		kinds.put("float", TypeKind.FLOAT);
+
+		kinds.put("double", TypeKind.DOUBLE);
+
+		kinds.put("java.lang.String", TypeKind.STRING);
+
+		kinds.put("java.lang.Boolean", TypeKind.BOOLEAN_OBJ);
+
+		kinds.put("java.lang.Byte", TypeKind.BYTE_OBJ);
+
+		kinds.put("java.lang.Character", TypeKind.CHAR_OBJ);
+
+		kinds.put("java.lang.Short", TypeKind.SHORT_OBJ);
+
+		kinds.put("java.lang.Integer", TypeKind.INT_OBJ);
+
+		kinds.put("java.lang.Long", TypeKind.LONG_OBJ);
+
+		kinds.put("java.lang.Float", TypeKind.FLOAT_OBJ);
+
+		kinds.put("java.lang.Double", TypeKind.DOUBLE_OBJ);
+
+		kinds.put("java.util.Date", TypeKind.DATE);
+
+		return kinds;
+	}
+
+	/**
+	 * @return Any kind, except NULL
+	 */
+	public static TypeKind kindOf(Class<?> type) {
+		String typeName = type.getName();
+		TypeKind kind = KINDS.get(typeName);
+
+		if (kind == null) {
+			kind = TypeKind.OBJECT;
+		}
+
+		return kind;
+	}
+
+	/**
+	 * @return Any kind, including NULL
+	 */
+	public static TypeKind kindOf(Object value) {
+		if (value == null) {
+			return TypeKind.NULL;
+		}
+
+		String typeName = value.getClass().getName();
+		TypeKind kind = KINDS.get(typeName);
+
+		if (kind == null) {
+			kind = TypeKind.OBJECT;
+		}
+
+		return kind;
+	}
 
 	private static String getCallingClass() {
 		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
 
 		for (int i = 2; i < trace.length; i++) {
 			String cls = trace[i].getClassName();
-			if (!cls.equals(U.class.getCanonicalName())) {
+			if (!cls.equals(CLASS.getCanonicalName())) {
 				return cls;
 			}
 		}
 
-		return U.class.getCanonicalName();
+		return CLASS.getCanonicalName();
 	}
 
 	private static void log(Appendable out, int level, String msg, String key1, Object value1, String key2,
@@ -300,6 +409,176 @@ public class U {
 		}
 	}
 
+	public static void setFieldValue(Object instance, String fieldName, Object value) {
+		try {
+			for (Class<?> c = instance.getClass(); c != Object.class; c = c.getSuperclass()) {
+				try {
+					Field field = c.getDeclaredField(fieldName);
+					field.setAccessible(true);
+					field.set(instance, value);
+					field.setAccessible(false);
+					return;
+				} catch (NoSuchFieldException e) {
+					// keep searching the filed in the super-class...
+				}
+			}
+		} catch (Exception e) {
+			throw rte("Cannot set field value!", e);
+		}
+
+		throw rte("Cannot find the field '%s' in the class '%s'", fieldName, instance.getClass());
+	}
+
+	public static void setFieldValue(Field field, Object instance, Object value) {
+		try {
+			field.setAccessible(true);
+			field.set(instance, value);
+			field.setAccessible(false);
+		} catch (Exception e) {
+			throw rte("Cannot set field value!", e);
+		}
+	}
+
+	public static Object getFieldValue(Object instance, String fieldName) {
+		try {
+			for (Class<?> c = instance.getClass(); c != Object.class; c = c.getSuperclass()) {
+				try {
+					Field field = c.getDeclaredField(fieldName);
+					return getFieldValue(field, instance);
+				} catch (NoSuchFieldException e) {
+					// keep searching the filed in the super-class...
+				}
+			}
+		} catch (Exception e) {
+			throw rte("Cannot get field value!", e);
+		}
+
+		throw rte("Cannot find the field '%s' in the class '%s'", fieldName, instance.getClass());
+	}
+
+	public static Object getFieldValue(Field field, Object instance) {
+		try {
+			field.setAccessible(true);
+			Object value = field.get(instance);
+			field.setAccessible(false);
+
+			return value;
+		} catch (Exception e) {
+			throw rte("Cannot get field value!", e);
+		}
+	}
+
+	public static List<Field> getFields(Class<?> clazz) {
+		List<Field> allFields = new ArrayList<Field>();
+
+		try {
+			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
+				Field[] fields = c.getDeclaredFields();
+				for (Field field : fields) {
+					allFields.add(field);
+				}
+			}
+
+		} catch (Exception e) {
+			throw rte("Cannot instantiate class!", e);
+		}
+
+		return allFields;
+	}
+
+	public static List<Field> getFieldsAnnotated(Class<?> clazz, Class<? extends Annotation> annotation) {
+		List<Field> allFields = new ArrayList<Field>();
+
+		try {
+			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
+				Field[] fields = c.getDeclaredFields();
+				for (Field field : fields) {
+					if (field.isAnnotationPresent(annotation)) {
+						allFields.add(field);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			throw rte("Cannot instantiate class!", e);
+		}
+
+		return allFields;
+	}
+
+	public static Method getMethod(Class<?> clazz, String name, Class<?>... parameterTypes) {
+		try {
+			return clazz.getMethod(name, parameterTypes);
+		} catch (NoSuchMethodException e) {
+			throw rte("Cannot find method: %s", e, name);
+		} catch (SecurityException e) {
+			throw rte("Cannot access method: %s", e, name);
+		}
+	}
+
+	public static Method findMethod(Class<?> clazz, String name, Class<?>... parameterTypes) {
+		try {
+			return clazz.getMethod(name, parameterTypes);
+		} catch (NoSuchMethodException e) {
+			return null;
+		} catch (SecurityException e) {
+			return null;
+		}
+	}
+
+	public static Object invokeStatic(Method m, Object... args) {
+		try {
+			return m.invoke(null, args);
+		} catch (IllegalAccessException e) {
+			throw rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
+		} catch (IllegalArgumentException e) {
+			throw rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
+		} catch (InvocationTargetException e) {
+			throw rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
+		}
+	}
+
+	public static Object invoke(Method m, Object target, Object... args) {
+		try {
+			return m.invoke(target, args);
+		} catch (Exception e) {
+			throw rte("Cannot invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
+		}
+	}
+
+	public static Class<?>[] getImplementedInterfaces(Class<?> clazz) {
+		try {
+			List<Class<?>> interfaces = new LinkedList<Class<?>>();
+
+			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
+				for (Class<?> interf : c.getInterfaces()) {
+					interfaces.add(interf);
+				}
+			}
+
+			return interfaces.toArray(new Class<?>[interfaces.size()]);
+		} catch (Exception e) {
+			throw rte("Cannot retrieve implemented interfaces!", e);
+		}
+	}
+
+	public static <T> Constructor<T> getConstructor(Class<T> clazz, Class<?>... paramTypes) {
+		try {
+			return (Constructor<T>) clazz.getConstructor(paramTypes);
+		} catch (Exception e) {
+			throw rte("Cannot find the constructor for %s with param types: %s", e, clazz, Arrays.toString(paramTypes));
+		}
+	}
+
+	public static boolean annotatedMethod(Object instance, String methodName, Class<Annotation> annotation) {
+		try {
+			Method method = instance.getClass().getMethod(methodName);
+			return method.getAnnotation(annotation) != null;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static String text(Collection<Object> coll) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
@@ -445,7 +724,7 @@ public class U {
 	}
 
 	public static URL resource(String filename) {
-		return U.class.getClassLoader().getResource(filename);
+		return CLASS_LOADER.getResource(filename);
 	}
 
 	public static long time() {
@@ -476,7 +755,7 @@ public class U {
 
 	public static String load(String name) {
 
-		InputStream stream = U.class.getClassLoader().getResourceAsStream(name);
+		InputStream stream = CLASS_LOADER.getResourceAsStream(name);
 
 		InputStreamReader reader = new InputStreamReader(stream);
 
@@ -592,15 +871,49 @@ public class U {
 		return map;
 	}
 
+	@SuppressWarnings("serial")
+	public static <K, V> Map<K, V> autoExpandingMap(final F1<V, K> valueFactory) {
+		return new ConcurrentHashMap<K, V>() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public synchronized V get(Object key) {
+				V val = super.get(key);
+
+				if (val == null) {
+					try {
+						val = valueFactory.execute((K) key);
+					} catch (Exception e) {
+						throw rte(e);
+					}
+
+					put((K) key, val);
+				}
+
+				return val;
+			}
+		};
+	}
+
+	public static <K, V> Map<K, V> autoExpandingMap(final Class<V> clazz) {
+		return autoExpandingMap(new F1<V, K>() {
+
+			@Override
+			public V execute(K param) throws Exception {
+				return wire(clazz);
+			}
+
+		});
+	}
+
 	public static void waitFor(AtomicBoolean done) {
 		while (!done.get()) {
-			U.sleep(5);
+			sleep(5);
 		}
 	}
 
 	public static void waitFor(AtomicInteger n, int value) {
 		while (n.get() != value) {
-			U.sleep(5);
+			sleep(5);
 		}
 	}
 
@@ -640,6 +953,155 @@ public class U {
 		byte[] bytes = new byte[len];
 		buf.get(bytes);
 		return deserialize(bytes);
+	}
+
+	public static void encode(Object value, ByteBuffer buf) {
+		TypeKind kind = kindOf(value);
+		int ordinal = kind.ordinal();
+		assert ordinal < 128;
+
+		byte kindCode = (byte) ordinal;
+		buf.put(kindCode);
+
+		switch (kind) {
+
+		case NULL:
+			// nothing else needed
+			break;
+
+		case BOOLEAN:
+		case BYTE:
+		case SHORT:
+		case CHAR:
+		case INT:
+		case LONG:
+		case FLOAT:
+		case DOUBLE:
+			throw notExpected();
+
+		case STRING:
+			String str = (String) value;
+			byte[] bytes = str.getBytes();
+			// 0-255
+			int len = bytes.length;
+			if (len < 255) {
+				byte len2 = (byte) (len - 128);
+				buf.put(len2);
+			} else {
+				byte len2 = (byte) (255 - 128);
+				buf.put(len2);
+				buf.putInt(len);
+			}
+			buf.put(bytes);
+			break;
+
+		case BOOLEAN_OBJ:
+			boolean val = (Boolean) value;
+			buf.put((byte) (val ? 1 : 0));
+			break;
+
+		case BYTE_OBJ:
+			buf.put((Byte) value);
+			break;
+
+		case SHORT_OBJ:
+			buf.putShort((Short) value);
+			break;
+
+		case CHAR_OBJ:
+			buf.putChar((Character) value);
+			break;
+
+		case INT_OBJ:
+			buf.putInt((Integer) value);
+			break;
+
+		case LONG_OBJ:
+			buf.putLong((Long) value);
+			break;
+
+		case FLOAT_OBJ:
+			buf.putFloat((Float) value);
+			break;
+
+		case DOUBLE_OBJ:
+			buf.putDouble((Double) value);
+			break;
+
+		case OBJECT:
+			serialize(value, buf);
+			break;
+
+		case DATE:
+			buf.putLong(((Date) value).getTime());
+			break;
+
+		default:
+			throw notExpected();
+		}
+	}
+
+	public static Object decode(ByteBuffer buf) {
+		byte kindCode = buf.get();
+
+		TypeKind kind = TypeKind.values()[kindCode];
+
+		switch (kind) {
+
+		case NULL:
+			return null;
+
+		case BOOLEAN:
+		case BOOLEAN_OBJ:
+			return buf.get() != 0;
+
+		case BYTE:
+		case BYTE_OBJ:
+			return buf.get();
+
+		case SHORT:
+		case SHORT_OBJ:
+			return buf.getShort();
+
+		case CHAR:
+		case CHAR_OBJ:
+			return buf.getChar();
+
+		case INT:
+		case INT_OBJ:
+			return buf.getInt();
+
+		case LONG:
+		case LONG_OBJ:
+			return buf.getLong();
+
+		case FLOAT:
+		case FLOAT_OBJ:
+			return buf.getFloat();
+
+		case DOUBLE:
+		case DOUBLE_OBJ:
+			return buf.getDouble();
+
+		case STRING:
+			byte len = buf.get();
+			int realLen = len + 128;
+			if (realLen == 255) {
+				realLen = buf.getInt();
+			}
+			byte[] sbuf = new byte[realLen];
+			buf.get(sbuf);
+			return new String(sbuf);
+
+		case OBJECT:
+			return deserialize(buf);
+
+		case DATE:
+			return new Date(buf.getLong());
+
+		default:
+			throw notExpected();
+		}
 	}
 
 	public static ByteBuffer expand(ByteBuffer buf, int newSize) {
@@ -798,7 +1260,7 @@ public class U {
 
 		String data = String.format("%s: %s in %s ms (%s/sec)", name, count, ms, avgs);
 
-		U.print(data + " | " + getCpuMemStats());
+		print(data + " | " + getCpuMemStats());
 	}
 
 	public static String getCpuMemStats() {
@@ -821,7 +1283,7 @@ public class U {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T createProxy(InvocationHandler handler, Class<?>... interfaces) {
-		return ((T) Proxy.newProxyInstance(U.class.getClassLoader(), interfaces, handler));
+		return ((T) Proxy.newProxyInstance(CLASS_LOADER, interfaces, handler));
 	}
 
 	public static <T> T implementInterfaces(final Object target, final InvocationHandler handler,
@@ -843,18 +1305,22 @@ public class U {
 		}, interfaces);
 	}
 
-	public static <T> T tracer(Class<T> interfacee, T implementation) {
-		return createProxy(new InvocationHandler() {
+	public static <T> T implementInterfaces(Object target, InvocationHandler handler) {
+		return implementInterfaces(target, handler, getImplementedInterfaces(target.getClass()));
+	}
+
+	public static <T> T tracer(Object target) {
+		return implementInterfaces(target, new InvocationHandler() {
 			@Override
 			public Object invoke(Object target, Method method, Object[] args) throws Throwable {
-				U.print("* called " + method.getName() + " (" + Arrays.toString(args) + ")");
+				trace("intercepting", "method", method.getName(), "args", Arrays.toString(args));
 				return method.invoke(target, args);
 			}
-		}, interfacee);
+		});
 	}
 
 	public static void show(Object... values) {
-		U.print(">" + join(values, ", ") + "<");
+		print(">" + join(values, ", ") + "<");
 	}
 
 	public static <T extends RuntimeException> T rte(Class<T> clazz) {
@@ -887,6 +1353,14 @@ public class U {
 		}
 
 		throw rte("Cannot find appropriate constructor!");
+	}
+
+	public static <T> T initNewInstance(Class<T> clazz, Map<String, Object> params) {
+		return init(newInstance(clazz), params);
+	}
+
+	public static <T> T init(T obj, Map<String, Object> params) {
+		throw notReady();
 	}
 
 	private static boolean areAssignable(Class<?>[] types, Object[] values) {
@@ -942,13 +1416,13 @@ public class U {
 	}
 
 	public static void args(String[] args) {
-		U.args = args;
+		ARGS = args;
 	}
 
 	public static boolean hasOption(String name) {
-		notNull(args, "command line arguments");
+		notNull(ARGS, "command line arguments");
 
-		for (String op : args) {
+		for (String op : ARGS) {
 			if (op.equalsIgnoreCase(name)) {
 				return true;
 			}
@@ -957,21 +1431,26 @@ public class U {
 		return false;
 	}
 
-	public static String option(String name) {
-		notNull(args, "command line arguments");
+	public static String option(String name, String defaultValue) {
+		notNull(ARGS, "command line arguments");
 
-		for (String op : args) {
+		for (String op : ARGS) {
 			if (op.startsWith(name + "=")) {
 				return op.substring(name.length() + 1);
 			}
 		}
 
-		return null;
+		return defaultValue;
 	}
 
-	public static int option(String name, int defaultVal) {
-		String n = option(name);
-		return n != null ? Integer.parseInt(n) : defaultVal;
+	public static long option(String name, long defaultValue) {
+		String n = option(name, null);
+		return n != null ? Long.parseLong(n) : defaultValue;
+	}
+
+	public static double option(String name, double defaultValue) {
+		String n = option(name, null);
+		return n != null ? Double.parseDouble(n) : defaultValue;
 	}
 
 	public static boolean isEmpty(String value) {
@@ -990,13 +1469,13 @@ public class U {
 
 			socket.close();
 		} catch (Exception e) {
-			throw U.rte(e);
+			throw rte(e);
 		} finally {
 			if (socket != null) {
 				try {
 					socket.close();
 				} catch (IOException e) {
-					throw U.rte(e);
+					throw rte(e);
 				}
 			}
 		}
@@ -1012,7 +1491,7 @@ public class U {
 			socket = new ServerSocket();
 			socket.bind(isEmpty(hostname) ? new InetSocketAddress(port) : new InetSocketAddress(hostname, port));
 
-			U.info("Starting TCP/IP server", "host", hostname, "port", port);
+			info("Starting TCP/IP server", "host", hostname, "port", port);
 
 			while (true) {
 				final Socket conn = socket.accept();
@@ -1023,19 +1502,19 @@ public class U {
 				try {
 					protocol.execute(in, out);
 				} catch (Exception e) {
-					throw U.rte(e);
+					throw rte(e);
 				} finally {
 					conn.close();
 				}
 			}
 		} catch (Exception e) {
-			throw U.rte(e);
+			throw rte(e);
 		} finally {
 			if (socket != null) {
 				try {
 					socket.close();
 				} catch (IOException e) {
-					throw U.rte(e);
+					throw rte(e);
 				}
 			}
 		}
@@ -1074,6 +1553,329 @@ public class U {
 			}
 
 		});
+	}
+
+	public static long getId(Object obj) {
+		// FIXME use getter id() or getId()
+
+		Object id = getFieldValue(obj, "id");
+		if (id == null) {
+			throw rte("The field 'id' cannot be null!");
+		}
+
+		if (id instanceof Long) {
+			Long num = (Long) id;
+			return num;
+		} else {
+			throw rte("The field 'id' must have type 'long', but it has: " + id.getClass());
+		}
+	}
+
+	public static long[] getIds(Object... objs) {
+		long[] ids = new long[objs.length];
+
+		for (int i = 0; i < objs.length; i++) {
+			ids[i] = getId(objs[i]);
+		}
+
+		return ids;
+	}
+
+	public static String replace(String s, String regex, F1<String, String[]> replacer) {
+		StringBuffer output = new StringBuffer();
+		Pattern p = Pattern.compile(regex);
+		Matcher matcher = p.matcher(s);
+
+		while (matcher.find()) {
+			int len = matcher.groupCount() + 1;
+			String[] gr = new String[len];
+
+			for (int i = 0; i < gr.length; i++) {
+				gr[i] = matcher.group(i);
+			}
+
+			try {
+				String rep = replacer.execute(gr);
+				matcher.appendReplacement(output, rep);
+			} catch (Exception e) {
+				throw rte("Cannot replace text!", e);
+			}
+		}
+
+		matcher.appendTail(output);
+		return output.toString();
+	}
+
+	public static void manage(Object... classesOrInstances) {
+		for (Object classOrInstance : classesOrInstances) {
+			boolean isClass = classOrInstance instanceof Class;
+			Class<?> clazz = isClass ? (Class<?>) classOrInstance : classOrInstance.getClass();
+
+			for (Class<?> interfacee : getImplementedInterfaces(clazz)) {
+				addInjectionProvider(interfacee, classOrInstance);
+			}
+
+			if (isClass) {
+				debug("configuring managed class", "class", classOrInstance);
+				MANAGED_CLASSES.add(clazz);
+
+				Resource resource = clazz.getAnnotation(Resource.class);
+				if (resource != null) {
+					if (resource.shareable()) {
+						if (!clazz.isInterface() && !clazz.isEnum() && !clazz.isAnnotation()) {
+							AUTOCREATE.add(clazz);
+						}
+					} else {
+						throw rte("Cannot pre-instantiate a non-shareable class!");
+					}
+				}
+			} else {
+				debug("configuring managed instance", "instance", classOrInstance);
+				MANAGED_INSTANCES.add(classOrInstance);
+			}
+		}
+	}
+
+	private static void addInjectionProvider(Class<?> type, Object provider) {
+		Set<Object> providers = INJECTION_PROVIDERS.get(type);
+
+		if (providers == null) {
+			providers = set();
+			INJECTION_PROVIDERS.put(type, providers);
+		}
+
+		providers.add(provider);
+	}
+
+	public static synchronized <T> T inject(Class<T> type) {
+		return null;
+	}
+
+	public static void initialize() {
+		for (Class<?> clazz : AUTOCREATE) {
+			instantiate(clazz);
+		}
+	}
+
+	public static <T> T instantiate(Class<T> type) {
+		info("Root instantiation", "type", type);
+		return process(provideInstanceOf(type, null));
+	}
+
+	public static <T> T autowire(T target) {
+		info("Root autowiring", "target", target);
+		return process(autowiree(target));
+	}
+
+	private static <T> T provideInstanceOf(Class<T> type, String name) {
+		T instance = null;
+
+		if (name != null) {
+			instance = provideInstanceByName(type, name);
+		}
+
+		if (instance == null) {
+			instance = provideInstanceByType(type);
+		}
+
+		if (instance == null) {
+			instance = provideNewInstanceOf(type);
+		}
+
+		if (instance == null) {
+			if (name != null) {
+				throw rte("Couldn't provide a value for type '%s' and name '%s'!", type, name);
+			} else {
+				throw rte("Couldn't provide a value for type '%s'!", type);
+			}
+		}
+
+		autowire(instance);
+		instance = proxyWrap(instance);
+		manage(instance);
+
+		return instance;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> T provideNewInstanceOf(Class<T> type) {
+		// instantiation if it's real class
+		if (!type.isInterface() && !type.isEnum() && !type.isAnnotation()) {
+			T instance = (T) SINGLETONS.get(type);
+
+			if (instance == null) {
+				instance = newInstance(type);
+			}
+
+			return instance;
+		} else {
+			return null;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> T provideInstanceByType(Class<T> type) {
+		T instance = null;
+
+		Set<Object> providers = INJECTION_PROVIDERS.get(type);
+
+		if (providers != null && !providers.isEmpty()) {
+			int count = providers.size();
+
+			if (count == 1) {
+				Object classOrInstance = providers.iterator().next();
+
+				if (classOrInstance instanceof Class) {
+					instance = provideNewInstanceOf((Class<T>) classOrInstance);
+				} else {
+					instance = (T) classOrInstance;
+				}
+			} else {
+				throw rte("Found more than 1 injection candidates for type '%s': %s", type, providers);
+			}
+		}
+
+		return instance;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> T provideInstanceByName(Class<T> type, String name) {
+		Object instance = null;
+
+		if (type.equals(Boolean.class) || type.equals(boolean.class)) {
+			instance = hasOption(name);
+		} else {
+			String opt = option(name, null);
+			if (opt != null) {
+				instance = convert(opt, type);
+			}
+		}
+
+		return (T) instance;
+	}
+
+	private static <T> T autowiree(T target) {
+
+		debug("Autowiring", "target", target);
+
+		for (Field field : INJECTABLE_FIELDS.get(target.getClass())) {
+			Object value = provideInstanceOf(field.getType(), field.getName());
+
+			debug("Injecting field value", "target", target, "field", field.getName(), "value", value);
+			setFieldValue(target, field.getName(), value);
+		}
+
+		return target;
+	}
+
+	private static <T> T process(T target) {
+		Method ready = findMethod(target.getClass(), "ready");
+
+		if (ready != null) {
+			invoke(ready, target);
+		}
+
+		return proxyWrap(target);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> T proxyWrap(T instance) {
+		Set<F3<Object, Object, Method, Object[]>> done = set();
+
+		for (Class<?> interf : getImplementedInterfaces(instance.getClass())) {
+			final List<F3<Object, Object, Method, Object[]>> interceptors = INTERCEPTORS.get(interf);
+
+			for (final F3<Object, Object, Method, Object[]> interceptor : interceptors) {
+				if (interceptor != null && !done.contains(interceptor)) {
+					debug("Creating proxy", "target", instance, "interface", interf, "interceptor", interceptor);
+
+					final T target = instance;
+					InvocationHandler handler = new InvocationHandler() {
+						@Override
+						public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+							return interceptor.execute(target, method, args);
+						}
+					};
+
+					instance = implementInterfaces(instance, handler, interf);
+
+					done.add(interceptor);
+				}
+			}
+		}
+
+		return instance;
+	}
+
+	public static <T> T wire(T instance) {
+		throw notReady();
+	}
+
+	public static <T> T wire(T instance, Object scope) {
+		throw notReady();
+	}
+
+	public static <T> T wire(Class<T> clazz) {
+		throw notReady();
+	}
+
+	public static <T> T wire(Class<T> clazz, Object scope) {
+		throw notReady();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T convert(String value, Class<T> toType) {
+		TypeKind targetKind = kindOf(toType);
+
+		switch (targetKind) {
+
+		case NULL:
+			throw notExpected();
+
+		case BOOLEAN:
+		case BOOLEAN_OBJ:
+			return (T) new Boolean(value);
+
+		case BYTE:
+		case BYTE_OBJ:
+			return (T) new Byte(value);
+
+		case SHORT:
+		case SHORT_OBJ:
+			return (T) new Short(value);
+
+		case CHAR:
+		case CHAR_OBJ:
+			return (T) new Character(value.charAt(0));
+
+		case INT:
+		case INT_OBJ:
+			return (T) new Integer(value);
+
+		case LONG:
+		case LONG_OBJ:
+			return (T) new Long(value);
+
+		case FLOAT:
+		case FLOAT_OBJ:
+			return (T) new Float(value);
+
+		case DOUBLE:
+		case DOUBLE_OBJ:
+			return (T) new Double(value);
+
+		case STRING:
+			return (T) value;
+
+		case OBJECT:
+			throw rte("Cannot convert string value to type '%s'!", toType);
+
+		case DATE:
+			throw notReady();
+
+		default:
+			throw notExpected();
+		}
 	}
 
 }
