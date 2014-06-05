@@ -1454,7 +1454,7 @@ public class U {
 	}
 
 	public static boolean isEmpty(String value) {
-		return value == null || !value.isEmpty();
+		return value == null || value.isEmpty();
 	}
 
 	public static void connect(String address, int port, F2<Void, BufferedReader, DataOutputStream> protocol) {
