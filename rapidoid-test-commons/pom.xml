@@ -23,11 +23,6 @@
 			<artifactId>mockito-core</artifactId>
 			<version>1.8.5</version>
 		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-u</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 	</dependencies>
 
 </project>
