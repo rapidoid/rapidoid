@@ -39,6 +39,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -58,6 +59,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -116,6 +118,89 @@ public class U {
 	private static final List<Class<?>> AUTOCREATE = new ArrayList<Class<?>>();
 
 	private static final Map<Class<?>, List<F3<Object, Object, Method, Object[]>>> INTERCEPTORS = map();
+
+	private static final Map<Class<?>, Map<String, Prop>> BEAN_PROPERTIES = autoExpandingMap(new F1<Map<String, Prop>, Class<?>>() {
+
+		@Override
+		public Map<String, Prop> execute(Class<?> clazz) throws Exception {
+
+			Map<String, Prop> properties = map();
+
+			try {
+				for (Class<?> c = clazz; c != Object.class && c != null; c = c.getSuperclass()) {
+					Method[] methods = c.getDeclaredMethods();
+					for (Method method : methods) {
+						int modif = method.getModifiers();
+						if ((modif & Modifier.PUBLIC) > 0 && (modif & Modifier.STATIC) == 0
+								&& (modif & Modifier.ABSTRACT) == 0) {
+							String name = method.getName();
+							if (name.matches("^(get|set|is)[A-Z].*")) {
+
+								String fieldName;
+								if (name.startsWith("is")) {
+									fieldName = name.substring(2, 3).toLowerCase() + name.substring(3);
+								} else {
+									fieldName = name.substring(3, 4).toLowerCase() + name.substring(4);
+								}
+
+								Prop propInfo = properties.get(fieldName);
+
+								if (propInfo == null) {
+									propInfo = new Prop();
+									propInfo.setName(fieldName);
+									properties.put(fieldName, propInfo);
+								}
+
+								if (name.startsWith("set")) {
+									propInfo.setSetter(method);
+								} else {
+									propInfo.setGetter(method);
+								}
+							}
+						}
+					}
+
+					for (Iterator<Entry<String, Prop>> it = properties.entrySet().iterator(); it.hasNext();) {
+						Entry<String, Prop> entry = (Entry<String, Prop>) it.next();
+						Prop minfo = entry.getValue();
+						if (minfo.getGetter() == null || minfo.getSetter() == null) {
+							it.remove();
+						}
+					}
+				}
+
+				for (Class<?> c = clazz; c != Object.class && c != null; c = c.getSuperclass()) {
+					Field[] fields = c.getDeclaredFields();
+					for (Field field : fields) {
+						int modif = field.getModifiers();
+						if ((modif & Modifier.PUBLIC) > 0 && (modif & Modifier.FINAL) == 0
+								&& (modif & Modifier.STATIC) == 0) {
+							String fieldName = field.getName();
+
+							Prop propInfo = properties.get(fieldName);
+
+							if (propInfo == null) {
+								propInfo = new Prop();
+								propInfo.setName(fieldName);
+								properties.put(fieldName, propInfo);
+								propInfo.setField(field);
+							}
+						}
+					}
+				}
+
+			} catch (Exception e) {
+				throw U.rte(e);
+			}
+
+			return properties;
+		}
+
+	});
+
+	public static Map<String, Prop> propertiesOf(Class<?> clazz) {
+		return BEAN_PROPERTIES.get(clazz);
+	}
 
 	private static Map<String, TypeKind> initKinds() {
 
