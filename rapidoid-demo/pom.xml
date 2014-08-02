@@ -43,7 +43,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-net</artifactId>
+			<artifactId>rapidoid-http</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

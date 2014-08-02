@@ -60,7 +60,7 @@ public class SimpleHttpProtocol implements Protocol {
 		buf.scanTo(SPACE, verb, true);
 		buf.scanTo(SPACE, uri, true);
 		buf.scanLnLn(ranges);
-
+		
 		boolean isKeepAlive = true;
 
 		ctx.write(HTTP_200_OK);
