@@ -16,7 +16,7 @@
 
 	<name>Rapidoid</name>
 	<url>http://www.rapidoid.org</url>
-	<description>High-performance asynchronous framework for super-easy development of various network protocol servers.</description>
+	<description>The way of rapid development of high-performance (web) applications</description>
 
 	<organization>
 		<name>Nikolche Mihajlovski</name>
@@ -62,6 +62,8 @@
 		<module>rapidoid-websocket</module>
 		<module>rapidoid-data</module>
 		<module>rapidoid-measure</module>
+		<module>rapidoid-web</module>
+		<module>rapidoid-all</module>
 		<module>rapidoid-demo</module>
 		<module>rapidoid-js</module>
 	</modules>
