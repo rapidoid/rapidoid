@@ -21,9 +21,11 @@ Add the following snippet to the `<dependencies>` section in pom.xml:
 
 # Quick start
 
-1. Add the `rapidoid-all` dependency to your Maven project (as described above) and the following code:
+* Add the `rapidoid-all` dependency to your Maven project (as described above).
+
+* Add the following code to your project:
  
-```
+```java
 public class MainService {
 
 	public String index() {
@@ -37,10 +39,10 @@ public class MainService {
 }
 ```
 
-2. Execute the org.rapidoid.web.Pojo application (found on your classpath). 
+* Execute the org.rapidoid.web.Pojo application (found on your classpath). 
 It will scan for `*Service` classes on your classpath and start a web server.
 
-3. Navigate to http://localhost:8080/ and http://localhost:8080/hey/joe/22.
+* Navigate to [http://localhost:8080/](http://localhost:8080/) and [http://localhost:8080/hey/joe/22](http://localhost:8080/hey/joe/22).
 
 # Important modules
 
