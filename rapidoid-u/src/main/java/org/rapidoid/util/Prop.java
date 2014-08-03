@@ -89,14 +89,30 @@ public class Prop {
 		try {
 			if (field != null) {
 				field.setAccessible(true);
-				field.set(obj, value);
+				field.set(obj, convert(value, getType()));
 			} else {
 				setter.setAccessible(true);
-				setter.invoke(obj, value);
+				setter.invoke(obj, convert(value, getType()));
 			}
 		} catch (Exception e) {
 			throw U.rte(e);
 		}
+	}
+
+	private Object convert(Object value, Class<?> toType) {
+		if (value == null || toType.isAssignableFrom(value.getClass())) {
+			return value;
+		}
+
+		if (toType.equals(String.class)) {
+			return String.valueOf(value);
+		}
+
+		if (value instanceof String) {
+			return U.convert((String) value, toType);
+		}
+
+		return value;
 	}
 
 	public Class<?> getType() {
