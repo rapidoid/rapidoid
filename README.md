@@ -10,4 +10,15 @@ Important modules:
 - rapidoid-http: high-performance asynchronous HTTP server,
 - rapidoid-websocket: high-performance asynchronous WebSocket server (coming soon...),
 - rapidoid-test-commons: helpers for writing more elegant tests,
+- rapidoid-pojo: writing web apps/services through simple POJOs,
 - rapidoid-?: a lot more is coming...
+
+# Contributing
+
+1. Fork.
+2. Create a branch (`git checkout -b branch_name`).
+3. Commit your changes (`git commit -am "Description of contribution"`).
+4. Push to the branch (`git push origin branch_name`).
+5. Open a Pull Request.
+6. Thank you for your contribution! Wait for a response...
+
