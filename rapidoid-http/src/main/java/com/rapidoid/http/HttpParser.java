@@ -75,6 +75,9 @@ public class HttpParser implements Constants {
 	}
 
 	void parseHeaders(Buf buf, int from, int to, KeyValueRanges hdr) {
+		int pos = buf.position();
+		int limit = buf.limit();
+
 		buf.position(from);
 		buf.limit(to);
 
@@ -85,10 +88,14 @@ public class HttpParser implements Constants {
 			buf.position(buf.position() + 1);
 		} while (!hdr.keys[ind].isEmpty());
 
-		// FIXME: restore buf pos and limit?
+		buf.position(pos);
+		buf.limit(limit);
 	}
 
 	void parseParams(Buf buf, KeyValueRanges params, Range range) {
+		int pos = buf.position();
+		int limit = buf.limit();
+
 		buf.position(range.start);
 		buf.limit(range.limit());
 
@@ -99,6 +106,9 @@ public class HttpParser implements Constants {
 				buf.scanTo(AMP, params.values[ind], false);
 			}
 		}
+
+		buf.position(pos);
+		buf.limit(limit);
 	}
 
 }
