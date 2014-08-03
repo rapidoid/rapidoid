@@ -31,6 +31,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Annotation;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
@@ -1631,7 +1632,7 @@ public class U {
 					String req = lines.get(0);
 					if (req.startsWith("GET /")) {
 						int pos = req.indexOf(' ', 4);
-						String path = URLDecoder.decode(req.substring(4, pos), "UTF-8");
+						String path = urlDecode(req.substring(4, pos));
 						String response = handler.execute(path, lines);
 						out.writeBytes(response);
 					} else {
@@ -2019,4 +2020,13 @@ public class U {
 			}
 		}
 	}
+
+	public static String urlDecode(String value) {
+		try {
+			return URLDecoder.decode(value, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw U.rte(e);
+		}
+	}
+
 }
