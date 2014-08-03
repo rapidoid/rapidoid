@@ -22,6 +22,7 @@ package com.rapidoid.http;
 
 import org.rapidoid.Ctx;
 import org.rapidoid.data.Data;
+import org.rapidoid.data.MultiData;
 
 public interface WebExchange extends Ctx {
 
@@ -37,6 +38,9 @@ public interface WebExchange extends Ctx {
 
 	Data body();
 
-	void done();
+	MultiData params();
 
+	MultiData headers();
+
+	void done();
 }

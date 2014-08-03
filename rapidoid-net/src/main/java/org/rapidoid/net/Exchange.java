@@ -29,6 +29,8 @@ import org.rapidoid.Ctx;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufProvider;
 import org.rapidoid.data.Data;
+import org.rapidoid.data.KeyValueRanges;
+import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
 import org.rapidoid.util.Resetable;
 
@@ -143,6 +145,10 @@ public class Exchange implements BufProvider, Resetable, Ctx {
 
 	protected Data decodedData(Range range) {
 		return new DecodedData(this, range);
+	}
+
+	protected MultiData multiData(KeyValueRanges ranges) {
+		return new DefaultMultiData(this, ranges);
 	}
 
 	@Override

@@ -22,6 +22,7 @@ package com.rapidoid.http;
 
 import org.rapidoid.data.Data;
 import org.rapidoid.data.KeyValueRanges;
+import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
 import org.rapidoid.net.Exchange;
 import org.rapidoid.util.U;
@@ -39,8 +40,7 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	final Range query = new Range();
 	final Range protocol = new Range();
 
-	private KeyValueRanges params = new KeyValueRanges(50);
-
+	final KeyValueRanges params = new KeyValueRanges(50);
 	final KeyValueRanges headers = new KeyValueRanges(50);
 
 	final Range body = new Range();
@@ -65,6 +65,8 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	private final Data _subpath;
 	private final Data _query;
 	private final Data _protocol;
+	private final MultiData _params;
+	private final MultiData _headers;
 
 	public WebExchangeImpl() {
 		reset();
@@ -75,6 +77,8 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 		this._subpath = decodedData(subpathRange);
 		this._query = decodedData(query);
 		this._protocol = data(protocol);
+		this._params = multiData(params);
+		this._headers = multiData(headers);
 	}
 
 	@Override
@@ -97,7 +101,8 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 		total = -1;
 	}
 
-	public KeyValueRanges params() {
+	@Override
+	public MultiData params() {
 		if (!parsedParams) {
 			if (!query.isEmpty()) {
 				PARSER.parseParams(input(), params, query);
@@ -105,11 +110,13 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 
 			parsedParams = true;
 		}
-		return params;
+
+		return _params;
 	}
 
-	public KeyValueRanges headers() {
-		return headers;
+	@Override
+	public MultiData headers() {
+		return _headers;
 	}
 
 	public Data subpath() {
