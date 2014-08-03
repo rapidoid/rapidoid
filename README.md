@@ -7,15 +7,40 @@ Rapidoid is the way of rapid development of high-performance (web) applications.
 
 The software is released under the liberal APL v2 license, so it is free to use for both commercial and non-commercial projects.
 
-# Using with Maven 
+# Using with Maven
 
 Add the following snippet to the `<dependencies>` section in pom.xml:
 
-  <dependency>
-      <groupId>org.rapidoid</groupId>
-      <artifactId>rapidoid-all</artifactId>
-      <version>0.9.0</version>
-  </dependency>
+```
+<dependency>
+    <groupId>org.rapidoid</groupId>
+    <artifactId>rapidoid-all</artifactId>
+    <version>0.9.0</version>
+</dependency>
+```
+
+# Quick start
+
+1. Add the `rapidoid-all` dependency to your Maven project (as described above) and the following code:
+ 
+```
+public class MainService {
+
+	public String index() {
+		return "hi!";
+	}
+
+	public String hey(String name, int age) {
+		return "Hey " + name + " (" + age + ")";
+	}
+
+}
+```
+
+2. Execute the org.rapidoid.web.Pojo application (found on your classpath). 
+It will scan for `*Service` classes on your classpath and start a web server.
+
+3. Navigate to http://localhost:8080/ and http://localhost:8080/hey/joe/22.
 
 # Important modules
 
