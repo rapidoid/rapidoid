@@ -15,7 +15,7 @@ Important modules:
 
 # Contributing
 
-1. Fork (and then git clone https://github.com/rapidoid/rapidoid.git).
+1. Fork (and then `git clone https://github.com/rapidoid/rapidoid.git`).
 2. Create a branch (`git checkout -b branch_name`).
 3. Commit your changes (`git commit -am "Description of contribution"`).
 4. Push to the branch (`git push origin branch_name`).
