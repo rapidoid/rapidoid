@@ -58,17 +58,26 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 	protected void process(Ctx ctx, WebExchangeImpl exchange) {
 		parser.parse(exchange.input(), exchange);
 
-		exchange.failIf(exchange.verb.isEmpty() || exchange.path.isEmpty(), "Invalid request!");
+		exchange.failIf(exchange.verb.isEmpty() || exchange.path.isEmpty(), "Invalid HTTP request!");
 		analyzeRequest(exchange);
 
 		boolean keepAlive = isKeepAlive(exchange);
 		exchange.setKeepAlive(keepAlive);
 		exchange.respType = 1;
 
+		int posBefore = exchange.output().size();
+
 		exchange.output().append(resp(exchange).bytes());
 
 		boolean dispatched = router.dispatch(exchange);
 		ctx.ensure(dispatched, "Invalid HTTP VERB or URL PATH!");
+
+		long wrote = exchange.getTotalWritten();
+		U.ensure(wrote <= Integer.MAX_VALUE, "Response too big!");
+
+		int pos = posBefore + resp(exchange).contentLengthPos;
+
+		exchange.output().putNumAsText(pos, wrote);
 	}
 
 	private HttpResponse resp(WebExchangeImpl exchange) {
@@ -206,9 +215,6 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 
 	@Override
 	protected void complete(Connection conn, WebExchangeImpl exchange) {
-		long wrote = exchange.getTotalWritten();
-		U.ensure(wrote <= Integer.MAX_VALUE, "Response too big!");
-		conn.output().putNumAsText(resp(exchange).contentLengthPos, wrote);
 	}
 
 }
