@@ -11,7 +11,7 @@ The software is released under the liberal APL v2 license, so it is free to use 
 
 Add the following snippet to the `<dependencies>` section in pom.xml:
 
-```
+```xml
 <dependency>
     <groupId>org.rapidoid</groupId>
     <artifactId>rapidoid-all</artifactId>
