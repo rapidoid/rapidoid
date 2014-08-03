@@ -20,6 +20,8 @@ package org.rapidoid.data;
  * #L%
  */
 
+import java.util.Map;
+
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.util.U;
 
@@ -95,6 +97,36 @@ public class KeyValueRanges {
 		}
 
 		return count++;
+	}
+
+	public Map<String, String> toMap(String data) {
+		Map<String, String> map = U.map();
+
+		for (int i = 0; i < count; i++) {
+			map.put(keys[i].get(data), values[i].get(data));
+		}
+
+		return map;
+	}
+
+	public Map<String, String> toMap(Buf src, boolean urlDecodeKeys, boolean urlDecodeVals) {
+		Map<String, String> map = U.map();
+
+		for (int i = 0; i < count; i++) {
+			String key = keys[i].str(src);
+			String val = values[i].str(src);
+
+			if (urlDecodeKeys) {
+				key = U.urlDecode(key);
+			}
+			if (urlDecodeVals) {
+				val = U.urlDecode(val);
+			}
+
+			map.put(key, val);
+		}
+
+		return map;
 	}
 
 }
