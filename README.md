@@ -54,10 +54,10 @@ public class MainService {
 It will scan for `*Service` classes on your classpath and start a fast embedded HTTP server (`rapidoid-http`).
 
 * Navigate to:
- * [http://localhost:8080/](http://localhost:8080/)
- * [http://localhost:8080/hey/joe/22](http://localhost:8080/hey/joe/22)
- * [http://localhost:8080/foo/aa/bbb/c](http://localhost:8080/foo/aa/bbb/c)
- * [http://localhost:8080/bar?x=1&y=2](http://localhost:8080/bar?x=1&y=2)
+ * [http://localhost:8080/](http://localhost:8080/) (returns `hi!`)
+ * [http://localhost:8080/hey/joe/22](http://localhost:8080/hey/joe/22) (returns `Hey joe (22)`)
+ * [http://localhost:8080/foo/aa/bbb/c](http://localhost:8080/foo/aa/bbb/c) (returns `["aa","bbb","c"]`)
+ * [http://localhost:8080/bar?x=1&y=2](http://localhost:8080/bar?x=1&y=2) (returns `{"y":"2","x":"1"}`)
 
 # Important modules
 
