@@ -7,6 +7,16 @@ Rapidoid is the way of rapid development of high-performance (web) applications.
 
 The software is released under the liberal APL v2 license, so it is free to use for both commercial and non-commercial projects.
 
+# Using with Maven 
+
+Add the following snippet to the `<dependencies>` section in pom.xml:
+
+  <dependency>
+      <groupId>org.rapidoid</groupId>
+      <artifactId>rapidoid-all</artifactId>
+      <version>0.9.0</version>
+  </dependency>
+
 # Important modules
 
 - rapidoid-u: simple and elegant static utilities useful for any kind of Java software development,
