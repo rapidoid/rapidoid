@@ -20,9 +20,6 @@ package org.rapidoid.net;
  * #L%
  */
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
 import org.rapidoid.buffer.BufProvider;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.Range;
@@ -41,11 +38,7 @@ public class DecodedData implements Data {
 
 	@Override
 	public String get() {
-		try {
-			return !range.isEmpty() ? URLDecoder.decode(src.buffer().get(range), "UTF-8") : "";
-		} catch (UnsupportedEncodingException e) {
-			throw U.rte(e);
-		}
+		return !range.isEmpty() ? U.urlDecode(src.buffer().get(range)) : "";
 	}
 
 	@Override
