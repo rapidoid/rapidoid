@@ -39,8 +39,8 @@ public class MainService {
 }
 ```
 
-* Execute the org.rapidoid.web.Pojo application (found on your classpath). 
-It will scan for `*Service` classes on your classpath and start a web server.
+* Execute the `org.rapidoid.web.Pojo` application (found on your classpath). 
+It will scan for `*Service` classes on your classpath and start a fast embedded HTTP server (`rapidoid-http`).
 
 * Navigate to [http://localhost:8080/](http://localhost:8080/) and [http://localhost:8080/hey/joe/22](http://localhost:8080/hey/joe/22).
 
