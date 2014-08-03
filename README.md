@@ -3,7 +3,12 @@ Rapidoid
 
 Rapidoid is the way of rapid development of high-performance (web) applications.
 
-Important modules:
+# Apache Public License v2
+
+The software is released under the liberal APL v2 license, so it is free to use for both commercial and non-commercial projects.
+
+# Important modules
+
 - rapidoid-u: simple and elegant static utilities useful for any kind of Java software development,
 - rapidoid-buffer: high-performance and extensible off-heap buffer, the heart of network communication,
 - rapidoid-net: high-performance asynchronous framework for super-easy development of various network protocol servers,
