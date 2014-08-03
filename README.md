@@ -26,6 +26,9 @@ Add the following snippet to the `<dependencies>` section in pom.xml:
 * Add the following code to your project:
  
 ```java
+import java.util.List;
+import java.util.Map;
+
 public class MainService {
 
 	public String index() {
@@ -36,13 +39,25 @@ public class MainService {
 		return "Hey " + name + " (" + age + ")";
 	}
 
+	public List<String> foo(List<String> params) {
+		return params;
+	}
+
+	public Map<String, Object> bar(Map<String, Object> params) {
+		return params;
+	}
+
 }
 ```
 
 * Execute the `org.rapidoid.web.Pojo` application (found on your classpath). 
 It will scan for `*Service` classes on your classpath and start a fast embedded HTTP server (`rapidoid-http`).
 
-* Navigate to [http://localhost:8080/](http://localhost:8080/) and [http://localhost:8080/hey/joe/22](http://localhost:8080/hey/joe/22).
+* Navigate to:
+** [http://localhost:8080/](http://localhost:8080/)
+** [http://localhost:8080/hey/joe/22](http://localhost:8080/hey/joe/22)
+** [http://localhost:8080/foo/aa/bbb/c](http://localhost:8080/foo/aa/bbb/c)
+** [http://localhost:8080/bar?x=1&y=2](http://localhost:8080/bar?x=1&y=2)
 
 # Important modules
 
