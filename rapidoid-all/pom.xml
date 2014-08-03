@@ -15,7 +15,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-web</artifactId>
+			<artifactId>rapidoid-pojo</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

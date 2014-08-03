@@ -62,7 +62,7 @@
 		<module>rapidoid-websocket</module>
 		<module>rapidoid-data</module>
 		<module>rapidoid-measure</module>
-		<module>rapidoid-web</module>
+		<module>rapidoid-pojo</module>
 		<module>rapidoid-all</module>
 		<module>rapidoid-demo</module>
 		<module>rapidoid-js</module>

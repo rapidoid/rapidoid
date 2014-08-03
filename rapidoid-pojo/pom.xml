@@ -8,9 +8,9 @@
 		<version>0.9.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-web</artifactId>
+	<artifactId>rapidoid-pojo</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid Web</description>
+	<description>Rapidoid POJO</description>
 
 	<dependencies>
 		<dependency>
