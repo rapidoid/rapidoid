@@ -317,7 +317,10 @@ public class UTest extends TestCommons {
 
 	@Test
 	public void testXor() {
-		fail("Not yet implemented");
+		eq(U.xor(true, true), false);
+		eq(U.xor(true, false), true);
+		eq(U.xor(false, true), true);
+		eq(U.xor(false, false), true);
 	}
 
 	@Test
@@ -667,7 +670,9 @@ public class UTest extends TestCommons {
 
 	@Test
 	public void testIsEmpty() {
-		fail("Not yet implemented");
+		eq(U.isEmpty(""), true);
+		eq(U.isEmpty("a"), false);
+		eq(U.isEmpty(null), true);
 	}
 
 	@Test
