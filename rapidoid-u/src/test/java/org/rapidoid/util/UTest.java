@@ -262,7 +262,33 @@ public class UTest extends TestCommons {
 
 	@Test
 	public void testTextObject() {
-		fail("Not yet implemented");
+		eq(U.text((Object) null), "null");
+
+		eq(U.text(123), "123");
+		eq(U.text(1.23), "1.23");
+
+		eq(U.text(true), "true");
+		eq(U.text(false), "false");
+
+		eq(U.text(""), "");
+		eq(U.text("abc"), "abc");
+
+		eq(U.text(new byte[] { -50, 0, 9 }), "[-50, 0, 9]");
+		eq(U.text(new short[] { -500, 0, 9 }), "[-500, 0, 9]");
+		eq(U.text(new int[] { 300000000, 70, 100 }), "[300000000, 70, 100]");
+		eq(U.text(new long[] { 3000000000000000000L, 1, -8900000000000000000L }),
+				"[3000000000000000000, 1, -8900000000000000000]");
+
+		eq(U.text(new float[] { -30.40000000f, -1.587f, 89.3f }),
+				"[-30.4, -1.587, 89.3]");
+		eq(U.text(new double[] { -9987.1, -1.5, 8.3 }), "[-9987.1, -1.5, 8.3]");
+
+		eq(U.text(new boolean[] { true }), "[true]");
+
+		eq(U.text(new char[] { 'k', 'o', 'h' }), "[k, o, h]");
+		eq(U.text(new char[] { '-', '.', '+' }), "[-, ., +]");
+
+		eq(U.text(new Object[] { 1, 'u', 7.9 }), "[1, u, 7.9]");
 	}
 
 	@Test
@@ -325,7 +351,15 @@ public class UTest extends TestCommons {
 
 	@Test
 	public void testEq() {
-		fail("Not yet implemented");
+		isTrue(U.eq("2", "2"));
+		isFalse(U.eq("2", "3"));
+		isTrue(U.eq("2", "2"));
+		isFalse(U.eq("a", "b"));
+		isFalse(U.eq('a', 'b'));
+
+		isFalse(U.eq(null, 'b'));
+		isFalse(U.eq('a', null));
+		isTrue(U.eq(null, null));
 	}
 
 	@Test
