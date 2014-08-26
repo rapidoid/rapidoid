@@ -279,21 +279,25 @@ public class UTest extends TestCommons {
 		eq(U.text(new long[] { 3000000000000000000L, 1, -8900000000000000000L }),
 				"[3000000000000000000, 1, -8900000000000000000]");
 
-		eq(U.text(new float[] { -30.40000000f, -1.587f, 89.3f }),
-				"[-30.4, -1.587, 89.3]");
+		eq(U.text(new float[] { -30.40000000f, -1.587f, 89.3f }), "[-30.4, -1.587, 89.3]");
 		eq(U.text(new double[] { -9987.1, -1.5, 8.3 }), "[-9987.1, -1.5, 8.3]");
 
 		eq(U.text(new boolean[] { true }), "[true]");
 
 		eq(U.text(new char[] { 'k', 'o', 'h' }), "[k, o, h]");
 		eq(U.text(new char[] { '-', '.', '+' }), "[-, ., +]");
-
-		eq(U.text(new Object[] { 1, 'u', 7.9 }), "[1, u, 7.9]");
 	}
 
 	@Test
 	public void testTextObjectArray() {
-		fail("Not yet implemented");
+		eq(U.text(new Object[] {}), "[]");
+		eq(U.text(new Object[] { 1, new boolean[] { true, false }, 3 }), "[1, [true, false], 3]");
+		eq(U.text(new Object[] { new double[] { -9987.1 }, new char[] { 'a', '.' }, new int[] { 300, 70, 100 } }),
+				"[[-9987.1], [a, .], [300, 70, 100]]");
+
+		eq(U.text(new int[][] { { 1, 2 }, { 3, 4, 5 } }), "[[1, 2], [3, 4, 5]]");
+
+		eq(U.text(new String[][][] { { { "a" }, { "r" } }, { { "m" } } }), "[[[a], [r]], [[m]]]");
 	}
 
 	@Test
