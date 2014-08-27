@@ -427,7 +427,13 @@ public class UTest extends TestCommons {
 
 	@Test
 	public void testList() {
-		fail("Not yet implemented");
+		List<String> list = U.list("m", "k", "l");
+
+		eq((list.size()), 3);
+
+		eq((list.get(0)), "m");
+		eq((list.get(1)), "k");
+		eq((list.get(2)), "l");
 	}
 
 	@Test
