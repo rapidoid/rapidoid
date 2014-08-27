@@ -22,6 +22,7 @@ package org.rapidoid.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
@@ -414,7 +415,14 @@ public class UTest extends TestCommons {
 
 	@Test
 	public void testSet() {
-		fail("Not yet implemented");
+		Set<Integer> set = U.set(1, 3, 5, 8);
+
+		eq((set.size()), 4);
+
+		isTrue(set.contains(1));
+		isTrue(set.contains(3));
+		isTrue(set.contains(5));
+		isTrue(set.contains(8));
 	}
 
 	@Test
@@ -766,6 +774,7 @@ public class UTest extends TestCommons {
 
 	@Test
 	public void testInject() {
+
 		fail("Not yet implemented");
 	}
 
