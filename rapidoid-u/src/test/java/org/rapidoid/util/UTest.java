@@ -20,6 +20,9 @@ package org.rapidoid.util;
  * #L%
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
 
@@ -257,7 +260,15 @@ public class UTest extends TestCommons {
 
 	@Test
 	public void testTextCollectionOfObject() {
-		fail("Not yet implemented");
+		eq(U.text(new ArrayList<Integer>()), "[]");
+
+		List<String> lst = new ArrayList<String>();
+
+		lst.add("java");
+		lst.add("c");
+		lst.add("c++");
+
+		eq(U.text(lst), "[java, c, c++]");
 	}
 
 	@Test
