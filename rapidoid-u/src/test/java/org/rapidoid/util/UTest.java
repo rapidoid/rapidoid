@@ -446,7 +446,11 @@ public class UTest extends TestCommons {
 
 	@Test
 	public void testMapKV() {
-		fail("Not yet implemented");
+		Map<String, Integer> map = U.map("a", 1);
+
+		eq((map.size()), 1);
+
+		eq((map.get("a").intValue()), 1);
 	}
 
 	@Test
