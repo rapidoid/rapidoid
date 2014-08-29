@@ -429,6 +429,11 @@ public class UTest extends TestCommons {
 		eq(subarr, new String[] { "bb", "c", "ddd" });
 	}
 
+	@Test(expectedExceptions = { RuntimeException.class })
+	public void testSubarrayException() {
+		U.subarray(new String[] { "aa", "bb", "c" }, 2, 1);
+	}
+
 	@Test
 	public void testSet() {
 		Set<Integer> set = U.set(1, 3, 5, 8);
