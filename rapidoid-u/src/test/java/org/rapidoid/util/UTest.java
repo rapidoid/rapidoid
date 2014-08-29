@@ -411,7 +411,22 @@ public class UTest extends TestCommons {
 
 	@Test
 	public void testSubarray() {
-		fail("Not yet implemented");
+		String[] arr = new String[] { "aa", "bb", "c", "ddd", "e" };
+
+		String[] subarr = U.subarray(arr, 0, 2);
+		eq(subarr, new String[] { "aa", "bb", "c" });
+
+		subarr = U.subarray(arr, 2, 4);
+		eq(subarr, new String[] { "c", "ddd", "e" });
+
+		subarr = U.subarray(arr, 0, 4);
+		eq(subarr, new String[] { "aa", "bb", "c", "ddd", "e" });
+
+		subarr = U.subarray(arr, 3, 3);
+		eq(subarr, new String[] { "ddd" });
+
+		subarr = U.subarray(arr, 1, 3);
+		eq(subarr, new String[] { "bb", "c", "ddd" });
 	}
 
 	@Test
