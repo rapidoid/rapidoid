@@ -22,6 +22,7 @@ package org.rapidoid.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.rapidoid.test.TestCommons;
@@ -438,7 +439,9 @@ public class UTest extends TestCommons {
 
 	@Test
 	public void testMap() {
-		fail("Not yet implemented");
+		Map<String, Integer> map = U.map();
+
+		isTrue((map.isEmpty()));
 	}
 
 	@Test
