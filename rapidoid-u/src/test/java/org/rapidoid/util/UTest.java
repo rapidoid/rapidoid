@@ -476,7 +476,14 @@ public class UTest extends TestCommons {
 
 	@Test
 	public void testMapKVKVKVKV() {
-		fail("Not yet implemented");
+		Map<String, Integer> map = U.map("a", 1, "b", 2, "c", 3, "d", 4);
+
+		eq((map.size()), 4);
+
+		eq((map.get("a").intValue()), 1);
+		eq((map.get("b").intValue()), 2);
+		eq((map.get("c").intValue()), 3);
+		eq((map.get("d").intValue()), 4);
 	}
 
 	@Test
