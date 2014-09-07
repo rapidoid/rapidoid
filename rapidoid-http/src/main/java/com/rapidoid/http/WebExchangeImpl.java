@@ -29,7 +29,7 @@ import org.rapidoid.util.U;
 
 public class WebExchangeImpl extends Exchange implements WebExchange {
 
-	private final static HttpParser PARSER = U.singleton(HttpParser.class);
+	private final static HttpParser PARSER = U.inject(HttpParser.class);
 
 	static final int WHOLE = 1;
 	static final int HEADER = 2;

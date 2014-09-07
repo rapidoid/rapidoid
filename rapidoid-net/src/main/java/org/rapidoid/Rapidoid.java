@@ -59,7 +59,7 @@ public class Rapidoid {
 		}
 
 		if (!config.nostats()) {
-			U.singleton(StatsThread.class).execute();
+			U.inject(StatsThread.class).execute();
 		}
 
 		RapidoidServer server = new RapidoidServerLoop(config, protocol, exchangeClass, helperClass);
