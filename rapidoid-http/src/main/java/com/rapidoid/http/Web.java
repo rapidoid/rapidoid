@@ -36,17 +36,6 @@ public class Web {
 		ROUTER.generic(handler);
 	}
 
-	public static void serve(String response) {
-		final byte[] bytes = response.getBytes();
-		ROUTER.generic(new Handler() {
-			@Override
-			public void handle(WebExchange x) {
-				x.write(bytes);
-				x.done();
-			}
-		});
-	}
-
 	public static void get(String url, Handler handler) {
 		handle("GET", url, handler);
 	}
@@ -86,7 +75,23 @@ public class Web {
 	}
 
 	private static void registerEmbeddedHandlers() {
-		Web.serve("Hello World!");
+		serve("Hello World!");
+	}
+
+	public static void serve(String response) {
+		final byte[] bytes = response.getBytes();
+		ROUTER.generic(new Handler() {
+			@Override
+			public Object handle(WebExchange x) {
+				return bytes;
+			}
+		});
+		start();
+	}
+
+	public static void serve(Handler handler) {
+		handle(handler);
+		start();
 	}
 
 }
