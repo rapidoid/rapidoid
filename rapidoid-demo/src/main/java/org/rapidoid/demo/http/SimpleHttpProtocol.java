@@ -24,6 +24,7 @@ import org.rapidoid.Ctx;
 import org.rapidoid.Protocol;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.Range;
+import org.rapidoid.util.U;
 
 public class SimpleHttpProtocol implements Protocol {
 
@@ -44,6 +45,8 @@ public class SimpleHttpProtocol implements Protocol {
 
 	private static final byte[] RESPONSE = "Hello".getBytes();
 
+	private static final byte[] DATE_HDR = "Date: ".getBytes();
+
 	private static final byte[] RESPONSE_LENGTH = String.valueOf(RESPONSE.length).getBytes();
 
 	private static final byte[] PLAIN = "/plain".getBytes();
@@ -60,7 +63,7 @@ public class SimpleHttpProtocol implements Protocol {
 		buf.scanTo(SPACE, verb, true);
 		buf.scanTo(SPACE, uri, true);
 		buf.scanLnLn(ranges);
-		
+
 		boolean isKeepAlive = true;
 
 		ctx.write(HTTP_200_OK);
@@ -72,7 +75,10 @@ public class SimpleHttpProtocol implements Protocol {
 		ctx.write(isKeepAlive ? CONN_KEEP_ALIVE : CONN_CLOSE);
 
 		ctx.write(SERVER_X);
-		ctx.write(HttpDate.get());
+
+		ctx.write(DATE_HDR);
+		ctx.write(U.getDateTimeBytes());
+		ctx.write(CR_LF);
 
 		if (buf.matches(uri, PLAIN, true)) {
 			ctx.write(CONTENT_TYPE_PLAIN);
