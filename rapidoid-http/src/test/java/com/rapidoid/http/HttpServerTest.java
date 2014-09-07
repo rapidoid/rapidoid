@@ -34,6 +34,8 @@ public class HttpServerTest extends HttpTestCommons {
 		eq(get("/echo?" + message), "GET:/echo::" + message);
 		eq(get("/echo/abc?" + message), "GET:/echo/abc:/abc:" + message);
 		eq(get("/echo/abc/d" + message), "GET:/echo/abc/d" + message + ":/abc/d" + message + ":");
+
+		shutdown();
 	}
 
 }
