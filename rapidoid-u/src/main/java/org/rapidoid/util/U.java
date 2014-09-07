@@ -2112,4 +2112,14 @@ public class U {
 		throw rte("Cannot find the property '%s' in the class '%s'", propertyName, instance.getClass());
 	}
 
+	public static String mul(String s, int n) {
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < n; i++) {
+			sb.append(s);
+		}
+
+		return sb.toString();
+	}
+
 }
