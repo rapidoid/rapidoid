@@ -584,7 +584,7 @@ public class U {
 	}
 
 	public static List<Field> getFields(Class<?> clazz) {
-		List<Field> allFields = new ArrayList<Field>();
+		List<Field> allFields = list();
 
 		try {
 			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
@@ -602,14 +602,14 @@ public class U {
 	}
 
 	public static List<Field> getFieldsAnnotated(Class<?> clazz, Class<? extends Annotation> annotation) {
-		List<Field> allFields = new ArrayList<Field>();
+		List<Field> annotatedFields = list();
 
 		try {
 			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
 				Field[] fields = c.getDeclaredFields();
 				for (Field field : fields) {
 					if (field.isAnnotationPresent(annotation)) {
-						allFields.add(field);
+						annotatedFields.add(field);
 					}
 				}
 			}
@@ -618,7 +618,7 @@ public class U {
 			throw rte("Cannot instantiate class!", e);
 		}
 
-		return allFields;
+		return annotatedFields;
 
 	public static List<Method> getMethodsAnnotated(Class<?> clazz, Class<? extends Annotation> annotation) {
 		List<Method> annotatedMethods = list();
