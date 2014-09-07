@@ -2084,4 +2084,32 @@ public class U {
 		}
 	}
 
+	public static Object getPropValue(Object instance, String propertyName) {
+		String propertyNameCap = capitalized(propertyName);
+		try {
+			for (Class<?> c = instance.getClass(); c != Object.class; c = c.getSuperclass()) {
+				try {
+					return invoke(c.getDeclaredMethod(propertyName), instance);
+				} catch (NoSuchMethodException e) {
+					try {
+						return invoke(c.getDeclaredMethod("get" + propertyNameCap), instance);
+					} catch (NoSuchMethodException e2) {
+						try {
+							return invoke(c.getDeclaredMethod("is" + propertyNameCap), instance);
+						} catch (NoSuchMethodException e3) {
+							try {
+								return getFieldValue(c.getDeclaredField(propertyName), instance);
+							} catch (NoSuchFieldException e4) {
+								// keep searching in the super-class...
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw rte("Cannot get property value!", e);
+		}
+		throw rte("Cannot find the property '%s' in the class '%s'", propertyName, instance.getClass());
+	}
+
 }
