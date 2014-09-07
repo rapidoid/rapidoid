@@ -20,8 +20,11 @@ package com.rapidoid.http;
  * #L%
  */
 
+import java.nio.ByteBuffer;
+
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.Range;
+import org.rapidoid.util.JSON;
 import org.rapidoid.util.SimpleHashTable;
 import org.rapidoid.util.SimpleList;
 import org.rapidoid.util.U;
@@ -115,8 +118,7 @@ public class HttpRouter implements Router {
 					int pos = path.start + route.path.length;
 					if (path.limit() == pos || buf.get(pos) == '/') {
 						x.setSubpath(pos, path.limit());
-						route.handler.handle(x);
-						return true;
+						return handle(route.handler, x);
 					}
 				}
 			}
@@ -124,11 +126,29 @@ public class HttpRouter implements Router {
 
 		if (genericHandler != null) {
 			x.setSubpath(path.start, path.limit());
-			genericHandler.handle(x);
-			return true;
+			return handle(genericHandler, x);
 		}
 
 		return false;
+	}
+
+	private boolean handle(Handler handler, WebExchangeImpl x) {
+		Object res = handler.handle(x);
+		if (res != null) {
+			if (res instanceof byte[]) {
+				x.write((byte[]) res);
+			} else if (res instanceof String) {
+				x.write((String) res);
+			} else if (res instanceof ByteBuffer) {
+				x.write((ByteBuffer) res);
+			} else {
+				x.write(JSON.stringify(res));
+			}
+
+			x.done();
+		}
+
+		return true;
 	}
 
 }

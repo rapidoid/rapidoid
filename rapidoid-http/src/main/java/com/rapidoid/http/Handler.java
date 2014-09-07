@@ -20,9 +20,8 @@ package com.rapidoid.http;
  * #L%
  */
 
-
 public interface Handler {
 
-	void handle(WebExchange x);
+	Object handle(WebExchange x);
 
 }

@@ -40,16 +40,14 @@ public class Pojo {
 
 	public static void run(int port, Object... controllers) {
 		final POJODispatcher dispatcher = new POJODispatcher(controllers);
-		
+
 		Web.handle(new Handler() {
 			@Override
-			public void handle(WebExchange x) {
-				PojowebResponse resp = dispatcher.dispatch(new WebReq(x));
-				x.write(resp.asString());
-				x.done();
+			public Object handle(WebExchange x) {
+				return dispatcher.dispatch(new WebReq(x)).asString();
 			}
 		});
-		
+
 		Web.start();
 	}
 
