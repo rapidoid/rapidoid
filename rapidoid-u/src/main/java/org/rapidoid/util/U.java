@@ -2122,4 +2122,8 @@ public class U {
 		return sb.toString();
 	}
 
+	public static int num(String s) {
+		return Integer.parseInt(s);
+	}
+
 }
