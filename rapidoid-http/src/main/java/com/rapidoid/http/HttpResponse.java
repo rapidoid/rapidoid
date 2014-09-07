@@ -20,11 +20,6 @@ package com.rapidoid.http;
  * #L%
  */
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-
 import org.rapidoid.util.U;
 
 public class HttpResponse {
@@ -33,22 +28,13 @@ public class HttpResponse {
 
 	private static final String DATE = "Date:";
 
-	private static final DateFormat FORMAT;
-
-	static {
-		FORMAT = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
-		FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
-	}
-
 	private final byte[] bytes;
 
 	final int contentLengthPos;
 
 	final int datePos;
 
-	private final Date date = new Date();
-
-	private long updateAfter = 0;
+	private byte[] dateBytes = null;
 
 	public HttpResponse(String resp) {
 		this.bytes = resp.getBytes(U.UTF8);
@@ -57,16 +43,11 @@ public class HttpResponse {
 	}
 
 	public byte[] bytes() {
-		long time = U.time();
+		byte[] dateBytes2 = U.getDateTimeBytes();
 
-		// allow race conditions for performance reasons
-		if (time > updateAfter) {
-			if (time > updateAfter) {
-				date.setTime(time);
-				byte[] dateBytes = FORMAT.format(date).getBytes();
-				System.arraycopy(dateBytes, 0, bytes, datePos, dateBytes.length);
-				updateAfter = time + 1000;
-			}
+		if (dateBytes != dateBytes2) {
+			dateBytes = dateBytes2;
+			System.arraycopy(dateBytes, 0, bytes, datePos, dateBytes.length);
 		}
 
 		return bytes;
