@@ -2122,6 +2122,19 @@ public class U {
 		return sb.toString();
 	}
 
+
+	private static boolean isDay(int day) {
+		return day >= 1 && day <= 31;
+	}
+
+	private static boolean isMonth(int month) {
+		return month >= 1 && month <= 12;
+	}
+
+	private static boolean isYear(int year) {
+		return year >= 1000;
+	}
+
 	public static int num(String s) {
 		return Integer.parseInt(s);
 	}
