@@ -53,17 +53,17 @@ public abstract class HttpTestCommons extends TestCommons {
 	protected void server() {
 		Web.get("/echo", new Handler() {
 			@Override
-			public void handle(WebExchange x) {
-				x.write(x.verb().get() + ":" + x.path().get() + ":" + x.subpath().get() + ":" + x.query().get());
-				x.done();
+			public Object handle(WebExchange x) {
+				return x.verb().get() + ":" + x.path().get() + ":" + x.subpath().get() + ":" + x.query().get();
 			}
 		});
 
 		Web.handle(new Handler() {
 			@Override
-			public void handle(WebExchange x) {
+			public Object handle(WebExchange x) {
 				x.write(x.verb().get() + ":" + x.path().get() + ":" + x.subpath().get() + ":" + x.query().get());
 				x.done();
+				return null;
 			}
 		});
 
