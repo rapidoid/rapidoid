@@ -21,14 +21,37 @@ package org.rapidoid.test;
  */
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Random;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 
 public abstract class TestCommons {
 
 	protected static final Random RND = new Random();
+
+	@BeforeMethod
+	public void init() {
+		try {
+			Class<?> clazz = Class.forName("org.rapidoid.util.U");
+			try {
+				Method reset = clazz.getMethod("reset");
+				try {
+					reset.invoke(null);
+				} catch (Exception e) {
+					throw new RuntimeException("Cannot find method: U.reset", e);
+				}
+			} catch (NoSuchMethodException e) {
+				throw new RuntimeException("Cannot find method: U.reset");
+			} catch (SecurityException e) {
+				throw new RuntimeException("Cannot access method: U.reset");
+			}
+
+		} catch (ClassNotFoundException e) {
+		}
+	}
 
 	protected void fail(String msg) {
 		Assert.fail(msg);
@@ -54,6 +77,12 @@ public abstract class TestCommons {
 
 	protected void isFalse(boolean cond) {
 		Assert.assertFalse(cond);
+	}
+
+	protected void same(Object... objects) {
+		for (int i = 0; i < objects.length - 1; i++) {
+			isTrue(objects[i] == objects[i + 1]);
+		}
 	}
 
 	protected void eq(Object actual, Object expected) {
