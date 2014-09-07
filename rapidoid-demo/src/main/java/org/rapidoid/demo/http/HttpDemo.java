@@ -22,8 +22,6 @@ package org.rapidoid.demo.http;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.rapidoid.util.U;
-
 import com.rapidoid.http.Handler;
 import com.rapidoid.http.Web;
 import com.rapidoid.http.WebExchange;
@@ -31,15 +29,12 @@ import com.rapidoid.http.WebExchange;
 public class HttpDemo {
 
 	public static void main(String[] args) {
-		U.args(args);
+		final AtomicLong n = new AtomicLong();
 
-		final AtomicLong nn = new AtomicLong();
-
-		Web.get("/user", new Handler() {
+		Web.get("/hi", new Handler() {
 			@Override
-			public void handle(WebExchange x) {
-				x.write("Hi: " + nn.incrementAndGet());
-				x.done();
+			public Object handle(WebExchange x) {
+				return "Hi: " + n.incrementAndGet();
 			}
 		});
 
