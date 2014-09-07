@@ -230,6 +230,20 @@ public class U {
 
 	});
 
+	public static synchronized void reset() {
+		info("Reset U state");
+		LOG_LEVEL = INFO;
+		SINGLETONS.clear();
+		ARGS = new String[] {};
+		MANAGED_CLASSES.clear();
+		MANAGED_INSTANCES.clear();
+		IOC_INSTANCES.clear();
+		INJECTABLE_FIELDS.clear();
+		INJECTION_PROVIDERS.clear();
+		INTERCEPTORS.clear();
+		BEAN_PROPERTIES.clear();
+	}
+
 	public static Map<String, Prop> propertiesOf(Class<?> clazz) {
 		return BEAN_PROPERTIES.get(clazz);
 	}
