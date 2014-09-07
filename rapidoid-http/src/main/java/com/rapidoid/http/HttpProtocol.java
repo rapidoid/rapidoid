@@ -42,7 +42,7 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 
 	private static final byte[] MULTIPART_FORM_DATA_BOUNDARY2 = "multipart/form-data;boundary=".getBytes();
 
-	private final HttpParser parser = U.singleton(HttpParser.class);
+	private final HttpParser parser = U.inject(HttpParser.class);
 
 	private final Router router;
 
@@ -70,7 +70,10 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 		exchange.output().append(resp(exchange).bytes());
 
 		boolean dispatched = router.dispatch(exchange);
-		ctx.ensure(dispatched, "Invalid HTTP VERB or URL PATH!");
+		if (!dispatched) {
+			exchange.write("Invalid HTTP VERB or URL PATH!");
+			exchange.done();
+		}
 
 		long wrote = exchange.getTotalWritten();
 		U.ensure(wrote <= Integer.MAX_VALUE, "Response too big!");
