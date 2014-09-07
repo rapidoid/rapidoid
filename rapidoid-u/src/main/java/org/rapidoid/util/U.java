@@ -118,6 +118,8 @@ public class U {
 		}
 	});
 
+	private static final Calendar CALENDAR = Calendar.getInstance();
+
 	private static final Map<Class<?>, Set<Object>> INJECTION_PROVIDERS = map();
 
 	private static final Map<String, TypeKind> KINDS = initKinds();
@@ -2019,7 +2021,7 @@ public class U {
 			throw rte("Cannot convert string value to type '%s'!", toType);
 
 		case DATE:
-			throw notReady();
+			return (T) date(value);
 
 		default:
 			throw notExpected();
@@ -2122,6 +2124,31 @@ public class U {
 		return sb.toString();
 	}
 
+	public static Date date(String value) {
+		String[] parts = value.split("(\\.|-|/)");
+
+		int a = parts.length > 0 ? num(parts[0]) : -1;
+		int b = parts.length > 1 ? num(parts[1]) : -1;
+		int c = parts.length > 2 ? num(parts[2]) : -1;
+
+		switch (parts.length) {
+		case 3:
+			if (isDay(a) && isMonth(b) && isYear(c)) {
+				return date(a, b, c);
+			} else if (isYear(a) && isMonth(b) && isDay(c)) {
+				return date(c, b, a);
+			}
+			break;
+		case 2:
+			if (isDay(a) && isMonth(b)) {
+				return date(a, b, thisYear());
+			}
+			break;
+		default:
+		}
+
+		throw rte("Invalid date: " + value);
+	}
 
 	private static boolean isDay(int day) {
 		return day >= 1 && day <= 31;
@@ -2137,6 +2164,16 @@ public class U {
 
 	public static int num(String s) {
 		return Integer.parseInt(s);
+	}
+
+	public static synchronized Date date(int day, int month, int year) {
+		CALENDAR.set(year, month - 1, day - 1);
+		return CALENDAR.getTime();
+	}
+
+	public static synchronized int thisYear() {
+		CALENDAR.setTime(new Date());
+		return CALENDAR.get(Calendar.YEAR);
 	}
 
 }
