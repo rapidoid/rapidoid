@@ -23,7 +23,7 @@ package org.rapidoid.util;
 public abstract class Super {
 
 	public Super() {
-		U.wire(this);
+		U.inject(this);
 	}
 
 	@Override

@@ -76,6 +76,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 public class U {
@@ -108,6 +109,8 @@ public class U {
 	private static final Set<Class<?>> MANAGED_CLASSES = set();
 
 	private static final Set<Object> MANAGED_INSTANCES = set();
+
+	private static final Map<Object, Object> IOC_INSTANCES = map();
 
 	private static final Map<Class<?>, List<Field>> INJECTABLE_FIELDS = autoExpandingMap(new F1<List<Field>, Class<?>>() {
 		@Override
@@ -145,7 +148,6 @@ public class U {
 
 		return CURR_DATE_BYTES;
 	}
-	private static final List<Class<?>> AUTOCREATE = new ArrayList<Class<?>>();
 
 	private static final Map<Class<?>, List<F3<Object, Object, Method, Object[]>>> INTERCEPTORS = map();
 
@@ -619,6 +621,7 @@ public class U {
 		}
 
 		return annotatedFields;
+	}
 
 	public static List<Method> getMethodsAnnotated(Class<?> clazz, Class<? extends Annotation> annotation) {
 		List<Method> annotatedMethods = list();
@@ -888,7 +891,6 @@ public class U {
 	}
 
 	public static String load(String name) {
-
 		InputStream stream = CLASS_LOADER.getResourceAsStream(name);
 
 		InputStreamReader reader = new InputStreamReader(stream);
@@ -1060,7 +1062,7 @@ public class U {
 
 			@Override
 			public V execute(K param) throws Exception {
-				return wire(clazz);
+				return inject(newInstance(clazz));
 			}
 
 		});
@@ -1570,18 +1572,6 @@ public class U {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static synchronized <T> T singleton(Class<T> clazz) {
-		T instance = (T) SINGLETONS.get(clazz);
-
-		if (instance == null) {
-			instance = newInstance(clazz);
-			SINGLETONS.put(clazz, instance);
-		}
-
-		return instance;
-	}
-
 	public static void args(String[] args) {
 		if (args != null) {
 			ARGS = args;
@@ -1733,7 +1723,6 @@ public class U {
 		if (id == null) {
 			throw rte("The field 'id' cannot be null!");
 		}
-
 		if (id instanceof Long) {
 			Long num = (Long) id;
 			return num;
@@ -1744,11 +1733,9 @@ public class U {
 
 	public static long[] getIds(Object... objs) {
 		long[] ids = new long[objs.length];
-
 		for (int i = 0; i < objs.length; i++) {
 			ids[i] = getId(objs[i]);
 		}
-
 		return ids;
 	}
 
@@ -1777,9 +1764,12 @@ public class U {
 		return output.toString();
 	}
 
-	public static void manage(Object... classesOrInstances) {
+	public static synchronized void manage(Object... classesOrInstances) {
+		List<Class<?>> autocreate = new ArrayList<Class<?>>();
+
 		for (Object classOrInstance : classesOrInstances) {
-			boolean isClass = classOrInstance instanceof Class;
+
+			boolean isClass = isClass(classOrInstance);
 			Class<?> clazz = isClass ? (Class<?>) classOrInstance : classOrInstance.getClass();
 
 			for (Class<?> interfacee : getImplementedInterfaces(clazz)) {
@@ -1790,11 +1780,12 @@ public class U {
 				debug("configuring managed class", "class", classOrInstance);
 				MANAGED_CLASSES.add(clazz);
 
+				// if the class is annotated, auto-create an instance
 				Resource resource = clazz.getAnnotation(Resource.class);
 				if (resource != null) {
 					if (resource.shareable()) {
 						if (!clazz.isInterface() && !clazz.isEnum() && !clazz.isAnnotation()) {
-							AUTOCREATE.add(clazz);
+							autocreate.add(clazz);
 						}
 					} else {
 						throw rte("Cannot pre-instantiate a non-shareable class!");
@@ -1802,8 +1793,13 @@ public class U {
 				}
 			} else {
 				debug("configuring managed instance", "instance", classOrInstance);
+				addInjectionProvider(clazz, classOrInstance);
 				MANAGED_INSTANCES.add(classOrInstance);
 			}
+		}
+
+		for (Class<?> clazz : autocreate) {
+			inject(clazz);
 		}
 	}
 
@@ -1819,26 +1815,16 @@ public class U {
 	}
 
 	public static synchronized <T> T inject(Class<T> type) {
-		return null;
+		info("Inject", "type", type);
+		return provideIoCInstanceOf(type, null);
 	}
 
-	public static void initialize() {
-		for (Class<?> clazz : AUTOCREATE) {
-			instantiate(clazz);
-		}
+	public static synchronized <T> T inject(T target) {
+		info("Inject", "target", target);
+		return ioc(target);
 	}
 
-	public static <T> T instantiate(Class<T> type) {
-		info("Root instantiation", "type", type);
-		return process(provideInstanceOf(type, null));
-	}
-
-	public static <T> T autowire(T target) {
-		info("Root autowiring", "target", target);
-		return process(autowiree(target));
-	}
-
-	private static <T> T provideInstanceOf(Class<T> type, String name) {
+	private static <T> T provideIoCInstanceOf(Class<T> type, String name) {
 		T instance = null;
 
 		if (name != null) {
@@ -1846,11 +1832,11 @@ public class U {
 		}
 
 		if (instance == null) {
-			instance = provideInstanceByType(type);
+			instance = provideIoCInstanceByType(type);
 		}
 
 		if (instance == null) {
-			instance = provideNewInstanceOf(type);
+			instance = provideNewIoCInstanceOf(type);
 		}
 
 		if (instance == null) {
@@ -1861,21 +1847,17 @@ public class U {
 			}
 		}
 
-		autowire(instance);
-		instance = proxyWrap(instance);
-		manage(instance);
-
-		return instance;
+		return ioc(instance);
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T> T provideNewInstanceOf(Class<T> type) {
+	private static <T> T provideNewIoCInstanceOf(Class<T> type) {
 		// instantiation if it's real class
 		if (!type.isInterface() && !type.isEnum() && !type.isAnnotation()) {
 			T instance = (T) SINGLETONS.get(type);
 
 			if (instance == null) {
-				instance = newInstance(type);
+				instance = ioc(newInstance(type));
 			}
 
 			return instance;
@@ -1884,29 +1866,46 @@ public class U {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <T> T provideInstanceByType(Class<T> type) {
-		T instance = null;
-
+	private static <T> T provideIoCInstanceByType(Class<T> type) {
 		Set<Object> providers = INJECTION_PROVIDERS.get(type);
 
 		if (providers != null && !providers.isEmpty()) {
-			int count = providers.size();
 
-			if (count == 1) {
-				Object classOrInstance = providers.iterator().next();
+			Object provider = null;
 
-				if (classOrInstance instanceof Class) {
-					instance = provideNewInstanceOf((Class<T>) classOrInstance);
+			for (Object pr : providers) {
+				if (provider == null) {
+					provider = pr;
 				} else {
-					instance = (T) classOrInstance;
+					if (isClass(provider) && !isClass(pr)) {
+						provider = pr;
+					} else if (isClass(provider) || !isClass(pr)) {
+						throw rte("Found more than 1 injection candidates for type '%s': %s", type, providers);
+					}
 				}
-			} else {
-				throw rte("Found more than 1 injection candidates for type '%s': %s", type, providers);
+			}
+
+			if (provider != null) {
+				return provideFrom(provider);
 			}
 		}
 
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> T provideFrom(Object classOrInstance) {
+		T instance;
+		if (isClass(classOrInstance)) {
+			instance = provideNewIoCInstanceOf((Class<T>) classOrInstance);
+		} else {
+			instance = (T) classOrInstance;
+		}
 		return instance;
+	}
+
+	private static boolean isClass(Object obj) {
+		return obj instanceof Class;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1925,28 +1924,55 @@ public class U {
 		return (T) instance;
 	}
 
-	private static <T> T autowiree(T target) {
-
+	private static void autowire(Object target) {
 		debug("Autowiring", "target", target);
 
 		for (Field field : INJECTABLE_FIELDS.get(target.getClass())) {
-			Object value = provideInstanceOf(field.getType(), field.getName());
+			Object value = provideIoCInstanceOf(field.getType(), field.getName());
 
 			debug("Injecting field value", "target", target, "field", field.getName(), "value", value);
 			setFieldValue(target, field.getName(), value);
+		}
+	}
+
+	private static <T> void invokePostConstruct(T target) {
+		List<Method> methods = getMethodsAnnotated(target.getClass(), PostConstruct.class);
+
+		for (Method method : methods) {
+			invoke(method, target);
+		}
+	}
+
+	private static <T> T ioc(T target) {
+		if (!isIocProcessed(target)) {
+			IOC_INSTANCES.put(target, null);
+
+			manage(target);
+
+			autowire(target);
+
+			invokePostConstruct(target);
+
+			T proxy = proxyWrap(target);
+
+			IOC_INSTANCES.put(target, proxy);
+
+			manage(proxy);
+
+			target = proxy;
 		}
 
 		return target;
 	}
 
-	private static <T> T process(T target) {
-		Method ready = findMethod(target.getClass(), "ready");
-
-		if (ready != null) {
-			invoke(ready, target);
+	private static boolean isIocProcessed(Object target) {
+		for (Entry<Object, Object> e : IOC_INSTANCES.entrySet()) {
+			if (e.getKey() == target || e.getValue() == target) {
+				return true;
+			}
 		}
 
-		return proxyWrap(target);
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1956,42 +1982,28 @@ public class U {
 		for (Class<?> interf : getImplementedInterfaces(instance.getClass())) {
 			final List<F3<Object, Object, Method, Object[]>> interceptors = INTERCEPTORS.get(interf);
 
-			for (final F3<Object, Object, Method, Object[]> interceptor : interceptors) {
-				if (interceptor != null && !done.contains(interceptor)) {
-					debug("Creating proxy", "target", instance, "interface", interf, "interceptor", interceptor);
+			if (interceptors != null) {
+				for (final F3<Object, Object, Method, Object[]> interceptor : interceptors) {
+					if (interceptor != null && !done.contains(interceptor)) {
+						debug("Creating proxy", "target", instance, "interface", interf, "interceptor", interceptor);
 
-					final T target = instance;
-					InvocationHandler handler = new InvocationHandler() {
-						@Override
-						public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-							return interceptor.execute(target, method, args);
-						}
-					};
+						final T target = instance;
+						InvocationHandler handler = new InvocationHandler() {
+							@Override
+							public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+								return interceptor.execute(target, method, args);
+							}
+						};
 
-					instance = implementInterfaces(instance, handler, interf);
+						instance = implementInterfaces(instance, handler, interf);
 
-					done.add(interceptor);
+						done.add(interceptor);
+					}
 				}
 			}
 		}
 
 		return instance;
-	}
-
-	public static <T> T wire(T instance) {
-		throw notReady();
-	}
-
-	public static <T> T wire(T instance, Object scope) {
-		throw notReady();
-	}
-
-	public static <T> T wire(Class<T> clazz) {
-		throw notReady();
-	}
-
-	public static <T> T wire(Class<T> clazz, Object scope) {
-		throw notReady();
 	}
 
 	@SuppressWarnings("unchecked")
