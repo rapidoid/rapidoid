@@ -97,7 +97,7 @@ public class U {
 
 	private static long measureStart;
 
-	private static String[] ARGS;
+	private static String[] ARGS = {};
 
 	private static final Class<U> CLASS = U.class;
 
@@ -1533,7 +1533,9 @@ public class U {
 	}
 
 	public static void args(String[] args) {
-		ARGS = args;
+		if (args != null) {
+			ARGS = args;
+		}
 	}
 
 	public static boolean hasOption(String name) {
