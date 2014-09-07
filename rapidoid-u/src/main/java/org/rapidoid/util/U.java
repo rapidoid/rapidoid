@@ -1727,10 +1727,9 @@ public class U {
 	public static String capitalized(String s) {
 		return s.substring(0, 1).toUpperCase() + s.substring(1);
 	}
-	public static long getId(Object obj) {
-		// FIXME use getter id() or getId()
 
-		Object id = getFieldValue(obj, "id");
+	public static long getId(Object obj) {
+		Object id = getPropValue(obj, "id");
 		if (id == null) {
 			throw rte("The field 'id' cannot be null!");
 		}
