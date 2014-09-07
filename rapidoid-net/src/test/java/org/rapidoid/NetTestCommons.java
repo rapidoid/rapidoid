@@ -25,10 +25,8 @@ import org.rapidoid.util.U;
 
 public abstract class NetTestCommons extends TestCommons {
 
-	protected RapidoidServer server;
-
 	protected void server(Protocol protocol, Runnable client) {
-		server = Rapidoid.start(protocol);
+		RapidoidServer server = Rapidoid.start(protocol);
 
 		U.sleep(300);
 		U.print("----------------------------------------");
@@ -37,15 +35,11 @@ public abstract class NetTestCommons extends TestCommons {
 			client.run();
 		} finally {
 			server.stop();
+			U.sleep(300);
+			U.print("--- SERVER STOPPED ---");
 		}
 
 		U.info("server finished");
-	}
-
-	protected void shutdown() {
-		server.stop();
-		U.sleep(300);
-		U.print("--- SERVER STOPPED ---");
 	}
 
 }
