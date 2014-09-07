@@ -1724,6 +1724,9 @@ public class U {
 		});
 	}
 
+	public static String capitalized(String s) {
+		return s.substring(0, 1).toUpperCase() + s.substring(1);
+	}
 	public static long getId(Object obj) {
 		// FIXME use getter id() or getId()
 
