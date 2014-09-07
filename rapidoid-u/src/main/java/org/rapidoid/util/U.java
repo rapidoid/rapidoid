@@ -25,11 +25,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Annotation;
@@ -886,8 +888,35 @@ public class U {
 	}
 
 	public static void save(String filename, String content) {
-		// FIXME
-		throw notReady();
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(filename);
+			out.write(content.getBytes());
+			close(out, false);
+		} catch (Exception e) {
+			close(out, true);
+			throw rte(e);
+		}
+	}
+
+	public static void close(OutputStream out, boolean quiet) {
+		try {
+			out.close();
+		} catch (IOException e) {
+			if (!quiet) {
+				throw rte(e);
+			}
+		}
+	}
+
+	public static void close(InputStream in, boolean quiet) {
+		try {
+			in.close();
+		} catch (IOException e) {
+			if (!quiet) {
+				throw rte(e);
+			}
+		}
 	}
 
 	public static void delete(String filename) {
