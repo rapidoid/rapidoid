@@ -619,6 +619,25 @@ public class U {
 		}
 
 		return allFields;
+
+	public static List<Method> getMethodsAnnotated(Class<?> clazz, Class<? extends Annotation> annotation) {
+		List<Method> annotatedMethods = list();
+
+		try {
+			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
+				Method[] methods = c.getMethods();
+				for (Method method : methods) {
+					if (method.isAnnotationPresent(annotation)) {
+						annotatedMethods.add(method);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			throw rte("Cannot instantiate class!", e);
+		}
+
+		return annotatedMethods;
 	}
 
 	public static Method getMethod(Class<?> clazz, String name, Class<?>... parameterTypes) {
