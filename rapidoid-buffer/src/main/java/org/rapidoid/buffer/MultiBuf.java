@@ -26,9 +26,11 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
 import org.rapidoid.data.Range;
+import org.rapidoid.data.Ranges;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
+import org.rapidoid.wrap.Int;
 
 public class MultiBuf implements Buf, Constants {
 
@@ -818,6 +820,47 @@ public class MultiBuf implements Buf, Constants {
 		return -1;
 	}
 
+	private int scanBufLn(Range range, ByteBuffer buf, int from, int to, int search, Int result, int lineInd) {
+
+		int p = from;
+		byte b0 = buf.get(p);
+		if (b0 == LF) {
+			return p;
+		}
+
+		p++;
+		byte b1 = buf.get(p);
+		if (b1 == LF) {
+			return p;
+		}
+
+		p++;
+		byte b2 = buf.get(p);
+		if (b2 == LF) {
+			return p;
+		}
+
+		p++;
+		byte b3 = buf.get(p);
+		if (b3 == LF) {
+			return p;
+		}
+
+		int prefix = U.intFrom(b0, b1, b2, b3);
+
+		if (prefix == search) {
+			result.value = lineInd;
+		}
+
+		for (int i = p; i <= to; i++) {
+			if (buf.get(i) == LF) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
 	@Override
 	public boolean match(int start, byte[] match, int offset, int length, boolean caseSensitive) {
 		if (caseSensitive) {
@@ -1366,7 +1409,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public int scanLnLn(Range[] ranges) {
+	public void scanLnLn(Ranges ranges, int search, Int result) {
 		int start = position();
 		int limit = limit();
 		int last = limit - 1;
@@ -1383,38 +1426,43 @@ public class MultiBuf implements Buf, Constants {
 		U.ensure(fromInd >= 0, "bad start: %s", start);
 		U.ensure(toInd >= 0, "bad limit: %s", limit);
 
+		result.value = -1;
 		scanFrom = position();
 
 		if (fromInd == toInd) {
-			return simpleScanLines(ranges, fromInd, fromAddr, toAddr);
+			ranges.count = simpleScanLines(ranges.ranges, fromInd, fromAddr, toAddr, search, result);
 		} else {
-			return complexScanLines(ranges, fromAddr, fromInd, toAddr, toInd);
+			ranges.count = complexScanLines(ranges.ranges, fromAddr, fromInd, toAddr, toInd, search, result);
 		}
 	}
 
-	private int simpleScanLines(Range[] ranges, int ind, int fromAddr, int toAddr) {
-		int rangeInd = scanRegionLines(ranges, ind, fromAddr, toAddr, 0);
+	private int simpleScanLines(Range[] ranges, int ind, int fromAddr, int toAddr, int search, Int result) {
+		int rangeInd = scanRegionLines(ranges, ind, fromAddr, toAddr, 0, search, result);
 		if (rangeInd < 0) {
-			return -rangeInd;
+			return -rangeInd - 1;
 		}
 
 		position(limit());
 		throw incomplete();
 	}
 
-	private int scanRegionLines(Range[] ranges, int ind, int fromAddr, int toAddr, int rangeInd) {
+	/**
+	 * @return the index of the range used to the scanned line
+	 */
+	private int scanRegionLines(Range[] ranges, int ind, int fromAddr, int toAddr, int rangeInd, int search, Int result) {
 		int base = rebase(0, ind);
 		ByteBuffer src = bufs[ind];
 
 		int pos = fromAddr;
-		while ((pos = scanBuf(src, pos, toAddr, LF)) > 0) {
+		while ((pos = scanBufLn(ranges[rangeInd], src, pos, toAddr, search, result, rangeInd)) > 0) {
 			boolean withCR = src.get(pos - 1) == CR;
 			int to = base + pos - (withCR ? 1 : 0);
-			ranges[rangeInd++].setStartEnd(scanFrom, to);
+			ranges[rangeInd++].setInterval(scanFrom, to);
 
 			position(base + pos + 1);
 
 			if (scanFrom == to) {
+				// return negative number to mark that an empty line was found
 				return -rangeInd;
 			}
 
@@ -1425,25 +1473,26 @@ public class MultiBuf implements Buf, Constants {
 		return rangeInd;
 	}
 
-	private int complexScanLines(Range[] ranges, int fromAddr, int fromInd, int toAddr, int toInd) {
+	private int complexScanLines(Range[] ranges, int fromAddr, int fromInd, int toAddr, int toInd, int search,
+			Int result) {
 
 		int rangeInd = 0;
 
-		rangeInd = scanRegionLines(ranges, fromInd, fromAddr, singleCap - 1, rangeInd);
+		rangeInd = scanRegionLines(ranges, fromInd, fromAddr, singleCap - 1, rangeInd, search, result);
 		if (rangeInd < 0) {
-			return -rangeInd;
+			return -rangeInd - 1;
 		}
 
 		for (int ind = fromInd + 1; ind < toInd; ind++) {
-			rangeInd = scanRegionLines(ranges, ind, 0, singleCap - 1, rangeInd);
+			rangeInd = scanRegionLines(ranges, ind, 0, singleCap - 1, rangeInd, search, result);
 			if (rangeInd < 0) {
-				return -rangeInd;
+				return -rangeInd - 1;
 			}
 		}
 
-		rangeInd = scanRegionLines(ranges, toInd, 0, toAddr, rangeInd);
+		rangeInd = scanRegionLines(ranges, toInd, 0, toAddr, rangeInd, search, result);
 		if (rangeInd < 0) {
-			return -rangeInd;
+			return -rangeInd - 1;
 		}
 
 		position(limit());

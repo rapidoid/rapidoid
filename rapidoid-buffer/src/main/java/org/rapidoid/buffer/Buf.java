@@ -26,6 +26,8 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
 import org.rapidoid.data.Range;
+import org.rapidoid.data.Ranges;
+import org.rapidoid.wrap.Int;
 
 public interface Buf {
 
@@ -143,7 +145,8 @@ public interface Buf {
 
 	void skip(int count);
 
-	int scanLnLn(Range[] ranges);
+	void scanLnLn(Ranges ranges, int search, Int result);
+
 	ByteBuffer bufAt(int index);
 
 	int bufCount();
