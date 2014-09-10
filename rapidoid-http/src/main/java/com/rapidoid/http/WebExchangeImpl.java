@@ -24,8 +24,10 @@ import org.rapidoid.data.Data;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
+import org.rapidoid.data.Ranges;
 import org.rapidoid.net.Exchange;
 import org.rapidoid.util.U;
+import org.rapidoid.wrap.Bool;
 
 public class WebExchangeImpl extends Exchange implements WebExchange {
 
@@ -41,16 +43,21 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	final Range query = new Range();
 	final Range protocol = new Range();
 
-	final KeyValueRanges params = new KeyValueRanges(50);
-	final KeyValueRanges headers = new KeyValueRanges(50);
+	final Ranges headers = new Ranges(50);
+
+	private final KeyValueRanges params = new KeyValueRanges(50);
+	private final KeyValueRanges headersKV = new KeyValueRanges(50);
 
 	final Range body = new Range();
+
+	final Bool isGet = new Bool();
+	final Bool isKeepAlive = new Bool();
 
 	int total;
 
 	private boolean parsedParams;
-
-	boolean isKeepAlive = false;
+	private boolean parsedHeaders;
+	private boolean parsedPathAndQuery;
 
 	byte respType;
 
@@ -81,14 +88,15 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 		this._query = decodedData(query);
 		this._protocol = data(protocol);
 		this._params = multiData(params);
-		this._headers = multiData(headers);
+		this._headers = multiData(headersKV);
 	}
 
 	@Override
 	public void reset() {
 		super.reset();
 
-		isKeepAlive = false;
+		isGet.value = false;
+		isKeepAlive.value = false;
 
 		verb.reset();
 		uri.reset();
@@ -99,9 +107,13 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 		multipartBoundary.reset();
 
 		params.reset();
+		headersKV.reset();
 		headers.reset();
 
 		parsedParams = false;
+		parsedHeaders = false;
+		parsedPathAndQuery = false;
+
 		total = -1;
 	}
 
@@ -109,7 +121,7 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	public MultiData params() {
 		if (!parsedParams) {
 			if (!query.isEmpty()) {
-				PARSER.parseParams(input(), params, query);
+				PARSER.parseParams(input(), params, query().range());
 			}
 
 			parsedParams = true;
@@ -120,6 +132,14 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 
 	@Override
 	public MultiData headers() {
+		if (!parsedHeaders) {
+			if (!headers.isEmpty()) {
+				PARSER.parseHeadersIntoKV(input(), headers, headersKV);
+			}
+
+			parsedHeaders = true;
+		}
+
 		return _headers;
 	}
 
@@ -144,6 +164,11 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 
 	@Override
 	public Data path() {
+		if (!parsedPathAndQuery) {
+			PARSER.parsePathAndQuery(input(), uri, path, query);
+			parsedPathAndQuery = true;
+		}
+
 		return _path;
 	}
 
@@ -154,20 +179,21 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 
 	@Override
 	public Data query() {
+		if (!parsedPathAndQuery) {
+			PARSER.parsePathAndQuery(input(), uri, path, query);
+			parsedPathAndQuery = true;
+		}
+
 		return _query;
 	}
 
 	public void setSubpath(int start, int end) {
-		subpathRange.setStartEnd(start, end);
+		subpathRange.setInterval(start, end);
 	}
 
 	@Override
 	public void done() {
-		conn.complete(this, !isKeepAlive);
-	}
-
-	public void setKeepAlive(boolean isKeepAlive) {
-		this.isKeepAlive = isKeepAlive;
+		conn.complete(this, !isKeepAlive.value);
 	}
 
 }
