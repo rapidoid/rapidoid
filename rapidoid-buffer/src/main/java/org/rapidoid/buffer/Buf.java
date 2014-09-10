@@ -41,8 +41,6 @@ public interface Buf {
 
 	int size();
 
-	void setSource(Buf buf, ByteBuffer src, int offset, int size);
-
 	boolean match(int start, byte[] match, int offset, int length, boolean caseSensitive);
 
 	int find(int start, int limit, byte[] match, int offset, int length, boolean caseSensitive);

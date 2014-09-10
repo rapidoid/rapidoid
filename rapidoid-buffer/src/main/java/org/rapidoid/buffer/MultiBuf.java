@@ -711,11 +711,6 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public void setSource(Buf buf, ByteBuffer src, int offset, int size) {
-		throw U.notSupported();
-	}
-
-	@Override
 	public void putNumAsText(int position, long n) {
 		assert n >= 0;
 
