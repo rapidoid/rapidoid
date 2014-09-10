@@ -115,7 +115,7 @@ public class MultiBuf implements Buf, Constants {
 		assert invariant();
 		assert position >= 0;
 
-		validatePos(position);
+		validatePos(position, 1);
 
 		position += shrinkN;
 
@@ -125,12 +125,16 @@ public class MultiBuf implements Buf, Constants {
 		return buf.get(position & addrMask);
 	}
 
-	private void validatePos(int pos) {
-		if (pos > size()) {
-			throw incomplete();
+	private void validatePos(int pos, int space) {
+		if (pos < 0) {
+			throw U.rte("Invalid position: " + pos);
 		}
 
-		if (pos >= _limit) {
+		int least = pos + space;
+
+		boolean hasEnough = least <= size() && least <= _limit;
+
+		if (!hasEnough) {
 			throw incomplete();
 		}
 	}
@@ -140,7 +144,7 @@ public class MultiBuf implements Buf, Constants {
 		assert invariant();
 		assert position >= 0;
 
-		validatePos(position);
+		validatePos(position, 1);
 
 		position += shrinkN;
 
