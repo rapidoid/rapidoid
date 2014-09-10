@@ -289,6 +289,12 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
+	public ByteBuffer bufAt(int index) {
+		assert bufN > index;
+		return bufs[index];
+	}
+
+	@Override
 	public int append(String s) {
 		assert invariant();
 
@@ -1423,6 +1429,12 @@ public class MultiBuf implements Buf, Constants {
 
 		position(limit());
 		throw incomplete();
+	}
+
+
+	@Override
+	public int bufCount() {
+		return bufN;
 	}
 
 }

@@ -144,6 +144,10 @@ public interface Buf {
 	void skip(int count);
 
 	int scanLnLn(Range[] ranges);
+	ByteBuffer bufAt(int index);
+
+	int bufCount();
+
 
 	IncompleteReadException incomplete();
 
