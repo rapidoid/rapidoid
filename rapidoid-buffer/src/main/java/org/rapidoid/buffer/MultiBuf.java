@@ -943,7 +943,7 @@ public class MultiBuf implements Buf, Constants {
 		if (caseSensitive) {
 			return scan(start, limit - 1, match, (short) 0, 0, 0, 1);
 		} else {
-			throw U.notReady();
+			throw U.notReady(); // FIXME
 		}
 	}
 
@@ -1002,7 +1002,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	private void consumeAndSkip(int toPos, Range range, int skip) {
-		range.setStartEnd(_position, toPos);
+		range.setInterval(_position, toPos);
 		_position = toPos + skip;
 	}
 
@@ -1112,6 +1112,12 @@ public class MultiBuf implements Buf, Constants {
 	@Override
 	public void scanLn(Range range, boolean failOnLimit) {
 		scanTo(LF_, CR_LF, range, failOnLimit);
+
+		// TODO: this is faster, but buggy:
+		// scanTo(LF, range, failOnLimit);
+		// if (range.start > 0 && get(range.last()) == CR) {
+		// range.length--;
+		// }
 	}
 
 	@Override
@@ -1226,7 +1232,7 @@ public class MultiBuf implements Buf, Constants {
 			byte b = src.get(pos);
 
 			if (b == value) {
-				range.setStartEnd(start, absPos);
+				range.setInterval(start, absPos);
 				position(absPos + 1);
 				return;
 			}
@@ -1241,7 +1247,7 @@ public class MultiBuf implements Buf, Constants {
 				byte b = src.get(pos);
 
 				if (b == value) {
-					range.setStartEnd(start, absPos);
+					range.setInterval(start, absPos);
 					position(absPos + 1);
 					return;
 				}
@@ -1257,7 +1263,7 @@ public class MultiBuf implements Buf, Constants {
 				byte b = src.get(pos);
 
 				if (b == value) {
-					range.setStartEnd(start, absPos);
+					range.setInterval(start, absPos);
 					position(absPos + 1);
 					return;
 				}
@@ -1271,7 +1277,7 @@ public class MultiBuf implements Buf, Constants {
 		if (failOnLimit) {
 			throw incomplete();
 		} else {
-			range.setStartEnd(start, absPos - 1);
+			range.setInterval(start, absPos - 1);
 		}
 	}
 
@@ -1301,7 +1307,7 @@ public class MultiBuf implements Buf, Constants {
 			byte b = src.get(pos);
 
 			if (b != value) {
-				range.setStartEnd(start, absPos);
+				range.setInterval(start, absPos);
 				position(absPos);
 				return;
 			}
@@ -1316,7 +1322,7 @@ public class MultiBuf implements Buf, Constants {
 				byte b = src.get(pos);
 
 				if (b != value) {
-					range.setStartEnd(start, absPos);
+					range.setInterval(start, absPos);
 					position(absPos);
 					return;
 				}
@@ -1332,7 +1338,7 @@ public class MultiBuf implements Buf, Constants {
 				byte b = src.get(pos);
 
 				if (b != value) {
-					range.setStartEnd(start, absPos);
+					range.setInterval(start, absPos);
 					position(absPos);
 					return;
 				}
@@ -1346,7 +1352,7 @@ public class MultiBuf implements Buf, Constants {
 		if (failOnLimit) {
 			throw incomplete();
 		} else {
-			range.setStartEnd(start, absPos - 1);
+			range.setInterval(start, absPos - 1);
 		}
 	}
 
