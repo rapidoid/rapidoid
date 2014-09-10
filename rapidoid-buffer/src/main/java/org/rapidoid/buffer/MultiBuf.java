@@ -971,6 +971,15 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
+	public boolean containsAt(Range target, int offset, byte[] match, boolean caseSensitive) {
+		if (offset < 0 || target.length < offset + match.length || target.start < 0 || target.last() >= size()) {
+			return false;
+		}
+
+		return match(target.start + offset, match, caseSensitive);
+	}
+
+	@Override
 	public void trim(Range target) {
 		int start = target.start;
 		int len = target.length;

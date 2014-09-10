@@ -53,6 +53,8 @@ public interface Buf {
 
 	boolean startsWith(Range target, byte[] match, boolean caseSensitive);
 
+	boolean containsAt(Range target, int offset, byte[] match, boolean caseSensitive);
+
 	void trim(Range target);
 
 	void append(ByteBuffer wrap);
