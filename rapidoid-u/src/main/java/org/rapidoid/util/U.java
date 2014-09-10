@@ -1508,7 +1508,8 @@ public class U {
 	}
 
 	public static void show(Object... values) {
-		print(">" + join(values, ", ") + "<");
+		String text = values.length == 1 ? text(values[0]) : text(values);
+		print(">" + text + "<");
 	}
 
 	public static <T extends RuntimeException> T rte(Class<T> clazz) {
