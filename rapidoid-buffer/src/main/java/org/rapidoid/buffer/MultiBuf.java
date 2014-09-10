@@ -1431,6 +1431,32 @@ public class MultiBuf implements Buf, Constants {
 		throw incomplete();
 	}
 
+	@Override
+	public int bufferIndexOf(int position) {
+		assert invariant();
+		assert position >= 0;
+
+		validatePos(position, 1);
+
+		position += shrinkN;
+
+		int index = position >> factor;
+		assert bufs[index] != null;
+
+		return index;
+	}
+
+	@Override
+	public int bufferOffsetOf(int position) {
+		assert invariant();
+		assert position >= 0;
+
+		validatePos(position, 1);
+
+		position += shrinkN;
+
+		return position & addrMask;
+	}
 
 	@Override
 	public int bufCount() {

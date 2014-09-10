@@ -148,6 +148,9 @@ public interface Buf {
 
 	int bufCount();
 
+	int bufferIndexOf(int position);
+
+	int bufferOffsetOf(int position);
 
 	IncompleteReadException incomplete();
 
