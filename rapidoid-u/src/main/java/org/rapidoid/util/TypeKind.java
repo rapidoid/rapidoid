@@ -27,6 +27,36 @@ package org.rapidoid.util;
  * 
  * ONLY APPEND NEW ELEMENTS!
  */
-public enum TypeKind {
-	NULL, BOOLEAN, BYTE, SHORT, CHAR, INT, LONG, FLOAT, DOUBLE, STRING, BOOLEAN_OBJ, BYTE_OBJ, SHORT_OBJ, CHAR_OBJ, INT_OBJ, LONG_OBJ, FLOAT_OBJ, DOUBLE_OBJ, OBJECT, DATE
+
+public enum TypeKind implements Constants {
+
+	NULL(F, F, T), BOOLEAN(T, F, T), BYTE(T, T, T), SHORT(T, T, T), CHAR(T, T, T), INT(T, T, T), LONG(T, T, T), FLOAT(
+			T, T, T), DOUBLE(T, T, T), STRING(F, F, T), BOOLEAN_OBJ(F, F, T), BYTE_OBJ(F, T, T), SHORT_OBJ(F, T, T), CHAR_OBJ(
+			F, T, T), INT_OBJ(F, T, T), LONG_OBJ(F, T, T), FLOAT_OBJ(F, T, T), DOUBLE_OBJ(F, T, T), OBJECT(F, F, F), DATE(
+			F, F, T);
+
+	private final boolean primitive;
+
+	private final boolean number;
+
+	private final boolean simple;
+
+	private TypeKind(boolean primitive, boolean number, boolean simple) {
+		this.primitive = primitive;
+		this.number = number;
+		this.simple = simple;
+	}
+
+	public boolean isPrimitive() {
+		return primitive;
+	}
+
+	public boolean isNumber() {
+		return number;
+	}
+
+	public boolean isSimple() {
+		return simple;
+	}
+
 }
