@@ -185,12 +185,19 @@ public class MultiBuf implements Buf, Constants {
 		assert invariant();
 	}
 
+	/**
+	 * Reads data from the channel and appends to the buffer.
+	 * 
+	 * Precondition: received event that the channel has data to be read.
+	 */
 	@Override
 	public int append(ReadableByteChannel channel) throws IOException {
 		assert invariant();
 
 		int totalRead = 0;
 		boolean done;
+
+		// precondition: the channel has data
 
 		do {
 			ByteBuffer dest = writableBuf();
@@ -202,16 +209,22 @@ public class MultiBuf implements Buf, Constants {
 			if (read >= 0) {
 				totalRead += read;
 			} else {
+				// end of stream (e.g. the other end closed the connection)
+				removeLastBufferIfEmpty();
+				sizeChanged();
+
+				assert invariant();
 				return -1;
 			}
 
+			// if buffer wasn't filled -> no data is available in channel
 			done = read < space;
 		} while (!done);
 
+		removeLastBufferIfEmpty();
 		sizeChanged();
 
 		assert invariant();
-
 		return totalRead;
 	}
 
@@ -525,7 +538,7 @@ public class MultiBuf implements Buf, Constants {
 		shrinkN += count;
 
 		while (shrinkN >= singleCap) {
-			removeLeftBuf();
+			removeFirstBuf();
 			shrinkN -= singleCap;
 		}
 
@@ -539,7 +552,7 @@ public class MultiBuf implements Buf, Constants {
 		assert invariant();
 	}
 
-	private void removeLeftBuf() {
+	private void removeFirstBuf() {
 		bufs[0].clear();
 		bufPool.release(bufs[0]);
 
@@ -550,12 +563,20 @@ public class MultiBuf implements Buf, Constants {
 		bufN--;
 	}
 
-	private void removeRightBuf() {
+	private void removeLastBuf() {
 		bufs[bufN - 1].clear();
 		bufPool.release(bufs[bufN - 1]);
 		bufN--;
 		if (bufN == 0) {
 			shrinkN = 0;
+		}
+	}
+
+	private void removeLastBufferIfEmpty() {
+		if (bufN > 0) {
+			if (last().position() == 0) {
+				removeLastBuf();
+			}
 		}
 	}
 
@@ -597,7 +618,7 @@ public class MultiBuf implements Buf, Constants {
 			int newPos = position + shrinkN;
 			first().position(newPos);
 			if (newPos == 0) {
-				removeRightBuf();
+				removeLastBuf();
 			}
 		} else {
 			position += shrinkN;
@@ -606,7 +627,7 @@ public class MultiBuf implements Buf, Constants {
 
 			// make it the last buffer
 			while (index < bufN - 1) {
-				removeRightBuf();
+				removeLastBuf();
 			}
 
 			ByteBuffer last = bufs[index];
@@ -615,7 +636,7 @@ public class MultiBuf implements Buf, Constants {
 			if (addr > 0) {
 				last.position(addr);
 			} else {
-				removeRightBuf();
+				removeLastBuf();
 				if (bufN > 0) {
 					last().position(singleCap);
 				}
