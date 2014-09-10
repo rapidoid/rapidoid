@@ -33,6 +33,7 @@ import java.util.Set;
 
 import org.rapidoid.util.JSON;
 import org.rapidoid.util.Prop;
+import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 
 public class POJODispatcher {
@@ -44,8 +45,7 @@ public class POJODispatcher {
 	public POJODispatcher(Object... controllers) {
 		for (Object controller : controllers) {
 			String name = controller.getClass().getSimpleName();
-			U.ensure(name.endsWith(Pojo.SUFFIX), "The service class doesn't have a '%s' suffix: %s", Pojo.SUFFIX,
-					name);
+			U.ensure(name.endsWith(Pojo.SUFFIX), "The service class doesn't have a '%s' suffix: %s", Pojo.SUFFIX, name);
 			U.info("Initializing service: " + name);
 			name = name.substring(0, name.length() - Pojo.SUFFIX.length()).toLowerCase();
 			Controller ctrl = new Controller(controller);
@@ -111,8 +111,17 @@ public class POJODispatcher {
 
 			for (int i = 0; i < types.length; i++) {
 				Class<?> type = types[i];
+				TypeKind kind = U.kindOf(type);
 
-				if (type.equals(Map.class)) {
+				if (kind.isSimple()) {
+
+					if (parts.length > paramsFrom + simpleParamIndex) {
+						args[i] = U.convert(parts[paramsFrom + simpleParamIndex++], type);
+					} else {
+						return error("Not enough parameters!");
+					}
+
+				} else if (type.equals(Map.class)) {
 
 					Map<String, Object> params = request.paramsMap();
 
@@ -121,27 +130,6 @@ public class POJODispatcher {
 					}
 
 					args[i] = params;
-
-				} else if (type.equals(String.class)) {
-
-					if (parts.length > paramsFrom + simpleParamIndex) {
-						args[i] = parts[paramsFrom + simpleParamIndex++];
-					} else {
-						return error("Not enough parameters!");
-					}
-
-				} else if (type.equals(int.class)) {
-
-					if (parts.length > paramsFrom + simpleParamIndex) {
-						String currentArg = parts[paramsFrom + simpleParamIndex++];
-						try {
-							args[i] = Integer.parseInt(currentArg);
-						} catch (NumberFormatException e) {
-							return error("Expected integer, but found: %s", currentArg);
-						}
-					} else {
-						return error("Not enough parameters!");
-					}
 
 				} else if (type.equals(String[].class)) {
 
