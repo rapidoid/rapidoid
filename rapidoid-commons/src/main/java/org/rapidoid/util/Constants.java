@@ -22,6 +22,8 @@ package org.rapidoid.util;
 
 public interface Constants {
 
+	byte BYTE_0 = 0;
+
 	byte SPACE = ' ';
 
 	byte CR = 13;
