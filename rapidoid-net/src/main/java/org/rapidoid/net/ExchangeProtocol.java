@@ -92,7 +92,7 @@ public abstract class ExchangeProtocol<T extends Exchange> implements Protocol, 
 
 	@SuppressWarnings("unchecked")
 	protected Pool<T> pool(RapidoidHelper helper) {
-		return (Pool<T>) helper.pool();
+		return (Pool<T>) helper.pool;
 	}
 
 }
