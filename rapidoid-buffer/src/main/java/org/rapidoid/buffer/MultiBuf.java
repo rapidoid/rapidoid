@@ -109,6 +109,7 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public boolean isSingle() {
+		assert invariant();
 		return bufN == 1;
 	}
 
@@ -124,6 +125,7 @@ public class MultiBuf implements Buf, Constants {
 		ByteBuffer buf = bufs[position >> factor];
 		assert buf != null;
 
+		assert invariant();
 		return buf.get(position & addrMask);
 	}
 
@@ -160,6 +162,7 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public int size() {
+		assert invariant();
 		return bufN > 0 ? (bufN - 1) * singleCap + bufs[bufN - 1].position() - shrinkN : 0;
 	}
 
@@ -303,12 +306,14 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public ByteBuffer first() {
+		assert invariant();
 		assert bufN > 0;
 		return bufs[0];
 	}
 
 	@Override
 	public ByteBuffer bufAt(int index) {
+		assert invariant();
 		assert bufN > index;
 		return bufs[index];
 	}
@@ -323,7 +328,6 @@ public class MultiBuf implements Buf, Constants {
 		sizeChanged();
 
 		assert invariant();
-
 		return bytes.length;
 	}
 
@@ -342,6 +346,7 @@ public class MultiBuf implements Buf, Constants {
 
 		assert total == bytes.length;
 
+		assert invariant();
 		return new String(bytes);
 	}
 
@@ -358,6 +363,7 @@ public class MultiBuf implements Buf, Constants {
 
 		assert total == bytes.length;
 
+		assert invariant();
 		return new String(bytes);
 	}
 
@@ -368,6 +374,7 @@ public class MultiBuf implements Buf, Constants {
 		int total = readAll(dest, offset, range.start, range.length);
 
 		assert total == range.length;
+		assert invariant();
 	}
 
 	private int writeToHelper(Range range) {
@@ -395,18 +402,26 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public int writeTo(WritableByteChannel channel) throws IOException {
+		assert invariant();
+
 		int wrote = writeTo(TO_CHANNEL, 0, size(), null, channel, null, 0);
 		U.ensure(wrote <= size(), "Incorrect write to channel!");
+
+		assert invariant();
 		return wrote;
 	}
 
 	@Override
 	public int writeTo(ByteBuffer buffer) {
+		assert invariant();
+
 		try {
 			int wrote = writeTo(TO_BUFFER, 0, size(), null, null, buffer, 0);
 			assert wrote == size();
+			assert invariant();
 			return wrote;
 		} catch (IOException e) {
+			assert invariant();
 			throw U.rte(e);
 		}
 	}
@@ -582,26 +597,36 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public int unitCount() {
+		assert invariant();
 		return bufN;
 	}
 
 	@Override
 	public int unitSize() {
+		assert invariant();
 		return singleCap;
 	}
 
 	@Override
 	public void put(int position, byte[] bytes, int offset, int length) {
+		assert invariant();
+
 		// FIXME optimize
 		int pos = position;
 		for (int i = offset; i < offset + length; i++) {
 			put(pos++, bytes[i]);
 		}
+
+		assert invariant();
 	}
 
 	@Override
 	public void append(byte[] bytes) {
+		assert invariant();
+
 		append(bytes, 0, bytes.length);
+
+		assert invariant();
 	}
 
 	@Override
@@ -609,6 +634,7 @@ public class MultiBuf implements Buf, Constants {
 		assert invariant();
 
 		if (bufN == 0 || position == size()) {
+			assert invariant();
 			return;
 		}
 
@@ -650,7 +676,11 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public void deleteLast(int count) {
+		assert invariant();
+
 		deleteAfter(size() - count);
+
+		assert invariant();
 	}
 
 	private boolean validPosition(int position) {
@@ -679,9 +709,12 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public long getN(Range range) {
+		assert invariant();
+
 		assert range.length >= 1;
 
 		if (range.length > 20) {
+			assert invariant();
 			throw U.rte("Too many digits!");
 		}
 
@@ -698,20 +731,25 @@ public class MultiBuf implements Buf, Constants {
 				int digit = b - '0';
 				value = value * 10 + digit;
 			} else {
+				assert invariant();
 				throw U.rte("Invalid number!");
 			}
 		}
 
+		assert invariant();
 		return negative ? -value : value;
 	}
 
 	@Override
 	public ByteBuffer getSingle() {
+		assert invariant();
 		return isSingle() ? first() : null;
 	}
 
 	@Override
 	public void putNumAsText(int position, long n) {
+		assert invariant();
+
 		assert n >= 0;
 
 		if (n >= 0) {
@@ -741,6 +779,8 @@ public class MultiBuf implements Buf, Constants {
 		} else {
 			throw U.notReady();
 		}
+
+		assert invariant();
 	}
 
 	protected int scan(int start, int last, byte valB, short valS, int valI, long valL, int n) {
@@ -879,11 +919,17 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public boolean match(int start, byte[] match, int offset, int length, boolean caseSensitive) {
+		assert invariant();
+
+		boolean result;
 		if (caseSensitive) {
-			return matchSensitive(start, match, offset, length);
+			result = matchSensitive(start, match, offset, length);
 		} else {
-			return matchNoCase(start, match, offset, length);
+			result = matchNoCase(start, match, offset, length);
 		}
+
+		assert invariant();
+		return result;
 	}
 
 	private boolean matchNoCase(int start, byte[] match, int offset, int length) {
@@ -908,6 +954,8 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public int find(int start, int limit, byte[] match, int offset, int length, boolean caseSensitive) {
+		assert invariant();
+
 		assert start >= 0;
 		assert limit >= 0;
 		assert offset >= 0;
@@ -920,6 +968,7 @@ public class MultiBuf implements Buf, Constants {
 			result = findNoCase(start, limit, match, offset, length);
 		}
 
+		assert invariant();
 		return result;
 	}
 
@@ -996,59 +1045,90 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public int find(int start, int limit, byte match, boolean caseSensitive) {
+		assert invariant();
+
 		assert start >= 0;
 		assert limit >= 0;
 
 		if (limit - start < 1) {
+			assert invariant();
 			return -1;
 		}
 
 		if (caseSensitive) {
+			assert invariant();
 			return scan(start, limit - 1, match, (short) 0, 0, 0, 1);
 		} else {
+			assert invariant();
 			throw U.notReady(); // FIXME
 		}
 	}
 
 	@Override
 	public int find(int start, int limit, byte[] match, boolean caseSensitive) {
-		return find(start, limit, match, 0, match.length, caseSensitive);
+		assert invariant();
+
+		int pos = find(start, limit, match, 0, match.length, caseSensitive);
+
+		assert invariant();
+		return pos;
 	}
 
 	@Override
 	public boolean matches(Range target, byte[] match, boolean caseSensitive) {
+		assert invariant();
+
 		if (target.length != match.length || target.start < 0 || target.last() >= size()) {
+			assert invariant();
 			return false;
 		}
 
-		return match(target.start, match, caseSensitive);
+		boolean result = match(target.start, match, caseSensitive);
+
+		assert invariant();
+		return result;
 	}
 
 	@Override
 	public boolean startsWith(Range target, byte[] match, boolean caseSensitive) {
+		assert invariant();
+
 		if (target.length < match.length || target.start < 0 || target.last() >= size()) {
+			assert invariant();
 			return false;
 		}
 
-		return match(target.start, match, caseSensitive);
+		boolean result = match(target.start, match, caseSensitive);
+		assert invariant();
+
+		return result;
 	}
 
 	@Override
 	public boolean containsAt(Range target, int offset, byte[] match, boolean caseSensitive) {
+		assert invariant();
+
 		if (offset < 0 || target.length < offset + match.length || target.start < 0 || target.last() >= size()) {
+			assert invariant();
 			return false;
 		}
 
-		return match(target.start + offset, match, caseSensitive);
+		boolean result = match(target.start + offset, match, caseSensitive);
+
+		assert invariant();
+		return result;
 	}
 
 	@Override
 	public void trim(Range target) {
+		assert invariant();
+
 		int start = target.start;
 		int len = target.length;
 		int finish = start + len - 1;
 
 		if (start < 0 || len == 0) {
+			assert invariant();
 			return;
 		}
 
@@ -1062,6 +1142,8 @@ public class MultiBuf implements Buf, Constants {
 
 		target.start = start;
 		target.length = finish - start + 1;
+
+		assert invariant();
 	}
 
 	private void consumeAndSkip(int toPos, Range range, int skip) {
@@ -1071,36 +1153,47 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public void scanTo(byte sep, Range range, boolean failOnLimit) {
+		assert invariant();
+
 		int pos = find(_position, _limit, sep, true);
 
 		if (pos >= 0) {
 			consumeAndSkip(pos, range, 1);
 		} else {
 			if (failOnLimit) {
+				assert invariant();
 				throw incomplete();
 			} else {
 				consumeAndSkip(_limit, range, 0);
 			}
 		}
+
+		assert invariant();
 	}
 
 	@Override
 	public void scanTo(byte[] sep, Range range, boolean failOnLimit) {
+		assert invariant();
+
 		int pos = find(_position, _limit, sep, true);
 
 		if (pos >= 0) {
 			consumeAndSkip(pos, range, sep.length);
 		} else {
 			if (failOnLimit) {
+				assert invariant();
 				throw incomplete();
 			} else {
 				consumeAndSkip(_limit, range, 0);
 			}
 		}
+
+		assert invariant();
 	}
 
 	@Override
 	public int scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit) {
+		assert invariant();
 
 		int pos1 = find(_position, _limit, sep1, true);
 		int pos2 = find(_position, _limit, sep2, true);
@@ -1111,22 +1204,28 @@ public class MultiBuf implements Buf, Constants {
 		if (found1 && found2) {
 			if (pos1 <= pos2) {
 				consumeAndSkip(pos1, range, 1);
+				assert invariant();
 				return 1;
 			} else {
 				consumeAndSkip(pos2, range, 1);
+				assert invariant();
 				return 2;
 			}
 		} else if (found1 && !found2) {
 			consumeAndSkip(pos1, range, 1);
+			assert invariant();
 			return 1;
 		} else if (!found1 && found2) {
 			consumeAndSkip(pos2, range, 1);
+			assert invariant();
 			return 2;
 		} else {
 			if (failOnLimit) {
+				assert invariant();
 				throw incomplete();
 			} else {
 				consumeAndSkip(_limit, range, 0);
+				assert invariant();
 				return 0;
 			}
 		}
@@ -1134,6 +1233,8 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public int scanTo(byte[] sep1, byte[] sep2, Range range, boolean failOnLimit) {
+		assert invariant();
+
 		int pos1 = find(_position, _limit, sep1, true);
 		int pos2 = find(_position, _limit, sep2, true);
 
@@ -1143,22 +1244,28 @@ public class MultiBuf implements Buf, Constants {
 		if (found1 && found2) {
 			if (pos1 <= pos2) {
 				consumeAndSkip(pos1, range, sep1.length);
+				assert invariant();
 				return 1;
 			} else {
 				consumeAndSkip(pos2, range, sep2.length);
+				assert invariant();
 				return 2;
 			}
 		} else if (found1 && !found2) {
 			consumeAndSkip(pos1, range, sep1.length);
+			assert invariant();
 			return 1;
 		} else if (!found1 && found2) {
 			consumeAndSkip(pos2, range, sep2.length);
+			assert invariant();
 			return 2;
 		} else {
 			if (failOnLimit) {
+				assert invariant();
 				throw incomplete();
 			} else {
 				consumeAndSkip(_limit, range, 0);
+				assert invariant();
 				return 0;
 			}
 		}
@@ -1166,14 +1273,20 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public IncompleteReadException incomplete() {
+		assert invariant();
+
 		if (ERRR == null) {
 			ERRR = U.rte(IncompleteReadException.class);
 		}
+
+		assert invariant();
 		return ERRR;
 	}
 
 	@Override
 	public void scanLn(Range range, boolean failOnLimit) {
+		assert invariant();
+
 		scanTo(LF_, CR_LF, range, failOnLimit);
 
 		// TODO: this is faster, but buggy:
@@ -1181,59 +1294,97 @@ public class MultiBuf implements Buf, Constants {
 		// if (range.start > 0 && get(range.last()) == CR) {
 		// range.length--;
 		// }
+
+		assert invariant();
 	}
 
 	@Override
 	public void scanN(int count, Range range) {
+		assert invariant();
+
 		get(_position + count - 1);
 		range.set(_position, count);
 		_position += count;
+
+		assert invariant();
 	}
 
 	@Override
 	public byte next() {
-		return get(_position++);
+		assert invariant();
+
+		byte b = get(_position++);
+
+		assert invariant();
+		return b;
 	}
 
 	@Override
 	public void back(int count) {
+		assert invariant();
+
 		_position--;
+
+		assert invariant();
 	}
 
 	@Override
 	public byte peek() {
-		return get(_position);
+		assert invariant();
+
+		byte b = get(_position);
+
+		assert invariant();
+		return b;
 	}
 
 	@Override
 	public boolean hasRemaining() {
-		return remaining() > 0;
+		assert invariant();
+
+		boolean result = remaining() > 0;
+
+		assert invariant();
+		return result;
 	}
 
 	@Override
 	public int remaining() {
+		assert invariant();
 		return _limit - _position;
 	}
 
 	@Override
 	public String readLn() {
+		assert invariant();
+
 		scanLn(HELPER_RANGE, true);
-		return get(HELPER_RANGE);
+		String result = get(HELPER_RANGE);
+
+		assert invariant();
+		return result;
 	}
 
 	@Override
 	public String readN(int count) {
+		assert invariant();
+
 		scanN(count, HELPER_RANGE);
-		return get(HELPER_RANGE);
+		String result = get(HELPER_RANGE);
+
+		assert invariant();
+		return result;
 	}
 
 	@Override
 	public int position() {
+		assert invariant();
 		return _position;
 	}
 
 	@Override
 	public int limit() {
+		assert invariant();
 		return _limit;
 	}
 
@@ -1243,16 +1394,22 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public void position(int position) {
+		assert invariant();
 		_position = position;
+		assert invariant();
 	}
 
 	@Override
 	public void limit(int limit) {
+		assert invariant();
 		_limit = limit;
+		assert invariant();
 	}
 
 	@Override
 	public void upto(byte value, Range range) {
+		assert invariant();
+
 		range.starts(_position);
 
 		while (get(_position) != value) {
@@ -1262,15 +1419,24 @@ public class MultiBuf implements Buf, Constants {
 		range.ends(_position);
 
 		_position++;
+
+		assert invariant();
 	}
 
 	@Override
 	public ByteBuffer exposed() {
-		return first();
+		assert invariant();
+
+		ByteBuffer first = first();
+
+		assert invariant();
+		return first;
 	}
 
 	@Override
 	public void scanUntil(byte value, Range range, boolean failOnLimit) {
+		assert invariant();
+
 		int start = position();
 		int limit = limit();
 		int last = limit - 1;
@@ -1297,6 +1463,7 @@ public class MultiBuf implements Buf, Constants {
 			if (b == value) {
 				range.setInterval(start, absPos);
 				position(absPos + 1);
+				assert invariant();
 				return;
 			}
 
@@ -1312,6 +1479,7 @@ public class MultiBuf implements Buf, Constants {
 				if (b == value) {
 					range.setInterval(start, absPos);
 					position(absPos + 1);
+					assert invariant();
 					return;
 				}
 
@@ -1328,6 +1496,7 @@ public class MultiBuf implements Buf, Constants {
 				if (b == value) {
 					range.setInterval(start, absPos);
 					position(absPos + 1);
+					assert invariant();
 					return;
 				}
 
@@ -1338,14 +1507,19 @@ public class MultiBuf implements Buf, Constants {
 		position(limit);
 
 		if (failOnLimit) {
+			assert invariant();
 			throw incomplete();
 		} else {
 			range.setInterval(start, absPos - 1);
 		}
+
+		assert invariant();
 	}
 
 	@Override
 	public void scanWhile(byte value, Range range, boolean failOnLimit) {
+		assert invariant();
+
 		int start = position();
 		int limit = limit();
 		int last = limit - 1;
@@ -1372,6 +1546,7 @@ public class MultiBuf implements Buf, Constants {
 			if (b != value) {
 				range.setInterval(start, absPos);
 				position(absPos);
+				assert invariant();
 				return;
 			}
 
@@ -1387,6 +1562,7 @@ public class MultiBuf implements Buf, Constants {
 				if (b != value) {
 					range.setInterval(start, absPos);
 					position(absPos);
+					assert invariant();
 					return;
 				}
 
@@ -1403,6 +1579,7 @@ public class MultiBuf implements Buf, Constants {
 				if (b != value) {
 					range.setInterval(start, absPos);
 					position(absPos);
+					assert invariant();
 					return;
 				}
 
@@ -1413,19 +1590,28 @@ public class MultiBuf implements Buf, Constants {
 		position(limit);
 
 		if (failOnLimit) {
+			assert invariant();
 			throw incomplete();
 		} else {
 			range.setInterval(start, absPos - 1);
 		}
+
+		assert invariant();
 	}
 
 	@Override
 	public void skip(int count) {
+		assert invariant();
+
 		_position += count;
+
+		assert invariant();
 	}
 
 	@Override
 	public void scanLnLn(Ranges ranges, int search, Int result) {
+		assert invariant();
+
 		int start = position();
 		int limit = limit();
 		int last = limit - 1;
@@ -1450,6 +1636,8 @@ public class MultiBuf implements Buf, Constants {
 		} else {
 			ranges.count = complexScanLines(ranges.ranges, fromAddr, fromInd, toAddr, toInd, search, result);
 		}
+
+		assert invariant();
 	}
 
 	private int simpleScanLines(Range[] ranges, int ind, int fromAddr, int toAddr, int search, Int result) {
@@ -1518,6 +1706,7 @@ public class MultiBuf implements Buf, Constants {
 	@Override
 	public int bufferIndexOf(int position) {
 		assert invariant();
+
 		assert position >= 0;
 
 		validatePos(position, 1);
@@ -1527,35 +1716,42 @@ public class MultiBuf implements Buf, Constants {
 		int index = position >> factor;
 		assert bufs[index] != null;
 
+		assert invariant();
 		return index;
 	}
 
 	@Override
 	public int bufferOffsetOf(int position) {
 		assert invariant();
+
 		assert position >= 0;
 
 		validatePos(position, 1);
 
 		position += shrinkN;
 
+		assert invariant();
 		return position & addrMask;
 	}
 
 	@Override
 	public int bufCount() {
+		assert invariant();
 		return bufN;
 	}
 
 	@Override
 	public boolean split(Range target, byte sep, Range before, Range after) {
+		assert invariant();
 		int pos = find(target.start, target.limit(), sep, true);
 
 		if (pos >= 0) {
 			before.setInterval(target.start, pos);
 			after.setInterval(pos + 1, target.limit());
+			assert invariant();
 			return true;
 		} else {
+			assert invariant();
 			return false;
 		}
 	}
