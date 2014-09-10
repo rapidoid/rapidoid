@@ -32,10 +32,6 @@ import org.rapidoid.util.U;
 
 public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 
-	private static final byte[] CONNECTION = "Connection".getBytes();
-
-	private static final byte[] KEEP_ALIVE = "keep-alive".getBytes();
-
 	private static final byte[] CONTENT_TYPE = "Content-Type".getBytes();
 
 	private static final byte[] MULTIPART_FORM_DATA_BOUNDARY1 = "multipart/form-data; boundary=".getBytes();
@@ -55,36 +51,36 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 	}
 
 	@Override
-	protected void process(Ctx ctx, WebExchangeImpl exchange) {
-		parser.parse(exchange.input(), exchange);
+	protected void process(Ctx ctx, WebExchangeImpl web) {
 
-		exchange.failIf(exchange.verb.isEmpty() || exchange.path.isEmpty(), "Invalid HTTP request!");
-		analyzeRequest(exchange);
+		parser.parse(web.input(), web.isGet, web.isKeepAlive, web.body, web.verb, web.uri, web.protocol, web.headers,
+				web.helper());
 
-		boolean keepAlive = isKeepAlive(exchange);
-		exchange.setKeepAlive(keepAlive);
-		exchange.respType = 1;
+		web.failIf(web.verb.isEmpty() || web.uri.isEmpty(), "Invalid HTTP request!");
+		analyzeRequest(web);
 
-		int posBefore = exchange.output().size();
+		web.respType = 1;
 
-		exchange.output().append(resp(exchange).bytes());
+		int posBefore = web.output().size();
 
-		boolean dispatched = router.dispatch(exchange);
+		web.output().append(resp(web).bytes());
+
+		boolean dispatched = router.dispatch(web);
 		if (!dispatched) {
-			exchange.write("Invalid HTTP VERB or URL PATH!");
-			exchange.done();
+			web.write("Invalid HTTP VERB or URL PATH!");
+			web.done();
 		}
 
-		long wrote = exchange.getTotalWritten();
+		long wrote = web.getTotalWritten();
 		U.ensure(wrote <= Integer.MAX_VALUE, "Response too big!");
 
-		int pos = posBefore + resp(exchange).contentLengthPos;
+		int pos = posBefore + resp(web).contentLengthPos;
 
-		exchange.output().putNumAsText(pos, wrote);
+		web.output().putNumAsText(pos, wrote);
 	}
 
 	private HttpResponse resp(WebExchangeImpl exchange) {
-		HttpResponse resp = responses.get(exchange.isKeepAlive, exchange.respType);
+		HttpResponse resp = responses.get(exchange.isKeepAlive.value, exchange.respType);
 		assert resp != null;
 		return resp;
 	}
@@ -100,13 +96,11 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 
 			src.get(exchange.multipartBoundary, helper.bytes, 2);
 
-			// U.show(src.get(exchange.multipartBoundary));
-			// U.show(new String(helper.bytes, 0,
-			// exchange.multipartBoundary.length +
-			// 2));
-			// U.print("# ********************");
-			// U.show(src.get(exchange.body));
-			// U.print("# ********************");
+//			U.show(src.get(exchange.multipartBoundary));
+//			U.show(new String(helper.bytes, 0, exchange.multipartBoundary.length + 2));
+//			U.print("# ********************");
+//			U.show(src.get(exchange.body));
+//			U.print("# ********************");
 
 			parseMultiParts(exchange);
 		}
@@ -143,7 +137,6 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 
 					// ?? int bodyStart = src.position(); ??
 					// U.show(src.get(Range.fromTo(bodyStart, to)));
-					U.show(headers.str(src));
 				}
 
 				pos1 = pos2;
@@ -156,30 +149,19 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 		}
 	}
 
-	private boolean isKeepAlive(WebExchangeImpl exchange) {
-		Buf buf = exchange.input();
-		Range connection = exchange.headers.get(buf, CONNECTION, false);
-
-		if (connection != null) {
-			return buf.matches(connection, KEEP_ALIVE, false);
-		} else {
-			return true;
-		}
-	}
-
 	private boolean isMultipartForm(WebExchangeImpl exchange) {
 		Buf buf = exchange.input();
-		Range contType = exchange.headers.get(buf, CONTENT_TYPE, false);
+		Range contType = exchange.headers().ranges().get(buf, CONTENT_TYPE, false);
 
 		if (contType != null) {
 			if (buf.startsWith(contType, MULTIPART_FORM_DATA_BOUNDARY1, false)) {
-				exchange.multipartBoundary.setStartEnd(contType.start + MULTIPART_FORM_DATA_BOUNDARY1.length,
+				exchange.multipartBoundary.setInterval(contType.start + MULTIPART_FORM_DATA_BOUNDARY1.length,
 						contType.limit());
 				return true;
 			}
 
 			if (buf.startsWith(contType, MULTIPART_FORM_DATA_BOUNDARY2, false)) {
-				exchange.multipartBoundary.setStartEnd(contType.start + MULTIPART_FORM_DATA_BOUNDARY2.length,
+				exchange.multipartBoundary.setInterval(contType.start + MULTIPART_FORM_DATA_BOUNDARY2.length,
 						contType.limit());
 				return true;
 			}
