@@ -2235,4 +2235,21 @@ public class U {
 		return CALENDAR.get(Calendar.YEAR);
 	}
 
+	public static short bytesToShort(String s) {
+		ByteBuffer buf = buf(s);
+		ensure(buf.limit() == 2);
+		return buf.getShort();
+	}
+
+	public static int bytesToInt(String s) {
+		ByteBuffer buf = buf(s);
+		ensure(buf.limit() == 4);
+		return buf.getInt();
+	}
+
+	public static long bytesToLong(String s) {
+		ByteBuffer buf = buf(s);
+		ensure(buf.limit() == 8);
+		return buf.getLong();
+	}
 }
