@@ -145,4 +145,6 @@ public interface Buf {
 
 	int scanLnLn(Range[] ranges);
 
+	IncompleteReadException incomplete();
+
 }

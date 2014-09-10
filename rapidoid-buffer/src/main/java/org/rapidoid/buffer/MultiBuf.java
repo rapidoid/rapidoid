@@ -1086,7 +1086,8 @@ public class MultiBuf implements Buf, Constants {
 		}
 	}
 
-	private IncompleteReadException incomplete() {
+	@Override
+	public IncompleteReadException incomplete() {
 		if (ERRR == null) {
 			ERRR = U.rte(IncompleteReadException.class);
 		}
