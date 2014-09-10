@@ -2252,4 +2252,13 @@ public class U {
 		ensure(buf.limit() == 8);
 		return buf.getLong();
 	}
+
+	public static int intFrom(byte a, byte b, byte c, byte d) {
+		return (a << 24) + (b << 16) + (c << 8) + d;
+	}
+
+	public static short shortFrom(byte a, byte b) {
+		return (short) ((a << 8) + b);
+	}
+
 }
