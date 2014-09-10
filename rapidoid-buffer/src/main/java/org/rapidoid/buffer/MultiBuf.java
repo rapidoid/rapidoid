@@ -298,7 +298,6 @@ public class MultiBuf implements Buf, Constants {
 		ByteBuffer cbuf = last();
 
 		if (!cbuf.hasRemaining()) {
-			cbuf.flip();
 			expandUnit();
 			cbuf = last();
 		}
@@ -530,23 +529,45 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	private boolean invariant() {
-		assert bufN >= 0;
+		try {
+
+			assert bufN >= 0;
+
+			for (int i = 0; i < bufN - 1; i++) {
+				ByteBuffer buf = bufs[i];
+				assert buf.position() == singleCap;
+				assert buf.limit() == singleCap;
+				assert buf.capacity() == singleCap;
+			}
+
+			if (bufN > 0) {
+				ByteBuffer buf = bufs[bufN - 1];
+				assert buf == last();
+				assert buf.position() > 0;
+				assert buf.capacity() == singleCap;
+			}
+
+			return true;
+
+		} catch (AssertionError e) {
+			dumpBuffers();
+			throw e;
+		}
+
+	}
+
+	private void dumpBuffers() {
+		U.print(">>" + bufN + " BUFFERS:");
 
 		for (int i = 0; i < bufN - 1; i++) {
 			ByteBuffer buf = bufs[i];
-			assert buf.position() == 0;
-			assert buf.limit() == singleCap;
-			assert buf.capacity() == singleCap;
+			U.show(i + "]" + buf);
 		}
 
 		if (bufN > 0) {
 			ByteBuffer buf = bufs[bufN - 1];
-			assert buf == last();
-			assert buf.position() > 0;
-			assert buf.capacity() == singleCap;
+			U.show("LAST]" + buf);
 		}
-
-		return true;
 	}
 
 	@Override
