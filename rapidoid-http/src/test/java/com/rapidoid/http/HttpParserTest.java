@@ -24,22 +24,26 @@ import org.mockito.Mockito;
 import org.rapidoid.Connection;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
+import org.rapidoid.net.RapidoidHelper;
+import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
 public class HttpParserTest extends HttpTestCommons {
 
 	private static final String CRLF = "\r\n";
 
-	private static String REQ1 = req("GET /foo/bar?a=5&b&n=4 HTTP/1.1|Host:www.test.com|Set-Cookie: aaa=2||", CRLF);
+	private static String REQ1 = req("GET /foo/bar?a=5&b&n=%20 HTTP/1.1|Host:www.test.com|Set-Cookie: aaa=2||", CRLF);
 	private static String REQ2 = req(
-			"POST /something/else/here?x=abc HTTP/STRANGE|Host:a.b.c.org|My-Header: same|My-Header: again|" + body("a"),
-			CRLF);
-	private static String REQ3 = req("PUT /books HTTP/1.0|  AAAAA: c = 2 |" + body("ab"), CRLF);
+			"POST /something/else/here?x=abc HTTP/STRANGE|Host:a.b.c.org|:ign|ored:|My-Header: same|My-Header: again|"
+					+ body("a"), CRLF);
+	private static String REQ3 = req("PUT /books HTTP/1.0|CoNNectioN: keep-alive | AAAAA: c = 2 |" + body("ab"), CRLF);
 	private static String REQ4 = req("DELETE /?a&bb=c&d MY-PROTOCOL|" + body("abc"), CRLF);
-	private static String REQ5 = req("GET / HTTP/1.1|" + body("abcd"), CRLF);
+	private static String REQ5 = req("ABCD ///??? HTTP/1.1|" + body("abcd"), CRLF);
 	private static String REQ6 = req("GET /?x A||", CRLF);
 
 	private static final String CONTENT_LENGTH = "CoNtEnT-LenGth";
+
+	private static final RapidoidHelper HELPER = new RapidoidHelper();
 
 	private static String req(String s, String nl) {
 		return s.replaceAll("\\|", nl);
@@ -55,10 +59,11 @@ public class HttpParserTest extends HttpTestCommons {
 		WebExchangeImpl req = parse(REQ1);
 
 		eq(REQ1, req.verb, "GET");
-		eq(REQ1, req.path, "/foo/bar");
-		eqs(REQ1, req.params().ranges(), "a", "5", "b", "", "n", "4");
+		eq(REQ1, req.path().range(), "/foo/bar");
+		eqs(REQ1, req.params().ranges(), "a", "5", "b", "", "n", "%20");
+		eq(req.params().get(), U.map("a", "5", "b", "", "n", " "));
 		eq(REQ1, req.protocol, "HTTP/1.1");
-		eqs(REQ1, req.headers, "Host", "www.test.com", "Set-Cookie", "aaa=2");
+		eqs(REQ1, req.headers().ranges(), "Host", "www.test.com", "Set-Cookie", "aaa=2");
 
 		isNone(req.body);
 	}
@@ -68,10 +73,11 @@ public class HttpParserTest extends HttpTestCommons {
 		WebExchangeImpl req = parse(REQ2);
 
 		eq(REQ2, req.verb, "POST");
-		eq(REQ2, req.path, "/something/else/here");
+		eq(REQ2, req.path().range(), "/something/else/here");
 		eqs(REQ2, req.params().ranges(), "x", "abc");
 		eq(REQ2, req.protocol, "HTTP/STRANGE");
-		eqs(REQ2, req.headers, "Host", "a.b.c.org", "My-Header", "same", "My-Header", "again", CONTENT_LENGTH, "5");
+		eqs(REQ2, req.headers().ranges(), "Host", "a.b.c.org", "My-Header", "same", "My-Header", "again",
+				CONTENT_LENGTH, "5");
 		eq(REQ2, req.body, "BODYa");
 	}
 
@@ -80,10 +86,10 @@ public class HttpParserTest extends HttpTestCommons {
 		WebExchangeImpl req = parse(REQ3);
 
 		eq(REQ3, req.verb, "PUT");
-		eq(REQ3, req.path, "/books");
+		eq(REQ3, req.path().range(), "/books");
 		eqs(REQ3, req.params().ranges());
 		eq(REQ3, req.protocol, "HTTP/1.0");
-		eqs(REQ3, req.headers, "AAAAA", "c = 2", CONTENT_LENGTH, "6");
+		eqs(REQ3, req.headers().ranges(), "CoNNectioN", "keep-alive", "AAAAA", "c = 2", CONTENT_LENGTH, "6");
 		eq(REQ3, req.body, "BODYab");
 	}
 
@@ -92,10 +98,10 @@ public class HttpParserTest extends HttpTestCommons {
 		WebExchangeImpl req = parse(REQ4);
 
 		eq(REQ4, req.verb, "DELETE");
-		eq(REQ4, req.path, "/");
+		eq(REQ4, req.path().range(), "/");
 		eqs(REQ4, req.params().ranges(), "a", "", "bb", "c", "d", "");
 		eq(REQ4, req.protocol, "MY-PROTOCOL");
-		eqs(REQ4, req.headers, CONTENT_LENGTH, "7");
+		eqs(REQ4, req.headers().ranges(), CONTENT_LENGTH, "7");
 		eq(REQ4, req.body, "BODYabc");
 	}
 
@@ -103,11 +109,14 @@ public class HttpParserTest extends HttpTestCommons {
 	public void shouldParseRequest5() {
 		WebExchangeImpl req = parse(REQ5);
 
-		eq(REQ5, req.verb, "GET");
-		eq(REQ5, req.path, "/");
-		eqs(REQ5, req.params().ranges());
+		eq(REQ5, req.verb, "ABCD");
+		eq(REQ5, req.path().range(), "///");
+		U.show(req.params().ranges().keys[0].str(req.input()));
+		U.show(req.params().ranges().values[0].str(req.input()));
+		eqs(REQ5, req.params().ranges(), "??", "");
+		eq(req.params().get(), U.map("??", ""));
 		eq(REQ5, req.protocol, "HTTP/1.1");
-		eqs(REQ5, req.headers, CONTENT_LENGTH, "8");
+		eqs(REQ5, req.headers().ranges(), CONTENT_LENGTH, "8");
 		eq(REQ5, req.body, "BODYabcd");
 	}
 
@@ -116,10 +125,10 @@ public class HttpParserTest extends HttpTestCommons {
 		WebExchangeImpl req = parse(REQ6);
 
 		eq(REQ6, req.verb, "GET");
-		eq(REQ6, req.path, "/");
+		eq(REQ6, req.path().range(), "/");
 		eqs(REQ6, req.params().ranges(), "x", "");
 		eq(REQ6, req.protocol, "A");
-		eqs(REQ6, req.headers);
+		eqs(REQ6, req.headers().ranges());
 		isNone(req.body);
 	}
 
@@ -134,7 +143,7 @@ public class HttpParserTest extends HttpTestCommons {
 		req.setConnection(conn);
 
 		HttpParser parser = new HttpParser();
-		parser.parse(reqbuf, req);
+		parser.parse(reqbuf, req.isGet, req.isKeepAlive, req.body, req.verb, req.uri, req.protocol, req.headers, HELPER);
 
 		return req;
 	}
