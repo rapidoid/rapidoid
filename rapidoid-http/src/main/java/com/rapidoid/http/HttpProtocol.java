@@ -65,9 +65,15 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 
 		web.output().append(resp(web).bytes());
 
-		boolean dispatched = router.dispatch(web);
-		if (!dispatched) {
-			web.write("Invalid HTTP VERB or URL PATH!");
+		try {
+			boolean dispatched = router.dispatch(web);
+			if (!dispatched) {
+				web.write("Invalid HTTP VERB or URL PATH!");
+				web.done();
+			}
+		} catch (Throwable e) {
+			U.error("Internal server error!", "request", web, "error", e);
+			web.write("Internal server error!");
 			web.done();
 		}
 
