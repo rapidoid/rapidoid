@@ -74,10 +74,10 @@ public class Range {
 		this.length = length;
 	}
 
-	public void setStartEnd(int start, int end) {
-		// U.ensure(start <= end, "Invalid range!");
+	public void setInterval(int start, int limit) {
+		assert start <= limit;
 		this.start = start;
-		this.length = end - start;
+		this.length = limit - start;
 	}
 
 	public String get(String whole) {

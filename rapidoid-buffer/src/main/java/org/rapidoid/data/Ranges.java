@@ -45,10 +45,9 @@ public class Ranges {
 		count = 0;
 	}
 
-	public Range get(Buf buf, byte[] key, boolean caseSensitive) {
+	public Range getByPrefix(Buf buf, byte[] prefix, boolean caseSensitive) {
 		for (int i = 0; i < count; i++) {
-			if (buf.startsWith(ranges[i], key, caseSensitive)) {
-				// FIXME complete
+			if (buf.startsWith(ranges[i], prefix, caseSensitive)) {
 				return ranges[i];
 			}
 		}
@@ -88,6 +87,10 @@ public class Ranges {
 		}
 
 		return count++;
+	}
+
+	public boolean isEmpty() {
+		return count == 0;
 	}
 
 }
