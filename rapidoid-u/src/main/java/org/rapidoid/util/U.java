@@ -2043,7 +2043,17 @@ public class U {
 
 		case BOOLEAN:
 		case BOOLEAN_OBJ:
-			return (T) new Boolean(value);
+			if ("y".equalsIgnoreCase(value) || "t".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value)
+					|| "true".equalsIgnoreCase(value)) {
+				return (T) Boolean.TRUE;
+			}
+
+			if ("n".equalsIgnoreCase(value) || "f".equalsIgnoreCase(value) || "no".equalsIgnoreCase(value)
+					|| "false".equalsIgnoreCase(value)) {
+				return (T) Boolean.FALSE;
+			}
+
+			throw rte("Cannot convert the string value '%s' to boolean!", value);
 
 		case BYTE:
 		case BYTE_OBJ:
