@@ -1168,11 +1168,9 @@ public class U {
 			// 0-255
 			int len = bytes.length;
 			if (len < 255) {
-				byte len2 = (byte) (len - 128);
-				buf.put(len2);
+				buf.put(bytee(len));
 			} else {
-				byte len2 = (byte) (255 - 128);
-				buf.put(len2);
+				buf.put(bytee(255));
 				buf.putInt(len);
 			}
 			buf.put(bytes);
@@ -1222,6 +1220,10 @@ public class U {
 		default:
 			throw notExpected();
 		}
+	}
+
+	private static byte bytee(int n) {
+		return (byte) (n - 128);
 	}
 
 	public static Object decode(ByteBuffer buf) {
