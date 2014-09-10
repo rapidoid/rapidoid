@@ -57,6 +57,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -246,6 +247,11 @@ public class U {
 
 	public static Map<String, Prop> propertiesOf(Class<?> clazz) {
 		return BEAN_PROPERTIES.get(clazz);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Map<String, Prop> propertiesOf(Object obj) {
+		return obj != null ? propertiesOf(obj.getClass()) : Collections.EMPTY_MAP;
 	}
 
 	private static Map<String, TypeKind> initKinds() {
