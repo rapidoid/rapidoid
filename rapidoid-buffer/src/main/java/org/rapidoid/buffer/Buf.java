@@ -154,4 +154,6 @@ public interface Buf {
 
 	IncompleteReadException incomplete();
 
+	boolean split(Range target, byte sep, Range before, Range after);
+
 }

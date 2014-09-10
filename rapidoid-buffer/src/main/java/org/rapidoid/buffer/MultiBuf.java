@@ -1482,4 +1482,17 @@ public class MultiBuf implements Buf, Constants {
 		return bufN;
 	}
 
+	@Override
+	public boolean split(Range target, byte sep, Range before, Range after) {
+		int pos = find(target.start, target.limit(), sep, true);
+
+		if (pos >= 0) {
+			before.setInterval(target.start, pos);
+			after.setInterval(pos + 1, target.limit());
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }
