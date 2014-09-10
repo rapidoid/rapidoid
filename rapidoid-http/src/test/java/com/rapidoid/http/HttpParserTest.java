@@ -111,8 +111,6 @@ public class HttpParserTest extends HttpTestCommons {
 
 		eq(REQ5, req.verb, "ABCD");
 		eq(REQ5, req.path().range(), "///");
-		U.show(req.params().ranges().keys[0].str(req.input()));
-		U.show(req.params().ranges().values[0].str(req.input()));
 		eqs(REQ5, req.params().ranges(), "??", "");
 		eq(req.params().get(), U.map("??", ""));
 		eq(REQ5, req.protocol, "HTTP/1.1");
