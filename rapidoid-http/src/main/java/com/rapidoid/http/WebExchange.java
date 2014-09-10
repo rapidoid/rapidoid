@@ -28,6 +28,8 @@ public interface WebExchange extends Ctx {
 
 	Data verb();
 
+	Data uri();
+
 	Data path();
 
 	Data subpath();

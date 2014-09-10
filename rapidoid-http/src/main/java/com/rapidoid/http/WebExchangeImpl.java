@@ -35,6 +35,7 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	static final int HEADER = 2;
 	static final int BODY_PART = 3;
 
+	final Range uri = new Range();
 	final Range verb = new Range();
 	final Range path = new Range();
 	final Range query = new Range();
@@ -60,6 +61,7 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	private final Range subpathRange = new Range();
 
 	private final Data _body;
+	private final Data _uri;
 	private final Data _verb;
 	private final Data _path;
 	private final Data _subpath;
@@ -72,6 +74,7 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 		reset();
 
 		this._body = data(body);
+		this._uri = data(uri);
 		this._verb = data(verb);
 		this._path = decodedData(path);
 		this._subpath = decodedData(subpathRange);
@@ -88,6 +91,7 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 		isKeepAlive = false;
 
 		verb.reset();
+		uri.reset();
 		path.reset();
 		query.reset();
 		protocol.reset();
@@ -126,6 +130,11 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	@Override
 	public Data body() {
 		return _body;
+	}
+
+	@Override
+	public Data uri() {
+		return _uri;
 	}
 
 	@Override
