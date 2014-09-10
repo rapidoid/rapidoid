@@ -136,7 +136,7 @@ public class MultiBuf implements Buf, Constants {
 
 		int least = pos + space;
 
-		boolean hasEnough = least <= size() && least <= _limit;
+		boolean hasEnough = least <= _size() && least <= _limit;
 
 		if (!hasEnough) {
 			throw incomplete();
@@ -163,6 +163,14 @@ public class MultiBuf implements Buf, Constants {
 	@Override
 	public int size() {
 		assert invariant();
+
+		int result = _size();
+
+		assert invariant();
+		return result;
+	}
+
+	private int _size() {
 		return bufN > 0 ? (bufN - 1) * singleCap + bufs[bufN - 1].position() - shrinkN : 0;
 	}
 
@@ -189,7 +197,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	/**
-	 * Reads data from the channel and appends to the buffer.
+	 * Reads data from the channel and appends it to the buffer.
 	 * 
 	 * Precondition: received event that the channel has data to be read.
 	 */
@@ -333,7 +341,7 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public String toString() {
-		return String.format("Buf " + name + " [size=" + size() + ", units=" + unitCount() + ", trash=" + shrinkN
+		return String.format("Buf " + name + " [size=" + _size() + ", units=" + unitCount() + ", trash=" + shrinkN
 				+ "] " + super.toString());
 	}
 
@@ -341,7 +349,7 @@ public class MultiBuf implements Buf, Constants {
 	public String data() {
 		assert invariant();
 
-		byte[] bytes = new byte[size()];
+		byte[] bytes = new byte[_size()];
 		int total = readAll(bytes, 0, 0, bytes.length);
 
 		assert total == bytes.length;
@@ -385,7 +393,7 @@ public class MultiBuf implements Buf, Constants {
 	private int readAll(byte[] bytes, int destOffset, int offset, int length) {
 		assert invariant();
 
-		if (offset + length > size()) {
+		if (offset + length > _size()) {
 			throw new IllegalArgumentException("offset + length > buffer size!");
 		}
 
@@ -404,8 +412,8 @@ public class MultiBuf implements Buf, Constants {
 	public int writeTo(WritableByteChannel channel) throws IOException {
 		assert invariant();
 
-		int wrote = writeTo(TO_CHANNEL, 0, size(), null, channel, null, 0);
-		U.ensure(wrote <= size(), "Incorrect write to channel!");
+		int wrote = writeTo(TO_CHANNEL, 0, _size(), null, channel, null, 0);
+		U.ensure(wrote <= _size(), "Incorrect write to channel!");
 
 		assert invariant();
 		return wrote;
@@ -416,8 +424,8 @@ public class MultiBuf implements Buf, Constants {
 		assert invariant();
 
 		try {
-			int wrote = writeTo(TO_BUFFER, 0, size(), null, null, buffer, 0);
-			assert wrote == size();
+			int wrote = writeTo(TO_BUFFER, 0, _size(), null, null, buffer, 0);
+			assert wrote == _size();
 			assert invariant();
 			return wrote;
 		} catch (IOException e) {
@@ -428,7 +436,7 @@ public class MultiBuf implements Buf, Constants {
 
 	private int writeTo(int mode, int offset, int length, byte[] bytes, WritableByteChannel channel, ByteBuffer buffer,
 			int destOffset) throws IOException {
-		if (size() == 0) {
+		if (_size() == 0) {
 			assert length == 0;
 			return 0;
 		}
@@ -545,7 +553,7 @@ public class MultiBuf implements Buf, Constants {
 	public void deleteBefore(int count) {
 		assert invariant();
 
-		if (count == size()) {
+		if (count == _size()) {
 			clear();
 			return;
 		}
@@ -633,7 +641,7 @@ public class MultiBuf implements Buf, Constants {
 	public void deleteAfter(int position) {
 		assert invariant();
 
-		if (bufN == 0 || position == size()) {
+		if (bufN == 0 || position == _size()) {
 			assert invariant();
 			return;
 		}
@@ -678,13 +686,13 @@ public class MultiBuf implements Buf, Constants {
 	public void deleteLast(int count) {
 		assert invariant();
 
-		deleteAfter(size() - count);
+		deleteAfter(_size() - count);
 
 		assert invariant();
 	}
 
 	private boolean validPosition(int position) {
-		U.ensure(position >= 0 && position < size(), "Invalid position: %s", position);
+		U.ensure(position >= 0 && position < _size(), "Invalid position: %s", position);
 		return true;
 	}
 
@@ -1078,7 +1086,7 @@ public class MultiBuf implements Buf, Constants {
 	public boolean matches(Range target, byte[] match, boolean caseSensitive) {
 		assert invariant();
 
-		if (target.length != match.length || target.start < 0 || target.last() >= size()) {
+		if (target.length != match.length || target.start < 0 || target.last() >= _size()) {
 			assert invariant();
 			return false;
 		}
@@ -1093,7 +1101,7 @@ public class MultiBuf implements Buf, Constants {
 	public boolean startsWith(Range target, byte[] match, boolean caseSensitive) {
 		assert invariant();
 
-		if (target.length < match.length || target.start < 0 || target.last() >= size()) {
+		if (target.length < match.length || target.start < 0 || target.last() >= _size()) {
 			assert invariant();
 			return false;
 		}
@@ -1108,7 +1116,7 @@ public class MultiBuf implements Buf, Constants {
 	public boolean containsAt(Range target, int offset, byte[] match, boolean caseSensitive) {
 		assert invariant();
 
-		if (offset < 0 || target.length < offset + match.length || target.start < 0 || target.last() >= size()) {
+		if (offset < 0 || target.length < offset + match.length || target.start < 0 || target.last() >= _size()) {
 			assert invariant();
 			return false;
 		}
@@ -1389,7 +1397,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	private void sizeChanged() {
-		_limit = size();
+		_limit = _size();
 	}
 
 	@Override
