@@ -21,6 +21,7 @@ package org.rapidoid.demo.web;
  */
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,13 +39,18 @@ public class MainService {
 	}
 
 	// e.g. /hey/joe/23
-	public String hey(String name, int age) {
-		return "Hey " + name + " (" + age + ")";
+	public String hey(String name, byte age, boolean driver) {
+		return "Hey " + name + " (" + age + "), driver: " + driver;
 	}
 
 	// e.g. /event/12/dec/2013
 	public String event(String day, String month, String year) {
 		return "Event at " + day + " " + month + " " + year;
+	}
+
+	// e.g. /date/31.12.2013 or 31-12-2013 or 2013-12-31 etc.
+	public Date date(Date date) {
+		return date;
 	}
 
 	// e.g. /params?x=1&y=2

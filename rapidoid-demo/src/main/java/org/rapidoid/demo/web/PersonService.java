@@ -22,7 +22,7 @@ package org.rapidoid.demo.web;
 
 public class PersonService {
 
-	// e.g. /ping
+	// e.g. /hello
 	public String hello() {
 		return "Hello from PersonService";
 	}
