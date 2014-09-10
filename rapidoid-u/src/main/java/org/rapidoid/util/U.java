@@ -137,6 +137,9 @@ public class U {
 		DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
 	}
 
+	private U() {
+	}
+
 	public static byte[] getDateTimeBytes() {
 		long time = System.currentTimeMillis();
 
