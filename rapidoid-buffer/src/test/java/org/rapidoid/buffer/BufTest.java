@@ -21,7 +21,10 @@ package org.rapidoid.buffer;
  */
 
 import org.rapidoid.data.Range;
+import org.rapidoid.data.Ranges;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.U;
+import org.rapidoid.wrap.Int;
 import org.testng.annotations.Test;
 
 public class BufTest extends BufferTestCommons implements Constants {
@@ -243,13 +246,53 @@ public class BufTest extends BufferTestCommons implements Constants {
 		eq(range, 4, 2);
 
 		eq(buf.position(), 6);
-		
+
 		buf.scanUntil(COL, range, true);
 		eq(buf.get(range), "xy");
 
 		eq(buf.position(), 9);
 	}
 
+	@Test
+	public void testScanUntilAndMatchPrefix() {
+		final int NO_PREFIX = 0;
+		Range range = new Range();
+
+		eq(MultiBuf.scanUntilAndMatchPrefix(U.buf("\n"), range, LF, 0, 0, NO_PREFIX), 1);
+		eq(range, 0, 0);
+
+		eq(MultiBuf.scanUntilAndMatchPrefix(U.buf("a\n"), range, COL, 0, 0, NO_PREFIX), NOT_FOUND);
+		eq(range, -1, 0);
+
+		eq(MultiBuf.scanUntilAndMatchPrefix(U.buf("a\n"), range, LF, 0, 1, NO_PREFIX), 2);
+		eq(range, 0, 1);
+
+		eq(MultiBuf.scanUntilAndMatchPrefix(U.buf("ab:c"), range, COL, 0, 3, NO_PREFIX), 3);
+		eq(range, 0, 2);
+
+		for (int i = 0; i < 10; i++) {
+			String s = U.copyNtimes("a", i);
+
+			eq(MultiBuf.scanUntilAndMatchPrefix(U.buf(s + ":"), range, COL, 0, i, NO_PREFIX), i + 1);
+			eq(range, 0, i);
+
+			eq(MultiBuf.scanLnAndMatchPrefix(U.buf(s + "\n"), range, 0, i, NO_PREFIX), i + 1);
+			eq(range, 0, i);
+
+			eq(MultiBuf.scanLnAndMatchPrefix(U.buf(s + "\r\n"), range, 0, i + 1, NO_PREFIX), i + 2);
+			eq(range, 0, i);
+		}
+
+		eq(MultiBuf.scanLnAndMatchPrefix(U.buf("x\n"), range, 0, 0, NO_PREFIX), NOT_FOUND);
+		eq(range, -1, 0);
+		eq(MultiBuf.scanLnAndMatchPrefix(U.buf("x\r\n"), range, 0, 1, NO_PREFIX), NOT_FOUND);
+		eq(range, -1, 0);
+
+		eq(MultiBuf.scanLnAndMatchPrefix(U.buf("x\n"), range, 1, 1, NO_PREFIX), 2);
+		eq(range, 1, 0);
+		eq(MultiBuf.scanLnAndMatchPrefix(U.buf("x\r\n"), range, 1, 2, NO_PREFIX), 3);
+		eq(range, 1, 0);
+	}
 
 	@Test
 	public void testScanLnLn() {
