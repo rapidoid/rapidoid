@@ -1,5 +1,7 @@
 package org.rapidoid.util;
 
+import java.nio.charset.Charset;
+
 /*
  * #%L
  * rapidoid-u
@@ -21,6 +23,10 @@ package org.rapidoid.util;
  */
 
 public interface Constants {
+
+	Charset UTF8 = Charset.forName("UTF-8");
+
+	int NOT_FOUND = Integer.MIN_VALUE;
 
 	boolean T = true;
 

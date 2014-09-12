@@ -50,7 +50,6 @@ import java.net.Socket;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -80,9 +79,7 @@ import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
-public class U {
-
-	public static final Charset UTF8 = Charset.forName("UTF-8");
+public class U implements Constants {
 
 	private static final int TRACE = 0;
 	private static final int DEBUG = 1;
