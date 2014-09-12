@@ -36,18 +36,18 @@ public class WebReq implements PojowebRequest {
 
 	@Override
 	public String uri() {
-		return x.path().get();
+		return x.path_().get();
 	}
 
 	@Override
 	public String path() {
-		return x.path().get();
+		return x.path_().get();
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Map<String, Object> paramsMap() {
-		return (Map) x.params().get();
+		return (Map) x.params_().get();
 	}
 
 	@Override

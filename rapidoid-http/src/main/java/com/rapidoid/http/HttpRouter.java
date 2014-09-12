@@ -104,8 +104,8 @@ public class HttpRouter implements Router {
 	public boolean dispatch(WebExchangeImpl x) {
 
 		Buf buf = x.input();
-		Range action = x.verb().range();
-		Range path = x.path().range();
+		Range action = x.verb_().range();
+		Range path = x.path_().range();
 
 		long hash = hash(buf, action, path);
 		SimpleList<Route> candidates = routes.get(hash);

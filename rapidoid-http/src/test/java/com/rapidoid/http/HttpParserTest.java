@@ -60,10 +60,10 @@ public class HttpParserTest extends HttpTestCommons {
 
 		eq(REQ1, req.verb, "GET");
 		eq(REQ1, req.path, "/foo/bar");
-		eqs(REQ1, req.params().ranges(), "a", "5", "b", "", "n", "%20");
-		eq(req.params().get(), U.map("a", "5", "b", "", "n", " "));
+		eqs(REQ1, req.params_().ranges(), "a", "5", "b", "", "n", "%20");
+		eq(req.params_().get(), U.map("a", "5", "b", "", "n", " "));
 		eq(REQ1, req.protocol, "HTTP/1.1");
-		eqs(REQ1, req.headers().ranges(), "Host", "www.test.com", "Set-Cookie", "aaa=2");
+		eqs(REQ1, req.headers_().ranges(), "Host", "www.test.com", "Set-Cookie", "aaa=2");
 
 		isNone(req.body);
 	}
@@ -74,9 +74,9 @@ public class HttpParserTest extends HttpTestCommons {
 
 		eq(REQ2, req.verb, "POST");
 		eq(REQ2, req.path, "/something/else/here");
-		eqs(REQ2, req.params().ranges(), "x", "abc");
+		eqs(REQ2, req.params_().ranges(), "x", "abc");
 		eq(REQ2, req.protocol, "HTTP/STRANGE");
-		eqs(REQ2, req.headers().ranges(), "Host", "a.b.c.org", "My-Header", "same", "My-Header", "again",
+		eqs(REQ2, req.headers_().ranges(), "Host", "a.b.c.org", "My-Header", "same", "My-Header", "again",
 				CONTENT_LENGTH, "5");
 		eq(REQ2, req.body, "BODYa");
 	}
@@ -87,9 +87,9 @@ public class HttpParserTest extends HttpTestCommons {
 
 		eq(REQ3, req.verb, "PUT");
 		eq(REQ3, req.path, "/books");
-		eqs(REQ3, req.params().ranges());
+		eqs(REQ3, req.params_().ranges());
 		eq(REQ3, req.protocol, "HTTP/1.0");
-		eqs(REQ3, req.headers().ranges(), "CoNNectioN", "keep-alive", "AAAAA", "c = 2", CONTENT_LENGTH, "6");
+		eqs(REQ3, req.headers_().ranges(), "CoNNectioN", "keep-alive", "AAAAA", "c = 2", CONTENT_LENGTH, "6");
 		eq(REQ3, req.body, "BODYab");
 	}
 
@@ -99,9 +99,9 @@ public class HttpParserTest extends HttpTestCommons {
 
 		eq(REQ4, req.verb, "DELETE");
 		eq(REQ4, req.path, "/");
-		eqs(REQ4, req.params().ranges(), "a", "", "bb", "c", "d", "");
+		eqs(REQ4, req.params_().ranges(), "a", "", "bb", "c", "d", "");
 		eq(REQ4, req.protocol, "MY-PROTOCOL");
-		eqs(REQ4, req.headers().ranges(), CONTENT_LENGTH, "7");
+		eqs(REQ4, req.headers_().ranges(), CONTENT_LENGTH, "7");
 		eq(REQ4, req.body, "BODYabc");
 	}
 
@@ -111,10 +111,10 @@ public class HttpParserTest extends HttpTestCommons {
 
 		eq(REQ5, req.verb, "ABCD");
 		eq(REQ5, req.path, "///");
-		eqs(REQ5, req.params().ranges(), "??", "");
-		eq(req.params().get(), U.map("??", ""));
+		eqs(REQ5, req.params_().ranges(), "??", "");
+		eq(req.params_().get(), U.map("??", ""));
 		eq(REQ5, req.protocol, "HTTP/1.1");
-		eqs(REQ5, req.headers().ranges(), CONTENT_LENGTH, "8");
+		eqs(REQ5, req.headers_().ranges(), CONTENT_LENGTH, "8");
 		eq(REQ5, req.body, "BODYabcd");
 	}
 
@@ -124,9 +124,9 @@ public class HttpParserTest extends HttpTestCommons {
 
 		eq(REQ6, req.verb, "GET");
 		eq(REQ6, req.path, "/");
-		eqs(REQ6, req.params().ranges(), "x", "");
+		eqs(REQ6, req.params_().ranges(), "x", "");
 		eq(REQ6, req.protocol, "A");
-		eqs(REQ6, req.headers().ranges());
+		eqs(REQ6, req.headers_().ranges());
 		isNone(req.body);
 	}
 

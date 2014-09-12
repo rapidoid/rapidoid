@@ -116,10 +116,10 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	}
 
 	@Override
-	public MultiData params() {
+	public MultiData params_() {
 		if (!parsedParams) {
 			if (!query.isEmpty()) {
-				PARSER.parseParams(input(), params, query().range());
+				PARSER.parseParams(input(), params, query_().range());
 			}
 
 			parsedParams = true;
@@ -129,7 +129,7 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	}
 
 	@Override
-	public MultiData headers() {
+	public MultiData headers_() {
 		if (!parsedHeaders) {
 			if (!headers.isEmpty()) {
 				PARSER.parseHeadersIntoKV(input(), headers, headersKV);
@@ -141,37 +141,37 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 		return _headers;
 	}
 
-	public Data subpath() {
+	public Data subpath_() {
 		return _subpath;
 	}
 
 	@Override
-	public Data body() {
+	public Data body_() {
 		return _body;
 	}
 
 	@Override
-	public Data uri() {
+	public Data uri_() {
 		return _uri;
 	}
 
 	@Override
-	public Data verb() {
+	public Data verb_() {
 		return _verb;
 	}
 
 	@Override
-	public Data path() {
+	public Data path_() {
 		return _path;
 	}
 
 	@Override
-	public Data protocol() {
+	public Data protocol_() {
 		return _protocol;
 	}
 
 	@Override
-	public Data query() {
+	public Data query_() {
 		return _query;
 	}
 
@@ -186,9 +186,9 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 
 	@Override
 	public String toString() {
-		return "WebExchange [uri=" + uri() + ", verb=" + verb() + ", path=" + path() + ", subpath=" + subpath()
-				+ ", query=" + query() + ", protocol=" + protocol() + ", body=" + body() + ", headers=" + headers()
-				+ ", params=" + params();
+		return "WebExchange [uri=" + uri_() + ", verb=" + verb_() + ", path=" + path_() + ", subpath=" + subpath_()
+				+ ", query=" + query_() + ", protocol=" + protocol_() + ", body=" + body_() + ", headers=" + headers_()
+				+ ", params=" + params_();
 	}
 
 }

@@ -54,7 +54,7 @@ public abstract class HttpTestCommons extends TestCommons {
 		Web.get("/echo", new Handler() {
 			@Override
 			public Object handle(WebExchange x) {
-				return x.verb().get() + ":" + x.path().get() + ":" + x.subpath().get() + ":" + x.query().get();
+				return x.verb_().get() + ":" + x.path_().get() + ":" + x.subpath_().get() + ":" + x.query_().get();
 			}
 		});
 
@@ -68,7 +68,7 @@ public abstract class HttpTestCommons extends TestCommons {
 		Web.handle(new Handler() {
 			@Override
 			public Object handle(WebExchange x) {
-				x.write(x.verb().get() + ":" + x.path().get() + ":" + x.subpath().get() + ":" + x.query().get());
+				x.write(x.verb_().get() + ":" + x.path_().get() + ":" + x.subpath_().get() + ":" + x.query_().get());
 				x.done();
 				return null;
 			}

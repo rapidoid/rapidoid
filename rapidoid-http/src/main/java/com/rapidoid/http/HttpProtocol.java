@@ -158,7 +158,7 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 
 	private boolean isMultipartForm(WebExchangeImpl exchange) {
 		Buf buf = exchange.input();
-		Range contType = exchange.headers().ranges().get(buf, CONTENT_TYPE, false);
+		Range contType = exchange.headers_().ranges().get(buf, CONTENT_TYPE, false);
 
 		if (contType != null) {
 			if (buf.startsWith(contType, MULTIPART_FORM_DATA_BOUNDARY1, false)) {

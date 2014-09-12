@@ -26,23 +26,23 @@ import org.rapidoid.data.MultiData;
 
 public interface WebExchange extends Ctx {
 
-	Data verb();
+	Data verb_();
 
-	Data uri();
+	Data uri_();
 
-	Data path();
+	Data path_();
 
-	Data subpath();
+	Data subpath_();
 
-	Data query();
+	Data query_();
 
-	Data protocol();
+	Data protocol_();
 
-	Data body();
+	Data body_();
 
-	MultiData params();
+	MultiData params_();
 
-	MultiData headers();
+	MultiData headers_();
 
 	void done();
 }
