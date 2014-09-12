@@ -1785,4 +1785,177 @@ public class MultiBuf implements Buf, Constants {
 		}
 	}
 
+	/**
+	 * Scans the buffer until the specified separator is found, and matches the
+	 * 4-byte prefix of the scanned selection against the specified search
+	 * prefix. Returns the position of the separator, or <code>-1</code> if the
+	 * limit is reached and separator not found. If the prefix is matched, the
+	 * negative of the position is returned, to mark the prefix match.
+	 * Duplicated code for performance reasons.
+	 * 
+	 * @param range
+	 */
+	public static int scanUntilAndMatchPrefix(ByteBuffer buf, Range result, byte separator, int fromPos, int toPos,
+			int searchPrefix) {
+
+		byte b0, b1, b2, b3;
+
+		int p = fromPos;
+		if (p <= toPos) {
+			b0 = buf.get(p);
+			if (b0 == separator) {
+				result.set(fromPos, 0);
+				return p + 1;
+			}
+		} else {
+			result.reset();
+			return NOT_FOUND;
+		}
+
+		p++;
+		if (p <= toPos) {
+			b1 = buf.get(p);
+			if (b1 == separator) {
+				result.set(fromPos, 1);
+				return p + 1;
+			}
+		} else {
+			result.reset();
+			return NOT_FOUND;
+		}
+
+		p++;
+		if (p <= toPos) {
+			b2 = buf.get(p);
+			if (b2 == separator) {
+				result.set(fromPos, 2);
+				return p + 1;
+			}
+		} else {
+			result.reset();
+			return NOT_FOUND;
+		}
+
+		p++;
+		if (p <= toPos) {
+			b3 = buf.get(p);
+			if (b3 == separator) {
+				result.set(fromPos, 3);
+				return p + 1;
+			}
+		} else {
+			result.reset();
+			return NOT_FOUND;
+		}
+
+		int prefix = U.intFrom(b0, b1, b2, b3);
+
+		boolean matchedPrefix = prefix == searchPrefix;
+
+		for (int i = p; i <= toPos; i++) {
+			if (buf.get(i) == separator) {
+				result.setInterval(fromPos, i);
+				int nextPos = i + 1;
+				return matchedPrefix ? -nextPos : nextPos;
+			}
+		}
+
+		result.reset();
+		return NOT_FOUND;
+	}
+
+	/**
+	 * Scans the buffer until a line separator (CRLF or LF) is found, and
+	 * matches the 4-byte prefix of the scanned selection against the specified
+	 * search prefix. Returns the position of the separator, or <code>-1</code>
+	 * if the limit is reached and separator not found. If the prefix is
+	 * matched, the negative of the position is returned, to mark the prefix
+	 * match. Duplicated code for performance reasons.
+	 */
+	public static int scanLnAndMatchPrefix(ByteBuffer buf, Range result, int fromPos, int toPos, int searchPrefix) {
+
+		byte b0, b1, b2, b3;
+
+		int p = fromPos;
+		if (p <= toPos) {
+			b0 = buf.get(p);
+			if (b0 == LF) {
+				result.set(fromPos, 0);
+				return p + 1;
+			}
+		} else {
+			result.reset();
+			return NOT_FOUND;
+		}
+
+		p++;
+		if (p <= toPos) {
+			b1 = buf.get(p);
+			if (b1 == LF) {
+				if (b0 == CR) {
+					result.set(fromPos, 0);
+				} else {
+					result.set(fromPos, 1);
+				}
+				return p + 1;
+			}
+		} else {
+			result.reset();
+			return NOT_FOUND;
+		}
+
+		p++;
+		if (p <= toPos) {
+			b2 = buf.get(p);
+			if (b2 == LF) {
+				if (b1 == CR) {
+					result.set(fromPos, 1);
+				} else {
+					result.set(fromPos, 2);
+				}
+				return p + 1;
+			}
+		} else {
+			result.reset();
+			return NOT_FOUND;
+		}
+
+		p++;
+		if (p <= toPos) {
+			b3 = buf.get(p);
+			if (b3 == LF) {
+				if (b2 == CR) {
+					result.set(fromPos, 2);
+				} else {
+					result.set(fromPos, 3);
+				}
+				return p + 1;
+			}
+		} else {
+			result.reset();
+			return NOT_FOUND;
+		}
+
+		int prefix = U.intFrom(b0, b1, b2, b3);
+
+		boolean matchedPrefix = prefix == searchPrefix;
+
+		for (int i = p; i <= toPos; i++) {
+			if (buf.get(i) == LF) {
+
+				if (buf.get(i - 1) == CR) {
+					result.setInterval(fromPos, i - 1);
+				} else {
+					result.setInterval(fromPos, i);
+				}
+
+				int nextPos = i + 1;
+				return matchedPrefix ? -nextPos : nextPos;
+			}
+		}
+
+		result.reset();
+		return NOT_FOUND;
+	}
+
 }
