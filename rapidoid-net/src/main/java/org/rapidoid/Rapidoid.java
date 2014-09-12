@@ -31,7 +31,7 @@ import org.rapidoid.util.U;
 
 public class Rapidoid {
 
-	private static final ServerConfig DEFAULT_CONFIG = new DefaultServerConfig();
+	private static final ServerConfig DEFAULT_CONFIG = new CLIConfig(new DefaultServerConfig());
 
 	public static final int WRITE = 0;
 
