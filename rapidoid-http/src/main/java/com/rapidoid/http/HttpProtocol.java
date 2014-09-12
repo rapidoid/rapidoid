@@ -53,8 +53,8 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 	@Override
 	protected void process(Ctx ctx, WebExchangeImpl web) {
 
-		parser.parse(web.input(), web.isGet, web.isKeepAlive, web.body, web.verb, web.uri, web.protocol, web.headers,
-				web.helper());
+		parser.parse(web.input(), web.isGet, web.isKeepAlive, web.body, web.verb, web.uri, web.path, web.query,
+				web.protocol, web.headers, web.helper());
 
 		web.failIf(web.verb.isEmpty() || web.uri.isEmpty(), "Invalid HTTP request!");
 		analyzeRequest(web);

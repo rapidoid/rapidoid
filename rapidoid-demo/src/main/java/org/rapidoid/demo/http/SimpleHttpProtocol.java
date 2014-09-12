@@ -70,12 +70,14 @@ public class SimpleHttpProtocol implements Protocol {
 
 		Range verb = ranges[ranges.length - 1];
 		Range uri = ranges[ranges.length - 2];
-		Range protocol = ranges[ranges.length - 3];
-		Range body = ranges[ranges.length - 4];
+		Range path = ranges[ranges.length - 3];
+		Range query = ranges[ranges.length - 4];
+		Range protocol = ranges[ranges.length - 5];
+		Range body = ranges[ranges.length - 6];
 
-		HTTP_PARSER.parse(buf, isGet, isKeepAlive, body, verb, uri, protocol, headers, helper);
+		HTTP_PARSER.parse(buf, isGet, isKeepAlive, body, verb, uri, path, query, protocol, headers, helper);
 
-		response(ctx, buf, uri, isGet.value, isKeepAlive.value);
+		response(ctx, buf, path, isGet.value, isKeepAlive.value);
 	}
 
 	private void response(Ctx ctx, Buf buf, Range path, boolean isGet, boolean isKeepAlive) {

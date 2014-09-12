@@ -57,7 +57,6 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 
 	private boolean parsedParams;
 	private boolean parsedHeaders;
-	private boolean parsedPathAndQuery;
 
 	byte respType;
 
@@ -112,7 +111,6 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 
 		parsedParams = false;
 		parsedHeaders = false;
-		parsedPathAndQuery = false;
 
 		total = -1;
 	}
@@ -164,11 +162,6 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 
 	@Override
 	public Data path() {
-		if (!parsedPathAndQuery) {
-			PARSER.parsePathAndQuery(input(), uri, path, query);
-			parsedPathAndQuery = true;
-		}
-
 		return _path;
 	}
 
@@ -179,11 +172,6 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 
 	@Override
 	public Data query() {
-		if (!parsedPathAndQuery) {
-			PARSER.parsePathAndQuery(input(), uri, path, query);
-			parsedPathAndQuery = true;
-		}
-
 		return _query;
 	}
 

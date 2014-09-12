@@ -42,8 +42,8 @@ public class HttpParser implements Constants {
 
 	private static final byte[] CONTENT_LENGTH = "Content-Length:".getBytes();
 
-	public void parse(Buf buf, Bool isGet, Bool isKeepAlive, Range body, Range verb, Range uri, Range protocol,
-			Ranges headers, RapidoidHelper helper) {
+	public void parse(Buf buf, Bool isGet, Bool isKeepAlive, Range body, Range verb, Range uri, Range path,
+			Range query, Range protocol, Ranges headers, RapidoidHelper helper) {
 
 		int pos = buf.position();
 
@@ -66,6 +66,8 @@ public class HttpParser implements Constants {
 		int connPos = result.value;
 
 		isKeepAlive.value = isKeepAlive(buf, headers, connPos);
+
+		parsePathAndQuery(buf, uri, path, query);
 
 		if (!getReq) {
 			parseBody(buf, body, headers, helper);

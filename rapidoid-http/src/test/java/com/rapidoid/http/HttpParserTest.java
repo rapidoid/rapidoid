@@ -59,7 +59,7 @@ public class HttpParserTest extends HttpTestCommons {
 		WebExchangeImpl req = parse(REQ1);
 
 		eq(REQ1, req.verb, "GET");
-		eq(REQ1, req.path().range(), "/foo/bar");
+		eq(REQ1, req.path, "/foo/bar");
 		eqs(REQ1, req.params().ranges(), "a", "5", "b", "", "n", "%20");
 		eq(req.params().get(), U.map("a", "5", "b", "", "n", " "));
 		eq(REQ1, req.protocol, "HTTP/1.1");
@@ -73,7 +73,7 @@ public class HttpParserTest extends HttpTestCommons {
 		WebExchangeImpl req = parse(REQ2);
 
 		eq(REQ2, req.verb, "POST");
-		eq(REQ2, req.path().range(), "/something/else/here");
+		eq(REQ2, req.path, "/something/else/here");
 		eqs(REQ2, req.params().ranges(), "x", "abc");
 		eq(REQ2, req.protocol, "HTTP/STRANGE");
 		eqs(REQ2, req.headers().ranges(), "Host", "a.b.c.org", "My-Header", "same", "My-Header", "again",
@@ -86,7 +86,7 @@ public class HttpParserTest extends HttpTestCommons {
 		WebExchangeImpl req = parse(REQ3);
 
 		eq(REQ3, req.verb, "PUT");
-		eq(REQ3, req.path().range(), "/books");
+		eq(REQ3, req.path, "/books");
 		eqs(REQ3, req.params().ranges());
 		eq(REQ3, req.protocol, "HTTP/1.0");
 		eqs(REQ3, req.headers().ranges(), "CoNNectioN", "keep-alive", "AAAAA", "c = 2", CONTENT_LENGTH, "6");
@@ -98,7 +98,7 @@ public class HttpParserTest extends HttpTestCommons {
 		WebExchangeImpl req = parse(REQ4);
 
 		eq(REQ4, req.verb, "DELETE");
-		eq(REQ4, req.path().range(), "/");
+		eq(REQ4, req.path, "/");
 		eqs(REQ4, req.params().ranges(), "a", "", "bb", "c", "d", "");
 		eq(REQ4, req.protocol, "MY-PROTOCOL");
 		eqs(REQ4, req.headers().ranges(), CONTENT_LENGTH, "7");
@@ -110,7 +110,7 @@ public class HttpParserTest extends HttpTestCommons {
 		WebExchangeImpl req = parse(REQ5);
 
 		eq(REQ5, req.verb, "ABCD");
-		eq(REQ5, req.path().range(), "///");
+		eq(REQ5, req.path, "///");
 		eqs(REQ5, req.params().ranges(), "??", "");
 		eq(req.params().get(), U.map("??", ""));
 		eq(REQ5, req.protocol, "HTTP/1.1");
@@ -123,7 +123,7 @@ public class HttpParserTest extends HttpTestCommons {
 		WebExchangeImpl req = parse(REQ6);
 
 		eq(REQ6, req.verb, "GET");
-		eq(REQ6, req.path().range(), "/");
+		eq(REQ6, req.path, "/");
 		eqs(REQ6, req.params().ranges(), "x", "");
 		eq(REQ6, req.protocol, "A");
 		eqs(REQ6, req.headers().ranges());
@@ -141,7 +141,8 @@ public class HttpParserTest extends HttpTestCommons {
 		req.setConnection(conn);
 
 		HttpParser parser = new HttpParser();
-		parser.parse(reqbuf, req.isGet, req.isKeepAlive, req.body, req.verb, req.uri, req.protocol, req.headers, HELPER);
+		parser.parse(reqbuf, req.isGet, req.isKeepAlive, req.body, req.verb, req.uri, req.path, req.query,
+				req.protocol, req.headers, HELPER);
 
 		return req;
 	}
