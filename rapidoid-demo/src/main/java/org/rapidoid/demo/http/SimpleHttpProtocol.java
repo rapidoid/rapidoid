@@ -35,7 +35,8 @@ public class SimpleHttpProtocol implements Protocol {
 
 	private static final byte[] HTTP_200_OK = "HTTP/1.1 200 OK\r\n".getBytes();
 
-	private static final byte[] HTTP_404_NOT_FOUND = "HTTP/1.1 404 Not Found\r\n".getBytes();
+	private static final byte[] HTTP_404_NOT_FOUND = "HTTP/1.1 404 Not Found\r\nContent-Length: 10\r\n\r\nNot found!"
+			.getBytes();
 
 	private static final byte[] CONN_KEEP_ALIVE = "Connection: keep-alive\r\n".getBytes();
 
@@ -77,8 +78,8 @@ public class SimpleHttpProtocol implements Protocol {
 		response(ctx, buf, uri, isGet.value, isKeepAlive.value);
 	}
 
-	private void response(Ctx ctx, Buf buf, Range uri, boolean isGet, boolean isKeepAlive) {
-		if (isGet && buf.matches(uri, PLAIN, true)) {
+	private void response(Ctx ctx, Buf buf, Range path, boolean isGet, boolean isKeepAlive) {
+		if (isGet && (buf.matches(path, PLAIN, true) || path.length == 1)) {
 
 			ctx.write(HTTP_200_OK);
 
