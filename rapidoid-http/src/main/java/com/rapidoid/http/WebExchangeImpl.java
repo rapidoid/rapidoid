@@ -20,6 +20,8 @@ package com.rapidoid.http;
  * #L%
  */
 
+import java.util.Map;
+
 import org.rapidoid.data.Data;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.MultiData;
@@ -186,9 +188,10 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 
 	@Override
 	public String toString() {
-		return "WebExchange [uri=" + uri_() + ", verb=" + verb_() + ", path=" + path_() + ", subpath=" + subpath_()
-				+ ", query=" + query_() + ", protocol=" + protocol_() + ", body=" + body_() + ", headers=" + headers_()
-				+ ", params=" + params_();
+		return "WebExchange [uri=" + uri() + ", verb=" + verb() + ", path=" + path() + ", subpath=" + subpath()
+				+ ", query=" + query() + ", protocol=" + protocol() + ", body=" + body() + ", headers=" + headers()
+				+ ", params=" + params();
+	}
 
 	@Override
 	public String verb() {

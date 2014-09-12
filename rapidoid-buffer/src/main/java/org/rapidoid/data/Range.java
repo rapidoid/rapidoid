@@ -54,7 +54,7 @@ public class Range {
 
 	@Override
 	public String toString() {
-		return "[" + start + ":" + length + "]";
+		return isEmpty() ? "[]" : "[" + start + ":" + length + "]";
 	}
 
 	public boolean isEmpty() {

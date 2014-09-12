@@ -47,4 +47,9 @@ public class DefaultMultiData implements MultiData {
 		return ranges;
 	}
 
+	@Override
+	public String toString() {
+		return "MultiData [ranges=" + ranges + "]";
+	}
+
 }

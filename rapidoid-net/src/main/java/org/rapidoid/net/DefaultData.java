@@ -45,4 +45,9 @@ public class DefaultData implements Data {
 		return range;
 	}
 
+	@Override
+	public String toString() {
+		return "Data [range=" + range + "]";
+	}
+
 }
