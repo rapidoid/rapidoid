@@ -57,8 +57,7 @@ public class StatisticalBufTest extends BufferTestCommons {
 					assert maxPos >= 0;
 					int pos = rnd(maxPos + 1); // range [0..maxPos]
 
-					copy = copy.substring(0, pos) + s
-							+ copy.substring(pos + s.length());
+					copy = copy.substring(0, pos) + s + copy.substring(pos + s.length());
 					buf.put(pos, s.getBytes(), 0, s.length());
 					break;
 

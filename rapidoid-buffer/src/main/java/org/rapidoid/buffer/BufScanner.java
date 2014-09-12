@@ -22,7 +22,6 @@ import org.rapidoid.util.Constants;
  * #L%
  */
 
-
 public interface BufScanner extends Constants {
 
 	int STOP = Integer.MIN_VALUE / 2;

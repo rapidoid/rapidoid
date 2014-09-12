@@ -100,7 +100,7 @@ public class EchoProtocolTest extends NetTestCommons {
 
 						out.writeBytes("bye\n");
 						eq(in.readLine(), "BYE");
-						
+
 						return null;
 					}
 				});
