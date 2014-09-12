@@ -905,47 +905,6 @@ public class MultiBuf implements Buf, Constants {
 		return -1;
 	}
 
-	private int scanBufLn(Range range, ByteBuffer buf, int from, int to, int search, Int result, int lineInd) {
-
-		int p = from;
-		byte b0 = buf.get(p);
-		if (b0 == LF) {
-			return p;
-		}
-
-		p++;
-		byte b1 = buf.get(p);
-		if (b1 == LF) {
-			return p;
-		}
-
-		p++;
-		byte b2 = buf.get(p);
-		if (b2 == LF) {
-			return p;
-		}
-
-		p++;
-		byte b3 = buf.get(p);
-		if (b3 == LF) {
-			return p;
-		}
-
-		int prefix = U.intFrom(b0, b1, b2, b3);
-
-		if (prefix == search) {
-			result.value = lineInd;
-		}
-
-		for (int i = p; i <= to; i++) {
-			if (buf.get(i) == LF) {
-				return i;
-			}
-		}
-
-		return -1;
-	}
-
 	@Override
 	public boolean match(int start, byte[] match, int offset, int length, boolean caseSensitive) {
 		assert invariant();
@@ -1671,6 +1630,7 @@ public class MultiBuf implements Buf, Constants {
 
 	private int simpleScanLines(Range[] ranges, int ind, int fromAddr, int toAddr, int search, Int result) {
 		int rangeInd = scanRegionLines(ranges, ind, fromAddr, toAddr, 0, search, result);
+
 		if (rangeInd < 0) {
 			return -rangeInd - 1;
 		}
@@ -1687,22 +1647,28 @@ public class MultiBuf implements Buf, Constants {
 		ByteBuffer src = bufs[ind];
 
 		int pos = fromAddr;
-		while ((pos = scanBufLn(ranges[rangeInd], src, pos, toAddr, search, result, rangeInd)) > 0) {
-			boolean withCR = src.get(pos - 1) == CR;
-			int to = base + pos - (withCR ? 1 : 0);
-			ranges[rangeInd++].setInterval(scanFrom, to);
 
-			position(base + pos + 1);
+		Range range = ranges[rangeInd];
+		while ((pos = scanLnAndMatchPrefix(src, range, pos, toAddr, search)) != NOT_FOUND) {
 
-			if (scanFrom == to) {
+			if (pos < 0) {
+				result.value = rangeInd;
+				pos = -pos;
+			}
+
+			range.setInterval(scanFrom, base + range.limit());
+			position(base + pos);
+
+			if (range.isEmpty()) {
 				// return negative number to mark that an empty line was found
-				return -rangeInd;
+				return -rangeInd - 1;
 			}
 
 			scanFrom = position();
-			pos++;
+			range = ranges[++rangeInd];
 		}
 
+		// didn't get to an empty line
 		return rangeInd;
 	}
 

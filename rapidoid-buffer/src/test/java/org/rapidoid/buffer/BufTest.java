@@ -250,6 +250,36 @@ public class BufTest extends BufferTestCommons implements Constants {
 		eq(buf.position(), 9);
 	}
 
+
+	@Test
+	public void testScanLnLn() {
+		for (int factor = 1; factor <= 10; factor++) {
+			BufGroup bufs = new BufGroup(factor);
+			Buf buf = bufs.newBuf();
+
+			buf.append("GET /hi H\naa: bb\nxyz\n\n");
+
+			buf.position(0);
+			buf.limit(buf.size());
+
+			Range verb = new Range();
+			Range uri = new Range();
+			Range protocol = new Range();
+
+			buf.scanUntil(SPACE, verb, true);
+			buf.scanUntil(SPACE, uri, true);
+			buf.scanLn(protocol, true);
+
+			Int result = new Int();
+			Ranges headers = new Ranges(10);
+			buf.scanLnLn(headers, 0, result);
+
+			eq(headers.count, 2);
+			eq(headers.ranges[0], 10, 6);
+			eq(headers.ranges[1], 17, 3);
+		}
+	}
+
 	private void checkMatch(Buf buf, int start, int limit, String match, int... positions) {
 		for (int pos : positions) {
 			int p = buf.find(start, limit, match.getBytes(), true);
