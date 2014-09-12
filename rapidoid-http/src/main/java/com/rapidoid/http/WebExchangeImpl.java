@@ -184,4 +184,11 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 		conn.complete(this, !isKeepAlive.value);
 	}
 
+	@Override
+	public String toString() {
+		return "WebExchange [uri=" + uri() + ", verb=" + verb() + ", path=" + path() + ", subpath=" + subpath()
+				+ ", query=" + query() + ", protocol=" + protocol() + ", body=" + body() + ", headers=" + headers()
+				+ ", params=" + params();
+	}
+
 }

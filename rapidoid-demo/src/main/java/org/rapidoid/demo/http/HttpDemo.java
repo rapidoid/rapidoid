@@ -34,7 +34,7 @@ public class HttpDemo {
 		Web.get("/hi", new Handler() {
 			@Override
 			public Object handle(WebExchange x) {
-				return "Hi: " + n.incrementAndGet();
+				return "[" + n.incrementAndGet() + "] Hi: " + x;
 			}
 		});
 
