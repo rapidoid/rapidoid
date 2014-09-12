@@ -1598,7 +1598,7 @@ public class U {
 		}
 	}
 
-	public static void args(String[] args) {
+	public static void args(String... args) {
 		if (args != null) {
 			ARGS = args;
 		}
