@@ -189,6 +189,50 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 		return "WebExchange [uri=" + uri_() + ", verb=" + verb_() + ", path=" + path_() + ", subpath=" + subpath_()
 				+ ", query=" + query_() + ", protocol=" + protocol_() + ", body=" + body_() + ", headers=" + headers_()
 				+ ", params=" + params_();
+
+	@Override
+	public String verb() {
+		return verb_().get();
+	}
+
+	@Override
+	public String uri() {
+		return uri_().get();
+	}
+
+	@Override
+	public String path() {
+		return path_().get();
+	}
+
+	@Override
+	public String subpath() {
+		return subpath_().get();
+	}
+
+	@Override
+	public String query() {
+		return query_().get();
+	}
+
+	@Override
+	public String protocol() {
+		return protocol_().get();
+	}
+
+	@Override
+	public String body() {
+		return body_().get();
+	}
+
+	@Override
+	public Map<String, String> params() {
+		return params_().get();
+	}
+
+	@Override
+	public Map<String, String> headers() {
+		return headers_().get();
 	}
 
 }

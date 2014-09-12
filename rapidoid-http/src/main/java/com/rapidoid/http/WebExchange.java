@@ -20,27 +20,47 @@ package com.rapidoid.http;
  * #L%
  */
 
+import java.util.Map;
+
 import org.rapidoid.Ctx;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.MultiData;
 
 public interface WebExchange extends Ctx {
 
+	String verb();
+
 	Data verb_();
+
+	String uri();
 
 	Data uri_();
 
+	String path();
+
 	Data path_();
+
+	String subpath();
 
 	Data subpath_();
 
+	String query();
+
 	Data query_();
+
+	String protocol();
 
 	Data protocol_();
 
+	String body();
+
 	Data body_();
 
+	Map<String, String> params();
+
 	MultiData params_();
+
+	Map<String, String> headers();
 
 	MultiData headers_();
 
