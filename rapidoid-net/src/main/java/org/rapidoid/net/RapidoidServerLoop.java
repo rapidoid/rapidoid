@@ -127,7 +127,7 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 			workers = new RapidoidWorker[workersN];
 			for (int i = 0; i < workers.length; i++) {
 				RapidoidHelper helper = U.newInstance(helperClass, exchangeClass);
-				workers[i] = new RapidoidWorker(i + 1, new BufGroup(10), config, protocol, helper);
+				workers[i] = new RapidoidWorker(i + 1, new BufGroup(13), config, protocol, helper);
 				new Thread(workers[i]).start();
 			}
 		} else {
