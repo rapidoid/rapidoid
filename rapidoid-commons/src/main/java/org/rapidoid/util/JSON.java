@@ -36,6 +36,14 @@ public class JSON {
 		}
 	}
 
+	public static void stringify(Object value, OutputStream out) {
+		try {
+			MAPPER.writeValue(out, value);
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
+	}
+
 	public static <T> T parse(String json, Class<T> valueType) {
 		try {
 			return MAPPER.readValue(json, valueType);
