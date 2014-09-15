@@ -21,6 +21,7 @@ package org.rapidoid.buffer;
  */
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
@@ -87,6 +88,8 @@ public class MultiBuf implements Buf, Constants {
 	int[] cccc = new int[300];
 
 	private int scanFrom;
+
+	private OutputStream outputStream;
 
 	public MultiBuf(Pool<ByteBuffer> bufPool, int factor, String name) {
 		this.bufPool = bufPool;
@@ -1922,6 +1925,19 @@ public class MultiBuf implements Buf, Constants {
 
 		result.reset();
 		return NOT_FOUND;
+	}
+
+	@Override
+	public OutputStream asOutputStream() {
+		if (outputStream == null) {
+			outputStream = new OutputStream() {
+				@Override
+				public void write(int b) throws IOException {
+					append((byte) b);
+				}
+			};
+		}
+		return outputStream;
 	}
 
 }

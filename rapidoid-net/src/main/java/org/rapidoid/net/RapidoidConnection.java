@@ -30,6 +30,7 @@ import org.rapidoid.Connection;
 import org.rapidoid.Ctx;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
+import org.rapidoid.util.JSON;
 import org.rapidoid.util.Resetable;
 import org.rapidoid.util.U;
 
@@ -281,6 +282,12 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 	@Override
 	public int write(ByteBuffer buf) {
 		return write(buf, null, 0);
+	}
+
+	@Override
+	public void writeJSON(Object value) {
+		// FIXME use other writeJSON to specify kind and notify listeners!
+		JSON.stringify(value, output.asOutputStream());
 	}
 
 	@Override

@@ -1,5 +1,15 @@
 package org.rapidoid.buffer;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
+
+import org.rapidoid.data.Range;
+import org.rapidoid.data.Ranges;
+import org.rapidoid.wrap.Int;
+
 /*
  * #%L
  * rapidoid-buffer
@@ -19,15 +29,6 @@ package org.rapidoid.buffer;
  * limitations under the License.
  * #L%
  */
-
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.WritableByteChannel;
-
-import org.rapidoid.data.Range;
-import org.rapidoid.data.Ranges;
-import org.rapidoid.wrap.Int;
 
 public interface Buf {
 
@@ -156,5 +157,7 @@ public interface Buf {
 	IncompleteReadException incomplete();
 
 	boolean split(Range target, byte sep, Range before, Range after);
+
+	OutputStream asOutputStream();
 
 }

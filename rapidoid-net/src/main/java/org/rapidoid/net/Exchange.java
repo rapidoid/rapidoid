@@ -70,6 +70,11 @@ public class Exchange implements BufProvider, Resetable, Ctx {
 		return wrote(conn.write(buf, this, 0));
 	}
 
+	@Override
+	public void writeJSON(Object value) {
+		conn.writeJSON(value);
+	}
+
 	private int wrote(int count) {
 		totalWritten.addAndGet(count);
 		return count;

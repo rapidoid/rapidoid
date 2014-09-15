@@ -38,6 +38,8 @@ public interface Ctx {
 
 	int write(ByteBuffer buf);
 
+	void writeJSON(Object value);
+
 	int writeTo(long connId, String s);
 
 	int writeTo(long connId, byte[] bytes);

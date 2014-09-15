@@ -24,7 +24,6 @@ import java.nio.ByteBuffer;
 
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.Range;
-import org.rapidoid.util.JSON;
 import org.rapidoid.util.SimpleHashTable;
 import org.rapidoid.util.SimpleList;
 import org.rapidoid.util.U;
@@ -142,7 +141,7 @@ public class HttpRouter implements Router {
 			} else if (res instanceof ByteBuffer) {
 				x.write((ByteBuffer) res);
 			} else {
-				x.write(JSON.stringify(res));
+				x.writeJSON(res);
 			}
 
 			x.done();
