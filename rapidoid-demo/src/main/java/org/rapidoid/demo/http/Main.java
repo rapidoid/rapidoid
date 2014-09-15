@@ -21,10 +21,12 @@ package org.rapidoid.demo.http;
  */
 
 import org.rapidoid.Rapidoid;
+import org.rapidoid.util.U;
 
 public class Main {
 
 	public static void main(String[] args) {
+		U.args(args);
 		Rapidoid.start(new SimpleHttpProtocol());
 	}
 
