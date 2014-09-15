@@ -1,6 +1,8 @@
 package org.rapidoid.util;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import java.io.OutputStream;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /*
  * #%L
