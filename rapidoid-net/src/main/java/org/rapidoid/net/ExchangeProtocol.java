@@ -49,40 +49,6 @@ public abstract class ExchangeProtocol<T extends Exchange> implements Protocol, 
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public final void beforeWriting(Connection conn, Object tag, int kind) {
-		assert tag == null || exchangeType.isAssignableFrom(tag.getClass());
-
-		before(conn, (T) tag, kind);
-	}
-
-	protected void before(Connection conn, T exchange, int kind) {
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public final void afterWriting(Connection conn, Object tag, int kind) {
-		assert tag == null || exchangeType.isAssignableFrom(tag.getClass());
-
-		after(conn, (T) tag, kind);
-	}
-
-	protected void after(Connection conn, T exchange, int kind) {
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public final void onComplete(RapidoidConnection conn, Object tag) {
-		assert tag != null;
-		assert exchangeType.isAssignableFrom(tag.getClass());
-
-		complete(conn, (T) tag);
-	}
-
-	protected void complete(Connection conn, T exchange) {
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
 	public void onDone(Connection conn, Object tag) {
 		assert tag != null;
 		assert exchangeType.isAssignableFrom(tag.getClass());

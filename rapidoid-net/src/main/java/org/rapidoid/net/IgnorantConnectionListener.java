@@ -25,19 +25,7 @@ import org.rapidoid.Connection;
 public class IgnorantConnectionListener implements ConnectionListener {
 
 	@Override
-	public void beforeWriting(Connection conn, Object tag, int kind) {
-	}
-
-	@Override
-	public void afterWriting(Connection conn, Object tag, int kind) {
-	}
-
-	@Override
 	public void onDone(Connection conn, Object tag) {
-	}
-
-	@Override
-	public void onComplete(RapidoidConnection gettyConnection, Object tag) {
 	}
 
 }

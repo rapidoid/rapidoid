@@ -31,23 +31,23 @@ public interface Connection {
 
 	String address();
 
-	int write(String s, Object tag, int kind);
+	int write(String s);
 
-	int write(byte[] bytes, Object tag, int kind);
+	int write(byte[] bytes);
 
-	int write(byte[] bytes, int offset, int length, Object tag, int kind);
+	int write(byte[] bytes, int offset, int length);
 
-	int write(ByteBuffer buf, Object tag, int kind);
+	int write(ByteBuffer buf);
 
 	void writeJSON(Object value);
 
-	int writeTo(long connId, String s, Object tag, int kind);
+	int writeTo(long connId, String s);
 
-	int writeTo(long connId, byte[] bytes, Object tag, int kind);
+	int writeTo(long connId, byte[] bytes);
 
-	int writeTo(long connId, byte[] bytes, int offset, int length, Object tag, int kind);
+	int writeTo(long connId, byte[] bytes, int offset, int length);
 
-	int writeTo(long connId, ByteBuffer buf, Object tag, int kind);
+	int writeTo(long connId, ByteBuffer buf);
 
 	void complete(Object tag, boolean close);
 

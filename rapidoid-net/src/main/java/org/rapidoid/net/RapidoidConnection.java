@@ -90,51 +90,48 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 	}
 
 	@Override
-	public synchronized int write(String s, Object tag, int kind) {
-		beforeWriting(tag, kind);
+	public synchronized int write(String s) {
 		int wrote = output.append(s);
 		return wrote;
 	}
 
 	@Override
-	public synchronized int write(byte[] bytes, Object tag, int kind) {
-		return write(bytes, 0, bytes.length, tag, kind);
+	public synchronized int write(byte[] bytes) {
+		return write(bytes, 0, bytes.length);
 	}
 
 	@Override
-	public synchronized int write(byte[] bytes, int offset, int length, Object tag, int kind) {
-		beforeWriting(tag, kind);
+	public synchronized int write(byte[] bytes, int offset, int length) {
 		output.append(bytes, offset, length);
 		return length;
 	}
 
 	@Override
-	public synchronized int write(ByteBuffer buf, Object tag, int kind) {
-		beforeWriting(tag, kind);
+	public synchronized int write(ByteBuffer buf) {
 		int count = buf.remaining();
 		output.append(buf);
 		return count;
 	}
 
 	@Override
-	public synchronized int writeTo(long connId, String s, Object tag, int kind) {
+	public synchronized int writeTo(long connId, String s) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public synchronized int writeTo(long connId, byte[] bytes, Object tag, int kind) {
-		return writeTo(connId, bytes, 0, bytes.length, tag, kind);
+	public synchronized int writeTo(long connId, byte[] bytes) {
+		return writeTo(connId, bytes, 0, bytes.length);
 	}
 
 	@Override
-	public synchronized int writeTo(long connId, byte[] bytes, int offset, int length, Object tag, int kind) {
+	public synchronized int writeTo(long connId, byte[] bytes, int offset, int length) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public synchronized int writeTo(long connId, ByteBuffer buf, Object tag, int kind) {
+	public synchronized int writeTo(long connId, ByteBuffer buf) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -145,7 +142,7 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 
 	@Override
 	public synchronized void complete(Object tag, boolean close) {
-		listener().onComplete(this, tag);
+		// listener().onComplete(this, tag);
 
 		askToSend();
 
@@ -194,10 +191,6 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 	@Override
 	public synchronized Buf output() {
 		return output;
-	}
-
-	private void beforeWriting(Object tag, int kind) {
-		listener().beforeWriting(this, tag, kind);
 	}
 
 	@Override
@@ -265,49 +258,9 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 	}
 
 	@Override
-	public int write(String s) {
-		return write(s, null, 0);
-	}
-
-	@Override
-	public int write(byte[] bytes) {
-		return write(bytes, null, 0);
-	}
-
-	@Override
-	public int write(byte[] bytes, int offset, int length) {
-		return write(bytes, offset, length, null, 0);
-	}
-
-	@Override
-	public int write(ByteBuffer buf) {
-		return write(buf, null, 0);
-	}
-
-	@Override
 	public void writeJSON(Object value) {
 		// FIXME use other writeJSON to specify kind and notify listeners!
 		JSON.stringify(value, output.asOutputStream());
-	}
-
-	@Override
-	public int writeTo(long connId, String s) {
-		return writeTo(connId, s, null, 0);
-	}
-
-	@Override
-	public int writeTo(long connId, byte[] bytes) {
-		return writeTo(connId, bytes, null, 0);
-	}
-
-	@Override
-	public int writeTo(long connId, byte[] bytes, int offset, int length) {
-		return writeTo(connId, bytes, offset, length, null, 0);
-	}
-
-	@Override
-	public int writeTo(long connId, ByteBuffer buf) {
-		return writeTo(connId, buf, null, 0);
 	}
 
 	@Override

@@ -20,9 +20,7 @@ package com.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.Connection;
 import org.rapidoid.Ctx;
-import org.rapidoid.Rapidoid;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
@@ -177,36 +175,6 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 		exchange.multipartBoundary.reset();
 
 		return false;
-	}
-
-	@Override
-	public void before(Connection conn, WebExchangeImpl exchange, int kind) {
-		switch (kind) {
-		case Rapidoid.WRITE:
-			break;
-
-		case WebExchangeImpl.WHOLE:
-			break;
-
-		case WebExchangeImpl.HEADER:
-			break;
-
-		case WebExchangeImpl.BODY_PART:
-			break;
-
-		default:
-			throw U.notExpected();
-		}
-
-		// conn.output().append(CR_LF);
-	}
-
-	@Override
-	public void after(Connection conn, WebExchangeImpl exchange, int kind) {
-	}
-
-	@Override
-	protected void complete(Connection conn, WebExchangeImpl exchange) {
 	}
 
 }

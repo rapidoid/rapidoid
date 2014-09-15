@@ -35,10 +35,6 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 
 	private final static HttpParser PARSER = U.inject(HttpParser.class);
 
-	static final int WHOLE = 1;
-	static final int HEADER = 2;
-	static final int BODY_PART = 3;
-
 	final Range uri = new Range();
 	final Range verb = new Range();
 	final Range path = new Range();

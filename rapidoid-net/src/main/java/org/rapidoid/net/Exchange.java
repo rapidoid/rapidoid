@@ -55,19 +55,19 @@ public class Exchange implements BufProvider, Resetable, Ctx {
 	}
 
 	public int write(String s) {
-		return wrote(conn.write(s, this, 0));
+		return wrote(conn.write(s));
 	}
 
 	public int write(byte[] bytes) {
-		return wrote(conn.write(bytes, this, 0));
+		return wrote(conn.write(bytes));
 	}
 
 	public int write(byte[] bytes, int offset, int length) {
-		return wrote(conn.write(bytes, offset, length, this, 0));
+		return wrote(conn.write(bytes, offset, length));
 	}
 
 	public int write(ByteBuffer buf) {
-		return wrote(conn.write(buf, this, 0));
+		return wrote(conn.write(buf));
 	}
 
 	@Override
@@ -81,19 +81,19 @@ public class Exchange implements BufProvider, Resetable, Ctx {
 	}
 
 	public int writeTo(long connId, String s) {
-		return conn.writeTo(connId, s, this, 0);
+		return conn.writeTo(connId, s);
 	}
 
 	public int writeTo(long connId, byte[] bytes) {
-		return conn.writeTo(connId, bytes, this, 0);
+		return conn.writeTo(connId, bytes);
 	}
 
 	public int writeTo(long connId, byte[] bytes, int offset, int length) {
-		return conn.writeTo(connId, bytes, offset, length, this, 0);
+		return conn.writeTo(connId, bytes, offset, length);
 	}
 
 	public int writeTo(long connId, ByteBuffer buf) {
-		return conn.writeTo(connId, buf, this, 0);
+		return conn.writeTo(connId, buf);
 	}
 
 	public void complete(boolean close) {

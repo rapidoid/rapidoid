@@ -24,12 +24,6 @@ import org.rapidoid.Connection;
 
 public interface ConnectionListener {
 
-	void beforeWriting(Connection conn, Object tag, int kind);
-
-	void afterWriting(Connection conn, Object tag, int kind);
-
-	void onComplete(RapidoidConnection gettyConnection, Object tag);
-
 	void onDone(Connection conn, Object tag);
 
 }
