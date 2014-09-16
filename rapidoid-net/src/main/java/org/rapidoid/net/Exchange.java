@@ -50,22 +50,27 @@ public class Exchange implements BufProvider, Resetable, Ctx {
 		this.conn = conn;
 	}
 
+	@Override
 	public String address() {
 		return conn.address();
 	}
 
+	@Override
 	public int write(String s) {
 		return wrote(conn.write(s));
 	}
 
+	@Override
 	public int write(byte[] bytes) {
 		return wrote(conn.write(bytes));
 	}
 
+	@Override
 	public int write(byte[] bytes, int offset, int length) {
 		return wrote(conn.write(bytes, offset, length));
 	}
 
+	@Override
 	public int write(ByteBuffer buf) {
 		return wrote(conn.write(buf));
 	}
@@ -80,66 +85,87 @@ public class Exchange implements BufProvider, Resetable, Ctx {
 		return count;
 	}
 
+	@Override
 	public int writeTo(long connId, String s) {
 		return conn.writeTo(connId, s);
 	}
 
+	@Override
 	public int writeTo(long connId, byte[] bytes) {
 		return conn.writeTo(connId, bytes);
 	}
 
+	@Override
 	public int writeTo(long connId, byte[] bytes, int offset, int length) {
 		return conn.writeTo(connId, bytes, offset, length);
 	}
 
+	@Override
 	public int writeTo(long connId, ByteBuffer buf) {
 		return conn.writeTo(connId, buf);
 	}
 
+	@Override
+	public void writeJSONTo(long connId, Object value) {
+		conn.writeJSONTo(connId, value);
+	}
+
+	@Override
 	public void complete(boolean close) {
 		conn.complete(this, close);
 	}
 
+	@Override
 	public void close() {
 		conn.close(true);
 	}
 
+	@Override
 	public Buf input() {
 		return conn.input();
 	}
 
+	@Override
 	public Buf output() {
 		return conn.output();
 	}
 
+	@Override
 	public String readln() {
 		return conn.readln();
 	}
 
+	@Override
 	public String readN(int count) {
 		return conn.readN(count);
 	}
 
+	@Override
 	public InetSocketAddress getAddress() {
 		return conn.getAddress();
 	}
 
+	@Override
 	public RapidoidHelper helper() {
 		return conn.helper();
 	}
 
+	@Override
 	public long connId() {
 		return conn.connId();
 	}
 
+	@Override
 	public void fail(String msg) {
 		conn.fail(msg);
 	}
 
+	@Override
 	public void failIf(boolean condition, String msg) {
 		conn.failIf(condition, msg);
 	}
 
+	@Override
 	public void ensure(boolean expectedCondition, String msg) {
 		conn.ensure(expectedCondition, msg);
 	}

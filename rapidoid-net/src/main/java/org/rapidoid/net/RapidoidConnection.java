@@ -114,6 +114,11 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 	}
 
 	@Override
+	public synchronized void writeJSON(Object value) {
+		JSON.stringify(value, output.asOutputStream());
+	}
+
+	@Override
 	public synchronized int writeTo(long connId, String s) {
 		// TODO Auto-generated method stub
 		return 0;
@@ -134,6 +139,11 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 	public synchronized int writeTo(long connId, ByteBuffer buf) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public synchronized void writeJSONTo(long connId, Object value) {
+		// FIXME implement this
 	}
 
 	public synchronized boolean closeAfterWrite() {
@@ -255,12 +265,6 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 		if (!expectedCondition) {
 			throw U.rte(ProtocolException.class, msg);
 		}
-	}
-
-	@Override
-	public void writeJSON(Object value) {
-		// FIXME use other writeJSON to specify kind and notify listeners!
-		JSON.stringify(value, output.asOutputStream());
 	}
 
 	@Override

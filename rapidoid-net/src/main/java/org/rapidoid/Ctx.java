@@ -48,6 +48,8 @@ public interface Ctx {
 
 	int writeTo(long connId, ByteBuffer buf);
 
+	void writeJSONTo(long connId, Object value);
+
 	void complete(boolean close);
 
 	void close();

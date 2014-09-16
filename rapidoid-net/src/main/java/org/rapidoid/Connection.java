@@ -49,6 +49,8 @@ public interface Connection {
 
 	int writeTo(long connId, ByteBuffer buf);
 
+	void writeJSONTo(long connId, Object value);
+
 	void complete(Object tag, boolean close);
 
 	void close();
