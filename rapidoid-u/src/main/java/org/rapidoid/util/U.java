@@ -1607,7 +1607,7 @@ public class U implements Constants {
 
 	public static void endMeasure() {
 		long delta = time() - measureStart;
-		show(delta);
+		show(delta + " ms");
 	}
 
 	public static void print(Object value) {
