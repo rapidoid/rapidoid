@@ -86,31 +86,6 @@ public class Exchange implements BufProvider, Resetable, Ctx {
 	}
 
 	@Override
-	public int writeTo(long connId, String s) {
-		return conn.writeTo(connId, s);
-	}
-
-	@Override
-	public int writeTo(long connId, byte[] bytes) {
-		return conn.writeTo(connId, bytes);
-	}
-
-	@Override
-	public int writeTo(long connId, byte[] bytes, int offset, int length) {
-		return conn.writeTo(connId, bytes, offset, length);
-	}
-
-	@Override
-	public int writeTo(long connId, ByteBuffer buf) {
-		return conn.writeTo(connId, buf);
-	}
-
-	@Override
-	public void writeJSONTo(long connId, Object value) {
-		conn.writeJSONTo(connId, value);
-	}
-
-	@Override
 	public void complete(boolean close) {
 		conn.complete(this, close);
 	}

@@ -41,16 +41,6 @@ public interface Connection {
 
 	void writeJSON(Object value);
 
-	int writeTo(long connId, String s);
-
-	int writeTo(long connId, byte[] bytes);
-
-	int writeTo(long connId, byte[] bytes, int offset, int length);
-
-	int writeTo(long connId, ByteBuffer buf);
-
-	void writeJSONTo(long connId, Object value);
-
 	void complete(Object tag, boolean close);
 
 	void close();
