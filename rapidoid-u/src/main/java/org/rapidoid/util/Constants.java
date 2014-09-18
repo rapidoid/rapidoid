@@ -24,7 +24,7 @@ import java.nio.charset.Charset;
 
 public interface Constants {
 
-	Charset UTF8 = Charset.forName("UTF-8");
+	Charset UTF_8 = Charset.forName("UTF-8");
 
 	int NOT_FOUND = Integer.MIN_VALUE;
 
@@ -59,5 +59,7 @@ public interface Constants {
 	byte AMP = '&';
 
 	byte COL = ':';
+
+	byte SEMI_COL = ';';
 
 }
