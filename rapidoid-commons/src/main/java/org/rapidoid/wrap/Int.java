@@ -24,4 +24,12 @@ public class Int {
 
 	public int value;
 
+	public Int() {
+		this(0);
+	}
+
+	public Int(int value) {
+		this.value = value;
+	}
+
 }
