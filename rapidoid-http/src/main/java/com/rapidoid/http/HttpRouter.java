@@ -133,6 +133,7 @@ public class HttpRouter implements Router {
 
 	private boolean handle(Handler handler, WebExchangeImpl x) {
 		Object res = handler.handle(x);
+
 		if (res != null) {
 			if (res instanceof byte[]) {
 				x.write((byte[]) res);
@@ -140,7 +141,7 @@ public class HttpRouter implements Router {
 				x.write((String) res);
 			} else if (res instanceof ByteBuffer) {
 				x.write((ByteBuffer) res);
-			} else {
+			} else if (!(res instanceof WebExchangeImpl)) {
 				x.writeJSON(res);
 			}
 
