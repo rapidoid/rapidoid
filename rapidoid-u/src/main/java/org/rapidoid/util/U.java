@@ -856,7 +856,7 @@ public class U implements Constants {
 			if (i > 0) {
 				sb.append(sep);
 			}
-			sb.append(String.format(itemFormat, items[i]));
+			sb.append(format(itemFormat, items[i]));
 		}
 
 		return sb.toString();
@@ -873,7 +873,7 @@ public class U implements Constants {
 				sb.append(sep);
 			}
 
-			sb.append(String.format(itemFormat, item));
+			sb.append(format(itemFormat, item));
 			i++;
 		}
 
@@ -1447,7 +1447,7 @@ public class U implements Constants {
 
 		String avgs = avg > 1 ? Math.round(avg) + "K" : Math.round(avg * 1000) + "";
 
-		String data = String.format("%s: %s in %s ms (%s/sec)", name, count, ms, avgs);
+		String data = format("%s: %s in %s ms (%s/sec)", name, count, ms, avgs);
 
 		print(data + " | " + getCpuMemStats());
 	}
@@ -1467,7 +1467,7 @@ public class U implements Constants {
 		}
 
 		String msg = "MEM [total=%s MB, used=%s MB, max=%s MB]%s";
-		return String.format(msg, totalMem / megs, usedMem / megs, maxMem / megs, gcinfo);
+		return format(msg, totalMem / megs, usedMem / megs, maxMem / megs, gcinfo);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -2270,6 +2270,10 @@ public class U implements Constants {
 
 	public static short shortFrom(byte a, byte b) {
 		return (short) ((a << 8) + b);
+	}
+
+	public static String format(String s, Object... args) {
+		return String.format(s, args);
 	}
 
 }
