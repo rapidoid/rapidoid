@@ -94,6 +94,18 @@ public class U implements Constants {
 
 	private static final Map<Class<?>, Object> SINGLETONS = map();
 
+	private static final Map<Class<?>, Map<String, ? extends RuntimeException>> EXCEPTIONS = autoExpandingMap(new F1<Map<String, ? extends RuntimeException>, Class<?>>() {
+		@Override
+		public Map<String, ? extends RuntimeException> execute(final Class<?> clazz) throws Exception {
+			return autoExpandingMap(new F1<RuntimeException, String>() {
+				@Override
+				public RuntimeException execute(String msg) throws Exception {
+					return (RuntimeException) (msg.isEmpty() ? newInstance(clazz) : newInstance(clazz, msg));
+				}
+			});
+		}
+	});
+
 	private static ScheduledThreadPoolExecutor EXECUTOR;
 
 	private static long measureStart;
@@ -1351,6 +1363,14 @@ public class U implements Constants {
 		return sb.toString();
 	}
 
+	public static RuntimeException rte(String message, Object... args) {
+		return new RuntimeException(format(message, args));
+	}
+
+	public static RuntimeException rte(String message, Throwable cause, Object... args) {
+		return new RuntimeException(format(message, args), cause);
+	}
+
 	public static RuntimeException rte(String message, Throwable cause) {
 		return new RuntimeException(message, cause);
 	}
@@ -1359,12 +1379,21 @@ public class U implements Constants {
 		return new RuntimeException(cause);
 	}
 
-	public static RuntimeException rte(String message, Object... args) {
-		return new RuntimeException(String.format(message, args));
+	public static RuntimeException rte(String message) {
+		return cachedRTE(RuntimeException.class, message);
 	}
 
-	public static RuntimeException rte(String message, Throwable cause, Object... args) {
-		return new RuntimeException(String.format(message, args), cause);
+	public static <T extends RuntimeException> T rte(Class<T> clazz) {
+		return cachedRTE(clazz, null);
+	}
+
+	public static <T extends RuntimeException> T rte(Class<T> clazz, String msg) {
+		return cachedRTE(clazz, msg);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static synchronized <T extends RuntimeException> T cachedRTE(Class<T> clazz, String msg) {
+		return (T) EXCEPTIONS.get(clazz).get(U.or(msg, ""));
 	}
 
 	public static void ensure(boolean expectedCondition) {
@@ -1511,14 +1540,6 @@ public class U implements Constants {
 	public static void show(Object... values) {
 		String text = values.length == 1 ? text(values[0]) : text(values);
 		print(">" + text + "<");
-	}
-
-	public static <T extends RuntimeException> T rte(Class<T> clazz) {
-		return newInstance(clazz);
-	}
-
-	public static <T extends RuntimeException> T rte(Class<T> clazz, String msg) {
-		return newInstance(clazz, msg);
 	}
 
 	public static <T> T newInstance(Class<T> clazz) {
