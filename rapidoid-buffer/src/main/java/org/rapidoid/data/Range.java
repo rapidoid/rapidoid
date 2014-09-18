@@ -84,6 +84,12 @@ public class Range {
 		return start >= 0 ? whole.substring(start, start + length) : "";
 	}
 
+	public byte[] bytes(Buf src) {
+		byte[] bytes = new byte[length];
+		src.get(this, bytes, 0);
+		return bytes;
+	}
+
 	public long backup() {
 		long backup = start;
 
