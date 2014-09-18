@@ -77,6 +77,7 @@ public interface WebExchange extends Ctx {
 
 	BinaryMultiData files_();
 
+	// due to async web handling option, it ain't over till the fat lady sings "done"
 	void done();
 
 }
