@@ -127,4 +127,9 @@ public class Range {
 		set(range.start, range.length);
 	}
 
+	public void strip(int left, int right) {
+		start += left;
+		length -= left + right;
+	}
+
 }
