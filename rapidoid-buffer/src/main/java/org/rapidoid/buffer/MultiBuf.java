@@ -1739,28 +1739,39 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public boolean split(Range target, byte sep, Range before, Range after) {
+	public boolean split(Range target, byte sep, Range before, Range after, boolean trimParts) {
 		assert invariant();
 		int pos = find(target.start, target.limit(), sep, true);
 
 		if (pos >= 0) {
 			before.setInterval(target.start, pos);
 			after.setInterval(pos + 1, target.limit());
+
+			if (trimParts) {
+				trim(before);
+				trim(after);
+			}
+
 			assert invariant();
 			return true;
 		} else {
+			before.assign(target);
+			after.reset();
+
+			if (trimParts) {
+				trim(before);
+			}
+
 			assert invariant();
 			return false;
 		}
 	}
 
 	/**
-	 * Scans the buffer until the specified separator is found, and matches the
-	 * 4-byte prefix of the scanned selection against the specified search
-	 * prefix. Returns the position of the separator, or <code>-1</code> if the
-	 * limit is reached and separator not found. If the prefix is matched, the
-	 * negative of the position is returned, to mark the prefix match.
-	 * Duplicated code for performance reasons.
+	 * Scans the buffer until the specified separator is found, and matches the 4-byte prefix of the scanned selection
+	 * against the specified search prefix. Returns the position of the separator, or <code>-1</code> if the limit is
+	 * reached and separator not found. If the prefix is matched, the negative of the position is returned, to mark the
+	 * prefix match. Duplicated code for performance reasons.
 	 * 
 	 * @param range
 	 */
@@ -1834,12 +1845,10 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	/**
-	 * Scans the buffer until a line separator (CRLF or LF) is found, and
-	 * matches the 4-byte prefix of the scanned selection against the specified
-	 * search prefix. Returns the position of the separator, or <code>-1</code>
-	 * if the limit is reached and separator not found. If the prefix is
-	 * matched, the negative of the position is returned, to mark the prefix
-	 * match. Duplicated code for performance reasons.
+	 * Scans the buffer until a line separator (CRLF or LF) is found, and matches the 4-byte prefix of the scanned
+	 * selection against the specified search prefix. Returns the position of the separator, or <code>-1</code> if the
+	 * limit is reached and separator not found. If the prefix is matched, the negative of the position is returned, to
+	 * mark the prefix match. Duplicated code for performance reasons.
 	 */
 	public static int scanLnAndMatchPrefix(ByteBuffer buf, Range result, int fromPos, int toPos, int searchPrefix) {
 

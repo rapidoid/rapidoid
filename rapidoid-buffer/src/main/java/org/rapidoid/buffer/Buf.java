@@ -156,7 +156,7 @@ public interface Buf {
 
 	IncompleteReadException incomplete();
 
-	boolean split(Range target, byte sep, Range before, Range after);
+	boolean split(Range target, byte sep, Range before, Range after, boolean trimParts);
 
 	OutputStream asOutputStream();
 
