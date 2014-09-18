@@ -65,7 +65,7 @@ public class HttpResponses {
 
 		lines.add("");
 
-		return new HttpResponse(U.join(lines, "\r\n") + "\r\n");
+		return new HttpResponse(U.join("\r\n", lines) + "\r\n");
 	}
 
 	public HttpResponse get(boolean keepAlive, byte type) {

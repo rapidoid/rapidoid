@@ -855,11 +855,11 @@ public class U implements Constants {
 		return s;
 	}
 
-	public static String join(Object[] items, String sep) {
+	public static String join(String sep, Object... items) {
 		return render(items, "%s", sep);
 	}
 
-	public static String join(Iterable<?> items, String sep) {
+	public static String join(String sep, Iterable<?> items) {
 		return render(items, "%s", sep);
 	}
 
