@@ -50,6 +50,8 @@ import java.net.Socket;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -2305,6 +2307,24 @@ public class U implements Constants {
 		}
 
 		return sb.toString();
+	}
+
+	private static MessageDigest digest(String algorithm) {
+		try {
+			return MessageDigest.getInstance(algorithm);
+		} catch (NoSuchAlgorithmException e) {
+			throw rte("Cannot find algorithm: " + algorithm);
+		}
+	}
+
+	public static String md5(byte[] bytes) {
+		MessageDigest md5 = digest("MD5");
+		md5.update(bytes);
+		return bytesToString(md5.digest());
+	}
+
+	public static String md5(String data) {
+		return md5(data.getBytes());
 	}
 
 }
