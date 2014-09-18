@@ -782,8 +782,6 @@ public class MultiBuf implements Buf, Constants {
 	public void putNumAsText(int position, long n) {
 		assert invariant();
 
-		assert n >= 0;
-
 		if (n >= 0) {
 			if (n < 10) {
 				put(position, (byte) (n + '0'));
@@ -809,7 +807,8 @@ public class MultiBuf implements Buf, Constants {
 				}
 			}
 		} else {
-			throw U.notReady();
+			put(position, (byte) ('-'));
+			putNumAsText(position + 1, -n);
 		}
 
 		assert invariant();
