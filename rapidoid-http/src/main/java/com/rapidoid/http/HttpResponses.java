@@ -30,6 +30,10 @@ public class HttpResponses {
 	// connection [0=close, 1=keep-alive],
 	// content-type [0=plain, 1=html, 2=json]
 
+	public static final int TEXT_PLAIN = 0;
+	public static final int TEXT_HTML = 1;
+	public static final int APLICATION_JSON = 2;
+
 	private static final String[] conns = { "close", "keep-alive" };
 
 	private static final String[] types = { "text/plain", "text/html", "application/json" };

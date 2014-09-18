@@ -57,7 +57,7 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 		U.failIf(xch.verb.isEmpty() || xch.uri.isEmpty(), "Invalid HTTP request!");
 		U.failIf(xch.isGet.value && !xch.body.isEmpty(), "Body is NOT allowed in HTTP GET requests!");
 
-		web.respType = 1;
+		xch.respType = HttpResponses.TEXT_HTML;
 
 		int posBefore = web.output().size();
 
