@@ -129,4 +129,21 @@ public class KeyValueRanges {
 		return map;
 	}
 
+	public Map<String, byte[]> toBinaryMap(Buf src, boolean urlDecodeKeys) {
+		Map<String, byte[]> map = U.map();
+
+		for (int i = 0; i < count; i++) {
+			String key = keys[i].str(src);
+			byte[] val = values[i].bytes(src);
+
+			if (urlDecodeKeys) {
+				key = U.urlDecode(key);
+			}
+
+			map.put(key, val);
+		}
+
+		return map;
+	}
+
 }
