@@ -54,8 +54,8 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 		parser.parse(web.input(), web.isGet, web.isKeepAlive, web.body, web.verb, web.uri, web.path, web.query,
 				web.protocol, web.headers, web.helper());
 
-		web.failIf(web.verb.isEmpty() || web.uri.isEmpty(), "Invalid HTTP request!");
-		analyzeRequest(web);
+		U.failIf(xch.verb.isEmpty() || xch.uri.isEmpty(), "Invalid HTTP request!");
+		U.failIf(xch.isGet.value && !xch.body.isEmpty(), "Body is NOT allowed in HTTP GET requests!");
 
 		web.respType = 1;
 

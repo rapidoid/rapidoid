@@ -69,12 +69,6 @@ public interface Connection {
 
 	long connId();
 
-	void fail(String msg);
-
-	void failIf(boolean condition, String msg);
-
-	void ensure(boolean expectedCondition, String msg);
-
 	void close(boolean waitToWrite);
 
 	boolean onSameThread();

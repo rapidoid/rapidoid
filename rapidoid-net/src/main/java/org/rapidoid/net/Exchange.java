@@ -155,21 +155,6 @@ public class Exchange implements BufProvider, Resetable, Ctx {
 		return conn.connId();
 	}
 
-	@Override
-	public void fail(String msg) {
-		conn.fail(msg);
-	}
-
-	@Override
-	public void failIf(boolean condition, String msg) {
-		conn.failIf(condition, msg);
-	}
-
-	@Override
-	public void ensure(boolean expectedCondition, String msg) {
-		conn.ensure(expectedCondition, msg);
-	}
-
 	protected Data data(Range range) {
 		return new DefaultData(this, range);
 	}

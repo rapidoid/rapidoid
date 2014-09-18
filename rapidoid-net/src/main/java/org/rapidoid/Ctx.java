@@ -68,12 +68,6 @@ public interface Ctx {
 
 	long connId();
 
-	void fail(String msg);
-
-	void failIf(boolean condition, String msg);
-
-	void ensure(boolean expectedCondition, String msg);
-
 	Connection connection();
 
 }

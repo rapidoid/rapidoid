@@ -32,7 +32,6 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.util.JSON;
 import org.rapidoid.util.Resetable;
-import org.rapidoid.util.U;
 
 public class RapidoidConnection implements Connection, Resetable, Ctx {
 
@@ -246,25 +245,6 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 	@Override
 	public synchronized long connId() {
 		return id;
-	}
-
-	@Override
-	public synchronized void fail(String msg) {
-		throw U.rte(ProtocolException.class, msg);
-	}
-
-	@Override
-	public synchronized void failIf(boolean condition, String msg) {
-		if (condition) {
-			throw U.rte(ProtocolException.class, msg);
-		}
-	}
-
-	@Override
-	public synchronized void ensure(boolean expectedCondition, String msg) {
-		if (!expectedCondition) {
-			throw U.rte(ProtocolException.class, msg);
-		}
 	}
 
 	@Override
