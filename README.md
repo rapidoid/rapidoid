@@ -3,6 +3,18 @@ Rapidoid
 
 Rapidoid is the way of rapid development of high-performance (web) applications.
 
+# Super-simple development #
+
+Navigating to [http://localhost:8080/teaser/hey/Joe/45](http://localhost:8080/teaser/hey/Joe/45) returns `Hey Joe (45)`
+
+```java
+public class TeaserService {
+	public String hey(String name, int age) {
+		return "Hey " + name + " (" + age + ")";
+	}
+}
+```
+
 # Apache Public License v2
 
 The software is released under the liberal APL v2 license, so it is free to use for both commercial and non-commercial projects.
@@ -65,7 +77,6 @@ It will scan for `*Service` classes on your classpath and start a fast embedded 
 - rapidoid-buffer: high-performance and extensible off-heap buffer, the heart of network communication,
 - rapidoid-net: high-performance asynchronous framework for super-easy development of various network protocol servers,
 - rapidoid-http: high-performance asynchronous HTTP server,
-- rapidoid-websocket: high-performance asynchronous WebSocket server (coming soon...),
 - rapidoid-test-commons: helpers for writing more elegant tests,
 - rapidoid-pojo: writing web apps/services through simple POJOs,
 - rapidoid-?: a lot more is coming...
