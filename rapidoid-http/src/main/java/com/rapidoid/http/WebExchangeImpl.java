@@ -22,6 +22,7 @@ package com.rapidoid.http;
 
 import java.util.Map;
 
+import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.MultiData;
@@ -45,6 +46,9 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 
 	private final KeyValueRanges params = new KeyValueRanges(50);
 	private final KeyValueRanges headersKV = new KeyValueRanges(50);
+	private final KeyValueRanges cookies = new KeyValueRanges(50);
+	private final KeyValueRanges data = new KeyValueRanges(50);
+	private final KeyValueRanges files = new KeyValueRanges(50);
 
 	final Range body = new Range();
 
@@ -55,6 +59,7 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 
 	private boolean parsedParams;
 	private boolean parsedHeaders;
+	private boolean parsedBody;
 
 	byte respType;
 
@@ -73,6 +78,9 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	private final Data _protocol;
 	private final MultiData _params;
 	private final MultiData _headers;
+	private final MultiData _cookies;
+	private final MultiData _data;
+	private final BinaryMultiData _files;
 
 	public WebExchangeImpl() {
 		reset();
@@ -86,6 +94,9 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 		this._protocol = data(protocol);
 		this._params = multiData(params);
 		this._headers = multiData(headersKV);
+		this._cookies = multiData(cookies);
+		this._data = multiData(data);
+		this._files = binaryMultiData(files);
 	}
 
 	@Override
@@ -106,9 +117,13 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 		params.reset();
 		headersKV.reset();
 		headers.reset();
+		cookies.reset();
+		data.reset();
+		files.reset();
 
 		parsedParams = false;
 		parsedHeaders = false;
+		parsedBody = false;
 
 		total = -1;
 	}
@@ -130,13 +145,46 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	public MultiData headers_() {
 		if (!parsedHeaders) {
 			if (!headers.isEmpty()) {
-				PARSER.parseHeadersIntoKV(input(), headers, headersKV);
+				PARSER.parseHeadersIntoKV(input(), headers, headersKV, cookies);
 			}
 
 			parsedHeaders = true;
 		}
 
 		return _headers;
+	}
+
+	@Override
+	public MultiData cookies_() {
+		if (!parsedHeaders) {
+			if (!headers.isEmpty()) {
+				PARSER.parseHeadersIntoKV(input(), headers, headersKV, cookies);
+			}
+
+			parsedHeaders = true;
+		}
+
+		return _cookies;
+	}
+
+	@Override
+	public MultiData data_() {
+		if (!parsedBody) {
+			PARSER.parseBody(input(), headersKV, body, data, files, helper());
+			parsedBody = true;
+		}
+
+		return _data;
+	}
+
+	@Override
+	public BinaryMultiData files_() {
+		if (!parsedBody) {
+			PARSER.parseBody(input(), headersKV, body, data, files, helper());
+			parsedBody = true;
+		}
+
+		return _files;
 	}
 
 	public Data subpath_() {
@@ -186,7 +234,7 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	public String toString() {
 		return "WebExchange [uri=" + uri() + ", verb=" + verb() + ", path=" + path() + ", subpath=" + subpath()
 				+ ", query=" + query() + ", protocol=" + protocol() + ", body=" + body() + ", headers=" + headers()
-				+ ", params=" + params();
+				+ ", params=" + params() + ", cookies=" + cookies() + ", data=" + data() + ", files=" + files() + "]";
 	}
 
 	@Override
@@ -232,6 +280,21 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	@Override
 	public Map<String, String> headers() {
 		return headers_().get();
+	}
+
+	@Override
+	public Map<String, String> cookies() {
+		return cookies_().get();
+	}
+
+	@Override
+	public Map<String, String> data() {
+		return data_().get();
+	}
+
+	@Override
+	public Map<String, byte[]> files() {
+		return files_().get();
 	}
 
 }

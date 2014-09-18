@@ -23,6 +23,7 @@ package com.rapidoid.http;
 import java.util.Map;
 
 import org.rapidoid.Ctx;
+import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.MultiData;
 
@@ -64,5 +65,18 @@ public interface WebExchange extends Ctx {
 
 	MultiData headers_();
 
+	Map<String, String> cookies();
+
+	MultiData cookies_();
+
+	Map<String, String> data();
+
+	MultiData data_();
+
+	Map<String, byte[]> files();
+
+	BinaryMultiData files_();
+
 	void done();
+
 }

@@ -20,6 +20,9 @@ package com.rapidoid.http;
  * #L%
  */
 
+import java.io.File;
+
+import org.apache.commons.io.FileUtils;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
@@ -28,14 +31,28 @@ public class HttpMultipartFormTest extends HttpTestCommons {
 	@Test
 	public void shouldHandleUploads() throws Throwable {
 		server();
-		eq(upload("/", U.map("a", "bb"), U.map("f1", "test1.txt", "f2", "test2.txt")), "POST:/:/:");
+
+		String hash1 = U.md5(FileUtils.readFileToByteArray(new File(U.resource("test1.txt").toURI())));
+		String hash2 = U.md5(FileUtils.readFileToByteArray(new File(U.resource("test2.txt").toURI())));
+		String hash3 = U.md5("");
+
+		eq(upload("/upload", U.map("a", "bb"), U.map("f1", "test1.txt", "f2", "test2.txt")),
+				"bar:a:bb:2:" + U.join(":", hash1, hash2, hash3));
+
 		shutdown();
 	}
 
 	@Test
 	public void shouldHandleBigUploads() throws Throwable {
 		server();
-		eq(upload("/", U.map("a", "bb"), U.map("f1", "test1.txt", "f2", "test2.txt", "f3", "rabbit.jpg")), "POST:/:/:");
+
+		String hash1 = U.md5(FileUtils.readFileToByteArray(new File(U.resource("test1.txt").toURI())));
+		String hash2 = U.md5(FileUtils.readFileToByteArray(new File(U.resource("test2.txt").toURI())));
+		String hash3 = U.md5(FileUtils.readFileToByteArray(new File(U.resource("rabbit.jpg").toURI())));
+
+		eq(upload("/upload", U.map("a", "d"), U.map("f1", "test1.txt", "f2", "test2.txt", "f3", "rabbit.jpg")),
+				"bar:a:d:3:" + U.join(":", hash1, hash2, hash3));
+
 		shutdown();
 	}
 

@@ -31,6 +31,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -51,6 +52,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected void server() {
+
 		Web.get("/echo", new Handler() {
 			@Override
 			public Object handle(WebExchange x) {
@@ -65,12 +67,19 @@ public abstract class HttpTestCommons extends TestCommons {
 			}
 		});
 
+		Web.post("/upload", new Handler() {
+			@Override
+			public Object handle(WebExchange x) {
+				return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.data().get("a"), x.files()
+						.size(), U.md5(x.files().get("f1")), U.md5(x.files().get("f2")), U.md5(U.or(
+						x.files().get("f3"), new byte[0])));
+			}
+		});
+
 		Web.handle(new Handler() {
 			@Override
 			public Object handle(WebExchange x) {
-				x.write(x.verb_().get() + ":" + x.path_().get() + ":" + x.subpath_().get() + ":" + x.query_().get());
-				x.done();
-				return null;
+				return U.join(":", x.verb(), x.path(), x.subpath(), x.query());
 			}
 		});
 
@@ -97,19 +106,26 @@ public abstract class HttpTestCommons extends TestCommons {
 			MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 
 			for (Entry<String, String> entry : files.entrySet()) {
-				builder = builder.addBinaryBody(entry.getKey(), resourceFile(entry.getValue()));
+				ContentType contentType = ContentType.create("application/octet-stream");
+				String filename = entry.getValue();
+				builder = builder.addBinaryBody(entry.getKey(), resourceFile(filename), contentType, filename);
 			}
 
 			for (Entry<String, String> entry : params.entrySet()) {
-				builder = builder.addTextBody(entry.getKey(), entry.getValue());
+				ContentType contentType = ContentType.create("text/plain", "UTF-8");
+				builder = builder.addTextBody(entry.getKey(), entry.getValue(), contentType);
 			}
 
 			httppost.setEntity(builder.build());
 
+			httppost.addHeader("Cookie", "COOKIE1=a");
+			httppost.addHeader("COOKIE", "foo=bar");
+
 			U.print("REQUEST " + httppost.getRequestLine());
-			U.print("a " + U.time());
+
+			U.startMeasure();
 			CloseableHttpResponse response = client.execute(httppost);
-			U.print("b " + U.time());
+			U.endMeasure();
 
 			try {
 				Assert.assertEquals(200, response.getStatusLine().getStatusCode());
@@ -119,7 +135,6 @@ public abstract class HttpTestCommons extends TestCommons {
 
 				return decoded;
 			} finally {
-				U.print("done " + U.time());
 				response.close();
 			}
 		} finally {

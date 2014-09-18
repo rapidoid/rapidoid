@@ -76,8 +76,8 @@ public class HttpParserTest extends HttpTestCommons {
 		eq(REQ2, req.path, "/something/else/here");
 		eqs(REQ2, req.params_().ranges(), "x", "abc");
 		eq(REQ2, req.protocol, "HTTP/STRANGE");
-		eqs(REQ2, req.headers_().ranges(), "Host", "a.b.c.org", "My-Header", "same", "My-Header", "again",
-				CONTENT_LENGTH, "5");
+		eqs(REQ2, req.headers_().ranges(), "Host", "a.b.c.org", "", "ign", "ored", "", "My-Header", "same",
+				"My-Header", "again", CONTENT_LENGTH, "5");
 		eq(REQ2, req.body, "BODYa");
 	}
 
