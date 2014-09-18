@@ -1006,6 +1006,10 @@ public class U implements Constants {
 		return part;
 	}
 
+	public static <T> T[] array(T... items) {
+		return items;
+	}
+
 	public static <T> Set<T> set(T... values) {
 		Set<T> set = new HashSet<T>();
 
