@@ -58,7 +58,7 @@ public class Web {
 
 	public static RapidoidServer start(WebConfig config) {
 		if (config == null) {
-			config = new DefaultWebConfig();
+			config = new CLIWebConfig(new DefaultWebConfig());
 		}
 
 		RapidoidServer server = Rapidoid.start(new HttpProtocol(config, ROUTER), config, WebExchangeImpl.class);
