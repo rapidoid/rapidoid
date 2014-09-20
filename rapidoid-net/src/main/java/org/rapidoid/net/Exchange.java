@@ -127,8 +127,8 @@ public class Exchange implements BufProvider, Resetable, Ctx {
 	}
 
 	@Override
-	public long connId() {
-		return conn.connId();
+	public long id() {
+		return conn.id();
 	}
 
 	protected Data data(Range range) {

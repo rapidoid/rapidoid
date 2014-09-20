@@ -37,6 +37,8 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 
 	private static final ConnectionListener IGNORE = new IgnorantConnectionListener();
 
+	private static final AtomicLong ID_N = new AtomicLong();
+
 	public final RapidoidWorker worker;
 
 	public final Buf input;
@@ -55,7 +57,8 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 
 	private ConnectionListener listener;
 
-	private long id;
+	private long id = ID_N.incrementAndGet();
+
 
 	public RapidoidConnection(RapidoidWorker worker, BufGroup bufs) {
 		this.worker = worker;
@@ -215,7 +218,7 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 	}
 
 	@Override
-	public synchronized long connId() {
+	public synchronized long id() {
 		return id;
 	}
 

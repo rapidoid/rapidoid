@@ -56,7 +56,7 @@ public interface Ctx {
 
 	RapidoidHelper helper();
 
-	long connId();
+	long id();
 
 	Connection connection();
 

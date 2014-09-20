@@ -57,7 +57,7 @@ public interface Connection {
 
 	RapidoidHelper helper();
 
-	long connId();
+	long id();
 
 	void close(boolean waitToWrite);
 
