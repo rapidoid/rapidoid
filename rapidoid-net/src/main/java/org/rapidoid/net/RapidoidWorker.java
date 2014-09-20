@@ -53,9 +53,9 @@ public class RapidoidWorker extends AbstractEventLoop {
 
 	private final boolean isProtocolListener;
 
-	public RapidoidWorker(int num, final BufGroup bufs, final ServerConfig config, final Protocol protocol,
+	public RapidoidWorker(String name, final BufGroup bufs, final ServerConfig config, final Protocol protocol,
 			final RapidoidHelper helper) {
-		super("worker" + num, config);
+		super(name, config);
 
 		this.protocol = protocol;
 		this.helper = helper;

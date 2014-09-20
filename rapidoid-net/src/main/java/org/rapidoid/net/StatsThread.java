@@ -24,6 +24,10 @@ import org.rapidoid.util.U;
 
 public class StatsThread extends Thread {
 
+	public StatsThread() {
+		super("stats");
+	}
+
 	private boolean active;
 
 	private String lastStats;

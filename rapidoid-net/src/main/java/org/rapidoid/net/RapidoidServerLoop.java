@@ -127,8 +127,9 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 			workers = new RapidoidWorker[workersN];
 			for (int i = 0; i < workers.length; i++) {
 				RapidoidHelper helper = U.newInstance(helperClass, exchangeClass);
-				workers[i] = new RapidoidWorker(i + 1, new BufGroup(13), config, protocol, helper);
-				new Thread(workers[i]).start();
+				String workerName = "server" + (i + 1);
+				workers[i] = new RapidoidWorker(workerName, new BufGroup(13), config, protocol, helper);
+				new Thread(workers[i], workerName).start();
 			}
 		} else {
 			throw U.rte("Cannot open socket!");
@@ -137,7 +138,7 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 
 	@Override
 	public void start() {
-		new Thread(this).start();
+		new Thread(this, "server").start();
 	}
 
 	@Override
