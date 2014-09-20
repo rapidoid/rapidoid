@@ -41,6 +41,10 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 	@Override
 	protected void process(Ctx ctx, WebExchangeImpl xch) {
 
+		if (ctx.connection().isInitial()) {
+			return;
+		}
+
 		parser.parse(xch.input(), xch.isGet, xch.isKeepAlive, xch.body, xch.verb, xch.uri, xch.path, xch.query,
 				xch.protocol, xch.headers, xch.helper());
 

@@ -69,4 +69,10 @@ public interface Connection {
 
 	void error();
 
+	ConnState state();
+
+	boolean isInitial();
+
+	void setInitial(boolean initial);
+
 }

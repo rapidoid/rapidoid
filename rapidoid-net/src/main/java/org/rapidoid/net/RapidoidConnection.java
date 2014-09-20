@@ -25,7 +25,9 @@ import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
+import java.util.concurrent.atomic.AtomicLong;
 
+import org.rapidoid.ConnState;
 import org.rapidoid.Connection;
 import org.rapidoid.Ctx;
 import org.rapidoid.buffer.Buf;
@@ -45,6 +47,8 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 
 	public final Buf output;
 
+	private final ConnState state = new ConnState();
+
 	private boolean waitingToWrite = false;
 
 	public SelectionKey key;
@@ -59,6 +63,7 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 
 	private long id = ID_N.incrementAndGet();
 
+	private boolean initial;
 
 	public RapidoidConnection(RapidoidWorker worker, BufGroup bufs) {
 		this.worker = worker;
@@ -77,6 +82,8 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 		waitingToWrite = false;
 		completedInputPos = 0;
 		listener = IGNORE;
+		initial = true;
+		state.reset();
 	}
 
 	@Override
@@ -230,6 +237,26 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 	@Override
 	public Connection connection() {
 		return this;
+	}
+
+	@Override
+	public ConnState state() {
+		return state;
+	}
+
+	@Override
+	public boolean isInitial() {
+		return initial;
+	}
+
+	@Override
+	public String toString() {
+		return "conn#" + id();
+	}
+
+	@Override
+	public void setInitial(boolean initial) {
+		this.initial = initial;
 	}
 
 }
