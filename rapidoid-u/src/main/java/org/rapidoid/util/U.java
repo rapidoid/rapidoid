@@ -363,6 +363,8 @@ public class U implements Constants {
 				synchronized (out) {
 					out.append(LOG_LEVELS[level]);
 					out.append(" | ");
+					out.append(Thread.currentThread().getName());
+					out.append(" | ");
 					out.append(getCallingClass());
 					out.append(" | ");
 					out.append(msg);
