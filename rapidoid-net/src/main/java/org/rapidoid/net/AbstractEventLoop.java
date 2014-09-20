@@ -60,19 +60,35 @@ public abstract class AbstractEventLoop extends AbstractLoop {
 			try {
 				acceptOP(key);
 			} catch (IOException e) {
+				failedOP(key, e);
 				U.error("accept IO error for key: " + key, e);
 			} catch (Throwable e) {
+				failedOP(key, e);
 				U.error("accept failed for key: " + key, e);
 			}
 
+		} else if (key.isConnectable()) {
+			U.debug("connected", "key", key);
+
+			try {
+				connectOP(key);
+			} catch (IOException e) {
+				failedOP(key, e);
+				U.error("connect IO error for key: " + key, e);
+			} catch (Throwable e) {
+				failedOP(key, e);
+				U.error("connect failed for key: " + key, e);
+			}
 		} else if (key.isReadable()) {
 			U.debug("reading", "key", key);
 
 			try {
 				readOP(key);
 			} catch (IOException e) {
+				failedOP(key, e);
 				U.error("read IO error for key: " + key, e);
 			} catch (Throwable e) {
+				failedOP(key, e);
 				U.error("read failed for key: " + key, e);
 			}
 
@@ -82,8 +98,10 @@ public abstract class AbstractEventLoop extends AbstractLoop {
 			try {
 				writeOP(key);
 			} catch (IOException e) {
+				failedOP(key, e);
 				U.error("write IO error for key: " + key, e);
 			} catch (Throwable e) {
+				failedOP(key, e);
 				U.error("write failed for key: " + key, e);
 			}
 		}
@@ -132,6 +150,10 @@ public abstract class AbstractEventLoop extends AbstractLoop {
 
 	protected void writeOP(SelectionKey key) throws IOException {
 		throw new RuntimeException("Accept operation is not implemented!");
+	}
+
+	protected void failedOP(SelectionKey key, Throwable e) {
+		// ignore the errors by default
 	}
 
 }
