@@ -21,6 +21,9 @@ package org.rapidoid.net;
  */
 
 import java.io.IOException;
+import java.net.ConnectException;
+import java.net.Socket;
+import java.net.SocketException;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
@@ -41,7 +44,11 @@ public class RapidoidWorker extends AbstractEventLoop {
 
 	private static final int MAX_PIPELINED = Integer.MAX_VALUE;
 
-	private final Queue<SocketChannel> accepted = new ArrayBlockingQueue<SocketChannel>(1000000);
+	private final Queue<RapidoidConnection> restarting = new ArrayBlockingQueue<RapidoidConnection>(1000000);
+
+	private final Queue<ConnectionTarget> connecting = new ArrayBlockingQueue<ConnectionTarget>(1000000);
+
+	private final Queue<SocketChannel> connected = new ArrayBlockingQueue<SocketChannel>(1000000);
 
 	private final SimpleList<RapidoidConnection> done = new SimpleList<RapidoidConnection>(100000, 10);
 
@@ -52,6 +59,10 @@ public class RapidoidWorker extends AbstractEventLoop {
 	final RapidoidHelper helper;
 
 	private final boolean isProtocolListener;
+
+	private final int bufSize;
+
+	private final boolean nodelay;
 
 	public RapidoidWorker(String name, final BufGroup bufs, final ServerConfig config, final Protocol protocol,
 			final RapidoidHelper helper) {
@@ -68,11 +79,61 @@ public class RapidoidWorker extends AbstractEventLoop {
 				return new RapidoidConnection(RapidoidWorker.this, bufs);
 			}
 		}, 100000);
+
+		this.bufSize = config.buf() * 1024;
+		this.nodelay = !config.nagle();
 	}
 
-	public void register(SocketChannel socketChannel) {
-		accepted.add(socketChannel);
+	public void accept(SocketChannel socketChannel) throws IOException {
+
+		configureSocket(socketChannel);
+
+		connected.add(socketChannel);
 		selector.wakeup();
+	}
+
+	public void connect(ConnectionTarget target) throws IOException {
+
+		configureSocket(target.socketChannel);
+
+		connecting.add(target);
+
+		if (target.socketChannel.connect(target.addr)) {
+			U.debug("Opened socket, connected", "address", target.addr);
+		} else {
+			U.debug("Opened socket, connecting...", "address", target.addr);
+		}
+
+		selector.wakeup();
+	}
+
+	private void configureSocket(SocketChannel socketChannel) throws IOException, SocketException {
+		socketChannel.configureBlocking(false);
+
+		Socket socket = socketChannel.socket();
+		socket.setTcpNoDelay(nodelay);
+		socket.setReceiveBufferSize(bufSize);
+		socket.setSendBufferSize(bufSize);
+		socket.setReuseAddress(true);
+	}
+
+	@Override
+	protected void connectOP(SelectionKey key) throws IOException {
+		SocketChannel socketChannel = (SocketChannel) key.channel();
+
+		ConnectionTarget target = (ConnectionTarget) key.attachment();
+
+		boolean ready;
+		try {
+			ready = socketChannel.finishConnect();
+			U.failIf(!ready, "Expected established connection!");
+			connected.add(socketChannel);
+		} catch (ConnectException e) {
+			socketChannel = SocketChannel.open();
+			target.socketChannel = SocketChannel.open();
+			target.after = U.time() + 1000;
+			connect(target);
+		}
 	}
 
 	@Override
@@ -210,24 +271,52 @@ public class RapidoidWorker extends AbstractEventLoop {
 	@Override
 	protected void doProcessing() {
 
+		long now = U.time();
+		int connectingN = connecting.size();
+
+		for (int i = 0; i < connectingN; i++) {
+			ConnectionTarget target = connecting.poll();
+			assert target != null;
+
+			if (target.after < now) {
+				U.debug("connecting", "address", target.addr);
+
+				try {
+					SelectionKey newKey = target.socketChannel.register(selector, SelectionKey.OP_CONNECT);
+					newKey.attach(target);
+				} catch (ClosedChannelException e) {
+					U.warn("Closed channel", e);
+				}
+			} else {
+				connecting.add(target);
+			}
+		}
+
 		SocketChannel socketChannel;
-		while ((socketChannel = accepted.poll()) != null) {
-			U.debug("incoming connection", "address", socketChannel.socket().getRemoteSocketAddress());
+
+		while ((socketChannel = connected.poll()) != null) {
+			U.debug("connected", "address", socketChannel.socket().getRemoteSocketAddress());
 
 			try {
 				SelectionKey newKey = socketChannel.register(selector, SelectionKey.OP_READ);
-				RapidoidConnection conn = connections.get();
-				conn.key = newKey;
+				RapidoidConnection conn = attachConn(newKey);
 
-				if (isProtocolListener) {
-					conn.setListener((ConnectionListener) protocol);
+				try {
+					processNext(conn);
+				} finally {
+					conn.setInitial(false);
 				}
-
-				newKey.attach(conn);
 
 			} catch (ClosedChannelException e) {
 				U.warn("Closed channel", e);
 			}
+		}
+
+		RapidoidConnection restartedConn;
+		while ((restartedConn = restarting.poll()) != null) {
+			U.debug("restarting", "connection", restartedConn);
+
+			processNext(restartedConn);
 		}
 
 		synchronized (done) {
@@ -241,8 +330,34 @@ public class RapidoidWorker extends AbstractEventLoop {
 		}
 	}
 
-	public void closeAll() {
+	private RapidoidConnection attachConn(SelectionKey key) {
+		Object attachment = key.attachment();
+		assert attachment == null || attachment instanceof ConnectionTarget;
+
+		RapidoidConnection conn = connections.get();
+		conn.key = key;
+
+		if (isProtocolListener) {
+			conn.setListener((ConnectionListener) protocol);
+		}
+
+		key.attach(conn);
+
+		return conn;
+	}
+
+	public void close() {
 		// FIXME implement this
+	}
+
+	@Override
+	protected void failedOP(SelectionKey key, Throwable e) {
+		U.error("Network error", e);
+		close(key);
+	}
+
+	public void restart(RapidoidConnection conn) {
+		restarting.add(conn);
 	}
 
 }

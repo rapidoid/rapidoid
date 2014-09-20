@@ -63,7 +63,7 @@ public abstract class HttpTestCommons extends TestCommons {
 		Web.get("/hello", new Handler() {
 			@Override
 			public Object handle(WebExchange x) {
-				return "Hello\r\n";
+				return "Hello";
 			}
 		});
 

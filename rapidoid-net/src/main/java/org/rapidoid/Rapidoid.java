@@ -24,6 +24,7 @@ import org.rapidoid.config.CLIConfig;
 import org.rapidoid.config.DefaultServerConfig;
 import org.rapidoid.config.ServerConfig;
 import org.rapidoid.net.Exchange;
+import org.rapidoid.net.RapidoidClientLoop;
 import org.rapidoid.net.RapidoidHelper;
 import org.rapidoid.net.RapidoidServerLoop;
 import org.rapidoid.net.StatsThread;
@@ -68,4 +69,39 @@ public class Rapidoid {
 		return server;
 	}
 
+	public static RapidoidClient connect(int connections, Protocol protocol, String host, int port) {
+		return connect(connections, protocol, null, null, host, port);
+	}
+
+	public static RapidoidClient connect(int connections, Protocol protocol, Class<? extends Exchange> exchangeClass,
+			String host, int port) {
+		return connect(connections, protocol, null, null, host, port);
+	}
+
+	public static RapidoidClient connect(int connections, Protocol protocol, ServerConfig config, String host, int port) {
+		return connect(connections, protocol, config, null, RapidoidHelper.class, host, port);
+	}
+
+	public static RapidoidClient connect(int connections, Protocol protocol, ServerConfig config,
+			Class<? extends Exchange> exchangeClass, String host, int port) {
+		return connect(connections, protocol, config, exchangeClass, RapidoidHelper.class, host, port);
+	}
+
+	public static RapidoidClient connect(int connections, Protocol protocol, ServerConfig config,
+			Class<? extends Exchange> exchangeClass, Class<? extends RapidoidHelper> helperClass, String host, int port) {
+
+		if (config == null) {
+			config = DEFAULT_CONFIG;
+		}
+
+		if (!config.nostats()) {
+			U.inject(StatsThread.class).execute();
+		}
+
+		RapidoidClient client = new RapidoidClientLoop(connections, config, protocol, exchangeClass, helperClass, host,
+				port);
+		client.start();
+
+		return client;
+	}
 }

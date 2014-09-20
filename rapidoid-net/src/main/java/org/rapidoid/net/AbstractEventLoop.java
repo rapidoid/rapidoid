@@ -126,10 +126,12 @@ public abstract class AbstractEventLoop extends AbstractLoop {
 			Set<SelectionKey> selectedKeys = selector.selectedKeys();
 			synchronized (selectedKeys) {
 
-				Iterator<?> keys = selectedKeys.iterator();
-				while (keys.hasNext()) {
-					SelectionKey key = (SelectionKey) keys.next();
-					keys.remove();
+				Iterator<?> iter = selectedKeys.iterator();
+
+				while (iter.hasNext()) {
+					SelectionKey key = (SelectionKey) iter.next();
+					iter.remove();
+
 					processKey(key);
 				}
 			}
@@ -142,6 +144,10 @@ public abstract class AbstractEventLoop extends AbstractLoop {
 
 	protected void acceptOP(SelectionKey key) throws IOException {
 		throw new RuntimeException("Accept operation is not implemented!");
+	}
+
+	protected void connectOP(SelectionKey key) throws IOException {
+		throw new RuntimeException("Connect operation is not implemented!");
 	}
 
 	protected void readOP(SelectionKey key) throws IOException {

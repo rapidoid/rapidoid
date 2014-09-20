@@ -1,4 +1,4 @@
-package org.rapidoid;
+package org.rapidoid.net;
 
 /*
  * #%L
@@ -21,45 +21,22 @@ package org.rapidoid;
  */
 
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 
-import org.rapidoid.buffer.Buf;
-import org.rapidoid.net.RapidoidHelper;
+import org.rapidoid.util.U;
 
-public interface Ctx {
+public class ConnectionTarget {
 
-	String address();
+	SocketChannel socketChannel;
 
-	int write(String s);
+	InetSocketAddress addr;
 
-	int write(byte[] bytes);
+	long after;
 
-	int write(byte[] bytes, int offset, int length);
-
-	int write(ByteBuffer buf);
-
-	void writeJSON(Object value);
-
-	void complete(boolean close);
-
-	void close();
-
-	Buf input();
-
-	Buf output();
-
-	String readln();
-
-	String readN(int count);
-
-	InetSocketAddress getAddress();
-
-	RapidoidHelper helper();
-
-	long id();
-
-	Connection connection();
-
-	void restart();
+	public ConnectionTarget(SocketChannel socketChannel, InetSocketAddress addr) {
+		this.socketChannel = socketChannel;
+		this.addr = addr;
+		this.after = U.time();
+	}
 
 }

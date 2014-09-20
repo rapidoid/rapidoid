@@ -23,7 +23,6 @@ package org.rapidoid.net;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
@@ -46,10 +45,6 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 
 	private final ServerConfig config;
 
-	private final int bufSize;
-
-	private final boolean nodelay;
-
 	private final Protocol protocol;
 
 	private final Class<? extends RapidoidHelper> helperClass;
@@ -67,8 +62,6 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 		this.port = config.port();
 		this.workersN = config.workers();
 		this.config = config;
-		this.bufSize = config.buf() * 1024;
-		this.nodelay = !config.nagle();
 	}
 
 	@Override
@@ -76,13 +69,6 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 		ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
 
 		SocketChannel socketChannel = serverChannel.accept();
-		socketChannel.configureBlocking(false);
-
-		Socket socket = socketChannel.socket();
-		socket.setTcpNoDelay(nodelay);
-		socket.setReceiveBufferSize(bufSize);
-		socket.setSendBufferSize(bufSize);
-		socket.setReuseAddress(true);
 
 		RapidoidWorker worker = workers[workerIndex];
 		workerIndex++;
@@ -90,7 +76,7 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 			workerIndex = 0;
 		}
 
-		worker.register(socketChannel);
+		worker.accept(socketChannel);
 	}
 
 	@Override
@@ -112,7 +98,6 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 		if ((serverSocketChannel.isOpen()) && (selector.isOpen())) {
 
 			serverSocketChannel.configureBlocking(false);
-
 			ServerSocket socket = serverSocketChannel.socket();
 
 			InetSocketAddress addr = new InetSocketAddress(port);
@@ -146,7 +131,7 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 		stopLoop();
 
 		for (RapidoidWorker worker : workers) {
-			worker.closeAll();
+			worker.close();
 			worker.stopLoop();
 		}
 

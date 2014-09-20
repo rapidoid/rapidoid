@@ -161,4 +161,9 @@ public class Exchange implements BufProvider, Resetable, Ctx {
 		return conn;
 	}
 
+	@Override
+	public void restart() {
+		conn.restart();
+	}
+
 }

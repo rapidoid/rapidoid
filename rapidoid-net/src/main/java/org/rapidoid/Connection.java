@@ -75,4 +75,6 @@ public interface Connection {
 
 	void setInitial(boolean initial);
 
+	void restart();
+
 }

@@ -259,4 +259,9 @@ public class RapidoidConnection implements Connection, Resetable, Ctx {
 		this.initial = initial;
 	}
 
+	@Override
+	public void restart() {
+		worker.restart(this);
+	}
+
 }

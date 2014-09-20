@@ -20,46 +20,10 @@ package org.rapidoid;
  * #L%
  */
 
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
+public interface RapidoidClient {
 
-import org.rapidoid.buffer.Buf;
-import org.rapidoid.net.RapidoidHelper;
+	void start();
 
-public interface Ctx {
-
-	String address();
-
-	int write(String s);
-
-	int write(byte[] bytes);
-
-	int write(byte[] bytes, int offset, int length);
-
-	int write(ByteBuffer buf);
-
-	void writeJSON(Object value);
-
-	void complete(boolean close);
-
-	void close();
-
-	Buf input();
-
-	Buf output();
-
-	String readln();
-
-	String readN(int count);
-
-	InetSocketAddress getAddress();
-
-	RapidoidHelper helper();
-
-	long id();
-
-	Connection connection();
-
-	void restart();
+	void stop();
 
 }

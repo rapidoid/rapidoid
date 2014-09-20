@@ -20,59 +20,77 @@ package com.rapidoid.http;
  * #L%
  */
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
-import org.rapidoid.util.F2;
+import org.rapidoid.ConnState;
+import org.rapidoid.Connection;
+import org.rapidoid.Ctx;
+import org.rapidoid.Protocol;
+import org.rapidoid.Rapidoid;
+import org.rapidoid.data.Range;
+import org.rapidoid.data.Ranges;
 import org.rapidoid.util.U;
+import org.rapidoid.wrap.Bool;
+import org.rapidoid.wrap.Int;
 import org.testng.annotations.Test;
 
 public class HttpPipeliningTest extends HttpTestCommons {
 
-	protected static final byte[] REQ = "GET /hello H\nasf:asf\n\n".getBytes();
+	protected static final byte[] REQ = "GET /hello H\r\nasf:asf\r\n\r\n".getBytes();
+
+	protected static final byte[] RESP = "Hello".getBytes();
 
 	@Test
 	public void testHttpServerPipelining() {
+		U.args("workers=1");
 		server();
 
-		final int K = 10000;
-		final int N = 10;
+		final int connections = 1000;
+		final int pipelining = 10;
 
-		U.connect("localhost", 8080, new F2<Void, BufferedReader, DataOutputStream>() {
+		final Int counter = new Int();
+		final Bool err = new Bool();
+
+		Rapidoid.connect(connections, new Protocol() {
 			@Override
-			public Void execute(final BufferedReader in, final DataOutputStream out) throws Exception {
-				U.benchmark("10-req batch", K, new Runnable() {
-					@Override
-					public void run() {
-						try {
-							for (int i = 1; i <= N; i++) {
-								out.write(REQ);
-							}
-							for (int i = 1; i <= N; i++) {
-								readLn(in);
-							}
-						} catch (Exception e) {
-							// TODO: handle exception
-						}
+			public void process(final Ctx ctx) {
+				Connection conn = ctx.connection();
+				ConnState state = conn.state();
+
+				final Ranges lines = ctx.helper().ranges1;
+				final Int res = ctx.helper().integers[0];
+				final Range resp = ctx.helper().ranges2.ranges[0];
+
+				if (state.n == 0) {
+					for (int i = 0; i < pipelining; i++) {
+						ctx.write(REQ);
 					}
-				});
-				return null;
-			}
+					ctx.complete(false);
+					state.n = 1;
+				} else if (state.n == 1) {
+					for (int i = 0; i < pipelining; i++) {
+						ctx.input().scanLnLn(lines, 0, res);
+						ctx.input().scanN(5, resp); // response body: "Hello"
 
-			private void readLn(BufferedReader in) throws IOException {
-				int a = 0, b = 0, c = 0;
-				boolean done;
-				do {
-					c = b;
-					b = a;
-					a = in.read();
-					done = a == 10 && b == 13 && c == 10;
-				} while (!done);
-			}
-		});
+						if (!ctx.input().matches(resp, RESP, true)) {
+							err.value = true;
+						}
 
+						counter.value++;
+					}
+
+					for (int i = 0; i < pipelining; i++) {
+						ctx.write(REQ);
+					}
+					ctx.complete(false);
+				}
+			}
+		}, "localhost", 8080);
+
+		int sec = 5;
+		U.sleep(sec * 1000);
 		shutdown();
+
+		isFalse(err.value);
+		U.show(counter.value, counter.value / sec);
 	}
 
 }
