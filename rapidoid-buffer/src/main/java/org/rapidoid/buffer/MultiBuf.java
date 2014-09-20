@@ -344,7 +344,7 @@ public class MultiBuf implements Buf, Constants {
 	@Override
 	public String toString() {
 		return String.format("Buf " + name + " [size=" + _size() + ", units=" + unitCount() + ", trash=" + shrinkN
-				+ "] " + super.toString());
+				+ ", pos=" + position() + ", limit=" + limit() + "] " + super.toString());
 	}
 
 	@Override
@@ -1606,6 +1606,10 @@ public class MultiBuf implements Buf, Constants {
 		int limit = limit();
 		int last = limit - 1;
 
+		if (last < start) {
+			throw incomplete();
+		}
+
 		int fromPos = (start + shrinkN);
 		int toPos = (last + shrinkN);
 
@@ -1946,6 +1950,11 @@ public class MultiBuf implements Buf, Constants {
 			};
 		}
 		return outputStream;
+	}
+
+	@Override
+	public String asText() {
+		return readN(remaining());
 	}
 
 }

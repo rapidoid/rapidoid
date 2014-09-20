@@ -160,4 +160,6 @@ public interface Buf {
 
 	OutputStream asOutputStream();
 
+	String asText();
+
 }
