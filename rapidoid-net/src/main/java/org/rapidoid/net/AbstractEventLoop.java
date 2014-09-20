@@ -99,7 +99,7 @@ public abstract class AbstractEventLoop extends AbstractLoop {
 		}
 
 		try {
-			selector.select();
+			selector.select(50);
 		} catch (IOException e) {
 			U.error("Select failed!", e);
 		}
