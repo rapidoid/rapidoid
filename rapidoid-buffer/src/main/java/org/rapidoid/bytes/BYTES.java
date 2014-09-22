@@ -35,25 +35,29 @@ public class BYTES implements Constants {
 		return new StringBytes(s);
 	}
 
-	public static void parseLines(Bytes bytes, Ranges lines) {
+	public static int parseLines(Bytes bytes, Ranges lines, int start, int limit) {
 		Range line;
-		int limit = bytes.limit();
 
 		byte b0 = 0, b1 = 0, b2 = 0, b3 = 0;
-		for (int i = 0; i < limit; i++) {
+		int i;
+		for (i = start; i < limit; i++) {
 			b0 = b1;
 			b1 = b2;
 			b2 = b3;
 			b3 = bytes.get(i);
 
-			if (b1 == LF) {
+			if (b3 == LF) {
 				int k = lines.add();
 				line = lines.ranges[k];
 				int pp = b2 == CR ? i : i - 1;
 				line.set(0, pp);
-				i++;
+				if (b0 == CR) {
+					break;
+				}
 			}
 		}
+		
+		return i;
 	}
 
 	public static void main(String[] args) {
@@ -67,7 +71,7 @@ public class BYTES implements Constants {
 				@Override
 				public void run() {
 					lines.count = 0;
-					parseLines(bytes, lines);
+					parseLines(bytes, lines, 0, bytes.limit());
 				}
 			});
 		}
