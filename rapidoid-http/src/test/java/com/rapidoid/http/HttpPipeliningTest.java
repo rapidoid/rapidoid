@@ -20,13 +20,12 @@ package com.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.ConnState;
-import org.rapidoid.Connection;
-import org.rapidoid.Ctx;
-import org.rapidoid.Protocol;
-import org.rapidoid.Rapidoid;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
+import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.net.impl.ConnState;
+import org.rapidoid.net.impl.Protocol;
+import org.rapidoid.net.impl.Rapidoid;
 import org.rapidoid.util.U;
 import org.rapidoid.wrap.Bool;
 import org.rapidoid.wrap.Int;
@@ -51,9 +50,8 @@ public class HttpPipeliningTest extends HttpTestCommons {
 
 		Rapidoid.connect(connections, new Protocol() {
 			@Override
-			public void process(final Ctx ctx) {
-				Connection conn = ctx.connection();
-				ConnState state = conn.state();
+			public void process(final Channel ctx) {
+				ConnState state = ctx.state();
 
 				final Ranges lines = ctx.helper().ranges1;
 				final Int res = ctx.helper().integers[0];
@@ -63,7 +61,7 @@ public class HttpPipeliningTest extends HttpTestCommons {
 					for (int i = 0; i < pipelining; i++) {
 						ctx.write(REQ);
 					}
-					ctx.complete(false);
+					ctx.done();
 					state.n = 1;
 				} else if (state.n == 1) {
 					for (int i = 0; i < pipelining; i++) {
@@ -80,7 +78,7 @@ public class HttpPipeliningTest extends HttpTestCommons {
 					for (int i = 0; i < pipelining; i++) {
 						ctx.write(REQ);
 					}
-					ctx.complete(false);
+					ctx.done();
 				}
 			}
 		}, "localhost", 8080);

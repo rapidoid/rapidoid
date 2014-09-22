@@ -20,12 +20,15 @@ package com.rapidoid.http;
  * #L%
  */
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -35,10 +38,10 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.rapidoid.RapidoidServer;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
+import org.rapidoid.net.impl.RapidoidServer;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 import org.testng.Assert;
@@ -160,6 +163,24 @@ public abstract class HttpTestCommons extends TestCommons {
 		}
 	}
 
+	protected byte[] getBytes(String url) {
+		try {
+			CloseableHttpClient client = HttpClientBuilder.create().disableAutomaticRetries().build();
+
+			HttpGet get = new HttpGet(localhost(url));
+
+			CloseableHttpResponse result = client.execute(get);
+
+			Assert.assertEquals(200, result.getStatusLine().getStatusCode());
+
+			InputStream resp = result.getEntity().getContent();
+
+			return IOUtils.toByteArray(resp);
+		} catch (Throwable e) {
+			throw U.rte(e);
+		}
+	}
+
 	protected void eq(String whole, Range range, String expected) {
 		eq(range.get(whole), expected);
 	}
@@ -210,6 +231,10 @@ public abstract class HttpTestCommons extends TestCommons {
 				eq(sub, expected.substring(p, p + len));
 			}
 		}
+	}
+
+	protected String resourceMD5(String filename) throws IOException, URISyntaxException {
+		return U.md5(FileUtils.readFileToByteArray(new File(U.resource(filename).toURI())));
 	}
 
 }

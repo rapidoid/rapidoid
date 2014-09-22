@@ -20,7 +20,7 @@ package com.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.config.CLIConfig;
+import org.rapidoid.net.config.CLIConfig;
 import org.rapidoid.util.U;
 
 public class CLIWebConfig extends CLIConfig implements WebConfig {

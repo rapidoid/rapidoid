@@ -26,6 +26,8 @@ public interface BinaryMultiData {
 
 	Map<String, byte[]> get();
 
+	byte[] get(String name);
+
 	KeyValueRanges ranges();
 
 }

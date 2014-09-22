@@ -323,6 +323,38 @@ public class BufTest extends BufferTestCommons implements Constants {
 		}
 	}
 
+	@Test
+	public void testPutNumAsText() {
+		BufGroup bufs = new BufGroup(1);
+
+		String num = "1234567890";
+
+		for (int dig = 1; dig <= 10; dig++) {
+			int n = U.num(num.substring(0, dig));
+
+			Buf buf = bufs.newBuf();
+			buf.append(U.mul(" ", dig + 2));
+			buf.putNumAsText(1, n, true);
+			eq(buf.asText(), " " + n + " ");
+
+			Buf buf2 = bufs.newBuf();
+			buf2.append(U.mul(" ", dig + 3));
+			buf2.putNumAsText(1, -n, true);
+			eq(buf2.asText(), " " + (-n) + " ");
+
+			Buf buf3 = bufs.newBuf();
+			buf3.append(U.mul(" ", dig + 2));
+			buf3.putNumAsText(dig, n, false);
+			eq(buf3.asText(), " " + n + " ");
+
+			Buf buf4 = bufs.newBuf();
+			buf4.append(U.mul(" ", dig + 3));
+			buf4.putNumAsText(dig + 1, -n, false);
+			eq(buf4.asText(), " " + (-n) + " ");
+		}
+
+	}
+
 	private void checkMatch(Buf buf, int start, int limit, String match, int... positions) {
 		for (int pos : positions) {
 			int p = buf.find(start, limit, match.getBytes(), true);

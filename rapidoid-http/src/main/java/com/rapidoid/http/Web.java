@@ -20,8 +20,8 @@ package com.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.Rapidoid;
-import org.rapidoid.RapidoidServer;
+import org.rapidoid.net.impl.Rapidoid;
+import org.rapidoid.net.impl.RapidoidServer;
 import org.rapidoid.util.U;
 
 public class Web {

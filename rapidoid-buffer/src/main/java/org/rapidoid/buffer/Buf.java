@@ -96,7 +96,7 @@ public interface Buf {
 
 	ByteBuffer first();
 
-	void putNumAsText(int position, long num);
+	int putNumAsText(int position, long num, boolean forward);
 
 	void get(Range range, byte[] dest, int offset);
 

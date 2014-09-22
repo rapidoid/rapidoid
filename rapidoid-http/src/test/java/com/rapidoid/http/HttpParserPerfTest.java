@@ -23,7 +23,7 @@ package com.rapidoid.http;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.data.Ranges;
-import org.rapidoid.net.RapidoidHelper;
+import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.U;
 
 public class HttpParserPerfTest {

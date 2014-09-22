@@ -20,8 +20,8 @@ package com.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.Ctx;
-import org.rapidoid.net.ExchangeProtocol;
+import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.net.impl.ExchangeProtocol;
 import org.rapidoid.util.U;
 
 public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
@@ -39,9 +39,9 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 	}
 
 	@Override
-	protected void process(Ctx ctx, WebExchangeImpl xch) {
+	protected void process(Channel ctx, WebExchangeImpl xch) {
 
-		if (ctx.connection().isInitial()) {
+		if (ctx.isInitial()) {
 			return;
 		}
 
@@ -51,34 +51,37 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 		U.failIf(xch.verb.isEmpty() || xch.uri.isEmpty(), "Invalid HTTP request!");
 		U.failIf(xch.isGet.value && !xch.body.isEmpty(), "Body is NOT allowed in HTTP GET requests!");
 
-		xch.respType = HttpResponses.TEXT_HTML;
-
-		int posBefore = xch.output().size();
-
+		int startingPos = xch.output().size();
 		xch.output().append(resp(xch).bytes());
 
 		try {
 			boolean dispatched = router.dispatch(xch);
 			if (!dispatched) {
+				if (!xch.hasContentType()) {
+					xch.html();
+				}
 				xch.write("Invalid HTTP VERB or URL PATH!");
 				xch.done();
 			}
 		} catch (Throwable e) {
 			U.error("Internal server error!", "request", xch, "error", e);
+			if (!xch.hasContentType()) {
+				xch.html();
+			}
 			xch.write("Internal server error!");
 			xch.done();
 		}
 
-		long wrote = xch.getTotalWritten();
+		long wrote = xch.output().size() - xch.bodyPos;
 		U.ensure(wrote <= Integer.MAX_VALUE, "Response too big!");
 
-		int pos = posBefore + resp(xch).contentLengthPos;
+		int pos = startingPos + resp(xch).contentLengthPos + 10;
 
-		xch.output().putNumAsText(pos, wrote);
+		xch.output().putNumAsText(pos, wrote, false);
 	}
 
 	private HttpResponse resp(WebExchangeImpl xch) {
-		HttpResponse resp = responses.get(xch.isKeepAlive.value, xch.respType);
+		HttpResponse resp = responses.get(xch.isKeepAlive.value);
 		assert resp != null;
 		return resp;
 	}

@@ -779,21 +779,30 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public void putNumAsText(int position, long n) {
+	public int putNumAsText(int position, long n, boolean forward) {
 		assert invariant();
+
+		int direction = forward ? 0 : -1;
+
+		int space;
 
 		if (n >= 0) {
 			if (n < 10) {
 				put(position, (byte) (n + '0'));
+				space = 1;
 			} else if (n < 100) {
 				long dig1 = n / 10;
 				long dig2 = n % 10;
-				put(position, (byte) (dig1 + '0'));
-				put(position + 1, (byte) (dig2 + '0'));
+				put(position + direction, (byte) (dig1 + '0'));
+				put(position + direction + 1, (byte) (dig2 + '0'));
+				space = 2;
 			} else {
 				int digitsN = (int) Math.ceil(Math.log10(n + 1));
 
-				int pos = position + digitsN - 1;
+				int pos = position + digitsN - 1 + direction * digitsN;
+				if (!forward) {
+					pos++;
+				}
 
 				while (true) {
 					long digit = n % 10;
@@ -805,13 +814,21 @@ public class MultiBuf implements Buf, Constants {
 					}
 					n = n / 10;
 				}
+				space = digitsN;
 			}
 		} else {
-			put(position, (byte) ('-'));
-			putNumAsText(position + 1, -n);
+			if (forward) {
+				put(position, (byte) ('-'));
+				space = putNumAsText(position + 1, -n, forward) + 1;
+			} else {
+				int digits = putNumAsText(position, -n, forward);
+				put(position - digits, (byte) ('-'));
+				space = digits + 1;
+			}
 		}
 
 		assert invariant();
+		return space;
 	}
 
 	protected int scan(int start, int last, byte valB, short valS, int valI, long valL, int n) {
@@ -1954,7 +1971,7 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public String asText() {
-		return readN(remaining());
+		return get(new Range(0, size()));
 	}
 
 }

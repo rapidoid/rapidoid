@@ -22,12 +22,14 @@ package com.rapidoid.http;
 
 import java.util.Map;
 
-import org.rapidoid.Ctx;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.MultiData;
+import org.rapidoid.net.abstracts.CtxFull;
 
-public interface WebExchange extends Ctx {
+public interface WebExchange extends CtxFull<WebExchange, WebExchangeBody>, WebExchangeHeaders {
+
+	/* REQUEST METHODS: */
 
 	String verb();
 
@@ -61,23 +63,30 @@ public interface WebExchange extends Ctx {
 
 	MultiData params_();
 
+	String param(String name);
+
 	Map<String, String> headers();
 
 	MultiData headers_();
+
+	String header(String name);
 
 	Map<String, String> cookies();
 
 	MultiData cookies_();
 
+	String cookie(String name);
+
 	Map<String, String> data();
 
 	MultiData data_();
+
+	String data(String name);
 
 	Map<String, byte[]> files();
 
 	BinaryMultiData files_();
 
-	// due to async web handling option, it ain't over till the fat lady sings "done"
-	void done();
+	byte[] file(String name);
 
 }

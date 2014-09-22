@@ -20,7 +20,7 @@ package com.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.config.ServerConfig;
+import org.rapidoid.net.config.ServerConfig;
 
 public interface WebConfig extends ServerConfig {
 

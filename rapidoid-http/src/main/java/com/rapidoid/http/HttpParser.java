@@ -24,7 +24,7 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
-import org.rapidoid.net.RapidoidHelper;
+import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.wrap.Bool;
@@ -177,7 +177,7 @@ public class HttpParser implements Constants {
 		Ranges headers = helper.ranges2;
 		buf.scanLnLn(headers, 0, result);
 
-		parseHeadersIntoKV(buf, headers, headersKV, null);
+		parseHeadersIntoKV(buf, headers, headersKV, null, helper);
 
 		int bodyPos = buf.position();
 
@@ -187,7 +187,11 @@ public class HttpParser implements Constants {
 		return bodyPos;
 	}
 
-	public void parseHeadersIntoKV(Buf buf, Ranges headers, KeyValueRanges headersKV, KeyValueRanges cookies) {
+	public void parseHeadersIntoKV(Buf buf, Ranges headers, KeyValueRanges headersKV, KeyValueRanges cookies,
+			RapidoidHelper helper) {
+
+		Range cookie = helper.ranges5.ranges[0];
+
 		for (int i = 0; i < headers.count; i++) {
 			Range hdr = headers.ranges[i];
 			int ind = headersKV.add();
@@ -197,11 +201,14 @@ public class HttpParser implements Constants {
 			boolean split = buf.split(hdr, COL, key, val, true);
 			U.ensure(split, "Invalid HTTP header!");
 
-			if (buf.matches(key, COOKIE, false)) {
+			if (cookies != null && buf.matches(key, COOKIE, false)) {
 				headersKV.count--; // don't include cookies in headers
 
-				int cind = cookies.add();
-				buf.split(val, EQ, cookies.keys[cind], cookies.values[cind], true);
+				do {
+					buf.split(val, SEMI_COL, cookie, val, true);
+					int cind = cookies.add();
+					buf.split(cookie, EQ, cookies.keys[cind], cookies.values[cind], true);
+				} while (!val.isEmpty());
 			}
 		}
 	}

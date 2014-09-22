@@ -24,6 +24,8 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.util.F2;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
@@ -35,13 +37,17 @@ public class EchoProtocolTest extends NetTestCommons {
 		server(new Protocol() {
 
 			@Override
-			public void process(Ctx ctx) {
+			public void process(Channel ctx) {
 				String in = ctx.readln();
 				boolean stop = in.equals("bye");
 
 				ctx.write(in.toUpperCase());
 				ctx.write("\n");
-				ctx.complete(stop);
+				ctx.done();
+
+				if (stop) {
+					ctx.close();
+				}
 			}
 
 		}, new Runnable() {
@@ -71,7 +77,7 @@ public class EchoProtocolTest extends NetTestCommons {
 		server(new Protocol() {
 
 			@Override
-			public void process(final Ctx ctx) {
+			public void process(final Channel ctx) {
 				final String in = ctx.readln();
 				final boolean stop = in.equals("bye");
 
@@ -80,7 +86,11 @@ public class EchoProtocolTest extends NetTestCommons {
 					@Override
 					public void run() {
 						ctx.write(in.toUpperCase() + "\n");
-						ctx.complete(stop);
+						ctx.done();
+
+						if (stop) {
+							ctx.close();
+						}
 					}
 
 				}, 2000);

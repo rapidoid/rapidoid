@@ -26,6 +26,8 @@ public interface MultiData {
 
 	Map<String, String> get();
 
+	String get(String name);
+
 	KeyValueRanges ranges();
 
 }

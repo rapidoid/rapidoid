@@ -26,19 +26,12 @@ import org.rapidoid.util.U;
 
 public class HttpResponses {
 
-	// dimensions:
-	// connection [0=close, 1=keep-alive],
-	// content-type [0=plain, 1=html, 2=json]
+	// DIMENSIONS:
+	// connection [0=close, 1=keep-alive]
 
-	public static final int TEXT_PLAIN = 0;
-	public static final int TEXT_HTML = 1;
-	public static final int APLICATION_JSON = 2;
+	private static final String[] CONNS = { "close", "keep-alive" };
 
-	private static final String[] conns = { "close", "keep-alive" };
-
-	private static final String[] types = { "text/plain", "text/html", "application/json" };
-
-	private HttpResponse[][] responses = new HttpResponse[2][3];
+	private HttpResponse[] responses = new HttpResponse[2];
 
 	public HttpResponses(boolean withServerHeader, boolean withDateHeader) {
 		init(withServerHeader, withDateHeader);
@@ -46,34 +39,30 @@ public class HttpResponses {
 
 	private void init(boolean withServerHeader, boolean withDateHeader) {
 		for (int conn = 0; conn < 2; conn++) {
-			for (int type = 0; type < 3; type++) {
-				responses[conn][type] = newResponse(withServerHeader, withDateHeader, conn, type);
-			}
+			responses[conn] = newResponse(withServerHeader, withDateHeader, conn);
 		}
 	}
 
-	private HttpResponse newResponse(boolean withServerHeader, boolean withDateHeader, int conn, int type) {
+	private HttpResponse newResponse(boolean withServerHeader, boolean withDateHeader, int conn) {
 		List<String> lines = U.list("HTTP/1.1 200 OK");
 
 		if (withServerHeader) {
-			lines.add("Server: X");
+			lines.add("Server: Rapidoid");
 		}
 
 		if (withDateHeader) {
 			lines.add("Date: x                              ");
 		}
 
-		lines.add("Connection: " + conns[conn]);
-		lines.add("Content-Type: " + types[type] + "; charset=utf-8");
 		lines.add("Content-Length:           ");
+		lines.add("Connection: " + CONNS[conn]);
 
-		lines.add("");
-
-		return new HttpResponse(U.join("\r\n", lines) + "\r\n");
+		String cnt = U.join("\r\n", lines) + "\r\n";
+		return new HttpResponse(cnt);
 	}
 
-	public HttpResponse get(boolean keepAlive, byte type) {
-		return responses[keepAlive ? 1 : 0][type];
+	public HttpResponse get(boolean keepAlive) {
+		return responses[keepAlive ? 1 : 0];
 	}
 
 }

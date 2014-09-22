@@ -20,12 +20,12 @@ package org.rapidoid.demo.http;
  * #L%
  */
 
-import org.rapidoid.Ctx;
-import org.rapidoid.Protocol;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
-import org.rapidoid.net.RapidoidHelper;
+import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.net.impl.Protocol;
+import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.U;
 import org.rapidoid.wrap.Bool;
 
@@ -64,7 +64,11 @@ public class SimpleHttpProtocol implements Protocol {
 
 	private static final HttpParser HTTP_PARSER = U.inject(HttpParser.class);
 
-	public void process(Ctx ctx) {
+	public void process(Channel ctx) {
+		if (ctx.isInitial()) {
+			return;
+		}
+
 		Buf buf = ctx.input();
 		RapidoidHelper helper = ctx.helper();
 
@@ -86,7 +90,7 @@ public class SimpleHttpProtocol implements Protocol {
 		response(ctx, buf, path, isGet.value, isKeepAlive.value);
 	}
 
-	private void response(Ctx ctx, Buf buf, Range path, boolean isGet, boolean isKeepAlive) {
+	private void response(Channel ctx, Buf buf, Range path, boolean isGet, boolean isKeepAlive) {
 		boolean processed = false;
 
 		if (isGet) {
@@ -109,16 +113,17 @@ public class SimpleHttpProtocol implements Protocol {
 				processed = true;
 			}
 
-			ctx.complete(!isKeepAlive);
+			ctx.done();
+			ctx.closeIf(!isKeepAlive);
 		}
 
 		if (!processed) {
 			ctx.write(HTTP_404_NOT_FOUND);
-			ctx.complete(true);
+			ctx.done().close();
 		}
 	}
 
-	private void handlePlaintext(Ctx ctx) {
+	private void handlePlaintext(Channel ctx) {
 		ctx.write(CONTENT_LENGTH_HDR);
 		ctx.write(RESPONSE_LENGTH);
 		ctx.write(CR_LF);
@@ -128,7 +133,7 @@ public class SimpleHttpProtocol implements Protocol {
 		ctx.write(RESPONSE);
 	}
 
-	private void handleJson(Ctx ctx) {
+	private void handleJson(Channel ctx) {
 		Buf output = ctx.output();
 
 		ctx.write(CONTENT_TYPE_JSON);
@@ -143,7 +148,7 @@ public class SimpleHttpProtocol implements Protocol {
 		ctx.writeJSON(new Msg("Hello, World!"));
 
 		int posAfter = output.size();
-		output.putNumAsText(posConLen, posAfter - posBefore);
+		output.putNumAsText(posConLen, posAfter - posBefore + 10, false);
 	}
 
 }

@@ -20,7 +20,7 @@ package org.rapidoid.demo.http;
  * #L%
  */
 
-import org.rapidoid.Rapidoid;
+import org.rapidoid.net.impl.Rapidoid;
 import org.rapidoid.util.U;
 
 public class Main {

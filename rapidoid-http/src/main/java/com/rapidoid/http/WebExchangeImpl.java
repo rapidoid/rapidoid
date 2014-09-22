@@ -20,6 +20,8 @@ package com.rapidoid.http;
  * #L%
  */
 
+import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.Map;
 
 import org.rapidoid.data.BinaryMultiData;
@@ -28,13 +30,17 @@ import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
-import org.rapidoid.net.Exchange;
+import org.rapidoid.net.impl.ConnState;
+import org.rapidoid.net.impl.DefaultExchange;
+import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.wrap.Bool;
 
-public class WebExchangeImpl extends Exchange implements WebExchange {
+public class WebExchangeImpl extends DefaultExchange<WebExchange, WebExchangeBody> implements WebExchange, Constants {
 
 	private final static HttpParser PARSER = U.inject(HttpParser.class);
+
+	private static final byte[] HEADER_SEP = ": ".getBytes();
 
 	final Range uri = new Range();
 	final Range verb = new Range();
@@ -51,17 +57,17 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	private final KeyValueRanges files = new KeyValueRanges(50);
 
 	final Range body = new Range();
-
 	final Bool isGet = new Bool();
 	final Bool isKeepAlive = new Bool();
-
-	int total;
 
 	private boolean parsedParams;
 	private boolean parsedHeaders;
 	private boolean parsedBody;
 
-	byte respType;
+	int total;
+	public int bodyPos;
+	private boolean writesBody;
+	private boolean hasContentType;
 
 	final Range multipartBoundary = new Range();
 
@@ -126,6 +132,9 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 		parsedBody = false;
 
 		total = -1;
+		writesBody = false;
+		bodyPos = -1;
+		hasContentType = false;
 	}
 
 	@Override
@@ -145,7 +154,7 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	public MultiData headers_() {
 		if (!parsedHeaders) {
 			if (!headers.isEmpty()) {
-				PARSER.parseHeadersIntoKV(input(), headers, headersKV, cookies);
+				PARSER.parseHeadersIntoKV(input(), headers, headersKV, cookies, helper());
 			}
 
 			parsedHeaders = true;
@@ -158,7 +167,7 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	public MultiData cookies_() {
 		if (!parsedHeaders) {
 			if (!headers.isEmpty()) {
-				PARSER.parseHeadersIntoKV(input(), headers, headersKV, cookies);
+				PARSER.parseHeadersIntoKV(input(), headers, headersKV, cookies, helper());
 			}
 
 			parsedHeaders = true;
@@ -226,8 +235,9 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	}
 
 	@Override
-	public void done() {
-		conn.complete(this, !isKeepAlive.value);
+	public WebExchangeImpl done() {
+		conn.done();
+		return this;
 	}
 
 	@Override
@@ -278,8 +288,18 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	}
 
 	@Override
+	public String param(String name) {
+		return params_().get(name);
+	}
+
+	@Override
 	public Map<String, String> headers() {
 		return headers_().get();
+	}
+
+	@Override
+	public String header(String name) {
+		return headers_().get(name);
 	}
 
 	@Override
@@ -288,13 +308,158 @@ public class WebExchangeImpl extends Exchange implements WebExchange {
 	}
 
 	@Override
+	public String cookie(String name) {
+		return cookies_().get(name);
+	}
+
+	@Override
 	public Map<String, String> data() {
 		return data_().get();
 	}
 
 	@Override
+	public String data(String name) {
+		return data_().get(name);
+	}
+
+	@Override
 	public Map<String, byte[]> files() {
 		return files_().get();
+	}
+
+	@Override
+	public byte[] file(String name) {
+		return files_().get(name);
+	}
+
+	@Override
+	public WebExchange addHeader(byte[] name, byte[] value) {
+		super.write(name);
+		super.write(HEADER_SEP);
+		super.write(value);
+		super.write(CR_LF);
+		return this;
+	}
+
+	@Override
+	public WebExchange addHeader(HttpHeader name, String value) {
+		addHeader(name.getBytes(), value.getBytes());
+		return this;
+	}
+
+	@Override
+	public WebExchange setCookie(String name, String value) {
+		addHeader(HttpHeader.SET_COOKIE, name + "=" + value);
+		return this;
+	}
+
+	@Override
+	public synchronized WebExchange setContentType(ContentType contentType) {
+		U.ensure(!hasContentType);
+		hasContentType = true;
+
+		addHeader(HttpHeader.CONTENT_TYPE.getBytes(), contentType.getBytes());
+		return this;
+	}
+
+	@Override
+	public WebExchange plain() {
+		return setContentType(ContentType.PLAIN);
+	}
+
+	@Override
+	public WebExchange html() {
+		return setContentType(ContentType.HTML);
+	}
+
+	@Override
+	public WebExchange json() {
+		return setContentType(ContentType.JSON);
+	}
+
+	@Override
+	public WebExchange binary() {
+		return setContentType(ContentType.BINARY);
+	}
+
+	@Override
+	public WebExchange download(String filename) {
+		addHeader(HttpHeader.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"");
+		addHeader(HttpHeader.CACHE_CONTROL, "private");
+		return binary();
+	}
+
+	private synchronized void ensureBodyWrite() {
+		if (!writesBody) {
+			writesBody = true;
+			write(CR_LF);
+			bodyPos = output().size();
+		}
+	}
+
+	@Override
+	public WebExchangeBody write(String s) {
+		ensureBodyWrite();
+		return super.write(s);
+	}
+
+	@Override
+	public WebExchangeBody write(byte[] bytes) {
+		ensureBodyWrite();
+		return super.write(bytes);
+	}
+
+	@Override
+	public WebExchangeBody write(byte[] bytes, int offset, int length) {
+		ensureBodyWrite();
+		return super.write(bytes, offset, length);
+	}
+
+	@Override
+	public WebExchangeBody write(ByteBuffer buf) {
+		ensureBodyWrite();
+		return super.write(buf);
+	}
+
+	@Override
+	public WebExchangeBody write(File file) {
+		if (!hasContentType()) {
+			download(file.getName());
+		}
+
+		ensureBodyWrite();
+		return super.write(file);
+	}
+
+	@Override
+	public WebExchangeBody writeJSON(Object value) {
+		if (!hasContentType()) {
+			json();
+		}
+
+		ensureBodyWrite();
+		return super.writeJSON(value);
+	}
+
+	@Override
+	public boolean isInitial() {
+		return conn.isInitial();
+	}
+
+	@Override
+	public ConnState state() {
+		return conn.state();
+	}
+
+	public boolean hasContentType() {
+		return hasContentType;
+	}
+
+	@Override
+	public WebExchangeBody sendFile(File file) {
+		setContentType(new ContentType("image/jpg")); // FIXME
+		write(file);
+		return this;
 	}
 
 }

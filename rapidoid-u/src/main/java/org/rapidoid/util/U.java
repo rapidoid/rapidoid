@@ -68,6 +68,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
@@ -95,6 +96,8 @@ public class U implements Constants {
 	private static final String[] LOG_LEVELS = { "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "SEVERE" };
 
 	private static final Map<Class<?>, Object> SINGLETONS = map();
+
+	protected static final Random RND = new Random();
 
 	private static final Map<Class<?>, Map<String, ? extends RuntimeException>> EXCEPTIONS = autoExpandingMap(new F1<Map<String, ? extends RuntimeException>, Class<?>>() {
 		@Override
@@ -144,6 +147,7 @@ public class U implements Constants {
 	private static final Date CURR_DATE = new Date();
 	private static byte[] CURR_DATE_BYTES;
 	private static long updateCurrDateAfter = 0;
+	
 	static {
 		DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
 	}
@@ -1350,7 +1354,7 @@ public class U implements Constants {
 	public static ByteBuffer buf(String s) {
 		byte[] bytes = s.getBytes();
 
-		ByteBuffer buf = ByteBuffer.allocate(bytes.length);
+		ByteBuffer buf = ByteBuffer.allocateDirect(bytes.length);
 		buf.put(bytes);
 		buf.rewind();
 
@@ -2327,6 +2331,54 @@ public class U implements Constants {
 
 	public static String md5(String data) {
 		return md5(data.getBytes());
+	}
+
+	public static char rndChar() {
+		return (char) (65 + rnd(26));
+	}
+
+	public static String rndStr(int length) {
+		return rndStr(length, length);
+	}
+
+	public static String rndStr(int minLength, int maxLength) {
+		int len = minLength + rnd(maxLength - minLength + 1);
+		StringBuffer sb = new StringBuffer();
+
+		for (int i = 0; i < len; i++) {
+			sb.append(rndChar());
+		}
+
+		return sb.toString();
+	}
+
+	public static int rnd(int n) {
+		return RND.nextInt(n);
+	}
+
+	public static int rndExcept(int n, int except) {
+		if (n > 1 || except != 0) {
+			while (true) {
+				int num = RND.nextInt(n);
+				if (num != except) {
+					return num;
+				}
+			}
+		} else {
+			throw new RuntimeException("Cannot produce such number!");
+		}
+	}
+
+	public static <T> T rnd(T[] arr) {
+		return arr[rnd(arr.length)];
+	}
+
+	public static int rnd() {
+		return RND.nextInt();
+	}
+
+	public static long rndL() {
+		return RND.nextLong();
 	}
 
 }

@@ -20,6 +20,9 @@ package org.rapidoid;
  * #L%
  */
 
+import org.rapidoid.net.impl.Protocol;
+import org.rapidoid.net.impl.Rapidoid;
+import org.rapidoid.net.impl.RapidoidServer;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 

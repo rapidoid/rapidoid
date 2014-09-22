@@ -20,6 +20,7 @@ package com.rapidoid.http;
  * #L%
  */
 
+import java.io.File;
 import java.nio.ByteBuffer;
 
 import org.rapidoid.buffer.Buf;
@@ -58,7 +59,7 @@ public class HttpRouter implements Router {
 					"Only uppercase letters, digits and underscore are allowed! Invalid action: " + action);
 		}
 
-		if (!url.matches("[a-zA-Z0-9_/]*")) {
+		if (!url.matches("[a-zA-Z0-9_/\\.\\-\\~]*")) {
 			throw new IllegalArgumentException("Invalid url: " + url);
 		}
 
@@ -136,12 +137,27 @@ public class HttpRouter implements Router {
 
 		if (res != null) {
 			if (res instanceof byte[]) {
+				if (!x.hasContentType()) {
+					x.binary();
+				}
 				x.write((byte[]) res);
 			} else if (res instanceof String) {
+				if (!x.hasContentType()) {
+					x.json();
+				}
 				x.write((String) res);
 			} else if (res instanceof ByteBuffer) {
+				if (!x.hasContentType()) {
+					x.binary();
+				}
 				x.write((ByteBuffer) res);
+			} else if (res instanceof File) {
+				File file = (File) res;
+				x.sendFile(file);
 			} else if (!(res instanceof WebExchangeImpl)) {
+				if (!x.hasContentType()) {
+					x.json();
+				}
 				x.writeJSON(res);
 			}
 
