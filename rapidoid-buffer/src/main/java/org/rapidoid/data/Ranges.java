@@ -89,6 +89,14 @@ public class Ranges {
 		return count++;
 	}
 
+	public void add(int start, int length) {
+		if (count >= max()) {
+			throw U.rte("too many key-values!");
+		}
+
+		ranges[count++].set(start, length);
+	}
+
 	public boolean isEmpty() {
 		return count == 0;
 	}
