@@ -1,4 +1,4 @@
-package org.rapidoid.bytes;
+package org.rapidoid.buffer;
 
 /*
  * #%L
@@ -20,16 +20,13 @@ package org.rapidoid.bytes;
  * #L%
  */
 
-import java.nio.ByteBuffer;
+import org.rapidoid.bytes.Bytes;
 
-public class ByteBufferBytes implements Bytes {
+public class BufBytes implements Bytes {
 
-	private ByteBuffer buf;
+	private final Buf buf;
 
-	public ByteBufferBytes() {
-	}
-
-	public ByteBufferBytes(ByteBuffer buf) {
+	public BufBytes(Buf buf) {
 		this.buf = buf;
 	}
 
@@ -41,10 +38,6 @@ public class ByteBufferBytes implements Bytes {
 	@Override
 	public int limit() {
 		return buf.limit();
-	}
-
-	public void setBuf(ByteBuffer buf) {
-		this.buf = buf;
 	}
 
 }

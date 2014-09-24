@@ -21,6 +21,8 @@ package org.rapidoid.data;
  */
 
 import org.rapidoid.buffer.Buf;
+import org.rapidoid.bytes.BYTES;
+import org.rapidoid.bytes.Bytes;
 import org.rapidoid.util.U;
 
 public class Ranges {
@@ -38,20 +40,17 @@ public class Ranges {
 		}
 	}
 
-	public void reset() {
+	public Ranges reset() {
 		for (int i = 0; i < count; i++) {
 			ranges[i].reset();
 		}
 		count = 0;
+
+		return this;
 	}
 
 	public Range getByPrefix(Buf buf, byte[] prefix, boolean caseSensitive) {
-		for (int i = 0; i < count; i++) {
-			if (buf.startsWith(ranges[i], prefix, caseSensitive)) {
-				return ranges[i];
-			}
-		}
-		return null;
+		return BYTES.getByPrefix(buf.bytes(), this, prefix, caseSensitive);
 	}
 
 	@Override
@@ -63,7 +62,7 @@ public class Ranges {
 		return ranges.length;
 	}
 
-	public String str(Buf src) {
+	public String str(Bytes bytes) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("[");
@@ -73,12 +72,16 @@ public class Ranges {
 			}
 
 			sb.append("<");
-			sb.append(ranges[i].str(src));
+			sb.append(ranges[i].str(bytes));
 			sb.append(">");
 		}
 		sb.append("]");
 
 		return sb.toString();
+	}
+
+	public String str(Buf buf) {
+		return str(buf.bytes());
 	}
 
 	public int add() {

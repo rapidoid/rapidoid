@@ -21,6 +21,7 @@ package org.rapidoid.demo.http;
  */
 
 import org.rapidoid.buffer.Buf;
+import org.rapidoid.bytes.BYTES;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.net.abstracts.Channel;
@@ -105,10 +106,10 @@ public class SimpleHttpProtocol implements Protocol {
 			ctx.write(U.getDateTimeBytes());
 			ctx.write(CR_LF);
 
-			if (buf.matches(path, URI_PLAIN, true) || path.length == 1) {
+			if (BYTES.matches(buf.bytes(), path, URI_PLAIN, true) || path.length == 1) {
 				handlePlaintext(ctx);
 				processed = true;
-			} else if (buf.matches(path, URI_JSON, true)) {
+			} else if (BYTES.matches(buf.bytes(), path, URI_JSON, true)) {
 				handleJson(ctx);
 				processed = true;
 			}

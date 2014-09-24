@@ -20,6 +20,7 @@ package com.rapidoid.http;
  * #L%
  */
 
+import org.rapidoid.bytes.BYTES;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.net.abstracts.Channel;
@@ -54,7 +55,6 @@ public class HttpPipeliningTest extends HttpTestCommons {
 				ConnState state = ctx.state();
 
 				final Ranges lines = ctx.helper().ranges1;
-				final Int res = ctx.helper().integers[0];
 				final Range resp = ctx.helper().ranges2.ranges[0];
 
 				if (state.n == 0) {
@@ -65,10 +65,10 @@ public class HttpPipeliningTest extends HttpTestCommons {
 					state.n = 1;
 				} else if (state.n == 1) {
 					for (int i = 0; i < pipelining; i++) {
-						ctx.input().scanLnLn(lines, 0, res);
+						ctx.input().scanLnLn(lines.reset());
 						ctx.input().scanN(5, resp); // response body: "Hello"
 
-						if (!ctx.input().matches(resp, RESP, true)) {
+						if (!BYTES.matches(ctx.input().bytes(), resp, RESP, true)) {
 							err.value = true;
 						}
 

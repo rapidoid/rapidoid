@@ -21,6 +21,7 @@ package com.rapidoid.http;
  */
 
 import org.rapidoid.buffer.Buf;
+import org.rapidoid.bytes.BYTES;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
@@ -82,20 +83,21 @@ public class HttpParser implements Constants {
 			verb.set(0, 3);
 		} else {
 			buf.position(pos);
-			buf.scanUntil(SPACE, verb, true);
+			buf.scanUntil(SPACE, verb);
 		}
 
-		buf.scanUntil(SPACE, uri, true);
-		buf.scanLn(protocol, true);
+		buf.scanUntil(SPACE, uri);
+		buf.scanLn(protocol);
 
 		Int result = helper.integers[0];
-		buf.scanLnLn(headers, PREFIX_CONN, result);
+		buf.scanLnLn(headers.reset());
+		result.value = -1;
 
 		int connPos = result.value;
 
 		isKeepAlive.value = isKeepAlive(buf, headers, connPos);
 
-		buf.split(uri, ASTERISK, path, query, false);
+		BYTES.split(buf.bytes(), uri, ASTERISK, path, query, false);
 
 		if (!getReq) {
 			parseBody(buf, body, headers, helper);
@@ -106,7 +108,7 @@ public class HttpParser implements Constants {
 		if (connPos >= 0) {
 			Range connHdr = headers.ranges[connPos];
 
-			if (!buf.startsWith(connHdr, CONNECTION, true)) {
+			if (!BYTES.startsWith(buf.bytes(), connHdr, CONNECTION, true)) {
 				connHdr = headers.getByPrefix(buf, CONNECTION, false);
 			}
 
@@ -117,15 +119,15 @@ public class HttpParser implements Constants {
 	}
 
 	private boolean getKeepAliveValue(Buf buf, Range connHdr) {
-		if (buf.containsAt(connHdr, CONNECTION.length + 1, KEEP_ALIVE, true)) {
+		if (BYTES.containsAt(buf.bytes(), connHdr, CONNECTION.length + 1, KEEP_ALIVE, true)) {
 			return true;
 		}
 
-		if (buf.containsAt(connHdr, CONNECTION.length + 1, CLOSE, false)) {
+		if (BYTES.containsAt(buf.bytes(), connHdr, CONNECTION.length + 1, CLOSE, false)) {
 			return false;
 		}
 
-		if (buf.containsAt(connHdr, CONNECTION.length, CLOSE, false)) {
+		if (BYTES.containsAt(buf.bytes(), connHdr, CONNECTION.length, CLOSE, false)) {
 			return false;
 		}
 
@@ -138,7 +140,7 @@ public class HttpParser implements Constants {
 		if (clen != null) {
 			Range clenValue = helper.ranges5.ranges[helper.ranges5.ranges.length - 1];
 			clenValue.setInterval(clen.start + CONTENT_LENGTH.length, clen.limit());
-			buf.trim(clenValue);
+			BYTES.trim(buf.bytes(), clenValue);
 			long len = buf.getN(clenValue);
 			U.ensure(len >= 0 && len <= Integer.MAX_VALUE, "Invalid body size!");
 			buf.scanN((int) len, body);
@@ -172,10 +174,8 @@ public class HttpParser implements Constants {
 		buf.position(from);
 		buf.limit(to);
 
-		Int result = helper.integers[0];
-
-		Ranges headers = helper.ranges2;
-		buf.scanLnLn(headers, 0, result);
+		Ranges headers = helper.ranges2.reset();
+		buf.scanLnLn(headers);
 
 		parseHeadersIntoKV(buf, headers, headersKV, null, helper);
 
@@ -198,16 +198,16 @@ public class HttpParser implements Constants {
 			Range key = headersKV.keys[ind];
 			Range val = headersKV.values[ind];
 
-			boolean split = buf.split(hdr, COL, key, val, true);
+			boolean split = BYTES.split(buf.bytes(), hdr, COL, key, val, true);
 			U.ensure(split, "Invalid HTTP header!");
 
-			if (cookies != null && buf.matches(key, COOKIE, false)) {
+			if (cookies != null && BYTES.matches(buf.bytes(), key, COOKIE, false)) {
 				headersKV.count--; // don't include cookies in headers
 
 				do {
-					buf.split(val, SEMI_COL, cookie, val, true);
+					BYTES.split(buf.bytes(), val, SEMI_COL, cookie, val, true);
 					int cind = cookies.add();
-					buf.split(cookie, EQ, cookies.keys[cind], cookies.values[cind], true);
+					BYTES.split(buf.bytes(), cookie, EQ, cookies.keys[cind], cookies.values[cind], true);
 				} while (!val.isEmpty());
 			}
 		}
@@ -243,7 +243,7 @@ public class HttpParser implements Constants {
 
 		try {
 
-			while ((pos2 = src.find(start, limit, helper.bytes, 0, sepLen, true)) >= 0) {
+			while ((pos2 = BYTES.find(src.bytes(), start, limit, helper.bytes, 0, sepLen, true)) >= 0) {
 				// U.print("****** PARSE MULTI *** pos2=" + pos2);
 
 				if (pos1 >= 0 && pos2 >= 0) {
@@ -283,13 +283,13 @@ public class HttpParser implements Constants {
 		// form-data; name="a" | form-data; name="f2"; filename="test2.txt"
 		Range disposition = headers.get(src, CONTENT_DISPOSITION, false);
 
-		if (src.startsWith(disposition, FORM_DATA, false)) {
+		if (BYTES.startsWith(src.bytes(), disposition, FORM_DATA, false)) {
 			disposition.strip(FORM_DATA.length, 0);
 		} else {
 			return;
 		}
 
-		src.split(disposition, SEMI_COL, dispo1, dispo2, true);
+		BYTES.split(src.bytes(), disposition, SEMI_COL, dispo1, dispo2, true);
 
 		if (!parseDisposition(src, dispo1, dispo2, name, filename)) {
 			if (!parseDisposition(src, dispo2, dispo1, name, filename)) {
@@ -309,13 +309,13 @@ public class HttpParser implements Constants {
 		contEnc.reset();
 
 		if (contentType != null) {
-			src.split(contentType, SEMI_COL, contType, contEnc, true);
-			if (src.startsWith(contEnc, CHARSET_EQ, false)) {
+			BYTES.split(src.bytes(), contentType, SEMI_COL, contType, contEnc, true);
+			if (BYTES.startsWith(src.bytes(), contEnc, CHARSET_EQ, false)) {
 				charset.assign(contEnc);
 				charset.strip(CHARSET_EQ.length, 0);
-				src.trim(charset);
+				BYTES.trim(src.bytes(), charset);
 
-				U.failIf(!src.matches(charset, _UTF_8, false), "Only the UTF-8 charset is supported!");
+				U.failIf(!BYTES.matches(src.bytes(), charset, _UTF_8, false), "Only the UTF-8 charset is supported!");
 			}
 		}
 
@@ -323,8 +323,9 @@ public class HttpParser implements Constants {
 		Range encoding = headers.get(src, CONTENT_TRANSFER_ENCODING, false);
 
 		if (encoding != null) {
-			boolean validEncoding = src.matches(encoding, _7BIT, false) || src.matches(encoding, _8BIT, false)
-					|| src.matches(encoding, BINARY, false);
+			boolean validEncoding = BYTES.matches(src.bytes(), encoding, _7BIT, false)
+					|| BYTES.matches(src.bytes(), encoding, _8BIT, false)
+					|| BYTES.matches(src.bytes(), encoding, BINARY, false);
 			U.failIf(!validEncoding, "Invalid Content-transfer-encoding header value!");
 		}
 
@@ -340,17 +341,17 @@ public class HttpParser implements Constants {
 	}
 
 	private boolean parseDisposition(Buf src, Range dispoA, Range dispoB, Range name, Range filename) {
-		if (src.startsWith(dispoA, NAME_EQ, false)) {
+		if (BYTES.startsWith(src.bytes(), dispoA, NAME_EQ, false)) {
 
 			name.assign(dispoA);
 			name.strip(NAME_EQ.length, 0);
-			src.trim(name);
+			BYTES.trim(src.bytes(), name);
 			name.strip(1, 1);
 
-			if (src.startsWith(dispoB, FILENAME_EQ, false)) {
+			if (BYTES.startsWith(src.bytes(), dispoB, FILENAME_EQ, false)) {
 				filename.assign(dispoB);
 				filename.strip(FILENAME_EQ.length, 0);
-				src.trim(filename);
+				BYTES.trim(src.bytes(), filename);
 				filename.strip(1, 1);
 			} else {
 				filename.reset();
@@ -368,12 +369,12 @@ public class HttpParser implements Constants {
 		if (contType != null) {
 			// TODO improve parsing of "multipart" and "data boundary"
 
-			if (buf.startsWith(contType, MULTIPART_FORM_DATA_BOUNDARY1, false)) {
+			if (BYTES.startsWith(buf.bytes(), contType, MULTIPART_FORM_DATA_BOUNDARY1, false)) {
 				multipartBoundary.setInterval(contType.start + MULTIPART_FORM_DATA_BOUNDARY1.length, contType.limit());
 				return true;
 			}
 
-			if (buf.startsWith(contType, MULTIPART_FORM_DATA_BOUNDARY2, false)) {
+			if (BYTES.startsWith(buf.bytes(), contType, MULTIPART_FORM_DATA_BOUNDARY2, false)) {
 				multipartBoundary.setInterval(contType.start + MULTIPART_FORM_DATA_BOUNDARY2.length, contType.limit());
 				return true;
 			}

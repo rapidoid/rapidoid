@@ -26,40 +26,28 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
+import org.rapidoid.bytes.BYTES;
+import org.rapidoid.bytes.ByteBufferBytes;
+import org.rapidoid.bytes.Bytes;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
-import org.rapidoid.wrap.Int;
 
 public class MultiBuf implements Buf, Constants {
 
-	public static final byte[] CHARS_SWITCH_CASE = new byte[128];
-
 	private final byte[] HELPER = new byte[20];
 
-	private final ByteBuffer HELPER_BUF = ByteBuffer.wrap(HELPER);
-
 	private final Range HELPER_RANGE = new Range();
-
-	static {
-		for (int ch = 0; ch < 128; ch++) {
-			if (ch >= 'a' && ch <= 'z') {
-				CHARS_SWITCH_CASE[ch] = (byte) (ch - 32);
-			} else if (ch >= 'A' && ch <= 'Z') {
-				CHARS_SWITCH_CASE[ch] = (byte) (ch + 32);
-			} else {
-				CHARS_SWITCH_CASE[ch] = (byte) ch;
-			}
-		}
-	}
 
 	private static final int TO_BYTES = 1;
 
 	private static final int TO_CHANNEL = 2;
 
 	private static final int TO_BUFFER = 3;
+
+	private static final IncompleteReadException ERR = new IncompleteReadException();
 
 	private final Pool<ByteBuffer> bufPool;
 
@@ -81,15 +69,15 @@ public class MultiBuf implements Buf, Constants {
 
 	private int _limit;
 
-	private IncompleteReadException ERRR;
-
 	int ccc = BufScanner.MORE;
 
 	int[] cccc = new int[300];
 
-	private int scanFrom;
-
 	private OutputStream outputStream;
+
+	private final ByteBufferBytes singleBytes = new ByteBufferBytes();
+
+	private final Bytes multiBytes = new BufBytes(this);
 
 	public MultiBuf(Pool<ByteBuffer> bufPool, int factor, String name) {
 		this.bufPool = bufPool;
@@ -643,7 +631,7 @@ public class MultiBuf implements Buf, Constants {
 	public void put(int position, byte[] bytes, int offset, int length) {
 		assert invariant();
 
-		// FIXME optimize
+		// TODO optimize
 		int pos = position;
 		for (int i = offset; i < offset + length; i++) {
 			put(pos++, bytes[i]);
@@ -831,489 +819,9 @@ public class MultiBuf implements Buf, Constants {
 		return space;
 	}
 
-	protected int scan(int start, int last, byte valB, short valS, int valI, long valL, int n) {
-
-		int fromPos = (start + shrinkN);
-		int toPos = (last + shrinkN);
-
-		int fromInd = fromPos >> factor;
-		int toInd = toPos >> factor;
-
-		int fromAddr = fromPos & addrMask;
-		int toAddr = toPos & addrMask;
-
-		U.ensure(fromInd >= 0, "bad start: %s", start);
-		U.ensure(toInd >= 0, "bad end: %s", last);
-
-		int res;
-		if (fromInd == toInd) {
-			res = scanBuf(bufs[fromInd], fromAddr, toAddr, valB, valS, valI, valL, n);
-			if (res >= 0) {
-				return rebase(res, fromInd);
-			}
-		} else {
-			res = scanBuf(bufs[fromInd], fromAddr, singleCap - 1, valB, valS, valI, valL, n);
-			if (res >= 0) {
-				return rebase(res, fromInd);
-			}
-
-			for (int i = fromInd + 1; i < toInd; i++) {
-				res = scanBuf(bufs[i], 0, singleCap - 1, valB, valS, valI, valL, n);
-				if (res >= 0) {
-					return rebase(res, i);
-				}
-			}
-
-			res = scanBuf(bufs[toInd], 0, toAddr, valB, valS, valI, valL, n);
-			if (res >= 0) {
-				return rebase(res, toInd);
-			}
-		}
-
-		return -1;
-	}
-
+	@SuppressWarnings("unused")
 	private int rebase(int pos, int bufInd) {
 		return (bufInd << factor) + pos - shrinkN;
-	}
-
-	private int scanBuf(ByteBuffer buf, int from, int to, byte valB, short valS, int valI, long valL, int n) {
-		switch (n) {
-		case 1:
-			return scanBuf(buf, from, to, valB);
-
-		case 2:
-			for (int i = from; i <= to - 1; i++) {
-				if (buf.getShort(i) == valS) {
-					return i;
-				}
-			}
-
-			return scanBuf(buf, Math.max(to, from), to, valB);
-
-		case 4:
-			for (int i = from; i <= to - 3; i++) {
-				if (buf.getInt(i) == valI) {
-					return i;
-				}
-			}
-
-			return scanBuf(buf, Math.max(to - 2, from), to, valB);
-
-		case 8:
-			for (int i = from; i <= to - 7; i++) {
-				if (buf.getLong(i) == valL) {
-					return i;
-				}
-			}
-
-			return scanBuf(buf, Math.max(to - 6, from), to, valB);
-
-		default:
-			throw U.notExpected();
-		}
-	}
-
-	private int scanBuf(ByteBuffer buf, int from, int to, byte value) {
-		for (int i = from; i <= to; i++) {
-			if (buf.get(i) == value) {
-				return i;
-			}
-		}
-
-		return -1;
-	}
-
-	@Override
-	public boolean match(int start, byte[] match, int offset, int length, boolean caseSensitive) {
-		assert invariant();
-
-		boolean result;
-		if (caseSensitive) {
-			result = matchSensitive(start, match, offset, length);
-		} else {
-			result = matchNoCase(start, match, offset, length);
-		}
-
-		assert invariant();
-		return result;
-	}
-
-	private boolean matchNoCase(int start, byte[] match, int offset, int length) {
-		for (int i = 0; i < length; i++) {
-			byte b = get(start + i);
-			if (b != match[offset + i] && (b < 'A' || CHARS_SWITCH_CASE[b] != match[offset + i])) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	private boolean matchSensitive(int start, byte[] match, int offset, int length) {
-		for (int i = 0; i < length; i++) {
-			if (get(start + i) != match[offset + i]) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	@Override
-	public int find(int start, int limit, byte[] match, int offset, int length, boolean caseSensitive) {
-		assert invariant();
-
-		assert start >= 0;
-		assert limit >= 0;
-		assert offset >= 0;
-		assert length >= 0;
-
-		int result;
-		if (caseSensitive) {
-			result = findSensitive(start, limit, match, offset, length);
-		} else {
-			result = findNoCase(start, limit, match, offset, length);
-		}
-
-		assert invariant();
-		return result;
-	}
-
-	private int findNoCase(int start, int limit, byte[] match, int offset, int length) {
-		throw U.notReady();
-	}
-
-	private int findSensitive(int start, int limit, byte[] match, int offset, int length) {
-		if (limit - start < length) {
-			return -1;
-		}
-
-		int pos = start;
-		int last = limit - length;
-
-		int len = matchPartLen(length);
-
-		HELPER_BUF.position(0);
-		HELPER_BUF.put(match, offset, len);
-
-		byte valB = match[offset];
-		short valS = 0;
-		int valI = 0;
-		long valL = 0;
-
-		switch (len) {
-		case 8:
-			valL = HELPER_BUF.getLong(0);
-		case 4:
-			valI = HELPER_BUF.getInt(0);
-		case 2:
-			valS = HELPER_BUF.getShort(0);
-			break;
-
-		default:
-			break;
-		}
-
-		while ((pos = scan(pos, last, valB, valS, valI, valL, len)) >= 0) {
-			if (matchSensitive(pos, match, offset, length)) {
-				return pos;
-			}
-			pos++;
-		}
-
-		return -1;
-	}
-
-	private int matchPartLen(int length) {
-		switch (length) {
-		case 0:
-			throw U.notExpected();
-
-		case 1:
-			return 1;
-
-		case 2:
-		case 3:
-			return 2;
-
-		case 4:
-		case 5:
-		case 6:
-		case 7:
-			return 4;
-		}
-
-		return 8;
-	}
-
-	private boolean match(int start, byte[] match, boolean caseSensitive) {
-		return match(start, match, 0, match.length, caseSensitive);
-	}
-
-	@Override
-	public int find(int start, int limit, byte match, boolean caseSensitive) {
-		assert invariant();
-
-		assert start >= 0;
-		assert limit >= 0;
-
-		if (limit - start < 1) {
-			assert invariant();
-			return -1;
-		}
-
-		if (caseSensitive) {
-			assert invariant();
-			return scan(start, limit - 1, match, (short) 0, 0, 0, 1);
-		} else {
-			assert invariant();
-			throw U.notReady(); // FIXME
-		}
-	}
-
-	@Override
-	public int find(int start, int limit, byte[] match, boolean caseSensitive) {
-		assert invariant();
-
-		int pos = find(start, limit, match, 0, match.length, caseSensitive);
-
-		assert invariant();
-		return pos;
-	}
-
-	@Override
-	public boolean matches(Range target, byte[] match, boolean caseSensitive) {
-		assert invariant();
-
-		if (target.length != match.length || target.start < 0 || target.last() >= _size()) {
-			assert invariant();
-			return false;
-		}
-
-		boolean result = match(target.start, match, caseSensitive);
-
-		assert invariant();
-		return result;
-	}
-
-	@Override
-	public boolean startsWith(Range target, byte[] match, boolean caseSensitive) {
-		assert invariant();
-
-		if (target.length < match.length || target.start < 0 || target.last() >= _size()) {
-			assert invariant();
-			return false;
-		}
-
-		boolean result = match(target.start, match, caseSensitive);
-		assert invariant();
-
-		return result;
-	}
-
-	@Override
-	public boolean containsAt(Range target, int offset, byte[] match, boolean caseSensitive) {
-		assert invariant();
-
-		if (offset < 0 || target.length < offset + match.length || target.start < 0 || target.last() >= _size()) {
-			assert invariant();
-			return false;
-		}
-
-		boolean result = match(target.start + offset, match, caseSensitive);
-
-		assert invariant();
-		return result;
-	}
-
-	@Override
-	public void trim(Range target) {
-		assert invariant();
-
-		int start = target.start;
-		int len = target.length;
-		int finish = start + len - 1;
-
-		if (start < 0 || len == 0) {
-			assert invariant();
-			return;
-		}
-
-		while (start < finish && get(start) == ' ') {
-			start++;
-		}
-
-		while (start < finish && get(finish) == ' ') {
-			finish--;
-		}
-
-		target.start = start;
-		target.length = finish - start + 1;
-
-		assert invariant();
-	}
-
-	private void consumeAndSkip(int toPos, Range range, int skip) {
-		range.setInterval(_position, toPos);
-		_position = toPos + skip;
-	}
-
-	@Override
-	public void scanTo(byte sep, Range range, boolean failOnLimit) {
-		assert invariant();
-
-		int pos = find(_position, _limit, sep, true);
-
-		if (pos >= 0) {
-			consumeAndSkip(pos, range, 1);
-		} else {
-			if (failOnLimit) {
-				assert invariant();
-				throw incomplete();
-			} else {
-				consumeAndSkip(_limit, range, 0);
-			}
-		}
-
-		assert invariant();
-	}
-
-	@Override
-	public void scanTo(byte[] sep, Range range, boolean failOnLimit) {
-		assert invariant();
-
-		int pos = find(_position, _limit, sep, true);
-
-		if (pos >= 0) {
-			consumeAndSkip(pos, range, sep.length);
-		} else {
-			if (failOnLimit) {
-				assert invariant();
-				throw incomplete();
-			} else {
-				consumeAndSkip(_limit, range, 0);
-			}
-		}
-
-		assert invariant();
-	}
-
-	@Override
-	public int scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit) {
-		assert invariant();
-
-		int pos1 = find(_position, _limit, sep1, true);
-		int pos2 = find(_position, _limit, sep2, true);
-
-		boolean found1 = pos1 >= 0;
-		boolean found2 = pos2 >= 0;
-
-		if (found1 && found2) {
-			if (pos1 <= pos2) {
-				consumeAndSkip(pos1, range, 1);
-				assert invariant();
-				return 1;
-			} else {
-				consumeAndSkip(pos2, range, 1);
-				assert invariant();
-				return 2;
-			}
-		} else if (found1 && !found2) {
-			consumeAndSkip(pos1, range, 1);
-			assert invariant();
-			return 1;
-		} else if (!found1 && found2) {
-			consumeAndSkip(pos2, range, 1);
-			assert invariant();
-			return 2;
-		} else {
-			if (failOnLimit) {
-				assert invariant();
-				throw incomplete();
-			} else {
-				consumeAndSkip(_limit, range, 0);
-				assert invariant();
-				return 0;
-			}
-		}
-	}
-
-	@Override
-	public int scanTo(byte[] sep1, byte[] sep2, Range range, boolean failOnLimit) {
-		assert invariant();
-
-		int pos1 = find(_position, _limit, sep1, true);
-		int pos2 = find(_position, _limit, sep2, true);
-
-		boolean found1 = pos1 >= 0;
-		boolean found2 = pos2 >= 0;
-
-		if (found1 && found2) {
-			if (pos1 <= pos2) {
-				consumeAndSkip(pos1, range, sep1.length);
-				assert invariant();
-				return 1;
-			} else {
-				consumeAndSkip(pos2, range, sep2.length);
-				assert invariant();
-				return 2;
-			}
-		} else if (found1 && !found2) {
-			consumeAndSkip(pos1, range, sep1.length);
-			assert invariant();
-			return 1;
-		} else if (!found1 && found2) {
-			consumeAndSkip(pos2, range, sep2.length);
-			assert invariant();
-			return 2;
-		} else {
-			if (failOnLimit) {
-				assert invariant();
-				throw incomplete();
-			} else {
-				consumeAndSkip(_limit, range, 0);
-				assert invariant();
-				return 0;
-			}
-		}
-	}
-
-	@Override
-	public IncompleteReadException incomplete() {
-		assert invariant();
-
-		if (ERRR == null) {
-			ERRR = U.rte(IncompleteReadException.class);
-		}
-
-		assert invariant();
-		return ERRR;
-	}
-
-	@Override
-	public void scanLn(Range range, boolean failOnLimit) {
-		assert invariant();
-
-		scanTo(LF_, CR_LF, range, failOnLimit);
-
-		// TODO: this is faster, but buggy:
-		// scanTo(LF, range, failOnLimit);
-		// if (range.start > 0 && get(range.last()) == CR) {
-		// range.length--;
-		// }
-
-		assert invariant();
-	}
-
-	@Override
-	public void scanN(int count, Range range) {
-		assert invariant();
-
-		get(_position + count - 1);
-		range.set(_position, count);
-		_position += count;
-
-		assert invariant();
 	}
 
 	@Override
@@ -1359,28 +867,6 @@ public class MultiBuf implements Buf, Constants {
 	public int remaining() {
 		assert invariant();
 		return _limit - _position;
-	}
-
-	@Override
-	public String readLn() {
-		assert invariant();
-
-		scanLn(HELPER_RANGE, true);
-		String result = get(HELPER_RANGE);
-
-		assert invariant();
-		return result;
-	}
-
-	@Override
-	public String readN(int count) {
-		assert invariant();
-
-		scanN(count, HELPER_RANGE);
-		String result = get(HELPER_RANGE);
-
-		assert invariant();
-		return result;
 	}
 
 	@Override
@@ -1440,8 +926,12 @@ public class MultiBuf implements Buf, Constants {
 		return first;
 	}
 
+	private static IncompleteReadException incomplete() {
+		return ERR;
+	}
+
 	@Override
-	public void scanUntil(byte value, Range range, boolean failOnLimit) {
+	public void scanUntil(byte value, Range range) {
 		assert invariant();
 
 		int start = position();
@@ -1513,18 +1003,12 @@ public class MultiBuf implements Buf, Constants {
 
 		position(limit);
 
-		if (failOnLimit) {
-			assert invariant();
-			throw incomplete();
-		} else {
-			range.setInterval(start, absPos - 1);
-		}
-
 		assert invariant();
+		throw incomplete();
 	}
 
 	@Override
-	public void scanWhile(byte value, Range range, boolean failOnLimit) {
+	public void scanWhile(byte value, Range range) {
 		assert invariant();
 
 		int start = position();
@@ -1596,14 +1080,8 @@ public class MultiBuf implements Buf, Constants {
 
 		position(limit);
 
-		if (failOnLimit) {
-			assert invariant();
-			throw incomplete();
-		} else {
-			range.setInterval(start, absPos - 1);
-		}
-
 		assert invariant();
+		throw incomplete();
 	}
 
 	@Override
@@ -1613,112 +1091,6 @@ public class MultiBuf implements Buf, Constants {
 		_position += count;
 
 		assert invariant();
-	}
-
-	@Override
-	public void scanLnLn(Ranges ranges, int search, Int result) {
-		assert invariant();
-
-		int start = position();
-		int limit = limit();
-		int last = limit - 1;
-
-		if (last < start) {
-			throw incomplete();
-		}
-
-		int fromPos = (start + shrinkN);
-		int toPos = (last + shrinkN);
-
-		int fromInd = fromPos >> factor;
-		int toInd = toPos >> factor;
-
-		int fromAddr = fromPos & addrMask;
-		int toAddr = toPos & addrMask;
-
-		U.ensure(fromInd >= 0, "bad start: %s", start);
-		U.ensure(toInd >= 0, "bad limit: %s", limit);
-
-		result.value = -1;
-		scanFrom = position();
-
-		if (fromInd == toInd) {
-			ranges.count = simpleScanLines(ranges.ranges, fromInd, fromAddr, toAddr, search, result);
-		} else {
-			ranges.count = complexScanLines(ranges.ranges, fromAddr, fromInd, toAddr, toInd, search, result);
-		}
-
-		assert invariant();
-	}
-
-	private int simpleScanLines(Range[] ranges, int ind, int fromAddr, int toAddr, int search, Int result) {
-		int rangeInd = scanRegionLines(ranges, ind, fromAddr, toAddr, 0, search, result);
-
-		if (rangeInd < 0) {
-			return -rangeInd - 1;
-		}
-
-		position(limit());
-		throw incomplete();
-	}
-
-	/**
-	 * @return the index of the range used to the scanned line
-	 */
-	private int scanRegionLines(Range[] ranges, int ind, int fromAddr, int toAddr, int rangeInd, int search, Int result) {
-		int base = rebase(0, ind);
-		ByteBuffer src = bufs[ind];
-
-		int pos = fromAddr;
-
-		Range range = ranges[rangeInd];
-		while ((pos = scanLnAndMatchPrefix(src, range, pos, toAddr, search)) != NOT_FOUND) {
-
-			if (pos < 0) {
-				result.value = rangeInd;
-				pos = -pos;
-			}
-
-			range.setInterval(scanFrom, base + range.limit());
-			position(base + pos);
-
-			if (range.isEmpty()) {
-				// return negative number to mark that an empty line was found
-				return -rangeInd - 1;
-			}
-
-			scanFrom = position();
-			range = ranges[++rangeInd];
-		}
-
-		// didn't get to an empty line
-		return rangeInd;
-	}
-
-	private int complexScanLines(Range[] ranges, int fromAddr, int fromInd, int toAddr, int toInd, int search,
-			Int result) {
-
-		int rangeInd = 0;
-
-		rangeInd = scanRegionLines(ranges, fromInd, fromAddr, singleCap - 1, rangeInd, search, result);
-		if (rangeInd < 0) {
-			return -rangeInd - 1;
-		}
-
-		for (int ind = fromInd + 1; ind < toInd; ind++) {
-			rangeInd = scanRegionLines(ranges, ind, 0, singleCap - 1, rangeInd, search, result);
-			if (rangeInd < 0) {
-				return -rangeInd - 1;
-			}
-		}
-
-		rangeInd = scanRegionLines(ranges, toInd, 0, toAddr, rangeInd, search, result);
-		if (rangeInd < 0) {
-			return -rangeInd - 1;
-		}
-
-		position(limit());
-		throw incomplete();
 	}
 
 	@Override
@@ -1759,204 +1131,6 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public boolean split(Range target, byte sep, Range before, Range after, boolean trimParts) {
-		assert invariant();
-		int pos = find(target.start, target.limit(), sep, true);
-
-		if (pos >= 0) {
-			before.setInterval(target.start, pos);
-			after.setInterval(pos + 1, target.limit());
-
-			if (trimParts) {
-				trim(before);
-				trim(after);
-			}
-
-			assert invariant();
-			return true;
-		} else {
-			before.assign(target);
-			after.reset();
-
-			if (trimParts) {
-				trim(before);
-			}
-
-			assert invariant();
-			return false;
-		}
-	}
-
-	/**
-	 * Scans the buffer until the specified separator is found, and matches the 4-byte prefix of the scanned selection
-	 * against the specified search prefix. Returns the position of the separator, or <code>-1</code> if the limit is
-	 * reached and separator not found. If the prefix is matched, the negative of the position is returned, to mark the
-	 * prefix match. Duplicated code for performance reasons.
-	 * 
-	 * @param range
-	 */
-	public static int scanUntilAndMatchPrefix(ByteBuffer buf, Range result, byte separator, int fromPos, int toPos,
-			int searchPrefix) {
-
-		byte b0, b1, b2, b3;
-
-		int p = fromPos;
-		if (p <= toPos) {
-			b0 = buf.get(p);
-			if (b0 == separator) {
-				result.set(fromPos, 0);
-				return p + 1;
-			}
-		} else {
-			result.reset();
-			return NOT_FOUND;
-		}
-
-		p++;
-		if (p <= toPos) {
-			b1 = buf.get(p);
-			if (b1 == separator) {
-				result.set(fromPos, 1);
-				return p + 1;
-			}
-		} else {
-			result.reset();
-			return NOT_FOUND;
-		}
-
-		p++;
-		if (p <= toPos) {
-			b2 = buf.get(p);
-			if (b2 == separator) {
-				result.set(fromPos, 2);
-				return p + 1;
-			}
-		} else {
-			result.reset();
-			return NOT_FOUND;
-		}
-
-		p++;
-		if (p <= toPos) {
-			b3 = buf.get(p);
-			if (b3 == separator) {
-				result.set(fromPos, 3);
-				return p + 1;
-			}
-		} else {
-			result.reset();
-			return NOT_FOUND;
-		}
-
-		int prefix = U.intFrom(b0, b1, b2, b3);
-
-		boolean matchedPrefix = prefix == searchPrefix;
-
-		for (int i = p; i <= toPos; i++) {
-			if (buf.get(i) == separator) {
-				result.setInterval(fromPos, i);
-				int nextPos = i + 1;
-				return matchedPrefix ? -nextPos : nextPos;
-			}
-		}
-
-		result.reset();
-		return NOT_FOUND;
-	}
-
-	/**
-	 * Scans the buffer until a line separator (CRLF or LF) is found, and matches the 4-byte prefix of the scanned
-	 * selection against the specified search prefix. Returns the position of the separator, or <code>-1</code> if the
-	 * limit is reached and separator not found. If the prefix is matched, the negative of the position is returned, to
-	 * mark the prefix match. Duplicated code for performance reasons.
-	 */
-	public static int scanLnAndMatchPrefix(ByteBuffer buf, Range result, int fromPos, int toPos, int searchPrefix) {
-
-		byte b0, b1, b2, b3;
-
-		int p = fromPos;
-		if (p <= toPos) {
-			b0 = buf.get(p);
-			if (b0 == LF) {
-				result.set(fromPos, 0);
-				return p + 1;
-			}
-		} else {
-			result.reset();
-			return NOT_FOUND;
-		}
-
-		p++;
-		if (p <= toPos) {
-			b1 = buf.get(p);
-			if (b1 == LF) {
-				if (b0 == CR) {
-					result.set(fromPos, 0);
-				} else {
-					result.set(fromPos, 1);
-				}
-				return p + 1;
-			}
-		} else {
-			result.reset();
-			return NOT_FOUND;
-		}
-
-		p++;
-		if (p <= toPos) {
-			b2 = buf.get(p);
-			if (b2 == LF) {
-				if (b1 == CR) {
-					result.set(fromPos, 1);
-				} else {
-					result.set(fromPos, 2);
-				}
-				return p + 1;
-			}
-		} else {
-			result.reset();
-			return NOT_FOUND;
-		}
-
-		p++;
-		if (p <= toPos) {
-			b3 = buf.get(p);
-			if (b3 == LF) {
-				if (b2 == CR) {
-					result.set(fromPos, 2);
-				} else {
-					result.set(fromPos, 3);
-				}
-				return p + 1;
-			}
-		} else {
-			result.reset();
-			return NOT_FOUND;
-		}
-
-		int prefix = U.intFrom(b0, b1, b2, b3);
-
-		boolean matchedPrefix = prefix == searchPrefix;
-
-		for (int i = p; i <= toPos; i++) {
-			if (buf.get(i) == LF) {
-
-				if (buf.get(i - 1) == CR) {
-					result.setInterval(fromPos, i - 1);
-				} else {
-					result.setInterval(fromPos, i);
-				}
-
-				int nextPos = i + 1;
-				return matchedPrefix ? -nextPos : nextPos;
-			}
-		}
-
-		result.reset();
-		return NOT_FOUND;
-	}
-
-	@Override
 	public OutputStream asOutputStream() {
 		if (outputStream == null) {
 			outputStream = new OutputStream() {
@@ -1972,6 +1146,143 @@ public class MultiBuf implements Buf, Constants {
 	@Override
 	public String asText() {
 		return get(new Range(0, size()));
+	}
+
+	@Override
+	public Bytes bytes() {
+		assert invariant();
+		if (isSingle()) {
+			singleBytes.setBuf(bufs[0]);
+			return singleBytes;
+		} else {
+			return multiBytes;
+		}
+	}
+
+	@Override
+	public void scanLn(Range line) {
+		assert invariant();
+		int pos = BYTES.parseLine(bytes(), line, position(), size());
+
+		if (pos < 0) {
+			assert invariant();
+			throw incomplete();
+		}
+
+		_position = pos;
+		assert invariant();
+	}
+
+	@Override
+	public void scanLnLn(Ranges lines) {
+		assert invariant();
+
+		int pos = BYTES.parseLines(bytes(), lines, position(), size());
+
+		if (pos < 0) {
+			assert invariant();
+			throw incomplete();
+		}
+
+		_position = pos;
+		assert invariant();
+	}
+
+	@Override
+	public void scanN(int count, Range range) {
+		assert invariant();
+
+		get(_position + count - 1);
+		range.set(_position, count);
+		_position += count;
+
+		assert invariant();
+	}
+
+	@Override
+	public String readLn() {
+		assert invariant();
+
+		scanLn(HELPER_RANGE);
+		String result = get(HELPER_RANGE);
+
+		assert invariant();
+		return result;
+	}
+
+	@Override
+	public String readN(int count) {
+		assert invariant();
+
+		scanN(count, HELPER_RANGE);
+		String result = get(HELPER_RANGE);
+		assert invariant();
+		return result;
+	}
+
+	@Override
+	public void scanTo(byte sep, Range range, boolean failOnLimit) {
+		assert invariant();
+
+		int pos = BYTES.find(bytes(), _position, _limit, sep, true);
+
+		if (pos >= 0) {
+			consumeAndSkip(pos, range, 1);
+		} else {
+			if (failOnLimit) {
+				assert invariant();
+				throw incomplete();
+			} else {
+				consumeAndSkip(_limit, range, 0);
+			}
+		}
+
+		assert invariant();
+	}
+
+	@Override
+	public int scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit) {
+		assert invariant();
+
+		int pos1 = BYTES.find(bytes(), _position, _limit, sep1, true);
+		int pos2 = BYTES.find(bytes(), _position, _limit, sep2, true);
+
+		boolean found1 = pos1 >= 0;
+		boolean found2 = pos2 >= 0;
+
+		if (found1 && found2) {
+			if (pos1 <= pos2) {
+				consumeAndSkip(pos1, range, 1);
+				assert invariant();
+				return 1;
+			} else {
+				consumeAndSkip(pos2, range, 1);
+				assert invariant();
+				return 2;
+			}
+		} else if (found1 && !found2) {
+			consumeAndSkip(pos1, range, 1);
+			assert invariant();
+			return 1;
+		} else if (!found1 && found2) {
+			consumeAndSkip(pos2, range, 1);
+			assert invariant();
+			return 2;
+		} else {
+			if (failOnLimit) {
+				assert invariant();
+				throw incomplete();
+			} else {
+				consumeAndSkip(_limit, range, 0);
+				assert invariant();
+				return 0;
+			}
+		}
+	}
+
+	private void consumeAndSkip(int toPos, Range range, int skip) {
+		range.setInterval(_position, toPos);
+		_position = toPos + skip;
 	}
 
 }

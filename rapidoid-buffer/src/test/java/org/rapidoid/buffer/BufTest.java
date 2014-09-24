@@ -20,11 +20,11 @@ package org.rapidoid.buffer;
  * #L%
  */
 
+import org.rapidoid.bytes.BYTES;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
-import org.rapidoid.wrap.Int;
 import org.testng.annotations.Test;
 
 public class BufTest extends BufferTestCommons implements Constants {
@@ -201,25 +201,25 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 		Range range = new Range();
 
-		buf.scanUntil(SPACE, range, true);
+		buf.scanUntil(SPACE, range);
 		eq(buf.get(range), "first");
 
-		buf.scanUntil(SPACE, range, true);
+		buf.scanUntil(SPACE, range);
 		eq(buf.get(range), "second");
 
-		buf.scanUntil(SPACE, range, true);
+		buf.scanUntil(SPACE, range);
 		eq(buf.get(range), "");
 
-		buf.scanLn(range, true);
+		buf.scanLn(range);
 		eq(buf.get(range), "third");
 
-		buf.scanUntil(SPACE, range, true);
+		buf.scanUntil(SPACE, range);
 		eq(buf.get(range), "a");
 
-		buf.scanUntil(SPACE, range, true);
+		buf.scanUntil(SPACE, range);
 		eq(buf.get(range), "b");
 
-		buf.scanLn(range, true);
+		buf.scanLn(range);
 		eq(buf.get(range), "c");
 
 		isFalse(buf.hasRemaining());
@@ -237,17 +237,17 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 		Range range = new Range();
 
-		buf.scanUntil(COL, range, true);
+		buf.scanUntil(COL, range);
 		eq(buf.get(range), "abc");
 
 		eq(buf.position(), 4);
 
-		buf.scanWhile(SPACE, range, true);
+		buf.scanWhile(SPACE, range);
 		eq(range, 4, 2);
 
 		eq(buf.position(), 6);
 
-		buf.scanUntil(COL, range, true);
+		buf.scanUntil(COL, range);
 		eq(buf.get(range), "xy");
 
 		eq(buf.position(), 9);
@@ -258,39 +258,39 @@ public class BufTest extends BufferTestCommons implements Constants {
 		final int NO_PREFIX = 0;
 		Range range = new Range();
 
-		eq(MultiBuf.scanUntilAndMatchPrefix(U.buf("\n"), range, LF, 0, 0, NO_PREFIX), 1);
+		eq(BYTES.scanUntilAndMatchPrefix(BYTES.from("\n"), range, LF, 0, 0, NO_PREFIX), 1);
 		eq(range, 0, 0);
 
-		eq(MultiBuf.scanUntilAndMatchPrefix(U.buf("a\n"), range, COL, 0, 0, NO_PREFIX), NOT_FOUND);
+		eq(BYTES.scanUntilAndMatchPrefix(BYTES.from("a\n"), range, COL, 0, 0, NO_PREFIX), NOT_FOUND);
 		eq(range, -1, 0);
 
-		eq(MultiBuf.scanUntilAndMatchPrefix(U.buf("a\n"), range, LF, 0, 1, NO_PREFIX), 2);
+		eq(BYTES.scanUntilAndMatchPrefix(BYTES.from("a\n"), range, LF, 0, 1, NO_PREFIX), 2);
 		eq(range, 0, 1);
 
-		eq(MultiBuf.scanUntilAndMatchPrefix(U.buf("ab:c"), range, COL, 0, 3, NO_PREFIX), 3);
+		eq(BYTES.scanUntilAndMatchPrefix(BYTES.from("ab:c"), range, COL, 0, 3, NO_PREFIX), 3);
 		eq(range, 0, 2);
 
 		for (int i = 0; i < 10; i++) {
 			String s = U.copyNtimes("a", i);
 
-			eq(MultiBuf.scanUntilAndMatchPrefix(U.buf(s + ":"), range, COL, 0, i, NO_PREFIX), i + 1);
+			eq(BYTES.scanUntilAndMatchPrefix(BYTES.from(s + ":"), range, COL, 0, i, NO_PREFIX), i + 1);
 			eq(range, 0, i);
 
-			eq(MultiBuf.scanLnAndMatchPrefix(U.buf(s + "\n"), range, 0, i, NO_PREFIX), i + 1);
+			eq(BYTES.scanLnAndMatchPrefix(BYTES.from(s + "\n"), range, 0, i, NO_PREFIX), i + 1);
 			eq(range, 0, i);
 
-			eq(MultiBuf.scanLnAndMatchPrefix(U.buf(s + "\r\n"), range, 0, i + 1, NO_PREFIX), i + 2);
+			eq(BYTES.scanLnAndMatchPrefix(BYTES.from(s + "\r\n"), range, 0, i + 1, NO_PREFIX), i + 2);
 			eq(range, 0, i);
 		}
 
-		eq(MultiBuf.scanLnAndMatchPrefix(U.buf("x\n"), range, 0, 0, NO_PREFIX), NOT_FOUND);
+		eq(BYTES.scanLnAndMatchPrefix(BYTES.from("x\n"), range, 0, 0, NO_PREFIX), NOT_FOUND);
 		eq(range, -1, 0);
-		eq(MultiBuf.scanLnAndMatchPrefix(U.buf("x\r\n"), range, 0, 1, NO_PREFIX), NOT_FOUND);
+		eq(BYTES.scanLnAndMatchPrefix(BYTES.from("x\r\n"), range, 0, 1, NO_PREFIX), NOT_FOUND);
 		eq(range, -1, 0);
 
-		eq(MultiBuf.scanLnAndMatchPrefix(U.buf("x\n"), range, 1, 1, NO_PREFIX), 2);
+		eq(BYTES.scanLnAndMatchPrefix(BYTES.from("x\n"), range, 1, 1, NO_PREFIX), 2);
 		eq(range, 1, 0);
-		eq(MultiBuf.scanLnAndMatchPrefix(U.buf("x\r\n"), range, 1, 2, NO_PREFIX), 3);
+		eq(BYTES.scanLnAndMatchPrefix(BYTES.from("x\r\n"), range, 1, 2, NO_PREFIX), 3);
 		eq(range, 1, 0);
 	}
 
@@ -300,7 +300,8 @@ public class BufTest extends BufferTestCommons implements Constants {
 			BufGroup bufs = new BufGroup(factor);
 			Buf buf = bufs.newBuf();
 
-			buf.append("GET /hi H\naa: bb\nxyz\n\n");
+			String s = "GET /hi H\naa: bb\nxyz\r\n\r\n";
+			buf.append(s);
 
 			buf.position(0);
 			buf.limit(buf.size());
@@ -309,17 +310,22 @@ public class BufTest extends BufferTestCommons implements Constants {
 			Range uri = new Range();
 			Range protocol = new Range();
 
-			buf.scanUntil(SPACE, verb, true);
-			buf.scanUntil(SPACE, uri, true);
-			buf.scanLn(protocol, true);
+			buf.scanUntil(SPACE, verb);
+			eq(s, verb, "GET");
 
-			Int result = new Int();
+			buf.scanUntil(SPACE, uri);
+			eq(s, uri, "/hi");
+
+			buf.scanLn(protocol);
+			eq(s, protocol, "H");
+
 			Ranges headers = new Ranges(10);
-			buf.scanLnLn(headers, 0, result);
+			buf.scanLnLn(headers.reset());
 
 			eq(headers.count, 2);
-			eq(headers.ranges[0], 10, 6);
-			eq(headers.ranges[1], 17, 3);
+
+			eq(s, headers.ranges[0], "aa: bb");
+			eq(s, headers.ranges[1], "xyz");
 		}
 	}
 
@@ -357,7 +363,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 	private void checkMatch(Buf buf, int start, int limit, String match, int... positions) {
 		for (int pos : positions) {
-			int p = buf.find(start, limit, match.getBytes(), true);
+			int p = BYTES.find(buf.bytes(), start, limit, match.getBytes(), true);
 			eq(p, pos);
 			start = p + 1;
 		}

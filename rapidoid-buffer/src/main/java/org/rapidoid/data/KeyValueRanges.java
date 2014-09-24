@@ -23,6 +23,7 @@ package org.rapidoid.data;
 import java.util.Map;
 
 import org.rapidoid.buffer.Buf;
+import org.rapidoid.bytes.BYTES;
 import org.rapidoid.util.U;
 
 public class KeyValueRanges {
@@ -55,7 +56,7 @@ public class KeyValueRanges {
 
 	public Range get(Buf buf, byte[] key, boolean caseSensitive) {
 		for (int i = 0; i < count; i++) {
-			if (buf.matches(keys[i], key, caseSensitive)) {
+			if (BYTES.matches(buf.bytes(), keys[i], key, caseSensitive)) {
 				return values[i];
 			}
 		}
@@ -81,9 +82,9 @@ public class KeyValueRanges {
 			}
 
 			sb.append("<");
-			sb.append(keys[i].str(src));
+			sb.append(keys[i].str(src.bytes()));
 			sb.append(":=");
-			sb.append(values[i].str(src));
+			sb.append(values[i].str(src.bytes()));
 			sb.append(">");
 		}
 		sb.append("]");
@@ -113,8 +114,8 @@ public class KeyValueRanges {
 		Map<String, String> map = U.map();
 
 		for (int i = 0; i < count; i++) {
-			String key = keys[i].str(src);
-			String val = values[i].str(src);
+			String key = keys[i].str(src.bytes());
+			String val = values[i].str(src.bytes());
 
 			if (urlDecodeKeys) {
 				key = U.urlDecode(key);
@@ -133,7 +134,7 @@ public class KeyValueRanges {
 		Map<String, byte[]> map = U.map();
 
 		for (int i = 0; i < count; i++) {
-			String key = keys[i].str(src);
+			String key = keys[i].str(src.bytes());
 			byte[] val = values[i].bytes(src);
 
 			if (urlDecodeKeys) {

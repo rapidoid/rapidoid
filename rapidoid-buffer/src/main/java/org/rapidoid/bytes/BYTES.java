@@ -72,7 +72,7 @@ public class BYTES implements Constants {
 						res.value = lines.count;
 					}
 				} else {
-					len = i - 2 - from;
+					len = i - from;
 					if (b1 == end1 && b2 == end2 && len > 0) {
 						res.value = lines.count;
 					}
@@ -91,10 +91,69 @@ public class BYTES implements Constants {
 		return ret;
 	}
 
-	public static Range getByPrefix(Bytes bytes, Ranges lines, byte[] prefix, boolean caseSensitive) {
-		for (int i = 0; i < lines.count; i++) {
-			if (startsWith(bytes, lines.ranges[i], prefix, caseSensitive)) {
-				return lines.ranges[i];
+	public static int parseLines(Bytes bytes, Ranges lines, int start, int limit) {
+		byte b0 = 0, b1 = 0;
+		int ret = -1;
+
+		int i;
+		int from = start;
+		for (i = start; i < limit; i++) {
+			b0 = b1;
+			b1 = bytes.get(i);
+
+			if (b1 == LF) {
+				int len;
+
+				if (b0 == CR) {
+					len = i - from - 1;
+				} else {
+					len = i - from;
+				}
+
+				if (len == 0) {
+					ret = i + 1;
+					break;
+				}
+
+				lines.add(from, len);
+				from = i + 1;
+			}
+		}
+
+		return ret;
+	}
+
+	public static int parseLine(Bytes bytes, Range line, int start, int limit) {
+		byte b0 = 0, b1 = 0;
+		int ret = -1;
+
+		int i;
+		for (i = start; i < limit; i++) {
+			b0 = b1;
+			b1 = bytes.get(i);
+
+			if (b1 == LF) {
+				int len;
+
+				if (b0 == CR) {
+					len = i - start - 1;
+				} else {
+					len = i - start;
+				}
+
+				line.set(start, len);
+				ret = i + 1;
+				break;
+			}
+		}
+
+		return ret;
+	}
+
+	public static Range getByPrefix(Bytes bytes, Ranges ranges, byte[] prefix, boolean caseSensitive) {
+		for (int i = 0; i < ranges.count; i++) {
+			if (startsWith(bytes, ranges.ranges[i], prefix, caseSensitive)) {
+				return ranges.ranges[i];
 			}
 		}
 		return null;
@@ -172,6 +231,50 @@ public class BYTES implements Constants {
 		} else {
 			throw U.notReady(); // FIXME
 		}
+	}
+
+	public static int find(Bytes bytes, int start, int limit, byte[] match, boolean caseSensitive) {
+		return find(bytes, start, limit, match, 0, match.length, caseSensitive);
+	}
+
+	public static int find(Bytes bytes, int start, int limit, byte[] match, int offset, int length,
+			boolean caseSensitive) {
+
+		assert start >= 0;
+		assert limit >= 0;
+		assert offset >= 0;
+		assert length >= 0;
+
+		int result;
+		if (caseSensitive) {
+			result = findSensitive(bytes, start, limit, match, offset, length);
+		} else {
+			result = findNoCase(bytes, start, limit, match, offset, length);
+		}
+
+		return result;
+	}
+
+	private static int findNoCase(Bytes bytes, int start, int limit, byte[] match, int offset, int length) {
+		throw U.notReady();
+	}
+
+	private static int findSensitive(Bytes bytes, int start, int limit, byte[] match, int offset, int length) {
+		if (limit - start < length) {
+			return -1;
+		}
+
+		int pos = start;
+		int last = limit - length;
+
+		while ((pos = scan(bytes, pos, last, match[0])) >= 0) {
+			if (matchSensitive(bytes, pos, match, offset, length)) {
+				return pos;
+			}
+			pos++;
+		}
+
+		return -1;
 	}
 
 	public static boolean matches(Bytes bytes, Range target, byte[] match, boolean caseSensitive) {
@@ -255,6 +358,175 @@ public class BYTES implements Constants {
 
 			return false;
 		}
+	}
+
+	/**
+	 * Scans the buffer until the specified separator is found, and matches the 4-byte prefix of the scanned selection
+	 * against the specified search prefix. Returns the position of the separator, or <code>-1</code> if the limit is
+	 * reached and separator not found. If the prefix is matched, the negative of the position is returned, to mark the
+	 * prefix match. Duplicated code for performance reasons.
+	 * 
+	 * @param range
+	 */
+	public static int scanUntilAndMatchPrefix(Bytes bytes, Range result, byte separator, int fromPos, int toPos,
+			int searchPrefix) {
+
+		byte b0, b1, b2, b3;
+
+		int p = fromPos;
+		if (p <= toPos) {
+			b0 = bytes.get(p);
+			if (b0 == separator) {
+				result.set(fromPos, 0);
+				return p + 1;
+			}
+		} else {
+			result.reset();
+			return NOT_FOUND;
+		}
+
+		p++;
+		if (p <= toPos) {
+			b1 = bytes.get(p);
+			if (b1 == separator) {
+				result.set(fromPos, 1);
+				return p + 1;
+			}
+		} else {
+			result.reset();
+			return NOT_FOUND;
+		}
+
+		p++;
+		if (p <= toPos) {
+			b2 = bytes.get(p);
+			if (b2 == separator) {
+				result.set(fromPos, 2);
+				return p + 1;
+			}
+		} else {
+			result.reset();
+			return NOT_FOUND;
+		}
+
+		p++;
+		if (p <= toPos) {
+			b3 = bytes.get(p);
+			if (b3 == separator) {
+				result.set(fromPos, 3);
+				return p + 1;
+			}
+		} else {
+			result.reset();
+			return NOT_FOUND;
+		}
+
+		int prefix = U.intFrom(b0, b1, b2, b3);
+
+		boolean matchedPrefix = prefix == searchPrefix;
+
+		for (int i = p; i <= toPos; i++) {
+			if (bytes.get(i) == separator) {
+				result.setInterval(fromPos, i);
+				int nextPos = i + 1;
+				return matchedPrefix ? -nextPos : nextPos;
+			}
+		}
+
+		result.reset();
+		return NOT_FOUND;
+	}
+
+	/**
+	 * Scans the buffer until a line separator (CRLF or LF) is found, and matches the 4-byte prefix of the scanned
+	 * selection against the specified search prefix. Returns the position of the separator, or <code>-1</code> if the
+	 * limit is reached and separator not found. If the prefix is matched, the negative of the position is returned, to
+	 * mark the prefix match. Duplicated code for performance reasons.
+	 */
+	public static int scanLnAndMatchPrefix(Bytes bytes, Range result, int fromPos, int toPos, int searchPrefix) {
+
+		byte b0, b1, b2, b3;
+
+		int p = fromPos;
+		if (p <= toPos) {
+			b0 = bytes.get(p);
+			if (b0 == LF) {
+				result.set(fromPos, 0);
+				return p + 1;
+			}
+		} else {
+			result.reset();
+			return NOT_FOUND;
+		}
+
+		p++;
+		if (p <= toPos) {
+			b1 = bytes.get(p);
+			if (b1 == LF) {
+				if (b0 == CR) {
+					result.set(fromPos, 0);
+				} else {
+					result.set(fromPos, 1);
+				}
+				return p + 1;
+			}
+		} else {
+			result.reset();
+			return NOT_FOUND;
+		}
+
+		p++;
+		if (p <= toPos) {
+			b2 = bytes.get(p);
+			if (b2 == LF) {
+				if (b1 == CR) {
+					result.set(fromPos, 1);
+				} else {
+					result.set(fromPos, 2);
+				}
+				return p + 1;
+			}
+		} else {
+			result.reset();
+			return NOT_FOUND;
+		}
+
+		p++;
+		if (p <= toPos) {
+			b3 = bytes.get(p);
+			if (b3 == LF) {
+				if (b2 == CR) {
+					result.set(fromPos, 2);
+				} else {
+					result.set(fromPos, 3);
+				}
+				return p + 1;
+			}
+		} else {
+			result.reset();
+			return NOT_FOUND;
+		}
+
+		int prefix = U.intFrom(b0, b1, b2, b3);
+
+		boolean matchedPrefix = prefix == searchPrefix;
+
+		for (int i = p; i <= toPos; i++) {
+			if (bytes.get(i) == LF) {
+
+				if (bytes.get(i - 1) == CR) {
+					result.setInterval(fromPos, i - 1);
+				} else {
+					result.setInterval(fromPos, i);
+				}
+
+				int nextPos = i + 1;
+				return matchedPrefix ? -nextPos : nextPos;
+			}
+		}
+
+		result.reset();
+		return NOT_FOUND;
 	}
 
 }

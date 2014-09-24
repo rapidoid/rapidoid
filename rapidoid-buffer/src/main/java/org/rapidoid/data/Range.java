@@ -21,6 +21,8 @@ package org.rapidoid.data;
  */
 
 import org.rapidoid.buffer.Buf;
+import org.rapidoid.bytes.BYTES;
+import org.rapidoid.bytes.Bytes;
 import org.rapidoid.util.U;
 
 public class Range {
@@ -125,8 +127,12 @@ public class Range {
 		return new Range(from, to - from);
 	}
 
-	public String str(Buf src) {
-		return src.get(this);
+	public String str(Buf buf) {
+		return BYTES.get(buf.bytes(), this);
+	}
+
+	public String str(Bytes bytes) {
+		return BYTES.get(bytes, this);
 	}
 
 	public void assign(Range range) {

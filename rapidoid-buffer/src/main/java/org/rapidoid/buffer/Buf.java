@@ -6,9 +6,9 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
+import org.rapidoid.bytes.Bytes;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
-import org.rapidoid.wrap.Int;
 
 /*
  * #%L
@@ -41,22 +41,6 @@ public interface Buf {
 	void put(int position, byte[] bytes, int offset, int length);
 
 	int size();
-
-	boolean match(int start, byte[] match, int offset, int length, boolean caseSensitive);
-
-	int find(int start, int limit, byte[] match, int offset, int length, boolean caseSensitive);
-
-	int find(int start, int limit, byte match, boolean caseSensitive);
-
-	int find(int start, int limit, byte[] match, boolean caseSensitive);
-
-	boolean matches(Range target, byte[] match, boolean caseSensitive);
-
-	boolean startsWith(Range target, byte[] match, boolean caseSensitive);
-
-	boolean containsAt(Range target, int offset, byte[] match, boolean caseSensitive);
-
-	void trim(Range target);
 
 	void append(ByteBuffer wrap);
 
@@ -100,18 +84,6 @@ public interface Buf {
 
 	void get(Range range, byte[] dest, int offset);
 
-	void scanTo(byte sep, Range range, boolean failOnLimit);
-
-	void scanTo(byte[] sep, Range range, boolean failOnLimit);
-
-	int scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit);
-
-	int scanTo(byte[] sep1, byte[] sep2, Range range, boolean failOnLimit);
-
-	void scanLn(Range range, boolean failOnLimit);
-
-	void scanN(int len, Range range);
-
 	byte next();
 
 	void back(int count);
@@ -121,10 +93,6 @@ public interface Buf {
 	boolean hasRemaining();
 
 	int remaining();
-
-	String readLn();
-
-	String readN(int count);
 
 	int position();
 
@@ -138,13 +106,11 @@ public interface Buf {
 
 	ByteBuffer exposed();
 
-	void scanUntil(byte value, Range range, boolean failOnLimit);
+	void scanUntil(byte value, Range range);
 
-	void scanWhile(byte value, Range range, boolean failOnLimit);
+	void scanWhile(byte value, Range range);
 
 	void skip(int count);
-
-	void scanLnLn(Ranges ranges, int search, Int result);
 
 	ByteBuffer bufAt(int index);
 
@@ -154,12 +120,24 @@ public interface Buf {
 
 	int bufferOffsetOf(int position);
 
-	IncompleteReadException incomplete();
-
-	boolean split(Range target, byte sep, Range before, Range after, boolean trimParts);
-
 	OutputStream asOutputStream();
 
 	String asText();
+
+	Bytes bytes();
+
+	void scanLn(Range range);
+
+	void scanLnLn(Ranges ranges);
+
+	void scanN(int count, Range range);
+
+	String readLn();
+
+	String readN(int count);
+
+	void scanTo(byte sep, Range range, boolean failOnLimit);
+
+	int scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit);
 
 }

@@ -24,6 +24,7 @@ import java.io.File;
 import java.nio.ByteBuffer;
 
 import org.rapidoid.buffer.Buf;
+import org.rapidoid.bytes.BYTES;
 import org.rapidoid.data.Range;
 import org.rapidoid.util.SimpleHashTable;
 import org.rapidoid.util.SimpleList;
@@ -114,7 +115,8 @@ public class HttpRouter implements Router {
 			for (int i = 0; i < candidates.size(); i++) {
 				Route route = candidates.get(i);
 
-				if (buf.matches(action, route.action, true) && buf.startsWith(path, route.path, true)) {
+				if (BYTES.matches(buf.bytes(), action, route.action, true)
+						&& BYTES.startsWith(buf.bytes(), path, route.path, true)) {
 					int pos = path.start + route.path.length;
 					if (path.limit() == pos || buf.get(pos) == '/') {
 						x.setSubpath(pos, path.limit());
