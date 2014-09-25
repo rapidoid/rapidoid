@@ -81,7 +81,7 @@ public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvide
 
 	public W write(File file) {
 		long size = file.length();
-		U.ensure(size < Integer.MAX_VALUE);
+		U.must(size < Integer.MAX_VALUE);
 		conn.write(file);
 		return wrote((int) size);
 	}

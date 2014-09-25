@@ -122,7 +122,7 @@ public class Range {
 	}
 
 	public static Range fromTo(int from, int to) {
-		U.ensure(from <= to, "Invalid range!");
+		U.must(from <= to, "Invalid range!");
 
 		return new Range(from, to - from);
 	}

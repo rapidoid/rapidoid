@@ -45,7 +45,7 @@ public class POJODispatcher {
 	public POJODispatcher(Object... controllers) {
 		for (Object controller : controllers) {
 			String name = controller.getClass().getSimpleName();
-			U.ensure(name.endsWith(Pojo.SUFFIX), "The service class doesn't have a '%s' suffix: %s", Pojo.SUFFIX, name);
+			U.must(name.endsWith(Pojo.SUFFIX), "The service class doesn't have a '%s' suffix: %s", Pojo.SUFFIX, name);
 			U.info("Initializing service: " + name);
 			name = name.substring(0, name.length() - Pojo.SUFFIX.length()).toLowerCase();
 			Controller ctrl = new Controller(controller);

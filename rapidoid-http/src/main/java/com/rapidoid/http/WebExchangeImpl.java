@@ -355,7 +355,7 @@ public class WebExchangeImpl extends DefaultExchange<WebExchange, WebExchangeBod
 
 	@Override
 	public synchronized WebExchange setContentType(ContentType contentType) {
-		U.ensure(!hasContentType);
+		U.must(!hasContentType);
 		hasContentType = true;
 
 		addHeader(HttpHeader.CONTENT_TYPE.getBytes(), contentType.getBytes());

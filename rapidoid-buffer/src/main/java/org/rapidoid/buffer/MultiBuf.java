@@ -401,7 +401,7 @@ public class MultiBuf implements Buf, Constants {
 		assert invariant();
 
 		int wrote = writeTo(TO_CHANNEL, 0, _size(), null, channel, null, 0);
-		U.ensure(wrote <= _size(), "Incorrect write to channel!");
+		assert U.must(wrote <= _size(), "Incorrect write to channel!");
 
 		assert invariant();
 		return wrote;
@@ -702,7 +702,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	private boolean validPosition(int position) {
-		U.ensure(position >= 0 && position < _size(), "Invalid position: %s", position);
+		assert U.must(position >= 0 && position < _size(), "Invalid position: %s", position);
 		return true;
 	}
 
@@ -941,8 +941,8 @@ public class MultiBuf implements Buf, Constants {
 		int fromAddr = fromPos & addrMask;
 		int toAddr = toPos & addrMask;
 
-		U.ensure(fromInd >= 0, "bad start: %s", start);
-		U.ensure(toInd >= 0, "bad end: %s", last);
+		assert U.must(fromInd >= 0, "bad start: %s", start);
+		assert U.must(toInd >= 0, "bad end: %s", last);
 
 		ByteBuffer src = bufs[fromInd];
 
@@ -1018,8 +1018,8 @@ public class MultiBuf implements Buf, Constants {
 		int fromAddr = fromPos & addrMask;
 		int toAddr = toPos & addrMask;
 
-		U.ensure(fromInd >= 0, "bad start: %s", start);
-		U.ensure(toInd >= 0, "bad end: %s", last);
+		assert U.must(fromInd >= 0, "bad start: %s", start);
+		assert U.must(toInd >= 0, "bad end: %s", last);
 
 		ByteBuffer src = bufs[fromInd];
 

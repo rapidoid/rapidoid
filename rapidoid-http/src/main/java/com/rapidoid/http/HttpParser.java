@@ -134,7 +134,7 @@ public class HttpParser implements Constants {
 			clenValue.setInterval(clen.start + CONTENT_LENGTH.length, clen.limit());
 			BYTES.trim(buf.bytes(), clenValue);
 			long len = buf.getN(clenValue);
-			U.ensure(len >= 0 && len <= Integer.MAX_VALUE, "Invalid body size!");
+			U.must(len >= 0 && len <= Integer.MAX_VALUE, "Invalid body size!");
 			buf.scanN((int) len, body);
 			U.debug("Request body complete", "range", body);
 		}
@@ -193,7 +193,7 @@ public class HttpParser implements Constants {
 			assert !hdr.isEmpty();
 
 			boolean split = BYTES.split(buf.bytes(), hdr, COL, key, val, true);
-			U.ensure(split, "Invalid HTTP header!");
+			U.must(split, "Invalid HTTP header!");
 
 			if (cookies != null && BYTES.matches(buf.bytes(), key, COOKIE, false)) {
 				headersKV.count--; // don't include cookies in headers

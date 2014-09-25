@@ -73,7 +73,7 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 		}
 
 		long wrote = xch.output().size() - xch.bodyPos;
-		U.ensure(wrote <= Integer.MAX_VALUE, "Response too big!");
+		U.must(wrote <= Integer.MAX_VALUE, "Response too big!");
 
 		int pos = startingPos + resp(xch).contentLengthPos + 10;
 

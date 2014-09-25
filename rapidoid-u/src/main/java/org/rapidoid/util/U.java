@@ -147,7 +147,7 @@ public class U implements Constants {
 	private static final Date CURR_DATE = new Date();
 	private static byte[] CURR_DATE_BYTES;
 	private static long updateCurrDateAfter = 0;
-	
+
 	static {
 		DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
 	}
@@ -1015,7 +1015,7 @@ public class U implements Constants {
 			end = arr.length - 1;
 		}
 
-		ensure(start <= end, "Invalid range: expected form <= to!");
+		must(start <= end, "Invalid range: expected form <= to!");
 
 		int size = end - start + 1;
 
@@ -1404,34 +1404,39 @@ public class U implements Constants {
 		return (T) EXCEPTIONS.get(clazz).get(U.or(msg, ""));
 	}
 
-	public static void ensure(boolean expectedCondition) {
+	public static boolean must(boolean expectedCondition) {
 		if (!expectedCondition) {
 			throw rte("Expectation failed!");
 		}
+		return true;
 	}
 
-	public static void ensure(boolean expectedCondition, String message) {
+	public static boolean must(boolean expectedCondition, String message) {
 		if (!expectedCondition) {
 			throw rte(message);
 		}
+		return true;
 	}
 
-	public static void ensure(boolean expectedCondition, String message, long arg) {
+	public static boolean must(boolean expectedCondition, String message, long arg) {
 		if (!expectedCondition) {
 			throw rte(message, arg);
 		}
+		return true;
 	}
 
-	public static void ensure(boolean expectedCondition, String message, Object arg) {
+	public static boolean must(boolean expectedCondition, String message, Object arg) {
 		if (!expectedCondition) {
 			throw rte(message, arg);
 		}
+		return true;
 	}
 
-	public static void ensure(boolean expectedCondition, String message, Object arg1, Object arg2) {
+	public static boolean must(boolean expectedCondition, String message, Object arg1, Object arg2) {
 		if (!expectedCondition) {
 			throw rte(message, arg1, arg2);
 		}
+		return true;
 	}
 
 	public static void notNull(Object... items) {
@@ -2277,19 +2282,19 @@ public class U implements Constants {
 
 	public static short bytesToShort(String s) {
 		ByteBuffer buf = buf(s);
-		ensure(buf.limit() == 2);
+		must(buf.limit() == 2);
 		return buf.getShort();
 	}
 
 	public static int bytesToInt(String s) {
 		ByteBuffer buf = buf(s);
-		ensure(buf.limit() == 4);
+		must(buf.limit() == 4);
 		return buf.getInt();
 	}
 
 	public static long bytesToLong(String s) {
 		ByteBuffer buf = buf(s);
-		ensure(buf.limit() == 8);
+		must(buf.limit() == 8);
 		return buf.getLong();
 	}
 
