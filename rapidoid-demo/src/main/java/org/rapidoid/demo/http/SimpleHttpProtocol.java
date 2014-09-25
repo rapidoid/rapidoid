@@ -138,8 +138,8 @@ public class SimpleHttpProtocol implements Protocol {
 		Buf output = ctx.output();
 
 		ctx.write(CONTENT_TYPE_JSON);
-
 		ctx.write(CONTENT_LENGTH);
+
 		int posConLen = output.size() - 10;
 		ctx.write(CR_LF);
 		ctx.write(CR_LF);
@@ -149,7 +149,7 @@ public class SimpleHttpProtocol implements Protocol {
 		ctx.writeJSON(new Msg("Hello, World!"));
 
 		int posAfter = output.size();
-		output.putNumAsText(posConLen, posAfter - posBefore + 10, false);
+		output.putNumAsText(posConLen, posAfter - posBefore, false);
 	}
 
 }
