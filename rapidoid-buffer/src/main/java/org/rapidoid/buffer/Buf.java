@@ -9,6 +9,7 @@ import java.nio.channels.WritableByteChannel;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
+import org.rapidoid.wrap.Int;
 
 /*
  * #%L
@@ -141,5 +142,7 @@ public interface Buf {
 	void scanTo(byte sep, Range range, boolean failOnLimit);
 
 	int scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit);
+
+	void scanLnLn(Ranges ranges, Int result, byte end1, byte end2);
 
 }

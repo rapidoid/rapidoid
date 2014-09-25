@@ -34,6 +34,7 @@ import org.rapidoid.data.Ranges;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
+import org.rapidoid.wrap.Int;
 
 public class MultiBuf implements Buf, Constants {
 
@@ -76,6 +77,8 @@ public class MultiBuf implements Buf, Constants {
 	private final ByteBufferBytes singleBytes = new ByteBufferBytes();
 
 	private final Bytes multiBytes = new BufBytes(this);
+
+	private Bytes _bytes = multiBytes;
 
 	public MultiBuf(Pool<ByteBuffer> bufPool, int factor, String name) {
 		this.bufPool = bufPool;
@@ -881,6 +884,13 @@ public class MultiBuf implements Buf, Constants {
 
 	private void sizeChanged() {
 		_limit = _size();
+
+		if (isSingle()) {
+			singleBytes.setBuf(bufs[0]);
+			_bytes = singleBytes;
+		} else {
+			_bytes = multiBytes;
+		}
 	}
 
 	@Override
@@ -1145,12 +1155,7 @@ public class MultiBuf implements Buf, Constants {
 	@Override
 	public Bytes bytes() {
 		assert invariant();
-		if (isSingle()) {
-			singleBytes.setBuf(bufs[0]);
-			return singleBytes;
-		} else {
-			return multiBytes;
-		}
+		return _bytes;
 	}
 
 	@Override
@@ -1277,6 +1282,17 @@ public class MultiBuf implements Buf, Constants {
 	private void consumeAndSkip(int toPos, Range range, int skip) {
 		range.setInterval(_position, toPos);
 		_position = toPos + skip;
+	}
+
+	@Override
+	public void scanLnLn(Ranges ranges, Int result, byte end1, byte end2) {
+		int nextPos = BYTES.parseLines(bytes(), ranges, result, _position, _limit, end1, end2);
+
+		if (nextPos < 0) {
+			throw Buf.INCOMPLETE_READ;
+		}
+
+		_position = nextPos;
 	}
 
 }
