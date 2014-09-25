@@ -45,19 +45,21 @@ public class HttpParserPerfTest {
 
 		final WebExchangeImpl req = new WebExchangeImpl();
 
-		U.benchmark("parse", 3000000, new Runnable() {
-			int n;
+		for (int i = 0; i < 10; i++) {
+			U.benchmark("parse", 3000000, new Runnable() {
+				int n;
 
-			@Override
-			public void run() {
-				req.reset();
-				Buf buf = reqs[n % 4];
-				buf.position(0);
-				parser.parse(buf, req.isGet, req.isKeepAlive, req.body, req.verb, req.uri, req.path, req.query,
-						req.protocol, req.headers, helper);
-				n++;
-			}
-		});
+				@Override
+				public void run() {
+					req.reset();
+					Buf buf = reqs[n % 4];
+					buf.position(0);
+					parser.parse(buf, req.isGet, req.isKeepAlive, req.body, req.verb, req.uri, req.path, req.query,
+							req.protocol, req.headers, helper);
+					n++;
+				}
+			});
+		}
 
 		U.print(BUFS.instances() + " buffer instances.");
 	}
