@@ -22,6 +22,7 @@ package com.rapidoid.http;
 
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BYTES;
+import org.rapidoid.bytes.Bytes;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
@@ -32,8 +33,6 @@ import org.rapidoid.wrap.Bool;
 import org.rapidoid.wrap.Int;
 
 public class HttpParser implements Constants {
-
-	private static final int PREFIX_CONN = U.bytesToInt("Conn");
 
 	private static final byte[] CONNECTION = "Connection:".getBytes();
 
@@ -89,45 +88,51 @@ public class HttpParser implements Constants {
 		buf.scanUntil(SPACE, uri);
 		buf.scanLn(protocol);
 
+		Bytes bytes = buf.bytes();
+
 		Int result = helper.integers[0];
-		buf.scanLnLn(headers.reset());
-		result.value = -1;
+		int nextPos = BYTES.parseLines(bytes, headers.reset(), result, buf.position(), buf.limit(), (byte) 'v',
+				(byte) 'e');
 
-		int connPos = result.value;
+		if (nextPos < 0) {
+			throw Buf.INCOMPLETE_READ;
+		}
 
-		isKeepAlive.value = isKeepAlive(buf, headers, connPos);
+		buf.position(nextPos);
 
-		BYTES.split(buf.bytes(), uri, ASTERISK, path, query, false);
+		int keepAlivePos = result.value;
+		isKeepAlive.value = isKeepAlive(bytes, headers, keepAlivePos);
+
+		BYTES.split(bytes, uri, ASTERISK, path, query, false);
 
 		if (!getReq) {
 			parseBody(buf, body, headers, helper);
 		}
 	}
 
-	private boolean isKeepAlive(Buf buf, Ranges headers, int connPos) {
-		if (connPos >= 0) {
-			Range connHdr = headers.ranges[connPos];
-
-			if (!BYTES.startsWith(buf.bytes(), connHdr, CONNECTION, true)) {
-				connHdr = headers.getByPrefix(buf, CONNECTION, false);
-			}
-
-			return getKeepAliveValue(buf, connHdr);
+	private boolean isKeepAlive(Bytes bytes, Ranges headers, int keepAlivePos) {
+		if (keepAlivePos >= 0 && BYTES.startsWith(bytes, headers.ranges[keepAlivePos], CONNECTION, false)) {
+			return true;
+		} else {
+			Range connHdr = headers.getByPrefix(bytes, CONNECTION, false);
+			return connHdr != null ? getKeepAliveValue(bytes, connHdr) : true;
 		}
-
-		return true;
 	}
 
-	private boolean getKeepAliveValue(Buf buf, Range connHdr) {
-		if (BYTES.containsAt(buf.bytes(), connHdr, CONNECTION.length + 1, KEEP_ALIVE, true)) {
+	private boolean getKeepAliveValue(Bytes bytes, Range connHdr) {
+
+		assert bytes != null;
+		assert connHdr != null;
+
+		if (BYTES.containsAt(bytes, connHdr, CONNECTION.length + 1, KEEP_ALIVE, true)) {
 			return true;
 		}
 
-		if (BYTES.containsAt(buf.bytes(), connHdr, CONNECTION.length + 1, CLOSE, false)) {
+		if (BYTES.containsAt(bytes, connHdr, CONNECTION.length + 1, CLOSE, false)) {
 			return false;
 		}
 
-		if (BYTES.containsAt(buf.bytes(), connHdr, CONNECTION.length, CLOSE, false)) {
+		if (BYTES.containsAt(bytes, connHdr, CONNECTION.length, CLOSE, false)) {
 			return false;
 		}
 
@@ -135,7 +140,7 @@ public class HttpParser implements Constants {
 	}
 
 	private void parseBody(Buf buf, Range body, Ranges headers, RapidoidHelper helper) {
-		Range clen = headers.getByPrefix(buf, CONTENT_LENGTH, false);
+		Range clen = headers.getByPrefix(buf.bytes(), CONTENT_LENGTH, false);
 
 		if (clen != null) {
 			Range clenValue = helper.ranges5.ranges[helper.ranges5.ranges.length - 1];
@@ -197,6 +202,8 @@ public class HttpParser implements Constants {
 			int ind = headersKV.add();
 			Range key = headersKV.keys[ind];
 			Range val = headersKV.values[ind];
+
+			assert !hdr.isEmpty();
 
 			boolean split = BYTES.split(buf.bytes(), hdr, COL, key, val, true);
 			U.ensure(split, "Invalid HTTP header!");

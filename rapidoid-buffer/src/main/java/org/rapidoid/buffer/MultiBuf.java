@@ -47,8 +47,6 @@ public class MultiBuf implements Buf, Constants {
 
 	private static final int TO_BUFFER = 3;
 
-	private static final IncompleteReadException ERR = new IncompleteReadException();
-
 	private final Pool<ByteBuffer> bufPool;
 
 	private final int factor;
@@ -130,7 +128,7 @@ public class MultiBuf implements Buf, Constants {
 		boolean hasEnough = least <= _size() && least <= _limit;
 
 		if (!hasEnough) {
-			throw incomplete();
+			throw INCOMPLETE_READ;
 		}
 	}
 
@@ -926,10 +924,6 @@ public class MultiBuf implements Buf, Constants {
 		return first;
 	}
 
-	private static IncompleteReadException incomplete() {
-		return ERR;
-	}
-
 	@Override
 	public void scanUntil(byte value, Range range) {
 		assert invariant();
@@ -1004,7 +998,7 @@ public class MultiBuf implements Buf, Constants {
 		position(limit);
 
 		assert invariant();
-		throw incomplete();
+		throw INCOMPLETE_READ;
 	}
 
 	@Override
@@ -1081,7 +1075,7 @@ public class MultiBuf implements Buf, Constants {
 		position(limit);
 
 		assert invariant();
-		throw incomplete();
+		throw INCOMPLETE_READ;
 	}
 
 	@Override
@@ -1166,7 +1160,7 @@ public class MultiBuf implements Buf, Constants {
 
 		if (pos < 0) {
 			assert invariant();
-			throw incomplete();
+			throw INCOMPLETE_READ;
 		}
 
 		_position = pos;
@@ -1181,7 +1175,7 @@ public class MultiBuf implements Buf, Constants {
 
 		if (pos < 0) {
 			assert invariant();
-			throw incomplete();
+			throw INCOMPLETE_READ;
 		}
 
 		_position = pos;
@@ -1231,7 +1225,7 @@ public class MultiBuf implements Buf, Constants {
 		} else {
 			if (failOnLimit) {
 				assert invariant();
-				throw incomplete();
+				throw INCOMPLETE_READ;
 			} else {
 				consumeAndSkip(_limit, range, 0);
 			}
@@ -1271,7 +1265,7 @@ public class MultiBuf implements Buf, Constants {
 		} else {
 			if (failOnLimit) {
 				assert invariant();
-				throw incomplete();
+				throw INCOMPLETE_READ;
 			} else {
 				consumeAndSkip(_limit, range, 0);
 				assert invariant();

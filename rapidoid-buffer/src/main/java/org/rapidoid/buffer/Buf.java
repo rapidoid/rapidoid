@@ -32,6 +32,8 @@ import org.rapidoid.data.Ranges;
 
 public interface Buf {
 
+	IncompleteReadException INCOMPLETE_READ = new IncompleteReadException();
+
 	byte get(int position);
 
 	void put(int position, byte value);

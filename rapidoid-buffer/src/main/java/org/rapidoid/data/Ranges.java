@@ -49,8 +49,8 @@ public class Ranges {
 		return this;
 	}
 
-	public Range getByPrefix(Buf buf, byte[] prefix, boolean caseSensitive) {
-		return BYTES.getByPrefix(buf.bytes(), this, prefix, caseSensitive);
+	public Range getByPrefix(Bytes bytes, byte[] prefix, boolean caseSensitive) {
+		return BYTES.getByPrefix(bytes, this, prefix, caseSensitive);
 	}
 
 	@Override
