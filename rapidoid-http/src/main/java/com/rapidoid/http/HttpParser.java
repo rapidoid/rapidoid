@@ -68,25 +68,41 @@ public class HttpParser implements Constants {
 
 	private static final byte[] BINARY = "binary".getBytes();
 
+	private static final byte[] GET = "GET".getBytes();
+
 	public void parse(Buf buf, Bool isGet, Bool isKeepAlive, Range body, Range verb, Range uri, Range path,
 			Range query, Range protocol, Ranges headers, RapidoidHelper helper) {
 
-		int pos = buf.position();
+		Bytes bytes = buf.bytes();
 
-		boolean getReq = buf.next() == 'G' && buf.next() == 'E' && buf.next() == 'T' && buf.next() == ' ';
-		isGet.value = getReq;
-
-		if (getReq) {
-			verb.set(0, 3);
-		} else {
-			buf.position(pos);
-			buf.scanUntil(SPACE, verb);
-		}
-
+		buf.scanUntil(SPACE, verb);
 		buf.scanUntil(SPACE, uri);
 		buf.scanLn(protocol);
 
+		Int result = helper.integers[0];
+		buf.scanLnLn(headers.reset(), result, (byte) 's', (byte) 'e');
+
+		int possibleClosePos = result.value;
+		isKeepAlive.value = possibleClosePos < 0 ? true : isKeepAlive(bytes, headers, helper);
+
+		BYTES.split(bytes, uri, ASTERISK, path, query, false);
+
+		if (BYTES.matches(bytes, verb, GET, true)) {
+			isGet.value = true;
+		} else {
+			isGet.value = false;
+			parseBody(buf, body, headers, helper);
+		}
+	}
+
+	public void parse2(Buf buf, Bool isGet, Bool isKeepAlive, Range body, Range verb, Range uri, Range path,
+			Range query, Range protocol, Ranges headers, RapidoidHelper helper) {
+
 		Bytes bytes = buf.bytes();
+
+		buf.scanUntil(SPACE, verb);
+		buf.scanUntil(SPACE, uri);
+		buf.scanLn(protocol);
 
 		Int result = helper.integers[0];
 		int nextPos = BYTES.parseLines(bytes, headers.reset(), result, buf.position(), buf.limit(), (byte) 's',
@@ -103,7 +119,10 @@ public class HttpParser implements Constants {
 
 		BYTES.split(bytes, uri, ASTERISK, path, query, false);
 
-		if (!getReq) {
+		if (BYTES.matches(bytes, verb, GET, true)) {
+			isGet.value = true;
+		} else {
+			isGet.value = false;
 			parseBody(buf, body, headers, helper);
 		}
 	}
