@@ -36,8 +36,6 @@ public class HttpParser implements Constants {
 
 	private static final byte[] CONNECTION = "Connection:".getBytes();
 
-	private static final byte[] CLOSE = "close".getBytes();
-
 	private static final byte[] KEEP_ALIVE = "keep-alive".getBytes();
 
 	private static final byte[] CONTENT_LENGTH = "Content-Length:".getBytes();
@@ -91,7 +89,7 @@ public class HttpParser implements Constants {
 		Bytes bytes = buf.bytes();
 
 		Int result = helper.integers[0];
-		int nextPos = BYTES.parseLines(bytes, headers.reset(), result, buf.position(), buf.limit(), (byte) 'v',
+		int nextPos = BYTES.parseLines(bytes, headers.reset(), result, buf.position(), buf.limit(), (byte) 's',
 				(byte) 'e');
 
 		if (nextPos < 0) {
@@ -100,8 +98,8 @@ public class HttpParser implements Constants {
 
 		buf.position(nextPos);
 
-		int keepAlivePos = result.value;
-		isKeepAlive.value = isKeepAlive(bytes, headers, keepAlivePos);
+		int possibleClosePos = result.value;
+		isKeepAlive.value = possibleClosePos < 0 ? true : isKeepAlive(bytes, headers, helper);
 
 		BYTES.split(bytes, uri, ASTERISK, path, query, false);
 
@@ -110,33 +108,22 @@ public class HttpParser implements Constants {
 		}
 	}
 
-	private boolean isKeepAlive(Bytes bytes, Ranges headers, int keepAlivePos) {
-		if (keepAlivePos >= 0 && BYTES.startsWith(bytes, headers.ranges[keepAlivePos], CONNECTION, false)) {
-			return true;
-		} else {
-			Range connHdr = headers.getByPrefix(bytes, CONNECTION, false);
-			return connHdr != null ? getKeepAliveValue(bytes, connHdr) : true;
-		}
+	private boolean isKeepAlive(Bytes bytes, Ranges headers, RapidoidHelper helper) {
+		Range connHdr = headers.getByPrefix(bytes, CONNECTION, false);
+		return connHdr != null ? getKeepAliveValue(bytes, connHdr, helper) : true;
 	}
 
-	private boolean getKeepAliveValue(Bytes bytes, Range connHdr) {
+	private boolean getKeepAliveValue(Bytes bytes, Range connHdr, RapidoidHelper helper) {
 
 		assert bytes != null;
 		assert connHdr != null;
 
-		if (BYTES.containsAt(bytes, connHdr, CONNECTION.length + 1, KEEP_ALIVE, true)) {
-			return true;
-		}
+		Range connVal = helper.ranges5.ranges[3];
 
-		if (BYTES.containsAt(bytes, connHdr, CONNECTION.length + 1, CLOSE, false)) {
-			return false;
-		}
+		connVal.setInterval(connHdr.start + CONNECTION.length, connHdr.limit());
+		BYTES.trim(bytes, connVal);
 
-		if (BYTES.containsAt(bytes, connHdr, CONNECTION.length, CLOSE, false)) {
-			return false;
-		}
-
-		return true;
+		return BYTES.matches(bytes, connVal, KEEP_ALIVE, false);
 	}
 
 	private void parseBody(Buf buf, Range body, Ranges headers, RapidoidHelper helper) {
