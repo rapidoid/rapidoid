@@ -176,7 +176,7 @@ public class RapidoidWorker extends AbstractEventLoop {
 			protocol.process(conn);
 			return true;
 		} catch (IncompleteReadException e) {
-			// input not ready, so rollback
+			// input not complete, so rollback
 			conn.input().position(pos);
 			conn.input().limit(limit);
 			// FIXME rollback output position

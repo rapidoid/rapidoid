@@ -70,8 +70,8 @@ public class RapidoidConnection implements Resetable, Channel {
 
 	public RapidoidConnection(RapidoidWorker worker, BufGroup bufs) {
 		this.worker = worker;
-		this.input = bufs.newBuf("input");
-		this.output = bufs.newBuf("output");
+		this.input = bufs.newBuf("input#" + connId());
+		this.output = bufs.newBuf("output#" + connId());
 		reset();
 	}
 
