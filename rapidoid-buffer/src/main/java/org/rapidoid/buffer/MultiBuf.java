@@ -80,12 +80,16 @@ public class MultiBuf implements Buf, Constants {
 
 	private Bytes _bytes = multiBytes;
 
+	private int _size;
+
 	public MultiBuf(Pool<ByteBuffer> bufPool, int factor, String name) {
 		this.bufPool = bufPool;
 		this.name = name;
 		this.singleCap = (int) Math.pow(2, factor);
 		this.factor = factor;
 		this.addrMask = addrMask();
+
+		assert invariant();
 	}
 
 	private int addrMask() {
@@ -156,10 +160,9 @@ public class MultiBuf implements Buf, Constants {
 	public int size() {
 		assert invariant();
 
-		int result = _size();
+		assert _size == _size();
 
-		assert invariant();
-		return result;
+		return _size;
 	}
 
 	private int _size() {
@@ -263,6 +266,8 @@ public class MultiBuf implements Buf, Constants {
 	public void append(byte[] src, int offset, int length) {
 		assert invariant();
 
+		int sizeBefore = _size();
+
 		if (length > 0) {
 			ByteBuffer buf = writableBuf();
 
@@ -277,6 +282,8 @@ public class MultiBuf implements Buf, Constants {
 		}
 
 		sizeChanged();
+
+		assert _size() - sizeBefore == length;
 
 		assert invariant();
 	}
@@ -546,10 +553,11 @@ public class MultiBuf implements Buf, Constants {
 			throw e;
 		}
 
+		// return true;
 	}
 
 	private void dumpBuffers() {
-		U.print(">>" + bufN + " BUFFERS:");
+		U.print(">> BUFFER " + name + " HAS " + bufN + " PARTS:");
 
 		for (int i = 0; i < bufN - 1; i++) {
 			ByteBuffer buf = bufs[i];
@@ -663,6 +671,7 @@ public class MultiBuf implements Buf, Constants {
 
 		if (bufN == 1) {
 			int newPos = position + shrinkN;
+			assert newPos <= singleCap;
 			first().position(newPos);
 			if (newPos == 0) {
 				removeLastBuf();
@@ -690,6 +699,7 @@ public class MultiBuf implements Buf, Constants {
 			}
 		}
 
+		removeLastBufferIfEmpty();
 		sizeChanged();
 
 		assert invariant();
@@ -711,7 +721,7 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public void clear() {
-		assert invariant();
+		// don't assert invariant() here, invalid state is allowed before clear/reset
 
 		for (int i = 0; i < bufN; i++) {
 			bufs[i].clear();
@@ -883,9 +893,10 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	private void sizeChanged() {
+		_size = _size();
 		_limit = _size();
 
-		if (isSingle()) {
+		if (bufN == 1) {
 			singleBytes.setBuf(bufs[0]);
 			_bytes = singleBytes;
 		} else {
@@ -937,6 +948,8 @@ public class MultiBuf implements Buf, Constants {
 	@Override
 	public void scanUntil(byte value, Range range) {
 		assert invariant();
+
+		requireRemaining(1);
 
 		int start = position();
 		int limit = limit();
@@ -1015,6 +1028,8 @@ public class MultiBuf implements Buf, Constants {
 	public void scanWhile(byte value, Range range) {
 		assert invariant();
 
+		requireRemaining(1);
+
 		int start = position();
 		int limit = limit();
 		int last = limit - 1;
@@ -1088,10 +1103,17 @@ public class MultiBuf implements Buf, Constants {
 		throw INCOMPLETE_READ;
 	}
 
+	private void requireRemaining(int n) {
+		if (remaining() < n) {
+			throw Buf.INCOMPLETE_READ;
+		}
+	}
+
 	@Override
 	public void skip(int count) {
 		assert invariant();
 
+		requireRemaining(count);
 		_position += count;
 
 		assert invariant();
@@ -1136,6 +1158,8 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public OutputStream asOutputStream() {
+		assert invariant();
+
 		if (outputStream == null) {
 			outputStream = new OutputStream() {
 				@Override
@@ -1144,6 +1168,8 @@ public class MultiBuf implements Buf, Constants {
 				}
 			};
 		}
+
+		assert invariant();
 		return outputStream;
 	}
 
@@ -1215,6 +1241,7 @@ public class MultiBuf implements Buf, Constants {
 
 		scanN(count, HELPER_RANGE);
 		String result = get(HELPER_RANGE);
+
 		assert invariant();
 		return result;
 	}
@@ -1286,6 +1313,8 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public void scanLnLn(Ranges ranges, Int result, byte end1, byte end2) {
+		assert invariant();
+
 		int nextPos = BYTES.parseLines(bytes(), ranges, result, _position, _limit, end1, end2);
 
 		if (nextPos < 0) {
@@ -1293,6 +1322,8 @@ public class MultiBuf implements Buf, Constants {
 		}
 
 		_position = nextPos;
+
+		assert invariant();
 	}
 
 }
