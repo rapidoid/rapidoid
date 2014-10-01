@@ -20,7 +20,6 @@ package com.rapidoid.http;
  * #L%
  */
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -69,14 +68,14 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 		Web.get("/testfile1", new Handler() {
 			@Override
 			public Object handle(WebExchange x) {
-				return new File(U.resource("test1.txt").getFile());
+				return U.file("test1.txt");
 			}
 		});
 
 		Web.get("/rabbit.jpg", new Handler() {
 			@Override
 			public Object handle(WebExchange x) {
-				return x.sendFile(new File(U.resource("rabbit.jpg").getFile())).done();
+				return x.sendFile(U.file("rabbit.jpg")).done();
 			}
 		});
 
@@ -91,16 +90,24 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 
 		U.print("----------------------------------------");
 
-		eq(get("/"), "a<b>b</b>c");
-		eq(get("/xy"), "a<b>b</b>c");
-		eq(get("/async"), "now");
-		eq(get("/session"), "{}");
-		eq(get("/bin"), "bin");
-		eq(get("/file/foo"), "abcde");
-		eq(get("/testfile1"), "TEST1");
+		for (int i = 0; i < 100; i++) {
 
-		byte[] expected = FileUtils.readFileToByteArray(new File(U.resource("rabbit.jpg").getFile()));
-		eq(getBytes("/rabbit.jpg").length, expected.length);
+			if (i % 100 == 0) {
+				System.out.println("@" + i);
+			}
+			eq(get("/"), "a<b>b</b>c");
+			eq(get("/xy"), "a<b>b</b>c");
+			eq(get("/async"), "now");
+			eq(get("/session"), "{}");
+			eq(get("/bin"), "bin");
+			eq(get("/file/foo"), "abcde");
+			eq(get("/testfile1"), "TEST1");
+
+			byte[] expected = FileUtils.readFileToByteArray(U.file("rabbit.jpg"));
+			byte[] rabb = getBytes("/rabbit.jpg");
+
+			eq(rabb, expected);
+		}
 
 		shutdown();
 	}
