@@ -72,6 +72,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -1505,6 +1506,25 @@ public class U implements Constants {
 		String data = format("%s: %s in %s ms (%s/sec)", name, count, ms, avgs);
 
 		print(data + " | " + getCpuMemStats());
+	}
+
+	public static void benchmarkMT(int threadsN, final String name, final int count, final Runnable runnable) {
+		final CountDownLatch latch = new CountDownLatch(threadsN);
+
+		for (int i = 1; i <= threadsN; i++) {
+			new Thread() {
+				public void run() {
+					benchmark(name, count, runnable);
+					latch.countDown();
+				};
+			}.start();
+		}
+
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			throw U.rte(e);
+		}
 	}
 
 	public static String getCpuMemStats() {
