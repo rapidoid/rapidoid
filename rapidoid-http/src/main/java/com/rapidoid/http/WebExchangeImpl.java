@@ -32,6 +32,7 @@ import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
+import org.rapidoid.net.mime.MediaType;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.wrap.Bool;
@@ -354,32 +355,32 @@ public class WebExchangeImpl extends DefaultExchange<WebExchange, WebExchangeBod
 	}
 
 	@Override
-	public synchronized WebExchange setContentType(ContentType contentType) {
+	public synchronized WebExchange setContentType(MediaType MediaType) {
 		U.must(!hasContentType);
 		hasContentType = true;
 
-		addHeader(HttpHeader.CONTENT_TYPE.getBytes(), contentType.getBytes());
+		addHeader(HttpHeader.CONTENT_TYPE.getBytes(), MediaType.getBytes());
 		return this;
 	}
 
 	@Override
 	public WebExchange plain() {
-		return setContentType(ContentType.PLAIN);
+		return setContentType(MediaType.PLAIN_TEXT_UTF_8);
 	}
 
 	@Override
 	public WebExchange html() {
-		return setContentType(ContentType.HTML);
+		return setContentType(MediaType.HTML_UTF_8);
 	}
 
 	@Override
 	public WebExchange json() {
-		return setContentType(ContentType.JSON);
+		return setContentType(MediaType.JSON_UTF_8);
 	}
 
 	@Override
 	public WebExchange binary() {
-		return setContentType(ContentType.BINARY);
+		return setContentType(MediaType.BINARY);
 	}
 
 	@Override
@@ -457,9 +458,9 @@ public class WebExchangeImpl extends DefaultExchange<WebExchange, WebExchangeBod
 
 	@Override
 	public WebExchangeBody sendFile(File file) {
-		setContentType(new ContentType("image/jpg")); // FIXME
+		U.must(file.exists());
+		setContentType(MediaType.getByFileName(file.getAbsolutePath()));
 		write(file);
 		return this;
 	}
-
 }

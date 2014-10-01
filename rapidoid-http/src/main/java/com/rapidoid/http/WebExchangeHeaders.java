@@ -1,5 +1,7 @@
 package com.rapidoid.http;
 
+import org.rapidoid.net.mime.MediaType;
+
 /*
  * #%L
  * rapidoid-http
@@ -38,6 +40,6 @@ public interface WebExchangeHeaders extends WebExchangeBody {
 
 	WebExchangeHeaders setCookie(String name, String value);
 
-	WebExchangeHeaders setContentType(ContentType contentType);
+	WebExchangeHeaders setContentType(MediaType contentType);
 
 }
