@@ -33,6 +33,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Annotation;
 import java.lang.management.GarbageCollectorMXBean;
@@ -50,6 +51,9 @@ import java.net.Socket;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileChannel.MapMode;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -2428,6 +2432,23 @@ public class U implements Constants {
 
 	public static long rndL() {
 		return RND.nextLong();
+	}
+
+	@SuppressWarnings("resource")
+	public static MappedByteBuffer mmap(String filename, MapMode mode, long position, long size) {
+		try {
+			File file = new File(filename);
+			FileChannel fc = new RandomAccessFile(file, "rw").getChannel();
+			return fc.map(mode, position, size);
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
+	}
+
+	public static MappedByteBuffer mmap(String filename, MapMode mode) {
+		File file = new File(filename);
+		U.must(file.exists());
+		return mmap(filename, mode, 0, file.length());
 	}
 
 }
