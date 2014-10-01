@@ -171,19 +171,25 @@ public class RapidoidWorker extends AbstractEventLoop {
 	private boolean processNext(RapidoidConnection conn) {
 		int pos = conn.input().position();
 		int limit = conn.input().limit();
+		int osize = conn.output().size();
 
 		try {
 			protocol.process(conn);
 			return true;
+
 		} catch (IncompleteReadException e) {
 			// input not complete, so rollback
 			conn.input().position(pos);
 			conn.input().limit(limit);
-			// FIXME rollback output position
+
+			conn.output().deleteAfter(osize);
+
 		} catch (ProtocolException e) {
+			conn.output().deleteAfter(osize);
 			conn.write(U.or(e.getMessage(), "Protocol error!"));
 			conn.error();
 			conn.close(true);
+
 		} catch (Throwable e) {
 			U.error("Failed to process message!", e);
 			conn.close(true);
