@@ -105,6 +105,10 @@ public abstract class TestCommons {
 		Assert.assertEquals(actual, expected);
 	}
 
+	protected void eq(byte[] actual, byte[] expected) {
+		Assert.assertEquals(actual, expected);
+	}
+
 	protected char rndChar() {
 		return (char) (65 + rnd(26));
 	}
