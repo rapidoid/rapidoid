@@ -89,16 +89,14 @@ import javax.annotation.Resource;
 
 public class U implements Constants {
 
-	private static final int TRACE = 0;
-	private static final int DEBUG = 1;
-	private static final int INFO = 2;
-	private static final int WARN = 3;
-	private static final int ERROR = 4;
-	private static final int SEVERE = 5;
+	public static final LogLevel TRACE = LogLevel.TRACE;
+	public static final LogLevel DEBUG = LogLevel.DEBUG;
+	public static final LogLevel INFO = LogLevel.INFO;
+	public static final LogLevel WARN = LogLevel.WARN;
+	public static final LogLevel ERROR = LogLevel.ERROR;
+	public static final LogLevel SEVERE = LogLevel.SEVERE;
 
-	private static int LOG_LEVEL = INFO;
-
-	private static final String[] LOG_LEVELS = { "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "SEVERE" };
+	private static LogLevel LOG_LEVEL = INFO;
 
 	private static final Map<Class<?>, Object> SINGLETONS = map();
 
@@ -254,6 +252,10 @@ public class U implements Constants {
 
 	});
 
+	public static synchronized void setLogLevel(LogLevel logLevel) {
+		LOG_LEVEL = logLevel;
+	}
+
 	public static synchronized void reset() {
 		info("Reset U state");
 		LOG_LEVEL = INFO;
@@ -365,12 +367,12 @@ public class U implements Constants {
 		return CLASS.getCanonicalName();
 	}
 
-	private static void log(Appendable out, int level, String msg, String key1, Object value1, String key2,
+	private static void log(Appendable out, LogLevel level, String msg, String key1, Object value1, String key2,
 			Object value2, String key3, Object value3, int paramsN) {
-		if (level >= LOG_LEVEL) {
+		if (level.ordinal() >= LOG_LEVEL.ordinal()) {
 			try {
 				synchronized (out) {
-					out.append(LOG_LEVELS[level]);
+					out.append(level.name());
 					out.append(" | ");
 					out.append(Thread.currentThread().getName());
 					out.append(" | ");
@@ -424,8 +426,8 @@ public class U implements Constants {
 		}
 	}
 
-	private static void log(int level, String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3, int paramsN) {
+	private static void log(LogLevel level, String msg, String key1, Object value1, String key2, Object value2,
+			String key3, Object value3, int paramsN) {
 		log(System.out, level, msg, key1, value1, key2, value2, key3, value3, paramsN);
 	}
 

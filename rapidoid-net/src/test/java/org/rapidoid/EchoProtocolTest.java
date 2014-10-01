@@ -34,6 +34,9 @@ public class EchoProtocolTest extends NetTestCommons {
 
 	@Test
 	public void echo() {
+		
+		U.setLogLevel(U.DEBUG);
+		
 		server(new Protocol() {
 
 			@Override
@@ -74,6 +77,9 @@ public class EchoProtocolTest extends NetTestCommons {
 
 	@Test
 	public void echoAsync() {
+		
+		U.setLogLevel(U.DEBUG);
+		
 		server(new Protocol() {
 
 			@Override
