@@ -904,6 +904,19 @@ public class U implements Constants {
 		return CLASS_LOADER.getResource(filename);
 	}
 
+	public static File file(String filename) {
+		File file = new File(filename);
+
+		if (!file.exists()) {
+			URL res = resource(filename);
+			if (res != null) {
+				return new File(res.getFile());
+			}
+		}
+
+		return file;
+	}
+
 	public static long time() {
 		return System.currentTimeMillis();
 	}
