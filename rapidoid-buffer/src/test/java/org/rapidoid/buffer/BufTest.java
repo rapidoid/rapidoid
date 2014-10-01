@@ -361,6 +361,40 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 	}
 
+	@Test
+	public void testDeleteAfter() {
+		BufGroup bufs = new BufGroup(4);
+		Buf buf = bufs.newBuf();
+
+		int size = 0;
+		for (int i = 0; i < 1000000; i++) {
+			int add = U.rnd(100);
+
+			for (int j = 0; j < 5; j++) {
+				size += add;
+				buf.append(U.mul(" ", add));
+				eq(buf.size(), size);
+			}
+
+			for (int j = 0; j < 5; j++) {
+				if (buf.size() > 0) {
+					if (U.rnd(2) == 0) {
+						int delFrom = U.rnd(size);
+						int delN = size - delFrom;
+
+						size -= delN;
+						buf.deleteAfter(delFrom);
+					} else {
+						int delN = U.rnd(size);
+
+						size -= delN;
+						buf.deleteBefore(delN);
+					}
+				}
+			}
+		}
+	}
+
 	private void checkMatch(Buf buf, int start, int limit, String match, int... positions) {
 		for (int pos : positions) {
 			int p = BYTES.find(buf.bytes(), start, limit, match.getBytes(), true);
