@@ -58,7 +58,7 @@ public class RapidoidConnection implements Resetable, Channel {
 
 	private boolean closeAfterWrite = false;
 
-	public boolean closed = false;
+	public boolean closed = true;
 
 	int completedInputPos;
 
@@ -78,7 +78,7 @@ public class RapidoidConnection implements Resetable, Channel {
 	@Override
 	public synchronized void reset() {
 		key = null;
-		closed = false;
+		closed = true;
 		input.clear();
 		output.clear();
 		closeAfterWrite = false;

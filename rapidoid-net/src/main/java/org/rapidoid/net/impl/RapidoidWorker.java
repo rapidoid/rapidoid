@@ -210,9 +210,8 @@ public class RapidoidWorker extends AbstractEventLoop {
 			if (conn != null) {
 				if (!conn.closed) {
 					U.trace("Closing connection", "connection", conn);
-					conn.closed = true;
 					assert conn.key == key;
-					conn.key = null;
+					conn.reset();
 					connections.release(conn);
 				}
 			}
@@ -333,6 +332,10 @@ public class RapidoidWorker extends AbstractEventLoop {
 		assert attachment == null || attachment instanceof ConnectionTarget;
 
 		RapidoidConnection conn = connections.get();
+
+		U.must(conn.closed);
+		conn.closed = false;
+
 		conn.key = key;
 
 		if (isProtocolListener) {
