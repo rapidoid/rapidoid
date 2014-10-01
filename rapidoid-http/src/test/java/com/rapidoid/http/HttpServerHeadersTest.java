@@ -79,6 +79,13 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 			}
 		});
 
+		Web.get("/ab", new Handler() {
+			@Override
+			public Object handle(WebExchange x) {
+				return x.sendFile(U.file("ab.html")).done();
+			}
+		});
+
 		Web.handle(new Handler() {
 			@Override
 			public Object handle(WebExchange x) {
@@ -90,11 +97,10 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 
 		U.print("----------------------------------------");
 
-		for (int i = 0; i < 100; i++) {
+		byte[] rabbit = FileUtils.readFileToByteArray(U.file("rabbit.jpg"));
+		byte[] ab = FileUtils.readFileToByteArray(U.file("ab.html"));
 
-			if (i % 100 == 0) {
-				System.out.println("@" + i);
-			}
+		for (int i = 0; i < 100; i++) {
 			eq(get("/"), "a<b>b</b>c");
 			eq(get("/xy"), "a<b>b</b>c");
 			eq(get("/async"), "now");
@@ -102,11 +108,8 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 			eq(get("/bin"), "bin");
 			eq(get("/file/foo"), "abcde");
 			eq(get("/testfile1"), "TEST1");
-
-			byte[] expected = FileUtils.readFileToByteArray(U.file("rabbit.jpg"));
-			byte[] rabb = getBytes("/rabbit.jpg");
-
-			eq(rabb, expected);
+			eq(getBytes("/rabbit.jpg"), rabbit);
+			eq(getBytes("/ab"), ab);
 		}
 
 		shutdown();
