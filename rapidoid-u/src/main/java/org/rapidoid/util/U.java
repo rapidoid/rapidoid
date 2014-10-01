@@ -1176,6 +1176,12 @@ public class U implements Constants {
 		return deserialize(bytes);
 	}
 
+	// TODO add such utils for other primitive types, as well
+	public static void encode(long value, ByteBuffer buf) {
+		buf.put((byte) TypeKind.LONG.ordinal());
+		buf.putLong(value);
+	}
+
 	public static void encode(Object value, ByteBuffer buf) {
 		TypeKind kind = kindOf(value);
 		int ordinal = kind.ordinal();
@@ -1262,6 +1268,11 @@ public class U implements Constants {
 
 	private static byte bytee(int n) {
 		return (byte) (n - 128);
+	}
+
+	public static long decodeLong(ByteBuffer buf) {
+		U.must(buf.get() == TypeKind.LONG.ordinal());
+		return buf.getLong();
 	}
 
 	public static Object decode(ByteBuffer buf) {
