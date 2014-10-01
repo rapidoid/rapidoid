@@ -459,20 +459,32 @@ public class MultiBuf implements Buf, Constants {
 
 	private int multiWriteTo(int mode, int fromIndex, int toIndex, int fromAddr, int toAddr, byte[] bytes,
 			WritableByteChannel channel, ByteBuffer buffer, int destOffset) throws IOException {
-		int wrote = 0;
 
 		ByteBuffer first = bufs[fromIndex];
 		int len = singleCap - fromAddr;
-		wrote += writePart(first, fromAddr, singleCap, mode, bytes, channel, buffer, destOffset, len);
+
+		int wrote = writePart(first, fromAddr, singleCap, mode, bytes, channel, buffer, destOffset, len);
+		if (wrote == 0) {
+			return 0;
+		}
+
+		int wroteTotal = wrote;
 
 		for (int i = fromIndex + 1; i < toIndex; i++) {
-			wrote += writePart(bufs[i], 0, singleCap, mode, bytes, channel, buffer, destOffset + wrote, singleCap);
+
+			wrote = writePart(bufs[i], 0, singleCap, mode, bytes, channel, buffer, destOffset + wroteTotal, singleCap);
+
+			if (wrote == 0) {
+				return wroteTotal;
+			}
+
+			wroteTotal += wrote;
 		}
 
 		ByteBuffer last = bufs[toIndex];
-		wrote += writePart(last, 0, toAddr + 1, mode, bytes, channel, buffer, destOffset + wrote, toAddr + 1);
+		wroteTotal += writePart(last, 0, toAddr + 1, mode, bytes, channel, buffer, destOffset + wroteTotal, toAddr + 1);
 
-		return wrote;
+		return wroteTotal;
 	}
 
 	private int writePart(ByteBuffer src, int pos, int limit, int mode, byte[] bytes, WritableByteChannel channel,
