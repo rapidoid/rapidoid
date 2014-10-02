@@ -732,7 +732,9 @@ public class U implements Constants {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T invokeStatic(Method m, Object... args) {
+		boolean accessible = m.isAccessible();
 		try {
+			m.setAccessible(true);
 			return (T) m.invoke(null, args);
 		} catch (IllegalAccessException e) {
 			throw rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
@@ -740,15 +742,21 @@ public class U implements Constants {
 			throw rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
 		} catch (InvocationTargetException e) {
 			throw rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
+		} finally {
+			m.setAccessible(accessible);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <T> T invoke(Method m, Object target, Object... args) {
+		boolean accessible = m.isAccessible();
 		try {
+			m.setAccessible(true);
 			return (T) m.invoke(target, args);
 		} catch (Exception e) {
 			throw rte("Cannot invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
+		} finally {
+			m.setAccessible(accessible);
 		}
 	}
 
