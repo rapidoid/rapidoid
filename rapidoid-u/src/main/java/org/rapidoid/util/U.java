@@ -111,6 +111,13 @@ public class U implements Constants {
 		}
 	});
 
+	private static final Method getGarbageCollectorMXBeans;
+
+	static {
+		Class<?> manFactory = U.getClassIfExists("java.lang.management.ManagementFactory");
+		getGarbageCollectorMXBeans = manFactory != null ? U.getMethod(manFactory, "getGarbageCollectorMXBeans") : null;
+	}
+
 	private static ScheduledThreadPoolExecutor EXECUTOR;
 
 	private static long measureStart;
@@ -725,9 +732,10 @@ public class U implements Constants {
 		}
 	}
 
-	public static Object invokeStatic(Method m, Object... args) {
+	@SuppressWarnings("unchecked")
+	public static <T> T invokeStatic(Method m, Object... args) {
 		try {
-			return m.invoke(null, args);
+			return (T) m.invoke(null, args);
 		} catch (IllegalAccessException e) {
 			throw rte("Cannot statically invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
 		} catch (IllegalArgumentException e) {
@@ -737,9 +745,10 @@ public class U implements Constants {
 		}
 	}
 
-	public static Object invoke(Method m, Object target, Object... args) {
+	@SuppressWarnings("unchecked")
+	public static <T> T invoke(Method m, Object target, Object... args) {
 		try {
-			return m.invoke(target, args);
+			return (T) m.invoke(target, args);
 		} catch (Exception e) {
 			throw rte("Cannot invoke method '%s' with args: %s", e, m.getName(), Arrays.toString(args));
 		}
@@ -2517,6 +2526,28 @@ public class U implements Constants {
 		File file = new File(filename);
 		U.must(file.exists());
 		return mmap(filename, mode, 0, file.length());
+	}
+
+	public static Class<?> getClassIfExists(String className) {
+		try {
+			return Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			return null;
+		}
+	}
+
+	public static String gcInfo() {
+		String gcinfo = "";
+
+		if (getGarbageCollectorMXBeans != null) {
+			List<?> gcs = invokeStatic(getGarbageCollectorMXBeans);
+
+			for (Object gc : gcs) {
+				gcinfo += " | " + getPropValue(gc, "name") + " x" + getPropValue(gc, "collectionCount") + ":"
+						+ getPropValue(gc, "collectionTime") + "ms";
+			}
+		}
+		return gcinfo;
 	}
 
 }

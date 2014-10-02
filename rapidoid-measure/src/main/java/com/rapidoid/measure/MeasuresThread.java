@@ -20,10 +20,6 @@ package com.rapidoid.measure;
  * #L%
  */
 
-import java.lang.management.GarbageCollectorMXBean;
-import java.lang.management.ManagementFactory;
-import java.util.List;
-
 import org.rapidoid.util.U;
 
 public class MeasuresThread extends Thread {
@@ -61,15 +57,10 @@ public class MeasuresThread extends Thread {
 		long usedMem = totalMem - freeMem;
 		int megs = 1024 * 1024;
 
-		String gcinfo = "";
-		List<GarbageCollectorMXBean> gcs = ManagementFactory.getGarbageCollectorMXBeans();
-		for (GarbageCollectorMXBean gc : gcs) {
-			gcinfo += " | " + gc.getName() + " x" + gc.getCollectionCount() + ":" + gc.getCollectionTime() + "ms";
-		}
-
 		String msg = "%s | total: %s MB, used: %s, free: %s MB, max: %s MB | %s";
 		String info = String.format(msg, measured, totalMem / megs, usedMem / megs, freeMem / megs, maxMem / megs,
-				gcinfo);
+				U.gcInfo());
 		U.print(info);
 	}
+
 }
