@@ -43,13 +43,13 @@ public class RapidoidWorker extends AbstractEventLoop {
 
 	private static final int MAX_PIPELINED = Integer.MAX_VALUE;
 
-	private final Queue<RapidoidConnection> restarting = new ArrayBlockingQueue<RapidoidConnection>(1000000);
+	private final Queue<RapidoidConnection> restarting;
 
-	private final Queue<ConnectionTarget> connecting = new ArrayBlockingQueue<ConnectionTarget>(1000000);
+	private final Queue<ConnectionTarget> connecting;
 
-	private final Queue<SocketChannel> connected = new ArrayBlockingQueue<SocketChannel>(1000000);
+	private final Queue<SocketChannel> connected;
 
-	private final SimpleList<RapidoidConnection> done = new SimpleList<RapidoidConnection>(100000, 10);
+	private final SimpleList<RapidoidConnection> done;
 
 	private final Pool<RapidoidConnection> connections;
 
@@ -69,6 +69,14 @@ public class RapidoidWorker extends AbstractEventLoop {
 
 		this.protocol = protocol;
 		this.helper = helper;
+
+		final int queueSize = config.micro() ? 1000 : 1000000;
+		final int growFactor = config.micro() ? 2 : 10;
+
+		this.restarting = new ArrayBlockingQueue<RapidoidConnection>(queueSize);
+		this.connecting = new ArrayBlockingQueue<ConnectionTarget>(queueSize);
+		this.connected = new ArrayBlockingQueue<SocketChannel>(queueSize);
+		this.done = new SimpleList<RapidoidConnection>(queueSize / 10, growFactor);
 
 		this.isProtocolListener = protocol instanceof CtxListener;
 

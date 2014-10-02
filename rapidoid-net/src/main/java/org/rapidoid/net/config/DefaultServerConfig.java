@@ -47,4 +47,9 @@ public class DefaultServerConfig implements ServerConfig {
 		return false;
 	}
 
+	@Override
+	public boolean micro() {
+		return false;
+	}
+
 }

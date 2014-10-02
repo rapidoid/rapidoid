@@ -55,4 +55,9 @@ public class CLIConfig implements ServerConfig {
 		return U.hasOption("nostats");
 	}
 
+	@Override
+	public boolean micro() {
+		return U.hasOption("micro");
+	}
+
 }
