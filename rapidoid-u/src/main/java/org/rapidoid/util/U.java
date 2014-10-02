@@ -36,8 +36,6 @@ import java.io.PrintStream;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Annotation;
-import java.lang.management.GarbageCollectorMXBean;
-import java.lang.management.ManagementFactory;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
@@ -1576,14 +1574,22 @@ public class U implements Constants {
 		long usedMem = totalMem - freeMem;
 		int megs = 1024 * 1024;
 
-		String gcinfo = "";
-		List<GarbageCollectorMXBean> gcs = ManagementFactory.getGarbageCollectorMXBeans();
-		for (GarbageCollectorMXBean gc : gcs) {
-			gcinfo += " | " + gc.getName() + " x " + gc.getCollectionCount() + " (" + gc.getCollectionTime() + " ms)";
-		}
-
 		String msg = "MEM [total=%s MB, used=%s MB, max=%s MB]%s";
-		return format(msg, totalMem / megs, usedMem / megs, maxMem / megs, gcinfo);
+		return format(msg, totalMem / megs, usedMem / megs, maxMem / megs, gcInfo());
+	}
+
+	public static String gcInfo() {
+		String gcinfo = "";
+
+		if (getGarbageCollectorMXBeans != null) {
+			List<?> gcs = invokeStatic(getGarbageCollectorMXBeans);
+
+			for (Object gc : gcs) {
+				gcinfo += " | " + getPropValue(gc, "name") + " x" + getPropValue(gc, "collectionCount") + ":"
+						+ getPropValue(gc, "collectionTime") + "ms";
+			}
+		}
+		return gcinfo;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -2534,20 +2540,6 @@ public class U implements Constants {
 		} catch (ClassNotFoundException e) {
 			return null;
 		}
-	}
-
-	public static String gcInfo() {
-		String gcinfo = "";
-
-		if (getGarbageCollectorMXBeans != null) {
-			List<?> gcs = invokeStatic(getGarbageCollectorMXBeans);
-
-			for (Object gc : gcs) {
-				gcinfo += " | " + getPropValue(gc, "name") + " x" + getPropValue(gc, "collectionCount") + ":"
-						+ getPropValue(gc, "collectionTime") + "ms";
-			}
-		}
-		return gcinfo;
 	}
 
 }

@@ -38,7 +38,7 @@ public class MeasuresThread extends Thread {
 			while (true) {
 				String info = statistics.info();
 				if (!lastInfo.equals(info)) {
-					printStats(info);
+					U.print(U.getCpuMemStats() + " " + info);
 					lastInfo = info;
 				}
 				Thread.sleep(1000);
@@ -47,20 +47,6 @@ public class MeasuresThread extends Thread {
 			U.print("Stats EXCEPTION!");
 			e.printStackTrace();
 		}
-	}
-
-	private void printStats(String measured) {
-		Runtime rt = Runtime.getRuntime();
-		long totalMem = rt.totalMemory();
-		long maxMem = rt.maxMemory();
-		long freeMem = rt.freeMemory();
-		long usedMem = totalMem - freeMem;
-		int megs = 1024 * 1024;
-
-		String msg = "%s | total: %s MB, used: %s, free: %s MB, max: %s MB | %s";
-		String info = String.format(msg, measured, totalMem / megs, usedMem / megs, freeMem / megs, maxMem / megs,
-				U.gcInfo());
-		U.print(info);
 	}
 
 }
