@@ -22,25 +22,23 @@ package org.rapidoid.util;
 
 import java.util.Map;
 
-import javax.annotation.Resource;
-
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
 
 class Table {
 
-	@Resource
+	@Inject
 	Database db;
 
-	@Resource
+	@Inject
 	Logger logger;
 
-	@Resource
+	@Inject
 	Transactor transactor;
 }
 
 class Rel {
-	@Resource
+	@Inject
 	Database db;
 }
 
@@ -52,7 +50,7 @@ class Transactor {
 
 class Database {
 
-	@Resource
+	@Inject
 	Transactor transactor;
 
 	final Map<String, Table> tables = U.autoExpandingMap(Table.class);

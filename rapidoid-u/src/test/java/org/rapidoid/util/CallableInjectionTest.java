@@ -22,14 +22,12 @@ package org.rapidoid.util;
 
 import java.util.concurrent.Callable;
 
-import javax.annotation.Resource;
-
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
 
 class MyCallable implements Callable<String> {
 
-	@Resource
+	@Inject
 	Foo foo;
 
 	@Override
@@ -39,7 +37,7 @@ class MyCallable implements Callable<String> {
 }
 
 class Foo {
-	@Resource
+	@Inject
 	Callable<String> callable;
 }
 

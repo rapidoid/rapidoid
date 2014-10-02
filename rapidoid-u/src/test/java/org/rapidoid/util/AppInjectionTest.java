@@ -20,14 +20,11 @@ package org.rapidoid.util;
  * #L%
  */
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
 
 class BookDao {
-	@Resource
+	@Inject
 	Logger logger;
 }
 
@@ -35,36 +32,36 @@ interface PersonService {
 }
 
 class PersonServiceImpl implements PersonService {
-	@Resource
+	@Inject
 	Logger logger;
 }
 
 class BookService {
-	@Resource
+	@Inject
 	BookDao dao;
 
-	@Resource
+	@Inject
 	Logger logger;
 }
 
-@Resource
+@Autocreate
 class App {
 
 	static boolean READY = false;
 
-	@Resource
+	@Inject
 	Logger logger;
 
-	@Resource
+	@Inject
 	PersonService personService;
 
-	@Resource
+	@Inject
 	PersonServiceImpl personService2;
 
-	@Resource
+	@Inject
 	BookService bookService;
 
-	@PostConstruct
+	@Init
 	public void callThisWhenReady() {
 		READY = true;
 	}

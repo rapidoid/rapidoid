@@ -22,11 +22,9 @@ package org.rapidoid.util;
 
 import java.util.concurrent.Callable;
 
-import javax.annotation.Resource;
-
 public class Bar {
 
-	@Resource
+	@Inject
 	Callable<String> callable;
 
 }

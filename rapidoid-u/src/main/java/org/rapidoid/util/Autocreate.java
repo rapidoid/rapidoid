@@ -1,10 +1,5 @@
 package org.rapidoid.util;
 
-import java.util.List;
-
-import org.rapidoid.test.TestCommons;
-import org.testng.annotations.Test;
-
 /*
  * #%L
  * rapidoid-u
@@ -25,18 +20,13 @@ import org.testng.annotations.Test;
  * #L%
  */
 
-public class ClasspathScanTest extends TestCommons {
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-	@Test
-	public void testClasspathScan() {
-		List<Class<?>> classes = U.classpathClasses("", ".*Test", null);
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-		isTrue(classes.contains(ClasspathScanTest.class));
-		isTrue(classes.contains(AppInjectionTest.class));
-		isTrue(classes.contains(CallableInjectionTest.class));
-		isTrue(classes.contains(DbInjectionTest.class));
-
-		isFalse(classes.contains(Bar.class));
-	}
-
+@Target({ TYPE })
+@Retention(RUNTIME)
+public @interface Autocreate {
 }

@@ -84,9 +84,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-
 public class U implements Constants {
 
 	public static final LogLevel TRACE = LogLevel.TRACE;
@@ -133,7 +130,7 @@ public class U implements Constants {
 	private static final Map<Class<?>, List<Field>> INJECTABLE_FIELDS = autoExpandingMap(new F1<List<Field>, Class<?>>() {
 		@Override
 		public List<Field> execute(Class<?> clazz) throws Exception {
-			List<Field> fields = getFieldsAnnotated(clazz, Resource.class);
+			List<Field> fields = getFieldsAnnotated(clazz, Inject.class);
 			debug("Retrieved injectable fields", "class", clazz, "fields", fields);
 			return fields;
 		}
@@ -630,6 +627,24 @@ public class U implements Constants {
 		} catch (Exception e) {
 			throw rte("Cannot get field value!", e);
 		}
+	}
+
+	public static List<Annotation> getAnnotations(Class<?> clazz) {
+		List<Annotation> allAnnotations = list();
+
+		try {
+			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
+				Annotation[] annotations = c.getDeclaredAnnotations();
+				for (Annotation an : annotations) {
+					allAnnotations.add(an);
+				}
+			}
+
+		} catch (Exception e) {
+			throw rte("Cannot instantiate class!", e);
+		}
+
+		return allAnnotations;
 	}
 
 	public static List<Field> getFields(Class<?> clazz) {
@@ -1891,15 +1906,12 @@ public class U implements Constants {
 				debug("configuring managed class", "class", classOrInstance);
 				MANAGED_CLASSES.add(clazz);
 
-				// if the class is annotated, auto-create an instance
-				Resource resource = clazz.getAnnotation(Resource.class);
-				if (resource != null) {
-					if (resource.shareable()) {
-						if (!clazz.isInterface() && !clazz.isEnum() && !clazz.isAnnotation()) {
-							autocreate.add(clazz);
-						}
-					} else {
-						throw rte("Cannot pre-instantiate a non-shareable class!");
+				if (!clazz.isInterface() && !clazz.isEnum() && !clazz.isAnnotation()) {
+					System.out.println(":" + clazz);
+
+					// if the class is annotated, auto-create an instance
+					if (clazz.getAnnotation(Autocreate.class) != null) {
+						autocreate.add(clazz);
 					}
 				}
 			} else {
@@ -2047,7 +2059,7 @@ public class U implements Constants {
 	}
 
 	private static <T> void invokePostConstruct(T target) {
-		List<Method> methods = getMethodsAnnotated(target.getClass(), PostConstruct.class);
+		List<Method> methods = getMethodsAnnotated(target.getClass(), Init.class);
 
 		for (Method method : methods) {
 			invoke(method, target);
