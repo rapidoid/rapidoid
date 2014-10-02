@@ -2194,7 +2194,38 @@ public class U implements Constants {
 		}
 	}
 
-	public static List<File> classpath(String packageName, F1<Boolean, File> filter) {
+	private static Enumeration<URL> resources(String name) {
+
+		name = name.replace('.', '/');
+
+		if (name.equals("*")) {
+			name = "";
+		}
+
+		try {
+			return Thread.currentThread().getContextClassLoader().getResources(name);
+		} catch (IOException e) {
+			throw rte("Cannot scan: " + name, e);
+		}
+	}
+
+	public static List<Class<?>> classpathClasses(String packageName, String nameRegex, Predicate<Class<?>> filter) {
+
+		Pattern regex = Pattern.compile(nameRegex);
+		ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
+		Enumeration<URL> urls = resources(packageName);
+
+		while (urls.hasMoreElements()) {
+			URL url = urls.nextElement();
+			File file = new File(url.getFile());
+
+			getClasses(classes, file, file, regex, filter);
+		}
+
+		return classes;
+	}
+
+	public static List<File> classpath(String packageName, Predicate<File> filter) {
 		ArrayList<File> files = new ArrayList<File>();
 
 		classpath(packageName, files, filter);
@@ -2202,19 +2233,8 @@ public class U implements Constants {
 		return files;
 	}
 
-	public static void classpath(String packageName, Collection<File> files, F1<Boolean, File> filter) {
-		String name = packageName.replace('.', '/');
-
-		if (name.equals("*")) {
-			name = "";
-		}
-
-		Enumeration<URL> urls;
-		try {
-			urls = Thread.currentThread().getContextClassLoader().getResources(name);
-		} catch (IOException e) {
-			throw rte("Cannot scan: " + name, e);
-		}
+	public static void classpath(String packageName, Collection<File> files, Predicate<File> filter) {
+		Enumeration<URL> urls = resources(packageName);
 
 		while (urls.hasMoreElements()) {
 			URL url = urls.nextElement();
@@ -2224,17 +2244,51 @@ public class U implements Constants {
 		}
 	}
 
-	private static void getFiles(Collection<File> files, File file, F1<Boolean, File> filter) {
+	private static void getFiles(Collection<File> files, File file, Predicate<File> filter) {
 		if (file.isDirectory()) {
-			info("scanning directory", "dir", file);
+			debug("scanning directory", "dir", file);
 			for (File f : file.listFiles()) {
 				if (f.isDirectory()) {
 					getFiles(files, f, filter);
 				} else {
 					debug("scanned file", "file", f);
 					try {
-						if (filter == null || filter.execute(f).booleanValue()) {
+						if (filter == null || filter.eval(f)) {
 							files.add(f);
+						}
+					} catch (Exception e) {
+						throw rte(e);
+					}
+				}
+			}
+		}
+	}
+
+	private static void getClasses(Collection<Class<?>> classes, File root, File parent, Pattern nameRegex,
+			Predicate<Class<?>> filter) {
+
+		if (parent.isDirectory()) {
+			debug("scanning directory", "dir", parent);
+			for (File f : parent.listFiles()) {
+				if (f.isDirectory()) {
+					getClasses(classes, root, f, nameRegex, filter);
+				} else {
+					debug("scanned file", "file", f);
+					try {
+						if (f.getName().endsWith(".class")) {
+							String clsName = f.getAbsolutePath();
+							String rootPath = root.getAbsolutePath();
+							U.must(clsName.startsWith(rootPath));
+
+							clsName = clsName.substring(rootPath.length() + 1, clsName.length() - 6);
+							clsName = clsName.replace(File.separatorChar, '.');
+
+							if (nameRegex.matcher(clsName).matches()) {
+								Class<?> cls = Class.forName(clsName);
+								if (filter == null || filter.eval(cls)) {
+									classes.add(cls);
+								}
+							}
 						}
 					} catch (Exception e) {
 						throw rte(e);

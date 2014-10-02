@@ -21,14 +21,10 @@ package org.rapidoid.web;
  */
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.rapidoid.util.U;
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.scanners.TypeAnnotationsScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
 
 import com.rapidoid.http.Handler;
 import com.rapidoid.http.Web;
@@ -38,7 +34,7 @@ public class Pojo {
 
 	protected static final String SUFFIX = "Service";
 
-	public static void run(int port, Object... controllers) {
+	public static void run(Object... controllers) {
 		final POJODispatcher dispatcher = new POJODispatcher(controllers);
 
 		Web.handle(new Handler() {
@@ -51,13 +47,7 @@ public class Pojo {
 		Web.start();
 	}
 
-	public static void run(String[] args, Object... services) {
-		int port = args.length > 0 ? Integer.parseInt(args[0]) : 8080;
-		Pojo.run(port, services);
-	}
-
-	public static void run(String[] args, Class<?>... classes) {
-		int port = args.length > 0 ? Integer.parseInt(args[0]) : 8080;
+	public static void run(Class<?>... classes) {
 		Object[] services = new Object[classes.length];
 		for (int i = 0; i < services.length; i++) {
 			try {
@@ -66,23 +56,20 @@ public class Pojo {
 				throw U.rte(e);
 			}
 		}
-		Pojo.run(port, services);
+		Pojo.run(services);
 	}
 
-	public static void main(String[] args) {
-		Reflections reflections = new Reflections(new ConfigurationBuilder().addUrls(ClasspathHelper.forPackage(""))
-				.setScanners(new SubTypesScanner(false), new TypeAnnotationsScanner()));
+	public static void start() {
 
-		Set<Class<? extends Object>> classes = reflections.getSubTypesOf(Object.class);
+		List<Class<?>> classes = U.classpathClasses("*", ".+" + SUFFIX, null);
 
 		Set<Class<?>> services = new HashSet<Class<?>>();
-		for (Class<? extends Object> clazz : classes) {
-			if (clazz.getSimpleName().endsWith(SUFFIX)) {
-				services.add(clazz);
-			}
+		for (Class<?> cls : classes) {
+			System.out.println(cls);
+			services.add(cls);
 		}
 
-		run(args, services.toArray(new Class[services.size()]));
+		run(services.toArray(new Class[services.size()]));
 	}
 
 }

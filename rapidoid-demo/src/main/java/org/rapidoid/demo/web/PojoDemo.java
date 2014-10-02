@@ -1,5 +1,6 @@
 package org.rapidoid.demo.web;
 
+import org.rapidoid.util.U;
 import org.rapidoid.web.Pojo;
 
 /*
@@ -25,7 +26,8 @@ import org.rapidoid.web.Pojo;
 public class PojoDemo {
 
 	public static void main(String[] args) {
-		Pojo.main(args);
+		U.args(args);
+		Pojo.start();
 	}
 
 }
