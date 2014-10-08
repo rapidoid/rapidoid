@@ -27,7 +27,7 @@ import org.rapidoid.data.Data;
 import org.rapidoid.data.MultiData;
 import org.rapidoid.net.abstracts.CtxFull;
 
-public interface WebExchange extends CtxFull<WebExchange, WebExchangeBody>, WebExchangeHeaders {
+public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, HttpExchangeHeaders {
 
 	/* REQUEST METHODS: */
 

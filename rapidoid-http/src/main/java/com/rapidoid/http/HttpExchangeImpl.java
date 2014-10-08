@@ -37,9 +37,9 @@ import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.wrap.Bool;
 
-public class WebExchangeImpl extends DefaultExchange<WebExchange, WebExchangeBody> implements WebExchange, Constants {
+public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements HttpExchange, Constants {
 
-	private final static HttpParser PARSER = U.inject(HttpParser.class);
+	private final static HttpParser PARSER = U.singleton(HttpParser.class);
 
 	private static final byte[] HEADER_SEP = ": ".getBytes();
 
@@ -89,7 +89,7 @@ public class WebExchangeImpl extends DefaultExchange<WebExchange, WebExchangeBod
 	private final MultiData _data;
 	private final BinaryMultiData _files;
 
-	public WebExchangeImpl() {
+	public HttpExchangeImpl() {
 		reset();
 
 		this._body = data(body);
@@ -236,7 +236,7 @@ public class WebExchangeImpl extends DefaultExchange<WebExchange, WebExchangeBod
 	}
 
 	@Override
-	public WebExchangeImpl done() {
+	public HttpExchangeImpl done() {
 		conn.done();
 		return this;
 	}
@@ -334,7 +334,7 @@ public class WebExchangeImpl extends DefaultExchange<WebExchange, WebExchangeBod
 	}
 
 	@Override
-	public WebExchange addHeader(byte[] name, byte[] value) {
+	public HttpExchange addHeader(byte[] name, byte[] value) {
 		super.write(name);
 		super.write(HEADER_SEP);
 		super.write(value);
@@ -343,19 +343,19 @@ public class WebExchangeImpl extends DefaultExchange<WebExchange, WebExchangeBod
 	}
 
 	@Override
-	public WebExchange addHeader(HttpHeader name, String value) {
+	public HttpExchange addHeader(HttpHeader name, String value) {
 		addHeader(name.getBytes(), value.getBytes());
 		return this;
 	}
 
 	@Override
-	public WebExchange setCookie(String name, String value) {
+	public HttpExchange setCookie(String name, String value) {
 		addHeader(HttpHeader.SET_COOKIE, name + "=" + value);
 		return this;
 	}
 
 	@Override
-	public synchronized WebExchange setContentType(MediaType MediaType) {
+	public synchronized HttpExchange setContentType(MediaType MediaType) {
 		U.must(!hasContentType);
 		hasContentType = true;
 
@@ -364,27 +364,27 @@ public class WebExchangeImpl extends DefaultExchange<WebExchange, WebExchangeBod
 	}
 
 	@Override
-	public WebExchange plain() {
+	public HttpExchange plain() {
 		return setContentType(MediaType.PLAIN_TEXT_UTF_8);
 	}
 
 	@Override
-	public WebExchange html() {
+	public HttpExchange html() {
 		return setContentType(MediaType.HTML_UTF_8);
 	}
 
 	@Override
-	public WebExchange json() {
+	public HttpExchange json() {
 		return setContentType(MediaType.JSON_UTF_8);
 	}
 
 	@Override
-	public WebExchange binary() {
+	public HttpExchange binary() {
 		return setContentType(MediaType.BINARY);
 	}
 
 	@Override
-	public WebExchange download(String filename) {
+	public HttpExchange download(String filename) {
 		addHeader(HttpHeader.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"");
 		addHeader(HttpHeader.CACHE_CONTROL, "private");
 		return binary();
@@ -399,31 +399,31 @@ public class WebExchangeImpl extends DefaultExchange<WebExchange, WebExchangeBod
 	}
 
 	@Override
-	public WebExchangeBody write(String s) {
+	public HttpExchangeBody write(String s) {
 		ensureBodyWrite();
 		return super.write(s);
 	}
 
 	@Override
-	public WebExchangeBody write(byte[] bytes) {
+	public HttpExchangeBody write(byte[] bytes) {
 		ensureBodyWrite();
 		return super.write(bytes);
 	}
 
 	@Override
-	public WebExchangeBody write(byte[] bytes, int offset, int length) {
+	public HttpExchangeBody write(byte[] bytes, int offset, int length) {
 		ensureBodyWrite();
 		return super.write(bytes, offset, length);
 	}
 
 	@Override
-	public WebExchangeBody write(ByteBuffer buf) {
+	public HttpExchangeBody write(ByteBuffer buf) {
 		ensureBodyWrite();
 		return super.write(buf);
 	}
 
 	@Override
-	public WebExchangeBody write(File file) {
+	public HttpExchangeBody write(File file) {
 		if (!hasContentType()) {
 			download(file.getName());
 		}
@@ -433,7 +433,7 @@ public class WebExchangeImpl extends DefaultExchange<WebExchange, WebExchangeBod
 	}
 
 	@Override
-	public WebExchangeBody writeJSON(Object value) {
+	public HttpExchangeBody writeJSON(Object value) {
 		if (!hasContentType()) {
 			json();
 		}
@@ -457,7 +457,7 @@ public class WebExchangeImpl extends DefaultExchange<WebExchange, WebExchangeBod
 	}
 
 	@Override
-	public WebExchangeBody sendFile(File file) {
+	public HttpExchangeBody sendFile(File file) {
 		U.must(file.exists());
 		setContentType(MediaType.getByFileName(file.getAbsolutePath()));
 		write(file);

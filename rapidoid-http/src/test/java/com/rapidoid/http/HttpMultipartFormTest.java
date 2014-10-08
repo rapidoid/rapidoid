@@ -30,7 +30,7 @@ public class HttpMultipartFormTest extends HttpTestCommons {
 
 	@Test
 	public void shouldHandleUploads() throws Throwable {
-		server();
+		defaultServerSetup();
 
 		String hash1 = U.md5(FileUtils.readFileToByteArray(new File(U.resource("test1.txt").toURI())));
 		String hash2 = U.md5(FileUtils.readFileToByteArray(new File(U.resource("test2.txt").toURI())));
@@ -44,7 +44,7 @@ public class HttpMultipartFormTest extends HttpTestCommons {
 
 	@Test
 	public void shouldHandleBigUploads() throws Throwable {
-		server();
+		defaultServerSetup();
 
 		String hash1 = U.md5(FileUtils.readFileToByteArray(new File(U.resource("test1.txt").toURI())));
 		String hash2 = U.md5(FileUtils.readFileToByteArray(new File(U.resource("test2.txt").toURI())));

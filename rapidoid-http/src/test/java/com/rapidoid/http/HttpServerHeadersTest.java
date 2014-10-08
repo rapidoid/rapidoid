@@ -32,23 +32,25 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 	@Test
 	public void shouldHandleHttpRequests() throws IOException, URISyntaxException {
 
-		Web.get("/file", new Handler() {
+		server();
+
+		server.get("/file", new Handler() {
 			@Override
-			public Object handle(WebExchange x) {
+			public Object handle(HttpExchange x) {
 				return x.download(x.subpath().substring(1) + ".txt").write("ab").write("cde").done();
 			}
 		});
 
-		Web.get("/bin", new Handler() {
+		server.get("/bin", new Handler() {
 			@Override
-			public Object handle(WebExchange x) {
+			public Object handle(HttpExchange x) {
 				return x.binary().write("bin").done();
 			}
 		});
 
-		Web.get("/session", new Handler() {
+		server.get("/session", new Handler() {
 			@Override
-			public Object handle(WebExchange x) {
+			public Object handle(HttpExchange x) {
 				if (x.cookie("ses") == null) {
 					x.setCookie("ses", "023B");
 				}
@@ -58,44 +60,42 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 			}
 		});
 
-		Web.get("/async", new Handler() {
+		server.get("/async", new Handler() {
 			@Override
-			public Object handle(WebExchange x) {
+			public Object handle(HttpExchange x) {
 				return x.async().write("now").done();
 			}
 		});
 
-		Web.get("/testfile1", new Handler() {
+		server.get("/testfile1", new Handler() {
 			@Override
-			public Object handle(WebExchange x) {
+			public Object handle(HttpExchange x) {
 				return U.file("test1.txt");
 			}
 		});
 
-		Web.get("/rabbit.jpg", new Handler() {
+		server.get("/rabbit.jpg", new Handler() {
 			@Override
-			public Object handle(WebExchange x) {
+			public Object handle(HttpExchange x) {
 				return x.sendFile(U.file("rabbit.jpg")).done();
 			}
 		});
 
-		Web.get("/ab", new Handler() {
+		server.get("/ab", new Handler() {
 			@Override
-			public Object handle(WebExchange x) {
+			public Object handle(HttpExchange x) {
 				return x.sendFile(U.file("ab.html")).done();
 			}
 		});
 
-		Web.handle(new Handler() {
+		server.serve(new Handler() {
 			@Override
-			public Object handle(WebExchange x) {
+			public Object handle(HttpExchange x) {
 				return x.setCookie("asd", "f").html().write("a<b>b</b>c");
 			}
 		});
 
-		server = Web.start();
-
-		U.print("----------------------------------------");
+		start();
 
 		byte[] rabbit = FileUtils.readFileToByteArray(U.file("rabbit.jpg"));
 		byte[] ab = FileUtils.readFileToByteArray(U.file("ab.html"));

@@ -25,16 +25,31 @@ import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 
 import org.rapidoid.buffer.BufGroup;
-import org.rapidoid.net.config.ServerConfig;
+import org.rapidoid.net.TCPClient;
+import org.rapidoid.util.Inject;
 import org.rapidoid.util.U;
 
-public class RapidoidClientLoop extends AbstractEventLoop implements RapidoidClient {
+public class RapidoidClientLoop extends AbstractEventLoop implements TCPClient {
 
 	private RapidoidWorker[] workers;
 
-	private final int workersN;
+	@Inject(optional = true)
+	private String host = null;
 
-	private final ServerConfig config;
+	@Inject(optional = true)
+	private int port = 80;
+
+	@Inject(optional = true)
+	private int workersN = U.cpus();
+
+	@Inject(optional = true)
+	private int bufSizeKB = 16;
+
+	@Inject(optional = true)
+	private boolean noDelay = false;
+
+	@Inject(optional = true)
+	private int connections = 1;
 
 	private final Protocol protocol;
 
@@ -42,24 +57,13 @@ public class RapidoidClientLoop extends AbstractEventLoop implements RapidoidCli
 
 	private final Class<? extends DefaultExchange<?, ?>> exchangeClass;
 
-	private final String host;
+	public RapidoidClientLoop(Protocol protocol, Class<? extends DefaultExchange<?, ?>> exchangeClass,
+			Class<? extends RapidoidHelper> helperClass) {
+		super("client");
 
-	private final int port;
-
-	private final int connections;
-
-	public RapidoidClientLoop(int connections, ServerConfig config, Protocol protocol,
-			Class<? extends DefaultExchange<?, ?>> exchangeClass, Class<? extends RapidoidHelper> helperClass,
-			String host, int port) {
-		super("main", config);
-		this.connections = connections;
 		this.protocol = protocol;
 		this.exchangeClass = exchangeClass;
-		this.helperClass = helperClass;
-		this.host = host;
-		this.port = port;
-		this.workersN = config.workers();
-		this.config = config;
+		this.helperClass = U.or(helperClass, RapidoidHelper.class);
 	}
 
 	@Override
@@ -77,6 +81,8 @@ public class RapidoidClientLoop extends AbstractEventLoop implements RapidoidCli
 
 	private void openSockets() throws IOException {
 
+		U.notNull(host, "host");
+
 		InetSocketAddress addr = new InetSocketAddress(host, port);
 
 		workers = new RapidoidWorker[workersN];
@@ -84,7 +90,7 @@ public class RapidoidClientLoop extends AbstractEventLoop implements RapidoidCli
 		for (int i = 0; i < workers.length; i++) {
 			RapidoidHelper helper = U.newInstance(helperClass, exchangeClass);
 			String workerName = "client" + (i + 1);
-			workers[i] = new RapidoidWorker(workerName, new BufGroup(13), config, protocol, helper);
+			workers[i] = new RapidoidWorker(workerName, new BufGroup(13), protocol, helper, bufSizeKB, noDelay);
 			new Thread(workers[i], workerName).start();
 		}
 
@@ -109,20 +115,20 @@ public class RapidoidClientLoop extends AbstractEventLoop implements RapidoidCli
 	}
 
 	@Override
-	public void start() {
+	public synchronized RapidoidClientLoop start() {
 		new Thread(this, "client").start();
+		return this;
 	}
 
 	@Override
-	public synchronized void stop() {
+	public synchronized RapidoidClientLoop stop() {
 		stopLoop();
 
 		for (RapidoidWorker worker : workers) {
 			worker.close();
 			worker.stopLoop();
 		}
-
-		// TODO: selector is not used here!
+		return this;
 	}
 
 }

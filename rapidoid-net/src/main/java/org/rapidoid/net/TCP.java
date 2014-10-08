@@ -1,4 +1,4 @@
-package org.rapidoid.net.impl;
+package org.rapidoid.net;
 
 /*
  * #%L
@@ -20,85 +20,33 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
-import org.rapidoid.net.config.CLIConfig;
-import org.rapidoid.net.config.DefaultServerConfig;
-import org.rapidoid.net.config.ServerConfig;
+import org.rapidoid.net.impl.TCPClientBuilder;
+import org.rapidoid.net.impl.Protocol;
+import org.rapidoid.net.impl.RapidoidClientLoop;
+import org.rapidoid.net.impl.RapidoidServerLoop;
+import org.rapidoid.net.impl.TCPServerBuilder;
 import org.rapidoid.util.U;
 
-public class Rapidoid {
+public class TCP {
 
-	private static final ServerConfig DEFAULT_CONFIG = new CLIConfig(new DefaultServerConfig());
-
-	public static final int WRITE = 0;
-
-	public static RapidoidServer start(Protocol protocol) {
-		return start(protocol, null, null);
+	public static TCPServerBuilder server() {
+		return U.builder(TCPServerBuilder.class, TCPServer.class, RapidoidServerLoop.class);
 	}
 
-	public static RapidoidServer start(Protocol protocol, Class<? extends DefaultExchange<?, ?>> exchangeClass) {
-		return start(protocol, null, null);
-	}
-
-	public static RapidoidServer start(Protocol protocol, ServerConfig config) {
-		return start(protocol, config, null, RapidoidHelper.class);
-	}
-
-	public static RapidoidServer start(Protocol protocol, ServerConfig config,
-			Class<? extends DefaultExchange<?, ?>> exchangeClass) {
-		return start(protocol, config, exchangeClass, RapidoidHelper.class);
-	}
-
-	public static RapidoidServer start(Protocol protocol, ServerConfig config,
-			Class<? extends DefaultExchange<?, ?>> exchangeClass, Class<? extends RapidoidHelper> helperClass) {
-
-		if (config == null) {
-			config = DEFAULT_CONFIG;
-		}
-
-		if (!config.nostats()) {
-			U.inject(StatsThread.class).execute();
-		}
-
-		RapidoidServer server = new RapidoidServerLoop(config, protocol, exchangeClass, helperClass);
+	public static TCPServer listen(Protocol protocol) {
+		TCPServer server = TCP.server().protocol(protocol).build();
 		server.start();
-
 		return server;
 	}
 
-	public static RapidoidClient connect(int connections, Protocol protocol, String host, int port) {
-		return connect(connections, protocol, null, null, host, port);
+	public static TCPClientBuilder client() {
+		return U.builder(TCPClientBuilder.class, TCPClient.class, RapidoidClientLoop.class);
 	}
 
-	public static RapidoidClient connect(int connections, Protocol protocol,
-			Class<? extends DefaultExchange<?, ?>> exchangeClass, String host, int port) {
-		return connect(connections, protocol, null, null, host, port);
-	}
-
-	public static RapidoidClient connect(int connections, Protocol protocol, ServerConfig config, String host, int port) {
-		return connect(connections, protocol, config, null, RapidoidHelper.class, host, port);
-	}
-
-	public static RapidoidClient connect(int connections, Protocol protocol, ServerConfig config,
-			Class<? extends DefaultExchange<?, ?>> exchangeClass, String host, int port) {
-		return connect(connections, protocol, config, exchangeClass, RapidoidHelper.class, host, port);
-	}
-
-	public static RapidoidClient connect(int connections, Protocol protocol, ServerConfig config,
-			Class<? extends DefaultExchange<?, ?>> exchangeClass, Class<? extends RapidoidHelper> helperClass,
-			String host, int port) {
-
-		if (config == null) {
-			config = DEFAULT_CONFIG;
-		}
-
-		if (!config.nostats()) {
-			U.inject(StatsThread.class).execute();
-		}
-
-		RapidoidClient client = new RapidoidClientLoop(connections, config, protocol, exchangeClass, helperClass, host,
-				port);
+	public static TCPClient connect(String host, int port, Protocol protocol) {
+		TCPClient client = TCP.client().host(host).port(port).protocol(protocol).build();
 		client.start();
-
 		return client;
 	}
+
 }

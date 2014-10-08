@@ -22,24 +22,24 @@ import org.rapidoid.net.mime.MediaType;
  * #L%
  */
 
-public interface WebExchangeHeaders extends WebExchangeBody {
+public interface HttpExchangeHeaders extends HttpExchangeBody {
 
-	WebExchangeHeaders plain();
+	HttpExchangeHeaders plain();
 
-	WebExchangeHeaders html();
+	HttpExchangeHeaders html();
 
-	WebExchangeHeaders json();
+	HttpExchangeHeaders json();
 
-	WebExchangeHeaders binary();
+	HttpExchangeHeaders binary();
 
-	WebExchangeHeaders download(String filename);
+	HttpExchangeHeaders download(String filename);
 
-	WebExchangeHeaders addHeader(byte[] name, byte[] value);
+	HttpExchangeHeaders addHeader(byte[] name, byte[] value);
 
-	WebExchangeHeaders addHeader(HttpHeader name, String value);
+	HttpExchangeHeaders addHeader(HttpHeader name, String value);
 
-	WebExchangeHeaders setCookie(String name, String value);
+	HttpExchangeHeaders setCookie(String name, String value);
 
-	WebExchangeHeaders setContentType(MediaType contentType);
+	HttpExchangeHeaders setContentType(MediaType contentType);
 
 }

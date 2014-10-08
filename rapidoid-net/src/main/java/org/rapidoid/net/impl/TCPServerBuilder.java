@@ -1,8 +1,8 @@
-package com.rapidoid.http;
+package org.rapidoid.net.impl;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-net
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,12 +20,27 @@ package com.rapidoid.http;
  * #L%
  */
 
-import java.io.File;
+import org.rapidoid.net.TCPServer;
+import org.rapidoid.util.Builder;
 
-import org.rapidoid.net.abstracts.CtxWrite;
+public interface TCPServerBuilder extends Builder<TCPServer> {
 
-public interface HttpExchangeBody extends CtxWrite<HttpExchangeBody> {
+	TCPServerBuilder bufSize(int bufSize);
 
-	HttpExchangeBody sendFile(File file);
+	TCPServerBuilder port(int port);
+
+	TCPServerBuilder workers(int workers);
+
+	TCPServerBuilder nagle();
+
+	TCPServerBuilder stats();
+
+	TCPServerBuilder micro();
+
+	TCPServerBuilder protocol(Protocol protocol);
+
+	TCPServerBuilder exchange(Class<? extends DefaultExchange<?, ?>> exchangeClass);
+
+	TCPServerBuilder helper(Class<? extends RapidoidHelper> helperClass);
 
 }

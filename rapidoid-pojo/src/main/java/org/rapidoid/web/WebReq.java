@@ -22,15 +22,15 @@ package org.rapidoid.web;
 
 import java.util.Map;
 
-import com.rapidoid.http.WebExchange;
+import com.rapidoid.http.HttpExchange;
 
 public class WebReq implements PojowebRequest {
 
 	private static final String[] EMPTY_PATH = {};
 
-	private final WebExchange x;
+	private final HttpExchange x;
 
-	public WebReq(WebExchange x) {
+	public WebReq(HttpExchange x) {
 		this.x = x;
 	}
 

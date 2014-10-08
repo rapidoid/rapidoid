@@ -1,4 +1,4 @@
-package org.rapidoid.net;
+package org.rapidoid.net.impl;
 
 /*
  * #%L
@@ -20,10 +20,31 @@ package org.rapidoid.net;
  * #L%
  */
 
-public interface TCPClient {
+import org.rapidoid.net.TCPClient;
+import org.rapidoid.util.Builder;
 
-	TCPClient start();
+public interface TCPClientBuilder extends Builder<TCPClient> {
 
-	TCPClient stop();
+	TCPClientBuilder connections(int connections);
+
+	TCPClientBuilder bufSize(int bufSize);
+
+	TCPClientBuilder host(String host);
+
+	TCPClientBuilder port(int port);
+
+	TCPClientBuilder workers(int workers);
+
+	TCPClientBuilder nagle();
+
+	TCPClientBuilder stats();
+
+	TCPClientBuilder micro();
+
+	TCPClientBuilder protocol(Protocol protocol);
+
+	TCPClientBuilder exchange(Class<? extends DefaultExchange<?, ?>> exchangeClass);
+
+	TCPClientBuilder helper(Class<? extends RapidoidHelper> helperClass);
 
 }

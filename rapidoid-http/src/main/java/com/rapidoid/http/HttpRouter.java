@@ -102,7 +102,7 @@ public class HttpRouter implements Router {
 	}
 
 	@Override
-	public boolean dispatch(WebExchangeImpl x) {
+	public boolean dispatch(HttpExchangeImpl x) {
 
 		Buf buf = x.input();
 		Range action = x.verb_().range();
@@ -134,7 +134,7 @@ public class HttpRouter implements Router {
 		return false;
 	}
 
-	private boolean handle(Handler handler, WebExchangeImpl x) {
+	private boolean handle(Handler handler, HttpExchangeImpl x) {
 		Object res = handler.handle(x);
 
 		if (res != null) {
@@ -156,7 +156,7 @@ public class HttpRouter implements Router {
 			} else if (res instanceof File) {
 				File file = (File) res;
 				x.sendFile(file);
-			} else if (!(res instanceof WebExchangeImpl)) {
+			} else if (!(res instanceof HttpExchangeImpl)) {
 				if (!x.hasContentType()) {
 					x.json();
 				}

@@ -20,14 +20,14 @@ package org.rapidoid.demo.http;
  * #L%
  */
 
-import org.rapidoid.net.impl.Rapidoid;
+import org.rapidoid.net.TCP;
 import org.rapidoid.util.U;
 
 public class Main {
 
 	public static void main(String[] args) {
 		U.args(args);
-		Rapidoid.start(new SimpleHttpProtocol());
+		TCP.listen(new SimpleHttpProtocol());
 	}
 
 }

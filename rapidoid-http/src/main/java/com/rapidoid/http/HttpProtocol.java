@@ -24,22 +24,22 @@ import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ExchangeProtocol;
 import org.rapidoid.util.U;
 
-public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
+public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
-	private final HttpParser parser = U.inject(HttpParser.class);
+	private final HttpParser parser = U.singleton(HttpParser.class);
 
 	private final Router router;
 
 	private final HttpResponses responses;
 
-	public HttpProtocol(WebConfig config, Router router) {
-		super(WebExchangeImpl.class);
+	public HttpProtocol(Router router) {
+		super(HttpExchangeImpl.class);
 		this.router = router;
-		this.responses = new HttpResponses(!config.noserver(), !config.noserver());
+		this.responses = new HttpResponses(true, true);
 	}
 
 	@Override
-	protected void process(Channel ctx, WebExchangeImpl xch) {
+	protected void process(Channel ctx, HttpExchangeImpl xch) {
 
 		if (ctx.isInitial()) {
 			return;
@@ -80,10 +80,14 @@ public class HttpProtocol extends ExchangeProtocol<WebExchangeImpl> {
 		xch.output().putNumAsText(pos, wrote, false);
 	}
 
-	private HttpResponse resp(WebExchangeImpl xch) {
+	private HttpResponse resp(HttpExchangeImpl xch) {
 		HttpResponse resp = responses.get(xch.isKeepAlive.value);
 		assert resp != null;
 		return resp;
+	}
+
+	public Router getRouter() {
+		return router;
 	}
 
 }

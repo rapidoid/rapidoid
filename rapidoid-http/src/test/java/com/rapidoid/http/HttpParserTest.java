@@ -56,7 +56,7 @@ public class HttpParserTest extends HttpTestCommons {
 
 	@Test
 	public void shouldParseRequest1() {
-		WebExchangeImpl req = parse(REQ1);
+		HttpExchangeImpl req = parse(REQ1);
 
 		eq(REQ1, req.verb, "GET");
 		eq(REQ1, req.path, "/foo/bar");
@@ -70,7 +70,7 @@ public class HttpParserTest extends HttpTestCommons {
 
 	@Test
 	public void shouldParseRequest2() {
-		WebExchangeImpl req = parse(REQ2);
+		HttpExchangeImpl req = parse(REQ2);
 
 		eq(REQ2, req.verb, "POST");
 		eq(REQ2, req.path, "/something/else/here");
@@ -83,7 +83,7 @@ public class HttpParserTest extends HttpTestCommons {
 
 	@Test
 	public void shouldParseRequest3() {
-		WebExchangeImpl req = parse(REQ3);
+		HttpExchangeImpl req = parse(REQ3);
 
 		eq(REQ3, req.verb, "PUT");
 		eq(REQ3, req.path, "/books");
@@ -95,7 +95,7 @@ public class HttpParserTest extends HttpTestCommons {
 
 	@Test
 	public void shouldParseRequest4() {
-		WebExchangeImpl req = parse(REQ4);
+		HttpExchangeImpl req = parse(REQ4);
 
 		eq(REQ4, req.verb, "DELETE");
 		eq(REQ4, req.path, "/");
@@ -107,7 +107,7 @@ public class HttpParserTest extends HttpTestCommons {
 
 	@Test
 	public void shouldParseRequest5() {
-		WebExchangeImpl req = parse(REQ5);
+		HttpExchangeImpl req = parse(REQ5);
 
 		eq(REQ5, req.verb, "ABCD");
 		eq(REQ5, req.path, "///");
@@ -120,7 +120,7 @@ public class HttpParserTest extends HttpTestCommons {
 
 	@Test
 	public void shouldParseRequest6() {
-		WebExchangeImpl req = parse(REQ6);
+		HttpExchangeImpl req = parse(REQ6);
 
 		eq(REQ6, req.verb, "GET");
 		eq(REQ6, req.path, "/");
@@ -130,8 +130,8 @@ public class HttpParserTest extends HttpTestCommons {
 		isNone(req.body);
 	}
 
-	private WebExchangeImpl parse(String reqs) {
-		WebExchangeImpl req = new WebExchangeImpl();
+	private HttpExchangeImpl parse(String reqs) {
+		HttpExchangeImpl req = new HttpExchangeImpl();
 
 		Buf reqbuf = new BufGroup(10).from(reqs, "test");
 

@@ -22,23 +22,26 @@ package org.rapidoid.demo.http;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.rapidoid.http.HTTP;
+import com.rapidoid.http.HTTPServer;
 import com.rapidoid.http.Handler;
-import com.rapidoid.http.Web;
-import com.rapidoid.http.WebExchange;
+import com.rapidoid.http.HttpExchange;
 
 public class HttpDemo {
 
 	public static void main(String[] args) {
 		final AtomicLong n = new AtomicLong();
 
-		Web.get("/hi", new Handler() {
+		HTTPServer server = HTTP.server().build();
+
+		server.get("/hi", new Handler() {
 			@Override
-			public Object handle(WebExchange x) {
+			public Object handle(HttpExchange x) {
 				return "[" + n.incrementAndGet() + "] Hi: " + x.uri_();
 			}
 		});
 
-		Web.start();
+		server.start();
 	}
 
 }

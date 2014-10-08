@@ -26,7 +26,7 @@ public class HttpServerTest extends HttpTestCommons {
 
 	@Test
 	public void shouldHandleHttpRequests() {
-		server();
+		defaultServerSetup();
 
 		String message = "ažфbдšгcč";
 

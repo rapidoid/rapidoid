@@ -23,10 +23,10 @@ package com.rapidoid.http;
 import org.rapidoid.bytes.BYTES;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
+import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.Protocol;
-import org.rapidoid.net.impl.Rapidoid;
 import org.rapidoid.util.U;
 import org.rapidoid.wrap.Bool;
 import org.rapidoid.wrap.Int;
@@ -41,7 +41,8 @@ public class HttpPipeliningTest extends HttpTestCommons {
 	@Test
 	public void testHttpServerPipelining() {
 		U.args("workers=1");
-		server();
+
+		defaultServerSetup();
 
 		final int connections = 1000;
 		final int pipelining = 10;
@@ -49,7 +50,7 @@ public class HttpPipeliningTest extends HttpTestCommons {
 		final Int counter = new Int();
 		final Bool err = new Bool();
 
-		Rapidoid.connect(connections, new Protocol() {
+		TCP.client().host("localhost").port(8080).connections(connections).protocol(new Protocol() {
 			@Override
 			public void process(final Channel ctx) {
 				ConnState state = ctx.state();
@@ -81,7 +82,7 @@ public class HttpPipeliningTest extends HttpTestCommons {
 					ctx.done();
 				}
 			}
-		}, "localhost", 8080);
+		}).build().start();
 
 		int sec = 5;
 		U.sleep(sec * 1000);

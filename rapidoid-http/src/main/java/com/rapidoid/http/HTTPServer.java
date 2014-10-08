@@ -20,12 +20,28 @@ package com.rapidoid.http;
  * #L%
  */
 
-import java.io.File;
+import org.rapidoid.net.TCPServer;
 
-import org.rapidoid.net.abstracts.CtxWrite;
+public interface HTTPServer extends TCPServer {
 
-public interface HttpExchangeBody extends CtxWrite<HttpExchangeBody> {
+	HTTPServer route(String cmd, String url, Handler handler);
 
-	HttpExchangeBody sendFile(File file);
+	HTTPServer route(String cmd, String url, String response);
+
+	HTTPServer serve(String response);
+
+	HTTPServer serve(Handler handler);
+
+	HTTPServer get(String url, Handler handler);
+
+	HTTPServer post(String url, Handler handler);
+
+	HTTPServer put(String url, Handler handler);
+
+	HTTPServer delete(String url, Handler handler);
+
+	HTTPServer start();
+
+	HTTPServer stop();
 
 }

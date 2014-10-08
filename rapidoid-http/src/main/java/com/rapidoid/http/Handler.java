@@ -22,6 +22,6 @@ package com.rapidoid.http;
 
 public interface Handler {
 
-	Object handle(WebExchange x);
+	Object handle(HttpExchange x);
 
 }

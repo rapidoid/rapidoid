@@ -27,14 +27,13 @@ import java.nio.channels.Selector;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.rapidoid.net.config.ServerConfig;
 import org.rapidoid.util.U;
 
 public abstract class AbstractEventLoop extends AbstractLoop {
 
 	protected final Selector selector;
 
-	public AbstractEventLoop(String name, ServerConfig config) {
+	public AbstractEventLoop(String name) {
 		super(name);
 
 		Selector sel;

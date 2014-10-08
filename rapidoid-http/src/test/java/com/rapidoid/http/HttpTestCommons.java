@@ -41,52 +41,60 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
-import org.rapidoid.net.impl.RapidoidServer;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 import org.testng.Assert;
 
 public abstract class HttpTestCommons extends TestCommons {
 
-	protected RapidoidServer server;
+	protected HTTPServer server;
 
 	protected String localhost(String url) {
 		return "http://localhost:8080" + url;
 	}
 
 	protected void server() {
+		server = HTTP.server().build();
+	}
 
-		Web.get("/echo", new Handler() {
+	protected void defaultServerSetup() {
+		server();
+
+		server.get("/echo", new Handler() {
 			@Override
-			public Object handle(WebExchange x) {
+			public Object handle(HttpExchange x) {
 				return x.verb_().get() + ":" + x.path_().get() + ":" + x.subpath_().get() + ":" + x.query_().get();
 			}
 		});
 
-		Web.get("/hello", new Handler() {
+		server.get("/hello", new Handler() {
 			@Override
-			public Object handle(WebExchange x) {
+			public Object handle(HttpExchange x) {
 				return "Hello";
 			}
 		});
 
-		Web.post("/upload", new Handler() {
+		server.post("/upload", new Handler() {
 			@Override
-			public Object handle(WebExchange x) {
+			public Object handle(HttpExchange x) {
 				return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.data().get("a"), x.files()
 						.size(), U.md5(x.files().get("f1")), U.md5(x.files().get("f2")), U.md5(U.or(
 						x.files().get("f3"), new byte[0])));
 			}
 		});
 
-		Web.handle(new Handler() {
+		server.serve(new Handler() {
 			@Override
-			public Object handle(WebExchange x) {
+			public Object handle(HttpExchange x) {
 				return U.join(":", x.verb(), x.path(), x.subpath(), x.query());
 			}
 		});
 
-		server = Web.start();
+		start();
+	}
+
+	protected void start() {
+		server.start();
 
 		U.sleep(300);
 		U.print("----------------------------------------");

@@ -33,7 +33,6 @@ import java.util.concurrent.Callable;
 
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.buffer.IncompleteReadException;
-import org.rapidoid.net.config.ServerConfig;
 import org.rapidoid.pool.ArrayPool;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.util.SimpleList;
@@ -61,17 +60,17 @@ public class RapidoidWorker extends AbstractEventLoop {
 
 	private final int bufSize;
 
-	private final boolean nodelay;
+	private final boolean noDelay;
 
-	public RapidoidWorker(String name, final BufGroup bufs, final ServerConfig config, final Protocol protocol,
-			final RapidoidHelper helper) {
-		super(name, config);
+	public RapidoidWorker(String name, final BufGroup bufs, final Protocol protocol, final RapidoidHelper helper,
+			int bufSizeKB, boolean noNelay) {
+		super(name);
 
 		this.protocol = protocol;
 		this.helper = helper;
 
-		final int queueSize = config.micro() ? 1000 : 1000000;
-		final int growFactor = config.micro() ? 2 : 10;
+		final int queueSize = U.micro() ? 1000 : 1000000;
+		final int growFactor = U.micro() ? 2 : 10;
 
 		this.restarting = new ArrayBlockingQueue<RapidoidConnection>(queueSize);
 		this.connecting = new ArrayBlockingQueue<ConnectionTarget>(queueSize);
@@ -87,8 +86,8 @@ public class RapidoidWorker extends AbstractEventLoop {
 			}
 		}, 100000);
 
-		this.bufSize = config.buf() * 1024;
-		this.nodelay = !config.nagle();
+		this.bufSize = bufSizeKB * 1024;
+		this.noDelay = noNelay;
 	}
 
 	public void accept(SocketChannel socketChannel) throws IOException {
@@ -118,7 +117,7 @@ public class RapidoidWorker extends AbstractEventLoop {
 		socketChannel.configureBlocking(false);
 
 		Socket socket = socketChannel.socket();
-		socket.setTcpNoDelay(nodelay);
+		socket.setTcpNoDelay(noDelay);
 		socket.setReceiveBufferSize(bufSize);
 		socket.setSendBufferSize(bufSize);
 		socket.setReuseAddress(true);

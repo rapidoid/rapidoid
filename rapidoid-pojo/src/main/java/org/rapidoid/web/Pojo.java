@@ -27,8 +27,8 @@ import java.util.Set;
 import org.rapidoid.util.U;
 
 import com.rapidoid.http.Handler;
-import com.rapidoid.http.Web;
-import com.rapidoid.http.WebExchange;
+import com.rapidoid.http.HTTP;
+import com.rapidoid.http.HttpExchange;
 
 public class Pojo {
 
@@ -37,14 +37,12 @@ public class Pojo {
 	public static void run(Object... controllers) {
 		final POJODispatcher dispatcher = new POJODispatcher(controllers);
 
-		Web.handle(new Handler() {
+		HTTP.serve(new Handler() {
 			@Override
-			public Object handle(WebExchange x) {
+			public Object handle(HttpExchange x) {
 				return dispatcher.dispatch(new WebReq(x)).asString();
 			}
 		});
-
-		Web.start();
 	}
 
 	public static void run(Class<?>... classes) {
@@ -65,7 +63,6 @@ public class Pojo {
 
 		Set<Class<?>> services = new HashSet<Class<?>>();
 		for (Class<?> cls : classes) {
-			System.out.println(cls);
 			services.add(cls);
 		}
 

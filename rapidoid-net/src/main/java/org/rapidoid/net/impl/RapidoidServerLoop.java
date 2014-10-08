@@ -28,22 +28,29 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
 import org.rapidoid.buffer.BufGroup;
-import org.rapidoid.net.config.ServerConfig;
+import org.rapidoid.net.TCPServer;
+import org.rapidoid.util.Inject;
 import org.rapidoid.util.U;
 
-public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidServer {
+public class RapidoidServerLoop extends AbstractEventLoop implements TCPServer {
 
 	private RapidoidWorker[] workers;
 
 	private int workerIndex = 0;
 
-	private final int port;
+	@Inject(optional = true)
+	private int port = 8080;
 
-	private final int workersN;
+	@Inject(optional = true)
+	private int workersN = U.cpus();
 
-	private final ServerConfig config;
+	@Inject(optional = true)
+	private int bufSizeKB = 16;
 
-	private final Protocol protocol;
+	@Inject(optional = true)
+	private boolean noDelay = false;
+
+	protected final Protocol protocol;
 
 	private final Class<? extends RapidoidHelper> helperClass;
 
@@ -51,15 +58,12 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 
 	private ServerSocketChannel serverSocketChannel;
 
-	public RapidoidServerLoop(ServerConfig config, Protocol protocol,
-			Class<? extends DefaultExchange<?, ?>> exchangeClass, Class<? extends RapidoidHelper> helperClass) {
-		super("main", config);
+	public RapidoidServerLoop(Protocol protocol, Class<? extends DefaultExchange<?, ?>> exchangeClass,
+			Class<? extends RapidoidHelper> helperClass) {
+		super("server");
 		this.protocol = protocol;
 		this.exchangeClass = exchangeClass;
-		this.helperClass = helperClass;
-		this.port = config.port();
-		this.workersN = config.workers();
-		this.config = config;
+		this.helperClass = U.or(helperClass, RapidoidHelper.class);
 	}
 
 	@Override
@@ -91,6 +95,9 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 	}
 
 	private void openSocket() throws IOException {
+		U.notNull(protocol, "protocol");
+		U.notNull(helperClass, "helperClass");
+
 		serverSocketChannel = ServerSocketChannel.open();
 
 		if ((serverSocketChannel.isOpen()) && (selector.isOpen())) {
@@ -112,7 +119,7 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 				RapidoidHelper helper = U.newInstance(helperClass, exchangeClass);
 				String workerName = "server" + (i + 1);
 				BufGroup bufGroup = new BufGroup(14); // 2^14B (16 KB per buffer segment)
-				workers[i] = new RapidoidWorker(workerName, bufGroup, config, protocol, helper);
+				workers[i] = new RapidoidWorker(workerName, bufGroup, protocol, helper, bufSizeKB, noDelay);
 				new Thread(workers[i], workerName).start();
 			}
 		} else {
@@ -121,12 +128,13 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 	}
 
 	@Override
-	public void start() {
+	public synchronized TCPServer start() {
 		new Thread(this, "server").start();
+		return this;
 	}
 
 	@Override
-	public synchronized void stop() {
+	public synchronized TCPServer stop() {
 		stopLoop();
 
 		for (RapidoidWorker worker : workers) {
@@ -142,6 +150,8 @@ public class RapidoidServerLoop extends AbstractEventLoop implements RapidoidSer
 				U.warn("Cannot close socket or selector!", e);
 			}
 		}
+
+		return this;
 	}
 
 }

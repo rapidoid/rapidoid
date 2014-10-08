@@ -20,12 +20,20 @@ package com.rapidoid.http;
  * #L%
  */
 
-import java.io.File;
+import org.rapidoid.util.Builder;
 
-import org.rapidoid.net.abstracts.CtxWrite;
+public interface HTTPServerBuilder extends Builder<HTTPServer> {
 
-public interface HttpExchangeBody extends CtxWrite<HttpExchangeBody> {
+	HTTPServerBuilder bufSize(int bufSize);
 
-	HttpExchangeBody sendFile(File file);
+	HTTPServerBuilder port(int port);
+
+	HTTPServerBuilder workers(int workers);
+
+	HTTPServerBuilder nagle();
+
+	HTTPServerBuilder stats();
+
+	HTTPServerBuilder micro();
 
 }

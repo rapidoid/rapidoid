@@ -1,4 +1,4 @@
-package org.rapidoid.net.impl;
+package org.rapidoid.net;
 
 /*
  * #%L
@@ -20,10 +20,10 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
-public interface RapidoidServer {
+public interface TCPServer {
 
-	void start();
+	TCPServer start();
 
-	void stop();
+	TCPServer stop();
 
 }

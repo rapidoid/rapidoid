@@ -20,16 +20,16 @@ package org.rapidoid;
  * #L%
  */
 
+import org.rapidoid.net.TCPServer;
+import org.rapidoid.net.TCP;
 import org.rapidoid.net.impl.Protocol;
-import org.rapidoid.net.impl.Rapidoid;
-import org.rapidoid.net.impl.RapidoidServer;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 
 public abstract class NetTestCommons extends TestCommons {
 
 	protected void server(Protocol protocol, Runnable client) {
-		RapidoidServer server = Rapidoid.start(protocol);
+		TCPServer server = TCP.listen(protocol);
 
 		U.sleep(300);
 		U.print("----------------------------------------");

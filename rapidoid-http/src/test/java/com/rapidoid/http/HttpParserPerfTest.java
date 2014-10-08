@@ -43,7 +43,7 @@ public class HttpParserPerfTest {
 		final Buf[] reqs = { r(REQ1), r(REQ2), r(REQ3), r(REQ4) };
 		final RapidoidHelper helper = new RapidoidHelper(null);
 
-		final WebExchangeImpl req = new WebExchangeImpl();
+		final HttpExchangeImpl req = new HttpExchangeImpl();
 
 		for (int i = 0; i < 10; i++) {
 			U.benchmark("parse", 3000000, new Runnable() {
