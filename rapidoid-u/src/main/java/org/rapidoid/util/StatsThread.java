@@ -1,8 +1,8 @@
-package org.rapidoid.net.impl;
+package org.rapidoid.util;
 
 /*
  * #%L
- * rapidoid-net
+ * rapidoid-u
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,24 +20,13 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
-import org.rapidoid.util.U;
-
 public class StatsThread extends Thread {
 
 	public StatsThread() {
 		super("stats");
 	}
 
-	private boolean active;
-
 	private String lastStats;
-
-	public synchronized void execute() {
-		if (!active) {
-			active = true;
-			start();
-		}
-	}
 
 	@Override
 	public void run() {

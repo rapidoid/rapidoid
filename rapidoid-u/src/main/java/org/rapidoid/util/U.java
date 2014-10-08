@@ -1721,9 +1721,13 @@ public class U implements Constants {
 		}
 	}
 
-	public static void args(String... args) {
+	public static synchronized void args(String... args) {
 		if (args != null) {
 			ARGS = args;
+
+			if (hasOption("stats")) {
+				singleton(StatsThread.class).start();
+			}
 		}
 	}
 
@@ -1751,7 +1755,12 @@ public class U implements Constants {
 		return defaultValue;
 	}
 
-	public static long option(String name, long defaultValue) {
+	public static int option(String name, int defaultValue) {
+		String n = option(name, null);
+		return n != null ? Integer.parseInt(n) : defaultValue;
+	}
+
+	public static long optionL(String name, long defaultValue) {
 		String n = option(name, null);
 		return n != null ? Long.parseLong(n) : defaultValue;
 	}
