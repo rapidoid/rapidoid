@@ -63,7 +63,7 @@ public class SimpleHttpProtocol implements Protocol {
 
 	private static final byte[] URI_JSON = "/json".getBytes();
 
-	private static final HttpParser HTTP_PARSER = U.inject(HttpParser.class);
+	private static final HttpParser HTTP_PARSER = U.singleton(HttpParser.class);
 
 	public void process(Channel ctx) {
 		if (ctx.isInitial()) {

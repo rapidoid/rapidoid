@@ -1823,6 +1823,14 @@ public class U implements Constants {
 		return n != null ? Double.parseDouble(n) : defaultValue;
 	}
 
+	public static int cpus() {
+		return option("cpus", Runtime.getRuntime().availableProcessors());
+	}
+
+	public static boolean micro() {
+		return hasOption("micro");
+	}
+
 	public static boolean isEmpty(String value) {
 		return value == null || value.isEmpty();
 	}
@@ -2007,7 +2015,7 @@ public class U implements Constants {
 		}
 
 		for (Class<?> clazz : autocreate) {
-			inject(clazz);
+			singleton(clazz);
 		}
 	}
 
@@ -2022,50 +2030,64 @@ public class U implements Constants {
 		providers.add(provider);
 	}
 
-	public static synchronized <T> T inject(Class<T> type) {
+	public static synchronized <T> T singleton(Class<T> type) {
 		info("Inject", "type", type);
-		return provideIoCInstanceOf(type, null);
+		return provideIoCInstanceOf(null, type, null, null, false);
 	}
 
 	public static synchronized <T> T inject(T target) {
 		info("Inject", "target", target);
-		return ioc(target);
+		return ioc(target, null);
 	}
 
-	private static <T> T provideIoCInstanceOf(Class<T> type, String name) {
+	public static synchronized <T> T inject(T target, Map<String, Object> properties) {
+		info("Inject", "target", target, "properties", properties);
+		return ioc(target, properties);
+	}
+
+	private static <T> T provideIoCInstanceOf(Object target, Class<T> type, String name,
+			Map<String, Object> properties, boolean optional) {
 		T instance = null;
 
 		if (name != null) {
-			instance = provideInstanceByName(type, name);
+			instance = provideInstanceByName(target, type, name, properties);
 		}
 
 		if (instance == null) {
-			instance = provideIoCInstanceByType(type);
+			instance = provideIoCInstanceByType(type, properties);
 		}
 
-		if (instance == null) {
-			instance = provideNewIoCInstanceOf(type);
+		if (instance == null && canInjectNew(type)) {
+			instance = provideNewIoCInstanceOf(type, properties);
 		}
 
-		if (instance == null) {
-			if (name != null) {
-				throw rte("Couldn't provide a value for type '%s' and name '%s'!", type, name);
-			} else {
-				throw rte("Couldn't provide a value for type '%s'!", type);
+		if (!optional) {
+			if (instance == null) {
+				if (name != null) {
+					throw rte("Didn't find a value for type '%s' and name '%s'!", type, name);
+				} else {
+					throw rte("Didn't find a value for type '%s'!", type);
+				}
 			}
 		}
 
-		return ioc(instance);
+		return instance != null ? ioc(instance, properties) : null;
+	}
+
+	private static boolean canInjectNew(Class<?> type) {
+		return !type.isAnnotation() && !type.isEnum() && !type.isInterface() && !type.isPrimitive()
+				&& !type.equals(String.class) && !type.equals(Object.class) && !type.equals(Boolean.class)
+				&& !Number.class.isAssignableFrom(type);
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T> T provideNewIoCInstanceOf(Class<T> type) {
+	private static <T> T provideNewIoCInstanceOf(Class<T> type, Map<String, Object> properties) {
 		// instantiation if it's real class
 		if (!type.isInterface() && !type.isEnum() && !type.isAnnotation()) {
 			T instance = (T) SINGLETONS.get(type);
 
 			if (instance == null) {
-				instance = ioc(newInstance(type));
+				instance = ioc(newInstance(type, properties), properties);
 			}
 
 			return instance;
@@ -2074,7 +2096,7 @@ public class U implements Constants {
 		}
 	}
 
-	private static <T> T provideIoCInstanceByType(Class<T> type) {
+	private static <T> T provideIoCInstanceByType(Class<T> type, Map<String, Object> properties) {
 		Set<Object> providers = INJECTION_PROVIDERS.get(type);
 
 		if (providers != null && !providers.isEmpty()) {
@@ -2094,7 +2116,7 @@ public class U implements Constants {
 			}
 
 			if (provider != null) {
-				return provideFrom(provider);
+				return provideFrom(provider, properties);
 			}
 		}
 
@@ -2102,10 +2124,10 @@ public class U implements Constants {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T> T provideFrom(Object classOrInstance) {
+	private static <T> T provideFrom(Object classOrInstance, Map<String, Object> properties) {
 		T instance;
 		if (isClass(classOrInstance)) {
-			instance = provideNewIoCInstanceOf((Class<T>) classOrInstance);
+			instance = provideNewIoCInstanceOf((Class<T>) classOrInstance, properties);
 		} else {
 			instance = (T) classOrInstance;
 		}
@@ -2116,31 +2138,58 @@ public class U implements Constants {
 		return obj instanceof Class;
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <T> T provideInstanceByName(Class<T> type, String name) {
-		Object instance = null;
+	private static <T> T provideInstanceByName(Object target, Class<T> type, String name, Map<String, Object> properties) {
+		T instance = getInjectableByName(type, name, properties, false);
 
-		if (type.equals(Boolean.class) || type.equals(boolean.class)) {
-			instance = hasOption(name);
-		} else {
-			String opt = option(name, null);
-			if (opt != null) {
-				instance = convert(opt, type);
+		if (target != null) {
+			instance = getInjectableByName(type, target.getClass().getSimpleName() + "." + name, properties, true);
+		}
+
+		if (instance == null) {
+			instance = getInjectableByName(type, name, properties, true);
+		}
+
+		return (T) instance;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> T getInjectableByName(Class<T> type, String name, Map<String, Object> properties,
+			boolean useConfig) {
+		Object instance = properties != null ? properties.get(name) : null;
+
+		if (instance == null && useConfig) {
+			if (type.equals(Boolean.class) || type.equals(boolean.class)) {
+				instance = hasOption(name);
+			} else {
+				String opt = option(name, null);
+				if (opt != null) {
+					instance = convert(opt, type);
+				}
 			}
 		}
 
 		return (T) instance;
 	}
 
-	private static void autowire(Object target) {
+	private static void autowire(Object target, Map<String, Object> properties) {
 		debug("Autowiring", "target", target);
 
 		for (Field field : INJECTABLE_FIELDS.get(target.getClass())) {
-			Object value = provideIoCInstanceOf(field.getType(), field.getName());
+
+			boolean optional = isInjectOptional(field);
+			Object value = provideIoCInstanceOf(target, field.getType(), field.getName(), properties, optional);
 
 			debug("Injecting field value", "target", target, "field", field.getName(), "value", value);
-			setFieldValue(target, field.getName(), value);
+
+			if (!optional || value != null) {
+				setFieldValue(target, field.getName(), value);
+			}
 		}
+	}
+
+	private static boolean isInjectOptional(Field field) {
+		Inject inject = field.getAnnotation(Inject.class);
+		return inject != null && inject.optional();
 	}
 
 	private static <T> void invokePostConstruct(T target) {
@@ -2151,13 +2200,13 @@ public class U implements Constants {
 		}
 	}
 
-	private static <T> T ioc(T target) {
+	private static <T> T ioc(T target, Map<String, Object> properties) {
 		if (!isIocProcessed(target)) {
 			IOC_INSTANCES.put(target, null);
 
 			manage(target);
 
-			autowire(target);
+			autowire(target, properties);
 
 			invokePostConstruct(target);
 
@@ -2203,7 +2252,7 @@ public class U implements Constants {
 							}
 						};
 
-						instance = implementInterfaces(instance, handler, interf);
+						instance = implement(instance, handler, interf);
 
 						done.add(interceptor);
 					}
@@ -2369,6 +2418,7 @@ public class U implements Constants {
 							clsName = clsName.replace(File.separatorChar, '.');
 
 							if (nameRegex.matcher(clsName).matches()) {
+								info("loading class", "name", clsName);
 								Class<?> cls = Class.forName(clsName);
 								if (filter == null || filter.eval(cls)) {
 									classes.add(cls);

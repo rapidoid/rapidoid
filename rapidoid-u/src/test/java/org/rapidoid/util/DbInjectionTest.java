@@ -63,9 +63,9 @@ public class DbInjectionTest extends TestCommons {
 
 	@Test
 	public void shouldInject() throws Exception {
-		Database db = U.inject(Database.class);
-		isTrue(db == U.inject(Database.class));
-		isTrue(db == U.inject(Database.class));
+		Database db = U.singleton(Database.class);
+		isTrue(db == U.singleton(Database.class));
+		isTrue(db == U.singleton(Database.class));
 
 		notNull(db.tables);
 

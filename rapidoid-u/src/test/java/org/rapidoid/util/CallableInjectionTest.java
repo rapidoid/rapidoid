@@ -47,7 +47,7 @@ public class CallableInjectionTest extends TestCommons {
 	public void shouldInject() throws Exception {
 		U.manage(MyCallable.class);
 
-		Foo foo = U.inject(Foo.class);
+		Foo foo = U.singleton(Foo.class);
 
 		notNullAll(foo, foo.callable);
 		hasType(foo.callable, MyCallable.class);

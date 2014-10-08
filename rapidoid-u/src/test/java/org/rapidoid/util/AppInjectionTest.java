@@ -75,8 +75,8 @@ public class AppInjectionTest extends TestCommons {
 		U.manage(App.class, PersonServiceImpl.class);
 		isTrue(App.READY);
 
-		App app = U.inject(App.class);
-		same(app, U.inject(App.class), U.inject(App.class));
+		App app = U.singleton(App.class);
+		same(app, U.singleton(App.class), U.singleton(App.class));
 
 		notNull(app.personService);
 		notNull(app.bookService);
