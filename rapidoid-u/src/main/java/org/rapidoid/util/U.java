@@ -974,9 +974,16 @@ public class U implements Constants {
 		return a.equals(b);
 	}
 
+	// a duplicate without varargs, to avoid creating array
 	public static void failIf(boolean failureCondition, String msg) {
 		if (failureCondition) {
 			throw rte(msg);
+		}
+	}
+
+	public static void failIf(boolean failureCondition, String msg, Object... args) {
+		if (failureCondition) {
+			throw rte(msg, args);
 		}
 	}
 
@@ -1605,8 +1612,7 @@ public class U implements Constants {
 		return ((T) Proxy.newProxyInstance(CLASS_LOADER, interfaces, handler));
 	}
 
-	public static <T> T implementInterfaces(final Object target, final InvocationHandler handler,
-			Class<?>... interfaces) {
+	public static <T> T implement(final Object target, final InvocationHandler handler, Class<?>... interfaces) {
 		final Class<?> targetClass = target.getClass();
 
 		return createProxy(new InvocationHandler() {
@@ -1624,8 +1630,12 @@ public class U implements Constants {
 		}, interfaces);
 	}
 
+	public static <T> T implement(InvocationHandler handler, Class<?>... classes) {
+		return implement(new InterceptorProxy(U.text(classes)), handler, classes);
+	}
+
 	public static <T> T implementInterfaces(Object target, InvocationHandler handler) {
-		return implementInterfaces(target, handler, getImplementedInterfaces(target.getClass()));
+		return implement(target, handler, getImplementedInterfaces(target.getClass()));
 	}
 
 	public static <T> T tracer(Object target) {
@@ -1664,15 +1674,7 @@ public class U implements Constants {
 			}
 		}
 
-		throw rte("Cannot find appropriate constructor!");
-	}
-
-	public static <T> T initNewInstance(Class<T> clazz, Map<String, Object> params) {
-		return init(newInstance(clazz), params);
-	}
-
-	public static <T> T init(T obj, Map<String, Object> params) {
-		throw notReady();
+		throw rte("Cannot find appropriate constructor for %s with args %s!", clazz, U.text(args));
 	}
 
 	private static boolean areAssignable(Class<?>[] types, Object[] values) {
@@ -1688,6 +1690,57 @@ public class U implements Constants {
 		}
 
 		return true;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T newInstance(Class<T> clazz, Map<String, Object> properties) {
+		if (properties == null) {
+			return newInstance(clazz);
+		}
+
+		Collection<Object> values = properties.values();
+
+		for (Constructor<?> constr : clazz.getConstructors()) {
+			Class<?>[] paramTypes = constr.getParameterTypes();
+			Object[] args = getAssignableArgs(paramTypes, values);
+			if (args != null) {
+				try {
+					return (T) constr.newInstance(args);
+				} catch (Exception e) {
+					throw rte(e);
+				}
+			}
+		}
+
+		throw rte("Cannot find appropriate constructor for %s with args %s!", clazz, values);
+	}
+
+	private static Object[] getAssignableArgs(Class<?>[] types, Collection<?> properties) {
+		Object[] args = new Object[types.length];
+
+		for (int i = 0; i < types.length; i++) {
+			Class<?> type = types[i];
+			args[i] = getUniqueInstanceOf(type, properties);
+		}
+
+		return args;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T getUniqueInstanceOf(Class<T> type, Collection<?> values) {
+		T instance = null;
+
+		for (Object obj : values) {
+			if (obj != null && type.isAssignableFrom(obj.getClass())) {
+				if (instance == null) {
+					instance = (T) obj;
+				} else {
+					throw rte("Found more than one instance of %s: %s and %s", type, instance, obj);
+				}
+			}
+		}
+
+		return instance;
 	}
 
 	public static <T> T or(T value, T fallback) {
@@ -2557,6 +2610,28 @@ public class U implements Constants {
 		} catch (ClassNotFoundException e) {
 			return null;
 		}
+	}
+
+	public static <T, B extends Builder<T>> B builder(final Class<B> builderClass, final Class<T> builtClass,
+			final Class<? extends T> implClass) {
+
+		final Map<String, Object> properties = map();
+
+		InvocationHandler handler = new InvocationHandler() {
+			@Override
+			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+				if (method.getDeclaringClass().equals(Builder.class)) {
+					return inject(newInstance(implClass, properties), properties);
+				} else {
+					must(args.length == 1, "expected 1 argument!");
+					properties.put(method.getName(), args[0]);
+					return proxy;
+				}
+			}
+		};
+
+		B builder = implement(handler, builderClass);
+		return builder;
 	}
 
 }
