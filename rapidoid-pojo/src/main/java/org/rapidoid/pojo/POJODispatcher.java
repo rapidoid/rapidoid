@@ -170,10 +170,6 @@ public class POJODispatcher {
 						args[i] = U.set();
 					}
 
-				} else if (type.equals(Principal.class)) {
-
-					args[i] = new PojowebPrincipal("not_implemented"); // FIXME
-
 				} else if (type.getCanonicalName().startsWith("java")) {
 					return error("Parameter type '%s' is not supported!", type.getCanonicalName());
 				} else {
