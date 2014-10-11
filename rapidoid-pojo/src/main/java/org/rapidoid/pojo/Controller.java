@@ -23,7 +23,6 @@ package org.rapidoid.pojo;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.rapidoid.util.U;
 
@@ -32,8 +31,6 @@ public class Controller {
 	private final Map<String, Method> methods = U.map();
 
 	// private final Map<String, String[]> paramNames = new HashMap<>();
-
-	private final Logger log = Logger.getLogger("POJOWEB-DISPATCHER");
 
 	private final Object controller;
 
@@ -49,7 +46,7 @@ public class Controller {
 					methods.put(method.getName(), method);
 					// paramNames.put(method.getName(),
 					// getParamNames(method));
-					log.info("Registered web handler method: " + method);
+					U.info("Registered web handler method: " + method);
 				}
 			}
 		}
