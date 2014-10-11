@@ -58,11 +58,12 @@ public class POJODispatcher {
 		String[] parts = request.pathParts();
 		int length = parts.length;
 
-		if (length == 0) {
-			return process(request, "main", "index", parts, 0);
-		}
+		PojoResponse res;
 
-		PojowebResponse res;
+		if (length == 0) {
+			res = process(request, "main", "index", parts, 0);
+			return res != null ? res : notFound(request);
+		}
 
 		if (length >= 1) {
 			res = process(request, parts[0], "index", parts, 1);
