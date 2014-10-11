@@ -987,24 +987,44 @@ public class U implements Constants {
 		}
 	}
 
-	public static String load(String name) {
-		InputStream stream = CLASS_LOADER.getResourceAsStream(name);
+	public static byte[] loadBytes(String filename) {
+		InputStream input = CLASS_LOADER.getResourceAsStream(filename);
 
-		InputStreamReader reader = new InputStreamReader(stream);
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-		BufferedReader r = new BufferedReader(reader);
+		byte[] buffer = new byte[4 * 1024];
 
-		StringBuilder sb = new StringBuilder();
-		String line;
 		try {
-			while ((line = r.readLine()) != null) {
-				sb.append(line);
+			int readN = 0;
+			while ((readN = input.read(buffer)) != -1) {
+				output.write(buffer, 0, readN);
 			}
 		} catch (IOException e) {
-			throw rte("Cannot read resource: " + name, e);
+			throw rte(e);
 		}
 
-		return sb.toString();
+		return output.toByteArray();
+	}
+
+	public static String load(String filename) {
+		return new String(loadBytes(filename));
+	}
+
+	public static List<String> loadLines(String filename) {
+		InputStream input = CLASS_LOADER.getResourceAsStream(filename);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+		List<String> lines = list();
+
+		try {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				lines.add(line);
+			}
+		} catch (IOException e) {
+			throw rte(e);
+		}
+
+		return lines;
 	}
 
 	public static void save(String filename, String content) {
@@ -2682,6 +2702,19 @@ public class U implements Constants {
 
 		B builder = implement(handler, builderClass);
 		return builder;
+	}
+
+	public static <T> void filter(Collection<T> coll, Predicate<T> predicate) {
+		try {
+			for (Iterator<T> iterator = coll.iterator(); iterator.hasNext();) {
+				T t = (T) iterator.next();
+				if (!predicate.eval(t)) {
+					iterator.remove();
+				}
+			}
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
 	}
 
 }
