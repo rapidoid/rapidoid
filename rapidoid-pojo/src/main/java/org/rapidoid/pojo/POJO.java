@@ -20,8 +20,16 @@ package org.rapidoid.pojo;
  * #L%
  */
 
-public interface PojowebResponse {
+import java.util.List;
 
-	String asString();
+import org.rapidoid.util.U;
+
+public class POJO {
+
+	protected static final String SUFFIX = "Service";
+
+	public static List<Class<?>> scanServices() {
+		return U.classpathClasses("*", ".+" + SUFFIX, null);
+	}
 
 }

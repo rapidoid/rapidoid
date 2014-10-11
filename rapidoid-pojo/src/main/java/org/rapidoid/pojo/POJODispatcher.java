@@ -22,7 +22,6 @@ package org.rapidoid.pojo;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -31,7 +30,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.rapidoid.util.JSON;
 import org.rapidoid.util.Prop;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
@@ -45,16 +43,16 @@ public class POJODispatcher {
 	public POJODispatcher(Object... controllers) {
 		for (Object controller : controllers) {
 			String name = controller.getClass().getSimpleName();
-			U.must(name.endsWith(Pojo.SUFFIX), "The service class doesn't have a '%s' suffix: %s", Pojo.SUFFIX, name);
+			U.must(name.endsWith(POJO.SUFFIX), "The service class doesn't have a '%s' suffix: %s", POJO.SUFFIX, name);
 			U.info("Initializing service: " + name);
-			name = name.substring(0, name.length() - Pojo.SUFFIX.length()).toLowerCase();
+			name = name.substring(0, name.length() - POJO.SUFFIX.length()).toLowerCase();
 			Controller ctrl = new Controller(controller);
 			ctrl.init();
 			this.controllers.put(name, ctrl);
 		}
 	}
 
-	public PojowebResponse dispatch(PojowebRequest request) {
+	public PojoResponse dispatch(PojoRequest request) {
 		String[] parts = request.pathParts();
 		int length = parts.length;
 
@@ -87,7 +85,7 @@ public class POJODispatcher {
 		return notFound(request);
 	}
 
-	private PojowebResponse process(PojowebRequest request, String ctrl, String action, String[] parts, int paramsFrom) {
+	private PojoResponse process(PojoRequest request, String ctrl, String action, String[] parts, int paramsFrom) {
 		Controller root = controllers.get(ctrl);
 		if (root != null) {
 			Method method = root.getMethod(action);
@@ -99,7 +97,7 @@ public class POJODispatcher {
 		return null;
 	}
 
-	private PojowebResponse doDispatch(PojowebRequest request, Method method, Object controller, String[] parts,
+	private PojoResponse doDispatch(PojoRequest request, Method method, Object controller, String[] parts,
 			int paramsFrom) {
 		int paramsSize = parts.length - paramsFrom;
 
@@ -164,7 +162,6 @@ public class POJODispatcher {
 						for (int j = paramsFrom; j < parts.length; j++) {
 							arguments.add(parts[j]);
 						}
-
 						args[i] = arguments;
 					} else {
 						args[i] = U.set();
@@ -197,11 +194,7 @@ public class POJODispatcher {
 
 			Object result = U.invoke(method, controller, args);
 
-			if (result instanceof String) {
-				return new PojowebStringResponse((String) result);
-			} else {
-				return new PojowebStringResponse(JSON.stringify(result));
-			}
+			return new PojoResponseImpl(result, false);
 
 		} else {
 			return notFound(request);
@@ -218,12 +211,12 @@ public class POJODispatcher {
 		}
 	}
 
-	private PojowebResponse error(String msg, Object... args) {
-		return new PojowebStringResponse("ERROR: " + String.format(msg, args));
+	private PojoResponse error(String msg, Object... args) {
+		return new PojoResponseImpl("ERROR: " + String.format(msg, args), true);
 	}
 
-	private PojowebStringResponse notFound(PojowebRequest request) {
-		return new PojowebStringResponse("Not found: " + request.path());
+	private PojoResponseImpl notFound(PojoRequest request) {
+		return new PojoResponseImpl("Not found: " + request.path(), true);
 	}
 
 }

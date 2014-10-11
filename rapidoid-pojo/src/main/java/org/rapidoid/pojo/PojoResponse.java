@@ -20,16 +20,10 @@ package org.rapidoid.pojo;
  * #L%
  */
 
-import java.util.Map;
+public interface PojoResponse {
 
-public interface PojowebRequest {
+	Object getResult();
 
-	String uri();
-
-	String path();
-
-	Map<String, Object> paramsMap();
-
-	String[] pathParts();
+	boolean hasError();
 
 }

@@ -20,17 +20,16 @@ package org.rapidoid.pojo;
  * #L%
  */
 
-public class PojowebStringResponse implements PojowebResponse {
+import java.util.Map;
 
-	private String str;
+public interface PojoRequest {
 
-	public PojowebStringResponse(String str) {
-		this.str = str;
-	}
+	String uri();
 
-	@Override
-	public String asString() {
-		return str;
-	}
+	String path();
+
+	Map<String, Object> paramsMap();
+
+	String[] pathParts();
 
 }

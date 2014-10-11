@@ -61,6 +61,7 @@
 		<module>rapidoid-http</module>
 		<module>rapidoid-measure</module>
 		<module>rapidoid-pojo</module>
+		<module>rapidoid-web</module>
 		<module>rapidoid-all</module>
 		<module>rapidoid-demo</module>
 	</modules>

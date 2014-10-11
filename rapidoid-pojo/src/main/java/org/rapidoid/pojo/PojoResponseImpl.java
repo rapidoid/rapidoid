@@ -20,45 +20,25 @@ package org.rapidoid.pojo;
  * #L%
  */
 
-import java.util.Map;
+public class PojoResponseImpl implements PojoResponse {
 
-import com.rapidoid.http.HttpExchange;
+	private final Object result;
 
-public class WebReq implements PojowebRequest {
+	private final boolean hasError;
 
-	private static final String[] EMPTY_PATH = {};
-
-	private final HttpExchange x;
-
-	public WebReq(HttpExchange x) {
-		this.x = x;
+	public PojoResponseImpl(Object result, boolean hasError) {
+		this.result = result;
+		this.hasError = hasError;
 	}
 
 	@Override
-	public String uri() {
-		return x.path_().get();
+	public Object getResult() {
+		return result;
 	}
 
 	@Override
-	public String path() {
-		return x.path_().get();
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public Map<String, Object> paramsMap() {
-		return (Map) x.params_().get();
-	}
-
-	@Override
-	public String[] pathParts() {
-		String path = path();
-
-		if (path.isEmpty() || path.equals("/")) {
-			return EMPTY_PATH;
-		}
-
-		return path.replaceAll("^/", "").replaceAll("/$", "").split("/");
+	public boolean hasError() {
+		return hasError;
 	}
 
 }

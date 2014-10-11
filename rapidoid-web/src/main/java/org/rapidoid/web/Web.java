@@ -1,8 +1,8 @@
-package org.rapidoid.pojo;
+package org.rapidoid.web;
 
 /*
  * #%L
- * rapidoid-pojo
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,19 +20,18 @@ package org.rapidoid.pojo;
  * #L%
  */
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import org.rapidoid.pojo.POJO;
+import org.rapidoid.pojo.POJODispatcher;
+import org.rapidoid.pojo.PojoResponse;
 import org.rapidoid.util.U;
 
-import com.rapidoid.http.Handler;
 import com.rapidoid.http.HTTP;
+import com.rapidoid.http.Handler;
 import com.rapidoid.http.HttpExchange;
 
-public class Pojo {
-
-	protected static final String SUFFIX = "Service";
+public class Web {
 
 	public static void run(Object... controllers) {
 		final POJODispatcher dispatcher = new POJODispatcher(controllers);
@@ -40,7 +39,9 @@ public class Pojo {
 		HTTP.serve(new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				return dispatcher.dispatch(new WebReq(x)).asString();
+				PojoResponse resp = dispatcher.dispatch(new WebReq(x));
+				U.notNull(resp, "POJO response");
+				return resp.getResult();
 			}
 		});
 	}
@@ -54,19 +55,17 @@ public class Pojo {
 				throw U.rte(e);
 			}
 		}
-		Pojo.run(services);
+		run(services);
 	}
 
 	public static void start() {
-
-		List<Class<?>> classes = U.classpathClasses("*", ".+" + SUFFIX, null);
-
-		Set<Class<?>> services = new HashSet<Class<?>>();
-		for (Class<?> cls : classes) {
-			services.add(cls);
-		}
-
+		List<Class<?>> services = POJO.scanServices();
 		run(services.toArray(new Class[services.size()]));
+	}
+
+	public static void main(String[] args) {
+		U.args(args);
+		start();
 	}
 
 }
