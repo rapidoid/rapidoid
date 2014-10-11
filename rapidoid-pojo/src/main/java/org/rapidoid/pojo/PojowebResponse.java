@@ -1,4 +1,4 @@
-package org.rapidoid.web;
+package org.rapidoid.pojo;
 
 /*
  * #%L
@@ -20,17 +20,8 @@ package org.rapidoid.web;
  * #L%
  */
 
-public class PojowebStringResponse implements PojowebResponse {
+public interface PojowebResponse {
 
-	private String str;
-
-	public PojowebStringResponse(String str) {
-		this.str = str;
-	}
-
-	@Override
-	public String asString() {
-		return str;
-	}
+	String asString();
 
 }
