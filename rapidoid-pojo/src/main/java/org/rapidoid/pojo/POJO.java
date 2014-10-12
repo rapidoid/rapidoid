@@ -30,7 +30,11 @@ public class POJO {
 	public static final String SERVICE_SUFFIX = "Service";
 
 	public static List<Class<?>> scanServices() {
-		return U.classpathClasses("*", ".+" + SERVICE_SUFFIX, null);
+		List<Class<?>> services = U.classpathClasses("*", ".+" + SERVICE_SUFFIX, null);
+		if (services.isEmpty()) {
+			U.warn("No service classes found on classpath!");
+		}
+		return services;
 	}
 
 	public static PojoDispatcher dispatcher(Object... services) {
@@ -49,6 +53,11 @@ public class POJO {
 		}
 
 		return dispatcher(services);
+	}
+
+	public static PojoDispatcher serviceDispatcher() {
+		List<Class<?>> services = scanServices();
+		return dispatcher(services.toArray(new Class[services.size()]));
 	}
 
 }
