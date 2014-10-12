@@ -1,4 +1,4 @@
-package org.rapidoid.demo.web;
+package org.rapidoid.demo.pojo;
 
 /*
  * #%L

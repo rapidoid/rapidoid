@@ -1,4 +1,4 @@
-package org.rapidoid.demo.web;
+package org.rapidoid.demo.pojo;
 
 /*
  * #%L
@@ -20,23 +20,17 @@ package org.rapidoid.demo.web;
  * #L%
  */
 
-public class Person {
+public class PersonService {
 
-	public String name;
-
-	private int _age;
-
-	public int getAge() {
-		return _age;
+	// e.g. /hello
+	public String hello() {
+		return "Hello from PersonService";
 	}
 
-	public void setAge(int age) {
-		this._age = age;
-	}
-
-	@Override
-	public String toString() {
-		return "Person [name=" + name + ", age=" + _age + "]";
+	// e.g. /person/add?name=nick&age=30
+	public Person add(Person p) {
+		System.out.println("Inserting " + p);
+		return p;
 	}
 
 }
