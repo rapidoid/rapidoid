@@ -22,6 +22,8 @@ package org.rapidoid.util;
 
 import java.util.concurrent.Callable;
 
+import org.rapidoid.annotation.Inject;
+
 public class Bar {
 
 	@Inject

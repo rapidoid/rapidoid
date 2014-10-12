@@ -24,9 +24,9 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 
+import org.rapidoid.annotation.Inject;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.net.TCPClient;
-import org.rapidoid.util.Inject;
 import org.rapidoid.util.U;
 
 public class RapidoidClientLoop extends AbstractEventLoop implements TCPClient {

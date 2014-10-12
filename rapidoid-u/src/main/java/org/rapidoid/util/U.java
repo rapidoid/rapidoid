@@ -82,6 +82,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.rapidoid.annotation.Autocreate;
+import org.rapidoid.annotation.Init;
+import org.rapidoid.annotation.Inject;
+import org.rapidoid.lambda.F1;
+import org.rapidoid.lambda.F2;
+import org.rapidoid.lambda.F3;
+import org.rapidoid.lambda.Predicate;
+
 public class U implements Constants {
 
 	public static final LogLevel TRACE = LogLevel.TRACE;

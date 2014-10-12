@@ -1,4 +1,4 @@
-package org.rapidoid.util;
+package org.rapidoid.lambda;
 
 /*
  * #%L
@@ -20,8 +20,8 @@ package org.rapidoid.util;
  * #L%
  */
 
-public interface Predicate<T> {
+public interface V2<P1, P2> {
 
-	boolean eval(T param) throws Exception;
+	void execute(P1 param1, P2 param2) throws Exception;
 
 }

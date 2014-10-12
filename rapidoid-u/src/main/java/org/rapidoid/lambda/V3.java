@@ -1,4 +1,4 @@
-package org.rapidoid.util;
+package org.rapidoid.lambda;
 
 /*
  * #%L
@@ -20,8 +20,8 @@ package org.rapidoid.util;
  * #L%
  */
 
-public interface F3<R, P1, P2, P3> {
+public interface V3<P1, P2, P3> {
 
-	R execute(P1 param1, P2 param2, P3 param3) throws Exception;
+	void execute(P1 param1, P2 param2, P3 param3) throws Exception;
 
 }

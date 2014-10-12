@@ -1,4 +1,4 @@
-package org.rapidoid.util;
+package org.rapidoid.annotation;
 
 /*
  * #%L
@@ -20,8 +20,13 @@ package org.rapidoid.util;
  * #L%
  */
 
-public interface V2<P1, P2> {
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-	void execute(P1 param1, P2 param2) throws Exception;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
+@Target({ METHOD })
+@Retention(RUNTIME)
+public @interface Init {
 }

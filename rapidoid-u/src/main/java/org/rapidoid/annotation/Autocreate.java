@@ -1,4 +1,4 @@
-package org.rapidoid.util;
+package org.rapidoid.annotation;
 
 /*
  * #%L
@@ -20,8 +20,13 @@ package org.rapidoid.util;
  * #L%
  */
 
-public interface V3<P1, P2, P3> {
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-	void execute(P1 param1, P2 param2, P3 param3) throws Exception;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
+@Target({ TYPE })
+@Retention(RUNTIME)
+public @interface Autocreate {
 }

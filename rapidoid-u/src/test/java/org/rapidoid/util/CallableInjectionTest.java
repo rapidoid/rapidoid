@@ -22,6 +22,7 @@ package org.rapidoid.util;
 
 import java.util.concurrent.Callable;
 
+import org.rapidoid.annotation.Inject;
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
 

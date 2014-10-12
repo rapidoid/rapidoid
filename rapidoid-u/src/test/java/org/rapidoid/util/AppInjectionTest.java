@@ -20,6 +20,9 @@ package org.rapidoid.util;
  * #L%
  */
 
+import org.rapidoid.annotation.Autocreate;
+import org.rapidoid.annotation.Init;
+import org.rapidoid.annotation.Inject;
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
 
