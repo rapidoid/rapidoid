@@ -40,7 +40,7 @@ import org.rapidoid.util.U;
 
 public class PojoDispatcherImpl implements PojoDispatcher {
 
-	private static final String[] EMPTY_STRING_ARRAY = new String[] {};
+	private static final String[] EMPTY_STRING_ARRAY = {};
 
 	private final Map<String, PojoServiceWrapper> services = new HashMap<String, PojoServiceWrapper>();
 
@@ -61,7 +61,7 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 
 	@Override
 	public PojoResponse dispatch(PojoRequest request) {
-		String[] parts = request.pathParts();
+		String[] parts = uriParts(request.path());
 		int length = parts.length;
 
 		PojoResponse res;
@@ -130,7 +130,7 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 
 				} else if (type.equals(Map.class)) {
 
-					Map<String, Object> params = request.paramsMap();
+					Map<String, String> params = request.params();
 
 					for (int j = paramsFrom; j < parts.length; j++) {
 						params.put("" + (j - paramsFrom + 1), parts[j]);
@@ -182,7 +182,7 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 						Constructor<?> constructor = type.getConstructor();
 						try {
 							Object instance = constructor.newInstance();
-							setBeanProperties(instance, request.paramsMap());
+							setBeanProperties(instance, request.params());
 							args[i] = instance;
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -209,22 +209,30 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 		}
 	}
 
-	private void setBeanProperties(Object instance, Map<String, Object> paramsMap) {
+	private static void setBeanProperties(Object instance, Map<String, String> paramsMap) {
 		Map<String, Prop> props = U.propertiesOf(instance.getClass());
 
-		for (Entry<String, Object> entry : paramsMap.entrySet()) {
+		for (Entry<String, String> entry : paramsMap.entrySet()) {
 			Prop prop = props.get(entry.getKey());
 			Object value = entry.getValue();
 			prop.set(instance, value);
 		}
 	}
 
-	private PojoResponse error(String msg, Object... args) {
+	private static PojoResponse error(String msg, Object... args) {
 		return new PojoResponseImpl("ERROR: " + String.format(msg, args), true);
 	}
 
-	private PojoResponseImpl notFound(PojoRequest request) {
-		return new PojoResponseImpl("Not found: " + request.path(), true);
+	private static PojoResponseImpl notFound(PojoRequest req) {
+		return new PojoResponseImpl("Not found: " + req.path(), true);
+	}
+
+	private static String[] uriParts(String uri) {
+		if (uri.isEmpty() || uri.equals("/")) {
+			return EMPTY_STRING_ARRAY;
+		}
+
+		return uri.replaceAll("^/", "").replaceAll("/$", "").split("/");
 	}
 
 }

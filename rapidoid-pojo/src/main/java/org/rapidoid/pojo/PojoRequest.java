@@ -24,12 +24,10 @@ import java.util.Map;
 
 public interface PojoRequest {
 
-	String uri();
+	String command();
 
 	String path();
 
-	Map<String, Object> paramsMap();
-
-	String[] pathParts();
+	Map<String, String> params();
 
 }

@@ -28,8 +28,6 @@ import com.rapidoid.http.HttpExchange;
 
 public class WebReq implements PojoRequest {
 
-	private static final String[] EMPTY_PATH = {};
-
 	private final HttpExchange x;
 
 	public WebReq(HttpExchange x) {
@@ -37,30 +35,18 @@ public class WebReq implements PojoRequest {
 	}
 
 	@Override
-	public String uri() {
-		return x.path_().get();
+	public String command() {
+		return x.verb();
 	}
 
 	@Override
 	public String path() {
-		return x.path_().get();
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public Map<String, Object> paramsMap() {
-		return (Map) x.params_().get();
+		return x.path();
 	}
 
 	@Override
-	public String[] pathParts() {
-		String path = path();
-
-		if (path.isEmpty() || path.equals("/")) {
-			return EMPTY_PATH;
-		}
-
-		return path.replaceAll("^/", "").replaceAll("/$", "").split("/");
+	public Map<String, String> params() {
+		return x.params();
 	}
 
 }
