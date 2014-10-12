@@ -22,14 +22,33 @@ package org.rapidoid.pojo;
 
 import java.util.List;
 
+import org.rapidoid.pojo.impl.PojoDispatcherImpl;
 import org.rapidoid.util.U;
 
 public class POJO {
 
-	protected static final String SUFFIX = "Service";
+	public static final String SERVICE_SUFFIX = "Service";
 
 	public static List<Class<?>> scanServices() {
-		return U.classpathClasses("*", ".+" + SUFFIX, null);
+		return U.classpathClasses("*", ".+" + SERVICE_SUFFIX, null);
+	}
+
+	public static PojoDispatcher dispatcher(Object... services) {
+		return new PojoDispatcherImpl(services);
+	}
+
+	public static PojoDispatcher dispatcher(Class<?>... serviceClasses) {
+		Object[] services = new Object[serviceClasses.length];
+
+		for (int i = 0; i < services.length; i++) {
+			try {
+				services[i] = serviceClasses[i].newInstance();
+			} catch (Exception e) {
+				throw U.rte(e);
+			}
+		}
+
+		return dispatcher(services);
 	}
 
 }

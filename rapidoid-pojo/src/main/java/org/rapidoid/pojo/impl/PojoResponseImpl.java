@@ -1,4 +1,6 @@
-package org.rapidoid.pojo;
+package org.rapidoid.pojo.impl;
+
+import org.rapidoid.pojo.PojoResponse;
 
 /*
  * #%L

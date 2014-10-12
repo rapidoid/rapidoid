@@ -1,4 +1,4 @@
-package org.rapidoid.pojo;
+package org.rapidoid.pojo.impl;
 
 /*
  * #%L
@@ -26,26 +26,22 @@ import java.util.Map;
 
 import org.rapidoid.util.U;
 
-public class Controller {
+public class PojoServiceWrapper {
 
 	private final Map<String, Method> methods = U.map();
 
-	// private final Map<String, String[]> paramNames = new HashMap<>();
+	private final Object service;
 
-	private final Object controller;
-
-	public Controller(Object controller) {
-		this.controller = controller;
+	public PojoServiceWrapper(Object service) {
+		this.service = service;
 	}
 
 	public void init() {
-		for (Method method : controller.getClass().getMethods()) {
+		for (Method method : service.getClass().getMethods()) {
 			if (!method.getDeclaringClass().equals(Object.class)) {
 				int modifiers = method.getModifiers();
 				if (!Modifier.isAbstract(modifiers) && Modifier.isPublic(modifiers)) {
 					methods.put(method.getName(), method);
-					// paramNames.put(method.getName(),
-					// getParamNames(method));
 					U.info("Registered web handler method: " + method);
 				}
 			}
@@ -58,7 +54,7 @@ public class Controller {
 	}
 
 	public Object getTarget() {
-		return controller;
+		return service;
 	}
 
 }

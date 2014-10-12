@@ -23,7 +23,7 @@ package org.rapidoid.web;
 import java.util.List;
 
 import org.rapidoid.pojo.POJO;
-import org.rapidoid.pojo.POJODispatcher;
+import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoResponse;
 import org.rapidoid.util.U;
 
@@ -33,9 +33,15 @@ import com.rapidoid.http.HttpExchange;
 
 public class Web {
 
-	public static void run(Object... controllers) {
-		final POJODispatcher dispatcher = new POJODispatcher(controllers);
+	public static void run(Object... services) {
+		serve(POJO.dispatcher(services));
+	}
 
+	public static void run(Class<?>... classes) {
+		serve(POJO.dispatcher(classes));
+	}
+
+	private static void serve(final PojoDispatcher dispatcher) {
 		HTTP.serve(new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
@@ -44,18 +50,6 @@ public class Web {
 				return resp.getResult();
 			}
 		});
-	}
-
-	public static void run(Class<?>... classes) {
-		Object[] services = new Object[classes.length];
-		for (int i = 0; i < services.length; i++) {
-			try {
-				services[i] = classes[i].newInstance();
-			} catch (Exception e) {
-				throw U.rte(e);
-			}
-		}
-		run(services);
 	}
 
 	public static void start() {

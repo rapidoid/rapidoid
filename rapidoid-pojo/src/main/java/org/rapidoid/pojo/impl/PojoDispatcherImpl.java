@@ -1,4 +1,4 @@
-package org.rapidoid.pojo;
+package org.rapidoid.pojo.impl;
 
 /*
  * #%L
@@ -30,28 +30,36 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.rapidoid.pojo.POJO;
+import org.rapidoid.pojo.PojoDispatcher;
+import org.rapidoid.pojo.PojoRequest;
+import org.rapidoid.pojo.PojoResponse;
 import org.rapidoid.util.Prop;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 
-public class POJODispatcher {
+public class PojoDispatcherImpl implements PojoDispatcher {
 
 	private static final String[] EMPTY_STRING_ARRAY = new String[] {};
 
-	private final Map<String, Controller> controllers = new HashMap<String, Controller>();
+	private final Map<String, PojoServiceWrapper> services = new HashMap<String, PojoServiceWrapper>();
 
-	public POJODispatcher(Object... controllers) {
-		for (Object controller : controllers) {
-			String name = controller.getClass().getSimpleName();
-			U.must(name.endsWith(POJO.SUFFIX), "The service class doesn't have a '%s' suffix: %s", POJO.SUFFIX, name);
+	public PojoDispatcherImpl(Object... services) {
+		for (Object service : services) {
+			String name = service.getClass().getSimpleName();
+			U.must(name.endsWith(POJO.SERVICE_SUFFIX), "The service class doesn't have a '%s' suffix: %s",
+					POJO.SERVICE_SUFFIX, name);
+
 			U.info("Initializing service: " + name);
-			name = name.substring(0, name.length() - POJO.SUFFIX.length()).toLowerCase();
-			Controller ctrl = new Controller(controller);
-			ctrl.init();
-			this.controllers.put(name, ctrl);
+			name = name.substring(0, name.length() - POJO.SERVICE_SUFFIX.length()).toLowerCase();
+
+			PojoServiceWrapper pojoService = new PojoServiceWrapper(service);
+			pojoService.init();
+			this.services.put(name, pojoService);
 		}
 	}
 
+	@Override
 	public PojoResponse dispatch(PojoRequest request) {
 		String[] parts = request.pathParts();
 		int length = parts.length;
@@ -85,8 +93,9 @@ public class POJODispatcher {
 		return notFound(request);
 	}
 
-	private PojoResponse process(PojoRequest request, String ctrl, String action, String[] parts, int paramsFrom) {
-		Controller root = controllers.get(ctrl);
+	private PojoResponse process(PojoRequest request, String service, String action, String[] parts, int paramsFrom) {
+		PojoServiceWrapper root = services.get(service);
+
 		if (root != null) {
 			Method method = root.getMethod(action);
 			if (method != null) {
@@ -97,8 +106,7 @@ public class POJODispatcher {
 		return null;
 	}
 
-	private PojoResponse doDispatch(PojoRequest request, Method method, Object controller, String[] parts,
-			int paramsFrom) {
+	private PojoResponse doDispatch(PojoRequest request, Method method, Object service, String[] parts, int paramsFrom) {
 		int paramsSize = parts.length - paramsFrom;
 
 		if (method != null) {
@@ -192,7 +200,7 @@ public class POJODispatcher {
 				}
 			}
 
-			Object result = U.invoke(method, controller, args);
+			Object result = U.invoke(method, service, args);
 
 			return new PojoResponseImpl(result, false);
 
