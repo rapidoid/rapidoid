@@ -51,39 +51,19 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		U.failIf(xch.verb.isEmpty() || xch.uri.isEmpty(), "Invalid HTTP request!");
 		U.failIf(xch.isGet.value && !xch.body.isEmpty(), "Body is NOT allowed in HTTP GET requests!");
 
-		int startingPos = xch.output().size();
-		xch.output().append(resp(xch).bytes());
+		xch.setResponses(responses);
 
 		try {
 			boolean dispatched = router.dispatch(xch);
 			if (!dispatched) {
-				if (!xch.hasContentType()) {
-					xch.html();
-				}
-				xch.write("Invalid HTTP VERB or URL PATH!");
-				xch.done();
+				xch.response(404);
 			}
 		} catch (Throwable e) {
 			U.error("Internal server error!", "request", xch, "error", e);
-			if (!xch.hasContentType()) {
-				xch.html();
-			}
-			xch.write("Internal server error!");
-			xch.done();
+			xch.response(500);
 		}
 
-		long wrote = xch.output().size() - xch.bodyPos;
-		U.must(wrote <= Integer.MAX_VALUE, "Response too big!");
-
-		int pos = startingPos + resp(xch).contentLengthPos + 10;
-
-		xch.output().putNumAsText(pos, wrote, false);
-	}
-
-	private HttpResponse resp(HttpExchangeImpl xch) {
-		HttpResponse resp = responses.get(xch.isKeepAlive.value);
-		assert resp != null;
-		return resp;
+		xch.completeResponse();
 	}
 
 	public Router getRouter() {

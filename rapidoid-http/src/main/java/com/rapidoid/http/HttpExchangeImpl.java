@@ -37,7 +37,8 @@ import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.wrap.Bool;
 
-public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements HttpExchange, Constants {
+public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements HttpExchange,
+		Constants {
 
 	private final static HttpParser PARSER = U.singleton(HttpParser.class);
 
@@ -69,6 +70,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	public int bodyPos;
 	private boolean writesBody;
 	private boolean hasContentType;
+	private boolean startedResponse;
+	private int startingPos;
+	private HttpResponses responses;
 
 	final Range multipartBoundary = new Range();
 
@@ -88,6 +92,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	private final MultiData _cookies;
 	private final MultiData _data;
 	private final BinaryMultiData _files;
+
+	private int responseCode;
 
 	public HttpExchangeImpl() {
 		reset();
@@ -136,6 +142,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		writesBody = false;
 		bodyPos = -1;
 		hasContentType = false;
+		responses = null;
+		startedResponse = false;
+		responseCode = -1;
 	}
 
 	@Override
@@ -333,13 +342,55 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return files_().get(name);
 	}
 
+	public void setResponses(HttpResponses responses) {
+		this.responses = responses;
+	}
+
 	@Override
-	public HttpExchange addHeader(byte[] name, byte[] value) {
+	public synchronized HttpExchange addHeader(byte[] name, byte[] value) {
+		if (!startedResponse) {
+			responseCode(200);
+		}
+
 		super.write(name);
 		super.write(HEADER_SEP);
 		super.write(value);
 		super.write(CR_LF);
+
 		return this;
+	}
+
+	@Override
+	public synchronized HttpExchangeHeaders responseCode(int responseCode) {
+		if (responseCode > 0) {
+			assert startingPos >= 0;
+			output().deleteAfter(startingPos);
+		}
+
+		this.responseCode = responseCode;
+
+		startingPos = output().size();
+		output().append(getResp(responseCode).bytes());
+		startedResponse = true;
+		hasContentType = false;
+		writesBody = false;
+		bodyPos = -1;
+
+		return this;
+	}
+
+	public void completeResponse() {
+		long wrote = output().size() - bodyPos;
+		U.must(wrote <= Integer.MAX_VALUE, "Response too big!");
+
+		int pos = startingPos + getResp(responseCode).contentLengthPos + 10;
+		output().putNumAsText(pos, wrote, false);
+	}
+
+	private HttpResponse getResp(int code) {
+		HttpResponse resp = responses.get(code, isKeepAlive.value);
+		assert resp != null;
+		return resp;
 	}
 
 	@Override
@@ -356,7 +407,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized HttpExchange setContentType(MediaType MediaType) {
-		U.must(!hasContentType);
+		U.must(!hasContentType, "Content type was already set!");
 		hasContentType = true;
 
 		addHeader(HttpHeader.CONTENT_TYPE.getBytes(), MediaType.getBytes());
@@ -390,8 +441,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return binary();
 	}
 
-	private synchronized void ensureBodyWrite() {
+	private synchronized void ensureHeadersComplete() {
 		if (!writesBody) {
+			if (!hasContentType) {
+				html();
+			}
 			writesBody = true;
 			write(CR_LF);
 			bodyPos = output().size();
@@ -400,25 +454,25 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public HttpExchangeBody write(String s) {
-		ensureBodyWrite();
+		ensureHeadersComplete();
 		return super.write(s);
 	}
 
 	@Override
 	public HttpExchangeBody write(byte[] bytes) {
-		ensureBodyWrite();
+		ensureHeadersComplete();
 		return super.write(bytes);
 	}
 
 	@Override
 	public HttpExchangeBody write(byte[] bytes, int offset, int length) {
-		ensureBodyWrite();
+		ensureHeadersComplete();
 		return super.write(bytes, offset, length);
 	}
 
 	@Override
 	public HttpExchangeBody write(ByteBuffer buf) {
-		ensureBodyWrite();
+		ensureHeadersComplete();
 		return super.write(buf);
 	}
 
@@ -428,7 +482,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			download(file.getName());
 		}
 
-		ensureBodyWrite();
+		ensureHeadersComplete();
 		return super.write(file);
 	}
 
@@ -438,7 +492,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			json();
 		}
 
-		ensureBodyWrite();
+		ensureHeadersComplete();
 		return super.writeJSON(value);
 	}
 
@@ -463,4 +517,35 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		write(file);
 		return this;
 	}
+
+	@Override
+	public HttpExchangeHeaders response(int httpResponseCode) {
+		return response(httpResponseCode, null, null);
+	}
+
+	@Override
+	public HttpExchangeHeaders response(int httpResponseCode, String response) {
+		return response(httpResponseCode, response, null);
+	}
+
+	@Override
+	public HttpExchangeHeaders response(int httpResponseCode, String response, Throwable err) {
+		responseCode(httpResponseCode);
+		ensureHeadersComplete();
+
+		if (U.production()) {
+			if (response != null) {
+				write(response);
+			}
+		} else {
+			if (err != null) {
+				String title = U.or(response, "Error occured!");
+				HTMLSnippets.errorPage(this, title, err);
+			}
+		}
+
+		done();
+		return this;
+	}
+
 }
