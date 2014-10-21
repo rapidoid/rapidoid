@@ -42,17 +42,7 @@ public class POJO {
 	}
 
 	public static PojoDispatcher dispatcher(Class<?>... serviceClasses) {
-		Object[] services = new Object[serviceClasses.length];
-
-		for (int i = 0; i < services.length; i++) {
-			try {
-				services[i] = serviceClasses[i].newInstance();
-			} catch (Exception e) {
-				throw U.rte(e);
-			}
-		}
-
-		return dispatcher(services);
+		return dispatcher(U.instantiateAll(serviceClasses));
 	}
 
 	public static PojoDispatcher serviceDispatcher() {

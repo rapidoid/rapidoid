@@ -20,37 +20,32 @@ package org.rapidoid.web;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.pojo.PojoRequest;
+import org.rapidoid.pojo.impl.PojoDispatcherImpl;
+import org.rapidoid.util.U;
 
 import com.rapidoid.http.HttpExchange;
 
-public class WebReq implements PojoRequest {
+public class WebPojoDispatcher extends PojoDispatcherImpl {
 
-	private final HttpExchange exchange;
-
-	public WebReq(HttpExchange x) {
-		this.exchange = x;
+	public WebPojoDispatcher(Object... services) {
+		super(services);
 	}
 
 	@Override
-	public String command() {
-		return exchange.verb();
+	protected boolean isCustomType(Class<?> type) {
+		return type.equals(HttpExchange.class) || super.isCustomType(type);
 	}
 
 	@Override
-	public String path() {
-		return exchange.path();
-	}
-
-	@Override
-	public Map<String, String> params() {
-		return exchange.params();
-	}
-
-	public HttpExchange getExchange() {
-		return exchange;
+	protected Object getCustomArg(PojoRequest request, Class<?> type, String[] parts, int paramsFrom, int paramsSize) {
+		if (type.equals(HttpExchange.class)) {
+			U.must(request instanceof WebReq);
+			WebReq webReq = (WebReq) request;
+			return webReq.getExchange();
+		} else {
+			return super.getCustomArg(request, type, parts, paramsFrom, paramsSize);
+		}
 	}
 
 }

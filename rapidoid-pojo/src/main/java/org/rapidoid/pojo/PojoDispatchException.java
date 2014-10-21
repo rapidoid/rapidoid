@@ -20,10 +20,11 @@ package org.rapidoid.pojo;
  * #L%
  */
 
-public interface PojoResponse {
+@SuppressWarnings("serial")
+public class PojoDispatchException extends Exception {
 
-	Object getResult();
-
-	boolean hasError();
+	public PojoDispatchException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
 
 }

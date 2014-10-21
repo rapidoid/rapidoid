@@ -22,6 +22,6 @@ package org.rapidoid.pojo;
 
 public interface PojoDispatcher {
 
-	PojoResponse dispatch(PojoRequest request);
+	Object dispatch(PojoRequest request) throws PojoHandlerNotFoundException, PojoDispatchException;
 
 }

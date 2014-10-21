@@ -31,9 +31,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.rapidoid.pojo.POJO;
+import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoDispatcher;
+import org.rapidoid.pojo.PojoHandlerNotFoundException;
 import org.rapidoid.pojo.PojoRequest;
-import org.rapidoid.pojo.PojoResponse;
 import org.rapidoid.util.Prop;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
@@ -60,15 +61,19 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 	}
 
 	@Override
-	public PojoResponse dispatch(PojoRequest request) {
+	public Object dispatch(PojoRequest request) throws PojoHandlerNotFoundException, PojoDispatchException {
 		String[] parts = uriParts(request.path());
 		int length = parts.length;
 
-		PojoResponse res;
+		Object res;
 
 		if (length == 0) {
 			res = process(request, "main", "index", parts, 0);
-			return res != null ? res : notFound(request);
+			if (res != null) {
+				return res;
+			} else {
+				throw notFound();
+			}
 		}
 
 		if (length >= 1) {
@@ -90,10 +95,11 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 			}
 		}
 
-		return notFound(request);
+		throw notFound();
 	}
 
-	private PojoResponse process(PojoRequest request, String service, String action, String[] parts, int paramsFrom) {
+	private Object process(PojoRequest request, String service, String action, String[] parts, int paramsFrom)
+			throws PojoHandlerNotFoundException, PojoDispatchException {
 		PojoServiceWrapper root = services.get(service);
 
 		if (root != null) {
@@ -106,107 +112,139 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 		return null;
 	}
 
-	private PojoResponse doDispatch(PojoRequest request, Method method, Object service, String[] parts, int paramsFrom) {
-		int paramsSize = parts.length - paramsFrom;
-
+	private Object doDispatch(PojoRequest request, Method method, Object service, String[] parts, int paramsFrom)
+			throws PojoHandlerNotFoundException, PojoDispatchException {
 		if (method != null) {
 
-			Class<?>[] types = method.getParameterTypes();
-			Object[] args = new Object[types.length];
+			Object[] args;
+			try {
+				int paramsSize = parts.length - paramsFrom;
+				Class<?>[] types = method.getParameterTypes();
+				args = new Object[types.length];
 
-			int simpleParamIndex = 0;
+				int simpleParamIndex = 0;
 
-			for (int i = 0; i < types.length; i++) {
-				Class<?> type = types[i];
-				TypeKind kind = U.kindOf(type);
+				for (int i = 0; i < types.length; i++) {
+					Class<?> type = types[i];
+					TypeKind kind = U.kindOf(type);
 
-				if (kind.isSimple()) {
+					if (kind.isSimple()) {
 
-					if (parts.length > paramsFrom + simpleParamIndex) {
-						args[i] = U.convert(parts[paramsFrom + simpleParamIndex++], type);
-					} else {
-						return error("Not enough parameters!");
-					}
-
-				} else if (type.equals(Map.class)) {
-
-					Map<String, String> params = request.params();
-
-					for (int j = paramsFrom; j < parts.length; j++) {
-						params.put("" + (j - paramsFrom + 1), parts[j]);
-					}
-
-					args[i] = params;
-
-				} else if (type.equals(String[].class)) {
-
-					if (parts.length > paramsFrom) {
-						String[] arguments = new String[paramsSize];
-						System.arraycopy(parts, paramsFrom, arguments, 0, paramsSize);
-						args[i] = arguments;
-					} else {
-						args[i] = EMPTY_STRING_ARRAY;
-					}
-
-				} else if (type.equals(List.class) || type.equals(Collection.class)) {
-
-					if (parts.length > paramsFrom) {
-						List<String> arguments = new ArrayList<String>(paramsSize);
-
-						for (int j = paramsFrom; j < parts.length; j++) {
-							arguments.add(parts[j]);
+						if (parts.length > paramsFrom + simpleParamIndex) {
+							args[i] = U.convert(parts[paramsFrom + simpleParamIndex++], type);
+						} else {
+							throw error(null, "Not enough parameters!");
 						}
 
-						args[i] = arguments;
 					} else {
-						args[i] = U.list();
+						args[i] = complexArg(i, type, request, parts, paramsFrom, paramsSize);
 					}
-
-				} else if (type.equals(Set.class)) {
-
-					if (parts.length > paramsFrom) {
-						Set<String> arguments = U.set();
-
-						for (int j = paramsFrom; j < parts.length; j++) {
-							arguments.add(parts[j]);
-						}
-						args[i] = arguments;
-					} else {
-						args[i] = U.set();
-					}
-
-				} else if (type.getCanonicalName().startsWith("java")) {
-					return error("Parameter type '%s' is not supported!", type.getCanonicalName());
-				} else {
-					try {
-						Constructor<?> constructor = type.getConstructor();
-						try {
-							Object instance = constructor.newInstance();
-							setBeanProperties(instance, request.params());
-							args[i] = instance;
-						} catch (Exception e) {
-							e.printStackTrace();
-							return error("Cannot create a new instance of type: '%s'!", type.getCanonicalName());
-						}
-
-					} catch (NoSuchMethodException e) {
-						return error("Cannot find a constructor with 0 parameters for type '%s'!",
-								type.getCanonicalName());
-					} catch (SecurityException e) {
-						return error("Cannot retrieve the constructor with 0 parameters for type '%s'!",
-								type.getCanonicalName());
-					}
-
 				}
+			} catch (Throwable e) {
+				throw new PojoDispatchException("Cannot dispatch to POJO target!", e);
 			}
 
-			Object result = U.invoke(method, service, args);
-
-			return new PojoResponseImpl(result, false);
+			return U.invoke(method, service, args);
 
 		} else {
-			return notFound(request);
+			throw notFound();
 		}
+	}
+
+	protected Object complexArg(int i, Class<?> type, PojoRequest request, String[] parts, int paramsFrom,
+			int paramsSize) throws PojoDispatchException {
+
+		if (type.equals(Map.class)) {
+			return mapArg(request, parts, paramsFrom);
+		} else if (type.equals(String[].class)) {
+			return stringsArg(request, parts, paramsFrom, paramsSize);
+		} else if (type.equals(List.class) || type.equals(Collection.class)) {
+			return listArg(request, parts, paramsFrom, paramsSize);
+		} else if (type.equals(Set.class)) {
+			return setArg(request, parts, paramsFrom, paramsSize);
+		} else if (isCustomType(type)) {
+			return getCustomArg(request, type, parts, paramsFrom, paramsSize);
+		} else if (type.getCanonicalName().startsWith("java")) {
+			throw error(null, "Parameter type '%s' is not supported!", type.getCanonicalName());
+		} else {
+			return instantiateArg(request, type);
+		}
+	}
+
+	private Object instantiateArg(PojoRequest request, Class<?> type) throws PojoDispatchException {
+		try {
+			Constructor<?> constructor = type.getConstructor();
+
+			try {
+				Object instance = constructor.newInstance();
+				setBeanProperties(instance, request.params());
+				return instance;
+
+			} catch (Exception e) {
+				throw error(e, "Cannot create a new instance of type: '%s'!", type.getCanonicalName());
+			}
+
+		} catch (NoSuchMethodException e) {
+			throw error(e, "Cannot find a constructor with 0 parameters for type '%s'!", type.getCanonicalName());
+
+		} catch (SecurityException e) {
+			throw error(e, "Cannot retrieve the constructor with 0 parameters for type '%s'!", type.getCanonicalName());
+		}
+
+	}
+
+	protected Object getCustomArg(PojoRequest request, Class<?> type, String[] parts, int paramsFrom, int paramsSize) {
+		return null;
+	}
+
+	protected boolean isCustomType(Class<?> type) {
+		return false;
+	}
+
+	private Set<?> setArg(PojoRequest request, String[] parts, int paramsFrom, int paramsSize) {
+		if (parts.length > paramsFrom) {
+			Set<String> arguments = U.set();
+
+			for (int j = paramsFrom; j < parts.length; j++) {
+				arguments.add(parts[j]);
+			}
+			return arguments;
+		} else {
+			return U.set();
+		}
+	}
+
+	private List<?> listArg(PojoRequest request, String[] parts, int paramsFrom, int paramsSize) {
+		if (parts.length > paramsFrom) {
+			List<String> arguments = new ArrayList<String>(paramsSize);
+
+			for (int j = paramsFrom; j < parts.length; j++) {
+				arguments.add(parts[j]);
+			}
+
+			return arguments;
+		} else {
+			return U.list();
+		}
+	}
+
+	private String[] stringsArg(PojoRequest request, String[] parts, int paramsFrom, int paramsSize) {
+		if (parts.length > paramsFrom) {
+			String[] arguments = new String[paramsSize];
+			System.arraycopy(parts, paramsFrom, arguments, 0, paramsSize);
+			return arguments;
+		} else {
+			return EMPTY_STRING_ARRAY;
+		}
+	}
+
+	private Map<String, String> mapArg(PojoRequest request, String[] parts, int paramsFrom) {
+		Map<String, String> params = request.params();
+
+		for (int j = paramsFrom; j < parts.length; j++) {
+			params.put("" + (j - paramsFrom + 1), parts[j]);
+		}
+		return params;
 	}
 
 	private static void setBeanProperties(Object instance, Map<String, String> paramsMap) {
@@ -219,12 +257,12 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 		}
 	}
 
-	private static PojoResponse error(String msg, Object... args) {
-		return new PojoResponseImpl("ERROR: " + String.format(msg, args), true);
+	private static PojoDispatchException error(Throwable cause, String msg, Object... args) {
+		return new PojoDispatchException(U.format(msg, args), cause);
 	}
 
-	private static PojoResponseImpl notFound(PojoRequest req) {
-		return new PojoResponseImpl("Not found: " + req.path(), true);
+	private static PojoHandlerNotFoundException notFound() {
+		return new PojoHandlerNotFoundException();
 	}
 
 	private static String[] uriParts(String uri) {

@@ -534,6 +534,10 @@ public class U implements Constants {
 		error(msg, "error", error);
 	}
 
+	public static void error(Throwable error) {
+		error("error occured!", "error", error);
+	}
+
 	public static void severe(String msg) {
 		log(SEVERE, msg, null, null, null, null, null, null, 0);
 	}
@@ -2723,6 +2727,16 @@ public class U implements Constants {
 		} catch (Exception e) {
 			throw U.rte(e);
 		}
+	}
+
+	public static Object[] instantiateAll(Class<?>... classes) {
+		Object[] instances = new Object[classes.length];
+
+		for (int i = 0; i < instances.length; i++) {
+			instances[i] = newInstance(classes[i]);
+		}
+
+		return instances;
 	}
 
 }

@@ -23,8 +23,9 @@ package org.rapidoid.web;
 import java.util.List;
 
 import org.rapidoid.pojo.POJO;
+import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoDispatcher;
-import org.rapidoid.pojo.PojoResponse;
+import org.rapidoid.pojo.PojoHandlerNotFoundException;
 import org.rapidoid.util.U;
 
 import com.rapidoid.http.HTTP;
@@ -34,20 +35,24 @@ import com.rapidoid.http.HttpExchange;
 public class Web {
 
 	public static void run(Object... services) {
-		serve(POJO.dispatcher(services));
+		serve(new WebPojoDispatcher(services));
 	}
 
 	public static void run(Class<?>... classes) {
-		serve(POJO.dispatcher(classes));
+		serve(new WebPojoDispatcher(U.instantiateAll(classes)));
 	}
 
 	private static void serve(final PojoDispatcher dispatcher) {
 		HTTP.serve(new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				PojoResponse resp = dispatcher.dispatch(new WebReq(x));
-				U.notNull(resp, "POJO response");
-				return resp.getResult();
+				try {
+					return dispatcher.dispatch(new WebReq(x));
+				} catch (PojoHandlerNotFoundException e) {
+					return x.response(404, "Handler not found!", e);
+				} catch (PojoDispatchException e) {
+					return x.response(500, "Cannot initialize handler argument(s)!", e);
+				}
 			}
 		});
 	}

@@ -27,7 +27,6 @@ import java.util.Map;
 import org.rapidoid.pojo.POJO;
 import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoRequest;
-import org.rapidoid.pojo.PojoResponse;
 import org.rapidoid.pojo.impl.PojoRequestImpl;
 import org.rapidoid.util.JSON;
 import org.rapidoid.util.U;
@@ -53,8 +52,7 @@ public class CLIPojoDemo {
 			PojoRequest req = new PojoRequestImpl(line.substring(0, p1), p2 > 0 ? line.substring(p1 + 1, p2)
 					: line.substring(p1 + 1), extra);
 			U.debug("processing request", "request", req);
-			PojoResponse resp = dispatcher.dispatch(req);
-			System.out.println(resp.getResult());
+			System.out.println(dispatcher.dispatch(req));
 		}
 
 		System.out.println("BYE");

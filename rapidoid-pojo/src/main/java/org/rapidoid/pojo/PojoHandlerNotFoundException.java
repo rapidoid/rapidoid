@@ -1,6 +1,4 @@
-package org.rapidoid.pojo.impl;
-
-import org.rapidoid.pojo.PojoResponse;
+package org.rapidoid.pojo;
 
 /*
  * #%L
@@ -22,25 +20,7 @@ import org.rapidoid.pojo.PojoResponse;
  * #L%
  */
 
-public class PojoResponseImpl implements PojoResponse {
-
-	private final Object result;
-
-	private final boolean hasError;
-
-	public PojoResponseImpl(Object result, boolean hasError) {
-		this.result = result;
-		this.hasError = hasError;
-	}
-
-	@Override
-	public Object getResult() {
-		return result;
-	}
-
-	@Override
-	public boolean hasError() {
-		return hasError;
-	}
+@SuppressWarnings("serial")
+public class PojoHandlerNotFoundException extends Exception {
 
 }
