@@ -22,6 +22,6 @@ package com.rapidoid.http;
 
 public interface Handler {
 
-	Object handle(HttpExchange x);
+	Object handle(HttpExchange x) throws Exception;
 
 }

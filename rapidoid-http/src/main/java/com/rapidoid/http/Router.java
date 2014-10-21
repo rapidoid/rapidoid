@@ -26,6 +26,6 @@ public interface Router {
 
 	void route(String action, String path, Handler handler);
 
-	boolean dispatch(HttpExchangeImpl x);
+	boolean dispatch(HttpExchangeImpl x) throws Exception;
 
 }

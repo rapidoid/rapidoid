@@ -102,7 +102,7 @@ public class HttpRouter implements Router {
 	}
 
 	@Override
-	public boolean dispatch(HttpExchangeImpl x) {
+	public boolean dispatch(HttpExchangeImpl x) throws Exception {
 
 		Buf buf = x.input();
 		Range action = x.verb_().range();
@@ -134,7 +134,7 @@ public class HttpRouter implements Router {
 		return false;
 	}
 
-	private boolean handle(Handler handler, HttpExchangeImpl x) {
+	private boolean handle(Handler handler, HttpExchangeImpl x) throws Exception {
 		Object res = handler.handle(x);
 
 		if (res != null) {
