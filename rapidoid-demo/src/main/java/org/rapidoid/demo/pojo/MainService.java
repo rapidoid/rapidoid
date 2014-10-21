@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.rapidoid.http.HttpExchange;
+
 public class MainService {
 
 	// e.g. /
@@ -78,6 +80,9 @@ public class MainService {
 		return p;
 	}
 
+	// e.g. /redir/ping
+	public Object redir(String to, HttpExchange x) {
+		return x.redirect("/" + to);
 	}
 
 }

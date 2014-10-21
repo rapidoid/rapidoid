@@ -519,6 +519,15 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
+	public HttpExchangeBody redirect(String url) {
+		responseCode(303);
+		addHeader(HttpHeader.LOCATION, url);
+		ensureHeadersComplete();
+		done();
+		return this;
+	}
+
+	@Override
 	public HttpExchangeHeaders response(int httpResponseCode) {
 		return response(httpResponseCode, null, null);
 	}

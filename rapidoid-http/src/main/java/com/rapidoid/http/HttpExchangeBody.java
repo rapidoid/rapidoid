@@ -28,4 +28,6 @@ public interface HttpExchangeBody extends CtxWrite<HttpExchangeBody> {
 
 	HttpExchangeBody sendFile(File file);
 
+	HttpExchangeBody redirect(String url);
+
 }

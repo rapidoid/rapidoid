@@ -30,6 +30,8 @@ public class HttpHeader {
 
 	public static final HttpHeader CACHE_CONTROL = new HttpHeader("Cache-Control");
 
+	public static final HttpHeader LOCATION = new HttpHeader("Location");
+
 	private final byte[] bytes;
 
 	public HttpHeader(String name) {
