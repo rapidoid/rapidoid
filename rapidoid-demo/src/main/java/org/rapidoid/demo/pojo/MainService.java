@@ -20,7 +20,6 @@ package org.rapidoid.demo.pojo;
  * #L%
  */
 
-import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -79,10 +78,6 @@ public class MainService {
 		return p;
 	}
 
-	// e.g. /user?a=1
-	public Object user(Principal user, Map<String, Object> params) {
-		params.put("user", user);
-		return params;
 	}
 
 }
