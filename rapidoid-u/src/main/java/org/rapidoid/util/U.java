@@ -25,6 +25,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -70,6 +71,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
 import java.util.TimeZone;
@@ -160,6 +162,8 @@ public class U implements Constants {
 	private static final Date CURR_DATE = new Date();
 	private static byte[] CURR_DATE_BYTES;
 	private static long updateCurrDateAfter = 0;
+
+	private static Properties CONFIG = null;
 
 	static {
 		DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -2740,6 +2744,24 @@ public class U implements Constants {
 		}
 
 		return instances;
+	}
+
+	public static boolean production() {
+		return hasOption("production");
+	}
+
+	public static synchronized String config(String name) {
+		if (CONFIG == null) {
+			CONFIG = new Properties();
+
+			try {
+				CONFIG.load(resource("config").openStream());
+			} catch (IOException e) {
+				throw rte("Cannot load config!", e);
+			}
+		}
+
+		return CONFIG.getProperty(name);
 	}
 
 }
