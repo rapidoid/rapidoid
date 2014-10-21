@@ -999,9 +999,7 @@ public class U implements Constants {
 		}
 	}
 
-	public static byte[] loadBytes(String filename) {
-		InputStream input = CLASS_LOADER.getResourceAsStream(filename);
-
+	public static byte[] loadBytes(InputStream input) {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 
 		byte[] buffer = new byte[4 * 1024];
@@ -1016,6 +1014,11 @@ public class U implements Constants {
 		}
 
 		return output.toByteArray();
+	}
+
+	public static byte[] loadBytes(String filename) {
+		InputStream input = CLASS_LOADER.getResourceAsStream(filename);
+		return loadBytes(input);
 	}
 
 	public static String load(String filename) {
