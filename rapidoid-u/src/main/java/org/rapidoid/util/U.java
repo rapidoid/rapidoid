@@ -1975,6 +1975,10 @@ public class U implements Constants {
 		return s.substring(0, 1).toUpperCase() + s.substring(1);
 	}
 
+	public static void setId(Object obj, long id) {
+		setPropValue(obj, "id", id);
+	}
+
 	public static long getId(Object obj) {
 		Object id = getPropValue(obj, "id");
 		if (id == null) {
@@ -2477,6 +2481,33 @@ public class U implements Constants {
 		} catch (UnsupportedEncodingException e) {
 			throw U.rte(e);
 		}
+	}
+
+	public static void setPropValue(Object instance, String propertyName, Object value) {
+		String propertyNameCap = capitalized(propertyName);
+		try {
+			for (Class<?> c = instance.getClass(); c != Object.class; c = c.getSuperclass()) {
+				try {
+					invoke(c.getDeclaredMethod(propertyName), instance, value);
+					return;
+				} catch (NoSuchMethodException e) {
+					try {
+						invoke(c.getDeclaredMethod("set" + propertyNameCap), instance, value);
+						return;
+					} catch (NoSuchMethodException e2) {
+						try {
+							setFieldValue(c.getDeclaredField(propertyName), instance, value);
+							return;
+						} catch (NoSuchFieldException e4) {
+							// keep searching in the super-class...
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw rte("Cannot get property value!", e);
+		}
+		throw rte("Cannot find the property '%s' in the class '%s'", propertyName, instance.getClass());
 	}
 
 	public static Object getPropValue(Object instance, String propertyName) {
