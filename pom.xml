@@ -63,6 +63,7 @@
 		<module>rapidoid-pojo</module>
 		<module>rapidoid-oauth</module>
 		<module>rapidoid-web</module>
+		<module>rapidoid-db</module>
 		<module>rapidoid-all</module>
 		<module>rapidoid-demo</module>
 	</modules>
