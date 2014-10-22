@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.lambda.V1;
 import org.rapidoid.util.U;
 
 public class DB {
@@ -37,6 +38,10 @@ public class DB {
 
 	public static void delete(long id) {
 		db().delete(id);
+	}
+
+	public static <T> T get(long id) {
+		return db().get(id);
 	}
 
 	public static <T> T get(long id, Class<T> clazz) {
@@ -57,6 +62,10 @@ public class DB {
 
 	public static <E> List<E> find(Predicate<E> match) {
 		return db().find(match);
+	}
+
+	public static <E> void each(V1<E> lambda) {
+		db().each(lambda);
 	}
 
 	public static void transaction(Runnable transaction) {
