@@ -69,7 +69,10 @@ public class DB {
 	}
 
 	private static Db initDb() {
-		return null; // FIXME
+		Class<?> clazz = U.getClassIfExists("org.rapidoid.db.DbImpl");
+		U.must(clazz != null, "Cannot find Db implementation (org.rapidoid.db.DbImpl)!");
+		U.must(Db.class.isAssignableFrom(clazz), "org.rapidoid.db.DbImpl must implement org.rapidoid.db.Db!");
+		return (Db) U.newInstance(clazz);
 	}
 
 	@SuppressWarnings("unchecked")
