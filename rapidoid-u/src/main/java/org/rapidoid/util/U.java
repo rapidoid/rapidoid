@@ -2754,7 +2754,15 @@ public class U implements Constants {
 			CONFIG = new Properties();
 
 			try {
-				CONFIG.load(resource("config").openStream());
+				URL config = resource("config");
+				if (config != null) {
+					CONFIG.load(config.openStream());
+				}
+
+				config = resource("config.private");
+				if (config != null) {
+					CONFIG.load(config.openStream());
+				}
 			} catch (IOException e) {
 				throw rte("Cannot load config!", e);
 			}
