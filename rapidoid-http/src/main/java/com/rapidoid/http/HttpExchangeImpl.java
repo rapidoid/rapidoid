@@ -567,4 +567,15 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return this;
 	}
 
+	@Override
+	public String constructUrl(String path) {
+		return (U.hasOption("https") ? "https://" : "http://") + host() + path;
+	}
+
+	@Override
+	public String sessionId() {
+		// FIXME implement this
+		return null;
+	}
+
 }

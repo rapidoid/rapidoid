@@ -60,7 +60,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			}
 		} catch (Throwable e) {
 			U.error("Internal server error!", "request", xch, "error", e);
-			xch.response(500);
+			xch.response(500, "Internal server error!", e);
 		}
 
 		xch.completeResponse();

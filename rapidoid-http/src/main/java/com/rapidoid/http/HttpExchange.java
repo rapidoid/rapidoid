@@ -93,4 +93,10 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	byte[] file(String name);
 
+	/* HELPERS: */
+
+	String constructUrl(String path);
+
+	String sessionId();
+
 }
