@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufProvider;
+import org.rapidoid.data.Data;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
@@ -59,6 +60,13 @@ public class DefaultMultiData implements MultiData {
 		Buf buf = src.buffer();
 		Range range = ranges.get(buf, name.getBytes(), false);
 		return range != null ? range.str(buf) : null;
+	}
+
+	@Override
+	public Data get_(String name) {
+		Buf buf = src.buffer();
+		Range range = ranges.get(buf, name.getBytes(), false);
+		return range != null ? new DefaultData(src, range) : null;
 	}
 
 }

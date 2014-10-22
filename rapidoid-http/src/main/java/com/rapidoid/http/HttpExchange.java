@@ -59,6 +59,10 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	Data body_();
 
+	String host();
+
+	Data host_();
+
 	Map<String, String> params();
 
 	MultiData params_();

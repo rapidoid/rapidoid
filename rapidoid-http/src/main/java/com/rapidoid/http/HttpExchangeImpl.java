@@ -342,6 +342,16 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return files_().get(name);
 	}
 
+	@Override
+	public Data host_() {
+		return headers_().get_("host");
+	}
+
+	@Override
+	public String host() {
+		return headers_().get("host");
+	}
+
 	public void setResponses(HttpResponses responses) {
 		this.responses = responses;
 	}
@@ -549,7 +559,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		} else {
 			if (err != null) {
 				String title = U.or(response, "Error occured!");
-				HTMLSnippets.errorPage(this, title, err);
+				HTMLSnippets.writeErrorPage(this, title, err);
 			}
 		}
 

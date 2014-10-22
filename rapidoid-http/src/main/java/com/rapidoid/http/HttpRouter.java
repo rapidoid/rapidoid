@@ -72,7 +72,7 @@ public class HttpRouter implements Router {
 			url = "/" + url;
 		}
 
-		U.info("Registering handler for: %s %s", action, url);
+		U.info("Registering handler", "action", action, "url", url);
 
 		addRoute(action, url, handler);
 	}
