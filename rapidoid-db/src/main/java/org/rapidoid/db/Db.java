@@ -33,6 +33,8 @@ public interface Db {
 
 	<E> E get(long id, Class<E> clazz);
 
+	void update(Object record);
+
 	void update(long id, Object record);
 
 	void delete(long id);

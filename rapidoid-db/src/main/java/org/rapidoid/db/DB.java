@@ -20,7 +20,6 @@ package org.rapidoid.db;
  * #L%
  */
 import java.util.List;
-import java.util.Map;
 
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.lambda.V1;
@@ -30,10 +29,20 @@ public class DB {
 
 	private static final Db db = initDb();
 
+	private static Db initDb() {
+		Class<?> clazz = U.getClassIfExists("org.rapidoid.db.DbImpl");
+		U.must(clazz != null, "Cannot find Db implementation (org.rapidoid.db.DbImpl)!");
+		U.must(Db.class.isAssignableFrom(clazz), "org.rapidoid.db.DbImpl must implement org.rapidoid.db.Db!");
+		return (Db) U.newInstance(clazz);
+	}
+
+	private static Db db() {
+		U.must(db != null, "Database not initialized!");
+		return db;
+	}
+
 	public static long insert(Object record) {
-		long id = db().insert(record);
-		setIdIfPossible(record, id);
-		return id;
+		return db().insert(record);
 	}
 
 	public static void delete(long id) {
@@ -53,7 +62,7 @@ public class DB {
 	}
 
 	public static void update(Object record) {
-		db().update(U.getId(record), record);
+		db().update(record);
 	}
 
 	public static <E> E read(long id, String column) {
@@ -70,30 +79,6 @@ public class DB {
 
 	public static void transaction(Runnable transaction) {
 		db().transaction(transaction);
-	}
-
-	private static Db db() {
-		U.must(db != null, "Database not initialized!");
-		return db;
-	}
-
-	private static Db initDb() {
-		Class<?> clazz = U.getClassIfExists("org.rapidoid.db.DbImpl");
-		U.must(clazz != null, "Cannot find Db implementation (org.rapidoid.db.DbImpl)!");
-		U.must(Db.class.isAssignableFrom(clazz), "org.rapidoid.db.DbImpl must implement org.rapidoid.db.Db!");
-		return (Db) U.newInstance(clazz);
-	}
-
-	@SuppressWarnings("unchecked")
-	private static void setIdIfPossible(Object record, long id) {
-		if (record instanceof Map) {
-			((Map<Object, Object>) record).put("id", id);
-		}
-		try {
-			U.setId(record, id);
-		} catch (Exception e) {
-			// ignore
-		}
 	}
 
 }

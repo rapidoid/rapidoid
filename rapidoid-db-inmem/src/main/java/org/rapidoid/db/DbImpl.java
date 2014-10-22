@@ -59,12 +59,31 @@ public class DbImpl implements Db {
 		return (T) JSON.parse(rec.json, rec.type);
 	}
 
+	@SuppressWarnings("unchecked")
+	private static <T> T setId(T record, long id) {
+		if (record != null) {
+
+			if (record instanceof Map) {
+				((Map<Object, Object>) record).put("id", id);
+			}
+
+			try {
+				U.setId(record, id);
+			} catch (Exception e) {
+				// ignore
+			}
+		}
+
+		return record;
+	}
+
 	@Override
 	public long insert(Object record) {
 		sharedLock();
 		try {
 			long id = ids.incrementAndGet();
 			data.put(id, rec(record));
+			setId(record, id);
 			return id;
 		} finally {
 			sharedUnlock();
@@ -87,7 +106,7 @@ public class DbImpl implements Db {
 		sharedLock();
 		try {
 			Rec rec = data.get(id);
-			return (E) (rec != null ? obj(rec) : null);
+			return (E) (rec != null ? setId(obj(rec), id) : null);
 		} finally {
 			sharedUnlock();
 		}
@@ -97,8 +116,7 @@ public class DbImpl implements Db {
 	public <E> E get(long id, Class<E> clazz) {
 		sharedLock();
 		try {
-			Rec rec = data.get(id);
-			return rec != null ? JSON.parse(rec.json, clazz) : null;
+			return get_(id, clazz);
 		} finally {
 			sharedUnlock();
 		}
@@ -109,9 +127,15 @@ public class DbImpl implements Db {
 		sharedLock();
 		try {
 			data.put(id, rec(record));
+			setId(record, id);
 		} finally {
 			sharedUnlock();
 		}
+	}
+
+	@Override
+	public void update(Object record) {
+		update(U.getId(record), record);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -119,7 +143,7 @@ public class DbImpl implements Db {
 	public <T> T read(long id, String column) {
 		sharedLock();
 		try {
-			Map<String, Object> map = getAsMap(id);
+			Map<String, Object> map = get_(id, Map.class);
 			return (T) (map != null ? map.get(column) : null);
 		} finally {
 			sharedUnlock();
@@ -136,6 +160,8 @@ public class DbImpl implements Db {
 
 			for (Entry<Long, Rec> entry : data.entrySet()) {
 				E record = obj(entry.getValue());
+				setId(record, entry.getKey());
+
 				try {
 					if (match.eval(record)) {
 						results.add(record);
@@ -160,6 +186,8 @@ public class DbImpl implements Db {
 
 			for (Entry<Long, Rec> entry : data.entrySet()) {
 				E record = obj(entry.getValue());
+				setId(record, entry.getKey());
+
 				try {
 					lambda.execute(record);
 				} catch (ClassCastException e) {
@@ -183,9 +211,9 @@ public class DbImpl implements Db {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private Map<String, Object> getAsMap(long id) {
-		return get(id, Map.class);
+	private <T> T get_(long id, Class<T> clazz) {
+		Rec rec = data.get(id);
+		return rec != null ? setId(JSON.parse(rec.json, clazz), id) : null;
 	}
 
 	private void sharedLock() {
