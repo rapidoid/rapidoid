@@ -25,7 +25,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -2762,6 +2761,10 @@ public class U implements Constants {
 		}
 
 		return CONFIG.getProperty(name);
+	}
+
+	public static String fillIn(String template, String placeholder, String value) {
+		return template.replaceAll("\\{\\{" + placeholder + "\\}\\}", value);
 	}
 
 }

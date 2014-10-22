@@ -37,7 +37,8 @@ public class HTMLSnippets {
 	}
 
 	public static HttpExchange writePage(HttpExchange x, String title, String content) {
-		String html = PAGE_HTML.replaceAll("\\{\\{title\\}\\}", title).replaceAll("\\{\\{content\\}\\}", content);
+		String html = U.fillIn(PAGE_HTML, "title", title);
+		html = U.fillIn(html, "content", content);
 		x.write(html);
 		return x;
 	}
