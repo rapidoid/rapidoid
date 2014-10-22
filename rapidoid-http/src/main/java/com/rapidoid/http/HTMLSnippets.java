@@ -29,17 +29,28 @@ public class HTMLSnippets {
 
 	private static String PAGE_HTML;
 
+	private static String FULL_PAGE_HTML;
+
 	static {
 		PAGE_HTML = U.load("page.html");
+		FULL_PAGE_HTML = U.load("page-full.html");
 	}
 
-	public static void errorPage(HttpExchange x, String title, Throwable err) {
-
-		String content = stackTrace("Stack trace: ", err);
-
+	public static HttpExchange writePage(HttpExchange x, String title, String content) {
 		String html = PAGE_HTML.replaceAll("\\{\\{title\\}\\}", title).replaceAll("\\{\\{content\\}\\}", content);
-
 		x.write(html);
+		return x;
+	}
+
+	public static HttpExchange writeFullPage(HttpExchange x, String title, String content) {
+		String html = FULL_PAGE_HTML.replaceAll("\\{\\{title\\}\\}", title).replaceAll("\\{\\{content\\}\\}", content);
+		x.write(html);
+		return x;
+	}
+
+	public static HttpExchange writeErrorPage(HttpExchange x, String title, Throwable err) {
+		String content = stackTrace("Stack trace: ", err);
+		return writeFullPage(x, title, content);
 	}
 
 	private static String stackTrace(String title, Throwable err) {
