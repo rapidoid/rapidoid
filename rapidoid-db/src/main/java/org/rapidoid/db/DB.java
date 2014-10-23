@@ -19,6 +19,7 @@ package org.rapidoid.db;
  * limitations under the License.
  * #L%
  */
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -95,6 +96,10 @@ public class DB {
 
 	public static void transaction(Runnable transaction) {
 		db().transaction(transaction);
+	}
+
+	public static void save(OutputStream output) {
+		db().save(output);
 	}
 
 }

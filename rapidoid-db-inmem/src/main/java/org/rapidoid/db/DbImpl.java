@@ -20,6 +20,8 @@ package org.rapidoid.db;
  * #L%
  */
 
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -50,8 +52,9 @@ public class DbImpl implements Db {
 
 	private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
-	private static Rec rec(Object record) {
-		return new Rec(record.getClass(), JSON.stringify(record));
+	private static Rec rec(Object record, long id) {
+		String _class = record.getClass().getCanonicalName();
+		return new Rec(record.getClass(), JSON.stringifyWithExtras(record, "_class", _class, "id", id));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -82,8 +85,8 @@ public class DbImpl implements Db {
 		sharedLock();
 		try {
 			long id = ids.incrementAndGet();
-			data.put(id, rec(record));
 			setId(record, id);
+			data.put(id, rec(record, id));
 			return id;
 		} finally {
 			sharedUnlock();
@@ -130,7 +133,7 @@ public class DbImpl implements Db {
 		sharedLock();
 		try {
 			validateId(id);
-			data.put(id, rec(record));
+			data.put(id, rec(record, id));
 			setId(record, id);
 		} finally {
 			sharedUnlock();
@@ -238,6 +241,25 @@ public class DbImpl implements Db {
 
 	private void validateId(long id) {
 		U.must(data.containsKey(id), "Cannot find DB record with id=%s", id);
+	}
+
+	@Override
+	public void save(final OutputStream output) {
+		globalLock();
+
+		try {
+			PrintWriter out = new PrintWriter(output);
+
+			for (Entry<Long, Rec> entry : data.entrySet()) {
+				String json = entry.getValue().json;
+				out.println(json);
+			}
+
+			out.close();
+		} finally {
+			globalUnlock();
+		}
+
 	}
 
 }

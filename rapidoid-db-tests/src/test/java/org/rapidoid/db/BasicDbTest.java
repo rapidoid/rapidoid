@@ -20,11 +20,13 @@ package org.rapidoid.db;
  * #L%
  */
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import org.rapidoid.db.model.Person;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
 public class BasicDbTest extends TestCommons {
@@ -70,6 +72,11 @@ public class BasicDbTest extends TestCommons {
 		eq(adults.size(), 2);
 		eq(adults.get(0).id, id2);
 		eq(adults.get(1).id, id3);
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		db.save(out);
+		byte[] bytes = out.toByteArray();
+		U.show(new String(bytes));
 	}
 
 }

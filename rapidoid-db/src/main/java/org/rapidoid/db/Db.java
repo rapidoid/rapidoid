@@ -20,6 +20,7 @@ package org.rapidoid.db;
  * #L%
  */
 
+import java.io.OutputStream;
 import java.util.List;
 
 import org.rapidoid.lambda.Predicate;
@@ -48,5 +49,7 @@ public interface Db {
 	<E> void each(V1<E> lambda);
 
 	void transaction(Runnable transaction);
+
+	void save(OutputStream output);
 
 }
