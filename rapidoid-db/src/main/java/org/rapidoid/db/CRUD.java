@@ -1,5 +1,7 @@
 package org.rapidoid.db;
 
+import java.util.List;
+
 import org.rapidoid.util.U;
 
 /*
@@ -43,6 +45,10 @@ public abstract class CRUD<E> {
 		return DB.insert(record);
 	}
 
+	public void update(long id, E record) {
+		DB.update(id, record);
+	}
+
 	public void delete(long id) {
 		DB.delete(id);
 	}
@@ -51,12 +57,12 @@ public abstract class CRUD<E> {
 		return DB.get(id, clazz);
 	}
 
-	public <T> T read(long id, String column) {
-		return DB.read(id, column);
+	public List<E> getAll() {
+		return DB.getAll(clazz);
 	}
 
-	public void update(long id, E record) {
-		DB.update(id, record);
+	public <T> T read(long id, String column) {
+		return DB.read(id, column);
 	}
 
 }
