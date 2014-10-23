@@ -27,6 +27,7 @@ import org.testng.annotations.Test;
 
 public class JSONTest extends TestCommons {
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void json() {
 		Person p = new Person("john", 25);

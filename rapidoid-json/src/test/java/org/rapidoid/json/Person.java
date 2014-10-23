@@ -25,6 +25,7 @@ import java.util.Set;
 
 import org.rapidoid.util.U;
 
+@SuppressWarnings("unchecked")
 public class Person {
 
 	public String name;
