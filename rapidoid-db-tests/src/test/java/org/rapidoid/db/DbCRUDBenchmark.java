@@ -23,11 +23,15 @@ package org.rapidoid.db;
 import org.rapidoid.db.model.Person;
 import org.rapidoid.util.U;
 
-public class DbBenchmarkDemo {
+public class DbCRUDBenchmark {
 
 	public static void main(String[] args) {
 
-		U.benchmarkMT(U.cpus(), "insert+read", 100000, new Runnable() {
+		U.args(args);
+
+		int size = U.option("size", 100000);
+
+		U.benchmarkMT(U.cpus(), "insert+read", size, new Runnable() {
 			@Override
 			public void run() {
 				String name = "Niko";
@@ -36,7 +40,6 @@ public class DbBenchmarkDemo {
 				U.must(p.name.equals(name));
 			}
 		});
-
 	}
 
 }
