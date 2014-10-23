@@ -65,34 +65,26 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 		String[] parts = uriParts(request.path());
 		int length = parts.length;
 
-		Object res;
-
 		if (length == 0) {
-			res = process(request, "main", "index", parts, 0);
-			if (res != null) {
-				return res;
-			} else {
-				throw notFound();
-			}
+			return process(request, "main", "index", parts, 0);
 		}
 
 		if (length >= 1) {
-			res = process(request, parts[0], "index", parts, 1);
-			if (res != null) {
-				return res;
+			try {
+				return process(request, parts[0], "index", parts, 1);
+			} catch (PojoHandlerNotFoundException e) {
+				// ignore, continue trying...
 			}
 
-			res = process(request, "main", parts[0], parts, 1);
-			if (res != null) {
-				return res;
+			try {
+				return process(request, "main", parts[0], parts, 1);
+			} catch (PojoHandlerNotFoundException e) {
+				// ignore, continue trying...
 			}
 		}
 
 		if (length >= 2) {
-			res = process(request, parts[0], parts[1], parts, 2);
-			if (res != null) {
-				return res;
-			}
+			return process(request, parts[0], parts[1], parts, 2);
 		}
 
 		throw notFound();
@@ -109,7 +101,7 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 			}
 		}
 
-		return null;
+		throw notFound();
 	}
 
 	private Object doDispatch(PojoRequest request, Method method, Object service, String[] parts, int paramsFrom)
