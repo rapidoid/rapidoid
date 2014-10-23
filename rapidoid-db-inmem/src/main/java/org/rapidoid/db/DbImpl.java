@@ -94,6 +94,7 @@ public class DbImpl implements Db {
 	public void delete(long id) {
 		sharedLock();
 		try {
+			validateId(id);
 			data.remove(id);
 		} finally {
 			sharedUnlock();
@@ -105,6 +106,7 @@ public class DbImpl implements Db {
 	public <E> E get(long id) {
 		sharedLock();
 		try {
+			validateId(id);
 			Rec rec = data.get(id);
 			return (E) (rec != null ? setId(obj(rec), id) : null);
 		} finally {
@@ -116,6 +118,7 @@ public class DbImpl implements Db {
 	public <E> E get(long id, Class<E> clazz) {
 		sharedLock();
 		try {
+			validateId(id);
 			return get_(id, clazz);
 		} finally {
 			sharedUnlock();
@@ -126,6 +129,7 @@ public class DbImpl implements Db {
 	public void update(long id, Object record) {
 		sharedLock();
 		try {
+			validateId(id);
 			data.put(id, rec(record));
 			setId(record, id);
 		} finally {
@@ -143,6 +147,7 @@ public class DbImpl implements Db {
 	public <T> T read(long id, String column) {
 		sharedLock();
 		try {
+			validateId(id);
 			Map<String, Object> map = get_(id, Map.class);
 			return (T) (map != null ? map.get(column) : null);
 		} finally {
@@ -210,6 +215,7 @@ public class DbImpl implements Db {
 	}
 
 	private <T> T get_(long id, Class<T> clazz) {
+		validateId(id);
 		Rec rec = data.get(id);
 		return rec != null ? setId(JSON.parse(rec.json, clazz), id) : null;
 	}
@@ -228,6 +234,10 @@ public class DbImpl implements Db {
 
 	private void globalUnlock() {
 		lock.writeLock().unlock();
+	}
+
+	private void validateId(long id) {
+		U.must(data.containsKey(id), "Cannot find DB record with id=%s", id);
 	}
 
 }
