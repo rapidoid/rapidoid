@@ -20,6 +20,7 @@ package org.rapidoid.db;
  * #L%
  */
 
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
@@ -51,5 +52,7 @@ public interface Db {
 	void transaction(Runnable transaction);
 
 	void save(OutputStream output);
+
+	void load(InputStream in);
 
 }

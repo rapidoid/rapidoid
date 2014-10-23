@@ -32,12 +32,14 @@ public class DbSerializationBenchmark {
 
 		U.args(args);
 
-		int size = U.option("size", 100000);
-		int loops = U.option("loops", 10);
+		int size = U.option("size", 1000000);
+		int loops = U.option("loops", 100);
 
 		for (int i = 0; i < size; i++) {
 			DB.insert(new Person("john doe" + i, i));
 		}
+
+		System.out.println("measuring...");
 
 		U.benchmark("save " + size + " records", loops, new Runnable() {
 			@Override

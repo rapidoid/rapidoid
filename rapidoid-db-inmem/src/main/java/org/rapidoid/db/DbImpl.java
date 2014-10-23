@@ -20,6 +20,10 @@ package org.rapidoid.db;
  * #L%
  */
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.List;
@@ -259,6 +263,35 @@ public class DbImpl implements Db {
 		} finally {
 			globalUnlock();
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void load(InputStream in) {
+		globalLock();
+
+		try {
+			data.clear();
+
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+			String line;
+			while ((line = reader.readLine()) != null) {
+				Map<String, Object> map = JSON.parse(line, Map.class);
+				Long id = new Long(((String) map.get("id")));
+				String className = ((String) map.get("_class"));
+				Class<?> type = U.getClassIfExists(className);
+				data.put(id, new Rec(type, line));
+			}
+
+			data = new ConcurrentHashMap<Long, Rec>(data);
+
+		} catch (IOException e) {
+			throw U.rte("Cannot load database!", e);
+		} finally {
+			globalUnlock();
+		}
+	}
 
 	}
 
