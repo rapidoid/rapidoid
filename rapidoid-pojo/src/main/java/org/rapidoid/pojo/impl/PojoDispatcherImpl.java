@@ -152,7 +152,11 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 				throw new PojoDispatchException("Cannot dispatch to POJO target!", e);
 			}
 
-			return U.invoke(method, service, args);
+			Object result = U.invoke(method, service, args);
+			if (result == null && method.getReturnType().equals(void.class)) {
+				result = "OK";
+			}
+			return result;
 
 		} else {
 			throw notFound();
