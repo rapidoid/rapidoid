@@ -4,7 +4,10 @@ import java.io.OutputStream;
 
 import org.rapidoid.util.U;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /*
  * #%L
@@ -28,11 +31,45 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JSON {
 
-	private static final ObjectMapper MAPPER = new ObjectMapper();
+	private static final ObjectMapper MAPPER = mapper();
+
+	private static ObjectMapper mapper() {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		return mapper;
+	}
 
 	public static String stringify(Object value) {
 		try {
 			return MAPPER.writeValueAsString(value);
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
+	}
+
+	/**
+	 * @param extras
+	 *            extra JSON attributes in format (key1, value1, key2, value2...)
+	 */
+	public static String stringifyWithExtras(Object value, Object... extras) {
+		U.must(extras.length % 2 == 0,
+				"Expected even number of extras (key1, value1, key2, value2...), but found: %s!", extras.length);
+
+		try {
+			JsonNode node = MAPPER.valueToTree(value);
+
+			U.must(node instanceof ObjectNode, "Cannot add extra attributes on a non-object value: %s", value);
+
+			ObjectNode obj = (ObjectNode) node;
+
+			int extrasN = extras.length / 2;
+			for (int i = 0; i < extrasN; i++) {
+				Object key = extras[2 * i];
+				U.must(key instanceof String, "Expected extra key of type String, but found: %s", key);
+				obj.put((String) key, String.valueOf(extras[2 * i + 1]));
+			}
+
+			return MAPPER.writeValueAsString(node);
 		} catch (Exception e) {
 			throw U.rte(e);
 		}
