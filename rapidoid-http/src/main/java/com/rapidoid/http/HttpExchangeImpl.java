@@ -416,9 +416,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public synchronized HttpExchange setContentType(MediaType MediaType) {
 		U.must(!hasContentType, "Content type was already set!");
-		hasContentType = true;
 
 		addHeader(HttpHeader.CONTENT_TYPE.getBytes(), MediaType.getBytes());
+
+		// this must be at the end of this method, because state might get restarted
+		hasContentType = true;
+		
 		return this;
 	}
 
