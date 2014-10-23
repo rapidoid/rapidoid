@@ -70,7 +70,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	public int bodyPos;
 	private boolean writesBody;
 	private boolean hasContentType;
-	private boolean startedResponse;
 	private int startingPos;
 	private HttpResponses responses;
 
@@ -143,7 +142,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		bodyPos = -1;
 		hasContentType = false;
 		responses = null;
-		startedResponse = false;
 		responseCode = -1;
 	}
 
@@ -358,7 +356,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized HttpExchange addHeader(byte[] name, byte[] value) {
-		if (!startedResponse) {
+		if (responseCode <= 0) {
 			responseCode(200);
 		}
 
@@ -381,7 +379,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 		startingPos = output().size();
 		output().append(getResp(responseCode).bytes());
-		startedResponse = true;
 		hasContentType = false;
 		writesBody = false;
 		bodyPos = -1;
@@ -390,6 +387,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	public void completeResponse() {
+		U.must(responseCode >= 100);
 		long wrote = output().size() - bodyPos;
 		U.must(wrote <= Integer.MAX_VALUE, "Response too big!");
 
@@ -563,7 +561,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			}
 		}
 
-		done();
 		return this;
 	}
 
