@@ -7,16 +7,11 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-measure</artifactId>
+	<artifactId>rapidoid-utils</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid Measure</description>
+	<description>Rapidoid Utils</description>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-utils</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-test-commons</artifactId>

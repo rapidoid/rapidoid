@@ -53,7 +53,7 @@
 	</properties>
 
 	<modules>
-		<module>rapidoid-u</module>
+		<module>rapidoid-utils</module>
 		<module>rapidoid-json</module>
 		<module>rapidoid-test-commons</module>
 		<module>rapidoid-buffer</module>
