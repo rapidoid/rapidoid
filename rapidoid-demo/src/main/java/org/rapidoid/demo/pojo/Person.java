@@ -28,6 +28,14 @@ public class Person {
 
 	private int _age;
 
+	public Person() {
+	}
+
+	public Person(String name, int _age) {
+		this.name = name;
+		this._age = _age;
+	}
+
 	public int getAge() {
 		return _age;
 	}

@@ -1,4 +1,4 @@
-package org.rapidoid.db;
+package org.rapidoid.demo.db;
 
 /*
  * #%L
@@ -20,30 +20,25 @@ package org.rapidoid.db;
  * #L%
  */
 
-import java.io.ByteArrayOutputStream;
-
-import org.rapidoid.db.model.Person;
+import org.rapidoid.db.DB;
+import org.rapidoid.demo.pojo.Person;
 import org.rapidoid.util.U;
 
-public class DbSerializationBenchmark {
+public class DbCRUDBenchmark {
 
 	public static void main(String[] args) {
 
 		U.args(args);
 
 		int size = U.option("size", 100000);
-		int loops = U.option("loops", 10);
 
-		for (int i = 0; i < size; i++) {
-			DB.insert(new Person("john doe" + i, i));
-		}
-
-		U.benchmark("save " + size + " records", loops, new Runnable() {
+		U.benchmarkMT(U.cpus(), "insert+read", size, new Runnable() {
 			@Override
 			public void run() {
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				DB.save(out);
-				byte[] bytes = out.toByteArray();
+				String name = "Niko";
+				long id = DB.insert(new Person(name, 30));
+				Person p = DB.get(id);
+				U.must(p.name.equals(name));
 			}
 		});
 	}
