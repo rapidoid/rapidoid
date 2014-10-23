@@ -9,9 +9,11 @@ Navigating to [http://localhost:8080/teaser/hey/Joe/45](http://localhost:8080/te
 
 ```java
 public class TeaserService {
+
 	public String hey(String name, int age) {
 		return "Hey " + name + " (" + age + ")";
 	}
+
 }
 ```
 
