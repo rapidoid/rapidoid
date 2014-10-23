@@ -22,6 +22,8 @@ package org.rapidoid.demo.pojo;
 
 public class Person {
 
+	public long id;
+
 	public String name;
 
 	private int _age;
@@ -36,7 +38,7 @@ public class Person {
 
 	@Override
 	public String toString() {
-		return "Person [name=" + name + ", age=" + _age + "]";
+		return "Person [id=" + id + ", name=" + name + ", _age=" + _age + "]";
 	}
 
 }

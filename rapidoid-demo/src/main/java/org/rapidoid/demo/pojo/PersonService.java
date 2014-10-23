@@ -1,5 +1,12 @@
 package org.rapidoid.demo.pojo;
 
+import java.util.List;
+
+import org.rapidoid.db.CRUD;
+import org.rapidoid.db.DB;
+import org.rapidoid.lambda.Predicate;
+import org.rapidoid.util.U;
+
 /*
  * #%L
  * rapidoid-demo
@@ -20,7 +27,20 @@ package org.rapidoid.demo.pojo;
  * #L%
  */
 
-public class PersonService {
+public class PersonService extends CRUD<Person> {
+
+	public PersonService() {
+		super(Person.class);
+	}
+
+	public List<Person> olderThan(final int age) {
+		return DB.find(new Predicate<Person>() {
+			@Override
+			public boolean eval(Person p) {
+				return p.getAge() > age;
+			}
+		});
+	}
 
 	// e.g. /hello
 	public String hello() {
@@ -28,9 +48,10 @@ public class PersonService {
 	}
 
 	// e.g. /person/add?name=nick&age=30
-	public Person add(Person p) {
-		System.out.println("Inserting " + p);
-		return p;
+	public List<Person> add(Person p) {
+		U.info("Inserting person", "person", p);
+		insert(p);
+		return getAll();
 	}
 
 }

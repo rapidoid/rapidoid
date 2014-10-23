@@ -23,7 +23,7 @@ import org.rapidoid.web.Web;
  * #L%
  */
 
-public class HttpPojoDemo {
+public class WebPojoDemo {
 
 	public static void main(String[] args) {
 		U.args(args);
