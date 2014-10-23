@@ -38,7 +38,7 @@ public class HttpResponse {
 
 	public HttpResponse(String resp) {
 		this.bytes = resp.getBytes(U.UTF_8);
-		this.contentLengthPos = resp.indexOf(CONTENT_LENGTH) + CONTENT_LENGTH.length() + 1;
+		this.contentLengthPos = resp.indexOf(CONTENT_LENGTH) + CONTENT_LENGTH.length();
 		this.datePos = resp.indexOf(DATE) + DATE.length() + 1;
 	}
 
