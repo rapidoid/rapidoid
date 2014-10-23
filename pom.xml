@@ -59,6 +59,7 @@
 		<module>rapidoid-buffer</module>
 		<module>rapidoid-net</module>
 		<module>rapidoid-http</module>
+		<module>rapidoid-html</module>
 		<module>rapidoid-measure</module>
 		<module>rapidoid-pojo</module>
 		<module>rapidoid-oauth</module>
