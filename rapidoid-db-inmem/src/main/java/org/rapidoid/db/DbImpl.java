@@ -150,33 +150,31 @@ public class DbImpl implements Db {
 		}
 	}
 
+	@Override
+	public <E> List<E> getAll(final Class<E> clazz) {
+		return find(new Predicate<E>() {
+			@Override
+			public boolean eval(E record) throws Exception {
+				return clazz.isAssignableFrom(record.getClass());
+			}
+		});
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <E> List<E> find(final Predicate<E> match) {
 		final List<E> results = U.list();
 
-		sharedLock();
-		try {
-
-			for (Entry<Long, Rec> entry : data.entrySet()) {
-				E record = obj(entry.getValue());
-				setId(record, entry.getKey());
-
-				try {
-					if (match.eval(record)) {
-						results.add(record);
-					}
-				} catch (ClassCastException e) {
-					// ignore, cast exceptions are expected
-				} catch (Exception e) {
-					throw U.rte(e);
+		each(new V1<E>() {
+			@Override
+			public void execute(E record) throws Exception {
+				if (match.eval(record)) {
+					results.add(record);
 				}
 			}
+		});
 
-			return results;
-		} finally {
-			sharedUnlock();
-		}
+		return results;
 	}
 
 	@Override

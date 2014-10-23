@@ -57,6 +57,10 @@ public class DB {
 		return db().get(id, clazz);
 	}
 
+	public static <E> List<E> getAll(Class<E> clazz) {
+		return db().getAll(clazz);
+	}
+
 	public static void update(long id, Object record) {
 		db().update(id, record);
 	}
