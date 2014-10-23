@@ -136,6 +136,14 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 							throw error(null, "Not enough parameters!");
 						}
 
+					} else if (type.equals(Object.class)) {
+						Class<?> defaultType = getDefaultType(service);
+
+						if (defaultType != null) {
+							args[i] = instantiateArg(request, defaultType);
+						} else {
+							throw error(null, "Cannot provide value for parameter of type Object!");
+						}
 					} else {
 						args[i] = complexArg(i, type, request, parts, paramsFrom, paramsSize);
 					}
@@ -169,6 +177,11 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 		} else {
 			return instantiateArg(request, type);
 		}
+	}
+
+	private Class<?> getDefaultType(Object service) {
+		Object clazz = U.getPropValue(service, "clazz");
+		return (Class<?>) (clazz instanceof Class ? clazz : null);
 	}
 
 	private Object instantiateArg(PojoRequest request, Class<?> type) throws PojoDispatchException {
