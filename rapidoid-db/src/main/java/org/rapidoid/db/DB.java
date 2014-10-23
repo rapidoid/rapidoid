@@ -20,25 +20,37 @@ package org.rapidoid.db;
  * #L%
  */
 import java.util.List;
+import java.util.Map;
 
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.lambda.V1;
 import org.rapidoid.util.U;
 
+@SuppressWarnings("unchecked")
 public class DB {
 
-	private static final Db db = initDb();
+	private static final Class<Db> DB_IMPL_CLASS;
 
-	private static Db initDb() {
-		Class<?> clazz = U.getClassIfExists("org.rapidoid.db.DbImpl");
-		U.must(clazz != null, "Cannot find Db implementation (org.rapidoid.db.DbImpl)!");
-		U.must(Db.class.isAssignableFrom(clazz), "org.rapidoid.db.DbImpl must implement org.rapidoid.db.Db!");
-		return (Db) U.newInstance(clazz);
+	private static final Db DEFAULT_DB_INSTANCE;
+
+	private static final Map<String, Db> DB_INSTANCES;
+
+	static {
+		DB_IMPL_CLASS = (Class<Db>) U.getClassIfExists("org.rapidoid.db.DbImpl");
+		U.must(DB_IMPL_CLASS != null, "Cannot find Db implementation (org.rapidoid.db.DbImpl)!");
+		U.must(Db.class.isAssignableFrom(DB_IMPL_CLASS), "org.rapidoid.db.DbImpl must implement org.rapidoid.db.Db!");
+
+		DEFAULT_DB_INSTANCE = (Db) U.newInstance(DB_IMPL_CLASS);
+		DB_INSTANCES = U.<String, Db> autoExpandingMap(DB_IMPL_CLASS);
 	}
 
-	private static Db db() {
-		U.must(db != null, "Database not initialized!");
-		return db;
+	public static Db db() {
+		assert U.must(DEFAULT_DB_INSTANCE != null, "Database not initialized!");
+		return DEFAULT_DB_INSTANCE;
+	}
+
+	public static Db instance(String dbName) {
+		return DB_INSTANCES.get(dbName);
 	}
 
 	public static long insert(Object record) {

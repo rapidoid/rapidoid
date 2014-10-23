@@ -31,14 +31,20 @@ public class BasicDbTest extends TestCommons {
 
 	@Test
 	public void testCRUD() {
+		testDb(DB.db());
+		testDb(DB.instance("db1"));
+		testDb(DB.instance("db2"));
+		testDb(DB.instance("db3"));
+	}
 
-		long id1 = DB.insert(new Person("abc", 10));
-		long id2 = DB.insert(new Person("f", 20));
-		long id3 = DB.insert(new Person("xy", 30));
+	private void testDb(Db db) {
+		long id1 = db.insert(new Person("abc", 10));
+		long id2 = db.insert(new Person("f", 20));
+		long id3 = db.insert(new Person("xy", 30));
 
-		Person p1 = DB.get(id1);
-		Person p2 = DB.get(id2, Person.class);
-		Person p3 = DB.get(id3);
+		Person p1 = db.get(id1);
+		Person p2 = db.get(id2, Person.class);
+		Person p3 = db.get(id3);
 
 		eq(p1.id, id1);
 		eq(p1.name, "abc");
@@ -59,7 +65,7 @@ public class BasicDbTest extends TestCommons {
 			}
 		};
 
-		List<Person> adults = DB.find(pr);
+		List<Person> adults = db.find(pr);
 
 		eq(adults.size(), 2);
 		eq(adults.get(0).id, id2);
