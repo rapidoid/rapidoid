@@ -2,7 +2,7 @@ package org.rapidoid.wrap;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-u
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,8 +20,16 @@ package org.rapidoid.wrap;
  * #L%
  */
 
-public class Dbl {
+public class Int {
 
-	public double value;
+	public int value;
+
+	public Int() {
+		this(0);
+	}
+
+	public Int(int value) {
+		this.value = value;
+	}
 
 }

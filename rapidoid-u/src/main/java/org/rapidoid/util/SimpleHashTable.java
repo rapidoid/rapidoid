@@ -1,8 +1,8 @@
-package org.rapidoid.wrap;
+package org.rapidoid.util;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-u
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,16 +20,31 @@ package org.rapidoid.wrap;
  * #L%
  */
 
-public class Int {
+public class SimpleHashTable<T> {
 
-	public int value;
+	public final SimpleList<T>[] base;
 
-	public Int() {
-		this(0);
+	@SuppressWarnings("unchecked")
+	public SimpleHashTable(int width) {
+		base = new SimpleList[width];
 	}
 
-	public Int(int value) {
-		this.value = value;
+	public void put(long key, T value) {
+		int hash = index(key);
+
+		if (base[hash] == null) {
+			base[hash] = new SimpleList<T>(5);
+		}
+
+		base[hash].add(value);
+	}
+
+	public SimpleList<T> get(long key) {
+		return base[index(key)];
+	}
+
+	private int index(long key) {
+		return (int) (Math.abs(key) % base.length);
 	}
 
 }

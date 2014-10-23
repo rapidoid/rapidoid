@@ -1,12 +1,14 @@
-package org.rapidoid.util;
+package org.rapidoid.json;
 
 import java.io.OutputStream;
+
+import org.rapidoid.util.U;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-json
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%

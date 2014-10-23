@@ -2,7 +2,7 @@ package org.rapidoid.pool;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-u
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%

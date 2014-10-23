@@ -24,11 +24,11 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Map;
 
+import org.rapidoid.json.JSON;
 import org.rapidoid.pojo.POJO;
 import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoRequest;
 import org.rapidoid.pojo.impl.PojoRequestImpl;
-import org.rapidoid.util.JSON;
 import org.rapidoid.util.U;
 
 public class CLIPojoDemo {

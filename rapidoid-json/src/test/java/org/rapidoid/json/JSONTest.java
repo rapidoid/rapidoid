@@ -1,8 +1,8 @@
-package org.rapidoid.wrap;
+package org.rapidoid.json;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-json
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,8 +20,27 @@ package org.rapidoid.wrap;
  * #L%
  */
 
-public class Flt {
+import java.util.Map;
 
-	public float value;
+import org.rapidoid.test.TestCommons;
+import org.testng.annotations.Test;
+
+public class JSONTest extends TestCommons {
+
+	@Test
+	public void json() {
+		Person p = new Person("john", 25);
+
+		String json = JSON.stringify(p);
+		System.out.println(json);
+
+		Person p2 = JSON.parse(json, Person.class);
+		eq(p2.name, p.name);
+		eq(p2.age, p.age);
+
+		Map<String, ?> map = JSON.parse(json, Map.class);
+		eq(map.get("name"), p.name);
+		eq(map.get("age"), p.age);
+	}
 
 }

@@ -33,8 +33,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
+import org.rapidoid.json.JSON;
 import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.util.JSON;
 import org.rapidoid.util.Resetable;
 import org.rapidoid.util.U;
 

@@ -12,7 +12,6 @@
 	<packaging>jar</packaging>
 	<description>Rapidoid DB In-memory Implementation</description>
 
-
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
@@ -21,7 +20,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-commons</artifactId>
+			<artifactId>rapidoid-json</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

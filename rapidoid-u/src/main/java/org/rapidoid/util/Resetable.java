@@ -1,8 +1,8 @@
-package org.rapidoid.wrap;
+package org.rapidoid.util;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-u
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,8 +20,8 @@ package org.rapidoid.wrap;
  * #L%
  */
 
-public class Lng {
+public interface Resetable {
 
-	public long value;
+	void reset();
 
 }

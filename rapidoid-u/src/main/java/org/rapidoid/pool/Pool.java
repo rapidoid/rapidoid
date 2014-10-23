@@ -1,8 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.pool;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-u
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,27 +20,12 @@ package org.rapidoid.util;
  * #L%
  */
 
-import java.util.Map;
+public interface Pool<T> {
 
-import org.rapidoid.test.TestCommons;
-import org.testng.annotations.Test;
+	T get();
 
-public class JSONTest extends TestCommons {
+	void release(T obj);
 
-	@Test
-	public void json() {
-		Person p = new Person("john", 25);
-
-		String json = JSON.stringify(p);
-		System.out.println(json);
-
-		Person p2 = JSON.parse(json, Person.class);
-		eq(p2.name, p.name);
-		eq(p2.age, p.age);
-
-		Map<String, ?> map = JSON.parse(json, Map.class);
-		eq(map.get("name"), p.name);
-		eq(map.get("age"), p.age);
-	}
+	int instances();
 
 }

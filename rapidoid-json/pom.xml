@@ -8,9 +8,9 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-commons</artifactId>
+	<artifactId>rapidoid-json</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid Commons</description>
+	<description>Rapidoid JSON</description>
 
 	<dependencies>
 		<dependency>

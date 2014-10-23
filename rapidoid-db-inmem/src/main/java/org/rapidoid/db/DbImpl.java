@@ -27,9 +27,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.rapidoid.json.JSON;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.lambda.V1;
-import org.rapidoid.util.JSON;
 import org.rapidoid.util.U;
 
 class Rec {

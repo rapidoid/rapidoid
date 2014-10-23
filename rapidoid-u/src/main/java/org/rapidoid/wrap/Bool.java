@@ -1,8 +1,8 @@
-package org.rapidoid.pool;
+package org.rapidoid.wrap;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-u
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,12 +20,8 @@ package org.rapidoid.pool;
  * #L%
  */
 
-public interface Pool<T> {
+public class Bool {
 
-	T get();
-
-	void release(T obj);
-
-	int instances();
+	public boolean value;
 
 }

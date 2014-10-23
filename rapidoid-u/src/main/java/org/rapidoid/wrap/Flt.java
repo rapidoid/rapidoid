@@ -1,8 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.wrap;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-u
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,8 +20,8 @@ package org.rapidoid.util;
  * #L%
  */
 
-public interface Resetable {
+public class Flt {
 
-	void reset();
+	public float value;
 
 }

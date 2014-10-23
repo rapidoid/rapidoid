@@ -1,8 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.wrap;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-u
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,27 +20,8 @@ package org.rapidoid.util;
  * #L%
  */
 
-import java.util.List;
-import java.util.Set;
+public class Shrt {
 
-public class Person {
-
-	public String name;
-
-	public int age;
-
-	public String[] tags = { "aa", "bbb" };
-
-	public Set<?> ss = U.set(1, "bn", false);
-
-	public List<?> lst = U.list(1, "bn", false);
-
-	public Person() {
-	}
-
-	public Person(String name, int age) {
-		this.name = name;
-		this.age = age;
-	}
+	public short value;
 
 }

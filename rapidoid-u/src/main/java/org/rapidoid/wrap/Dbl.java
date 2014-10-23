@@ -2,7 +2,7 @@ package org.rapidoid.wrap;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-u
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,8 +20,8 @@ package org.rapidoid.wrap;
  * #L%
  */
 
-public class Bool {
+public class Dbl {
 
-	public boolean value;
+	public double value;
 
 }

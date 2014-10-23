@@ -1,8 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.json;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-json
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,31 +20,29 @@ package org.rapidoid.util;
  * #L%
  */
 
-public class SimpleHashTable<T> {
+import java.util.List;
+import java.util.Set;
 
-	public final SimpleList<T>[] base;
+import org.rapidoid.util.U;
 
-	@SuppressWarnings("unchecked")
-	public SimpleHashTable(int width) {
-		base = new SimpleList[width];
+public class Person {
+
+	public String name;
+
+	public int age;
+
+	public String[] tags = { "aa", "bbb" };
+
+	public Set<?> ss = U.set(1, "bn", false);
+
+	public List<?> lst = U.list(1, "bn", false);
+
+	public Person() {
 	}
 
-	public void put(long key, T value) {
-		int hash = index(key);
-
-		if (base[hash] == null) {
-			base[hash] = new SimpleList<T>(5);
-		}
-
-		base[hash].add(value);
-	}
-
-	public SimpleList<T> get(long key) {
-		return base[index(key)];
-	}
-
-	private int index(long key) {
-		return (int) (Math.abs(key) % base.length);
+	public Person(String name, int age) {
+		this.name = name;
+		this.age = age;
 	}
 
 }
