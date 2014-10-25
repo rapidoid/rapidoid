@@ -57,4 +57,6 @@ public interface Db {
 
 	void load(InputStream in);
 
+	void shutdown();
+
 }

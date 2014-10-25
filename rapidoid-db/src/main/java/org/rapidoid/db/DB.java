@@ -115,4 +115,8 @@ public class DB {
 		db().save(output);
 	}
 
+	public static void shutdown() {
+		db().shutdown();
+	}
+
 }

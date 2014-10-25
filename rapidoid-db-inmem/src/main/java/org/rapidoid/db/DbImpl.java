@@ -61,6 +61,8 @@ public class DbImpl implements Db, Runnable {
 
 	private final AtomicLong ids = new AtomicLong();
 
+	private final AtomicBoolean active = new AtomicBoolean(true);
+
 	private final AtomicBoolean aOrB = new AtomicBoolean(true);
 
 	private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
@@ -392,8 +394,25 @@ public class DbImpl implements Db, Runnable {
 	public void run() {
 		while (true) {
 			persistData(null);
+
+			if (active.get()) {
+				U.sleep(500);
+			} else {
+				persistData(null);
+				return;
+			}
 		}
 	}
+
+	@Override
+	public void shutdown() {
+		active.set(false);
+		try {
+			persistor.join();
+		} catch (InterruptedException e) {
+		}
+	}
+
 	@Override
 	public String toString() {
 		return "DB [name=" + name + ", filename=" + filename + "]";
