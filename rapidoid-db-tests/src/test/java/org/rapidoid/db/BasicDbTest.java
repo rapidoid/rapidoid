@@ -53,7 +53,7 @@ public class BasicDbTest extends DbTestCommons {
 
 		U.show(new String(bytes));
 
-		db = DB.instance("new-db");
+		db = DB.instance(db.name() + "-new");
 
 		// load the db (several times shouldn't matter)
 		db.load(new ByteArrayInputStream(bytes));
