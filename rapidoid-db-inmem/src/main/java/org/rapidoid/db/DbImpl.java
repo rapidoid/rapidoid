@@ -344,8 +344,6 @@ public class DbImpl implements Db, Runnable {
 			globalUnlock();
 		}
 
-		U.startMeasure();
-
 		try {
 			boolean isA = aOrB.get();
 			String suffixAorB = isA ? "a" : "b";
@@ -386,8 +384,6 @@ public class DbImpl implements Db, Runnable {
 
 			throw U.rte("Cannot persist database changes!", e);
 		}
-
-		U.endMeasure();
 	}
 
 	@Override
