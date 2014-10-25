@@ -21,11 +21,10 @@ package org.rapidoid.db;
  */
 
 import org.rapidoid.db.model.Person;
-import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
-public class DbPersistenceTest extends TestCommons {
+public class DbPersistenceTest extends DbTestCommons {
 
 	@Test
 	public void testCRUD() {

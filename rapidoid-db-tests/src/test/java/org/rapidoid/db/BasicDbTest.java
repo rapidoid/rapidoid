@@ -26,11 +26,10 @@ import java.util.List;
 
 import org.rapidoid.db.model.Person;
 import org.rapidoid.lambda.Predicate;
-import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
-public class BasicDbTest extends TestCommons {
+public class BasicDbTest extends DbTestCommons {
 
 	@Test
 	public void testCRUD() {
@@ -49,6 +48,8 @@ public class BasicDbTest extends TestCommons {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		db.save(out);
 		byte[] bytes = out.toByteArray();
+
+		db.shutdown();
 
 		U.show(new String(bytes));
 
@@ -87,6 +88,8 @@ public class BasicDbTest extends TestCommons {
 		eq(adults.size(), 2);
 		eq(adults.get(0).id, id2);
 		eq(adults.get(1).id, id3);
+
+		db.shutdown();
 	}
 
 }
