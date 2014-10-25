@@ -2,8 +2,6 @@ package org.rapidoid.json;
 
 import java.io.OutputStream;
 
-import org.rapidoid.util.U;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,7 +41,7 @@ public class JSON {
 		try {
 			return MAPPER.writeValueAsString(value);
 		} catch (Exception e) {
-			throw U.rte(e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -52,26 +50,33 @@ public class JSON {
 	 *            extra JSON attributes in format (key1, value1, key2, value2...)
 	 */
 	public static String stringifyWithExtras(Object value, Object... extras) {
-		U.must(extras.length % 2 == 0,
-				"Expected even number of extras (key1, value1, key2, value2...), but found: %s!", extras.length);
+		if (extras.length % 2 != 0) {
+			throw new IllegalArgumentException(
+					"Expected even number of extras (key1, value1, key2, value2...), but found: " + extras.length);
+		}
 
 		try {
 			JsonNode node = MAPPER.valueToTree(value);
 
-			U.must(node instanceof ObjectNode, "Cannot add extra attributes on a non-object value: %s", value);
+			if (!(node instanceof ObjectNode)) {
+				throw new RuntimeException("Cannot add extra attributes on a non-object value: " + value);
+			}
 
 			ObjectNode obj = (ObjectNode) node;
 
 			int extrasN = extras.length / 2;
 			for (int i = 0; i < extrasN; i++) {
 				Object key = extras[2 * i];
-				U.must(key instanceof String, "Expected extra key of type String, but found: %s", key);
-				obj.put((String) key, String.valueOf(extras[2 * i + 1]));
+				if (key instanceof String) {
+					obj.put((String) key, String.valueOf(extras[2 * i + 1]));
+				} else {
+					throw new RuntimeException("Expected extra key of type String, but found: " + key);
+				}
 			}
 
 			return MAPPER.writeValueAsString(node);
 		} catch (Exception e) {
-			throw U.rte(e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -79,7 +84,7 @@ public class JSON {
 		try {
 			MAPPER.writeValue(out, value);
 		} catch (Exception e) {
-			throw U.rte(e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -87,7 +92,7 @@ public class JSON {
 		try {
 			return MAPPER.readValue(json, valueType);
 		} catch (Exception e) {
-			throw U.rte(e);
+			throw new RuntimeException(e);
 		}
 	}
 
