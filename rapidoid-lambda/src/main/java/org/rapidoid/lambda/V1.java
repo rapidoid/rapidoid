@@ -2,7 +2,7 @@ package org.rapidoid.lambda;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-lambda
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%

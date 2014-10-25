@@ -2,7 +2,7 @@ package org.rapidoid.inmem;
 
 /*
  * #%L
- * rapidoid-db-inmem
+ * rapidoid-inmem
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
