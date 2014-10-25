@@ -59,6 +59,8 @@ public interface Db {
 
 	void shutdown();
 
+	void destroy();
+
 	boolean isActive();
 
 	void halt();

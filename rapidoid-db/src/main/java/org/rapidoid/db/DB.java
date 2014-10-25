@@ -127,4 +127,16 @@ public class DB {
 		db().halt();
 	}
 
+	public static void destroy() {
+		db().destroy();
+	}
+
+	public synchronized static void destroyAll() {
+		for (Db db : DB_INSTANCES.values()) {
+			db.destroy();
+		}
+
+		DB_INSTANCES.clear();
+	}
+
 }

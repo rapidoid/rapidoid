@@ -53,6 +53,10 @@ class Rec {
 
 public class DbImpl implements Db, Runnable {
 
+	private static final String SUFFIX_B = "b";
+
+	private static final String SUFFIX_A = "a";
+
 	private static final byte[] CR_LF = { 13, 10 };
 
 	private final String name;
@@ -346,8 +350,8 @@ public class DbImpl implements Db, Runnable {
 
 		try {
 			boolean isA = aOrB.get();
-			String suffixAorB = isA ? "a" : "b";
-			File file = new File(filename.replace(".db", "-" + suffixAorB + ".db"));
+			String suffixAorB = isA ? SUFFIX_A : SUFFIX_B;
+			File file = new File(filenameWithSuffix(suffixAorB));
 
 			if (file.exists()) {
 				file.delete();
@@ -386,15 +390,31 @@ public class DbImpl implements Db, Runnable {
 		}
 	}
 
+	private String filenameWithSuffix(String suffixAorB) {
+		return filename.replace(".db", "-" + suffixAorB + ".db");
+	}
+
 	@Override
 	public void run() {
 		while (!Thread.interrupted()) {
-			persistData(null);
+			try {
+				persistData(null);
+			} catch (Exception e1) {
+				U.error(e1);
+			}
 
 			if (active.get()) {
-				U.sleep(500);
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// FIXME return immediately if halt
+				}
 			} else {
-				persistData(null);
+				try {
+					persistData(null);
+				} catch (Exception e1) {
+					U.error(e1);
+				}
 				return;
 			}
 		}
@@ -432,6 +452,12 @@ public class DbImpl implements Db, Runnable {
 		}
 	}
 
+	@Override
+	public void destroy() {
+		halt();
+		new File(filename).delete();
+		new File(filenameWithSuffix(SUFFIX_A)).delete();
+		new File(filenameWithSuffix(SUFFIX_B)).delete();
 	}
 
 }
