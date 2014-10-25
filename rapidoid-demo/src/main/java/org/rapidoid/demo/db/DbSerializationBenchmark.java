@@ -2,7 +2,7 @@ package org.rapidoid.demo.db;
 
 /*
  * #%L
- * rapidoid-db-tests
+ * rapidoid-demo
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
