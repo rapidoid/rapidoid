@@ -1802,6 +1802,11 @@ public class U implements Constants {
 		show(delta + " ms");
 	}
 
+	public static void endMeasure(String info) {
+		long delta = time() - measureStart;
+		show(info + ": " + delta + " ms");
+	}
+
 	public static void print(Object value) {
 		System.out.println(value);
 	}
