@@ -28,6 +28,8 @@ public class DbPersistenceBenchmark {
 
 	public static void main(String[] args) {
 
+		U.args(args);
+
 		final int size = U.option("size", 10000);
 
 		System.out.println("inserting...");

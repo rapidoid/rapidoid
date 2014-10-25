@@ -30,7 +30,7 @@ public class DbCRUDBenchmark {
 
 		U.args(args);
 
-		int size = U.option("size", 100000);
+		int size = U.option("size", 10000);
 
 		U.benchmarkMT(U.cpus(), "insert+read", size, new Runnable() {
 			@Override
@@ -41,6 +41,9 @@ public class DbCRUDBenchmark {
 				U.must(p.name.equals(name));
 			}
 		});
+
+		DB.shutdown();
+		DB.destroy();
 	}
 
 }
