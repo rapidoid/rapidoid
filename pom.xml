@@ -54,6 +54,7 @@
 	</properties>
 
 	<modules>
+		<module>rapidoid-lambda</module>
 		<module>rapidoid-utils</module>
 		<module>rapidoid-json</module>
 		<module>rapidoid-test-commons</module>

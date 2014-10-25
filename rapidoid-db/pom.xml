@@ -12,7 +12,6 @@
 	<packaging>jar</packaging>
 	<description>Rapidoid DB</description>
 
-
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
