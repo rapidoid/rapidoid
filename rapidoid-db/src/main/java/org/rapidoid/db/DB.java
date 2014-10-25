@@ -21,6 +21,7 @@ package org.rapidoid.db;
  */
 import java.io.File;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -65,6 +66,10 @@ public class DB {
 
 	public static Db instance(String dbName) {
 		return DB_INSTANCES.get(dbName);
+	}
+
+	public static Map<String, Db> instances() {
+		return Collections.unmodifiableMap(DB_INSTANCES);
 	}
 
 	public static long insert(Object record) {
@@ -131,12 +136,21 @@ public class DB {
 		db().destroy();
 	}
 
+	public static void destroy(String name) {
+		instance(name).destroy();
+		remove(name);
+	}
+
 	public synchronized static void destroyAll() {
 		for (Db db : DB_INSTANCES.values()) {
 			db.destroy();
 		}
 
 		DB_INSTANCES.clear();
+	}
+
+	public static void remove(String name) {
+		DB_INSTANCES.remove(name);
 	}
 
 }
