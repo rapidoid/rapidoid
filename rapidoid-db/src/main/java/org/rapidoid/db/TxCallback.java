@@ -20,41 +20,10 @@ package org.rapidoid.db;
  * #L%
  */
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.List;
+public interface TxCallback {
 
-import org.rapidoid.lambda.Predicate;
-import org.rapidoid.lambda.V1;
+	void onCommit();
 
-public interface Db {
-
-	String name();
-
-	long insert(Object record);
-
-	<E> E get(long id);
-
-	<E> E get(long id, Class<E> clazz);
-
-	<E> List<E> getAll(Class<E> clazz);
-
-	void update(Object record);
-
-	void update(long id, Object record);
-
-	void delete(long id);
-
-	<T> T read(long id, String column);
-
-	<E> List<E> find(Predicate<E> match);
-
-	<E> void each(V1<E> lambda);
-
-	void transaction(Runnable transaction);
-
-	void save(OutputStream output);
-
-	void load(InputStream in);
+	void onRollback();
 
 }

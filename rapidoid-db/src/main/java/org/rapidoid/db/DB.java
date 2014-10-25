@@ -19,10 +19,12 @@ package org.rapidoid.db;
  * limitations under the License.
  * #L%
  */
+import java.io.File;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.lambda.F1;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.lambda.V1;
 import org.rapidoid.util.U;
@@ -41,8 +43,19 @@ public class DB {
 		U.must(DB_IMPL_CLASS != null, "Cannot find Db implementation (org.rapidoid.db.DbImpl)!");
 		U.must(Db.class.isAssignableFrom(DB_IMPL_CLASS), "org.rapidoid.db.DbImpl must implement org.rapidoid.db.Db!");
 
-		DEFAULT_DB_INSTANCE = (Db) U.newInstance(DB_IMPL_CLASS);
-		DB_INSTANCES = U.<String, Db> autoExpandingMap(DB_IMPL_CLASS);
+		DB_INSTANCES = U.<String, Db> autoExpandingMap(new F1<Db, String>() {
+			@Override
+			public Db execute(String name) throws Exception {
+				String dbPath = U.option("db", "");
+				if (!dbPath.isEmpty() && !dbPath.endsWith(File.separator)) {
+					dbPath += File.separator;
+				}
+				String dbFilename = dbPath + name + ".db";
+				return (Db) U.newInstance(DB_IMPL_CLASS, name, dbFilename);
+			}
+		});
+
+		DEFAULT_DB_INSTANCE = instance("default");
 	}
 
 	public static Db db() {
