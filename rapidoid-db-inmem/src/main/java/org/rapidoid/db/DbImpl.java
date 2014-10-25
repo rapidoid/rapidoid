@@ -388,7 +388,7 @@ public class DbImpl implements Db, Runnable {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (!Thread.interrupted()) {
 			persistData(null);
 
 			if (active.get()) {
@@ -410,8 +410,28 @@ public class DbImpl implements Db, Runnable {
 	}
 
 	@Override
+	public boolean isActive() {
+		return active.get();
+	}
+
+	@Override
 	public String toString() {
-		return "DB [name=" + name + ", filename=" + filename + "]";
+		return "DB [name=" + name + ", filename=" + filename + ", active=" + active + "]";
+	}
+
+	@Override
+	public void halt() {
+		if (active.get()) {
+			active.set(false);
+
+			persistor.interrupt();
+			try {
+				persistor.join();
+			} catch (InterruptedException e) {
+			}
+		}
+	}
+
 	}
 
 }

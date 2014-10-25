@@ -119,4 +119,12 @@ public class DB {
 		db().shutdown();
 	}
 
+	public static boolean isActive() {
+		return db().isActive();
+	}
+
+	public static void halt() {
+		db().halt();
+	}
+
 }
