@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.lambda.F1;
+import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
-import org.rapidoid.lambda.V1;
 import org.rapidoid.util.U;
 
 @SuppressWarnings("unchecked")
@@ -108,7 +108,7 @@ public class DB {
 		return db().find(match);
 	}
 
-	public static <E> void each(V1<E> lambda) {
+	public static <E> void each(Operation<E> lambda) {
 		db().each(lambda);
 	}
 

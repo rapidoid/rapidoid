@@ -24,8 +24,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
-import org.rapidoid.lambda.V1;
 
 public interface Db {
 
@@ -49,7 +49,7 @@ public interface Db {
 
 	<E> List<E> find(Predicate<E> match);
 
-	<E> void each(V1<E> lambda);
+	<E> void each(Operation<E> lambda);
 
 	void transaction(Runnable transaction);
 

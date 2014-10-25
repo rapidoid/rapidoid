@@ -28,6 +28,8 @@ import org.rapidoid.util.U;
 @SuppressWarnings("unchecked")
 public class Person {
 
+	public long id;
+	
 	public String name;
 
 	public int age;

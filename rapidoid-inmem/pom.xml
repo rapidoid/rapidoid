@@ -8,31 +8,20 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-db-inmem</artifactId>
+	<artifactId>rapidoid-inmem</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid DB In-memory Implementation</description>
+	<description>Rapidoid Inmem</description>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-db</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-inmem</artifactId>
-			<version>${project.version}</version>
+			<artifactId>rapidoid-lambda</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-json</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-test-commons</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

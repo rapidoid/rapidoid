@@ -66,6 +66,7 @@
 		<module>rapidoid-pojo</module>
 		<module>rapidoid-oauth</module>
 		<module>rapidoid-web</module>
+		<module>rapidoid-inmem</module>
 		<module>rapidoid-db</module>
 		<module>rapidoid-db-inmem</module>
 		<module>rapidoid-db-tests</module>
