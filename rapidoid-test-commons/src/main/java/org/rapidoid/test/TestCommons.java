@@ -32,7 +32,7 @@ public abstract class TestCommons {
 
 	protected static final Random RND = new Random();
 
-	@BeforeMethod
+	@BeforeMethod(alwaysRun = true)
 	public void init() {
 		try {
 			Class<?> clazz = Class.forName("org.rapidoid.util.U");
