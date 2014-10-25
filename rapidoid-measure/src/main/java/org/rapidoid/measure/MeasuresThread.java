@@ -1,4 +1,4 @@
-package com.rapidoid.measure;
+package org.rapidoid.measure;
 
 /*
  * #%L
@@ -20,37 +20,33 @@ package com.rapidoid.measure;
  * #L%
  */
 
-public class StatsMeasure implements Measure {
+import org.rapidoid.util.U;
 
-	private long min = Long.MAX_VALUE;
-	private long max = Long.MIN_VALUE;
-	private long sum = 0;
-	private long count = 0;
+public class MeasuresThread extends Thread {
 
-	@Override
-	public String get() {
-		return count > 0 ? String.format("[%s..%s..%s]/%s", min, sum / count, max, count) : null;
+	private final Measures statistics;
+
+	private String lastInfo = "";
+
+	public MeasuresThread(Measures statistics) {
+		this.statistics = statistics;
 	}
 
 	@Override
-	public void reset() {
-		min = Long.MAX_VALUE;
-		max = Long.MIN_VALUE;
-		sum = 0;
-		count = 0;
-	}
-
-	public synchronized void add(long value) {
-		if (min > value) {
-			min = value;
+	public void run() {
+		try {
+			while (true) {
+				String info = statistics.info();
+				if (!lastInfo.equals(info)) {
+					U.print(U.getCpuMemStats() + " " + info);
+					lastInfo = info;
+				}
+				Thread.sleep(1000);
+			}
+		} catch (Exception e) {
+			U.print("Stats EXCEPTION!");
+			e.printStackTrace();
 		}
-
-		if (max < value) {
-			max = value;
-		}
-
-		count++;
-		sum += value;
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.rapidoid.measure;
+package org.rapidoid.measure;
 
 /*
  * #%L
@@ -20,10 +20,37 @@ package com.rapidoid.measure;
  * #L%
  */
 
-public interface Measure {
+public class StatsMeasure implements Measure {
 
-	String get();
+	private long min = Long.MAX_VALUE;
+	private long max = Long.MIN_VALUE;
+	private long sum = 0;
+	private long count = 0;
 
-	void reset();
+	@Override
+	public String get() {
+		return count > 0 ? String.format("[%s..%s..%s]/%s", min, sum / count, max, count) : null;
+	}
+
+	@Override
+	public void reset() {
+		min = Long.MAX_VALUE;
+		max = Long.MIN_VALUE;
+		sum = 0;
+		count = 0;
+	}
+
+	public synchronized void add(long value) {
+		if (min > value) {
+			min = value;
+		}
+
+		if (max < value) {
+			max = value;
+		}
+
+		count++;
+		sum += value;
+	}
 
 }

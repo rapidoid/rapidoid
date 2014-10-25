@@ -1,4 +1,4 @@
-package com.rapidoid.measure;
+package org.rapidoid.measure;
 
 /*
  * #%L

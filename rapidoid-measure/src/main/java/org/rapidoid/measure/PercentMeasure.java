@@ -1,4 +1,4 @@
-package com.rapidoid.measure;
+package org.rapidoid.measure;
 
 /*
  * #%L
@@ -20,33 +20,32 @@ package com.rapidoid.measure;
  * #L%
  */
 
-import org.rapidoid.util.U;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class MeasuresThread extends Thread {
+public class PercentMeasure implements Measure {
 
-	private final Measures statistics;
+	private final AtomicInteger total = new AtomicInteger();
 
-	private String lastInfo = "";
+	private final AtomicInteger hits = new AtomicInteger();
 
-	public MeasuresThread(Measures statistics) {
-		this.statistics = statistics;
+	public synchronized void reset() {
+		total.set(0);
+		hits.set(0);
 	}
 
 	@Override
-	public void run() {
-		try {
-			while (true) {
-				String info = statistics.info();
-				if (!lastInfo.equals(info)) {
-					U.print(U.getCpuMemStats() + " " + info);
-					lastInfo = info;
-				}
-				Thread.sleep(1000);
-			}
-		} catch (Exception e) {
-			U.print("Stats EXCEPTION!");
-			e.printStackTrace();
-		}
+	public synchronized String get() {
+		int t = total.getAndSet(0);
+		int h = hits.getAndSet(0) * 100;
+		return t > 0 ? h / t + "%(" + t + ")" : null;
+	}
+
+	public void increment() {
+		total.incrementAndGet();
+	}
+
+	public void hit() {
+		hits.incrementAndGet();
 	}
 
 }
