@@ -22,6 +22,8 @@ package org.rapidoid.demo.http;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.rapidoid.util.U;
+
 import com.rapidoid.http.HTTP;
 import com.rapidoid.http.HTTPServer;
 import com.rapidoid.http.Handler;
@@ -30,6 +32,7 @@ import com.rapidoid.http.HttpExchange;
 public class HttpDemo {
 
 	public static void main(String[] args) {
+		U.args(args);
 		final AtomicLong n = new AtomicLong();
 
 		HTTPServer server = HTTP.server().build();
@@ -37,7 +40,7 @@ public class HttpDemo {
 		server.get("/hi", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				return "[" + n.incrementAndGet() + "] Hi: " + x.uri_();
+				return "[" + n.incrementAndGet() + "] Hi: " + x.uri();
 			}
 		});
 
