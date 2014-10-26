@@ -57,6 +57,8 @@ public interface Db {
 
 	void load(InputStream in);
 
+	long size();
+
 	void shutdown();
 
 	void destroy();

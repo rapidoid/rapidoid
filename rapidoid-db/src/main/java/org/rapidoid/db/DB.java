@@ -124,6 +124,10 @@ public class DB {
 		db().shutdown();
 	}
 
+	public static long size() {
+		return db().size();
+	}
+
 	public static boolean isActive() {
 		return db().isActive();
 	}

@@ -516,4 +516,13 @@ public class InMem {
 				"Cannot find public 'id' field nor 'getId' getter method nor 'id' getter method in class: " + c);
 	}
 
+	public int size() {
+		globalLock();
+		try {
+			return data.size();
+		} finally {
+			globalUnlock();
+		}
+	}
+
 }

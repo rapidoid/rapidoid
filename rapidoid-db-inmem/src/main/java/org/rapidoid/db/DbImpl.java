@@ -134,4 +134,9 @@ public class DbImpl implements Db {
 		inmem.destroy();
 	}
 
+	@Override
+	public long size() {
+		return inmem.size();
+	}
+
 }
