@@ -308,8 +308,12 @@ public class InMem {
 
 	private void persistData(Runnable onCommit, Runnable onRollback) {
 		globalLock();
+
 		final ConcurrentHashMap<Long, Rec> copy;
 		try {
+			if (data.isEmpty()) {
+				return;
+			}
 			copy = new ConcurrentHashMap<Long, Rec>(data);
 		} finally {
 			globalUnlock();

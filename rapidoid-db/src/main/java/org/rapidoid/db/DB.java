@@ -35,7 +35,7 @@ public class DB {
 
 	private static final Class<Db> DB_IMPL_CLASS;
 
-	private static final Db DEFAULT_DB_INSTANCE;
+	private static Db defaultDb;
 
 	private static final Map<String, Db> DB_INSTANCES;
 
@@ -56,12 +56,12 @@ public class DB {
 			}
 		});
 
-		DEFAULT_DB_INSTANCE = instance("default");
+		defaultDb = instance("default");
 	}
 
 	public static Db db() {
-		assert U.must(DEFAULT_DB_INSTANCE != null, "Database not initialized!");
-		return DEFAULT_DB_INSTANCE;
+		assert U.must(defaultDb != null, "Database not initialized!");
+		return defaultDb;
 	}
 
 	public static Db instance(String dbName) {
@@ -147,10 +147,14 @@ public class DB {
 		}
 
 		DB_INSTANCES.clear();
+		defaultDb = instance("default");
 	}
 
 	public static void remove(String name) {
 		DB_INSTANCES.remove(name);
+		if (name.equals("default")) {
+			defaultDb = instance("default");
+		}
 	}
 
 }

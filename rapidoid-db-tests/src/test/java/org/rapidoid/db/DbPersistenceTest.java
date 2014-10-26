@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
 public class DbPersistenceTest extends DbTestCommons {
 
 	@Test
-	public void testCRUD() {
+	public void testPersistence() {
 
 		final int count = 10000;
 

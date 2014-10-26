@@ -31,10 +31,12 @@ import org.rapidoid.lambda.Predicate;
 public class DbImpl implements Db {
 
 	private final String name;
+	private final String filename;
 	private final InMem inmem;
 
 	public DbImpl(String name, String filename) {
 		this.name = name;
+		this.filename = filename;
 		this.inmem = new InMem(filename);
 	}
 
@@ -119,7 +121,7 @@ public class DbImpl implements Db {
 
 	@Override
 	public String toString() {
-		return "DbImpl [name=" + name + ", db=" + inmem + "]";
+		return "DB:" + name + "(" + filename + ")";
 	}
 
 	@Override
