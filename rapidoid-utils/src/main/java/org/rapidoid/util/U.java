@@ -269,6 +269,10 @@ public class U implements Constants {
 		LOG_LEVEL = logLevel;
 	}
 
+	public static synchronized LogLevel getLogLevel() {
+		return LOG_LEVEL;
+	}
+
 	public static synchronized void reset() {
 		info("Reset U state");
 		LOG_LEVEL = INFO;
@@ -1823,6 +1827,10 @@ public class U implements Constants {
 
 			if (hasOption("stats")) {
 				singleton(StatsThread.class).start();
+			}
+
+			if (hasOption("debug") && getLogLevel().ordinal() > DEBUG.ordinal()) {
+				setLogLevel(DEBUG);
 			}
 		}
 	}

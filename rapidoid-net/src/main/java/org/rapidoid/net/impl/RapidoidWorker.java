@@ -156,6 +156,7 @@ public class RapidoidWorker extends AbstractEventLoop {
 
 		if (read == -1) {
 			// the other end closed the connection
+			U.debug("The other end closed the connection!");
 			close(key);
 			return;
 		}
@@ -182,9 +183,12 @@ public class RapidoidWorker extends AbstractEventLoop {
 
 		try {
 			protocol.process(conn);
+			U.debug("Completed message processing");
 			return true;
 
 		} catch (IncompleteReadException e) {
+			U.debug("Incomplete message");
+
 			// input not complete, so rollback
 			conn.input().position(pos);
 			conn.input().limit(limit);
@@ -192,6 +196,7 @@ public class RapidoidWorker extends AbstractEventLoop {
 			conn.output().deleteAfter(osize);
 
 		} catch (ProtocolException e) {
+			U.debug("Protocol error");
 			conn.output().deleteAfter(osize);
 			conn.write(U.or(e.getMessage(), "Protocol error!"));
 			conn.error();

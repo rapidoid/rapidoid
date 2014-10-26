@@ -137,6 +137,10 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		parsedHeaders = false;
 		parsedBody = false;
 
+		resetResponse();
+	}
+
+	private void resetResponse() {
 		total = -1;
 		writesBody = false;
 		bodyPos = -1;
@@ -370,7 +374,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized HttpExchangeHeaders responseCode(int responseCode) {
-		if (responseCode > 0) {
+		if (this.responseCode > 0) {
 			assert startingPos >= 0;
 			output().deleteAfter(startingPos);
 		}
@@ -393,6 +397,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 		int pos = startingPos + getResp(responseCode).contentLengthPos + 10;
 		output().putNumAsText(pos, wrote, false);
+
+		// reset response because the exchange might be reused in pipelining mode
+		resetResponse();
 	}
 
 	private HttpResponse getResp(int code) {

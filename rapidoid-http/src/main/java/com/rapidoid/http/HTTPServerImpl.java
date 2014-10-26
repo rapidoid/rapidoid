@@ -81,6 +81,7 @@ public class HTTPServerImpl extends RapidoidServerLoop implements HTTPServer {
 		return new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
+				x.html();
 				return bytes;
 			}
 		};
