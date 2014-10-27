@@ -34,23 +34,12 @@ public class EchoProtocolTest extends NetTestCommons {
 
 	@Test
 	public void echo() {
-		
-		U.setLogLevel(U.DEBUG);
-		
 		server(new Protocol() {
 
 			@Override
 			public void process(Channel ctx) {
 				String in = ctx.readln();
-				boolean stop = in.equals("bye");
-
-				ctx.write(in.toUpperCase());
-				ctx.write("\n");
-				ctx.done();
-
-				if (stop) {
-					ctx.close();
-				}
+				ctx.write(in.toUpperCase()).write(CR_LF).closeIf(in.equals("bye"));
 			}
 
 		}, new Runnable() {
@@ -77,29 +66,20 @@ public class EchoProtocolTest extends NetTestCommons {
 
 	@Test
 	public void echoAsync() {
-		
-		U.setLogLevel(U.DEBUG);
-		
 		server(new Protocol() {
 
 			@Override
 			public void process(final Channel ctx) {
 				final String in = ctx.readln();
-				final boolean stop = in.equals("bye");
 
 				U.schedule(new Runnable() {
-
 					@Override
 					public void run() {
-						ctx.write(in.toUpperCase() + "\n");
-						ctx.done();
-
-						if (stop) {
-							ctx.close();
-						}
+						ctx.write(in.toUpperCase()).write(CR_LF).done().closeIf(in.equals("bye"));
 					}
+				}, 1000);
 
-				}, 2000);
+				ctx.async();
 			}
 
 		}, new Runnable() {
