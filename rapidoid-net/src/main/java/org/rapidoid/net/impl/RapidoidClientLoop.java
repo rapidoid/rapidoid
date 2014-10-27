@@ -128,6 +128,7 @@ public class RapidoidClientLoop extends AbstractEventLoop implements TCPClient {
 			worker.close();
 			worker.stopLoop();
 		}
+
 		return this;
 	}
 

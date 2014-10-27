@@ -34,10 +34,11 @@ import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.abstracts.CtxFull;
+import org.rapidoid.util.Constants;
 import org.rapidoid.util.Resetable;
 import org.rapidoid.util.U;
 
-public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvider, Resetable {
+public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvider, Resetable, Constants {
 
 	protected Channel conn;
 
@@ -61,6 +62,13 @@ public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvide
 		byte[] bytes = s.getBytes();
 		conn.write(bytes);
 		return wrote(bytes.length);
+	}
+
+	public W writeln(String s) {
+		byte[] bytes = s.getBytes();
+		conn.write(bytes);
+		conn.write(CR_LF);
+		return wrote(bytes.length + 2);
 	}
 
 	public W write(byte[] bytes) {

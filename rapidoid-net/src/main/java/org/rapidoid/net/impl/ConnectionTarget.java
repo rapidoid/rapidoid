@@ -31,12 +31,12 @@ public class ConnectionTarget {
 
 	InetSocketAddress addr;
 
-	long after;
+	long retryAfter;
 
 	public ConnectionTarget(SocketChannel socketChannel, InetSocketAddress addr) {
 		this.socketChannel = socketChannel;
 		this.addr = addr;
-		this.after = U.time();
+		this.retryAfter = U.time();
 	}
 
 }

@@ -132,7 +132,7 @@ public class RapidoidWorker extends AbstractEventLoop {
 		boolean ready;
 		try {
 			ready = socketChannel.finishConnect();
-			U.failIf(!ready, "Expected established connection!");
+			U.failIf(!ready, "Expected an established connection!");
 			connected.add(socketChannel);
 		} catch (ConnectException e) {
 			socketChannel = SocketChannel.open();
@@ -300,7 +300,7 @@ public class RapidoidWorker extends AbstractEventLoop {
 			ConnectionTarget target = connecting.poll();
 			assert target != null;
 
-			if (target.after < now) {
+			if (target.retryAfter < now) {
 				U.debug("connecting", "address", target.addr);
 
 				try {

@@ -35,10 +35,11 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.json.JSON;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.util.Constants;
 import org.rapidoid.util.Resetable;
 import org.rapidoid.util.U;
 
-public class RapidoidConnection implements Resetable, Channel {
+public class RapidoidConnection implements Resetable, Channel, Constants {
 
 	private static final CtxListener IGNORE = new IgnorantConnectionListener();
 
@@ -114,6 +115,13 @@ public class RapidoidConnection implements Resetable, Channel {
 	}
 
 	@Override
+	public synchronized Channel writeln(String s) {
+		output.append(s);
+		output.append(CR_LF);
+		return this;
+	}
+
+	@Override
 	public synchronized Channel write(byte[] bytes) {
 		return write(bytes, 0, bytes.length);
 	}
@@ -168,6 +176,12 @@ public class RapidoidConnection implements Resetable, Channel {
 				listener().onDone(this, tag);
 			}
 		}
+	}
+
+	@Override
+	public Channel send() {
+		askToSend();
+		return this;
 	}
 
 	public synchronized void error() {

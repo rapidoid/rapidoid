@@ -27,6 +27,8 @@ public interface CtxWrite<T> {
 
 	T write(String s);
 
+	T writeln(String s);
+
 	T write(byte[] bytes);
 
 	T write(byte[] bytes, int offset, int length);
@@ -36,6 +38,8 @@ public interface CtxWrite<T> {
 	T write(File file);
 
 	T writeJSON(Object value);
+
+	T send();
 
 	// due to async() web handling option, it ain't over till the fat lady sings "done"
 	T async();

@@ -253,6 +253,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
+	public HttpExchangeBody send() {
+		conn.send();
+		return this;
+	}
+
+	@Override
 	public String toString() {
 		return "WebExchange [uri=" + uri() + ", verb=" + verb() + ", path=" + path() + ", subpath=" + subpath()
 				+ ", query=" + query() + ", protocol=" + protocol() + ", body=" + body() + ", headers=" + headers()
@@ -428,7 +434,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 		// this must be at the end of this method, because state might get restarted
 		hasContentType = true;
-		
+
 		return this;
 	}
 
@@ -474,6 +480,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	public HttpExchangeBody write(String s) {
 		ensureHeadersComplete();
 		return super.write(s);
+	}
+
+	@Override
+	public HttpExchangeBody writeln(String s) {
+		ensureHeadersComplete();
+		return super.writeln(s);
 	}
 
 	@Override

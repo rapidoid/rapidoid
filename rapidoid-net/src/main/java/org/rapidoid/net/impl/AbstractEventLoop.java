@@ -67,7 +67,7 @@ public abstract class AbstractEventLoop extends AbstractLoop {
 			}
 
 		} else if (key.isConnectable()) {
-			U.debug("connected", "key", key);
+			U.debug("connection event", "key", key);
 
 			try {
 				connectOP(key);
