@@ -73,6 +73,8 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 
 	boolean done;
 
+	private boolean isClient;
+
 	public RapidoidConnection(RapidoidWorker worker, BufGroup bufs) {
 		this.worker = worker;
 		this.input = bufs.newBuf("input#" + connId());
@@ -93,6 +95,7 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 		initial = true;
 		async = false;
 		done = false;
+		isClient = false;
 		state.reset();
 	}
 
@@ -310,6 +313,14 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 
 	public boolean isAsync() {
 		return async;
+	}
+
+	public boolean isClient() {
+		return isClient;
+	}
+
+	public void setClient(boolean isClient) {
+		this.isClient = isClient;
 	}
 
 }

@@ -22,6 +22,7 @@ package org.rapidoid.net.impl;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.channels.ClosedChannelException;
@@ -135,11 +136,15 @@ public class RapidoidWorker extends AbstractEventLoop {
 			U.failIf(!ready, "Expected an established connection!");
 			connected.add(socketChannel);
 		} catch (ConnectException e) {
-			socketChannel = SocketChannel.open();
-			target.socketChannel = SocketChannel.open();
-			target.after = U.time() + 1000;
-			connect(target);
+			retryConnecting(target);
 		}
+	}
+
+	private void retryConnecting(ConnectionTarget target) throws IOException {
+		U.debug("Reconnecting...", "address", target.addr);
+		target.socketChannel = SocketChannel.open();
+		target.retryAfter = U.time() + 1000;
+		connect(target);
 	}
 
 	@Override
@@ -157,7 +162,15 @@ public class RapidoidWorker extends AbstractEventLoop {
 		if (read == -1) {
 			// the other end closed the connection
 			U.debug("The other end closed the connection!");
-			close(key);
+
+			if (conn.isClient()) {
+				InetSocketAddress addr = conn.getAddress();
+				close(key);
+				retryConnecting(new ConnectionTarget(null, addr));
+			} else {
+				close(key);
+			}
+
 			return;
 		}
 
@@ -225,12 +238,7 @@ public class RapidoidWorker extends AbstractEventLoop {
 		try {
 			RapidoidConnection conn = (RapidoidConnection) key.attachment();
 
-			if (key.isValid()) {
-				SocketChannel socketChannel = (SocketChannel) key.channel();
-				socketChannel.close();
-				key.attach(null);
-				key.cancel();
-			}
+			clearKey(key);
 
 			if (conn != null) {
 				if (!conn.closed) {
@@ -243,6 +251,15 @@ public class RapidoidWorker extends AbstractEventLoop {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void clearKey(SelectionKey key) throws IOException {
+		if (key.isValid()) {
+			SocketChannel socketChannel = (SocketChannel) key.channel();
+			socketChannel.close();
+			key.attach(null);
+			key.cancel();
 		}
 	}
 
@@ -322,6 +339,7 @@ public class RapidoidWorker extends AbstractEventLoop {
 			try {
 				SelectionKey newKey = socketChannel.register(selector, SelectionKey.OP_READ);
 				RapidoidConnection conn = attachConn(newKey);
+				conn.setClient(true);
 
 				try {
 					processNext(conn);
