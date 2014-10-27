@@ -29,10 +29,6 @@ import org.rapidoid.util.U;
 
 public class PersonService extends CRUD<Person> {
 
-	public PersonService() {
-		super(Person.class);
-	}
-
 	public List<Person> olderThan(final int age) {
 		return DB.find(new Predicate<Person>() {
 			@Override

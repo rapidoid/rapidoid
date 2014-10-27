@@ -28,13 +28,29 @@ public abstract class CRUD<E> {
 
 	private final Class<E> clazz;
 
-	private static Class<?> detectEntity() {
-		throw U.notReady(); // FIXME detect and load entity class from this class' name
+	/**
+	 * e.g. com.example.PersonService -> com.example.Person
+	 */
+	private static Class<?> inferEntityClass(String className) {
+		String type;
+		if (className.endsWith("Service")) {
+			type = className.substring(0, className.length() - 7);
+		} else if (className.endsWith("Controller")) {
+			type = className.substring(0, className.length() - 10);
+		} else if (className.endsWith("CRUD")) {
+			type = className.substring(0, className.length() - 4);
+		} else {
+			throw U.rte("Automatic entity detection requires class name suffix to be 'Service', 'Controller' or 'CRUD'");
+		}
+
+		Class<?> entityClass = U.getClassIfExists(type);
+		U.must(entityClass != null, "Cannot infer entity class for the service: %s", className);
+		return entityClass;
 	}
 
 	@SuppressWarnings("unchecked")
 	public CRUD() {
-		this.clazz = (Class<E>) detectEntity();
+		this.clazz = (Class<E>) inferEntityClass(getClass().getCanonicalName());
 	}
 
 	public CRUD(Class<E> clazz) {
