@@ -37,14 +37,14 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 		server.get("/file", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				return x.download(x.subpath().substring(1) + ".txt").write("ab").write("cde").done();
+				return x.download(x.subpath().substring(1) + ".txt").write("ab").write("cde");
 			}
 		});
 
 		server.get("/bin", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				return x.binary().write("bin").done();
+				return x.binary().write("bin");
 			}
 		});
 
@@ -56,7 +56,7 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 				}
 				x.setCookie("key" + U.rnd(100), "val" + U.rnd(100));
 
-				return x.writeJSON(x.cookies()).done();
+				return x.writeJSON(x.cookies());
 			}
 		});
 
@@ -77,14 +77,14 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 		server.get("/rabbit.jpg", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				return x.sendFile(U.file("rabbit.jpg")).done();
+				return x.sendFile(U.file("rabbit.jpg"));
 			}
 		});
 
 		server.get("/ab", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				return x.sendFile(U.file("ab.html")).done();
+				return x.sendFile(U.file("ab.html"));
 			}
 		});
 

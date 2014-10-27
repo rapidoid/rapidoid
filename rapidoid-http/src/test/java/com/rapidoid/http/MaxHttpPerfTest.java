@@ -94,7 +94,7 @@ public class MaxHttpPerfTest {
 
 				in.position(poss);
 
-				ctx.write(RESP).done();
+				ctx.write(RESP);
 			}
 		});
 	}

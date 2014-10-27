@@ -114,13 +114,12 @@ public class SimpleHttpProtocol implements Protocol {
 				processed = true;
 			}
 
-			ctx.done();
 			ctx.closeIf(!isKeepAlive);
 		}
 
 		if (!processed) {
 			ctx.write(HTTP_404_NOT_FOUND);
-			ctx.done().close();
+			ctx.close();
 		}
 	}
 

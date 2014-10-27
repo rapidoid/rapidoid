@@ -68,6 +68,10 @@ public class RapidoidConnection implements Resetable, Channel {
 
 	private boolean initial;
 
+	private boolean async;
+
+	boolean done;
+
 	public RapidoidConnection(RapidoidWorker worker, BufGroup bufs) {
 		this.worker = worker;
 		this.input = bufs.newBuf("input#" + connId());
@@ -86,6 +90,8 @@ public class RapidoidConnection implements Resetable, Channel {
 		completedInputPos = 0;
 		listener = IGNORE;
 		initial = true;
+		async = false;
+		done = false;
 		state.reset();
 	}
 
@@ -155,9 +161,12 @@ public class RapidoidConnection implements Resetable, Channel {
 	}
 
 	public synchronized void done(Object tag) {
-		askToSend();
-		if (tag != null) {
-			listener().onDone(this, tag);
+		if (!done) {
+			done = true;
+			askToSend();
+			if (tag != null) {
+				listener().onDone(this, tag);
+			}
 		}
 	}
 
@@ -173,6 +182,10 @@ public class RapidoidConnection implements Resetable, Channel {
 	}
 
 	public synchronized void close(boolean waitToWrite) {
+		if (waitToWrite) {
+			done();
+		}
+
 		if (waitToWrite && waitingToWrite) {
 			closeAfterWrite = true;
 		} else {
@@ -276,8 +289,13 @@ public class RapidoidConnection implements Resetable, Channel {
 
 	@Override
 	public Channel async() {
-		// TODO Auto-generated method stub
-		return null;
+		this.async = true;
+		this.done = false;
+		return this;
+	}
+
+	public boolean isAsync() {
+		return async;
 	}
 
 }

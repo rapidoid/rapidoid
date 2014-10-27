@@ -182,7 +182,14 @@ public class RapidoidWorker extends AbstractEventLoop {
 		int osize = conn.output().size();
 
 		try {
+			conn.done = false;
+
 			protocol.process(conn);
+
+			if (!conn.closed && !conn.isAsync()) {
+				conn.done();
+			}
+
 			U.debug("Completed message processing");
 			return true;
 
@@ -196,7 +203,7 @@ public class RapidoidWorker extends AbstractEventLoop {
 			conn.output().deleteAfter(osize);
 
 		} catch (ProtocolException e) {
-			U.debug("Protocol error");
+			U.warn("Protocol error", "error", e);
 			conn.output().deleteAfter(osize);
 			conn.write(U.or(e.getMessage(), "Protocol error!"));
 			conn.error();

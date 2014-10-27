@@ -541,7 +541,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		responseCode(303);
 		addHeader(HttpHeader.LOCATION, url);
 		ensureHeadersComplete();
-		done();
 		return this;
 	}
 

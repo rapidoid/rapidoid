@@ -170,7 +170,6 @@ public class HttpRouter implements Router {
 			x.writeJSON(res); // null
 		}
 
-		x.done();
 		return true;
 	}
 

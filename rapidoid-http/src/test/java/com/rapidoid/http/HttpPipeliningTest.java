@@ -62,7 +62,6 @@ public class HttpPipeliningTest extends HttpTestCommons {
 					for (int i = 0; i < pipelining; i++) {
 						ctx.write(REQ);
 					}
-					ctx.done();
 					state.n = 1;
 				} else if (state.n == 1) {
 					for (int i = 0; i < pipelining; i++) {
@@ -79,7 +78,6 @@ public class HttpPipeliningTest extends HttpTestCommons {
 					for (int i = 0; i < pipelining; i++) {
 						ctx.write(REQ);
 					}
-					ctx.done();
 				}
 			}
 		}).build().start();
