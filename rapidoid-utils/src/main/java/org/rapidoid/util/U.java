@@ -71,10 +71,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -1249,6 +1252,14 @@ public class U implements Constants {
 			}
 
 		});
+	}
+
+	public static <K, V> Map<K, V> concurrentMap() {
+		return new ConcurrentHashMap<K, V>();
+	}
+
+	public static <T> Queue<T> queue(int maxSize) {
+		return maxSize > 0 ? new ArrayBlockingQueue<T>(maxSize) : new ConcurrentLinkedQueue<T>();
 	}
 
 	public static void waitFor(AtomicBoolean done) {
