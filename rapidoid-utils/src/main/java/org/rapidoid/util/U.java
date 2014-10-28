@@ -925,6 +925,19 @@ public class U implements Constants {
 		return render(items, "%s", sep);
 	}
 
+	public static String join(String sep, char[][] items) {
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < items.length; i++) {
+			if (i > 0) {
+				sb.append(sep);
+			}
+			sb.append(items[i]);
+		}
+
+		return sb.toString();
+	}
+
 	public static String render(Object[] items, String itemFormat, String sep) {
 		StringBuilder sb = new StringBuilder();
 
