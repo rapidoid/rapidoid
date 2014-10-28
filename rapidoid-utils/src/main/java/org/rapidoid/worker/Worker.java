@@ -24,6 +24,8 @@ public interface Worker<IN, OUT> {
 
 	boolean enqueue(IN task, boolean blocking);
 
+	OUT nextResult(boolean blocking);
+
 	void start();
 
 	void halt();

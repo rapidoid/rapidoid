@@ -92,4 +92,13 @@ public class WorkerThread<IN, OUT> extends Thread implements Worker<IN, OUT> {
 		return output.queue.size();
 	}
 
+	@Override
+	public OUT nextResult(boolean blocking) {
+		if (blocking) {
+			return output.take();
+		} else {
+			return output.queue.poll();
+		}
+	}
+
 }

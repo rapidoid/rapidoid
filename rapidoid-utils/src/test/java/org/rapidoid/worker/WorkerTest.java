@@ -74,6 +74,9 @@ public class WorkerTest extends TestCommons {
 		eq(wrk1.pendingResultsCount(), 3);
 		eq(wrk2.pendingResultsCount(), 1);
 
+		eq(wrk1.nextResult(false).intValue(), 3);
+		eq(wrk1.nextResult(false).intValue(), 2);
+
 		isTrue(wrk1.enqueue("aaaaa", false));
 		isTrue(wrk2.enqueue(77, false));
 
@@ -85,9 +88,8 @@ public class WorkerTest extends TestCommons {
 		eq(wrk1.pendingTasksCount(), 0);
 		eq(wrk2.pendingTasksCount(), 1);
 
-		eq(wrk1.pendingResultsCount(), 4);
+		eq(wrk1.pendingResultsCount(), 2);
 		eq(wrk2.pendingResultsCount(), 1);
-
 	}
 
 }
