@@ -265,6 +265,8 @@ public class U implements Constants {
 
 	});
 
+	private static Appendable LOG_OUTPUT = System.out;
+
 	public static synchronized void setLogLevel(LogLevel logLevel) {
 		LOG_LEVEL = logLevel;
 	}
@@ -420,7 +422,7 @@ public class U implements Constants {
 						throw notExpected();
 					}
 
-					out.append("\n");
+					out.append((char) 10);
 				}
 			} catch (IOException e) {
 				throw rte(e);
@@ -443,9 +445,13 @@ public class U implements Constants {
 		}
 	}
 
+	public synchronized static void setLogOutput(Appendable logOutput) {
+		LOG_OUTPUT = logOutput;
+	}
+
 	private static void log(LogLevel level, String msg, String key1, Object value1, String key2, Object value2,
 			String key3, Object value3, int paramsN) {
-		log(System.out, level, msg, key1, value1, key2, value2, key3, value3, paramsN);
+		log(LOG_OUTPUT, level, msg, key1, value1, key2, value2, key3, value3, paramsN);
 	}
 
 	public static void trace(String msg) {
