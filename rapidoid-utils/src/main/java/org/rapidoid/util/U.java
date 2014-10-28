@@ -2865,4 +2865,12 @@ public class U implements Constants {
 		return template.replaceAll("\\{\\{" + placeholder + "\\}\\}", value);
 	}
 
+	public static <T> boolean eval(Predicate<T> predicate, T target) {
+		try {
+			return predicate.eval(target);
+		} catch (Exception e) {
+			throw U.rte("Cannot evaluate predicate %s on target: %s", e, predicate, target);
+		}
+	}
+
 }
