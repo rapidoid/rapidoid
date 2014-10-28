@@ -1583,6 +1583,18 @@ public class U implements Constants {
 		return true;
 	}
 
+	public static void secure(boolean condition, String msg, Object arg) {
+		if (!condition) {
+			throw new SecurityException(U.format(msg, arg));
+		}
+	}
+
+	public static void secure(boolean condition, String msg, Object arg1, Object arg2) {
+		if (!condition) {
+			throw new SecurityException(U.format(msg, arg1, arg2));
+		}
+	}
+
 	public static void notNull(Object... items) {
 		for (int i = 0; i < items.length; i++) {
 			if (items[i] == null) {
