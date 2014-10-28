@@ -1628,14 +1628,18 @@ public class U implements Constants {
 	}
 
 	public static void benchmark(String name, int count, Runnable runnable) {
-		long start = Calendar.getInstance().getTimeInMillis();
+		long start = time();
 
 		for (int i = 0; i < count; i++) {
 			runnable.run();
 		}
 
-		long end = Calendar.getInstance().getTimeInMillis();
-		long ms = end - start;
+		benchmarkComplete(name, count, start);
+	}
+
+	public static void benchmarkComplete(String name, int count, long startTime) {
+		long end = time();
+		long ms = end - startTime;
 
 		if (ms == 0) {
 			ms = 1;
@@ -1651,6 +1655,8 @@ public class U implements Constants {
 	}
 
 	public static void benchmarkMT(int threadsN, final String name, final int count, final Runnable runnable) {
+		long time = time();
+
 		final CountDownLatch latch = new CountDownLatch(threadsN);
 
 		for (int i = 1; i <= threadsN; i++) {
@@ -1667,6 +1673,8 @@ public class U implements Constants {
 		} catch (InterruptedException e) {
 			throw U.rte(e);
 		}
+
+		benchmarkComplete("avg(" + name + ")", threadsN * count, time);
 	}
 
 	public static String getCpuMemStats() {
