@@ -1066,6 +1066,23 @@ public class U implements Constants {
 		return lines;
 	}
 
+	public static List<String> loadLines(String filename, final boolean filterEmpty, final String commentPrefix) {
+
+		List<String> lines = loadLines(filename);
+
+		Predicate<String> active = new Predicate<String>() {
+			@Override
+			public boolean eval(String s) throws Exception {
+				s = s.trim();
+				return (!filterEmpty || !s.isEmpty()) && (commentPrefix == null || !s.startsWith(commentPrefix));
+			}
+		};
+
+		U.filter(lines, active);
+
+		return lines;
+	}
+
 	public static void save(String filename, String content) {
 		FileOutputStream out = null;
 		try {
