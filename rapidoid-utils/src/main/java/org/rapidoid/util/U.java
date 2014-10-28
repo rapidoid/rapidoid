@@ -92,6 +92,7 @@ import org.rapidoid.annotation.Inject;
 import org.rapidoid.lambda.F1;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.F3;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Predicate;
 
 public class U implements Constants {
@@ -2895,6 +2896,14 @@ public class U implements Constants {
 			return predicate.eval(target);
 		} catch (Exception e) {
 			throw U.rte("Cannot evaluate predicate %s on target: %s", e, predicate, target);
+		}
+	}
+
+	public static <FROM, TO> TO eval(Mapper<FROM, TO> mapper, FROM src) {
+		try {
+			return mapper.map(src);
+		} catch (Exception e) {
+			throw U.rte("Cannot evaluate mapper %s on target: %s", e, mapper, src);
 		}
 	}
 

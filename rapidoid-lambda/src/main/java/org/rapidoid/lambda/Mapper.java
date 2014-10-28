@@ -22,6 +22,6 @@ package org.rapidoid.lambda;
 
 public interface Mapper<FROM, TO> {
 
-	TO map(FROM x) throws Exception;
+	TO map(FROM src) throws Exception;
 
 }
