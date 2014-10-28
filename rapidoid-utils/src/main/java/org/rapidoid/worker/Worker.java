@@ -22,6 +22,14 @@ package org.rapidoid.worker;
 
 public interface Worker<IN, OUT> {
 
-	boolean enqueue(IN task);
+	boolean enqueue(IN task, boolean blocking);
+
+	void start();
+
+	void halt();
+
+	int pendingTasksCount();
+
+	int pendingResultsCount();
 
 }

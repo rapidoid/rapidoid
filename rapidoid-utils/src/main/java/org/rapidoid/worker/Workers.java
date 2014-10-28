@@ -21,7 +21,6 @@ package org.rapidoid.worker;
  */
 
 import java.util.Map;
-import java.util.Queue;
 
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.U;
@@ -30,11 +29,11 @@ public class Workers {
 
 	private static final Map<String, Worker<?, ?>> WORKERS = U.concurrentMap();
 
-	public static <IN, OUT> Worker<IN, OUT> add(String workerId, int inputQueueSize, int outputQueueSize,
+	public static <IN, OUT> Worker<IN, OUT> add(String workerId, int inputQueueLimit, int outputQueueLimit,
 			Mapper<IN, OUT> mapper) {
 
-		Queue<IN> input = U.queue(inputQueueSize);
-		Queue<OUT> output = U.queue(outputQueueSize);
+		WorkerQueue<IN> input = new WorkerQueue<IN>(U.<IN> queue(inputQueueLimit), inputQueueLimit);
+		WorkerQueue<OUT> output = new WorkerQueue<OUT>(U.<OUT> queue(outputQueueLimit), outputQueueLimit);
 
 		WorkerThread<IN, OUT> worker = new WorkerThread<IN, OUT>(workerId, input, output, mapper);
 		WORKERS.put(workerId, worker);
@@ -47,9 +46,13 @@ public class Workers {
 		return (WorkerThread<IN, OUT>) WORKERS.get(workerId);
 	}
 
-	public static boolean enqueue(String workerId, Object task) {
+	public static boolean enqueue(String workerId, Object task, boolean blocking) {
 		Worker<Object, Object> worker = get(workerId);
-		return worker.enqueue(task);
+		return worker.enqueue(task, blocking);
+	}
+
+	public static int count() {
+		return WORKERS.size();
 	}
 
 }

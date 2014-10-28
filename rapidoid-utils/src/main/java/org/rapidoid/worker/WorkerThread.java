@@ -1,7 +1,5 @@
 package org.rapidoid.worker;
 
-import java.util.Queue;
-
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.U;
 
@@ -29,13 +27,13 @@ public class WorkerThread<IN, OUT> extends Thread implements Worker<IN, OUT> {
 
 	private final String id;
 
-	private final Queue<IN> input;
+	private final WorkerQueue<IN> input;
 
-	private final Queue<OUT> output;
+	private final WorkerQueue<OUT> output;
 
 	private final Mapper<IN, OUT> mapper;
 
-	public WorkerThread(String id, Queue<IN> input, Queue<OUT> output, Mapper<IN, OUT> mapper) {
+	public WorkerThread(String id, WorkerQueue<IN> input, WorkerQueue<OUT> output, Mapper<IN, OUT> mapper) {
 		super("worker-" + id);
 
 		this.id = id;
@@ -49,25 +47,49 @@ public class WorkerThread<IN, OUT> extends Thread implements Worker<IN, OUT> {
 		U.info("Starting worker thread...", "id", id);
 
 		while (!Thread.interrupted()) {
-			IN task = input.poll();
-			if (task != null) {
-				try {
-					OUT result = mapper.map(task);
-					output.add(result);
-				} catch (Exception e) {
-					U.warn("Worker error", "id", id, "error", e);
-				}
+			try {
+
+				IN task = input.take();
+				U.notNull(task);
+
+				OUT result = U.eval(mapper, task);
+				U.notNull(result, "worker mapper result");
+
+				output.put(result);
+			} catch (Exception e) {
+				U.error("Worker processing error!", "id", id, "error", e);
 			}
 		}
 	}
 
 	@Override
-	public boolean enqueue(IN task) {
-		try {
-			return input.add(task);
-		} catch (Exception e) {
-			return false;
+	public boolean enqueue(IN task, boolean blocking) {
+		if (blocking) {
+			input.put(task);
+			return true;
+		} else {
+			return input.queue.offer(task);
 		}
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void halt() {
+		stop();
+		try {
+			join();
+		} catch (InterruptedException e) {
+		}
+	}
+
+	@Override
+	public int pendingTasksCount() {
+		return input.queue.size();
+	}
+
+	@Override
+	public int pendingResultsCount() {
+		return output.queue.size();
 	}
 
 }

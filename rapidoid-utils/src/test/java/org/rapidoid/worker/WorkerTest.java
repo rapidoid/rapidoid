@@ -22,6 +22,7 @@ package org.rapidoid.worker;
 
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
 public class WorkerTest extends TestCommons {
@@ -36,7 +37,7 @@ public class WorkerTest extends TestCommons {
 			}
 		});
 
-		Worker<Integer, String> wrk2 = Workers.add("wrk2", 1, 2, new Mapper<Integer, String>() {
+		Worker<Integer, String> wrk2 = Workers.add("wrk2", 2, 1, new Mapper<Integer, String>() {
 			@Override
 			public String map(Integer x) throws Exception {
 				return x + "";
@@ -46,13 +47,47 @@ public class WorkerTest extends TestCommons {
 		eq(Workers.get("wrk1"), wrk1);
 		eq(Workers.get("wrk2"), wrk2);
 
-		isTrue(Workers.enqueue("wrk1", "abc"));
-		isTrue(wrk1.enqueue("xy"));
-		isTrue(Workers.enqueue("wrk1", "xy"));
+		isTrue(Workers.enqueue("wrk1", "abc", false));
+		isTrue(wrk1.enqueue("xy", false));
+		isTrue(Workers.enqueue("wrk1", "xy", false));
 
-		isTrue(Workers.enqueue("wrk2", 123));
-		isFalse(wrk2.enqueue(77));
-		isFalse(Workers.enqueue("wrk2", 56789));
+		isTrue(Workers.enqueue("wrk2", 123, false));
+		isTrue(wrk2.enqueue(111, false));
+
+		isFalse(wrk2.enqueue(77, false));
+		isFalse(Workers.enqueue("wrk2", 56789, false));
+
+		eq(wrk1.pendingTasksCount(), 3);
+		eq(wrk2.pendingTasksCount(), 2);
+
+		eq(wrk1.pendingResultsCount(), 0);
+		eq(wrk2.pendingResultsCount(), 0);
+
+		wrk1.start();
+		wrk2.start();
+
+		U.sleep(1000);
+
+		eq(wrk1.pendingTasksCount(), 0);
+		eq(wrk2.pendingTasksCount(), 0);
+
+		eq(wrk1.pendingResultsCount(), 3);
+		eq(wrk2.pendingResultsCount(), 1);
+
+		isTrue(wrk1.enqueue("aaaaa", false));
+		isTrue(wrk2.enqueue(77, false));
+
+		U.sleep(1000);
+
+		wrk1.halt();
+		wrk2.halt();
+
+		eq(wrk1.pendingTasksCount(), 0);
+		eq(wrk2.pendingTasksCount(), 1);
+
+		eq(wrk1.pendingResultsCount(), 4);
+		eq(wrk2.pendingResultsCount(), 1);
+
 	}
 
 }
