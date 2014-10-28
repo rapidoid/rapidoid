@@ -1038,7 +1038,11 @@ public class U implements Constants {
 
 	public static byte[] loadBytes(String filename) {
 		InputStream input = CLASS_LOADER.getResourceAsStream(filename);
-		return loadBytes(input);
+		return input != null ? loadBytes(input) : null;
+	}
+
+	public static byte[] classBytes(String fullClassName) {
+		return U.loadBytes(fullClassName.replace('.', '/') + ".class");
 	}
 
 	public static String load(String filename) {
