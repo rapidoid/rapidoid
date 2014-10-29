@@ -4,7 +4,7 @@ import org.rapidoid.activity.Activity;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-worker
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%

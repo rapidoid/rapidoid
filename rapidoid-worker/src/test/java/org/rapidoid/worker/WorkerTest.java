@@ -2,7 +2,7 @@ package org.rapidoid.worker;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-worker
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%

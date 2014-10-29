@@ -7,7 +7,7 @@ import org.rapidoid.util.UTILS;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-worker
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
