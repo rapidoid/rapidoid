@@ -8,25 +8,14 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-json</artifactId>
+	<artifactId>rapidoid-u</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid JSON</description>
+	<description>Rapidoid U</description>
 
 	<dependencies>
 		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.4.2</version>
-		</dependency>
-		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-test-commons</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-utils</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
