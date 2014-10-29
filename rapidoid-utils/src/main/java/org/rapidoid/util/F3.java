@@ -1,8 +1,8 @@
-package org.rapidoid.lambda;
+package org.rapidoid.util;
 
 /*
  * #%L
- * rapidoid-lambda
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,8 +20,8 @@ package org.rapidoid.lambda;
  * #L%
  */
 
-public interface F2<R, P1, P2> {
+public interface F3<R, P1, P2, P3> {
 
-	R execute(P1 param1, P2 param2) throws Exception;
+	R execute(P1 param1, P2 param2, P3 param3) throws Exception;
 
 }
