@@ -12,12 +12,4 @@
 	<packaging>jar</packaging>
 	<description>Rapidoid HTML</description>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-utils</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-	</dependencies>
-
 </project>
