@@ -43,6 +43,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -60,9 +61,11 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.lambda.Predicate;
 
 public class U {
 
@@ -75,8 +78,6 @@ public class U {
 
 	protected static LogLevel LOG_LEVEL = INFO;
 
-	protected static final Class<U> CLASS = U.class;
-	public static final ClassLoader CLASS_LOADER = CLASS.getClassLoader();
 	protected static final Random RND = new Random();
 	private static Appendable LOG_OUTPUT = System.out;
 	private static ScheduledThreadPoolExecutor EXECUTOR;
@@ -100,12 +101,12 @@ public class U {
 
 		for (int i = 2; i < trace.length; i++) {
 			String cls = trace[i].getClassName();
-			if (!cls.equals(CLASS.getCanonicalName())) {
+			if (!cls.equals(U.class.getCanonicalName())) {
 				return cls;
 			}
 		}
 
-		return CLASS.getCanonicalName();
+		return U.class.getCanonicalName();
 	}
 
 	private static void log(Appendable out, LogLevel level, String msg, String key1, Object value1, String key2,
@@ -647,7 +648,22 @@ public class U {
 	}
 
 	public static URL resource(String filename) {
-		return CLASS_LOADER.getResource(filename);
+		return Thread.currentThread().getContextClassLoader().getResource(filename);
+	}
+
+	private static Enumeration<URL> resources(String name) {
+
+		name = name.replace('.', '/');
+
+		if (name.equals("*")) {
+			name = "";
+		}
+
+		try {
+			return Thread.currentThread().getContextClassLoader().getResources(name);
+		} catch (IOException e) {
+			throw U.rte("Cannot scan: " + name, e);
+		}
 	}
 
 	public static File file(String filename) {
@@ -713,7 +729,7 @@ public class U {
 	}
 
 	public static byte[] loadBytes(String filename) {
-		InputStream input = CLASS_LOADER.getResourceAsStream(filename);
+		InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
 		return input != null ? loadBytes(input) : null;
 	}
 
@@ -726,7 +742,7 @@ public class U {
 	}
 
 	public static List<String> loadLines(String filename) {
-		InputStream input = CLASS_LOADER.getResourceAsStream(filename);
+		InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 		List<String> lines = list();
 
@@ -1289,6 +1305,132 @@ public class U {
 
 		String msg = "MEM [total=%s MB, used=%s MB, max=%s MB]";
 		return format(msg, totalMem / megs, usedMem / megs, maxMem / megs);
+	}
+
+	public static String replace(String s, String regex, Mapper<String[], String> replacer) {
+		StringBuffer output = new StringBuffer();
+		Pattern p = Pattern.compile(regex);
+		Matcher matcher = p.matcher(s);
+
+		while (matcher.find()) {
+			int len = matcher.groupCount() + 1;
+			String[] gr = new String[len];
+
+			for (int i = 0; i < gr.length; i++) {
+				gr[i] = matcher.group(i);
+			}
+
+			matcher.appendReplacement(output, eval(replacer, gr));
+		}
+
+		matcher.appendTail(output);
+		return output.toString();
+	}
+
+	public static <T> boolean eval(Predicate<T> predicate, T target) {
+		try {
+			return predicate.eval(target);
+		} catch (Exception e) {
+			throw U.rte("Cannot evaluate predicate %s on target: %s", e, predicate, target);
+		}
+	}
+
+	public static <FROM, TO> TO eval(Mapper<FROM, TO> mapper, FROM src) {
+		try {
+			return mapper.map(src);
+		} catch (Exception e) {
+			throw U.rte("Cannot evaluate mapper %s on target: %s", e, mapper, src);
+		}
+	}
+
+	public static List<Class<?>> classpathClasses(String packageName, String nameRegex, Predicate<Class<?>> filter) {
+
+		Pattern regex = Pattern.compile(nameRegex);
+		ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
+		Enumeration<URL> urls = resources(packageName);
+
+		while (urls.hasMoreElements()) {
+			URL url = urls.nextElement();
+			File file = new File(url.getFile());
+
+			getClasses(classes, file, file, regex, filter);
+		}
+
+		return classes;
+	}
+
+	public static List<File> classpath(String packageName, Predicate<File> filter) {
+		ArrayList<File> files = new ArrayList<File>();
+
+		classpath(packageName, files, filter);
+
+		return files;
+	}
+
+	public static void classpath(String packageName, Collection<File> files, Predicate<File> filter) {
+		Enumeration<URL> urls = resources(packageName);
+
+		while (urls.hasMoreElements()) {
+			URL url = urls.nextElement();
+			File file = new File(url.getFile());
+
+			getFiles(files, file, filter);
+		}
+	}
+
+	private static void getFiles(Collection<File> files, File file, Predicate<File> filter) {
+		if (file.isDirectory()) {
+			U.debug("scanning directory", "dir", file);
+			for (File f : file.listFiles()) {
+				if (f.isDirectory()) {
+					getFiles(files, f, filter);
+				} else {
+					U.debug("scanned file", "file", f);
+					try {
+						if (filter == null || filter.eval(f)) {
+							files.add(f);
+						}
+					} catch (Exception e) {
+						throw U.rte(e);
+					}
+				}
+			}
+		}
+	}
+
+	private static void getClasses(Collection<Class<?>> classes, File root, File parent, Pattern nameRegex,
+			Predicate<Class<?>> filter) {
+
+		if (parent.isDirectory()) {
+			U.debug("scanning directory", "dir", parent);
+			for (File f : parent.listFiles()) {
+				if (f.isDirectory()) {
+					getClasses(classes, root, f, nameRegex, filter);
+				} else {
+					U.debug("scanned file", "file", f);
+					try {
+						if (f.getName().endsWith(".class")) {
+							String clsName = f.getAbsolutePath();
+							String rootPath = root.getAbsolutePath();
+							U.must(clsName.startsWith(rootPath));
+
+							clsName = clsName.substring(rootPath.length() + 1, clsName.length() - 6);
+							clsName = clsName.replace(File.separatorChar, '.');
+
+							if (nameRegex.matcher(clsName).matches()) {
+								U.info("loading class", "name", clsName);
+								Class<?> cls = Class.forName(clsName);
+								if (filter == null || filter.eval(cls)) {
+									classes.add(cls);
+								}
+							}
+						}
+					} catch (Exception e) {
+						throw U.rte(e);
+					}
+				}
+			}
+		}
 	}
 
 }

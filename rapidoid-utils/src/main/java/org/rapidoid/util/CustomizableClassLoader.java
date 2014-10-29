@@ -38,7 +38,7 @@ public class CustomizableClassLoader extends SecureClassLoader {
 
 	@Override
 	public Class<?> loadClass(String name) throws ClassNotFoundException {
-		U.secure(UTILS.eval(allowed, name), "Class not allowed: %s", name);
+		U.secure(U.eval(allowed, name), "Class not allowed: %s", name);
 
 		try {
 			// if the class has already been loaded, it's done
@@ -51,7 +51,7 @@ public class CustomizableClassLoader extends SecureClassLoader {
 
 	@Override
 	protected Class<?> findClass(String name) throws ClassNotFoundException {
-		U.secure(UTILS.eval(allowed, name), "Class not allowed: %s", name);
+		U.secure(U.eval(allowed, name), "Class not allowed: %s", name);
 
 		byte[] bytes = classes.get(name);
 		if (bytes != null) {

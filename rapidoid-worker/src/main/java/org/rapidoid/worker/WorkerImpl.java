@@ -3,7 +3,6 @@ package org.rapidoid.worker;
 import org.rapidoid.activity.AbstractActivity;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 /*
  * #%L
@@ -57,7 +56,7 @@ public class WorkerImpl<IN, OUT> extends AbstractActivity<Worker<IN, OUT>> imple
 				IN task = input.take();
 				U.notNull(task);
 
-				OUT result = UTILS.eval(mapper, task);
+				OUT result = U.eval(mapper, task);
 				U.notNull(result, "worker mapper result");
 
 				output.put(result);

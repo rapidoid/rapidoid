@@ -25,14 +25,13 @@ import java.util.List;
 import org.rapidoid.pojo.impl.PojoDispatcherImpl;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 public class POJO {
 
 	public static final String SERVICE_SUFFIX = "Service";
 
 	public static List<Class<?>> scanServices() {
-		List<Class<?>> services = UTILS.classpathClasses("*", ".+" + SERVICE_SUFFIX, null);
+		List<Class<?>> services = U.classpathClasses("*", ".+" + SERVICE_SUFFIX, null);
 		if (services.isEmpty()) {
 			U.warn("No service classes found on classpath!");
 		}

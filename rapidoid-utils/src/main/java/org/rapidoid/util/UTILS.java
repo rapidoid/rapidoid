@@ -24,7 +24,6 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
@@ -36,19 +35,15 @@ import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Autocreate;
 import org.rapidoid.annotation.Init;
@@ -418,26 +413,6 @@ public class UTILS implements Constants {
 		});
 	}
 
-	public static String replace(String s, String regex, Mapper<String[], String> replacer) {
-		StringBuffer output = new StringBuffer();
-		Pattern p = Pattern.compile(regex);
-		Matcher matcher = p.matcher(s);
-
-		while (matcher.find()) {
-			int len = matcher.groupCount() + 1;
-			String[] gr = new String[len];
-
-			for (int i = 0; i < gr.length; i++) {
-				gr[i] = matcher.group(i);
-			}
-
-			matcher.appendReplacement(output, eval(replacer, gr));
-		}
-
-		matcher.appendTail(output);
-		return output.toString();
-	}
-
 	public static synchronized void manage(Object... classesOrInstances) {
 		List<Class<?>> autocreate = new ArrayList<Class<?>>();
 
@@ -783,111 +758,6 @@ public class UTILS implements Constants {
 		}
 	}
 
-	private static Enumeration<URL> resources(String name) {
-
-		name = name.replace('.', '/');
-
-		if (name.equals("*")) {
-			name = "";
-		}
-
-		try {
-			return Thread.currentThread().getContextClassLoader().getResources(name);
-		} catch (IOException e) {
-			throw U.rte("Cannot scan: " + name, e);
-		}
-	}
-
-	public static List<Class<?>> classpathClasses(String packageName, String nameRegex, Predicate<Class<?>> filter) {
-
-		Pattern regex = Pattern.compile(nameRegex);
-		ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
-		Enumeration<URL> urls = resources(packageName);
-
-		while (urls.hasMoreElements()) {
-			URL url = urls.nextElement();
-			File file = new File(url.getFile());
-
-			getClasses(classes, file, file, regex, filter);
-		}
-
-		return classes;
-	}
-
-	public static List<File> classpath(String packageName, Predicate<File> filter) {
-		ArrayList<File> files = new ArrayList<File>();
-
-		classpath(packageName, files, filter);
-
-		return files;
-	}
-
-	public static void classpath(String packageName, Collection<File> files, Predicate<File> filter) {
-		Enumeration<URL> urls = resources(packageName);
-
-		while (urls.hasMoreElements()) {
-			URL url = urls.nextElement();
-			File file = new File(url.getFile());
-
-			getFiles(files, file, filter);
-		}
-	}
-
-	private static void getFiles(Collection<File> files, File file, Predicate<File> filter) {
-		if (file.isDirectory()) {
-			U.debug("scanning directory", "dir", file);
-			for (File f : file.listFiles()) {
-				if (f.isDirectory()) {
-					getFiles(files, f, filter);
-				} else {
-					U.debug("scanned file", "file", f);
-					try {
-						if (filter == null || filter.eval(f)) {
-							files.add(f);
-						}
-					} catch (Exception e) {
-						throw U.rte(e);
-					}
-				}
-			}
-		}
-	}
-
-	private static void getClasses(Collection<Class<?>> classes, File root, File parent, Pattern nameRegex,
-			Predicate<Class<?>> filter) {
-
-		if (parent.isDirectory()) {
-			U.debug("scanning directory", "dir", parent);
-			for (File f : parent.listFiles()) {
-				if (f.isDirectory()) {
-					getClasses(classes, root, f, nameRegex, filter);
-				} else {
-					U.debug("scanned file", "file", f);
-					try {
-						if (f.getName().endsWith(".class")) {
-							String clsName = f.getAbsolutePath();
-							String rootPath = root.getAbsolutePath();
-							U.must(clsName.startsWith(rootPath));
-
-							clsName = clsName.substring(rootPath.length() + 1, clsName.length() - 6);
-							clsName = clsName.replace(File.separatorChar, '.');
-
-							if (nameRegex.matcher(clsName).matches()) {
-								U.info("loading class", "name", clsName);
-								Class<?> cls = Class.forName(clsName);
-								if (filter == null || filter.eval(cls)) {
-									classes.add(cls);
-								}
-							}
-						}
-					} catch (Exception e) {
-						throw U.rte(e);
-					}
-				}
-			}
-		}
-	}
-
 	public static <T, B extends Builder<T>> B builder(final Class<B> builderClass, final Class<T> builtClass,
 			final Class<? extends T> implClass) {
 
@@ -920,22 +790,6 @@ public class UTILS implements Constants {
 			}
 		} catch (Exception e) {
 			throw U.rte(e);
-		}
-	}
-
-	public static <T> boolean eval(Predicate<T> predicate, T target) {
-		try {
-			return predicate.eval(target);
-		} catch (Exception e) {
-			throw U.rte("Cannot evaluate predicate %s on target: %s", e, predicate, target);
-		}
-	}
-
-	public static <FROM, TO> TO eval(Mapper<FROM, TO> mapper, FROM src) {
-		try {
-			return mapper.map(src);
-		} catch (Exception e) {
-			throw U.rte("Cannot evaluate mapper %s on target: %s", e, mapper, src);
 		}
 	}
 
