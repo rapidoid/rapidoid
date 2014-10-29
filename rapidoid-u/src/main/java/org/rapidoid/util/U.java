@@ -402,7 +402,7 @@ public class U {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
-			// do nothing
+			throw new ThreadDeath();
 		}
 	}
 
@@ -421,6 +421,14 @@ public class U {
 			synchronized (obj) {
 				obj.wait();
 			}
+		} catch (InterruptedException e) {
+			// do nothing
+		}
+	}
+
+	public static void joinThread(Thread thread) {
+		try {
+			thread.join();
 		} catch (InterruptedException e) {
 			// do nothing
 		}
