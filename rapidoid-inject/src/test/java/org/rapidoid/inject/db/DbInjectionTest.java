@@ -1,8 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.inject.db;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-inject
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,53 +20,17 @@ package org.rapidoid.util;
  * #L%
  */
 
-import java.util.Map;
-
-import org.rapidoid.annotation.Inject;
+import org.rapidoid.inject.IoC;
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
-
-class Table {
-
-	@Inject
-	Database db;
-
-	@Inject
-	Logger logger;
-
-	@Inject
-	Transactor transactor;
-}
-
-class Rel {
-	@Inject
-	Database db;
-}
-
-class Logger {
-}
-
-class Transactor {
-}
-
-class Database {
-
-	@Inject
-	Transactor transactor;
-
-	final Map<String, Table> tables = UTILS.autoExpandingInjectingMap(Table.class);
-
-	final Map<String, Rel> relations = UTILS.autoExpandingInjectingMap(Rel.class);
-
-}
 
 public class DbInjectionTest extends TestCommons {
 
 	@Test
 	public void shouldInject() throws Exception {
-		Database db = UTILS.singleton(Database.class);
-		isTrue(db == UTILS.singleton(Database.class));
-		isTrue(db == UTILS.singleton(Database.class));
+		Database db = IoC.singleton(Database.class);
+		isTrue(db == IoC.singleton(Database.class));
+		isTrue(db == IoC.singleton(Database.class));
 
 		notNull(db.tables);
 
@@ -76,8 +40,6 @@ public class DbInjectionTest extends TestCommons {
 		notNullAll(persons, books);
 
 		isTrue(persons != books);
-
-		isTrue(persons.logger == books.logger);
 
 		isTrue(persons.transactor == books.transactor);
 		isTrue(persons.transactor == db.transactor);

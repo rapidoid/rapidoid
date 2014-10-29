@@ -1,8 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.inject.app;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-inject
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,66 +20,19 @@ package org.rapidoid.util;
  * #L%
  */
 
-import org.rapidoid.annotation.Autocreate;
-import org.rapidoid.annotation.Init;
-import org.rapidoid.annotation.Inject;
+import org.rapidoid.inject.IoC;
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
-
-class BookDao {
-	@Inject
-	Logger logger;
-}
-
-interface PersonService {
-}
-
-class PersonServiceImpl implements PersonService {
-	@Inject
-	Logger logger;
-}
-
-class BookService {
-	@Inject
-	BookDao dao;
-
-	@Inject
-	Logger logger;
-}
-
-@Autocreate
-class App {
-
-	static boolean READY = false;
-
-	@Inject
-	Logger logger;
-
-	@Inject
-	PersonService personService;
-
-	@Inject
-	PersonServiceImpl personService2;
-
-	@Inject
-	BookService bookService;
-
-	@Init
-	public void callThisWhenReady() {
-		READY = true;
-	}
-
-}
 
 public class AppInjectionTest extends TestCommons {
 
 	@Test
 	public void shouldInjectAndCallPostConstruct() {
-		UTILS.manage(App.class, PersonServiceImpl.class);
+		IoC.manage(App.class, PersonServiceImpl.class);
 		isTrue(App.READY);
 
-		App app = UTILS.singleton(App.class);
-		same(app, UTILS.singleton(App.class), UTILS.singleton(App.class));
+		App app = IoC.singleton(App.class);
+		same(app, IoC.singleton(App.class), IoC.singleton(App.class));
 
 		notNull(app.personService);
 		notNull(app.bookService);

@@ -20,17 +20,17 @@ package org.rapidoid.net;
  * #L%
  */
 
+import org.rapidoid.inject.IoC;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.net.impl.RapidoidClientLoop;
 import org.rapidoid.net.impl.RapidoidServerLoop;
 import org.rapidoid.net.impl.TCPClientBuilder;
 import org.rapidoid.net.impl.TCPServerBuilder;
-import org.rapidoid.util.UTILS;
 
 public class TCP {
 
 	public static TCPServerBuilder server() {
-		return UTILS.builder(TCPServerBuilder.class, TCPServer.class, RapidoidServerLoop.class);
+		return IoC.builder(TCPServerBuilder.class, TCPServer.class, RapidoidServerLoop.class);
 	}
 
 	public static TCPServer listen(Protocol protocol) {
@@ -40,7 +40,7 @@ public class TCP {
 	}
 
 	public static TCPClientBuilder client() {
-		return UTILS.builder(TCPClientBuilder.class, TCPClient.class, RapidoidClientLoop.class);
+		return IoC.builder(TCPClientBuilder.class, TCPClient.class, RapidoidClientLoop.class);
 	}
 
 	public static TCPClient connect(String host, int port, Protocol protocol) {

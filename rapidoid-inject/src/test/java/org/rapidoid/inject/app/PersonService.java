@@ -1,8 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.inject.app;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-inject
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,13 +20,5 @@ package org.rapidoid.util;
  * #L%
  */
 
-import java.util.concurrent.Callable;
-
-import org.rapidoid.annotation.Inject;
-
-public class Bar {
-
-	@Inject
-	Callable<String> callable;
-
+public interface PersonService {
 }

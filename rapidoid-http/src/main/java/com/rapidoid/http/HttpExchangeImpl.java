@@ -30,18 +30,18 @@ import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
+import org.rapidoid.inject.IoC;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.net.mime.MediaType;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.Bool;
 
 public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements HttpExchange,
 		Constants {
 
-	private final static HttpParser PARSER = UTILS.singleton(HttpParser.class);
+	private final static HttpParser PARSER = IoC.singleton(HttpParser.class);
 
 	private static final byte[] HEADER_SEP = ": ".getBytes();
 

@@ -109,7 +109,7 @@ public class Prop {
 		}
 
 		if (value instanceof String) {
-			return UTILS.convert((String) value, toType);
+			return Cls.convert((String) value, toType);
 		}
 
 		return value;

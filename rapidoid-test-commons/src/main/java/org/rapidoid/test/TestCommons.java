@@ -35,7 +35,7 @@ public abstract class TestCommons {
 	@BeforeMethod(alwaysRun = true)
 	public void init() {
 		try {
-			Class<?> clazz = Class.forName("org.rapidoid.util.UTILS");
+			Class<?> clazz = Class.forName("org.rapidoid.util.IOC");
 			try {
 				Method reset = clazz.getMethod("reset");
 				try {

@@ -1,8 +1,13 @@
-package com.rapidoid.http;
+package org.rapidoid.util;
+
+import java.util.List;
+
+import org.rapidoid.test.TestCommons;
+import org.testng.annotations.Test;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-u
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,20 +25,14 @@ package com.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.inject.IoC;
+public class ClasspathScanTest extends TestCommons {
 
-public class HTTP {
+	@Test
+	public void testClasspathScan() {
+		List<Class<?>> classes = U.classpathClasses("", ".*Test", null);
 
-	public static HTTPServerBuilder server() {
-		return IoC.builder(HTTPServerBuilder.class, HTTPServer.class, HTTPServerImpl.class);
-	}
-
-	public static HTTPServer serve(String response) {
-		return HTTP.server().build().serve(response).start();
-	}
-
-	public static HTTPServer serve(Handler handler) {
-		return HTTP.server().build().serve(handler).start();
+		isTrue(classes.contains(ClasspathScanTest.class));
+		isTrue(classes.contains(UTest.class));
 	}
 
 }

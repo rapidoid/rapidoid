@@ -35,11 +35,10 @@ import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
 import org.rapidoid.pojo.PojoRequest;
-import org.rapidoid.util.Prop;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.Prop;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 public class PojoDispatcherImpl implements PojoDispatcher {
 
@@ -125,7 +124,7 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 					if (kind.isSimple()) {
 
 						if (parts.length > paramsFrom + simpleParamIndex) {
-							args[i] = UTILS.convert(parts[paramsFrom + simpleParamIndex++], type);
+							args[i] = Cls.convert(parts[paramsFrom + simpleParamIndex++], type);
 						} else {
 							throw error(null, "Not enough parameters!");
 						}

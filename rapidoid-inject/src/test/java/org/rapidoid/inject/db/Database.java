@@ -1,8 +1,8 @@
-package com.rapidoid.http;
+package org.rapidoid.inject.db;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-inject
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,20 +20,18 @@ package com.rapidoid.http;
  * #L%
  */
 
+import java.util.Map;
+
+import org.rapidoid.annotation.Inject;
 import org.rapidoid.inject.IoC;
 
-public class HTTP {
+public class Database {
 
-	public static HTTPServerBuilder server() {
-		return IoC.builder(HTTPServerBuilder.class, HTTPServer.class, HTTPServerImpl.class);
-	}
+	@Inject
+	Transactor transactor;
 
-	public static HTTPServer serve(String response) {
-		return HTTP.server().build().serve(response).start();
-	}
+	final Map<String, Table> tables = IoC.autoExpandingInjectingMap(Table.class);
 
-	public static HTTPServer serve(Handler handler) {
-		return HTTP.server().build().serve(handler).start();
-	}
+	final Map<String, Rel> relations = IoC.autoExpandingInjectingMap(Rel.class);
 
 }

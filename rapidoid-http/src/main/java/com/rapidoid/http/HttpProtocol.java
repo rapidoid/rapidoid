@@ -20,14 +20,14 @@ package com.rapidoid.http;
  * #L%
  */
 
+import org.rapidoid.inject.IoC;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ExchangeProtocol;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
-	private final HttpParser parser = UTILS.singleton(HttpParser.class);
+	private final HttpParser parser = IoC.singleton(HttpParser.class);
 
 	private final Router router;
 

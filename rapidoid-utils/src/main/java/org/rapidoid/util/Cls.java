@@ -124,6 +124,10 @@ public class Cls {
 
 			});
 
+	public static void reset() {
+		BEAN_PROPERTIES.clear();
+	}
+
 	public static Map<String, Prop> propertiesOf(Class<?> clazz) {
 		return BEAN_PROPERTIES.get(clazz);
 	}
@@ -607,6 +611,71 @@ public class Cls {
 				return method.invoke(target, args);
 			}
 		});
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T convert(String value, Class<T> toType) {
+		TypeKind targetKind = Cls.kindOf(toType);
+
+		switch (targetKind) {
+
+		case NULL:
+			throw U.notExpected();
+
+		case BOOLEAN:
+		case BOOLEAN_OBJ:
+			if ("y".equalsIgnoreCase(value) || "t".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value)
+					|| "true".equalsIgnoreCase(value)) {
+				return (T) Boolean.TRUE;
+			}
+
+			if ("n".equalsIgnoreCase(value) || "f".equalsIgnoreCase(value) || "no".equalsIgnoreCase(value)
+					|| "false".equalsIgnoreCase(value)) {
+				return (T) Boolean.FALSE;
+			}
+
+			throw U.rte("Cannot convert the string value '%s' to boolean!", value);
+
+		case BYTE:
+		case BYTE_OBJ:
+			return (T) new Byte(value);
+
+		case SHORT:
+		case SHORT_OBJ:
+			return (T) new Short(value);
+
+		case CHAR:
+		case CHAR_OBJ:
+			return (T) new Character(value.charAt(0));
+
+		case INT:
+		case INT_OBJ:
+			return (T) new Integer(value);
+
+		case LONG:
+		case LONG_OBJ:
+			return (T) new Long(value);
+
+		case FLOAT:
+		case FLOAT_OBJ:
+			return (T) new Float(value);
+
+		case DOUBLE:
+		case DOUBLE_OBJ:
+			return (T) new Double(value);
+
+		case STRING:
+			return (T) value;
+
+		case OBJECT:
+			throw U.rte("Cannot convert string value to type '%s'!", toType);
+
+		case DATE:
+			return (T) Dates.date(value);
+
+		default:
+			throw U.notExpected();
+		}
 	}
 
 }

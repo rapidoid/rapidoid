@@ -1,8 +1,8 @@
-package com.rapidoid.http;
+package org.rapidoid.inject.app;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-inject
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,20 +20,31 @@ package com.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.inject.IoC;
+import org.rapidoid.annotation.Autocreate;
+import org.rapidoid.annotation.Init;
+import org.rapidoid.annotation.Inject;
+import org.rapidoid.inject.Logger;
 
-public class HTTP {
+@Autocreate
+public class App {
 
-	public static HTTPServerBuilder server() {
-		return IoC.builder(HTTPServerBuilder.class, HTTPServer.class, HTTPServerImpl.class);
-	}
+	static boolean READY = false;
 
-	public static HTTPServer serve(String response) {
-		return HTTP.server().build().serve(response).start();
-	}
+	@Inject
+	Logger logger;
 
-	public static HTTPServer serve(Handler handler) {
-		return HTTP.server().build().serve(handler).start();
+	@Inject
+	PersonService personService;
+
+	@Inject
+	PersonServiceImpl personService2;
+
+	@Inject
+	BookService bookService;
+
+	@Init
+	public void callThisWhenReady() {
+		READY = true;
 	}
 
 }

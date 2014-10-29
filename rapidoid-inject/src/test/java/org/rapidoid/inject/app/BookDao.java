@@ -1,13 +1,8 @@
-package org.rapidoid.util;
-
-import java.util.List;
-
-import org.rapidoid.test.TestCommons;
-import org.testng.annotations.Test;
+package org.rapidoid.inject.app;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-inject
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -25,18 +20,10 @@ import org.testng.annotations.Test;
  * #L%
  */
 
-public class ClasspathScanTest extends TestCommons {
+import org.rapidoid.annotation.Inject;
+import org.rapidoid.inject.Logger;
 
-	@Test
-	public void testClasspathScan() {
-		List<Class<?>> classes = U.classpathClasses("", ".*Test", null);
-
-		isTrue(classes.contains(ClasspathScanTest.class));
-		isTrue(classes.contains(AppInjectionTest.class));
-		isTrue(classes.contains(CallableInjectionTest.class));
-		isTrue(classes.contains(DbInjectionTest.class));
-
-		isFalse(classes.contains(Bar.class));
-	}
-
+public class BookDao {
+	@Inject
+	Logger logger;
 }

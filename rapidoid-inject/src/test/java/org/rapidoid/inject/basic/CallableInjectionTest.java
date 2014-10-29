@@ -1,8 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.inject.basic;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-inject
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,35 +20,17 @@ package org.rapidoid.util;
  * #L%
  */
 
-import java.util.concurrent.Callable;
-
-import org.rapidoid.annotation.Inject;
+import org.rapidoid.inject.IoC;
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
-
-class MyCallable implements Callable<String> {
-
-	@Inject
-	Foo foo;
-
-	@Override
-	public String call() throws Exception {
-		return "abc";
-	}
-}
-
-class Foo {
-	@Inject
-	Callable<String> callable;
-}
 
 public class CallableInjectionTest extends TestCommons {
 
 	@Test
 	public void shouldInject() throws Exception {
-		UTILS.manage(MyCallable.class);
+		IoC.manage(MyCallable.class);
 
-		Foo foo = UTILS.singleton(Foo.class);
+		Foo foo = IoC.singleton(Foo.class);
 
 		notNullAll(foo, foo.callable);
 		hasType(foo.callable, MyCallable.class);
