@@ -8,9 +8,9 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-inject</artifactId>
+	<artifactId>rapidoid-ioc</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid Inject</description>
+	<description>Rapidoid IoC</description>
 
 	<dependencies>
 		<dependency>

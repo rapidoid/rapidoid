@@ -56,7 +56,7 @@
 	<modules>
 		<module>rapidoid-u</module>
 		<module>rapidoid-utils</module>
-		<module>rapidoid-inject</module>
+		<module>rapidoid-ioc</module>
 		<module>rapidoid-json</module>
 		<module>rapidoid-activity</module>
 		<module>rapidoid-worker</module>
