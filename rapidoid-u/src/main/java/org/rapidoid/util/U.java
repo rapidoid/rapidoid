@@ -648,7 +648,11 @@ public class U {
 	}
 
 	public static URL resource(String filename) {
-		return Thread.currentThread().getContextClassLoader().getResource(filename);
+		return classLoader().getResource(filename);
+	}
+
+	public static ClassLoader classLoader() {
+		return Thread.currentThread().getContextClassLoader();
 	}
 
 	private static Enumeration<URL> resources(String name) {
@@ -660,7 +664,7 @@ public class U {
 		}
 
 		try {
-			return Thread.currentThread().getContextClassLoader().getResources(name);
+			return classLoader().getResources(name);
 		} catch (IOException e) {
 			throw U.rte("Cannot scan: " + name, e);
 		}
@@ -729,7 +733,7 @@ public class U {
 	}
 
 	public static byte[] loadBytes(String filename) {
-		InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
+		InputStream input = classLoader().getResourceAsStream(filename);
 		return input != null ? loadBytes(input) : null;
 	}
 
@@ -742,7 +746,7 @@ public class U {
 	}
 
 	public static List<String> loadLines(String filename) {
-		InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
+		InputStream input = classLoader().getResourceAsStream(filename);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 		List<String> lines = list();
 
