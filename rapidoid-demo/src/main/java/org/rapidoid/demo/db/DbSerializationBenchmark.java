@@ -46,7 +46,7 @@ public class DbSerializationBenchmark {
 			public void run() {
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				DB.save(out);
-				byte[] bytes = out.toByteArray();
+				out.toByteArray();
 			}
 		});
 	}
