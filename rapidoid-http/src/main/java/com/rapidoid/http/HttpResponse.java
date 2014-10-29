@@ -20,7 +20,8 @@ package com.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Constants;
+import org.rapidoid.util.Dates;
 
 public class HttpResponse {
 
@@ -37,13 +38,13 @@ public class HttpResponse {
 	private byte[] dateBytes = null;
 
 	public HttpResponse(String resp) {
-		this.bytes = resp.getBytes(UTILS.UTF_8);
+		this.bytes = resp.getBytes(Constants.UTF_8);
 		this.contentLengthPos = resp.indexOf(CONTENT_LENGTH) + CONTENT_LENGTH.length();
 		this.datePos = resp.indexOf(DATE) + DATE.length() + 1;
 	}
 
 	public byte[] bytes() {
-		byte[] dateBytes2 = UTILS.getDateTimeBytes();
+		byte[] dateBytes2 = Dates.getDateTimeBytes();
 
 		if (dateBytes != dateBytes2) {
 			dateBytes = dateBytes2;

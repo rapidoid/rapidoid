@@ -23,6 +23,7 @@ package org.rapidoid.pojo;
 import java.util.List;
 
 import org.rapidoid.pojo.impl.PojoDispatcherImpl;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
@@ -43,7 +44,7 @@ public class POJO {
 	}
 
 	public static PojoDispatcher dispatcher(Class<?>... serviceClasses) {
-		return dispatcher(UTILS.instantiateAll(serviceClasses));
+		return dispatcher(Cls.instantiateAll(serviceClasses));
 	}
 
 	public static PojoDispatcher serviceDispatcher() {

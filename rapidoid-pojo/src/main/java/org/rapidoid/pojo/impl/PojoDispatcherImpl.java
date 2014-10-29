@@ -36,6 +36,7 @@ import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
 import org.rapidoid.pojo.PojoRequest;
 import org.rapidoid.util.Prop;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
@@ -119,7 +120,7 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 
 				for (int i = 0; i < types.length; i++) {
 					Class<?> type = types[i];
-					TypeKind kind = UTILS.kindOf(type);
+					TypeKind kind = Cls.kindOf(type);
 
 					if (kind.isSimple()) {
 
@@ -145,7 +146,7 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 				throw new PojoDispatchException("Cannot dispatch to POJO target!", e);
 			}
 
-			Object result = UTILS.invoke(method, service, args);
+			Object result = Cls.invoke(method, service, args);
 			if (result == null && method.getReturnType().equals(void.class)) {
 				result = "OK";
 			}
@@ -177,7 +178,7 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 	}
 
 	private Class<?> getDefaultType(Object service) {
-		Object clazz = UTILS.getPropValue(service, "clazz");
+		Object clazz = Cls.getPropValue(service, "clazz");
 		return (Class<?>) (clazz instanceof Class ? clazz : null);
 	}
 
@@ -258,7 +259,7 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 	}
 
 	private static void setBeanProperties(Object instance, Map<String, String> paramsMap) {
-		Map<String, Prop> props = UTILS.propertiesOf(instance.getClass());
+		Map<String, Prop> props = Cls.propertiesOf(instance.getClass());
 
 		for (Entry<String, String> entry : paramsMap.entrySet()) {
 			Prop prop = props.get(entry.getKey());

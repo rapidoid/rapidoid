@@ -20,12 +20,38 @@ package org.rapidoid.util;
  * #L%
  */
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class Dates {
 
 	protected static final Calendar CALENDAR = Calendar.getInstance();
+
+	/* RFC 1123 date-time format, e.g. Sun, 07 Sep 2014 00:17:29 GMT */
+	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
+	private static final Date CURR_DATE = new Date();
+	private static byte[] CURR_DATE_BYTES;
+	private static long updateCurrDateAfter = 0;
+
+	static {
+		DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
+	}
+
+	public static byte[] getDateTimeBytes() {
+		long time = System.currentTimeMillis();
+
+		// avoid synchronization for better performance
+		if (time > updateCurrDateAfter) {
+			CURR_DATE.setTime(time);
+			CURR_DATE_BYTES = DATE_FORMAT.format(CURR_DATE).getBytes();
+			updateCurrDateAfter = time + 1000;
+		}
+
+		return CURR_DATE_BYTES;
+	}
 
 	public static Date date(String value) {
 		String[] parts = value.split("(\\.|-|/)");

@@ -125,7 +125,7 @@ public class Prop {
 
 	public TypeKind getTypeKind() {
 		if (typeKind == null) {
-			typeKind = UTILS.kindOf(getType());
+			typeKind = Cls.kindOf(getType());
 		}
 
 		return typeKind;

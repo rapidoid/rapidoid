@@ -26,8 +26,8 @@ import org.rapidoid.pojo.POJO;
 import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 import com.rapidoid.http.HTTP;
 import com.rapidoid.http.Handler;
@@ -40,7 +40,7 @@ public class Web {
 	}
 
 	public static void run(Class<?>... classes) {
-		serve(new WebPojoDispatcher(UTILS.instantiateAll(classes)));
+		serve(new WebPojoDispatcher(Cls.instantiateAll(classes)));
 	}
 
 	private static void serve(final PojoDispatcher dispatcher) {

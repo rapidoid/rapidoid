@@ -62,6 +62,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
+import org.rapidoid.lambda.Mapper;
+
 public class U {
 
 	public static final LogLevel TRACE = LogLevel.TRACE;
@@ -594,6 +596,38 @@ public class U {
 
 	public static <K, V> Map<K, V> concurrentMap() {
 		return new ConcurrentHashMap<K, V>();
+	}
+
+	public static <K, V> Map<K, V> autoExpandingMap(final Class<V> clazz) {
+		return autoExpandingMap(new Mapper<K, V>() {
+			@Override
+			public V map(K src) throws Exception {
+				return newInstance(clazz);
+			}
+		});
+	}
+
+	@SuppressWarnings("serial")
+	public static <K, V> Map<K, V> autoExpandingMap(final Mapper<K, V> valueFactory) {
+		return new ConcurrentHashMap<K, V>() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public synchronized V get(Object key) {
+				V val = super.get(key);
+
+				if (val == null) {
+					try {
+						val = valueFactory.map((K) key);
+					} catch (Exception e) {
+						throw rte(e);
+					}
+
+					put((K) key, val);
+				}
+
+				return val;
+			}
+		};
 	}
 
 	public static <T> Queue<T> queue(int maxSize) {
@@ -1239,7 +1273,7 @@ public class U {
 		try {
 			latch.await();
 		} catch (InterruptedException e) {
-			throw U.rte(e);
+			throw rte(e);
 		}
 
 		benchmarkComplete("avg(" + name + ")", threadsN * count, time);

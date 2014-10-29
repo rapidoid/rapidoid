@@ -27,6 +27,7 @@ import org.rapidoid.data.Ranges;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.net.impl.RapidoidHelper;
+import org.rapidoid.util.Dates;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.Bool;
 
@@ -103,7 +104,7 @@ public class SimpleHttpProtocol implements Protocol {
 			ctx.write(SERVER_X);
 
 			ctx.write(DATE_HDR);
-			ctx.write(UTILS.getDateTimeBytes());
+			ctx.write(Dates.getDateTimeBytes());
 			ctx.write(CR_LF);
 
 			if (BYTES.matches(buf.bytes(), path, URI_PLAIN, true) || path.length == 1) {

@@ -54,9 +54,9 @@ class Database {
 	@Inject
 	Transactor transactor;
 
-	final Map<String, Table> tables = UTILS.autoExpandingMap(Table.class);
+	final Map<String, Table> tables = UTILS.autoExpandingInjectingMap(Table.class);
 
-	final Map<String, Rel> relations = UTILS.autoExpandingMap(Rel.class);
+	final Map<String, Rel> relations = UTILS.autoExpandingInjectingMap(Rel.class);
 
 }
 
