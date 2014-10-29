@@ -24,25 +24,20 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import org.rapidoid.activity.AbstractActivity;
 import org.rapidoid.inmem.InMem;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 
-public class DbImpl implements Db {
+public class DbImpl extends AbstractActivity implements Db {
 
-	private final String name;
 	private final String filename;
 	private final InMem inmem;
 
 	public DbImpl(String name, String filename) {
-		this.name = name;
+		super(name);
 		this.filename = filename;
 		this.inmem = new InMem(filename);
-	}
-
-	@Override
-	public String name() {
-		return name;
 	}
 
 	@Override
@@ -137,6 +132,11 @@ public class DbImpl implements Db {
 	@Override
 	public long size() {
 		return inmem.size();
+	}
+
+	@Override
+	public void start() {
+		// FIXME: implement this
 	}
 
 }

@@ -24,12 +24,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import org.rapidoid.activity.Activity;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 
-public interface Db {
-
-	String name();
+public interface Db extends Activity {
 
 	long insert(Object record);
 
@@ -59,12 +58,6 @@ public interface Db {
 
 	long size();
 
-	void shutdown();
-
 	void destroy();
-
-	boolean isActive();
-
-	void halt();
 
 }

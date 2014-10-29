@@ -33,4 +33,24 @@ public abstract class AbstractActivity implements Activity {
 		return name;
 	}
 
+	@Override
+	public void start() {
+		throw new RuntimeException("Not implemented!"); // FIXME
+	}
+
+	@Override
+	public void halt() {
+		throw new RuntimeException("Not implemented!"); // FIXME
+	}
+
+	@Override
+	public void shutdown() {
+		throw new RuntimeException("Not implemented!"); // FIXME
+	}
+
+	@Override
+	public boolean isActive() {
+		throw new RuntimeException("Not implemented!"); // FIXME
+	}
+
 }
