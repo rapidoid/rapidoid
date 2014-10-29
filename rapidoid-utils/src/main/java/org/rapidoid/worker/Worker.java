@@ -1,5 +1,7 @@
 package org.rapidoid.worker;
 
+import org.rapidoid.activity.Activity;
+
 /*
  * #%L
  * rapidoid-utils
@@ -20,15 +22,11 @@ package org.rapidoid.worker;
  * #L%
  */
 
-public interface Worker<IN, OUT> {
+public interface Worker<IN, OUT> extends Activity {
 
 	boolean enqueue(IN task, boolean blocking);
 
 	OUT nextResult(boolean blocking);
-
-	void start();
-
-	void halt();
 
 	int pendingTasksCount();
 

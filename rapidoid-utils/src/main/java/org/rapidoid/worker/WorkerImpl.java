@@ -1,5 +1,6 @@
 package org.rapidoid.worker;
 
+import org.rapidoid.activity.AbstractActivity;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.U;
 
@@ -23,7 +24,7 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-public class WorkerThread<IN, OUT> extends Thread implements Worker<IN, OUT> {
+public class WorkerImpl<IN, OUT> extends AbstractActivity implements Worker<IN, OUT>, Runnable {
 
 	private final String id;
 
@@ -33,13 +34,16 @@ public class WorkerThread<IN, OUT> extends Thread implements Worker<IN, OUT> {
 
 	private final Mapper<IN, OUT> mapper;
 
-	public WorkerThread(String id, WorkerQueue<IN> input, WorkerQueue<OUT> output, Mapper<IN, OUT> mapper) {
+	private final Thread thread;
+
+	public WorkerImpl(String id, WorkerQueue<IN> input, WorkerQueue<OUT> output, Mapper<IN, OUT> mapper) {
 		super("worker-" + id);
 
 		this.id = id;
 		this.input = input;
 		this.output = output;
 		this.mapper = mapper;
+		this.thread = new Thread(this, name);
 	}
 
 	@Override
@@ -72,12 +76,17 @@ public class WorkerThread<IN, OUT> extends Thread implements Worker<IN, OUT> {
 		}
 	}
 
+	@Override
+	public void start() {
+		thread.start();
+	}
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public void halt() {
-		stop();
+		thread.stop();
 		try {
-			join();
+			thread.join();
 		} catch (InterruptedException e) {
 		}
 	}
