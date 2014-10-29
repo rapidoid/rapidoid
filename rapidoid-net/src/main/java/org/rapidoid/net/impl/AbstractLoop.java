@@ -20,18 +20,17 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
+import org.rapidoid.activity.AbstractActivity;
 import org.rapidoid.util.U;
 
-public abstract class AbstractLoop implements Runnable {
-
-	protected final String name;
+public abstract class AbstractLoop<T> extends AbstractActivity<T> implements Runnable {
 
 	protected Thread ownerThread;
 
 	protected volatile LoopStatus status = LoopStatus.INIT;
 
 	public AbstractLoop(String name) {
-		this.name = name;
+		super(name);
 	}
 
 	@Override

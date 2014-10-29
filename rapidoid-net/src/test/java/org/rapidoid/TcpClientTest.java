@@ -50,7 +50,7 @@ public class TcpClientTest extends NetTestCommons {
 
 		// FIXME complete this test with TCP server
 
-		client.stop();
+		client.shutdown();
 	}
 
 }

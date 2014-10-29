@@ -29,7 +29,7 @@ import java.util.Set;
 
 import org.rapidoid.util.U;
 
-public abstract class AbstractEventLoop extends AbstractLoop {
+public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 
 	protected final Selector selector;
 

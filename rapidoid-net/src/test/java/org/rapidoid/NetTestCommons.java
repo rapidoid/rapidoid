@@ -37,7 +37,7 @@ public abstract class NetTestCommons extends TestCommons {
 		try {
 			client.run();
 		} finally {
-			server.stop();
+			server.shutdown();
 			U.sleep(300);
 			U.print("--- SERVER STOPPED ---");
 		}

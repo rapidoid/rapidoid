@@ -29,7 +29,7 @@ import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.net.TCPClient;
 import org.rapidoid.util.U;
 
-public class RapidoidClientLoop extends AbstractEventLoop implements TCPClient {
+public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements TCPClient {
 
 	private RapidoidWorker[] workers;
 
@@ -115,13 +115,14 @@ public class RapidoidClientLoop extends AbstractEventLoop implements TCPClient {
 	}
 
 	@Override
-	public synchronized RapidoidClientLoop start() {
+	public synchronized TCPClient start() {
 		new Thread(this, "client").start();
-		return this;
+
+		return super.start();
 	}
 
 	@Override
-	public synchronized RapidoidClientLoop stop() {
+	public synchronized TCPClient shutdown() {
 		stopLoop();
 
 		for (RapidoidWorker worker : workers) {
@@ -129,7 +130,7 @@ public class RapidoidClientLoop extends AbstractEventLoop implements TCPClient {
 			worker.stopLoop();
 		}
 
-		return this;
+		return super.shutdown();
 	}
 
 }

@@ -39,7 +39,7 @@ import org.rapidoid.pool.Pool;
 import org.rapidoid.util.SimpleList;
 import org.rapidoid.util.U;
 
-public class RapidoidWorker extends AbstractEventLoop {
+public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private static final int MAX_PIPELINED = Integer.MAX_VALUE;
 

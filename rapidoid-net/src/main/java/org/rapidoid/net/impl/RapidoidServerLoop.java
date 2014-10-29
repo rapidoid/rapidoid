@@ -32,7 +32,7 @@ import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.util.U;
 
-public class RapidoidServerLoop extends AbstractEventLoop implements TCPServer {
+public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements TCPServer {
 
 	private RapidoidWorker[] workers;
 
@@ -130,11 +130,12 @@ public class RapidoidServerLoop extends AbstractEventLoop implements TCPServer {
 	@Override
 	public synchronized TCPServer start() {
 		new Thread(this, "server").start();
-		return this;
+
+		return super.start();
 	}
 
 	@Override
-	public synchronized TCPServer stop() {
+	public synchronized TCPServer shutdown() {
 		stopLoop();
 
 		for (RapidoidWorker worker : workers) {
@@ -151,7 +152,7 @@ public class RapidoidServerLoop extends AbstractEventLoop implements TCPServer {
 			}
 		}
 
-		return this;
+		return super.shutdown();
 	}
 
 }

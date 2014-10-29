@@ -1,5 +1,7 @@
 package org.rapidoid.net;
 
+import org.rapidoid.activity.Activity;
+
 /*
  * #%L
  * rapidoid-net
@@ -20,10 +22,6 @@ package org.rapidoid.net;
  * #L%
  */
 
-public interface TCPClient {
-
-	TCPClient start();
-
-	TCPClient stop();
+public interface TCPClient extends Activity<TCPClient> {
 
 }
