@@ -83,7 +83,7 @@ public class WorkerTest extends TestCommons {
 		U.sleep(1000);
 
 		wrk1.halt();
-		wrk2.halt();
+		wrk2.shutdown();
 
 		eq(wrk1.pendingTasksCount(), 0);
 		eq(wrk2.pendingTasksCount(), 1);

@@ -1,6 +1,6 @@
 package org.rapidoid.worker;
 
-import org.rapidoid.activity.AbstractActivity;
+import org.rapidoid.activity.AbstractThreadActivity;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.U;
 
@@ -24,9 +24,7 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-public class WorkerImpl<IN, OUT> extends AbstractActivity<Worker<IN, OUT>> implements Worker<IN, OUT>, Runnable {
-
-	private final String id;
+public class WorkerActivity<IN, OUT> extends AbstractThreadActivity<Worker<IN, OUT>> implements Worker<IN, OUT> {
 
 	private final WorkerQueue<IN> input;
 
@@ -34,36 +32,12 @@ public class WorkerImpl<IN, OUT> extends AbstractActivity<Worker<IN, OUT>> imple
 
 	private final Mapper<IN, OUT> mapper;
 
-	private final Thread thread;
-
-	public WorkerImpl(String id, WorkerQueue<IN> input, WorkerQueue<OUT> output, Mapper<IN, OUT> mapper) {
+	public WorkerActivity(String id, WorkerQueue<IN> input, WorkerQueue<OUT> output, Mapper<IN, OUT> mapper) {
 		super("worker-" + id);
 
-		this.id = id;
 		this.input = input;
 		this.output = output;
 		this.mapper = mapper;
-		this.thread = new Thread(this, name);
-	}
-
-	@Override
-	public void run() {
-		U.info("Starting worker thread...", "id", id);
-
-		while (!Thread.interrupted()) {
-			try {
-
-				IN task = input.take();
-				U.notNull(task);
-
-				OUT result = U.eval(mapper, task);
-				U.notNull(result, "worker mapper result");
-
-				output.put(result);
-			} catch (Exception e) {
-				U.error("Worker processing error!", "id", id, "error", e);
-			}
-		}
 	}
 
 	@Override
@@ -74,24 +48,6 @@ public class WorkerImpl<IN, OUT> extends AbstractActivity<Worker<IN, OUT>> imple
 		} else {
 			return input.queue.offer(task);
 		}
-	}
-
-	@Override
-	public Worker<IN, OUT> start() {
-		thread.start();
-		return super.start();
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public Worker<IN, OUT> halt() {
-		thread.stop();
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-		}
-
-		return super.halt();
 	}
 
 	@Override
@@ -111,6 +67,17 @@ public class WorkerImpl<IN, OUT> extends AbstractActivity<Worker<IN, OUT>> imple
 		} else {
 			return output.queue.poll();
 		}
+	}
+
+	@Override
+	protected void loop() {
+		IN task = input.take();
+		U.notNull(task);
+
+		OUT result = U.eval(mapper, task);
+		U.notNull(result, "worker mapper result");
+
+		output.put(result);
 	}
 
 }

@@ -35,7 +35,7 @@ public class Workers {
 		WorkerQueue<IN> input = new WorkerQueue<IN>(U.<IN> queue(inputQueueLimit), inputQueueLimit);
 		WorkerQueue<OUT> output = new WorkerQueue<OUT>(U.<OUT> queue(outputQueueLimit), outputQueueLimit);
 
-		WorkerImpl<IN, OUT> worker = new WorkerImpl<IN, OUT>(workerId, input, output, mapper);
+		WorkerActivity<IN, OUT> worker = new WorkerActivity<IN, OUT>(workerId, input, output, mapper);
 		WORKERS.put(workerId, worker);
 
 		return (Worker<IN, OUT>) worker;
@@ -43,7 +43,7 @@ public class Workers {
 
 	@SuppressWarnings("unchecked")
 	public static <IN, OUT> Worker<IN, OUT> get(String workerId) {
-		return (WorkerImpl<IN, OUT>) WORKERS.get(workerId);
+		return (WorkerActivity<IN, OUT>) WORKERS.get(workerId);
 	}
 
 	public static boolean enqueue(String workerId, Object task, boolean blocking) {
