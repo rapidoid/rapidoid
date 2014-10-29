@@ -59,8 +59,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -633,18 +631,6 @@ public class U {
 
 	public static <T> Queue<T> queue(int maxSize) {
 		return maxSize > 0 ? new ArrayBlockingQueue<T>(maxSize) : new ConcurrentLinkedQueue<T>();
-	}
-
-	public static void waitFor(AtomicBoolean done) {
-		while (!done.get()) {
-			sleep(5);
-		}
-	}
-
-	public static void waitFor(AtomicInteger n, int value) {
-		while (n.get() != value) {
-			sleep(5);
-		}
 	}
 
 	public static URL resource(String filename) {
