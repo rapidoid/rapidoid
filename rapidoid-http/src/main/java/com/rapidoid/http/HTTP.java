@@ -20,12 +20,12 @@ package com.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class HTTP {
 
 	public static HTTPServerBuilder server() {
-		return U.builder(HTTPServerBuilder.class, HTTPServer.class, HTTPServerImpl.class);
+		return UTILS.builder(HTTPServerBuilder.class, HTTPServer.class, HTTPServerImpl.class);
 	}
 
 	public static HTTPServer serve(String response) {

@@ -109,7 +109,7 @@ public class Prop {
 		}
 
 		if (value instanceof String) {
-			return U.convert((String) value, toType);
+			return UTILS.convert((String) value, toType);
 		}
 
 		return value;
@@ -125,7 +125,7 @@ public class Prop {
 
 	public TypeKind getTypeKind() {
 		if (typeKind == null) {
-			typeKind = U.kindOf(getType());
+			typeKind = UTILS.kindOf(getType());
 		}
 
 		return typeKind;

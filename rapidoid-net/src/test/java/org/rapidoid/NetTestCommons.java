@@ -20,8 +20,8 @@ package org.rapidoid;
  * #L%
  */
 
-import org.rapidoid.net.TCPServer;
 import org.rapidoid.net.TCP;
+import org.rapidoid.net.TCPServer;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;

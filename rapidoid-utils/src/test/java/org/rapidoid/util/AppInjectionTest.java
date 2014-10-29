@@ -75,11 +75,11 @@ public class AppInjectionTest extends TestCommons {
 
 	@Test
 	public void shouldInjectAndCallPostConstruct() {
-		U.manage(App.class, PersonServiceImpl.class);
+		UTILS.manage(App.class, PersonServiceImpl.class);
 		isTrue(App.READY);
 
-		App app = U.singleton(App.class);
-		same(app, U.singleton(App.class), U.singleton(App.class));
+		App app = UTILS.singleton(App.class);
+		same(app, UTILS.singleton(App.class), UTILS.singleton(App.class));
 
 		notNull(app.personService);
 		notNull(app.bookService);

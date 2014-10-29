@@ -24,6 +24,7 @@ import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.Int;
 
 public class BYTES implements Constants {
@@ -421,7 +422,7 @@ public class BYTES implements Constants {
 			return NOT_FOUND;
 		}
 
-		int prefix = U.intFrom(b0, b1, b2, b3);
+		int prefix = UTILS.intFrom(b0, b1, b2, b3);
 
 		boolean matchedPrefix = prefix == searchPrefix;
 
@@ -507,7 +508,7 @@ public class BYTES implements Constants {
 			return NOT_FOUND;
 		}
 
-		int prefix = U.intFrom(b0, b1, b2, b3);
+		int prefix = UTILS.intFrom(b0, b1, b2, b3);
 
 		boolean matchedPrefix = prefix == searchPrefix;
 

@@ -54,9 +54,9 @@ class Database {
 	@Inject
 	Transactor transactor;
 
-	final Map<String, Table> tables = U.autoExpandingMap(Table.class);
+	final Map<String, Table> tables = UTILS.autoExpandingMap(Table.class);
 
-	final Map<String, Rel> relations = U.autoExpandingMap(Rel.class);
+	final Map<String, Rel> relations = UTILS.autoExpandingMap(Rel.class);
 
 }
 
@@ -64,9 +64,9 @@ public class DbInjectionTest extends TestCommons {
 
 	@Test
 	public void shouldInject() throws Exception {
-		Database db = U.singleton(Database.class);
-		isTrue(db == U.singleton(Database.class));
-		isTrue(db == U.singleton(Database.class));
+		Database db = UTILS.singleton(Database.class);
+		isTrue(db == UTILS.singleton(Database.class));
+		isTrue(db == UTILS.singleton(Database.class));
 
 		notNull(db.tables);
 

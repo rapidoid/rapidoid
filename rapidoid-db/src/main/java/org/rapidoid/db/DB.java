@@ -29,6 +29,7 @@ import org.rapidoid.lambda.F1;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 @SuppressWarnings("unchecked")
 public class DB {
@@ -44,7 +45,7 @@ public class DB {
 		U.must(DB_IMPL_CLASS != null, "Cannot find Db implementation (org.rapidoid.db.DbImpl)!");
 		U.must(Db.class.isAssignableFrom(DB_IMPL_CLASS), "org.rapidoid.db.DbImpl must implement org.rapidoid.db.Db!");
 
-		DB_INSTANCES = U.<String, Db> autoExpandingMap(new F1<Db, String>() {
+		DB_INSTANCES = UTILS.<String, Db> autoExpandingMap(new F1<Db, String>() {
 			@Override
 			public Db execute(String name) throws Exception {
 				String dbPath = U.option("db", "");

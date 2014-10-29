@@ -872,21 +872,21 @@ public class UTest extends TestCommons {
 
 	@Test
 	public void testDate() {
-		eq(U.date("27.12.2001"), U.date(27, 12, 2001));
-		eq(U.date("2/11.2000"), U.date(2, 11, 2000));
-		eq(U.date("20-03/1984"), U.date(20, 3, 1984));
-		eq(U.date("2006-12-31"), U.date(31, 12, 2006));
+		eq(UTILS.date("27.12.2001"), UTILS.date(27, 12, 2001));
+		eq(UTILS.date("2/11.2000"), UTILS.date(2, 11, 2000));
+		eq(UTILS.date("20-03/1984"), UTILS.date(20, 3, 1984));
+		eq(UTILS.date("2006-12-31"), UTILS.date(31, 12, 2006));
 
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(U.date(31, 12, 2006));
+		cal.setTime(UTILS.date(31, 12, 2006));
 
 		eq(cal.get(Calendar.YEAR), 2006);
 		eq(cal.get(Calendar.MONTH), 11);
 		eq(cal.get(Calendar.DAY_OF_MONTH), 30);
 
-		cal.setTime(U.date("20/01"));
+		cal.setTime(UTILS.date("20/01"));
 
-		eq(cal.get(Calendar.YEAR), U.thisYear());
+		eq(cal.get(Calendar.YEAR), UTILS.thisYear());
 		eq(cal.get(Calendar.MONTH), 0);
 		eq(cal.get(Calendar.DAY_OF_MONTH), 19);
 	}

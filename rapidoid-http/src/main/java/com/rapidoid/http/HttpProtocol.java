@@ -23,10 +23,11 @@ package com.rapidoid.http;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ExchangeProtocol;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
-	private final HttpParser parser = U.singleton(HttpParser.class);
+	private final HttpParser parser = UTILS.singleton(HttpParser.class);
 
 	private final Router router;
 

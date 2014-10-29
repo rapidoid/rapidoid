@@ -35,18 +35,18 @@ public abstract class TestCommons {
 	@BeforeMethod(alwaysRun = true)
 	public void init() {
 		try {
-			Class<?> clazz = Class.forName("org.rapidoid.util.U");
+			Class<?> clazz = Class.forName("org.rapidoid.util.UTILS");
 			try {
 				Method reset = clazz.getMethod("reset");
 				try {
 					reset.invoke(null);
 				} catch (Exception e) {
-					throw new RuntimeException("Cannot find method: U.reset", e);
+					throw new RuntimeException("Cannot find method: UTILS.reset", e);
 				}
 			} catch (NoSuchMethodException e) {
-				throw new RuntimeException("Cannot find method: U.reset");
+				throw new RuntimeException("Cannot find method: UTILS.reset");
 			} catch (SecurityException e) {
-				throw new RuntimeException("Cannot access method: U.reset");
+				throw new RuntimeException("Cannot access method: UTILS.reset");
 			}
 
 		} catch (ClassNotFoundException e) {

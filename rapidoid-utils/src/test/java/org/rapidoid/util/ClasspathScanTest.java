@@ -29,7 +29,7 @@ public class ClasspathScanTest extends TestCommons {
 
 	@Test
 	public void testClasspathScan() {
-		List<Class<?>> classes = U.classpathClasses("", ".*Test", null);
+		List<Class<?>> classes = UTILS.classpathClasses("", ".*Test", null);
 
 		isTrue(classes.contains(ClasspathScanTest.class));
 		isTrue(classes.contains(AppInjectionTest.class));

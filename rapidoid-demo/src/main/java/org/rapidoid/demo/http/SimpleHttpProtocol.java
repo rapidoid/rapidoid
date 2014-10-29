@@ -27,7 +27,7 @@ import org.rapidoid.data.Ranges;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.net.impl.RapidoidHelper;
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.Bool;
 
 import com.rapidoid.http.HttpParser;
@@ -63,7 +63,7 @@ public class SimpleHttpProtocol implements Protocol {
 
 	private static final byte[] URI_JSON = "/json".getBytes();
 
-	private static final HttpParser HTTP_PARSER = U.singleton(HttpParser.class);
+	private static final HttpParser HTTP_PARSER = UTILS.singleton(HttpParser.class);
 
 	public void process(Channel ctx) {
 		if (ctx.isInitial()) {
@@ -103,7 +103,7 @@ public class SimpleHttpProtocol implements Protocol {
 			ctx.write(SERVER_X);
 
 			ctx.write(DATE_HDR);
-			ctx.write(U.getDateTimeBytes());
+			ctx.write(UTILS.getDateTimeBytes());
 			ctx.write(CR_LF);
 
 			if (BYTES.matches(buf.bytes(), path, URI_PLAIN, true) || path.length == 1) {

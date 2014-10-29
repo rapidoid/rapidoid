@@ -28,6 +28,7 @@ import org.rapidoid.lambda.F2;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
 
 public class EchoProtocolTest extends NetTestCommons {
@@ -45,7 +46,7 @@ public class EchoProtocolTest extends NetTestCommons {
 		}, new Runnable() {
 			@Override
 			public void run() {
-				U.connect("localhost", 8080, new F2<Void, BufferedReader, DataOutputStream>() {
+				UTILS.connect("localhost", 8080, new F2<Void, BufferedReader, DataOutputStream>() {
 					@Override
 					public Void execute(BufferedReader in, DataOutputStream out) throws IOException {
 						out.writeBytes("hello\n");
@@ -85,7 +86,7 @@ public class EchoProtocolTest extends NetTestCommons {
 		}, new Runnable() {
 			@Override
 			public void run() {
-				U.connect("localhost", 8080, new F2<Void, BufferedReader, DataOutputStream>() {
+				UTILS.connect("localhost", 8080, new F2<Void, BufferedReader, DataOutputStream>() {
 					@Override
 					public Void execute(BufferedReader in, DataOutputStream out) throws IOException {
 						out.writeBytes("a\n");

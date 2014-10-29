@@ -27,6 +27,7 @@ import java.util.Set;
 
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
 
 public class CompileTest extends TestCommons {
@@ -58,12 +59,12 @@ public class CompileTest extends TestCommons {
 		}
 
 		Class<?> mainClass = compilation.loadClass("abc.Main");
-		Method main = U.getMethod(mainClass, "main", String[].class);
+		Method main = UTILS.getMethod(mainClass, "main", String[].class);
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		U.setLogOutput(new PrintStream(out));
 
-		U.invoke(main, null, new Object[] { new String[] {} });
+		UTILS.invoke(main, null, new Object[] { new String[] {} });
 
 		String output = new String(out.toByteArray());
 		eq(output, U.load("test1.out"));

@@ -35,12 +35,13 @@ import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.net.mime.MediaType;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.Bool;
 
 public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements HttpExchange,
 		Constants {
 
-	private final static HttpParser PARSER = U.singleton(HttpParser.class);
+	private final static HttpParser PARSER = UTILS.singleton(HttpParser.class);
 
 	private static final byte[] HEADER_SEP = ": ".getBytes();
 
