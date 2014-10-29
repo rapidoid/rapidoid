@@ -20,15 +20,15 @@ package org.rapidoid.activity;
  * #L%
  */
 
-public interface Activity {
+public interface Activity<T> {
 
 	String name();
 
-	void start();
+	T start();
 
-	void halt();
+	T halt();
 
-	void shutdown();
+	T shutdown();
 
 	boolean isActive();
 

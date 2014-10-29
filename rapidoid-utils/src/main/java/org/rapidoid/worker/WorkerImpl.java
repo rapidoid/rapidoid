@@ -24,7 +24,7 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-public class WorkerImpl<IN, OUT> extends AbstractActivity implements Worker<IN, OUT>, Runnable {
+public class WorkerImpl<IN, OUT> extends AbstractActivity<Worker<IN, OUT>> implements Worker<IN, OUT>, Runnable {
 
 	private final String id;
 
@@ -77,18 +77,21 @@ public class WorkerImpl<IN, OUT> extends AbstractActivity implements Worker<IN, 
 	}
 
 	@Override
-	public void start() {
+	public Worker<IN, OUT> start() {
 		thread.start();
+		return super.start();
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void halt() {
+	public Worker<IN, OUT> halt() {
 		thread.stop();
 		try {
 			thread.join();
 		} catch (InterruptedException e) {
 		}
+
+		return super.halt();
 	}
 
 	@Override

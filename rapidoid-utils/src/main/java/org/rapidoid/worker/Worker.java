@@ -22,7 +22,7 @@ import org.rapidoid.activity.Activity;
  * #L%
  */
 
-public interface Worker<IN, OUT> extends Activity {
+public interface Worker<IN, OUT> extends Activity<Worker<IN, OUT>> {
 
 	boolean enqueue(IN task, boolean blocking);
 

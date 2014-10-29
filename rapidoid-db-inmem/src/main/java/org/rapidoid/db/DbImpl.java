@@ -29,7 +29,7 @@ import org.rapidoid.inmem.InMem;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 
-public class DbImpl extends AbstractActivity implements Db {
+public class DbImpl extends AbstractActivity<Db> implements Db {
 
 	private final String filename;
 	private final InMem inmem;
@@ -105,13 +105,14 @@ public class DbImpl extends AbstractActivity implements Db {
 	}
 
 	@Override
-	public void shutdown() {
+	public Db shutdown() {
 		inmem.shutdown();
+		return super.shutdown();
 	}
 
 	@Override
 	public boolean isActive() {
-		return inmem.isActive();
+		return inmem.isActive() && super.isActive();
 	}
 
 	@Override
@@ -120,8 +121,9 @@ public class DbImpl extends AbstractActivity implements Db {
 	}
 
 	@Override
-	public void halt() {
+	public Db halt() {
 		inmem.halt();
+		return super.halt();
 	}
 
 	@Override
@@ -132,11 +134,6 @@ public class DbImpl extends AbstractActivity implements Db {
 	@Override
 	public long size() {
 		return inmem.size();
-	}
-
-	@Override
-	public void start() {
-		// FIXME: implement this
 	}
 
 }

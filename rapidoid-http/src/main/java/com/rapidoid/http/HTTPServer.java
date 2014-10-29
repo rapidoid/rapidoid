@@ -42,6 +42,6 @@ public interface HTTPServer extends TCPServer {
 
 	HTTPServer start();
 
-	HTTPServer stop();
+	HTTPServer shutdown();
 
 }

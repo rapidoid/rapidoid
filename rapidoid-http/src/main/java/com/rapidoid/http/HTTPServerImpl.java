@@ -94,8 +94,8 @@ public class HTTPServerImpl extends RapidoidServerLoop implements HTTPServer {
 	}
 
 	@Override
-	public HTTPServer stop() {
-		super.stop();
+	public HTTPServer shutdown() {
+		super.shutdown();
 		return this;
 	}
 

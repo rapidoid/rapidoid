@@ -28,7 +28,7 @@ import org.rapidoid.activity.Activity;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 
-public interface Db extends Activity {
+public interface Db extends Activity<Db> {
 
 	long insert(Object record);
 

@@ -20,7 +20,7 @@ package org.rapidoid.activity;
  * #L%
  */
 
-public abstract class AbstractActivity implements Activity {
+public abstract class AbstractActivity<T> implements Activity<T> {
 
 	protected final String name;
 
@@ -33,19 +33,25 @@ public abstract class AbstractActivity implements Activity {
 		return name;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void start() {
-		throw new RuntimeException("Not implemented!"); // FIXME
+	public T start() {
+		// FIXME implement
+		return (T) this;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void halt() {
-		throw new RuntimeException("Not implemented!"); // FIXME
+	public T halt() {
+		// FIXME implement
+		return (T) this;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void shutdown() {
-		throw new RuntimeException("Not implemented!"); // FIXME
+	public T shutdown() {
+		// FIXME implement
+		return (T) this;
 	}
 
 	@Override
