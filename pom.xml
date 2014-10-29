@@ -59,6 +59,7 @@
 		<module>rapidoid-utils</module>
 		<module>rapidoid-json</module>
 		<module>rapidoid-activity</module>
+		<module>rapidoid-worker</module>
 		<module>rapidoid-test-commons</module>
 		<module>rapidoid-buffer</module>
 		<module>rapidoid-net</module>
