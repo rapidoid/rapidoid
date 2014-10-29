@@ -24,9 +24,9 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import org.rapidoid.lambda.F2;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.Protocol;
+import org.rapidoid.util.F2;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
