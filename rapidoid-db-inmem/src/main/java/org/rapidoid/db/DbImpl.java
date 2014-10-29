@@ -24,18 +24,19 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-import org.rapidoid.activity.AbstractActivity;
+import org.rapidoid.activity.NamedActivity;
 import org.rapidoid.inmem.InMem;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 
-public class DbImpl extends AbstractActivity<Db> implements Db {
+public class DbImpl extends NamedActivity<Db> implements Db {
 
 	private final String filename;
 	private final InMem inmem;
 
 	public DbImpl(String name, String filename) {
 		super(name);
+
 		this.filename = filename;
 		this.inmem = new InMem(filename);
 	}
@@ -105,25 +106,26 @@ public class DbImpl extends AbstractActivity<Db> implements Db {
 	}
 
 	@Override
-	public Db shutdown() {
-		inmem.shutdown();
-		return super.shutdown();
-	}
-
-	@Override
-	public boolean isActive() {
-		return inmem.isActive() && super.isActive();
-	}
-
-	@Override
-	public String toString() {
-		return "DB:" + name + "(" + filename + ")";
+	public Db start() {
+		inmem.start();
+		return this;
 	}
 
 	@Override
 	public Db halt() {
 		inmem.halt();
-		return super.halt();
+		return this;
+	}
+
+	@Override
+	public Db shutdown() {
+		inmem.shutdown();
+		return this;
+	}
+
+	@Override
+	public boolean isActive() {
+		return inmem.isActive();
 	}
 
 	@Override
@@ -134,6 +136,11 @@ public class DbImpl extends AbstractActivity<Db> implements Db {
 	@Override
 	public long size() {
 		return inmem.size();
+	}
+
+	@Override
+	public String toString() {
+		return "DB:" + name + "(" + filename + ")";
 	}
 
 }

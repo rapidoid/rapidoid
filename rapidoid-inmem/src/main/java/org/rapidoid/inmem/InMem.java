@@ -407,6 +407,10 @@ public class InMem {
 		return super.toString() + "[filename=" + filename + "]";
 	}
 
+	public void start() {
+		// TODO implement start after shutdown
+	}
+
 	public void halt() {
 		if (active.get()) {
 			active.set(false);
