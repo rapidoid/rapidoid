@@ -47,7 +47,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -81,8 +80,6 @@ public class UTILS implements Constants {
 		Class<?> manFactory = U.getClassIfExists("java.lang.management.ManagementFactory");
 		getGarbageCollectorMXBeans = manFactory != null ? getMethod(manFactory, "getGarbageCollectorMXBeans") : null;
 	}
-
-	protected static final Calendar CALENDAR = Calendar.getInstance();
 
 	private static final Map<Class<?>, Object> SINGLETONS = U.map();
 
@@ -1347,7 +1344,7 @@ public class UTILS implements Constants {
 			throw U.rte("Cannot convert string value to type '%s'!", toType);
 
 		case DATE:
-			return (T) date(value);
+			return (T) Dates.date(value);
 
 		default:
 			throw U.notExpected();
@@ -1512,54 +1509,6 @@ public class UTILS implements Constants {
 			throw U.rte("Cannot get property value!", e);
 		}
 		throw U.rte("Cannot find the property '%s' in the class '%s'", propertyName, instance.getClass());
-	}
-
-	public static Date date(String value) {
-		String[] parts = value.split("(\\.|-|/)");
-
-		int a = parts.length > 0 ? U.num(parts[0]) : -1;
-		int b = parts.length > 1 ? U.num(parts[1]) : -1;
-		int c = parts.length > 2 ? U.num(parts[2]) : -1;
-
-		switch (parts.length) {
-		case 3:
-			if (isDay(a) && isMonth(b) && isYear(c)) {
-				return date(a, b, c);
-			} else if (isYear(a) && isMonth(b) && isDay(c)) {
-				return date(c, b, a);
-			}
-			break;
-		case 2:
-			if (isDay(a) && isMonth(b)) {
-				return date(a, b, thisYear());
-			}
-			break;
-		default:
-		}
-
-		throw U.rte("Invalid date: " + value);
-	}
-
-	private static boolean isDay(int day) {
-		return day >= 1 && day <= 31;
-	}
-
-	private static boolean isMonth(int month) {
-		return month >= 1 && month <= 12;
-	}
-
-	private static boolean isYear(int year) {
-		return year >= 1000;
-	}
-
-	public static synchronized Date date(int day, int month, int year) {
-		CALENDAR.set(year, month - 1, day - 1);
-		return CALENDAR.getTime();
-	}
-
-	public static synchronized int thisYear() {
-		CALENDAR.setTime(new Date());
-		return CALENDAR.get(Calendar.YEAR);
 	}
 
 	public static short bytesToShort(String s) {
