@@ -2,7 +2,7 @@ package org.rapidoid.lambda;
 
 /*
  * #%L
- * rapidoid-lambda
+ * rapidoid-u
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,8 +20,8 @@ package org.rapidoid.lambda;
  * #L%
  */
 
-public interface Operation<T> {
+public interface Mapper<FROM, TO> {
 
-	void execute(T obj) throws Exception;
+	TO map(FROM src) throws Exception;
 
 }

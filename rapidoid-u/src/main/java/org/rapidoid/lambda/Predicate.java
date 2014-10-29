@@ -2,7 +2,7 @@ package org.rapidoid.lambda;
 
 /*
  * #%L
- * rapidoid-lambda
+ * rapidoid-u
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,8 +20,24 @@ package org.rapidoid.lambda;
  * #L%
  */
 
-public interface Mapper<FROM, TO> {
+public interface Predicate<T> {
 
-	TO map(FROM src) throws Exception;
+	@SuppressWarnings("rawtypes")
+	public static final Predicate<?> ALWAYS_TRUE = new Predicate() {
+		@Override
+		public boolean eval(Object param) throws Exception {
+			return true;
+		}
+	};
+
+	@SuppressWarnings("rawtypes")
+	public static final Predicate<?> ALWAYS_FALSE = new Predicate() {
+		@Override
+		public boolean eval(Object param) throws Exception {
+			return false;
+		}
+	};
+
+	boolean eval(T param) throws Exception;
 
 }
