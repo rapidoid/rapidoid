@@ -22,7 +22,7 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-public abstract class AbstractThreadActivity<T> extends AbstractActivity<T> implements Runnable {
+public abstract class AbstractThreadActivity<T> extends LifecycleActivity<T> implements Runnable {
 
 	protected final Thread thread;
 

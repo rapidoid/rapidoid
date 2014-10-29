@@ -24,19 +24,12 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-public abstract class AbstractActivity<T> implements Activity<T> {
-
-	protected final String name;
+public abstract class LifecycleActivity<T> extends NamedActivity<T> {
 
 	private final AtomicBoolean active = new AtomicBoolean(false);
 
-	public AbstractActivity(String name) {
-		this.name = name;
-	}
-
-	@Override
-	public String name() {
-		return name;
+	public LifecycleActivity(String name) {
+		super(name);
 	}
 
 	@SuppressWarnings("unchecked")

@@ -20,10 +20,10 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
-import org.rapidoid.activity.AbstractActivity;
+import org.rapidoid.activity.LifecycleActivity;
 import org.rapidoid.util.U;
 
-public abstract class AbstractLoop<T> extends AbstractActivity<T> implements Runnable {
+public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Runnable {
 
 	protected Thread ownerThread;
 
