@@ -1,7 +1,5 @@
 package org.rapidoid.activity;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.rapidoid.util.U;
 
 /*
@@ -24,56 +22,61 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-public abstract class AbstractActivity<T> implements Activity<T> {
+public abstract class AbstractThreadActivity<T> extends AbstractActivity<T> implements Runnable {
 
-	protected final String name;
+	protected final Thread thread;
 
-	private final AtomicBoolean active = new AtomicBoolean(false);
+	public AbstractThreadActivity(String name) {
+		super(name);
 
-	public AbstractActivity(String name) {
-		this.name = name;
+		this.thread = new Thread(this, name);
 	}
 
-	@Override
-	public String name() {
-		return name;
-	}
-
-	@SuppressWarnings("unchecked")
 	@Override
 	public T start() {
 		checkActive(false);
-		active.set(true);
-		return (T) this;
+		thread.start();
+		return super.start();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("deprecation")
 	@Override
 	public T halt() {
 		checkActive(true);
-		active.set(false);
-		return (T) this;
+		thread.stop();
+		U.joinThread(thread);
+		return super.halt();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public T shutdown() {
 		checkActive(true);
-		active.set(false);
-		return (T) this;
+		thread.interrupt();
+		U.joinThread(thread);
+		return super.shutdown();
 	}
 
 	@Override
-	public boolean isActive() {
-		return active.get();
+	public final void run() {
+		U.info("Starting activity thread", "name", name);
+
+		try {
+			while (!Thread.interrupted()) {
+				try {
+					loop();
+				} catch (Exception e) {
+					U.error("Worker processing error!", "activity", name, "error", e);
+				}
+			}
+
+		} catch (ThreadDeath e) {
+			U.info("Halted activity thread", "name", name);
+			return;
+		}
+
+		U.info("Finished activity thread", "name", name);
 	}
 
-	protected void checkActive(boolean active) {
-		if (active) {
-			U.must(isActive(), "The activity is not active!");
-		} else {
-			U.must(!isActive(), "The activity is already active!");
-		}
-	}
+	protected abstract void loop();
 
 }
