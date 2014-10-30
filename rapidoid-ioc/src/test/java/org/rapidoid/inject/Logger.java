@@ -2,7 +2,7 @@ package org.rapidoid.inject;
 
 /*
  * #%L
- * rapidoid-inject
+ * rapidoid-ioc
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
