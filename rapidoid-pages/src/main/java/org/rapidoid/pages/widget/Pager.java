@@ -1,4 +1,4 @@
-package org.rapidoid.pages;
+package org.rapidoid.pages.widget;
 
 /*
  * #%L
@@ -20,28 +20,30 @@ package org.rapidoid.pages;
  * #L%
  */
 
+import org.rapidoid.pages.Do;
+import org.rapidoid.pages.Var;
 import org.rapidoid.pages.html.ButtonTag;
 import org.rapidoid.pages.html.SpanTag;
 
-public class Pager extends GUI {
+public class Pager extends Widget {
 
 	private int from;
 	private int to;
-	private Var<Integer> counter;
+	private Var<Integer> pageNumber;
 
-	public Pager(int from, int to, Var<Integer> counter) {
+	public Pager(int from, int to, Var<Integer> pageNumber) {
 		this.from = from;
 		this.to = to;
-		this.counter = counter;
+		this.pageNumber = pageNumber;
 	}
 
 	@Override
 	protected Object contents() {
-		ButtonTag first = button("<<", Do.set(counter, from));
-		ButtonTag prev = button("<", Do.dec(counter, 1));
-		SpanTag current = span("(page ", counter, ")");
-		ButtonTag next = button(">", Do.inc(counter, 1));
-		ButtonTag last = button(">>", Do.set(counter, to));
+		ButtonTag first = button("<<", Do.set(pageNumber, from));
+		ButtonTag prev = button("<", Do.dec(pageNumber, 1));
+		SpanTag current = span("(page ", pageNumber, ")");
+		ButtonTag next = button(">", Do.inc(pageNumber, 1));
+		ButtonTag last = button(">>", Do.set(pageNumber, to));
 		return span(first, prev, current, next, last);
 	}
 

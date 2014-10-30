@@ -1,4 +1,4 @@
-package org.rapidoid.pages;
+package org.rapidoid.pages.widget;
 
 /*
  * #%L
@@ -23,7 +23,7 @@ package org.rapidoid.pages;
 import org.rapidoid.pages.html.Tags;
 import org.rapidoid.pages.impl.TagRenderer;
 
-public abstract class GUI extends Tags {
+public abstract class Widget extends Tags {
 
 	private Object contents;
 
