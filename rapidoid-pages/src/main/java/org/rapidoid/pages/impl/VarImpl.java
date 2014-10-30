@@ -25,12 +25,9 @@ import org.rapidoid.pages.Var;
 
 public class VarImpl<T> implements Var<T> {
 
-	private final GuiContext ctx;
-
 	private volatile T value;
 
 	public VarImpl(GuiContext ctx, T value) {
-		this.ctx = ctx;
 		this.value = value;
 	}
 
