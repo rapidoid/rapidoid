@@ -22,11 +22,13 @@ package org.rapidoid.pages.html;
 
 import org.rapidoid.pages.Tag;
 import org.rapidoid.pages.Var;
-import org.rapidoid.pages.impl.TagData;
+import org.rapidoid.pages.impl.GuiContext;
 import org.rapidoid.pages.impl.TagInterceptor;
 import org.rapidoid.pages.impl.VarImpl;
 
 public class Tags {
+
+	protected final GuiContext ctx = new GuiContext();
 
 	public Object _(String multiLanguageText) {
 		// TODO implement internationalization
@@ -34,11 +36,11 @@ public class Tags {
 	}
 
 	public <T> Var<T> var(T value) {
-		return new VarImpl<T>(value);
+		return new VarImpl<T>(ctx, value);
 	}
 
 	public <TAG extends Tag<?>> TAG tag(Class<TAG> clazz, String tagName, Object... contents) {
-		return TagInterceptor.create(new TagData<TAG>(clazz, tagName, contents), clazz);
+		return TagInterceptor.create(ctx, clazz, tagName, contents);
 	}
 
 {{tags}}
