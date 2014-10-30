@@ -32,47 +32,53 @@ import org.rapidoid.util.U;
 
 public class TagRenderer {
 
-	public static String toString(Object content) {
-		return str(content, 0);
+	public static String str(Object content) {
+		return str(content, 0, false);
 	}
 
-	public static String str(Object content, int level) {
+	public static String str(Object content, int level, boolean inline) {
 
 		if (content instanceof Tag) {
 			Tag<?> tag = (Tag<?>) content;
 			return tag.str(level);
 		} else if (content instanceof Object[]) {
-			return join((Object[]) content, level);
+			return join((Object[]) content, level, inline);
 		} else if (content instanceof Collection<?>) {
-			return join((Collection<?>) content, level);
+			return join((Collection<?>) content, level, inline);
 		}
 
-		return U.mul("  ", level) + String.valueOf(content);
+		String indent = !inline ? U.mul("  ", level) : "";
+		return indent + String.valueOf(content);
 	}
 
-	private static String join(Collection<?> items, int level) {
+	private static String join(Collection<?> items, int level, boolean inline) {
 		StringBuilder sb = new StringBuilder();
 
 		for (Object item : items) {
-			sb.append("\n");
-			sb.append(str(item, level + 1));
+			if (!inline) {
+				sb.append("\n");
+			}
+			sb.append(str(item, level + 1, inline));
 		}
 
 		return sb.toString();
 	}
 
-	private static String join(Object[] items, int level) {
+	private static String join(Object[] items, int level, boolean inline) {
 		StringBuilder sb = new StringBuilder();
 
 		for (int i = 0; i < items.length; i++) {
-			sb.append("\n");
-			sb.append(str(items[i], level + 1));
+			if (!inline) {
+				sb.append("\n");
+			}
+			sb.append(str(items[i], level + 1, inline));
 		}
 
 		return sb.toString();
 	}
 
-	public static String str(TagData<?> tag, int level) {
+	public static String str(TagData<?> tag, int level, boolean inline) {
+
 		String name = escape(tag.name);
 		List<Object> contents = tag.contents;
 
@@ -88,33 +94,25 @@ public class TagRenderer {
 
 		String attrib = sb.toString();
 
-		String indent = U.mul("  ", level);
+		String indent = !inline ? U.mul("  ", level) : "";
 
 		if (contents == null || contents.isEmpty()) {
 			return U.format("%s<%s%s></%s>", indent, name, attrib, name);
 		}
 
-		if (contents.size() == 1) {
-			Object item = contents.get(0);
-			if (isSimpleContent(item)) {
-				String content = escape(str(item, 0));
-				return U.format("%s<%s%s>%s</%s>", indent, name, attrib, content, name);
-			}
+		if (inline || isSimpleOrHasSimpleContent(contents)) {
+			String content = escape(str(contents, level + 1, true));
+			return U.format("%s<%s%s>%s</%s>", indent, name, attrib, content, name);
 		}
 
 		sb = new StringBuilder();
 
 		if (contents != null) {
 			if (contents.size() < 2) {
-				sb.append(str(contents, level));
+				sb.append(str(contents, level, inline));
 			} else {
-				sb.append(str(contents, level));
+				sb.append(str(contents, level, inline));
 			}
-			// for (Object cnt : contents) {
-			// sb.append("\n");
-			// sb.append(U.mul("  ", level));
-			// sb.append(str((cnt));
-			// }
 		}
 
 		String inside = sb.toString();
@@ -125,10 +123,52 @@ public class TagRenderer {
 		return StringEscapeUtils.escapeHtml4(s);
 	}
 
+	private static boolean isSimpleOrHasSimpleContent(Object content) {
+		if (isSimpleContent(content)) {
+			return true;
+		}
+
+		if (content instanceof Object[]) {
+			return hasSimpleContent((Object[]) content);
+		}
+
+		if (content instanceof Collection<?>) {
+			return hasSimpleContent((Collection<?>) content);
+		}
+
+		return false;
+	}
+
 	private static boolean isSimpleContent(Object content) {
-		return content instanceof String || content instanceof Number || content instanceof Boolean
-				|| content instanceof Date
-				|| ((content instanceof Var<?>) && isSimpleContent(((Var<?>) content).get()));
+		if (content instanceof String || content instanceof Number || content instanceof Boolean
+				|| content instanceof Date) {
+			return true;
+		}
+
+		if (content instanceof Var<?>) {
+			Var<?> var = (Var<?>) content;
+			return isSimpleContent(var.get());
+		}
+
+		return false;
+	}
+
+	private static boolean hasSimpleContent(Collection<?> content) {
+		for (Object cnt : content) {
+			if (isSimpleContent(cnt)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean hasSimpleContent(Object[] content) {
+		for (Object cnt : content) {
+			if (isSimpleContent(cnt)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

@@ -38,7 +38,7 @@ public abstract class GUI extends Tags {
 	@Override
 	public String toString() {
 		getAndSaveContents();
-		return TagRenderer.toString(contents);
+		return TagRenderer.str(contents);
 	}
 
 	public void emit(String event, String hnd) {
