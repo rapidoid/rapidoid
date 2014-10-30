@@ -23,7 +23,7 @@ package org.rapidoid.pages;
 import org.rapidoid.pages.html.Tags;
 import org.rapidoid.pages.impl.TagRenderer;
 
-public abstract class AbstractPage extends Tags {
+public abstract class GUI extends Tags {
 
 	private Object contents;
 

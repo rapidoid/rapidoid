@@ -23,25 +23,25 @@ package org.rapidoid.pages;
 import org.rapidoid.pages.html.ButtonTag;
 import org.rapidoid.pages.html.SpanTag;
 
-public class Pager extends AbstractPage {
+public class Pager extends GUI {
 
 	private int from;
 	private int to;
-	private Var<Integer> page;
+	private Var<Integer> counter;
 
-	public Pager(int from, int to, Var<Integer> page) {
+	public Pager(int from, int to, Var<Integer> counter) {
 		this.from = from;
 		this.to = to;
-		this.page = page;
+		this.counter = counter;
 	}
 
 	@Override
 	protected Object contents() {
-		ButtonTag first = button("<<", Do.set(page, from));
-		ButtonTag prev = button("<", Do.dec(page, 1));
-		SpanTag current = span("(page ", page, ")");
-		ButtonTag next = button(">", Do.inc(page, 1));
-		ButtonTag last = button(">>", Do.set(page, to));
+		ButtonTag first = button("<<", Do.set(counter, from));
+		ButtonTag prev = button("<", Do.dec(counter, 1));
+		SpanTag current = span("(page ", counter, ")");
+		ButtonTag next = button(">", Do.inc(counter, 1));
+		ButtonTag last = button(">>", Do.set(counter, to));
 		return span(first, prev, current, next, last);
 	}
 
