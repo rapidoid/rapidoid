@@ -31,12 +31,6 @@ import org.rapidoid.util.U;
 @SuppressWarnings("unchecked")
 public class TagData<TAG extends Tag<?>> {
 
-	private static final Handler<Tag<?>> EMPTY_HANDLER = new Handler<Tag<?>>() {
-		@Override
-		public void handle(Tag<?> target) {
-			// do nothing
-		}
-	};
 
 	final Class<TAG> clazz;
 
@@ -90,12 +84,21 @@ public class TagData<TAG extends Tag<?>> {
 
 	public void setHandler(String event, Handler<TAG> handler) {
 		eventHandlers.put(event, handler);
+
+		if (handler != null) {
+			eventHandlers.put(event, handler);
+		} else {
+			eventHandlers.remove(event);
+		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public Handler<TAG> setHandler(String event, Action[] actions) {
+	public void setHandler(String event, Action[] actions) {
 		if (actions.length == 0) {
-			return (Handler<TAG>) EMPTY_HANDLER;
+			setHandler(event, (Handler<TAG>) null);
+		} else {
+			setHandler(event, new ActionsHandler<TAG>(actions));
+		}
+	}
 		} else {
 			return new ActionsHandler<TAG>(actions);
 		}
