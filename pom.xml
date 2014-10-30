@@ -67,6 +67,7 @@
 		<module>rapidoid-html</module>
 		<module>rapidoid-measure</module>
 		<module>rapidoid-pojo</module>
+		<module>rapidoid-pages</module>
 		<module>rapidoid-oauth</module>
 		<module>rapidoid-web</module>
 		<module>rapidoid-inmem</module>
