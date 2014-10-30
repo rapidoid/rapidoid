@@ -42,7 +42,7 @@ public class VarImpl<T> implements Var<T> {
 
 	@Override
 	public String toString() {
-		return String.valueOf(value);
+		return StringEscapeUtils.escapeHtml4(String.valueOf(value));
 	}
 
 }
