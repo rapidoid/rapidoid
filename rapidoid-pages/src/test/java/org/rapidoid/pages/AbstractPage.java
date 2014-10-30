@@ -25,11 +25,25 @@ import org.rapidoid.pages.impl.TagRenderer;
 
 public abstract class AbstractPage extends Tags {
 
+	private Object contents;
+
 	protected abstract Object contents();
+
+	private synchronized void getAndSaveContents() {
+		if (this.contents == null) {
+			this.contents = contents();
+		}
+	}
 
 	@Override
 	public String toString() {
-		return TagRenderer.toString(contents());
+		getAndSaveContents();
+		return TagRenderer.toString(contents);
+	}
+
+	public void emit(String event, String hnd) {
+		getAndSaveContents();
+		ctx.emit(event, hnd);
 	}
 
 }

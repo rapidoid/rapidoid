@@ -20,13 +20,17 @@ package org.rapidoid.pages.impl;
  * #L%
  */
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.rapidoid.pages.Var;
 
 public class VarImpl<T> implements Var<T> {
 
+	private final GuiContext ctx;
+
 	private volatile T value;
 
-	public VarImpl(T value) {
+	public VarImpl(GuiContext ctx, T value) {
+		this.ctx = ctx;
 		this.value = value;
 	}
 

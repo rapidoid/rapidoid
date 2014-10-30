@@ -31,8 +31,11 @@ import org.rapidoid.util.U;
 
 public class TagInterceptor<TAG extends Tag<?>> implements InvocationHandler {
 
-	public static <TAG extends Tag<?>> TAG create(TagData<TAG> tag, Class<TAG> clazz) {
-		return Cls.implement(tag, new TagInterceptor<TAG>(tag, clazz), clazz);
+	public static <TAG extends Tag<?>> TAG create(GuiContext ctx, Class<TAG> clazz, String tagName, Object[] contents) {
+		TagData<TAG> tagData = new TagData<TAG>(ctx, clazz, tagName, contents);
+		TAG tagImpl = Cls.implement(tagData, new TagInterceptor<TAG>(tagData, clazz), clazz);
+		tagData.setTag(tagImpl);
+		return tagImpl;
 	}
 
 	private final TagData<TAG> tag;

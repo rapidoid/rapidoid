@@ -31,6 +31,7 @@ import org.rapidoid.util.U;
 @SuppressWarnings("unchecked")
 public class TagData<TAG extends Tag<?>> {
 
+	final GuiContext ctx;
 
 	final Class<TAG> clazz;
 
@@ -42,7 +43,12 @@ public class TagData<TAG extends Tag<?>> {
 
 	final Map<String, Handler<TAG>> eventHandlers = U.map();
 
-	public TagData(Class<TAG> clazz, String name, Object[] contentsAndHandlers) {
+	private String _hnd;
+
+	private TAG tag;
+
+	public TagData(GuiContext ctx, Class<TAG> clazz, String name, Object[] contentsAndHandlers) {
+		this.ctx = ctx;
 		this.clazz = clazz;
 		this.name = name;
 
@@ -78,12 +84,8 @@ public class TagData<TAG extends Tag<?>> {
 		}
 	}
 
-	public Handler<TAG> handler(String act) {
-		return eventHandlers.get(act);
-	}
-
 	public void setHandler(String event, Handler<TAG> handler) {
-		eventHandlers.put(event, handler);
+		getEventHandle();
 
 		if (handler != null) {
 			eventHandlers.put(event, handler);
@@ -99,8 +101,24 @@ public class TagData<TAG extends Tag<?>> {
 			setHandler(event, new ActionsHandler<TAG>(actions));
 		}
 	}
+
+	public void setTag(TAG tag) {
+		this.tag = tag;
+	}
+
+	private synchronized void getEventHandle() {
+		if (_hnd == null) {
+			_hnd = ctx.getNewId((TagData<?>) this);
+		}
+	}
+
+	public void emit(String event) {
+		Handler<TAG> handler = eventHandlers.get(event);
+		if (handler != null) {
+			U.notNull(tag, "tag");
+			handler.handle(tag);
 		} else {
-			return new ActionsHandler<TAG>(actions);
+			U.warn("Cannot find event handler!", "event", event, "hnd", _hnd);
 		}
 	}
 
