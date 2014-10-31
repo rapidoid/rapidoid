@@ -122,4 +122,22 @@ public class TagData<TAG extends Tag<?>> {
 		}
 	}
 
+	public void content(Object[] objects) {
+		contents.clear();
+		append(objects);
+	}
+
+	public void prepend(Object[] objects) {
+		int index = 0;
+		for (Object obj : objects) {
+			contents.add(index++, obj);
+		}
+	}
+
+	public void append(Object[] objects) {
+		for (Object obj : objects) {
+			contents.add(obj);
+		}
+	}
+
 }

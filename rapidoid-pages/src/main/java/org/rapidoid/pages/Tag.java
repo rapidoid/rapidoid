@@ -28,6 +28,10 @@ public interface Tag<TAG extends Tag<?>> {
 
 	TAG content(Object... content);
 
+	TAG append(Object... content);
+
+	TAG prepend(Object... content);
+
 	String id();
 
 	TAG id(String id);
