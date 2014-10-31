@@ -22,12 +22,10 @@ package org.rapidoid.pages.widget;
 
 import org.rapidoid.pages.Var;
 import org.rapidoid.pages.html.Tags;
-import org.rapidoid.pages.widget.Pager;
-import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
-public class PagerTest extends TestCommons {
+public class PagerTest extends WidgetTestCommons {
 
 	@Test
 	public void testPagerButtons() {
@@ -38,24 +36,28 @@ public class PagerTest extends TestCommons {
 		U.print(pager);
 
 		eq(pageN.get().intValue(), 3);
-		isTrue(pager.toString().contains("(page 3)"));
+		has(pager, "(page 3)");
 
 		pager.emit("click", "_1");
-		eq(pageN.get().intValue(), 1);
-		isTrue(pager.toString().contains("(page 1)"));
+
+		eq(pageN, 1);
+		has(pager, "(page 1)");
 
 		pager.emit("click", "_4");
-		eq(pageN.get().intValue(), 7);
-		isTrue(pager.toString().contains("(page 7)"));
+
+		eq(pageN, 7);
+		has(pager, "(page 7)");
 
 		pager.emit("click", "_2");
 		pager.emit("click", "_2");
-		eq(pageN.get().intValue(), 5);
-		isTrue(pager.toString().contains("(page 5)"));
+
+		eq(pageN, 5);
+		has(pager, "(page 5)");
 
 		pager.emit("click", "_3");
-		eq(pageN.get().intValue(), 6);
-		isTrue(pager.toString().contains("(page 6)"));
+
+		eq(pageN, 6);
+		has(pager, "(page 6)");
 	}
 
 }
