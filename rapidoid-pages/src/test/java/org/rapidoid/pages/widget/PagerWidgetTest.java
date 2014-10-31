@@ -20,31 +20,44 @@ package org.rapidoid.pages.widget;
  * #L%
  */
 
-import org.rapidoid.pages.Do;
 import org.rapidoid.pages.Var;
-import org.rapidoid.pages.html.ButtonTag;
-import org.rapidoid.pages.html.SpanTag;
+import org.rapidoid.pages.html.Tags;
+import org.rapidoid.util.U;
+import org.testng.annotations.Test;
 
-public class Pager extends Widget {
+public class PagerWidgetTest extends WidgetTestCommons {
 
-	private int from;
-	private int to;
-	private Var<Integer> pageNumber;
+	@Test
+	public void testPagerButtons() {
+		Tags tags = new Tags();
 
-	public Pager(int from, int to, Var<Integer> pageNumber) {
-		this.from = from;
-		this.to = to;
-		this.pageNumber = pageNumber;
-	}
+		Var<Integer> pageN = tags.var(3);
+		PagerWidget pager = new PagerWidget(1, 7, pageN);
+		U.print(pager);
 
-	@Override
-	protected Object contents() {
-		ButtonTag first = button("<<", Do.set(pageNumber, from));
-		ButtonTag prev = button("<", Do.dec(pageNumber, 1));
-		SpanTag current = span("(page ", pageNumber, ")");
-		ButtonTag next = button(">", Do.inc(pageNumber, 1));
-		ButtonTag last = button(">>", Do.set(pageNumber, to));
-		return span(first, prev, current, next, last);
+		eq(pageN.get().intValue(), 3);
+		has(pager, "(page 3)");
+
+		pager.emit("click", "_1");
+
+		eq(pageN, 1);
+		has(pager, "(page 1)");
+
+		pager.emit("click", "_4");
+
+		eq(pageN, 7);
+		has(pager, "(page 7)");
+
+		pager.emit("click", "_2");
+		pager.emit("click", "_2");
+
+		eq(pageN, 5);
+		has(pager, "(page 5)");
+
+		pager.emit("click", "_3");
+
+		eq(pageN, 6);
+		has(pager, "(page 6)");
 	}
 
 }
