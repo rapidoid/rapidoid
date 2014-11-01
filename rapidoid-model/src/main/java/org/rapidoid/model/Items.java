@@ -30,6 +30,8 @@ public interface Items {
 
 	void addAll(Items items);
 
+	void addAll(List<Item> items);
+
 	void clear();
 
 	Item get(int index);

@@ -20,15 +20,11 @@ package org.rapidoid.model.impl;
  * #L%
  */
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.rapidoid.model.Item;
+import org.rapidoid.model.Model;
 import org.rapidoid.model.Property;
-import org.rapidoid.util.Cls;
-import org.rapidoid.util.Prop;
-import org.rapidoid.util.U;
 
 public class BeanListItems<T> extends ListItems {
 
@@ -36,32 +32,14 @@ public class BeanListItems<T> extends ListItems {
 
 	private final List<Property> properties;
 
-	public BeanListItems(Class<T> beanType, Object... values) {
-		super(values);
+	public BeanListItems(Class<T> beanType) {
 		this.beanType = beanType;
-		this.properties = propertiesFrom(beanType);
-	}
-
-	public BeanListItems(Class<T> beanType, Collection<?> values) {
-		super(values);
-		this.beanType = beanType;
-		this.properties = propertiesFrom(beanType);
+		this.properties = Model.propertiesOf(beanType);
 	}
 
 	@Override
 	public List<Property> properties() {
 		return properties;
-	}
-
-	private static List<Property> propertiesFrom(Class<?> type) {
-		List<Property> pr = U.list();
-
-		Map<String, Prop> props = Cls.propertiesOf(type);
-		for (Prop prop : props.values()) {
-			pr.add(new BeanProperty(prop.getName(), prop.getType()));
-		}
-
-		return pr;
 	}
 
 	@Override

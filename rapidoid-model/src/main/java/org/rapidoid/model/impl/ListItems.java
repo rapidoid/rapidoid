@@ -21,31 +21,17 @@ package org.rapidoid.model.impl;
  */
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
-import org.rapidoid.model.Model;
 import org.rapidoid.model.Property;
 import org.rapidoid.util.U;
 
 public class ListItems implements Items {
 
 	private final List<Item> list = new ArrayList<Item>();
-
-	public ListItems(Object... values) {
-		for (Object value : values) {
-			list.add(ifFitsIn(Model.item(value)));
-		}
-	}
-
-	public ListItems(Collection<?> values) {
-		for (Object value : values) {
-			list.add(ifFitsIn(Model.item(value)));
-		}
-	}
 
 	@Override
 	public void insert(int index, Item item) {
@@ -61,6 +47,13 @@ public class ListItems implements Items {
 	public void addAll(Items items) {
 		for (int i = 0; i < items.size(); i++) {
 			list.add(ifFitsIn(items.get(i)));
+		}
+	}
+
+	@Override
+	public void addAll(List<Item> items) {
+		for (Item item : items) {
+			list.add(ifFitsIn(item));
 		}
 	}
 
@@ -96,7 +89,9 @@ public class ListItems implements Items {
 
 	@Override
 	public Items range(int fromIndex, int toIndex) {
-		return new ListItems(list.subList(fromIndex, toIndex));
+		ListItems subitems = new ListItems();
+		subitems.addAll(list.subList(fromIndex, toIndex));
+		return subitems;
 	}
 
 	@SuppressWarnings("unchecked")
