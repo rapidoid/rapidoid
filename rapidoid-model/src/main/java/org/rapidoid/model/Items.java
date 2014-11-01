@@ -46,4 +46,6 @@ public interface Items {
 
 	List<Property> properties();
 
+	boolean fitsIn(Item item);
+
 }

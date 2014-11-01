@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Prop;
@@ -61,6 +62,11 @@ public class BeanListItems<T> extends ListItems {
 		}
 
 		return pr;
+	}
+
+	@Override
+	public boolean fitsIn(Item item) {
+		return super.fitsIn(item) && beanType.isAssignableFrom(item.value().getClass());
 	}
 
 }

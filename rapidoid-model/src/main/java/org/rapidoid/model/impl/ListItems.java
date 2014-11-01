@@ -29,6 +29,7 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
 import org.rapidoid.model.Property;
+import org.rapidoid.util.U;
 
 public class ListItems implements Items {
 
@@ -36,30 +37,30 @@ public class ListItems implements Items {
 
 	public ListItems(Object... values) {
 		for (Object value : values) {
-			list.add(Model.item(value));
+			list.add(ifFitsIn(Model.item(value)));
 		}
 	}
 
 	public ListItems(Collection<?> values) {
 		for (Object value : values) {
-			list.add(Model.item(value));
+			list.add(ifFitsIn(Model.item(value)));
 		}
 	}
 
 	@Override
 	public void insert(int index, Item item) {
-		list.add(index, item);
+		list.add(index, ifFitsIn(item));
 	}
 
 	@Override
 	public void add(Item item) {
-		list.add(item);
+		list.add(ifFitsIn(item));
 	}
 
 	@Override
 	public void addAll(Items items) {
 		for (int i = 0; i < items.size(); i++) {
-			list.add(items.get(i));
+			list.add(ifFitsIn(items.get(i)));
 		}
 	}
 
@@ -85,7 +86,7 @@ public class ListItems implements Items {
 
 	@Override
 	public void set(int index, Item item) {
-		list.set(index, item);
+		list.set(index, ifFitsIn(item));
 	}
 
 	@Override
@@ -102,6 +103,16 @@ public class ListItems implements Items {
 	@Override
 	public List<Property> properties() {
 		return Collections.EMPTY_LIST;
+	}
+
+	@Override
+	public boolean fitsIn(Item item) {
+		return item.value() != null;
+	}
+
+	protected final Item ifFitsIn(Item item) {
+		U.must(fitsIn(item), "This item doesn't fit in the items: %s", item);
+		return item;
 	}
 
 }
