@@ -22,13 +22,13 @@ package org.rapidoid.model.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
 import org.rapidoid.model.Property;
-import org.rapidoid.util.U;
 
 public class ListItems implements Items {
 
@@ -40,7 +40,7 @@ public class ListItems implements Items {
 		}
 	}
 
-	public ListItems(Collection<Object> values) {
+	public ListItems(Collection<?> values) {
 		for (Object value : values) {
 			list.add(Model.item(value));
 		}
@@ -98,9 +98,10 @@ public class ListItems implements Items {
 		return new ListItems(list.subList(fromIndex, toIndex));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Property> properties() {
-		throw U.notReady(); // FIXME
+		return Collections.EMPTY_LIST;
 	}
 
 }
