@@ -24,6 +24,7 @@ import org.rapidoid.pages.Tag;
 import org.rapidoid.pages.Var;
 import org.rapidoid.pages.impl.FileTemplate;
 import org.rapidoid.pages.impl.GuiContext;
+import org.rapidoid.pages.impl.MultiLanguageText;
 import org.rapidoid.pages.impl.TagInterceptor;
 import org.rapidoid.pages.impl.VarImpl;
 
@@ -37,6 +38,10 @@ public class Tags {
 
 	public <T> Var<T> var(T value) {
 		return new VarImpl<T>(ctx, value);
+	}
+
+	public Object render(String templateFileName, Object... namesAndValues) {
+		return new FileTemplate(templateFileName, namesAndValues);
 	}
 
 	public <TAG extends Tag<?>> TAG tag(Class<TAG> clazz, String tagName, Object... contents) {
@@ -590,6 +595,5 @@ public class Tags {
 	public XmpTag xmp(Object... contents) {
 		return tag(XmpTag.class, "xmp", contents);
 	}
-
 
 }
