@@ -20,15 +20,23 @@ package org.rapidoid.pages;
  * #L%
  */
 
-import org.rapidoid.pages.html.Tags;
 import org.rapidoid.util.U;
+import org.testng.annotations.Test;
 
-public class Examples {
+public class PlaygroundWidgetTest extends PagesTestCommons {
 
-	public static void main(String[] args) {
-		Tags tags = new Tags();
-		Var<Integer> pageN = tags.var(3);
-		U.print(new Pager(1, 5, pageN));
+	@Test
+	public void testPlaygroundWidget() {
+		PlaygroundWidget play = new PlaygroundWidget();
+		U.print(play);
+
+		has(play, "<table classs=\"table\">");
+
+		has(play, "<button>-</button>");
+		has(play, "<span>10</span>");
+		has(play, "<button>+</button>");
+
+		has(play, "<input css=\"border: 1px;\"></input>");
 	}
 
 }
