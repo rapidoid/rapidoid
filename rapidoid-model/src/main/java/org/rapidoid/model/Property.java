@@ -26,4 +26,6 @@ public interface Property {
 
 	Class<?> type();
 
+	String caption();
+
 }

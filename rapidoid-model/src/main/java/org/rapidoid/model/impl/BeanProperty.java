@@ -43,4 +43,9 @@ public class BeanProperty implements Property {
 		return type;
 	}
 
+	@Override
+	public String caption() {
+		return name; // TODO improve
+	}
+
 }
