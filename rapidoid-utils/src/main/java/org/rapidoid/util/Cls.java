@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +51,7 @@ public class Cls {
 				@Override
 				public Map<String, Prop> map(Class<?> clazz) throws Exception {
 
-					Map<String, Prop> properties = U.map();
+					Map<String, Prop> properties = new LinkedHashMap<String, Prop>();
 
 					try {
 						for (Class<?> c = clazz; c != Object.class && c != null; c = c.getSuperclass()) {
@@ -98,11 +99,11 @@ public class Cls {
 						for (Class<?> c = clazz; c != Object.class && c != null; c = c.getSuperclass()) {
 							Field[] fields = c.getDeclaredFields();
 							for (Field field : fields) {
+
 								int modif = field.getModifiers();
 								if ((modif & Modifier.PUBLIC) > 0 && (modif & Modifier.FINAL) == 0
 										&& (modif & Modifier.STATIC) == 0) {
 									String fieldName = field.getName();
-
 									Prop propInfo = properties.get(fieldName);
 
 									if (propInfo == null) {
