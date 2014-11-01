@@ -487,15 +487,22 @@ public class Cls {
 	}
 
 	public static long getId(Object obj) {
-		Object id = getPropValue(obj, "id");
+		Long id = getIdIfExists(obj);
+
 		if (id == null) {
-			throw U.rte("The field 'id' cannot be null!");
+			throw U.rte("The property 'id' cannot be null!");
 		}
-		if (id instanceof Long) {
-			Long num = (Long) id;
-			return num;
+
+		return id;
+	}
+
+	public static Long getIdIfExists(Object obj) {
+		Object id = getPropValue(obj, "id");
+
+		if (id instanceof Number) {
+			return ((Number) id).longValue();
 		} else {
-			throw U.rte("The field 'id' must have type 'long', but it has: " + id.getClass());
+			throw U.rte("The property 'id' must have numeric type, but it has type: " + id.getClass());
 		}
 	}
 
