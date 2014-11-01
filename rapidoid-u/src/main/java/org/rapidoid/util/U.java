@@ -736,7 +736,8 @@ public class U {
 	}
 
 	public static String load(String filename) {
-		return new String(loadBytes(filename));
+		byte[] bytes = loadBytes(filename);
+		return bytes != null ? new String(bytes) : null;
 	}
 
 	public static List<String> loadLines(String filename) {
