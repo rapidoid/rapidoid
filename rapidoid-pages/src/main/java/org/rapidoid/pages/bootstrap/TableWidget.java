@@ -1,4 +1,4 @@
-package org.rapidoid.pages.widget;
+package org.rapidoid.pages.bootstrap;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ import org.rapidoid.pages.html.TrTag;
  * #L%
  */
 
-public class TableWidget extends Widget {
+public class TableWidget extends BootstrapWidget {
 
 	private final List<Property> properties;
 

@@ -1,4 +1,4 @@
-package org.rapidoid.pages.widget;
+package org.rapidoid.pages.bootstrap;
 
 /*
  * #%L
@@ -21,14 +21,16 @@ package org.rapidoid.pages.widget;
  */
 
 import org.rapidoid.pages.Var;
+import org.rapidoid.pages.PagesTestCommons;
+import org.rapidoid.pages.bootstrap.PagerWidget;
 import org.rapidoid.pages.html.Tags;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
-public class PagerWidgetTest extends WidgetTestCommons {
+public class PagerWidgetTest extends PagesTestCommons {
 
 	@Test
-	public void testPagerButtons() {
+	public void testPagerWidget() {
 		Tags tags = new Tags();
 
 		Var<Integer> pageN = tags.var(3);

@@ -1,4 +1,4 @@
-package org.rapidoid.pages.widget;
+package org.rapidoid.pages.bootstrap;
 
 /*
  * #%L
@@ -22,14 +22,16 @@ package org.rapidoid.pages.widget;
 
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
-import org.rapidoid.pages.Person;
+import org.rapidoid.pages.PagesTestCommons;
+import org.rapidoid.pages.bootstrap.TableWidget;
+import org.rapidoid.pages.entity.Person;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
-public class TableWidgetTest extends WidgetTestCommons {
+public class TableWidgetTest extends PagesTestCommons {
 
 	@Test
-	public void testPagerButtons() {
+	public void testTableWidget() {
 		Items items = Model.beanItems(new Person("John", 20), new Person("Rambo", 50));
 
 		TableWidget table = new TableWidget(items);

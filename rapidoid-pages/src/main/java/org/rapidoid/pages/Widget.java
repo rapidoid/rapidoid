@@ -1,4 +1,4 @@
-package org.rapidoid.pages.widget;
+package org.rapidoid.pages;
 
 /*
  * #%L
@@ -20,20 +20,30 @@ package org.rapidoid.pages.widget;
  * #L%
  */
 
-import org.rapidoid.pages.Var;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.pages.html.Tags;
+import org.rapidoid.pages.impl.TagRenderer;
 
-public class WidgetTestCommons extends TestCommons {
+public abstract class Widget extends Tags {
 
-	protected void has(Widget widget, String... containingTexts) {
-		String html = widget.toString();
-		for (String text : containingTexts) {
-			isTrue(html.contains(text));
+	private Object contents;
+
+	protected abstract Object contents();
+
+	private synchronized void getAndSaveContents() {
+		if (this.contents == null) {
+			this.contents = contents();
 		}
 	}
 
-	protected void eq(Var<?> var, Object value) {
-		eq(var.get(), value);
+	@Override
+	public String toString() {
+		getAndSaveContents();
+		return TagRenderer.str(contents);
+	}
+
+	public void emit(String event, String hnd) {
+		getAndSaveContents();
+		ctx.emit(event, hnd);
 	}
 
 }

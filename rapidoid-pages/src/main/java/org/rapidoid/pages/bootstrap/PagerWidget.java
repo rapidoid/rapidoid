@@ -1,4 +1,4 @@
-package org.rapidoid.pages.widget;
+package org.rapidoid.pages.bootstrap;
 
 /*
  * #%L
@@ -25,7 +25,7 @@ import org.rapidoid.pages.Var;
 import org.rapidoid.pages.html.ButtonTag;
 import org.rapidoid.pages.html.SpanTag;
 
-public class PagerWidget extends Widget {
+public class PagerWidget extends BootstrapWidget {
 
 	private int from;
 	private int to;
