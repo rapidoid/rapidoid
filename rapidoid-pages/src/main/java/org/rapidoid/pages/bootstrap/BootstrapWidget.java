@@ -86,11 +86,16 @@ public abstract class BootstrapWidget extends Widget {
 		return btn;
 	}
 
-	protected FormTag navbarSearchForm(boolean onLeft, String placeholder, String buttonCaption) {
-		InputTag inp = input().attr("type", "text").classs("form-control").attr("placeholder", placeholder);
-		DivTag ctrls = div(inp).classs("form-group");
+	protected FormTag navbarForm(boolean onLeft, String buttonCaption, String... fields) {
+		DivTag ctrls = div().classs("form-group");
+
+		for (String fieldName : fields) {
+			InputTag inp = input().attr("type", "text").classs("form-control").attr("placeholder", fieldName);
+			ctrls.append(inp);
+		}
+
 		ButtonTag btn = button(buttonCaption).classs("btn btn-default").attr("type", "submit");
-		return form(ctrls, btn).classs("navbar-form navbar-" + leftOrRight(onLeft)).attr("role", "search");
+		return form(ctrls, btn).classs("navbar-form navbar-" + leftOrRight(onLeft));
 	}
 
 	protected UlTag navbarMenu(boolean onLeft, Object... menuItems) {
@@ -105,7 +110,7 @@ public abstract class BootstrapWidget extends Widget {
 		return span().classs("caret");
 	}
 
-	protected UlTag dropdown(Tag<?> menu, Object... subItems) {
+	protected UlTag navbarDropdown(Tag<?> menu, Object... subItems) {
 		UlTag ul1 = ul_li(subItems).classs("dropdown-menu").attr("role", "menu");
 		menu.classs("dropdown-toggle").attr("data-toggle", "dropdown");
 		LiTag drop1 = li(menu, ul1).classs("dropdown");
