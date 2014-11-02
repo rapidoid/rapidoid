@@ -72,6 +72,13 @@ public class TagInterceptor<TAG extends Tag<?>> implements InvocationHandler {
 
 		boolean returnsTag = ret.isAssignableFrom(clazz);
 
+
+		// classs setter
+		if (name.equals("classs") && returnsTag && paramTypes.length == 1 && paramTypes[0].equals(String.class)) {
+			tag.set("class", args[0]);
+			return target;
+		}
+
 		// content
 		if (name.equals("content") && paramTypes.length == 1 && paramTypes[0].equals(Object[].class)) {
 			tag.content((Object[]) args[0]);
