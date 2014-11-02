@@ -20,10 +20,17 @@ package org.rapidoid.pages.bootstrap;
  * #L%
  */
 
+import org.rapidoid.pages.Tag;
 import org.rapidoid.pages.Widget;
+import org.rapidoid.pages.html.ButtonTag;
 import org.rapidoid.pages.html.DivTag;
+import org.rapidoid.pages.html.FormTag;
+import org.rapidoid.pages.html.InputTag;
+import org.rapidoid.pages.html.LiTag;
+import org.rapidoid.pages.html.NavTag;
 import org.rapidoid.pages.html.SpanTag;
 import org.rapidoid.pages.html.TableTag;
+import org.rapidoid.pages.html.UlTag;
 
 public abstract class BootstrapWidget extends Widget {
 
@@ -32,16 +39,81 @@ public abstract class BootstrapWidget extends Widget {
 		return super.table(contents).classs("table");
 	}
 
-	public DivTag row(Object... contents) {
+	protected DivTag row(Object... contents) {
 		return div(contents).classs("row");
 	}
 
-	public DivTag container(Object... contents) {
+	protected DivTag container(Object... contents) {
 		return div(contents).classs("container");
 	}
 
-	public SpanTag icon(String icon) {
+	protected DivTag containerFluid(Object... contents) {
+		return div(contents).classs("container-fluid");
+	}
+
+	protected SpanTag icon(String icon) {
 		return span().classs("icon-" + icon);
+	}
+
+	protected ButtonTag btn(Object... contents) {
+		return button(contents).classs("btn btn-default");
+	}
+
+	protected ButtonTag btnPrimary(Object... contents) {
+		return button(contents).classs("btn btn-primary");
+	}
+
+	protected NavTag nav(boolean fluid, Tag<?> brand, Object[] navbarContent) {
+		brand.classs("navbar-brand");
+		DivTag hdr = div(btnCollapse(), brand).classs("navbar-header");
+
+		DivTag collapsable = div(navbarContent).classs("collapse navbar-collapse").id("collapsable");
+
+		DivTag cnt = div(hdr, collapsable).classs(containerMaybeFluid(fluid));
+		return nav(cnt).classs("navbar navbar-default").attr("role", "navigation");
+	}
+
+	protected String containerMaybeFluid(boolean fluid) {
+		return fluid ? "container-fluid" : "container";
+	}
+
+	protected ButtonTag btnCollapse() {
+		ButtonTag btn = button(span("Toggle navigation").classs("sr-only"), icon("bar"), icon("bar"), icon("bar"));
+
+		btn.attr("type", "button").classs("navbar-toggle collapsed").attr("data-toggle", "collapse")
+				.attr("data-target", "#collapsable");
+
+		return btn;
+	}
+
+	protected FormTag navbarSearchForm(boolean onLeft, String placeholder, String buttonCaption) {
+		InputTag inp = input().attr("type", "text").classs("form-control").attr("placeholder", placeholder);
+		DivTag ctrls = div(inp).classs("form-group");
+		ButtonTag btn = button(buttonCaption).classs("btn btn-default").attr("type", "submit");
+		return form(ctrls, btn).classs("navbar-form navbar-" + leftOrRight(onLeft)).attr("role", "search");
+	}
+
+	protected UlTag navbarMenu(boolean onLeft, Object... menuItems) {
+		return ul_li(menuItems).classs("nav navbar-nav navbar-" + leftOrRight(onLeft));
+	}
+
+	private String leftOrRight(boolean onLeft) {
+		return onLeft ? "left" : "right";
+	}
+
+	protected SpanTag caret() {
+		return span().classs("caret");
+	}
+
+	protected UlTag dropdown(Tag<?> menu, Object... subItems) {
+		UlTag ul1 = ul_li(subItems).classs("dropdown-menu").attr("role", "menu");
+		menu.classs("dropdown-toggle").attr("data-toggle", "dropdown");
+		LiTag drop1 = li(menu, ul1).classs("dropdown");
+		return ul(drop1).classs("nav navbar-nav");
+	}
+
+	protected DivTag cols(int cols, Object... contents) {
+		return div(contents).classs("col-md-" + cols);
 	}
 
 }
