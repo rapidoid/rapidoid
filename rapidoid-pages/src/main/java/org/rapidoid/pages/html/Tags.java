@@ -50,6 +50,16 @@ public class Tags {
 		return new DynamicContentWrapper(dynamic);
 	}
 
+	protected UlTag ul_li(Object... listItems) {
+		UlTag list = ul();
+
+		for (Object item : listItems) {
+			list.append(li(item));
+		}
+
+		return list;
+	}
+
 	public <TAG extends Tag<?>> TAG tag(Class<TAG> clazz, String tagName, Object... contents) {
 		return TagInterceptor.create(ctx, clazz, tagName, contents);
 	}
@@ -601,6 +611,5 @@ public class Tags {
 	public XmpTag xmp(Object... contents) {
 		return tag(XmpTag.class, "xmp", contents);
 	}
-
 
 }
