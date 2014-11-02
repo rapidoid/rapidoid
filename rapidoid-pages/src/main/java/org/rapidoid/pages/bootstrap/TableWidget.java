@@ -5,6 +5,7 @@ import java.util.List;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
+import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.pages.html.TbodyTag;
 import org.rapidoid.pages.html.TrTag;
 
@@ -47,18 +48,25 @@ public class TableWidget extends BootstrapWidget {
 			header.append(th(prop.caption()));
 		}
 
-		TbodyTag body = tbody();
+		Object body = dynamic(new DynamicContent() {
+			@Override
+			public Object eval() {
 
-		for (int i = 0; i < items.size(); i++) {
-			TrTag row = tr();
-			Item item = items.get(i);
+				TbodyTag body = tbody();
 
-			for (Property prop : properties) {
-				row.append(td(item.get(prop.name())));
+				for (Item item : items) {
+					TrTag row = tr();
+
+					for (Property prop : properties) {
+						row.append(td(item.get(prop.name())));
+					}
+
+					body.append(row);
+				}
+
+				return body;
 			}
-
-			body.append(row);
-		}
+		});
 
 		return table(thead(header), body);
 	}
