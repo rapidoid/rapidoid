@@ -20,8 +20,10 @@ package org.rapidoid.pages.html;
  * #L%
  */
 
+import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.pages.Tag;
 import org.rapidoid.pages.Var;
+import org.rapidoid.pages.impl.DynamicContentWrapper;
 import org.rapidoid.pages.impl.FileTemplate;
 import org.rapidoid.pages.impl.GuiContext;
 import org.rapidoid.pages.impl.MultiLanguageText;
@@ -42,6 +44,10 @@ public class Tags {
 
 	public Object render(String templateFileName, Object... namesAndValues) {
 		return new FileTemplate(templateFileName, namesAndValues);
+	}
+
+	public Object dynamic(DynamicContent dynamic) {
+		return new DynamicContentWrapper(dynamic);
 	}
 
 	public <TAG extends Tag<?>> TAG tag(Class<TAG> clazz, String tagName, Object... contents) {
@@ -595,5 +601,6 @@ public class Tags {
 	public XmpTag xmp(Object... contents) {
 		return tag(XmpTag.class, "xmp", contents);
 	}
+
 
 }
