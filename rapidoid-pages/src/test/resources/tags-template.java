@@ -20,9 +20,13 @@ package org.rapidoid.pages.html;
  * #L%
  */
 
+import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.pages.Tag;
 import org.rapidoid.pages.Var;
+import org.rapidoid.pages.impl.DynamicContentWrapper;
+import org.rapidoid.pages.impl.FileTemplate;
 import org.rapidoid.pages.impl.GuiContext;
+import org.rapidoid.pages.impl.MultiLanguageText;
 import org.rapidoid.pages.impl.TagInterceptor;
 import org.rapidoid.pages.impl.VarImpl;
 
@@ -30,13 +34,20 @@ public class Tags {
 
 	protected final GuiContext ctx = new GuiContext();
 
-	public Object _(String multiLanguageText) {
-		// TODO implement internationalization
-		return var(multiLanguageText);
+	public Object _(String multiLanguageText, Object... formatArgs) {
+		return new MultiLanguageText(multiLanguageText, formatArgs);
 	}
 
 	public <T> Var<T> var(T value) {
 		return new VarImpl<T>(ctx, value);
+	}
+
+	public Object render(String templateFileName, Object... namesAndValues) {
+		return new FileTemplate(templateFileName, namesAndValues);
+	}
+
+	public Object dynamic(DynamicContent dynamic) {
+		return new DynamicContentWrapper(dynamic);
 	}
 
 	public <TAG extends Tag<?>> TAG tag(Class<TAG> clazz, String tagName, Object... contents) {
