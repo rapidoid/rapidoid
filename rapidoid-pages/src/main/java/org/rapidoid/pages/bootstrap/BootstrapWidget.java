@@ -21,6 +21,8 @@ package org.rapidoid.pages.bootstrap;
  */
 
 import org.rapidoid.pages.Widget;
+import org.rapidoid.pages.html.DivTag;
+import org.rapidoid.pages.html.SpanTag;
 import org.rapidoid.pages.html.TableTag;
 
 public abstract class BootstrapWidget extends Widget {
@@ -28,6 +30,18 @@ public abstract class BootstrapWidget extends Widget {
 	@Override
 	public TableTag table(Object... contents) {
 		return super.table(contents).classs("table");
+	}
+
+	public DivTag row(Object... contents) {
+		return div(contents).classs("row");
+	}
+
+	public DivTag container(Object... contents) {
+		return div(contents).classs("container");
+	}
+
+	public SpanTag icon(String icon) {
+		return span().classs("icon-" + icon);
 	}
 
 }
