@@ -30,7 +30,7 @@ public class PlaygroundWidgetTest extends PagesTestCommons {
 		PlaygroundWidget play = new PlaygroundWidget();
 		U.print(play);
 
-		has(play, "<table classs=\"table\">");
+		has(play, "<table class=\"table\">");
 
 		has(play, "<button>-</button>");
 		has(play, "<span>10</span>");
