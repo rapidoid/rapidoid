@@ -22,7 +22,7 @@ package org.rapidoid.model;
 
 import java.util.List;
 
-public interface Items {
+public interface Items extends Iterable<Item> {
 
 	void insert(int index, Item item);
 

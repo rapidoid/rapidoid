@@ -22,6 +22,7 @@ package org.rapidoid.model.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.rapidoid.model.Item;
@@ -108,6 +109,11 @@ public class ListItems implements Items {
 	protected final Item ifFitsIn(Item item) {
 		U.must(fitsIn(item), "This item doesn't fit in the items: %s", item);
 		return item;
+	}
+
+	@Override
+	public Iterator<Item> iterator() {
+		return list.iterator();
 	}
 
 }
