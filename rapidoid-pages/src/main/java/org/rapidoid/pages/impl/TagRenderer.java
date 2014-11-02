@@ -101,7 +101,7 @@ public class TagRenderer {
 		}
 
 		if (inline || isSimpleOrHasSimpleContent(contents)) {
-			String content = escape(str(contents, level + 1, true));
+			String content = str(contents, level + 1, true);
 			return U.format("%s<%s%s>%s</%s>", indent, name, attrib, content, name);
 		}
 
