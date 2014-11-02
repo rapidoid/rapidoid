@@ -25,6 +25,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-pages</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-oauth</artifactId>
 			<version>${project.version}</version>
 		</dependency>
