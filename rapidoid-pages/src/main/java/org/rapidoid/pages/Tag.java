@@ -48,6 +48,10 @@ public interface Tag<TAG extends Tag<?>> {
 
 	TAG enabled(boolean value);
 
+	TAG attr(String attr, String value);
+
+	String attr(String attr);
+
 	TAG classs(String classs);
 
 	TAG classIf(boolean condition, String thenCls, String elseCls);
