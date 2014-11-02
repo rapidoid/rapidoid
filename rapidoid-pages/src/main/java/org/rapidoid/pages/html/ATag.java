@@ -24,6 +24,8 @@ import org.rapidoid.pages.Tag;
 
 public interface ATag extends Tag<ATag> {
 
+    String href();
 
+    ATag href(String href);
 
 }

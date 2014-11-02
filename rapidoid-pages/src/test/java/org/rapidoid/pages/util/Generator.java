@@ -76,6 +76,10 @@ public class Generator {
 
 		if (tag.equals("InputTag")) {
 			methods.add("String value()");
+			methods.add("InputTag value(String value)");
+		} else if (tag.equals("ATag")) {
+			methods.add("String href()");
+			methods.add("ATag href(String href)");
 		}
 
 		return methods;

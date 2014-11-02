@@ -26,4 +26,6 @@ public interface InputTag extends Tag<InputTag> {
 
     String value();
 
+    InputTag value(String value);
+
 }
