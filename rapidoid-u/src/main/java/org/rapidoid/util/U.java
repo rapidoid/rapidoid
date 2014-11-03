@@ -56,6 +56,7 @@ import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -601,7 +602,7 @@ public class U {
 		return map;
 	}
 
-	public static <K, V> Map<K, V> concurrentMap() {
+	public static <K, V> ConcurrentMap<K, V> concurrentMap() {
 		return new ConcurrentHashMap<K, V>();
 	}
 
