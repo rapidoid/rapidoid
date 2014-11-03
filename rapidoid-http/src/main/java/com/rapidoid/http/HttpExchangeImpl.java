@@ -41,6 +41,8 @@ import org.rapidoid.wrap.Bool;
 public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements HttpExchange,
 		Constants {
 
+	private static final String SESSION_COOKIE = "JSESSIONID";
+
 	private final static HttpParser PARSER = IoC.singleton(HttpParser.class);
 
 	private static final byte[] HEADER_SEP = ": ".getBytes();
@@ -95,6 +97,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	private int responseCode;
 
+	private String sessionId;
+
 	public HttpExchangeImpl() {
 		reset();
 
@@ -137,6 +141,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		parsedParams = false;
 		parsedHeaders = false;
 		parsedBody = false;
+
+		sessionId = null;
 
 		resetResponse();
 	}
@@ -593,8 +599,16 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public String sessionId() {
-		// FIXME implement this
-		return null;
+		if (sessionId == null) {
+			sessionId = cookie(SESSION_COOKIE);
+
+			if (sessionId == null) {
+				sessionId = U.rndStr(50);
+				setCookie(SESSION_COOKIE, sessionId);
+			}
+		}
+
+		return sessionId;
 	}
 
 }
