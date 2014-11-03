@@ -47,7 +47,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private final Queue<ConnectionTarget> connecting;
 
-	private final Queue<SocketChannel> connected;
+	private final Queue<RapidoidChannel> connected;
 
 	private final SimpleList<RapidoidConnection> done;
 
@@ -75,7 +75,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 		this.restarting = new ArrayBlockingQueue<RapidoidConnection>(queueSize);
 		this.connecting = new ArrayBlockingQueue<ConnectionTarget>(queueSize);
-		this.connected = new ArrayBlockingQueue<SocketChannel>(queueSize);
+		this.connected = new ArrayBlockingQueue<RapidoidChannel>(queueSize);
 		this.done = new SimpleList<RapidoidConnection>(queueSize / 10, growFactor);
 
 		this.isProtocolListener = protocol instanceof CtxListener;
@@ -95,7 +95,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 		configureSocket(socketChannel);
 
-		connected.add(socketChannel);
+		connected.add(new RapidoidChannel(socketChannel, false));
 		selector.wakeup();
 	}
 
@@ -134,7 +134,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		try {
 			ready = socketChannel.finishConnect();
 			U.failIf(!ready, "Expected an established connection!");
-			connected.add(socketChannel);
+			connected.add(new RapidoidChannel(socketChannel, true));
 		} catch (ConnectException e) {
 			retryConnecting(target);
 		}
@@ -331,15 +331,17 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			}
 		}
 
-		SocketChannel socketChannel;
+		RapidoidChannel channel;
 
-		while ((socketChannel = connected.poll()) != null) {
+		while ((channel = connected.poll()) != null) {
+
+			SocketChannel socketChannel = channel.socketChannel;
 			U.debug("connected", "address", socketChannel.socket().getRemoteSocketAddress());
 
 			try {
 				SelectionKey newKey = socketChannel.register(selector, SelectionKey.OP_READ);
 				RapidoidConnection conn = attachConn(newKey);
-				conn.setClient(true);
+				conn.setClient(channel.isClient);
 
 				try {
 					processNext(conn);
