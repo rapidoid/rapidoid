@@ -52,6 +52,8 @@ public class TagData<TAG extends Tag<?>> {
 		this.clazz = clazz;
 		this.name = name;
 
+		getEventHandle();
+
 		List<Action> actions = U.list();
 
 		for (Object x : contentsAndHandlers) {
@@ -109,6 +111,7 @@ public class TagData<TAG extends Tag<?>> {
 	private synchronized void getEventHandle() {
 		if (_hnd == null) {
 			_hnd = ctx.getNewId((TagData<?>) this);
+			attrs.put("_h", U.<Object> list(_hnd));
 		}
 	}
 
