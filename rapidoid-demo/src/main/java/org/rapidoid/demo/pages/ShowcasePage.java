@@ -20,8 +20,10 @@ package org.rapidoid.demo.pages;
  * #L%
  */
 
+import org.rapidoid.pages.Handler;
 import org.rapidoid.pages.Tag;
 import org.rapidoid.pages.bootstrap.NavbarBootstrapPage;
+import org.rapidoid.pages.html.ButtonTag;
 import org.rapidoid.pages.html.FormTag;
 import org.rapidoid.pages.html.UlTag;
 
@@ -35,7 +37,14 @@ public class ShowcasePage extends NavbarBootstrapPage {
 
 	@Override
 	protected Object pageContent() {
-		return row(cols(6, info), cols(3, btnPrimary("abc")), cols(3, btn("some", " button")));
+		ButtonTag abc = btnPrimary("abc", new Handler<ButtonTag>() {
+			@Override
+			public void handle(ButtonTag target) {
+				System.out.println("clicked abc!");
+			}
+		});
+
+		return row(cols(6, info), cols(3, abc, btn("xy")));
 	}
 
 	protected Tag<?> brand() {
