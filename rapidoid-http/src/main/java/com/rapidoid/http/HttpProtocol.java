@@ -69,6 +69,8 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		}
 
 		xch.completeResponse();
+
+		xch.closeIf(!xch.isKeepAlive.value);
 	}
 
 	public Router getRouter() {
