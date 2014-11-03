@@ -21,15 +21,20 @@ package org.rapidoid.pages.impl;
  */
 
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.rapidoid.pages.Tag;
 import org.rapidoid.util.U;
 
 public class GuiContext {
 
-	private AtomicInteger counter = new AtomicInteger();
+	private final AtomicInteger counter = new AtomicInteger();
 
-	private Map<String, TagData<?>> tags = U.map();
+	private final ConcurrentMap<String, TagData<?>> tags = U.concurrentMap();
+
+	private final ConcurrentMap<String, Tag<?>> changed = U.concurrentMap();
 
 	public String getNewId(TagData<?> tag) {
 		String hnd = "_" + counter.incrementAndGet();
@@ -44,6 +49,34 @@ public class GuiContext {
 		} else {
 			U.warn("Cannot find tag!", "event", event, "hnd", hnd);
 		}
+	}
+
+	public Tag<?> get(String hnd) {
+		TagData<?> tag = tags.get(hnd);
+
+		if (tag == null) {
+			U.warn("Cannot find tag!", "hnd", hnd);
+		}
+
+		return tag.tag;
+	}
+
+	public Map<String, Tag<?>> changedTags() {
+		return changed;
+	}
+
+	public void changedContents(TagData<?> tagData) {
+		changed.putIfAbsent(tagData._hnd, tagData.tag);
+	}
+
+	public Map<String, String> changedContent() {
+		Map<String, String> content = U.map();
+
+		for (Entry<String, Tag<?>> e : changed.entrySet()) {
+			content.put(e.getKey(), e.getValue().toString());
+		}
+
+		return content;
 	}
 
 }

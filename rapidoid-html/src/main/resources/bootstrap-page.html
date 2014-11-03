@@ -14,6 +14,7 @@
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css" rel="stylesheet">
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
 <style type="text/css">
 {{style}}
 </style>
@@ -22,9 +23,11 @@
 function _emit(c, event) {
 	var hnd = $(c).attr('_h');
 	$.post('/_emit', {event: event, hnd: hnd}).done(function (data) {
-		//alert(JSON.stringify( data));
+		for (var h in data) {
+			$('[_h=' + h + ']').replaceWith(data[h]);
+		}
 	}).fail(function (data) {
-		alert("Error: " + JSON.stringify( data));
+		alert("Error: " + JSON.stringify(data));
 	});
 }
 </script>

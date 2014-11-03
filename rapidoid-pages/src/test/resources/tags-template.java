@@ -20,6 +20,8 @@ package org.rapidoid.pages.html;
  * #L%
  */
 
+import java.util.Map;
+
 import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.pages.Tag;
 import org.rapidoid.pages.Var;
@@ -48,6 +50,28 @@ public class Tags {
 
 	public Object dynamic(DynamicContent dynamic) {
 		return new DynamicContentWrapper(dynamic);
+	}
+
+	public Tag<?> get(String hnd) {
+		return ctx.get(hnd);
+	}
+
+	public Map<String, Tag<?>> changedTags() {
+		return ctx.changedTags();
+	}
+
+	public Map<String, String> changedContent() {
+		return ctx.changedContent();
+	}
+
+	protected UlTag ul_li(Object... listItems) {
+		UlTag list = ul();
+
+		for (Object item : listItems) {
+			list.append(li(item));
+		}
+
+		return list;
 	}
 
 	public <TAG extends Tag<?>> TAG tag(Class<TAG> clazz, String tagName, Object... contents) {

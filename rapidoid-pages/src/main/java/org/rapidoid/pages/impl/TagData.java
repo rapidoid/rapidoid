@@ -43,9 +43,9 @@ public class TagData<TAG extends Tag<?>> {
 
 	final Map<String, Handler<TAG>> eventHandlers = U.map();
 
-	private String _hnd;
+	String _hnd;
 
-	private TAG tag;
+	TAG tag;
 
 	public TagData(GuiContext ctx, Class<TAG> clazz, String name, Object[] contentsAndHandlers) {
 		this.ctx = ctx;
@@ -126,11 +126,13 @@ public class TagData<TAG extends Tag<?>> {
 	}
 
 	public void content(Object[] objects) {
+		changedContents();
 		contents.clear();
 		append(objects);
 	}
 
 	public void prepend(Object[] objects) {
+		changedContents();
 		int index = 0;
 		for (Object obj : objects) {
 			contents.add(index++, obj);
@@ -138,9 +140,14 @@ public class TagData<TAG extends Tag<?>> {
 	}
 
 	public void append(Object[] objects) {
+		changedContents();
 		for (Object obj : objects) {
 			contents.add(obj);
 		}
+	}
+
+	private void changedContents() {
+		ctx.changedContents(this);
 	}
 
 }

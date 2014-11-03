@@ -20,9 +20,11 @@ package org.rapidoid.demo.pages;
  * #L%
  */
 
+import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.pages.Handler;
 import org.rapidoid.pages.Tag;
 import org.rapidoid.pages.bootstrap.NavbarBootstrapPage;
+import org.rapidoid.pages.html.ATag;
 import org.rapidoid.pages.html.ButtonTag;
 import org.rapidoid.pages.html.FormTag;
 import org.rapidoid.pages.html.UlTag;
@@ -31,8 +33,22 @@ public class ShowcasePage extends NavbarBootstrapPage {
 
 	private final String info;
 
+	private ATag brand;
+	private UlTag dropdownMenu;
+	private UlTag menuL;
+	private UlTag menuR;
+	private FormTag formL;
+	private FormTag formR;
+
 	public ShowcasePage(String info) {
 		this.info = info;
+
+		brand = a("Welcome to the Showcase page!").href("/");
+		dropdownMenu = navbarDropdown(a("Profile", caret()).href("#"), a("Settings"), a("Logout"));
+		menuL = navbarMenu(true, a("About us").href("#about"), a("Contact").href("#contact"));
+		menuR = navbarMenu(false, a("Logout").href("/_logout"));
+		formL = navbarForm(true, "Search", "Enter search phrase...");
+		formR = navbarForm(false, "Login", "Username", "Password");
 	}
 
 	@Override
@@ -41,24 +57,37 @@ public class ShowcasePage extends NavbarBootstrapPage {
 			@Override
 			public void handle(ButtonTag target) {
 				System.out.println("clicked abc!");
+				brand.content(glyphicon("cog"));
 			}
 		});
 
-		return row(cols(6, info), cols(3, abc, btn("xy")));
-	}
+		ButtonTag xy = btnPrimary("xy", new Handler<ButtonTag>() {
+			@Override
+			public void handle(ButtonTag target) {
+				System.out.println("clicked xy!");
+				brand.content(target.content());
+			}
+		});
 
-	protected Tag<?> brand() {
-		return a("Welcome to the Showcase page!").href("/");
+		Object dyn = dynamic(new DynamicContent() {
+			private int n;
+
+			@Override
+			public Object eval() {
+				return n++;
+			}
+		});
+
+		return row(cols(6, info), cols(3, abc, xy), cols(3, dyn));
 	}
 
 	protected Object[] navbarContent() {
-		UlTag dropdownMenu = navbarDropdown(a("Profile", caret()).href("#"), a("Settings"), a("Logout"));
-		UlTag menuL = navbarMenu(true, a("About us").href("#about"), a("Contact").href("#contact"));
-		UlTag menuR = navbarMenu(false, a("RAbout us").href("#about"), a("RContact").href("#contact"));
-		FormTag formL = navbarForm(true, "Search", "Enter search phrase...");
-		FormTag formR = navbarForm(false, "Login", "Username", "Password");
-
 		return new Object[] { menuL, formL, dropdownMenu, menuR, formR };
+	}
+
+	@Override
+	protected Tag<?> brand() {
+		return brand;
 	}
 
 }
