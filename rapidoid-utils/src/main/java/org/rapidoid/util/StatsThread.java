@@ -31,7 +31,8 @@ public class StatsThread extends Thread {
 	@Override
 	public void run() {
 		U.info("Starting stats thread...");
-		while (true) {
+
+		while (!Thread.interrupted()) {
 			U.sleep(1000);
 			String stats = U.getCpuMemStats();
 			if (!stats.equals(lastStats)) {
@@ -39,6 +40,8 @@ public class StatsThread extends Thread {
 				lastStats = stats;
 			}
 		}
+
+		U.info("Stopped stats thread.");
 	}
 
 }

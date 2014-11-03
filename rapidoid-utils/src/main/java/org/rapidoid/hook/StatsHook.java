@@ -1,8 +1,12 @@
-package org.rapidoid.demo.http;
+package org.rapidoid.hook;
+
+import java.util.concurrent.Callable;
+
+import org.rapidoid.util.StatsThread;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,32 +24,13 @@ package org.rapidoid.demo.http;
  * #L%
  */
 
-import java.util.concurrent.atomic.AtomicLong;
+public class StatsHook implements Callable<Object> {
 
-import org.rapidoid.util.U;
-
-import com.rapidoid.http.HTTP;
-import com.rapidoid.http.HTTPServer;
-import com.rapidoid.http.Handler;
-import com.rapidoid.http.HttpExchange;
-
-public class HttpDemo {
-
-	public static void main(String[] args) {
-		U.args("debug", "stats");
-
-		final AtomicLong n = new AtomicLong();
-
-		HTTPServer server = HTTP.server().build();
-
-		server.get("/hi", new Handler() {
-			@Override
-			public Object handle(HttpExchange x) {
-				return "[" + n.incrementAndGet() + "] Hi: " + x.uri();
-			}
-		});
-
-		server.start();
+	@Override
+	public Object call() throws Exception {
+		StatsThread statsThread = new StatsThread();
+		statsThread.start();
+		return statsThread;
 	}
 
 }
