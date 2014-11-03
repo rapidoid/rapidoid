@@ -99,6 +99,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	private String sessionId;
 
+	private HttpSession session;
+
 	public HttpExchangeImpl() {
 		reset();
 
@@ -371,6 +373,10 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		this.responses = responses;
 	}
 
+	public void setSession(HttpSession session) {
+		this.session = session;
+	}
+
 	@Override
 	public synchronized HttpExchange addHeader(byte[] name, byte[] value) {
 		if (responseCode <= 0) {
@@ -602,13 +608,66 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		if (sessionId == null) {
 			sessionId = cookie(SESSION_COOKIE);
 
+			if (sessionId != null && !session.exists(sessionId)) {
+				sessionId = null;
+			}
+
 			if (sessionId == null) {
 				sessionId = U.rndStr(50);
 				setCookie(SESSION_COOKIE, sessionId);
+				session.openSession(sessionId);
 			}
 		}
 
 		return sessionId;
+	}
+
+	@Override
+	public Map<String, Object> session() {
+		return session.getSession(sessionId());
+	}
+
+	@Override
+	public HttpExchangeHeaders setSession(String name, Object value) {
+		if (value != null) {
+			session.setAttribute(sessionId(), name, value);
+		} else {
+			session.deleteAttribute(sessionId(), name);
+		}
+
+		return this;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T session(String name, T defaultValue) {
+		return U.or((T) session.getAttribute(sessionId(), name), defaultValue);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T session(String name) {
+		return (T) session.getAttribute(sessionId(), name);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs) {
+		T value = (T) session.getAttribute(sessionId(), name);
+
+		if (value == null) {
+			value = U.newInstance(valueClass, constructorArgs);
+			session.setAttribute(sessionId(), name, value);
+		}
+
+		return value;
+	}
+
+	@Override
+	public HttpExchangeHeaders closeSession() {
+		session.closeSession(sessionId());
+		sessionId = null;
+		return this;
 	}
 
 }

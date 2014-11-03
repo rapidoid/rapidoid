@@ -33,6 +33,8 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	private final HttpResponses responses;
 
+	private HttpSession session;
+
 	public HttpProtocol(Router router) {
 		super(HttpExchangeImpl.class);
 		this.router = router;
@@ -41,6 +43,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	@Override
 	protected void process(Channel ctx, HttpExchangeImpl xch) {
+		U.notNull(session, "session");
 
 		if (ctx.isInitial()) {
 			return;
@@ -53,6 +56,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		U.failIf(xch.isGet.value && !xch.body.isEmpty(), "Body is NOT allowed in HTTP GET requests!");
 
 		xch.setResponses(responses);
+		xch.setSession(session);
 
 		try {
 			boolean dispatched = router.dispatch(xch);
@@ -69,6 +73,10 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	public Router getRouter() {
 		return router;
+	}
+
+	public void setSession(HttpSession session) {
+		this.session = session;
 	}
 
 }

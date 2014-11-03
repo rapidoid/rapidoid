@@ -24,8 +24,11 @@ import org.rapidoid.net.impl.RapidoidServerLoop;
 
 public class HTTPServerImpl extends RapidoidServerLoop implements HTTPServer {
 
+	private final HttpSession session = new InMemoryHttpSession();
+
 	public HTTPServerImpl() {
 		super(new HttpProtocol(new HttpRouter()), HttpExchangeImpl.class, null);
+		((HttpProtocol) protocol).setSession(session);
 	}
 
 	@Override

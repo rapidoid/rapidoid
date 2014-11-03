@@ -93,6 +93,14 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	byte[] file(String name);
 
+	Map<String, Object> session();
+
+	<T> T session(String name);
+
+	<T> T session(String name, T defaultValue);
+
+	<T> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+
 	/* HELPERS: */
 
 	String constructUrl(String path);
