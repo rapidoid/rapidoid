@@ -23,7 +23,6 @@ package org.rapidoid.pages.bootstrap;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
 import org.rapidoid.pages.PagesTestCommons;
-import org.rapidoid.pages.bootstrap.TableWidget;
 import org.rapidoid.pages.entity.Person;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
@@ -37,14 +36,14 @@ public class TableWidgetTest extends PagesTestCommons {
 		TableWidget table = new TableWidget(items);
 		U.print(table);
 
-		has(table, "<th>name</th>");
-		has(table, "<th>age</th>");
+		hasRegex(table, "<th[^>]*?>name</th>");
+		hasRegex(table, "<th[^>]*?>age</th>");
 
-		has(table, "<td>John</td>");
-		has(table, "<td>20</td>");
+		hasRegex(table, "<td[^>]*?>John</td>");
+		hasRegex(table, "<td[^>]*?>20</td>");
 
-		has(table, "<td>Rambo</td>");
-		has(table, "<td>50</td>");
+		hasRegex(table, "<td[^>]*?>Rambo</td>");
+		hasRegex(table, "<td[^>]*?>50</td>");
 	}
 
 }

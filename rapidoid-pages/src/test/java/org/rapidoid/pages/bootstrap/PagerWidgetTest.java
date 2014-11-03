@@ -45,7 +45,7 @@ public class PagerWidgetTest extends PagesTestCommons {
 		eq(pageN, 1);
 		has(pager, "(page 1)");
 
-		pager.emit("click", "_4");
+		pager.emit("click", "_5");
 
 		eq(pageN, 7);
 		has(pager, "(page 7)");
@@ -56,7 +56,7 @@ public class PagerWidgetTest extends PagesTestCommons {
 		eq(pageN, 5);
 		has(pager, "(page 5)");
 
-		pager.emit("click", "_3");
+		pager.emit("click", "_4");
 
 		eq(pageN, 6);
 		has(pager, "(page 6)");

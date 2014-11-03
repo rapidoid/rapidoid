@@ -44,7 +44,7 @@ public class BootstrapPageTest extends PagesTestCommons {
 		U.print(page);
 
 		has(page, "<title>Some title</title>");
-		has(page, "<div>abc</div>");
+		hasRegex(page, "<div[^>]*?>abc</div>");
 	}
 
 }

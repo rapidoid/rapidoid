@@ -30,13 +30,13 @@ public class PlaygroundWidgetTest extends PagesTestCommons {
 		PlaygroundWidget play = new PlaygroundWidget();
 		U.print(play);
 
-		has(play, "<table class=\"table\">");
+		hasRegex(play, "<table [^>]*? class=\"table\">");
 
-		has(play, "<button>-</button>");
-		has(play, "<span>10</span>");
-		has(play, "<button>+</button>");
+		hasRegex(play, "<button[^>]*?>-</button>");
+		hasRegex(play, "<span[^>]*?>10</span>");
+		hasRegex(play, "<button[^>]*?>\\+</button>");
 
-		has(play, "<input css=\"border: 1px;\"></input>");
+		hasRegex(play, "<input [^>]*? css=\"border: 1px;\"></input>");
 	}
 
 }

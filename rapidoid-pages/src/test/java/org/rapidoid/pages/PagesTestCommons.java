@@ -20,6 +20,8 @@ package org.rapidoid.pages;
  * #L%
  */
 
+import java.util.regex.Pattern;
+
 import org.rapidoid.pages.Var;
 import org.rapidoid.pages.Widget;
 import org.rapidoid.test.TestCommons;
@@ -30,6 +32,13 @@ public class PagesTestCommons extends TestCommons {
 		String html = widget.toString();
 		for (String text : containingTexts) {
 			isTrue(html.contains(text));
+		}
+	}
+
+	protected void hasRegex(Widget widget, String... containingRegexes) {
+		String html = widget.toString();
+		for (String regex : containingRegexes) {
+			isTrue(Pattern.compile(regex).matcher(html).find());
 		}
 	}
 
