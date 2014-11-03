@@ -18,6 +18,20 @@
 {{style}}
 </style>
 
+<script>
+function _emit(c, event) {
+	var hnd = $(c).attr('_h');
+	$.post('/_emit', {event: event, hnd: hnd}).done(function (data) {
+		//alert(JSON.stringify( data));
+	}).fail(function (data) {
+		alert("Error: " + JSON.stringify( data));
+	});
+}
+function _click(c) {
+	return _emit(c, 'click');
+}
+</script>
+
 {{head}}
 </head>
 
