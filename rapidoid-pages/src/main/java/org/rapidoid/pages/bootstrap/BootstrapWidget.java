@@ -55,6 +55,10 @@ public abstract class BootstrapWidget extends Widget {
 		return span().classs("icon-" + icon);
 	}
 
+	protected SpanTag glyphicon(String glyphicon) {
+		return span().classs("glyphicon glyphicon-" + glyphicon);
+	}
+
 	protected ButtonTag btn(Object... contents) {
 		return button(contents).classs("btn btn-default");
 	}
