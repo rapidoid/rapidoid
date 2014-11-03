@@ -23,6 +23,7 @@ package org.rapidoid.demo.pages;
 import org.rapidoid.util.U;
 
 import com.rapidoid.http.HTTP;
+import com.rapidoid.http.HTTPServer;
 import com.rapidoid.http.Handler;
 import com.rapidoid.http.HttpExchange;
 
@@ -31,14 +32,41 @@ public class PageServerDemo {
 	public static void main(String[] args) {
 		U.args(args);
 
-		final ShowcasePage p = new ShowcasePage();
+		HTTPServer server = HTTP.server().build();
 
-		HTTP.serve(new Handler() {
+		server.get("/", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				return x.html().write(p.toString());
+				return x.sessionGetOrCreate("page", ShowcasePage.class, U.rndStr(11));
 			}
 		});
-	}
 
+		server.get("/del", new Handler() {
+			@Override
+			public Object handle(HttpExchange x) {
+				x.closeSession();
+				return x.html().write(x.session().toString());
+			}
+		});
+
+		server.post("/_emit", new Handler() {
+			@Override
+			public Object handle(HttpExchange x) throws Exception {
+				String hnd = x.data("hnd");
+				String event = x.data("event");
+
+				U.notNull(hnd, "hnd");
+				U.notNull(event, "event");
+
+				ShowcasePage p = x.session("page");
+				p.emit(event, hnd);
+
+				x.json();
+				return "[123]";
+			}
+		});
+
+		server.start();
+
+	}
 }

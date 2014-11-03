@@ -27,9 +27,15 @@ import org.rapidoid.pages.html.UlTag;
 
 public class ShowcasePage extends NavbarBootstrapPage {
 
+	private final String info;
+
+	public ShowcasePage(String info) {
+		this.info = info;
+	}
+
 	@Override
 	protected Object pageContent() {
-		return row(cols(6, "the content"), cols(3, btnPrimary("abc")), cols(3, btn("some", " button")));
+		return row(cols(6, info), cols(3, btnPrimary("abc")), cols(3, btn("some", " button")));
 	}
 
 	protected Tag<?> brand() {
