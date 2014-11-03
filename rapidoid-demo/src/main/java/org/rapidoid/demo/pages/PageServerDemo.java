@@ -43,11 +43,10 @@ public class PageServerDemo {
 			}
 		});
 
-		server.get("/del", new Handler() {
+		server.get("/_logout", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				x.closeSession();
-				return x.html().write(x.session().toString());
+				return x.closeSession().redirect("/");
 			}
 		});
 
