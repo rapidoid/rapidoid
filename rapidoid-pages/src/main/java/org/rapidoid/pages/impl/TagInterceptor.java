@@ -85,10 +85,15 @@ public class TagInterceptor<TAG extends Tag<?>> implements InvocationHandler {
 			return target;
 		}
 
-		// content
+		// set content
 		if (name.equals("content") && paramTypes.length == 1 && paramTypes[0].equals(Object[].class)) {
 			tag.content((Object[]) args[0]);
 			return target;
+		}
+
+		// get content
+		if (name.equals("content") && paramTypes.length == 0) {
+			return tag.contents;
 		}
 
 		// prepend
