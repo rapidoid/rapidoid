@@ -160,6 +160,10 @@ public class HttpParser implements Constants {
 	}
 
 	public void parseParams(Buf buf, KeyValueRanges params, Range range) {
+		parseURLEncodedKV(buf, params, range);
+	}
+
+	private void parseURLEncodedKV(Buf buf, KeyValueRanges params, Range range) {
 		int pos = buf.position();
 		int limit = buf.limit();
 
@@ -240,8 +244,9 @@ public class HttpParser implements Constants {
 			U.failIf(multipartBoundary.isEmpty(), "Invalid multi-part HTTP request!");
 
 			parseMultiParts(src, body, data, files, multipartBoundary, helper);
+		} else {
+			parseURLEncodedKV(src, data, body);
 		}
-
 	}
 
 	/* http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4.2 */
