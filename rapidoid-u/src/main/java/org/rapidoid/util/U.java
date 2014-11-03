@@ -54,6 +54,7 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
@@ -1234,15 +1235,42 @@ public class U {
 		if (args != null) {
 			ARGS = args;
 
-			// FIXME: use start-up hook to register the stats thread
-			// if (hasOption("stats")) {
-			// singleton(StatsThread.class).start();
-			// }
-
 			if (hasOption("debug") && getLogLevel().ordinal() > DEBUG.ordinal()) {
 				setLogLevel(DEBUG);
 			}
+
+			for (String arg : args) {
+				if (arg.matches("\\w+")) {
+					hook(arg);
+				}
+			}
 		}
+	}
+
+	public static Object hook(String hookName) {
+		U.must(hookName.matches("\\w+"), "Invalid hook name, must be alphanumeric!");
+
+		String hookClassName = "org.rapidoid.hook." + capitalized(hookName) + "Hook";
+		Class<?> hookCls = getClassIfExists(hookClassName);
+
+		if (hookCls != null) {
+			if (Callable.class.isAssignableFrom(hookCls)) {
+				Callable<?> hook = (Callable<?>) newInstance(hookCls);
+				try {
+					Object hookResult = hook.call();
+					U.info("Executed a hook", "hook", hookName, "hookClass", hookClassName, "result", hookResult);
+					return hookResult;
+				} catch (Exception e) {
+					throw rte(e);
+				}
+			} else {
+				U.warn("Found a hook, but it's not a Runnable!", "hook", hookName, "hookClass", hookClassName);
+			}
+		} else {
+			U.debug("No hook was found", "hook", hookName, "hookClass", hookClassName);
+		}
+
+		return null;
 	}
 
 	public static void benchmark(String name, int count, Runnable runnable) {
