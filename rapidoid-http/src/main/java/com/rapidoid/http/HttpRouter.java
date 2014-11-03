@@ -156,6 +156,8 @@ public class HttpRouter implements Router {
 			} else if (res instanceof File) {
 				File file = (File) res;
 				x.sendFile(file);
+			} else if (res.getClass().getSimpleName().endsWith("Page")) {
+				x.html().write(res.toString());
 			} else if (!(res instanceof HttpExchangeImpl)) {
 				if (!x.hasContentType()) {
 					x.json();
