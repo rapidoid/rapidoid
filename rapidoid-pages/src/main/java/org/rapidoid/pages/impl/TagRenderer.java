@@ -92,6 +92,16 @@ public class TagRenderer {
 			sb.append("\"");
 		}
 
+		for (String event : tag.eventHandlers.keySet()) {
+			sb.append(" on");
+			sb.append(event);
+			sb.append("=\"");
+			sb.append("_emit(this, '");
+			sb.append(event);
+			sb.append("')");
+			sb.append("\"");
+		}
+
 		String attrib = sb.toString();
 
 		String indent = !inline ? U.mul("  ", level) : "";
