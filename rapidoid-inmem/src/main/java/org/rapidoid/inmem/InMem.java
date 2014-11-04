@@ -409,6 +409,9 @@ public class InMem {
 
 	public void start() {
 		// TODO implement start after shutdown
+		if (!active.get()) {
+			throw new IllegalStateException("Starting the database after shutdown is not implemented yet!");
+		}
 	}
 
 	public void halt() {
