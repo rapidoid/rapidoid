@@ -182,6 +182,18 @@ public class BYTES implements Constants {
 		return -1;
 	}
 
+	public static int scanNoCase(Bytes bytes, int from, int to, byte value) {
+		for (int i = from; i <= to; i++) {
+			byte b = bytes.get(i);
+
+			if (b == value || (b >= 'A' && CHARS_SWITCH_CASE[b] == value)) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
 	public static boolean match(Bytes bytes, int start, byte[] match, int offset, int length, boolean caseSensitive) {
 
 		boolean result;
@@ -230,7 +242,7 @@ public class BYTES implements Constants {
 		if (caseSensitive) {
 			return scan(bytes, start, limit - 1, match);
 		} else {
-			throw U.notReady(); // FIXME
+			return scanNoCase(bytes, start, limit - 1, match);
 		}
 	}
 
