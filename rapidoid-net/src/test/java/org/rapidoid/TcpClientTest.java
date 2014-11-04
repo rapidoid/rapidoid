@@ -22,6 +22,7 @@ package org.rapidoid;
 
 import org.rapidoid.net.TCP;
 import org.rapidoid.net.TCPClient;
+import org.rapidoid.net.TCPServer;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.util.LogLevel;
@@ -38,19 +39,30 @@ public class TcpClientTest extends NetTestCommons {
 			@Override
 			public void process(Channel ctx) {
 				if (ctx.isInitial()) {
-					ctx.writeln("Welcome!");
+					ctx.writeln("Hi there!");
+					return;
+				}
+
+				eq(ctx.readln(), "HI THERE!");
+			}
+		}).build().start();
+
+		U.sleep(3000);
+
+		TCPServer server = TCP.server().port(8080).protocol(new Protocol() {
+			@Override
+			public void process(Channel ctx) {
+				if (ctx.isInitial()) {
 					return;
 				}
 				ctx.writeln(ctx.readln().toUpperCase());
 			}
 		}).build().start();
 
-		int sec = 5;
-		U.sleep(sec * 1000);
-
-		// FIXME complete this test with TCP server
+		U.sleep(3000);
 
 		client.shutdown();
+		server.shutdown();
 	}
 
 }
