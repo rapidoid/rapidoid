@@ -392,10 +392,6 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		return conn;
 	}
 
-	public void close() {
-		// FIXME implement this
-	}
-
 	@Override
 	protected void failedOP(SelectionKey key, Throwable e) {
 		U.error("Network error", e);

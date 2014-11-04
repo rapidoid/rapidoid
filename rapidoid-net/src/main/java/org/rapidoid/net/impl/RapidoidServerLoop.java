@@ -139,7 +139,6 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 		stopLoop();
 
 		for (RapidoidWorker worker : workers) {
-			worker.close();
 			worker.stopLoop();
 		}
 
