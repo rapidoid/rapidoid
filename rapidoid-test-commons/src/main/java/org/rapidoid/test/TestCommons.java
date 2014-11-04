@@ -26,14 +26,19 @@ import java.net.URL;
 import java.util.Random;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 public abstract class TestCommons {
 
 	protected static final Random RND = new Random();
 
+	private boolean hasError = false;
+
 	@BeforeMethod(alwaysRun = true)
 	public void init() {
+		hasError = false;
+
 		try {
 			Class<?> clazz = Class.forName("org.rapidoid.util.IOC");
 			try {
@@ -53,16 +58,42 @@ public abstract class TestCommons {
 		}
 	}
 
+	@AfterMethod(alwaysRun = true)
+	public void checkForErrors() {
+		if (hasError) {
+			Assert.fail("Assertion error(s) occured, probably were caught or were thrown on non-main thread!");
+		}
+	}
+
+	protected void registerError(AssertionError e) {
+		hasError = true;
+	}
+
 	protected void fail(String msg) {
-		Assert.fail(msg);
+		try {
+			Assert.fail(msg);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
 	}
 
 	protected void isNull(Object value) {
-		Assert.assertNull(value);
+		try {
+			Assert.assertNull(value);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
 	}
 
 	protected void notNull(Object value) {
-		Assert.assertNotNull(value);
+		try {
+			Assert.assertNotNull(value);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
 	}
 
 	protected void notNullAll(Object... value) {
@@ -72,11 +103,21 @@ public abstract class TestCommons {
 	}
 
 	protected void isTrue(boolean cond) {
-		Assert.assertTrue(cond);
+		try {
+			Assert.assertTrue(cond);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
 	}
 
 	protected void isFalse(boolean cond) {
-		Assert.assertFalse(cond);
+		try {
+			Assert.assertFalse(cond);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
 	}
 
 	protected void same(Object... objects) {
@@ -86,27 +127,75 @@ public abstract class TestCommons {
 	}
 
 	protected void eq(Object actual, Object expected) {
-		Assert.assertEquals(actual, expected);
+		try {
+			Assert.assertEquals(actual, expected);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
 	}
 
 	protected void eq(String actual, String expected) {
-		Assert.assertEquals(actual, expected);
+		try {
+			Assert.assertEquals(actual, expected);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
 	}
 
 	protected void eq(char actual, char expected) {
-		Assert.assertEquals(actual, expected);
+		try {
+			Assert.assertEquals(actual, expected);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
 	}
 
 	protected void eq(long actual, long expected) {
-		Assert.assertEquals(actual, expected);
+		try {
+			Assert.assertEquals(actual, expected);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
 	}
 
 	protected void eq(double actual, double expected) {
-		Assert.assertEquals(actual, expected);
+		try {
+			Assert.assertEquals(actual, expected);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
 	}
 
 	protected void eq(byte[] actual, byte[] expected) {
-		Assert.assertEquals(actual, expected);
+		try {
+			Assert.assertEquals(actual, expected);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
+	}
+
+	protected void expectedException() {
+		try {
+			Assert.fail("Expected exception!");
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
+	}
+
+	protected void hasType(Object instance, Class<?> clazz) {
+		try {
+			Assert.assertEquals(instance.getClass(), clazz);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
 	}
 
 	protected char rndChar() {
@@ -157,10 +246,6 @@ public abstract class TestCommons {
 		return RND.nextLong();
 	}
 
-	protected void expectedException() {
-		Assert.fail("Expected exception!");
-	}
-
 	protected boolean yesNo() {
 		return RND.nextBoolean();
 	}
@@ -171,10 +256,6 @@ public abstract class TestCommons {
 
 	protected File resourceFile(String filename) {
 		return new File(resource(filename).getFile());
-	}
-
-	protected void hasType(Object instance, Class<?> clazz) {
-		Assert.assertEquals(instance.getClass(), clazz);
 	}
 
 }
