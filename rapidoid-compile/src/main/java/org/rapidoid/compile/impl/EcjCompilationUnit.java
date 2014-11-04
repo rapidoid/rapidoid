@@ -28,17 +28,24 @@ import org.rapidoid.util.U;
 
 public class EcjCompilationUnit implements ICompilationUnit {
 
+	private static final Pattern PACKAGE_PATTERN = Pattern.compile("package\\s+([\\w\\.]+?)\\s*;");
+
 	private static final Pattern PUBLIC_CLASS_PATTERN = Pattern.compile("public\\s+class\\s+(\\w+?)\\b");
 
+	private static final char[][] DEFAULT_PACKAGE = new char[0][];
+
+	private final String packageName;
 	private final String className;
 	private final String source;
 
-	public EcjCompilationUnit(String className, String source) {
+	public EcjCompilationUnit(String packageName, String className, String source) {
+		this.packageName = packageName;
 		this.className = className;
 		this.source = source;
 	}
 
 	public EcjCompilationUnit(String source) {
+		this.packageName = inferPackageName(source);
 		this.className = inferClassName(source);
 		this.source = source;
 	}
@@ -56,8 +63,7 @@ public class EcjCompilationUnit implements ICompilationUnit {
 	}
 
 	public char[][] getPackageName() {
-		// FIXME package name
-		return null;
+		return !packageName.isEmpty() ? toCharArrays(packageName.split("\\.")) : DEFAULT_PACKAGE;
 	}
 
 	public boolean ignoreOptionalProblems() {
@@ -71,6 +77,25 @@ public class EcjCompilationUnit implements ICompilationUnit {
 		} else {
 			throw U.rte("Couldn't find/infer the public class name from the source!");
 		}
+	}
+
+	private static String inferPackageName(String src) {
+		Matcher m = PACKAGE_PATTERN.matcher(src);
+		if (m.find()) {
+			return m.group(1);
+		} else {
+			return ""; // default package
+		}
+	}
+
+	private static char[][] toCharArrays(String[] arr) {
+		char[][] charArr = new char[arr.length][];
+
+		for (int i = 0; i < arr.length; i++) {
+			charArr[i] = arr[i].toCharArray();
+		}
+
+		return charArr;
 	}
 
 }

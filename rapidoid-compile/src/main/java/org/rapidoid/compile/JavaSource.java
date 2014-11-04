@@ -22,11 +22,14 @@ package org.rapidoid.compile;
 
 public class JavaSource {
 
+	public final String packageName;
+
 	public final String name;
 
 	public final String source;
 
-	public JavaSource(String name, String source) {
+	public JavaSource(String packageName, String name, String source) {
+		this.packageName = packageName;
 		this.name = name;
 		this.source = source;
 	}

@@ -30,8 +30,8 @@ public class Compile {
 		return new EcjCompiler();
 	}
 
-	public static JavaSource source(String name, String sourceCode) {
-		return new JavaSource(name, sourceCode);
+	public static JavaSource source(String packageName, String name, String sourceCode) {
+		return new JavaSource(packageName, name, sourceCode);
 	}
 
 	public static Compilation compile(String... sources) {
@@ -48,7 +48,7 @@ public class Compile {
 		ICompilationUnit[] units = new ICompilationUnit[sources.length];
 
 		for (int i = 0; i < units.length; i++) {
-			units[i] = new EcjCompilationUnit(sources[i].name, sources[i].source);
+			units[i] = new EcjCompilationUnit(sources[i].packageName, sources[i].name, sources[i].source);
 		}
 
 		return getCompiler().compile(units);
