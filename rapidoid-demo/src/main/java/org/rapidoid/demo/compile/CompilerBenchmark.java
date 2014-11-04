@@ -29,7 +29,7 @@ public class CompilerBenchmark {
 	public static void main(String[] args) throws Throwable {
 		U.args(args);
 
-		int count = U.option("count", 1000);
+		int count = U.option("count", 10000);
 		int threads = U.option("threads", U.cpus());
 
 		final String src1 = "public class Main%s { public static void main(String[] args) { U.info(\"abc%s\"); } }";

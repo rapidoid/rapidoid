@@ -1305,10 +1305,12 @@ public class U {
 
 		final CountDownLatch latch = new CountDownLatch(threadsN);
 
+		final int countPerThread = count / threadsN;
+
 		for (int i = 1; i <= threadsN; i++) {
 			new Thread() {
 				public void run() {
-					benchmark(name, count, runnable);
+					benchmark(name, countPerThread, runnable);
 					latch.countDown();
 				};
 			}.start();
@@ -1320,7 +1322,7 @@ public class U {
 			throw rte(e);
 		}
 
-		benchmarkComplete("avg(" + name + ")", threadsN * count, time);
+		benchmarkComplete("avg(" + name + ")", threadsN * countPerThread, time);
 	}
 
 	public static String getCpuMemStats() {
