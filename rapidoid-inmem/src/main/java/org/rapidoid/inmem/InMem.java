@@ -29,9 +29,12 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -40,6 +43,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.rapidoid.json.JSON;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.util.U;
 
 class Rec {
 	final Class<?> type;
@@ -71,6 +75,12 @@ public class InMem {
 
 	private final Thread persistor;
 
+	private final AtomicBoolean insideTx = new AtomicBoolean(false);
+
+	private final Map<Long, Rec> txChanges = new HashMap<Long, Rec>();
+
+	private final Set<Long> txInsertions = new HashSet<Long>();
+
 	private ConcurrentHashMap<Long, Rec> prevData = new ConcurrentHashMap<Long, Rec>();
 
 	private ConcurrentHashMap<Long, Rec> data = new ConcurrentHashMap<Long, Rec>();
@@ -100,7 +110,15 @@ public class InMem {
 		try {
 			long id = ids.incrementAndGet();
 			setId(record, id);
-			data.put(id, rec(record, id));
+
+			if (!txInsertions.add(id)) {
+				throw new IllegalStateException("Cannot insert changelog record with existing ID: " + id);
+			}
+
+			if (data.putIfAbsent(id, rec(record, id)) != null) {
+				throw new IllegalStateException("Cannot insert record with existing ID: " + id);
+			}
+
 			return id;
 		} finally {
 			sharedUnlock();
@@ -111,7 +129,13 @@ public class InMem {
 		sharedLock();
 		try {
 			validateId(id);
-			data.remove(id);
+
+			Rec removed = data.remove(id);
+
+			if (!txChanges.containsKey(id)) {
+				txChanges.put(id, removed);
+			}
+
 		} finally {
 			sharedUnlock();
 		}
@@ -143,7 +167,17 @@ public class InMem {
 		sharedLock();
 		try {
 			validateId(id);
-			data.put(id, rec(record, id));
+
+			Rec removed = data.put(id, rec(record, id));
+
+			if (!txChanges.containsKey(id)) {
+				txChanges.put(id, removed);
+			}
+
+			if (removed == null) {
+				throw new IllegalStateException("Cannot update non-existing record with ID=" + id);
+			}
+
 			setId(record, id);
 		} finally {
 			sharedUnlock();
@@ -214,10 +248,34 @@ public class InMem {
 
 	public void transaction(Runnable transaction) {
 		globalLock();
+
+		insideTx.set(true);
+
 		try {
 			transaction.run();
+		} catch (Throwable e) {
+			U.debug("Error in transaction, rolling back", "error", e);
+			txRollback();
 		} finally {
+			txChanges.clear();
+			txInsertions.clear();
+			insideTx.set(false);
 			globalUnlock();
+		}
+	}
+
+	private void txRollback() {
+		for (Entry<Long, Rec> e : txChanges.entrySet()) {
+			Long id = e.getKey();
+			Rec value = e.getValue();
+			U.must(value != null);
+			data.put(id, value);
+		}
+
+		for (Long id : txInsertions) {
+			// rollback insert operation
+			Rec inserted = data.remove(id);
+			U.must(inserted != null);
 		}
 	}
 
@@ -377,7 +435,6 @@ public class InMem {
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
-					// FIXME return immediately if halt
 				}
 			} else {
 				try {
