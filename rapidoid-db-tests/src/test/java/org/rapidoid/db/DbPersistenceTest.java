@@ -32,12 +32,13 @@ public class DbPersistenceTest extends DbTestCommons {
 		final int count = 10000;
 
 		System.out.println("inserting...");
+
 		U.startMeasure();
 
 		U.benchmarkMT(U.cpus(), "insert", count, new Runnable() {
 			@Override
 			public void run() {
-				DB.insert(new Person("abc", 10));
+				DB.insert(new Person("abc", -1));
 			}
 		});
 
@@ -46,7 +47,8 @@ public class DbPersistenceTest extends DbTestCommons {
 		U.benchmarkMT(U.cpus(), "update", count, new Runnable() {
 			@Override
 			public void run() {
-				DB.update(U.rnd(count) + 1, new Person("xyz", 10));
+				int id = U.rnd(count) + 1;
+				DB.update(id, new Person("x", id * 100));
 			}
 		});
 
@@ -54,7 +56,13 @@ public class DbPersistenceTest extends DbTestCommons {
 
 		U.endMeasure("total");
 
-		// FIXME complete this test
+		eq(DB.size(), count);
+
+		for (int id = 1; id < count; id++) {
+			Person p = DB.get(id);
+			isTrue(p.id == id);
+			isTrue((p.name.equals("abc") && p.age == -1) || (p.name.equals("x") && p.age == id * 100));
+		}
 	}
 
 }
