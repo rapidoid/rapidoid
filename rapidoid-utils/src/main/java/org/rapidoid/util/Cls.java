@@ -125,6 +125,8 @@ public class Cls {
 
 			});
 
+	private static final Object RTE = new Object();
+
 	public static void reset() {
 		BEAN_PROPERTIES.clear();
 	}
@@ -240,6 +242,15 @@ public class Cls {
 			field.setAccessible(false);
 		} catch (Exception e) {
 			throw U.rte("Cannot set field value!", e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T getFieldValue(Object instance, String fieldName, T defaultValue) {
+		try {
+			return (T) getFieldValue(instance, fieldName);
+		} catch (Exception e) {
+			return defaultValue;
 		}
 	}
 
@@ -542,7 +553,7 @@ public class Cls {
 		throw U.rte("Cannot find the property '%s' in the class '%s'", propertyName, instance.getClass());
 	}
 
-	public static Object getPropValue(Object instance, String propertyName) {
+	public static Object getPropValue(Object instance, String propertyName, Object defaultValue) {
 		String propertyNameCap = U.capitalized(propertyName);
 		try {
 			for (Class<?> c = instance.getClass(); c != Object.class; c = c.getSuperclass()) {
@@ -567,7 +578,17 @@ public class Cls {
 		} catch (Exception e) {
 			throw U.rte("Cannot get property value!", e);
 		}
-		throw U.rte("Cannot find the property '%s' in the class '%s'", propertyName, instance.getClass());
+
+		if (defaultValue == RTE) {
+			throw U.rte("Cannot find the property '%s' in the class '%s'", propertyName, instance.getClass());
+		} else {
+			return defaultValue;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T getPropValue(Object instance, String propertyName) {
+		return (T) getPropValue(instance, propertyName, RTE);
 	}
 
 	public static Object[] instantiateAll(Class<?>... classes) {
@@ -575,6 +596,17 @@ public class Cls {
 
 		for (int i = 0; i < instances.length; i++) {
 			instances[i] = U.newInstance(classes[i]);
+		}
+
+		return instances;
+	}
+
+	public static Object[] instantiateAll(Collection<Class<?>> classes) {
+		Object[] instances = new Object[classes.size()];
+
+		int i = 0;
+		for (Class<?> clazz : classes) {
+			instances[i++] = U.newInstance(clazz);
 		}
 
 		return instances;
