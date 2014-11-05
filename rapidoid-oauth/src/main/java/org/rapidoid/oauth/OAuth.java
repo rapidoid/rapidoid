@@ -29,7 +29,7 @@ import com.rapidoid.http.HttpExchange;
 
 public class OAuth {
 
-	private static final String LOGIN_BTN = "<div class=\"row-fluid\"><div class=\"col-md-3\"><a href=\"/%sLogin\" class=\"btn btn-default btn-block\">Login with %s</a></div></div>";
+	private static final String LOGIN_BTN = "<div class=\"row-fluid\"><div class=\"col-md-3\"><a href=\"/_%sLogin\" class=\"btn btn-default btn-block\">Login with %s</a></div></div>";
 
 	public static void register(HTTPServer server, OAuthProvider... providers) {
 		register(server, new DefaultOAuthStateCheck(), providers);
@@ -47,8 +47,8 @@ public class OAuth {
 		for (OAuthProvider provider : providers) {
 			String name = provider.getName().toLowerCase();
 
-			String loginPath = "/" + name + "Login";
-			String callbackPath = "/" + name + "OauthCallback";
+			String loginPath = "/_" + name + "Login";
+			String callbackPath = "/_" + name + "OauthCallback";
 
 			String clientId = U.config(name + ".clientId");
 			String clientSecret = U.config(name + ".clientSecret");
@@ -61,7 +61,7 @@ public class OAuth {
 
 		loginHtml.append("</div>");
 
-		server.get("/oauthLogin", new Handler() {
+		server.get("/_oauthLogin", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) throws Exception {
 				return HTMLSnippets.writePage(x, "Login with OAuth provider", loginHtml.toString());
