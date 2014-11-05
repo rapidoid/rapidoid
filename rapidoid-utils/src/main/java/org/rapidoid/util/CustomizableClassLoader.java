@@ -21,24 +21,36 @@ package org.rapidoid.util;
  */
 
 import java.security.SecureClassLoader;
-import java.util.Map;
 
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Predicate;
 
 public class CustomizableClassLoader extends SecureClassLoader {
 
-	private final Map<String, byte[]> classes;
+	private final Mapper<String, byte[]> classes;
 
 	private final Predicate<String> allowed;
 
-	public CustomizableClassLoader(Map<String, byte[]> classes, Predicate<String> allowed) {
+	private boolean forceReload;
+
+	public CustomizableClassLoader(Mapper<String, byte[]> classes, Predicate<String> allowed, boolean forceReload) {
 		this.classes = classes;
 		this.allowed = allowed;
+		this.forceReload = forceReload;
 	}
 
 	@Override
 	public Class<?> loadClass(String name) throws ClassNotFoundException {
 		U.secure(U.eval(allowed, name), "Class not allowed: %s", name);
+
+		if (forceReload && !U.isJREClass(name)) {
+			try {
+				// try to force class reloading
+				return findClass(name);
+			} catch (ClassNotFoundException e) {
+				// if the reloading fails, continue to the normal loading flow - below...
+			}
+		}
 
 		try {
 			// if the class has already been loaded, it's done
@@ -53,7 +65,8 @@ public class CustomizableClassLoader extends SecureClassLoader {
 	protected Class<?> findClass(String name) throws ClassNotFoundException {
 		U.secure(U.eval(allowed, name), "Class not allowed: %s", name);
 
-		byte[] bytes = classes.get(name);
+		byte[] bytes = U.eval(classes, name);
+
 		if (bytes != null) {
 			return super.defineClass(name, bytes, 0, bytes.length);
 		} else {

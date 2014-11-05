@@ -44,7 +44,7 @@ public class EcjCompilation implements Compilation {
 	private final CustomizableClassLoader loader;
 
 	public EcjCompilation(Predicate<String> allowed) {
-		loader = new CustomizableClassLoader(classes, allowed);
+		loader = new CustomizableClassLoader(U.mapper(classes), allowed, false);
 	}
 
 	@SuppressWarnings("unchecked")
