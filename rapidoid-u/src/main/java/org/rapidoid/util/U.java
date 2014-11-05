@@ -1392,8 +1392,8 @@ public class U {
 		}
 	}
 
-	public static List<Class<?>> classpathClasses(String packageName, String nameRegex, Predicate<Class<?>> filter) {
-
+	public static List<Class<?>> classpathClasses(String packageName, String nameRegex, Predicate<Class<?>> filter,
+			ClassLoader classLoader) {
 		Pattern regex = Pattern.compile(nameRegex);
 		ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
 		Enumeration<URL> urls = resources(packageName);
@@ -1402,7 +1402,29 @@ public class U {
 			URL url = urls.nextElement();
 			File file = new File(url.getFile());
 
-			getClasses(classes, file, file, regex, filter);
+			getClasses(classes, file, file, regex, filter, classLoader);
+		}
+
+		return classes;
+	}
+
+	public static List<Class<?>> classpathClassesByName(String simpleName, Predicate<Class<?>> filter,
+			ClassLoader classLoader) {
+		List<Class<?>> classes = classpathClasses("*", ".*\\." + simpleName, filter, classLoader);
+
+		if (classes.isEmpty()) {
+			U.warn("No classes found on classpath with the specified simple name", "name", simpleName);
+		}
+
+		return classes;
+	}
+
+	public static List<Class<?>> classpathClassesBySuffix(String nameSuffix, Predicate<Class<?>> filter,
+			ClassLoader classLoader) {
+		List<Class<?>> classes = classpathClasses("*", ".+" + nameSuffix, filter, classLoader);
+
+		if (classes.isEmpty()) {
+			U.warn("No classes found on classpath with the specified suffix", "suffix", nameSuffix);
 		}
 
 		return classes;
@@ -1448,13 +1470,13 @@ public class U {
 	}
 
 	private static void getClasses(Collection<Class<?>> classes, File root, File parent, Pattern nameRegex,
-			Predicate<Class<?>> filter) {
+			Predicate<Class<?>> filter, ClassLoader classLoader) {
 
 		if (parent.isDirectory()) {
 			U.debug("scanning directory", "dir", parent);
 			for (File f : parent.listFiles()) {
 				if (f.isDirectory()) {
-					getClasses(classes, root, f, nameRegex, filter);
+					getClasses(classes, root, f, nameRegex, filter, classLoader);
 				} else {
 					U.debug("scanned file", "file", f);
 					try {
@@ -1468,7 +1490,10 @@ public class U {
 
 							if (nameRegex.matcher(clsName).matches()) {
 								U.info("loading class", "name", clsName);
-								Class<?> cls = Class.forName(clsName);
+
+								Class<?> cls = classLoader != null ? Class.forName(clsName, true, classLoader) : Class
+										.forName(clsName);
+
 								if (filter == null || filter.eval(cls)) {
 									classes.add(cls);
 								}
