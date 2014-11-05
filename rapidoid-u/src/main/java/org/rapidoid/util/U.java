@@ -85,6 +85,9 @@ public class U {
 	protected static String[] ARGS = {};
 	private static Properties CONFIG = null;
 
+	private static Pattern JRE_CLASS_PATTERN = Pattern
+			.compile("^(java|javax|javafx|com\\.sun|sun|com\\.oracle|oracle|jdk|org\\.omg|org\\.w3c).*");
+
 	private U() {
 	}
 
@@ -643,6 +646,15 @@ public class U {
 		return maxSize > 0 ? new ArrayBlockingQueue<T>(maxSize) : new ConcurrentLinkedQueue<T>();
 	}
 
+	public static <FROM, TO> Mapper<FROM, TO> mapper(final Map<FROM, TO> map) {
+		return new Mapper<FROM, TO>() {
+			@Override
+			public TO map(FROM key) throws Exception {
+				return map.get(key);
+			}
+		};
+	}
+
 	public static URL resource(String filename) {
 		return classLoader().getResource(filename);
 	}
@@ -1028,6 +1040,13 @@ public class U {
 
 	public static String capitalized(String s) {
 		return s.substring(0, 1).toUpperCase() + s.substring(1);
+	}
+
+	public static String mid(String s, int beginIndex, int endIndex) {
+		if (endIndex < 0) {
+			endIndex = s.length() + endIndex;
+		}
+		return s.substring(beginIndex, endIndex);
 	}
 
 	public static String urlDecode(String value) {
@@ -1461,6 +1480,10 @@ public class U {
 				}
 			}
 		}
+	}
+
+	public static boolean isJREClass(String canonicalClassName) {
+		return JRE_CLASS_PATTERN.matcher(canonicalClassName).matches();
 	}
 
 }
