@@ -482,7 +482,7 @@ public class Cls {
 		T instance = null;
 
 		for (Object obj : values) {
-			if (obj != null && type.isAssignableFrom(obj.getClass())) {
+			if (U.instanceOf(obj, type)) {
 				if (instance == null) {
 					instance = (T) obj;
 				} else {

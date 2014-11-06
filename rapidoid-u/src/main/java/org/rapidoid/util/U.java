@@ -387,7 +387,7 @@ public class U {
 
 		for (int i = 0; i < values.length; i++) {
 			Object val = values[i];
-			if (val != null && !types[i].isAssignableFrom(val.getClass())) {
+			if (val != null && !instanceOf(val, types[i])) {
 				return false;
 			}
 		}
@@ -1509,6 +1509,22 @@ public class U {
 
 	public static boolean isJREClass(String canonicalClassName) {
 		return JRE_CLASS_PATTERN.matcher(canonicalClassName).matches();
+	}
+
+	public static boolean instanceOf(Object obj, Class<?>... classes) {
+		if (obj == null) {
+			return false;
+		}
+
+		Class<? extends Object> objClass = obj.getClass();
+
+		for (Class<?> clazz : classes) {
+			if (clazz.isAssignableFrom(objClass)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }

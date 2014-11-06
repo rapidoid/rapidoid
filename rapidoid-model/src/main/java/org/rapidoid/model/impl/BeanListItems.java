@@ -25,6 +25,7 @@ import java.util.List;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Model;
 import org.rapidoid.model.Property;
+import org.rapidoid.util.U;
 
 public class BeanListItems<T> extends ListItems {
 
@@ -44,7 +45,7 @@ public class BeanListItems<T> extends ListItems {
 
 	@Override
 	public boolean fitsIn(Item item) {
-		return super.fitsIn(item) && beanType.isAssignableFrom(item.value().getClass());
+		return super.fitsIn(item) && U.instanceOf(item.value(), beanType);
 	}
 
 }

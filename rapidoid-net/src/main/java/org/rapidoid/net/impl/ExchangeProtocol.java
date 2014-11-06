@@ -22,6 +22,7 @@ package org.rapidoid.net.impl;
 
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.pool.Pool;
+import org.rapidoid.util.U;
 
 public abstract class ExchangeProtocol<T extends DefaultExchange<?, ?>> implements Protocol, CtxListener {
 
@@ -36,8 +37,7 @@ public abstract class ExchangeProtocol<T extends DefaultExchange<?, ?>> implemen
 		T exchange = pool(ctx.helper()).get();
 		exchange.reset();
 
-		assert exchange != null;
-		assert exchangeType.isAssignableFrom(exchange.getClass());
+		assert U.instanceOf(exchange, exchangeType);
 
 		exchange.setConnection(ctx);
 		process(ctx, exchange);
@@ -48,8 +48,7 @@ public abstract class ExchangeProtocol<T extends DefaultExchange<?, ?>> implemen
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onDone(Channel conn, Object tag) {
-		assert tag != null;
-		assert exchangeType.isAssignableFrom(tag.getClass());
+		assert U.instanceOf(tag, exchangeType);
 
 		pool(conn.helper()).release((T) tag);
 	}
