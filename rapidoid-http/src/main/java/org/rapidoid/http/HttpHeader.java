@@ -1,8 +1,8 @@
-package org.rapidoid.oauth;
+package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-oauth
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,18 +20,26 @@ package org.rapidoid.oauth;
  * #L%
  */
 
-import org.rapidoid.http.HTTP;
-import org.rapidoid.http.HTTPServer;
-import org.rapidoid.util.LogLevel;
-import org.rapidoid.util.U;
+public class HttpHeader {
 
-public class OAuthDemo {
+	public static final HttpHeader SET_COOKIE = new HttpHeader("Set-Cookie");
 
-	public static void main(String[] args) {
-		U.setLogLevel(LogLevel.DEBUG);
-		HTTPServer server = HTTP.server().build();
-		OAuth.register(server);
-		server.start();
+	public static final HttpHeader CONTENT_TYPE = new HttpHeader("Content-Type");
+
+	public static final HttpHeader CONTENT_DISPOSITION = new HttpHeader("Content-Disposition");
+
+	public static final HttpHeader CACHE_CONTROL = new HttpHeader("Cache-Control");
+
+	public static final HttpHeader LOCATION = new HttpHeader("Location");
+
+	private final byte[] bytes;
+
+	public HttpHeader(String name) {
+		this.bytes = name.getBytes();
+	}
+
+	public byte[] getBytes() {
+		return bytes;
 	}
 
 }

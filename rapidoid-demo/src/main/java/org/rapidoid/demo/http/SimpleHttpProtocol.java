@@ -24,14 +24,13 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BYTES;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
+import org.rapidoid.http.HttpParser;
 import org.rapidoid.inject.IoC;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.Dates;
 import org.rapidoid.wrap.Bool;
-
-import com.rapidoid.http.HttpParser;
 
 public class SimpleHttpProtocol implements Protocol {
 

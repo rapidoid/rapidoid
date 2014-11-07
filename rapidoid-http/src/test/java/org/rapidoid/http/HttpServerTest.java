@@ -1,8 +1,8 @@
-package org.rapidoid.oauth;
+package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-oauth
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,18 +20,22 @@ package org.rapidoid.oauth;
  * #L%
  */
 
-import org.rapidoid.http.HTTP;
-import org.rapidoid.http.HTTPServer;
-import org.rapidoid.util.LogLevel;
-import org.rapidoid.util.U;
+import org.testng.annotations.Test;
 
-public class OAuthDemo {
+public class HttpServerTest extends HttpTestCommons {
 
-	public static void main(String[] args) {
-		U.setLogLevel(LogLevel.DEBUG);
-		HTTPServer server = HTTP.server().build();
-		OAuth.register(server);
-		server.start();
+	@Test
+	public void shouldHandleHttpRequests() {
+		defaultServerSetup();
+
+		String message = "ažфbдšгcč";
+
+		eq(get("/x?" + message), "GET:/x:/x:" + message);
+		eq(get("/echo?" + message), "GET:/echo::" + message);
+		eq(get("/echo/abc?" + message), "GET:/echo/abc:/abc:" + message);
+		eq(get("/echo/abc/d" + message), "GET:/echo/abc/d" + message + ":/abc/d" + message + ":");
+
+		shutdown();
 	}
 
 }

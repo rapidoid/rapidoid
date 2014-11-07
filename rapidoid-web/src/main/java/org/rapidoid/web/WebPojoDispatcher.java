@@ -20,11 +20,10 @@ package org.rapidoid.web;
  * #L%
  */
 
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pojo.PojoRequest;
 import org.rapidoid.pojo.impl.PojoDispatcherImpl;
 import org.rapidoid.util.U;
-
-import com.rapidoid.http.HttpExchange;
 
 public class WebPojoDispatcher extends PojoDispatcherImpl {
 

@@ -22,11 +22,10 @@ package org.rapidoid.pages;
 
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.impl.GuiContextImpl;
+import org.rapidoid.http.HTTPServer;
+import org.rapidoid.http.Handler;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
-
-import com.rapidoid.http.HTTPServer;
-import com.rapidoid.http.Handler;
-import com.rapidoid.http.HttpExchange;
 
 public class Pages {
 

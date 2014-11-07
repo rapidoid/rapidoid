@@ -1,8 +1,10 @@
-package org.rapidoid.oauth;
+package org.rapidoid.http;
+
+import java.util.Map;
 
 /*
  * #%L
- * rapidoid-oauth
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,18 +22,20 @@ package org.rapidoid.oauth;
  * #L%
  */
 
-import org.rapidoid.http.HTTP;
-import org.rapidoid.http.HTTPServer;
-import org.rapidoid.util.LogLevel;
-import org.rapidoid.util.U;
+public interface HttpSession {
 
-public class OAuthDemo {
+	void openSession(String sessionId);
 
-	public static void main(String[] args) {
-		U.setLogLevel(LogLevel.DEBUG);
-		HTTPServer server = HTTP.server().build();
-		OAuth.register(server);
-		server.start();
-	}
+	Map<String, Object> getSession(String sessionId);
+
+	void setAttribute(String sessionId, String attribute, Object value);
+
+	Object getAttribute(String sessionId, String attribute);
+
+	void deleteAttribute(String sessionId, String attribute);
+
+	void closeSession(String sessionId);
+
+	boolean exists(String sessionId);
 
 }

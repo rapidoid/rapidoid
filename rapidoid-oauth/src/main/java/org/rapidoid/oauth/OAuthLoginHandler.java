@@ -21,9 +21,8 @@ package org.rapidoid.oauth;
  */
 
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
-
-import com.rapidoid.http.Handler;
-import com.rapidoid.http.HttpExchange;
+import org.rapidoid.http.Handler;
+import org.rapidoid.http.HttpExchange;
 
 public class OAuthLoginHandler implements Handler {
 

@@ -29,10 +29,9 @@ import org.apache.oltu.oauth2.client.response.GitHubTokenResponse;
 import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
 import org.apache.oltu.oauth2.client.response.OAuthResourceResponse;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
+import org.rapidoid.http.Handler;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
-
-import com.rapidoid.http.Handler;
-import com.rapidoid.http.HttpExchange;
 
 public class OAuthTokenHandler implements Handler {
 

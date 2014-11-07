@@ -1,8 +1,8 @@
-package org.rapidoid.oauth;
+package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-oauth
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,18 +20,14 @@ package org.rapidoid.oauth;
  * #L%
  */
 
-import org.rapidoid.http.HTTP;
-import org.rapidoid.http.HTTPServer;
-import org.rapidoid.util.LogLevel;
-import org.rapidoid.util.U;
+import java.io.File;
 
-public class OAuthDemo {
+import org.rapidoid.net.abstracts.CtxWrite;
 
-	public static void main(String[] args) {
-		U.setLogLevel(LogLevel.DEBUG);
-		HTTPServer server = HTTP.server().build();
-		OAuth.register(server);
-		server.start();
-	}
+public interface HttpExchangeBody extends CtxWrite<HttpExchangeBody> {
+
+	HttpExchangeBody sendFile(File file);
+
+	HttpExchangeBody redirect(String url);
 
 }

@@ -20,13 +20,12 @@ package org.rapidoid.demo.pages;
  * #L%
  */
 
+import org.rapidoid.http.HTTP;
+import org.rapidoid.http.HTTPServer;
+import org.rapidoid.http.Handler;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.util.U;
-
-import com.rapidoid.http.HTTP;
-import com.rapidoid.http.HTTPServer;
-import com.rapidoid.http.Handler;
-import com.rapidoid.http.HttpExchange;
 
 public class PageServerDemo {
 

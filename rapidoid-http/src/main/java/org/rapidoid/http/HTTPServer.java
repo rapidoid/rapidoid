@@ -1,8 +1,8 @@
-package org.rapidoid.oauth;
+package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-oauth
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,18 +20,28 @@ package org.rapidoid.oauth;
  * #L%
  */
 
-import org.rapidoid.http.HTTP;
-import org.rapidoid.http.HTTPServer;
-import org.rapidoid.util.LogLevel;
-import org.rapidoid.util.U;
+import org.rapidoid.net.TCPServer;
 
-public class OAuthDemo {
+public interface HTTPServer extends TCPServer {
 
-	public static void main(String[] args) {
-		U.setLogLevel(LogLevel.DEBUG);
-		HTTPServer server = HTTP.server().build();
-		OAuth.register(server);
-		server.start();
-	}
+	HTTPServer route(String cmd, String url, Handler handler);
+
+	HTTPServer route(String cmd, String url, String response);
+
+	HTTPServer serve(String response);
+
+	HTTPServer serve(Handler handler);
+
+	HTTPServer get(String url, Handler handler);
+
+	HTTPServer post(String url, Handler handler);
+
+	HTTPServer put(String url, Handler handler);
+
+	HTTPServer delete(String url, Handler handler);
+
+	HTTPServer start();
+
+	HTTPServer shutdown();
 
 }

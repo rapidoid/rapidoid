@@ -20,12 +20,11 @@ package org.rapidoid.oauth;
  * #L%
  */
 
+import org.rapidoid.http.HTMLSnippets;
+import org.rapidoid.http.HTTPServer;
+import org.rapidoid.http.Handler;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
-
-import com.rapidoid.http.HTMLSnippets;
-import com.rapidoid.http.HTTPServer;
-import com.rapidoid.http.Handler;
-import com.rapidoid.http.HttpExchange;
 
 public class OAuth {
 

@@ -22,16 +22,15 @@ package org.rapidoid.web;
 
 import java.util.List;
 
+import org.rapidoid.http.HTTP;
+import org.rapidoid.http.Handler;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pojo.POJO;
 import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
-
-import com.rapidoid.http.HTTP;
-import com.rapidoid.http.Handler;
-import com.rapidoid.http.HttpExchange;
 
 public class Web {
 

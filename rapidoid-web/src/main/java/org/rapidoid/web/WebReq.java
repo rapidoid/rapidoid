@@ -22,9 +22,8 @@ package org.rapidoid.web;
 
 import java.util.Map;
 
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pojo.PojoRequest;
-
-import com.rapidoid.http.HttpExchange;
 
 public class WebReq implements PojoRequest {
 
