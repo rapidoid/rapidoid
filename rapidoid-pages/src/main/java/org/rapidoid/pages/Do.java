@@ -1,5 +1,8 @@
 package org.rapidoid.pages;
 
+import org.rapidoid.html.Action;
+import org.rapidoid.html.Var;
+
 /*
  * #%L
  * rapidoid-pages

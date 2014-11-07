@@ -20,8 +20,7 @@ package org.rapidoid.demo.pages;
  * #L%
  */
 
-import java.util.Map;
-
+import org.rapidoid.pages.Pages;
 import org.rapidoid.util.U;
 
 import com.rapidoid.http.HTTP;
@@ -50,26 +49,9 @@ public class PageServerDemo {
 			}
 		});
 
-		server.post("/_emit", new Handler() {
-
-			@Override
-			public Object handle(HttpExchange x) throws Exception {
-				String hnd = x.data("hnd");
-				String event = x.data("event");
-
-				U.notNull(hnd, "hnd");
-				U.notNull(event, "event");
-
-				ShowcasePage page = x.session("page");
-				page.emit(event, hnd);
-
-				Map<String, String> diff = page.changedContent();
-				x.json();
-				return diff;
-			}
-		});
+		Pages.registerPages(server);
 
 		server.start();
-
 	}
+
 }

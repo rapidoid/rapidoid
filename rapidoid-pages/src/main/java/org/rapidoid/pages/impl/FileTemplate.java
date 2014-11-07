@@ -20,9 +20,10 @@ package org.rapidoid.pages.impl;
  * #L%
  */
 
+import org.rapidoid.html.impl.TagRenderer;
 import org.rapidoid.util.U;
 
-public class FileTemplate {
+public class FileTemplate extends UnmodifiableTag {
 
 	private final String templateName;
 

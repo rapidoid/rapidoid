@@ -27,7 +27,8 @@ function _emit(c, event) {
 			$('[_h=' + h + ']').replaceWith(data[h]);
 		}
 	}).fail(function (data) {
-		alert("Error: " + JSON.stringify(data));
+		alert("Communication error!");
+		console.log(data);
 	});
 }
 </script>

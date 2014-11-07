@@ -20,20 +20,20 @@ package org.rapidoid.pages.impl;
  * #L%
  */
 
-import org.rapidoid.pages.Handler;
-import org.rapidoid.pages.Tag;
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagEventHandler;
 
-public class HandlerChain<TAG extends Tag<?>> implements Handler<TAG> {
+public class HandlerChain<TAG extends Tag<?>> implements TagEventHandler<TAG> {
 
-	private final Handler<TAG>[] handlers;
+	private final TagEventHandler<TAG>[] handlers;
 
-	public HandlerChain(Handler<TAG>[] handlers) {
+	public HandlerChain(TagEventHandler<TAG>[] handlers) {
 		this.handlers = handlers;
 	}
 
 	@Override
 	public void handle(TAG target) {
-		for (Handler<TAG> handler : handlers) {
+		for (TagEventHandler<TAG> handler : handlers) {
 			handler.handle(target);
 		}
 	}

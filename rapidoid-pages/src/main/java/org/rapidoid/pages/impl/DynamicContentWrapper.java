@@ -20,9 +20,10 @@ package org.rapidoid.pages.impl;
  * #L%
  */
 
+import org.rapidoid.html.impl.TagRenderer;
 import org.rapidoid.pages.DynamicContent;
 
-public class DynamicContentWrapper {
+public class DynamicContentWrapper extends UnmodifiableTag {
 
 	private final DynamicContent dynamic;
 
@@ -33,6 +34,11 @@ public class DynamicContentWrapper {
 	@Override
 	public String toString() {
 		return String.valueOf(dynamic.eval());
+	}
+
+	@Override
+	public String str(int level) {
+		return TagRenderer.str(dynamic.eval(), level, false);
 	}
 
 }

@@ -2,12 +2,12 @@ package org.rapidoid.pages.bootstrap;
 
 import java.util.List;
 
+import org.rapidoid.html.tag.TbodyTag;
+import org.rapidoid.html.tag.TrTag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
 import org.rapidoid.pages.DynamicContent;
-import org.rapidoid.pages.html.TbodyTag;
-import org.rapidoid.pages.html.TrTag;
 
 /*
  * #%L
@@ -31,17 +31,10 @@ import org.rapidoid.pages.html.TrTag;
 
 public class TableWidget extends BootstrapWidget {
 
-	private final List<Property> properties;
+	public TableWidget(final Items items) {
 
-	private final Items items;
+		final List<Property> properties = items.properties();
 
-	public TableWidget(Items items) {
-		this.items = items;
-		this.properties = items.properties();
-	}
-
-	@Override
-	protected Object contents() {
 		TrTag header = tr();
 
 		for (Property prop : properties) {
@@ -68,7 +61,7 @@ public class TableWidget extends BootstrapWidget {
 			}
 		});
 
-		return table(thead(header), body);
+		setContent(table(thead(header), body));
 	}
 
 }

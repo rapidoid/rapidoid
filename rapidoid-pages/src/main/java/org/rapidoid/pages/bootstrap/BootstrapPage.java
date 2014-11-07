@@ -1,5 +1,7 @@
 package org.rapidoid.pages.bootstrap;
 
+import org.rapidoid.html.Tag;
+
 /*
  * #%L
  * rapidoid-pages
@@ -22,8 +24,7 @@ package org.rapidoid.pages.bootstrap;
 
 public abstract class BootstrapPage extends BootstrapWidget {
 
-	@Override
-	protected Object contents() {
+	protected Tag<?> page() {
 		return render("bootstrap-page.html", "title", pageTitle(), "style", pageStyle(), "head", pageHead(), "body",
 				pageBody());
 	}

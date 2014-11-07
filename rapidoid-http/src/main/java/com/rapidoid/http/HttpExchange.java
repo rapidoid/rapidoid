@@ -107,4 +107,6 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	String sessionId();
 
+	boolean hasSession();
+
 }

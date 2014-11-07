@@ -20,18 +20,25 @@ package org.rapidoid.pages;
  * #L%
  */
 
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagEventHandler;
+import org.rapidoid.html.Var;
+import org.rapidoid.html.tag.ButtonTag;
+import org.rapidoid.html.tag.DivTag;
+import org.rapidoid.html.tag.InputTag;
+import org.rapidoid.html.tag.SpanTag;
 import org.rapidoid.model.Model;
 import org.rapidoid.pages.bootstrap.TableWidget;
 import org.rapidoid.pages.entity.Person;
-import org.rapidoid.pages.html.ButtonTag;
-import org.rapidoid.pages.html.DivTag;
-import org.rapidoid.pages.html.InputTag;
-import org.rapidoid.pages.html.SpanTag;
 import org.rapidoid.util.U;
 
-public class PlaygroundWidget extends Widget {
+public class PlaygroundWidget extends HtmlWidget {
 
-	public DivTag grid(int page) {
+	public PlaygroundWidget() {
+		setContent(html(grid(1), counter(10), adder()));
+	}
+
+	public Tag<?> grid(int page) {
 		Object[] data = { new Person("nick", 22), new Person("doe", 44) };
 
 		if (data.length > 0) {
@@ -45,14 +52,14 @@ public class PlaygroundWidget extends Widget {
 
 		final Var<Integer> num = var(start);
 
-		ButtonTag b1 = button("+").onClick(new Handler<ButtonTag>() {
+		ButtonTag b1 = button("+").onClick(new TagEventHandler<ButtonTag>() {
 			@Override
 			public void handle(ButtonTag target) {
 				num.set(num.get() + 1);
 			}
 		});
 
-		ButtonTag b2 = button("-").onClick(new Handler<ButtonTag>() {
+		ButtonTag b2 = button("-").onClick(new TagEventHandler<ButtonTag>() {
 			@Override
 			public void handle(ButtonTag target) {
 				num.set(num.get() + 1);
@@ -67,7 +74,7 @@ public class PlaygroundWidget extends Widget {
 		final InputTag input = input().css("border: 1px;");
 		final DivTag coll = div();
 
-		ButtonTag b2 = button("+").onClick(new Handler<ButtonTag>() {
+		ButtonTag b2 = button("+").onClick(new TagEventHandler<ButtonTag>() {
 			@Override
 			public void handle(ButtonTag target) {
 				U.debug("click", "button", target);
@@ -80,11 +87,6 @@ public class PlaygroundWidget extends Widget {
 		b2.onClick(Do.inc(counter, 2), Do.dec(counter, 1));
 
 		return div(span(input, b2), coll);
-	}
-
-	@Override
-	protected Object contents() {
-		return html(grid(1), counter(10), adder());
 	}
 
 }

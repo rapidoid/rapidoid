@@ -22,21 +22,25 @@ package org.rapidoid.pages;
 
 import java.util.regex.Pattern;
 
-import org.rapidoid.pages.Var;
-import org.rapidoid.pages.Widget;
+import org.rapidoid.html.TagWidget;
+import org.rapidoid.html.Var;
 import org.rapidoid.test.TestCommons;
 
 public class PagesTestCommons extends TestCommons {
 
-	protected void has(Widget widget, String... containingTexts) {
+	protected void has(TagWidget widget, String... containingTexts) {
 		String html = widget.toString();
+		notNull(html);
+
 		for (String text : containingTexts) {
 			isTrue(html.contains(text));
 		}
 	}
 
-	protected void hasRegex(Widget widget, String... containingRegexes) {
+	protected void hasRegex(TagWidget widget, String... containingRegexes) {
 		String html = widget.toString();
+		notNull(html);
+
 		for (String regex : containingRegexes) {
 			isTrue(Pattern.compile(regex).matcher(html).find());
 		}

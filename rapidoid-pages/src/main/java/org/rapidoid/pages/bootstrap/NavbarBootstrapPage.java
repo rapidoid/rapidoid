@@ -20,7 +20,7 @@ package org.rapidoid.pages.bootstrap;
  * #L%
  */
 
-import org.rapidoid.pages.Tag;
+import org.rapidoid.html.Tag;
 
 public abstract class NavbarBootstrapPage extends BootstrapPage {
 

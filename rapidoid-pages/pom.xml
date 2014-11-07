@@ -20,7 +20,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-ioc</artifactId>
+			<artifactId>rapidoid-http</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -33,11 +33,6 @@
 			<artifactId>rapidoid-test-commons</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.3.2</version>
 		</dependency>
 	</dependencies>
 

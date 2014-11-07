@@ -670,4 +670,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return this;
 	}
 
+	@Override
+	public boolean hasSession() {
+		return session != null;
+	}
+
 }

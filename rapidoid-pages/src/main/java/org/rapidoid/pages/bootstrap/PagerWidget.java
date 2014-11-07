@@ -20,31 +20,22 @@ package org.rapidoid.pages.bootstrap;
  * #L%
  */
 
+import org.rapidoid.html.Var;
+import org.rapidoid.html.tag.ButtonTag;
+import org.rapidoid.html.tag.SpanTag;
 import org.rapidoid.pages.Do;
-import org.rapidoid.pages.Var;
-import org.rapidoid.pages.html.ButtonTag;
-import org.rapidoid.pages.html.SpanTag;
 
 public class PagerWidget extends BootstrapWidget {
 
-	private int from;
-	private int to;
-	private Var<Integer> pageNumber;
-
 	public PagerWidget(int from, int to, Var<Integer> pageNumber) {
-		this.from = from;
-		this.to = to;
-		this.pageNumber = pageNumber;
-	}
 
-	@Override
-	protected Object contents() {
 		ButtonTag first = button("<<", Do.set(pageNumber, from));
 		ButtonTag prev = button("<", Do.dec(pageNumber, 1));
 		SpanTag current = span("(page ", pageNumber, ")");
 		ButtonTag next = button(">", Do.inc(pageNumber, 1));
 		ButtonTag last = button(">>", Do.set(pageNumber, to));
-		return span(first, prev, current, next, last);
+
+		setContent(span(first, prev, current, next, last));
 	}
 
 }

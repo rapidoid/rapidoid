@@ -30,6 +30,10 @@ public class BootstrapPageTest extends PagesTestCommons {
 	public void testPagerWidget() {
 		BootstrapPage page = new BootstrapPage() {
 
+			{
+				setContent(page());
+			}
+
 			@Override
 			protected Object pageBody() {
 				return div("abc");
