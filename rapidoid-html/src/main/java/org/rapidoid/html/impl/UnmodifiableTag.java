@@ -1,8 +1,8 @@
-package org.rapidoid.pages.impl;
+package org.rapidoid.html.impl;
 
 /*
  * #%L
- * rapidoid-pages
+ * rapidoid-html
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -25,11 +25,11 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.util.U;
 
-public class UnmodifiableTag implements Tag<Tag<?>> {
+public abstract class UnmodifiableTag implements Tag<Tag<?>> {
 
 	@Override
 	public String str(int level) {
-		return this.toString();
+		throw U.notExpected();
 	}
 
 	@Override
