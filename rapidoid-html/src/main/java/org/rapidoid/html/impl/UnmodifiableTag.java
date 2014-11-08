@@ -28,11 +28,6 @@ import org.rapidoid.util.U;
 public abstract class UnmodifiableTag implements Tag<Tag<?>> {
 
 	@Override
-	public String str(int level) {
-		throw U.notExpected();
-	}
-
-	@Override
 	public Object content() {
 		throw U.notExpected();
 	}

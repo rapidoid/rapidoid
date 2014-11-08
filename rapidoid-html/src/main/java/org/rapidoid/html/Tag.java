@@ -22,8 +22,6 @@ package org.rapidoid.html;
 
 public interface Tag<TAG extends Tag<?>> {
 
-	String str(int level);
-
 	Object content();
 
 	TAG content(Object... content);

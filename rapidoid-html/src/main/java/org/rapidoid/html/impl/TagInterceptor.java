@@ -54,11 +54,6 @@ public class TagInterceptor<TAG extends Tag<?>> implements InvocationHandler {
 		Class<?> ret = method.getReturnType();
 		Class<?>[] paramTypes = method.getParameterTypes();
 
-		// str
-		if (name.equals("str") && paramTypes.length == 1 && paramTypes[0].equals(int.class)) {
-			return TagRenderer.get().str(tag, (Integer) args[0], false, null);
-		}
-
 		// tagData()
 		if (name.equals("tagData") && paramTypes.length == 0) {
 			return tag;

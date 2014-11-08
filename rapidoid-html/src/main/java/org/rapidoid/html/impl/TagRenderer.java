@@ -47,7 +47,8 @@ public class TagRenderer {
 
 		if (content instanceof Tag) {
 			Tag<?> tag = (Tag<?>) content;
-			return tag.str(level);
+			TagInternals tagi = (TagInternals) tag;
+			return str(tagi.tagData(), level, inline, extra);
 		} else if (content instanceof TagWidget) {
 			TagWidget widget = (TagWidget) content;
 			return str(widget.content(), level, inline, extra);
