@@ -20,13 +20,13 @@ package org.rapidoid.pages;
  * #L%
  */
 
-import org.rapidoid.html.TagContext;
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagWidget;
+import org.rapidoid.html.Tags;
 import org.rapidoid.html.Var;
 import org.rapidoid.html.impl.TagRenderer;
-import org.rapidoid.html.impl.VarImpl;
 import org.rapidoid.pages.impl.DynamicContentWrapper;
 import org.rapidoid.pages.impl.FileTemplate;
 import org.rapidoid.pages.impl.MultiLanguageText;
@@ -65,7 +65,7 @@ public abstract class HtmlWidget extends HTML implements TagWidget {
 	}
 
 	public static <T> Var<T> var(T value) {
-		return new VarImpl<T>(value);
+		return Tags.var(value);
 	}
 
 	public static Tag<?> render(String templateFileName, Object... namesAndValues) {

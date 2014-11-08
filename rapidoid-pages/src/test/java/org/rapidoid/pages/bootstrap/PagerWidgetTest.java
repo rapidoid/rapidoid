@@ -21,9 +21,9 @@ package org.rapidoid.pages.bootstrap;
  */
 
 import org.rapidoid.html.TagContext;
+import org.rapidoid.html.Tags;
 import org.rapidoid.html.Var;
 import org.rapidoid.pages.HtmlWidget;
-import org.rapidoid.pages.Pages;
 import org.rapidoid.pages.PagesTestCommons;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
@@ -33,7 +33,7 @@ public class PagerWidgetTest extends PagesTestCommons {
 	@Test
 	public void testPagerWidget() {
 
-		TagContext ctx = Pages.context();
+		TagContext ctx = Tags.context();
 		Var<Integer> pageN = HtmlWidget.var(3);
 
 		PagerWidget pager = new PagerWidget(1, 7, pageN);

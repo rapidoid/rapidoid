@@ -21,7 +21,6 @@ package org.rapidoid.pages;
  */
 
 import org.rapidoid.html.TagContext;
-import org.rapidoid.html.impl.GuiContextImpl;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
@@ -30,10 +29,6 @@ import org.rapidoid.util.U;
 public class Pages {
 
 	private static final String SESSION_CTX = "_ctx";
-
-	public static TagContext context() {
-		return new GuiContextImpl();
-	}
 
 	public static void registerPages(HTTPServer server) {
 		server.post("/_emit", new Handler() {
