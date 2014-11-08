@@ -28,9 +28,15 @@ import org.rapidoid.util.U;
 
 public class Pages {
 
-	private static final String SESSION_CTX = "_ctx";
+	public static final String SESSION_CTX = "_ctx";
 
 	public static void registerPages(HTTPServer server) {
+		registerEmitHandler(server);
+
+		server.serve(new PageHandler());
+	}
+
+	public static void registerEmitHandler(HTTPServer server) {
 		server.post("/_emit", new Handler() {
 
 			@Override
@@ -49,8 +55,6 @@ public class Pages {
 				return ctx.changedContent();
 			}
 		});
-
-		server.serve(new PageHandler());
 	}
 
 }
