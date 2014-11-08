@@ -54,6 +54,8 @@ public class Pages {
 				return ctx.changedContent();
 			}
 		});
+
+		server.serve(new PageHandler());
 	}
 
 }

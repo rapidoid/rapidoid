@@ -26,6 +26,7 @@ import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.UlTag;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.pages.bootstrap.NavbarBootstrapPage;
 
@@ -77,7 +78,7 @@ public class ShowcasePage extends NavbarBootstrapPage {
 			private int n;
 
 			@Override
-			public Object eval() {
+			public Object eval(HttpExchange x) {
 				return n++;
 			}
 		});

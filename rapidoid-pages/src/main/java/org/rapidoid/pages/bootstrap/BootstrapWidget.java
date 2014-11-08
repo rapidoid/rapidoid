@@ -51,7 +51,7 @@ public abstract class BootstrapWidget extends Bootstrap implements TagWidget {
 	@Override
 	public String toString() {
 		U.must(content != null, "No content was set in widget: " + super.toString());
-		return TagRenderer.str(content);
+		return TagRenderer.get().str(content, null);
 	}
 
 	public static Object _(String multiLanguageText, Object... formatArgs) {

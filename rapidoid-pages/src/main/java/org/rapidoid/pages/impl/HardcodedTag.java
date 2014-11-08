@@ -1,5 +1,8 @@
 package org.rapidoid.pages.impl;
 
+import org.rapidoid.html.impl.UnmodifiableTag;
+import org.rapidoid.http.HttpExchange;
+
 /*
  * #%L
  * rapidoid-pages
@@ -20,19 +23,8 @@ package org.rapidoid.pages.impl;
  * #L%
  */
 
-import org.rapidoid.html.impl.UnmodifiableTag;
-import org.rapidoid.pages.DynamicContent;
+public abstract class HardcodedTag extends UnmodifiableTag {
 
-public class DynamicContentWrapper extends UnmodifiableTag {
-
-	private final DynamicContent dynamic;
-
-	public DynamicContentWrapper(DynamicContent dynamic) {
-		this.dynamic = dynamic;
-	}
-
-	public DynamicContent getDynamic() {
-		return dynamic;
-	}
+	public abstract String render(HttpExchange x, PageRenderer renderer);
 
 }

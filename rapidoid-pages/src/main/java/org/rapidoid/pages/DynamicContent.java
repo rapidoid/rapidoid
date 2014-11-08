@@ -1,5 +1,7 @@
 package org.rapidoid.pages;
 
+import org.rapidoid.http.HttpExchange;
+
 /*
  * #%L
  * rapidoid-pages
@@ -22,6 +24,6 @@ package org.rapidoid.pages;
 
 public interface DynamicContent {
 
-	Object eval();
+	Object eval(HttpExchange x);
 
 }

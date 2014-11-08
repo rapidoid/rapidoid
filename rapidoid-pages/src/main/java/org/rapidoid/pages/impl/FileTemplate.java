@@ -20,10 +20,10 @@ package org.rapidoid.pages.impl;
  * #L%
  */
 
-import org.rapidoid.html.impl.TagRenderer;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
 
-public class FileTemplate extends UnmodifiableTag {
+public class FileTemplate extends HardcodedTag {
 
 	private final String templateName;
 
@@ -37,12 +37,12 @@ public class FileTemplate extends UnmodifiableTag {
 	}
 
 	@Override
-	public String toString() {
+	public String render(HttpExchange x, PageRenderer renderer) {
 		String text = U.load(templateName);
 
 		for (int i = 0; i < namesAndValues.length / 2; i++) {
 			String placeholder = (String) namesAndValues[i * 2];
-			String value = TagRenderer.str(namesAndValues[i * 2 + 1]);
+			String value = renderer.render(namesAndValues[i * 2 + 1], x);
 
 			text = U.fillIn(text, placeholder, value);
 		}

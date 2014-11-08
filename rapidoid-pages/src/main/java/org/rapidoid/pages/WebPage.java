@@ -1,4 +1,4 @@
-package org.rapidoid.pages.impl;
+package org.rapidoid.pages;
 
 /*
  * #%L
@@ -20,19 +20,10 @@ package org.rapidoid.pages.impl;
  * #L%
  */
 
-import org.rapidoid.html.impl.UnmodifiableTag;
-import org.rapidoid.pages.DynamicContent;
+import org.rapidoid.http.HttpExchange;
 
-public class DynamicContentWrapper extends UnmodifiableTag {
+public interface WebPage {
 
-	private final DynamicContent dynamic;
-
-	public DynamicContentWrapper(DynamicContent dynamic) {
-		this.dynamic = dynamic;
-	}
-
-	public DynamicContent getDynamic() {
-		return dynamic;
-	}
+	void render(HttpExchange x);
 
 }

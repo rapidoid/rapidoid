@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.rapidoid.html.tag.TbodyTag;
 import org.rapidoid.html.tag.TrTag;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
@@ -43,7 +44,7 @@ public class TableWidget extends BootstrapWidget {
 
 		Object body = dynamic(new DynamicContent() {
 			@Override
-			public Object eval() {
+			public Object eval(HttpExchange x) {
 
 				TbodyTag body = tbody();
 
