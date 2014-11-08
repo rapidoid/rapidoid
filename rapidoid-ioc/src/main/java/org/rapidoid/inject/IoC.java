@@ -134,6 +134,12 @@ public class IoC {
 		return provideIoCInstanceOf(null, type, null, null, false);
 	}
 
+	public static synchronized <T> T autowire(T target) {
+		U.info("Autowire", "target", target);
+		autowire(target, null);
+		return target;
+	}
+
 	public static synchronized <T> T inject(T target) {
 		U.info("Inject", "target", target);
 		return ioc(target, null);
