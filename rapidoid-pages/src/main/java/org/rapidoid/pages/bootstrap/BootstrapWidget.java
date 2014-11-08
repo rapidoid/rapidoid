@@ -66,8 +66,8 @@ public abstract class BootstrapWidget extends Bootstrap implements TagWidget {
 		return HtmlWidget.var(value);
 	}
 
-	public static Tag<?> render(String templateFileName, Object... namesAndValues) {
-		return HtmlWidget.render(templateFileName, namesAndValues);
+	public static Tag<?> template(String templateFileName, Object... namesAndValues) {
+		return HtmlWidget.template(templateFileName, namesAndValues);
 	}
 
 	public static Tag<?> dynamic(DynamicContent dynamic) {

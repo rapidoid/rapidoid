@@ -29,7 +29,7 @@ import org.rapidoid.util.U;
 public abstract class BootstrapPage extends BootstrapWidget implements WebPage {
 
 	protected Tag<?> page() {
-		return render("bootstrap-page.html", "title", pageTitle(), "style", pageStyle(), "head", pageHead(), "body",
+		return template("bootstrap-page.html", "title", pageTitle(), "style", pageStyle(), "head", pageHead(), "body",
 				pageBody());
 	}
 

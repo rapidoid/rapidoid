@@ -68,7 +68,7 @@ public abstract class HtmlWidget extends HTML implements TagWidget {
 		return Tags.var(value);
 	}
 
-	public static Tag<?> render(String templateFileName, Object... namesAndValues) {
+	public static Tag<?> template(String templateFileName, Object... namesAndValues) {
 		return new FileTemplate(templateFileName, namesAndValues);
 	}
 
