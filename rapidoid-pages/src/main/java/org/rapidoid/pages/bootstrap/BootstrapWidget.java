@@ -10,7 +10,6 @@ import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.pages.HtmlWidget;
 import org.rapidoid.pages.PageComponent;
 import org.rapidoid.pages.impl.PageRenderer;
-import org.rapidoid.pages.impl.SimpleHardcodedTag;
 import org.rapidoid.util.U;
 
 /*

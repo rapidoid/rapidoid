@@ -57,4 +57,18 @@ public class Pages {
 		});
 	}
 
+	public static String pageName(HttpExchange x) {
+		String path = x.path();
+
+		if (path.equals("/")) {
+			path = "/index.html";
+		}
+
+		if (path.length() > 6 && path.endsWith(".html")) {
+			return U.capitalized(U.mid(path, 1, -5));
+		} else {
+			return null;
+		}
+	}
+
 }

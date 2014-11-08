@@ -29,31 +29,23 @@ import org.rapidoid.util.U;
 
 public class PageHandler implements Handler {
 
-	private static final String DEFAULT_PAGE = "/index.html";
-
 	private static final String PAGE_PREFIX = "_page_";
 
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
 
-		List<Class<?>> pageClasses = U.classpathClassesBySuffix("Page", null, null);
+		String pageName = Pages.pageName(x);
 
-		String path = x.path();
+		if (pageName != null) {
 
-		if (path.equals("/")) {
-			path = DEFAULT_PAGE;
-		}
-
-		if (path.length() > 6 && path.endsWith(".html")) {
-
-			String pageName = U.capitalized(U.mid(path, 1, -5));
-
+			List<Class<?>> pageClasses = U.classpathClassesBySuffix("Page", null, null);
 			PageComponent page = x.session(PAGE_PREFIX + pageName, null);
 
 			if (page == null) {
 				Class<?> pageClass = findPageClass(pageClasses, pageName);
 
-				U.must(PageComponent.class.isAssignableFrom(pageClass), "The class %s must implement WebPage!", pageClass);
+				U.must(PageComponent.class.isAssignableFrom(pageClass), "The class %s must implement WebPage!",
+						pageClass);
 
 				if (pageClass != null) {
 					page = (PageComponent) U.newInstance(pageClass);
