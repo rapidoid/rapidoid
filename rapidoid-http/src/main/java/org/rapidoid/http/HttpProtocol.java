@@ -61,7 +61,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		try {
 			boolean dispatched = router.dispatch(xch);
 			if (!dispatched) {
-				xch.response(404);
+				xch.notFound();
 			}
 		} catch (Throwable e) {
 			U.error("Internal server error!", "request", xch, "error", e);

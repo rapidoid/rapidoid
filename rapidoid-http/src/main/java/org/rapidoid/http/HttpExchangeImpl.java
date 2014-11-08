@@ -675,4 +675,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return session != null;
 	}
 
+	@Override
+	public HttpExchangeHeaders notFound() {
+		return response(404, "Not found!");
+	}
+
 }

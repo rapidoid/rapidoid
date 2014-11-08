@@ -32,6 +32,8 @@ public interface HttpExchangeHeaders extends HttpExchangeBody {
 
 	HttpExchangeHeaders response(int httpResponseCode, String response, Throwable err);
 
+	HttpExchangeHeaders notFound();
+
 	HttpExchangeHeaders plain();
 
 	HttpExchangeHeaders html();
@@ -53,5 +55,9 @@ public interface HttpExchangeHeaders extends HttpExchangeBody {
 	HttpExchangeHeaders setSession(String name, Object value);
 
 	HttpExchangeHeaders closeSession();
+
+	String sessionId();
+
+	boolean hasSession();
 
 }

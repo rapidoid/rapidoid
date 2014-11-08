@@ -105,8 +105,4 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	String constructUrl(String path);
 
-	String sessionId();
-
-	boolean hasSession();
-
 }

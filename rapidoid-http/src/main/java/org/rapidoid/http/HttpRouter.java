@@ -166,10 +166,7 @@ public class HttpRouter implements Router {
 			}
 
 		} else {
-			if (!x.hasContentType()) {
-				x.json();
-			}
-			x.writeJSON(res); // null
+			x.notFound();
 		}
 
 		return true;

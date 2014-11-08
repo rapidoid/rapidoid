@@ -49,7 +49,7 @@ public class Web {
 				try {
 					return dispatcher.dispatch(new WebReq(x));
 				} catch (PojoHandlerNotFoundException e) {
-					return x.response(404, "Handler not found!", e);
+					return x.notFound();
 				} catch (PojoDispatchException e) {
 					return x.response(500, "Cannot initialize handler argument(s)!", e);
 				}
