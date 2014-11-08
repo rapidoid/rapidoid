@@ -20,6 +20,9 @@ package org.rapidoid.html.impl;
  * #L%
  */
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
@@ -29,9 +32,21 @@ import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.Var;
+import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 
 public class TagRenderer {
+
+	private static final byte[] EMIT_CLOSE = "')".getBytes();
+	private static final byte[] INDENT = "  ".getBytes();
+	private static final byte[] EMIT = "_emit(this, '".getBytes();
+	private static final byte[] _H = " _h=\"".getBytes();
+	private static final byte[] ON = " on".getBytes();
+	private static final byte[] EQ_DQUOTES = "=\"".getBytes();
+	private static final byte[] LT = "<".getBytes();
+	private static final byte[] DQUOTES = "\"".getBytes();
+	private static final byte[] LT_SLASH = "</".getBytes();
+	private static final byte[] GT = ">".getBytes();
 
 	protected static final TagRenderer INSTANCE = new TagRenderer();
 
@@ -39,143 +54,147 @@ public class TagRenderer {
 		return INSTANCE;
 	}
 
-	public String str(Object content, Object extra) {
-		return str(content, 0, false, extra);
+	public String toHTML(Object content, Object extra) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		str(content, extra, out);
+		return out.toString();
 	}
 
-	public String str(Object content, int level, boolean inline, Object extra) {
+	public void str(Object content, Object extra, OutputStream out) {
+		str(content, 0, false, extra, out);
+	}
+
+	public void str(Object content, int level, boolean inline, Object extra, OutputStream out) {
 
 		if (content instanceof Tag) {
 			Tag<?> tag = (Tag<?>) content;
 			TagInternals tagi = (TagInternals) tag;
-			return str(tagi.tagData(), level, inline, extra);
+			str(tagi.tagData(), level, inline, extra, out);
+			return;
 		} else if (content instanceof TagWidget) {
 			TagWidget widget = (TagWidget) content;
-			return str(widget.content(), level, inline, extra);
+			str(widget.content(), level, inline, extra, out);
+			return;
 		} else if (content instanceof Object[]) {
-			return join((Object[]) content, level, inline, extra);
+			join((Object[]) content, level, inline, extra, out);
+			return;
 		} else if (content instanceof Collection<?>) {
-			return join((Collection<?>) content, level, inline, extra);
+			join((Collection<?>) content, level, inline, extra, out);
+			return;
 		}
 
-		return indent(level, inline) + HTML.escape(String.valueOf(content));
+		indent(out, level, inline);
+		write(out, HTML.escape(String.valueOf(content)));
 	}
 
-	protected String indent(int level, boolean inline) {
-		return !inline ? U.mul("  ", level) : "";
-	}
-
-	protected String join(Collection<?> items, int level, boolean inline, Object extra) {
-		StringBuilder sb = new StringBuilder();
-
+	protected void join(Collection<?> items, int level, boolean inline, Object extra, OutputStream out) {
 		for (Object item : items) {
 			if (!inline) {
-				sb.append("\n");
+				write(out, Constants.CR_LF);
 			}
-			sb.append(str(item, level + 1, inline, extra));
+			str(item, level + 1, inline, extra, out);
 		}
-
-		return sb.toString();
 	}
 
-	protected String join(Object[] items, int level, boolean inline, Object extra) {
-		StringBuilder sb = new StringBuilder();
-
+	protected void join(Object[] items, int level, boolean inline, Object extra, OutputStream out) {
 		for (int i = 0; i < items.length; i++) {
 			if (!inline) {
-				sb.append("\n");
+				write(out, Constants.CR_LF);
 			}
-			sb.append(str(items[i], level + 1, inline, extra));
+			str(items[i], level + 1, inline, extra, out);
 		}
-
-		return sb.toString();
 	}
 
-	public String str(TagData<?> tag, int level, boolean inline, Object extra) {
+	public void str(TagData<?> tag, int level, boolean inline, Object extra, OutputStream out) {
 
 		String name = HTML.escape(tag.name);
 		List<Object> contents = tag.contents;
 
-		StringBuilder sb = new StringBuilder();
+		indent(out, level, inline);
+
+		write(out, LT);
+		write(out, name);
 
 		if (tag.ctx != null) {
-			sb.append(" _h=\"");
-			sb.append(attrToStr(tag, "_h", tag._hnd));
-			sb.append("\"");
+			write(out, _H);
+			attrToStr(out, tag, "_h", tag._hnd);
+			write(out, DQUOTES);
 		}
 
 		for (Entry<String, Object> e : tag.attrs.entrySet()) {
 			String attr = e.getKey();
 
-			sb.append(" ");
-			sb.append(HTML.escape(attr));
-			sb.append("=\"");
-			sb.append(HTML.escape(attrToStr(tag, attr, e.getValue())));
-			sb.append("\"");
+			write(out, Constants.SPACE_);
+			write(out, HTML.escape(attr));
+			write(out, EQ_DQUOTES);
+			attrToStr(out, tag, attr, e.getValue());
+			write(out, DQUOTES);
 		}
 
 		for (String event : tag.eventHandlers.keySet()) {
-			sb.append(" on");
-			sb.append(event);
-			sb.append("=\"");
-			sb.append("_emit(this, '");
-			sb.append(event);
-			sb.append("')");
-			sb.append("\"");
+			write(out, ON);
+			write(out, event);
+			write(out, EQ_DQUOTES);
+			write(out, EMIT);
+			write(out, event);
+			write(out, EMIT_CLOSE);
+			write(out, DQUOTES);
 		}
 
-		String attrib = sb.toString();
+		write(out, GT);
 
-		String indent = indent(level, inline);
+		if (isSingleTag(name)) {
+			return;
+		}
 
 		if (contents == null || contents.isEmpty()) {
-			return U.format("%s<%s%s></%s>", indent, name, attrib, name);
+			closeTag(out, name);
+			return;
 		}
 
 		if (inline || shouldRenderInline(name, contents)) {
-			String content = str(contents, level + 1, true, extra);
-			if (isSingleTag(name)) {
-				return U.format("%s<%s%s>", indent, name, attrib);
-			} else {
-				return U.format("%s<%s%s>%s</%s>", indent, name, attrib, content, name);
-			}
+			str(contents, level + 1, true, extra, out);
+			closeTag(out, name);
+			return;
 		}
-
-		sb = new StringBuilder();
 
 		if (contents != null) {
-			if (contents.size() < 2) {
-				sb.append(str(contents, level, inline, extra));
-			} else {
-				sb.append(str(contents, level, inline, extra));
-			}
+			str(contents, level, inline, extra, out);
 		}
 
-		String inside = sb.toString();
+		write(out, Constants.CR_LF);
+		indent(out, level, inline);
+		closeTag(out, name);
+	}
 
-		return U.format("%s<%s%s>%s\n%s</%s>", indent, name, attrib, inside, indent, name);
+	private void closeTag(OutputStream out, String name) {
+		write(out, LT_SLASH);
+		write(out, name);
+		write(out, GT);
 	}
 
 	protected boolean isSingleTag(String name) {
 		return name.equals("input");
 	}
 
-	protected String attrToStr(TagData<?> tag, String attr, Object value) {
+	protected void attrToStr(OutputStream out, TagData<?> tag, String attr, Object value) {
 		if (value == null) {
 			throw U.rte("The HTML attribute '%s' of tag '%s' cannot have null value!", attr, tag.name);
 		}
 
 		if (value instanceof Object[]) {
 			Object[] arr = (Object[]) value;
-			return U.join(" ", arr);
+			write(out, U.join(" ", arr));
+			return;
 		}
 
 		if (value instanceof Collection) {
 			Collection<?> coll = (Collection<?>) value;
-			return U.join(" ", coll);
+			write(out, U.join(" ", coll));
+			return;
 		}
 
-		return value.toString();
+		write(out, HTML.escape(value.toString()));
 	}
 
 	protected boolean shouldRenderInline(String name, Object content) {
@@ -220,6 +239,26 @@ public class TagRenderer {
 			}
 		}
 		return false;
+	}
+
+	protected void write(OutputStream out, byte[] bytes) {
+		try {
+			out.write(bytes);
+		} catch (IOException e) {
+			throw U.rte("Cannot render tag!", e);
+		}
+	}
+
+	protected void write(OutputStream out, String s) {
+		write(out, s.getBytes());
+	}
+
+	protected void indent(OutputStream out, int level, boolean inline) {
+		if (!inline) {
+			for (int i = 0; i < level; i++) {
+				write(out, INDENT);
+			}
+		}
 	}
 
 }

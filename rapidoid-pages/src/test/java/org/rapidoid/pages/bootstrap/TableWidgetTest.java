@@ -24,7 +24,6 @@ import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
 import org.rapidoid.pages.PagesTestCommons;
 import org.rapidoid.pages.entity.Person;
-import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
 public class TableWidgetTest extends PagesTestCommons {
@@ -34,7 +33,6 @@ public class TableWidgetTest extends PagesTestCommons {
 		Items items = Model.beanItems(new Person("John", 20), new Person("Rambo", 50));
 
 		TableWidget table = new TableWidget(items);
-		U.print(table);
 
 		hasRegex(table, "<th[^>]*?>name</th>");
 		hasRegex(table, "<th[^>]*?>age</th>");

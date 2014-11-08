@@ -25,7 +25,6 @@ import org.rapidoid.html.Tags;
 import org.rapidoid.html.Var;
 import org.rapidoid.pages.HtmlWidget;
 import org.rapidoid.pages.PagesTestCommons;
-import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
 public class PagerWidgetTest extends PagesTestCommons {
@@ -40,8 +39,6 @@ public class PagerWidgetTest extends PagesTestCommons {
 		pager.attachContext(ctx);
 		pager.attachContext(ctx);
 		pager.attachContext(ctx);
-
-		U.print(pager);
 
 		HtmlWidget.var(3);
 

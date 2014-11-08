@@ -26,13 +26,14 @@ import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.Tags;
 import org.rapidoid.html.Var;
-import org.rapidoid.html.impl.TagRenderer;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.impl.DynamicContentWrapper;
 import org.rapidoid.pages.impl.FileTemplate;
 import org.rapidoid.pages.impl.MultiLanguageText;
+import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.util.U;
 
-public abstract class HtmlWidget extends HTML implements TagWidget {
+public abstract class HtmlWidget extends HTML implements TagWidget, PageComponent {
 
 	private Tag<?> content;
 
@@ -48,12 +49,6 @@ public abstract class HtmlWidget extends HTML implements TagWidget {
 	@Override
 	public void attachContext(TagContext ctx) {
 		ctx.add(content());
-	}
-
-	@Override
-	public String toString() {
-		U.must(content != null, "No content was set in widget: " + super.toString());
-		return TagRenderer.get().str(content, null);
 	}
 
 	public static Object _(String multiLanguageText, Object... formatArgs) {
@@ -74,6 +69,18 @@ public abstract class HtmlWidget extends HTML implements TagWidget {
 
 	public static Tag<?> dynamic(DynamicContent dynamic) {
 		return new DynamicContentWrapper(dynamic);
+	}
+
+	@Override
+	public void render(HttpExchange x) {
+		U.must(content != null, "No content was set in widget: " + super.toString());
+		PageRenderer.get().render(content, x);
+	}
+
+	@Override
+	public String toHTML(HttpExchange x) {
+		U.must(content != null, "No content was set in widget: " + super.toString());
+		return PageRenderer.get().toHTML(content, x);
 	}
 
 }

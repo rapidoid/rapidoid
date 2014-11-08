@@ -22,14 +22,15 @@ package org.rapidoid.pages;
 
 import java.util.regex.Pattern;
 
-import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.Var;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.test.TestCommons;
 
 public class PagesTestCommons extends TestCommons {
 
-	protected void has(TagWidget widget, String... containingTexts) {
-		String html = widget.toString();
+	protected void has(PageComponent c, String... containingTexts) {
+		HttpExchange x = null;
+		String html = c.toHTML(x);
 		notNull(html);
 
 		for (String text : containingTexts) {
@@ -37,8 +38,9 @@ public class PagesTestCommons extends TestCommons {
 		}
 	}
 
-	protected void hasRegex(TagWidget widget, String... containingRegexes) {
-		String html = widget.toString();
+	protected void hasRegex(PageComponent c, String... containingRegexes) {
+		HttpExchange x = null;
+		String html = c.toHTML(x);
 		notNull(html);
 
 		for (String regex : containingRegexes) {

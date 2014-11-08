@@ -20,6 +20,7 @@ package org.rapidoid.html.impl;
  * #L%
  */
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -71,7 +72,9 @@ public class TagData<TAG extends Tag<?>> {
 
 	@Override
 	public String toString() {
-		return TagRenderer.get().str(this, 0, false, null);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		TagRenderer.get().str(this, 0, false, null, out);
+		return out.toString();
 	}
 
 	public void set(String attr, Object value) {

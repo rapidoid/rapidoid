@@ -20,6 +20,9 @@ package org.rapidoid.pages.impl;
  * #L%
  */
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
 
@@ -37,17 +40,21 @@ public class FileTemplate extends HardcodedTag {
 	}
 
 	@Override
-	public String render(HttpExchange x, PageRenderer renderer) {
+	public void render(HttpExchange x, PageRenderer renderer, OutputStream out) {
 		String text = U.load(templateName);
 
 		for (int i = 0; i < namesAndValues.length / 2; i++) {
 			String placeholder = (String) namesAndValues[i * 2];
-			String value = renderer.render(namesAndValues[i * 2 + 1], x);
+			String value = renderer.toHTML(namesAndValues[i * 2 + 1], x);
 
 			text = U.fillIn(text, placeholder, value);
 		}
 
-		return text;
+		try {
+			out.write(text.getBytes());
+		} catch (IOException e) {
+			throw U.rte("Cannot render template!", e);
+		}
 	}
 
 }

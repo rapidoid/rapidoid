@@ -22,8 +22,10 @@ package org.rapidoid.pages;
 
 import org.rapidoid.http.HttpExchange;
 
-public interface WebPage {
+public interface PageComponent {
 
-	void render(HttpExchange x);
+	void render(HttpExchange exchange);
+
+	String toHTML(HttpExchange exchange);
 
 }

@@ -20,21 +20,6 @@ package org.rapidoid.pages;
  * #L%
  */
 
-import org.testng.annotations.Test;
-
-public class PlaygroundWidgetTest extends PagesTestCommons {
-
-	@Test
-	public void testPlaygroundWidget() {
-		PlaygroundWidget play = new PlaygroundWidget();
-
-		hasRegex(play, "<table [^>]*?class=\"table[^>]*?>");
-
-		hasRegex(play, "<button[^>]*?>-</button>");
-		hasRegex(play, "<span[^>]*?>10</span>");
-		hasRegex(play, "<button[^>]*?>\\+</button>");
-
-		hasRegex(play, "<input [^>]*?css=\"border: 1px;\">");
-	}
+public interface PageRequest {
 
 }

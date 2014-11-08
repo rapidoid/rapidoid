@@ -1,13 +1,15 @@
 package org.rapidoid.pages.bootstrap;
 
 import org.rapidoid.html.Bootstrap;
-import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.Var;
-import org.rapidoid.html.impl.TagRenderer;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.pages.HtmlWidget;
+import org.rapidoid.pages.PageComponent;
+import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.util.U;
 
 /*
@@ -30,7 +32,7 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-public abstract class BootstrapWidget extends Bootstrap implements TagWidget {
+public abstract class BootstrapWidget extends Bootstrap implements TagWidget, PageComponent {
 
 	private Tag<?> content;
 
@@ -46,12 +48,6 @@ public abstract class BootstrapWidget extends Bootstrap implements TagWidget {
 	@Override
 	public void attachContext(TagContext ctx) {
 		ctx.add(content());
-	}
-
-	@Override
-	public String toString() {
-		U.must(content != null, "No content was set in widget: " + super.toString());
-		return TagRenderer.get().str(content, null);
 	}
 
 	public static Object _(String multiLanguageText, Object... formatArgs) {
@@ -72,6 +68,18 @@ public abstract class BootstrapWidget extends Bootstrap implements TagWidget {
 
 	public static Tag<?> dynamic(DynamicContent dynamic) {
 		return HtmlWidget.dynamic(dynamic);
+	}
+
+	@Override
+	public void render(HttpExchange x) {
+		U.must(content != null, "No content was set in widget: " + super.toString());
+		PageRenderer.get().render(content, x);
+	}
+
+	@Override
+	public String toHTML(HttpExchange x) {
+		U.must(content != null, "No content was set in widget: " + super.toString());
+		return PageRenderer.get().toHTML(content, x);
 	}
 
 }

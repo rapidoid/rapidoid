@@ -48,15 +48,15 @@ public class PageHandler implements Handler {
 
 			String pageName = U.capitalized(U.mid(path, 1, -5));
 
-			WebPage page = x.session(PAGE_PREFIX + pageName, null);
+			PageComponent page = x.session(PAGE_PREFIX + pageName, null);
 
 			if (page == null) {
 				Class<?> pageClass = findPageClass(pageClasses, pageName);
 
-				U.must(WebPage.class.isAssignableFrom(pageClass), "The class %s must implement WebPage!", pageClass);
+				U.must(PageComponent.class.isAssignableFrom(pageClass), "The class %s must implement WebPage!", pageClass);
 
 				if (pageClass != null) {
-					page = (WebPage) U.newInstance(pageClass);
+					page = (PageComponent) U.newInstance(pageClass);
 					IoC.autowire(page);
 					x.setSession(PAGE_PREFIX + pageName, page);
 				} else {
