@@ -40,7 +40,7 @@ public class BootstrapPageTest extends PagesTestCommons {
 			}
 
 			@Override
-			protected Object pageTitle() {
+			protected String pageTitle() {
 				return "Some title";
 			}
 		};

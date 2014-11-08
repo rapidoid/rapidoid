@@ -128,7 +128,7 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 	}
 
 	@Override
-	protected Object pageTitle() {
+	protected String pageTitle() {
 		return titleOf(app, "Untitled App");
 	}
 
