@@ -10,6 +10,7 @@ import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.pages.HtmlWidget;
 import org.rapidoid.pages.PageComponent;
 import org.rapidoid.pages.impl.PageRenderer;
+import org.rapidoid.pages.impl.SimpleHardcodedTag;
 import org.rapidoid.util.U;
 
 /*
@@ -68,6 +69,10 @@ public abstract class BootstrapWidget extends Bootstrap implements TagWidget, Pa
 
 	public static Tag<?> dynamic(DynamicContent dynamic) {
 		return HtmlWidget.dynamic(dynamic);
+	}
+
+	public static Tag<?> hardcoded(String content) {
+		return HtmlWidget.hardcoded(content);
 	}
 
 	@Override

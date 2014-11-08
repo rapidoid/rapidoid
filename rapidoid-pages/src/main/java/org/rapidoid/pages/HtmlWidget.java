@@ -31,6 +31,7 @@ import org.rapidoid.pages.impl.DynamicContentWrapper;
 import org.rapidoid.pages.impl.FileTemplate;
 import org.rapidoid.pages.impl.MultiLanguageText;
 import org.rapidoid.pages.impl.PageRenderer;
+import org.rapidoid.pages.impl.SimpleHardcodedTag;
 import org.rapidoid.util.U;
 
 public abstract class HtmlWidget extends HTML implements TagWidget, PageComponent {
@@ -69,6 +70,10 @@ public abstract class HtmlWidget extends HTML implements TagWidget, PageComponen
 
 	public static Tag<?> dynamic(DynamicContent dynamic) {
 		return new DynamicContentWrapper(dynamic);
+	}
+
+	public static Tag<?> hardcoded(String content) {
+		return new SimpleHardcodedTag(content);
 	}
 
 	@Override
