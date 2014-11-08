@@ -71,7 +71,7 @@ public class TagData<TAG extends Tag<?>> {
 
 	@Override
 	public String toString() {
-		return TagRenderer.str(this, 0, false);
+		return TagRenderer.get().str(this, 0, false, null);
 	}
 
 	public void set(String attr, Object value) {

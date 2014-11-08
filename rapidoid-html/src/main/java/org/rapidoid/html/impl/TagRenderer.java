@@ -33,58 +33,64 @@ import org.rapidoid.util.U;
 
 public class TagRenderer {
 
-	public static String str(Object content) {
-		return str(content, 0, false);
+	protected static final TagRenderer INSTANCE = new TagRenderer();
+
+	public static TagRenderer get() {
+		return INSTANCE;
 	}
 
-	public static String str(Object content, int level, boolean inline) {
+	public String str(Object content, Object extra) {
+		return str(content, 0, false, extra);
+	}
+
+	public String str(Object content, int level, boolean inline, Object extra) {
 
 		if (content instanceof Tag) {
 			Tag<?> tag = (Tag<?>) content;
 			return tag.str(level);
 		} else if (content instanceof TagWidget) {
 			TagWidget widget = (TagWidget) content;
-			return str(widget.content(), level, inline);
+			return str(widget.content(), level, inline, extra);
 		} else if (content instanceof Object[]) {
-			return join((Object[]) content, level, inline);
+			return join((Object[]) content, level, inline, extra);
 		} else if (content instanceof Collection<?>) {
-			return join((Collection<?>) content, level, inline);
+			return join((Collection<?>) content, level, inline, extra);
 		}
 
 		return indent(level, inline) + HTML.escape(String.valueOf(content));
 	}
 
-	private static String indent(int level, boolean inline) {
+	protected String indent(int level, boolean inline) {
 		return !inline ? U.mul("  ", level) : "";
 	}
 
-	private static String join(Collection<?> items, int level, boolean inline) {
+	protected String join(Collection<?> items, int level, boolean inline, Object extra) {
 		StringBuilder sb = new StringBuilder();
 
 		for (Object item : items) {
 			if (!inline) {
 				sb.append("\n");
 			}
-			sb.append(str(item, level + 1, inline));
+			sb.append(str(item, level + 1, inline, extra));
 		}
 
 		return sb.toString();
 	}
 
-	private static String join(Object[] items, int level, boolean inline) {
+	protected String join(Object[] items, int level, boolean inline, Object extra) {
 		StringBuilder sb = new StringBuilder();
 
 		for (int i = 0; i < items.length; i++) {
 			if (!inline) {
 				sb.append("\n");
 			}
-			sb.append(str(items[i], level + 1, inline));
+			sb.append(str(items[i], level + 1, inline, extra));
 		}
 
 		return sb.toString();
 	}
 
-	public static String str(TagData<?> tag, int level, boolean inline) {
+	public String str(TagData<?> tag, int level, boolean inline, Object extra) {
 
 		String name = HTML.escape(tag.name);
 		List<Object> contents = tag.contents;
@@ -126,7 +132,7 @@ public class TagRenderer {
 		}
 
 		if (inline || shouldRenderInline(name, contents)) {
-			String content = str(contents, level + 1, true);
+			String content = str(contents, level + 1, true, extra);
 			if (isSingleTag(name)) {
 				return U.format("%s<%s%s>", indent, name, attrib);
 			} else {
@@ -138,9 +144,9 @@ public class TagRenderer {
 
 		if (contents != null) {
 			if (contents.size() < 2) {
-				sb.append(str(contents, level, inline));
+				sb.append(str(contents, level, inline, extra));
 			} else {
-				sb.append(str(contents, level, inline));
+				sb.append(str(contents, level, inline, extra));
 			}
 		}
 
@@ -149,11 +155,11 @@ public class TagRenderer {
 		return U.format("%s<%s%s>%s\n%s</%s>", indent, name, attrib, inside, indent, name);
 	}
 
-	private static boolean isSingleTag(String name) {
+	protected boolean isSingleTag(String name) {
 		return name.equals("input");
 	}
 
-	private static String attrToStr(TagData<?> tag, String attr, Object value) {
+	protected String attrToStr(TagData<?> tag, String attr, Object value) {
 		if (value == null) {
 			throw U.rte("The HTML attribute '%s' of tag '%s' cannot have null value!", attr, tag.name);
 		}
@@ -171,7 +177,7 @@ public class TagRenderer {
 		return value.toString();
 	}
 
-	private static boolean shouldRenderInline(String name, Object content) {
+	protected boolean shouldRenderInline(String name, Object content) {
 		if (isSimpleContent(content)) {
 			return true;
 		}
@@ -187,7 +193,7 @@ public class TagRenderer {
 		return false;
 	}
 
-	private static boolean isSimpleContent(Object content) {
+	protected boolean isSimpleContent(Object content) {
 		if (content instanceof Var) {
 			Var<?> var = (Var<?>) content;
 			return isSimpleContent(var.get());
@@ -196,7 +202,7 @@ public class TagRenderer {
 		return !U.instanceOf(content, Tag.class, CustomTag.class, TagWidget.class, Object[].class, Collection.class);
 	}
 
-	private static boolean hasSimpleContent(Collection<?> content) {
+	protected boolean hasSimpleContent(Collection<?> content) {
 		for (Object cnt : content) {
 			if (!isSimpleContent(cnt)) {
 				return false;
@@ -206,7 +212,7 @@ public class TagRenderer {
 		return true;
 	}
 
-	private static boolean hasSimpleContent(Object[] content) {
+	protected boolean hasSimpleContent(Object[] content) {
 		for (Object cnt : content) {
 			if (isSimpleContent(cnt)) {
 				return true;
