@@ -101,9 +101,11 @@ public class GuiContextImpl implements TagContext, TagEventHandler<Tag<?>> {
 
 	@Override
 	public void handle(Tag<?> tag) {
-		TagInternals tagi = tagi(tag);
-		TagData<?> tagData = tagi.tagData();
-		tagi.setHnd(getNewId(tagData));
+		if (tag instanceof TagInternals) {
+			TagInternals tagi = tagi(tag);
+			TagData<?> tagData = tagi.tagData();
+			tagi.setHnd(getNewId(tagData));
+		}
 	}
 
 }
