@@ -236,6 +236,9 @@ public class Bootstrap extends HTML {
 		case EMAIL:
 			return input().type("email").classs("form-control").id(id).name(name).placeholder(desc);
 
+		case TEXTAREA:
+			return textarea().classs("form-control").id(id).name(name);
+
 		case CHECKBOX:
 			return input().type("checkbox").id(id).name(name);
 
