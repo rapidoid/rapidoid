@@ -196,6 +196,22 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	}
 
 	@Override
+	public boolean is(String attr) {
+		return battrs.contains(attr);
+	}
+
+	@Override
+	public TAG is(String attr, boolean value) {
+		if (value) {
+			battrs.add(attr);
+		} else {
+			battrs.remove(attr);
+		}
+
+		return proxy();
+	}
+
+	@Override
 	public TAG classs(String classs) {
 		return attr("class", classs);
 	}

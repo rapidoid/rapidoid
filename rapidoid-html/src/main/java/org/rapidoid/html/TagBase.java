@@ -46,4 +46,8 @@ public interface TagBase<TAG extends Tag<?>> {
 
 	TAG attr(String attr, String value);
 
+	boolean is(String attr);
+
+	TAG is(String attr, boolean value);
+
 }

@@ -131,6 +131,11 @@ public class TagRenderer {
 			write(out, DQUOTES);
 		}
 
+		for (String attr : tag.battrs) {
+			write(out, Constants.SPACE_);
+			write(out, HTML.escape(attr));
+		}
+
 		for (String event : tag.eventHandlers.keySet()) {
 			write(out, ON);
 			write(out, event);

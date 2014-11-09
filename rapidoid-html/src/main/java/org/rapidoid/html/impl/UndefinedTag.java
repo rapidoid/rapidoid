@@ -147,4 +147,14 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 		throw U.notExpected();
 	}
 
+	@Override
+	public boolean is(String attr) {
+		throw U.notExpected();
+	}
+
+	@Override
+	public TAG is(String attr, boolean value) {
+		throw U.notExpected();
+	}
+
 }
