@@ -47,13 +47,13 @@ public class FormPage extends NavbarBootstrapPage {
 
 	private FormTag frm(FormLayout layout) {
 
-		String[] names = { "user", "pass", "email", "aa", "roles", "gender", "accept" };
+		String[] names = { "user", "pass", "email", "aa", "roles", "gender", "accept", "bbb" };
 
-		String[] desc = { "Username", "Password", "E-mail address", "Aaa", "Roles", "Gender",
+		String[] desc = { "Username", "Password", "E-mail address", "Aaa", "Roles", "Gender", "Bbb",
 				"I accept the terms and conditions" };
 
 		FieldType[] types = { FieldType.TEXT, FieldType.PASSWORD, FieldType.EMAIL, FieldType.DROPDOWN,
-				FieldType.MULTI_SELECT, FieldType.RADIOS, FieldType.CHECKBOX };
+				FieldType.MULTI_SELECT, FieldType.RADIOS, FieldType.CHECKBOXES, FieldType.CHECKBOX };
 
 		Object[] opt1 = { "Yes", "No", "Not sure" };
 
@@ -61,7 +61,9 @@ public class FormPage extends NavbarBootstrapPage {
 
 		Object[] opt3 = { "Male", "Female" };
 
-		Object[][] options = { null, null, null, opt1, opt2, opt3, null };
+		Object[] opt4 = { "A", "B", "C", "D" };
+
+		Object[][] options = { null, null, null, opt1, opt2, opt3, opt4, null };
 
 		return form_(layout, names, desc, types, options, "Save", "Cancel", "Something else");
 	}

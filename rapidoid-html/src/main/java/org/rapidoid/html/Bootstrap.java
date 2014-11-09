@@ -190,7 +190,7 @@ public class Bootstrap extends HTML {
 		LabelTag label;
 		Object inputWrap;
 
-		if (type == FieldType.RADIOS) {
+		if (type == FieldType.RADIOS || type == FieldType.CHECKBOXES) {
 			inp = layout == FormLayout.VERTICAL ? div(inp) : span(inp);
 		}
 
@@ -248,6 +248,10 @@ public class Bootstrap extends HTML {
 		case RADIOS:
 			return foreach(options, label(input().type("radio").name(name).value($value), $value)
 					.classs("radio-inline"));
+
+		case CHECKBOXES:
+			return foreach(options,
+					label(input().type("checkbox").name(name).value($value), $value).classs("radio-checkbox"));
 
 		default:
 			throw U.notExpected();
