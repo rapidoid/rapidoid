@@ -2,8 +2,9 @@ package org.rapidoid.pages.bootstrap;
 
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.pages.Page;
+import org.rapidoid.pages.Pages;
 import org.rapidoid.pages.impl.PageRenderer;
-import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -25,9 +26,10 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-public abstract class BootstrapPage extends BootstrapWidget {
+public abstract class BootstrapPage extends BootstrapWidget implements Page {
 
-	protected Tag<?> page() {
+	@Override
+	public Tag<?> page() {
 		return template("bootstrap-page.html", "title", pageTitle(), "style", pageStyle(), "head", pageHead(), "body",
 				pageBody());
 	}
@@ -43,13 +45,7 @@ public abstract class BootstrapPage extends BootstrapWidget {
 	}
 
 	protected String pageTitle() {
-		String pageName = getClass().getSimpleName();
-
-		if (pageName.endsWith("Page")) {
-			pageName = U.mid(pageName, 0, -4);
-		}
-
-		return pageName;
+		return Pages.pageTitle(getClass());
 	}
 
 	@Override

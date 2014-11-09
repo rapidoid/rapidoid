@@ -71,4 +71,14 @@ public class Pages {
 		}
 	}
 
+	public static String pageTitle(Class<? extends Page> pageClass) {
+		String pageName = pageClass.getSimpleName();
+
+		if (pageName.endsWith("Page")) {
+			pageName = U.mid(pageName, 0, -4);
+		}
+
+		return pageName;
+	}
+
 }
