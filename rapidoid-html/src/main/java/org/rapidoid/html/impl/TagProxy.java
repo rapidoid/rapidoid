@@ -84,16 +84,24 @@ public class TagProxy<TAG extends Tag<?>> implements InvocationHandler {
 		}
 
 		// value setter
-		if (returnsTag && paramTypes.length == 1) {
+		if (name.equals("value") && returnsTag && paramTypes.length == 1 && paramTypes[0].equals(Object.class)) {
+			tag.value(args[0]);
+			return target;
+		}
+
+		// String attribute setter
+		if (returnsTag && paramTypes.length == 1 && paramTypes[0].equals(String.class)) {
 			tag.attr(name, (String) args[0]);
 			return target;
 		}
 
-		// boolean setter
-		if (returnsTag && paramTypes.length == 0) {
-			tag.attr(name, name); // TODO improve
+		// boolean attribute setter
+		if (returnsTag && paramTypes.length == 1 && paramTypes[0].equals(boolean.class)) {
+			tag.is(name, (Boolean) args[0]);
 			return target;
 		}
+
+		// FIXME implement attribute getters
 
 		throw U.rte("Not implemented: " + name);
 	}

@@ -24,6 +24,12 @@ import org.rapidoid.html.Tag;
 
 public interface SelectTag extends Tag<SelectTag> {
 
+	String name();
 
+	SelectTag name(String name);
+
+	boolean multiple();
+
+	SelectTag multiple(boolean multiple);
 
 }

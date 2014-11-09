@@ -40,6 +40,8 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	final Map<String, String> attrs = U.map();
 
+	final Set<String> battrs = U.set();
+
 	final Map<String, TagEventHandler<TAG>> eventHandlers = U.map();
 
 	String _hnd;
@@ -47,6 +49,8 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	TagContext ctx;
 
 	private TAG proxy;
+
+	private Object value;
 
 	@SuppressWarnings("unchecked")
 	public TagImpl(Class<TAG> clazz, String name, Object[] contentsAndHandlers) {
@@ -219,6 +223,14 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	@Override
 	public String classs() {
 		return attr("class");
+	}
+
+	public void value(Object value) {
+		this.value = value;
+	}
+
+	public Object value() {
+		return value;
 	}
 
 }
