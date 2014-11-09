@@ -24,6 +24,8 @@ import org.rapidoid.html.Tag;
 
 public interface LabelTag extends Tag<LabelTag> {
 
+	LabelTag for_(String for_);
 
+	String for_();
 
 }

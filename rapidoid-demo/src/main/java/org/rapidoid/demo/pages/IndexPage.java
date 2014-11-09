@@ -79,7 +79,7 @@ public class IndexPage extends NavbarBootstrapPage {
 			}
 		});
 
-		return row(cols(6, "Hello world!"), cols(3, abc, xy), cols(3, dyn));
+		return row(col_(6, "Hello world!"), col_(3, abc, xy), col_(3, dyn));
 	}
 
 	protected Object[] navbarContent() {

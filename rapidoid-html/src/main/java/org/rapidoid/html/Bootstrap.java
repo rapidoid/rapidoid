@@ -25,6 +25,7 @@ import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.InputTag;
+import org.rapidoid.html.tag.LabelTag;
 import org.rapidoid.html.tag.LiTag;
 import org.rapidoid.html.tag.NavTag;
 import org.rapidoid.html.tag.SpanTag;
@@ -34,7 +35,7 @@ import org.rapidoid.util.U;
 
 public class Bootstrap extends HTML {
 
-	public static TableTag table(Object... contents) {
+	public static TableTag table_(Object... contents) {
 		return HTML.table(contents).classs("table table-default table-hover");
 	}
 
@@ -43,7 +44,7 @@ public class Bootstrap extends HTML {
 	}
 
 	public static DivTag rowFull(Object... contents) {
-		return div(cols(12, contents)).classs("row");
+		return div(col_(12, contents)).classs("row");
 	}
 
 	public static DivTag container(Object... contents) {
@@ -62,7 +63,7 @@ public class Bootstrap extends HTML {
 		return span().classs("glyphicon glyphicon-" + glyphicon);
 	}
 
-	public static SpanTag a_awesome(String fontAwesomeIcon) {
+	public static SpanTag awesome(String fontAwesomeIcon) {
 		return span().classs("fa fa-" + fontAwesomeIcon);
 	}
 
@@ -71,7 +72,7 @@ public class Bootstrap extends HTML {
 	}
 
 	public static ATag a_awesome(String fontAwesomeIcon, Object... contents) {
-		return a(a_awesome(fontAwesomeIcon), contents);
+		return a(awesome(fontAwesomeIcon), contents);
 	}
 
 	public static ButtonTag btn(Object... contents) {
@@ -89,7 +90,7 @@ public class Bootstrap extends HTML {
 		DivTag collapsable = div(navbarContent).classs("collapse navbar-collapse").id("collapsable");
 
 		DivTag cnt = div(hdr, collapsable).classs(containerMaybeFluid(fluid));
-		return HTML.nav(cnt).classs("navbar navbar-default").attr("role", "navigation");
+		return HTML.nav(cnt).classs("navbar navbar-default").role("navigation");
 	}
 
 	public static String containerMaybeFluid(boolean fluid) {
@@ -99,10 +100,21 @@ public class Bootstrap extends HTML {
 	public static ButtonTag btnCollapse() {
 		ButtonTag btn = button(span("Toggle navigation").classs("sr-only"), icon("bar"), icon("bar"), icon("bar"));
 
-		btn.attr("type", "button").classs("navbar-toggle collapsed").attr("data-toggle", "collapse")
+		btn.type("button").classs("navbar-toggle collapsed").attr("data-toggle", "collapse")
 				.attr("data-target", "#collapsable");
 
 		return btn;
+	}
+
+	public static UlTag navbarMenu(boolean onLeft, Object... menuItems) {
+		return ul_li(menuItems).classs("nav navbar-nav navbar-" + leftOrRight(onLeft));
+	}
+
+	public static UlTag navbarDropdown(boolean onLeft, Tag<?> menu, Object... subItems) {
+		UlTag ul1 = ul_li(subItems).classs("dropdown-menu").role("menu");
+		menu.classs("dropdown-toggle").attr("data-toggle", "dropdown");
+		LiTag drop1 = li(menu, ul1).classs("dropdown");
+		return ul(drop1).classs("nav navbar-nav navbar-" + leftOrRight(onLeft));
 	}
 
 	public static FormTag navbarForm(boolean onLeft, String buttonCaption, String[] fields, String[] placeholders) {
@@ -111,24 +123,16 @@ public class Bootstrap extends HTML {
 		DivTag ctrls = div().classs("form-group");
 
 		for (int i = 0; i < fields.length; i++) {
-			InputTag inp = input().attr("type", "text").classs("form-control").attr("name", fields[i])
-					.attr("placeholder", placeholders[i]);
+			InputTag inp = input().type("text").classs("form-control").name(fields[i]).placeholder(placeholders[i]);
 			ctrls.append(inp);
 		}
 
-		ButtonTag btn = button(buttonCaption).classs("btn btn-default").attr("type", "submit");
+		ButtonTag btn = button(buttonCaption).classs("btn btn-default").type("submit");
 		return form(ctrls, btn).classs("navbar-form navbar-" + leftOrRight(onLeft));
 	}
 
-	public static UlTag navbarMenu(boolean onLeft, Object... menuItems) {
-		return ul_li(menuItems).classs("nav navbar-nav navbar-" + leftOrRight(onLeft));
 	}
 
-	public static UlTag navbarDropdown(boolean onLeft, Tag<?> menu, Object... subItems) {
-		UlTag ul1 = ul_li(subItems).classs("dropdown-menu").attr("role", "menu");
-		menu.classs("dropdown-toggle").attr("data-toggle", "dropdown");
-		LiTag drop1 = li(menu, ul1).classs("dropdown");
-		return ul(drop1).classs("nav navbar-nav navbar-" + leftOrRight(onLeft));
 	}
 
 	private static String leftOrRight(boolean onLeft) {
@@ -139,7 +143,7 @@ public class Bootstrap extends HTML {
 		return span().classs("caret");
 	}
 
-	public static DivTag cols(int cols, Object... contents) {
+	public static DivTag col_(int cols, Object... contents) {
 		return div(contents).classs("col-md-" + cols);
 	}
 

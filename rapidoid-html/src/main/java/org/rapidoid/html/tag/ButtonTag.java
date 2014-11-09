@@ -24,6 +24,8 @@ import org.rapidoid.html.Tag;
 
 public interface ButtonTag extends Tag<ButtonTag> {
 
+	String type();
 
+	ButtonTag type(String type);
 
 }

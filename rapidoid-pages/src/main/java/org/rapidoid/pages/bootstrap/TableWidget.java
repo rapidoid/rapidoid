@@ -62,7 +62,7 @@ public class TableWidget extends BootstrapWidget {
 			}
 		});
 
-		setContent(table(thead(header), body));
+		setContent(table_(thead(header), body));
 	}
 
 }

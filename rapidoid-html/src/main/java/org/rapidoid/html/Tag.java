@@ -38,6 +38,10 @@ public interface Tag<TAG extends Tag<?>> {
 
 	TAG css(String css);
 
+	String role();
+
+	TAG role(String role);
+
 	boolean hidden();
 
 	TAG hidden(boolean hidden);

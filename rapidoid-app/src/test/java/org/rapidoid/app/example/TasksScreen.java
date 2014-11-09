@@ -40,7 +40,7 @@ public class TasksScreen {
 				Priority.HIGH), new Task("aa", Priority.MEDIUM), new Task("bb", Priority.HIGH), new Task("aa",
 				Priority.MEDIUM), new Task("bb", Priority.HIGH));
 
-		DivTag caption = row(cols(12, h3("List of tasks:")));
+		DivTag caption = row(col_(12, h3("List of tasks:")));
 		TableWidget table = new TableWidget(items);
 
 		return arr(caption, rowFull(table));
