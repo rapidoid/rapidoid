@@ -22,8 +22,7 @@ package org.rapidoid.demo.pages;
 
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
-import org.rapidoid.http.Handler;
-import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.util.U;
 
@@ -34,20 +33,7 @@ public class PageServerDemo {
 
 		HTTPServer server = HTTP.server().build();
 
-		server.get("/", new Handler() {
-			@Override
-			public Object handle(HttpExchange x) {
-				return x.sessionGetOrCreate("page", ShowcasePage.class, U.rndStr(11));
-			}
-		});
-
-		server.get("/_logout", new Handler() {
-			@Override
-			public Object handle(HttpExchange x) {
-				return x.closeSession().redirect("/");
-			}
-		});
-
+		HttpBuiltins.register(server);
 		Pages.registerPages(server);
 
 		server.start();

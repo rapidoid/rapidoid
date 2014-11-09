@@ -30,9 +30,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.pages.bootstrap.NavbarBootstrapPage;
 
-public class ShowcasePage extends NavbarBootstrapPage {
-
-	private final String info;
+public class IndexPage extends NavbarBootstrapPage {
 
 	private ATag brand;
 	private UlTag dropdownMenu;
@@ -41,9 +39,7 @@ public class ShowcasePage extends NavbarBootstrapPage {
 	private FormTag formL;
 	private FormTag formR;
 
-	public ShowcasePage(String info) {
-		this.info = info;
-
+	public IndexPage() {
 		brand = a("Welcome to the Showcase page!").href("/");
 		dropdownMenu = navbarDropdown(false, a("Profile", caret()).href("#"), a("Settings"), a("Logout"));
 		menuL = navbarMenu(true, a("About us").href("#about"), a("Contact").href("#contact"));
@@ -83,7 +79,7 @@ public class ShowcasePage extends NavbarBootstrapPage {
 			}
 		});
 
-		return row(cols(6, info), cols(3, abc, xy), cols(3, dyn));
+		return row(cols(6, "Hello world!"), cols(3, abc, xy), cols(3, dyn));
 	}
 
 	protected Object[] navbarContent() {
