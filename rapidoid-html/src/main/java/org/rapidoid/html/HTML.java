@@ -24,6 +24,7 @@ import java.util.Collection;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.rapidoid.html.impl.TagInterceptor;
+import org.rapidoid.html.impl.UnmodifiableTag;
 import org.rapidoid.html.tag.*;
 
 public class HTML {
@@ -33,10 +34,13 @@ public class HTML {
 	}
 
 	public static void traverse(Object contents, TagEventHandler<Tag<?>> handler) {
+
 		if (contents instanceof Tag) {
-			Tag<?> tag = (Tag<?>) contents;
-			handler.handle(tag);
-			traverse(tag.content(), handler);
+			if (!(contents instanceof UnmodifiableTag)) {
+				Tag<?> tag = (Tag<?>) contents;
+				handler.handle(tag);
+				traverse(tag.content(), handler);
+			}
 		} else if (contents instanceof Object[]) {
 			Object[] arr = (Object[]) contents;
 			for (Object cont : arr) {
