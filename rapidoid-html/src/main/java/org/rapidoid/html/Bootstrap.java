@@ -132,7 +132,7 @@ public class Bootstrap extends HTML {
 	}
 
 	public static FormTag form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc, FieldType[] fieldTypes,
-			String... commands) {
+			Object[][] options, String... commands) {
 
 		U.notNull(fieldsNames, "field names");
 		fieldsDesc = U.or(fieldsDesc, fieldsNames);
@@ -141,7 +141,7 @@ public class Bootstrap extends HTML {
 		FormTag form = form().classs(formLayoutClass(layout)).role("form");
 
 		for (int i = 0; i < fieldsNames.length; i++) {
-			form.append(field(layout, fieldsNames[i], fieldsDesc[i], fieldTypes[i]));
+			form.append(field(layout, fieldsNames[i], fieldsDesc[i], fieldTypes[i], options[i]));
 		}
 
 		form.append(formBtns(layout, commands));
@@ -180,20 +180,19 @@ public class Bootstrap extends HTML {
 		}
 	}
 
-	public static DivTag field(FormLayout layout, String name, String desc, FieldType type) {
+	public static DivTag field(FormLayout layout, String name, String desc, FieldType type, Object[] options) {
 		desc = U.or(desc, name);
 
-		String inputId = "_" + name;
+		String inputId = "_" + name; // FIXME
 
+		Tag<?> inp = input_(name, desc, type, options).id(inputId);
 		LabelTag label;
-		Tag<?> inp;
 		Tag<?> inputWrap;
 
 		if (type == FieldType.CHECKBOX) {
 			label = null;
 
-			InputTag chk = input_(name, desc, type).id(inputId);
-			inp = div(label(chk, desc)).classs("checkbox");
+			inp = div(label(inp, desc)).classs("checkbox");
 
 			inputWrap = layout == FormLayout.HORIZONTAL ? div(inp).classs("col-sm-offset-4 col-sm-8") : inp;
 
@@ -204,8 +203,6 @@ public class Bootstrap extends HTML {
 				label.classs("col-sm-4 control-label");
 			}
 
-			inp = input_(name, desc, type).id(inputId);
-
 			inputWrap = layout == FormLayout.HORIZONTAL ? div(inp).classs("col-sm-8") : inp;
 		}
 
@@ -214,7 +211,7 @@ public class Bootstrap extends HTML {
 		return group;
 	}
 
-	public static InputTag input_(String name, String desc, FieldType type) {
+	public static Tag<?> input_(String name, String desc, FieldType type, Object[] options) {
 		switch (type) {
 
 		case TEXT:
@@ -228,6 +225,9 @@ public class Bootstrap extends HTML {
 
 		case CHECKBOX:
 			return input().type("checkbox");
+
+		case DROPDOWN:
+			return select(foreach(options, option($value))).classs("form-control");
 
 		default:
 			throw U.notExpected();
