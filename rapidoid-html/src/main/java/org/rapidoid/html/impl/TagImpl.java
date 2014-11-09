@@ -23,6 +23,7 @@ package org.rapidoid.html.impl;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.rapidoid.html.Action;
 import org.rapidoid.html.Tag;
@@ -139,7 +140,13 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	@Override
 	public TAG copy() {
-		return TagProxy.create(clazz, name, contents.toArray());
+		TAG copy = TagProxy.create(clazz, name, contents.toArray());
+
+		TagInternals tagi = (TagInternals) copy;
+		tagi.base().attrs.putAll(attrs);
+		tagi.base().battrs.addAll(battrs);
+
+		return copy;
 	}
 
 	@SuppressWarnings("unchecked")
