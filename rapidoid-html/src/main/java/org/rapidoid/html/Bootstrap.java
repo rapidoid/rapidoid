@@ -131,8 +131,107 @@ public class Bootstrap extends HTML {
 		return form(ctrls, btn).classs("navbar-form navbar-" + leftOrRight(onLeft));
 	}
 
+	public static FormTag form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc, FieldType[] fieldTypes,
+			String... commands) {
+
+		U.notNull(fieldsNames, "field names");
+		fieldsDesc = U.or(fieldsDesc, fieldsNames);
+		U.must(fieldsNames.length == fieldsDesc.length, "");
+
+		FormTag form = form().classs(formLayoutClass(layout)).role("form");
+
+		for (int i = 0; i < fieldsNames.length; i++) {
+			form.append(field(layout, fieldsNames[i], fieldsDesc[i], fieldTypes[i]));
+		}
+
+		form.append(formBtns(layout, commands));
+
+		return form;
 	}
 
+	public static Tag<?> formBtns(FormLayout layout, String[] commands) {
+		Tag<?> wrap, btns;
+
+		if (layout == FormLayout.HORIZONTAL) {
+			btns = div().classs("col-sm-offset-4 col-sm-8");
+			wrap = div(btns).classs("form-group");
+		} else {
+			wrap = div().classs("form-group");
+			btns = wrap;
+		}
+
+		for (String cmd : commands) {
+			btns.append(button(cmd).classs("btn btn-default"));
+		}
+
+		return wrap;
+	}
+
+	private static String formLayoutClass(FormLayout layout) {
+		switch (layout) {
+		case VERTICAL:
+			return "";
+		case HORIZONTAL:
+			return "form-horizontal";
+		case INLINE:
+			return "form-inline";
+		default:
+			throw U.notExpected();
+		}
+	}
+
+	public static DivTag field(FormLayout layout, String name, String desc, FieldType type) {
+		desc = U.or(desc, name);
+
+		String inputId = "_" + name;
+
+		LabelTag label;
+		Tag<?> inp;
+		Tag<?> inputWrap;
+
+		if (type == FieldType.CHECKBOX) {
+			label = null;
+
+			InputTag chk = input_(name, desc, type).id(inputId);
+			inp = div(label(chk, desc)).classs("checkbox");
+
+			inputWrap = layout == FormLayout.HORIZONTAL ? div(inp).classs("col-sm-offset-4 col-sm-8") : inp;
+
+		} else {
+			label = layout != FormLayout.INLINE ? label(desc).for_(inputId) : null;
+
+			if (layout == FormLayout.HORIZONTAL) {
+				label.classs("col-sm-4 control-label");
+			}
+
+			inp = input_(name, desc, type).id(inputId);
+
+			inputWrap = layout == FormLayout.HORIZONTAL ? div(inp).classs("col-sm-8") : inp;
+		}
+
+		DivTag group = label != null ? div(label, inputWrap) : div(inputWrap);
+		group.classs("form-group");
+		return group;
+	}
+
+	public static InputTag input_(String name, String desc, FieldType type) {
+		switch (type) {
+
+		case TEXT:
+			return input().type("text").classs("form-control").name(name).placeholder(desc);
+
+		case PASSWORD:
+			return input().type("password").classs("form-control").name(name).placeholder(desc);
+
+		case EMAIL:
+			return input().type("email").classs("form-control").name(name).placeholder(desc);
+
+		case CHECKBOX:
+			return input().type("checkbox");
+
+		default:
+			throw U.notExpected();
+		}
 	}
 
 	private static String leftOrRight(boolean onLeft) {
