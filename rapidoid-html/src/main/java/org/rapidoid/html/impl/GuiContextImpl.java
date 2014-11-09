@@ -25,9 +25,9 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.rapidoid.html.TagContext;
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.util.U;
 
@@ -35,13 +35,13 @@ public class GuiContextImpl implements TagContext, TagEventHandler<Tag<?>> {
 
 	private final AtomicInteger counter = new AtomicInteger();
 
-	private final ConcurrentMap<String, TagData<?>> tags = U.concurrentMap();
+	private final ConcurrentMap<String, TagImpl<?>> tags = U.concurrentMap();
 
 	private final ConcurrentMap<String, Tag<?>> changed = U.concurrentMap();
 
 	@Override
 	public void emit(String hnd, String event) {
-		TagData<?> tag = tags.get(hnd);
+		TagImpl<?> tag = tags.get(hnd);
 		if (tag != null) {
 			tag.emit(event);
 		} else {
@@ -51,7 +51,7 @@ public class GuiContextImpl implements TagContext, TagEventHandler<Tag<?>> {
 	}
 
 	@Override
-	public String getNewId(TagData<?> tag) {
+	public String getNewId(TagImpl<?> tag) {
 		String hnd = "_" + counter.incrementAndGet();
 		tags.put(hnd, tag);
 		return hnd;
@@ -59,14 +59,14 @@ public class GuiContextImpl implements TagContext, TagEventHandler<Tag<?>> {
 
 	@Override
 	public Tag<?> get(String hnd) {
-		TagData<?> tag = tags.get(hnd);
+		TagImpl<?> tag = tags.get(hnd);
 
 		if (tag == null) {
 			U.error("Cannot find tag!", "_h", hnd);
 			throw U.rte("Cannot find tag with _h = '%s'", hnd);
 		}
 
-		return tag.tag;
+		return tag.proxy();
 	}
 
 	@Override
@@ -75,8 +75,8 @@ public class GuiContextImpl implements TagContext, TagEventHandler<Tag<?>> {
 	}
 
 	@Override
-	public void changedContents(TagData<?> tagData) {
-		changed.putIfAbsent(tagData._hnd, tagData.tag);
+	public void changedContents(TagImpl<?> tag) {
+		changed.putIfAbsent(tag._hnd, tag.proxy());
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class GuiContextImpl implements TagContext, TagEventHandler<Tag<?>> {
 	public void handle(Tag<?> tag) {
 		if (tag instanceof TagInternals) {
 			TagInternals tagi = tagi(tag);
-			TagData<?> tagData = tagi.tagData();
+			TagImpl<?> tagData = tagi.base();
 			tagi.setHnd(getNewId(tagData));
 		}
 	}

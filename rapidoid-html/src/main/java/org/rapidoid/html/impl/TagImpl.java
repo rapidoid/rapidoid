@@ -25,13 +25,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.html.Action;
-import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.util.U;
 
-@SuppressWarnings("unchecked")
-public class TagData<TAG extends Tag<?>> {
+public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements TagInternals {
 
 	final Class<TAG> clazz;
 
@@ -39,17 +38,18 @@ public class TagData<TAG extends Tag<?>> {
 
 	final List<Object> contents = U.list();
 
-	final Map<String, Object> attrs = U.map();
+	final Map<String, String> attrs = U.map();
 
 	final Map<String, TagEventHandler<TAG>> eventHandlers = U.map();
 
 	String _hnd;
 
-	TAG tag;
-
 	TagContext ctx;
 
-	public TagData(Class<TAG> clazz, String name, Object[] contentsAndHandlers) {
+	private TAG proxy;
+
+	@SuppressWarnings("unchecked")
+	public TagImpl(Class<TAG> clazz, String name, Object[] contentsAndHandlers) {
 		this.clazz = clazz;
 		this.name = name;
 
@@ -77,10 +77,6 @@ public class TagData<TAG extends Tag<?>> {
 		return out.toString();
 	}
 
-	public void set(String attr, Object value) {
-		attrs.put(attr, value);
-	}
-
 	public void setHandler(String event, TagEventHandler<TAG> handler) {
 		if (handler != null) {
 			eventHandlers.put(event, handler);
@@ -97,8 +93,8 @@ public class TagData<TAG extends Tag<?>> {
 		}
 	}
 
-	public void setTag(TAG tag) {
-		this.tag = tag;
+	public void setProxy(TAG proxy) {
+		this.proxy = proxy;
 	}
 
 	public void setCtx(TagContext ctx) {
@@ -108,32 +104,11 @@ public class TagData<TAG extends Tag<?>> {
 	public void emit(String event) {
 		TagEventHandler<TAG> handler = eventHandlers.get(event);
 		if (handler != null) {
-			U.notNull(tag, "tag");
-			handler.handle(tag);
+			U.notNull(proxy, "tag");
+			handler.handle(proxy);
 		} else {
 			U.error("Cannot find event handler!", "event", event, "hnd", _hnd);
 			throw U.rte("Cannot find event handler on tag with _h = '%s' for event = '%s'", _hnd, event);
-		}
-	}
-
-	public void content(Object[] objects) {
-		changedContents();
-		contents.clear();
-		append(objects);
-	}
-
-	public void prepend(Object[] objects) {
-		changedContents();
-		int index = 0;
-		for (Object obj : objects) {
-			contents.add(index++, obj);
-		}
-	}
-
-	public void append(Object[] objects) {
-		changedContents();
-		for (Object obj : objects) {
-			contents.add(obj);
 		}
 	}
 
@@ -143,8 +118,91 @@ public class TagData<TAG extends Tag<?>> {
 		}
 	}
 
+	@Override
+	public int size() {
+		return contents.size();
+	}
+
+	@Override
+	public Object child(int index) {
+		return contents.get(index);
+	}
+
+	@Override
+	public void setChild(int index, Object child) {
+		contents.set(index, child);
+	}
+
+	@Override
+	public TAG copy() {
+		return TagProxy.create(clazz, name, contents.toArray());
+	}
+
+	@SuppressWarnings("unchecked")
+	public TagImpl<Tag<?>> base() {
+		return (TagImpl<Tag<?>>) this;
+	}
+
+	@Override
 	public void setHnd(String hnd) {
 		_hnd = hnd;
+	}
+
+	@Override
+	public Object content() {
+		return contents;
+	}
+
+	public TAG proxy() {
+		return proxy;
+	}
+
+	@Override
+	public TAG content(Object... content) {
+		changedContents();
+		contents.clear();
+		append(content);
+		return proxy();
+	}
+
+	@Override
+	public TAG prepend(Object... content) {
+		changedContents();
+		int index = 0;
+		for (Object obj : content) {
+			contents.add(index++, obj);
+		}
+		return proxy();
+	}
+
+	@Override
+	public TAG append(Object... content) {
+		changedContents();
+		for (Object obj : content) {
+			contents.add(obj);
+		}
+		return proxy();
+	}
+
+	@Override
+	public String attr(String attr) {
+		return attrs.get(attr);
+	}
+
+	@Override
+	public TAG attr(String attr, String value) {
+		attrs.put(attr, value);
+		return proxy();
+	}
+
+	@Override
+	public TAG classs(String classs) {
+		return attr("class", classs);
+	}
+
+	@Override
+	public String classs() {
+		return attr("class");
 	}
 
 }

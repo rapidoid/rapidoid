@@ -1,7 +1,5 @@
 package org.rapidoid.html;
 
-import org.rapidoid.html.impl.TagData;
-
 /*
  * #%L
  * rapidoid-html
@@ -22,10 +20,30 @@ import org.rapidoid.html.impl.TagData;
  * #L%
  */
 
+public interface TagBase<TAG extends Tag<?>> {
 
-public class ActData<TAG extends Tag<?>> {
+	Object content();
 
-	public ActData(TagData<TAG> tag, String name) {
-	}
+	TAG content(Object... content);
+
+	TAG append(Object... content);
+
+	TAG prepend(Object... content);
+
+	TAG copy();
+
+	int size();
+
+	Object child(int index);
+
+	void setChild(int index, Object child);
+
+	String classs();
+
+	TAG classs(String classs);
+
+	String attr(String attr);
+
+	TAG attr(String attr, String value);
 
 }

@@ -20,10 +20,11 @@ package org.rapidoid.pages.impl;
  * #L%
  */
 
-import org.rapidoid.html.impl.UnmodifiableTag;
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.impl.UndefinedTag;
 import org.rapidoid.pages.DynamicContent;
 
-public class DynamicContentWrapper extends UnmodifiableTag {
+public class DynamicContentWrapper extends UndefinedTag<Tag<?>> {
 
 	private final DynamicContent dynamic;
 
@@ -33,6 +34,11 @@ public class DynamicContentWrapper extends UnmodifiableTag {
 
 	public DynamicContent getDynamic() {
 		return dynamic;
+	}
+
+	@Override
+	public Tag<?> copy() {
+		return new DynamicContentWrapper(dynamic);
 	}
 
 }

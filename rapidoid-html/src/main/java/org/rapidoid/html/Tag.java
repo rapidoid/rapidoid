@@ -20,15 +20,7 @@ package org.rapidoid.html;
  * #L%
  */
 
-public interface Tag<TAG extends Tag<?>> {
-
-	Object content();
-
-	TAG content(Object... content);
-
-	TAG append(Object... content);
-
-	TAG prepend(Object... content);
+public interface Tag<TAG extends Tag<?>> extends TagBase<TAG> {
 
 	String id();
 
@@ -50,30 +42,8 @@ public interface Tag<TAG extends Tag<?>> {
 
 	TAG enabled(boolean value);
 
-	TAG attr(String attr, String value);
-
-	String attr(String attr);
-
-	TAG classs(String classs);
-
-	TAG classIf(boolean condition, String thenCls, String elseCls);
-
-	TAG contentIf(boolean condition, Object thenCnt, Object elseCnt);
-
 	TAG onClick(TagEventHandler<TAG> handler);
 
 	TAG onClick(Action... action);
-
-	Action doShow();
-
-	Action doHide();
-
-	Action doEnable();
-
-	Action doDisable();
-
-	Action doRemove();
-
-	Action doAdd(Object... tags);
 
 }

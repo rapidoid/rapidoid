@@ -2,7 +2,7 @@ package org.rapidoid.html;
 
 import java.util.Map;
 
-import org.rapidoid.html.impl.TagData;
+import org.rapidoid.html.impl.TagImpl;
 
 /*
  * #%L
@@ -28,13 +28,13 @@ public interface TagContext {
 
 	void emit(String hnd, String event);
 
-	String getNewId(TagData<?> tag);
+	String getNewId(TagImpl<?> tag);
 
 	Tag<?> get(String hnd);
 
 	Map<String, Tag<?>> changedTags();
 
-	void changedContents(TagData<?> tagData);
+	void changedContents(TagImpl<?> tag);
 
 	Map<String, String> changedContent();
 

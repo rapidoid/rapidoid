@@ -25,7 +25,7 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.util.U;
 
-public abstract class UnmodifiableTag implements Tag<Tag<?>> {
+public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 
 	@Override
 	public Object content() {
@@ -33,17 +33,17 @@ public abstract class UnmodifiableTag implements Tag<Tag<?>> {
 	}
 
 	@Override
-	public Tag<?> content(Object... content) {
+	public TAG content(Object... content) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public Tag<?> append(Object... content) {
+	public TAG append(Object... content) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public Tag<?> prepend(Object... content) {
+	public TAG prepend(Object... content) {
 		throw U.notExpected();
 	}
 
@@ -53,7 +53,17 @@ public abstract class UnmodifiableTag implements Tag<Tag<?>> {
 	}
 
 	@Override
-	public Tag<?> id(String id) {
+	public TAG id(String id) {
+		throw U.notExpected();
+	}
+
+	@Override
+	public String role() {
+		throw U.notExpected();
+	}
+
+	@Override
+	public TAG role(String role) {
 		throw U.notExpected();
 	}
 
@@ -63,7 +73,7 @@ public abstract class UnmodifiableTag implements Tag<Tag<?>> {
 	}
 
 	@Override
-	public Tag<?> css(String css) {
+	public TAG css(String css) {
 		throw U.notExpected();
 	}
 
@@ -73,7 +83,7 @@ public abstract class UnmodifiableTag implements Tag<Tag<?>> {
 	}
 
 	@Override
-	public Tag<?> hidden(boolean hidden) {
+	public TAG hidden(boolean hidden) {
 		throw U.notExpected();
 	}
 
@@ -83,12 +93,12 @@ public abstract class UnmodifiableTag implements Tag<Tag<?>> {
 	}
 
 	@Override
-	public Tag<?> enabled(boolean value) {
+	public TAG enabled(boolean value) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public Tag<?> attr(String attr, String value) {
+	public TAG attr(String attr, String value) {
 		throw U.notExpected();
 	}
 
@@ -98,57 +108,42 @@ public abstract class UnmodifiableTag implements Tag<Tag<?>> {
 	}
 
 	@Override
-	public Tag<?> classs(String classs) {
+	public TAG classs(String classs) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public Tag<?> classIf(boolean condition, String thenCls, String elseCls) {
+	public String classs() {
 		throw U.notExpected();
 	}
 
 	@Override
-	public Tag<?> contentIf(boolean condition, Object thenCnt, Object elseCnt) {
+	public TAG onClick(TagEventHandler<TAG> handler) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public Tag<?> onClick(TagEventHandler<Tag<?>> handler) {
+	public TAG onClick(Action... action) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public Tag<?> onClick(Action... action) {
+	public int size() {
 		throw U.notExpected();
 	}
 
 	@Override
-	public Action doShow() {
+	public Object child(int index) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public Action doHide() {
+	public void setChild(int index, Object replace) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public Action doEnable() {
-		throw U.notExpected();
-	}
-
-	@Override
-	public Action doDisable() {
-		throw U.notExpected();
-	}
-
-	@Override
-	public Action doRemove() {
-		throw U.notExpected();
-	}
-
-	@Override
-	public Action doAdd(Object... tags) {
+	public TAG copy() {
 		throw U.notExpected();
 	}
 

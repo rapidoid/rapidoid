@@ -24,7 +24,7 @@ import org.rapidoid.html.Tag;
 
 public interface TagInternals {
 
-	TagData<Tag<?>> tagData();
+	TagImpl<Tag<?>> base();
 
 	void setHnd(String hnd);
 

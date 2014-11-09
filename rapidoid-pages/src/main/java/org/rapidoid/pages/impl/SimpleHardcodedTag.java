@@ -3,6 +3,7 @@ package org.rapidoid.pages.impl;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
 
@@ -31,7 +32,11 @@ public class SimpleHardcodedTag extends HardcodedTag {
 	private final byte[] content;
 
 	public SimpleHardcodedTag(String content) {
-		this.content = content.getBytes();
+		this(content.getBytes());
+	}
+
+	public SimpleHardcodedTag(byte[] content) {
+		this.content = content;
 	}
 
 	public void render(HttpExchange x, PageRenderer renderer, OutputStream out) {
@@ -40,6 +45,11 @@ public class SimpleHardcodedTag extends HardcodedTag {
 		} catch (IOException e) {
 			throw U.rte("Cannot render hardcoded tag!", e);
 		}
+	}
+
+	@Override
+	public Tag<?> copy() {
+		return new SimpleHardcodedTag(content);
 	}
 
 }

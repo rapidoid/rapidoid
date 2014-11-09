@@ -2,7 +2,8 @@ package org.rapidoid.pages.impl;
 
 import java.io.OutputStream;
 
-import org.rapidoid.html.impl.UnmodifiableTag;
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.impl.UndefinedTag;
 import org.rapidoid.http.HttpExchange;
 
 /*
@@ -25,7 +26,7 @@ import org.rapidoid.http.HttpExchange;
  * #L%
  */
 
-public abstract class HardcodedTag extends UnmodifiableTag {
+public abstract class HardcodedTag extends UndefinedTag<Tag<?>> {
 
 	public abstract void render(HttpExchange x, PageRenderer renderer, OutputStream out);
 

@@ -23,6 +23,7 @@ package org.rapidoid.pages.impl;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
 
@@ -55,6 +56,11 @@ public class FileTemplate extends HardcodedTag {
 		} catch (IOException e) {
 			throw U.rte("Cannot render template!", e);
 		}
+	}
+
+	@Override
+	public Tag<?> copy() {
+		return new FileTemplate(templateName, namesAndValues);
 	}
 
 }

@@ -69,7 +69,7 @@ public class TagRenderer {
 		if (content instanceof Tag) {
 			Tag<?> tag = (Tag<?>) content;
 			TagInternals tagi = (TagInternals) tag;
-			str(tagi.tagData(), level, inline, extra, out);
+			str(tagi.base(), level, inline, extra, out);
 			return;
 		} else if (content instanceof TagWidget) {
 			TagWidget widget = (TagWidget) content;
@@ -105,7 +105,7 @@ public class TagRenderer {
 		}
 	}
 
-	public void str(TagData<?> tag, int level, boolean inline, Object extra, OutputStream out) {
+	public void str(TagImpl<?> tag, int level, boolean inline, Object extra, OutputStream out) {
 
 		String name = HTML.escape(tag.name);
 		List<Object> contents = tag.contents;
@@ -121,7 +121,7 @@ public class TagRenderer {
 			write(out, DQUOTES);
 		}
 
-		for (Entry<String, Object> e : tag.attrs.entrySet()) {
+		for (Entry<String, String> e : tag.attrs.entrySet()) {
 			String attr = e.getKey();
 
 			write(out, Constants.SPACE_);
@@ -177,7 +177,7 @@ public class TagRenderer {
 		return name.equals("input");
 	}
 
-	protected void attrToStr(OutputStream out, TagData<?> tag, String attr, Object value) {
+	protected void attrToStr(OutputStream out, TagImpl<?> tag, String attr, Object value) {
 		if (value == null) {
 			throw U.rte("The HTML attribute '%s' of tag '%s' cannot have null value!", attr, tag.name);
 		}
