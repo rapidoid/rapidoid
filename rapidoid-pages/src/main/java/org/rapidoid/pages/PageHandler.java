@@ -22,6 +22,8 @@ package org.rapidoid.pages;
 
 import java.util.List;
 
+import org.rapidoid.html.TagContext;
+import org.rapidoid.html.Tags;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.inject.IoC;
@@ -39,7 +41,7 @@ public class PageHandler implements Handler {
 		if (pageName != null) {
 
 			List<Class<?>> pageClasses = U.classpathClassesBySuffix("Page", null, null);
-			PageComponent page = x.session(PAGE_PREFIX + pageName, null);
+			Page page = x.session(PAGE_PREFIX + pageName, null);
 
 			if (page == null) {
 				Class<?> pageClass = findPageClass(pageClasses, pageName);
@@ -48,9 +50,17 @@ public class PageHandler implements Handler {
 						pageClass);
 
 				if (pageClass != null) {
-					page = (PageComponent) U.newInstance(pageClass);
+					page = (Page) U.newInstance(pageClass);
 					IoC.autowire(page);
 					x.setSession(PAGE_PREFIX + pageName, page);
+
+					TagContext ctx = x.session(Pages.SESSION_CTX, null);
+					if (ctx == null) {
+						ctx = Tags.context();
+						x.setSession(Pages.SESSION_CTX, ctx);
+					}
+
+					page.attachContext(ctx);
 				} else {
 					return x.notFound();
 				}
