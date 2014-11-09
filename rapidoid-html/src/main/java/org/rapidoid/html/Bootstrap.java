@@ -141,7 +141,7 @@ public class Bootstrap extends HTML {
 		FormTag form = form().classs(formLayoutClass(layout)).role("form");
 
 		for (int i = 0; i < fieldsNames.length; i++) {
-			form.append(field(layout, fieldsNames[i], fieldsDesc[i], fieldTypes[i], options[i]));
+			form.append(field(layout, fieldsNames[i], fieldsDesc[i], fieldTypes[i], options[i], null));
 		}
 
 		form.append(formBtns(layout, commands));
@@ -180,14 +180,19 @@ public class Bootstrap extends HTML {
 		}
 	}
 
-	public static DivTag field(FormLayout layout, String name, String desc, FieldType type, Object[] options) {
+	public static DivTag field(FormLayout layout, String name, String desc, FieldType type, Object[] options,
+			Object value) {
 		desc = U.or(desc, name);
 
 		String inputId = "_" + name; // FIXME
 
-		Tag<?> inp = input_(name, desc, type, options).id(inputId);
+		Object inp = input_(inputId, name, desc, type, options, value);
 		LabelTag label;
-		Tag<?> inputWrap;
+		Object inputWrap;
+
+		if (type == FieldType.RADIOS) {
+			inp = layout == FormLayout.VERTICAL ? div(inp) : span(inp);
+		}
 
 		if (type == FieldType.CHECKBOX) {
 			label = null;
@@ -197,7 +202,15 @@ public class Bootstrap extends HTML {
 			inputWrap = layout == FormLayout.HORIZONTAL ? div(inp).classs("col-sm-offset-4 col-sm-8") : inp;
 
 		} else {
-			label = layout != FormLayout.INLINE ? label(desc).for_(inputId) : null;
+			if (layout != FormLayout.INLINE) {
+				label = label(desc).for_(inputId);
+			} else {
+				if (type == FieldType.RADIOS) {
+					label = label(desc);
+				} else {
+					label = null;
+				}
+			}
 
 			if (layout == FormLayout.HORIZONTAL) {
 				label.classs("col-sm-4 control-label");
@@ -211,26 +224,30 @@ public class Bootstrap extends HTML {
 		return group;
 	}
 
-	public static Tag<?> input_(String name, String desc, FieldType type, Object[] options) {
+	public static Object input_(String id, String name, String desc, FieldType type, Object[] options, Object value) {
 		switch (type) {
 
 		case TEXT:
-			return input().type("text").classs("form-control").name(name).placeholder(desc);
+			return input().type("text").classs("form-control").id(id).name(name).placeholder(desc);
 
 		case PASSWORD:
-			return input().type("password").classs("form-control").name(name).placeholder(desc);
+			return input().type("password").classs("form-control").id(id).name(name).placeholder(desc);
 
 		case EMAIL:
-			return input().type("email").classs("form-control").name(name).placeholder(desc);
+			return input().type("email").classs("form-control").id(id).name(name).placeholder(desc);
 
 		case CHECKBOX:
-			return input().type("checkbox");
+			return input().type("checkbox").id(id).name(name);
 
 		case DROPDOWN:
-			return select(foreach(options, option($value))).classs("form-control");
+			return select(foreach(options, option($value))).id(id).name(name).classs("form-control").multiple(false);
 
 		case MULTI_SELECT:
-			return select(foreach(options, option($value))).classs("form-control").attr("multiple", "multiple");
+			return select(foreach(options, option($value))).id(id).name(name).classs("form-control").multiple(true);
+
+		case RADIOS:
+			return foreach(options, label(input().type("radio").name(name).value($value), $value)
+					.classs("radio-inline"));
 
 		default:
 			throw U.notExpected();
