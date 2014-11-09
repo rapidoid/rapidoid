@@ -229,6 +229,9 @@ public class Bootstrap extends HTML {
 		case DROPDOWN:
 			return select(foreach(options, option($value))).classs("form-control");
 
+		case MULTI_SELECT:
+			return select(foreach(options, option($value))).classs("form-control").attr("multiple", "multiple");
+
 		default:
 			throw U.notExpected();
 		}
