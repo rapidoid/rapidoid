@@ -54,7 +54,7 @@ public class FormPage extends NavbarBootstrapPage {
 
 	@Override
 	protected Object pageContent() {
-		return row(col_(3, form1), col_(3, form2), col_(6, form3));
+		return row(col3(form1), col3(form2), col6(form3));
 	}
 
 	@Override

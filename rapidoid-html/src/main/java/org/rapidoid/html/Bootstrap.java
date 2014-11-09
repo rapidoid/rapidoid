@@ -44,7 +44,7 @@ public class Bootstrap extends HTML {
 	}
 
 	public static DivTag rowFull(Object... contents) {
-		return div(col_(12, contents)).classs("row");
+		return div(col12(contents)).classs("row");
 	}
 
 	public static DivTag container(Object... contents) {
@@ -242,12 +242,60 @@ public class Bootstrap extends HTML {
 		return span().classs("caret");
 	}
 
+	public static DivTag jumbotron(Object... contents) {
+		return div(contents).classs("jumbotron");
+	}
+
 	public static DivTag col_(int cols, Object... contents) {
 		return div(contents).classs("col-md-" + cols);
 	}
 
-	public static DivTag jumbotron(Object... contents) {
-		return div(contents).classs("jumbotron");
+	public static DivTag col1(Object... contents) {
+		return col_(1, contents);
+	}
+
+	public static DivTag col2(Object... contents) {
+		return col_(2, contents);
+	}
+
+	public static DivTag col3(Object... contents) {
+		return col_(3, contents);
+	}
+
+	public static DivTag col4(Object... contents) {
+		return col_(4, contents);
+	}
+
+	public static DivTag col5(Object... contents) {
+		return col_(5, contents);
+	}
+
+	public static DivTag col6(Object... contents) {
+		return col_(6, contents);
+	}
+
+	public static DivTag col7(Object... contents) {
+		return col_(7, contents);
+	}
+
+	public static DivTag col8(Object... contents) {
+		return col_(8, contents);
+	}
+
+	public static DivTag col9(Object... contents) {
+		return col_(9, contents);
+	}
+
+	public static DivTag col10(Object... contents) {
+		return col_(10, contents);
+	}
+
+	public static DivTag col11(Object... contents) {
+		return col_(11, contents);
+	}
+
+	public static DivTag col12(Object... contents) {
+		return col_(12, contents);
 	}
 
 }
