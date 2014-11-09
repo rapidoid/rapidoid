@@ -647,7 +647,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T session(String name) {
-		return (T) session.getAttribute(sessionId(), name);
+		T value = (T) session.getAttribute(sessionId(), name);
+		U.notNull(value, "session[" + name + "]");
+		return value;
 	}
 
 	@SuppressWarnings("unchecked")
