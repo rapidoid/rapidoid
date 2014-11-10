@@ -24,6 +24,8 @@ import org.rapidoid.html.Tag;
 
 public interface OptionTag extends Tag<OptionTag> {
 
+	boolean selected();
 
+	OptionTag selected(boolean selected);
 
 }

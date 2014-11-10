@@ -32,4 +32,8 @@ public interface TextareaTag extends Tag<TextareaTag> {
 
 	TextareaTag name(String name);
 
+	String placeholder();
+
+	TextareaTag placeholder(String placeholder);
+
 }

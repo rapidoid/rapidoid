@@ -28,6 +28,7 @@ import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.LabelTag;
 import org.rapidoid.html.tag.LiTag;
 import org.rapidoid.html.tag.NavTag;
+import org.rapidoid.html.tag.SelectTag;
 import org.rapidoid.html.tag.SpanTag;
 import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.html.tag.UlTag;
@@ -132,7 +133,7 @@ public class Bootstrap extends HTML {
 	}
 
 	public static FormTag form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc, FieldType[] fieldTypes,
-			Object[][] options, Object[] buttons) {
+			Object[][] options, Object[] values, Object[] buttons) {
 
 		U.notNull(fieldsNames, "field names");
 		fieldsDesc = U.or(fieldsDesc, fieldsNames);
@@ -141,7 +142,7 @@ public class Bootstrap extends HTML {
 		FormTag form = form().classs(formLayoutClass(layout)).role("form");
 
 		for (int i = 0; i < fieldsNames.length; i++) {
-			form.append(field(layout, fieldsNames[i], fieldsDesc[i], fieldTypes[i], options[i], null));
+			form.append(field(layout, fieldsNames[i], fieldsDesc[i], fieldTypes[i], options[i], values[i]));
 		}
 
 		form.append(formBtns(layout, buttons));
@@ -228,33 +229,52 @@ public class Bootstrap extends HTML {
 		switch (type) {
 
 		case TEXT:
-			return input().type("text").classs("form-control").id(id).name(name).placeholder(desc);
+			return input().type("text").classs("form-control").id(id).name(name).placeholder(desc).value(value);
 
 		case PASSWORD:
-			return input().type("password").classs("form-control").id(id).name(name).placeholder(desc);
+			return input().type("password").classs("form-control").id(id).name(name).placeholder(desc).value(value);
 
 		case EMAIL:
-			return input().type("email").classs("form-control").id(id).name(name).placeholder(desc);
+			return input().type("email").classs("form-control").id(id).name(name).placeholder(desc).value(value);
 
 		case TEXTAREA:
-			return textarea().classs("form-control").id(id).name(name);
+			return textarea(value).classs("form-control").id(id).name(name).placeholder(desc);
 
 		case CHECKBOX:
-			return input().type("checkbox").id(id).name(name);
+			return input().type("checkbox").id(id).name(name).checked((Boolean) value);
 
 		case DROPDOWN:
-			return select(foreach(options, option($value))).id(id).name(name).classs("form-control").multiple(false);
+			SelectTag dropdown = select().id(id).name(name).classs("form-control").multiple(false);
+			for (Object opt : options) {
+				dropdown.append(option(opt).selected(opt.equals(value)));
+			}
+			return dropdown;
 
 		case MULTI_SELECT:
-			return select(foreach(options, option($value))).id(id).name(name).classs("form-control").multiple(true);
+			SelectTag select = select().id(id).name(name).classs("form-control").multiple(true);
+			for (Object opt : options) {
+				select.append(option(opt).selected(U.eq(opt, value) || U.contains(value, opt)));
+			}
+			return select;
 
 		case RADIOS:
-			return foreach(options, label(input().type("radio").name(name).value($value), $value)
-					.classs("radio-inline"));
+			Object[] radios = new Object[options.length];
+			for (int i = 0; i < options.length; i++) {
+				Object opt = options[i];
+				InputTag radio = input().type("radio").name(name).value(opt).checked(U.eq(value, opt));
+				radios[i] = label(radio, opt).classs("radio-inline");
+			}
+			return radios;
 
 		case CHECKBOXES:
-			return foreach(options,
-					label(input().type("checkbox").name(name).value($value), $value).classs("radio-checkbox"));
+			Object[] checkboxes = new Object[options.length];
+			for (int i = 0; i < options.length; i++) {
+				Object opt = options[i];
+				InputTag cc = input().type("checkbox").name(name).value(opt)
+						.checked(U.eq(opt, value) || U.contains(value, opt));
+				checkboxes[i] = label(cc, opt).classs("radio-checkbox");
+			}
+			return checkboxes;
 
 		default:
 			throw U.notExpected();

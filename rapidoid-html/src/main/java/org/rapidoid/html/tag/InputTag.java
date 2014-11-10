@@ -40,4 +40,8 @@ public interface InputTag extends Tag<InputTag> {
 
 	InputTag placeholder(String placeholder);
 
+	boolean checked();
+
+	InputTag checked(boolean checked);
+
 }

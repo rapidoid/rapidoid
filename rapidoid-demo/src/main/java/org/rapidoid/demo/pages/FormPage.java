@@ -47,10 +47,10 @@ public class FormPage extends NavbarBootstrapPage {
 
 	private FormTag frm(FormLayout layout) {
 
-		String[] names = { "user", "pass", "email", "aa", "roles", "gender", "accept", "bbb", "comments" };
+		String[] names = { "user", "pass", "email", "driver", "roles", "gender", "accept", "bbb", "comments" };
 
-		String[] desc = { "Username", "Password", "E-mail address", "Aaa", "Roles", "Gender", "Bbb", "Comments",
-				"I accept the terms and conditions" };
+		String[] desc = { "Username", "Password", "E-mail address", "Has Driver license", "Roles", "Gender", "Bbb",
+				"Comments", "I accept the terms and conditions" };
 
 		FieldType[] types = { FieldType.TEXT, FieldType.PASSWORD, FieldType.EMAIL, FieldType.DROPDOWN,
 				FieldType.MULTI_SELECT, FieldType.RADIOS, FieldType.CHECKBOXES, FieldType.TEXTAREA, FieldType.CHECKBOX };
@@ -65,9 +65,12 @@ public class FormPage extends NavbarBootstrapPage {
 
 		Object[][] options = { null, null, null, opt1, opt2, opt3, opt4, null, null };
 
+		Object[] values = { "niko", "rapidoid", "niko@rapi.doid", "No", arr("Manager", "Moderator"), "Male",
+				arr("A", "C"), "Very interesting!", true };
+
 		Object[] buttons = { btn("Save"), btn("Cancel") };
 
-		return form_(layout, names, desc, types, options, buttons);
+		return form_(layout, names, desc, types, options, values, buttons);
 	}
 
 	@Override

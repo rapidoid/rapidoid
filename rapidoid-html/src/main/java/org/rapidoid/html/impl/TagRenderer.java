@@ -47,6 +47,7 @@ public class TagRenderer {
 	private static final byte[] DQUOTES = "\"".getBytes();
 	private static final byte[] LT_SLASH = "</".getBytes();
 	private static final byte[] GT = ">".getBytes();
+	private static final byte[] VALUE_EQ = " value=\"".getBytes();
 
 	protected static final TagRenderer INSTANCE = new TagRenderer();
 
@@ -128,6 +129,13 @@ public class TagRenderer {
 			write(out, HTML.escape(attr));
 			write(out, EQ_DQUOTES);
 			attrToStr(out, tag, attr, e.getValue());
+			write(out, DQUOTES);
+		}
+
+		Object val = tag.value();
+		if (val != null) {
+			write(out, VALUE_EQ);
+			write(out, HTML.escape(val.toString()));
 			write(out, DQUOTES);
 		}
 
