@@ -76,11 +76,11 @@ public class Bootstrap extends HTML {
 	}
 
 	public static ButtonTag btn(Object... contents) {
-		return button(contents).classs("btn btn-default");
+		return button(contents).type("button").classs("btn btn-default");
 	}
 
 	public static ButtonTag btnPrimary(Object... contents) {
-		return button(contents).classs("btn btn-primary");
+		return button(contents).type("button").classs("btn btn-primary");
 	}
 
 	public static NavTag nav(boolean fluid, Tag<?> brand, Object[] navbarContent) {
