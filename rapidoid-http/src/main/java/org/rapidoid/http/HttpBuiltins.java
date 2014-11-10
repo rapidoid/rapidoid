@@ -26,7 +26,7 @@ public class HttpBuiltins {
 		server.get("/_logout", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				if (x.hasSession() && x.session("_user", null) != null) {
+				if (x.hasSession() && x.isLoggedIn()) {
 					x.closeSession();
 				}
 				return x.redirect("/");

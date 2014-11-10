@@ -58,7 +58,7 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 		dropdownMenu = dynamic(new DynamicContent() {
 			@Override
 			public Object eval(HttpExchange x) {
-				if (x.session("_user", null) != null) {
+				if (x.isLoggedIn()) {
 
 					ATag profile = a_glyph("user", "Profile", caret()).href("#");
 					ATag settings = a_glyph("cog", " Settings");

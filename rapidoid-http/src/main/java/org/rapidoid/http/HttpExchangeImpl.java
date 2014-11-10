@@ -41,6 +41,8 @@ import org.rapidoid.wrap.Bool;
 public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements HttpExchange,
 		Constants {
 
+	private static final String SESSION_USER = "_user";
+
 	private static final String SESSION_COOKIE = "JSESSIONID";
 
 	private final static HttpParser PARSER = IoC.singleton(HttpParser.class);
@@ -680,6 +682,23 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public HttpExchangeHeaders notFound() {
 		return response(404, "Not found!");
+	}
+
+	@Override
+	public boolean isLoggedIn() {
+		return hasSession() && session(SESSION_USER, null) != null;
+	}
+
+	@Override
+	public <T> T user() {
+		U.must(isLoggedIn(), "Must be logged in!");
+
+		return session(SESSION_USER);
+	}
+
+	@Override
+	public boolean isGetReq() {
+		return isGet.value;
 	}
 
 }
