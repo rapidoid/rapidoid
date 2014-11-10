@@ -65,7 +65,9 @@ public class FormPage extends NavbarBootstrapPage {
 
 		Object[][] options = { null, null, null, opt1, opt2, opt3, opt4, null, null };
 
-		return form_(layout, names, desc, types, options, "Save", "Cancel", "Something else");
+		Object[] buttons = { btn("Save"), btn("Cancel") };
+
+		return form_(layout, names, desc, types, options, buttons);
 	}
 
 	@Override

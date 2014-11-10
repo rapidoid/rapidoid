@@ -132,7 +132,7 @@ public class Bootstrap extends HTML {
 	}
 
 	public static FormTag form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc, FieldType[] fieldTypes,
-			Object[][] options, String... commands) {
+			Object[][] options, Object[] buttons) {
 
 		U.notNull(fieldsNames, "field names");
 		fieldsDesc = U.or(fieldsDesc, fieldsNames);
@@ -144,12 +144,12 @@ public class Bootstrap extends HTML {
 			form.append(field(layout, fieldsNames[i], fieldsDesc[i], fieldTypes[i], options[i], null));
 		}
 
-		form.append(formBtns(layout, commands));
+		form.append(formBtns(layout, buttons));
 
 		return form;
 	}
 
-	public static Tag<?> formBtns(FormLayout layout, String[] commands) {
+	public static Tag<?> formBtns(FormLayout layout, Object[] buttons) {
 		Tag<?> wrap, btns;
 
 		if (layout == FormLayout.HORIZONTAL) {
@@ -160,8 +160,8 @@ public class Bootstrap extends HTML {
 			btns = wrap;
 		}
 
-		for (String cmd : commands) {
-			btns.append(button(cmd).classs("btn btn-default"));
+		for (Object btn : buttons) {
+			btns.append(btn);
 		}
 
 		return wrap;
