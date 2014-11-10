@@ -65,44 +65,65 @@ public class TagProxy<TAG extends Tag<?>> implements InvocationHandler {
 		Class<?>[] paramTypes = method.getParameterTypes();
 
 		boolean returnsTag = ret.isAssignableFrom(clazz);
+		boolean returnsObj = ret.equals(Object.class);
+		boolean returnsStr = ret.equals(String.class);
+		boolean returnsBool = ret.equals(boolean.class);
 
+		boolean has0arg = paramTypes.length == 0;
+		boolean has1arg = paramTypes.length == 1;
+
+		// event handlers
 		if (name.startsWith("on") && name.length() > 2) {
 
 			String event = name.substring(2).toLowerCase();
 
 			// handlers setter
-			if (returnsTag && paramTypes.length == 1 && TagEventHandler.class.isAssignableFrom(paramTypes[0])) {
+			if (returnsTag && has1arg && TagEventHandler.class.isAssignableFrom(paramTypes[0])) {
 				tag.setHandler(event, (TagEventHandler<TAG>) args[0]);
 				return target;
 			}
 
 			// action setter
-			if (returnsTag && paramTypes.length == 1 && Action[].class.isAssignableFrom(paramTypes[0])) {
+			if (returnsTag && has1arg && Action[].class.isAssignableFrom(paramTypes[0])) {
 				tag.setHandler(event, (Action[]) args[0]);
 				return target;
 			}
 		}
 
 		// value setter
-		if (name.equals("value") && returnsTag && paramTypes.length == 1 && paramTypes[0].equals(Object.class)) {
+		if (returnsTag && has1arg && paramTypes[0].equals(Object.class) && name.equals("value")) {
 			tag.value(args[0]);
 			return target;
 		}
 
+		// value getter
+		if (returnsObj && has0arg && name.equals("value")) {
+			return tag.value();
+		}
+
 		// String attribute setter
-		if (returnsTag && paramTypes.length == 1 && paramTypes[0].equals(String.class)) {
+		if (returnsTag && has1arg && paramTypes[0].equals(String.class)) {
 			tag.attr(name, (String) args[0]);
 			return target;
 		}
 
+		// String attribute getter
+		if (returnsStr && has0arg) {
+			return tag.attr(name);
+		}
+
 		// boolean attribute setter
-		if (returnsTag && paramTypes.length == 1 && paramTypes[0].equals(boolean.class)) {
+		if (returnsTag && has1arg && paramTypes[0].equals(boolean.class)) {
 			tag.is(name, (Boolean) args[0]);
 			return target;
 		}
 
-		// FIXME implement attribute getters
+		// boolean attribute getter
+		if (returnsBool && has0arg) {
+			return tag.is(name);
+		}
 
+		// in case something is missed
 		throw U.rte("Not implemented: " + name);
 	}
 
