@@ -26,7 +26,7 @@ public abstract class NavbarBootstrapPage extends BootstrapPage {
 
 	@Override
 	protected Object pageBody() {
-		Object cont = div(pageContent()).classs(containerMaybeFluid(isFluid()));
+		Object cont = div(pageContent()).class_(containerMaybeFluid(isFluid()));
 		return new Object[] { nav(isFluid(), brand(), navbarContent()), cont };
 	}
 

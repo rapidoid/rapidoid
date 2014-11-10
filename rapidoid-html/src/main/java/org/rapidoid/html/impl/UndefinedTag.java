@@ -108,12 +108,12 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 	}
 
 	@Override
-	public TAG classs(String classs) {
+	public TAG class_(String classs) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public String classs() {
+	public String class_() {
 		throw U.notExpected();
 	}
 

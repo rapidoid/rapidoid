@@ -222,16 +222,6 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 		return proxy();
 	}
 
-	@Override
-	public TAG classs(String classs) {
-		return attr("class", classs);
-	}
-
-	@Override
-	public String classs() {
-		return attr("class");
-	}
-
 	public void value(Object value) {
 		this.value = value;
 	}

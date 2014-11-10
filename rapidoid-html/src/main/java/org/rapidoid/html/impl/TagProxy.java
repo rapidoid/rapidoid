@@ -103,28 +103,32 @@ public class TagProxy<TAG extends Tag<?>> implements InvocationHandler {
 
 		// String attribute setter
 		if (returnsTag && has1arg && paramTypes[0].equals(String.class)) {
-			tag.attr(name, (String) args[0]);
+			tag.attr(attr(name), (String) args[0]);
 			return target;
 		}
 
 		// String attribute getter
 		if (returnsStr && has0arg) {
-			return tag.attr(name);
+			return tag.attr(attr(name));
 		}
 
 		// boolean attribute setter
 		if (returnsTag && has1arg && paramTypes[0].equals(boolean.class)) {
-			tag.is(name, (Boolean) args[0]);
+			tag.is(attr(name), (Boolean) args[0]);
 			return target;
 		}
 
 		// boolean attribute getter
 		if (returnsBool && has0arg) {
-			return tag.is(name);
+			return tag.is(attr(name));
 		}
 
 		// in case something is missed
 		throw U.rte("Not implemented: " + name);
+	}
+
+	private static String attr(String name) {
+		return name.endsWith("_") ? U.mid(name, 0, -1) : name;
 	}
 
 }

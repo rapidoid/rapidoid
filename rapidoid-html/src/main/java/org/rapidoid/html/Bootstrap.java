@@ -37,35 +37,35 @@ import org.rapidoid.util.U;
 public class Bootstrap extends HTML {
 
 	public static TableTag table_(Object... contents) {
-		return HTML.table(contents).classs("table table-default table-hover");
+		return HTML.table(contents).class_("table table-default table-hover");
 	}
 
 	public static DivTag row(Object... contents) {
-		return div(contents).classs("row");
+		return div(contents).class_("row");
 	}
 
 	public static DivTag rowFull(Object... contents) {
-		return div(col12(contents)).classs("row");
+		return div(col12(contents)).class_("row");
 	}
 
 	public static DivTag container(Object... contents) {
-		return div(contents).classs("container");
+		return div(contents).class_("container");
 	}
 
 	public static DivTag containerFluid(Object... contents) {
-		return div(contents).classs("container-fluid");
+		return div(contents).class_("container-fluid");
 	}
 
 	public static SpanTag icon(String icon) {
-		return span().classs("icon-" + icon);
+		return span().class_("icon-" + icon);
 	}
 
 	public static SpanTag glyphicon(String glyphicon) {
-		return span().classs("glyphicon glyphicon-" + glyphicon);
+		return span().class_("glyphicon glyphicon-" + glyphicon);
 	}
 
 	public static SpanTag awesome(String fontAwesomeIcon) {
-		return span().classs("fa fa-" + fontAwesomeIcon);
+		return span().class_("fa fa-" + fontAwesomeIcon);
 	}
 
 	public static ATag a_glyph(String glyphicon, Object... contents) {
@@ -77,21 +77,21 @@ public class Bootstrap extends HTML {
 	}
 
 	public static ButtonTag btn(Object... contents) {
-		return button(contents).type("button").classs("btn btn-default");
+		return button(contents).type("button").class_("btn btn-default");
 	}
 
 	public static ButtonTag btnPrimary(Object... contents) {
-		return button(contents).type("button").classs("btn btn-primary");
+		return button(contents).type("button").class_("btn btn-primary");
 	}
 
 	public static NavTag nav(boolean fluid, Tag<?> brand, Object[] navbarContent) {
-		brand.classs("navbar-brand");
-		DivTag hdr = div(btnCollapse(), brand).classs("navbar-header");
+		brand.class_("navbar-brand");
+		DivTag hdr = div(btnCollapse(), brand).class_("navbar-header");
 
-		DivTag collapsable = div(navbarContent).classs("collapse navbar-collapse").id("collapsable");
+		DivTag collapsable = div(navbarContent).class_("collapse navbar-collapse").id("collapsable");
 
-		DivTag cnt = div(hdr, collapsable).classs(containerMaybeFluid(fluid));
-		return HTML.nav(cnt).classs("navbar navbar-default").role("navigation");
+		DivTag cnt = div(hdr, collapsable).class_(containerMaybeFluid(fluid));
+		return HTML.nav(cnt).class_("navbar navbar-default").role("navigation");
 	}
 
 	public static String containerMaybeFluid(boolean fluid) {
@@ -99,37 +99,37 @@ public class Bootstrap extends HTML {
 	}
 
 	public static ButtonTag btnCollapse() {
-		ButtonTag btn = button(span("Toggle navigation").classs("sr-only"), icon("bar"), icon("bar"), icon("bar"));
+		ButtonTag btn = button(span("Toggle navigation").class_("sr-only"), icon("bar"), icon("bar"), icon("bar"));
 
-		btn.type("button").classs("navbar-toggle collapsed").attr("data-toggle", "collapse")
+		btn.type("button").class_("navbar-toggle collapsed").attr("data-toggle", "collapse")
 				.attr("data-target", "#collapsable");
 
 		return btn;
 	}
 
 	public static UlTag navbarMenu(boolean onLeft, Object... menuItems) {
-		return ul_li(menuItems).classs("nav navbar-nav navbar-" + leftOrRight(onLeft));
+		return ul_li(menuItems).class_("nav navbar-nav navbar-" + leftOrRight(onLeft));
 	}
 
 	public static UlTag navbarDropdown(boolean onLeft, Tag<?> menu, Object... subItems) {
-		UlTag ul1 = ul_li(subItems).classs("dropdown-menu").role("menu");
-		menu.classs("dropdown-toggle").attr("data-toggle", "dropdown");
-		LiTag drop1 = li(menu, ul1).classs("dropdown");
-		return ul(drop1).classs("nav navbar-nav navbar-" + leftOrRight(onLeft));
+		UlTag ul1 = ul_li(subItems).class_("dropdown-menu").role("menu");
+		menu.class_("dropdown-toggle").attr("data-toggle", "dropdown");
+		LiTag drop1 = li(menu, ul1).class_("dropdown");
+		return ul(drop1).class_("nav navbar-nav navbar-" + leftOrRight(onLeft));
 	}
 
 	public static FormTag navbarForm(boolean onLeft, String buttonCaption, String[] fields, String[] placeholders) {
 		U.must(fields.length == placeholders.length, "");
 
-		DivTag ctrls = div().classs("form-group");
+		DivTag ctrls = div().class_("form-group");
 
 		for (int i = 0; i < fields.length; i++) {
-			InputTag inp = input().type("text").classs("form-control").name(fields[i]).placeholder(placeholders[i]);
+			InputTag inp = input().type("text").class_("form-control").name(fields[i]).placeholder(placeholders[i]);
 			ctrls.append(inp);
 		}
 
-		ButtonTag btn = button(buttonCaption).classs("btn btn-default").type("submit");
-		return form(ctrls, btn).classs("navbar-form navbar-" + leftOrRight(onLeft));
+		ButtonTag btn = button(buttonCaption).class_("btn btn-default").type("submit");
+		return form(ctrls, btn).class_("navbar-form navbar-" + leftOrRight(onLeft));
 	}
 
 	public static FormTag form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc, FieldType[] fieldTypes,
@@ -139,7 +139,7 @@ public class Bootstrap extends HTML {
 		fieldsDesc = U.or(fieldsDesc, fieldsNames);
 		U.must(fieldsNames.length == fieldsDesc.length, "");
 
-		FormTag form = form().classs(formLayoutClass(layout)).role("form");
+		FormTag form = form().class_(formLayoutClass(layout)).role("form");
 
 		for (int i = 0; i < fieldsNames.length; i++) {
 			form.append(field(layout, fieldsNames[i], fieldsDesc[i], fieldTypes[i], options[i], values[i]));
@@ -154,10 +154,10 @@ public class Bootstrap extends HTML {
 		Tag<?> wrap, btns;
 
 		if (layout == FormLayout.HORIZONTAL) {
-			btns = div().classs("col-sm-offset-4 col-sm-8");
-			wrap = div(btns).classs("form-group");
+			btns = div().class_("col-sm-offset-4 col-sm-8");
+			wrap = div(btns).class_("form-group");
 		} else {
-			wrap = div().classs("form-group");
+			wrap = div().class_("form-group");
 			btns = wrap;
 		}
 
@@ -196,9 +196,9 @@ public class Bootstrap extends HTML {
 		if (type == FieldType.CHECKBOX) {
 			label = null;
 
-			inp = div(label(inp, desc)).classs("checkbox");
+			inp = div(label(inp, desc)).class_("checkbox");
 
-			inputWrap = layout == FormLayout.HORIZONTAL ? div(inp).classs("col-sm-offset-4 col-sm-8") : inp;
+			inputWrap = layout == FormLayout.HORIZONTAL ? div(inp).class_("col-sm-offset-4 col-sm-8") : inp;
 
 		} else {
 			if (layout != FormLayout.INLINE) {
@@ -212,14 +212,14 @@ public class Bootstrap extends HTML {
 			}
 
 			if (layout == FormLayout.HORIZONTAL) {
-				label.classs("col-sm-4 control-label");
+				label.class_("col-sm-4 control-label");
 			}
 
-			inputWrap = layout == FormLayout.HORIZONTAL ? div(inp).classs("col-sm-8") : inp;
+			inputWrap = layout == FormLayout.HORIZONTAL ? div(inp).class_("col-sm-8") : inp;
 		}
 
 		DivTag group = label != null ? div(label, inputWrap) : div(inputWrap);
-		group.classs("form-group");
+		group.class_("form-group");
 		return group;
 	}
 
@@ -227,29 +227,29 @@ public class Bootstrap extends HTML {
 		switch (type) {
 
 		case TEXT:
-			return input().type("text").classs("form-control").name(name).placeholder(desc).value(value);
+			return input().type("text").class_("form-control").name(name).placeholder(desc).value(value);
 
 		case PASSWORD:
-			return input().type("password").classs("form-control").name(name).placeholder(desc).value(value);
+			return input().type("password").class_("form-control").name(name).placeholder(desc).value(value);
 
 		case EMAIL:
-			return input().type("email").classs("form-control").name(name).placeholder(desc).value(value);
+			return input().type("email").class_("form-control").name(name).placeholder(desc).value(value);
 
 		case TEXTAREA:
-			return textarea(value).classs("form-control").name(name).placeholder(desc);
+			return textarea(value).class_("form-control").name(name).placeholder(desc);
 
 		case CHECKBOX:
 			return input().type("checkbox").name(name).checked((Boolean) value);
 
 		case DROPDOWN:
-			SelectTag dropdown = select().name(name).classs("form-control").multiple(false);
+			SelectTag dropdown = select().name(name).class_("form-control").multiple(false);
 			for (Object opt : options) {
 				dropdown.append(option(opt).selected(opt.equals(value)));
 			}
 			return dropdown;
 
 		case MULTI_SELECT:
-			SelectTag select = select().name(name).classs("form-control").multiple(true);
+			SelectTag select = select().name(name).class_("form-control").multiple(true);
 			for (Object opt : options) {
 				select.append(option(opt).selected(U.eq(opt, value) || U.contains(value, opt)));
 			}
@@ -260,7 +260,7 @@ public class Bootstrap extends HTML {
 			for (int i = 0; i < options.length; i++) {
 				Object opt = options[i];
 				InputTag radio = input().type("radio").name(name).value(opt).checked(U.eq(value, opt));
-				radios[i] = label(radio, opt).classs("radio-inline");
+				radios[i] = label(radio, opt).class_("radio-inline");
 			}
 			return radios;
 
@@ -270,7 +270,7 @@ public class Bootstrap extends HTML {
 				Object opt = options[i];
 				InputTag cc = input().type("checkbox").name(name).value(opt)
 						.checked(U.eq(opt, value) || U.contains(value, opt));
-				checkboxes[i] = label(cc, opt).classs("radio-checkbox");
+				checkboxes[i] = label(cc, opt).class_("radio-checkbox");
 			}
 			return checkboxes;
 
@@ -284,15 +284,15 @@ public class Bootstrap extends HTML {
 	}
 
 	public static SpanTag caret() {
-		return span().classs("caret");
+		return span().class_("caret");
 	}
 
 	public static DivTag jumbotron(Object... contents) {
-		return div(contents).classs("jumbotron");
+		return div(contents).class_("jumbotron");
 	}
 
 	public static DivTag col_(int cols, Object... contents) {
-		return div(contents).classs("col-md-" + cols);
+		return div(contents).class_("col-md-" + cols);
 	}
 
 	public static DivTag col1(Object... contents) {

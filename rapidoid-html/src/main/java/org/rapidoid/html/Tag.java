@@ -30,6 +30,10 @@ public interface Tag<TAG extends Tag<?>> extends TagBase<TAG> {
 
 	TAG css(String css);
 
+	String class_();
+
+	TAG class_(String class_);
+
 	String role();
 
 	TAG role(String role);

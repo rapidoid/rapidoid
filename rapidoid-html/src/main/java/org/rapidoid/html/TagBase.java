@@ -38,10 +38,6 @@ public interface TagBase<TAG extends Tag<?>> {
 
 	void setChild(int index, Object child);
 
-	String classs();
-
-	TAG classs(String classs);
-
 	String attr(String attr);
 
 	TAG attr(String attr, String value);
