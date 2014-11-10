@@ -185,9 +185,7 @@ public class Bootstrap extends HTML {
 			Object value) {
 		desc = U.or(desc, name);
 
-		String inputId = "_" + name; // FIXME
-
-		Object inp = input_(inputId, name, desc, type, options, value);
+		Object inp = input_(name, desc, type, options, value);
 		LabelTag label;
 		Object inputWrap;
 
@@ -204,7 +202,7 @@ public class Bootstrap extends HTML {
 
 		} else {
 			if (layout != FormLayout.INLINE) {
-				label = label(desc).for_(inputId);
+				label = label(desc);
 			} else {
 				if (type == FieldType.RADIOS) {
 					label = label(desc);
@@ -225,33 +223,33 @@ public class Bootstrap extends HTML {
 		return group;
 	}
 
-	public static Object input_(String id, String name, String desc, FieldType type, Object[] options, Object value) {
+	public static Object input_(String name, String desc, FieldType type, Object[] options, Object value) {
 		switch (type) {
 
 		case TEXT:
-			return input().type("text").classs("form-control").id(id).name(name).placeholder(desc).value(value);
+			return input().type("text").classs("form-control").name(name).placeholder(desc).value(value);
 
 		case PASSWORD:
-			return input().type("password").classs("form-control").id(id).name(name).placeholder(desc).value(value);
+			return input().type("password").classs("form-control").name(name).placeholder(desc).value(value);
 
 		case EMAIL:
-			return input().type("email").classs("form-control").id(id).name(name).placeholder(desc).value(value);
+			return input().type("email").classs("form-control").name(name).placeholder(desc).value(value);
 
 		case TEXTAREA:
-			return textarea(value).classs("form-control").id(id).name(name).placeholder(desc);
+			return textarea(value).classs("form-control").name(name).placeholder(desc);
 
 		case CHECKBOX:
-			return input().type("checkbox").id(id).name(name).checked((Boolean) value);
+			return input().type("checkbox").name(name).checked((Boolean) value);
 
 		case DROPDOWN:
-			SelectTag dropdown = select().id(id).name(name).classs("form-control").multiple(false);
+			SelectTag dropdown = select().name(name).classs("form-control").multiple(false);
 			for (Object opt : options) {
 				dropdown.append(option(opt).selected(opt.equals(value)));
 			}
 			return dropdown;
 
 		case MULTI_SELECT:
-			SelectTag select = select().id(id).name(name).classs("form-control").multiple(true);
+			SelectTag select = select().name(name).classs("form-control").multiple(true);
 			for (Object opt : options) {
 				select.append(option(opt).selected(U.eq(opt, value) || U.contains(value, opt)));
 			}
