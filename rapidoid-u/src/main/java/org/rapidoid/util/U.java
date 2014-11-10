@@ -1527,4 +1527,25 @@ public class U {
 		return false;
 	}
 
+	public static boolean contains(Object arrOrColl, Object value) {
+		if (arrOrColl instanceof Object[]) {
+			Object[] arr = (Object[]) arrOrColl;
+			return indexOf(arr, value) >= 0;
+		} else if (arrOrColl instanceof Collection<?>) {
+			Collection<?> coll = (Collection<?>) arrOrColl;
+			return coll.contains(value);
+		} else {
+			return false;
+		}
+	}
+
+	public static int indexOf(Object[] arr, Object value) {
+		for (int i = 0; i < arr.length; i++) {
+			if (eq(arr[i], value)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
 }
