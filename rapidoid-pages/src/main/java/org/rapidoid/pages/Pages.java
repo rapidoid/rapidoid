@@ -21,6 +21,7 @@ package org.rapidoid.pages;
  */
 
 import org.rapidoid.html.TagContext;
+import org.rapidoid.html.Tags;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
@@ -55,6 +56,17 @@ public class Pages {
 				return ctx.changedContent();
 			}
 		});
+	}
+
+	public static TagContext ctx(HttpExchange x) {
+		TagContext ctx = x.session(SESSION_CTX, null);
+
+		if (ctx == null) {
+			ctx = Tags.context();
+			x.setSession(SESSION_CTX, ctx);
+		}
+
+		return ctx;
 	}
 
 	public static String pageName(HttpExchange x) {

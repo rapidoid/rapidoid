@@ -38,6 +38,4 @@ public interface TagContext {
 
 	Map<String, String> changedContent();
 
-	void add(Tag<?> tag);
-
 }

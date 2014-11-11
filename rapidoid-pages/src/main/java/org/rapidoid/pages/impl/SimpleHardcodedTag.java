@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagContext;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
 
@@ -39,7 +40,8 @@ public class SimpleHardcodedTag extends HardcodedTag {
 		this.content = content;
 	}
 
-	public void render(HttpExchange x, PageRenderer renderer, OutputStream out) {
+	@Override
+	public void render(TagContext ctx, HttpExchange x, PageRenderer renderer, OutputStream out) {
 		try {
 			out.write(content);
 		} catch (IOException e) {

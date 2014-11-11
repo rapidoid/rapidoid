@@ -26,6 +26,4 @@ public interface TagInternals {
 
 	TagImpl<Tag<?>> base();
 
-	void setHnd(String hnd);
-
 }

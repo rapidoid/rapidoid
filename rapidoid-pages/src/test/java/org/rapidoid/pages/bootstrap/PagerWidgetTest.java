@@ -36,35 +36,31 @@ public class PagerWidgetTest extends PagesTestCommons {
 		Var<Integer> pageN = HtmlWidget.var(3);
 
 		PagerWidget pager = new PagerWidget(1, 7, pageN);
-		pager.attachContext(ctx);
-		pager.attachContext(ctx);
-		pager.attachContext(ctx);
-
-		HtmlWidget.var(3);
+		print(ctx, pager);
 
 		eq(pageN.get().intValue(), 3);
-		has(pager, "(page 3)");
+		has(ctx, pager, "(page 3)");
 
 		ctx.emit("_2", "click"); // first
 
 		eq(pageN, 1);
-		has(pager, "(page 1)");
+		has(ctx, pager, "(page 1)");
 
 		ctx.emit("_6", "click"); // last
 
 		eq(pageN, 7);
-		has(pager, "(page 7)");
+		has(ctx, pager, "(page 7)");
 
 		ctx.emit("_3", "click"); // prev
 		ctx.emit("_3", "click"); // prev
 
 		eq(pageN, 5);
-		has(pager, "(page 5)");
+		has(ctx, pager, "(page 5)");
 
 		ctx.emit("_5", "click"); // next
 
 		eq(pageN, 6);
-		has(pager, "(page 6)");
+		has(ctx, pager, "(page 6)");
 	}
 
 }

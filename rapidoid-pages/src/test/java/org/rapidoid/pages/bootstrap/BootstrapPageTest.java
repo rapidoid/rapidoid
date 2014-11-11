@@ -20,8 +20,9 @@ package org.rapidoid.pages.bootstrap;
  * #L%
  */
 
+import org.rapidoid.html.TagContext;
+import org.rapidoid.html.Tags;
 import org.rapidoid.pages.PagesTestCommons;
-import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
 public class BootstrapPageTest extends PagesTestCommons {
@@ -29,7 +30,6 @@ public class BootstrapPageTest extends PagesTestCommons {
 	@Test
 	public void testPagerWidget() {
 		BootstrapPage page = new BootstrapPage() {
-
 			{
 				setContent(page());
 			}
@@ -45,10 +45,11 @@ public class BootstrapPageTest extends PagesTestCommons {
 			}
 		};
 
-		U.print(page);
+		TagContext ctx = Tags.context();
+		print(ctx, page);
 
-		has(page, "<title>Some title</title>");
-		hasRegex(page, "<div[^>]*?>abc</div>");
+		has(ctx, page, "<title>Some title</title>");
+		hasRegex(ctx, page, "<div[^>]*?>abc</div>");
 	}
 
 }

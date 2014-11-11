@@ -22,6 +22,7 @@ package org.rapidoid.pages.impl;
 
 import java.io.OutputStream;
 
+import org.rapidoid.html.TagContext;
 import org.rapidoid.html.impl.TagRenderer;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.DynamicContent;
@@ -35,20 +36,20 @@ public class PageRenderer extends TagRenderer {
 	}
 
 	@Override
-	public void str(Object content, int level, boolean inline, Object extra, OutputStream out) {
+	public void str(TagContext ctx, Object content, int level, boolean inline, Object extra, OutputStream out) {
 		if (content instanceof DynamicContentWrapper) {
 			DynamicContent dynamicContent = ((DynamicContentWrapper) content).getDynamic();
-			str(dynamicContent.eval((HttpExchange) extra), level, inline, extra, out);
+			str(ctx, dynamicContent.eval((HttpExchange) extra), level, inline, extra, out);
 		} else if (content instanceof HardcodedTag) {
 			HardcodedTag hardcoded = ((HardcodedTag) content);
-			hardcoded.render((HttpExchange) extra, this, out);
+			hardcoded.render(ctx, (HttpExchange) extra, this, out);
 		} else {
-			super.str(content, level, inline, extra, out);
+			super.str(ctx, content, level, inline, extra, out);
 		}
 	}
 
-	public void render(Object content, HttpExchange x) {
-		str(content, x, x.output().asOutputStream());
+	public void render(TagContext ctx, Object content, HttpExchange x) {
+		str(ctx, content, x, x.output().asOutputStream());
 	}
 
 }

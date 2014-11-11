@@ -78,7 +78,7 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	@Override
 	public String toString() {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		TagRenderer.get().str(this, 0, false, null, out);
+		TagRenderer.get().str(ctx, this, 0, false, null, out);
 		return out.toString();
 	}
 
@@ -152,11 +152,6 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	@SuppressWarnings("unchecked")
 	public TagImpl<Tag<?>> base() {
 		return (TagImpl<Tag<?>>) this;
-	}
-
-	@Override
-	public void setHnd(String hnd) {
-		_hnd = hnd;
 	}
 
 	@Override

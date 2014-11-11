@@ -22,7 +22,6 @@ package org.rapidoid.pages;
 
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.Tags;
 import org.rapidoid.html.Var;
@@ -45,11 +44,6 @@ public abstract class HtmlWidget extends HTML implements TagWidget, PageComponen
 	@Override
 	public Tag<?> content() {
 		return content;
-	}
-
-	@Override
-	public void attachContext(TagContext ctx) {
-		ctx.add(content());
 	}
 
 	public static Object _(String multiLanguageText, Object... formatArgs) {
@@ -79,13 +73,13 @@ public abstract class HtmlWidget extends HTML implements TagWidget, PageComponen
 	@Override
 	public void render(HttpExchange x) {
 		U.must(content != null, "No content was set in widget: " + super.toString());
-		PageRenderer.get().render(content, x);
+		PageRenderer.get().render(Pages.ctx(x), content, x);
 	}
 
 	@Override
 	public String toHTML(HttpExchange x) {
 		U.must(content != null, "No content was set in widget: " + super.toString());
-		return PageRenderer.get().toHTML(content, x);
+		return PageRenderer.get().toHTML(Pages.ctx(x), content, x);
 	}
 
 }

@@ -20,21 +20,25 @@ package org.rapidoid.pages;
  * #L%
  */
 
+import org.rapidoid.html.TagContext;
+import org.rapidoid.html.Tags;
 import org.testng.annotations.Test;
 
 public class PlaygroundWidgetTest extends PagesTestCommons {
 
 	@Test
 	public void testPlaygroundWidget() {
+		TagContext ctx = Tags.context();
 		PlaygroundWidget play = new PlaygroundWidget();
+		print(ctx, play);
 
-		hasRegex(play, "<table [^>]*?class=\"table[^>]*?>");
+		hasRegex(ctx, play, "<table [^>]*?class=\"table[^>]*?>");
 
-		hasRegex(play, "<button[^>]*?>-</button>");
-		hasRegex(play, "<span[^>]*?>10</span>");
-		hasRegex(play, "<button[^>]*?>\\+</button>");
+		hasRegex(ctx, play, "<button[^>]*?>-</button>");
+		hasRegex(ctx, play, "<span[^>]*?>10</span>");
+		hasRegex(ctx, play, "<button[^>]*?>\\+</button>");
 
-		hasRegex(play, "<input [^>]*?css=\"border: 1px;\">");
+		hasRegex(ctx, play, "<input [^>]*?css=\"border: 1px;\">");
 	}
 
 }

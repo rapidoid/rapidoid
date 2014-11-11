@@ -20,6 +20,8 @@ package org.rapidoid.pages.bootstrap;
  * #L%
  */
 
+import org.rapidoid.html.TagContext;
+import org.rapidoid.html.Tags;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
 import org.rapidoid.pages.PagesTestCommons;
@@ -30,18 +32,21 @@ public class TableWidgetTest extends PagesTestCommons {
 
 	@Test
 	public void testTableWidget() {
+		TagContext ctx = Tags.context();
+
 		Items items = Model.beanItems(new Person("John", 20), new Person("Rambo", 50));
 
 		TableWidget table = new TableWidget(items);
+		print(ctx, table);
 
-		hasRegex(table, "<th[^>]*?>name</th>");
-		hasRegex(table, "<th[^>]*?>age</th>");
+		hasRegex(ctx, table, "<th[^>]*?>name</th>");
+		hasRegex(ctx, table, "<th[^>]*?>age</th>");
 
-		hasRegex(table, "<td[^>]*?>John</td>");
-		hasRegex(table, "<td[^>]*?>20</td>");
+		hasRegex(ctx, table, "<td[^>]*?>John</td>");
+		hasRegex(ctx, table, "<td[^>]*?>20</td>");
 
-		hasRegex(table, "<td[^>]*?>Rambo</td>");
-		hasRegex(table, "<td[^>]*?>50</td>");
+		hasRegex(ctx, table, "<td[^>]*?>Rambo</td>");
+		hasRegex(ctx, table, "<td[^>]*?>50</td>");
 	}
 
 }

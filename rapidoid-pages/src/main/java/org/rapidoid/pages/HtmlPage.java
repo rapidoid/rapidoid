@@ -1,8 +1,6 @@
 package org.rapidoid.pages;
 
 import org.rapidoid.html.Tag;
-import org.rapidoid.http.HttpExchange;
-import org.rapidoid.pages.impl.PageRenderer;
 
 /*
  * #%L
@@ -44,11 +42,6 @@ public abstract class HtmlPage extends HtmlWidget implements Page {
 
 	protected String pageTitle() {
 		return Pages.pageTitle(getClass());
-	}
-
-	@Override
-	public void render(HttpExchange x) {
-		PageRenderer.get().render(content(), x);
 	}
 
 }

@@ -25,13 +25,11 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
-import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.util.U;
 
-public class GuiContextImpl implements TagContext, TagEventHandler<Tag<?>> {
+public class TagContextImpl implements TagContext {
 
 	private final AtomicInteger counter = new AtomicInteger();
 
@@ -88,24 +86,6 @@ public class GuiContextImpl implements TagContext, TagEventHandler<Tag<?>> {
 		}
 
 		return content;
-	}
-
-	private TagInternals tagi(Tag<?> tag) {
-		return (TagInternals) tag;
-	}
-
-	@Override
-	public void add(Tag<?> tag) {
-		HTML.traverse(tag, this);
-	}
-
-	@Override
-	public void handle(Tag<?> tag) {
-		if (tag instanceof TagInternals) {
-			TagInternals tagi = tagi(tag);
-			TagImpl<?> tagData = tagi.base();
-			tagi.setHnd(getNewId(tagData));
-		}
 	}
 
 }

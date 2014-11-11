@@ -30,6 +30,7 @@ import java.util.Map.Entry;
 import org.rapidoid.html.CustomTag;
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.Var;
 import org.rapidoid.util.Constants;
@@ -55,32 +56,32 @@ public class TagRenderer {
 		return INSTANCE;
 	}
 
-	public String toHTML(Object content, Object extra) {
+	public String toHTML(TagContext ctx, Object content, Object extra) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		str(content, extra, out);
+		str(ctx, content, extra, out);
 		return out.toString();
 	}
 
-	public void str(Object content, Object extra, OutputStream out) {
-		str(content, 0, false, extra, out);
+	public void str(TagContext ctx, Object content, Object extra, OutputStream out) {
+		str(ctx, content, 0, false, extra, out);
 	}
 
-	public void str(Object content, int level, boolean inline, Object extra, OutputStream out) {
+	public void str(TagContext ctx, Object content, int level, boolean inline, Object extra, OutputStream out) {
 
 		if (content instanceof Tag) {
 			Tag<?> tag = (Tag<?>) content;
 			TagInternals tagi = (TagInternals) tag;
-			str(tagi.base(), level, inline, extra, out);
+			str(ctx, tagi.base(), level, inline, extra, out);
 			return;
 		} else if (content instanceof TagWidget) {
 			TagWidget widget = (TagWidget) content;
-			str(widget.content(), level, inline, extra, out);
+			str(ctx, widget.content(), level, inline, extra, out);
 			return;
 		} else if (content instanceof Object[]) {
-			join((Object[]) content, level, inline, extra, out);
+			join(ctx, (Object[]) content, level, inline, extra, out);
 			return;
 		} else if (content instanceof Collection<?>) {
-			join((Collection<?>) content, level, inline, extra, out);
+			join(ctx, (Collection<?>) content, level, inline, extra, out);
 			return;
 		}
 
@@ -88,25 +89,34 @@ public class TagRenderer {
 		write(out, HTML.escape(String.valueOf(content)));
 	}
 
-	protected void join(Collection<?> items, int level, boolean inline, Object extra, OutputStream out) {
+	protected void join(TagContext ctx, Collection<?> items, int level, boolean inline, Object extra, OutputStream out) {
 		for (Object item : items) {
 			if (!inline) {
 				write(out, Constants.CR_LF);
 			}
-			str(item, level + 1, inline, extra, out);
+			str(ctx, item, level + 1, inline, extra, out);
 		}
 	}
 
-	protected void join(Object[] items, int level, boolean inline, Object extra, OutputStream out) {
+	protected void join(TagContext ctx, Object[] items, int level, boolean inline, Object extra, OutputStream out) {
 		for (int i = 0; i < items.length; i++) {
 			if (!inline) {
 				write(out, Constants.CR_LF);
 			}
-			str(items[i], level + 1, inline, extra, out);
+			str(ctx, items[i], level + 1, inline, extra, out);
 		}
 	}
 
-	public void str(TagImpl<?> tag, int level, boolean inline, Object extra, OutputStream out) {
+	public void str(TagContext ctx, TagImpl<?> tag, int level, boolean inline, Object extra, OutputStream out) {
+
+		U.notNull(ctx, "tag context");
+
+		if (tag.ctx != null) {
+			U.must(tag.ctx == ctx, "Invalid tag context!");
+		} else {
+			tag.ctx = ctx;
+			tag._hnd = ctx.getNewId(tag);
+		}
 
 		String name = HTML.escape(tag.name);
 		List<Object> contents = tag.contents;
@@ -166,13 +176,13 @@ public class TagRenderer {
 		}
 
 		if (inline || shouldRenderInline(name, contents)) {
-			str(contents, level + 1, true, extra, out);
+			str(ctx, contents, level + 1, true, extra, out);
 			closeTag(out, name);
 			return;
 		}
 
 		if (contents != null) {
-			str(contents, level, inline, extra, out);
+			str(ctx, contents, level, inline, extra, out);
 		}
 
 		write(out, Constants.CR_LF);

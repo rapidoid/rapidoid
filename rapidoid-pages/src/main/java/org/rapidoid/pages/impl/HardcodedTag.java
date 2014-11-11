@@ -3,6 +3,7 @@ package org.rapidoid.pages.impl;
 import java.io.OutputStream;
 
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagContext;
 import org.rapidoid.html.impl.UndefinedTag;
 import org.rapidoid.http.HttpExchange;
 
@@ -28,6 +29,6 @@ import org.rapidoid.http.HttpExchange;
 
 public abstract class HardcodedTag extends UndefinedTag<Tag<?>> {
 
-	public abstract void render(HttpExchange x, PageRenderer renderer, OutputStream out);
+	public abstract void render(TagContext ctx, HttpExchange x, PageRenderer renderer, OutputStream out);
 
 }

@@ -24,6 +24,4 @@ public interface TagWidget {
 
 	Tag<?> content();
 
-	void attachContext(TagContext ctx);
-
 }

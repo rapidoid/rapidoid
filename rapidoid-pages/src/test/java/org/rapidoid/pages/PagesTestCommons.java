@@ -22,14 +22,22 @@ package org.rapidoid.pages;
 
 import java.util.regex.Pattern;
 
+import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Var;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.test.TestCommons;
 
 public class PagesTestCommons extends TestCommons {
 
-	protected void has(PageComponent c, String... containingTexts) {
-		HttpExchange x = null;
+	protected void print(TagContext ctx, PageComponent c) {
+		HttpExchange x = mockExchange(ctx);
+		String html = c.toHTML(x);
+		notNull(html);
+		System.out.println(html);
+	}
+
+	protected void has(TagContext ctx, PageComponent c, String... containingTexts) {
+		HttpExchange x = mockExchange(ctx);
 		String html = c.toHTML(x);
 		notNull(html);
 
@@ -38,8 +46,8 @@ public class PagesTestCommons extends TestCommons {
 		}
 	}
 
-	protected void hasRegex(PageComponent c, String... containingRegexes) {
-		HttpExchange x = null;
+	protected void hasRegex(TagContext ctx, PageComponent c, String... containingRegexes) {
+		HttpExchange x = mockExchange(ctx);
 		String html = c.toHTML(x);
 		notNull(html);
 
@@ -50,6 +58,12 @@ public class PagesTestCommons extends TestCommons {
 
 	protected void eq(Var<?> var, Object value) {
 		eq(var.get(), value);
+	}
+
+	protected HttpExchange mockExchange(TagContext ctx) {
+		HttpExchange x = mock(HttpExchange.class);
+		returns(x.session(Pages.SESSION_CTX, null), ctx);
+		return x;
 	}
 
 }

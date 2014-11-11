@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagContext;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
 
@@ -41,12 +42,12 @@ public class FileTemplate extends HardcodedTag {
 	}
 
 	@Override
-	public void render(HttpExchange x, PageRenderer renderer, OutputStream out) {
+	public void render(TagContext ctx, HttpExchange x, PageRenderer renderer, OutputStream out) {
 		String text = U.load(templateName);
 
 		for (int i = 0; i < namesAndValues.length / 2; i++) {
 			String placeholder = (String) namesAndValues[i * 2];
-			String value = renderer.toHTML(namesAndValues[i * 2 + 1], x);
+			String value = renderer.toHTML(ctx, namesAndValues[i * 2 + 1], x);
 
 			text = U.fillIn(text, placeholder, value);
 		}

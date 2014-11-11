@@ -20,7 +20,7 @@ package org.rapidoid.html;
  * #L%
  */
 
-import org.rapidoid.html.impl.GuiContextImpl;
+import org.rapidoid.html.impl.TagContextImpl;
 import org.rapidoid.html.impl.VarImpl;
 
 public class Tags {
@@ -30,7 +30,7 @@ public class Tags {
 	}
 
 	public static TagContext context() {
-		return new GuiContextImpl();
+		return new TagContextImpl();
 	}
 
 }

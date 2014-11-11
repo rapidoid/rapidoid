@@ -23,6 +23,7 @@ package org.rapidoid.demo.pages;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.pages.bootstrap.NavbarBootstrapPage;
@@ -68,7 +69,12 @@ public class FormPage extends NavbarBootstrapPage {
 		Object[] values = { "niko", "rapidoid", "niko@rapi.doid", "No", arr("Manager", "Moderator"), "Male",
 				arr("A", "C"), "Very interesting!", true };
 
-		Object[] buttons = { btn("Save"), btn("Cancel") };
+		Object[] buttons = { btn("Save", new TagEventHandler<Tag<?>>() {
+			@Override
+			public void handle(Tag<?> target) {
+				System.out.println("save");
+			}
+		}), btn("Cancel") };
 
 		return form_(layout, names, desc, types, options, values, buttons);
 	}
