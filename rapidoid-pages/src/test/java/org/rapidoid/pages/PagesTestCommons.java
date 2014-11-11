@@ -20,6 +20,8 @@ package org.rapidoid.pages;
  * #L%
  */
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.rapidoid.html.TagContext;
@@ -28,6 +30,9 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.test.TestCommons;
 
 public class PagesTestCommons extends TestCommons {
+
+	@SuppressWarnings({ "unchecked" })
+	protected static final Map<String, Object> NO_CHANGES = Collections.EMPTY_MAP;
 
 	protected void print(TagContext ctx, PageComponent c) {
 		HttpExchange x = mockExchange(ctx);

@@ -20,16 +20,24 @@ package org.rapidoid.pages;
  * #L%
  */
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.json.JSON;
 import org.rapidoid.util.U;
 
 public class Pages {
 
 	public static final String SESSION_CTX = "_ctx";
+
+	static final String SESSION_PAGE_PREFIX = "_page_";
+
+	public static final String SESSION_PAGE = "_page";
 
 	public static void registerPages(HTTPServer server) {
 		registerEmitHandler(server);
@@ -42,6 +50,7 @@ public class Pages {
 
 			@Override
 			public Object handle(HttpExchange x) throws Exception {
+
 				int hnd = U.num(x.data("hnd"));
 				String event = x.data("event");
 
@@ -49,13 +58,32 @@ public class Pages {
 				U.notNull(event, "event");
 
 				TagContext ctx = x.session(SESSION_CTX);
+				Page page = x.session(SESSION_PAGE);
 
-				ctx.emit(hnd, event);
 
+				Map<Integer, Object> inp = inputs(x);
+				ctx.emit(page.content(), inp, hnd, event);
+
+				Map<Integer, String> changes = ctx.changes();
 				x.json();
-				return ctx.changedContent();
+				return changes;
 			}
 		});
+	}
+
+	@SuppressWarnings("unchecked")
+	protected static Map<Integer, Object> inputs(HttpExchange x) {
+		String inputs = x.data("inputs");
+		U.notNull(inputs, "inputs");
+
+		Map<Integer, Object> inputsMap = U.map();
+
+		Map<String, Object> inp = JSON.parse(inputs, Map.class);
+		for (Entry<String, Object> e : inp.entrySet()) {
+			inputsMap.put(U.num(e.getKey()), e.getValue());
+		}
+
+		return inputsMap;
 	}
 
 	public static TagContext ctx(HttpExchange x) {

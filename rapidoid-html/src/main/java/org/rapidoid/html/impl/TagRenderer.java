@@ -115,7 +115,7 @@ public class TagRenderer {
 			U.must(tag.ctx == ctx, "Invalid tag context!");
 		} else {
 			tag.ctx = ctx;
-			tag._h = ctx.getNewId(tag);
+			tag._h = ctx.newHnd();
 		}
 
 		String name = HTML.escape(tag.name);

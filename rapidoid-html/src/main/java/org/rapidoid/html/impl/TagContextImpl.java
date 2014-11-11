@@ -25,9 +25,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
+import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
+import org.rapidoid.html.TagProcessor;
 import org.rapidoid.util.U;
 
 public class TagContextImpl implements TagContext, Serializable {
@@ -36,43 +39,11 @@ public class TagContextImpl implements TagContext, Serializable {
 
 	private final AtomicInteger counter = new AtomicInteger();
 
-	private final ConcurrentMap<Integer, TagImpl<?>> tags = U.concurrentMap();
-
 	private final ConcurrentMap<Integer, Tag<?>> changed = U.concurrentMap();
 
 	@Override
-	public void emit(int hnd, String event) {
-		TagImpl<?> tag = tags.get(hnd);
-		if (tag != null) {
-			tag.emit(event);
-		} else {
-			U.error("Cannot find tag!", "event", event, "_h", hnd);
-			throw U.rte("Cannot find tag with _h = '%s'", hnd);
-		}
-	}
-
-	@Override
-	public int getNewId(TagImpl<?> tag) {
-		int hnd = counter.incrementAndGet();
-		tags.put(hnd, tag);
-		return hnd;
-	}
-
-	@Override
-	public Tag<?> get(int hnd) {
-		TagImpl<?> tag = tags.get(hnd);
-
-		if (tag == null) {
-			U.error("Cannot find tag!", "_h", hnd);
-			throw U.rte("Cannot find tag with _h = '%s'", hnd);
-		}
-
-		return tag.proxy();
-	}
-
-	@Override
-	public Map<Integer, Tag<?>> changedTags() {
-		return changed;
+	public int newHnd() {
+		return counter.incrementAndGet();
 	}
 
 	@Override
@@ -81,7 +52,7 @@ public class TagContextImpl implements TagContext, Serializable {
 	}
 
 	@Override
-	public Map<Integer, String> changedContent() {
+	public Map<Integer, String> changes() {
 		Map<Integer, String> content = U.map();
 
 		for (Entry<Integer, Tag<?>> e : changed.entrySet()) {
@@ -89,6 +60,40 @@ public class TagContextImpl implements TagContext, Serializable {
 		}
 
 		return content;
+	}
+
+	@Override
+	public void emit(Tag<?> root, final Map<Integer, Object> values, final int eventHnd, String event) {
+
+		changed.clear();
+
+		final AtomicReference<TagImpl<?>> ref = new AtomicReference<TagImpl<?>>(null);
+
+		HTML.traverse(root, new TagProcessor<Tag<?>>() {
+			@Override
+			public void handle(Tag<?> tag) {
+
+				TagImpl<Tag<?>> t = ((TagInternals) tag).base();
+
+				Object val = values.get(t._h);
+				if (val != null) {
+					t.value(val);
+				}
+
+				if (t._h == eventHnd) {
+					ref.set(t);
+				}
+			}
+		});
+
+		TagImpl<?> tag = ref.get();
+
+		if (tag != null) {
+			tag.emit(event);
+		} else {
+			U.error("Cannot find tag!", "event", event, "_h", eventHnd);
+			throw U.rte("Cannot find tag with _h = '%s'", eventHnd);
+		}
 	}
 
 }

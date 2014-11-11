@@ -29,8 +29,6 @@ import org.rapidoid.util.U;
 
 public class PageHandler implements Handler {
 
-	private static final String PAGE_PREFIX = "_page_";
-
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
 
@@ -39,7 +37,7 @@ public class PageHandler implements Handler {
 		if (pageName != null) {
 
 			List<Class<?>> pageClasses = U.classpathClassesBySuffix("Page", null, null);
-			Page page = x.session(PAGE_PREFIX + pageName, null);
+			Page page = x.session(Pages.SESSION_PAGE_PREFIX + pageName, null);
 
 			if (page == null) {
 				Class<?> pageClass = findPageClass(pageClasses, pageName);
@@ -50,14 +48,16 @@ public class PageHandler implements Handler {
 				if (pageClass != null) {
 					page = (Page) U.newInstance(pageClass);
 					IoC.autowire(page);
-					x.setSession(PAGE_PREFIX + pageName, page);
+					x.setSession(Pages.SESSION_PAGE_PREFIX + pageName, page);
 				} else {
 					return x.notFound();
 				}
 			}
 
+			x.setSession(Pages.SESSION_PAGE, page);
 			x.html();
 			page.render(x);
+
 			return x;
 
 		} else {
