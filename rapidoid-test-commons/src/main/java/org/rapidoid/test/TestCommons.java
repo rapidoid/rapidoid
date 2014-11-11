@@ -25,6 +25,8 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Random;
 
+import org.mockito.Mockito;
+import org.mockito.stubbing.OngoingStubbing;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -256,6 +258,18 @@ public abstract class TestCommons {
 
 	protected File resourceFile(String filename) {
 		return new File(resource(filename).getFile());
+	}
+
+	protected <T> T mock(Class<T> classToMock) {
+		return Mockito.mock(classToMock);
+	}
+
+	protected <T> OngoingStubbing<T> when(T methodCall) {
+		return Mockito.when(methodCall);
+	}
+
+	protected <T> void returns(T methodCall, T result) {
+		Mockito.when(methodCall).thenReturn(result);
 	}
 
 }

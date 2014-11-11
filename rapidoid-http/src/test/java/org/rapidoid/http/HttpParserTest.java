@@ -20,11 +20,8 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.mockito.Mockito;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
-import org.rapidoid.http.HttpExchangeImpl;
-import org.rapidoid.http.HttpParser;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.U;
@@ -137,9 +134,9 @@ public class HttpParserTest extends HttpTestCommons {
 
 		Buf reqbuf = new BufGroup(10).from(reqs, "test");
 
-		Channel conn = Mockito.mock(Channel.class);
-		Mockito.when(conn.input()).thenReturn(reqbuf);
-		Mockito.when(conn.helper()).thenReturn(HELPER);
+		Channel conn = mock(Channel.class);
+		returns(conn.input(), reqbuf);
+		returns(conn.helper(), HELPER);
 
 		req.setConnection(conn);
 
