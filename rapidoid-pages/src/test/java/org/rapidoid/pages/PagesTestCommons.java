@@ -32,7 +32,7 @@ import org.rapidoid.test.TestCommons;
 public class PagesTestCommons extends TestCommons {
 
 	@SuppressWarnings({ "unchecked" })
-	protected static final Map<String, Object> NO_CHANGES = Collections.EMPTY_MAP;
+	protected static final Map<Integer, Object> NO_CHANGES = Collections.EMPTY_MAP;
 
 	protected void print(TagContext ctx, PageComponent c) {
 		HttpExchange x = mockExchange(ctx);
