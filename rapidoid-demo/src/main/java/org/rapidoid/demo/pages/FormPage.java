@@ -37,7 +37,7 @@ public class FormPage extends NavbarBootstrapPage {
 	private FormTag form3;
 
 	public FormPage() {
-		brand = a("Welcome to the Forms page!").href("/");
+		brand = a("Welcome to the Forms page!").href("/form.html");
 
 		form1 = frm(FormLayout.HORIZONTAL);
 		form2 = frm(FormLayout.VERTICAL);
@@ -72,7 +72,7 @@ public class FormPage extends NavbarBootstrapPage {
 		Object[] buttons = { btn("Save", new TagEventHandler<Tag<?>>() {
 			@Override
 			public void handle(Tag<?> target) {
-				System.out.println("save");
+				target.append("+");
 			}
 		}), btn("Cancel") };
 
