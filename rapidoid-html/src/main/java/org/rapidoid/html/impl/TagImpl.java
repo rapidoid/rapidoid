@@ -45,7 +45,7 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	final Map<String, TagEventHandler<TAG>> eventHandlers = U.map();
 
-	String _hnd;
+	int _h;
 
 	TagContext ctx;
 
@@ -112,8 +112,8 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 			U.notNull(proxy, "tag");
 			handler.handle(proxy);
 		} else {
-			U.error("Cannot find event handler!", "event", event, "hnd", _hnd);
-			throw U.rte("Cannot find event handler on tag with _h = '%s' for event = '%s'", _hnd, event);
+			U.error("Cannot find event handler!", "event", event, "hnd", _h);
+			throw U.rte("Cannot find event handler on tag with _h = '%s' for event = '%s'", _h, event);
 		}
 	}
 

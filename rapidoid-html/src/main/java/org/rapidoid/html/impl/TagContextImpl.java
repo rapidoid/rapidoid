@@ -33,12 +33,12 @@ public class TagContextImpl implements TagContext {
 
 	private final AtomicInteger counter = new AtomicInteger();
 
-	private final ConcurrentMap<String, TagImpl<?>> tags = U.concurrentMap();
+	private final ConcurrentMap<Integer, TagImpl<?>> tags = U.concurrentMap();
 
-	private final ConcurrentMap<String, Tag<?>> changed = U.concurrentMap();
+	private final ConcurrentMap<Integer, Tag<?>> changed = U.concurrentMap();
 
 	@Override
-	public void emit(String hnd, String event) {
+	public void emit(int hnd, String event) {
 		TagImpl<?> tag = tags.get(hnd);
 		if (tag != null) {
 			tag.emit(event);
@@ -49,14 +49,14 @@ public class TagContextImpl implements TagContext {
 	}
 
 	@Override
-	public String getNewId(TagImpl<?> tag) {
-		String hnd = "_" + counter.incrementAndGet();
+	public int getNewId(TagImpl<?> tag) {
+		int hnd = counter.incrementAndGet();
 		tags.put(hnd, tag);
 		return hnd;
 	}
 
 	@Override
-	public Tag<?> get(String hnd) {
+	public Tag<?> get(int hnd) {
 		TagImpl<?> tag = tags.get(hnd);
 
 		if (tag == null) {
@@ -68,20 +68,20 @@ public class TagContextImpl implements TagContext {
 	}
 
 	@Override
-	public Map<String, Tag<?>> changedTags() {
+	public Map<Integer, Tag<?>> changedTags() {
 		return changed;
 	}
 
 	@Override
 	public void changedContents(TagImpl<?> tag) {
-		changed.putIfAbsent(tag._hnd, tag.proxy());
+		changed.putIfAbsent(tag._h, tag.proxy());
 	}
 
 	@Override
-	public Map<String, String> changedContent() {
-		Map<String, String> content = U.map();
+	public Map<Integer, String> changedContent() {
+		Map<Integer, String> content = U.map();
 
-		for (Entry<String, Tag<?>> e : changed.entrySet()) {
+		for (Entry<Integer, Tag<?>> e : changed.entrySet()) {
 			content.put(e.getKey(), e.getValue().toString());
 		}
 

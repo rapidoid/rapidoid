@@ -42,7 +42,7 @@ public class Pages {
 
 			@Override
 			public Object handle(HttpExchange x) throws Exception {
-				String hnd = x.data("hnd");
+				int hnd = U.num(x.data("hnd"));
 				String event = x.data("event");
 
 				U.notNull(hnd, "hnd");
