@@ -22,8 +22,7 @@ package org.rapidoid.html.impl;
 
 import java.io.Serializable;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentMap;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -39,7 +38,7 @@ public class TagContextImpl implements TagContext, Serializable {
 
 	private final AtomicInteger counter = new AtomicInteger();
 
-	private final ConcurrentMap<Integer, Tag<?>> changed = U.concurrentMap();
+	private final Set<Tag<?>> changed = U.set();
 
 	@Override
 	public int newHnd() {
@@ -47,16 +46,16 @@ public class TagContextImpl implements TagContext, Serializable {
 	}
 
 	@Override
-	public void changedContents(TagImpl<?> tag) {
-		changed.putIfAbsent(tag._h, tag.proxy());
+	public void changed(TagImpl<?> tag) {
+		changed.add(tag.proxy());
 	}
 
 	@Override
 	public Map<Integer, String> changes() {
 		Map<Integer, String> content = U.map();
 
-		for (Entry<Integer, Tag<?>> e : changed.entrySet()) {
-			content.put(e.getKey(), e.getValue().toString());
+		for (Tag<?> tag : changed) {
+			content.put(base(tag)._h, tag.toString());
 		}
 
 		return content;
@@ -73,11 +72,12 @@ public class TagContextImpl implements TagContext, Serializable {
 			@Override
 			public void handle(Tag<?> tag) {
 
-				TagImpl<Tag<?>> t = ((TagInternals) tag).base();
+				TagImpl<Tag<?>> t = base(tag);
 
 				Object val = values.get(t._h);
 				if (val != null) {
 					t.value(val);
+					values.remove(t._h);
 				}
 
 				if (t._h == eventHnd) {
@@ -85,6 +85,8 @@ public class TagContextImpl implements TagContext, Serializable {
 				}
 			}
 		});
+
+		U.must(values.isEmpty(), "Missing input field(s): %s", values.keySet());
 
 		TagImpl<?> tag = ref.get();
 
@@ -94,6 +96,10 @@ public class TagContextImpl implements TagContext, Serializable {
 			U.error("Cannot find tag!", "event", event, "_h", eventHnd);
 			throw U.rte("Cannot find tag with _h = '%s'", eventHnd);
 		}
+	}
+
+	private TagImpl<Tag<?>> base(Tag<?> tag) {
+		return ((TagInternals) tag).base();
 	}
 
 }

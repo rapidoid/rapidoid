@@ -120,9 +120,15 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 		}
 	}
 
-	private void changedContents() {
+	private void changed() {
 		if (ctx != null) {
-			ctx.changedContents(this);
+			ctx.changed(this);
+		}
+	}
+
+	private void changeIf(boolean cond) {
+		if (cond && ctx != null) {
+			ctx.changed(this);
 		}
 	}
 
@@ -138,6 +144,7 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	@Override
 	public void setChild(int index, Object child) {
+		changed();
 		contents.set(index, child);
 	}
 
@@ -168,7 +175,7 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	@Override
 	public TAG content(Object... content) {
-		changedContents();
+		changed();
 		contents.clear();
 		append(content);
 		return proxy();
@@ -176,7 +183,7 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	@Override
 	public TAG prepend(Object... content) {
-		changedContents();
+		changed();
 		int index = 0;
 		for (Object obj : content) {
 			contents.add(index++, obj);
@@ -186,7 +193,7 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	@Override
 	public TAG append(Object... content) {
-		changedContents();
+		changed();
 		for (Object obj : content) {
 			contents.add(obj);
 		}
@@ -200,7 +207,8 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	@Override
 	public TAG attr(String attr, String value) {
-		attrs.put(attr, value);
+		String prev = attrs.put(attr, value);
+		changeIf(U.eq(prev, value));
 		return proxy();
 	}
 
@@ -212,15 +220,16 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	@Override
 	public TAG is(String attr, boolean value) {
 		if (value) {
-			battrs.add(attr);
+			changeIf(battrs.add(attr));
 		} else {
-			battrs.remove(attr);
+			changeIf(battrs.remove(attr));
 		}
 
 		return proxy();
 	}
 
 	public void value(Object value) {
+		changeIf(!U.eq(this.value, value));
 		this.value = value;
 	}
 

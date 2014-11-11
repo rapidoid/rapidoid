@@ -30,7 +30,7 @@ public interface TagContext {
 
 	int newHnd();
 
-	void changedContents(TagImpl<?> tag);
+	void changed(TagImpl<?> tag);
 
 	Map<Integer, String> changes();
 
