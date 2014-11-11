@@ -94,23 +94,26 @@ public class HTML {
 		return StringEscapeUtils.escapeHtml4(s);
 	}
 
-	public static void traverse(Object contents, TagEventHandler<Tag<?>> handler) {
+	public static void traverse(Object contents, TagProcessor<Tag<?>> processor) {
 
 		if (contents instanceof Tag) {
-			if (!(contents instanceof UndefinedTag)) {
+			if (contents instanceof UndefinedTag) {
+				UndefinedTag<?> tag = (UndefinedTag<?>) contents;
+				tag.traverse(processor);
+			} else {
 				Tag<?> tag = (Tag<?>) contents;
-				handler.handle(tag);
-				traverse(tag.content(), handler);
+				processor.handle(tag);
+				traverse(tag.content(), processor);
 			}
 		} else if (contents instanceof Object[]) {
 			Object[] arr = (Object[]) contents;
 			for (Object cont : arr) {
-				traverse(cont, handler);
+				traverse(cont, processor);
 			}
 		} else if (contents instanceof Collection<?>) {
 			Collection<?> coll = (Collection<?>) contents;
 			for (Object cont : coll) {
-				traverse(cont, handler);
+				traverse(cont, processor);
 			}
 		}
 	}

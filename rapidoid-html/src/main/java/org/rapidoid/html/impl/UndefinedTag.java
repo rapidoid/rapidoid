@@ -23,6 +23,7 @@ package org.rapidoid.html.impl;
 import org.rapidoid.html.Action;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagEventHandler;
+import org.rapidoid.html.TagProcessor;
 import org.rapidoid.util.U;
 
 public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
@@ -156,6 +157,10 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 
 	@Override
 	public TAG is(String attr, boolean value) {
+		throw U.notExpected();
+	}
+
+	public void traverse(TagProcessor<Tag<?>> processor) {
 		throw U.notExpected();
 	}
 

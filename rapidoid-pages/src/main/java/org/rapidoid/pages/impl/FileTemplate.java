@@ -23,8 +23,10 @@ package org.rapidoid.pages.impl;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
+import org.rapidoid.html.TagProcessor;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
 
@@ -64,6 +66,14 @@ public class FileTemplate extends HardcodedTag {
 	@Override
 	public Tag<?> copy() {
 		return new FileTemplate(templateName, namesAndValues);
+	}
+
+	@Override
+	public void traverse(TagProcessor<Tag<?>> processor) {
+		for (int i = 0; i < namesAndValues.length / 2; i++) {
+			Object val = namesAndValues[i * 2 + 1];
+			HTML.traverse(val, processor);
+		}
 	}
 
 }
