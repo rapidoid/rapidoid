@@ -20,6 +20,7 @@ package org.rapidoid.http;
  * #L%
  */
 
+import org.rapidoid.json.JSON;
 import org.rapidoid.net.impl.RapidoidServerLoop;
 
 public class HTTPServerImpl extends RapidoidServerLoop implements HTTPServer {
@@ -93,6 +94,7 @@ public class HTTPServerImpl extends RapidoidServerLoop implements HTTPServer {
 	@Override
 	public HTTPServer start() {
 		super.start();
+		JSON.warmup();
 		return this;
 	}
 

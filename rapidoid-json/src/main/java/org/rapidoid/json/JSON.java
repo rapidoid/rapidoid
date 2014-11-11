@@ -1,6 +1,7 @@
 package org.rapidoid.json;
 
 import java.io.OutputStream;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -94,6 +95,11 @@ public class JSON {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static void warmup() {
+		JSON.stringify(123);
+		JSON.parse("{}", Map.class);
 	}
 
 }
