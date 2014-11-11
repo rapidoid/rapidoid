@@ -35,6 +35,8 @@ import org.rapidoid.util.U;
 
 public abstract class HtmlWidget extends HTML implements TagWidget, PageComponent {
 
+	private static final long serialVersionUID = -2760069277625837174L;
+
 	private Tag<?> content;
 
 	public void setContent(Tag<?> content) {

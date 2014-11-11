@@ -36,6 +36,7 @@ import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.net.mime.MediaType;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.Bool;
 
 public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements HttpExchange,
@@ -699,6 +700,16 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public boolean isGetReq() {
 		return isGet.value;
+	}
+
+	@Override
+	public byte[] sessionSerialize() {
+		return UTILS.serialize(session);
+	}
+
+	@Override
+	public void sessionDeserialize(byte[] bytes) {
+		session = (HttpSession) UTILS.deserialize(bytes);
 	}
 
 }

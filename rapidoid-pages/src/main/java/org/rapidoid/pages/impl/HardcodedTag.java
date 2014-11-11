@@ -29,6 +29,8 @@ import org.rapidoid.http.HttpExchange;
 
 public abstract class HardcodedTag extends UndefinedTag<Tag<?>> {
 
+	private static final long serialVersionUID = 3561924768522903213L;
+
 	public abstract void render(TagContext ctx, HttpExchange x, PageRenderer renderer, OutputStream out);
 
 }

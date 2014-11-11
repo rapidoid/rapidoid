@@ -20,6 +20,7 @@ package org.rapidoid.html.impl;
  * #L%
  */
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentMap;
@@ -29,7 +30,9 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.util.U;
 
-public class TagContextImpl implements TagContext {
+public class TagContextImpl implements TagContext, Serializable {
+
+	private static final long serialVersionUID = 4007586215607855031L;
 
 	private final AtomicInteger counter = new AtomicInteger();
 

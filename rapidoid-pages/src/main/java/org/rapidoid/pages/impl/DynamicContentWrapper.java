@@ -26,6 +26,8 @@ import org.rapidoid.pages.DynamicContent;
 
 public class DynamicContentWrapper extends UndefinedTag<Tag<?>> {
 
+	private static final long serialVersionUID = 3180185069262405035L;
+
 	private final DynamicContent dynamic;
 
 	public DynamicContentWrapper(DynamicContent dynamic) {

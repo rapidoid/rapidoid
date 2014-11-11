@@ -27,6 +27,8 @@ public class Do {
 
 	public static <T> Action set(final Var<T> var, final T value) {
 		return new Action() {
+			private static final long serialVersionUID = -5595450284798571855L;
+
 			@Override
 			public void execute() {
 				var.set(value);
@@ -36,6 +38,8 @@ public class Do {
 
 	public static Action inc(final Var<Integer> var, final int value) {
 		return new Action() {
+			private static final long serialVersionUID = -6575443505843528218L;
+
 			@Override
 			public void execute() {
 				var.set(var.get() + value);

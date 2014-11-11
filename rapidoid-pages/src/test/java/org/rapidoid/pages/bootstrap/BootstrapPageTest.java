@@ -30,6 +30,9 @@ public class BootstrapPageTest extends PagesTestCommons {
 	@Test
 	public void testPagerWidget() {
 		BootstrapPage page = new BootstrapPage() {
+
+			private static final long serialVersionUID = 1735557278588407730L;
+
 			{
 				setContent(page());
 			}

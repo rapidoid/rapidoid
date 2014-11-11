@@ -32,6 +32,8 @@ import org.rapidoid.pages.DynamicContent;
 
 public class TableWidget extends BootstrapWidget {
 
+	private static final long serialVersionUID = -8550720285123228765L;
+
 	public TableWidget(final Items items) {
 
 		final List<Property> properties = items.properties();

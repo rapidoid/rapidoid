@@ -34,6 +34,8 @@ import org.rapidoid.util.U;
 
 public abstract class BootstrapWidget extends Bootstrap implements TagWidget, PageComponent {
 
+	private static final long serialVersionUID = -9047370359802026760L;
+
 	private Tag<?> content;
 
 	public void setContent(Tag<?> content) {

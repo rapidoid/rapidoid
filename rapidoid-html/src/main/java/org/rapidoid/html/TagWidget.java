@@ -1,5 +1,7 @@
 package org.rapidoid.html;
 
+import java.io.Serializable;
+
 /*
  * #%L
  * rapidoid-html
@@ -20,7 +22,7 @@ package org.rapidoid.html;
  * #L%
  */
 
-public interface TagWidget {
+public interface TagWidget extends Serializable {
 
 	Tag<?> content();
 

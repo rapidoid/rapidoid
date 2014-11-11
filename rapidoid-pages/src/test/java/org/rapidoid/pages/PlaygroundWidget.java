@@ -32,6 +32,7 @@ import org.rapidoid.pages.bootstrap.TableWidget;
 import org.rapidoid.pages.entity.Person;
 import org.rapidoid.util.U;
 
+@SuppressWarnings("serial")
 public class PlaygroundWidget extends HtmlWidget {
 
 	public PlaygroundWidget() {

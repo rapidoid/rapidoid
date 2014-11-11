@@ -28,6 +28,8 @@ import org.rapidoid.util.U;
 
 public class InMemoryHttpSession implements HttpSession {
 
+	private static final long serialVersionUID = -3390334080583841460L;
+
 	private final ConcurrentMap<String, ConcurrentMap<String, Object>> sessions = U.concurrentMap();
 
 	@Override

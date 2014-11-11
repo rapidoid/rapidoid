@@ -24,6 +24,8 @@ import org.rapidoid.html.Tag;
 
 public abstract class NavbarBootstrapPage extends BootstrapPage {
 
+	private static final long serialVersionUID = -774757866486863390L;
+
 	@Override
 	protected Object pageBody() {
 		Object cont = div(pageContent()).class_(containerMaybeFluid(isFluid()));

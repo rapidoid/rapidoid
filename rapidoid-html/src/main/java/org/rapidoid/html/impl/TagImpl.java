@@ -21,6 +21,7 @@ package org.rapidoid.html.impl;
  */
 
 import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,7 +32,9 @@ import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.util.U;
 
-public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements TagInternals {
+public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements TagInternals, Serializable {
+
+	private static final long serialVersionUID = -8137919597555179907L;
 
 	final Class<TAG> clazz;
 

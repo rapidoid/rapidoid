@@ -34,6 +34,8 @@ import org.rapidoid.util.Cls;
 
 public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 
+	private static final long serialVersionUID = 5633741993098185900L;
+
 	final Object app;
 	final Object[] screens;
 	Object screen;

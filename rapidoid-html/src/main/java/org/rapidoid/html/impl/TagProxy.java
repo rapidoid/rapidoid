@@ -20,6 +20,7 @@ package org.rapidoid.html.impl;
  * #L%
  */
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
@@ -30,7 +31,9 @@ import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
-public class TagProxy<TAG extends Tag<?>> implements InvocationHandler {
+public class TagProxy<TAG extends Tag<?>> implements InvocationHandler, Serializable {
+
+	private static final long serialVersionUID = 8876053750757191711L;
 
 	public static <TAG extends Tag<?>> TAG create(Class<TAG> tagInterface, String tagName, Object[] contents) {
 		TagImpl<TAG> tag = new TagImpl<TAG>(tagInterface, tagName, contents);

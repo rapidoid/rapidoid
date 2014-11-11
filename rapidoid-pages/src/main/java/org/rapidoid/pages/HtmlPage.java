@@ -24,6 +24,8 @@ import org.rapidoid.html.Tag;
 
 public abstract class HtmlPage extends HtmlWidget implements Page {
 
+	private static final long serialVersionUID = -4604288833708886704L;
+
 	@Override
 	public Tag<?> page() {
 		return template("jquery-page.html", "title", pageTitle(), "style", pageStyle(), "head", pageHead(), "body",

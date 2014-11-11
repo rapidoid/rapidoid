@@ -1,5 +1,6 @@
 package org.rapidoid.http;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /*
@@ -22,7 +23,7 @@ import java.util.Map;
  * #L%
  */
 
-public interface HttpSession {
+public interface HttpSession extends Serializable {
 
 	void openSession(String sessionId);
 

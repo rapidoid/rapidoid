@@ -27,6 +27,8 @@ import org.rapidoid.pages.Do;
 
 public class PagerWidget extends BootstrapWidget {
 
+	private static final long serialVersionUID = 6880769731168102839L;
+
 	public PagerWidget(int from, int to, Var<Integer> pageNumber) {
 
 		ButtonTag first = button("<<", Do.set(pageNumber, from));

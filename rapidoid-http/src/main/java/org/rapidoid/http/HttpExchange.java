@@ -111,4 +111,8 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	String constructUrl(String path);
 
+	byte[] sessionSerialize();
+
+	void sessionDeserialize(byte[] bytes);
+
 }

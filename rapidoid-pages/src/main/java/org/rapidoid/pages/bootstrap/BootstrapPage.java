@@ -26,6 +26,8 @@ import org.rapidoid.pages.Pages;
 
 public abstract class BootstrapPage extends BootstrapWidget implements Page {
 
+	private static final long serialVersionUID = -7946981148551443133L;
+
 	@Override
 	public Tag<?> page() {
 		return template("bootstrap-page.html", "title", pageTitle(), "style", pageStyle(), "head", pageHead(), "body",

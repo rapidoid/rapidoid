@@ -30,6 +30,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.pages.bootstrap.NavbarBootstrapPage;
 
+@SuppressWarnings("serial")
 public class IndexPage extends NavbarBootstrapPage {
 
 	private ATag brand;

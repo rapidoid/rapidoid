@@ -28,6 +28,7 @@ import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.pages.bootstrap.NavbarBootstrapPage;
 
+@SuppressWarnings("serial")
 public class FormPage extends NavbarBootstrapPage {
 
 	private ATag brand;

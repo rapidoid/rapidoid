@@ -25,6 +25,8 @@ import org.rapidoid.html.TagEventHandler;
 
 public class HandlerChain<TAG extends Tag<?>> implements TagEventHandler<TAG> {
 
+	private static final long serialVersionUID = -7243257908983384418L;
+
 	private final TagEventHandler<TAG>[] handlers;
 
 	public HandlerChain(TagEventHandler<TAG>[] handlers) {

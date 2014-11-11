@@ -30,6 +30,8 @@ import org.rapidoid.util.U;
 
 public class SimpleHardcodedTag extends HardcodedTag {
 
+	private static final long serialVersionUID = 6376692936885597211L;
+
 	private final byte[] content;
 
 	public SimpleHardcodedTag(String content) {

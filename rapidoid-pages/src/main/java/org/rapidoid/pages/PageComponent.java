@@ -20,9 +20,11 @@ package org.rapidoid.pages;
  * #L%
  */
 
+import java.io.Serializable;
+
 import org.rapidoid.http.HttpExchange;
 
-public interface PageComponent {
+public interface PageComponent extends Serializable {
 
 	void render(HttpExchange exchange);
 
