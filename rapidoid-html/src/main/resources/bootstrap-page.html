@@ -26,12 +26,28 @@ function _modal(title, content) {
 	$('#_modal_box').modal({});
 }
 function _emit(c, event) {
+
+	var x = document.querySelectorAll("input,select,textarea");
+
+	var inputs = {};
+
+	for (var i = 0; i < x.length; i++) {
+		var t = $(x[i]);
+		var _h = t.attr('_h');
+		inputs[_h] = t.val();
+	}
+
 	var hnd = $(c).attr('_h');
-	$.post('/_emit', {event: event, hnd: hnd}).done(function (data) {
-		for (var h in data) {
+
+	$.post('/_emit', {
+		event : event,
+		hnd : hnd,
+		inputs : JSON.stringify(inputs)
+	}).done(function(data) {
+		for ( var h in data) {
 			$('[_h=' + h + ']').replaceWith(data[h]);
 		}
-	}).fail(function (data) {
+	}).fail(function(data) {
 		alert("Communication error!");
 		console.log(data);
 	});
