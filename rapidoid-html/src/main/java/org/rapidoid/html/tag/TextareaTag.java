@@ -24,10 +24,6 @@ import org.rapidoid.html.Tag;
 
 public interface TextareaTag extends Tag<TextareaTag> {
 
-	Object value();
-
-	TextareaTag value(Object value);
-
 	String name();
 
 	TextareaTag name(String name);

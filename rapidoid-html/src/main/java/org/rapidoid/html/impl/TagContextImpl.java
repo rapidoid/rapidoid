@@ -30,6 +30,7 @@ import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagProcessor;
+import org.rapidoid.html.Tags;
 import org.rapidoid.util.U;
 
 public class TagContextImpl implements TagContext, Serializable {
@@ -76,7 +77,7 @@ public class TagContextImpl implements TagContext, Serializable {
 
 				Object val = values.get(t._h);
 				if (val != null) {
-					t.value(val);
+					Tags.setValue(tag, val);
 					values.remove(t._h);
 				}
 

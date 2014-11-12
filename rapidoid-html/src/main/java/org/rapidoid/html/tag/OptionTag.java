@@ -28,4 +28,8 @@ public interface OptionTag extends Tag<OptionTag> {
 
 	OptionTag selected(boolean selected);
 
+	String value();
+
+	OptionTag value(String value);
+
 }

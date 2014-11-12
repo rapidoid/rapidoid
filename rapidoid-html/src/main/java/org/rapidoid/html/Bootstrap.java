@@ -28,6 +28,7 @@ import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.LabelTag;
 import org.rapidoid.html.tag.LiTag;
 import org.rapidoid.html.tag.NavTag;
+import org.rapidoid.html.tag.OptionTag;
 import org.rapidoid.html.tag.SelectTag;
 import org.rapidoid.html.tag.SpanTag;
 import org.rapidoid.html.tag.TableTag;
@@ -227,31 +228,36 @@ public class Bootstrap extends HTML {
 		switch (type) {
 
 		case TEXT:
-			return input().type("text").class_("form-control").name(name).placeholder(desc).value(value);
+			return Tags.setValue(input().type("text").class_("form-control").name(name).placeholder(desc), value);
 
 		case PASSWORD:
-			return input().type("password").class_("form-control").name(name).placeholder(desc).value(value);
+			return Tags.setValue(input().type("password").class_("form-control").name(name).placeholder(desc), value);
 
 		case EMAIL:
-			return input().type("email").class_("form-control").name(name).placeholder(desc).value(value);
+			return Tags.setValue(input().type("email").class_("form-control").name(name).placeholder(desc), value);
 
 		case TEXTAREA:
-			return textarea(value).class_("form-control").name(name).placeholder(desc);
+			return Tags.setValue(textarea(value).class_("form-control").name(name).placeholder(desc), value);
 
 		case CHECKBOX:
-			return input().type("checkbox").name(name).checked((Boolean) value);
+			return Tags.setValue(input().type("checkbox").name(name), value);
 
 		case DROPDOWN:
 			SelectTag dropdown = select().name(name).class_("form-control").multiple(false);
 			for (Object opt : options) {
-				dropdown.append(option(opt).selected(opt.equals(value)));
+				OptionTag op = option(opt).value(str(opt));
+				Tags.setValue(op, opt.equals(value));
+				dropdown.append(op);
 			}
 			return dropdown;
 
 		case MULTI_SELECT:
 			SelectTag select = select().name(name).class_("form-control").multiple(true);
 			for (Object opt : options) {
-				select.append(option(opt).selected(U.eq(opt, value) || U.contains(value, opt)));
+				OptionTag op = option(opt).value(str(opt));
+				U.must(op instanceof OptionTag);
+				Tags.setValue(op, eq(opt, value) || U.contains(value, opt));
+				select.append(op);
 			}
 			return select;
 
@@ -259,7 +265,8 @@ public class Bootstrap extends HTML {
 			Object[] radios = new Object[options.length];
 			for (int i = 0; i < options.length; i++) {
 				Object opt = options[i];
-				InputTag radio = input().type("radio").name(name).value(opt).checked(U.eq(value, opt));
+				InputTag radio = input().type("radio").name(name).value(str(opt));
+				Tags.setValue(radio, eq(value, opt));
 				radios[i] = label(radio, opt).class_("radio-inline");
 			}
 			return radios;
@@ -268,8 +275,8 @@ public class Bootstrap extends HTML {
 			Object[] checkboxes = new Object[options.length];
 			for (int i = 0; i < options.length; i++) {
 				Object opt = options[i];
-				InputTag cc = input().type("checkbox").name(name).value(opt)
-						.checked(U.eq(opt, value) || U.contains(value, opt));
+				InputTag cc = input().type("checkbox").name(name).value(str(opt))
+						.checked(eq(opt, value) || U.contains(value, opt));
 				checkboxes[i] = label(cc, opt).class_("radio-checkbox");
 			}
 			return checkboxes;

@@ -24,9 +24,9 @@ import org.rapidoid.html.Tag;
 
 public interface InputTag extends Tag<InputTag> {
 
-	Object value();
+	String value();
 
-	InputTag value(Object value);
+	InputTag value(String value);
 
 	String type();
 

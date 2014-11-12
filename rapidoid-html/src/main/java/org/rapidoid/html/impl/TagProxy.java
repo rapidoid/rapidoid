@@ -68,7 +68,6 @@ public class TagProxy<TAG extends Tag<?>> implements InvocationHandler, Serializ
 		Class<?>[] paramTypes = method.getParameterTypes();
 
 		boolean returnsTag = ret.isAssignableFrom(clazz);
-		boolean returnsObj = ret.equals(Object.class);
 		boolean returnsStr = ret.equals(String.class);
 		boolean returnsBool = ret.equals(boolean.class);
 
@@ -91,17 +90,6 @@ public class TagProxy<TAG extends Tag<?>> implements InvocationHandler, Serializ
 				tag.setHandler(event, (Action[]) args[0]);
 				return target;
 			}
-		}
-
-		// value setter
-		if (returnsTag && has1arg && paramTypes[0].equals(Object.class) && name.equals("value")) {
-			tag.value(args[0]);
-			return target;
-		}
-
-		// value getter
-		if (returnsObj && has0arg && name.equals("value")) {
-			return tag.value();
 		}
 
 		// String attribute setter

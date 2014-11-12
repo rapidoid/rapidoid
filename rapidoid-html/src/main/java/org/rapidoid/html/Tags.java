@@ -133,4 +133,31 @@ public class Tags extends BasicUtils {
 			}
 		}
 	}
+
+	public static <T extends Tag<?>> T setValue(T tag, Object value) {
+
+		if (tag instanceof InputTag) {
+			InputTag input = (InputTag) tag;
+			if ("checkbox".equals(input.type()) || "radio".equals(input.type())) {
+				input.checked(bool(value));
+			} else {
+				input.value(str(value));
+			}
+		} else if (tag instanceof TextareaTag) {
+			TextareaTag textArea = (TextareaTag) tag;
+			textArea.content(str(value));
+		} else if (tag instanceof OptionTag) {
+			OptionTag optionTag = (OptionTag) tag;
+			optionTag.selected(bool(value));
+		} else {
+			throw U.rte("Cannot set value to a '%s' tag!", ((Tag<?>) tag).tagKind());
+		}
+
+		return tag;
+	}
+
+	public static Object getValue(Tag<?> tag) {
+		throw U.notReady(); // FIXME
+	}
+
 }

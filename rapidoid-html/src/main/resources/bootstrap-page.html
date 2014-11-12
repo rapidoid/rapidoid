@@ -27,14 +27,32 @@ function _modal(title, content) {
 }
 function _emit(c, event) {
 
-	var x = document.querySelectorAll("input,select,textarea");
+	var x = document.querySelectorAll("input,textarea");
 
 	var inputs = {};
 
 	for (var i = 0; i < x.length; i++) {
 		var t = $(x[i]);
 		var _h = t.attr('_h');
-		inputs[_h] = t.val();
+
+		var val;
+
+		if (t.prop('type') == 'checkbox' || t.prop('type') == 'radio') {
+			val = t.prop('checked');
+		} else {
+			val = t.val();
+		}
+
+		inputs[_h] = val;
+	}
+
+	x = document.querySelectorAll("option");
+
+	for (var i = 0; i < x.length; i++) {
+		var t = $(x[i]);
+		var _h = t.attr('_h');
+
+		inputs[_h] = t.prop('selected');
 	}
 
 	var hnd = $(c).attr('_h');

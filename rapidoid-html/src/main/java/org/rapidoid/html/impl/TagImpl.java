@@ -54,8 +54,6 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	private TAG proxy;
 
-	private Object value;
-
 	@SuppressWarnings("unchecked")
 	public TagImpl(Class<TAG> clazz, String name, Object[] contentsAndHandlers) {
 		this.clazz = clazz;
@@ -231,15 +229,6 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 		}
 
 		return proxy();
-	}
-
-	public void value(Object value) {
-		changeIf(!U.eq(this.value, value));
-		this.value = value;
-	}
-
-	public Object value() {
-		return value;
 	}
 
 }
