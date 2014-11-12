@@ -43,4 +43,9 @@ public class DynamicContentWrapper extends UndefinedTag<Tag<?>> {
 		return new DynamicContentWrapper(dynamic);
 	}
 
+	@Override
+	public String tagKind() {
+		return "dynamic";
+	}
+
 }

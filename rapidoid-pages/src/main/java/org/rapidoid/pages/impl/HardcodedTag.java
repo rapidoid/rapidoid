@@ -33,4 +33,9 @@ public abstract class HardcodedTag extends UndefinedTag<Tag<?>> {
 
 	public abstract void render(TagContext ctx, HttpExchange x, PageRenderer renderer, OutputStream out);
 
+	@Override
+	public String tagKind() {
+		return "hardcoded";
+	}
+
 }

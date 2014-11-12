@@ -164,4 +164,9 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 		throw U.notExpected();
 	}
 
+	@Override
+	public String tagKind() {
+		throw U.notExpected();
+	}
+
 }

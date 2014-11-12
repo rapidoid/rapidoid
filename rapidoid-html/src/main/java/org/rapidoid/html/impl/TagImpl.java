@@ -79,6 +79,11 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	}
 
 	@Override
+	public String tagKind() {
+		return name;
+	}
+
+	@Override
 	public String toString() {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		TagRenderer.get().str(ctx, this, 0, false, null, out);

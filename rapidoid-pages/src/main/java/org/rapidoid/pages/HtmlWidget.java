@@ -27,7 +27,7 @@ import org.rapidoid.html.Tags;
 import org.rapidoid.html.Var;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.impl.DynamicContentWrapper;
-import org.rapidoid.pages.impl.FileTemplate;
+import org.rapidoid.pages.impl.FileTemplateTag;
 import org.rapidoid.pages.impl.MultiLanguageText;
 import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.pages.impl.SimpleHardcodedTag;
@@ -61,7 +61,7 @@ public abstract class HtmlWidget extends HTML implements TagWidget, PageComponen
 	}
 
 	public static Tag<?> template(String templateFileName, Object... namesAndValues) {
-		return new FileTemplate(templateFileName, namesAndValues);
+		return new FileTemplateTag(templateFileName, namesAndValues);
 	}
 
 	public static Tag<?> dynamic(DynamicContent dynamic) {

@@ -30,7 +30,7 @@ import org.rapidoid.html.TagProcessor;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
 
-public class FileTemplate extends HardcodedTag {
+public class FileTemplateTag extends HardcodedTag {
 
 	private static final long serialVersionUID = -2794647786758152024L;
 
@@ -38,7 +38,7 @@ public class FileTemplate extends HardcodedTag {
 
 	private final Object[] namesAndValues;
 
-	public FileTemplate(String templateName, Object[] namesAndValues) {
+	public FileTemplateTag(String templateName, Object[] namesAndValues) {
 		U.must(U.resource(templateName) != null, "Cannot find file: %s", templateName);
 
 		this.templateName = templateName;
@@ -65,7 +65,7 @@ public class FileTemplate extends HardcodedTag {
 
 	@Override
 	public Tag<?> copy() {
-		return new FileTemplate(templateName, namesAndValues);
+		return new FileTemplateTag(templateName, namesAndValues);
 	}
 
 	@Override
@@ -74,6 +74,11 @@ public class FileTemplate extends HardcodedTag {
 			Object val = namesAndValues[i * 2 + 1];
 			HTML.traverse(val, processor);
 		}
+	}
+
+	@Override
+	public String tagKind() {
+		return "template";
 	}
 
 }
