@@ -31,6 +31,7 @@ import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -655,6 +656,11 @@ public class Cls {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T convert(String value, Class<T> toType) {
+
+		if (toType.equals(Object.class)) {
+			return (T) value;
+		}
+
 		TypeKind targetKind = Cls.kindOf(toType);
 
 		switch (targetKind) {
@@ -712,6 +718,107 @@ public class Cls {
 
 		case DATE:
 			return (T) Dates.date(value);
+
+		default:
+			throw U.notExpected();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T convert(Object value, Class<T> toType) {
+
+		if (toType.equals(Object.class)) {
+			return (T) value;
+		}
+
+		if (value instanceof String) {
+			return convert((String) value, toType);
+		}
+
+		TypeKind targetKind = Cls.kindOf(toType);
+		boolean isNum = value instanceof Number;
+
+		switch (targetKind) {
+
+		case NULL:
+			throw U.notExpected();
+
+		case BOOLEAN:
+		case BOOLEAN_OBJ:
+			if (value instanceof Boolean) {
+				return (T) value;
+			} else {
+				throw U.rte("Cannot convert the value '%s' to boolean!", value);
+			}
+
+		case BYTE:
+		case BYTE_OBJ:
+			if (isNum) {
+				return (T) new Byte(((Number) value).byteValue());
+			} else {
+				throw U.rte("Cannot convert the value '%s' to byte!", value);
+			}
+
+		case SHORT:
+		case SHORT_OBJ:
+			if (isNum) {
+				return (T) new Short(((Number) value).shortValue());
+			} else {
+				throw U.rte("Cannot convert the value '%s' to short!", value);
+			}
+
+		case CHAR:
+		case CHAR_OBJ:
+			if (isNum) {
+				return (T) new Character((char) ((Number) value).intValue());
+			} else {
+				throw U.rte("Cannot convert the value '%s' to char!", value);
+			}
+
+		case INT:
+		case INT_OBJ:
+			if (isNum) {
+				return (T) new Integer(((Number) value).intValue());
+			} else {
+				throw U.rte("Cannot convert the value '%s' to int!", value);
+			}
+
+		case LONG:
+		case LONG_OBJ:
+			if (isNum) {
+				return (T) new Long(((Number) value).longValue());
+			} else {
+				throw U.rte("Cannot convert the value '%s' to long!", value);
+			}
+
+		case FLOAT:
+		case FLOAT_OBJ:
+			if (isNum) {
+				return (T) new Float(((Number) value).floatValue());
+			} else {
+				throw U.rte("Cannot convert the value '%s' to float!", value);
+			}
+
+		case DOUBLE:
+		case DOUBLE_OBJ:
+			if (isNum) {
+				return (T) new Double(((Number) value).doubleValue());
+			} else {
+				throw U.rte("Cannot convert the value '%s' to double!", value);
+			}
+
+		case STRING:
+			return (T) String.valueOf(value);
+
+		case OBJECT:
+			throw U.rte("Cannot convert the value to type '%s'!", toType);
+
+		case DATE:
+			if (value instanceof Date) {
+				return (T) value;
+			} else {
+				throw U.rte("Cannot convert the value '%s' to date!", value);
+			}
 
 		default:
 			throw U.notExpected();
