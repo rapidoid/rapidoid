@@ -20,10 +20,24 @@ package org.rapidoid.html;
  * #L%
  */
 
-import org.rapidoid.html.impl.TagContextImpl;
-import org.rapidoid.html.impl.VarImpl;
+import java.util.Collection;
 
-public class Tags {
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.rapidoid.html.impl.TagContextImpl;
+import org.rapidoid.html.impl.TagProxy;
+import org.rapidoid.html.impl.UndefinedTag;
+import org.rapidoid.html.impl.VarImpl;
+import org.rapidoid.html.tag.InputTag;
+import org.rapidoid.html.tag.OptionTag;
+import org.rapidoid.html.tag.TextareaTag;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.util.U;
+
+public class Tags extends BasicUtils {
+
+	public static final Object $index = new Object();
+	public static final Object $key = new Object();
+	public static final Object $value = new Object();
 
 	public static <T> Var<T> var(T value) {
 		return new VarImpl<T>(value);
@@ -33,4 +47,90 @@ public class Tags {
 		return new TagContextImpl();
 	}
 
+	public static <TAG extends Tag<?>> TAG tag(Class<TAG> clazz, String tagName, Object... contents) {
+		return TagProxy.create(clazz, tagName, contents);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T[] foreach(Object[] values, Tag<?> template) {
+		Tag<?>[] tags = new Tag[values.length];
+
+		for (int i = 0; i < values.length; i++) {
+			tags[i] = template.copy();
+			replaceAll(tags[i], $index, i, $value, values[i]);
+		}
+
+		return (T[]) tags;
+	}
+
+	public static void replaceAll(Tag<?> tag, final Object... findAndReplace) {
+		U.notNull(tag, "tag");
+
+		transform(tag, new Mapper<Object, Object>() {
+			@Override
+			public Object map(Object obj) throws Exception {
+
+				for (int i = 0; i < findAndReplace.length / 2; i++) {
+					Object find = findAndReplace[i * 2];
+					Object replace = findAndReplace[i * 2 + 1];
+
+					if (find.equals(obj)) {
+						return replace;
+					}
+				}
+
+				return obj;
+			}
+		});
+	}
+
+	public static void transform(Tag<?> tag, Mapper<Object, Object> transformation) {
+		U.notNull(tag, "tag");
+
+		if (tag instanceof UndefinedTag) {
+			return;
+		}
+
+		for (int i = 0; i < tag.size(); i++) {
+			Object child = tag.child(i);
+
+			Object transformed = U.eval(transformation, child);
+
+			if (transformed != child) {
+				tag.setChild(i, transformed);
+			} else {
+				if (transformed instanceof Tag<?>) {
+					transform((Tag<?>) transformed, transformation);
+				}
+			}
+		}
+	}
+
+	public static String escape(String s) {
+		return StringEscapeUtils.escapeHtml4(s);
+	}
+
+	public static void traverse(Object contents, TagProcessor<Tag<?>> processor) {
+
+		if (contents instanceof Tag) {
+			if (contents instanceof UndefinedTag) {
+				UndefinedTag<?> tag = (UndefinedTag<?>) contents;
+				tag.traverse(processor);
+			} else {
+				Tag<?> tag = (Tag<?>) contents;
+				processor.handle(tag);
+				traverse(tag.content(), processor);
+			}
+		} else if (contents instanceof Object[]) {
+			Object[] arr = (Object[]) contents;
+			for (Object cont : arr) {
+				traverse(cont, processor);
+			}
+		} else if (contents instanceof Collection<?>) {
+			Collection<?> coll = (Collection<?>) contents;
+			for (Object cont : coll) {
+				traverse(cont, processor);
+			}
+		}
+	}
 }
