@@ -242,6 +242,9 @@ public class InMem {
 	public void transaction(Runnable transaction) {
 		globalLock();
 
+		txChanges.clear();
+		txInsertions.clear();
+
 		insideTx.set(true);
 
 		try {
