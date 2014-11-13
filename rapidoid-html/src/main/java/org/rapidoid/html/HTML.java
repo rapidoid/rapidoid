@@ -26,6 +26,10 @@ public class HTML extends Tags {
 
 	public static final Tag<?> NBSP = constant("&nbsp;");
 
+	public static final Tag<?> LT = constant("&lt;");
+
+	public static final Tag<?> GT = constant("&gt;");
+
 	public static final Tag<?> LAQUO = constant("&laquo;");
 
 	public static final Tag<?> RAQUO = constant("&raquo;");
