@@ -243,6 +243,7 @@ public class Bootstrap extends HTML {
 			return Tags.setValue(input().type("checkbox").name(name), value);
 
 		case DROPDOWN:
+			U.notNull(options, "dropdown options");
 			SelectTag dropdown = select().name(name).class_("form-control").multiple(false);
 			for (Object opt : options) {
 				OptionTag op = option(opt).value(str(opt));
@@ -252,6 +253,7 @@ public class Bootstrap extends HTML {
 			return dropdown;
 
 		case MULTI_SELECT:
+			U.notNull(options, "multi-select options");
 			SelectTag select = select().name(name).class_("form-control").multiple(true);
 			for (Object opt : options) {
 				OptionTag op = option(opt).value(str(opt));
@@ -262,6 +264,7 @@ public class Bootstrap extends HTML {
 			return select;
 
 		case RADIOS:
+			U.notNull(options, "radios options");
 			Object[] radios = new Object[options.length];
 			for (int i = 0; i < options.length; i++) {
 				Object opt = options[i];
@@ -272,6 +275,7 @@ public class Bootstrap extends HTML {
 			return radios;
 
 		case CHECKBOXES:
+			U.notNull(options, "checkboxes options");
 			Object[] checkboxes = new Object[options.length];
 			for (int i = 0; i < options.length; i++) {
 				Object opt = options[i];
