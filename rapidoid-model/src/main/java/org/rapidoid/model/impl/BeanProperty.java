@@ -21,6 +21,7 @@ package org.rapidoid.model.impl;
  */
 
 import org.rapidoid.model.Property;
+import org.rapidoid.util.U;
 
 public class BeanProperty implements Property {
 
@@ -28,9 +29,16 @@ public class BeanProperty implements Property {
 
 	private final Class<?> type;
 
+	private final String caption;
+
 	public BeanProperty(String name, Class<?> type) {
+		this(name, type, pretty(name));
+	}
+
+	public BeanProperty(String name, Class<?> type, String caption) {
 		this.name = name;
 		this.type = type;
+		this.caption = caption;
 	}
 
 	@Override
@@ -45,7 +53,14 @@ public class BeanProperty implements Property {
 
 	@Override
 	public String caption() {
-		return name; // TODO improve
+		return caption;
+	}
+
+	private static String pretty(String prop) {
+		if (prop.equals("id")) {
+			return "ID";
+		}
+		return U.camelPhrase(prop);
 	}
 
 }
