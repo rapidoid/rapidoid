@@ -20,7 +20,12 @@ package org.rapidoid.model.impl;
  * #L%
  */
 
+import java.util.Collections;
+import java.util.List;
+
 import org.rapidoid.model.Item;
+import org.rapidoid.model.Model;
+import org.rapidoid.model.Property;
 import org.rapidoid.util.Cls;
 
 public class BeanItem implements Item {
@@ -45,6 +50,18 @@ public class BeanItem implements Item {
 	@Override
 	public Object get(String property) {
 		return Cls.getPropValue(value, property);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Property> properties() {
+		return value != null ? Model.propertiesOf(value.getClass()) : Collections.EMPTY_LIST;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Property> editableProperties() {
+		return value != null ? Model.editablePropertiesOf(value.getClass()) : Collections.EMPTY_LIST;
 	}
 
 }

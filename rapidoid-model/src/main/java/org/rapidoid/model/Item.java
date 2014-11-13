@@ -1,5 +1,7 @@
 package org.rapidoid.model;
 
+import java.util.List;
+
 /*
  * #%L
  * rapidoid-model
@@ -27,5 +29,9 @@ public interface Item {
 	Object value();
 
 	Object get(String property);
+
+	List<Property> properties();
+
+	List<Property> editableProperties();
 
 }

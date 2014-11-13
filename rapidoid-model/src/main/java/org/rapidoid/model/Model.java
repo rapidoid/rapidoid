@@ -75,4 +75,17 @@ public class Model {
 		return pr;
 	}
 
+	public static List<Property> editablePropertiesOf(Class<?> beanType) {
+		List<Property> pr = U.list();
+
+		Map<String, Prop> props = Cls.propertiesOf(beanType);
+		for (Prop prop : props.values()) {
+			if (!prop.getName().equalsIgnoreCase("id")) {
+				pr.add(new BeanProperty(prop.getName(), prop.getType()));
+			}
+		}
+
+		return pr;
+	}
+
 }
