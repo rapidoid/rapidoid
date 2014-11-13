@@ -46,7 +46,7 @@ public class HTML extends Tags {
 	}
 
 	public static ATag a(Object... contents) {
-		return tag(ATag.class, "a", contents);
+		return tag(ATag.class, "a", contents).href("#");
 	}
 
 	public static AbbrTag abbr(Object... contents) {
