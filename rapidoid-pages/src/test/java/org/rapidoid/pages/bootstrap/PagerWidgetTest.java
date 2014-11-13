@@ -39,28 +39,28 @@ public class PagerWidgetTest extends PagesTestCommons {
 		print(ctx, pager);
 
 		eq(pageN.get().intValue(), 3);
-		has(ctx, pager, "(page 3)");
+		has(ctx, pager, "Page 3 of 7");
 
-		ctx.emit(pager.content(), NO_CHANGES, 2, "click"); // first
+		ctx.emit(pager.content(), NO_CHANGES, 6, "click"); // first
 
 		eq(pageN, 1);
-		has(ctx, pager, "(page 1)");
+		has(ctx, pager, "Page 1 of 7");
 
-		ctx.emit(pager.content(), NO_CHANGES, 6, "click"); // last
+		ctx.emit(pager.content(), NO_CHANGES, 20, "click"); // last
 
 		eq(pageN, 7);
-		has(ctx, pager, "(page 7)");
+		has(ctx, pager, "Page 7 of 7");
 
-		ctx.emit(pager.content(), NO_CHANGES, 3, "click"); // prev
-		ctx.emit(pager.content(), NO_CHANGES, 3, "click"); // prev
+		ctx.emit(pager.content(), NO_CHANGES, 10, "click"); // prev
+		ctx.emit(pager.content(), NO_CHANGES, 10, "click"); // prev
 
 		eq(pageN, 5);
-		has(ctx, pager, "(page 5)");
+		has(ctx, pager, "Page 5 of 7");
 
-		ctx.emit(pager.content(), NO_CHANGES, 5, "click"); // next
+		ctx.emit(pager.content(), NO_CHANGES, 16, "click"); // next
 
 		eq(pageN, 6);
-		has(ctx, pager, "(page 6)");
+		has(ctx, pager, "Page 6 of 7");
 	}
 
 }

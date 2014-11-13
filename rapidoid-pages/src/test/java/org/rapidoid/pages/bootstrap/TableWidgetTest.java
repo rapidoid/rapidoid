@@ -39,8 +39,8 @@ public class TableWidgetTest extends PagesTestCommons {
 		TableWidget table = new TableWidget(items);
 		print(ctx, table);
 
-		hasRegex(ctx, table, "<th[^>]*?>name</th>");
-		hasRegex(ctx, table, "<th[^>]*?>age</th>");
+		hasRegex(ctx, table, "<th[^>]*?>Name</th>");
+		hasRegex(ctx, table, "<th[^>]*?>Age</th>");
 
 		hasRegex(ctx, table, "<td[^>]*?>John</td>");
 		hasRegex(ctx, table, "<td[^>]*?>20</td>");
