@@ -67,7 +67,11 @@ public class TagRenderer {
 
 	public void str(TagContext ctx, Object content, int level, boolean inline, Object extra, OutputStream out) {
 
-		if (content instanceof Tag) {
+		if (content instanceof ConstantTag) {
+			ConstantTag constantTag = ((ConstantTag) content);
+			write(out, constantTag.bytes());
+			return;
+		} else if (content instanceof Tag) {
 			Tag<?> tag = (Tag<?>) content;
 			TagInternals tagi = (TagInternals) tag;
 			str(ctx, tagi.base(), level, inline, extra, out);
@@ -232,6 +236,10 @@ public class TagRenderer {
 		if (content instanceof Var) {
 			Var<?> var = (Var<?>) content;
 			return isSimpleContent(var.get());
+		}
+
+		if (content instanceof ConstantTag) {
+			return true;
 		}
 
 		return !U.instanceOf(content, Tag.class, CustomTag.class, TagWidget.class, Object[].class, Collection.class);

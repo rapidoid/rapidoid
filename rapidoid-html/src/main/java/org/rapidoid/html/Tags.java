@@ -23,6 +23,7 @@ package org.rapidoid.html;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.rapidoid.html.impl.ConstantTag;
 import org.rapidoid.html.impl.TagContextImpl;
 import org.rapidoid.html.impl.TagProxy;
 import org.rapidoid.html.impl.UndefinedTag;
@@ -49,6 +50,10 @@ public class Tags extends BasicUtils {
 
 	public static <TAG extends Tag<?>> TAG tag(Class<TAG> clazz, String tagName, Object... contents) {
 		return TagProxy.create(clazz, tagName, contents);
+	}
+
+	public static ConstantTag constant(String code) {
+		return new ConstantTag(code);
 	}
 
 	@SuppressWarnings("unchecked")

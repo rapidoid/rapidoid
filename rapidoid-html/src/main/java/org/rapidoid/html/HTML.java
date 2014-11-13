@@ -24,6 +24,12 @@ import org.rapidoid.html.tag.*;
 
 public class HTML extends Tags {
 
+	public static final Tag<?> NBSP = constant("&nbsp;");
+
+	public static final Tag<?> LAQUO = constant("&laquo;");
+
+	public static final Tag<?> RAQUO = constant("&raquo;");
+
 	public static UlTag ul_li(Object... listItems) {
 		UlTag list = ul();
 
