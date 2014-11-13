@@ -38,7 +38,7 @@ import org.rapidoid.util.U;
 public class Bootstrap extends HTML {
 
 	public static TableTag table_(Object... contents) {
-		return HTML.table(contents).class_("table table-default table-hover");
+		return HTML.table(contents).class_("table table-striped table-hover");
 	}
 
 	public static DivTag row(Object... contents) {
