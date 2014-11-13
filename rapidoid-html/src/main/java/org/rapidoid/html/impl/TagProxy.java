@@ -75,19 +75,17 @@ public class TagProxy<TAG extends Tag<?>> implements InvocationHandler, Serializ
 		boolean has1arg = paramTypes.length == 1;
 
 		// event handlers
-		if (name.startsWith("on") && name.length() > 2) {
-
-			String event = name.substring(2).toLowerCase();
+		if (name.equals("click") || name.equals("change")) {
 
 			// handlers setter
 			if (returnsTag && has1arg && TagEventHandler.class.isAssignableFrom(paramTypes[0])) {
-				tag.setHandler(event, (TagEventHandler<TAG>) args[0]);
+				tag.setHandler(name, (TagEventHandler<TAG>) args[0]);
 				return target;
 			}
 
 			// action setter
 			if (returnsTag && has1arg && Action[].class.isAssignableFrom(paramTypes[0])) {
-				tag.setHandler(event, (Action[]) args[0]);
+				tag.setHandler(name, (Action[]) args[0]);
 				return target;
 			}
 		}

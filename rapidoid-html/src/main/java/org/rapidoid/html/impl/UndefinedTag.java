@@ -121,12 +121,12 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 	}
 
 	@Override
-	public TAG onClick(TagEventHandler<TAG> handler) {
+	public TAG click(TagEventHandler<TAG> handler) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public TAG onClick(Action... action) {
+	public TAG click(Action... action) {
 		throw U.notExpected();
 	}
 
@@ -166,6 +166,16 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 
 	@Override
 	public String tagKind() {
+		throw U.notExpected();
+	}
+
+	@Override
+	public String onclick() {
+		throw U.notExpected();
+	}
+
+	@Override
+	public TAG onclick(String onclick) {
 		throw U.notExpected();
 	}
 

@@ -53,14 +53,14 @@ public class PlaygroundWidget extends HtmlWidget {
 
 		final Var<Integer> num = var(start);
 
-		ButtonTag b1 = button("+").onClick(new TagEventHandler<ButtonTag>() {
+		ButtonTag b1 = button("+").click(new TagEventHandler<ButtonTag>() {
 			@Override
 			public void handle(ButtonTag target) {
 				num.set(num.get() + 1);
 			}
 		});
 
-		ButtonTag b2 = button("-").onClick(new TagEventHandler<ButtonTag>() {
+		ButtonTag b2 = button("-").click(new TagEventHandler<ButtonTag>() {
 			@Override
 			public void handle(ButtonTag target) {
 				num.set(num.get() + 1);
@@ -75,7 +75,7 @@ public class PlaygroundWidget extends HtmlWidget {
 		final InputTag input = input().css("border: 1px;");
 		final DivTag coll = div();
 
-		ButtonTag b2 = button("+").onClick(new TagEventHandler<ButtonTag>() {
+		ButtonTag b2 = button("+").click(new TagEventHandler<ButtonTag>() {
 			@Override
 			public void handle(ButtonTag target) {
 				U.debug("click", "button", target);
@@ -85,7 +85,7 @@ public class PlaygroundWidget extends HtmlWidget {
 
 		Var<Integer> counter = var(1);
 
-		b2.onClick(Do.inc(counter, 2), Do.dec(counter, 1));
+		b2.click(Do.inc(counter, 2), Do.dec(counter, 1));
 
 		return div(span(input, b2), coll);
 	}

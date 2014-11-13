@@ -40,6 +40,10 @@ public interface Tag<TAG extends Tag<?>> extends TagBase<TAG>, Serializable {
 
 	TAG role(String role);
 
+	String onclick();
+
+	TAG onclick(String onclick);
+
 	boolean hidden();
 
 	TAG hidden(boolean hidden);
@@ -48,8 +52,8 @@ public interface Tag<TAG extends Tag<?>> extends TagBase<TAG>, Serializable {
 
 	TAG enabled(boolean value);
 
-	TAG onClick(TagEventHandler<TAG> handler);
+	TAG click(TagEventHandler<TAG> handler);
 
-	TAG onClick(Action... action);
+	TAG click(Action... action);
 
 }
