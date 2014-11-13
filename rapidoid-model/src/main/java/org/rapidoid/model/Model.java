@@ -88,4 +88,16 @@ public class Model {
 		return pr;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> Items mockBeanItems(int size, Class<T> beanType) {
+		T[] beans = (T[]) new Object[size];
+
+		for (int i = 0; i < beans.length; i++) {
+			beans[i] = U.newInstance(beanType);
+			Cls.setId(beans[i], i);
+		}
+
+		return beanItems(beanType, beans);
+	}
+
 }

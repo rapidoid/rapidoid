@@ -30,6 +30,9 @@ public class Task {
 
 	public User author;
 
+	public Task() {
+	}
+
 	public Task(String title, Priority priority) {
 		this.title = title;
 		this.priority = priority;

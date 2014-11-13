@@ -24,7 +24,6 @@ import static org.rapidoid.html.Bootstrap.*;
 import static org.rapidoid.html.HTML.*;
 import static org.rapidoid.pages.bootstrap.BootstrapWidget.*;
 
-import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.html.tag.H1Tag;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
@@ -36,10 +35,7 @@ public class TasksScreen {
 
 	Object content() {
 
-		Items items = Model.beanItems(new Task("aa", Priority.MEDIUM), new Task("bb", Priority.HIGH), new Task("aa",
-				Priority.MEDIUM), new Task("bb", Priority.HIGH), new Task("aa", Priority.MEDIUM), new Task("bb",
-				Priority.HIGH), new Task("aa", Priority.MEDIUM), new Task("bb", Priority.HIGH), new Task("aa",
-				Priority.MEDIUM), new Task("bb", Priority.HIGH));
+		Items items = Model.mockBeanItems(20, Task.class);
 
 		H1Tag caption = h1("Manage tasks");
 
