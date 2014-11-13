@@ -751,10 +751,14 @@ public class U {
 		InputStream input = classLoader().getResourceAsStream(filename);
 
 		if (input == null) {
-			try {
-				input = new FileInputStream(filename);
-			} catch (FileNotFoundException e) {
-				throw U.rte(e);
+			File file = new File(filename);
+
+			if (file.exists()) {
+				try {
+					input = new FileInputStream(filename);
+				} catch (FileNotFoundException e) {
+					throw U.rte(e);
+				}
 			}
 		}
 
