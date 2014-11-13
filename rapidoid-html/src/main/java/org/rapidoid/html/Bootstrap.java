@@ -38,7 +38,7 @@ import org.rapidoid.util.U;
 public class Bootstrap extends HTML {
 
 	public static TableTag table_(Object... contents) {
-		return HTML.table(contents).class_("table table-striped table-hover");
+		return table(contents).class_("table table-striped table-hover");
 	}
 
 	public static DivTag row(Object... contents) {
@@ -85,14 +85,16 @@ public class Bootstrap extends HTML {
 		return button(contents).type("button").class_("btn btn-primary");
 	}
 
-	public static NavTag nav(boolean fluid, Tag<?> brand, Object[] navbarContent) {
+	public static NavTag nav_(boolean fluid, boolean inverse, Tag<?> brand, Object[] navbarContent) {
 		brand.class_("navbar-brand");
 		DivTag hdr = div(btnCollapse(), brand).class_("navbar-header");
 
 		DivTag collapsable = div(navbarContent).class_("collapse navbar-collapse").id("collapsable");
 
 		DivTag cnt = div(hdr, collapsable).class_(containerMaybeFluid(fluid));
-		return HTML.nav(cnt).class_("navbar navbar-default").role("navigation");
+
+		String navDefOrInv = inverse ? "navbar-inverse" : "navbar-default";
+		return nav(cnt).class_("navbar " + navDefOrInv).role("navigation");
 	}
 
 	public static String containerMaybeFluid(boolean fluid) {
