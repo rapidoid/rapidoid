@@ -192,7 +192,7 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 	}
 
 	private void askToSend() {
-		if (!waitingToWrite) {
+		if (!waitingToWrite && output.size() > 0) {
 			waitingToWrite = true;
 			worker.wantToWrite(this);
 		}
