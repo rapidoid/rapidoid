@@ -169,6 +169,8 @@ public class InMem {
 		try {
 			validateId(id);
 
+			setId(record, id);
+
 			Rec removed = data.replace(id, rec(record, id));
 
 			if (insideTx.get()) {
@@ -178,8 +180,6 @@ public class InMem {
 			if (removed == null) {
 				throw new IllegalStateException("Cannot update non-existing record with ID=" + id);
 			}
-
-			setId(record, id);
 		} finally {
 			sharedUnlock();
 		}
