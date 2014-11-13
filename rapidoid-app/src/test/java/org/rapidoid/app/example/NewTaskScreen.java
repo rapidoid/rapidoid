@@ -22,29 +22,40 @@ package org.rapidoid.app.example;
 
 import static org.rapidoid.html.Bootstrap.*;
 import static org.rapidoid.html.HTML.*;
-import static org.rapidoid.pages.bootstrap.BootstrapWidget.*;
 
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.html.tag.H1Tag;
-import org.rapidoid.model.Items;
+import org.rapidoid.model.Item;
 import org.rapidoid.model.Model;
-import org.rapidoid.pages.bootstrap.TableWidget;
+import org.rapidoid.pages.bootstrap.FormWidget;
 
-public class TasksScreen {
-
-	String title = "My Tasks";
+@SuppressWarnings("serial")
+public class NewTaskScreen {
 
 	Object content() {
 
-		Items items = Model.beanItems(new Task("aa", Priority.MEDIUM), new Task("bb", Priority.HIGH), new Task("aa",
-				Priority.MEDIUM), new Task("bb", Priority.HIGH), new Task("aa", Priority.MEDIUM), new Task("bb",
-				Priority.HIGH), new Task("aa", Priority.MEDIUM), new Task("bb", Priority.HIGH), new Task("aa",
-				Priority.MEDIUM), new Task("bb", Priority.HIGH));
+		H1Tag caption = h1("Create a new task");
 
-		H1Tag caption = h1("Manage tasks");
+		DivTag caption2 = rowFull(h4("Edit user:"));
 
-		TableWidget table = new TableWidget(items);
+		User user = new User();
 
-		return arr(caption, rowFull(table));
+		Tag<?>[] buttons = { btn("Save", new TagEventHandler<Tag<?>>() {
+			@Override
+			public void handle(Tag<?> target) {
+				target.append("+");
+			}
+		}), btn("Cancel") };
+
+		Item item = Model.item(new Task("aa", Priority.MEDIUM, user));
+		FormWidget frm1 = new FormWidget(item, buttons);
+
+		Item item2 = Model.item(user);
+		FormWidget frm2 = new FormWidget(item2, buttons);
+
+		return row(col2(), col8(caption, frm1, caption2, frm2), col2());
 	}
+
 }

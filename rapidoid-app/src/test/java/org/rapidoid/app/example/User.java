@@ -1,5 +1,7 @@
 package org.rapidoid.app.example;
 
+import java.util.List;
+
 /*
  * #%L
  * rapidoid-app
@@ -20,25 +22,14 @@ package org.rapidoid.app.example;
  * #L%
  */
 
-public class Task {
+public class User {
 
 	public long id;
 
-	public String title;
+	public String firstName;
 
-	public Priority priority;
+	public String lastName;
 
-	public User author;
-
-	public Task(String title, Priority priority) {
-		this.title = title;
-		this.priority = priority;
-	}
-
-	public Task(String title, Priority priority, User author) {
-		this.title = title;
-		this.priority = priority;
-		this.author = author;
-	}
+	public List<Task> tasks;
 
 }
