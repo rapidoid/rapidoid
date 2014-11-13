@@ -29,12 +29,9 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -63,6 +60,8 @@ public class InMem {
 
 	private static final byte[] CR_LF = { 13, 10 };
 
+	private static final Object INSERTION = new Object();
+
 	private final String filename;
 
 	private final AtomicLong ids = new AtomicLong();
@@ -77,9 +76,9 @@ public class InMem {
 
 	private final AtomicBoolean insideTx = new AtomicBoolean(false);
 
-	private final Map<Long, Rec> txChanges = new HashMap<Long, Rec>();
+	private final ConcurrentHashMap<Long, Rec> txChanges = new ConcurrentHashMap<Long, Rec>();
 
-	private final Set<Long> txInsertions = new HashSet<Long>();
+	private final ConcurrentHashMap<Long, Object> txInsertions = new ConcurrentHashMap<Long, Object>();
 
 	private ConcurrentHashMap<Long, Rec> prevData = new ConcurrentHashMap<Long, Rec>();
 
@@ -111,7 +110,7 @@ public class InMem {
 			long id = ids.incrementAndGet();
 			setId(record, id);
 
-			if (!txInsertions.add(id)) {
+			if (txInsertions.putIfAbsent(id, INSERTION) != null) {
 				throw new IllegalStateException("Cannot insert changelog record with existing ID: " + id);
 			}
 
@@ -131,10 +130,7 @@ public class InMem {
 			validateId(id);
 
 			Rec removed = data.remove(id);
-
-			if (!txChanges.containsKey(id)) {
-				txChanges.put(id, removed);
-			}
+			txChanges.putIfAbsent(id, removed);
 
 		} finally {
 			sharedUnlock();
@@ -169,10 +165,7 @@ public class InMem {
 			validateId(id);
 
 			Rec removed = data.put(id, rec(record, id));
-
-			if (!txChanges.containsKey(id)) {
-				txChanges.put(id, removed);
-			}
+			txChanges.putIfAbsent(id, removed);
 
 			if (removed == null) {
 				throw new IllegalStateException("Cannot update non-existing record with ID=" + id);
@@ -272,8 +265,12 @@ public class InMem {
 			data.put(id, value);
 		}
 
-		for (Long id : txInsertions) {
+		for (Entry<Long, Object> e : txInsertions.entrySet()) {
 			// rollback insert operation
+			Long id = e.getKey();
+			Object value = e.getValue();
+			U.must(value == INSERTION);
+
 			Rec inserted = data.remove(id);
 			U.must(inserted != null);
 		}
@@ -302,7 +299,9 @@ public class InMem {
 	}
 
 	private void validateId(long id) {
-		must(data.containsKey(id), "Cannot find DB record with id=%s", id);
+		if (!data.containsKey(id)) {
+			throw new IllegalArgumentException("Cannot find DB record with id=" + id);
+		}
 	}
 
 	public void save(final OutputStream output) {

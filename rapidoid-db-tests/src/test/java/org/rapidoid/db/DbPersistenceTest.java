@@ -44,7 +44,7 @@ public class DbPersistenceTest extends DbTestCommons {
 
 		System.out.println("updating...");
 
-		U.benchmarkMT(U.cpus(), "update", count, new Runnable() {
+		U.benchmarkMT(10, "update", count, new Runnable() {
 			@Override
 			public void run() {
 				int id = U.rnd(count) + 1;
