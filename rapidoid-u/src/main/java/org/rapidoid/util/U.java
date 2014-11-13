@@ -23,6 +23,8 @@ package org.rapidoid.util;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -742,6 +744,15 @@ public class U {
 
 	public static byte[] loadBytes(String filename) {
 		InputStream input = classLoader().getResourceAsStream(filename);
+
+		if (input == null) {
+			try {
+				input = new FileInputStream(filename);
+			} catch (FileNotFoundException e) {
+				throw U.rte(e);
+			}
+		}
+
 		return input != null ? loadBytes(input) : null;
 	}
 
