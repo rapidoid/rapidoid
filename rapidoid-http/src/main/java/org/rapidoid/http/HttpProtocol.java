@@ -42,35 +42,38 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	}
 
 	@Override
-	protected void process(Channel ctx, HttpExchangeImpl xch) {
+	protected void process(Channel ctx, HttpExchangeImpl x) {
 		U.notNull(session, "session");
 
 		if (ctx.isInitial()) {
 			return;
 		}
 
-		parser.parse(xch.input(), xch.isGet, xch.isKeepAlive, xch.body, xch.verb, xch.uri, xch.path, xch.query,
-				xch.protocol, xch.headers, xch.helper());
+		parser.parse(x.input(), x.isGet, x.isKeepAlive, x.body, x.verb, x.uri, x.path, x.query, x.protocol, x.headers,
+				x.helper());
 
-		U.failIf(xch.verb.isEmpty() || xch.uri.isEmpty(), "Invalid HTTP request!");
-		U.failIf(xch.isGet.value && !xch.body.isEmpty(), "Body is NOT allowed in HTTP GET requests!");
+		U.failIf(x.verb.isEmpty() || x.uri.isEmpty(), "Invalid HTTP request!");
+		U.failIf(x.isGet.value && !x.body.isEmpty(), "Body is NOT allowed in HTTP GET requests!");
 
-		xch.setResponses(responses);
-		xch.setSession(session);
+		x.setResponses(responses);
+		x.setSession(session);
 
 		try {
-			boolean dispatched = router.dispatch(xch);
+			boolean dispatched = router.dispatch(x);
 			if (!dispatched) {
-				xch.notFound();
+				x.notFound();
 			}
 		} catch (Throwable e) {
-			U.error("Internal server error!", "request", xch, "error", e);
-			xch.response(500, "Internal server error!", e);
+			U.error("Internal server error!", "request", x, "error", e);
+			x.response(500, "Internal server error!", e);
 		}
 
-		xch.completeResponse();
+		if (!x.hasContentType()) {
+			x.html();
+		}
 
-		xch.closeIf(!xch.isKeepAlive.value);
+		x.completeResponse();
+		x.closeIf(!x.isKeepAlive.value);
 	}
 
 	public Router getRouter() {

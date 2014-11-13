@@ -49,7 +49,7 @@ public class PageRenderer extends TagRenderer {
 	}
 
 	public void render(TagContext ctx, Object content, HttpExchange x) {
-		str(ctx, content, x, x.output().asOutputStream());
+		str(ctx, content, x, x.outputStream());
 	}
 
 }

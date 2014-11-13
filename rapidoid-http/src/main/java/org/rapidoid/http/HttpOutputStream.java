@@ -20,17 +20,29 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 
-import org.rapidoid.net.abstracts.CtxWrite;
+public class HttpOutputStream extends OutputStream {
 
-public interface HttpExchangeBody extends CtxWrite<HttpExchangeBody> {
+	private final OutputStream out;
 
-	HttpExchangeBody sendFile(File file);
+	private final HttpExchangeImpl x;
 
-	HttpExchangeBody redirect(String url);
+	private boolean initialized;
 
-	OutputStream outputStream();
+	public HttpOutputStream(HttpExchangeImpl x) {
+		this.x = x;
+		out = x.output().asOutputStream();
+	}
+
+	@Override
+	public void write(int n) throws IOException {
+		if (!initialized) {
+			x.ensureHeadersComplete();
+			initialized = true;
+		}
+		out.write(n);
+	}
 
 }

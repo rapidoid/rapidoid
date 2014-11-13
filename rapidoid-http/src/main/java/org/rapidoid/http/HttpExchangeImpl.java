@@ -21,6 +21,7 @@ package org.rapidoid.http;
  */
 
 import java.io.File;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Map;
 
@@ -414,11 +415,13 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	public void completeResponse() {
 		U.must(responseCode >= 100);
-		long wrote = output().size() - bodyPos;
-		U.must(wrote <= Integer.MAX_VALUE, "Response too big!");
+		U.must(bodyPos >= 0);
+
+		long responseSize = output().size() - bodyPos;
+		U.must(responseSize <= Integer.MAX_VALUE, "Response too big!");
 
 		int pos = startingPos + getResp(responseCode).contentLengthPos + 10;
-		output().putNumAsText(pos, wrote, false);
+		output().putNumAsText(pos, responseSize, false);
 
 		// reset response because the exchange might be reused in pipelining mode
 		resetResponse();
@@ -481,7 +484,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return binary();
 	}
 
-	private synchronized void ensureHeadersComplete() {
+	public synchronized void ensureHeadersComplete() {
 		if (!writesBody) {
 			if (!hasContentType) {
 				html();
@@ -710,6 +713,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public void sessionDeserialize(byte[] bytes) {
 		session = (HttpSession) UTILS.deserialize(bytes);
+	}
+
+	@Override
+	public OutputStream outputStream() {
+		return new HttpOutputStream(this);
 	}
 
 }
