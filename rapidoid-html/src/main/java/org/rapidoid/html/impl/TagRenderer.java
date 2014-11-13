@@ -239,12 +239,12 @@ public class TagRenderer {
 
 	protected boolean hasSimpleContent(Collection<?> content) {
 		for (Object cnt : content) {
-			if (!isSimpleContent(cnt)) {
-				return false;
+			if (isSimpleContent(cnt)) {
+				return true;
 			}
 
 		}
-		return true;
+		return false;
 	}
 
 	protected boolean hasSimpleContent(Object[] content) {
