@@ -20,6 +20,7 @@ package org.rapidoid.pages.impl;
  * #L%
  */
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -39,7 +40,8 @@ public class FileTemplateTag extends HardcodedTag {
 	private final Object[] namesAndValues;
 
 	public FileTemplateTag(String templateName, Object[] namesAndValues) {
-		U.must(U.resource(templateName) != null, "Cannot find file: %s", templateName);
+		U.must(U.resource(templateName) != null || new File(templateName).exists(), "Cannot find file: %s",
+				templateName);
 
 		this.templateName = templateName;
 		this.namesAndValues = namesAndValues;
