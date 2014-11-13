@@ -31,6 +31,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.pages.bootstrap.NavbarBootstrapPage;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.U;
 
 public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 
@@ -86,7 +87,7 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 			if (i != searchScreenIndex) {
 				Object scr = screens[i];
 				String name = Apps.screenName(scr);
-				String title = titleOf(scr, name);
+				String title = U.or(titleOf(scr), U.camelPhrase(name));
 				menuItems[k++] = a(title).href(Apps.screenUrl(scr));
 			}
 		}
@@ -131,11 +132,11 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 
 	@Override
 	protected String pageTitle() {
-		return titleOf(app, "Untitled App");
+		return U.or(titleOf(app), "Untitled app");
 	}
 
-	private String titleOf(Object obj, String defaultValue) {
-		return Cls.getFieldValue(obj, "title", defaultValue);
+	private String titleOf(Object obj) {
+		return Cls.getFieldValue(obj, "title", null);
 	}
 
 	@Override
