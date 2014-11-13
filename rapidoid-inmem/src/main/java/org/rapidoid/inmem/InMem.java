@@ -110,8 +110,10 @@ public class InMem {
 			long id = ids.incrementAndGet();
 			setId(record, id);
 
-			if (txInsertions.putIfAbsent(id, INSERTION) != null) {
-				throw new IllegalStateException("Cannot insert changelog record with existing ID: " + id);
+			if (insideTx.get()) {
+				if (txInsertions.putIfAbsent(id, INSERTION) != null) {
+					throw new IllegalStateException("Cannot insert changelog record with existing ID: " + id);
+				}
 			}
 
 			if (data.putIfAbsent(id, rec(record, id)) != null) {
@@ -130,7 +132,10 @@ public class InMem {
 			validateId(id);
 
 			Rec removed = data.remove(id);
-			txChanges.putIfAbsent(id, removed);
+
+			if (insideTx.get()) {
+				txChanges.putIfAbsent(id, removed);
+			}
 
 		} finally {
 			sharedUnlock();
@@ -164,8 +169,11 @@ public class InMem {
 		try {
 			validateId(id);
 
-			Rec removed = data.put(id, rec(record, id));
-			txChanges.putIfAbsent(id, removed);
+			Rec removed = data.replace(id, rec(record, id));
+
+			if (insideTx.get()) {
+				txChanges.putIfAbsent(id, removed);
+			}
 
 			if (removed == null) {
 				throw new IllegalStateException("Cannot update non-existing record with ID=" + id);
