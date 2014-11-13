@@ -118,7 +118,7 @@ public class Pages {
 			pageName = U.mid(pageName, 0, -4);
 		}
 
-		return pageName;
+		return U.camelPhrase(pageName);
 	}
 
 }
