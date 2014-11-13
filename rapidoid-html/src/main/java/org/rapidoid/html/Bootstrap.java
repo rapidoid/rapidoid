@@ -70,11 +70,11 @@ public class Bootstrap extends HTML {
 	}
 
 	public static ATag a_glyph(String glyphicon, Object... contents) {
-		return a(glyphicon(glyphicon), contents);
+		return a(glyphicon(glyphicon), NBSP, contents);
 	}
 
 	public static ATag a_awesome(String fontAwesomeIcon, Object... contents) {
-		return a(awesome(fontAwesomeIcon), contents);
+		return a(awesome(fontAwesomeIcon), NBSP, contents);
 	}
 
 	public static ButtonTag btn(Object... contents) {
