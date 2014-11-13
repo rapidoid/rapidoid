@@ -2,6 +2,7 @@ package org.rapidoid.pages.bootstrap;
 
 import java.util.List;
 
+import org.rapidoid.html.Var;
 import org.rapidoid.html.tag.TbodyTag;
 import org.rapidoid.html.tag.TrTag;
 import org.rapidoid.http.HttpExchange;
@@ -39,6 +40,8 @@ public class TableWidget extends BootstrapWidget {
 
 		final List<Property> properties = items.properties();
 
+		final Var<Integer> pageNumber = var(1);
+
 		TrTag header = tr();
 
 		for (Property prop : properties) {
@@ -49,15 +52,13 @@ public class TableWidget extends BootstrapWidget {
 			@Override
 			public Object eval(HttpExchange x) {
 
+				Integer pageN = pageNumber.get();
+				Items page = items.range((pageN - 1) * pageSize(), Math.min((pageN) * pageSize(), items.size()));
+
 				TbodyTag body = tbody();
 
-				for (Item item : items) {
-					TrTag row = tr();
-
-					for (Property prop : properties) {
-						row.append(td(U.or(item.get(prop.name()), "")));
-					}
-
+				for (Item item : page) {
+					TrTag row = itemRow(properties, item);
 					body.append(row);
 				}
 
@@ -65,7 +66,25 @@ public class TableWidget extends BootstrapWidget {
 			}
 		});
 
-		setContent(table_(thead(header), body));
+		int total = items.size();
+		int pages = (int) Math.ceil(total / (double) pageSize());
+
+		PagerWidget pager = new PagerWidget(1, pages, pageNumber);
+		setContent(rowFull(table_(thead(header), body), pager));
+	}
+
+	protected int pageSize() {
+		return 10;
+	}
+
+	protected TrTag itemRow(List<Property> properties, Item item) {
+		TrTag row = tr();
+
+		for (Property prop : properties) {
+			row.append(td(U.or(item.get(prop.name()), "")));
+		}
+
+		return row;
 	}
 
 }
