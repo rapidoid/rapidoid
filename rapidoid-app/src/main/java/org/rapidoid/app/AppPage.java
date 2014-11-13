@@ -37,6 +37,9 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 
 	private static final long serialVersionUID = 5633741993098185900L;
 
+	private static final String[] themes = { "default", "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal",
+			"lumen", "paper", "readable", "sandstone", "simplex", "slate", "spacelab", "superhero", "united", "yeti" };
+
 	final Object app;
 	final Object[] screens;
 	Object screen;
@@ -47,6 +50,8 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 	private Object dropdownMenu;
 	private UlTag navMenu;
 	private FormTag searchForm;
+
+	private Object themesMenu;
 
 	public AppPage(Object app, Object[] screens, Object screen) {
 		this.app = app;
@@ -63,22 +68,34 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 			public Object eval(HttpExchange x) {
 				if (x.isLoggedIn()) {
 
-					ATag profile = a_glyph("user", "Profile", caret()).href("#");
+					ATag profile = a_glyph("user", "Profile", caret());
 					ATag settings = a_glyph("cog", " Settings");
-					ATag logout = a_glyph("log-out", " Logout").href("/_logout");
+					ATag logout = a_glyph("log-out", "Logout").href("/_logout");
 
 					return navbarDropdown(false, profile, settings, logout);
 				} else {
 
-					ATag ga = a_awesome("google", " Sign in with Google").href("/_googleLogin");
-					ATag fb = a_awesome("facebook", " Sign in with Facebook").href("/_facebookLogin");
-					ATag li = a_awesome("linkedin", " Sign in with LinkedIn").href("/_linkedinLogin");
-					ATag gh = a_awesome("github", " Sign in with GitHub").href("/_githubLogin");
+					ATag ga = a_awesome("google", "Sign in with Google").href("/_googleLogin");
+					ATag fb = a_awesome("facebook", "Sign in with Facebook").href("/_facebookLogin");
+					ATag li = a_awesome("linkedin", "Sign in with LinkedIn").href("/_linkedinLogin");
+					ATag gh = a_awesome("github", "Sign in with GitHub").href("/_githubLogin");
 
-					return navbarDropdown(false, a("Sign in", caret()).href("#"), ga, fb, li, gh);
+					return navbarDropdown(false, a_glyph("log-in", "Sign in", caret()), ga, fb, li, gh);
 				}
 			}
 		});
+
+		ATag theme = a_glyph("eye-open", "Theme", caret());
+
+		Object[] themess = new Object[themes.length];
+
+		for (int i = 0; i < themes.length; i++) {
+			String thm = themes[i];
+			String js = U.format("document.cookie='THEME=%s; path=/'; location.reload();", thm);
+			themess[i] = a(U.capitalized(thm)).onclick(js);
+		}
+
+		themesMenu = navbarDropdown(false, theme, themess);
 
 		Object[] menuItems = new Object[searchScreenIndex < 0 ? screens.length : screens.length - 1];
 
@@ -122,7 +139,7 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 	}
 
 	protected Object[] navbarContent() {
-		return new Object[] { navMenu, dropdownMenu, searchForm };
+		return new Object[] { navMenu, themesMenu, dropdownMenu, searchForm };
 	}
 
 	@Override
