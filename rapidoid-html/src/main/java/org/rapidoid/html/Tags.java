@@ -144,16 +144,16 @@ public class Tags extends BasicUtils {
 		if (tag instanceof InputTag) {
 			InputTag input = (InputTag) tag;
 			if ("checkbox".equals(input.type()) || "radio".equals(input.type())) {
-				input.checked(bool(value));
+				input.checked(value != null ? bool(value) : false);
 			} else {
-				input.value(str(value));
+				input.value(value != null ? str(value) : "");
 			}
 		} else if (tag instanceof TextareaTag) {
 			TextareaTag textArea = (TextareaTag) tag;
-			textArea.content(str(value));
+			textArea.content(value != null ? str(value) : "");
 		} else if (tag instanceof OptionTag) {
 			OptionTag optionTag = (OptionTag) tag;
-			optionTag.selected(bool(value));
+			optionTag.selected(value != null ? bool(value) : false);
 		} else {
 			throw U.rte("Cannot set value to a '%s' tag!", ((Tag<?>) tag).tagKind());
 		}

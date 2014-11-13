@@ -9,6 +9,7 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
 import org.rapidoid.pages.DynamicContent;
+import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -54,7 +55,7 @@ public class TableWidget extends BootstrapWidget {
 					TrTag row = tr();
 
 					for (Property prop : properties) {
-						row.append(td(item.get(prop.name())));
+						row.append(td(U.or(item.get(prop.name()), "")));
 					}
 
 					body.append(row);
