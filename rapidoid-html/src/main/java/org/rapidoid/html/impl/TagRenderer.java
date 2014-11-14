@@ -89,7 +89,7 @@ public class TagRenderer {
 		}
 
 		indent(out, level, inline);
-		write(out, HTML.escape(String.valueOf(content)));
+		write(out, HTML.escape(U.text(content)));
 	}
 
 	protected void join(TagContext ctx, Collection<?> items, int level, boolean inline, Object extra, OutputStream out) {
