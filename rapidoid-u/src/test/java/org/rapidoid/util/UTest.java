@@ -208,4 +208,19 @@ public class UTest extends TestCommons {
 		eq(U.isEmpty(null), true);
 	}
 
+	@Test
+	public void testExclude() {
+		String[] arr = { "a", "b", "c" };
+		eq(U.exclude(arr, "a"), U.array("b", "c"));
+		eq(U.exclude(arr, "b"), U.array("a", "c"));
+		eq(U.exclude(arr, "c"), U.array("a", "b"));
+	}
+
+	@Test
+	public void testInclude() {
+		String[] arr = { "a", "b", "c" };
+		eq(U.include(arr, "a"), U.array("a", "b", "c"));
+		eq(U.include(arr, "d"), U.array("a", "b", "c", "d"));
+	}
+
 }

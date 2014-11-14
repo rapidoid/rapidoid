@@ -363,6 +363,10 @@ public class U {
 		return rte("This operation is not expected to be called!");
 	}
 
+	public static IllegalArgumentException illegalArg(String message) {
+		return new IllegalArgumentException(message);
+	}
+
 	public static <T> T newInstance(Class<T> clazz) {
 		try {
 			return clazz.newInstance();
@@ -1555,17 +1559,65 @@ public class U {
 			Collection<?> coll = (Collection<?>) arrOrColl;
 			return coll.contains(value);
 		} else {
-			return false;
+			throw illegalArg("Expected array or collection!");
 		}
 	}
 
-	public static int indexOf(Object[] arr, Object value) {
+	@SuppressWarnings("unchecked")
+	public static Object include(Object arrOrColl, Object item) {
+		if (arrOrColl instanceof Object[]) {
+			Object[] arr = (Object[]) arrOrColl;
+			return indexOf(arr, item) < 0 ? expand(arr, item) : arr;
+		} else if (arrOrColl instanceof Collection<?>) {
+			Collection<Object> coll = (Collection<Object>) arrOrColl;
+			if (!coll.contains(item)) {
+				coll.add(item);
+			}
+			return coll;
+		} else {
+			throw illegalArg("Expected array or collection!");
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Object exclude(Object arrOrColl, Object item) {
+		if (arrOrColl instanceof Object[]) {
+			Object[] arr = (Object[]) arrOrColl;
+			int ind = indexOf(arr, item);
+			return ind >= 0 ? deleteAt(arr, ind) : arr;
+		} else if (arrOrColl instanceof Collection<?>) {
+			Collection<Object> coll = (Collection<Object>) arrOrColl;
+			if (coll.contains(item)) {
+				coll.remove(item);
+			}
+			return coll;
+		} else {
+			throw illegalArg("Expected array or collection!");
+		}
+	}
+
+	private static int indexOf(Object[] arr, Object value) {
 		for (int i = 0; i < arr.length; i++) {
 			if (eq(arr[i], value)) {
 				return i;
 			}
 		}
 		return -1;
+	}
+
+	private static Object[] deleteAt(Object[] arr, int index) {
+
+		Object[] res = new Object[arr.length - 1];
+
+		if (index > 0) {
+			System.arraycopy(arr, 0, res, 0, index);
+		}
+
+		if (index < arr.length - 1) {
+			System.arraycopy(arr, index + 1, res, index, res.length - index);
+		}
+
+		return res;
 	}
 
 	public static String camelSplit(String s) {
