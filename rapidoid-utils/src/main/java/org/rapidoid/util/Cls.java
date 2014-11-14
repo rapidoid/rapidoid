@@ -808,7 +808,7 @@ public class Cls {
 			}
 
 		case STRING:
-			return (T) String.valueOf(value);
+			return (T) U.text(value);
 
 		case OBJECT:
 			throw U.rte("Cannot convert the value to type '%s'!", toType);
