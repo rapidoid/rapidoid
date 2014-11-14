@@ -24,8 +24,8 @@ import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagEventHandler;
+import org.rapidoid.html.Var;
 import org.rapidoid.html.tag.ATag;
-import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.pages.bootstrap.NavbarBootstrapPage;
 
 @SuppressWarnings("serial")
@@ -33,9 +33,9 @@ public class FormPage extends NavbarBootstrapPage {
 
 	private ATag brand;
 
-	private FormTag form1;
-	private FormTag form2;
-	private FormTag form3;
+	private Object form1;
+	private Object form2;
+	private Object form3;
 
 	public FormPage() {
 		brand = a("Welcome to the Forms page!").href("/form.html");
@@ -47,7 +47,7 @@ public class FormPage extends NavbarBootstrapPage {
 		setContent(page());
 	}
 
-	private FormTag frm(FormLayout layout) {
+	private Object frm(FormLayout layout) {
 
 		String[] names = { "user", "pass", "email", "driver", "roles", "gender", "accept", "bbb", "comments" };
 
@@ -67,8 +67,8 @@ public class FormPage extends NavbarBootstrapPage {
 
 		Object[][] options = { null, null, null, opt1, opt2, opt3, opt4, null, null };
 
-		Object[] values = { "niko", "rapidoid", "niko@rapi.doid", "No", arr("Manager", "Moderator"), "Male",
-				arr("A", "C"), "Very interesting!", true };
+		Var<?>[] vars = vars("niko", "rapidoid", "niko@rapi.doid", "No", arr("Manager", "Moderator"), "Male",
+				arr("A", "C"), "Very interesting!", true);
 
 		Object[] buttons = { btn("Save", new TagEventHandler<Tag<?>>() {
 			@Override
@@ -77,7 +77,7 @@ public class FormPage extends NavbarBootstrapPage {
 			}
 		}), btn("Cancel") };
 
-		return form_(layout, names, desc, types, options, values, buttons);
+		return arr(form_(layout, names, desc, types, options, vars, buttons), ul_li((Object[]) vars));
 	}
 
 	@Override

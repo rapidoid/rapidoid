@@ -136,7 +136,7 @@ public class Bootstrap extends HTML {
 	}
 
 	public static FormTag form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc, FieldType[] fieldTypes,
-			Object[][] options, Object[] values, Object[] buttons) {
+			Object[][] options, Var<?>[] vars, Object[] buttons) {
 
 		U.notNull(fieldsNames, "field names");
 		fieldsDesc = U.or(fieldsDesc, fieldsNames);
@@ -145,7 +145,7 @@ public class Bootstrap extends HTML {
 		FormTag form = form().class_(formLayoutClass(layout)).role("form");
 
 		for (int i = 0; i < fieldsNames.length; i++) {
-			form.append(field(layout, fieldsNames[i], fieldsDesc[i], fieldTypes[i], options[i], values[i]));
+			form.append(field(layout, fieldsNames[i], fieldsDesc[i], fieldTypes[i], options[i], vars[i]));
 		}
 
 		form.append(formBtns(layout, buttons));
@@ -184,11 +184,10 @@ public class Bootstrap extends HTML {
 		}
 	}
 
-	public static DivTag field(FormLayout layout, String name, String desc, FieldType type, Object[] options,
-			Object value) {
+	public static DivTag field(FormLayout layout, String name, String desc, FieldType type, Object[] options, Var<?> var) {
 		desc = U.or(desc, name);
 
-		Object inp = input_(name, desc, type, options, value);
+		Object inp = input_(name, desc, type, options, var);
 		LabelTag label;
 		Object inputWrap;
 
@@ -226,7 +225,10 @@ public class Bootstrap extends HTML {
 		return group;
 	}
 
-	public static Object input_(String name, String desc, FieldType type, Object[] options, Object value) {
+	public static Object input_(String name, String desc, FieldType type, Object[] options, Var<?> var) {
+
+		Object value = var.get();
+
 		switch (type) {
 
 		case TEXT:

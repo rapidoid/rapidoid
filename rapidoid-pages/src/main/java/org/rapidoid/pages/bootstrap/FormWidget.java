@@ -6,6 +6,7 @@ import java.util.List;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.Var;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
 import org.rapidoid.util.Cls;
@@ -45,7 +46,7 @@ public class FormWidget extends BootstrapWidget {
 		String[] desc = new String[propN];
 		FieldType[] types = new FieldType[propN];
 		Object[][] options = new Object[propN][];
-		Object[] values = new Object[propN];
+		Var<?>[] vars = new Var[propN];
 
 		for (int i = 0; i < propN; i++) {
 			Property prop = properties.get(i);
@@ -53,10 +54,10 @@ public class FormWidget extends BootstrapWidget {
 			desc[i] = prop.caption();
 			types[i] = getPropertyFieldType(prop);
 			options[i] = getPropertyOptions(prop);
-			values[i] = item.get(prop.name());
+			vars[i] = property(item, prop.name());
 		}
 
-		Tag<?> frm = form_(FormLayout.VERTICAL, names, desc, types, options, values, buttons);
+		Tag<?> frm = form_(FormLayout.VERTICAL, names, desc, types, options, vars, buttons);
 
 		setContent(frm);
 	}
