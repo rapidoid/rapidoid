@@ -1,5 +1,7 @@
 package org.rapidoid.html;
 
+import org.rapidoid.var.Var;
+
 /*
  * #%L
  * rapidoid-html

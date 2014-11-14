@@ -22,7 +22,6 @@ package org.rapidoid.pages;
 
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagEventHandler;
-import org.rapidoid.html.Var;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.html.tag.InputTag;
@@ -31,6 +30,7 @@ import org.rapidoid.model.Model;
 import org.rapidoid.pages.bootstrap.TableWidget;
 import org.rapidoid.pages.entity.Person;
 import org.rapidoid.util.U;
+import org.rapidoid.var.Var;
 
 @SuppressWarnings("serial")
 public class PlaygroundWidget extends HtmlWidget {

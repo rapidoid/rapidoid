@@ -3,7 +3,6 @@ package org.rapidoid.pages.bootstrap;
 import org.rapidoid.html.Bootstrap;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
-import org.rapidoid.html.Var;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
 import org.rapidoid.pages.DynamicContent;
@@ -12,6 +11,7 @@ import org.rapidoid.pages.PageComponent;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.util.U;
+import org.rapidoid.var.Var;
 
 /*
  * #%L

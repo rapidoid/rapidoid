@@ -1,7 +1,7 @@
 package org.rapidoid.pages;
 
 import org.rapidoid.html.Action;
-import org.rapidoid.html.Var;
+import org.rapidoid.var.Var;
 
 /*
  * #%L

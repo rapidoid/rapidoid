@@ -24,9 +24,6 @@ import java.util.Collection;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.rapidoid.html.impl.ConstantTag;
-import org.rapidoid.html.impl.ContainerVar;
-import org.rapidoid.html.impl.EqualityVar;
-import org.rapidoid.html.impl.SimpleVar;
 import org.rapidoid.html.impl.TagContextImpl;
 import org.rapidoid.html.impl.TagProxy;
 import org.rapidoid.html.impl.UndefinedTag;
@@ -35,6 +32,10 @@ import org.rapidoid.html.tag.OptionTag;
 import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.U;
+import org.rapidoid.var.ContainerVar;
+import org.rapidoid.var.EqualityVar;
+import org.rapidoid.var.SimpleVar;
+import org.rapidoid.var.Var;
 
 public class Tags extends BasicUtils {
 

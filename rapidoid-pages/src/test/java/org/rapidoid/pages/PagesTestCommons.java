@@ -25,9 +25,9 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.rapidoid.html.TagContext;
-import org.rapidoid.html.Var;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.var.Var;
 
 public class PagesTestCommons extends TestCommons {
 

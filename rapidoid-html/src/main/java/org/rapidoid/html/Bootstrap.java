@@ -34,6 +34,7 @@ import org.rapidoid.html.tag.SpanTag;
 import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.html.tag.UlTag;
 import org.rapidoid.util.U;
+import org.rapidoid.var.Var;
 
 public class Bootstrap extends HTML {
 

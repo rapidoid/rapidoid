@@ -20,10 +20,10 @@ package org.rapidoid.pages.bootstrap;
  * #L%
  */
 
-import org.rapidoid.html.Var;
 import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.html.tag.LiTag;
 import org.rapidoid.pages.Do;
+import org.rapidoid.var.Var;
 
 public class PagerWidget extends BootstrapWidget {
 

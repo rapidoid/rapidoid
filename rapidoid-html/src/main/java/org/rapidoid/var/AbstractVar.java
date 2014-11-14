@@ -1,4 +1,4 @@
-package org.rapidoid.html.impl;
+package org.rapidoid.var;
 
 /*
  * #%L
@@ -20,24 +20,21 @@ package org.rapidoid.html.impl;
  * #L%
  */
 
-public class SimpleVar<T> extends AbstractVar<T> {
+import org.rapidoid.html.CustomTag;
+import org.rapidoid.util.U;
 
-	private static final long serialVersionUID = 7970150705828178233L;
+public abstract class AbstractVar<T> implements Var<T>, CustomTag {
 
-	private volatile T value;
+	private static final long serialVersionUID = -6006051524799076017L;
 
-	public SimpleVar(T value) {
-		this.value = value;
+	@Override
+	public String toString() {
+		return U.text(get());
 	}
 
 	@Override
-	public T get() {
-		return value;
-	}
-
-	@Override
-	public void set(T value) {
-		this.value = value;
+	public Object content() {
+		return get();
 	}
 
 }

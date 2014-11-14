@@ -2,7 +2,6 @@ package org.rapidoid.pages.bootstrap;
 
 import java.util.List;
 
-import org.rapidoid.html.Var;
 import org.rapidoid.html.tag.TbodyTag;
 import org.rapidoid.html.tag.TrTag;
 import org.rapidoid.http.HttpExchange;
@@ -11,6 +10,7 @@ import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
 import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.util.U;
+import org.rapidoid.var.Var;
 
 /*
  * #%L

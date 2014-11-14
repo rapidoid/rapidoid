@@ -20,8 +20,8 @@ package org.rapidoid.pages.impl;
  * #L%
  */
 
-import org.rapidoid.html.impl.AbstractVar;
 import org.rapidoid.model.Item;
+import org.rapidoid.var.AbstractVar;
 
 public class ItemPropertyVar<T> extends AbstractVar<T> {
 

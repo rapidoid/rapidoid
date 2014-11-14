@@ -24,9 +24,9 @@ import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagEventHandler;
-import org.rapidoid.html.Var;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.pages.bootstrap.NavbarBootstrapPage;
+import org.rapidoid.var.Var;
 
 @SuppressWarnings("serial")
 public class FormPage extends NavbarBootstrapPage {

@@ -24,8 +24,8 @@ import org.rapidoid.html.Action;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.html.TagProcessor;
-import org.rapidoid.html.Var;
 import org.rapidoid.util.U;
+import org.rapidoid.var.Var;
 
 public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 

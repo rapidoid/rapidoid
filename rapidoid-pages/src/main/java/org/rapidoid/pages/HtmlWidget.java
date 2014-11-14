@@ -23,7 +23,6 @@ package org.rapidoid.pages;
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
-import org.rapidoid.html.Var;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
 import org.rapidoid.pages.impl.DynamicContentWrapper;
@@ -33,6 +32,7 @@ import org.rapidoid.pages.impl.MultiLanguageText;
 import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.pages.impl.SimpleHardcodedTag;
 import org.rapidoid.util.U;
+import org.rapidoid.var.Var;
 
 public abstract class HtmlWidget extends HTML implements TagWidget, PageComponent {
 

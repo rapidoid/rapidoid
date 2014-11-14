@@ -1,4 +1,4 @@
-package org.rapidoid.html.impl;
+package org.rapidoid.var;
 
 /*
  * #%L
@@ -20,22 +20,35 @@ package org.rapidoid.html.impl;
  * #L%
  */
 
-import org.rapidoid.html.CustomTag;
-import org.rapidoid.html.Var;
 import org.rapidoid.util.U;
 
-public abstract class AbstractVar<T> implements Var<T>, CustomTag {
+public class EqualityVar extends AbstractVar<Boolean> {
 
-	private static final long serialVersionUID = -6006051524799076017L;
+	private static final long serialVersionUID = 6990464844550633598L;
 
-	@Override
-	public String toString() {
-		return U.text(get());
+	private final Var<Object> var;
+
+	private final Object val;
+
+	public EqualityVar(Var<Object> var, Object val) {
+		this.var = var;
+		this.val = val;
 	}
 
 	@Override
-	public Object content() {
-		return get();
+	public Boolean get() {
+		return U.eq(var.get(), val);
+	}
+
+	@Override
+	public void set(Boolean value) {
+		if (value) {
+			var.set(val);
+		} else {
+			if (U.eq(var.get(), val)) {
+				var.set(null);
+			}
+		}
 	}
 
 }
