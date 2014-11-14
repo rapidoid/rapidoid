@@ -51,4 +51,8 @@ public class BasicUtils {
 		return Cls.convert(value, Date.class);
 	}
 
+	public static <T> T[] arr(T... arr) {
+		return arr;
+	}
+
 }

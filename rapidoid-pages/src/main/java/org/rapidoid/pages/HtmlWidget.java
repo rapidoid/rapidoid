@@ -23,7 +23,6 @@ package org.rapidoid.pages;
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
-import org.rapidoid.html.Tags;
 import org.rapidoid.html.Var;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.impl.DynamicContentWrapper;
@@ -52,12 +51,6 @@ public abstract class HtmlWidget extends HTML implements TagWidget, PageComponen
 		return new MultiLanguageText(multiLanguageText, formatArgs);
 	}
 
-	public static <T> T[] arr(T... arr) {
-		return arr;
-	}
-
-	public static <T> Var<T> var(T value) {
-		return Tags.var(value);
 	}
 
 	public static Tag<?> template(String templateFileName, Object... namesAndValues) {

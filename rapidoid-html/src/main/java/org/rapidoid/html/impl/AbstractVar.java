@@ -22,33 +22,20 @@ package org.rapidoid.html.impl;
 
 import org.rapidoid.html.CustomTag;
 import org.rapidoid.html.Var;
+import org.rapidoid.util.U;
 
-public class VarImpl<T> implements Var<T>, CustomTag {
+public abstract class AbstractVar<T> implements Var<T>, CustomTag {
 
-	private volatile T value;
-
-	public VarImpl(T value) {
-		this.value = value;
-	}
-
-	@Override
-	public T get() {
-		return value;
-	}
-
-	@Override
-	public void set(T value) {
-		this.value = value;
-	}
+	private static final long serialVersionUID = -6006051524799076017L;
 
 	@Override
 	public String toString() {
-		return String.valueOf(value);
+		return U.text(get());
 	}
 
 	@Override
 	public Object content() {
-		return value;
+		return get();
 	}
 
 }

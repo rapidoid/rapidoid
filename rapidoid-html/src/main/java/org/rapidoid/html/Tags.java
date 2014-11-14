@@ -27,7 +27,7 @@ import org.rapidoid.html.impl.ConstantTag;
 import org.rapidoid.html.impl.TagContextImpl;
 import org.rapidoid.html.impl.TagProxy;
 import org.rapidoid.html.impl.UndefinedTag;
-import org.rapidoid.html.impl.VarImpl;
+import org.rapidoid.html.impl.SimpleVar;
 import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.OptionTag;
 import org.rapidoid.html.tag.TextareaTag;
@@ -41,7 +41,18 @@ public class Tags extends BasicUtils {
 	public static final Object $value = new Object();
 
 	public static <T> Var<T> var(T value) {
-		return new VarImpl<T>(value);
+		return new SimpleVar<T>(value);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> Var<T>[] vars(T... values) {
+		Var<T>[] vars = new Var[values.length];
+
+		for (int i = 0; i < vars.length; i++) {
+			vars[i] = var(values[i]);
+		}
+
+		return vars;
 	}
 
 	public static TagContext context() {

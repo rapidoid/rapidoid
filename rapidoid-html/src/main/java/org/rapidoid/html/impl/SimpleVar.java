@@ -1,6 +1,4 @@
-package org.rapidoid.html;
-
-import java.io.Serializable;
+package org.rapidoid.html.impl;
 
 /*
  * #%L
@@ -22,10 +20,24 @@ import java.io.Serializable;
  * #L%
  */
 
-public interface Var<T> extends Serializable {
+public class SimpleVar<T> extends AbstractVar<T> {
 
-	T get();
+	private static final long serialVersionUID = 7970150705828178233L;
 
-	void set(T value);
+	private volatile T value;
+
+	public SimpleVar(T value) {
+		this.value = value;
+	}
+
+	@Override
+	public T get() {
+		return value;
+	}
+
+	@Override
+	public void set(T value) {
+		this.value = value;
+	}
 
 }
