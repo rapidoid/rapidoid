@@ -50,8 +50,13 @@ public class BeanItem implements Item {
 	}
 
 	@Override
-	public Object get(String property) {
+	public <T> T get(String property) {
 		return Cls.getPropValue(value, property);
+	}
+
+	@Override
+	public void set(String property, Object propValue) {
+		Cls.setPropValue(value, property, propValue);
 	}
 
 	@SuppressWarnings("unchecked")

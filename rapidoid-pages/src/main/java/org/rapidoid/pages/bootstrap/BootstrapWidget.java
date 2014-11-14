@@ -5,6 +5,7 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.Var;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.model.Item;
 import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.pages.HtmlWidget;
 import org.rapidoid.pages.PageComponent;
@@ -51,12 +52,8 @@ public abstract class BootstrapWidget extends Bootstrap implements TagWidget, Pa
 		return HtmlWidget._(multiLanguageText, formatArgs);
 	}
 
-	public static <T> T[] arr(T... arr) {
-		return HtmlWidget.arr(arr);
-	}
-
-	public static <T> Var<T> var(T value) {
-		return HtmlWidget.var(value);
+	public static <T> Var<T> property(Item item, String property) {
+		return HtmlWidget.property(item, property);
 	}
 
 	public static Tag<?> template(String templateFileName, Object... namesAndValues) {

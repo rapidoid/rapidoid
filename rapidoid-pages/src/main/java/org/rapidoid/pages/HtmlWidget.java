@@ -25,8 +25,10 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.Var;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.model.Item;
 import org.rapidoid.pages.impl.DynamicContentWrapper;
 import org.rapidoid.pages.impl.FileTemplateTag;
+import org.rapidoid.pages.impl.ItemPropertyVar;
 import org.rapidoid.pages.impl.MultiLanguageText;
 import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.pages.impl.SimpleHardcodedTag;
@@ -51,6 +53,8 @@ public abstract class HtmlWidget extends HTML implements TagWidget, PageComponen
 		return new MultiLanguageText(multiLanguageText, formatArgs);
 	}
 
+	public static <T> Var<T> property(Item item, String property) {
+		return new ItemPropertyVar<T>(item, property);
 	}
 
 	public static Tag<?> template(String templateFileName, Object... namesAndValues) {

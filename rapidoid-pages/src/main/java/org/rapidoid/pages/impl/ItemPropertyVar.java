@@ -1,11 +1,8 @@
-package org.rapidoid.model;
-
-import java.io.Serializable;
-import java.util.List;
+package org.rapidoid.pages.impl;
 
 /*
  * #%L
- * rapidoid-model
+ * rapidoid-pages
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -23,18 +20,30 @@ import java.util.List;
  * #L%
  */
 
-public interface Item extends Serializable {
+import org.rapidoid.html.impl.AbstractVar;
+import org.rapidoid.model.Item;
 
-	String id();
+public class ItemPropertyVar<T> extends AbstractVar<T> {
 
-	Object value();
+	private static final long serialVersionUID = -1208784804459879580L;
 
-	<T> T get(String property);
+	private final Item item;
 
-	void set(String property, Object value);
+	private final String property;
 
-	List<Property> properties();
+	public ItemPropertyVar(Item item, String property) {
+		this.item = item;
+		this.property = property;
+	}
 
-	List<Property> editableProperties();
+	@Override
+	public T get() {
+		return item.get(property);
+	}
+
+	@Override
+	public void set(T value) {
+		item.set(property, value);
+	}
 
 }
