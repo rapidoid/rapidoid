@@ -29,6 +29,8 @@ import org.rapidoid.util.U;
 
 public class BeanListItems<T> extends ListItems {
 
+	private static final long serialVersionUID = 7346765152583871241L;
+
 	private final Class<T> beanType;
 
 	private final List<Property> properties;

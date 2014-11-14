@@ -20,9 +20,10 @@ package org.rapidoid.model;
  * #L%
  */
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface Items extends Iterable<Item> {
+public interface Items extends Iterable<Item>, Serializable {
 
 	void insert(int index, Item item);
 

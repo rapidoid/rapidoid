@@ -30,6 +30,8 @@ import org.rapidoid.util.Cls;
 
 public class BeanItem implements Item {
 
+	private static final long serialVersionUID = 4793756823666203912L;
+
 	private final Object value;
 
 	public BeanItem(Object object) {

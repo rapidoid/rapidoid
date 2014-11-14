@@ -1,5 +1,7 @@
 package org.rapidoid.demo.pojo;
 
+import java.io.Serializable;
+
 /*
  * #%L
  * rapidoid-demo
@@ -20,7 +22,9 @@ package org.rapidoid.demo.pojo;
  * #L%
  */
 
-public class Person {
+public class Person implements Serializable {
+
+	private static final long serialVersionUID = -923841191756779245L;
 
 	public long id;
 

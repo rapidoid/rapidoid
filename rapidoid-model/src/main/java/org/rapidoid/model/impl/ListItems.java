@@ -32,6 +32,8 @@ import org.rapidoid.util.U;
 
 public class ListItems implements Items {
 
+	private static final long serialVersionUID = -4233673233447713903L;
+
 	private final List<Item> list = new ArrayList<Item>();
 
 	@Override

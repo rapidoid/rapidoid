@@ -25,6 +25,8 @@ import org.rapidoid.util.U;
 
 public class BeanProperty implements Property {
 
+	private static final long serialVersionUID = 7627370931428864929L;
+
 	private final String name;
 
 	private final Class<?> type;

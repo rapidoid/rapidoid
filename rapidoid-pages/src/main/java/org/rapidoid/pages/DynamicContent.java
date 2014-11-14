@@ -1,5 +1,7 @@
 package org.rapidoid.pages;
 
+import java.io.Serializable;
+
 import org.rapidoid.http.HttpExchange;
 
 /*
@@ -22,7 +24,7 @@ import org.rapidoid.http.HttpExchange;
  * #L%
  */
 
-public interface DynamicContent {
+public interface DynamicContent extends Serializable {
 
 	Object eval(HttpExchange x);
 

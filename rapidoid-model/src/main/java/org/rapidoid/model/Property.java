@@ -1,5 +1,7 @@
 package org.rapidoid.model;
 
+import java.io.Serializable;
+
 /*
  * #%L
  * rapidoid-model
@@ -20,7 +22,7 @@ package org.rapidoid.model;
  * #L%
  */
 
-public interface Property {
+public interface Property extends Serializable {
 
 	String name();
 
