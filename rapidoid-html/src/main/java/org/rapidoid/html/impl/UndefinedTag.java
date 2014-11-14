@@ -24,6 +24,7 @@ import org.rapidoid.html.Action;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.html.TagProcessor;
+import org.rapidoid.html.Var;
 import org.rapidoid.util.U;
 
 public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
@@ -176,6 +177,31 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 
 	@Override
 	public TAG onclick(String onclick) {
+		throw U.notExpected();
+	}
+
+	@Override
+	public TAG bind(String attr, Var<String> var) {
+		throw U.notExpected();
+	}
+
+	@Override
+	public TAG bindIs(String attr, Var<Boolean> var) {
+		throw U.notExpected();
+	}
+
+	@Override
+	public TAG unbind(String attr) {
+		throw U.notExpected();
+	}
+
+	@Override
+	public TAG bindContent(Var<Object> var) {
+		throw U.notExpected();
+	}
+
+	@Override
+	public TAG unbindContent(String attr) {
 		throw U.notExpected();
 	}
 

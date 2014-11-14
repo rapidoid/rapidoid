@@ -30,6 +30,7 @@ import org.rapidoid.html.Action;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagEventHandler;
+import org.rapidoid.html.Var;
 import org.rapidoid.util.U;
 
 public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements TagInternals, Serializable {
@@ -45,6 +46,10 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	final Map<String, String> attrs = U.map();
 
 	final Set<String> battrs = U.set();
+
+	Var<Object> contentBinding;
+
+	final Map<String, Var<?>> bindings = U.map();
 
 	final Map<String, TagEventHandler<TAG>> eventHandlers = U.map();
 
@@ -129,10 +134,11 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 		}
 	}
 
-	private void changeIf(boolean cond) {
-		if (cond && ctx != null) {
-			ctx.changed(this);
+	private void changedContent() {
+		if (contentBinding != null) {
+			contentBinding.set(contents.size() == 1 ? contents.get(0) : contents);
 		}
+		changed();
 	}
 
 	@Override
@@ -147,8 +153,8 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	@Override
 	public void setChild(int index, Object child) {
-		changed();
 		contents.set(index, child);
+		changedContent();
 	}
 
 	@Override
@@ -178,28 +184,30 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	@Override
 	public TAG content(Object... content) {
-		changed();
 		contents.clear();
-		append(content);
+		for (Object obj : content) {
+			contents.add(obj);
+		}
+		changedContent();
 		return proxy();
 	}
 
 	@Override
 	public TAG prepend(Object... content) {
-		changed();
 		int index = 0;
 		for (Object obj : content) {
 			contents.add(index++, obj);
 		}
+		changedContent();
 		return proxy();
 	}
 
 	@Override
 	public TAG append(Object... content) {
-		changed();
 		for (Object obj : content) {
 			contents.add(obj);
 		}
+		changedContent();
 		return proxy();
 	}
 
@@ -208,10 +216,19 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 		return attrs.get(attr);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public TAG attr(String attr, String value) {
 		String prev = attrs.put(attr, value);
-		changeIf(U.eq(prev, value));
+
+		if (!U.eq(prev, value)) {
+			Var<String> var = (Var<String>) bindings.get(attr);
+			if (var != null) {
+				var.set(value);
+			}
+			changed();
+		}
+
 		return proxy();
 	}
 
@@ -220,14 +237,62 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 		return battrs.contains(attr);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public TAG is(String attr, boolean value) {
+		boolean changed;
+
 		if (value) {
-			changeIf(battrs.add(attr));
+			changed = battrs.add(attr);
 		} else {
-			changeIf(battrs.remove(attr));
+			changed = battrs.remove(attr);
 		}
 
+		if (changed) {
+			Var<Boolean> var = (Var<Boolean>) bindings.get(attr);
+			if (var != null) {
+				var.set(value);
+			}
+			changed();
+		}
+
+		return proxy();
+	}
+
+	@Override
+	public TAG bind(String attr, Var<String> var) {
+		U.must(!bindings.containsKey(attr), "The attribute '%s' of tag '%s' is already bound to a var!", attr, name);
+		bindings.put(attr, var);
+		attr(attr, var.get());
+		return proxy();
+	}
+
+	public TAG bindIs(String attr, Var<Boolean> var) {
+		U.must(!bindings.containsKey(attr), "The attribute '%s' of tag '%s' is already bound to a var!", attr, name);
+		bindings.put(attr, var);
+		is(attr, var.get());
+		return proxy();
+	}
+
+	@Override
+	public TAG unbind(String attr) {
+		U.must(bindings.containsKey(attr), "The attribute '%s' of tag '%s' is not bound to a var!", attr, name);
+		bindings.remove(attr);
+		return proxy();
+	}
+
+	@Override
+	public TAG bindContent(Var<Object> var) {
+		U.must(contentBinding == null, "The content of tag '%s' is already bound to a var!", name);
+		contentBinding = var;
+		content(var.get());
+		return proxy();
+	}
+
+	@Override
+	public TAG unbindContent(String attr) {
+		U.must(contentBinding != null, "The content of tag '%s' is not bound to a var!", name);
+		contentBinding = null;
 		return proxy();
 	}
 
