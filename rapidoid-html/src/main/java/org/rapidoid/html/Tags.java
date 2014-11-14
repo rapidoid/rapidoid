@@ -106,6 +106,8 @@ public class Tags extends BasicUtils {
 			} else {
 				if (transformed instanceof Tag<?>) {
 					transform((Tag<?>) transformed, transformation);
+				} else if (transformed instanceof TagWidget) {
+					transform(((TagWidget) transformed).content(), transformation);
 				}
 			}
 		}
@@ -126,6 +128,8 @@ public class Tags extends BasicUtils {
 				processor.handle(tag);
 				traverse(tag.content(), processor);
 			}
+		} else if (contents instanceof TagWidget) {
+			traverse(((TagWidget) contents).content(), processor);
 		} else if (contents instanceof Object[]) {
 			Object[] arr = (Object[]) contents;
 			for (Object cont : arr) {
