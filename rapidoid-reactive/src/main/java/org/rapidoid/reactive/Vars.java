@@ -1,4 +1,8 @@
-package org.rapidoid.var;
+package org.rapidoid.reactive;
+
+import org.rapidoid.reactive.var.ContainerVar;
+import org.rapidoid.reactive.var.EqualityVar;
+import org.rapidoid.reactive.var.SimpleVar;
 
 /*
  * #%L

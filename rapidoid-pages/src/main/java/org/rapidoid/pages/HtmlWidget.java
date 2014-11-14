@@ -31,8 +31,8 @@ import org.rapidoid.pages.impl.ItemPropertyVar;
 import org.rapidoid.pages.impl.MultiLanguageText;
 import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.pages.impl.SimpleHardcodedTag;
+import org.rapidoid.reactive.Var;
 import org.rapidoid.util.U;
-import org.rapidoid.var.Var;
 
 public abstract class HtmlWidget extends HTML implements TagWidget, PageComponent {
 

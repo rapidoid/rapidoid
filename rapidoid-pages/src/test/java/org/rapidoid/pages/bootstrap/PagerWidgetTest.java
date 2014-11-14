@@ -24,7 +24,7 @@ import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.rapidoid.pages.HtmlWidget;
 import org.rapidoid.pages.PagesTestCommons;
-import org.rapidoid.var.Var;
+import org.rapidoid.reactive.Var;
 import org.testng.annotations.Test;
 
 public class PagerWidgetTest extends PagesTestCommons {

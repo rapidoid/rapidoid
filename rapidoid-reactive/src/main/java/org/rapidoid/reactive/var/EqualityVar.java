@@ -1,6 +1,4 @@
-package org.rapidoid.var;
-
-import java.io.Serializable;
+package org.rapidoid.reactive.var;
 
 /*
  * #%L
@@ -22,10 +20,36 @@ import java.io.Serializable;
  * #L%
  */
 
-public interface Var<T> extends Serializable {
+import org.rapidoid.reactive.Var;
+import org.rapidoid.util.U;
 
-	T get();
+public class EqualityVar extends AbstractVar<Boolean> {
 
-	void set(T value);
+	private static final long serialVersionUID = 6990464844550633598L;
+
+	private final Var<Object> var;
+
+	private final Object val;
+
+	public EqualityVar(Var<Object> var, Object val) {
+		this.var = var;
+		this.val = val;
+	}
+
+	@Override
+	public Boolean get() {
+		return U.eq(var.get(), val);
+	}
+
+	@Override
+	public void set(Boolean value) {
+		if (value) {
+			var.set(val);
+		} else {
+			if (U.eq(var.get(), val)) {
+				var.set(null);
+			}
+		}
+	}
 
 }

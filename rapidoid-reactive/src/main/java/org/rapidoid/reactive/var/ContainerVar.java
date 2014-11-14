@@ -1,4 +1,4 @@
-package org.rapidoid.var;
+package org.rapidoid.reactive.var;
 
 /*
  * #%L
@@ -20,6 +20,7 @@ package org.rapidoid.var;
  * #L%
  */
 
+import org.rapidoid.reactive.Var;
 import org.rapidoid.util.U;
 
 public class ContainerVar extends AbstractVar<Boolean> {

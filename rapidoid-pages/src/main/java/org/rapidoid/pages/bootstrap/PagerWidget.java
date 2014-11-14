@@ -23,7 +23,7 @@ package org.rapidoid.pages.bootstrap;
 import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.html.tag.LiTag;
 import org.rapidoid.pages.Do;
-import org.rapidoid.var.Var;
+import org.rapidoid.reactive.Var;
 
 public class PagerWidget extends BootstrapWidget {
 

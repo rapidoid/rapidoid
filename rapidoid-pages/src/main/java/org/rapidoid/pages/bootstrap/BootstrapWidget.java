@@ -10,8 +10,8 @@ import org.rapidoid.pages.HtmlWidget;
 import org.rapidoid.pages.PageComponent;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.pages.impl.PageRenderer;
+import org.rapidoid.reactive.Var;
 import org.rapidoid.util.U;
-import org.rapidoid.var.Var;
 
 /*
  * #%L

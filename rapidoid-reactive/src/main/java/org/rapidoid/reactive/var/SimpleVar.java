@@ -1,4 +1,4 @@
-package org.rapidoid.var;
+package org.rapidoid.reactive.var;
 
 /*
  * #%L
@@ -20,35 +20,24 @@ package org.rapidoid.var;
  * #L%
  */
 
-import org.rapidoid.util.U;
+public class SimpleVar<T> extends AbstractVar<T> {
 
-public class EqualityVar extends AbstractVar<Boolean> {
+	private static final long serialVersionUID = 7970150705828178233L;
 
-	private static final long serialVersionUID = 6990464844550633598L;
+	private volatile T value;
 
-	private final Var<Object> var;
-
-	private final Object val;
-
-	public EqualityVar(Var<Object> var, Object val) {
-		this.var = var;
-		this.val = val;
+	public SimpleVar(T value) {
+		this.value = value;
 	}
 
 	@Override
-	public Boolean get() {
-		return U.eq(var.get(), val);
+	public T get() {
+		return value;
 	}
 
 	@Override
-	public void set(Boolean value) {
-		if (value) {
-			var.set(val);
-		} else {
-			if (U.eq(var.get(), val)) {
-				var.set(null);
-			}
-		}
+	public void set(T value) {
+		this.value = value;
 	}
 
 }

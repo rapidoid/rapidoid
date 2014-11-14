@@ -64,6 +64,9 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 		brand = a(pageTitle()).href("/");
 
 		dropdownMenu = dynamic(new DynamicContent() {
+
+			private static final long serialVersionUID = -2512806659030800594L;
+
 			@Override
 			public Object eval(HttpExchange x) {
 				if (x.isLoggedIn()) {

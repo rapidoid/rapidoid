@@ -9,8 +9,8 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
 import org.rapidoid.pages.DynamicContent;
+import org.rapidoid.reactive.Var;
 import org.rapidoid.util.U;
-import org.rapidoid.var.Var;
 
 /*
  * #%L
@@ -36,6 +36,7 @@ public class TableWidget extends BootstrapWidget {
 
 	private static final long serialVersionUID = -8550720285123228765L;
 
+	@SuppressWarnings("serial")
 	public TableWidget(final Items items) {
 
 		final List<Property> properties = items.properties();

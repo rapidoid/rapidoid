@@ -1,4 +1,4 @@
-package org.rapidoid.var;
+package org.rapidoid.reactive.var;
 
 /*
  * #%L
@@ -20,21 +20,16 @@ package org.rapidoid.var;
  * #L%
  */
 
-import org.rapidoid.html.CustomTag;
+import org.rapidoid.reactive.Var;
 import org.rapidoid.util.U;
 
-public abstract class AbstractVar<T> implements Var<T>, CustomTag {
+public abstract class AbstractVar<T> implements Var<T> {
 
 	private static final long serialVersionUID = -6006051524799076017L;
 
 	@Override
 	public String toString() {
 		return U.text(get());
-	}
-
-	@Override
-	public Object content() {
-		return get();
 	}
 
 }

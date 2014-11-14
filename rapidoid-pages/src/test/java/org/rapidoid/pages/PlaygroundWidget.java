@@ -29,8 +29,8 @@ import org.rapidoid.html.tag.SpanTag;
 import org.rapidoid.model.Model;
 import org.rapidoid.pages.bootstrap.TableWidget;
 import org.rapidoid.pages.entity.Person;
+import org.rapidoid.reactive.Var;
 import org.rapidoid.util.U;
-import org.rapidoid.var.Var;
 
 @SuppressWarnings("serial")
 public class PlaygroundWidget extends HtmlWidget {

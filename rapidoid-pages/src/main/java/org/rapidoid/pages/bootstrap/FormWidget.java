@@ -8,9 +8,9 @@ import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
+import org.rapidoid.reactive.Var;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
-import org.rapidoid.var.Var;
 
 /*
  * #%L
