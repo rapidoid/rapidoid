@@ -32,10 +32,8 @@ import org.rapidoid.html.tag.OptionTag;
 import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.U;
-import org.rapidoid.var.ContainerVar;
-import org.rapidoid.var.EqualityVar;
-import org.rapidoid.var.SimpleVar;
 import org.rapidoid.var.Var;
+import org.rapidoid.var.Vars;
 
 public class Tags extends BasicUtils {
 
@@ -44,28 +42,7 @@ public class Tags extends BasicUtils {
 	public static final Object $value = new Object();
 
 	public static <T> Var<T> var(T value) {
-		return new SimpleVar<T>(value);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Var<Boolean> varEq(Var<?> var, Object value) {
-		return new EqualityVar((Var<Object>) var, value);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Var<Boolean> varHas(Var<?> container, Object item) {
-		return new ContainerVar((Var<Object>) container, item);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> Var<T>[] vars(T... values) {
-		Var<T>[] vars = new Var[values.length];
-
-		for (int i = 0; i < vars.length; i++) {
-			vars[i] = var(values[i]);
-		}
-
-		return vars;
+		return Vars.var(value);
 	}
 
 	public static TagContext context() {

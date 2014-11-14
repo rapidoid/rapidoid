@@ -35,6 +35,7 @@ import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.html.tag.UlTag;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
+import org.rapidoid.var.Vars;
 
 public class Bootstrap extends HTML {
 
@@ -254,7 +255,7 @@ public class Bootstrap extends HTML {
 			U.notNull(options, "dropdown options");
 			SelectTag dropdown = select().name(name).class_("form-control").multiple(false);
 			for (Object opt : options) {
-				Var<Boolean> optVar = varEq(var, opt);
+				Var<Boolean> optVar = Vars.eq(var, opt);
 				OptionTag op = option(opt).value(str(opt)).bindIs("selected", optVar);
 				dropdown.append(op);
 			}
@@ -264,7 +265,7 @@ public class Bootstrap extends HTML {
 			U.notNull(options, "multi-select options");
 			SelectTag select = select().name(name).class_("form-control").multiple(true);
 			for (Object opt : options) {
-				Var<Boolean> optVar = varHas(var, opt);
+				Var<Boolean> optVar = Vars.has(var, opt);
 				OptionTag op = option(opt).value(str(opt)).bindIs("selected", optVar);
 				select.append(op);
 			}
@@ -275,7 +276,7 @@ public class Bootstrap extends HTML {
 			Object[] radios = new Object[options.length];
 			for (int i = 0; i < options.length; i++) {
 				Object opt = options[i];
-				Var<Boolean> optVar = varEq(var, opt);
+				Var<Boolean> optVar = Vars.eq(var, opt);
 				InputTag radio = input().type("radio").name(name).value(str(opt)).bindIs("checked", optVar);
 				radios[i] = label(radio, opt).class_("radio-inline");
 			}
@@ -286,7 +287,7 @@ public class Bootstrap extends HTML {
 			Object[] checkboxes = new Object[options.length];
 			for (int i = 0; i < options.length; i++) {
 				Object opt = options[i];
-				Var<Boolean> optVar = varHas(var, opt);
+				Var<Boolean> optVar = Vars.has(var, opt);
 				InputTag cc = input().type("checkbox").name(name).value(str(opt)).bindIs("checked", optVar);
 				checkboxes[i] = label(cc, opt).class_("radio-checkbox");
 			}

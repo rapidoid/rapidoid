@@ -27,6 +27,7 @@ import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.pages.bootstrap.NavbarBootstrapPage;
 import org.rapidoid.var.Var;
+import org.rapidoid.var.Vars;
 
 @SuppressWarnings("serial")
 public class FormPage extends NavbarBootstrapPage {
@@ -67,7 +68,7 @@ public class FormPage extends NavbarBootstrapPage {
 
 		Object[][] options = { null, null, null, opt1, opt2, opt3, opt4, null, null };
 
-		Var<?>[] vars = vars("niko", "rapidoid", "niko@rapi.doid", "No", arr("Manager", "Moderator"), "Male",
+		Var<?>[] vars = Vars.vars("niko", "rapidoid", "niko@rapi.doid", "No", arr("Manager", "Moderator"), "Male",
 				arr("A", "C"), "Very interesting!", true);
 
 		Object[] buttons = { btn("Save", new TagEventHandler<Tag<?>>() {
