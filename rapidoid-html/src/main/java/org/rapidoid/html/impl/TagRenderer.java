@@ -198,7 +198,7 @@ public class TagRenderer {
 
 	protected void attrToStr(OutputStream out, TagImpl<?> tag, String attr, Object value) {
 		if (value == null) {
-			throw U.rte("The HTML attribute '%s' of tag '%s' cannot have null value!", attr, tag.name);
+			return;
 		}
 
 		if (value instanceof Object[]) {

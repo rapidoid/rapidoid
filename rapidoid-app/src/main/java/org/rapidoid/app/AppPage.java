@@ -154,11 +154,7 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 	}
 
 	protected Object[] navbarContent() {
-		if (searchForm != null) {
-			return new Object[] { navMenu, themesMenu, dropdownMenu, searchForm };
-		} else {
-			return new Object[] { navMenu, themesMenu, dropdownMenu };
-		}
+		return new Object[] { navMenu, themesMenu, dropdownMenu, searchForm };
 	}
 
 	@Override

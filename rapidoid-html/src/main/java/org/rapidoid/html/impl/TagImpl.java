@@ -22,6 +22,7 @@ package org.rapidoid.html.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -36,6 +37,8 @@ import org.rapidoid.util.U;
 public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements TagInternals, Serializable {
 
 	private static final long serialVersionUID = -8137919597555179907L;
+
+	private static final int APPEND = Integer.MAX_VALUE;
 
 	final Class<TAG> clazz;
 
@@ -72,12 +75,32 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 			} else if (x instanceof Action) {
 				actions.add((Action) x);
 			} else {
-				contents.add(x);
+				flatAndInsertContent(APPEND, x);
 			}
 		}
 
 		if (!actions.isEmpty()) {
 			setHandler("click", actions.toArray(new Action[actions.size()]));
+		}
+	}
+
+	private void flatAndInsertContent(int index, Object item) {
+		if (item instanceof Object[]) {
+			Object[] arr = (Object[]) item;
+			for (Object obj : arr) {
+				flatAndInsertContent(index, obj);
+			}
+		} else if (item instanceof Collection<?>) {
+			Collection<?> coll = (Collection<?>) item;
+			for (Object obj : coll) {
+				flatAndInsertContent(index, obj);
+			}
+		} else if (item != null) {
+			if (index == APPEND) {
+				contents.add(item);
+			} else {
+				contents.add(index, item);
+			}
 		}
 	}
 
@@ -185,28 +208,21 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	@Override
 	public TAG content(Object... content) {
 		contents.clear();
-		for (Object obj : content) {
-			contents.add(obj);
-		}
+		flatAndInsertContent(APPEND, content);
 		changedContent();
 		return proxy();
 	}
 
 	@Override
 	public TAG prepend(Object... content) {
-		int index = 0;
-		for (Object obj : content) {
-			contents.add(index++, obj);
-		}
+		flatAndInsertContent(0, content);
 		changedContent();
 		return proxy();
 	}
 
 	@Override
 	public TAG append(Object... content) {
-		for (Object obj : content) {
-			contents.add(obj);
-		}
+		flatAndInsertContent(APPEND, content);
 		changedContent();
 		return proxy();
 	}
