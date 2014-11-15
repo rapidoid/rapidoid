@@ -20,38 +20,20 @@ package org.rapidoid.oauth;
  * #L%
  */
 
-import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 
 public class OAuthLoginHandler implements Handler {
 
 	private final OAuthProvider provider;
-	private final OAuthStateCheck stateCheck;
-	private final String clientId;
-	private final String clientSecret;
-	private final String callbackPath;
 
-	public OAuthLoginHandler(OAuthProvider provider, OAuthStateCheck stateCheck, String clientId, String clientSecret,
-			String callbackPath) {
+	public OAuthLoginHandler(OAuthProvider provider) {
 		this.provider = provider;
-		this.stateCheck = stateCheck;
-		this.clientId = clientId;
-		this.clientSecret = clientSecret;
-		this.callbackPath = callbackPath;
 	}
 
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
-		String state = stateCheck.generateState(clientSecret, x.sessionId());
-
-		String redirectUrl = x.constructUrl(callbackPath);
-
-		OAuthClientRequest request = OAuthClientRequest.authorizationLocation(provider.getAuthEndpoint())
-				.setClientId(clientId).setRedirectURI(redirectUrl).setScope(provider.getEmailScope()).setState(state)
-				.setResponseType("code").buildQueryMessage();
-
-		return x.redirect(request.getLocationUri());
+		return x.redirect(OAuth.getLoginURL(x, provider));
 	}
 
 }

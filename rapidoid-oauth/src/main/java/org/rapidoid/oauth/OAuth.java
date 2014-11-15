@@ -20,6 +20,8 @@ package org.rapidoid.oauth;
  * #L%
  */
 
+import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
+import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.rapidoid.http.HTMLSnippets;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
@@ -30,11 +32,15 @@ public class OAuth {
 
 	private static final String LOGIN_BTN = "<div class=\"row-fluid\"><div class=\"col-md-3\"><a href=\"/_%sLogin\" class=\"btn btn-default btn-block\">Login with %s</a></div></div>";
 
+	private static OAuthStateCheck STATE_CHECK;
+
 	public static void register(HTTPServer server, OAuthProvider... providers) {
 		register(server, new DefaultOAuthStateCheck(), providers);
 	}
 
 	public static void register(HTTPServer server, OAuthStateCheck stateCheck, OAuthProvider... providers) {
+
+		OAuth.STATE_CHECK = stateCheck;
 
 		if (providers == null || providers.length == 0) {
 			providers = OAuthProvider.PROVIDERS;
@@ -52,7 +58,7 @@ public class OAuth {
 			String clientId = U.config(name + ".clientId");
 			String clientSecret = U.config(name + ".clientSecret");
 
-			server.get(loginPath, new OAuthLoginHandler(provider, stateCheck, clientId, clientSecret, callbackPath));
+			server.get(loginPath, new OAuthLoginHandler(provider));
 			server.get(callbackPath, new OAuthTokenHandler(provider, stateCheck, clientId, clientSecret, callbackPath));
 
 			loginHtml.append(U.format(LOGIN_BTN, name, provider.getName()));
@@ -66,6 +72,27 @@ public class OAuth {
 				return HTMLSnippets.writePage(x, "Login with OAuth provider", loginHtml.toString());
 			}
 		});
+	}
+
+	public static String getLoginURL(HttpExchange x, OAuthProvider provider) {
+		String name = provider.getName().toLowerCase();
+
+		String clientId = U.config(name + ".clientId");
+		String clientSecret = U.config(name + ".clientSecret");
+
+		String callbackPath = "/_" + name + "OauthCallback";
+		String redirectUrl = x.constructUrl(callbackPath);
+
+		String state = STATE_CHECK.generateState(clientSecret, x.sessionId());
+
+		try {
+			OAuthClientRequest request = OAuthClientRequest.authorizationLocation(provider.getAuthEndpoint())
+					.setClientId(clientId).setRedirectURI(redirectUrl).setScope(provider.getEmailScope())
+					.setState(state).setResponseType("code").buildQueryMessage();
+			return request.getLocationUri();
+		} catch (OAuthSystemException e) {
+			throw U.rte(e);
+		}
 	}
 
 }
