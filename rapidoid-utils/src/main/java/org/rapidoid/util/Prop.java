@@ -71,17 +71,33 @@ public class Prop {
 		this.name = name;
 	}
 
-	public Object get(Object obj) {
+	@SuppressWarnings("unchecked")
+	public <T> T get(Object obj) {
 		try {
 			if (field != null) {
 				field.setAccessible(true);
-				return field.get(obj);
+				return (T) field.get(obj);
 			} else {
 				getter.setAccessible(true);
-				return getter.invoke(obj);
+				return (T) getter.invoke(obj);
 			}
 		} catch (Exception e) {
 			throw U.rte(e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T get(Object obj, T defaultValue) {
+		try {
+			if (field != null) {
+				field.setAccessible(true);
+				return (T) field.get(obj);
+			} else {
+				getter.setAccessible(true);
+				return (T) getter.invoke(obj);
+			}
+		} catch (Exception e) {
+			return defaultValue;
 		}
 	}
 
