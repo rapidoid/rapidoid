@@ -1,5 +1,7 @@
 package org.rapidoid.oauth;
 
+import org.rapidoid.util.U;
+
 /*
  * #%L
  * rapidoid-oauth
@@ -24,13 +26,28 @@ public class DefaultOAuthStateCheck implements OAuthStateCheck {
 
 	@Override
 	public String generateState(String clientSecret, String sessionId) {
-		// FIXME implement this
-		return "ABC";
+		if (U.hasOption("oauth-no-state")) {
+			return "OK";
+		}
+
+		String rnd = U.rndStr(10);
+		String hash = U.md5(clientSecret + rnd);
+		return rnd + "_" + hash;
 	}
 
 	@Override
 	public boolean isValidState(String state, String clientSecret, String sessionId) {
-		return true;
+		if (U.hasOption("oauth-no-state")) {
+			return state.equals("OK");
+		}
+
+		String[] parts = state.split("_");
+		if (parts.length != 2) {
+			return false;
+		}
+
+		String hash = U.md5(clientSecret + parts[0]);
+		return parts[1].equals(hash);
 	}
 
 }
