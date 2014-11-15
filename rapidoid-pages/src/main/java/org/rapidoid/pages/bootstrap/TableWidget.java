@@ -36,9 +36,16 @@ public class TableWidget extends BootstrapWidget {
 
 	private static final long serialVersionUID = -8550720285123228765L;
 
-	@SuppressWarnings("serial")
-	public TableWidget(final Items items) {
+	private final TableItemAction itemAction;
 
+	public TableWidget(final Items items) {
+		this(items, null);
+	}
+
+	@SuppressWarnings("serial")
+	public TableWidget(final Items items, TableItemAction itemAction) {
+
+		this.itemAction = itemAction;
 		final List<Property> properties = items.properties();
 
 		final Var<Integer> pageNumber = var(1);
@@ -60,6 +67,9 @@ public class TableWidget extends BootstrapWidget {
 
 				for (Item item : page) {
 					TrTag row = itemRow(properties, item);
+					if (TableWidget.this.itemAction != null) {
+						row.click(new TableItemActionImpl(item, TableWidget.this.itemAction));
+					}
 					body.append(row);
 				}
 
