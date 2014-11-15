@@ -20,6 +20,8 @@ package org.rapidoid.oauth;
  * #L%
  */
 
+import java.util.Map;
+
 import org.apache.oltu.oauth2.client.OAuthClient;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
 import org.apache.oltu.oauth2.client.request.OAuthBearerClientRequest;
@@ -31,6 +33,8 @@ import org.apache.oltu.oauth2.client.response.OAuthResourceResponse;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.UserInfo;
+import org.rapidoid.json.JSON;
 import org.rapidoid.util.U;
 
 public class OAuthTokenHandler implements Handler {
@@ -80,16 +84,36 @@ public class OAuthTokenHandler implements Handler {
 			OAuthResourceResponse res = oAuthClient.resource(bearerClientRequest,
 					org.apache.oltu.oauth2.common.OAuth.HttpMethod.GET, OAuthResourceResponse.class);
 
-			return res.getBody();
+			U.must(res.getResponseCode() == 200, "OAuth response error!");
 
+			Map<String, Object> auth = JSON.parseMap(res.getBody());
+
+			String firstName = (String) U.or(auth.get("firstName"),
+					U.or(auth.get("first_name"), auth.get("given_name")));
+			String lastName = (String) U.or(auth.get("lastName"), U.or(auth.get("last_name"), auth.get("family_name")));
+
+			UserInfo user = new UserInfo();
+
+			user.name = U.or((String) auth.get("name"), firstName + " " + lastName);
+			user.oauthProvider = provider.getName();
+			user.email = (String) U.or(auth.get("email"), auth.get("emailAddress"));
+			user.username = user.email;
+			user.oauthId = String.valueOf(auth.get("id"));
+			user.display = user.email.substring(0, user.email.indexOf('@'));
+
+			x.setSession("_user", user);
+			U.must(x.user() == user);
+
+			return x.redirect("/");
 		} else {
 			String error = x.param("error");
 			if (error != null) {
 				U.warn("OAuth error", "error", error);
+				throw U.rte("OAuth error!");
 			}
 		}
 
-		return "";
+		throw U.rte("OAuth error!");
 	}
 
 	private String token(OAuthClientRequest request, OAuthClient oAuthClient) throws Exception {
