@@ -1,0 +1,21 @@
+<div id="_modal_box" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 id="_modal_title" class="modal-title"></h4>
+      </div>
+      <div id="_modal_body" class="modal-body"></div>
+      <div id="_modal_footer" class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+	function _modal(title, content) {
+		$('#_modal_title').html(title);
+		$('#_modal_body').html(content);
+		$('#_modal_box').modal({});
+	}
+</script>
