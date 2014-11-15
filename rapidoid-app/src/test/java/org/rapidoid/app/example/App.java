@@ -22,16 +22,16 @@ package org.rapidoid.app.example;
 
 public class App {
 
-	String title = "Task Planer";
+	public String title = "Task Planer";
 
-	boolean search = true;
+	public boolean search = true;
 
-	boolean themes = true;
+	public boolean themes = true;
 
-	boolean fluid = true;
+	public boolean fluid = true;
 
-	boolean settings = true;
+	public boolean settings = true;
 
-	Object[] screens = { HomeScreen.class, NewTaskScreen.class, TasksScreen.class };
+	public Object[] screens = { HomeScreen.class, NewTaskScreen.class, TasksScreen.class };
 
 }

@@ -22,6 +22,6 @@ package org.rapidoid.app.example;
 
 public class SearchScreen {
 
-	String content = "Search Results";
+	public String content = "Search Results";
 
 }

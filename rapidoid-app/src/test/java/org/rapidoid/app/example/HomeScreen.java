@@ -25,8 +25,8 @@ import static org.rapidoid.html.HTML.*;
 
 public class HomeScreen {
 
-	String title = "Welcome!";
+	public String title = "Welcome!";
 
-	Object content = rowFull(h2("Welcome to Task Planer!"));
+	public Object content = rowFull(h2("Welcome to Task Planer!"));
 
 }

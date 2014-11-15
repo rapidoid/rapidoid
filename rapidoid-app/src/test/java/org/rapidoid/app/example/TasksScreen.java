@@ -31,9 +31,9 @@ import org.rapidoid.pages.bootstrap.TableWidget;
 
 public class TasksScreen {
 
-	String title = "My Tasks";
+	public String title = "My Tasks";
 
-	Object content() {
+	public Object content() {
 
 		Items items = Model.mockBeanItems(20, Task.class);
 
@@ -43,4 +43,5 @@ public class TasksScreen {
 
 		return arr(caption, rowFull(table));
 	}
+
 }

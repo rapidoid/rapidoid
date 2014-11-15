@@ -34,7 +34,7 @@ import org.rapidoid.pages.bootstrap.FormWidget;
 @SuppressWarnings("serial")
 public class NewTaskScreen {
 
-	Object content() {
+	public Object content() {
 
 		H1Tag caption = h1("Create a new task");
 
