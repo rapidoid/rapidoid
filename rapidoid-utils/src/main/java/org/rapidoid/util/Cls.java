@@ -59,39 +59,76 @@ public class Cls {
 							Method[] methods = c.getDeclaredMethods();
 							for (Method method : methods) {
 								int modif = method.getModifiers();
+								Class<?>[] params = method.getParameterTypes();
+								Class<?> ret = method.getReturnType();
+
 								if ((modif & Modifier.PUBLIC) > 0 && (modif & Modifier.STATIC) == 0
 										&& (modif & Modifier.ABSTRACT) == 0) {
+
 									String name = method.getName();
 									if (name.matches("^(get|set|is)[A-Z].*")) {
 
-										String fieldName;
+										String propName;
 										if (name.startsWith("is")) {
-											fieldName = name.substring(2, 3).toLowerCase() + name.substring(3);
+											propName = name.substring(2, 3).toLowerCase() + name.substring(3);
 										} else {
-											fieldName = name.substring(3, 4).toLowerCase() + name.substring(4);
+											propName = name.substring(3, 4).toLowerCase() + name.substring(4);
 										}
 
-										Prop propInfo = properties.get(fieldName);
+										Prop propInfo = properties.get(propName);
 
 										if (propInfo == null) {
 											propInfo = new Prop();
-											propInfo.setName(fieldName);
-											properties.put(fieldName, propInfo);
+											propInfo.setName(propName);
+											properties.put(propName, propInfo);
 										}
 
 										if (name.startsWith("set")) {
-											propInfo.setSetter(method);
-										} else {
+											if (params.length == 1) {
+												propInfo.setSetter(method);
+												propInfo.setReadOnly(false);
+											}
+										} else if (params.length == 0) {
 											propInfo.setGetter(method);
+										}
+									} else if (!name.matches("^to[A-Z].*")) {
+
+										if (params.length == 0 && !ret.equals(void.class)) {
+
+											String propName = name;
+											Prop propInfo = properties.get(propName);
+
+											if (propInfo == null) {
+												propInfo = new Prop();
+												propInfo.setName(propName);
+												properties.put(propName, propInfo);
+											}
+
+											propInfo.setGetter(method);
+
+										} else if (params.length == 1) {
+
+											String propName = name;
+											Prop propInfo = properties.get(propName);
+
+											if (propInfo == null) {
+												propInfo = new Prop();
+												propInfo.setName(propName);
+												properties.put(propName, propInfo);
+											}
+
+											propInfo.setReadOnly(false);
+											propInfo.setSetter(method);
 										}
 									}
 								}
 							}
 
+							// remove properties with setters, without getters
 							for (Iterator<Entry<String, Prop>> it = properties.entrySet().iterator(); it.hasNext();) {
 								Entry<String, Prop> entry = (Entry<String, Prop>) it.next();
 								Prop minfo = entry.getValue();
-								if (minfo.getGetter() == null || minfo.getSetter() == null) {
+								if (minfo.getGetter() == null && minfo.getSetter() != null) {
 									it.remove();
 								}
 							}
@@ -544,7 +581,11 @@ public class Cls {
 	}
 
 	public static <T> T getPropValue(Object instance, String propertyName, T defaultValue) {
-		return property(instance, propertyName).get(instance, defaultValue);
+		try {
+			return property(instance, propertyName).get(instance, defaultValue);
+		} catch (RuntimeException e) {
+			return defaultValue;
+		}
 	}
 
 	public static <T> T getPropValue(Object instance, String propertyName) {

@@ -39,6 +39,8 @@ public class Prop {
 
 	private Object defaultValue;
 
+	private boolean readOnly = true;
+
 	public void setGetter(Method getter) {
 		this.getter = getter;
 	}
@@ -69,6 +71,14 @@ public class Prop {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+
+	public void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
 	}
 
 	@SuppressWarnings("unchecked")
