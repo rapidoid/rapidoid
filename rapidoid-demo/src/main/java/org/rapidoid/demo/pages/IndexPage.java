@@ -20,15 +20,24 @@ package org.rapidoid.demo.pages;
  * #L%
  */
 
+import org.rapidoid.demo.pojo.Person;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.FormTag;
+import org.rapidoid.html.tag.H1Tag;
+import org.rapidoid.html.tag.TrTag;
 import org.rapidoid.html.tag.UlTag;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.model.Item;
+import org.rapidoid.model.Items;
+import org.rapidoid.model.Model;
 import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.pages.bootstrap.NavbarBootstrapPage;
+import org.rapidoid.pages.bootstrap.TableItemAction;
+import org.rapidoid.pages.bootstrap.TableWidget;
+import org.rapidoid.util.U;
 
 @SuppressWarnings("serial")
 public class IndexPage extends NavbarBootstrapPage {
@@ -80,7 +89,20 @@ public class IndexPage extends NavbarBootstrapPage {
 			}
 		});
 
-		return row(col6("Hello world!"), col3(abc, xy), col3(dyn));
+		Items items = Model.mockBeanItems(20, Person.class);
+
+		H1Tag caption = h1("Manage persons");
+
+		TableWidget table = new TableWidget(items, new TableItemAction() {
+			@Override
+			public void execute(TrTag row, Item item) {
+				row.class_("bg-primary");
+				Integer age = (Integer) U.or(item.get("age"), 0);
+				item.set("age", age + 1);
+			}
+		});
+
+		return arr(row(col6("Hello world!"), col3(abc, xy), col3(dyn)), arr(caption, rowFull(table)));
 	}
 
 	protected Object[] navbarContent() {
