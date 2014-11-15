@@ -81,7 +81,7 @@ public class Apps {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T config(Object obj, String configName, T byDefault) {
-		Object val = Cls.getFieldValue(obj, configName, null);
+		Object val = Cls.getPropValue(obj, configName, null);
 		return val != null ? (T) val : byDefault;
 	}
 
