@@ -88,7 +88,7 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 			}
 		});
 
-		ATag theme = a_glyph("eye-open", "Theme", caret());
+		ATag theme = a_glyph("eye-open", "", caret());
 
 		Object[] themess = new Object[themes.length];
 
@@ -98,7 +98,7 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 			themess[i] = a(U.capitalized(thm)).onclick(js);
 		}
 
-		themesMenu = navbarDropdown(false, theme, themess);
+		themesMenu = Apps.config(app, "themes", false) ? navbarDropdown(false, theme, themess) : null;
 
 		Object[] menuItems = new Object[searchScreenIndex < 0 ? screens.length : screens.length - 1];
 
@@ -114,7 +114,10 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 
 		navMenu = navbarMenu(true, menuItems);
 
-		searchForm = navbarForm(false, "Find", arr("q"), arr("Search")).attr("action", "/search").attr("method", "GET");
+		if (Apps.config(app, "search", false)) {
+			searchForm = navbarForm(false, "Find", arr("q"), arr("Search")).attr("action", "/search").attr("method",
+					"GET");
+		}
 
 		setContent(page());
 	}
@@ -142,7 +145,11 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 	}
 
 	protected Object[] navbarContent() {
-		return new Object[] { navMenu, themesMenu, dropdownMenu, searchForm };
+		if (searchForm != null) {
+			return new Object[] { navMenu, themesMenu, dropdownMenu, searchForm };
+		} else {
+			return new Object[] { navMenu, themesMenu, dropdownMenu };
+		}
 	}
 
 	@Override
