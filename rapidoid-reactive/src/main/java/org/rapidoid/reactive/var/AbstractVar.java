@@ -2,7 +2,7 @@ package org.rapidoid.reactive.var;
 
 /*
  * #%L
- * rapidoid-html
+ * rapidoid-reactive
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%

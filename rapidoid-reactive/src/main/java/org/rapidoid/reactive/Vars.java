@@ -6,7 +6,7 @@ import org.rapidoid.reactive.var.SimpleVar;
 
 /*
  * #%L
- * rapidoid-html
+ * rapidoid-reactive
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%

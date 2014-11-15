@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /*
  * #%L
- * rapidoid-html
+ * rapidoid-reactive
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%

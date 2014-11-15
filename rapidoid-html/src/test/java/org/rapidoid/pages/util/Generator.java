@@ -2,7 +2,7 @@ package org.rapidoid.pages.util;
 
 /*
  * #%L
- * rapidoid-pages
+ * rapidoid-html
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
