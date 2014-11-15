@@ -2,6 +2,7 @@ package org.rapidoid.pages;
 
 import org.rapidoid.html.Action;
 import org.rapidoid.reactive.Var;
+import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -49,6 +50,28 @@ public class Do {
 
 	public static Action dec(Var<Integer> var, int value) {
 		return inc(var, -1);
+	}
+
+	public static Action debug(final String msg) {
+		return new Action() {
+			private static final long serialVersionUID = 7724090739276842194L;
+
+			@Override
+			public void execute() {
+				U.debug(msg);
+			}
+		};
+	}
+
+	public static Action info(final String msg) {
+		return new Action() {
+			private static final long serialVersionUID = 7724090739276842194L;
+
+			@Override
+			public void execute() {
+				U.info(msg);
+			}
+		};
 	}
 
 }
