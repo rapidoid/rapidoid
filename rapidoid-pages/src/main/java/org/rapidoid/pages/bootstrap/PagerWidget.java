@@ -20,17 +20,28 @@ package org.rapidoid.pages.bootstrap;
  * #L%
  */
 
-import org.rapidoid.html.tag.DivTag;
+import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.LiTag;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.Do;
 import org.rapidoid.reactive.Var;
 
 public class PagerWidget extends BootstrapWidget {
 
-	private static final long serialVersionUID = 6880769731168102839L;
+	private final int from;
+
+	private final int to;
+
+	private final Var<Integer> pageNumber;
 
 	public PagerWidget(int from, int to, Var<Integer> pageNumber) {
+		this.from = from;
+		this.to = to;
+		this.pageNumber = pageNumber;
+	}
 
+	@Override
+	public Tag<?> view(HttpExchange x) {
 		LiTag first = li(a(span(LAQUO).click(Do.set(pageNumber, from)).attr("aria-hidden", "true"), span("First")
 				.class_("sr-only")));
 
@@ -45,9 +56,7 @@ public class PagerWidget extends BootstrapWidget {
 		LiTag last = li(a(span(RAQUO).click(Do.set(pageNumber, to)).attr("aria-hidden", "true"),
 				span("Last").class_("sr-only")));
 
-		DivTag pager = div(nav(ul(first, prev, current, next, last).class_("pagination"))).class_("pull-right");
-
-		setContent(pager);
+		return div(nav(ul(first, prev, current, next, last).class_("pagination"))).class_("pull-right");
 	}
 
 }

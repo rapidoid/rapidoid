@@ -26,8 +26,6 @@ import org.rapidoid.model.Item;
 
 public class TableItemActionImpl implements TagEventHandler<TrTag> {
 
-	private static final long serialVersionUID = 8910958457624457816L;
-
 	private final Item item;
 
 	private final TableItemAction itemAction;

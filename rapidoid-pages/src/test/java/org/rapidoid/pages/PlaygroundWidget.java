@@ -26,17 +26,19 @@ import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.SpanTag;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Model;
 import org.rapidoid.pages.bootstrap.TableWidget;
 import org.rapidoid.pages.entity.Person;
+import org.rapidoid.pages.plain.HtmlWidget;
 import org.rapidoid.reactive.Var;
 import org.rapidoid.util.U;
 
-@SuppressWarnings("serial")
 public class PlaygroundWidget extends HtmlWidget {
 
-	public PlaygroundWidget() {
-		setContent(html(grid(1), counter(10), adder()));
+	@Override
+	public Tag<?> view(HttpExchange x) {
+		return div(grid(1), counter(10), adder());
 	}
 
 	public Tag<?> grid(int page) {

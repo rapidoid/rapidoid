@@ -1,7 +1,5 @@
 package org.rapidoid.html;
 
-import java.io.Serializable;
-
 /*
  * #%L
  * rapidoid-html
@@ -22,7 +20,7 @@ import java.io.Serializable;
  * #L%
  */
 
-public interface Action extends Serializable {
+public interface Action {
 
 	void execute();
 

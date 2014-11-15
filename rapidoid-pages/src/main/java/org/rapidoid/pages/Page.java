@@ -21,10 +21,10 @@ package org.rapidoid.pages;
  */
 
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagWidget;
+import org.rapidoid.http.HttpExchange;
 
-public interface Page extends TagWidget, PageComponent {
+public interface Page extends PageWidget {
 
-	Tag<?> page();
+	Tag<?> pageBody(HttpExchange x);
 
 }

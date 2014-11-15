@@ -34,25 +34,26 @@ public class PageHandler implements Handler {
 
 		String pageName = Pages.pageName(x);
 
+		x.setSession(Pages.SESSION_CTX, null);
+
 		if (pageName != null) {
 
 			List<Class<?>> pageClasses = U.classpathClassesBySuffix("Page", null, null);
 			Page page = x.session(Pages.SESSION_PAGE_PREFIX + pageName, null);
 
-			if (page == null) {
-				Class<?> pageClass = findPageClass(pageClasses, pageName);
+			// if (page == null) {
+			Class<?> pageClass = findPageClass(pageClasses, pageName);
 
-				U.must(PageComponent.class.isAssignableFrom(pageClass), "The class %s must implement WebPage!",
-						pageClass);
+			U.must(PageWidget.class.isAssignableFrom(pageClass), "The class %s must implement WebPage!", pageClass);
 
-				if (pageClass != null) {
-					page = (Page) U.newInstance(pageClass);
-					IoC.autowire(page);
-					x.setSession(Pages.SESSION_PAGE_PREFIX + pageName, page);
-				} else {
-					return x.notFound();
-				}
+			if (pageClass != null) {
+				page = (Page) U.newInstance(pageClass);
+				IoC.autowire(page);
+				x.setSession(Pages.SESSION_PAGE_PREFIX + pageName, page);
+			} else {
+				return x.notFound();
 			}
+			// }
 
 			x.setSession(Pages.SESSION_PAGE, page);
 			x.html();

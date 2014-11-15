@@ -1,7 +1,5 @@
 package org.rapidoid.pages;
 
-import org.rapidoid.html.Tag;
-
 /*
  * #%L
  * rapidoid-pages
@@ -22,28 +20,13 @@ import org.rapidoid.html.Tag;
  * #L%
  */
 
-public abstract class HtmlPage extends HtmlWidget implements Page {
+import org.rapidoid.html.TagWidget;
+import org.rapidoid.http.HttpExchange;
 
-	private static final long serialVersionUID = -4604288833708886704L;
+public interface PageWidget extends TagWidget<HttpExchange> {
 
-	@Override
-	public Tag<?> page() {
-		return template("jquery-page.html", "title", pageTitle(), "style", pageStyle(), "head", pageHead(), "body",
-				pageBody());
-	}
+	void render(HttpExchange exchange);
 
-	protected abstract Object pageBody();
-
-	protected Object pageHead() {
-		return "";
-	}
-
-	protected Object pageStyle() {
-		return "";
-	}
-
-	protected String pageTitle() {
-		return Pages.pageTitle(getClass());
-	}
+	String toHTML(HttpExchange exchange);
 
 }

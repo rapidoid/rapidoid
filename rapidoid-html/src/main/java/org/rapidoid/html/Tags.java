@@ -108,7 +108,7 @@ public class Tags extends BasicUtils {
 				if (transformed instanceof Tag<?>) {
 					transform((Tag<?>) transformed, transformation);
 				} else if (transformed instanceof TagWidget) {
-					transform(((TagWidget) transformed).content(), transformation);
+					transform(((TagWidget<?>) transformed).view(null), transformation);
 				}
 			}
 		}
@@ -130,7 +130,7 @@ public class Tags extends BasicUtils {
 				traverse(tag.content(), processor);
 			}
 		} else if (contents instanceof TagWidget) {
-			traverse(((TagWidget) contents).content(), processor);
+			traverse(((TagWidget<?>) contents).view(null), processor);
 		} else if (contents instanceof Object[]) {
 			Object[] arr = (Object[]) contents;
 			for (Object cont : arr) {

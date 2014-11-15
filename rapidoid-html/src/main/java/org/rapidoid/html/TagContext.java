@@ -26,9 +26,9 @@ import org.rapidoid.html.impl.TagImpl;
 
 public interface TagContext {
 
-	void emit(Tag<?> root, Map<Integer, Object> values, int eventHnd, String event);
+	void emit(Map<Integer, Object> values, int eventHnd, String event);
 
-	int newHnd();
+	int newHnd(TagImpl<?> tag);
 
 	void changed(TagImpl<?> tag);
 

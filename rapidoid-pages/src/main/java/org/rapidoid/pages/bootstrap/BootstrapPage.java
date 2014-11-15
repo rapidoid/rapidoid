@@ -1,6 +1,7 @@
 package org.rapidoid.pages.bootstrap;
 
 import org.rapidoid.html.Tag;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.Page;
 import org.rapidoid.pages.Pages;
 
@@ -26,15 +27,11 @@ import org.rapidoid.pages.Pages;
 
 public abstract class BootstrapPage extends BootstrapWidget implements Page {
 
-	private static final long serialVersionUID = -7946981148551443133L;
-
 	@Override
-	public Tag<?> page() {
+	public Tag<?> view(HttpExchange x) {
 		return template("bootstrap-page.html", "title", pageTitle(), "style", pageStyle(), "head", pageHead(), "body",
-				pageBody());
+				pageBody(x));
 	}
-
-	protected abstract Object pageBody();
 
 	protected Object pageHead() {
 		return "";

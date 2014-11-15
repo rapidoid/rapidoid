@@ -137,6 +137,11 @@ public class Bootstrap extends HTML {
 		return form(ctrls, btn).class_("navbar-form navbar-" + leftOrRight(onLeft));
 	}
 
+	public static Tag<?> navbarPage(boolean fluid, Tag<?> brand, Object[] navbarContent, Object pageContent) {
+		Object cont = div(pageContent).class_(containerMaybeFluid(fluid));
+		return body(nav_(fluid, false, brand, navbarContent), cont);
+	}
+
 	public static FormTag form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc, FieldType[] fieldTypes,
 			Object[][] options, Var<?>[] vars, Object[] buttons) {
 

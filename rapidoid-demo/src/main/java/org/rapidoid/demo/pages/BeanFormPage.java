@@ -24,20 +24,19 @@ import org.rapidoid.demo.pojo.Person;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.html.tag.ATag;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Model;
+import org.rapidoid.pages.bootstrap.BootstrapPage;
 import org.rapidoid.pages.bootstrap.FormWidget;
-import org.rapidoid.pages.bootstrap.NavbarBootstrapPage;
 
-@SuppressWarnings("serial")
-public class BeanFormPage extends NavbarBootstrapPage {
+public class BeanFormPage extends BootstrapPage {
 
-	private ATag brand;
-
-	private FormWidget form;
-
-	public BeanFormPage() {
-		brand = a("Edit person").href("/beanForm.html");
+	static Person person = new Person("abc", 22);
+	
+	@Override
+	public Tag<?> pageBody(HttpExchange x) {
+		ATag brand = a("Edit person").href("/beanForm.html");
 
 		Tag<?>[] buttons = { btn("Save", new TagEventHandler<Tag<?>>() {
 			@Override
@@ -46,27 +45,11 @@ public class BeanFormPage extends NavbarBootstrapPage {
 			}
 		}), btn("Cancel") };
 
-		Person person = new Person("abc", 22);
 		Item item = Model.item(person);
 
-		form = new FormWidget(item, buttons);
+		FormWidget form = new FormWidget(item, buttons);
 
-		setContent(page());
-	}
-
-	@Override
-	protected Object pageContent() {
-		return row(col4(form));
-	}
-
-	@Override
-	protected Tag<?> brand() {
-		return brand;
-	}
-
-	@Override
-	protected Object[] navbarContent() {
-		return arr();
+		return navbarPage(true, brand, null, row(col4(form)));
 	}
 
 }

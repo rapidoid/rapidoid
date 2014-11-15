@@ -34,14 +34,14 @@ public class PagesTestCommons extends TestCommons {
 	@SuppressWarnings({ "unchecked" })
 	protected static final Map<Integer, Object> NO_CHANGES = Collections.EMPTY_MAP;
 
-	protected void print(TagContext ctx, PageComponent c) {
+	protected void print(TagContext ctx, PageWidget c) {
 		HttpExchange x = mockExchange(ctx);
 		String html = c.toHTML(x);
 		notNull(html);
 		System.out.println(html);
 	}
 
-	protected void has(TagContext ctx, PageComponent c, String... containingTexts) {
+	protected void has(TagContext ctx, PageWidget c, String... containingTexts) {
 		HttpExchange x = mockExchange(ctx);
 		String html = c.toHTML(x);
 		notNull(html);
@@ -51,7 +51,7 @@ public class PagesTestCommons extends TestCommons {
 		}
 	}
 
-	protected void hasRegex(TagContext ctx, PageComponent c, String... containingRegexes) {
+	protected void hasRegex(TagContext ctx, PageWidget c, String... containingRegexes) {
 		HttpExchange x = mockExchange(ctx);
 		String html = c.toHTML(x);
 		notNull(html);

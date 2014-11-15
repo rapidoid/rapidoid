@@ -44,7 +44,7 @@ public class MeasuresThread extends Thread {
 				Thread.sleep(1000);
 			}
 		} catch (Exception e) {
-			U.print("Stats EXCEPTION!");
+			U.print("Stats Exception!");
 			e.printStackTrace();
 		}
 	}

@@ -22,14 +22,14 @@ package org.rapidoid.pages.bootstrap;
 
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
-import org.rapidoid.pages.HtmlWidget;
 import org.rapidoid.pages.PagesTestCommons;
+import org.rapidoid.pages.plain.HtmlWidget;
 import org.rapidoid.reactive.Var;
 import org.testng.annotations.Test;
 
 public class PagerWidgetTest extends PagesTestCommons {
 
-	@Test
+	@Test()
 	public void testPagerWidget() {
 
 		TagContext ctx = Tags.context();
@@ -41,23 +41,23 @@ public class PagerWidgetTest extends PagesTestCommons {
 		eq(pageN.get().intValue(), 3);
 		has(ctx, pager, "Page 3 of 7");
 
-		ctx.emit(pager.content(), NO_CHANGES, 6, "click"); // first
+		ctx.emit(NO_CHANGES, 6, "click"); // first
 
 		eq(pageN, 1);
 		has(ctx, pager, "Page 1 of 7");
 
-		ctx.emit(pager.content(), NO_CHANGES, 20, "click"); // last
+		ctx.emit(NO_CHANGES, 20, "click"); // last
 
 		eq(pageN, 7);
 		has(ctx, pager, "Page 7 of 7");
 
-		ctx.emit(pager.content(), NO_CHANGES, 10, "click"); // prev
-		ctx.emit(pager.content(), NO_CHANGES, 10, "click"); // prev
+		ctx.emit(NO_CHANGES, 10, "click"); // prev
+		ctx.emit(NO_CHANGES, 10, "click"); // prev
 
 		eq(pageN, 5);
 		has(ctx, pager, "Page 5 of 7");
 
-		ctx.emit(pager.content(), NO_CHANGES, 16, "click"); // next
+		ctx.emit(NO_CHANGES, 16, "click"); // next
 
 		eq(pageN, 6);
 		has(ctx, pager, "Page 6 of 7");

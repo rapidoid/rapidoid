@@ -2,13 +2,13 @@ package org.rapidoid.pages.bootstrap;
 
 import java.util.List;
 
+import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.TbodyTag;
 import org.rapidoid.html.tag.TrTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
-import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.reactive.Var;
 import org.rapidoid.util.U;
 
@@ -34,7 +34,7 @@ import org.rapidoid.util.U;
 
 public class TableWidget extends BootstrapWidget {
 
-	private static final long serialVersionUID = -8550720285123228765L;
+	private final Items items;
 
 	private final TableItemAction itemAction;
 
@@ -42,46 +42,9 @@ public class TableWidget extends BootstrapWidget {
 		this(items, null);
 	}
 
-	@SuppressWarnings("serial")
 	public TableWidget(final Items items, TableItemAction itemAction) {
-
+		this.items = items;
 		this.itemAction = itemAction;
-		final List<Property> properties = items.properties();
-
-		final Var<Integer> pageNumber = var(1);
-
-		TrTag header = tr();
-
-		for (Property prop : properties) {
-			header.append(th(prop.caption()));
-		}
-
-		Object body = dynamic(new DynamicContent() {
-			@Override
-			public Object eval(HttpExchange x) {
-
-				Integer pageN = pageNumber.get();
-				Items page = items.range((pageN - 1) * pageSize(), Math.min((pageN) * pageSize(), items.size()));
-
-				TbodyTag body = tbody();
-
-				for (Item item : page) {
-					TrTag row = itemRow(properties, item);
-					if (TableWidget.this.itemAction != null) {
-						row.click(new TableItemActionImpl(item, TableWidget.this.itemAction));
-					}
-					body.append(row);
-				}
-
-				return body;
-			}
-		});
-
-		int total = items.size();
-		int pages = (int) Math.ceil(total / (double) pageSize());
-
-		PagerWidget pager = new PagerWidget(1, pages, pageNumber);
-		setContent(rowFull(table_(thead(header), body), pager));
 	}
 
 	protected int pageSize() {
@@ -96,6 +59,38 @@ public class TableWidget extends BootstrapWidget {
 		}
 
 		return row;
+	}
+
+	@Override
+	public Tag<?> view(HttpExchange x) {
+		final List<Property> properties = items.properties();
+
+		final Var<Integer> pageNumber = var(1);
+
+		TrTag header = tr();
+
+		for (Property prop : properties) {
+			header.append(th(prop.caption()));
+		}
+
+		Integer pageN = pageNumber.get();
+		Items page = items.range((pageN - 1) * pageSize(), Math.min((pageN) * pageSize(), items.size()));
+
+		TbodyTag body = tbody();
+
+		for (Item item : page) {
+			TrTag row = itemRow(properties, item);
+			if (TableWidget.this.itemAction != null) {
+				row.click(new TableItemActionImpl(item, TableWidget.this.itemAction));
+			}
+			body.append(row);
+		}
+
+		int total = items.size();
+		int pages = (int) Math.ceil(total / (double) pageSize());
+
+		PagerWidget pager = new PagerWidget(1, pages, pageNumber);
+		return rowFull(table_(thead(header), body), pager);
 	}
 
 }

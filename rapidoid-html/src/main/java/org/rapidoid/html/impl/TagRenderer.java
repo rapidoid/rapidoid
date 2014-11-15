@@ -65,6 +65,7 @@ public class TagRenderer {
 		str(ctx, content, 0, false, extra, out);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void str(TagContext ctx, Object content, int level, boolean inline, Object extra, OutputStream out) {
 
 		if (content instanceof ConstantTag) {
@@ -77,8 +78,8 @@ public class TagRenderer {
 			str(ctx, tagi.base(), level, inline, extra, out);
 			return;
 		} else if (content instanceof TagWidget) {
-			TagWidget widget = (TagWidget) content;
-			str(ctx, widget.content(), level, inline, extra, out);
+			TagWidget<Object> widget = (TagWidget<Object>) content;
+			str(ctx, widget.view(extra), level, inline, extra, out);
 			return;
 		} else if (content instanceof Object[]) {
 			join(ctx, (Object[]) content, level, inline, extra, out);
@@ -118,7 +119,7 @@ public class TagRenderer {
 			tag.ctx = ctx;
 		} else {
 			tag.ctx = ctx;
-			tag._h = ctx.newHnd();
+			tag._h = ctx.newHnd(tag);
 		}
 
 		String name = HTML.escape(tag.name);

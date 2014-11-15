@@ -22,9 +22,14 @@ package org.rapidoid.pages;
 
 import java.util.Map;
 
+import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
+import org.rapidoid.html.Tags;
+import org.rapidoid.html.impl.TagImpl;
+import org.rapidoid.html.impl.TagInternals;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.util.U;
 
 public class EmitHandler implements Handler {
@@ -41,13 +46,23 @@ public class EmitHandler implements Handler {
 		TagContext ctx = x.session(Pages.SESSION_CTX);
 		Page page = x.session(Pages.SESSION_PAGE);
 
-		// FIXME remove this
-		x.sessionSerialize();
-
 		Map<Integer, Object> inp = Pages.inputs(x);
-		ctx.emit(page.content(), inp, hnd, event);
+		ctx.emit(inp, hnd, event);
+
+		ctx = Tags.context();
+		page = U.newInstance(page.getClass());
+
+		x.setSession(Pages.SESSION_CTX, ctx);
+
+		Tag<?> root = page.pageBody(x);
+		TagImpl<Tag<?>> rootImpl = ((TagInternals) root).base();
 
 		Map<Integer, String> changes = ctx.changes();
+
+		String html = PageRenderer.get().toHTML(ctx, root, x);
+
+		changes.put(rootImpl.hnd(), html);
+
 		x.json();
 		return changes;
 	}

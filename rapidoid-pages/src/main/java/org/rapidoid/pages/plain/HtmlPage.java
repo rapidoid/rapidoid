@@ -1,4 +1,9 @@
-package org.rapidoid.pages;
+package org.rapidoid.pages.plain;
+
+import org.rapidoid.html.Tag;
+import org.rapidoid.http.HttpExchange;
+import org.rapidoid.pages.Page;
+import org.rapidoid.pages.Pages;
 
 /*
  * #%L
@@ -20,14 +25,24 @@ package org.rapidoid.pages;
  * #L%
  */
 
-import java.io.Serializable;
+public abstract class HtmlPage extends HtmlWidget implements Page {
 
-import org.rapidoid.http.HttpExchange;
+	@Override
+	public Tag<?> view(HttpExchange x) {
+		return template("jquery-page.html", "title", pageTitle(), "style", pageStyle(), "head", pageHead(), "body",
+				pageBody(x));
+	}
 
-public interface PageComponent extends Serializable {
+	protected Object pageHead() {
+		return "";
+	}
 
-	void render(HttpExchange exchange);
+	protected Object pageStyle() {
+		return "";
+	}
 
-	String toHTML(HttpExchange exchange);
+	protected String pageTitle() {
+		return Pages.pageTitle(getClass());
+	}
 
 }

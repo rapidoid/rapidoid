@@ -1,7 +1,5 @@
 package org.rapidoid.html;
 
-import java.io.Serializable;
-
 /*
  * #%L
  * rapidoid-html
@@ -22,7 +20,7 @@ import java.io.Serializable;
  * #L%
  */
 
-public interface Tag<TAG extends Tag<?>> extends TagBase<TAG>, Serializable {
+public interface Tag<TAG extends Tag<?>> extends TagBase<TAG> {
 
 	String id();
 

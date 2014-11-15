@@ -22,9 +22,11 @@ package org.rapidoid.pages.impl;
 
 import java.io.OutputStream;
 
+import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.impl.TagRenderer;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.pages.PageWidget;
 
 public class PageRenderer extends TagRenderer {
 
@@ -36,12 +38,13 @@ public class PageRenderer extends TagRenderer {
 
 	@Override
 	public void str(TagContext ctx, Object content, int level, boolean inline, Object extra, OutputStream out) {
-		if (content instanceof DynamicContentWrapper) {
-			Object dynCnt = ((DynamicContentWrapper) content).generateContent((HttpExchange) extra);
-			str(ctx, dynCnt, level, inline, extra, out);
-		} else if (content instanceof HardcodedTag) {
+		if (content instanceof HardcodedTag) {
 			HardcodedTag hardcoded = ((HardcodedTag) content);
 			hardcoded.render(ctx, (HttpExchange) extra, this, out);
+		} else if (content instanceof PageWidget) {
+			PageWidget widget = ((PageWidget) content);
+			Tag<?> view = widget.view((HttpExchange) extra);
+			str(ctx, view, level, inline, extra, out);
 		} else {
 			super.str(ctx, content, level, inline, extra, out);
 		}

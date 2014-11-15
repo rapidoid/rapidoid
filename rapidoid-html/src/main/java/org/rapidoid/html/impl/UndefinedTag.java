@@ -29,8 +29,6 @@ import org.rapidoid.util.U;
 
 public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 
-	private static final long serialVersionUID = -7982241929117711564L;
-
 	@Override
 	public Object content() {
 		throw U.notExpected();

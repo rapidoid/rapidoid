@@ -25,8 +25,6 @@ import org.rapidoid.html.TagProcessor;
 
 public class ConstantTag extends UndefinedTag<Tag<?>> {
 
-	private static final long serialVersionUID = -1980930037247789495L;
-
 	private final String code;
 
 	private final byte[] bytes;

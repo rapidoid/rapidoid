@@ -33,8 +33,6 @@ import org.rapidoid.util.U;
 
 public class FileTemplateTag extends HardcodedTag {
 
-	private static final long serialVersionUID = -2794647786758152024L;
-
 	private final String templateName;
 
 	private final Object[] namesAndValues;

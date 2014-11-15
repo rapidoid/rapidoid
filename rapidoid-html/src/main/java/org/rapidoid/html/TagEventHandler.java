@@ -1,9 +1,5 @@
 package org.rapidoid.html;
 
-import java.io.Serializable;
-
-import org.rapidoid.html.Tag;
-
 /*
  * #%L
  * rapidoid-html
@@ -24,7 +20,7 @@ import org.rapidoid.html.Tag;
  * #L%
  */
 
-public interface TagEventHandler<TAG extends Tag<?>> extends Serializable {
+public interface TagEventHandler<TAG extends Tag<?>> {
 
 	void handle(TAG target);
 

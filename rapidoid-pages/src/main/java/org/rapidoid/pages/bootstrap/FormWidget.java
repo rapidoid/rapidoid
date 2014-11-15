@@ -6,11 +6,13 @@ import java.util.List;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
 import org.rapidoid.reactive.Var;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
+import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -34,32 +36,13 @@ import org.rapidoid.util.TypeKind;
 
 public class FormWidget extends BootstrapWidget {
 
-	private static final long serialVersionUID = -8550720285123228765L;
+	private final Item item;
+
+	private final Tag<?>[] buttons;
 
 	public FormWidget(final Item item, final Tag<?>[] buttons) {
-
-		final List<Property> properties = item.editableProperties();
-
-		int propN = properties.size();
-
-		String[] names = new String[propN];
-		String[] desc = new String[propN];
-		FieldType[] types = new FieldType[propN];
-		Object[][] options = new Object[propN][];
-		Var<?>[] vars = new Var[propN];
-
-		for (int i = 0; i < propN; i++) {
-			Property prop = properties.get(i);
-			names[i] = prop.name();
-			desc[i] = prop.caption();
-			types[i] = getPropertyFieldType(prop);
-			options[i] = getPropertyOptions(prop);
-			vars[i] = property(item, prop.name());
-		}
-
-		Tag<?> frm = form_(FormLayout.VERTICAL, names, desc, types, options, vars, buttons);
-
-		setContent(frm);
+		this.item = item;
+		this.buttons = buttons;
 	}
 
 	protected FieldType getPropertyFieldType(Property prop) {
@@ -98,4 +81,32 @@ public class FormWidget extends BootstrapWidget {
 		return null;
 	}
 
+	@Override
+	public Tag<?> view(HttpExchange x) {
+		final List<Property> properties = item.editableProperties();
+
+		int propN = properties.size();
+
+		String[] names = new String[propN];
+		String[] desc = new String[propN];
+		FieldType[] types = new FieldType[propN];
+		Object[][] options = new Object[propN][];
+		Var<?>[] vars = new Var[propN];
+
+		for (int i = 0; i < propN; i++) {
+			Property prop = properties.get(i);
+			names[i] = prop.name();
+			desc[i] = prop.caption();
+			types[i] = getPropertyFieldType(prop);
+			options[i] = getPropertyOptions(prop);
+			vars[i] = property(item, prop.name());
+		}
+
+		return form_(FormLayout.VERTICAL, names, desc, types, options, vars, buttons);
+	}
+
+	@Override
+	public String toString() {
+		throw U.rte("FFFFFF");
+	}
 }

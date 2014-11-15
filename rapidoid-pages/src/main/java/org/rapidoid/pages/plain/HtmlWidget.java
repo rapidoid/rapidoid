@@ -1,4 +1,4 @@
-package org.rapidoid.pages;
+package org.rapidoid.pages.plain;
 
 /*
  * #%L
@@ -22,10 +22,10 @@ package org.rapidoid.pages;
 
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagWidget;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
-import org.rapidoid.pages.impl.DynamicContentWrapper;
+import org.rapidoid.pages.PageWidget;
+import org.rapidoid.pages.Pages;
 import org.rapidoid.pages.impl.FileTemplateTag;
 import org.rapidoid.pages.impl.ItemPropertyVar;
 import org.rapidoid.pages.impl.MultiLanguageText;
@@ -34,20 +34,7 @@ import org.rapidoid.pages.impl.SimpleHardcodedTag;
 import org.rapidoid.reactive.Var;
 import org.rapidoid.util.U;
 
-public abstract class HtmlWidget extends HTML implements TagWidget, PageComponent {
-
-	private static final long serialVersionUID = -2760069277625837174L;
-
-	private Tag<?> content;
-
-	public void setContent(Tag<?> content) {
-		this.content = content;
-	}
-
-	@Override
-	public Tag<?> content() {
-		return content;
-	}
+public abstract class HtmlWidget extends HTML implements PageWidget {
 
 	public static Object _(String multiLanguageText, Object... formatArgs) {
 		return new MultiLanguageText(multiLanguageText, formatArgs);
@@ -61,24 +48,22 @@ public abstract class HtmlWidget extends HTML implements TagWidget, PageComponen
 		return new FileTemplateTag(templateFileName, namesAndValues);
 	}
 
-	public static Tag<?> dynamic(DynamicContent dynamic) {
-		return new DynamicContentWrapper(dynamic);
-	}
-
 	public static Tag<?> hardcoded(String content) {
 		return new SimpleHardcodedTag(content);
 	}
 
 	@Override
 	public void render(HttpExchange x) {
-		U.must(content != null, "No content was set in widget: " + super.toString());
-		PageRenderer.get().render(Pages.ctx(x), content, x);
+		Tag<?> widget = view(x);
+		U.must(widget != null, "No content was set in widget: " + super.toString());
+		PageRenderer.get().render(Pages.ctx(x), widget, x);
 	}
 
 	@Override
 	public String toHTML(HttpExchange x) {
-		U.must(content != null, "No content was set in widget: " + super.toString());
-		return PageRenderer.get().toHTML(Pages.ctx(x), content, x);
+		Tag<?> widget = view(x);
+		U.must(widget != null, "No content was set in widget: " + super.toString());
+		return PageRenderer.get().toHTML(Pages.ctx(x), widget, x);
 	}
 
 }

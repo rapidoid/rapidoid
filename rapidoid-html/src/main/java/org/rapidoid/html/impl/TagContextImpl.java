@@ -22,14 +22,12 @@ package org.rapidoid.html.impl;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
-import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
-import org.rapidoid.html.TagProcessor;
 import org.rapidoid.html.Tags;
 import org.rapidoid.util.U;
 
@@ -41,9 +39,13 @@ public class TagContextImpl implements TagContext, Serializable {
 
 	private final Set<Tag<?>> changed = U.set();
 
+	private final Map<Integer, TagImpl<?>> tags = U.map();
+
 	@Override
-	public int newHnd() {
-		return counter.incrementAndGet();
+	public int newHnd(TagImpl<?> tag) {
+		int hnd = counter.incrementAndGet();
+		tags.put(hnd, tag);
+		return hnd;
 	}
 
 	@Override
@@ -63,36 +65,22 @@ public class TagContextImpl implements TagContext, Serializable {
 	}
 
 	@Override
-	public void emit(Tag<?> root, final Map<Integer, Object> values, final int eventHnd, String event) {
+	public void emit(final Map<Integer, Object> values, final int eventHnd, String event) {
 
 		changed.clear();
 
-		final AtomicReference<TagImpl<?>> ref = new AtomicReference<TagImpl<?>>(null);
+		TagImpl<?> target = tags.get(eventHnd);
 
-		HTML.traverse(root, new TagProcessor<Tag<?>>() {
-			@Override
-			public void handle(Tag<?> tag) {
+		for (Entry<Integer, Object> e : values.entrySet()) {
+			TagImpl<?> tag = tags.get(e.getKey());
 
-				TagImpl<Tag<?>> t = base(tag);
-
-				Object val = values.get(t._h);
-				if (val != null) {
-					Tags.setValue(tag, val);
-					values.remove(t._h);
-				}
-
-				if (t._h == eventHnd) {
-					ref.set(t);
-				}
+			if (tag != null) {
+				Tags.setValue(tag.proxy(), e.getValue());
 			}
-		});
+		}
 
-		U.must(values.isEmpty(), "Missing input field(s): %s", values.keySet());
-
-		TagImpl<?> tag = ref.get();
-
-		if (tag != null) {
-			tag.emit(event);
+		if (target != null) {
+			target.emit(event);
 		} else {
 			U.error("Cannot find tag!", "event", event, "_h", eventHnd);
 			throw U.rte("Cannot find tag with _h = '%s'", eventHnd);

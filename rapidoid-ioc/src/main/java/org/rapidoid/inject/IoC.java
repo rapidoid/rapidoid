@@ -99,8 +99,6 @@ public class IoC {
 				MANAGED_CLASSES.add(clazz);
 
 				if (!clazz.isInterface() && !clazz.isEnum() && !clazz.isAnnotation()) {
-					System.out.println(":" + clazz);
-
 					// if the class is annotated, auto-create an instance
 					if (clazz.getAnnotation(Autocreate.class) != null) {
 						autocreate.add(clazz);

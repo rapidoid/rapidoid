@@ -30,14 +30,11 @@ import org.rapidoid.html.tag.UlTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
-import org.rapidoid.pages.DynamicContent;
-import org.rapidoid.pages.bootstrap.NavbarBootstrapPage;
+import org.rapidoid.pages.bootstrap.BootstrapPage;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
-public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
-
-	private static final long serialVersionUID = 5633741993098185900L;
+public class AppPage extends BootstrapPage implements Comparator<Object> {
 
 	private static final String[] themes = { "default", "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal",
 			"lumen", "paper", "readable", "sandstone", "simplex", "slate", "spacelab", "superhero", "united", "yeti" };
@@ -45,15 +42,7 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 	final Object app;
 	final Object[] screens;
 	Object screen;
-
 	private int searchScreenIndex;
-
-	private ATag brand;
-	private Object dropdownMenu;
-	private UlTag navMenu;
-	private FormTag searchForm;
-
-	private Object themesMenu;
 
 	public AppPage(final Object app, Object[] screens, Object screen) {
 		this.app = app;
@@ -62,40 +51,36 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 
 		Arrays.sort(screens, this);
 		this.searchScreenIndex = findSearchScreen();
+	}
 
-		brand = a(pageTitle()).href("/");
+	@Override
+	public Tag<?> pageBody(HttpExchange x) {
 
-		dropdownMenu = dynamic(new DynamicContent() {
+		ATag brand = a(pageTitle()).href("/");
 
-			private static final long serialVersionUID = -2512806659030800594L;
+		Tag<?> dropdownMenu;
 
-			@Override
-			public Object eval(HttpExchange x) {
-				if (x.isLoggedIn()) {
+		if (x.isLoggedIn()) {
 
-					ATag profile = a_glyph("user", x.user().display, caret());
-					ATag settings = Apps.config(app, "settings", false) ? a_glyph("cog", " Settings").href("/settings.html") : null;
-					ATag logout = a_glyph("log-out", "Logout").href("/_logout");
+			ATag profile = a_glyph("user", x.user().display, caret());
+			ATag settings = Apps.config(app, "settings", false) ? a_glyph("cog", " Settings").href("/settings.html")
+					: null;
+			ATag logout = a_glyph("log-out", "Logout").href("/_logout");
 
-					return navbarDropdown(false, profile, settings, logout);
-				} else {
+			dropdownMenu = navbarDropdown(false, profile, settings, logout);
 
-					ATag ga = a_awesome("google", "Sign in with Google").href(
-							OAuth.getLoginURL(x, OAuthProvider.GOOGLE));
+		} else {
 
-					ATag fb = a_awesome("facebook", "Sign in with Facebook").href(
-							OAuth.getLoginURL(x, OAuthProvider.FACEBOOK));
+			ATag ga = a_awesome("google", "Sign in with Google").href(OAuth.getLoginURL(x, OAuthProvider.GOOGLE));
 
-					ATag li = a_awesome("linkedin", "Sign in with LinkedIn").href(
-							OAuth.getLoginURL(x, OAuthProvider.LINKEDIN));
+			ATag fb = a_awesome("facebook", "Sign in with Facebook").href(OAuth.getLoginURL(x, OAuthProvider.FACEBOOK));
 
-					ATag gh = a_awesome("github", "Sign in with GitHub").href(
-							OAuth.getLoginURL(x, OAuthProvider.GITHUB));
+			ATag li = a_awesome("linkedin", "Sign in with LinkedIn").href(OAuth.getLoginURL(x, OAuthProvider.LINKEDIN));
 
-					return navbarDropdown(false, a_glyph("log-in", "Sign in", caret()), ga, fb, li, gh);
-				}
-			}
-		});
+			ATag gh = a_awesome("github", "Sign in with GitHub").href(OAuth.getLoginURL(x, OAuthProvider.GITHUB));
+
+			dropdownMenu = navbarDropdown(false, a_glyph("log-in", "Sign in", caret()), ga, fb, li, gh);
+		}
 
 		ATag theme = a_glyph("eye-open", "", caret());
 
@@ -107,7 +92,7 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 			themess[i] = a(U.capitalized(thm)).onclick(js);
 		}
 
-		themesMenu = Apps.config(app, "themes", false) ? navbarDropdown(false, theme, themess) : null;
+		UlTag themesMenu = Apps.config(app, "themes", false) ? navbarDropdown(false, theme, themess) : null;
 
 		Object[] menuItems = new Object[searchScreenIndex < 0 ? screens.length : screens.length - 1];
 
@@ -121,14 +106,24 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 			}
 		}
 
-		navMenu = navbarMenu(true, menuItems);
+		UlTag navMenu = navbarMenu(true, menuItems);
 
+		FormTag searchForm = null;
 		if (Apps.config(app, "search", false)) {
 			searchForm = navbarForm(false, "Find", arr("q"), arr("Search")).attr("action", "/search").attr("method",
 					"GET");
 		}
 
-		setContent(page());
+		Object[] navbarContent = arr(navMenu, themesMenu, dropdownMenu, searchForm);
+
+		Object pageContent = Cls.getPropValue(screen, "content", null);
+
+		if (pageContent == null) {
+			pageContent = hardcoded("Cannot find/execute method: <b>Object content() { }</b> in screen: <b>"
+					+ screen.getClass().getSimpleName() + "</b>");
+		}
+
+		return navbarPage(isFluid(), brand, navbarContent, pageContent);
 	}
 
 	private int findSearchScreen() {
@@ -141,28 +136,6 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 		return -1;
 	}
 
-	@Override
-	protected Object pageContent() {
-		Object content = Cls.getPropValue(screen, "content", null);
-
-		if (content == null) {
-			content = hardcoded("Cannot find/execute method: <b>Object content() { }</b> in screen: <b>"
-					+ screen.getClass().getSimpleName() + "</b>");
-		}
-
-		return content;
-	}
-
-	protected Object[] navbarContent() {
-		return new Object[] { navMenu, themesMenu, dropdownMenu, searchForm };
-	}
-
-	@Override
-	protected Tag<?> brand() {
-		return brand;
-	}
-
-	@Override
 	protected boolean isFluid() {
 		return Apps.config(app, "fluid", false);
 	}

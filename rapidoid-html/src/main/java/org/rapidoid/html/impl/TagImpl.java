@@ -69,13 +69,15 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 		List<Action> actions = U.list();
 
-		for (Object x : contentsAndHandlers) {
-			if (x instanceof TagEventHandler) {
-				setHandler("click", (TagEventHandler<TAG>) x);
-			} else if (x instanceof Action) {
-				actions.add((Action) x);
-			} else {
-				flatAndInsertContent(APPEND, x);
+		if (contentsAndHandlers != null) {
+			for (Object x : contentsAndHandlers) {
+				if (x instanceof TagEventHandler) {
+					setHandler("click", (TagEventHandler<TAG>) x);
+				} else if (x instanceof Action) {
+					actions.add((Action) x);
+				} else {
+					flatAndInsertContent(APPEND, x);
+				}
 			}
 		}
 
@@ -279,7 +281,7 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	public TAG bind(String attr, Var<String> var) {
 		U.must(!bindings.containsKey(attr), "The attribute '%s' of tag '%s' is already bound to a var!", attr, name);
 		bindings.put(attr, var);
-		attr(attr, var.get());
+		attr(attr, U.text(var.get()));
 		return proxy();
 	}
 
@@ -310,6 +312,10 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 		U.must(contentBinding != null, "The content of tag '%s' is not bound to a var!", name);
 		contentBinding = null;
 		return proxy();
+	}
+
+	public int hnd() {
+		return _h;
 	}
 
 }

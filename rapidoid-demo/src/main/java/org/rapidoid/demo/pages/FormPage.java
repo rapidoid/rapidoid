@@ -25,37 +25,39 @@ import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.html.tag.ATag;
-import org.rapidoid.pages.bootstrap.NavbarBootstrapPage;
+import org.rapidoid.html.tag.DivTag;
+import org.rapidoid.http.HttpExchange;
+import org.rapidoid.pages.bootstrap.BootstrapPage;
 import org.rapidoid.reactive.Var;
 import org.rapidoid.reactive.Vars;
 
-@SuppressWarnings("serial")
-public class FormPage extends NavbarBootstrapPage {
+public class FormPage extends BootstrapPage {
 
-	private ATag brand;
+	final Var<?>[] vars = Vars.vars("niko", "rapidoid", "niko@rapi.doid", "No", arr("Manager", "Moderator"), "Male",
+			arr("A", "C"), "Very interesting!", true);
 
-	private Object form1;
-	private Object form2;
-	private Object form3;
+	@Override
+	public Tag<?> pageBody(HttpExchange x) {
 
-	public FormPage() {
-		brand = a("Welcome to the Forms page!").href("/form.html");
+		ATag brand = a("Welcome to the Forms page!").href("/form.html");
 
-		form1 = frm(FormLayout.HORIZONTAL);
-		form2 = frm(FormLayout.VERTICAL);
-		form3 = frm(FormLayout.INLINE);
+		Tag<?> form1 = frm(FormLayout.HORIZONTAL);
+		Tag<?> form2 = frm(FormLayout.VERTICAL);
+		Tag<?> form3 = frm(FormLayout.INLINE);
 
-		setContent(page());
+		DivTag pageContent = row(col3(form1), col3(form2), col6(form3));
+
+		return navbarPage(true, brand, null, pageContent);
 	}
 
-	private Object frm(FormLayout layout) {
+	private Tag<?> frm(final FormLayout layout) {
 
-		String[] names = { "user", "pass", "email", "driver", "roles", "gender", "accept", "bbb", "comments" };
+		final String[] names = { "user", "pass", "email", "driver", "roles", "gender", "accept", "bbb", "comments" };
 
-		String[] desc = { "Username", "Password", "E-mail address", "Has Driver license", "Roles", "Gender", "Bbb",
-				"Comments", "I accept the terms and conditions" };
+		final String[] desc = { "Username", "Password", "E-mail address", "Has Driver license", "Roles", "Gender",
+				"Bbb", "Comments", "I accept the terms and conditions" };
 
-		FieldType[] types = { FieldType.TEXT, FieldType.PASSWORD, FieldType.EMAIL, FieldType.DROPDOWN,
+		final FieldType[] types = { FieldType.TEXT, FieldType.PASSWORD, FieldType.EMAIL, FieldType.DROPDOWN,
 				FieldType.MULTI_SELECT, FieldType.RADIOS, FieldType.CHECKBOXES, FieldType.TEXTAREA, FieldType.CHECKBOX };
 
 		Object[] opt1 = { "Yes", "No", "Not sure" };
@@ -66,34 +68,16 @@ public class FormPage extends NavbarBootstrapPage {
 
 		Object[] opt4 = { "A", "B", "C", "D" };
 
-		Object[][] options = { null, null, null, opt1, opt2, opt3, opt4, null, null };
+		final Object[][] options = { null, null, null, opt1, opt2, opt3, opt4, null, null };
 
-		Var<?>[] vars = Vars.vars("niko", "rapidoid", "niko@rapi.doid", "No", arr("Manager", "Moderator"), "Male",
-				arr("A", "C"), "Very interesting!", true);
-
-		Object[] buttons = { btn("Save", new TagEventHandler<Tag<?>>() {
+		final Object[] buttons = { btn("Save", new TagEventHandler<Tag<?>>() {
 			@Override
 			public void handle(Tag<?> target) {
 				target.append("+");
 			}
 		}), btn("Cancel") };
 
-		return arr(form_(layout, names, desc, types, options, vars, buttons), ul_li((Object[]) vars));
-	}
-
-	@Override
-	protected Object pageContent() {
-		return row(col3(form1), col3(form2), col6(form3));
-	}
-
-	@Override
-	protected Tag<?> brand() {
-		return brand;
-	}
-
-	@Override
-	protected Object[] navbarContent() {
-		return arr();
+		return div(form_(layout, names, desc, types, options, vars, buttons), ul_li((Object[]) vars));
 	}
 
 }

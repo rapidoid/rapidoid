@@ -20,8 +20,10 @@ package org.rapidoid.pages.bootstrap;
  * #L%
  */
 
+import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.PagesTestCommons;
 import org.testng.annotations.Test;
 
@@ -31,21 +33,16 @@ public class BootstrapPageTest extends PagesTestCommons {
 	public void testPagerWidget() {
 		BootstrapPage page = new BootstrapPage() {
 
-			private static final long serialVersionUID = 1735557278588407730L;
-
-			{
-				setContent(page());
-			}
-
 			@Override
-			protected Object pageBody() {
-				return div("abc");
+			public Tag<?> pageBody(HttpExchange x) {
+				return body(div("abc"));
 			}
 
 			@Override
 			protected String pageTitle() {
 				return "Some title";
 			}
+
 		};
 
 		TagContext ctx = Tags.context();

@@ -20,12 +20,10 @@ package org.rapidoid.pages.bootstrap;
  * #L%
  */
 
-import java.io.Serializable;
-
 import org.rapidoid.html.tag.TrTag;
 import org.rapidoid.model.Item;
 
-public interface TableItemAction extends Serializable {
+public interface TableItemAction {
 
 	void execute(TrTag row, Item item);
 
