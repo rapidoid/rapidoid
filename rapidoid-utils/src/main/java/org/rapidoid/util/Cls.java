@@ -126,8 +126,6 @@ public class Cls {
 
 			});
 
-	private static final Object RTE = new Object();
-
 	public static void reset() {
 		BEAN_PROPERTIES.clear();
 	}
@@ -139,6 +137,20 @@ public class Cls {
 	@SuppressWarnings("unchecked")
 	public static Map<String, Prop> propertiesOf(Object obj) {
 		return obj != null ? propertiesOf(obj.getClass()) : Collections.EMPTY_MAP;
+	}
+
+	public static Prop property(Class<?> clazz, String property) {
+		Prop prop = BEAN_PROPERTIES.get(clazz).get(property);
+
+		if (prop == null) {
+			throw U.rte("Cannot find the property '%s' in the class '%s'", property, clazz);
+		}
+
+		return prop;
+	}
+
+	public static Prop property(Object obj, String property) {
+		return property(obj.getClass(), property);
 	}
 
 	protected static Map<String, TypeKind> initKinds() {
@@ -528,68 +540,15 @@ public class Cls {
 	}
 
 	public static void setPropValue(Object instance, String propertyName, Object value) {
-		String propertyNameCap = U.capitalized(propertyName);
-		try {
-			for (Class<?> c = instance.getClass(); c != Object.class; c = c.getSuperclass()) {
-				try {
-					invoke(c.getDeclaredMethod(propertyName), instance, value);
-					return;
-				} catch (NoSuchMethodException e) {
-					try {
-						invoke(c.getDeclaredMethod("set" + propertyNameCap), instance, value);
-						return;
-					} catch (NoSuchMethodException e2) {
-						try {
-							setFieldValue(c.getDeclaredField(propertyName), instance, value);
-							return;
-						} catch (NoSuchFieldException e4) {
-							// keep searching in the super-class...
-						}
-					}
-				}
-			}
-		} catch (Exception e) {
-			throw U.rte("Cannot get property value!", e);
-		}
-		throw U.rte("Cannot find the property '%s' in the class '%s'", propertyName, instance.getClass());
+		property(instance, propertyName).set(instance, value);
 	}
 
-	public static Object getPropValue(Object instance, String propertyName, Object defaultValue) {
-		String propertyNameCap = U.capitalized(propertyName);
-		try {
-			for (Class<?> c = instance.getClass(); c != Object.class; c = c.getSuperclass()) {
-				try {
-					return invoke(c.getDeclaredMethod(propertyName), instance);
-				} catch (NoSuchMethodException e) {
-					try {
-						return invoke(c.getDeclaredMethod("get" + propertyNameCap), instance);
-					} catch (NoSuchMethodException e2) {
-						try {
-							return invoke(c.getDeclaredMethod("is" + propertyNameCap), instance);
-						} catch (NoSuchMethodException e3) {
-							try {
-								return getFieldValue(c.getDeclaredField(propertyName), instance);
-							} catch (NoSuchFieldException e4) {
-								// keep searching in the super-class...
-							}
-						}
-					}
-				}
-			}
-		} catch (Exception e) {
-			throw U.rte("Cannot get property value!", e);
-		}
-
-		if (defaultValue == RTE) {
-			throw U.rte("Cannot find the property '%s' in the class '%s'", propertyName, instance.getClass());
-		} else {
-			return defaultValue;
-		}
+	public static <T> T getPropValue(Object instance, String propertyName, T defaultValue) {
+		return property(instance, propertyName).get(instance, defaultValue);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T> T getPropValue(Object instance, String propertyName) {
-		return (T) getPropValue(instance, propertyName, RTE);
+		return property(instance, propertyName).get(instance);
 	}
 
 	public static Object[] instantiateAll(Class<?>... classes) {
