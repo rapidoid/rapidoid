@@ -25,7 +25,7 @@ import org.rapidoid.app.Apps;
 public class Main {
 
 	public static void main(String[] args) {
-		Apps.main(args);
+		Apps.main(new String[] { "oauth-no-state" });
 	}
 
 }
