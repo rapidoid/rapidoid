@@ -97,6 +97,11 @@ public class JSON {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> parseMap(String json) {
+		return parse(json, Map.class);
+	}
+
 	public static void warmup() {
 		JSON.stringify(123);
 		JSON.parse("{}", Map.class);
