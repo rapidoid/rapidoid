@@ -21,7 +21,10 @@ package org.rapidoid.pages.impl;
  */
 
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagProcessor;
+import org.rapidoid.html.Tags;
 import org.rapidoid.html.impl.UndefinedTag;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.DynamicContent;
 
 public class DynamicContentWrapper extends UndefinedTag<Tag<?>> {
@@ -29,6 +32,8 @@ public class DynamicContentWrapper extends UndefinedTag<Tag<?>> {
 	private static final long serialVersionUID = 3180185069262405035L;
 
 	private final DynamicContent dynamic;
+
+	private Object content;
 
 	public DynamicContentWrapper(DynamicContent dynamic) {
 		this.dynamic = dynamic;
@@ -46,6 +51,16 @@ public class DynamicContentWrapper extends UndefinedTag<Tag<?>> {
 	@Override
 	public String tagKind() {
 		return "dynamic";
+	}
+
+	@Override
+	public void traverse(TagProcessor<Tag<?>> processor) {
+		Tags.traverse(content, processor);
+	}
+
+	public Object generateContent(HttpExchange x) {
+		content = dynamic.eval(x);
+		return content;
 	}
 
 }

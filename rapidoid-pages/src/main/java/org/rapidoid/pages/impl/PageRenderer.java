@@ -25,7 +25,6 @@ import java.io.OutputStream;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.impl.TagRenderer;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.pages.DynamicContent;
 
 public class PageRenderer extends TagRenderer {
 
@@ -38,8 +37,8 @@ public class PageRenderer extends TagRenderer {
 	@Override
 	public void str(TagContext ctx, Object content, int level, boolean inline, Object extra, OutputStream out) {
 		if (content instanceof DynamicContentWrapper) {
-			DynamicContent dynamicContent = ((DynamicContentWrapper) content).getDynamic();
-			str(ctx, dynamicContent.eval((HttpExchange) extra), level, inline, extra, out);
+			Object dynCnt = ((DynamicContentWrapper) content).generateContent((HttpExchange) extra);
+			str(ctx, dynCnt, level, inline, extra, out);
 		} else if (content instanceof HardcodedTag) {
 			HardcodedTag hardcoded = ((HardcodedTag) content);
 			hardcoded.render(ctx, (HttpExchange) extra, this, out);
