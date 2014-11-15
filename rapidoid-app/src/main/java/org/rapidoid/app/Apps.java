@@ -27,6 +27,7 @@ import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.pages.Pages;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 public class Apps {
@@ -65,8 +66,23 @@ public class Apps {
 		U.must(apps.size() <= 1, "Found more than one applications (classes named 'App')!", "classes", apps);
 		final Class<?> appClass = !apps.isEmpty() ? apps.get(0) : TheDefaultApp.class;
 
-		AppStructure app = new AppStructure(appClass, screens, services);
-		return app;
+		Object app = U.newInstance(appClass);
+		Object[] screensConfig = Apps.config(app, "screens", null);
+
+		if (screensConfig != null) {
+			screens.clear();
+			for (Object scr : screensConfig) {
+				screens.add((Class<?>) scr);
+			}
+		}
+
+		return new AppStructure(appClass, screens, services);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T config(Object obj, String configName, T byDefault) {
+		Object val = Cls.getFieldValue(obj, configName, null);
+		return val != null ? (T) val : byDefault;
 	}
 
 }
