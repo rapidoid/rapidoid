@@ -68,8 +68,16 @@ public class Model {
 		List<Property> pr = U.list();
 
 		Map<String, Prop> props = Cls.propertiesOf(beanType);
+
+		Prop idProp = props.get("id");
+		if (idProp != null) {
+			pr.add(new BeanProperty(idProp.getName(), idProp.getType()));
+		}
+
 		for (Prop prop : props.values()) {
-			pr.add(new BeanProperty(prop.getName(), prop.getType()));
+			if (!prop.getName().equals("id")) {
+				pr.add(new BeanProperty(prop.getName(), prop.getType()));
+			}
 		}
 
 		return pr;
