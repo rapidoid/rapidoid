@@ -28,6 +28,10 @@ public class App {
 
 	boolean themes = true;
 
+	boolean fluid = true;
+
+	boolean settings = true;
+
 	Object[] screens = { HomeScreen.class, NewTaskScreen.class, TasksScreen.class };
 
 }

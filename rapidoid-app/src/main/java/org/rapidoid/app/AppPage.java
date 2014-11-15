@@ -55,7 +55,7 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 
 	private Object themesMenu;
 
-	public AppPage(Object app, Object[] screens, Object screen) {
+	public AppPage(final Object app, Object[] screens, Object screen) {
 		this.app = app;
 		this.screens = screens;
 		this.screen = screen;
@@ -74,7 +74,7 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 				if (x.isLoggedIn()) {
 
 					ATag profile = a_glyph("user", x.user().display, caret());
-					ATag settings = a_glyph("cog", " Settings");
+					ATag settings = Apps.config(app, "settings", false) ? a_glyph("cog", " Settings").href("/settings.html") : null;
 					ATag logout = a_glyph("log-out", "Logout").href("/_logout");
 
 					return navbarDropdown(false, profile, settings, logout);
@@ -160,6 +160,11 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 	@Override
 	protected Tag<?> brand() {
 		return brand;
+	}
+
+	@Override
+	protected boolean isFluid() {
+		return Apps.config(app, "fluid", false);
 	}
 
 	@Override
