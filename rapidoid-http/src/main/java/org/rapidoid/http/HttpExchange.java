@@ -103,7 +103,7 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	boolean isLoggedIn();
 
-	<T> T user();
+	UserInfo user();
 
 	boolean isGetReq();
 

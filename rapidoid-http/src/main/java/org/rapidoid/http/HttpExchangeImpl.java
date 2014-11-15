@@ -694,7 +694,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public <T> T user() {
+	public UserInfo user() {
 		U.must(isLoggedIn(), "Must be logged in!");
 
 		return session(SESSION_USER);
