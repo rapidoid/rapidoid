@@ -28,6 +28,8 @@ import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.UlTag;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.oauth.OAuth;
+import org.rapidoid.oauth.OAuthProvider;
 import org.rapidoid.pages.DynamicContent;
 import org.rapidoid.pages.bootstrap.NavbarBootstrapPage;
 import org.rapidoid.util.Cls;
@@ -71,17 +73,24 @@ public class AppPage extends NavbarBootstrapPage implements Comparator<Object> {
 			public Object eval(HttpExchange x) {
 				if (x.isLoggedIn()) {
 
-					ATag profile = a_glyph("user", "Profile", caret());
+					ATag profile = a_glyph("user", x.user().display, caret());
 					ATag settings = a_glyph("cog", " Settings");
 					ATag logout = a_glyph("log-out", "Logout").href("/_logout");
 
 					return navbarDropdown(false, profile, settings, logout);
 				} else {
 
-					ATag ga = a_awesome("google", "Sign in with Google").href("/_googleLogin");
-					ATag fb = a_awesome("facebook", "Sign in with Facebook").href("/_facebookLogin");
-					ATag li = a_awesome("linkedin", "Sign in with LinkedIn").href("/_linkedinLogin");
-					ATag gh = a_awesome("github", "Sign in with GitHub").href("/_githubLogin");
+					ATag ga = a_awesome("google", "Sign in with Google").href(
+							OAuth.getLoginURL(x, OAuthProvider.GOOGLE));
+
+					ATag fb = a_awesome("facebook", "Sign in with Facebook").href(
+							OAuth.getLoginURL(x, OAuthProvider.FACEBOOK));
+
+					ATag li = a_awesome("linkedin", "Sign in with LinkedIn").href(
+							OAuth.getLoginURL(x, OAuthProvider.LINKEDIN));
+
+					ATag gh = a_awesome("github", "Sign in with GitHub").href(
+							OAuth.getLoginURL(x, OAuthProvider.GITHUB));
 
 					return navbarDropdown(false, a_glyph("log-in", "Sign in", caret()), ga, fb, li, gh);
 				}
