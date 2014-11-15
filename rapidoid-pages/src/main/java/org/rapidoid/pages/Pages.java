@@ -26,7 +26,6 @@ import java.util.Map.Entry;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.rapidoid.http.HTTPServer;
-import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.json.JSON;
 import org.rapidoid.util.U;
@@ -46,29 +45,7 @@ public class Pages {
 	}
 
 	public static void registerEmitHandler(HTTPServer server) {
-		server.post("/_emit", new Handler() {
-
-			@Override
-			public Object handle(HttpExchange x) throws Exception {
-
-				int hnd = U.num(x.data("hnd"));
-				String event = x.data("event");
-
-				U.notNull(hnd, "hnd");
-				U.notNull(event, "event");
-
-				TagContext ctx = x.session(SESSION_CTX);
-				Page page = x.session(SESSION_PAGE);
-
-
-				Map<Integer, Object> inp = inputs(x);
-				ctx.emit(page.content(), inp, hnd, event);
-
-				Map<Integer, String> changes = ctx.changes();
-				x.json();
-				return changes;
-			}
-		});
+		server.post("/_emit", new EmitHandler());
 	}
 
 	@SuppressWarnings("unchecked")
