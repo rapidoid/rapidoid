@@ -115,7 +115,7 @@ public class TagRenderer {
 		U.notNull(ctx, "tag context");
 
 		if (tag.ctx != null) {
-			U.must(tag.ctx == ctx, "Invalid tag context!");
+			tag.ctx = ctx;
 		} else {
 			tag.ctx = ctx;
 			tag._h = ctx.newHnd();
