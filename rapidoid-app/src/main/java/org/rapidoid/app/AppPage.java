@@ -116,11 +116,10 @@ public class AppPage extends BootstrapPage implements Comparator<Object> {
 
 		Object[] navbarContent = arr(navMenu, themesMenu, dropdownMenu, searchForm);
 
-		Object pageContent = Cls.getPropValue(screen, "content", null);
+		Object pageContent = Cls.getPropValue(U.or(screen, app), "content", null);
 
 		if (pageContent == null) {
-			pageContent = hardcoded("Cannot find/execute method: <b>Object content() { }</b> in screen: <b>"
-					+ screen.getClass().getSimpleName() + "</b>");
+			pageContent = hardcoded("No content available!");
 		}
 
 		return navbarPage(isFluid(), brand, navbarContent, pageContent);
