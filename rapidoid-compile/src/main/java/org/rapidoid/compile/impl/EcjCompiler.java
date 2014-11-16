@@ -38,10 +38,11 @@ public class EcjCompiler implements ICompilerRequestor {
 	private EcjCompilation currentCompilation;
 
 	public EcjCompiler() {
-		INameEnvironment environment = new SimpleNameEnvironment();
-		IProblemFactory problemFactory = new DefaultProblemFactory();
-		CompilerOptions options = new CompilerOptions(U.map(CompilerOptions.OPTION_Source, "1.8"));
+		this(new SimpleNameEnvironment(), new DefaultProblemFactory());
+	}
 
+	public EcjCompiler(INameEnvironment environment, IProblemFactory problemFactory) {
+		CompilerOptions options = new CompilerOptions(U.map(CompilerOptions.OPTION_Source, "1.8"));
 		compiler = new Compiler(environment, new ErrorPolicy(), options, this, problemFactory, null, null);
 	}
 
