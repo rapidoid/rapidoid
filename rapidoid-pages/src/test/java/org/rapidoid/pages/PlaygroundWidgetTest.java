@@ -20,21 +20,25 @@ package org.rapidoid.pages;
  * #L%
  */
 
+import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.testng.annotations.Test;
 
 public class PlaygroundWidgetTest extends PagesTestCommons {
 
+	private static final String ATTRS = "[^>]*?";
+
 	@Test
 	public void testPlaygroundWidget() {
 		TagContext ctx = Tags.context();
-		PlaygroundWidget play = new PlaygroundWidget();
+
+		Tag<?> play = PlaygroundWidget.pageContent(null);
 		print(ctx, play);
 
-		hasRegex(ctx, play, "<table [^>]*?class=\"table[^>]*?>");
+		hasRegex(ctx, play, "<table class=\"table" + ATTRS + ">");
 
-		hasRegex(ctx, play, "<button[^>]*?>-</button>");
+		hasRegex(ctx, play, "<button[^>]*?>\\-</button>");
 		hasRegex(ctx, play, "<span[^>]*?>10</span>");
 		hasRegex(ctx, play, "<button[^>]*?>\\+</button>");
 

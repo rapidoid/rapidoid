@@ -30,11 +30,11 @@ import org.rapidoid.html.tag.UlTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
-import org.rapidoid.pages.bootstrap.BootstrapPage;
+import org.rapidoid.pages.BootstrapWidgets;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
-public class AppPage extends BootstrapPage implements Comparator<Object> {
+public class AppPage extends BootstrapWidgets implements Comparator<Object> {
 
 	private static final String[] themes = { "default", "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal",
 			"lumen", "paper", "readable", "sandstone", "simplex", "slate", "spacelab", "superhero", "united", "yeti" };
@@ -53,10 +53,9 @@ public class AppPage extends BootstrapPage implements Comparator<Object> {
 		this.searchScreenIndex = findSearchScreen();
 	}
 
-	@Override
-	public Tag<?> pageBody(HttpExchange x) {
+	public Tag<?> content(HttpExchange x) {
 
-		ATag brand = a(pageTitle()).href("/");
+		ATag brand = a(title()).href("/");
 
 		Tag<?> dropdownMenu;
 
@@ -139,8 +138,7 @@ public class AppPage extends BootstrapPage implements Comparator<Object> {
 		return Apps.config(app, "fluid", false);
 	}
 
-	@Override
-	protected String pageTitle() {
+	public String title() {
 		return U.or(titleOf(app), "Untitled app");
 	}
 

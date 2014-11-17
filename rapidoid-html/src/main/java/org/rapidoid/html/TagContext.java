@@ -2,7 +2,7 @@ package org.rapidoid.html;
 
 import java.util.Map;
 
-import org.rapidoid.html.impl.TagImpl;
+import org.rapidoid.reactive.Var;
 
 /*
  * #%L
@@ -26,12 +26,8 @@ import org.rapidoid.html.impl.TagImpl;
 
 public interface TagContext {
 
-	void emit(Map<Integer, Object> values, int eventHnd, String event);
+	void emit(Map<Integer, Object> values, int eventHnd);
 
-	int newHnd(TagImpl<?> tag);
-
-	void changed(TagImpl<?> tag);
-
-	Map<Integer, String> changes();
+	int newBinding(Var<Object> binding);
 
 }

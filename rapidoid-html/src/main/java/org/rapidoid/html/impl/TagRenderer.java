@@ -40,7 +40,7 @@ public class TagRenderer {
 
 	private static final byte[] EMIT_CLOSE = "')".getBytes();
 	private static final byte[] INDENT = "  ".getBytes();
-	private static final byte[] EMIT = "_emit(this, '".getBytes();
+	private static final byte[] EMIT = "_emit('".getBytes();
 	private static final byte[] _H = " _h=\"".getBytes();
 	private static final byte[] ON = " on".getBytes();
 	private static final byte[] EQ_DQUOTES = "=\"".getBytes();
@@ -115,11 +115,12 @@ public class TagRenderer {
 
 		U.notNull(ctx, "tag context");
 
-		if (tag.ctx != null) {
-			tag.ctx = ctx;
-		} else {
-			tag.ctx = ctx;
-			tag._h = ctx.newHnd(tag);
+		U.must(tag.ctx == null || tag.ctx == ctx);
+
+		tag.ctx = ctx;
+
+		if (tag.binding != null) {
+			tag._h = ctx.newBinding(tag.binding);
 		}
 
 		String name = HTML.escape(tag.name);
@@ -130,7 +131,7 @@ public class TagRenderer {
 		write(out, LT);
 		write(out, name);
 
-		if (tag.ctx != null) {
+		if (tag._h >= 0) {
 			write(out, _H);
 			attrToStr(out, tag, "_h", tag._h);
 			write(out, DQUOTES);
@@ -161,6 +162,16 @@ public class TagRenderer {
 			write(out, DQUOTES);
 		}
 
+		// FIXME complete this
+		if (tag.cmd != null) {
+			write(out, ON);
+			write(out, "click");
+			write(out, EQ_DQUOTES);
+			write(out, EMIT);
+			write(out, 123456789 + "");
+			write(out, EMIT_CLOSE);
+			write(out, DQUOTES);
+		}
 		write(out, GT);
 
 		if (isSingleTag(name)) {

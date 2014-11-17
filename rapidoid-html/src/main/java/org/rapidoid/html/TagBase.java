@@ -50,14 +50,8 @@ public interface TagBase<TAG extends Tag<?>> {
 
 	TAG is(String attr, boolean value);
 
-	TAG bindContent(Var<Object> var);
+	<T> TAG bind(Var<T> var);
 
-	TAG bind(String attr, Var<String> var);
-
-	TAG bindIs(String attr, Var<Boolean> var);
-
-	TAG unbindContent(String attr);
-
-	TAG unbind(String attr);
+	TAG cmd(String cmd);
 
 }

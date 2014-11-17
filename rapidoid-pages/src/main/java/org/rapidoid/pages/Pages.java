@@ -20,32 +20,37 @@ package org.rapidoid.pages;
  * #L%
  */
 
+import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
-import org.rapidoid.html.Tags;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.json.JSON;
+import org.rapidoid.pages.impl.PageRenderer;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 public class Pages {
 
 	public static final String SESSION_CTX = "_ctx";
 
-	static final String SESSION_PAGE_PREFIX = "_page_";
-
-	public static final String SESSION_PAGE = "_page";
+	public static final String SESSION_PAGE_NAME = "_page_name";
 
 	public static void registerPages(HTTPServer server) {
-		registerEmitHandler(server);
 
-		server.serve(new PageHandler());
-	}
+		Map<String, Class<?>> pages = U.map();
+		List<Class<?>> pageClasses = U.classpathClassesBySuffix("Page", null, null);
 
-	public static void registerEmitHandler(HTTPServer server) {
-		server.post("/_emit", new EmitHandler());
+		for (Class<?> cls : pageClasses) {
+			pages.put(cls.getSimpleName(), cls);
+		}
+
+		server.post("/_emit", new EmitHandler(pages));
+		server.serve(new PageHandler(pages));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -64,31 +69,24 @@ public class Pages {
 	}
 
 	public static TagContext ctx(HttpExchange x) {
-		TagContext ctx = x.session(SESSION_CTX, null);
-
-		if (ctx == null) {
-			ctx = Tags.context();
-			x.setSession(SESSION_CTX, ctx);
-		}
-
-		return ctx;
+		return x.session(SESSION_CTX);
 	}
 
 	public static String pageName(HttpExchange x) {
 		String path = x.path();
 
-		if (path.equals("/")) {
-			path = "/index.html";
+		if (path.endsWith(".html")) {
+			path = U.mid(path, 0, -5);
 		}
 
-		if (path.length() > 6 && path.endsWith(".html")) {
-			return U.capitalized(U.mid(path, 1, -5));
-		} else {
-			return null;
+		if (path.equals("/")) {
+			path = "/index";
 		}
+
+		return U.capitalized(path.substring(1));
 	}
 
-	public static String pageTitle(Class<? extends Page> pageClass) {
+	public static String pageTitle(Class<?> pageClass) {
 		String pageName = pageClass.getSimpleName();
 
 		if (pageName.endsWith("Page")) {
@@ -96,6 +94,35 @@ public class Pages {
 		}
 
 		return U.camelPhrase(pageName);
+	}
+
+	public static String titleOf(Object page) {
+		if (page.getClass().getSimpleName().endsWith("Page")) {
+			return pageTitle(page.getClass());
+		} else {
+			return Cls.getPropValue(page, "title");
+		}
+	}
+
+	public static Tag<?> contentOf(HttpExchange x, Object page) {
+		Method m = Cls.findMethod(page.getClass(), "content", HttpExchange.class);
+		return (Tag<?>) (m != null ? Cls.invoke(m, page, x) : Cls.getPropValue(page, "content"));
+	}
+
+	public static Tag<?> page(HttpExchange x, Object page) {
+		String pageTitle = titleOf(page);
+		Tag<?> body = contentOf(x, page);
+
+		return BootstrapWidgets.page(pageTitle, body);
+	}
+
+	public static HttpExchange render(HttpExchange x, Object page) {
+
+		Object fullPage = page(x, page);
+
+		x.html();
+		PageRenderer.get().render(ctx(x), fullPage, x);
+		return x;
 	}
 
 }

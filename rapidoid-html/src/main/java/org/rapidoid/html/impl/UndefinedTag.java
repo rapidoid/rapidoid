@@ -179,27 +179,12 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 	}
 
 	@Override
-	public TAG bind(String attr, Var<String> var) {
+	public <T> TAG bind(Var<T> var) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public TAG bindIs(String attr, Var<Boolean> var) {
-		throw U.notExpected();
-	}
-
-	@Override
-	public TAG unbind(String attr) {
-		throw U.notExpected();
-	}
-
-	@Override
-	public TAG bindContent(Var<Object> var) {
-		throw U.notExpected();
-	}
-
-	@Override
-	public TAG unbindContent(String attr) {
+	public TAG cmd(String cmd) {
 		throw U.notExpected();
 	}
 

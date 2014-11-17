@@ -31,6 +31,7 @@ import org.rapidoid.html.Action;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagEventHandler;
+import org.rapidoid.html.Tags;
 import org.rapidoid.reactive.Var;
 import org.rapidoid.util.U;
 
@@ -50,17 +51,17 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	final Set<String> battrs = U.set();
 
-	Var<Object> contentBinding;
-
-	final Map<String, Var<?>> bindings = U.map();
-
 	final Map<String, TagEventHandler<TAG>> eventHandlers = U.map();
 
-	int _h;
+	int _h = -1;
 
 	TagContext ctx;
 
-	private TAG proxy;
+	TAG proxy;
+
+	Var<Object> binding;
+
+	String cmd;
 
 	@SuppressWarnings("unchecked")
 	public TagImpl(Class<TAG> clazz, String name, Object[] contentsAndHandlers) {
@@ -154,15 +155,9 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	}
 
 	private void changed() {
-		if (ctx != null) {
-			ctx.changed(this);
-		}
 	}
 
 	private void changedContent() {
-		if (contentBinding != null) {
-			contentBinding.set(contents.size() == 1 ? contents.get(0) : contents);
-		}
 		changed();
 	}
 
@@ -234,16 +229,11 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 		return attrs.get(attr);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public TAG attr(String attr, String value) {
 		String prev = attrs.put(attr, value);
 
 		if (!U.eq(prev, value)) {
-			Var<String> var = (Var<String>) bindings.get(attr);
-			if (var != null) {
-				var.set(value);
-			}
 			changed();
 		}
 
@@ -255,7 +245,6 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 		return battrs.contains(attr);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public TAG is(String attr, boolean value) {
 		boolean changed;
@@ -267,55 +256,29 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 		}
 
 		if (changed) {
-			Var<Boolean> var = (Var<Boolean>) bindings.get(attr);
-			if (var != null) {
-				var.set(value);
-			}
 			changed();
 		}
 
 		return proxy();
 	}
 
-	@Override
-	public TAG bind(String attr, Var<String> var) {
-		U.must(!bindings.containsKey(attr), "The attribute '%s' of tag '%s' is already bound to a var!", attr, name);
-		bindings.put(attr, var);
-		attr(attr, U.text(var.get()));
-		return proxy();
-	}
-
-	public TAG bindIs(String attr, Var<Boolean> var) {
-		U.must(!bindings.containsKey(attr), "The attribute '%s' of tag '%s' is already bound to a var!", attr, name);
-		bindings.put(attr, var);
-		is(attr, var.get());
-		return proxy();
-	}
-
-	@Override
-	public TAG unbind(String attr) {
-		U.must(bindings.containsKey(attr), "The attribute '%s' of tag '%s' is not bound to a var!", attr, name);
-		bindings.remove(attr);
-		return proxy();
-	}
-
-	@Override
-	public TAG bindContent(Var<Object> var) {
-		U.must(contentBinding == null, "The content of tag '%s' is already bound to a var!", name);
-		contentBinding = var;
-		content(var.get());
-		return proxy();
-	}
-
-	@Override
-	public TAG unbindContent(String attr) {
-		U.must(contentBinding != null, "The content of tag '%s' is not bound to a var!", name);
-		contentBinding = null;
-		return proxy();
-	}
-
 	public int hnd() {
 		return _h;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> TAG bind(Var<T> var) {
+		Tags.setValue(proxy(), var.get());
+		U.must(binding == null);
+		binding = (Var<Object>) var;
+		return proxy();
+	}
+
+	@Override
+	public TAG cmd(String cmd) {
+		this.cmd = cmd;
+		return proxy();
 	}
 
 }

@@ -20,14 +20,15 @@ package org.rapidoid.app.example;
  * #L%
  */
 
+import static org.rapidoid.html.BasicUtils.*;
 import static org.rapidoid.html.Bootstrap.*;
 import static org.rapidoid.html.HTML.*;
-import static org.rapidoid.pages.bootstrap.BootstrapWidget.*;
+import static org.rapidoid.pages.BootstrapWidgets.*;
 
+import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.H1Tag;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
-import org.rapidoid.pages.bootstrap.TableWidget;
 
 public class TasksScreen {
 
@@ -39,7 +40,7 @@ public class TasksScreen {
 
 		H1Tag caption = h1("Manage tasks");
 
-		TableWidget table = new TableWidget(items);
+		Tag<?> table = grid(items, 10);
 
 		return arr(caption, rowFull(table));
 	}

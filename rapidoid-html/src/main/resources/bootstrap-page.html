@@ -26,12 +26,8 @@ document.write('<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/' + theme
 
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
-<style type="text/css">
-{{style}}
-</style>
-
 <script>
-function _emit(c, event) {
+function _emit(event) {
 
 	var x = document.querySelectorAll("input,textarea");
 
@@ -41,35 +37,36 @@ function _emit(c, event) {
 		var t = $(x[i]);
 		var _h = t.attr('_h');
 
-		var val;
-
-		if (t.prop('type') == 'checkbox' || t.prop('type') == 'radio') {
-			val = t.prop('checked');
-		} else {
-			val = t.val();
+		if (_h) {
+			var val;
+	
+			if (t.prop('type') == 'checkbox' || t.prop('type') == 'radio') {
+				val = t.prop('checked');
+			} else {
+				val = t.val();
+			}
+	
+			inputs[_h] = val;
 		}
-
-		inputs[_h] = val;
 	}
-
+	
 	x = document.querySelectorAll("option");
 
 	for (var i = 0; i < x.length; i++) {
 		var t = $(x[i]);
 		var _h = t.attr('_h');
 
-		inputs[_h] = t.prop('selected');
+		if (_h) {
+			inputs[_h] = t.prop('selected');
+		}
 	}
-
-	var hnd = $(c).attr('_h');
 
 	$.post('/_emit', {
 		event : event,
-		hnd : hnd,
 		inputs : JSON.stringify(inputs)
 	}).done(function(data) {
-		for ( var h in data) {
-			$('[_h=' + h + ']').replaceWith(data[h]);
+		for ( var sel in data) {
+			$(sel).html(data[sel]);
 		}
 	}).fail(function(data) {
 		alert("Communication error!");

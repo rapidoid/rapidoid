@@ -39,7 +39,7 @@ public class Apps {
 
 		OAuth.register(server);
 		HttpBuiltins.register(server);
-		Pages.registerEmitHandler(server);
+		Pages.registerPages(server);
 
 		server.serve(new AppHandler(scanAppClasses(null)));
 		server.start();

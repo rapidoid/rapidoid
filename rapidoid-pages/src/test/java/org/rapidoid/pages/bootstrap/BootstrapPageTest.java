@@ -24,24 +24,41 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.pages.BootstrapWidgets;
 import org.rapidoid.pages.PagesTestCommons;
 import org.testng.annotations.Test;
 
+@SuppressWarnings("unused")
 public class BootstrapPageTest extends PagesTestCommons {
 
 	@Test
-	public void testPagerWidget() {
-		BootstrapPage page = new BootstrapPage() {
+	public void testPojoPage() {
+		Object page = new Object() {
 
-			@Override
-			public Tag<?> pageBody(HttpExchange x) {
-				return body(div("abc"));
+			public Tag<?> content(HttpExchange x) {
+				return BootstrapWidgets.body(BootstrapWidgets.div("abc"));
 			}
 
-			@Override
-			protected String pageTitle() {
+			public String title() {
 				return "Some title";
 			}
+
+		};
+
+		TagContext ctx = Tags.context();
+		print(ctx, page);
+
+		has(ctx, page, "<title>Some title</title>");
+		hasRegex(ctx, page, "<div[^>]*?>abc</div>");
+	}
+
+	@Test
+	public void testPojoPage2() {
+		Object page = new Object() {
+
+			public Tag<?> content = BootstrapWidgets.body(BootstrapWidgets.div("abc"));
+
+			public String title = "Some title";
 
 		};
 

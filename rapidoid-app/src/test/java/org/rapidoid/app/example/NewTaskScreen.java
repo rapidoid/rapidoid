@@ -22,16 +22,15 @@ package org.rapidoid.app.example;
 
 import static org.rapidoid.html.Bootstrap.*;
 import static org.rapidoid.html.HTML.*;
+import static org.rapidoid.pages.BootstrapWidgets.*;
 
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.html.tag.DivTag;
+import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.H1Tag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Model;
-import org.rapidoid.pages.bootstrap.FormWidget;
 
-@SuppressWarnings("serial")
 public class NewTaskScreen {
 
 	public Object content() {
@@ -42,18 +41,13 @@ public class NewTaskScreen {
 
 		User user = new User();
 
-		Tag<?>[] buttons = { btn("Save", new TagEventHandler<Tag<?>>() {
-			@Override
-			public void handle(Tag<?> target) {
-				target.append("+");
-			}
-		}), btn("Cancel") };
+		Tag<?>[] buttons = { cmd("Save"), cmd("Cancel") };
 
 		Item item = Model.item(new Task("aa", Priority.MEDIUM, user));
-		FormWidget frm1 = new FormWidget(item, buttons);
+		FormTag frm1 = form_(item, buttons);
 
 		Item item2 = Model.item(user);
-		FormWidget frm2 = new FormWidget(item2, buttons);
+		FormTag frm2 = form_(item2, buttons);
 
 		return row(col2(), col8(caption, frm1, caption2, frm2), col2());
 	}

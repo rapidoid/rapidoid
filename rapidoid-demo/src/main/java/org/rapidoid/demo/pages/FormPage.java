@@ -20,37 +20,45 @@ package org.rapidoid.demo.pages;
  * #L%
  */
 
+import org.rapidoid.annotation.Session;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.pages.bootstrap.BootstrapPage;
+import org.rapidoid.pages.BootstrapWidgets;
 import org.rapidoid.reactive.Var;
 import org.rapidoid.reactive.Vars;
 
-public class FormPage extends BootstrapPage {
+public class FormPage extends BootstrapWidgets {
 
-	final Var<?>[] vars = Vars.vars("niko", "rapidoid", "niko@rapi.doid", "No", arr("Manager", "Moderator"), "Male",
-			arr("A", "C"), "Very interesting!", true);
+	@Session
+	private Var<?>[] vars1 = Vars.vars("niko1", "rapidoid", "niko@rapi.doid", "No", arr("Manager", "Moderator"),
+			"Male", arr("A", "C"), "Very interesting!", true);
 
-	@Override
-	public Tag<?> pageBody(HttpExchange x) {
+	@Session
+	private Var<?>[] vars2 = Vars.vars("niko2", "rapidoid", "niko@rapi.doid", "Yes", arr("Manager", "Moderator"),
+			"Male", arr("A", "C"), "Very interesting!", true);
+
+	@Session
+	private Var<?>[] vars3 = Vars.vars("niko3", "rapidoid", "niko@rapi.doid", "No", arr("Manager", "Moderator"),
+			"Male", arr("A", "C"), "Very interesting!", true);
+
+	public Object content(HttpExchange x) {
 
 		ATag brand = a("Welcome to the Forms page!").href("/form.html");
 
-		Tag<?> form1 = frm(FormLayout.HORIZONTAL);
-		Tag<?> form2 = frm(FormLayout.VERTICAL);
-		Tag<?> form3 = frm(FormLayout.INLINE);
+		Tag<?> form1 = frm(FormLayout.HORIZONTAL, vars1);
+		Tag<?> form2 = frm(FormLayout.VERTICAL, vars2);
+		Tag<?> form3 = frm(FormLayout.INLINE, vars3);
 
 		DivTag pageContent = row(col3(form1), col3(form2), col6(form3));
 
 		return navbarPage(true, brand, null, pageContent);
 	}
 
-	private Tag<?> frm(final FormLayout layout) {
+	private Tag<?> frm(final FormLayout layout, Var<?>[] vars) {
 
 		final String[] names = { "user", "pass", "email", "driver", "roles", "gender", "accept", "bbb", "comments" };
 
@@ -70,14 +78,17 @@ public class FormPage extends BootstrapPage {
 
 		final Object[][] options = { null, null, null, opt1, opt2, opt3, opt4, null, null };
 
-		final Object[] buttons = { btn("Save", new TagEventHandler<Tag<?>>() {
-			@Override
-			public void handle(Tag<?> target) {
-				target.append("+");
-			}
-		}), btn("Cancel") };
+		final Object[] buttons = { btn("Save").cmd("save"), btn("Cancel") };
 
 		return div(form_(layout, names, desc, types, options, vars, buttons), ul_li((Object[]) vars));
+	}
+
+	public void onSave() {
+
+	}
+
+	public void onCancel() {
+
 	}
 
 }

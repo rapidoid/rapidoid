@@ -28,30 +28,27 @@ import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.SpanTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Model;
-import org.rapidoid.pages.bootstrap.TableWidget;
 import org.rapidoid.pages.entity.Person;
-import org.rapidoid.pages.plain.HtmlWidget;
 import org.rapidoid.reactive.Var;
 import org.rapidoid.util.U;
 
-public class PlaygroundWidget extends HtmlWidget {
+public class PlaygroundWidget extends BootstrapWidgets {
 
-	@Override
-	public Tag<?> view(HttpExchange x) {
-		return div(grid(1), counter(10), adder());
+	public static Tag<?> pageContent(HttpExchange x) {
+		return div(gridAt(1), counter(10), adder());
 	}
 
-	public Tag<?> grid(int page) {
+	public static Tag<?> gridAt(int page) {
 		Object[] data = { new Person("nick", 22), new Person("doe", 44) };
 
 		if (data.length > 0) {
-			return div(new TableWidget(Model.beanItems(data)));
+			return div(grid(Model.beanItems(data), 10));
 		} else {
 			return div(_("No results!"));
 		}
 	}
 
-	public SpanTag counter(int start) {
+	public static SpanTag counter(int start) {
 
 		final Var<Integer> num = var(start);
 
@@ -72,7 +69,7 @@ public class PlaygroundWidget extends HtmlWidget {
 		return span(b2, span(num), b1);
 	}
 
-	public DivTag adder() {
+	public static DivTag adder() {
 
 		final InputTag input = input().css("border: 1px;");
 		final DivTag coll = div();

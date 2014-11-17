@@ -20,6 +20,7 @@ package org.rapidoid.demo.pages;
  * #L%
  */
 
+import org.rapidoid.annotation.Session;
 import org.rapidoid.demo.pojo.Person;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagEventHandler;
@@ -27,25 +28,27 @@ import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.H1Tag;
-import org.rapidoid.html.tag.TrTag;
 import org.rapidoid.html.tag.UlTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
-import org.rapidoid.pages.bootstrap.BootstrapPage;
-import org.rapidoid.pages.bootstrap.TableItemAction;
-import org.rapidoid.pages.bootstrap.TableWidget;
+import org.rapidoid.pages.BootstrapWidgets;
 import org.rapidoid.util.U;
 
-public class IndexPage extends BootstrapPage {
+public class IndexPage extends BootstrapWidgets {
 
-	@Override
-	public Tag<?> pageBody(HttpExchange x) {
+	@Session
+	private int n;
+
+	public Tag<?> content(HttpExchange x) {
+
 		final ATag brand = a("Welcome to the Showcase page!").href("/");
+
 		UlTag dropdownMenu = navbarDropdown(false, a("Profile", caret()).href("#"), a("Settings"), a("Logout"));
 		UlTag menuL = navbarMenu(true, a("About us").href("#about"), a("Contact").href("#contact"));
 		UlTag menuR = navbarMenu(false, a("Logout").href("/_logout"));
+
 		FormTag formL = navbarForm(true, "Search", arr("query"), arr("Enter search phrase..."));
 		FormTag formR = navbarForm(false, "Login", arr("user", "pass"), arr("Username", "Password"));
 
@@ -59,32 +62,28 @@ public class IndexPage extends BootstrapPage {
 			}
 		});
 
-		ButtonTag xy = btnPrimary("xy", new TagEventHandler<ButtonTag>() {
-			@Override
-			public void handle(ButtonTag target) {
-				System.out.println("clicked xy!");
-				brand.content(target.content());
-			}
-		});
+		ButtonTag xy = btnPrimary("X Z Y").cmd("xyz");
 
 		Items items = Model.mockBeanItems(20, Person.class);
 
 		H1Tag caption = h1("Manage persons");
 
-		TableWidget table = new TableWidget(items, new TableItemAction() {
-			@Override
-			public void execute(TrTag row, Item item) {
-				row.class_("bg-primary");
-				Integer age = (Integer) U.or(item.get("age"), 0);
-				item.set("age", age + 1);
-			}
-		});
+		Tag<?> table = grid(items, 10);
 
 		Object[] pageContent = arr(row(col6("Hello world!"), col3(abc, xy)), arr(caption, rowFull(table)));
 
 		Tag<?>[] navbarContent = arr(menuL, formL, dropdownMenu, menuR, formR);
 
 		return navbarPage(true, brand, navbarContent, pageContent);
+	}
+
+	public void onXyz() {
+		n++;
+	}
+
+	public void onEnter(Item item) {
+		Integer age = (Integer) U.or(item.get("age"), 0);
+		item.set("age", age + 1);
 	}
 
 }

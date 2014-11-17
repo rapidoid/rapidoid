@@ -20,8 +20,10 @@ package org.rapidoid.pages;
  * #L%
  */
 
-import java.util.List;
+import java.util.Map;
 
+import org.rapidoid.html.TagContext;
+import org.rapidoid.html.Tags;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.inject.IoC;
@@ -29,51 +31,36 @@ import org.rapidoid.util.U;
 
 public class PageHandler implements Handler {
 
+	private final Map<String, Class<?>> pages;
+
+	public PageHandler(Map<String, Class<?>> pages) {
+		this.pages = pages;
+	}
+
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
 
 		String pageName = Pages.pageName(x);
-
-		x.setSession(Pages.SESSION_CTX, null);
-
-		if (pageName != null) {
-
-			List<Class<?>> pageClasses = U.classpathClassesBySuffix("Page", null, null);
-			Page page = x.session(Pages.SESSION_PAGE_PREFIX + pageName, null);
-
-			// if (page == null) {
-			Class<?> pageClass = findPageClass(pageClasses, pageName);
-
-			U.must(PageWidget.class.isAssignableFrom(pageClass), "The class %s must implement WebPage!", pageClass);
-
-			if (pageClass != null) {
-				page = (Page) U.newInstance(pageClass);
-				IoC.autowire(page);
-				x.setSession(Pages.SESSION_PAGE_PREFIX + pageName, page);
-			} else {
-				return x.notFound();
-			}
-			// }
-
-			x.setSession(Pages.SESSION_PAGE, page);
-			x.html();
-			page.render(x);
-
-			return x;
-
-		} else {
-			return null;
-		}
-	}
-
-	private Class<?> findPageClass(List<Class<?>> pageClasses, String pageName) {
-		for (Class<?> cls : pageClasses) {
-			if (cls.getSimpleName().equals(pageName + "Page")) {
-				return cls;
-			}
+		if (pageName == null) {
+			return x.notFound();
 		}
 
-		return null;
+		String pageClassName = U.capitalized(pageName) + "Page";
+
+		Class<?> pageClass = pages.get(pageClassName);
+		if (pageClass == null) {
+			return x.notFound();
+		}
+
+		x.setSession(Pages.SESSION_PAGE_NAME, pageClassName);
+
+		Object page = U.newInstance(pageClass);
+		IoC.autowire(page);
+
+		TagContext ctx = Tags.context();
+		x.setSession(Pages.SESSION_CTX, ctx);
+
+		return Pages.render(x, page);
 	}
 
 }

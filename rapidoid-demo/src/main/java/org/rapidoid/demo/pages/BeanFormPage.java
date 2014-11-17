@@ -20,36 +20,31 @@ package org.rapidoid.demo.pages;
  * #L%
  */
 
+import org.rapidoid.annotation.Session;
 import org.rapidoid.demo.pojo.Person;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.html.tag.ATag;
+import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Model;
-import org.rapidoid.pages.bootstrap.BootstrapPage;
-import org.rapidoid.pages.bootstrap.FormWidget;
+import org.rapidoid.pages.BootstrapWidgets;
 
-public class BeanFormPage extends BootstrapPage {
+public class BeanFormPage extends BootstrapWidgets {
 
-	static Person person = new Person("abc", 22);
-	
-	@Override
-	public Tag<?> pageBody(HttpExchange x) {
+	@Session
+	private Person person = new Person("abc", 22);
+
+	public Tag<?> content(HttpExchange x) {
 		ATag brand = a("Edit person").href("/beanForm.html");
 
-		Tag<?>[] buttons = { btn("Save", new TagEventHandler<Tag<?>>() {
-			@Override
-			public void handle(Tag<?> target) {
-				target.append("+");
-			}
-		}), btn("Cancel") };
+		Tag<?>[] buttons = { cmd("Save"), cmd("Cancel") };
 
 		Item item = Model.item(person);
 
-		FormWidget form = new FormWidget(item, buttons);
+		FormTag form = form_(item, buttons);
 
-		return navbarPage(true, brand, null, row(col4(form)));
+		return navbarPage(false, brand, null, arr(rowFull(form), rowFull(person)));
 	}
 
 }

@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.pages.Pages;
 import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
 import org.rapidoid.util.Cls;
@@ -32,8 +33,6 @@ import org.rapidoid.web.WebPojoDispatcher;
 import org.rapidoid.web.WebReq;
 
 public class AppHandler implements Handler {
-
-	private static final String SESSION_APP_PAGE = "_appPage";
 
 	private final WebPojoDispatcher dispatcher;
 
@@ -53,8 +52,6 @@ public class AppHandler implements Handler {
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
 
-		AppPage appPage = x.session(SESSION_APP_PAGE, null);
-
 		String path = x.path();
 
 		Object screen = getScreen(path);
@@ -62,19 +59,12 @@ public class AppHandler implements Handler {
 			return x.notFound();
 		}
 
-		if (appPage == null) {
-			appPage = new AppPage(main, screens, screen);
-			x.setSession(SESSION_APP_PAGE, appPage);
-		} else {
-			appPage.setScreen(screen);
-		}
+		AppPage appPage = new AppPage(main, screens, screen);
 
 		try {
 			return dispatcher.dispatch(new WebReq(x));
 		} catch (PojoHandlerNotFoundException e) {
-			x.html();
-			appPage.render(x);
-			return x;
+			return Pages.render(x, appPage);
 
 		} catch (PojoDispatchException e) {
 			return x.response(500, "Cannot initialize handler argument(s)!", e);
@@ -89,4 +79,5 @@ public class AppHandler implements Handler {
 		}
 		return null;
 	}
+
 }

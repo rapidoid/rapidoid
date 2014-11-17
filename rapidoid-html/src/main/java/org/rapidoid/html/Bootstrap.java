@@ -32,6 +32,7 @@ import org.rapidoid.html.tag.OptionTag;
 import org.rapidoid.html.tag.SelectTag;
 import org.rapidoid.html.tag.SpanTag;
 import org.rapidoid.html.tag.TableTag;
+import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.html.tag.UlTag;
 import org.rapidoid.reactive.Var;
 import org.rapidoid.reactive.Vars;
@@ -232,36 +233,37 @@ public class Bootstrap extends HTML {
 		return group;
 	}
 
-	@SuppressWarnings("unchecked")
 	public static Object input_(String name, String desc, FieldType type, Object[] options, Var<?> var) {
 
-		Var<String> svar = (Var<String>) var;
-		Var<Boolean> bvar = (Var<Boolean>) var;
-		Var<Object> ovar = (Var<Object>) var;
-
+		InputTag input;
 		switch (type) {
 
 		case TEXT:
-			return input().type("text").class_("form-control").name(name).placeholder(desc).bind("value", svar);
+			input = input().type("text").class_("form-control").name(name).placeholder(desc).bind(var);
+			return input;
 
 		case PASSWORD:
-			return input().type("password").class_("form-control").name(name).placeholder(desc).bind("value", svar);
+			input = input().type("password").class_("form-control").name(name).placeholder(desc).bind(var);
+			return input;
 
 		case EMAIL:
-			return input().type("email").class_("form-control").name(name).placeholder(desc).bind("value", svar);
+			input = input().type("email").class_("form-control").name(name).placeholder(desc).bind(var);
+			return input;
 
 		case TEXTAREA:
-			return textarea().class_("form-control").name(name).placeholder(desc).bindContent(ovar);
+			TextareaTag textarea = textarea().class_("form-control").name(name).placeholder(desc).bind(var);
+			return textarea;
 
 		case CHECKBOX:
-			return input().type("checkbox").name(name).bindIs("checked", bvar);
+			input = input().type("checkbox").name(name).bind(var);
+			return input;
 
 		case DROPDOWN:
 			U.notNull(options, "dropdown options");
 			SelectTag dropdown = select().name(name).class_("form-control").multiple(false);
 			for (Object opt : options) {
 				Var<Boolean> optVar = Vars.eq(var, opt);
-				OptionTag op = option(opt).value(str(opt)).bindIs("selected", optVar);
+				OptionTag op = option(opt).value(str(opt)).bind(optVar);
 				dropdown.append(op);
 			}
 			return dropdown;
@@ -271,7 +273,7 @@ public class Bootstrap extends HTML {
 			SelectTag select = select().name(name).class_("form-control").multiple(true);
 			for (Object opt : options) {
 				Var<Boolean> optVar = Vars.has(var, opt);
-				OptionTag op = option(opt).value(str(opt)).bindIs("selected", optVar);
+				OptionTag op = option(opt).value(str(opt)).bind(optVar);
 				select.append(op);
 			}
 			return select;
@@ -282,7 +284,7 @@ public class Bootstrap extends HTML {
 			for (int i = 0; i < options.length; i++) {
 				Object opt = options[i];
 				Var<Boolean> optVar = Vars.eq(var, opt);
-				InputTag radio = input().type("radio").name(name).value(str(opt)).bindIs("checked", optVar);
+				InputTag radio = input().type("radio").name(name).value(str(opt)).bind(optVar);
 				radios[i] = label(radio, opt).class_("radio-inline");
 			}
 			return radios;
@@ -293,7 +295,7 @@ public class Bootstrap extends HTML {
 			for (int i = 0; i < options.length; i++) {
 				Object opt = options[i];
 				Var<Boolean> optVar = Vars.has(var, opt);
-				InputTag cc = input().type("checkbox").name(name).value(str(opt)).bindIs("checked", optVar);
+				InputTag cc = input().type("checkbox").name(name).value(str(opt)).bind(optVar);
 				checkboxes[i] = label(cc, opt).class_("radio-checkbox");
 			}
 			return checkboxes;
@@ -365,6 +367,10 @@ public class Bootstrap extends HTML {
 
 	public static DivTag col12(Object... contents) {
 		return col_(12, contents);
+	}
+
+	public static ButtonTag cmd(String cmd) {
+		return btn(U.capitalized(cmd)).cmd(cmd);
 	}
 
 }

@@ -24,8 +24,10 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.reactive.Var;
 import org.rapidoid.test.TestCommons;
 
@@ -34,16 +36,26 @@ public class PagesTestCommons extends TestCommons {
 	@SuppressWarnings({ "unchecked" })
 	protected static final Map<Integer, Object> NO_CHANGES = Collections.EMPTY_MAP;
 
-	protected void print(TagContext ctx, PageWidget c) {
+	protected void print(TagContext ctx, Object content) {
 		HttpExchange x = mockExchange(ctx);
-		String html = c.toHTML(x);
+
+		if (!(content instanceof Tag<?>)) {
+			content = Pages.page(x, content);
+		}
+
+		String html = PageRenderer.get().toHTML(ctx, content, x);
 		notNull(html);
 		System.out.println(html);
 	}
 
-	protected void has(TagContext ctx, PageWidget c, String... containingTexts) {
+	protected void has(TagContext ctx, Object content, String... containingTexts) {
 		HttpExchange x = mockExchange(ctx);
-		String html = c.toHTML(x);
+
+		if (!(content instanceof Tag<?>)) {
+			content = Pages.page(x, content);
+		}
+
+		String html = PageRenderer.get().toHTML(ctx, content, x);
 		notNull(html);
 
 		for (String text : containingTexts) {
@@ -51,10 +63,14 @@ public class PagesTestCommons extends TestCommons {
 		}
 	}
 
-	protected void hasRegex(TagContext ctx, PageWidget c, String... containingRegexes) {
+	protected void hasRegex(TagContext ctx, Object content, String... containingRegexes) {
 		HttpExchange x = mockExchange(ctx);
-		String html = c.toHTML(x);
-		notNull(html);
+
+		if (!(content instanceof Tag<?>)) {
+			content = Pages.page(x, content);
+		}
+
+		String html = PageRenderer.get().toHTML(ctx, content, x);
 
 		for (String regex : containingRegexes) {
 			isTrue(Pattern.compile(regex).matcher(html).find());

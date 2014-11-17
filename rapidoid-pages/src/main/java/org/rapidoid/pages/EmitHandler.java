@@ -25,8 +25,6 @@ import java.util.Map;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
-import org.rapidoid.html.impl.TagImpl;
-import org.rapidoid.html.impl.TagInternals;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.impl.PageRenderer;
@@ -34,34 +32,32 @@ import org.rapidoid.util.U;
 
 public class EmitHandler implements Handler {
 
+	private final Map<String, Class<?>> pages;
+
+	public EmitHandler(Map<String, Class<?>> pages) {
+		this.pages = pages;
+	}
+
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
 
-		int hnd = U.num(x.data("hnd"));
-		String event = x.data("event");
+		int event = U.num(x.data("event"));
 
-		U.notNull(hnd, "hnd");
-		U.notNull(event, "event");
-
-		TagContext ctx = x.session(Pages.SESSION_CTX);
-		Page page = x.session(Pages.SESSION_PAGE);
+		TagContext ctx = Pages.ctx(x);
 
 		Map<Integer, Object> inp = Pages.inputs(x);
-		ctx.emit(inp, hnd, event);
+		ctx.emit(inp, event);
+
+		Object page = U.newInstance(pages.get(x.session(Pages.SESSION_PAGE_NAME)));
 
 		ctx = Tags.context();
-		page = U.newInstance(page.getClass());
-
 		x.setSession(Pages.SESSION_CTX, ctx);
 
-		Tag<?> root = page.pageBody(x);
-		TagImpl<Tag<?>> rootImpl = ((TagInternals) root).base();
+		Tag<?> body = Pages.contentOf(x, page);
 
-		Map<Integer, String> changes = ctx.changes();
-
-		String html = PageRenderer.get().toHTML(ctx, root, x);
-
-		changes.put(rootImpl.hnd(), html);
+		Map<String, String> changes = U.map();
+		String html = PageRenderer.get().toHTML(ctx, body, x);
+		changes.put("body", html);
 
 		x.json();
 		return changes;
