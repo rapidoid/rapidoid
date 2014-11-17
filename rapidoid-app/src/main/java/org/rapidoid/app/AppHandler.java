@@ -20,64 +20,31 @@ package org.rapidoid.app;
  * #L%
  */
 
-import java.util.List;
-
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.Pages;
-import org.rapidoid.pojo.PojoDispatchException;
-import org.rapidoid.pojo.PojoHandlerNotFoundException;
-import org.rapidoid.util.Cls;
-import org.rapidoid.util.U;
-import org.rapidoid.web.WebPojoDispatcher;
-import org.rapidoid.web.WebReq;
+import org.rapidoid.rest.WebPojoDispatcher;
 
 public class AppHandler implements Handler {
 
-	private final WebPojoDispatcher dispatcher;
+	private final AppClasses appCls;
 
-	private Object main;
-
-	private Object[] screens;
-
-	public AppHandler(AppStructure app) {
-		main = U.newInstance(app.main);
-
-		List<Class<?>> services = app.services;
-		this.dispatcher = new WebPojoDispatcher(Cls.instantiateAll(services));
-
-		screens = Cls.instantiateAll(app.screens);
+	public AppHandler(AppClasses appCls) {
+		this.appCls = appCls;
 	}
 
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
 
-		String path = x.path();
+		WebPojoDispatcher dispatcher = new WebPojoDispatcher(appCls.services);
 
-		Object screen = getScreen(path);
-		if (screen == null) {
-			return x.notFound();
+		Object result = Pages.dispatch(x, dispatcher, appCls.pages);
+
+		if (result != null) {
+			return result;
 		}
 
-		AppPage appPage = new AppPage(main, screens, screen);
-
-		try {
-			return dispatcher.dispatch(new WebReq(x));
-		} catch (PojoHandlerNotFoundException e) {
-			return Pages.render(x, appPage);
-
-		} catch (PojoDispatchException e) {
-			return x.response(500, "Cannot initialize handler argument(s)!", e);
-		}
-	}
-
-	private Object getScreen(String path) {
-		for (Object screen : screens) {
-			if (Apps.screenUrl(screen).equals(path)) {
-				return screen;
-			}
-		}
-		return null;
+		return Pages.serve(x, AppPageGeneric.class);
 	}
 
 }

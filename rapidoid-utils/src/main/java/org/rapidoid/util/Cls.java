@@ -603,6 +603,9 @@ public class Cls {
 	}
 
 	public static Object[] instantiateAll(Collection<Class<?>> classes) {
+		if (classes.isEmpty()) {
+			return Constants.EMPTY_ARRAY;
+		}
 		Object[] instances = new Object[classes.size()];
 
 		int i = 0;
@@ -823,6 +826,16 @@ public class Cls {
 		default:
 			throw U.notExpected();
 		}
+	}
+
+	public static Map<String, Class<?>> classMap(List<Class<?>> classes) {
+		Map<String, Class<?>> map = U.map();
+
+		for (Class<?> cls : classes) {
+			map.put(cls.getSimpleName(), cls);
+		}
+
+		return map;
 	}
 
 }

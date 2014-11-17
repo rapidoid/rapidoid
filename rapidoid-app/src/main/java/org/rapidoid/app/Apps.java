@@ -20,7 +20,7 @@ package org.rapidoid.app;
  * #L%
  */
 
-import java.util.List;
+import java.util.Map;
 
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
@@ -32,6 +32,8 @@ import org.rapidoid.util.U;
 
 public class Apps {
 
+	private static AppClasses APP_CLASSES;
+
 	public static void main(String[] args) {
 		U.args(args);
 
@@ -41,42 +43,39 @@ public class Apps {
 		HttpBuiltins.register(server);
 		Pages.registerPages(server);
 
-		server.serve(new AppHandler(scanAppClasses(null)));
+		AppClasses appCls = scanAppClasses();
+		server.serve(new AppHandler(appCls));
 		server.start();
 	}
 
-	public static String screenName(Object screen) {
-		return U.mid(screen.getClass().getSimpleName(), 0, -6);
+	public static String screenName(Class<?> screenClass) {
+		return U.mid(screenClass.getSimpleName(), 0, -6);
 	}
 
-	public static String screenUrl(Object screen) {
-		String url = "/" + screenName(screen).toLowerCase();
+	public static String screenUrl(Class<?> screenClass) {
+		String url = "/" + screenName(screenClass).toLowerCase();
 		return url.equals("/home") ? "/" : url;
 	}
 
-	public static AppStructure scanAppClasses() {
+	public static AppClasses scanAppClasses() {
 		return scanAppClasses(null);
 	}
 
-	public static AppStructure scanAppClasses(ClassLoader classLoader) {
-		List<Class<?>> services = U.classpathClassesBySuffix("Service", null, classLoader);
-		List<Class<?>> apps = U.classpathClassesByName("App", null, classLoader);
-		List<Class<?>> screens = U.classpathClassesBySuffix("Screen", null, classLoader);
+	public static synchronized AppClasses scanAppClasses(ClassLoader classLoader) {
 
-		U.must(apps.size() <= 1, "Found more than one applications (classes named 'App')!", "classes", apps);
-		final Class<?> appClass = !apps.isEmpty() ? apps.get(0) : TheDefaultApp.class;
+		if (APP_CLASSES == null) {
 
-		Object app = U.newInstance(appClass);
-		Object[] screensConfig = Apps.config(app, "screens", null);
+			Map<String, Class<?>> services = Cls.classMap(U.classpathClassesBySuffix("Service", null, classLoader));
+			Map<String, Class<?>> pages = Cls.classMap(U.classpathClassesBySuffix("Page", null, classLoader));
+			Map<String, Class<?>> apps = Cls.classMap(U.classpathClassesByName("App", null, classLoader));
+			Map<String, Class<?>> screens = Cls.classMap(U.classpathClassesBySuffix("Screen", null, classLoader));
 
-		if (screensConfig != null) {
-			screens.clear();
-			for (Object scr : screensConfig) {
-				screens.add((Class<?>) scr);
-			}
+			final Class<?> appClass = !apps.isEmpty() ? apps.get("App") : TheDefaultApp.class;
+
+			APP_CLASSES = new AppClasses(appClass, services, pages, screens);
 		}
 
-		return new AppStructure(appClass, screens, services);
+		return APP_CLASSES;
 	}
 
 	@SuppressWarnings("unchecked")

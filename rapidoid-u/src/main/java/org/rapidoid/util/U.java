@@ -952,7 +952,7 @@ public class U {
 		}
 	}
 
-	public static void notNull(Object... items) {
+	public static void notNullAll(Object... items) {
 		for (int i = 0; i < items.length; i++) {
 			if (items[i] == null) {
 				throw rte("The item[%s] must NOT be null!", i);

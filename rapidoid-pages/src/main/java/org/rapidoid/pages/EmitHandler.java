@@ -22,7 +22,6 @@ package org.rapidoid.pages;
 
 import java.util.Map;
 
-import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.rapidoid.http.Handler;
@@ -31,12 +30,6 @@ import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.util.U;
 
 public class EmitHandler implements Handler {
-
-	private final Map<String, Class<?>> pages;
-
-	public EmitHandler(Map<String, Class<?>> pages) {
-		this.pages = pages;
-	}
 
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
@@ -48,19 +41,33 @@ public class EmitHandler implements Handler {
 		Map<Integer, Object> inp = Pages.inputs(x);
 		ctx.emit(inp, event);
 
-		Object page = U.newInstance(pages.get(x.session(Pages.SESSION_PAGE_NAME)));
+		Object page = U.newInstance(currentPage(x));
 
 		ctx = Tags.context();
 		x.setSession(Pages.SESSION_CTX, ctx);
 
-		Tag<?> body = Pages.contentOf(x, page);
+		Object body = Pages.contentOf(x, page);
+
+		if (body == null) {
+
+		}
+
+		if (body instanceof HttpExchange) {
+			return body;
+		}
+
+		System.out.println(body);
+		String html = PageRenderer.get().toHTML(ctx, body, x);
 
 		Map<String, String> changes = U.map();
-		String html = PageRenderer.get().toHTML(ctx, body, x);
 		changes.put("body", html);
 
 		x.json();
 		return changes;
+	}
+
+	private Class<?> currentPage(HttpExchange x) {
+		return x.session(Pages.SESSION_CURRENT_PAGE);
 	}
 
 }

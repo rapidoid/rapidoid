@@ -24,6 +24,10 @@ import java.nio.charset.Charset;
 
 public interface Constants {
 
+	Object[] EMPTY_ARRAY = {};
+
+	String[] EMPTY_STRING_ARRAY = {};
+
 	Charset UTF_8 = Charset.forName("UTF-8");
 
 	int NOT_FOUND = Integer.MIN_VALUE;

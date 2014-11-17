@@ -72,7 +72,7 @@ public class WorkerActivity<IN, OUT> extends AbstractThreadActivity<Worker<IN, O
 	@Override
 	protected void loop() {
 		IN task = input.take();
-		U.notNull(task);
+		U.notNullAll(task);
 
 		OUT result = U.eval(mapper, task);
 		U.notNull(result, "worker mapper result");

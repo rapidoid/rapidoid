@@ -22,12 +22,8 @@ package org.rapidoid.pages;
 
 import java.util.Map;
 
-import org.rapidoid.html.TagContext;
-import org.rapidoid.html.Tags;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.inject.IoC;
-import org.rapidoid.util.U;
 
 public class PageHandler implements Handler {
 
@@ -39,28 +35,9 @@ public class PageHandler implements Handler {
 
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
+		Object result = Pages.dispatch(x, null, pages);
 
-		String pageName = Pages.pageName(x);
-		if (pageName == null) {
-			return x.notFound();
-		}
-
-		String pageClassName = U.capitalized(pageName) + "Page";
-
-		Class<?> pageClass = pages.get(pageClassName);
-		if (pageClass == null) {
-			return x.notFound();
-		}
-
-		x.setSession(Pages.SESSION_PAGE_NAME, pageClassName);
-
-		Object page = U.newInstance(pageClass);
-		IoC.autowire(page);
-
-		TagContext ctx = Tags.context();
-		x.setSession(Pages.SESSION_CTX, ctx);
-
-		return Pages.render(x, page);
+		return result != null ? result : x.notFound();
 	}
 
 }

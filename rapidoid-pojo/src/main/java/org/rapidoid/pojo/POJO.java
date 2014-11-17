@@ -34,12 +34,8 @@ public class POJO {
 		return U.classpathClassesBySuffix(SERVICE_SUFFIX, null, null);
 	}
 
-	public static PojoDispatcher dispatcher(Object... services) {
-		return new PojoDispatcherImpl(services);
-	}
-
 	public static PojoDispatcher dispatcher(Class<?>... serviceClasses) {
-		return dispatcher(Cls.instantiateAll(serviceClasses));
+		return new PojoDispatcherImpl(Cls.classMap(U.list(serviceClasses)));
 	}
 
 	public static PojoDispatcher serviceDispatcher() {

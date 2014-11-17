@@ -34,9 +34,10 @@ public class PojoServiceWrapper {
 
 	public PojoServiceWrapper(Object service) {
 		this.service = service;
+		init();
 	}
 
-	public void init() {
+	private void init() {
 		for (Method method : service.getClass().getMethods()) {
 			if (!method.getDeclaringClass().equals(Object.class)) {
 				int modifiers = method.getModifiers();

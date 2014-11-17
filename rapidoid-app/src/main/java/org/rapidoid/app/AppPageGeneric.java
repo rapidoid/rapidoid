@@ -22,6 +22,8 @@ package org.rapidoid.app;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
@@ -34,51 +36,72 @@ import org.rapidoid.pages.BootstrapWidgets;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
-public class AppPage extends BootstrapWidgets implements Comparator<Object> {
+public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class<?>> {
 
 	private static final String[] themes = { "default", "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal",
 			"lumen", "paper", "readable", "sandstone", "simplex", "slate", "spacelab", "superhero", "united", "yeti" };
 
-	final Object app;
-	final Object[] screens;
-	Object screen;
-	private int searchScreenIndex;
+	private final AppClasses appCls;
 
-	public AppPage(final Object app, Object[] screens, Object screen) {
-		this.app = app;
-		this.screens = screens;
-		this.screen = screen;
+	private final Object app;
 
-		Arrays.sort(screens, this);
-		this.searchScreenIndex = findSearchScreen();
+	private final Map<String, Class<?>> screenClasses;
+
+	public AppPageGeneric() {
+		appCls = Apps.scanAppClasses(null);
+		app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
+		screenClasses = filterScreens(app, appCls.screens);
+	}
+
+	public String title(HttpExchange x) {
+		return appTitle(app);
 	}
 
 	public Tag<?> content(HttpExchange x) {
 
-		ATag brand = a(title()).href("/");
+		String path = x.path();
 
-		Tag<?> dropdownMenu;
+		Class<?> screenClass = getScreen(path);
+		if (screenClass == null) {
+			return null;
+		}
 
-		if (x.isLoggedIn()) {
+		Object screen = U.newInstance(screenClass);
 
-			ATag profile = a_glyph("user", x.user().display, caret());
-			ATag settings = Apps.config(app, "settings", false) ? a_glyph("cog", " Settings").href("/settings.html")
-					: null;
-			ATag logout = a_glyph("log-out", "Logout").href("/_logout");
+		Class<?>[] screens = screenClasses.values().toArray(new Class[screenClasses.size()]);
 
-			dropdownMenu = navbarDropdown(false, profile, settings, logout);
+		Arrays.sort(screens, this);
+		int searchScreenIndex = findSearchScreen(screens);
 
-		} else {
+		ATag brand = a(appTitle(app)).href("/");
 
-			ATag ga = a_awesome("google", "Sign in with Google").href(OAuth.getLoginURL(x, OAuthProvider.GOOGLE));
+		Tag<?> dropdownMenu = null;
 
-			ATag fb = a_awesome("facebook", "Sign in with Facebook").href(OAuth.getLoginURL(x, OAuthProvider.FACEBOOK));
+		if (Apps.config(app, "auth", false)) {
 
-			ATag li = a_awesome("linkedin", "Sign in with LinkedIn").href(OAuth.getLoginURL(x, OAuthProvider.LINKEDIN));
+			if (x.isLoggedIn()) {
 
-			ATag gh = a_awesome("github", "Sign in with GitHub").href(OAuth.getLoginURL(x, OAuthProvider.GITHUB));
+				ATag profile = a_glyph("user", x.user().display, caret());
+				ATag settings = Apps.config(app, "settings", false) ? a_glyph("cog", " Settings")
+						.href("/settings.html") : null;
+				ATag logout = a_glyph("log-out", "Logout").href("/_logout");
 
-			dropdownMenu = navbarDropdown(false, a_glyph("log-in", "Sign in", caret()), ga, fb, li, gh);
+				dropdownMenu = navbarDropdown(false, profile, settings, logout);
+
+			} else {
+
+				ATag ga = a_awesome("google", "Sign in with Google").href(OAuth.getLoginURL(x, OAuthProvider.GOOGLE));
+
+				ATag fb = a_awesome("facebook", "Sign in with Facebook").href(
+						OAuth.getLoginURL(x, OAuthProvider.FACEBOOK));
+
+				ATag li = a_awesome("linkedin", "Sign in with LinkedIn").href(
+						OAuth.getLoginURL(x, OAuthProvider.LINKEDIN));
+
+				ATag gh = a_awesome("github", "Sign in with GitHub").href(OAuth.getLoginURL(x, OAuthProvider.GITHUB));
+
+				dropdownMenu = navbarDropdown(false, a_glyph("log-in", "Sign in", caret()), ga, fb, li, gh);
+			}
 		}
 
 		ATag theme = a_glyph("eye-open", "", caret());
@@ -98,7 +121,7 @@ public class AppPage extends BootstrapWidgets implements Comparator<Object> {
 		int k = 0;
 		for (int i = 0; i < screens.length; i++) {
 			if (i != searchScreenIndex) {
-				Object scr = screens[i];
+				Class<?> scr = screens[i];
 				String name = Apps.screenName(scr);
 				String title = U.or(titleOf(scr), U.camelPhrase(name));
 				menuItems[k++] = a(title).href(Apps.screenUrl(scr));
@@ -121,10 +144,10 @@ public class AppPage extends BootstrapWidgets implements Comparator<Object> {
 			pageContent = hardcoded("No content available!");
 		}
 
-		return navbarPage(isFluid(), brand, navbarContent, pageContent);
+		return navbarPage(isFluid(app), brand, navbarContent, pageContent);
 	}
 
-	private int findSearchScreen() {
+	private int findSearchScreen(Class<?>[] screens) {
 		for (int i = 0; i < screens.length; i++) {
 			if (Apps.screenName(screens[i]).equals("Search")) {
 				return i;
@@ -134,11 +157,11 @@ public class AppPage extends BootstrapWidgets implements Comparator<Object> {
 		return -1;
 	}
 
-	protected boolean isFluid() {
+	protected boolean isFluid(Object app) {
 		return Apps.config(app, "fluid", false);
 	}
 
-	public String title() {
+	public String appTitle(Object app) {
 		return U.or(titleOf(app), "Untitled app");
 	}
 
@@ -147,16 +170,16 @@ public class AppPage extends BootstrapWidgets implements Comparator<Object> {
 	}
 
 	@Override
-	public int compare(Object o1, Object o2) {
+	public int compare(Class<?> o1, Class<?> o2) {
 		int cls1 = screenOrder(o1);
 		int cls2 = screenOrder(o2);
 
 		return cls1 - cls2;
 	}
 
-	private int screenOrder(Object obj) {
+	private int screenOrder(Class<?> scrClass) {
 
-		String cls = obj.getClass().getSimpleName();
+		String cls = scrClass.getSimpleName();
 
 		if (cls.equals("HomeScreen")) {
 			return -1000;
@@ -173,8 +196,31 @@ public class AppPage extends BootstrapWidgets implements Comparator<Object> {
 		return cls.charAt(0);
 	}
 
-	public void setScreen(Object screen) {
-		this.screen = screen;
+	private Class<?> getScreen(String path) {
+		// TODO use screens.get(...) instead of iteration
+		for (Class<?> screen : screenClasses.values()) {
+			if (Apps.screenUrl(screen).equals(path)) {
+				return screen;
+			}
+		}
+		return null;
+	}
+
+	private static Map<String, Class<?>> filterScreens(Object app, Map<String, Class<?>> screenClasses) {
+		Object[] screensConfig = Apps.config(app, "screens", null);
+
+		if (screensConfig == null) {
+			return screenClasses;
+		}
+
+		Map<String, Class<?>> filtered = new LinkedHashMap<String, Class<?>>();
+
+		for (Object scr : screensConfig) {
+			Class<?> cls = (Class<?>) scr;
+			filtered.put(cls.getSimpleName(), screenClasses.get(cls.getSimpleName()));
+		}
+
+		return filtered;
 	}
 
 }

@@ -24,41 +24,42 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.pojo.POJO;
 import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
 import org.rapidoid.pojo.PojoRequest;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.Constants;
 import org.rapidoid.util.Prop;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 
-public class PojoDispatcherImpl implements PojoDispatcher {
+public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 
-	private static final String[] EMPTY_STRING_ARRAY = {};
+	private static final Map<Class<?>, PojoServiceWrapper> WRAPPERS = U
+			.autoExpandingMap(new Mapper<Class<?>, PojoServiceWrapper>() {
+				@Override
+				public PojoServiceWrapper map(Class<?> serviceClass) throws Exception {
+					return new PojoServiceWrapper(serviceClass);
+				}
+			});
 
-	private final Map<String, PojoServiceWrapper> services = new HashMap<String, PojoServiceWrapper>();
+	private final Map<String, Class<?>> services;
 
-	public PojoDispatcherImpl(Object... services) {
-		for (Object service : services) {
-			String name = service.getClass().getSimpleName();
-			U.must(name.endsWith(POJO.SERVICE_SUFFIX), "The service class doesn't have a '%s' suffix: %s",
-					POJO.SERVICE_SUFFIX, name);
+	public PojoDispatcherImpl(Map<String, Class<?>> services) {
+		this.services = services;
+	}
 
-			U.info("Initializing service: " + name);
-			name = name.substring(0, name.length() - POJO.SERVICE_SUFFIX.length()).toLowerCase();
-
-			PojoServiceWrapper pojoService = new PojoServiceWrapper(service);
-			pojoService.init();
-			this.services.put(name, pojoService);
-		}
+	@SuppressWarnings("unused")
+	private static String nameOf(Class<?> serviceClass) {
+		return U.mid(serviceClass.getSimpleName(), 0, -POJO.SERVICE_SUFFIX.length());
 	}
 
 	@Override
@@ -93,16 +94,27 @@ public class PojoDispatcherImpl implements PojoDispatcher {
 
 	private Object process(PojoRequest request, String service, String action, String[] parts, int paramsFrom)
 			throws PojoHandlerNotFoundException, PojoDispatchException {
-		PojoServiceWrapper root = services.get(service);
 
-		if (root != null) {
-			Method method = root.getMethod(action);
+		PojoServiceWrapper wrapper = wrapper(service);
+
+		if (wrapper != null) {
+			Method method = wrapper.getMethod(action);
 			if (method != null) {
-				return doDispatch(request, method, root.getTarget(), parts, paramsFrom);
+				return doDispatch(request, method, wrapper.getTarget(), parts, paramsFrom);
 			}
 		}
 
 		throw notFound();
+	}
+
+	private PojoServiceWrapper wrapper(String service) {
+
+		Class<?> serviceClass = services.get(service);
+		if (serviceClass == null) {
+			return null;
+		}
+
+		return WRAPPERS.get(serviceClass);
 	}
 
 	private Object doDispatch(PojoRequest request, Method method, Object service, String[] parts, int paramsFrom)

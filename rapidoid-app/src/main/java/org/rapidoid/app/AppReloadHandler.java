@@ -57,8 +57,8 @@ public class AppReloadHandler implements Handler, Mapper<String, byte[]> {
 		CustomizableClassLoader classLoader = new CustomizableClassLoader(this,
 				(Predicate<String>) Predicate.ALWAYS_TRUE, true);
 
-		AppStructure app = Apps.scanAppClasses(classLoader);
-		AppHandler handler = new AppHandler(app);
+		AppClasses appCls = Apps.scanAppClasses(classLoader);
+		AppHandler handler = new AppHandler(appCls);
 		return handler.handle(x);
 	}
 

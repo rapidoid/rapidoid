@@ -29,17 +29,14 @@ import org.rapidoid.pojo.POJO;
 import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
-import org.rapidoid.util.Cls;
+import org.rapidoid.rest.WebPojoDispatcher;
+import org.rapidoid.rest.WebReq;
 import org.rapidoid.util.U;
 
 public class Web {
 
-	public static void run(Object... services) {
-		serve(new WebPojoDispatcher(services));
-	}
-
 	public static void run(Class<?>... classes) {
-		serve(new WebPojoDispatcher(Cls.instantiateAll(classes)));
+		serve(new WebPojoDispatcher(classes));
 	}
 
 	private static void serve(final PojoDispatcher dispatcher) {

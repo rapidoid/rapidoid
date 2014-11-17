@@ -20,18 +20,27 @@ package org.rapidoid.app;
  * #L%
  */
 
-import java.util.List;
+import java.util.Map;
 
-public class AppStructure {
+public class AppClasses {
 
 	final Class<?> main;
-	final List<Class<?>> screens;
-	final List<Class<?>> services;
+	final Map<String, Class<?>> services;
+	final Map<String, Class<?>> pages;
+	final Map<String, Class<?>> screens;
 
-	public AppStructure(Class<?> main, List<Class<?>> screens, List<Class<?>> services) {
+	public AppClasses(Class<?> main, Map<String, Class<?>> services, Map<String, Class<?>> pages,
+			Map<String, Class<?>> screens) {
 		this.main = main;
-		this.screens = screens;
 		this.services = services;
+		this.pages = pages;
+		this.screens = screens;
+	}
+
+	@Override
+	public String toString() {
+		return "AppClasses [main=" + main + ", services=" + services + ", pages=" + pages + ", screens=" + screens
+				+ "]";
 	}
 
 }
