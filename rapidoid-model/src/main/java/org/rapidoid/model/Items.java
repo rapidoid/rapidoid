@@ -47,7 +47,7 @@ public interface Items extends Iterable<Item>, Serializable {
 
 	Items range(int fromIndex, int toIndex);
 
-	List<Property> properties();
+	List<Property> properties(String... propertyNames);
 
 	boolean fitsIn(Item item);
 

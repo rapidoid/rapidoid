@@ -99,7 +99,7 @@ public class ListItems implements Items {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Property> properties() {
+	public List<Property> properties(String... propertyNames) {
 		return Collections.EMPTY_LIST;
 	}
 

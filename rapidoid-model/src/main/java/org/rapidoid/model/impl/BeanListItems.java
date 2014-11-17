@@ -41,8 +41,18 @@ public class BeanListItems<T> extends ListItems {
 	}
 
 	@Override
-	public List<Property> properties() {
-		return properties;
+	public List<Property> properties(String... propertyNames) {
+		return propertyNames.length == 0 ? properties : filterProperties(propertyNames);
+	}
+
+	private List<Property> filterProperties(String[] propertyNames) {
+		List<Property> props = U.list();
+
+		for (String pr : propertyNames) {
+			props.add(Model.propertyOf(beanType, pr));
+		}
+
+		return props;
 	}
 
 	@Override

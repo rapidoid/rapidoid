@@ -64,6 +64,15 @@ public class Model {
 		return new BeanItem(value);
 	}
 
+	public static Property propertyOf(Class<?> beanType, String property) {
+		Map<String, Prop> props = Cls.propertiesOf(beanType);
+
+		Prop prop = props.get(property);
+		U.must(prop != null, "Cannot find property %s in class %s!", property, beanType);
+
+		return new BeanProperty(prop.getName(), prop.getType());
+	}
+
 	public static List<Property> propertiesOf(Class<?> beanType) {
 		List<Property> pr = U.list();
 
