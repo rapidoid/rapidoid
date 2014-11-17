@@ -57,7 +57,7 @@ public class IoC {
 	private static final Map<Class<?>, List<F3<Object, Object, Method, Object[]>>> INTERCEPTORS = U.map();
 
 	public static synchronized void reset() {
-		U.info("Reset U state");
+		U.info("Reseting IoC state");
 
 		U.setLogLevel(U.INFO);
 		U.args();
@@ -128,23 +128,23 @@ public class IoC {
 	}
 
 	public static synchronized <T> T singleton(Class<T> type) {
-		U.info("Inject", "type", type);
+		U.debug("Inject", "type", type);
 		return provideIoCInstanceOf(null, type, null, null, false);
 	}
 
 	public static synchronized <T> T autowire(T target) {
-		U.info("Autowire", "target", target);
+		U.debug("Autowire", "target", target);
 		autowire(target, null);
 		return target;
 	}
 
 	public static synchronized <T> T inject(T target) {
-		U.info("Inject", "target", target);
+		U.debug("Inject", "target", target);
 		return ioc(target, null);
 	}
 
 	public static synchronized <T> T inject(T target, Map<String, Object> properties) {
-		U.info("Inject", "target", target, "properties", properties);
+		U.debug("Inject", "target", target, "properties", properties);
 		return ioc(target, properties);
 	}
 

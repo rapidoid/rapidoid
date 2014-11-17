@@ -685,7 +685,7 @@ public class U {
 		try {
 			return classLoader().getResources(name);
 		} catch (IOException e) {
-			throw U.rte("Cannot scan: " + name, e);
+			throw rte("Cannot scan: " + name, e);
 		}
 	}
 
@@ -761,7 +761,7 @@ public class U {
 				try {
 					input = new FileInputStream(filename);
 				} catch (FileNotFoundException e) {
-					throw U.rte(e);
+					throw rte(e);
 				}
 			}
 		}
@@ -1063,7 +1063,7 @@ public class U {
 	}
 
 	public static String capitalized(String s) {
-		return s.substring(0, 1).toUpperCase() + s.substring(1);
+		return s.isEmpty() ? s : s.substring(0, 1).toUpperCase() + s.substring(1);
 	}
 
 	public static String mid(String s, int beginIndex, int endIndex) {
@@ -1291,7 +1291,7 @@ public class U {
 	}
 
 	public static Object hook(String hookName) {
-		U.must(hookName.matches("\\w+"), "Invalid hook name, must be alphanumeric!");
+		must(hookName.matches("\\w+"), "Invalid hook name, must be alphanumeric!");
 
 		String hookClassName = "org.rapidoid.hook." + capitalized(hookName) + "Hook";
 		Class<?> hookCls = getClassIfExists(hookClassName);
@@ -1301,16 +1301,16 @@ public class U {
 				Callable<?> hook = (Callable<?>) newInstance(hookCls);
 				try {
 					Object hookResult = hook.call();
-					U.info("Executed a hook", "hook", hookName, "hookClass", hookClassName, "result", hookResult);
+					info("Executed a hook", "hook", hookName, "hookClass", hookClassName, "result", hookResult);
 					return hookResult;
 				} catch (Exception e) {
 					throw rte(e);
 				}
 			} else {
-				U.warn("Found a hook, but it's not a Runnable!", "hook", hookName, "hookClass", hookClassName);
+				warn("Found a hook, but it's not a Runnable!", "hook", hookName, "hookClass", hookClassName);
 			}
 		} else {
-			U.debug("No hook was found", "hook", hookName, "hookClass", hookClassName);
+			debug("No hook was found", "hook", hookName, "hookClass", hookClassName);
 		}
 
 		return null;
@@ -1404,7 +1404,7 @@ public class U {
 		try {
 			return predicate.eval(target);
 		} catch (Exception e) {
-			throw U.rte("Cannot evaluate predicate %s on target: %s", e, predicate, target);
+			throw rte("Cannot evaluate predicate %s on target: %s", e, predicate, target);
 		}
 	}
 
@@ -1412,7 +1412,7 @@ public class U {
 		try {
 			return mapper.map(src);
 		} catch (Exception e) {
-			throw U.rte("Cannot evaluate mapper %s on target: %s", e, mapper, src);
+			throw rte("Cannot evaluate mapper %s on target: %s", e, mapper, src);
 		}
 	}
 
@@ -1437,7 +1437,7 @@ public class U {
 		List<Class<?>> classes = classpathClasses("*", ".*\\." + simpleName, filter, classLoader);
 
 		if (classes.isEmpty()) {
-			U.warn("No classes found on classpath with the specified simple name", "name", simpleName);
+			warn("No classes found on classpath with the specified simple name", "name", simpleName);
 		}
 
 		return classes;
@@ -1448,7 +1448,7 @@ public class U {
 		List<Class<?>> classes = classpathClasses("*", ".+" + nameSuffix, filter, classLoader);
 
 		if (classes.isEmpty()) {
-			U.warn("No classes found on classpath with the specified suffix", "suffix", nameSuffix);
+			warn("No classes found on classpath with the specified suffix", "suffix", nameSuffix);
 		}
 
 		return classes;
@@ -1475,18 +1475,18 @@ public class U {
 
 	private static void getFiles(Collection<File> files, File file, Predicate<File> filter) {
 		if (file.isDirectory()) {
-			U.debug("scanning directory", "dir", file);
+			debug("scanning directory", "dir", file);
 			for (File f : file.listFiles()) {
 				if (f.isDirectory()) {
 					getFiles(files, f, filter);
 				} else {
-					U.debug("scanned file", "file", f);
+					debug("scanned file", "file", f);
 					try {
 						if (filter == null || filter.eval(f)) {
 							files.add(f);
 						}
 					} catch (Exception e) {
-						throw U.rte(e);
+						throw rte(e);
 					}
 				}
 			}
@@ -1497,23 +1497,23 @@ public class U {
 			Predicate<Class<?>> filter, ClassLoader classLoader) {
 
 		if (parent.isDirectory()) {
-			U.debug("scanning directory", "dir", parent);
+			debug("scanning directory", "dir", parent);
 			for (File f : parent.listFiles()) {
 				if (f.isDirectory()) {
 					getClasses(classes, root, f, nameRegex, filter, classLoader);
 				} else {
-					U.debug("scanned file", "file", f);
+					debug("scanned file", "file", f);
 					try {
 						if (f.getName().endsWith(".class")) {
 							String clsName = f.getAbsolutePath();
 							String rootPath = root.getAbsolutePath();
-							U.must(clsName.startsWith(rootPath));
+							must(clsName.startsWith(rootPath));
 
 							clsName = clsName.substring(rootPath.length() + 1, clsName.length() - 6);
 							clsName = clsName.replace(File.separatorChar, '.');
 
 							if (nameRegex.matcher(clsName).matches()) {
-								U.info("loading class", "name", clsName);
+								debug("loading class", "name", clsName);
 
 								Class<?> cls = classLoader != null ? Class.forName(clsName, true, classLoader) : Class
 										.forName(clsName);
@@ -1524,7 +1524,7 @@ public class U {
 							}
 						}
 					} catch (Exception e) {
-						throw U.rte(e);
+						throw rte(e);
 					}
 				}
 			}
