@@ -55,6 +55,15 @@ class Rec {
 	}
 }
 
+/**
+ * Simple, persisted in-memory NoSQL DB, based on {@link ConcurrentSkipListMap}.<br>
+ * 
+ * Relaxed transactional semantics:<br>
+ * - Atomicity with automatic rollback in case of exception,<br>
+ * - Consistency - only with constraints enforced programmatically inside transaction,<br>
+ * - Isolation is serializable (with global lock),<br>
+ * - NO Durability guarantee in v1.0 (writes are async, and callbacks are scheduled for v1.1).<br>
+ */
 public class InMem {
 
 	private static final String SUFFIX_B = "b";
@@ -274,6 +283,13 @@ public class InMem {
 		}
 	}
 
+	/**
+	 * Relaxed transactional semantics:<br>
+	 * - Atomicity with automatic rollback in case of exception,<br>
+	 * - Consistency - only with constraints enforced programmatically inside transaction,<br>
+	 * - Isolation is serializable (with global lock),<br>
+	 * - NO Durability guarantee in v1.0 (writes are async, and callbacks are scheduled for v1.1).<br>
+	 */
 	public void transaction(Runnable transaction) {
 		globalLock();
 
