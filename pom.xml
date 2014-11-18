@@ -72,7 +72,6 @@
 		<module>rapidoid-rest</module>
 		<module>rapidoid-pages</module>
 		<module>rapidoid-oauth</module>
-		<module>rapidoid-web</module>
 		<module>rapidoid-inmem</module>
 		<module>rapidoid-db</module>
 		<module>rapidoid-db-inmem</module>

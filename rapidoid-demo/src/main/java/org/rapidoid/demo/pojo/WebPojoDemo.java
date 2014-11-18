@@ -1,7 +1,7 @@
 package org.rapidoid.demo.pojo;
 
+import org.rapidoid.rest.REST;
 import org.rapidoid.util.U;
-import org.rapidoid.web.Web;
 
 /*
  * #%L
@@ -27,7 +27,7 @@ public class WebPojoDemo {
 
 	public static void main(String[] args) {
 		U.args(args);
-		Web.start();
+		REST.start();
 	}
 
 }

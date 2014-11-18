@@ -1,4 +1,4 @@
-package org.rapidoid.web;
+package org.rapidoid.rest;
 
 /*
  * #%L
@@ -29,11 +29,9 @@ import org.rapidoid.pojo.POJO;
 import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
-import org.rapidoid.rest.WebPojoDispatcher;
-import org.rapidoid.rest.WebReq;
 import org.rapidoid.util.U;
 
-public class Web {
+public class REST {
 
 	public static void run(Class<?>... classes) {
 		serve(new WebPojoDispatcher(classes));
