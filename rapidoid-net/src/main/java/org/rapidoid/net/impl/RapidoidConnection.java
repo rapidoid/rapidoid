@@ -55,13 +55,13 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 
 	private boolean waitingToWrite = false;
 
-	public SelectionKey key;
+	public volatile SelectionKey key;
 
 	private boolean closeAfterWrite = false;
 
-	public boolean closed = true;
+	public volatile boolean closed = true;
 
-	int completedInputPos;
+	volatile int completedInputPos;
 
 	private CtxListener listener;
 
@@ -71,7 +71,7 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 
 	private boolean async;
 
-	boolean done;
+	volatile boolean done;
 
 	private boolean isClient;
 
@@ -182,7 +182,7 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 	}
 
 	@Override
-	public Channel send() {
+	public synchronized Channel send() {
 		askToSend();
 		return this;
 	}
@@ -280,46 +280,46 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 		return id;
 	}
 
-	public ConnState state() {
+	public synchronized ConnState state() {
 		return state;
 	}
 
 	@Override
-	public boolean isInitial() {
+	public synchronized boolean isInitial() {
 		return initial;
 	}
 
 	@Override
-	public String toString() {
+	public synchronized String toString() {
 		return "conn#" + connId();
 	}
 
-	public void setInitial(boolean initial) {
+	public synchronized void setInitial(boolean initial) {
 		this.initial = initial;
 	}
 
 	@Override
-	public Channel restart() {
+	public synchronized Channel restart() {
 		worker.restart(this);
 		return this;
 	}
 
 	@Override
-	public Channel async() {
+	public synchronized Channel async() {
 		this.async = true;
 		this.done = false;
 		return this;
 	}
 
-	public boolean isAsync() {
+	public synchronized boolean isAsync() {
 		return async;
 	}
 
-	public boolean isClient() {
+	public synchronized boolean isClient() {
 		return isClient;
 	}
 
-	public void setClient(boolean isClient) {
+	public synchronized void setClient(boolean isClient) {
 		this.isClient = isClient;
 	}
 

@@ -73,8 +73,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	private boolean parsedHeaders;
 	private boolean parsedBody;
 
-	int total;
-	public int bodyPos;
+	private int bodyPos;
+	
 	private boolean writesBody;
 	private boolean hasContentType;
 	private int startingPos;
@@ -123,7 +123,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public void reset() {
+	public synchronized void reset() {
 		super.reset();
 
 		isGet.value = false;
@@ -154,7 +154,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	private void resetResponse() {
-		total = -1;
 		writesBody = false;
 		bodyPos = -1;
 		hasContentType = false;
@@ -163,7 +162,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public MultiData params_() {
+	public synchronized MultiData params_() {
 		if (!parsedParams) {
 			if (!query.isEmpty()) {
 				PARSER.parseParams(input(), params, query_().range());
@@ -176,7 +175,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public MultiData headers_() {
+	public synchronized MultiData headers_() {
 		if (!parsedHeaders) {
 			if (!headers.isEmpty()) {
 				PARSER.parseHeadersIntoKV(input(), headers, headersKV, cookies, helper());
@@ -189,7 +188,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public MultiData cookies_() {
+	public synchronized MultiData cookies_() {
 		if (!parsedHeaders) {
 			if (!headers.isEmpty()) {
 				PARSER.parseHeadersIntoKV(input(), headers, headersKV, cookies, helper());
@@ -202,7 +201,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public MultiData data_() {
+	public synchronized MultiData data_() {
 		if (!parsedBody) {
 			PARSER.parseBody(input(), headersKV, body, data, files, helper());
 			parsedBody = true;
@@ -212,7 +211,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public BinaryMultiData files_() {
+	public synchronized BinaryMultiData files_() {
 		if (!parsedBody) {
 			PARSER.parseBody(input(), headersKV, body, data, files, helper());
 			parsedBody = true;
@@ -221,163 +220,163 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return _files;
 	}
 
-	public Data subpath_() {
+	public synchronized Data subpath_() {
 		return _subpath;
 	}
 
 	@Override
-	public Data body_() {
+	public synchronized Data body_() {
 		return _body;
 	}
 
 	@Override
-	public Data uri_() {
+	public synchronized Data uri_() {
 		return _uri;
 	}
 
 	@Override
-	public Data verb_() {
+	public synchronized Data verb_() {
 		return _verb;
 	}
 
 	@Override
-	public Data path_() {
+	public synchronized Data path_() {
 		return _path;
 	}
 
 	@Override
-	public Data protocol_() {
+	public synchronized Data protocol_() {
 		return _protocol;
 	}
 
 	@Override
-	public Data query_() {
+	public synchronized Data query_() {
 		return _query;
 	}
 
-	public void setSubpath(int start, int end) {
+	public synchronized void setSubpath(int start, int end) {
 		subpathRange.setInterval(start, end);
 	}
 
 	@Override
-	public HttpExchangeImpl done() {
+	public synchronized HttpExchangeImpl done() {
 		conn.done();
 		return this;
 	}
 
 	@Override
-	public HttpExchangeBody send() {
+	public synchronized HttpExchangeBody send() {
 		conn.send();
 		return this;
 	}
 
 	@Override
-	public String toString() {
+	public synchronized String toString() {
 		return "WebExchange [uri=" + uri() + ", verb=" + verb() + ", path=" + path() + ", subpath=" + subpath()
 				+ ", query=" + query() + ", protocol=" + protocol() + ", body=" + body() + ", headers=" + headers()
 				+ ", params=" + params() + ", cookies=" + cookies() + ", data=" + data() + ", files=" + files() + "]";
 	}
 
 	@Override
-	public String verb() {
+	public synchronized String verb() {
 		return verb_().get();
 	}
 
 	@Override
-	public String uri() {
+	public synchronized String uri() {
 		return uri_().get();
 	}
 
 	@Override
-	public String path() {
+	public synchronized String path() {
 		return path_().get();
 	}
 
 	@Override
-	public String subpath() {
+	public synchronized String subpath() {
 		return subpath_().get();
 	}
 
 	@Override
-	public String query() {
+	public synchronized String query() {
 		return query_().get();
 	}
 
 	@Override
-	public String protocol() {
+	public synchronized String protocol() {
 		return protocol_().get();
 	}
 
 	@Override
-	public String body() {
+	public synchronized String body() {
 		return body_().get();
 	}
 
 	@Override
-	public Map<String, String> params() {
+	public synchronized Map<String, String> params() {
 		return params_().get();
 	}
 
 	@Override
-	public String param(String name) {
+	public synchronized String param(String name) {
 		return params_().get(name);
 	}
 
 	@Override
-	public Map<String, String> headers() {
+	public synchronized Map<String, String> headers() {
 		return headers_().get();
 	}
 
 	@Override
-	public String header(String name) {
+	public synchronized String header(String name) {
 		return headers_().get(name);
 	}
 
 	@Override
-	public Map<String, String> cookies() {
+	public synchronized Map<String, String> cookies() {
 		return cookies_().get();
 	}
 
 	@Override
-	public String cookie(String name) {
+	public synchronized String cookie(String name) {
 		return cookies_().get(name);
 	}
 
 	@Override
-	public Map<String, String> data() {
+	public synchronized Map<String, String> data() {
 		return data_().get();
 	}
 
 	@Override
-	public String data(String name) {
+	public synchronized String data(String name) {
 		return data_().get(name);
 	}
 
 	@Override
-	public Map<String, byte[]> files() {
+	public synchronized Map<String, byte[]> files() {
 		return files_().get();
 	}
 
 	@Override
-	public byte[] file(String name) {
+	public synchronized byte[] file(String name) {
 		return files_().get(name);
 	}
 
 	@Override
-	public Data host_() {
+	public synchronized Data host_() {
 		return headers_().get_("host");
 	}
 
 	@Override
-	public String host() {
+	public synchronized String host() {
 		return headers_().get("host");
 	}
 
-	public void setResponses(HttpResponses responses) {
+	public synchronized void setResponses(HttpResponses responses) {
 		this.responses = responses;
 	}
 
-	public void setSession(HttpSession session) {
+	public synchronized void setSession(HttpSession session) {
 		this.session = session;
 	}
 
@@ -413,7 +412,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return this;
 	}
 
-	public void completeResponse() {
+	public synchronized void completeResponse() {
 		U.must(responseCode >= 100);
 		U.must(bodyPos >= 0);
 
@@ -434,13 +433,13 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public HttpExchange addHeader(HttpHeader name, String value) {
+	public synchronized HttpExchange addHeader(HttpHeader name, String value) {
 		addHeader(name.getBytes(), value.getBytes());
 		return this;
 	}
 
 	@Override
-	public HttpExchange setCookie(String name, String value) {
+	public synchronized HttpExchange setCookie(String name, String value) {
 		addHeader(HttpHeader.SET_COOKIE, name + "=" + value);
 		return this;
 	}
@@ -458,27 +457,27 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public HttpExchange plain() {
+	public synchronized HttpExchange plain() {
 		return setContentType(MediaType.PLAIN_TEXT_UTF_8);
 	}
 
 	@Override
-	public HttpExchange html() {
+	public synchronized HttpExchange html() {
 		return setContentType(MediaType.HTML_UTF_8);
 	}
 
 	@Override
-	public HttpExchange json() {
+	public synchronized HttpExchange json() {
 		return setContentType(MediaType.JSON_UTF_8);
 	}
 
 	@Override
-	public HttpExchange binary() {
+	public synchronized HttpExchange binary() {
 		return setContentType(MediaType.BINARY);
 	}
 
 	@Override
-	public HttpExchange download(String filename) {
+	public synchronized HttpExchange download(String filename) {
 		addHeader(HttpHeader.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"");
 		addHeader(HttpHeader.CACHE_CONTROL, "private");
 		return binary();
@@ -496,37 +495,37 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public HttpExchangeBody write(String s) {
+	public synchronized HttpExchangeBody write(String s) {
 		ensureHeadersComplete();
 		return super.write(s);
 	}
 
 	@Override
-	public HttpExchangeBody writeln(String s) {
+	public synchronized HttpExchangeBody writeln(String s) {
 		ensureHeadersComplete();
 		return super.writeln(s);
 	}
 
 	@Override
-	public HttpExchangeBody write(byte[] bytes) {
+	public synchronized HttpExchangeBody write(byte[] bytes) {
 		ensureHeadersComplete();
 		return super.write(bytes);
 	}
 
 	@Override
-	public HttpExchangeBody write(byte[] bytes, int offset, int length) {
+	public synchronized HttpExchangeBody write(byte[] bytes, int offset, int length) {
 		ensureHeadersComplete();
 		return super.write(bytes, offset, length);
 	}
 
 	@Override
-	public HttpExchangeBody write(ByteBuffer buf) {
+	public synchronized HttpExchangeBody write(ByteBuffer buf) {
 		ensureHeadersComplete();
 		return super.write(buf);
 	}
 
 	@Override
-	public HttpExchangeBody write(File file) {
+	public synchronized HttpExchangeBody write(File file) {
 		if (!hasContentType()) {
 			download(file.getName());
 		}
@@ -536,7 +535,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public HttpExchangeBody writeJSON(Object value) {
+	public synchronized HttpExchangeBody writeJSON(Object value) {
 		if (!hasContentType()) {
 			json();
 		}
@@ -546,21 +545,21 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public boolean isInitial() {
+	public synchronized boolean isInitial() {
 		return conn.isInitial();
 	}
 
 	@Override
-	public ConnState state() {
+	public synchronized ConnState state() {
 		return conn.state();
 	}
 
-	public boolean hasContentType() {
+	public synchronized boolean hasContentType() {
 		return hasContentType;
 	}
 
 	@Override
-	public HttpExchangeBody sendFile(File file) {
+	public synchronized HttpExchangeBody sendFile(File file) {
 		U.must(file.exists());
 		setContentType(MediaType.getByFileName(file.getAbsolutePath()));
 		write(file);
@@ -568,7 +567,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public HttpExchangeBody redirect(String url) {
+	public synchronized HttpExchangeBody redirect(String url) {
 		responseCode(303);
 		addHeader(HttpHeader.LOCATION, url);
 		ensureHeadersComplete();
@@ -576,17 +575,17 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public HttpExchangeHeaders response(int httpResponseCode) {
+	public synchronized HttpExchangeHeaders response(int httpResponseCode) {
 		return response(httpResponseCode, null, null);
 	}
 
 	@Override
-	public HttpExchangeHeaders response(int httpResponseCode, String response) {
+	public synchronized HttpExchangeHeaders response(int httpResponseCode, String response) {
 		return response(httpResponseCode, response, null);
 	}
 
 	@Override
-	public HttpExchangeHeaders response(int httpResponseCode, String response, Throwable err) {
+	public synchronized HttpExchangeHeaders response(int httpResponseCode, String response, Throwable err) {
 
 		responseCode(httpResponseCode);
 		ensureHeadersComplete();
@@ -612,12 +611,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public String constructUrl(String path) {
+	public synchronized String constructUrl(String path) {
 		return (U.hasOption("https") ? "https://" : "http://") + host() + path;
 	}
 
 	@Override
-	public String sessionId() {
+	public synchronized String sessionId() {
 		if (sessionId == null) {
 			sessionId = cookie(SESSION_COOKIE);
 
@@ -636,12 +635,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public Map<String, Object> session() {
+	public synchronized Map<String, Object> session() {
 		return session.getSession(sessionId());
 	}
 
 	@Override
-	public HttpExchangeHeaders sessionSet(String name, Object value) {
+	public synchronized HttpExchangeHeaders sessionSet(String name, Object value) {
 		if (value != null) {
 			session.setAttribute(sessionId(), name, value);
 		} else {
@@ -653,13 +652,13 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T session(String name, T defaultValue) {
+	public synchronized <T> T session(String name, T defaultValue) {
 		return U.or((T) session.getAttribute(sessionId(), name), defaultValue);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T session(String name) {
+	public synchronized <T> T session(String name) {
 		T value = (T) session.getAttribute(sessionId(), name);
 		U.notNull(value, "session[" + name + "]");
 		return value;
@@ -667,7 +666,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs) {
+	public synchronized <T> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs) {
 		T value = (T) session.getAttribute(sessionId(), name);
 
 		if (value == null) {
@@ -679,56 +678,56 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public HttpExchangeHeaders closeSession() {
+	public synchronized HttpExchangeHeaders closeSession() {
 		session.closeSession(sessionId());
 		sessionId = null;
 		return this;
 	}
 
 	@Override
-	public boolean hasSession() {
+	public synchronized boolean hasSession() {
 		return session != null;
 	}
 
 	@Override
-	public HttpExchangeHeaders notFound() {
+	public synchronized HttpExchangeHeaders notFound() {
 		return response(404, "Error: page not found!");
 	}
 
 	@Override
-	public boolean isLoggedIn() {
+	public synchronized boolean isLoggedIn() {
 		return hasSession() && session(SESSION_USER, null) != null;
 	}
 
 	@Override
-	public UserInfo user() {
+	public synchronized UserInfo user() {
 		U.must(isLoggedIn(), "Must be logged in!");
 
 		return session(SESSION_USER);
 	}
 
 	@Override
-	public boolean isGetReq() {
+	public synchronized boolean isGetReq() {
 		return isGet.value;
 	}
 
 	@Override
-	public byte[] sessionSerialize() {
+	public synchronized byte[] sessionSerialize() {
 		return UTILS.serialize(session);
 	}
 
 	@Override
-	public void sessionDeserialize(byte[] bytes) {
+	public synchronized void sessionDeserialize(byte[] bytes) {
 		session = (HttpSession) UTILS.deserialize(bytes);
 	}
 
 	@Override
-	public OutputStream outputStream() {
+	public synchronized OutputStream outputStream() {
 		return new HttpOutputStream(this);
 	}
 
 	@Override
-	public boolean devMode() {
+	public synchronized boolean devMode() {
 		String host = host();
 		return host == null || host.equals("localhost") || host.equals("127.0.0.1") || host.startsWith("localhost:")
 				|| host.startsWith("127.0.0.1:");
