@@ -113,8 +113,21 @@ public class Bootstrap extends HTML {
 		return btn;
 	}
 
-	public static UlTag navbarMenu(boolean onLeft, Object... menuItems) {
-		return ul_li(menuItems).class_("nav navbar-nav navbar-" + leftOrRight(onLeft));
+	public static UlTag navbarMenu(boolean onLeft, int activeIndex, Object... menuItems) {
+		UlTag menu = ul().class_("nav navbar-nav navbar-" + leftOrRight(onLeft));
+
+		for (int i = 0; i < menuItems.length; i++) {
+			Object item = menuItems[i];
+
+			LiTag li = li(item);
+			if (i == activeIndex) {
+				li = li.class_("active");
+			}
+
+			menu.append(li);
+		}
+
+		return menu;
 	}
 
 	public static UlTag navbarDropdown(boolean onLeft, Tag<?> menu, Object... subItems) {

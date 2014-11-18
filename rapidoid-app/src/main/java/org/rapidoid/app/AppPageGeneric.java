@@ -128,6 +128,7 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 		Object[] menuItems = new Object[searchScreenIndex < 0 ? screens.length : screens.length - 1];
 
+		int activeIndex = -1;
 		int k = 0;
 		for (int i = 0; i < screens.length; i++) {
 			if (i != searchScreenIndex) {
@@ -135,10 +136,14 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 				String name = Apps.screenName(scr);
 				String title = U.or(titleOf(scr), U.camelPhrase(name));
 				menuItems[k++] = a(title).href(Apps.screenUrl(scr));
+
+				if (scr.equals(screenClass)) {
+					activeIndex = i < searchScreenIndex ? i : i - 1;
+				}
 			}
 		}
 
-		UlTag navMenu = navbarMenu(true, menuItems);
+		UlTag navMenu = navbarMenu(true, activeIndex, menuItems);
 
 		FormTag searchForm = null;
 		if (Apps.config(app, "search", false)) {
