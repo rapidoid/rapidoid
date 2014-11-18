@@ -27,7 +27,7 @@ import org.rapidoid.http.HttpExchange;
 public class SearchScreen {
 
 	public Object content(HttpExchange x) {
-		return h1("Search Results for: ", b(x.param("q")));
+		return h1("Search results for ", b(x.param("q")), ":");
 	}
 
 }
