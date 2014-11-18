@@ -598,7 +598,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		} else {
 			String title = U.or(response, "Error occured!");
 			if (err != null) {
-				HTMLSnippets.writeErrorPage(this, title, err);
+				if (devMode()) {
+					HTMLSnippets.writeErrorPage(this, title, err);
+				} else {
+					HTMLSnippets.writeFullPage(this, title, "");
+				}
 			} else {
 				HTMLSnippets.writeFullPage(this, title, "<h1>The requested page cannot be found!</h1>");
 			}
@@ -721,6 +725,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public OutputStream outputStream() {
 		return new HttpOutputStream(this);
+	}
+
+	@Override
+	public boolean devMode() {
+		String host = host();
+		return host == null || host.equals("localhost") || host.equals("127.0.0.1");
 	}
 
 }

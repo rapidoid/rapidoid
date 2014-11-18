@@ -107,6 +107,8 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	boolean isGetReq();
 
+	boolean devMode();
+	
 	/* HELPERS: */
 
 	String constructUrl(String path);
