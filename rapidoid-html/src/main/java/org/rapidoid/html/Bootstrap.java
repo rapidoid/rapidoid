@@ -384,8 +384,8 @@ public class Bootstrap extends HTML {
 		return col_(12, contents);
 	}
 
-	public static ButtonTag cmd(String cmd) {
-		return btn(U.capitalized(cmd)).cmd(cmd);
+	public static ButtonTag cmd(String cmd, Object... args) {
+		return btn(U.capitalized(cmd)).cmd(cmd, args);
 	}
 
 }

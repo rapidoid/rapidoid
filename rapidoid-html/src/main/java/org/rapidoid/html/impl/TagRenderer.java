@@ -152,16 +152,17 @@ public class TagRenderer {
 			write(out, HTML.escape(attr));
 		}
 
-		// FIXME complete this
 		if (tag.cmd != null) {
+			int eventHnd = ctx.newCommand(tag.cmd);
 			write(out, ON);
 			write(out, "click");
 			write(out, EQ_DQUOTES);
 			write(out, EMIT);
-			write(out, 123456789 + "");
+			write(out, eventHnd + "");
 			write(out, EMIT_CLOSE);
 			write(out, DQUOTES);
 		}
+
 		write(out, GT);
 
 		if (isSingleTag(name)) {

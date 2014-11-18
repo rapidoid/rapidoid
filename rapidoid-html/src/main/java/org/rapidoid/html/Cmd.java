@@ -1,9 +1,5 @@
 package org.rapidoid.html;
 
-import java.util.Map;
-
-import org.rapidoid.reactive.Var;
-
 /*
  * #%L
  * rapidoid-html
@@ -24,14 +20,22 @@ import org.rapidoid.reactive.Var;
  * #L%
  */
 
-public interface TagContext {
+import java.util.Arrays;
 
-	int newBinding(Var<Object> binding);
+public class Cmd {
 
-	void emitValues(Map<Integer, Object> values);
+	public String name;
 
-	int newCommand(Cmd cmd);
+	public Object[] args;
 
-	Cmd getEventCmd(int eventId);
+	public Cmd(String cmd, Object... args) {
+		this.name = cmd;
+		this.args = args;
+	}
+
+	@Override
+	public String toString() {
+		return "Cmd [cmd=" + name + ", args=" + Arrays.toString(args) + "]";
+	}
 
 }

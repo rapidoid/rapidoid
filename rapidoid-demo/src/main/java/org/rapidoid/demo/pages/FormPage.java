@@ -78,17 +78,17 @@ public class FormPage extends BootstrapWidgets {
 
 		final Object[][] options = { null, null, null, opt1, opt2, opt3, opt4, null, null };
 
-		final Object[] buttons = { btn("Save").cmd("saveIt"), btn("Cancel") };
+		final Object[] buttons = { btn("Save").cmd("saveIt", vars[0]), cmd("Cancel", vars[0]) };
 
 		return div(form_(layout, names, desc, types, options, vars, buttons), ul_li((Object[]) vars));
 	}
 
-	public void onSaveIt() {
-
+	public void onSaveIt(Object x) {
+		System.out.println("saved " + x);
 	}
 
-	public void onCancel() {
-		System.out.println("nothing special!");
+	public void onCancel(Object x) {
+		System.out.println("cancel " + x);
 	}
 
 }

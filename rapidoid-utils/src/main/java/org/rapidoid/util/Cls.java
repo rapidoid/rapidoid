@@ -850,4 +850,27 @@ public class Cls {
 		return map;
 	}
 
+	public static Class<?>[] typesOf(Object[] args) {
+		Class<?>[] types = new Class<?>[args.length];
+
+		for (int i = 0; i < types.length; i++) {
+			types[i] = args[i] != null ? args[i].getClass() : null;
+		}
+
+		return types;
+	}
+
+	public static Method findMethodByArgs(Class<? extends Object> clazz, String name, Object... args) {
+
+		for (Method method : clazz.getDeclaredMethods()) {
+			Class<?>[] paramTypes = method.getParameterTypes();
+
+			if (method.getName().equals(name) && U.areAssignable(paramTypes, args)) {
+				return method;
+			}
+		}
+
+		return null;
+	}
+
 }

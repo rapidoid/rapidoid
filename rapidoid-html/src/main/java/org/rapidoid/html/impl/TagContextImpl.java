@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.rapidoid.html.Cmd;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.reactive.Var;
 import org.rapidoid.util.U;
@@ -33,6 +34,8 @@ public class TagContextImpl implements TagContext, Serializable {
 	private static final long serialVersionUID = 4007586215607855031L;
 
 	private final Map<Integer, Var<Object>> bindings = U.map();
+
+	private final Map<Integer, Cmd> commands = U.map();
 
 	@Override
 	public int newBinding(Var<Object> binding) {
@@ -47,17 +50,36 @@ public class TagContextImpl implements TagContext, Serializable {
 	}
 
 	@Override
-	public void emit(final Map<Integer, Object> values, final int eventId) {
+	public int newCommand(Cmd cmd) {
+		int hnd;
+		do {
+			hnd = Math.abs(U.rnd());
+		} while (commands.containsKey(hnd));
+
+		commands.put(hnd, cmd);
+
+		return hnd;
+	}
+
+	@Override
+	public void emitValues(final Map<Integer, Object> values) {
 
 		for (Entry<Integer, Object> e : values.entrySet()) {
 			Var<Object> var = bindings.get(e.getKey());
 
-			U.must(var != null, "Invalid handle: h_%s", e.getKey());
+			U.must(var != null, "Invalid input handle: h_%s", e.getKey());
 
 			if (var != null) {
 				var.set(e.getValue());
 			}
 		}
+	}
+
+	@Override
+	public Cmd getEventCmd(int eventId) {
+		Cmd cmd = commands.get(eventId);
+		U.must(cmd != null, "Invalid event handle: h_%s", eventId);
+		return cmd;
 	}
 
 }

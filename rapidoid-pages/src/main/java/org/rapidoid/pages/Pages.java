@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
+import org.rapidoid.html.Cmd;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.rapidoid.http.HTTPServer;
@@ -226,10 +227,14 @@ public class Pages {
 		TagContext ctx = Pages.ctx(x);
 
 		Map<Integer, Object> inp = Pages.inputs(x);
-		ctx.emit(inp, event);
+		ctx.emitValues(inp);
 
 		Object page = U.newInstance(currentPage(x));
 		Pages.load(x, page);
+
+		Cmd cmd = ctx.getEventCmd(event);
+
+		callCmdHandler(page, cmd);
 
 		ctx = Tags.context();
 		x.sessionSet(Pages.SESSION_CTX, ctx);
@@ -249,6 +254,15 @@ public class Pages {
 
 		x.json();
 		return changes;
+	}
+
+	public static void callCmdHandler(Object target, Cmd cmd) {
+		String handlerName = "on" + U.capitalized(cmd.name);
+
+		Method m = Cls.findMethodByArgs(target.getClass(), handlerName, cmd.args);
+		U.must(m != null, "Cannot find handler for the command '%s' and args: %s", cmd.name, cmd.args);
+
+		Cls.invoke(m, target, cmd.args);
 	}
 
 	public static Class<?> currentPage(HttpExchange x) {

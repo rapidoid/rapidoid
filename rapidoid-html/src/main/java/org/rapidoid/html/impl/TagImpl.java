@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
@@ -57,7 +58,7 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	Var<Object> binding;
 
-	String cmd;
+	Cmd cmd;
 
 	public TagImpl(Class<TAG> clazz, String name, Object[] contents) {
 		this.clazz = clazz;
@@ -235,7 +236,7 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 		TAG _copy = copy();
 		TagImpl<Tag<?>> impl = impl(_copy);
 
-		impl.cmd = cmd;
+		impl.cmd = new Cmd(cmd, args);
 
 		return _copy;
 	}
