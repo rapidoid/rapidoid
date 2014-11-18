@@ -32,6 +32,7 @@ import java.util.Set;
 import org.rapidoid.annotation.Autocreate;
 import org.rapidoid.annotation.Init;
 import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.Session;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.Builder;
 import org.rapidoid.util.Cls;
@@ -53,6 +54,15 @@ public class IoC {
 					return fields;
 				}
 			});
+	private static final Map<Class<?>, List<Field>> SESSION_FIELDS = U
+			.autoExpandingMap(new Mapper<Class<?>, List<Field>>() {
+				@Override
+				public List<Field> map(Class<?> clazz) throws Exception {
+					List<Field> fields = Cls.getFieldsAnnotated(clazz, Session.class);
+					U.debug("Retrieved session fields", "class", clazz, "fields", fields);
+					return fields;
+				}
+			});
 	private static final Map<Class<?>, Set<Object>> INJECTION_PROVIDERS = U.map();
 	private static final Map<Class<?>, List<F3<Object, Object, Method, Object[]>>> INTERCEPTORS = U.map();
 
@@ -69,6 +79,7 @@ public class IoC {
 		MANAGED_INSTANCES.clear();
 		IOC_INSTANCES.clear();
 		INJECTABLE_FIELDS.clear();
+		SESSION_FIELDS.clear();
 		INJECTION_PROVIDERS.clear();
 		INTERCEPTORS.clear();
 	}
@@ -134,7 +145,13 @@ public class IoC {
 
 	public static synchronized <T> T autowire(T target) {
 		U.debug("Autowire", "target", target);
-		autowire(target, null);
+		autowire(target, null, null);
+		return target;
+	}
+
+	public static synchronized <T> T autowire(T target, Mapper<String, Object> session) {
+		U.debug("Autowire", "target", target);
+		autowire(target, null, session);
 		return target;
 	}
 
@@ -146,6 +163,12 @@ public class IoC {
 	public static synchronized <T> T inject(T target, Map<String, Object> properties) {
 		U.debug("Inject", "target", target, "properties", properties);
 		return ioc(target, properties);
+	}
+
+	private static <T> T provideSessionValue(Object target, Class<T> type, String name, Mapper<String, Object> session) {
+		U.notNull(session, "session");
+		Object value = U.eval(session, name);
+		return value != null ? Cls.convert(value, type) : null;
 	}
 
 	private static <T> T provideIoCInstanceOf(Object target, Class<T> type, String name,
@@ -274,7 +297,7 @@ public class IoC {
 		return (T) instance;
 	}
 
-	private static void autowire(Object target, Map<String, Object> properties) {
+	private static void autowire(Object target, Map<String, Object> properties, Mapper<String, Object> session) {
 		U.debug("Autowiring", "target", target);
 
 		for (Field field : INJECTABLE_FIELDS.get(target.getClass())) {
@@ -285,6 +308,16 @@ public class IoC {
 			U.debug("Injecting field value", "target", target, "field", field.getName(), "value", value);
 
 			if (!optional || value != null) {
+				Cls.setFieldValue(target, field.getName(), value);
+			}
+		}
+
+		for (Field field : SESSION_FIELDS.get(target.getClass())) {
+
+			Object value = provideSessionValue(target, field.getType(), field.getName(), session);
+
+			if (value != null) {
+				U.debug("Injecting session field value", "target", target, "field", field.getName(), "value", value);
 				Cls.setFieldValue(target, field.getName(), value);
 			}
 		}
@@ -309,7 +342,7 @@ public class IoC {
 
 			manage(target);
 
-			autowire(target, properties);
+			autowire(target, properties, null);
 
 			invokePostConstruct(target);
 
@@ -386,6 +419,10 @@ public class IoC {
 
 		B builder = Cls.implement(handler, builderClass);
 		return builder;
+	}
+
+	public static synchronized List<Field> getSessionFields(Object target) {
+		return SESSION_FIELDS.get(target.getClass());
 	}
 
 }
