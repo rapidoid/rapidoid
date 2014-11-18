@@ -222,10 +222,9 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> TAG bind(Var<T> var) {
-		TAG _copy = copy();
+		TAG _copy = (TAG) Tags.withValue(proxy, var.get());
 		TagImpl<Tag<?>> impl = impl(_copy);
 
-		Tags.setValue(_copy, var.get());
 		impl.binding = (Var<Object>) var;
 
 		return _copy;

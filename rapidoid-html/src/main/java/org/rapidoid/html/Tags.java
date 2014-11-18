@@ -82,26 +82,25 @@ public class Tags extends BasicUtils {
 		}
 	}
 
-	public static <T extends Tag<?>> T setValue(T tag, Object value) {
+	@SuppressWarnings("unchecked")
+	public static <T extends Tag<?>> T withValue(T tag, Object value) {
 
 		if (tag instanceof InputTag) {
 			InputTag input = (InputTag) tag;
 			if ("checkbox".equals(input.type()) || "radio".equals(input.type())) {
-				input.checked(value != null ? bool(value) : false);
+				return (T) input.checked(value != null ? bool(value) : false);
 			} else {
-				input.value(value != null ? str(value) : "");
+				return (T) input.value(value != null ? str(value) : "");
 			}
 		} else if (tag instanceof TextareaTag) {
 			TextareaTag textArea = (TextareaTag) tag;
-			textArea.content(value != null ? str(value) : "");
+			return (T) textArea.content(value != null ? str(value) : "");
 		} else if (tag instanceof OptionTag) {
 			OptionTag optionTag = (OptionTag) tag;
-			optionTag.selected(value != null ? bool(value) : false);
+			return (T) optionTag.selected(value != null ? bool(value) : false);
 		} else {
 			throw U.rte("Cannot set value to a '%s' tag!", ((Tag<?>) tag).tagKind());
 		}
-
-		return tag;
 	}
 
 }

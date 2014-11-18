@@ -38,7 +38,7 @@ public class HTML extends Tags {
 		UlTag list = ul();
 
 		for (Object item : listItems) {
-			list.append(li(item));
+			list = list.append(li(item));
 		}
 
 		return list;

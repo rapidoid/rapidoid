@@ -65,7 +65,7 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		TrTag header = tr();
 
 		for (Property prop : props) {
-			header.append(th(prop.caption()));
+			header = header.append(th(prop.caption()));
 		}
 
 		Integer pageN = pageNumber.get();
@@ -75,7 +75,7 @@ public abstract class BootstrapWidgets extends Bootstrap {
 
 		for (Item item : page) {
 			TrTag row = itemRow(props, item);
-			body.append(row);
+			body = body.append(row);
 		}
 
 		int total = items.size();
@@ -88,15 +88,15 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		TrTag row = tr();
 
 		for (Property prop : properties) {
-			row.append(td(U.or(item.get(prop.name()), "")));
+			row = row.append(td(U.or(item.get(prop.name()), "")));
 		}
 
 		return row;
 	}
 
 	public static Tag<?> pager(int from, int to, Var<Integer> pageNumber) {
-		LiTag first = li(a(span(LAQUO).cmd("_set", pageNumber, from)).attr("aria-hidden", "true"), span("First")
-				.class_("sr-only"));
+		LiTag first = li(a(span(LAQUO).cmd("_set", pageNumber, from).attr("aria-hidden", "true"),
+				span("First").class_("sr-only")));
 
 		LiTag prev = li(a(span(LT).cmd("_dec", pageNumber, 1).attr("aria-hidden", "true"),
 				span("Previous").class_("sr-only")));
