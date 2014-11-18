@@ -34,6 +34,6 @@ public class App {
 
 	public boolean auth = true;
 
-	public Object[] screens = { HomeScreen.class, NewTaskScreen.class, TasksScreen.class };
+//	public Object[] screens = { HomeScreen.class, NewTaskScreen.class, TasksScreen.class };
 
 }

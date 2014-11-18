@@ -95,18 +95,18 @@ public abstract class BootstrapWidgets extends Bootstrap {
 	}
 
 	public static Tag<?> pager(int from, int to, Var<Integer> pageNumber) {
-		LiTag first = li(a(span(LAQUO).click(Do.set(pageNumber, from)).attr("aria-hidden", "true"), span("First")
-				.class_("sr-only")));
+		LiTag first = li(a(span(LAQUO).cmd("_set", pageNumber, from)).attr("aria-hidden", "true"), span("First")
+				.class_("sr-only"));
 
-		LiTag prev = li(a(span(LT).click(Do.dec(pageNumber, 1)).attr("aria-hidden", "true"),
+		LiTag prev = li(a(span(LT).cmd("_dec", pageNumber, 1).attr("aria-hidden", "true"),
 				span("Previous").class_("sr-only")));
 
 		LiTag current = li(a("Page ", pageNumber, " of " + to));
 
-		LiTag next = li(a(span(GT).click(Do.inc(pageNumber, 1)).attr("aria-hidden", "true"),
+		LiTag next = li(a(span(GT).cmd("_inc", pageNumber, 1).attr("aria-hidden", "true"),
 				span("Next").class_("sr-only")));
 
-		LiTag last = li(a(span(RAQUO).click(Do.set(pageNumber, to)).attr("aria-hidden", "true"),
+		LiTag last = li(a(span(RAQUO).cmd("_set", pageNumber, to).attr("aria-hidden", "true"),
 				span("Last").class_("sr-only")));
 
 		return div(nav(ul(first, prev, current, next, last).class_("pagination"))).class_("pull-right");

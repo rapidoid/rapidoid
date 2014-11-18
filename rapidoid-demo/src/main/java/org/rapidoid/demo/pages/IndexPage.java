@@ -23,7 +23,6 @@ package org.rapidoid.demo.pages;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.demo.pojo.Person;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.FormTag;
@@ -52,15 +51,7 @@ public class IndexPage extends BootstrapWidgets {
 		FormTag formL = navbarForm(true, "Search", arr("query"), arr("Enter search phrase..."));
 		FormTag formR = navbarForm(false, "Login", arr("user", "pass"), arr("Username", "Password"));
 
-		ButtonTag abc = btnPrimary("abc", new TagEventHandler<ButtonTag>() {
-			int n = 1;
-
-			@Override
-			public void handle(ButtonTag target) {
-				System.out.println("clicked abc! " + n++);
-				brand.content(glyphicon("cog"), n);
-			}
-		});
+		ButtonTag abc = btnPrimary("abc");
 
 		ButtonTag xy = btnPrimary("X Z Y").cmd("xyz");
 

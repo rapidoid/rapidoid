@@ -152,16 +152,6 @@ public class TagRenderer {
 			write(out, HTML.escape(attr));
 		}
 
-		for (String event : tag.eventHandlers.keySet()) {
-			write(out, ON);
-			write(out, event);
-			write(out, EQ_DQUOTES);
-			write(out, EMIT);
-			write(out, event);
-			write(out, EMIT_CLOSE);
-			write(out, DQUOTES);
-		}
-
 		// FIXME complete this
 		if (tag.cmd != null) {
 			write(out, ON);

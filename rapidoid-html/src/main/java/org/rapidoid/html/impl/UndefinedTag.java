@@ -20,9 +20,7 @@ package org.rapidoid.html.impl;
  * #L%
  */
 
-import org.rapidoid.html.Action;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.html.TagProcessor;
 import org.rapidoid.reactive.Var;
 import org.rapidoid.util.U;
@@ -116,16 +114,6 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 
 	@Override
 	public String class_() {
-		throw U.notExpected();
-	}
-
-	@Override
-	public TAG click(TagEventHandler<TAG> handler) {
-		throw U.notExpected();
-	}
-
-	@Override
-	public TAG click(Action... action) {
 		throw U.notExpected();
 	}
 

@@ -24,10 +24,8 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import org.rapidoid.html.Action;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagBase;
-import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
@@ -53,7 +51,6 @@ public class TagProxy<TAG extends Tag<?>> implements InvocationHandler, Serializ
 		this.clazz = clazz;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Object invoke(Object target, Method method, Object[] args) throws Throwable {
 
 		Class<?> methodClass = method.getDeclaringClass();
@@ -73,22 +70,6 @@ public class TagProxy<TAG extends Tag<?>> implements InvocationHandler, Serializ
 
 		boolean has0arg = paramTypes.length == 0;
 		boolean has1arg = paramTypes.length == 1;
-
-		// event handlers
-		if (name.equals("click") || name.equals("change")) {
-
-			// handlers setter
-			if (returnsTag && has1arg && TagEventHandler.class.isAssignableFrom(paramTypes[0])) {
-				tag.setHandler(name, (TagEventHandler<TAG>) args[0]);
-				return target;
-			}
-
-			// action setter
-			if (returnsTag && has1arg && Action[].class.isAssignableFrom(paramTypes[0])) {
-				tag.setHandler(name, (Action[]) args[0]);
-				return target;
-			}
-		}
 
 		// String attribute setter
 		if (returnsTag && has1arg && paramTypes[0].equals(String.class)) {

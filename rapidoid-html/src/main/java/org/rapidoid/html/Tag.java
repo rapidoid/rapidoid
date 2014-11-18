@@ -50,8 +50,4 @@ public interface Tag<TAG extends Tag<?>> extends TagBase<TAG> {
 
 	TAG enabled(boolean value);
 
-	TAG click(TagEventHandler<TAG> handler);
-
-	TAG click(Action... action);
-
 }

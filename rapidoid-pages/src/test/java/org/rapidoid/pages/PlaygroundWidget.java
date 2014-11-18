@@ -21,7 +21,6 @@ package org.rapidoid.pages;
  */
 
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.html.tag.InputTag;
@@ -30,7 +29,6 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Model;
 import org.rapidoid.pages.entity.Person;
 import org.rapidoid.reactive.Var;
-import org.rapidoid.util.U;
 
 public class PlaygroundWidget extends BootstrapWidgets {
 
@@ -52,19 +50,9 @@ public class PlaygroundWidget extends BootstrapWidgets {
 
 		final Var<Integer> num = var(start);
 
-		ButtonTag b1 = button("+").click(new TagEventHandler<ButtonTag>() {
-			@Override
-			public void handle(ButtonTag target) {
-				num.set(num.get() + 1);
-			}
-		});
+		ButtonTag b1 = button("+");
 
-		ButtonTag b2 = button("-").click(new TagEventHandler<ButtonTag>() {
-			@Override
-			public void handle(ButtonTag target) {
-				num.set(num.get() + 1);
-			}
-		});
+		ButtonTag b2 = button("-");
 
 		return span(b2, span(num), b1);
 	}
@@ -74,17 +62,7 @@ public class PlaygroundWidget extends BootstrapWidgets {
 		final InputTag input = input().css("border: 1px;");
 		final DivTag coll = div();
 
-		ButtonTag b2 = button("+").click(new TagEventHandler<ButtonTag>() {
-			@Override
-			public void handle(ButtonTag target) {
-				U.debug("click", "button", target);
-				coll.append(p("added ", input.value()));
-			}
-		});
-
-		Var<Integer> counter = var(1);
-
-		b2.click(Do.inc(counter, 2), Do.dec(counter, 1));
+		ButtonTag b2 = button("+");
 
 		return div(span(input, b2), coll);
 	}

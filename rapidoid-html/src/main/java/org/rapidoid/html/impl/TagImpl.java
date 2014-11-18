@@ -27,10 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.rapidoid.html.Action;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
-import org.rapidoid.html.TagEventHandler;
 import org.rapidoid.html.Tags;
 import org.rapidoid.reactive.Var;
 import org.rapidoid.util.U;
@@ -51,8 +49,6 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	final Set<String> battrs = U.set();
 
-	final Map<String, TagEventHandler<TAG>> eventHandlers = U.map();
-
 	int _h = -1;
 
 	TagContext ctx;
@@ -63,28 +59,11 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	String cmd;
 
-	@SuppressWarnings("unchecked")
-	public TagImpl(Class<TAG> clazz, String name, Object[] contentsAndHandlers) {
+	public TagImpl(Class<TAG> clazz, String name, Object[] contents) {
 		this.clazz = clazz;
 		this.name = name;
 
-		List<Action> actions = U.list();
-
-		if (contentsAndHandlers != null) {
-			for (Object x : contentsAndHandlers) {
-				if (x instanceof TagEventHandler) {
-					setHandler("click", (TagEventHandler<TAG>) x);
-				} else if (x instanceof Action) {
-					actions.add((Action) x);
-				} else {
-					flatAndInsertContent(APPEND, x);
-				}
-			}
-		}
-
-		if (!actions.isEmpty()) {
-			setHandler("click", actions.toArray(new Action[actions.size()]));
-		}
+		flatAndInsertContent(APPEND, contents);
 	}
 
 	private void flatAndInsertContent(int index, Object item) {
@@ -119,46 +98,12 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 		return out.toString();
 	}
 
-	public void setHandler(String event, TagEventHandler<TAG> handler) {
-		if (handler != null) {
-			eventHandlers.put(event, handler);
-		} else {
-			eventHandlers.remove(event);
-		}
-	}
-
-	public void setHandler(String event, Action[] actions) {
-		if (actions.length == 0) {
-			setHandler(event, (TagEventHandler<TAG>) null);
-		} else {
-			setHandler(event, new ActionsHandler<TAG>(actions));
-		}
-	}
-
 	public void setProxy(TAG proxy) {
 		this.proxy = proxy;
 	}
 
 	public void setCtx(TagContext ctx) {
 		this.ctx = ctx;
-	}
-
-	public void emit(String event) {
-		TagEventHandler<TAG> handler = eventHandlers.get(event);
-		if (handler != null) {
-			U.notNull(proxy, "tag");
-			handler.handle(proxy);
-		} else {
-			U.error("Cannot find event handler!", "event", event, "hnd", _h);
-			throw U.rte("Cannot find event handler on tag with _h = '%s' for event = '%s'", _h, event);
-		}
-	}
-
-	private void changed() {
-	}
-
-	private void changedContent() {
-		changed();
 	}
 
 	@Override
@@ -174,7 +119,6 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	@Override
 	public void setChild(int index, Object child) {
 		contents.set(index, child);
-		changedContent();
 	}
 
 	@Override
@@ -206,21 +150,18 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	public TAG content(Object... content) {
 		contents.clear();
 		flatAndInsertContent(APPEND, content);
-		changedContent();
 		return proxy();
 	}
 
 	@Override
 	public TAG prepend(Object... content) {
 		flatAndInsertContent(0, content);
-		changedContent();
 		return proxy();
 	}
 
 	@Override
 	public TAG append(Object... content) {
 		flatAndInsertContent(APPEND, content);
-		changedContent();
 		return proxy();
 	}
 
@@ -231,12 +172,7 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	@Override
 	public TAG attr(String attr, String value) {
-		String prev = attrs.put(attr, value);
-
-		if (!U.eq(prev, value)) {
-			changed();
-		}
-
+		attrs.put(attr, value);
 		return proxy();
 	}
 
@@ -247,16 +183,10 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	@Override
 	public TAG is(String attr, boolean value) {
-		boolean changed;
-
 		if (value) {
-			changed = battrs.add(attr);
+			battrs.add(attr);
 		} else {
-			changed = battrs.remove(attr);
-		}
-
-		if (changed) {
-			changed();
+			battrs.remove(attr);
 		}
 
 		return proxy();
