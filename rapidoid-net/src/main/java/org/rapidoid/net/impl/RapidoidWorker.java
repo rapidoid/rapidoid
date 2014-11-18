@@ -41,8 +41,6 @@ import org.rapidoid.util.U;
 
 public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
-	private static final int MAX_PIPELINED = Integer.MAX_VALUE;
-
 	private final Queue<RapidoidConnection> restarting;
 
 	private final Queue<ConnectionTarget> connecting;
@@ -52,6 +50,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	private final SimpleList<RapidoidConnection> done;
 
 	private final Pool<RapidoidConnection> connections;
+
+	private final int maxPipelineSize;
 
 	final Protocol protocol;
 
@@ -69,6 +69,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 		this.protocol = protocol;
 		this.helper = helper;
+		this.maxPipelineSize = U.option("pipeline-max", Integer.MAX_VALUE);
 
 		final int queueSize = U.micro() ? 1000 : 1000000;
 		final int growFactor = U.micro() ? 2 : 10;
@@ -182,7 +183,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	private int processMsgs(RapidoidConnection conn) {
 		int reqN = 0;
 
-		while (reqN < MAX_PIPELINED && conn.input().hasRemaining() && processNext(conn)) {
+		while (reqN < maxPipelineSize && conn.input().hasRemaining() && processNext(conn)) {
 			reqN++;
 		}
 
