@@ -22,6 +22,8 @@ package org.rapidoid.inmem;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -92,6 +94,16 @@ public class InMem {
 		this.filename = filename;
 
 		if (filename != null && !filename.isEmpty()) {
+
+			if (currentFile().exists() && otherFile().exists()) {
+				throw new IllegalStateException(
+						String.format(
+								"The database was left in inconsistent state, both %s and %s files exist! Please delete one of them!",
+								currentFile().getName(), otherFile().getName()));
+			}
+
+			load();
+
 			persistor = new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -101,6 +113,20 @@ public class InMem {
 			persistor.start();
 		} else {
 			persistor = null;
+		}
+	}
+
+	private void load() {
+		try {
+			if (currentFile().exists()) {
+				load(new FileInputStream(currentFile()));
+				aOrB.set(false);
+			} else if (otherFile().exists()) {
+				load(new FileInputStream(otherFile()));
+				aOrB.set(true);
+			}
+		} catch (FileNotFoundException e) {
+			throw new IllegalStateException(e);
 		}
 	}
 
@@ -388,12 +414,11 @@ public class InMem {
 		}
 
 		try {
-			boolean isA = aOrB.get();
-			String suffixAorB = isA ? SUFFIX_A : SUFFIX_B;
-			File file = new File(filenameWithSuffix(suffixAorB));
+			File file = currentFile();
 
 			if (file.exists()) {
-				file.delete();
+				throw new IllegalStateException("Cannot save the database, file already exists: "
+						+ file.getAbsolutePath());
 			}
 
 			RandomAccessFile ff = new RandomAccessFile(file, "rw");
@@ -402,7 +427,11 @@ public class InMem {
 			ff.close();
 
 			prevData = copy;
-			must(aOrB.compareAndSet(isA, !isA), "DB persistence filename switching error!");
+			boolean isA = aOrB.get();
+			must(aOrB.compareAndSet(isA, !isA), "DB persistence file switching error!");
+
+			File oldFile = currentFile();
+			oldFile.delete();
 
 			try {
 				if (onCommit != null) {
@@ -427,6 +456,14 @@ public class InMem {
 
 			throw new RuntimeException("Cannot persist database changes!", e);
 		}
+	}
+
+	private File currentFile() {
+		return new File(filenameWithSuffix(aOrB.get() ? SUFFIX_A : SUFFIX_B));
+	}
+
+	private File otherFile() {
+		return new File(filenameWithSuffix(!aOrB.get() ? SUFFIX_A : SUFFIX_B));
 	}
 
 	private String filenameWithSuffix(String suffixAorB) {
@@ -459,10 +496,13 @@ public class InMem {
 
 	public void shutdown() {
 		active.set(false);
+
 		try {
 			persistor.join();
 		} catch (InterruptedException e) {
 		}
+
+		new File(filename).delete();
 	}
 
 	public boolean isActive() {

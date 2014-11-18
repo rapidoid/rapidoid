@@ -20,6 +20,8 @@ package org.rapidoid.db;
  * #L%
  */
 
+import java.util.concurrent.CountDownLatch;
+
 import org.rapidoid.db.model.Person;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
@@ -44,25 +46,38 @@ public class DbPersistenceTest extends DbTestCommons {
 
 		System.out.println("updating...");
 
-		U.benchmarkMT(10, "update", count, new Runnable() {
+		final CountDownLatch latch = new CountDownLatch(count);
+
+		U.benchmarkMT(10, "update", count, latch, new Runnable() {
 			@Override
 			public void run() {
 				int id = U.rnd(count) + 1;
 				DB.update(id, new Person("x", id * 100));
+				latch.countDown();
 			}
 		});
 
 		DB.shutdown();
 
+		DB.remove("default");
+
+		checkDb(count);
+		checkDb(count);
+		checkDb(count);
+	}
+
+	private void checkDb(final int count) {
 		U.endMeasure("total");
 
 		eq(DB.size(), count);
 
-		for (int id = 1; id < count; id++) {
+		for (int id = 1; id <= count; id++) {
 			Person p = DB.get(id);
 			isTrue(p.id == id);
 			isTrue((p.name.equals("abc") && p.age == -1) || (p.name.equals("x") && p.age == id * 100));
 		}
+
+		DB.shutdown();
 	}
 
 }
