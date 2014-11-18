@@ -40,14 +40,16 @@ import org.rapidoid.util.U;
 public class OAuthTokenHandler implements Handler {
 
 	private final OAuthProvider provider;
+	private final String oauthDomain;
 	private final OAuthStateCheck stateCheck;
 	private final String clientId;
 	private final String clientSecret;
 	private final String callbackPath;
 
-	public OAuthTokenHandler(OAuthProvider provider, OAuthStateCheck stateCheck, String clientId, String clientSecret,
-			String callbackPath) {
+	public OAuthTokenHandler(OAuthProvider provider, String oauthDomain, OAuthStateCheck stateCheck, String clientId,
+			String clientSecret, String callbackPath) {
 		this.provider = provider;
+		this.oauthDomain = oauthDomain;
 		this.stateCheck = stateCheck;
 		this.clientId = clientId;
 		this.clientSecret = clientSecret;
@@ -64,7 +66,7 @@ public class OAuthTokenHandler implements Handler {
 		if (code != null && state != null) {
 			U.must(stateCheck.isValidState(state, clientSecret, x.sessionId()), "Invalid OAuth state!");
 
-			String redirectUrl = x.constructUrl(callbackPath);
+			String redirectUrl = oauthDomain != null ? oauthDomain + callbackPath : x.constructUrl(callbackPath);
 
 			TokenRequestBuilder reqBuilder = OAuthClientRequest.tokenLocation(provider.getTokenEndpoint())
 					.setGrantType(GrantType.AUTHORIZATION_CODE).setClientId(clientId).setClientSecret(clientSecret)

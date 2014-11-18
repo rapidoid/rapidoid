@@ -26,14 +26,16 @@ import org.rapidoid.http.HttpExchange;
 public class OAuthLoginHandler implements Handler {
 
 	private final OAuthProvider provider;
+	private final String oauthDomain;
 
-	public OAuthLoginHandler(OAuthProvider provider) {
+	public OAuthLoginHandler(OAuthProvider provider, String oauthDomain) {
 		this.provider = provider;
+		this.oauthDomain = oauthDomain;
 	}
 
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
-		return x.redirect(OAuth.getLoginURL(x, provider));
+		return x.redirect(OAuth.getLoginURL(x, provider, oauthDomain));
 	}
 
 }

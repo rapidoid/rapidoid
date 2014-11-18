@@ -35,10 +35,13 @@ public class OAuth {
 	private static OAuthStateCheck STATE_CHECK;
 
 	public static void register(HTTPServer server, OAuthProvider... providers) {
-		register(server, new DefaultOAuthStateCheck(), providers);
+		register(server, null, new DefaultOAuthStateCheck(), providers);
 	}
 
-	public static void register(HTTPServer server, OAuthStateCheck stateCheck, OAuthProvider... providers) {
+	public static void register(HTTPServer server, String oauthDomain, OAuthStateCheck stateCheck,
+			OAuthProvider... providers) {
+
+		oauthDomain = U.or(oauthDomain, U.option("oauth-domain", null));
 
 		OAuth.STATE_CHECK = stateCheck;
 
@@ -58,8 +61,9 @@ public class OAuth {
 			String clientId = U.config(name + ".clientId");
 			String clientSecret = U.config(name + ".clientSecret");
 
-			server.get(loginPath, new OAuthLoginHandler(provider));
-			server.get(callbackPath, new OAuthTokenHandler(provider, stateCheck, clientId, clientSecret, callbackPath));
+			server.get(loginPath, new OAuthLoginHandler(provider, oauthDomain));
+			server.get(callbackPath, new OAuthTokenHandler(provider, oauthDomain, stateCheck, clientId, clientSecret,
+					callbackPath));
 
 			loginHtml.append(U.format(LOGIN_BTN, name, provider.getName()));
 		}
@@ -74,14 +78,17 @@ public class OAuth {
 		});
 	}
 
-	public static String getLoginURL(HttpExchange x, OAuthProvider provider) {
+	public static String getLoginURL(HttpExchange x, OAuthProvider provider, String oauthDomain) {
+
+		oauthDomain = U.or(oauthDomain, U.option("oauth-domain", null));
+
 		String name = provider.getName().toLowerCase();
 
 		String clientId = U.config(name + ".clientId");
 		String clientSecret = U.config(name + ".clientSecret");
 
 		String callbackPath = "/_" + name + "OauthCallback";
-		String redirectUrl = x.constructUrl(callbackPath);
+		String redirectUrl = oauthDomain != null ? oauthDomain + callbackPath : x.constructUrl(callbackPath);
 
 		String state = STATE_CHECK.generateState(clientSecret, x.sessionId());
 
