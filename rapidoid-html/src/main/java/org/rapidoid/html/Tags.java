@@ -104,8 +104,4 @@ public class Tags extends BasicUtils {
 		return tag;
 	}
 
-	public static Object getValue(Tag<?> tag) {
-		throw U.notReady(); // FIXME
-	}
-
 }
