@@ -173,14 +173,14 @@ public class Pages {
 	}
 
 	public static Object serve(HttpExchange x, Class<?> pageClass) {
-		x.setSession(Pages.SESSION_CURRENT_PAGE, pageClass);
+		x.sessionSet(Pages.SESSION_CURRENT_PAGE, pageClass);
 
 		Object page = U.newInstance(pageClass);
 
 		load(x, page);
 
 		TagContext ctx = Tags.context();
-		x.setSession(Pages.SESSION_CTX, ctx);
+		x.sessionSet(Pages.SESSION_CTX, ctx);
 
 		Object result = render(x, page);
 
@@ -196,7 +196,7 @@ public class Pages {
 	public static void store(HttpExchange x, Object target) {
 		for (Field field : IoC.getSessionFields(target)) {
 			Object value = Cls.getFieldValue(field, target);
-			x.setSession(field.getName(), value);
+			x.sessionSet(field.getName(), value);
 		}
 	}
 
@@ -212,7 +212,7 @@ public class Pages {
 		Pages.load(x, page);
 
 		ctx = Tags.context();
-		x.setSession(Pages.SESSION_CTX, ctx);
+		x.sessionSet(Pages.SESSION_CTX, ctx);
 
 		Object content = Pages.contentOf(x, page);
 

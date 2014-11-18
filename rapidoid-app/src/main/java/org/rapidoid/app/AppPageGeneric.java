@@ -75,7 +75,7 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 			return null;
 		}
 
-		x.setSession(SESSION_CURRENT_SCREEN, screenClass.getSimpleName());
+		x.sessionSet(SESSION_CURRENT_SCREEN, screenClass.getSimpleName());
 
 		Object screen = U.newInstance(screenClass);
 		Pages.load(x, screen);

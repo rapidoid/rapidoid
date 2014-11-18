@@ -52,7 +52,7 @@ public interface HttpExchangeHeaders extends HttpExchangeBody {
 
 	HttpExchangeHeaders setContentType(MediaType contentType);
 
-	HttpExchangeHeaders setSession(String name, Object value);
+	HttpExchangeHeaders sessionSet(String name, Object value);
 
 	HttpExchangeHeaders closeSession();
 

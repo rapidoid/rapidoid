@@ -641,7 +641,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public HttpExchangeHeaders setSession(String name, Object value) {
+	public HttpExchangeHeaders sessionSet(String name, Object value) {
 		if (value != null) {
 			session.setAttribute(sessionId(), name, value);
 		} else {

@@ -101,7 +101,7 @@ public class OAuthTokenHandler implements Handler {
 			user.oauthId = String.valueOf(auth.get("id"));
 			user.display = user.email.substring(0, user.email.indexOf('@'));
 
-			x.setSession("_user", user);
+			x.sessionSet("_user", user);
 			U.must(x.user() == user);
 
 			return x.redirect("/");
