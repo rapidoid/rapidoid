@@ -22,6 +22,7 @@ package org.rapidoid.pages;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -126,7 +127,7 @@ public class Pages {
 			return x;
 		}
 
-		return BootstrapWidgets.page(pageTitle, content);
+		return BootstrapWidgets.page(x.devMode(), pageTitle, content);
 	}
 
 	public static Object render(HttpExchange x, Object page) {

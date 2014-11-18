@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{{title}}</title>
+
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+<style type="text/css">
+{{style}}
+</style>
+
+<script>
+function _emit(c, event) {
+	var hnd = $(c).attr('_h');
+	$.post('/_emit', {event: event, hnd: hnd}).done(function (data) {
+		for (var h in data) {
+			$('[_h=' + h + ']').replaceWith(data[h]);
+		}
+	}).fail(function (data) {
+		alert("Communication error!");
+		console.log(data);
+	});
+}
+</script>
+
+{{head}}
+</head>
+
+{{body}}
+
+</html>

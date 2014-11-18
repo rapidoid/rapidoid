@@ -171,12 +171,13 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		return null;
 	}
 
-	public static Tag<?> page(String pageTitle, Object head, Object body) {
-		return template("bootstrap-page.html", "title", pageTitle, "head", head, "body", body);
+	public static Tag<?> page(boolean devMode, String pageTitle, Object head, Object body) {
+		String devOrProd = devMode ? "dev" : "prod";
+		return template("bootstrap-page-" + devOrProd + ".html", "title", pageTitle, "head", head, "body", body);
 	}
 
-	public static Tag<?> page(String pageTitle, Object body) {
-		return page(pageTitle, "", body);
+	public static Tag<?> page(boolean devMode, String pageTitle, Object body) {
+		return page(devMode, pageTitle, "", body);
 	}
 
 }
