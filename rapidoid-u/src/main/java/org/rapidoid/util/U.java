@@ -391,7 +391,7 @@ public class U {
 		throw rte("Cannot find appropriate constructor for %s with args %s!", clazz, text(args));
 	}
 
-	private static boolean areAssignable(Class<?>[] types, Object[] values) {
+	public static boolean areAssignable(Class<?>[] types, Object[] values) {
 		if (types.length != values.length) {
 			return false;
 		}
@@ -960,10 +960,12 @@ public class U {
 		}
 	}
 
-	public static void notNull(Object value, String desc) {
+	public static <T> T notNull(T value, String desc, Object... descArgs) {
 		if (value == null) {
-			throw rte("%s must NOT be null!", desc);
+			throw rte("%s must NOT be null!", format(desc, descArgs));
 		}
+
+		return value;
 	}
 
 	public static RuntimeException notReady() {

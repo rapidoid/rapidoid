@@ -53,7 +53,7 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 		server.get("/session", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				if (x.cookie("ses") == null) {
+				if (x.cookie("ses", null) == null) {
 					x.setCookie("ses", "023B");
 				}
 				x.setCookie("key" + U.rnd(100), "val" + U.rnd(100));

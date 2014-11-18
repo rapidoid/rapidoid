@@ -41,10 +41,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
-import org.rapidoid.http.HTTP;
-import org.rapidoid.http.HTTPServer;
-import org.rapidoid.http.Handler;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 import org.testng.Assert;
@@ -165,7 +161,7 @@ public abstract class HttpTestCommons extends TestCommons {
 
 			CloseableHttpResponse result = client.execute(get);
 
-			Assert.assertEquals(200, result.getStatusLine().getStatusCode());
+			eq(result.getStatusLine().getStatusCode(), 200);
 
 			InputStream resp = result.getEntity().getContent();
 

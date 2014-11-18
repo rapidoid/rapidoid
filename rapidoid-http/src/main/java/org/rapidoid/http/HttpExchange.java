@@ -69,11 +69,15 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	String param(String name);
 
+	String param(String name, String defaultValue);
+
 	Map<String, String> headers();
 
 	MultiData headers_();
 
 	String header(String name);
+
+	String header(String name, String defaultValue);
 
 	Map<String, String> cookies();
 
@@ -81,17 +85,23 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	String cookie(String name);
 
+	String cookie(String name, String defaultValue);
+
 	Map<String, String> data();
 
 	MultiData data_();
 
 	String data(String name);
 
+	String data(String name, String defaultValue);
+
 	Map<String, byte[]> files();
 
 	BinaryMultiData files_();
 
 	byte[] file(String name);
+
+	byte[] file(String name, byte[] defaultValue);
 
 	Map<String, Object> session();
 
@@ -108,7 +118,7 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 	boolean isGetReq();
 
 	boolean devMode();
-	
+
 	/* HELPERS: */
 
 	String constructUrl(String path);

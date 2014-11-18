@@ -74,7 +74,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	private boolean parsedBody;
 
 	private int bodyPos;
-	
+
 	private boolean writesBody;
 	private boolean hasContentType;
 	private int startingPos;
@@ -319,7 +319,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized String param(String name) {
-		return params_().get(name);
+		return U.notNull(params_().get(name), "PARAM[%s]", name);
+	}
+
+	@Override
+	public String param(String name, String defaultValue) {
+		return U.or(params_().get(name), defaultValue);
 	}
 
 	@Override
@@ -329,7 +334,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized String header(String name) {
-		return headers_().get(name);
+		return U.notNull(headers_().get(name), "HEADERS[%s]", name);
+	}
+
+	@Override
+	public String header(String name, String defaultValue) {
+		return U.or(headers_().get(name), defaultValue);
 	}
 
 	@Override
@@ -339,7 +349,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized String cookie(String name) {
-		return cookies_().get(name);
+		return U.notNull(cookies_().get(name), "COOKIES[%s]", name);
+	}
+
+	@Override
+	public String cookie(String name, String defaultValue) {
+		return U.or(cookies_().get(name), defaultValue);
 	}
 
 	@Override
@@ -349,7 +364,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized String data(String name) {
-		return data_().get(name);
+		return U.notNull(data_().get(name), "DATA[%s]", name);
+	}
+
+	@Override
+	public String data(String name, String defaultValue) {
+		return U.or(data_().get(name), defaultValue);
 	}
 
 	@Override
@@ -359,7 +379,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized byte[] file(String name) {
-		return files_().get(name);
+		return U.notNull(files_().get(name), "FILE[%s]", name);
+	}
+
+	@Override
+	public synchronized byte[] file(String name, byte[] defaultValue) {
+		return U.or(files_().get(name), defaultValue);
 	}
 
 	@Override
