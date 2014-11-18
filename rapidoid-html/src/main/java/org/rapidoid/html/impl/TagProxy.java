@@ -73,8 +73,7 @@ public class TagProxy<TAG extends Tag<?>> implements InvocationHandler, Serializ
 
 		// String attribute setter
 		if (returnsTag && has1arg && paramTypes[0].equals(String.class)) {
-			tag.attr(attr(name), (String) args[0]);
-			return target;
+			return tag.attr(attr(name), (String) args[0]);
 		}
 
 		// String attribute getter
@@ -84,8 +83,7 @@ public class TagProxy<TAG extends Tag<?>> implements InvocationHandler, Serializ
 
 		// boolean attribute setter
 		if (returnsTag && has1arg && paramTypes[0].equals(boolean.class)) {
-			tag.is(attr(name), (Boolean) args[0]);
-			return target;
+			return tag.is(attr(name), (Boolean) args[0]);
 		}
 
 		// boolean attribute getter
