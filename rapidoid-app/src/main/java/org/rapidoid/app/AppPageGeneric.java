@@ -34,6 +34,7 @@ import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
 import org.rapidoid.pages.BootstrapWidgets;
 import org.rapidoid.pages.Pages;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class<?>> {
@@ -56,7 +57,7 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 	}
 
 	public String title(HttpExchange x) {
-		return appTitle(app);
+		return Pages.titleOf(x, app);
 	}
 
 	public Tag<?> content(HttpExchange x) {
@@ -84,7 +85,7 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 		Arrays.sort(screens, this);
 		int searchScreenIndex = findSearchScreen(screens);
 
-		ATag brand = a(appTitle(app)).href("/");
+		ATag brand = a(Pages.titleOf(x, app)).href("/");
 
 		Tag<?> dropdownMenu = null;
 
@@ -154,9 +155,10 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 		Object[] navbarContent = arr(navMenu, themesMenu, dropdownMenu, searchForm);
 
-		Object pageContent = Cls.getPropValue(U.or(screen, app), "content", null);
-
-		if (pageContent == null) {
+		Object pageContent;
+		try {
+			pageContent = Pages.contentOf(x, screen);
+		} catch (Exception e) {
 			pageContent = hardcoded("No content available!");
 		}
 
