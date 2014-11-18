@@ -660,6 +660,10 @@ public class Cls {
 	@SuppressWarnings("unchecked")
 	public static <T> T convert(String value, Class<T> toType) {
 
+		if (value == null) {
+			return null;
+		}
+
 		if (toType.equals(Object.class)) {
 			return (T) value;
 		}
@@ -729,6 +733,14 @@ public class Cls {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T convert(Object value, Class<T> toType) {
+
+		if (value == null) {
+			return null;
+		}
+
+		if (toType.isAssignableFrom(value.getClass())) {
+			return (T) value;
+		}
 
 		if (toType.equals(Object.class)) {
 			return (T) value;
