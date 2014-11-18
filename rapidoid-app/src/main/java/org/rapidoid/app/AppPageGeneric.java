@@ -104,8 +104,8 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 			if (x.isLoggedIn()) {
 
 				ATag profile = a_glyph("user", x.user().display, caret());
-				ATag settings = Apps.config(app, "settings", false) ? a_glyph("cog", " Settings")
-						.href("/settings.html") : null;
+				ATag settings = Apps.config(app, "settings", false) ? a_glyph("cog", " Settings").href("/settings")
+						: null;
 				ATag logout = a_glyph("log-out", "Logout").href("/_logout");
 
 				dropdownMenu = navbarDropdown(false, profile, settings, logout);
