@@ -20,11 +20,13 @@ package org.rapidoid.pages;
  * #L%
  */
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
@@ -45,6 +47,8 @@ public class Pages {
 	public static final String SESSION_CTX = "_ctx";
 
 	public static final String SESSION_CURRENT_PAGE = "_current_page_";
+
+	private static final Pattern STATIC_RESOURCE_PATTERN = Pattern.compile("^[a-zA-Z_\\.\\-]+$");
 
 	public static void registerPages(HTTPServer server) {
 		server.post("/_emit", new EmitHandler());
@@ -147,6 +151,21 @@ public class Pages {
 	}
 
 	public static Object dispatch(HttpExchange x, WebPojoDispatcher serviceDispatcher, Map<String, Class<?>> pages) {
+
+		if (x.isGetReq() && x.query().isEmpty()) {
+			String filename = x.path().substring(1);
+
+			if (filename.isEmpty()) {
+				filename = "index.html";
+			}
+
+			if (!filename.contains("..") && STATIC_RESOURCE_PATTERN.matcher(filename).matches()) {
+				URL res = U.resource("public/" + filename);
+				if (res != null) {
+					return x.sendFile(new File(res.getFile()));
+				}
+			}
+		}
 
 		if (serviceDispatcher != null) {
 			try {
