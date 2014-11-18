@@ -1343,18 +1343,23 @@ public class U {
 		print(data + " | " + getCpuMemStats());
 	}
 
-	public static void benchmarkMT(int threadsN, final String name, final int count, final Runnable runnable) {
-		long time = time();
+	public static void benchmarkMT(int threadsN, final String name, final int count, final CountDownLatch outsideLatch,
+			final Runnable runnable) {
 
-		final CountDownLatch latch = new CountDownLatch(threadsN);
-
+		eq(count % threadsN, 0);
 		final int countPerThread = count / threadsN;
+
+		final CountDownLatch latch = outsideLatch != null ? outsideLatch : new CountDownLatch(threadsN);
+
+		long time = time();
 
 		for (int i = 1; i <= threadsN; i++) {
 			new Thread() {
 				public void run() {
 					benchmark(name, countPerThread, runnable);
-					latch.countDown();
+					if (outsideLatch == null) {
+						latch.countDown();
+					}
 				};
 			}.start();
 		}
@@ -1366,6 +1371,10 @@ public class U {
 		}
 
 		benchmarkComplete("avg(" + name + ")", threadsN * countPerThread, time);
+	}
+
+	public static void benchmarkMT(int threadsN, final String name, final int count, final Runnable runnable) {
+		benchmarkMT(threadsN, name, count, null, runnable);
 	}
 
 	public static String getCpuMemStats() {
