@@ -34,7 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentNavigableMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -78,13 +79,13 @@ public class InMem {
 
 	private final AtomicBoolean insideTx = new AtomicBoolean(false);
 
-	private final ConcurrentHashMap<Long, Rec> txChanges = new ConcurrentHashMap<Long, Rec>();
+	private final ConcurrentNavigableMap<Long, Rec> txChanges = new ConcurrentSkipListMap<Long, Rec>();
 
-	private final ConcurrentHashMap<Long, Object> txInsertions = new ConcurrentHashMap<Long, Object>();
+	private final ConcurrentNavigableMap<Long, Object> txInsertions = new ConcurrentSkipListMap<Long, Object>();
 
-	private ConcurrentHashMap<Long, Rec> prevData = new ConcurrentHashMap<Long, Rec>();
+	private ConcurrentNavigableMap<Long, Rec> prevData = new ConcurrentSkipListMap<Long, Rec>();
 
-	private ConcurrentHashMap<Long, Rec> data = new ConcurrentHashMap<Long, Rec>();
+	private ConcurrentNavigableMap<Long, Rec> data = new ConcurrentSkipListMap<Long, Rec>();
 
 	public InMem() {
 		this(null);
@@ -383,7 +384,7 @@ public class InMem {
 				data.put(id, new Rec(type, line));
 			}
 
-			prevData = new ConcurrentHashMap<Long, Rec>(data);
+			prevData = new ConcurrentSkipListMap<Long, Rec>(data);
 
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot load database!", e);
@@ -403,12 +404,12 @@ public class InMem {
 	private void persistData(Runnable onCommit, Runnable onRollback) {
 		globalLock();
 
-		final ConcurrentHashMap<Long, Rec> copy;
+		final ConcurrentNavigableMap<Long, Rec> copy;
 		try {
 			if (data.isEmpty()) {
 				return;
 			}
-			copy = new ConcurrentHashMap<Long, Rec>(data);
+			copy = new ConcurrentSkipListMap<Long, Rec>(data);
 		} finally {
 			globalUnlock();
 		}
@@ -452,7 +453,7 @@ public class InMem {
 				// ignore
 			}
 
-			data = new ConcurrentHashMap<Long, Rec>(prevData);
+			data = new ConcurrentSkipListMap<Long, Rec>(prevData);
 
 			throw new RuntimeException("Cannot persist database changes!", e);
 		}
