@@ -117,19 +117,24 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	}
 
 	@Override
-	public void setChild(int index, Object child) {
-		contents.set(index, child);
+	public TAG withChild(int index, Object child) {
+		TAG _copy = copy();
+		TagImpl<Tag<?>> impl = impl(_copy);
+
+		impl.contents.set(index, child);
+
+		return _copy;
 	}
 
 	@Override
 	public TAG copy() {
-		TAG copy = TagProxy.create(clazz, name, contents.toArray());
+		TAG _copy = TagProxy.create(clazz, name, contents.toArray());
+		TagImpl<Tag<?>> impl = impl(_copy);
 
-		TagInternals tagi = (TagInternals) copy;
-		tagi.base().attrs.putAll(attrs);
-		tagi.base().battrs.addAll(battrs);
+		impl.attrs.putAll(attrs);
+		impl.battrs.addAll(battrs);
 
-		return copy;
+		return _copy;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -142,27 +147,35 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 		return contents;
 	}
 
-	public TAG proxy() {
-		return proxy;
-	}
-
 	@Override
 	public TAG content(Object... content) {
-		contents.clear();
-		flatAndInsertContent(APPEND, content);
-		return proxy();
+		TAG _copy = copy();
+		TagImpl<Tag<?>> impl = impl(_copy);
+
+		impl.contents.clear();
+		impl.flatAndInsertContent(APPEND, content);
+
+		return _copy;
 	}
 
 	@Override
 	public TAG prepend(Object... content) {
-		flatAndInsertContent(0, content);
-		return proxy();
+		TAG _copy = copy();
+		TagImpl<Tag<?>> impl = impl(_copy);
+
+		impl.flatAndInsertContent(0, content);
+
+		return _copy;
 	}
 
 	@Override
 	public TAG append(Object... content) {
-		flatAndInsertContent(APPEND, content);
-		return proxy();
+		TAG _copy = copy();
+		TagImpl<Tag<?>> impl = impl(_copy);
+
+		impl.flatAndInsertContent(APPEND, content);
+
+		return _copy;
 	}
 
 	@Override
@@ -172,8 +185,12 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	@Override
 	public TAG attr(String attr, String value) {
-		attrs.put(attr, value);
-		return proxy();
+		TAG _copy = copy();
+		TagImpl<Tag<?>> impl = impl(_copy);
+
+		impl.attrs.put(attr, value);
+
+		return _copy;
 	}
 
 	@Override
@@ -183,13 +200,16 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	@Override
 	public TAG is(String attr, boolean value) {
+		TAG _copy = copy();
+		TagImpl<Tag<?>> impl = impl(_copy);
+
 		if (value) {
-			battrs.add(attr);
+			impl.battrs.add(attr);
 		} else {
-			battrs.remove(attr);
+			impl.battrs.remove(attr);
 		}
 
-		return proxy();
+		return _copy;
 	}
 
 	public int hnd() {
@@ -199,16 +219,27 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> TAG bind(Var<T> var) {
-		Tags.setValue(proxy(), var.get());
-		U.must(binding == null);
-		binding = (Var<Object>) var;
-		return proxy();
+		TAG _copy = copy();
+		TagImpl<Tag<?>> impl = impl(_copy);
+
+		Tags.setValue(_copy, var.get());
+		impl.binding = (Var<Object>) var;
+
+		return _copy;
 	}
 
 	@Override
 	public TAG cmd(String cmd, Object... args) {
-		this.cmd = cmd;
-		return proxy();
+		TAG _copy = copy();
+		TagImpl<Tag<?>> impl = impl(_copy);
+
+		impl.cmd = cmd;
+
+		return _copy;
+	}
+
+	private TagImpl<Tag<?>> impl(TAG tag) {
+		return ((TagInternals) tag).base();
 	}
 
 }

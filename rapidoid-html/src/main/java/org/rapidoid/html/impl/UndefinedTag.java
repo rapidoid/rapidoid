@@ -128,7 +128,7 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 	}
 
 	@Override
-	public void setChild(int index, Object replace) {
+	public TAG withChild(int index, Object replace) {
 		throw U.notExpected();
 	}
 

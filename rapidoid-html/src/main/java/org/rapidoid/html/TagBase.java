@@ -40,7 +40,7 @@ public interface TagBase<TAG extends Tag<?>> {
 
 	Object child(int index);
 
-	void setChild(int index, Object child);
+	TAG withChild(int index, Object child);
 
 	String attr(String attr);
 
