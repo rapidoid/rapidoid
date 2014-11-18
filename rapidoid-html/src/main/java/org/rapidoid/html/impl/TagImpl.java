@@ -131,6 +131,9 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 		TAG _copy = TagProxy.create(clazz, name, contents.toArray());
 		TagImpl<Tag<?>> impl = impl(_copy);
 
+		impl.binding = binding;
+		impl._h = _h;
+		impl.cmd = cmd;
 		impl.attrs.putAll(attrs);
 		impl.battrs.addAll(battrs);
 
