@@ -30,16 +30,11 @@ import org.rapidoid.html.impl.UndefinedTag;
 import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.OptionTag;
 import org.rapidoid.html.tag.TextareaTag;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.reactive.Var;
 import org.rapidoid.reactive.Vars;
 import org.rapidoid.util.U;
 
 public class Tags extends BasicUtils {
-
-	public static final Object $index = new Object();
-	public static final Object $key = new Object();
-	public static final Object $value = new Object();
 
 	public static <T> Var<T> var(T value) {
 		return Vars.var(value);
@@ -55,63 +50,6 @@ public class Tags extends BasicUtils {
 
 	public static ConstantTag constant(String code) {
 		return new ConstantTag(code);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> T[] foreach(Object[] values, Tag<?> template) {
-		Tag<?>[] tags = new Tag[values.length];
-
-		for (int i = 0; i < values.length; i++) {
-			tags[i] = template.copy();
-			replaceAll(tags[i], $index, i, $value, values[i]);
-		}
-
-		return (T[]) tags;
-	}
-
-	public static void replaceAll(Tag<?> tag, final Object... findAndReplace) {
-		U.notNull(tag, "tag");
-
-		transform(tag, new Mapper<Object, Object>() {
-			@Override
-			public Object map(Object obj) throws Exception {
-
-				for (int i = 0; i < findAndReplace.length / 2; i++) {
-					Object find = findAndReplace[i * 2];
-					Object replace = findAndReplace[i * 2 + 1];
-
-					if (find.equals(obj)) {
-						return replace;
-					}
-				}
-
-				return obj;
-			}
-		});
-	}
-
-	public static void transform(Tag<?> tag, Mapper<Object, Object> transformation) {
-		U.notNull(tag, "tag");
-
-		if (tag instanceof UndefinedTag) {
-			return;
-		}
-
-		for (int i = 0; i < tag.size(); i++) {
-			Object child = tag.child(i);
-
-			Object transformed = U.eval(transformation, child);
-
-			if (transformed != child) {
-				tag.setChild(i, transformed);
-			} else {
-				if (transformed instanceof Tag<?>) {
-					transform((Tag<?>) transformed, transformation);
-				} else if (transformed instanceof TagWidget) {
-					transform(((TagWidget<?>) transformed).view(null), transformation);
-				}
-			}
-		}
 	}
 
 	public static String escape(String s) {
