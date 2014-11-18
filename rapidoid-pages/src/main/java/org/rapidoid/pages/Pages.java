@@ -48,7 +48,7 @@ public class Pages {
 
 	public static final String SESSION_CURRENT_PAGE = "_current_page_";
 
-	private static final Pattern STATIC_RESOURCE_PATTERN = Pattern.compile("^[a-zA-Z_\\.\\-]+$");
+	private static final Pattern STATIC_RESOURCE_PATTERN = Pattern.compile("^[a-zA-Z0-9_\\.\\-]+$");
 
 	public static void registerPages(HTTPServer server) {
 		server.post("/_emit", new EmitHandler());
