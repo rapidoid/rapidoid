@@ -45,8 +45,8 @@ public class IndexPage extends BootstrapWidgets {
 		final ATag brand = a("Welcome to the Showcase page!").href("/");
 
 		UlTag dropdownMenu = navbarDropdown(false, a("Profile", caret()).href("#"), a("Settings"), a("Logout"));
-		UlTag menuL = navbarMenu(true, a("About us").href("#about"), a("Contact").href("#contact"));
-		UlTag menuR = navbarMenu(false, a("Logout").href("/_logout"));
+		UlTag menuL = navbarMenu(true, 1, a("About us").href("#about"), a("Contact").href("#contact"));
+		UlTag menuR = navbarMenu(false, -1, a("Logout").href("/_logout"));
 
 		FormTag formL = navbarForm(true, "Search", arr("query"), arr("Enter search phrase..."));
 		FormTag formR = navbarForm(false, "Login", arr("user", "pass"), arr("Username", "Password"));

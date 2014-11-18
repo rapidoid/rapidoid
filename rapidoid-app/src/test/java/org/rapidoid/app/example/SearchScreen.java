@@ -1,5 +1,9 @@
 package org.rapidoid.app.example;
 
+import static org.rapidoid.html.HTML.*;
+
+import org.rapidoid.http.HttpExchange;
+
 /*
  * #%L
  * rapidoid-app
@@ -22,6 +26,8 @@ package org.rapidoid.app.example;
 
 public class SearchScreen {
 
-	public String content = "Search Results";
+	public Object content(HttpExchange x) {
+		return h1("Search Results for: ", b(x.param("q")));
+	}
 
 }

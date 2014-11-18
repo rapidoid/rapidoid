@@ -24,6 +24,7 @@ import static org.rapidoid.html.Bootstrap.*;
 import static org.rapidoid.html.HTML.*;
 import static org.rapidoid.pages.BootstrapWidgets.*;
 
+import org.rapidoid.annotation.Session;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.html.tag.FormTag;
@@ -33,17 +34,21 @@ import org.rapidoid.model.Model;
 
 public class NewTaskScreen {
 
+	@Session
+	private User user = new User();
+
+	@Session
+	private Task task = new Task("aa", Priority.MEDIUM, user);
+
 	public Object content() {
 
 		H1Tag caption = h1("Create a new task");
 
 		DivTag caption2 = rowFull(h4("Edit user:"));
 
-		User user = new User();
-
 		Tag<?>[] buttons = { cmd("Save"), cmd("Cancel") };
 
-		Item item = Model.item(new Task("aa", Priority.MEDIUM, user));
+		Item item = Model.item(task);
 		FormTag frm1 = form_(item, buttons);
 
 		Item item2 = Model.item(user);
