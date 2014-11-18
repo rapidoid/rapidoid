@@ -93,23 +93,23 @@ public class Pages {
 		return U.camelPhrase(pageName);
 	}
 
-	public static String titleOf(HttpExchange x, Object page) {
-		Method m = Cls.findMethod(page.getClass(), "title", HttpExchange.class);
+	public static String titleOf(HttpExchange x, Object target) {
+		Method m = Cls.findMethod(target.getClass(), "title", HttpExchange.class);
 
 		if (m != null) {
-			return Cls.invoke(m, page, x);
+			return Cls.invoke(m, target, x);
 		}
 
 		try {
-			return Cls.getPropValue(page, "content");
+			return Cls.getPropValue(target, "title");
 		} catch (Exception e) {
-			return defaultPageTitle(page.getClass());
+			return defaultPageTitle(target.getClass());
 		}
 	}
 
-	public static Object contentOf(HttpExchange x, Object page) {
-		Method m = Cls.findMethod(page.getClass(), "content", HttpExchange.class);
-		return m != null ? Cls.invoke(m, page, x) : Cls.getPropValue(page, "content");
+	public static Object contentOf(HttpExchange x, Object target) {
+		Method m = Cls.findMethod(target.getClass(), "content", HttpExchange.class);
+		return m != null ? Cls.invoke(m, target, x) : Cls.getPropValue(target, "content");
 	}
 
 	public static Object page(HttpExchange x, Object page) {
