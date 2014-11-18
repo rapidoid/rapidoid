@@ -730,7 +730,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public boolean devMode() {
 		String host = host();
-		return host == null || host.equals("localhost") || host.equals("127.0.0.1");
+		return host == null || host.equals("localhost") || host.equals("127.0.0.1") || host.startsWith("localhost:")
+				|| host.startsWith("127.0.0.1:");
 	}
 
 }
