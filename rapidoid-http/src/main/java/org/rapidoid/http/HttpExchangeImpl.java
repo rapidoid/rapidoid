@@ -587,6 +587,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public HttpExchangeHeaders response(int httpResponseCode, String response, Throwable err) {
+
 		responseCode(httpResponseCode);
 		ensureHeadersComplete();
 
@@ -595,9 +596,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 				write(response);
 			}
 		} else {
+			String title = U.or(response, "Error occured!");
 			if (err != null) {
-				String title = U.or(response, "Error occured!");
 				HTMLSnippets.writeErrorPage(this, title, err);
+			} else {
+				HTMLSnippets.writeFullPage(this, title, "<h1>The requested page cannot be found!</h1>");
 			}
 		}
 
@@ -685,7 +688,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public HttpExchangeHeaders notFound() {
-		return response(404, "Not found!");
+		return response(404, "Error: page not found!");
 	}
 
 	@Override
