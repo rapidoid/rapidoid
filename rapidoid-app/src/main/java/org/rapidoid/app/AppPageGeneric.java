@@ -112,15 +112,27 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 			} else {
 
-				ATag ga = a_awesome("google", "Sign in with Google").href(OAuth.getLoginURL(x, OAuthProvider.GOOGLE));
+				ATag ga = null, fb = null, li = null, gh = null;
 
-				ATag fb = a_awesome("facebook", "Sign in with Facebook").href(
-						OAuth.getLoginURL(x, OAuthProvider.FACEBOOK));
+				if (Apps.config(app, "googleLogin", false)) {
+					ga = a_awesome("google", "Sign in with Google").href(
+							OAuth.getLoginURL(x, OAuthProvider.GOOGLE, null));
+				}
 
-				ATag li = a_awesome("linkedin", "Sign in with LinkedIn").href(
-						OAuth.getLoginURL(x, OAuthProvider.LINKEDIN));
+				if (Apps.config(app, "facebookLogin", false)) {
+					fb = a_awesome("facebook", "Sign in with Facebook").href(
+							OAuth.getLoginURL(x, OAuthProvider.FACEBOOK, null));
+				}
 
-				ATag gh = a_awesome("github", "Sign in with GitHub").href(OAuth.getLoginURL(x, OAuthProvider.GITHUB));
+				if (Apps.config(app, "linkedinLogin", false)) {
+					li = a_awesome("linkedin", "Sign in with LinkedIn").href(
+							OAuth.getLoginURL(x, OAuthProvider.LINKEDIN, null));
+				}
+
+				if (Apps.config(app, "githubLogin", false)) {
+					gh = a_awesome("github", "Sign in with GitHub").href(
+							OAuth.getLoginURL(x, OAuthProvider.GITHUB, null));
+				}
 
 				dropdownMenu = navbarDropdown(false, a_glyph("log-in", "Sign in", caret()), ga, fb, li, gh);
 			}

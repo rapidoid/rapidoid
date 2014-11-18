@@ -32,6 +32,10 @@ public class App {
 
 	public boolean settings = true;
 
+	public boolean googleLogin = true;
+
+	public boolean linkedinLogin = true;
+
 	public boolean auth = true;
 
 	public Object[] screens = { HomeScreen.class, "NewTask", "tasksScreen" };
