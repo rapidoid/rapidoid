@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
@@ -39,6 +40,8 @@ import org.rapidoid.util.U;
 
 public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class<?>> {
 
+	private static final String SEARCH_SCREEN = "SearchScreen";
+
 	private static final String[] themes = { "default", "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal",
 			"lumen", "paper", "readable", "sandstone", "simplex", "slate", "spacelab", "superhero", "united", "yeti" };
 
@@ -48,12 +51,12 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 	private final Object app;
 
-	private final Map<String, Class<?>> screenClasses;
+	private final Map<String, Class<?>> mainScreens;
 
 	public AppPageGeneric() {
 		appCls = Apps.scanAppClasses();
 		app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
-		screenClasses = filterScreens(app, appCls.screens);
+		mainScreens = filterScreens(app, appCls.screens);
 	}
 
 	public String title(HttpExchange x) {
@@ -80,10 +83,17 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 		Object screen = U.newInstance(screenClass);
 		Pages.load(x, screen);
 
-		Class<?>[] screens = screenClasses.values().toArray(new Class[screenClasses.size()]);
+		int screensN = mainScreens.containsKey(SEARCH_SCREEN) ? mainScreens.size() - 1 : mainScreens.size();
+
+		Class<?>[] screens = new Class[screensN];
+		int ind = 0;
+		for (Entry<String, Class<?>> e : mainScreens.entrySet()) {
+			if (!e.getKey().equals(SEARCH_SCREEN)) {
+				screens[ind++] = e.getValue();
+			}
+		}
 
 		Arrays.sort(screens, this);
-		int searchScreenIndex = findSearchScreen(screens);
 
 		ATag brand = a(Pages.titleOf(x, app)).href("/");
 
@@ -128,20 +138,18 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 		UlTag themesMenu = Apps.config(app, "themes", false) ? navbarDropdown(false, theme, themess) : null;
 
-		Object[] menuItems = new Object[searchScreenIndex < 0 ? screens.length : screens.length - 1];
+		Object[] menuItems = new Object[screens.length];
 
 		int activeIndex = -1;
 		int k = 0;
 		for (int i = 0; i < screens.length; i++) {
-			if (i != searchScreenIndex) {
-				Class<?> scr = screens[i];
-				String name = Apps.screenName(scr);
-				String title = U.or(titleOf(scr), U.camelPhrase(name));
-				menuItems[k++] = a(title).href(Apps.screenUrl(scr));
+			Class<?> scr = screens[i];
+			String name = Apps.screenName(scr);
+			String title = U.or(titleOf(scr), U.camelPhrase(name));
+			menuItems[k++] = a(title).href(Apps.screenUrl(scr));
 
-				if (scr.equals(screenClass)) {
-					activeIndex = i < searchScreenIndex ? i : i - 1;
-				}
+			if (scr.equals(screenClass)) {
+				activeIndex = i;
 			}
 		}
 
@@ -167,16 +175,6 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 		Pages.store(x, screen);
 
 		return result;
-	}
-
-	private int findSearchScreen(Class<?>[] screens) {
-		for (int i = 0; i < screens.length; i++) {
-			if (Apps.screenName(screens[i]).equals("Search")) {
-				return i;
-			}
-		}
-
-		return -1;
 	}
 
 	protected boolean isFluid(Object app) {
@@ -220,7 +218,7 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 	private Class<?> getScreen(String path) {
 		// TODO use screens.get(...) instead of iteration
-		for (Class<?> screen : screenClasses.values()) {
+		for (Class<?> screen : appCls.screens.values()) {
 			if (Apps.screenUrl(screen).equals(path)) {
 				return screen;
 			}
@@ -238,8 +236,18 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 		Map<String, Class<?>> filtered = new LinkedHashMap<String, Class<?>>();
 
 		for (Object scr : screensConfig) {
-			Class<?> cls = (Class<?>) scr;
-			filtered.put(cls.getSimpleName(), screenClasses.get(cls.getSimpleName()));
+			if (scr instanceof Class<?>) {
+				Class<?> cls = (Class<?>) scr;
+				filtered.put(cls.getSimpleName(), screenClasses.get(cls.getSimpleName()));
+			} else if (scr instanceof String) {
+				String name = U.capitalized((String) scr);
+				if (!name.endsWith("Screen")) {
+					name += "Screen";
+				}
+				filtered.put(name, screenClasses.get(name));
+			} else {
+				throw U.rte("Expected class or string to represent a screen, but found: %s", scr);
+			}
 		}
 
 		return filtered;
