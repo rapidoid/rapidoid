@@ -33,7 +33,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
 import org.rapidoid.pages.BootstrapWidgets;
-import org.rapidoid.util.Cls;
+import org.rapidoid.pages.Pages;
 import org.rapidoid.util.U;
 
 public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class<?>> {
@@ -77,6 +77,7 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 		x.setSession(SESSION_CURRENT_SCREEN, screenClass.getSimpleName());
 
 		Object screen = U.newInstance(screenClass);
+		Pages.load(x, screen);
 
 		Class<?>[] screens = screenClasses.values().toArray(new Class[screenClasses.size()]);
 
@@ -159,7 +160,11 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 			pageContent = hardcoded("No content available!");
 		}
 
-		return navbarPage(isFluid(app), brand, navbarContent, pageContent);
+		Tag<?> result = navbarPage(isFluid(app), brand, navbarContent, pageContent);
+
+		Pages.store(x, screen);
+
+		return result;
 	}
 
 	private int findSearchScreen(Class<?>[] screens) {
