@@ -31,7 +31,7 @@ import org.rapidoid.reactive.Var;
 
 public abstract class HtmlWidgets extends HTML {
 
-	public static Object _(String multiLanguageText, Object... formatArgs) {
+	public static Object i18n(String multiLanguageText, Object... formatArgs) {
 		return new MultiLanguageText(multiLanguageText, formatArgs);
 	}
 

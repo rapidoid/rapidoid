@@ -41,8 +41,8 @@ import org.rapidoid.util.U;
 
 public abstract class BootstrapWidgets extends Bootstrap {
 
-	public static Object _(String multiLanguageText, Object... formatArgs) {
-		return HtmlWidgets._(multiLanguageText, formatArgs);
+	public static Object i18n(String multiLanguageText, Object... formatArgs) {
+		return HtmlWidgets.i18n(multiLanguageText, formatArgs);
 	}
 
 	public static <T> Var<T> property(Item item, String property) {

@@ -42,7 +42,7 @@ public class PlaygroundWidget extends BootstrapWidgets {
 		if (data.length > 0) {
 			return div(grid(Model.beanItems(data), 10));
 		} else {
-			return div(_("No results!"));
+			return div(i18n("No results!"));
 		}
 	}
 
