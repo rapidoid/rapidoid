@@ -43,8 +43,8 @@ public class Apps {
 		HttpBuiltins.register(server);
 		Pages.registerPages(server);
 
-		AppClasses appCls = scanAppClasses();
-		server.serve(new AppHandler(appCls));
+		server.serve(new AppHandler());
+
 		server.start();
 	}
 

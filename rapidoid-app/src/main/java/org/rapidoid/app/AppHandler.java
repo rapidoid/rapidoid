@@ -24,20 +24,25 @@ import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.rest.WebPojoDispatcher;
+import org.rapidoid.util.CustomizableClassLoader;
 
 public class AppHandler implements Handler {
 
-	private final AppClasses appCls;
+	private CustomizableClassLoader classLoader;
 
-	public AppHandler(AppClasses appCls) {
-		this.appCls = appCls;
+	public AppHandler() {
+		this(null);
+	}
+
+	public AppHandler(CustomizableClassLoader classLoader) {
+		this.classLoader = classLoader;
 	}
 
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
+		AppClasses appCls = Apps.scanAppClasses(classLoader);
 
 		WebPojoDispatcher dispatcher = new WebPojoDispatcher(appCls.services);
-
 		Object result = Pages.dispatch(x, dispatcher, appCls.pages);
 
 		if (result != null) {

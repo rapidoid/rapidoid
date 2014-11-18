@@ -27,7 +27,9 @@ public class EmitHandler implements Handler {
 
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
-		return Pages.emit(x);
+		Object result = Pages.emit(x);
+
+		return result != null ? result : x.notFound();
 	}
 
 }

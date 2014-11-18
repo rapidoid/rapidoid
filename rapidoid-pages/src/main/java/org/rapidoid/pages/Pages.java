@@ -22,7 +22,6 @@ package org.rapidoid.pages;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -47,16 +46,8 @@ public class Pages {
 	public static final String SESSION_CURRENT_PAGE = "_current_page_";
 
 	public static void registerPages(HTTPServer server) {
-
-		Map<String, Class<?>> pages = U.map();
-		List<Class<?>> pageClasses = U.classpathClassesBySuffix("Page", null, null);
-
-		for (Class<?> cls : pageClasses) {
-			pages.put(cls.getSimpleName(), cls);
-		}
-
 		server.post("/_emit", new EmitHandler());
-		server.serve(new PageHandler(pages));
+		server.serve(new PageHandler());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -225,9 +216,7 @@ public class Pages {
 
 		Object content = Pages.contentOf(x, page);
 
-		U.notNull(content, "page content");
-
-		if (content instanceof HttpExchange) {
+		if (content == null || content instanceof HttpExchange) {
 			return content;
 		}
 

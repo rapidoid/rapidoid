@@ -48,7 +48,7 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 	private final Map<String, Class<?>> screenClasses;
 
 	public AppPageGeneric() {
-		appCls = Apps.scanAppClasses(null);
+		appCls = Apps.scanAppClasses();
 		app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
 		screenClasses = filterScreens(app, appCls.screens);
 	}
