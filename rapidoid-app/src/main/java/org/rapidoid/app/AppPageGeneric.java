@@ -41,6 +41,8 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 	private static final String[] themes = { "default", "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal",
 			"lumen", "paper", "readable", "sandstone", "simplex", "slate", "spacelab", "superhero", "united", "yeti" };
 
+	private static final String SESSION_CURRENT_SCREEN = "_current_screen_";
+
 	private final AppClasses appCls;
 
 	private final Object app;
@@ -61,10 +63,18 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 		String path = x.path();
 
-		Class<?> screenClass = getScreen(path);
+		Class<?> screenClass;
+		if (path.startsWith("/_")) {
+			screenClass = appCls.screens.get(x.session(SESSION_CURRENT_SCREEN));
+		} else {
+			screenClass = getScreen(path);
+		}
+
 		if (screenClass == null) {
 			return null;
 		}
+
+		x.setSession(SESSION_CURRENT_SCREEN, screenClass.getSimpleName());
 
 		Object screen = U.newInstance(screenClass);
 
