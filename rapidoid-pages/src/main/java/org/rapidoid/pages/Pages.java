@@ -20,6 +20,7 @@ package org.rapidoid.pages;
  * #L%
  */
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
@@ -184,12 +185,65 @@ public class Pages {
 		x.setSession(Pages.SESSION_CURRENT_PAGE, pageClass);
 
 		Object page = U.newInstance(pageClass);
-		IoC.autowire(page); // FIXME inject session attributes
+
+		load(x, page);
 
 		TagContext ctx = Tags.context();
 		x.setSession(Pages.SESSION_CTX, ctx);
 
-		return render(x, page);
+		Object result = render(x, page);
+
+		store(x, page);
+
+		return result;
+	}
+
+	public static void load(HttpExchange x, Object target) {
+		IoC.autowire(target, U.mapper(x.session()));
+	}
+
+	public static void store(HttpExchange x, Object target) {
+		for (Field field : IoC.getSessionFields(target)) {
+			Object value = Cls.getFieldValue(field, target);
+			x.setSession(field.getName(), value);
+		}
+	}
+
+	public static Object emit(HttpExchange x) {
+		int event = U.num(x.data("event"));
+
+		TagContext ctx = Pages.ctx(x);
+
+		Map<Integer, Object> inp = Pages.inputs(x);
+		ctx.emit(inp, event);
+
+		Object page = U.newInstance(currentPage(x));
+		Pages.load(x, page);
+
+		ctx = Tags.context();
+		x.setSession(Pages.SESSION_CTX, ctx);
+
+		Object content = Pages.contentOf(x, page);
+
+		U.notNull(content, "page content");
+
+		if (content instanceof HttpExchange) {
+			return content;
+		}
+
+		String html = PageRenderer.get().toHTML(ctx, content, x);
+
+		Pages.store(x, page);
+
+		Map<String, String> changes = U.map();
+		changes.put("body", html);
+
+		x.json();
+		return changes;
+	}
+
+	public static Class<?> currentPage(HttpExchange x) {
+		return x.session(Pages.SESSION_CURRENT_PAGE);
 	}
 
 }
