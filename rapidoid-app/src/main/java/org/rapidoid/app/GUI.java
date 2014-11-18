@@ -1,4 +1,6 @@
-package org.rapidoid.app.example;
+package org.rapidoid.app;
+
+import org.rapidoid.pages.BootstrapWidgets;
 
 /*
  * #%L
@@ -20,12 +22,10 @@ package org.rapidoid.app.example;
  * #L%
  */
 
-import org.rapidoid.app.GUI;
-
-public class HomeScreen extends GUI {
-
-	public String title = "Welcome!";
-
-	public Object content = rowFull(h2("Welcome to Task Planer!"));
+/**
+ * This class can be extended by a Page or Screen class to avoid static imports 
+ * of all the gui tags and widgets factory utils.
+ */
+public abstract class GUI extends BootstrapWidgets {
 
 }

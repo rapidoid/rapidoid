@@ -1,5 +1,11 @@
 package org.rapidoid.app.example;
 
+import org.rapidoid.app.GUI;
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.tag.H1Tag;
+import org.rapidoid.model.Items;
+import org.rapidoid.model.Model;
+
 /*
  * #%L
  * rapidoid-app
@@ -20,17 +26,7 @@ package org.rapidoid.app.example;
  * #L%
  */
 
-import static org.rapidoid.html.BasicUtils.*;
-import static org.rapidoid.html.Bootstrap.*;
-import static org.rapidoid.html.HTML.*;
-import static org.rapidoid.pages.BootstrapWidgets.*;
-
-import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.H1Tag;
-import org.rapidoid.model.Items;
-import org.rapidoid.model.Model;
-
-public class TasksScreen {
+public class TasksScreen extends GUI {
 
 	public String title = "My Tasks";
 

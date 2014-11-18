@@ -20,11 +20,8 @@ package org.rapidoid.app.example;
  * #L%
  */
 
-import static org.rapidoid.html.Bootstrap.*;
-import static org.rapidoid.html.HTML.*;
-import static org.rapidoid.pages.BootstrapWidgets.*;
-
 import org.rapidoid.annotation.Session;
+import org.rapidoid.app.GUI;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.html.tag.FormTag;
@@ -32,7 +29,7 @@ import org.rapidoid.html.tag.H1Tag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Model;
 
-public class NewTaskScreen {
+public class NewTaskScreen extends GUI {
 
 	@Session
 	private User user = new User();
