@@ -172,7 +172,7 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 	}
 
 	@Override
-	public TAG cmd(String cmd) {
+	public TAG cmd(String cmd, Object... args) {
 		throw U.notExpected();
 	}
 

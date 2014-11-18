@@ -52,6 +52,6 @@ public interface TagBase<TAG extends Tag<?>> {
 
 	<T> TAG bind(Var<T> var);
 
-	TAG cmd(String cmd);
+	TAG cmd(String cmd, Object... args);
 
 }

@@ -206,7 +206,7 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	}
 
 	@Override
-	public TAG cmd(String cmd) {
+	public TAG cmd(String cmd, Object... args) {
 		this.cmd = cmd;
 		return proxy();
 	}
