@@ -176,18 +176,18 @@ public class Cls {
 		return obj != null ? propertiesOf(obj.getClass()) : Collections.EMPTY_MAP;
 	}
 
-	public static Prop property(Class<?> clazz, String property) {
+	public static Prop property(Class<?> clazz, String property, boolean mandatory) {
 		Prop prop = BEAN_PROPERTIES.get(clazz).get(property);
 
-		if (prop == null) {
+		if (mandatory && prop == null) {
 			throw U.rte("Cannot find the property '%s' in the class '%s'", property, clazz);
 		}
 
 		return prop;
 	}
 
-	public static Prop property(Object obj, String property) {
-		return property(obj.getClass(), property);
+	public static Prop property(Object obj, String property, boolean mandatory) {
+		return property(obj.getClass(), property, mandatory);
 	}
 
 	protected static Map<String, TypeKind> initKinds() {
@@ -577,19 +577,16 @@ public class Cls {
 	}
 
 	public static void setPropValue(Object instance, String propertyName, Object value) {
-		property(instance, propertyName).set(instance, value);
+		property(instance, propertyName, true).set(instance, value);
 	}
 
 	public static <T> T getPropValue(Object instance, String propertyName, T defaultValue) {
-		try {
-			return property(instance, propertyName).get(instance, defaultValue);
-		} catch (RuntimeException e) {
-			return defaultValue;
-		}
+		Prop prop = property(instance, propertyName, false);
+		return prop != null ? prop.get(instance, defaultValue) : defaultValue;
 	}
 
 	public static <T> T getPropValue(Object instance, String propertyName) {
-		return property(instance, propertyName).get(instance);
+		return property(instance, propertyName, true).get(instance);
 	}
 
 	public static Object[] instantiateAll(Class<?>... classes) {

@@ -107,7 +107,7 @@ public class Prop {
 				return (T) getter.invoke(obj);
 			}
 		} catch (Exception e) {
-			return defaultValue;
+			throw U.rte(e);
 		}
 	}
 
@@ -143,6 +143,7 @@ public class Prop {
 
 	public Class<?> getType() {
 		if (type == null) {
+			U.show(name, field, getter);
 			// TODO: improve inference from getter and setter
 			type = field != null ? field.getType() : getter.getReturnType();
 		}
@@ -163,6 +164,12 @@ public class Prop {
 
 	public void setDefaultValue(Object defaultValue) {
 		this.defaultValue = defaultValue;
+	}
+
+	@Override
+	public String toString() {
+		return "Prop [name=" + name + ", field=" + field + ", getter=" + getter + ", setter=" + setter + ", type="
+				+ type + ", typeKind=" + typeKind + ", defaultValue=" + defaultValue + ", readOnly=" + readOnly + "]";
 	}
 
 }
