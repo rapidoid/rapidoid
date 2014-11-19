@@ -42,7 +42,7 @@ public class BeanFormPage extends BootstrapWidgets {
 
 		Item item = Model.item(person);
 
-		FormTag form = form_(item, buttons);
+		FormTag form = edit(item, buttons);
 
 		return navbarPage(false, brand, null, arr(rowFull(form), rowFull(person)));
 	}

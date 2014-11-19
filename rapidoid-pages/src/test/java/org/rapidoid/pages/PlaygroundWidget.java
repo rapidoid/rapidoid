@@ -40,7 +40,7 @@ public class PlaygroundWidget extends BootstrapWidgets {
 		Object[] data = { new Person("nick", 22), new Person("doe", 44) };
 
 		if (data.length > 0) {
-			return div(grid(Model.beanItems(data), 10));
+			return div(grid(Model.beanItemsInfer(data), 10));
 		} else {
 			return div(i18n("No results!"));
 		}

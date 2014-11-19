@@ -13,6 +13,7 @@ import org.rapidoid.html.tag.TbodyTag;
 import org.rapidoid.html.tag.TrTag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
+import org.rapidoid.model.Model;
 import org.rapidoid.model.Property;
 import org.rapidoid.reactive.Var;
 import org.rapidoid.util.Cls;
@@ -55,6 +56,14 @@ public abstract class BootstrapWidgets extends Bootstrap {
 
 	public static Tag<?> hardcoded(String content) {
 		return HtmlWidgets.hardcoded(content);
+	}
+
+	public static <T> Tag<?> grid(Class<T> type, Object[] items, int pageSize, String... properties) {
+		return grid(Model.beanItems(type, items), pageSize, properties);
+	}
+
+	public static <T> Tag<?> grid(Class<T> type, Collection<T> items, int pageSize, String... properties) {
+		return grid(type, items.toArray(), pageSize, properties);
 	}
 
 	public static Tag<?> grid(Items items, int pageSize, String... properties) {
@@ -112,10 +121,15 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		return div(nav(ul(first, prev, current, next, last).class_("pagination"))).class_("pull-right");
 	}
 
-	public static FormTag form_(final Item item, final Tag<?>[] buttons) {
-		final List<Property> properties = item.editableProperties();
+	public static FormTag edit(Object bean, final Tag<?>[] buttons, String... properties) {
+		Item item = Model.item(bean);
+		return edit(item, buttons, properties);
+	}
 
-		int propN = properties.size();
+	public static FormTag edit(final Item item, final Tag<?>[] buttons, String... properties) {
+		final List<Property> props = item.editableProperties(properties);
+
+		int propN = props.size();
 
 		String[] names = new String[propN];
 		String[] desc = new String[propN];
@@ -124,7 +138,7 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		Var<?>[] vars = new Var[propN];
 
 		for (int i = 0; i < propN; i++) {
-			Property prop = properties.get(i);
+			Property prop = props.get(i);
 			names[i] = prop.name();
 			desc[i] = prop.caption();
 			types[i] = getPropertyFieldType(prop);
