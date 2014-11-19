@@ -928,14 +928,14 @@ public class U {
 
 	public static boolean must(boolean expectedCondition, String message, Object arg) {
 		if (!expectedCondition) {
-			throw rte(message, arg);
+			throw rte(message, text(arg));
 		}
 		return true;
 	}
 
 	public static boolean must(boolean expectedCondition, String message, Object arg1, Object arg2) {
 		if (!expectedCondition) {
-			throw rte(message, arg1, arg2);
+			throw rte(message, text(arg1), text(arg2));
 		}
 		return true;
 	}
