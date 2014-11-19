@@ -388,4 +388,14 @@ public class Bootstrap extends HTML {
 		return btn(U.capitalized(cmd)).cmd(cmd, args);
 	}
 
+	public static ButtonTag[] cmds(String... commands) {
+		ButtonTag[] cmds = new ButtonTag[commands.length];
+
+		for (int i = 0; i < cmds.length; i++) {
+			cmds[i] = cmd(commands[i]);
+		}
+
+		return cmds;
+	}
+
 }
