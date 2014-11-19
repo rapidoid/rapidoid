@@ -20,29 +20,35 @@ package org.rapidoid.app.example;
  * #L%
  */
 
+import java.util.List;
+
 import org.rapidoid.annotation.Session;
 import org.rapidoid.app.GUI;
-import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.FormTag;
-import org.rapidoid.html.tag.H1Tag;
-import org.rapidoid.model.Item;
-import org.rapidoid.model.Model;
+import org.rapidoid.util.U;
 
 public class NewTaskScreen extends GUI {
 
 	@Session
-	private Task task = new Task("aa", Priority.MEDIUM);
+	private Task task = new Task();
+
+	@Session
+	private List<Task> tasks = U.list();
 
 	public Object content() {
 
-		H1Tag caption = h1("Create a new task");
+		FormTag frm = edit(task, cmds("Save", "Cancel"), "title", "priority");
 
-		Tag<?>[] buttons = { cmd("Save"), cmd("Cancel") };
+		return row(col2(), col8(h1("Create a new task"), frm, grid(Task.class, tasks, 5)), col2());
+	}
 
-		Item item = Model.item(task);
-		FormTag frm1 = form_(item, buttons);
+	public void onSave() {
+		tasks.add(task);
+		task = null;
+	}
 
-		return row(col2(), col8(caption, frm1), col2());
+	public void onCancel() {
+		task = new Task();
 	}
 
 }

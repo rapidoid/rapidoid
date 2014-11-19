@@ -143,7 +143,6 @@ public class Prop {
 
 	public Class<?> getType() {
 		if (type == null) {
-			U.show(name, field, getter);
 			// TODO: improve inference from getter and setter
 			type = field != null ? field.getType() : getter.getReturnType();
 		}

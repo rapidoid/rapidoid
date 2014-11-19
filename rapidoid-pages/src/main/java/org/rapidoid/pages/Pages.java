@@ -35,6 +35,7 @@ import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.inject.IoC;
 import org.rapidoid.json.JSON;
+import org.rapidoid.pages.impl.BuiltInCmdHandler;
 import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
@@ -50,6 +51,8 @@ public class Pages {
 	public static final String SESSION_CURRENT_PAGE = "_current_page_";
 
 	private static final Pattern STATIC_RESOURCE_PATTERN = Pattern.compile("^[a-zA-Z0-9_\\.\\-/]+$");
+
+	private static final BuiltInCmdHandler BUILT_IN_HANDLER = new BuiltInCmdHandler();
 
 	public static void registerPages(HTTPServer server) {
 		server.post("/_emit", new EmitHandler());
@@ -256,8 +259,12 @@ public class Pages {
 	}
 
 	public static void callCmdHandler(HttpExchange x, Object target, Cmd cmd) {
-		String handlerName = "on" + U.capitalized(cmd.name);
 
+		if (cmd.name.startsWith("_")) {
+			target = BUILT_IN_HANDLER;
+		}
+
+		String handlerName = "on" + U.capitalized(cmd.name);
 		Method m = Cls.findMethodByArgs(target.getClass(), handlerName, cmd.args);
 
 		if (m != null) {
@@ -277,7 +284,7 @@ public class Pages {
 			return;
 		}
 
-		throw U.rte("Cannot find handler for the command '%s' and args: %s", cmd.name, cmd.args);
+		throw U.rte("Cannot find handler '%s' for the command '%s' and args: %s", handlerName, cmd.name, cmd.args);
 	}
 
 	public static Class<?> currentPage(HttpExchange x) {
