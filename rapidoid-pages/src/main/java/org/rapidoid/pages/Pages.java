@@ -115,7 +115,7 @@ public class Pages {
 
 	public static Object contentOf(HttpExchange x, Object target) {
 		Method m = Cls.findMethod(target.getClass(), "content", HttpExchange.class);
-		return m != null ? Cls.invoke(m, target, x) : Cls.getPropValue(target, "content");
+		return m != null ? Cls.invoke(m, target, x) : Cls.getPropValue(target, "content", null);
 	}
 
 	public static Object page(HttpExchange x, Object page) {
@@ -233,8 +233,7 @@ public class Pages {
 		Pages.load(x, page);
 
 		Cmd cmd = ctx.getEventCmd(event);
-
-		callCmdHandler(page, cmd);
+		callCmdHandler(x, page, cmd);
 
 		ctx = Tags.context();
 		x.sessionSet(Pages.SESSION_CTX, ctx);
@@ -256,13 +255,29 @@ public class Pages {
 		return changes;
 	}
 
-	public static void callCmdHandler(Object target, Cmd cmd) {
+	public static void callCmdHandler(HttpExchange x, Object target, Cmd cmd) {
 		String handlerName = "on" + U.capitalized(cmd.name);
 
 		Method m = Cls.findMethodByArgs(target.getClass(), handlerName, cmd.args);
-		U.must(m != null, "Cannot find handler for the command '%s' and args: %s", cmd.name, cmd.args);
 
-		Cls.invoke(m, target, cmd.args);
+		if (m != null) {
+			Cls.invoke(m, target, cmd.args);
+			return;
+		}
+
+		Method on = Cls.findMethod(target.getClass(), "on", String.class, Object[].class);
+		if (on != null) {
+			Cls.invoke(on, target, cmd.name, cmd.args);
+			return;
+		}
+
+		on = Cls.findMethod(target.getClass(), "on", HttpExchange.class, String.class, Object[].class);
+		if (on != null) {
+			Cls.invoke(on, target, x, cmd.name, cmd.args);
+			return;
+		}
+
+		throw U.rte("Cannot find handler for the command '%s' and args: %s", cmd.name, cmd.args);
 	}
 
 	public static Class<?> currentPage(HttpExchange x) {

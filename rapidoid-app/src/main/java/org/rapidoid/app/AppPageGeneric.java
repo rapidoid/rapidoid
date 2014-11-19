@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.FormTag;
@@ -65,15 +66,7 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 	public Tag<?> content(HttpExchange x) {
 
-		String path = x.path();
-
-		Class<?> screenClass;
-		if (path.startsWith("/_")) {
-			screenClass = appCls.screens.get(x.session(SESSION_CURRENT_SCREEN));
-		} else {
-			screenClass = getScreen(path);
-		}
-
+		Class<?> screenClass = getScreenClass(x);
 		if (screenClass == null) {
 			return null;
 		}
@@ -175,10 +168,8 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 		Object[] navbarContent = arr(navMenu, themesMenu, dropdownMenu, searchForm);
 
-		Object pageContent;
-		try {
-			pageContent = Pages.contentOf(x, screen);
-		} catch (Exception e) {
+		Object pageContent = Pages.contentOf(x, screen);
+		if (pageContent == null) {
 			pageContent = hardcoded("No content available!");
 		}
 
@@ -187,6 +178,18 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 		Pages.store(x, screen);
 
 		return result;
+	}
+
+	private Class<?> getScreenClass(HttpExchange x) {
+		String path = x.path();
+
+		Class<?> screenClass;
+		if (path.startsWith("/_")) {
+			screenClass = appCls.screens.get(x.session(SESSION_CURRENT_SCREEN));
+		} else {
+			screenClass = getScreen(path);
+		}
+		return screenClass;
 	}
 
 	protected boolean isFluid(Object app) {
@@ -265,4 +268,18 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 		return filtered;
 	}
 
+	public void on(HttpExchange x, String cmd, Object[] args) {
+
+		Class<?> screenClass = getScreenClass(x);
+		U.must(screenClass != null, "Cannot find a screen to process the command!");
+
+		x.sessionSet(SESSION_CURRENT_SCREEN, screenClass.getSimpleName());
+
+		Object screen = U.newInstance(screenClass);
+		Pages.load(x, screen);
+
+		Pages.callCmdHandler(x, screen, new Cmd(cmd, args));
+
+		Pages.store(x, screen);
+	}
 }
