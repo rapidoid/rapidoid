@@ -61,14 +61,14 @@ public class BeanItem implements Item {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Property> properties() {
-		return value != null ? Model.propertiesOf(value.getClass()) : Collections.EMPTY_LIST;
+	public List<Property> properties(String... propertyNames) {
+		return value != null ? Model.propertiesOf(value.getClass(), propertyNames) : Collections.EMPTY_LIST;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Property> editableProperties() {
-		return value != null ? Model.editablePropertiesOf(value.getClass()) : Collections.EMPTY_LIST;
+	public List<Property> editableProperties(String... propertyNames) {
+		return value != null ? Model.editablePropertiesOf(value.getClass(), propertyNames) : Collections.EMPTY_LIST;
 	}
 
 }

@@ -43,7 +43,7 @@ public class Model {
 		return items;
 	}
 
-	public static <T> Items beanItems(Class<T> beanType, T... beans) {
+	public static <T> Items beanItems(Class<T> beanType, Object... beans) {
 		ListItems items = new BeanListItems<T>(beanType);
 
 		for (Object bean : beans) {
@@ -54,7 +54,7 @@ public class Model {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> Items beanItems(T... items) {
+	public static <T> Items beanItemsInfer(T... items) {
 		U.must(items.length > 0, "Must have at least 1 item to infer the bean type!");
 		Class<T> type = (Class<T>) items[0].getClass();
 		return beanItems(type, items);
@@ -73,31 +73,48 @@ public class Model {
 		return new BeanProperty(prop.getName(), prop.getType());
 	}
 
-	public static List<Property> propertiesOf(Class<?> beanType) {
+	public static List<Property> propertiesOf(Class<?> beanType, String... propertyNames) {
 		List<Property> pr = U.list();
 
 		Map<String, Prop> props = Cls.propertiesOf(beanType);
 
-		Prop idProp = props.get("id");
-		if (idProp != null) {
-			pr.add(new BeanProperty(idProp.getName(), idProp.getType()));
-		}
+		if (propertyNames.length == 0) {
 
-		for (Prop prop : props.values()) {
-			if (!prop.getName().equals("id")) {
+			Prop idProp = props.get("id");
+			if (idProp != null) {
+				pr.add(new BeanProperty(idProp.getName(), idProp.getType()));
+			}
+
+			for (Prop prop : props.values()) {
+				if (!prop.getName().equals("id")) {
+					pr.add(new BeanProperty(prop.getName(), prop.getType()));
+				}
+			}
+		} else {
+			for (String propName : propertyNames) {
+				Prop prop = props.get(propName);
+				U.must(prop != null, "Cannot find property '%s' in type: %s", propName, beanType);
 				pr.add(new BeanProperty(prop.getName(), prop.getType()));
 			}
 		}
-
 		return pr;
 	}
 
-	public static List<Property> editablePropertiesOf(Class<?> beanType) {
+	public static List<Property> editablePropertiesOf(Class<?> beanType, String... propertyNames) {
 		List<Property> pr = U.list();
 
 		Map<String, Prop> props = Cls.propertiesOf(beanType);
-		for (Prop prop : props.values()) {
-			if (!prop.getName().equalsIgnoreCase("id")) {
+
+		if (propertyNames.length == 0) {
+			for (Prop prop : props.values()) {
+				if (!prop.getName().equalsIgnoreCase("id")) {
+					pr.add(new BeanProperty(prop.getName(), prop.getType()));
+				}
+			}
+		} else {
+			for (String propName : propertyNames) {
+				Prop prop = props.get(propName);
+				U.must(prop != null, "Cannot find property '%s' in type: %s", propName, beanType);
 				pr.add(new BeanProperty(prop.getName(), prop.getType()));
 			}
 		}

@@ -33,8 +33,8 @@ public interface Item extends Serializable {
 
 	void set(String property, Object value);
 
-	List<Property> properties();
+	List<Property> properties(String... propertyNames);
 
-	List<Property> editableProperties();
+	List<Property> editableProperties(String... propertyNames);
 
 }
