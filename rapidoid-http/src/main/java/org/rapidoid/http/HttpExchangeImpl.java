@@ -643,7 +643,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public synchronized String sessionId() {
 		if (sessionId == null) {
-			sessionId = cookie(SESSION_COOKIE);
+			sessionId = cookie(SESSION_COOKIE, null);
 
 			if (sessionId != null && !session.exists(sessionId)) {
 				sessionId = null;
