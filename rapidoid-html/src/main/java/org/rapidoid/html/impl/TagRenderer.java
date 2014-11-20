@@ -32,9 +32,9 @@ import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagWidget;
-import org.rapidoid.reactive.Var;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
+import org.rapidoid.var.Var;
 
 public class TagRenderer {
 

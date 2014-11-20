@@ -28,8 +28,8 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.impl.PageRenderer;
-import org.rapidoid.reactive.Var;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.var.Var;
 
 public class PagesTestCommons extends TestCommons {
 

@@ -1,8 +1,8 @@
-package org.rapidoid.reactive.var;
+package org.rapidoid.var.impl;
 
 /*
  * #%L
- * rapidoid-reactive
+ * rapidoid-model
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%

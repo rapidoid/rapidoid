@@ -1,8 +1,8 @@
-package org.rapidoid.reactive.var;
+package org.rapidoid.var.impl;
 
 /*
  * #%L
- * rapidoid-reactive
+ * rapidoid-model
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,8 +20,8 @@ package org.rapidoid.reactive.var;
  * #L%
  */
 
-import org.rapidoid.reactive.Var;
 import org.rapidoid.util.U;
+import org.rapidoid.var.Var;
 
 public abstract class AbstractVar<T> implements Var<T> {
 

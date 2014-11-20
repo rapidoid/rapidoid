@@ -27,7 +27,7 @@ import org.rapidoid.pages.impl.FileTemplateTag;
 import org.rapidoid.pages.impl.ItemPropertyVar;
 import org.rapidoid.pages.impl.MultiLanguageText;
 import org.rapidoid.pages.impl.SimpleHardcodedTag;
-import org.rapidoid.reactive.Var;
+import org.rapidoid.var.Var;
 
 public abstract class HtmlWidgets extends HTML {
 

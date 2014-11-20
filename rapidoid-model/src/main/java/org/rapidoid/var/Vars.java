@@ -1,12 +1,12 @@
-package org.rapidoid.reactive;
+package org.rapidoid.var;
 
-import org.rapidoid.reactive.var.ContainerVar;
-import org.rapidoid.reactive.var.EqualityVar;
-import org.rapidoid.reactive.var.SimpleVar;
+import org.rapidoid.var.impl.ContainerVar;
+import org.rapidoid.var.impl.EqualityVar;
+import org.rapidoid.var.impl.SimpleVar;
 
 /*
  * #%L
- * rapidoid-reactive
+ * rapidoid-model
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%

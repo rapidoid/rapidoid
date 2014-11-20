@@ -15,10 +15,10 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
 import org.rapidoid.model.Property;
-import org.rapidoid.reactive.Var;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
+import org.rapidoid.var.Var;
 
 /*
  * #%L

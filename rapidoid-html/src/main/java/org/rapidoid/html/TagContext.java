@@ -2,7 +2,7 @@ package org.rapidoid.html;
 
 import java.util.Map;
 
-import org.rapidoid.reactive.Var;
+import org.rapidoid.var.Var;
 
 /*
  * #%L

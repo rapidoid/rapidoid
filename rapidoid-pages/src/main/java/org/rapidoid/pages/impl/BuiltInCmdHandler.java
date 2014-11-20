@@ -20,7 +20,7 @@ package org.rapidoid.pages.impl;
  * #L%
  */
 
-import org.rapidoid.reactive.Var;
+import org.rapidoid.var.Var;
 
 public class BuiltInCmdHandler {
 

@@ -30,9 +30,9 @@ import org.rapidoid.html.impl.UndefinedTag;
 import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.OptionTag;
 import org.rapidoid.html.tag.TextareaTag;
-import org.rapidoid.reactive.Var;
-import org.rapidoid.reactive.Vars;
 import org.rapidoid.util.U;
+import org.rapidoid.var.Var;
+import org.rapidoid.var.Vars;
 
 public class Tags extends BasicUtils {
 

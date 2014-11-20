@@ -1,6 +1,6 @@
 package org.rapidoid.html;
 
-import org.rapidoid.reactive.Var;
+import org.rapidoid.var.Var;
 
 /*
  * #%L

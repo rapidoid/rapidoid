@@ -31,7 +31,7 @@ import org.rapidoid.util.U;
 public class HttpDemo {
 
 	public static void main(String[] args) {
-		U.args("debug", "stats");
+		U.args(args);
 
 		final AtomicLong n = new AtomicLong();
 

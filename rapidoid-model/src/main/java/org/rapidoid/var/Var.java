@@ -1,10 +1,10 @@
-package org.rapidoid.reactive;
+package org.rapidoid.var;
 
 import java.io.Serializable;
 
 /*
  * #%L
- * rapidoid-reactive
+ * rapidoid-model
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%

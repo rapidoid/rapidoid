@@ -64,7 +64,7 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 		return Pages.titleOf(x, app);
 	}
 
-	public Tag<?> content(HttpExchange x) {
+	public Object content(HttpExchange x) {
 
 		Class<?> screenClass = getScreenClass(x);
 		if (screenClass == null) {

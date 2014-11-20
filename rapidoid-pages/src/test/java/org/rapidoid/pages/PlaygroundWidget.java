@@ -28,7 +28,7 @@ import org.rapidoid.html.tag.SpanTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Model;
 import org.rapidoid.pages.entity.Person;
-import org.rapidoid.reactive.Var;
+import org.rapidoid.var.Var;
 
 public class PlaygroundWidget extends BootstrapWidgets {
 
