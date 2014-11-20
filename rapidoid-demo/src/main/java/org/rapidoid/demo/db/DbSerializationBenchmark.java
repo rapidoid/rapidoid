@@ -23,7 +23,6 @@ package org.rapidoid.demo.db;
 import java.io.ByteArrayOutputStream;
 
 import org.rapidoid.db.DB;
-import org.rapidoid.demo.pojo.Person;
 import org.rapidoid.util.U;
 
 public class DbSerializationBenchmark {

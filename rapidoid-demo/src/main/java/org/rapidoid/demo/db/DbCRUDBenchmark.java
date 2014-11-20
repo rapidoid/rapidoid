@@ -21,7 +21,6 @@ package org.rapidoid.demo.db;
  */
 
 import org.rapidoid.db.DB;
-import org.rapidoid.demo.pojo.Person;
 import org.rapidoid.util.U;
 
 public class DbCRUDBenchmark {

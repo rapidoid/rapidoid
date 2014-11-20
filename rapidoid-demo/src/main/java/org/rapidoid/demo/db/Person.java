@@ -20,42 +20,18 @@ package org.rapidoid.demo.db;
  * #L%
  */
 
-import org.rapidoid.db.DB;
-import org.rapidoid.util.U;
+public class Person {
 
-public class DbPersistenceBenchmark {
+	public long id;
+	public String name;
+	public int age;
 
-	public static void main(String[] args) {
+	public Person() {
+	}
 
-		U.args(args);
-
-		final int size = U.option("size", 10000);
-
-		System.out.println("inserting...");
-
-		U.startMeasure();
-
-		U.benchmarkMT(U.cpus(), "insert", size, new Runnable() {
-			@Override
-			public void run() {
-				DB.insert(new Person("abc", 10));
-			}
-		});
-
-		System.out.println("updating...");
-
-		U.benchmarkMT(U.cpus(), "update", size, new Runnable() {
-			@Override
-			public void run() {
-				DB.update(U.rnd(size) + 1, new Person("xyz", 10));
-			}
-		});
-
-		System.out.println("persisting...");
-
-		DB.shutdown();
-
-		U.endMeasure("total");
+	public Person(String name, int age) {
+		this.name = name;
+		this.age = age;
 	}
 
 }
