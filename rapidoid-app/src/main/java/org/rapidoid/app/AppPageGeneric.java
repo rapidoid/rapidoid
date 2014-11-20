@@ -43,6 +43,8 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 	private static final String SEARCH_SCREEN = "SearchScreen";
 
+	private static final String SETTINGS_SCREEN = "SettingsScreen";
+
 	private static final String[] themes = { "default", "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal",
 			"lumen", "paper", "readable", "sandstone", "simplex", "slate", "spacelab", "superhero", "united", "yeti" };
 
@@ -78,10 +80,14 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 		int screensN = mainScreens.containsKey(SEARCH_SCREEN) ? mainScreens.size() - 1 : mainScreens.size();
 
+		if (mainScreens.containsKey(SETTINGS_SCREEN)) {
+			screensN--;
+		}
+
 		Class<?>[] screens = new Class[screensN];
 		int ind = 0;
 		for (Entry<String, Class<?>> e : mainScreens.entrySet()) {
-			if (!e.getKey().equals(SEARCH_SCREEN)) {
+			if (!e.getKey().equals(SEARCH_SCREEN) && !e.getKey().equals(SETTINGS_SCREEN)) {
 				screens[ind++] = e.getValue();
 			}
 		}
