@@ -98,12 +98,12 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 		Tag<?> dropdownMenu = null;
 
-		if (Apps.config(app, "auth", false)) {
+		if (Apps.config(app, "auth", true)) {
 
 			if (x.isLoggedIn()) {
 
 				ATag profile = a_glyph("user", x.user().display, caret());
-				ATag settings = Apps.config(app, "settings", false) ? a_glyph("cog", " Settings").href("/settings")
+				ATag settings = Apps.config(app, "settings", true) ? a_glyph("cog", " Settings").href("/settings")
 						: null;
 				ATag logout = a_glyph("log-out", "Logout").href("/_logout");
 
@@ -113,22 +113,22 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 				ATag ga = null, fb = null, li = null, gh = null;
 
-				if (Apps.config(app, "googleLogin", false)) {
+				if (Apps.config(app, "googleLogin", true)) {
 					ga = a_awesome("google", "Sign in with Google").href(
 							OAuth.getLoginURL(x, OAuthProvider.GOOGLE, null));
 				}
 
-				if (Apps.config(app, "facebookLogin", false)) {
+				if (Apps.config(app, "facebookLogin", true)) {
 					fb = a_awesome("facebook", "Sign in with Facebook").href(
 							OAuth.getLoginURL(x, OAuthProvider.FACEBOOK, null));
 				}
 
-				if (Apps.config(app, "linkedinLogin", false)) {
+				if (Apps.config(app, "linkedinLogin", true)) {
 					li = a_awesome("linkedin", "Sign in with LinkedIn").href(
 							OAuth.getLoginURL(x, OAuthProvider.LINKEDIN, null));
 				}
 
-				if (Apps.config(app, "githubLogin", false)) {
+				if (Apps.config(app, "githubLogin", true)) {
 					gh = a_awesome("github", "Sign in with GitHub").href(
 							OAuth.getLoginURL(x, OAuthProvider.GITHUB, null));
 				}
@@ -147,7 +147,7 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 			themess[i] = a(U.capitalized(thm)).onclick(js);
 		}
 
-		UlTag themesMenu = Apps.config(app, "themes", false) ? navbarDropdown(false, theme, themess) : null;
+		UlTag themesMenu = Apps.config(app, "themes", true) ? navbarDropdown(false, theme, themess) : null;
 
 		Object[] menuItems = new Object[screens.length];
 
@@ -167,7 +167,7 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 		UlTag navMenu = navbarMenu(true, activeIndex, menuItems);
 
 		FormTag searchForm = null;
-		if (Apps.config(app, "search", false)) {
+		if (Apps.config(app, "search", true)) {
 			searchForm = navbarForm(false, "Find", arr("q"), arr("Search")).attr("action", "/search").attr("method",
 					"GET");
 		}
@@ -199,7 +199,7 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 	}
 
 	protected boolean isFluid(Object app) {
-		return Apps.config(app, "fluid", false);
+		return Apps.config(app, "fluid", true);
 	}
 
 	public String appTitle(Object app) {
