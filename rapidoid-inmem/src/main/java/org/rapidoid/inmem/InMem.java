@@ -398,6 +398,10 @@ public class InMem {
 				}
 
 				data.put(id, new Rec(type, line));
+				
+				if (id > ids.get()) {
+					ids.set(id);
+				}
 			}
 
 			prevData = new ConcurrentSkipListMap<Long, Rec>(data);
