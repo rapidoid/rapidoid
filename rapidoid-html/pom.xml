@@ -20,7 +20,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-reactive</artifactId>
+			<artifactId>rapidoid-model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
