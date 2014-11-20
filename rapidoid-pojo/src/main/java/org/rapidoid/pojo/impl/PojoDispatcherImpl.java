@@ -100,7 +100,8 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		if (wrapper != null) {
 			Method method = wrapper.getMethod(action);
 			if (method != null) {
-				return doDispatch(request, method, wrapper.getTarget(), parts, paramsFrom);
+				Object serviceInstance = U.newInstance(wrapper.getTarget());
+				return doDispatch(request, method, serviceInstance, parts, paramsFrom);
 			}
 		}
 
@@ -109,7 +110,9 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 
 	private PojoServiceWrapper wrapper(String service) {
 
-		Class<?> serviceClass = services.get(service);
+		String name = U.capitalized(service) + "Service";
+
+		Class<?> serviceClass = services.get(name);
 		if (serviceClass == null) {
 			return null;
 		}

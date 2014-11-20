@@ -30,15 +30,16 @@ public class PojoServiceWrapper {
 
 	private final Map<String, Method> methods = U.map();
 
-	private final Object service;
+	private final Class<?> serviceCls;
 
-	public PojoServiceWrapper(Object service) {
-		this.service = service;
+	public PojoServiceWrapper(Class<?> serviceCls) {
+		U.must(serviceCls instanceof Class<?>);
+		this.serviceCls = serviceCls;
 		init();
 	}
 
 	private void init() {
-		for (Method method : service.getClass().getMethods()) {
+		for (Method method : serviceCls.getMethods()) {
 			if (!method.getDeclaringClass().equals(Object.class)) {
 				int modifiers = method.getModifiers();
 				if (!Modifier.isAbstract(modifiers) && Modifier.isPublic(modifiers)) {
@@ -54,8 +55,8 @@ public class PojoServiceWrapper {
 		return methods.get(action);
 	}
 
-	public Object getTarget() {
-		return service;
+	public Class<?> getTarget() {
+		return serviceCls;
 	}
 
 }
