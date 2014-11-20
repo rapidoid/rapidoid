@@ -156,7 +156,7 @@ public class Pages {
 
 	public static Object dispatch(HttpExchange x, WebPojoDispatcher serviceDispatcher, Map<String, Class<?>> pages) {
 
-		if (x.isGetReq() && x.query().isEmpty()) {
+		if (x.isGetReq()) {
 			String filename = x.path().substring(1);
 
 			if (filename.isEmpty()) {
