@@ -49,14 +49,14 @@ public class ListItems implements Items {
 	@Override
 	public void addAll(Items items) {
 		for (int i = 0; i < items.size(); i++) {
-			data().add(ifFitsIn(items.get(i)));
+			add(ifFitsIn(items.get(i)));
 		}
 	}
 
 	@Override
 	public void addAll(List<Item> items) {
 		for (Item item : items) {
-			data().add(ifFitsIn(item));
+			add(ifFitsIn(item));
 		}
 	}
 
@@ -120,6 +120,10 @@ public class ListItems implements Items {
 
 	protected List<Item> data() {
 		return list;
+	}
+
+	protected long idOf(int index) {
+		return Long.parseLong(data().get(index).id());
 	}
 
 }
