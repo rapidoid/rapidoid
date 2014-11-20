@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.rapidoid</groupId>
 		<artifactId>rapidoid</artifactId>
-		<version>1.0.1</version>
+		<version>1.1.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>rapidoid-inmem</artifactId>
@@ -15,12 +15,12 @@
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-u</artifactId>
-			<version>1.0.1</version>
+			<version>1.1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-json</artifactId>
-			<version>1.0.1</version>
+			<version>1.1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
