@@ -67,8 +67,8 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 	public Object content(HttpExchange x) {
 
 		Class<?> screenClass = getScreenClass(x);
-		if (screenClass == null) {
-			return null;
+		if (screenClass == null && x.path().equals("/")) {
+			return Pages.contentOf(x, app);
 		}
 
 		x.sessionSet(SESSION_CURRENT_SCREEN, screenClass.getSimpleName());
