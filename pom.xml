@@ -56,7 +56,6 @@
 	<modules>
 		<module>rapidoid-u</module>
 		<module>rapidoid-utils</module>
-		<module>rapidoid-reactive</module>
 		<module>rapidoid-model</module>
 		<module>rapidoid-ioc</module>
 		<module>rapidoid-json</module>
