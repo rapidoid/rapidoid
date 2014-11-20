@@ -38,62 +38,62 @@ public class ListItems implements Items {
 
 	@Override
 	public void insert(int index, Item item) {
-		list.add(index, ifFitsIn(item));
+		data().add(index, ifFitsIn(item));
 	}
 
 	@Override
 	public void add(Item item) {
-		list.add(ifFitsIn(item));
+		data().add(ifFitsIn(item));
 	}
 
 	@Override
 	public void addAll(Items items) {
 		for (int i = 0; i < items.size(); i++) {
-			list.add(ifFitsIn(items.get(i)));
+			data().add(ifFitsIn(items.get(i)));
 		}
 	}
 
 	@Override
 	public void addAll(List<Item> items) {
 		for (Item item : items) {
-			list.add(ifFitsIn(item));
+			data().add(ifFitsIn(item));
 		}
 	}
 
 	@Override
 	public void clear() {
-		list.clear();
+		data().clear();
 	}
 
 	@Override
 	public Item get(int index) {
-		return list.get(index);
+		return data().get(index);
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return list.isEmpty();
+		return data().isEmpty();
 	}
 
 	@Override
 	public void remove(int index) {
-		list.remove(index);
+		data().remove(index);
 	}
 
 	@Override
 	public void set(int index, Item item) {
-		list.set(index, ifFitsIn(item));
+		data().set(index, ifFitsIn(item));
 	}
 
 	@Override
 	public int size() {
-		return list.size();
+		return data().size();
 	}
 
 	@Override
 	public Items range(int fromIndex, int toIndex) {
 		ListItems subitems = new ListItems();
-		subitems.addAll(list.subList(fromIndex, toIndex));
+		subitems.addAll(data().subList(fromIndex, toIndex));
 		return subitems;
 	}
 
@@ -115,7 +115,11 @@ public class ListItems implements Items {
 
 	@Override
 	public Iterator<Item> iterator() {
-		return list.iterator();
+		return data().iterator();
+	}
+
+	protected List<Item> data() {
+		return list;
 	}
 
 }
