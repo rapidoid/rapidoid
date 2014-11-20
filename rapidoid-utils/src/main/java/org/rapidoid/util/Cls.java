@@ -665,6 +665,19 @@ public class Cls {
 			return (T) value;
 		}
 
+		if (Enum.class.isAssignableFrom(toType)) {
+			T[] ens = toType.getEnumConstants();
+			Enum<?> en;
+			for (T t : ens) {
+				en = (Enum<?>) t;
+				if (en.name().equalsIgnoreCase(value)) {
+					return (T) en;
+				}
+			}
+
+			throw U.rte("Cannot find the enum constant: %s.%s", toType, value);
+		}
+
 		TypeKind targetKind = Cls.kindOf(toType);
 
 		switch (targetKind) {
