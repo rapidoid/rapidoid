@@ -115,10 +115,6 @@ public class TagRenderer {
 
 		U.notNull(ctx, "tag context");
 
-		U.must(tag.ctx == null || tag.ctx == ctx);
-
-		tag.ctx = ctx;
-
 		if (tag.binding != null) {
 			tag._h = ctx.newBinding(tag.binding);
 		}

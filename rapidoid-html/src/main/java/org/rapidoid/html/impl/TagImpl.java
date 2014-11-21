@@ -20,7 +20,6 @@ package org.rapidoid.html.impl;
  * #L%
  */
 
-import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -29,7 +28,6 @@ import java.util.Set;
 
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
@@ -51,8 +49,6 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 	final Set<String> battrs = U.set();
 
 	int _h = -1;
-
-	TagContext ctx;
 
 	TAG proxy;
 
@@ -94,17 +90,11 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 
 	@Override
 	public String toString() {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		TagRenderer.get().str(ctx, this, 0, false, null, out);
-		return out.toString();
+		throw U.notExpected();
 	}
 
 	public void setProxy(TAG proxy) {
 		this.proxy = proxy;
-	}
-
-	public void setCtx(TagContext ctx) {
-		this.ctx = ctx;
 	}
 
 	@Override
