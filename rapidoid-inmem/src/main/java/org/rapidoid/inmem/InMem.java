@@ -66,6 +66,10 @@ class Rec {
  */
 public class InMem {
 
+	private static final String META_UPTIME = "uptime";
+
+	private static final String META_TIMESTAMP = "timestamp";
+
 	private static final String SUFFIX_B = "b";
 
 	private static final String SUFFIX_A = "a";
@@ -73,6 +77,8 @@ public class InMem {
 	private static final byte[] CR_LF = { 13, 10 };
 
 	private static final Object INSERTION = new Object();
+
+	private final long startedAt = U.time();
 
 	private final String filename;
 
@@ -389,6 +395,28 @@ public class InMem {
 		}
 	}
 
+	public Map<String, Object> loadMetadata(InputStream in) {
+		globalLock();
+
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+			String line = reader.readLine();
+			U.must(line != null, "Missing meta-data at the first line in the database file!");
+
+			Map<String, Object> meta = JSON.parseMap(line);
+
+			reader.close();
+
+			return meta;
+
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot load meta-data from database!", e);
+		} finally {
+			globalUnlock();
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public void load(InputStream in) {
 		globalLock();
@@ -398,7 +426,13 @@ public class InMem {
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-			String line;
+			String line = reader.readLine();
+
+			U.must(line != null, "Missing meta-data at the first line in the database file!");
+
+			Map<String, Object> meta = JSON.parseMap(line);
+			U.info("Database meta-data", META_TIMESTAMP, meta.get(META_TIMESTAMP), META_UPTIME, meta.get(META_UPTIME));
+
 			while ((line = reader.readLine()) != null) {
 				Map<String, Object> map = JSON.parse(line, Map.class);
 				Long id = new Long(((String) map.get("id")));
@@ -420,6 +454,8 @@ public class InMem {
 
 			prevData = new ConcurrentSkipListMap<Long, Rec>(data);
 
+			reader.close();
+
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot load database!", e);
 		} finally {
@@ -428,11 +464,24 @@ public class InMem {
 	}
 
 	private void persistTo(RandomAccessFile file) throws IOException {
+		file.write(JSON.stringify(metadata()).getBytes());
+		file.write(CR_LF);
 		for (Entry<Long, Rec> entry : data.entrySet()) {
 			String json = entry.getValue().json;
 			file.write(json.getBytes());
 			file.write(CR_LF);
 		}
+	}
+
+	private Map<String, Object> metadata() {
+		Map<String, Object> meta = U.map();
+
+		long now = U.time();
+
+		meta.put(META_TIMESTAMP, now);
+		meta.put(META_UPTIME, now - startedAt);
+
+		return meta;
 	}
 
 	private void persistData(Runnable onCommit, Runnable onRollback) {
@@ -456,10 +505,10 @@ public class InMem {
 						+ file.getAbsolutePath());
 			}
 
-			RandomAccessFile ff = new RandomAccessFile(file, "rw");
-			persistTo(ff);
-			ff.getChannel().force(false);
-			ff.close();
+			RandomAccessFile raf = new RandomAccessFile(file, "rw");
+			persistTo(raf);
+			raf.getChannel().force(false);
+			raf.close();
 
 			prevData = copy;
 			boolean isA = aOrB.get();
