@@ -39,7 +39,7 @@ public class NewTaskScreen extends GUI {
 
 		H1Tag caption = h1("Add new task");
 
-		FormTag frm = edit(task, cmds("Save", "Cancel"), "title", "priority");
+		FormTag frm = edit(task, SAVE_CANCEL, "title", "priority");
 
 		Tag<?> grid = grid(all(Task.class), 3, "id", "priority", "title");
 

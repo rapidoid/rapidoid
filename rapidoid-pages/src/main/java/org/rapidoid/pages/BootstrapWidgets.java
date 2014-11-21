@@ -7,6 +7,7 @@ import org.rapidoid.html.Bootstrap;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.LiTag;
 import org.rapidoid.html.tag.TbodyTag;
@@ -41,6 +42,22 @@ import org.rapidoid.var.Var;
  */
 
 public abstract class BootstrapWidgets extends Bootstrap {
+
+	public static final ButtonTag[] SAVE_CANCEL = cmds("Save", "Cancel");
+
+	public static final ButtonTag[] ADD_CANCEL = cmds("Add", "Cancel");
+
+	public static final ButtonTag[] UPDATE_CANCEL = cmds("Update", "Cancel");
+
+	public static final ButtonTag[] DELETE_CANCEL = cmds("Delete", "Cancel");
+
+	public static final ButtonTag[] INSERT_CANCEL = cmds("Insert", "Cancel");
+
+	public static final ButtonTag[] YES_NO = cmds("Yes", "No");
+
+	public static final ButtonTag[] YES_NO_CANCEL = cmds("Yes", "No", "Cancel");
+
+	public static final ButtonTag[] OK_CANCEL = cmds("OK", "Cancel");
 
 	public static Object i18n(String multiLanguageText, Object... formatArgs) {
 		return HtmlWidgets.i18n(multiLanguageText, formatArgs);
