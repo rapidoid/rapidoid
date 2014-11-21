@@ -1,6 +1,5 @@
 package org.rapidoid.demo.taskplanner.gui;
 
-
 /*
  * #%L
  * rapidoid-demo
@@ -43,6 +42,6 @@ public class App {
 
 	public boolean auth = true;
 
-	public Object[] screens = { HomeScreen.class, "NewTask", "tasksScreen" };
+	// public Object[] screens = { HomeScreen.class, "NewTask", "tasksScreen" };
 
 }

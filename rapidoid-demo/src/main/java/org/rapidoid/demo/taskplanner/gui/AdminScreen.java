@@ -20,8 +20,24 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
-public class SettingsScreen extends GUI {
+import org.rapidoid.db.DB;
+import org.rapidoid.util.U;
 
-	public Object content = rowFull(h2("Settings..."));
+public class AdminScreen extends GUI {
+
+	public Object[] content = { h2("Manage Application"), cmd("Shutdown") };
+
+	public void onShutdown() {
+		DB.shutdown();
+
+		U.warn("Shutting down the application...");
+		U.schedule(new Runnable() {
+			@Override
+			public void run() {
+				U.warn("Exit application");
+				System.exit(0);
+			}
+		}, 500);
+	}
 
 }
