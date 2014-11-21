@@ -29,12 +29,11 @@ import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.H1Tag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
-import org.rapidoid.model.Model;
 
 public class NewTaskScreen extends GUI {
 
 	@Session
-	private Item task = Model.item(new Task("Buy milk!", Priority.MEDIUM));
+	private Item task = item(new Task("Buy milk!", Priority.MEDIUM));
 
 	@Session
 	private Items tasks = all(Task.class);
@@ -56,7 +55,7 @@ public class NewTaskScreen extends GUI {
 	}
 
 	public void onCancel() {
-		task = Model.item(new Task("Buy milk!", Priority.MEDIUM));
+		task = item(new Task("Buy milk!", Priority.MEDIUM));
 	}
 
 }

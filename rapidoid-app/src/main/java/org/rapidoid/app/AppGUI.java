@@ -21,13 +21,27 @@ package org.rapidoid.app;
  */
 
 import org.rapidoid.db.model.DbItems;
+import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
+import org.rapidoid.model.Model;
 import org.rapidoid.pages.BootstrapWidgets;
 
 public class AppGUI extends BootstrapWidgets {
 
 	public static <T> Items all(Class<T> type) {
 		return new DbItems<T>(type);
+	}
+
+	public static Item item(Object value) {
+		return Model.item(value);
+	}
+
+	public static Items items(Object... values) {
+		return Model.items(values);
+	}
+
+	public static <T> Items beanItems(Class<T> beanType, Object... beans) {
+		return Model.beanItems(beanType, beans);
 	}
 
 }

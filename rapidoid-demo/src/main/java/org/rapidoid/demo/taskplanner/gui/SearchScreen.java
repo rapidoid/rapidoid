@@ -43,7 +43,6 @@ public class SearchScreen {
 		List<Task> found = DB.find(new Predicate<Task>() {
 			@Override
 			public boolean eval(Task task) throws Exception {
-				System.out.println(task);
 				return task.title.contains(query);
 			}
 		});
