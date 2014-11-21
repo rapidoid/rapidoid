@@ -46,6 +46,8 @@ import org.rapidoid.util.U;
 
 public class Pages {
 
+	private static final String PAGE_RELOAD = "<h2>Reloading...</h2><script>location.reload();</script>";
+
 	public static final String SESSION_CTX = "_ctx";
 
 	public static final String SESSION_CURRENT_PAGE = "_current_page_";
@@ -72,10 +74,6 @@ public class Pages {
 		}
 
 		return inputsMap;
-	}
-
-	public static TagContext ctx(HttpExchange x) {
-		return x.session(SESSION_CTX);
 	}
 
 	public static String pageName(HttpExchange x) {
@@ -146,7 +144,8 @@ public class Pages {
 				return x;
 			} else {
 				x.html();
-				PageRenderer.get().render(ctx(x), fullPage, x);
+				TagContext ctx = x.session(SESSION_CTX);
+				PageRenderer.get().render(ctx, fullPage, x);
 				return x;
 			}
 		} else {
@@ -227,15 +226,25 @@ public class Pages {
 	public static Object emit(HttpExchange x) {
 		int event = U.num(x.data("event"));
 
-		TagContext ctx = Pages.ctx(x);
+		TagContext ctx = x.session(SESSION_CTX, null);
 
-		Map<Integer, Object> inp = Pages.inputs(x);
-		ctx.emitValues(inp);
+		// if the context has been lost, reload the page
+		if (ctx == null) {
+			return changes(x, PAGE_RELOAD);
+		}
+
+		Cmd cmd = ctx.getEventCmd(event);
+
+		if (cmd != null) {
+			Map<Integer, Object> inp = Pages.inputs(x);
+			ctx.emitValues(inp);
+		} else {
+			U.warn("Invalid event!", "event", event);
+		}
 
 		Object page = U.newInstance(currentPage(x));
 		Pages.load(x, page);
 
-		Cmd cmd = ctx.getEventCmd(event);
 		callCmdHandler(x, page, cmd);
 
 		ctx = Tags.context();
@@ -251,9 +260,12 @@ public class Pages {
 
 		Pages.store(x, page);
 
+		return changes(x, html);
+	}
+
+	private static Object changes(HttpExchange x, String html) {
 		Map<String, String> changes = U.map();
 		changes.put("body", html);
-
 		x.json();
 		return changes;
 	}

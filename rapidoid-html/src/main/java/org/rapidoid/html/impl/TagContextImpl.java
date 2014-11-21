@@ -78,7 +78,6 @@ public class TagContextImpl implements TagContext, Serializable {
 	@Override
 	public Cmd getEventCmd(int eventId) {
 		Cmd cmd = commands.get(eventId);
-		U.must(cmd != null, "Invalid event handle: h_%s", eventId);
 		return cmd;
 	}
 
