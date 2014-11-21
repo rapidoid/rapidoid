@@ -245,7 +245,9 @@ public class Pages {
 		Object page = U.newInstance(currentPage(x));
 		Pages.load(x, page);
 
-		callCmdHandler(x, page, cmd);
+		if (cmd != null) {
+			callCmdHandler(x, page, cmd);
+		}
 
 		ctx = Tags.context();
 		x.sessionSet(Pages.SESSION_CTX, ctx);
