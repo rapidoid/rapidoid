@@ -86,20 +86,25 @@ public abstract class BootstrapWidgets extends Bootstrap {
 	public static Tag<?> grid(Items items, int pageSize, String... properties) {
 		final List<Property> props = items.properties(properties);
 
-		final Var<Integer> pageNumber = var(1);
-
 		TrTag header = tr();
 
 		for (Property prop : props) {
 			header = header.append(th(prop.caption()));
 		}
 
-		Integer pageN = pageNumber.get();
-		Items page = items.range((pageN - 1) * pageSize, Math.min((pageN) * pageSize, items.size()));
+		boolean paging = pageSize > 0;
+		Var<Integer> pageNumber = null;
+		Items pageOrAll = items;
+
+		if (paging) {
+			pageNumber = var(1);
+			Integer pageN = pageNumber.get();
+			pageOrAll = items.range((pageN - 1) * pageSize, Math.min((pageN) * pageSize, items.size()));
+		}
 
 		TbodyTag body = tbody();
 
-		for (Item item : page) {
+		for (Item item : pageOrAll) {
 			TrTag row = itemRow(props, item);
 			body = body.append(row);
 		}
@@ -107,7 +112,8 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		int total = items.size();
 		int pages = (int) Math.ceil(total / (double) pageSize);
 
-		return rowFull(table_(thead(header), body), pager(1, pages, pageNumber));
+		Tag<?> pager = paging ? pager(1, pages, pageNumber) : null;
+		return rowFull(table_(thead(header), body), pager);
 	}
 
 	protected static TrTag itemRow(List<Property> properties, Item item) {

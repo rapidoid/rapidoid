@@ -37,7 +37,7 @@ public class TasksScreen extends GUI {
 
 		H1Tag caption = h1("Manage tasks");
 
-		Tag<?> table = grid(tasks, 1000, "title", "priority");
+		Tag<?> table = grid(tasks, 0, "id", "title", "priority");
 
 		return arr(caption, rowFull(table));
 	}
