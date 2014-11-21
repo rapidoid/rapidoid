@@ -3,6 +3,8 @@ package org.rapidoid.json;
 import java.io.OutputStream;
 import java.util.Map;
 
+import org.rapidoid.util.U;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -93,6 +95,7 @@ public class JSON {
 		try {
 			return MAPPER.readValue(json, valueType);
 		} catch (Exception e) {
+			U.error("Cannot parse JSON!", "json", json, "error", e);
 			throw new RuntimeException(e);
 		}
 	}
