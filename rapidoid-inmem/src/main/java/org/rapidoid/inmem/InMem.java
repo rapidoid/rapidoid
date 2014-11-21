@@ -106,10 +106,7 @@ public class InMem {
 		if (filename != null && !filename.isEmpty()) {
 
 			if (currentFile().exists() && otherFile().exists()) {
-				throw new IllegalStateException(
-						String.format(
-								"The database was left in inconsistent state, both %s and %s files exist! Please delete one of them!",
-								currentFile().getName(), otherFile().getName()));
+				resolveDoubleFileInconsistency();
 			}
 
 			load();
@@ -124,6 +121,23 @@ public class InMem {
 		} else {
 			persistor = null;
 		}
+	}
+
+	private void resolveDoubleFileInconsistency() {
+		String file1 = currentFile().getName();
+		String file2 = otherFile().getName();
+
+		U.warn("The database was left in inconsistent state, both files exist!", "file1", file1, "file2", file2);
+
+		long modif1 = currentFile().lastModified();
+		long modif2 = otherFile().lastModified();
+
+		U.must(modif1 != modif2,
+				"Cannot determine which database file to remove, please remove the incorrect file manually!");
+
+		// delete the most recent file, since it wasn't written completely
+		File recent = modif1 > modif2 ? currentFile() : otherFile();
+		recent.delete();
 	}
 
 	private void load() {
@@ -556,7 +570,6 @@ public class InMem {
 
 	public void destroy() {
 		halt();
-		new File(filename).delete();
 		new File(filenameWithSuffix(SUFFIX_A)).delete();
 		new File(filenameWithSuffix(SUFFIX_B)).delete();
 	}
