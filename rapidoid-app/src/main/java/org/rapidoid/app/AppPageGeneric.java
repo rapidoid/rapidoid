@@ -36,6 +36,7 @@ import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
 import org.rapidoid.pages.BootstrapWidgets;
 import org.rapidoid.pages.Pages;
+import org.rapidoid.util.Arr;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
@@ -44,6 +45,10 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 	private static final String SEARCH_SCREEN = "SearchScreen";
 
 	private static final String SETTINGS_SCREEN = "SettingsScreen";
+
+	private static final String ADMIN_SCREEN = "AdminScreen";
+
+	private static final String[] SPECIAL_SCREENS = { SEARCH_SCREEN, SETTINGS_SCREEN, ADMIN_SCREEN };
 
 	private static final String[] themes = { "default", "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal",
 			"lumen", "paper", "readable", "sandstone", "simplex", "slate", "spacelab", "superhero", "united", "yeti" };
@@ -78,16 +83,18 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 		Object screen = U.newInstance(screenClass);
 		Pages.load(x, screen);
 
-		int screensN = mainScreens.containsKey(SEARCH_SCREEN) ? mainScreens.size() - 1 : mainScreens.size();
-
-		if (mainScreens.containsKey(SETTINGS_SCREEN)) {
-			screensN--;
+		int screensN = mainScreens.size();
+		for (String scr : SPECIAL_SCREENS) {
+			if (mainScreens.containsKey(scr)) {
+				screensN--;
+			}
 		}
 
 		Class<?>[] screens = new Class[screensN];
 		int ind = 0;
 		for (Entry<String, Class<?>> e : mainScreens.entrySet()) {
-			if (!e.getKey().equals(SEARCH_SCREEN) && !e.getKey().equals(SETTINGS_SCREEN)) {
+
+			if (Arr.indexOf(SPECIAL_SCREENS, e.getKey()) < 0) {
 				screens[ind++] = e.getValue();
 			}
 		}
