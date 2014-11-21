@@ -392,6 +392,8 @@ public class InMem {
 		try {
 			PrintWriter out = new PrintWriter(output);
 
+			out.println(JSON.stringify(metadata()));
+
 			for (Entry<Long, Rec> entry : data.entrySet()) {
 				String json = entry.getValue().json;
 				out.println(json);
@@ -454,7 +456,7 @@ public class InMem {
 				}
 
 				data.put(id, new Rec(type, line));
-				
+
 				if (id > ids.get()) {
 					ids.set(id);
 				}
