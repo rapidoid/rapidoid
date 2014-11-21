@@ -28,6 +28,7 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.H1Tag;
 import org.rapidoid.model.Item;
+import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
 
 public class NewTaskScreen extends GUI {
@@ -35,13 +36,16 @@ public class NewTaskScreen extends GUI {
 	@Session
 	private Item task = Model.item(new Task("Buy milk!", Priority.MEDIUM));
 
+	@Session
+	private Items tasks = all(Task.class);
+
 	public Object content() {
 
 		H1Tag caption = h1("Add new task");
 
 		FormTag frm = edit(task, SAVE_CANCEL, "title", "priority");
 
-		Tag<?> grid = grid(all(Task.class), 3, "id", "priority", "title");
+		Tag<?> grid = grid(tasks, 3, "id", "priority", "title");
 
 		return rowFull(caption, frm, grid);
 	}
