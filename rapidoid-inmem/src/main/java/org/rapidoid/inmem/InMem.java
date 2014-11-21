@@ -135,14 +135,22 @@ public class InMem {
 
 		U.warn("The database was left in inconsistent state, both files exist!", "file1", file1, "file2", file2);
 
-		long modif1 = currentFile().lastModified();
-		long modif2 = otherFile().lastModified();
+		long modif1, modif2;
+		try {
+			modif1 = (Long) loadMetadata(new FileInputStream(currentFile())).get(META_TIMESTAMP);
+			modif2 = (Long) loadMetadata(new FileInputStream(otherFile())).get(META_TIMESTAMP);
+		} catch (FileNotFoundException e) {
+			throw U.rte(e);
+		}
 
 		U.must(modif1 != modif2,
 				"Cannot determine which database file to remove, please remove the incorrect file manually!");
 
 		// delete the most recent file, since it wasn't written completely
 		File recent = modif1 > modif2 ? currentFile() : otherFile();
+
+		U.warn("The more recent database file is assumed incomplete, so it will be deleted!", "file", recent);
+
 		recent.delete();
 	}
 
