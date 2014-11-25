@@ -20,8 +20,6 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
-import static org.rapidoid.html.HTML.*;
-
 import java.util.List;
 
 import org.rapidoid.db.DB;
@@ -31,7 +29,7 @@ import org.rapidoid.html.tag.H2Tag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.lambda.Predicate;
 
-public class SearchScreen {
+public class SearchScreen extends GUI {
 
 	public Object content(HttpExchange x) {
 
@@ -48,7 +46,7 @@ public class SearchScreen {
 		});
 
 		for (Task task : found) {
-			res = res.append(div(task.title, " with ", b(task.priority), " priority"));
+			res = res.append(row(task.title, " with ", b(task.priority), " priority"));
 		}
 
 		return res;

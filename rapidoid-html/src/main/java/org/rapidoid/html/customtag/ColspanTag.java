@@ -1,8 +1,8 @@
-package org.rapidoid.demo.taskplanner.gui;
+package org.rapidoid.html.customtag;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-html
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,10 +20,8 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
-public class HomeScreen extends GUI {
+import org.rapidoid.html.tag.DivTag;
 
-	public String title = "Welcome!";
-
-	public Object content = row(h2("Welcome to Task Planer!"));
+public interface ColspanTag extends DivTag {
 
 }

@@ -60,7 +60,7 @@ public class MixPage extends BootstrapWidgets {
 
 		Tag<?> table = grid(items, 10);
 
-		Object[] pageContent = arr(row(col6("Hello world!"), col3(abc, xy)), arr(caption, rowFull(table)));
+		Object[] pageContent = arr(row(col6("Hello world!"), col3(abc, xy)), arr(caption, row(table)));
 
 		Tag<?>[] navbarContent = arr(menuL, dropdownMenu, menuR, formR);
 

@@ -46,7 +46,7 @@ public class NewTaskScreen extends GUI {
 
 		Tag<?> grid = grid(tasks, 3, "id", "priority", "title");
 
-		return rowFull(caption, frm, grid);
+		return row(caption, frm, grid);
 	}
 
 	public void onSave() {

@@ -20,6 +20,7 @@ package org.rapidoid.html;
  * #L%
  */
 
+import org.rapidoid.html.customtag.ColspanTag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.DivTag;
@@ -44,12 +45,12 @@ public class Bootstrap extends HTML {
 		return table(contents).class_("table table-striped table-hover");
 	}
 
-	public static DivTag row(Object... contents) {
-		return div(contents).class_("row");
+	public static DivTag row(ColspanTag... cols) {
+		return div((Object[]) cols).class_("row");
 	}
 
-	public static DivTag rowFull(Object... contents) {
-		return div(col12(contents)).class_("row");
+	public static DivTag row(Object... contents) {
+		return row(col12(contents));
 	}
 
 	public static DivTag container(Object... contents) {
@@ -332,55 +333,55 @@ public class Bootstrap extends HTML {
 		return div(contents).class_("jumbotron");
 	}
 
-	public static DivTag col_(int cols, Object... contents) {
-		return div(contents).class_("col-md-" + cols);
+	public static ColspanTag col_(int cols, Object... contents) {
+		return (ColspanTag) tag(ColspanTag.class, "div", contents).class_("col-md-" + cols);
 	}
 
-	public static DivTag col1(Object... contents) {
+	public static ColspanTag col1(Object... contents) {
 		return col_(1, contents);
 	}
 
-	public static DivTag col2(Object... contents) {
+	public static ColspanTag col2(Object... contents) {
 		return col_(2, contents);
 	}
 
-	public static DivTag col3(Object... contents) {
+	public static ColspanTag col3(Object... contents) {
 		return col_(3, contents);
 	}
 
-	public static DivTag col4(Object... contents) {
+	public static ColspanTag col4(Object... contents) {
 		return col_(4, contents);
 	}
 
-	public static DivTag col5(Object... contents) {
+	public static ColspanTag col5(Object... contents) {
 		return col_(5, contents);
 	}
 
-	public static DivTag col6(Object... contents) {
+	public static ColspanTag col6(Object... contents) {
 		return col_(6, contents);
 	}
 
-	public static DivTag col7(Object... contents) {
+	public static ColspanTag col7(Object... contents) {
 		return col_(7, contents);
 	}
 
-	public static DivTag col8(Object... contents) {
+	public static ColspanTag col8(Object... contents) {
 		return col_(8, contents);
 	}
 
-	public static DivTag col9(Object... contents) {
+	public static ColspanTag col9(Object... contents) {
 		return col_(9, contents);
 	}
 
-	public static DivTag col10(Object... contents) {
+	public static ColspanTag col10(Object... contents) {
 		return col_(10, contents);
 	}
 
-	public static DivTag col11(Object... contents) {
+	public static ColspanTag col11(Object... contents) {
 		return col_(11, contents);
 	}
 
-	public static DivTag col12(Object... contents) {
+	public static ColspanTag col12(Object... contents) {
 		return col_(12, contents);
 	}
 

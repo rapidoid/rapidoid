@@ -22,6 +22,6 @@ package org.rapidoid.demo.taskplanner.gui;
 
 public class SettingsScreen extends GUI {
 
-	public Object content = rowFull(h2("Settings..."));
+	public Object content = row(h2("Settings..."));
 
 }

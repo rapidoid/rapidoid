@@ -113,7 +113,7 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		int pages = (int) Math.ceil(total / (double) pageSize);
 
 		Tag<?> pager = paging ? pager(1, pages, pageNumber) : null;
-		return rowFull(table_(thead(header), body), pager);
+		return row(table_(thead(header), body), pager);
 	}
 
 	protected static TrTag itemRow(List<Property> properties, Item item) {
