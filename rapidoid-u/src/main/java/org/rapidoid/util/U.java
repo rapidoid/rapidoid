@@ -369,7 +369,14 @@ public class U {
 
 	public static <T> T newInstance(Class<T> clazz) {
 		try {
-			return clazz.newInstance();
+			Constructor<T> constr = clazz.getDeclaredConstructor();
+			boolean accessible = constr.isAccessible();
+			constr.setAccessible(true);
+
+			T obj = constr.newInstance();
+
+			constr.setAccessible(accessible);
+			return obj;
 		} catch (Exception e) {
 			throw rte(e);
 		}
@@ -381,7 +388,13 @@ public class U {
 			Class<?>[] paramTypes = constr.getParameterTypes();
 			if (areAssignable(paramTypes, args)) {
 				try {
-					return (T) constr.newInstance(args);
+					boolean accessible = constr.isAccessible();
+					constr.setAccessible(true);
+
+					T obj = (T) constr.newInstance(args);
+
+					constr.setAccessible(accessible);
+					return obj;
 				} catch (Exception e) {
 					throw rte(e);
 				}
