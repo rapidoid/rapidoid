@@ -10,6 +10,8 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.LiTag;
+import org.rapidoid.html.tag.NavTag;
+import org.rapidoid.html.tag.SpanTag;
 import org.rapidoid.html.tag.TbodyTag;
 import org.rapidoid.html.tag.TrTag;
 import org.rapidoid.model.Item;
@@ -97,7 +99,7 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		Items pageOrAll = items;
 
 		if (paging) {
-			pageNumber = var(1);
+			pageNumber = items.var("_pageN_", 1);
 			Integer pageN = pageNumber.get();
 			pageOrAll = items.range((pageN - 1) * pageSize, Math.min((pageN) * pageSize, items.size()));
 		}
@@ -127,21 +129,23 @@ public abstract class BootstrapWidgets extends Bootstrap {
 	}
 
 	public static Tag<?> pager(int from, int to, Var<Integer> pageNumber) {
-		LiTag first = li(a(span(LAQUO).cmd("_set", pageNumber, from).attr("aria-hidden", "true"),
-				span("First").class_("sr-only")));
 
-		LiTag prev = li(a(span(LT).cmd("_dec", pageNumber, 1).attr("aria-hidden", "true"),
-				span("Previous").class_("sr-only")));
+		SpanTag firstIcon = span(LAQUO).attr("aria-hidden", "true");
+		LiTag first = li(a(firstIcon, span("First").class_("sr-only")).cmd("_set", pageNumber, from));
+
+		SpanTag prevIcon = span(LT).attr("aria-hidden", "true");
+		LiTag prev = li(a(prevIcon, span("Previous").class_("sr-only")).cmd("_dec", pageNumber, 1));
 
 		LiTag current = li(a("Page ", pageNumber, " of " + to));
 
-		LiTag next = li(a(span(GT).cmd("_inc", pageNumber, 1).attr("aria-hidden", "true"),
-				span("Next").class_("sr-only")));
+		SpanTag nextIcon = span(GT).attr("aria-hidden", "true");
+		LiTag next = li(a(nextIcon, span("Next").class_("sr-only")).cmd("_inc", pageNumber, 1));
 
-		LiTag last = li(a(span(RAQUO).cmd("_set", pageNumber, to).attr("aria-hidden", "true"),
-				span("Last").class_("sr-only")));
+		SpanTag lastIcon = span(RAQUO).attr("aria-hidden", "true");
+		LiTag last = li(a(lastIcon, span("Last").class_("sr-only")).cmd("_set", pageNumber, to));
 
-		return div(nav(ul(first, prev, current, next, last).class_("pagination"))).class_("pull-right");
+		NavTag pagination = nav(ul(first, prev, current, next, last).class_("pagination"));
+		return div(pagination).class_("pull-right");
 	}
 
 	public static FormTag edit(Object bean, final Tag<?>[] buttons, String... properties) {
