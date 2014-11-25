@@ -177,6 +177,10 @@ public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvide
 		return meW();
 	}
 
+	public boolean isAsync() {
+		return conn.isAsync();
+	}
+
 	public W done() {
 		conn.done();
 		return meW();

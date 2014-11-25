@@ -30,6 +30,8 @@ public interface CtxConnection<T> {
 
 	long connId();
 
+	boolean isAsync();
+
 	T close();
 
 	T closeIf(boolean condition);
