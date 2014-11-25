@@ -55,27 +55,21 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 	private static final String SESSION_CURRENT_SCREEN = "_current_screen_";
 
-	private final AppClasses appCls;
-
-	private final Object app;
-
-	private final Map<String, Class<?>> mainScreens;
-
-	public AppPageGeneric() {
-		appCls = Apps.scanAppClasses();
-		app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
-		mainScreens = filterScreens(app, appCls.screens);
-	}
-
 	public String title(HttpExchange x) {
+		AppClasses appCls = Apps.scanAppClasses(x);
+		Object app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
 		return Pages.titleOf(x, app);
 	}
 
 	public Object content(HttpExchange x) {
 
-		Class<?> screenClass = getScreenClass(x);
-		if (screenClass == null && x.path().equals("/")) {
-			return Pages.contentOf(x, app);
+		AppClasses appCls = Apps.scanAppClasses(x);
+		Object app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
+		Map<String, Class<?>> mainScreens = filterScreens(app, appCls.screens);
+
+		Class<?> screenClass = getScreenClass(x, appCls);
+		if (screenClass == null) {
+			return x.path().equals("/") ? Pages.contentOf(x, app) : null;
 		}
 
 		x.sessionSet(SESSION_CURRENT_SCREEN, screenClass.getSimpleName());
@@ -193,14 +187,14 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 		return result;
 	}
 
-	private Class<?> getScreenClass(HttpExchange x) {
+	private Class<?> getScreenClass(HttpExchange x, AppClasses appCls) {
 		String path = x.path();
 
 		Class<?> screenClass;
 		if (path.startsWith("/_")) {
 			screenClass = appCls.screens.get(x.session(SESSION_CURRENT_SCREEN));
 		} else {
-			screenClass = getScreen(path);
+			screenClass = getScreen(path, appCls);
 		}
 		return screenClass;
 	}
@@ -244,7 +238,7 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 		return cls.charAt(0);
 	}
 
-	private Class<?> getScreen(String path) {
+	private Class<?> getScreen(String path, AppClasses appCls) {
 		// TODO use screens.get(...) instead of iteration
 		for (Class<?> screen : appCls.screens.values()) {
 			if (Apps.screenUrl(screen).equals(path)) {
@@ -283,7 +277,9 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 	public void on(HttpExchange x, String cmd, Object[] args) {
 
-		Class<?> screenClass = getScreenClass(x);
+		AppClasses appCls = Apps.scanAppClasses(x);
+
+		Class<?> screenClass = getScreenClass(x, appCls);
 		U.must(screenClass != null, "Cannot find a screen to process the command!");
 
 		x.sessionSet(SESSION_CURRENT_SCREEN, screenClass.getSimpleName());

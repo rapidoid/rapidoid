@@ -21,10 +21,12 @@ package org.rapidoid.app;
  */
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.util.Cls;
@@ -33,6 +35,8 @@ import org.rapidoid.util.U;
 public class Apps {
 
 	private static AppClasses APP_CLASSES;
+
+	public static final ConcurrentMap<String, AppClasses> CLASSES = U.concurrentMap();
 
 	public static void main(String[] args) {
 		U.args(args);
@@ -57,11 +61,21 @@ public class Apps {
 		return url.equals("/home") ? "/" : url;
 	}
 
-	public static AppClasses scanAppClasses() {
-		return scanAppClasses(null);
+	public static AppClasses scanAppClasses(HttpExchange x) {
+		return scanAppClasses(x, null);
 	}
 
-	public static synchronized AppClasses scanAppClasses(ClassLoader classLoader) {
+	public static synchronized AppClasses scanAppClasses(HttpExchange x, ClassLoader classLoader) {
+
+		if (x.hasSession()) {
+			String q = x.session("_app_classes_", null);
+			if (q != null) {
+				AppClasses cls = CLASSES.get(q);
+				if (cls != null) {
+					return cls;
+				}
+			}
+		}
 
 		if (APP_CLASSES == null) {
 

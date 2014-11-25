@@ -40,7 +40,7 @@ public class AppHandler implements Handler {
 
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
-		AppClasses appCls = Apps.scanAppClasses(classLoader);
+		AppClasses appCls = Apps.scanAppClasses(x, classLoader);
 
 		WebPojoDispatcher dispatcher = new WebPojoDispatcher(appCls.services);
 		Object result = Pages.dispatch(x, dispatcher, appCls.pages);

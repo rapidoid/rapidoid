@@ -21,13 +21,16 @@ package org.rapidoid.app;
  */
 
 import java.util.Map;
+import java.util.Set;
+
+import org.rapidoid.util.U;
 
 public class AppClasses {
 
-	final Class<?> main;
-	final Map<String, Class<?>> services;
-	final Map<String, Class<?>> pages;
-	final Map<String, Class<?>> screens;
+	public final Class<?> main;
+	public final Map<String, Class<?>> services;
+	public final Map<String, Class<?>> pages;
+	public final Map<String, Class<?>> screens;
 
 	public AppClasses(Class<?> main, Map<String, Class<?>> services, Map<String, Class<?>> pages,
 			Map<String, Class<?>> screens) {
@@ -35,6 +38,28 @@ public class AppClasses {
 		this.services = services;
 		this.pages = pages;
 		this.screens = screens;
+	}
+
+	public static AppClasses from(Set<Class<?>> classes) {
+		Class<?> main = null;
+		Map<String, Class<?>> services = U.map();
+		Map<String, Class<?>> pages = U.map();
+		Map<String, Class<?>> screens = U.map();
+
+		for (Class<?> cls : classes) {
+			String name = cls.getSimpleName();
+			if (name.equals("App")) {
+				main = cls;
+			} else if (name.endsWith("Service")) {
+				services.put(name, cls);
+			} else if (name.endsWith("Screen")) {
+				screens.put(name, cls);
+			} else if (name.endsWith("Page")) {
+				pages.put(name, cls);
+			}
+		}
+
+		return new AppClasses(main, services, pages, screens);
 	}
 
 	@Override
