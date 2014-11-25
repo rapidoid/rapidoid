@@ -30,7 +30,7 @@ import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
 import org.rapidoid.util.U;
 
-public class ListItems implements Items {
+public class ListItems extends AbstractModel implements Items {
 
 	private static final long serialVersionUID = -4233673233447713903L;
 

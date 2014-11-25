@@ -1,7 +1,5 @@
 package org.rapidoid.model;
 
-import java.util.List;
-
 /*
  * #%L
  * rapidoid-model
@@ -22,18 +20,16 @@ import java.util.List;
  * #L%
  */
 
-public interface Item extends IModel {
+import java.io.Serializable;
 
-	String id();
+import org.rapidoid.var.Var;
 
-	Object value();
+public interface IModel extends Serializable {
 
-	<T> T get(String property);
+	<T> T getExtra(String name, T defaultValue);
 
-	void set(String property, Object value);
+	void setExtra(String name, Object value);
 
-	List<Property> properties(String... propertyNames);
-
-	List<Property> editableProperties(String... propertyNames);
+	<T> Var<T> var(String name, T defaultValue);
 
 }

@@ -28,7 +28,7 @@ import org.rapidoid.model.Model;
 import org.rapidoid.model.Property;
 import org.rapidoid.util.Cls;
 
-public class BeanItem implements Item {
+public class BeanItem extends AbstractModel implements Item {
 
 	private static final long serialVersionUID = 4793756823666203912L;
 
