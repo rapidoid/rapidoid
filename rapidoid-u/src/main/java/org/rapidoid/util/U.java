@@ -1086,6 +1086,10 @@ public class U {
 		return s.isEmpty() ? s : s.substring(0, 1).toUpperCase() + s.substring(1);
 	}
 
+	public static String uncapitalized(String s) {
+		return s.isEmpty() ? s : s.substring(0, 1).toLowerCase() + s.substring(1);
+	}
+
 	public static String mid(String s, int beginIndex, int endIndex) {
 		if (endIndex < 0) {
 			endIndex = s.length() + endIndex;
