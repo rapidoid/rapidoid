@@ -36,6 +36,7 @@ public class BeanListItems<T> extends ListItems {
 	protected final List<Property> properties;
 
 	public BeanListItems(Class<T> beanType) {
+		super("/" + beanType.getSimpleName().toLowerCase());
 		this.beanType = beanType;
 		this.properties = Model.propertiesOf(beanType);
 	}

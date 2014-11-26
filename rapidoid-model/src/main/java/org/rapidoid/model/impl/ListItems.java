@@ -36,6 +36,12 @@ public class ListItems extends AbstractModel implements Items {
 
 	private final List<Item> list = new ArrayList<Item>();
 
+	private final String uri;
+
+	public ListItems(String uri) {
+		this.uri = uri;
+	}
+
 	@Override
 	public void insert(int index, Item item) {
 		data().add(index, ifFitsIn(item));
@@ -92,7 +98,7 @@ public class ListItems extends AbstractModel implements Items {
 
 	@Override
 	public Items range(int fromIndex, int toIndex) {
-		ListItems subitems = new ListItems();
+		ListItems subitems = new ListItems(uri);
 		subitems.addAll(data().subList(fromIndex, toIndex));
 		return subitems;
 	}
@@ -124,6 +130,11 @@ public class ListItems extends AbstractModel implements Items {
 
 	protected long idOf(int index) {
 		return Long.parseLong(data().get(index).id());
+	}
+
+	@Override
+	public String uri() {
+		return uri;
 	}
 
 }

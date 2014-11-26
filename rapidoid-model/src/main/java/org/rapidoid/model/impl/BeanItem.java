@@ -71,4 +71,9 @@ public class BeanItem extends AbstractModel implements Item {
 		return value != null ? Model.editablePropertiesOf(value.getClass(), propertyNames) : Collections.EMPTY_LIST;
 	}
 
+	@Override
+	public String uri() {
+		return "/" + value.getClass() + "/" + id();
+	}
+
 }
