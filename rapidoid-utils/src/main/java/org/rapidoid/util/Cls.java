@@ -883,4 +883,34 @@ public class Cls {
 		return null;
 	}
 
+	public static String beanToStr(Object bean) {
+
+		Class<? extends Object> clazz = bean.getClass();
+
+		Method m = getMethod(clazz, "toString");
+
+		if (!m.getDeclaringClass().equals(Object.class)) {
+			return bean.toString();
+		}
+
+		Map<String, Prop> props = propertiesOf(clazz);
+
+		StringBuilder sb = new StringBuilder();
+
+		for (Entry<String, Prop> e : props.entrySet()) {
+			Prop prop = e.getValue();
+			if (!prop.getName().equalsIgnoreCase("id")) {
+				Object value = prop.get(bean);
+				if (value != null) {
+					if (sb.length() > 0) {
+						sb.append(", ");
+					}
+					sb.append(value);
+				}
+			}
+		}
+
+		return sb.toString();
+	}
+
 }
