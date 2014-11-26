@@ -9,7 +9,9 @@ import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
+import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.html.tag.FormTag;
+import org.rapidoid.html.tag.H4Tag;
 import org.rapidoid.html.tag.LiTag;
 import org.rapidoid.html.tag.NavTag;
 import org.rapidoid.html.tag.SpanTag;
@@ -237,6 +239,13 @@ public abstract class BootstrapWidgets extends Bootstrap {
 
 	public static Tag<?> page(boolean devMode, String pageTitle, Object body) {
 		return page(devMode, pageTitle, "", body);
+	}
+
+	public static Tag<?> media(Object left, Object title, Object body) {
+		H4Tag mhead = h4(title).class_("media-heading");
+		DivTag mleft = div(left).class_("media-left");
+		DivTag mbody = div(mhead, body).class_("media-body");
+		return div(mleft, mbody).class_("media");
 	}
 
 }
