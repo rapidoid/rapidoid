@@ -1628,4 +1628,8 @@ public class U {
 		return capitalized(camelSplit(s).toLowerCase());
 	}
 
+	public static int limit(int min, int value, int max) {
+		return Math.min(Math.max(min, value), max);
+	}
+
 }

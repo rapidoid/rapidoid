@@ -226,7 +226,7 @@ public class TagImpl<TAG extends Tag<?>> extends UndefinedTag<TAG> implements Ta
 		TAG _copy = copy();
 		TagImpl<Tag<?>> impl = impl(_copy);
 
-		impl.cmd = new Cmd(cmd, args);
+		impl.cmd = cmd != null ? new Cmd(cmd, args) : null;
 
 		return _copy;
 	}

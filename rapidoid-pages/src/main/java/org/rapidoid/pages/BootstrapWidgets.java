@@ -7,6 +7,7 @@ import org.rapidoid.html.Bootstrap;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.LiTag;
@@ -90,6 +91,9 @@ public abstract class BootstrapWidgets extends Bootstrap {
 	public static Tag<?> grid(Items items, int pageSize, String... properties) {
 		final List<Property> props = items.properties(properties);
 
+		int total = items.size();
+		int pages = (int) Math.ceil(total / (double) pageSize);
+
 		TrTag header = tr();
 
 		for (Property prop : props) {
@@ -102,9 +106,15 @@ public abstract class BootstrapWidgets extends Bootstrap {
 
 		if (paging) {
 			HttpExchange x = HttpExchanges.getThreadLocalExchange();
+
 			pageNumber = HttpExchanges.sessionVar("_pageN_" + items.uri() + ":" + Pages.viewId(x), 1);
-			Integer pageN = pageNumber.get();
-			pageOrAll = items.range((pageN - 1) * pageSize, Math.min((pageN) * pageSize, items.size()));
+			Integer pageN = U.limit(1, pageNumber.get(), pages);
+			pageNumber.set(pageN);
+
+			int pageFrom = Math.max((pageN - 1) * pageSize, 0);
+			int pageTo = Math.min((pageN) * pageSize, items.size());
+
+			pageOrAll = items.range(pageFrom, pageTo);
 		}
 
 		TbodyTag body = tbody();
@@ -113,9 +123,6 @@ public abstract class BootstrapWidgets extends Bootstrap {
 			TrTag row = itemRow(props, item);
 			body = body.append(row);
 		}
-
-		int total = items.size();
-		int pages = (int) Math.ceil(total / (double) pageSize);
 
 		Tag<?> pager = paging ? pager(1, pages, pageNumber) : null;
 		return row(table_(thead(header), body), pager);
@@ -133,21 +140,29 @@ public abstract class BootstrapWidgets extends Bootstrap {
 
 	public static Tag<?> pager(int from, int to, Var<Integer> pageNumber) {
 
+		int pageN = pageNumber.get();
+
 		SpanTag firstIcon = span(LAQUO).attr("aria-hidden", "true");
-		LiTag first = li(a(firstIcon, span("First").class_("sr-only")).cmd("_set", pageNumber, from));
+		ATag first = a(firstIcon, span("First").class_("sr-only")).cmd("_set", pageNumber, from);
 
 		SpanTag prevIcon = span(LT).attr("aria-hidden", "true");
-		LiTag prev = li(a(prevIcon, span("Previous").class_("sr-only")).cmd("_dec", pageNumber, 1));
+		ATag prev = a(prevIcon, span("Previous").class_("sr-only")).cmd("_dec", pageNumber, 1);
 
-		LiTag current = li(a("Page ", pageNumber, " of " + to));
+		ATag current = a("Page ", pageN, " of " + to);
 
 		SpanTag nextIcon = span(GT).attr("aria-hidden", "true");
-		LiTag next = li(a(nextIcon, span("Next").class_("sr-only")).cmd("_inc", pageNumber, 1));
+		ATag next = a(nextIcon, span("Next").class_("sr-only")).cmd("_inc", pageNumber, 1);
 
 		SpanTag lastIcon = span(RAQUO).attr("aria-hidden", "true");
-		LiTag last = li(a(lastIcon, span("Last").class_("sr-only")).cmd("_set", pageNumber, to));
+		ATag last = a(lastIcon, span("Last").class_("sr-only")).cmd("_set", pageNumber, to);
 
-		NavTag pagination = nav(ul(first, prev, current, next, last).class_("pagination"));
+		LiTag firstLi = pageN > from ? li(first) : li(first.cmd(null)).class_("disabled");
+		LiTag prevLi = pageN > from ? li(prev) : li(prev.cmd(null)).class_("disabled");
+		LiTag currentLi = li(current);
+		LiTag nextLi = pageN < to ? li(next) : li(next.cmd(null)).class_("disabled");
+		LiTag lastLi = pageN < to ? li(last) : li(last.cmd(null)).class_("disabled");
+
+		NavTag pagination = nav(ul_li(firstLi, prevLi, currentLi, nextLi, lastLi).class_("pagination"));
 		return div(pagination).class_("pull-right");
 	}
 
