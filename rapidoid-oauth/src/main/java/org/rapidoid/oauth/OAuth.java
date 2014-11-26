@@ -41,7 +41,7 @@ public class OAuth {
 	public static void register(HTTPServer server, String oauthDomain, OAuthStateCheck stateCheck,
 			OAuthProvider... providers) {
 
-		oauthDomain = U.or(oauthDomain, U.option("oauth-domain", null));
+		oauthDomain = U.or(oauthDomain, U.option("oauth-domain", (String) null));
 
 		OAuth.STATE_CHECK = stateCheck;
 
@@ -80,7 +80,7 @@ public class OAuth {
 
 	public static String getLoginURL(HttpExchange x, OAuthProvider provider, String oauthDomain) {
 
-		oauthDomain = U.or(oauthDomain, U.option("oauth-domain", null));
+		oauthDomain = U.or(oauthDomain, U.option("oauth-domain", (String) null));
 
 		String name = provider.getName().toLowerCase();
 

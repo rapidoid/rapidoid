@@ -1051,18 +1051,23 @@ public class U {
 	}
 
 	public static int option(String name, int defaultValue) {
-		String n = option(name, null);
+		String n = option(name, (String) null);
 		return n != null ? Integer.parseInt(n) : defaultValue;
 	}
 
-	public static long optionL(String name, long defaultValue) {
-		String n = option(name, null);
+	public static long option(String name, long defaultValue) {
+		String n = option(name, (String) null);
 		return n != null ? Long.parseLong(n) : defaultValue;
 	}
 
 	public static double option(String name, double defaultValue) {
-		String n = option(name, null);
+		String n = option(name, (String) null);
 		return n != null ? Double.parseDouble(n) : defaultValue;
+	}
+
+	public static String[] option(String name, String[] defaultValue) {
+		String opt = option(name, (String) null);
+		return opt != null ? opt.split("\\,") : defaultValue;
 	}
 
 	public static int cpus() {

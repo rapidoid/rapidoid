@@ -287,7 +287,7 @@ public class IoC {
 			if (type.equals(Boolean.class) || type.equals(boolean.class)) {
 				instance = U.hasOption(name);
 			} else {
-				String opt = U.option(name, null);
+				String opt = U.option(name, (String) null);
 				if (opt != null) {
 					instance = Cls.convert(opt, type);
 				}
