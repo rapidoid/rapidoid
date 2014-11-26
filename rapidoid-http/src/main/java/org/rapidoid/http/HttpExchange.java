@@ -115,6 +115,8 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	UserInfo user();
 
+	boolean isAdmin();
+
 	boolean isGetReq();
 
 	boolean devMode();

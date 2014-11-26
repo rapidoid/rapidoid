@@ -35,6 +35,7 @@ import org.rapidoid.inject.IoC;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.net.mime.MediaType;
+import org.rapidoid.util.Arr;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
@@ -729,6 +730,17 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		U.must(isLoggedIn(), "Must be logged in!");
 
 		return session(SESSION_USER);
+	}
+
+	@Override
+	public synchronized boolean isAdmin() {
+		if (!isLoggedIn()) {
+			return false;
+		}
+
+		UserInfo user = user();
+		String[] admins = U.option("admins", EMPTY_STRING_ARRAY);
+		return user != null && user.email != null && Arr.indexOf(admins, user.email) >= 0;
 	}
 
 	@Override
