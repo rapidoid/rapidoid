@@ -28,7 +28,6 @@ import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.html.tag.H2Tag;
 import org.rapidoid.html.tag.H6Tag;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.Cls;
 
 public class SearchScreen extends GUI {
@@ -40,17 +39,12 @@ public class SearchScreen extends GUI {
 
 		DivTag res = div(title);
 
-		List<Task> found = DB.find(new Predicate<Task>() {
-			@Override
-			public boolean eval(Task task) throws Exception {
-				return task.title.contains(query);
-			}
-		});
+		List<Task> found = DB.find(query);
 
 		for (Object result : found) {
-			H6Tag left = h6("[ID = ", Cls.getId(result), "]");
+			H6Tag left = h6("(ID", NBSP, "=", NBSP, Cls.getId(result), ")");
 			Object header = span(result.getClass().getSimpleName());
-			res = res.append(media(left, header, b(Cls.beanToStr(result))));
+			res = res.append(media(left, header, small(Cls.beanToStr(result))));
 		}
 
 		res = res.append(h4("Total ", found.size(), " results."));

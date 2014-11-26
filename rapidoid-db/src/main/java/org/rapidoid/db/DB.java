@@ -108,6 +108,10 @@ public class DB {
 		return db().find(match);
 	}
 
+	public static <E> List<E> find(String searchPhrase) {
+		return db().find(searchPhrase);
+	}
+
 	public static <E> void each(Operation<E> lambda) {
 		db().each(lambda);
 	}

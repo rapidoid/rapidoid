@@ -290,6 +290,28 @@ public class InMem {
 		return results;
 	}
 
+	public <E> List<E> find(String searchPhrase) {
+
+		String search = searchPhrase.toLowerCase();
+		List<E> results = new ArrayList<E>();
+
+		sharedLock();
+		try {
+
+			for (Entry<Long, Rec> entry : data.entrySet()) {
+				if (entry.getValue().json.toLowerCase().contains(search)) {
+					E record = obj(entry.getValue());
+					setId(record, entry.getKey());
+					results.add(record);
+				}
+			}
+		} finally {
+			sharedUnlock();
+		}
+
+		return results;
+	}
+
 	public <E> void each(final Operation<E> lambda) {
 		sharedLock();
 		try {

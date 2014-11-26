@@ -86,6 +86,11 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	}
 
 	@Override
+	public <E> List<E> find(String searchPhrase) {
+		return inmem.find(searchPhrase);
+	}
+
+	@Override
 	public <E> void each(Operation<E> lambda) {
 		inmem.each(lambda);
 	}

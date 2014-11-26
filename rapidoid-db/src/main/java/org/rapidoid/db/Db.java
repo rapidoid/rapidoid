@@ -48,6 +48,8 @@ public interface Db extends Activity<Db> {
 
 	<E> List<E> find(Predicate<E> match);
 
+	<E> List<E> find(String searchPhrase);
+
 	<E> void each(Operation<E> lambda);
 
 	void transaction(Runnable transaction);
