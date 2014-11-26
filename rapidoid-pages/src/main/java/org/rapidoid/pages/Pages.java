@@ -52,6 +52,10 @@ public class Pages {
 
 	public static final String SESSION_CURRENT_PAGE = "_current_page_";
 
+	public static final String SESSION_MAIN_VIEW_ID = "_current_main_view_";
+
+	public static final String SESSION_SUB_VIEW_ID = "_current_sub_view_";
+
 	private static final Pattern STATIC_RESOURCE_PATTERN = Pattern.compile("^[a-zA-Z0-9_\\.\\-/]+$");
 
 	private static final BuiltInCmdHandler BUILT_IN_HANDLER = new BuiltInCmdHandler();
@@ -196,7 +200,8 @@ public class Pages {
 	}
 
 	public static Object serve(HttpExchange x, Class<?> pageClass) {
-		x.sessionSet(Pages.SESSION_CURRENT_PAGE, pageClass);
+		x.sessionSet(SESSION_CURRENT_PAGE, pageClass);
+		x.sessionSet(SESSION_MAIN_VIEW_ID, pageClass.getSimpleName());
 
 		Object page = U.newInstance(pageClass);
 
@@ -303,6 +308,10 @@ public class Pages {
 
 	public static Class<?> currentPage(HttpExchange x) {
 		return x.session(Pages.SESSION_CURRENT_PAGE);
+	}
+
+	public static String viewId(HttpExchange x) {
+		return x.session(SESSION_MAIN_VIEW_ID, "") + ":" + x.session(SESSION_SUB_VIEW_ID, "");
 	}
 
 }

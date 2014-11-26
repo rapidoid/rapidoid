@@ -53,8 +53,6 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 	private static final String[] themes = { "default", "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal",
 			"lumen", "paper", "readable", "sandstone", "simplex", "slate", "spacelab", "superhero", "united", "yeti" };
 
-	private static final String SESSION_CURRENT_SCREEN = "_current_screen_";
-
 	public String title(HttpExchange x) {
 		AppClasses appCls = Apps.scanAppClasses(x);
 		Object app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
@@ -72,7 +70,7 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 			return x.path().equals("/") ? Pages.contentOf(x, app) : null;
 		}
 
-		x.sessionSet(SESSION_CURRENT_SCREEN, screenClass.getSimpleName());
+		x.sessionSet(Pages.SESSION_SUB_VIEW_ID, screenClass.getSimpleName());
 
 		Object screen = U.newInstance(screenClass);
 		Pages.load(x, screen);
@@ -192,7 +190,7 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 		Class<?> screenClass;
 		if (path.startsWith("/_")) {
-			screenClass = appCls.screens.get(x.session(SESSION_CURRENT_SCREEN));
+			screenClass = appCls.screens.get(x.session(Pages.SESSION_SUB_VIEW_ID));
 		} else {
 			screenClass = getScreen(path, appCls);
 		}
@@ -282,7 +280,7 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 		Class<?> screenClass = getScreenClass(x, appCls);
 		U.must(screenClass != null, "Cannot find a screen to process the command!");
 
-		x.sessionSet(SESSION_CURRENT_SCREEN, screenClass.getSimpleName());
+		x.sessionSet(Pages.SESSION_SUB_VIEW_ID, screenClass.getSimpleName());
 
 		Object screen = U.newInstance(screenClass);
 		Pages.load(x, screen);

@@ -14,6 +14,8 @@ import org.rapidoid.html.tag.NavTag;
 import org.rapidoid.html.tag.SpanTag;
 import org.rapidoid.html.tag.TbodyTag;
 import org.rapidoid.html.tag.TrTag;
+import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpExchanges;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
@@ -99,7 +101,8 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		Items pageOrAll = items;
 
 		if (paging) {
-			pageNumber = items.var("_pageN_", 1);
+			HttpExchange x = HttpExchanges.getThreadLocalExchange();
+			pageNumber = HttpExchanges.sessionVar("_pageN_" + items.uri() + ":" + Pages.viewId(x), 1);
 			Integer pageN = pageNumber.get();
 			pageOrAll = items.range((pageN - 1) * pageSize, Math.min((pageN) * pageSize, items.size()));
 		}
