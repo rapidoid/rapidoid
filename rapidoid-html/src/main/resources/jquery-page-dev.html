@@ -11,10 +11,15 @@
 <script src="/jquery-2.1.1.min.js"></script>
 
 <style type="text/css">
-{{style}}
+.pointer {
+    cursor: pointer;
+}
 </style>
-
 <script>
+function goAt(url) {
+	window.location.href = url;
+}
+
 function _emit(c, event) {
 	var hnd = $(c).attr('_h');
 	$.post('/_emit', {event: event, hnd: hnd}).done(function (data) {

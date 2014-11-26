@@ -98,4 +98,10 @@ public class Apps {
 		return val != null ? (T) val : byDefault;
 	}
 
+	public static String urlFor(Object entity) {
+		long id = Cls.getId(entity);
+		String className = entity.getClass().getSimpleName();
+		return U.format("/%s/%s", U.uncapitalized(className), id);
+	}
+
 }

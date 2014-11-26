@@ -137,6 +137,10 @@ public abstract class BootstrapWidgets extends Bootstrap {
 			row = row.append(td(U.or(item.get(prop.name()), "")));
 		}
 
+		String type = U.uncapitalized(item.value().getClass().getSimpleName());
+		String js = U.format("goAt('/%s/%s');", type, item.id());
+		row = row.onclick(js).class_("pointer");
+
 		return row;
 	}
 
@@ -241,11 +245,16 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		return page(devMode, pageTitle, "", body);
 	}
 
-	public static Tag<?> media(Object left, Object title, Object body) {
+	public static Tag<?> media(Object left, Object title, Object body, String targetUrl) {
+
 		H4Tag mhead = h4(title).class_("media-heading");
 		DivTag mleft = div(left).class_("media-left");
 		DivTag mbody = div(mhead, body).class_("media-body");
-		return div(mleft, mbody).class_("media");
+
+		String divClass = targetUrl != null ? "media pointer" : "media";
+		String js = targetUrl != null ? U.format("goAt('%s');", targetUrl) : null;
+
+		return div(mleft, mbody).class_(divClass).onclick(js);
 	}
 
 }
