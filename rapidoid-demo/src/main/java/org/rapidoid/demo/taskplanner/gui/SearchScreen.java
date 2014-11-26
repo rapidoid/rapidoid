@@ -26,15 +26,17 @@ import org.rapidoid.db.DB;
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.html.tag.H2Tag;
+import org.rapidoid.html.tag.H6Tag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.util.Cls;
 
 public class SearchScreen extends GUI {
 
 	public Object content(HttpExchange x) {
 
 		final String query = x.param("q");
-		H2Tag title = h2("Search results for ", b(query), ":");
+		H2Tag title = query.isEmpty() ? h2("Search results:") : h2("Search results for ", b(query), ":");
 
 		DivTag res = div(title);
 
@@ -45,9 +47,13 @@ public class SearchScreen extends GUI {
 			}
 		});
 
-		for (Task task : found) {
-			res = res.append(row(task.title, " with ", b(task.priority), " priority"));
+		for (Object result : found) {
+			H6Tag left = h6("[ID = ", Cls.getId(result), "]");
+			Object header = span(result.getClass().getSimpleName());
+			res = res.append(media(left, header, b(Cls.beanToStr(result))));
 		}
+
+		res = res.append(h4("Total ", found.size(), " results."));
 
 		return res;
 	}
