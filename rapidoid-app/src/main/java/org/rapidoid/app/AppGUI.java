@@ -36,10 +36,6 @@ public class AppGUI extends BootstrapWidgets {
 		return Model.item(value);
 	}
 
-	public static Items items(Object... values) {
-		return Model.items(values);
-	}
-
 	public static <T> Items beanItems(Class<T> beanType, Object... beans) {
 		return Model.beanItems(beanType, beans);
 	}

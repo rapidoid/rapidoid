@@ -33,16 +33,6 @@ import org.rapidoid.util.U;
 
 public class Model {
 
-	public static Items items(Object... values) {
-		ListItems items = new ListItems();
-
-		for (Object value : values) {
-			items.add(item(value));
-		}
-
-		return items;
-	}
-
 	public static <T> Items beanItems(Class<T> beanType, Object... beans) {
 		ListItems items = new BeanListItems<T>(beanType);
 
