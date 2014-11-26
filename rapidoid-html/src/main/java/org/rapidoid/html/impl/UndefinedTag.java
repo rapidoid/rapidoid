@@ -88,12 +88,12 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 	}
 
 	@Override
-	public boolean enabled() {
+	public boolean disabled() {
 		throw U.notExpected();
 	}
 
 	@Override
-	public TAG enabled(boolean value) {
+	public TAG disabled(boolean value) {
 		throw U.notExpected();
 	}
 

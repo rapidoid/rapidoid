@@ -46,8 +46,8 @@ public interface Tag<TAG extends Tag<?>> extends TagBase<TAG> {
 
 	TAG hidden(boolean hidden);
 
-	boolean enabled();
+	boolean disabled();
 
-	TAG enabled(boolean value);
+	TAG disabled(boolean value);
 
 }
