@@ -1,8 +1,5 @@
 package org.rapidoid.http;
 
-import org.rapidoid.util.U;
-import org.rapidoid.var.Var;
-
 /*
  * #%L
  * rapidoid-http
@@ -23,26 +20,37 @@ import org.rapidoid.var.Var;
  * #L%
  */
 
-public class HttpExchanges {
+import org.rapidoid.var.impl.AbstractVar;
 
-	private static final ThreadLocal<HttpExchange> EXCHANGES = new ThreadLocal<HttpExchange>();
+public class SessionVar<T> extends AbstractVar<T> {
 
-	public static void setThreadLocalExchange(HttpExchange x) {
-		EXCHANGES.set(x);
+	private static final long serialVersionUID = 2761159925375675659L;
+
+	private final String name;
+
+	private final T defaultValue;
+
+	public SessionVar(String name, T defaultValue) {
+		this.name = name;
+		this.defaultValue = defaultValue;
 	}
 
-	public static HttpExchange getThreadLocalExchange() {
-		HttpExchange x = EXCHANGES.get();
-		U.notNull(x, "HTTP exchange");
-		return x;
+	@Override
+	public T get() {
+		HttpExchange x = HttpExchanges.getThreadLocalExchange();
+		T val = x.session(name, null);
+
+		if (val == null) {
+			x.sessionSet(name, defaultValue);
+			val = defaultValue;
+		}
+
+		return val;
 	}
 
-	public static HttpExchange getThreadLocalExchangeIfExists() {
-		return EXCHANGES.get();
-	}
-
-	public static <T> Var<T> sessionVar(String name, T defaultValue) {
-		return new SessionVar<T>(name, defaultValue);
+	@Override
+	public void set(T value) {
+		HttpExchanges.getThreadLocalExchange().sessionSet(name, value);
 	}
 
 }
