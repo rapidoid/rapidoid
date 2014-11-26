@@ -559,9 +559,10 @@ public class Cls {
 	}
 
 	public static Long getIdIfExists(Object obj) {
-		Object id = getPropValue(obj, "id");
-
-		if (id instanceof Number) {
+		Object id = getPropValue(obj, "id", null);
+		if (id == null) {
+			return null;
+		} else if (id instanceof Number) {
 			return ((Number) id).longValue();
 		} else {
 			throw U.rte("The property 'id' must have numeric type, but it has type: " + id.getClass());
