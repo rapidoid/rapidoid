@@ -58,6 +58,8 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		x.setResponses(responses);
 		x.setSession(session);
 
+		HttpExchanges.setThreadLocalExchange(x);
+
 		try {
 			boolean dispatched = router.dispatch(x);
 			if (!dispatched) {
@@ -74,6 +76,8 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 		x.completeResponse();
 		x.closeIf(!x.isKeepAlive.value);
+
+		HttpExchanges.setThreadLocalExchange(null);
 	}
 
 	public Router getRouter() {

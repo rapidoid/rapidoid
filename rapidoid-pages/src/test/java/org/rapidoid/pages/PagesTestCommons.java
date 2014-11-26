@@ -24,9 +24,15 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpExchangeImpl;
+import org.rapidoid.http.HttpExchanges;
+import org.rapidoid.http.HttpResponses;
+import org.rapidoid.http.InMemoryHttpSession;
+import org.rapidoid.net.impl.RapidoidConnection;
 import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.var.Var;
@@ -82,8 +88,20 @@ public class PagesTestCommons extends TestCommons {
 	}
 
 	protected HttpExchange mockExchange(TagContext ctx) {
-		HttpExchange x = mock(HttpExchange.class);
-		returns(x.session(Pages.SESSION_CTX, null), ctx);
+		HttpExchangeImpl x = new HttpExchangeImpl();
+
+		BufGroup bufs = new BufGroup(2);
+		RapidoidConnection conn = new RapidoidConnection(null, bufs);
+		x.setConnection(conn);
+
+		InMemoryHttpSession session = new InMemoryHttpSession();
+		session.openSession("sess1");
+		session.setAttribute("sess1", Pages.SESSION_CTX, ctx);
+		x.setSession(session);
+
+		x.setResponses(new HttpResponses(false, false));
+
+		HttpExchanges.setThreadLocalExchange(x);
 		return x;
 	}
 
