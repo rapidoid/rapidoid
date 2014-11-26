@@ -27,16 +27,12 @@ import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.H1Tag;
-import org.rapidoid.model.Item;
-import org.rapidoid.model.Items;
+import org.rapidoid.html.tag.H3Tag;
 
 public class NewTaskScreen extends GUI {
 
 	@Session
-	private Item task = item(new Task("Buy milk!", Priority.MEDIUM));
-
-	@Session
-	private Items tasks = all(Task.class);
+	private Task task = new Task("Buy milk!", Priority.MEDIUM);
 
 	public Object content() {
 
@@ -44,18 +40,20 @@ public class NewTaskScreen extends GUI {
 
 		FormTag frm = edit(task, SAVE_CANCEL, "title", "priority");
 
-		Tag<?> grid = grid(tasks, 3, "id", "priority", "title");
+		H3Tag recent = h3("Most recent tasks:");
 
-		return row(caption, frm, grid);
+		Tag<?> grid = grid(all(Task.class), 3, "id", "priority", "title");
+
+		return row(caption, frm, recent, grid);
 	}
 
 	public void onSave() {
-		DB.insert(task.value());
+		DB.insert(task);
 		task = null;
 	}
 
 	public void onCancel() {
-		task = item(new Task("Buy milk!", Priority.MEDIUM));
+		task = new Task("Buy milk!", Priority.MEDIUM);
 	}
 
 }

@@ -20,16 +20,11 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
-import org.rapidoid.annotation.Session;
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.H1Tag;
-import org.rapidoid.model.Items;
 
 public class TasksScreen extends GUI {
-
-	@Session
-	private Items tasks = all(Task.class);
 
 	public String title = "My Tasks";
 
@@ -37,7 +32,7 @@ public class TasksScreen extends GUI {
 
 		H1Tag caption = h1("Manage tasks");
 
-		Tag<?> grid = grid(tasks, 10, "id", "title", "priority");
+		Tag<?> grid = grid(all(Task.class), 10, "id", "title", "priority");
 
 		return row(caption, grid);
 	}
