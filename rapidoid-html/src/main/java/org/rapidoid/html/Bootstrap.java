@@ -386,7 +386,14 @@ public class Bootstrap extends HTML {
 	}
 
 	public static ButtonTag cmd(String cmd, Object... args) {
-		return btn(U.capitalized(cmd)).cmd(cmd, args);
+		boolean primary = cmd.startsWith("^");
+
+		if (primary) {
+			cmd = cmd.substring(1);
+		}
+
+		ButtonTag btn = primary ? btnPrimary(U.capitalized(cmd)) : btn(U.capitalized(cmd));
+		return btn.cmd(cmd, args);
 	}
 
 	public static ButtonTag[] cmds(String... commands) {
