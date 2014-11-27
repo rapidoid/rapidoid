@@ -84,6 +84,10 @@ public class InMem {
 
 	private final AtomicLong ids = new AtomicLong();
 
+	private final AtomicLong lastChangedOn = new AtomicLong();
+
+	private final AtomicLong lastPersistedOn = new AtomicLong();
+
 	private final AtomicBoolean active = new AtomicBoolean(true);
 
 	private final AtomicBoolean aOrB = new AtomicBoolean(true);
@@ -184,6 +188,7 @@ public class InMem {
 				throw new IllegalStateException("Cannot insert record with existing ID: " + id);
 			}
 
+			lastChangedOn.set(System.currentTimeMillis());
 			return id;
 		} finally {
 			sharedUnlock();
@@ -200,6 +205,8 @@ public class InMem {
 			if (insideTx.get()) {
 				txChanges.putIfAbsent(id, removed);
 			}
+
+			lastChangedOn.set(System.currentTimeMillis());
 
 		} finally {
 			sharedUnlock();
@@ -244,6 +251,8 @@ public class InMem {
 			if (removed == null) {
 				throw new IllegalStateException("Cannot update non-existing record with ID=" + id);
 			}
+
+			lastChangedOn.set(System.currentTimeMillis());
 		} finally {
 			sharedUnlock();
 		}
@@ -517,6 +526,11 @@ public class InMem {
 	}
 
 	private void persistData(Runnable onCommit, Runnable onRollback) {
+		if (lastChangedOn.get() < lastPersistedOn.get()) {
+			return;
+		}
+		lastPersistedOn.set(System.currentTimeMillis());
+
 		globalLock();
 
 		final ConcurrentNavigableMap<Long, Rec> copy;
