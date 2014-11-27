@@ -25,7 +25,10 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.rapidoid.db.DB;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
@@ -34,13 +37,12 @@ import org.rapidoid.html.tag.UlTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
-import org.rapidoid.pages.BootstrapWidgets;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.util.Arr;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
-public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class<?>> {
+public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 
 	private static final String SEARCH_SCREEN = "SearchScreen";
 
@@ -52,6 +54,8 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 
 	private static final String[] themes = { "default", "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal",
 			"lumen", "paper", "readable", "sandstone", "simplex", "slate", "spacelab", "superhero", "united", "yeti" };
+
+	private static final Pattern ENTITY_DETAILS = Pattern.compile("^/(\\w+?)/(\\d+)/?$");
 
 	public String title(HttpExchange x) {
 		AppClasses appCls = Apps.scanAppClasses(x);
@@ -65,15 +69,117 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 		Object app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
 		Map<String, Class<?>> mainScreens = filterScreens(app, appCls.screens);
 
+		Object pageContent;
+		int activeIndex = -1;
 		Class<?> screenClass = getScreenClass(x, appCls);
+		Object screen = null;
+
 		if (screenClass == null) {
-			return x.path().equals("/") ? Pages.contentOf(x, app) : null;
+			screen = genericScreen(x, app);
+			if (screen != null) {
+				x.sessionSet(Pages.SESSION_SUB_VIEW_ID, EntityScreenGeneric.class.getSimpleName());
+				pageContent = pageContent(x, screen);
+			} else {
+				pageContent = Pages.contentOf(x, app);
+			}
+		} else {
+			x.sessionSet(Pages.SESSION_SUB_VIEW_ID, screenClass.getSimpleName());
+
+			screen = U.newInstance(screenClass);
+			Pages.load(x, screen);
+			pageContent = pageContent(x, screen);
 		}
 
-		x.sessionSet(Pages.SESSION_SUB_VIEW_ID, screenClass.getSimpleName());
+		Class<?>[] screens = constructScreens(mainScreens);
+		Object[] menuItems = new Object[screens.length];
+		activeIndex = setupMenuItems(screenClass, screens, menuItems);
 
-		Object screen = U.newInstance(screenClass);
-		Pages.load(x, screen);
+		ATag brand = a(Pages.titleOf(x, app)).href("/");
+		Tag<?> userMenu = userMenu(x, app);
+		UlTag themesMenu = themesMenu(app);
+		FormTag searchForm = searchForm(app);
+		UlTag navMenu = navbarMenu(true, activeIndex, menuItems);
+		Object[] navbarContent = arr(navMenu, themesMenu, userMenu, searchForm);
+
+		Tag<?> result = navbarPage(isFluid(app), brand, navbarContent, pageContent);
+
+		if (screen != null) {
+			Pages.store(x, screen);
+		}
+
+		return result;
+	}
+
+	private Object genericScreen(HttpExchange x, Object app) {
+		if (!x.query_().range().isEmpty()) {
+			return null;
+		}
+
+		Matcher m = ENTITY_DETAILS.matcher(x.path());
+
+		if (m.find()) {
+			String type = m.group(1);
+			long id = Long.parseLong(m.group(2));
+
+			Object entity = DB.get(id);
+
+			String entityClass = entity.getClass().getSimpleName();
+			String reqType = U.capitalized(type);
+			U.must(entityClass.equals(reqType), "Incorrect entity type, expected '%s', but found '%s'!", entityClass,
+					reqType);
+
+			return new EntityScreenGeneric(type, entity);
+		}
+
+		return null;
+	}
+
+	private Object pageContent(HttpExchange x, Object screen) {
+		Object pageContent = Pages.contentOf(x, screen);
+		if (pageContent == null) {
+			pageContent = hardcoded("No content available!");
+		}
+		return pageContent;
+	}
+
+	private FormTag searchForm(Object app) {
+		FormTag searchForm = null;
+		if (Apps.config(app, "search", true)) {
+			searchForm = navbarForm(false, "Find", arr("q"), arr("Search")).attr("action", "/search").attr("method",
+					"GET");
+		}
+		return searchForm;
+	}
+
+	private int setupMenuItems(Class<?> screenClass, Class<?>[] screens, Object[] menuItems) {
+		int activeIndex = -1;
+		int k = 0;
+		for (int i = 0; i < screens.length; i++) {
+			Class<?> scr = screens[i];
+			String name = Apps.screenName(scr);
+			String title = U.or(titleOf(scr), U.camelPhrase(name));
+			menuItems[k++] = a(title).href(Apps.screenUrl(scr));
+
+			if (scr.equals(screenClass)) {
+				activeIndex = i;
+			}
+		}
+		return activeIndex;
+	}
+
+	private Tag<?> userMenu(HttpExchange x, Object app) {
+		Tag<?> dropdownMenu = null;
+		if (Apps.config(app, "auth", true)) {
+			if (x.isLoggedIn()) {
+				dropdownMenu = loggedInUserMenu(x, app);
+			} else {
+				dropdownMenu = loggedOutUserMenu(x, app);
+			}
+		}
+		return dropdownMenu;
+	}
+
+	private Class<?>[] constructScreens(Map<String, Class<?>> mainScreens) {
 
 		int screensN = mainScreens.size();
 		for (String scr : SPECIAL_SCREENS) {
@@ -92,50 +198,10 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 		}
 
 		Arrays.sort(screens, this);
+		return screens;
+	}
 
-		ATag brand = a(Pages.titleOf(x, app)).href("/");
-
-		Tag<?> dropdownMenu = null;
-
-		if (Apps.config(app, "auth", true)) {
-
-			if (x.isLoggedIn()) {
-
-				ATag profile = a_glyph("user", x.user().display, caret());
-				ATag settings = Apps.config(app, "settings", true) ? a_glyph("cog", " Settings").href("/settings")
-						: null;
-				ATag logout = a_glyph("log-out", "Logout").href("/_logout");
-
-				dropdownMenu = navbarDropdown(false, profile, settings, logout);
-
-			} else {
-
-				ATag ga = null, fb = null, li = null, gh = null;
-
-				if (Apps.config(app, "googleLogin", true)) {
-					ga = a_awesome("google", "Sign in with Google").href(
-							OAuth.getLoginURL(x, OAuthProvider.GOOGLE, null));
-				}
-
-				if (Apps.config(app, "facebookLogin", true)) {
-					fb = a_awesome("facebook", "Sign in with Facebook").href(
-							OAuth.getLoginURL(x, OAuthProvider.FACEBOOK, null));
-				}
-
-				if (Apps.config(app, "linkedinLogin", true)) {
-					li = a_awesome("linkedin", "Sign in with LinkedIn").href(
-							OAuth.getLoginURL(x, OAuthProvider.LINKEDIN, null));
-				}
-
-				if (Apps.config(app, "githubLogin", true)) {
-					gh = a_awesome("github", "Sign in with GitHub").href(
-							OAuth.getLoginURL(x, OAuthProvider.GITHUB, null));
-				}
-
-				dropdownMenu = navbarDropdown(false, a_glyph("log-in", "Sign in", caret()), ga, fb, li, gh);
-			}
-		}
-
+	private UlTag themesMenu(Object app) {
 		ATag theme = a_glyph("eye-open", "", caret());
 
 		Object[] themess = new Object[themes.length];
@@ -147,42 +213,43 @@ public class AppPageGeneric extends BootstrapWidgets implements Comparator<Class
 		}
 
 		UlTag themesMenu = Apps.config(app, "themes", true) ? navbarDropdown(false, theme, themess) : null;
+		return themesMenu;
+	}
 
-		Object[] menuItems = new Object[screens.length];
+	private Tag<?> loggedOutUserMenu(HttpExchange x, Object app) {
+		Tag<?> dropdownMenu;
+		ATag ga = null, fb = null, li = null, gh = null;
 
-		int activeIndex = -1;
-		int k = 0;
-		for (int i = 0; i < screens.length; i++) {
-			Class<?> scr = screens[i];
-			String name = Apps.screenName(scr);
-			String title = U.or(titleOf(scr), U.camelPhrase(name));
-			menuItems[k++] = a(title).href(Apps.screenUrl(scr));
-
-			if (scr.equals(screenClass)) {
-				activeIndex = i;
-			}
+		if (Apps.config(app, "googleLogin", true)) {
+			ga = a_awesome("google", "Sign in with Google").href(OAuth.getLoginURL(x, OAuthProvider.GOOGLE, null));
 		}
 
-		UlTag navMenu = navbarMenu(true, activeIndex, menuItems);
-
-		FormTag searchForm = null;
-		if (Apps.config(app, "search", true)) {
-			searchForm = navbarForm(false, "Find", arr("q"), arr("Search")).attr("action", "/search").attr("method",
-					"GET");
+		if (Apps.config(app, "facebookLogin", true)) {
+			fb = a_awesome("facebook", "Sign in with Facebook")
+					.href(OAuth.getLoginURL(x, OAuthProvider.FACEBOOK, null));
 		}
 
-		Object[] navbarContent = arr(navMenu, themesMenu, dropdownMenu, searchForm);
-
-		Object pageContent = Pages.contentOf(x, screen);
-		if (pageContent == null) {
-			pageContent = hardcoded("No content available!");
+		if (Apps.config(app, "linkedinLogin", true)) {
+			li = a_awesome("linkedin", "Sign in with LinkedIn")
+					.href(OAuth.getLoginURL(x, OAuthProvider.LINKEDIN, null));
 		}
 
-		Tag<?> result = navbarPage(isFluid(app), brand, navbarContent, pageContent);
+		if (Apps.config(app, "githubLogin", true)) {
+			gh = a_awesome("github", "Sign in with GitHub").href(OAuth.getLoginURL(x, OAuthProvider.GITHUB, null));
+		}
 
-		Pages.store(x, screen);
+		dropdownMenu = navbarDropdown(false, a_glyph("log-in", "Sign in", caret()), ga, fb, li, gh);
+		return dropdownMenu;
+	}
 
-		return result;
+	private Tag<?> loggedInUserMenu(HttpExchange x, Object app) {
+		Tag<?> dropdownMenu;
+		ATag profile = a_glyph("user", x.user().display, caret());
+		ATag settings = Apps.config(app, "settings", true) ? a_glyph("cog", " Settings").href("/settings") : null;
+		ATag logout = a_glyph("log-out", "Logout").href("/_logout");
+
+		dropdownMenu = navbarDropdown(false, profile, settings, logout);
+		return dropdownMenu;
 	}
 
 	private Class<?> getScreenClass(HttpExchange x, AppClasses appCls) {
