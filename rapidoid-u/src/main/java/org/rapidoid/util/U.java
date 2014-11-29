@@ -526,7 +526,7 @@ public class U {
 		return s;
 	}
 
-	public static String join(String sep, Object... items) {
+	public static <T> String join(String sep, T... items) {
 		return render(items, "%s", sep);
 	}
 
