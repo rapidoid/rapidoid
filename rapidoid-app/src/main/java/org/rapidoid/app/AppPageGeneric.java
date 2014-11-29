@@ -69,23 +69,22 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		Object app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
 		Map<String, Class<?>> mainScreens = filterScreens(app, appCls.screens);
 
-		Object pageContent;
+		Object pageContent = null;
 		int activeIndex = -1;
 		Class<?> screenClass = getScreenClass(x, appCls);
 		Object screen = null;
 
 		if (screenClass == null) {
 			screen = genericScreen(x, app);
-			if (screen != null) {
-				x.sessionSet(Pages.SESSION_SUB_VIEW_ID, EntityScreenGeneric.class.getSimpleName());
-				pageContent = pageContent(x, screen);
-			} else {
+			if (screen == null) {
 				pageContent = Pages.contentOf(x, app);
 			}
 		} else {
-			x.sessionSet(Pages.SESSION_SUB_VIEW_ID, screenClass.getSimpleName());
-
 			screen = U.newInstance(screenClass);
+		}
+
+		if (screen != null) {
+			x.sessionSet(Pages.SESSION_SUB_VIEW_ID, screen.getClass().getSimpleName());
 			Pages.load(x, screen);
 			pageContent = pageContent(x, screen);
 		}
@@ -128,7 +127,7 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 			U.must(entityClass.equals(reqType), "Incorrect entity type, expected '%s', but found '%s'!", entityClass,
 					reqType);
 
-			return new EntityScreenGeneric(type, entity);
+			return new EntityScreenGeneric();
 		}
 
 		return null;
@@ -257,7 +256,12 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 
 		Class<?> screenClass;
 		if (path.startsWith("/_")) {
-			screenClass = appCls.screens.get(x.session(Pages.SESSION_SUB_VIEW_ID));
+			Object screenName = x.session(Pages.SESSION_SUB_VIEW_ID);
+			if (screenName.equals(EntityScreenGeneric.class.getSimpleName())) {
+				screenClass = EntityScreenGeneric.class;
+			} else {
+				screenClass = appCls.screens.get(screenName);
+			}
 		} else {
 			screenClass = getScreen(path, appCls);
 		}

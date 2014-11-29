@@ -20,21 +20,15 @@ package org.rapidoid.app;
  * #L%
  */
 
+import org.rapidoid.db.DB;
 import org.rapidoid.http.HttpExchange;
 
 public class EntityScreenGeneric extends AppGUI {
 
-	private final String type;
-
-	private final Object entity;
-
-	public EntityScreenGeneric(String type, Object entity) {
-		this.type = type;
-		this.entity = entity;
-	}
-
 	public Object content(HttpExchange x) {
-		return x;
+		long id = Long.parseLong(x.path().split("/")[2]);
+		Object entity = DB.get(id);
+		return edit(entity, SAVE_CANCEL);
 	}
 
 }
