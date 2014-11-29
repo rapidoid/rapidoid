@@ -48,7 +48,7 @@ public interface HttpExchangeHeaders extends HttpExchangeBody {
 
 	HttpExchangeHeaders addHeader(HttpHeader name, String value);
 
-	HttpExchangeHeaders setCookie(String name, String value);
+	HttpExchangeHeaders setCookie(String name, String value, String... extras);
 
 	HttpExchangeHeaders setContentType(MediaType contentType);
 

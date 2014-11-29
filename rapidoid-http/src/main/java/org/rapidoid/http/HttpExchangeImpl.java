@@ -465,8 +465,14 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchange setCookie(String name, String value) {
-		addHeader(HttpHeader.SET_COOKIE, name + "=" + value);
+	public synchronized HttpExchange setCookie(String name, String value, String... extras) {
+		String cookie = name + "=" + value;
+
+		if (extras.length > 0) {
+			cookie += "; " + U.join("; ", extras);
+		}
+
+		addHeader(HttpHeader.SET_COOKIE, cookie);
 		return this;
 	}
 
@@ -652,7 +658,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 			if (sessionId == null) {
 				sessionId = U.rndStr(50);
-				setCookie(SESSION_COOKIE, sessionId);
+				setCookie(SESSION_COOKIE, sessionId, "path=/");
 				session.openSession(sessionId);
 			}
 		}
