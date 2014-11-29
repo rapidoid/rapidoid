@@ -172,6 +172,10 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		return div(pagination).class_("pull-right");
 	}
 
+	public static Tag<?> view(Object bean, final Tag<?>[] buttons, String... properties) {
+		return edit(bean, buttons, properties);
+	}
+
 	public static FormTag edit(Object bean, final Tag<?>[] buttons, String... properties) {
 		Item item = Model.item(bean);
 		return edit(item, buttons, properties);

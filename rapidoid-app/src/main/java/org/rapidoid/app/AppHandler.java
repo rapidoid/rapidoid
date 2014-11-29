@@ -40,6 +40,7 @@ public class AppHandler implements Handler {
 
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
+
 		AppClasses appCls = Apps.scanAppClasses(x, classLoader);
 
 		WebPojoDispatcher dispatcher = new WebPojoDispatcher(appCls.services);
@@ -49,7 +50,13 @@ public class AppHandler implements Handler {
 			return result;
 		}
 
-		return Pages.serve(x, AppPageGeneric.class);
+		Object view = new AppPageGeneric();
+
+		if (Pages.isEmiting(x)) {
+			return Pages.emit(x, view);
+		} else {
+			return Pages.serve(x, view);
+		}
 	}
 
 }

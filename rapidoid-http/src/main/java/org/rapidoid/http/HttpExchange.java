@@ -119,6 +119,8 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	boolean isGetReq();
 
+	boolean isPostReq();
+
 	boolean devMode();
 
 	/* HELPERS: */

@@ -71,7 +71,7 @@ function _emit(event) {
 		}
 	}
 
-	$.post('/_emit', {
+	$.post(window.location.href, {
 		event : event,
 		inputs : JSON.stringify(inputs)
 	}).done(function(data) {

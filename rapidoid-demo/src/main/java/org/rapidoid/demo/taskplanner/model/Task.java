@@ -44,4 +44,9 @@ public class Task {
 		this.author = author;
 	}
 
+	@Override
+	public String toString() {
+		return "Task [id=" + id + ", title=" + title + ", priority=" + priority + ", author=" + author + "]";
+	}
+
 }

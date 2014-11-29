@@ -81,4 +81,9 @@ public class TagContextImpl implements TagContext, Serializable {
 		return cmd;
 	}
 
+	@Override
+	public String toString() {
+		return "TagContextImpl [bindings=" + bindings + ", commands=" + commands + "]";
+	}
+
 }

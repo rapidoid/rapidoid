@@ -756,6 +756,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
+	public synchronized boolean isPostReq() {
+		return !isGet.value && verb().equals("POST");
+	}
+
+	@Override
 	public synchronized byte[] sessionSerialize() {
 		return UTILS.serialize(session);
 	}

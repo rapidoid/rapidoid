@@ -50,18 +50,11 @@ public class Pages {
 
 	public static final String SESSION_CTX = "_ctx";
 
-	public static final String SESSION_CURRENT_PAGE = "_current_page_";
-
-	public static final String SESSION_MAIN_VIEW_ID = "_current_main_view_";
-
-	public static final String SESSION_SUB_VIEW_ID = "_current_sub_view_";
-
 	private static final Pattern STATIC_RESOURCE_PATTERN = Pattern.compile("^[a-zA-Z0-9_\\.\\-/]+$");
 
 	private static final BuiltInCmdHandler BUILT_IN_HANDLER = new BuiltInCmdHandler();
 
 	public static void registerPages(HTTPServer server) {
-		server.post("/_emit", new EmitHandler());
 		server.serve(new PageHandler());
 	}
 
@@ -147,7 +140,6 @@ public class Pages {
 			if (fullPage instanceof HttpExchange) {
 				return x;
 			} else {
-				x.html();
 				TagContext ctx = x.session(SESSION_CTX);
 				PageRenderer.get().render(ctx, fullPage, x);
 				return x;
@@ -196,23 +188,28 @@ public class Pages {
 			return null;
 		}
 
-		return serve(x, pageClass);
-	}
-
-	public static Object serve(HttpExchange x, Class<?> pageClass) {
-		x.sessionSet(SESSION_CURRENT_PAGE, pageClass);
-		x.sessionSet(SESSION_MAIN_VIEW_ID, pageClass.getSimpleName());
-
 		Object page = U.newInstance(pageClass);
 
-		load(x, page);
+		if (isEmiting(x)) {
+			return Pages.emit(x, page);
+		} else {
+			return serve(x, page);
+		}
+	}
+
+	public static boolean isEmiting(HttpExchange x) {
+		return x.isPostReq();
+	}
+
+	public static Object serve(HttpExchange x, Object view) {
+		load(x, view);
 
 		TagContext ctx = Tags.context();
 		x.sessionSet(Pages.SESSION_CTX, ctx);
 
-		Object result = render(x, page);
+		Object result = render(x, view);
 
-		store(x, page);
+		store(x, view);
 
 		return result;
 	}
@@ -228,7 +225,7 @@ public class Pages {
 		}
 	}
 
-	public static Object emit(HttpExchange x) {
+	public static Object emit(HttpExchange x, Object view) {
 		int event = U.num(x.data("event"));
 
 		TagContext ctx = x.session(SESSION_CTX, null);
@@ -247,17 +244,16 @@ public class Pages {
 			U.warn("Invalid event!", "event", event);
 		}
 
-		Object page = U.newInstance(currentPage(x));
-		Pages.load(x, page);
+		Pages.load(x, view);
 
 		if (cmd != null) {
-			callCmdHandler(x, page, cmd);
+			callCmdHandler(x, view, cmd);
 		}
 
 		ctx = Tags.context();
 		x.sessionSet(Pages.SESSION_CTX, ctx);
 
-		Object content = Pages.contentOf(x, page);
+		Object content = Pages.contentOf(x, view);
 
 		if (content == null || content instanceof HttpExchange) {
 			return content;
@@ -265,7 +261,7 @@ public class Pages {
 
 		String html = PageRenderer.get().toHTML(ctx, content, x);
 
-		Pages.store(x, page);
+		Pages.store(x, view);
 
 		return changes(x, html);
 	}
@@ -306,12 +302,8 @@ public class Pages {
 		throw U.rte("Cannot find handler '%s' for the command '%s' and args: %s", handlerName, cmd.name, cmd.args);
 	}
 
-	public static Class<?> currentPage(HttpExchange x) {
-		return x.session(Pages.SESSION_CURRENT_PAGE);
-	}
-
 	public static String viewId(HttpExchange x) {
-		return x.session(SESSION_MAIN_VIEW_ID, "") + ":" + x.session(SESSION_SUB_VIEW_ID, "");
+		return x.uri();
 	}
 
 }

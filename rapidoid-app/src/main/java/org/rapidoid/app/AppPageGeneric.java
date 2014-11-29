@@ -71,27 +71,15 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 
 		Object pageContent = null;
 		int activeIndex = -1;
-		Class<?> screenClass = getScreenClass(x, appCls);
-		Object screen = null;
+		Object screen = getScreen(x, appCls, app);
+		U.notNull(screen, "screen");
 
-		if (screenClass == null) {
-			screen = genericScreen(x, app);
-			if (screen == null) {
-				pageContent = Pages.contentOf(x, app);
-			}
-		} else {
-			screen = U.newInstance(screenClass);
-		}
-
-		if (screen != null) {
-			x.sessionSet(Pages.SESSION_SUB_VIEW_ID, screen.getClass().getSimpleName());
-			Pages.load(x, screen);
-			pageContent = pageContent(x, screen);
-		}
+		Pages.load(x, screen);
+		pageContent = pageContent(x, screen);
 
 		Class<?>[] screens = constructScreens(mainScreens);
 		Object[] menuItems = new Object[screens.length];
-		activeIndex = setupMenuItems(screenClass, screens, menuItems);
+		activeIndex = setupMenuItems(screen.getClass(), screens, menuItems);
 
 		ATag brand = a(Pages.titleOf(x, app)).href("/");
 		Tag<?> userMenu = userMenu(x, app);
@@ -102,9 +90,7 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 
 		Tag<?> result = navbarPage(isFluid(app), brand, navbarContent, pageContent);
 
-		if (screen != null) {
-			Pages.store(x, screen);
-		}
+		Pages.store(x, screen);
 
 		return result;
 	}
@@ -251,23 +237,6 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		return dropdownMenu;
 	}
 
-	private Class<?> getScreenClass(HttpExchange x, AppClasses appCls) {
-		String path = x.path();
-
-		Class<?> screenClass;
-		if (path.startsWith("/_")) {
-			Object screenName = x.session(Pages.SESSION_SUB_VIEW_ID);
-			if (screenName.equals(EntityScreenGeneric.class.getSimpleName())) {
-				screenClass = EntityScreenGeneric.class;
-			} else {
-				screenClass = appCls.screens.get(screenName);
-			}
-		} else {
-			screenClass = getScreen(path, appCls);
-		}
-		return screenClass;
-	}
-
 	protected boolean isFluid(Object app) {
 		return Apps.config(app, "fluid", true);
 	}
@@ -307,14 +276,15 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		return cls.charAt(0);
 	}
 
-	private Class<?> getScreen(String path, AppClasses appCls) {
+	private Object getScreen(HttpExchange x, AppClasses appCls, Object app) {
 		// TODO use screens.get(...) instead of iteration
 		for (Class<?> screen : appCls.screens.values()) {
-			if (Apps.screenUrl(screen).equals(path)) {
-				return screen;
+			if (Apps.screenUrl(screen).equals(x.path())) {
+				return U.newInstance(screen);
 			}
 		}
-		return null;
+
+		return U.or(genericScreen(x, app), app);
 	}
 
 	private static Map<String, Class<?>> filterScreens(Object app, Map<String, Class<?>> screenClasses) {
@@ -348,16 +318,16 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 
 		AppClasses appCls = Apps.scanAppClasses(x);
 
-		Class<?> screenClass = getScreenClass(x, appCls);
-		U.must(screenClass != null, "Cannot find a screen to process the command!");
+		Object app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
 
-		x.sessionSet(Pages.SESSION_SUB_VIEW_ID, screenClass.getSimpleName());
+		Object screen = getScreen(x, appCls, app);
+		U.must(screen != null, "Cannot find a screen to process the command!");
 
-		Object screen = U.newInstance(screenClass);
 		Pages.load(x, screen);
 
 		Pages.callCmdHandler(x, screen, new Cmd(cmd, args));
 
 		Pages.store(x, screen);
 	}
+
 }

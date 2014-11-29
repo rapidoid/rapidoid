@@ -28,7 +28,6 @@ import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.oauth.OAuth;
-import org.rapidoid.pages.EmitHandler;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
@@ -45,7 +44,6 @@ public class Apps {
 
 		OAuth.register(server);
 		HttpBuiltins.register(server);
-		server.post("/_emit", new EmitHandler());
 
 		server.serve(new AppHandler());
 

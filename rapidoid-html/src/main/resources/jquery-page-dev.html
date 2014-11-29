@@ -22,7 +22,7 @@ function goAt(url) {
 
 function _emit(c, event) {
 	var hnd = $(c).attr('_h');
-	$.post('/_emit', {event: event, hnd: hnd}).done(function (data) {
+	$.post(window.location.href, {event: event, hnd: hnd}).done(function (data) {
 		for (var h in data) {
 			$('[_h=' + h + ']').replaceWith(data[h]);
 		}
