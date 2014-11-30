@@ -120,6 +120,10 @@ public class DB {
 		db().transaction(transaction);
 	}
 
+	public static void transaction(Runnable transaction, Runnable onCommit, Runnable onRollback) {
+		db().transaction(transaction, onCommit, onRollback);
+	}
+
 	public static void save(OutputStream output) {
 		db().save(output);
 	}

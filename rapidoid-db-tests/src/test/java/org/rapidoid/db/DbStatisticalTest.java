@@ -87,7 +87,7 @@ public class DbStatisticalTest extends DbTestCommons {
 
 							complete.set(true);
 						}
-					});
+					}, null, null);
 
 					for (int i = 0; i < ops.length; i++) {
 						if (ops[i].fail || !rets[i].ok || rets[i].illegalId) {

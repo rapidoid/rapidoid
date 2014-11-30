@@ -49,7 +49,7 @@ public class DbTransactionTest extends DbTestCommons {
 
 						n.addAndGet(2);
 					}
-				});
+				}, null, null);
 			}
 		});
 
@@ -60,20 +60,24 @@ public class DbTransactionTest extends DbTestCommons {
 
 	@Test
 	public void testDeleteRollback() {
+		try {
 
-		DB.transaction(new Runnable() {
-			@Override
-			public void run() {
-				long id = DB.insert(new Person("a", 1));
-				DB.update(id, new Person("b", 2));
-				DB.delete(id);
-				throw U.rte("tx error");
-			}
-		});
+			DB.transaction(new Runnable() {
+				@Override
+				public void run() {
+					long id = DB.insert(new Person("a", 1));
+					DB.update(id, new Person("b", 2));
+					DB.delete(id);
+					throw U.rte("tx error");
+				}
+			});
 
-		DB.shutdown();
+			fail("Expected exception!");
+		} catch (Exception e) {
+			DB.shutdown();
 
-		eq(DB.size(), 0);
+			eq(DB.size(), 0);
+		}
 	}
 
 }

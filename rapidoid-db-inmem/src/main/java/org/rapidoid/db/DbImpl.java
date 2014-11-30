@@ -101,6 +101,11 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	}
 
 	@Override
+	public void transaction(Runnable transaction, Runnable onCommit, Runnable onRollback) {
+		inmem.transaction(transaction, onCommit, onRollback);
+	}
+
+	@Override
 	public void save(OutputStream output) {
 		inmem.save(output);
 	}
