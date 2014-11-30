@@ -261,6 +261,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized HttpExchangeImpl done() {
+		if (isAsync()) {
+			HttpProtocol.processResponse(this, this);
+		}
 		conn.done();
 		return this;
 	}
@@ -354,7 +357,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public String cookie(String name, String defaultValue) {
+	public synchronized String cookie(String name, String defaultValue) {
 		return U.or(cookies_().get(name), defaultValue);
 	}
 

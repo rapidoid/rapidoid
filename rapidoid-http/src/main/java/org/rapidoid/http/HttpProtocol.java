@@ -20,6 +20,9 @@ package org.rapidoid.http;
  * #L%
  */
 
+import java.io.File;
+import java.nio.ByteBuffer;
+
 import org.rapidoid.inject.IoC;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ExchangeProtocol;
@@ -60,22 +63,23 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 		HttpExchanges.setThreadLocalExchange(x);
 
+		boolean dispatched;
+
 		try {
-			boolean dispatched = router.dispatch(x);
-			if (!dispatched) {
-				x.notFound();
-			}
+			dispatched = router.dispatch(x);
 		} catch (Throwable e) {
 			U.error("Internal server error!", "request", x, "error", e);
+			e.printStackTrace();
 			x.response(500, "Internal server error!", e);
+			HttpProtocol.processResponse(x, x);
+			HttpExchanges.setThreadLocalExchange(null);
+			return;
 		}
 
-		if (!x.hasContentType()) {
-			x.html();
+		if (!dispatched) {
+			x.notFound();
+			HttpProtocol.processResponse(x, null);
 		}
-
-		x.completeResponse();
-		x.closeIf(!x.isKeepAlive.value);
 
 		HttpExchanges.setThreadLocalExchange(null);
 	}
@@ -86,6 +90,50 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	public void setSession(HttpSession session) {
 		this.session = session;
+	}
+
+	public static void processResponse(HttpExchange xch, Object res) {
+
+		HttpExchangeImpl x = (HttpExchangeImpl) xch;
+
+		if (res != null) {
+			if (res instanceof byte[]) {
+				if (!x.hasContentType()) {
+					x.binary();
+				}
+				x.write((byte[]) res);
+			} else if (res instanceof String) {
+				if (!x.hasContentType()) {
+					x.json();
+				}
+				x.write((String) res);
+			} else if (res instanceof ByteBuffer) {
+				if (!x.hasContentType()) {
+					x.binary();
+				}
+				x.write((ByteBuffer) res);
+			} else if (res instanceof File) {
+				File file = (File) res;
+				x.sendFile(file);
+			} else if (res.getClass().getSimpleName().endsWith("Page")) {
+				x.html().write(res.toString());
+			} else if (!(res instanceof HttpExchangeImpl)) {
+				if (!x.hasContentType()) {
+					x.json();
+				}
+				x.writeJSON(res);
+			}
+
+		} else {
+			if (!x.hasContentType()) {
+				x.html();
+			}
+			x.notFound();
+		}
+
+		x.write(new byte[0]);
+		x.completeResponse();
+		x.closeIf(!x.isKeepAlive.value);
 	}
 
 }

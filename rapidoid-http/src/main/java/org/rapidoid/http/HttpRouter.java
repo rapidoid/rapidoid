@@ -20,9 +20,6 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.io.File;
-import java.nio.ByteBuffer;
-
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BYTES;
 import org.rapidoid.data.Range;
@@ -137,36 +134,8 @@ public class HttpRouter implements Router {
 	private boolean handle(Handler handler, HttpExchangeImpl x) throws Exception {
 		Object res = handler.handle(x);
 
-		if (res != null) {
-			if (res instanceof byte[]) {
-				if (!x.hasContentType()) {
-					x.binary();
-				}
-				x.write((byte[]) res);
-			} else if (res instanceof String) {
-				if (!x.hasContentType()) {
-					x.json();
-				}
-				x.write((String) res);
-			} else if (res instanceof ByteBuffer) {
-				if (!x.hasContentType()) {
-					x.binary();
-				}
-				x.write((ByteBuffer) res);
-			} else if (res instanceof File) {
-				File file = (File) res;
-				x.sendFile(file);
-			} else if (res.getClass().getSimpleName().endsWith("Page")) {
-				x.html().write(res.toString());
-			} else if (!(res instanceof HttpExchangeImpl)) {
-				if (!x.hasContentType()) {
-					x.json();
-				}
-				x.writeJSON(res);
-			}
-
-		} else {
-			x.notFound();
+		if (!x.isAsync()) {
+			HttpProtocol.processResponse(x, res);
 		}
 
 		return true;
