@@ -24,6 +24,8 @@ import org.rapidoid.net.mime.MediaType;
 
 public interface HttpExchangeHeaders extends HttpExchangeBody {
 
+	HttpExchangeHeaders startResponse(int httpResponseCode);
+
 	HttpExchangeHeaders response(int httpResponseCode);
 
 	HttpExchangeHeaders response(int httpResponseCode, String response);
@@ -59,5 +61,7 @@ public interface HttpExchangeHeaders extends HttpExchangeBody {
 	boolean hasSession();
 
 	int responseCode();
+
+	String redirectUrl();
 
 }

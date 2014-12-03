@@ -50,6 +50,8 @@ public class Pages {
 
 	public static final String SESSION_CTX = "_ctx";
 
+	public static final String SESSION_PREV_PAGE = "_prev_page_";
+
 	private static final Pattern STATIC_RESOURCE_PATTERN = Pattern.compile("^[a-zA-Z0-9_\\.\\-/]+$");
 
 	private static final BuiltInCmdHandler BUILT_IN_HANDLER = new BuiltInCmdHandler();
@@ -263,14 +265,18 @@ public class Pages {
 
 		Pages.store(x, view);
 
+		if (x.redirectUrl() != null) {
+			x.startResponse(200);
+			x.json();
+			return U.map("_redirect_", x.redirectUrl());
+		}
+
 		return changes(x, html);
 	}
 
 	private static Object changes(HttpExchange x, String html) {
-		Map<String, String> changes = U.map();
-		changes.put("body", html);
 		x.json();
-		return changes;
+		return U.map("body", html);
 	}
 
 	public static void callCmdHandler(HttpExchange x, Object target, Cmd cmd) {
@@ -322,6 +328,10 @@ public class Pages {
 
 	public static String viewId(HttpExchange x) {
 		return x.uri();
+	}
+
+	public static void goBack(HttpExchange x) {
+		x.redirect(x.session(SESSION_PREV_PAGE, "/"));
 	}
 
 }

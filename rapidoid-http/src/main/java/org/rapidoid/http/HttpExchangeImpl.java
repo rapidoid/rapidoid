@@ -102,6 +102,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	private int responseCode;
 
+	private String redirectUrl;
+
 	private String sessionId;
 
 	private HttpSession session;
@@ -160,6 +162,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		hasContentType = false;
 		responses = null;
 		responseCode = -1;
+		redirectUrl = null;
 	}
 
 	@Override
@@ -604,8 +607,14 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	public synchronized HttpExchangeBody redirect(String url) {
 		responseCode(303);
 		addHeader(HttpHeader.LOCATION, url);
+		this.redirectUrl = url;
 		ensureHeadersComplete();
 		return this;
+	}
+
+	@Override
+	public synchronized String redirectUrl() {
+		return redirectUrl;
 	}
 
 	@Override
@@ -642,6 +651,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		}
 
 		return this;
+	}
+
+	@Override
+	public synchronized HttpExchangeHeaders startResponse(int httpResponseCode) {
+		return responseCode(httpResponseCode);
 	}
 
 	@Override

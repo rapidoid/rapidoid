@@ -50,7 +50,11 @@ function _emit(event) {
 	$.post(window.location.href, {
 		event : event,
 		inputs : JSON.stringify(inputs)
-	}).done(function(data, a, b, c) {
+	}).done(function(data) {
+		if (data._redirect_) {
+			goAt(data._redirect_);
+			return;
+		}
 		for ( var sel in data) {
 			$(sel).html(data[sel]);
 		}

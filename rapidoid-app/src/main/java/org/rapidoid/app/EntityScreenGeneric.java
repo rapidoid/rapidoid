@@ -23,6 +23,7 @@ package org.rapidoid.app;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.db.DB;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.pages.Pages;
 
 public class EntityScreenGeneric extends AppGUI {
 
@@ -35,8 +36,13 @@ public class EntityScreenGeneric extends AppGUI {
 		return view(entity, SAVE_CANCEL);
 	}
 
-	public void onSave() {
+	public void onSave(HttpExchange x) {
 		DB.update(entity);
+		Pages.goBack(x);
+	}
+
+	public void onCancel(HttpExchange x) {
+		Pages.goBack(x);
 	}
 
 }
