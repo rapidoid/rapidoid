@@ -24,8 +24,6 @@ import org.rapidoid.net.mime.MediaType;
 
 public interface HttpExchangeHeaders extends HttpExchangeBody {
 
-	HttpExchangeHeaders responseCode(int httpResponseCode);
-
 	HttpExchangeHeaders response(int httpResponseCode);
 
 	HttpExchangeHeaders response(int httpResponseCode, String response);

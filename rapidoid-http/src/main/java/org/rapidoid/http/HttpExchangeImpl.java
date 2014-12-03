@@ -423,8 +423,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return this;
 	}
 
-	@Override
-	public synchronized HttpExchangeHeaders responseCode(int responseCode) {
+	private HttpExchangeHeaders responseCode(int responseCode) {
 		if (this.responseCode > 0) {
 			assert startingPos >= 0;
 			output().deleteAfter(startingPos);
