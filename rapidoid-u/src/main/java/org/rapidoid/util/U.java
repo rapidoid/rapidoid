@@ -348,7 +348,7 @@ public class U {
 	}
 
 	public static RuntimeException rte(String message, Object... args) {
-		return new RuntimeException(format(message, args));
+		return new RuntimeException(readable(message, args));
 	}
 
 	public static RuntimeException rte(Throwable cause) {
@@ -425,6 +425,15 @@ public class U {
 
 	public static String format(String s, Object... args) {
 		return String.format(s, args);
+	}
+
+	public static String readable(String format, Object... args) {
+
+		for (int i = 0; i < args.length; i++) {
+			args[i] = text(args[i]);
+		}
+
+		return String.format(format, args);
 	}
 
 	public static void sleep(long millis) {
@@ -554,7 +563,7 @@ public class U {
 			if (i > 0) {
 				sb.append(sep);
 			}
-			sb.append(format(itemFormat, items[i]));
+			sb.append(readable(itemFormat, items[i]));
 		}
 
 		return sb.toString();
@@ -571,7 +580,7 @@ public class U {
 				sb.append(sep);
 			}
 
-			sb.append(format(itemFormat, item));
+			sb.append(readable(itemFormat, item));
 			i++;
 		}
 
@@ -918,7 +927,7 @@ public class U {
 	}
 
 	public static RuntimeException rte(String message, Throwable cause, Object... args) {
-		return new RuntimeException(format(message, args), cause);
+		return new RuntimeException(readable(message, args), cause);
 	}
 
 	public static RuntimeException rte(String message, Throwable cause) {
@@ -955,13 +964,13 @@ public class U {
 
 	public static void secure(boolean condition, String msg, Object arg) {
 		if (!condition) {
-			throw new SecurityException(format(msg, arg));
+			throw new SecurityException(readable(msg, arg));
 		}
 	}
 
 	public static void secure(boolean condition, String msg, Object arg1, Object arg2) {
 		if (!condition) {
-			throw new SecurityException(format(msg, arg1, arg2));
+			throw new SecurityException(readable(msg, arg1, arg2));
 		}
 	}
 
@@ -975,7 +984,7 @@ public class U {
 
 	public static <T> T notNull(T value, String desc, Object... descArgs) {
 		if (value == null) {
-			throw rte("%s must NOT be null!", format(desc, descArgs));
+			throw rte("%s must NOT be null!", readable(desc, descArgs));
 		}
 
 		return value;
