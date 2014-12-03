@@ -46,7 +46,7 @@ public class BasicDbTest extends DbTestCommons {
 
 		// serialize the db
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		db.save(out);
+		db.saveTo(out);
 		byte[] bytes = out.toByteArray();
 
 		db.shutdown();

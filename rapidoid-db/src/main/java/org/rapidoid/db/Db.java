@@ -56,7 +56,7 @@ public interface Db extends Activity<Db> {
 
 	void transaction(Runnable transaction, Runnable onCommit, Runnable onRollback);
 
-	void save(OutputStream output);
+	void saveTo(OutputStream output);
 
 	void load(InputStream in);
 

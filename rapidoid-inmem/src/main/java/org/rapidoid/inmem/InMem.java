@@ -167,10 +167,10 @@ public class InMem {
 	private void load() {
 		try {
 			if (currentFile().exists()) {
-				load(new FileInputStream(currentFile()));
+				loadFrom(new FileInputStream(currentFile()));
 				aOrB.set(false);
 			} else if (otherFile().exists()) {
-				load(new FileInputStream(otherFile()));
+				loadFrom(new FileInputStream(otherFile()));
 				aOrB.set(true);
 			}
 		} catch (FileNotFoundException e) {
@@ -478,7 +478,7 @@ public class InMem {
 		}
 	}
 
-	public void save(final OutputStream output) {
+	public void saveTo(final OutputStream output) {
 		globalLock();
 
 		try {
@@ -520,7 +520,7 @@ public class InMem {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void load(InputStream in) {
+	public void loadFrom(InputStream in) {
 		globalLock();
 
 		try {

@@ -22,7 +22,7 @@ package org.rapidoid.demo.db;
 
 import java.io.ByteArrayOutputStream;
 
-import org.rapidoid.db.DB;
+import org.rapidoid.inmem.InMem;
 import org.rapidoid.util.U;
 
 public class DbSerializationBenchmark {
@@ -31,11 +31,13 @@ public class DbSerializationBenchmark {
 
 		U.args(args);
 
-		int size = U.option("size", 1000000);
+		final InMem db = new InMem();
+
+		int size = U.option("size", 100000);
 		int loops = U.option("loops", 100);
 
 		for (int i = 0; i < size; i++) {
-			DB.insert(new Person("john doe" + i, i));
+			db.insert(new Person("john doe" + i, i));
 		}
 
 		System.out.println("measuring...");
@@ -44,7 +46,7 @@ public class DbSerializationBenchmark {
 			@Override
 			public void run() {
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				DB.save(out);
+				db.saveTo(out);
 				out.toByteArray();
 			}
 		});

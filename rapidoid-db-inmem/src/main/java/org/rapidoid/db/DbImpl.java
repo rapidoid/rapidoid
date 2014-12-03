@@ -106,13 +106,13 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	}
 
 	@Override
-	public void save(OutputStream output) {
-		inmem.save(output);
+	public void saveTo(OutputStream output) {
+		inmem.saveTo(output);
 	}
 
 	@Override
 	public void load(InputStream in) {
-		inmem.load(in);
+		inmem.loadFrom(in);
 	}
 
 	@Override
