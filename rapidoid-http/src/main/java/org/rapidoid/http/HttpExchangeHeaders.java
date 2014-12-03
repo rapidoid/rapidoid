@@ -58,4 +58,6 @@ public interface HttpExchangeHeaders extends HttpExchangeBody {
 
 	boolean hasSession();
 
+	int responseCode();
+
 }

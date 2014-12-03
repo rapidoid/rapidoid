@@ -784,4 +784,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 				|| host.startsWith("127.0.0.1:");
 	}
 
+	@Override
+	public int responseCode() {
+		return this.responseCode;
+	}
+
 }
