@@ -287,6 +287,24 @@ public class Pages {
 			return;
 		}
 
+		Object[] args2 = U.expand(cmd.args, x);
+		m = Cls.findMethodByArgs(target.getClass(), handlerName, args2);
+
+		if (m != null) {
+			Cls.invoke(m, target, args2);
+			return;
+		}
+
+		args2 = new Object[cmd.args.length + 1];
+		args2[0] = x;
+		System.arraycopy(cmd.args, 0, args2, 1, cmd.args.length);
+		m = Cls.findMethodByArgs(target.getClass(), handlerName, args2);
+
+		if (m != null) {
+			Cls.invoke(m, target, args2);
+			return;
+		}
+
 		Method on = Cls.findMethod(target.getClass(), "on", String.class, Object[].class);
 		if (on != null) {
 			Cls.invoke(on, target, cmd.name, cmd.args);
