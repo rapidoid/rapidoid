@@ -20,7 +20,6 @@ package org.rapidoid.db;
  * #L%
  */
 import java.io.File;
-import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -122,10 +121,6 @@ public class DB {
 
 	public static void transaction(Runnable transaction, Runnable onCommit, Runnable onRollback) {
 		db().transaction(transaction, onCommit, onRollback);
-	}
-
-	public static void save(OutputStream output) {
-		db().save(output);
 	}
 
 	public static void shutdown() {
