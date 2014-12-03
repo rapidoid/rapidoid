@@ -48,7 +48,9 @@ public class Pages {
 
 	private static final String PAGE_RELOAD = "<h2>Reloading...</h2><script>location.reload();</script>";
 
-	public static final String SESSION_CTX = "_ctx";
+	public static final String SESSION_CTX = "_ctx_";
+
+	public static final String SESSION_CURRENT_PAGE = "_current_page_";
 
 	public static final String SESSION_PREV_PAGE = "_prev_page_";
 
@@ -208,6 +210,14 @@ public class Pages {
 
 		TagContext ctx = Tags.context();
 		x.sessionSet(Pages.SESSION_CTX, ctx);
+
+		String prev = x.session(Pages.SESSION_PREV_PAGE, null);
+		String current = x.session(Pages.SESSION_CURRENT_PAGE, null);
+		if (!U.eq(prev, current)) {
+			x.sessionSet(Pages.SESSION_PREV_PAGE, current);
+		}
+
+		x.sessionSet(Pages.SESSION_CURRENT_PAGE, x.uri());
 
 		Object result = render(x, view);
 
