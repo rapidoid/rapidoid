@@ -87,7 +87,7 @@ public class PagesTestCommons extends TestCommons {
 		eq(var.get(), value);
 	}
 
-	protected HttpExchange mockExchange(TagContext ctx) {
+	protected static HttpExchange mockExchange(TagContext ctx) {
 		HttpExchangeImpl x = new HttpExchangeImpl();
 
 		BufGroup bufs = new BufGroup(2);

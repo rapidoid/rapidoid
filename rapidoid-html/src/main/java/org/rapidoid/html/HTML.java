@@ -34,6 +34,10 @@ public class HTML extends Tags {
 
 	public static final Tag<?> RAQUO = constant("&raquo;");
 
+	public static ATag a_void(Object... contents) {
+		return tag(ATag.class, "a", contents).href("javascript:void(0);");
+	}
+
 	public static UlTag ul_li(Object... listItems) {
 		UlTag list = ul();
 
@@ -45,7 +49,7 @@ public class HTML extends Tags {
 	}
 
 	public static ATag a(Object... contents) {
-		return tag(ATag.class, "a", contents).href("#");
+		return tag(ATag.class, "a", contents);
 	}
 
 	public static AbbrTag abbr(Object... contents) {

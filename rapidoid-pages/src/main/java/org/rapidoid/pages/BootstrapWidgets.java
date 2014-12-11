@@ -66,6 +66,16 @@ public abstract class BootstrapWidgets extends Bootstrap {
 
 	public static final ButtonTag[] OK_CANCEL = cmds("^OK", "Cancel");
 
+	public static final ButtonTag[] EDIT_BACK = cmds("^Edit", "Back");
+
+	public static final ButtonTag[] OK = cmds("^OK");
+
+	public static final ButtonTag[] CANCEL = cmds("Cancel");
+
+	public static final ButtonTag[] BACK = cmds("Back");
+
+	public static final ButtonTag[] EDIT = cmds("^Edit");
+
 	public static Object i18n(String multiLanguageText, Object... formatArgs) {
 		return HtmlWidgets.i18n(multiLanguageText, formatArgs);
 	}
@@ -149,18 +159,18 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		int pageN = pageNumber.get();
 
 		SpanTag firstIcon = span(LAQUO).attr("aria-hidden", "true");
-		ATag first = a(firstIcon, span("First").class_("sr-only")).cmd("_set", pageNumber, from);
+		ATag first = a_void(firstIcon, span("First").class_("sr-only")).cmd("_set", pageNumber, from);
 
 		SpanTag prevIcon = span(LT).attr("aria-hidden", "true");
-		ATag prev = a(prevIcon, span("Previous").class_("sr-only")).cmd("_dec", pageNumber, 1);
+		ATag prev = a_void(prevIcon, span("Previous").class_("sr-only")).cmd("_dec", pageNumber, 1);
 
-		ATag current = a("Page ", pageN, " of " + to);
+		ATag current = a_void("Page ", pageN, " of " + to);
 
 		SpanTag nextIcon = span(GT).attr("aria-hidden", "true");
-		ATag next = a(nextIcon, span("Next").class_("sr-only")).cmd("_inc", pageNumber, 1);
+		ATag next = a_void(nextIcon, span("Next").class_("sr-only")).cmd("_inc", pageNumber, 1);
 
 		SpanTag lastIcon = span(RAQUO).attr("aria-hidden", "true");
-		ATag last = a(lastIcon, span("Last").class_("sr-only")).cmd("_set", pageNumber, to);
+		ATag last = a_void(lastIcon, span("Last").class_("sr-only")).cmd("_set", pageNumber, to);
 
 		LiTag firstLi = pageN > from ? li(first) : li(first.cmd(null)).class_("disabled");
 		LiTag prevLi = pageN > from ? li(prev) : li(prev.cmd(null)).class_("disabled");
@@ -172,8 +182,32 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		return div(pagination).class_("pull-right");
 	}
 
-	public static Tag<?> view(Object bean, final Tag<?>[] buttons, String... properties) {
-		return edit(bean, buttons, properties);
+	public static FormTag view(Object bean, final Tag<?>[] buttons, String... properties) {
+		Item item = Model.item(bean);
+		return view(item, buttons, properties);
+	}
+
+	public static FormTag view(final Item item, final Tag<?>[] buttons, String... properties) {
+		final List<Property> props = item.editableProperties(properties);
+
+		int propN = props.size();
+
+		String[] names = new String[propN];
+		String[] desc = new String[propN];
+		FieldType[] types = new FieldType[propN];
+		Object[][] options = new Object[propN][];
+		Var<?>[] vars = new Var[propN];
+
+		for (int i = 0; i < propN; i++) {
+			Property prop = props.get(i);
+			names[i] = prop.name();
+			desc[i] = prop.caption();
+			types[i] = FieldType.LABEL;
+			options[i] = getPropertyOptions(prop);
+			vars[i] = property(item, prop.name());
+		}
+
+		return form_(FormLayout.VERTICAL, names, desc, types, options, vars, buttons);
 	}
 
 	public static FormTag edit(Object bean, final Tag<?>[] buttons, String... properties) {

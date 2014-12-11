@@ -251,7 +251,7 @@ public class Bootstrap extends HTML {
 
 	public static Object input_(String name, String desc, FieldType type, Object[] options, Var<?> var) {
 
-		InputTag input;
+		Tag<?> input;
 		switch (type) {
 
 		case TEXT:
@@ -315,6 +315,10 @@ public class Bootstrap extends HTML {
 				checkboxes[i] = label(cc, opt).class_("radio-checkbox");
 			}
 			return checkboxes;
+
+		case LABEL:
+			input = span(var.get()).class_("form-control");
+			return input;
 
 		default:
 			throw U.notExpected();
