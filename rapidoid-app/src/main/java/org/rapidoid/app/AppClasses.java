@@ -20,8 +20,8 @@ package org.rapidoid.app;
  * #L%
  */
 
+import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 import org.rapidoid.util.U;
 
@@ -40,7 +40,7 @@ public class AppClasses {
 		this.screens = screens;
 	}
 
-	public static AppClasses from(Set<Class<?>> classes) {
+	public static AppClasses from(Class<?>... classes) {
 		Class<?> main = null;
 		Map<String, Class<?>> services = U.map();
 		Map<String, Class<?>> pages = U.map();
@@ -60,6 +60,12 @@ public class AppClasses {
 		}
 
 		return new AppClasses(main, services, pages, screens);
+	}
+
+	public static AppClasses from(Collection<Class<?>> classes) {
+		Class<?>[] classesArr = new Class<?>[classes.size()];
+		classes.toArray(classesArr);
+		return from(classesArr);
 	}
 
 	@Override

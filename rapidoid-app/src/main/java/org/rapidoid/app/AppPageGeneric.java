@@ -55,7 +55,9 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 	private static final String[] themes = { "default", "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal",
 			"lumen", "paper", "readable", "sandstone", "simplex", "slate", "spacelab", "superhero", "united", "yeti" };
 
-	private static final Pattern ENTITY_DETAILS = Pattern.compile("^/(\\w+?)/(\\d+)/?$");
+	private static final Pattern ENTITY_VIEW = Pattern.compile("^/(\\w+?)/(\\d+)/?$");
+
+	private static final Pattern ENTITY_EDIT = Pattern.compile("^/edit(\\w+?)/(\\d+)/?$");
 
 	public String title(HttpExchange x) {
 		AppClasses appCls = Apps.scanAppClasses(x);
@@ -100,7 +102,24 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 			return null;
 		}
 
-		Matcher m = ENTITY_DETAILS.matcher(x.path());
+		String path = x.path();
+
+		Matcher m = ENTITY_EDIT.matcher(path);
+		if (m.find()) {
+			String type = m.group(1);
+			long id = Long.parseLong(m.group(2));
+
+			Object entity = DB.get(id);
+
+			String entityClass = entity.getClass().getSimpleName();
+			String reqType = U.capitalized(type);
+
+			if (entityClass.equals(reqType)) {
+				return new EditEntityScreenGeneric();
+			}
+		}
+
+		m = ENTITY_VIEW.matcher(path);
 
 		if (m.find()) {
 			String type = m.group(1);
@@ -110,10 +129,10 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 
 			String entityClass = entity.getClass().getSimpleName();
 			String reqType = U.capitalized(type);
-			U.must(entityClass.equals(reqType), "Incorrect entity type, expected '%s', but found '%s'!", entityClass,
-					reqType);
 
-			return new EntityScreenGeneric();
+			if (entityClass.equals(reqType)) {
+				return new ViewEntityScreenGeneric();
+			}
 		}
 
 		return null;
@@ -194,7 +213,7 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		for (int i = 0; i < themes.length; i++) {
 			String thm = themes[i];
 			String js = U.format("document.cookie='THEME=%s; path=/'; location.reload();", thm);
-			themess[i] = a(U.capitalized(thm)).onclick(js);
+			themess[i] = a_void(U.capitalized(thm)).onclick(js);
 		}
 
 		UlTag themesMenu = Apps.config(app, "themes", false) ? navbarDropdown(false, theme, themess) : null;

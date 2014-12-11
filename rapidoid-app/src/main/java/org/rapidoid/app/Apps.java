@@ -102,4 +102,8 @@ public class Apps {
 		return U.format("/%s/%s", U.uncapitalized(className), id);
 	}
 
+	public static void setAppClasses(AppClasses appClasses) {
+		APP_CLASSES = appClasses;
+	}
+
 }

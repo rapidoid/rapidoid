@@ -22,27 +22,37 @@ package org.rapidoid.app;
 
 import org.rapidoid.annotation.Session;
 import org.rapidoid.db.DB;
+import org.rapidoid.html.tag.FormTag;
+import org.rapidoid.html.tag.H2Tag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.Pages;
+import org.rapidoid.util.U;
 
-public class EntityScreenGeneric extends AppGUI {
+public class ViewEntityScreenGeneric extends AppGUI {
 
 	@Session
 	private Object entity;
 
 	public Object content(HttpExchange x) {
-		long id = Long.parseLong(x.path().split("/")[2]);
+
+		String[] pathParts = x.path().split("/");
+
+		H2Tag caption = h2(U.capitalized(pathParts[1]) + " Details");
+
+		long id = Long.parseLong(pathParts[2]);
 		entity = DB.get(id);
-		return view(entity, SAVE_CANCEL);
+
+		FormTag details = view(entity, EDIT_BACK);
+
+		return row(caption, details);
 	}
 
-	public void onSave(HttpExchange x) {
-		DB.update(entity);
+	public void onBack(HttpExchange x) {
 		Pages.goBack(x);
 	}
 
-	public void onCancel(HttpExchange x) {
-		Pages.goBack(x);
+	public void onEdit(HttpExchange x) {
+		String id = x.path().split("/")[2];
+		x.redirect("/edit" + entity.getClass().getSimpleName() + "/" + id);
 	}
-
 }
