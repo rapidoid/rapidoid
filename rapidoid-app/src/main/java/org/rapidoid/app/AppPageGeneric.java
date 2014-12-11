@@ -129,7 +129,7 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 
 	private FormTag searchForm(Object app) {
 		FormTag searchForm = null;
-		if (Apps.config(app, "search", true)) {
+		if (Apps.config(app, "search", false)) {
 			searchForm = navbarForm(false, "Find", arr("q"), arr("Search")).attr("action", "/search").attr("method",
 					"GET");
 		}
@@ -154,7 +154,7 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 
 	private Tag<?> userMenu(HttpExchange x, Object app) {
 		Tag<?> dropdownMenu = null;
-		if (Apps.config(app, "auth", true)) {
+		if (Apps.config(app, "auth", false)) {
 			if (x.isLoggedIn()) {
 				dropdownMenu = loggedInUserMenu(x, app);
 			} else {
@@ -197,7 +197,7 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 			themess[i] = a(U.capitalized(thm)).onclick(js);
 		}
 
-		UlTag themesMenu = Apps.config(app, "themes", true) ? navbarDropdown(false, theme, themess) : null;
+		UlTag themesMenu = Apps.config(app, "themes", false) ? navbarDropdown(false, theme, themess) : null;
 		return themesMenu;
 	}
 
@@ -205,21 +205,21 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		Tag<?> dropdownMenu;
 		ATag ga = null, fb = null, li = null, gh = null;
 
-		if (Apps.config(app, "googleLogin", true)) {
+		if (Apps.config(app, "googleLogin", false)) {
 			ga = a_awesome("google", "Sign in with Google").href(OAuth.getLoginURL(x, OAuthProvider.GOOGLE, null));
 		}
 
-		if (Apps.config(app, "facebookLogin", true)) {
+		if (Apps.config(app, "facebookLogin", false)) {
 			fb = a_awesome("facebook", "Sign in with Facebook")
 					.href(OAuth.getLoginURL(x, OAuthProvider.FACEBOOK, null));
 		}
 
-		if (Apps.config(app, "linkedinLogin", true)) {
+		if (Apps.config(app, "linkedinLogin", false)) {
 			li = a_awesome("linkedin", "Sign in with LinkedIn")
 					.href(OAuth.getLoginURL(x, OAuthProvider.LINKEDIN, null));
 		}
 
-		if (Apps.config(app, "githubLogin", true)) {
+		if (Apps.config(app, "githubLogin", false)) {
 			gh = a_awesome("github", "Sign in with GitHub").href(OAuth.getLoginURL(x, OAuthProvider.GITHUB, null));
 		}
 
@@ -230,7 +230,7 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 	private Tag<?> loggedInUserMenu(HttpExchange x, Object app) {
 		Tag<?> dropdownMenu;
 		ATag profile = a_glyph("user", x.user().display, caret());
-		ATag settings = Apps.config(app, "settings", true) ? a_glyph("cog", " Settings").href("/settings") : null;
+		ATag settings = Apps.config(app, "settings", false) ? a_glyph("cog", " Settings").href("/settings") : null;
 		ATag logout = a_glyph("log-out", "Logout").href("/_logout");
 
 		dropdownMenu = navbarDropdown(false, profile, settings, logout);
