@@ -1470,7 +1470,10 @@ public class U {
 			URL url = urls.nextElement();
 			File file = new File(url.getFile());
 
-			getClasses(classes, file, file, regex, filter, classLoader);
+			String path = file.getAbsolutePath();
+			String root = path.replace(File.separatorChar + packageName.replace('.', File.separatorChar), "");
+
+			getClasses(classes, new File(root), file, regex, filter, classLoader);
 		}
 
 		return classes;
@@ -1547,16 +1550,16 @@ public class U {
 					getClasses(classes, root, f, nameRegex, filter, classLoader);
 				} else {
 					debug("scanned file", "file", f);
-					try {
-						if (f.getName().endsWith(".class")) {
-							String clsName = f.getAbsolutePath();
-							String rootPath = root.getAbsolutePath();
-							must(clsName.startsWith(rootPath));
+					if (f.getName().endsWith(".class")) {
+						String clsName = f.getAbsolutePath();
+						String rootPath = root.getAbsolutePath();
+						must(clsName.startsWith(rootPath));
 
-							clsName = clsName.substring(rootPath.length() + 1, clsName.length() - 6);
-							clsName = clsName.replace(File.separatorChar, '.');
+						clsName = clsName.substring(rootPath.length() + 1, clsName.length() - 6);
+						clsName = clsName.replace(File.separatorChar, '.');
 
-							if (nameRegex.matcher(clsName).matches()) {
+						if (nameRegex.matcher(clsName).matches()) {
+							try {
 								debug("loading class", "name", clsName);
 
 								Class<?> cls = classLoader != null ? Class.forName(clsName, true, classLoader) : Class
@@ -1565,10 +1568,10 @@ public class U {
 								if (filter == null || filter.eval(cls)) {
 									classes.add(cls);
 								}
+							} catch (Exception e) {
+								throw rte(e);
 							}
 						}
-					} catch (Exception e) {
-						throw rte(e);
 					}
 				}
 			}
