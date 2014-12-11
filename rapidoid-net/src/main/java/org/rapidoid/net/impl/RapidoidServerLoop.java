@@ -131,6 +131,9 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 	public synchronized TCPServer start() {
 		new Thread(this, "server").start();
 
+		// hack: give some time to the server threads to activate
+		U.sleep(500); // FIXME use proper synchronization for the server initialization
+
 		return super.start();
 	}
 
