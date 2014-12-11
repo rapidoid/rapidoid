@@ -847,7 +847,9 @@ public class U {
 
 	public static void close(OutputStream out, boolean quiet) {
 		try {
-			out.close();
+			if (out != null) {
+				out.close();
+			}
 		} catch (IOException e) {
 			if (!quiet) {
 				throw rte(e);
