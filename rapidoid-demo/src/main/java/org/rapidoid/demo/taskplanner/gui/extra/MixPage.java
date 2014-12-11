@@ -44,8 +44,8 @@ public class MixPage extends BootstrapWidgets {
 
 		final ATag brand = a("Welcome to the Mix!").href("/mix");
 
-		UlTag dropdownMenu = navbarDropdown(false, a("Profile", caret()).href("#"), a("Settings"), a("Logout"));
-		UlTag menuL = navbarMenu(true, 1, a("Forms").href("/forms"), a("Contact").href("#contact"));
+		UlTag dropdownMenu = navbarDropdown(false, a_void("Profile", caret()), a_void("Settings"), a_void("Logout"));
+		UlTag menuL = navbarMenu(true, 1, a("Forms").href("/forms"), a_void("Contact"));
 		UlTag menuR = navbarMenu(false, -1, a("Logout").href("/_logout"));
 
 		FormTag formR = navbarForm(false, "Login", arr("user", "pass"), arr("Username", "Password"));
