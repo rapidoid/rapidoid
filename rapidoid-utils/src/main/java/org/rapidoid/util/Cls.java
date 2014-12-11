@@ -91,7 +91,7 @@ public class Cls {
 										} else if (params.length == 0) {
 											propInfo.setGetter(method);
 										}
-									} else if (!name.matches("^to[A-Z].*")) {
+									} else if (!name.matches("^to[A-Z].*") && !name.equals("hashCode")) {
 
 										if (params.length == 0 && !ret.equals(void.class)) {
 
@@ -149,6 +149,7 @@ public class Cls {
 										propInfo.setName(fieldName);
 										properties.put(fieldName, propInfo);
 										propInfo.setField(field);
+										propInfo.setReadOnly(false);
 									}
 								}
 							}

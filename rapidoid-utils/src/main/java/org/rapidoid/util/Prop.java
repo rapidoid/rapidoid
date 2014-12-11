@@ -112,6 +112,7 @@ public class Prop {
 	}
 
 	public void set(Object obj, Object value) {
+		U.must(!isReadOnly());
 		try {
 			if (field != null) {
 				field.setAccessible(true);
