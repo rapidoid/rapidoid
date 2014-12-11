@@ -97,7 +97,8 @@ public class Model {
 
 		if (propertyNames.length == 0) {
 			for (Prop prop : props.values()) {
-				if (!prop.getName().equalsIgnoreCase("id")) {
+				if (!prop.getName().equalsIgnoreCase("id") && !prop.getName().equalsIgnoreCase("version")
+						&& !prop.isReadOnly()) {
 					pr.add(new BeanProperty(prop.getName(), prop.getType()));
 				}
 			}
