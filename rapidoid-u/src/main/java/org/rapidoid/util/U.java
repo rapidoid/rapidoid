@@ -1471,9 +1471,15 @@ public class U {
 			File file = new File(url.getFile());
 
 			String path = file.getAbsolutePath();
-			String root = path.replace(File.separatorChar + packageName.replace('.', File.separatorChar), "");
 
-			getClasses(classes, new File(root), file, regex, filter, classLoader);
+			String pkgPath = packageName.replace('.', File.separatorChar);
+			String rootPath = pkgPath.isEmpty() ? path : path.replace(File.separatorChar + pkgPath, "");
+
+			File root = new File(rootPath);
+			U.must(root.exists());
+			U.must(root.isDirectory());
+
+			getClasses(classes, root, file, regex, filter, classLoader);
 		}
 
 		return classes;
