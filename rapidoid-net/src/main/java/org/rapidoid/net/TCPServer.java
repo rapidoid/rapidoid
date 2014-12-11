@@ -24,4 +24,6 @@ import org.rapidoid.activity.Activity;
 
 public interface TCPServer extends Activity<TCPServer> {
 
+	String process(String input);
+
 }

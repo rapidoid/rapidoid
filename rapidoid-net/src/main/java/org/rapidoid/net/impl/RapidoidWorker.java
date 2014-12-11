@@ -63,9 +63,12 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private final boolean noDelay;
 
+	private final BufGroup bufs;
+
 	public RapidoidWorker(String name, final BufGroup bufs, final Protocol protocol, final RapidoidHelper helper,
 			int bufSizeKB, boolean noNelay) {
 		super(name);
+		this.bufs = bufs;
 
 		this.protocol = protocol;
 		this.helper = helper;
@@ -84,7 +87,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		connections = new ArrayPool<RapidoidConnection>(new Callable<RapidoidConnection>() {
 			@Override
 			public RapidoidConnection call() throws Exception {
-				return new RapidoidConnection(RapidoidWorker.this, bufs);
+				return newConnection();
 			}
 		}, 100000);
 
@@ -175,6 +178,10 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			return;
 		}
 
+		process(conn);
+	}
+
+	public void process(RapidoidConnection conn) {
 		processMsgs(conn);
 
 		conn.completedInputPos = conn.input.position();
@@ -401,6 +408,10 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	public void restart(RapidoidConnection conn) {
 		restarting.add(conn);
+	}
+
+	public RapidoidConnection newConnection() {
+		return new RapidoidConnection(RapidoidWorker.this, bufs);
 	}
 
 }

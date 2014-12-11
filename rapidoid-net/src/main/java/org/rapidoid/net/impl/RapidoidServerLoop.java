@@ -34,7 +34,7 @@ import org.rapidoid.util.U;
 
 public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements TCPServer {
 
-	private RapidoidWorker[] workers;
+	private volatile RapidoidWorker[] workers;
 
 	private int workerIndex = 0;
 
@@ -155,6 +155,24 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 		}
 
 		return super.shutdown();
+	}
+
+	public synchronized RapidoidConnection newConnection() {
+		int rndWorker = U.rnd(workers.length);
+		return workers[rndWorker].newConnection();
+	}
+
+	public synchronized void process(RapidoidConnection conn) {
+		conn.worker.process(conn);
+	}
+
+	@Override
+	public synchronized String process(String input) {
+		RapidoidConnection conn = newConnection();
+		conn.setInitial(false);
+		conn.input.append(input);
+		process(conn);
+		return conn.output.asText();
 	}
 
 }

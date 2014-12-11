@@ -75,6 +75,7 @@ public abstract class HttpTestCommons extends TestCommons {
 		});
 
 		server.post("/upload", new Handler() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public Object handle(HttpExchange x) {
 				return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.data().get("a"), x.files()
