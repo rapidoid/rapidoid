@@ -268,6 +268,16 @@ public class InMem {
 		update(getObjId(record), record);
 	}
 
+	public long persist(Object record) {
+		long id = getIdOf(record, true);
+		if (id <= 0) {
+			return insert(record);
+		} else {
+			update(id, record);
+			return id;
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public <T> T read(long id, String column) {
 		sharedLock();

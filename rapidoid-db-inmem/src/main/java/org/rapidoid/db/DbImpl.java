@@ -72,6 +72,11 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	}
 
 	@Override
+	public long persist(Object record) {
+		return inmem.persist(record);
+	}
+
+	@Override
 	public <T> T read(long id, String column) {
 		return inmem.read(id, column);
 	}

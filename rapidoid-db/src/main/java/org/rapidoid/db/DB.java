@@ -99,6 +99,10 @@ public class DB {
 		db().update(record);
 	}
 
+	public static long persist(Object record) {
+		return db().persist(record);
+	}
+
 	public static <E> E read(long id, String column) {
 		return db().read(id, column);
 	}

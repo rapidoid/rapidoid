@@ -42,6 +42,8 @@ public interface Db extends Activity<Db> {
 
 	void update(long id, Object record);
 
+	long persist(Object record);
+
 	void delete(long id);
 
 	<T> T read(long id, String column);
