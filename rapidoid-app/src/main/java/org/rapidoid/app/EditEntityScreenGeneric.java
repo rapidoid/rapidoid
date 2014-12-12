@@ -34,11 +34,10 @@ public class EditEntityScreenGeneric extends AppGUI {
 	private Object entity;
 
 	public Object content(HttpExchange x) {
-		String[] pathParts = x.path().split("/");
 
-		H2Tag caption = h2("Edit " + U.capitalized(pathParts[1].substring(4)));
+		H2Tag caption = h2("Edit " + U.capitalized(x.pathSegment(0).substring(4)));
 
-		long id = Long.parseLong(pathParts[2]);
+		long id = Long.parseLong(x.pathSegment(1));
 		entity = DB.get(id);
 
 		FormTag form = edit(entity, SAVE_CANCEL);

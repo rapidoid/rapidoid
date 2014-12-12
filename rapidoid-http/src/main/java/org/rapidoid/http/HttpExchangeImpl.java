@@ -832,4 +832,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return error;
 	}
 
+	@Override
+	public String pathSegment(int segmentIndex) {
+		return path().substring(1).split("/")[segmentIndex];
+	}
+
 }

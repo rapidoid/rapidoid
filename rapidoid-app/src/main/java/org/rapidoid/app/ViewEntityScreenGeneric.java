@@ -35,11 +35,9 @@ public class ViewEntityScreenGeneric extends AppGUI {
 
 	public Object content(HttpExchange x) {
 
-		String[] pathParts = x.path().split("/");
+		H2Tag caption = h2(U.capitalized(x.pathSegment(0)) + " Details");
 
-		H2Tag caption = h2(U.capitalized(pathParts[1]) + " Details");
-
-		long id = Long.parseLong(pathParts[2]);
+		long id = Long.parseLong(x.pathSegment(1));
 		entity = DB.get(id);
 
 		FormTag details = view(entity, EDIT_BACK);

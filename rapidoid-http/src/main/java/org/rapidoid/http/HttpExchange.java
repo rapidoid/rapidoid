@@ -111,6 +111,8 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	<T> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
 
+	String pathSegment(int segmentIndex);
+
 	boolean isLoggedIn();
 
 	UserInfo user();
