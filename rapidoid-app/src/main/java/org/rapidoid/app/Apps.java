@@ -40,7 +40,10 @@ public class Apps {
 
 	public static void main(String[] args) {
 		U.args(args);
+		run();
+	}
 
+	public static void run() {
 		HTTPServer server = HTTP.server().build();
 
 		OAuth.register(server);
