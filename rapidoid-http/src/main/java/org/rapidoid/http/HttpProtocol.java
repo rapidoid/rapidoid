@@ -46,7 +46,9 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	@Override
 	protected void process(Channel ctx, HttpExchangeImpl x) {
+		U.notNull(responses, "responses");
 		U.notNull(session, "session");
+		U.notNull(router, "router");
 
 		if (ctx.isInitial()) {
 			return;
@@ -58,38 +60,40 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		U.failIf(x.verb.isEmpty() || x.uri.isEmpty(), "Invalid HTTP request!");
 		U.failIf(x.isGet.value && !x.body.isEmpty(), "Body is NOT allowed in HTTP GET requests!");
 
+		processRequest(x);
+	}
+
+	private void processRequest(HttpExchangeImpl x) {
 		x.setResponses(responses);
 		x.setSession(session);
+		x.setRouter(router);
 
 		HttpExchanges.setThreadLocalExchange(x);
 
-		boolean dispatched;
-
 		try {
-			dispatched = router.dispatch(x);
+
+			if (interceptor != null) {
+				interceptor.intercept(x);
+			} else {
+				x.run();
+			}
+
+			if (x.hasError()) {
+				handleError(x, x.error());
+			}
+
 		} catch (Throwable e) {
-			U.error("Internal server error!", "request", x, "error", e);
-			e.printStackTrace();
-			x.response(500, "Internal server error!", e);
-			HttpProtocol.processResponse(x, x);
+			handleError(x, e);
+		} finally {
 			HttpExchanges.setThreadLocalExchange(null);
-			return;
 		}
-
-		if (!dispatched) {
-			x.notFound();
-			HttpProtocol.processResponse(x, null);
-		}
-
-		HttpExchanges.setThreadLocalExchange(null);
 	}
 
-	public Router getRouter() {
-		return router;
-	}
-
-	public void setSession(HttpSession session) {
-		this.session = session;
+	private void handleError(HttpExchangeImpl x, Throwable e) {
+		U.error("Internal server error!", "request", x, "error", e);
+		e.printStackTrace();
+		x.response(500, "Internal server error!", e);
+		HttpProtocol.processResponse(x, x);
 	}
 
 	public static void processResponse(HttpExchange xch, Object res) {
@@ -136,4 +140,11 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		x.closeIf(!x.isKeepAlive.value);
 	}
 
+	public Router getRouter() {
+		return router;
+	}
+
+	public void setSession(HttpSession session) {
+		this.session = session;
+	}
 }
