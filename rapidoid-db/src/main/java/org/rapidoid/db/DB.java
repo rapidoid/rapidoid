@@ -178,6 +178,13 @@ public class DB {
 		}
 	}
 
+	public static <E> List<E> list() {
+		return db().list();
+	}
+
+	public static <E> Set<E> set() {
+		return db().set();
+	}
 
 	public static long getIdOf(Object record) {
 		return db().getIdOf(record);

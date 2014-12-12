@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.rapidoid.activity.NamedActivity;
+import org.rapidoid.db.collections.DbList;
+import org.rapidoid.db.collections.DbSet;
 import org.rapidoid.inmem.InMem;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
@@ -168,6 +170,16 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	@Override
 	public String toString() {
 		return "DB:" + name + "(" + filename + ")";
+	}
+
+	@Override
+	public <E> List<E> list() {
+		return new DbList<E>(this);
+	}
+
+	@Override
+	public <E> Set<E> set() {
+		return new DbSet<E>(this);
 	}
 
 	@Override
