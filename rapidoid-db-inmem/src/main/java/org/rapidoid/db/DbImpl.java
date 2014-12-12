@@ -22,7 +22,9 @@ package org.rapidoid.db;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.rapidoid.activity.NamedActivity;
 import org.rapidoid.inmem.InMem;
@@ -83,6 +85,16 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 
 	public <E> List<E> getAll(Class<E> clazz) {
 		return inmem.getAll(clazz);
+	}
+
+	@Override
+	public <E> List<E> getAll(long... ids) {
+		return inmem.getAll(ids);
+	}
+
+	@Override
+	public <E> List<E> getAll(Collection<Long> ids) {
+		return inmem.getAll(ids);
 	}
 
 	@Override

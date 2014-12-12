@@ -20,9 +20,11 @@ package org.rapidoid.db;
  * #L%
  */
 import java.io.File;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Operation;
@@ -89,6 +91,14 @@ public class DB {
 
 	public static <E> List<E> getAll(Class<E> clazz) {
 		return db().getAll(clazz);
+	}
+
+	public static <E> List<E> getAll(long... ids) {
+		return db().getAll(ids);
+	}
+
+	public static <E> List<E> getAll(Collection<Long> ids) {
+		return db().getAll(ids);
 	}
 
 	public static void update(long id, Object record) {

@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -219,16 +220,20 @@ public class InMem {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public <E> E get(long id) {
 		sharedLock();
 		try {
-			validateId(id);
-			Rec rec = data.get(id);
-			return (E) (rec != null ? setId(obj(rec), id) : null);
+			return get_(id);
 		} finally {
 			sharedUnlock();
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private <E> E get_(long id) {
+		validateId(id);
+		Rec rec = data.get(id);
+		return (E) (rec != null ? setId(obj(rec), id) : null);
 	}
 
 	public <E> E get(long id, Class<E> clazz) {
@@ -297,6 +302,40 @@ public class InMem {
 				return clazz.isAssignableFrom(record.getClass());
 			}
 		});
+	}
+
+	@SuppressWarnings("unchecked")
+	public <E> List<E> getAll(long[] ids) {
+		List<E> results = new ArrayList<E>(ids.length);
+
+		sharedLock();
+		try {
+
+			for (long id : ids) {
+				results.add((E) get_(id));
+			}
+
+			return results;
+		} finally {
+			sharedUnlock();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public <E> List<E> getAll(Collection<Long> ids) {
+		List<E> results = new ArrayList<E>(ids.size());
+
+		sharedLock();
+		try {
+
+			for (long id : ids) {
+				results.add((E) get_(id));
+			}
+
+			return results;
+		} finally {
+			sharedUnlock();
+		}
 	}
 
 	public <E> List<E> find(final Predicate<E> match) {

@@ -22,7 +22,9 @@ package org.rapidoid.db;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.rapidoid.activity.Activity;
 import org.rapidoid.lambda.Operation;
@@ -37,6 +39,10 @@ public interface Db extends Activity<Db> {
 	<E> E get(long id, Class<E> clazz);
 
 	<E> List<E> getAll(Class<E> clazz);
+
+	<E> List<E> getAll(long... ids);
+
+	<E> List<E> getAll(Collection<Long> ids);
 
 	void update(Object record);
 
