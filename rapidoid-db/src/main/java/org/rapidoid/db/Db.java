@@ -72,4 +72,6 @@ public interface Db extends Activity<Db> {
 
 	void destroy();
 
+	long getIdOf(Object record);
+
 }

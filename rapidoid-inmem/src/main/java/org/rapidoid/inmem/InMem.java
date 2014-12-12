@@ -270,7 +270,7 @@ public class InMem {
 	}
 
 	public void update(Object record) {
-		update(getObjId(record), record);
+		update(getIdOf(record, true), record);
 	}
 
 	public long persist(Object record) {
@@ -825,7 +825,7 @@ public class InMem {
 		e.printStackTrace();
 	}
 
-	private static void setObjId(Object obj, long id) {
+	public static void setObjId(Object obj, long id) {
 		Class<?> c = obj.getClass();
 
 		try {
@@ -852,7 +852,7 @@ public class InMem {
 				"Cannot find public 'id' field nor 'setId' setter method nor 'id' setter method in class: " + c);
 	}
 
-	private static long getObjId(Object obj) {
+	public static long getIdOf(Object obj, boolean failIfNotFound) {
 		Class<?> c = obj.getClass();
 
 		try {
@@ -872,8 +872,12 @@ public class InMem {
 			throw new RuntimeException("Cannot get object id!", e);
 		}
 
-		throw new RuntimeException(
-				"Cannot find public 'id' field nor 'getId' getter method nor 'id' getter method in class: " + c);
+		if (failIfNotFound) {
+			throw new RuntimeException(
+					"Cannot find public 'id' field nor 'getId' getter method nor 'id' getter method in class: " + c);
+		} else {
+			return -1;
+		}
 	}
 
 	public int size() {

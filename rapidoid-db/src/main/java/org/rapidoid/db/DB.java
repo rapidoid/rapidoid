@@ -178,4 +178,9 @@ public class DB {
 		}
 	}
 
+
+	public static long getIdOf(Object record) {
+		return db().getIdOf(record);
+	}
+
 }

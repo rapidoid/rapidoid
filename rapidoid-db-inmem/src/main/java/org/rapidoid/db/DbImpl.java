@@ -170,4 +170,9 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 		return "DB:" + name + "(" + filename + ")";
 	}
 
+	@Override
+	public long getIdOf(Object record) {
+		return InMem.getIdOf(record, false);
+	}
+
 }
