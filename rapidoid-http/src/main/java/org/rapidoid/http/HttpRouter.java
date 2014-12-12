@@ -99,7 +99,7 @@ public class HttpRouter implements Router {
 	}
 
 	@Override
-	public boolean dispatch(HttpExchangeImpl x) throws Exception {
+	public void dispatch(HttpExchangeImpl x) {
 
 		Buf buf = x.input();
 		Range action = x.verb_().range();
@@ -117,7 +117,8 @@ public class HttpRouter implements Router {
 					int pos = path.start + route.path.length;
 					if (path.limit() == pos || buf.get(pos) == '/') {
 						x.setSubpath(pos, path.limit());
-						return handle(route.handler, x);
+						handle(route.handler, x);
+						return;
 					}
 				}
 			}
@@ -125,20 +126,25 @@ public class HttpRouter implements Router {
 
 		if (genericHandler != null) {
 			x.setSubpath(path.start, path.limit());
-			return handle(genericHandler, x);
+			handle(genericHandler, x);
+			return;
 		}
 
-		return false;
+		x.notFound();
+		HttpProtocol.processResponse(x, null);
 	}
 
-	private boolean handle(Handler handler, HttpExchangeImpl x) throws Exception {
-		Object res = handler.handle(x);
+	private void handle(Handler handler, HttpExchangeImpl x) {
+		Object res;
+		try {
+			res = handler.handle(x);
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
 
 		if (!x.isAsync()) {
 			HttpProtocol.processResponse(x, res);
 		}
-
-		return true;
 	}
 
 }
