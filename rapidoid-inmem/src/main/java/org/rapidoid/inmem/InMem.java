@@ -41,9 +41,11 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.rapidoid.json.JSON;
+import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.U;
@@ -105,9 +107,7 @@ public class InMem {
 
 	private final ConcurrentNavigableMap<Long, Object> txInsertions = new ConcurrentSkipListMap<Long, Object>();
 
-	private final ConcurrentLinkedQueue<Runnable> txCommitCallbacks = new ConcurrentLinkedQueue<Runnable>();
-
-	private final ConcurrentLinkedQueue<Runnable> txRollbackCallbacks = new ConcurrentLinkedQueue<Runnable>();
+	private final ConcurrentLinkedQueue<Callback<Void>> txCallbacks = new ConcurrentLinkedQueue<Callback<Void>>();
 
 	private ConcurrentNavigableMap<Long, Rec> prevData = new ConcurrentSkipListMap<Long, Rec>();
 
@@ -406,27 +406,20 @@ public class InMem {
 	 * - Isolation is serializable (with global lock),<br>
 	 * - Durability through on-commit callbacks (this method is blocking).<br>
 	 */
-	public void transaction(Runnable transaction) {
+	public void transaction(Runnable transaction, boolean readOnly) {
 
-		final AtomicBoolean failed = new AtomicBoolean();
+		final AtomicReference<Throwable> error = new AtomicReference<Throwable>();
 		final CountDownLatch latch = new CountDownLatch(1);
 
-		Runnable onCommit = new Runnable() {
+		Callback<Void> txCallback = new Callback<Void>() {
 			@Override
-			public void run() {
+			public void onDone(Void result, Throwable e) {
 				latch.countDown();
+				error.set(e);
 			}
 		};
 
-		Runnable onRollback = new Runnable() {
-			@Override
-			public void run() {
-				failed.set(true);
-				latch.countDown();
-			}
-		};
-
-		transaction(transaction, onCommit, onRollback);
+		transaction(transaction, readOnly, txCallback);
 
 		try {
 			latch.await();
@@ -434,8 +427,8 @@ public class InMem {
 			throw U.rte(e);
 		}
 
-		if (failed.get()) {
-			throw U.rte("Transaction failure!");
+		if (error.get() != null) {
+			throw U.rte("Transaction failure!", error.get());
 		}
 	}
 
@@ -446,7 +439,7 @@ public class InMem {
 	 * - Isolation is serializable (with global lock),<br>
 	 * - Durability through on-commit callbacks.<br>
 	 */
-	public void transaction(Runnable transaction, Runnable onCommit, Runnable onRollback) {
+	public void transaction(Runnable transaction, boolean readOnly, Callback<Void> txCallback) {
 		globalLock();
 
 		txChanges.clear();
@@ -457,19 +450,15 @@ public class InMem {
 		try {
 			transaction.run();
 
-			if (onCommit != null) {
-				txCommitCallbacks.add(onCommit);
-			}
-
-			if (onRollback != null) {
-				txRollbackCallbacks.add(onRollback);
+			if (txCallback != null) {
+				txCallbacks.add(txCallback);
 			}
 
 		} catch (Throwable e) {
 			U.debug("Error in transaction, rolling back", "error", e);
 			txRollback();
-			if (onRollback != null) {
-				onRollback.run();
+			if (txCallback != null) {
+				txCallback.onDone(null, e);
 			}
 
 		} finally {
@@ -635,6 +624,7 @@ public class InMem {
 		return meta;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void persistData() {
 		if (lastChangedOn.get() < lastPersistedOn.get()) {
 			return;
@@ -644,7 +634,7 @@ public class InMem {
 		globalLock();
 
 		final ConcurrentNavigableMap<Long, Rec> copy;
-		Runnable[] onCommit, onRollback;
+		Callback<Void>[] callbacks;
 
 		try {
 			if (data.isEmpty()) {
@@ -653,11 +643,8 @@ public class InMem {
 
 			copy = new ConcurrentSkipListMap<Long, Rec>(data);
 
-			onCommit = txCommitCallbacks.toArray(new Runnable[txCommitCallbacks.size()]);
-			txCommitCallbacks.clear();
-
-			onRollback = txRollbackCallbacks.toArray(new Runnable[txRollbackCallbacks.size()]);
-			txRollbackCallbacks.clear();
+			callbacks = txCallbacks.toArray(new Callback[txCallbacks.size()]);
+			txCallbacks.clear();
 
 		} finally {
 			globalUnlock();
@@ -685,22 +672,22 @@ public class InMem {
 
 		} catch (IOException e) {
 
-			invokeCallbacks(onRollback);
+			invokeCallbacks(callbacks, e);
 
 			data = new ConcurrentSkipListMap<Long, Rec>(prevData);
 
 			throw new RuntimeException("Cannot persist database changes!", e);
 		}
 
-		invokeCallbacks(onCommit);
+		invokeCallbacks(callbacks, null);
 	}
 
-	private void invokeCallbacks(Runnable[] callbacks) {
-		for (Runnable callback : callbacks) {
+	private void invokeCallbacks(Callback<Void>[] callbacks, Throwable e) {
+		for (Callback<Void> callback : callbacks) {
 			try {
-				callback.run();
-			} catch (Throwable e) {
-				error("Transaction callback error", e);
+				callback.onDone(null, e);
+			} catch (Throwable e2) {
+				error("Transaction callback error", e2);
 			}
 		}
 	}

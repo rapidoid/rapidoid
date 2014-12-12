@@ -30,6 +30,7 @@ import org.rapidoid.activity.NamedActivity;
 import org.rapidoid.db.collections.DbList;
 import org.rapidoid.db.collections.DbSet;
 import org.rapidoid.inmem.InMem;
+import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 
@@ -115,13 +116,13 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	}
 
 	@Override
-	public void transaction(Runnable transaction) {
-		inmem.transaction(transaction);
+	public void transaction(Runnable transaction, boolean readOnly) {
+		inmem.transaction(transaction, readOnly);
 	}
 
 	@Override
-	public void transaction(Runnable transaction, Runnable onCommit, Runnable onRollback) {
-		inmem.transaction(transaction, onCommit, onRollback);
+	public void transaction(Runnable transaction, boolean readOnly, Callback<Void> callback) {
+		inmem.transaction(transaction, readOnly, callback);
 	}
 
 	@Override

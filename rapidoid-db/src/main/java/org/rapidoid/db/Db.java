@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.rapidoid.activity.Activity;
+import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 
@@ -60,9 +61,9 @@ public interface Db extends Activity<Db> {
 
 	<E> void each(Operation<E> lambda);
 
-	void transaction(Runnable transaction);
+	void transaction(Runnable transaction, boolean readOnly);
 
-	void transaction(Runnable transaction, Runnable onCommit, Runnable onRollback);
+	void transaction(Runnable transaction, boolean readOnly, Callback<Void> callback);
 
 	void saveTo(OutputStream output);
 

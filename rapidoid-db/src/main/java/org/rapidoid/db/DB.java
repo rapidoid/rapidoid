@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
@@ -129,12 +130,12 @@ public class DB {
 		db().each(lambda);
 	}
 
-	public static void transaction(Runnable transaction) {
-		db().transaction(transaction);
+	public static void transaction(Runnable transaction, boolean readOnly) {
+		db().transaction(transaction, readOnly);
 	}
 
-	public static void transaction(Runnable transaction, Runnable onCommit, Runnable onRollback) {
-		db().transaction(transaction, onCommit, onRollback);
+	public static void transaction(Runnable transaction, boolean readOnly, Callback callback) {
+		db().transaction(transaction, readOnly, callback);
 	}
 
 	public static void shutdown() {

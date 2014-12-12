@@ -49,7 +49,7 @@ public class DbTransactionTest extends DbTestCommons {
 
 						n.addAndGet(2);
 					}
-				}, null, null);
+				}, false, null);
 			}
 		});
 
@@ -70,7 +70,7 @@ public class DbTransactionTest extends DbTestCommons {
 					DB.delete(id);
 					throw U.rte("tx error");
 				}
-			});
+			}, false);
 
 			fail("Expected exception!");
 		} catch (Exception e) {

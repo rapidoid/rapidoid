@@ -51,7 +51,7 @@ public class DbStatisticalTest extends DbTestCommons {
 	@Test
 	public void testDbOperations() {
 
-		U.benchmarkMT(U.cpus(), "op", 100000, new Runnable() {
+		U.benchmarkMT(U.cpus(), "op", 50000, new Runnable() {
 			@Override
 			public synchronized void run() {
 
@@ -87,7 +87,7 @@ public class DbStatisticalTest extends DbTestCommons {
 
 							complete.set(true);
 						}
-					}, null, null);
+					}, false, null);
 
 					for (int i = 0; i < ops.length; i++) {
 						if (ops[i].fail || !rets[i].ok || rets[i].illegalId) {

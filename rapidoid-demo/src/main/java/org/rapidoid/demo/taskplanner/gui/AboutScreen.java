@@ -44,7 +44,7 @@ public class AboutScreen extends GUI {
 				DB.update(0, new Task("DON'T GO TO THE DATABASE!", Priority.HIGH));
 				throw U.rte("some failure!");
 			}
-		});
+		}, false);
 	}
 
 }
