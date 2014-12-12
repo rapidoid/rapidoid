@@ -153,7 +153,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		sessionId = null;
 
 		session = null;
-		responses = null;
 		router = null;
 
 		resetResponse();
