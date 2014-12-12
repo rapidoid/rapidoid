@@ -1,11 +1,8 @@
 package org.rapidoid.demo.taskplanner.model;
 
-import java.util.List;
 import java.util.Set;
 
-import org.rapidoid.db.DB;
 import org.rapidoid.db.Entity;
-import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -27,40 +24,14 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-public class Task extends Entity {
+public class Comment extends Entity {
 
-	public String title;
-
-	public Priority priority = Priority.MEDIUM;
+	public String content;
 
 	public User owner;
 
-	public User createdBy;
+	public Task task;
 
-	public final List<Comment> comments = DB.list();
-
-	public final Set<User> likedBy = DB.set();
-
-	public Task() {
-	}
-
-	public Task(String title, Priority priority) {
-		this.title = title;
-		this.priority = priority;
-	}
-
-	public void like(User currentUser) {
-		likedBy.add(currentUser);
-	}
-
-	public void unlike(User currentUser) {
-		likedBy.remove(currentUser);
-	}
-
-	public void transferTo(User currentUser, User newOwner) {
-		U.must(currentUser.equals(owner));
-
-		owner = newOwner;
-	}
+	public Set<User> likedBy;
 
 }

@@ -20,16 +20,27 @@ package org.rapidoid.demo.taskplanner.model;
  * #L%
  */
 
-import java.util.List;
+import java.util.Set;
 
-public class User {
+import org.rapidoid.db.DB;
+import org.rapidoid.db.Entity;
 
-	public long id;
+public class User extends Entity {
+
+	public String username;
 
 	public String firstName;
 
 	public String lastName;
 
-	public List<Task> tasks;
+	public final Set<Task> tasksOwned = DB.set();
+
+	public final Set<Task> tasksLiked = DB.set();
+
+	public final Set<Comment> commentsLiked = DB.set();
+
+	public void doTransferTo(Task task, User newOwner) {
+		tasksLiked.remove(task);
+	}
 
 }

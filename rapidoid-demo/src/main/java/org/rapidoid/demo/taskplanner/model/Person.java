@@ -1,5 +1,7 @@
 package org.rapidoid.demo.taskplanner.model;
 
+import org.rapidoid.db.Entity;
+
 /*
  * #%L
  * rapidoid-demo
@@ -20,10 +22,10 @@ package org.rapidoid.demo.taskplanner.model;
  * #L%
  */
 
-public class Person {
+public class Person extends Entity {
 
-	public long id;
 	public String name;
+
 	public int age;
 
 	public Person() {
