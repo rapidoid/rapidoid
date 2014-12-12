@@ -1,0 +1,17 @@
+Use method chaining to construct HTML tags:
+import static org.rapidoid.app.AppGUI.*;
+
+public class App {
+	public String title = "Example 3";
+}
+
+class HomeScreen {
+	public Object content() {
+		Object link = a("Foo").href("foo.html");
+		return h2("Welcome! Visit ", link);
+	}
+}
+
+class FooScreen {
+	public String content = "At the Foo screen!";
+}
