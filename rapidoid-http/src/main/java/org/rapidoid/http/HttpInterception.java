@@ -20,32 +20,12 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.net.TCPServer;
+public interface HttpInterception extends Runnable {
 
-public interface HTTPServer extends TCPServer {
+	HttpExchange exchange();
 
-	HTTPServer route(String cmd, String url, Handler handler);
+	boolean hasError();
 
-	HTTPServer route(String cmd, String url, String response);
-
-	HTTPServer serve(String response);
-
-	HTTPServer serve(Handler handler);
-
-	HTTPServer get(String url, Handler handler);
-
-	HTTPServer post(String url, Handler handler);
-
-	HTTPServer put(String url, Handler handler);
-
-	HTTPServer delete(String url, Handler handler);
-
-	HTTPServer start();
-
-	HTTPServer shutdown();
-
-	HTTPInterceptor interceptor();
-
-	HTTPServer interceptor(HTTPInterceptor interceptor);
+	Throwable error();
 
 }

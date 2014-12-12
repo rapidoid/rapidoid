@@ -104,4 +104,15 @@ public class HTTPServerImpl extends RapidoidServerLoop implements HTTPServer {
 		return this;
 	}
 
+	@Override
+	public HTTPInterceptor interceptor() {
+		return ((HttpProtocol) protocol).getInterceptor();
+	}
+
+	@Override
+	public HTTPServer interceptor(HTTPInterceptor interceptor) {
+		((HttpProtocol) protocol).setInterceptor(interceptor);
+		return this;
+	}
+
 }

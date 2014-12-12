@@ -38,6 +38,8 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	private HttpSession session;
 
+	private HTTPInterceptor interceptor;
+
 	public HttpProtocol(Router router) {
 		super(HttpExchangeImpl.class);
 		this.router = router;
@@ -147,4 +149,13 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	public void setSession(HttpSession session) {
 		this.session = session;
 	}
+
+	public void setInterceptor(HTTPInterceptor interceptor) {
+		this.interceptor = interceptor;
+	}
+
+	public HTTPInterceptor getInterceptor() {
+		return interceptor;
+	}
+
 }

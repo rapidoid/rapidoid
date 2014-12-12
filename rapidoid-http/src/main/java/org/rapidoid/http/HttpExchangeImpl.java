@@ -42,7 +42,7 @@ import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.Bool;
 
 public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements HttpExchange,
-		Constants {
+		HttpInterception, Constants {
 
 	private static final String SESSION_USER = "_user";
 
@@ -80,6 +80,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	private boolean hasContentType;
 	private int startingPos;
 	private HttpResponses responses;
+	private HttpSession session;
+	private Router router;
 
 	final Range multipartBoundary = new Range();
 
@@ -101,12 +103,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	private final BinaryMultiData _files;
 
 	private int responseCode;
-
 	private String redirectUrl;
-
 	private String sessionId;
-
-	private HttpSession session;
+	private Throwable error;
 
 	public HttpExchangeImpl() {
 		reset();
@@ -153,6 +152,10 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 		sessionId = null;
 
+		session = null;
+		responses = null;
+		router = null;
+
 		resetResponse();
 	}
 
@@ -163,6 +166,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		responses = null;
 		responseCode = -1;
 		redirectUrl = null;
+		error = null;
 	}
 
 	@Override
@@ -801,6 +805,30 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public int responseCode() {
 		return this.responseCode;
+	}
+
+	@Override
+	public void run() {
+		router.dispatch(this);
+	}
+
+	public void setRouter(Router router) {
+		this.router = router;
+	}
+
+	@Override
+	public HttpExchange exchange() {
+		return this;
+	}
+
+	@Override
+	public boolean hasError() {
+		return error != null;
+	}
+
+	@Override
+	public Throwable error() {
+		return error;
 	}
 
 }
