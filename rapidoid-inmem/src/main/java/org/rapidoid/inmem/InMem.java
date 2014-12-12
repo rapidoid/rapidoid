@@ -633,6 +633,7 @@ public class InMem {
 
 		try {
 			if (data.isEmpty()) {
+				must(txCallbacks.isEmpty(), "Inconsistent DB state!");
 				return;
 			}
 
@@ -645,7 +646,7 @@ public class InMem {
 			globalUnlock();
 		}
 
-		if (lastChangedOn.get() > lastPersistedOn.get()) {
+		if (lastChangedOn.get() < lastPersistedOn.get()) {
 			invokeCallbacks(callbacks, null);
 			return;
 		}
