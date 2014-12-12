@@ -23,6 +23,7 @@ package org.rapidoid.app;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
+import org.rapidoid.db.DB;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
@@ -46,6 +47,8 @@ public class Apps {
 		HttpBuiltins.register(server);
 
 		server.serve(new AppHandler());
+
+		server.interceptor(new TxInterceptor(DB.db()));
 
 		server.start();
 	}
