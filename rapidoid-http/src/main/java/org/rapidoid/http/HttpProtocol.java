@@ -95,10 +95,10 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		U.error("Internal server error!", "request", x, "error", e);
 		e.printStackTrace();
 		x.response(500, "Internal server error!", e);
-		HttpProtocol.processResponse(x, x);
+		HttpProtocol.processResponse(x, x, true);
 	}
 
-	public static void processResponse(HttpExchange xch, Object res) {
+	public static void processResponse(HttpExchange xch, Object res, boolean complete) {
 
 		HttpExchangeImpl x = (HttpExchangeImpl) xch;
 
@@ -137,9 +137,10 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			x.notFound();
 		}
 
-		x.write(new byte[0]);
-		x.completeResponse();
-		x.closeIf(!x.isKeepAlive.value);
+		if (complete) {
+			x.completeResponse();
+			x.closeIf(!x.isKeepAlive.value);
+		}
 	}
 
 	public Router getRouter() {

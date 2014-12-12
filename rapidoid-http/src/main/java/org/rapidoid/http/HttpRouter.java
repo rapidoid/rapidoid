@@ -131,7 +131,7 @@ public class HttpRouter implements Router {
 		}
 
 		x.notFound();
-		HttpProtocol.processResponse(x, null);
+		HttpProtocol.processResponse(x, null, true);
 	}
 
 	private void handle(Handler handler, HttpExchangeImpl x) {
@@ -142,9 +142,7 @@ public class HttpRouter implements Router {
 			throw U.rte(e);
 		}
 
-		if (!x.isAsync()) {
-			HttpProtocol.processResponse(x, res);
-		}
+		HttpProtocol.processResponse(x, res, !x.isAsync());
 	}
 
 }

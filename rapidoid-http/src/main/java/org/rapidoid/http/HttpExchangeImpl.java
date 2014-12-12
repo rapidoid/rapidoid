@@ -268,7 +268,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public synchronized HttpExchangeImpl done() {
 		if (isAsync()) {
-			HttpProtocol.processResponse(this, this);
+			HttpProtocol.processResponse(this, this, true);
 		}
 		conn.done();
 		return this;
@@ -447,6 +447,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	public synchronized void completeResponse() {
+		write(new byte[0]);
+
 		U.must(responseCode >= 100);
 		U.must(bodyPos >= 0);
 
