@@ -626,11 +626,6 @@ public class InMem {
 
 	@SuppressWarnings("unchecked")
 	private void persistData() {
-		if (lastChangedOn.get() < lastPersistedOn.get()) {
-			return;
-		}
-		lastPersistedOn.set(System.currentTimeMillis());
-
 		globalLock();
 
 		final ConcurrentNavigableMap<Long, Rec> copy;
@@ -649,6 +644,13 @@ public class InMem {
 		} finally {
 			globalUnlock();
 		}
+
+		if (lastChangedOn.get() > lastPersistedOn.get()) {
+			invokeCallbacks(callbacks, null);
+			return;
+		}
+
+		lastPersistedOn.set(System.currentTimeMillis());
 
 		try {
 			File file = currentFile();
