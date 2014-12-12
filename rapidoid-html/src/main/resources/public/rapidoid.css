@@ -1,3 +1,8 @@
 .pointer {
-    cursor: pointer;
+	cursor: pointer;
+}
+
+.display-value {
+	border-style: dashed;
+	border-color: #DDD;
 }

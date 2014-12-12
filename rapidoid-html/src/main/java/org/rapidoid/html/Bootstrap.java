@@ -317,7 +317,7 @@ public class Bootstrap extends HTML {
 			return checkboxes;
 
 		case LABEL:
-			input = span(var.get()).class_("form-control");
+			input = span(var.get()).class_("form-control display-value");
 			return input;
 
 		default:
