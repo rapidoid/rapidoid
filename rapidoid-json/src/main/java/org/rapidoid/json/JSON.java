@@ -32,7 +32,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class JSON {
 
-	private static final ObjectMapper MAPPER = mapper();
+	public static final ObjectMapper MAPPER = mapper();
 
 	private static ObjectMapper mapper() {
 		ObjectMapper mapper = new ObjectMapper();
