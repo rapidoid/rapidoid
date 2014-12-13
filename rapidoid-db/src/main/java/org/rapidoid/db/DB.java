@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Mapper;
@@ -179,11 +178,11 @@ public class DB {
 		}
 	}
 
-	public static <E> List<E> list() {
+	public static <E> DbList<E> list() {
 		return db().list();
 	}
 
-	public static <E> Set<E> set() {
+	public static <E> DbSet<E> set() {
 		return db().set();
 	}
 

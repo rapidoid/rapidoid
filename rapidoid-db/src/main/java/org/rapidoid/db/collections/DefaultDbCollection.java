@@ -28,13 +28,15 @@ import java.util.List;
 import org.rapidoid.db.Db;
 import org.rapidoid.util.U;
 
-public class DbCollection<E> implements Collection<E> {
+import com.fasterxml.jackson.annotation.JsonValue;
+
+public class DefaultDbCollection<E> implements Collection<E> {
 
 	protected final Db db;
 
 	protected final Collection<Long> ids;
 
-	public DbCollection(Db db, Collection<Long> ids) {
+	public DefaultDbCollection(Db db, Collection<Long> ids) {
 		this.db = db;
 		this.ids = ids;
 	}
@@ -126,7 +128,7 @@ public class DbCollection<E> implements Collection<E> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DbCollection<?> other = (DbCollection<?>) obj;
+		DefaultDbCollection<?> other = (DefaultDbCollection<?>) obj;
 		if (db == null) {
 			if (other.db != null)
 				return false;
@@ -149,7 +151,8 @@ public class DbCollection<E> implements Collection<E> {
 		return result;
 	}
 
-	public Collection<Long> getIds() {
+	@JsonValue
+	public Collection<Long> ids() {
 		return ids;
 	}
 

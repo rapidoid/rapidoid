@@ -1,8 +1,8 @@
-package org.rapidoid.db.model;
+package org.rapidoid.db;
 
 /*
  * #%L
- * rapidoid-db-tests
+ * rapidoid-db
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,18 +20,8 @@ package org.rapidoid.db.model;
  * #L%
  */
 
-import org.rapidoid.db.DB;
-import org.rapidoid.db.DbList;
+import java.util.List;
 
-public class Profile {
-
-	public long id;
-
-	public DbList<Post> posts = DB.list();
-
-	@Override
-	public String toString() {
-		return "Profile [posts=" + posts + "]";
-	}
+public interface DbList<E> extends List<E> {
 
 }

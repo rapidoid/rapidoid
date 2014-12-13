@@ -1,5 +1,8 @@
 package org.rapidoid.db.model;
 
+import org.rapidoid.db.DB;
+import org.rapidoid.db.DbSet;
+
 /*
  * #%L
  * rapidoid-db-tests
@@ -22,7 +25,18 @@ package org.rapidoid.db.model;
 
 public class Post {
 
-	String content;
+	public long id;
+
+	public String content;
+
+	public DbSet<Person> likes = DB.set();
+
+	public Post() {
+	}
+
+	public Post(String content) {
+		this.content = content;
+	}
 
 	@Override
 	public String toString() {

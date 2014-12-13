@@ -24,7 +24,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.rapidoid.activity.Activity;
 import org.rapidoid.lambda.Callback;
@@ -73,9 +72,9 @@ public interface Db extends Activity<Db> {
 
 	void destroy();
 
-	<E> List<E> list();
+	<E> DbList<E> list();
 
-	<E> Set<E> set();
+	<E> DbSet<E> set();
 
 	long getIdOf(Object record);
 

@@ -1,4 +1,4 @@
-package org.rapidoid.db.collections;
+package org.rapidoid.db;
 
 /*
  * #%L
@@ -20,15 +20,8 @@ package org.rapidoid.db.collections;
  * #L%
  */
 
-import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.rapidoid.db.Db;
-
-public class DbSet<E> extends DbCollection<E> implements Set<E> {
-
-	public DbSet(Db db) {
-		super(db, new LinkedHashSet<Long>());
-	}
+public interface DbSet<E> extends Set<E> {
 
 }

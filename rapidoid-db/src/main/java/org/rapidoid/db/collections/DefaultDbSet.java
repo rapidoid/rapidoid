@@ -1,8 +1,8 @@
-package org.rapidoid.db.model;
+package org.rapidoid.db.collections;
 
 /*
  * #%L
- * rapidoid-db-tests
+ * rapidoid-db
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,18 +20,23 @@ package org.rapidoid.db.model;
  * #L%
  */
 
-import org.rapidoid.db.DB;
-import org.rapidoid.db.DbList;
+import java.util.LinkedHashSet;
+import java.util.List;
 
-public class Profile {
+import org.rapidoid.db.Db;
+import org.rapidoid.db.DbSet;
 
-	public long id;
+public class DefaultDbSet<E> extends DefaultDbCollection<E> implements DbSet<E> {
 
-	public DbList<Post> posts = DB.list();
+	public DefaultDbSet(Db db) {
+		super(db, new LinkedHashSet<Long>());
+	}
 
-	@Override
-	public String toString() {
-		return "Profile [posts=" + posts + "]";
+	public DefaultDbSet(Db db, List<? extends Number> ids) {
+		this(db);
+		for (Number id : ids) {
+			ids().add(id.longValue());
+		}
 	}
 
 }

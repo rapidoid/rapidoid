@@ -27,15 +27,19 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.rapidoid.db.Db;
+import org.rapidoid.db.DbList;
 
-public class DbList<E> extends DbCollection<E> implements List<E> {
+public class DefaultDbList<E> extends DefaultDbCollection<E> implements DbList<E> {
 
-	public DbList(Db db) {
+	public DefaultDbList(Db db) {
 		super(db, new ArrayList<Long>());
 	}
 
-	public DbList(Db db, List<Long> ids) {
-		super(db, ids);
+	public DefaultDbList(Db db, List<? extends Number> ids) {
+		this(db);
+		for (Number id : ids) {
+			ids().add(id.longValue());
+		}
 	}
 
 	public void add(int index, E e) {
@@ -79,10 +83,10 @@ public class DbList<E> extends DbCollection<E> implements List<E> {
 	}
 
 	public List<E> subList(int fromIndex, int toIndex) {
-		return new DbList<E>(db, ids().subList(fromIndex, toIndex));
+		return new DefaultDbList<E>(db, ids().subList(fromIndex, toIndex));
 	}
 
-	private List<Long> ids() {
+	public List<Long> ids() {
 		return (List<Long>) ids;
 	}
 

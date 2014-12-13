@@ -174,13 +174,13 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	}
 
 	@Override
-	public <E> List<E> list() {
-		return new DbList<E>(this);
+	public <E> DbList<E> list() {
+		return new DefaultDbList<E>(this);
 	}
 
 	@Override
-	public <E> Set<E> set() {
-		return new DbSet<E>(this);
+	public <E> DbSet<E> set() {
+		return new DefaultDbSet<E>(this);
 	}
 
 	@Override
