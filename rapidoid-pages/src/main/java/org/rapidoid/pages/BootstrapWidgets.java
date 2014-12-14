@@ -117,9 +117,8 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		Items pageOrAll = items;
 
 		if (paging) {
-			HttpExchange x = HttpExchanges.getThreadLocalExchange();
+			pageNumber = localVar("_page_" + items.uri(), 1);
 
-			pageNumber = HttpExchanges.sessionVar("_pageN_" + items.uri() + ":" + Pages.viewId(x), 1);
 			Integer pageN = U.limit(1, pageNumber.get(), pages);
 			pageNumber.set(pageN);
 
@@ -293,6 +292,15 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		String js = targetUrl != null ? U.format("goAt('%s');", targetUrl) : null;
 
 		return div(mleft, mbody).class_(divClass).onclick(js);
+	}
+
+	protected static <T> Var<T> sessionVar(String name, T defaultValue) {
+		return HttpExchanges.sessionVar(name, defaultValue);
+	}
+
+	protected static <T> Var<T> localVar(String name, T defaultValue) {
+		HttpExchange x = HttpExchanges.getThreadLocalExchange();
+		return HttpExchanges.sessionVar(name + ":" + Pages.viewId(x), defaultValue);
 	}
 
 }
