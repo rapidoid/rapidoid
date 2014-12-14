@@ -37,14 +37,9 @@ public class AboutScreen extends GUI {
 	}
 
 	public void onTx() {
-		DB.transaction(new Runnable() {
-			@Override
-			public void run() {
-				DB.insert(new Task("DON'T GO TO THE DATABASE!", Priority.HIGH));
-				DB.update(0, new Task("DON'T GO TO THE DATABASE!", Priority.HIGH));
-				throw U.rte("some failure!");
-			}
-		}, false);
+		DB.insert(new Task("DON'T GO TO THE DATABASE!", Priority.HIGH));
+		DB.update(0, new Task("DON'T GO TO THE DATABASE!", Priority.HIGH));
+		throw U.rte("some failure!");
 	}
 
 }
