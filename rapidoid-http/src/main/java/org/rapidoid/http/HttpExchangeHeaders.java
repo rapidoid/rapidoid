@@ -60,6 +60,8 @@ public interface HttpExchangeHeaders extends HttpExchangeBody {
 
 	HttpExchangeHeaders accessDeniedIf(boolean accessDeniedCondition);
 
+	HttpExchangeHeaders authorize(Class<?> clazz);
+
 	String sessionId();
 
 	boolean hasSession();
