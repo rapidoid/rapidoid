@@ -25,7 +25,6 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,7 +37,6 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
 import org.rapidoid.pages.Pages;
-import org.rapidoid.security.Secure;
 import org.rapidoid.util.Arr;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
@@ -76,9 +74,6 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		int activeIndex = -1;
 		Object screen = getScreen(x, appCls, app);
 		U.notNull(screen, "screen");
-
-		Set<String> roles = x.isLoggedIn() ? x.user().roles : null;
-		x.accessDeniedIf(!Secure.isAllowed(screen.getClass(), roles));
 
 		Pages.load(x, screen);
 		pageContent = pageContent(x, screen);
@@ -304,6 +299,7 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		// TODO use screens.get(...) instead of iteration
 		for (Class<?> screen : appCls.screens.values()) {
 			if (Apps.screenUrl(screen).equals(x.path())) {
+				x.authorize(screen);
 				return U.newInstance(screen);
 			}
 		}
