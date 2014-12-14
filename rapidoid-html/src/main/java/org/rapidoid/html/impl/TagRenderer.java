@@ -192,7 +192,7 @@ public class TagRenderer {
 	}
 
 	protected boolean isSingleTag(String name) {
-		return name.equals("input") || name.equals("br");
+		return name.equals("input") || name.equals("br") || name.equals("link");
 	}
 
 	protected void attrToStr(OutputStream out, TagImpl tag, String attr, Object value) {
