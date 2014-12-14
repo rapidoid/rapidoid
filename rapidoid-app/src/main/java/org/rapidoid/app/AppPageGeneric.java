@@ -59,15 +59,14 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 	private static final Pattern ENTITY_EDIT = Pattern.compile("^/edit(\\w+?)/(\\d+)/?$");
 
 	public String title(HttpExchange x) {
-		AppClasses appCls = Apps.scanAppClasses(x);
-		Object app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
+		Object app = app(x);
 		return Pages.titleOf(x, app);
 	}
 
 	public Object content(HttpExchange x) {
 
 		AppClasses appCls = Apps.scanAppClasses(x);
-		Object app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
+		Object app = app(x);
 		Map<String, Class<?>> mainScreens = filterScreens(app, appCls.screens);
 
 		Object pageContent = null;
@@ -348,6 +347,12 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		Pages.callCmdHandler(x, screen, new Cmd(cmd, args));
 
 		Pages.store(x, screen);
+	}
+
+	private Object app(HttpExchange x) {
+		AppClasses appCls = Apps.scanAppClasses(x);
+		Object app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
+		return app;
 	}
 
 }
