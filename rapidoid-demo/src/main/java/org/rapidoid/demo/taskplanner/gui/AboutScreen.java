@@ -23,14 +23,14 @@ package org.rapidoid.demo.taskplanner.gui;
 import org.rapidoid.db.DB;
 import org.rapidoid.demo.taskplanner.model.Priority;
 import org.rapidoid.demo.taskplanner.model.Task;
+import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ButtonTag;
-import org.rapidoid.html.tag.H2Tag;
 import org.rapidoid.util.U;
 
 public class AboutScreen extends GUI {
 
 	public Object content() {
-		H2Tag mix = h2(a("Enter the mix").href("/mix"));
+		Tag mix = h2(a("Enter the mix").href("/mix"));
 		ButtonTag tx = btn("Transactional").cmd("tx");
 
 		return arr(mix, tx);

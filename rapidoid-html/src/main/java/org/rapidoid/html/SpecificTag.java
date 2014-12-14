@@ -1,4 +1,4 @@
-package org.rapidoid.html.tag;
+package org.rapidoid.html;
 
 /*
  * #%L
@@ -20,10 +20,34 @@ package org.rapidoid.html.tag;
  * #L%
  */
 
-import org.rapidoid.html.Tag;
+public interface SpecificTag<TAG extends SpecificTag<?>> extends Tag, SpecificTagBase<TAG> {
 
-public interface SupTag extends Tag<SupTag> {
+	String id();
 
+	TAG id(String id);
 
+	String css();
+
+	TAG css(String css);
+
+	String class_();
+
+	TAG class_(String class_);
+
+	String role();
+
+	TAG role(String role);
+
+	String onclick();
+
+	TAG onclick(String onclick);
+
+	boolean hidden();
+
+	TAG hidden(boolean hidden);
+
+	boolean disabled();
+
+	TAG disabled(boolean value);
 
 }

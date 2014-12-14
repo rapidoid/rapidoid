@@ -22,15 +22,14 @@ package org.rapidoid.demo.taskplanner.gui;
 
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.H1Tag;
 
 public class TasksScreen extends GUI {
 
 	public String title = "My Tasks";
 
 	public Object content() {
-		H1Tag caption = h1("Manage tasks");
-		Tag<?> grid = grid(Task.class, "-priority", 10, "id", "title", "priority");
+		Tag caption = h1("Manage tasks");
+		Tag grid = grid(Task.class, "-priority", 10, "id", "title", "priority");
 		return row(caption, grid);
 	}
 

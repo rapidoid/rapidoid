@@ -34,7 +34,7 @@ public class PlaygroundWidgetTest extends PagesTestCommons {
 		TagContext ctx = Tags.context();
 		setupMockExchange(ctx);
 
-		Tag<?> play = PlaygroundWidget.pageContent(null);
+		Tag play = PlaygroundWidget.pageContent(null);
 		print(ctx, play);
 
 		hasRegex(ctx, play, "<table class=\"table" + ATTRS + ">");

@@ -40,7 +40,7 @@ public class TableWidgetTest extends PagesTestCommons {
 
 		Items items = Model.beanItemsInfer(new Person("John", 20), new Person("Rambo", 50));
 
-		Tag<?> table = BootstrapWidgets.grid(items, null, 10);
+		Tag table = BootstrapWidgets.grid(items, null, 10);
 		print(ctx, table);
 
 		hasRegex(ctx, table, "<th[^>]*?>Name</th>");

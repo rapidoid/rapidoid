@@ -45,7 +45,7 @@ public class AppGUI extends BootstrapWidgets {
 		return Model.beanItems(beanType, beans);
 	}
 
-	public static <T> Tag<?> grid(Class<T> type, String sortOrder, int pageSize, String... properties) {
+	public static <T> Tag grid(Class<T> type, String sortOrder, int pageSize, String... properties) {
 		return grid(all(type, sortOrder), sortOrder, pageSize, properties);
 	}
 

@@ -45,7 +45,7 @@ public class PagesTestCommons extends TestCommons {
 	protected void print(TagContext ctx, Object content) {
 		HttpExchange x = setupMockExchange(ctx);
 
-		if (!(content instanceof Tag<?>)) {
+		if (!(content instanceof Tag)) {
 			content = Pages.page(x, content);
 		}
 
@@ -57,7 +57,7 @@ public class PagesTestCommons extends TestCommons {
 	protected void has(TagContext ctx, Object content, String... containingTexts) {
 		HttpExchange x = setupMockExchange(ctx);
 
-		if (!(content instanceof Tag<?>)) {
+		if (!(content instanceof Tag)) {
 			content = Pages.page(x, content);
 		}
 
@@ -72,7 +72,7 @@ public class PagesTestCommons extends TestCommons {
 	protected void hasRegex(TagContext ctx, Object content, String... containingRegexes) {
 		HttpExchange x = setupMockExchange(ctx);
 
-		if (!(content instanceof Tag<?>)) {
+		if (!(content instanceof Tag)) {
 			content = Pages.page(x, content);
 		}
 

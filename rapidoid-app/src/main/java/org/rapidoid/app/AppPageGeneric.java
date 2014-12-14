@@ -33,7 +33,6 @@ import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.FormTag;
-import org.rapidoid.html.tag.UlTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
@@ -84,13 +83,13 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		activeIndex = setupMenuItems(screen.getClass(), screens, menuItems);
 
 		ATag brand = a(Pages.titleOf(x, app)).href("/");
-		Tag<?> userMenu = userMenu(x, app);
-		UlTag themesMenu = themesMenu(app);
+		Tag userMenu = userMenu(x, app);
+		Tag themesMenu = themesMenu(app);
 		FormTag searchForm = searchForm(app);
-		UlTag navMenu = navbarMenu(true, activeIndex, menuItems);
+		Tag navMenu = navbarMenu(true, activeIndex, menuItems);
 		Object[] navbarContent = arr(navMenu, themesMenu, userMenu, searchForm);
 
-		Tag<?> result = navbarPage(isFluid(app), brand, navbarContent, pageContent);
+		Tag result = navbarPage(isFluid(app), brand, navbarContent, pageContent);
 
 		Pages.store(x, screen);
 
@@ -171,8 +170,8 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		return activeIndex;
 	}
 
-	private Tag<?> userMenu(HttpExchange x, Object app) {
-		Tag<?> dropdownMenu = null;
+	private Tag userMenu(HttpExchange x, Object app) {
+		Tag dropdownMenu = null;
 		if (Apps.addon(app, "auth") || Apps.addon(app, "googleLogin") || Apps.addon(app, "facebookLogin")
 				|| Apps.addon(app, "linkedinLogin") || Apps.addon(app, "githubLogin")) {
 			if (x.isLoggedIn()) {
@@ -206,7 +205,7 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		return screens;
 	}
 
-	private UlTag themesMenu(Object app) {
+	private Tag themesMenu(Object app) {
 		ATag theme = a_glyph("eye-open", "", caret());
 
 		Object[] themess = new Object[themes.length];
@@ -217,12 +216,12 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 			themess[i] = a_void(U.capitalized(thm)).onclick(js);
 		}
 
-		UlTag themesMenu = Apps.addon(app, "themes") ? navbarDropdown(false, theme, themess) : null;
+		Tag themesMenu = Apps.addon(app, "themes") ? navbarDropdown(false, theme, themess) : null;
 		return themesMenu;
 	}
 
-	private Tag<?> loggedOutUserMenu(HttpExchange x, Object app) {
-		Tag<?> dropdownMenu;
+	private Tag loggedOutUserMenu(HttpExchange x, Object app) {
+		Tag dropdownMenu;
 		ATag ga = null, fb = null, li = null, gh = null;
 
 		if (Apps.addon(app, "googleLogin")) {
@@ -247,8 +246,8 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		return dropdownMenu;
 	}
 
-	private Tag<?> loggedInUserMenu(HttpExchange x, Object app) {
-		Tag<?> dropdownMenu;
+	private Tag loggedInUserMenu(HttpExchange x, Object app) {
+		Tag dropdownMenu;
 		ATag profile = a_glyph("user", x.user().display, caret());
 		ATag settings = Apps.addon(app, "settings") ? a_glyph("cog", " Settings").href("/settings") : null;
 		ATag logout = a_glyph("log-out", "Logout").href("/_logout");

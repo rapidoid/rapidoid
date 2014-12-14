@@ -22,7 +22,7 @@ import org.rapidoid.var.Var;
  * #L%
  */
 
-public interface TagBase<TAG extends Tag<?>> {
+public interface TagBase<TAG extends Tag> {
 
 	String tagKind();
 

@@ -1,7 +1,5 @@
 package org.rapidoid.html.impl;
 
-import org.rapidoid.html.Tag;
-
 /*
  * #%L
  * rapidoid-html
@@ -24,6 +22,6 @@ import org.rapidoid.html.Tag;
 
 public interface TagInternals {
 
-	TagImpl<Tag<?>> base();
+	TagImpl base();
 
 }

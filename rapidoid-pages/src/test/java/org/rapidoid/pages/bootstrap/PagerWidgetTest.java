@@ -39,7 +39,7 @@ public class PagerWidgetTest extends PagesTestCommons {
 		TagContext ctx = Tags.context();
 		Var<Integer> pageN = HtmlWidgets.var(3);
 
-		Tag<?> pager = BootstrapWidgets.pager(1, 7, pageN);
+		Tag pager = BootstrapWidgets.pager(1, 7, pageN);
 		print(ctx, pager);
 
 		eq(pageN.get().intValue(), 3);

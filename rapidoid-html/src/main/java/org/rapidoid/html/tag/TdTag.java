@@ -20,10 +20,8 @@ package org.rapidoid.html.tag;
  * #L%
  */
 
-import org.rapidoid.html.Tag;
+import org.rapidoid.html.SpecificTag;
 
-public interface TdTag extends Tag<TdTag> {
-
-
+public interface TdTag extends SpecificTag<TdTag> {
 
 }

@@ -20,12 +20,12 @@ package org.rapidoid.html.tag;
  * #L%
  */
 
-import org.rapidoid.html.Tag;
+import org.rapidoid.html.SpecificTag;
 
-public interface ATag extends Tag<ATag> {
+public interface ATag extends SpecificTag<ATag> {
 
-    String href();
+	String href();
 
-    ATag href(String href);
+	ATag href(String href);
 
 }

@@ -20,10 +20,8 @@ package org.rapidoid.html.tag;
  * #L%
  */
 
-import org.rapidoid.html.Tag;
+import org.rapidoid.html.SpecificTag;
 
-public interface CanvasTag extends Tag<CanvasTag> {
-
-
+public interface CanvasTag extends SpecificTag<CanvasTag> {
 
 }

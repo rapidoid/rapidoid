@@ -22,8 +22,8 @@ package org.rapidoid.app;
 
 import org.rapidoid.annotation.Session;
 import org.rapidoid.db.DB;
+import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.FormTag;
-import org.rapidoid.html.tag.H2Tag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.util.U;
@@ -35,7 +35,7 @@ public class ViewEntityScreenGeneric extends AppGUI {
 
 	public Object content(HttpExchange x) {
 
-		H2Tag caption = h2(U.capitalized(x.pathSegment(0)) + " Details");
+		Tag caption = h2(U.capitalized(x.pathSegment(0)) + " Details");
 
 		long id = Long.parseLong(x.pathSegment(1));
 		entity = DB.get(id);

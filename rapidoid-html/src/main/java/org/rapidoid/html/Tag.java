@@ -20,34 +20,34 @@ package org.rapidoid.html;
  * #L%
  */
 
-public interface Tag<TAG extends Tag<?>> extends TagBase<TAG> {
+public interface Tag extends TagBase<Tag> {
 
 	String id();
 
-	TAG id(String id);
+	Tag id(String id);
 
 	String css();
 
-	TAG css(String css);
+	Tag css(String css);
 
 	String class_();
 
-	TAG class_(String class_);
+	Tag class_(String class_);
 
 	String role();
 
-	TAG role(String role);
+	Tag role(String role);
 
 	String onclick();
 
-	TAG onclick(String onclick);
+	Tag onclick(String onclick);
 
 	boolean hidden();
 
-	TAG hidden(boolean hidden);
+	Tag hidden(boolean hidden);
 
 	boolean disabled();
 
-	TAG disabled(boolean value);
+	Tag disabled(boolean value);
 
 }

@@ -35,7 +35,7 @@ public class BootstrapPageTest extends PagesTestCommons {
 	public void testPojoPage() {
 		Object page = new Object() {
 
-			public Tag<?> content(HttpExchange x) {
+			public Tag content(HttpExchange x) {
 				return BootstrapWidgets.body(BootstrapWidgets.div("abc"));
 			}
 
@@ -56,7 +56,7 @@ public class BootstrapPageTest extends PagesTestCommons {
 	public void testPojoPage2() {
 		Object page = new Object() {
 
-			public Tag<?> content = BootstrapWidgets.body(BootstrapWidgets.div("abc"));
+			public Tag content = BootstrapWidgets.body(BootstrapWidgets.div("abc"));
 
 			public String title = "Some title";
 

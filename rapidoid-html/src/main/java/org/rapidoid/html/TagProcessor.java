@@ -20,7 +20,7 @@ package org.rapidoid.html;
  * #L%
  */
 
-public interface TagProcessor<TAG extends Tag<?>> {
+public interface TagProcessor<TAG extends Tag> {
 
 	void handle(TAG target);
 

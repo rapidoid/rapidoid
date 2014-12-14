@@ -25,7 +25,6 @@ import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
-import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.BootstrapWidgets;
 import org.rapidoid.var.Var;
@@ -49,16 +48,16 @@ public class FormsPage extends BootstrapWidgets {
 
 		ATag brand = a("Welcome to the Forms!").href("/mix");
 
-		Tag<?> form1 = frm(FormLayout.HORIZONTAL, vars1);
-		Tag<?> form2 = frm(FormLayout.VERTICAL, vars2);
-		Tag<?> form3 = frm(FormLayout.INLINE, vars3);
+		Tag form1 = frm(FormLayout.HORIZONTAL, vars1);
+		Tag form2 = frm(FormLayout.VERTICAL, vars2);
+		Tag form3 = frm(FormLayout.INLINE, vars3);
 
-		DivTag pageContent = row(col3(form1), col3(form2), col6(form3));
+		Tag pageContent = row(col3(form1), col3(form2), col6(form3));
 
 		return navbarPage(true, brand, null, pageContent);
 	}
 
-	private Tag<?> frm(final FormLayout layout, Var<?>[] vars) {
+	private Tag frm(final FormLayout layout, Var<?>[] vars) {
 
 		final String[] names = { "user", "pass", "email", "driver", "roles", "gender", "accept", "bbb", "comments" };
 

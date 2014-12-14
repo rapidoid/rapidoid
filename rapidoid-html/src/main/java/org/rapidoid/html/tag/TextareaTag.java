@@ -20,9 +20,9 @@ package org.rapidoid.html.tag;
  * #L%
  */
 
-import org.rapidoid.html.Tag;
+import org.rapidoid.html.SpecificTag;
 
-public interface TextareaTag extends Tag<TextareaTag> {
+public interface TextareaTag extends SpecificTag<TextareaTag> {
 
 	String name();
 

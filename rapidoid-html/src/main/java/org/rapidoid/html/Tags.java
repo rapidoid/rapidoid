@@ -44,7 +44,7 @@ public class Tags extends BasicUtils {
 		return new TagContextImpl();
 	}
 
-	public static <TAG extends Tag<?>> TAG tag(Class<TAG> clazz, String tagName, Object... contents) {
+	public static <TAG extends Tag> TAG tag(Class<TAG> clazz, String tagName, Object... contents) {
 		return TagProxy.create(clazz, tagName, contents);
 	}
 
@@ -56,14 +56,14 @@ public class Tags extends BasicUtils {
 		return StringEscapeUtils.escapeHtml4(s);
 	}
 
-	public static void traverse(Object contents, TagProcessor<Tag<?>> processor) {
+	public static void traverse(Object contents, TagProcessor<Tag> processor) {
 
 		if (contents instanceof Tag) {
 			if (contents instanceof UndefinedTag) {
-				UndefinedTag<?> tag = (UndefinedTag<?>) contents;
+				UndefinedTag tag = (UndefinedTag) contents;
 				tag.traverse(processor);
 			} else {
-				Tag<?> tag = (Tag<?>) contents;
+				Tag tag = (Tag) contents;
 				processor.handle(tag);
 				traverse(tag.content(), processor);
 			}
@@ -83,7 +83,7 @@ public class Tags extends BasicUtils {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends Tag<?>> T withValue(T tag, Object value) {
+	public static <T extends Tag> T withValue(T tag, Object value) {
 
 		if (tag instanceof InputTag) {
 			InputTag input = (InputTag) tag;
@@ -99,7 +99,7 @@ public class Tags extends BasicUtils {
 			OptionTag optionTag = (OptionTag) tag;
 			return (T) optionTag.selected(value != null ? bool(value) : false);
 		} else {
-			throw U.rte("Cannot set value to a '%s' tag!", ((Tag<?>) tag).tagKind());
+			throw U.rte("Cannot set value to a '%s' tag!", ((Tag) tag).tagKind());
 		}
 	}
 

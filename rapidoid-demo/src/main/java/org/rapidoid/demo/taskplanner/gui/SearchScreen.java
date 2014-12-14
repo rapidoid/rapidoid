@@ -25,9 +25,7 @@ import java.util.List;
 import org.rapidoid.app.Apps;
 import org.rapidoid.db.DB;
 import org.rapidoid.demo.taskplanner.model.Task;
-import org.rapidoid.html.tag.DivTag;
-import org.rapidoid.html.tag.H2Tag;
-import org.rapidoid.html.tag.H6Tag;
+import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.Cls;
 
@@ -36,9 +34,9 @@ public class SearchScreen extends GUI {
 	public Object content(HttpExchange x) {
 
 		final String query = x.param("q");
-		H2Tag title = query.isEmpty() ? h2("Search results:") : h2("Search results for ", b(query), ":");
+		Tag title = query.isEmpty() ? h2("Search results:") : h2("Search results for ", b(query), ":");
 
-		DivTag res = div(title);
+		Tag res = div(title);
 
 		List<Task> found = DB.find(query);
 
@@ -46,7 +44,7 @@ public class SearchScreen extends GUI {
 			long id = Cls.getId(result);
 			String url = Apps.urlFor(result);
 
-			H6Tag left = h6("(ID", NBSP, "=", NBSP, id, ")");
+			Tag left = h6("(ID", NBSP, "=", NBSP, id, ")");
 			Object header = span(result.getClass().getSimpleName());
 			res = res.append(media(left, header, small(Cls.beanToStr(result)), url));
 		}

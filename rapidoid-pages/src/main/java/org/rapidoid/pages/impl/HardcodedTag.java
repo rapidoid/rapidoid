@@ -27,7 +27,7 @@ import org.rapidoid.http.HttpExchange;
  * #L%
  */
 
-public abstract class HardcodedTag extends UndefinedTag<Tag<?>> {
+public abstract class HardcodedTag extends UndefinedTag {
 
 	public abstract void render(TagContext ctx, HttpExchange x, PageRenderer renderer, OutputStream out);
 

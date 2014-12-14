@@ -23,7 +23,7 @@ package org.rapidoid.html.impl;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagProcessor;
 
-public class ConstantTag extends UndefinedTag<Tag<?>> {
+public class ConstantTag extends UndefinedTag {
 
 	private final String code;
 
@@ -35,11 +35,11 @@ public class ConstantTag extends UndefinedTag<Tag<?>> {
 	}
 
 	@Override
-	public Tag<?> copy() {
+	public Tag copy() {
 		return this;
 	}
 
-	public void traverse(TagProcessor<Tag<?>> processor) {
+	public void traverse(TagProcessor<Tag> processor) {
 	}
 
 	@Override

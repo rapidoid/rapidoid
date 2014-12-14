@@ -20,8 +20,8 @@ package org.rapidoid.html.customtag;
  * #L%
  */
 
-import org.rapidoid.html.tag.DivTag;
+import org.rapidoid.html.Tag;
 
-public interface ColspanTag extends DivTag {
+public interface ColspanTag extends Tag {
 
 }

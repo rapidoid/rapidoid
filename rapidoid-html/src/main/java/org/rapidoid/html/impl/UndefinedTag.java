@@ -25,7 +25,7 @@ import org.rapidoid.html.TagProcessor;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
-public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
+public class UndefinedTag implements Tag {
 
 	@Override
 	public Object content() {
@@ -33,17 +33,17 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 	}
 
 	@Override
-	public TAG content(Object... content) {
+	public Tag content(Object... content) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public TAG append(Object... content) {
+	public Tag append(Object... content) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public TAG prepend(Object... content) {
+	public Tag prepend(Object... content) {
 		throw U.notExpected();
 	}
 
@@ -53,7 +53,7 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 	}
 
 	@Override
-	public TAG id(String id) {
+	public Tag id(String id) {
 		throw U.notExpected();
 	}
 
@@ -63,7 +63,7 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 	}
 
 	@Override
-	public TAG role(String role) {
+	public Tag role(String role) {
 		throw U.notExpected();
 	}
 
@@ -73,7 +73,7 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 	}
 
 	@Override
-	public TAG css(String css) {
+	public Tag css(String css) {
 		throw U.notExpected();
 	}
 
@@ -83,7 +83,7 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 	}
 
 	@Override
-	public TAG hidden(boolean hidden) {
+	public Tag hidden(boolean hidden) {
 		throw U.notExpected();
 	}
 
@@ -93,12 +93,12 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 	}
 
 	@Override
-	public TAG disabled(boolean value) {
+	public Tag disabled(boolean value) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public TAG attr(String attr, String value) {
+	public Tag attr(String attr, String value) {
 		throw U.notExpected();
 	}
 
@@ -108,7 +108,7 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 	}
 
 	@Override
-	public TAG class_(String classs) {
+	public Tag class_(String classs) {
 		throw U.notExpected();
 	}
 
@@ -128,12 +128,12 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 	}
 
 	@Override
-	public TAG withChild(int index, Object replace) {
+	public Tag withChild(int index, Object replace) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public TAG copy() {
+	public Tag copy() {
 		throw U.notExpected();
 	}
 
@@ -143,11 +143,11 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 	}
 
 	@Override
-	public TAG is(String attr, boolean value) {
+	public Tag is(String attr, boolean value) {
 		throw U.notExpected();
 	}
 
-	public void traverse(TagProcessor<Tag<?>> processor) {
+	public void traverse(TagProcessor<Tag> processor) {
 		throw U.notExpected();
 	}
 
@@ -162,17 +162,17 @@ public class UndefinedTag<TAG extends Tag<?>> implements Tag<TAG> {
 	}
 
 	@Override
-	public TAG onclick(String onclick) {
+	public Tag onclick(String onclick) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public <T> TAG bind(Var<T> var) {
+	public <T> Tag bind(Var<T> var) {
 		throw U.notExpected();
 	}
 
 	@Override
-	public TAG cmd(String cmd, Object... args) {
+	public Tag cmd(String cmd, Object... args) {
 		throw U.notExpected();
 	}
 

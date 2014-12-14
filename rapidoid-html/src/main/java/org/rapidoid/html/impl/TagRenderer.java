@@ -73,7 +73,7 @@ public class TagRenderer {
 			write(out, constantTag.bytes());
 			return;
 		} else if (content instanceof Tag) {
-			Tag<?> tag = (Tag<?>) content;
+			Tag tag = (Tag) content;
 			TagInternals tagi = (TagInternals) tag;
 			str(ctx, tagi.base(), level, inline, extra, out);
 			return;
@@ -111,7 +111,7 @@ public class TagRenderer {
 		}
 	}
 
-	public void str(TagContext ctx, TagImpl<?> tag, int level, boolean inline, Object extra, OutputStream out) {
+	public void str(TagContext ctx, TagImpl tag, int level, boolean inline, Object extra, OutputStream out) {
 
 		U.notNull(ctx, "tag context");
 
@@ -195,7 +195,7 @@ public class TagRenderer {
 		return name.equals("input") || name.equals("br");
 	}
 
-	protected void attrToStr(OutputStream out, TagImpl<?> tag, String attr, Object value) {
+	protected void attrToStr(OutputStream out, TagImpl tag, String attr, Object value) {
 		if (value == null) {
 			return;
 		}

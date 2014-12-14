@@ -22,9 +22,7 @@ package org.rapidoid.pages;
 
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ButtonTag;
-import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.html.tag.InputTag;
-import org.rapidoid.html.tag.SpanTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Model;
 import org.rapidoid.pages.entity.Person;
@@ -32,11 +30,11 @@ import org.rapidoid.var.Var;
 
 public class PlaygroundWidget extends BootstrapWidgets {
 
-	public static Tag<?> pageContent(HttpExchange x) {
+	public static Tag pageContent(HttpExchange x) {
 		return div(gridAt(1), counter(10), adder());
 	}
 
-	public static Tag<?> gridAt(int page) {
+	public static Tag gridAt(int page) {
 		Object[] data = { new Person("nick", 22), new Person("doe", 44) };
 
 		if (data.length > 0) {
@@ -46,7 +44,7 @@ public class PlaygroundWidget extends BootstrapWidgets {
 		}
 	}
 
-	public static SpanTag counter(int start) {
+	public static Tag counter(int start) {
 
 		final Var<Integer> num = var(start);
 
@@ -57,10 +55,10 @@ public class PlaygroundWidget extends BootstrapWidgets {
 		return span(b2, span(num), b1);
 	}
 
-	public static DivTag adder() {
+	public static Tag adder() {
 
 		final InputTag input = input().css("border: 1px;");
-		final DivTag coll = div();
+		final Tag coll = div();
 
 		ButtonTag b2 = button("+");
 

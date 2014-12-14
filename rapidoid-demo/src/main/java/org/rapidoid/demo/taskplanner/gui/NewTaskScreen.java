@@ -26,8 +26,6 @@ import org.rapidoid.demo.taskplanner.model.Priority;
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.FormTag;
-import org.rapidoid.html.tag.H1Tag;
-import org.rapidoid.html.tag.H3Tag;
 
 public class NewTaskScreen extends GUI {
 
@@ -36,13 +34,13 @@ public class NewTaskScreen extends GUI {
 
 	public Object content() {
 
-		H1Tag caption = h1("Add new task");
+		Tag caption = h1("Add new task");
 
 		FormTag frm = edit(task, SAVE_CANCEL, "title", "priority");
 
-		H3Tag recent = h3("Most recent tasks:");
+		Tag recent = h3("Most recent tasks:");
 
-		Tag<?> grid = grid(Task.class, "-id", 3, "id", "priority", "title");
+		Tag grid = grid(Task.class, "-id", 3, "id", "priority", "title");
 
 		return row(caption, frm, recent, grid);
 	}

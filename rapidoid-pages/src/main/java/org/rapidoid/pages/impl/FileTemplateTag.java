@@ -64,12 +64,12 @@ public class FileTemplateTag extends HardcodedTag {
 	}
 
 	@Override
-	public Tag<?> copy() {
+	public Tag copy() {
 		return new FileTemplateTag(templateName, namesAndValues);
 	}
 
 	@Override
-	public void traverse(TagProcessor<Tag<?>> processor) {
+	public void traverse(TagProcessor<Tag> processor) {
 		for (int i = 0; i < namesAndValues.length / 2; i++) {
 			Object val = namesAndValues[i * 2 + 1];
 			HTML.traverse(val, processor);

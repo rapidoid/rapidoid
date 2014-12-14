@@ -24,29 +24,30 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+import org.rapidoid.html.SpecificTagBase;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagBase;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
-public class TagProxy<TAG extends Tag<?>> implements InvocationHandler, Serializable {
+public class TagProxy implements InvocationHandler, Serializable {
 
 	private static final long serialVersionUID = 8876053750757191711L;
 
-	public static <TAG extends Tag<?>> TAG create(Class<TAG> tagInterface, String tagName, Object[] contents) {
-		TagImpl<TAG> tag = new TagImpl<TAG>(tagInterface, tagName, contents);
+	public static <TAG extends Tag> TAG create(Class<?> tagInterface, String tagName, Object[] contents) {
+		TagImpl tag = new TagImpl(tagInterface, tagName, contents);
 
-		TAG proxy = Cls.createProxy(new TagProxy<TAG>(tag, tagInterface), tagInterface, TagInternals.class);
+		TAG proxy = Cls.createProxy(new TagProxy(tag, tagInterface), tagInterface, TagInternals.class);
 		tag.setProxy(proxy);
 
 		return proxy;
 	}
 
-	private final TagImpl<TAG> tag;
+	private final TagImpl tag;
 
 	private final Class<?> clazz;
 
-	public TagProxy(TagImpl<TAG> tag, Class<TAG> clazz) {
+	public TagProxy(TagImpl tag, Class<?> clazz) {
 		this.tag = tag;
 		this.clazz = clazz;
 	}
@@ -55,14 +56,15 @@ public class TagProxy<TAG extends Tag<?>> implements InvocationHandler, Serializ
 
 		Class<?> methodClass = method.getDeclaringClass();
 
-		if (methodClass.equals(Object.class) || methodClass.equals(TagBase.class)
-				|| methodClass.equals(TagInternals.class)) {
-			return method.invoke(tag, args);
-		}
-
 		String name = method.getName();
 		Class<?> ret = method.getReturnType();
 		Class<?>[] paramTypes = method.getParameterTypes();
+
+		Method m2 = Cls.findMethod(SpecificTagBase.class, name, paramTypes);
+		if (methodClass.equals(Object.class) || methodClass.equals(TagBase.class)
+				|| methodClass.equals(TagInternals.class) || m2 != null) {
+			return method.invoke(tag, args);
+		}
 
 		boolean returnsTag = ret.isAssignableFrom(clazz);
 		boolean returnsStr = ret.equals(String.class);

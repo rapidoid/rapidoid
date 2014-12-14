@@ -50,7 +50,7 @@ public class SimpleHardcodedTag extends HardcodedTag {
 	}
 
 	@Override
-	public Tag<?> copy() {
+	public Tag copy() {
 		return new SimpleHardcodedTag(content);
 	}
 

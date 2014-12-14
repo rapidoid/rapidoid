@@ -23,18 +23,12 @@ package org.rapidoid.html;
 import org.rapidoid.html.customtag.ColspanTag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
-import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.InputTag;
-import org.rapidoid.html.tag.LabelTag;
-import org.rapidoid.html.tag.LiTag;
-import org.rapidoid.html.tag.NavTag;
 import org.rapidoid.html.tag.OptionTag;
 import org.rapidoid.html.tag.SelectTag;
-import org.rapidoid.html.tag.SpanTag;
 import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.html.tag.TextareaTag;
-import org.rapidoid.html.tag.UlTag;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
@@ -45,35 +39,35 @@ public class Bootstrap extends HTML {
 		return table(contents).class_("table table-striped table-hover");
 	}
 
-	public static DivTag row(ColspanTag... cols) {
+	public static Tag row(ColspanTag... cols) {
 		return div((Object[]) cols).class_("row");
 	}
 
-	public static DivTag row(Object... contents) {
+	public static Tag row(Object... contents) {
 		return row(col12(contents));
 	}
 
-	public static DivTag container(Object... contents) {
+	public static Tag container(Object... contents) {
 		return div(contents).class_("container");
 	}
 
-	public static DivTag containerFluid(Object... contents) {
+	public static Tag containerFluid(Object... contents) {
 		return div(contents).class_("container-fluid");
 	}
 
-	public static SpanTag icon(String icon) {
+	public static Tag icon(String icon) {
 		return span().class_("icon-" + icon);
 	}
 
-	public static SpanTag glyphicon(String glyphicon) {
+	public static Tag glyphicon(String glyphicon) {
 		return span().class_("glyphicon glyphicon-" + glyphicon);
 	}
 
-	public static SpanTag awesome(String fontAwesomeIcon) {
+	public static Tag awesome(String fontAwesomeIcon) {
 		return span().class_("fa fa-" + fontAwesomeIcon);
 	}
 
-	public static SpanTag awesomeFw(String fontAwesomeIcon) {
+	public static Tag awesomeFw(String fontAwesomeIcon) {
 		return span().class_("fa fa-fw fa-" + fontAwesomeIcon);
 	}
 
@@ -93,13 +87,13 @@ public class Bootstrap extends HTML {
 		return button(contents).type("button").class_("btn btn-primary");
 	}
 
-	public static NavTag nav_(boolean fluid, boolean inverse, Tag<?> brand, Object[] navbarContent) {
+	public static Tag nav_(boolean fluid, boolean inverse, Tag brand, Object[] navbarContent) {
 		brand = brand.class_("navbar-brand");
-		DivTag hdr = div(btnCollapse(), brand).class_("navbar-header");
+		Tag hdr = div(btnCollapse(), brand).class_("navbar-header");
 
-		DivTag collapsable = div(navbarContent).class_("collapse navbar-collapse").id("collapsable");
+		Tag collapsable = div(navbarContent).class_("collapse navbar-collapse").id("collapsable");
 
-		DivTag cnt = div(hdr, collapsable).class_(containerMaybeFluid(fluid));
+		Tag cnt = div(hdr, collapsable).class_(containerMaybeFluid(fluid));
 
 		String navDefOrInv = inverse ? "navbar-inverse" : "navbar-default";
 		return nav(cnt).class_("navbar " + navDefOrInv).role("navigation");
@@ -118,13 +112,13 @@ public class Bootstrap extends HTML {
 		return btn;
 	}
 
-	public static UlTag navbarMenu(boolean onLeft, int activeIndex, Object... menuItems) {
-		UlTag menu = ul().class_("nav navbar-nav navbar-" + leftOrRight(onLeft));
+	public static Tag navbarMenu(boolean onLeft, int activeIndex, Object... menuItems) {
+		Tag menu = ul().class_("nav navbar-nav navbar-" + leftOrRight(onLeft));
 
 		for (int i = 0; i < menuItems.length; i++) {
 			Object item = menuItems[i];
 
-			LiTag li = li(item);
+			Tag li = li(item);
 			if (i == activeIndex) {
 				li = li.class_("active");
 			}
@@ -135,17 +129,17 @@ public class Bootstrap extends HTML {
 		return menu;
 	}
 
-	public static UlTag navbarDropdown(boolean onLeft, Tag<?> menu, Object... subItems) {
-		UlTag ul1 = ul_li(subItems).class_("dropdown-menu").role("menu");
+	public static Tag navbarDropdown(boolean onLeft, Tag menu, Object... subItems) {
+		Tag ul1 = ul_li(subItems).class_("dropdown-menu").role("menu");
 		menu = menu.class_("dropdown-toggle").attr("data-toggle", "dropdown");
-		LiTag drop1 = li(menu, ul1).class_("dropdown");
+		Tag drop1 = li(menu, ul1).class_("dropdown");
 		return ul(drop1).class_("nav navbar-nav navbar-" + leftOrRight(onLeft));
 	}
 
 	public static FormTag navbarForm(boolean onLeft, String buttonCaption, String[] fields, String[] placeholders) {
 		U.must(fields.length == placeholders.length, "");
 
-		DivTag ctrls = div().class_("form-group");
+		Tag ctrls = div().class_("form-group");
 
 		for (int i = 0; i < fields.length; i++) {
 			InputTag inp = input().type("text").class_("form-control").name(fields[i]).placeholder(placeholders[i]);
@@ -156,7 +150,7 @@ public class Bootstrap extends HTML {
 		return form(ctrls, btn).class_("navbar-form navbar-" + leftOrRight(onLeft));
 	}
 
-	public static Tag<?> navbarPage(boolean fluid, Tag<?> brand, Object[] navbarContent, Object pageContent) {
+	public static Tag navbarPage(boolean fluid, Tag brand, Object[] navbarContent, Object pageContent) {
 		Object cont = div(pageContent).class_(containerMaybeFluid(fluid));
 		return body(nav_(fluid, false, brand, navbarContent), cont);
 	}
@@ -179,8 +173,8 @@ public class Bootstrap extends HTML {
 		return form;
 	}
 
-	public static Tag<?> formBtns(FormLayout layout, Object[] buttons) {
-		Tag<?> btns;
+	public static Tag formBtns(FormLayout layout, Object[] buttons) {
+		Tag btns;
 
 		if (layout == FormLayout.HORIZONTAL) {
 			btns = div().class_("col-sm-offset-4 col-sm-8");
@@ -212,11 +206,11 @@ public class Bootstrap extends HTML {
 		}
 	}
 
-	public static DivTag field(FormLayout layout, String name, String desc, FieldType type, Object[] options, Var<?> var) {
+	public static Tag field(FormLayout layout, String name, String desc, FieldType type, Object[] options, Var<?> var) {
 		desc = U.or(desc, name);
 
 		Object inp = input_(name, desc, type, options, var);
-		LabelTag label;
+		Tag label;
 		Object inputWrap;
 
 		if (type == FieldType.RADIOS || type == FieldType.CHECKBOXES) {
@@ -248,14 +242,14 @@ public class Bootstrap extends HTML {
 			inputWrap = layout == FormLayout.HORIZONTAL ? div(inp).class_("col-sm-8") : inp;
 		}
 
-		DivTag group = label != null ? div(label, inputWrap) : div(inputWrap);
+		Tag group = label != null ? div(label, inputWrap) : div(inputWrap);
 		group = group.class_("form-group");
 		return group;
 	}
 
 	public static Object input_(String name, String desc, FieldType type, Object[] options, Var<?> var) {
 
-		Tag<?> input;
+		Tag input;
 		switch (type) {
 
 		case TEXT:
@@ -333,11 +327,11 @@ public class Bootstrap extends HTML {
 		return onLeft ? "left" : "right";
 	}
 
-	public static SpanTag caret() {
+	public static Tag caret() {
 		return span().class_("caret");
 	}
 
-	public static DivTag jumbotron(Object... contents) {
+	public static Tag jumbotron(Object... contents) {
 		return div(contents).class_("jumbotron");
 	}
 

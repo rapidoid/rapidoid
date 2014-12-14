@@ -20,9 +20,9 @@ package org.rapidoid.html.tag;
  * #L%
  */
 
-import org.rapidoid.html.Tag;
+import org.rapidoid.html.SpecificTag;
 
-public interface SelectTag extends Tag<SelectTag> {
+public interface SelectTag extends SpecificTag<SelectTag> {
 
 	String name();
 

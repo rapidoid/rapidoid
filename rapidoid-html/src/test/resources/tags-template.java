@@ -52,11 +52,11 @@ public class Tags {
 		return new DynamicContentWrapper(dynamic);
 	}
 
-	public Tag<?> get(String hnd) {
+	public Tag get(String hnd) {
 		return ctx.get(hnd);
 	}
 
-	public Map<String, Tag<?>> changedTags() {
+	public Map<String, Tag> changedTags() {
 		return ctx.changedTags();
 	}
 
@@ -64,8 +64,8 @@ public class Tags {
 		return ctx.changedContent();
 	}
 
-	protected UlTag ul_li(Object... listItems) {
-		UlTag list = ul();
+	protected Tag ul_li(Object... listItems) {
+		Tag list = ul();
 
 		for (Object item : listItems) {
 			list.append(li(item));
@@ -74,7 +74,7 @@ public class Tags {
 		return list;
 	}
 
-	public <TAG extends Tag<?>> TAG tag(Class<TAG> clazz, String tagName, Object... contents) {
+	public <TAG extends Tag> TAG tag(Class<TAG> clazz, String tagName, Object... contents) {
 		return TagInterceptor.create(ctx, clazz, tagName, contents);
 	}
 

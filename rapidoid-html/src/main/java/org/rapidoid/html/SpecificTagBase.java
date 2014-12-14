@@ -1,4 +1,4 @@
-package org.rapidoid.html.tag;
+package org.rapidoid.html;
 
 /*
  * #%L
@@ -20,10 +20,26 @@ package org.rapidoid.html.tag;
  * #L%
  */
 
-import org.rapidoid.html.Tag;
+import org.rapidoid.var.Var;
 
-public interface CenterTag extends Tag<CenterTag> {
+public interface SpecificTagBase<TAG> {
 
+	TAG content(Object... content);
 
+	TAG append(Object... content);
+
+	TAG prepend(Object... content);
+
+	TAG copy();
+
+	TAG withChild(int index, Object child);
+
+	TAG attr(String attr, String value);
+
+	TAG is(String attr, boolean value);
+
+	<T> TAG bind(Var<T> var);
+
+	TAG cmd(String cmd, Object... args);
 
 }

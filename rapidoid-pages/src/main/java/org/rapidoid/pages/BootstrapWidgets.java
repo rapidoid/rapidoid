@@ -9,14 +9,7 @@ import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
-import org.rapidoid.html.tag.DivTag;
 import org.rapidoid.html.tag.FormTag;
-import org.rapidoid.html.tag.H4Tag;
-import org.rapidoid.html.tag.LiTag;
-import org.rapidoid.html.tag.NavTag;
-import org.rapidoid.html.tag.SpanTag;
-import org.rapidoid.html.tag.TbodyTag;
-import org.rapidoid.html.tag.TrTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchanges;
 import org.rapidoid.model.Item;
@@ -84,24 +77,23 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		return HtmlWidgets.property(item, property);
 	}
 
-	public static Tag<?> template(String templateFileName, Object... namesAndValues) {
+	public static Tag template(String templateFileName, Object... namesAndValues) {
 		return HtmlWidgets.template(templateFileName, namesAndValues);
 	}
 
-	public static Tag<?> hardcoded(String content) {
+	public static Tag hardcoded(String content) {
 		return HtmlWidgets.hardcoded(content);
 	}
 
-	public static <T> Tag<?> grid(Class<T> type, Object[] items, String sortOrder, int pageSize, String... properties) {
+	public static <T> Tag grid(Class<T> type, Object[] items, String sortOrder, int pageSize, String... properties) {
 		return grid(Model.beanItems(type, items), sortOrder, pageSize, properties);
 	}
 
-	public static <T> Tag<?> grid(Class<T> type, Collection<T> items, String sortOrder, int pageSize,
-			String... properties) {
+	public static <T> Tag grid(Class<T> type, Collection<T> items, String sortOrder, int pageSize, String... properties) {
 		return grid(type, items.toArray(), sortOrder, pageSize, properties);
 	}
 
-	public static Tag<?> grid(Items items, String sortOrder, int pageSize, String... properties) {
+	public static Tag grid(Items items, String sortOrder, int pageSize, String... properties) {
 		final List<Property> props = items.properties(properties);
 
 		int total = items.size();
@@ -132,10 +124,10 @@ public abstract class BootstrapWidgets extends Bootstrap {
 			pageOrAll = items.range(pageFrom, pageTo);
 		}
 
-		TrTag header = tr();
+		Tag header = tr();
 
 		for (Property prop : props) {
-			SpanTag sortIcon = null;
+			Tag sortIcon = null;
 
 			Object sort;
 			if (ordered) {
@@ -156,19 +148,19 @@ public abstract class BootstrapWidgets extends Bootstrap {
 			header = header.append(th(sort));
 		}
 
-		TbodyTag body = tbody();
+		Tag body = tbody();
 
 		for (Item item : pageOrAll) {
-			TrTag row = itemRow(props, item);
+			Tag row = itemRow(props, item);
 			body = body.append(row);
 		}
 
-		Tag<?> pager = paging ? pager(1, pages, pageNumber) : null;
+		Tag pager = paging ? pager(1, pages, pageNumber) : null;
 		return row(table_(thead(header), body), pager);
 	}
 
-	protected static TrTag itemRow(List<Property> properties, Item item) {
-		TrTag row = tr();
+	protected static Tag itemRow(List<Property> properties, Item item) {
+		Tag row = tr();
 
 		for (Property prop : properties) {
 			row = row.append(td(U.or(item.get(prop.name()), "")));
@@ -181,40 +173,40 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		return row;
 	}
 
-	public static Tag<?> pager(int from, int to, Var<Integer> pageNumber) {
+	public static Tag pager(int from, int to, Var<Integer> pageNumber) {
 
 		int pageN = pageNumber.get();
 
-		SpanTag firstIcon = span(LAQUO).attr("aria-hidden", "true");
+		Tag firstIcon = span(LAQUO).attr("aria-hidden", "true");
 		ATag first = a_void(firstIcon, span("First").class_("sr-only")).cmd("_set", pageNumber, from);
 
-		SpanTag prevIcon = span(LT).attr("aria-hidden", "true");
+		Tag prevIcon = span(LT).attr("aria-hidden", "true");
 		ATag prev = a_void(prevIcon, span("Previous").class_("sr-only")).cmd("_dec", pageNumber, 1);
 
 		ATag current = a_void("Page ", pageN, " of " + to);
 
-		SpanTag nextIcon = span(GT).attr("aria-hidden", "true");
+		Tag nextIcon = span(GT).attr("aria-hidden", "true");
 		ATag next = a_void(nextIcon, span("Next").class_("sr-only")).cmd("_inc", pageNumber, 1);
 
-		SpanTag lastIcon = span(RAQUO).attr("aria-hidden", "true");
+		Tag lastIcon = span(RAQUO).attr("aria-hidden", "true");
 		ATag last = a_void(lastIcon, span("Last").class_("sr-only")).cmd("_set", pageNumber, to);
 
-		LiTag firstLi = pageN > from ? li(first) : li(first.cmd(null)).class_("disabled");
-		LiTag prevLi = pageN > from ? li(prev) : li(prev.cmd(null)).class_("disabled");
-		LiTag currentLi = li(current);
-		LiTag nextLi = pageN < to ? li(next) : li(next.cmd(null)).class_("disabled");
-		LiTag lastLi = pageN < to ? li(last) : li(last.cmd(null)).class_("disabled");
+		Tag firstLi = pageN > from ? li(first) : li(first.cmd(null)).class_("disabled");
+		Tag prevLi = pageN > from ? li(prev) : li(prev.cmd(null)).class_("disabled");
+		Tag currentLi = li(current);
+		Tag nextLi = pageN < to ? li(next) : li(next.cmd(null)).class_("disabled");
+		Tag lastLi = pageN < to ? li(last) : li(last.cmd(null)).class_("disabled");
 
-		NavTag pagination = nav(ul_li(firstLi, prevLi, currentLi, nextLi, lastLi).class_("pagination"));
+		Tag pagination = nav(ul_li(firstLi, prevLi, currentLi, nextLi, lastLi).class_("pagination"));
 		return div(pagination).class_("pull-right");
 	}
 
-	public static FormTag view(Object bean, final Tag<?>[] buttons, String... properties) {
+	public static FormTag view(Object bean, final Tag[] buttons, String... properties) {
 		Item item = Model.item(bean);
 		return view(item, buttons, properties);
 	}
 
-	public static FormTag view(final Item item, final Tag<?>[] buttons, String... properties) {
+	public static FormTag view(final Item item, final Tag[] buttons, String... properties) {
 		final List<Property> props = item.editableProperties(properties);
 
 		int propN = props.size();
@@ -237,12 +229,12 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		return form_(FormLayout.VERTICAL, names, desc, types, options, vars, buttons);
 	}
 
-	public static FormTag edit(Object bean, final Tag<?>[] buttons, String... properties) {
+	public static FormTag edit(Object bean, final Tag[] buttons, String... properties) {
 		Item item = Model.item(bean);
 		return edit(item, buttons, properties);
 	}
 
-	public static FormTag edit(final Item item, final Tag<?>[] buttons, String... properties) {
+	public static FormTag edit(final Item item, final Tag[] buttons, String... properties) {
 		final List<Property> props = item.editableProperties(properties);
 
 		int propN = props.size();
@@ -301,20 +293,20 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		return null;
 	}
 
-	public static Tag<?> page(boolean devMode, String pageTitle, Object head, Object body) {
+	public static Tag page(boolean devMode, String pageTitle, Object head, Object body) {
 		String devOrProd = devMode ? "dev" : "prod";
 		return template("bootstrap-page-" + devOrProd + ".html", "title", pageTitle, "head", head, "body", body);
 	}
 
-	public static Tag<?> page(boolean devMode, String pageTitle, Object body) {
+	public static Tag page(boolean devMode, String pageTitle, Object body) {
 		return page(devMode, pageTitle, "", body);
 	}
 
-	public static Tag<?> media(Object left, Object title, Object body, String targetUrl) {
+	public static Tag media(Object left, Object title, Object body, String targetUrl) {
 
-		H4Tag mhead = h4(title).class_("media-heading");
-		DivTag mleft = div(left).class_("media-left");
-		DivTag mbody = div(mhead, body).class_("media-body");
+		Tag mhead = h4(title).class_("media-heading");
+		Tag mleft = div(left).class_("media-left");
+		Tag mbody = div(mhead, body).class_("media-body");
 
 		String divClass = targetUrl != null ? "media pointer" : "media";
 		String js = targetUrl != null ? U.format("goAt('%s');", targetUrl) : null;
