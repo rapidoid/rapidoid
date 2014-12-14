@@ -73,6 +73,10 @@ public class Bootstrap extends HTML {
 		return span().class_("fa fa-" + fontAwesomeIcon);
 	}
 
+	public static SpanTag awesomeFw(String fontAwesomeIcon) {
+		return span().class_("fa fa-fw fa-" + fontAwesomeIcon);
+	}
+
 	public static ATag a_glyph(String glyphicon, Object... contents) {
 		return a_void(glyphicon(glyphicon), NBSP, contents);
 	}
