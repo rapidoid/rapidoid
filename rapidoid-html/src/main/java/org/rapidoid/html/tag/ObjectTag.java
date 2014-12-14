@@ -24,4 +24,32 @@ import org.rapidoid.html.SpecificTag;
 
 public interface ObjectTag extends SpecificTag<ObjectTag> {
 
+	String data();
+
+	ObjectTag data(String data);
+
+	String usemap();
+
+	ObjectTag usemap(String usemap);
+
+	String name();
+
+	ObjectTag name(String name);
+
+	String form();
+
+	ObjectTag form(String form);
+
+	String height();
+
+	ObjectTag height(String height);
+
+	String width();
+
+	ObjectTag width(String width);
+
+	String type();
+
+	ObjectTag type(String type);
+
 }
