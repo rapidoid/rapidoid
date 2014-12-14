@@ -24,4 +24,32 @@ import org.rapidoid.html.SpecificTag;
 
 public interface IframeTag extends SpecificTag<IframeTag> {
 
+	String height();
+
+	IframeTag height(String height);
+
+	String width();
+
+	IframeTag width(String width);
+
+	String name();
+
+	IframeTag name(String name);
+
+	String sandbox();
+
+	IframeTag sandbox(String sandbox);
+
+	String src();
+
+	IframeTag src(String src);
+
+	String srcdoc();
+
+	IframeTag srcdoc(String srcdoc);
+
+	boolean seamless();
+
+	IframeTag seamless(boolean seamless);
+
 }
