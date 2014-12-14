@@ -32,6 +32,7 @@ import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -44,11 +45,14 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.rapidoid.json.JSON;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
-import org.rapidoid.util.U;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class Rec {
 	final Class<?> type;
@@ -82,6 +86,8 @@ public class InMem {
 	private static final byte[] CR_LF = { 13, 10 };
 
 	private static final Object INSERTION = new Object();
+
+	private final ObjectMapper mapper = new ObjectMapper();
 
 	private final long startedAt = U.time();
 
@@ -138,6 +144,8 @@ public class InMem {
 		} else {
 			persistor = null;
 		}
+
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 
 	private void resolveDoubleFileInconsistency() {
@@ -491,7 +499,7 @@ public class InMem {
 	private <T> T get_(long id, Class<T> clazz) {
 		validateId(id);
 		Rec rec = data.get(id);
-		return rec != null ? setId(JSON.parse(rec.json, clazz), id) : null;
+		return rec != null ? setId(parse(rec.json, clazz), id) : null;
 	}
 
 	private void sharedLock() {
@@ -522,7 +530,7 @@ public class InMem {
 		try {
 			PrintWriter out = new PrintWriter(output);
 
-			out.println(JSON.stringify(metadata()));
+			out.println(stringify(metadata()));
 
 			for (Entry<Long, Rec> entry : data.entrySet()) {
 				String json = entry.getValue().json;
@@ -535,6 +543,7 @@ public class InMem {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<String, Object> loadMetadata(InputStream in) {
 		globalLock();
 
@@ -542,9 +551,9 @@ public class InMem {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
 			String line = reader.readLine();
-			U.must(line != null, "Missing meta-data at the first line in the database file!");
+			must(line != null, "Missing meta-data at the first line in the database file!");
 
-			Map<String, Object> meta = JSON.parseMap(line);
+			Map<String, Object> meta = parse(line, Map.class);
 
 			reader.close();
 
@@ -568,13 +577,14 @@ public class InMem {
 
 			String line = reader.readLine();
 
-			U.must(line != null, "Missing meta-data at the first line in the database file!");
+			must(line != null, "Missing meta-data at the first line in the database file!");
 
-			Map<String, Object> meta = JSON.parseMap(line);
-			U.info("Database meta-data", META_TIMESTAMP, meta.get(META_TIMESTAMP), META_UPTIME, meta.get(META_UPTIME));
+			Map<String, Object> meta = parse(line, Map.class);
+			log("INFO", "Database meta-data: %s=%s, %s=%s", META_TIMESTAMP, meta.get(META_TIMESTAMP), META_UPTIME,
+					meta.get(META_UPTIME));
 
 			while ((line = reader.readLine()) != null) {
-				Map<String, Object> map = JSON.parse(line, Map.class);
+				Map<String, Object> map = parse(line, Map.class);
 				Long id = new Long(((String) map.get("id")));
 				String className = ((String) map.get("_class"));
 
@@ -604,7 +614,7 @@ public class InMem {
 	}
 
 	private void persistTo(RandomAccessFile file) throws IOException {
-		file.write(JSON.stringify(metadata()).getBytes());
+		file.write(stringify(metadata()).getBytes());
 		file.write(CR_LF);
 		for (Entry<Long, Rec> entry : data.entrySet()) {
 			String json = entry.getValue().json;
@@ -614,9 +624,9 @@ public class InMem {
 	}
 
 	private Map<String, Object> metadata() {
-		Map<String, Object> meta = U.map();
+		Map<String, Object> meta = new HashMap<String, Object>();
 
-		long now = U.time();
+		long now = System.currentTimeMillis();
 
 		meta.put(META_TIMESTAMP, now);
 		meta.put(META_UPTIME, now - startedAt);
@@ -776,14 +786,14 @@ public class InMem {
 		new File(filenameWithSuffix(SUFFIX_B)).delete();
 	}
 
-	private static Rec rec(Object record, long id) {
+	private Rec rec(Object record, long id) {
 		String _class = record.getClass().getCanonicalName();
-		return new Rec(record.getClass(), JSON.stringifyWithExtras(record, "_class", _class, "id", id));
+		return new Rec(record.getClass(), stringifyWithExtras(record, "_class", _class, "id", id));
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T> T obj(Rec rec) {
-		return (T) JSON.parse(rec.json, rec.type);
+	private <T> T obj(Rec rec) {
+		return (T) parse(rec.json, rec.type);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -876,6 +886,62 @@ public class InMem {
 			return data.size();
 		} finally {
 			globalUnlock();
+		}
+	}
+
+	public ObjectMapper getMapper() {
+		return mapper;
+	}
+
+	public String stringify(Object value) {
+		try {
+			return mapper.writeValueAsString(value);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * @param extras
+	 *            extra JSON attributes in format (key1, value1, key2, value2...)
+	 */
+	private String stringifyWithExtras(Object value, Object... extras) {
+		if (extras.length % 2 != 0) {
+			throw new IllegalArgumentException(
+					"Expected even number of extras (key1, value1, key2, value2...), but found: " + extras.length);
+		}
+
+		try {
+			JsonNode node = mapper.valueToTree(value);
+
+			if (!(node instanceof ObjectNode)) {
+				throw new RuntimeException("Cannot add extra attributes on a non-object value: " + value);
+			}
+
+			ObjectNode obj = (ObjectNode) node;
+
+			int extrasN = extras.length / 2;
+			for (int i = 0; i < extrasN; i++) {
+				Object key = extras[2 * i];
+				if (key instanceof String) {
+					obj.put((String) key, String.valueOf(extras[2 * i + 1]));
+				} else {
+					throw new RuntimeException("Expected extra key of type String, but found: " + key);
+				}
+			}
+
+			return mapper.writeValueAsString(node);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public <T> T parse(String json, Class<T> valueType) {
+		try {
+			return mapper.readValue(json, valueType);
+		} catch (Exception e) {
+			error("Cannot parse JSON!", e);
+			throw new RuntimeException(e);
 		}
 	}
 
