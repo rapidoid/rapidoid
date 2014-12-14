@@ -21,5 +21,5 @@ package org.rapidoid.demo.taskplanner.model;
  */
 
 public enum Priority {
-	HIGH, MEDIUM, LOW;
+	LOW, MEDIUM, HIGH;
 }
