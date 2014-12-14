@@ -1476,8 +1476,8 @@ public class U {
 			String rootPath = pkgPath.isEmpty() ? path : path.replace(File.separatorChar + pkgPath, "");
 
 			File root = new File(rootPath);
-			U.must(root.exists());
-			U.must(root.isDirectory());
+			must(root.exists());
+			must(root.isDirectory());
 
 			getClasses(classes, root, file, regex, filter, classLoader);
 		}
