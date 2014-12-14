@@ -32,6 +32,7 @@ public class PlaygroundWidgetTest extends PagesTestCommons {
 	@Test
 	public void testPlaygroundWidget() {
 		TagContext ctx = Tags.context();
+		setupMockExchange(ctx);
 
 		Tag<?> play = PlaygroundWidget.pageContent(null);
 		print(ctx, play);

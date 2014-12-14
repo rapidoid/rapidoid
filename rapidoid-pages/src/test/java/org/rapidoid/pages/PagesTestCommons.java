@@ -43,7 +43,7 @@ public class PagesTestCommons extends TestCommons {
 	protected static final Map<Integer, Object> NO_CHANGES = Collections.EMPTY_MAP;
 
 	protected void print(TagContext ctx, Object content) {
-		HttpExchange x = mockExchange(ctx);
+		HttpExchange x = setupMockExchange(ctx);
 
 		if (!(content instanceof Tag<?>)) {
 			content = Pages.page(x, content);
@@ -55,7 +55,7 @@ public class PagesTestCommons extends TestCommons {
 	}
 
 	protected void has(TagContext ctx, Object content, String... containingTexts) {
-		HttpExchange x = mockExchange(ctx);
+		HttpExchange x = setupMockExchange(ctx);
 
 		if (!(content instanceof Tag<?>)) {
 			content = Pages.page(x, content);
@@ -70,7 +70,7 @@ public class PagesTestCommons extends TestCommons {
 	}
 
 	protected void hasRegex(TagContext ctx, Object content, String... containingRegexes) {
-		HttpExchange x = mockExchange(ctx);
+		HttpExchange x = setupMockExchange(ctx);
 
 		if (!(content instanceof Tag<?>)) {
 			content = Pages.page(x, content);
@@ -87,7 +87,7 @@ public class PagesTestCommons extends TestCommons {
 		eq(var.get(), value);
 	}
 
-	protected static HttpExchange mockExchange(TagContext ctx) {
+	protected static HttpExchange setupMockExchange(TagContext ctx) {
 		HttpExchangeImpl x = new HttpExchangeImpl();
 
 		BufGroup bufs = new BufGroup(2);

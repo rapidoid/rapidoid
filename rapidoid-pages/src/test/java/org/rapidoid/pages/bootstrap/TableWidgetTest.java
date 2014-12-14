@@ -36,7 +36,7 @@ public class TableWidgetTest extends PagesTestCommons {
 	public void testTableWidget() {
 
 		TagContext ctx = Tags.context();
-		mockExchange(ctx);
+		setupMockExchange(ctx);
 
 		Items items = Model.beanItemsInfer(new Person("John", 20), new Person("Rambo", 50));
 
