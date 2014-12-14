@@ -24,4 +24,20 @@ import org.rapidoid.html.SpecificTag;
 
 public interface EmbedTag extends SpecificTag<EmbedTag> {
 
+	String src();
+
+	EmbedTag src(String src);
+
+	String height();
+
+	EmbedTag height(String height);
+
+	String width();
+
+	EmbedTag width(String width);
+
+	String type();
+
+	EmbedTag type(String type);
+
 }
