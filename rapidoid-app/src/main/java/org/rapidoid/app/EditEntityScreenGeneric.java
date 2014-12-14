@@ -50,8 +50,4 @@ public class EditEntityScreenGeneric extends AppGUI {
 		Pages.goBack(x);
 	}
 
-	public void onCancel(HttpExchange x) {
-		Pages.goBack(x);
-	}
-
 }

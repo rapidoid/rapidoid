@@ -25,7 +25,6 @@ import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.pages.Pages;
 import org.rapidoid.util.U;
 
 public class ViewEntityScreenGeneric extends AppGUI {
@@ -45,12 +44,9 @@ public class ViewEntityScreenGeneric extends AppGUI {
 		return row(caption, details);
 	}
 
-	public void onBack(HttpExchange x) {
-		Pages.goBack(x);
-	}
-
 	public void onEdit(HttpExchange x) {
 		String id = x.pathSegment(1);
 		x.redirect("/edit" + entity.getClass().getSimpleName() + "/" + id);
 	}
+
 }
