@@ -223,4 +223,23 @@ public class UTest extends TestCommons {
 		eq(U.include(arr, "d"), U.array("a", "b", "c", "d"));
 	}
 
+	@Test
+	public void testPlural() {
+		eq(U.plural("book"), "books");
+		eq(U.plural("hero"), "heroes");
+		eq(U.plural("box"), "boxes");
+		eq(U.plural("phrase"), "phrases");
+		eq(U.plural("dish"), "dishes");
+		eq(U.plural("toy"), "toys");
+		eq(U.plural("sky"), "skies");
+
+		eq(U.plural("BOOK"), "BOOKS");
+		eq(U.plural("HERO"), "HEROES");
+		eq(U.plural("BOX"), "BOXES");
+		eq(U.plural("PHRASE"), "PHRASES");
+		eq(U.plural("DISH"), "DISHES");
+		eq(U.plural("TOY"), "TOYS");
+		eq(U.plural("SKY"), "SKIES");
+	}
+
 }

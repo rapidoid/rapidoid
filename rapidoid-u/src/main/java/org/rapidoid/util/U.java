@@ -95,6 +95,13 @@ public class U {
 	private static Pattern CAMEL_SPLITTER_PATTERN = Pattern
 			.compile("(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
 
+	private static Pattern PLURAL1 = Pattern.compile(".*(s|x|z|ch|sh)$");
+	private static Pattern PLURAL1U = Pattern.compile(".*(S|X|Z|CH|SH)$");
+	private static Pattern PLURAL2 = Pattern.compile(".*[bcdfghjklmnpqrstvwxz]o$");
+	private static Pattern PLURAL2U = Pattern.compile(".*[BCDFGHJKLMNPQRSTVWXZ]O$");
+	private static Pattern PLURAL3 = Pattern.compile(".*[bcdfghjklmnpqrstvwxz]y$");
+	private static Pattern PLURAL3U = Pattern.compile(".*[BCDFGHJKLMNPQRSTVWXZ]Y$");
+
 	private U() {
 	}
 
@@ -1659,6 +1666,29 @@ public class U {
 
 	public static int limit(int min, int value, int max) {
 		return Math.min(Math.max(min, value), max);
+	}
+
+	public static String plural(String s) {
+		if (isEmpty(s)) {
+			return s;
+		}
+
+		if (PLURAL1.matcher(s).matches()) {
+			return s + "es";
+		} else if (PLURAL2.matcher(s).matches()) {
+			return s + "es";
+		} else if (PLURAL3.matcher(s).matches()) {
+			return mid(s, 0, -1) + "ies";
+		} else if (PLURAL1U.matcher(s).matches()) {
+			return s + "ES";
+		} else if (PLURAL2U.matcher(s).matches()) {
+			return s + "ES";
+		} else if (PLURAL3U.matcher(s).matches()) {
+			return mid(s, 0, -1) + "IES";
+		} else {
+			boolean upper = Character.isUpperCase(s.charAt(s.length() - 1));
+			return s + (upper ? "S" : "s");
+		}
 	}
 
 }
