@@ -89,7 +89,7 @@ public class InMem {
 
 	private final ObjectMapper mapper = new ObjectMapper();
 
-	private final long startedAt = U.time();
+	private final long startedAt = System.currentTimeMillis();
 
 	private final String filename;
 
@@ -152,23 +152,23 @@ public class InMem {
 		String file1 = currentFile().getName();
 		String file2 = otherFile().getName();
 
-		U.warn("The database was left in inconsistent state, both files exist!", "file1", file1, "file2", file2);
+		log("WARN", "The database was left in inconsistent state, both files exist! file1=%2, file2=%s", file1, file2);
 
 		long modif1, modif2;
 		try {
 			modif1 = (Long) loadMetadata(new FileInputStream(currentFile())).get(META_TIMESTAMP);
 			modif2 = (Long) loadMetadata(new FileInputStream(otherFile())).get(META_TIMESTAMP);
 		} catch (FileNotFoundException e) {
-			throw U.rte(e);
+			throw new RuntimeException(e);
 		}
 
-		U.must(modif1 != modif2,
+		must(modif1 != modif2,
 				"Cannot determine which database file to remove, please remove the incorrect file manually!");
 
 		// delete the most recent file, since it wasn't written completely
 		File recent = modif1 > modif2 ? currentFile() : otherFile();
 
-		U.warn("The more recent database file is assumed incomplete, so it will be deleted!", "file", recent);
+		log("WARN", "The more recent database file is assumed incomplete, so it will be deleted! file=%s", recent);
 
 		recent.delete();
 	}
@@ -432,11 +432,11 @@ public class InMem {
 		try {
 			latch.await();
 		} catch (InterruptedException e) {
-			throw U.rte(e);
+			throw new RuntimeException(e);
 		}
 
 		if (error.get() != null) {
-			throw U.rte("Transaction failure!", error.get());
+			throw new RuntimeException("Transaction failure!", error.get());
 		}
 	}
 
@@ -463,7 +463,7 @@ public class InMem {
 			}
 
 		} catch (Throwable e) {
-			U.debug("Error in transaction, rolling back", "error", e);
+			error("Error in transaction, rolling back", e);
 			txRollback();
 			if (txCallback != null) {
 				txCallback.onDone(null, e);
@@ -481,7 +481,7 @@ public class InMem {
 		for (Entry<Long, Rec> e : txChanges.entrySet()) {
 			Long id = e.getKey();
 			Rec value = e.getValue();
-			U.must(value != null);
+			must(value != null, "Cannot have null value!");
 			data.put(id, value);
 		}
 
@@ -489,10 +489,10 @@ public class InMem {
 			// rollback insert operation
 			Long id = e.getKey();
 			Object value = e.getValue();
-			U.must(value == INSERTION);
+			must(value == INSERTION, "Expected insertion mode!");
 
 			Rec inserted = data.remove(id);
-			U.must(inserted != null);
+			must(inserted != null, "Cannot have null insertion!");
 		}
 	}
 
@@ -818,6 +818,10 @@ public class InMem {
 		if (!condition) {
 			throw new RuntimeException(String.format(msg, args));
 		}
+	}
+
+	private static void log(String level, String msg, Object... args) {
+		System.out.println(level + " | " + String.format(msg, args));
 	}
 
 	private static void error(String msg, Throwable e) {
