@@ -26,10 +26,10 @@ public interface ScriptTag extends SpecificTag<ScriptTag> {
 
 	String src();
 
-	LinkTag src(String src);
+	ScriptTag src(String src);
 
 	String language();
 
-	LinkTag language(String language);
+	ScriptTag language(String language);
 
 }
