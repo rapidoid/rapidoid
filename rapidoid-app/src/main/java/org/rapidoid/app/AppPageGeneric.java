@@ -89,9 +89,11 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		Object[] menuItems = new Object[screens.length];
 		activeIndex = setupMenuItems(screen.getClass(), screens, menuItems);
 
+		String theme = Apps.config(app, "theme", null);
+
 		ATag brand = a(Pages.titleOf(x, app)).href("/");
 		Tag userMenu = userMenu(x, app);
-		Tag themesMenu = themesMenu(app);
+		Tag themesMenu = theme == null ? themesMenu(app) : null;
 		FormTag searchForm = searchForm(app);
 		Tag navMenu = navbarMenu(true, activeIndex, menuItems);
 		Object[] navbarContent = arr(navMenu, themesMenu, userMenu, searchForm);
