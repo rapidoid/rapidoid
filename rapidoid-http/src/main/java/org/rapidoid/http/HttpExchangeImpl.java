@@ -837,6 +837,13 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return path().substring(1).split("/")[segmentIndex];
 	}
 
+	@Override
+	public HttpExchangeHeaders accessDeniedIf(boolean accessDeniedCondition) {
+		if (accessDeniedCondition) {
+			throw new SecurityException("Access denied!");
+		}
+		return this;
+	}
 
 	@Override
 	public HttpExchangeHeaders errorResponse(Throwable err) {

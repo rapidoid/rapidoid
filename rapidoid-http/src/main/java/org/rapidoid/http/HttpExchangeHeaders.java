@@ -58,6 +58,8 @@ public interface HttpExchangeHeaders extends HttpExchangeBody {
 
 	HttpExchangeHeaders closeSession();
 
+	HttpExchangeHeaders accessDeniedIf(boolean accessDeniedCondition);
+
 	String sessionId();
 
 	boolean hasSession();
