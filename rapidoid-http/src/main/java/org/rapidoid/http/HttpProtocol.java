@@ -93,8 +93,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	private void handleError(HttpExchangeImpl x, Throwable e) {
 		U.error("Internal server error!", "request", x, "error", e);
-		e.printStackTrace();
-		x.response(500, "Internal server error!", e);
+		x.errorResponse(e);
 		HttpProtocol.processResponse(x, x, true);
 	}
 

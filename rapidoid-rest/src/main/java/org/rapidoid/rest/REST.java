@@ -46,7 +46,7 @@ public class REST {
 				} catch (PojoHandlerNotFoundException e) {
 					return x.notFound();
 				} catch (PojoDispatchException e) {
-					return x.response(500, "Cannot initialize handler argument(s)!", e);
+					return x.errorResponse(e);
 				}
 			}
 		});

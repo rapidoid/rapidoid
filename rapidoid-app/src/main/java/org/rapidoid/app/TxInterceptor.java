@@ -42,7 +42,7 @@ public class TxInterceptor implements HTTPInterceptor {
 			@Override
 			public void onDone(Void result, Throwable error) {
 				if (error != null) {
-					x.response(500, "Internal server error!", error);
+					x.errorResponse(error);
 				}
 				x.done();
 			}

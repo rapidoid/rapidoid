@@ -176,7 +176,7 @@ public class Pages {
 			} catch (PojoHandlerNotFoundException e) {
 				// / just ignore, will try to dispatch a page next...
 			} catch (PojoDispatchException e) {
-				return x.response(500, "Cannot initialize handler argument(s)!", e);
+				return x.errorResponse(e);
 			}
 		}
 

@@ -837,4 +837,15 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return path().substring(1).split("/")[segmentIndex];
 	}
 
+
+	@Override
+	public HttpExchangeHeaders errorResponse(Throwable err) {
+		Throwable cause = U.rootCause(err);
+		if (cause instanceof SecurityException) {
+			return response(500, "Access Denied!", cause);
+		} else {
+			return response(500, "Internal server error!", cause);
+		}
+	}
+
 }

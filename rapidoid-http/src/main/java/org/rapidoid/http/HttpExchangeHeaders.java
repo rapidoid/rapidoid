@@ -32,6 +32,8 @@ public interface HttpExchangeHeaders extends HttpExchangeBody {
 
 	HttpExchangeHeaders response(int httpResponseCode, String response, Throwable err);
 
+	HttpExchangeHeaders errorResponse(Throwable err);
+
 	HttpExchangeHeaders notFound();
 
 	HttpExchangeHeaders plain();
