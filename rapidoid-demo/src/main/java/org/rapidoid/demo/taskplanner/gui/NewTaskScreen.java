@@ -34,7 +34,7 @@ public class NewTaskScreen extends GUI {
 
 	public Object content() {
 
-		Tag caption = h1("Add new task");
+		Tag caption = h3("Add new task");
 
 		FormTag frm = edit(task, SAVE_CANCEL, "title", "priority");
 
