@@ -58,6 +58,7 @@
 		<module>rapidoid-model</module>
 		<module>rapidoid-ioc</module>
 		<module>rapidoid-json</module>
+		<module>rapidoid-security</module>
 		<module>rapidoid-activity</module>
 		<module>rapidoid-worker</module>
 		<module>rapidoid-test-commons</module>
