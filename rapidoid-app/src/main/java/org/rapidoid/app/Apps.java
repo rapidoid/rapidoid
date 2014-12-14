@@ -102,6 +102,10 @@ public class Apps {
 		return val != null ? (T) val : byDefault;
 	}
 
+	public static boolean addon(Object obj, String configName) {
+		return config(obj, configName, false) || config(obj, "full", false);
+	}
+
 	public static String urlFor(Object entity) {
 		long id = Cls.getId(entity);
 		String className = entity.getClass().getSimpleName();
