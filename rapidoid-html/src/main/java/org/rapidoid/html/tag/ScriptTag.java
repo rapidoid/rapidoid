@@ -24,4 +24,12 @@ import org.rapidoid.html.SpecificTag;
 
 public interface ScriptTag extends SpecificTag<ScriptTag> {
 
+	String src();
+
+	LinkTag src(String src);
+
+	String language();
+
+	LinkTag language(String language);
+
 }
