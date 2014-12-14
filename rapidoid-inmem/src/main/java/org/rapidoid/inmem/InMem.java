@@ -857,30 +857,40 @@ public class InMem {
 	}
 
 	public static long getIdOf(Object obj, boolean failIfNotFound) {
+		Number id = (Number) getProperty(obj, "id", failIfNotFound);
+		return id != null ? id.longValue() : -1;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T getProperty(Object obj, String property, boolean failIfNotFound) {
 		Class<?> c = obj.getClass();
+
+		String capitalized = property.substring(0, 1).toUpperCase() + property.substring(1);
+		String getter = "get" + capitalized;
 
 		try {
 			try {
-				return ((Number) c.getMethod("getId").invoke(obj)).longValue();
+				return (T) c.getMethod(getter).invoke(obj);
 			} catch (NoSuchMethodException e1) {
 				try {
-					return ((Number) c.getMethod("id").invoke(obj)).longValue();
+					return (T) c.getMethod(property).invoke(obj);
 				} catch (NoSuchMethodException e2) {
 					try {
-						return ((Number) c.getField("id").get(obj)).longValue();
+						return (T) c.getField(property).get(obj);
 					} catch (NoSuchFieldException e3) {
 					}
 				}
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("Cannot get object id!", e);
+			throw new RuntimeException("Cannot get property: " + property, e);
 		}
 
 		if (failIfNotFound) {
-			throw new RuntimeException(
-					"Cannot find public 'id' field nor 'getId' getter method nor 'id' getter method in class: " + c);
+			throw new RuntimeException(String.format(
+					"Cannot find public '%s' field nor '%s' getter method nor '%s' getter method in class: %s",
+					property, getter, property, c));
 		} else {
-			return -1;
+			return null;
 		}
 	}
 
