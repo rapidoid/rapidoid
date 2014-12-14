@@ -29,9 +29,11 @@ import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Moderator;
 import org.rapidoid.security.annotation.Roles;
+import org.rapidoid.util.Arr;
+import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 
-public class Secure {
+public class Secure implements Constants {
 
 	public static Set<String> rolesAllowed(Class<?> clazz) {
 		Set<String> roles = U.set();
@@ -72,6 +74,44 @@ public class Secure {
 		}
 
 		return rolesAllowed.isEmpty();
+	}
+
+	public static boolean isAllowed(Class<?> clazz, String email) {
+		Set<String> rolesAllowed = rolesAllowed(clazz);
+
+		if (!rolesAllowed.isEmpty() && U.isEmpty(email)) {
+			return false;
+		}
+
+		for (String role : rolesAllowed) {
+			if (hasRole(email, role)) {
+				return true;
+			}
+		}
+
+		return rolesAllowed.isEmpty();
+	}
+
+	public static boolean hasRole(String email, String role) {
+		if (role.equalsIgnoreCase(LoggedIn.class.getSimpleName())) {
+			return !U.isEmpty(email);
+		}
+
+		String roleConfig = "role-" + role.toLowerCase();
+		String[] admins = U.option(roleConfig, EMPTY_STRING_ARRAY);
+		return !U.isEmpty(email) && Arr.indexOf(admins, email) >= 0;
+	}
+
+	public static boolean isAdmin(String email) {
+		return hasRole(email, "ADMIN");
+	}
+
+	public static boolean isManager(String email) {
+		return hasRole(email, "MANAGER");
+	}
+
+	public static boolean isModerator(String email) {
+		return hasRole(email, "MODERATOR");
 	}
 
 }

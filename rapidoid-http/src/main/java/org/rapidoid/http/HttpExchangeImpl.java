@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Map;
-import java.util.Set;
 
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
@@ -37,7 +36,6 @@ import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.net.mime.MediaType;
 import org.rapidoid.security.Secure;
-import org.rapidoid.util.Arr;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
@@ -768,9 +766,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			return false;
 		}
 
-		UserInfo user = user();
-		String[] admins = U.option("admins", EMPTY_STRING_ARRAY);
-		return user != null && user.email != null && Arr.indexOf(admins, user.email) >= 0;
+		return Secure.isAdmin(user().email);
 	}
 
 	@Override
@@ -859,8 +855,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public HttpExchangeHeaders authorize(Class<?> clazz) {
-		Set<String> roles = isLoggedIn() ? user().roles : null;
-		return accessDeniedIf(!Secure.isAllowed(clazz, roles));
+		String email = isLoggedIn() ? user().email : null;
+		return accessDeniedIf(!Secure.isAllowed(clazz, email));
 	}
 
 }
