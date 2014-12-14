@@ -137,4 +137,9 @@ public class ListItems extends AbstractModel implements Items {
 		return uri;
 	}
 
+	@Override
+	public Items orderedBy(String sortOrder) {
+		throw U.notSupported();
+	}
+
 }

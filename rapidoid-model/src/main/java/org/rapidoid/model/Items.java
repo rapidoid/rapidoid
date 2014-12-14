@@ -44,10 +44,12 @@ public interface Items extends IModel, Iterable<Item> {
 
 	int size();
 
-	Items range(int fromIndex, int toIndex);
-
 	List<Property> properties(String... propertyNames);
 
 	boolean fitsIn(Item item);
+
+	Items range(int fromIndex, int toIndex);
+
+	Items orderedBy(String sortOrder);
 
 }

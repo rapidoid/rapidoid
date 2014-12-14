@@ -21,6 +21,7 @@ package org.rapidoid.app;
  */
 
 import org.rapidoid.db.model.DbItems;
+import org.rapidoid.html.Tag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
@@ -42,6 +43,10 @@ public class AppGUI extends BootstrapWidgets {
 
 	public static <T> Items beanItems(Class<T> beanType, Object... beans) {
 		return Model.beanItems(beanType, beans);
+	}
+
+	public static <T> Tag<?> grid(Class<T> type, String sortOrder, int pageSize, String... properties) {
+		return grid(all(type, sortOrder), sortOrder, pageSize, properties);
 	}
 
 }

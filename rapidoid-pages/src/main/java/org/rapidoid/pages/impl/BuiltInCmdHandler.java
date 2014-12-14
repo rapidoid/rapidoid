@@ -20,11 +20,12 @@ package org.rapidoid.pages.impl;
  * #L%
  */
 
+import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
 public class BuiltInCmdHandler {
 
-	public void on_set(Var<Integer> var, Integer value) {
+	public void on_set(Var<Object> var, Object value) {
 		var.set(value);
 	}
 
@@ -34,6 +35,18 @@ public class BuiltInCmdHandler {
 
 	public void on_dec(Var<Integer> var, Integer value) {
 		var.set(var.get() - value);
+	}
+
+	public void on_sort(Var<String> var, String value) {
+		String before = var.get();
+		if (!U.isEmpty(before) && !U.isEmpty(value)) {
+			if (!value.startsWith("-") && before.equals(value)) {
+				var.set("-" + value);
+				return;
+			}
+		}
+
+		var.set(value);
 	}
 
 }

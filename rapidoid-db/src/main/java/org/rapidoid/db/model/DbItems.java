@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.rapidoid.db.DB;
 import org.rapidoid.model.Item;
+import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
 import org.rapidoid.model.impl.BeanListItems;
 import org.rapidoid.util.U;
@@ -73,6 +74,11 @@ public class DbItems<T> extends BeanListItems<T> {
 	@Override
 	public void set(int index, Item item) {
 		DB.update(idOf(index), item.value());
+	}
+
+	@Override
+	public Items orderedBy(String sortOrder) {
+		return new DbItems<T>(beanType, sortOrder);
 	}
 
 }

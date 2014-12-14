@@ -29,10 +29,8 @@ public class TasksScreen extends GUI {
 	public String title = "My Tasks";
 
 	public Object content() {
-
 		H1Tag caption = h1("Manage tasks");
-
-		Tag<?> grid = grid(all(Task.class, "-priority"), 10, "id", "title", "priority");
+		Tag<?> grid = grid(Task.class, "-priority", 10, "id", "title", "priority");
 		return row(caption, grid);
 	}
 

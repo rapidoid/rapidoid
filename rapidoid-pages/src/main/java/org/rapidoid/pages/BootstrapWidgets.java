@@ -92,24 +92,28 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		return HtmlWidgets.hardcoded(content);
 	}
 
-	public static <T> Tag<?> grid(Class<T> type, Object[] items, int pageSize, String... properties) {
-		return grid(Model.beanItems(type, items), pageSize, properties);
+	public static <T> Tag<?> grid(Class<T> type, Object[] items, String sortOrder, int pageSize, String... properties) {
+		return grid(Model.beanItems(type, items), sortOrder, pageSize, properties);
 	}
 
-	public static <T> Tag<?> grid(Class<T> type, Collection<T> items, int pageSize, String... properties) {
-		return grid(type, items.toArray(), pageSize, properties);
+	public static <T> Tag<?> grid(Class<T> type, Collection<T> items, String sortOrder, int pageSize,
+			String... properties) {
+		return grid(type, items.toArray(), sortOrder, pageSize, properties);
 	}
 
-	public static Tag<?> grid(Items items, int pageSize, String... properties) {
+	public static Tag<?> grid(Items items, String sortOrder, int pageSize, String... properties) {
 		final List<Property> props = items.properties(properties);
 
 		int total = items.size();
 		int pages = (int) Math.ceil(total / (double) pageSize);
 
-		TrTag header = tr();
+		boolean ordered = !U.isEmpty(sortOrder);
+		Var<String> order = null;
 
-		for (Property prop : props) {
-			header = header.append(th(prop.caption()));
+		if (ordered) {
+			order = localVar("_order_" + items.uri(), sortOrder);
+			sortOrder = order.get();
+			items = items.orderedBy(sortOrder);
 		}
 
 		boolean paging = pageSize > 0;
@@ -126,6 +130,30 @@ public abstract class BootstrapWidgets extends Bootstrap {
 			int pageTo = Math.min((pageN) * pageSize, items.size());
 
 			pageOrAll = items.range(pageFrom, pageTo);
+		}
+
+		TrTag header = tr();
+
+		for (Property prop : props) {
+			SpanTag sortIcon = null;
+
+			Object sort;
+			if (ordered) {
+
+				if (sortOrder.equals(prop.name())) {
+					sortIcon = glyphicon("chevron-down");
+				}
+
+				if (ordered && sortOrder.equals("-" + prop.name())) {
+					sortIcon = glyphicon("chevron-up");
+				}
+
+				sort = a_void(prop.caption(), " ", sortIcon).cmd("_sort", order, prop.name());
+			} else {
+				sort = prop.caption();
+			}
+
+			header = header.append(th(sort));
 		}
 
 		TbodyTag body = tbody();

@@ -58,7 +58,7 @@ public class MixPage extends BootstrapWidgets {
 
 		H1Tag caption = h1("Manage persons");
 
-		Tag<?> table = grid(items, 10);
+		Tag<?> table = grid(items, "id", 10);
 
 		Object[] pageContent = arr(row(col6("Hello world!"), col3(abc, xy)), arr(caption, row(table)));
 
