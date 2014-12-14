@@ -63,6 +63,14 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		return Pages.titleOf(x, app);
 	}
 
+	public Object head(HttpExchange x) {
+		Object app = app(x);
+		String theme = Apps.config(app, "theme", null);
+		return theme != null ? link()
+				.href("//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/" + theme + "/bootstrap.min.css").rel("stylesheet")
+				: null;
+	}
+
 	public Object content(HttpExchange x) {
 
 		AppClasses appCls = Apps.scanAppClasses(x);

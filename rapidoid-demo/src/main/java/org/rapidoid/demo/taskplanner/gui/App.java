@@ -24,6 +24,8 @@ public class App {
 
 	public String title = "Task Planer";
 
+	public String theme = "flaty";
+
 	public boolean search = true;
 
 	public boolean themes = true;
