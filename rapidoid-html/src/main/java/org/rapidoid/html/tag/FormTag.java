@@ -24,4 +24,32 @@ import org.rapidoid.html.SpecificTag;
 
 public interface FormTag extends SpecificTag<FormTag> {
 
+	String action();
+
+	FormTag action(String action);
+
+	String autocomplete();
+
+	FormTag autocomplete(String autocomplete);
+
+	String enctype();
+
+	FormTag enctype(String enctype);
+
+	String method();
+
+	FormTag method(String method);
+
+	String name();
+
+	FormTag name(String name);
+
+	String target();
+
+	FormTag target(String target);
+
+	boolean novalidate();
+
+	FormTag novalidate(boolean novalidate);
+
 }
