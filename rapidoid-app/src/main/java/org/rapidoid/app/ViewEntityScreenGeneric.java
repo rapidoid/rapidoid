@@ -50,7 +50,7 @@ public class ViewEntityScreenGeneric extends AppGUI {
 	}
 
 	public void onEdit(HttpExchange x) {
-		String id = x.path().split("/")[2];
+		String id = x.pathSegment(1);
 		x.redirect("/edit" + entity.getClass().getSimpleName() + "/" + id);
 	}
 }
