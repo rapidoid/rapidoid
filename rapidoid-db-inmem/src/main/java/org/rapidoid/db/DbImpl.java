@@ -20,19 +20,26 @@ package org.rapidoid.db;
  * #L%
  */
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.rapidoid.activity.NamedActivity;
-import org.rapidoid.db.collections.DbList;
-import org.rapidoid.db.collections.DbSet;
+import org.rapidoid.db.collections.DefaultDbList;
+import org.rapidoid.db.collections.DefaultDbSet;
 import org.rapidoid.inmem.InMem;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class DbImpl extends NamedActivity<Db> implements Db {
 
@@ -44,6 +51,35 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 
 		this.filename = filename;
 		this.inmem = new InMem(filename);
+
+		initDbMapper();
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void initDbMapper() {
+		SimpleModule dbCollModule = new SimpleModule("DbCollModule", new Version(1, 0, 0, null, null, null));
+
+		dbCollModule.addDeserializer(DbList.class, new JsonDeserializer<DbList>() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public DbList deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,
+					JsonProcessingException {
+				List<Integer> ids = jp.readValueAs(List.class);
+				return new DefaultDbList(DbImpl.this, ids);
+			}
+		});
+
+		dbCollModule.addDeserializer(DbSet.class, new JsonDeserializer<DbSet>() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public DbSet deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,
+					JsonProcessingException {
+				List<Integer> ids = jp.readValueAs(List.class);
+				return new DefaultDbSet(DbImpl.this, ids);
+			}
+		});
+
+		inmem.getMapper().registerModule(dbCollModule);
 	}
 
 	@Override
