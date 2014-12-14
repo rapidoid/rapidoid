@@ -28,8 +28,20 @@ public interface ScriptTag extends SpecificTag<ScriptTag> {
 
 	ScriptTag src(String src);
 
-	String language();
+	String type();
 
-	ScriptTag language(String language);
+	ScriptTag type(String type);
+
+	String charset();
+
+	ScriptTag charset(String charset);
+
+	boolean defer();
+
+	ScriptTag defer(boolean defer);
+
+	boolean async();
+
+	ScriptTag async(boolean async);
 
 }
