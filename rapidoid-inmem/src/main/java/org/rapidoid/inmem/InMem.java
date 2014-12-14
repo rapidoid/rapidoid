@@ -32,6 +32,8 @@ import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -310,6 +312,32 @@ public class InMem {
 				return clazz.isAssignableFrom(record.getClass());
 			}
 		});
+	}
+
+	public <E> List<E> getAll(final Class<E> clazz, String orderBy) {
+		List<E> results = getAll(clazz);
+
+		final int sign = orderBy.startsWith("-") ? -1 : 1;
+		final String order = sign == 1 ? orderBy : orderBy.substring(1);
+
+		Comparator<E> comparator = new Comparator<E>() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public int compare(E o1, E o2) {
+
+				E val1 = getProperty(o1, order, true);
+				E val2 = getProperty(o2, order, true);
+
+				must(val1 instanceof Comparable && val2 instanceof Comparable, "The property '%s' is not comparable!",
+						order);
+
+				return sign * ((Comparable<E>) val1).compareTo(val2);
+			}
+		};
+
+		Collections.sort(results, comparator);
+
+		return results;
 	}
 
 	@SuppressWarnings("unchecked")
