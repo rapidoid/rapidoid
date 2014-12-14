@@ -120,9 +120,15 @@ public class Pages {
 		return m != null ? Cls.invoke(m, target, x) : Cls.getPropValue(target, "content", null);
 	}
 
+	public static Object headOf(HttpExchange x, Object target) {
+		Method m = Cls.findMethod(target.getClass(), "head", HttpExchange.class);
+		return m != null ? Cls.invoke(m, target, x) : Cls.getPropValue(target, "head", null);
+	}
+
 	public static Object page(HttpExchange x, Object page) {
 
 		String pageTitle = titleOf(x, page);
+		Object pageHead = U.or(headOf(x, page), "");
 		Object content = contentOf(x, page);
 
 		if (content == null) {
@@ -134,7 +140,7 @@ public class Pages {
 			return x;
 		}
 
-		return BootstrapWidgets.page(x.devMode(), pageTitle, content);
+		return BootstrapWidgets.page(x.devMode(), pageTitle, pageHead, content);
 	}
 
 	public static Object render(HttpExchange x, Object page) {
