@@ -24,4 +24,24 @@ import org.rapidoid.html.SpecificTag;
 
 public interface ImgTag extends SpecificTag<ImgTag> {
 
+	String src();
+
+	ImgTag src(String src);
+
+	String alt();
+
+	ImgTag alt(String alt);
+
+	String width();
+
+	ImgTag width(String width);
+
+	String height();
+
+	ImgTag height(String height);
+
+	String usemap();
+
+	ImgTag usemap(String usemap);
+
 }
