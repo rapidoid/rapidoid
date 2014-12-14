@@ -28,6 +28,7 @@ import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.IframeTag;
 import org.rapidoid.html.tag.ImgTag;
 import org.rapidoid.html.tag.InputTag;
+import org.rapidoid.html.tag.LinkTag;
 import org.rapidoid.html.tag.ObjectTag;
 import org.rapidoid.html.tag.OptionTag;
 import org.rapidoid.html.tag.ScriptTag;
@@ -359,8 +360,8 @@ public class HTML extends Tags {
 		return tag(Tag.class, "li", contents);
 	}
 
-	public static Tag link(Object... contents) {
-		return tag(Tag.class, "link", contents);
+	public static LinkTag link(Object... contents) {
+		return tag(LinkTag.class, "link", contents);
 	}
 
 	public static Tag listing(Object... contents) {
