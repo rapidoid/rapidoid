@@ -28,7 +28,7 @@ import org.rapidoid.util.U;
 
 @Admin
 @Manager
-@Roles({ "Restarter", "admiN" })
+@Roles({ "RESTARTER" })
 public class AdminScreen extends GUI {
 
 	public Object[] content = { h2("Manage Application"), cmd("Shutdown") };

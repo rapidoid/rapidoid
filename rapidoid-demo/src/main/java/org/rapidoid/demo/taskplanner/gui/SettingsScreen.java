@@ -1,5 +1,7 @@
 package org.rapidoid.demo.taskplanner.gui;
 
+import org.rapidoid.security.annotation.LoggedIn;
+
 /*
  * #%L
  * rapidoid-demo
@@ -20,6 +22,7 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
+@LoggedIn
 public class SettingsScreen extends GUI {
 
 	public Object content = row(h2("Settings..."));

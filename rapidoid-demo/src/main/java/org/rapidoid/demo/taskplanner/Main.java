@@ -21,14 +21,12 @@ package org.rapidoid.demo.taskplanner;
  */
 
 import org.rapidoid.app.Apps;
-import org.rapidoid.db.DB;
 import org.rapidoid.util.U;
 
 public class Main {
 
 	public static void main(String[] args) {
 		U.args("oauth-no-state");
-		U.info("Loaded database", "size", DB.size());
 		Apps.run();
 	}
 

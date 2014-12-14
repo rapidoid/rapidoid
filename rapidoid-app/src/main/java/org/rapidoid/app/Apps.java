@@ -44,6 +44,8 @@ public class Apps {
 	}
 
 	public static void run() {
+		U.info("Loaded database", "size", DB.size());
+
 		HTTPServer server = HTTP.server().build();
 
 		OAuth.register(server);
