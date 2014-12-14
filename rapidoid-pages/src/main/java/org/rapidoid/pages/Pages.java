@@ -290,17 +290,19 @@ public class Pages {
 	}
 
 	public static void callCmdHandler(HttpExchange x, Object target, Cmd cmd) {
-
-		if (cmd.name.startsWith("_")) {
-			target = BUILT_IN_HANDLER;
+		if (!callCmdHandler(x, target, cmd, false)) {
+			callCmdHandler(x, BUILT_IN_HANDLER, cmd, true);
 		}
+	}
+
+	private static boolean callCmdHandler(HttpExchange x, Object target, Cmd cmd, boolean failIfNotFound) {
 
 		String handlerName = "on" + U.capitalized(cmd.name);
 		Method m = Cls.findMethodByArgs(target.getClass(), handlerName, cmd.args);
 
 		if (m != null) {
 			Cls.invoke(m, target, cmd.args);
-			return;
+			return true;
 		}
 
 		Object[] args2 = U.expand(cmd.args, x);
@@ -308,7 +310,7 @@ public class Pages {
 
 		if (m != null) {
 			Cls.invoke(m, target, args2);
-			return;
+			return true;
 		}
 
 		args2 = new Object[cmd.args.length + 1];
@@ -318,22 +320,26 @@ public class Pages {
 
 		if (m != null) {
 			Cls.invoke(m, target, args2);
-			return;
+			return true;
 		}
 
 		Method on = Cls.findMethod(target.getClass(), "on", String.class, Object[].class);
 		if (on != null) {
 			Cls.invoke(on, target, cmd.name, cmd.args);
-			return;
+			return true;
 		}
 
 		on = Cls.findMethod(target.getClass(), "on", HttpExchange.class, String.class, Object[].class);
 		if (on != null) {
 			Cls.invoke(on, target, x, cmd.name, cmd.args);
-			return;
+			return true;
 		}
 
-		throw U.rte("Cannot find handler '%s' for the command '%s' and args: %s", handlerName, cmd.name, cmd.args);
+		if (failIfNotFound) {
+			throw U.rte("Cannot find handler '%s' for the command '%s' and args: %s", handlerName, cmd.name, cmd.args);
+		} else {
+			return false;
+		}
 	}
 
 	public static String viewId(HttpExchange x) {
