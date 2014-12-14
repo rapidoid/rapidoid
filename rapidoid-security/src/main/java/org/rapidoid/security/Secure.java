@@ -71,7 +71,7 @@ public class Secure {
 			}
 		}
 
-		return false;
+		return rolesAllowed.isEmpty();
 	}
 
 }
