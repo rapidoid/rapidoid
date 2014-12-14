@@ -1,5 +1,7 @@
 package org.rapidoid.http;
 
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-http
@@ -33,6 +35,8 @@ public class UserInfo {
 	public String oauthId;
 
 	public String oauthProvider;
+
+	public Set<String> roles;
 
 	@Override
 	public String toString() {
