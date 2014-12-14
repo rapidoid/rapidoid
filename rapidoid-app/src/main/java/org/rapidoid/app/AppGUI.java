@@ -29,7 +29,11 @@ import org.rapidoid.pages.BootstrapWidgets;
 public class AppGUI extends BootstrapWidgets {
 
 	public static <T> Items all(Class<T> type) {
-		return new DbItems<T>(type);
+		return new DbItems<T>(type, "id");
+	}
+
+	public static <T> Items all(Class<T> type, String orderBy) {
+		return new DbItems<T>(type, orderBy);
 	}
 
 	public static Item item(Object value) {

@@ -122,8 +122,14 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 		return inmem.read(id, column);
 	}
 
+	@Override
 	public <E> List<E> getAll(Class<E> clazz) {
 		return inmem.getAll(clazz);
+	}
+
+	@Override
+	public <E> List<E> getAll(Class<E> clazz, String orderBy) {
+		return inmem.getAll(clazz, orderBy);
 	}
 
 	@Override

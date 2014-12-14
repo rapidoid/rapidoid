@@ -93,6 +93,10 @@ public class DB {
 		return db().getAll(clazz);
 	}
 
+	public static <E> List<E> getAll(Class<E> clazz, String orderBy) {
+		return db().getAll(clazz, orderBy);
+	}
+
 	public static <E> List<E> getAll(long... ids) {
 		return db().getAll(ids);
 	}

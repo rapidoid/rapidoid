@@ -31,8 +31,11 @@ import org.rapidoid.util.U;
 @SuppressWarnings("serial")
 public class DbItems<T> extends BeanListItems<T> {
 
-	public DbItems(Class<T> type) {
+	private final String orderBy;
+
+	public DbItems(Class<T> type, String orderBy) {
 		super(type);
+		this.orderBy = orderBy;
 	}
 
 	@Override
@@ -52,7 +55,7 @@ public class DbItems<T> extends BeanListItems<T> {
 
 	@Override
 	protected List<Item> data() {
-		List<T> all = DB.getAll(beanType);
+		List<T> all = DB.getAll(beanType, orderBy);
 		List<Item> records = U.list();
 
 		for (T t : all) {

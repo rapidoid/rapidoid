@@ -40,6 +40,8 @@ public interface Db extends Activity<Db> {
 
 	<E> List<E> getAll(Class<E> clazz);
 
+	<E> List<E> getAll(Class<E> clazz, String orderBy);
+
 	<E> List<E> getAll(long... ids);
 
 	<E> List<E> getAll(Collection<Long> ids);

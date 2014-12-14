@@ -42,7 +42,7 @@ public class NewTaskScreen extends GUI {
 
 		H3Tag recent = h3("Most recent tasks:");
 
-		Tag<?> grid = grid(all(Task.class), 3, "id", "priority", "title");
+		Tag<?> grid = grid(all(Task.class, "-id"), 3, "id", "priority", "title");
 
 		return row(caption, frm, recent, grid);
 	}
