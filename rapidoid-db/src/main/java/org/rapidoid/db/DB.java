@@ -133,7 +133,7 @@ public class DB {
 		db().transaction(transaction, readOnly);
 	}
 
-	public static void transaction(Runnable transaction, boolean readOnly, Callback callback) {
+	public static void transaction(Runnable transaction, boolean readOnly, Callback<Void> callback) {
 		db().transaction(transaction, readOnly, callback);
 	}
 
