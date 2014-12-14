@@ -24,4 +24,12 @@ import org.rapidoid.html.SpecificTag;
 
 public interface CanvasTag extends SpecificTag<CanvasTag> {
 
+	String height();
+
+	CanvasTag height(String height);
+
+	String width();
+
+	CanvasTag width(String width);
+
 }
