@@ -22,36 +22,21 @@ package org.rapidoid.demo.taskplanner.gui;
 
 import java.util.List;
 
-import org.rapidoid.app.Apps;
 import org.rapidoid.db.DB;
-import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.util.Cls;
 
 public class SearchScreen extends GUI {
 
 	public Object content(HttpExchange x) {
 
 		final String query = x.param("q");
-		Tag title = query.isEmpty() ? h2("Search results:") : h2("Search results for ", b(query), ":");
+		List<Object> found = DB.find(query);
 
-		Tag res = div(title);
+		Tag title = h3(found.size() + " search results for ", b(highlight(query)), ":");
+		Tag grid = grid(Object.class, found, "", 10, "id", "_class", "_str");
 
-		List<Task> found = DB.find(query);
-
-		for (Object result : found) {
-			long id = Cls.getId(result);
-			String url = Apps.urlFor(result);
-
-			Tag left = h6("(ID", NBSP, "=", NBSP, id, ")");
-			Object header = span(result.getClass().getSimpleName());
-			res = res.append(media(left, header, small(Cls.beanToStr(result)), url));
-		}
-
-		res = res.append(h4("Total ", found.size(), " results."));
-
-		return res;
+		return div(title, grid);
 	}
 
 }
