@@ -24,4 +24,8 @@ import org.rapidoid.html.SpecificTag;
 
 public interface TableTag extends SpecificTag<TableTag> {
 
+	boolean sortable();
+
+	TableTag sortable(boolean sortable);
+
 }
