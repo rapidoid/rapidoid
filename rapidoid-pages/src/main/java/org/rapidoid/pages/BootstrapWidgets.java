@@ -2,6 +2,8 @@ package org.rapidoid.pages;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.rapidoid.html.Bootstrap;
 import org.rapidoid.html.FieldType;
@@ -163,7 +165,8 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		Tag row = tr();
 
 		for (Property prop : properties) {
-			row = row.append(td(U.or(item.get(prop.name()), "")));
+			Object value = item.get(prop.name());
+			row = row.append(td(U.or(value, "")));
 		}
 
 		String type = U.uncapitalized(item.value().getClass().getSimpleName());
@@ -343,6 +346,28 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		long id = Cls.getId(entity);
 		String className = entity.getClass().getSimpleName();
 		return U.format("/%s/%s", U.uncapitalized(className), id);
+	}
+
+	public static Object highlight(String text) {
+		return mark(text).class_("highlight");
+	}
+
+	public static Object highlight(String text, String regex) {
+		List<Object> parts = U.list();
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(text);
+
+		int end = 0;
+		while (m.find()) {
+			String match = m.group();
+			parts.add(text.substring(end, m.start()));
+			parts.add(highlight(match));
+			end = m.end();
+		}
+
+		parts.add(text.substring(end));
+
+		return parts;
 	}
 
 }
