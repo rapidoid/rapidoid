@@ -20,8 +20,11 @@ package org.rapidoid.app;
  * #L%
  */
 
+import org.rapidoid.db.DB;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpProtocol;
+import org.rapidoid.lambda.Callback;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.util.CustomizableClassLoader;
@@ -39,10 +42,34 @@ public class AppHandler implements Handler {
 	}
 
 	@Override
-	public Object handle(HttpExchange x) throws Exception {
+	public Object handle(final HttpExchange x) throws Exception {
 
-		AppClasses appCls = Apps.scanAppClasses(x, classLoader);
+		final AppClasses appCls = Apps.scanAppClasses(x, classLoader);
 
+		Callback<Void> callback = new Callback<Void>() {
+			@Override
+			public void onDone(Void result, Throwable error) {
+				if (error != null) {
+					x.errorResponse(error);
+				}
+				x.done();
+			}
+		};
+
+		x.async();
+
+		DB.transaction(new Runnable() {
+			@Override
+			public void run() {
+				Object result = processReq(x, appCls);
+				HttpProtocol.processResponse(x, result);
+			}
+		}, x.isGetReq(), callback);
+
+		return x;
+	}
+
+	private Object processReq(HttpExchange x, AppClasses appCls) {
 		WebPojoDispatcher dispatcher = new WebPojoDispatcher(appCls.services);
 		Object result = Pages.dispatch(x, dispatcher, appCls.pages);
 

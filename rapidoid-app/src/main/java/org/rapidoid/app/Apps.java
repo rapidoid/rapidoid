@@ -53,8 +53,6 @@ public class Apps {
 
 		server.serve(new AppHandler());
 
-		server.interceptor(new TxInterceptor(DB.db()));
-
 		server.start();
 	}
 
