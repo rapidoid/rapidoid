@@ -74,18 +74,22 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 		try {
 
-			if (interceptor != null) {
-				interceptor.intercept(x);
-			} else {
-				x.run();
+			try {
+				if (interceptor != null) {
+					interceptor.intercept(x);
+				} else {
+					x.run();
+				}
+			} catch (Throwable e) {
+				handleError(x, e);
 			}
 
 			if (x.hasError()) {
 				handleError(x, x.error());
+			} else if (!x.isAsync()) {
+				x.completeResponse();
 			}
 
-		} catch (Throwable e) {
-			handleError(x, e);
 		} finally {
 			HttpExchanges.setThreadLocalExchange(null);
 		}
@@ -94,10 +98,10 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	private void handleError(HttpExchangeImpl x, Throwable e) {
 		U.error("Internal server error!", "request", x, "error", e);
 		x.errorResponse(e);
-		HttpProtocol.processResponse(x, x, true);
+		x.completeResponse();
 	}
 
-	public static void processResponse(HttpExchange xch, Object res, boolean complete) {
+	public static void processResponse(HttpExchange xch, Object res) {
 
 		HttpExchangeImpl x = (HttpExchangeImpl) xch;
 
@@ -134,11 +138,6 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 				x.html();
 			}
 			x.notFound();
-		}
-
-		if (complete) {
-			x.completeResponse();
-			x.closeIf(!x.isKeepAlive.value);
 		}
 	}
 

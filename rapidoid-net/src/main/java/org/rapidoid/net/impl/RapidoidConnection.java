@@ -172,6 +172,8 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 	}
 
 	public synchronized void done(Object tag) {
+		async = false;
+		// TODO done might be obsolete, is async enough?
 		if (!done) {
 			done = true;
 			askToSend();
@@ -311,6 +313,7 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 		return this;
 	}
 
+	@Override
 	public synchronized boolean isAsync() {
 		return async;
 	}

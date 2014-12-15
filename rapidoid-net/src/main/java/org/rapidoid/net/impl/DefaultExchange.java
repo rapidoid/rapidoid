@@ -54,16 +54,19 @@ public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvide
 		this.conn = conn;
 	}
 
+	@Override
 	public String address() {
 		return conn.address();
 	}
 
+	@Override
 	public W write(String s) {
 		byte[] bytes = s.getBytes();
 		conn.write(bytes);
 		return wrote(bytes.length);
 	}
 
+	@Override
 	public W writeln(String s) {
 		byte[] bytes = s.getBytes();
 		conn.write(bytes);
@@ -71,22 +74,26 @@ public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvide
 		return wrote(bytes.length + 2);
 	}
 
+	@Override
 	public W write(byte[] bytes) {
 		conn.write(bytes);
 		return wrote(bytes.length);
 	}
 
+	@Override
 	public W write(byte[] bytes, int offset, int length) {
 		conn.write(bytes, offset, length);
 		return wrote(length);
 	}
 
+	@Override
 	public W write(ByteBuffer buf) {
 		int n = buf.remaining();
 		conn.write(buf);
 		return wrote(n);
 	}
 
+	@Override
 	public W write(File file) {
 		long size = file.length();
 		U.must(size < Integer.MAX_VALUE);
@@ -94,6 +101,7 @@ public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvide
 		return wrote((int) size);
 	}
 
+	@Override
 	public W writeJSON(Object value) {
 		conn.writeJSON(value);
 		return meW();
@@ -104,6 +112,7 @@ public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvide
 		return meW();
 	}
 
+	@Override
 	public T close() {
 		conn.close();
 		return meT();
@@ -115,30 +124,37 @@ public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvide
 		return meT();
 	}
 
+	@Override
 	public Buf input() {
 		return conn.input();
 	}
 
+	@Override
 	public Buf output() {
 		return conn.output();
 	}
 
+	@Override
 	public String readln() {
 		return conn.readln();
 	}
 
+	@Override
 	public String readN(int count) {
 		return conn.readN(count);
 	}
 
+	@Override
 	public InetSocketAddress getAddress() {
 		return conn.getAddress();
 	}
 
+	@Override
 	public RapidoidHelper helper() {
 		return conn.helper();
 	}
 
+	@Override
 	public long connId() {
 		return conn.connId();
 	}
@@ -159,6 +175,7 @@ public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvide
 		return new DefaultBinaryMultiData(this, ranges);
 	}
 
+	@Override
 	public Buf buffer() {
 		return conn.input();
 	}
@@ -167,20 +184,24 @@ public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvide
 		return totalWritten.get();
 	}
 
+	@Override
 	public T restart() {
 		conn.restart();
 		return meT();
 	}
 
+	@Override
 	public W async() {
 		conn.async();
 		return meW();
 	}
 
+	@Override
 	public boolean isAsync() {
 		return conn.isAsync();
 	}
 
+	@Override
 	public W done() {
 		conn.done();
 		return meW();
