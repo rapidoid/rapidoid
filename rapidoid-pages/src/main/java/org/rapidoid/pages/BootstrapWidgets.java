@@ -314,6 +314,21 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		return div(mleft, mbody).class_(divClass).onclick(js);
 	}
 
+	public static Tag[] mediaList(List<Object> found) {
+		Tag[] items = new Tag[found.size()];
+		int ind = 0;
+
+		for (Object result : found) {
+			long id = Cls.getId(result);
+			String url = urlFor(result);
+
+			Tag left = h6("(ID", NBSP, "=", NBSP, id, ")");
+			Object header = span(result.getClass().getSimpleName());
+			items[ind++] = media(left, header, small(Cls.beanToStr(result, true)), url);
+		}
+
+		return items;
+	}
 
 	public static <T> Var<T> sessionVar(String name, T defaultValue) {
 		return HttpExchanges.sessionVar(name, defaultValue);
