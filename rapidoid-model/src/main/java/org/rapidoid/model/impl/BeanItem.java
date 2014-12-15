@@ -49,8 +49,17 @@ public class BeanItem extends AbstractModel implements Item {
 		return value;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T get(String property) {
+		if (property.equals("_class")) {
+			return (T) value.getClass().getSimpleName();
+		} else if (property.equals("_toString")) {
+			return (T) value.toString();
+		} else if (property.equals("_str")) {
+			return (T) Cls.beanToStr(value, false);
+		}
+
 		return Cls.getPropValue(value, property);
 	}
 

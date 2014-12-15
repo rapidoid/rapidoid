@@ -885,14 +885,15 @@ public class Cls {
 		return null;
 	}
 
-	public static String beanToStr(Object bean) {
+	public static String beanToStr(Object bean, boolean allowCustom) {
 
 		Class<? extends Object> clazz = bean.getClass();
 
-		Method m = getMethod(clazz, "toString");
-
-		if (!m.getDeclaringClass().equals(Object.class)) {
-			return bean.toString();
+		if (allowCustom) {
+			Method m = getMethod(clazz, "toString");
+			if (!m.getDeclaringClass().equals(Object.class)) {
+				return bean.toString();
+			}
 		}
 
 		Map<String, Prop> props = propertiesOf(clazz);

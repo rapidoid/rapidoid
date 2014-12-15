@@ -57,6 +57,10 @@ public class Model {
 	public static Property propertyOf(Class<?> beanType, String property) {
 		Map<String, Prop> props = Cls.propertiesOf(beanType);
 
+		if (beanType == Object.class) {
+			return new BeanProperty(property, property.equals("id") ? long.class : String.class);
+		}
+
 		Prop prop = props.get(property);
 		U.must(prop != null, "Cannot find property %s in class %s!", property, beanType);
 

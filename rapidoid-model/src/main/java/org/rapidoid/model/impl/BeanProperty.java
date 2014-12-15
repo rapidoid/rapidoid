@@ -59,6 +59,13 @@ public class BeanProperty implements Property {
 	}
 
 	private static String pretty(String prop) {
+		if (prop.startsWith("_")) {
+			prop = prop.substring(1);
+			if (prop.equals("toString") || prop.equals("str")) {
+				prop = "record data";
+			}
+		}
+
 		if (prop.equals("id")) {
 			return "ID";
 		}
