@@ -46,8 +46,7 @@ public class DbCollectionsTest extends DbTestCommons {
 		}
 
 		DB.shutdown();
-
-		DB.remove("default");
+		DB.init();
 
 		eq(DB.size(), 7);
 

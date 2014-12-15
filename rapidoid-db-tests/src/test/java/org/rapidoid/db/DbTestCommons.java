@@ -30,8 +30,10 @@ public abstract class DbTestCommons extends TestCommons {
 	@BeforeMethod(alwaysRun = true)
 	@AfterMethod(alwaysRun = true)
 	public void initDB() {
-		U.warn("Destroying all databases: " + DB.instances());
-		DB.destroyAll();
+		U.warn("Destroying all databases: " + DBs.instances());
+		DBs.destroyAll();
+		DB.destroy();
+		DB.init();
 	}
 
 }

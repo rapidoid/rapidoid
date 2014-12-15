@@ -34,9 +34,9 @@ public class BasicDbTest extends DbTestCommons {
 	@Test
 	public void testCRUD() {
 		testDb(DB.db());
-		testDb(DB.instance("db1"));
-		testDb(DB.instance("db2"));
-		testDb(DB.instance("db3"));
+		testDb(DBs.instance("db1"));
+		testDb(DBs.instance("db2"));
+		testDb(DBs.instance("db3"));
 	}
 
 	private void testDb(Db db) {
@@ -53,7 +53,7 @@ public class BasicDbTest extends DbTestCommons {
 
 		U.show(new String(bytes));
 
-		db = DB.instance(db.name() + "-new");
+		db = DBs.instance(db.name() + "-new");
 
 		// load the db (several times shouldn't matter)
 		db.load(new ByteArrayInputStream(bytes));

@@ -58,8 +58,7 @@ public class DbPersistenceTest extends DbTestCommons {
 		});
 
 		DB.shutdown();
-
-		DB.remove("default");
+		DB.init();
 
 		checkDb(count);
 		checkDb(count);

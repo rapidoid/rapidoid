@@ -21,12 +21,9 @@ package org.rapidoid.db;
  */
 import java.io.File;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.rapidoid.lambda.Callback;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.U;
@@ -34,43 +31,34 @@ import org.rapidoid.util.U;
 @SuppressWarnings("unchecked")
 public class DB {
 
-	private static final Class<Db> DB_IMPL_CLASS;
+	static final Class<Db> DB_IMPL_CLASS;
 
-	private static Db defaultDb;
-
-	private static final Map<String, Db> DB_INSTANCES;
+	private static Db db;
 
 	static {
 		DB_IMPL_CLASS = (Class<Db>) U.getClassIfExists("org.rapidoid.db.DbImpl");
 		U.must(DB_IMPL_CLASS != null, "Cannot find Db implementation (org.rapidoid.db.DbImpl)!");
 		U.must(Db.class.isAssignableFrom(DB_IMPL_CLASS), "org.rapidoid.db.DbImpl must implement org.rapidoid.db.Db!");
+		init();
+	}
 
-		DB_INSTANCES = U.autoExpandingMap(new Mapper<String, Db>() {
-			@Override
-			public Db map(String name) throws Exception {
-				String dbPath = U.option("db", "");
-				if (!dbPath.isEmpty() && !dbPath.endsWith(File.separator)) {
-					dbPath += File.separator;
-				}
-				String dbFilename = dbPath + name + ".db";
-				return (Db) U.newInstance(DB_IMPL_CLASS, name, dbFilename);
-			}
-		});
+	public static String path() {
+		String path = U.option("db", "");
 
-		defaultDb = instance("default");
+		if (!path.isEmpty() && !path.endsWith(File.separator)) {
+			path += File.separator;
+		}
+
+		return path;
+	}
+
+	public static void init() {
+		db = (Db) U.newInstance(DB.DB_IMPL_CLASS, "default", path() + "default.db");
 	}
 
 	public static Db db() {
-		assert U.must(defaultDb != null, "Database not initialized!");
-		return defaultDb;
-	}
-
-	public static Db instance(String dbName) {
-		return DB_INSTANCES.get(dbName);
-	}
-
-	public static Map<String, Db> instances() {
-		return Collections.unmodifiableMap(DB_INSTANCES);
+		assert U.must(db != null, "Database not initialized!");
+		return db;
 	}
 
 	public static long insert(Object record) {
@@ -159,27 +147,6 @@ public class DB {
 
 	public static void destroy() {
 		db().destroy();
-	}
-
-	public static void destroy(String name) {
-		instance(name).destroy();
-		remove(name);
-	}
-
-	public synchronized static void destroyAll() {
-		for (Db db : DB_INSTANCES.values()) {
-			db.destroy();
-		}
-
-		DB_INSTANCES.clear();
-		defaultDb = instance("default");
-	}
-
-	public static void remove(String name) {
-		DB_INSTANCES.remove(name);
-		if (name.equals("default")) {
-			defaultDb = instance("default");
-		}
 	}
 
 	public static <E> DbList<E> list() {
