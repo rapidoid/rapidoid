@@ -45,31 +45,25 @@ import org.rapidoid.var.Var;
 
 public abstract class BootstrapWidgets extends Bootstrap {
 
-	public static final ButtonTag[] SAVE_CANCEL = cmds("^Save", "Cancel");
+	public static final ButtonTag SAVE = cmd("SAVE");
 
-	public static final ButtonTag[] ADD_CANCEL = cmds("^Add", "Cancel");
+	public static final ButtonTag UPDATE = cmd("^UPDATE");
 
-	public static final ButtonTag[] UPDATE_CANCEL = cmds("^Update", "Cancel");
+	public static final ButtonTag INSERT = cmd("^INSERT");
 
-	public static final ButtonTag[] DELETE_CANCEL = cmds("^Delete", "Cancel");
+	public static final ButtonTag DELETE = cmd("DELETE");
 
-	public static final ButtonTag[] INSERT_CANCEL = cmds("^Insert", "Cancel");
+	public static final ButtonTag YES = cmd("^YES");
 
-	public static final ButtonTag[] YES_NO = cmds("^Yes", "No");
+	public static final ButtonTag NO = cmd("NO");
 
-	public static final ButtonTag[] YES_NO_CANCEL = cmds("^Yes", "No", "Cancel");
+	public static final ButtonTag OK = cmd("^OK");
 
-	public static final ButtonTag[] OK_CANCEL = cmds("^OK", "Cancel");
+	public static final ButtonTag CANCEL = cmd("Cancel");
 
-	public static final ButtonTag[] EDIT_BACK = cmds("^Edit", "Back");
+	public static final ButtonTag BACK = cmd("Back");
 
-	public static final ButtonTag[] OK = cmds("^OK");
-
-	public static final ButtonTag[] CANCEL = cmds("Cancel");
-
-	public static final ButtonTag[] BACK = cmds("Back");
-
-	public static final ButtonTag[] EDIT = cmds("^Edit");
+	public static final ButtonTag EDIT = cmd("^Edit");
 
 	public static Object i18n(String multiLanguageText, Object... formatArgs) {
 		return HtmlWidgets.i18n(multiLanguageText, formatArgs);
@@ -204,12 +198,12 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		return div(pagination).class_("pull-right");
 	}
 
-	public static FormTag show(Object bean, final Tag[] buttons, String... properties) {
+	public static FormTag show(Object bean, String... properties) {
 		Item item = Model.item(bean);
-		return show(item, buttons, properties);
+		return show(item, properties);
 	}
 
-	public static FormTag show(final Item item, final Tag[] buttons, String... properties) {
+	public static FormTag show(final Item item, String... properties) {
 		final List<Property> props = item.editableProperties(properties);
 
 		int propN = props.size();
@@ -229,15 +223,15 @@ public abstract class BootstrapWidgets extends Bootstrap {
 			vars[i] = property(item, prop.name());
 		}
 
-		return form_(FormLayout.VERTICAL, names, desc, types, options, vars, buttons);
+		return form_(FormLayout.VERTICAL, names, desc, types, options, vars);
 	}
 
-	public static FormTag edit(Object bean, final Tag[] buttons, String... properties) {
+	public static FormTag edit(Object bean, String... properties) {
 		Item item = Model.item(bean);
-		return edit(item, buttons, properties);
+		return edit(item, properties);
 	}
 
-	public static FormTag edit(final Item item, final Tag[] buttons, String... properties) {
+	public static FormTag edit(final Item item, String... properties) {
 		final List<Property> props = item.editableProperties(properties);
 
 		int propN = props.size();
@@ -257,7 +251,7 @@ public abstract class BootstrapWidgets extends Bootstrap {
 			vars[i] = property(item, prop.name());
 		}
 
-		return form_(FormLayout.VERTICAL, names, desc, types, options, vars, buttons);
+		return form_(FormLayout.VERTICAL, names, desc, types, options, vars);
 	}
 
 	protected static FieldType getPropertyFieldType(Property prop) {

@@ -156,8 +156,13 @@ public class Bootstrap extends HTML {
 	}
 
 	public static FormTag form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc, FieldType[] fieldTypes,
-			Object[][] options, Var<?>[] vars, Object[] buttons) {
+			Object[][] options, Var<?>[] vars, Tag[] buttons) {
+		// FIXME form = form.append(formBtns(layout, buttons));
+		return form_(layout, fieldsNames, fieldsDesc, fieldTypes, options, vars).buttons(buttons);
+	}
 
+	public static FormTag form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc, FieldType[] fieldTypes,
+			Object[][] options, Var<?>[] vars) {
 		U.notNull(fieldsNames, "field names");
 		fieldsDesc = U.or(fieldsDesc, fieldsNames);
 		U.must(fieldsNames.length == fieldsDesc.length, "");
@@ -167,8 +172,6 @@ public class Bootstrap extends HTML {
 		for (int i = 0; i < fieldsNames.length; i++) {
 			form = form.append(field(layout, fieldsNames[i], fieldsDesc[i], fieldTypes[i], options[i], vars[i]));
 		}
-
-		form = form.append(formBtns(layout, buttons));
 
 		return form;
 	}

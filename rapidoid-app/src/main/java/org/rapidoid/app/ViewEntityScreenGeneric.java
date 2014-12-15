@@ -39,7 +39,7 @@ public class ViewEntityScreenGeneric extends AppGUI {
 		long id = Long.parseLong(x.pathSegment(1));
 		entity = DB.get(id);
 
-		FormTag details = view(entity, EDIT_BACK);
+		FormTag details = show(entity).buttons(EDIT, BACK);
 
 		return row(caption, details);
 	}

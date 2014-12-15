@@ -176,4 +176,9 @@ public class UndefinedTag implements Tag {
 		throw U.notExpected();
 	}
 
+	@Override
+	public Tag extra(String attr, Object value) {
+		throw U.notExpected();
+	}
+
 }

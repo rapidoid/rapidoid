@@ -36,7 +36,7 @@ public class NewTaskScreen extends GUI {
 
 		Tag caption = h3("Add new task");
 
-		FormTag frm = edit(task, SAVE_CANCEL, "title", "priority");
+		FormTag frm = edit(task, "title", "priority").buttons(OK, CANCEL);
 
 		Tag recent = h3("Most recent tasks:");
 

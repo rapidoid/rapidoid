@@ -40,7 +40,7 @@ public class EditEntityScreenGeneric extends AppGUI {
 		long id = Long.parseLong(x.pathSegment(1));
 		entity = DB.get(id);
 
-		FormTag form = edit(entity, SAVE_CANCEL);
+		FormTag form = edit(entity).buttons(SAVE, CANCEL);
 
 		return row(caption, form);
 	}

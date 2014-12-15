@@ -77,7 +77,7 @@ public class FormsPage extends BootstrapWidgets {
 
 		final Object[][] options = { null, null, null, opt1, opt2, opt3, opt4, null, null };
 
-		final Object[] buttons = { btn("Save").cmd("saveIt", vars[0]), cmd("Cancel", vars[0]) };
+		final Tag[] buttons = { btn("Save").cmd("saveIt", vars[0]), cmd("Cancel", vars[0]) };
 
 		return div(form_(layout, names, desc, types, options, vars, buttons), ul_li((Object[]) vars));
 	}
