@@ -24,6 +24,8 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
@@ -50,9 +52,7 @@ public class Pages {
 
 	public static final String SESSION_CTX = "_ctx_";
 
-	public static final String SESSION_CURRENT_PAGE = "_current_page_";
-
-	public static final String SESSION_PREV_PAGE = "_prev_page_";
+	public static final String SESSION_PAGES_STACK = "_pages_stack_";
 
 	private static final Pattern STATIC_RESOURCE_PATTERN = Pattern.compile("^[a-zA-Z0-9_\\.\\-/]+$");
 
@@ -211,19 +211,24 @@ public class Pages {
 		return x.isPostReq();
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Object serve(HttpExchange x, Object view) {
 		load(x, view);
 
 		TagContext ctx = Tags.context();
 		x.sessionSet(Pages.SESSION_CTX, ctx);
 
-		String prev = x.session(Pages.SESSION_PREV_PAGE, null);
-		String current = x.session(Pages.SESSION_CURRENT_PAGE, null);
-		if (!U.eq(prev, current)) {
-			x.sessionSet(Pages.SESSION_PREV_PAGE, current);
-		}
+		List<String> stack = x.sessionGetOrCreate(Pages.SESSION_PAGES_STACK, ArrayList.class);
 
-		x.sessionSet(Pages.SESSION_CURRENT_PAGE, x.uri());
+		String last = !stack.isEmpty() ? stack.get(stack.size() - 1) : null;
+		String current = x.uri();
+
+		if (!U.eq(current, last)) {
+			stack.add(current);
+			if (stack.size() > 7) {
+				stack.remove(0);
+			}
+		}
 
 		Object result = render(x, view);
 
@@ -353,7 +358,17 @@ public class Pages {
 	}
 
 	public static void goBack(HttpExchange x) {
-		x.redirect(x.session(SESSION_PREV_PAGE, "/"));
+		String prev = "/";
+
+		List<String> stack = x.session(Pages.SESSION_PAGES_STACK, null);
+		if (stack != null && !stack.isEmpty()) {
+			stack.remove(stack.size() - 1);
+			if (!stack.isEmpty()) {
+				prev = stack.remove(stack.size() - 1);
+			}
+		}
+
+		x.redirect(prev);
 	}
 
 }
