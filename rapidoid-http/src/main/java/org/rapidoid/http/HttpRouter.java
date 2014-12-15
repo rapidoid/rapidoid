@@ -105,6 +105,12 @@ public class HttpRouter implements Router {
 		Range action = x.verb_().range();
 		Range path = x.path_().range();
 
+		if (x.isGetReq() && BYTES.find(buf.bytes(), path.start + 1, path.limit(), (byte) '.', true) >= 0) {
+			if (x.serveStatic()) {
+				return;
+			}
+		}
+
 		long hash = hash(buf, action, path);
 		SimpleList<Route> candidates = routes.get(hash);
 

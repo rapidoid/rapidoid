@@ -70,4 +70,6 @@ public interface HttpExchangeHeaders extends HttpExchangeBody {
 
 	String redirectUrl();
 
+	boolean serveStatic();
+
 }

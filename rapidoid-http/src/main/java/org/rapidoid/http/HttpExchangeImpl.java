@@ -22,8 +22,10 @@ package org.rapidoid.http;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
@@ -51,6 +53,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	private final static HttpParser PARSER = IoC.singleton(HttpParser.class);
 
 	private static final byte[] HEADER_SEP = ": ".getBytes();
+
+	private static final Pattern STATIC_RESOURCE_PATTERN = Pattern.compile("^[a-zA-Z0-9_\\.\\-/]+$");
 
 	final Range uri = new Range();
 	final Range verb = new Range();
@@ -857,6 +861,27 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	public HttpExchangeHeaders authorize(Class<?> clazz) {
 		String email = isLoggedIn() ? user().email : null;
 		return accessDeniedIf(!Secure.isAllowed(clazz, email));
+	}
+
+	@Override
+	public boolean serveStatic() {
+		if (isGetReq()) {
+			String filename = path().substring(1);
+
+			if (filename.isEmpty()) {
+				filename = "index.html";
+			}
+
+			if (!filename.contains("..") && STATIC_RESOURCE_PATTERN.matcher(filename).matches()) {
+				URL res = U.resource("public/" + filename);
+				if (res != null) {
+					startResponse(200);
+					sendFile(new File(res.getFile()));
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }
