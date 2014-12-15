@@ -24,4 +24,16 @@ import org.rapidoid.html.SpecificTag;
 
 public interface TdTag extends SpecificTag<TdTag> {
 
+	String colspan();
+
+	TdTag colspan(String colspan);
+
+	String rowspan();
+
+	TdTag rowspan(String rowspan);
+
+	String headers();
+
+	TdTag headers(String headers);
+
 }
