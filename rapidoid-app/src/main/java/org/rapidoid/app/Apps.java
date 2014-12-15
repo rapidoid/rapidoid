@@ -106,12 +106,6 @@ public class Apps {
 		return config(obj, configName, false) || config(obj, "full", false);
 	}
 
-	public static String urlFor(Object entity) {
-		long id = Cls.getId(entity);
-		String className = entity.getClass().getSimpleName();
-		return U.format("/%s/%s", U.uncapitalized(className), id);
-	}
-
 	public static void setAppClasses(AppClasses appClasses) {
 		APP_CLASSES = appClasses;
 	}

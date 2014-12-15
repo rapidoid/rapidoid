@@ -201,12 +201,12 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		return div(pagination).class_("pull-right");
 	}
 
-	public static FormTag view(Object bean, final Tag[] buttons, String... properties) {
+	public static FormTag show(Object bean, final Tag[] buttons, String... properties) {
 		Item item = Model.item(bean);
-		return view(item, buttons, properties);
+		return show(item, buttons, properties);
 	}
 
-	public static FormTag view(final Item item, final Tag[] buttons, String... properties) {
+	public static FormTag show(final Item item, final Tag[] buttons, String... properties) {
 		final List<Property> props = item.editableProperties(properties);
 
 		int propN = props.size();
@@ -314,13 +314,20 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		return div(mleft, mbody).class_(divClass).onclick(js);
 	}
 
-	protected static <T> Var<T> sessionVar(String name, T defaultValue) {
+
+	public static <T> Var<T> sessionVar(String name, T defaultValue) {
 		return HttpExchanges.sessionVar(name, defaultValue);
 	}
 
-	protected static <T> Var<T> localVar(String name, T defaultValue) {
+	public static <T> Var<T> localVar(String name, T defaultValue) {
 		HttpExchange x = HttpExchanges.getThreadLocalExchange();
 		return HttpExchanges.sessionVar(name + ":" + Pages.viewId(x), defaultValue);
+	}
+
+	public static String urlFor(Object entity) {
+		long id = Cls.getId(entity);
+		String className = entity.getClass().getSimpleName();
+		return U.format("/%s/%s", U.uncapitalized(className), id);
 	}
 
 }
