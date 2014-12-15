@@ -37,8 +37,10 @@ public class AboutScreen extends GUI {
 	}
 
 	public void onTx() {
-		DB.insert(new Task("DON'T GO TO THE DATABASE!", Priority.HIGH));
-		DB.update(0, new Task("DON'T GO TO THE DATABASE!", Priority.HIGH));
+		long id = DB.insert(new Task("DON'T GO TO THE DATABASE!", Priority.HIGH));
+		DB.update(id, new Task("DON'T GO TO THE DATABASE!", Priority.HIGH));
+		DB.update(1, new Task("DON'T GO TO THE DATABASE!", Priority.HIGH));
+		DB.delete(1);
 		throw U.rte("some failure!");
 	}
 
