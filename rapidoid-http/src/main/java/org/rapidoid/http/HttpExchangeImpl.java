@@ -110,6 +110,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	private String redirectUrl;
 	private String sessionId;
 	private Throwable error;
+	private boolean complete;
 
 	public HttpExchangeImpl() {
 		reset();
@@ -170,6 +171,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		responseCode = -1;
 		redirectUrl = null;
 		error = null;
+		complete = false;
 	}
 
 	@Override
@@ -272,9 +274,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public synchronized HttpExchangeImpl done() {
 		if (isAsync()) {
-			HttpProtocol.processResponse(this, this, true);
+			completeResponse();
+			conn.done();
 		}
-		conn.done();
 		return this;
 	}
 
@@ -451,9 +453,17 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	public synchronized void completeResponse() {
-		write(new byte[0]);
+
+		// TODO find better solution
+		if (complete) {
+			// after async req is done, it might be called to complete again, so exit
+			return;
+		}
 
 		U.must(responseCode >= 100);
+
+		write(new byte[0]);
+
 		U.must(bodyPos >= 0);
 
 		long responseSize = output().size() - bodyPos;
@@ -462,8 +472,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		int pos = startingPos + getResp(responseCode).contentLengthPos + 10;
 		output().putNumAsText(pos, responseSize, false);
 
-		// reset response because the exchange might be reused in pipelining mode
-		resetResponse();
+		closeIf(!isKeepAlive.value);
+
+		complete = true;
 	}
 
 	private HttpResponse getResp(int code) {
