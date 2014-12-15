@@ -46,6 +46,8 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 
 	final Map<String, String> attrs = U.map();
 
+	final Map<String, Object> extras = U.map();
+
 	final Set<String> battrs = U.set();
 
 	int _h = -1;
@@ -127,6 +129,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 		impl.cmd = cmd;
 		impl.attrs.putAll(attrs);
 		impl.battrs.addAll(battrs);
+		impl.extras.putAll(extras);
 
 		return _copy;
 	}
@@ -201,6 +204,16 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 		} else {
 			impl.battrs.remove(attr);
 		}
+
+		return _copy;
+	}
+
+	@Override
+	public Tag extra(String attr, Object value) {
+		Tag _copy = copy();
+		TagImpl impl = impl(_copy);
+
+		impl.extras.put(attr, value);
 
 		return _copy;
 	}

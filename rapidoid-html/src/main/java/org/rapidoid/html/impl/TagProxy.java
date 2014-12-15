@@ -93,6 +93,11 @@ public class TagProxy implements InvocationHandler, Serializable {
 			return tag.is(attr(name));
 		}
 
+		// extra attribute setter
+		if (returnsTag && has1arg) {
+			return tag.extra(attr(name), args[0]);
+		}
+
 		// in case something is missed
 		throw U.rte("Not implemented: " + name);
 	}

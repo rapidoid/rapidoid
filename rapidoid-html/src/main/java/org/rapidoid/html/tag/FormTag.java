@@ -21,6 +21,7 @@ package org.rapidoid.html.tag;
  */
 
 import org.rapidoid.html.SpecificTag;
+import org.rapidoid.html.Tag;
 
 public interface FormTag extends SpecificTag<FormTag> {
 
@@ -51,5 +52,7 @@ public interface FormTag extends SpecificTag<FormTag> {
 	boolean novalidate();
 
 	FormTag novalidate(boolean novalidate);
+
+	FormTag buttons(Tag... buttons);
 
 }
