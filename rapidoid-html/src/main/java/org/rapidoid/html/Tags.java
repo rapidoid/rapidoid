@@ -68,7 +68,7 @@ public class Tags extends BasicUtils {
 				traverse(tag.content(), processor);
 			}
 		} else if (contents instanceof TagWidget) {
-			traverse(((TagWidget<?>) contents).view(null), processor);
+			traverse(((TagWidget<?>) contents).toTag(null), processor);
 		} else if (contents instanceof Object[]) {
 			Object[] arr = (Object[]) contents;
 			for (Object cont : arr) {

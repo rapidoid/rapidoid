@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
+import org.rapidoid.html.TagWidget;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.http.HttpExchanges;
@@ -45,21 +46,30 @@ public class PagesTestCommons extends TestCommons {
 	protected void print(TagContext ctx, Object content) {
 		HttpExchange x = setupMockExchange(ctx);
 
-		if (!(content instanceof Tag)) {
-			content = Pages.page(x, content);
-		}
+		content = preprocess(content, x);
 
 		String html = PageRenderer.get().toHTML(ctx, content, x);
 		notNull(html);
 		System.out.println(html);
 	}
 
-	protected void has(TagContext ctx, Object content, String... containingTexts) {
-		HttpExchange x = setupMockExchange(ctx);
+	@SuppressWarnings("unchecked")
+	private Object preprocess(Object content, HttpExchange x) {
+		if (content instanceof TagWidget<?>) {
+			TagWidget<HttpExchange> widget = (TagWidget<HttpExchange>) content;
+			content = widget.toTag(x);
+		}
 
 		if (!(content instanceof Tag)) {
 			content = Pages.page(x, content);
 		}
+		return content;
+	}
+
+	protected void has(TagContext ctx, Object content, String... containingTexts) {
+		HttpExchange x = setupMockExchange(ctx);
+
+		content = preprocess(content, x);
 
 		String html = PageRenderer.get().toHTML(ctx, content, x);
 		notNull(html);
@@ -72,9 +82,7 @@ public class PagesTestCommons extends TestCommons {
 	protected void hasRegex(TagContext ctx, Object content, String... containingRegexes) {
 		HttpExchange x = setupMockExchange(ctx);
 
-		if (!(content instanceof Tag)) {
-			content = Pages.page(x, content);
-		}
+		content = preprocess(content, x);
 
 		String html = PageRenderer.get().toHTML(ctx, content, x);
 

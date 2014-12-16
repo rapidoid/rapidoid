@@ -22,6 +22,6 @@ package org.rapidoid.html;
 
 public interface TagWidget<EXTRA> {
 
-	Tag view(EXTRA extra);
+	Tag toTag(EXTRA extra);
 
 }
