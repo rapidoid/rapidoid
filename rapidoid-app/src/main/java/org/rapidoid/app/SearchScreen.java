@@ -1,8 +1,8 @@
-package org.rapidoid.demo.taskplanner.gui;
+package org.rapidoid.app;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-app
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -30,7 +30,7 @@ import org.rapidoid.model.Items;
 import org.rapidoid.pages.GridWidget;
 import org.rapidoid.pages.HighlightedGridWidget;
 
-public class SearchScreen extends GUI {
+public class SearchScreen extends AppGUI {
 
 	public Object content(HttpExchange x) {
 
