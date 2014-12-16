@@ -1,4 +1,4 @@
-package org.rapidoid.pages;
+package org.rapidoid.widget;
 
 /*
  * #%L

@@ -24,10 +24,10 @@ import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
-import org.rapidoid.pages.BootstrapWidgets;
-import org.rapidoid.pages.GridWidget;
 import org.rapidoid.pages.PagesTestCommons;
 import org.rapidoid.pages.entity.Person;
+import org.rapidoid.widget.BootstrapWidgets;
+import org.rapidoid.widget.GridWidget;
 import org.testng.annotations.Test;
 
 public class TableWidgetTest extends PagesTestCommons {

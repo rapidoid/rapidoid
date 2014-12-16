@@ -1,4 +1,4 @@
-package org.rapidoid.pages;
+package org.rapidoid.widget;
 
 /*
  * #%L
@@ -20,17 +20,27 @@ package org.rapidoid.pages;
  * #L%
  */
 
-import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagWidget;
-import org.rapidoid.http.HttpExchange;
+import org.rapidoid.html.tag.TdTag;
+import org.rapidoid.model.Items;
 
-public abstract class AbstractWidget extends BootstrapWidgets implements TagWidget<HttpExchange> {
+// TODO use grid decorator instead
+public class HighlightedGridWidget extends GridWidget {
 
-	protected abstract Tag create();
+	private String regex;
+
+	public HighlightedGridWidget(Items items, String sortOrder, int pageSize, String... properties) {
+		super(items, sortOrder, pageSize, properties);
+	}
+
+	public GridWidget regex(String regex) {
+		this.regex = regex;
+		return this;
+	}
 
 	@Override
-	public Tag toTag(HttpExchange x) {
-		return create();
+	protected TdTag cell(Object value) {
+		String s = String.valueOf(value);
+		return super.cell(highlight(s, regex));
 	}
 
 }

@@ -24,8 +24,8 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.pages.BootstrapWidgets;
 import org.rapidoid.pages.PagesTestCommons;
+import org.rapidoid.widget.BootstrapWidgets;
 import org.testng.annotations.Test;
 
 @SuppressWarnings("unused")

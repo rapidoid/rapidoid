@@ -22,11 +22,11 @@ package org.rapidoid.pages.bootstrap;
 
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
-import org.rapidoid.pages.BootstrapWidgets;
-import org.rapidoid.pages.HtmlWidgets;
-import org.rapidoid.pages.PagerWidget;
 import org.rapidoid.pages.PagesTestCommons;
 import org.rapidoid.var.Var;
+import org.rapidoid.widget.BootstrapWidgets;
+import org.rapidoid.widget.HtmlWidgets;
+import org.rapidoid.widget.PagerWidget;
 import org.testng.annotations.Test;
 
 public class PagerWidgetTest extends PagesTestCommons {

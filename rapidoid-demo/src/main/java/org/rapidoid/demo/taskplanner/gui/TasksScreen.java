@@ -22,7 +22,7 @@ package org.rapidoid.demo.taskplanner.gui;
 
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.html.Tag;
-import org.rapidoid.pages.GridWidget;
+import org.rapidoid.widget.GridWidget;
 
 public class TasksScreen extends GUI {
 

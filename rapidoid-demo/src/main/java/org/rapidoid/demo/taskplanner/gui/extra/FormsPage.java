@@ -26,9 +26,9 @@ import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.pages.BootstrapWidgets;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
+import org.rapidoid.widget.BootstrapWidgets;
 
 public class FormsPage extends BootstrapWidgets {
 

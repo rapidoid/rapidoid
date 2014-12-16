@@ -25,8 +25,8 @@ import org.rapidoid.db.DB;
 import org.rapidoid.demo.taskplanner.model.Priority;
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.html.Tag;
-import org.rapidoid.pages.FormWidget;
-import org.rapidoid.pages.GridWidget;
+import org.rapidoid.widget.FormWidget;
+import org.rapidoid.widget.GridWidget;
 
 public class NewTaskScreen extends GUI {
 

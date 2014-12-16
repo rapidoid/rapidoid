@@ -27,8 +27,8 @@ import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Items;
-import org.rapidoid.pages.GridWidget;
-import org.rapidoid.pages.HighlightedGridWidget;
+import org.rapidoid.widget.GridWidget;
+import org.rapidoid.widget.HighlightedGridWidget;
 
 public class SearchScreen extends AppGUI {
 

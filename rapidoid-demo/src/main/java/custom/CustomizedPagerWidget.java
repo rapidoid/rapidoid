@@ -1,8 +1,8 @@
 package custom;
 
 import org.rapidoid.html.Tag;
-import org.rapidoid.pages.PagerWidget;
 import org.rapidoid.var.Var;
+import org.rapidoid.widget.PagerWidget;
 
 /*
  * #%L

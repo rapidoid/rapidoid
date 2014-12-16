@@ -27,6 +27,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Model;
 import org.rapidoid.pages.entity.Person;
 import org.rapidoid.var.Var;
+import org.rapidoid.widget.BootstrapWidgets;
 
 public class PlaygroundWidget extends BootstrapWidgets {
 

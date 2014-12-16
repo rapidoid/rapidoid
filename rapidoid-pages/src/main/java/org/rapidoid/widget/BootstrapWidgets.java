@@ -1,4 +1,4 @@
-package org.rapidoid.pages;
+package org.rapidoid.widget;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,6 +13,7 @@ import org.rapidoid.http.HttpExchanges;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
+import org.rapidoid.pages.Pages;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;

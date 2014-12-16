@@ -24,8 +24,8 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.pages.FormWidget;
 import org.rapidoid.util.U;
+import org.rapidoid.widget.FormWidget;
 
 public class ViewEntityScreenGeneric extends AppGUI {
 

@@ -30,9 +30,9 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
-import org.rapidoid.pages.BootstrapWidgets;
-import org.rapidoid.pages.GridWidget;
 import org.rapidoid.util.U;
+import org.rapidoid.widget.BootstrapWidgets;
+import org.rapidoid.widget.GridWidget;
 
 public class MixPage extends BootstrapWidgets {
 
