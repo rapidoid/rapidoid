@@ -21,11 +21,14 @@ package org.rapidoid.demo.taskplanner.gui;
  */
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.model.Items;
 import org.rapidoid.pages.GridWidget;
+import org.rapidoid.pages.HighlightedGridWidget;
 
 public class SearchScreen extends GUI {
 
@@ -33,9 +36,12 @@ public class SearchScreen extends GUI {
 
 		final String query = x.param("q");
 		List<Object> found = DB.find(query);
+		Items items = beanItems(Object.class, found.toArray());
 
 		Tag title = h3("Total " + found.size() + " search results for ", b(highlight(query)), ":");
-		GridWidget grid = grid(Object.class, found, "", 10, "id", "_class", "_str");
+
+		String regex = "(?i)" + Pattern.quote(query);
+		GridWidget grid = new HighlightedGridWidget(items, "", 10, "id", "_class", "_str").regex(regex);
 
 		return div(title, grid);
 	}
