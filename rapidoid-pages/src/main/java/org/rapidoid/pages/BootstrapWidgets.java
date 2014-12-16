@@ -86,16 +86,16 @@ public abstract class BootstrapWidgets extends Bootstrap {
 	}
 
 	public static GridWidget grid(Items items, String sortOrder, int pageSize, String... properties) {
-		return new GridWidget(items, sortOrder, pageSize, properties);
+		return U.customizable(GridWidget.class, items, sortOrder, pageSize, properties);
 	}
 
 	public static PagerWidget pager(int from, int to, Var<Integer> pageNumber) {
-		return new PagerWidget(from, to, pageNumber);
+		return U.customizable(PagerWidget.class, from, to, pageNumber);
 	}
 
 	public static FormWidget form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc,
 			FieldType[] fieldTypes, Object[][] options, Var<?>[] vars, Tag[] buttons) {
-		return new FormWidget(layout, fieldsNames, fieldsDesc, fieldTypes, options, vars, buttons);
+		return U.customizable(FormWidget.class, layout, fieldsNames, fieldsDesc, fieldTypes, options, vars, buttons);
 	}
 
 	public static FormWidget show(Object bean, String... properties) {
@@ -104,7 +104,7 @@ public abstract class BootstrapWidgets extends Bootstrap {
 	}
 
 	public static FormWidget show(final Item item, String... properties) {
-		return new FormWidget(false, item, properties);
+		return U.customizable(FormWidget.class, false, item, properties);
 	}
 
 	public static FormWidget edit(Object bean, String... properties) {
@@ -113,7 +113,7 @@ public abstract class BootstrapWidgets extends Bootstrap {
 	}
 
 	public static FormWidget edit(final Item item, String... properties) {
-		return new FormWidget(true, item, properties);
+		return U.customizable(FormWidget.class, true, item, properties);
 	}
 
 	public static Tag page(boolean devMode, String pageTitle, Object head, Object body) {
@@ -173,7 +173,7 @@ public abstract class BootstrapWidgets extends Bootstrap {
 	}
 
 	public static Object highlight(String text, String regex) {
-		return new HighlightWidget(text, regex);
+		return U.customizable(HighlightWidget.class, text, regex);
 	}
 
 }

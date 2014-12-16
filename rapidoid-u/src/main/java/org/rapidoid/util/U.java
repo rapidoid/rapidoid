@@ -415,6 +415,12 @@ public class U {
 		throw rte("Cannot find appropriate constructor for %s with args %s!", clazz, text(args));
 	}
 
+	public static <T> T customizable(Class<T> clazz, Object... args) {
+		String customClassName = "custom." + clazz.getSimpleName();
+		Class<T> customClass = U.getClassIfExists(customClassName);
+		return newInstance(U.or(customClass, clazz), args);
+	}
+
 	public static boolean areAssignable(Class<?>[] types, Object[] values) {
 		if (types.length != values.length) {
 			return false;
