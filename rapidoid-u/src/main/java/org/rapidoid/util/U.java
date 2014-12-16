@@ -416,8 +416,18 @@ public class U {
 	}
 
 	public static <T> T customizable(Class<T> clazz, Object... args) {
-		String customClassName = "custom." + clazz.getSimpleName();
+		String customClassName = "Customized" + clazz.getSimpleName();
+
 		Class<T> customClass = U.getClassIfExists(customClassName);
+
+		if (customClass == null) {
+			customClass = U.getClassIfExists("custom." + customClassName);
+		}
+
+		if (customClass != null && !clazz.isAssignableFrom(customClass)) {
+			customClass = null;
+		}
+
 		return newInstance(U.or(customClass, clazz), args);
 	}
 

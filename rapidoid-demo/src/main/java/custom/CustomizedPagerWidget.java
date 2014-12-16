@@ -1,6 +1,7 @@
 package custom;
 
 import org.rapidoid.html.Tag;
+import org.rapidoid.pages.PagerWidget;
 import org.rapidoid.var.Var;
 
 /*
@@ -23,9 +24,9 @@ import org.rapidoid.var.Var;
  * #L%
  */
 
-public class PagerWidget extends org.rapidoid.pages.PagerWidget {
+public class CustomizedPagerWidget extends PagerWidget {
 
-	public PagerWidget(int from, int to, Var<Integer> pageNumber) {
+	public CustomizedPagerWidget(int from, int to, Var<Integer> pageNumber) {
 		super(from, to, pageNumber);
 	}
 
