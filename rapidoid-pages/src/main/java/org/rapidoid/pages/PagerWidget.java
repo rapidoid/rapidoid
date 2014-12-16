@@ -21,7 +21,6 @@ package org.rapidoid.pages;
  */
 
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.ATag;
 import org.rapidoid.var.Var;
 
 public class PagerWidget extends AbstractWidget {
@@ -38,21 +37,17 @@ public class PagerWidget extends AbstractWidget {
 
 	@Override
 	protected Tag create() {
-		int pageN = pageNumber.get();
+		Tag first = first().cmd("_set", pageNumber, from);
+		Tag prev = prev().cmd("_dec", pageNumber, 1);
+		Tag current = current();
+		Tag next = next().cmd("_inc", pageNumber, 1);
+		Tag last = last().cmd("_set", pageNumber, to);
 
-		Tag firstIcon = span(LAQUO).attr("aria-hidden", "true");
-		ATag first = a_void(firstIcon, span("First").class_("sr-only")).cmd("_set", pageNumber, from);
+		return pagination(first, prev, current, next, last);
+	}
 
-		Tag prevIcon = span(LT).attr("aria-hidden", "true");
-		ATag prev = a_void(prevIcon, span("Previous").class_("sr-only")).cmd("_dec", pageNumber, 1);
-
-		ATag current = a_void("Page ", pageN, " of " + to);
-
-		Tag nextIcon = span(GT).attr("aria-hidden", "true");
-		ATag next = a_void(nextIcon, span("Next").class_("sr-only")).cmd("_inc", pageNumber, 1);
-
-		Tag lastIcon = span(RAQUO).attr("aria-hidden", "true");
-		ATag last = a_void(lastIcon, span("Last").class_("sr-only")).cmd("_set", pageNumber, to);
+	protected Tag pagination(Tag first, Tag prev, Tag current, Tag next, Tag last) {
+		int pageN = pageNumber();
 
 		Tag firstLi = pageN > from ? li(first) : li(first.cmd(null)).class_("disabled");
 		Tag prevLi = pageN > from ? li(prev) : li(prev.cmd(null)).class_("disabled");
@@ -62,6 +57,34 @@ public class PagerWidget extends AbstractWidget {
 
 		Tag pagination = nav(ul_li(firstLi, prevLi, currentLi, nextLi, lastLi).class_("pagination"));
 		return div(pagination).class_("pull-right");
+	}
+
+	protected int pageNumber() {
+		return pageNumber.get();
+	}
+
+	protected Tag first() {
+		Tag firstIcon = span(LAQUO).attr("aria-hidden", "true");
+		return a_void(firstIcon, span("First").class_("sr-only"));
+	}
+
+	protected Tag prev() {
+		Tag prevIcon = span(LT).attr("aria-hidden", "true");
+		return a_void(prevIcon, span("Previous").class_("sr-only"));
+	}
+
+	protected Tag current() {
+		return a_void("Page ", pageNumber(), " of " + to);
+	}
+
+	protected Tag next() {
+		Tag nextIcon = span(GT).attr("aria-hidden", "true");
+		return a_void(nextIcon, span("Next").class_("sr-only"));
+	}
+
+	protected Tag last() {
+		Tag lastIcon = span(RAQUO).attr("aria-hidden", "true");
+		return a_void(lastIcon, span("Last").class_("sr-only"));
 	}
 
 }
