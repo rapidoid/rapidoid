@@ -23,6 +23,7 @@ package org.rapidoid.pages;
 import java.util.List;
 
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.tag.TdTag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
@@ -115,14 +116,24 @@ public class GridWidget extends AbstractWidget {
 
 		for (Property prop : properties) {
 			Object value = item.get(prop.name());
-			row = row.append(td(U.or(value, "")));
+			value = U.or(value, "");
+			row = row.append(cell(value));
 		}
 
-		String type = U.uncapitalized(item.value().getClass().getSimpleName());
-		String js = U.format("goAt('/%s/%s');", type, item.id());
+		String js = onClickScript(item);
 		row = row.onclick(js).class_("pointer");
 
 		return row;
+	}
+
+	protected String onClickScript(Item item) {
+		String type = U.uncapitalized(item.value().getClass().getSimpleName());
+		String js = U.format("goAt('/%s/%s');", type, item.id());
+		return js;
+	}
+
+	protected TdTag cell(Object value) {
+		return td(value);
 	}
 
 }
