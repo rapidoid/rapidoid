@@ -20,9 +20,17 @@ package org.rapidoid.pages;
  * #L%
  */
 
+import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.http.HttpExchange;
 
 public abstract class AbstractWidget extends BootstrapWidgets implements TagWidget<HttpExchange> {
+
+	protected abstract Tag create();
+
+	@Override
+	public Tag toTag(HttpExchange x) {
+		return create();
+	}
 
 }

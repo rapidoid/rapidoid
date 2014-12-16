@@ -23,7 +23,6 @@ package org.rapidoid.pages;
 import java.util.List;
 
 import org.rapidoid.html.Tag;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
@@ -44,6 +43,7 @@ public class GridWidget extends AbstractWidget {
 		this.properties = properties;
 	}
 
+	@Override
 	protected Tag create() {
 		final List<Property> props = items.properties(properties);
 
@@ -123,11 +123,6 @@ public class GridWidget extends AbstractWidget {
 		row = row.onclick(js).class_("pointer");
 
 		return row;
-	}
-
-	@Override
-	public Tag toTag(HttpExchange x) {
-		return create();
 	}
 
 }

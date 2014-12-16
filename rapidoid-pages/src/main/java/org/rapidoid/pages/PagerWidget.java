@@ -22,7 +22,6 @@ package org.rapidoid.pages;
 
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.var.Var;
 
 public class PagerWidget extends AbstractWidget {
@@ -37,6 +36,7 @@ public class PagerWidget extends AbstractWidget {
 		this.pageNumber = pageNumber;
 	}
 
+	@Override
 	protected Tag create() {
 		int pageN = pageNumber.get();
 
@@ -62,11 +62,6 @@ public class PagerWidget extends AbstractWidget {
 
 		Tag pagination = nav(ul_li(firstLi, prevLi, currentLi, nextLi, lastLi).class_("pagination"));
 		return div(pagination).class_("pull-right");
-	}
-
-	@Override
-	public Tag toTag(HttpExchange x) {
-		return create();
 	}
 
 }

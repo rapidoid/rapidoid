@@ -32,7 +32,6 @@ import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.OptionTag;
 import org.rapidoid.html.tag.SelectTag;
 import org.rapidoid.html.tag.TextareaTag;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
 import org.rapidoid.util.Cls;
@@ -128,6 +127,7 @@ public class FormWidget extends AbstractWidget {
 		return this;
 	}
 
+	@Override
 	protected FormTag create() {
 		U.notNull(fieldsNames, "field names");
 		fieldsDesc = U.or(fieldsDesc, fieldsNames);
@@ -292,11 +292,6 @@ public class FormWidget extends AbstractWidget {
 		default:
 			throw U.notExpected();
 		}
-	}
-
-	@Override
-	public Tag toTag(HttpExchange x) {
-		return create();
 	}
 
 }
