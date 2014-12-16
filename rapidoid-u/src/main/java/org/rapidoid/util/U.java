@@ -102,6 +102,10 @@ public class U {
 	private static Pattern PLURAL3 = Pattern.compile(".*[bcdfghjklmnpqrstvwxz]y$");
 	private static Pattern PLURAL3U = Pattern.compile(".*[BCDFGHJKLMNPQRSTVWXZ]Y$");
 
+	private static final Map<Class<?>, Class<?>> PRIMITIVE_WRAPPERS = U.map(boolean.class, Boolean.class, byte.class,
+			Byte.class, char.class, Character.class, double.class, Double.class, float.class, Float.class, int.class,
+			Integer.class, long.class, Long.class, short.class, Short.class, void.class, Void.class);
+
 	private U() {
 	}
 
@@ -643,6 +647,19 @@ public class U {
 	public static <K, V> Map<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
 		Map<K, V> map = map(key1, value1, key2, value2, key3, value3);
 		map.put(key4, value4);
+		return map;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <K, V> Map<K, V> map(Object... keysAndValues) {
+		must(keysAndValues.length % 2 == 0, "Incorrect number of arguments (expected key-value pairs)!");
+
+		Map<K, V> map = map();
+
+		for (int i = 0; i < keysAndValues.length / 2; i++) {
+			map.put((K) keysAndValues[i * 2], (V) keysAndValues[i * 2 + 1]);
+		}
+
 		return map;
 	}
 
@@ -1596,6 +1613,12 @@ public class U {
 		return JRE_CLASS_PATTERN.matcher(canonicalClassName).matches();
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> Class<T> getWrapperClass(Class<T> c) {
+		must(c.isPrimitive());
+		return c.isPrimitive() ? (Class<T>) PRIMITIVE_WRAPPERS.get(c) : c;
+	}
+
 	public static boolean instanceOf(Object obj, Class<?>... classes) {
 		if (obj == null) {
 			return false;
@@ -1604,6 +1627,9 @@ public class U {
 		Class<? extends Object> objClass = obj.getClass();
 
 		for (Class<?> clazz : classes) {
+			if (clazz.isPrimitive()) {
+				clazz = getWrapperClass(clazz);
+			}
 			if (clazz.isAssignableFrom(objClass)) {
 				return true;
 			}
