@@ -23,8 +23,8 @@ package org.rapidoid.app;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.pages.FormWidget;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.util.U;
 
@@ -40,7 +40,7 @@ public class EditEntityScreenGeneric extends AppGUI {
 		long id = Long.parseLong(x.pathSegment(1));
 		entity = DB.get(id);
 
-		FormTag form = edit(entity).buttons(SAVE, CANCEL);
+		FormWidget form = edit(entity).buttons(SAVE, CANCEL);
 
 		return row(caption, form);
 	}

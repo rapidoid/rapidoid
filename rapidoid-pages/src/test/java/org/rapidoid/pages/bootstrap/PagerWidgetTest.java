@@ -20,11 +20,11 @@ package org.rapidoid.pages.bootstrap;
  * #L%
  */
 
-import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.rapidoid.pages.BootstrapWidgets;
 import org.rapidoid.pages.HtmlWidgets;
+import org.rapidoid.pages.PagerWidget;
 import org.rapidoid.pages.PagesTestCommons;
 import org.rapidoid.var.Var;
 import org.testng.annotations.Test;
@@ -39,7 +39,7 @@ public class PagerWidgetTest extends PagesTestCommons {
 		TagContext ctx = Tags.context();
 		Var<Integer> pageN = HtmlWidgets.var(3);
 
-		Tag pager = BootstrapWidgets.pager(1, 7, pageN);
+		PagerWidget pager = BootstrapWidgets.pager(1, 7, pageN);
 		print(ctx, pager);
 
 		eq(pageN.get().intValue(), 3);

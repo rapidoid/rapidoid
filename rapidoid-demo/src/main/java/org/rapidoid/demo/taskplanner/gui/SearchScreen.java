@@ -25,6 +25,7 @@ import java.util.List;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.pages.GridWidget;
 
 public class SearchScreen extends GUI {
 
@@ -33,8 +34,8 @@ public class SearchScreen extends GUI {
 		final String query = x.param("q");
 		List<Object> found = DB.find(query);
 
-		Tag title = h3(found.size() + " search results for ", b(highlight(query)), ":");
-		Tag grid = grid(Object.class, found, "", 10, "id", "_class", "_str");
+		Tag title = h3("Total " + found.size() + " search results for ", b(highlight(query)), ":");
+		GridWidget grid = grid(Object.class, found, "", 10, "id", "_class", "_str");
 
 		return div(title, grid);
 	}

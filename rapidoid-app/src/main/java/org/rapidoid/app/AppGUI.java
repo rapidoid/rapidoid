@@ -21,11 +21,11 @@ package org.rapidoid.app;
  */
 
 import org.rapidoid.db.model.DbItems;
-import org.rapidoid.html.Tag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
 import org.rapidoid.pages.BootstrapWidgets;
+import org.rapidoid.pages.GridWidget;
 
 public class AppGUI extends BootstrapWidgets {
 
@@ -45,7 +45,7 @@ public class AppGUI extends BootstrapWidgets {
 		return Model.beanItems(beanType, beans);
 	}
 
-	public static <T> Tag grid(Class<T> type, String sortOrder, int pageSize, String... properties) {
+	public static <T> GridWidget grid(Class<T> type, String sortOrder, int pageSize, String... properties) {
 		return grid(all(type, sortOrder), sortOrder, pageSize, properties);
 	}
 

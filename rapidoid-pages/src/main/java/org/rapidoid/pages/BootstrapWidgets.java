@@ -9,17 +9,13 @@ import org.rapidoid.html.Bootstrap;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
-import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchanges;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
-import org.rapidoid.model.Property;
 import org.rapidoid.util.Cls;
-import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
@@ -45,17 +41,17 @@ import org.rapidoid.var.Var;
 
 public abstract class BootstrapWidgets extends Bootstrap {
 
-	public static final ButtonTag SAVE = cmd("SAVE");
+	public static final ButtonTag SAVE = cmd("^Save");
 
-	public static final ButtonTag UPDATE = cmd("^UPDATE");
+	public static final ButtonTag UPDATE = cmd("^Update");
 
-	public static final ButtonTag INSERT = cmd("^INSERT");
+	public static final ButtonTag INSERT = cmd("^Insert");
 
-	public static final ButtonTag DELETE = cmd("DELETE");
+	public static final ButtonTag DELETE = cmd("Delete");
 
-	public static final ButtonTag YES = cmd("^YES");
+	public static final ButtonTag YES = cmd("^Yes");
 
-	public static final ButtonTag NO = cmd("NO");
+	public static final ButtonTag NO = cmd("No");
 
 	public static final ButtonTag OK = cmd("^OK");
 
@@ -81,213 +77,45 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		return HtmlWidgets.hardcoded(content);
 	}
 
-	public static <T> Tag grid(Class<T> type, Object[] items, String sortOrder, int pageSize, String... properties) {
+	public static <T> GridWidget grid(Class<T> type, Object[] items, String sortOrder, int pageSize,
+			String... properties) {
 		return grid(Model.beanItems(type, items), sortOrder, pageSize, properties);
 	}
 
-	public static <T> Tag grid(Class<T> type, Collection<T> items, String sortOrder, int pageSize, String... properties) {
+	public static <T> GridWidget grid(Class<T> type, Collection<T> items, String sortOrder, int pageSize,
+			String... properties) {
 		return grid(type, items.toArray(), sortOrder, pageSize, properties);
 	}
 
-	public static Tag grid(Items items, String sortOrder, int pageSize, String... properties) {
-		final List<Property> props = items.properties(properties);
-
-		int total = items.size();
-		int pages = (int) Math.ceil(total / (double) pageSize);
-
-		boolean ordered = !U.isEmpty(sortOrder);
-		Var<String> order = null;
-
-		if (ordered) {
-			order = localVar("_order_" + items.uri(), sortOrder);
-			sortOrder = order.get();
-			items = items.orderedBy(sortOrder);
-		}
-
-		boolean paging = pageSize > 0;
-		Var<Integer> pageNumber = null;
-		Items pageOrAll = items;
-
-		if (paging) {
-			pageNumber = localVar("_page_" + items.uri(), 1);
-
-			Integer pageN = U.limit(1, pageNumber.get(), pages);
-			pageNumber.set(pageN);
-
-			int pageFrom = Math.max((pageN - 1) * pageSize, 0);
-			int pageTo = Math.min((pageN) * pageSize, items.size());
-
-			pageOrAll = items.range(pageFrom, pageTo);
-		}
-
-		Tag header = tr();
-
-		for (Property prop : props) {
-			Tag sortIcon = null;
-
-			Object sort;
-			if (ordered) {
-
-				if (sortOrder.equals(prop.name())) {
-					sortIcon = glyphicon("chevron-down");
-				}
-
-				if (ordered && sortOrder.equals("-" + prop.name())) {
-					sortIcon = glyphicon("chevron-up");
-				}
-
-				sort = a_void(prop.caption(), " ", sortIcon).cmd("_sort", order, prop.name());
-			} else {
-				sort = prop.caption();
-			}
-
-			header = header.append(th(sort));
-		}
-
-		Tag body = tbody();
-
-		for (Item item : pageOrAll) {
-			Tag row = itemRow(props, item);
-			body = body.append(row);
-		}
-
-		Tag pager = paging ? pager(1, pages, pageNumber) : null;
-		return row(table_(thead(header), body), pager);
+	public static GridWidget grid(Items items, String sortOrder, int pageSize, String... properties) {
+		return new GridWidget(items, sortOrder, pageSize, properties);
 	}
 
-	protected static Tag itemRow(List<Property> properties, Item item) {
-		Tag row = tr();
-
-		for (Property prop : properties) {
-			Object value = item.get(prop.name());
-			row = row.append(td(U.or(value, "")));
-		}
-
-		String type = U.uncapitalized(item.value().getClass().getSimpleName());
-		String js = U.format("goAt('/%s/%s');", type, item.id());
-		row = row.onclick(js).class_("pointer");
-
-		return row;
+	public static PagerWidget pager(int from, int to, Var<Integer> pageNumber) {
+		return new PagerWidget(from, to, pageNumber);
 	}
 
-	public static Tag pager(int from, int to, Var<Integer> pageNumber) {
-
-		int pageN = pageNumber.get();
-
-		Tag firstIcon = span(LAQUO).attr("aria-hidden", "true");
-		ATag first = a_void(firstIcon, span("First").class_("sr-only")).cmd("_set", pageNumber, from);
-
-		Tag prevIcon = span(LT).attr("aria-hidden", "true");
-		ATag prev = a_void(prevIcon, span("Previous").class_("sr-only")).cmd("_dec", pageNumber, 1);
-
-		ATag current = a_void("Page ", pageN, " of " + to);
-
-		Tag nextIcon = span(GT).attr("aria-hidden", "true");
-		ATag next = a_void(nextIcon, span("Next").class_("sr-only")).cmd("_inc", pageNumber, 1);
-
-		Tag lastIcon = span(RAQUO).attr("aria-hidden", "true");
-		ATag last = a_void(lastIcon, span("Last").class_("sr-only")).cmd("_set", pageNumber, to);
-
-		Tag firstLi = pageN > from ? li(first) : li(first.cmd(null)).class_("disabled");
-		Tag prevLi = pageN > from ? li(prev) : li(prev.cmd(null)).class_("disabled");
-		Tag currentLi = li(current);
-		Tag nextLi = pageN < to ? li(next) : li(next.cmd(null)).class_("disabled");
-		Tag lastLi = pageN < to ? li(last) : li(last.cmd(null)).class_("disabled");
-
-		Tag pagination = nav(ul_li(firstLi, prevLi, currentLi, nextLi, lastLi).class_("pagination"));
-		return div(pagination).class_("pull-right");
+	public static FormWidget form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc,
+			FieldType[] fieldTypes, Object[][] options, Var<?>[] vars, Tag[] buttons) {
+		return new FormWidget(layout, fieldsNames, fieldsDesc, fieldTypes, options, vars, buttons);
 	}
 
-	public static FormTag show(Object bean, String... properties) {
+	public static FormWidget show(Object bean, String... properties) {
 		Item item = Model.item(bean);
 		return show(item, properties);
 	}
 
-	public static FormTag show(final Item item, String... properties) {
-		final List<Property> props = item.editableProperties(properties);
-
-		int propN = props.size();
-
-		String[] names = new String[propN];
-		String[] desc = new String[propN];
-		FieldType[] types = new FieldType[propN];
-		Object[][] options = new Object[propN][];
-		Var<?>[] vars = new Var[propN];
-
-		for (int i = 0; i < propN; i++) {
-			Property prop = props.get(i);
-			names[i] = prop.name();
-			desc[i] = prop.caption();
-			types[i] = FieldType.LABEL;
-			options[i] = getPropertyOptions(prop);
-			vars[i] = property(item, prop.name());
-		}
-
-		return form_(FormLayout.VERTICAL, names, desc, types, options, vars);
+	public static FormWidget show(final Item item, String... properties) {
+		return new FormWidget(false, item, properties);
 	}
 
-	public static FormTag edit(Object bean, String... properties) {
+	public static FormWidget edit(Object bean, String... properties) {
 		Item item = Model.item(bean);
 		return edit(item, properties);
 	}
 
-	public static FormTag edit(final Item item, String... properties) {
-		final List<Property> props = item.editableProperties(properties);
-
-		int propN = props.size();
-
-		String[] names = new String[propN];
-		String[] desc = new String[propN];
-		FieldType[] types = new FieldType[propN];
-		Object[][] options = new Object[propN][];
-		Var<?>[] vars = new Var[propN];
-
-		for (int i = 0; i < propN; i++) {
-			Property prop = props.get(i);
-			names[i] = prop.name();
-			desc[i] = prop.caption();
-			types[i] = getPropertyFieldType(prop);
-			options[i] = getPropertyOptions(prop);
-			vars[i] = property(item, prop.name());
-		}
-
-		return form_(FormLayout.VERTICAL, names, desc, types, options, vars);
-	}
-
-	protected static FieldType getPropertyFieldType(Property prop) {
-		Class<?> type = prop.type();
-
-		if (type.isEnum()) {
-			return type.getEnumConstants().length <= 3 ? FieldType.RADIOS : FieldType.DROPDOWN;
-		}
-
-		if (prop.name().toLowerCase().contains("email")) {
-			return FieldType.EMAIL;
-		}
-
-		if (Collection.class.isAssignableFrom(type)) {
-			return FieldType.MULTI_SELECT;
-		}
-
-		if (Cls.kindOf(type) == TypeKind.OBJECT) {
-			return FieldType.DROPDOWN;
-		}
-
-		return FieldType.TEXT;
-	}
-
-	protected static Object[] getPropertyOptions(Property prop) {
-		Class<?> type = prop.type();
-
-		if (type.isEnum()) {
-			return type.getEnumConstants();
-		}
-
-		if (Cls.kindOf(type) == TypeKind.OBJECT) {
-			return new Object[] {};
-		}
-
-		return null;
+	public static FormWidget edit(final Item item, String... properties) {
+		return new FormWidget(true, item, properties);
 	}
 
 	public static Tag page(boolean devMode, String pageTitle, Object head, Object body) {

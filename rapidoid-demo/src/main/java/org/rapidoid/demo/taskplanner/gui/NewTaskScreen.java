@@ -25,7 +25,8 @@ import org.rapidoid.db.DB;
 import org.rapidoid.demo.taskplanner.model.Priority;
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.FormTag;
+import org.rapidoid.pages.FormWidget;
+import org.rapidoid.pages.GridWidget;
 
 public class NewTaskScreen extends GUI {
 
@@ -36,11 +37,11 @@ public class NewTaskScreen extends GUI {
 
 		Tag caption = h3("Add new task");
 
-		FormTag frm = edit(task, "title", "priority").buttons(OK, CANCEL);
+		FormWidget frm = edit(task, "title", "priority", "owner").buttons(SAVE, CANCEL);
 
-		Tag recent = h3("Most recent tasks:");
+		Tag recent = h3("Most recent tasks");
 
-		Tag grid = grid(Task.class, "-id", 3, "id", "priority", "title");
+		GridWidget grid = grid(Task.class, "-id", 7, "id", "priority", "title");
 
 		return row(col4(caption, frm), col8(recent, grid));
 	}

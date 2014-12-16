@@ -1,8 +1,8 @@
-package org.rapidoid.demo.taskplanner.gui;
+package org.rapidoid.pages;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-pages
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,18 +20,9 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
-import org.rapidoid.demo.taskplanner.model.Task;
-import org.rapidoid.html.Tag;
-import org.rapidoid.pages.GridWidget;
+import org.rapidoid.html.TagWidget;
+import org.rapidoid.http.HttpExchange;
 
-public class TasksScreen extends GUI {
-
-	public String title = "My Tasks";
-
-	public Object content() {
-		Tag caption = h3("Manage tasks");
-		GridWidget grid = grid(Task.class, "-priority", 10, "id", "title", "priority");
-		return row(caption, grid);
-	}
+public abstract class AbstractWidget extends BootstrapWidgets implements TagWidget<HttpExchange> {
 
 }

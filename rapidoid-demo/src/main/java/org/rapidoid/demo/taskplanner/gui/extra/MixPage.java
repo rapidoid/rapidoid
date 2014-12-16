@@ -31,6 +31,7 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Model;
 import org.rapidoid.pages.BootstrapWidgets;
+import org.rapidoid.pages.GridWidget;
 import org.rapidoid.util.U;
 
 public class MixPage extends BootstrapWidgets {
@@ -56,7 +57,7 @@ public class MixPage extends BootstrapWidgets {
 
 		Tag caption = h1("Manage persons");
 
-		Tag table = grid(items, null, 10);
+		GridWidget table = grid(items, null, 10);
 
 		Object[] pageContent = arr(row(col6("Hello world!"), col3(abc, xy)), arr(caption, row(table)));
 
