@@ -2,8 +2,6 @@ package org.rapidoid.pages;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.rapidoid.html.Bootstrap;
 import org.rapidoid.html.FieldType;
@@ -171,25 +169,11 @@ public abstract class BootstrapWidgets extends Bootstrap {
 	}
 
 	public static Object highlight(String text) {
-		return mark(text).class_("highlight");
+		return highlight(text, null);
 	}
 
 	public static Object highlight(String text, String regex) {
-		List<Object> parts = U.list();
-		Pattern p = Pattern.compile(regex);
-		Matcher m = p.matcher(text);
-
-		int end = 0;
-		while (m.find()) {
-			String match = m.group();
-			parts.add(text.substring(end, m.start()));
-			parts.add(highlight(match));
-			end = m.end();
-		}
-
-		parts.add(text.substring(end));
-
-		return parts;
+		return new HighlightWidget(text, regex);
 	}
 
 }
