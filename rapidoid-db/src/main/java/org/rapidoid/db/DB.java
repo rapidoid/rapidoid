@@ -28,7 +28,6 @@ import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.U;
 
-@SuppressWarnings("unchecked")
 public class DB {
 
 	static final Class<Db> DB_IMPL_CLASS;
@@ -36,7 +35,7 @@ public class DB {
 	private static Db db;
 
 	static {
-		DB_IMPL_CLASS = (Class<Db>) U.getClassIfExists("org.rapidoid.db.DbImpl");
+		DB_IMPL_CLASS = U.getClassIfExists("org.rapidoid.db.DbImpl");
 		U.must(DB_IMPL_CLASS != null, "Cannot find Db implementation (org.rapidoid.db.DbImpl)!");
 		U.must(Db.class.isAssignableFrom(DB_IMPL_CLASS), "org.rapidoid.db.DbImpl must implement org.rapidoid.db.Db!");
 		init();

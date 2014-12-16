@@ -1230,9 +1230,10 @@ public class U {
 		return mmap(filename, mode, 0, file.length());
 	}
 
-	public static Class<?> getClassIfExists(String className) {
+	@SuppressWarnings("unchecked")
+	public static <T> Class<T> getClassIfExists(String className) {
 		try {
-			return Class.forName(className);
+			return (Class<T>) Class.forName(className);
 		} catch (ClassNotFoundException e) {
 			return null;
 		}
