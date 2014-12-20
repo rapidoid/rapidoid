@@ -899,7 +899,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public HttpExchangeHeaders authorize(Class<?> clazz) {
 		String username = isLoggedIn() ? user().username : null;
-		return accessDeniedIf(!Secure.canAccessClass(clazz, username));
+		return accessDeniedIf(!Secure.canAccessClass(username, clazz));
 	}
 
 	@Override

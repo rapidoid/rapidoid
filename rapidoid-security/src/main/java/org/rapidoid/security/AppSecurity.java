@@ -21,7 +21,6 @@ package org.rapidoid.security;
  */
 
 import java.lang.annotation.Annotation;
-import java.util.Collection;
 import java.util.Set;
 
 import org.rapidoid.security.annotation.Admin;
@@ -60,36 +59,8 @@ public class AppSecurity implements Constants {
 		return roles;
 	}
 
-	public boolean canAccessClass(Class<?> clazz, Collection<String> roles) {
-		Set<String> rolesAllowed = rolesAllowedForClass(clazz);
-
-		if (!rolesAllowed.isEmpty() && (roles == null || roles.isEmpty())) {
-			return false;
-		}
-
-		for (String role : rolesAllowed) {
-			if (roles.contains(role)) {
-				return true;
-			}
-		}
-
-		return rolesAllowed.isEmpty();
-	}
-
-	public boolean canAccessClass(Class<?> clazz, String username) {
-		Set<String> rolesAllowed = rolesAllowedForClass(clazz);
-
-		if (!rolesAllowed.isEmpty() && U.isEmpty(username)) {
-			return false;
-		}
-
-		for (String role : rolesAllowed) {
-			if (hasRole(username, role)) {
-				return true;
-			}
-		}
-
-		return rolesAllowed.isEmpty();
+	public boolean canAccessClass(String username, Class<?> clazz) {
+		return true;
 	}
 
 	public boolean hasRole(String username, String role) {
@@ -114,11 +85,7 @@ public class AppSecurity implements Constants {
 		return hasRole(username, "MODERATOR");
 	}
 
-	public DataPermissions typePermissions(String username, String type) {
-		return DataPermissions.ALL;
-	}
-
-	public DataPermissions typePermissions(String username, Class<?> type) {
+	public DataPermissions classPermissions(String username, Class<?> clazz) {
 		return DataPermissions.ALL;
 	}
 

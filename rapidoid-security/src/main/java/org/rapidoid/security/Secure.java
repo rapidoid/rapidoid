@@ -20,7 +20,6 @@ package org.rapidoid.security;
  * #L%
  */
 
-import java.util.Collection;
 import java.util.Set;
 
 import org.rapidoid.util.Constants;
@@ -29,18 +28,6 @@ import org.rapidoid.util.U;
 public class Secure implements Constants {
 
 	private static AppSecurity security = U.customizable(AppSecurity.class);
-
-	public static Set<String> rolesAllowedForClass(Class<?> clazz) {
-		return security.rolesAllowedForClass(clazz);
-	}
-
-	public static boolean canAccessClass(Class<?> clazz, Collection<String> roles) {
-		return security.canAccessClass(clazz, roles);
-	}
-
-	public static boolean canAccessClass(Class<?> clazz, String username) {
-		return security.canAccessClass(clazz, username);
-	}
 
 	public static boolean hasRole(String username, String role) {
 		return security.hasRole(username, role);
@@ -58,16 +45,65 @@ public class Secure implements Constants {
 		return security.isModerator(username);
 	}
 
-	public static DataPermissions typePermissions(String username, String type) {
-		return security.typePermissions(username, type);
+	public static boolean canAccessClass(String username, Class<?> clazz) {
+		U.notNull(clazz, "class");
+		return hasRoleBasedAccess(username, clazz) && security.canAccessClass(username, clazz);
+	}
+
+	public static boolean hasRoleBasedAccess(String username, Class<?> clazz) {
+		Set<String> rolesAllowed = getClassRolesAllowed(clazz);
+
+		if (!rolesAllowed.isEmpty() && U.isEmpty(username)) {
+			return false;
+		}
+
+		for (String role : rolesAllowed) {
+			if (hasRole(username, role)) {
+				return true;
+			}
+		}
+
+		return rolesAllowed.isEmpty();
+	}
+
+	private static Set<String> getClassRolesAllowed(Class<?> clazz) {
+		// TODO use caching
+		return security.rolesAllowedForClass(clazz);
+	}
+
+	public static DataPermissions classPermissions(String username, Class<?> clazz) {
+		U.notNull(clazz, "class");
+
+		if (!canAccessClass(username, clazz)) {
+			return DataPermissions.NONE;
+		}
+
+		return security.classPermissions(username, clazz);
 	}
 
 	public static DataPermissions recordPermissions(String username, Object record) {
-		return security.recordPermissions(username, record);
+		U.notNull(record, "record");
+
+		DataPermissions classPerm = classPermissions(username, record.getClass());
+
+		if (classPerm == DataPermissions.NONE) {
+			return DataPermissions.NONE;
+		}
+
+		return security.recordPermissions(username, record).and(classPerm);
 	}
 
 	public static DataPermissions fieldPermissions(String username, Object record, String fieldName) {
-		return security.fieldPermissions(username, record, fieldName);
+		U.notNull(record, "record");
+		U.notNull(fieldName, "field name");
+
+		DataPermissions recordPerm = recordPermissions(username, record);
+
+		if (recordPerm == DataPermissions.NONE) {
+			return DataPermissions.NONE;
+		}
+
+		return security.fieldPermissions(username, record, fieldName).and(recordPerm);
 	}
 
 }
