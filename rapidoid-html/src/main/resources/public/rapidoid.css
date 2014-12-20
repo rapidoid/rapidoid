@@ -6,3 +6,19 @@
 	border-style: dashed;
 	border-color: #DDD;
 }
+
+div.title-box {
+	margin: 0px;
+	margin-bottom: 10px;
+	padding: 3px;
+	font-size: 20px;
+	font-weight: bold;
+	border-left-width: 0px;
+	border-right-width: 0px;
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-radius: 0px;
+	border-style: solid;
+	border-color: #AAA;
+	text-align: center;
+}

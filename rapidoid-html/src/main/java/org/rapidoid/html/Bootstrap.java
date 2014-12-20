@@ -235,4 +235,8 @@ public class Bootstrap extends HTML {
 		return cmds;
 	}
 
+	public static Tag titleBox(Object... contents) {
+		return div(contents).class_("title-box");
+	}
+
 }

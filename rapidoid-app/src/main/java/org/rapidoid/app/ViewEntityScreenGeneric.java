@@ -34,7 +34,7 @@ public class ViewEntityScreenGeneric extends AppGUI {
 
 	public Object content(HttpExchange x) {
 
-		Tag caption = h2(U.capitalized(x.pathSegment(0)) + " Details");
+		Tag caption = titleBox(U.capitalized(x.pathSegment(0)) + " Details");
 
 		long id = Long.parseLong(x.pathSegment(1));
 		entity = DB.get(id);

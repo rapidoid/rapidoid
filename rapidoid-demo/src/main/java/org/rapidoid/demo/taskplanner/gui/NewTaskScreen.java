@@ -35,11 +35,11 @@ public class NewTaskScreen extends GUI {
 
 	public Object content() {
 
-		Tag caption = h3("Add new task");
+		Tag caption = titleBox("Add new task");
 
 		FormWidget frm = edit(task, "title", "priority", "owner").buttons(SAVE, CANCEL);
 
-		Tag recent = h3("Most recent tasks");
+		Tag recent = titleBox("Most recent tasks");
 
 		GridWidget grid = grid(Task.class, "-id", 7, "id", "priority", "title");
 
