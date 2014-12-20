@@ -43,13 +43,13 @@ import org.rapidoid.var.Vars;
 
 public class FormWidget extends AbstractWidget {
 
-	private Tag[] buttons;
-	private FormLayout layout = FormLayout.VERTICAL;
-	private String[] fieldNames;
-	private String[] fieldLabels;
-	private FieldType[] fieldTypes;
-	private Object[][] options;
-	private Var<?>[] vars;
+	protected Tag[] buttons;
+	protected FormLayout layout = FormLayout.VERTICAL;
+	protected String[] fieldNames;
+	protected String[] fieldLabels;
+	protected FieldType[] fieldTypes;
+	protected Object[][] options;
+	protected Var<?>[] vars;
 
 	public FormWidget(boolean editable, Item item, String... properties) {
 		init(editable, item, properties);
@@ -170,18 +170,27 @@ public class FormWidget extends AbstractWidget {
 		fieldLabels = U.or(fieldLabels, fieldNames);
 		U.must(fieldNames.length == fieldLabels.length);
 
-		FormTag form = form().class_(formLayoutClass(layout)).role("form");
+		FormTag form = emptyForm();
 
-		for (int i = 0; i < fieldNames.length; i++) {
-			form = form.append(field(layout, fieldNames[i], fieldLabels[i], fieldTypes[i], options[i], vars[i]));
-		}
+		form = addFormFields(form);
 
-		form = form.append(formBtns(layout, buttons));
+		form = form.append(formButtons());
 
 		return form;
 	}
 
-	protected Tag formBtns(FormLayout layout, Object[] buttons) {
+	protected FormTag addFormFields(FormTag form) {
+		for (int i = 0; i < fieldNames.length; i++) {
+			form = form.append(field(fieldNames[i], fieldLabels[i], fieldTypes[i], options[i], vars[i]));
+		}
+		return form;
+	}
+
+	protected FormTag emptyForm() {
+		return form().class_(formLayoutClass(layout)).role("form");
+	}
+
+	protected Tag formButtons() {
 		Tag btns;
 
 		if (layout == FormLayout.HORIZONTAL) {
@@ -214,10 +223,10 @@ public class FormWidget extends AbstractWidget {
 		}
 	}
 
-	protected Tag field(FormLayout layout, String name, String desc, FieldType type, Object[] options, Var<?> var) {
+	protected Tag field(String name, String desc, FieldType type, Object[] options, Var<?> var) {
 		desc = U.or(desc, name);
 
-		Object inp = input_(layout, name, desc, type, options, var);
+		Object inp = input_(name, desc, type, options, var);
 		Tag label;
 		Object inputWrap;
 
@@ -255,83 +264,126 @@ public class FormWidget extends AbstractWidget {
 		return group;
 	}
 
-	protected Object input_(FormLayout layout, String name, String desc, FieldType type, Object[] options, Var<?> var) {
+	protected Object input_(String name, String desc, FieldType type, Object[] options, Var<?> var) {
 
-		InputTag input;
 		switch (type) {
 
 		case TEXT:
-			input = input().type("text").class_("form-control").name(name).bind(var);
-			input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
-			return input;
+			return textInput(name, desc, var);
 
 		case PASSWORD:
-			input = input().type("password").class_("form-control").name(name).bind(var);
-			input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
-			return input;
+			return passwordInput(name, desc, var);
 
 		case EMAIL:
-			input = input().type("email").class_("form-control").name(name).bind(var);
-			input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
-			return input;
+			return emailInput(name, desc, var);
 
 		case TEXTAREA:
-			TextareaTag textarea = textarea().class_("form-control").name(name).bind(var);
-			textarea = layout == FormLayout.INLINE ? textarea.placeholder(desc) : textarea;
-			return textarea;
+			return textareaInput(name, desc, var);
 
 		case CHECKBOX:
-			input = input().type("checkbox").name(name).bind(var);
-			return input;
+			return checkboxInput(name, var);
 
 		case DROPDOWN:
-			U.notNull(options, "dropdown options");
-			SelectTag dropdown = select().name(name).class_("form-control").multiple(false);
-			for (Object opt : options) {
-				Var<Boolean> optVar = Vars.eq(var, opt);
-				OptionTag op = option(opt).value(str(opt)).bind(optVar);
-				dropdown = dropdown.append(op);
-			}
-			return dropdown;
+			return dropdownInput(name, options, var);
 
 		case MULTI_SELECT:
-			U.notNull(options, "multi-select options");
-			SelectTag select = select().name(name).class_("form-control").multiple(true);
-			for (Object opt : options) {
-				Var<Boolean> optVar = Vars.has(var, opt);
-				OptionTag op = option(opt).value(str(opt)).bind(optVar);
-				select = select.append(op);
-			}
-			return select;
+			return multiSelectInput(name, options, var);
 
 		case RADIOS:
-			U.notNull(options, "radios options");
-			Object[] radios = new Object[options.length];
-			for (int i = 0; i < options.length; i++) {
-				Object opt = options[i];
-				Var<Boolean> optVar = Vars.eq(var, opt);
-				InputTag radio = input().type("radio").name(name).value(str(opt)).bind(optVar);
-				radios[i] = label(radio, opt).class_("radio-inline");
-			}
-			return radios;
+			return radiosInput(name, options, var);
 
 		case CHECKBOXES:
-			U.notNull(options, "checkboxes options");
-			Object[] checkboxes = new Object[options.length];
-			for (int i = 0; i < options.length; i++) {
-				Object opt = options[i];
-				Var<Boolean> optVar = Vars.has(var, opt);
-				InputTag cc = input().type("checkbox").name(name).value(str(opt)).bind(optVar);
-				checkboxes[i] = label(cc, opt).class_("radio-checkbox");
-			}
-			return checkboxes;
+			return checkboxesInput(name, options, var);
 
 		case LABEL:
-			return span(var.get()).class_("form-control display-value");
+			return readonlyInput(var);
 
 		default:
 			throw U.notExpected();
 		}
+	}
+
+	protected Object readonlyInput(Var<?> var) {
+		return span(var.get()).class_("form-control display-value");
+	}
+
+	protected Object checkboxesInput(String name, Object[] options, Var<?> var) {
+		U.notNull(options, "checkboxes options");
+		Object[] checkboxes = new Object[options.length];
+		for (int i = 0; i < options.length; i++) {
+			Object opt = options[i];
+			Var<Boolean> optVar = Vars.has(var, opt);
+			InputTag cc = input().type("checkbox").name(name).value(str(opt)).bind(optVar);
+			checkboxes[i] = label(cc, opt).class_("radio-checkbox");
+		}
+		return checkboxes;
+	}
+
+	protected Object radiosInput(String name, Object[] options, Var<?> var) {
+		U.notNull(options, "radios options");
+		Object[] radios = new Object[options.length];
+		for (int i = 0; i < options.length; i++) {
+			Object opt = options[i];
+			Var<Boolean> optVar = Vars.eq(var, opt);
+			InputTag radio = input().type("radio").name(name).value(str(opt)).bind(optVar);
+			radios[i] = label(radio, opt).class_("radio-inline");
+		}
+		return radios;
+	}
+
+	protected Object multiSelectInput(String name, Object[] options, Var<?> var) {
+		U.notNull(options, "multi-select options");
+		SelectTag select = select().name(name).class_("form-control").multiple(true);
+		for (Object opt : options) {
+			Var<Boolean> optVar = Vars.has(var, opt);
+			OptionTag op = option(opt).value(str(opt)).bind(optVar);
+			select = select.append(op);
+		}
+		return select;
+	}
+
+	protected Object dropdownInput(String name, Object[] options, Var<?> var) {
+		U.notNull(options, "dropdown options");
+		SelectTag dropdown = select().name(name).class_("form-control").multiple(false);
+		for (Object opt : options) {
+			Var<Boolean> optVar = Vars.eq(var, opt);
+			OptionTag op = option(opt).value(str(opt)).bind(optVar);
+			dropdown = dropdown.append(op);
+		}
+		return dropdown;
+	}
+
+	protected Object checkboxInput(String name, Var<?> var) {
+		InputTag input;
+		input = input().type("checkbox").name(name).bind(var);
+		return input;
+	}
+
+	protected Object textareaInput(String name, String desc, Var<?> var) {
+		TextareaTag textarea = textarea().class_("form-control").name(name).bind(var);
+		textarea = layout == FormLayout.INLINE ? textarea.placeholder(desc) : textarea;
+		return textarea;
+	}
+
+	protected Object emailInput(String name, String desc, Var<?> var) {
+		InputTag input;
+		input = input().type("email").class_("form-control").name(name).bind(var);
+		input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
+		return input;
+	}
+
+	protected Object passwordInput(String name, String desc, Var<?> var) {
+		InputTag input;
+		input = input().type("password").class_("form-control").name(name).bind(var);
+		input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
+		return input;
+	}
+
+	protected Object textInput(String name, String desc, Var<?> var) {
+		InputTag input;
+		input = input().type("text").class_("form-control").name(name).bind(var);
+		input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
+		return input;
 	}
 
 }
