@@ -162,6 +162,10 @@ public class Bootstrap extends HTML {
 		return div(contents).class_("jumbotron");
 	}
 
+	public static Tag well(Object... contents) {
+		return div(contents).class_("well");
+	}
+
 	public static ColspanTag col_(int cols, Object... contents) {
 		return (ColspanTag) tag(ColspanTag.class, "div", contents).class_("col-md-" + cols);
 	}
