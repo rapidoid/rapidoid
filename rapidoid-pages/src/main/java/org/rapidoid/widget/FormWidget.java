@@ -217,7 +217,7 @@ public class FormWidget extends AbstractWidget {
 	protected Tag field(FormLayout layout, String name, String desc, FieldType type, Object[] options, Var<?> var) {
 		desc = U.or(desc, name);
 
-		Object inp = input_(name, desc, type, options, var);
+		Object inp = input_(layout, name, desc, type, options, var);
 		Tag label;
 		Object inputWrap;
 
@@ -255,25 +255,29 @@ public class FormWidget extends AbstractWidget {
 		return group;
 	}
 
-	protected Object input_(String name, String desc, FieldType type, Object[] options, Var<?> var) {
+	protected Object input_(FormLayout layout, String name, String desc, FieldType type, Object[] options, Var<?> var) {
 
-		Tag input;
+		InputTag input;
 		switch (type) {
 
 		case TEXT:
-			input = input().type("text").class_("form-control").name(name).placeholder(desc).bind(var);
+			input = input().type("text").class_("form-control").name(name).bind(var);
+			input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
 			return input;
 
 		case PASSWORD:
-			input = input().type("password").class_("form-control").name(name).placeholder(desc).bind(var);
+			input = input().type("password").class_("form-control").name(name).bind(var);
+			input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
 			return input;
 
 		case EMAIL:
-			input = input().type("email").class_("form-control").name(name).placeholder(desc).bind(var);
+			input = input().type("email").class_("form-control").name(name).bind(var);
+			input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
 			return input;
 
 		case TEXTAREA:
-			TextareaTag textarea = textarea().class_("form-control").name(name).placeholder(desc).bind(var);
+			TextareaTag textarea = textarea().class_("form-control").name(name).bind(var);
+			textarea = layout == FormLayout.INLINE ? textarea.placeholder(desc) : textarea;
 			return textarea;
 
 		case CHECKBOX:
@@ -323,8 +327,7 @@ public class FormWidget extends AbstractWidget {
 			return checkboxes;
 
 		case LABEL:
-			input = span(var.get()).class_("form-control display-value");
-			return input;
+			return span(var.get()).class_("form-control display-value");
 
 		default:
 			throw U.notExpected();
