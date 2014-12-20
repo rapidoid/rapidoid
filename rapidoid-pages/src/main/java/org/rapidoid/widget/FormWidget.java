@@ -20,6 +20,7 @@ package org.rapidoid.widget;
  * #L%
  */
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -44,8 +45,8 @@ public class FormWidget extends AbstractWidget {
 
 	private Tag[] buttons;
 	private FormLayout layout = FormLayout.VERTICAL;
-	private String[] fieldsNames;
-	private String[] fieldsDesc;
+	private String[] fieldNames;
+	private String[] fieldLabels;
 	private FieldType[] fieldTypes;
 	private Object[][] options;
 	private Var<?>[] vars;
@@ -54,15 +55,56 @@ public class FormWidget extends AbstractWidget {
 		init(editable, item, properties);
 	}
 
-	public FormWidget(FormLayout layout, String[] fieldsNames, String[] fieldsDesc, FieldType[] fieldTypes,
+	public FormWidget(FormLayout layout, String[] fieldNames, String[] fieldLabels, FieldType[] fieldTypes,
 			Object[][] options, Var<?>[] vars, Tag[] buttons) {
 		this.layout = layout;
-		this.fieldsNames = fieldsNames;
-		this.fieldsDesc = fieldsDesc;
+		this.fieldNames = fieldNames;
+		this.fieldLabels = U.or(fieldLabels, Arrays.copyOf(fieldNames, fieldNames.length));
 		this.fieldTypes = fieldTypes;
 		this.options = options;
 		this.vars = vars;
 		this.buttons = buttons;
+	}
+
+	public FormWidget buttons(ButtonTag... buttons) {
+		this.buttons = buttons;
+		return this;
+	}
+
+	public FormWidget fieldType(String fieldName, FieldType fieldType) {
+		return fieldType(fieldIndex(fieldName), fieldType);
+	}
+
+	public FormWidget fieldType(int fieldIndex, FieldType fieldType) {
+		fieldTypes[fieldIndex] = fieldType;
+		return this;
+	}
+
+	public FieldType fieldType(int fieldIndex) {
+		return fieldTypes[fieldIndex];
+	}
+
+	public FormWidget fieldLabel(String fieldName, String fieldLabel) {
+		return fieldLabel(fieldIndex(fieldName), fieldLabel);
+	}
+
+	public FormWidget fieldLabel(int fieldIndex, String fieldLabel) {
+		fieldLabels[fieldIndex] = fieldLabel;
+		return this;
+	}
+
+	public String fieldLabel(int fieldIndex) {
+		return fieldLabels[fieldIndex];
+	}
+
+	public int fieldIndex(String fieldName) {
+		for (int i = 0; i < fieldNames.length; i++) {
+			if (fieldNames[i].equals(fieldName)) {
+				return i;
+			}
+		}
+
+		throw U.rte("Cannot find field '%s'!", fieldName);
 	}
 
 	protected void init(boolean editable, Item item, String... properties) {
@@ -70,16 +112,16 @@ public class FormWidget extends AbstractWidget {
 
 		int propN = props.size();
 
-		fieldsNames = new String[propN];
-		fieldsDesc = new String[propN];
+		fieldNames = new String[propN];
+		fieldLabels = new String[propN];
 		fieldTypes = new FieldType[propN];
 		options = new Object[propN][];
 		vars = new Var[propN];
 
 		for (int i = 0; i < propN; i++) {
 			Property prop = props.get(i);
-			fieldsNames[i] = prop.name();
-			fieldsDesc[i] = prop.caption();
+			fieldNames[i] = prop.name();
+			fieldLabels[i] = prop.caption();
 			fieldTypes[i] = editable ? getPropertyFieldType(prop) : FieldType.LABEL;
 			options[i] = getPropertyOptions(prop);
 			vars[i] = property(item, prop.name());
@@ -122,21 +164,16 @@ public class FormWidget extends AbstractWidget {
 		return null;
 	}
 
-	public FormWidget buttons(ButtonTag... buttons) {
-		this.buttons = buttons;
-		return this;
-	}
-
 	@Override
 	protected FormTag create() {
-		U.notNull(fieldsNames, "field names");
-		fieldsDesc = U.or(fieldsDesc, fieldsNames);
-		U.must(fieldsNames.length == fieldsDesc.length, "");
+		U.notNull(fieldNames, "field names");
+		fieldLabels = U.or(fieldLabels, fieldNames);
+		U.must(fieldNames.length == fieldLabels.length);
 
 		FormTag form = form().class_(formLayoutClass(layout)).role("form");
 
-		for (int i = 0; i < fieldsNames.length; i++) {
-			form = form.append(field(layout, fieldsNames[i], fieldsDesc[i], fieldTypes[i], options[i], vars[i]));
+		for (int i = 0; i < fieldNames.length; i++) {
+			form = form.append(field(layout, fieldNames[i], fieldLabels[i], fieldTypes[i], options[i], vars[i]));
 		}
 
 		form = form.append(formBtns(layout, buttons));

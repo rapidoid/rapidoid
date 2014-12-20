@@ -33,6 +33,8 @@ public class Task extends Entity {
 
 	public Priority priority = Priority.MEDIUM;
 
+	public String description;
+
 	public User owner;
 
 	public User createdBy;
