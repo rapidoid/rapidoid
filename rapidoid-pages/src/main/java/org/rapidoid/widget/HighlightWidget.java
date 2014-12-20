@@ -43,7 +43,7 @@ public class HighlightWidget extends AbstractWidget {
 	}
 
 	protected Tag simpleHighlight() {
-		return mark(text).class_("highlight");
+		return !U.isEmpty(text) ? span(text).class_("highlight") : span(text);
 	}
 
 	protected Tag complexHighlight() {
