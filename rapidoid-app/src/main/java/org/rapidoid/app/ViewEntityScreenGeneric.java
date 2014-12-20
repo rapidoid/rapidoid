@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.pages.Pages;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.FormWidget;
 
@@ -39,7 +40,7 @@ public class ViewEntityScreenGeneric extends AppGUI {
 		long id = Long.parseLong(x.pathSegment(1));
 		entity = DB.get(id);
 
-		FormWidget details = show(entity).buttons(EDIT, BACK);
+		FormWidget details = show(entity).buttons(EDIT, BACK, DELETE);
 
 		return row(caption, details);
 	}
@@ -47,6 +48,12 @@ public class ViewEntityScreenGeneric extends AppGUI {
 	public void onEdit(HttpExchange x) {
 		String id = x.pathSegment(1);
 		x.redirect("/edit" + entity.getClass().getSimpleName() + "/" + id);
+	}
+
+	public void onDelete(HttpExchange x) {
+		long id = Long.parseLong(x.pathSegment(1));
+		DB.delete(id);
+		Pages.goBack(x);
 	}
 
 }
