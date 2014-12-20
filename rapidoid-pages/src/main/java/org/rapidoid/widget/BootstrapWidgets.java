@@ -46,7 +46,11 @@ public abstract class BootstrapWidgets extends Bootstrap {
 
 	public static final ButtonTag INSERT = cmd("^Insert");
 
-	public static final ButtonTag DELETE = cmd("Delete");
+	public static final ButtonTag DELETE = cmd("!Delete");
+
+	public static final ButtonTag REMOVE = cmd("!Remove");
+
+	public static final ButtonTag DESTROY = cmd("!Destroy");
 
 	public static final ButtonTag YES = cmd("^Yes");
 

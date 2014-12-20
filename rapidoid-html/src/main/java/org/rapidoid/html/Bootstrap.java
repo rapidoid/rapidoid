@@ -82,6 +82,22 @@ public class Bootstrap extends HTML {
 		return button(contents).type("button").class_("btn btn-primary");
 	}
 
+	public static ButtonTag btnSuccess(Object... contents) {
+		return button(contents).type("button").class_("btn btn-success");
+	}
+
+	public static ButtonTag btnInfo(Object... contents) {
+		return button(contents).type("button").class_("btn btn-info");
+	}
+
+	public static ButtonTag btnWarning(Object... contents) {
+		return button(contents).type("button").class_("btn btn-warning");
+	}
+
+	public static ButtonTag btnDanger(Object... contents) {
+		return button(contents).type("button").class_("btn btn-danger");
+	}
+
 	public static Tag nav_(boolean fluid, boolean inverse, Tag brand, Object[] navbarContent) {
 		brand = brand.class_("navbar-brand");
 		Tag hdr = div(btnCollapse(), brand).class_("navbar-header");
@@ -220,12 +236,26 @@ public class Bootstrap extends HTML {
 
 	public static ButtonTag cmd(String cmd, Object... args) {
 		boolean primary = cmd.startsWith("^");
+		boolean danger = cmd.startsWith("!");
+		boolean warning = cmd.startsWith("?");
 
-		if (primary) {
+		if (primary || danger || warning) {
 			cmd = cmd.substring(1);
 		}
 
-		ButtonTag btn = primary ? btnPrimary(U.capitalized(cmd)) : btn(U.capitalized(cmd));
+		String caption = U.capitalized(cmd);
+
+		ButtonTag btn = primary ? btnPrimary(caption) : btn();
+		if (primary) {
+			btn = btnPrimary(caption);
+		} else if (danger) {
+			btn = btnDanger(caption);
+		} else if (warning) {
+			btn = btnWarning(caption);
+		} else {
+			btn = btn(caption);
+		}
+
 		return btn.cmd(cmd, args);
 	}
 
