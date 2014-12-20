@@ -133,7 +133,10 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 			String type = m.group(1);
 			long id = Long.parseLong(m.group(2));
 
-			Object entity = DB.get(id);
+			Object entity = DB.getIfExists(id);
+			if (entity == null) {
+				return null;
+			}
 
 			String entityClass = entity.getClass().getSimpleName();
 			String reqType = U.capitalized(type);
