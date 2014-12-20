@@ -163,6 +163,17 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		return HttpExchanges.sessionVar(name + ":" + Pages.viewId(x), defaultValue);
 	}
 
+	public static Var<Integer> localVar(String name, int defaultValue, int min, int max) {
+		HttpExchange x = HttpExchanges.getThreadLocalExchange();
+		Var<Integer> var = HttpExchanges.sessionVar(name + ":" + Pages.viewId(x), defaultValue);
+
+		// TODO put the constraints into the variable implementation
+		Integer pageN = U.limit(min, var.get(), max);
+		var.set(pageN);
+
+		return var;
+	}
+
 	public static String urlFor(Object entity) {
 		long id = Cls.getId(entity);
 		String className = entity.getClass().getSimpleName();

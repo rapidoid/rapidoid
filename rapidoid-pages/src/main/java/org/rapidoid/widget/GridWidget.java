@@ -32,10 +32,10 @@ import org.rapidoid.var.Var;
 
 public class GridWidget extends AbstractWidget {
 
-	private Items items;
-	private String sortOrder;
-	private int pageSize;
-	private String[] properties;
+	private final Items items;
+	private final String sortOrder;
+	private final int pageSize;
+	private final String[] properties;
 
 	public GridWidget(Items items, String sortOrder, int pageSize, String... properties) {
 		this.items = items;
@@ -54,41 +54,74 @@ public class GridWidget extends AbstractWidget {
 		boolean ordered = !U.isEmpty(sortOrder);
 		Var<String> order = null;
 
+		Items slice = items;
+
+		String currentOrder = sortOrder;
+
 		if (ordered) {
 			order = localVar("_order_" + items.uri(), sortOrder);
-			sortOrder = order.get();
-			items = items.orderedBy(sortOrder);
+			currentOrder = order.get();
+			slice = slice.orderedBy(currentOrder);
 		}
 
 		boolean paging = pageSize > 0;
 		Var<Integer> pageNumber = null;
-		Items pageOrAll = items;
 
 		if (paging) {
-			pageNumber = localVar("_page_" + items.uri(), 1);
-
-			Integer pageN = U.limit(1, pageNumber.get(), pages);
-			pageNumber.set(pageN);
-
-			int pageFrom = Math.max((pageN - 1) * pageSize, 0);
-			int pageTo = Math.min((pageN) * pageSize, items.size());
-
-			pageOrAll = items.range(pageFrom, pageTo);
+			pageNumber = localVar("_page_" + items.uri(), 1, 1, pages);
+			slice = getPage(slice, pageNumber.get());
 		}
 
+		Tag header = tableHeader(props, order);
+		Tag body = tableBody(props, slice);
+		PagerWidget pager = paging ? pager(1, pages, pageNumber) : noPager();
+
+		return fullTable(header, body, pager);
+	}
+
+	protected PagerWidget noPager() {
+		return null;
+	}
+
+	protected Tag fullTable(Tag header, Tag body, PagerWidget pager) {
+		return row(table_(thead(header), body), pager);
+	}
+
+	protected Items getPage(Items items, Integer pageN) {
+		Items pageOrAll;
+		int pageFrom = Math.max((pageN - 1) * pageSize, 0);
+		int pageTo = Math.min((pageN) * pageSize, items.size());
+
+		pageOrAll = items.range(pageFrom, pageTo);
+		return pageOrAll;
+	}
+
+	protected Tag tableBody(final List<Property> props, Items pageOrAll) {
+		Tag body = tbody();
+
+		for (Item item : pageOrAll) {
+			Tag row = itemRow(props, item);
+			body = body.append(row);
+		}
+		return body;
+	}
+
+	protected Tag tableHeader(final List<Property> props, Var<String> order) {
 		Tag header = tr();
 
 		for (Property prop : props) {
 			Tag sortIcon = null;
 
 			Object sort;
-			if (ordered) {
+			if (order != null) {
 
-				if (sortOrder.equals(prop.name())) {
+				String currentOrder = order.get();
+
+				if (currentOrder.equals(prop.name())) {
 					sortIcon = glyphicon("chevron-down");
 				}
 
-				if (ordered && sortOrder.equals("-" + prop.name())) {
+				if (order != null && currentOrder.equals("-" + prop.name())) {
 					sortIcon = glyphicon("chevron-up");
 				}
 
@@ -99,16 +132,7 @@ public class GridWidget extends AbstractWidget {
 
 			header = header.append(th(sort));
 		}
-
-		Tag body = tbody();
-
-		for (Item item : pageOrAll) {
-			Tag row = itemRow(props, item);
-			body = body.append(row);
-		}
-
-		PagerWidget pager = paging ? pager(1, pages, pageNumber) : null;
-		return row(table_(thead(header), body), pager);
+		return header;
 	}
 
 	protected Tag itemRow(List<Property> properties, Item item) {
