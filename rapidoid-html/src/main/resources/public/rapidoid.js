@@ -5,8 +5,7 @@ try {
 } catch (e) {
 }
 if (theme && theme != 'default') {
-	document.write('<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/'
-			+ theme + '/bootstrap.min.css" rel="stylesheet">');
+	document.write('<link href="/bootstrap/css/theme-' + theme + '.css" rel="stylesheet">');
 }
 
 function goAt(url) {

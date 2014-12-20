@@ -51,8 +51,8 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 
 	private static final String[] SPECIAL_SCREENS = { SEARCH_SCREEN, SETTINGS_SCREEN, ADMIN_SCREEN };
 
-	private static final String[] themes = { "default", "cerulean", "cosmo", "cyborg", "darkly", "flatly", "journal",
-			"lumen", "paper", "readable", "sandstone", "simplex", "slate", "spacelab", "superhero", "united", "yeti" };
+	private static final String[] themes = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14",
+			"15" };
 
 	private static final Pattern ENTITY_VIEW = Pattern.compile("^/(\\w+?)/(\\d+)/?$");
 
