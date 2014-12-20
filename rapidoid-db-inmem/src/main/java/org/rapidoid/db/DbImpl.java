@@ -98,6 +98,11 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	}
 
 	@Override
+	public <E> E getIfExists(long id) {
+		return inmem.getIfExists(id);
+	}
+
+	@Override
 	public <E> E get(long id, Class<E> clazz) {
 		return inmem.get(id, clazz);
 	}

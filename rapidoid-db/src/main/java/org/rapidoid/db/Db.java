@@ -36,6 +36,8 @@ public interface Db extends Activity<Db> {
 
 	<E> E get(long id);
 
+	<E> E getIfExists(long id);
+
 	<E> E get(long id, Class<E> clazz);
 
 	<E> List<E> getAll(Class<E> clazz);

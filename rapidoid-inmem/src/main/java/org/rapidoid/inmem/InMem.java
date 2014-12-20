@@ -233,15 +233,26 @@ public class InMem {
 	public <E> E get(long id) {
 		sharedLock();
 		try {
-			return get_(id);
+			return get_(id, true);
+		} finally {
+			sharedUnlock();
+		}
+	}
+
+	public <E> E getIfExists(long id) {
+		sharedLock();
+		try {
+			return get_(id, false);
 		} finally {
 			sharedUnlock();
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private <E> E get_(long id) {
-		validateId(id);
+	private <E> E get_(long id, boolean validateId) {
+		if (validateId) {
+			validateId(id);
+		}
 		Rec rec = data.get(id);
 		return (E) (rec != null ? setId(obj(rec), id) : null);
 	}
@@ -348,7 +359,7 @@ public class InMem {
 		try {
 
 			for (long id : ids) {
-				results.add((E) get_(id));
+				results.add((E) get_(id, true));
 			}
 
 			return results;
@@ -365,7 +376,7 @@ public class InMem {
 		try {
 
 			for (long id : ids) {
-				results.add((E) get_(id));
+				results.add((E) get_(id, true));
 			}
 
 			return results;

@@ -72,6 +72,10 @@ public class DB {
 		return db().get(id);
 	}
 
+	public static <T> T getIfExists(long id) {
+		return db().getIfExists(id);
+	}
+
 	public static <T> T get(long id, Class<T> clazz) {
 		return db().get(id, clazz);
 	}
