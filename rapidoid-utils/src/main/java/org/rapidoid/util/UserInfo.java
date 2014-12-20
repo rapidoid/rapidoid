@@ -1,8 +1,8 @@
-package org.rapidoid.http;
+package org.rapidoid.util;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%

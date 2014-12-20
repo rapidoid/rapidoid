@@ -41,6 +41,7 @@ import org.rapidoid.security.Secure;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.util.UserInfo;
 import org.rapidoid.wrap.Bool;
 
 public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements HttpExchange,
@@ -781,7 +782,34 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			return false;
 		}
 
-		return Secure.isAdmin(user().email);
+		return Secure.isAdmin(user().username);
+	}
+
+	@Override
+	public synchronized boolean isManager() {
+		if (!isLoggedIn()) {
+			return false;
+		}
+
+		return Secure.isManager(user().username);
+	}
+
+	@Override
+	public synchronized boolean isModerator() {
+		if (!isLoggedIn()) {
+			return false;
+		}
+
+		return Secure.isModerator(user().username);
+	}
+
+	@Override
+	public synchronized boolean hasRole(String role) {
+		if (!isLoggedIn()) {
+			return false;
+		}
+
+		return Secure.hasRole(user().username, role);
 	}
 
 	@Override
@@ -870,8 +898,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public HttpExchangeHeaders authorize(Class<?> clazz) {
-		String email = isLoggedIn() ? user().email : null;
-		return accessDeniedIf(!Secure.isAllowed(clazz, email));
+		String username = isLoggedIn() ? user().username : null;
+		return accessDeniedIf(!Secure.canAccessClass(clazz, username));
 	}
 
 	@Override

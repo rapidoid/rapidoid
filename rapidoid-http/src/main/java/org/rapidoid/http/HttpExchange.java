@@ -26,6 +26,7 @@ import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.MultiData;
 import org.rapidoid.net.abstracts.CtxFull;
+import org.rapidoid.util.UserInfo;
 
 public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, HttpExchangeHeaders {
 
@@ -118,6 +119,12 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 	UserInfo user();
 
 	boolean isAdmin();
+
+	boolean isManager();
+
+	boolean isModerator();
+
+	boolean hasRole(String role);
 
 	boolean isGetReq();
 

@@ -20,98 +20,54 @@ package org.rapidoid.security;
  * #L%
  */
 
-import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Set;
 
-import org.rapidoid.security.annotation.Admin;
-import org.rapidoid.security.annotation.LoggedIn;
-import org.rapidoid.security.annotation.Manager;
-import org.rapidoid.security.annotation.Moderator;
-import org.rapidoid.security.annotation.Roles;
-import org.rapidoid.util.Arr;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 
 public class Secure implements Constants {
 
-	public static Set<String> rolesAllowed(Class<?> clazz) {
-		Set<String> roles = U.set();
+	private static AppSecurity security = U.customizable(AppSecurity.class);
 
-		for (Annotation ann : clazz.getAnnotations()) {
-			Class<? extends Annotation> type = ann.annotationType();
-			if (type.equals(Admin.class)) {
-				roles.add(Admin.class.getSimpleName().toUpperCase());
-			} else if (type.equals(Manager.class)) {
-				roles.add(Manager.class.getSimpleName().toUpperCase());
-			} else if (type.equals(Moderator.class)) {
-				roles.add(Moderator.class.getSimpleName().toUpperCase());
-			} else if (type.equals(LoggedIn.class)) {
-				roles.add(LoggedIn.class.getSimpleName().toUpperCase());
-			} else if (type.equals(Roles.class)) {
-				String[] values = ((Roles) ann).value();
-				U.must(values.length > 0, "At least one role must be specified in @Roles annotation!");
-				for (String role : values) {
-					roles.add(role.toUpperCase());
-				}
-			}
-		}
-
-		return roles;
+	public static Set<String> rolesAllowedForClass(Class<?> clazz) {
+		return security.rolesAllowedForClass(clazz);
 	}
 
-	public static boolean isAllowed(Class<?> clazz, Collection<String> roles) {
-		Set<String> rolesAllowed = rolesAllowed(clazz);
-
-		if (!rolesAllowed.isEmpty() && (roles == null || roles.isEmpty())) {
-			return false;
-		}
-
-		for (String role : rolesAllowed) {
-			if (roles.contains(role)) {
-				return true;
-			}
-		}
-
-		return rolesAllowed.isEmpty();
+	public static boolean canAccessClass(Class<?> clazz, Collection<String> roles) {
+		return security.canAccessClass(clazz, roles);
 	}
 
-	public static boolean isAllowed(Class<?> clazz, String email) {
-		Set<String> rolesAllowed = rolesAllowed(clazz);
-
-		if (!rolesAllowed.isEmpty() && U.isEmpty(email)) {
-			return false;
-		}
-
-		for (String role : rolesAllowed) {
-			if (hasRole(email, role)) {
-				return true;
-			}
-		}
-
-		return rolesAllowed.isEmpty();
+	public static boolean canAccessClass(Class<?> clazz, String username) {
+		return security.canAccessClass(clazz, username);
 	}
 
-	public static boolean hasRole(String email, String role) {
-		if (role.equalsIgnoreCase(LoggedIn.class.getSimpleName())) {
-			return !U.isEmpty(email);
-		}
-
-		String roleConfig = "role-" + role.toLowerCase();
-		String[] admins = U.option(roleConfig, EMPTY_STRING_ARRAY);
-		return !U.isEmpty(email) && Arr.indexOf(admins, email) >= 0;
+	public static boolean hasRole(String username, String role) {
+		return security.hasRole(username, role);
 	}
 
-	public static boolean isAdmin(String email) {
-		return hasRole(email, "ADMIN");
+	public static boolean isAdmin(String username) {
+		return security.isAdmin(username);
 	}
 
-	public static boolean isManager(String email) {
-		return hasRole(email, "MANAGER");
+	public static boolean isManager(String username) {
+		return security.isManager(username);
 	}
 
-	public static boolean isModerator(String email) {
-		return hasRole(email, "MODERATOR");
+	public static boolean isModerator(String username) {
+		return security.isModerator(username);
+	}
+
+	public static DataPermissions typePermissions(String username, String type) {
+		return security.typePermissions(username, type);
+	}
+
+	public static DataPermissions recordPermissions(String username, Object record) {
+		return security.recordPermissions(username, record);
+	}
+
+	public static DataPermissions fieldPermissions(String username, Object record, String fieldName) {
+		return security.fieldPermissions(username, record, fieldName);
 	}
 
 }

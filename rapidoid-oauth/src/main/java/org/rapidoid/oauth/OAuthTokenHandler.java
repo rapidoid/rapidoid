@@ -33,9 +33,9 @@ import org.apache.oltu.oauth2.client.response.OAuthResourceResponse;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.UserInfo;
 import org.rapidoid.json.JSON;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UserInfo;
 
 public class OAuthTokenHandler implements Handler {
 
