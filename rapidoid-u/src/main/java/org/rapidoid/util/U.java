@@ -1276,6 +1276,10 @@ public class U {
 		return hasOption("production");
 	}
 
+	public static boolean dev() {
+		return hasOption("dev");
+	}
+
 	public static synchronized String config(String name) {
 		if (CONFIG == null) {
 			CONFIG = new Properties();
