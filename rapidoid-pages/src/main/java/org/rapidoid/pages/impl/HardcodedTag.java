@@ -2,7 +2,6 @@ package org.rapidoid.pages.impl;
 
 import java.io.OutputStream;
 
-import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.impl.UndefinedTag;
 import org.rapidoid.http.HttpExchange;

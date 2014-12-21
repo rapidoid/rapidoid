@@ -843,6 +843,10 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			return true;
 		}
 
+		if (U.production()) {
+			return false;
+		}
+
 		String host = host();
 		return host == null || host.equals("localhost") || host.equals("127.0.0.1") || host.startsWith("localhost:")
 				|| host.startsWith("127.0.0.1:");
