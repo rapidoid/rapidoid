@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
 
 @Target({ TYPE, METHOD, FIELD })
 @Retention(RUNTIME)
-public @interface Moderator {
+public @interface SharedWith {
 
 	boolean fullAccess() default false;
 

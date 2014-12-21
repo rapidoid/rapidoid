@@ -27,31 +27,47 @@ import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Moderator;
+import org.rapidoid.security.annotation.Owner;
+import org.rapidoid.security.annotation.Role;
 import org.rapidoid.security.annotation.Roles;
+import org.rapidoid.security.annotation.SharedWith;
 import org.rapidoid.util.Arr;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 
 public class AppSecurity implements Constants {
 
-	public Set<String> rolesAllowedForClass(Class<?> clazz) {
-		Set<String> roles = U.set();
+	public Set<RoleBasedAccess> rolesAllowedForClass(Class<?> clazz) {
+		Set<RoleBasedAccess> roles = U.set();
 
 		for (Annotation ann : clazz.getAnnotations()) {
 			Class<? extends Annotation> type = ann.annotationType();
+			String roleName = type.getSimpleName().toUpperCase();
+
 			if (type.equals(Admin.class)) {
-				roles.add(Admin.class.getSimpleName().toUpperCase());
+				Admin r = (Admin) ann;
+				roles.add(RoleBasedAccess.from(roleName, r.fullAccess(), r.insert(), r.read(), r.update(), r.delete()));
 			} else if (type.equals(Manager.class)) {
-				roles.add(Manager.class.getSimpleName().toUpperCase());
+				Manager r = (Manager) ann;
+				roles.add(RoleBasedAccess.from(roleName, r.fullAccess(), r.insert(), r.read(), r.update(), r.delete()));
 			} else if (type.equals(Moderator.class)) {
-				roles.add(Moderator.class.getSimpleName().toUpperCase());
+				Moderator r = (Moderator) ann;
+				roles.add(RoleBasedAccess.from(roleName, r.fullAccess(), r.insert(), r.read(), r.update(), r.delete()));
 			} else if (type.equals(LoggedIn.class)) {
-				roles.add(LoggedIn.class.getSimpleName().toUpperCase());
+				LoggedIn r = (LoggedIn) ann;
+				roles.add(RoleBasedAccess.from(roleName, r.fullAccess(), r.insert(), r.read(), r.update(), r.delete()));
+			} else if (type.equals(Owner.class)) {
+				Owner r = (Owner) ann;
+				roles.add(RoleBasedAccess.from(roleName, r.fullAccess(), r.insert(), r.read(), r.update(), r.delete()));
+			} else if (type.equals(SharedWith.class)) {
+				SharedWith r = (SharedWith) ann;
+				roles.add(RoleBasedAccess.from(roleName, r.fullAccess(), r.insert(), r.read(), r.update(), r.delete()));
 			} else if (type.equals(Roles.class)) {
-				String[] values = ((Roles) ann).value();
+				Role[] values = ((Roles) ann).value();
 				U.must(values.length > 0, "At least one role must be specified in @Roles annotation!");
-				for (String role : values) {
-					roles.add(role.toUpperCase());
+				for (Role r : values) {
+					roles.add(RoleBasedAccess.from(roleName, r.fullAccess(), r.insert(), r.read(), r.update(),
+							r.delete()));
 				}
 			}
 		}
@@ -93,7 +109,7 @@ public class AppSecurity implements Constants {
 		return DataPermissions.ALL;
 	}
 
-	public DataPermissions fieldPermissions(String username, Object record, String fieldName) {
+	public DataPermissions propertyPermissions(String username, Object record, String fieldName) {
 		return DataPermissions.ALL;
 	}
 

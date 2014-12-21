@@ -23,12 +23,13 @@ package org.rapidoid.demo.taskplanner.gui;
 import org.rapidoid.db.DB;
 import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.Manager;
+import org.rapidoid.security.annotation.Role;
 import org.rapidoid.security.annotation.Roles;
 import org.rapidoid.util.U;
 
 @Admin
 @Manager
-@Roles({ "RESTARTER" })
+@Roles({ @Role("RESTARTER") })
 public class AdminScreen extends GUI {
 
 	public Object[] content = { h2("Manage Application"), cmd("Shutdown") };

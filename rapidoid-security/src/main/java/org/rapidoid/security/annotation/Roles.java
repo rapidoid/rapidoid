@@ -26,10 +26,10 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-@Target({ TYPE, METHOD })
+@Target({ TYPE, METHOD, FIELD })
 @Retention(RUNTIME)
 public @interface Roles {
 
-	String[] value();
+	Role[] value();
 
 }

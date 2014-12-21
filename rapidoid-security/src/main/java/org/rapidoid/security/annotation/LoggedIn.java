@@ -26,8 +26,18 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-@Target({ TYPE, METHOD })
+@Target({ TYPE, METHOD, FIELD })
 @Retention(RUNTIME)
 public @interface LoggedIn {
+
+	boolean fullAccess() default false;
+
+	boolean insert() default false;
+
+	boolean read() default true;
+
+	boolean update() default false;
+
+	boolean delete() default false;
 
 }

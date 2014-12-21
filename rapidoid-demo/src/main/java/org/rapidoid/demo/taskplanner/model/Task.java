@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.rapidoid.db.DB;
 import org.rapidoid.db.Entity;
+import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.util.U;
 
 /*
@@ -27,6 +28,7 @@ import org.rapidoid.util.U;
  * #L%
  */
 
+@LoggedIn
 public class Task extends Entity {
 
 	public String title;

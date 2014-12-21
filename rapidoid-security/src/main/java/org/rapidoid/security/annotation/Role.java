@@ -26,9 +26,11 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-@Target({ TYPE, METHOD, FIELD })
+@Target({ ANNOTATION_TYPE })
 @Retention(RUNTIME)
-public @interface Moderator {
+public @interface Role {
+
+	String value();
 
 	boolean fullAccess() default false;
 

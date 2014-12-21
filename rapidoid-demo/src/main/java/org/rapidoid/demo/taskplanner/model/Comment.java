@@ -3,6 +3,7 @@ package org.rapidoid.demo.taskplanner.model;
 import java.util.Set;
 
 import org.rapidoid.db.Entity;
+import org.rapidoid.security.annotation.Manager;
 
 /*
  * #%L
@@ -24,6 +25,7 @@ import org.rapidoid.db.Entity;
  * #L%
  */
 
+@Manager
 public class Comment extends Entity {
 
 	public String content;

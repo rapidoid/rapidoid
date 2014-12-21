@@ -51,14 +51,14 @@ public class Secure implements Constants {
 	}
 
 	public static boolean hasRoleBasedAccess(String username, Class<?> clazz) {
-		Set<String> rolesAllowed = getClassRolesAllowed(clazz);
+		Set<RoleBasedAccess> rolesAllowed = getClassRolesAllowed(clazz);
 
 		if (!rolesAllowed.isEmpty() && U.isEmpty(username)) {
 			return false;
 		}
 
-		for (String role : rolesAllowed) {
-			if (hasRole(username, role)) {
+		for (RoleBasedAccess roleAccess : rolesAllowed) {
+			if (hasRole(username, roleAccess.role)) {
 				return true;
 			}
 		}
@@ -66,7 +66,7 @@ public class Secure implements Constants {
 		return rolesAllowed.isEmpty();
 	}
 
-	private static Set<String> getClassRolesAllowed(Class<?> clazz) {
+	private static Set<RoleBasedAccess> getClassRolesAllowed(Class<?> clazz) {
 		// TODO use caching
 		return security.rolesAllowedForClass(clazz);
 	}
@@ -93,7 +93,7 @@ public class Secure implements Constants {
 		return security.recordPermissions(username, record).and(classPerm);
 	}
 
-	public static DataPermissions fieldPermissions(String username, Object record, String fieldName) {
+	public static DataPermissions propertyPermissions(String username, Object record, String fieldName) {
 		U.notNull(record, "record");
 		U.notNull(fieldName, "field name");
 
@@ -103,7 +103,7 @@ public class Secure implements Constants {
 			return DataPermissions.NONE;
 		}
 
-		return security.fieldPermissions(username, record, fieldName).and(recordPerm);
+		return security.propertyPermissions(username, record, fieldName).and(recordPerm);
 	}
 
 }
