@@ -39,7 +39,7 @@ public class Task extends Entity {
 
 	public User owner;
 
-	public User createdBy;
+	public final Set<User> sharedWith = DB.set();
 
 	public final List<Comment> comments = DB.list();
 

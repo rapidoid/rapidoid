@@ -53,6 +53,14 @@ public class Secure implements Constants {
 		return security.isModerator(username);
 	}
 
+	public static boolean isOwnerOf(String username, Object record) {
+		return security.isOwnerOf(username, record);
+	}
+
+	public static boolean isSharedWith(String username, Object record) {
+		return security.isSharedWith(username, record);
+	}
+
 	public static boolean canAccessClass(String username, Class<?> clazz) {
 		U.notNull(clazz, "class");
 		return hasRoleBasedAccess(username, clazz) && security.canAccessClass(username, clazz);

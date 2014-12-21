@@ -21,6 +21,7 @@ package org.rapidoid.security;
  */
 
 import java.lang.annotation.Annotation;
+import java.util.Collection;
 import java.util.Set;
 
 import org.rapidoid.security.annotation.Admin;
@@ -89,6 +90,14 @@ public class AppSecurity implements Constants {
 			return !U.isEmpty(username);
 		}
 
+		if (role.equalsIgnoreCase(Owner.class.getSimpleName())) {
+			return isOwnerOf(username, record);
+		}
+
+		if (role.equalsIgnoreCase(SharedWith.class.getSimpleName())) {
+			return isSharedWith(username, record);
+		}
+
 		String roleConfig = "role-" + role.toLowerCase();
 		String[] usernames = U.option(roleConfig, EMPTY_STRING_ARRAY);
 		return !U.isEmpty(username) && Arr.indexOf(usernames, username) >= 0;
@@ -116,6 +125,34 @@ public class AppSecurity implements Constants {
 
 	public DataPermissions propertyPermissions(String username, Object record, String propertyName) {
 		return DataPermissions.ALL;
+	}
+
+	public boolean isOwnerOf(String username, Object record) {
+		if (U.isEmpty(username) || record == null) {
+			return false;
+		}
+
+		Object owner = Cls.getPropValue(record, "owner", null);
+
+		return owner != null && username.equalsIgnoreCase(Cls.getPropValue(owner, "username", ""));
+	}
+
+	public boolean isSharedWith(String username, Object record) {
+		if (U.isEmpty(username) || record == null) {
+			return false;
+		}
+
+		Object sharedWith = Cls.getPropValue(record, "sharedWith", null);
+
+		if (sharedWith != null && sharedWith instanceof Collection<?>) {
+			for (Object user : (Collection<?>) sharedWith) {
+				if (username.equalsIgnoreCase(Cls.getPropValue(user, "username", ""))) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 }
