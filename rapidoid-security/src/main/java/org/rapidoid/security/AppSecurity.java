@@ -32,12 +32,13 @@ import org.rapidoid.security.annotation.Role;
 import org.rapidoid.security.annotation.Roles;
 import org.rapidoid.security.annotation.SharedWith;
 import org.rapidoid.util.Arr;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 
 public class AppSecurity implements Constants {
 
-	public Set<RoleBasedAccess> rolesAllowedForClass(Class<?> clazz) {
+	public Set<RoleBasedAccess> rolesAllowedForClass(Class<?> clazz, Object record, String propertyName) {
 		Set<RoleBasedAccess> roles = U.set();
 
 		for (Annotation ann : clazz.getAnnotations()) {
@@ -79,26 +80,30 @@ public class AppSecurity implements Constants {
 		return true;
 	}
 
-	public boolean hasRole(String username, String role) {
+	public boolean hasRole(String username, String role, Class<?> clazz, Object record) {
+		if (U.isEmpty(username)) {
+			return false;
+		}
+
 		if (role.equalsIgnoreCase(LoggedIn.class.getSimpleName())) {
 			return !U.isEmpty(username);
 		}
 
 		String roleConfig = "role-" + role.toLowerCase();
-		String[] users = U.option(roleConfig, EMPTY_STRING_ARRAY);
-		return !U.isEmpty(username) && Arr.indexOf(users, username) >= 0;
+		String[] usernames = U.option(roleConfig, EMPTY_STRING_ARRAY);
+		return !U.isEmpty(username) && Arr.indexOf(usernames, username) >= 0;
 	}
 
 	public boolean isAdmin(String username) {
-		return hasRole(username, "ADMIN");
+		return hasRole(username, "ADMIN", null, null);
 	}
 
 	public boolean isManager(String username) {
-		return hasRole(username, "MANAGER");
+		return hasRole(username, "MANAGER", null, null);
 	}
 
 	public boolean isModerator(String username) {
-		return hasRole(username, "MODERATOR");
+		return hasRole(username, "MODERATOR", null, null);
 	}
 
 	public DataPermissions classPermissions(String username, Class<?> clazz) {
@@ -109,7 +114,7 @@ public class AppSecurity implements Constants {
 		return DataPermissions.ALL;
 	}
 
-	public DataPermissions propertyPermissions(String username, Object record, String fieldName) {
+	public DataPermissions propertyPermissions(String username, Object record, String propertyName) {
 		return DataPermissions.ALL;
 	}
 

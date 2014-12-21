@@ -51,6 +51,10 @@ public class RoleBasedAccess {
 		return new RoleBasedAccess(role, create, read, update, delete);
 	}
 
+	public DataPermissions dataPermissions() {
+		return DataPermissions.from(create, read, update, delete);
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

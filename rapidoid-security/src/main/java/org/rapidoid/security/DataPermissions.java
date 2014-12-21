@@ -38,15 +38,30 @@ public class DataPermissions {
 
 	public final boolean delete;
 
-	public DataPermissions(boolean create, boolean read, boolean update, boolean delete) {
+	public final boolean denied;
+
+	DataPermissions(boolean create, boolean read, boolean update, boolean delete) {
 		this.create = create;
 		this.read = read;
 		this.update = update;
 		this.delete = delete;
+		this.denied = !create && !read && !update && !delete;
+	}
+
+	public static DataPermissions from(boolean create, boolean read, boolean update, boolean delete) {
+		return new DataPermissions(create, read, update, delete);
 	}
 
 	public DataPermissions and(DataPermissions dp) {
-		return new DataPermissions(create && dp.create, read && dp.read, update && dp.update, delete && dp.delete);
+		return from(create && dp.create, read && dp.read, update && dp.update, delete && dp.delete);
+	}
+
+	public DataPermissions or(DataPermissions dp) {
+		return from(create || dp.create, read || dp.read, update || dp.update, delete || dp.delete);
+	}
+
+	public boolean denied() {
+		return denied;
 	}
 
 }

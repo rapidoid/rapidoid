@@ -30,7 +30,15 @@ public class Secure implements Constants {
 	private static AppSecurity security = U.customizable(AppSecurity.class);
 
 	public static boolean hasRole(String username, String role) {
-		return security.hasRole(username, role);
+		return security.hasRole(username, role, null, null);
+	}
+
+	public static boolean hasRoleForClass(String username, String role, Class<?> clazz) {
+		return security.hasRole(username, role, clazz, null);
+	}
+
+	public static boolean hasRoleForRecord(String username, String role, Object record) {
+		return security.hasRole(username, role, record.getClass(), record);
 	}
 
 	public static boolean isAdmin(String username) {
@@ -51,34 +59,41 @@ public class Secure implements Constants {
 	}
 
 	public static boolean hasRoleBasedAccess(String username, Class<?> clazz) {
-		Set<RoleBasedAccess> rolesAllowed = getClassRolesAllowed(clazz);
+		return getRoleBasedDataPermissions(username, clazz, null, null).read;
+	}
+
+	public static DataPermissions getRoleBasedDataPermissions(String username, Class<?> clazz, Object record,
+			String propertyName) {
+
+		Set<RoleBasedAccess> rolesAllowed = getClassRolesAllowed(clazz, record, propertyName);
 
 		if (!rolesAllowed.isEmpty() && U.isEmpty(username)) {
-			return false;
+			return DataPermissions.NONE;
 		}
 
+		DataPermissions perm = rolesAllowed.isEmpty() ? DataPermissions.ALL : DataPermissions.NONE;
+
 		for (RoleBasedAccess roleAccess : rolesAllowed) {
-			if (hasRole(username, roleAccess.role)) {
-				return true;
+			if (security.hasRole(username, roleAccess.role, clazz, record)) {
+				// disjunction of all permissions: e.g. @Moderator(edit=true) || @Manager(delete=true)
+				perm = perm.or(roleAccess.dataPermissions());
 			}
 		}
 
-		return rolesAllowed.isEmpty();
+		return perm;
 	}
 
-	private static Set<RoleBasedAccess> getClassRolesAllowed(Class<?> clazz) {
+	private static Set<RoleBasedAccess> getClassRolesAllowed(Class<?> clazz, Object record, String propertyName) {
 		// TODO use caching
-		return security.rolesAllowedForClass(clazz);
+		return security.rolesAllowedForClass(clazz, record, propertyName);
 	}
 
 	public static DataPermissions classPermissions(String username, Class<?> clazz) {
 		U.notNull(clazz, "class");
 
-		if (!canAccessClass(username, clazz)) {
-			return DataPermissions.NONE;
-		}
+		DataPermissions dataAccess = getRoleBasedDataPermissions(username, clazz, null, null);
 
-		return security.classPermissions(username, clazz);
+		return security.classPermissions(username, clazz).and(dataAccess);
 	}
 
 	public static DataPermissions recordPermissions(String username, Object record) {
@@ -86,24 +101,20 @@ public class Secure implements Constants {
 
 		DataPermissions classPerm = classPermissions(username, record.getClass());
 
-		if (classPerm == DataPermissions.NONE) {
-			return DataPermissions.NONE;
-		}
+		DataPermissions recordAccess = getRoleBasedDataPermissions(username, record.getClass(), record, null);
 
-		return security.recordPermissions(username, record).and(classPerm);
+		return security.recordPermissions(username, record).and(classPerm).and(recordAccess);
 	}
 
-	public static DataPermissions propertyPermissions(String username, Object record, String fieldName) {
+	public static DataPermissions propertyPermissions(String username, Object record, String propertyName) {
 		U.notNull(record, "record");
-		U.notNull(fieldName, "field name");
+		U.notNull(propertyName, "property name");
 
 		DataPermissions recordPerm = recordPermissions(username, record);
 
-		if (recordPerm == DataPermissions.NONE) {
-			return DataPermissions.NONE;
-		}
+		DataPermissions fieldAccess = getRoleBasedDataPermissions(username, record.getClass(), record, propertyName);
 
-		return security.propertyPermissions(username, record, fieldName).and(recordPerm);
+		return security.propertyPermissions(username, record, propertyName).and(recordPerm).and(fieldAccess);
 	}
 
 }
