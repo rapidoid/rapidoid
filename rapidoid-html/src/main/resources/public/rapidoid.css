@@ -32,3 +32,7 @@ span.highlight {
 	border-style: solid;
 	border-color: #A55;
 }
+
+.table-hover tbody tr:hover td {
+	background-color: #FFC !important;
+}
