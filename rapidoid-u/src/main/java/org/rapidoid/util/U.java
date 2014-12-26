@@ -1364,33 +1364,33 @@ public class U {
 
 			for (String arg : args) {
 				if (arg.matches("\\w+")) {
-					hook(arg);
+					addon(arg);
 				}
 			}
 		}
 	}
 
-	public static Object hook(String hookName) {
-		must(hookName.matches("\\w+"), "Invalid hook name, must be alphanumeric!");
+	public static Object addon(String addonName) {
+		must(addonName.matches("\\w+"), "Invalid add-on name, must be alphanumeric!");
 
-		String hookClassName = "org.rapidoid.hook." + capitalized(hookName) + "Hook";
-		Class<?> hookCls = getClassIfExists(hookClassName);
+		String addonClassName = "org.rapidoid.addon." + capitalized(addonName) + "Addon";
+		Class<?> addonCls = getClassIfExists(addonClassName);
 
-		if (hookCls != null) {
-			if (Callable.class.isAssignableFrom(hookCls)) {
-				Callable<?> hook = (Callable<?>) newInstance(hookCls);
+		if (addonCls != null) {
+			if (Callable.class.isAssignableFrom(addonCls)) {
+				Callable<?> addon = (Callable<?>) newInstance(addonCls);
 				try {
-					Object hookResult = hook.call();
-					info("Executed a hook", "hook", hookName, "hookClass", hookClassName, "result", hookResult);
-					return hookResult;
+					Object addonResult = addon.call();
+					info("Executed add-on", "add-on", addonName, "add-on class", addonClassName, "result", addonResult);
+					return addonResult;
 				} catch (Exception e) {
 					throw rte(e);
 				}
 			} else {
-				warn("Found a hook, but it's not a Runnable!", "hook", hookName, "hookClass", hookClassName);
+				warn("Found add-on, but it's not a Runnable!", "add-on", addonName, "add-on class", addonClassName);
 			}
 		} else {
-			debug("No hook was found", "hook", hookName, "hookClass", hookClassName);
+			debug("No add-on was found", "add-on", addonName, "add-on class", addonClassName);
 		}
 
 		return null;

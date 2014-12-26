@@ -1,4 +1,4 @@
-package org.rapidoid.hook;
+package org.rapidoid.addon;
 
 import java.util.concurrent.Callable;
 
@@ -24,7 +24,7 @@ import org.rapidoid.util.StatsThread;
  * #L%
  */
 
-public class StatsHook implements Callable<Object> {
+public class StatsAddon implements Callable<Object> {
 
 	@Override
 	public Object call() throws Exception {
