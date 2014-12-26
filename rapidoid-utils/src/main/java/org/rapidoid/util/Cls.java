@@ -430,6 +430,26 @@ public class Cls {
 		}
 	}
 
+	public static Field getField(Class<?> clazz, String name) {
+		try {
+			return clazz.getField(name);
+		} catch (NoSuchFieldException e) {
+			throw U.rte("Cannot find field: %s", e, name);
+		} catch (SecurityException e) {
+			throw U.rte("Cannot access field: %s", e, name);
+		}
+	}
+
+	public static Field findField(Class<?> clazz, String name) {
+		try {
+			return clazz.getField(name);
+		} catch (NoSuchFieldException e) {
+			return null;
+		} catch (SecurityException e) {
+			return null;
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public static <T> T invokeStatic(Method m, Object... args) {
 		boolean accessible = m.isAccessible();
