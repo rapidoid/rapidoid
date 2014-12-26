@@ -260,7 +260,7 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 
 	private Tag loggedInUserMenu(HttpExchange x, Object app) {
 		Tag dropdownMenu;
-		ATag profile = a_glyph("user", x.user().display, caret());
+		ATag profile = a_glyph("user", x.user().display(), caret());
 		ATag settings = Apps.addon(app, "settings") ? a_glyph("cog", " Settings").href("/settings") : null;
 		ATag logout = a_glyph("log-out", "Logout").href("/_logout");
 

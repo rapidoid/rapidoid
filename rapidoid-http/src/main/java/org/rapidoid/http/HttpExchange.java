@@ -26,7 +26,7 @@ import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.MultiData;
 import org.rapidoid.net.abstracts.CtxFull;
-import org.rapidoid.util.UserInfo;
+import org.rapidoid.util.IUser;
 
 public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, HttpExchangeHeaders {
 
@@ -116,7 +116,7 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	boolean isLoggedIn();
 
-	UserInfo user();
+	IUser user();
 
 	boolean isAdmin();
 

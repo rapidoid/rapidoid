@@ -20,44 +20,14 @@ package org.rapidoid.util;
  * #L%
  */
 
-public class UserInfo implements IUser {
+public interface IUser {
 
-	public String username;
+	public String username();
 
-	public String email;
+	public String email();
 
-	public String name;
+	public String name();
 
-	public String display;
-
-	public String oauthId;
-
-	public String oauthProvider;
-
-	@Override
-	public String toString() {
-		return "UserInfo [username=" + username + ", email=" + email + ", name=" + name + ", display=" + display
-				+ ", oauthId=" + oauthId + ", oauthProvider=" + oauthProvider + "]";
-	}
-
-	@Override
-	public String username() {
-		return username;
-	}
-
-	@Override
-	public String email() {
-		return email;
-	}
-
-	@Override
-	public String name() {
-		return name;
-	}
-
-	@Override
-	public String display() {
-		return display;
-	}
+	public String display();
 
 }

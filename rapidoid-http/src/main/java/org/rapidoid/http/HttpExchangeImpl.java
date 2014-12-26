@@ -39,9 +39,9 @@ import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.net.mime.MediaType;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.IUser;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.util.UserInfo;
 import org.rapidoid.wrap.Bool;
 
 public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements HttpExchange,
@@ -770,7 +770,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized UserInfo user() {
+	public synchronized IUser user() {
 		U.must(isLoggedIn(), "Must be logged in!");
 
 		return session(SESSION_USER);
@@ -782,7 +782,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			return false;
 		}
 
-		return Secure.isAdmin(user().username);
+		return Secure.isAdmin(username());
+	}
+
+	private String username() {
+		return isLoggedIn() ? user().username() : null;
 	}
 
 	@Override
@@ -791,7 +795,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			return false;
 		}
 
-		return Secure.isManager(user().username);
+		return Secure.isManager(username());
 	}
 
 	@Override
@@ -800,7 +804,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			return false;
 		}
 
-		return Secure.isModerator(user().username);
+		return Secure.isModerator(username());
 	}
 
 	@Override
@@ -809,7 +813,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			return false;
 		}
 
-		return Secure.hasRole(user().username, role);
+		return Secure.hasRole(username(), role);
 	}
 
 	@Override
@@ -906,8 +910,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public HttpExchangeHeaders authorize(Class<?> clazz) {
-		String username = isLoggedIn() ? user().username : null;
-		return accessDeniedIf(!Secure.canAccessClass(username, clazz));
+		return accessDeniedIf(!Secure.canAccessClass(username(), clazz));
 	}
 
 	@Override
