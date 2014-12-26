@@ -51,7 +51,7 @@ public class HTML extends Tags {
 	public static final Tag RAQUO = constant("&raquo;");
 
 	public static ATag a_void(Object... contents) {
-		return tag(ATag.class, "a", contents).href("javascript:void(0);");
+		return a(contents).href("javascript:void(0);");
 	}
 
 	public static Tag ul_li(Object... listItems) {
