@@ -20,9 +20,11 @@ package org.rapidoid.model;
  * #L%
  */
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.model.impl.BeanItem;
 import org.rapidoid.model.impl.BeanListItems;
 import org.rapidoid.model.impl.BeanProperty;
@@ -101,8 +103,7 @@ public class Models {
 
 		if (propertyNames.length == 0) {
 			for (Prop prop : props.values()) {
-				if (!prop.getName().equalsIgnoreCase("id") && !prop.getName().equalsIgnoreCase("version")
-						&& !prop.isReadOnly()) {
+				if (isEditable(prop)) {
 					pr.add(new BeanProperty(prop.getName(), prop.getType()));
 				}
 			}
@@ -115,6 +116,53 @@ public class Models {
 		}
 
 		return pr;
+	}
+
+	public static List<Property> readablePropertiesOf(Class<?> beanType, String... propertyNames) {
+		List<Property> pr = U.list();
+
+		Map<String, Prop> props = Cls.propertiesOf(beanType);
+
+		if (propertyNames.length == 0) {
+			for (Prop prop : props.values()) {
+				if (isReadable(prop)) {
+					pr.add(new BeanProperty(prop.getName(), prop.getType()));
+				}
+			}
+		} else {
+			for (String propName : propertyNames) {
+				Prop prop = props.get(propName);
+				U.must(prop != null, "Cannot find property '%s' in type: %s", propName, beanType);
+				pr.add(new BeanProperty(prop.getName(), prop.getType()));
+			}
+		}
+
+		return pr;
+	}
+
+	public static boolean isEditable(Prop prop) {
+		String name = prop.getName();
+
+		if (name.equalsIgnoreCase("id") || name.equalsIgnoreCase("version") || prop.isReadOnly()) {
+			return false;
+		}
+
+		Field field = prop.getField();
+		if (field != null && field.getAnnotation(Programmatic.class) != null) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public static boolean isReadable(Prop prop) {
+		String name = prop.getName();
+
+		if (name.equalsIgnoreCase("id") || name.equalsIgnoreCase("version") || prop.isReadOnly()) {
+			return false;
+		}
+
+		return true;
 	}
 
 	@SuppressWarnings("unchecked")

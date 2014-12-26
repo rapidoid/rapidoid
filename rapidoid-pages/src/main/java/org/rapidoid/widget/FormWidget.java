@@ -108,7 +108,8 @@ public class FormWidget extends AbstractWidget {
 	}
 
 	protected void init(boolean editable, Item item, String... properties) {
-		final List<Property> props = item.editableProperties(properties);
+		final List<Property> props = editable ? item.editableProperties(properties) : item
+				.readableProperties(properties);
 
 		int propN = props.size();
 

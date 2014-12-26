@@ -36,4 +36,6 @@ public interface Item extends IModel {
 
 	List<Property> editableProperties(String... propertyNames);
 
+	List<Property> readableProperties(String... propertyNames);
+
 }

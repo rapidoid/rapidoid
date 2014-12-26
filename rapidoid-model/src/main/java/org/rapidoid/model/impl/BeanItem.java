@@ -80,6 +80,12 @@ public class BeanItem extends AbstractModel implements Item {
 		return value != null ? Models.editablePropertiesOf(value.getClass(), propertyNames) : Collections.EMPTY_LIST;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Property> readableProperties(String... propertyNames) {
+		return value != null ? Models.readablePropertiesOf(value.getClass(), propertyNames) : Collections.EMPTY_LIST;
+	}
+
 	@Override
 	public String uri() {
 		return "/" + value.getClass() + "/" + id();
