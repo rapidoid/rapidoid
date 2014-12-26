@@ -117,6 +117,8 @@ public class InMem {
 
 	private final ConcurrentLinkedQueue<Callback<Void>> txCallbacks = new ConcurrentLinkedQueue<Callback<Void>>();
 
+	private final AtomicLong txIdCounter = new AtomicLong();
+
 	private ConcurrentNavigableMap<Long, Rec> prevData = new ConcurrentSkipListMap<Long, Rec>();
 
 	private ConcurrentNavigableMap<Long, Rec> data = new ConcurrentSkipListMap<Long, Rec>();
@@ -489,6 +491,7 @@ public class InMem {
 	public void transaction(Runnable transaction, boolean readOnly, Callback<Void> txCallback) {
 		globalLock();
 
+		txIdCounter.set(ids.get());
 		txChanges.clear();
 		txInsertions.clear();
 
@@ -517,6 +520,8 @@ public class InMem {
 	}
 
 	private void txRollback() {
+		ids.set(txIdCounter.get());
+
 		for (Entry<Long, Rec> e : txChanges.entrySet()) {
 			Long id = e.getKey();
 			Rec value = e.getValue();
