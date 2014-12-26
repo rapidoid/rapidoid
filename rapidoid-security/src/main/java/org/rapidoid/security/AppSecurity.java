@@ -34,6 +34,7 @@ import org.rapidoid.security.annotation.Role;
 import org.rapidoid.security.annotation.Roles;
 import org.rapidoid.util.Arr;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.CommonRoles;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Metadata;
 import org.rapidoid.util.U;

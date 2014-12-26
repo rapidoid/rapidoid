@@ -1,8 +1,10 @@
-package org.rapidoid.db;
+package org.rapidoid.app.entity;
+
+import org.rapidoid.util.CommonRoles;
 
 /*
  * #%L
- * rapidoid-db
+ * rapidoid-app
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -23,7 +25,7 @@ package org.rapidoid.db;
 /**
  * Base class for persisted domain model entities.
  */
-public abstract class Entity {
+public abstract class Entity implements CommonRoles {
 
 	public long id;
 

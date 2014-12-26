@@ -21,6 +21,7 @@ package org.rapidoid.security;
  */
 
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.util.CommonRoles;
 
 public abstract class SecurityTestCommons extends TestCommons implements CommonRoles {
 

@@ -20,7 +20,6 @@ package org.rapidoid.app.entity;
  * #L%
  */
 
-import org.rapidoid.db.Entity;
 import org.rapidoid.util.IUser;
 
 public class SimpleUser extends Entity implements IUser {

@@ -20,7 +20,7 @@ package org.rapidoid.security;
  * #L%
  */
 
-import static org.rapidoid.security.CommonRoles.*;
+import static org.rapidoid.util.CommonRoles.*;
 
 import java.util.List;
 

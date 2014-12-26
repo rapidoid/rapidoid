@@ -2,7 +2,7 @@ package org.rapidoid.demo.taskplanner.model;
 
 import java.util.Set;
 
-import org.rapidoid.db.Entity;
+import org.rapidoid.app.entity.Entity;
 import org.rapidoid.security.annotation.Manager;
 
 /*

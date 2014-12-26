@@ -1,8 +1,8 @@
-package org.rapidoid.security;
+package org.rapidoid.util;
 
 /*
  * #%L
- * rapidoid-security
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%

@@ -1,6 +1,6 @@
 package org.rapidoid.demo.taskplanner.model;
 
-import org.rapidoid.db.Entity;
+import org.rapidoid.app.entity.Entity;
 
 /*
  * #%L

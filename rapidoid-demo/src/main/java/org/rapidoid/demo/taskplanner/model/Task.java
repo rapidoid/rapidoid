@@ -3,8 +3,8 @@ package org.rapidoid.demo.taskplanner.model;
 import java.util.List;
 import java.util.Set;
 
+import org.rapidoid.app.entity.Entity;
 import org.rapidoid.db.DB;
-import org.rapidoid.db.Entity;
 import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.util.U;
 

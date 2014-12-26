@@ -22,8 +22,8 @@ package org.rapidoid.demo.taskplanner.model;
 
 import java.util.Set;
 
+import org.rapidoid.app.entity.Entity;
 import org.rapidoid.db.DB;
-import org.rapidoid.db.Entity;
 
 public class User extends Entity {
 
