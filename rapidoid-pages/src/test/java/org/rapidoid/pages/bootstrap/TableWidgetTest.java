@@ -23,7 +23,7 @@ package org.rapidoid.pages.bootstrap;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.rapidoid.model.Items;
-import org.rapidoid.model.Model;
+import org.rapidoid.model.Models;
 import org.rapidoid.pages.PagesTestCommons;
 import org.rapidoid.pages.entity.Person;
 import org.rapidoid.widget.BootstrapWidgets;
@@ -38,7 +38,7 @@ public class TableWidgetTest extends PagesTestCommons {
 		TagContext ctx = Tags.context();
 		setupMockExchange(ctx);
 
-		Items items = Model.beanItemsInfer(new Person("John", 20), new Person("Rambo", 50));
+		Items items = Models.beanItemsInfer(new Person("John", 20), new Person("Rambo", 50));
 
 		GridWidget table = BootstrapWidgets.grid(items, null, 10);
 		print(ctx, table);

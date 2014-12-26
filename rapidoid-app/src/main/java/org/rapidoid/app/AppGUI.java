@@ -23,7 +23,7 @@ package org.rapidoid.app;
 import org.rapidoid.db.model.DbItems;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
-import org.rapidoid.model.Model;
+import org.rapidoid.model.Models;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.GridWidget;
 
@@ -38,11 +38,11 @@ public class AppGUI extends BootstrapWidgets {
 	}
 
 	public static Item item(Object value) {
-		return Model.item(value);
+		return Models.item(value);
 	}
 
 	public static <T> Items beanItems(Class<T> beanType, Object... beans) {
-		return Model.beanItems(beanType, beans);
+		return Models.beanItems(beanType, beans);
 	}
 
 	public static <T> GridWidget grid(Class<T> type, String sortOrder, int pageSize, String... properties) {

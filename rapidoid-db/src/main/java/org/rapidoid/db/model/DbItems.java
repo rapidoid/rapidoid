@@ -25,7 +25,7 @@ import java.util.List;
 import org.rapidoid.db.DB;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
-import org.rapidoid.model.Model;
+import org.rapidoid.model.Models;
 import org.rapidoid.model.impl.BeanListItems;
 import org.rapidoid.util.U;
 
@@ -60,7 +60,7 @@ public class DbItems<T> extends BeanListItems<T> {
 		List<Item> records = U.list();
 
 		for (T t : all) {
-			records.add(Model.item(t));
+			records.add(Models.item(t));
 		}
 
 		return records;

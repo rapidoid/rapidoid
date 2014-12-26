@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.rapidoid.model.Item;
-import org.rapidoid.model.Model;
+import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.util.Cls;
 
@@ -71,13 +71,13 @@ public class BeanItem extends AbstractModel implements Item {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Property> properties(String... propertyNames) {
-		return value != null ? Model.propertiesOf(value.getClass(), propertyNames) : Collections.EMPTY_LIST;
+		return value != null ? Models.propertiesOf(value.getClass(), propertyNames) : Collections.EMPTY_LIST;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Property> editableProperties(String... propertyNames) {
-		return value != null ? Model.editablePropertiesOf(value.getClass(), propertyNames) : Collections.EMPTY_LIST;
+		return value != null ? Models.editablePropertiesOf(value.getClass(), propertyNames) : Collections.EMPTY_LIST;
 	}
 
 	@Override

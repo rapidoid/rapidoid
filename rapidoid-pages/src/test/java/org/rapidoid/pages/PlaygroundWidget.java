@@ -24,7 +24,7 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.model.Model;
+import org.rapidoid.model.Models;
 import org.rapidoid.pages.entity.Person;
 import org.rapidoid.var.Var;
 import org.rapidoid.widget.BootstrapWidgets;
@@ -39,7 +39,7 @@ public class PlaygroundWidget extends BootstrapWidgets {
 		Object[] data = { new Person("nick", 22), new Person("doe", 44) };
 
 		if (data.length > 0) {
-			return div(grid(Model.beanItemsInfer(data), "", 10));
+			return div(grid(Models.beanItemsInfer(data), "", 10));
 		} else {
 			return div(i18n("No results!"));
 		}

@@ -31,7 +31,7 @@ import org.rapidoid.util.Cls;
 import org.rapidoid.util.Prop;
 import org.rapidoid.util.U;
 
-public class Model {
+public class Models {
 
 	public static <T> Items beanItems(Class<T> beanType, Object... beans) {
 		ListItems items = new BeanListItems<T>(beanType);

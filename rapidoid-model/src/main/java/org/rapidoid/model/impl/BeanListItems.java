@@ -23,7 +23,7 @@ package org.rapidoid.model.impl;
 import java.util.List;
 
 import org.rapidoid.model.Item;
-import org.rapidoid.model.Model;
+import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.util.U;
 
@@ -38,7 +38,7 @@ public class BeanListItems<T> extends ListItems {
 	public BeanListItems(Class<T> beanType) {
 		super("/" + beanType.getSimpleName().toLowerCase());
 		this.beanType = beanType;
-		this.properties = Model.propertiesOf(beanType);
+		this.properties = Models.propertiesOf(beanType);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class BeanListItems<T> extends ListItems {
 		List<Property> props = U.list();
 
 		for (String pr : propertyNames) {
-			props.add(Model.propertyOf(beanType, pr));
+			props.add(Models.propertyOf(beanType, pr));
 		}
 
 		return props;

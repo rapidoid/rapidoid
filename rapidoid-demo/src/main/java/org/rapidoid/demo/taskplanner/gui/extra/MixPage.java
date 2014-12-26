@@ -29,7 +29,7 @@ import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
-import org.rapidoid.model.Model;
+import org.rapidoid.model.Models;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.GridWidget;
@@ -53,7 +53,7 @@ public class MixPage extends BootstrapWidgets {
 
 		ButtonTag xy = btnPrimary("X Z Y").cmd("xyz");
 
-		Items items = Model.mockBeanItems(20, Person.class);
+		Items items = Models.mockBeanItems(20, Person.class);
 
 		Tag caption = h1("Manage persons");
 

@@ -12,7 +12,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchanges;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
-import org.rapidoid.model.Model;
+import org.rapidoid.model.Models;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
@@ -82,7 +82,7 @@ public abstract class BootstrapWidgets extends Bootstrap {
 
 	public static <T> GridWidget grid(Class<T> type, Object[] items, String sortOrder, int pageSize,
 			String... properties) {
-		return grid(Model.beanItems(type, items), sortOrder, pageSize, properties);
+		return grid(Models.beanItems(type, items), sortOrder, pageSize, properties);
 	}
 
 	public static <T> GridWidget grid(Class<T> type, Collection<T> items, String sortOrder, int pageSize,
@@ -104,7 +104,7 @@ public abstract class BootstrapWidgets extends Bootstrap {
 	}
 
 	public static FormWidget show(Object bean, String... properties) {
-		Item item = Model.item(bean);
+		Item item = Models.item(bean);
 		return show(item, properties);
 	}
 
@@ -113,7 +113,7 @@ public abstract class BootstrapWidgets extends Bootstrap {
 	}
 
 	public static FormWidget edit(Object bean, String... properties) {
-		Item item = Model.item(bean);
+		Item item = Models.item(bean);
 		return edit(item, properties);
 	}
 
