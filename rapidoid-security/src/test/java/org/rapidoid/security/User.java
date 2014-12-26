@@ -1,4 +1,4 @@
-package org.rapidoid.security.annotation;
+package org.rapidoid.security;
 
 /*
  * #%L
@@ -20,24 +20,15 @@ package org.rapidoid.security.annotation;
  * #L%
  */
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
+public class User {
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+	public String username;
 
-@Target({ TYPE, METHOD, FIELD })
-@Retention(RUNTIME)
-public @interface SharedWith {
+	public User() {
+	}
 
-	boolean fullAccess() default false;
-
-	boolean insert() default false;
-
-	boolean read() default true;
-
-	boolean update() default false;
-
-	boolean delete() default false;
+	public User(String username) {
+		this.username = username;
+	}
 
 }

@@ -1,4 +1,4 @@
-package org.rapidoid.security.annotation;
+package org.rapidoid.security;
 
 /*
  * #%L
@@ -20,16 +20,22 @@ package org.rapidoid.security.annotation;
  * #L%
  */
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
+import org.rapidoid.test.TestCommons;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+public abstract class SecurityTestCommons extends TestCommons implements CommonRoles {
 
-@Target({ ANNOTATION_TYPE })
-@Retention(RUNTIME)
-public @interface Role {
+	protected void checkPermissions(String username, Class<?> clazz, Object target, String propertyName,
+			boolean canRead, boolean canChange) {
 
-	String value();
+		DataPermissions perms = Secure.getDataPermissions(username, clazz, target, propertyName);
+
+		eq(perms.read, canRead);
+		eq(perms.change, canChange);
+	}
+
+	protected void checkPermissions(String username, Class<?> clazz, String propertyName, boolean canRead,
+			boolean canUpdate) {
+		checkPermissions(username, clazz, null, propertyName, canRead, canUpdate);
+	}
 
 }

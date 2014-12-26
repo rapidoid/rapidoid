@@ -22,30 +22,15 @@ package org.rapidoid.security;
 
 import java.util.List;
 
-import org.rapidoid.security.annotation.Owner;
-import org.rapidoid.security.annotation.SharedWith;
-import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
-
-class User {
-	public String username;
-
-	public User(String username) {
-		this.username = username;
-	}
-}
 
 class Foo {
 	public User owner;
 	public List<User> sharedWith;
 }
 
-public class RoleBasedSecurityTest extends TestCommons {
-
-	private static final String ROLE_OWNER = Owner.class.getSimpleName().toUpperCase();
-
-	private static final String ROLE_SHARED_WITH = SharedWith.class.getSimpleName().toUpperCase();
+public class RoleBasedSecurityTest extends SecurityTestCommons {
 
 	private void setupRoles() {
 		U.args("role-admin=adm1,adm2", "role-manager=mng1", "role-moderator=mod1,mod2", "role-abc=abc");
@@ -99,94 +84,94 @@ public class RoleBasedSecurityTest extends TestCommons {
 	public void testLoggedInRoleCheck() {
 		setupRoles();
 
-		isFalse(Secure.hasRole(null, "LOGGEDIN"));
-		isFalse(Secure.hasRole("", "LOGGEDIN"));
+		isFalse(Secure.hasRole(null, LOGGED_IN));
+		isFalse(Secure.hasRole("", LOGGED_IN));
 
-		isTrue(Secure.hasRole("abc", "LOGGEDIN"));
-		isTrue(Secure.hasRole("adm1", "LOGGEDIN"));
-		isTrue(Secure.hasRole("mod1", "LOGGEDIN"));
+		isTrue(Secure.hasRole("abc", LOGGED_IN));
+		isTrue(Secure.hasRole("adm1", LOGGED_IN));
+		isTrue(Secure.hasRole("mod1", LOGGED_IN));
 	}
 
 	@Test
 	public void testOwnerRoleCheck() {
 		setupRoles();
 
-		isFalse(Secure.hasRole(null, ROLE_OWNER));
-		isFalse(Secure.hasRole("", ROLE_OWNER));
-		isFalse(Secure.hasRole("abc", ROLE_OWNER));
-		isFalse(Secure.hasRole("adm1", ROLE_OWNER));
-		isFalse(Secure.hasRole("mng1", ROLE_OWNER));
-		isFalse(Secure.hasRole("mod1", ROLE_OWNER));
+		isFalse(Secure.hasRole(null, OWNER));
+		isFalse(Secure.hasRole("", OWNER));
+		isFalse(Secure.hasRole("abc", OWNER));
+		isFalse(Secure.hasRole("adm1", OWNER));
+		isFalse(Secure.hasRole("mng1", OWNER));
+		isFalse(Secure.hasRole("mod1", OWNER));
 
-		isFalse(Secure.hasRoleForClass(null, ROLE_OWNER, Foo.class));
-		isFalse(Secure.hasRoleForClass("", ROLE_OWNER, Foo.class));
-		isFalse(Secure.hasRoleForClass("abc", ROLE_OWNER, Foo.class));
-		isFalse(Secure.hasRoleForClass("adm1", ROLE_OWNER, Foo.class));
-		isFalse(Secure.hasRoleForClass("mng1", ROLE_OWNER, Foo.class));
-		isFalse(Secure.hasRoleForClass("mod1", ROLE_OWNER, Foo.class));
+		isFalse(Secure.hasRoleForClass(null, OWNER, Foo.class));
+		isFalse(Secure.hasRoleForClass("", OWNER, Foo.class));
+		isFalse(Secure.hasRoleForClass("abc", OWNER, Foo.class));
+		isFalse(Secure.hasRoleForClass("adm1", OWNER, Foo.class));
+		isFalse(Secure.hasRoleForClass("mng1", OWNER, Foo.class));
+		isFalse(Secure.hasRoleForClass("mod1", OWNER, Foo.class));
 
 		Foo foo = new Foo();
 
-		isFalse(Secure.hasRoleForRecord(null, ROLE_OWNER, foo));
-		isFalse(Secure.hasRoleForRecord("", ROLE_OWNER, foo));
-		isFalse(Secure.hasRoleForRecord("abc", ROLE_OWNER, foo));
-		isFalse(Secure.hasRoleForRecord("adm1", ROLE_OWNER, foo));
-		isFalse(Secure.hasRoleForRecord("mng1", ROLE_OWNER, foo));
-		isFalse(Secure.hasRoleForRecord("mod1", ROLE_OWNER, foo));
+		isFalse(Secure.hasRoleForRecord(null, OWNER, foo));
+		isFalse(Secure.hasRoleForRecord("", OWNER, foo));
+		isFalse(Secure.hasRoleForRecord("abc", OWNER, foo));
+		isFalse(Secure.hasRoleForRecord("adm1", OWNER, foo));
+		isFalse(Secure.hasRoleForRecord("mng1", OWNER, foo));
+		isFalse(Secure.hasRoleForRecord("mod1", OWNER, foo));
 
 		foo.owner = new User("abc");
 		foo.sharedWith = U.list();
 		foo.sharedWith.add(new User("adm1"));
 		foo.sharedWith.add(new User("mod1"));
 
-		isFalse(Secure.hasRoleForRecord(null, ROLE_OWNER, foo));
-		isFalse(Secure.hasRoleForRecord("", ROLE_OWNER, foo));
-		isFalse(Secure.hasRoleForRecord("adm1", ROLE_OWNER, foo));
-		isFalse(Secure.hasRoleForRecord("mng1", ROLE_OWNER, foo));
-		isFalse(Secure.hasRoleForRecord("mod1", ROLE_OWNER, foo));
+		isFalse(Secure.hasRoleForRecord(null, OWNER, foo));
+		isFalse(Secure.hasRoleForRecord("", OWNER, foo));
+		isFalse(Secure.hasRoleForRecord("adm1", OWNER, foo));
+		isFalse(Secure.hasRoleForRecord("mng1", OWNER, foo));
+		isFalse(Secure.hasRoleForRecord("mod1", OWNER, foo));
 
-		isTrue(Secure.hasRoleForRecord("abc", ROLE_OWNER, foo));
+		isTrue(Secure.hasRoleForRecord("abc", OWNER, foo));
 	}
 
 	@Test
 	public void testSharedWithRoleCheck() {
 		setupRoles();
 
-		isFalse(Secure.hasRole(null, ROLE_SHARED_WITH));
-		isFalse(Secure.hasRole("", ROLE_SHARED_WITH));
-		isFalse(Secure.hasRole("abc", ROLE_SHARED_WITH));
-		isFalse(Secure.hasRole("adm1", ROLE_SHARED_WITH));
-		isFalse(Secure.hasRole("mng1", ROLE_SHARED_WITH));
-		isFalse(Secure.hasRole("mod1", ROLE_SHARED_WITH));
+		isFalse(Secure.hasRole(null, SHARED_WITH));
+		isFalse(Secure.hasRole("", SHARED_WITH));
+		isFalse(Secure.hasRole("abc", SHARED_WITH));
+		isFalse(Secure.hasRole("adm1", SHARED_WITH));
+		isFalse(Secure.hasRole("mng1", SHARED_WITH));
+		isFalse(Secure.hasRole("mod1", SHARED_WITH));
 
-		isFalse(Secure.hasRoleForClass(null, ROLE_SHARED_WITH, Foo.class));
-		isFalse(Secure.hasRoleForClass("", ROLE_SHARED_WITH, Foo.class));
-		isFalse(Secure.hasRoleForClass("abc", ROLE_SHARED_WITH, Foo.class));
-		isFalse(Secure.hasRoleForClass("adm1", ROLE_SHARED_WITH, Foo.class));
-		isFalse(Secure.hasRoleForClass("mng1", ROLE_SHARED_WITH, Foo.class));
-		isFalse(Secure.hasRoleForClass("mod1", ROLE_SHARED_WITH, Foo.class));
+		isFalse(Secure.hasRoleForClass(null, SHARED_WITH, Foo.class));
+		isFalse(Secure.hasRoleForClass("", SHARED_WITH, Foo.class));
+		isFalse(Secure.hasRoleForClass("abc", SHARED_WITH, Foo.class));
+		isFalse(Secure.hasRoleForClass("adm1", SHARED_WITH, Foo.class));
+		isFalse(Secure.hasRoleForClass("mng1", SHARED_WITH, Foo.class));
+		isFalse(Secure.hasRoleForClass("mod1", SHARED_WITH, Foo.class));
 
 		Foo foo = new Foo();
 
-		isFalse(Secure.hasRoleForRecord(null, ROLE_SHARED_WITH, foo));
-		isFalse(Secure.hasRoleForRecord("", ROLE_SHARED_WITH, foo));
-		isFalse(Secure.hasRoleForRecord("abc", ROLE_SHARED_WITH, foo));
-		isFalse(Secure.hasRoleForRecord("adm1", ROLE_SHARED_WITH, foo));
-		isFalse(Secure.hasRoleForRecord("mng1", ROLE_SHARED_WITH, foo));
-		isFalse(Secure.hasRoleForRecord("mod1", ROLE_SHARED_WITH, foo));
+		isFalse(Secure.hasRoleForRecord(null, SHARED_WITH, foo));
+		isFalse(Secure.hasRoleForRecord("", SHARED_WITH, foo));
+		isFalse(Secure.hasRoleForRecord("abc", SHARED_WITH, foo));
+		isFalse(Secure.hasRoleForRecord("adm1", SHARED_WITH, foo));
+		isFalse(Secure.hasRoleForRecord("mng1", SHARED_WITH, foo));
+		isFalse(Secure.hasRoleForRecord("mod1", SHARED_WITH, foo));
 
 		foo.owner = new User("abc");
 		foo.sharedWith = U.list();
 		foo.sharedWith.add(new User("adm1"));
 		foo.sharedWith.add(new User("mod1"));
 
-		isFalse(Secure.hasRoleForRecord(null, ROLE_SHARED_WITH, foo));
-		isFalse(Secure.hasRoleForRecord("", ROLE_SHARED_WITH, foo));
-		isFalse(Secure.hasRoleForRecord("abc", ROLE_SHARED_WITH, foo));
-		isFalse(Secure.hasRoleForRecord("mng1", ROLE_SHARED_WITH, foo));
+		isFalse(Secure.hasRoleForRecord(null, SHARED_WITH, foo));
+		isFalse(Secure.hasRoleForRecord("", SHARED_WITH, foo));
+		isFalse(Secure.hasRoleForRecord("abc", SHARED_WITH, foo));
+		isFalse(Secure.hasRoleForRecord("mng1", SHARED_WITH, foo));
 
-		isTrue(Secure.hasRoleForRecord("adm1", ROLE_SHARED_WITH, foo));
-		isTrue(Secure.hasRoleForRecord("mod1", ROLE_SHARED_WITH, foo));
+		isTrue(Secure.hasRoleForRecord("adm1", SHARED_WITH, foo));
+		isTrue(Secure.hasRoleForRecord("mod1", SHARED_WITH, foo));
 	}
 
 }

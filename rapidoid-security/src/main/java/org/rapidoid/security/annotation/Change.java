@@ -26,8 +26,10 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-@Target({ TYPE, METHOD, FIELD })
+@Target({ TYPE, FIELD })
 @Retention(RUNTIME)
-public @interface LoggedIn {
+public @interface Change {
+
+	String[] value();
 
 }

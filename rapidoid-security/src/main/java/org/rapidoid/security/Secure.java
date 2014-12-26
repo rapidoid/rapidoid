@@ -20,9 +20,10 @@ package org.rapidoid.security;
  * #L%
  */
 
-import java.util.Set;
-
+import org.rapidoid.security.annotation.Change;
+import org.rapidoid.security.annotation.Read;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.Metadata;
 import org.rapidoid.util.U;
 
 public class Secure implements Constants {
@@ -63,66 +64,52 @@ public class Secure implements Constants {
 
 	public static boolean canAccessClass(String username, Class<?> clazz) {
 		U.notNull(clazz, "class");
-		return hasRoleBasedAccess(username, clazz) && security.canAccessClass(username, clazz);
+		return hasRoleBasedClassAccess(username, clazz) && security.canAccessClass(username, clazz);
 	}
 
-	public static boolean hasRoleBasedAccess(String username, Class<?> clazz) {
-		return getRoleBasedDataPermissions(username, clazz, null, null).read;
+	public static boolean hasRoleBasedClassAccess(String username, Class<?> clazz) {
+		U.notNull(clazz, "class");
+		return hasRoleBasedAccess(username, clazz, null);
 	}
 
-	public static DataPermissions getRoleBasedDataPermissions(String username, Class<?> clazz, Object record,
-			String propertyName) {
+	public static boolean hasRoleBasedObjectAccess(String username, Object target) {
+		U.notNull(target, "target");
+		return hasRoleBasedAccess(username, target.getClass(), target);
+	}
 
-		Set<RoleBasedAccess> rolesAllowed = getClassRolesAllowed(clazz, record, propertyName);
+	private static boolean hasRoleBasedAccess(String username, Class<?> clazz, Object target) {
+		String[] roles = security.getRolesAllowed(clazz);
+		return roles.length == 0 || hasAnyRole(username, roles, clazz, target);
+	}
 
-		if (!rolesAllowed.isEmpty() && U.isEmpty(username)) {
-			return DataPermissions.NONE;
-		}
-
-		DataPermissions perm = rolesAllowed.isEmpty() ? DataPermissions.ALL : DataPermissions.NONE;
-
-		for (RoleBasedAccess roleAccess : rolesAllowed) {
-			if (security.hasRole(username, roleAccess.role, clazz, record)) {
-				// disjunction of all permissions: e.g. @Moderator(edit=true) || @Manager(delete=true)
-				perm = perm.or(roleAccess.dataPermissions());
+	public static boolean hasAnyRole(String username, String[] roles, Class<?> clazz, Object target) {
+		for (String role : roles) {
+			if (security.hasRole(username, role, clazz, target)) {
+				return true;
 			}
 		}
 
-		return perm;
+		return false;
 	}
 
-	private static Set<RoleBasedAccess> getClassRolesAllowed(Class<?> clazz, Object record, String propertyName) {
-		// TODO use caching
-		return security.rolesAllowedForClass(clazz, record, propertyName);
-	}
-
-	public static DataPermissions classPermissions(String username, Class<?> clazz) {
+	public static DataPermissions getDataPermissions(String username, Class<?> clazz, Object target, String propertyName) {
 		U.notNull(clazz, "class");
 
-		DataPermissions dataAccess = getRoleBasedDataPermissions(username, clazz, null, null);
+		if (!hasRoleBasedAccess(username, clazz, target)) {
+			return DataPermissions.NONE;
+		}
 
-		return security.classPermissions(username, clazz).and(dataAccess);
-	}
+		Read read = Metadata.fieldAnnotation(clazz, propertyName, Read.class);
+		Change change = Metadata.fieldAnnotation(clazz, propertyName, Change.class);
 
-	public static DataPermissions recordPermissions(String username, Object record) {
-		U.notNull(record, "record");
+		if (read == null && change == null) {
+			return DataPermissions.ALL;
+		}
 
-		DataPermissions classPerm = classPermissions(username, record.getClass());
+		boolean canRead = read != null && hasAnyRole(username, read.value(), clazz, target);
+		boolean canChange = change != null && hasAnyRole(username, change.value(), clazz, target);
 
-		DataPermissions recordAccess = getRoleBasedDataPermissions(username, record.getClass(), record, null);
-
-		return security.recordPermissions(username, record).and(classPerm).and(recordAccess);
-	}
-
-	public static DataPermissions propertyPermissions(String username, Object record, String propertyName) {
-		U.notNull(record, "record");
-		U.notNull(propertyName, "property name");
-
-		DataPermissions recordPerm = recordPermissions(username, record);
-
-		DataPermissions fieldAccess = getRoleBasedDataPermissions(username, record.getClass(), record, propertyName);
-
-		return security.propertyPermissions(username, record, propertyName).and(recordPerm).and(fieldAccess);
+		return DataPermissions.from(canRead, canChange);
 	}
 
 }

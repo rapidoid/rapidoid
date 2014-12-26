@@ -30,14 +30,4 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 public @interface Moderator {
 
-	boolean fullAccess() default false;
-
-	boolean insert() default false;
-
-	boolean read() default true;
-
-	boolean update() default false;
-
-	boolean delete() default false;
-
 }

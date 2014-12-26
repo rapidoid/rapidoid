@@ -22,59 +22,51 @@ package org.rapidoid.security;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Moderator;
-import org.rapidoid.security.annotation.Owner;
 import org.rapidoid.security.annotation.Role;
 import org.rapidoid.security.annotation.Roles;
-import org.rapidoid.security.annotation.SharedWith;
 import org.rapidoid.util.Arr;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.Metadata;
 import org.rapidoid.util.U;
 
 public class AppSecurity implements Constants {
 
-	public Set<RoleBasedAccess> rolesAllowedForClass(Class<?> clazz, Object record, String propertyName) {
-		Set<RoleBasedAccess> roles = U.set();
+	public String[] getRolesAllowed(Class<?> clazz) {
 
-		for (Annotation ann : clazz.getAnnotations()) {
+		Set<String> roles = U.set();
+		Map<Class<?>, Annotation> annotations = Metadata.classAnnotations(clazz);
+
+		for (Entry<Class<?>, Annotation> e : annotations.entrySet()) {
+			Annotation ann = e.getValue();
 			Class<? extends Annotation> type = ann.annotationType();
-			String roleName = type.getSimpleName().toUpperCase();
 
 			if (type.equals(Admin.class)) {
-				Admin r = (Admin) ann;
-				roles.add(RoleBasedAccess.from(roleName, r.fullAccess(), r.insert(), r.read(), r.update(), r.delete()));
+				roles.add(CommonRoles.ADMIN);
 			} else if (type.equals(Manager.class)) {
-				Manager r = (Manager) ann;
-				roles.add(RoleBasedAccess.from(roleName, r.fullAccess(), r.insert(), r.read(), r.update(), r.delete()));
+				roles.add(CommonRoles.MANAGER);
 			} else if (type.equals(Moderator.class)) {
-				Moderator r = (Moderator) ann;
-				roles.add(RoleBasedAccess.from(roleName, r.fullAccess(), r.insert(), r.read(), r.update(), r.delete()));
+				roles.add(CommonRoles.MODERATOR);
 			} else if (type.equals(LoggedIn.class)) {
-				LoggedIn r = (LoggedIn) ann;
-				roles.add(RoleBasedAccess.from(roleName, r.fullAccess(), r.insert(), r.read(), r.update(), r.delete()));
-			} else if (type.equals(Owner.class)) {
-				Owner r = (Owner) ann;
-				roles.add(RoleBasedAccess.from(roleName, r.fullAccess(), r.insert(), r.read(), r.update(), r.delete()));
-			} else if (type.equals(SharedWith.class)) {
-				SharedWith r = (SharedWith) ann;
-				roles.add(RoleBasedAccess.from(roleName, r.fullAccess(), r.insert(), r.read(), r.update(), r.delete()));
+				roles.add(CommonRoles.LOGGED_IN);
 			} else if (type.equals(Roles.class)) {
 				Role[] values = ((Roles) ann).value();
 				U.must(values.length > 0, "At least one role must be specified in @Roles annotation!");
 				for (Role r : values) {
-					roles.add(RoleBasedAccess.from(roleName, r.fullAccess(), r.insert(), r.read(), r.update(),
-							r.delete()));
+					roles.add(r.annotationType().getSimpleName().toUpperCase());
 				}
 			}
 		}
 
-		return roles;
+		return roles.toArray(new String[roles.size()]);
 	}
 
 	public boolean canAccessClass(String username, Class<?> clazz) {
@@ -82,22 +74,34 @@ public class AppSecurity implements Constants {
 	}
 
 	public boolean hasRole(String username, String role, Class<?> clazz, Object record) {
-		if (U.isEmpty(username)) {
+
+		if (CommonRoles.ANYBODY.equalsIgnoreCase(role)) {
+			return true;
+		}
+
+		if (U.isEmpty(username) || U.isEmpty(role)) {
 			return false;
 		}
 
-		if (role.equalsIgnoreCase(LoggedIn.class.getSimpleName())) {
+		if (role.equalsIgnoreCase(CommonRoles.LOGGED_IN)) {
 			return !U.isEmpty(username);
 		}
 
-		if (role.equalsIgnoreCase(Owner.class.getSimpleName())) {
-			return isOwnerOf(username, record);
+		if (record != null) {
+
+			if (role.equalsIgnoreCase(CommonRoles.OWNER)) {
+				return isOwnerOf(username, record);
+			}
+
+			if (role.equalsIgnoreCase(CommonRoles.SHARED_WITH)) {
+				return isSharedWith(username, record);
+			}
 		}
 
-		if (role.equalsIgnoreCase(SharedWith.class.getSimpleName())) {
-			return isSharedWith(username, record);
-		}
+		return hasRole(username, role);
+	}
 
+	protected boolean hasRole(String username, String role) {
 		String roleConfig = "role-" + role.toLowerCase();
 		String[] usernames = U.option(roleConfig, EMPTY_STRING_ARRAY);
 		return !U.isEmpty(username) && Arr.indexOf(usernames, username) >= 0;

@@ -1,4 +1,4 @@
-package org.rapidoid.security.annotation;
+package org.rapidoid.security;
 
 /*
  * #%L
@@ -20,24 +20,20 @@ package org.rapidoid.security.annotation;
  * #L%
  */
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
+public interface CommonRoles {
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+	String ANYBODY = "ANYBODY";
 
-@Target({ TYPE, METHOD, FIELD })
-@Retention(RUNTIME)
-public @interface Owner {
+	String ADMIN = "ADMIN";
 
-	boolean fullAccess() default false;
+	String MANAGER = "MANAGER";
 
-	boolean insert() default false;
+	String MODERATOR = "MODERATOR";
 
-	boolean read() default true;
+	String LOGGED_IN = "LOGGED_IN";
 
-	boolean update() default false;
+	String OWNER = "OWNER";
 
-	boolean delete() default false;
+	String SHARED_WITH = "SHARED_WITH";
 
 }

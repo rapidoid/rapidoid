@@ -22,46 +22,42 @@ package org.rapidoid.security;
 
 public class DataPermissions {
 
-	public static final DataPermissions ALL = new DataPermissions(true, true, true, true);
+	public static final DataPermissions ALL = new DataPermissions(true, true);
 
-	public static final DataPermissions NONE = new DataPermissions(false, false, false, false);
+	public static final DataPermissions NONE = new DataPermissions(false, false);
 
-	public static final DataPermissions READ_ONLY = new DataPermissions(false, true, false, false);
+	public static final DataPermissions READ_ONLY = new DataPermissions(true, false);
 
-	public static final DataPermissions NO_DELETE = new DataPermissions(true, true, true, false);
-
-	public final boolean create;
+	public static final DataPermissions WRITE_ONLY = new DataPermissions(false, true);
 
 	public final boolean read;
 
-	public final boolean update;
+	public final boolean change;
 
-	public final boolean delete;
-
-	public final boolean denied;
-
-	DataPermissions(boolean create, boolean read, boolean update, boolean delete) {
-		this.create = create;
+	private DataPermissions(boolean read, boolean change) {
 		this.read = read;
-		this.update = update;
-		this.delete = delete;
-		this.denied = !create && !read && !update && !delete;
+		this.change = change;
 	}
 
-	public static DataPermissions from(boolean create, boolean read, boolean update, boolean delete) {
-		return new DataPermissions(create, read, update, delete);
+	public static DataPermissions from(boolean read, boolean change) {
+		if (read) {
+			return change ? ALL : READ_ONLY;
+		} else {
+			return change ? WRITE_ONLY : NONE;
+		}
 	}
 
 	public DataPermissions and(DataPermissions dp) {
-		return from(create && dp.create, read && dp.read, update && dp.update, delete && dp.delete);
+		return from(read && dp.read, change && dp.change);
 	}
 
 	public DataPermissions or(DataPermissions dp) {
-		return from(create || dp.create, read || dp.read, update || dp.update, delete || dp.delete);
+		return from(read || dp.read, change || dp.change);
 	}
 
-	public boolean denied() {
-		return denied;
+	@Override
+	public String toString() {
+		return "DataPermissions [read=" + read + ", change=" + change + "]";
 	}
 
 }
