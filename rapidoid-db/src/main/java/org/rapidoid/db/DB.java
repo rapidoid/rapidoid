@@ -52,7 +52,7 @@ public class DB {
 	}
 
 	public static void init() {
-		db = (Db) U.newInstance(DB.DB_IMPL_CLASS, "default", path() + "default.db");
+		db = (Db) U.customizable(DB.DB_IMPL_CLASS, "default", path() + "default.db");
 	}
 
 	public static Db db() {
