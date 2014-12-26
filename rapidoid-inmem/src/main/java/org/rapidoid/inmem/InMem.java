@@ -156,7 +156,7 @@ public class InMem {
 		String file1 = currentFile().getName();
 		String file2 = otherFile().getName();
 
-		log("WARN", "The database was left in inconsistent state, both files exist! file1=%2, file2=%s", file1, file2);
+		log("WARN", "The database was left in inconsistent state, both files exist! file1=%s, file2=%s", file1, file2);
 
 		long modif1, modif2;
 		try {
