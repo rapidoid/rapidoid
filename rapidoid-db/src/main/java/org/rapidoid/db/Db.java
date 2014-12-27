@@ -78,10 +78,12 @@ public interface Db extends Activity<Db> {
 
 	void destroy();
 
+	long getIdOf(Object record);
+
 	<E> DbList<E> list();
 
 	<E> DbSet<E> set();
 
-	long getIdOf(Object record);
+	<E> Ref<E> ref();
 
 }

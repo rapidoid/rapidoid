@@ -27,8 +27,9 @@ import java.util.Collection;
 import java.util.List;
 
 import org.rapidoid.activity.NamedActivity;
-import org.rapidoid.db.collections.DefaultDbList;
-import org.rapidoid.db.collections.DefaultDbSet;
+import org.rapidoid.db.impl.DefaultDbList;
+import org.rapidoid.db.impl.DefaultDbRef;
+import org.rapidoid.db.impl.DefaultDbSet;
 import org.rapidoid.inmem.InMem;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
@@ -76,6 +77,15 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 					JsonProcessingException {
 				List<Integer> ids = jp.readValueAs(List.class);
 				return new DefaultDbSet(DbImpl.this, ids);
+			}
+		});
+
+		dbCollModule.addDeserializer(Ref.class, new JsonDeserializer<Ref>() {
+			@Override
+			public Ref deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,
+					JsonProcessingException {
+				long id = jp.getLongValue();
+				return new DefaultDbRef(DbImpl.this, id);
 			}
 		});
 
@@ -226,6 +236,11 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	}
 
 	@Override
+	public long getIdOf(Object record) {
+		return InMem.getIdOf(record, false);
+	}
+
+	@Override
 	public <E> DbList<E> list() {
 		return new DefaultDbList<E>(this);
 	}
@@ -236,8 +251,8 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	}
 
 	@Override
-	public long getIdOf(Object record) {
-		return InMem.getIdOf(record, false);
+	public <E> Ref<E> ref() {
+		return new DefaultDbRef<E>(this);
 	}
 
 }

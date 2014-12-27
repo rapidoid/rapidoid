@@ -1,4 +1,4 @@
-package org.rapidoid.db.collections;
+package org.rapidoid.db.impl;
 
 /*
  * #%L
@@ -20,23 +20,40 @@ package org.rapidoid.db.collections;
  * #L%
  */
 
-import java.util.LinkedHashSet;
-import java.util.List;
-
 import org.rapidoid.db.Db;
-import org.rapidoid.db.DbSet;
+import org.rapidoid.db.Ref;
 
-public class DefaultDbSet<E> extends DefaultDbCollection<E> implements DbSet<E> {
+import com.fasterxml.jackson.annotation.JsonValue;
 
-	public DefaultDbSet(Db db) {
-		super(db, new LinkedHashSet<Long>());
+public class DefaultDbRef<E> implements Ref<E> {
+
+	private final Db db;
+
+	private long id;
+
+	public DefaultDbRef(Db db) {
+		this(db, -1);
 	}
 
-	public DefaultDbSet(Db db, List<? extends Number> ids) {
-		this(db);
-		for (Number id : ids) {
-			ids().add(id.longValue());
-		}
+	public DefaultDbRef(Db db, long id) {
+		this.db = db;
+		this.id = id;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public E get() {
+		return (E) (id > 0 ? db.get(id) : null);
+	}
+
+	@Override
+	public void set(E value) {
+		this.id = db.persist(value);
+	}
+
+	@JsonValue
+	public long id() {
+		return id;
 	}
 
 }

@@ -51,7 +51,7 @@ public class NewTaskScreen extends GUI {
 	}
 
 	public void onSave(HttpExchange x) {
-		task.owner = Users.current(x, User.class);
+		task.owner.set(Users.current(x, User.class));
 		DB.insert(task);
 		task = null;
 	}

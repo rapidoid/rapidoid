@@ -156,6 +156,10 @@ public class DB {
 		db().destroy();
 	}
 
+	public static long getIdOf(Object record) {
+		return db().getIdOf(record);
+	}
+
 	public static <E> DbList<E> list() {
 		return db().list();
 	}
@@ -164,8 +168,8 @@ public class DB {
 		return db().set();
 	}
 
-	public static long getIdOf(Object record) {
-		return db().getIdOf(record);
+	public static <E> Ref<E> ref() {
+		return db().ref();
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.Set;
 import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.app.entity.Entity;
 import org.rapidoid.db.DB;
+import org.rapidoid.db.Ref;
 import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.util.U;
 
@@ -39,7 +40,7 @@ public class Task extends Entity {
 	public String description;
 
 	@Programmatic
-	public User owner;
+	public final Ref<User> owner = DB.ref();
 
 	public final Set<User> sharedWith = DB.set();
 
@@ -64,9 +65,8 @@ public class Task extends Entity {
 	}
 
 	public void transferTo(User currentUser, User newOwner) {
-		U.must(currentUser.equals(owner));
-
-		owner = newOwner;
+		U.must(currentUser.equals(owner.get()));
+		owner.set(newOwner);
 	}
 
 }

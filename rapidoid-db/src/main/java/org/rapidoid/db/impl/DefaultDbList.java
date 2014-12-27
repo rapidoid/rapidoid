@@ -1,4 +1,4 @@
-package org.rapidoid.db.collections;
+package org.rapidoid.db.impl;
 
 /*
  * #%L
