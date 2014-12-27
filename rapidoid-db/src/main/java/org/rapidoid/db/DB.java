@@ -120,6 +120,10 @@ public class DB {
 		return db().find(searchPhrase);
 	}
 
+	public static <E> List<E> find(Class<E> clazz, String query, Object... args) {
+		return db().find(clazz, query, args);
+	}
+
 	public static <E> void each(Operation<E> lambda) {
 		db().each(lambda);
 	}

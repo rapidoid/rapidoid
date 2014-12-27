@@ -46,6 +46,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.regex.Pattern;
 
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
@@ -88,6 +89,8 @@ public class InMem {
 	private static final byte[] CR_LF = { 13, 10 };
 
 	private static final Object INSERTION = new Object();
+
+	private static final Pattern P_WORD = Pattern.compile("\\w+");
 
 	private final ObjectMapper mapper = new ObjectMapper();
 
@@ -423,6 +426,33 @@ public class InMem {
 		}
 
 		return results;
+	}
+
+	public <E> List<E> find(final Class<E> clazz, final String query, final Object... args) {
+
+		Predicate<E> match = new Predicate<E>() {
+			@Override
+			public boolean eval(E record) throws Exception {
+				return clazz.isAssignableFrom(record.getClass()) && matches(record, query, args);
+			}
+		};
+
+		return find(match);
+	}
+
+	public boolean matches(Object record, String query, Object... args) {
+
+		if (query == null || query.isEmpty()) {
+			return true;
+		}
+
+		if (P_WORD.matcher(query).matches() && args.length == 1) {
+			Object val = getProperty(record, query, false);
+			Object arg = args[0];
+			return val == arg || (val != null && val.equals(arg));
+		}
+
+		throw new RuntimeException("Query not supported: " + query);
 	}
 
 	public <E> void each(final Operation<E> lambda) {

@@ -62,6 +62,8 @@ public interface Db extends Activity<Db> {
 
 	<E> List<E> find(String searchPhrase);
 
+	<E> List<E> find(Class<E> clazz, String query, Object... args);
+
 	<E> void each(Operation<E> lambda);
 
 	void transaction(Runnable transaction, boolean readOnly);
