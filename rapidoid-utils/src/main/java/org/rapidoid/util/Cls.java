@@ -75,50 +75,47 @@ public class Cls {
 											propName = name.substring(3, 4).toLowerCase() + name.substring(4);
 										}
 
-										Prop propInfo = properties.get(propName);
+										Prop prop = properties.get(propName);
 
-										if (propInfo == null) {
-											propInfo = new Prop();
-											propInfo.setName(propName);
-											properties.put(propName, propInfo);
+										if (prop == null) {
+											prop = new Prop(propName);
+											properties.put(propName, prop);
 										}
 
 										if (name.startsWith("set")) {
 											if (params.length == 1) {
-												propInfo.setSetter(method);
-												propInfo.setReadOnly(false);
+												prop.setSetter(method);
+												prop.setReadOnly(false);
 											}
 										} else if (params.length == 0) {
-											propInfo.setGetter(method);
+											prop.setGetter(method);
 										}
 									} else if (!name.matches("^to[A-Z].*") && !name.equals("hashCode")) {
 
 										if (params.length == 0 && !ret.equals(void.class)) {
 
 											String propName = name;
-											Prop propInfo = properties.get(propName);
+											Prop prop = properties.get(propName);
 
-											if (propInfo == null) {
-												propInfo = new Prop();
-												propInfo.setName(propName);
-												properties.put(propName, propInfo);
+											if (prop == null) {
+												prop = new Prop(propName);
+												properties.put(propName, prop);
 											}
 
-											propInfo.setGetter(method);
+											prop.setGetter(method);
 
 										} else if (params.length == 1) {
 
 											String propName = name;
-											Prop propInfo = properties.get(propName);
+											Prop prop = properties.get(propName);
 
-											if (propInfo == null) {
-												propInfo = new Prop();
-												propInfo.setName(propName);
-												properties.put(propName, propInfo);
+											if (prop == null) {
+												prop = new Prop(propName);
+												properties.put(propName, prop);
 											}
 
-											propInfo.setReadOnly(false);
-											propInfo.setSetter(method);
+											prop.setReadOnly(false);
+											prop.setSetter(method);
 										}
 									}
 								}
@@ -141,14 +138,11 @@ public class Cls {
 								int modif = field.getModifiers();
 								if ((modif & Modifier.PUBLIC) != 0 && (modif & Modifier.STATIC) == 0) {
 									String fieldName = field.getName();
-									Prop propInfo = properties.get(fieldName);
+									Prop prop = properties.get(fieldName);
 
-									if (propInfo == null) {
-										propInfo = new Prop();
-										propInfo.setName(fieldName);
-										properties.put(fieldName, propInfo);
-										propInfo.setField(field);
-										propInfo.setReadOnly((modif & Modifier.FINAL) != 0);
+									if (prop == null) {
+										prop = new Prop(fieldName, field, (modif & Modifier.FINAL) != 0);
+										properties.put(fieldName, prop);
 									}
 								}
 							}
@@ -158,6 +152,9 @@ public class Cls {
 						throw U.rte(e);
 					}
 
+					for (Entry<String, Prop> e : properties.entrySet()) {
+						e.getValue().init();
+					}
 					return properties;
 				}
 

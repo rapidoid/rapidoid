@@ -22,10 +22,12 @@ package org.rapidoid.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 public class Prop {
 
-	private String name;
+	private final String name;
 
 	private Field field;
 
@@ -40,6 +42,27 @@ public class Prop {
 	private Object defaultValue;
 
 	private boolean readOnly = true;
+
+	private ParameterizedType genericType;
+
+	public Prop(String name) {
+		this.name = name;
+	}
+
+	public Prop(String name, Field field, boolean readOnly) {
+		this.name = name;
+		this.field = field;
+		this.readOnly = readOnly;
+	}
+
+	public void init() {
+		// TODO: improve inference from getter and setter
+		type = field != null ? field.getType() : getter.getReturnType();
+		typeKind = Cls.kindOf(type);
+
+		Type gType = field != null ? field.getGenericType() : getter.getGenericReturnType();
+		genericType = (gType instanceof ParameterizedType) ? ((ParameterizedType) gType) : null;
+	}
 
 	public void setGetter(Method getter) {
 		this.getter = getter;
@@ -67,10 +90,6 @@ public class Prop {
 
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public boolean isReadOnly() {
@@ -143,19 +162,15 @@ public class Prop {
 	}
 
 	public Class<?> getType() {
-		if (type == null) {
-			// TODO: improve inference from getter and setter
-			type = field != null ? field.getType() : getter.getReturnType();
-		}
 		return type;
 	}
 
 	public TypeKind getTypeKind() {
-		if (typeKind == null) {
-			typeKind = Cls.kindOf(getType());
-		}
-
 		return typeKind;
+	}
+
+	public ParameterizedType getGenericType() {
+		return genericType;
 	}
 
 	public Object getDefaultValue() {
