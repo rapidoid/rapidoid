@@ -2,9 +2,20 @@
 	cursor: pointer;
 }
 
-.display-value {
-	border-style: dashed;
-	border-color: #DDD;
+.value-display {
+	padding-top: 1px;
+	padding-bottom: 1px;
+	padding-left: 2px;
+	padding-right: 2px;
+	border-width: 1px;
+	border-radius: 3px;
+	border-style: dotted;
+	border-color: #CCC;
+}
+
+.value-line {
+	margin: 0px;
+	margin-bottom: 7px;
 }
 
 div.title-box {

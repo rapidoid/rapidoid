@@ -29,6 +29,7 @@ import java.util.List;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.InputTag;
@@ -257,7 +258,7 @@ public class FormWidget extends AbstractWidget {
 	}
 
 	protected Tag field(String name, String desc, FieldType type, Collection<?> options, Var<?> var) {
-		desc = U.or(desc, name);
+		desc = U.or(desc, name) + ":";
 
 		Object inp = input_(name, desc, type, options, var);
 		Tag label;
@@ -337,7 +338,21 @@ public class FormWidget extends AbstractWidget {
 	}
 
 	protected Object readonlyInput(Var<?> var) {
-		return span(var.get()).class_("form-control display-value");
+		Object value = var.get();
+
+		if (value instanceof Collection) {
+			Collection<?> coll = (Collection<?>) value;
+
+			Tag wrap = div();
+			for (Object item : coll) {
+				Tag icon = awesome("circle-o");
+				ATag itemLink = a(item).href("/").class_("value-display");
+				wrap = wrap.append(div(icon, " ", itemLink).class_("value-line"));
+			}
+
+			return wrap;
+		}
+		return span(value).class_("value-display");
 	}
 
 	protected Object checkboxesInput(String name, Collection<?> options, Var<?> var) {
