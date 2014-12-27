@@ -62,7 +62,7 @@ public class Cls {
 								Class<?>[] params = method.getParameterTypes();
 								Class<?> ret = method.getReturnType();
 
-								if ((modif & Modifier.PUBLIC) > 0 && (modif & Modifier.STATIC) == 0
+								if ((modif & Modifier.PUBLIC) != 0 && (modif & Modifier.STATIC) == 0
 										&& (modif & Modifier.ABSTRACT) == 0) {
 
 									String name = method.getName();
@@ -139,8 +139,7 @@ public class Cls {
 							for (Field field : fields) {
 
 								int modif = field.getModifiers();
-								if ((modif & Modifier.PUBLIC) > 0 && (modif & Modifier.FINAL) == 0
-										&& (modif & Modifier.STATIC) == 0) {
+								if ((modif & Modifier.PUBLIC) != 0 && (modif & Modifier.STATIC) == 0) {
 									String fieldName = field.getName();
 									Prop propInfo = properties.get(fieldName);
 
@@ -149,7 +148,7 @@ public class Cls {
 										propInfo.setName(fieldName);
 										properties.put(fieldName, propInfo);
 										propInfo.setField(field);
-										propInfo.setReadOnly(false);
+										propInfo.setReadOnly((modif & Modifier.FINAL) != 0);
 									}
 								}
 							}
