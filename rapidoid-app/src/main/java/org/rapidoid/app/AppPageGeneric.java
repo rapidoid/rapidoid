@@ -160,8 +160,8 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 	private FormTag searchForm(Object app) {
 		FormTag searchForm = null;
 		if (Apps.addon(app, "search")) {
-			searchForm = navbarForm(false, "Find", arr("q"), arr("Search")).attr("action", "/search").attr("method",
-					"GET");
+			searchForm = navbarForm(false, awesome("search"), arr("q"), arr("Search")).attr("action", "/search").attr(
+					"method", "GET");
 		}
 		return searchForm;
 	}

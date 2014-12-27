@@ -147,7 +147,7 @@ public class Bootstrap extends HTML {
 		return ul(drop1).class_("nav navbar-nav navbar-" + leftOrRight(onLeft));
 	}
 
-	public static FormTag navbarForm(boolean onLeft, String buttonCaption, String[] fields, String[] placeholders) {
+	public static FormTag navbarForm(boolean onLeft, Object btnContent, String[] fields, String[] placeholders) {
 		U.must(fields.length == placeholders.length, "");
 
 		Tag ctrls = div().class_("form-group");
@@ -157,7 +157,7 @@ public class Bootstrap extends HTML {
 			ctrls = ctrls.append(inp);
 		}
 
-		ButtonTag btn = button(buttonCaption).class_("btn btn-default").type("submit");
+		ButtonTag btn = button(btnContent).class_("btn btn-default").type("submit");
 		return form(ctrls, btn).class_("navbar-form navbar-" + leftOrRight(onLeft));
 	}
 
