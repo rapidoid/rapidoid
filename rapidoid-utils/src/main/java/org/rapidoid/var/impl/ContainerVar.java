@@ -2,7 +2,7 @@ package org.rapidoid.var.impl;
 
 /*
  * #%L
- * rapidoid-model
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -23,13 +23,31 @@ package org.rapidoid.var.impl;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
-public abstract class AbstractVar<T> implements Var<T> {
+public class ContainerVar extends AbstractVar<Boolean> {
 
-	private static final long serialVersionUID = -6006051524799076017L;
+	private static final long serialVersionUID = 6990464844550633598L;
+
+	private final Var<Object> container;
+
+	private final Object item;
+
+	public ContainerVar(Var<Object> container, Object item) {
+		this.container = container;
+		this.item = item;
+	}
 
 	@Override
-	public String toString() {
-		return U.text(get());
+	public Boolean get() {
+		return U.contains(container.get(), item);
+	}
+
+	@Override
+	public void set(Boolean value) {
+		if (value) {
+			container.set(U.include(container.get(), item));
+		} else {
+			container.set(U.exclude(container.get(), item));
+		}
 	}
 
 }

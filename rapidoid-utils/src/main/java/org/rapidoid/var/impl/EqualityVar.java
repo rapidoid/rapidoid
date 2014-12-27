@@ -1,10 +1,8 @@
-package org.rapidoid.var;
-
-import java.io.Serializable;
+package org.rapidoid.var.impl;
 
 /*
  * #%L
- * rapidoid-model
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -22,10 +20,36 @@ import java.io.Serializable;
  * #L%
  */
 
-public interface Var<T> extends Serializable {
+import org.rapidoid.util.U;
+import org.rapidoid.var.Var;
 
-	T get();
+public class EqualityVar extends AbstractVar<Boolean> {
 
-	void set(T value);
+	private static final long serialVersionUID = 6990464844550633598L;
+
+	private final Var<Object> var;
+
+	private final Object val;
+
+	public EqualityVar(Var<Object> var, Object val) {
+		this.var = var;
+		this.val = val;
+	}
+
+	@Override
+	public Boolean get() {
+		return U.eq(var.get(), val);
+	}
+
+	@Override
+	public void set(Boolean value) {
+		if (value) {
+			var.set(val);
+		} else {
+			if (U.eq(var.get(), val)) {
+				var.set(null);
+			}
+		}
+	}
 
 }

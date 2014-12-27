@@ -6,7 +6,7 @@ import org.rapidoid.var.impl.SimpleVar;
 
 /*
  * #%L
- * rapidoid-model
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%

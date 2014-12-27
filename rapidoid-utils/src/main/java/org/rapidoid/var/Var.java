@@ -1,8 +1,10 @@
-package org.rapidoid.var.impl;
+package org.rapidoid.var;
+
+import java.io.Serializable;
 
 /*
  * #%L
- * rapidoid-model
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,24 +22,10 @@ package org.rapidoid.var.impl;
  * #L%
  */
 
-public class SimpleVar<T> extends AbstractVar<T> {
+public interface Var<T> extends Serializable {
 
-	private static final long serialVersionUID = 7970150705828178233L;
+	T get();
 
-	private volatile T value;
-
-	public SimpleVar(T value) {
-		this.value = value;
-	}
-
-	@Override
-	public T get() {
-		return value;
-	}
-
-	@Override
-	public void set(T value) {
-		this.value = value;
-	}
+	void set(T value);
 
 }
