@@ -1,8 +1,9 @@
 package org.rapidoid.demo.taskplanner.model;
 
-import java.util.Set;
-
 import org.rapidoid.app.entity.Entity;
+import org.rapidoid.db.DB;
+import org.rapidoid.db.DbRef;
+import org.rapidoid.db.DbSet;
 
 /*
  * #%L
@@ -28,10 +29,10 @@ public class Comment extends Entity {
 
 	public String content;
 
-	public User owner;
+	public DbRef<User> owner = DB.ref("owns");
 
-	public Task task;
+	public DbRef<Task> task = DB.ref("has");
 
-	public Set<User> likedBy;
+	public DbSet<User> likedBy = DB.set("likes");
 
 }

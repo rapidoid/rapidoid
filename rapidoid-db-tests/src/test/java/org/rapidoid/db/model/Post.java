@@ -29,7 +29,7 @@ public class Post {
 
 	public String content;
 
-	public DbSet<Person> likes = DB.set();
+	public DbSet<Person> likes = DB.set("likes");
 
 	public Post() {
 	}

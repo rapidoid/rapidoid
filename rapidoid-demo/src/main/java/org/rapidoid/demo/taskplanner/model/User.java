@@ -36,11 +36,15 @@ public class User extends Entity {
 
 	public Date birthdate;
 
-	public final DbSet<Task> tasksOwned = DB.set();
+	public final DbSet<Task> tasksOwned = DB.set("owns");
 
-	public final DbSet<Task> tasksLiked = DB.set();
+	public final DbSet<Comment> commentsOwned = DB.set("owns");
 
-	public final DbSet<Comment> commentsLiked = DB.set();
+	public final DbSet<Task> tasksLiked = DB.set("likes");
+
+	public final DbSet<Task> sharedTasks = DB.set("shared");
+
+	public final DbSet<Comment> commentsLiked = DB.set("likes");
 
 	public void doTransferTo(Task task, User newOwner) {
 		tasksLiked.remove(task);

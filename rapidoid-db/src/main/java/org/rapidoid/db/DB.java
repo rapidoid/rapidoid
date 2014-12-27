@@ -160,15 +160,15 @@ public class DB {
 		return db().getIdOf(record);
 	}
 
-	public static <E> DbList<E> list() {
+	public static <E> DbList<E> list(String relation) {
 		return db().list();
 	}
 
-	public static <E> DbSet<E> set() {
+	public static <E> DbSet<E> set(String relation) {
 		return db().set();
 	}
 
-	public static <E> DbRef<E> ref() {
+	public static <E> DbRef<E> ref(String relation) {
 		return db().ref();
 	}
 

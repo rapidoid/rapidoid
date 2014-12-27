@@ -36,12 +36,12 @@ public class Task extends Entity {
 
 	public int rating;
 
-	public final DbRef<User> owner = DB.ref();
+	public final DbRef<User> owner = DB.ref("owns");
 
-	public final DbSet<User> sharedWith = DB.set();
+	public final DbSet<User> sharedWith = DB.set("shared");
 
-	public final DbList<Comment> comments = DB.list();
+	public final DbList<Comment> comments = DB.list("has");
 
-	public final DbSet<User> likedBy = DB.set();
+	public final DbSet<User> likedBy = DB.set("likes");
 
 }
