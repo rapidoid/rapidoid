@@ -21,6 +21,7 @@ package org.rapidoid.model;
  */
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,7 @@ import org.rapidoid.model.impl.ListItems;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Prop;
 import org.rapidoid.util.U;
+import org.rapidoid.var.Var;
 
 public class Models {
 
@@ -143,7 +145,12 @@ public class Models {
 	public static boolean isEditable(Prop prop) {
 		String name = prop.getName();
 
-		if (name.equalsIgnoreCase("id") || name.equalsIgnoreCase("version") || prop.isReadOnly()) {
+		if (name.equalsIgnoreCase("id") || name.equalsIgnoreCase("version")) {
+			return false;
+		}
+
+		if (prop.isReadOnly() && !Collection.class.isAssignableFrom(prop.getType())
+				&& !Var.class.isAssignableFrom(prop.getType())) {
 			return false;
 		}
 
