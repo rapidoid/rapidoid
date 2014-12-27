@@ -1745,4 +1745,14 @@ public class U {
 		return e;
 	}
 
+	public static <T> T single(Collection<T> coll) {
+		must(coll.size() == 1, "Expected exactly 1 items, but found: %s!", coll.size());
+		return coll.iterator().next();
+	}
+
+	public static <T> T singleOrNone(Collection<T> coll) {
+		must(coll.size() <= 1, "Expected 0 or 1 items, but found: %s!", coll.size());
+		return !coll.isEmpty() ? coll.iterator().next() : null;
+	}
+
 }
