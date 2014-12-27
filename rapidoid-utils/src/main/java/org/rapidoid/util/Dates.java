@@ -54,6 +54,10 @@ public class Dates {
 	}
 
 	public static Date date(String value) {
+		if (U.isEmpty(value)) {
+			return null;
+		}
+
 		String[] parts = value.split("(\\.|-|/)");
 
 		int a = parts.length > 0 ? U.num(parts[0]) : -1;
