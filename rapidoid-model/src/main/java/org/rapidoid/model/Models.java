@@ -62,13 +62,13 @@ public class Models {
 		Map<String, Prop> props = Cls.propertiesOf(beanType);
 
 		if (beanType == Object.class) {
-			return new BeanProperty(property, property.equals("id") ? long.class : String.class);
+			return new BeanProperty(property, property.equals("id") ? long.class : String.class, null);
 		}
 
 		Prop prop = props.get(property);
 		U.must(prop != null, "Cannot find property %s in class %s!", property, beanType);
 
-		return new BeanProperty(prop.getName(), prop.getType());
+		return new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType());
 	}
 
 	public static List<Property> propertiesOf(Class<?> beanType, String... propertyNames) {
@@ -80,19 +80,19 @@ public class Models {
 
 			Prop idProp = props.get("id");
 			if (idProp != null) {
-				pr.add(new BeanProperty(idProp.getName(), idProp.getType()));
+				pr.add(new BeanProperty(idProp.getName(), idProp.getType(), idProp.getGenericType()));
 			}
 
 			for (Prop prop : props.values()) {
 				if (!prop.getName().equals("id")) {
-					pr.add(new BeanProperty(prop.getName(), prop.getType()));
+					pr.add(new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType()));
 				}
 			}
 		} else {
 			for (String propName : propertyNames) {
 				Prop prop = props.get(propName);
 				U.must(prop != null, "Cannot find property '%s' in type: %s", propName, beanType);
-				pr.add(new BeanProperty(prop.getName(), prop.getType()));
+				pr.add(new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType()));
 			}
 		}
 		return pr;
@@ -106,14 +106,14 @@ public class Models {
 		if (propertyNames.length == 0) {
 			for (Prop prop : props.values()) {
 				if (isEditable(prop)) {
-					pr.add(new BeanProperty(prop.getName(), prop.getType()));
+					pr.add(new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType()));
 				}
 			}
 		} else {
 			for (String propName : propertyNames) {
 				Prop prop = props.get(propName);
 				U.must(prop != null, "Cannot find property '%s' in type: %s", propName, beanType);
-				pr.add(new BeanProperty(prop.getName(), prop.getType()));
+				pr.add(new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType()));
 			}
 		}
 
@@ -128,14 +128,14 @@ public class Models {
 		if (propertyNames.length == 0) {
 			for (Prop prop : props.values()) {
 				if (isReadable(prop)) {
-					pr.add(new BeanProperty(prop.getName(), prop.getType()));
+					pr.add(new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType()));
 				}
 			}
 		} else {
 			for (String propName : propertyNames) {
 				Prop prop = props.get(propName);
 				U.must(prop != null, "Cannot find property '%s' in type: %s", propName, beanType);
-				pr.add(new BeanProperty(prop.getName(), prop.getType()));
+				pr.add(new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType()));
 			}
 		}
 

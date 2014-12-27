@@ -1,6 +1,7 @@
 package org.rapidoid.model;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 
 /*
  * #%L
@@ -27,6 +28,8 @@ public interface Property extends Serializable {
 	String name();
 
 	Class<?> type();
+
+	ParameterizedType genericType();
 
 	String caption();
 

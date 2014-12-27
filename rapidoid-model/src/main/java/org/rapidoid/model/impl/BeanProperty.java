@@ -20,6 +20,8 @@ package org.rapidoid.model.impl;
  * #L%
  */
 
+import java.lang.reflect.ParameterizedType;
+
 import org.rapidoid.model.Property;
 import org.rapidoid.util.U;
 
@@ -31,16 +33,19 @@ public class BeanProperty implements Property {
 
 	private final Class<?> type;
 
+	private final ParameterizedType genericType;
+
 	private final String caption;
 
-	public BeanProperty(String name, Class<?> type) {
-		this(name, type, pretty(name));
+	public BeanProperty(String name, Class<?> type, ParameterizedType genericType) {
+		this(name, type, genericType, pretty(name));
 	}
 
-	public BeanProperty(String name, Class<?> type, String caption) {
+	public BeanProperty(String name, Class<?> type, ParameterizedType genericType, String caption) {
 		this.name = name;
 		this.type = type;
 		this.caption = caption;
+		this.genericType = genericType;
 	}
 
 	@Override
@@ -58,6 +63,11 @@ public class BeanProperty implements Property {
 		return caption;
 	}
 
+	@Override
+	public ParameterizedType genericType() {
+		return genericType;
+	}
+
 	private static String pretty(String prop) {
 		if (prop.startsWith("_")) {
 			prop = prop.substring(1);
@@ -70,6 +80,12 @@ public class BeanProperty implements Property {
 			return "ID";
 		}
 		return U.camelPhrase(prop);
+	}
+
+	@Override
+	public String toString() {
+		return "BeanProperty [name=" + name + ", type=" + type + ", genericType=" + genericType + ", caption="
+				+ caption + "]";
 	}
 
 }
