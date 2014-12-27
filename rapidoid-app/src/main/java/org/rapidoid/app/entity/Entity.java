@@ -1,5 +1,6 @@
 package org.rapidoid.app.entity;
 
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.CommonRoles;
 
 /*
@@ -55,7 +56,7 @@ public abstract class Entity implements CommonRoles {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + "#" + id;
+		return Cls.beanToStr(this, false);
 	}
 
 }

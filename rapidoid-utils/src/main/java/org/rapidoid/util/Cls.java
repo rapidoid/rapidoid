@@ -927,7 +927,7 @@ public class Cls {
 
 		for (Entry<String, Prop> e : props.entrySet()) {
 			Prop prop = e.getValue();
-			if (!prop.getName().equalsIgnoreCase("id")) {
+			if (!prop.getName().equalsIgnoreCase("id") && prop.getTypeKind() != TypeKind.OBJECT) {
 				Object value = prop.get(bean);
 				if (value != null) {
 					if (sb.length() > 0) {
