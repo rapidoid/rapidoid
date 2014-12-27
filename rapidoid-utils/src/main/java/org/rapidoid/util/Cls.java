@@ -28,6 +28,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -185,6 +186,14 @@ public class Cls {
 
 	public static Prop property(Object obj, String property, boolean mandatory) {
 		return property(obj.getClass(), property, mandatory);
+	}
+
+	public static boolean hasProperty(Class<?> clazz, String property) {
+		return property(clazz, property, false) != null;
+	}
+
+	public static boolean hasProperty(Object obj, String property) {
+		return property(obj, property, false) != null;
 	}
 
 	protected static Map<String, TypeKind> initKinds() {
@@ -930,6 +939,10 @@ public class Cls {
 		}
 
 		return sb.toString();
+	}
+
+	public static Class<?> clazz(Type type) {
+		return type instanceof Class<?> ? (Class<?>) type : Object.class;
 	}
 
 }
