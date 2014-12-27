@@ -927,12 +927,22 @@ public class Cls {
 
 		for (Entry<String, Prop> e : props.entrySet()) {
 			Prop prop = e.getValue();
-			if (!prop.getName().equalsIgnoreCase("id") && prop.getTypeKind() != TypeKind.OBJECT) {
+			String name = prop.getName();
+
+			if (!name.equalsIgnoreCase("id") && !name.equalsIgnoreCase("version")
+					&& prop.getTypeKind() != TypeKind.OBJECT && prop.getTypeKind() != TypeKind.DATE) {
+
 				Object value = prop.get(bean);
 				if (value != null) {
+
 					if (sb.length() > 0) {
 						sb.append(", ");
 					}
+
+					if (value instanceof Number) {
+						value = name + ": " + value;
+					}
+
 					sb.append(value);
 				}
 			}
