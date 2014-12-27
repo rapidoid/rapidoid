@@ -716,8 +716,7 @@ public class InMem {
 		Callback<Void>[] callbacks;
 
 		try {
-			if (data.isEmpty()) {
-				must(txCallbacks.isEmpty(), "Inconsistent DB state!");
+			if (data.isEmpty() && txCallbacks.isEmpty()) {
 				return;
 			}
 
