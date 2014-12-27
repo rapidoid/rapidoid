@@ -346,8 +346,12 @@ public class FormWidget extends AbstractWidget {
 			Tag wrap = div();
 			for (Object item : coll) {
 				Tag icon = awesome("circle-o");
-				ATag itemLink = a(item).href("/").class_("value-display");
-				wrap = wrap.append(div(icon, " ", itemLink).class_("value-line"));
+
+				boolean withLink = Cls.hasProperty(item, "id");
+				Tag itemDisplay = withLink ? a(item).href(BootstrapWidgets.urlFor(item)) : span(item);
+				itemDisplay = itemDisplay.class_("value-display");
+
+				wrap = wrap.append(div(icon, " ", itemDisplay).class_("value-line"));
 			}
 
 			return wrap;
