@@ -29,9 +29,9 @@ public class User extends Entity {
 
 	public String username;
 
-	public String firstName;
+	public String email;
 
-	public String lastName;
+	public String name;
 
 	public final Set<Task> tasksOwned = DB.set();
 

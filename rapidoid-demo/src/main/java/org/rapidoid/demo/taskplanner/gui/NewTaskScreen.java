@@ -21,11 +21,14 @@ package org.rapidoid.demo.taskplanner.gui;
  */
 
 import org.rapidoid.annotation.Session;
+import org.rapidoid.app.Users;
 import org.rapidoid.db.DB;
 import org.rapidoid.demo.taskplanner.model.Priority;
 import org.rapidoid.demo.taskplanner.model.Task;
+import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.Tag;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.widget.FormWidget;
 import org.rapidoid.widget.GridWidget;
 
@@ -38,7 +41,7 @@ public class NewTaskScreen extends GUI {
 
 		Tag caption = titleBox("Add new task");
 
-		FormWidget frm = edit(task, "title", "description", "priority", "owner").buttons(SAVE, CANCEL);
+		FormWidget frm = edit(task).buttons(SAVE, CANCEL);
 		frm = frm.fieldType("description", FieldType.TEXTAREA);
 
 		Tag recent = titleBox("Most recent tasks");
@@ -47,7 +50,8 @@ public class NewTaskScreen extends GUI {
 		return row(col4(caption, frm), col8(recent, grid));
 	}
 
-	public void onSave() {
+	public void onSave(HttpExchange x) {
+		task.owner = Users.current(x, User.class);
 		DB.insert(task);
 		task = null;
 	}

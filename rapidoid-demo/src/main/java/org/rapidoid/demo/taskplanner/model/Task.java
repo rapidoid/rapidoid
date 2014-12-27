@@ -3,6 +3,7 @@ package org.rapidoid.demo.taskplanner.model;
 import java.util.List;
 import java.util.Set;
 
+import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.app.entity.Entity;
 import org.rapidoid.db.DB;
 import org.rapidoid.security.annotation.LoggedIn;
@@ -37,6 +38,7 @@ public class Task extends Entity {
 
 	public String description;
 
+	@Programmatic
 	public User owner;
 
 	public final Set<User> sharedWith = DB.set();
