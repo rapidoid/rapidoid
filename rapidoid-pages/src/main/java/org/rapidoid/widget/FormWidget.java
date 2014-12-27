@@ -29,7 +29,6 @@ import java.util.List;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.InputTag;
@@ -342,6 +341,10 @@ public class FormWidget extends AbstractWidget {
 
 		if (value instanceof Collection) {
 			Collection<?> coll = (Collection<?>) value;
+
+			if (coll.isEmpty()) {
+				return div(awesome("ban"), " No entries!").class_("value-line");
+			}
 
 			Tag wrap = div();
 			for (Object item : coll) {
