@@ -1,5 +1,7 @@
 package org.rapidoid.db;
 
+import org.rapidoid.var.Var;
+
 /*
  * #%L
  * rapidoid-db
@@ -20,10 +22,6 @@ package org.rapidoid.db;
  * #L%
  */
 
-public interface Ref<E> {
-
-	E get();
-
-	void set(E value);
+public interface Ref<E> extends Var<E>, DbAware {
 
 }
