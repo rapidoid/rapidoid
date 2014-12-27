@@ -158,7 +158,7 @@ public class Models {
 	public static boolean isReadable(Prop prop) {
 		String name = prop.getName();
 
-		if (name.equalsIgnoreCase("id") || name.equalsIgnoreCase("version") || prop.isReadOnly()) {
+		if (name.equalsIgnoreCase("id") || name.equalsIgnoreCase("version")) {
 			return false;
 		}
 
