@@ -5,8 +5,6 @@ import org.rapidoid.db.DB;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
-import org.rapidoid.security.annotation.LoggedIn;
-import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -28,7 +26,6 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-@LoggedIn
 public class Task extends Entity {
 
 	public String title;
@@ -37,6 +34,8 @@ public class Task extends Entity {
 
 	public String description;
 
+	public int rating;
+
 	public final DbRef<User> owner = DB.ref();
 
 	public final DbSet<User> sharedWith = DB.set();
@@ -44,26 +43,5 @@ public class Task extends Entity {
 	public final DbList<Comment> comments = DB.list();
 
 	public final DbSet<User> likedBy = DB.set();
-
-	public Task() {
-	}
-
-	public Task(String title, Priority priority) {
-		this.title = title;
-		this.priority = priority;
-	}
-
-	public void like(User currentUser) {
-		likedBy.add(currentUser);
-	}
-
-	public void unlike(User currentUser) {
-		likedBy.remove(currentUser);
-	}
-
-	public void transferTo(User currentUser, User newOwner) {
-		U.must(currentUser.equals(owner.get()));
-		owner.set(newOwner);
-	}
 
 }

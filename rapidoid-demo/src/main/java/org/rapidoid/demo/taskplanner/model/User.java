@@ -20,6 +20,8 @@ package org.rapidoid.demo.taskplanner.model;
  * #L%
  */
 
+import java.util.Date;
+
 import org.rapidoid.app.entity.Entity;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbSet;
@@ -31,6 +33,8 @@ public class User extends Entity {
 	public String email;
 
 	public String name;
+
+	public Date birthdate;
 
 	public final DbSet<Task> tasksOwned = DB.set();
 

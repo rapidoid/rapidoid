@@ -23,7 +23,6 @@ package org.rapidoid.demo.taskplanner.gui;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Users;
 import org.rapidoid.db.DB;
-import org.rapidoid.demo.taskplanner.model.Priority;
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.FieldType;
@@ -35,7 +34,7 @@ import org.rapidoid.widget.GridWidget;
 public class NewTaskScreen extends GUI {
 
 	@Session
-	private Task task = new Task("Buy milk!", Priority.MEDIUM);
+	private Task task = new Task();
 
 	public Object content() {
 
@@ -57,7 +56,7 @@ public class NewTaskScreen extends GUI {
 	}
 
 	public void onCancel() {
-		task = new Task("Buy milk!", Priority.MEDIUM);
+		task = new Task();
 	}
 
 }

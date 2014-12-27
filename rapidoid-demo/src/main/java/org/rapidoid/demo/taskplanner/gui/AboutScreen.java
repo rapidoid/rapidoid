@@ -21,7 +21,6 @@ package org.rapidoid.demo.taskplanner.gui;
  */
 
 import org.rapidoid.db.DB;
-import org.rapidoid.demo.taskplanner.model.Priority;
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ButtonTag;
@@ -37,11 +36,17 @@ public class AboutScreen extends GUI {
 	}
 
 	public void onTx() {
-		long id = DB.insert(new Task("DON'T GO TO THE DATABASE!", Priority.HIGH));
-		DB.update(id, new Task("DON'T GO TO THE DATABASE!", Priority.HIGH));
-		DB.update(1, new Task("DON'T GO TO THE DATABASE!", Priority.HIGH));
+		long id = DB.insert(task());
+		DB.update(id, task());
+		DB.update(1, task());
 		DB.delete(1);
 		throw U.rte("some failure!");
+	}
+
+	private Task task() {
+		Task task = new Task();
+		task.title = "DON'T GO TO THE DATABASE!";
+		return task;
 	}
 
 }
