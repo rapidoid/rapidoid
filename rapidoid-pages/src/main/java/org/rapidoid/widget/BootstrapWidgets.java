@@ -104,21 +104,27 @@ public abstract class BootstrapWidgets extends Bootstrap {
 	}
 
 	public static FormWidget show(Object bean, String... properties) {
-		Item item = Models.item(bean);
-		return show(item, properties);
+		return show(Models.item(bean), properties);
 	}
 
 	public static FormWidget show(final Item item, String... properties) {
-		return U.customizable(FormWidget.class, false, item, properties);
+		return show(null, item, properties);
+	}
+
+	public static FormWidget show(DataManager dataManager, final Item item, String... properties) {
+		return U.customizable(FormWidget.class, dataManager, false, item, properties);
 	}
 
 	public static FormWidget edit(Object bean, String... properties) {
-		Item item = Models.item(bean);
-		return edit(item, properties);
+		return edit(Models.item(bean), properties);
 	}
 
 	public static FormWidget edit(final Item item, String... properties) {
-		return U.customizable(FormWidget.class, true, item, properties);
+		return edit(null, item, properties);
+	}
+
+	public static FormWidget edit(DataManager dataManager, final Item item, String... properties) {
+		return U.customizable(FormWidget.class, dataManager, true, item, properties);
 	}
 
 	public static Tag page(boolean devMode, String pageTitle, Object head, Object body) {

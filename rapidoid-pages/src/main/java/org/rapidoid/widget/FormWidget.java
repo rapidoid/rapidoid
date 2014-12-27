@@ -23,6 +23,7 @@ package org.rapidoid.widget;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.rapidoid.html.FieldType;
@@ -44,20 +45,24 @@ import org.rapidoid.var.Vars;
 
 public class FormWidget extends AbstractWidget {
 
+	protected final DataManager dataManager;
+
 	protected Tag[] buttons;
 	protected FormLayout layout = FormLayout.VERTICAL;
 	protected String[] fieldNames;
 	protected String[] fieldLabels;
 	protected FieldType[] fieldTypes;
-	protected Object[][] options;
+	protected Collection<?>[] options;
 	protected Var<?>[] vars;
 
-	public FormWidget(boolean editable, Item item, String... properties) {
+	public FormWidget(DataManager dataManager, boolean editable, Item item, String... properties) {
+		this.dataManager = dataManager;
 		init(editable, item, properties);
 	}
 
-	public FormWidget(FormLayout layout, String[] fieldNames, String[] fieldLabels, FieldType[] fieldTypes,
-			Object[][] options, Var<?>[] vars, Tag[] buttons) {
+	public FormWidget(DataManager dataManager, FormLayout layout, String[] fieldNames, String[] fieldLabels,
+			FieldType[] fieldTypes, Collection<?>[] options, Var<?>[] vars, Tag[] buttons) {
+		this.dataManager = dataManager;
 		this.layout = layout;
 		this.fieldNames = fieldNames;
 		this.fieldLabels = U.or(fieldLabels, Arrays.copyOf(fieldNames, fieldNames.length));
@@ -117,7 +122,7 @@ public class FormWidget extends AbstractWidget {
 		fieldNames = new String[propN];
 		fieldLabels = new String[propN];
 		fieldTypes = new FieldType[propN];
-		options = new Object[propN][];
+		options = new Collection<?>[propN];
 		vars = new Var[propN];
 
 		for (int i = 0; i < propN; i++) {
@@ -152,11 +157,11 @@ public class FormWidget extends AbstractWidget {
 		return FieldType.TEXT;
 	}
 
-	protected Object[] getPropertyOptions(Property prop) {
+	protected Collection<?> getPropertyOptions(Property prop) {
 		Class<?> type = prop.type();
 
 		if (type.isEnum()) {
-			return type.getEnumConstants();
+			return U.list(type.getEnumConstants());
 		}
 
 		if (Collection.class.isAssignableFrom(type)) {
@@ -168,33 +173,28 @@ public class FormWidget extends AbstractWidget {
 		}
 
 		if (Cls.kindOf(type) == TypeKind.OBJECT) {
-			return EMPTY_ARRAY;
+			return Collections.EMPTY_LIST;
 		}
 
 		return null;
 	}
 
-	protected Object[] getCollectionPropertyOptions(Property prop) {
+	protected Collection<?> getCollectionPropertyOptions(Property prop) {
 		Type[] typeArgs = prop.genericType().getActualTypeArguments();
-		return typeArgs.length == 1 ? getOptionsOfType(Cls.clazz(typeArgs[0])) : EMPTY_ARRAY;
+		return typeArgs.length == 1 ? getOptionsOfType(Cls.clazz(typeArgs[0])) : Collections.EMPTY_LIST;
 	}
 
-	protected Object[] getVarPropertyOptions(Property prop) {
+	protected Collection<?> getVarPropertyOptions(Property prop) {
 		Type[] typeArgs = prop.genericType().getActualTypeArguments();
-		return typeArgs.length == 1 ? getOptionsOfType(Cls.clazz(typeArgs[0])) : EMPTY_ARRAY;
+		return typeArgs.length == 1 ? getOptionsOfType(Cls.clazz(typeArgs[0])) : Collections.EMPTY_LIST;
 	}
 
-	protected Object[] getOptionsOfType(Class<?> clazz) {
+	protected Collection<?> getOptionsOfType(Class<?> clazz) {
 		if (Cls.kindOf(clazz) == TypeKind.OBJECT && Cls.hasProperty(clazz, "id")) {
-			return getInstancesOf(clazz);
+			return dataManager != null ? dataManager.getAll(clazz) : Collections.EMPTY_LIST;
 		} else {
-			return EMPTY_ARRAY;
+			return Collections.EMPTY_LIST;
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	protected <T> T[] getInstancesOf(Class<T> clazz) {
-		return (T[]) new Object[] {}; // FIXME complete implementation
 	}
 
 	@Override
@@ -256,7 +256,7 @@ public class FormWidget extends AbstractWidget {
 		}
 	}
 
-	protected Tag field(String name, String desc, FieldType type, Object[] options, Var<?> var) {
+	protected Tag field(String name, String desc, FieldType type, Collection<?> options, Var<?> var) {
 		desc = U.or(desc, name);
 
 		Object inp = input_(name, desc, type, options, var);
@@ -297,7 +297,7 @@ public class FormWidget extends AbstractWidget {
 		return group;
 	}
 
-	protected Object input_(String name, String desc, FieldType type, Object[] options, Var<?> var) {
+	protected Object input_(String name, String desc, FieldType type, Collection<?> options, Var<?> var) {
 
 		switch (type) {
 
@@ -340,31 +340,34 @@ public class FormWidget extends AbstractWidget {
 		return span(var.get()).class_("form-control display-value");
 	}
 
-	protected Object checkboxesInput(String name, Object[] options, Var<?> var) {
+	protected Object checkboxesInput(String name, Collection<?> options, Var<?> var) {
 		U.notNull(options, "checkboxes options");
-		Object[] checkboxes = new Object[options.length];
-		for (int i = 0; i < options.length; i++) {
-			Object opt = options[i];
+		Object[] checkboxes = new Object[options.size()];
+		int i = 0;
+		for (Object opt : options) {
 			Var<Boolean> optVar = Vars.has(var, opt);
 			InputTag cc = input().type("checkbox").name(name).value(str(opt)).bind(optVar);
 			checkboxes[i] = label(cc, opt).class_("radio-checkbox");
+			i++;
 		}
 		return checkboxes;
 	}
 
-	protected Object radiosInput(String name, Object[] options, Var<?> var) {
+	protected Object radiosInput(String name, Collection<?> options, Var<?> var) {
 		U.notNull(options, "radios options");
-		Object[] radios = new Object[options.length];
-		for (int i = 0; i < options.length; i++) {
-			Object opt = options[i];
+		Object[] radios = new Object[options.size()];
+
+		int i = 0;
+		for (Object opt : options) {
 			Var<Boolean> optVar = Vars.eq(var, opt);
 			InputTag radio = input().type("radio").name(name).value(str(opt)).bind(optVar);
 			radios[i] = label(radio, opt).class_("radio-inline");
+			i++;
 		}
 		return radios;
 	}
 
-	protected Object multiSelectInput(String name, Object[] options, Var<?> var) {
+	protected Object multiSelectInput(String name, Collection<?> options, Var<?> var) {
 		U.notNull(options, "multi-select options");
 		SelectTag select = select().name(name).class_("form-control").multiple(true);
 		for (Object opt : options) {
@@ -375,7 +378,7 @@ public class FormWidget extends AbstractWidget {
 		return select;
 	}
 
-	protected Object dropdownInput(String name, Object[] options, Var<?> var) {
+	protected Object dropdownInput(String name, Collection<?> options, Var<?> var) {
 		U.notNull(options, "dropdown options");
 		SelectTag dropdown = select().name(name).class_("form-control").multiple(false);
 		for (Object opt : options) {

@@ -20,11 +20,15 @@ package org.rapidoid.app;
  * #L%
  */
 
+import org.rapidoid.db.DB;
 import org.rapidoid.db.model.DbItems;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
+import org.rapidoid.util.U;
 import org.rapidoid.widget.BootstrapWidgets;
+import org.rapidoid.widget.DataManager;
+import org.rapidoid.widget.FormWidget;
 import org.rapidoid.widget.GridWidget;
 
 public class AppGUI extends BootstrapWidgets {
@@ -47,6 +51,26 @@ public class AppGUI extends BootstrapWidgets {
 
 	public static <T> GridWidget grid(Class<T> type, String sortOrder, int pageSize, String... properties) {
 		return grid(all(type, sortOrder), sortOrder, pageSize, properties);
+	}
+
+	public static FormWidget show(Object bean, String... properties) {
+		return show(Models.item(bean), properties);
+	}
+
+	public static FormWidget show(final Item item, String... properties) {
+		return BootstrapWidgets.show(dataManager(), item, properties);
+	}
+
+	public static FormWidget edit(Object bean, String... properties) {
+		return edit(Models.item(bean), properties);
+	}
+
+	public static FormWidget edit(final Item item, String... properties) {
+		return BootstrapWidgets.edit(dataManager(), item, properties);
+	}
+
+	public static DataManager dataManager() {
+		return U.customizable(DbDataManager.class, DB.db());
 	}
 
 }
