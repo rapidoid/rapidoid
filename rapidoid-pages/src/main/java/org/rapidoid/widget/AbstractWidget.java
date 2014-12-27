@@ -23,8 +23,9 @@ package org.rapidoid.widget;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.util.Constants;
 
-public abstract class AbstractWidget extends BootstrapWidgets implements TagWidget<HttpExchange> {
+public abstract class AbstractWidget extends BootstrapWidgets implements TagWidget<HttpExchange>, Constants {
 
 	protected abstract Tag create();
 

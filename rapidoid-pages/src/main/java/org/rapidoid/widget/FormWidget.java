@@ -20,6 +20,7 @@ package org.rapidoid.widget;
  * #L%
  */
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -158,11 +159,42 @@ public class FormWidget extends AbstractWidget {
 			return type.getEnumConstants();
 		}
 
+		if (Collection.class.isAssignableFrom(type)) {
+			return getCollectionPropertyOptions(prop);
+		}
+
+		if (Var.class.isAssignableFrom(type)) {
+			return getVarPropertyOptions(prop);
+		}
+
 		if (Cls.kindOf(type) == TypeKind.OBJECT) {
-			return new Object[] {};
+			return EMPTY_ARRAY;
 		}
 
 		return null;
+	}
+
+	protected Object[] getCollectionPropertyOptions(Property prop) {
+		Type[] typeArgs = prop.genericType().getActualTypeArguments();
+		return typeArgs.length == 1 ? getOptionsOfType(Cls.clazz(typeArgs[0])) : EMPTY_ARRAY;
+	}
+
+	protected Object[] getVarPropertyOptions(Property prop) {
+		Type[] typeArgs = prop.genericType().getActualTypeArguments();
+		return typeArgs.length == 1 ? getOptionsOfType(Cls.clazz(typeArgs[0])) : EMPTY_ARRAY;
+	}
+
+	protected Object[] getOptionsOfType(Class<?> clazz) {
+		if (Cls.kindOf(clazz) == TypeKind.OBJECT && Cls.hasProperty(clazz, "id")) {
+			return getInstancesOf(clazz);
+		} else {
+			return EMPTY_ARRAY;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <T> T[] getInstancesOf(Class<T> clazz) {
+		return (T[]) new Object[] {}; // FIXME complete implementation
 	}
 
 	@Override
