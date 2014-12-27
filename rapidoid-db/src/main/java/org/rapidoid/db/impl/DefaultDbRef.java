@@ -21,11 +21,11 @@ package org.rapidoid.db.impl;
  */
 
 import org.rapidoid.db.Db;
-import org.rapidoid.db.Ref;
+import org.rapidoid.db.DbRef;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public class DefaultDbRef<E> implements Ref<E> {
+public class DefaultDbRef<E> implements DbRef<E> {
 
 	private final Db db;
 

@@ -1,12 +1,10 @@
 package org.rapidoid.demo.taskplanner.model;
 
-import java.util.List;
-import java.util.Set;
-
-import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.app.entity.Entity;
 import org.rapidoid.db.DB;
-import org.rapidoid.db.Ref;
+import org.rapidoid.db.DbList;
+import org.rapidoid.db.DbRef;
+import org.rapidoid.db.DbSet;
 import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.util.U;
 
@@ -39,14 +37,13 @@ public class Task extends Entity {
 
 	public String description;
 
-	@Programmatic
-	public final Ref<User> owner = DB.ref();
+	public final DbRef<User> owner = DB.ref();
 
-	public final Set<User> sharedWith = DB.set();
+	public final DbSet<User> sharedWith = DB.set();
 
-	public final List<Comment> comments = DB.list();
+	public final DbList<Comment> comments = DB.list();
 
-	public final Set<User> likedBy = DB.set();
+	public final DbSet<User> likedBy = DB.set();
 
 	public Task() {
 	}

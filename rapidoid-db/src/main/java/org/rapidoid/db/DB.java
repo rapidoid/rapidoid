@@ -168,7 +168,7 @@ public class DB {
 		return db().set();
 	}
 
-	public static <E> Ref<E> ref() {
+	public static <E> DbRef<E> ref() {
 		return db().ref();
 	}
 

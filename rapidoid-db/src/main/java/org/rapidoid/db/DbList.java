@@ -22,6 +22,6 @@ package org.rapidoid.db;
 
 import java.util.List;
 
-public interface DbList<E> extends List<E>, DbAware {
+public interface DbList<E> extends List<E> {
 
 }

@@ -22,6 +22,6 @@ import org.rapidoid.var.Var;
  * #L%
  */
 
-public interface Ref<E> extends Var<E>, DbAware {
+public interface DbRef<E> extends Var<E> {
 
 }

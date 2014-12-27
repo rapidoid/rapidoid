@@ -20,10 +20,9 @@ package org.rapidoid.demo.taskplanner.model;
  * #L%
  */
 
-import java.util.Set;
-
 import org.rapidoid.app.entity.Entity;
 import org.rapidoid.db.DB;
+import org.rapidoid.db.DbSet;
 
 public class User extends Entity {
 
@@ -33,11 +32,11 @@ public class User extends Entity {
 
 	public String name;
 
-	public final Set<Task> tasksOwned = DB.set();
+	public final DbSet<Task> tasksOwned = DB.set();
 
-	public final Set<Task> tasksLiked = DB.set();
+	public final DbSet<Task> tasksLiked = DB.set();
 
-	public final Set<Comment> commentsLiked = DB.set();
+	public final DbSet<Comment> commentsLiked = DB.set();
 
 	public void doTransferTo(Task task, User newOwner) {
 		tasksLiked.remove(task);

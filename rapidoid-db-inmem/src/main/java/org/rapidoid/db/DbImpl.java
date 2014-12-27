@@ -80,9 +80,9 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 			}
 		});
 
-		dbCollModule.addDeserializer(Ref.class, new JsonDeserializer<Ref>() {
+		dbCollModule.addDeserializer(DbRef.class, new JsonDeserializer<DbRef>() {
 			@Override
-			public Ref deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,
+			public DbRef deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,
 					JsonProcessingException {
 				long id = jp.getLongValue();
 				return new DefaultDbRef(DbImpl.this, id);
@@ -251,7 +251,7 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	}
 
 	@Override
-	public <E> Ref<E> ref() {
+	public <E> DbRef<E> ref() {
 		return new DefaultDbRef<E>(this);
 	}
 

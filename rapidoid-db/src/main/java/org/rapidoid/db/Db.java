@@ -84,6 +84,6 @@ public interface Db extends Activity<Db> {
 
 	<E> DbSet<E> set();
 
-	<E> Ref<E> ref();
+	<E> DbRef<E> ref();
 
 }

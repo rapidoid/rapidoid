@@ -22,6 +22,6 @@ package org.rapidoid.db;
 
 import java.util.Set;
 
-public interface DbSet<E> extends Set<E>, DbAware {
+public interface DbSet<E> extends Set<E> {
 
 }
