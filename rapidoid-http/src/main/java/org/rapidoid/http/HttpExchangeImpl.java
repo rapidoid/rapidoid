@@ -38,6 +38,7 @@ import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.net.mime.MediaType;
 import org.rapidoid.security.Secure;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.IUser;
 import org.rapidoid.util.U;
@@ -774,6 +775,19 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		U.must(isLoggedIn(), "Must be logged in!");
 
 		return session(SESSION_USER);
+	}
+
+	@Override
+	public synchronized <T> T user(Class<T> userClass) {
+		IUser user = user();
+
+		T user2 = U.newInstance(userClass);
+
+		Cls.setPropValue(user2, "username", user.username());
+		Cls.setPropValue(user2, "email", user.email());
+		Cls.setPropValue(user2, "name", user.name());
+
+		return user2;
 	}
 
 	@Override
