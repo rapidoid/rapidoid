@@ -41,7 +41,7 @@ public class DefaultDbList<E> extends DefaultDbCollection<E> implements DbList<E
 	}
 
 	public void add(int index, E e) {
-		long id = db.persist(e);
+		long id = db.persistedIdOf(e);
 		addIdAt(index, id);
 	}
 
@@ -78,7 +78,7 @@ public class DefaultDbList<E> extends DefaultDbCollection<E> implements DbList<E
 	}
 
 	public E set(int index, E e) {
-		long id = db.persist(e);
+		long id = db.persistedIdOf(e);
 		return db.get(setIdAt(index, id));
 	}
 

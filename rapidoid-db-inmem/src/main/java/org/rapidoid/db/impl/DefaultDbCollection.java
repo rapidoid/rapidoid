@@ -41,7 +41,7 @@ public class DefaultDbCollection<E> extends DbRelsCommons<E> implements Collecti
 	}
 
 	public boolean add(E e) {
-		long id = db.persist(e);
+		long id = db.persistedIdOf(e);
 		return addId(id);
 	}
 
@@ -100,7 +100,7 @@ public class DefaultDbCollection<E> extends DbRelsCommons<E> implements Collecti
 		Collection<Long> recordIds = U.list();
 
 		for (Object record : c) {
-			long id = persist ? db.persist(record) : db.getIdOf(record);
+			long id = persist ? db.persistedIdOf(record) : db.getIdOf(record);
 			recordIds.add(id);
 		}
 

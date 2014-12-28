@@ -54,7 +54,7 @@ public class DefaultDbRef<E> extends DbRelsCommons<E> implements DbRef<E> {
 			return;
 		}
 
-		long id = db.persist(value);
+		long id = db.persistedIdOf(value);
 		long oldId = getSingleId();
 
 		if (id != oldId) {
