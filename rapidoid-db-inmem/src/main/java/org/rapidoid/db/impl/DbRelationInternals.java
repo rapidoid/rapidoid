@@ -4,7 +4,7 @@ import java.util.Set;
 
 /*
  * #%L
- * rapidoid-db
+ * rapidoid-db-inmem
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%

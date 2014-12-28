@@ -2,7 +2,7 @@ package org.rapidoid.db.impl;
 
 /*
  * #%L
- * rapidoid-db
+ * rapidoid-db-inmem
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,21 +20,32 @@ package org.rapidoid.db.impl;
  * #L%
  */
 
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.Set;
 
-import org.rapidoid.db.Db;
-import org.rapidoid.db.DbSet;
+import org.rapidoid.util.U;
 
-public class DefaultDbSet<E> extends DefaultDbCollection<E> implements DbSet<E> {
+public class DbRelChangesTracker {
 
-	public DefaultDbSet(Db db, Object holder, String relation) {
-		super(db, holder, relation, new LinkedHashSet<Long>());
+	private final Set<Long> addedRelations = U.set();
+
+	private final Set<Long> removedRelations = U.set();
+
+	public void addedRelTo(long id) {
+		addedRelations.add(id);
+		removedRelations.remove(id);
 	}
 
-	public DefaultDbSet(Db db, Object holder, String relation, List<? extends Number> ids) {
-		this(db, holder, relation);
-		addAllIds(ids);
+	public void removedRelTo(long id) {
+		removedRelations.add(id);
+		addedRelations.remove(id);
+	}
+
+	public Set<Long> getAddedRelations() {
+		return addedRelations;
+	}
+
+	public Set<Long> getRemovedRelations() {
+		return removedRelations;
 	}
 
 }
