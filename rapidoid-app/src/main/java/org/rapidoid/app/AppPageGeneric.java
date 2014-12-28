@@ -20,11 +20,8 @@ package org.rapidoid.app;
  * #L%
  */
 
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,19 +34,10 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
 import org.rapidoid.pages.Pages;
-import org.rapidoid.util.Arr;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
-public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
-
-	private static final String SEARCH_SCREEN = "SearchScreen";
-
-	private static final String SETTINGS_SCREEN = "SettingsScreen";
-
-	private static final String ADMIN_SCREEN = "AdminScreen";
-
-	private static final String[] SPECIAL_SCREENS = { SEARCH_SCREEN, SETTINGS_SCREEN, ADMIN_SCREEN };
+public class AppPageGeneric extends AppGUI {
 
 	private static final String[] themes = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14",
 			"15" };
@@ -57,6 +45,8 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 	private static final Pattern ENTITY_VIEW = Pattern.compile("^/(\\w+?)/(\\d+)/?$");
 
 	private static final Pattern ENTITY_EDIT = Pattern.compile("^/edit(\\w+?)/(\\d+)/?$");
+
+	private static final AppScreens APP_SCREENS = U.customizable(AppScreens.class);
 
 	public String title(HttpExchange x) {
 		Object app = app(x);
@@ -85,7 +75,7 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		Pages.load(x, screen);
 		pageContent = pageContent(x, screen);
 
-		Class<?>[] screens = constructScreens(mainScreens);
+		Class<?>[] screens = APP_SCREENS.constructScreens(mainScreens);
 		Object[] menuItems = new Object[screens.length];
 		activeIndex = setupMenuItems(screen.getClass(), screens, menuItems);
 
@@ -195,28 +185,6 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		return dropdownMenu;
 	}
 
-	private Class<?>[] constructScreens(Map<String, Class<?>> mainScreens) {
-
-		int screensN = mainScreens.size();
-		for (String scr : SPECIAL_SCREENS) {
-			if (mainScreens.containsKey(scr)) {
-				screensN--;
-			}
-		}
-
-		Class<?>[] screens = new Class[screensN];
-		int ind = 0;
-		for (Entry<String, Class<?>> e : mainScreens.entrySet()) {
-
-			if (Arr.indexOf(SPECIAL_SCREENS, e.getKey()) < 0) {
-				screens[ind++] = e.getValue();
-			}
-		}
-
-		Arrays.sort(screens, this);
-		return screens;
-	}
-
 	private Tag themesMenu(Object app) {
 		ATag theme = a_glyph("eye-open", "", caret());
 
@@ -283,33 +251,6 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 
 	private String titleOf(Object obj) {
 		return Cls.getFieldValue(obj, "title", null);
-	}
-
-	@Override
-	public int compare(Class<?> o1, Class<?> o2) {
-		int cls1 = screenOrder(o1);
-		int cls2 = screenOrder(o2);
-
-		return cls1 - cls2;
-	}
-
-	private int screenOrder(Class<?> scrClass) {
-
-		String cls = scrClass.getSimpleName();
-
-		if (cls.equals("HomeScreen")) {
-			return -1000;
-		}
-
-		if (cls.equals("AboutScreen")) {
-			return 1000;
-		}
-
-		if (cls.equals("HelpScreen")) {
-			return 2000;
-		}
-
-		return cls.charAt(0);
 	}
 
 	private Object getScreen(HttpExchange x, AppClasses appCls, Object app) {
