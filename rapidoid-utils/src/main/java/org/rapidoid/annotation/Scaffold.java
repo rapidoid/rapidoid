@@ -1,8 +1,8 @@
-package org.rapidoid.app;
+package org.rapidoid.annotation;
 
 /*
  * #%L
- * rapidoid-app
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
