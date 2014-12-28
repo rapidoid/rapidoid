@@ -301,6 +301,15 @@ public class InMem {
 		}
 	}
 
+	public long persistedIdOf(Object record) {
+		long id = getIdOf(record, true);
+		if (id <= 0) {
+			return insert(record);
+		} else {
+			return id;
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public <T> T read(long id, String column) {
 		sharedLock();

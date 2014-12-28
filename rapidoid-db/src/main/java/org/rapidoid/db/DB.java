@@ -108,6 +108,10 @@ public class DB {
 		return db().persist(record);
 	}
 
+	public static long persistedIdOf(Object record) {
+		return db().persistedIdOf(record);
+	}
+
 	public static <E> E read(long id, String column) {
 		return db().read(id, column);
 	}
