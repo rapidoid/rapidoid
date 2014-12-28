@@ -56,6 +56,8 @@ public class Prop {
 	}
 
 	public void init() {
+		U.must(field != null || getter != null, "Invalid property: %s", name);
+
 		// TODO: improve inference from getter and setter
 		type = field != null ? field.getType() : getter.getReturnType();
 		typeKind = Cls.kindOf(type);
@@ -131,7 +133,7 @@ public class Prop {
 	}
 
 	public void set(Object obj, Object value) {
-		U.must(!isReadOnly());
+		U.must(!isReadOnly(), "Cannot assign value to a read-only property: %s", name);
 		try {
 			if (field != null) {
 				field.setAccessible(true);
