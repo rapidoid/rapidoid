@@ -15,6 +15,7 @@ import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
@@ -182,6 +183,10 @@ public abstract class BootstrapWidgets extends Bootstrap {
 		var.set(pageN);
 
 		return var;
+	}
+
+	public static boolean isEntity(Object obj) {
+		return Cls.kindOf(obj) == TypeKind.OBJECT && !obj.getClass().isEnum() && Cls.hasProperty(obj, "id");
 	}
 
 	public static String urlFor(Object entity) {

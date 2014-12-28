@@ -340,26 +340,38 @@ public class FormWidget extends AbstractWidget {
 		Object value = var.get();
 
 		if (value instanceof Collection) {
-			Collection<?> coll = (Collection<?>) value;
-
-			if (coll.isEmpty()) {
-				return div(awesome("ban"), " No entries!").class_("value-line");
-			}
-
-			Tag wrap = div();
-			for (Object item : coll) {
-				Tag icon = awesome("circle-o");
-
-				boolean withLink = Cls.hasProperty(item, "id");
-				Tag itemDisplay = withLink ? a(item).href(BootstrapWidgets.urlFor(item)) : span(item);
-				itemDisplay = itemDisplay.class_("value-display");
-
-				wrap = wrap.append(div(icon, " ", itemDisplay).class_("value-line"));
-			}
-
-			return wrap;
+			return readonlyColl((Collection<?>) value);
 		}
-		return span(value).class_("value-display");
+
+		return readonly(value);
+	}
+
+	protected Object readonlyColl(Collection<?> coll) {
+		if (coll.isEmpty()) {
+			return noEntries();
+		}
+
+		Tag wrap = div();
+		for (Object item : coll) {
+			wrap = readonlyCollItem(wrap, item);
+		}
+
+		return wrap;
+	}
+
+	protected Tag readonlyCollItem(Tag wrap, Object item) {
+		Tag icon = awesome("circle-o");
+		return wrap.append(div(icon, " ", readonly(item)).class_("value-line"));
+	}
+
+	protected Tag noEntries() {
+		return div(awesome("ban"), " No entries!").class_("value-line");
+	}
+
+	protected Object readonly(Object item) {
+		Tag itemDisplay = isEntity(item) ? a(item).href(urlFor(item)) : span(item);
+		itemDisplay = itemDisplay.class_("value-display");
+		return itemDisplay;
 	}
 
 	protected Object checkboxesInput(String name, Collection<?> options, Var<?> var) {
@@ -402,12 +414,14 @@ public class FormWidget extends AbstractWidget {
 
 	protected Object dropdownInput(String name, Collection<?> options, Var<?> var) {
 		U.notNull(options, "dropdown options");
+
 		SelectTag dropdown = select().name(name).class_("form-control").multiple(false);
 		for (Object opt : options) {
 			Var<Boolean> optVar = Vars.eq(var, opt);
 			OptionTag op = option(opt).value(str(opt)).bind(optVar);
 			dropdown = dropdown.append(op);
 		}
+
 		return dropdown;
 	}
 
