@@ -43,7 +43,7 @@ public class User extends Entity {
 
 	public final DbSet<Task> tasksLiked = DB.set(this, "likes");
 
-	public final DbSet<Task> sharedTasks = DB.set(this, "shared");
+	public final DbSet<Task> sharedTasks = DB.set(this, "^sharedWith");
 
 	public final DbSet<Comment> commentsLiked = DB.set(this, "likes");
 
