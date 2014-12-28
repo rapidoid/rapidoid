@@ -20,18 +20,20 @@ package org.rapidoid.var.impl;
  * #L%
  */
 
+import java.util.Collection;
+
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
-public class ContainerVar extends AbstractVar<Boolean> {
+public class CollectionContainerVar extends AbstractVar<Boolean> {
 
 	private static final long serialVersionUID = 6990464844550633598L;
 
-	private final Var<Object> container;
+	private final Var<Collection<Object>> container;
 
 	private final Object item;
 
-	public ContainerVar(Var<Object> container, Object item) {
+	public CollectionContainerVar(Var<Collection<Object>> container, Object item) {
 		this.container = container;
 		this.item = item;
 	}
@@ -43,11 +45,20 @@ public class ContainerVar extends AbstractVar<Boolean> {
 
 	@Override
 	public void set(Boolean value) {
+		Collection<Object> coll = container.get();
+
 		if (value) {
-			container.set(U.include(container.get(), item));
+			if (coll != null) {
+				coll.add(item);
+			} else {
+				container.set(U.list(item));
+			}
 		} else {
-			container.set(U.exclude(container.get(), item));
+			if (coll != null) {
+				coll.remove(item);
+			} else {
+				container.set(U.list(item));
+			}
 		}
 	}
-
 }

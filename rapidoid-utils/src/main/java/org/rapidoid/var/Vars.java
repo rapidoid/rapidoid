@@ -1,6 +1,9 @@
 package org.rapidoid.var;
 
-import org.rapidoid.var.impl.ContainerVar;
+import java.util.Collection;
+
+import org.rapidoid.var.impl.ArrayContainerVar;
+import org.rapidoid.var.impl.CollectionContainerVar;
 import org.rapidoid.var.impl.EqualityVar;
 import org.rapidoid.var.impl.SimpleVar;
 
@@ -48,7 +51,13 @@ public class Vars {
 
 	@SuppressWarnings("unchecked")
 	public static Var<Boolean> has(Var<?> container, Object item) {
-		return new ContainerVar((Var<Object>) container, item);
+		Object arrOrColl = container.get();
+
+		if (arrOrColl instanceof Collection) {
+			return new CollectionContainerVar((Var<Collection<Object>>) container, item);
+		} else {
+			return new ArrayContainerVar((Var<Object>) container, item);
+		}
 	}
 
 }
