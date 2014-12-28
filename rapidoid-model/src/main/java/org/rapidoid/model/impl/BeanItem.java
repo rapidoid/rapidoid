@@ -27,6 +27,8 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.Prop;
+import org.rapidoid.var.Var;
 
 public class BeanItem extends AbstractModel implements Item {
 
@@ -60,12 +62,29 @@ public class BeanItem extends AbstractModel implements Item {
 			return (T) Cls.beanToStr(value, false);
 		}
 
-		return Cls.getPropValue(value, property);
+		Prop prop = Cls.property(value, property, true);
+
+		if (Var.class.isAssignableFrom(prop.getType())) {
+			Var<Object> propVar = prop.get(value);
+			return (T) (propVar != null ? propVar.get() : null);
+		}
+
+		return prop.get(value);
 	}
 
 	@Override
 	public void set(String property, Object propValue) {
-		Cls.setPropValue(value, property, propValue);
+		Prop prop = Cls.property(value, property, true);
+
+		if (Var.class.isAssignableFrom(prop.getType())) {
+			Var<Object> propVar = prop.get(value);
+			if (propVar != null) {
+				propVar.set(propValue);
+				return;
+			}
+		}
+
+		prop.set(value, propValue);
 	}
 
 	@SuppressWarnings("unchecked")
