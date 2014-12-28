@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.rapidoid.demo.taskplanner.model.Person;
+import org.rapidoid.demo.db.Person;
 import org.rapidoid.http.HttpExchange;
 
 public class MyService {

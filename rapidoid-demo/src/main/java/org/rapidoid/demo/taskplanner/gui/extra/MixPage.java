@@ -21,7 +21,7 @@ package org.rapidoid.demo.taskplanner.gui.extra;
  */
 
 import org.rapidoid.annotation.Session;
-import org.rapidoid.demo.taskplanner.model.Person;
+import org.rapidoid.demo.db.Person;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;

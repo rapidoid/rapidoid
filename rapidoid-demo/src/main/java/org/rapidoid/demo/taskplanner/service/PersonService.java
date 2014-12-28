@@ -25,7 +25,7 @@ import java.util.Map;
 
 import org.rapidoid.db.CRUD;
 import org.rapidoid.db.DB;
-import org.rapidoid.demo.taskplanner.model.Person;
+import org.rapidoid.demo.db.Person;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.U;
 
