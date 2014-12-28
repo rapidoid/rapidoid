@@ -30,6 +30,8 @@ import org.rapidoid.util.CommonRoles;
  */
 public abstract class Entity implements CommonRoles, Serializable {
 
+	private static final long serialVersionUID = 8414835674684110203L;
+
 	public long id;
 
 	public long version;

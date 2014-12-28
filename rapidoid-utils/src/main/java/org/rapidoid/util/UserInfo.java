@@ -28,16 +28,14 @@ public class UserInfo implements IUser {
 
 	public String name;
 
-	public String display;
-
 	public String oauthId;
 
 	public String oauthProvider;
 
 	@Override
 	public String toString() {
-		return "UserInfo [username=" + username + ", email=" + email + ", name=" + name + ", display=" + display
-				+ ", oauthId=" + oauthId + ", oauthProvider=" + oauthProvider + "]";
+		return "UserInfo [username=" + username + ", email=" + email + ", name=" + name + ", oauthId=" + oauthId
+				+ ", oauthProvider=" + oauthProvider + "]";
 	}
 
 	@Override
@@ -53,11 +51,6 @@ public class UserInfo implements IUser {
 	@Override
 	public String name() {
 		return name;
-	}
-
-	@Override
-	public String display() {
-		return display;
 	}
 
 }

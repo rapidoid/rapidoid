@@ -258,14 +258,19 @@ public class AppPageGeneric extends AppGUI implements Comparator<Class<?>> {
 		return dropdownMenu;
 	}
 
-	private Tag loggedInUserMenu(HttpExchange x, Object app) {
+	protected Tag loggedInUserMenu(HttpExchange x, Object app) {
 		Tag dropdownMenu;
-		ATag profile = a_glyph("user", x.user().display(), caret());
+		ATag profile = a_glyph("user", userDisplay(x), caret());
 		ATag settings = Apps.addon(app, "settings") ? a_glyph("cog", " Settings").href("/settings") : null;
 		ATag logout = a_glyph("log-out", "Logout").href("/_logout");
 
 		dropdownMenu = navbarDropdown(false, profile, settings, logout);
 		return dropdownMenu;
+	}
+
+	protected String userDisplay(HttpExchange x) {
+		String username = x.user().username();
+		return username.substring(0, username.indexOf('@'));
 	}
 
 	protected boolean isFluid(Object app) {

@@ -28,6 +28,4 @@ public interface IUser {
 
 	public String name();
 
-	public String display();
-
 }

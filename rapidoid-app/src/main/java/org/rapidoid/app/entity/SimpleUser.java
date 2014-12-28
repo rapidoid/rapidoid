@@ -49,9 +49,4 @@ public class SimpleUser extends Entity implements IUser {
 		return name;
 	}
 
-	@Override
-	public String display() {
-		return display;
-	}
-
 }
