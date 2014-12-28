@@ -31,7 +31,7 @@ public class DbSerializationBenchmark {
 
 		U.args(args);
 
-		final InMem db = new InMem();
+		final InMem db = new InMem(null, null);
 
 		int size = U.option("size", 100000);
 		int loops = U.option("loops", 100);

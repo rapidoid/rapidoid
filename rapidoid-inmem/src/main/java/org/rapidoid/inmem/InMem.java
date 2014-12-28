@@ -52,18 +52,13 @@ import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 class Rec {
 	final Class<?> type;
-	final String json;
+	final byte[] bytes;
 
-	public Rec(Class<?> type, String json) {
+	public Rec(Class<?> type, byte[] bytes) {
 		this.type = type;
-		this.json = json;
+		this.bytes = bytes;
 	}
 }
 
@@ -92,11 +87,11 @@ public class InMem {
 
 	private static final Pattern P_WORD = Pattern.compile("\\w+");
 
-	private final ObjectMapper mapper = new ObjectMapper();
-
 	private final long startedAt = System.currentTimeMillis();
 
 	private final String filename;
+
+	private final EntitySerializer serializer;
 
 	private final AtomicLong ids = new AtomicLong();
 
@@ -126,12 +121,9 @@ public class InMem {
 
 	private ConcurrentNavigableMap<Long, Rec> data = new ConcurrentSkipListMap<Long, Rec>();
 
-	public InMem() {
-		this(null);
-	}
-
-	public InMem(String filename) {
+	public InMem(String filename, EntitySerializer serializer) {
 		this.filename = filename;
+		this.serializer = serializer;
 
 		if (filename != null && !filename.isEmpty()) {
 
@@ -151,8 +143,6 @@ public class InMem {
 		} else {
 			persistor = null;
 		}
-
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	}
 
 	private void resolveDoubleFileInconsistency() {
@@ -206,7 +196,7 @@ public class InMem {
 				}
 			}
 
-			if (data.putIfAbsent(id, rec(record, id)) != null) {
+			if (data.putIfAbsent(id, rec(record)) != null) {
 				throw new IllegalStateException("Cannot insert record with existing ID: " + id);
 			}
 
@@ -279,7 +269,7 @@ public class InMem {
 
 			setId(record, id);
 
-			Rec removed = data.replace(id, rec(record, id));
+			Rec removed = data.replace(id, rec(record));
 
 			if (insideTx.get()) {
 				txChanges.putIfAbsent(id, removed);
@@ -408,24 +398,14 @@ public class InMem {
 
 	public <E> List<E> find(String searchPhrase) {
 
-		String search = searchPhrase.toLowerCase();
-		List<E> results = new ArrayList<E>();
-
-		sharedLock();
-		try {
-
-			for (Entry<Long, Rec> entry : data.entrySet()) {
-				if (entry.getValue().json.toLowerCase().contains(search)) {
-					E record = obj(entry.getValue());
-					setId(record, entry.getKey());
-					results.add(record);
-				}
+		Predicate<E> match = new Predicate<E>() {
+			@Override
+			public boolean eval(E record) throws Exception {
+				return true; // FIXME
 			}
-		} finally {
-			sharedUnlock();
-		}
+		};
 
-		return results;
+		return find(match);
 	}
 
 	public <E> List<E> find(final Class<E> clazz, final String query, final Object... args) {
@@ -573,7 +553,7 @@ public class InMem {
 	private <T> T get_(long id, Class<T> clazz) {
 		validateId(id);
 		Rec rec = data.get(id);
-		return rec != null ? setId(parse(rec.json, clazz), id) : null;
+		return rec != null ? setId(obj(rec, clazz), id) : null;
 	}
 
 	private void sharedLock() {
@@ -604,11 +584,10 @@ public class InMem {
 		try {
 			PrintWriter out = new PrintWriter(output);
 
-			out.println(stringify(metadata()));
+			out.println(new String(serializer.serialize(metadata())));
 
 			for (Entry<Long, Rec> entry : data.entrySet()) {
-				String json = entry.getValue().json;
-				out.println(json);
+				out.println(new String(entry.getValue().bytes));
 			}
 
 			out.close();
@@ -627,7 +606,7 @@ public class InMem {
 			String line = reader.readLine();
 			must(line != null, "Missing meta-data at the first line in the database file!");
 
-			Map<String, Object> meta = parse(line, Map.class);
+			Map<String, Object> meta = serializer.deserialize(line.getBytes(), Map.class);
 
 			reader.close();
 
@@ -650,16 +629,19 @@ public class InMem {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
 			String line = reader.readLine();
+			byte[] bytes = line.getBytes();
 
 			must(line != null, "Missing meta-data at the first line in the database file!");
 
-			Map<String, Object> meta = parse(line, Map.class);
+			Map<String, Object> meta = serializer.deserialize(bytes, Map.class);
 			log("INFO", "Database meta-data: %s=%s, %s=%s", META_TIMESTAMP, meta.get(META_TIMESTAMP), META_UPTIME,
 					meta.get(META_UPTIME));
 
 			while ((line = reader.readLine()) != null) {
-				Map<String, Object> map = parse(line, Map.class);
-				Long id = new Long(((String) map.get("id")));
+				bytes = line.getBytes();
+				Map<String, Object> map = serializer.deserialize(bytes, Map.class);
+
+				long id = ((Number) map.get("id")).longValue();
 				String className = ((String) map.get("_class"));
 
 				Class<?> type;
@@ -669,7 +651,7 @@ public class InMem {
 					type = null;
 				}
 
-				data.put(id, new Rec(type, line));
+				data.put(id, new Rec(type, bytes));
 
 				if (id > ids.get()) {
 					ids.set(id);
@@ -688,11 +670,10 @@ public class InMem {
 	}
 
 	private void persistTo(RandomAccessFile file) throws IOException {
-		file.write(stringify(metadata()).getBytes());
+		file.write(serializer.serialize(metadata()));
 		file.write(CR_LF);
 		for (Entry<Long, Rec> entry : data.entrySet()) {
-			String json = entry.getValue().json;
-			file.write(json.getBytes());
+			file.write(entry.getValue().bytes);
 			file.write(CR_LF);
 		}
 	}
@@ -859,14 +840,17 @@ public class InMem {
 		new File(filenameWithSuffix(SUFFIX_B)).delete();
 	}
 
-	private Rec rec(Object record, long id) {
-		String _class = record.getClass().getCanonicalName();
-		return new Rec(record.getClass(), stringifyWithExtras(record, "_class", _class, "id", id));
+	private Rec rec(Object record) {
+		return new Rec(record.getClass(), serializer.serialize(record));
 	}
 
 	@SuppressWarnings("unchecked")
 	private <T> T obj(Rec rec) {
-		return (T) parse(rec.json, rec.type);
+		return (T) obj(rec, rec.type);
+	}
+
+	private <T> T obj(Rec rec, Class<T> type) {
+		return serializer.deserialize(rec.bytes, type);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -973,62 +957,6 @@ public class InMem {
 			return data.size();
 		} finally {
 			globalUnlock();
-		}
-	}
-
-	public ObjectMapper getMapper() {
-		return mapper;
-	}
-
-	public String stringify(Object value) {
-		try {
-			return mapper.writeValueAsString(value);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	/**
-	 * @param extras
-	 *            extra JSON attributes in format (key1, value1, key2, value2...)
-	 */
-	private String stringifyWithExtras(Object value, Object... extras) {
-		if (extras.length % 2 != 0) {
-			throw new IllegalArgumentException(
-					"Expected even number of extras (key1, value1, key2, value2...), but found: " + extras.length);
-		}
-
-		try {
-			JsonNode node = mapper.valueToTree(value);
-
-			if (!(node instanceof ObjectNode)) {
-				throw new RuntimeException("Cannot add extra attributes on a non-object value: " + value);
-			}
-
-			ObjectNode obj = (ObjectNode) node;
-
-			int extrasN = extras.length / 2;
-			for (int i = 0; i < extrasN; i++) {
-				Object key = extras[2 * i];
-				if (key instanceof String) {
-					obj.put((String) key, String.valueOf(extras[2 * i + 1]));
-				} else {
-					throw new RuntimeException("Expected extra key of type String, but found: " + key);
-				}
-			}
-
-			return mapper.writeValueAsString(node);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public <T> T parse(String json, Class<T> valueType) {
-		try {
-			return mapper.readValue(json, valueType);
-		} catch (Exception e) {
-			error("Cannot parse JSON!", e);
-			throw new RuntimeException(e);
 		}
 	}
 

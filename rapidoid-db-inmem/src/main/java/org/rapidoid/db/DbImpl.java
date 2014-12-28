@@ -20,12 +20,10 @@ package org.rapidoid.db;
  * #L%
  */
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.rapidoid.activity.NamedActivity;
 import org.rapidoid.db.impl.DefaultDbList;
@@ -35,72 +33,14 @@ import org.rapidoid.inmem.InMem;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
-import org.rapidoid.util.U;
-
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class DbImpl extends NamedActivity<Db> implements Db {
 
-	private final String filename;
 	private final InMem inmem;
 
 	public DbImpl(String name, String filename) {
 		super(name);
-
-		this.filename = filename;
-		this.inmem = new InMem(filename);
-
-		initDbMapper();
-	}
-
-	@SuppressWarnings("rawtypes")
-	private void initDbMapper() {
-		SimpleModule dbModule = new SimpleModule("DbModule", new Version(1, 0, 0, null, null, null));
-
-		dbModule.addDeserializer(DbList.class, new JsonDeserializer<DbList>() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public DbList deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,
-					JsonProcessingException {
-				Map<String, Object> data = jp.readValueAs(Map.class);
-				String relation = (String) data.get("relation");
-				List<? extends Number> ids = (List<Number>) data.get("ids");
-				return new DefaultDbList(DbImpl.this, null, relation, ids);
-			}
-		});
-
-		dbModule.addDeserializer(DbSet.class, new JsonDeserializer<DbSet>() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public DbSet deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,
-					JsonProcessingException {
-				Map<String, Object> data = jp.readValueAs(Map.class);
-				String relation = (String) data.get("relation");
-				List<? extends Number> ids = (List<Number>) data.get("ids");
-				return new DefaultDbSet(DbImpl.this, null, relation, ids);
-			}
-		});
-
-		dbModule.addDeserializer(DbRef.class, new JsonDeserializer<DbRef>() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public DbRef deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,
-					JsonProcessingException {
-				Map<String, Object> data = jp.readValueAs(Map.class);
-				String relation = (String) data.get("relation");
-				List<? extends Number> ids = (List<Number>) data.get("ids");
-				U.must(ids.size() <= 1, "Expected 0 or 1 IDs!");
-				long id = !ids.isEmpty() ? ids.get(0).longValue() : -1;
-				return new DefaultDbRef(DbImpl.this, null, relation, id);
-			}
-		});
-
-		inmem.getMapper().registerModule(dbModule);
+		this.inmem = new InMem(filename, new JacksonEntitySerializer(this));
 	}
 
 	@Override
@@ -243,7 +183,7 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 
 	@Override
 	public String toString() {
-		return "DB:" + name + "(" + filename + ")";
+		return "DB:" + name + "(" + inmem + ")";
 	}
 
 	@Override
