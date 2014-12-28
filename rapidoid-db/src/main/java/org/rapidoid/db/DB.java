@@ -161,15 +161,15 @@ public class DB {
 	}
 
 	public static <E> DbList<E> list(String relation) {
-		return db().list();
+		return db().list(relation);
 	}
 
 	public static <E> DbSet<E> set(String relation) {
-		return db().set();
+		return db().set(relation);
 	}
 
 	public static <E> DbRef<E> ref(String relation) {
-		return db().ref();
+		return db().ref(relation);
 	}
 
 }

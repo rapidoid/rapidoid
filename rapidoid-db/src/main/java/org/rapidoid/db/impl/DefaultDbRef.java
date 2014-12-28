@@ -22,6 +22,7 @@ package org.rapidoid.db.impl;
 
 import org.rapidoid.db.Db;
 import org.rapidoid.db.DbRef;
+import org.rapidoid.util.U;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -31,14 +32,17 @@ public class DefaultDbRef<E> implements DbRef<E> {
 
 	private final Db db;
 
+	private final String relation;
+
 	private long id;
 
-	public DefaultDbRef(Db db) {
-		this(db, -1);
+	public DefaultDbRef(Db db, String relation) {
+		this(db, relation, -1);
 	}
 
-	public DefaultDbRef(Db db, long id) {
+	public DefaultDbRef(Db db, String relation, long id) {
 		this.db = db;
+		this.relation = relation;
 		this.id = id;
 	}
 
@@ -53,9 +57,43 @@ public class DefaultDbRef<E> implements DbRef<E> {
 		this.id = value != null ? db.persist(value) : -1;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((db == null) ? 0 : db.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((relation == null) ? 0 : relation.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DefaultDbRef<?> other = (DefaultDbRef<?>) obj;
+		if (db == null) {
+			if (other.db != null)
+				return false;
+		} else if (!db.equals(other.db))
+			return false;
+		if (id != other.id)
+			return false;
+		if (relation == null) {
+			if (other.relation != null)
+				return false;
+		} else if (!relation.equals(other.relation))
+			return false;
+		return true;
+	}
+
 	@JsonValue
-	public long id() {
-		return id;
+	public Object serialized() {
+		return U.map("relation", relation, "id", id);
 	}
 
 }

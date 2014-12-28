@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.rapidoid.activity.NamedActivity;
 import org.rapidoid.db.impl.DefaultDbList;
@@ -58,38 +59,45 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 
 	@SuppressWarnings("rawtypes")
 	private void initDbMapper() {
-		SimpleModule dbCollModule = new SimpleModule("DbCollModule", new Version(1, 0, 0, null, null, null));
+		SimpleModule dbModule = new SimpleModule("DbModule", new Version(1, 0, 0, null, null, null));
 
-		dbCollModule.addDeserializer(DbList.class, new JsonDeserializer<DbList>() {
+		dbModule.addDeserializer(DbList.class, new JsonDeserializer<DbList>() {
 			@SuppressWarnings("unchecked")
 			@Override
 			public DbList deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,
 					JsonProcessingException {
-				List<Integer> ids = jp.readValueAs(List.class);
-				return new DefaultDbList(DbImpl.this, ids);
+				Map<String, Object> data = jp.readValueAs(Map.class);
+				String relation = (String) data.get("relation");
+				List<? extends Number> ids = (List<Number>) data.get("ids");
+				return new DefaultDbList(DbImpl.this, relation, ids);
 			}
 		});
 
-		dbCollModule.addDeserializer(DbSet.class, new JsonDeserializer<DbSet>() {
+		dbModule.addDeserializer(DbSet.class, new JsonDeserializer<DbSet>() {
 			@SuppressWarnings("unchecked")
 			@Override
 			public DbSet deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,
 					JsonProcessingException {
-				List<Integer> ids = jp.readValueAs(List.class);
-				return new DefaultDbSet(DbImpl.this, ids);
+				Map<String, Object> data = jp.readValueAs(Map.class);
+				String relation = (String) data.get("relation");
+				List<? extends Number> ids = (List<Number>) data.get("ids");
+				return new DefaultDbSet(DbImpl.this, relation, ids);
 			}
 		});
 
-		dbCollModule.addDeserializer(DbRef.class, new JsonDeserializer<DbRef>() {
+		dbModule.addDeserializer(DbRef.class, new JsonDeserializer<DbRef>() {
 			@Override
 			public DbRef deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,
 					JsonProcessingException {
-				long id = jp.getLongValue();
-				return new DefaultDbRef(DbImpl.this, id);
+				@SuppressWarnings("unchecked")
+				Map<String, Object> data = jp.readValueAs(Map.class);
+				String relation = (String) data.get("relation");
+				Number id = (Number) data.get("id");
+				return new DefaultDbRef(DbImpl.this, relation, id.longValue());
 			}
 		});
 
-		inmem.getMapper().registerModule(dbCollModule);
+		inmem.getMapper().registerModule(dbModule);
 	}
 
 	@Override
@@ -241,18 +249,18 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	}
 
 	@Override
-	public <E> DbList<E> list() {
-		return new DefaultDbList<E>(this);
+	public <E> DbList<E> list(String relation) {
+		return new DefaultDbList<E>(this, relation);
 	}
 
 	@Override
-	public <E> DbSet<E> set() {
-		return new DefaultDbSet<E>(this);
+	public <E> DbSet<E> set(String relation) {
+		return new DefaultDbSet<E>(this, relation);
 	}
 
 	@Override
-	public <E> DbRef<E> ref() {
-		return new DefaultDbRef<E>(this);
+	public <E> DbRef<E> ref(String relation) {
+		return new DefaultDbRef<E>(this, relation);
 	}
 
 }

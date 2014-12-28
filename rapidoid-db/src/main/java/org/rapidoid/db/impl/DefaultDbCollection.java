@@ -34,10 +34,13 @@ public class DefaultDbCollection<E> implements Collection<E> {
 
 	protected final Db db;
 
+	protected String relation;
+
 	protected final Collection<Long> ids;
 
-	public DefaultDbCollection(Db db, Collection<Long> ids) {
+	public DefaultDbCollection(Db db, String relation, Collection<Long> ids) {
 		this.db = db;
+		this.relation = relation;
 		this.ids = ids;
 	}
 
@@ -120,6 +123,10 @@ public class DefaultDbCollection<E> implements Collection<E> {
 		return recordIds;
 	}
 
+	public Collection<Long> ids() {
+		return ids;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -139,6 +146,11 @@ public class DefaultDbCollection<E> implements Collection<E> {
 				return false;
 		} else if (!ids.equals(other.ids))
 			return false;
+		if (relation == null) {
+			if (other.relation != null)
+				return false;
+		} else if (!relation.equals(other.relation))
+			return false;
 		return true;
 	}
 
@@ -148,12 +160,13 @@ public class DefaultDbCollection<E> implements Collection<E> {
 		int result = 1;
 		result = prime * result + ((db == null) ? 0 : db.hashCode());
 		result = prime * result + ((ids == null) ? 0 : ids.hashCode());
+		result = prime * result + ((relation == null) ? 0 : relation.hashCode());
 		return result;
 	}
 
 	@JsonValue
-	public Collection<Long> ids() {
-		return ids;
+	public Object serialized() {
+		return U.map("relation", relation, "ids", ids);
 	}
 
 }

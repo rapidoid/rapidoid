@@ -80,10 +80,10 @@ public interface Db extends Activity<Db> {
 
 	long getIdOf(Object record);
 
-	<E> DbList<E> list();
+	<E> DbList<E> list(String relation);
 
-	<E> DbSet<E> set();
+	<E> DbSet<E> set(String relation);
 
-	<E> DbRef<E> ref();
+	<E> DbRef<E> ref(String relation);
 
 }
