@@ -21,6 +21,7 @@ package org.rapidoid.db.impl;
  */
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -37,9 +38,7 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals {
 
 	private final Collection<Long> ids;
 
-	protected final Set<Long> addedRelations = U.set();
-
-	protected final Set<Long> removedRelations = U.set();
+	protected final DbRelChangesTracker tracker = new DbRelChangesTracker();
 
 	public DbRelsCommons(Db db, String relation, Collection<Long> ids) {
 		this.db = db;
@@ -47,24 +46,14 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals {
 		this.ids = ids;
 	}
 
-	protected void addedRelTo(long id) {
-		addedRelations.add(id);
-		removedRelations.remove(id);
-	}
-
-	protected void removedRelTo(long id) {
-		removedRelations.add(id);
-		addedRelations.remove(id);
-	}
-
 	@Override
 	public Set<Long> getAddedRelations() {
-		return addedRelations;
+		return tracker.getAddedRelations();
 	}
 
 	@Override
 	public Set<Long> getRemovedRelations() {
-		return removedRelations;
+		return tracker.getRemovedRelations();
 	}
 
 	@Override
@@ -105,10 +94,6 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals {
 		return true;
 	}
 
-	protected Collection<Long> getIds() {
-		return ids;
-	}
-
 	protected long getSingleId() {
 		U.must(ids.size() <= 1);
 		return !ids.isEmpty() ? ids.iterator().next() : -1;
@@ -117,10 +102,6 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals {
 	@JsonValue
 	public Object serialized() {
 		return U.map("relation", relation, "ids", ids);
-	}
-
-	public void clear() {
-		ids.clear();
 	}
 
 	public boolean isEmpty() {
@@ -132,22 +113,8 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals {
 	}
 
 	@Override
-	public boolean addId(long id) {
-		return ids.add(id);
-	}
-
-	@Override
-	public boolean removeId(long id) {
-		return ids.remove(id);
-	}
-
-	@Override
 	public boolean hasId(long id) {
 		return ids.contains(id);
-	}
-
-	protected boolean retainIds(Collection<Long> ids) {
-		return ids.retainAll(ids);
 	}
 
 	private List<Long> getIdsAsList() {
@@ -170,32 +137,92 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals {
 		return getIdsAsList().get(index);
 	}
 
-	protected void addIdAt(int index, long id) {
-		getIdsAsList().add(index, id);
-	}
-
-	protected boolean addIdsAt(int index, Collection<Long> items) {
-		return getIdsAsList().addAll(index, items);
-	}
-
-	protected long removeIdAt(int index) {
-		return getIdsAsList().remove(index);
-	}
-
-	protected long setIdAt(int index, long id) {
-		return getIdsAsList().set(index, id);
-	}
-
-	protected List<Long> getIdSublist(int fromIndex, int toIndex) {
-		return getIdsAsList().subList(fromIndex, toIndex);
-	}
-
 	protected int indexOfId(long id) {
 		return getIdsAsList().indexOf(id);
 	}
 
 	protected int lastIndexOfId(long id) {
 		return getIdsAsList().lastIndexOf(id);
+	}
+
+	protected List<Long> getIdSublist(int fromIndex, int toIndex) {
+		// TODO make it modifiable (solve the problem of tracking changes through the sublist)
+		return Collections.unmodifiableList(getIdsAsList().subList(fromIndex, toIndex));
+	}
+
+	/*
+	 * THE FOLLOWING METHODS CHANGE THE IDs (IT IS IMPORTANT TO TRACK THE CHANGES):
+	 */
+
+	public void clear() {
+		for (long id : ids) {
+			tracker.removedRelTo(id);
+		}
+		ids.clear();
+	}
+
+	@Override
+	public boolean addId(long id) {
+		boolean changed = ids.add(id);
+
+		if (changed) {
+			tracker.addedRelTo(id);
+		}
+
+		return changed;
+	}
+
+	@Override
+	public boolean removeId(long id) {
+		boolean changed = ids.remove(id);
+
+		if (changed) {
+			tracker.removedRelTo(id);
+		}
+
+		return changed;
+	}
+
+	protected boolean retainIds(Collection<Long> retainIds) {
+		for (Long id : ids) {
+			if (!retainIds.contains(id)) {
+				tracker.removedRelTo(id);
+			}
+		}
+
+		return retainIds.retainAll(retainIds);
+	}
+
+	protected void addIdAt(int index, long id) {
+		getIdsAsList().add(index, id);
+		tracker.addedRelTo(id);
+	}
+
+	protected boolean addIdsAt(int index, Collection<Long> idsToAdd) {
+		boolean changed = getIdsAsList().addAll(index, idsToAdd);
+
+		for (Long id : idsToAdd) {
+			tracker.addedRelTo(id);
+		}
+
+		return changed;
+	}
+
+	protected long removeIdAt(int index) {
+		long removedId = getIdsAsList().remove(index);
+		tracker.removedRelTo(removedId);
+		return removedId;
+	}
+
+	protected long setIdAt(int index, long id) {
+		long removedId = getIdsAsList().set(index, id);
+
+		if (id != removedId) {
+			tracker.addedRelTo(id);
+			tracker.removedRelTo(removedId);
+		}
+
+		return removedId;
 	}
 
 }
