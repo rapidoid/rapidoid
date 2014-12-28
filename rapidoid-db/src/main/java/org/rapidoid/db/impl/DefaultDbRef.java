@@ -22,11 +22,12 @@ package org.rapidoid.db.impl;
 
 import org.rapidoid.db.Db;
 import org.rapidoid.db.DbRef;
+import org.rapidoid.db.DbRelationTo;
 import org.rapidoid.util.U;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public class DefaultDbRef<E> implements DbRef<E> {
+public class DefaultDbRef<E> implements DbRef<E>, DbRelationTo {
 
 	private static final long serialVersionUID = -1239566356630772624L;
 
@@ -94,6 +95,23 @@ public class DefaultDbRef<E> implements DbRef<E> {
 	@JsonValue
 	public Object serialized() {
 		return U.map("relation", relation, "id", id);
+	}
+
+	@Override
+	public void addLinkTo(long id) {
+		this.id = id;
+	}
+
+	@Override
+	public void removeLinkTo(long id) {
+		if (hasLinkTo(id)) {
+			this.id = -1;
+		}
+	}
+
+	@Override
+	public boolean hasLinkTo(long id) {
+		return this.id == id;
 	}
 
 }

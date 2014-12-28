@@ -26,11 +26,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.rapidoid.db.Db;
+import org.rapidoid.db.DbRelationTo;
 import org.rapidoid.util.U;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public class DefaultDbCollection<E> implements Collection<E> {
+public class DefaultDbCollection<E> implements Collection<E>, DbRelationTo {
 
 	protected final Db db;
 
@@ -167,6 +168,23 @@ public class DefaultDbCollection<E> implements Collection<E> {
 	@JsonValue
 	public Object serialized() {
 		return U.map("relation", relation, "ids", ids);
+	}
+
+	@Override
+	public void addLinkTo(long id) {
+		if (!hasLinkTo(id)) {
+			ids.add(id);
+		}
+	}
+
+	@Override
+	public void removeLinkTo(long id) {
+		ids.remove(id);
+	}
+
+	@Override
+	public boolean hasLinkTo(long id) {
+		return ids.contains(id);
 	}
 
 }
