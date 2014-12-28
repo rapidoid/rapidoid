@@ -24,7 +24,6 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.pages.Pages;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.FormWidget;
 
@@ -53,7 +52,7 @@ public class ViewEntityScreenGeneric extends AppGUI {
 	public void onDelete(HttpExchange x) {
 		long id = Long.parseLong(x.pathSegment(1));
 		DB.delete(id);
-		Pages.goBack(x);
+		x.goBack(1);
 	}
 
 }

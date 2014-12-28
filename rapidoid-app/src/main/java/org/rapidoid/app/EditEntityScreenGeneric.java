@@ -24,7 +24,6 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.pages.Pages;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.FormWidget;
 
@@ -47,7 +46,7 @@ public class EditEntityScreenGeneric extends AppGUI {
 
 	public void onSave(HttpExchange x) {
 		DB.update(entity);
-		Pages.goBack(x);
+		x.goBack(1);
 	}
 
 }

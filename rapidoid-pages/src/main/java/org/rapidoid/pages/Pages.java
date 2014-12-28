@@ -22,8 +22,6 @@ package org.rapidoid.pages;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -49,8 +47,6 @@ public class Pages {
 	private static final String PAGE_RELOAD = "<h2>Reloading...</h2><script>location.reload();</script>";
 
 	public static final String SESSION_CTX = "_ctx_";
-
-	public static final String SESSION_PAGES_STACK = "_pages_stack_";
 
 	private static final BuiltInCmdHandler BUILT_IN_HANDLER = new BuiltInCmdHandler();
 
@@ -196,24 +192,13 @@ public class Pages {
 		return x.isPostReq();
 	}
 
-	@SuppressWarnings("unchecked")
 	public static Object serve(HttpExchange x, Object view) {
 		load(x, view);
 
 		TagContext ctx = Tags.context();
 		x.sessionSet(Pages.SESSION_CTX, ctx);
 
-		List<String> stack = x.sessionGetOrCreate(Pages.SESSION_PAGES_STACK, ArrayList.class);
-
-		String last = !stack.isEmpty() ? stack.get(stack.size() - 1) : null;
-		String current = x.uri();
-
-		if (!U.eq(current, last)) {
-			stack.add(current);
-			if (stack.size() > 7) {
-				stack.remove(0);
-			}
-		}
+		x.addToPageStack();
 
 		Object result = render(x, view);
 
@@ -340,20 +325,6 @@ public class Pages {
 
 	public static String viewId(HttpExchange x) {
 		return x.uri();
-	}
-
-	public static void goBack(HttpExchange x) {
-		String prev = "/";
-
-		List<String> stack = x.session(Pages.SESSION_PAGES_STACK, null);
-		if (stack != null && !stack.isEmpty()) {
-			stack.remove(stack.size() - 1);
-			if (!stack.isEmpty()) {
-				prev = stack.remove(stack.size() - 1);
-			}
-		}
-
-		x.redirect(prev);
 	}
 
 }

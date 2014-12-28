@@ -24,6 +24,8 @@ import java.io.File;
 import java.io.OutputStream;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -51,6 +53,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	private static final String SESSION_USER = "_user";
 
 	private static final String SESSION_COOKIE = "JSESSIONID";
+
+	public static final String SESSION_PAGE_STACK = "_page_stack_";
 
 	private final static HttpParser PARSER = IoC.singleton(HttpParser.class);
 
@@ -946,6 +950,41 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public HttpExchangeBody goBack(int steps) {
+
+		List<String> stack = session(SESSION_PAGE_STACK, null);
+		String dest = !stack.isEmpty() ? stack.get(stack.size() - 1) : "/";
+
+		for (int i = 0; i < steps; i++) {
+			if (stack != null && !stack.isEmpty()) {
+				stack.remove(stack.size() - 1);
+				if (!stack.isEmpty()) {
+					dest = stack.remove(stack.size() - 1);
+				}
+			}
+		}
+
+		return redirect(dest);
+	}
+
+	@SuppressWarnings("unchecked")
+	public HttpExchangeBody addToPageStack() {
+		List<String> stack = sessionGetOrCreate(SESSION_PAGE_STACK, ArrayList.class);
+
+		String last = !stack.isEmpty() ? stack.get(stack.size() - 1) : null;
+		String current = uri();
+
+		if (!U.eq(current, last)) {
+			stack.add(current);
+			if (stack.size() > 7) {
+				stack.remove(0);
+			}
+		}
+
+		return this;
 	}
 
 }

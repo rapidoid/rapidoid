@@ -31,6 +31,10 @@ public interface HttpExchangeBody extends CtxWrite<HttpExchangeBody> {
 
 	HttpExchangeBody redirect(String url);
 
+	HttpExchangeBody goBack(int steps);
+
+	HttpExchangeBody addToPageStack();
+
 	OutputStream outputStream();
 
 }

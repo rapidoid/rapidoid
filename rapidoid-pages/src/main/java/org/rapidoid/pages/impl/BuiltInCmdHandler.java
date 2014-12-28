@@ -21,7 +21,6 @@ package org.rapidoid.pages.impl;
  */
 
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.pages.Pages;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
@@ -52,11 +51,11 @@ public class BuiltInCmdHandler {
 	}
 
 	public void onCancel(HttpExchange x) {
-		Pages.goBack(x);
+		x.goBack(1);
 	}
 
 	public void onBack(HttpExchange x) {
-		Pages.goBack(x);
+		x.goBack(1);
 	}
 
 }
