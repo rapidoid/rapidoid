@@ -34,7 +34,7 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals {
 
 	protected final Db db;
 
-	protected final Object holder;
+	protected Object holder;
 
 	protected final String relation;
 
@@ -47,6 +47,15 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals {
 		this.holder = holder;
 		this.relation = relation;
 		this.ids = ids;
+
+		U.notNull(db, "db");
+		U.notNull(relation, "relation");
+		U.notNull(ids, "ids");
+	}
+
+	@Override
+	public void setHolder(Object holder) {
+		this.holder = holder;
 	}
 
 	@Override

@@ -34,4 +34,6 @@ public interface DbRelationInternals {
 
 	Set<Long> getRemovedRelations();
 
+	void setHolder(Object holder);
+
 }
