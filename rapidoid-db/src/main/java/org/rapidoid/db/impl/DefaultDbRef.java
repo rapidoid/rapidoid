@@ -27,6 +27,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public class DefaultDbRef<E> implements DbRef<E> {
 
+	private static final long serialVersionUID = -1239566356630772624L;
+
 	private final Db db;
 
 	private long id;
@@ -48,7 +50,7 @@ public class DefaultDbRef<E> implements DbRef<E> {
 
 	@Override
 	public void set(E value) {
-		this.id = db.persist(value);
+		this.id = value != null ? db.persist(value) : -1;
 	}
 
 	@JsonValue
