@@ -105,7 +105,7 @@ public class OAuthTokenHandler implements Handler {
 			x.sessionSet("_user", user);
 			U.must(x.user() == user);
 
-			return x.redirect("/");
+			return x.goBack(0);
 		} else {
 			String error = x.param("error");
 			if (error != null) {
