@@ -25,6 +25,7 @@ import org.rapidoid.db.DbSet;
  * #L%
  */
 
+@SuppressWarnings("serial")
 public class Comment extends Entity {
 
 	public String content;

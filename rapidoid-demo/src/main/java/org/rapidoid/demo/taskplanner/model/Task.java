@@ -26,6 +26,7 @@ import org.rapidoid.db.DbSet;
  * #L%
  */
 
+@SuppressWarnings("serial")
 public class Task extends Entity {
 
 	public String title;

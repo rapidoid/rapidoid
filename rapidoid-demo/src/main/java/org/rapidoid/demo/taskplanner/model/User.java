@@ -26,6 +26,7 @@ import org.rapidoid.app.entity.Entity;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbSet;
 
+@SuppressWarnings("serial")
 public class User extends Entity {
 
 	public String username;

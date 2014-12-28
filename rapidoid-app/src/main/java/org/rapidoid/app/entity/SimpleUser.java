@@ -24,6 +24,8 @@ import org.rapidoid.util.IUser;
 
 public class SimpleUser extends Entity implements IUser {
 
+	private static final long serialVersionUID = -2320510856869926729L;
+
 	public String username;
 
 	public String email;

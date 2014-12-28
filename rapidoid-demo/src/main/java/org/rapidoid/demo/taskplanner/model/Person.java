@@ -22,6 +22,7 @@ import org.rapidoid.app.entity.Entity;
  * #L%
  */
 
+@SuppressWarnings("serial")
 public class Person extends Entity {
 
 	public String name;

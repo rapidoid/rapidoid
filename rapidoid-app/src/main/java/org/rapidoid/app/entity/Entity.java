@@ -1,5 +1,7 @@
 package org.rapidoid.app.entity;
 
+import java.io.Serializable;
+
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.CommonRoles;
 
@@ -26,7 +28,7 @@ import org.rapidoid.util.CommonRoles;
 /**
  * Base class for persisted domain model entities.
  */
-public abstract class Entity implements CommonRoles {
+public abstract class Entity implements CommonRoles, Serializable {
 
 	public long id;
 
