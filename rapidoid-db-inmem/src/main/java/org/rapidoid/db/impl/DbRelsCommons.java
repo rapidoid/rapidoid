@@ -26,11 +26,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.rapidoid.db.Db;
+import org.rapidoid.inmem.EntityLinks;
 import org.rapidoid.util.U;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public abstract class DbRelsCommons<E> implements DbRelationInternals {
+public abstract class DbRelsCommons<E> implements DbRelationInternals, EntityLinks {
 
 	protected final Db db;
 
@@ -235,6 +236,22 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals {
 		}
 
 		return removedId;
+	}
+
+	@Override
+	public String relationName() {
+		return relation;
+	}
+
+	@Override
+	public long fromId() {
+		U.notNull(holder, "holder");
+		return db.getIdOf(holder);
+	}
+
+	@Override
+	public Collection<Long> toIds() {
+		return ids;
 	}
 
 }
