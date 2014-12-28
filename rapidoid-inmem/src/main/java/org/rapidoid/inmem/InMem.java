@@ -51,6 +51,8 @@ import java.util.regex.Pattern;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.util.Cls;
+import org.rapidoid.util.Prop;
 
 class Rec {
 	final Class<?> type;
@@ -397,11 +399,24 @@ public class InMem {
 	}
 
 	public <E> List<E> find(String searchPhrase) {
+		final String search = searchPhrase.toLowerCase();
 
 		Predicate<E> match = new Predicate<E>() {
 			@Override
 			public boolean eval(E record) throws Exception {
-				return true; // FIXME
+
+				if (record.getClass().getSimpleName().toLowerCase().contains(search)) {
+					return true;
+				}
+
+				for (Entry<String, Prop> e : Cls.propertiesOf(record).entrySet()) {
+					Prop prop = e.getValue();
+					String s = String.valueOf(prop.get(record)).toLowerCase();
+					if (s.contains(search)) {
+						return true;
+					}
+				}
+				return false;
 			}
 		};
 
