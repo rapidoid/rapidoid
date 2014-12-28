@@ -20,98 +20,47 @@ package org.rapidoid.db.impl;
  * #L%
  */
 
+import java.util.HashSet;
+
 import org.rapidoid.db.Db;
 import org.rapidoid.db.DbRef;
-import org.rapidoid.db.DbRelationTo;
-import org.rapidoid.util.U;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-
-public class DefaultDbRef<E> implements DbRef<E>, DbRelationTo {
+public class DefaultDbRef<E> extends DbRelsCommons<E> implements DbRef<E> {
 
 	private static final long serialVersionUID = -1239566356630772624L;
-
-	private final Db db;
-
-	private final String relation;
-
-	private long id;
 
 	public DefaultDbRef(Db db, String relation) {
 		this(db, relation, -1);
 	}
 
 	public DefaultDbRef(Db db, String relation, long id) {
-		this.db = db;
-		this.relation = relation;
-		this.id = id;
+		super(db, relation, new HashSet<Long>());
+		if (id > 0) {
+			addId(id);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public E get() {
+		long id = getSingleId();
 		return (E) (id > 0 ? db.get(id) : null);
 	}
 
 	@Override
 	public void set(E value) {
-		this.id = value != null ? db.persist(value) : -1;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((db == null) ? 0 : db.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((relation == null) ? 0 : relation.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DefaultDbRef<?> other = (DefaultDbRef<?>) obj;
-		if (db == null) {
-			if (other.db != null)
-				return false;
-		} else if (!db.equals(other.db))
-			return false;
-		if (id != other.id)
-			return false;
-		if (relation == null) {
-			if (other.relation != null)
-				return false;
-		} else if (!relation.equals(other.relation))
-			return false;
-		return true;
-	}
-
-	@JsonValue
-	public Object serialized() {
-		return U.map("relation", relation, "id", id);
-	}
-
-	@Override
-	public void addLinkTo(long id) {
-		this.id = id;
-	}
-
-	@Override
-	public void removeLinkTo(long id) {
-		if (hasLinkTo(id)) {
-			this.id = -1;
+		if (value == null) {
+			clear();
+			return;
 		}
-	}
 
-	@Override
-	public boolean hasLinkTo(long id) {
-		return this.id == id;
+		long id = db.persist(value);
+		long oldId = getSingleId();
+
+		if (id != oldId) {
+			clear();
+			addId(id);
+		}
 	}
 
 }

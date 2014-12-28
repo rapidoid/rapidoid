@@ -1,4 +1,6 @@
-package org.rapidoid.db;
+package org.rapidoid.db.impl;
+
+import java.util.Set;
 
 /*
  * #%L
@@ -20,12 +22,16 @@ package org.rapidoid.db;
  * #L%
  */
 
-public interface DbRelationTo {
+public interface DbRelationInternals {
 
-	void addLinkTo(long id);
+	boolean addId(long id);
 
-	void removeLinkTo(long id);
+	boolean removeId(long id);
 
-	boolean hasLinkTo(long id);
+	boolean hasId(long id);
+
+	Set<Long> getAddedRelations();
+
+	Set<Long> getRemovedRelations();
 
 }

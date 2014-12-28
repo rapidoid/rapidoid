@@ -37,30 +37,30 @@ public class DefaultDbList<E> extends DefaultDbCollection<E> implements DbList<E
 
 	public DefaultDbList(Db db, String relation, List<? extends Number> ids) {
 		this(db, relation);
-		for (Number id : ids) {
-			ids().add(id.longValue());
-		}
+		addAllIds(ids);
 	}
 
 	public void add(int index, E e) {
 		long id = db.persist(e);
-		ids().add(index, id);
+		addIdAt(index, id);
 	}
 
 	public boolean addAll(int index, Collection<? extends E> c) {
-		return ids().addAll(index, idsOf(c, true));
+		return addIdsAt(index, idsOf(c, true));
 	}
 
 	public E get(int index) {
-		return db.get(ids().get(index));
+		return db.get(getIdAt(index));
 	}
 
 	public int indexOf(Object e) {
-		return ids().indexOf(db.getIdOf(e));
+		long id = db.getIdOf(e);
+		return indexOfId(id);
 	}
 
 	public int lastIndexOf(Object e) {
-		return ids().lastIndexOf(db.getIdOf(e));
+		long id = db.getIdOf(e);
+		return lastIndexOfId(id);
 	}
 
 	public ListIterator<E> listIterator() {
@@ -74,20 +74,16 @@ public class DefaultDbList<E> extends DefaultDbCollection<E> implements DbList<E
 	}
 
 	public E remove(int index) {
-		return db.get(ids().remove(index));
+		return db.get(removeIdAt(index));
 	}
 
 	public E set(int index, E e) {
 		long id = db.persist(e);
-		return db.get(ids().set(index, id));
+		return db.get(setIdAt(index, id));
 	}
 
 	public List<E> subList(int fromIndex, int toIndex) {
-		return new DefaultDbList<E>(db, relation, ids().subList(fromIndex, toIndex));
-	}
-
-	public List<Long> ids() {
-		return (List<Long>) ids;
+		return new DefaultDbList<E>(db, relation, getIdSublist(fromIndex, toIndex));
 	}
 
 }

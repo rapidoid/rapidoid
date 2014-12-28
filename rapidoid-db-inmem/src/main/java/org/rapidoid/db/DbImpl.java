@@ -35,6 +35,7 @@ import org.rapidoid.inmem.InMem;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.util.U;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -86,14 +87,16 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 		});
 
 		dbModule.addDeserializer(DbRef.class, new JsonDeserializer<DbRef>() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public DbRef deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,
 					JsonProcessingException {
-				@SuppressWarnings("unchecked")
 				Map<String, Object> data = jp.readValueAs(Map.class);
 				String relation = (String) data.get("relation");
-				Number id = (Number) data.get("id");
-				return new DefaultDbRef(DbImpl.this, relation, id.longValue());
+				List<? extends Number> ids = (List<Number>) data.get("ids");
+				U.must(ids.size() <= 1, "Expected 0 or 1 IDs!");
+				long id = !ids.isEmpty() ? ids.get(0).longValue() : -1;
+				return new DefaultDbRef(DbImpl.this, relation, id);
 			}
 		});
 
