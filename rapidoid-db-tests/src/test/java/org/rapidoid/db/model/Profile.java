@@ -27,7 +27,7 @@ public class Profile {
 
 	public long id;
 
-	public DbList<Post> posts = DB.list("posted");
+	public DbList<Post> posts = DB.list(this, "posted");
 
 	@Override
 	public String toString() {

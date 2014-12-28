@@ -31,12 +31,12 @@ import org.rapidoid.db.DbList;
 
 public class DefaultDbList<E> extends DefaultDbCollection<E> implements DbList<E> {
 
-	public DefaultDbList(Db db, String relation) {
-		super(db, relation, new ArrayList<Long>());
+	public DefaultDbList(Db db, Object holder, String relation) {
+		super(db, holder, relation, new ArrayList<Long>());
 	}
 
-	public DefaultDbList(Db db, String relation, List<? extends Number> ids) {
-		this(db, relation);
+	public DefaultDbList(Db db, Object holder, String relation, List<? extends Number> ids) {
+		this(db, holder, relation);
 		addAllIds(ids);
 	}
 
@@ -83,7 +83,7 @@ public class DefaultDbList<E> extends DefaultDbCollection<E> implements DbList<E
 	}
 
 	public List<E> subList(int fromIndex, int toIndex) {
-		return new DefaultDbList<E>(db, relation, getIdSublist(fromIndex, toIndex));
+		return new DefaultDbList<E>(db, holder, relation, getIdSublist(fromIndex, toIndex));
 	}
 
 }

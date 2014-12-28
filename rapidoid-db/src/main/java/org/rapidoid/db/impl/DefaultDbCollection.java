@@ -30,8 +30,8 @@ import org.rapidoid.util.U;
 
 public class DefaultDbCollection<E> extends DbRelsCommons<E> implements Collection<E> {
 
-	public DefaultDbCollection(Db db, String relation, Collection<Long> ids) {
-		super(db, relation, ids);
+	public DefaultDbCollection(Db db, Object holder, String relation, Collection<Long> ids) {
+		super(db, holder, relation, ids);
 	}
 
 	protected void addAllIds(List<? extends Number> ids) {

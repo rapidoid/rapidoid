@@ -70,7 +70,7 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 				Map<String, Object> data = jp.readValueAs(Map.class);
 				String relation = (String) data.get("relation");
 				List<? extends Number> ids = (List<Number>) data.get("ids");
-				return new DefaultDbList(DbImpl.this, relation, ids);
+				return new DefaultDbList(DbImpl.this, null, relation, ids);
 			}
 		});
 
@@ -82,7 +82,7 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 				Map<String, Object> data = jp.readValueAs(Map.class);
 				String relation = (String) data.get("relation");
 				List<? extends Number> ids = (List<Number>) data.get("ids");
-				return new DefaultDbSet(DbImpl.this, relation, ids);
+				return new DefaultDbSet(DbImpl.this, null, relation, ids);
 			}
 		});
 
@@ -96,7 +96,7 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 				List<? extends Number> ids = (List<Number>) data.get("ids");
 				U.must(ids.size() <= 1, "Expected 0 or 1 IDs!");
 				long id = !ids.isEmpty() ? ids.get(0).longValue() : -1;
-				return new DefaultDbRef(DbImpl.this, relation, id);
+				return new DefaultDbRef(DbImpl.this, null, relation, id);
 			}
 		});
 
@@ -252,18 +252,18 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	}
 
 	@Override
-	public <E> DbList<E> list(String relation) {
-		return new DefaultDbList<E>(this, relation);
+	public <E> DbList<E> list(Object holder, String relation) {
+		return new DefaultDbList<E>(this, holder, relation);
 	}
 
 	@Override
-	public <E> DbSet<E> set(String relation) {
-		return new DefaultDbSet<E>(this, relation);
+	public <E> DbSet<E> set(Object holder, String relation) {
+		return new DefaultDbSet<E>(this, holder, relation);
 	}
 
 	@Override
-	public <E> DbRef<E> ref(String relation) {
-		return new DefaultDbRef<E>(this, relation);
+	public <E> DbRef<E> ref(Object holder, String relation) {
+		return new DefaultDbRef<E>(this, holder, relation);
 	}
 
 }

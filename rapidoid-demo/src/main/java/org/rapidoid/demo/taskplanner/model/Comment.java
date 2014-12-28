@@ -30,10 +30,10 @@ public class Comment extends Entity {
 
 	public String content;
 
-	public DbRef<User> owner = DB.ref("owns");
+	public DbRef<User> owner = DB.ref(this, "owns");
 
-	public DbRef<Task> task = DB.ref("has");
+	public DbRef<Task> task = DB.ref(this, "has");
 
-	public DbSet<User> likedBy = DB.set("likes");
+	public DbSet<User> likedBy = DB.set(this, "likes");
 
 }

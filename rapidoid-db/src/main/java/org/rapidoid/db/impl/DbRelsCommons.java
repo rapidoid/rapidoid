@@ -34,14 +34,17 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals {
 
 	protected final Db db;
 
+	protected final Object holder;
+
 	protected final String relation;
 
 	private final Collection<Long> ids;
 
 	protected final DbRelChangesTracker tracker = new DbRelChangesTracker();
 
-	public DbRelsCommons(Db db, String relation, Collection<Long> ids) {
+	public DbRelsCommons(Db db, Object holder, String relation, Collection<Long> ids) {
 		this.db = db;
+		this.holder = holder;
 		this.relation = relation;
 		this.ids = ids;
 	}

@@ -28,12 +28,12 @@ import org.rapidoid.db.DbSet;
 
 public class DefaultDbSet<E> extends DefaultDbCollection<E> implements DbSet<E> {
 
-	public DefaultDbSet(Db db, String relation) {
-		super(db, relation, new LinkedHashSet<Long>());
+	public DefaultDbSet(Db db, Object holder, String relation) {
+		super(db, holder, relation, new LinkedHashSet<Long>());
 	}
 
-	public DefaultDbSet(Db db, String relation, List<? extends Number> ids) {
-		this(db, relation);
+	public DefaultDbSet(Db db, Object holder, String relation, List<? extends Number> ids) {
+		this(db, holder, relation);
 		addAllIds(ids);
 	}
 
