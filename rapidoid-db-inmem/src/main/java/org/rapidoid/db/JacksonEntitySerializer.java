@@ -23,7 +23,6 @@ package org.rapidoid.db;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.rapidoid.db.impl.DbRelationInternals;
 import org.rapidoid.db.impl.DefaultDbList;
@@ -165,15 +164,10 @@ public class JacksonEntitySerializer implements EntitySerializer {
 	public <T> T deserialize(byte[] bytes, Class<T> type) {
 		T entity = parse(bytes, type);
 
-		for (Entry<String, Prop> e : Cls.propertiesOf(entity).entrySet()) {
-			Prop prop = e.getValue();
-			Class<?> propType = prop.getType();
-			if (DbList.class.isAssignableFrom(propType) || DbSet.class.isAssignableFrom(propType)
-					|| DbRef.class.isAssignableFrom(propType)) {
-				DbRelationInternals rel = prop.get(entity);
-				U.notNull(rel, prop.getName());
-				rel.setHolder(entity);
-			}
+		for (Prop prop : Cls.propertiesOf(entity).select(DbHelper.DB_REL_PROPS)) {
+			DbRelationInternals rel = prop.get(entity);
+			U.notNull(rel, prop.getName());
+			rel.setHolder(entity);
 		}
 
 		return entity;

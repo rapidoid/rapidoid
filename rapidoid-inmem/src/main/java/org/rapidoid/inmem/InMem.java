@@ -53,6 +53,7 @@ import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Prop;
+import org.rapidoid.util.U;
 
 class Rec {
 	final Class<?> type;
@@ -88,6 +89,13 @@ public class InMem {
 	private static final Object INSERTION = new Object();
 
 	private static final Pattern P_WORD = Pattern.compile("\\w+");
+
+	protected static final Predicate<Prop> SEARCHABLE_PROPS = new Predicate<Prop>() {
+		@Override
+		public boolean eval(Prop prop) throws Exception {
+			return U.isAssignableTo(prop.getType(), Number.class, String.class, Boolean.class, Enum.class, Date.class);
+		}
+	};
 
 	private final long startedAt = System.currentTimeMillis();
 
@@ -418,8 +426,7 @@ public class InMem {
 					return true;
 				}
 
-				for (Entry<String, Prop> e : Cls.propertiesOf(record).entrySet()) {
-					Prop prop = e.getValue();
+				for (Prop prop : Cls.propertiesOf(record).select(SEARCHABLE_PROPS)) {
 					String s = String.valueOf(prop.get(record)).toLowerCase();
 					if (s.contains(search)) {
 						return true;

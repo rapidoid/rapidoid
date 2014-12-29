@@ -31,7 +31,6 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,11 +46,11 @@ public class Cls {
 
 	static final Map<String, TypeKind> KINDS = initKinds();
 
-	protected static final Map<Class<?>, Map<String, Prop>> BEAN_PROPERTIES = U
-			.autoExpandingMap(new Mapper<Class<?>, Map<String, Prop>>() {
+	protected static final Map<Class<?>, BeanProperties> BEAN_PROPERTIES = U
+			.autoExpandingMap(new Mapper<Class<?>, BeanProperties>() {
 
 				@Override
-				public Map<String, Prop> map(Class<?> clazz) throws Exception {
+				public BeanProperties map(Class<?> clazz) throws Exception {
 
 					Map<String, Prop> properties = new LinkedHashMap<String, Prop>();
 
@@ -156,7 +155,7 @@ public class Cls {
 					for (Entry<String, Prop> e : properties.entrySet()) {
 						e.getValue().init();
 					}
-					return properties;
+					return new BeanProperties(properties);
 				}
 
 			});
@@ -165,13 +164,12 @@ public class Cls {
 		BEAN_PROPERTIES.clear();
 	}
 
-	public static Map<String, Prop> propertiesOf(Class<?> clazz) {
+	public static BeanProperties propertiesOf(Class<?> clazz) {
 		return BEAN_PROPERTIES.get(clazz);
 	}
 
-	@SuppressWarnings("unchecked")
-	public static Map<String, Prop> propertiesOf(Object obj) {
-		return obj != null ? propertiesOf(obj.getClass()) : Collections.EMPTY_MAP;
+	public static BeanProperties propertiesOf(Object obj) {
+		return obj != null ? propertiesOf(obj.getClass()) : BeanProperties.NONE;
 	}
 
 	public static Prop property(Class<?> clazz, String property, boolean mandatory) {
@@ -921,12 +919,10 @@ public class Cls {
 			}
 		}
 
-		Map<String, Prop> props = propertiesOf(clazz);
-
+		BeanProperties props = propertiesOf(clazz);
 		StringBuilder sb = new StringBuilder();
 
-		for (Entry<String, Prop> e : props.entrySet()) {
-			Prop prop = e.getValue();
+		for (Prop prop : props) {
 			String name = prop.getName();
 
 			if (!name.equalsIgnoreCase("id") && !name.equalsIgnoreCase("version")

@@ -35,6 +35,7 @@ import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
 import org.rapidoid.pojo.PojoRequest;
+import org.rapidoid.util.BeanProperties;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Prop;
@@ -273,7 +274,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 	}
 
 	private static void setBeanProperties(Object instance, Map<String, String> paramsMap) {
-		Map<String, Prop> props = Cls.propertiesOf(instance.getClass());
+		BeanProperties props = Cls.propertiesOf(instance.getClass());
 
 		for (Entry<String, String> entry : paramsMap.entrySet()) {
 			Prop prop = props.get(entry.getKey());

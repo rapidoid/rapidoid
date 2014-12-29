@@ -23,13 +23,13 @@ package org.rapidoid.model;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.model.impl.BeanItem;
 import org.rapidoid.model.impl.BeanListItems;
 import org.rapidoid.model.impl.BeanProperty;
 import org.rapidoid.model.impl.ListItems;
+import org.rapidoid.util.BeanProperties;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Prop;
 import org.rapidoid.util.U;
@@ -59,7 +59,7 @@ public class Models {
 	}
 
 	public static Property propertyOf(Class<?> beanType, String property) {
-		Map<String, Prop> props = Cls.propertiesOf(beanType);
+		BeanProperties props = Cls.propertiesOf(beanType);
 
 		if (beanType == Object.class) {
 			return new BeanProperty(property, property.equals("id") ? long.class : String.class, null);
@@ -74,7 +74,7 @@ public class Models {
 	public static List<Property> propertiesOf(Class<?> beanType, String... propertyNames) {
 		List<Property> pr = U.list();
 
-		Map<String, Prop> props = Cls.propertiesOf(beanType);
+		BeanProperties props = Cls.propertiesOf(beanType);
 
 		if (propertyNames.length == 0) {
 
@@ -83,7 +83,7 @@ public class Models {
 				pr.add(new BeanProperty(idProp.getName(), idProp.getType(), idProp.getGenericType()));
 			}
 
-			for (Prop prop : props.values()) {
+			for (Prop prop : props) {
 				if (!prop.getName().equals("id")) {
 					pr.add(new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType()));
 				}
@@ -101,10 +101,10 @@ public class Models {
 	public static List<Property> editablePropertiesOf(Class<?> beanType, String... propertyNames) {
 		List<Property> pr = U.list();
 
-		Map<String, Prop> props = Cls.propertiesOf(beanType);
+		BeanProperties props = Cls.propertiesOf(beanType);
 
 		if (propertyNames.length == 0) {
-			for (Prop prop : props.values()) {
+			for (Prop prop : props) {
 				if (isEditable(prop)) {
 					pr.add(new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType()));
 				}
@@ -123,10 +123,10 @@ public class Models {
 	public static List<Property> readablePropertiesOf(Class<?> beanType, String... propertyNames) {
 		List<Property> pr = U.list();
 
-		Map<String, Prop> props = Cls.propertiesOf(beanType);
+		BeanProperties props = Cls.propertiesOf(beanType);
 
 		if (propertyNames.length == 0) {
-			for (Prop prop : props.values()) {
+			for (Prop prop : props) {
 				if (isReadable(prop)) {
 					pr.add(new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType()));
 				}
