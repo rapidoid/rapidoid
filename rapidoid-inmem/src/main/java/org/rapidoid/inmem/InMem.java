@@ -34,11 +34,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CountDownLatch;
@@ -53,6 +57,7 @@ import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Prop;
+import org.rapidoid.util.Tuple;
 import org.rapidoid.util.U;
 
 class Rec {
@@ -104,6 +109,8 @@ public class InMem {
 	private final EntitySerializer serializer;
 
 	private final Predicate<Prop> relPropFilter;
+
+	private final ConcurrentMap<Tuple, RelPair> relPairs = new ConcurrentHashMap<Tuple, RelPair>();
 
 	private final AtomicLong ids = new AtomicLong();
 
@@ -223,10 +230,120 @@ public class InMem {
 				throw new IllegalStateException("Cannot insert record with existing ID: " + id);
 			}
 
+			updateChangesFromRels(record);
+
 			lastChangedOn.set(System.currentTimeMillis());
 			return id;
 		} finally {
 			sharedUnlock();
+		}
+	}
+
+	private void updateChangesFromRels(Object entity) {
+		for (Prop prop : Cls.propertiesOf(entity).select(relPropFilter)) {
+			Object value = prop.get(entity);
+
+			if (value != null) {
+				EntityLinks links = (EntityLinks) value;
+
+				long fromId = links.fromId();
+				propageteRelChanges(entity, prop, links, fromId, links.addedRelIds(), links.removedRelIds());
+			}
+		}
+	}
+
+	private void propageteRelChanges(Object entity, Prop prop, EntityLinks links, long fromId,
+			Collection<Long> addToIds, Collection<Long> delToIds) {
+
+		String rel = links.relationName();
+
+		boolean inverse = rel.startsWith("^");
+		if (inverse) {
+			rel = rel.substring(1);
+		}
+
+		RelPair relPair = getRelPair(entity, prop, rel, inverse);
+
+		if (addToIds != null) {
+			for (long toId : addToIds) {
+				if (!inverse) {
+					relLink(rel, relPair.destProp, toId, relPair.srcProp, fromId);
+				} else {
+					relLink(rel, relPair.srcProp, toId, relPair.destProp, fromId);
+				}
+			}
+		}
+
+		if (delToIds != null) {
+			for (long toId : delToIds) {
+				if (!inverse) {
+					relUnlink(rel, relPair.destProp, toId, relPair.srcProp, fromId);
+				} else {
+					relUnlink(rel, relPair.srcProp, toId, relPair.destProp, fromId);
+				}
+			}
+		}
+	}
+
+	private RelPair getRelPair(Object entity, Prop prop, String rel, boolean inverse) {
+		Class<?> cls = prop.typeArg(0);
+		Class<?> srcType = inverse ? cls : entity.getClass();
+		Class<?> destType = inverse ? entity.getClass() : cls;
+
+		Tuple key = new Tuple(rel, srcType, destType);
+		RelPair relPair = relPairs.get(key);
+
+		Prop srcProp, destProp;
+
+		if (relPair != null) {
+			srcProp = relPair.srcProp;
+			destProp = relPair.destProp;
+		} else {
+			String invRel = inverse ? rel : "^" + rel;
+			Prop p = findRelProperty(cls, invRel, entity.getClass());
+			srcProp = inverse ? p : prop;
+			destProp = inverse ? prop : p;
+			relPair = new RelPair(rel, srcType, destType, srcProp, destProp);
+			relPairs.putIfAbsent(key, relPair);
+		}
+
+		return relPair;
+	}
+
+	private Prop findRelProperty(Class<?> fromCls, String rel, Class<?> toCls) {
+		Object entity = U.newInstance(fromCls);
+
+		for (Prop prop : Cls.propertiesOf(fromCls).select(relPropFilter)) {
+			Object value = prop.get(entity);
+
+			if (value != null) {
+				EntityLinks links = (EntityLinks) value;
+				if (links.relationName().equals(rel)) {
+					if (prop.typeArg(0).equals(toCls)) {
+						return prop;
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+
+	private void relLink(String relation, Prop srcProp, long fromId, Prop destProp, long toId) {
+		if (srcProp != null && destProp != null) {
+			Object from = get(fromId);
+			EntityLinks srcRels = srcProp.get(from);
+			srcRels.addRelTo(toId);
+			update_(fromId, from, false);
+		}
+	}
+
+	private void relUnlink(String relation, Prop srcProp, long fromId, Prop destProp, long toId) {
+		if (srcProp != null && destProp != null) {
+			Object from = get(fromId);
+			EntityLinks srcRels = srcProp.get(from);
+			srcRels.removeRelTo(toId);
+			update_(fromId, from, false);
 		}
 	}
 
@@ -288,24 +405,32 @@ public class InMem {
 	public void update(long id, Object record) {
 		sharedLock();
 		try {
-			validateId(id);
-
-			setId(record, id);
-
-			Rec removed = data.replace(id, rec(record));
-
-			if (insideTx.get()) {
-				txChanges.putIfAbsent(id, removed);
-			}
-
-			if (removed == null) {
-				throw new IllegalStateException("Cannot update non-existing record with ID=" + id);
-			}
-
-			lastChangedOn.set(System.currentTimeMillis());
+			update_(id, record, true);
 		} finally {
 			sharedUnlock();
 		}
+	}
+
+	private void update_(long id, Object record, boolean reflectRelChanges) {
+		validateId(id);
+
+		setId(record, id);
+
+		Rec removed = data.replace(id, rec(record));
+
+		if (insideTx.get()) {
+			txChanges.putIfAbsent(id, removed);
+		}
+
+		if (removed == null) {
+			throw new IllegalStateException("Cannot update non-existing record with ID=" + id);
+		}
+
+		if (reflectRelChanges) {
+			updateChangesFromRels(record);
+		}
+
+		lastChangedOn.set(System.currentTimeMillis());
 	}
 
 	public void update(Object record) {

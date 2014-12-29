@@ -28,6 +28,12 @@ public interface EntityLinks {
 
 	long fromId();
 
-	Collection<Long> toIds();
+	Collection<Long> addedRelIds();
+
+	Collection<Long> removedRelIds();
+
+	void addRelTo(long toId);
+
+	void removeRelTo(long toId);
 
 }
