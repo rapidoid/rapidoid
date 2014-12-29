@@ -189,4 +189,12 @@ public class Prop {
 				+ type + ", typeKind=" + typeKind + ", defaultValue=" + defaultValue + ", readOnly=" + readOnly + "]";
 	}
 
+	public int typeArgsCount() {
+		return genericType != null ? genericType.getActualTypeArguments().length : 0;
+	}
+
+	public Class<?> typeArg(int index) {
+		return Cls.clazz(genericType.getActualTypeArguments()[index]);
+	}
+
 }
