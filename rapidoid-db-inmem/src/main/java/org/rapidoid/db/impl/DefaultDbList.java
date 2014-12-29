@@ -37,7 +37,7 @@ public class DefaultDbList<E> extends DefaultDbCollection<E> implements DbList<E
 
 	public DefaultDbList(Db db, Object holder, String relation, List<? extends Number> ids) {
 		this(db, holder, relation);
-		addAllIds(ids);
+		initIds(ids);
 	}
 
 	public void add(int index, E e) {

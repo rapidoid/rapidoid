@@ -54,6 +54,16 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals, EntityLin
 		U.notNull(ids, "ids");
 	}
 
+	protected void initIds(List<? extends Number> initIds) {
+		for (Number id : initIds) {
+			ids.add(id.longValue()); // no tracking on initialization
+		}
+	}
+
+	protected void initId(long id) {
+		ids.add(id); // no tracking on initialization
+	}
+
 	@Override
 	public void setHolder(Object holder) {
 		this.holder = holder;

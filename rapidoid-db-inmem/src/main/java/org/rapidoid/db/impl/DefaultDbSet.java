@@ -34,7 +34,7 @@ public class DefaultDbSet<E> extends DefaultDbCollection<E> implements DbSet<E> 
 
 	public DefaultDbSet(Db db, Object holder, String relation, List<? extends Number> ids) {
 		this(db, holder, relation);
-		addAllIds(ids);
+		initIds(ids);
 	}
 
 }

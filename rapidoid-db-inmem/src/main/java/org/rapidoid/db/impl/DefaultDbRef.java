@@ -36,7 +36,7 @@ public class DefaultDbRef<E> extends DbRelsCommons<E> implements DbRef<E> {
 	public DefaultDbRef(Db db, Object holder, String relation, long id) {
 		super(db, holder, relation, new HashSet<Long>());
 		if (id > 0) {
-			addId(id);
+			initId(id);
 		}
 	}
 

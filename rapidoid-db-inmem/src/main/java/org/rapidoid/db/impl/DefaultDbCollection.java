@@ -23,7 +23,6 @@ package org.rapidoid.db.impl;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 
 import org.rapidoid.db.Db;
 import org.rapidoid.util.U;
@@ -32,12 +31,6 @@ public class DefaultDbCollection<E> extends DbRelsCommons<E> implements Collecti
 
 	public DefaultDbCollection(Db db, Object holder, String relation, Collection<Long> ids) {
 		super(db, holder, relation, ids);
-	}
-
-	protected void addAllIds(List<? extends Number> ids) {
-		for (Number id : ids) {
-			addId(id.longValue());
-		}
 	}
 
 	public boolean add(E e) {
