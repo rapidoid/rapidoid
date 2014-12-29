@@ -21,6 +21,7 @@ package org.rapidoid.util;
  */
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -202,10 +203,19 @@ public class UTest extends TestCommons {
 	}
 
 	@Test
-	public void testIsEmpty() {
+	public void testIsEmptyString() {
 		eq(U.isEmpty(""), true);
 		eq(U.isEmpty("a"), false);
-		eq(U.isEmpty(null), true);
+		eq(U.isEmpty((String) null), true);
+	}
+
+	@Test
+	public void testIsEmptyCollection() {
+		eq(U.isEmpty(U.set()), true);
+		eq(U.isEmpty(U.list()), true);
+		eq(U.isEmpty((Collection<?>) null), true);
+		eq(U.isEmpty(U.set(1)), false);
+		eq(U.isEmpty(U.list("2")), false);
 	}
 
 	@Test
