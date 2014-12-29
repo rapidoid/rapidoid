@@ -1640,17 +1640,18 @@ public class U {
 	}
 
 	public static boolean instanceOf(Object obj, Class<?>... classes) {
-		if (obj == null) {
-			return false;
-		}
+		return obj != null ? isAssignableTo(obj.getClass(), classes) : false;
+	}
 
-		Class<? extends Object> objClass = obj.getClass();
-
-		for (Class<?> clazz : classes) {
-			if (clazz.isPrimitive()) {
-				clazz = getWrapperClass(clazz);
+	public static boolean isAssignableTo(Class<?> clazz, Class<?>... targetClasses) {
+		for (Class<?> cls : targetClasses) {
+			if (cls.isPrimitive()) {
+				if (cls.isAssignableFrom(clazz)) {
+					return true;
+				}
+				cls = getWrapperClass(cls);
 			}
-			if (clazz.isAssignableFrom(objClass)) {
+			if (cls.isAssignableFrom(clazz)) {
 				return true;
 			}
 		}
