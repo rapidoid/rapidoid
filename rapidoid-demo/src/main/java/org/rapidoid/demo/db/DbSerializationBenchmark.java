@@ -21,17 +21,20 @@ package org.rapidoid.demo.db;
  */
 
 import java.io.ByteArrayOutputStream;
+import java.util.Collections;
 
+import org.rapidoid.db.JacksonEntitySerializer;
 import org.rapidoid.inmem.InMem;
 import org.rapidoid.util.U;
 
 public class DbSerializationBenchmark {
 
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 
 		U.args(args);
 
-		final InMem db = new InMem(null, null);
+		final InMem db = new InMem(null, new JacksonEntitySerializer(null), Collections.EMPTY_SET);
 
 		int size = U.option("size", 100000);
 		int loops = U.option("loops", 100);

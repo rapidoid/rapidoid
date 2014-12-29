@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.rapidoid.activity.NamedActivity;
 import org.rapidoid.db.impl.DefaultDbList;
@@ -33,14 +34,18 @@ import org.rapidoid.inmem.InMem;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.util.U;
 
 public class DbImpl extends NamedActivity<Db> implements Db {
+
+	@SuppressWarnings("unchecked")
+	private static final Set<Class<?>> REL_CLASSES = U.set(DbList.class, DbSet.class, DbRef.class);
 
 	private final InMem inmem;
 
 	public DbImpl(String name, String filename) {
 		super(name);
-		this.inmem = new InMem(filename, new JacksonEntitySerializer(this));
+		this.inmem = new InMem(filename, new JacksonEntitySerializer(this), REL_CLASSES);
 	}
 
 	@Override

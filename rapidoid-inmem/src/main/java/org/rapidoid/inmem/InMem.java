@@ -103,6 +103,8 @@ public class InMem {
 
 	private final EntitySerializer serializer;
 
+	private final Predicate<Prop> relPropFilter;
+
 	private final AtomicLong ids = new AtomicLong();
 
 	private final AtomicLong lastChangedOn = new AtomicLong();
@@ -131,9 +133,20 @@ public class InMem {
 
 	private ConcurrentNavigableMap<Long, Rec> data = new ConcurrentSkipListMap<Long, Rec>();
 
-	public InMem(String filename, EntitySerializer serializer) {
+	public InMem(String filename, EntitySerializer serializer, final Set<Class<?>> relClasses) {
 		this.filename = filename;
 		this.serializer = serializer;
+		this.relPropFilter = new Predicate<Prop>() {
+			@Override
+			public boolean eval(Prop prop) throws Exception {
+				for (Class<?> relCls : relClasses) {
+					if (relCls.isAssignableFrom(prop.getType())) {
+						return true;
+					}
+				}
+				return false;
+			}
+		};
 
 		if (filename != null && !filename.isEmpty()) {
 
