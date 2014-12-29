@@ -186,13 +186,17 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals, EntityLin
 
 	@Override
 	public boolean addId(long id) {
-		boolean changed = ids.add(id);
+		if (!hasId(id)) {
+			boolean changed = ids.add(id);
 
-		if (changed) {
-			tracker.addedRelTo(id);
+			if (changed) {
+				tracker.addedRelTo(id);
+			}
+
+			return changed;
+		} else {
+			return false;
 		}
-
-		return changed;
 	}
 
 	@Override
@@ -216,16 +220,25 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals, EntityLin
 		return retainIds.retainAll(retainIds);
 	}
 
-	protected void addIdAt(int index, long id) {
-		getIdsAsList().add(index, id);
-		tracker.addedRelTo(id);
+	protected boolean addIdAt(int index, long id) {
+		if (!hasId(id)) {
+			getIdsAsList().add(index, id);
+			tracker.addedRelTo(id);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	protected boolean addIdsAt(int index, Collection<Long> idsToAdd) {
-		boolean changed = getIdsAsList().addAll(index, idsToAdd);
+		boolean changed = false;
 
-		for (Long id : idsToAdd) {
-			tracker.addedRelTo(id);
+		for (long id : idsToAdd) {
+			boolean added = addIdAt(index, id);
+			if (added) {
+				index++;
+			}
+			changed |= added;
 		}
 
 		return changed;
@@ -239,6 +252,8 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals, EntityLin
 
 	protected long setIdAt(int index, long id) {
 		long removedId = getIdsAsList().set(index, id);
+
+		// FIXME handle possible duplications
 
 		if (id != removedId) {
 			tracker.addedRelTo(id);
