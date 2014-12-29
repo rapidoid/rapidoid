@@ -1133,6 +1133,10 @@ public class U {
 		return value == null || value.isEmpty();
 	}
 
+	public static boolean isEmpty(Collection<?> coll) {
+		return coll == null || coll.isEmpty();
+	}
+
 	public static String capitalized(String s) {
 		return s.isEmpty() ? s : s.substring(0, 1).toUpperCase() + s.substring(1);
 	}

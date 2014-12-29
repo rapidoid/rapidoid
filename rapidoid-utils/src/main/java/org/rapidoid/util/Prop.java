@@ -35,6 +35,8 @@ public class Prop {
 
 	private Method setter;
 
+	private Class<?> declaringType;
+
 	private Class<?> type;
 
 	private TypeKind typeKind;
@@ -64,6 +66,8 @@ public class Prop {
 
 		Type gType = field != null ? field.getGenericType() : getter.getGenericReturnType();
 		genericType = (gType instanceof ParameterizedType) ? ((ParameterizedType) gType) : null;
+
+		declaringType = field != null ? field.getDeclaringClass() : getter.getDeclaringClass();
 	}
 
 	public void setGetter(Method getter) {
@@ -185,8 +189,7 @@ public class Prop {
 
 	@Override
 	public String toString() {
-		return "Prop [name=" + name + ", field=" + field + ", getter=" + getter + ", setter=" + setter + ", type="
-				+ type + ", typeKind=" + typeKind + ", defaultValue=" + defaultValue + ", readOnly=" + readOnly + "]";
+		return declaringType.getSimpleName() + "#" + name + ":" + type.getSimpleName();
 	}
 
 	public int typeArgsCount() {
