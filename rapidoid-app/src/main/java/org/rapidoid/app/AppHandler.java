@@ -77,7 +77,7 @@ public class AppHandler implements Handler {
 			return result;
 		}
 
-		Object view = new AppPageGeneric();
+		Object view = new AppPageGeneric(x, appCls);
 
 		if (Pages.isEmiting(x)) {
 			return Pages.emit(x, view);

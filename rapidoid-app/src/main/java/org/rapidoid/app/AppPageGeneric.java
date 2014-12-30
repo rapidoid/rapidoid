@@ -39,63 +39,81 @@ import org.rapidoid.util.U;
 
 public class AppPageGeneric extends AppGUI {
 
-	private static final String[] themes = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14",
-			"15" };
+	protected static final String[] themes = { "1", "2", "3" };
 
-	private static final Pattern ENTITY_VIEW = Pattern.compile("^/(\\w+?)/(\\d+)/?$");
+	protected static final Pattern ENTITY_VIEW = Pattern.compile("^/(\\w+?)/(\\d+)/?$");
 
-	private static final Pattern ENTITY_EDIT = Pattern.compile("^/edit(\\w+?)/(\\d+)/?$");
+	protected static final Pattern ENTITY_EDIT = Pattern.compile("^/edit(\\w+?)/(\\d+)/?$");
 
-	private static final AppScreens APP_SCREENS = U.customizable(AppScreens.class);
+	protected static final AppScreens APP_SCREENS = U.customizable(AppScreens.class);
 
-	public String title(HttpExchange x) {
-		Object app = app(x);
+	protected final HttpExchange x;
+
+	protected final AppClasses appCls;
+
+	protected final Object app;
+
+	protected final Object screen;
+
+	public AppPageGeneric(HttpExchange x, AppClasses appCls) {
+		this.x = x;
+		this.appCls = appCls;
+		this.app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
+		this.screen = getScreen();
+
+		U.must(screen != null, "Cannot find a screen to process the request!");
+		Pages.load(x, screen);
+	}
+
+	public String title() {
 		return Pages.titleOf(x, app);
 	}
 
-	public Object head(HttpExchange x) {
-		Object app = app(x);
-		String theme = Apps.config(app, "theme", null);
-		return theme != null ? link()
-				.href("//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/" + theme + "/bootstrap.min.css").rel("stylesheet")
-				: null;
+	public Object head() {
+		String theme = config("theme", null);
+		return theme != null ? link().href(themeUrl(theme)).rel("stylesheet") : null;
 	}
 
-	public Object content(HttpExchange x) {
+	protected String themeUrl(String theme) {
+		if (theme.startsWith("bootswatch:")) {
+			theme = theme.substring("bootswatch:".length());
+			return "//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/" + theme + "/bootstrap.min.css";
+		} else {
+			return "/bootstrap/css/theme-" + theme + ".css";
+		}
+	}
 
-		AppClasses appCls = Apps.scanAppClasses(x);
-		Object app = app(x);
-		Map<String, Class<?>> mainScreens = filterScreens(app, appCls.screens);
+	public Object content() {
+
+		Map<String, Class<?>> mainScreens = filterScreens();
 
 		Object pageContent = null;
 		int activeIndex = -1;
-		Object screen = getScreen(x, appCls, app);
-		U.notNull(screen, "screen");
 
 		Pages.load(x, screen);
-		pageContent = pageContent(x, screen);
+		pageContent = pageContent();
 
 		Class<?>[] screens = APP_SCREENS.constructScreens(mainScreens);
 		Object[] menuItems = new Object[screens.length];
 		activeIndex = setupMenuItems(screen.getClass(), screens, menuItems);
 
-		String theme = Apps.config(app, "theme", null);
+		String theme = config("theme", null);
 
 		ATag brand = a(Pages.titleOf(x, app)).href("/");
-		Tag userMenu = userMenu(x, app);
-		Tag themesMenu = theme == null ? themesMenu(app) : null;
-		FormTag searchForm = searchForm(app);
+		Tag userMenu = userMenu();
+		Tag themesMenu = theme == null ? themesMenu() : null;
+		FormTag searchForm = searchForm();
 		Tag navMenu = navbarMenu(true, activeIndex, menuItems);
 		Object[] navbarContent = arr(navMenu, themesMenu, userMenu, searchForm);
 
-		Tag result = navbarPage(isFluid(app), brand, navbarContent, pageContent);
+		Tag result = navbarPage(isFluid(), brand, navbarContent, pageContent);
 
 		Pages.store(x, screen);
 
 		return result;
 	}
 
-	private Object genericScreen(HttpExchange x, Object app) {
+	protected Object genericScreen() {
 		if (!x.query_().range().isEmpty()) {
 			return null;
 		}
@@ -139,30 +157,29 @@ public class AppPageGeneric extends AppGUI {
 		return null;
 	}
 
-	private Object pageContent(HttpExchange x, Object screen) {
-		Object pageContent = Pages.contentOf(x, screen);
-		if (pageContent == null) {
-			pageContent = hardcoded("No content available!");
-		}
-		return pageContent;
+	protected Object pageContent() {
+		return U.or(Pages.contentOf(x, screen), "Page not found!");
 	}
 
-	private FormTag searchForm(Object app) {
-		FormTag searchForm = null;
-		if (Apps.addon(app, "search")) {
-			searchForm = navbarForm(false, awesome("search"), arr("q"), arr("Search")).attr("action", "/search").attr(
-					"method", "GET");
-		}
-		return searchForm;
+	protected FormTag searchForm() {
+		return addon("search") ? navbarSearchForm("/search") : null;
 	}
 
-	private int setupMenuItems(Class<?> screenClass, Class<?>[] screens, Object[] menuItems) {
+	protected boolean addon(String name) {
+		return Apps.addon(app, name);
+	}
+
+	protected <T> T config(String name, T defaultValue) {
+		return Apps.config(app, name, defaultValue);
+	}
+
+	protected int setupMenuItems(Class<?> screenClass, Class<?>[] screens, Object[] menuItems) {
 		int activeIndex = -1;
 		int k = 0;
 		for (int i = 0; i < screens.length; i++) {
 			Class<?> scr = screens[i];
 			String name = Apps.screenName(scr);
-			String title = U.or(titleOf(scr), U.camelPhrase(name));
+			String title = Cls.getFieldValue(scr, "title", U.camelPhrase(name));
 			menuItems[k++] = a(title).href(Apps.screenUrl(scr));
 
 			if (scr.equals(screenClass)) {
@@ -172,20 +189,20 @@ public class AppPageGeneric extends AppGUI {
 		return activeIndex;
 	}
 
-	private Tag userMenu(HttpExchange x, Object app) {
+	protected Tag userMenu() {
 		Tag dropdownMenu = null;
-		if (Apps.addon(app, "auth") || Apps.addon(app, "googleLogin") || Apps.addon(app, "facebookLogin")
-				|| Apps.addon(app, "linkedinLogin") || Apps.addon(app, "githubLogin")) {
+		if (addon("auth") || addon("googleLogin") || addon("facebookLogin") || addon("linkedinLogin")
+				|| addon("githubLogin")) {
 			if (x.isLoggedIn()) {
-				dropdownMenu = loggedInUserMenu(x, app);
+				dropdownMenu = loggedInUserMenu();
 			} else {
-				dropdownMenu = loggedOutUserMenu(x, app);
+				dropdownMenu = loggedOutUserMenu();
 			}
 		}
 		return dropdownMenu;
 	}
 
-	private Tag themesMenu(Object app) {
+	protected Tag themesMenu() {
 		ATag theme = a_glyph("eye-open", "", caret());
 
 		Object[] themess = new Object[themes.length];
@@ -196,29 +213,29 @@ public class AppPageGeneric extends AppGUI {
 			themess[i] = a_void(U.capitalized(thm)).onclick(js);
 		}
 
-		Tag themesMenu = Apps.addon(app, "themes") ? navbarDropdown(false, theme, themess) : null;
+		Tag themesMenu = addon("themes") ? navbarDropdown(false, theme, themess) : null;
 		return themesMenu;
 	}
 
-	private Tag loggedOutUserMenu(HttpExchange x, Object app) {
+	protected Tag loggedOutUserMenu() {
 		Tag dropdownMenu;
 		ATag ga = null, fb = null, li = null, gh = null;
 
-		if (Apps.addon(app, "googleLogin")) {
+		if (addon("googleLogin")) {
 			ga = a_awesome("google", "Sign in with Google").href(OAuth.getLoginURL(x, OAuthProvider.GOOGLE, null));
 		}
 
-		if (Apps.addon(app, "facebookLogin")) {
+		if (addon("facebookLogin")) {
 			fb = a_awesome("facebook", "Sign in with Facebook")
 					.href(OAuth.getLoginURL(x, OAuthProvider.FACEBOOK, null));
 		}
 
-		if (Apps.addon(app, "linkedinLogin")) {
+		if (addon("linkedinLogin")) {
 			li = a_awesome("linkedin", "Sign in with LinkedIn")
 					.href(OAuth.getLoginURL(x, OAuthProvider.LINKEDIN, null));
 		}
 
-		if (Apps.addon(app, "githubLogin")) {
+		if (addon("githubLogin")) {
 			gh = a_awesome("github", "Sign in with GitHub").href(OAuth.getLoginURL(x, OAuthProvider.GITHUB, null));
 		}
 
@@ -226,34 +243,26 @@ public class AppPageGeneric extends AppGUI {
 		return dropdownMenu;
 	}
 
-	protected Tag loggedInUserMenu(HttpExchange x, Object app) {
+	protected Tag loggedInUserMenu() {
 		Tag dropdownMenu;
-		ATag profile = a_glyph("user", userDisplay(x), caret());
-		ATag settings = Apps.addon(app, "settings") ? a_glyph("cog", " Settings").href("/settings") : null;
+		ATag profile = a_glyph("user", userDisplay(), caret());
+		ATag settings = addon("settings") ? a_glyph("cog", " Settings").href("/settings") : null;
 		ATag logout = a_glyph("log-out", "Logout").href("/_logout");
 
 		dropdownMenu = navbarDropdown(false, profile, settings, logout);
 		return dropdownMenu;
 	}
 
-	protected String userDisplay(HttpExchange x) {
+	protected String userDisplay() {
 		String username = x.user().username();
 		return username.substring(0, username.indexOf('@'));
 	}
 
-	protected boolean isFluid(Object app) {
-		return Apps.config(app, "fluid", true);
+	protected boolean isFluid() {
+		return config("fluid", true);
 	}
 
-	public String appTitle(Object app) {
-		return U.or(titleOf(app), "Untitled app");
-	}
-
-	private String titleOf(Object obj) {
-		return Cls.getFieldValue(obj, "title", null);
-	}
-
-	private Object getScreen(HttpExchange x, AppClasses appCls, Object app) {
+	protected Object getScreen() {
 		// TODO use screens.get(...) instead of iteration
 		for (Class<?> screen : appCls.screens.values()) {
 			if (Apps.screenUrl(screen).equals(x.path())) {
@@ -262,14 +271,14 @@ public class AppPageGeneric extends AppGUI {
 			}
 		}
 
-		return U.or(genericScreen(x, app), app);
+		return U.or(genericScreen(), app);
 	}
 
-	private static Map<String, Class<?>> filterScreens(Object app, Map<String, Class<?>> screenClasses) {
-		Object[] screensConfig = Apps.config(app, "screens", null);
+	protected Map<String, Class<?>> filterScreens() {
+		Object[] screensConfig = config("screens", null);
 
 		if (screensConfig == null) {
-			return screenClasses;
+			return appCls.screens;
 		}
 
 		Map<String, Class<?>> filtered = new LinkedHashMap<String, Class<?>>();
@@ -277,13 +286,13 @@ public class AppPageGeneric extends AppGUI {
 		for (Object scr : screensConfig) {
 			if (scr instanceof Class<?>) {
 				Class<?> cls = (Class<?>) scr;
-				filtered.put(cls.getSimpleName(), screenClasses.get(cls.getSimpleName()));
+				filtered.put(cls.getSimpleName(), appCls.screens.get(cls.getSimpleName()));
 			} else if (scr instanceof String) {
 				String name = U.capitalized((String) scr);
 				if (!name.endsWith("Screen")) {
 					name += "Screen";
 				}
-				filtered.put(name, screenClasses.get(name));
+				filtered.put(name, appCls.screens.get(name));
 			} else {
 				throw U.rte("Expected class or string to represent a screen, but found: %s", scr);
 			}
@@ -292,26 +301,8 @@ public class AppPageGeneric extends AppGUI {
 		return filtered;
 	}
 
-	public void on(HttpExchange x, String cmd, Object[] args) {
-
-		AppClasses appCls = Apps.scanAppClasses(x);
-
-		Object app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
-
-		Object screen = getScreen(x, appCls, app);
-		U.must(screen != null, "Cannot find a screen to process the command!");
-
-		Pages.load(x, screen);
-
+	public void on(String cmd, Object[] args) {
 		Pages.callCmdHandler(x, screen, new Cmd(cmd, args));
-
-		Pages.store(x, screen);
-	}
-
-	private Object app(HttpExchange x) {
-		AppClasses appCls = Apps.scanAppClasses(x);
-		Object app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
-		return app;
 	}
 
 }
