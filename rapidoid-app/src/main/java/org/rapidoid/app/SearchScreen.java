@@ -31,7 +31,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.widget.GridWidget;
 import org.rapidoid.widget.HighlightedGridWidget;
 
-public class SearchScreen extends AppGUI {
+public class SearchScreen extends Screen {
 
 	public Object content(HttpExchange x) {
 

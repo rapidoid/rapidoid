@@ -20,13 +20,14 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
+import org.rapidoid.app.Screen;
 import org.rapidoid.db.DB;
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.util.U;
 
-public class AboutScreen extends GUI {
+public class AboutScreen extends Screen {
 
 	public Object content() {
 		Tag mix = h2(a("Enter the mix").href("/mix"));

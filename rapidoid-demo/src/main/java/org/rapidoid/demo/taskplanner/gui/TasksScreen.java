@@ -20,11 +20,12 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
+import org.rapidoid.app.Screen;
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.html.Tag;
 import org.rapidoid.widget.GridWidget;
 
-public class TasksScreen extends GUI {
+public class TasksScreen extends Screen {
 
 	public String title = "My Tasks";
 

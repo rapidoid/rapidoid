@@ -27,7 +27,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.FormWidget;
 
-public class EditEntityScreenGeneric extends AppGUI {
+public class EditEntityScreenGeneric extends Screen {
 
 	@Session
 	private Object entity;

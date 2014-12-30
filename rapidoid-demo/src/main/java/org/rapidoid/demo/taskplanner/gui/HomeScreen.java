@@ -1,5 +1,7 @@
 package org.rapidoid.demo.taskplanner.gui;
 
+import org.rapidoid.app.Screen;
+
 /*
  * #%L
  * rapidoid-demo
@@ -20,7 +22,7 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
-public class HomeScreen extends GUI {
+public class HomeScreen extends Screen {
 
 	public String title = "Welcome!";
 

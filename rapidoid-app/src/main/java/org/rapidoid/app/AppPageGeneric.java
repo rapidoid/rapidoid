@@ -105,7 +105,9 @@ public class AppPageGeneric extends AppGUI {
 		Tag navMenu = navbarMenu(true, activeIndex, menuItems);
 		Object[] navbarContent = arr(navMenu, themesMenu, userMenu, searchForm);
 
-		Tag result = navbarPage(isFluid(), brand, navbarContent, pageContent);
+		String modal = Cls.getPropValue(screen, "modal", null);
+		Object modalContent = modal != null ? Cls.getPropValue(screen, modal, null) : null;
+		Tag result = navbarPage(isFluid(), brand, navbarContent, arr(pageContent, modalContent));
 
 		Pages.store(x, screen);
 
