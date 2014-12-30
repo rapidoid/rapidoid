@@ -1547,7 +1547,7 @@ public class U {
 
 	public static List<Class<?>> classpathClassesBySuffix(String nameSuffix, Predicate<Class<?>> filter,
 			ClassLoader classLoader) {
-		List<Class<?>> classes = classpathClasses("*", ".+" + nameSuffix, filter, classLoader);
+		List<Class<?>> classes = classpathClasses("*", ".+\\w" + nameSuffix, filter, classLoader);
 
 		if (classes.isEmpty()) {
 			warn("No classes found on classpath with the specified suffix", "suffix", nameSuffix);

@@ -897,7 +897,7 @@ public class Cls {
 
 	public static Method findMethodByArgs(Class<? extends Object> clazz, String name, Object... args) {
 
-		for (Method method : clazz.getDeclaredMethods()) {
+		for (Method method : clazz.getMethods()) {
 			Class<?>[] paramTypes = method.getParameterTypes();
 
 			if (method.getName().equals(name) && U.areAssignable(paramTypes, args)) {

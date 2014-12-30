@@ -232,8 +232,10 @@ public class FormWidget extends AbstractWidget {
 			btns = div().class_("form-group");
 		}
 
-		for (Object btn : buttons) {
-			btns = btns.append(btn);
+		if (buttons != null) {
+			for (Object btn : buttons) {
+				btns = btns.append(btn);
+			}
 		}
 
 		if (layout == FormLayout.HORIZONTAL) {

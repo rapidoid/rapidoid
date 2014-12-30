@@ -90,7 +90,6 @@ public class AppPageGeneric extends AppGUI {
 		Object pageContent = null;
 		int activeIndex = -1;
 
-		Pages.load(x, screen);
 		pageContent = pageContent();
 
 		Class<?>[] screens = APP_SCREENS.constructScreens(mainScreens);
