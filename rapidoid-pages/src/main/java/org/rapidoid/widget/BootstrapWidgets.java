@@ -48,6 +48,8 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static final ButtonTag SAVE = cmd("^Save");
 
+	public static final ButtonTag ADD = cmd("^Add");
+
 	public static final ButtonTag UPDATE = cmd("^Update");
 
 	public static final ButtonTag INSERT = cmd("^Insert");
@@ -224,11 +226,18 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static Tag navbarPage(boolean fluid, Tag brand, Object[] navbarContent, Object pageContent) {
 		Object cont = div(pageContent).class_(containerMaybeFluid(fluid));
-		return body(nav_(fluid, false, brand, navbarContent), cont, modal());
+		return body(nav_(fluid, false, brand, navbarContent), cont);
 	}
 
-	public static Tag modal() {
-		return hardcoded(U.load("modal.html"));
+	public static Tag modal(Object title, Object content, Object footer) {
+		return template("modal.html", "title", title, "content", content, "footer", footer, "cmdCloseModal",
+				xClose("closeModal"));
+	}
+
+	public static Tag xClose(String cmd) {
+		Tag sp1 = span(hardcoded("&times;")).attr("aria-hidden", "true");
+		Tag sp2 = span("Close").class_("sr-only");
+		return cmd(cmd).class_("close").content(sp1, sp2);
 	}
 
 	private static String leftOrRight(boolean onLeft) {
