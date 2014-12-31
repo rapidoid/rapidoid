@@ -285,6 +285,11 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals, EntityLin
 	}
 
 	@Override
+	public Collection<Long> allRelIds() {
+		return Collections.unmodifiableCollection(ids);
+	}
+
+	@Override
 	public void addRelTo(long id) {
 		ids.add(id); // no tracking!
 	}

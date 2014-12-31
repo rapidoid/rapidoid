@@ -252,6 +252,20 @@ public class InMem {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	private void deleteRelsFor(Object entity) {
+		for (Prop prop : Cls.propertiesOf(entity).select(relPropFilter)) {
+			Object value = prop.get(entity);
+
+			if (value != null) {
+				EntityLinks links = (EntityLinks) value;
+
+				long fromId = links.fromId();
+				propageteRelChanges(entity, prop, links, fromId, null, links.allRelIds());
+			}
+		}
+	}
+
 	private void propageteRelChanges(Object entity, Prop prop, EntityLinks links, long fromId,
 			Collection<Long> addToIds, Collection<Long> delToIds) {
 
@@ -357,6 +371,9 @@ public class InMem {
 			if (insideTx.get()) {
 				txChanges.putIfAbsent(id, removed);
 			}
+
+			Object entity = obj(removed);
+			deleteRelsFor(entity);
 
 			lastChangedOn.set(System.currentTimeMillis());
 

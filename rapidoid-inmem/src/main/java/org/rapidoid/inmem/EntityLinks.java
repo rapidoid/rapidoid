@@ -32,6 +32,8 @@ public interface EntityLinks {
 
 	Collection<Long> removedRelIds();
 
+	Collection<Long> allRelIds();
+
 	void addRelTo(long toId);
 
 	void removeRelTo(long toId);
