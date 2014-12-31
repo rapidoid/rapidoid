@@ -37,7 +37,11 @@ public class ViewEntityScreenGeneric extends Screen {
 		Tag caption = titleBox(U.capitalized(x.pathSegment(0)) + " Details");
 
 		long id = Long.parseLong(x.pathSegment(1));
-		entity = DB.get(id);
+		entity = DB.getIfExists(id);
+
+		if (entity == null) {
+			return x.notFound();
+		}
 
 		FormWidget details = show(entity).buttons(EDIT, BACK, DELETE);
 

@@ -37,7 +37,11 @@ public class EditEntityScreenGeneric extends Screen {
 		Tag caption = titleBox("Edit " + U.capitalized(x.pathSegment(0).substring(4)));
 
 		long id = Long.parseLong(x.pathSegment(1));
-		entity = DB.get(id);
+		entity = DB.getIfExists(id);
+
+		if (entity == null) {
+			return x.notFound();
+		}
 
 		FormWidget form = edit(entity).buttons(SAVE, CANCEL);
 
