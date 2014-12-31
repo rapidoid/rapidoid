@@ -66,21 +66,21 @@ public class AboutScreen extends Screen {
 	}
 
 	public void onDialog() {
-		modal = "yesNo";
+		showModal("yesNo");
 	}
 
 	public void onAdd() {
-		modal = "addBook";
+		showModal("addBook");
 	}
 
 	public void onYes() {
 		U.info("yes");
-		modal = null;
+		hideModal();
 	}
 
 	public void onNo() {
 		U.info("no");
-		modal = null;
+		hideModal();
 	}
 
 }

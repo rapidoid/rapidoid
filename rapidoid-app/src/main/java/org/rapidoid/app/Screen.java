@@ -8,13 +8,21 @@ public abstract class Screen extends AppGUI {
 	@Session
 	public String modal = null;
 
+	protected void showModal(String modalName) {
+		modal = modalName;
+	}
+
+	protected void hideModal() {
+		modal = null;
+	}
+
 	public void onCloseModal() {
 		modal = null;
 	}
 
 	public void onCancel(HttpExchange x) {
 		if (modal != null) {
-			modal = null;
+			hideModal();
 		} else {
 			x.goBack(1);
 		}
