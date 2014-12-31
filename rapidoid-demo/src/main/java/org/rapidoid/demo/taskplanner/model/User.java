@@ -47,8 +47,4 @@ public class User extends Entity {
 
 	public final DbSet<Comment> commentsLiked = DB.set(this, "likes");
 
-	public void doTransferTo(Task task, User newOwner) {
-		tasksLiked.remove(task);
-	}
-
 }

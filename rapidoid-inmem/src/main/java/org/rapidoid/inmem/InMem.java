@@ -252,7 +252,6 @@ public class InMem {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void deleteRelsFor(Object entity) {
 		for (Prop prop : Cls.propertiesOf(entity).select(relPropFilter)) {
 			Object value = prop.get(entity);
