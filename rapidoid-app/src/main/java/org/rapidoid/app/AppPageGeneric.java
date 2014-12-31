@@ -39,7 +39,7 @@ import org.rapidoid.util.U;
 
 public class AppPageGeneric extends AppGUI {
 
-	protected static final String[] themes = { "1", "2", "3" };
+	protected static final String[] themes = { "1", "2", "3", "4", "5" };
 
 	protected static final Pattern ENTITY_VIEW = Pattern.compile("^/(\\w+?)/(\\d+)/?$");
 
