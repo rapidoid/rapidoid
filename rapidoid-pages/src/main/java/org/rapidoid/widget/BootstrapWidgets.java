@@ -56,6 +56,8 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static final ButtonTag DELETE = cmd("!Delete");
 
+	public static final ButtonTag YES_DELETE = cmd("!YesDelete").content("Yes, delete!");
+
 	public static final ButtonTag REMOVE = cmd("!Remove");
 
 	public static final ButtonTag DESTROY = cmd("!Destroy");

@@ -54,9 +54,17 @@ public class ViewEntityScreenGeneric extends Screen {
 	}
 
 	public void onDelete(HttpExchange x) {
+		showModal("confirmDeletion");
+	}
+
+	public void onYesDelete(HttpExchange x) {
 		long id = Long.parseLong(x.pathSegment(1));
 		DB.delete(id);
 		x.goBack(1);
+	}
+
+	public Tag confirmDeletion() {
+		return modal("Confirm deletion", h4("Are you sure you want to delete the record?"), div(YES_DELETE, CANCEL));
 	}
 
 }
