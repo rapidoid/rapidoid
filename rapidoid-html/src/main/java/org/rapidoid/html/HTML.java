@@ -37,6 +37,7 @@ import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.html.tag.TdTag;
 import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.html.tag.ThTag;
+import org.rapidoid.util.U;
 
 public class HTML extends Tags {
 
@@ -49,6 +50,14 @@ public class HTML extends Tags {
 	public static final Tag LAQUO = constant("&laquo;");
 
 	public static final Tag RAQUO = constant("&raquo;");
+
+	public static boolean isTag(Object target) {
+		return target instanceof Tag;
+	}
+
+	public static boolean isTag(Object target, String tagKind) {
+		return isTag(target) && ((Tag) target).tagKind().equals(tagKind);
+	}
 
 	public static ATag a_void(Object... contents) {
 		return a(contents).href("javascript:void(0);");
