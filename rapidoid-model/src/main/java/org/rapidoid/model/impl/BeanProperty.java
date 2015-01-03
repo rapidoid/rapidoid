@@ -72,7 +72,7 @@ public class BeanProperty implements Property {
 		if (prop.startsWith("_")) {
 			prop = prop.substring(1);
 			if (prop.equals("toString") || prop.equals("str")) {
-				prop = "record data";
+				prop = "data";
 			}
 		}
 

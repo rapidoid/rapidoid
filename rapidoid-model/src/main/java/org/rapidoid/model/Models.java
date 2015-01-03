@@ -23,6 +23,7 @@ package org.rapidoid.model;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.model.impl.BeanItem;
@@ -56,7 +57,7 @@ public class Models {
 	}
 
 	public static Item item(Object value) {
-		return new BeanItem(value);
+		return value instanceof Map ? new MapItem((Map<?, ?>) value) : new BeanItem(value);
 	}
 
 	public static Property propertyOf(Class<?> beanType, String property) {
