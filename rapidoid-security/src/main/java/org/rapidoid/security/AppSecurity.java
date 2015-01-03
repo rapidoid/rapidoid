@@ -22,6 +22,7 @@ package org.rapidoid.security;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -158,6 +159,22 @@ public class AppSecurity implements Constants {
 		}
 
 		return false;
+	}
+
+	public List<String> getBuiltInRoles() {
+		return CommonRoles.ALL;
+	}
+
+	public List<String> getUserRoles(String username) {
+		List<String> roles = U.list();
+
+		for (String role : getBuiltInRoles()) {
+			if (hasRole(username, role)) {
+				roles.add(role);
+			}
+		}
+
+		return roles;
 	}
 
 }

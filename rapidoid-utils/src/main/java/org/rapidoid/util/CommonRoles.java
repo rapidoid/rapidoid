@@ -1,5 +1,8 @@
 package org.rapidoid.util;
 
+import java.util.Collections;
+import java.util.List;
+
 /*
  * #%L
  * rapidoid-utils
@@ -35,5 +38,7 @@ public interface CommonRoles {
 	String OWNER = "OWNER";
 
 	String SHARED_WITH = "SHARED_WITH";
+
+	List<String> ALL = Collections.unmodifiableList(U.list(ADMIN, MANAGER, MODERATOR, LOGGED_IN, OWNER, SHARED_WITH));
 
 }

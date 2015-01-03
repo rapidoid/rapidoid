@@ -20,6 +20,8 @@ package org.rapidoid.security;
  * #L%
  */
 
+import java.util.List;
+
 import org.rapidoid.security.annotation.Change;
 import org.rapidoid.security.annotation.Read;
 import org.rapidoid.util.Constants;
@@ -110,6 +112,10 @@ public class Secure implements Constants {
 		boolean canChange = change != null && hasAnyRole(username, change.value(), clazz, target);
 
 		return DataPermissions.from(canRead, canChange);
+	}
+
+	public static List<String> getUserRoles(String username) {
+		return security.getUserRoles(username);
 	}
 
 }
