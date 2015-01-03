@@ -60,6 +60,8 @@ public class ViewEntityScreenGeneric extends Screen {
 	public void onYesDelete(HttpExchange x) {
 		long id = Long.parseLong(x.pathSegment(1));
 		DB.delete(id);
+
+		hideModal();
 		x.goBack(1);
 	}
 
