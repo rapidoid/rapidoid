@@ -36,6 +36,7 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.Builder;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.F3;
 import org.rapidoid.util.U;
 
@@ -285,9 +286,9 @@ public class IoC {
 
 		if (instance == null && useConfig) {
 			if (type.equals(Boolean.class) || type.equals(boolean.class)) {
-				instance = U.hasOption(name);
+				instance = Conf.hasOption(name);
 			} else {
-				String opt = U.option(name, (String) null);
+				String opt = Conf.option(name, (String) null);
 				if (opt != null) {
 					instance = Cls.convert(opt, type);
 				}

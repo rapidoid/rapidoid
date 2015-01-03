@@ -26,6 +26,7 @@ import org.rapidoid.http.HTMLSnippets;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 
 public class OAuth {
@@ -41,7 +42,7 @@ public class OAuth {
 	public static void register(HTTPServer server, String oauthDomain, OAuthStateCheck stateCheck,
 			OAuthProvider... providers) {
 
-		oauthDomain = U.or(oauthDomain, U.option("oauth-domain", (String) null));
+		oauthDomain = U.or(oauthDomain, Conf.option("oauth-domain", (String) null));
 
 		OAuth.STATE_CHECK = stateCheck;
 
@@ -58,8 +59,8 @@ public class OAuth {
 			String loginPath = "/_" + name + "Login";
 			String callbackPath = "/_" + name + "OauthCallback";
 
-			String clientId = U.config(name + ".clientId");
-			String clientSecret = U.config(name + ".clientSecret");
+			String clientId = Conf.option(name + ".clientId", "NO-CLIENT-ID");
+			String clientSecret = Conf.option(name + ".clientSecret", "NO-CLIENT-SECRET");
 
 			server.get(loginPath, new OAuthLoginHandler(provider, oauthDomain));
 			server.get(callbackPath, new OAuthTokenHandler(provider, oauthDomain, stateCheck, clientId, clientSecret,
@@ -80,12 +81,12 @@ public class OAuth {
 
 	public static String getLoginURL(HttpExchange x, OAuthProvider provider, String oauthDomain) {
 
-		oauthDomain = U.or(oauthDomain, U.option("oauth-domain", (String) null));
+		oauthDomain = U.or(oauthDomain, Conf.option("oauth-domain", (String) null));
 
 		String name = provider.getName().toLowerCase();
 
-		String clientId = U.config(name + ".clientId");
-		String clientSecret = U.config(name + ".clientSecret");
+		String clientId = Conf.option(name + ".clientId", "NO-CLIENT-ID");
+		String clientSecret = Conf.option(name + ".clientSecret", "NO-CLIENT-SECRET");
 
 		String callbackPath = "/_" + name + "OauthCallback";
 		String redirectUrl = oauthDomain != null ? oauthDomain + callbackPath : x.constructUrl(callbackPath);

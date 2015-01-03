@@ -41,6 +41,7 @@ import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.net.mime.MediaType;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.IUser;
 import org.rapidoid.util.U;
@@ -659,7 +660,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		responseCode(httpResponseCode);
 		ensureHeadersComplete();
 
-		if (U.production()) {
+		if (Conf.production()) {
 			if (response != null) {
 				write(response);
 			}
@@ -686,7 +687,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized String constructUrl(String path) {
-		return (U.hasOption("https") ? "https://" : "http://") + host() + path;
+		return (Conf.hasOption("https") ? "https://" : "http://") + host() + path;
 	}
 
 	@Override
@@ -861,11 +862,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized boolean devMode() {
-		if (U.dev()) {
+		if (Conf.dev()) {
 			return true;
 		}
 
-		if (U.production()) {
+		if (Conf.production()) {
 			return false;
 		}
 

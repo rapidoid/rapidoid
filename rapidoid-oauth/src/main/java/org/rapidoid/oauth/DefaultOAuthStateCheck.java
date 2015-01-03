@@ -1,5 +1,6 @@
 package org.rapidoid.oauth;
 
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 
 /*
@@ -26,7 +27,7 @@ public class DefaultOAuthStateCheck implements OAuthStateCheck {
 
 	@Override
 	public String generateState(String clientSecret, String sessionId) {
-		if (U.hasOption("oauth-no-state")) {
+		if (Conf.hasOption("oauth-no-state")) {
 			return "OK";
 		}
 
@@ -37,7 +38,7 @@ public class DefaultOAuthStateCheck implements OAuthStateCheck {
 
 	@Override
 	public boolean isValidState(String state, String clientSecret, String sessionId) {
-		if (U.hasOption("oauth-no-state")) {
+		if (Conf.hasOption("oauth-no-state")) {
 			return state.equals("OK");
 		}
 

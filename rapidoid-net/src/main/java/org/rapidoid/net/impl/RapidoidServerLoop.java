@@ -30,6 +30,7 @@ import java.nio.channels.SocketChannel;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.net.TCPServer;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 
 public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements TCPServer {
@@ -42,7 +43,7 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 	private int port = 8080;
 
 	@Inject(optional = true)
-	private int workersN = U.cpus();
+	private int workersN = Conf.cpus();
 
 	@Inject(optional = true)
 	private int bufSizeKB = 16;

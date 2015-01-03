@@ -24,8 +24,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.apache.commons.io.FileUtils;
-import org.rapidoid.http.Handler;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 

@@ -27,6 +27,7 @@ import java.nio.channels.SocketChannel;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.net.TCPClient;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 
 public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements TCPClient {
@@ -40,7 +41,7 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 	private int port = 80;
 
 	@Inject(optional = true)
-	private int workersN = U.cpus();
+	private int workersN = Conf.cpus();
 
 	@Inject(optional = true)
 	private int bufSizeKB = 16;

@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.rapidoid.db.model.Person;
 import org.rapidoid.lambda.Operation;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
@@ -51,7 +52,7 @@ public class DbStatisticalTest extends DbTestCommons {
 	@Test
 	public void testDbOperations() {
 
-		U.benchmarkMT(U.cpus(), "op", 50000, new Runnable() {
+		U.benchmarkMT(Conf.cpus(), "op", 50000, new Runnable() {
 			@Override
 			public synchronized void run() {
 

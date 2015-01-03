@@ -23,6 +23,7 @@ package org.rapidoid.db;
 import java.util.concurrent.CountDownLatch;
 
 import org.rapidoid.db.model.Person;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
@@ -37,7 +38,7 @@ public class DbPersistenceTest extends DbTestCommons {
 
 		U.startMeasure();
 
-		U.benchmarkMT(U.cpus(), "insert", count, new Runnable() {
+		U.benchmarkMT(Conf.cpus(), "insert", count, new Runnable() {
 			@Override
 			public void run() {
 				DB.insert(new Person("abc", -1));

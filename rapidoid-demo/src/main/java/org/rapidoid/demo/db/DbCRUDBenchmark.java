@@ -21,6 +21,7 @@ package org.rapidoid.demo.db;
  */
 
 import org.rapidoid.db.DB;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 
 public class DbCRUDBenchmark {
@@ -29,9 +30,9 @@ public class DbCRUDBenchmark {
 
 		U.args(args);
 
-		int size = U.option("size", 10000);
+		int size = Conf.option("size", 10000);
 
-		U.benchmarkMT(U.cpus(), "insert+read", size, new Runnable() {
+		U.benchmarkMT(Conf.cpus(), "insert+read", size, new Runnable() {
 			@Override
 			public void run() {
 				String name = "Niko";

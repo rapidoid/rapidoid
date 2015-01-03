@@ -21,6 +21,7 @@ package org.rapidoid.demo.compile;
  */
 
 import org.rapidoid.compile.Compile;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.rapidoid.wrap.Int;
 
@@ -29,8 +30,8 @@ public class CompilerBenchmark {
 	public static void main(String[] args) throws Throwable {
 		U.args(args);
 
-		int count = U.option("count", 10000);
-		int threads = U.option("threads", U.cpus());
+		int count = Conf.option("count", 10000);
+		int threads = Conf.option("threads", Conf.cpus());
 
 		final String src1 = "public class Main%s { public static void main(String[] args) { U.info(\"abc%s\"); } }";
 		final String src2 = "public class Book%s { String title=\"%s\"; int year = 0;} class Foo%s {}";

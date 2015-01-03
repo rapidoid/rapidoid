@@ -33,9 +33,9 @@ import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Moderator;
 import org.rapidoid.security.annotation.Role;
 import org.rapidoid.security.annotation.Roles;
-import org.rapidoid.util.Arr;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.CommonRoles;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Metadata;
 import org.rapidoid.util.U;
@@ -104,7 +104,7 @@ public class AppSecurity implements Constants {
 	}
 
 	protected boolean hasRoleInDevMode(String username, String role) {
-		return U.dev() && username.equals(role.toLowerCase() + "@debug");
+		return Conf.dev() && username.equals(role.toLowerCase() + "@debug");
 	}
 
 	protected boolean hasRole(String username, String role) {
@@ -113,8 +113,7 @@ public class AppSecurity implements Constants {
 		}
 
 		String roleConfig = "role-" + role.toLowerCase();
-		String[] usernames = U.option(roleConfig, EMPTY_STRING_ARRAY);
-		return !U.isEmpty(username) && Arr.indexOf(usernames, username) >= 0;
+		return !U.isEmpty(username) && Conf.contains(roleConfig, username);
 	}
 
 	public boolean isAdmin(String username) {

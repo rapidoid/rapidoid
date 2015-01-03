@@ -26,6 +26,7 @@ import java.util.List;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 
 public class DB {
@@ -42,7 +43,7 @@ public class DB {
 	}
 
 	public static String path() {
-		String path = U.option("db", "");
+		String path = Conf.option("db", "");
 
 		if (!path.isEmpty() && !path.endsWith(File.separator)) {
 			path += File.separator;

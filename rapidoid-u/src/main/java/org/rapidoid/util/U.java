@@ -51,7 +51,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
@@ -84,8 +83,6 @@ public class U {
 	private static Appendable LOG_OUTPUT = System.out;
 	private static ScheduledThreadPoolExecutor EXECUTOR;
 	private static long measureStart;
-	protected static String[] ARGS = {};
-	private static Properties CONFIG = null;
 
 	private static Pattern JRE_CLASS_PATTERN = Pattern
 			.compile("^(java|javax|javafx|com\\.sun|sun|com\\.oracle|oracle|jdk|org\\.omg|org\\.w3c).*");
@@ -1112,58 +1109,6 @@ public class U {
 		}
 	}
 
-	public static boolean hasOption(String name) {
-		notNull(ARGS, "command line arguments");
-
-		for (String op : ARGS) {
-			if (op.equalsIgnoreCase(name)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	public static String option(String name, String defaultValue) {
-		notNull(ARGS, "command line arguments");
-
-		for (String op : ARGS) {
-			if (op.startsWith(name + "=")) {
-				return op.substring(name.length() + 1);
-			}
-		}
-
-		return defaultValue;
-	}
-
-	public static int option(String name, int defaultValue) {
-		String n = option(name, (String) null);
-		return n != null ? Integer.parseInt(n) : defaultValue;
-	}
-
-	public static long option(String name, long defaultValue) {
-		String n = option(name, (String) null);
-		return n != null ? Long.parseLong(n) : defaultValue;
-	}
-
-	public static double option(String name, double defaultValue) {
-		String n = option(name, (String) null);
-		return n != null ? Double.parseDouble(n) : defaultValue;
-	}
-
-	public static String[] option(String name, String[] defaultValue) {
-		String opt = option(name, (String) null);
-		return opt != null ? opt.split("\\,") : defaultValue;
-	}
-
-	public static int cpus() {
-		return option("cpus", Runtime.getRuntime().availableProcessors());
-	}
-
-	public static boolean micro() {
-		return hasOption("micro");
-	}
-
 	public static boolean isEmpty(String value) {
 		return value == null || value.isEmpty();
 	}
@@ -1315,36 +1260,6 @@ public class U {
 		}
 	}
 
-	public static boolean production() {
-		return hasOption("production");
-	}
-
-	public static boolean dev() {
-		return hasOption("dev");
-	}
-
-	public static synchronized String config(String name) {
-		if (CONFIG == null) {
-			CONFIG = new Properties();
-
-			try {
-				URL config = resource("config");
-				if (config != null) {
-					CONFIG.load(config.openStream());
-				}
-
-				config = resource("config.private");
-				if (config != null) {
-					CONFIG.load(config.openStream());
-				}
-			} catch (IOException e) {
-				throw rte("Cannot load config!", e);
-			}
-		}
-
-		return CONFIG.getProperty(name);
-	}
-
 	public static String fillIn(String template, String placeholder, String value) {
 		return template.replace("{{" + placeholder + "}}", value);
 	}
@@ -1398,17 +1313,15 @@ public class U {
 	}
 
 	public static synchronized void args(String... args) {
-		if (args != null) {
-			ARGS = args;
+		Conf.args(args);
 
-			if (hasOption("debug") && getLogLevel().ordinal() > DEBUG.ordinal()) {
-				setLogLevel(DEBUG);
-			}
+		if (Conf.hasOption("debug") && getLogLevel().ordinal() > DEBUG.ordinal()) {
+			setLogLevel(DEBUG);
+		}
 
-			for (String arg : args) {
-				if (arg.matches("\\w+")) {
-					addon(arg);
-				}
+		for (String arg : args) {
+			if (arg.matches("\\+\\w+")) {
+				addon(arg.substring(1));
 			}
 		}
 	}

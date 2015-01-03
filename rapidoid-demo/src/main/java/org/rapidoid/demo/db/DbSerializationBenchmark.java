@@ -25,6 +25,7 @@ import java.util.Collections;
 
 import org.rapidoid.db.JacksonEntitySerializer;
 import org.rapidoid.inmem.InMem;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 
 public class DbSerializationBenchmark {
@@ -36,8 +37,8 @@ public class DbSerializationBenchmark {
 
 		final InMem db = new InMem(null, new JacksonEntitySerializer(null), Collections.EMPTY_SET);
 
-		int size = U.option("size", 100000);
-		int loops = U.option("loops", 100);
+		int size = Conf.option("size", 100000);
+		int loops = Conf.option("loops", 100);
 
 		for (int i = 0; i < size; i++) {
 			db.insert(new Person("john doe" + i, i));

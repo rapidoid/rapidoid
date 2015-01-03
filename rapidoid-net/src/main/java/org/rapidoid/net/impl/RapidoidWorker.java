@@ -36,6 +36,7 @@ import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.buffer.IncompleteReadException;
 import org.rapidoid.pool.ArrayPool;
 import org.rapidoid.pool.Pool;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.SimpleList;
 import org.rapidoid.util.U;
 
@@ -72,10 +73,10 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 		this.protocol = protocol;
 		this.helper = helper;
-		this.maxPipelineSize = U.option("pipeline-max", Integer.MAX_VALUE);
+		this.maxPipelineSize = Conf.option("pipeline-max", Integer.MAX_VALUE);
 
-		final int queueSize = U.micro() ? 1000 : 1000000;
-		final int growFactor = U.micro() ? 2 : 10;
+		final int queueSize = Conf.micro() ? 1000 : 1000000;
+		final int growFactor = Conf.micro() ? 2 : 10;
 
 		this.restarting = new ArrayBlockingQueue<RapidoidConnection>(queueSize);
 		this.connecting = new ArrayBlockingQueue<ConnectionTarget>(queueSize);

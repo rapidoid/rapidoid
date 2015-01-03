@@ -21,6 +21,7 @@ package org.rapidoid.demo.db;
  */
 
 import org.rapidoid.db.DB;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 
 public class DbPersistenceBenchmark {
@@ -29,13 +30,13 @@ public class DbPersistenceBenchmark {
 
 		U.args(args);
 
-		final int size = U.option("size", 10000);
+		final int size = Conf.option("size", 10000);
 
 		System.out.println("inserting...");
 
 		U.startMeasure();
 
-		U.benchmarkMT(U.cpus(), "insert", size, new Runnable() {
+		U.benchmarkMT(Conf.cpus(), "insert", size, new Runnable() {
 			@Override
 			public void run() {
 				DB.insert(new Person("abc", 10));
@@ -44,7 +45,7 @@ public class DbPersistenceBenchmark {
 
 		System.out.println("updating...");
 
-		U.benchmarkMT(U.cpus(), "update", size, new Runnable() {
+		U.benchmarkMT(Conf.cpus(), "update", size, new Runnable() {
 			@Override
 			public void run() {
 				DB.update(U.rnd(size) + 1, new Person("xyz", 10));
