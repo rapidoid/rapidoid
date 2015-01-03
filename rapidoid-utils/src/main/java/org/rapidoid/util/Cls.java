@@ -41,6 +41,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.prop.BeanProperties;
+import org.rapidoid.prop.Prop;
 
 public class Cls {
 
@@ -601,17 +603,35 @@ public class Cls {
 		return ids;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void setPropValue(Object instance, String propertyName, Object value) {
-		property(instance, propertyName, true).set(instance, value);
+		if (instance instanceof Map) {
+			((Map<Object, Object>) instance).put(propertyName, value);
+		} else {
+			property(instance, propertyName, true).set(instance, value);
+		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T getPropValue(Object instance, String propertyName, T defaultValue) {
-		Prop prop = property(instance, propertyName, false);
-		return prop != null ? prop.get(instance, defaultValue) : defaultValue;
+		if (instance instanceof Map<?, ?>) {
+			Map<?, ?> map = (Map<?, ?>) instance;
+			return (T) (map.containsKey(propertyName) ? map.get(propertyName) : defaultValue);
+		} else {
+			Prop prop = property(instance, propertyName, false);
+			return prop != null ? prop.get(instance, defaultValue) : defaultValue;
+		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T getPropValue(Object instance, String propertyName) {
-		return property(instance, propertyName, true).get(instance);
+		if (instance instanceof Map<?, ?>) {
+			Map<?, ?> map = (Map<?, ?>) instance;
+			U.must(map.containsKey(propertyName), "The map must contain key: %s", propertyName);
+			return (T) map.get(propertyName);
+		} else {
+			return property(instance, propertyName, true).get(instance);
+		}
 	}
 
 	public static Object[] instantiateAll(Class<?>... classes) {
