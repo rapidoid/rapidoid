@@ -64,10 +64,15 @@ public class HTML extends Tags {
 	}
 
 	public static Tag ul_li(Object... listItems) {
+		listItems = U.flat(listItems);
+
 		Tag list = ul();
 
 		for (Object item : listItems) {
-			list = list.append(li(item));
+			if (!isTag(item, "li")) {
+				item = li(item);
+			}
+			list = list.append(item);
 		}
 
 		return list;
