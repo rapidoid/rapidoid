@@ -207,6 +207,10 @@ public abstract class BootstrapWidgets extends HTML {
 		return ul(drop1).class_("nav navbar-nav navbar-" + leftOrRight(onLeft));
 	}
 
+	public static Tag menuDivider() {
+		return li().class_("divider");
+	}
+
 	public static FormTag navbarForm(boolean onLeft, Object btnContent, String[] fields, String[] placeholders) {
 		U.must(fields.length == placeholders.length, "");
 
