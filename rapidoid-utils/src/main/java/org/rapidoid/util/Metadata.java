@@ -57,4 +57,8 @@ public class Metadata {
 		return (T) fieldAnnotations(clazz, fieldName).get(annotationClass);
 	}
 
+	public static boolean isAnnotated(Class<?> target, Class<?> annotation) {
+		return classAnnotations(target).containsKey(annotation);
+	}
+
 }
