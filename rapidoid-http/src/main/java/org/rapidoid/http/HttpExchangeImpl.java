@@ -954,15 +954,20 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public HttpExchangeBody goBack(int steps) {
-
+		String dest = "/";
 		List<String> stack = session(SESSION_PAGE_STACK, null);
-		String dest = !stack.isEmpty() ? stack.get(stack.size() - 1) : "/";
 
-		for (int i = 0; i < steps; i++) {
-			if (stack != null && !stack.isEmpty()) {
-				stack.remove(stack.size() - 1);
+		if (stack != null) {
+			if (!stack.isEmpty()) {
+				dest = stack.get(stack.size() - 1);
+			}
+
+			for (int i = 0; i < steps; i++) {
 				if (!stack.isEmpty()) {
-					dest = stack.remove(stack.size() - 1);
+					stack.remove(stack.size() - 1);
+					if (!stack.isEmpty()) {
+						dest = stack.remove(stack.size() - 1);
+					}
 				}
 			}
 		}
