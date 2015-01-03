@@ -103,7 +103,15 @@ public class AppSecurity implements Constants {
 		return hasRole(username, role);
 	}
 
+	protected boolean hasRoleInDevMode(String username, String role) {
+		return U.dev() && username.equals(role.toLowerCase() + "@debug");
+	}
+
 	protected boolean hasRole(String username, String role) {
+		if (hasRoleInDevMode(username, role)) {
+			return true;
+		}
+
 		String roleConfig = "role-" + role.toLowerCase();
 		String[] usernames = U.option(roleConfig, EMPTY_STRING_ARRAY);
 		return !U.isEmpty(username) && Arr.indexOf(usernames, username) >= 0;
