@@ -951,6 +951,41 @@ public class U {
 		return part;
 	}
 
+	public static Object[] flat(Object... arr) {
+		List<Object> flat = list();
+		flatInsertInto(flat, 0, arr);
+		return flat.toArray();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> int flatInsertInto(List<T> dest, int index, Object item) {
+		if (index > dest.size()) {
+			index = dest.size();
+		}
+		int inserted = 0;
+
+		if (item instanceof Object[]) {
+			Object[] arr = (Object[]) item;
+			for (Object obj : arr) {
+				inserted += flatInsertInto(dest, index + inserted, obj);
+			}
+		} else if (item instanceof Collection<?>) {
+			Collection<?> coll = (Collection<?>) item;
+			for (Object obj : coll) {
+				inserted += flatInsertInto(dest, index + inserted, obj);
+			}
+		} else if (item != null) {
+			if (index >= dest.size()) {
+				dest.add((T) item);
+			} else {
+				dest.add(index + inserted, (T) item);
+			}
+			inserted++;
+		}
+
+		return inserted;
+	}
+
 	public static boolean must(boolean expectedCondition, String message) {
 		if (!expectedCondition) {
 			throw rte(message);
@@ -1131,6 +1166,10 @@ public class U {
 
 	public static boolean isEmpty(String value) {
 		return value == null || value.isEmpty();
+	}
+
+	public static boolean isEmpty(Object[] arr) {
+		return arr == null || arr.length == 0;
 	}
 
 	public static boolean isEmpty(Collection<?> coll) {

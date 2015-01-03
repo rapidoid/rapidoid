@@ -21,7 +21,6 @@ package org.rapidoid.html.impl;
  */
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -61,28 +60,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 	public TagImpl(Class<?> clazz, String name, Object[] contents) {
 		this.clazz = clazz;
 		this.name = name;
-
-		flatAndInsertContent(APPEND, contents);
-	}
-
-	private void flatAndInsertContent(int index, Object item) {
-		if (item instanceof Object[]) {
-			Object[] arr = (Object[]) item;
-			for (Object obj : arr) {
-				flatAndInsertContent(index, obj);
-			}
-		} else if (item instanceof Collection<?>) {
-			Collection<?> coll = (Collection<?>) item;
-			for (Object obj : coll) {
-				flatAndInsertContent(index, obj);
-			}
-		} else if (item != null) {
-			if (index == APPEND) {
-				contents.add(item);
-			} else {
-				contents.add(index, item);
-			}
-		}
+		U.flatInsertInto(this.contents, APPEND, contents);
 	}
 
 	@Override
@@ -149,7 +127,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 		TagImpl impl = impl(_copy);
 
 		impl.contents.clear();
-		impl.flatAndInsertContent(APPEND, content);
+		U.flatInsertInto(impl.contents, APPEND, content);
 
 		return _copy;
 	}
@@ -159,7 +137,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 		Tag _copy = copy();
 		TagImpl impl = impl(_copy);
 
-		impl.flatAndInsertContent(0, content);
+		U.flatInsertInto(impl.contents, 0, content);
 
 		return _copy;
 	}
@@ -169,7 +147,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 		Tag _copy = copy();
 		TagImpl impl = impl(_copy);
 
-		impl.flatAndInsertContent(APPEND, content);
+		U.flatInsertInto(impl.contents, APPEND, content);
 
 		return _copy;
 	}
