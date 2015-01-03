@@ -50,7 +50,7 @@ import org.rapidoid.wrap.Bool;
 public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements HttpExchange,
 		HttpInterception, Constants {
 
-	private static final String SESSION_USER = "_user";
+	protected static final String SESSION_USER = "_user";
 
 	private static final String SESSION_COOKIE = "JSESSIONID";
 

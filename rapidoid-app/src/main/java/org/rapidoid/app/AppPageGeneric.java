@@ -101,9 +101,10 @@ public class AppPageGeneric extends AppGUI {
 		ATag brand = a(Pages.titleOf(x, app)).href("/");
 		Tag userMenu = userMenu();
 		Tag themesMenu = theme == null ? themesMenu() : null;
+		Tag debugMenu = x.devMode() ? debugMenu() : null;
 		FormTag searchForm = searchForm();
 		Tag navMenu = navbarMenu(true, activeIndex, menuItems);
-		Object[] navbarContent = arr(navMenu, themesMenu, userMenu, searchForm);
+		Object[] navbarContent = arr(navMenu, debugMenu, themesMenu, userMenu, searchForm);
 
 		String modal = Cls.getPropValue(screen, "modal", null);
 		Object modalContent = modal != null ? Cls.getPropValue(screen, modal, null) : null;
@@ -219,8 +220,7 @@ public class AppPageGeneric extends AppGUI {
 	}
 
 	protected Tag loggedOutUserMenu() {
-		Tag dropdownMenu;
-		ATag ga = null, fb = null, li = null, gh = null;
+		Tag ga = null, fb = null, li = null, gh = null;
 
 		if (addon("googleLogin")) {
 			ga = a_awesome("google", "Sign in with Google").href(OAuth.getLoginURL(x, OAuthProvider.GOOGLE, null));
@@ -240,23 +240,34 @@ public class AppPageGeneric extends AppGUI {
 			gh = a_awesome("github", "Sign in with GitHub").href(OAuth.getLoginURL(x, OAuthProvider.GITHUB, null));
 		}
 
-		dropdownMenu = navbarDropdown(false, a_glyph("log-in", "Sign in", caret()), ga, fb, li, gh);
-		return dropdownMenu;
+		return navbarDropdown(false, a_glyph("log-in", "Sign in", caret()), ga, fb, li, gh);
 	}
 
 	protected Tag loggedInUserMenu() {
-		Tag dropdownMenu;
 		ATag profile = a_glyph("user", userDisplay(), caret());
 		ATag settings = addon("settings") ? a_glyph("cog", " Settings").href("/settings") : null;
 		ATag logout = a_glyph("log-out", "Logout").href("/_logout");
 
-		dropdownMenu = navbarDropdown(false, profile, settings, logout);
-		return dropdownMenu;
+		return navbarDropdown(false, profile, settings, logout);
 	}
 
 	protected String userDisplay() {
 		String username = x.user().username();
-		return username.substring(0, username.indexOf('@'));
+		int pos = username.indexOf('@');
+		return pos > 0 ? username.substring(0, pos) : username;
+	}
+
+	protected Tag debugMenu() {
+		ATag debug = a_awesome("bug", "Debug", caret());
+
+		ATag userInfo = a_awesome("bug", "User info").href("/debuguserinfo");
+
+		return navbarDropdown(false, debug, debugLoginUrl("admin"), debugLoginUrl("manager"),
+				debugLoginUrl("moderator"), debugLoginUrl("foo"), debugLoginUrl("bar"), menuDivider(), userInfo);
+	}
+
+	protected ATag debugLoginUrl(String username) {
+		return a_awesome("bug", "Sign in as " + U.capitalized(username)).href("/_debugLogin?user=" + username);
 	}
 
 	protected boolean isFluid() {

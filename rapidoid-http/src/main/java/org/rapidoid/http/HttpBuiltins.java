@@ -1,5 +1,8 @@
 package org.rapidoid.http;
 
+import org.rapidoid.util.U;
+import org.rapidoid.util.UserInfo;
+
 /*
  * #%L
  * rapidoid-http
@@ -29,7 +32,26 @@ public class HttpBuiltins {
 				if (x.hasSession() && x.isLoggedIn()) {
 					x.closeSession();
 				}
-				return x.redirect("/");
+				return x.goBack(0);
+			}
+		});
+		server.get("/_debugLogin", new Handler() {
+			@Override
+			public Object handle(HttpExchange x) {
+				x.accessDeniedIf(!x.devMode());
+
+				String username = x.param("user");
+				U.must(username.matches("\\w+"));
+
+				username += "@debug";
+
+				UserInfo user = new UserInfo();
+				user.username = username;
+				user.email = username;
+				user.name = U.capitalized(username);
+
+				x.sessionSet(HttpExchangeImpl.SESSION_USER, user);
+				return x.goBack(0);
 			}
 		});
 	}

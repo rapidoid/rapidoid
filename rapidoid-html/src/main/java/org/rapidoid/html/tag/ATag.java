@@ -28,4 +28,8 @@ public interface ATag extends SpecificTag<ATag> {
 
 	ATag href(String href);
 
+	String tabindex();
+
+	ATag tabindex(String tabindex);
+
 }
