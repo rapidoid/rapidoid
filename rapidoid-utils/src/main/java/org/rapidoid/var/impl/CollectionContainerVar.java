@@ -49,16 +49,17 @@ public class CollectionContainerVar extends AbstractVar<Boolean> {
 
 		if (value) {
 			if (coll != null) {
-				coll.add(item);
+				if (!coll.contains(item)) {
+					coll.add(item);
+				}
 			} else {
 				container.set(U.list(item));
 			}
 		} else {
 			if (coll != null) {
 				coll.remove(item);
-			} else {
-				container.set(U.list(item));
 			}
 		}
 	}
+
 }
