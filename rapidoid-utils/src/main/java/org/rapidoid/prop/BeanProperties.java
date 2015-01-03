@@ -30,6 +30,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 public class BeanProperties implements Iterable<Prop> {
@@ -71,15 +72,11 @@ public class BeanProperties implements Iterable<Prop> {
 
 					Collections.sort(selected, selector);
 
-					Map<String, Prop> map = new LinkedHashMap<String, Prop>();
-					for (Prop prop : selected) {
-						map.put(prop.getName(), prop);
-					}
-					return new BeanProperties(map);
+					return from(selected);
 				}
 			});
 
-	public BeanProperties(Map<String, Prop> properties) {
+	public BeanProperties(Map<String, ? extends Prop> properties) {
 		this.map = Collections.unmodifiableMap(properties);
 		this.props = Collections.unmodifiableList(new ArrayList<Prop>(properties.values()));
 		this.names = Collections.unmodifiableList(new ArrayList<String>(properties.keySet()));
@@ -101,6 +98,28 @@ public class BeanProperties implements Iterable<Prop> {
 	@Override
 	public String toString() {
 		return "BeanProperties [map=" + map + ", selections=" + selections + "]";
+	}
+
+	public static BeanProperties from(List<Prop> properties) {
+		Map<String, Prop> map = new LinkedHashMap<String, Prop>();
+
+		for (Prop prop : properties) {
+			map.put(prop.getName(), prop);
+		}
+
+		return new BeanProperties(map);
+	}
+
+	public static BeanProperties from(Map<String, ?> map) {
+		Map<String, Prop> properties = new LinkedHashMap<String, Prop>();
+
+		for (Entry<?, ?> e : map.entrySet()) {
+			Object key = e.getKey();
+			Prop prop = new MapProp(String.valueOf(key), key, Cls.of(e.getValue()));
+			properties.put(prop.getName(), prop);
+		}
+
+		return new BeanProperties(properties);
 	}
 
 }

@@ -41,7 +41,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.prop.BeanProp;
 import org.rapidoid.prop.BeanProperties;
+import org.rapidoid.prop.MapProp;
 import org.rapidoid.prop.Prop;
 
 public class Cls {
@@ -54,7 +56,7 @@ public class Cls {
 				@Override
 				public BeanProperties map(Class<?> clazz) throws Exception {
 
-					Map<String, Prop> properties = new LinkedHashMap<String, Prop>();
+					Map<String, BeanProp> properties = new LinkedHashMap<String, BeanProp>();
 
 					try {
 						for (Class<?> c = clazz; c != Object.class && c != null; c = c.getSuperclass()) {
@@ -77,10 +79,10 @@ public class Cls {
 											propName = name.substring(3, 4).toLowerCase() + name.substring(4);
 										}
 
-										Prop prop = properties.get(propName);
+										BeanProp prop = properties.get(propName);
 
 										if (prop == null) {
-											prop = new Prop(propName);
+											prop = new BeanProp(propName);
 											properties.put(propName, prop);
 										}
 
@@ -97,10 +99,10 @@ public class Cls {
 										if (params.length == 0 && !ret.equals(void.class)) {
 
 											String propName = name;
-											Prop prop = properties.get(propName);
+											BeanProp prop = properties.get(propName);
 
 											if (prop == null) {
-												prop = new Prop(propName);
+												prop = new BeanProp(propName);
 												properties.put(propName, prop);
 											}
 
@@ -109,10 +111,10 @@ public class Cls {
 										} else if (params.length == 1) {
 
 											String propName = name;
-											Prop prop = properties.get(propName);
+											BeanProp prop = properties.get(propName);
 
 											if (prop == null) {
-												prop = new Prop(propName);
+												prop = new BeanProp(propName);
 												properties.put(propName, prop);
 											}
 
@@ -124,9 +126,9 @@ public class Cls {
 							}
 
 							// remove properties with setters, without getters
-							for (Iterator<Entry<String, Prop>> it = properties.entrySet().iterator(); it.hasNext();) {
-								Entry<String, Prop> entry = (Entry<String, Prop>) it.next();
-								Prop minfo = entry.getValue();
+							for (Iterator<Entry<String, BeanProp>> it = properties.entrySet().iterator(); it.hasNext();) {
+								Entry<String, BeanProp> entry = (Entry<String, BeanProp>) it.next();
+								BeanProp minfo = entry.getValue();
 								if (minfo.getGetter() == null && minfo.getSetter() != null) {
 									it.remove();
 								}
@@ -140,10 +142,10 @@ public class Cls {
 								int modif = field.getModifiers();
 								if ((modif & Modifier.PUBLIC) != 0 && (modif & Modifier.STATIC) == 0) {
 									String fieldName = field.getName();
-									Prop prop = properties.get(fieldName);
+									BeanProp prop = properties.get(fieldName);
 
 									if (prop == null) {
-										prop = new Prop(fieldName, field, (modif & Modifier.FINAL) != 0);
+										prop = new BeanProp(fieldName, field, (modif & Modifier.FINAL) != 0);
 										properties.put(fieldName, prop);
 									}
 								}
@@ -154,7 +156,7 @@ public class Cls {
 						throw U.rte(e);
 					}
 
-					for (Entry<String, Prop> e : properties.entrySet()) {
+					for (Entry<String, BeanProp> e : properties.entrySet()) {
 						e.getValue().init();
 					}
 					return new BeanProperties(properties);
@@ -170,8 +172,17 @@ public class Cls {
 		return BEAN_PROPERTIES.get(clazz);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static BeanProperties propertiesOf(Object obj) {
-		return obj != null ? propertiesOf(obj.getClass()) : BeanProperties.NONE;
+		if (obj == null) {
+			return BeanProperties.NONE;
+		} else if (obj instanceof Map) {
+			return BeanProperties.from(((Map) obj));
+		} else if (obj instanceof Class) {
+			return propertiesOf((Class) obj);
+		} else {
+			return propertiesOf(obj.getClass());
+		}
 	}
 
 	public static Prop property(Class<?> clazz, String property, boolean mandatory) {
@@ -184,8 +195,13 @@ public class Cls {
 		return prop;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static Prop property(Object obj, String property, boolean mandatory) {
-		return property(obj.getClass(), property, mandatory);
+		if (obj instanceof Map) {
+			return new MapProp(property, property, of(((Map) obj).get(property)));
+		} else {
+			return property(obj.getClass(), property, mandatory);
+		}
 	}
 
 	public static boolean hasProperty(Class<?> clazz, String property) {
@@ -939,7 +955,7 @@ public class Cls {
 			}
 		}
 
-		BeanProperties props = propertiesOf(clazz);
+		BeanProperties props = propertiesOf(bean);
 		StringBuilder sb = new StringBuilder();
 
 		for (Prop prop : props) {
@@ -969,6 +985,10 @@ public class Cls {
 
 	public static Class<?> clazz(Type type) {
 		return type instanceof Class<?> ? (Class<?>) type : Object.class;
+	}
+
+	public static Class<?> of(Object obj) {
+		return obj != null ? obj.getClass() : Object.class;
 	}
 
 }

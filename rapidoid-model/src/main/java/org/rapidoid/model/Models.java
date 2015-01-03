@@ -20,7 +20,6 @@ package org.rapidoid.model;
  * #L%
  */
 
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -73,8 +72,8 @@ public class Models {
 		return prop(prop);
 	}
 
-	public static List<Property> propertiesOf(Class<?> beanType, String... propertyNames) {
-		return properties(Cls.propertiesOf(beanType).select(new ModelPropertySelector() {
+	public static List<Property> propertiesOf(Object target, String... propertyNames) {
+		return properties(Cls.propertiesOf(target).select(new ModelPropertySelector() {
 			@Override
 			public boolean eval(Prop prop) throws Exception {
 				return true;
@@ -82,8 +81,8 @@ public class Models {
 		}));
 	}
 
-	public static List<Property> editablePropertiesOf(Class<?> beanType, String... propertyNames) {
-		return properties(Cls.propertiesOf(beanType).select(new ModelPropertySelector(propertyNames) {
+	public static List<Property> editablePropertiesOf(Object target, String... propertyNames) {
+		return properties(Cls.propertiesOf(target).select(new ModelPropertySelector(propertyNames) {
 			@Override
 			public boolean eval(Prop prop) throws Exception {
 				return isEditable(prop);
@@ -91,8 +90,8 @@ public class Models {
 		}));
 	}
 
-	public static List<Property> readablePropertiesOf(Class<?> beanType, String... propertyNames) {
-		return properties(Cls.propertiesOf(beanType).select(new ModelPropertySelector(propertyNames) {
+	public static List<Property> readablePropertiesOf(Object target, String... propertyNames) {
+		return properties(Cls.propertiesOf(target).select(new ModelPropertySelector(propertyNames) {
 			@Override
 			public boolean eval(Prop prop) throws Exception {
 				return isReadable(prop);
@@ -133,8 +132,7 @@ public class Models {
 			return false;
 		}
 
-		Field field = prop.getField();
-		if (field != null && field.getAnnotation(Programmatic.class) != null) {
+		if (prop.getAnnotation(Programmatic.class) != null) {
 			return false;
 		}
 

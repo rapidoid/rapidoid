@@ -1,0 +1,111 @@
+package org.rapidoid.prop;
+
+/*
+ * #%L
+ * rapidoid-utils
+ * %%
+ * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
+import java.util.Map;
+
+import org.rapidoid.util.Cls;
+import org.rapidoid.util.TypeKind;
+import org.rapidoid.util.U;
+
+public class MapProp implements Prop {
+
+	private final String name;
+
+	private final Object key;
+
+	private final Class<?> type;
+
+	private final TypeKind typeKind;
+
+	public MapProp(String name, Object key, Class<?> type) {
+		this.name = name;
+		this.key = key;
+		this.type = type;
+		this.typeKind = Cls.kindOf(type);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T get(Object target) {
+		return (T) map(target).get(key);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T get(Object target, T defaultValue) {
+		Map<Object, Object> map = map(target);
+		return map.containsKey(key) ? (T) map.get(key) : defaultValue;
+	}
+
+	@Override
+	public void set(Object target, Object value) {
+		map(target).put(key, value);
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public boolean isReadOnly() {
+		return false;
+	}
+
+	@Override
+	public Class<?> getType() {
+		return type;
+	}
+
+	@Override
+	public TypeKind getTypeKind() {
+		return typeKind;
+	}
+
+	@Override
+	public ParameterizedType getGenericType() {
+		return null;
+	}
+
+	@Override
+	public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
+		return null;
+	}
+
+	@Override
+	public int typeArgsCount() {
+		return 0;
+	}
+
+	@Override
+	public Class<?> typeArg(int index) {
+		throw U.rte("No type args available!");
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Map<Object, Object> map(Object target) {
+		return (Map<Object, Object>) target;
+	}
+
+}

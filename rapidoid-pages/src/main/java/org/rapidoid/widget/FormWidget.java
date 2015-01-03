@@ -180,13 +180,20 @@ public class FormWidget extends AbstractWidget {
 	}
 
 	protected Collection<?> getCollectionPropertyOptions(Property prop) {
-		Type[] typeArgs = prop.genericType().getActualTypeArguments();
-		return typeArgs.length == 1 ? getOptionsOfType(Cls.clazz(typeArgs[0])) : Collections.EMPTY_LIST;
+		return propertyOptions(prop);
 	}
 
 	protected Collection<?> getVarPropertyOptions(Property prop) {
-		Type[] typeArgs = prop.genericType().getActualTypeArguments();
-		return typeArgs.length == 1 ? getOptionsOfType(Cls.clazz(typeArgs[0])) : Collections.EMPTY_LIST;
+		return propertyOptions(prop);
+	}
+
+	protected Collection<?> propertyOptions(Property prop) {
+		if (prop.genericType() != null) {
+			Type[] typeArgs = prop.genericType().getActualTypeArguments();
+			return typeArgs.length == 1 ? getOptionsOfType(Cls.clazz(typeArgs[0])) : Collections.EMPTY_LIST;
+		} else {
+			return Collections.EMPTY_LIST;
+		}
 	}
 
 	protected Collection<?> getOptionsOfType(Class<?> clazz) {
