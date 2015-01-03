@@ -1,4 +1,4 @@
-package org.rapidoid.util;
+package org.rapidoid.prop;
 
 /*
  * #%L
@@ -20,15 +20,17 @@ package org.rapidoid.util;
  * #L%
  */
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.lambda.Mapper;
-import org.rapidoid.lambda.Predicate;
+import org.rapidoid.util.U;
 
 public class BeanProperties implements Iterable<Prop> {
 
@@ -37,30 +39,50 @@ public class BeanProperties implements Iterable<Prop> {
 
 	public final Map<String, Prop> map;
 
-	public final Collection<Prop> props;
+	public final List<Prop> props;
 
-	public final Collection<String> names;
+	public final List<String> names;
 
-	public final Map<Predicate<Prop>, BeanProperties> selections = U
-			.autoExpandingMap(new Mapper<Predicate<Prop>, BeanProperties>() {
+	public final ConcurrentMap<String, Object> extras = U.concurrentMap();
+
+	public final Map<PropertySelector, BeanProperties> selections = U
+			.autoExpandingMap(new Mapper<PropertySelector, BeanProperties>() {
 				@Override
-				public BeanProperties map(Predicate<Prop> filter) throws Exception {
-					Map<String, Prop> selected = new LinkedHashMap<String, Prop>();
+				public BeanProperties map(PropertySelector selector) throws Exception {
 
-					for (Entry<String, Prop> e : map.entrySet()) {
-						if (U.eval(filter, e.getValue())) {
-							selected.put(e.getKey(), e.getValue());
+					String[] propertyNames = selector.requiredProperties();
+					List<Prop> selected = new ArrayList<Prop>(20);
+
+					if (!U.isEmpty(propertyNames)) {
+						for (String propName : propertyNames) {
+							Prop prop = map.get(propName);
+							U.must(prop != null, "Cannot find property '%s'!", propName);
+							if (U.eval(selector, prop)) {
+								selected.add(prop);
+							}
+						}
+					} else {
+						for (Entry<String, Prop> e : map.entrySet()) {
+							if (U.eval(selector, e.getValue())) {
+								selected.add(e.getValue());
+							}
 						}
 					}
 
-					return new BeanProperties(selected);
+					Collections.sort(selected, selector);
+
+					Map<String, Prop> map = new LinkedHashMap<String, Prop>();
+					for (Prop prop : selected) {
+						map.put(prop.getName(), prop);
+					}
+					return new BeanProperties(map);
 				}
 			});
 
 	public BeanProperties(Map<String, Prop> properties) {
 		this.map = Collections.unmodifiableMap(properties);
-		this.props = Collections.unmodifiableCollection(properties.values());
-		this.names = Collections.unmodifiableCollection(properties.keySet());
+		this.props = Collections.unmodifiableList(new ArrayList<Prop>(properties.values()));
+		this.names = Collections.unmodifiableList(new ArrayList<String>(properties.keySet()));
 	}
 
 	@Override
@@ -72,8 +94,8 @@ public class BeanProperties implements Iterable<Prop> {
 		return map.get(property);
 	}
 
-	public BeanProperties select(Predicate<Prop> filter) {
-		return selections.get(filter);
+	public BeanProperties select(PropertySelector selector) {
+		return selections.get(selector);
 	}
 
 	@Override

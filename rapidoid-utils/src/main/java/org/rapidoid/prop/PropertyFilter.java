@@ -1,8 +1,8 @@
-package org.rapidoid.db;
+package org.rapidoid.prop;
 
 /*
  * #%L
- * rapidoid-db-inmem
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 Nikolche Mihajlovski
  * %%
@@ -20,18 +20,16 @@ package org.rapidoid.db;
  * #L%
  */
 
-import org.rapidoid.prop.Prop;
-import org.rapidoid.prop.PropertyFilter;
+public abstract class PropertyFilter implements PropertySelector {
 
-public class DbHelper {
+	@Override
+	public String[] requiredProperties() {
+		return null;
+	}
 
-	public static final PropertyFilter DB_REL_PROPS = new PropertyFilter() {
-		@Override
-		public boolean eval(Prop prop) throws Exception {
-			Class<?> type = prop.getType();
-			return DbList.class.isAssignableFrom(type) || DbSet.class.isAssignableFrom(type)
-					|| DbRef.class.isAssignableFrom(type);
-		}
-	};
+	@Override
+	public int compare(Prop o1, Prop o2) {
+		return 0;
+	}
 
 }

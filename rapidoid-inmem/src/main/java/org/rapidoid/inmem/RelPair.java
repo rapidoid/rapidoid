@@ -20,7 +20,7 @@ package org.rapidoid.inmem;
  * #L%
  */
 
-import org.rapidoid.util.Prop;
+import org.rapidoid.prop.Prop;
 
 public class RelPair {
 

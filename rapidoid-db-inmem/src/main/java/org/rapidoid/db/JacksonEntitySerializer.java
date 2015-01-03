@@ -29,8 +29,8 @@ import org.rapidoid.db.impl.DefaultDbList;
 import org.rapidoid.db.impl.DefaultDbRef;
 import org.rapidoid.db.impl.DefaultDbSet;
 import org.rapidoid.inmem.EntitySerializer;
+import org.rapidoid.prop.Prop;
 import org.rapidoid.util.Cls;
-import org.rapidoid.util.Prop;
 import org.rapidoid.util.U;
 
 import com.fasterxml.jackson.core.JsonParser;

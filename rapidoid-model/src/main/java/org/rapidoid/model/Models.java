@@ -29,9 +29,10 @@ import org.rapidoid.model.impl.BeanItem;
 import org.rapidoid.model.impl.BeanListItems;
 import org.rapidoid.model.impl.BeanProperty;
 import org.rapidoid.model.impl.ListItems;
-import org.rapidoid.util.BeanProperties;
+import org.rapidoid.model.impl.MapItem;
+import org.rapidoid.prop.BeanProperties;
+import org.rapidoid.prop.Prop;
 import org.rapidoid.util.Cls;
-import org.rapidoid.util.Prop;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
@@ -68,78 +69,55 @@ public class Models {
 		Prop prop = props.get(property);
 		U.must(prop != null, "Cannot find property %s in class %s!", property, beanType);
 
-		return new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType());
+		return prop(prop);
 	}
 
 	public static List<Property> propertiesOf(Class<?> beanType, String... propertyNames) {
-		List<Property> pr = U.list();
-
-		BeanProperties props = Cls.propertiesOf(beanType);
-
-		if (propertyNames.length == 0) {
-
-			Prop idProp = props.get("id");
-			if (idProp != null) {
-				pr.add(new BeanProperty(idProp.getName(), idProp.getType(), idProp.getGenericType()));
+		return properties(Cls.propertiesOf(beanType).select(new ModelPropertySelector() {
+			@Override
+			public boolean eval(Prop prop) throws Exception {
+				return true;
 			}
-
-			for (Prop prop : props) {
-				if (!prop.getName().equals("id")) {
-					pr.add(new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType()));
-				}
-			}
-		} else {
-			for (String propName : propertyNames) {
-				Prop prop = props.get(propName);
-				U.must(prop != null, "Cannot find property '%s' in type: %s", propName, beanType);
-				pr.add(new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType()));
-			}
-		}
-		return pr;
+		}));
 	}
 
 	public static List<Property> editablePropertiesOf(Class<?> beanType, String... propertyNames) {
-		List<Property> pr = U.list();
-
-		BeanProperties props = Cls.propertiesOf(beanType);
-
-		if (propertyNames.length == 0) {
-			for (Prop prop : props) {
-				if (isEditable(prop)) {
-					pr.add(new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType()));
-				}
+		return properties(Cls.propertiesOf(beanType).select(new ModelPropertySelector(propertyNames) {
+			@Override
+			public boolean eval(Prop prop) throws Exception {
+				return isEditable(prop);
 			}
-		} else {
-			for (String propName : propertyNames) {
-				Prop prop = props.get(propName);
-				U.must(prop != null, "Cannot find property '%s' in type: %s", propName, beanType);
-				pr.add(new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType()));
-			}
-		}
-
-		return pr;
+		}));
 	}
 
 	public static List<Property> readablePropertiesOf(Class<?> beanType, String... propertyNames) {
-		List<Property> pr = U.list();
+		return properties(Cls.propertiesOf(beanType).select(new ModelPropertySelector(propertyNames) {
+			@Override
+			public boolean eval(Prop prop) throws Exception {
+				return isReadable(prop);
+			}
+		}));
+	}
 
-		BeanProperties props = Cls.propertiesOf(beanType);
+	@SuppressWarnings("unchecked")
+	private static List<Property> properties(BeanProperties props) {
+		String key = Property.class.getCanonicalName();
 
-		if (propertyNames.length == 0) {
+		List<Property> properties = (List<Property>) props.extras.get(key);
+
+		if (properties == null) {
+			properties = U.list();
 			for (Prop prop : props) {
-				if (isReadable(prop)) {
-					pr.add(new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType()));
-				}
+				properties.add(prop(prop));
 			}
-		} else {
-			for (String propName : propertyNames) {
-				Prop prop = props.get(propName);
-				U.must(prop != null, "Cannot find property '%s' in type: %s", propName, beanType);
-				pr.add(new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType()));
-			}
+			props.extras.put(key, properties);
 		}
 
-		return pr;
+		return properties;
+	}
+
+	private static BeanProperty prop(Prop prop) {
+		return new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType());
 	}
 
 	public static boolean isEditable(Prop prop) {

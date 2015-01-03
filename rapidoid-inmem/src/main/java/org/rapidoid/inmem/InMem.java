@@ -55,8 +55,10 @@ import java.util.regex.Pattern;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.prop.Prop;
+import org.rapidoid.prop.PropertyFilter;
+import org.rapidoid.prop.PropertySelector;
 import org.rapidoid.util.Cls;
-import org.rapidoid.util.Prop;
 import org.rapidoid.util.Tuple;
 import org.rapidoid.util.U;
 
@@ -95,7 +97,7 @@ public class InMem {
 
 	private static final Pattern P_WORD = Pattern.compile("\\w+");
 
-	protected static final Predicate<Prop> SEARCHABLE_PROPS = new Predicate<Prop>() {
+	protected static final PropertyFilter SEARCHABLE_PROPS = new PropertyFilter() {
 		@Override
 		public boolean eval(Prop prop) throws Exception {
 			return U.isAssignableTo(prop.getType(), Number.class, String.class, Boolean.class, Enum.class, Date.class);
@@ -108,7 +110,7 @@ public class InMem {
 
 	private final EntitySerializer serializer;
 
-	private final Predicate<Prop> relPropFilter;
+	private final PropertySelector relPropSelector;
 
 	private final ConcurrentMap<Tuple, RelPair> relPairs = new ConcurrentHashMap<Tuple, RelPair>();
 
@@ -143,7 +145,8 @@ public class InMem {
 	public InMem(String filename, EntitySerializer serializer, final Set<Class<?>> relClasses) {
 		this.filename = filename;
 		this.serializer = serializer;
-		this.relPropFilter = new Predicate<Prop>() {
+
+		this.relPropSelector = new PropertyFilter() {
 			@Override
 			public boolean eval(Prop prop) throws Exception {
 				for (Class<?> relCls : relClasses) {
@@ -240,7 +243,7 @@ public class InMem {
 	}
 
 	private void updateChangesFromRels(Object entity) {
-		for (Prop prop : Cls.propertiesOf(entity).select(relPropFilter)) {
+		for (Prop prop : Cls.propertiesOf(entity).select(relPropSelector)) {
 			Object value = prop.get(entity);
 
 			if (value != null) {
@@ -253,7 +256,7 @@ public class InMem {
 	}
 
 	private void deleteRelsFor(Object entity) {
-		for (Prop prop : Cls.propertiesOf(entity).select(relPropFilter)) {
+		for (Prop prop : Cls.propertiesOf(entity).select(relPropSelector)) {
 			Object value = prop.get(entity);
 
 			if (value != null) {
@@ -326,7 +329,7 @@ public class InMem {
 	private Prop findRelProperty(Class<?> fromCls, String rel, Class<?> toCls) {
 		Object entity = U.newInstance(fromCls);
 
-		for (Prop prop : Cls.propertiesOf(fromCls).select(relPropFilter)) {
+		for (Prop prop : Cls.propertiesOf(fromCls).select(relPropSelector)) {
 			Object value = prop.get(entity);
 
 			if (value != null) {

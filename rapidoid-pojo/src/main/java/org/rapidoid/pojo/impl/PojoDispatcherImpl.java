@@ -35,10 +35,10 @@ import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
 import org.rapidoid.pojo.PojoRequest;
-import org.rapidoid.util.BeanProperties;
+import org.rapidoid.prop.BeanProperties;
+import org.rapidoid.prop.Prop;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.Prop;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 
