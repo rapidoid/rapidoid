@@ -52,7 +52,7 @@ public class FormWidget extends AbstractWidget {
 	protected String[] fieldNames;
 	protected String[] fieldLabels;
 	protected FieldType[] fieldTypes;
-	protected Collection<?>[] options;
+	protected Collection<?>[] fieldOptions;
 	protected Var<?>[] vars;
 
 	public FormWidget(DataManager dataManager, boolean editable, Item item, String... properties) {
@@ -67,41 +67,91 @@ public class FormWidget extends AbstractWidget {
 		this.fieldNames = fieldNames;
 		this.fieldLabels = U.or(fieldLabels, Arrays.copyOf(fieldNames, fieldNames.length));
 		this.fieldTypes = fieldTypes;
-		this.options = options;
+		this.fieldOptions = options;
 		this.vars = vars;
 		this.buttons = buttons;
 	}
 
-	public FormWidget buttons(ButtonTag... buttons) {
-		this.buttons = buttons;
-		return this;
-	}
-
-	public FormWidget fieldType(String fieldName, FieldType fieldType) {
-		return fieldType(fieldIndex(fieldName), fieldType);
-	}
-
-	public FormWidget fieldType(int fieldIndex, FieldType fieldType) {
-		fieldTypes[fieldIndex] = fieldType;
-		return this;
-	}
-
-	public FieldType fieldType(int fieldIndex) {
-		return fieldTypes[fieldIndex];
-	}
+	/************************** FIELD LABEL ********************************/
 
 	public FormWidget fieldLabel(String fieldName, String fieldLabel) {
 		return fieldLabel(fieldIndex(fieldName), fieldLabel);
 	}
 
 	public FormWidget fieldLabel(int fieldIndex, String fieldLabel) {
-		fieldLabels[fieldIndex] = fieldLabel;
+		this.fieldLabels[fieldIndex] = fieldLabel;
 		return this;
 	}
 
-	public String fieldLabel(int fieldIndex) {
-		return fieldLabels[fieldIndex];
+	public String fieldLabel(String fieldName) {
+		return fieldLabel(fieldIndex(fieldName));
 	}
+
+	public String fieldLabel(int fieldIndex) {
+		return this.fieldLabels[fieldIndex];
+	}
+
+	/************************** FIELD TYPE ********************************/
+
+	public FormWidget fieldType(String fieldName, FieldType fieldType) {
+		return fieldType(fieldIndex(fieldName), fieldType);
+	}
+
+	public FormWidget fieldType(int fieldIndex, FieldType fieldType) {
+		this.fieldTypes[fieldIndex] = fieldType;
+		return this;
+	}
+
+	public String fieldType(String fieldName) {
+		return fieldLabel(fieldType(fieldName));
+	}
+
+	public FieldType fieldType(int fieldIndex) {
+		return this.fieldTypes[fieldIndex];
+	}
+
+	/************************** FIELD OPTIONS ********************************/
+
+	public FormWidget fieldOptions(String fieldName, Collection<?> fieldOptions) {
+		return fieldOptions(fieldIndex(fieldName), fieldOptions);
+	}
+
+	public FormWidget fieldOptions(int fieldIndex, Collection<?> fieldOptions) {
+		this.fieldOptions[fieldIndex] = fieldOptions;
+		return this;
+	}
+
+	public Collection<?> fieldOptions(String fieldName) {
+		return fieldOptions(fieldIndex(fieldName));
+	}
+
+	public Collection<?> fieldOptions(int fieldIndex) {
+		return this.fieldOptions[fieldIndex];
+	}
+
+	/************************** BUTTONS ********************************/
+
+	public FormWidget buttons(ButtonTag... buttons) {
+		this.buttons = buttons;
+		return this;
+	}
+
+	public Tag[] buttons() {
+		return this.buttons;
+	}
+
+	/************************** VARS ********************************/
+
+	public FormWidget vars(Var<?>... vars) {
+		this.vars = vars;
+		return this;
+	}
+
+	public Var<?>[] vars() {
+		return this.vars;
+	}
+
+	/************************** OTHER ********************************/
 
 	public int fieldIndex(String fieldName) {
 		for (int i = 0; i < fieldNames.length; i++) {
@@ -122,7 +172,7 @@ public class FormWidget extends AbstractWidget {
 		fieldNames = new String[propN];
 		fieldLabels = new String[propN];
 		fieldTypes = new FieldType[propN];
-		options = new Collection<?>[propN];
+		fieldOptions = new Collection<?>[propN];
 		vars = new Var[propN];
 
 		for (int i = 0; i < propN; i++) {
@@ -130,7 +180,7 @@ public class FormWidget extends AbstractWidget {
 			fieldNames[i] = prop.name();
 			fieldLabels[i] = prop.caption();
 			fieldTypes[i] = editable ? getPropertyFieldType(prop) : FieldType.LABEL;
-			options[i] = getPropertyOptions(prop);
+			fieldOptions[i] = getPropertyOptions(prop);
 			vars[i] = property(item, prop.name());
 		}
 	}
@@ -221,7 +271,7 @@ public class FormWidget extends AbstractWidget {
 
 	protected FormTag addFormFields(FormTag form) {
 		for (int i = 0; i < fieldNames.length; i++) {
-			form = form.append(field(fieldNames[i], fieldLabels[i], fieldTypes[i], options[i], vars[i]));
+			form = form.append(field(fieldNames[i], fieldLabels[i], fieldTypes[i], fieldOptions[i], vars[i]));
 		}
 		return form;
 	}
