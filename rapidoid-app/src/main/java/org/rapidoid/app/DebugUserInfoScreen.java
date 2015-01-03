@@ -22,7 +22,10 @@ package org.rapidoid.app;
 
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.security.Secure;
 import org.rapidoid.security.annotation.DevMode;
+import org.rapidoid.util.U;
+import org.rapidoid.widget.FormWidget;
 
 @DevMode
 public class DebugUserInfoScreen extends Screen {
@@ -30,8 +33,9 @@ public class DebugUserInfoScreen extends Screen {
 	public Object content(HttpExchange x) {
 		Tag caption = titleBox("Debug Mode - User Information");
 		if (x.isLoggedIn()) {
-			Object details = show(x.user(), "name", "username", "email");
-			return row(caption, details);
+			Object userDetails = show(x.user(), "name", "username", "email");
+			FormWidget userRoles = show(U.map("roles", Secure.getUserRoles(x.user().username())));
+			return row(caption, userDetails, userRoles);
 		} else {
 			return row(caption, h4("Not logged in!"));
 		}
