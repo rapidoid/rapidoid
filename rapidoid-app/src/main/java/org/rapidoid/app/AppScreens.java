@@ -25,7 +25,9 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.rapidoid.security.annotation.DevMode;
 import org.rapidoid.util.Arr;
+import org.rapidoid.util.Metadata;
 
 public class AppScreens implements Comparator<Class<?>> {
 
@@ -40,8 +42,9 @@ public class AppScreens implements Comparator<Class<?>> {
 	public Class<?>[] constructScreens(Map<String, Class<?>> mainScreens) {
 
 		int screensN = mainScreens.size();
-		for (String scr : SPECIAL_SCREENS) {
-			if (mainScreens.containsKey(scr)) {
+		for (Entry<String, Class<?>> e : mainScreens.entrySet()) {
+			Class<?> cls = e.getValue();
+			if (isSpecialScreen(cls)) {
 				screensN--;
 			}
 		}
@@ -49,14 +52,17 @@ public class AppScreens implements Comparator<Class<?>> {
 		Class<?>[] screens = new Class[screensN];
 		int ind = 0;
 		for (Entry<String, Class<?>> e : mainScreens.entrySet()) {
-
-			if (Arr.indexOf(SPECIAL_SCREENS, e.getKey()) < 0) {
+			if (!isSpecialScreen(e.getValue())) {
 				screens[ind++] = e.getValue();
 			}
 		}
 
 		Arrays.sort(screens, this);
 		return screens;
+	}
+
+	protected boolean isSpecialScreen(Class<?> cls) {
+		return Arr.indexOf(SPECIAL_SCREENS, cls.getSimpleName()) >= 0 || Metadata.isAnnotated(cls, DevMode.class);
 	}
 
 	@Override
