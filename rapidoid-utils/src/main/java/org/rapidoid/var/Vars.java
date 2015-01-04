@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.rapidoid.var.impl.ArrayContainerVar;
 import org.rapidoid.var.impl.CollectionContainerVar;
 import org.rapidoid.var.impl.EqualityVar;
+import org.rapidoid.var.impl.MandatoryVar;
 import org.rapidoid.var.impl.SimpleVar;
 
 /*
@@ -58,6 +59,10 @@ public class Vars {
 		} else {
 			return new ArrayContainerVar((Var<Object>) container, item);
 		}
+	}
+
+	public static <T> Var<T> mandatory(Var<T> var) {
+		return new MandatoryVar<T>(var);
 	}
 
 }
