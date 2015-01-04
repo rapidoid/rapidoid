@@ -385,7 +385,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static FormWidget show(DataManager dataManager, final Item item, String... properties) {
-		return U.customizable(FormWidget.class, dataManager, false, item, properties);
+		return U.customizable(FormWidget.class, dataManager, FormMode.SHOW, item, properties);
 	}
 
 	public static FormWidget edit(Object bean, String... properties) {
@@ -397,7 +397,19 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static FormWidget edit(DataManager dataManager, final Item item, String... properties) {
-		return U.customizable(FormWidget.class, dataManager, true, item, properties);
+		return U.customizable(FormWidget.class, dataManager, FormMode.EDIT, item, properties);
+	}
+
+	public static FormWidget create(Object bean, String... properties) {
+		return create(Models.item(bean), properties);
+	}
+
+	public static FormWidget create(final Item item, String... properties) {
+		return create(null, item, properties);
+	}
+
+	public static FormWidget create(DataManager dataManager, final Item item, String... properties) {
+		return U.customizable(FormWidget.class, dataManager, FormMode.CREATE, item, properties);
 	}
 
 	public static Tag page(boolean devMode, String pageTitle, Object head, Object body) {

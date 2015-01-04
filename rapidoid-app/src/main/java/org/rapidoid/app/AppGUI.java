@@ -69,6 +69,14 @@ public class AppGUI extends BootstrapWidgets {
 		return BootstrapWidgets.edit(dataManager(), item, properties);
 	}
 
+	public static FormWidget create(Object bean, String... properties) {
+		return create(Models.item(bean), properties);
+	}
+
+	public static FormWidget create(final Item item, String... properties) {
+		return BootstrapWidgets.create(dataManager(), item, properties);
+	}
+
 	public static DataManager dataManager() {
 		return U.customizable(DbDataManager.class, DB.db());
 	}

@@ -49,6 +49,7 @@ public class FormWidget extends AbstractWidget {
 
 	protected final DataManager dataManager;
 	protected final Item item;
+	protected final FormMode mode;
 
 	protected Tag[] buttons;
 	protected FormLayout layout = FormLayout.VERTICAL;
@@ -61,15 +62,17 @@ public class FormWidget extends AbstractWidget {
 
 	protected boolean hasFields = false;
 
-	public FormWidget(DataManager dataManager, boolean editable, Item item, String... properties) {
+	public FormWidget(DataManager dataManager, FormMode mode, Item item, String... properties) {
 		this.dataManager = dataManager;
+		this.mode = mode;
 		this.item = item;
-		init(editable, item, properties);
+		init(item, properties);
 	}
 
-	public FormWidget(DataManager dataManager, FormLayout layout, String[] fieldNames, String[] fieldLabels,
-			FieldType[] fieldTypes, Collection<?>[] options, Var<?>[] vars, Tag[] buttons) {
+	public FormWidget(DataManager dataManager, FormMode mode, FormLayout layout, String[] fieldNames,
+			String[] fieldLabels, FieldType[] fieldTypes, Collection<?>[] options, Var<?>[] vars, Tag[] buttons) {
 		this.dataManager = dataManager;
+		this.mode = mode;
 		this.item = null;
 		this.layout = layout;
 		this.fieldNames = fieldNames;
@@ -171,8 +174,9 @@ public class FormWidget extends AbstractWidget {
 		throw U.rte("Cannot find field '%s'!", fieldName);
 	}
 
-	protected void init(boolean editable, Item item, String... properties) {
-		final List<Property> props = editable ? item.editableProperties(properties) : item
+	protected void init(Item item, String... properties) {
+
+		final List<Property> props = editable() ? item.editableProperties(properties) : item
 				.readableProperties(properties);
 
 		int propN = props.size();
@@ -188,10 +192,14 @@ public class FormWidget extends AbstractWidget {
 			Property prop = props.get(i);
 			fieldNames[i] = prop.name();
 			fieldLabels[i] = prop.caption();
-			fieldTypes[i] = editable ? getPropertyFieldType(prop) : FieldType.LABEL;
+			fieldTypes[i] = editable() ? getPropertyFieldType(prop) : FieldType.LABEL;
 			fieldOptions[i] = getPropertyOptions(prop);
 			vars[i] = property(item, prop.name());
 		}
+	}
+
+	private boolean editable() {
+		return mode != FormMode.SHOW;
 	}
 
 	protected void initPermissions() {

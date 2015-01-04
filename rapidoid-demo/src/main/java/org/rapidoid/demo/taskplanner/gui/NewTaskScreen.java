@@ -40,7 +40,7 @@ public class NewTaskScreen extends Screen {
 	public Object content() {
 
 		Tag caption1 = titleBox("Add new task");
-		FormWidget frm = edit(task).buttons(SAVE, CANCEL);
+		FormWidget frm = create(task).buttons(ADD, CANCEL);
 		frm = frm.fieldType("description", FieldType.TEXTAREA);
 
 		Tag caption2 = titleBox("Most recent tasks");
@@ -49,7 +49,7 @@ public class NewTaskScreen extends Screen {
 		return row(col4(caption1, frm), col8(caption2, grid));
 	}
 
-	public void onSave(HttpExchange x) {
+	public void onAdd(HttpExchange x) {
 		task.owner.set(Users.current(x, User.class));
 		DB.insert(task);
 		task = new Task();
