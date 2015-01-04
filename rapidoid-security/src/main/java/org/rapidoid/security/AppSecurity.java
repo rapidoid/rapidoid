@@ -39,6 +39,7 @@ import org.rapidoid.util.Conf;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Metadata;
 import org.rapidoid.util.U;
+import org.rapidoid.var.Var;
 
 public class AppSecurity implements Constants {
 
@@ -146,6 +147,10 @@ public class AppSecurity implements Constants {
 		}
 
 		Object owner = Cls.getPropValue(record, "owner", null);
+
+		if (owner instanceof Var<?>) {
+			owner = ((Var<?>) owner).get();
+		}
 
 		return owner != null && username.equalsIgnoreCase(Cls.getPropValue(owner, "username", ""));
 	}

@@ -20,7 +20,9 @@ package org.rapidoid.security;
  * #L%
  */
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.rapidoid.security.annotation.Change;
 import org.rapidoid.security.annotation.Read;
@@ -96,6 +98,15 @@ public class Secure implements Constants {
 
 	public static DataPermissions getDataPermissions(String username, Class<?> clazz, Object target, String propertyName) {
 		U.notNull(clazz, "class");
+
+		if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)
+				|| Object[].class.isAssignableFrom(clazz)) {
+			return DataPermissions.ALL;
+		}
+
+		if (security.isAdmin(username)) {
+			return DataPermissions.ALL;
+		}
 
 		if (!hasRoleBasedAccess(username, clazz, target)) {
 			return DataPermissions.NONE;
