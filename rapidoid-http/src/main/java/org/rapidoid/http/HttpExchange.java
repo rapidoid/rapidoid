@@ -118,6 +118,8 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	IUser user();
 
+	String username();
+
 	<T> T user(Class<T> userClass);
 
 	boolean isAdmin();

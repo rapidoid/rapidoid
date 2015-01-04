@@ -796,7 +796,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return Secure.isAdmin(username());
 	}
 
-	private String username() {
+	@Override
+	public String username() {
 		return isLoggedIn() ? user().username() : null;
 	}
 
