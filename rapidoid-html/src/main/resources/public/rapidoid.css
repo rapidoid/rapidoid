@@ -47,3 +47,8 @@ span.highlight {
 .table-hover tbody tr:hover td {
 	background-color: #FFC !important;
 }
+
+.field-error {
+	font-weight: bold;
+	color: #700;
+}

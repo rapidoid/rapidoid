@@ -231,11 +231,18 @@ public class Pages {
 
 		Cmd cmd = ctx.getEventCmd(event);
 
+		Map<Integer, String> errors = U.map();
+
 		if (cmd != null) {
-			Map<Integer, Object> inp = Pages.inputs(x);
-			ctx.emitValues(inp);
+			Map<Integer, Object> inputs = Pages.inputs(x);
+			ctx.emitValues(inputs, errors);
 		} else {
 			U.warn("Invalid event!", "event", event);
+		}
+
+		if (!errors.isEmpty()) {
+			x.json();
+			return U.map("!errors", errors);
 		}
 
 		Pages.load(x, view);

@@ -62,15 +62,19 @@ public class TagContextImpl implements TagContext, Serializable {
 	}
 
 	@Override
-	public void emitValues(final Map<Integer, Object> values) {
+	public void emitValues(final Map<Integer, Object> values, Map<Integer, String> errors) {
 
 		for (Entry<Integer, Object> e : values.entrySet()) {
-			Var<Object> var = bindings.get(e.getKey());
-
-			U.must(var != null, "Invalid input handle: h_%s", e.getKey());
+			Integer inputId = e.getKey();
+			Var<Object> var = bindings.get(inputId);
+			U.must(var != null, "Invalid input handle: h_%s", inputId);
 
 			if (var != null) {
-				var.set(e.getValue());
+				try {
+					var.set(e.getValue());
+				} catch (Exception err) {
+					errors.put(inputId, "Invalid value!");
+				}
 			}
 		}
 	}

@@ -416,7 +416,8 @@ public class FormWidget extends AbstractWidget {
 			inputWrap = layout == FormLayout.HORIZONTAL ? div(inp).class_("col-sm-8") : inp;
 		}
 
-		Tag group = label != null ? div(label, inputWrap) : div(inputWrap);
+		Tag err = span("").class_("field-error");
+		Tag group = label != null ? div(label, inputWrap, err) : div(inputWrap, err);
 		group = group.class_("form-group");
 		return group;
 	}

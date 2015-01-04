@@ -1,12 +1,8 @@
-package org.rapidoid.html;
-
-import java.util.Map;
-
-import org.rapidoid.var.Var;
+package org.rapidoid.annotation;
 
 /*
  * #%L
- * rapidoid-html
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -24,14 +20,14 @@ import org.rapidoid.var.Var;
  * #L%
  */
 
-public interface TagContext {
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 
-	int newBinding(Var<Object> binding);
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-	void emitValues(Map<Integer, Object> values, Map<Integer, String> errors);
-
-	int newCommand(Cmd cmd);
-
-	Cmd getEventCmd(int eventId);
+@Target({ FIELD })
+@Retention(RUNTIME)
+public @interface Optional {
 
 }
