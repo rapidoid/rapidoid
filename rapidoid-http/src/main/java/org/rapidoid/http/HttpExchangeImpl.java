@@ -346,7 +346,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public String param(String name, String defaultValue) {
+	public synchronized String param(String name, String defaultValue) {
 		return U.or(params_().get(name), defaultValue);
 	}
 
@@ -361,7 +361,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public String header(String name, String defaultValue) {
+	public synchronized String header(String name, String defaultValue) {
 		return U.or(headers_().get(name), defaultValue);
 	}
 
@@ -391,7 +391,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public String data(String name, String defaultValue) {
+	public synchronized String data(String name, String defaultValue) {
 		return U.or(data_().get(name), defaultValue);
 	}
 
@@ -863,37 +863,37 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public int responseCode() {
+	public synchronized int responseCode() {
 		return this.responseCode;
 	}
 
 	@Override
-	public void run() {
+	public synchronized void run() {
 		router.dispatch(this);
 	}
 
 	@Override
-	public HttpExchange exchange() {
+	public synchronized HttpExchange exchange() {
 		return this;
 	}
 
 	@Override
-	public boolean hasError() {
+	public synchronized boolean hasError() {
 		return error != null;
 	}
 
 	@Override
-	public Throwable error() {
+	public synchronized Throwable error() {
 		return error;
 	}
 
 	@Override
-	public String pathSegment(int segmentIndex) {
+	public synchronized String pathSegment(int segmentIndex) {
 		return path().substring(1).split("/")[segmentIndex];
 	}
 
 	@Override
-	public HttpExchangeHeaders accessDeniedIf(boolean accessDeniedCondition) {
+	public synchronized HttpExchangeHeaders accessDeniedIf(boolean accessDeniedCondition) {
 		if (accessDeniedCondition) {
 			throw new SecurityException("Access denied!");
 		}
@@ -901,7 +901,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public HttpExchangeHeaders errorResponse(Throwable err) {
+	public synchronized HttpExchangeHeaders errorResponse(Throwable err) {
 		Throwable cause = U.rootCause(err);
 		if (cause instanceof SecurityException) {
 			return response(500, "Access Denied!", cause);
@@ -911,12 +911,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public HttpExchangeHeaders authorize(Class<?> clazz) {
+	public synchronized HttpExchangeHeaders authorize(Class<?> clazz) {
 		return accessDeniedIf(!Secure.canAccessClass(username(), clazz));
 	}
 
 	@Override
-	public boolean serveStatic() {
+	public synchronized boolean serveStatic() {
 		if (isGetReq()) {
 			String filename = path().substring(1);
 
@@ -937,7 +937,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public HttpExchangeBody goBack(int steps) {
+	public synchronized HttpExchangeBody goBack(int steps) {
 		String dest = "/";
 		List<String> stack = session(SESSION_PAGE_STACK, null);
 
@@ -960,7 +960,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@SuppressWarnings("unchecked")
-	public HttpExchangeBody addToPageStack() {
+	public synchronized HttpExchangeBody addToPageStack() {
 		List<String> stack = sessionGetOrCreate(SESSION_PAGE_STACK, ArrayList.class);
 
 		String last = !stack.isEmpty() ? stack.get(stack.size() - 1) : null;
