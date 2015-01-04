@@ -48,6 +48,7 @@ import org.rapidoid.var.Vars;
 public class FormWidget extends AbstractWidget {
 
 	protected final DataManager dataManager;
+	protected final Item item;
 
 	protected Tag[] buttons;
 	protected FormLayout layout = FormLayout.VERTICAL;
@@ -56,15 +57,20 @@ public class FormWidget extends AbstractWidget {
 	protected FieldType[] fieldTypes;
 	protected Collection<?>[] fieldOptions;
 	protected Var<?>[] vars;
+	protected DataPermissions[] permissions;
+
+	protected boolean hasFields = false;
 
 	public FormWidget(DataManager dataManager, boolean editable, Item item, String... properties) {
 		this.dataManager = dataManager;
+		this.item = item;
 		init(editable, item, properties);
 	}
 
 	public FormWidget(DataManager dataManager, FormLayout layout, String[] fieldNames, String[] fieldLabels,
 			FieldType[] fieldTypes, Collection<?>[] options, Var<?>[] vars, Tag[] buttons) {
 		this.dataManager = dataManager;
+		this.item = null;
 		this.layout = layout;
 		this.fieldNames = fieldNames;
 		this.fieldLabels = U.or(fieldLabels, Arrays.copyOf(fieldNames, fieldNames.length));
@@ -166,8 +172,8 @@ public class FormWidget extends AbstractWidget {
 	}
 
 	protected void init(boolean editable, Item item, String... properties) {
-		final List<Property> props = permitedProperties(editable, item.value(),
-				editable ? item.editableProperties(properties) : item.readableProperties(properties));
+		final List<Property> props = editable ? item.editableProperties(properties) : item
+				.readableProperties(properties);
 
 		int propN = props.size();
 
@@ -176,6 +182,7 @@ public class FormWidget extends AbstractWidget {
 		fieldTypes = new FieldType[propN];
 		fieldOptions = new Collection<?>[propN];
 		vars = new Var[propN];
+		permissions = new DataPermissions[propN];
 
 		for (int i = 0; i < propN; i++) {
 			Property prop = props.get(i);
@@ -187,18 +194,18 @@ public class FormWidget extends AbstractWidget {
 		}
 	}
 
-	protected List<Property> permitedProperties(boolean editable, Object target, List<Property> properties) {
-		Class<?> targetClass = Cls.of(target);
-		List<Property> permited = U.list();
+	protected void initPermissions() {
+		if (item != null) {
+			Object target = item.value();
+			Class<?> targetClass = Cls.of(target);
 
-		for (Property prop : properties) {
-			DataPermissions perms = Secure.getDataPermissions(exchange().username(), targetClass, target, prop.name());
-			if ((editable && perms.full()) || (!editable && perms.read)) {
-				permited.add(prop);
+			for (int i = 0; i < fieldNames.length; i++) {
+				if (permissions[i] == null) {
+					permissions[i] = Secure.getDataPermissions(exchange().username(), targetClass, target,
+							fieldNames[i]);
+				}
 			}
 		}
-
-		return permited;
 	}
 
 	protected FieldType getPropertyFieldType(Property prop) {
@@ -276,6 +283,8 @@ public class FormWidget extends AbstractWidget {
 		fieldLabels = U.or(fieldLabels, fieldNames);
 		U.must(fieldNames.length == fieldLabels.length);
 
+		initPermissions();
+
 		FormTag form = emptyForm();
 
 		form = addFormFields(form);
@@ -287,9 +296,22 @@ public class FormWidget extends AbstractWidget {
 
 	protected FormTag addFormFields(FormTag form) {
 		for (int i = 0; i < fieldNames.length; i++) {
-			form = form.append(field(fieldNames[i], fieldLabels[i], fieldTypes[i], fieldOptions[i], vars[i]));
+			if (isFieldAllowed(i)) {
+				form = form.append(field(fieldNames[i], fieldLabels[i], fieldTypes[i], fieldOptions[i], vars[i]));
+				hasFields = true;
+			}
 		}
+
+		if (!hasFields) {
+			form = form.append(h4("No data available!"));
+		}
+
 		return form;
+	}
+
+	protected boolean isFieldAllowed(int index) {
+		boolean edit = fieldTypes[index] != FieldType.LABEL;
+		return (edit && permissions[index].full()) || (!edit && permissions[index].read);
 	}
 
 	protected FormTag emptyForm() {
@@ -306,8 +328,12 @@ public class FormWidget extends AbstractWidget {
 		}
 
 		if (buttons != null) {
-			for (Object btn : buttons) {
-				btns = btns.append(btn);
+			if (hasFields) {
+				for (Object btn : buttons) {
+					btns = btns.append(btn);
+				}
+			} else {
+				btns = btns.append(CANCEL);
 			}
 		}
 

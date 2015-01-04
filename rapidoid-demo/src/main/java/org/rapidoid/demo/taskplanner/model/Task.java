@@ -1,10 +1,14 @@
 package org.rapidoid.demo.taskplanner.model;
 
+import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.app.entity.Entity;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
+import org.rapidoid.security.annotation.Change;
+import org.rapidoid.security.annotation.Read;
+import org.rapidoid.util.CommonRoles;
 
 /*
  * #%L
@@ -27,20 +31,28 @@ import org.rapidoid.db.DbSet;
  */
 
 @SuppressWarnings("serial")
+@Read({ CommonRoles.OWNER, CommonRoles.SHARED_WITH, CommonRoles.LOGGED_IN })
+@Change({ CommonRoles.OWNER })
 public class Task extends Entity {
 
+	@Change({ MODERATOR, OWNER })
 	public String title;
 
+	@Change({ MODERATOR, OWNER, SHARED_WITH })
 	public Priority priority = Priority.MEDIUM;
 
+	@Change({ MODERATOR, OWNER, SHARED_WITH })
 	public String description;
 
 	public int rating;
 
+	@Programmatic
 	public final DbRef<User> owner = DB.ref(this, "^owns");
 
+	@Read({ CommonRoles.OWNER })
 	public final DbSet<User> sharedWith = DB.set(this, "sharedWith");
 
+	@Read({ CommonRoles.OWNER, CommonRoles.SHARED_WITH })
 	public final DbList<Comment> comments = DB.list(this, "has");
 
 	public final DbSet<User> likedBy = DB.set(this, "^likes");
