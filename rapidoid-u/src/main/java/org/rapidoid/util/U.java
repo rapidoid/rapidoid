@@ -1121,6 +1121,25 @@ public class U {
 		return coll == null || coll.isEmpty();
 	}
 
+	public static boolean isEmpty(Map<?, ?> map) {
+		return map == null || map.isEmpty();
+	}
+
+	public static boolean isEmpty(Object value) {
+		if (value == null) {
+			return true;
+		} else if (value instanceof String) {
+			return isEmpty((String) value);
+		} else if (value instanceof Object[]) {
+			return isEmpty((Object[]) value);
+		} else if (value instanceof Collection<?>) {
+			return isEmpty((Collection<?>) value);
+		} else if (value instanceof Map<?, ?>) {
+			return isEmpty((Map<?, ?>) value);
+		}
+		return false;
+	}
+
 	public static String capitalized(String s) {
 		return s.isEmpty() ? s : s.substring(0, 1).toUpperCase() + s.substring(1);
 	}
