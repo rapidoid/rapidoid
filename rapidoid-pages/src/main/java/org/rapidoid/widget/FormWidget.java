@@ -311,15 +311,32 @@ public class FormWidget extends AbstractWidget {
 		}
 
 		if (!hasFields) {
-			form = form.append(h4("No data available!"));
+			form = form.append(h4("Insufficient permissions!"));
 		}
 
 		return form;
 	}
 
 	protected boolean isFieldAllowed(int index) {
-		boolean edit = fieldTypes[index] != FieldType.LABEL;
-		return (edit && permissions[index].full()) || (!edit && permissions[index].read);
+		DataPermissions perm = permissions[index];
+
+		switch (fieldMode(index)) {
+		case CREATE:
+			return perm.insert;
+
+		case EDIT:
+			return perm.read && perm.change;
+
+		case SHOW:
+			return perm.read;
+
+		default:
+			throw U.notExpected();
+		}
+	}
+
+	protected FormMode fieldMode(int index) {
+		return fieldTypes[index] != FieldType.LABEL ? mode : FormMode.SHOW;
 	}
 
 	protected FormTag emptyForm() {
@@ -340,8 +357,6 @@ public class FormWidget extends AbstractWidget {
 				for (Object btn : buttons) {
 					btns = btns.append(btn);
 				}
-			} else {
-				btns = btns.append(CANCEL);
 			}
 		}
 

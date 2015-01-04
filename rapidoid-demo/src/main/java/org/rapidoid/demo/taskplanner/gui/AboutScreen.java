@@ -26,8 +26,10 @@ import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ButtonTag;
+import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.util.U;
 
+@CanInsert("logged_in")
 class Book {
 	public String title;
 	public User author;
@@ -44,7 +46,7 @@ public class AboutScreen extends Screen {
 	}
 
 	public Tag addBook() {
-		return modal("Add new book", edit(new Book()), div(SAVE, CANCEL));
+		return modal("Add new book", create(new Book()), div(SAVE, CANCEL));
 	}
 
 	public Tag yesNo() {

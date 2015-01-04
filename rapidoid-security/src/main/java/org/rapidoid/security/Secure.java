@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.security.annotation.CanChange;
+import org.rapidoid.security.annotation.CanDelete;
+import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Metadata;
@@ -108,17 +110,21 @@ public class Secure implements Constants {
 			return DataPermissions.NONE;
 		}
 
-		CanRead read = Metadata.fieldAnnotation(clazz, propertyName, CanRead.class);
-		CanChange change = Metadata.fieldAnnotation(clazz, propertyName, CanChange.class);
+		CanRead canRead = Metadata.fieldAnnotation(clazz, propertyName, CanRead.class);
+		CanInsert canInsert = Metadata.fieldAnnotation(clazz, propertyName, CanInsert.class);
+		CanChange canChange = Metadata.fieldAnnotation(clazz, propertyName, CanChange.class);
+		CanDelete canDelete = Metadata.fieldAnnotation(clazz, propertyName, CanDelete.class);
 
-		if (read == null && change == null) {
+		if (canRead == null && canInsert == null && canChange == null && canDelete == null) {
 			return DataPermissions.ALL;
 		}
 
-		boolean canRead = read != null && hasAnyRole(username, read.value(), clazz, target);
-		boolean canChange = change != null && hasAnyRole(username, change.value(), clazz, target);
+		boolean read = canRead != null && hasAnyRole(username, canRead.value(), clazz, target);
+		boolean insert = canInsert != null && hasAnyRole(username, canInsert.value(), clazz, target);
+		boolean change = canChange != null && hasAnyRole(username, canChange.value(), clazz, target);
+		boolean delete = canDelete != null && hasAnyRole(username, canDelete.value(), clazz, target);
 
-		return DataPermissions.from(canRead, canChange);
+		return DataPermissions.from(read, insert, change, delete);
 	}
 
 	public static List<String> getUserRoles(String username) {

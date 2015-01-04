@@ -7,6 +7,7 @@ import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
 import org.rapidoid.security.annotation.CanChange;
+import org.rapidoid.security.annotation.CanDelete;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.CommonRoles;
@@ -35,6 +36,7 @@ import org.rapidoid.util.CommonRoles;
 @CanRead(CommonRoles.LOGGED_IN)
 @CanChange({ CommonRoles.OWNER })
 @CanInsert(CommonRoles.LOGGED_IN)
+@CanDelete(CommonRoles.OWNER)
 public class Task extends Entity {
 
 	@CanChange({ MODERATOR, OWNER })
@@ -57,6 +59,7 @@ public class Task extends Entity {
 	@CanRead({ CommonRoles.OWNER, CommonRoles.SHARED_WITH })
 	public final DbList<Comment> comments = DB.list(this, "has");
 
+	@Programmatic
 	public final DbSet<User> likedBy = DB.set(this, "^likes");
 
 }

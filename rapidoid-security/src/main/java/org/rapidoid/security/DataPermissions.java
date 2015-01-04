@@ -22,46 +22,43 @@ package org.rapidoid.security;
 
 public class DataPermissions {
 
-	public static final DataPermissions ALL = new DataPermissions(true, true);
+	public static final DataPermissions ALL = new DataPermissions(true, true, true, true);
 
-	public static final DataPermissions NONE = new DataPermissions(false, false);
+	public static final DataPermissions NONE = new DataPermissions(false, false, false, false);
 
-	public static final DataPermissions READ_ONLY = new DataPermissions(true, false);
-
-	public static final DataPermissions WRITE_ONLY = new DataPermissions(false, true);
+	public static final DataPermissions READ_ONLY = new DataPermissions(true, false, false, false);
 
 	public final boolean read;
 
+	public final boolean insert;
+
 	public final boolean change;
 
-	private DataPermissions(boolean read, boolean change) {
+	public final boolean delete;
+
+	private DataPermissions(boolean read, boolean insert, boolean change, boolean delete) {
 		this.read = read;
+		this.insert = insert;
 		this.change = change;
+		this.delete = delete;
 	}
 
-	public static DataPermissions from(boolean read, boolean change) {
-		if (read) {
-			return change ? ALL : READ_ONLY;
-		} else {
-			return change ? WRITE_ONLY : NONE;
-		}
+	public static DataPermissions from(boolean read, boolean insert, boolean change, boolean delete) {
+		return new DataPermissions(read, insert, change, delete);
 	}
 
 	public DataPermissions and(DataPermissions dp) {
-		return from(read && dp.read, change && dp.change);
+		return from(read && dp.read, insert && dp.insert, change && dp.change, delete && dp.delete);
 	}
 
 	public DataPermissions or(DataPermissions dp) {
-		return from(read || dp.read, change || dp.change);
+		return from(read || dp.read, insert || dp.insert, change || dp.change, delete || dp.delete);
 	}
 
 	@Override
 	public String toString() {
-		return "DataPermissions [read=" + read + ", change=" + change + "]";
-	}
-
-	public boolean full() {
-		return read && change;
+		return "DataPermissions [read=" + read + ", insert=" + insert + ", change=" + change + ", delete=" + delete
+				+ "]";
 	}
 
 }
