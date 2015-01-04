@@ -37,6 +37,8 @@ import org.rapidoid.html.tag.SelectTag;
 import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
+import org.rapidoid.security.DataPermissions;
+import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
@@ -164,8 +166,8 @@ public class FormWidget extends AbstractWidget {
 	}
 
 	protected void init(boolean editable, Item item, String... properties) {
-		final List<Property> props = editable ? item.editableProperties(properties) : item
-				.readableProperties(properties);
+		final List<Property> props = permitedProperties(editable, item.value(),
+				editable ? item.editableProperties(properties) : item.readableProperties(properties));
 
 		int propN = props.size();
 
@@ -183,6 +185,20 @@ public class FormWidget extends AbstractWidget {
 			fieldOptions[i] = getPropertyOptions(prop);
 			vars[i] = property(item, prop.name());
 		}
+	}
+
+	protected List<Property> permitedProperties(boolean editable, Object target, List<Property> properties) {
+		Class<?> targetClass = Cls.of(target);
+		List<Property> permited = U.list();
+
+		for (Property prop : properties) {
+			DataPermissions perms = Secure.getDataPermissions(exchange().username(), targetClass, target, prop.name());
+			if ((editable && perms.full()) || (!editable && perms.read)) {
+				permited.add(prop);
+			}
+		}
+
+		return permited;
 	}
 
 	protected FieldType getPropertyFieldType(Property prop) {

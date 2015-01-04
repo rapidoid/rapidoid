@@ -60,4 +60,8 @@ public class DataPermissions {
 		return "DataPermissions [read=" + read + ", change=" + change + "]";
 	}
 
+	public boolean full() {
+		return read && change;
+	}
+
 }
