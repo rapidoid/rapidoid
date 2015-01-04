@@ -85,10 +85,6 @@ public class AppSecurity implements Constants {
 			return false;
 		}
 
-		if (role.equalsIgnoreCase(CommonRoles.LOGGED_IN)) {
-			return !U.isEmpty(username);
-		}
-
 		if (record != null) {
 
 			if (role.equalsIgnoreCase(CommonRoles.OWNER)) {
@@ -110,6 +106,10 @@ public class AppSecurity implements Constants {
 	protected boolean hasRole(String username, String role) {
 		if (hasRoleInDevMode(username, role)) {
 			return true;
+		}
+
+		if (role.equalsIgnoreCase(CommonRoles.LOGGED_IN)) {
+			return !U.isEmpty(username);
 		}
 
 		String roleConfig = "role-" + role.toLowerCase();
