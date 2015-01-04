@@ -143,6 +143,44 @@ public class FormWidget extends AbstractWidget {
 		return this.fieldOptions[fieldIndex];
 	}
 
+	/************************** FIELD REQUIRED ********************************/
+
+	public FormWidget fieldRequired(String fieldName, boolean fieldRequired) {
+		return fieldRequired(fieldIndex(fieldName), fieldRequired);
+	}
+
+	public FormWidget fieldRequired(int fieldIndex, boolean fieldRequired) {
+		this.fieldRequired[fieldIndex] = fieldRequired;
+		return this;
+	}
+
+	public boolean fieldRequired(String fieldName) {
+		return fieldRequired(fieldIndex(fieldName));
+	}
+
+	public boolean fieldRequired(int fieldIndex) {
+		return this.fieldRequired[fieldIndex];
+	}
+
+	/************************** FIELD PERMISSIONS ********************************/
+
+	public FormWidget permissions(String fieldName, DataPermissions permissions) {
+		return permissions(fieldIndex(fieldName), permissions);
+	}
+
+	public FormWidget permissions(int fieldIndex, DataPermissions permissions) {
+		this.permissions[fieldIndex] = permissions;
+		return this;
+	}
+
+	public DataPermissions permissions(String fieldName) {
+		return permissions(fieldIndex(fieldName));
+	}
+
+	public DataPermissions permissions(int fieldIndex) {
+		return this.permissions[fieldIndex];
+	}
+
 	/************************** BUTTONS ********************************/
 
 	public FormWidget buttons(ButtonTag... buttons) {
