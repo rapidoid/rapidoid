@@ -39,6 +39,7 @@ import org.rapidoid.pojo.PojoHandlerNotFoundException;
 import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.rest.WebReq;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.BootstrapWidgets;
 
@@ -132,7 +133,7 @@ public class Pages {
 			return x;
 		}
 
-		return BootstrapWidgets.page(x.devMode(), pageTitle, pageHead, content);
+		return BootstrapWidgets.page(Conf.dev(), pageTitle, pageHead, content);
 	}
 
 	public static Object render(HttpExchange x, Object page) {

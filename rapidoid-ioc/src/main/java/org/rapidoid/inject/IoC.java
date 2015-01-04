@@ -286,7 +286,7 @@ public class IoC {
 
 		if (instance == null && useConfig) {
 			if (type.equals(Boolean.class) || type.equals(boolean.class)) {
-				instance = Conf.hasOption(name);
+				instance = Conf.is(name);
 			} else {
 				String opt = Conf.option(name, (String) null);
 				if (opt != null) {

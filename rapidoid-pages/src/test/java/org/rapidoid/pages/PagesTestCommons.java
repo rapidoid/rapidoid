@@ -105,9 +105,7 @@ public class PagesTestCommons extends TestCommons {
 		InMemoryHttpSession session = new InMemoryHttpSession();
 		session.openSession("sess1");
 		session.setAttribute("sess1", Pages.SESSION_CTX, ctx);
-		x.setSession(session);
-
-		x.setResponses(new HttpResponses(false, false));
+		x.init(new HttpResponses(false, false), session, null);
 
 		HttpExchanges.setThreadLocalExchange(x);
 		return x;

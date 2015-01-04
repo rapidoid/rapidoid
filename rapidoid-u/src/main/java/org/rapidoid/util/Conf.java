@@ -33,11 +33,6 @@ public class Conf {
 
 	private static final ConcurrentMap<String, Object> CFG = U.concurrentMap();
 
-	public static boolean hasOption(String name) {
-		init();
-		return CFG.containsKey(name.toLowerCase());
-	}
-
 	private static synchronized void init() {
 		if (!initialized) {
 			initialized = true;
@@ -66,6 +61,7 @@ public class Conf {
 	public static synchronized void args(String... args) {
 		CFG.clear();
 		initialized = false;
+		init();
 
 		if (args != null) {
 			for (String arg : args) {
@@ -85,17 +81,25 @@ public class Conf {
 		}
 	}
 
-	private static void configure(String name, String value) {
+	public static void configure(String name, String value) {
+		init();
 		String[] parts = value.split(",");
 		Object val = parts.length > 1 ? U.list(parts) : value;
 		CFG.put(name, val);
 	}
 
+	public static void unconfigure(String name) {
+		init();
+		CFG.remove(name);
+	}
+
 	public static Object option(String name) {
+		init();
 		return CFG.get(name);
 	}
 
 	public static String option(String name, String defaultValue) {
+		init();
 		return CFG.containsKey(name) ? (String) CFG.get(name) : defaultValue;
 	}
 
@@ -112,6 +116,15 @@ public class Conf {
 	public static double option(String name, double defaultValue) {
 		String n = option(name, (String) null);
 		return n != null ? Double.parseDouble(n) : defaultValue;
+	}
+
+	public static boolean has(String name, String value) {
+		Object opt = option(name);
+		return U.eq(opt, value);
+	}
+
+	public static boolean is(String name) {
+		return has(name, "true");
 	}
 
 	public static boolean contains(String name, String value) {
@@ -131,15 +144,15 @@ public class Conf {
 	}
 
 	public static boolean micro() {
-		return hasOption("micro");
+		return has("size", "micro");
 	}
 
 	public static boolean production() {
-		return hasOption("production");
+		return has("mode", "production");
 	}
 
 	public static boolean dev() {
-		return hasOption("dev");
+		return has("mode", "dev");
 	}
 
 }

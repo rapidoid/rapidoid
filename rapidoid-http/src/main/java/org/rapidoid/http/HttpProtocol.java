@@ -66,9 +66,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	}
 
 	private void processRequest(HttpExchangeImpl x) {
-		x.setResponses(responses);
-		x.setSession(session);
-		x.setRouter(router);
+		x.init(responses, session, router);
 
 		HttpExchanges.setThreadLocalExchange(x);
 

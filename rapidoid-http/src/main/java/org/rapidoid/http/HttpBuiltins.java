@@ -1,5 +1,6 @@
 package org.rapidoid.http;
 
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UserInfo;
 
@@ -38,7 +39,7 @@ public class HttpBuiltins {
 		server.get("/_debugLogin", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				x.accessDeniedIf(!x.devMode());
+				x.accessDeniedIf(!Conf.dev());
 
 				String username = x.param("user");
 				U.must(username.matches("\\w+"));

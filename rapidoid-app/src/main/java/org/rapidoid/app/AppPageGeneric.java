@@ -35,6 +35,7 @@ import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 
 public class AppPageGeneric extends AppGUI {
@@ -101,7 +102,7 @@ public class AppPageGeneric extends AppGUI {
 		ATag brand = a(Pages.titleOf(x, app)).href("/");
 		Tag userMenu = userMenu();
 		Tag themesMenu = theme == null ? themesMenu() : null;
-		Tag debugMenu = x.devMode() ? debugMenu() : null;
+		Tag debugMenu = Conf.dev() ? debugMenu() : null;
 		FormTag searchForm = searchForm();
 		Tag navMenu = navbarMenu(true, activeIndex, menuItems);
 		Object[] navbarContent = arr(navMenu, debugMenu, themesMenu, userMenu, searchForm);

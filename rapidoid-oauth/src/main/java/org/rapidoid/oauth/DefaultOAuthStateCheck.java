@@ -27,7 +27,7 @@ public class DefaultOAuthStateCheck implements OAuthStateCheck {
 
 	@Override
 	public String generateState(String clientSecret, String sessionId) {
-		if (Conf.hasOption("oauth-no-state")) {
+		if (Conf.is("oauth-no-state")) {
 			return "OK";
 		}
 
@@ -38,7 +38,7 @@ public class DefaultOAuthStateCheck implements OAuthStateCheck {
 
 	@Override
 	public boolean isValidState(String state, String clientSecret, String sessionId) {
-		if (Conf.hasOption("oauth-no-state")) {
+		if (Conf.is("oauth-no-state")) {
 			return state.equals("OK");
 		}
 

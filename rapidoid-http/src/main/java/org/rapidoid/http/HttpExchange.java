@@ -132,8 +132,6 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	boolean isPostReq();
 
-	boolean devMode();
-
 	/* HELPERS: */
 
 	String constructUrl(String path);

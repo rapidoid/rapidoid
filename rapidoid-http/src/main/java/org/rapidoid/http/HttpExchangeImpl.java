@@ -420,14 +420,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return headers_().get("host");
 	}
 
-	public synchronized void setResponses(HttpResponses responses) {
-		this.responses = responses;
-	}
-
-	public synchronized void setSession(HttpSession session) {
-		this.session = session;
-	}
-
 	@Override
 	public synchronized HttpExchange addHeader(byte[] name, byte[] value) {
 		if (responseCode <= 0) {
@@ -667,7 +659,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		} else {
 			String title = U.or(response, "Error occured!");
 			if (err != null) {
-				if (devMode()) {
+				if (Conf.dev()) {
 					HTMLSnippets.writeErrorPage(this, title, err);
 				} else {
 					HTMLSnippets.writeFullPage(this, title, "");
@@ -687,7 +679,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized String constructUrl(String path) {
-		return (Conf.hasOption("https") ? "https://" : "http://") + host() + path;
+		return (Conf.is("https") ? "https://" : "http://") + host() + path;
 	}
 
 	@Override
@@ -860,12 +852,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return new HttpOutputStream(this);
 	}
 
-	@Override
-	public synchronized boolean devMode() {
-		if (Conf.dev()) {
-			return true;
-		}
-
+	private synchronized boolean detectedDevMode() {
 		if (Conf.production()) {
 			return false;
 		}
@@ -883,10 +870,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public void run() {
 		router.dispatch(this);
-	}
-
-	public void setRouter(Router router) {
-		this.router = router;
 	}
 
 	@Override
@@ -991,6 +974,15 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		}
 
 		return this;
+	}
+
+	public synchronized void init(HttpResponses responses, HttpSession session, Router router) {
+		this.responses = responses;
+		this.session = session;
+		this.router = router;
+		if (!Conf.production()) {
+			Conf.configure("mode", detectedDevMode() ? "dev" : "");
+		}
 	}
 
 }

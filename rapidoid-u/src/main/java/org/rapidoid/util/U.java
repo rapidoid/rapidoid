@@ -1315,7 +1315,7 @@ public class U {
 	public static synchronized void args(String... args) {
 		Conf.args(args);
 
-		if (Conf.hasOption("debug") && getLogLevel().ordinal() > DEBUG.ordinal()) {
+		if (Conf.is("debug") && getLogLevel().ordinal() > DEBUG.ordinal()) {
 			setLogLevel(DEBUG);
 		}
 
