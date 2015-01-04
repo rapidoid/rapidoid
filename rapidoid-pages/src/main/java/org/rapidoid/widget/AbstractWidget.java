@@ -24,13 +24,22 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.U;
 
 public abstract class AbstractWidget extends BootstrapWidgets implements TagWidget<HttpExchange>, Constants {
+
+	private HttpExchange x;
+
+	protected HttpExchange exchange() {
+		U.notNull(x, "HTTP exchange");
+		return x;
+	}
 
 	protected abstract Tag create();
 
 	@Override
 	public Tag toTag(HttpExchange x) {
+		this.x = x;
 		return create();
 	}
 
