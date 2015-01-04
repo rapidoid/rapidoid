@@ -213,7 +213,7 @@ public class AppPageGeneric extends AppGUI {
 		for (int i = 0; i < themes.length; i++) {
 			String thm = themes[i];
 			String js = U.format("document.cookie='THEME=%s; path=/'; location.reload();", thm);
-			themess[i] = a_void(U.capitalized(thm)).onclick(js);
+			themess[i] = a_void("Theme " + U.capitalized(thm)).onclick(js);
 		}
 
 		Tag themesMenu = addon("themes") ? navbarDropdown(false, theme, themess) : null;
