@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.rapidoid.annotation.Optional;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
@@ -40,6 +41,7 @@ import org.rapidoid.model.Property;
 import org.rapidoid.security.DataPermissions;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.Metadata;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
@@ -57,6 +59,7 @@ public class FormWidget extends AbstractWidget {
 	protected String[] fieldLabels;
 	protected FieldType[] fieldTypes;
 	protected Collection<?>[] fieldOptions;
+	protected boolean[] fieldRequired;
 	protected Var<?>[] vars;
 	protected DataPermissions[] permissions;
 
@@ -185,6 +188,7 @@ public class FormWidget extends AbstractWidget {
 		fieldLabels = new String[propN];
 		fieldTypes = new FieldType[propN];
 		fieldOptions = new Collection<?>[propN];
+		fieldRequired = new boolean[propN];
 		vars = new Var[propN];
 		permissions = new DataPermissions[propN];
 
@@ -194,6 +198,7 @@ public class FormWidget extends AbstractWidget {
 			fieldLabels[i] = prop.caption();
 			fieldTypes[i] = editable() ? getPropertyFieldType(prop) : FieldType.LABEL;
 			fieldOptions[i] = getPropertyOptions(prop);
+			fieldRequired[i] = Metadata.get(prop.annotations(), Optional.class) == null;
 			vars[i] = property(item, prop.name());
 		}
 	}
@@ -305,7 +310,11 @@ public class FormWidget extends AbstractWidget {
 	protected FormTag addFormFields(FormTag form) {
 		for (int i = 0; i < fieldNames.length; i++) {
 			if (isFieldAllowed(i)) {
-				form = form.append(field(fieldNames[i], fieldLabels[i], fieldTypes[i], fieldOptions[i], vars[i]));
+				Var<?> var = vars[i];
+				if (fieldRequired[i]) {
+					var = Vars.mandatory(var);
+				}
+				form = form.append(field(fieldNames[i], fieldLabels[i], fieldTypes[i], fieldOptions[i], var));
 				hasFields = true;
 			}
 		}

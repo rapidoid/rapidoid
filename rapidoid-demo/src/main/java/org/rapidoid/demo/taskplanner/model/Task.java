@@ -1,5 +1,6 @@
 package org.rapidoid.demo.taskplanner.model;
 
+import org.rapidoid.annotation.Optional;
 import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.app.entity.Entity;
 import org.rapidoid.db.DB;
@@ -45,6 +46,7 @@ public class Task extends Entity {
 	@CanChange({ MODERATOR, OWNER, SHARED_WITH })
 	public Priority priority = Priority.MEDIUM;
 
+	@Optional
 	@CanChange({ MODERATOR, OWNER, SHARED_WITH })
 	public String description;
 
