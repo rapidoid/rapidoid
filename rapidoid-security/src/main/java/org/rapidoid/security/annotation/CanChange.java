@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
 
 @Target({ TYPE, FIELD })
 @Retention(RUNTIME)
-public @interface Change {
+public @interface CanChange {
 
 	String[] value();
 

@@ -24,8 +24,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.rapidoid.security.annotation.Change;
-import org.rapidoid.security.annotation.Read;
+import org.rapidoid.security.annotation.CanChange;
+import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Metadata;
 import org.rapidoid.util.U;
@@ -104,16 +104,12 @@ public class Secure implements Constants {
 			return DataPermissions.ALL;
 		}
 
-		if (security.isAdmin(username)) {
-			return DataPermissions.ALL;
-		}
-
 		if (!hasRoleBasedAccess(username, clazz, target)) {
 			return DataPermissions.NONE;
 		}
 
-		Read read = Metadata.fieldAnnotation(clazz, propertyName, Read.class);
-		Change change = Metadata.fieldAnnotation(clazz, propertyName, Change.class);
+		CanRead read = Metadata.fieldAnnotation(clazz, propertyName, CanRead.class);
+		CanChange change = Metadata.fieldAnnotation(clazz, propertyName, CanChange.class);
 
 		if (read == null && change == null) {
 			return DataPermissions.ALL;

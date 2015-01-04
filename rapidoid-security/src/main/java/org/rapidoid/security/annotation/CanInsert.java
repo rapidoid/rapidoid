@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
 
 @Target({ TYPE, FIELD })
 @Retention(RUNTIME)
-public @interface Read {
+public @interface CanInsert {
 
 	String[] value();
 

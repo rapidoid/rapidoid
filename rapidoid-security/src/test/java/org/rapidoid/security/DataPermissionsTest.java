@@ -26,20 +26,20 @@ import java.util.List;
 
 import org.rapidoid.annotation.Composite;
 import org.rapidoid.annotation.Programmatic;
-import org.rapidoid.security.annotation.Change;
-import org.rapidoid.security.annotation.Read;
+import org.rapidoid.security.annotation.CanChange;
+import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
-@Read({ ANYBODY })
-@Change({ ANYBODY })
+@CanRead({ ANYBODY })
+@CanChange({ ANYBODY })
 class AbstractEntity {
 
-	@Change({})
+	@CanChange({})
 	public long id;
 
-	@Read("abc")
-	@Change({ "OTHER_ROLE" })
+	@CanRead("abc")
+	@CanChange({ "OTHER_ROLE" })
 	public String notes;
 
 }
@@ -47,18 +47,18 @@ class AbstractEntity {
 class Category {
 	public String name;
 
-	@Change("OTHER_ROLE")
+	@CanChange("OTHER_ROLE")
 	public String desc;
 }
 
-@Read({ ANYBODY, "OTHER_ROLE" })
+@CanRead({ ANYBODY, "OTHER_ROLE" })
 class Comment {
 
-	@Change({ MODERATOR, OWNER })
+	@CanChange({ MODERATOR, OWNER })
 	public String content;
 
-	@Read({ MANAGER })
-	@Change({ MANAGER })
+	@CanRead({ MANAGER })
+	@CanChange({ MANAGER })
 	public boolean visible = true;
 
 	@Programmatic
@@ -66,8 +66,8 @@ class Comment {
 
 }
 
-@Read({ OWNER, SHARED_WITH, "OTHER_ROLE" })
-@Change({ OWNER })
+@CanRead({ OWNER, SHARED_WITH, "OTHER_ROLE" })
+@CanChange({ OWNER })
 class Issue extends AbstractEntity {
 
 	public String title;
@@ -79,13 +79,13 @@ class Issue extends AbstractEntity {
 	public String description;
 
 	@Composite
-	@Change({ OWNER, SHARED_WITH })
+	@CanChange({ OWNER, SHARED_WITH })
 	public List<Comment> comments;
 
 	@Programmatic
 	public User owner;
 
-	@Change({ OWNER })
+	@CanChange({ OWNER })
 	public List<User> sharedWith;
 
 }
