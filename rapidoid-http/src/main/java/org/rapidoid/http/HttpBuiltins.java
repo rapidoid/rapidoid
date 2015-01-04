@@ -30,10 +30,11 @@ public class HttpBuiltins {
 		server.get("/_logout", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
+				x.goBack(0);
 				if (x.hasSession() && x.isLoggedIn()) {
 					x.closeSession();
 				}
-				return x.goBack(0);
+				return x;
 			}
 		});
 		server.get("/_debugLogin", new Handler() {
@@ -56,5 +57,4 @@ public class HttpBuiltins {
 			}
 		});
 	}
-
 }
