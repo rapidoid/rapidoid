@@ -1,6 +1,7 @@
 package org.rapidoid.model;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 
 /*
@@ -32,5 +33,7 @@ public interface Property extends Serializable {
 	ParameterizedType genericType();
 
 	String caption();
+
+	Annotation[] annotations();
 
 }

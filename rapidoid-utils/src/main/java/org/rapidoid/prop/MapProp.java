@@ -94,6 +94,11 @@ public class MapProp implements Prop {
 	}
 
 	@Override
+	public Annotation[] getAnnotations() {
+		return null;
+	}
+
+	@Override
 	public int typeArgsCount() {
 		return 0;
 	}

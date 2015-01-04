@@ -63,7 +63,7 @@ public class Models {
 		BeanProperties props = Cls.propertiesOf(beanType);
 
 		if (beanType == Object.class) {
-			return new BeanProperty(property, property.equals("id") ? long.class : String.class, null);
+			return new BeanProperty(property, property.equals("id") ? long.class : String.class, null, null);
 		}
 
 		Prop prop = props.get(property);
@@ -117,7 +117,7 @@ public class Models {
 	}
 
 	private static BeanProperty prop(Prop prop) {
-		return new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType());
+		return new BeanProperty(prop.getName(), prop.getType(), prop.getGenericType(), prop.getAnnotations());
 	}
 
 	public static boolean isEditable(Prop prop) {

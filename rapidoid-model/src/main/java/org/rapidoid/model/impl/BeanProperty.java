@@ -20,6 +20,7 @@ package org.rapidoid.model.impl;
  * #L%
  */
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 
 import org.rapidoid.model.Property;
@@ -37,13 +38,17 @@ public class BeanProperty implements Property {
 
 	private final String caption;
 
-	public BeanProperty(String name, Class<?> type, ParameterizedType genericType) {
-		this(name, type, genericType, pretty(name));
+	private final Annotation[] annotations;
+
+	public BeanProperty(String name, Class<?> type, ParameterizedType genericType, Annotation[] annotations) {
+		this(name, type, genericType, annotations, pretty(name));
 	}
 
-	public BeanProperty(String name, Class<?> type, ParameterizedType genericType, String caption) {
+	public BeanProperty(String name, Class<?> type, ParameterizedType genericType, Annotation[] annotations,
+			String caption) {
 		this.name = name;
 		this.type = type;
+		this.annotations = annotations;
 		this.caption = caption;
 		this.genericType = genericType;
 	}
@@ -61,6 +66,11 @@ public class BeanProperty implements Property {
 	@Override
 	public String caption() {
 		return caption;
+	}
+
+	@Override
+	public Annotation[] annotations() {
+		return annotations;
 	}
 
 	@Override

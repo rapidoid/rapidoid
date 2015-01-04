@@ -45,6 +45,8 @@ public interface Prop {
 
 	<T extends Annotation> T getAnnotation(Class<T> annotationClass);
 
+	Annotation[] getAnnotations();
+
 	int typeArgsCount();
 
 	Class<?> typeArg(int index);

@@ -221,6 +221,11 @@ public class BeanProp implements Prop {
 	}
 
 	@Override
+	public Annotation[] getAnnotations() {
+		return field != null ? field.getAnnotations() : null;
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
