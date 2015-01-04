@@ -34,6 +34,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
 import org.rapidoid.pages.Pages;
+import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
@@ -291,7 +292,7 @@ public class AppPageGeneric extends AppGUI {
 		Object[] screensConfig = config("screens", null);
 
 		if (screensConfig == null) {
-			return appCls.screens;
+			screensConfig = appCls.screens.values().toArray();
 		}
 
 		Map<String, Class<?>> filtered = new LinkedHashMap<String, Class<?>>();
@@ -299,19 +300,29 @@ public class AppPageGeneric extends AppGUI {
 		for (Object scr : screensConfig) {
 			if (scr instanceof Class<?>) {
 				Class<?> cls = (Class<?>) scr;
-				filtered.put(cls.getSimpleName(), appCls.screens.get(cls.getSimpleName()));
+				Class<?> screenCls = appCls.screens.get(cls.getSimpleName());
+				if (isScreenAllowed(screenCls)) {
+					filtered.put(cls.getSimpleName(), screenCls);
+				}
 			} else if (scr instanceof String) {
 				String name = U.capitalized((String) scr);
 				if (!name.endsWith("Screen")) {
 					name += "Screen";
 				}
-				filtered.put(name, appCls.screens.get(name));
+				Class<?> screenCls = appCls.screens.get(name);
+				if (isScreenAllowed(screenCls)) {
+					filtered.put(name, screenCls);
+				}
 			} else {
 				throw U.rte("Expected class or string to represent a screen, but found: %s", scr);
 			}
 		}
 
 		return filtered;
+	}
+
+	protected boolean isScreenAllowed(Class<?> screenCls) {
+		return Secure.canAccessClass(x.username(), screenCls);
 	}
 
 	public void on(String cmd, Object[] args) {
