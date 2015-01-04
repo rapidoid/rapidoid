@@ -61,4 +61,16 @@ public class Metadata {
 		return classAnnotations(target).containsKey(annotation);
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T extends Annotation> T get(Annotation[] annotations, Class<T> annotationClass) {
+		if (annotations != null) {
+			for (Annotation ann : annotations) {
+				if (annotationClass.isAssignableFrom(ann.annotationType())) {
+					return (T) ann;
+				}
+			}
+		}
+		return null;
+	}
+
 }
