@@ -37,7 +37,7 @@ import org.rapidoid.util.CommonRoles;
 @CanRead(CommonRoles.LOGGED_IN)
 @CanChange({ CommonRoles.OWNER })
 @CanInsert(CommonRoles.LOGGED_IN)
-@CanDelete(CommonRoles.OWNER)
+@CanDelete({ CommonRoles.OWNER, CommonRoles.ADMIN })
 public class Task extends Entity {
 
 	@CanChange({ MODERATOR, OWNER })

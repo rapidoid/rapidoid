@@ -28,7 +28,7 @@ public abstract class SecurityTestCommons extends TestCommons implements CommonR
 	protected void checkPermissions(String username, Class<?> clazz, Object target, String propertyName,
 			boolean canRead, boolean canChange) {
 
-		DataPermissions perms = Secure.getDataPermissions(username, clazz, target, propertyName);
+		DataPermissions perms = Secure.getPropertyPermissions(username, clazz, target, propertyName);
 
 		eq(perms.read, canRead);
 		eq(perms.change, canChange);

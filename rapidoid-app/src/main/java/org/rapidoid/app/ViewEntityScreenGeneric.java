@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.security.Secure;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.FormWidget;
 
@@ -43,7 +44,13 @@ public class ViewEntityScreenGeneric extends Screen {
 			return x.notFound();
 		}
 
-		FormWidget details = show(entity).buttons(EDIT, BACK, DELETE);
+		FormWidget details = show(entity);
+
+		if (Secure.getObjectPermissions(x.username(), entity).delete) {
+			details = details.buttons(EDIT, BACK, DELETE);
+		} else {
+			details = details.buttons(EDIT, BACK);
+		}
 
 		return row(caption, details);
 	}

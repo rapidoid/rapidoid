@@ -36,6 +36,11 @@ public class Metadata {
 		return annotations;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T extends Annotation> T classAnnotation(Class<?> clazz, Class<T> annotationClass) {
+		return (T) classAnnotations(clazz).get(annotationClass);
+	}
+
 	public static Map<Class<?>, Annotation> fieldAnnotations(Class<?> clazz, String fieldName) {
 
 		Field field = Cls.getField(clazz, fieldName);

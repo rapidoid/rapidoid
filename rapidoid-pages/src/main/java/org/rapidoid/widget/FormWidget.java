@@ -252,7 +252,7 @@ public class FormWidget extends AbstractWidget {
 
 			for (int i = 0; i < fieldNames.length; i++) {
 				if (permissions[i] == null) {
-					permissions[i] = Secure.getDataPermissions(exchange().username(), targetClass, target,
+					permissions[i] = Secure.getPropertyPermissions(exchange().username(), targetClass, target,
 							fieldNames[i]);
 				}
 			}

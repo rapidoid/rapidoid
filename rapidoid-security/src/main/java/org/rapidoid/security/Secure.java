@@ -98,7 +98,8 @@ public class Secure implements Constants {
 		return false;
 	}
 
-	public static DataPermissions getDataPermissions(String username, Class<?> clazz, Object target, String propertyName) {
+	public static DataPermissions getPropertyPermissions(String username, Class<?> clazz, Object target,
+			String propertyName) {
 		U.notNull(clazz, "class");
 
 		if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)
@@ -114,6 +115,65 @@ public class Secure implements Constants {
 		CanInsert canInsert = Metadata.fieldAnnotation(clazz, propertyName, CanInsert.class);
 		CanChange canChange = Metadata.fieldAnnotation(clazz, propertyName, CanChange.class);
 		CanDelete canDelete = Metadata.fieldAnnotation(clazz, propertyName, CanDelete.class);
+
+		if (canRead == null && canInsert == null && canChange == null && canDelete == null) {
+			return DataPermissions.ALL;
+		}
+
+		boolean read = canRead != null && hasAnyRole(username, canRead.value(), clazz, target);
+		boolean insert = canInsert != null && hasAnyRole(username, canInsert.value(), clazz, target);
+		boolean change = canChange != null && hasAnyRole(username, canChange.value(), clazz, target);
+		boolean delete = canDelete != null && hasAnyRole(username, canDelete.value(), clazz, target);
+
+		return DataPermissions.from(read, insert, change, delete);
+	}
+
+	public static DataPermissions getClassPermissions(String username, Class<?> clazz) {
+		U.notNull(clazz, "class");
+
+		if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)
+				|| Object[].class.isAssignableFrom(clazz)) {
+			return DataPermissions.ALL;
+		}
+
+		if (!hasRoleBasedAccess(username, clazz, null)) {
+			return DataPermissions.NONE;
+		}
+
+		CanRead canRead = Metadata.classAnnotation(clazz, CanRead.class);
+		CanInsert canInsert = Metadata.classAnnotation(clazz, CanInsert.class);
+		CanChange canChange = Metadata.classAnnotation(clazz, CanChange.class);
+		CanDelete canDelete = Metadata.classAnnotation(clazz, CanDelete.class);
+
+		if (canRead == null && canInsert == null && canChange == null && canDelete == null) {
+			return DataPermissions.ALL;
+		}
+
+		boolean read = canRead != null && hasAnyRole(username, canRead.value(), clazz, null);
+		boolean insert = canInsert != null && hasAnyRole(username, canInsert.value(), clazz, null);
+		boolean change = canChange != null && hasAnyRole(username, canChange.value(), clazz, null);
+		boolean delete = canDelete != null && hasAnyRole(username, canDelete.value(), clazz, null);
+
+		return DataPermissions.from(read, insert, change, delete);
+	}
+
+	public static DataPermissions getObjectPermissions(String username, Object target) {
+		U.notNull(target, "target");
+		Class<?> clazz = target.getClass();
+
+		if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)
+				|| Object[].class.isAssignableFrom(clazz)) {
+			return DataPermissions.ALL;
+		}
+
+		if (!hasRoleBasedAccess(username, clazz, null)) {
+			return DataPermissions.NONE;
+		}
+
+		CanRead canRead = Metadata.classAnnotation(clazz, CanRead.class);
+		CanInsert canInsert = Metadata.classAnnotation(clazz, CanInsert.class);
+		CanChange canChange = Metadata.classAnnotation(clazz, CanChange.class);
+		CanDelete canDelete = Metadata.classAnnotation(clazz, CanDelete.class);
 
 		if (canRead == null && canInsert == null && canChange == null && canDelete == null) {
 			return DataPermissions.ALL;
