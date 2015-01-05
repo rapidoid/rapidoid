@@ -32,8 +32,6 @@ public class SimpleUser extends Entity implements IUser {
 
 	public String name;
 
-	public String display;
-
 	@Override
 	public String username() {
 		return username;
@@ -49,4 +47,32 @@ public class SimpleUser extends Entity implements IUser {
 		return name;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		return result;
+	}
+
+	/**
+	 * Custom implementation, based on {@link IUser}{@link #username()} comparison.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (!(obj instanceof IUser))
+			return false;
+		IUser other = (IUser) obj;
+		if (username == null) {
+			if (other.username() != null)
+				return false;
+		} else if (!username.equals(other.username()))
+			return false;
+		return true;
+	}
+	
 }
