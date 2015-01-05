@@ -20,22 +20,28 @@ package org.rapidoid.db.model;
  * #L%
  */
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.rapidoid.db.DB;
+import org.rapidoid.lambda.Predicate;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.impl.BeanListItems;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 @SuppressWarnings("serial")
 public class DbItems<T> extends BeanListItems<T> {
 
-	private final String orderBy;
+	private final Predicate<T> match;
 
-	public DbItems(Class<T> type, String orderBy) {
+	private final Comparator<T> orderBy;
+
+	public DbItems(Class<T> type, Predicate<T> match, Comparator<T> orderBy) {
 		super(type);
+		this.match = match;
 		this.orderBy = orderBy;
 	}
 
@@ -56,7 +62,7 @@ public class DbItems<T> extends BeanListItems<T> {
 
 	@Override
 	protected List<Item> data() {
-		List<T> all = DB.getAll(beanType, orderBy);
+		List<T> all = DB.find(beanType, match, orderBy);
 		List<Item> records = U.list();
 
 		for (T t : all) {
@@ -78,7 +84,8 @@ public class DbItems<T> extends BeanListItems<T> {
 
 	@Override
 	public Items orderedBy(String sortOrder) {
-		return new DbItems<T>(beanType, sortOrder);
+		Comparator<T> orderBy = Cls.comparator(sortOrder);
+		return new DbItems<T>(beanType, match, orderBy);
 	}
 
 }

@@ -496,30 +496,11 @@ public class InMem {
 		});
 	}
 
-	public <E> List<E> getAll(final Class<E> clazz, String orderBy) {
-		List<E> results = getAll(clazz);
-
-		final int sign = orderBy.startsWith("-") ? -1 : 1;
-		final String order = sign == 1 ? orderBy : orderBy.substring(1);
-
-		Comparator<E> comparator = new Comparator<E>() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public int compare(E o1, E o2) {
-
-				E val1 = getProperty(o1, order, true);
-				E val2 = getProperty(o2, order, true);
-
-				must(val1 instanceof Comparable && val2 instanceof Comparable, "The property '%s' is not comparable!",
-						order);
-
-				return sign * ((Comparable<E>) val1).compareTo(val2);
-			}
-		};
-
-		Collections.sort(results, comparator);
-
-		return results;
+	protected <E> List<E> sorted(List<E> records, Comparator<E> orderBy) {
+		if (orderBy != null) {
+			Collections.sort(records, orderBy);
+		}
+		return records;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -560,7 +541,6 @@ public class InMem {
 		final List<E> results = new ArrayList<E>();
 
 		each(new Operation<E>() {
-
 			@Override
 			public void execute(E record) throws Exception {
 				if (match.eval(record)) {
@@ -570,6 +550,23 @@ public class InMem {
 		});
 
 		return results;
+	}
+
+	public <E> List<E> find(final Class<E> clazz, final Predicate<E> match, final Comparator<E> orderBy) {
+		final List<E> results = new ArrayList<E>();
+
+		each(new Operation<E>() {
+			@Override
+			public void execute(E record) throws Exception {
+				if (clazz.isAssignableFrom(record.getClass())) {
+					if (match == null || match.eval(record)) {
+						results.add(record);
+					}
+				}
+			}
+		});
+
+		return sorted(results, orderBy);
 	}
 
 	public <E> List<E> find(String searchPhrase) {

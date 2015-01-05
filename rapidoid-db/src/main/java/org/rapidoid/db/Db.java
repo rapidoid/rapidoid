@@ -23,6 +23,7 @@ package org.rapidoid.db;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 import org.rapidoid.activity.Activity;
@@ -42,8 +43,6 @@ public interface Db extends Activity<Db> {
 
 	<E> List<E> getAll(Class<E> clazz);
 
-	<E> List<E> getAll(Class<E> clazz, String orderBy);
-
 	<E> List<E> getAll(long... ids);
 
 	<E> List<E> getAll(Collection<Long> ids);
@@ -61,6 +60,8 @@ public interface Db extends Activity<Db> {
 	<T> T read(long id, String column);
 
 	<E> List<E> find(Predicate<E> match);
+
+	<E> List<E> find(Class<E> clazz, Predicate<E> match, Comparator<E> orderBy);
 
 	<E> List<E> find(String searchPhrase);
 

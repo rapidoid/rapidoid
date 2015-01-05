@@ -23,6 +23,7 @@ package org.rapidoid.db;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -104,11 +105,6 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	}
 
 	@Override
-	public <E> List<E> getAll(Class<E> clazz, String orderBy) {
-		return inmem.getAll(clazz, orderBy);
-	}
-
-	@Override
 	public <E> List<E> getAll(long... ids) {
 		return inmem.getAll(ids);
 	}
@@ -121,6 +117,11 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	@Override
 	public <E> List<E> find(Predicate<E> match) {
 		return inmem.find(match);
+	}
+
+	@Override
+	public <E> List<E> find(Class<E> clazz, Predicate<E> match, Comparator<E> orderBy) {
+		return inmem.find(clazz, match, orderBy);
 	}
 
 	@Override

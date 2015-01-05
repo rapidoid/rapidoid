@@ -20,23 +20,46 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
+import java.util.Comparator;
+
 import org.rapidoid.app.Screen;
 import org.rapidoid.demo.taskplanner.model.Task;
+import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.Tag;
+import org.rapidoid.http.HttpExchange;
+import org.rapidoid.lambda.Predicate;
 import org.rapidoid.security.annotation.LoggedIn;
+import org.rapidoid.util.Cls;
 import org.rapidoid.widget.GridWidget;
 
 @LoggedIn
 public class MyTasksScreen extends Screen {
 
-	public Object content() {
+	public Object content(final HttpExchange x) {
 		Tag c1 = titleBox("Tasks owned by me");
-		GridWidget grid1 = grid(Task.class, "-priority", 10, "id", "title", "priority");
+
+		GridWidget grid1 = grid(Task.class, new Predicate<Task>() {
+			@Override
+			public boolean eval(Task t) throws Exception {
+				User user = t.owner.get();
+				return user != null && user.username.equals(x.username());
+			}
+		}, "-priority", 10, "id", "title", "priority");
 
 		Tag c2 = titleBox("Tasks shared with me");
-		GridWidget grid2 = grid(Task.class, "-priority", 10, "id", "title", "priority", "owner");
+
+		GridWidget grid2 = grid(Task.class, new Predicate<Task>() {
+			@Override
+			public boolean eval(Task t) throws Exception {
+				return Cls.projection(t.sharedWith, "username").contains(x.username());
+			}
+		}, new Comparator<Task>() {
+			@Override
+			public int compare(Task t1, Task t2) {
+				return t1.sharedWith.size() - t2.sharedWith.size();
+			}
+		}, 10, "id", "title", "priority");
 
 		return row(col6(c1, grid1), col6(c2, grid2));
 	}
-
 }

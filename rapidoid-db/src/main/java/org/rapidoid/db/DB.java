@@ -21,6 +21,7 @@ package org.rapidoid.db;
  */
 import java.io.File;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 import org.rapidoid.lambda.Callback;
@@ -85,10 +86,6 @@ public class DB {
 		return db().getAll(clazz);
 	}
 
-	public static <E> List<E> getAll(Class<E> clazz, String orderBy) {
-		return db().getAll(clazz, orderBy);
-	}
-
 	public static <E> List<E> getAll(long... ids) {
 		return db().getAll(ids);
 	}
@@ -119,6 +116,10 @@ public class DB {
 
 	public static <E> List<E> find(Predicate<E> match) {
 		return db().find(match);
+	}
+
+	public static <E> List<E> find(Class<E> clazz, Predicate<E> match, Comparator<E> orderBy) {
+		return db().find(clazz, match, orderBy);
 	}
 
 	public static <E> List<E> find(String searchPhrase) {
