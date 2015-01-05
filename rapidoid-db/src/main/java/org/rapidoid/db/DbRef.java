@@ -24,4 +24,6 @@ import org.rapidoid.var.Var;
 
 public interface DbRef<E> extends Var<E> {
 
+	boolean eq(Object obj);
+
 }

@@ -24,6 +24,7 @@ import java.util.HashSet;
 
 import org.rapidoid.db.Db;
 import org.rapidoid.db.DbRef;
+import org.rapidoid.util.U;
 
 public class DefaultDbRef<E> extends DbRelsCommons<E> implements DbRef<E> {
 
@@ -61,6 +62,11 @@ public class DefaultDbRef<E> extends DbRelsCommons<E> implements DbRef<E> {
 			clear();
 			addId(id);
 		}
+	}
+
+	@Override
+	public boolean eq(Object obj) {
+		return U.eq(get(), obj);
 	}
 
 }
