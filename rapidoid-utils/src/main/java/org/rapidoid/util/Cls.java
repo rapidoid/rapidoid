@@ -31,6 +31,7 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -989,6 +990,38 @@ public class Cls {
 
 	public static Class<?> of(Object obj) {
 		return obj != null ? obj.getClass() : Object.class;
+	}
+
+	public static <E> Comparator<E> comparator(String orderBy) {
+		final int sign = orderBy.startsWith("-") ? -1 : 1;
+		final String order = sign == 1 ? orderBy : orderBy.substring(1);
+
+		Comparator<E> comparator = new Comparator<E>() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public int compare(E o1, E o2) {
+
+				E val1 = getPropValue(o1, order);
+				E val2 = getPropValue(o2, order);
+
+				U.must(val1 instanceof Comparable && val2 instanceof Comparable,
+						"The property '%s' is not comparable!", order);
+
+				return sign * ((Comparable<E>) val1).compareTo(val2);
+			}
+		};
+		return comparator;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <FROM, TO> List<TO> projection(Collection<FROM> coll, String propertyName) {
+		List<TO> projection = U.list();
+
+		for (FROM item : coll) {
+			projection.add((TO) getPropValue(item, propertyName));
+		}
+
+		return projection;
 	}
 
 }
