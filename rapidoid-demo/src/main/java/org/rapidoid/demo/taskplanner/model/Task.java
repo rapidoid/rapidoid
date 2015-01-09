@@ -58,6 +58,7 @@ public class Task extends Entity {
 	@CanRead({ CommonRoles.OWNER })
 	public final DbSet<User> sharedWith = DB.set(this, "sharedWith");
 
+	@Programmatic
 	@CanRead({ CommonRoles.OWNER, CommonRoles.SHARED_WITH })
 	public final DbList<Comment> comments = DB.list(this, "has");
 

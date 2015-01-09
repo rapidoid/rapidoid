@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.rapidoid.annotation.Optional;
+import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
@@ -53,6 +54,8 @@ public class FormWidget extends AbstractWidget {
 	protected final Item item;
 	protected final FormMode mode;
 
+	protected List<Property> props;
+
 	protected Tag[] buttons;
 	protected FormLayout layout = FormLayout.VERTICAL;
 	protected String[] fieldNames;
@@ -62,6 +65,7 @@ public class FormWidget extends AbstractWidget {
 	protected boolean[] fieldRequired;
 	protected Var<?>[] vars;
 	protected DataPermissions[] permissions;
+	protected Tag[] fields;
 
 	protected boolean hasFields = false;
 
@@ -84,6 +88,25 @@ public class FormWidget extends AbstractWidget {
 		this.fieldOptions = options;
 		this.vars = vars;
 		this.buttons = buttons;
+	}
+
+	/************************** FIELD ********************************/
+
+	public FormWidget field(String fieldName, Tag field) {
+		return field(fieldIndex(fieldName), field);
+	}
+
+	public FormWidget field(int fieldIndex, Tag field) {
+		this.fields[fieldIndex] = field;
+		return this;
+	}
+
+	public Tag field(String fieldName) {
+		return field(fieldIndex(fieldName));
+	}
+
+	public Tag field(int fieldIndex) {
+		return this.fields[fieldIndex];
 	}
 
 	/************************** FIELD LABEL ********************************/
@@ -181,6 +204,25 @@ public class FormWidget extends AbstractWidget {
 		return this.permissions[fieldIndex];
 	}
 
+	/************************** FIELD VARS ********************************/
+
+	public FormWidget vars(String fieldName, Var<?> vars) {
+		return vars(fieldIndex(fieldName), vars);
+	}
+
+	public FormWidget vars(int fieldIndex, Var<?> vars) {
+		this.vars[fieldIndex] = vars;
+		return this;
+	}
+
+	public Var<?> vars(String fieldName) {
+		return vars(fieldIndex(fieldName));
+	}
+
+	public Var<?> vars(int fieldIndex) {
+		return this.vars[fieldIndex];
+	}
+
 	/************************** BUTTONS ********************************/
 
 	public FormWidget buttons(ButtonTag... buttons) {
@@ -190,17 +232,6 @@ public class FormWidget extends AbstractWidget {
 
 	public Tag[] buttons() {
 		return this.buttons;
-	}
-
-	/************************** VARS ********************************/
-
-	public FormWidget vars(Var<?>... vars) {
-		this.vars = vars;
-		return this;
-	}
-
-	public Var<?>[] vars() {
-		return this.vars;
 	}
 
 	/************************** OTHER ********************************/
@@ -217,8 +248,7 @@ public class FormWidget extends AbstractWidget {
 
 	protected void init(Item item, String... properties) {
 
-		final List<Property> props = editable() ? item.editableProperties(properties) : item
-				.readableProperties(properties);
+		props = editable() ? item.editableProperties(properties) : item.readableProperties(properties);
 
 		int propN = props.size();
 
@@ -229,6 +259,7 @@ public class FormWidget extends AbstractWidget {
 		fieldRequired = new boolean[propN];
 		vars = new Var[propN];
 		permissions = new DataPermissions[propN];
+		fields = new Tag[propN];
 
 		for (int i = 0; i < propN; i++) {
 			Property prop = props.get(i);
@@ -347,21 +378,46 @@ public class FormWidget extends AbstractWidget {
 
 	protected FormTag addFormFields(FormTag form) {
 		for (int i = 0; i < fieldNames.length; i++) {
-			if (isFieldAllowed(i)) {
-				Var<?> var = vars[i];
-				if (fieldRequired[i]) {
-					var = Vars.mandatory(var);
-				}
-				form = form.append(field(fieldNames[i], fieldLabels[i], fieldTypes[i], fieldOptions[i], var));
+			Tag field = getField(i);
+			if (field != null) {
+				form = form.append(field);
 				hasFields = true;
 			}
 		}
 
 		if (!hasFields) {
-			form = form.append(h4("Insufficient permissions!"));
+			form = form.append(noFormFields());
 		}
 
 		return form;
+	}
+
+	protected Tag noFormFields() {
+		return h4("Insufficient permissions!");
+	}
+
+	private Tag getField(int index) {
+		if (!isFieldAllowed(index)) {
+			return null;
+		}
+
+		if (fields[index] != null) {
+			return fields[index];
+		}
+
+		if (!isFieldProgrammatic(index) || mode == FormMode.SHOW) {
+			Var<?> var = vars[index];
+			if (fieldRequired[index]) {
+				var = Vars.mandatory(var);
+				return field(fieldNames[index], fieldLabels[index], fieldTypes[index], fieldOptions[index], var);
+			}
+		}
+
+		return null;
+	}
+
+	protected boolean isFieldProgrammatic(int index) {
+		return Metadata.get(props.get(index).annotations(), Programmatic.class) != null;
 	}
 
 	protected boolean isFieldAllowed(int index) {

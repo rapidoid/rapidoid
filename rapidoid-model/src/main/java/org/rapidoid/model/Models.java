@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.model.impl.BeanItem;
 import org.rapidoid.model.impl.BeanListItems;
 import org.rapidoid.model.impl.BeanProperty;
@@ -129,10 +128,6 @@ public class Models {
 
 		if (prop.isReadOnly() && !Collection.class.isAssignableFrom(prop.getType())
 				&& !Var.class.isAssignableFrom(prop.getType())) {
-			return false;
-		}
-
-		if (prop.getAnnotation(Programmatic.class) != null) {
 			return false;
 		}
 

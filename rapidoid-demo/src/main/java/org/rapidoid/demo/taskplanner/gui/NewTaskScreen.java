@@ -42,6 +42,7 @@ public class NewTaskScreen extends Screen {
 		Tag caption1 = titleBox("Add new task");
 		FormWidget frm = create(task).buttons(ADD, CANCEL);
 		frm = frm.fieldType("description", FieldType.TEXTAREA);
+		frm = frm.field("comments", h3("my custom field"));
 
 		Tag caption2 = titleBox("Most recent tasks");
 		GridWidget grid = grid(Task.class, "-id", 7, "id", "priority", "title");
