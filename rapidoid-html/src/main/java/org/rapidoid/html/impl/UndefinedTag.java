@@ -123,6 +123,11 @@ public class UndefinedTag implements Tag {
 	}
 
 	@Override
+	public boolean isEmpty() {
+		throw U.notExpected();
+	}
+
+	@Override
 	public Object child(int index) {
 		throw U.notExpected();
 	}

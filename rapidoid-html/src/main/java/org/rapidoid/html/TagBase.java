@@ -38,6 +38,8 @@ public interface TagBase<TAG extends Tag> {
 
 	int size();
 
+	boolean isEmpty();
+
 	Object child(int index);
 
 	TAG withChild(int index, Object child);

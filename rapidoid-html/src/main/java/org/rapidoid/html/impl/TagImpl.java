@@ -83,6 +83,11 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 	}
 
 	@Override
+	public boolean isEmpty() {
+		return contents.isEmpty();
+	}
+
+	@Override
 	public Object child(int index) {
 		return contents.get(index);
 	}
