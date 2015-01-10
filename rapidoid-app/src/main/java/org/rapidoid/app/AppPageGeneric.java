@@ -273,7 +273,7 @@ public class AppPageGeneric extends AppGUI {
 	}
 
 	protected Tag debugMenu() {
-		ATag debug = a_awesome("bug", "Debug", caret());
+		ATag debug = a_awesome("bug", " ", caret());
 
 		ATag userInfo = a_awesome("bug", "User info").href("/debuguserinfo");
 
