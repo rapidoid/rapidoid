@@ -553,7 +553,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Tag[] radios(Collection<?> options, Var<?> var) {
-		return radios(null, options, var);
+		return radios(U.rndStr(30), options, var);
 	}
 
 	public static Tag[] checkboxes(String name, Collection<?> options, Var<?> var) {
@@ -570,7 +570,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Tag[] checkboxes(Collection<?> options, Var<?> var) {
-		return checkboxes(null, options, var);
+		return checkboxes(U.rndStr(30), options, var);
 	}
 
 	public static Object display(Object item) {
