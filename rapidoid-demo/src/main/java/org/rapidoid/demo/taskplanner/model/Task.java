@@ -3,7 +3,7 @@ package org.rapidoid.demo.taskplanner.model;
 import org.rapidoid.annotation.Optional;
 import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.annotation.Scaffold;
-import org.rapidoid.app.entity.Entity;
+import org.rapidoid.app.entity.AbstractEntity;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
@@ -40,7 +40,7 @@ import org.rapidoid.util.CommonRoles;
 @CanChange({ CommonRoles.OWNER })
 @CanInsert(CommonRoles.LOGGED_IN)
 @CanDelete({ CommonRoles.OWNER, CommonRoles.ADMIN })
-public class Task extends Entity {
+public class Task extends AbstractEntity {
 
 	@CanChange({ MODERATOR, OWNER })
 	public String title;

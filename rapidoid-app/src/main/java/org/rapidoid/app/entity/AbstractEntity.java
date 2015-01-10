@@ -1,5 +1,10 @@
 package org.rapidoid.app.entity;
 
+import java.io.Serializable;
+
+import org.rapidoid.util.Cls;
+import org.rapidoid.util.CommonRoles;
+
 /*
  * #%L
  * rapidoid-app
@@ -20,59 +25,42 @@ package org.rapidoid.app.entity;
  * #L%
  */
 
-import org.rapidoid.util.IUser;
+/**
+ * Base class for persisted domain model entities.
+ */
+public abstract class AbstractEntity implements CommonRoles, Serializable {
 
-public class SimpleUser extends AbstractEntity implements IUser {
+	private static final long serialVersionUID = 8414835674684110203L;
 
-	private static final long serialVersionUID = -2320510856869926729L;
+	public long id;
 
-	public String username;
-
-	public String email;
-
-	public String name;
-
-	@Override
-	public String username() {
-		return username;
-	}
-
-	@Override
-	public String email() {
-		return email;
-	}
-
-	@Override
-	public String name() {
-		return name;
-	}
+	public long version;
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
 		return result;
 	}
 
-	/**
-	 * Custom implementation, based on {@link IUser}{@link #username()} comparison.
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
+		if (obj == null)
 			return false;
-		if (!(obj instanceof IUser))
+		if (getClass() != obj.getClass())
 			return false;
-		IUser other = (IUser) obj;
-		if (username == null) {
-			if (other.username() != null)
-				return false;
-		} else if (!username.equals(other.username()))
+		AbstractEntity other = (AbstractEntity) obj;
+		if (id != other.id)
 			return false;
 		return true;
 	}
-	
+
+	@Override
+	public String toString() {
+		return Cls.beanToStr(this, false);
+	}
+
 }

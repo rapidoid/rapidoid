@@ -20,10 +20,18 @@ package org.rapidoid.app.entity;
  * #L%
  */
 
-public interface Entity {
+/**
+ * Base class for persisted user entity.
+ */
+public abstract class AbstractUserEntity extends AbstractEntity {
 
-	long id();
+	private static final long serialVersionUID = -1904219596105663275L;
 
-	long version();
+	public String username;
+
+	@Override
+	public String toString() {
+		return username;
+	}
 
 }

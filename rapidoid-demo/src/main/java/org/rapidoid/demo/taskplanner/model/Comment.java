@@ -1,6 +1,6 @@
 package org.rapidoid.demo.taskplanner.model;
 
-import org.rapidoid.app.entity.Entity;
+import org.rapidoid.app.entity.AbstractEntity;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
@@ -26,7 +26,7 @@ import org.rapidoid.db.DbSet;
  */
 
 @SuppressWarnings("serial")
-public class Comment extends Entity {
+public class Comment extends AbstractEntity {
 
 	public String content;
 
