@@ -26,6 +26,6 @@ public interface HttpInterception extends Runnable {
 
 	boolean hasError();
 
-	Throwable error();
+	Throwable getError();
 
 }

@@ -78,7 +78,7 @@ public abstract class Screen extends AppGUI implements HttpExchangeHolder {
 		Object entity = DB.getIfExists(id);
 
 		if (entity == null) {
-			throw ctx().notFound().asError();
+			throw ctx().notFound().error();
 		}
 
 		return (T) entity;

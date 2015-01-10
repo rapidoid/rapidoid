@@ -32,6 +32,7 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpExchangeException;
 import org.rapidoid.http.HttpExchangeHolder;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
@@ -339,7 +340,14 @@ public class AppPageGeneric extends AppGUI {
 	}
 
 	public void on(String cmd, Object[] args) {
-		Pages.callCmdHandler(x, screen, new Cmd(cmd, args));
+		try {
+			Pages.callCmdHandler(x, screen, new Cmd(cmd, args));
+		} catch (Exception e) {
+			if (U.rootCause(e) instanceof HttpExchangeException) {
+				Pages.store(x, screen);
+				throw U.rte(e);
+			}
+		}
 	}
 
 }

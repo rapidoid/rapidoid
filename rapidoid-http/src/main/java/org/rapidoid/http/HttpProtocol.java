@@ -83,7 +83,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			}
 
 			if (x.hasError()) {
-				handleError(x, x.error());
+				handleError(x, x.getError());
 			} else if (!x.isAsync()) {
 				x.completeResponse();
 			}
@@ -94,9 +94,15 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	}
 
 	private void handleError(HttpExchangeImpl x, Throwable e) {
-		U.error("Internal server error!", "request", x, "error", e);
-		x.errorResponse(e);
-		x.completeResponse();
+		Throwable cause = U.rootCause(e);
+		if (cause instanceof HttpExchangeException) {
+			// redirect, notFound etc.
+			x.completeResponse();
+		} else {
+			U.error("Internal server error!", "request", x, "error", cause);
+			x.errorResponse(e);
+			x.completeResponse();
+		}
 	}
 
 	public static void processResponse(HttpExchange xch, Object res) {

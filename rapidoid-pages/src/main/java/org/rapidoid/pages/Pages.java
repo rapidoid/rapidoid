@@ -30,6 +30,7 @@ import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpExchangeException;
 import org.rapidoid.inject.IoC;
 import org.rapidoid.json.JSON;
 import org.rapidoid.pages.impl.BuiltInCmdHandler;
@@ -247,20 +248,44 @@ public class Pages {
 
 		Pages.load(x, view);
 
+		boolean processView = true;
+
 		if (cmd != null) {
-			callCmdHandler(x, view, cmd);
+			try {
+				callCmdHandler(x, view, cmd);
+			} catch (Exception e) {
+				Throwable cause = U.rootCause(e);
+				if (cause instanceof HttpExchangeException) {
+					processView = false;
+				} else {
+					x.json();
+					return U.map("!error", "Error occured while processing command: " + cmd.name);
+				}
+			}
 		}
 
-		ctx = Tags.context();
-		x.sessionSet(Pages.SESSION_CTX, ctx);
-
-		Object content = Pages.contentOf(x, view);
-
-		if (content == null || content instanceof HttpExchange) {
-			return content;
+		String html;
+		if (processView) {
+			ctx = Tags.context();
+			x.sessionSet(Pages.SESSION_CTX, ctx);
+			Object content;
+			try {
+				content = Pages.contentOf(x, view);
+				if (content == null || content instanceof HttpExchange) {
+					return content;
+				}
+			} catch (Exception e) {
+				Throwable cause = U.rootCause(e);
+				if (cause instanceof HttpExchangeException) {
+					return null;
+				} else {
+					throw U.rte(e);
+				}
+			}
+			html = PageRenderer.get().toHTML(ctx, content, x);
+		} else {
+			html = "Error!";
 		}
-
-		String html = PageRenderer.get().toHTML(ctx, content, x);
 
 		Pages.store(x, view);
 

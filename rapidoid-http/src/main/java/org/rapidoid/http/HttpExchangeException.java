@@ -20,18 +20,16 @@ package org.rapidoid.http;
  * #L%
  */
 
+@SuppressWarnings("serial")
 public class HttpExchangeException extends RuntimeException {
 
-	private static final long serialVersionUID = 548339907490281755L;
+	private static final HttpExchangeException INSTANCE = new HttpExchangeException();
 
-	private final HttpExchange x;
-
-	public HttpExchangeException(HttpExchange x) {
-		this.x = x;
+	private HttpExchangeException() {
 	}
 
-	public HttpExchange getHttpExchange() {
-		return x;
+	public static HttpExchangeException get() {
+		return INSTANCE;
 	}
 
 }

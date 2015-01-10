@@ -884,7 +884,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized Throwable error() {
+	public synchronized Throwable getError() {
 		return error;
 	}
 
@@ -957,7 +957,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			}
 		}
 
-		return redirect(dest);
+		redirect(dest);
+		throw error();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -987,8 +988,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public HttpExchangeException asError() {
-		return new HttpExchangeException(this);
+	public HttpExchangeException error() {
+		return HttpExchangeException.get();
 	}
 
 }

@@ -220,8 +220,8 @@ public class HttpAppContext implements AppContext {
 		return x.subpath_();
 	}
 
-	public HttpExchangeException asError() {
-		return x.asError();
+	public HttpExchangeException error() {
+		return x.error();
 	}
 
 	public String query() {
