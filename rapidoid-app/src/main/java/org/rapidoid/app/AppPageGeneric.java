@@ -31,6 +31,7 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpExchangeHolder;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
 import org.rapidoid.pages.Pages;
@@ -60,11 +61,18 @@ public class AppPageGeneric extends AppGUI {
 	public AppPageGeneric(HttpExchange x, AppClasses appCls) {
 		this.x = x;
 		this.appCls = appCls;
-		this.app = appCls.main != null ? U.newInstance(appCls.main) : new Object();
-		this.screen = getScreen();
+		this.app = wireX(appCls.main != null ? U.newInstance(appCls.main) : new Object(), x);
+		this.screen = wireX(getScreen(), x);
 
 		U.must(screen != null, "Cannot find a screen to process the request!");
 		Pages.load(x, screen);
+	}
+
+	private static <T> T wireX(T target, HttpExchange x) {
+		if (target instanceof HttpExchangeHolder) {
+			((HttpExchangeHolder) target).setHttpExchange(x);
+		}
+		return target;
 	}
 
 	public String title() {
