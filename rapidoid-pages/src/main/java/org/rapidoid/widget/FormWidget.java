@@ -34,8 +34,6 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.InputTag;
-import org.rapidoid.html.tag.OptionTag;
-import org.rapidoid.html.tag.SelectTag;
 import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
@@ -272,7 +270,7 @@ public class FormWidget extends AbstractWidget {
 		}
 	}
 
-	private boolean editable() {
+	protected boolean editable() {
 		return mode != FormMode.SHOW;
 	}
 
@@ -396,7 +394,7 @@ public class FormWidget extends AbstractWidget {
 		return h4("Insufficient permissions!");
 	}
 
-	private Tag getField(int index) {
+	protected Tag getField(int index) {
 		if (!isFieldAllowed(index)) {
 			return null;
 		}
@@ -409,8 +407,9 @@ public class FormWidget extends AbstractWidget {
 			Var<?> var = vars[index];
 			if (fieldRequired[index]) {
 				var = Vars.mandatory(var);
-				return field(fieldNames[index], fieldLabels[index], fieldTypes[index], fieldOptions[index], var);
 			}
+
+			return field(fieldNames[index], fieldLabels[index], fieldTypes[index], fieldOptions[index], var);
 		}
 
 		return null;
@@ -557,131 +556,60 @@ public class FormWidget extends AbstractWidget {
 			return checkboxesInput(name, options, var);
 
 		case LABEL:
-			return readonlyInput(var);
+			return readonly(var);
 
 		default:
 			throw U.notExpected();
 		}
 	}
 
-	protected Object readonlyInput(Var<?> var) {
-		Object value = var.get();
-
-		if (value instanceof Collection) {
-			return readonlyColl((Collection<?>) value);
-		}
-
-		return readonly(value);
-	}
-
-	protected Object readonlyColl(Collection<?> coll) {
-		if (coll.isEmpty()) {
-			return noEntries();
-		}
-
-		Tag wrap = div();
-		for (Object item : coll) {
-			wrap = readonlyCollItem(wrap, item);
-		}
-
-		return wrap;
-	}
-
-	protected Tag readonlyCollItem(Tag wrap, Object item) {
-		Tag icon = awesome("circle-o");
-		return wrap.append(div(icon, " ", readonly(item)).class_("value-line"));
-	}
-
-	protected Tag noEntries() {
-		return div(awesome("ban"), " No entries!").class_("value-line");
-	}
-
 	protected Object readonly(Object item) {
-		Tag itemDisplay = isEntity(item) ? a(item).href(urlFor(item)) : span(item);
-		itemDisplay = itemDisplay.class_("value-display");
-		return itemDisplay;
+		return display(item);
 	}
 
 	protected Object checkboxesInput(String name, Collection<?> options, Var<?> var) {
-		U.notNull(options, "checkboxes options");
-		Object[] checkboxes = new Object[options.size()];
-		int i = 0;
-		for (Object opt : options) {
-			Var<Boolean> optVar = Vars.has(var, opt);
-			InputTag cc = input().type("checkbox").name(name).value(str(opt)).bind(optVar);
-			checkboxes[i] = label(cc, opt).class_("radio-checkbox");
-			i++;
-		}
-		return checkboxes;
+		return checkboxes(name, options, var);
 	}
 
 	protected Object radiosInput(String name, Collection<?> options, Var<?> var) {
-		U.notNull(options, "radios options");
-		Object[] radios = new Object[options.size()];
-
-		int i = 0;
-		for (Object opt : options) {
-			Var<Boolean> optVar = Vars.eq(var, opt);
-			InputTag radio = input().type("radio").name(name).value(str(opt)).bind(optVar);
-			radios[i] = label(radio, opt).class_("radio-inline");
-			i++;
-		}
-		return radios;
+		return radios(name, options, var);
 	}
 
 	protected Object multiSelectInput(String name, Collection<?> options, Var<?> var) {
-		U.notNull(options, "multi-select options");
-		SelectTag select = select().name(name).class_("form-control").multiple(true);
-		for (Object opt : options) {
-			Var<Boolean> optVar = Vars.has(var, opt);
-			OptionTag op = option(opt).value(str(opt)).bind(optVar);
-			select = select.append(op);
-		}
-		return select;
+		return multiSelect(options, var).name(name);
 	}
 
 	protected Object dropdownInput(String name, Collection<?> options, Var<?> var) {
-		U.notNull(options, "dropdown options");
-
-		SelectTag dropdown = select().name(name).class_("form-control").multiple(false);
-		for (Object opt : options) {
-			Var<Boolean> optVar = Vars.eq(var, opt);
-			OptionTag op = option(opt).value(str(opt)).bind(optVar);
-			dropdown = dropdown.append(op);
-		}
-
-		return dropdown;
+		return dropdown(options, var).name(name);
 	}
 
 	protected Object checkboxInput(String name, Var<?> var) {
-		InputTag input;
-		input = input().type("checkbox").name(name).bind(var);
-		return input;
+		return checkbox(var).name(name);
 	}
 
 	protected Object textareaInput(String name, String desc, Var<?> var) {
-		TextareaTag textarea = textarea().class_("form-control").name(name).bind(var);
+		TextareaTag textarea = textareaInput(var).name(name);
 		textarea = layout == FormLayout.INLINE ? textarea.placeholder(desc) : textarea;
 		return textarea;
 	}
 
 	protected Object emailInput(String name, String desc, Var<?> var) {
 		InputTag input;
-		input = input().type("email").class_("form-control").name(name).bind(var);
+		input = emailInput(var).name(name);
 		input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
 		return input;
 	}
 
 	protected Object passwordInput(String name, String desc, Var<?> var) {
 		InputTag input;
-		input = input().type("password").class_("form-control").name(name).bind(var);
+		input = passwordInput(var).name(name);
 		input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
 		return input;
 	}
 
 	protected Object textInput(String name, String desc, Var<?> var) {
 		InputTag input;
-		input = input().type("text").class_("form-control").name(name).bind(var);
+		input = textInput(var).name(name);
 		input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
 		return input;
 	}

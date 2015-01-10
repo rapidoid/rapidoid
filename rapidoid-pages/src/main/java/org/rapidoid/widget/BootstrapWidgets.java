@@ -1,6 +1,7 @@
 package org.rapidoid.widget;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.rapidoid.html.FieldType;
@@ -12,7 +13,10 @@ import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.html.tag.InputTag;
+import org.rapidoid.html.tag.OptionTag;
+import org.rapidoid.html.tag.SelectTag;
 import org.rapidoid.html.tag.TableTag;
+import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchanges;
 import org.rapidoid.model.Item;
@@ -23,6 +27,7 @@ import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
+import org.rapidoid.var.Vars;
 
 /*
  * #%L
@@ -485,6 +490,124 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static Object highlight(String text, String regex) {
 		return U.customizable(HighlightWidget.class, text, regex);
+	}
+
+	public static InputTag emailInput(Var<?> var) {
+		return input().type("email").class_("form-control").bind(var);
+	}
+
+	public static InputTag passwordInput(Var<?> var) {
+		return input().type("password").class_("form-control").bind(var);
+	}
+
+	public static InputTag textInput(Var<?> var) {
+		return input().type("text").class_("form-control").bind(var);
+	}
+
+	public static TextareaTag textareaInput(Var<?> var) {
+		return textarea().class_("form-control").bind(var);
+	}
+
+	public static InputTag checkbox(Var<?> var) {
+		return input().type("checkbox").bind(var);
+	}
+
+	public static SelectTag dropdown(Collection<?> options, Var<?> var) {
+		U.notNull(options, "dropdown options");
+		SelectTag dropdown = select().class_("form-control").multiple(false);
+
+		for (Object opt : options) {
+			Var<Boolean> optVar = Vars.eq(var, opt);
+			OptionTag op = option(opt).value(str(opt)).bind(optVar);
+			dropdown = dropdown.append(op);
+		}
+
+		return dropdown;
+	}
+
+	public static SelectTag multiSelect(Collection<?> options, Var<?> var) {
+		U.notNull(options, "multi-select options");
+		SelectTag select = select().class_("form-control").multiple(true);
+
+		for (Object opt : options) {
+			Var<Boolean> optVar = Vars.has(var, opt);
+			OptionTag op = option(opt).value(str(opt)).bind(optVar);
+			select = select.append(op);
+		}
+
+		return select;
+	}
+
+	public static Tag[] radios(String name, Collection<?> options, Var<?> var) {
+		U.notNull(options, "radios options");
+		Tag[] radios = new Tag[options.size()];
+
+		int i = 0;
+		for (Object opt : options) {
+			Var<Boolean> optVar = Vars.eq(var, opt);
+			InputTag radio = input().type("radio").name(name).value(str(opt)).bind(optVar);
+			radios[i] = label(radio, opt).class_("radio-inline");
+			i++;
+		}
+		return radios;
+	}
+
+	public static Tag[] radios(Collection<?> options, Var<?> var) {
+		return radios(null, options, var);
+	}
+
+	public static Tag[] checkboxes(String name, Collection<?> options, Var<?> var) {
+		U.notNull(options, "checkboxes options");
+		Tag[] checkboxes = new Tag[options.size()];
+		int i = 0;
+		for (Object opt : options) {
+			Var<Boolean> optVar = Vars.has(var, opt);
+			InputTag cc = input().type("checkbox").name(name).value(str(opt)).bind(optVar);
+			checkboxes[i] = label(cc, opt).class_("radio-checkbox");
+			i++;
+		}
+		return checkboxes;
+	}
+
+	public static Tag[] checkboxes(Collection<?> options, Var<?> var) {
+		return checkboxes(null, options, var);
+	}
+
+	public static Object display(Object item) {
+		if (item instanceof Var<?>) {
+			Var<?> var = (Var<?>) item;
+			return display(var.get());
+		} else if (item instanceof Iterable) {
+			Iterable<?> iter = (Iterable<?>) item;
+			return display(iter.iterator());
+		} else if (item instanceof Object[]) {
+			Object[] arr = (Object[]) item;
+			return display(U.arrayIterator(arr));
+		}
+
+		Tag itemDisplay = isEntity(item) ? a(item).href(urlFor(item)) : span(item);
+		itemDisplay = itemDisplay.class_("value-display");
+		return itemDisplay;
+	}
+
+	private static Object display(Iterator<?> it) {
+		Tag icon = awesome("circle-o");
+		Tag wrap = div();
+
+		while (it.hasNext()) {
+			Object item = (Object) it.next();
+			wrap = wrap.append(div(icon, " ", display(item)).class_("value-line"));
+		}
+
+		if (wrap.isEmpty()) {
+			return nothing().class_("value-line");
+		}
+
+		return wrap;
+	}
+
+	public static Tag nothing() {
+		return div(awesome("ban"), " No entries!");
 	}
 
 }
