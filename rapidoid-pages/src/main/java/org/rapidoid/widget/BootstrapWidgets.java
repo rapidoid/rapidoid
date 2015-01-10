@@ -585,7 +585,7 @@ public abstract class BootstrapWidgets extends HTML {
 			return display(U.arrayIterator(arr));
 		}
 
-		Tag itemDisplay = isEntity(item) ? a(item).href(urlFor(item)) : span(item);
+		Tag itemDisplay = isEntity(item) ? a(item).href(urlFor(item)) : span(Cls.convert(item, String.class));
 		itemDisplay = itemDisplay.class_("value-display");
 		return itemDisplay;
 	}

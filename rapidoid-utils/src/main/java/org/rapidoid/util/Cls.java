@@ -901,7 +901,11 @@ public class Cls {
 			}
 
 		case STRING:
-			return (T) U.text(value);
+			if (value instanceof Date) {
+				return (T) Dates.str((Date) value);
+			} else {
+				return (T) U.text(value);
+			}
 
 		case OBJECT:
 			throw U.rte("Cannot convert the value to type '%s'!", toType);

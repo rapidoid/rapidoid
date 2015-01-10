@@ -36,6 +36,8 @@ public class Dates {
 	private static byte[] CURR_DATE_BYTES;
 	private static long updateCurrDateAfter = 0;
 
+	private static final DateFormat DAY_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+
 	static {
 		DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
 	}
@@ -96,13 +98,17 @@ public class Dates {
 	}
 
 	public static synchronized Date date(int day, int month, int year) {
-		CALENDAR.set(year, month - 1, day - 1);
+		CALENDAR.set(year, month - 1, day, 0, 0, 0);
 		return CALENDAR.getTime();
 	}
 
 	public static synchronized int thisYear() {
 		CALENDAR.setTime(new Date());
 		return CALENDAR.get(Calendar.YEAR);
+	}
+
+	public static String str(Date date) {
+		return DAY_FORMAT.format(date);
 	}
 
 }
