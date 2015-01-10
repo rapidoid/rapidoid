@@ -23,7 +23,6 @@ package org.rapidoid.app;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.FormWidget;
@@ -31,22 +30,15 @@ import org.rapidoid.widget.FormWidget;
 public class ViewEntityScreenGeneric extends Screen {
 
 	@Session
-	private Object entity;
+	private Object target;
 
-	public Object content(HttpExchange x) {
+	public Object content() {
+		target = entity();
 
-		Tag caption = titleBox(U.capitalized(x.pathSegment(0)) + " Details");
+		Tag caption = titleBox(U.capitalized(ctx().pathSegment(0)) + " Details");
+		FormWidget details = show(target);
 
-		long id = Long.parseLong(x.pathSegment(1));
-		entity = DB.getIfExists(id);
-
-		if (entity == null) {
-			return x.notFound();
-		}
-
-		FormWidget details = show(entity);
-
-		if (Secure.getObjectPermissions(x.username(), entity).delete) {
+		if (Secure.getObjectPermissions(ctx().username(), target).delete) {
 			details = details.buttons(EDIT, BACK, DELETE);
 		} else {
 			details = details.buttons(EDIT, BACK);
@@ -55,21 +47,21 @@ public class ViewEntityScreenGeneric extends Screen {
 		return row(caption, details);
 	}
 
-	public void onEdit(HttpExchange x) {
-		String id = x.pathSegment(1);
-		x.redirect("/edit" + entity.getClass().getSimpleName() + "/" + id);
+	public void onEdit() {
+		String id = ctx().pathSegment(1);
+		ctx().redirect("/edit" + target.getClass().getSimpleName() + "/" + id);
 	}
 
-	public void onDelete(HttpExchange x) {
+	public void onDelete() {
 		showModal("confirmDeletion");
 	}
 
-	public void onYesDelete(HttpExchange x) {
-		long id = Long.parseLong(x.pathSegment(1));
+	public void onYesDelete() {
+		long id = Long.parseLong(ctx().pathSegment(1));
 		DB.delete(id);
 
 		hideModal();
-		x.goBack(1);
+		ctx().goBack(1);
 	}
 
 	public Tag confirmDeletion() {

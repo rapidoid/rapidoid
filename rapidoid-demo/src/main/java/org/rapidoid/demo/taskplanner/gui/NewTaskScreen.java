@@ -20,6 +20,8 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
+import java.util.List;
+
 import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Screen;
 import org.rapidoid.app.Users;
@@ -28,7 +30,8 @@ import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.Tag;
-import org.rapidoid.http.HttpExchange;
+import org.rapidoid.util.U;
+import org.rapidoid.var.Var;
 import org.rapidoid.widget.FormWidget;
 import org.rapidoid.widget.GridWidget;
 
@@ -37,12 +40,19 @@ public class NewTaskScreen extends Screen {
 	@Session
 	private Task task = new Task();
 
-	public Object content() {
+	@Session
+	private List<String> comments = U.list();
 
+	@Session
+	private Var<String> v = var("abc");
+
+	public Object content() {
 		Tag caption1 = titleBox("Add new task");
 		FormWidget frm = create(task).buttons(ADD, CANCEL);
 		frm = frm.fieldType("description", FieldType.TEXTAREA);
-		frm = frm.field("comments", h3("my custom field"));
+
+		frm = frm.field("description", div(h3("my custom field"), textInput(v)));
+		frm = frm.field("comments", div((Object[]) radios(U.list("a", "bb", "ccc"), v)));
 
 		Tag caption2 = titleBox("Most recent tasks");
 		GridWidget grid = grid(Task.class, "-id", 7, "id", "priority", "title");
@@ -50,8 +60,9 @@ public class NewTaskScreen extends Screen {
 		return row(col4(caption1, frm), col8(caption2, grid));
 	}
 
-	public void onAdd(HttpExchange x) {
-		task.owner.set(Users.current(x, User.class));
+	public void onAdd() {
+		task.owner.set(Users.current(ctx(), User.class));
+		task.description = v.get();
 		DB.insert(task);
 		task = new Task();
 	}

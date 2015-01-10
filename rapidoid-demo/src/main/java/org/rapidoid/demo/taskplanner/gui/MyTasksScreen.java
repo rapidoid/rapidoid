@@ -26,7 +26,6 @@ import org.rapidoid.app.Screen;
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.Tag;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.util.Cls;
@@ -35,14 +34,14 @@ import org.rapidoid.widget.GridWidget;
 @LoggedIn
 public class MyTasksScreen extends Screen {
 
-	public Object content(final HttpExchange x) {
+	public Object content() {
 		Tag c1 = titleBox("Tasks owned by me");
 
 		GridWidget grid1 = grid(Task.class, new Predicate<Task>() {
 			@Override
 			public boolean eval(Task t) throws Exception {
 				User user = t.owner.get();
-				return user != null && user.username.equals(x.username());
+				return user != null && user.username.equals(ctx().username());
 			}
 		}, "-priority", 10, "id", "title", "priority");
 
@@ -51,7 +50,7 @@ public class MyTasksScreen extends Screen {
 		GridWidget grid2 = grid(Task.class, new Predicate<Task>() {
 			@Override
 			public boolean eval(Task t) throws Exception {
-				return Cls.projection(t.sharedWith, "username").contains(x.username());
+				return Cls.projection(t.sharedWith, "username").contains(ctx().username());
 			}
 		}, new Comparator<Task>() {
 			@Override

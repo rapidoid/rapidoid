@@ -23,34 +23,26 @@ package org.rapidoid.app;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.FormWidget;
 
 public class EditEntityScreenGeneric extends Screen {
 
 	@Session
-	private Object entity;
+	private Object target;
 
-	public Object content(HttpExchange x) {
+	public Object content() {
+		target = entity();
 
-		Tag caption = titleBox("Edit " + U.capitalized(x.pathSegment(0).substring(4)));
-
-		long id = Long.parseLong(x.pathSegment(1));
-		entity = DB.getIfExists(id);
-
-		if (entity == null) {
-			return x.notFound();
-		}
-
-		FormWidget form = edit(entity).buttons(SAVE, CANCEL);
+		Tag caption = titleBox("Edit " + U.capitalized(ctx().pathSegment(0).substring(4)));
+		FormWidget form = edit(target).buttons(SAVE, CANCEL);
 
 		return row(caption, form);
 	}
 
-	public void onSave(HttpExchange x) {
-		DB.update(entity);
-		x.goBack(1);
+	public void onSave() {
+		DB.update(target);
+		ctx().goBack(1);
 	}
 
 }

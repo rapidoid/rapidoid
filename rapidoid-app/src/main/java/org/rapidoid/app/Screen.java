@@ -21,6 +21,7 @@ package org.rapidoid.app;
  */
 
 import org.rapidoid.annotation.Session;
+import org.rapidoid.db.DB;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeHolder;
 import org.rapidoid.util.U;
@@ -69,6 +70,18 @@ public abstract class Screen extends AppGUI implements HttpExchangeHolder {
 	protected AppContext ctx() {
 		U.must(ctx != null, "App context is not initialized yet!");
 		return ctx;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <T> T entity() {
+		long id = Long.parseLong(ctx().pathSegment(1));
+		Object entity = DB.getIfExists(id);
+
+		if (entity == null) {
+			throw ctx().notFound().asError();
+		}
+
+		return (T) entity;
 	}
 
 }
