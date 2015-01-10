@@ -615,6 +615,10 @@ public class U {
 		return items;
 	}
 
+	public static <T> Iterator<T> arrayIterator(T[] arr) {
+		return Arrays.asList(arr).iterator();
+	}
+
 	public static <T> Set<T> set(T... values) {
 		Set<T> set = new HashSet<T>();
 
