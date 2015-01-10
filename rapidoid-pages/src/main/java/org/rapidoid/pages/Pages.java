@@ -144,7 +144,8 @@ public class Pages {
 			if (fullPage instanceof HttpExchange) {
 				return x;
 			} else {
-				TagContext ctx = x.session(SESSION_CTX);
+				TagContext ctx = Tags.context();
+				x.sessionSet(Pages.SESSION_CTX, ctx);
 				PageRenderer.get().render(ctx, fullPage, x);
 				return x;
 			}
@@ -197,13 +198,9 @@ public class Pages {
 	public static Object serve(HttpExchange x, Object view) {
 		load(x, view);
 
-		TagContext ctx = Tags.context();
-		x.sessionSet(Pages.SESSION_CTX, ctx);
-
-		x.addToPageStack();
-
 		Object result = render(x, view);
 
+		x.addToPageStack();
 		store(x, view);
 
 		return result;
@@ -266,8 +263,6 @@ public class Pages {
 
 		String html;
 		if (processView) {
-			ctx = Tags.context();
-			x.sessionSet(Pages.SESSION_CTX, ctx);
 			Object content;
 			try {
 				content = Pages.contentOf(x, view);
@@ -282,6 +277,8 @@ public class Pages {
 					throw U.rte(e);
 				}
 			}
+			ctx = Tags.context();
+			x.sessionSet(Pages.SESSION_CTX, ctx);
 			html = PageRenderer.get().toHTML(ctx, content, x);
 		} else {
 			html = "Error!";
