@@ -56,114 +56,120 @@ public class Cls {
 
 				@Override
 				public BeanProperties map(Class<?> clazz) throws Exception {
-
 					Map<String, BeanProp> properties = new LinkedHashMap<String, BeanProp>();
 
-					try {
-						for (Class<?> c = clazz; c != Object.class && c != null; c = c.getSuperclass()) {
-							Method[] methods = c.getDeclaredMethods();
-							for (Method method : methods) {
-								int modif = method.getModifiers();
-								Class<?>[] params = method.getParameterTypes();
-								Class<?> ret = method.getReturnType();
-
-								if ((modif & Modifier.PUBLIC) != 0 && (modif & Modifier.STATIC) == 0
-										&& (modif & Modifier.ABSTRACT) == 0) {
-
-									String name = method.getName();
-									if (name.matches("^(get|set|is)[A-Z].*")) {
-
-										String propName;
-										if (name.startsWith("is")) {
-											propName = name.substring(2, 3).toLowerCase() + name.substring(3);
-										} else {
-											propName = name.substring(3, 4).toLowerCase() + name.substring(4);
-										}
-
-										BeanProp prop = properties.get(propName);
-
-										if (prop == null) {
-											prop = new BeanProp(propName);
-											properties.put(propName, prop);
-										}
-
-										if (name.startsWith("set")) {
-											if (params.length == 1) {
-												prop.setSetter(method);
-												prop.setReadOnly(false);
-											}
-										} else if (params.length == 0) {
-											prop.setGetter(method);
-										}
-									} else if (!name.matches("^to[A-Z].*") && !name.equals("hashCode")) {
-
-										if (params.length == 0 && !ret.equals(void.class)) {
-
-											String propName = name;
-											BeanProp prop = properties.get(propName);
-
-											if (prop == null) {
-												prop = new BeanProp(propName);
-												properties.put(propName, prop);
-											}
-
-											prop.setGetter(method);
-
-										} else if (params.length == 1) {
-
-											String propName = name;
-											BeanProp prop = properties.get(propName);
-
-											if (prop == null) {
-												prop = new BeanProp(propName);
-												properties.put(propName, prop);
-											}
-
-											prop.setReadOnly(false);
-											prop.setSetter(method);
-										}
-									}
-								}
-							}
-
-							// remove properties with setters, without getters
-							for (Iterator<Entry<String, BeanProp>> it = properties.entrySet().iterator(); it.hasNext();) {
-								Entry<String, BeanProp> entry = (Entry<String, BeanProp>) it.next();
-								BeanProp minfo = entry.getValue();
-								if (minfo.getGetter() == null && minfo.getSetter() != null) {
-									it.remove();
-								}
-							}
-						}
-
-						for (Class<?> c = clazz; c != Object.class && c != null; c = c.getSuperclass()) {
-							Field[] fields = c.getDeclaredFields();
-							for (Field field : fields) {
-
-								int modif = field.getModifiers();
-								if ((modif & Modifier.PUBLIC) != 0 && (modif & Modifier.STATIC) == 0) {
-									String fieldName = field.getName();
-									BeanProp prop = properties.get(fieldName);
-
-									if (prop == null) {
-										prop = new BeanProp(fieldName, field, (modif & Modifier.FINAL) != 0);
-										properties.put(fieldName, prop);
-									}
-								}
-							}
-						}
-
-					} catch (Exception e) {
-						throw U.rte(e);
-					}
+					getBeanProperties(clazz, properties);
 
 					for (Entry<String, BeanProp> e : properties.entrySet()) {
 						e.getValue().init();
 					}
+
 					return new BeanProperties(properties);
 				}
-
 			});
+
+	private static void getBeanProperties(Class<?> clazz, Map<String, BeanProp> properties) {
+
+		if (clazz == Object.class) {
+			return;
+		} else {
+			getBeanProperties(clazz.getSuperclass(), properties);
+		}
+
+		try {
+			Method[] methods = clazz.getDeclaredMethods();
+			for (Method method : methods) {
+				int modif = method.getModifiers();
+				Class<?>[] params = method.getParameterTypes();
+				Class<?> ret = method.getReturnType();
+
+				if ((modif & Modifier.PUBLIC) != 0 && (modif & Modifier.STATIC) == 0
+						&& (modif & Modifier.ABSTRACT) == 0) {
+
+					String name = method.getName();
+					if (name.matches("^(get|set|is)[A-Z].*")) {
+
+						String propName;
+						if (name.startsWith("is")) {
+							propName = name.substring(2, 3).toLowerCase() + name.substring(3);
+						} else {
+							propName = name.substring(3, 4).toLowerCase() + name.substring(4);
+						}
+
+						BeanProp prop = properties.get(propName);
+
+						if (prop == null) {
+							prop = new BeanProp(propName);
+							properties.put(propName, prop);
+						}
+
+						if (name.startsWith("set")) {
+							if (params.length == 1) {
+								prop.setSetter(method);
+								prop.setReadOnly(false);
+							}
+						} else if (params.length == 0) {
+							prop.setGetter(method);
+						}
+					} else if (!name.matches("^to[A-Z].*") && !name.equals("hashCode")) {
+
+						if (params.length == 0 && !ret.equals(void.class)) {
+
+							String propName = name;
+							BeanProp prop = properties.get(propName);
+
+							if (prop == null) {
+								prop = new BeanProp(propName);
+								properties.put(propName, prop);
+							}
+
+							prop.setGetter(method);
+
+						} else if (params.length == 1) {
+
+							String propName = name;
+							BeanProp prop = properties.get(propName);
+
+							if (prop == null) {
+								prop = new BeanProp(propName);
+								properties.put(propName, prop);
+							}
+
+							prop.setReadOnly(false);
+							prop.setSetter(method);
+						}
+					}
+				}
+			}
+
+			// remove properties with setters, without getters
+			for (Iterator<Entry<String, BeanProp>> it = properties.entrySet().iterator(); it.hasNext();) {
+				Entry<String, BeanProp> entry = (Entry<String, BeanProp>) it.next();
+				BeanProp minfo = entry.getValue();
+				if (minfo.getGetter() == null && minfo.getSetter() != null) {
+					it.remove();
+				}
+			}
+
+			Field[] fields = clazz.getDeclaredFields();
+			for (Field field : fields) {
+
+				int modif = field.getModifiers();
+				if ((modif & Modifier.PUBLIC) != 0 && (modif & Modifier.STATIC) == 0) {
+					String fieldName = field.getName();
+					BeanProp prop = properties.get(fieldName);
+
+					if (prop == null) {
+						prop = new BeanProp(fieldName, field, (modif & Modifier.FINAL) != 0);
+						properties.put(fieldName, prop);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
+	}
 
 	public static void reset() {
 		BEAN_PROPERTIES.clear();
