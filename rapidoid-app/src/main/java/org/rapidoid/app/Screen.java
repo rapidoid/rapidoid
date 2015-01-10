@@ -22,11 +22,15 @@ package org.rapidoid.app;
 
 import org.rapidoid.annotation.Session;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpExchangeHolder;
+import org.rapidoid.util.U;
 
-public abstract class Screen extends AppGUI {
+public abstract class Screen extends AppGUI implements HttpExchangeHolder {
 
 	@Session
 	public String modal = null;
+
+	private AppContext ctx;
 
 	protected void showModal(String modalName) {
 		modal = modalName;
@@ -50,6 +54,21 @@ public abstract class Screen extends AppGUI {
 
 	public void onBack(HttpExchange x) {
 		x.goBack(1);
+	}
+
+	@Override
+	public HttpExchange getHttpExchange() {
+		return ctx;
+	}
+
+	@Override
+	public void setHttpExchange(HttpExchange x) {
+		this.ctx = new HttpAppContext(x);
+	}
+
+	protected AppContext ctx() {
+		U.must(ctx != null, "App context is not initialized yet!");
+		return ctx;
 	}
 
 }
