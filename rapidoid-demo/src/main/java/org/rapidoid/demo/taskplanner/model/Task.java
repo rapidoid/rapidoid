@@ -2,6 +2,7 @@ package org.rapidoid.demo.taskplanner.model;
 
 import org.rapidoid.annotation.Optional;
 import org.rapidoid.annotation.Programmatic;
+import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.app.entity.Entity;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbList;
@@ -33,6 +34,7 @@ import org.rapidoid.util.CommonRoles;
  * #L%
  */
 
+@Scaffold
 @SuppressWarnings("serial")
 @CanRead(CommonRoles.LOGGED_IN)
 @CanChange({ CommonRoles.OWNER })

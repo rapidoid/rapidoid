@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
@@ -38,6 +39,7 @@ import org.rapidoid.pages.Pages;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Conf;
+import org.rapidoid.util.Metadata;
 import org.rapidoid.util.U;
 
 public class AppPageGeneric extends AppGUI {
@@ -137,7 +139,10 @@ public class AppPageGeneric extends AppGUI {
 			String type = m.group(1);
 			long id = Long.parseLong(m.group(2));
 
-			Object entity = DB.get(id);
+			Object entity = DB.getIfExists(id);
+			if (entity == null || !Metadata.isAnnotated(entity.getClass(), Scaffold.class)) {
+				return null;
+			}
 
 			String entityClass = entity.getClass().getSimpleName();
 			String reqType = U.capitalized(type);
@@ -154,7 +159,7 @@ public class AppPageGeneric extends AppGUI {
 			long id = Long.parseLong(m.group(2));
 
 			Object entity = DB.getIfExists(id);
-			if (entity == null) {
+			if (entity == null || !Metadata.isAnnotated(entity.getClass(), Scaffold.class)) {
 				return null;
 			}
 

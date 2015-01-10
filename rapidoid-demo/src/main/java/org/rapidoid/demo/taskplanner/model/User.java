@@ -22,10 +22,12 @@ package org.rapidoid.demo.taskplanner.model;
 
 import java.util.Date;
 
+import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.app.entity.Entity;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbSet;
 
+@Scaffold
 @SuppressWarnings("serial")
 public class User extends Entity {
 
