@@ -149,7 +149,7 @@ public class Pages {
 				return x;
 			}
 		} else {
-			return x.notFound();
+			throw x.notFound();
 		}
 	}
 

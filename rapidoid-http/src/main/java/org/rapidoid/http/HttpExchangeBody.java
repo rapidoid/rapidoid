@@ -29,9 +29,9 @@ public interface HttpExchangeBody extends CtxWrite<HttpExchangeBody> {
 
 	HttpExchangeBody sendFile(File file);
 
-	HttpExchangeBody redirect(String url);
+	HttpExchangeException redirect(String url);
 
-	HttpExchangeBody goBack(int steps);
+	HttpExchangeException goBack(int steps);
 
 	HttpExchangeBody addToPageStack();
 

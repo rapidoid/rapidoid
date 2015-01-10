@@ -136,7 +136,7 @@ public class HttpRouter implements Router {
 			return;
 		}
 
-		x.notFound();
+		throw x.notFound();
 	}
 
 	private void handle(Handler handler, HttpExchangeImpl x) {

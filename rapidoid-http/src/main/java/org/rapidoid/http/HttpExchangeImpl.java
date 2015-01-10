@@ -623,12 +623,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeBody redirect(String url) {
+	public synchronized HttpExchangeException redirect(String url) {
 		responseCode(303);
 		addHeader(HttpHeader.LOCATION, url);
 		this.redirectUrl = url;
 		ensureHeadersComplete();
-		return this;
+		throw error();
 	}
 
 	@Override
@@ -758,8 +758,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeHeaders notFound() {
-		return response(404, "Error: page not found!");
+	public synchronized HttpExchangeException notFound() {
+		response(404, "Error: page not found!");
+		throw error();
 	}
 
 	@Override
@@ -904,7 +905,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public synchronized HttpExchangeHeaders errorResponse(Throwable err) {
 		Throwable cause = U.rootCause(err);
-		if (cause instanceof SecurityException) {
+		if (cause instanceof HttpExchangeException) {
+			return this;
+		} else if (cause instanceof SecurityException) {
 			return response(500, "Access Denied!", cause);
 		} else {
 			return response(500, "Internal server error!", cause);
@@ -938,7 +941,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeBody goBack(int steps) {
+	public synchronized HttpExchangeException goBack(int steps) {
 		String dest = "/";
 		List<String> stack = session(SESSION_PAGE_STACK, null);
 
@@ -957,8 +960,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			}
 		}
 
-		redirect(dest);
-		throw error();
+		throw redirect(dest);
 	}
 
 	@SuppressWarnings("unchecked")

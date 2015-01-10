@@ -141,7 +141,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			if (!x.hasContentType()) {
 				x.html();
 			}
-			x.notFound();
+			throw x.notFound();
 		}
 	}
 

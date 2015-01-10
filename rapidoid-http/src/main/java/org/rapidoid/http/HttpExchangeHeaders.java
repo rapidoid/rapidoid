@@ -34,7 +34,7 @@ public interface HttpExchangeHeaders extends HttpExchangeBody {
 
 	HttpExchangeHeaders errorResponse(Throwable err);
 
-	HttpExchangeHeaders notFound();
+	HttpExchangeException notFound();
 
 	HttpExchangeException error();
 

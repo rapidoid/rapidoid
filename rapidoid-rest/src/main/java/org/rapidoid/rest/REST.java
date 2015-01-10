@@ -44,7 +44,7 @@ public class REST {
 				try {
 					return dispatcher.dispatch(new WebReq(x));
 				} catch (PojoHandlerNotFoundException e) {
-					return x.notFound();
+					throw x.notFound();
 				} catch (PojoDispatchException e) {
 					return x.errorResponse(e);
 				}

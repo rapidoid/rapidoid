@@ -132,7 +132,7 @@ public class HttpAppContext implements AppContext {
 		return x.closeIf(condition);
 	}
 
-	public HttpExchangeBody redirect(String url) {
+	public HttpExchangeException redirect(String url) {
 		return x.redirect(url);
 	}
 
@@ -148,7 +148,7 @@ public class HttpAppContext implements AppContext {
 		return x.write(file);
 	}
 
-	public HttpExchangeBody goBack(int steps) {
+	public HttpExchangeException goBack(int steps) {
 		return x.goBack(steps);
 	}
 
@@ -208,7 +208,7 @@ public class HttpAppContext implements AppContext {
 		return x.path_();
 	}
 
-	public HttpExchangeHeaders notFound() {
+	public HttpExchangeException notFound() {
 		return x.notFound();
 	}
 

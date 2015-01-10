@@ -176,7 +176,12 @@ public class AppPageGeneric extends AppGUI {
 	}
 
 	protected Object pageContent() {
-		return U.or(Pages.contentOf(x, screen), "Page not found!");
+		Object cnt = Pages.contentOf(x, screen);
+		if (cnt != null) {
+			return cnt;
+		} else {
+			throw x.notFound();
+		}
 	}
 
 	protected FormTag searchForm() {
