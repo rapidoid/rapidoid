@@ -986,4 +986,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		}
 	}
 
+	@Override
+	public HttpExchangeException asError() {
+		return new HttpExchangeException(this);
+	}
+
 }

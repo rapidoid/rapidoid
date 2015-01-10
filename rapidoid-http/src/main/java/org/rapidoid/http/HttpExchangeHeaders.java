@@ -36,6 +36,8 @@ public interface HttpExchangeHeaders extends HttpExchangeBody {
 
 	HttpExchangeHeaders notFound();
 
+	HttpExchangeException asError();
+
 	HttpExchangeHeaders plain();
 
 	HttpExchangeHeaders html();
