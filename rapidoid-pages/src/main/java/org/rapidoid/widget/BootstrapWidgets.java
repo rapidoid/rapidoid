@@ -419,7 +419,7 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static Tag page(boolean devMode, String pageTitle, Object head, Object body) {
 		String devOrProd = devMode ? "dev" : "prod";
-		return render("bootstrap-page-" + devOrProd + ".html", "title", pageTitle, "head", head, "body", body);
+		return render("page-" + devOrProd + ".html", "title", pageTitle, "head", head, "body", body);
 	}
 
 	public static Tag page(boolean devMode, String pageTitle, Object body) {
