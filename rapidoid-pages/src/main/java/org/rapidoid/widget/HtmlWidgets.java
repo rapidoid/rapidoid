@@ -39,7 +39,7 @@ public abstract class HtmlWidgets extends HTML {
 		return new ItemPropertyVar<T>(item, property);
 	}
 
-	public static Tag template(String templateFileName, Object... namesAndValues) {
+	public static Tag render(String templateFileName, Object... namesAndValues) {
 		return new FileTemplateTag(templateFileName, namesAndValues);
 	}
 

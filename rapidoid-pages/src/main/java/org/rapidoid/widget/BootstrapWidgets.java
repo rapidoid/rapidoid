@@ -87,8 +87,8 @@ public abstract class BootstrapWidgets extends HTML {
 		return HtmlWidgets.property(item, property);
 	}
 
-	public static Tag template(String templateFileName, Object... namesAndValues) {
-		return HtmlWidgets.template(templateFileName, namesAndValues);
+	public static Tag render(String templateFileName, Object... namesAndValues) {
+		return HtmlWidgets.render(templateFileName, namesAndValues);
 	}
 
 	public static Tag hardcoded(String content) {
@@ -241,7 +241,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Tag modal(Object title, Object content, Object footer) {
-		return template("modal.html", "title", title, "content", content, "footer", footer, "cmdCloseModal",
+		return render("modal.html", "title", title, "content", content, "footer", footer, "cmdCloseModal",
 				xClose("closeModal"));
 	}
 
@@ -419,7 +419,7 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static Tag page(boolean devMode, String pageTitle, Object head, Object body) {
 		String devOrProd = devMode ? "dev" : "prod";
-		return template("bootstrap-page-" + devOrProd + ".html", "title", pageTitle, "head", head, "body", body);
+		return render("bootstrap-page-" + devOrProd + ".html", "title", pageTitle, "head", head, "body", body);
 	}
 
 	public static Tag page(boolean devMode, String pageTitle, Object body) {
