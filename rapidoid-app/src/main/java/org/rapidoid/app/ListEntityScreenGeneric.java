@@ -1,8 +1,8 @@
-package org.rapidoid.demo.taskplanner.gui;
+package org.rapidoid.app;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-app
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,18 +20,20 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
-import org.rapidoid.app.Screen;
-import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.html.Tag;
 import org.rapidoid.widget.GridWidget;
 
-public class TasksScreen extends Screen {
+public class ListEntityScreenGeneric extends Screen {
 
-	public String title = "My Tasks";
+	private final Class<?> entityType;
+
+	public ListEntityScreenGeneric(Class<?> entityType) {
+		this.entityType = entityType;
+	}
 
 	public Object content() {
-		Tag caption = titleBox("Manage tasks");
-		GridWidget grid = grid(Task.class, "-priority", 10, "id", "title", "priority");
+		Tag caption = titleBox(entityType.getSimpleName() + " List");
+		GridWidget grid = grid(entityType, "-id", 10);
 		return row(caption, grid);
 	}
 
