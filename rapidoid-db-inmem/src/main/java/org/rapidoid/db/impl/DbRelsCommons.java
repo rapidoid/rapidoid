@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.rapidoid.db.Db;
+import org.rapidoid.db.Database;
 import org.rapidoid.inmem.EntityLinks;
 import org.rapidoid.util.U;
 
@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public abstract class DbRelsCommons<E> implements DbRelationInternals, EntityLinks {
 
-	protected final Db db;
+	protected final Database db;
 
 	protected Object holder;
 
@@ -43,7 +43,7 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals, EntityLin
 
 	protected final DbRelChangesTracker tracker = new DbRelChangesTracker();
 
-	public DbRelsCommons(Db db, Object holder, String relation, Collection<Long> ids) {
+	public DbRelsCommons(Database db, Object holder, String relation, Collection<Long> ids) {
 		this.db = db;
 		this.holder = holder;
 		this.relation = relation;

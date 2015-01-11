@@ -26,16 +26,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.rapidoid.db.Db;
+import org.rapidoid.db.Database;
 import org.rapidoid.db.DbList;
 
 public class DefaultDbList<E> extends DefaultDbCollection<E> implements DbList<E> {
 
-	public DefaultDbList(Db db, Object holder, String relation) {
+	public DefaultDbList(Database db, Object holder, String relation) {
 		super(db, holder, relation, new ArrayList<Long>());
 	}
 
-	public DefaultDbList(Db db, Object holder, String relation, List<? extends Number> ids) {
+	public DefaultDbList(Database db, Object holder, String relation, List<? extends Number> ids) {
 		this(db, holder, relation);
 		initIds(ids);
 	}

@@ -23,16 +23,16 @@ package org.rapidoid.db.impl;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import org.rapidoid.db.Db;
+import org.rapidoid.db.Database;
 import org.rapidoid.db.DbSet;
 
 public class DefaultDbSet<E> extends DefaultDbCollection<E> implements DbSet<E> {
 
-	public DefaultDbSet(Db db, Object holder, String relation) {
+	public DefaultDbSet(Database db, Object holder, String relation) {
 		super(db, holder, relation, new LinkedHashSet<Long>());
 	}
 
-	public DefaultDbSet(Db db, Object holder, String relation, List<? extends Number> ids) {
+	public DefaultDbSet(Database db, Object holder, String relation, List<? extends Number> ids) {
 		this(db, holder, relation);
 		initIds(ids);
 	}

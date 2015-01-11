@@ -32,7 +32,7 @@ import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 
-public interface Db extends Activity<Db> {
+public interface Database extends Activity<Database> {
 
 	void initAndLoad();
 

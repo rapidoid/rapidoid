@@ -22,14 +22,14 @@ package org.rapidoid.app;
 
 import java.util.List;
 
-import org.rapidoid.db.Db;
+import org.rapidoid.db.Database;
 import org.rapidoid.widget.DataManager;
 
 public class DbDataManager implements DataManager {
 
-	protected final Db db;
+	protected final Database db;
 
-	public DbDataManager(Db db) {
+	public DbDataManager(Database db) {
 		this.db = db;
 	}
 

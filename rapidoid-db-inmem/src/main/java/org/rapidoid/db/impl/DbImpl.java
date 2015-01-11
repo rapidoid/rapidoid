@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.rapidoid.activity.NamedActivity;
-import org.rapidoid.db.Db;
+import org.rapidoid.db.Database;
 import org.rapidoid.db.DbColumn;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
@@ -41,7 +41,7 @@ import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.U;
 
-public class DbImpl extends NamedActivity<Db> implements Db {
+public class DbImpl extends NamedActivity<Database> implements Database {
 
 	@SuppressWarnings("unchecked")
 	private static final Set<Class<?>> REL_CLASSES = U.set(DbList.class, DbSet.class, DbRef.class);
@@ -172,19 +172,19 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	}
 
 	@Override
-	public Db start() {
+	public Database start() {
 		inmem.start();
 		return this;
 	}
 
 	@Override
-	public Db halt() {
+	public Database halt() {
 		inmem.halt();
 		return this;
 	}
 
 	@Override
-	public Db shutdown() {
+	public Database shutdown() {
 		inmem.shutdown();
 		return this;
 	}

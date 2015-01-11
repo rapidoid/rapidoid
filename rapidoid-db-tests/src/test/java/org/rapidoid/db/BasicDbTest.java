@@ -39,7 +39,7 @@ public class BasicDbTest extends DbTestCommons {
 		testDb(DBs.instance("db3"));
 	}
 
-	private void testDb(Db db) {
+	private void testDb(Database db) {
 		long id1 = db.insert(new Person("abc", 10));
 		long id2 = db.insert(new Person("f", 20));
 		long id3 = db.insert(new Person("xy", 30));

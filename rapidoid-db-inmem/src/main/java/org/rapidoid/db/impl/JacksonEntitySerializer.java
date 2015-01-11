@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.rapidoid.db.Db;
+import org.rapidoid.db.Database;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
@@ -46,11 +46,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class JacksonEntitySerializer implements EntitySerializer {
 
-	private final Db db;
+	private final Database db;
 
 	private final ObjectMapper mapper = new ObjectMapper();
 
-	public JacksonEntitySerializer(Db db) {
+	public JacksonEntitySerializer(Database db) {
 		this.db = db;
 		initDbMapper();
 	}

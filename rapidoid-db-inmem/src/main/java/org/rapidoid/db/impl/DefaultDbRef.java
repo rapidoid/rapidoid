@@ -22,7 +22,7 @@ package org.rapidoid.db.impl;
 
 import java.util.HashSet;
 
-import org.rapidoid.db.Db;
+import org.rapidoid.db.Database;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.util.U;
 
@@ -30,11 +30,11 @@ public class DefaultDbRef<E> extends DbRelsCommons<E> implements DbRef<E> {
 
 	private static final long serialVersionUID = -1239566356630772624L;
 
-	public DefaultDbRef(Db db, Object holder, String relation) {
+	public DefaultDbRef(Database db, Object holder, String relation) {
 		this(db, holder, relation, -1);
 	}
 
-	public DefaultDbRef(Db db, Object holder, String relation, long id) {
+	public DefaultDbRef(Database db, Object holder, String relation, long id) {
 		super(db, holder, relation, new HashSet<Long>());
 		if (id > 0) {
 			initId(id);

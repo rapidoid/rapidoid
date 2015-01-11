@@ -27,23 +27,23 @@ import org.rapidoid.util.U;
 
 public class DBs {
 
-	private static final Map<String, Db> DB_INSTANCES;
+	private static final Map<String, Database> DB_INSTANCES;
 
 	static {
-		DB_INSTANCES = U.autoExpandingMap(new Mapper<String, Db>() {
+		DB_INSTANCES = U.autoExpandingMap(new Mapper<String, Database>() {
 			@Override
-			public Db map(String name) throws Exception {
+			public Database map(String name) throws Exception {
 				String dbFilename = DB.path() + name + ".db";
-				return (Db) U.newInstance(DB.DB_IMPL_CLASS, name, dbFilename);
+				return (Database) U.newInstance(DB.DB_IMPL_CLASS, name, dbFilename);
 			}
 		});
 	}
 
-	public static Db instance(String dbName) {
+	public static Database instance(String dbName) {
 		return DB_INSTANCES.get(dbName);
 	}
 
-	public static Map<String, Db> instances() {
+	public static Map<String, Database> instances() {
 		return Collections.unmodifiableMap(DB_INSTANCES);
 	}
 
@@ -53,7 +53,7 @@ public class DBs {
 	}
 
 	public synchronized static void destroyAll() {
-		for (Db db : DB_INSTANCES.values()) {
+		for (Database db : DB_INSTANCES.values()) {
 			db.destroy();
 		}
 

@@ -20,7 +20,7 @@ package org.rapidoid.app;
  * #L%
  */
 
-import org.rapidoid.db.Db;
+import org.rapidoid.db.Database;
 import org.rapidoid.http.HTTPInterceptor;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpInterception;
@@ -28,9 +28,9 @@ import org.rapidoid.lambda.Callback;
 
 public class TxInterceptor implements HTTPInterceptor {
 
-	private final Db db;
+	private final Database db;
 
-	public TxInterceptor(Db db) {
+	public TxInterceptor(Database db) {
 		this.db = db;
 	}
 

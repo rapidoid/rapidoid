@@ -24,12 +24,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 
-import org.rapidoid.db.Db;
+import org.rapidoid.db.Database;
 import org.rapidoid.util.U;
 
 public class DefaultDbCollection<E> extends DbRelsCommons<E> implements Collection<E> {
 
-	public DefaultDbCollection(Db db, Object holder, String relation, Collection<Long> ids) {
+	public DefaultDbCollection(Database db, Object holder, String relation, Collection<Long> ids) {
 		super(db, holder, relation, ids);
 	}
 

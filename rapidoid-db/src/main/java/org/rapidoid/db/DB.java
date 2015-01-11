@@ -35,16 +35,16 @@ public class DB {
 
 	private static final String IMPL_NAME = "org.rapidoid.db.impl.DbImpl";
 
-	static final Class<Db> DB_IMPL_CLASS;
+	static final Class<Database> DB_IMPL_CLASS;
 
-	private static Db db;
+	private static Database db;
 
 	static {
 		DB_IMPL_CLASS = U.getClassIfExists(IMPL_NAME);
 
 		U.must(DB_IMPL_CLASS != null, "Cannot find Db implementation (%s)!", IMPL_NAME);
-		U.must(Db.class.isAssignableFrom(DB_IMPL_CLASS), "%s must implement %s!", IMPL_NAME,
-				Db.class.getCanonicalName());
+		U.must(Database.class.isAssignableFrom(DB_IMPL_CLASS), "%s must implement %s!", IMPL_NAME,
+				Database.class.getCanonicalName());
 
 		init();
 	}
@@ -60,11 +60,11 @@ public class DB {
 	}
 
 	public static void init() {
-		db = (Db) U.customizable(DB.DB_IMPL_CLASS, "default", path() + "default.db");
+		db = (Database) U.customizable(DB.DB_IMPL_CLASS, "default", path() + "default.db");
 		db.initAndLoad();
 	}
 
-	public static Db db() {
+	public static Database db() {
 		assert U.must(db != null, "Database not initialized!");
 		return db;
 	}
