@@ -20,7 +20,7 @@ package org.rapidoid.buffer;
  * #L%
  */
 
-import org.rapidoid.bytes.BYTES;
+import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.util.Constants;
@@ -258,39 +258,39 @@ public class BufTest extends BufferTestCommons implements Constants {
 		final int NO_PREFIX = 0;
 		Range range = new Range();
 
-		eq(BYTES.scanUntilAndMatchPrefix(BYTES.from("\n"), range, LF, 0, 0, NO_PREFIX), 1);
+		eq(BytesUtil.scanUntilAndMatchPrefix(BytesUtil.from("\n"), range, LF, 0, 0, NO_PREFIX), 1);
 		eq(range, 0, 0);
 
-		eq(BYTES.scanUntilAndMatchPrefix(BYTES.from("a\n"), range, COL, 0, 0, NO_PREFIX), NOT_FOUND);
+		eq(BytesUtil.scanUntilAndMatchPrefix(BytesUtil.from("a\n"), range, COL, 0, 0, NO_PREFIX), NOT_FOUND);
 		eq(range, -1, 0);
 
-		eq(BYTES.scanUntilAndMatchPrefix(BYTES.from("a\n"), range, LF, 0, 1, NO_PREFIX), 2);
+		eq(BytesUtil.scanUntilAndMatchPrefix(BytesUtil.from("a\n"), range, LF, 0, 1, NO_PREFIX), 2);
 		eq(range, 0, 1);
 
-		eq(BYTES.scanUntilAndMatchPrefix(BYTES.from("ab:c"), range, COL, 0, 3, NO_PREFIX), 3);
+		eq(BytesUtil.scanUntilAndMatchPrefix(BytesUtil.from("ab:c"), range, COL, 0, 3, NO_PREFIX), 3);
 		eq(range, 0, 2);
 
 		for (int i = 0; i < 10; i++) {
 			String s = U.copyNtimes("a", i);
 
-			eq(BYTES.scanUntilAndMatchPrefix(BYTES.from(s + ":"), range, COL, 0, i, NO_PREFIX), i + 1);
+			eq(BytesUtil.scanUntilAndMatchPrefix(BytesUtil.from(s + ":"), range, COL, 0, i, NO_PREFIX), i + 1);
 			eq(range, 0, i);
 
-			eq(BYTES.scanLnAndMatchPrefix(BYTES.from(s + "\n"), range, 0, i, NO_PREFIX), i + 1);
+			eq(BytesUtil.scanLnAndMatchPrefix(BytesUtil.from(s + "\n"), range, 0, i, NO_PREFIX), i + 1);
 			eq(range, 0, i);
 
-			eq(BYTES.scanLnAndMatchPrefix(BYTES.from(s + "\r\n"), range, 0, i + 1, NO_PREFIX), i + 2);
+			eq(BytesUtil.scanLnAndMatchPrefix(BytesUtil.from(s + "\r\n"), range, 0, i + 1, NO_PREFIX), i + 2);
 			eq(range, 0, i);
 		}
 
-		eq(BYTES.scanLnAndMatchPrefix(BYTES.from("x\n"), range, 0, 0, NO_PREFIX), NOT_FOUND);
+		eq(BytesUtil.scanLnAndMatchPrefix(BytesUtil.from("x\n"), range, 0, 0, NO_PREFIX), NOT_FOUND);
 		eq(range, -1, 0);
-		eq(BYTES.scanLnAndMatchPrefix(BYTES.from("x\r\n"), range, 0, 1, NO_PREFIX), NOT_FOUND);
+		eq(BytesUtil.scanLnAndMatchPrefix(BytesUtil.from("x\r\n"), range, 0, 1, NO_PREFIX), NOT_FOUND);
 		eq(range, -1, 0);
 
-		eq(BYTES.scanLnAndMatchPrefix(BYTES.from("x\n"), range, 1, 1, NO_PREFIX), 2);
+		eq(BytesUtil.scanLnAndMatchPrefix(BytesUtil.from("x\n"), range, 1, 1, NO_PREFIX), 2);
 		eq(range, 1, 0);
-		eq(BYTES.scanLnAndMatchPrefix(BYTES.from("x\r\n"), range, 1, 2, NO_PREFIX), 3);
+		eq(BytesUtil.scanLnAndMatchPrefix(BytesUtil.from("x\r\n"), range, 1, 2, NO_PREFIX), 3);
 		eq(range, 1, 0);
 	}
 
@@ -397,7 +397,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 	private void checkMatch(Buf buf, int start, int limit, String match, int... positions) {
 		for (int pos : positions) {
-			int p = BYTES.find(buf.bytes(), start, limit, match.getBytes(), true);
+			int p = BytesUtil.find(buf.bytes(), start, limit, match.getBytes(), true);
 			eq(p, pos);
 			start = p + 1;
 		}

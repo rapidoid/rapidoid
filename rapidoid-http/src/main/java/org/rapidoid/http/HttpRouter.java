@@ -21,7 +21,7 @@ package org.rapidoid.http;
  */
 
 import org.rapidoid.buffer.Buf;
-import org.rapidoid.bytes.BYTES;
+import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.Range;
 import org.rapidoid.util.SimpleHashTable;
 import org.rapidoid.util.SimpleList;
@@ -105,7 +105,7 @@ public class HttpRouter implements Router {
 		Range action = x.verb_().range();
 		Range path = x.path_().range();
 
-		if (x.isGetReq() && BYTES.find(buf.bytes(), path.start + 1, path.limit(), (byte) '.', true) >= 0) {
+		if (x.isGetReq() && BytesUtil.find(buf.bytes(), path.start + 1, path.limit(), (byte) '.', true) >= 0) {
 			if (x.serveStatic()) {
 				return;
 			}
@@ -118,8 +118,8 @@ public class HttpRouter implements Router {
 			for (int i = 0; i < candidates.size(); i++) {
 				Route route = candidates.get(i);
 
-				if (BYTES.matches(buf.bytes(), action, route.action, true)
-						&& BYTES.startsWith(buf.bytes(), path, route.path, true)) {
+				if (BytesUtil.matches(buf.bytes(), action, route.action, true)
+						&& BytesUtil.startsWith(buf.bytes(), path, route.path, true)) {
 					int pos = path.start + route.path.length;
 					if (path.limit() == pos || buf.get(pos) == '/') {
 						x.setSubpath(pos, path.limit());

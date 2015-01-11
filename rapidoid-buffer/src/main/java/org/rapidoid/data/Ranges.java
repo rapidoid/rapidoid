@@ -21,7 +21,7 @@ package org.rapidoid.data;
  */
 
 import org.rapidoid.buffer.Buf;
-import org.rapidoid.bytes.BYTES;
+import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.util.U;
 
@@ -50,7 +50,7 @@ public class Ranges {
 	}
 
 	public Range getByPrefix(Bytes bytes, byte[] prefix, boolean caseSensitive) {
-		return BYTES.getByPrefix(bytes, this, prefix, caseSensitive);
+		return BytesUtil.getByPrefix(bytes, this, prefix, caseSensitive);
 	}
 
 	@Override

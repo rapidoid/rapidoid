@@ -26,7 +26,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
-import org.rapidoid.bytes.BYTES;
+import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.bytes.ByteBufferBytes;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.data.Range;
@@ -1199,7 +1199,7 @@ public class MultiBuf implements Buf, Constants {
 	@Override
 	public void scanLn(Range line) {
 		assert invariant();
-		int pos = BYTES.parseLine(bytes(), line, position(), size());
+		int pos = BytesUtil.parseLine(bytes(), line, position(), size());
 
 		if (pos < 0) {
 			assert invariant();
@@ -1214,7 +1214,7 @@ public class MultiBuf implements Buf, Constants {
 	public void scanLnLn(Ranges lines) {
 		assert invariant();
 
-		int pos = BYTES.parseLines(bytes(), lines, position(), size());
+		int pos = BytesUtil.parseLines(bytes(), lines, position(), size());
 
 		if (pos < 0) {
 			assert invariant();
@@ -1262,7 +1262,7 @@ public class MultiBuf implements Buf, Constants {
 	public void scanTo(byte sep, Range range, boolean failOnLimit) {
 		assert invariant();
 
-		int pos = BYTES.find(bytes(), _position, _limit, sep, true);
+		int pos = BytesUtil.find(bytes(), _position, _limit, sep, true);
 
 		if (pos >= 0) {
 			consumeAndSkip(pos, range, 1);
@@ -1282,8 +1282,8 @@ public class MultiBuf implements Buf, Constants {
 	public int scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit) {
 		assert invariant();
 
-		int pos1 = BYTES.find(bytes(), _position, _limit, sep1, true);
-		int pos2 = BYTES.find(bytes(), _position, _limit, sep2, true);
+		int pos1 = BytesUtil.find(bytes(), _position, _limit, sep1, true);
+		int pos2 = BytesUtil.find(bytes(), _position, _limit, sep2, true);
 
 		boolean found1 = pos1 >= 0;
 		boolean found2 = pos2 >= 0;
@@ -1327,7 +1327,7 @@ public class MultiBuf implements Buf, Constants {
 	public void scanLnLn(Ranges ranges, Int result, byte end1, byte end2) {
 		assert invariant();
 
-		int nextPos = BYTES.parseLines(bytes(), ranges, result, _position, _limit, end1, end2);
+		int nextPos = BytesUtil.parseLines(bytes(), ranges, result, _position, _limit, end1, end2);
 
 		if (nextPos < 0) {
 			throw Buf.INCOMPLETE_READ;

@@ -20,7 +20,7 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.bytes.BYTES;
+import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.net.TCP;
@@ -68,7 +68,7 @@ public class HttpPipeliningTest extends HttpTestCommons {
 						ctx.input().scanLnLn(lines.reset());
 						ctx.input().scanN(5, resp); // response body: "Hello"
 
-						if (!BYTES.matches(ctx.input().bytes(), resp, RESP, true)) {
+						if (!BytesUtil.matches(ctx.input().bytes(), resp, RESP, true)) {
 							err.value = true;
 						}
 

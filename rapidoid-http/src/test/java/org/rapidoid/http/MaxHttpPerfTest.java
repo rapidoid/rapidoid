@@ -22,7 +22,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
-import org.rapidoid.bytes.BYTES;
+import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.net.TCP;
@@ -90,7 +90,7 @@ public class MaxHttpPerfTest {
 
 				Int pos = ctx.helper().integers[0];
 
-				int poss = BYTES.parseLines(in.bytes(), lines, pos, in.position(), in.size(), (byte) 'v', (byte) 'e');
+				int poss = BytesUtil.parseLines(in.bytes(), lines, pos, in.position(), in.size(), (byte) 'v', (byte) 'e');
 
 				in.position(poss);
 

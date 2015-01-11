@@ -27,7 +27,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.Int;
 
-public class BYTES implements Constants {
+public class BytesUtil implements Constants {
 
 	public static final byte[] CHARS_SWITCH_CASE = new byte[128];
 

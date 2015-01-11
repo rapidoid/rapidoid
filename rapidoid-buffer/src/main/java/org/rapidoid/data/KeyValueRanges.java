@@ -23,7 +23,7 @@ package org.rapidoid.data;
 import java.util.Map;
 
 import org.rapidoid.buffer.Buf;
-import org.rapidoid.bytes.BYTES;
+import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.util.U;
 
 public class KeyValueRanges {
@@ -56,7 +56,7 @@ public class KeyValueRanges {
 
 	public Range get(Buf buf, byte[] key, boolean caseSensitive) {
 		for (int i = 0; i < count; i++) {
-			if (BYTES.matches(buf.bytes(), keys[i], key, caseSensitive)) {
+			if (BytesUtil.matches(buf.bytes(), keys[i], key, caseSensitive)) {
 				return values[i];
 			}
 		}
