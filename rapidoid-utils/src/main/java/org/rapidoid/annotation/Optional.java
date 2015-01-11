@@ -26,7 +26,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-@Target({ FIELD })
+@Target({ FIELD, METHOD })
 @Retention(RUNTIME)
 public @interface Optional {
 
