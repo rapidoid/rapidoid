@@ -4,7 +4,7 @@ import java.util.Map;
 
 /*
  * #%L
- * rapidoid-db
+ * rapidoid-db-inmem
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
