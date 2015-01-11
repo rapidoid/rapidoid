@@ -1,4 +1,4 @@
-package org.rapidoid.db;
+package org.rapidoid.db.impl;
 
 /*
  * #%L
@@ -20,6 +20,9 @@ package org.rapidoid.db;
  * #L%
  */
 
+import org.rapidoid.db.DbList;
+import org.rapidoid.db.DbRef;
+import org.rapidoid.db.DbSet;
 import org.rapidoid.prop.Prop;
 import org.rapidoid.prop.PropertyFilter;
 

@@ -1,4 +1,4 @@
-package org.rapidoid.db;
+package org.rapidoid.db.impl;
 
 /*
  * #%L
@@ -25,12 +25,16 @@ import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.rapidoid.activity.NamedActivity;
-import org.rapidoid.db.impl.DefaultDbList;
-import org.rapidoid.db.impl.DefaultDbRef;
-import org.rapidoid.db.impl.DefaultDbSet;
+import org.rapidoid.db.Db;
+import org.rapidoid.db.DbColumn;
+import org.rapidoid.db.DbList;
+import org.rapidoid.db.DbRef;
+import org.rapidoid.db.DbSchema;
+import org.rapidoid.db.DbSet;
 import org.rapidoid.inmem.InMem;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;

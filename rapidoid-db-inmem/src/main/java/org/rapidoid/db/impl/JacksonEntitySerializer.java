@@ -1,4 +1,4 @@
-package org.rapidoid.db;
+package org.rapidoid.db.impl;
 
 /*
  * #%L
@@ -24,10 +24,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.rapidoid.db.impl.DbRelationInternals;
-import org.rapidoid.db.impl.DefaultDbList;
-import org.rapidoid.db.impl.DefaultDbRef;
-import org.rapidoid.db.impl.DefaultDbSet;
+import org.rapidoid.db.Db;
+import org.rapidoid.db.DbList;
+import org.rapidoid.db.DbRef;
+import org.rapidoid.db.DbSet;
 import org.rapidoid.inmem.EntitySerializer;
 import org.rapidoid.prop.Prop;
 import org.rapidoid.util.Cls;

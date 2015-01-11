@@ -1,7 +1,9 @@
-package org.rapidoid.db;
+package org.rapidoid.db.impl;
 
 import java.util.concurrent.ConcurrentMap;
 
+import org.rapidoid.db.DbDsl;
+import org.rapidoid.db.DbSchema;
 import org.rapidoid.util.U;
 
 /*

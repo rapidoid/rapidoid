@@ -20,7 +20,7 @@ package custom;
  * #L%
  */
 
-import org.rapidoid.db.DbImpl;
+import org.rapidoid.db.impl.DbImpl;
 import org.rapidoid.util.U;
 
 public class CustomizedDbImpl extends DbImpl {
