@@ -31,6 +31,8 @@ import org.rapidoid.db.DbSet;
 @SuppressWarnings("serial")
 public class User extends AbstractUserEntity {
 
+	public static final User DSL = DB.dsl(User.class);
+
 	public String email;
 
 	public String name;

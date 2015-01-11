@@ -44,9 +44,12 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 
 	private final InMem inmem;
 
+	private final DbSchema schema;
+
 	public DbImpl(String name, String filename) {
 		super(name);
 		this.inmem = new InMem(filename, new JacksonEntitySerializer(this), REL_CLASSES);
+		this.schema = new DbSchemaImpl();
 	}
 
 	@Override
@@ -220,6 +223,11 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	@Override
 	public <E> DbRef<E> ref(Object holder, String relation) {
 		return new DefaultDbRef<E>(this, holder, relation);
+	}
+
+	@Override
+	public DbSchema schema() {
+		return schema;
 	}
 
 }

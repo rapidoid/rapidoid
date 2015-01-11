@@ -179,4 +179,12 @@ public class DB {
 		return db().ref(holder, relation);
 	}
 
+	public static DbSchema schema() {
+		return db().schema();
+	}
+
+	public static <E> E dsl(Class<E> entityType) {
+		return db().schema().dsl(entityType);
+	}
+
 }

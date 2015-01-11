@@ -42,6 +42,8 @@ import org.rapidoid.util.CommonRoles;
 @CanDelete({ CommonRoles.OWNER, CommonRoles.ADMIN })
 public class Task extends AbstractEntity {
 
+	public static final Task DSL = DB.dsl(Task.class);
+
 	@CanChange({ MODERATOR, OWNER })
 	public String title;
 

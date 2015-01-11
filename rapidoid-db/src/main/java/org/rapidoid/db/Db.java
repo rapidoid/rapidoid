@@ -91,4 +91,6 @@ public interface Db extends Activity<Db> {
 
 	<E> DbRef<E> ref(Object holder, String relation);
 
+	DbSchema schema();
+
 }
