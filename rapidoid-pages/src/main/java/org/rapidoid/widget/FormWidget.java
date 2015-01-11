@@ -244,6 +244,10 @@ public class FormWidget extends AbstractWidget {
 		throw U.rte("Cannot find field '%s'!", fieldName);
 	}
 
+	public FormWidget addField(String fieldName, Tag field) {
+		throw U.notReady();
+	}
+
 	protected void init(Item item, String... properties) {
 
 		props = editable() ? item.editableProperties(properties) : item.readableProperties(properties);
@@ -564,7 +568,7 @@ public class FormWidget extends AbstractWidget {
 	}
 
 	protected Object readonly(Object item) {
-		return display(item);
+		return display(item).class_("form-display");
 	}
 
 	protected Object checkboxesInput(String name, Collection<?> options, Var<?> var) {

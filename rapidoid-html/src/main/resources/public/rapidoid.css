@@ -2,7 +2,7 @@
 	cursor: pointer;
 }
 
-.value-display {
+.display-wrap {
 	padding-top: 1px;
 	padding-bottom: 1px;
 	padding-left: 2px;
@@ -45,10 +45,14 @@ span.highlight {
 }
 
 .table-hover tbody tr:hover td {
-	background-color: #FFC !important;
+	background-color: #FFB !important;
 }
 
 .field-error {
 	font-weight: bold;
 	color: #700;
+}
+
+.nothing {
+	color: #BBB;	
 }

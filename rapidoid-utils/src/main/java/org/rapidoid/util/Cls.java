@@ -1034,4 +1034,8 @@ public class Cls {
 		return projection;
 	}
 
+	public static Object str(Object value) {
+		return convert(value, String.class);
+	}
+
 }

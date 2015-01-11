@@ -573,7 +573,7 @@ public abstract class BootstrapWidgets extends HTML {
 		return checkboxes(U.rndStr(30), options, var);
 	}
 
-	public static Object display(Object item) {
+	public static Tag display(Object item) {
 		if (item instanceof Var<?>) {
 			Var<?> var = (Var<?>) item;
 			return display(var.get());
@@ -585,12 +585,11 @@ public abstract class BootstrapWidgets extends HTML {
 			return display(U.arrayIterator(arr));
 		}
 
-		Tag itemDisplay = isEntity(item) ? a(item).href(urlFor(item)) : span(Cls.convert(item, String.class));
-		itemDisplay = itemDisplay.class_("value-display");
+		Tag itemDisplay = isEntity(item) ? a(item).href(urlFor(item)) : span(Cls.str(item));
 		return itemDisplay;
 	}
 
-	private static Object display(Iterator<?> it) {
+	private static Tag display(Iterator<?> it) {
 		Tag icon = awesome("circle-o");
 		Tag wrap = div();
 
@@ -600,14 +599,14 @@ public abstract class BootstrapWidgets extends HTML {
 		}
 
 		if (wrap.isEmpty()) {
-			return nothing().class_("value-line");
+			return span(nothing()).class_("value-line");
 		}
 
 		return wrap;
 	}
 
 	public static Tag nothing() {
-		return div(awesome("ban"), " No entries!");
+		return span(awesome("ban"), " N/A").class_("nothing");
 	}
 
 }
