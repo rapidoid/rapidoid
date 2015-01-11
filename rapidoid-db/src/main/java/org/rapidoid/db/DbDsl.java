@@ -1,5 +1,7 @@
 package org.rapidoid.db;
 
+import java.util.List;
+
 /*
  * #%L
  * rapidoid-db
@@ -20,12 +22,8 @@ package org.rapidoid.db;
  * #L%
  */
 
-public interface DbSchema {
+public interface DbDsl<E> {
 
-	<E> DbDsl<E> dsl(Class<E> entityType);
-
-	<E> Class<E> getEntityType(String typeName);
-
-	<E> Class<E> getEntityTypeFromPlural(String typeNamePlural);
+	List<E> all();
 
 }

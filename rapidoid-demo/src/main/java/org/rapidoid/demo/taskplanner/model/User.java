@@ -25,13 +25,14 @@ import java.util.Date;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.app.entity.AbstractUserEntity;
 import org.rapidoid.db.DB;
+import org.rapidoid.db.DbDsl;
 import org.rapidoid.db.DbSet;
 
 @Scaffold
 @SuppressWarnings("serial")
 public class User extends AbstractUserEntity {
 
-	public static final User DSL = DB.dsl(User.class);
+	public static final DbDsl<User> DSL = DB.dsl(User.class);
 
 	public String email;
 

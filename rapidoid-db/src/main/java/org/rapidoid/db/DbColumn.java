@@ -20,12 +20,8 @@ package org.rapidoid.db;
  * #L%
  */
 
-public interface DbSchema {
+import org.rapidoid.var.Var;
 
-	<E> DbDsl<E> dsl(Class<E> entityType);
-
-	<E> Class<E> getEntityType(String typeName);
-
-	<E> Class<E> getEntityTypeFromPlural(String typeNamePlural);
+public interface DbColumn<E> extends Var<E> {
 
 }

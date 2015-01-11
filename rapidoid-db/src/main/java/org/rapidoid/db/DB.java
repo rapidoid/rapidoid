@@ -183,7 +183,7 @@ public class DB {
 		return db().schema();
 	}
 
-	public static <E> E dsl(Class<E> entityType) {
+	public static <E> DbDsl<E> dsl(Class<E> entityType) {
 		return db().schema().dsl(entityType);
 	}
 

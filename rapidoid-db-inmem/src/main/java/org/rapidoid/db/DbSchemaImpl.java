@@ -31,7 +31,7 @@ public class DbSchemaImpl implements DbSchema {
 	private final ConcurrentMap<String, Class<?>> entityTypesPlural = U.concurrentMap();
 
 	@Override
-	public <E> E dsl(Class<E> entityType) {
+	public <E> DbDsl<E> dsl(Class<E> entityType) {
 		String type = entityType.getSimpleName().toLowerCase();
 
 		entityTypes.putIfAbsent(type, entityType);
