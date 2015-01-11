@@ -33,14 +33,19 @@ import org.rapidoid.util.U;
 
 public class DB {
 
+	private static final String IMPL_NAME = "org.rapidoid.db.impl.DbImpl";
+
 	static final Class<Db> DB_IMPL_CLASS;
 
 	private static Db db;
 
 	static {
-		DB_IMPL_CLASS = U.getClassIfExists("org.rapidoid.db.DbImpl");
-		U.must(DB_IMPL_CLASS != null, "Cannot find Db implementation (org.rapidoid.db.DbImpl)!");
-		U.must(Db.class.isAssignableFrom(DB_IMPL_CLASS), "org.rapidoid.db.DbImpl must implement org.rapidoid.db.Db!");
+		DB_IMPL_CLASS = U.getClassIfExists(IMPL_NAME);
+
+		U.must(DB_IMPL_CLASS != null, "Cannot find Db implementation (%s)!", IMPL_NAME);
+		U.must(Db.class.isAssignableFrom(DB_IMPL_CLASS), "%s must implement %s!", IMPL_NAME,
+				Db.class.getCanonicalName());
+
 		init();
 	}
 
@@ -189,11 +194,11 @@ public class DB {
 	}
 
 	public static <E extends Entity> E create(Class<E> entityType) {
-		return db().schema().create(entityType);
+		return schema().create(entityType);
 	}
 
 	public static <E> DbDsl<E> dsl(Class<E> entityType) {
-		return db().schema().dsl(entityType);
+		return schema().dsl(entityType);
 	}
 
 }
