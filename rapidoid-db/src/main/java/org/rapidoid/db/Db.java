@@ -33,6 +33,8 @@ import org.rapidoid.lambda.Predicate;
 
 public interface Db extends Activity<Db> {
 
+	void initAndLoad();
+
 	long insert(Object record);
 
 	<E> E get(long id);

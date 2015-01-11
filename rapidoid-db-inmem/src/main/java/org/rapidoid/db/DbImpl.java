@@ -50,6 +50,11 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	}
 
 	@Override
+	public void initAndLoad() {
+		inmem.initAndLoad();
+	}
+
+	@Override
 	public long insert(Object record) {
 		return inmem.insert(record);
 	}

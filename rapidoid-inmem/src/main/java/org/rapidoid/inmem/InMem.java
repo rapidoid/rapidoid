@@ -159,22 +159,24 @@ public class InMem {
 		};
 
 		if (filename != null && !filename.isEmpty()) {
-
-			if (currentFile().exists() && otherFile().exists()) {
-				resolveDoubleFileInconsistency();
-			}
-
-			load();
-
 			persistor = new Thread(new Runnable() {
 				@Override
 				public void run() {
 					persist();
 				}
 			});
-			persistor.start();
 		} else {
 			persistor = null;
+		}
+	}
+
+	public void initAndLoad() {
+		if (filename != null && !filename.isEmpty()) {
+			if (currentFile().exists() && otherFile().exists()) {
+				resolveDoubleFileInconsistency();
+			}
+			load();
+			persistor.start();
 		}
 	}
 
