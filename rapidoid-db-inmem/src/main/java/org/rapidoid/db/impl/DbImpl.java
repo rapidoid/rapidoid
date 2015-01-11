@@ -215,6 +215,11 @@ public class DbImpl extends NamedActivity<Db> implements Db {
 	}
 
 	@Override
+	public <E> DbColumn<E> column(Map<String, Object> map, String name) {
+		return new DbColumnImpl<E>(map, name);
+	}
+
+	@Override
 	public <E> DbList<E> list(Object holder, String relation) {
 		return new DefaultDbList<E>(this, holder, relation);
 	}

@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
@@ -167,6 +168,10 @@ public class DB {
 		return db().getIdOf(record);
 	}
 
+	public static <E> DbColumn<E> column(Map<String, Object> map, String name) {
+		return db().column(map, name);
+	}
+
 	public static <E> DbList<E> list(Object holder, String relation) {
 		return db().list(holder, relation);
 	}
@@ -181,6 +186,10 @@ public class DB {
 
 	public static DbSchema schema() {
 		return db().schema();
+	}
+
+	public static <E extends Entity> E create(Class<E> entityType) {
+		return db().schema().create(entityType);
 	}
 
 	public static <E> DbDsl<E> dsl(Class<E> entityType) {

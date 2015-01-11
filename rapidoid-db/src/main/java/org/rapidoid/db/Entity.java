@@ -20,14 +20,12 @@ package org.rapidoid.db;
  * #L%
  */
 
-public interface DbSchema {
+import org.rapidoid.util.CommonRoles;
 
-	<E extends Entity> E create(Class<E> entityType);
+public interface Entity extends CommonRoles {
 
-	<E> DbDsl<E> dsl(Class<E> entityType);
+	long id();
 
-	<E> Class<E> getEntityType(String typeName);
-
-	<E> Class<E> getEntityTypeFromPlural(String typeNamePlural);
+	long version();
 
 }

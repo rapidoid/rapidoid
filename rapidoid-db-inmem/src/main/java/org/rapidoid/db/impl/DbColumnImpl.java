@@ -1,4 +1,4 @@
-package org.rapidoid.db;
+package org.rapidoid.db.impl;
 
 /*
  * #%L
@@ -20,14 +20,32 @@ package org.rapidoid.db;
  * #L%
  */
 
-public interface DbSchema {
+import java.util.Map;
 
-	<E extends Entity> E create(Class<E> entityType);
+import org.rapidoid.db.DbColumn;
 
-	<E> DbDsl<E> dsl(Class<E> entityType);
+public class DbColumnImpl<E> implements DbColumn<E> {
 
-	<E> Class<E> getEntityType(String typeName);
+	private static final long serialVersionUID = 5047929644817533060L;
 
-	<E> Class<E> getEntityTypeFromPlural(String typeNamePlural);
+	private final Map<String, Object> map;
+
+	private final String name;
+
+	public DbColumnImpl(Map<String, Object> map, String name) {
+		this.map = map;
+		this.name = name;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public E get() {
+		return (E) map.get(name);
+	}
+
+	@Override
+	public void set(E value) {
+		map.put(name, value);
+	}
 
 }

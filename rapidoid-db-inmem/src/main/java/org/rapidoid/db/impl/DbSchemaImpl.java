@@ -4,6 +4,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.db.DbDsl;
 import org.rapidoid.db.DbSchema;
+import org.rapidoid.db.Entity;
 import org.rapidoid.util.U;
 
 /*
@@ -52,6 +53,12 @@ public class DbSchemaImpl implements DbSchema {
 	@Override
 	public <E> Class<E> getEntityTypeFromPlural(String typeNamePlural) {
 		return (Class<E>) entityTypesPlural.get(typeNamePlural.toLowerCase());
+	}
+
+	@Override
+	public <E extends Entity> E create(Class<E> entityType) {
+		ConcurrentMap<String, Object> map = U.concurrentMap();
+		return DbProxy.create(entityType, map);
 	}
 
 }

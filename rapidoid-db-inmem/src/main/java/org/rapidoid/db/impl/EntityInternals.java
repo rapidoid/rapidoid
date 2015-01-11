@@ -1,4 +1,6 @@
-package org.rapidoid.db;
+package org.rapidoid.db.impl;
+
+import java.util.Map;
 
 /*
  * #%L
@@ -20,14 +22,8 @@ package org.rapidoid.db;
  * #L%
  */
 
-public interface DbSchema {
+public interface EntityInternals {
 
-	<E extends Entity> E create(Class<E> entityType);
-
-	<E> DbDsl<E> dsl(Class<E> entityType);
-
-	<E> Class<E> getEntityType(String typeName);
-
-	<E> Class<E> getEntityTypeFromPlural(String typeNamePlural);
+	Map<?, ?> values();
 
 }

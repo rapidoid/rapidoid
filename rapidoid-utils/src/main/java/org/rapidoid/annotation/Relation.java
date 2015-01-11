@@ -1,8 +1,8 @@
-package org.rapidoid.db;
+package org.rapidoid.annotation;
 
 /*
  * #%L
- * rapidoid-db
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,14 +20,16 @@ package org.rapidoid.db;
  * #L%
  */
 
-public interface DbSchema {
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 
-	<E extends Entity> E create(Class<E> entityType);
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-	<E> DbDsl<E> dsl(Class<E> entityType);
+@Target({ FIELD, METHOD })
+@Retention(RUNTIME)
+public @interface Relation {
 
-	<E> Class<E> getEntityType(String typeName);
-
-	<E> Class<E> getEntityTypeFromPlural(String typeNamePlural);
+	String value();
 
 }

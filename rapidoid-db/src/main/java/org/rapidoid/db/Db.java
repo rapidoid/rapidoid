@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import org.rapidoid.activity.Activity;
 import org.rapidoid.lambda.Callback;
@@ -84,6 +85,8 @@ public interface Db extends Activity<Db> {
 	void destroy();
 
 	long getIdOf(Object record);
+
+	<E> DbColumn<E> column(Map<String, Object> map, String name);
 
 	<E> DbList<E> list(Object holder, String relation);
 
