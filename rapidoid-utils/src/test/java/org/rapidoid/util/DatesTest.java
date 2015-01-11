@@ -39,13 +39,13 @@ public class DatesTest extends TestCommons {
 
 		eq(cal.get(Calendar.YEAR), 2006);
 		eq(cal.get(Calendar.MONTH), 11);
-		eq(cal.get(Calendar.DAY_OF_MONTH), 30);
+		eq(cal.get(Calendar.DAY_OF_MONTH), 31);
 
 		cal.setTime(Dates.date("20/01"));
 
 		eq(cal.get(Calendar.YEAR), Dates.thisYear());
 		eq(cal.get(Calendar.MONTH), 0);
-		eq(cal.get(Calendar.DAY_OF_MONTH), 19);
+		eq(cal.get(Calendar.DAY_OF_MONTH), 20);
 	}
 
 }
