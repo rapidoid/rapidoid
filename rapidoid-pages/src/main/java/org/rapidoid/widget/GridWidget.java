@@ -141,7 +141,7 @@ public class GridWidget extends AbstractWidget {
 		for (Property prop : properties) {
 			Object value = item.get(prop.name());
 			value = U.or(value, "");
-			row = row.append(cell(display(value).class_("grid-display")));
+			row = row.append(cell(display(value)));
 		}
 
 		String js = onClickScript(item);

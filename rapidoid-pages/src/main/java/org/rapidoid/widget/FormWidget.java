@@ -568,7 +568,7 @@ public class FormWidget extends AbstractWidget {
 	}
 
 	protected Object readonly(Object item) {
-		return display(item).class_("form-display");
+		return display(item);
 	}
 
 	protected Object checkboxesInput(String name, Collection<?> options, Var<?> var) {
