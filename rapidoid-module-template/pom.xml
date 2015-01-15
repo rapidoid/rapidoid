@@ -8,9 +8,9 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-module</artifactId>
+	<artifactId>rapidoid-module-template</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid Module</description>
+	<description>Rapidoid Module Template</description>
 
 	<dependencies>
 		<dependency>
