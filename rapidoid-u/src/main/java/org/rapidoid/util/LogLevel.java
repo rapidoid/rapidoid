@@ -22,6 +22,6 @@ package org.rapidoid.util;
 
 public enum LogLevel {
 
-	TRACE, DEBUG, INFO, WARN, ERROR, SEVERE;
+	TRACE, DEBUG, AUDIT, INFO, WARN, ERROR, SEVERE;
 
 }

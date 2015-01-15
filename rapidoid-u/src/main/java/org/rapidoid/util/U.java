@@ -72,6 +72,7 @@ public class U {
 
 	public static final LogLevel TRACE = LogLevel.TRACE;
 	public static final LogLevel DEBUG = LogLevel.DEBUG;
+	public static final LogLevel AUDIT = LogLevel.AUDIT;
 	public static final LogLevel INFO = LogLevel.INFO;
 	public static final LogLevel WARN = LogLevel.WARN;
 	public static final LogLevel ERROR = LogLevel.ERROR;
@@ -227,6 +228,23 @@ public class U {
 	public static void debug(String msg, String key1, Object value1, String key2, Object value2, String key3,
 			Object value3) {
 		log(DEBUG, msg, key1, value1, key2, value2, key3, value3, 3);
+	}
+
+	public static void audit(String msg) {
+		log(AUDIT, msg, null, null, null, null, null, null, 0);
+	}
+
+	public static void audit(String msg, String key, Object value) {
+		log(AUDIT, msg, key, value, null, null, null, null, 1);
+	}
+
+	public static void audit(String msg, String key1, Object value1, String key2, Object value2) {
+		log(AUDIT, msg, key1, value1, key2, value2, null, null, 2);
+	}
+
+	public static void audit(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3) {
+		log(AUDIT, msg, key1, value1, key2, value2, key3, value3, 3);
 	}
 
 	public static void info(String msg) {
