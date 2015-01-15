@@ -184,7 +184,7 @@ public class InMem {
 		String file1 = currentFile().getName();
 		String file2 = otherFile().getName();
 
-		log("WARN", "The database was left in inconsistent state, both files exist! file1=%s, file2=%s", file1, file2);
+		U.warn("The database was left in inconsistent state, both files exist!", "file1", file1, "file2", file2);
 
 		long modif1, modif2;
 		try {
@@ -194,13 +194,13 @@ public class InMem {
 			throw new RuntimeException(e);
 		}
 
-		must(modif1 != modif2,
+		U.must(modif1 != modif2,
 				"Cannot determine which database file to remove, please remove the incorrect file manually!");
 
 		// delete the most recent file, since it wasn't written completely
 		File recent = modif1 > modif2 ? currentFile() : otherFile();
 
-		log("WARN", "The more recent database file is assumed incomplete, so it will be deleted! file=%s", recent);
+		U.warn("The more recent database file is assumed incomplete, so it will be deleted!", "file", recent);
 
 		recent.delete();
 	}
@@ -702,7 +702,7 @@ public class InMem {
 			}
 
 		} catch (Throwable e) {
-			error("Error in transaction, rolling back", e);
+			U.error("Error in transaction, rolling back", e);
 			txRollback();
 			if (txCallback != null) {
 				txCallback.onDone(null, e);
@@ -722,7 +722,7 @@ public class InMem {
 		for (Entry<Long, Rec> e : txChanges.entrySet()) {
 			Long id = e.getKey();
 			Rec value = e.getValue();
-			must(value != null, "Cannot have null value!");
+			U.must(value != null, "Cannot have null value!");
 			data.put(id, value);
 		}
 
@@ -730,10 +730,10 @@ public class InMem {
 			// rollback insert operation
 			Long id = e.getKey();
 			Object value = e.getValue();
-			must(value == INSERTION, "Expected insertion mode!");
+			U.must(value == INSERTION, "Expected insertion mode!");
 
 			Rec inserted = data.remove(id);
-			must(inserted != null, "Cannot have null insertion!");
+			U.must(inserted != null, "Cannot have null insertion!");
 		}
 	}
 
@@ -791,7 +791,7 @@ public class InMem {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
 			String line = reader.readLine();
-			must(line != null, "Missing meta-data at the first line in the database file!");
+			U.must(line != null, "Missing meta-data at the first line in the database file!");
 
 			Map<String, Object> meta = serializer.deserialize(line.getBytes(), Map.class);
 
@@ -818,10 +818,10 @@ public class InMem {
 			String line = reader.readLine();
 			byte[] bytes = line.getBytes();
 
-			must(line != null, "Missing meta-data at the first line in the database file!");
+			U.must(line != null, "Missing meta-data at the first line in the database file!");
 
 			Map<String, Object> meta = serializer.deserialize(bytes, Map.class);
-			log("INFO", "Database meta-data: %s=%s, %s=%s", META_TIMESTAMP, meta.get(META_TIMESTAMP), META_UPTIME,
+			U.info("Database meta-data: %s=%s, %s=%s", META_TIMESTAMP, meta.get(META_TIMESTAMP), META_UPTIME,
 					meta.get(META_UPTIME));
 
 			while ((line = reader.readLine()) != null) {
@@ -919,7 +919,7 @@ public class InMem {
 
 			prevData = copy;
 			boolean isA = aOrB.get();
-			must(aOrB.compareAndSet(isA, !isA), "DB persistence file switching error!");
+			U.must(aOrB.compareAndSet(isA, !isA), "DB persistence file switching error!");
 
 			File oldFile = currentFile();
 			oldFile.delete();
@@ -941,7 +941,7 @@ public class InMem {
 			try {
 				callback.onDone(null, e);
 			} catch (Throwable e2) {
-				error("Transaction callback error", e2);
+				U.error("Transaction callback error", e2);
 			}
 		}
 	}
@@ -963,7 +963,7 @@ public class InMem {
 			try {
 				persistData();
 			} catch (Exception e1) {
-				error("Failed to persist data!", e1);
+				U.error("Failed to persist data!", e1);
 			}
 
 			if (active.get()) {
@@ -975,7 +975,7 @@ public class InMem {
 				try {
 					persistData();
 				} catch (Exception e1) {
-					error("Failed to persist data!", e1);
+					U.error("Failed to persist data!", e1);
 				}
 				return;
 			}
@@ -1056,21 +1056,6 @@ public class InMem {
 		}
 
 		return record;
-	}
-
-	private static void must(boolean condition, String msg, Object... args) {
-		if (!condition) {
-			throw new RuntimeException(String.format(msg, args));
-		}
-	}
-
-	private static void log(String level, String msg, Object... args) {
-		System.out.println(level + " | " + String.format(msg, args));
-	}
-
-	private static void error(String msg, Throwable e) {
-		System.err.println(msg);
-		e.printStackTrace();
 	}
 
 	public static void setObjId(Object obj, long id) {
