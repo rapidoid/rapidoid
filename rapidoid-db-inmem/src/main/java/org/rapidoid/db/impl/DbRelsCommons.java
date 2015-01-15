@@ -26,47 +26,57 @@ import java.util.List;
 import java.util.Set;
 
 import org.rapidoid.db.Database;
-import org.rapidoid.inmem.EntityLinks;
 import org.rapidoid.util.U;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public abstract class DbRelsCommons<E> implements DbRelationInternals, EntityLinks {
+public abstract class DbRelsCommons<E> implements DbRelationInternals {
 
 	protected final Database db;
 
 	protected Object holder;
 
-	protected final String relation;
+	protected final String name;
 
 	private final Collection<Long> ids;
 
 	protected final DbRelChangesTracker tracker = new DbRelChangesTracker();
 
-	public DbRelsCommons(Database db, Object holder, String relation, Collection<Long> ids) {
-		this.db = db;
-		this.holder = holder;
-		this.relation = relation;
-		this.ids = ids;
+	private final Collection<Long> idsView;
 
+	public DbRelsCommons(Database db, Object holder, String relation, Collection<Long> ids) {
 		U.notNull(db, "db");
 		U.notNull(relation, "relation");
 		U.notNull(ids, "ids");
+
+		this.db = db;
+		this.holder = holder;
+		this.name = relation;
+		this.ids = ids;
+		this.idsView = Collections.unmodifiableCollection(ids);
 	}
 
 	protected void initIds(List<? extends Number> initIds) {
 		for (Number id : initIds) {
-			ids.add(id.longValue()); // no tracking on initialization
+			addIdWithoutTracking(id.longValue()); // no tracking on initialization
 		}
 	}
 
 	protected void initId(long id) {
-		ids.add(id); // no tracking on initialization
+		addIdWithoutTracking(id); // no tracking on initialization
 	}
 
 	@Override
 	public void setHolder(Object holder) {
 		this.holder = holder;
+	}
+
+	public Object getHolder() {
+		return holder;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	@Override
@@ -79,13 +89,21 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals, EntityLin
 		return tracker.getRemovedRelations();
 	}
 
+	public void addIdWithoutTracking(long id) {
+		ids.add(id); // just add the ID, no tracking
+	}
+
+	public void removeIdWithoutTracking(long id) {
+		ids.remove(id); // just remove the ID, no tracking
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((db == null) ? 0 : db.hashCode());
 		result = prime * result + ((ids == null) ? 0 : ids.hashCode());
-		result = prime * result + ((relation == null) ? 0 : relation.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
 
@@ -109,10 +127,10 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals, EntityLin
 				return false;
 		} else if (!ids.equals(other.ids))
 			return false;
-		if (relation == null) {
-			if (other.relation != null)
+		if (name == null) {
+			if (other.name != null)
 				return false;
-		} else if (!relation.equals(other.relation))
+		} else if (!name.equals(other.name))
 			return false;
 		return true;
 	}
@@ -124,7 +142,7 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals, EntityLin
 
 	@JsonValue
 	public Object serialized() {
-		return U.map("relation", relation, "ids", ids);
+		return U.map("relation", name, "ids", ids);
 	}
 
 	public boolean isEmpty() {
@@ -263,40 +281,8 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals, EntityLin
 		return removedId;
 	}
 
-	@Override
-	public String relationName() {
-		return relation;
-	}
-
-	@Override
-	public long fromId() {
-		U.notNull(holder, "holder");
-		return db.getIdOf(holder);
-	}
-
-	@Override
-	public Collection<Long> addedRelIds() {
-		return tracker.getAddedRelations();
-	}
-
-	@Override
-	public Collection<Long> removedRelIds() {
-		return tracker.getRemovedRelations();
-	}
-
-	@Override
-	public Collection<Long> allRelIds() {
-		return Collections.unmodifiableCollection(ids);
-	}
-
-	@Override
-	public void addRelTo(long id) {
-		ids.add(id); // no tracking!
-	}
-
-	@Override
-	public void removeRelTo(long id) {
-		ids.remove(id); // no tracking!
+	public Collection<Long> getIdsView() {
+		return idsView;
 	}
 
 }

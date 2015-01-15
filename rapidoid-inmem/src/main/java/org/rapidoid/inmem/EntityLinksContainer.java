@@ -1,8 +1,8 @@
-package custom;
+package org.rapidoid.inmem;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-inmem
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,19 +20,8 @@ package custom;
  * #L%
  */
 
-import org.rapidoid.db.impl.inmem.DbImpl;
-import org.rapidoid.util.U;
+public interface EntityLinksContainer {
 
-public class CustomizedDbImpl extends DbImpl {
-
-	public CustomizedDbImpl(String name, String filename) {
-		super(name, filename);
-	}
-
-	@Override
-	public void delete(long id) {
-		U.warn("deleting record", "id", id);
-		super.delete(id);
-	}
+	EntityLinks getEntityLinks();
 
 }

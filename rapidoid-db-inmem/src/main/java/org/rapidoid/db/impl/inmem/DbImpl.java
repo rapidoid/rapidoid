@@ -1,4 +1,4 @@
-package org.rapidoid.db.impl;
+package org.rapidoid.db.impl.inmem;
 
 /*
  * #%L
@@ -35,6 +35,8 @@ import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSchema;
 import org.rapidoid.db.DbSet;
+import org.rapidoid.db.impl.DbColumnImpl;
+import org.rapidoid.db.impl.DbSchemaImpl;
 import org.rapidoid.inmem.InMem;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
@@ -221,17 +223,17 @@ public class DbImpl extends NamedActivity<Database> implements Database {
 
 	@Override
 	public <E> DbList<E> list(Object holder, String relation) {
-		return new DefaultDbList<E>(this, holder, relation);
+		return new InMemDbList<E>(this, holder, relation);
 	}
 
 	@Override
 	public <E> DbSet<E> set(Object holder, String relation) {
-		return new DefaultDbSet<E>(this, holder, relation);
+		return new InMemDbSet<E>(this, holder, relation);
 	}
 
 	@Override
 	public <E> DbRef<E> ref(Object holder, String relation) {
-		return new DefaultDbRef<E>(this, holder, relation);
+		return new InMemDbRef<E>(this, holder, relation);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package org.rapidoid.db.impl;
+package org.rapidoid.db.impl.inmem;
 
 /*
  * #%L
@@ -28,6 +28,11 @@ import org.rapidoid.db.Database;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
+import org.rapidoid.db.impl.DbHelper;
+import org.rapidoid.db.impl.DbRelationInternals;
+import org.rapidoid.db.impl.DefaultDbList;
+import org.rapidoid.db.impl.DefaultDbRef;
+import org.rapidoid.db.impl.DefaultDbSet;
 import org.rapidoid.inmem.EntitySerializer;
 import org.rapidoid.prop.Prop;
 import org.rapidoid.util.Cls;

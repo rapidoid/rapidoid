@@ -83,7 +83,7 @@ public class DefaultDbList<E> extends DefaultDbCollection<E> implements DbList<E
 	}
 
 	public List<E> subList(int fromIndex, int toIndex) {
-		return new DefaultDbList<E>(db, holder, relation, getIdSublist(fromIndex, toIndex));
+		return new DefaultDbList<E>(db, holder, name, getIdSublist(fromIndex, toIndex));
 	}
 
 }

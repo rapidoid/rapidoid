@@ -248,8 +248,8 @@ public class InMem {
 		for (Prop prop : Cls.propertiesOf(entity).select(relPropSelector)) {
 			Object value = prop.get(entity);
 
-			if (value != null) {
-				EntityLinks links = (EntityLinks) value;
+			if (hasEntityLinks(value)) {
+				EntityLinks links = entityLinks(value);
 
 				long fromId = links.fromId();
 				propageteRelChanges(entity, prop, links, fromId, links.addedRelIds(), links.removedRelIds());
@@ -261,13 +261,20 @@ public class InMem {
 		for (Prop prop : Cls.propertiesOf(entity).select(relPropSelector)) {
 			Object value = prop.get(entity);
 
-			if (value != null) {
-				EntityLinks links = (EntityLinks) value;
-
+			if (hasEntityLinks(value)) {
+				EntityLinks links = entityLinks(value);
 				long fromId = links.fromId();
 				propageteRelChanges(entity, prop, links, fromId, null, links.allRelIds());
 			}
 		}
+	}
+
+	private boolean hasEntityLinks(Object value) {
+		return value instanceof EntityLinksContainer;
+	}
+
+	private EntityLinks entityLinks(Object value) {
+		return ((EntityLinksContainer) value).getEntityLinks();
 	}
 
 	private void propageteRelChanges(Object entity, Prop prop, EntityLinks links, long fromId,
@@ -334,8 +341,8 @@ public class InMem {
 		for (Prop prop : Cls.propertiesOf(fromCls).select(relPropSelector)) {
 			Object value = prop.get(entity);
 
-			if (value != null) {
-				EntityLinks links = (EntityLinks) value;
+			if (hasEntityLinks(value)) {
+				EntityLinks links = entityLinks(value);
 				if (links.relationName().equals(rel)) {
 					if (prop.typeArg(0).equals(toCls)) {
 						return prop;
