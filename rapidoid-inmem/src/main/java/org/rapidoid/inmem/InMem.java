@@ -357,7 +357,7 @@ public class InMem {
 	private void relLink(String relation, Prop srcProp, long fromId, Prop destProp, long toId) {
 		if (srcProp != null && destProp != null) {
 			Object from = get(fromId);
-			EntityLinks srcRels = srcProp.get(from);
+			EntityLinks srcRels = entityLinks(srcProp.get(from));
 			srcRels.addRelTo(toId);
 			update_(fromId, from, false);
 		}
@@ -366,7 +366,7 @@ public class InMem {
 	private void relUnlink(String relation, Prop srcProp, long fromId, Prop destProp, long toId) {
 		if (srcProp != null && destProp != null) {
 			Object from = get(fromId);
-			EntityLinks srcRels = srcProp.get(from);
+			EntityLinks srcRels = entityLinks(srcProp.get(from));
 			srcRels.removeRelTo(toId);
 			update_(fromId, from, false);
 		}
