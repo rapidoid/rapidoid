@@ -30,9 +30,6 @@ import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
 import org.rapidoid.db.impl.DbHelper;
 import org.rapidoid.db.impl.DbRelationInternals;
-import org.rapidoid.db.impl.DefaultDbList;
-import org.rapidoid.db.impl.DefaultDbRef;
-import org.rapidoid.db.impl.DefaultDbSet;
 import org.rapidoid.inmem.EntitySerializer;
 import org.rapidoid.prop.Prop;
 import org.rapidoid.util.Cls;
@@ -72,7 +69,7 @@ public class JacksonEntitySerializer implements EntitySerializer {
 				Map<String, Object> data = jp.readValueAs(Map.class);
 				String relation = (String) data.get("relation");
 				List<? extends Number> ids = (List<Number>) data.get("ids");
-				return new DefaultDbList(db, null, relation, ids);
+				return new InMemDbList(db, null, relation, ids);
 			}
 		});
 
@@ -84,7 +81,7 @@ public class JacksonEntitySerializer implements EntitySerializer {
 				Map<String, Object> data = jp.readValueAs(Map.class);
 				String relation = (String) data.get("relation");
 				List<? extends Number> ids = (List<Number>) data.get("ids");
-				return new DefaultDbSet(db, null, relation, ids);
+				return new InMemDbSet(db, null, relation, ids);
 			}
 		});
 
@@ -98,7 +95,7 @@ public class JacksonEntitySerializer implements EntitySerializer {
 				List<? extends Number> ids = (List<Number>) data.get("ids");
 				U.must(ids.size() <= 1, "Expected 0 or 1 IDs!");
 				long id = !ids.isEmpty() ? ids.get(0).longValue() : -1;
-				return new DefaultDbRef(db, null, relation, id);
+				return new InMemDbRef(db, null, relation, id);
 			}
 		});
 
