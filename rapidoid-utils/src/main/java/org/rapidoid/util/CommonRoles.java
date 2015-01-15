@@ -39,6 +39,9 @@ public interface CommonRoles {
 
 	String SHARED_WITH = "SHARED_WITH";
 
-	List<String> ALL = Collections.unmodifiableList(U.list(ADMIN, MANAGER, MODERATOR, LOGGED_IN, OWNER, SHARED_WITH));
+	String RESTARTER = "RESTARTER";
+
+	List<String> ALL = Collections.unmodifiableList(U.list(ADMIN, MANAGER, MODERATOR, LOGGED_IN, OWNER, SHARED_WITH,
+			RESTARTER));
 
 }
