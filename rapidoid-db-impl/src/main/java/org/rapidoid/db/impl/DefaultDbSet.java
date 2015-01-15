@@ -2,7 +2,7 @@ package org.rapidoid.db.impl;
 
 /*
  * #%L
- * rapidoid-db-inmem
+ * rapidoid-db-impl
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%

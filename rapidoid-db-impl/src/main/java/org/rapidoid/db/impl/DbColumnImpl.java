@@ -2,7 +2,7 @@ package org.rapidoid.db.impl;
 
 /*
  * #%L
- * rapidoid-db-inmem
+ * rapidoid-db-impl
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,32 +20,32 @@ package org.rapidoid.db.impl;
  * #L%
  */
 
-import java.util.Set;
+import java.util.Map;
 
-import org.rapidoid.util.U;
+import org.rapidoid.db.DbColumn;
 
-public class DbRelChangesTracker {
+public class DbColumnImpl<E> implements DbColumn<E> {
 
-	private final Set<Long> addedRelations = U.set();
+	private static final long serialVersionUID = 5047929644817533060L;
 
-	private final Set<Long> removedRelations = U.set();
+	private final Map<String, Object> map;
 
-	public void addedRelTo(long id) {
-		addedRelations.add(id);
-		removedRelations.remove(id);
+	private final String name;
+
+	public DbColumnImpl(Map<String, Object> map, String name) {
+		this.map = map;
+		this.name = name;
 	}
 
-	public void removedRelTo(long id) {
-		removedRelations.add(id);
-		addedRelations.remove(id);
+	@SuppressWarnings("unchecked")
+	@Override
+	public E get() {
+		return (E) map.get(name);
 	}
 
-	public Set<Long> getAddedRelations() {
-		return addedRelations;
-	}
-
-	public Set<Long> getRemovedRelations() {
-		return removedRelations;
+	@Override
+	public void set(E value) {
+		map.put(name, value);
 	}
 
 }

@@ -1,8 +1,10 @@
 package org.rapidoid.db.impl;
 
+import java.util.Map;
+
 /*
  * #%L
- * rapidoid-db-inmem
+ * rapidoid-db-impl
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,21 +22,8 @@ package org.rapidoid.db.impl;
  * #L%
  */
 
-import org.rapidoid.db.DbList;
-import org.rapidoid.db.DbRef;
-import org.rapidoid.db.DbSet;
-import org.rapidoid.prop.Prop;
-import org.rapidoid.prop.PropertyFilter;
+public interface EntityInternals {
 
-public class DbHelper {
-
-	public static final PropertyFilter DB_REL_PROPS = new PropertyFilter() {
-		@Override
-		public boolean eval(Prop prop) throws Exception {
-			Class<?> type = prop.getType();
-			return DbList.class.isAssignableFrom(type) || DbSet.class.isAssignableFrom(type)
-					|| DbRef.class.isAssignableFrom(type);
-		}
-	};
+	Map<?, ?> values();
 
 }
