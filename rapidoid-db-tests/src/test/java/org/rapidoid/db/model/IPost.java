@@ -1,5 +1,10 @@
 package org.rapidoid.db.model;
 
+import org.rapidoid.annotation.Relation;
+import org.rapidoid.db.DbColumn;
+import org.rapidoid.db.DbSet;
+import org.rapidoid.db.Entity;
+
 /*
  * #%L
  * rapidoid-db-tests
@@ -20,13 +25,11 @@ package org.rapidoid.db.model;
  * #L%
  */
 
-import org.rapidoid.annotation.Relation;
-import org.rapidoid.db.DbList;
-import org.rapidoid.db.Entity;
+public interface IPost extends Entity {
 
-public interface IProfile extends Entity {
+	DbColumn<String> content();
 
-	@Relation("posted")
-	public DbList<IPost> posts();
+	@Relation("likes")
+	DbSet<IPerson> likes();
 
 }

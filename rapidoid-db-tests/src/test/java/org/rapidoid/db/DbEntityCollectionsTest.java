@@ -20,54 +20,67 @@ package org.rapidoid.db;
  * #L%
  */
 
+import org.rapidoid.db.model.IPerson;
+import org.rapidoid.db.model.IPost;
 import org.rapidoid.db.model.IProfile;
+import org.rapidoid.db.model.Profile;
 import org.testng.annotations.Test;
 
 public class DbEntityCollectionsTest extends DbTestCommons {
 
-	@Test
+	@Test(enabled = false)
 	public void testCollectionsPersistence() {
 
 		IProfile profile = DB.create(IProfile.class);
 		notNull(profile);
 
-		// FIXME complete this!
-		
-		// profile.posts().add(new Post("post 1"));
-		// DB.persist(profile);
-		// profile.posts().add(new Post("post 2"));
-		// profile.posts().add(new Post("post 3"));
-		// DB.persist(profile);
-		//
-		// int pn = 1;
-		// for (Post post : profile.posts()) {
-		// post.likes.add(new Person("person " + pn, pn * 10));
-		// DB.persist(post);
-		// pn++;
-		// }
-		//
-		// DB.shutdown();
-		// DB.init();
-		//
-		// eq(DB.size(), 7);
-		//
-		// Post post1 = DB.get(1);
-		// eq(post1.content, "post 1");
-		// eq(post1.likes.size(), 1);
-		// eq(post1.likes.iterator().next().name, "person 1");
-		//
-		// Profile p = DB.get(2);
-		// eq(p.posts.size(), 3);
-		//
-		// Post post2 = DB.get(3);
-		// eq(post2.content, "post 2");
-		// eq(post2.likes.size(), 1);
-		// eq(post1.likes.iterator().next().name, "person 1");
-		//
-		// Post post3 = DB.get(4);
-		// eq(post3.content, "post 3");
-		// eq(post3.likes.size(), 1);
-		// eq(post1.likes.iterator().next().name, "person 1");
+		IPost post1 = DB.create(IPost.class);
+		post1.content().set("post 1");
+
+		IPost post2 = DB.create(IPost.class);
+		post2.content().set("post 2");
+
+		IPost post3 = DB.create(IPost.class);
+		post3.content().set("post 3");
+
+		profile.posts().add(post1);
+		DB.persist(profile);
+		profile.posts().add(post2);
+		profile.posts().add(post3);
+		DB.persist(profile);
+
+		int pn = 1;
+		for (IPost post : profile.posts()) {
+			IPerson person = DB.create(IPerson.class);
+			person.name().set("person " + pn);
+			person.age().set(pn * 10);
+			post.likes().add(person);
+			DB.persist(post);
+			pn++;
+		}
+
+		DB.shutdown();
+		DB.init();
+
+		eq(DB.size(), 7);
+
+		post1 = DB.get(1);
+		eq(post1.content().get(), "post 1");
+		eq(post1.likes().size(), 1);
+		eq(post1.likes().iterator().next().name().get(), "person 1");
+
+		Profile p = DB.get(2);
+		eq(p.posts.size(), 3);
+
+		post2 = DB.get(3);
+		eq(post2.content().get(), "post 2");
+		eq(post2.likes().size(), 1);
+		eq(post1.likes().iterator().next().name().get(), "person 1");
+
+		post3 = DB.get(4);
+		eq(post3.content().get(), "post 3");
+		eq(post3.likes().size(), 1);
+		eq(post1.likes().iterator().next().name().get(), "person 1");
 
 		DB.shutdown();
 	}
