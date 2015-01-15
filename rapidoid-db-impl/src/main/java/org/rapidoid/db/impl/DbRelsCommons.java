@@ -28,8 +28,6 @@ import java.util.Set;
 import org.rapidoid.db.Database;
 import org.rapidoid.util.U;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-
 public abstract class DbRelsCommons<E> implements DbRelationInternals {
 
 	protected final Database db;
@@ -140,7 +138,6 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals {
 		return !ids.isEmpty() ? ids.iterator().next() : -1;
 	}
 
-	@JsonValue
 	public Object serialized() {
 		return U.map("relation", name, "ids", ids);
 	}

@@ -33,7 +33,7 @@ import org.rapidoid.util.U;
 
 public class DB {
 
-	private static final String IMPL_NAME = "org.rapidoid.db.impl.DbImpl";
+	private static final String IMPL_NAME = "org.rapidoid.db.impl.inmem.DbImpl";
 
 	static final Class<Database> DB_IMPL_CLASS;
 
