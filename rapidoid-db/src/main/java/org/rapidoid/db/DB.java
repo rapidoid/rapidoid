@@ -40,10 +40,12 @@ public class DB {
 	private static Database db;
 
 	static {
+		String dbImplName = Conf.option("db", IMPL_NAME);
+
 		DB_IMPL_CLASS = U.getClassIfExists(IMPL_NAME);
 
-		U.must(DB_IMPL_CLASS != null, "Cannot find Db implementation (%s)!", IMPL_NAME);
-		U.must(Database.class.isAssignableFrom(DB_IMPL_CLASS), "%s must implement %s!", IMPL_NAME,
+		U.must(DB_IMPL_CLASS != null, "Cannot find Db implementation (%s)!", dbImplName);
+		U.must(Database.class.isAssignableFrom(DB_IMPL_CLASS), "%s must implement %s!", dbImplName,
 				Database.class.getCanonicalName());
 
 		init();
