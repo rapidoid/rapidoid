@@ -702,6 +702,44 @@ public class U {
 		return new ConcurrentHashMap<K, V>();
 	}
 
+	public static <K, V> ConcurrentMap<K, V> concurrentMap(K key, V value) {
+		ConcurrentMap<K, V> map = concurrentMap();
+		map.put(key, value);
+		return map;
+	}
+
+	public static <K, V> ConcurrentMap<K, V> concurrentMap(K key1, V value1, K key2, V value2) {
+		ConcurrentMap<K, V> map = concurrentMap(key1, value1);
+		map.put(key2, value2);
+		return map;
+	}
+
+	public static <K, V> ConcurrentMap<K, V> concurrentMap(K key1, V value1, K key2, V value2, K key3, V value3) {
+		ConcurrentMap<K, V> map = concurrentMap(key1, value1, key2, value2);
+		map.put(key3, value3);
+		return map;
+	}
+
+	public static <K, V> ConcurrentMap<K, V> concurrentMap(K key1, V value1, K key2, V value2, K key3, V value3,
+			K key4, V value4) {
+		ConcurrentMap<K, V> map = concurrentMap(key1, value1, key2, value2, key3, value3);
+		map.put(key4, value4);
+		return map;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <K, V> ConcurrentMap<K, V> concurrentMap(Object... keysAndValues) {
+		must(keysAndValues.length % 2 == 0, "Incorrect number of arguments (expected key-value pairs)!");
+
+		ConcurrentMap<K, V> map = concurrentMap();
+
+		for (int i = 0; i < keysAndValues.length / 2; i++) {
+			map.put((K) keysAndValues[i * 2], (V) keysAndValues[i * 2 + 1]);
+		}
+
+		return map;
+	}
+
 	public static <K, V> Map<K, V> autoExpandingMap(final Class<V> clazz) {
 		return autoExpandingMap(new Mapper<K, V>() {
 			@Override
