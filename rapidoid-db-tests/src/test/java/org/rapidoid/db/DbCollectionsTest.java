@@ -61,12 +61,12 @@ public class DbCollectionsTest extends DbTestCommons {
 		Post post2 = DB.get(3);
 		eq(post2.content, "post 2");
 		eq(post2.likes.size(), 1);
-		eq(post1.likes.iterator().next().name, "person 1");
+		eq(post2.likes.iterator().next().name, "person 2");
 
 		Post post3 = DB.get(4);
 		eq(post3.content, "post 3");
 		eq(post3.likes.size(), 1);
-		eq(post1.likes.iterator().next().name, "person 1");
+		eq(post3.likes.iterator().next().name, "person 3");
 
 		DB.shutdown();
 	}
