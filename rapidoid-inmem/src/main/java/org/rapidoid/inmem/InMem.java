@@ -790,7 +790,6 @@ public class InMem {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public Map<String, Object> loadMetadata(InputStream in) {
 		globalLock();
 
@@ -800,7 +799,8 @@ public class InMem {
 			String line = reader.readLine();
 			U.must(line != null, "Missing meta-data at the first line in the database file!");
 
-			Map<String, Object> meta = serializer.deserialize(line.getBytes(), Map.class);
+			Map<String, Object> meta = U.map();
+			serializer.deserialize(line.getBytes(), meta);
 
 			reader.close();
 
@@ -813,7 +813,6 @@ public class InMem {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void loadFrom(InputStream in) {
 		globalLock();
 
@@ -827,13 +826,16 @@ public class InMem {
 
 			U.must(line != null, "Missing meta-data at the first line in the database file!");
 
-			Map<String, Object> meta = serializer.deserialize(bytes, Map.class);
+			Map<String, Object> meta = U.map();
+			serializer.deserialize(bytes, meta);
+
 			U.info("Database meta-data: %s=%s, %s=%s", META_TIMESTAMP, meta.get(META_TIMESTAMP), META_UPTIME,
 					meta.get(META_UPTIME));
 
 			while ((line = reader.readLine()) != null) {
 				bytes = line.getBytes();
-				Map<String, Object> map = serializer.deserialize(bytes, Map.class);
+				Map<String, Object> map = U.map();
+				serializer.deserialize(bytes, map);
 
 				long id = ((Number) map.get("id")).longValue();
 				String className = ((String) map.get("_class"));
@@ -1040,11 +1042,19 @@ public class InMem {
 
 	@SuppressWarnings("unchecked")
 	private <T> T obj(Rec rec) {
-		return (T) obj(rec, rec.type);
+		Class<T> destType = (Class<T>) rec.type;
+		T dest = U.newInstance(destType);
+		return (T) obj(rec, dest);
 	}
 
-	private <T> T obj(Rec rec, Class<T> type) {
-		return serializer.deserialize(rec.bytes, type);
+	private <T> T obj(Rec rec, Class<T> destType) {
+		T dest = U.newInstance(destType);
+		return (T) obj(rec, dest);
+	}
+
+	private <T> T obj(Rec rec, T destination) {
+		serializer.deserialize(rec.bytes, destination);
+		return destination;
 	}
 
 	@SuppressWarnings("unchecked")

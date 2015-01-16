@@ -24,6 +24,6 @@ public interface EntitySerializer {
 
 	byte[] serialize(Object entity);
 
-	<T> T deserialize(byte[] bytes, Class<T> type);
+	<T> void deserialize(byte[] bytes, T destination);
 
 }

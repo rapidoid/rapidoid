@@ -147,9 +147,9 @@ public class JacksonEntitySerializer implements EntitySerializer {
 		}
 	}
 
-	public <T> T parse(byte[] bytes, Class<T> type) {
+	public <T> void parse(byte[] bytes, T destination) {
 		try {
-			return mapper.readValue(bytes, type);
+			mapper.readerForUpdating(destination).readValue(bytes);
 		} catch (Exception e) {
 			U.error("Cannot parse JSON!", e);
 			throw new RuntimeException(e);
@@ -163,16 +163,14 @@ public class JacksonEntitySerializer implements EntitySerializer {
 	}
 
 	@Override
-	public <T> T deserialize(byte[] bytes, Class<T> type) {
-		T entity = parse(bytes, type);
+	public <T> void deserialize(byte[] bytes, T destination) {
+		parse(bytes, destination);
 
-		for (Prop prop : Cls.propertiesOf(entity).select(DbHelper.DB_REL_PROPS)) {
-			DbRelationInternals rel = prop.get(entity);
+		for (Prop prop : Cls.propertiesOf(destination).select(DbHelper.DB_REL_PROPS)) {
+			DbRelationInternals rel = prop.get(destination);
 			U.notNull(rel, prop.getName());
-			rel.setHolder(entity);
+			rel.setHolder(destination);
 		}
-
-		return entity;
 	}
 
 }
