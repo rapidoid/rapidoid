@@ -1058,6 +1058,13 @@ public class U {
 		return true;
 	}
 
+	public static boolean must(boolean expectedCondition, String message, Object arg1, Object arg2, Object arg3) {
+		if (!expectedCondition) {
+			throw rte(message, text(arg1), text(arg2), text(arg3));
+		}
+		return true;
+	}
+
 	public static void secure(boolean condition, String msg, Object arg) {
 		if (!condition) {
 			throw new SecurityException(readable(msg, arg));
@@ -1068,6 +1075,10 @@ public class U {
 		if (!condition) {
 			throw new SecurityException(readable(msg, arg1, arg2));
 		}
+	}
+
+	public static void bounds(int value, int min, int max) {
+		must(value >= min && value <= max, "%s is not in the range [%s, %s]!", value, min, max);
 	}
 
 	public static void notNullAll(Object... items) {
