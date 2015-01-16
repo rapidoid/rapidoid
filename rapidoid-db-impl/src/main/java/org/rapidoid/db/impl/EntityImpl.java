@@ -35,7 +35,7 @@ import org.rapidoid.util.Metadata;
 import org.rapidoid.util.U;
 
 @SuppressWarnings("serial")
-public class EntityImpl implements Entity, EntityInternals {
+public class EntityImpl implements Entity {
 
 	private final Class<?> type;
 
@@ -76,12 +76,6 @@ public class EntityImpl implements Entity, EntityInternals {
 		Object ver = values.get("version");
 		return ver != null ? ((Number) ver).longValue() : 0;
 	}
-
-	@Override
-	public Map<String, Object> values() {
-		return values;
-	}
-
 	public DbColumn<?> column(Method method) {
 		String name = method.getName();
 		DbColumn<?> res = columns.get(name);
