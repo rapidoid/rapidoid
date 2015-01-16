@@ -52,6 +52,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.regex.Pattern;
 
+import org.rapidoid.annotation.Relation;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
@@ -339,14 +340,25 @@ public class InMem {
 		Object entity = U.newInstance(fromCls);
 
 		for (Prop prop : Cls.propertiesOf(fromCls).select(relPropSelector)) {
-			Object value = prop.get(entity);
 
-			if (hasEntityLinks(value)) {
-				EntityLinks links = entityLinks(value);
-				if (links.relationName().equals(rel)) {
-					if (prop.typeArg(0).equals(toCls)) {
-						return prop;
-					}
+			String relName = null;
+
+			if (!fromCls.isInterface()) {
+				Object value = prop.get(entity);
+				if (hasEntityLinks(value)) {
+					EntityLinks links = entityLinks(value);
+					relName = links.relationName();
+				}
+			} else {
+				Relation relation = prop.getAnnotation(Relation.class);
+				if (relation != null) {
+					relName = relation.value();
+				}
+			}
+
+			if (relName != null && relName.equals(rel)) {
+				if (prop.typeArg(0).equals(toCls)) {
+					return prop;
 				}
 			}
 		}
