@@ -33,7 +33,6 @@ import org.rapidoid.prop.BeanProperties;
 import org.rapidoid.prop.Prop;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
-import org.rapidoid.var.Var;
 
 public class Models {
 
@@ -126,8 +125,7 @@ public class Models {
 			return false;
 		}
 
-		if (prop.isReadOnly() && !Collection.class.isAssignableFrom(prop.getType())
-				&& !Var.class.isAssignableFrom(prop.getType())) {
+		if (prop.isReadOnly() && !Collection.class.isAssignableFrom(prop.getType())) {
 			return false;
 		}
 

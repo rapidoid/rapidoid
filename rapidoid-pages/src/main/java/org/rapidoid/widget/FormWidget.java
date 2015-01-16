@@ -325,10 +325,6 @@ public class FormWidget extends AbstractWidget {
 			return getCollectionPropertyOptions(prop);
 		}
 
-		if (Var.class.isAssignableFrom(type)) {
-			return getVarPropertyOptions(prop);
-		}
-
 		if (Cls.kindOf(type) == TypeKind.OBJECT) {
 			return Collections.EMPTY_LIST;
 		}
@@ -337,10 +333,6 @@ public class FormWidget extends AbstractWidget {
 	}
 
 	protected Collection<?> getCollectionPropertyOptions(Property prop) {
-		return propertyOptions(prop);
-	}
-
-	protected Collection<?> getVarPropertyOptions(Property prop) {
 		return propertyOptions(prop);
 	}
 

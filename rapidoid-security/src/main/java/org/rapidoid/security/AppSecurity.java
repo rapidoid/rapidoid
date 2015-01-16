@@ -147,11 +147,7 @@ public class AppSecurity implements Constants {
 		}
 
 		Object owner = Cls.getPropValue(record, "owner", null);
-
-		if (owner instanceof Var<?>) {
-			owner = ((Var<?>) owner).get();
-		}
-
+		
 		return owner != null && username.equalsIgnoreCase(Cls.getPropValue(owner, "username", ""));
 	}
 

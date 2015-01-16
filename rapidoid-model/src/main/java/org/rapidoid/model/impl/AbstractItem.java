@@ -63,12 +63,6 @@ public abstract class AbstractItem extends AbstractModel implements Item {
 		}
 
 		Prop prop = Cls.property(value, property, true);
-
-		if (Var.class.isAssignableFrom(prop.getType())) {
-			Var<Object> propVar = prop.get(value);
-			return (T) (propVar != null ? propVar.get() : null);
-		}
-
 		return prop.get(value);
 	}
 

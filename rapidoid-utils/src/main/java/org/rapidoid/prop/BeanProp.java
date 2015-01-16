@@ -25,10 +25,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Collection;
 
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
+import org.rapidoid.var.Var;
+import org.rapidoid.var.Vars;
 
 public class BeanProp implements Prop {
 
@@ -45,6 +48,8 @@ public class BeanProp implements Prop {
 	private Class<?> type;
 
 	private TypeKind typeKind;
+
+	private PropKind propKind = PropKind.NORMAL;
 
 	private Object defaultValue;
 
@@ -67,11 +72,25 @@ public class BeanProp implements Prop {
 
 		// TODO: improve inference from getter and setter
 		type = field != null ? field.getType() : getter.getReturnType();
-		typeKind = Cls.kindOf(type);
-
 		Type gType = field != null ? field.getGenericType() : getter.getGenericReturnType();
 		genericType = (gType instanceof ParameterizedType) ? ((ParameterizedType) gType) : null;
 
+		if (Collection.class.isAssignableFrom(type)) {
+			readOnly = false;
+			propKind = PropKind.COLLECTION;
+
+		} else if (Var.class.isAssignableFrom(type)) {
+			U.notNull(genericType, "generic type");
+
+			gType = genericType.getActualTypeArguments()[0];
+			genericType = (gType instanceof ParameterizedType) ? ((ParameterizedType) gType) : null;
+			type = Cls.clazz(gType);
+
+			readOnly = false;
+			propKind = PropKind.VAR;
+		}
+
+		typeKind = Cls.kindOf(type);
 		declaringType = field != null ? field.getDeclaringClass() : getter.getDeclaringClass();
 	}
 
@@ -135,10 +154,10 @@ public class BeanProp implements Prop {
 		try {
 			if (field != null) {
 				field.setAccessible(true);
-				return (T) field.get(target);
+				return (T) Vars.unwrap(field.get(target));
 			} else {
 				getter.setAccessible(true);
-				return (T) getter.invoke(target);
+				return (T) Vars.unwrap(getter.invoke(target));
 			}
 		} catch (Exception e) {
 			throw U.rte(e);
@@ -148,13 +167,46 @@ public class BeanProp implements Prop {
 	@Override
 	public void set(Object target, Object value) {
 		U.must(!isReadOnly(), "Cannot assign value to a read-only property: %s", name);
+		switch (propKind) {
+		case NORMAL:
+			normalSet(target, value);
+			break;
+
+		case COLLECTION:
+			collSet(target, value);
+			break;
+
+		case VAR:
+			varSet(target, value);
+			break;
+
+		default:
+			throw U.notExpected();
+		}
+	}
+
+	private void varSet(Object target, Object value) {
+		Vars.cast(get(target)).set(value);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void collSet(Object target, Object value) {
+		U.must(value instanceof Collection<?>, "Expected a collection, but found: %s", value);
+		Collection<Object> coll = (Collection<Object>) get(target);
+		coll.clear();
+		coll.addAll((Collection<Object>) value);
+	}
+
+	private void normalSet(Object target, Object value) {
 		try {
 			if (field != null) {
 				field.setAccessible(true);
 				field.set(target, convert(value, getType()));
-			} else {
+			} else if (setter != null) {
 				setter.setAccessible(true);
 				setter.invoke(target, convert(value, getType()));
+			} else if (getter != null) {
+				throw U.notExpected();
 			}
 		} catch (Exception e) {
 			throw U.rte(e);
@@ -212,6 +264,7 @@ public class BeanProp implements Prop {
 
 	@Override
 	public Class<?> typeArg(int index) {
+		U.bounds(index, 0, typeArgsCount() - 1);
 		return Cls.clazz(genericType.getActualTypeArguments()[index]);
 	}
 
