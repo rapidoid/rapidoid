@@ -23,6 +23,7 @@ package org.rapidoid.demo.db;
 import java.io.ByteArrayOutputStream;
 import java.util.Collections;
 
+import org.rapidoid.db.impl.inmem.DbEntityConstructor;
 import org.rapidoid.db.impl.inmem.JacksonEntitySerializer;
 import org.rapidoid.inmem.InMem;
 import org.rapidoid.util.Conf;
@@ -35,7 +36,8 @@ public class DbSerializationBenchmark {
 
 		U.args(args);
 
-		final InMem db = new InMem(null, new JacksonEntitySerializer(null), Collections.EMPTY_SET);
+		final InMem db = new InMem(null, new JacksonEntitySerializer(null), new DbEntityConstructor(null),
+				Collections.EMPTY_SET);
 
 		int size = Conf.option("size", 100000);
 		int loops = Conf.option("loops", 100);

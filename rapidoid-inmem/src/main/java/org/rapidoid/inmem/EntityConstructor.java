@@ -1,8 +1,8 @@
-package org.rapidoid.db;
+package org.rapidoid.inmem;
 
 /*
  * #%L
- * rapidoid-db
+ * rapidoid-inmem
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,16 +20,8 @@ package org.rapidoid.db;
  * #L%
  */
 
-public interface DbSchema {
+public interface EntityConstructor {
 
-	<E> E create(Class<E> entityType);
-
-	<E> DbDsl<E> dsl(Class<E> entityType);
-
-	<E> Class<E> getEntityType(String typeName);
-
-	<E> Class<E> getEntityTypeFromPlural(String typeNamePlural);
-
-	<E> Class<E> getEntityTypeFor(Class<E> clazz);
+	<T> T create(Class<T> entityType);
 
 }

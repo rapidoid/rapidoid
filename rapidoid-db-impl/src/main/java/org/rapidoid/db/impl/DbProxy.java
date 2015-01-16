@@ -40,10 +40,15 @@ public class DbProxy implements InvocationHandler, Serializable {
 	public static <E extends Entity> E create(Class<E> type, ConcurrentMap<String, Object> values) {
 		EntityImpl entity = new EntityImpl(type, values);
 
-		E proxy = Cls.createProxy(new DbProxy(entity, type), type, EntityInternals.class);
+		E proxy = Cls.createProxy(new DbProxy(entity, type), type);
 		entity.setProxy(proxy);
 
 		return proxy;
+	}
+
+	public static <E extends Entity> E create(Class<E> type) {
+		ConcurrentMap<String, Object> map = U.concurrentMap("id", (Object) 0L, "version", (Object) 0L);
+		return create(type, map);
 	}
 
 	private final EntityImpl entity;
@@ -61,7 +66,7 @@ public class DbProxy implements InvocationHandler, Serializable {
 		Class<?>[] paramTypes = method.getParameterTypes();
 
 		if (methodClass.equals(Object.class) || methodClass.equals(EntityImpl.class)
-				|| methodClass.equals(Entity.class) || methodClass.equals(EntityInternals.class)) {
+				|| methodClass.equals(Entity.class)) {
 			return method.invoke(entity, args);
 		}
 

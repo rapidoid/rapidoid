@@ -1,5 +1,6 @@
 package org.rapidoid.db.impl;
 
+import java.lang.reflect.Proxy;
 import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.db.DbDsl;
@@ -55,10 +56,32 @@ public class DbSchemaImpl implements DbSchema {
 		return (Class<E>) entityTypesPlural.get(typeNamePlural.toLowerCase());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public <E extends Entity> E create(Class<E> entityType) {
-		ConcurrentMap<String, Object> map = U.concurrentMap();
-		return DbProxy.create(entityType, map);
+	public <E> E create(Class<E> clazz) {
+		Class<E> entityType = getEntityTypeFor(clazz);
+		if (entityType.isInterface() && Entity.class.isAssignableFrom(entityType)) {
+			Class<? extends Entity> cls = (Class<? extends Entity>) entityType;
+			return (E) DbProxy.create(cls);
+		} else {
+			return U.newInstance(entityType);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <E> Class<E> getEntityTypeFor(Class<E> clazz) {
+		if (Entity.class.isAssignableFrom(clazz)) {
+			if (Proxy.class.isAssignableFrom(clazz)) {
+				for (Class<?> interf : clazz.getInterfaces()) {
+					if (Entity.class.isAssignableFrom(interf)) {
+						return (Class<E>) interf;
+					}
+				}
+				throw U.rte("Cannot find entity type for: %s!", clazz);
+			}
+		}
+		return clazz;
 	}
 
 }

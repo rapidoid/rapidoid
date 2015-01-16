@@ -111,6 +111,8 @@ public class InMem {
 
 	private final EntitySerializer serializer;
 
+	private final EntityConstructor constructor;
+
 	private final PropertySelector relPropSelector;
 
 	private final ConcurrentMap<Tuple, RelPair> relPairs = new ConcurrentHashMap<Tuple, RelPair>();
@@ -143,9 +145,12 @@ public class InMem {
 
 	private ConcurrentNavigableMap<Long, Rec> data = new ConcurrentSkipListMap<Long, Rec>();
 
-	public InMem(String filename, EntitySerializer serializer, final Set<Class<?>> relClasses) {
+	public InMem(String filename, EntitySerializer serializer, EntityConstructor constructor,
+			final Set<Class<?>> relClasses) {
+
 		this.filename = filename;
 		this.serializer = serializer;
+		this.constructor = constructor;
 
 		this.relPropSelector = new PropertyFilter() {
 			@Override
@@ -337,7 +342,7 @@ public class InMem {
 	}
 
 	private Prop findRelProperty(Class<?> fromCls, String rel, Class<?> toCls) {
-		Object entity = U.newInstance(fromCls);
+		Object entity = !fromCls.isInterface() ? constructor.create(fromCls) : null;
 
 		for (Prop prop : Cls.propertiesOf(fromCls).select(relPropSelector)) {
 
@@ -1080,12 +1085,12 @@ public class InMem {
 	@SuppressWarnings("unchecked")
 	private <T> T obj(Rec rec) {
 		Class<T> destType = (Class<T>) rec.type;
-		T dest = U.newInstance(destType);
+		T dest = constructor.create(destType);
 		return (T) obj(rec, dest);
 	}
 
 	private <T> T obj(Rec rec, Class<T> destType) {
-		T dest = U.newInstance(destType);
+		T dest = constructor.create(destType);
 		return (T) obj(rec, dest);
 	}
 

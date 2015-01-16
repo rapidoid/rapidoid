@@ -1,8 +1,8 @@
-package org.rapidoid.db;
+package org.rapidoid.db.impl.inmem;
 
 /*
  * #%L
- * rapidoid-db
+ * rapidoid-db-inmem
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,16 +20,20 @@ package org.rapidoid.db;
  * #L%
  */
 
-public interface DbSchema {
+import org.rapidoid.db.Database;
+import org.rapidoid.inmem.EntityConstructor;
 
-	<E> E create(Class<E> entityType);
+public class DbEntityConstructor implements EntityConstructor {
 
-	<E> DbDsl<E> dsl(Class<E> entityType);
+	private final Database db;
 
-	<E> Class<E> getEntityType(String typeName);
+	public DbEntityConstructor(Database db) {
+		this.db = db;
+	}
 
-	<E> Class<E> getEntityTypeFromPlural(String typeNamePlural);
-
-	<E> Class<E> getEntityTypeFor(Class<E> clazz);
+	@Override
+	public <T> T create(Class<T> entityType) {
+		return (T) db.schema().create(entityType);
+	}
 
 }

@@ -48,13 +48,15 @@ public class DbImpl extends NamedActivity<Database> implements Database {
 	@SuppressWarnings("unchecked")
 	private static final Set<Class<?>> REL_CLASSES = U.set(DbList.class, DbSet.class, DbRef.class);
 
+	private final DbEntityConstructor constructor = new DbEntityConstructor(this);
+
 	private final InMem inmem;
 
 	private final DbSchema schema;
 
 	public DbImpl(String name, String filename) {
 		super(name);
-		this.inmem = new InMem(filename, new JacksonEntitySerializer(this), REL_CLASSES);
+		this.inmem = new InMem(filename, new JacksonEntitySerializer(this), constructor, REL_CLASSES);
 		this.schema = new DbSchemaImpl();
 	}
 
