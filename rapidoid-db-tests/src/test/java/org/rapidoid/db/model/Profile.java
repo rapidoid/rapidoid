@@ -20,14 +20,15 @@ package org.rapidoid.db.model;
  * #L%
  */
 
+import org.rapidoid.db.AbstractEntity;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbList;
 
-public class Profile {
+public class Profile extends AbstractEntity {
 
-	public long id;
+	private static final long serialVersionUID = 7386682836039719457L;
 
-	public DbList<Post> posts = DB.list(this, "posted");
+	public final DbList<Post> posts = DB.list(this, "posted");
 
 	@Override
 	public String toString() {

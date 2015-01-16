@@ -1,6 +1,8 @@
 package org.rapidoid.db.model;
 
+import org.rapidoid.db.AbstractEntity;
 import org.rapidoid.db.DB;
+import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
 
 /*
@@ -23,13 +25,15 @@ import org.rapidoid.db.DbSet;
  * #L%
  */
 
-public class Post {
+public class Post extends AbstractEntity {
 
-	public long id;
+	private static final long serialVersionUID = 3776106825040831514L;
 
 	public String content;
 
-	public DbSet<Person> likes = DB.set(this, "likes");
+	public final DbRef<Profile> postedOn = DB.ref(this, "^posted");
+
+	public final DbSet<Person> likes = DB.set(this, "likes");
 
 	public Post() {
 	}
