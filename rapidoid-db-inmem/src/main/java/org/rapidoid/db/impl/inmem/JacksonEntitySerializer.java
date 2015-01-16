@@ -147,9 +147,11 @@ public class JacksonEntitySerializer implements EntitySerializer {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> void parse(byte[] bytes, T destination) {
 		try {
-			mapper.readerForUpdating(destination).readValue(bytes);
+			Map<String, Object> map = mapper.readValue(bytes, Map.class);
+			Cls.update(map, destination);
 		} catch (Exception e) {
 			U.error("Cannot parse JSON!", e);
 			throw new RuntimeException(e);
@@ -158,8 +160,8 @@ public class JacksonEntitySerializer implements EntitySerializer {
 
 	@Override
 	public byte[] serialize(Object entity) {
-		String _class = entity.getClass().getCanonicalName();
-		return stringifyWithExtras(entity, "_class", _class);
+		Class<?> entityType = db.schema().getEntityTypeFor(entity.getClass());
+		return stringifyWithExtras(Cls.read(entity), "_class", entityType.getCanonicalName());
 	}
 
 	@Override

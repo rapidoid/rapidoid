@@ -23,8 +23,10 @@ package org.rapidoid.db.impl;
 import java.util.Map;
 
 import org.rapidoid.db.DbColumn;
+import org.rapidoid.prop.SerializableBean;
+import org.rapidoid.util.U;
 
-public class DbColumnImpl<E> implements DbColumn<E> {
+public class DbColumnImpl<E> implements DbColumn<E>, SerializableBean<Object> {
 
 	private static final long serialVersionUID = 5047929644817533060L;
 
@@ -33,6 +35,9 @@ public class DbColumnImpl<E> implements DbColumn<E> {
 	private final String name;
 
 	public DbColumnImpl(Map<String, Object> map, String name) {
+		U.notNull(map, "map");
+		U.notNull(name, "name");
+
 		this.map = map;
 		this.name = name;
 	}
@@ -46,6 +51,17 @@ public class DbColumnImpl<E> implements DbColumn<E> {
 	@Override
 	public void set(E value) {
 		map.put(name, value);
+	}
+
+	@Override
+	public Object serializeBean() {
+		return get();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void deserializeBean(Object serialized) {
+		set((E) serialized);
 	}
 
 }

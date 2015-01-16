@@ -23,18 +23,20 @@ package org.rapidoid.db.impl;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.rapidoid.db.Database;
+import org.rapidoid.prop.SerializableBean;
 import org.rapidoid.util.U;
 
-public abstract class DbRelsCommons<E> implements DbRelationInternals {
+public abstract class DbRelsCommons<E> implements DbRelationInternals, SerializableBean<Map<String, Object>> {
 
 	protected final Database db;
 
 	protected Object holder;
 
-	protected final String name;
+	protected String name;
 
 	private final Collection<Long> ids;
 
@@ -138,10 +140,6 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals {
 	protected long getSingleId() {
 		U.must(ids.size() <= 1);
 		return !ids.isEmpty() ? ids.iterator().next() : -1;
-	}
-
-	public Object serialized() {
-		return U.map("relation", name, "ids", ids);
 	}
 
 	public boolean isEmpty() {
@@ -287,6 +285,22 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals {
 	@Override
 	public String toString() {
 		return ids.toString();
+	}
+
+	@Override
+	public Map<String, Object> serializeBean() {
+		return U.map("relation", name, "ids", ids);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void deserializeBean(Map<String, Object> serialized) {
+		name = (String) serialized.get("relation");
+		U.notNull(name, "relation");
+
+		Collection<? extends Number> initialIds = (Collection<? extends Number>) serialized.get("ids");
+		U.notNull(initialIds, "ids");
+		initIds(initialIds);
 	}
 
 }

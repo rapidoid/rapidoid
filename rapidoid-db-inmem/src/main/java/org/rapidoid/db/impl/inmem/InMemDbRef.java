@@ -25,8 +25,6 @@ import org.rapidoid.db.impl.DefaultDbRef;
 import org.rapidoid.inmem.EntityLinks;
 import org.rapidoid.inmem.EntityLinksContainer;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-
 public class InMemDbRef<E> extends DefaultDbRef<E> implements EntityLinksContainer {
 
 	private static final long serialVersionUID = 6459087258568217810L;
@@ -44,12 +42,6 @@ public class InMemDbRef<E> extends DefaultDbRef<E> implements EntityLinksContain
 	@Override
 	public EntityLinks getEntityLinks() {
 		return entityLinks;
-	}
-
-	@JsonValue
-	@Override
-	public Object serialized() {
-		return super.serialized();
 	}
 
 }
