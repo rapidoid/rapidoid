@@ -70,10 +70,13 @@ public class Cls {
 
 	private static void getBeanProperties(Class<?> clazz, Map<String, BeanProp> properties) {
 
-		if (clazz == Object.class) {
+		if (clazz == null || clazz == Object.class) {
 			return;
 		} else {
 			getBeanProperties(clazz.getSuperclass(), properties);
+			for (Class<?> interf : clazz.getInterfaces()) {
+				getBeanProperties(interf, properties);
+			}
 		}
 
 		try {
@@ -83,8 +86,7 @@ public class Cls {
 				Class<?>[] params = method.getParameterTypes();
 				Class<?> ret = method.getReturnType();
 
-				if ((modif & Modifier.PUBLIC) != 0 && (modif & Modifier.STATIC) == 0
-						&& (modif & Modifier.ABSTRACT) == 0) {
+				if ((modif & Modifier.PUBLIC) != 0 && (modif & Modifier.STATIC) == 0) {
 
 					String name = method.getName();
 					if (name.matches("^(get|set|is)[A-Z].*")) {
