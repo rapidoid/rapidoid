@@ -23,16 +23,16 @@ package org.rapidoid.db;
 import org.rapidoid.db.model.IPerson;
 import org.rapidoid.db.model.IPost;
 import org.rapidoid.db.model.IProfile;
-import org.rapidoid.db.model.Profile;
 import org.testng.annotations.Test;
 
 public class DbEntityCollectionsTest extends DbTestCommons {
 
-	@Test(enabled = false)
+	@Test
 	public void testCollectionsPersistence() {
 
 		IProfile profile = DB.create(IProfile.class);
 		notNull(profile);
+		eq(DB.size(), 0);
 
 		IPost post1 = DB.create(IPost.class);
 		post1.content().set("post 1");
@@ -44,10 +44,21 @@ public class DbEntityCollectionsTest extends DbTestCommons {
 		post3.content().set("post 3");
 
 		profile.posts().add(post1);
+		eq(DB.size(), 1);
+
 		DB.persist(profile);
+		eq(DB.size(), 2);
+
 		profile.posts().add(post2);
+		eq(DB.size(), 3);
+
 		profile.posts().add(post3);
+		eq(DB.size(), 4);
+
+		notNull(profile.id());
+		notNull(profile.id().get());
 		DB.persist(profile);
+		eq(DB.size(), 4);
 
 		int pn = 1;
 		for (IPost post : profile.posts()) {
@@ -65,22 +76,25 @@ public class DbEntityCollectionsTest extends DbTestCommons {
 		eq(DB.size(), 7);
 
 		post1 = DB.get(1);
+		notNull(post1);
+		notNull(post1.likes());
+
 		eq(post1.content().get(), "post 1");
 		eq(post1.likes().size(), 1);
 		eq(post1.likes().iterator().next().name().get(), "person 1");
 
-		Profile p = DB.get(2);
-		eq(p.posts.size(), 3);
+		IProfile p = DB.get(2);
+		eq(p.posts().size(), 3);
 
 		post2 = DB.get(3);
 		eq(post2.content().get(), "post 2");
 		eq(post2.likes().size(), 1);
-		eq(post1.likes().iterator().next().name().get(), "person 1");
+		eq(post2.likes().iterator().next().name().get(), "person 2");
 
 		post3 = DB.get(4);
 		eq(post3.content().get(), "post 3");
 		eq(post3.likes().size(), 1);
-		eq(post1.likes().iterator().next().name().get(), "person 1");
+		eq(post3.likes().iterator().next().name().get(), "person 3");
 
 		DB.shutdown();
 	}
