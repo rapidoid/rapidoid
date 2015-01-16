@@ -50,7 +50,11 @@ public class DbColumnImpl<E> implements DbColumn<E>, SerializableBean<Object> {
 
 	@Override
 	public void set(E value) {
-		map.put(name, value);
+		if (value != null) {
+			map.put(name, value);
+		} else {
+			map.remove(name);
+		}
 	}
 
 	@Override
