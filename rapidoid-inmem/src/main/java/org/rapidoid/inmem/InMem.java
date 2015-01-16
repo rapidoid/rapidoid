@@ -883,15 +883,16 @@ public class InMem {
 			Map<String, Object> meta = U.map();
 			serializer.deserialize(bytes, meta);
 
-			U.info("Database meta-data: %s=%s, %s=%s", META_TIMESTAMP, meta.get(META_TIMESTAMP), META_UPTIME,
-					meta.get(META_UPTIME));
+			U.info("Database meta-data", META_TIMESTAMP, meta.get(META_TIMESTAMP), META_UPTIME, meta.get(META_UPTIME));
 
 			while ((line = reader.readLine()) != null) {
 				bytes = line.getBytes();
 				Map<String, Object> map = U.map();
 				serializer.deserialize(bytes, map);
 
-				long id = ((Number) map.get("id")).longValue();
+				Number idNum = (Number) map.get("id");
+				U.must(idNum != null, "Found DB record without ID: %s", line);
+				long id = idNum.longValue();
 				String className = ((String) map.get("_class"));
 
 				Class<?> type;
