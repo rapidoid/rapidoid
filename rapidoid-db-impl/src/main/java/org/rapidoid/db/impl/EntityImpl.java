@@ -21,7 +21,6 @@ package org.rapidoid.db.impl;
  */
 
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.annotation.Relation;
@@ -34,8 +33,9 @@ import org.rapidoid.db.Entity;
 import org.rapidoid.util.Metadata;
 import org.rapidoid.util.U;
 
-@SuppressWarnings("serial")
 public class EntityImpl implements Entity {
+
+	private static final long serialVersionUID = -5556123216690345146L;
 
 	private final Class<?> type;
 
@@ -49,11 +49,17 @@ public class EntityImpl implements Entity {
 
 	private final ConcurrentMap<String, DbRef<?>> refs = U.concurrentMap();
 
+	private final DbColumn<Long> idColumn;
+
+	private final DbColumn<Long> versionColumn;
+
 	private Entity proxy;
 
 	public EntityImpl(Class<?> type, ConcurrentMap<String, Object> values) {
 		this.type = type;
 		this.values = values;
+		this.idColumn = DB.column(values, "id");
+		this.versionColumn = DB.column(values, "version");
 	}
 
 	public void setProxy(Entity proxy) {
@@ -65,17 +71,11 @@ public class EntityImpl implements Entity {
 		return type.getSimpleName() + values;
 	}
 
-	@Override
-	public long id() {
+	private long getId() {
 		Object id = values.get("id");
 		return id != null ? ((Number) id).longValue() : 0;
 	}
 
-	@Override
-	public long version() {
-		Object ver = values.get("version");
-		return ver != null ? ((Number) ver).longValue() : 0;
-	}
 	public DbColumn<?> column(Method method) {
 		String name = method.getName();
 		DbColumn<?> res = columns.get(name);
@@ -138,7 +138,7 @@ public class EntityImpl implements Entity {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (id() ^ (id() >>> 32));
+		result = prime * result + (int) (getId() ^ (getId() >>> 32));
 		return result;
 	}
 
@@ -151,9 +151,19 @@ public class EntityImpl implements Entity {
 		if (getClass() != obj.getClass())
 			return false;
 		Entity other = (Entity) obj;
-		if (id() != other.id())
+		if (getId() != other.id().get())
 			return false;
 		return true;
+	}
+
+	@Override
+	public DbColumn<Long> id() {
+		return idColumn;
+	}
+
+	@Override
+	public DbColumn<Long> version() {
+		return versionColumn;
 	}
 
 }

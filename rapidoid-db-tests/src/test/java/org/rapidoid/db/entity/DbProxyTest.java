@@ -40,30 +40,33 @@ public class DbProxyTest extends DbTestCommons {
 		map.put("description", "Abc");
 
 		final Task t = DbProxy.create(Task.class, map);
-
 		notNull(t);
-
+		
 		U.benchmarkMT(100, "ops", 1000000, new Runnable() {
 			@Override
 			public void run() {
-				eq(t.id(), map.get("id"));
-				eq(t.version(), map.get("version"));
-
-				notNullAll(t.title(), t.description(), t.priority(), t.comments(), t.owner(), t.likedBy());
-
-				eq(t.title().get(), map.get("title"));
-				eq(t.description().get(), "Abc");
-
-				isTrue(t.title() == t.title());
-				isTrue(t.description() == t.description());
-				isTrue(t.priority() == t.priority());
-				isTrue(t.comments() == t.comments());
-				isTrue(t.owner() == t.owner());
-				isTrue(t.likedBy() == t.likedBy());
+				check(map, t);
 			}
 		});
 
 		DB.shutdown();
+	}
+
+	private void check(final ConcurrentMap<String, Object> map, final Task t) {
+		eq(t.id().get(), map.get("id"));
+		eq(t.version().get(), map.get("version"));
+
+		notNullAll(t.title(), t.description(), t.priority(), t.comments(), t.owner(), t.likedBy());
+
+		eq(t.title().get(), map.get("title"));
+		eq(t.description().get(), "Abc");
+
+		isTrue(t.title() == t.title());
+		isTrue(t.description() == t.description());
+		isTrue(t.priority() == t.priority());
+		isTrue(t.comments() == t.comments());
+		isTrue(t.owner() == t.owner());
+		isTrue(t.likedBy() == t.likedBy());
 	}
 
 }

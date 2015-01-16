@@ -26,8 +26,8 @@ import org.rapidoid.util.CommonRoles;
 
 public interface Entity extends CommonRoles, Serializable {
 
-	long id();
+	DbColumn<Long> id();
 
-	long version();
+	DbColumn<Long> version();
 
 }
