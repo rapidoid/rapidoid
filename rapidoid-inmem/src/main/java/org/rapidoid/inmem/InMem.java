@@ -156,7 +156,7 @@ public class InMem {
 			@Override
 			public boolean eval(Prop prop) throws Exception {
 				for (Class<?> relCls : relClasses) {
-					if (relCls.isAssignableFrom(prop.getType())) {
+					if (relCls.isAssignableFrom(prop.getRawType())) {
 						return true;
 					}
 				}
@@ -317,7 +317,7 @@ public class InMem {
 	}
 
 	private RelPair getRelPair(Object entity, Prop prop, String rel, boolean inverse) {
-		Class<?> cls = prop.typeArg(0);
+		Class<?> cls = prop.getRawTypeArg(0);
 		Class<?> srcType = inverse ? cls : entity.getClass();
 		Class<?> destType = inverse ? entity.getClass() : cls;
 
@@ -362,7 +362,7 @@ public class InMem {
 			}
 
 			if (relName != null && relName.equals(rel)) {
-				if (prop.typeArg(0).equals(toCls)) {
+				if (prop.getRawTypeArg(0).equals(toCls)) {
 					return prop;
 				}
 			}
