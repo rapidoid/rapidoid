@@ -65,4 +65,14 @@ public class Vars {
 		return new MandatoryVar<T>(var);
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> T unwrap(T value) {
+		return (value instanceof Var) ? (T) ((Var<?>) value).get() : value;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> Var<T> cast(Object value) {
+		return (Var<T>) value;
+	}
+
 }
