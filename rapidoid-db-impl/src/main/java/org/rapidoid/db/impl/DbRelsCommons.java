@@ -54,13 +54,15 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals {
 		this.idsView = Collections.unmodifiableCollection(ids);
 	}
 
-	protected void initIds(List<? extends Number> initIds) {
+	protected void initIds(Collection<? extends Number> initIds) {
+		this.ids.clear();
 		for (Number id : initIds) {
 			addIdWithoutTracking(id.longValue()); // no tracking on initialization
 		}
 	}
 
 	protected void initId(long id) {
+		this.ids.clear();
 		addIdWithoutTracking(id); // no tracking on initialization
 	}
 
