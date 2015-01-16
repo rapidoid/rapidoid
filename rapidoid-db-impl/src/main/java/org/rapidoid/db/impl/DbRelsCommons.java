@@ -282,4 +282,9 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals {
 		return idsView;
 	}
 
+	@Override
+	public String toString() {
+		return ids.toString();
+	}
+
 }
