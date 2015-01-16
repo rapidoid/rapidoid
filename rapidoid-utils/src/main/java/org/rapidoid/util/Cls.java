@@ -79,6 +79,10 @@ public class Cls {
 			}
 		}
 
+		if (Proxy.isProxyClass(clazz)) {
+			return;
+		}
+
 		try {
 			Method[] methods = clazz.getDeclaredMethods();
 			for (Method method : methods) {
