@@ -89,6 +89,11 @@ public class DbImpl extends NamedActivity<Database> implements Database {
 	}
 
 	@Override
+	public <E> void refresh(E record) {
+		inmem.refresh(record);
+	}
+
+	@Override
 	public void update(long id, Object record) {
 		inmem.update(id, record);
 	}

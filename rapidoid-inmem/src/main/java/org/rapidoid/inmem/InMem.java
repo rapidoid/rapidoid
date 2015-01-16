@@ -430,6 +430,27 @@ public class InMem {
 		}
 	}
 
+	public void refresh(Object record) {
+		sharedLock();
+		try {
+
+			long id = getIdOf(record, true);
+			validateId(id);
+			Rec rec = getRec(id);
+			obj(rec, record);
+		} finally {
+			sharedUnlock();
+		}
+	}
+
+	private Rec getRec(long id) {
+		Rec rec = data.get(id);
+		if (rec == null) {
+			throw invalidId(id);
+		}
+		return rec;
+	}
+
 	public void update(long id, Object record) {
 		sharedLock();
 		try {
@@ -768,8 +789,12 @@ public class InMem {
 
 	private void validateId(long id) {
 		if (!data.containsKey(id)) {
-			throw new IllegalArgumentException("Cannot find DB record with id=" + id);
+			throw invalidId(id);
 		}
+	}
+
+	private IllegalArgumentException invalidId(long id) {
+		return new IllegalArgumentException("Cannot find DB record with id=" + id);
 	}
 
 	public void saveTo(final OutputStream output) {

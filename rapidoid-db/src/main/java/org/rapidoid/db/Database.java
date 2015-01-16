@@ -50,6 +50,8 @@ public interface Database extends Activity<Database> {
 
 	<E> List<E> getAll(Collection<Long> ids);
 
+	<E> void refresh(E record);
+
 	void update(Object record);
 
 	void update(long id, Object record);

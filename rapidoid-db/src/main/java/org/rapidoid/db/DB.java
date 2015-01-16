@@ -103,6 +103,10 @@ public class DB {
 		return db().getAll(ids);
 	}
 
+	public static <E> void refresh(E record) {
+		db().refresh(record);
+	}
+
 	public static void update(long id, Object record) {
 		db().update(id, record);
 	}
