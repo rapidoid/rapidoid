@@ -46,8 +46,10 @@ public class BeanProp implements Prop {
 	private Class<?> declaringType;
 
 	private Class<?> type;
+	private Class<?> rawType;
 
 	private TypeKind typeKind;
+	private TypeKind rawTypeKind;
 
 	private PropKind propKind = PropKind.NORMAL;
 
@@ -56,6 +58,7 @@ public class BeanProp implements Prop {
 	private boolean readOnly = true;
 
 	private ParameterizedType genericType;
+	private ParameterizedType rawGenericType;
 
 	public BeanProp(String name) {
 		this.name = name;
@@ -71,9 +74,9 @@ public class BeanProp implements Prop {
 		U.must(field != null || getter != null, "Invalid property: %s", name);
 
 		// TODO: improve inference from getter and setter
-		type = field != null ? field.getType() : getter.getReturnType();
+		type = rawType = field != null ? field.getType() : getter.getReturnType();
 		Type gType = field != null ? field.getGenericType() : getter.getGenericReturnType();
-		genericType = (gType instanceof ParameterizedType) ? ((ParameterizedType) gType) : null;
+		genericType = rawGenericType = (gType instanceof ParameterizedType) ? ((ParameterizedType) gType) : null;
 
 		if (Collection.class.isAssignableFrom(type)) {
 			readOnly = false;
@@ -91,6 +94,7 @@ public class BeanProp implements Prop {
 		}
 
 		typeKind = Cls.kindOf(type);
+		rawTypeKind = Cls.kindOf(rawType);
 		declaringType = field != null ? field.getDeclaringClass() : getter.getDeclaringClass();
 	}
 
@@ -258,13 +262,13 @@ public class BeanProp implements Prop {
 	}
 
 	@Override
-	public int typeArgsCount() {
+	public int getTypeArgsCount() {
 		return genericType != null ? genericType.getActualTypeArguments().length : 0;
 	}
 
 	@Override
-	public Class<?> typeArg(int index) {
-		U.bounds(index, 0, typeArgsCount() - 1);
+	public Class<?> getTypeArg(int index) {
+		U.bounds(index, 0, getTypeArgsCount() - 1);
 		return Cls.clazz(genericType.getActualTypeArguments()[index]);
 	}
 
@@ -276,6 +280,32 @@ public class BeanProp implements Prop {
 	@Override
 	public Annotation[] getAnnotations() {
 		return field != null ? field.getAnnotations() : null;
+	}
+
+	@Override
+	public Class<?> getRawType() {
+		return rawType;
+	}
+
+	@Override
+	public TypeKind getRawTypeKind() {
+		return rawTypeKind;
+	}
+
+	@Override
+	public ParameterizedType getRawGenericType() {
+		return rawGenericType;
+	}
+
+	@Override
+	public int getRawTypeArgsCount() {
+		return rawGenericType != null ? rawGenericType.getActualTypeArguments().length : 0;
+	}
+
+	@Override
+	public Class<?> getRawTypeArg(int index) {
+		U.bounds(index, 0, getRawTypeArgsCount() - 1);
+		return Cls.clazz(rawGenericType.getActualTypeArguments()[index]);
 	}
 
 	@Override

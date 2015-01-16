@@ -75,8 +75,8 @@ public class DbEntityPropertiesTest extends DbTestCommons {
 		notNull(props.get("posts").getGenericType());
 		eq(props.get("posts").getGenericType().getRawType(), DbList.class);
 		eq(props.get("posts").getTypeKind(), TypeKind.OBJECT);
-		eq(props.get("posts").typeArgsCount(), 1);
-		eq(props.get("posts").typeArg(0), IPost.class);
+		eq(props.get("posts").getTypeArgsCount(), 1);
+		eq(props.get("posts").getTypeArg(0), IPost.class);
 	}
 
 }

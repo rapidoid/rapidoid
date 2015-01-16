@@ -39,16 +39,26 @@ public interface Prop {
 
 	Class<?> getType();
 
+	Class<?> getRawType();
+
 	TypeKind getTypeKind();
 
+	TypeKind getRawTypeKind();
+
 	ParameterizedType getGenericType();
+
+	ParameterizedType getRawGenericType();
 
 	<T extends Annotation> T getAnnotation(Class<T> annotationClass);
 
 	Annotation[] getAnnotations();
 
-	int typeArgsCount();
+	int getTypeArgsCount();
 
-	Class<?> typeArg(int index);
+	int getRawTypeArgsCount();
+
+	Class<?> getTypeArg(int index);
+
+	Class<?> getRawTypeArg(int index);
 
 }

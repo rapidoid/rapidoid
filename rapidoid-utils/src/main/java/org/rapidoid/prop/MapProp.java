@@ -99,18 +99,43 @@ public class MapProp implements Prop {
 	}
 
 	@Override
-	public int typeArgsCount() {
+	public int getTypeArgsCount() {
 		return 0;
 	}
 
 	@Override
-	public Class<?> typeArg(int index) {
+	public Class<?> getTypeArg(int index) {
 		throw U.rte("No type args available!");
 	}
 
 	@SuppressWarnings("unchecked")
 	private static Map<Object, Object> map(Object target) {
 		return (Map<Object, Object>) target;
+	}
+
+	@Override
+	public Class<?> getRawType() {
+		return getType();
+	}
+
+	@Override
+	public TypeKind getRawTypeKind() {
+		return getTypeKind();
+	}
+
+	@Override
+	public ParameterizedType getRawGenericType() {
+		return null;
+	}
+
+	@Override
+	public int getRawTypeArgsCount() {
+		return 0;
+	}
+
+	@Override
+	public Class<?> getRawTypeArg(int index) {
+		throw U.rte("No type args available!");
 	}
 
 }
