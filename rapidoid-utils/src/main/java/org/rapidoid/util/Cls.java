@@ -46,6 +46,7 @@ import org.rapidoid.prop.BeanProp;
 import org.rapidoid.prop.BeanProperties;
 import org.rapidoid.prop.MapProp;
 import org.rapidoid.prop.Prop;
+import org.rapidoid.prop.SerializableBean;
 
 public class Cls {
 
@@ -206,6 +207,45 @@ public class Cls {
 		}
 
 		return prop;
+	}
+
+	public static Map<String, Object> read(Object bean) {
+		Map<String, Object> props = U.map();
+		read(bean, props);
+		return props;
+	}
+
+	public static void read(Object bean, Map<String, Object> dest) {
+		for (Prop prop : propertiesOf(bean)) {
+			Object value = prop.get(bean);
+
+			if (value instanceof SerializableBean<?>) {
+				SerializableBean<?> ser = (SerializableBean<?>) value;
+				value = ser.serializeBean();
+			}
+
+			dest.put(prop.getName(), value);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void update(Map<String, Object> src, Object destBean) {
+		if (destBean instanceof Map) {
+			((Map<String, Object>) destBean).putAll(src);
+			return;
+		}
+
+		for (Prop prop : propertiesOf(destBean)) {
+			Object value = src.get(prop.getName());
+
+			Object propValue = prop.get(destBean);
+			if (propValue != null && propValue instanceof SerializableBean) {
+				SerializableBean<Object> ser = (SerializableBean<Object>) propValue;
+				ser.deserializeBean(value);
+			} else {
+				prop.set(destBean, value);
+			}
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
