@@ -20,9 +20,11 @@ package org.rapidoid.db;
  * #L%
  */
 
+import java.io.Serializable;
+
 import org.rapidoid.util.CommonRoles;
 
-public interface Entity extends CommonRoles {
+public interface Entity extends CommonRoles, Serializable {
 
 	long id();
 

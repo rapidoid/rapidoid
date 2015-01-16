@@ -1,5 +1,7 @@
 package org.rapidoid.app.entity;
 
+import org.rapidoid.db.AbstractEntity;
+
 /*
  * #%L
  * rapidoid-app

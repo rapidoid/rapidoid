@@ -1,4 +1,4 @@
-package org.rapidoid.app.entity;
+package org.rapidoid.db;
 
 import java.io.Serializable;
 
@@ -7,7 +7,7 @@ import org.rapidoid.util.CommonRoles;
 
 /*
  * #%L
- * rapidoid-app
+ * rapidoid-db
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%

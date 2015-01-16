@@ -34,6 +34,7 @@ import org.rapidoid.db.Entity;
 import org.rapidoid.util.Metadata;
 import org.rapidoid.util.U;
 
+@SuppressWarnings("serial")
 public class EntityImpl implements Entity, EntityInternals {
 
 	private final Class<?> type;

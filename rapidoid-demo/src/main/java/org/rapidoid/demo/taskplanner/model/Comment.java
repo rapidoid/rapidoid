@@ -1,6 +1,6 @@
 package org.rapidoid.demo.taskplanner.model;
 
-import org.rapidoid.app.entity.AbstractEntity;
+import org.rapidoid.db.AbstractEntity;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
