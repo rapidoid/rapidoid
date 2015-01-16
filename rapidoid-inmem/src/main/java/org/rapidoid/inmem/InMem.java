@@ -229,7 +229,7 @@ public class InMem {
 		sharedLock();
 		try {
 			long id = ids.incrementAndGet();
-			setId(record, id);
+			Cls.setId(record, id);
 
 			if (insideTx.get()) {
 				if (txInsertions.putIfAbsent(id, INSERTION) != null) {
@@ -428,13 +428,19 @@ public class InMem {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private <E> E get_(long id, boolean validateId) {
 		if (validateId) {
 			validateId(id);
 		}
 		Rec rec = data.get(id);
-		return (E) (rec != null ? setId(obj(rec), id) : null);
+
+		if (rec != null) {
+			E record = obj(rec);
+			Cls.setId(record, id);
+			return record;
+		} else {
+			return null;
+		}
 	}
 
 	public <E> E get(long id, Class<E> clazz) {
@@ -451,7 +457,7 @@ public class InMem {
 		sharedLock();
 		try {
 
-			long id = getIdOf(record, true);
+			long id = Cls.getId(record);
 			validateId(id);
 			Rec rec = getRec(id);
 			obj(rec, record);
@@ -480,7 +486,7 @@ public class InMem {
 	private void update_(long id, Object record, boolean reflectRelChanges) {
 		validateId(id);
 
-		setId(record, id);
+		Cls.setId(record, id);
 
 		Rec removed = data.replace(id, rec(record));
 
@@ -500,11 +506,11 @@ public class InMem {
 	}
 
 	public void update(Object record) {
-		update(getIdOf(record, true), record);
+		update(Cls.getId(record), record);
 	}
 
 	public long persist(Object record) {
-		long id = getIdOf(record, true);
+		long id = Cls.getId(record);
 		if (id <= 0) {
 			return insert(record);
 		} else {
@@ -514,7 +520,7 @@ public class InMem {
 	}
 
 	public long persistedIdOf(Object record) {
-		long id = getIdOf(record, true);
+		long id = Cls.getId(record);
 		if (id <= 0) {
 			return insert(record);
 		} else {
@@ -659,7 +665,7 @@ public class InMem {
 		}
 
 		if (P_WORD.matcher(query).matches() && args.length == 1) {
-			Object val = getProperty(record, query, false);
+			Object val = Cls.getPropValue(record, query, null);
 			Object arg = args[0];
 			return val == arg || (val != null && val.equals(arg));
 		}
@@ -673,7 +679,7 @@ public class InMem {
 
 			for (Entry<Long, Rec> entry : data.entrySet()) {
 				E record = obj(entry.getValue());
-				setId(record, entry.getKey());
+				Cls.setId(record, entry.getKey());
 
 				try {
 					lambda.execute(record);
@@ -785,7 +791,13 @@ public class InMem {
 	private <T> T get_(long id, Class<T> clazz) {
 		validateId(id);
 		Rec rec = data.get(id);
-		return rec != null ? setId(obj(rec, clazz), id) : null;
+		if (rec != null) {
+			T record = obj(rec, clazz);
+			Cls.setId(record, id);
+			return record;
+		} else {
+			return null;
+		}
 	}
 
 	private void sharedLock() {
@@ -1097,89 +1109,6 @@ public class InMem {
 	private <T> T obj(Rec rec, T destination) {
 		serializer.deserialize(rec.bytes, destination);
 		return destination;
-	}
-
-	@SuppressWarnings("unchecked")
-	private static <T> T setId(T record, long id) {
-		if (record != null) {
-
-			if (record instanceof Map) {
-				((Map<Object, Object>) record).put("id", id);
-			}
-
-			try {
-				setObjId(record, id);
-			} catch (Exception e) {
-				// ignore
-			}
-		}
-
-		return record;
-	}
-
-	public static void setObjId(Object obj, long id) {
-		Class<?> c = obj.getClass();
-
-		try {
-			try {
-				c.getMethod("setId", long.class).invoke(obj, id);
-				return;
-			} catch (NoSuchMethodException e1) {
-				try {
-					c.getMethod("id", long.class).invoke(obj, id);
-					return;
-				} catch (NoSuchMethodException e2) {
-					try {
-						c.getField("id").set(obj, id);
-						return;
-					} catch (NoSuchFieldException e3) {
-					}
-				}
-			}
-		} catch (Exception e) {
-			throw new RuntimeException("Cannot get object id!", e);
-		}
-
-		throw new RuntimeException(
-				"Cannot find public 'id' field nor 'setId' setter method nor 'id' setter method in class: " + c);
-	}
-
-	public static long getIdOf(Object obj, boolean failIfNotFound) {
-		Number id = (Number) getProperty(obj, "id", failIfNotFound);
-		return id != null ? id.longValue() : -1;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> T getProperty(Object obj, String property, boolean failIfNotFound) {
-		Class<?> c = obj.getClass();
-
-		String capitalized = property.substring(0, 1).toUpperCase() + property.substring(1);
-		String getter = "get" + capitalized;
-
-		try {
-			try {
-				return (T) c.getMethod(getter).invoke(obj);
-			} catch (NoSuchMethodException e1) {
-				try {
-					return (T) c.getMethod(property).invoke(obj);
-				} catch (NoSuchMethodException e2) {
-					try {
-						return (T) c.getField(property).get(obj);
-					} catch (NoSuchFieldException e3) {
-					}
-				}
-			}
-		} catch (Exception e) {
-			throw new RuntimeException("Cannot get property: " + property, e);
-		}
-
-		if (failIfNotFound) {
-			throw new RuntimeException(String.format(
-					"Cannot find public '%s' field nor '%s' getter method nor '%s' getter method in class: %s",
-					property, getter, property, c));
-		} else {
-			return null;
-		}
 	}
 
 	public int size() {

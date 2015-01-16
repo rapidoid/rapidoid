@@ -41,6 +41,7 @@ import org.rapidoid.inmem.InMem;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 public class DbImpl extends NamedActivity<Database> implements Database {
@@ -220,7 +221,7 @@ public class DbImpl extends NamedActivity<Database> implements Database {
 
 	@Override
 	public long getIdOf(Object record) {
-		return InMem.getIdOf(record, false);
+		return U.or(Cls.getIdIfExists(record), -1L);
 	}
 
 	@Override
