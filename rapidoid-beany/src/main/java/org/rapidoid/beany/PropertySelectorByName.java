@@ -2,7 +2,7 @@ package org.rapidoid.beany;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-beany
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,16 +20,46 @@ package org.rapidoid.beany;
  * #L%
  */
 
-public abstract class PropertyFilter implements PropertySelector {
+import java.util.Arrays;
+
+public abstract class PropertySelectorByName implements PropertySelector {
+
+	private final String[] propertyNames;
+
+	public PropertySelectorByName(String... propertyNames) {
+		this.propertyNames = propertyNames;
+	}
 
 	@Override
 	public String[] requiredProperties() {
-		return null;
+		return propertyNames;
 	}
 
 	@Override
 	public int compare(Prop o1, Prop o2) {
 		return 0;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(propertyNames);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PropertySelectorByName other = (PropertySelectorByName) obj;
+		if (!Arrays.equals(propertyNames, other.propertyNames))
+			return false;
+		return true;
 	}
 
 }
