@@ -20,6 +20,8 @@ package org.rapidoid.db.impl.inmem;
  * #L%
  */
 
+import java.util.Collections;
+
 import org.rapidoid.db.Database;
 import org.rapidoid.inmem.EntityConstructor;
 
@@ -31,9 +33,10 @@ public class DbEntityConstructor implements EntityConstructor {
 		this.db = db;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T create(Class<T> entityType) {
-		return (T) db.schema().create(entityType);
+		return (T) db.schema().create(entityType, Collections.EMPTY_MAP);
 	}
 
 }

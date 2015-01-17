@@ -1,5 +1,7 @@
 package org.rapidoid.db;
 
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-db
@@ -22,7 +24,7 @@ package org.rapidoid.db;
 
 public interface DbSchema {
 
-	<E> E create(Class<E> entityType);
+	<E> E create(Class<E> entityType, Map<String, ?> properties);
 
 	<E> DbDsl<E> dsl(Class<E> entityType);
 

@@ -1,6 +1,7 @@
 package org.rapidoid.db.impl;
 
 import java.lang.reflect.Proxy;
+import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.db.DbDsl;
@@ -58,11 +59,11 @@ public class DbSchemaImpl implements DbSchema {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <E> E create(Class<E> clazz) {
+	public <E> E create(Class<E> clazz, Map<String, ?> properties) {
 		Class<E> entityType = getEntityTypeFor(clazz);
 		if (entityType.isInterface() && Entity.class.isAssignableFrom(entityType)) {
 			Class<? extends Entity> cls = (Class<? extends Entity>) entityType;
-			return (E) DbProxy.create(cls);
+			return (E) DbProxy.create(cls, U.concurrentMap(properties));
 		} else {
 			return U.newInstance(entityType);
 		}

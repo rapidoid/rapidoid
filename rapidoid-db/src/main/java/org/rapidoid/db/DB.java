@@ -21,6 +21,7 @@ package org.rapidoid.db;
  */
 import java.io.File;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -203,8 +204,38 @@ public class DB {
 		return db().schema();
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <E extends Entity> E create(Class<E> entityType) {
-		return schema().create(entityType);
+		return (E) schema().create(entityType, Collections.EMPTY_MAP);
+	}
+
+	public static <E extends Entity> E create(Class<E> entityType, Map<String, ?> properties) {
+		return schema().create(entityType, properties);
+	}
+
+	public static <E extends Entity> E create(Class<E> entityType, String prop, Object value) {
+		return schema().create(entityType, U.map(prop, value));
+	}
+
+	public static <E extends Entity> E create(Class<E> entityType, String prop1, Object value1, String prop2,
+			Object value2) {
+		return schema().create(entityType, U.map(prop1, value1, prop2, value2));
+	}
+
+	public static <E extends Entity> E create(Class<E> entityType, String prop1, Object value1, String prop2,
+			Object value2, String prop3, Object value3) {
+		return schema().create(entityType, U.map(prop1, value1, prop2, value2, prop3, value3));
+	}
+
+	public static <E extends Entity> E create(Class<E> entityType, String prop1, Object value1, String prop2,
+			Object value2, String prop3, Object value3, String prop4, Object value4) {
+		return schema().create(entityType, U.map(prop1, value1, prop2, value2, prop3, value3, prop4, value4));
+	}
+
+	public static <E extends Entity> E create(Class<E> entityType, String prop1, Object value1, String prop2,
+			Object value2, String prop3, Object value3, String prop4, Object value4, String prop5, Object value5) {
+		return schema().create(entityType,
+				U.map(prop1, value1, prop2, value2, prop3, value3, prop4, value4, prop5, value5));
 	}
 
 	public static <E> DbDsl<E> dsl(Class<E> entityType) {
