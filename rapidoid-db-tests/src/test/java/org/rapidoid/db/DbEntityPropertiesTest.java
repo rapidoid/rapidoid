@@ -53,7 +53,7 @@ public class DbEntityPropertiesTest extends DbTestCommons {
 
 		profile.posts().add(post1);
 		Map<String, Object> profileProps = Beany.read(profile);
-		eq(profileProps, U.map("id", 0L, "version", 0L, "posts", U.map("relation", "posted", "ids", U.list(123L))));
+		eq(profileProps, U.map("id", null, "version", null, "posts", U.map("relation", "posted", "ids", U.list(123L))));
 
 		IProfile profile2 = DB.create(IProfile.class);
 		Beany.update(profileProps, profile2);

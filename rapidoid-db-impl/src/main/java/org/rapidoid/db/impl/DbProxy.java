@@ -47,7 +47,7 @@ public class DbProxy implements InvocationHandler, Serializable {
 	}
 
 	public static <E extends Entity> E create(Class<E> type) {
-		ConcurrentMap<String, Object> map = U.concurrentMap("id", (Object) 0L, "version", (Object) 0L);
+		ConcurrentMap<String, Object> map = U.concurrentMap();
 		return create(type, map);
 	}
 
