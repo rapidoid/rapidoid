@@ -21,9 +21,11 @@ package org.rapidoid.db.model;
  */
 
 public class Person {
-	
+
 	public long id;
-	
+
+	public long version;
+
 	public String name;
 	public int age;
 	public String title;
