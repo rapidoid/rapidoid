@@ -44,7 +44,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -54,7 +53,6 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
@@ -567,21 +565,6 @@ public class U {
 
 	public static ClassLoader classLoader() {
 		return Thread.currentThread().getContextClassLoader();
-	}
-
-	private static Enumeration<URL> resources(String name) {
-
-		name = name.replace('.', '/');
-
-		if (name.equals("*")) {
-			name = "";
-		}
-
-		try {
-			return classLoader().getResources(name);
-		} catch (IOException e) {
-			throw rte("Cannot scan: " + name, e);
-		}
 	}
 
 	public static File file(String filename) {
@@ -1180,43 +1163,7 @@ public class U {
 
 	public static synchronized void args(String... args) {
 		Conf.args(args);
-
-		if (Conf.is("debug") && Log.getLogLevel().ordinal() > LogLevel.DEBUG.ordinal()) {
-			Log.setLogLevel(LogLevel.DEBUG);
-		}
-
-		for (String arg : args) {
-			if (arg.matches("\\+\\w+")) {
-				addon(arg.substring(1));
-			}
-		}
-	}
-
-	public static Object addon(String addonName) {
-		must(addonName.matches("\\w+"), "Invalid add-on name, must be alphanumeric!");
-
-		String addonClassName = "org.rapidoid.addon." + capitalized(addonName) + "Addon";
-		Class<?> addonCls = getClassIfExists(addonClassName);
-
-		if (addonCls != null) {
-			if (Callable.class.isAssignableFrom(addonCls)) {
-				Callable<?> addon = (Callable<?>) newInstance(addonCls);
-				try {
-					Object addonResult = addon.call();
-					Log.info("Executed add-on", "add-on", addonName, "add-on class", addonClassName, "result",
-							addonResult);
-					return addonResult;
-				} catch (Exception e) {
-					throw rte(e);
-				}
-			} else {
-				Log.warn("Found add-on, but it's not a Runnable!", "add-on", addonName, "add-on class", addonClassName);
-			}
-		} else {
-			Log.debug("No add-on was found", "add-on", addonName, "add-on class", addonClassName);
-		}
-
-		return null;
+		Scan.args(args);
 	}
 
 	public static void benchmark(String name, int count, Runnable runnable) {
@@ -1325,130 +1272,6 @@ public class U {
 			return mapper.map(src);
 		} catch (Exception e) {
 			throw rte("Cannot evaluate mapper %s on target: %s", e, mapper, src);
-		}
-	}
-
-	public static List<Class<?>> classpathClasses(String packageName, String nameRegex, Predicate<Class<?>> filter,
-			ClassLoader classLoader) {
-		Pattern regex = Pattern.compile(nameRegex);
-		ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
-		Enumeration<URL> urls = resources(packageName);
-
-		while (urls.hasMoreElements()) {
-			URL url = urls.nextElement();
-			File file = new File(url.getFile());
-
-			String path = file.getAbsolutePath();
-
-			String pkgPath = packageName.replace('.', File.separatorChar);
-			String rootPath = pkgPath.isEmpty() ? path : path.replace(File.separatorChar + pkgPath, "");
-
-			File root = new File(rootPath);
-			must(root.exists());
-			must(root.isDirectory());
-
-			getClasses(classes, root, file, regex, filter, classLoader);
-		}
-
-		return classes;
-	}
-
-	public static List<Class<?>> classpathClassesByName(String simpleName, Predicate<Class<?>> filter,
-			ClassLoader classLoader) {
-		List<Class<?>> classes = classpathClasses("*", ".*\\." + simpleName, filter, classLoader);
-
-		if (classes.isEmpty()) {
-			Log.warn("No classes found on classpath with the specified simple name", "name", simpleName);
-		}
-
-		return classes;
-	}
-
-	public static List<Class<?>> classpathClassesBySuffix(String nameSuffix, Predicate<Class<?>> filter,
-			ClassLoader classLoader) {
-		List<Class<?>> classes = classpathClasses("*", ".+\\w" + nameSuffix, filter, classLoader);
-
-		if (classes.isEmpty()) {
-			Log.warn("No classes found on classpath with the specified suffix", "suffix", nameSuffix);
-		}
-
-		return classes;
-	}
-
-	public static List<File> classpath(String packageName, Predicate<File> filter) {
-		ArrayList<File> files = new ArrayList<File>();
-
-		classpath(packageName, files, filter);
-
-		return files;
-	}
-
-	public static void classpath(String packageName, Collection<File> files, Predicate<File> filter) {
-		Enumeration<URL> urls = resources(packageName);
-
-		while (urls.hasMoreElements()) {
-			URL url = urls.nextElement();
-			File file = new File(url.getFile());
-
-			getFiles(files, file, filter);
-		}
-	}
-
-	private static void getFiles(Collection<File> files, File file, Predicate<File> filter) {
-		if (file.isDirectory()) {
-			Log.debug("scanning directory", "dir", file);
-			for (File f : file.listFiles()) {
-				if (f.isDirectory()) {
-					getFiles(files, f, filter);
-				} else {
-					Log.debug("scanned file", "file", f);
-					try {
-						if (filter == null || filter.eval(f)) {
-							files.add(f);
-						}
-					} catch (Exception e) {
-						throw rte(e);
-					}
-				}
-			}
-		}
-	}
-
-	private static void getClasses(Collection<Class<?>> classes, File root, File parent, Pattern nameRegex,
-			Predicate<Class<?>> filter, ClassLoader classLoader) {
-
-		if (parent.isDirectory()) {
-			Log.debug("scanning directory", "dir", parent);
-			for (File f : parent.listFiles()) {
-				if (f.isDirectory()) {
-					getClasses(classes, root, f, nameRegex, filter, classLoader);
-				} else {
-					Log.debug("scanned file", "file", f);
-					if (f.getName().endsWith(".class")) {
-						String clsName = f.getAbsolutePath();
-						String rootPath = root.getAbsolutePath();
-						must(clsName.startsWith(rootPath));
-
-						clsName = clsName.substring(rootPath.length() + 1, clsName.length() - 6);
-						clsName = clsName.replace(File.separatorChar, '.');
-
-						if (nameRegex.matcher(clsName).matches()) {
-							try {
-								Log.debug("loading class", "name", clsName);
-
-								Class<?> cls = classLoader != null ? Class.forName(clsName, true, classLoader) : Class
-										.forName(clsName);
-
-								if (filter == null || filter.eval(cls)) {
-									classes.add(cls);
-								}
-							} catch (Exception e) {
-								throw rte(e);
-							}
-						}
-					}
-				}
-			}
 		}
 	}
 

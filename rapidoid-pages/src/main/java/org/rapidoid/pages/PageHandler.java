@@ -25,14 +25,14 @@ import java.util.Map;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.Cls;
-import org.rapidoid.util.U;
+import org.rapidoid.util.Scan;
 
 public class PageHandler implements Handler {
 
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
 
-		Map<String, Class<?>> pages = Cls.classMap(U.classpathClassesBySuffix("Page", null, null));
+		Map<String, Class<?>> pages = Cls.classMap(Scan.classpathClassesBySuffix("Page", null, null));
 
 		Object result = Pages.dispatch(x, null, pages);
 

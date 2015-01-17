@@ -33,6 +33,7 @@ import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.oauth.OAuth;
+import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 
 public class Examples {
@@ -47,7 +48,7 @@ public class Examples {
 
 		int exampleN = 1;
 		while (true) {
-			List<Class<?>> classes = U.classpathClasses("org.rapidoid.docs.eg" + exampleN, ".*", null, null);
+			List<Class<?>> classes = Scan.classpathClasses("org.rapidoid.docs.eg" + exampleN, ".*", null, null);
 			if (classes.isEmpty()) {
 				break;
 			}

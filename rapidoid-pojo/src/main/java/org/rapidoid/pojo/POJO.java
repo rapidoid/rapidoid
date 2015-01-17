@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.rapidoid.pojo.impl.PojoDispatcherImpl;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 
 public class POJO {
@@ -31,7 +32,7 @@ public class POJO {
 	public static final String SERVICE_SUFFIX = "Service";
 
 	public static List<Class<?>> scanServices() {
-		return U.classpathClassesBySuffix(SERVICE_SUFFIX, null, null);
+		return Scan.classpathClassesBySuffix(SERVICE_SUFFIX, null, null);
 	}
 
 	public static PojoDispatcher dispatcher(Class<?>... serviceClasses) {

@@ -29,9 +29,10 @@ import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.log.Log;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.util.Cls;
-import org.rapidoid.util.Log;
+import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 
 public class Apps {
@@ -85,10 +86,10 @@ public class Apps {
 
 		if (APP_CLASSES == null) {
 
-			Map<String, Class<?>> services = Cls.classMap(U.classpathClassesBySuffix("Service", null, classLoader));
-			Map<String, Class<?>> pages = Cls.classMap(U.classpathClassesBySuffix("Page", null, classLoader));
-			Map<String, Class<?>> apps = Cls.classMap(U.classpathClassesByName("App", null, classLoader));
-			Map<String, Class<?>> screens = Cls.classMap(U.classpathClassesBySuffix("Screen", null, classLoader));
+			Map<String, Class<?>> services = Cls.classMap(Scan.classpathClassesBySuffix("Service", null, classLoader));
+			Map<String, Class<?>> pages = Cls.classMap(Scan.classpathClassesBySuffix("Page", null, classLoader));
+			Map<String, Class<?>> apps = Cls.classMap(Scan.classpathClassesByName("App", null, classLoader));
+			Map<String, Class<?>> screens = Cls.classMap(Scan.classpathClassesBySuffix("Screen", null, classLoader));
 
 			final Class<?> appClass = !apps.isEmpty() ? apps.get("App") : TheDefaultApp.class;
 
