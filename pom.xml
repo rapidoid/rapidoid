@@ -80,6 +80,7 @@
 		<module>rapidoid-db-tests</module>
 		<module>rapidoid-compile</module>
 		<module>rapidoid-app</module>
+		<module>rapidoid-extras</module>
 		<module>rapidoid-all</module>
 		<module>rapidoid-demo</module>
 		<module>rapidoid-docs</module>
