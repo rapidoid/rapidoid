@@ -431,6 +431,12 @@ public class U {
 		return list;
 	}
 
+	public static <K, V> Map<K, V> map(Map<? extends K, ? extends V> src) {
+		Map<K, V> map = map();
+		map.putAll(src);
+		return map;
+	}
+
 	public static <K, V> Map<K, V> map() {
 		return new HashMap<K, V>();
 	}
@@ -459,6 +465,13 @@ public class U {
 		return map;
 	}
 
+	public static <K, V> Map<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4, K key5,
+			V value5) {
+		Map<K, V> map = map(key1, value1, key2, value2, key3, value3, key4, value4);
+		map.put(key5, value5);
+		return map;
+	}
+
 	@SuppressWarnings("unchecked")
 	public static <K, V> Map<K, V> map(Object... keysAndValues) {
 		must(keysAndValues.length % 2 == 0, "Incorrect number of arguments (expected key-value pairs)!");
@@ -469,6 +482,12 @@ public class U {
 			map.put((K) keysAndValues[i * 2], (V) keysAndValues[i * 2 + 1]);
 		}
 
+		return map;
+	}
+
+	public static <K, V> ConcurrentMap<K, V> concurrentMap(Map<? extends K, ? extends V> src) {
+		ConcurrentMap<K, V> map = concurrentMap();
+		map.putAll(src);
 		return map;
 	}
 
@@ -498,6 +517,13 @@ public class U {
 			K key4, V value4) {
 		ConcurrentMap<K, V> map = concurrentMap(key1, value1, key2, value2, key3, value3);
 		map.put(key4, value4);
+		return map;
+	}
+
+	public static <K, V> ConcurrentMap<K, V> concurrentMap(K key1, V value1, K key2, V value2, K key3, V value3,
+			K key4, V value4, K key5, V value5) {
+		ConcurrentMap<K, V> map = concurrentMap(key1, value1, key2, value2, key3, value3, key4, value4);
+		map.put(key5, value5);
 		return map;
 	}
 
