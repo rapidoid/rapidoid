@@ -26,6 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Scaffold;
+import org.rapidoid.beany.Beany;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
@@ -121,8 +122,8 @@ public class AppPageGeneric extends AppGUI {
 		Tag navMenu = navbarMenu(true, activeIndex, menuItems);
 		Object[] navbarContent = arr(navMenu, debugMenu, themesMenu, userMenu, searchForm);
 
-		String modal = Cls.getPropValue(screen, "modal", null);
-		Object modalContent = modal != null ? Cls.getPropValue(screen, modal, null) : null;
+		String modal = Beany.getPropValue(screen, "modal", null);
+		Object modalContent = modal != null ? Beany.getPropValue(screen, modal, null) : null;
 		Tag result = navbarPage(isFluid(), brand, navbarContent, arr(pageContent, modalContent));
 
 		Pages.store(x, screen);

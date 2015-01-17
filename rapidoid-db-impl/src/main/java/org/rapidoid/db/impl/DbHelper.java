@@ -20,11 +20,11 @@ package org.rapidoid.db.impl;
  * #L%
  */
 
+import org.rapidoid.beany.Prop;
+import org.rapidoid.beany.PropertyFilter;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
-import org.rapidoid.prop.Prop;
-import org.rapidoid.prop.PropertyFilter;
 
 public class DbHelper {
 

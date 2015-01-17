@@ -20,8 +20,8 @@ package org.rapidoid.model;
  * #L%
  */
 
-import org.rapidoid.prop.Prop;
-import org.rapidoid.prop.PropertySelectorByName;
+import org.rapidoid.beany.Prop;
+import org.rapidoid.beany.PropertySelectorByName;
 
 public abstract class ModelPropertySelector extends PropertySelectorByName {
 

@@ -23,12 +23,12 @@ package org.rapidoid.demo.taskplanner.gui;
 import java.util.Comparator;
 
 import org.rapidoid.app.Screen;
+import org.rapidoid.beany.Beany;
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.Tag;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.security.annotation.LoggedIn;
-import org.rapidoid.util.Cls;
 import org.rapidoid.widget.GridWidget;
 
 @LoggedIn
@@ -50,7 +50,7 @@ public class MyTasksScreen extends Screen {
 		GridWidget grid2 = grid(Task.class, new Predicate<Task>() {
 			@Override
 			public boolean eval(Task t) throws Exception {
-				return Cls.projection(t.sharedWith, "username").contains(ctx().username());
+				return Beany.projection(t.sharedWith, "username").contains(ctx().username());
 			}
 		}, new Comparator<Task>() {
 			@Override

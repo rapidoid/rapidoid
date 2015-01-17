@@ -28,6 +28,7 @@ import java.util.List;
 
 import org.rapidoid.annotation.Optional;
 import org.rapidoid.annotation.Programmatic;
+import org.rapidoid.beany.Beany;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
@@ -346,7 +347,7 @@ public class FormWidget extends AbstractWidget {
 	}
 
 	protected Collection<?> getOptionsOfType(Class<?> clazz) {
-		if (Cls.kindOf(clazz) == TypeKind.OBJECT && Cls.hasProperty(clazz, "id")) {
+		if (Cls.kindOf(clazz) == TypeKind.OBJECT && Beany.hasProperty(clazz, "id")) {
 			return dataManager != null ? dataManager.getAll(clazz) : Collections.EMPTY_LIST;
 		} else {
 			return Collections.EMPTY_LIST;

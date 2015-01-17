@@ -40,6 +40,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.rapidoid.beany.Beany;
 import org.rapidoid.lambda.Predicate;
 
 public class UTILS implements Constants {
@@ -379,8 +380,8 @@ public class UTILS implements Constants {
 			List<?> gcs = Cls.invokeStatic(getGarbageCollectorMXBeans);
 
 			for (Object gc : gcs) {
-				gcinfo += " | " + Cls.getPropValue(gc, "name") + " x" + Cls.getPropValue(gc, "collectionCount") + ":"
-						+ Cls.getPropValue(gc, "collectionTime") + "ms";
+				gcinfo += " | " + Beany.getPropValue(gc, "name") + " x" + Beany.getPropValue(gc, "collectionCount")
+						+ ":" + Beany.getPropValue(gc, "collectionTime") + "ms";
 			}
 		}
 		return gcinfo;

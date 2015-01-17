@@ -21,8 +21,8 @@ package org.rapidoid.http;
  */
 
 import org.rapidoid.buffer.Buf;
-import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.bytes.Bytes;
+import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;

@@ -23,12 +23,12 @@ package org.rapidoid.db;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
+import org.rapidoid.beany.BeanProperties;
+import org.rapidoid.beany.Beany;
+import org.rapidoid.beany.Prop;
 import org.rapidoid.db.impl.DbProxy;
 import org.rapidoid.db.model.IPost;
 import org.rapidoid.db.model.IProfile;
-import org.rapidoid.prop.BeanProperties;
-import org.rapidoid.prop.Prop;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
@@ -38,7 +38,7 @@ public class DbEntityPropertiesTest extends DbTestCommons {
 	@Test
 	public void testEntityProperties() {
 		checkProfileProperties(IProfile.class);
-
+		
 		IProfile profile = DbProxy.create(IProfile.class);
 		checkProfileProperties(profile.getClass());
 
@@ -47,26 +47,25 @@ public class DbEntityPropertiesTest extends DbTestCommons {
 		IPost post1 = DbProxy.create(IPost.class, map);
 		post1.content().set("abc");
 
-		Map<String, Object> postProps = Cls.read(post1);
+		Map<String, Object> postProps = Beany.read(post1);
 		eq(postProps, U.map("id", 123L, "version", 456, "likes", U.map("relation", "likes", "ids", U.set()), "content",
 				"abc"));
 
 		profile.posts().add(post1);
-		Map<String, Object> profileProps = Cls.read(profile);
+		Map<String, Object> profileProps = Beany.read(profile);
 		eq(profileProps, U.map("id", 0L, "version", 0L, "posts", U.map("relation", "posted", "ids", U.list(123L))));
 
 		IProfile profile2 = DB.create(IProfile.class);
-		Cls.update(profileProps, profile2);
+		Beany.update(profileProps, profile2);
 
-		Map<String, Object> profileProps2 = Cls.read(profile2);
+		Map<String, Object> profileProps2 = Beany.read(profile2);
 		eq(profileProps2, profileProps);
 	}
 
 	private void checkProfileProperties(Class<?> clazz) {
-		BeanProperties props = Cls.propertiesOf(clazz);
-		
+		BeanProperties props = Beany.propertiesOf(clazz);
+
 		for (Prop prop : props) {
-			System.out.println(prop);
 			isFalse(prop.isReadOnly());
 		}
 

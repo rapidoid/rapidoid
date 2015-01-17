@@ -23,11 +23,11 @@ package org.rapidoid.model.impl;
 import java.util.Collections;
 import java.util.List;
 
+import org.rapidoid.beany.Beany;
+import org.rapidoid.beany.Prop;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
-import org.rapidoid.prop.Prop;
-import org.rapidoid.util.Cls;
 import org.rapidoid.var.Var;
 
 public abstract class AbstractItem extends AbstractModel implements Item {
@@ -42,7 +42,7 @@ public abstract class AbstractItem extends AbstractModel implements Item {
 
 	@Override
 	public String id() {
-		Long id = Cls.getIdIfExists(value);
+		Long id = Beany.getIdIfExists(value);
 		return id != null ? "" + id : null;
 	}
 
@@ -59,16 +59,16 @@ public abstract class AbstractItem extends AbstractModel implements Item {
 		} else if (property.equals("_toString")) {
 			return (T) value.toString();
 		} else if (property.equals("_str")) {
-			return (T) Cls.beanToStr(value, false);
+			return (T) Beany.beanToStr(value, false);
 		}
 
-		Prop prop = Cls.property(value, property, true);
+		Prop prop = Beany.property(value, property, true);
 		return prop.get(value);
 	}
 
 	@Override
 	public void set(String property, Object propValue) {
-		Prop prop = Cls.property(value, property, true);
+		Prop prop = Beany.property(value, property, true);
 
 		if (Var.class.isAssignableFrom(prop.getType())) {
 			Var<Object> propVar = prop.get(value);

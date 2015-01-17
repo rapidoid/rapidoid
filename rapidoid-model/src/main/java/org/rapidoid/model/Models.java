@@ -24,14 +24,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.beany.BeanProperties;
+import org.rapidoid.beany.Beany;
+import org.rapidoid.beany.Prop;
 import org.rapidoid.model.impl.BeanItem;
 import org.rapidoid.model.impl.BeanListItems;
 import org.rapidoid.model.impl.BeanProperty;
 import org.rapidoid.model.impl.ListItems;
 import org.rapidoid.model.impl.MapItem;
-import org.rapidoid.prop.BeanProperties;
-import org.rapidoid.prop.Prop;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 public class Models {
@@ -58,7 +58,7 @@ public class Models {
 	}
 
 	public static Property propertyOf(Class<?> beanType, String property) {
-		BeanProperties props = Cls.propertiesOf(beanType);
+		BeanProperties props = Beany.propertiesOf(beanType);
 
 		if (beanType == Object.class) {
 			return new BeanProperty(property, property.equals("id") ? long.class : String.class, null, null);
@@ -71,7 +71,7 @@ public class Models {
 	}
 
 	public static List<Property> propertiesOf(Object target, String... propertyNames) {
-		return properties(Cls.propertiesOf(target).select(new ModelPropertySelector() {
+		return properties(Beany.propertiesOf(target).select(new ModelPropertySelector() {
 			@Override
 			public boolean eval(Prop prop) throws Exception {
 				return true;
@@ -80,7 +80,7 @@ public class Models {
 	}
 
 	public static List<Property> editablePropertiesOf(Object target, String... propertyNames) {
-		return properties(Cls.propertiesOf(target).select(new ModelPropertySelector(propertyNames) {
+		return properties(Beany.propertiesOf(target).select(new ModelPropertySelector(propertyNames) {
 			@Override
 			public boolean eval(Prop prop) throws Exception {
 				return isEditable(prop);
@@ -89,7 +89,7 @@ public class Models {
 	}
 
 	public static List<Property> readablePropertiesOf(Object target, String... propertyNames) {
-		return properties(Cls.propertiesOf(target).select(new ModelPropertySelector(propertyNames) {
+		return properties(Beany.propertiesOf(target).select(new ModelPropertySelector(propertyNames) {
 			@Override
 			public boolean eval(Prop prop) throws Exception {
 				return isReadable(prop);
@@ -148,7 +148,7 @@ public class Models {
 
 		for (int i = 0; i < beans.length; i++) {
 			beans[i] = U.newInstance(beanType);
-			Cls.setId(beans[i], i);
+			Beany.setId(beans[i], i);
 		}
 
 		return beanItems(beanType, beans);

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.rapidoid.beany.Beany;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.HTML;
@@ -443,12 +444,12 @@ public abstract class BootstrapWidgets extends HTML {
 		int ind = 0;
 
 		for (Object result : found) {
-			long id = Cls.getId(result);
+			long id = Beany.getId(result);
 			String url = urlFor(result);
 
 			Tag left = h6("(ID", NBSP, "=", NBSP, id, ")");
 			Object header = span(result.getClass().getSimpleName());
-			items[ind++] = media(left, header, small(Cls.beanToStr(result, true)), url);
+			items[ind++] = media(left, header, small(Beany.beanToStr(result, true)), url);
 		}
 
 		return items;
@@ -475,11 +476,11 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static boolean isEntity(Object obj) {
-		return Cls.kindOf(obj) == TypeKind.OBJECT && !obj.getClass().isEnum() && Cls.hasProperty(obj, "id");
+		return Cls.kindOf(obj) == TypeKind.OBJECT && !obj.getClass().isEnum() && Beany.hasProperty(obj, "id");
 	}
 
 	public static String urlFor(Object entity) {
-		long id = Cls.getId(entity);
+		long id = Beany.getId(entity);
 		String className = entity.getClass().getSimpleName();
 		return U.format("/%s/%s", U.uncapitalized(className), id);
 	}

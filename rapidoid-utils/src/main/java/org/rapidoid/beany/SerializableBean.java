@@ -1,4 +1,4 @@
-package org.rapidoid.prop;
+package org.rapidoid.beany;
 
 /*
  * #%L
@@ -20,8 +20,10 @@ package org.rapidoid.prop;
  * #L%
  */
 
-public enum PropKind {
+public interface SerializableBean<T> {
 
-	NORMAL, COLLECTION, VAR;
+	T serializeBean();
+
+	void deserializeBean(T serialized);
 
 }

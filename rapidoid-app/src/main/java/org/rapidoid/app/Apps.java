@@ -23,6 +23,7 @@ package org.rapidoid.app;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
+import org.rapidoid.beany.Beany;
 import org.rapidoid.db.DB;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
@@ -98,7 +99,7 @@ public class Apps {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T config(Object obj, String configName, T byDefault) {
-		Object val = Cls.getPropValue(obj, configName, null);
+		Object val = Beany.getPropValue(obj, configName, null);
 		return val != null ? (T) val : byDefault;
 	}
 

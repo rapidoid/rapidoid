@@ -22,8 +22,8 @@ package org.rapidoid.db.impl;
 
 import java.util.Map;
 
+import org.rapidoid.beany.SerializableBean;
 import org.rapidoid.db.DbColumn;
-import org.rapidoid.prop.SerializableBean;
 import org.rapidoid.util.U;
 
 public class DbColumnImpl<E> implements DbColumn<E>, SerializableBean<Object> {

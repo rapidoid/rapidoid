@@ -27,13 +27,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.rapidoid.beany.Beany;
 import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Moderator;
 import org.rapidoid.security.annotation.Role;
 import org.rapidoid.security.annotation.Roles;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.CommonRoles;
 import org.rapidoid.util.Conf;
 import org.rapidoid.util.Constants;
@@ -145,9 +145,9 @@ public class AppSecurity implements Constants {
 			return false;
 		}
 
-		Object owner = Cls.getPropValue(record, "owner", null);
+		Object owner = Beany.getPropValue(record, "owner", null);
 
-		return owner != null && username.equalsIgnoreCase(Cls.getPropValue(owner, "username", ""));
+		return owner != null && username.equalsIgnoreCase(Beany.getPropValue(owner, "username", ""));
 	}
 
 	public boolean isSharedWith(String username, Object record) {
@@ -155,11 +155,11 @@ public class AppSecurity implements Constants {
 			return false;
 		}
 
-		Object sharedWith = Cls.getPropValue(record, "sharedWith", null);
+		Object sharedWith = Beany.getPropValue(record, "sharedWith", null);
 
 		if (sharedWith != null && sharedWith instanceof Collection<?>) {
 			for (Object user : (Collection<?>) sharedWith) {
-				if (username.equalsIgnoreCase(Cls.getPropValue(user, "username", ""))) {
+				if (username.equalsIgnoreCase(Beany.getPropValue(user, "username", ""))) {
 					return true;
 				}
 			}

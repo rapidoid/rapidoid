@@ -20,7 +20,7 @@ package org.rapidoid.docs.eg3;
  * #L%
  */
 
-import static org.rapidoid.app.AppGUI.*;
+import static org.rapidoid.html.HTML.*;
 
 public class HomeScreen {
 	public Object content() {

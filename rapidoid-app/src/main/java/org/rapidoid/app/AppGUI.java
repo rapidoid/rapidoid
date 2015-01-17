@@ -22,13 +22,13 @@ package org.rapidoid.app;
 
 import java.util.Comparator;
 
+import org.rapidoid.beany.Beany;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.model.DbItems;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.DataManager;
@@ -38,15 +38,15 @@ import org.rapidoid.widget.GridWidget;
 public class AppGUI extends BootstrapWidgets {
 
 	public static <T> Items all(Class<T> type) {
-		return new DbItems<T>(type, null, Cls.<T> comparator("id"));
+		return new DbItems<T>(type, null, Beany.<T> comparator("id"));
 	}
 
 	public static <T> Items all(Class<T> type, String orderBy) {
-		return new DbItems<T>(type, null, Cls.<T> comparator(orderBy));
+		return new DbItems<T>(type, null, Beany.<T> comparator(orderBy));
 	}
 
 	public static <T> Items all(Class<T> type, Predicate<T> match, String orderBy) {
-		return new DbItems<T>(type, match, Cls.<T> comparator(orderBy));
+		return new DbItems<T>(type, match, Beany.<T> comparator(orderBy));
 	}
 
 	public static <T> Items all(Class<T> type, Predicate<T> match, Comparator<T> orderBy) {

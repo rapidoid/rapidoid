@@ -23,13 +23,13 @@ package org.rapidoid.db.model;
 import java.util.Comparator;
 import java.util.List;
 
+import org.rapidoid.beany.Beany;
 import org.rapidoid.db.DB;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.impl.BeanListItems;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 @SuppressWarnings("serial")
@@ -84,7 +84,7 @@ public class DbItems<T> extends BeanListItems<T> {
 
 	@Override
 	public Items orderedBy(String sortOrder) {
-		Comparator<T> orderBy = Cls.comparator(sortOrder);
+		Comparator<T> orderBy = Beany.comparator(sortOrder);
 		return new DbItems<T>(beanType, match, orderBy);
 	}
 

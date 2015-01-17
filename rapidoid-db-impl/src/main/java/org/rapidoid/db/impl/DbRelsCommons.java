@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.rapidoid.beany.SerializableBean;
 import org.rapidoid.db.Database;
-import org.rapidoid.prop.SerializableBean;
 import org.rapidoid.util.U;
 
 public abstract class DbRelsCommons<E> implements DbRelationInternals, SerializableBean<Map<String, Object>> {

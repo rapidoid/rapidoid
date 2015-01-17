@@ -53,13 +53,13 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Relation;
+import org.rapidoid.beany.Beany;
+import org.rapidoid.beany.Prop;
+import org.rapidoid.beany.PropertyFilter;
+import org.rapidoid.beany.PropertySelector;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
-import org.rapidoid.prop.Prop;
-import org.rapidoid.prop.PropertyFilter;
-import org.rapidoid.prop.PropertySelector;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.Tuple;
 import org.rapidoid.util.U;
 
@@ -229,7 +229,7 @@ public class InMem {
 		sharedLock();
 		try {
 			long id = ids.incrementAndGet();
-			Cls.setId(record, id);
+			Beany.setId(record, id);
 
 			if (insideTx.get()) {
 				if (txInsertions.putIfAbsent(id, INSERTION) != null) {
@@ -251,7 +251,7 @@ public class InMem {
 	}
 
 	private void updateChangesFromRels(Object entity) {
-		for (Prop prop : Cls.propertiesOf(entity).select(relPropSelector)) {
+		for (Prop prop : Beany.propertiesOf(entity).select(relPropSelector)) {
 			Object value = prop.get(entity);
 
 			if (hasEntityLinks(value)) {
@@ -264,7 +264,7 @@ public class InMem {
 	}
 
 	private void deleteRelsFor(Object entity) {
-		for (Prop prop : Cls.propertiesOf(entity).select(relPropSelector)) {
+		for (Prop prop : Beany.propertiesOf(entity).select(relPropSelector)) {
 			Object value = prop.get(entity);
 
 			if (hasEntityLinks(value)) {
@@ -344,7 +344,7 @@ public class InMem {
 	private Prop findRelProperty(Class<?> fromCls, String rel, Class<?> toCls) {
 		Object entity = !fromCls.isInterface() ? constructor.create(fromCls) : null;
 
-		for (Prop prop : Cls.propertiesOf(fromCls).select(relPropSelector)) {
+		for (Prop prop : Beany.propertiesOf(fromCls).select(relPropSelector)) {
 
 			String relName = null;
 
@@ -411,7 +411,7 @@ public class InMem {
 	}
 
 	public void delete(Object record) {
-		delete(Cls.getId(record));
+		delete(Beany.getId(record));
 	}
 
 	public <E> E get(long id) {
@@ -440,7 +440,7 @@ public class InMem {
 
 		if (rec != null) {
 			E record = obj(rec);
-			Cls.setId(record, id);
+			Beany.setId(record, id);
 			return record;
 		} else {
 			return null;
@@ -461,7 +461,7 @@ public class InMem {
 		sharedLock();
 		try {
 
-			long id = Cls.getId(record);
+			long id = Beany.getId(record);
 			validateId(id);
 			Rec rec = getRec(id);
 			obj(rec, record);
@@ -490,7 +490,7 @@ public class InMem {
 	private void update_(long id, Object record, boolean reflectRelChanges) {
 		validateId(id);
 
-		Cls.setId(record, id);
+		Beany.setId(record, id);
 
 		Rec removed = data.replace(id, rec(record));
 
@@ -510,11 +510,11 @@ public class InMem {
 	}
 
 	public void update(Object record) {
-		update(Cls.getId(record), record);
+		update(Beany.getId(record), record);
 	}
 
 	public long persist(Object record) {
-		long id = Cls.getId(record);
+		long id = Beany.getId(record);
 		if (id <= 0) {
 			return insert(record);
 		} else {
@@ -524,7 +524,7 @@ public class InMem {
 	}
 
 	public long persistedIdOf(Object record) {
-		long id = Cls.getId(record);
+		long id = Beany.getId(record);
 		if (id <= 0) {
 			return insert(record);
 		} else {
@@ -637,7 +637,7 @@ public class InMem {
 					return true;
 				}
 
-				for (Prop prop : Cls.propertiesOf(record).select(SEARCHABLE_PROPS)) {
+				for (Prop prop : Beany.propertiesOf(record).select(SEARCHABLE_PROPS)) {
 					String s = String.valueOf(prop.get(record)).toLowerCase();
 					if (s.contains(search)) {
 						return true;
@@ -669,7 +669,7 @@ public class InMem {
 		}
 
 		if (P_WORD.matcher(query).matches() && args.length == 1) {
-			Object val = Cls.getPropValue(record, query, null);
+			Object val = Beany.getPropValue(record, query, null);
 			Object arg = args[0];
 			return val == arg || (val != null && val.equals(arg));
 		}
@@ -683,7 +683,7 @@ public class InMem {
 
 			for (Entry<Long, Rec> entry : data.entrySet()) {
 				E record = obj(entry.getValue());
-				Cls.setId(record, entry.getKey());
+				Beany.setId(record, entry.getKey());
 
 				try {
 					lambda.execute(record);
@@ -797,7 +797,7 @@ public class InMem {
 		Rec rec = data.get(id);
 		if (rec != null) {
 			T record = obj(rec, clazz);
-			Cls.setId(record, id);
+			Beany.setId(record, id);
 			return record;
 		} else {
 			return null;

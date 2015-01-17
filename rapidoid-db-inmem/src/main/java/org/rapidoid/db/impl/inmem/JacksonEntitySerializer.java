@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.beany.Beany;
+import org.rapidoid.beany.Prop;
 import org.rapidoid.db.Database;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
@@ -31,8 +33,6 @@ import org.rapidoid.db.DbSet;
 import org.rapidoid.db.impl.DbHelper;
 import org.rapidoid.db.impl.DbRelationInternals;
 import org.rapidoid.inmem.EntitySerializer;
-import org.rapidoid.prop.Prop;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -151,7 +151,7 @@ public class JacksonEntitySerializer implements EntitySerializer {
 	public <T> void parse(byte[] bytes, T destination) {
 		try {
 			Map<String, Object> map = mapper.readValue(bytes, Map.class);
-			Cls.update(map, destination);
+			Beany.update(map, destination);
 		} catch (Exception e) {
 			U.error("Cannot parse JSON!", e);
 			throw new RuntimeException(e);
@@ -161,14 +161,14 @@ public class JacksonEntitySerializer implements EntitySerializer {
 	@Override
 	public byte[] serialize(Object entity) {
 		Class<?> entityType = db.schema().getEntityTypeFor(entity.getClass());
-		return stringifyWithExtras(Cls.read(entity), "_class", entityType.getCanonicalName());
+		return stringifyWithExtras(Beany.read(entity), "_class", entityType.getCanonicalName());
 	}
 
 	@Override
 	public <T> void deserialize(byte[] bytes, T destination) {
 		parse(bytes, destination);
 
-		for (Prop prop : Cls.propertiesOf(destination).select(DbHelper.DB_REL_PROPS)) {
+		for (Prop prop : Beany.propertiesOf(destination).select(DbHelper.DB_REL_PROPS)) {
 			DbRelationInternals rel = prop.get(destination);
 			U.notNull(rel, prop.getName());
 			rel.setHolder(destination);

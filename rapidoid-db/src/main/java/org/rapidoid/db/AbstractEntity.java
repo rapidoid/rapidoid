@@ -2,7 +2,7 @@ package org.rapidoid.db;
 
 import java.io.Serializable;
 
-import org.rapidoid.util.Cls;
+import org.rapidoid.beany.Beany;
 import org.rapidoid.util.CommonRoles;
 
 /*
@@ -60,7 +60,7 @@ public abstract class AbstractEntity implements CommonRoles, Serializable {
 
 	@Override
 	public String toString() {
-		return Cls.beanToStr(this, false);
+		return Beany.beanToStr(this, false);
 	}
 
 }

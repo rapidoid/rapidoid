@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.rapidoid.beany.Beany;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.KeyValueRanges;
@@ -40,7 +41,6 @@ import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.net.mime.MediaType;
 import org.rapidoid.security.Secure;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.Conf;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.IUser;
@@ -781,9 +781,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 		T user2 = U.newInstance(userClass);
 
-		Cls.setPropValue(user2, "username", user.username());
-		Cls.setPropValue(user2, "email", user.email());
-		Cls.setPropValue(user2, "name", user.name());
+		Beany.setPropValue(user2, "username", user.username());
+		Beany.setPropValue(user2, "email", user.email());
+		Beany.setPropValue(user2, "name", user.name());
 
 		return user2;
 	}

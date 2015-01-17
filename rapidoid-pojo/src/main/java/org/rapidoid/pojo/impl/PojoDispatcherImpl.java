@@ -29,14 +29,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.rapidoid.beany.BeanProperties;
+import org.rapidoid.beany.Beany;
+import org.rapidoid.beany.Prop;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.pojo.POJO;
 import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
 import org.rapidoid.pojo.PojoRequest;
-import org.rapidoid.prop.BeanProperties;
-import org.rapidoid.prop.Prop;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.TypeKind;
@@ -193,7 +194,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 	}
 
 	private Class<?> getDefaultType(Object service) {
-		Object clazz = Cls.getPropValue(service, "clazz");
+		Object clazz = Beany.getPropValue(service, "clazz");
 		return (Class<?>) (clazz instanceof Class ? clazz : null);
 	}
 
@@ -274,7 +275,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 	}
 
 	private static void setBeanProperties(Object instance, Map<String, String> paramsMap) {
-		BeanProperties props = Cls.propertiesOf(instance.getClass());
+		BeanProperties props = Beany.propertiesOf(instance.getClass());
 
 		for (Entry<String, String> entry : paramsMap.entrySet()) {
 			Prop prop = props.get(entry.getKey());

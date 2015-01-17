@@ -1,4 +1,4 @@
-package org.rapidoid.prop;
+package org.rapidoid.beany;
 
 /*
  * #%L

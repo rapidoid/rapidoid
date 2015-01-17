@@ -33,6 +33,7 @@ import org.rapidoid.annotation.Autocreate;
 import org.rapidoid.annotation.Init;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Session;
+import org.rapidoid.beany.Beany;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.Builder;
 import org.rapidoid.util.Cls;
@@ -73,7 +74,7 @@ public class IoC {
 		U.setLogLevel(U.INFO);
 		U.args();
 
-		Cls.reset();
+		Beany.reset();
 
 		SINGLETONS.clear();
 		MANAGED_CLASSES.clear();

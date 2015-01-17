@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.rapidoid.activity.NamedActivity;
+import org.rapidoid.beany.Beany;
 import org.rapidoid.db.Database;
 import org.rapidoid.db.DbColumn;
 import org.rapidoid.db.DbList;
@@ -41,7 +42,6 @@ import org.rapidoid.inmem.InMem;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 public class DbImpl extends NamedActivity<Database> implements Database {
@@ -226,7 +226,7 @@ public class DbImpl extends NamedActivity<Database> implements Database {
 
 	@Override
 	public long getIdOf(Object record) {
-		return U.or(Cls.getIdIfExists(record), -1L);
+		return U.or(Beany.getIdIfExists(record), -1L);
 	}
 
 	@Override

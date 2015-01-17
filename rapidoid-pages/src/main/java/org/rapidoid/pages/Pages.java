@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.rapidoid.beany.Beany;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
@@ -103,7 +104,7 @@ public class Pages {
 		}
 
 		try {
-			return Cls.getPropValue(target, "title");
+			return Beany.getPropValue(target, "title");
 		} catch (Exception e) {
 			return defaultPageTitle(target.getClass());
 		}
@@ -111,12 +112,12 @@ public class Pages {
 
 	public static Object contentOf(HttpExchange x, Object target) {
 		Method m = Cls.findMethod(target.getClass(), "content", HttpExchange.class);
-		return m != null ? Cls.invoke(m, target, x) : Cls.getPropValue(target, "content", null);
+		return m != null ? Cls.invoke(m, target, x) : Beany.getPropValue(target, "content", null);
 	}
 
 	public static Object headOf(HttpExchange x, Object target) {
 		Method m = Cls.findMethod(target.getClass(), "head", HttpExchange.class);
-		return m != null ? Cls.invoke(m, target, x) : Cls.getPropValue(target, "head", null);
+		return m != null ? Cls.invoke(m, target, x) : Beany.getPropValue(target, "head", null);
 	}
 
 	public static Object page(HttpExchange x, Object page) {
