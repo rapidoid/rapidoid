@@ -171,6 +171,9 @@ public class BeanProp implements Prop {
 	@Override
 	public void set(Object target, Object value) {
 		U.must(!isReadOnly(), "Cannot assign value to a read-only property: %s", name);
+
+		value = Cls.convert(value, getType());
+
 		switch (propKind) {
 		case NORMAL:
 			normalSet(target, value);
@@ -205,32 +208,16 @@ public class BeanProp implements Prop {
 		try {
 			if (field != null) {
 				field.setAccessible(true);
-				field.set(target, convert(value, getType()));
+				field.set(target, value);
 			} else if (setter != null) {
 				setter.setAccessible(true);
-				setter.invoke(target, convert(value, getType()));
+				setter.invoke(target, value);
 			} else if (getter != null) {
 				throw U.notExpected();
 			}
 		} catch (Exception e) {
 			throw U.rte(e);
 		}
-	}
-
-	private Object convert(Object value, Class<?> toType) {
-		if (value == null || toType.isAssignableFrom(value.getClass())) {
-			return value;
-		}
-
-		if (toType.equals(String.class)) {
-			return String.valueOf(value);
-		}
-
-		if (value instanceof String) {
-			return Cls.convert((String) value, toType);
-		}
-
-		return value;
 	}
 
 	@Override
