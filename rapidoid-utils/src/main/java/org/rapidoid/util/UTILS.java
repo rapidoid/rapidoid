@@ -29,7 +29,6 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
-import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -40,18 +39,9 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.rapidoid.beany.Beany;
 import org.rapidoid.lambda.Predicate;
 
 public class UTILS implements Constants {
-
-	private static final Method getGarbageCollectorMXBeans;
-
-	static {
-		Class<?> manFactory = U.getClassIfExists("java.lang.management.ManagementFactory");
-		getGarbageCollectorMXBeans = manFactory != null ? Cls.getMethod(manFactory, "getGarbageCollectorMXBeans")
-				: null;
-	}
 
 	private UTILS() {
 	}
@@ -371,20 +361,6 @@ public class UTILS implements Constants {
 		} catch (Exception e) {
 			throw U.rte(e);
 		}
-	}
-
-	public static String gcInfo() {
-		String gcinfo = "";
-
-		if (getGarbageCollectorMXBeans != null) {
-			List<?> gcs = Cls.invokeStatic(getGarbageCollectorMXBeans);
-
-			for (Object gc : gcs) {
-				gcinfo += " | " + Beany.getPropValue(gc, "name") + " x" + Beany.getPropValue(gc, "collectionCount")
-						+ ":" + Beany.getPropValue(gc, "collectionTime") + "ms";
-			}
-		}
-		return gcinfo;
 	}
 
 	public static short bytesToShort(String s) {
