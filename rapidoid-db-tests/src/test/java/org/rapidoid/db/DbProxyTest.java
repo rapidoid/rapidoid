@@ -2,8 +2,8 @@ package org.rapidoid.db;
 
 import java.util.concurrent.ConcurrentMap;
 
-import org.rapidoid.db.imodel.Task;
 import org.rapidoid.db.impl.DbProxy;
+import org.rapidoid.db.model.IPost;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
@@ -35,10 +35,9 @@ public class DbProxyTest extends DbTestCommons {
 		final ConcurrentMap<String, Object> map = U.concurrentMap();
 		map.put("id", 1234567890123L);
 		map.put("version", 346578789843490123L);
-		map.put("title", "dsafasfasf");
-		map.put("description", "Abc");
+		map.put("content", "dsafasfasf");
 
-		final Task t = DbProxy.create(Task.class, map);
+		final IPost t = DbProxy.create(IPost.class, map);
 		notNull(t);
 
 		U.benchmarkMT(100, "ops", 1000000, new Runnable() {
@@ -51,21 +50,17 @@ public class DbProxyTest extends DbTestCommons {
 		DB.shutdown();
 	}
 
-	private void check(final ConcurrentMap<String, Object> map, final Task t) {
-		eq(t.id().get(), map.get("id"));
-		eq(t.version().get(), map.get("version"));
+	private void check(final ConcurrentMap<String, Object> map, final IPost p) {
+		notNullAll(p.content(), p.likes(), p.id(), p.version());
 
-		notNullAll(t.title(), t.description(), t.priority(), t.comments(), t.owner(), t.likedBy());
+		isTrue(p.id() == p.id());
+		isTrue(p.version() == p.version());
+		isTrue(p.content() == p.content());
+		isTrue(p.likes() == p.likes());
 
-		eq(t.title().get(), map.get("title"));
-		eq(t.description().get(), "Abc");
-
-		isTrue(t.title() == t.title());
-		isTrue(t.description() == t.description());
-		isTrue(t.priority() == t.priority());
-		isTrue(t.comments() == t.comments());
-		isTrue(t.owner() == t.owner());
-		isTrue(t.likedBy() == t.likedBy());
+		eq(p.id().get(), map.get("id"));
+		eq(p.version().get(), map.get("version"));
+		eq(p.content().get(), map.get("content"));
 	}
 
 }
