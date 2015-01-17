@@ -1163,7 +1163,6 @@ public class U {
 
 	public static synchronized void args(String... args) {
 		Conf.args(args);
-		Scan.args(args);
 	}
 
 	public static void benchmark(String name, int count, Runnable runnable) {
