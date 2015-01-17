@@ -1,7 +1,10 @@
 package org.rapidoid.db;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 /*
@@ -24,37 +27,39 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-public abstract class CRUD<E> {
+public abstract class DAO<E> {
 
 	private final Class<E> clazz;
 
 	/**
-	 * e.g. com.example.PersonService -> com.example.Person
+	 * e.g. IF PersonService extends DAO&lt;Person&gt; THEN entity == Person
 	 */
-	private static Class<?> inferEntityClass(String className) {
-		String type;
-		if (className.endsWith("Service")) {
-			type = className.substring(0, className.length() - 7);
-		} else if (className.endsWith("Controller")) {
-			type = className.substring(0, className.length() - 10);
-		} else if (className.endsWith("CRUD")) {
-			type = className.substring(0, className.length() - 4);
-		} else {
-			throw U.rte("Automatic entity detection requires class name suffix to be 'Service', 'Controller' or 'CRUD'");
-		}
+	private static Class<?> inferEntityType(Class<? extends DAO<?>> daoClass) {
 
-		Class<?> entityClass = U.getClassIfExists(type);
-		U.must(entityClass != null, "Cannot infer entity class for the service: %s", className);
-		return entityClass;
+		U.must(daoClass.getSuperclass() == DAO.class, "Expected DAO to be superclass of %s, but found: %s!", daoClass,
+				daoClass.getSuperclass());
+
+		ParameterizedType genDao = Cls.parameterized(daoClass.getGenericSuperclass());
+
+		U.must(genDao != null && genDao.getActualTypeArguments().length > 0, "Cannot infer entity type for: %s",
+				daoClass);
+
+		Type arg = genDao.getActualTypeArguments()[0];
+
+		return Cls.clazz(arg);
 	}
 
 	@SuppressWarnings("unchecked")
-	public CRUD() {
-		this.clazz = (Class<E>) inferEntityClass(getClass().getCanonicalName());
+	public DAO() {
+		this.clazz = (Class<E>) inferEntityType((Class<? extends DAO<?>>) getClass());
 	}
 
-	public CRUD(Class<E> clazz) {
+	public DAO(Class<E> clazz) {
 		this.clazz = clazz;
+	}
+
+	public Class<E> getEntityType() {
+		return clazz;
 	}
 
 	public long insert(E record) {
@@ -67,6 +72,10 @@ public abstract class CRUD<E> {
 
 	public void delete(long id) {
 		DB.delete(id);
+	}
+
+	public void delete(E record) {
+		DB.delete(record);
 	}
 
 	public E get(long id) {
