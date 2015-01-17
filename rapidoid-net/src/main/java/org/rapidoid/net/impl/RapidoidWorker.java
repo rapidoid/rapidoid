@@ -37,6 +37,7 @@ import org.rapidoid.buffer.IncompleteReadException;
 import org.rapidoid.pool.ArrayPool;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.util.Conf;
+import org.rapidoid.util.Log;
 import org.rapidoid.util.SimpleList;
 import org.rapidoid.util.U;
 
@@ -111,9 +112,9 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		connecting.add(target);
 
 		if (target.socketChannel.connect(target.addr)) {
-			U.debug("Opened socket, connected", "address", target.addr);
+			Log.debug("Opened socket, connected", "address", target.addr);
 		} else {
-			U.debug("Opened socket, connecting...", "address", target.addr);
+			Log.debug("Opened socket, connecting...", "address", target.addr);
 		}
 
 		selector.wakeup();
@@ -146,7 +147,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	}
 
 	private void retryConnecting(ConnectionTarget target) throws IOException {
-		U.debug("Reconnecting...", "address", target.addr);
+		Log.debug("Reconnecting...", "address", target.addr);
 		target.socketChannel = SocketChannel.open();
 		target.retryAfter = U.time() + 1000;
 		connect(target);
@@ -166,7 +167,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 		if (read == -1) {
 			// the other end closed the connection
-			U.debug("The other end closed the connection!");
+			Log.debug("The other end closed the connection!");
 
 			if (conn.isClient()) {
 				InetSocketAddress addr = conn.getAddress();
@@ -212,11 +213,11 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 				conn.done();
 			}
 
-			U.debug("Completed message processing");
+			Log.debug("Completed message processing");
 			return true;
 
 		} catch (IncompleteReadException e) {
-			U.debug("Incomplete message");
+			Log.debug("Incomplete message");
 
 			// input not complete, so rollback
 			conn.input().position(pos);
@@ -225,14 +226,14 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			conn.output().deleteAfter(osize);
 
 		} catch (ProtocolException e) {
-			U.warn("Protocol error", "error", e);
+			Log.warn("Protocol error", "error", e);
 			conn.output().deleteAfter(osize);
 			conn.write(U.or(e.getMessage(), "Protocol error!"));
 			conn.error();
 			conn.close(true);
 
 		} catch (Throwable e) {
-			U.error("Failed to process message!", e);
+			Log.error("Failed to process message!", e);
 			conn.close(true);
 		}
 
@@ -251,7 +252,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 			if (conn != null) {
 				if (!conn.closed) {
-					U.trace("Closing connection", "connection", conn);
+					Log.trace("Closing connection", "connection", conn);
 					assert conn.key == key;
 					conn.reset();
 					connections.release(conn);
@@ -327,13 +328,13 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			assert target != null;
 
 			if (target.retryAfter < now) {
-				U.debug("connecting", "address", target.addr);
+				Log.debug("connecting", "address", target.addr);
 
 				try {
 					SelectionKey newKey = target.socketChannel.register(selector, SelectionKey.OP_CONNECT);
 					newKey.attach(target);
 				} catch (ClosedChannelException e) {
-					U.warn("Closed channel", e);
+					Log.warn("Closed channel", e);
 				}
 			} else {
 				connecting.add(target);
@@ -345,7 +346,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		while ((channel = connected.poll()) != null) {
 
 			SocketChannel socketChannel = channel.socketChannel;
-			U.debug("connected", "address", socketChannel.socket().getRemoteSocketAddress());
+			Log.debug("connected", "address", socketChannel.socket().getRemoteSocketAddress());
 
 			try {
 				SelectionKey newKey = socketChannel.register(selector, SelectionKey.OP_READ);
@@ -359,13 +360,13 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 				}
 
 			} catch (ClosedChannelException e) {
-				U.warn("Closed channel", e);
+				Log.warn("Closed channel", e);
 			}
 		}
 
 		RapidoidConnection restartedConn;
 		while ((restartedConn = restarting.poll()) != null) {
-			U.debug("restarting", "connection", restartedConn);
+			Log.debug("restarting", "connection", restartedConn);
 
 			processNext(restartedConn);
 		}
@@ -403,7 +404,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	@Override
 	protected void failedOP(SelectionKey key, Throwable e) {
-		U.error("Network error", e);
+		Log.error("Network error", e);
 		close(key);
 	}
 

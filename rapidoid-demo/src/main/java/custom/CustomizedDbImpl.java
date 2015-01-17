@@ -21,7 +21,7 @@ package custom;
  */
 
 import org.rapidoid.db.impl.inmem.DbImpl;
-import org.rapidoid.util.U;
+import org.rapidoid.util.Log;
 
 public class CustomizedDbImpl extends DbImpl {
 
@@ -31,7 +31,7 @@ public class CustomizedDbImpl extends DbImpl {
 
 	@Override
 	public void delete(long id) {
-		U.warn("deleting record", "id", id);
+		Log.warn("deleting record", "id", id);
 		super.delete(id);
 	}
 

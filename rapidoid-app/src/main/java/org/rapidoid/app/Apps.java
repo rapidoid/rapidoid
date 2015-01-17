@@ -31,6 +31,7 @@ import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 
 public class Apps {
@@ -45,7 +46,7 @@ public class Apps {
 	}
 
 	public static void run() {
-		U.info("Loaded database", "size", DB.size());
+		Log.info("Loaded database", "size", DB.size());
 
 		HTTPServer server = HTTP.server().build();
 

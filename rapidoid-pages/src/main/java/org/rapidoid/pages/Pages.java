@@ -42,6 +42,7 @@ import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.rest.WebReq;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Conf;
+import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.BootstrapWidgets;
 
@@ -236,7 +237,7 @@ public class Pages {
 			Map<Integer, Object> inputs = Pages.inputs(x);
 			ctx.emitValues(inputs, errors);
 		} else {
-			U.warn("Invalid event!", "event", event);
+			Log.warn("Invalid event!", "event", event);
 		}
 
 		if (!errors.isEmpty()) {

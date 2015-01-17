@@ -27,6 +27,7 @@ import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.security.annotation.CanInsert;
+import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 
 @CanInsert("logged_in")
@@ -76,12 +77,12 @@ public class AboutScreen extends Screen {
 	}
 
 	public void onYes() {
-		U.info("yes");
+		Log.info("yes");
 		hideModal();
 	}
 
 	public void onNo() {
-		U.info("no");
+		Log.info("no");
 		hideModal();
 	}
 

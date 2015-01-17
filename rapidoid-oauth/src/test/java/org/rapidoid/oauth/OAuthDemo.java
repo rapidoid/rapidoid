@@ -22,13 +22,13 @@ package org.rapidoid.oauth;
 
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
+import org.rapidoid.util.Log;
 import org.rapidoid.util.LogLevel;
-import org.rapidoid.util.U;
 
 public class OAuthDemo {
 
 	public static void main(String[] args) {
-		U.setLogLevel(LogLevel.DEBUG);
+		Log.setLogLevel(LogLevel.DEBUG);
 		HTTPServer server = HTTP.server().build();
 		OAuth.register(server);
 		server.start();

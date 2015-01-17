@@ -60,6 +60,7 @@ import org.rapidoid.beany.PropertySelector;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.util.Log;
 import org.rapidoid.util.Tuple;
 import org.rapidoid.util.U;
 
@@ -190,7 +191,7 @@ public class InMem {
 		String file1 = currentFile().getName();
 		String file2 = otherFile().getName();
 
-		U.warn("The database was left in inconsistent state, both files exist!", "file1", file1, "file2", file2);
+		Log.warn("The database was left in inconsistent state, both files exist!", "file1", file1, "file2", file2);
 
 		long modif1, modif2;
 		try {
@@ -206,7 +207,7 @@ public class InMem {
 		// delete the most recent file, since it wasn't written completely
 		File recent = modif1 > modif2 ? currentFile() : otherFile();
 
-		U.warn("The more recent database file is assumed incomplete, so it will be deleted!", "file", recent);
+		Log.warn("The more recent database file is assumed incomplete, so it will be deleted!", "file", recent);
 
 		recent.delete();
 	}
@@ -757,7 +758,7 @@ public class InMem {
 			}
 
 		} catch (Throwable e) {
-			U.error("Error in transaction, rolling back", e);
+			Log.error("Error in transaction, rolling back", e);
 			txRollback();
 			if (txCallback != null) {
 				txCallback.onDone(null, e);
@@ -887,7 +888,7 @@ public class InMem {
 			Map<String, Object> meta = U.map();
 			serializer.deserialize(bytes, meta);
 
-			U.info("Database meta-data", META_TIMESTAMP, meta.get(META_TIMESTAMP), META_UPTIME, meta.get(META_UPTIME));
+			Log.info("Database meta-data", META_TIMESTAMP, meta.get(META_TIMESTAMP), META_UPTIME, meta.get(META_UPTIME));
 
 			while ((line = reader.readLine()) != null) {
 				bytes = line.getBytes();
@@ -1009,7 +1010,7 @@ public class InMem {
 			try {
 				callback.onDone(null, e);
 			} catch (Throwable e2) {
-				U.error("Transaction callback error", e2);
+				Log.error("Transaction callback error", e2);
 			}
 		}
 	}
@@ -1031,7 +1032,7 @@ public class InMem {
 			try {
 				persistData();
 			} catch (Exception e1) {
-				U.error("Failed to persist data!", e1);
+				Log.error("Failed to persist data!", e1);
 			}
 
 			if (active.get()) {
@@ -1043,7 +1044,7 @@ public class InMem {
 				try {
 					persistData();
 				} catch (Exception e1) {
-					U.error("Failed to persist data!", e1);
+					Log.error("Failed to persist data!", e1);
 				}
 				return;
 			}

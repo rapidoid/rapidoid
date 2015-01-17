@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
 
+import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 
 public class PojoServiceWrapper {
@@ -44,7 +45,7 @@ public class PojoServiceWrapper {
 				int modifiers = method.getModifiers();
 				if (!Modifier.isAbstract(modifiers) && Modifier.isPublic(modifiers)) {
 					methods.put(method.getName(), method);
-					U.info("Registered web handler method: " + method);
+					Log.info("Registered web handler method: " + method);
 				}
 			}
 		}

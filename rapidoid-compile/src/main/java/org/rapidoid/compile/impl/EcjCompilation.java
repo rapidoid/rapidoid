@@ -31,6 +31,7 @@ import org.rapidoid.compile.CodeDiagnostic;
 import org.rapidoid.compile.Compilation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.CustomizableClassLoader;
+import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 
 public class EcjCompilation implements Compilation {
@@ -124,7 +125,7 @@ public class EcjCompilation implements Compilation {
 				} else if (problem.isWarning()) {
 					warnings.add(diagnostic(problem));
 				} else {
-					U.warn("Unknown problem type!", "problem", problem);
+					Log.warn("Unknown problem type!", "problem", problem);
 				}
 			}
 		}

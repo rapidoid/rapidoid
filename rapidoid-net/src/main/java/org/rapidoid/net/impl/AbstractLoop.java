@@ -21,6 +21,7 @@ package org.rapidoid.net.impl;
  */
 
 import org.rapidoid.activity.LifecycleActivity;
+import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 
 public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Runnable {
@@ -37,14 +38,14 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 	public void run() {
 		this.ownerThread = Thread.currentThread();
 
-		U.info("Starting event loop", "name", name);
+		Log.info("Starting event loop", "name", name);
 
 		setStatus(LoopStatus.BEFORE_LOOP);
 
 		try {
 			beforeLoop();
 		} catch (Throwable e) {
-			U.severe("Error occured before loop is started", "name", name, "error", e);
+			Log.severe("Error occured before loop is started", "name", name, "error", e);
 			return;
 		}
 
@@ -58,7 +59,7 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 			try {
 				insideLoop();
 			} catch (Throwable e) {
-				U.severe("Event loop exception in " + name, e);
+				Log.severe("Event loop exception in " + name, e);
 			}
 		}
 
@@ -68,7 +69,7 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 
 		setStatus(LoopStatus.STOPPED);
 
-		U.info("Stopped event loop", "name", name);
+		Log.info("Stopped event loop", "name", name);
 	}
 
 	private void setStatus(LoopStatus status) {
@@ -76,18 +77,18 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 	}
 
 	protected synchronized void stopLoop() {
-		U.info("Stopping event loop", "name", name);
+		Log.info("Stopping event loop", "name", name);
 
 		while (status == LoopStatus.INIT || status == LoopStatus.BEFORE_LOOP) {
 			try {
 				Thread.sleep(100);
-				U.info("Waiting for event loop to initialize...", "name", name);
+				Log.info("Waiting for event loop to initialize...", "name", name);
 			} catch (InterruptedException e) {
 				// ignore it, stopping anyway
 			}
 		}
 
-		U.info("Stopped event loop", "name", name);
+		Log.info("Stopped event loop", "name", name);
 
 		if (status == LoopStatus.LOOP) {
 			status = LoopStatus.STOPPED;

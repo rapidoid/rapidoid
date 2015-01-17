@@ -1,5 +1,6 @@
 package org.rapidoid.activity;
 
+import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 
 /*
@@ -58,23 +59,23 @@ public abstract class AbstractThreadActivity<T> extends LifecycleActivity<T> imp
 
 	@Override
 	public final void run() {
-		U.info("Starting activity thread", "name", name);
+		Log.info("Starting activity thread", "name", name);
 
 		try {
 			while (!Thread.interrupted()) {
 				try {
 					loop();
 				} catch (Exception e) {
-					U.error("Worker processing error!", "activity", name, "error", e);
+					Log.error("Worker processing error!", "activity", name, "error", e);
 				}
 			}
 
 		} catch (ThreadDeath e) {
-			U.info("Halted activity thread", "name", name);
+			Log.info("Halted activity thread", "name", name);
 			return;
 		}
 
-		U.info("Finished activity thread", "name", name);
+		Log.info("Finished activity thread", "name", name);
 	}
 
 	protected abstract void loop();

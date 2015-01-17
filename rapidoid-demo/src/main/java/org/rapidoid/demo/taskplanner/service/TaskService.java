@@ -24,12 +24,12 @@ import java.util.List;
 
 import org.rapidoid.db.DAO;
 import org.rapidoid.demo.taskplanner.model.Task;
-import org.rapidoid.util.U;
+import org.rapidoid.util.Log;
 
 public class TaskService extends DAO<Task> {
 
 	public List<Task> add(Task task) {
-		U.info("Inserting task", "task", task);
+		Log.info("Inserting task", "task", task);
 		insert(task);
 		return getAll();
 	}

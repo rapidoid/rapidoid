@@ -474,7 +474,7 @@ public class Cls {
 		return implementInterfaces(target, new InvocationHandler() {
 			@Override
 			public Object invoke(Object target, Method method, Object[] args) throws Throwable {
-				U.trace("intercepting", "method", method.getName(), "args", Arrays.toString(args));
+				Log.trace("intercepting", "method", method.getName(), "args", Arrays.toString(args));
 				return method.invoke(target, args);
 			}
 		});

@@ -33,7 +33,7 @@ public class CompilerBenchmark {
 		int count = Conf.option("count", 10000);
 		int threads = Conf.option("threads", Conf.cpus());
 
-		final String src1 = "public class Main%s { public static void main(String[] args) { U.info(\"abc%s\"); } }";
+		final String src1 = "public class Main%s { public static void main(String[] args) { Log.info(\"abc%s\"); } }";
 		final String src2 = "public class Book%s { String title=\"%s\"; int year = 0;} class Foo%s {}";
 		final String src3 = "public class Bar%s extends Foo%s {}";
 

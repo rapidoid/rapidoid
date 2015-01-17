@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.rapidoid.db.model.Person;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.util.Conf;
+import org.rapidoid.util.Log;
 import org.rapidoid.util.LogLevel;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
@@ -53,7 +54,7 @@ public class DbStatisticalTest extends DbTestCommons {
 	@Test
 	public void testDbOperations() {
 
-		U.setLogLevel(LogLevel.SEVERE);
+		Log.setLogLevel(LogLevel.SEVERE);
 		
 		U.benchmarkMT(Conf.cpus(), "op", 50000, new Runnable() {
 			@Override

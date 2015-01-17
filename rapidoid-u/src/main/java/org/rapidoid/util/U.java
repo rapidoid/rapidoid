@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
@@ -70,18 +69,7 @@ import org.rapidoid.lambda.Predicate;
 
 public class U {
 
-	public static final LogLevel TRACE = LogLevel.TRACE;
-	public static final LogLevel DEBUG = LogLevel.DEBUG;
-	public static final LogLevel AUDIT = LogLevel.AUDIT;
-	public static final LogLevel INFO = LogLevel.INFO;
-	public static final LogLevel WARN = LogLevel.WARN;
-	public static final LogLevel ERROR = LogLevel.ERROR;
-	public static final LogLevel SEVERE = LogLevel.SEVERE;
-
-	protected static LogLevel LOG_LEVEL = INFO;
-
 	protected static final Random RND = new Random();
-	private static Appendable LOG_OUTPUT = System.out;
 	private static ScheduledThreadPoolExecutor EXECUTOR;
 	private static long measureStart;
 
@@ -105,230 +93,6 @@ public class U {
 			Integer.class, long.class, Long.class, short.class, Short.class, void.class, Void.class);
 
 	private U() {
-	}
-
-	public static synchronized void setLogLevel(LogLevel logLevel) {
-		LOG_LEVEL = logLevel;
-	}
-
-	public static synchronized LogLevel getLogLevel() {
-		return LOG_LEVEL;
-	}
-
-	private static String getCallingClass() {
-		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
-
-		for (int i = 2; i < trace.length; i++) {
-			String cls = trace[i].getClassName();
-			if (!cls.equals(U.class.getCanonicalName())) {
-				return cls;
-			}
-		}
-
-		return U.class.getCanonicalName();
-	}
-
-	private static void log(Appendable out, LogLevel level, String msg, String key1, Object value1, String key2,
-			Object value2, String key3, Object value3, int paramsN) {
-		if (level.ordinal() >= LOG_LEVEL.ordinal()) {
-			try {
-				synchronized (out) {
-					out.append(level.name());
-					out.append(" | ");
-					out.append(Thread.currentThread().getName());
-					out.append(" | ");
-					out.append(getCallingClass());
-					out.append(" | ");
-					out.append(msg);
-
-					switch (paramsN) {
-					case 0:
-						break;
-
-					case 1:
-						printKeyValue(out, key1, value1);
-						break;
-
-					case 2:
-						printKeyValue(out, key1, value1);
-						printKeyValue(out, key2, value2);
-						break;
-
-					case 3:
-						printKeyValue(out, key1, value1);
-						printKeyValue(out, key2, value2);
-						printKeyValue(out, key3, value3);
-						break;
-
-					default:
-						throw notExpected();
-					}
-
-					out.append((char) 10);
-				}
-			} catch (IOException e) {
-				throw rte(e);
-			}
-		}
-	}
-
-	private static void printKeyValue(Appendable out, String key, Object value) throws IOException {
-		out.append(" | ");
-		out.append(key);
-		out.append("=");
-		out.append(text(value));
-
-		if (value instanceof Throwable) {
-			Throwable err = (Throwable) value;
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			err.printStackTrace(new PrintStream(stream));
-			out.append("\n");
-			out.append(stream.toString());
-		}
-	}
-
-	public static synchronized void setLogOutput(Appendable logOutput) {
-		LOG_OUTPUT = logOutput;
-	}
-
-	private static void log(LogLevel level, String msg, String key1, Object value1, String key2, Object value2,
-			String key3, Object value3, int paramsN) {
-		log(LOG_OUTPUT, level, msg, key1, value1, key2, value2, key3, value3, paramsN);
-	}
-
-	public static void trace(String msg) {
-		log(TRACE, msg, null, null, null, null, null, null, 0);
-	}
-
-	public static void trace(String msg, String key, Object value) {
-		log(TRACE, msg, key, value, null, null, null, null, 1);
-	}
-
-	public static void trace(String msg, String key1, Object value1, String key2, Object value2) {
-		log(TRACE, msg, key1, value1, key2, value2, null, null, 2);
-	}
-
-	public static void trace(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
-		log(TRACE, msg, key1, value1, key2, value2, key3, value3, 3);
-	}
-
-	public static void debug(String msg) {
-		log(DEBUG, msg, null, null, null, null, null, null, 0);
-	}
-
-	public static void debug(String msg, String key, Object value) {
-		log(DEBUG, msg, key, value, null, null, null, null, 1);
-	}
-
-	public static void debug(String msg, String key1, Object value1, String key2, Object value2) {
-		log(DEBUG, msg, key1, value1, key2, value2, null, null, 2);
-	}
-
-	public static void debug(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
-		log(DEBUG, msg, key1, value1, key2, value2, key3, value3, 3);
-	}
-
-	public static void audit(String msg) {
-		log(AUDIT, msg, null, null, null, null, null, null, 0);
-	}
-
-	public static void audit(String msg, String key, Object value) {
-		log(AUDIT, msg, key, value, null, null, null, null, 1);
-	}
-
-	public static void audit(String msg, String key1, Object value1, String key2, Object value2) {
-		log(AUDIT, msg, key1, value1, key2, value2, null, null, 2);
-	}
-
-	public static void audit(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
-		log(AUDIT, msg, key1, value1, key2, value2, key3, value3, 3);
-	}
-
-	public static void info(String msg) {
-		log(INFO, msg, null, null, null, null, null, null, 0);
-	}
-
-	public static void info(String msg, String key, Object value) {
-		log(INFO, msg, key, value, null, null, null, null, 1);
-	}
-
-	public static void info(String msg, String key1, Object value1, String key2, Object value2) {
-		log(INFO, msg, key1, value1, key2, value2, null, null, 2);
-	}
-
-	public static void info(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
-		log(INFO, msg, key1, value1, key2, value2, key3, value3, 3);
-	}
-
-	public static void warn(String msg) {
-		log(WARN, msg, null, null, null, null, null, null, 0);
-	}
-
-	public static void warn(String msg, String key, Object value) {
-		log(WARN, msg, key, value, null, null, null, null, 1);
-	}
-
-	public static void warn(String msg, String key1, Object value1, String key2, Object value2) {
-		log(WARN, msg, key1, value1, key2, value2, null, null, 2);
-	}
-
-	public static void warn(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
-		log(WARN, msg, key1, value1, key2, value2, key3, value3, 3);
-	}
-
-	public static void warn(String msg, Throwable error) {
-		warn(msg, "error", error);
-	}
-
-	public static void error(String msg) {
-		log(ERROR, msg, null, null, null, null, null, null, 0);
-	}
-
-	public static void error(String msg, String key, Object value) {
-		log(ERROR, msg, key, value, null, null, null, null, 1);
-	}
-
-	public static void error(String msg, String key1, Object value1, String key2, Object value2) {
-		log(ERROR, msg, key1, value1, key2, value2, null, null, 2);
-	}
-
-	public static void error(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
-		log(ERROR, msg, key1, value1, key2, value2, key3, value3, 3);
-	}
-
-	public static void error(String msg, Throwable error) {
-		error(msg, "error", error);
-	}
-
-	public static void error(Throwable error) {
-		error("error occured!", "error", error);
-	}
-
-	public static void severe(String msg) {
-		log(SEVERE, msg, null, null, null, null, null, null, 0);
-	}
-
-	public static void severe(String msg, String key, Object value) {
-		log(SEVERE, msg, key, value, null, null, null, null, 1);
-	}
-
-	public static void severe(String msg, String key1, Object value1, String key2, Object value2) {
-		log(SEVERE, msg, key1, value1, key2, value2, null, null, 2);
-	}
-
-	public static void severe(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
-		log(SEVERE, msg, key1, value1, key2, value2, key3, value3, 3);
-	}
-
-	public static void severe(String msg, Throwable error) {
-		severe(msg, "error", error);
 	}
 
 	public static String text(Object obj) {
@@ -1417,8 +1181,8 @@ public class U {
 	public static synchronized void args(String... args) {
 		Conf.args(args);
 
-		if (Conf.is("debug") && getLogLevel().ordinal() > DEBUG.ordinal()) {
-			setLogLevel(DEBUG);
+		if (Conf.is("debug") && Log.getLogLevel().ordinal() > LogLevel.DEBUG.ordinal()) {
+			Log.setLogLevel(LogLevel.DEBUG);
 		}
 
 		for (String arg : args) {
@@ -1439,16 +1203,17 @@ public class U {
 				Callable<?> addon = (Callable<?>) newInstance(addonCls);
 				try {
 					Object addonResult = addon.call();
-					info("Executed add-on", "add-on", addonName, "add-on class", addonClassName, "result", addonResult);
+					Log.info("Executed add-on", "add-on", addonName, "add-on class", addonClassName, "result",
+							addonResult);
 					return addonResult;
 				} catch (Exception e) {
 					throw rte(e);
 				}
 			} else {
-				warn("Found add-on, but it's not a Runnable!", "add-on", addonName, "add-on class", addonClassName);
+				Log.warn("Found add-on, but it's not a Runnable!", "add-on", addonName, "add-on class", addonClassName);
 			}
 		} else {
-			debug("No add-on was found", "add-on", addonName, "add-on class", addonClassName);
+			Log.debug("No add-on was found", "add-on", addonName, "add-on class", addonClassName);
 		}
 
 		return null;
@@ -1593,7 +1358,7 @@ public class U {
 		List<Class<?>> classes = classpathClasses("*", ".*\\." + simpleName, filter, classLoader);
 
 		if (classes.isEmpty()) {
-			warn("No classes found on classpath with the specified simple name", "name", simpleName);
+			Log.warn("No classes found on classpath with the specified simple name", "name", simpleName);
 		}
 
 		return classes;
@@ -1604,7 +1369,7 @@ public class U {
 		List<Class<?>> classes = classpathClasses("*", ".+\\w" + nameSuffix, filter, classLoader);
 
 		if (classes.isEmpty()) {
-			warn("No classes found on classpath with the specified suffix", "suffix", nameSuffix);
+			Log.warn("No classes found on classpath with the specified suffix", "suffix", nameSuffix);
 		}
 
 		return classes;
@@ -1631,12 +1396,12 @@ public class U {
 
 	private static void getFiles(Collection<File> files, File file, Predicate<File> filter) {
 		if (file.isDirectory()) {
-			debug("scanning directory", "dir", file);
+			Log.debug("scanning directory", "dir", file);
 			for (File f : file.listFiles()) {
 				if (f.isDirectory()) {
 					getFiles(files, f, filter);
 				} else {
-					debug("scanned file", "file", f);
+					Log.debug("scanned file", "file", f);
 					try {
 						if (filter == null || filter.eval(f)) {
 							files.add(f);
@@ -1653,12 +1418,12 @@ public class U {
 			Predicate<Class<?>> filter, ClassLoader classLoader) {
 
 		if (parent.isDirectory()) {
-			debug("scanning directory", "dir", parent);
+			Log.debug("scanning directory", "dir", parent);
 			for (File f : parent.listFiles()) {
 				if (f.isDirectory()) {
 					getClasses(classes, root, f, nameRegex, filter, classLoader);
 				} else {
-					debug("scanned file", "file", f);
+					Log.debug("scanned file", "file", f);
 					if (f.getName().endsWith(".class")) {
 						String clsName = f.getAbsolutePath();
 						String rootPath = root.getAbsolutePath();
@@ -1669,7 +1434,7 @@ public class U {
 
 						if (nameRegex.matcher(clsName).matches()) {
 							try {
-								debug("loading class", "name", clsName);
+								Log.debug("loading class", "name", clsName);
 
 								Class<?> cls = classLoader != null ? Class.forName(clsName, true, classLoader) : Class
 										.forName(clsName);

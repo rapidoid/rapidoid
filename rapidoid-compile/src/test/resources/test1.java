@@ -31,12 +31,12 @@ public class Main {
 		Runnable r1 = new Runnable() {
 			@Override
 			public void run() {
-				U.info("hello1!");
+				Log.info("hello1!");
 			}
 		};
 
 		r1.run();
-		U.info("success!");
+		Log.info("success!");
 	}
 }
 

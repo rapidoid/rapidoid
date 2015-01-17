@@ -286,7 +286,7 @@ public class UTILS implements Constants {
 			socket = new ServerSocket();
 			socket.bind(U.isEmpty(hostname) ? new InetSocketAddress(port) : new InetSocketAddress(hostname, port));
 
-			U.info("Starting TCP/IP server", "host", hostname, "port", port);
+			Log.info("Starting TCP/IP server", "host", hostname, "port", port);
 
 			while (true) {
 				final Socket conn = socket.accept();

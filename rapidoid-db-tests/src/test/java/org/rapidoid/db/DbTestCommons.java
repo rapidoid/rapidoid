@@ -21,8 +21,8 @@ package org.rapidoid.db;
  */
 
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.util.Log;
 import org.rapidoid.util.LogLevel;
-import org.rapidoid.util.U;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -31,11 +31,11 @@ public abstract class DbTestCommons extends TestCommons {
 	@BeforeMethod(alwaysRun = true)
 	@AfterMethod(alwaysRun = true)
 	public void initDB() {
-		U.warn("Destroying all databases: " + DBs.instances());
+		Log.warn("Destroying all databases: " + DBs.instances());
 		DBs.destroyAll();
 		DB.destroy();
 		DB.init();
-		U.setLogLevel(LogLevel.DEBUG);
+		Log.setLogLevel(LogLevel.DEBUG);
 	}
 
 }

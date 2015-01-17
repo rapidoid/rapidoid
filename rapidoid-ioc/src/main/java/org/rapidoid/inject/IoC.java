@@ -39,6 +39,7 @@ import org.rapidoid.util.Builder;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Conf;
 import org.rapidoid.util.F3;
+import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 
 public class IoC {
@@ -52,7 +53,7 @@ public class IoC {
 				@Override
 				public List<Field> map(Class<?> clazz) throws Exception {
 					List<Field> fields = Cls.getFieldsAnnotated(clazz, Inject.class);
-					U.debug("Retrieved injectable fields", "class", clazz, "fields", fields);
+					Log.debug("Retrieved injectable fields", "class", clazz, "fields", fields);
 					return fields;
 				}
 			});
@@ -61,7 +62,7 @@ public class IoC {
 				@Override
 				public List<Field> map(Class<?> clazz) throws Exception {
 					List<Field> fields = Cls.getFieldsAnnotated(clazz, Session.class);
-					U.debug("Retrieved session fields", "class", clazz, "fields", fields);
+					Log.debug("Retrieved session fields", "class", clazz, "fields", fields);
 					return fields;
 				}
 			});
@@ -69,9 +70,9 @@ public class IoC {
 	private static final Map<Class<?>, List<F3<Object, Object, Method, Object[]>>> INTERCEPTORS = U.map();
 
 	public static synchronized void reset() {
-		U.info("Reseting IoC state");
+		Log.info("Reseting IoC state");
 
-		U.setLogLevel(U.INFO);
+		Log.setLogLevel(Log.INFO);
 		U.args();
 
 		Beany.reset();
@@ -108,7 +109,7 @@ public class IoC {
 			}
 
 			if (isClass) {
-				U.debug("configuring managed class", "class", classOrInstance);
+				Log.debug("configuring managed class", "class", classOrInstance);
 				MANAGED_CLASSES.add(clazz);
 
 				if (!clazz.isInterface() && !clazz.isEnum() && !clazz.isAnnotation()) {
@@ -118,7 +119,7 @@ public class IoC {
 					}
 				}
 			} else {
-				U.debug("configuring managed instance", "instance", classOrInstance);
+				Log.debug("configuring managed instance", "instance", classOrInstance);
 				addInjectionProvider(clazz, classOrInstance);
 				MANAGED_INSTANCES.add(classOrInstance);
 			}
@@ -141,29 +142,29 @@ public class IoC {
 	}
 
 	public static synchronized <T> T singleton(Class<T> type) {
-		U.debug("Inject", "type", type);
+		Log.debug("Inject", "type", type);
 		return provideIoCInstanceOf(null, type, null, null, false);
 	}
 
 	public static synchronized <T> T autowire(T target) {
-		U.debug("Autowire", "target", target);
+		Log.debug("Autowire", "target", target);
 		autowire(target, null, null);
 		return target;
 	}
 
 	public static synchronized <T> T autowire(T target, Mapper<String, Object> session) {
-		U.debug("Autowire", "target", target);
+		Log.debug("Autowire", "target", target);
 		autowire(target, null, session);
 		return target;
 	}
 
 	public static synchronized <T> T inject(T target) {
-		U.debug("Inject", "target", target);
+		Log.debug("Inject", "target", target);
 		return ioc(target, null);
 	}
 
 	public static synchronized <T> T inject(T target, Map<String, Object> properties) {
-		U.debug("Inject", "target", target, "properties", properties);
+		Log.debug("Inject", "target", target, "properties", properties);
 		return ioc(target, properties);
 	}
 
@@ -300,14 +301,14 @@ public class IoC {
 	}
 
 	private static void autowire(Object target, Map<String, Object> properties, Mapper<String, Object> session) {
-		U.debug("Autowiring", "target", target);
+		Log.debug("Autowiring", "target", target);
 
 		for (Field field : INJECTABLE_FIELDS.get(target.getClass())) {
 
 			boolean optional = isInjectOptional(field);
 			Object value = provideIoCInstanceOf(target, field.getType(), field.getName(), properties, optional);
 
-			U.debug("Injecting field value", "target", target, "field", field.getName(), "value", value);
+			Log.debug("Injecting field value", "target", target, "field", field.getName(), "value", value);
 
 			if (!optional || value != null) {
 				Cls.setFieldValue(target, field.getName(), value);
@@ -319,7 +320,7 @@ public class IoC {
 			Object value = provideSessionValue(target, field.getType(), field.getName(), session);
 
 			if (value != null) {
-				U.debug("Injecting session field value", "target", target, "field", field.getName(), "value", value);
+				Log.debug("Injecting session field value", "target", target, "field", field.getName(), "value", value);
 				Cls.setFieldValue(target, field.getName(), value);
 			}
 		}
@@ -380,7 +381,7 @@ public class IoC {
 			if (interceptors != null) {
 				for (final F3<Object, Object, Method, Object[]> interceptor : interceptors) {
 					if (interceptor != null && !done.contains(interceptor)) {
-						U.debug("Creating proxy", "target", instance, "interface", interf, "interceptor", interceptor);
+						Log.debug("Creating proxy", "target", instance, "interface", interf, "interceptor", interceptor);
 
 						final T target = instance;
 						InvocationHandler handler = new InvocationHandler() {

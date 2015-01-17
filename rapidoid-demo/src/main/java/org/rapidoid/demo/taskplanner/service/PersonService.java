@@ -27,7 +27,7 @@ import org.rapidoid.db.DAO;
 import org.rapidoid.db.DB;
 import org.rapidoid.demo.db.Person;
 import org.rapidoid.lambda.Predicate;
-import org.rapidoid.util.U;
+import org.rapidoid.util.Log;
 
 public class PersonService extends DAO<Person> {
 
@@ -47,7 +47,7 @@ public class PersonService extends DAO<Person> {
 
 	// e.g. /person/add?name=nikolche&age=30
 	public List<Person> add(Person p) {
-		U.info("Inserting person", "person", p);
+		Log.info("Inserting person", "person", p);
 		insert(p);
 		return getAll();
 	}

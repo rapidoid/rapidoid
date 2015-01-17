@@ -30,7 +30,7 @@ public class StatsThread extends Thread {
 
 	@Override
 	public void run() {
-		U.info("Starting stats thread...");
+		Log.info("Starting stats thread...");
 
 		while (!Thread.interrupted()) {
 			U.sleep(1000);
@@ -41,7 +41,7 @@ public class StatsThread extends Thread {
 			}
 		}
 
-		U.info("Stopped stats thread.");
+		Log.info("Stopped stats thread.");
 	}
 
 }

@@ -25,6 +25,7 @@ import org.rapidoid.net.TCPClient;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.Protocol;
+import org.rapidoid.util.Log;
 import org.rapidoid.util.LogLevel;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
@@ -33,7 +34,7 @@ public class TcpClientTest extends NetTestCommons {
 
 	@Test
 	public void testTCPClient() {
-		U.setLogLevel(LogLevel.DEBUG);
+		Log.setLogLevel(LogLevel.DEBUG);
 
 		TCPClient client = TCP.client().host("localhost").port(8080).connections(1).protocol(new Protocol() {
 			@Override

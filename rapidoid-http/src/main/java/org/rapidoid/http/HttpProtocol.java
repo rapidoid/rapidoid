@@ -26,6 +26,7 @@ import java.nio.ByteBuffer;
 import org.rapidoid.inject.IoC;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ExchangeProtocol;
+import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 
 public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
@@ -99,7 +100,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			// redirect, notFound etc.
 			x.completeResponse();
 		} else {
-			U.error("Internal server error!", "request", x, "error", cause);
+			Log.error("Internal server error!", "request", x, "error", cause);
 			x.errorResponse(e);
 			x.completeResponse();
 		}

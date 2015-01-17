@@ -34,6 +34,7 @@ import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.json.JSON;
+import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UserInfo;
 
@@ -61,7 +62,7 @@ public class OAuthTokenHandler implements Handler {
 		String code = x.param("code");
 		String state = x.param("state");
 
-		U.debug("Received OAuth code", "code", code, "state", state);
+		Log.debug("Received OAuth code", "code", code, "state", state);
 
 		if (code != null && state != null) {
 			U.must(stateCheck.isValidState(state, clientSecret, x.sessionId()), "Invalid OAuth state!");
@@ -109,7 +110,7 @@ public class OAuthTokenHandler implements Handler {
 		} else {
 			String error = x.param("error");
 			if (error != null) {
-				U.warn("OAuth error", "error", error);
+				Log.warn("OAuth error", "error", error);
 				throw U.rte("OAuth error!");
 			}
 		}

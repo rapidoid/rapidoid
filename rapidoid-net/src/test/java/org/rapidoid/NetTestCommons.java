@@ -24,6 +24,7 @@ import org.rapidoid.net.TCP;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 
 public abstract class NetTestCommons extends TestCommons {
@@ -42,7 +43,7 @@ public abstract class NetTestCommons extends TestCommons {
 			U.print("--- SERVER STOPPED ---");
 		}
 
-		U.info("server finished");
+		Log.info("server finished");
 	}
 
 }

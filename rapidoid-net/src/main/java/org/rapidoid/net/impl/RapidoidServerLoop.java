@@ -31,6 +31,7 @@ import org.rapidoid.annotation.Inject;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.util.Conf;
+import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 
 public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements TCPServer {
@@ -109,11 +110,11 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 			InetSocketAddress addr = new InetSocketAddress(port);
 			socket.bind(addr);
 
-			U.info("Opened socket", "address", addr);
+			Log.info("Opened socket", "address", addr);
 
 			serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
-			U.info("Waiting for connections...");
+			Log.info("Waiting for connections...");
 
 			workers = new RapidoidWorker[workersN];
 			for (int i = 0; i < workers.length; i++) {
@@ -151,7 +152,7 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 				selector.close();
 				serverSocketChannel.close();
 			} catch (IOException e) {
-				U.warn("Cannot close socket or selector!", e);
+				Log.warn("Cannot close socket or selector!", e);
 			}
 		}
 

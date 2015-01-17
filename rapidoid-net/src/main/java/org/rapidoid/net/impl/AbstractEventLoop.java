@@ -27,7 +27,7 @@ import java.nio.channels.Selector;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.rapidoid.util.U;
+import org.rapidoid.util.Log;
 
 public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 
@@ -41,7 +41,7 @@ public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 		try {
 			sel = Selector.open();
 		} catch (IOException e) {
-			U.severe("Cannot open selector!", e);
+			Log.severe("Cannot open selector!", e);
 			throw new RuntimeException(e);
 		}
 
@@ -54,54 +54,54 @@ public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 		}
 
 		if (key.isAcceptable()) {
-			U.debug("accepting", "key", key);
+			Log.debug("accepting", "key", key);
 
 			try {
 				acceptOP(key);
 			} catch (IOException e) {
 				failedOP(key, e);
-				U.error("accept IO error for key: " + key, e);
+				Log.error("accept IO error for key: " + key, e);
 			} catch (Throwable e) {
 				failedOP(key, e);
-				U.error("accept failed for key: " + key, e);
+				Log.error("accept failed for key: " + key, e);
 			}
 
 		} else if (key.isConnectable()) {
-			U.debug("connection event", "key", key);
+			Log.debug("connection event", "key", key);
 
 			try {
 				connectOP(key);
 			} catch (IOException e) {
 				failedOP(key, e);
-				U.error("connect IO error for key: " + key, e);
+				Log.error("connect IO error for key: " + key, e);
 			} catch (Throwable e) {
 				failedOP(key, e);
-				U.error("connect failed for key: " + key, e);
+				Log.error("connect failed for key: " + key, e);
 			}
 		} else if (key.isReadable()) {
-			U.debug("reading", "key", key);
+			Log.debug("reading", "key", key);
 
 			try {
 				readOP(key);
 			} catch (IOException e) {
 				failedOP(key, e);
-				U.error("read IO error for key: " + key, e);
+				Log.error("read IO error for key: " + key, e);
 			} catch (Throwable e) {
 				failedOP(key, e);
-				U.error("read failed for key: " + key, e);
+				Log.error("read failed for key: " + key, e);
 			}
 
 		} else if (key.isWritable()) {
-			U.debug("writing", "key", key);
+			Log.debug("writing", "key", key);
 
 			try {
 				writeOP(key);
 			} catch (IOException e) {
 				failedOP(key, e);
-				U.error("write IO error for key: " + key, e);
+				Log.error("write IO error for key: " + key, e);
 			} catch (Throwable e) {
 				failedOP(key, e);
-				U.error("write failed for key: " + key, e);
+				Log.error("write failed for key: " + key, e);
 			}
 		}
 	}
@@ -112,13 +112,13 @@ public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 		try {
 			doProcessing();
 		} catch (Throwable e) {
-			U.severe("Event processing error!", e);
+			Log.severe("Event processing error!", e);
 		}
 
 		try {
 			selector.select(50);
 		} catch (IOException e) {
-			U.error("Select failed!", e);
+			Log.error("Select failed!", e);
 		}
 
 		try {
