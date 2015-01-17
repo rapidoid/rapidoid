@@ -29,9 +29,9 @@ import java.nio.channels.SocketChannel;
 
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.buffer.BufGroup;
+import org.rapidoid.log.Log;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.util.Conf;
-import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 
 public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements TCPServer {

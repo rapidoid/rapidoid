@@ -20,13 +20,13 @@ package org.rapidoid;
  * #L%
  */
 
+import org.rapidoid.log.Log;
+import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.TCP;
 import org.rapidoid.net.TCPClient;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.Protocol;
-import org.rapidoid.util.Log;
-import org.rapidoid.util.LogLevel;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 

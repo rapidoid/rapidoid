@@ -34,6 +34,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeException;
 import org.rapidoid.inject.IoC;
 import org.rapidoid.json.JSON;
+import org.rapidoid.log.Log;
 import org.rapidoid.pages.impl.BuiltInCmdHandler;
 import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.pojo.PojoDispatchException;
@@ -42,7 +43,6 @@ import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.rest.WebReq;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Conf;
-import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.BootstrapWidgets;
 

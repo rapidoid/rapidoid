@@ -1,5 +1,7 @@
 package org.rapidoid.util;
 
+import org.rapidoid.log.Log;
+
 /*
  * #%L
  * rapidoid-utils

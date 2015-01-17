@@ -30,8 +30,8 @@ import org.eclipse.jdt.internal.compiler.CompilationResult;
 import org.rapidoid.compile.CodeDiagnostic;
 import org.rapidoid.compile.Compilation;
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.CustomizableClassLoader;
-import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 
 public class EcjCompilation implements Compilation {

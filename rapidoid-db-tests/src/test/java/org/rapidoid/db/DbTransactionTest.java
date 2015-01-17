@@ -23,8 +23,8 @@ package org.rapidoid.db;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.rapidoid.db.model.Person;
-import org.rapidoid.util.Log;
-import org.rapidoid.util.LogLevel;
+import org.rapidoid.log.Log;
+import org.rapidoid.log.LogLevel;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 

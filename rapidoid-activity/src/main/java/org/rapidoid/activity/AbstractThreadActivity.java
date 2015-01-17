@@ -1,6 +1,6 @@
 package org.rapidoid.activity;
 
-import org.rapidoid.util.Log;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 
 /*

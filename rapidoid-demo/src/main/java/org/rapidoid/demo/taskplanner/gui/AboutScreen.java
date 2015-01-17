@@ -26,8 +26,8 @@ import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ButtonTag;
+import org.rapidoid.log.Log;
 import org.rapidoid.security.annotation.CanInsert;
-import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 
 @CanInsert("logged_in")

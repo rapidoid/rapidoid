@@ -26,9 +26,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.rapidoid.db.model.Person;
 import org.rapidoid.lambda.Operation;
+import org.rapidoid.log.Log;
+import org.rapidoid.log.LogLevel;
 import org.rapidoid.util.Conf;
-import org.rapidoid.util.Log;
-import org.rapidoid.util.LogLevel;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 

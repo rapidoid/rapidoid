@@ -21,7 +21,7 @@ package org.rapidoid.net.impl;
  */
 
 import org.rapidoid.activity.LifecycleActivity;
-import org.rapidoid.util.Log;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 
 public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Runnable {

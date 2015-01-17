@@ -22,11 +22,11 @@ package org.rapidoid.demo.taskplanner.gui;
 
 import org.rapidoid.app.Screen;
 import org.rapidoid.db.DB;
+import org.rapidoid.log.Log;
 import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Role;
 import org.rapidoid.security.annotation.Roles;
-import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 
 @Admin

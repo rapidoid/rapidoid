@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
 
-import org.rapidoid.util.Log;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 
 public class PojoServiceWrapper {

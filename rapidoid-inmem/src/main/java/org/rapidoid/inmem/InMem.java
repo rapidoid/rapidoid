@@ -60,7 +60,7 @@ import org.rapidoid.beany.PropertySelector;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
-import org.rapidoid.util.Log;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.Tuple;
 import org.rapidoid.util.U;
 

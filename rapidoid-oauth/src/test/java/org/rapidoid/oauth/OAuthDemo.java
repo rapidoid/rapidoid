@@ -22,8 +22,8 @@ package org.rapidoid.oauth;
 
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
-import org.rapidoid.util.Log;
-import org.rapidoid.util.LogLevel;
+import org.rapidoid.log.Log;
+import org.rapidoid.log.LogLevel;
 
 public class OAuthDemo {
 

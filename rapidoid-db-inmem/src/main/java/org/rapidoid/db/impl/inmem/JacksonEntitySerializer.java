@@ -33,7 +33,7 @@ import org.rapidoid.db.DbSet;
 import org.rapidoid.db.impl.DbHelper;
 import org.rapidoid.db.impl.DbRelationInternals;
 import org.rapidoid.inmem.EntitySerializer;
-import org.rapidoid.util.Log;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 
 import com.fasterxml.jackson.core.JsonParser;

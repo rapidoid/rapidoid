@@ -40,6 +40,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.log.Log;
 
 public class UTILS implements Constants {
 

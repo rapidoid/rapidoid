@@ -27,7 +27,7 @@ import java.nio.channels.Selector;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.rapidoid.util.Log;
+import org.rapidoid.log.Log;
 
 public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 

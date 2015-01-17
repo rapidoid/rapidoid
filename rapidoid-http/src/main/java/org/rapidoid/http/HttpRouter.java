@@ -23,7 +23,7 @@ package org.rapidoid.http;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.Range;
-import org.rapidoid.util.Log;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.SimpleHashTable;
 import org.rapidoid.util.SimpleList;
 import org.rapidoid.util.U;

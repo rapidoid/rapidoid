@@ -27,7 +27,7 @@ import org.rapidoid.db.DAO;
 import org.rapidoid.db.DB;
 import org.rapidoid.demo.db.Person;
 import org.rapidoid.lambda.Predicate;
-import org.rapidoid.util.Log;
+import org.rapidoid.log.Log;
 
 public class PersonService extends DAO<Person> {
 

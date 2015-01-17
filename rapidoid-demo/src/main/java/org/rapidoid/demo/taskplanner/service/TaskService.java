@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.rapidoid.db.DAO;
 import org.rapidoid.demo.taskplanner.model.Task;
-import org.rapidoid.util.Log;
+import org.rapidoid.log.Log;
 
 public class TaskService extends DAO<Task> {
 

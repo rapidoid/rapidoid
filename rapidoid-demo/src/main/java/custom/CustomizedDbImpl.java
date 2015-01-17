@@ -21,7 +21,7 @@ package custom;
  */
 
 import org.rapidoid.db.impl.inmem.DbImpl;
-import org.rapidoid.util.Log;
+import org.rapidoid.log.Log;
 
 public class CustomizedDbImpl extends DbImpl {
 

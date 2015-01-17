@@ -20,9 +20,9 @@ package org.rapidoid.db;
  * #L%
  */
 
+import org.rapidoid.log.Log;
+import org.rapidoid.log.LogLevel;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.Log;
-import org.rapidoid.util.LogLevel;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 

@@ -1,4 +1,4 @@
-package org.rapidoid.util;
+package org.rapidoid.log;
 
 /*
  * #%L

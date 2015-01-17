@@ -37,6 +37,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.log.Log;
+
 public class Cls {
 
 	static final Map<String, TypeKind> KINDS = initKinds();

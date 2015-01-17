@@ -22,7 +22,7 @@ package org.rapidoid.pool;
 
 import java.util.concurrent.Callable;
 
-import org.rapidoid.util.Log;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 
 public class ArrayPool<T> implements Pool<T> {

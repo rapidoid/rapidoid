@@ -35,11 +35,11 @@ import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.Builder;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Conf;
 import org.rapidoid.util.F3;
-import org.rapidoid.util.Log;
 import org.rapidoid.util.U;
 
 public class IoC {

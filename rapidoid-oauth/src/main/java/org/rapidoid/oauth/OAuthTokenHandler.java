@@ -34,7 +34,7 @@ import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.json.JSON;
-import org.rapidoid.util.Log;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UserInfo;
 

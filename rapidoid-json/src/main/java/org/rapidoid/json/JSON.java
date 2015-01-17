@@ -3,7 +3,7 @@ package org.rapidoid.json;
 import java.io.OutputStream;
 import java.util.Map;
 
-import org.rapidoid.util.Log;
+import org.rapidoid.log.Log;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
