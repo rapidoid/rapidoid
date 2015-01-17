@@ -79,6 +79,10 @@ public class DB {
 		db().delete(id);
 	}
 
+	public static void delete(Object record) {
+		db().delete(record);
+	}
+
 	public static <T> T get(long id) {
 		return db().get(id);
 	}

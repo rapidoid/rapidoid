@@ -410,6 +410,10 @@ public class InMem {
 		}
 	}
 
+	public void delete(Object record) {
+		delete(Cls.getId(record));
+	}
+
 	public <E> E get(long id) {
 		sharedLock();
 		try {

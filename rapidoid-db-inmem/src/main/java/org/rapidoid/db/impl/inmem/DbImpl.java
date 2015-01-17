@@ -77,6 +77,11 @@ public class DbImpl extends NamedActivity<Database> implements Database {
 	}
 
 	@Override
+	public void delete(Object record) {
+		inmem.delete(record);
+	}
+	
+	@Override
 	public <E> E get(long id) {
 		return inmem.get(id);
 	}
