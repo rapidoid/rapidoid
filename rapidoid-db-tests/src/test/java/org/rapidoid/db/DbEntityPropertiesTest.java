@@ -69,7 +69,7 @@ public class DbEntityPropertiesTest extends DbTestCommons {
 			isFalse(prop.isReadOnly());
 		}
 
-		eq(props.names, U.list("id", "version", "posts"));
+		eq(U.set(props.names), U.set("id", "version", "posts"));
 		eq(props.get("posts").getType(), DbList.class);
 		notNull(props.get("posts").getGenericType());
 		eq(props.get("posts").getGenericType().getRawType(), DbList.class);
