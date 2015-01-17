@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 
 /*
  * #%L
- * rapidoid-u
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -32,7 +32,7 @@ public class ClasspathScanTest extends TestCommons {
 		List<Class<?>> classes = Scan.classpathClasses("", ".*Test", null, null);
 
 		isTrue(classes.contains(ClasspathScanTest.class));
-		isTrue(classes.contains(UTest.class));
+		isTrue(classes.contains(DatesTest.class));
 	}
 
 }
