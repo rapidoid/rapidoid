@@ -47,8 +47,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -637,14 +637,26 @@ public class U {
 		return Arrays.asList(arr).iterator();
 	}
 
+	public static <T> Set<T> set(Collection<? extends T> coll) {
+		Set<T> set = new LinkedHashSet<T>();
+		set.addAll(coll);
+		return set;
+	}
+
 	public static <T> Set<T> set(T... values) {
-		Set<T> set = new HashSet<T>();
+		Set<T> set = new LinkedHashSet<T>();
 
 		for (T val : values) {
 			set.add(val);
 		}
 
 		return set;
+	}
+
+	public static <T> List<T> list(Collection<? extends T> coll) {
+		List<T> list = new ArrayList<T>();
+		list.addAll(coll);
+		return list;
 	}
 
 	public static <T> List<T> list(T... values) {
