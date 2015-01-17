@@ -54,6 +54,7 @@
 
 	<modules>
 		<module>rapidoid-u</module>
+		<module>rapidoid-log</module>
 		<module>rapidoid-utils</module>
 		<module>rapidoid-beany</module>
 		<module>rapidoid-model</module>
