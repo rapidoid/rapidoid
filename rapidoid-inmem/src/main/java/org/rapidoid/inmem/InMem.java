@@ -516,7 +516,7 @@ public class InMem {
 
 	public long persist(Object record) {
 		Long id = Beany.getIdIfExists(record);
-		if (id == null) {
+		if (id == null || id <= 0) {
 			return insert(record);
 		} else {
 			update(id, record);
@@ -526,7 +526,7 @@ public class InMem {
 
 	public long persistedIdOf(Object record) {
 		Long id = Beany.getIdIfExists(record);
-		if (id == null) {
+		if (id == null || id <= 0) {
 			return insert(record);
 		} else {
 			return id;
