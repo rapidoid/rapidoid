@@ -22,11 +22,11 @@ package org.rapidoid.demo.taskplanner.service;
 
 import java.util.List;
 
-import org.rapidoid.db.CRUD;
+import org.rapidoid.db.DAO;
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.util.U;
 
-public class TaskService extends CRUD<Task> {
+public class TaskService extends DAO<Task> {
 
 	public List<Task> add(Task task) {
 		U.info("Inserting task", "task", task);

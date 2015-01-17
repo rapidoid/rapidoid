@@ -23,13 +23,13 @@ package org.rapidoid.demo.taskplanner.service;
 import java.util.List;
 import java.util.Map;
 
-import org.rapidoid.db.CRUD;
+import org.rapidoid.db.DAO;
 import org.rapidoid.db.DB;
 import org.rapidoid.demo.db.Person;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.U;
 
-public class PersonService extends CRUD<Person> {
+public class PersonService extends DAO<Person> {
 
 	public List<Person> olderThan(final int age) {
 		return DB.find(new Predicate<Person>() {
