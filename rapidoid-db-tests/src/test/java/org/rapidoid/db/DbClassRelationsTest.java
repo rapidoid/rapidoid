@@ -25,7 +25,7 @@ import org.rapidoid.db.model.Profile;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
-public class DbRelationsTest extends DbTestCommons {
+public class DbClassRelationsTest extends DbTestCommons {
 
 	@Test
 	public void testInverseRelations1() {

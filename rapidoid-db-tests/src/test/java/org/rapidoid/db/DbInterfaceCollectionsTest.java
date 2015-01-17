@@ -25,7 +25,7 @@ import org.rapidoid.db.model.IPost;
 import org.rapidoid.db.model.IProfile;
 import org.testng.annotations.Test;
 
-public class DbEntityCollectionsTest extends DbTestCommons {
+public class DbInterfaceCollectionsTest extends DbTestCommons {
 
 	@Test
 	public void testCollectionsPersistence() {

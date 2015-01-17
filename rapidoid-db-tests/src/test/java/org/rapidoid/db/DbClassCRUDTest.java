@@ -29,7 +29,7 @@ import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
-public class BasicDbTest extends DbTestCommons {
+public class DbClassCRUDTest extends DbTestCommons {
 
 	@Test
 	public void testCRUD() {

@@ -27,7 +27,7 @@ import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
-public class DbPersistenceTest extends DbTestCommons {
+public class DbClassPersistenceTest extends DbTestCommons {
 
 	@Test
 	public void testPersistence() {
