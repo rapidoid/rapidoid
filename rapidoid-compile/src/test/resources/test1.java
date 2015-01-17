@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.rapidoid.util.U;
+import org.rapidoid.log.Log;
 
 public class Main {
 
