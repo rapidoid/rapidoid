@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
-import org.rapidoid.log.LogLevel;
 
 /*
  * #%L
@@ -36,11 +35,10 @@ import org.rapidoid.log.LogLevel;
 
 public class Scan {
 
-	public static synchronized void args(String... args) {
-		if (Conf.is("debug") && Log.getLogLevel().ordinal() > LogLevel.DEBUG.ordinal()) {
-			Log.setLogLevel(LogLevel.DEBUG);
-		}
+	private Scan() {
+	}
 
+	public static synchronized void args(String... args) {
 		for (String arg : args) {
 			if (arg.matches("\\+\\w+")) {
 				addon(arg.substring(1));

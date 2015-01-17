@@ -41,6 +41,14 @@ public class Log {
 	private Log() {
 	}
 
+	public static synchronized void args(String... args) {
+		for (String arg : args) {
+			if (arg.equals("debug") && getLogLevel().ordinal() > DEBUG.ordinal()) {
+				setLogLevel(DEBUG);
+			}
+		}
+	}
+
 	public static synchronized void setLogLevel(LogLevel logLevel) {
 		LOG_LEVEL = logLevel;
 	}
