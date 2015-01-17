@@ -15,7 +15,7 @@ import org.rapidoid.log.Log;
 
 /*
  * #%L
- * rapidoid-u
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
