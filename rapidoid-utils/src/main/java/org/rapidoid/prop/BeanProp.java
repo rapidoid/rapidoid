@@ -76,7 +76,7 @@ public class BeanProp implements Prop {
 		// TODO: improve inference from getter and setter
 		type = rawType = field != null ? field.getType() : getter.getReturnType();
 		Type gType = field != null ? field.getGenericType() : getter.getGenericReturnType();
-		genericType = rawGenericType = (gType instanceof ParameterizedType) ? ((ParameterizedType) gType) : null;
+		genericType = rawGenericType = Cls.parameterized(gType);
 
 		if (Collection.class.isAssignableFrom(type)) {
 			readOnly = false;
@@ -86,7 +86,7 @@ public class BeanProp implements Prop {
 			U.notNull(genericType, "generic type");
 
 			gType = genericType.getActualTypeArguments()[0];
-			genericType = (gType instanceof ParameterizedType) ? ((ParameterizedType) gType) : null;
+			genericType = Cls.parameterized(gType);
 			type = Cls.clazz(gType);
 
 			readOnly = false;

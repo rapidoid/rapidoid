@@ -27,6 +27,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -1084,6 +1085,10 @@ public class Cls {
 
 	public static Object str(Object value) {
 		return convert(value, String.class);
+	}
+
+	public static ParameterizedType parameterized(Type type) {
+		return (type instanceof ParameterizedType) ? ((ParameterizedType) type) : null;
 	}
 
 }
