@@ -959,6 +959,8 @@ public class Cls {
 		case DATE:
 			if (value instanceof Date) {
 				return (T) value;
+			} else if (value instanceof Number) {
+				return (T) new Date(((Number) value).longValue());
 			} else {
 				throw U.rte("Cannot convert the value '%s' to date!", value);
 			}
