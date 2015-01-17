@@ -29,6 +29,7 @@ import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.net.impl.RapidoidHelper;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.rapidoid.wrap.Bool;
 import org.rapidoid.wrap.Int;
@@ -41,7 +42,7 @@ public class MaxHttpPerfTest {
 			.getBytes();
 
 	public static void main(String[] args) {
-		U.args(args);
+		Conf.args(args);
 
 		String req = "GET /plaintext HTTP/1.1\r\nHost:www.test.com\r\n\r\n";
 

@@ -29,7 +29,7 @@ import org.rapidoid.pojo.POJO;
 import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
-import org.rapidoid.util.U;
+import org.rapidoid.util.Conf;
 
 public class REST {
 
@@ -58,7 +58,7 @@ public class REST {
 	}
 
 	public static void main(String[] args) {
-		U.args(args);
+		Conf.args(args);
 		start();
 	}
 

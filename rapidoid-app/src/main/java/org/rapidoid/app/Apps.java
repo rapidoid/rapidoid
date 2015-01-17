@@ -32,6 +32,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.log.Log;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 
@@ -42,7 +43,7 @@ public class Apps {
 	public static final ConcurrentMap<String, AppClasses> CLASSES = U.concurrentMap();
 
 	public static void main(String[] args) {
-		U.args(args);
+		Conf.args(args);
 		run();
 	}
 

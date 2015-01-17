@@ -73,7 +73,7 @@ public class IoC {
 		Log.info("Reseting IoC state");
 
 		Log.setLogLevel(Log.INFO);
-		U.args();
+		Conf.args();
 
 		Beany.reset();
 

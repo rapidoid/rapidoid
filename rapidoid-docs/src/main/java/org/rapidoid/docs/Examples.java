@@ -33,6 +33,7 @@ import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.oauth.OAuth;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 
@@ -41,7 +42,7 @@ public class Examples {
 	private static final String JAVA_KEYWORDS = "abstract|continue|for|new|switch|assert|default|goto|package|synchronized|boolean|do|if|private|this|break|double|implements|protected|throw|byte|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|int|short|try|char|final|interface|static|void|class|finally|long|strictfp|volatile|const|float|native|super|while";
 
 	public static void main(String[] args) {
-		U.args("oauth-no-state");
+		Conf.args("oauth-no-state");
 
 		String path = "../../rapidoid.github.io/";
 		U.must(new File(path).exists());

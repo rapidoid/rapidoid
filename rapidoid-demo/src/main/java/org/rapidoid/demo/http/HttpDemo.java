@@ -26,12 +26,12 @@ import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.util.U;
+import org.rapidoid.util.Conf;
 
 public class HttpDemo {
 
 	public static void main(String[] args) {
-		U.args(args);
+		Conf.args(args);
 
 		final AtomicLong n = new AtomicLong();
 

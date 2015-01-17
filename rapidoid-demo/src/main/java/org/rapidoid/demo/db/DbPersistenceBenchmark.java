@@ -28,7 +28,7 @@ public class DbPersistenceBenchmark {
 
 	public static void main(String[] args) {
 
-		U.args(args);
+		Conf.args(args);
 
 		final int size = Conf.option("size", 10000);
 

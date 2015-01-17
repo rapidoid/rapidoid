@@ -28,6 +28,7 @@ import org.rapidoid.annotation.Composite;
 import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanRead;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
@@ -95,7 +96,7 @@ public class DataPermissionsTest extends SecurityTestCommons {
 	private static final String[] USERS = { null, "", "abc", "adm1", "adm2", "mng1", "mod1", "mod2" };
 
 	private void setupRoles() {
-		U.args("role-admin=adm1,adm2", "role-manager=mng1", "role-moderator=mod1,mod2", "role-abc=abc",
+		Conf.args("role-admin=adm1,adm2", "role-manager=mng1", "role-moderator=mod1,mod2", "role-abc=abc",
 				"role-other_role=other");
 	}
 

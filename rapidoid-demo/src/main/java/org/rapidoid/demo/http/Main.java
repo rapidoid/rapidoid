@@ -21,12 +21,12 @@ package org.rapidoid.demo.http;
  */
 
 import org.rapidoid.net.TCP;
-import org.rapidoid.util.U;
+import org.rapidoid.util.Conf;
 
 public class Main {
 
 	public static void main(String[] args) {
-		U.args(args);
+		Conf.args(args);
 		TCP.listen(new SimpleHttpProtocol());
 	}
 

@@ -1161,10 +1161,6 @@ public class U {
 		return buf;
 	}
 
-	public static synchronized void args(String... args) {
-		Conf.args(args);
-	}
-
 	public static void benchmark(String name, int count, Runnable runnable) {
 		long start = time();
 

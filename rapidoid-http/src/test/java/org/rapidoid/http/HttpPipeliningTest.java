@@ -27,6 +27,7 @@ import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.Protocol;
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.rapidoid.wrap.Bool;
 import org.rapidoid.wrap.Int;
@@ -40,7 +41,7 @@ public class HttpPipeliningTest extends HttpTestCommons {
 
 	@Test
 	public void testHttpServerPipelining() {
-		U.args("workers=1");
+		Conf.args("workers=1");
 
 		defaultServerSetup();
 

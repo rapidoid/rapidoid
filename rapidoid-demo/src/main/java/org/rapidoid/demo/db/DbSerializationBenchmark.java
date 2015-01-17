@@ -34,7 +34,7 @@ public class DbSerializationBenchmark {
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 
-		U.args(args);
+		Conf.args(args);
 
 		final InMem db = new InMem(null, new JacksonEntitySerializer(null), new DbEntityConstructor(null),
 				Collections.EMPTY_SET);

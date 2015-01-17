@@ -28,7 +28,7 @@ import org.rapidoid.wrap.Int;
 public class CompilerBenchmark {
 
 	public static void main(String[] args) throws Throwable {
-		U.args(args);
+		Conf.args(args);
 
 		int count = Conf.option("count", 10000);
 		int threads = Conf.option("threads", Conf.cpus());

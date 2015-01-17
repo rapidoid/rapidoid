@@ -22,6 +22,7 @@ package org.rapidoid.security;
 
 import java.util.List;
 
+import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
@@ -33,7 +34,7 @@ class Foo {
 public class RoleBasedSecurityTest extends SecurityTestCommons {
 
 	private void setupRoles() {
-		U.args("role-admin=adm1,adm2", "role-manager=mng1", "role-moderator=mod1,mod2", "role-abc=abc");
+		Conf.args("role-admin=adm1,adm2", "role-manager=mng1", "role-moderator=mod1,mod2", "role-abc=abc");
 	}
 
 	@Test
