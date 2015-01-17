@@ -1,4 +1,4 @@
-package org.rapidoid.db.entity;
+package org.rapidoid.db.imodel;
 
 /*
  * #%L
@@ -20,38 +20,6 @@ package org.rapidoid.db.entity;
  * #L%
  */
 
-import java.util.Date;
-
-import org.rapidoid.annotation.Relation;
-import org.rapidoid.db.DB;
-import org.rapidoid.db.DbColumn;
-import org.rapidoid.db.DbDsl;
-import org.rapidoid.db.DbSet;
-import org.rapidoid.db.Entity;
-
-interface User extends Entity {
-
-	DbDsl<User> DSL = DB.dsl(User.class);
-
-	DbColumn<String> email();
-
-	DbColumn<String> name();
-
-	DbColumn<Date> birthdate();
-
-	@Relation("owns")
-	DbSet<Task> tasksOwned();
-
-	@Relation("owns")
-	DbSet<Comment> commentsOwned();
-
-	@Relation("likes")
-	DbSet<Task> tasksLiked();
-
-	@Relation("^sharedWith")
-	DbSet<Task> sharedTasks();
-
-	@Relation("likes")
-	DbSet<Comment> commentsLiked();
-
+public enum Priority {
+	LOW, MEDIUM, HIGH;
 }

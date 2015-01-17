@@ -1,4 +1,4 @@
-package org.rapidoid.db.entity;
+package org.rapidoid.db.imodel;
 
 /*
  * #%L
@@ -20,6 +20,14 @@ package org.rapidoid.db.entity;
  * #L%
  */
 
-public enum Priority {
-	LOW, MEDIUM, HIGH;
+import org.rapidoid.annotation.Programmatic;
+import org.rapidoid.annotation.Relation;
+import org.rapidoid.db.DbList;
+
+public interface Commentable {
+
+	@Programmatic
+	@Relation("has")
+	DbList<Comment> comments();
+
 }

@@ -1,9 +1,6 @@
-package org.rapidoid.db.entity;
+package org.rapidoid.db.model;
 
-import org.rapidoid.annotation.Relation;
 import org.rapidoid.db.DbColumn;
-import org.rapidoid.db.DbRef;
-import org.rapidoid.db.DbSet;
 import org.rapidoid.db.Entity;
 
 /*
@@ -26,17 +23,10 @@ import org.rapidoid.db.Entity;
  * #L%
  */
 
-interface Comment extends Entity {
+public interface ICompany extends Entity {
 
-	DbColumn<String> content();
+	DbColumn<String> name();
 
-	@Relation("^owns")
-	DbRef<User> owner();
-
-	@Relation("^has")
-	DbRef<Task> task();
-
-	@Relation("^likes")
-	DbSet<User> likedBy();
+	DbColumn<IProfile> profile();
 
 }

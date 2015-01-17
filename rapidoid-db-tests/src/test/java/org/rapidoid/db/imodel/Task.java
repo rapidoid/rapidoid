@@ -1,4 +1,13 @@
-package org.rapidoid.db.entity;
+package org.rapidoid.db.imodel;
+
+import org.rapidoid.annotation.Optional;
+import org.rapidoid.annotation.Relation;
+import org.rapidoid.db.DB;
+import org.rapidoid.db.DbColumn;
+import org.rapidoid.db.DbDsl;
+import org.rapidoid.db.DbRef;
+import org.rapidoid.db.DbSet;
+import org.rapidoid.db.Entity;
 
 /*
  * #%L
@@ -20,14 +29,23 @@ package org.rapidoid.db.entity;
  * #L%
  */
 
-import org.rapidoid.annotation.Programmatic;
-import org.rapidoid.annotation.Relation;
-import org.rapidoid.db.DbList;
+public interface Task extends Entity, Commentable {
 
-public interface Commentable {
+	DbDsl<Task> DSL = DB.dsl(Task.class);
 
-	@Programmatic
-	@Relation("has")
-	DbList<Comment> comments();
+	DbColumn<String> title();
+
+	DbColumn<Priority> priority();
+
+	@Optional
+	DbColumn<String> description();
+
+	DbColumn<Integer> rating();
+
+	@Relation("^owns")
+	DbRef<User> owner();
+
+	@Relation("^likes")
+	DbSet<User> likedBy();
 
 }

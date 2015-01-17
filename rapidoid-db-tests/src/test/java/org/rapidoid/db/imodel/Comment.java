@@ -1,6 +1,10 @@
-package org.rapidoid.db.model;
+package org.rapidoid.db.imodel;
 
-import org.rapidoid.db.AbstractEntity;
+import org.rapidoid.annotation.Relation;
+import org.rapidoid.db.DbColumn;
+import org.rapidoid.db.DbRef;
+import org.rapidoid.db.DbSet;
+import org.rapidoid.db.Entity;
 
 /*
  * #%L
@@ -22,16 +26,17 @@ import org.rapidoid.db.AbstractEntity;
  * #L%
  */
 
-@SuppressWarnings("serial")
-public class Company extends AbstractEntity {
+public interface Comment extends Entity {
 
-	public String name;
+	DbColumn<String> content();
 
-	public Profile profile;
+	@Relation("^owns")
+	DbRef<User> owner();
 
-	@Override
-	public String toString() {
-		return "Company [name=" + name + ", profile=" + profile + "]";
-	}
+	@Relation("^has")
+	DbRef<Task> task();
+
+	@Relation("^likes")
+	DbSet<User> likedBy();
 
 }

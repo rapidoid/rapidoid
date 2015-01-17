@@ -1,9 +1,8 @@
-package org.rapidoid.db.entity;
+package org.rapidoid.db;
 
 import java.util.concurrent.ConcurrentMap;
 
-import org.rapidoid.db.DB;
-import org.rapidoid.db.DbTestCommons;
+import org.rapidoid.db.imodel.Task;
 import org.rapidoid.db.impl.DbProxy;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
@@ -41,7 +40,7 @@ public class DbProxyTest extends DbTestCommons {
 
 		final Task t = DbProxy.create(Task.class, map);
 		notNull(t);
-		
+
 		U.benchmarkMT(100, "ops", 1000000, new Runnable() {
 			@Override
 			public void run() {

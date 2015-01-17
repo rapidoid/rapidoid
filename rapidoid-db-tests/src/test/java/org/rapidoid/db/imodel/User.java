@@ -1,13 +1,4 @@
-package org.rapidoid.db.entity;
-
-import org.rapidoid.annotation.Optional;
-import org.rapidoid.annotation.Relation;
-import org.rapidoid.db.DB;
-import org.rapidoid.db.DbColumn;
-import org.rapidoid.db.DbDsl;
-import org.rapidoid.db.DbRef;
-import org.rapidoid.db.DbSet;
-import org.rapidoid.db.Entity;
+package org.rapidoid.db.imodel;
 
 /*
  * #%L
@@ -29,23 +20,38 @@ import org.rapidoid.db.Entity;
  * #L%
  */
 
-interface Task extends Entity, Commentable {
+import java.util.Date;
 
-	DbDsl<Task> DSL = DB.dsl(Task.class);
+import org.rapidoid.annotation.Relation;
+import org.rapidoid.db.DB;
+import org.rapidoid.db.DbColumn;
+import org.rapidoid.db.DbDsl;
+import org.rapidoid.db.DbSet;
+import org.rapidoid.db.Entity;
 
-	DbColumn<String> title();
+public interface User extends Entity {
 
-	DbColumn<Priority> priority();
+	DbDsl<User> DSL = DB.dsl(User.class);
 
-	@Optional
-	DbColumn<String> description();
+	DbColumn<String> email();
 
-	DbColumn<Integer> rating();
+	DbColumn<String> name();
 
-	@Relation("^owns")
-	DbRef<User> owner();
+	DbColumn<Date> birthdate();
 
-	@Relation("^likes")
-	DbSet<User> likedBy();
+	@Relation("owns")
+	DbSet<Task> tasksOwned();
+
+	@Relation("owns")
+	DbSet<Comment> commentsOwned();
+
+	@Relation("likes")
+	DbSet<Task> tasksLiked();
+
+	@Relation("^sharedWith")
+	DbSet<Task> sharedTasks();
+
+	@Relation("likes")
+	DbSet<Comment> commentsLiked();
 
 }
