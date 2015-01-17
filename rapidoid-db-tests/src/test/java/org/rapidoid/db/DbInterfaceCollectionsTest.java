@@ -34,14 +34,12 @@ public class DbInterfaceCollectionsTest extends DbTestCommons {
 		notNull(profile);
 		eq(DB.size(), 0);
 
-		IPost post1 = DB.create(IPost.class);
-		post1.content().set("post 1");
+		IPost post1 = DB.create(IPost.class, "content", "post 1");
 
 		IPost post2 = DB.create(IPost.class);
 		post2.content().set("post 2");
 
-		IPost post3 = DB.create(IPost.class);
-		post3.content().set("post 3");
+		IPost post3 = DB.create(IPost.class, "content", "post 3");
 
 		profile.posts().add(post1);
 		eq(DB.size(), 1);
