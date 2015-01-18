@@ -32,12 +32,11 @@ public class HttpBuiltins {
 		server.get("/_logout", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				x.goBack(0);
 				if (x.hasSession() && Secure.isLoggedIn()) {
 					x.closeSession();
-					AppCtx.delUser();
 				}
-				return x;
+				AppCtx.delUser();
+				throw x.goBack(0);
 			}
 		});
 		server.get("/_debugLogin", new Handler() {
@@ -55,10 +54,11 @@ public class HttpBuiltins {
 				user.email = username;
 				user.name = U.capitalized(username);
 
+				AppCtx.delUser();
 				x.sessionSet(UserInfo.class.getCanonicalName(), user);
 				AppCtx.setUser(user);
 
-				return x.goBack(0);
+				throw x.goBack(0);
 			}
 		});
 	}
