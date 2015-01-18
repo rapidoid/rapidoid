@@ -20,7 +20,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-u</artifactId>
+			<artifactId>rapidoid-beany</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

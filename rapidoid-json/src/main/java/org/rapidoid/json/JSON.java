@@ -3,12 +3,11 @@ package org.rapidoid.json;
 import java.io.OutputStream;
 import java.util.Map;
 
+import org.rapidoid.beany.Beany;
 import org.rapidoid.log.Log;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /*
  * #%L
@@ -42,42 +41,7 @@ public class JSON {
 
 	public static String stringify(Object value) {
 		try {
-			return MAPPER.writeValueAsString(value);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	/**
-	 * @param extras
-	 *            extra JSON attributes in format (key1, value1, key2, value2...)
-	 */
-	public static String stringifyWithExtras(Object value, Object... extras) {
-		if (extras.length % 2 != 0) {
-			throw new IllegalArgumentException(
-					"Expected even number of extras (key1, value1, key2, value2...), but found: " + extras.length);
-		}
-
-		try {
-			JsonNode node = MAPPER.valueToTree(value);
-
-			if (!(node instanceof ObjectNode)) {
-				throw new RuntimeException("Cannot add extra attributes on a non-object value: " + value);
-			}
-
-			ObjectNode obj = (ObjectNode) node;
-
-			int extrasN = extras.length / 2;
-			for (int i = 0; i < extrasN; i++) {
-				Object key = extras[2 * i];
-				if (key instanceof String) {
-					obj.put((String) key, String.valueOf(extras[2 * i + 1]));
-				} else {
-					throw new RuntimeException("Expected extra key of type String, but found: " + key);
-				}
-			}
-
-			return MAPPER.writeValueAsString(node);
+			return MAPPER.writeValueAsString(Beany.serialize(value));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -85,7 +49,7 @@ public class JSON {
 
 	public static void stringify(Object value, OutputStream out) {
 		try {
-			MAPPER.writeValue(out, value);
+			MAPPER.writeValue(out, Beany.serialize(value));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

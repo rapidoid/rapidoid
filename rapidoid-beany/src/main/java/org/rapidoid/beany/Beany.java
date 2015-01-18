@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.Cls;
@@ -196,6 +197,48 @@ public class Beany {
 		return prop;
 	}
 
+	public static Object serialize(Object value) {
+
+		if (Cls.kindOf(value) != TypeKind.OBJECT || value instanceof Enum) {
+			return value;
+
+		} else if (value instanceof Set) {
+			Set<Object> set = U.set();
+			for (Object item : ((Set<?>) value)) {
+				set.add(serialize(item));
+			}
+			return set;
+
+		} else if (value instanceof List) {
+			List<Object> list = U.list();
+			for (Object item : ((List<?>) value)) {
+				list.add(serialize(item));
+			}
+			return list;
+
+		} else if (value instanceof Object[]) {
+			Object[] vals = (Object[]) value;
+			Object[] arr = new Object[vals.length];
+			for (int i = 0; i < arr.length; i++) {
+				arr[i] = serialize(vals[i]);
+			}
+			return arr;
+
+		} else if (value instanceof Map) {
+			Map<Object, Object> map = U.map();
+			for (Entry<?, ?> e : ((Map<?, ?>) value).entrySet()) {
+				map.put(serialize(e.getKey()), serialize(e.getValue()));
+			}
+			return map;
+
+		} else if (value.getClass().isArray()) {
+			// a primitive array
+			return value;
+		} else {
+			return read(value);
+		}
+	}
+
 	public static Map<String, Object> read(Object bean) {
 		Map<String, Object> props = U.map();
 		read(bean, props);
@@ -203,12 +246,20 @@ public class Beany {
 	}
 
 	public static void read(Object bean, Map<String, Object> dest) {
+		U.notNull(bean, "bean");
+		U.must(!(bean instanceof Collection));
+		U.must(!bean.getClass().isArray());
+		U.must(!bean.getClass().isEnum());
+		U.must(Cls.kindOf(bean) == TypeKind.OBJECT);
+
 		for (Prop prop : propertiesOf(bean)) {
 			Object value = prop.get(bean);
 
 			if (value instanceof SerializableBean<?>) {
 				SerializableBean<?> ser = (SerializableBean<?>) value;
 				value = ser.serializeBean();
+			} else {
+				value = serialize(value);
 			}
 
 			dest.put(prop.getName(), value);

@@ -162,7 +162,7 @@ public class JacksonEntitySerializer implements EntitySerializer {
 	@Override
 	public byte[] serialize(Object entity) {
 		Class<?> entityType = db.schema().getEntityTypeFor(entity.getClass());
-		return stringifyWithExtras(Beany.read(entity), "_class", entityType.getCanonicalName());
+		return stringifyWithExtras(Beany.serialize(entity), "_class", entityType.getCanonicalName());
 	}
 
 	@Override

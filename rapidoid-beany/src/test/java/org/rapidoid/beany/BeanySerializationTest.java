@@ -1,0 +1,102 @@
+package org.rapidoid.beany;
+
+/*
+ * #%L
+ * rapidoid-beany
+ * %%
+ * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
+import java.util.Map;
+
+import org.rapidoid.util.U;
+import org.testng.annotations.Test;
+
+enum ABC {
+	A, B, C
+};
+
+class Foo {
+
+	public int x = 12;
+
+	public String g = "gg";
+
+	public ABC abc = ABC.B;
+
+	int invisible1 = 111;
+
+	@SuppressWarnings("unused")
+	private int invisible2 = 111;
+
+	protected int invisible3 = 111;
+}
+
+class Bar {
+	public final Foo ff = new Foo();
+}
+
+public class BeanySerializationTest extends BeanyTestCommons {
+
+	@Test
+	public void testPrimitivesSerialization() {
+		eq(Beany.serialize(123), 123);
+		eq(Beany.serialize(324L), 324L);
+		eq(Beany.serialize("bb"), "bb");
+		eq(Beany.serialize(true), true);
+		eq(Beany.serialize(null), null);
+	}
+
+	@Test
+	public void testSetSerialization() {
+		eq(Beany.serialize(U.set(1, 3, 5)), U.set(1, 3, 5));
+	}
+
+	@Test
+	public void testListSerialization() {
+		eq(Beany.serialize(U.list("a", "b", "c")), U.list("a", "b", "c"));
+	}
+
+	@Test
+	public void testMapSerialization() {
+		eq(Beany.serialize(U.map("a", 123, "b", 56)), U.map("a", 123, "b", 56));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testArraySerialization() {
+		eq(Beany.serialize(U.array("f", 3, true)), U.array("f", 3, true));
+
+		int[] a1 = { 1, 2, 3 };
+		int[] a2 = { 1, 2, 3 };
+		eq(Beany.serialize(a1), a2);
+	}
+
+	@Test
+	public void testBeanSerialization() {
+		Map<String, ? extends Object> foo = U.map("x", 12, "g", "gg", "abc", ABC.B);
+		Map<String, ? extends Object> bar = U.map("ff", foo);
+
+		eq(Beany.serialize(new Foo()), foo);
+		eq(Beany.serialize(new Bar()), bar);
+	}
+
+	@Test
+	public void testPlainObjectSerialization() {
+		eq(Beany.serialize(new Object()), U.map());
+	}
+
+}
