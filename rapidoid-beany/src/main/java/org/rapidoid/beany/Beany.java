@@ -361,17 +361,18 @@ public class Beany {
 		final String order = sign == 1 ? orderBy : orderBy.substring(1);
 
 		Comparator<E> comparator = new Comparator<E>() {
-			@SuppressWarnings("unchecked")
 			@Override
 			public int compare(E o1, E o2) {
 
 				E val1 = getPropValue(o1, order);
 				E val2 = getPropValue(o2, order);
 
-				U.must(val1 instanceof Comparable && val2 instanceof Comparable,
-						"The property '%s' is not comparable!", order);
+				U.must(val1 == null || val1 instanceof Comparable, "The property '%s' (%s) is not comparable!", order,
+						Cls.of((val1)));
+				U.must(val2 == null || val2 instanceof Comparable, "The property '%s' (%s) is not comparable!", order,
+						Cls.of((val2)));
 
-				return sign * ((Comparable<E>) val1).compareTo(val2);
+				return sign * U.cmp(val1, val2);
 			}
 		};
 		return comparator;

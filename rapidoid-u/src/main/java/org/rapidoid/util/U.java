@@ -1423,4 +1423,17 @@ public class U {
 		return !coll.isEmpty() ? coll.iterator().next() : null;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> int cmp(T val1, T val2) {
+		if (val1 == null && val2 == null) {
+			return 0;
+		} else if (val1 == null) {
+			return -1;
+		} else if (val2 == null) {
+			return 1;
+		} else {
+			return ((Comparable<T>) val1).compareTo(val2);
+		}
+	}
+
 }
