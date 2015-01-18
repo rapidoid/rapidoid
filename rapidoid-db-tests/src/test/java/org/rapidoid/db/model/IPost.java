@@ -2,6 +2,7 @@ package org.rapidoid.db.model;
 
 import org.rapidoid.annotation.Relation;
 import org.rapidoid.db.DbColumn;
+import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
 import org.rapidoid.db.Entity;
 
@@ -28,6 +29,9 @@ import org.rapidoid.db.Entity;
 public interface IPost extends Entity {
 
 	DbColumn<String> content();
+
+	@Relation("^posted")
+	DbRef<IProfile> postedOn();
 
 	@Relation("likes")
 	DbSet<IPerson> likes();
