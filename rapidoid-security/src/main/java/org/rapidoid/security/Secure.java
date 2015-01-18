@@ -28,9 +28,11 @@ import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanDelete;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanRead;
+import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Metadata;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UserInfo;
 
 public class Secure implements Constants {
 
@@ -189,6 +191,19 @@ public class Secure implements Constants {
 
 	public static List<String> getUserRoles(String username) {
 		return security.getUserRoles(username);
+	}
+
+	public static UserInfo user() {
+		return AppCtx.user();
+	}
+
+	public static boolean isLoggedIn() {
+		return user() != null;
+	}
+
+	public static String username() {
+		UserInfo user = user();
+		return user != null ? user.username : null;
 	}
 
 }

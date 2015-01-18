@@ -38,7 +38,7 @@ public class ViewEntityScreenGeneric extends Screen {
 		Tag caption = titleBox(U.capitalized(ctx().pathSegment(0)) + " Details");
 		FormWidget details = show(target);
 
-		if (Secure.getObjectPermissions(ctx().username(), target).delete) {
+		if (Secure.getObjectPermissions(Secure.username(), target).delete) {
 			details = details.buttons(EDIT, BACK, DELETE);
 		} else {
 			details = details.buttons(EDIT, BACK);

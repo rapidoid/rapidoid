@@ -70,7 +70,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	private void processRequest(HttpExchangeImpl x) {
 		x.init(responses, session, router);
 
-		AppCtx.setUsername(x.username());
+		AppCtx.setUser(x.user());
 
 		try {
 
@@ -91,7 +91,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			}
 
 		} finally {
-			AppCtx.delUsername();
+			AppCtx.delUser();
 		}
 	}
 

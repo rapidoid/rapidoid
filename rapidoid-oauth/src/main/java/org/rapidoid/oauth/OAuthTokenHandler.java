@@ -35,6 +35,8 @@ import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.json.JSON;
 import org.rapidoid.log.Log;
+import org.rapidoid.security.Secure;
+import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UserInfo;
 
@@ -103,8 +105,9 @@ public class OAuthTokenHandler implements Handler {
 			user.username = user.email;
 			user.oauthId = String.valueOf(auth.get("id"));
 
-			x.sessionSet("_user", user);
-			U.must(x.user() == user);
+			x.sessionSet(UserInfo.class.getCanonicalName(), user);
+			AppCtx.setUser(user);
+			U.must(Secure.user() == user);
 
 			return x.goBack(0);
 		} else {

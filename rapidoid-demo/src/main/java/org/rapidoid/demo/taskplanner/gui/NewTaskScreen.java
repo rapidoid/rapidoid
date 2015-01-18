@@ -61,7 +61,7 @@ public class NewTaskScreen extends Screen {
 	}
 
 	public void onAdd() {
-		task.owner.set(Users.current(ctx(), User.class));
+		task.owner.set(Users.current(User.class));
 		task.description = v.get();
 		DB.insert(task);
 		task = new Task();

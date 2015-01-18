@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.rapidoid.beany.Beany;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.KeyValueRanges;
@@ -43,15 +42,13 @@ import org.rapidoid.net.mime.MediaType;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Conf;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.IUser;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.util.UserInfo;
 import org.rapidoid.wrap.Bool;
 
 public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements HttpExchange,
 		HttpInterception, Constants {
-
-	protected static final String SESSION_USER = "_user";
 
 	private static final String SESSION_COOKIE = "JSESSIONID";
 
@@ -763,70 +760,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		throw error();
 	}
 
-	@Override
-	public synchronized boolean isLoggedIn() {
-		return hasSession() && session(SESSION_USER, null) != null;
-	}
-
-	@Override
-	public synchronized IUser user() {
-		U.must(isLoggedIn(), "Must be logged in!");
-
-		return session(SESSION_USER);
-	}
-
-	@Override
-	public synchronized <T> T user(Class<T> userClass) {
-		IUser user = user();
-
-		T user2 = U.newInstance(userClass);
-
-		Beany.setPropValue(user2, "username", user.username());
-		Beany.setPropValue(user2, "email", user.email());
-		Beany.setPropValue(user2, "name", user.name());
-
-		return user2;
-	}
-
-	@Override
-	public synchronized boolean isAdmin() {
-		if (!isLoggedIn()) {
-			return false;
-		}
-
-		return Secure.isAdmin(username());
-	}
-
-	@Override
-	public String username() {
-		return isLoggedIn() ? user().username() : null;
-	}
-
-	@Override
-	public synchronized boolean isManager() {
-		if (!isLoggedIn()) {
-			return false;
-		}
-
-		return Secure.isManager(username());
-	}
-
-	@Override
-	public synchronized boolean isModerator() {
-		if (!isLoggedIn()) {
-			return false;
-		}
-
-		return Secure.isModerator(username());
-	}
-
-	@Override
-	public synchronized boolean hasRole(String role) {
-		if (!isLoggedIn()) {
-			return false;
-		}
-
-		return Secure.hasRole(username(), role);
+	public synchronized UserInfo user() {
+		return hasSession() ? (UserInfo) session(UserInfo.class.getCanonicalName(), null) : null;
 	}
 
 	@Override
@@ -916,7 +851,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized HttpExchangeHeaders authorize(Class<?> clazz) {
-		return accessDeniedIf(!Secure.canAccessClass(username(), clazz));
+		return accessDeniedIf(!Secure.canAccessClass(Secure.username(), clazz));
 	}
 
 	@Override

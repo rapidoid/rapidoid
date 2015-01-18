@@ -1,5 +1,7 @@
 package org.rapidoid.http;
 
+import org.rapidoid.security.Secure;
+import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UserInfo;
@@ -31,8 +33,9 @@ public class HttpBuiltins {
 			@Override
 			public Object handle(HttpExchange x) {
 				x.goBack(0);
-				if (x.hasSession() && x.isLoggedIn()) {
+				if (x.hasSession() && Secure.isLoggedIn()) {
 					x.closeSession();
+					AppCtx.delUser();
 				}
 				return x;
 			}
@@ -52,7 +55,9 @@ public class HttpBuiltins {
 				user.email = username;
 				user.name = U.capitalized(username);
 
-				x.sessionSet(HttpExchangeImpl.SESSION_USER, user);
+				x.sessionSet(UserInfo.class.getCanonicalName(), user);
+				AppCtx.setUser(user);
+
 				return x.goBack(0);
 			}
 		});

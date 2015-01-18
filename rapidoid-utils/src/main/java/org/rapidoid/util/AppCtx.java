@@ -24,7 +24,7 @@ public class AppCtx {
 
 	private static final ThreadLocal<AppCtx> CTXS = new ThreadLocal<AppCtx>();
 
-	private String username;
+	private UserInfo user;
 
 	private Object exchange;
 
@@ -52,19 +52,19 @@ public class AppCtx {
 		CTXS.remove();
 	}
 
-	public static void setUsername(String username) {
+	public static void setUser(UserInfo user) {
 		AppCtx ctx = provideCtx();
-		U.must(ctx.username == null, "The username was already set!");
-		ctx.username = username;
+		U.must(ctx.user == null, "The username was already set!");
+		ctx.user = user;
 	}
 
-	public static String username() {
-		return ctx().username;
+	public static UserInfo user() {
+		return ctx().user;
 	}
 
-	public static void delUsername() {
+	public static void delUser() {
 		AppCtx ctx = ctx();
-		ctx.username = null;
+		ctx.user = null;
 	}
 
 	public static void setExchange(Object exchange) {

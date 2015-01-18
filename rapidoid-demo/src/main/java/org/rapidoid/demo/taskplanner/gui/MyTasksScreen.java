@@ -28,6 +28,7 @@ import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.Tag;
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.security.Secure;
 import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.widget.GridWidget;
 
@@ -41,7 +42,7 @@ public class MyTasksScreen extends Screen {
 			@Override
 			public boolean eval(Task t) throws Exception {
 				User user = t.owner.get();
-				return user != null && user.username.equals(ctx().username());
+				return user != null && user.username.equals(Secure.username());
 			}
 		}, "-priority", 10, "id", "title", "priority");
 
@@ -50,7 +51,7 @@ public class MyTasksScreen extends Screen {
 		GridWidget grid2 = grid(Task.class, new Predicate<Task>() {
 			@Override
 			public boolean eval(Task t) throws Exception {
-				return Beany.projection(t.sharedWith, "username").contains(ctx().username());
+				return Beany.projection(t.sharedWith, "username").contains(Secure.username());
 			}
 		}, new Comparator<Task>() {
 			@Override

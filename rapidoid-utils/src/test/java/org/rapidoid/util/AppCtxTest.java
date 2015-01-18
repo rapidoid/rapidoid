@@ -33,13 +33,15 @@ public class AppCtxTest extends TestCommons {
 
 				AppCtx.reset();
 
-				String username = rndStr(10);
+				UserInfo user = new UserInfo();
+				user.username = rndStr(10);
+
 				Integer n = rnd();
 
-				AppCtx.setUsername(username);
+				AppCtx.setUser(user);
 				AppCtx.setExchange(n);
 
-				eq(AppCtx.username(), username);
+				eq(AppCtx.user(), user);
 				eq(AppCtx.exchange(), n);
 
 				AppCtx.reset();

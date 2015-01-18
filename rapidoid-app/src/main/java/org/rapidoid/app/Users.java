@@ -20,17 +20,20 @@ package org.rapidoid.app;
  * #L%
  */
 
+import org.rapidoid.beany.Beany;
 import org.rapidoid.db.DB;
-import org.rapidoid.http.HttpExchange;
+import org.rapidoid.security.Secure;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UserInfo;
 
 public class Users {
 
-	public static <T> T current(HttpExchange x, Class<T> userClass) {
-		T user = U.singleOrNone(DB.find(userClass, "username", x.user().username()));
+	public static <T> T current(Class<T> userClass) {
+		UserInfo u = Secure.user();
+		T user = U.singleOrNone(DB.find(userClass, "username", u.username));
 
 		if (user == null) {
-			user = x.user(userClass);
+			user = DB.create(userClass, Beany.read(u));
 			DB.insert(user);
 		}
 

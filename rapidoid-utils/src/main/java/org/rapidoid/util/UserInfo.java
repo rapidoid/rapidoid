@@ -20,17 +20,17 @@ package org.rapidoid.util;
  * #L%
  */
 
-public class UserInfo implements IUser {
+public class UserInfo {
 
-	public String username;
+	public volatile String username;
 
-	public String email;
+	public volatile String email;
 
-	public String name;
+	public volatile String name;
 
-	public String oauthId;
+	public volatile String oauthId;
 
-	public String oauthProvider;
+	public volatile String oauthProvider;
 
 	@Override
 	public String toString() {
@@ -39,44 +39,26 @@ public class UserInfo implements IUser {
 	}
 
 	@Override
-	public String username() {
-		return username;
-	}
-
-	@Override
-	public String email() {
-		return email;
-	}
-
-	@Override
-	public String name() {
-		return name;
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = super.hashCode();
+		int result = 1;
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
 
-	/**
-	 * Custom implementation, based on {@link IUser}{@link #username()} comparison.
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
+		if (obj == null)
 			return false;
-		if (!(obj instanceof IUser))
+		if (getClass() != obj.getClass())
 			return false;
-		IUser other = (IUser) obj;
+		UserInfo other = (UserInfo) obj;
 		if (username == null) {
-			if (other.username() != null)
+			if (other.username != null)
 				return false;
-		} else if (!username.equals(other.username()))
+		} else if (!username.equals(other.username))
 			return false;
 		return true;
 	}

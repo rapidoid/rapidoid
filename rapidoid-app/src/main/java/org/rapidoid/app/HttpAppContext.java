@@ -38,7 +38,6 @@ import org.rapidoid.http.HttpHeader;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.net.mime.MediaType;
-import org.rapidoid.util.IUser;
 
 public class HttpAppContext implements AppContext {
 
@@ -426,38 +425,6 @@ public class HttpAppContext implements AppContext {
 
 	public String pathSegment(int segmentIndex) {
 		return x.pathSegment(segmentIndex);
-	}
-
-	public boolean isLoggedIn() {
-		return x.isLoggedIn();
-	}
-
-	public IUser user() {
-		return x.user();
-	}
-
-	public String username() {
-		return x.username();
-	}
-
-	public <T> T user(Class<T> userClass) {
-		return x.user(userClass);
-	}
-
-	public boolean isAdmin() {
-		return x.isAdmin();
-	}
-
-	public boolean isManager() {
-		return x.isManager();
-	}
-
-	public boolean isModerator() {
-		return x.isModerator();
-	}
-
-	public boolean hasRole(String role) {
-		return x.hasRole(role);
 	}
 
 	public boolean isGetReq() {

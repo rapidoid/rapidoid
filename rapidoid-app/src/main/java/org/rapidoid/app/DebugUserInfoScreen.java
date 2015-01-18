@@ -31,9 +31,9 @@ public class DebugUserInfoScreen extends Screen {
 
 	public Object content() {
 		Tag caption = titleBox("Debug Mode - User Information");
-		if (ctx().isLoggedIn()) {
-			Object userDetails = show(ctx().user(), "name", "username", "email");
-			FormWidget userRoles = show(U.map("roles", Secure.getUserRoles(ctx().user().username())));
+		if (Secure.isLoggedIn()) {
+			Object userDetails = show(Secure.user(), "name", "username", "email");
+			FormWidget userRoles = show(U.map("roles", Secure.getUserRoles(Secure.username())));
 			return row(caption, userDetails, userRoles);
 		} else {
 			return row(caption, h4("Not logged in!"));

@@ -233,7 +233,7 @@ public class AppPageGeneric extends AppGUI {
 		Tag dropdownMenu = null;
 		if (addon("auth") || addon("googleLogin") || addon("facebookLogin") || addon("linkedinLogin")
 				|| addon("githubLogin")) {
-			if (x.isLoggedIn()) {
+			if (Secure.isLoggedIn()) {
 				dropdownMenu = loggedInUserMenu();
 			} else {
 				dropdownMenu = loggedOutUserMenu();
@@ -290,7 +290,7 @@ public class AppPageGeneric extends AppGUI {
 	}
 
 	protected String userDisplay() {
-		String username = x.user().username();
+		String username = Secure.username();
 		int pos = username.indexOf('@');
 		return pos > 0 ? username.substring(0, pos) : username;
 	}
@@ -358,7 +358,7 @@ public class AppPageGeneric extends AppGUI {
 	}
 
 	protected boolean isScreenAllowed(Class<?> screenCls) {
-		return Secure.canAccessClass(x.username(), screenCls);
+		return Secure.canAccessClass(Secure.username(), screenCls);
 	}
 
 	public void on(String cmd, Object[] args) {
