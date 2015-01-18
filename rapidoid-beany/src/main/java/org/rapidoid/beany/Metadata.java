@@ -7,7 +7,7 @@ import org.rapidoid.util.U;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-beany
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
