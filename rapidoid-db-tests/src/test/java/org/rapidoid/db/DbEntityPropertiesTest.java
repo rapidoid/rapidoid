@@ -38,7 +38,7 @@ public class DbEntityPropertiesTest extends DbTestCommons {
 	@Test
 	public void testEntityProperties() {
 		checkProfileProperties(IProfile.class);
-		
+
 		IProfile profile = DbProxy.create(IProfile.class);
 		checkProfileProperties(profile.getClass());
 
@@ -48,8 +48,9 @@ public class DbEntityPropertiesTest extends DbTestCommons {
 		post1.content().set("abc");
 
 		Map<String, Object> postProps = Beany.read(post1);
-		eq(postProps, U.map("id", 123L, "version", 456, "likes", U.map("relation", "likes", "ids", U.set()), "content",
-				"abc"));
+		Map<String, Object> likes = U.map("relation", "likes", "ids", U.set());
+		Map<String, Object> postedOn = U.map("relation", "^posted", "ids", U.set());
+		eq(postProps, U.map("id", 123L, "version", 456L, "likes", likes, "postedOn", postedOn, "content", "abc"));
 
 		profile.posts().add(post1);
 		Map<String, Object> profileProps = Beany.read(profile);
