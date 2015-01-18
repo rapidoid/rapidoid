@@ -28,6 +28,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.rapidoid.beany.Beany;
+import org.rapidoid.beany.Metadata;
 import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.security.annotation.Manager;
@@ -37,7 +38,6 @@ import org.rapidoid.security.annotation.Roles;
 import org.rapidoid.util.CommonRoles;
 import org.rapidoid.util.Conf;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.Metadata;
 import org.rapidoid.util.U;
 
 public class AppSecurity implements Constants {

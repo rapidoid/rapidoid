@@ -25,9 +25,9 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.rapidoid.beany.Metadata;
 import org.rapidoid.security.annotation.DevMode;
 import org.rapidoid.util.Arr;
-import org.rapidoid.util.Metadata;
 
 public class AppScreens implements Comparator<Class<?>> {
 

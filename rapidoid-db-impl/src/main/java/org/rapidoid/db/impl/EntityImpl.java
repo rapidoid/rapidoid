@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.annotation.Relation;
+import org.rapidoid.beany.Metadata;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbColumn;
 import org.rapidoid.db.DbList;
@@ -31,7 +32,6 @@ import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
 import org.rapidoid.db.Entity;
 import org.rapidoid.util.Cls;
-import org.rapidoid.util.Metadata;
 import org.rapidoid.util.U;
 
 public class EntityImpl implements Entity {

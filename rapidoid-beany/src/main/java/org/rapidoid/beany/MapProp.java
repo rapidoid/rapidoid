@@ -138,4 +138,9 @@ public class MapProp implements Prop {
 		throw U.rte("No type args available!");
 	}
 
+	@Override
+	public Class<?> getDeclaringType() {
+		return null;
+	}
+
 }

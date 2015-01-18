@@ -244,6 +244,11 @@ public class BeanProp implements Prop {
 	}
 
 	@Override
+	public Class<?> getDeclaringType() {
+		return declaringType;
+	}
+
+	@Override
 	public String toString() {
 		return declaringType.getSimpleName() + "#" + name + ":" + type.getSimpleName();
 	}

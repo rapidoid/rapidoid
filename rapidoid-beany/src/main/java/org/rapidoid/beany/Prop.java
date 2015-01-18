@@ -61,4 +61,6 @@ public interface Prop {
 
 	Class<?> getRawTypeArg(int index);
 
+	Class<?> getDeclaringType();
+
 }

@@ -1,8 +1,9 @@
-package org.rapidoid.util;
+package org.rapidoid.beany;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.Map;
+
+import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -41,25 +42,26 @@ public class Metadata {
 		return (T) classAnnotations(clazz).get(annotationClass);
 	}
 
-	public static Map<Class<?>, Annotation> fieldAnnotations(Class<?> clazz, String fieldName) {
+	public static Map<Class<?>, Annotation> propAnnotations(Class<?> clazz, String property) {
 
-		Field field = Cls.getField(clazz, fieldName);
 		Map<Class<?>, Annotation> annotations = U.map();
+		Prop prop = Beany.property(clazz, property, false);
 
-		for (Annotation ann : field.getDeclaringClass().getAnnotations()) {
-			annotations.put(ann.annotationType(), ann);
-		}
-
-		for (Annotation ann : field.getAnnotations()) {
-			annotations.put(ann.annotationType(), ann);
+		if (prop != null) {
+			for (Annotation ann : prop.getDeclaringType().getAnnotations()) {
+				annotations.put(ann.annotationType(), ann);
+			}
+			for (Annotation ann : prop.getAnnotations()) {
+				annotations.put(ann.annotationType(), ann);
+			}
 		}
 
 		return annotations;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends Annotation> T fieldAnnotation(Class<?> clazz, String fieldName, Class<T> annotationClass) {
-		return (T) fieldAnnotations(clazz, fieldName).get(annotationClass);
+	public static <T extends Annotation> T propAnnotation(Class<?> clazz, String property, Class<T> annotationClass) {
+		return (T) propAnnotations(clazz, property).get(annotationClass);
 	}
 
 	public static boolean isAnnotated(Class<?> target, Class<?> annotation) {

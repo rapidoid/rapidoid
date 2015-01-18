@@ -24,13 +24,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.beany.Metadata;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanDelete;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.Metadata;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UserInfo;
 
@@ -113,10 +113,10 @@ public class Secure implements Constants {
 			return DataPermissions.NONE;
 		}
 
-		CanRead canRead = Metadata.fieldAnnotation(clazz, propertyName, CanRead.class);
-		CanInsert canInsert = Metadata.fieldAnnotation(clazz, propertyName, CanInsert.class);
-		CanChange canChange = Metadata.fieldAnnotation(clazz, propertyName, CanChange.class);
-		CanDelete canDelete = Metadata.fieldAnnotation(clazz, propertyName, CanDelete.class);
+		CanRead canRead = Metadata.propAnnotation(clazz, propertyName, CanRead.class);
+		CanInsert canInsert = Metadata.propAnnotation(clazz, propertyName, CanInsert.class);
+		CanChange canChange = Metadata.propAnnotation(clazz, propertyName, CanChange.class);
+		CanDelete canDelete = Metadata.propAnnotation(clazz, propertyName, CanDelete.class);
 
 		if (canRead == null && canInsert == null && canChange == null && canDelete == null) {
 			return DataPermissions.ALL;
