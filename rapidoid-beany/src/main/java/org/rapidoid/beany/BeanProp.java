@@ -261,12 +261,12 @@ public class BeanProp implements Prop {
 
 	@Override
 	public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
-		return field != null ? field.getAnnotation(annotationClass) : null;
+		return field != null ? field.getAnnotation(annotationClass) : getter.getAnnotation(annotationClass);
 	}
 
 	@Override
 	public Annotation[] getAnnotations() {
-		return field != null ? field.getAnnotations() : null;
+		return field != null ? field.getAnnotations() : getter.getAnnotations();
 	}
 
 	@Override
