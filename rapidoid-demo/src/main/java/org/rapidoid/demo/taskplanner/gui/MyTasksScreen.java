@@ -30,6 +30,7 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.security.Secure;
 import org.rapidoid.security.annotation.LoggedIn;
+import org.rapidoid.util.U;
 import org.rapidoid.widget.GridWidget;
 
 @LoggedIn
@@ -42,7 +43,7 @@ public class MyTasksScreen extends Screen {
 			@Override
 			public boolean eval(Task t) throws Exception {
 				User user = t.owner.get();
-				return user != null && user.username.equals(Secure.username());
+				return user != null && U.eq(user.username, Secure.username());
 			}
 		}, "-priority", 10, "id", "title", "priority");
 

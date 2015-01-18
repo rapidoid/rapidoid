@@ -295,12 +295,14 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals, Serializa
 	@SuppressWarnings("unchecked")
 	@Override
 	public void deserializeBean(Map<String, Object> serialized) {
-		name = (String) serialized.get("relation");
-		U.notNull(name, "relation");
+		if (serialized != null) {
+			name = (String) serialized.get("relation");
+			U.notNull(name, "relation");
 
-		Collection<? extends Number> initialIds = (Collection<? extends Number>) serialized.get("ids");
-		U.notNull(initialIds, "ids");
-		initIds(initialIds);
+			Collection<? extends Number> initialIds = (Collection<? extends Number>) serialized.get("ids");
+			U.notNull(initialIds, "ids");
+			initIds(initialIds);
+		}
 	}
 
 }
