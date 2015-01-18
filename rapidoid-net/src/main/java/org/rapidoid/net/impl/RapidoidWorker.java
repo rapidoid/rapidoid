@@ -37,6 +37,7 @@ import org.rapidoid.buffer.IncompleteReadException;
 import org.rapidoid.log.Log;
 import org.rapidoid.pool.ArrayPool;
 import org.rapidoid.pool.Pool;
+import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Conf;
 import org.rapidoid.util.SimpleList;
 import org.rapidoid.util.U;
@@ -207,7 +208,9 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		try {
 			conn.done = false;
 
+			AppCtx.reset();
 			protocol.process(conn);
+			AppCtx.reset();
 
 			if (!conn.closed && !conn.isAsync()) {
 				conn.done();

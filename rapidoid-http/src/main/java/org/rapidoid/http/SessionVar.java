@@ -20,6 +20,7 @@ package org.rapidoid.http;
  * #L%
  */
 
+import org.rapidoid.util.AppCtx;
 import org.rapidoid.var.impl.AbstractVar;
 
 public class SessionVar<T> extends AbstractVar<T> {
@@ -37,7 +38,7 @@ public class SessionVar<T> extends AbstractVar<T> {
 
 	@Override
 	public T get() {
-		HttpExchange x = HttpExchanges.getThreadLocalExchange();
+		HttpExchange x = AppCtx.exchange();
 		T val = x.session(name, null);
 
 		if (val == null) {
@@ -50,7 +51,8 @@ public class SessionVar<T> extends AbstractVar<T> {
 
 	@Override
 	public void set(T value) {
-		HttpExchanges.getThreadLocalExchange().sessionSet(name, value);
+		HttpExchange x = AppCtx.exchange();
+		x.sessionSet(name, value);
 	}
 
 }

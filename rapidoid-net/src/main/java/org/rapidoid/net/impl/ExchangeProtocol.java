@@ -22,6 +22,7 @@ package org.rapidoid.net.impl;
 
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.pool.Pool;
+import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.U;
 
 public abstract class ExchangeProtocol<T extends DefaultExchange<?, ?>> implements Protocol, CtxListener {
@@ -35,12 +36,14 @@ public abstract class ExchangeProtocol<T extends DefaultExchange<?, ?>> implemen
 	@Override
 	public void process(Channel ctx) {
 		T exchange = pool(ctx.helper()).get();
-		exchange.reset();
-
 		assert U.instanceOf(exchange, exchangeType);
 
+		exchange.reset();
 		exchange.setConnection(ctx);
+
+		AppCtx.setExchange(exchange);
 		process(ctx, exchange);
+		AppCtx.delExchange();
 	}
 
 	protected abstract void process(Channel ctx, T exchange);

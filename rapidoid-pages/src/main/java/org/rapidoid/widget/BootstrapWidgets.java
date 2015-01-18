@@ -19,11 +19,12 @@ import org.rapidoid.html.tag.SelectTag;
 import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.HttpExchanges;
+import org.rapidoid.http.SessionVar;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.pages.Pages;
+import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
@@ -456,17 +457,17 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static <T> Var<T> sessionVar(String name, T defaultValue) {
-		return HttpExchanges.sessionVar(name, defaultValue);
+		return new SessionVar<T>(name, defaultValue);
 	}
 
 	public static <T> Var<T> localVar(String name, T defaultValue) {
-		HttpExchange x = HttpExchanges.getThreadLocalExchange();
-		return HttpExchanges.sessionVar(name + ":" + Pages.viewId(x), defaultValue);
+		HttpExchange x = AppCtx.exchange();
+		return sessionVar(name + ":" + Pages.viewId(x), defaultValue);
 	}
 
 	public static Var<Integer> localVar(String name, int defaultValue, int min, int max) {
-		HttpExchange x = HttpExchanges.getThreadLocalExchange();
-		Var<Integer> var = HttpExchanges.sessionVar(name + ":" + Pages.viewId(x), defaultValue);
+		HttpExchange x = AppCtx.exchange();
+		Var<Integer> var = sessionVar(name + ":" + Pages.viewId(x), defaultValue);
 
 		// TODO put the constraints into the variable implementation
 		Integer pageN = U.limit(min, var.get(), max);

@@ -30,12 +30,12 @@ import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeImpl;
-import org.rapidoid.http.HttpExchanges;
 import org.rapidoid.http.HttpResponses;
 import org.rapidoid.http.InMemoryHttpSession;
 import org.rapidoid.net.impl.RapidoidConnection;
 import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.util.AppCtx;
 import org.rapidoid.var.Var;
 
 public class PagesTestCommons extends TestCommons {
@@ -107,7 +107,8 @@ public class PagesTestCommons extends TestCommons {
 		session.setAttribute("sess1", Pages.SESSION_CTX, ctx);
 		x.init(new HttpResponses(false, false), session, null);
 
-		HttpExchanges.setThreadLocalExchange(x);
+		AppCtx.reset();
+		AppCtx.setExchange(x);
 		return x;
 	}
 

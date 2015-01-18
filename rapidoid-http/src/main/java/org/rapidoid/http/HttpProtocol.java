@@ -27,6 +27,7 @@ import org.rapidoid.inject.IoC;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ExchangeProtocol;
+import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.U;
 
 public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
@@ -69,7 +70,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	private void processRequest(HttpExchangeImpl x) {
 		x.init(responses, session, router);
 
-		HttpExchanges.setThreadLocalExchange(x);
+		AppCtx.setUsername(x.username());
 
 		try {
 
@@ -90,7 +91,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			}
 
 		} finally {
-			HttpExchanges.setThreadLocalExchange(null);
+			AppCtx.delUsername();
 		}
 	}
 
