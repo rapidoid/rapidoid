@@ -30,6 +30,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -319,8 +320,10 @@ public class InMem {
 
 	private RelPair getRelPair(Object entity, Prop prop, String rel, boolean inverse) {
 		Class<?> cls = prop.getRawTypeArg(0);
-		Class<?> srcType = inverse ? cls : entity.getClass();
-		Class<?> destType = inverse ? entity.getClass() : cls;
+		Class<? extends Object> entCls = unproxy(entity.getClass());
+
+		Class<?> srcType = inverse ? cls : entCls;
+		Class<?> destType = inverse ? entCls : cls;
 
 		Tuple key = new Tuple(rel, srcType, destType);
 		RelPair relPair = relPairs.get(key);
@@ -332,14 +335,27 @@ public class InMem {
 			destProp = relPair.destProp;
 		} else {
 			String invRel = inverse ? rel : "^" + rel;
-			Prop p = findRelProperty(cls, invRel, entity.getClass());
+			Prop p = findRelProperty(cls, invRel, entCls);
 			srcProp = inverse ? p : prop;
 			destProp = inverse ? prop : p;
+
 			relPair = new RelPair(rel, srcType, destType, srcProp, destProp);
 			relPairs.putIfAbsent(key, relPair);
+
+			if (srcType == null || srcProp == null || destType == null || destProp == null) {
+				Log.warn("Incomplete relation pair!", "relation", relPair);
+			}
 		}
 
 		return relPair;
+	}
+
+	private static Class<?> unproxy(Class<?> cls) {
+		// TODO this is a hack, find better solution
+		if (Proxy.class.isAssignableFrom(cls)) {
+			return cls.getInterfaces()[0];
+		}
+		return cls;
 	}
 
 	private Prop findRelProperty(Class<?> fromCls, String rel, Class<?> toCls) {
@@ -369,6 +385,7 @@ public class InMem {
 			}
 		}
 
+		Log.warn("Didn't find inverse relation property!", "relation", rel, "from", fromCls, "to", toCls);
 		return null;
 	}
 
