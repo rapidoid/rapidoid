@@ -1,8 +1,8 @@
-package org.rapidoid.demo.taskplanner.gui;
+package org.rapidoid.annotation;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,21 +20,16 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
-import org.rapidoid.annotation.Order;
-import org.rapidoid.app.Screen;
-import org.rapidoid.demo.taskplanner.model.Task;
-import org.rapidoid.html.Tag;
-import org.rapidoid.widget.GridWidget;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 
-@Order(2)
-public class ManageTasksScreen extends Screen {
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-	public String title = "Tasks Overview";
+@Target({ FIELD, METHOD, TYPE })
+@Retention(RUNTIME)
+public @interface Order {
 
-	public Object content() {
-		Tag caption = titleBox("Manage tasks");
-		GridWidget grid = grid(Task.class, "-priority", 10, "id", "title", "priority");
-		return row(caption, grid);
-	}
+	int value();
 
 }

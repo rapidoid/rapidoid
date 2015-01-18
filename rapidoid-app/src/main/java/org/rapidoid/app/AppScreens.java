@@ -25,6 +25,7 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.rapidoid.annotation.Order;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.security.annotation.DevMode;
 import org.rapidoid.util.Arr;
@@ -75,6 +76,11 @@ public class AppScreens implements Comparator<Class<?>> {
 
 	protected int screenOrder(Class<?> scrClass) {
 
+		Order order = Metadata.classAnnotation(scrClass, Order.class);
+		if (order != null) {
+			return order.value();
+		}
+
 		String cls = scrClass.getSimpleName();
 
 		if (cls.equals("HomeScreen")) {
@@ -89,7 +95,7 @@ public class AppScreens implements Comparator<Class<?>> {
 			return 2000;
 		}
 
-		return cls.charAt(0);
+		return 0;
 	}
 
 }

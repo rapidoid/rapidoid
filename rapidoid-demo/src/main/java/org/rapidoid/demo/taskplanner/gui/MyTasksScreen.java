@@ -22,6 +22,7 @@ package org.rapidoid.demo.taskplanner.gui;
 
 import java.util.Comparator;
 
+import org.rapidoid.annotation.Order;
 import org.rapidoid.app.Screen;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.demo.taskplanner.model.Task;
@@ -34,6 +35,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.widget.GridWidget;
 
 @LoggedIn
+@Order(3)
 public class MyTasksScreen extends Screen {
 
 	public Object content() {
