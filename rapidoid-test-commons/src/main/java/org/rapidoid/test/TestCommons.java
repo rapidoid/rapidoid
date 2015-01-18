@@ -128,6 +128,15 @@ public abstract class TestCommons {
 		}
 	}
 
+	protected void neq(Object actual, Object expected) {
+		try {
+			Assert.assertNotEquals(actual, expected);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
+	}
+
 	protected void eq(Object actual, Object expected) {
 		try {
 			Assert.assertEquals(actual, expected);
