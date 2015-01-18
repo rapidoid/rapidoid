@@ -118,7 +118,7 @@ public class Log {
 		out.append(" | ");
 		out.append(key);
 		out.append("=");
-		out.append(pretty(value));
+		out.append(printable(value));
 
 		if (value instanceof Throwable) {
 			Throwable err = (Throwable) value;
@@ -129,8 +129,8 @@ public class Log {
 		}
 	}
 
-	private static String pretty(Object value) {
-		return null;
+	private static String printable(Object value) {
+		return String.valueOf(value);
 	}
 
 	public static synchronized void setLogOutput(Appendable logOutput) {
