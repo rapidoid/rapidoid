@@ -23,7 +23,9 @@ import org.rapidoid.http.SessionVar;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
+import org.rapidoid.model.Property;
 import org.rapidoid.pages.Pages;
+import org.rapidoid.security.DataPermissions;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
@@ -417,6 +419,16 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static FormWidget create(DataManager dataManager, final Item item, String... properties) {
 		return U.customizable(FormWidget.class, dataManager, FormMode.CREATE, item, properties);
+	}
+
+	public static FormField field(DataManager dataManager, FormMode mode, FormLayout layout, Property prop,
+			String name, String desc, FieldType type, Collection<?> options, boolean required, Var<?> var,
+			DataPermissions permissions) {
+		return new FormField(dataManager, mode, layout, prop, name, desc, type, options, required, var, permissions);
+	}
+
+	public static FormField field(DataManager dataManager, FormMode mode, FormLayout layout, Item item, Property prop) {
+		return new FormField(dataManager, mode, layout, item, prop);
 	}
 
 	public static Tag page(boolean devMode, String pageTitle, Object head, Object body) {

@@ -46,13 +46,20 @@ public class NewTaskScreen extends Screen {
 	@Session
 	private Var<String> v = var("abc");
 
+	@Session
+	private Var<List<String>> v2 = var(U.list("b", "AA"));
+
 	public Object content() {
 		Tag caption1 = titleBox("Add new task");
 		FormWidget frm = create(task).buttons(ADD, CANCEL);
-		frm = frm.fieldType("description", FieldType.TEXTAREA);
+		frm.field("description").setType(FieldType.TEXTAREA);
 
-		frm = frm.field("description", div(h3("my custom field"), textInput(v)));
-		frm = frm.field("comments", div((Object[]) radios(U.list("a", "bb", "ccc"), v)));
+		frm.add(field(null, null, null, null, "abcd", null, FieldType.CHECKBOXES, U.list("AA", "b", "cDeF"), true, v2,
+				null));
+
+		frm.field("description").setLabel(h3("my custom field"));
+
+		frm.field("comments").setInput(div((Object[]) radios(U.list("a", "bb", "ccc"), v)));
 
 		Tag caption2 = titleBox("Most recent tasks");
 		GridWidget grid = grid(Task.class, "-id", 7, "id", "priority", "title");
