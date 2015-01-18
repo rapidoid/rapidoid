@@ -717,8 +717,9 @@ public class Cls {
 		return null;
 	}
 
-	public static Class<?> clazz(Type type) {
-		return type instanceof Class<?> ? (Class<?>) type : Object.class;
+	@SuppressWarnings("unchecked")
+	public static <T> Class<T> clazz(Type type) {
+		return (Class<T>) (type instanceof Class ? type : Object.class);
 	}
 
 	public static Class<?> of(Object obj) {
