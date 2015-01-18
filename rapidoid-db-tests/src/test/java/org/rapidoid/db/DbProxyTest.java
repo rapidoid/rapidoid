@@ -40,7 +40,7 @@ public class DbProxyTest extends DbTestCommons {
 		final IPost t = DbProxy.create(IPost.class, map);
 		notNull(t);
 
-		U.benchmarkMT(100, "ops", 1000000, new Runnable() {
+		multiThreaded(100, 1000000, new Runnable() {
 			@Override
 			public void run() {
 				check(map, t);

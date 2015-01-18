@@ -55,8 +55,8 @@ public class DbStatisticalTest extends DbTestCommons {
 	public void testDbOperations() {
 
 		Log.setLogLevel(LogLevel.SEVERE);
-		
-		U.benchmarkMT(Conf.cpus(), "op", 50000, new Runnable() {
+
+		multiThreaded(Conf.cpus(), 50000, new Runnable() {
 			@Override
 			public synchronized void run() {
 

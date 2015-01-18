@@ -24,6 +24,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
@@ -279,6 +280,31 @@ public abstract class TestCommons {
 
 	protected <T> void returns(T methodCall, T result) {
 		Mockito.when(methodCall).thenReturn(result);
+	}
+
+	protected void multiThreaded(int threadsN, final int count, final Runnable runnable) {
+
+		eq(count % threadsN, 0);
+		final int countPerThread = count / threadsN;
+
+		final CountDownLatch latch = new CountDownLatch(threadsN);
+
+		for (int i = 1; i <= threadsN; i++) {
+			new Thread() {
+				public void run() {
+					for (int j = 0; j < countPerThread; j++) {
+						runnable.run();
+					}
+					latch.countDown();
+				};
+			}.start();
+		}
+
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }
