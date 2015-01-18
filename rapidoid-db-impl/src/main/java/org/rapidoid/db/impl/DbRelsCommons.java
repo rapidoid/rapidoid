@@ -284,7 +284,7 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals, Serializa
 
 	@Override
 	public String toString() {
-		return ids.toString();
+		return "#" + ids.toString();
 	}
 
 	@Override
