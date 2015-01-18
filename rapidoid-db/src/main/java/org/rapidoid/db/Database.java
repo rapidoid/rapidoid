@@ -90,7 +90,7 @@ public interface Database extends Activity<Database> {
 
 	long getIdOf(Object record);
 
-	<E> DbColumn<E> column(Map<String, Object> map, String name);
+	<E> DbColumn<E> column(Map<String, Object> map, String name, Class<E> type);
 
 	<E> DbList<E> list(Object holder, String relation);
 

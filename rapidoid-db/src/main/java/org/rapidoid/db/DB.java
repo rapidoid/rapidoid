@@ -184,8 +184,8 @@ public class DB {
 		return db().getIdOf(record);
 	}
 
-	public static <E> DbColumn<E> column(Map<String, Object> map, String name) {
-		return db().column(map, name);
+	public static <E> DbColumn<E> column(Map<String, Object> map, String name, Class<E> type) {
+		return db().column(map, name, type);
 	}
 
 	public static <E> DbList<E> list(Object holder, String relation) {

@@ -80,7 +80,7 @@ public class DbImpl extends NamedActivity<Database> implements Database {
 	public void delete(Object record) {
 		inmem.delete(record);
 	}
-	
+
 	@Override
 	public <E> E get(long id) {
 		return inmem.get(id);
@@ -230,8 +230,8 @@ public class DbImpl extends NamedActivity<Database> implements Database {
 	}
 
 	@Override
-	public <E> DbColumn<E> column(Map<String, Object> map, String name) {
-		return new DbColumnImpl<E>(map, name);
+	public <E> DbColumn<E> column(Map<String, Object> map, String name, Class<E> type) {
+		return new DbColumnImpl<E>(map, name, type);
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.rapidoid.beany.SerializableBean;
 import org.rapidoid.db.DbColumn;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 public class DbColumnImpl<E> implements DbColumn<E>, SerializableBean<Object> {
@@ -34,24 +35,27 @@ public class DbColumnImpl<E> implements DbColumn<E>, SerializableBean<Object> {
 
 	private final String name;
 
-	public DbColumnImpl(Map<String, Object> map, String name) {
+	private Class<E> type;
+
+	public DbColumnImpl(Map<String, Object> map, String name, Class<E> type) {
 		U.notNull(map, "map");
 		U.notNull(name, "name");
+		U.notNull(type, "type");
 
 		this.map = map;
 		this.name = name;
+		this.type = type;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public E get() {
-		return (E) map.get(name);
+		return Cls.convert(map.get(name), type);
 	}
 
 	@Override
 	public void set(E value) {
 		if (value != null) {
-			map.put(name, value);
+			map.put(name, Cls.convert(value, type));
 		} else {
 			map.remove(name);
 		}

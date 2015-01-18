@@ -30,6 +30,7 @@ import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
 import org.rapidoid.db.Entity;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.Metadata;
 import org.rapidoid.util.U;
 
@@ -58,8 +59,8 @@ public class EntityImpl implements Entity {
 	public EntityImpl(Class<?> type, ConcurrentMap<String, Object> values) {
 		this.type = type;
 		this.values = values;
-		this.idColumn = DB.column(values, "id");
-		this.versionColumn = DB.column(values, "version");
+		this.idColumn = DB.column(values, "id", Long.class);
+		this.versionColumn = DB.column(values, "version", Long.class);
 	}
 
 	public void setProxy(Entity proxy) {
@@ -77,11 +78,14 @@ public class EntityImpl implements Entity {
 	}
 
 	public DbColumn<?> column(Method method) {
+		U.must(DbColumn.class.isAssignableFrom(method.getReturnType()));
+
 		String name = method.getName();
 		DbColumn<?> res = columns.get(name);
 
 		if (res == null) {
-			DbColumn<Object> value = DB.column(values, method.getName());
+			Class<Object> colType = Cls.clazz(Cls.generic(method.getGenericReturnType()).getActualTypeArguments()[0]);
+			DbColumn<Object> value = DB.column(values, method.getName(), colType);
 			DbColumn<?> old = columns.putIfAbsent(name, value);
 			return U.or(old, value);
 		}
