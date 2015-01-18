@@ -730,7 +730,7 @@ public class Cls {
 		return convert(value, String.class);
 	}
 
-	public static ParameterizedType parameterized(Type type) {
+	public static ParameterizedType generic(Type type) {
 		return (type instanceof ParameterizedType) ? ((ParameterizedType) type) : null;
 	}
 

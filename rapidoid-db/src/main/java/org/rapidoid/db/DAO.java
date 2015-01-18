@@ -39,7 +39,7 @@ public abstract class DAO<E> {
 		U.must(daoClass.getSuperclass() == DAO.class, "Expected DAO to be superclass of %s, but found: %s!", daoClass,
 				daoClass.getSuperclass());
 
-		ParameterizedType genDao = Cls.parameterized(daoClass.getGenericSuperclass());
+		ParameterizedType genDao = Cls.generic(daoClass.getGenericSuperclass());
 
 		U.must(genDao != null && genDao.getActualTypeArguments().length > 0, "Cannot infer entity type for: %s",
 				daoClass);
