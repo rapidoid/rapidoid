@@ -26,34 +26,61 @@ public class AppCtx {
 
 	private String username;
 
-	private Object extra;
+	private Object exchange;
 
 	private AppCtx() {
 	}
 
-	public static String username() {
-		return CTXS.get().username;
+	private static AppCtx ctx() {
+		AppCtx ctx = CTXS.get();
+		U.must(ctx != null, "App ctx wasn't set!");
+		return ctx;
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> T extra() {
-		return (T) CTXS.get().extra;
-	}
+	private static AppCtx provideCtx() {
+		AppCtx ctx = CTXS.get();
 
-	public static void set(String username, Object extra) {
-		U.must(CTXS.get() == null, "The app context is already set!");
+		if (ctx == null) {
+			ctx = new AppCtx();
+			CTXS.set(ctx);
+		}
 
-		AppCtx ctx = new AppCtx();
-
-		ctx.username = username;
-		ctx.extra = extra;
-
-		CTXS.set(ctx);
+		return ctx;
 	}
 
 	public static void reset() {
-		U.must(CTXS.get() != null, "The app context is already empty!");
 		CTXS.remove();
+	}
+
+	public static void setUsername(String username) {
+		AppCtx ctx = provideCtx();
+		U.must(ctx.username == null, "The username was already set!");
+		ctx.username = username;
+	}
+
+	public static String username() {
+		return ctx().username;
+	}
+
+	public static void delUsername() {
+		AppCtx ctx = ctx();
+		ctx.username = null;
+	}
+
+	public static void setExchange(Object exchange) {
+		AppCtx ctx = provideCtx();
+		U.must(ctx.exchange == null, "The exchange was already set!");
+		ctx.exchange = exchange;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T exchange() {
+		return (T) ctx().exchange;
+	}
+
+	public static void delExchange() {
+		AppCtx ctx = ctx();
+		ctx.exchange = null;
 	}
 
 }

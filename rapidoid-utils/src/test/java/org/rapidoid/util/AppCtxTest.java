@@ -31,13 +31,16 @@ public class AppCtxTest extends TestCommons {
 			@Override
 			public void run() {
 
+				AppCtx.reset();
+
 				String username = rndStr(10);
 				Integer n = rnd();
 
-				AppCtx.set(username, n);
+				AppCtx.setUsername(username);
+				AppCtx.setExchange(n);
 
 				eq(AppCtx.username(), username);
-				eq(AppCtx.extra(), n);
+				eq(AppCtx.exchange(), n);
 
 				AppCtx.reset();
 			}
