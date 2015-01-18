@@ -152,10 +152,13 @@ public class EntityImpl implements Entity {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof Entity))
 			return false;
 		Entity other = (Entity) obj;
-		if (getId() != other.id().get())
+		if (id().get() == null || other.id().get() == null) {
+			return false;
+		}
+		if (!id().get().equals(other.id().get()))
 			return false;
 		return true;
 	}
