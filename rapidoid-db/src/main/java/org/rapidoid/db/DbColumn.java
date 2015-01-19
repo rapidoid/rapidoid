@@ -22,6 +22,6 @@ package org.rapidoid.db;
 
 import org.rapidoid.var.Var;
 
-public interface DbColumn<E> extends Var<E> {
+public interface DbColumn<E> extends Var<E>, Comparable<DbColumn<E>> {
 
 }
