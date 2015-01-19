@@ -30,7 +30,8 @@ import org.rapidoid.beany.SerializableBean;
 import org.rapidoid.db.Database;
 import org.rapidoid.util.U;
 
-public abstract class DbRelsCommons<E> implements DbRelationInternals, SerializableBean<Map<String, Object>> {
+public abstract class DbRelsCommons<E> implements DbRelationInternals, SerializableBean<Map<String, Object>>,
+		Comparable<DbRelsCommons<E>> {
 
 	protected final Database db;
 
@@ -303,6 +304,11 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals, Serializa
 			U.notNull(initialIds, "ids");
 			initIds(initialIds);
 		}
+	}
+
+	@Override
+	public int compareTo(DbRelsCommons<E> rel) {
+		return ids.size() - rel.ids.size();
 	}
 
 }
