@@ -62,6 +62,7 @@ import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
+import org.rapidoid.util.SuccessException;
 import org.rapidoid.util.Tuple;
 import org.rapidoid.util.U;
 
@@ -767,24 +768,32 @@ public class InMem {
 
 		insideTx.set(true);
 
+		boolean success = false;
 		try {
 			transaction.run();
-
-			if (txCallback != null) {
-				txCallbacks.add(txCallback);
-			}
+			success = true;
 
 		} catch (Throwable e) {
-			Log.error("Error in transaction, rolling back", e);
-			txRollback();
-			if (txCallback != null) {
-				txCallback.onDone(null, e);
+			if (SuccessException.isSuccess(e)) {
+				success = true;
+				throw U.rte(e);
+			} else {
+				Log.error("Error in transaction, rolling back", e);
+				txRollback();
+				if (txCallback != null) {
+					txCallback.onDone(null, e);
+				}
 			}
 
 		} finally {
 			txChanges.clear();
 			txInsertions.clear();
 			insideTx.set(false);
+
+			if (success && txCallback != null) {
+				txCallbacks.add(txCallback);
+			}
+
 			globalUnlock();
 		}
 	}

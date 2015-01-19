@@ -1,10 +1,8 @@
-package org.rapidoid.http;
-
-import org.rapidoid.util.SuccessException;
+package org.rapidoid.util;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -23,15 +21,16 @@ import org.rapidoid.util.SuccessException;
  */
 
 @SuppressWarnings("serial")
-public class HttpExchangeException extends SuccessException {
+public class SuccessException extends RuntimeException {
 
-	private static final HttpExchangeException INSTANCE = new HttpExchangeException();
-
-	private HttpExchangeException() {
-	}
-
-	public static HttpExchangeException get() {
-		return INSTANCE;
+	public static boolean isSuccess(Throwable e) {
+		while (e != null) {
+			if (e instanceof SuccessException) {
+				return true;
+			}
+			e = e.getCause();
+		}
+		return false;
 	}
 
 }
