@@ -2,7 +2,7 @@ package org.rapidoid.annotation;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-annotations
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -26,10 +26,10 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-@Target({ FIELD, METHOD, TYPE })
+@Target({ FIELD })
 @Retention(RUNTIME)
-public @interface Order {
+public @interface Inject {
 
-	int value();
+	boolean optional() default false;
 
 }

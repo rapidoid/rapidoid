@@ -2,7 +2,7 @@ package org.rapidoid.annotation;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-annotations
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -28,6 +28,8 @@ import java.lang.annotation.Target;
 
 @Target({ FIELD, METHOD })
 @Retention(RUNTIME)
-public @interface Programmatic {
+public @interface Relation {
+
+	String value();
 
 }

@@ -53,6 +53,7 @@
 	</properties>
 
 	<modules>
+		<module>rapidoid-annotations</module>
 		<module>rapidoid-u</module>
 		<module>rapidoid-log</module>
 		<module>rapidoid-utils</module>
