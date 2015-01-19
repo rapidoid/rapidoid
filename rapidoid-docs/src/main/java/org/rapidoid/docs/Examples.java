@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 import org.rapidoid.app.AppClasses;
 import org.rapidoid.app.AppHandler;
 import org.rapidoid.app.Apps;
+import org.rapidoid.db.DB;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
@@ -43,7 +44,8 @@ public class Examples {
 
 	public static void main(String[] args) {
 		Conf.args("oauth-no-state");
-
+		DB.destroy();
+		
 		String path = "../../rapidoid.github.io/";
 		U.must(new File(path).exists());
 
@@ -60,6 +62,8 @@ public class Examples {
 		}
 
 		generateIndex(path, exampleN - 1);
+		DB.shutdown();
+		DB.destroy();
 	}
 
 	private static void generateIndex(String path, int examplesN) {
