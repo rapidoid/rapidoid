@@ -21,6 +21,7 @@ package org.rapidoid.app;
  */
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,6 +43,7 @@ import org.rapidoid.pages.Pages;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Conf;
+import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 
 public class AppPageGeneric extends AppGUI {
@@ -109,8 +111,10 @@ public class AppPageGeneric extends AppGUI {
 		pageContent = pageContent();
 
 		Class<?>[] screens = APP_SCREENS.constructScreens(mainScreens);
-		Object[] menuItems = new Object[screens.length];
-		activeIndex = setupMenuItems(screen.getClass(), screens, menuItems);
+		List<Class<?>> scaffolding = Scan.annotated(Scaffold.class);
+
+		Object[] menuItems = new Object[screens.length + scaffolding.size()];
+		activeIndex = setupMenuItems(x.path(), screens, menuItems, scaffolding);
 
 		String theme = config("theme", null);
 
@@ -213,19 +217,54 @@ public class AppPageGeneric extends AppGUI {
 		return Apps.config(app, name, defaultValue);
 	}
 
-	protected int setupMenuItems(Class<?> screenClass, Class<?>[] screens, Object[] menuItems) {
+	protected int setupMenuItems(String currentUrl, Class<?>[] screens, Object[] menuItems, List<Class<?>> scaffolding) {
+
 		int activeIndex = -1;
 		int k = 0;
-		for (int i = 0; i < screens.length; i++) {
+		int i = 0;
+
+		for (; i < screens.length; i++) {
 			Class<?> scr = screens[i];
 			String name = Apps.screenName(scr);
-			String title = Cls.getFieldValue(scr, "title", U.camelPhrase(name));
-			menuItems[k++] = a(title).href(Apps.screenUrl(scr));
 
-			if (scr.equals(screenClass)) {
+			if (name.equalsIgnoreCase("about") || name.equalsIgnoreCase("help") || name.equalsIgnoreCase("settings")
+					|| name.equalsIgnoreCase("search") || name.equalsIgnoreCase("profile")) {
+				break;
+			}
+
+			String title = Cls.getFieldValue(scr, "title", U.camelPhrase(name));
+			String url = Apps.screenUrl(scr);
+			menuItems[k++] = a(title).href(url);
+
+			if (url.equals(currentUrl)) {
 				activeIndex = i;
 			}
 		}
+
+		for (int j = 0; j < scaffolding.size(); j++) {
+			Class<?> scaff = scaffolding.get(j);
+			String name = U.plural(scaff.getSimpleName());
+			String title = U.camelSplit(name);
+			String url = "/" + name.toLowerCase();
+			menuItems[k++] = a(title).href(url);
+
+			if (url.equals(currentUrl)) {
+				activeIndex = i + j;
+			}
+		}
+
+		for (; i < screens.length; i++) {
+			Class<?> scr = screens[i];
+			String name = Apps.screenName(scr);
+			String title = Cls.getFieldValue(scr, "title", U.camelPhrase(name));
+			String url = Apps.screenUrl(scr);
+			menuItems[k++] = a(title).href(url);
+
+			if (url.equals(currentUrl)) {
+				activeIndex = i + scaffolding.size();
+			}
+		}
+
 		return activeIndex;
 	}
 

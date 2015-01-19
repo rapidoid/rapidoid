@@ -1,7 +1,6 @@
 package org.rapidoid.demo.taskplanner.imodel;
 
 import org.rapidoid.annotation.Optional;
-import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbColumn;
 import org.rapidoid.db.DbDsl;
@@ -32,7 +31,6 @@ import org.rapidoid.util.CommonRoles;
  * #L%
  */
 
-@Scaffold
 @CanRead(CommonRoles.LOGGED_IN)
 @CanChange({ CommonRoles.OWNER })
 @CanInsert(CommonRoles.LOGGED_IN)

@@ -23,14 +23,12 @@ package org.rapidoid.demo.taskplanner.imodel;
 import java.util.Date;
 
 import org.rapidoid.annotation.Relation;
-import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbColumn;
 import org.rapidoid.db.DbDsl;
 import org.rapidoid.db.DbSet;
 import org.rapidoid.db.Entity;
 
-@Scaffold
 interface User extends Entity {
 
 	DbDsl<User> DSL = DB.dsl(User.class);
