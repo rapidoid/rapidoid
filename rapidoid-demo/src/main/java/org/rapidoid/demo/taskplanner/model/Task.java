@@ -1,5 +1,6 @@
 package org.rapidoid.demo.taskplanner.model;
 
+import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Optional;
 import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.annotation.Scaffold;
@@ -45,9 +46,11 @@ public class Task extends AbstractEntity {
 
 	public static final DbDsl<Task> DSL = DB.dsl(Task.class);
 
+	@Display
 	@CanChange({ MODERATOR, OWNER })
 	public String title;
 
+	@Display
 	@CanChange({ MODERATOR, OWNER, SHARED_WITH })
 	public Priority priority = Priority.MEDIUM;
 

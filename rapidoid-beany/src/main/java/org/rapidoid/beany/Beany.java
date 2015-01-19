@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.rapidoid.annotation.Display;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
@@ -381,14 +382,28 @@ public class Beany {
 			}
 		}
 
-		BeanProperties props = propertiesOf(bean);
+		BeanProperties props = propertiesOf(bean).annotated(Display.class);
+		boolean annotated = true;
+
+		if (props.isEmpty()) {
+
+			Prop nameProp = property(bean, "name", false);
+			if (nameProp != null && nameProp.getType() == String.class) {
+				return U.or((String) nameProp.get(bean), "");
+			}
+
+			annotated = false;
+			props = propertiesOf(bean);
+		}
+
 		StringBuilder sb = new StringBuilder();
 
 		for (Prop prop : props) {
 			String name = prop.getName();
 
-			if (!name.equalsIgnoreCase("id") && !name.equalsIgnoreCase("version")
-					&& prop.getTypeKind() != TypeKind.OBJECT && prop.getTypeKind() != TypeKind.DATE) {
+			if (annotated
+					|| (!name.equalsIgnoreCase("id") && !name.equalsIgnoreCase("version")
+							&& prop.getTypeKind() != TypeKind.OBJECT && prop.getTypeKind() != TypeKind.DATE)) {
 
 				Object value = prop.get(bean);
 				if (value != null) {

@@ -22,6 +22,7 @@ package org.rapidoid.demo.taskplanner.model;
 
 import java.util.Date;
 
+import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.db.AbstractEntity;
 import org.rapidoid.db.DB;
@@ -34,6 +35,7 @@ public class User extends AbstractEntity {
 
 	public static final DbDsl<User> DSL = DB.dsl(User.class);
 
+	@Display
 	public String username;
 
 	public String email;
