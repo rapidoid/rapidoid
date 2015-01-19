@@ -257,8 +257,7 @@ public class Pages {
 				if (cause instanceof HttpExchangeException) {
 					processView = false;
 				} else {
-					x.json();
-					return U.map("!error", "Error occured while processing command: " + cmd.name);
+					throw U.rte(e);
 				}
 			}
 		}

@@ -367,8 +367,8 @@ public class AppPageGeneric extends AppGUI {
 		} catch (Exception e) {
 			if (U.rootCause(e) instanceof HttpExchangeException) {
 				Pages.store(x, screen);
-				throw U.rte(e);
 			}
+			throw U.rte(e);
 		}
 	}
 
