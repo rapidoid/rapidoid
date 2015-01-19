@@ -168,6 +168,10 @@ public class DB {
 		return db().size();
 	}
 
+	public static void clear() {
+		db().clear();
+	}
+
 	public static boolean isActive() {
 		return db().isActive();
 	}

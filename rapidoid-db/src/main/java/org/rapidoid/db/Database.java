@@ -86,6 +86,8 @@ public interface Database extends Activity<Database> {
 
 	long size();
 
+	void clear();
+
 	void destroy();
 
 	long getIdOf(Object record);

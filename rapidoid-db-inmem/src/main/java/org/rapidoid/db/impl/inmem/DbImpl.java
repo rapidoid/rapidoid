@@ -220,6 +220,11 @@ public class DbImpl extends NamedActivity<Database> implements Database {
 	}
 
 	@Override
+	public void clear() {
+		inmem.clear();
+	}
+
+	@Override
 	public String toString() {
 		return "DB:" + name + "(" + inmem + ")";
 	}

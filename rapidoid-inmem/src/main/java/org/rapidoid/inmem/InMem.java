@@ -1152,4 +1152,18 @@ public class InMem {
 		}
 	}
 
+	public void clear() {
+		globalLock();
+		try {
+			each(new Operation<Object>() {
+				@Override
+				public void execute(Object obj) throws Exception {
+					delete(obj);
+				}
+			});
+		} finally {
+			globalUnlock();
+		}
+	}
+
 }
