@@ -20,6 +20,7 @@ package org.rapidoid.beany;
  * #L%
  */
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -95,6 +96,10 @@ public class BeanProperties implements Iterable<Prop> {
 		return selections.get(selector);
 	}
 
+	public BeanProperties annotated(Class<? extends Annotation> annotated) {
+		return select(new AnnotatedPropertyFilter(annotated));
+	}
+
 	@Override
 	public String toString() {
 		return "BeanProperties [map=" + map + ", selections=" + selections + "]";
@@ -120,6 +125,14 @@ public class BeanProperties implements Iterable<Prop> {
 		}
 
 		return new BeanProperties(properties);
+	}
+
+	public int size() {
+		return map.size();
+	}
+
+	public boolean isEmpty() {
+		return map.isEmpty();
 	}
 
 }
