@@ -1,10 +1,5 @@
 package org.rapidoid.util;
 
-import java.util.List;
-
-import org.rapidoid.test.TestCommons;
-import org.testng.annotations.Test;
-
 /*
  * #%L
  * rapidoid-utils
@@ -25,26 +20,14 @@ import org.testng.annotations.Test;
  * #L%
  */
 
-@MyAnnot
-class Foo {
-}
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 
-public class ClasspathScanTest extends TestCommons {
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testClasspathScanByName() {
-		List<Class<?>> classes = Scan.classpathClasses(null, ".*Test", null, null, null);
-
-		eq(U.set(classes), U.set(ClasspathScanTest.class, DatesTest.class, AppCtxTest.class));
-	}
-
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testClasspathScanByAnnotation() {
-		List<Class<?>> classes = Scan.annotated(MyAnnot.class);
-
-		eq(U.set(classes), U.set(Foo.class, Bar.class));
-	}
+@Target({ TYPE })
+@Retention(RUNTIME)
+public @interface MyAnnot {
 
 }

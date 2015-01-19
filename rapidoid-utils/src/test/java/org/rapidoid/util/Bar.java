@@ -1,10 +1,5 @@
 package org.rapidoid.util;
 
-import java.util.List;
-
-import org.rapidoid.test.TestCommons;
-import org.testng.annotations.Test;
-
 /*
  * #%L
  * rapidoid-utils
@@ -26,25 +21,5 @@ import org.testng.annotations.Test;
  */
 
 @MyAnnot
-class Foo {
-}
-
-public class ClasspathScanTest extends TestCommons {
-
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testClasspathScanByName() {
-		List<Class<?>> classes = Scan.classpathClasses(null, ".*Test", null, null, null);
-
-		eq(U.set(classes), U.set(ClasspathScanTest.class, DatesTest.class, AppCtxTest.class));
-	}
-
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testClasspathScanByAnnotation() {
-		List<Class<?>> classes = Scan.annotated(MyAnnot.class);
-
-		eq(U.set(classes), U.set(Foo.class, Bar.class));
-	}
-
+class Bar {
 }

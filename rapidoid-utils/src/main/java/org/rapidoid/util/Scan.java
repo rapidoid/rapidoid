@@ -2,6 +2,7 @@ package org.rapidoid.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -74,8 +75,12 @@ public class Scan {
 	}
 
 	public static List<Class<?>> classpathClasses(String packageName, String nameRegex, Predicate<Class<?>> filter,
-			ClassLoader classLoader) {
-		Pattern regex = Pattern.compile(nameRegex);
+			Class<? extends Annotation> annotated, ClassLoader classLoader) {
+
+		packageName = U.or(packageName, "");
+
+		Pattern regex = nameRegex != null ? Pattern.compile(nameRegex) : null;
+
 		ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
 		Enumeration<URL> urls = resources(packageName);
 
@@ -92,15 +97,19 @@ public class Scan {
 			U.must(root.exists());
 			U.must(root.isDirectory());
 
-			getClasses(classes, root, file, regex, filter, classLoader);
+			getClasses(classes, root, file, regex, filter, annotated, classLoader);
 		}
 
 		return classes;
 	}
 
+	public static List<Class<?>> annotated(Class<? extends Annotation> annotated) {
+		return classpathClasses(null, null, null, annotated, null);
+	}
+
 	public static List<Class<?>> classpathClassesByName(String simpleName, Predicate<Class<?>> filter,
 			ClassLoader classLoader) {
-		List<Class<?>> classes = classpathClasses("*", ".*\\." + simpleName, filter, classLoader);
+		List<Class<?>> classes = classpathClasses("*", ".*\\." + simpleName, filter, null, classLoader);
 
 		if (classes.isEmpty()) {
 			Log.warn("No classes found on classpath with the specified simple name", "name", simpleName);
@@ -111,7 +120,7 @@ public class Scan {
 
 	public static List<Class<?>> classpathClassesBySuffix(String nameSuffix, Predicate<Class<?>> filter,
 			ClassLoader classLoader) {
-		List<Class<?>> classes = classpathClasses("*", ".+\\w" + nameSuffix, filter, classLoader);
+		List<Class<?>> classes = classpathClasses("*", ".+\\w" + nameSuffix, filter, null, classLoader);
 
 		if (classes.isEmpty()) {
 			Log.warn("No classes found on classpath with the specified suffix", "suffix", nameSuffix);
@@ -159,14 +168,14 @@ public class Scan {
 		}
 	}
 
-	private static void getClasses(Collection<Class<?>> classes, File root, File parent, Pattern nameRegex,
-			Predicate<Class<?>> filter, ClassLoader classLoader) {
+	private static void getClasses(Collection<Class<?>> classes, File root, File parent, Pattern regex,
+			Predicate<Class<?>> filter, Class<? extends Annotation> annotated, ClassLoader classLoader) {
 
 		if (parent.isDirectory()) {
 			Log.debug("scanning directory", "dir", parent);
 			for (File f : parent.listFiles()) {
 				if (f.isDirectory()) {
-					getClasses(classes, root, f, nameRegex, filter, classLoader);
+					getClasses(classes, root, f, regex, filter, annotated, classLoader);
 				} else {
 					Log.debug("scanned file", "file", f);
 					if (f.getName().endsWith(".class")) {
@@ -177,15 +186,17 @@ public class Scan {
 						clsName = clsName.substring(rootPath.length() + 1, clsName.length() - 6);
 						clsName = clsName.replace(File.separatorChar, '.');
 
-						if (nameRegex.matcher(clsName).matches()) {
+						if (regex == null || regex.matcher(clsName).matches()) {
 							try {
 								Log.debug("loading class", "name", clsName);
 
 								Class<?> cls = classLoader != null ? Class.forName(clsName, true, classLoader) : Class
 										.forName(clsName);
 
-								if (filter == null || filter.eval(cls)) {
-									classes.add(cls);
+								if (annotated == null || cls.getAnnotation(annotated) != null) {
+									if (filter == null || filter.eval(cls)) {
+										classes.add(cls);
+									}
 								}
 							} catch (Exception e) {
 								throw U.rte(e);
