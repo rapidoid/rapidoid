@@ -152,7 +152,7 @@ public class JacksonEntitySerializer implements EntitySerializer {
 	public <T> void parse(byte[] bytes, T destination) {
 		try {
 			Map<String, Object> map = mapper.readValue(bytes, Map.class);
-			Beany.update(map, destination);
+			Beany.update(destination, map, false);
 		} catch (Exception e) {
 			Log.error("Cannot parse JSON!", e);
 			throw new RuntimeException(e);

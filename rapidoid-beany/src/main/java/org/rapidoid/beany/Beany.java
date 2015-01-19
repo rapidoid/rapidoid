@@ -267,7 +267,7 @@ public class Beany {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static void update(Map<String, Object> src, Object destBean) {
+	public static void update(Object destBean, Map<String, Object> src, boolean ignoreNullValues) {
 		if (destBean instanceof Map) {
 			((Map<String, Object>) destBean).putAll(src);
 			return;
@@ -276,12 +276,14 @@ public class Beany {
 		for (Prop prop : propertiesOf(destBean)) {
 			Object value = src.get(prop.getName());
 
-			Object propValue = prop.get(destBean);
-			if (propValue != null && propValue instanceof SerializableBean) {
-				SerializableBean<Object> ser = (SerializableBean<Object>) propValue;
-				ser.deserializeBean(value);
-			} else {
-				prop.set(destBean, value);
+			if (value != null || !ignoreNullValues) {
+				Object propValue = prop.get(destBean);
+				if (propValue != null && propValue instanceof SerializableBean) {
+					SerializableBean<Object> ser = (SerializableBean<Object>) propValue;
+					ser.deserializeBean(value);
+				} else {
+					prop.set(destBean, value);
+				}
 			}
 		}
 	}
