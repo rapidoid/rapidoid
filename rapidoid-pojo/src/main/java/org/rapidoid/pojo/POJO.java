@@ -32,7 +32,7 @@ public class POJO {
 	public static final String SERVICE_SUFFIX = "Service";
 
 	public static List<Class<?>> scanServices() {
-		return Scan.classpathClassesBySuffix(SERVICE_SUFFIX, null, null);
+		return Scan.bySuffix(SERVICE_SUFFIX, null, null);
 	}
 
 	public static PojoDispatcher dispatcher(Class<?>... serviceClasses) {

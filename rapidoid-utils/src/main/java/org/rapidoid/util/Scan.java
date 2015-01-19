@@ -47,7 +47,7 @@ public class Scan {
 		}
 	}
 
-	public static Object addon(String addonName) {
+	private static Object addon(String addonName) {
 		U.must(addonName.matches("\\w+"), "Invalid add-on name, must be alphanumeric!");
 
 		String addonClassName = "org.rapidoid.addon." + U.capitalized(addonName) + "Addon";
@@ -74,7 +74,7 @@ public class Scan {
 		return null;
 	}
 
-	public static List<Class<?>> classpathClasses(String packageName, String nameRegex, Predicate<Class<?>> filter,
+	public static List<Class<?>> classes(String packageName, String nameRegex, Predicate<Class<?>> filter,
 			Class<? extends Annotation> annotated, ClassLoader classLoader) {
 
 		packageName = U.or(packageName, "");
@@ -104,12 +104,15 @@ public class Scan {
 	}
 
 	public static List<Class<?>> annotated(Class<? extends Annotation> annotated) {
-		return classpathClasses(null, null, null, annotated, null);
+		return classes(null, null, null, annotated, null);
 	}
 
-	public static List<Class<?>> classpathClassesByName(String simpleName, Predicate<Class<?>> filter,
-			ClassLoader classLoader) {
-		List<Class<?>> classes = classpathClasses("*", ".*\\." + simpleName, filter, null, classLoader);
+	public static List<Class<?>> pkg(String packageName) {
+		return classes(packageName, null, null, null, null);
+	}
+
+	public static List<Class<?>> byName(String simpleName, Predicate<Class<?>> filter, ClassLoader classLoader) {
+		List<Class<?>> classes = classes("*", ".*\\." + simpleName, filter, null, classLoader);
 
 		if (classes.isEmpty()) {
 			Log.warn("No classes found on classpath with the specified simple name", "name", simpleName);
@@ -118,9 +121,8 @@ public class Scan {
 		return classes;
 	}
 
-	public static List<Class<?>> classpathClassesBySuffix(String nameSuffix, Predicate<Class<?>> filter,
-			ClassLoader classLoader) {
-		List<Class<?>> classes = classpathClasses("*", ".+\\w" + nameSuffix, filter, null, classLoader);
+	public static List<Class<?>> bySuffix(String nameSuffix, Predicate<Class<?>> filter, ClassLoader classLoader) {
+		List<Class<?>> classes = classes("*", ".+\\w" + nameSuffix, filter, null, classLoader);
 
 		if (classes.isEmpty()) {
 			Log.warn("No classes found on classpath with the specified suffix", "suffix", nameSuffix);
@@ -129,15 +131,15 @@ public class Scan {
 		return classes;
 	}
 
-	public static List<File> classpath(String packageName, Predicate<File> filter) {
+	public static List<File> files(String packageName, Predicate<File> filter) {
 		ArrayList<File> files = new ArrayList<File>();
 
-		classpath(packageName, files, filter);
+		files(packageName, files, filter);
 
 		return files;
 	}
 
-	public static void classpath(String packageName, Collection<File> files, Predicate<File> filter) {
+	public static void files(String packageName, Collection<File> files, Predicate<File> filter) {
 		Enumeration<URL> urls = resources(packageName);
 
 		while (urls.hasMoreElements()) {

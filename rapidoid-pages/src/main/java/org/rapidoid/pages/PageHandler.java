@@ -32,7 +32,7 @@ public class PageHandler implements Handler {
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
 
-		Map<String, Class<?>> pages = Cls.classMap(Scan.classpathClassesBySuffix("Page", null, null));
+		Map<String, Class<?>> pages = Cls.classMap(Scan.bySuffix("Page", null, null));
 
 		Object result = Pages.dispatch(x, null, pages);
 

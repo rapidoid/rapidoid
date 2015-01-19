@@ -87,10 +87,10 @@ public class Apps {
 
 		if (APP_CLASSES == null) {
 
-			Map<String, Class<?>> services = Cls.classMap(Scan.classpathClassesBySuffix("Service", null, classLoader));
-			Map<String, Class<?>> pages = Cls.classMap(Scan.classpathClassesBySuffix("Page", null, classLoader));
-			Map<String, Class<?>> apps = Cls.classMap(Scan.classpathClassesByName("App", null, classLoader));
-			Map<String, Class<?>> screens = Cls.classMap(Scan.classpathClassesBySuffix("Screen", null, classLoader));
+			Map<String, Class<?>> services = Cls.classMap(Scan.bySuffix("Service", null, classLoader));
+			Map<String, Class<?>> pages = Cls.classMap(Scan.bySuffix("Page", null, classLoader));
+			Map<String, Class<?>> apps = Cls.classMap(Scan.byName("App", null, classLoader));
+			Map<String, Class<?>> screens = Cls.classMap(Scan.bySuffix("Screen", null, classLoader));
 
 			final Class<?> appClass = !apps.isEmpty() ? apps.get("App") : TheDefaultApp.class;
 

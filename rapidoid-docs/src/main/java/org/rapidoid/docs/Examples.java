@@ -49,7 +49,7 @@ public class Examples {
 
 		int exampleN = 1;
 		while (true) {
-			List<Class<?>> classes = Scan.classpathClasses("org.rapidoid.docs.eg" + exampleN, ".*", null, null, null);
+			List<Class<?>> classes = Scan.pkg("org.rapidoid.docs.eg" + exampleN);
 			if (classes.isEmpty()) {
 				break;
 			}
