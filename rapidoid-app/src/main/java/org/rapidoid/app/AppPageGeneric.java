@@ -201,7 +201,11 @@ public class AppPageGeneric extends AppGUI {
 		if (cnt != null) {
 			return cnt;
 		} else {
-			throw x.notFound();
+			if (screen != null && screen != app) {
+				return "No content available!";
+			} else {
+				throw x.notFound();
+			}
 		}
 	}
 
