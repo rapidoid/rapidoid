@@ -342,9 +342,11 @@ public class AppPageGeneric extends AppGUI {
 		ATag debug = a_awesome("bug", " ", caret());
 
 		ATag userInfo = a_awesome("bug", "User info").href("/debuguserinfo");
+		ATag delAll = a_awesome("bug", "Delete All Data").href("/deletealldata");
 
 		return navbarDropdown(false, debug, debugLoginUrl("admin"), debugLoginUrl("manager"),
-				debugLoginUrl("moderator"), debugLoginUrl("foo"), debugLoginUrl("bar"), menuDivider(), userInfo);
+				debugLoginUrl("moderator"), debugLoginUrl("foo"), debugLoginUrl("bar"), menuDivider(), userInfo,
+				menuDivider(), delAll);
 	}
 
 	protected ATag debugLoginUrl(String username) {
