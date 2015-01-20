@@ -24,18 +24,21 @@ import java.util.Arrays;
 
 public class Cmd {
 
-	public String name;
+	public final String name;
 
-	public Object[] args;
+	public final Object[] args;
 
-	public Cmd(String cmd, Object... args) {
+	public final boolean navigational;
+
+	public Cmd(String cmd, boolean navigational, Object[] args) {
 		this.name = cmd;
+		this.navigational = navigational;
 		this.args = args;
 	}
 
 	@Override
 	public String toString() {
-		return "Cmd [cmd=" + name + ", args=" + Arrays.toString(args) + "]";
+		return "Cmd [name=" + name + ", args=" + Arrays.toString(args) + ", navigational=" + navigational + "]";
 	}
 
 }

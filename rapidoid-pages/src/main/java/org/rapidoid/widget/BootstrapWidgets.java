@@ -77,9 +77,9 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static final ButtonTag OK = cmd("^OK");
 
-	public static final ButtonTag CANCEL = cmd("Cancel");
+	public static final ButtonTag CANCEL = navigate("Cancel");
 
-	public static final ButtonTag BACK = cmd("Back");
+	public static final ButtonTag BACK = navigate("Back");
 
 	public static final ButtonTag EDIT = cmd("^Edit");
 
@@ -334,7 +334,7 @@ public abstract class BootstrapWidgets extends HTML {
 
 		String caption = U.capitalized(cmd);
 
-		ButtonTag btn = primary ? btnPrimary(caption) : btn();
+		ButtonTag btn;
 		if (primary) {
 			btn = btnPrimary(caption);
 		} else if (danger) {
@@ -346,6 +346,12 @@ public abstract class BootstrapWidgets extends HTML {
 		}
 
 		return btn.cmd(cmd, args);
+	}
+
+	public static ButtonTag navigate(String cmd) {
+		String caption = U.capitalized(cmd);
+		ButtonTag btn = btn(caption);
+		return btn.navigate(cmd);
 	}
 
 	public static ButtonTag[] cmds(String... commands) {

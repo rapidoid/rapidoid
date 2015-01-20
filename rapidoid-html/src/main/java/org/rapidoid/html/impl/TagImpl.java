@@ -221,7 +221,17 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 		Tag _copy = copy();
 		TagImpl impl = impl(_copy);
 
-		impl.cmd = cmd != null ? new Cmd(cmd, args) : null;
+		impl.cmd = cmd != null ? new Cmd(cmd, false, args) : null;
+
+		return _copy;
+	}
+
+	@Override
+	public Tag navigate(String cmd, Object... args) {
+		Tag _copy = copy();
+		TagImpl impl = impl(_copy);
+
+		impl.cmd = cmd != null ? new Cmd(cmd, true, args) : null;
 
 		return _copy;
 	}

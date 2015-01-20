@@ -408,7 +408,7 @@ public class AppPageGeneric extends AppGUI {
 
 	public void on(String cmd, Object[] args) {
 		try {
-			Pages.callCmdHandler(x, screen, new Cmd(cmd, args));
+			Pages.callCmdHandler(x, screen, new Cmd(cmd, false, args));
 		} catch (Exception e) {
 			if (U.rootCause(e) instanceof HttpExchangeException) {
 				Pages.store(x, screen);

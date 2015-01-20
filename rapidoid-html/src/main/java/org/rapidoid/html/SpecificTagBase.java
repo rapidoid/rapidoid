@@ -42,4 +42,6 @@ public interface SpecificTagBase<TAG> {
 
 	TAG cmd(String cmd, Object... args);
 
+	TAG navigate(String cmd, Object... args);
+
 }
