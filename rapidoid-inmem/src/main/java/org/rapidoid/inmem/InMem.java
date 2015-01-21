@@ -41,27 +41,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Relation;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertyFilter;
-import org.rapidoid.beany.PropertySelector;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
+import org.rapidoid.security.Secure;
 import org.rapidoid.util.SuccessException;
 import org.rapidoid.util.Tuple;
 import org.rapidoid.util.U;
@@ -108,54 +102,18 @@ public class InMem {
 		}
 	};
 
-	private final long startedAt = System.currentTimeMillis();
+	private final InMemData data;
 
-	private final String filename;
+	private final String asUsername;
 
-	private final EntitySerializer serializer;
+	private Thread persistor;
 
-	private final EntityConstructor constructor;
-
-	private final PropertySelector relPropSelector;
-
-	private final ConcurrentMap<Tuple, RelPair> relPairs = new ConcurrentHashMap<Tuple, RelPair>();
-
-	private final AtomicLong ids = new AtomicLong();
-
-	private final AtomicLong lastChangedOn = new AtomicLong();
-
-	private final AtomicLong lastPersistedOn = new AtomicLong();
-
-	private final AtomicBoolean active = new AtomicBoolean(true);
-
-	private final AtomicBoolean aOrB = new AtomicBoolean(true);
-
-	private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
-
-	private final Thread persistor;
-
-	private final AtomicBoolean insideTx = new AtomicBoolean(false);
-
-	private final ConcurrentNavigableMap<Long, Rec> txChanges = new ConcurrentSkipListMap<Long, Rec>();
-
-	private final ConcurrentNavigableMap<Long, Object> txInsertions = new ConcurrentSkipListMap<Long, Object>();
-
-	private final ConcurrentLinkedQueue<Callback<Void>> txCallbacks = new ConcurrentLinkedQueue<Callback<Void>>();
-
-	private final AtomicLong txIdCounter = new AtomicLong();
-
-	private ConcurrentNavigableMap<Long, Rec> prevData = new ConcurrentSkipListMap<Long, Rec>();
-
-	private ConcurrentNavigableMap<Long, Rec> data = new ConcurrentSkipListMap<Long, Rec>();
+	private final boolean sudo;
 
 	public InMem(String filename, EntitySerializer serializer, EntityConstructor constructor,
-			final Set<Class<?>> relClasses) {
+			final Set<Class<?>> relClasses, String asUsername) {
 
-		this.filename = filename;
-		this.serializer = serializer;
-		this.constructor = constructor;
-
-		this.relPropSelector = new PropertyFilter() {
+		this(new InMemData(filename, serializer, constructor, new PropertyFilter() {
 			@Override
 			public boolean eval(Prop prop) throws Exception {
 				for (Class<?> relCls : relClasses) {
@@ -165,22 +123,30 @@ public class InMem {
 				}
 				return false;
 			}
-		};
+		}), asUsername, null, false);
 
-		if (filename != null && !filename.isEmpty()) {
-			persistor = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					persist();
-				}
-			});
-		} else {
-			persistor = null;
-		}
+		// TODO separate persistor thread into a new class
+		this.persistor = (filename != null && !filename.isEmpty()) ? new Thread(new Runnable() {
+			@Override
+			public void run() {
+				persist();
+			}
+		}) : null;
+	}
+
+	private InMem(InMemData data, String asUsername, Thread persistor, boolean sudo) {
+		this.data = data;
+		this.asUsername = asUsername;
+		this.persistor = persistor;
+		this.sudo = sudo;
+	}
+
+	protected String username() {
+		return asUsername != null ? asUsername : Secure.username();
 	}
 
 	public void initAndLoad() {
-		if (filename != null && !filename.isEmpty()) {
+		if (data.filename != null && !data.filename.isEmpty()) {
 			if (currentFile().exists() && otherFile().exists()) {
 				resolveDoubleFileInconsistency();
 			}
@@ -218,10 +184,10 @@ public class InMem {
 		try {
 			if (currentFile().exists()) {
 				loadFrom(new FileInputStream(currentFile()));
-				aOrB.set(false);
+				data.aOrB.set(false);
 			} else if (otherFile().exists()) {
 				loadFrom(new FileInputStream(otherFile()));
-				aOrB.set(true);
+				data.aOrB.set(true);
 			}
 		} catch (FileNotFoundException e) {
 			throw new IllegalStateException(e);
@@ -231,22 +197,22 @@ public class InMem {
 	public long insert(Object record) {
 		sharedLock();
 		try {
-			long id = ids.incrementAndGet();
+			long id = data.ids.incrementAndGet();
 			Beany.setId(record, id);
 
-			if (insideTx.get()) {
-				if (txInsertions.putIfAbsent(id, INSERTION) != null) {
+			if (data.insideTx.get()) {
+				if (data.txInsertions.putIfAbsent(id, INSERTION) != null) {
 					throw new IllegalStateException("Cannot insert changelog record with existing ID: " + id);
 				}
 			}
 
-			if (data.putIfAbsent(id, rec(record)) != null) {
+			if (data.data.putIfAbsent(id, rec(record)) != null) {
 				throw new IllegalStateException("Cannot insert record with existing ID: " + id);
 			}
 
 			updateChangesFromRels(record);
 
-			lastChangedOn.set(System.currentTimeMillis());
+			data.lastChangedOn.set(System.currentTimeMillis());
 			return id;
 		} finally {
 			sharedUnlock();
@@ -254,7 +220,7 @@ public class InMem {
 	}
 
 	private void updateChangesFromRels(Object entity) {
-		for (Prop prop : Beany.propertiesOf(entity).select(relPropSelector)) {
+		for (Prop prop : Beany.propertiesOf(entity).select(data.relPropSelector)) {
 			Object value = prop.get(entity);
 
 			if (hasEntityLinks(value)) {
@@ -267,7 +233,7 @@ public class InMem {
 	}
 
 	private void deleteRelsFor(Object entity) {
-		for (Prop prop : Beany.propertiesOf(entity).select(relPropSelector)) {
+		for (Prop prop : Beany.propertiesOf(entity).select(data.relPropSelector)) {
 			Object value = prop.get(entity);
 
 			if (hasEntityLinks(value)) {
@@ -327,7 +293,7 @@ public class InMem {
 		Class<?> destType = inverse ? entCls : cls;
 
 		Tuple key = new Tuple(rel, srcType, destType);
-		RelPair relPair = relPairs.get(key);
+		RelPair relPair = data.relPairs.get(key);
 
 		Prop srcProp, destProp;
 
@@ -341,7 +307,7 @@ public class InMem {
 			destProp = inverse ? prop : p;
 
 			relPair = new RelPair(rel, srcType, destType, srcProp, destProp);
-			relPairs.putIfAbsent(key, relPair);
+			data.relPairs.putIfAbsent(key, relPair);
 
 			if (srcType == null || srcProp == null || destType == null || destProp == null) {
 				Log.warn("Incomplete relation pair!", "relation", relPair);
@@ -360,9 +326,9 @@ public class InMem {
 	}
 
 	private Prop findRelProperty(Class<?> fromCls, String rel, Class<?> toCls) {
-		Object entity = !fromCls.isInterface() ? constructor.create(fromCls) : null;
+		Object entity = !fromCls.isInterface() ? data.constructor.create(fromCls) : null;
 
-		for (Prop prop : Beany.propertiesOf(fromCls).select(relPropSelector)) {
+		for (Prop prop : Beany.propertiesOf(fromCls).select(data.relPropSelector)) {
 
 			String relName = null;
 
@@ -413,16 +379,16 @@ public class InMem {
 		try {
 			validateId(id);
 
-			Rec removed = data.remove(id);
+			Rec removed = data.data.remove(id);
 
-			if (insideTx.get()) {
-				txChanges.putIfAbsent(id, removed);
+			if (data.insideTx.get()) {
+				data.txChanges.putIfAbsent(id, removed);
 			}
 
 			Object entity = obj(removed);
 			deleteRelsFor(entity);
 
-			lastChangedOn.set(System.currentTimeMillis());
+			data.lastChangedOn.set(System.currentTimeMillis());
 
 		} finally {
 			sharedUnlock();
@@ -436,7 +402,7 @@ public class InMem {
 	public <E> E get(long id) {
 		sharedLock();
 		try {
-			return get_(id, true);
+			return getIfAllowed(id, true);
 		} finally {
 			sharedUnlock();
 		}
@@ -445,7 +411,7 @@ public class InMem {
 	public <E> E getIfExists(long id) {
 		sharedLock();
 		try {
-			return get_(id, false);
+			return getIfAllowed(id, false);
 		} finally {
 			sharedUnlock();
 		}
@@ -455,7 +421,7 @@ public class InMem {
 		if (validateId) {
 			validateId(id);
 		}
-		Rec rec = data.get(id);
+		Rec rec = data.data.get(id);
 
 		if (rec != null) {
 			E record = obj(rec);
@@ -470,7 +436,7 @@ public class InMem {
 		sharedLock();
 		try {
 			validateId(id);
-			return get_(id, clazz);
+			return getIfAllowed(id, clazz);
 		} finally {
 			sharedUnlock();
 		}
@@ -490,7 +456,7 @@ public class InMem {
 	}
 
 	private Rec getRec(long id) {
-		Rec rec = data.get(id);
+		Rec rec = data.data.get(id);
 		if (rec == null) {
 			throw invalidId(id);
 		}
@@ -511,10 +477,10 @@ public class InMem {
 
 		Beany.setId(record, id);
 
-		Rec removed = data.replace(id, rec(record));
+		Rec removed = data.data.replace(id, rec(record));
 
-		if (insideTx.get()) {
-			txChanges.putIfAbsent(id, removed);
+		if (data.insideTx.get()) {
+			data.txChanges.putIfAbsent(id, removed);
 		}
 
 		if (removed == null) {
@@ -525,7 +491,7 @@ public class InMem {
 			updateChangesFromRels(record);
 		}
 
-		lastChangedOn.set(System.currentTimeMillis());
+		data.lastChangedOn.set(System.currentTimeMillis());
 	}
 
 	public void update(Object record) {
@@ -556,7 +522,7 @@ public class InMem {
 		sharedLock();
 		try {
 			validateId(id);
-			Map<String, Object> map = get_(id, Map.class);
+			Map<String, Object> map = getIfAllowed(id, Map.class);
 			return (T) (map != null ? map.get(column) : null);
 		} finally {
 			sharedUnlock();
@@ -587,7 +553,7 @@ public class InMem {
 		try {
 
 			for (long id : ids) {
-				results.add((E) get_(id, true));
+				results.add((E) getIfAllowed(id, true));
 			}
 
 			return results;
@@ -604,7 +570,7 @@ public class InMem {
 		try {
 
 			for (long id : ids) {
-				results.add((E) get_(id, true));
+				results.add((E) getIfAllowed(id, true));
 			}
 
 			return results;
@@ -619,7 +585,7 @@ public class InMem {
 		each(new Operation<E>() {
 			@Override
 			public void execute(E record) throws Exception {
-				if (match.eval(record)) {
+				if (canRead(record) && match.eval(record)) {
 					results.add(record);
 				}
 			}
@@ -628,21 +594,33 @@ public class InMem {
 		return results;
 	}
 
+	private boolean canRead(Object record) {
+		return sudo || Secure.hasRoleBasedObjectAccess(username(), record)
+				&& Secure.getObjectPermissions(username(), record).read;
+	}
+
+	private <E> E getIfAllowed(long id, boolean validateId) {
+		E record = get_(id, validateId);
+		U.secure(record == null || canRead(record), "Access denied to the record!");
+		return record;
+	}
+
+	private <E> E getIfAllowed(long id, Class<E> type) {
+		E record = get_(id, type);
+		U.secure(record == null || canRead(record), "Access denied to the record!");
+		return record;
+	}
+
 	public <E> List<E> find(final Class<E> clazz, final Predicate<E> match, final Comparator<E> orderBy) {
-		final List<E> results = new ArrayList<E>();
 
-		each(new Operation<E>() {
+		Predicate<E> match2 = new Predicate<E>() {
 			@Override
-			public void execute(E record) throws Exception {
-				if (clazz.isAssignableFrom(record.getClass())) {
-					if (match == null || match.eval(record)) {
-						results.add(record);
-					}
-				}
+			public boolean eval(E record) throws Exception {
+				return clazz.isAssignableFrom(record.getClass()) && (match == null || match.eval(record));
 			}
-		});
+		};
 
-		return sorted(results, orderBy);
+		return find(match2);
 	}
 
 	public <E> List<E> find(String searchPhrase) {
@@ -681,7 +659,7 @@ public class InMem {
 		return find(match);
 	}
 
-	public boolean matches(Object record, String query, Object... args) {
+	public static boolean matches(Object record, String query, Object... args) {
 
 		if (query == null || query.isEmpty()) {
 			return true;
@@ -700,16 +678,18 @@ public class InMem {
 		sharedLock();
 		try {
 
-			for (Entry<Long, Rec> entry : data.entrySet()) {
+			for (Entry<Long, Rec> entry : data.data.entrySet()) {
 				E record = obj(entry.getValue());
 				Beany.setId(record, entry.getKey());
 
-				try {
-					lambda.execute(record);
-				} catch (ClassCastException e) {
-					// ignore, cast exceptions are expected
-				} catch (Exception e) {
-					throw new RuntimeException(e);
+				if (canRead(record)) {
+					try {
+						lambda.execute(record);
+					} catch (ClassCastException e) {
+						// ignore, cast exceptions are expected
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
 				}
 			}
 		} finally {
@@ -762,11 +742,11 @@ public class InMem {
 	public void transaction(Runnable transaction, boolean readOnly, Callback<Void> txCallback) {
 		globalLock();
 
-		txIdCounter.set(ids.get());
-		txChanges.clear();
-		txInsertions.clear();
+		data.txIdCounter.set(data.ids.get());
+		data.txChanges.clear();
+		data.txInsertions.clear();
 
-		insideTx.set(true);
+		data.insideTx.set(true);
 
 		boolean success = false;
 		try {
@@ -786,12 +766,12 @@ public class InMem {
 			}
 
 		} finally {
-			txChanges.clear();
-			txInsertions.clear();
-			insideTx.set(false);
+			data.txChanges.clear();
+			data.txInsertions.clear();
+			data.insideTx.set(false);
 
 			if (success && txCallback != null) {
-				txCallbacks.add(txCallback);
+				data.txCallbacks.add(txCallback);
 			}
 
 			globalUnlock();
@@ -799,29 +779,29 @@ public class InMem {
 	}
 
 	private void txRollback() {
-		ids.set(txIdCounter.get());
+		data.ids.set(data.txIdCounter.get());
 
-		for (Entry<Long, Rec> e : txChanges.entrySet()) {
+		for (Entry<Long, Rec> e : data.txChanges.entrySet()) {
 			Long id = e.getKey();
 			Rec value = e.getValue();
 			U.must(value != null, "Cannot have null value!");
-			data.put(id, value);
+			data.data.put(id, value);
 		}
 
-		for (Entry<Long, Object> e : txInsertions.entrySet()) {
+		for (Entry<Long, Object> e : data.txInsertions.entrySet()) {
 			// rollback insert operation
 			Long id = e.getKey();
 			Object value = e.getValue();
 			U.must(value == INSERTION, "Expected insertion mode!");
 
-			Rec inserted = data.remove(id);
+			Rec inserted = data.data.remove(id);
 			U.must(inserted != null, "Cannot have null insertion!");
 		}
 	}
 
 	private <T> T get_(long id, Class<T> clazz) {
 		validateId(id);
-		Rec rec = data.get(id);
+		Rec rec = data.data.get(id);
 		if (rec != null) {
 			T record = obj(rec, clazz);
 			Beany.setId(record, id);
@@ -832,23 +812,23 @@ public class InMem {
 	}
 
 	private void sharedLock() {
-		lock.readLock().lock();
+		data.lock.readLock().lock();
 	}
 
 	private void sharedUnlock() {
-		lock.readLock().unlock();
+		data.lock.readLock().unlock();
 	}
 
 	private void globalLock() {
-		lock.writeLock().lock();
+		data.lock.writeLock().lock();
 	}
 
 	private void globalUnlock() {
-		lock.writeLock().unlock();
+		data.lock.writeLock().unlock();
 	}
 
 	private void validateId(long id) {
-		if (!data.containsKey(id)) {
+		if (!data.data.containsKey(id)) {
 			throw invalidId(id);
 		}
 	}
@@ -863,9 +843,9 @@ public class InMem {
 		try {
 			PrintWriter out = new PrintWriter(output);
 
-			out.println(new String(serializer.serialize(metadata())));
+			out.println(new String(data.serializer.serialize(metadata())));
 
-			for (Entry<Long, Rec> entry : data.entrySet()) {
+			for (Entry<Long, Rec> entry : data.data.entrySet()) {
 				out.println(new String(entry.getValue().bytes));
 			}
 
@@ -885,7 +865,7 @@ public class InMem {
 			U.must(line != null, "Missing meta-data at the first line in the database file!");
 
 			Map<String, Object> meta = U.map();
-			serializer.deserialize(line.getBytes(), meta);
+			data.serializer.deserialize(line.getBytes(), meta);
 
 			reader.close();
 
@@ -902,7 +882,7 @@ public class InMem {
 		globalLock();
 
 		try {
-			data.clear();
+			data.data.clear();
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
@@ -912,14 +892,14 @@ public class InMem {
 			U.must(line != null, "Missing meta-data at the first line in the database file!");
 
 			Map<String, Object> meta = U.map();
-			serializer.deserialize(bytes, meta);
+			data.serializer.deserialize(bytes, meta);
 
 			Log.info("Database meta-data", META_TIMESTAMP, meta.get(META_TIMESTAMP), META_UPTIME, meta.get(META_UPTIME));
 
 			while ((line = reader.readLine()) != null) {
 				bytes = line.getBytes();
 				Map<String, Object> map = U.map();
-				serializer.deserialize(bytes, map);
+				data.serializer.deserialize(bytes, map);
 
 				Number idNum = (Number) map.get("id");
 				U.must(idNum != null, "Found DB record without ID: %s", line);
@@ -933,14 +913,14 @@ public class InMem {
 					type = null;
 				}
 
-				data.put(id, new Rec(type, bytes));
+				data.data.put(id, new Rec(type, bytes));
 
-				if (id > ids.get()) {
-					ids.set(id);
+				if (id > data.ids.get()) {
+					data.ids.set(id);
 				}
 			}
 
-			prevData = new ConcurrentSkipListMap<Long, Rec>(data);
+			data.prevData = new ConcurrentSkipListMap<Long, Rec>(data.data);
 
 			reader.close();
 
@@ -952,9 +932,9 @@ public class InMem {
 	}
 
 	private void persistTo(RandomAccessFile file) throws IOException {
-		file.write(serializer.serialize(metadata()));
+		file.write(data.serializer.serialize(metadata()));
 		file.write(CR_LF);
-		for (Entry<Long, Rec> entry : data.entrySet()) {
+		for (Entry<Long, Rec> entry : data.data.entrySet()) {
 			file.write(entry.getValue().bytes);
 			file.write(CR_LF);
 		}
@@ -966,7 +946,7 @@ public class InMem {
 		long now = System.currentTimeMillis();
 
 		meta.put(META_TIMESTAMP, now);
-		meta.put(META_UPTIME, now - startedAt);
+		meta.put(META_UPTIME, now - data.startedAt);
 
 		return meta;
 	}
@@ -979,25 +959,25 @@ public class InMem {
 		Callback<Void>[] callbacks;
 
 		try {
-			if (data.isEmpty() && txCallbacks.isEmpty()) {
+			if (data.data.isEmpty() && data.txCallbacks.isEmpty()) {
 				return;
 			}
 
-			copy = new ConcurrentSkipListMap<Long, Rec>(data);
+			copy = new ConcurrentSkipListMap<Long, Rec>(data.data);
 
-			callbacks = txCallbacks.toArray(new Callback[txCallbacks.size()]);
-			txCallbacks.clear();
+			callbacks = data.txCallbacks.toArray(new Callback[data.txCallbacks.size()]);
+			data.txCallbacks.clear();
 
 		} finally {
 			globalUnlock();
 		}
 
-		if (lastChangedOn.get() < lastPersistedOn.get()) {
+		if (data.lastChangedOn.get() < data.lastPersistedOn.get()) {
 			invokeCallbacks(callbacks, null);
 			return;
 		}
 
-		lastPersistedOn.set(System.currentTimeMillis());
+		data.lastPersistedOn.set(System.currentTimeMillis());
 
 		try {
 			File file = currentFile();
@@ -1012,9 +992,9 @@ public class InMem {
 			raf.getChannel().force(false);
 			raf.close();
 
-			prevData = copy;
-			boolean isA = aOrB.get();
-			U.must(aOrB.compareAndSet(isA, !isA), "DB persistence file switching error!");
+			data.prevData = copy;
+			boolean isA = data.aOrB.get();
+			U.must(data.aOrB.compareAndSet(isA, !isA), "DB persistence file switching error!");
 
 			File oldFile = currentFile();
 			oldFile.delete();
@@ -1023,7 +1003,7 @@ public class InMem {
 
 			invokeCallbacks(callbacks, e);
 
-			data = new ConcurrentSkipListMap<Long, Rec>(prevData);
+			data.data = new ConcurrentSkipListMap<Long, Rec>(data.prevData);
 
 			throw new RuntimeException("Cannot persist database changes!", e);
 		}
@@ -1042,15 +1022,15 @@ public class InMem {
 	}
 
 	private File currentFile() {
-		return new File(filenameWithSuffix(aOrB.get() ? SUFFIX_A : SUFFIX_B));
+		return new File(filenameWithSuffix(data.aOrB.get() ? SUFFIX_A : SUFFIX_B));
 	}
 
 	private File otherFile() {
-		return new File(filenameWithSuffix(!aOrB.get() ? SUFFIX_A : SUFFIX_B));
+		return new File(filenameWithSuffix(!data.aOrB.get() ? SUFFIX_A : SUFFIX_B));
 	}
 
 	private String filenameWithSuffix(String suffixAorB) {
-		return filename.replace(".db", "-" + suffixAorB + ".db");
+		return data.filename.replace(".db", "-" + suffixAorB + ".db");
 	}
 
 	private void persist() {
@@ -1061,7 +1041,7 @@ public class InMem {
 				Log.error("Failed to persist data!", e1);
 			}
 
-			if (active.get()) {
+			if (data.active.get()) {
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
@@ -1078,35 +1058,35 @@ public class InMem {
 	}
 
 	public void shutdown() {
-		active.set(false);
+		data.active.set(false);
 
 		try {
 			persistor.join();
 		} catch (InterruptedException e) {
 		}
 
-		new File(filename).delete();
+		new File(data.filename).delete();
 	}
 
 	public boolean isActive() {
-		return active.get();
+		return data.active.get();
 	}
 
 	@Override
 	public String toString() {
-		return super.toString() + "[filename=" + filename + "]";
+		return super.toString() + "[filename=" + data.filename + "]";
 	}
 
 	public void start() {
 		// TODO implement start after shutdown
-		if (!active.get()) {
+		if (!data.active.get()) {
 			throw new IllegalStateException("Starting the database after shutdown is not implemented yet!");
 		}
 	}
 
 	public void halt() {
-		if (active.get()) {
-			active.set(false);
+		if (data.active.get()) {
+			data.active.set(false);
 
 			persistor.interrupt();
 			try {
@@ -1123,30 +1103,30 @@ public class InMem {
 	}
 
 	private Rec rec(Object record) {
-		return new Rec(record.getClass(), serializer.serialize(record));
+		return new Rec(record.getClass(), data.serializer.serialize(record));
 	}
 
 	@SuppressWarnings("unchecked")
 	private <T> T obj(Rec rec) {
 		Class<T> destType = (Class<T>) rec.type;
-		T dest = constructor.create(destType);
+		T dest = data.constructor.create(destType);
 		return (T) obj(rec, dest);
 	}
 
 	private <T> T obj(Rec rec, Class<T> destType) {
-		T dest = constructor.create(destType);
+		T dest = data.constructor.create(destType);
 		return (T) obj(rec, dest);
 	}
 
 	private <T> T obj(Rec rec, T destination) {
-		serializer.deserialize(rec.bytes, destination);
+		data.serializer.deserialize(rec.bytes, destination);
 		return destination;
 	}
 
 	public int size() {
 		globalLock();
 		try {
-			return data.size();
+			return data.data.size();
 		} finally {
 			globalUnlock();
 		}
@@ -1164,6 +1144,14 @@ public class InMem {
 		} finally {
 			globalUnlock();
 		}
+	}
+
+	public InMem as(String username) {
+		return new InMem(data, username, persistor, false);
+	}
+
+	public InMem sudo() {
+		return new InMem(data, null, persistor, true);
 	}
 
 }

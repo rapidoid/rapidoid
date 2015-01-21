@@ -59,7 +59,8 @@ public class AppCtx {
 	}
 
 	public static UserInfo user() {
-		return ctx().user;
+		AppCtx ctx = CTXS.get();
+		return ctx != null ? ctx.user : null;
 	}
 
 	public static void delUser() {
@@ -75,7 +76,8 @@ public class AppCtx {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T exchange() {
-		return (T) ctx().exchange;
+		AppCtx ctx = CTXS.get();
+		return ctx != null ? (T) ctx.exchange : null;
 	}
 
 	public static void delExchange() {

@@ -37,7 +37,7 @@ public class DbSerializationBenchmark {
 		Conf.args(args);
 
 		final InMem db = new InMem(null, new JacksonEntitySerializer(null), new DbEntityConstructor(null),
-				Collections.EMPTY_SET);
+				Collections.EMPTY_SET, null);
 
 		int size = Conf.option("size", 100000);
 		int loops = Conf.option("loops", 100);

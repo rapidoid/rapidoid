@@ -57,7 +57,7 @@ public class DbImpl extends NamedActivity<Database> implements Database {
 
 	public DbImpl(String name, String filename) {
 		super(name);
-		this.inmem = new InMem(filename, new JacksonEntitySerializer(this), constructor, REL_CLASSES);
+		this.inmem = new InMem(filename, new JacksonEntitySerializer(this), constructor, REL_CLASSES, null);
 		this.schema = new DbSchemaImpl();
 	}
 

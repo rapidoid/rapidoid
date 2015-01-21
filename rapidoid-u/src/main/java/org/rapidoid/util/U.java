@@ -888,6 +888,12 @@ public class U {
 		return true;
 	}
 
+	public static void secure(boolean condition, String msg) {
+		if (!condition) {
+			throw new SecurityException(readable(msg));
+		}
+	}
+
 	public static void secure(boolean condition, String msg, Object arg) {
 		if (!condition) {
 			throw new SecurityException(readable(msg, arg));
