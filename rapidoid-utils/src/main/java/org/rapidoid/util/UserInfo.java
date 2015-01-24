@@ -32,6 +32,13 @@ public class UserInfo {
 
 	public volatile String oauthProvider;
 
+	public UserInfo() {
+	}
+
+	public UserInfo(String username) {
+		this.username = username;
+	}
+
 	@Override
 	public String toString() {
 		return "UserInfo [username=" + username + ", email=" + email + ", name=" + name + ", oauthId=" + oauthId
