@@ -1,4 +1,0 @@
-	public {{type}} {{tag}}(Object... contents) {
-		return tag({{type}}.class, "{{tag}}", contents);
-	}
-
