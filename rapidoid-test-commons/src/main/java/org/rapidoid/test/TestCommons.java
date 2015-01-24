@@ -21,7 +21,6 @@ package org.rapidoid.test;
  */
 
 import java.io.File;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
@@ -36,29 +35,11 @@ public abstract class TestCommons {
 
 	protected static final Random RND = new Random();
 
-	private boolean hasError = false;
+	private volatile boolean hasError = false;
 
 	@BeforeMethod(alwaysRun = true)
 	public void init() {
 		hasError = false;
-
-		try {
-			Class<?> clazz = Class.forName("org.rapidoid.util.IOC");
-			try {
-				Method reset = clazz.getMethod("reset");
-				try {
-					reset.invoke(null);
-				} catch (Exception e) {
-					throw new RuntimeException("Cannot find method: UTILS.reset", e);
-				}
-			} catch (NoSuchMethodException e) {
-				throw new RuntimeException("Cannot find method: UTILS.reset");
-			} catch (SecurityException e) {
-				throw new RuntimeException("Cannot access method: UTILS.reset");
-			}
-
-		} catch (ClassNotFoundException e) {
-		}
 	}
 
 	@AfterMethod(alwaysRun = true)
