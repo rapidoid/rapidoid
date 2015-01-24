@@ -73,16 +73,6 @@ It will scan for `*Service` classes on your classpath and start a fast embedded 
  * [http://localhost:8080/foo/aa/bbb/c](http://localhost:8080/foo/aa/bbb/c) (returns `["aa","bbb","c"]`)
  * [http://localhost:8080/bar?x=1&y=2](http://localhost:8080/bar?x=1&y=2) (returns `{"y":"2","x":"1"}`)
 
-# Important modules
-
-- rapidoid-u: simple and elegant static utilities useful for any kind of Java software development,
-- rapidoid-buffer: high-performance and extensible off-heap buffer, the heart of network communication,
-- rapidoid-net: high-performance asynchronous framework for super-easy development of various network protocol servers,
-- rapidoid-http: high-performance asynchronous HTTP server,
-- rapidoid-test-commons: helpers for writing more elegant tests,
-- rapidoid-pojo: writing web apps/services through simple POJOs,
-- rapidoid-?: a lot more is coming...
-
 # Contributing
 
 1. Fork (and then `git clone https://github.com/rapidoid/rapidoid.git`).
