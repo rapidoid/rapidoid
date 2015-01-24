@@ -21,11 +21,13 @@ package org.rapidoid.db;
  */
 
 import org.rapidoid.security.annotation.CanInsert;
+import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.UserInfo;
 import org.testng.annotations.Test;
 
 @CanInsert({ "ADMIN", "MANAGER" })
+@CanRead({ "AUTHOR" })
 @SuppressWarnings("serial")
 class Foo extends AbstractEntity {
 	public String name = "no name";
@@ -63,6 +65,8 @@ public class DbClassSecurityTest extends DbTestCommons {
 		AppCtx.reset();
 		Foo foo = new Foo();
 		DB.sudo().persist(foo);
+		DB.sudo().update(foo);
+		DB.sudo().refresh(foo);
 		DB.sudo().delete(foo);
 		DB.shutdown();
 	}
@@ -70,7 +74,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 	@Test
 	public void testDbSecurity() {
 		AppCtx.reset();
-		Foo foo = new Foo();
+		final Foo foo = new Foo();
 		DB.as("admin@debug").persist(foo);
 		DB.shutdown();
 	}
@@ -81,6 +85,137 @@ public class DbClassSecurityTest extends DbTestCommons {
 		Foo foo = new Foo();
 		AppCtx.setUser(new UserInfo("manager@debug"));
 		DB.persist(foo);
+		DB.shutdown();
+	}
+
+	@Test
+	public void testDbDeleteSecurity() {
+		AppCtx.reset();
+		final Foo foo = new Foo();
+		DB.sudo().persist(foo);
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.as("admin@debug").delete(foo);
+			}
+		});
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.as("asdf").delete(foo);
+			}
+		});
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.delete(foo);
+			}
+		});
+
+		DB.shutdown();
+	}
+
+	@Test
+	public void testDbUpdateSecurity() {
+		AppCtx.reset();
+		final Foo foo = new Foo();
+		DB.sudo().persist(foo);
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.as("admin@debug").update(foo);
+			}
+		});
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.as("asdf").update(foo);
+			}
+		});
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.update(foo);
+			}
+		});
+
+		DB.shutdown();
+	}
+
+	@Test
+	public void testDbGetSecurity() {
+		AppCtx.reset();
+		final Foo foo = new Foo();
+		foo.name = "abc";
+		final long id = DB.sudo().persist(foo);
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.as("admin@debug").get(id);
+			}
+		});
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.as("asdf").get(id);
+			}
+		});
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.get(id);
+			}
+		});
+
+		DB.shutdown();
+	}
+
+	@Test
+	public void testDbRefreshSecurity() {
+		AppCtx.reset();
+		final Foo foo = new Foo();
+		foo.name = "abc";
+		DB.sudo().persist(foo);
+
+		final Foo foo2 = new Foo();
+		foo2.id = foo.id;
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.as("admin@debug").refresh(foo2);
+			}
+		});
+
+		eq(foo2.name, "no name");
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.as("asdf").refresh(foo2);
+			}
+		});
+
+		eq(foo2.name, "no name");
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.refresh(foo2);
+			}
+		});
+
+		eq(foo2.name, "no name");
+
 		DB.shutdown();
 	}
 

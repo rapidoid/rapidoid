@@ -288,4 +288,13 @@ public abstract class TestCommons {
 		}
 	}
 
+	protected void throwsSecurityException(Runnable code) {
+		try {
+			code.run();
+		} catch (SecurityException e) {
+			return;
+		}
+		fail("Expected SecurityException to be thrown!");
+	}
+
 }
