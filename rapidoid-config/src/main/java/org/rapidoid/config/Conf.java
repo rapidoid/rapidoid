@@ -160,7 +160,13 @@ public class Conf {
 	}
 
 	public static boolean dev() {
+		assert configureDevMode();
 		return has("mode", "dev");
+	}
+
+	private static boolean configureDevMode() {
+		configure("mode", "dev");
+		return true;
 	}
 
 }
