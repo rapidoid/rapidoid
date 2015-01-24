@@ -63,6 +63,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 		AppCtx.reset();
 		Foo foo = new Foo();
 		DB.sudo().persist(foo);
+		DB.sudo().delete(foo);
 		DB.shutdown();
 	}
 

@@ -207,4 +207,20 @@ public class Secure implements Constants {
 		return user != null ? user.username : null;
 	}
 
+	public static boolean canRead(String username, Object record) {
+		return hasRoleBasedObjectAccess(username, record) && getObjectPermissions(username, record).read;
+	}
+
+	public static boolean canInsert(String username, Object record) {
+		return hasRoleBasedObjectAccess(username, record) && getObjectPermissions(username, record).insert;
+	}
+
+	public static boolean canUpdate(String username, Object record) {
+		return hasRoleBasedObjectAccess(username, record) && getObjectPermissions(username, record).change;
+	}
+
+	public static boolean canDelete(String username, Object record) {
+		return hasRoleBasedObjectAccess(username, record) && getObjectPermissions(username, record).delete;
+	}
+
 }

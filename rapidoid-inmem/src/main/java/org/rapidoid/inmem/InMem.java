@@ -384,13 +384,17 @@ public class InMem {
 		try {
 			validateId(id);
 
+			Rec toRemove = data.data.get(id);
+			Object entity = obj(toRemove);
+			U.secure(canDelete(entity), "Not enough privileges to delete the record!");
+
 			Rec removed = data.data.remove(id);
+			U.must(toRemove == removed, "Concurrent modification occured while deleting the object with ID=%s!", id);
 
 			if (data.insideTx.get()) {
 				data.txChanges.putIfAbsent(id, removed);
 			}
 
-			Object entity = obj(removed);
 			deleteRelsFor(entity);
 
 			data.lastChangedOn.set(System.currentTimeMillis());
@@ -481,6 +485,8 @@ public class InMem {
 		validateId(id);
 
 		Beany.setId(record, id);
+
+		U.secure(canUpdate(record), "Not enough privileges to update the record!");
 
 		Rec removed = data.data.replace(id, rec(record));
 
@@ -594,19 +600,10 @@ public class InMem {
 					results.add(record);
 				}
 			}
+
 		});
 
 		return results;
-	}
-
-	private boolean canRead(Object record) {
-		return sudo || Secure.hasRoleBasedObjectAccess(username(), record)
-				&& Secure.getObjectPermissions(username(), record).read;
-	}
-
-	private boolean canInsert(Object record) {
-		return sudo || Secure.hasRoleBasedObjectAccess(username(), record)
-				&& Secure.getObjectPermissions(username(), record).insert;
 	}
 
 	private <E> E getIfAllowed(long id, boolean validateId) {
@@ -1162,6 +1159,22 @@ public class InMem {
 
 	public InMem sudo() {
 		return new InMem(data, null, persistor, true);
+	}
+
+	private boolean canRead(Object record) {
+		return sudo || Secure.canRead(username(), record);
+	}
+
+	private boolean canInsert(Object record) {
+		return sudo || Secure.canInsert(username(), record);
+	}
+
+	private boolean canUpdate(Object record) {
+		return sudo || Secure.canUpdate(username(), record);
+	}
+
+	private boolean canDelete(Object record) {
+		return sudo || Secure.canDelete(username(), record);
 	}
 
 }
