@@ -43,6 +43,7 @@ import org.rapidoid.net.mime.MediaType;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.util.UserInfo;
@@ -865,7 +866,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			}
 
 			if (!filename.contains("..") && STATIC_RESOURCE_PATTERN.matcher(filename).matches()) {
-				URL res = U.resource("public/" + filename);
+				URL res = IO.resource("public/" + filename);
 				if (res != null) {
 					startResponse(200);
 					sendFile(new File(res.getFile()));

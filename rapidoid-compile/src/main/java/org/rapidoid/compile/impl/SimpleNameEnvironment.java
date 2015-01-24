@@ -25,6 +25,7 @@ import org.eclipse.jdt.internal.compiler.env.AccessRestriction;
 import org.eclipse.jdt.internal.compiler.env.IBinaryType;
 import org.eclipse.jdt.internal.compiler.env.INameEnvironment;
 import org.eclipse.jdt.internal.compiler.env.NameEnvironmentAnswer;
+import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
 
 public class SimpleNameEnvironment implements INameEnvironment {
@@ -47,7 +48,7 @@ public class SimpleNameEnvironment implements INameEnvironment {
 
 	protected NameEnvironmentAnswer type(String fullclassName) {
 		try {
-			byte[] classFileBytes = U.classBytes(fullclassName);
+			byte[] classFileBytes = IO.classBytes(fullclassName);
 			if (classFileBytes == null) {
 				return null;
 			}

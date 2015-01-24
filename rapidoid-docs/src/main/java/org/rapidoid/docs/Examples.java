@@ -35,6 +35,7 @@ import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.oauth.OAuth;
+import org.rapidoid.util.IO;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
@@ -68,8 +69,8 @@ public class Examples {
 	}
 
 	private static void generateIndex(String path, int examplesN) {
-		String docsT = U.load("docs-template.html");
-		String egT = U.load("example-template.html");
+		String docsT = IO.load("docs-template.html");
+		String egT = IO.load("example-template.html");
 
 		String examples = "";
 
@@ -83,12 +84,12 @@ public class Examples {
 
 		Pattern p = Pattern.compile("\n");
 
-		String[] titles = U.load("examples.txt").split("\\n");
+		String[] titles = IO.load("examples.txt").split("\\n");
 		U.must(titles.length >= examplesN - 1);
 
 		for (int i = 2; i <= examplesN; i++) {
 
-			String snippet = U.load("example" + i + ".snippet");
+			String snippet = IO.load("example" + i + ".snippet");
 
 			Matcher m = p.matcher(snippet);
 			U.must(m.find());
@@ -107,7 +108,7 @@ public class Examples {
 
 		String html = U.fillIn(docsT, "examples", examples);
 
-		U.save(path + "index.html", html);
+		IO.save(path + "index.html", html);
 	}
 
 	private static String col(String rr, String snippet) {
@@ -178,7 +179,7 @@ public class Examples {
 		out = out.replace("href=\"/\"", "href=\"index.html\"");
 		out = out.replaceAll("(href|action)=\\\"/(\\w+)\\\"", "$1=\"$2.html\"");
 
-		U.save(filename, out);
+		IO.save(filename, out);
 	}
 
 }

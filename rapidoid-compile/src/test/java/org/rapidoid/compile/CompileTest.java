@@ -28,6 +28,7 @@ import java.util.Set;
 import org.rapidoid.log.Log;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
@@ -36,7 +37,7 @@ public class CompileTest extends TestCommons {
 	@Test
 	public void testCompile() throws Exception {
 
-		Compilation compilation = Compile.compile(U.load("test1.java"),
+		Compilation compilation = Compile.compile(IO.load("test1.java"),
 				"public class Book { String title; int x = 1234; } class Foo {}", "public class Bar extends Foo {}",
 				"public class Fg extends Foo {}");
 
@@ -68,7 +69,7 @@ public class CompileTest extends TestCommons {
 		Cls.invoke(main, null, new Object[] { new String[] {} });
 
 		String output = new String(out.toByteArray());
-		eq(output, U.load("test1.out"));
+		eq(output, IO.load("test1.out"));
 	}
 
 }

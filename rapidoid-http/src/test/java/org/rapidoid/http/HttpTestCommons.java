@@ -42,6 +42,7 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
 import org.testng.Assert;
 
@@ -243,7 +244,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected String resourceMD5(String filename) throws IOException, URISyntaxException {
-		return U.md5(FileUtils.readFileToByteArray(new File(U.resource(filename).toURI())));
+		return U.md5(FileUtils.readFileToByteArray(new File(IO.resource(filename).toURI())));
 	}
 
 }

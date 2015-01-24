@@ -29,6 +29,7 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagProcessor;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
 
 public class FileTemplateTag extends HardcodedTag {
@@ -38,7 +39,7 @@ public class FileTemplateTag extends HardcodedTag {
 	private final Object[] namesAndValues;
 
 	public FileTemplateTag(String templateName, Object[] namesAndValues) {
-		U.must(U.resource(templateName) != null || new File(templateName).exists(), "Cannot find file: %s",
+		U.must(IO.resource(templateName) != null || new File(templateName).exists(), "Cannot find file: %s",
 				templateName);
 
 		this.templateName = templateName;
@@ -47,7 +48,7 @@ public class FileTemplateTag extends HardcodedTag {
 
 	@Override
 	public void render(TagContext ctx, HttpExchange x, PageRenderer renderer, OutputStream out) {
-		String text = U.load(templateName);
+		String text = IO.load(templateName);
 
 		for (int i = 0; i < namesAndValues.length / 2; i++) {
 			String placeholder = (String) namesAndValues[i * 2];

@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
 
 public class HTMLSnippets {
@@ -32,8 +33,8 @@ public class HTMLSnippets {
 	private static String FULL_PAGE_HTML;
 
 	static {
-		PAGE_HTML = U.load("page.html");
-		FULL_PAGE_HTML = U.load("page-full.html");
+		PAGE_HTML = IO.load("page.html");
+		FULL_PAGE_HTML = IO.load("page-full.html");
 	}
 
 	public static HttpExchange writePage(HttpExchange x, String title, String content) {

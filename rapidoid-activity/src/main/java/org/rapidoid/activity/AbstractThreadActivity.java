@@ -1,7 +1,6 @@
 package org.rapidoid.activity;
 
 import org.rapidoid.log.Log;
-import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -45,7 +44,11 @@ public abstract class AbstractThreadActivity<T> extends LifecycleActivity<T> imp
 	public T halt() {
 		checkActive(true);
 		thread.stop();
-		U.joinThread(thread);
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			// do nothing
+		}
 		return super.halt();
 	}
 
@@ -53,7 +56,11 @@ public abstract class AbstractThreadActivity<T> extends LifecycleActivity<T> imp
 	public T shutdown() {
 		checkActive(true);
 		thread.interrupt();
-		U.joinThread(thread);
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			// do nothing
+		}
 		return super.shutdown();
 	}
 

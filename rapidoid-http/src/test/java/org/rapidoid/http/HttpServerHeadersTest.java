@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.apache.commons.io.FileUtils;
+import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
@@ -70,21 +71,21 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 		server.get("/testfile1", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				return U.file("test1.txt");
+				return IO.file("test1.txt");
 			}
 		});
 
 		server.get("/rabbit.jpg", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				return x.sendFile(U.file("rabbit.jpg"));
+				return x.sendFile(IO.file("rabbit.jpg"));
 			}
 		});
 
 		server.get("/ab", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				return x.sendFile(U.file("ab.html"));
+				return x.sendFile(IO.file("ab.html"));
 			}
 		});
 
@@ -97,8 +98,8 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 
 		start();
 
-		byte[] rabbit = FileUtils.readFileToByteArray(U.file("rabbit.jpg"));
-		byte[] ab = FileUtils.readFileToByteArray(U.file("ab.html"));
+		byte[] rabbit = FileUtils.readFileToByteArray(IO.file("rabbit.jpg"));
+		byte[] ab = FileUtils.readFileToByteArray(IO.file("ab.html"));
 
 		for (int i = 0; i < 100; i++) {
 			eq(get("/"), "a<b>b</b>c");

@@ -28,6 +28,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.CustomizableClassLoader;
+import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
 
 public class AppReloadHandler implements Handler, Mapper<String, byte[]> {
@@ -67,7 +68,7 @@ public class AppReloadHandler implements Handler, Mapper<String, byte[]> {
 
 		File file = new File(filename);
 		if (file.exists()) {
-			return U.loadBytes(new FileInputStream(file));
+			return IO.loadBytes(new FileInputStream(file));
 		} else {
 			return null;
 		}

@@ -37,7 +37,7 @@ import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.html.tag.TdTag;
 import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.html.tag.ThTag;
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class HTML extends Tags {
 
@@ -64,7 +64,7 @@ public class HTML extends Tags {
 	}
 
 	public static Tag ul_li(Object... listItems) {
-		listItems = U.flat(listItems);
+		listItems = UTILS.flat(listItems);
 
 		Tag list = ul();
 

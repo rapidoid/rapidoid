@@ -454,7 +454,11 @@ public class Cls {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T createProxy(InvocationHandler handler, Class<?>... interfaces) {
-		return ((T) Proxy.newProxyInstance(U.classLoader(), interfaces, handler));
+		return ((T) Proxy.newProxyInstance(classLoader(), interfaces, handler));
+	}
+
+	public static ClassLoader classLoader() {
+		return Thread.currentThread().getContextClassLoader();
 	}
 
 	public static <T> T implement(final Object target, final InvocationHandler handler, Class<?>... interfaces) {

@@ -493,4 +493,67 @@ public class UTILS implements Constants {
 		}
 	}
 
+	public static boolean waitInterruption(long millis) {
+		try {
+			Thread.sleep(millis);
+			return true;
+		} catch (InterruptedException e) {
+			Thread.interrupted();
+			return false;
+		}
+	}
+
+	public static void waitFor(Object obj) {
+		try {
+			synchronized (obj) {
+				obj.wait();
+			}
+		} catch (InterruptedException e) {
+			// do nothing
+		}
+	}
+
+	public static void joinThread(Thread thread) {
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			// do nothing
+		}
+	}
+
+	public static Object[] flat(Object... arr) {
+		List<Object> flat = U.list();
+		flatInsertInto(flat, 0, arr);
+		return flat.toArray();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> int flatInsertInto(List<T> dest, int index, Object item) {
+		if (index > dest.size()) {
+			index = dest.size();
+		}
+		int inserted = 0;
+
+		if (item instanceof Object[]) {
+			Object[] arr = (Object[]) item;
+			for (Object obj : arr) {
+				inserted += flatInsertInto(dest, index + inserted, obj);
+			}
+		} else if (item instanceof Collection<?>) {
+			Collection<?> coll = (Collection<?>) item;
+			for (Object obj : coll) {
+				inserted += flatInsertInto(dest, index + inserted, obj);
+			}
+		} else if (item != null) {
+			if (index >= dest.size()) {
+				dest.add((T) item);
+			} else {
+				dest.add(index + inserted, (T) item);
+			}
+			inserted++;
+		}
+
+		return inserted;
+	}
+
 }

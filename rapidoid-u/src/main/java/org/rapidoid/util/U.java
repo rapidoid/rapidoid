@@ -20,24 +20,9 @@ package org.rapidoid.util;
  * #L%
  */
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.ByteBuffer;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileChannel.MapMode;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -165,34 +150,6 @@ public class U {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
 			throw new ThreadDeath();
-		}
-	}
-
-	public static boolean waitInterruption(long millis) {
-		try {
-			Thread.sleep(millis);
-			return true;
-		} catch (InterruptedException e) {
-			Thread.interrupted();
-			return false;
-		}
-	}
-
-	public static void waitFor(Object obj) {
-		try {
-			synchronized (obj) {
-				obj.wait();
-			}
-		} catch (InterruptedException e) {
-			// do nothing
-		}
-	}
-
-	public static void joinThread(Thread thread) {
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			// do nothing
 		}
 	}
 
@@ -464,27 +421,6 @@ public class U {
 		return maxSize > 0 ? new ArrayBlockingQueue<T>(maxSize) : new ConcurrentLinkedQueue<T>();
 	}
 
-	public static URL resource(String filename) {
-		return classLoader().getResource(filename);
-	}
-
-	public static ClassLoader classLoader() {
-		return Thread.currentThread().getContextClassLoader();
-	}
-
-	public static File file(String filename) {
-		File file = new File(filename);
-
-		if (!file.exists()) {
-			URL res = resource(filename);
-			if (res != null) {
-				return new File(res.getFile());
-			}
-		}
-
-		return file;
-	}
-
 	public static long time() {
 		return System.currentTimeMillis();
 	}
@@ -515,156 +451,6 @@ public class U {
 		if (failureCondition) {
 			throw rte(msg, args);
 		}
-	}
-
-	public static byte[] loadBytes(InputStream input) {
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-		byte[] buffer = new byte[4 * 1024];
-
-		try {
-			int readN = 0;
-			while ((readN = input.read(buffer)) != -1) {
-				output.write(buffer, 0, readN);
-			}
-		} catch (IOException e) {
-			throw rte(e);
-		}
-
-		return output.toByteArray();
-	}
-
-	public static byte[] loadBytes(String filename) {
-		InputStream input = classLoader().getResourceAsStream(filename);
-
-		if (input == null) {
-			File file = new File(filename);
-
-			if (file.exists()) {
-				try {
-					input = new FileInputStream(filename);
-				} catch (FileNotFoundException e) {
-					throw rte(e);
-				}
-			}
-		}
-
-		return input != null ? loadBytes(input) : null;
-	}
-
-	public static byte[] classBytes(String fullClassName) {
-		return loadBytes(fullClassName.replace('.', '/') + ".class");
-	}
-
-	public static String load(String filename) {
-		byte[] bytes = loadBytes(filename);
-		return bytes != null ? new String(bytes) : null;
-	}
-
-	public static List<String> loadLines(String filename) {
-		InputStream input = classLoader().getResourceAsStream(filename);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-		List<String> lines = list();
-
-		try {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				lines.add(line);
-			}
-		} catch (IOException e) {
-			throw rte(e);
-		}
-
-		return lines;
-	}
-
-	public static List<String> loadLines(String filename, final boolean filterEmpty, final String commentPrefix) {
-
-		List<String> lines = loadLines(filename);
-
-		List<String> lines2 = list();
-
-		for (String line : lines) {
-			String s = line.trim();
-			if ((!filterEmpty || !s.isEmpty()) && (commentPrefix == null || !s.startsWith(commentPrefix))) {
-				lines2.add(s);
-			}
-		}
-
-		return lines2;
-	}
-
-	public static void save(String filename, String content) {
-		FileOutputStream out = null;
-		try {
-			out = new FileOutputStream(filename);
-			out.write(content.getBytes());
-			close(out, false);
-		} catch (Exception e) {
-			close(out, true);
-			throw rte(e);
-		}
-	}
-
-	public static void close(OutputStream out, boolean quiet) {
-		try {
-			if (out != null) {
-				out.close();
-			}
-		} catch (IOException e) {
-			if (!quiet) {
-				throw rte(e);
-			}
-		}
-	}
-
-	public static void close(InputStream in, boolean quiet) {
-		try {
-			in.close();
-		} catch (IOException e) {
-			if (!quiet) {
-				throw rte(e);
-			}
-		}
-	}
-
-	public static void delete(String filename) {
-		new File(filename).delete();
-	}
-
-	public static Object[] flat(Object... arr) {
-		List<Object> flat = list();
-		flatInsertInto(flat, 0, arr);
-		return flat.toArray();
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> int flatInsertInto(List<T> dest, int index, Object item) {
-		if (index > dest.size()) {
-			index = dest.size();
-		}
-		int inserted = 0;
-
-		if (item instanceof Object[]) {
-			Object[] arr = (Object[]) item;
-			for (Object obj : arr) {
-				inserted += flatInsertInto(dest, index + inserted, obj);
-			}
-		} else if (item instanceof Collection<?>) {
-			Collection<?> coll = (Collection<?>) item;
-			for (Object obj : coll) {
-				inserted += flatInsertInto(dest, index + inserted, obj);
-			}
-		} else if (item != null) {
-			if (index >= dest.size()) {
-				dest.add((T) item);
-			} else {
-				dest.add(index + inserted, (T) item);
-			}
-			inserted++;
-		}
-
-		return inserted;
 	}
 
 	public static boolean must(boolean expectedCondition, String message) {
@@ -878,7 +664,7 @@ public class U {
 		return Integer.parseInt(s);
 	}
 
-	public static String bytesToString(byte[] bytes) {
+	public static String bytesAsText(byte[] bytes) {
 		StringBuilder sb = new StringBuilder();
 
 		for (int i = 0; i < bytes.length; i++) {
@@ -899,76 +685,11 @@ public class U {
 	public static String md5(byte[] bytes) {
 		MessageDigest md5 = digest("MD5");
 		md5.update(bytes);
-		return bytesToString(md5.digest());
+		return bytesAsText(md5.digest());
 	}
 
 	public static String md5(String data) {
 		return md5(data.getBytes());
-	}
-
-	public static char rndChar() {
-		return (char) (65 + rnd(26));
-	}
-
-	public static String rndStr(int length) {
-		return rndStr(length, length);
-	}
-
-	public static String rndStr(int minLength, int maxLength) {
-		int len = minLength + rnd(maxLength - minLength + 1);
-		StringBuffer sb = new StringBuffer();
-
-		for (int i = 0; i < len; i++) {
-			sb.append(rndChar());
-		}
-
-		return sb.toString();
-	}
-
-	public static int rnd(int n) {
-		return RND.nextInt(n);
-	}
-
-	public static int rndExcept(int n, int except) {
-		if (n > 1 || except != 0) {
-			while (true) {
-				int num = RND.nextInt(n);
-				if (num != except) {
-					return num;
-				}
-			}
-		} else {
-			throw new RuntimeException("Cannot produce such number!");
-		}
-	}
-
-	public static <T> T rnd(T[] arr) {
-		return arr[rnd(arr.length)];
-	}
-
-	public static int rnd() {
-		return RND.nextInt();
-	}
-
-	public static long rndL() {
-		return RND.nextLong();
-	}
-
-	@SuppressWarnings("resource")
-	public static MappedByteBuffer mmap(String filename, MapMode mode, long position, long size) {
-		try {
-			File file = new File(filename);
-			FileChannel fc = new RandomAccessFile(file, "rw").getChannel();
-			return fc.map(mode, position, size);
-		} catch (Exception e) {
-			throw rte(e);
-		}
-	}
-
-	public static MappedByteBuffer mmap(String filename, MapMode mode) {
-		File file = new File(filename);
-		must(file.exists());
-		return mmap(filename, mode, 0, file.length());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1168,6 +889,54 @@ public class U {
 		} else {
 			return ((Comparable<T>) val1).compareTo(val2);
 		}
+	}
+
+	public static char rndChar() {
+		return (char) (65 + rnd(26));
+	}
+
+	public static String rndStr(int length) {
+		return rndStr(length, length);
+	}
+
+	public static String rndStr(int minLength, int maxLength) {
+		int len = minLength + rnd(maxLength - minLength + 1);
+		StringBuffer sb = new StringBuffer();
+
+		for (int i = 0; i < len; i++) {
+			sb.append(rndChar());
+		}
+
+		return sb.toString();
+	}
+
+	public static int rnd(int n) {
+		return RND.nextInt(n);
+	}
+
+	public static int rndExcept(int n, int except) {
+		if (n > 1 || except != 0) {
+			while (true) {
+				int num = RND.nextInt(n);
+				if (num != except) {
+					return num;
+				}
+			}
+		} else {
+			throw new RuntimeException("Cannot produce such number!");
+		}
+	}
+
+	public static <T> T rnd(T[] arr) {
+		return arr[rnd(arr.length)];
+	}
+
+	public static int rnd() {
+		return RND.nextInt();
+	}
+
+	public static long rndL() {
+		return RND.nextLong();
 	}
 
 }

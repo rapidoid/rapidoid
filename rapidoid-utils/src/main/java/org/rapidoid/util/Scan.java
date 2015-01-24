@@ -219,7 +219,7 @@ public class Scan {
 		}
 
 		try {
-			return U.classLoader().getResources(name);
+			return Cls.classLoader().getResources(name);
 		} catch (IOException e) {
 			throw U.rte("Cannot scan: " + name, e);
 		}

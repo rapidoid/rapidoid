@@ -29,6 +29,7 @@ import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.Tags;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 
 public class TagImpl extends UndefinedTag implements TagInternals, Serializable {
@@ -60,7 +61,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 	public TagImpl(Class<?> clazz, String name, Object[] contents) {
 		this.clazz = clazz;
 		this.name = name;
-		U.flatInsertInto(this.contents, APPEND, contents);
+		UTILS.flatInsertInto(this.contents, APPEND, contents);
 	}
 
 	@Override
@@ -132,7 +133,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 		TagImpl impl = impl(_copy);
 
 		impl.contents.clear();
-		U.flatInsertInto(impl.contents, APPEND, content);
+		UTILS.flatInsertInto(impl.contents, APPEND, content);
 
 		return _copy;
 	}
@@ -142,7 +143,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 		Tag _copy = copy();
 		TagImpl impl = impl(_copy);
 
-		U.flatInsertInto(impl.contents, 0, content);
+		UTILS.flatInsertInto(impl.contents, 0, content);
 
 		return _copy;
 	}
@@ -152,7 +153,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 		Tag _copy = copy();
 		TagImpl impl = impl(_copy);
 
-		U.flatInsertInto(impl.contents, APPEND, content);
+		UTILS.flatInsertInto(impl.contents, APPEND, content);
 
 		return _copy;
 	}
