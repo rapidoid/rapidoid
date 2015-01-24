@@ -246,4 +246,12 @@ public class DB {
 		return schema().dsl(entityType);
 	}
 
+	public static Database as(String username) {
+		return db().as(username);
+	}
+
+	public static Database sudo() {
+		return db().sudo();
+	}
+
 }

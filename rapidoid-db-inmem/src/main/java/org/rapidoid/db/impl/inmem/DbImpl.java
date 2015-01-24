@@ -61,6 +61,12 @@ public class DbImpl extends NamedActivity<Database> implements Database {
 		this.schema = new DbSchemaImpl();
 	}
 
+	public DbImpl(String name, InMem inmem, DbSchema schema) {
+		super(name);
+		this.inmem = inmem;
+		this.schema = schema;
+	}
+
 	@Override
 	public void initAndLoad() {
 		inmem.initAndLoad();
@@ -257,6 +263,16 @@ public class DbImpl extends NamedActivity<Database> implements Database {
 	@Override
 	public DbSchema schema() {
 		return schema;
+	}
+
+	@Override
+	public Database as(String username) {
+		return new DbImpl(name, inmem.as(username), schema);
+	}
+
+	@Override
+	public Database sudo() {
+		return new DbImpl(name, inmem.sudo(), schema);
 	}
 
 }

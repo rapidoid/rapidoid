@@ -102,4 +102,8 @@ public interface Database extends Activity<Database> {
 
 	DbSchema schema();
 
+	Database as(String username);
+
+	Database sudo();
+
 }
