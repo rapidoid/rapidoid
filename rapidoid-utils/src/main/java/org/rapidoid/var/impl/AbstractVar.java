@@ -29,7 +29,7 @@ public abstract class AbstractVar<T> implements Var<T> {
 
 	@Override
 	public String toString() {
-		return U.text(get());
+		return U.readable(get());
 	}
 
 }

@@ -242,7 +242,7 @@ public class HttpParser implements Constants {
 
 			src.get(multipartBoundary, helper.bytes, 2);
 
-			U.failIf(multipartBoundary.isEmpty(), "Invalid multi-part HTTP request!");
+			U.rteIf(multipartBoundary.isEmpty(), "Invalid multi-part HTTP request!");
 
 			parseMultiParts(src, body, data, files, multipartBoundary, helper);
 		} else {
@@ -334,7 +334,7 @@ public class HttpParser implements Constants {
 				charset.strip(CHARSET_EQ.length, 0);
 				BytesUtil.trim(src.bytes(), charset);
 
-				U.failIf(!BytesUtil.matches(src.bytes(), charset, _UTF_8, false), "Only the UTF-8 charset is supported!");
+				U.rteIf(!BytesUtil.matches(src.bytes(), charset, _UTF_8, false), "Only the UTF-8 charset is supported!");
 			}
 		}
 
@@ -345,7 +345,7 @@ public class HttpParser implements Constants {
 			boolean validEncoding = BytesUtil.matches(src.bytes(), encoding, _7BIT, false)
 					|| BytesUtil.matches(src.bytes(), encoding, _8BIT, false)
 					|| BytesUtil.matches(src.bytes(), encoding, BINARY, false);
-			U.failIf(!validEncoding, "Invalid Content-transfer-encoding header value!");
+			U.rteIf(!validEncoding, "Invalid Content-transfer-encoding header value!");
 		}
 
 		if (filename.isEmpty()) {

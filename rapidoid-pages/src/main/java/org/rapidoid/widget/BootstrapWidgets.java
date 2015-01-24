@@ -489,7 +489,7 @@ public abstract class BootstrapWidgets extends HTML {
 		Var<Integer> var = sessionVar(name + ":" + Pages.viewId(x), defaultValue);
 
 		// TODO put the constraints into the variable implementation
-		Integer pageN = U.limit(min, var.get(), max);
+		Integer pageN = U.limited(min, var.get(), max);
 		var.set(pageN);
 
 		return var;

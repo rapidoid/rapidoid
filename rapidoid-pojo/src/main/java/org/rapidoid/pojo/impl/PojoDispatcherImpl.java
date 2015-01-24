@@ -286,7 +286,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 	}
 
 	private static PojoDispatchException error(Throwable cause, String msg, Object... args) {
-		return new PojoDispatchException(U.readable(msg, args), cause);
+		return new PojoDispatchException(U.nice(msg, args), cause);
 	}
 
 	private static PojoHandlerNotFoundException notFound() {

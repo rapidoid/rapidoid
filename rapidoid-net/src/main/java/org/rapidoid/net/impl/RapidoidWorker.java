@@ -140,7 +140,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		boolean ready;
 		try {
 			ready = socketChannel.finishConnect();
-			U.failIf(!ready, "Expected an established connection!");
+			U.rteIf(!ready, "Expected an established connection!");
 			connected.add(new RapidoidChannel(socketChannel, true));
 		} catch (ConnectException e) {
 			retryConnecting(target);

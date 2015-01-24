@@ -480,7 +480,7 @@ public class Cls {
 	}
 
 	public static <T> T implement(InvocationHandler handler, Class<?>... classes) {
-		return implement(new InterceptorProxy(U.text(classes)), handler, classes);
+		return implement(new InterceptorProxy(U.readable(classes)), handler, classes);
 	}
 
 	public static <T> T implementInterfaces(Object target, InvocationHandler handler) {
@@ -679,7 +679,7 @@ public class Cls {
 			if (value instanceof Date) {
 				return (T) Dates.str((Date) value);
 			} else {
-				return (T) U.text(value);
+				return (T) U.readable(value);
 			}
 
 		case OBJECT:
@@ -828,7 +828,7 @@ public class Cls {
 			}
 		}
 
-		throw U.rte("Cannot find appropriate constructor for %s with args %s!", clazz, U.text(args));
+		throw U.rte("Cannot find appropriate constructor for %s with args %s!", clazz, U.readable(args));
 	}
 
 	public static <T> T customizable(Class<T> clazz, Object... args) {

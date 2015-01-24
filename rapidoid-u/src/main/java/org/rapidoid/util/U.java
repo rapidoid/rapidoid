@@ -41,7 +41,7 @@ public class U {
 	private U() {
 	}
 
-	public static String text(Object obj) {
+	public static String readable(Object obj) {
 		if (obj == null) {
 			return "null";
 		} else if (obj instanceof byte[]) {
@@ -61,13 +61,13 @@ public class U {
 		} else if (obj instanceof char[]) {
 			return Arrays.toString((char[]) obj);
 		} else if (obj instanceof Object[]) {
-			return text((Object[]) obj);
+			return readable((Object[]) obj);
 		} else {
 			return String.valueOf(obj);
 		}
 	}
 
-	public static String text(Object[] objs) {
+	public static String readable(Object[] objs) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
 
@@ -75,7 +75,7 @@ public class U {
 			if (i > 0) {
 				sb.append(", ");
 			}
-			sb.append(text(objs[i]));
+			sb.append(readable(objs[i]));
 		}
 
 		sb.append("]");
@@ -83,44 +83,19 @@ public class U {
 		return sb.toString();
 	}
 
-	public static RuntimeException rte(String message, Object... args) {
-		return new RuntimeException(readable(message, args));
-	}
-
-	public static RuntimeException rte(Throwable cause) {
-		return new RuntimeException(cause);
-	}
-
-	public static RuntimeException rte(String message) {
-		return new RuntimeException(message);
-	}
-
-	public static RuntimeException notExpected() {
-		return rte("This operation is not expected to be called!");
-	}
-
-	public static IllegalArgumentException illegalArg(String message) {
-		return new IllegalArgumentException(message);
-	}
-
-	public static <T> T or(T value, T fallback) {
-		return value != null ? value : fallback;
-	}
-
 	public static String format(String s, Object... args) {
 		return String.format(s, args);
 	}
 
-	public static String readable(String format, Object... args) {
-
+	public static String nice(String format, Object... args) {
 		for (int i = 0; i < args.length; i++) {
-			args[i] = text(args[i]);
+			args[i] = readable(args[i]);
 		}
 
 		return String.format(format, args);
 	}
 
-	public static String text(Collection<Object> coll) {
+	public static String readable(Iterable<Object> coll) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
 
@@ -131,7 +106,7 @@ public class U {
 				sb.append(", ");
 			}
 
-			sb.append(text(obj));
+			sb.append(readable(obj));
 			first = false;
 		}
 
@@ -139,7 +114,7 @@ public class U {
 		return sb.toString();
 	}
 
-	public static String text(Iterator<?> it) {
+	public static String readable(Iterator<?> it) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
 
@@ -151,7 +126,7 @@ public class U {
 				first = false;
 			}
 
-			sb.append(text(it.next()));
+			sb.append(readable(it.next()));
 		}
 
 		sb.append("]");
@@ -159,7 +134,7 @@ public class U {
 		return sb.toString();
 	}
 
-	public static String textln(Object[] objs) {
+	public static String readableln(Object[] objs) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
 
@@ -168,7 +143,7 @@ public class U {
 				sb.append(",");
 			}
 			sb.append("\n  ");
-			sb.append(text(objs[i]));
+			sb.append(readable(objs[i]));
 		}
 
 		sb.append("\n]");
@@ -211,7 +186,7 @@ public class U {
 			if (i > 0) {
 				sb.append(sep);
 			}
-			sb.append(readable(itemFormat, items[i]));
+			sb.append(nice(itemFormat, items[i]));
 		}
 
 		return sb.toString();
@@ -228,24 +203,28 @@ public class U {
 				sb.append(sep);
 			}
 
-			sb.append(readable(itemFormat, item));
+			sb.append(nice(itemFormat, item));
 			i++;
 		}
 
 		return sb.toString();
 	}
 
-	public static <T> T[] array(T... items) {
-		return items;
-	}
-
 	public static <T> Iterator<T> iterator(T[] arr) {
 		return Arrays.asList(arr).iterator();
 	}
 
-	public static <T> Set<T> set(Collection<? extends T> coll) {
+	public static <T> T[] array(T... items) {
+		return items;
+	}
+
+	public static <T> Set<T> set(Iterable<? extends T> values) {
 		Set<T> set = new LinkedHashSet<T>();
-		set.addAll(coll);
+
+		for (T val : values) {
+			set.add(val);
+		}
+
 		return set;
 	}
 
@@ -259,9 +238,13 @@ public class U {
 		return set;
 	}
 
-	public static <T> List<T> list(Collection<? extends T> coll) {
+	public static <T> List<T> list(Iterable<? extends T> values) {
 		List<T> list = new ArrayList<T>();
-		list.addAll(coll);
+
+		for (T item : values) {
+			list.add(item);
+		}
+
 		return list;
 	}
 
@@ -388,6 +371,10 @@ public class U {
 		return maxSize > 0 ? new ArrayBlockingQueue<T>(maxSize) : new ConcurrentLinkedQueue<T>();
 	}
 
+	public static <T> T or(T value, T fallback) {
+		return value != null ? value : fallback;
+	}
+
 	public static long time() {
 		return System.currentTimeMillis();
 	}
@@ -408,15 +395,29 @@ public class U {
 		return a.equals(b);
 	}
 
-	public static void failIf(boolean failureCondition, String msg) {
-		if (failureCondition) {
-			throw rte(msg);
-		}
+	public static RuntimeException rte(String message, Object... args) {
+		return new RuntimeException(nice(message, args));
 	}
 
-	public static void failIf(boolean failureCondition, String msg, Object... args) {
+	public static RuntimeException rte(Throwable cause) {
+		return new RuntimeException(cause);
+	}
+
+	public static RuntimeException rte(String message) {
+		return new RuntimeException(message);
+	}
+
+	public static RuntimeException notExpected() {
+		return rte("This operation is not expected to be called!");
+	}
+
+	public static IllegalArgumentException illegalArg(String message) {
+		return new IllegalArgumentException(message);
+	}
+
+	public static void rteIf(boolean failureCondition, String msg) {
 		if (failureCondition) {
-			throw rte(msg, args);
+			throw rte(msg);
 		}
 	}
 
@@ -427,18 +428,8 @@ public class U {
 		return true;
 	}
 
-	public static String copyNtimes(String s, int n) {
-		StringBuffer sb = new StringBuffer();
-
-		for (int i = 0; i < n; i++) {
-			sb.append(s);
-		}
-
-		return sb.toString();
-	}
-
 	public static RuntimeException rte(String message, Throwable cause, Object... args) {
-		return new RuntimeException(readable(message, args), cause);
+		return new RuntimeException(nice(message, args), cause);
 	}
 
 	public static RuntimeException rte(String message, Throwable cause) {
@@ -461,21 +452,21 @@ public class U {
 
 	public static boolean must(boolean expectedCondition, String message, Object arg) {
 		if (!expectedCondition) {
-			throw rte(message, text(arg));
+			throw rte(message, readable(arg));
 		}
 		return true;
 	}
 
 	public static boolean must(boolean expectedCondition, String message, Object arg1, Object arg2) {
 		if (!expectedCondition) {
-			throw rte(message, text(arg1), text(arg2));
+			throw rte(message, readable(arg1), readable(arg2));
 		}
 		return true;
 	}
 
 	public static boolean must(boolean expectedCondition, String message, Object arg1, Object arg2, Object arg3) {
 		if (!expectedCondition) {
-			throw rte(message, text(arg1), text(arg2), text(arg3));
+			throw rte(message, readable(arg1), readable(arg2), readable(arg3));
 		}
 		return true;
 	}
@@ -488,13 +479,13 @@ public class U {
 
 	public static void secure(boolean condition, String msg, Object arg) {
 		if (!condition) {
-			throw new SecurityException(readable(msg, arg));
+			throw new SecurityException(nice(msg, arg));
 		}
 	}
 
 	public static void secure(boolean condition, String msg, Object arg1, Object arg2) {
 		if (!condition) {
-			throw new SecurityException(readable(msg, arg1, arg2));
+			throw new SecurityException(nice(msg, arg1, arg2));
 		}
 	}
 
@@ -512,7 +503,7 @@ public class U {
 
 	public static <T> T notNull(T value, String desc, Object... descArgs) {
 		if (value == null) {
-			throw rte("%s must NOT be null!", readable(desc, descArgs));
+			throw rte("%s must NOT be null!", nice(desc, descArgs));
 		}
 
 		return value;
@@ -527,7 +518,7 @@ public class U {
 	}
 
 	public static void show(Object... values) {
-		String text = values.length == 1 ? text(values[0]) : text(values);
+		String text = values.length == 1 ? readable(values[0]) : readable(values);
 		System.out.println(">" + text + "<");
 	}
 
@@ -541,6 +532,10 @@ public class U {
 
 	public static boolean isEmpty(Collection<?> coll) {
 		return coll == null || coll.isEmpty();
+	}
+
+	public static boolean isEmpty(Iterable<?> iter) {
+		return iter.iterator().hasNext();
 	}
 
 	public static boolean isEmpty(Map<?, ?> map) {
@@ -558,6 +553,8 @@ public class U {
 			return isEmpty((Collection<?>) value);
 		} else if (value instanceof Map<?, ?>) {
 			return isEmpty((Map<?, ?>) value);
+		} else if (value instanceof Iterable<?>) {
+			return isEmpty((Iterable<?>) value);
 		}
 		return false;
 	}
@@ -568,6 +565,16 @@ public class U {
 
 	public static String uncapitalized(String s) {
 		return s.isEmpty() ? s : s.substring(0, 1).toLowerCase() + s.substring(1);
+	}
+
+	public static String copyNtimes(String s, int n) {
+		StringBuffer sb = new StringBuffer();
+
+		for (int i = 0; i < n; i++) {
+			sb.append(s);
+		}
+
+		return sb.toString();
 	}
 
 	public static String mid(String s, int beginIndex, int endIndex) {
@@ -581,18 +588,23 @@ public class U {
 		return Integer.parseInt(s);
 	}
 
-	public static int limit(int min, int value, int max) {
+	public static int limited(int min, int value, int max) {
 		return Math.min(Math.max(min, value), max);
 	}
 
-	public static <T> T single(Collection<T> coll) {
-		must(coll.size() == 1, "Expected exactly 1 items, but found: %s!", coll.size());
-		return coll.iterator().next();
+	public static <T> T single(Iterable<T> coll) {
+		Iterator<T> it = coll.iterator();
+		must(it.hasNext(), "Expected exactly 1 item, but didn't find any!");
+		T item = it.next();
+		must(!it.hasNext(), "Expected exactly 1 item, but found more than 1!");
+		return item;
 	}
 
-	public static <T> T singleOrNone(Collection<T> coll) {
-		must(coll.size() <= 1, "Expected 0 or 1 items, but found: %s!", coll.size());
-		return !coll.isEmpty() ? coll.iterator().next() : null;
+	public static <T> T singleOrNone(Iterable<T> coll) {
+		Iterator<T> it = coll.iterator();
+		T item = it.hasNext() ? it.next() : null;
+		must(!it.hasNext(), "Expected 0 or 1 items, but found more than 1!");
+		return item;
 	}
 
 	@SuppressWarnings("unchecked")
