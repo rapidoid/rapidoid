@@ -46,6 +46,7 @@ import org.rapidoid.rest.WebReq;
 import org.rapidoid.util.Arr;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.widget.BootstrapWidgets;
 
 public class Pages {
@@ -259,7 +260,7 @@ public class Pages {
 			try {
 				callCmdHandler(x, view, cmd);
 			} catch (Exception e) {
-				Throwable cause = U.rootCause(e);
+				Throwable cause = UTILS.rootCause(e);
 				if (cause instanceof HttpExchangeException) {
 					processView = false;
 				} else {
@@ -277,7 +278,7 @@ public class Pages {
 					return content;
 				}
 			} catch (Exception e) {
-				Throwable cause = U.rootCause(e);
+				Throwable cause = UTILS.rootCause(e);
 				if (cause instanceof HttpExchangeException) {
 					return null;
 				} else {

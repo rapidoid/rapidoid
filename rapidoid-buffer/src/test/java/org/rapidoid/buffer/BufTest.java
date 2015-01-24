@@ -340,22 +340,22 @@ public class BufTest extends BufferTestCommons implements Constants {
 			int n = U.num(num.substring(0, dig));
 
 			Buf buf = bufs.newBuf();
-			buf.append(U.mul(" ", dig + 2));
+			buf.append(U.copyNtimes(" ", dig + 2));
 			buf.putNumAsText(1, n, true);
 			eq(buf.asText(), " " + n + " ");
 
 			Buf buf2 = bufs.newBuf();
-			buf2.append(U.mul(" ", dig + 3));
+			buf2.append(U.copyNtimes(" ", dig + 3));
 			buf2.putNumAsText(1, -n, true);
 			eq(buf2.asText(), " " + (-n) + " ");
 
 			Buf buf3 = bufs.newBuf();
-			buf3.append(U.mul(" ", dig + 2));
+			buf3.append(U.copyNtimes(" ", dig + 2));
 			buf3.putNumAsText(dig, n, false);
 			eq(buf3.asText(), " " + n + " ");
 
 			Buf buf4 = bufs.newBuf();
-			buf4.append(U.mul(" ", dig + 3));
+			buf4.append(U.copyNtimes(" ", dig + 3));
 			buf4.putNumAsText(dig + 1, -n, false);
 			eq(buf4.asText(), " " + (-n) + " ");
 		}
@@ -373,7 +373,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 			for (int j = 0; j < 5; j++) {
 				size += add;
-				buf.append(U.mul(" ", add));
+				buf.append(U.copyNtimes(" ", add));
 				eq(buf.size(), size);
 			}
 

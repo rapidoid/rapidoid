@@ -842,7 +842,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized HttpExchangeHeaders errorResponse(Throwable err) {
-		Throwable cause = U.rootCause(err);
+		Throwable cause = UTILS.rootCause(err);
 		if (cause instanceof HttpExchangeException) {
 			return this;
 		} else if (cause instanceof SecurityException) {

@@ -29,6 +29,7 @@ import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ExchangeProtocol;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
@@ -96,7 +97,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	}
 
 	private void handleError(HttpExchangeImpl x, Throwable e) {
-		Throwable cause = U.rootCause(e);
+		Throwable cause = UTILS.rootCause(e);
 		if (cause instanceof HttpExchangeException) {
 			// redirect, notFound etc.
 			x.completeResponse();

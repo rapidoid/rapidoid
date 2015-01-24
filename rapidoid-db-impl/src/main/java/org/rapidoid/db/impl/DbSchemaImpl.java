@@ -9,6 +9,7 @@ import org.rapidoid.db.DbDsl;
 import org.rapidoid.db.DbSchema;
 import org.rapidoid.db.Entity;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.English;
 import org.rapidoid.util.U;
 
 /*
@@ -42,7 +43,7 @@ public class DbSchemaImpl implements DbSchema {
 		String type = entityType.getSimpleName().toLowerCase();
 
 		entityTypes.putIfAbsent(type, entityType);
-		entityTypesPlural.putIfAbsent(U.plural(type), entityType);
+		entityTypesPlural.putIfAbsent(English.plural(type), entityType);
 
 		return null; // FIXME implement this
 	}

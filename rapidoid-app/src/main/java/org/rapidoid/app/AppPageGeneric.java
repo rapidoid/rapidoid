@@ -43,8 +43,10 @@ import org.rapidoid.oauth.OAuthProvider;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.English;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class AppPageGeneric extends AppGUI {
 
@@ -247,7 +249,7 @@ public class AppPageGeneric extends AppGUI {
 
 		for (int j = 0; j < scaffolding.size(); j++) {
 			Class<?> scaff = scaffolding.get(j);
-			String name = U.plural(scaff.getSimpleName());
+			String name = English.plural(scaff.getSimpleName());
 			String title = U.camelSplit(name);
 			String url = "/" + name.toLowerCase();
 			menuItems[k++] = a(title).href(url);
@@ -410,7 +412,7 @@ public class AppPageGeneric extends AppGUI {
 		try {
 			Pages.callCmdHandler(x, screen, new Cmd(cmd, false, args));
 		} catch (Exception e) {
-			if (U.rootCause(e) instanceof HttpExchangeException) {
+			if (UTILS.rootCause(e) instanceof HttpExchangeException) {
 				Pages.store(x, screen);
 			}
 			throw U.rte(e);

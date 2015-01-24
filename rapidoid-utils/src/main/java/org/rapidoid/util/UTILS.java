@@ -705,4 +705,15 @@ public class UTILS implements Constants {
 		}
 	}
 
+	public static Throwable rootCause(Throwable e) {
+		while (e.getCause() != null) {
+			e = e.getCause();
+		}
+		return e;
+	}
+
+	public static String fillIn(String template, String placeholder, String value) {
+		return template.replace("{{" + placeholder + "}}", value);
+	}
+
 }

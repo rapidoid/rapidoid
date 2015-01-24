@@ -38,6 +38,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.util.UserInfo;
 
 public class OAuthTokenHandler implements Handler {
@@ -81,7 +82,7 @@ public class OAuthTokenHandler implements Handler {
 
 			String accessToken = token(request, oAuthClient);
 
-			String profileUrl = U.fillIn(provider.getProfileEndpoint(), "token", accessToken);
+			String profileUrl = UTILS.fillIn(provider.getProfileEndpoint(), "token", accessToken);
 
 			OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(profileUrl).setAccessToken(
 					accessToken).buildQueryMessage();

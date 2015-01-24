@@ -24,7 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import org.rapidoid.util.IO;
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class HTMLSnippets {
 
@@ -38,8 +38,8 @@ public class HTMLSnippets {
 	}
 
 	public static HttpExchange writePage(HttpExchange x, String title, String content) {
-		String html = U.fillIn(PAGE_HTML, "title", title);
-		html = U.fillIn(html, "content", content);
+		String html = UTILS.fillIn(PAGE_HTML, "title", title);
+		html = UTILS.fillIn(html, "content", content);
 		x.write(html);
 		return x;
 	}

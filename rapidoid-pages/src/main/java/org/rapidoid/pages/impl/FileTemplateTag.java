@@ -31,6 +31,7 @@ import org.rapidoid.html.TagProcessor;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class FileTemplateTag extends HardcodedTag {
 
@@ -54,7 +55,7 @@ public class FileTemplateTag extends HardcodedTag {
 			String placeholder = (String) namesAndValues[i * 2];
 			String value = renderer.toHTML(ctx, namesAndValues[i * 2 + 1], x);
 
-			text = U.fillIn(text, placeholder, value);
+			text = UTILS.fillIn(text, placeholder, value);
 		}
 
 		try {

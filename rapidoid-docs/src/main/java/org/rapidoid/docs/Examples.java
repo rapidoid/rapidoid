@@ -99,14 +99,14 @@ public class Examples {
 
 			snippet = col(rr, snippet);
 
-			String example = U.fillIn(egT, "n", i + "");
-			example = U.fillIn(example, "code", snippet);
-			example = U.fillIn(example, "title", titles[i - 2]);
-			example = U.fillIn(example, "desc", desc);
+			String example = UTILS.fillIn(egT, "n", i + "");
+			example = UTILS.fillIn(example, "code", snippet);
+			example = UTILS.fillIn(example, "title", titles[i - 2]);
+			example = UTILS.fillIn(example, "desc", desc);
 			examples += example;
 		}
 
-		String html = U.fillIn(docsT, "examples", examples);
+		String html = UTILS.fillIn(docsT, "examples", examples);
 
 		IO.save(path + "index.html", html);
 	}
