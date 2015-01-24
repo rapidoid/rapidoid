@@ -8,6 +8,7 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.db.DbDsl;
 import org.rapidoid.db.DbSchema;
 import org.rapidoid.db.Entity;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 /*
@@ -66,7 +67,7 @@ public class DbSchemaImpl implements DbSchema {
 			Class<? extends Entity> cls = (Class<? extends Entity>) entityType;
 			return (E) DbProxy.create(cls, U.concurrentMap(properties));
 		} else {
-			E entity = U.newInstance(entityType);
+			E entity = Cls.newInstance(entityType);
 			Beany.update(entity, (Map<String, Object>) properties, true);
 			return entity;
 		}

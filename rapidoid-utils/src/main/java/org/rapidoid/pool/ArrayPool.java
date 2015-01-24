@@ -23,6 +23,7 @@ package org.rapidoid.pool;
 import java.util.concurrent.Callable;
 
 import org.rapidoid.log.Log;
+import org.rapidoid.util.Arr;
 import org.rapidoid.util.U;
 
 public class ArrayPool<T> implements Pool<T> {
@@ -65,7 +66,7 @@ public class ArrayPool<T> implements Pool<T> {
 			int expandFactor = free.length < 1000000 ? 10 : 2;
 			int newSize = free.length * expandFactor;
 			Log.warn("Pool wasn't big enough, expanding...", "old size", free.length, "new size", newSize);
-			free = U.expand(free, expandFactor);
+			free = Arr.expand(free, expandFactor);
 		}
 
 		free[freeN++] = obj;

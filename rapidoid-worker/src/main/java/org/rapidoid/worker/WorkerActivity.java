@@ -1,6 +1,7 @@
 package org.rapidoid.worker;
 
 import org.rapidoid.activity.AbstractThreadActivity;
+import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.U;
 
@@ -74,7 +75,7 @@ public class WorkerActivity<IN, OUT> extends AbstractThreadActivity<Worker<IN, O
 		IN task = input.take();
 		U.notNullAll(task);
 
-		OUT result = U.eval(mapper, task);
+		OUT result = Lambdas.eval(mapper, task);
 		U.notNull(result, "worker mapper result");
 
 		output.put(result);

@@ -106,31 +106,6 @@ public class UTest extends TestCommons {
 	}
 
 	@Test
-	public void testSubarray() {
-		String[] arr = new String[] { "aa", "bb", "c", "ddd", "e" };
-
-		String[] subarr = U.subarray(arr, 0, 2);
-		eq(subarr, new String[] { "aa", "bb", "c" });
-
-		subarr = U.subarray(arr, 2, 4);
-		eq(subarr, new String[] { "c", "ddd", "e" });
-
-		subarr = U.subarray(arr, 0, 4);
-		eq(subarr, new String[] { "aa", "bb", "c", "ddd", "e" });
-
-		subarr = U.subarray(arr, 3, 3);
-		eq(subarr, new String[] { "ddd" });
-
-		subarr = U.subarray(arr, 1, 3);
-		eq(subarr, new String[] { "bb", "c", "ddd" });
-	}
-
-	@Test(expectedExceptions = { RuntimeException.class })
-	public void testSubarrayException() {
-		U.subarray(new String[] { "aa", "bb", "c" }, 2, 1);
-	}
-
-	@Test
 	public void testSet() {
 		Set<Integer> set = U.set(1, 3, 5, 8);
 
@@ -216,21 +191,6 @@ public class UTest extends TestCommons {
 		eq(U.isEmpty((Collection<?>) null), true);
 		eq(U.isEmpty(U.set(1)), false);
 		eq(U.isEmpty(U.list("2")), false);
-	}
-
-	@Test
-	public void testExclude() {
-		String[] arr = { "a", "b", "c" };
-		eq(U.exclude(arr, "a"), U.array("b", "c"));
-		eq(U.exclude(arr, "b"), U.array("a", "c"));
-		eq(U.exclude(arr, "c"), U.array("a", "b"));
-	}
-
-	@Test
-	public void testInclude() {
-		String[] arr = { "a", "b", "c" };
-		eq(U.include(arr, "a"), U.array("a", "b", "c"));
-		eq(U.include(arr, "d"), U.array("a", "b", "c", "d"));
 	}
 
 	@Test

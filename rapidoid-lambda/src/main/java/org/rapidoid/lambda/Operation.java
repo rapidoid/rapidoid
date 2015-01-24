@@ -2,7 +2,7 @@ package org.rapidoid.lambda;
 
 /*
  * #%L
- * rapidoid-u
+ * rapidoid-lambda
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,24 +20,8 @@ package org.rapidoid.lambda;
  * #L%
  */
 
-public interface Predicate<T> {
+public interface Operation<T> {
 
-	@SuppressWarnings("rawtypes")
-	public static final Predicate<?> ALWAYS_TRUE = new Predicate() {
-		@Override
-		public boolean eval(Object param) throws Exception {
-			return true;
-		}
-	};
-
-	@SuppressWarnings("rawtypes")
-	public static final Predicate<?> ALWAYS_FALSE = new Predicate() {
-		@Override
-		public boolean eval(Object param) throws Exception {
-			return false;
-		}
-	};
-
-	boolean eval(T param) throws Exception;
+	void execute(T obj) throws Exception;
 
 }

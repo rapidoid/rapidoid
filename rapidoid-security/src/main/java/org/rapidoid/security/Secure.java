@@ -30,13 +30,14 @@ import org.rapidoid.security.annotation.CanDelete;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.AppCtx;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UserInfo;
 
 public class Secure implements Constants {
 
-	private static AppSecurity security = U.customizable(AppSecurity.class);
+	private static AppSecurity security = Cls.customizable(AppSecurity.class);
 
 	public static boolean hasRole(String username, String role) {
 		return security.hasRole(username, role, null, null);

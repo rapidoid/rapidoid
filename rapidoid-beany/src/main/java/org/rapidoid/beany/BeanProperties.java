@@ -30,9 +30,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentMap;
 
+import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class BeanProperties implements Iterable<Prop> {
 
@@ -47,7 +49,7 @@ public class BeanProperties implements Iterable<Prop> {
 
 	public final ConcurrentMap<String, Object> extras = U.concurrentMap();
 
-	public final Map<PropertySelector, BeanProperties> selections = U
+	public final Map<PropertySelector, BeanProperties> selections = UTILS
 			.autoExpandingMap(new Mapper<PropertySelector, BeanProperties>() {
 				@Override
 				public BeanProperties map(PropertySelector selector) throws Exception {
@@ -59,13 +61,13 @@ public class BeanProperties implements Iterable<Prop> {
 						for (String propName : propertyNames) {
 							Prop prop = map.get(propName);
 							U.must(prop != null, "Cannot find property '%s'!", propName);
-							if (U.eval(selector, prop)) {
+							if (Lambdas.eval(selector, prop)) {
 								selected.add(prop);
 							}
 						}
 					} else {
 						for (Entry<String, Prop> e : map.entrySet()) {
-							if (U.eval(selector, e.getValue())) {
+							if (Lambdas.eval(selector, e.getValue())) {
 								selected.add(e.getValue());
 							}
 						}

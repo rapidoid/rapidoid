@@ -32,6 +32,7 @@ import org.rapidoid.model.impl.BeanListItems;
 import org.rapidoid.model.impl.BeanProperty;
 import org.rapidoid.model.impl.ListItems;
 import org.rapidoid.model.impl.MapItem;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 public class Models {
@@ -147,7 +148,7 @@ public class Models {
 		T[] beans = (T[]) new Object[size];
 
 		for (int i = 0; i < beans.length; i++) {
-			beans[i] = U.newInstance(beanType);
+			beans[i] = Cls.newInstance(beanType);
 			Beany.setId(beans[i], i);
 		}
 

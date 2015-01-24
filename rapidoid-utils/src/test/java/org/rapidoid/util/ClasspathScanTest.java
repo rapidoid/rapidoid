@@ -34,9 +34,13 @@ public class ClasspathScanTest extends TestCommons {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testClasspathScanByName() {
-		List<Class<?>> classes = Scan.classes(null, ".*Test", null, null, null);
+		List<Class<?>> classes = Scan.classes(null, ".*ScanTest", null, null, null);
 
-		eq(U.set(classes), U.set(ClasspathScanTest.class, DatesTest.class, AppCtxTest.class));
+		eq(U.set(classes), U.set(ClasspathScanTest.class));
+
+		classes = Scan.byName("AppCtxTest", null, null);
+
+		eq(U.set(classes), U.set(AppCtxTest.class));
 	}
 
 	@SuppressWarnings("unchecked")

@@ -379,16 +379,16 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static GridWidget grid(Items items, String sortOrder, int pageSize, String... properties) {
-		return U.customizable(GridWidget.class, items, sortOrder, pageSize, properties);
+		return Cls.customizable(GridWidget.class, items, sortOrder, pageSize, properties);
 	}
 
 	public static PagerWidget pager(int from, int to, Var<Integer> pageNumber) {
-		return U.customizable(PagerWidget.class, from, to, pageNumber);
+		return Cls.customizable(PagerWidget.class, from, to, pageNumber);
 	}
 
 	public static FormWidget form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc,
 			FieldType[] fieldTypes, Object[][] options, Var<?>[] vars, Tag[] buttons) {
-		return U.customizable(FormWidget.class, layout, fieldsNames, fieldsDesc, fieldTypes, options, vars, buttons);
+		return Cls.customizable(FormWidget.class, layout, fieldsNames, fieldsDesc, fieldTypes, options, vars, buttons);
 	}
 
 	public static FormWidget show(Object bean, String... properties) {
@@ -400,7 +400,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static FormWidget show(DataManager dataManager, final Item item, String... properties) {
-		return U.customizable(FormWidget.class, dataManager, FormMode.SHOW, item, properties);
+		return Cls.customizable(FormWidget.class, dataManager, FormMode.SHOW, item, properties);
 	}
 
 	public static FormWidget edit(Object bean, String... properties) {
@@ -412,7 +412,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static FormWidget edit(DataManager dataManager, final Item item, String... properties) {
-		return U.customizable(FormWidget.class, dataManager, FormMode.EDIT, item, properties);
+		return Cls.customizable(FormWidget.class, dataManager, FormMode.EDIT, item, properties);
 	}
 
 	public static FormWidget create(Object bean, String... properties) {
@@ -424,7 +424,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static FormWidget create(DataManager dataManager, final Item item, String... properties) {
-		return U.customizable(FormWidget.class, dataManager, FormMode.CREATE, item, properties);
+		return Cls.customizable(FormWidget.class, dataManager, FormMode.CREATE, item, properties);
 	}
 
 	public static FormField field(DataManager dataManager, FormMode mode, FormLayout layout, Property prop,
@@ -509,7 +509,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Object highlight(String text, String regex) {
-		return U.customizable(HighlightWidget.class, text, regex);
+		return Cls.customizable(HighlightWidget.class, text, regex);
 	}
 
 	public static InputTag emailInput(Var<?> var) {

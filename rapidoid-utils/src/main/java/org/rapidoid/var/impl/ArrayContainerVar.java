@@ -20,7 +20,7 @@ package org.rapidoid.var.impl;
  * #L%
  */
 
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 
 public class ArrayContainerVar extends AbstractVar<Boolean> {
@@ -38,15 +38,15 @@ public class ArrayContainerVar extends AbstractVar<Boolean> {
 
 	@Override
 	public Boolean get() {
-		return U.contains(container.get(), item);
+		return UTILS.contains(container.get(), item);
 	}
 
 	@Override
 	public void set(Boolean value) {
 		if (value) {
-			container.set(U.include(container.get(), item));
+			container.set(UTILS.include(container.get(), item));
 		} else {
-			container.set(U.exclude(container.get(), item));
+			container.set(UTILS.exclude(container.get(), item));
 		}
 	}
 

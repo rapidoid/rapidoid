@@ -1,8 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.lambda;
 
 /*
  * #%L
- * rapidoid-u
+ * rapidoid-lambda
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,30 +20,24 @@ package org.rapidoid.util;
  * #L%
  */
 
-public class Arr {
+public interface Predicate<T> {
 
-	public static int indexOf(Object[] arr, Object value) {
-		for (int i = 0; i < arr.length; i++) {
-			if (U.eq(arr[i], value)) {
-				return i;
-			}
+	@SuppressWarnings("rawtypes")
+	public static final Predicate<?> ALWAYS_TRUE = new Predicate() {
+		@Override
+		public boolean eval(Object param) throws Exception {
+			return true;
 		}
-		return -1;
-	}
+	};
 
-	public static Object[] deleteAt(Object[] arr, int index) {
-
-		Object[] res = new Object[arr.length - 1];
-
-		if (index > 0) {
-			System.arraycopy(arr, 0, res, 0, index);
+	@SuppressWarnings("rawtypes")
+	public static final Predicate<?> ALWAYS_FALSE = new Predicate() {
+		@Override
+		public boolean eval(Object param) throws Exception {
+			return false;
 		}
+	};
 
-		if (index < arr.length - 1) {
-			System.arraycopy(arr, index + 1, res, index, res.length - index);
-		}
-
-		return res;
-	}
+	boolean eval(T param) throws Exception;
 
 }

@@ -1,8 +1,8 @@
-package org.rapidoid.lambda;
+package org.rapidoid.util;
 
 /*
  * #%L
- * rapidoid-u
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,8 +20,24 @@ package org.rapidoid.lambda;
  * #L%
  */
 
-public interface Mapper<FROM, TO> {
+import org.rapidoid.test.TestCommons;
+import org.testng.annotations.Test;
 
-	TO map(FROM src) throws Exception;
+public class UtilsTest extends TestCommons {
+
+	@Test
+	public void testExclude() {
+		String[] arr = { "a", "b", "c" };
+		eq(UTILS.exclude(arr, "a"), U.array("b", "c"));
+		eq(UTILS.exclude(arr, "b"), U.array("a", "c"));
+		eq(UTILS.exclude(arr, "c"), U.array("a", "b"));
+	}
+
+	@Test
+	public void testInclude() {
+		String[] arr = { "a", "b", "c" };
+		eq(UTILS.include(arr, "a"), U.array("a", "b", "c"));
+		eq(UTILS.include(arr, "d"), U.array("a", "b", "c", "d"));
+	}
 
 }

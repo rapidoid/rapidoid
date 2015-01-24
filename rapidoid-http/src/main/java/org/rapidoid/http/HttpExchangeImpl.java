@@ -40,6 +40,7 @@ import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.net.mime.MediaType;
 import org.rapidoid.security.Secure;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.Conf;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
@@ -734,7 +735,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		T value = (T) session.getAttribute(sessionId(), name);
 
 		if (value == null) {
-			value = U.newInstance(valueClass, constructorArgs);
+			value = Cls.newInstance(valueClass, constructorArgs);
 			session.setAttribute(sessionId(), name, value);
 		}
 

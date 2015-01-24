@@ -26,7 +26,7 @@ import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.pool.ArrayPool;
 import org.rapidoid.pool.Pool;
-import org.rapidoid.util.U;
+import org.rapidoid.util.Cls;
 import org.rapidoid.wrap.Bool;
 import org.rapidoid.wrap.Chr;
 import org.rapidoid.wrap.Dbl;
@@ -111,11 +111,11 @@ public class RapidoidHelper {
 		}
 
 		if (exchangeClass != null) {
-			exchange = U.newInstance(exchangeClass);
+			exchange = Cls.newInstance(exchangeClass);
 			pool = new ArrayPool(new Callable() {
 				@Override
 				public Object call() throws Exception {
-					return U.newInstance(exchangeClass);
+					return Cls.newInstance(exchangeClass);
 				}
 			}, 1000);
 		} else {

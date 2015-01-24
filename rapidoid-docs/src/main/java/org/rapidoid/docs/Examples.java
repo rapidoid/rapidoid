@@ -37,6 +37,7 @@ import org.rapidoid.oauth.OAuth;
 import org.rapidoid.util.Conf;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class Examples {
 
@@ -45,7 +46,7 @@ public class Examples {
 	public static void main(String[] args) {
 		Conf.args("oauth-no-state");
 		DB.destroy();
-		
+
 		String path = "../../rapidoid.github.io/";
 		U.must(new File(path).exists());
 
@@ -110,7 +111,7 @@ public class Examples {
 	}
 
 	private static String col(String rr, String snippet) {
-		snippet = U.replace(snippet, rr, new Mapper<String[], String>() {
+		snippet = UTILS.replace(snippet, rr, new Mapper<String[], String>() {
 			@Override
 			public String map(String[] src) throws Exception {
 				String s = src[0];

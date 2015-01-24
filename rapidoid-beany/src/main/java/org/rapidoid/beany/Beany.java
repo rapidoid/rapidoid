@@ -18,6 +18,7 @@ import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 /*
  * #%L
@@ -41,7 +42,7 @@ import org.rapidoid.util.U;
 
 public class Beany {
 
-	protected static final Map<Class<?>, BeanProperties> BEAN_PROPERTIES = U
+	protected static final Map<Class<?>, BeanProperties> BEAN_PROPERTIES = UTILS
 			.autoExpandingMap(new Mapper<Class<?>, BeanProperties>() {
 
 				@Override

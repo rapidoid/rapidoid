@@ -29,6 +29,7 @@ import java.util.Map;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 
@@ -63,7 +64,7 @@ public class DB {
 	}
 
 	public static void init() {
-		db = (Database) U.customizable(DB.DB_IMPL_CLASS, "default", path() + "default.db");
+		db = (Database) Cls.customizable(DB.DB_IMPL_CLASS, "default", path() + "default.db");
 		db.initAndLoad();
 	}
 

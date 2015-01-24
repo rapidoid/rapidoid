@@ -23,6 +23,7 @@ package org.rapidoid.var.impl;
 import java.util.Collection;
 
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 
 public class CollectionContainerVar extends AbstractVar<Boolean> {
@@ -40,7 +41,7 @@ public class CollectionContainerVar extends AbstractVar<Boolean> {
 
 	@Override
 	public Boolean get() {
-		return U.contains(container.get(), item);
+		return UTILS.contains(container.get(), item);
 	}
 
 	@Override

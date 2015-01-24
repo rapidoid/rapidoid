@@ -32,6 +32,7 @@ import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.pool.Pool;
+import org.rapidoid.util.Arr;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.wrap.Int;
@@ -171,7 +172,7 @@ public class MultiBuf implements Buf, Constants {
 
 	private void expandUnit() {
 		if (bufN == bufs.length) {
-			bufs = U.expand(bufs, 2);
+			bufs = Arr.expand(bufs, 2);
 		}
 
 		bufs[bufN] = bufPool.get();

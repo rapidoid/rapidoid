@@ -22,6 +22,7 @@ package org.rapidoid.util;
 
 import java.security.SecureClassLoader;
 
+import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Predicate;
 
@@ -41,9 +42,9 @@ public class CustomizableClassLoader extends SecureClassLoader {
 
 	@Override
 	public Class<?> loadClass(String name) throws ClassNotFoundException {
-		U.secure(U.eval(allowed, name), "Class not allowed: %s", name);
+		U.secure(Lambdas.eval(allowed, name), "Class not allowed: %s", name);
 
-		if (forceReload && !U.isJREClass(name)) {
+		if (forceReload && !Cls.isJREClass(name)) {
 			try {
 				// try to force class reloading
 				return findClass(name);
@@ -63,9 +64,9 @@ public class CustomizableClassLoader extends SecureClassLoader {
 
 	@Override
 	protected Class<?> findClass(String name) throws ClassNotFoundException {
-		U.secure(U.eval(allowed, name), "Class not allowed: %s", name);
+		U.secure(Lambdas.eval(allowed, name), "Class not allowed: %s", name);
 
-		byte[] bytes = U.eval(classes, name);
+		byte[] bytes = Lambdas.eval(classes, name);
 
 		if (bytes != null) {
 			return super.defineClass(name, bytes, 0, bytes.length);

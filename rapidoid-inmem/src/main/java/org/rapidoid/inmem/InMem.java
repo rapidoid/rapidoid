@@ -56,6 +56,7 @@ import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.security.Secure;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.SuccessException;
 import org.rapidoid.util.Tuple;
 import org.rapidoid.util.U;
@@ -98,7 +99,7 @@ public class InMem {
 	protected static final PropertyFilter SEARCHABLE_PROPS = new PropertyFilter() {
 		@Override
 		public boolean eval(Prop prop) throws Exception {
-			return U.isAssignableTo(prop.getType(), Number.class, String.class, Boolean.class, Enum.class, Date.class);
+			return Cls.isAssignableTo(prop.getType(), Number.class, String.class, Boolean.class, Enum.class, Date.class);
 		}
 	};
 

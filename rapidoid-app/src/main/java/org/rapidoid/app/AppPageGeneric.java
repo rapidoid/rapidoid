@@ -56,7 +56,7 @@ public class AppPageGeneric extends AppGUI {
 
 	protected static final Pattern ENTITY_LIST = Pattern.compile("^/(\\w+?)/?$");
 
-	protected static final AppScreens APP_SCREENS = U.customizable(AppScreens.class);
+	protected static final AppScreens APP_SCREENS = Cls.customizable(AppScreens.class);
 
 	protected final HttpExchange x;
 
@@ -69,7 +69,7 @@ public class AppPageGeneric extends AppGUI {
 	public AppPageGeneric(HttpExchange x, AppClasses appCls) {
 		this.x = x;
 		this.appCls = appCls;
-		this.app = wireX(appCls.main != null ? U.newInstance(appCls.main) : new Object(), x);
+		this.app = wireX(appCls.main != null ? Cls.newInstance(appCls.main) : new Object(), x);
 		this.screen = wireX(getScreen(), x);
 
 		U.must(screen != null, "Cannot find a screen to process the request!");
@@ -362,7 +362,7 @@ public class AppPageGeneric extends AppGUI {
 		for (Class<?> screen : appCls.screens.values()) {
 			if (Apps.screenUrl(screen).equals(x.path())) {
 				x.authorize(screen);
-				return U.newInstance(screen);
+				return Cls.newInstance(screen);
 			}
 		}
 

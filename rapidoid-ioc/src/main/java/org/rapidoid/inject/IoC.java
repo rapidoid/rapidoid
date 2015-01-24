@@ -34,6 +34,7 @@ import org.rapidoid.annotation.Init;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.beany.Beany;
+import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.Builder;
@@ -41,6 +42,7 @@ import org.rapidoid.util.Cls;
 import org.rapidoid.util.Conf;
 import org.rapidoid.util.F3;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class IoC {
 
@@ -48,7 +50,7 @@ public class IoC {
 	private static final Set<Class<?>> MANAGED_CLASSES = U.set();
 	private static final Set<Object> MANAGED_INSTANCES = U.set();
 	private static final Map<Object, Object> IOC_INSTANCES = U.map();
-	private static final Map<Class<?>, List<Field>> INJECTABLE_FIELDS = U
+	private static final Map<Class<?>, List<Field>> INJECTABLE_FIELDS = UTILS
 			.autoExpandingMap(new Mapper<Class<?>, List<Field>>() {
 				@Override
 				public List<Field> map(Class<?> clazz) throws Exception {
@@ -57,7 +59,7 @@ public class IoC {
 					return fields;
 				}
 			});
-	private static final Map<Class<?>, List<Field>> SESSION_FIELDS = U
+	private static final Map<Class<?>, List<Field>> SESSION_FIELDS = UTILS
 			.autoExpandingMap(new Mapper<Class<?>, List<Field>>() {
 				@Override
 				public List<Field> map(Class<?> clazz) throws Exception {
@@ -88,10 +90,10 @@ public class IoC {
 	}
 
 	public static <K, V> Map<K, V> autoExpandingInjectingMap(final Class<V> clazz) {
-		return U.autoExpandingMap(new Mapper<K, V>() {
+		return UTILS.autoExpandingMap(new Mapper<K, V>() {
 			@Override
 			public V map(K src) throws Exception {
-				return inject(U.newInstance(clazz));
+				return inject(Cls.newInstance(clazz));
 			}
 		});
 	}
@@ -170,7 +172,7 @@ public class IoC {
 
 	private static <T> T provideSessionValue(Object target, Class<T> type, String name, Mapper<String, Object> session) {
 		U.notNull(session, "session");
-		Object value = U.eval(session, name);
+		Object value = Lambdas.eval(session, name);
 		return value != null ? Cls.convert(value, type) : null;
 	}
 

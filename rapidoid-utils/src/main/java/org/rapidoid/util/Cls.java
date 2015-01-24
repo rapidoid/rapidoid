@@ -36,12 +36,23 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.rapidoid.log.Log;
 
 public class Cls {
 
-	static final Map<String, TypeKind> KINDS = initKinds();
+	private static Pattern JRE_CLASS_PATTERN = Pattern
+			.compile("^(java|javax|javafx|com\\.sun|sun|com\\.oracle|oracle|jdk|org\\.omg|org\\.w3c).*");
+
+	private static final Map<Class<?>, Class<?>> PRIMITIVE_WRAPPERS = U.map(boolean.class, Boolean.class, byte.class,
+			Byte.class, char.class, Character.class, double.class, Double.class, float.class, Float.class, int.class,
+			Integer.class, long.class, Long.class, short.class, Short.class, void.class, Void.class);
+
+	private static final Map<String, TypeKind> KINDS = initKinds();
+
+	private Cls() {
+	}
 
 	protected static Map<String, TypeKind> initKinds() {
 
@@ -369,7 +380,7 @@ public class Cls {
 	@SuppressWarnings("unchecked")
 	public static <T> T newInstance(Class<T> clazz, Map<String, Object> properties) {
 		if (properties == null) {
-			return U.newInstance(clazz);
+			return newInstance(clazz);
 		}
 
 		Collection<Object> values = properties.values();
@@ -405,7 +416,7 @@ public class Cls {
 		T instance = null;
 
 		for (Object obj : values) {
-			if (U.instanceOf(obj, type)) {
+			if (instanceOf(obj, type)) {
 				if (instance == null) {
 					instance = (T) obj;
 				} else {
@@ -421,7 +432,7 @@ public class Cls {
 		Object[] instances = new Object[classes.length];
 
 		for (int i = 0; i < instances.length; i++) {
-			instances[i] = U.newInstance(classes[i]);
+			instances[i] = newInstance(classes[i]);
 		}
 
 		return instances;
@@ -435,7 +446,7 @@ public class Cls {
 
 		int i = 0;
 		for (Class<?> clazz : classes) {
-			instances[i++] = U.newInstance(clazz);
+			instances[i++] = newInstance(clazz);
 		}
 
 		return instances;
@@ -709,7 +720,7 @@ public class Cls {
 		for (Method method : clazz.getMethods()) {
 			Class<?>[] paramTypes = method.getParameterTypes();
 
-			if (method.getName().equals(name) && U.areAssignable(paramTypes, args)) {
+			if (method.getName().equals(name) && areAssignable(paramTypes, args)) {
 				return method;
 			}
 		}
@@ -732,6 +743,104 @@ public class Cls {
 
 	public static ParameterizedType generic(Type type) {
 		return (type instanceof ParameterizedType) ? ((ParameterizedType) type) : null;
+	}
+
+	public static boolean isJREClass(String canonicalClassName) {
+		return JRE_CLASS_PATTERN.matcher(canonicalClassName).matches();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> Class<T> getWrapperClass(Class<T> c) {
+		U.must(c.isPrimitive());
+		return c.isPrimitive() ? (Class<T>) PRIMITIVE_WRAPPERS.get(c) : c;
+	}
+
+	public static boolean instanceOf(Object obj, Class<?>... classes) {
+		return obj != null ? isAssignableTo(obj.getClass(), classes) : false;
+	}
+
+	public static boolean isAssignableTo(Class<?> clazz, Class<?>... targetClasses) {
+		for (Class<?> cls : targetClasses) {
+			if (cls.isPrimitive()) {
+				if (cls.isAssignableFrom(clazz)) {
+					return true;
+				}
+				cls = getWrapperClass(cls);
+			}
+			if (cls.isAssignableFrom(clazz)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean areAssignable(Class<?>[] types, Object[] values) {
+		if (types.length != values.length) {
+			return false;
+		}
+
+		for (int i = 0; i < values.length; i++) {
+			Object val = values[i];
+			if (val != null && !instanceOf(val, types[i])) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public static <T> T newInstance(Class<T> clazz) {
+		try {
+			Constructor<T> constr = clazz.getDeclaredConstructor();
+			boolean accessible = constr.isAccessible();
+			constr.setAccessible(true);
+
+			T obj = constr.newInstance();
+
+			constr.setAccessible(accessible);
+			return obj;
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T newInstance(Class<T> clazz, Object... args) {
+		for (Constructor<?> constr : clazz.getConstructors()) {
+			Class<?>[] paramTypes = constr.getParameterTypes();
+			if (areAssignable(paramTypes, args)) {
+				try {
+					boolean accessible = constr.isAccessible();
+					constr.setAccessible(true);
+
+					T obj = (T) constr.newInstance(args);
+
+					constr.setAccessible(accessible);
+					return obj;
+				} catch (Exception e) {
+					throw U.rte(e);
+				}
+			}
+		}
+
+		throw U.rte("Cannot find appropriate constructor for %s with args %s!", clazz, U.text(args));
+	}
+
+	public static <T> T customizable(Class<T> clazz, Object... args) {
+		String customClassName = "Customized" + clazz.getSimpleName();
+
+		Class<T> customClass = U.getClassIfExists(customClassName);
+
+		if (customClass == null) {
+			customClass = U.getClassIfExists("custom." + customClassName);
+		}
+
+		if (customClass != null && !clazz.isAssignableFrom(customClass)) {
+			customClass = null;
+		}
+
+		return newInstance(U.or(customClass, clazz), args);
 	}
 
 }

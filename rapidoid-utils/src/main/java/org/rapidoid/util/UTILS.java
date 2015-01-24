@@ -38,7 +38,13 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.rapidoid.lambda.Lambdas;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 
@@ -388,6 +394,103 @@ public class UTILS implements Constants {
 
 	public static short shortFrom(byte a, byte b) {
 		return (short) ((a << 8) + b);
+	}
+
+	public static <K, V> Map<K, V> autoExpandingMap(final Class<V> clazz) {
+		return autoExpandingMap(new Mapper<K, V>() {
+			@Override
+			public V map(K src) throws Exception {
+				return Cls.newInstance(clazz);
+			}
+		});
+	}
+
+	@SuppressWarnings("serial")
+	public static <K, V> Map<K, V> autoExpandingMap(final Mapper<K, V> valueFactory) {
+		return new ConcurrentHashMap<K, V>() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public synchronized V get(Object key) {
+				V val = super.get(key);
+
+				if (val == null) {
+					try {
+						val = valueFactory.map((K) key);
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+
+					put((K) key, val);
+				}
+
+				return val;
+			}
+		};
+	}
+
+	public static String replace(String s, String regex, Mapper<String[], String> replacer) {
+		StringBuffer output = new StringBuffer();
+		Pattern p = Pattern.compile(regex);
+		Matcher matcher = p.matcher(s);
+
+		while (matcher.find()) {
+			int len = matcher.groupCount() + 1;
+			String[] gr = new String[len];
+
+			for (int i = 0; i < gr.length; i++) {
+				gr[i] = matcher.group(i);
+			}
+
+			matcher.appendReplacement(output, Lambdas.eval(replacer, gr));
+		}
+
+		matcher.appendTail(output);
+		return output.toString();
+	}
+
+	public static boolean contains(Object arrOrColl, Object value) {
+		if (arrOrColl instanceof Object[]) {
+			Object[] arr = (Object[]) arrOrColl;
+			return Arr.indexOf(arr, value) >= 0;
+		} else if (arrOrColl instanceof Collection<?>) {
+			Collection<?> coll = (Collection<?>) arrOrColl;
+			return coll.contains(value);
+		} else {
+			throw U.illegalArg("Expected array or collection!");
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Object include(Object arrOrColl, Object item) {
+		if (arrOrColl instanceof Object[]) {
+			Object[] arr = (Object[]) arrOrColl;
+			return Arr.indexOf(arr, item) < 0 ? Arr.expand(arr, item) : arr;
+		} else if (arrOrColl instanceof Collection<?>) {
+			Collection<Object> coll = (Collection<Object>) arrOrColl;
+			if (!coll.contains(item)) {
+				coll.add(item);
+			}
+			return coll;
+		} else {
+			throw U.illegalArg("Expected array or collection!");
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Object exclude(Object arrOrColl, Object item) {
+		if (arrOrColl instanceof Object[]) {
+			Object[] arr = (Object[]) arrOrColl;
+			int ind = Arr.indexOf(arr, item);
+			return ind >= 0 ? Arr.deleteAt(arr, ind) : arr;
+		} else if (arrOrColl instanceof Collection<?>) {
+			Collection<Object> coll = (Collection<Object>) arrOrColl;
+			if (coll.contains(item)) {
+				coll.remove(item);
+			}
+			return coll;
+		} else {
+			throw U.illegalArg("Expected array or collection!");
+		}
 	}
 
 }

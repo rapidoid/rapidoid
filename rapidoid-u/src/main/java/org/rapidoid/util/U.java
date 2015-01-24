@@ -32,7 +32,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.ByteBuffer;
@@ -59,20 +58,13 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.lambda.Predicate;
 
 public class U {
 
 	protected static final Random RND = new Random();
 	private static ScheduledThreadPoolExecutor EXECUTOR;
 	private static long measureStart;
-
-	private static Pattern JRE_CLASS_PATTERN = Pattern
-			.compile("^(java|javax|javafx|com\\.sun|sun|com\\.oracle|oracle|jdk|org\\.omg|org\\.w3c).*");
 
 	// regex taken from
 	// http://stackoverflow.com/questions/2559759/how-do-i-convert-camelcase-into-human-readable-names-in-java
@@ -85,10 +77,6 @@ public class U {
 	private static Pattern PLURAL2U = Pattern.compile(".*[BCDFGHJKLMNPQRSTVWXZ]O$");
 	private static Pattern PLURAL3 = Pattern.compile(".*[bcdfghjklmnpqrstvwxz]y$");
 	private static Pattern PLURAL3U = Pattern.compile(".*[BCDFGHJKLMNPQRSTVWXZ]Y$");
-
-	private static final Map<Class<?>, Class<?>> PRIMITIVE_WRAPPERS = U.map(boolean.class, Boolean.class, byte.class,
-			Byte.class, char.class, Character.class, double.class, Double.class, float.class, Float.class, int.class,
-			Integer.class, long.class, Long.class, short.class, Short.class, void.class, Void.class);
 
 	private U() {
 	}
@@ -153,74 +141,6 @@ public class U {
 
 	public static IllegalArgumentException illegalArg(String message) {
 		return new IllegalArgumentException(message);
-	}
-
-	public static <T> T newInstance(Class<T> clazz) {
-		try {
-			Constructor<T> constr = clazz.getDeclaredConstructor();
-			boolean accessible = constr.isAccessible();
-			constr.setAccessible(true);
-
-			T obj = constr.newInstance();
-
-			constr.setAccessible(accessible);
-			return obj;
-		} catch (Exception e) {
-			throw rte(e);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> T newInstance(Class<T> clazz, Object... args) {
-		for (Constructor<?> constr : clazz.getConstructors()) {
-			Class<?>[] paramTypes = constr.getParameterTypes();
-			if (areAssignable(paramTypes, args)) {
-				try {
-					boolean accessible = constr.isAccessible();
-					constr.setAccessible(true);
-
-					T obj = (T) constr.newInstance(args);
-
-					constr.setAccessible(accessible);
-					return obj;
-				} catch (Exception e) {
-					throw rte(e);
-				}
-			}
-		}
-
-		throw rte("Cannot find appropriate constructor for %s with args %s!", clazz, text(args));
-	}
-
-	public static <T> T customizable(Class<T> clazz, Object... args) {
-		String customClassName = "Customized" + clazz.getSimpleName();
-
-		Class<T> customClass = U.getClassIfExists(customClassName);
-
-		if (customClass == null) {
-			customClass = U.getClassIfExists("custom." + customClassName);
-		}
-
-		if (customClass != null && !clazz.isAssignableFrom(customClass)) {
-			customClass = null;
-		}
-
-		return newInstance(U.or(customClass, clazz), args);
-	}
-
-	public static boolean areAssignable(Class<?>[] types, Object[] values) {
-		if (types.length != values.length) {
-			return false;
-		}
-
-		for (int i = 0; i < values.length; i++) {
-			Object val = values[i];
-			if (val != null && !instanceOf(val, types[i])) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	public static <T> T or(T value, T fallback) {
@@ -540,49 +460,8 @@ public class U {
 		return map;
 	}
 
-	public static <K, V> Map<K, V> autoExpandingMap(final Class<V> clazz) {
-		return autoExpandingMap(new Mapper<K, V>() {
-			@Override
-			public V map(K src) throws Exception {
-				return newInstance(clazz);
-			}
-		});
-	}
-
-	@SuppressWarnings("serial")
-	public static <K, V> Map<K, V> autoExpandingMap(final Mapper<K, V> valueFactory) {
-		return new ConcurrentHashMap<K, V>() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public synchronized V get(Object key) {
-				V val = super.get(key);
-
-				if (val == null) {
-					try {
-						val = valueFactory.map((K) key);
-					} catch (Exception e) {
-						throw rte(e);
-					}
-
-					put((K) key, val);
-				}
-
-				return val;
-			}
-		};
-	}
-
 	public static <T> Queue<T> queue(int maxSize) {
 		return maxSize > 0 ? new ArrayBlockingQueue<T>(maxSize) : new ConcurrentLinkedQueue<T>();
-	}
-
-	public static <FROM, TO> Mapper<FROM, TO> mapper(final Map<FROM, TO> map) {
-		return new Mapper<FROM, TO>() {
-			@Override
-			public TO map(FROM key) throws Exception {
-				return map.get(key);
-			}
-		};
 	}
 
 	public static URL resource(String filename) {
@@ -751,46 +630,6 @@ public class U {
 
 	public static void delete(String filename) {
 		new File(filename).delete();
-	}
-
-	public static <T> T[] expand(T[] arr, int factor) {
-		int len = arr.length;
-
-		arr = Arrays.copyOf(arr, len * factor);
-
-		return arr;
-	}
-
-	public static <T> T[] expand(T[] arr, T item) {
-		int len = arr.length;
-
-		arr = Arrays.copyOf(arr, len + 1);
-		arr[len] = item;
-
-		return arr;
-	}
-
-	public static <T> T[] subarray(T[] arr, int from, int to) {
-		int start = from >= 0 ? from : arr.length + from;
-		int end = to >= 0 ? to : arr.length + to;
-
-		if (start < 0) {
-			start = 0;
-		}
-
-		if (end > arr.length - 1) {
-			end = arr.length - 1;
-		}
-
-		must(start <= end, "Invalid range: expected form <= to!");
-
-		int size = end - start + 1;
-
-		T[] part = Arrays.copyOf(arr, size);
-
-		System.arraycopy(arr, start, part, 0, size);
-
-		return part;
 	}
 
 	public static Object[] flat(Object... arr) {
@@ -1264,117 +1103,6 @@ public class U {
 
 		String msg = "MEM [total=%s MB, used=%s MB, max=%s MB]";
 		return format(msg, totalMem / megs, usedMem / megs, maxMem / megs);
-	}
-
-	public static String replace(String s, String regex, Mapper<String[], String> replacer) {
-		StringBuffer output = new StringBuffer();
-		Pattern p = Pattern.compile(regex);
-		Matcher matcher = p.matcher(s);
-
-		while (matcher.find()) {
-			int len = matcher.groupCount() + 1;
-			String[] gr = new String[len];
-
-			for (int i = 0; i < gr.length; i++) {
-				gr[i] = matcher.group(i);
-			}
-
-			matcher.appendReplacement(output, eval(replacer, gr));
-		}
-
-		matcher.appendTail(output);
-		return output.toString();
-	}
-
-	public static <T> boolean eval(Predicate<T> predicate, T target) {
-		try {
-			return predicate.eval(target);
-		} catch (Exception e) {
-			throw rte("Cannot evaluate predicate %s on target: %s", e, predicate, target);
-		}
-	}
-
-	public static <FROM, TO> TO eval(Mapper<FROM, TO> mapper, FROM src) {
-		try {
-			return mapper.map(src);
-		} catch (Exception e) {
-			throw rte("Cannot evaluate mapper %s on target: %s", e, mapper, src);
-		}
-	}
-
-	public static boolean isJREClass(String canonicalClassName) {
-		return JRE_CLASS_PATTERN.matcher(canonicalClassName).matches();
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> Class<T> getWrapperClass(Class<T> c) {
-		must(c.isPrimitive());
-		return c.isPrimitive() ? (Class<T>) PRIMITIVE_WRAPPERS.get(c) : c;
-	}
-
-	public static boolean instanceOf(Object obj, Class<?>... classes) {
-		return obj != null ? isAssignableTo(obj.getClass(), classes) : false;
-	}
-
-	public static boolean isAssignableTo(Class<?> clazz, Class<?>... targetClasses) {
-		for (Class<?> cls : targetClasses) {
-			if (cls.isPrimitive()) {
-				if (cls.isAssignableFrom(clazz)) {
-					return true;
-				}
-				cls = getWrapperClass(cls);
-			}
-			if (cls.isAssignableFrom(clazz)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	public static boolean contains(Object arrOrColl, Object value) {
-		if (arrOrColl instanceof Object[]) {
-			Object[] arr = (Object[]) arrOrColl;
-			return Arr.indexOf(arr, value) >= 0;
-		} else if (arrOrColl instanceof Collection<?>) {
-			Collection<?> coll = (Collection<?>) arrOrColl;
-			return coll.contains(value);
-		} else {
-			throw illegalArg("Expected array or collection!");
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Object include(Object arrOrColl, Object item) {
-		if (arrOrColl instanceof Object[]) {
-			Object[] arr = (Object[]) arrOrColl;
-			return Arr.indexOf(arr, item) < 0 ? expand(arr, item) : arr;
-		} else if (arrOrColl instanceof Collection<?>) {
-			Collection<Object> coll = (Collection<Object>) arrOrColl;
-			if (!coll.contains(item)) {
-				coll.add(item);
-			}
-			return coll;
-		} else {
-			throw illegalArg("Expected array or collection!");
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Object exclude(Object arrOrColl, Object item) {
-		if (arrOrColl instanceof Object[]) {
-			Object[] arr = (Object[]) arrOrColl;
-			int ind = Arr.indexOf(arr, item);
-			return ind >= 0 ? Arr.deleteAt(arr, ind) : arr;
-		} else if (arrOrColl instanceof Collection<?>) {
-			Collection<Object> coll = (Collection<Object>) arrOrColl;
-			if (coll.contains(item)) {
-				coll.remove(item);
-			}
-			return coll;
-		} else {
-			throw illegalArg("Expected array or collection!");
-		}
 	}
 
 	public static String camelSplit(String s) {

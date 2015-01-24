@@ -55,7 +55,7 @@ public class Scan {
 
 		if (addonCls != null) {
 			if (Callable.class.isAssignableFrom(addonCls)) {
-				Callable<?> addon = (Callable<?>) U.newInstance(addonCls);
+				Callable<?> addon = (Callable<?>) Cls.newInstance(addonCls);
 				try {
 					Object addonResult = addon.call();
 					Log.info("Executed add-on", "add-on", addonName, "add-on class", addonClassName, "result",

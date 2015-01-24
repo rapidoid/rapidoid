@@ -29,7 +29,7 @@ import org.rapidoid.lambda.Predicate;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
-import org.rapidoid.util.U;
+import org.rapidoid.util.Cls;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.DataManager;
 import org.rapidoid.widget.FormWidget;
@@ -100,7 +100,7 @@ public class AppGUI extends BootstrapWidgets {
 	}
 
 	public static DataManager dataManager() {
-		return U.customizable(DbDataManager.class, DB.db());
+		return Cls.customizable(DbDataManager.class, DB.db());
 	}
 
 }

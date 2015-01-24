@@ -23,18 +23,19 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.rapidoid.lambda.Mapper;
-import org.rapidoid.util.U;
+import org.rapidoid.util.Cls;
+import org.rapidoid.util.UTILS;
 
 public class DBs {
 
 	private static final Map<String, Database> DB_INSTANCES;
 
 	static {
-		DB_INSTANCES = U.autoExpandingMap(new Mapper<String, Database>() {
+		DB_INSTANCES = UTILS.autoExpandingMap(new Mapper<String, Database>() {
 			@Override
 			public Database map(String name) throws Exception {
 				String dbFilename = DB.path() + name + ".db";
-				return (Database) U.newInstance(DB.DB_IMPL_CLASS, name, dbFilename);
+				return (Database) Cls.newInstance(DB.DB_IMPL_CLASS, name, dbFilename);
 			}
 		});
 	}

@@ -31,6 +31,7 @@ import org.rapidoid.annotation.Inject;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.TCPServer;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 
@@ -118,7 +119,7 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 
 			workers = new RapidoidWorker[workersN];
 			for (int i = 0; i < workers.length; i++) {
-				RapidoidHelper helper = U.newInstance(helperClass, exchangeClass);
+				RapidoidHelper helper = Cls.newInstance(helperClass, exchangeClass);
 				String workerName = "server" + (i + 1);
 				BufGroup bufGroup = new BufGroup(14); // 2^14B (16 KB per buffer segment)
 				workers[i] = new RapidoidWorker(workerName, bufGroup, protocol, helper, bufSizeKB, noDelay);

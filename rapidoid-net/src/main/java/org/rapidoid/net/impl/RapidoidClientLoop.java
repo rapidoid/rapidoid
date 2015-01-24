@@ -27,6 +27,7 @@ import java.nio.channels.SocketChannel;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.net.TCPClient;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 
@@ -89,7 +90,7 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 		workers = new RapidoidWorker[workersN];
 
 		for (int i = 0; i < workers.length; i++) {
-			RapidoidHelper helper = U.newInstance(helperClass, exchangeClass);
+			RapidoidHelper helper = Cls.newInstance(helperClass, exchangeClass);
 			String workerName = "client" + (i + 1);
 			workers[i] = new RapidoidWorker(workerName, new BufGroup(13), protocol, helper, bufSizeKB, noDelay);
 			new Thread(workers[i], workerName).start();

@@ -34,6 +34,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeException;
 import org.rapidoid.inject.IoC;
 import org.rapidoid.json.JSON;
+import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.log.Log;
 import org.rapidoid.pages.impl.BuiltInCmdHandler;
 import org.rapidoid.pages.impl.PageRenderer;
@@ -41,6 +42,7 @@ import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
 import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.rest.WebReq;
+import org.rapidoid.util.Arr;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
@@ -184,7 +186,7 @@ public class Pages {
 			return null;
 		}
 
-		Object page = U.newInstance(pageClass);
+		Object page = Cls.newInstance(pageClass);
 
 		if (isEmiting(x)) {
 			return Pages.emit(x, page);
@@ -209,7 +211,7 @@ public class Pages {
 	}
 
 	public static void load(HttpExchange x, Object target) {
-		IoC.autowire(target, U.mapper(x.session()));
+		IoC.autowire(target, Lambdas.mapper(x.session()));
 	}
 
 	public static void store(HttpExchange x, Object target) {
@@ -321,7 +323,7 @@ public class Pages {
 			return true;
 		}
 
-		Object[] args2 = U.expand(cmd.args, x);
+		Object[] args2 = Arr.expand(cmd.args, x);
 		m = Cls.findMethodByArgs(target.getClass(), handlerName, args2);
 
 		if (m != null) {

@@ -42,10 +42,11 @@ import org.rapidoid.util.Cls;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 
-	private static final Map<Class<?>, PojoServiceWrapper> WRAPPERS = U
+	private static final Map<Class<?>, PojoServiceWrapper> WRAPPERS = UTILS
 			.autoExpandingMap(new Mapper<Class<?>, PojoServiceWrapper>() {
 				@Override
 				public PojoServiceWrapper map(Class<?> serviceClass) throws Exception {
@@ -102,7 +103,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		if (wrapper != null) {
 			Method method = wrapper.getMethod(action);
 			if (method != null) {
-				Object serviceInstance = U.newInstance(wrapper.getTarget());
+				Object serviceInstance = Cls.newInstance(wrapper.getTarget());
 				return doDispatch(request, method, serviceInstance, parts, paramsFrom);
 			}
 		}
