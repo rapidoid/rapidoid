@@ -198,7 +198,7 @@ public class InMem {
 
 	public long insert(Object record) {
 		U.notNull(record, "record");
-		U.secure(canInsert(record), "Not enough privileges to insert the record!");
+		secureInsert(record);
 
 		sharedLock();
 		try {
@@ -386,7 +386,7 @@ public class InMem {
 
 			Rec toRemove = data.data.get(id);
 			Object entity = obj(toRemove);
-			U.secure(canDelete(entity), "Not enough privileges to delete the record!");
+			secureDelete(entity);
 
 			Rec removed = data.data.remove(id);
 			U.must(toRemove == removed, "Concurrent modification occured while deleting the object with ID=%s!", id);
@@ -458,6 +458,10 @@ public class InMem {
 			long id = Beany.getId(record);
 			validateId(id);
 			Rec rec = getRec(id);
+
+			Object tmp = obj(rec);
+			secureRead(tmp);
+
 			obj(rec, record);
 		} finally {
 			sharedUnlock();
@@ -486,7 +490,7 @@ public class InMem {
 
 		Beany.setId(record, id);
 
-		U.secure(canUpdate(record), "Not enough privileges to update the record!");
+		secureUpdate(record);
 
 		Rec removed = data.data.replace(id, rec(record));
 
@@ -608,13 +612,13 @@ public class InMem {
 
 	private <E> E getIfAllowed(long id, boolean validateId) {
 		E record = get_(id, validateId);
-		U.secure(record == null || canRead(record), "Access denied to the record!");
+		secureRead(record);
 		return record;
 	}
 
 	private <E> E getIfAllowed(long id, Class<E> type) {
 		E record = get_(id, type);
-		U.secure(record == null || canRead(record), "Access denied to the record!");
+		secureRead(record);
 		return record;
 	}
 
@@ -1162,19 +1166,35 @@ public class InMem {
 	}
 
 	private boolean canRead(Object record) {
-		return sudo || Secure.canRead(username(), record);
+		return record == null || sudo || Secure.canRead(username(), record);
 	}
 
 	private boolean canInsert(Object record) {
-		return sudo || Secure.canInsert(username(), record);
+		return record == null || sudo || Secure.canInsert(username(), record);
 	}
 
 	private boolean canUpdate(Object record) {
-		return sudo || Secure.canUpdate(username(), record);
+		return record == null || sudo || Secure.canUpdate(username(), record);
 	}
 
 	private boolean canDelete(Object record) {
-		return sudo || Secure.canDelete(username(), record);
+		return record == null || sudo || Secure.canDelete(username(), record);
+	}
+
+	private void secureRead(Object record) {
+		U.secure(canRead(record), "Not enough privileges to read the record!");
+	}
+
+	private void secureInsert(Object record) {
+		U.secure(canInsert(record), "Not enough privileges to insert the record!");
+	}
+
+	private void secureUpdate(Object record) {
+		U.secure(canUpdate(record), "Not enough privileges to update the record!");
+	}
+
+	private void secureDelete(Object record) {
+		U.secure(canDelete(record), "Not enough privileges to delete the record!");
 	}
 
 }
