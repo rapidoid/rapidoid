@@ -26,6 +26,7 @@ import org.rapidoid.db.model.Person;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
 
 public class DbTransactionTest extends DbTestCommons {
@@ -36,7 +37,7 @@ public class DbTransactionTest extends DbTestCommons {
 
 		final AtomicInteger n = new AtomicInteger();
 
-		U.benchmarkMT(10, "tx", 10000, new Runnable() {
+		UTILS.benchmarkMT(10, "tx", 10000, new Runnable() {
 			@Override
 			public void run() {
 				DB.transaction(new Runnable() {

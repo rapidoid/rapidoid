@@ -25,22 +25,22 @@ import org.rapidoid.net.TCP;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public abstract class NetTestCommons extends TestCommons {
 
 	protected void server(Protocol protocol, Runnable client) {
 		TCPServer server = TCP.listen(protocol);
 
-		U.sleep(300);
-		U.print("----------------------------------------");
+		UTILS.sleep(300);
+		System.out.println("----------------------------------------");
 
 		try {
 			client.run();
 		} finally {
 			server.shutdown();
-			U.sleep(300);
-			U.print("--- SERVER STOPPED ---");
+			UTILS.sleep(300);
+			System.out.println("--- SERVER STOPPED ---");
 		}
 
 		Log.info("server finished");

@@ -29,6 +29,7 @@ import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.Bool;
 import org.rapidoid.wrap.Int;
 import org.testng.annotations.Test;
@@ -84,7 +85,7 @@ public class HttpPipeliningTest extends HttpTestCommons {
 		}).build().start();
 
 		int sec = 5;
-		U.sleep(sec * 1000);
+		UTILS.sleep(sec * 1000);
 		shutdown();
 
 		isFalse(err.value);

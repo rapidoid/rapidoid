@@ -35,6 +35,7 @@ import org.rapidoid.net.TCPServer;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements TCPServer {
 
@@ -136,7 +137,7 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 		new Thread(this, "server").start();
 
 		// hack: give some time to the server threads to activate
-		U.sleep(500); // FIXME use proper synchronization for the server initialization
+		UTILS.sleep(500); // FIXME use proper synchronization for the server initialization
 
 		return super.start();
 	}

@@ -23,7 +23,7 @@ package org.rapidoid.db;
 import org.rapidoid.config.Conf;
 import org.rapidoid.db.model.IPerson;
 import org.rapidoid.util.Rnd;
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
 
 public class DbInterfacePersistenceTest extends DbTestCommons {
@@ -35,9 +35,9 @@ public class DbInterfacePersistenceTest extends DbTestCommons {
 
 		System.out.println("inserting...");
 
-		U.startMeasure();
+		UTILS.startMeasure();
 
-		U.benchmarkMT(Conf.cpus(), "insert", count, new Runnable() {
+		UTILS.benchmarkMT(Conf.cpus(), "insert", count, new Runnable() {
 			@Override
 			public void run() {
 				DB.insert(DB.create(IPerson.class, "name", "abc", "age", -1));
@@ -46,7 +46,7 @@ public class DbInterfacePersistenceTest extends DbTestCommons {
 
 		System.out.println("updating...");
 
-		U.benchmarkMT(10, "update", count, new Runnable() {
+		UTILS.benchmarkMT(10, "update", count, new Runnable() {
 			@Override
 			public void run() {
 				int id = Rnd.rnd(count) + 1;
@@ -63,7 +63,7 @@ public class DbInterfacePersistenceTest extends DbTestCommons {
 	}
 
 	private void checkDb(final int count) {
-		U.endMeasure("total");
+		UTILS.endMeasure("total");
 
 		eq(DB.size(), count);
 

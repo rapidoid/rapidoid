@@ -25,7 +25,7 @@ import java.util.concurrent.CountDownLatch;
 import org.rapidoid.config.Conf;
 import org.rapidoid.db.model.Person;
 import org.rapidoid.util.Rnd;
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
 
 public class DbClassPersistenceTest extends DbTestCommons {
@@ -37,9 +37,9 @@ public class DbClassPersistenceTest extends DbTestCommons {
 
 		System.out.println("inserting...");
 
-		U.startMeasure();
+		UTILS.startMeasure();
 
-		U.benchmarkMT(Conf.cpus(), "insert", count, new Runnable() {
+		UTILS.benchmarkMT(Conf.cpus(), "insert", count, new Runnable() {
 			@Override
 			public void run() {
 				DB.insert(new Person("abc", -1));
@@ -50,7 +50,7 @@ public class DbClassPersistenceTest extends DbTestCommons {
 
 		final CountDownLatch latch = new CountDownLatch(count);
 
-		U.benchmarkMT(10, "update", count, latch, new Runnable() {
+		UTILS.benchmarkMT(10, "update", count, latch, new Runnable() {
 			@Override
 			public void run() {
 				int id = Rnd.rnd(count) + 1;
@@ -68,7 +68,7 @@ public class DbClassPersistenceTest extends DbTestCommons {
 	}
 
 	private void checkDb(final int count) {
-		U.endMeasure("total");
+		UTILS.endMeasure("total");
 
 		eq(DB.size(), count);
 

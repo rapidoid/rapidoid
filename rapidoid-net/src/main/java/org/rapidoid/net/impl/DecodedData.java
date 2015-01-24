@@ -23,7 +23,7 @@ package org.rapidoid.net.impl;
 import org.rapidoid.buffer.BufProvider;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.Range;
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class DecodedData implements Data {
 
@@ -38,7 +38,7 @@ public class DecodedData implements Data {
 
 	@Override
 	public String get() {
-		return !range.isEmpty() ? U.urlDecode(src.buffer().get(range)) : "";
+		return !range.isEmpty() ? UTILS.urlDecode(src.buffer().get(range)) : "";
 	}
 
 	@Override

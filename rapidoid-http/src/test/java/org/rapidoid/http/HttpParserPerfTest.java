@@ -24,7 +24,7 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.net.impl.RapidoidHelper;
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class HttpParserPerfTest {
 
@@ -46,7 +46,7 @@ public class HttpParserPerfTest {
 		final HttpExchangeImpl req = new HttpExchangeImpl();
 
 		for (int i = 0; i < 10; i++) {
-			U.benchmark("parse", 3000000, new Runnable() {
+			UTILS.benchmark("parse", 3000000, new Runnable() {
 				int n;
 
 				@Override
@@ -61,12 +61,12 @@ public class HttpParserPerfTest {
 			});
 		}
 
-		U.print(BUFS.instances() + " buffer instances.");
+		System.out.println(BUFS.instances() + " buffer instances.");
 	}
 
 	private static Buf r(String req) {
 		req = req.replaceAll("\\|", "\r\n");
-		U.print("Request size: " + req.length());
+		System.out.println("Request size: " + req.length());
 		return BUFS.from(req, "");
 	}
 

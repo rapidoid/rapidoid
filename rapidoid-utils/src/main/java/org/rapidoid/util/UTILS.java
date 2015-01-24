@@ -29,10 +29,14 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URLDecoder;
 import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -40,6 +44,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,6 +56,10 @@ import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 
 public class UTILS implements Constants {
+
+	private static ScheduledThreadPoolExecutor EXECUTOR;
+
+	private static long measureStart;
 
 	private UTILS() {
 	}
@@ -341,7 +352,7 @@ public class UTILS implements Constants {
 					String req = lines.get(0);
 					if (req.startsWith("GET /")) {
 						int pos = req.indexOf(' ', 4);
-						String path = U.urlDecode(req.substring(4, pos));
+						String path = urlDecode(req.substring(4, pos));
 						String response = handler.execute(path, lines);
 						out.writeBytes(response);
 					} else {
@@ -371,19 +382,19 @@ public class UTILS implements Constants {
 	}
 
 	public static short bytesToShort(String s) {
-		ByteBuffer buf = U.buf(s);
+		ByteBuffer buf = Bufs.buf(s);
 		U.must(buf.limit() == 2);
 		return buf.getShort();
 	}
 
 	public static int bytesToInt(String s) {
-		ByteBuffer buf = U.buf(s);
+		ByteBuffer buf = Bufs.buf(s);
 		U.must(buf.limit() == 4);
 		return buf.getInt();
 	}
 
 	public static long bytesToLong(String s) {
-		ByteBuffer buf = U.buf(s);
+		ByteBuffer buf = Bufs.buf(s);
 		U.must(buf.limit() == 8);
 		return buf.getLong();
 	}
@@ -554,6 +565,144 @@ public class UTILS implements Constants {
 		}
 
 		return inserted;
+	}
+
+	public static void benchmark(String name, int count, Runnable runnable) {
+		long start = U.time();
+
+		for (int i = 0; i < count; i++) {
+			runnable.run();
+		}
+
+		benchmarkComplete(name, count, start);
+	}
+
+	public static void benchmarkComplete(String name, int count, long startTime) {
+		long end = U.time();
+		long ms = end - startTime;
+
+		if (ms == 0) {
+			ms = 1;
+		}
+
+		double avg = ((double) count / (double) ms);
+
+		String avgs = avg > 1 ? Math.round(avg) + "K" : Math.round(avg * 1000) + "";
+
+		String data = String.format("%s: %s in %s ms (%s/sec)", name, count, ms, avgs);
+
+		System.out.println(data + " | " + getCpuMemStats());
+	}
+
+	public static void benchmarkMT(int threadsN, final String name, final int count, final CountDownLatch outsideLatch,
+			final Runnable runnable) {
+
+		final int countPerThread = count / threadsN;
+
+		final CountDownLatch latch = outsideLatch != null ? outsideLatch : new CountDownLatch(threadsN);
+
+		long time = U.time();
+
+		for (int i = 1; i <= threadsN; i++) {
+			new Thread() {
+				public void run() {
+					benchmark(name, countPerThread, runnable);
+					if (outsideLatch == null) {
+						latch.countDown();
+					}
+				};
+			}.start();
+		}
+
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			throw U.rte(e);
+		}
+
+		benchmarkComplete("avg(" + name + ")", threadsN * countPerThread, time);
+	}
+
+	public static void benchmarkMT(int threadsN, final String name, final int count, final Runnable runnable) {
+		benchmarkMT(threadsN, name, count, null, runnable);
+	}
+
+	public static String getCpuMemStats() {
+		Runtime rt = Runtime.getRuntime();
+		long totalMem = rt.totalMemory();
+		long maxMem = rt.maxMemory();
+		long freeMem = rt.freeMemory();
+		long usedMem = totalMem - freeMem;
+		int megs = 1024 * 1024;
+
+		String msg = "MEM [total=%s MB, used=%s MB, max=%s MB]";
+		return String.format(msg, totalMem / megs, usedMem / megs, maxMem / megs);
+	}
+
+	public static String bytesAsText(byte[] bytes) {
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < bytes.length; i++) {
+			sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+		}
+
+		return sb.toString();
+	}
+
+	private static MessageDigest digest(String algorithm) {
+		try {
+			return MessageDigest.getInstance(algorithm);
+		} catch (NoSuchAlgorithmException e) {
+			throw U.rte("Cannot find algorithm: " + algorithm);
+		}
+	}
+
+	public static String md5(byte[] bytes) {
+		MessageDigest md5 = digest("MD5");
+		md5.update(bytes);
+		return bytesAsText(md5.digest());
+	}
+
+	public static String md5(String data) {
+		return md5(data.getBytes());
+	}
+
+	public static String urlDecode(String value) {
+		try {
+			return URLDecoder.decode(value, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw U.rte(e);
+		}
+	}
+
+	public static synchronized void schedule(Runnable task, long delay) {
+		if (EXECUTOR == null) {
+			EXECUTOR = new ScheduledThreadPoolExecutor(3);
+		}
+
+		EXECUTOR.schedule(task, delay, TimeUnit.MILLISECONDS);
+	}
+
+	public static void startMeasure() {
+		measureStart = U.time();
+	}
+
+	public static void endMeasure() {
+		long delta = U.time() - measureStart;
+		U.show(delta + " ms");
+	}
+
+	public static void endMeasure(String info) {
+		long delta = U.time() - measureStart;
+		U.show(info + ": " + delta + " ms");
+	}
+
+	public static void sleep(long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			throw new ThreadDeath();
+		}
 	}
 
 }

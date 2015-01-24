@@ -30,7 +30,7 @@ import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.net.impl.RapidoidHelper;
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.Bool;
 import org.rapidoid.wrap.Int;
 
@@ -55,7 +55,7 @@ public class MaxHttpPerfTest {
 		final HttpParser parser = new HttpParser();
 
 		for (int i = 0; i < 10; i++) {
-			U.benchmark("HTTP parse", 3000000, new Runnable() {
+			UTILS.benchmark("HTTP parse", 3000000, new Runnable() {
 				public void run() {
 					buf.position(0);
 

@@ -1,5 +1,7 @@
 package org.rapidoid.measure;
 
+import org.rapidoid.util.UTILS;
+
 /*
  * #%L
  * rapidoid-measure
@@ -20,8 +22,6 @@ package org.rapidoid.measure;
  * #L%
  */
 
-import org.rapidoid.util.U;
-
 public class MeasuresThread extends Thread {
 
 	private final Measures statistics;
@@ -38,13 +38,13 @@ public class MeasuresThread extends Thread {
 			while (true) {
 				String info = statistics.info();
 				if (!lastInfo.equals(info)) {
-					U.print(U.getCpuMemStats() + " " + info);
+					System.out.println(UTILS.getCpuMemStats() + " " + info);
 					lastInfo = info;
 				}
 				Thread.sleep(1000);
 			}
 		} catch (Exception e) {
-			U.print("Stats Exception!");
+			System.out.println("Stats Exception!");
 			e.printStackTrace();
 		}
 	}

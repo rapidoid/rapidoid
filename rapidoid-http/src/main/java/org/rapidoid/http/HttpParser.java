@@ -263,7 +263,7 @@ public class HttpParser implements Constants {
 		try {
 
 			while ((pos2 = BytesUtil.find(src.bytes(), start, limit, helper.bytes, 0, sepLen, true)) >= 0) {
-				// U.print("****** PARSE MULTI *** pos2=" + pos2);
+				// System.out.println("****** PARSE MULTI *** pos2=" + pos2);
 
 				if (pos1 >= 0 && pos2 >= 0) {
 					int from = pos1 + sepLen + 2;

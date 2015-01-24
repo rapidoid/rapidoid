@@ -27,7 +27,7 @@ public class RuntimeInfo {
 	private static final Method getGarbageCollectorMXBeans;
 
 	static {
-		Class<?> manFactory = U.getClassIfExists("java.lang.management.ManagementFactory");
+		Class<?> manFactory = Cls.getClassIfExists("java.lang.management.ManagementFactory");
 		getGarbageCollectorMXBeans = manFactory != null ? Cls.getMethod(manFactory, "getGarbageCollectorMXBeans")
 				: null;
 	}

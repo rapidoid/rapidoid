@@ -20,11 +20,6 @@ package org.rapidoid.util;
  * #L%
  */
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.ByteBuffer;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -39,15 +34,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 public class U {
-
-	private static ScheduledThreadPoolExecutor EXECUTOR;
-	private static long measureStart;
 
 	// regex taken from
 	// http://stackoverflow.com/questions/2559759/how-do-i-convert-camelcase-into-human-readable-names-in-java
@@ -141,14 +130,6 @@ public class U {
 		}
 
 		return String.format(format, args);
-	}
-
-	public static void sleep(long millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (InterruptedException e) {
-			throw new ThreadDeath();
-		}
 	}
 
 	public static String text(Collection<Object> coll) {
@@ -559,39 +540,7 @@ public class U {
 
 	public static void show(Object... values) {
 		String text = values.length == 1 ? text(values[0]) : text(values);
-		print(">" + text + "<");
-	}
-
-	public static synchronized void schedule(Runnable task, long delay) {
-		if (EXECUTOR == null) {
-			EXECUTOR = new ScheduledThreadPoolExecutor(3);
-		}
-
-		EXECUTOR.schedule(task, delay, TimeUnit.MILLISECONDS);
-	}
-
-	public static void startMeasure() {
-		measureStart = time();
-	}
-
-	public static void endMeasure() {
-		long delta = time() - measureStart;
-		show(delta + " ms");
-	}
-
-	public static void endMeasure(String info) {
-		long delta = time() - measureStart;
-		show(info + ": " + delta + " ms");
-	}
-
-	public static void print(Object value) {
-		System.out.println(value);
-	}
-
-	public static void printAll(Collection<?> collection) {
-		for (Object item : collection) {
-			print(item);
-		}
+		System.out.println(">" + text + "<");
 	}
 
 	public static boolean isEmpty(String value) {
@@ -640,14 +589,6 @@ public class U {
 		return s.substring(beginIndex, endIndex);
 	}
 
-	public static String urlDecode(String value) {
-		try {
-			return URLDecoder.decode(value, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			throw rte(e);
-		}
-	}
-
 	public static String mul(String s, int n) {
 		StringBuilder sb = new StringBuilder();
 
@@ -662,166 +603,8 @@ public class U {
 		return Integer.parseInt(s);
 	}
 
-	public static String bytesAsText(byte[] bytes) {
-		StringBuilder sb = new StringBuilder();
-
-		for (int i = 0; i < bytes.length; i++) {
-			sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-		}
-
-		return sb.toString();
-	}
-
-	private static MessageDigest digest(String algorithm) {
-		try {
-			return MessageDigest.getInstance(algorithm);
-		} catch (NoSuchAlgorithmException e) {
-			throw rte("Cannot find algorithm: " + algorithm);
-		}
-	}
-
-	public static String md5(byte[] bytes) {
-		MessageDigest md5 = digest("MD5");
-		md5.update(bytes);
-		return bytesAsText(md5.digest());
-	}
-
-	public static String md5(String data) {
-		return md5(data.getBytes());
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> Class<T> getClassIfExists(String className) {
-		try {
-			return (Class<T>) Class.forName(className);
-		} catch (ClassNotFoundException e) {
-			return null;
-		}
-	}
-
 	public static String fillIn(String template, String placeholder, String value) {
 		return template.replace("{{" + placeholder + "}}", value);
-	}
-
-	public static ByteBuffer expand(ByteBuffer buf, int newSize) {
-		ByteBuffer buf2 = ByteBuffer.allocate(newSize);
-
-		ByteBuffer buff = buf.duplicate();
-		buff.rewind();
-		buff.limit(buff.capacity());
-
-		buf2.put(buff);
-
-		return buf2;
-	}
-
-	public static ByteBuffer expand(ByteBuffer buf) {
-		int cap = buf.capacity();
-
-		if (cap <= 1000) {
-			cap *= 10;
-		} else if (cap <= 10000) {
-			cap *= 5;
-		} else {
-			cap *= 2;
-		}
-
-		return expand(buf, cap);
-	}
-
-	public static String buf2str(ByteBuffer buf) {
-		ByteBuffer buf2 = buf.duplicate();
-
-		buf2.rewind();
-		buf2.limit(buf2.capacity());
-
-		byte[] bytes = new byte[buf2.capacity()];
-		buf2.get(bytes);
-
-		return new String(bytes);
-	}
-
-	public static ByteBuffer buf(String s) {
-		byte[] bytes = s.getBytes();
-
-		ByteBuffer buf = ByteBuffer.allocateDirect(bytes.length);
-		buf.put(bytes);
-		buf.rewind();
-
-		return buf;
-	}
-
-	public static void benchmark(String name, int count, Runnable runnable) {
-		long start = time();
-
-		for (int i = 0; i < count; i++) {
-			runnable.run();
-		}
-
-		benchmarkComplete(name, count, start);
-	}
-
-	public static void benchmarkComplete(String name, int count, long startTime) {
-		long end = time();
-		long ms = end - startTime;
-
-		if (ms == 0) {
-			ms = 1;
-		}
-
-		double avg = ((double) count / (double) ms);
-
-		String avgs = avg > 1 ? Math.round(avg) + "K" : Math.round(avg * 1000) + "";
-
-		String data = format("%s: %s in %s ms (%s/sec)", name, count, ms, avgs);
-
-		print(data + " | " + getCpuMemStats());
-	}
-
-	public static void benchmarkMT(int threadsN, final String name, final int count, final CountDownLatch outsideLatch,
-			final Runnable runnable) {
-
-		eq(count % threadsN, 0);
-		final int countPerThread = count / threadsN;
-
-		final CountDownLatch latch = outsideLatch != null ? outsideLatch : new CountDownLatch(threadsN);
-
-		long time = time();
-
-		for (int i = 1; i <= threadsN; i++) {
-			new Thread() {
-				public void run() {
-					benchmark(name, countPerThread, runnable);
-					if (outsideLatch == null) {
-						latch.countDown();
-					}
-				};
-			}.start();
-		}
-
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			throw rte(e);
-		}
-
-		benchmarkComplete("avg(" + name + ")", threadsN * countPerThread, time);
-	}
-
-	public static void benchmarkMT(int threadsN, final String name, final int count, final Runnable runnable) {
-		benchmarkMT(threadsN, name, count, null, runnable);
-	}
-
-	public static String getCpuMemStats() {
-		Runtime rt = Runtime.getRuntime();
-		long totalMem = rt.totalMemory();
-		long maxMem = rt.maxMemory();
-		long freeMem = rt.freeMemory();
-		long usedMem = totalMem - freeMem;
-		int megs = 1024 * 1024;
-
-		String msg = "MEM [total=%s MB, used=%s MB, max=%s MB]";
-		return format(msg, totalMem / megs, usedMem / megs, maxMem / megs);
 	}
 
 	public static String camelSplit(String s) {

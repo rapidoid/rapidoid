@@ -27,7 +27,7 @@ import org.rapidoid.net.TCPClient;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.Protocol;
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
 
 public class TcpClientTest extends NetTestCommons {
@@ -48,7 +48,7 @@ public class TcpClientTest extends NetTestCommons {
 			}
 		}).build().start();
 
-		U.sleep(3000);
+		UTILS.sleep(3000);
 
 		TCPServer server = TCP.server().port(8080).protocol(new Protocol() {
 			@Override
@@ -60,7 +60,7 @@ public class TcpClientTest extends NetTestCommons {
 			}
 		}).build().start();
 
-		U.sleep(3000);
+		UTILS.sleep(3000);
 
 		client.shutdown();
 		server.shutdown();

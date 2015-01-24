@@ -22,7 +22,7 @@ package org.rapidoid.worker;
 
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
 
 public class WorkerTest extends TestCommons {
@@ -66,7 +66,7 @@ public class WorkerTest extends TestCommons {
 		wrk1.start();
 		wrk2.start();
 
-		U.sleep(1000);
+		UTILS.sleep(1000);
 
 		eq(wrk1.pendingTasksCount(), 0);
 		eq(wrk2.pendingTasksCount(), 0);
@@ -80,7 +80,7 @@ public class WorkerTest extends TestCommons {
 		isTrue(wrk1.enqueue("aaaaa", false));
 		isTrue(wrk2.enqueue(77, false));
 
-		U.sleep(1000);
+		UTILS.sleep(1000);
 
 		wrk1.halt();
 		wrk2.shutdown();

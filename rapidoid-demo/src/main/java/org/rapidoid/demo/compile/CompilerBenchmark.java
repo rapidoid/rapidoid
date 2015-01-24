@@ -23,6 +23,7 @@ package org.rapidoid.demo.compile;
 import org.rapidoid.compile.Compile;
 import org.rapidoid.config.Conf;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.Int;
 
 public class CompilerBenchmark {
@@ -39,7 +40,7 @@ public class CompilerBenchmark {
 
 		final Int n = new Int();
 
-		U.benchmarkMT(threads, "compile", count, new Runnable() {
+		UTILS.benchmarkMT(threads, "compile", count, new Runnable() {
 			@Override
 			public void run() {
 				int x = n.value++;

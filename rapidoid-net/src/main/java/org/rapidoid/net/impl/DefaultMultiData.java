@@ -28,7 +28,7 @@ import org.rapidoid.data.Data;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class DefaultMultiData implements MultiData {
 
@@ -60,7 +60,7 @@ public class DefaultMultiData implements MultiData {
 	public String get(String name) {
 		Buf buf = src.buffer();
 		Range range = ranges.get(buf, name.getBytes(), false);
-		return range != null ? U.urlDecode(range.str(buf)) : null;
+		return range != null ? UTILS.urlDecode(range.str(buf)) : null;
 	}
 
 	@Override

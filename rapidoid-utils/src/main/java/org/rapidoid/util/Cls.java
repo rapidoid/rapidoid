@@ -834,10 +834,10 @@ public class Cls {
 	public static <T> T customizable(Class<T> clazz, Object... args) {
 		String customClassName = "Customized" + clazz.getSimpleName();
 
-		Class<T> customClass = U.getClassIfExists(customClassName);
+		Class<T> customClass = getClassIfExists(customClassName);
 
 		if (customClass == null) {
-			customClass = U.getClassIfExists("custom." + customClassName);
+			customClass = getClassIfExists("custom." + customClassName);
 		}
 
 		if (customClass != null && !clazz.isAssignableFrom(customClass)) {
@@ -845,6 +845,15 @@ public class Cls {
 		}
 
 		return newInstance(U.or(customClass, clazz), args);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> Class<T> getClassIfExists(String className) {
+		try {
+			return (Class<T>) Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			return null;
+		}
 	}
 
 }

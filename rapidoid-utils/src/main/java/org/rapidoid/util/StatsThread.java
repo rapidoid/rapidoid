@@ -35,10 +35,10 @@ public class StatsThread extends Thread {
 		Log.info("Starting stats thread...");
 
 		while (!Thread.interrupted()) {
-			U.sleep(1000);
-			String stats = U.getCpuMemStats();
+			UTILS.sleep(1000);
+			String stats = UTILS.getCpuMemStats();
 			if (!stats.equals(lastStats)) {
-				U.print(stats);
+				System.out.println(stats);
 				lastStats = stats;
 			}
 		}

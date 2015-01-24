@@ -27,7 +27,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.db.impl.inmem.DbEntityConstructor;
 import org.rapidoid.db.impl.inmem.JacksonEntitySerializer;
 import org.rapidoid.inmem.InMem;
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class DbSerializationBenchmark {
 
@@ -48,7 +48,7 @@ public class DbSerializationBenchmark {
 
 		System.out.println("measuring...");
 
-		U.benchmark("save " + size + " records", loops, new Runnable() {
+		UTILS.benchmark("save " + size + " records", loops, new Runnable() {
 			@Override
 			public void run() {
 				ByteArrayOutputStream out = new ByteArrayOutputStream();

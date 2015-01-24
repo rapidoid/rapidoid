@@ -27,7 +27,6 @@ import java.io.IOException;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.util.F2;
-import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
 
@@ -73,7 +72,7 @@ public class EchoProtocolTest extends NetTestCommons {
 			public void process(final Channel ctx) {
 				final String in = ctx.readln();
 
-				U.schedule(new Runnable() {
+				UTILS.schedule(new Runnable() {
 					@Override
 					public void run() {
 						ctx.write(in.toUpperCase()).write(CR_LF).done().closeIf(in.equals("bye"));

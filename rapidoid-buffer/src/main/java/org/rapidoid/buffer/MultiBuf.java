@@ -570,7 +570,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	private void dumpBuffers() {
-		U.print(">> BUFFER " + name + " HAS " + bufN + " PARTS:");
+		System.out.println(">> BUFFER " + name + " HAS " + bufN + " PARTS:");
 
 		for (int i = 0; i < bufN - 1; i++) {
 			ByteBuffer buf = bufs[i];

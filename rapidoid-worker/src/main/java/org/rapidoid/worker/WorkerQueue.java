@@ -22,7 +22,7 @@ package org.rapidoid.worker;
 
 import java.util.Queue;
 
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class WorkerQueue<T> {
 
@@ -47,7 +47,7 @@ public class WorkerQueue<T> {
 		T item;
 
 		while ((item = queue.poll()) == null) {
-			U.sleep(100);
+			UTILS.sleep(100);
 		}
 
 		return item;
@@ -55,7 +55,7 @@ public class WorkerQueue<T> {
 
 	public void put(T item) {
 		while (!queue.offer(item)) {
-			U.sleep(100);
+			UTILS.sleep(100);
 		}
 	}
 

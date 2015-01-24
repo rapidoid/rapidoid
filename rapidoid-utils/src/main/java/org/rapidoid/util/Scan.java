@@ -51,7 +51,7 @@ public class Scan {
 		U.must(addonName.matches("\\w+"), "Invalid add-on name, must be alphanumeric!");
 
 		String addonClassName = "org.rapidoid.addon." + U.capitalized(addonName) + "Addon";
-		Class<?> addonCls = U.getClassIfExists(addonClassName);
+		Class<?> addonCls = Cls.getClassIfExists(addonClassName);
 
 		if (addonCls != null) {
 			if (Callable.class.isAssignableFrom(addonCls)) {

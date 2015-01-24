@@ -2,7 +2,7 @@ package org.rapidoid.oauth;
 
 import org.rapidoid.config.Conf;
 import org.rapidoid.util.Rnd;
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 /*
  * #%L
@@ -33,7 +33,7 @@ public class DefaultOAuthStateCheck implements OAuthStateCheck {
 		}
 
 		String rnd = Rnd.rndStr(10);
-		String hash = U.md5(clientSecret + rnd);
+		String hash = UTILS.md5(clientSecret + rnd);
 		return rnd + "_" + hash;
 	}
 
@@ -48,7 +48,7 @@ public class DefaultOAuthStateCheck implements OAuthStateCheck {
 			return false;
 		}
 
-		String hash = U.md5(clientSecret + parts[0]);
+		String hash = UTILS.md5(clientSecret + parts[0]);
 		return parts[1].equals(hash);
 	}
 

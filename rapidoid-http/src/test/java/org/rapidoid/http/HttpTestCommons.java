@@ -44,6 +44,7 @@ import org.rapidoid.data.Range;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.testng.Assert;
 
 public abstract class HttpTestCommons extends TestCommons {
@@ -80,7 +81,7 @@ public abstract class HttpTestCommons extends TestCommons {
 			@Override
 			public Object handle(HttpExchange x) {
 				return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.data().get("a"), x.files()
-						.size(), U.md5(x.files().get("f1")), U.md5(x.files().get("f2")), U.md5(U.or(
+						.size(), UTILS.md5(x.files().get("f1")), UTILS.md5(x.files().get("f2")), UTILS.md5(U.or(
 						x.files().get("f3"), new byte[0])));
 			}
 		});
@@ -98,14 +99,14 @@ public abstract class HttpTestCommons extends TestCommons {
 	protected void start() {
 		server.start();
 
-		U.sleep(300);
-		U.print("----------------------------------------");
+		UTILS.sleep(300);
+		System.out.println("----------------------------------------");
 	}
 
 	protected void shutdown() {
 		server.shutdown();
-		U.sleep(300);
-		U.print("--- SERVER STOPPED ---");
+		UTILS.sleep(300);
+		System.out.println("--- SERVER STOPPED ---");
 	}
 
 	protected String upload(String path, Map<String, String> params, Map<String, String> files) throws IOException,
@@ -134,11 +135,11 @@ public abstract class HttpTestCommons extends TestCommons {
 			httppost.addHeader("Cookie", "COOKIE1=a");
 			httppost.addHeader("COOKIE", "foo=bar");
 
-			U.print("REQUEST " + httppost.getRequestLine());
+			System.out.println("REQUEST " + httppost.getRequestLine());
 
-			U.startMeasure();
+			UTILS.startMeasure();
 			CloseableHttpResponse response = client.execute(httppost);
-			U.endMeasure();
+			UTILS.endMeasure();
 
 			try {
 				Assert.assertEquals(200, response.getStatusLine().getStatusCode());
@@ -244,7 +245,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected String resourceMD5(String filename) throws IOException, URISyntaxException {
-		return U.md5(FileUtils.readFileToByteArray(new File(IO.resource(filename).toURI())));
+		return UTILS.md5(FileUtils.readFileToByteArray(new File(IO.resource(filename).toURI())));
 	}
 
 }
