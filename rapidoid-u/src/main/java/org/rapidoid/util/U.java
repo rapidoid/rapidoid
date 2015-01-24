@@ -244,7 +244,7 @@ public class U {
 		return items;
 	}
 
-	public static <T> Iterator<T> arrayIterator(T[] arr) {
+	public static <T> Iterator<T> iterator(T[] arr) {
 		return Arrays.asList(arr).iterator();
 	}
 
@@ -609,7 +609,7 @@ public class U {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> int cmp(T val1, T val2) {
+	public static <T> int compare(T val1, T val2) {
 		if (val1 == null && val2 == null) {
 			return 0;
 		} else if (val1 == null) {

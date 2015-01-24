@@ -441,7 +441,7 @@ public class Beany {
 				U.must(val2 == null || val2 instanceof Comparable, "The property '%s' (%s) is not comparable!", order,
 						Cls.of((val2)));
 
-				return sign * U.cmp(val1, val2);
+				return sign * U.compare(val1, val2);
 			}
 		};
 		return comparator;

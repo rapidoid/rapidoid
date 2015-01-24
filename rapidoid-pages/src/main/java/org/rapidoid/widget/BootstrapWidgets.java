@@ -603,7 +603,7 @@ public abstract class BootstrapWidgets extends HTML {
 			return display(iter.iterator());
 		} else if (item instanceof Object[]) {
 			Object[] arr = (Object[]) item;
-			return display(U.arrayIterator(arr));
+			return display(U.iterator(arr));
 		}
 
 		return isEntity(item) ? a(item).href(urlFor(item)) : Cls.str(item);

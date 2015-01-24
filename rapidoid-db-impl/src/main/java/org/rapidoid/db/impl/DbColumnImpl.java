@@ -74,7 +74,7 @@ public class DbColumnImpl<E> implements DbColumn<E>, SerializableBean<Object> {
 
 	@Override
 	public int compareTo(DbColumn<E> col) {
-		return U.cmp(get(), col.get());
+		return U.compare(get(), col.get());
 	}
 
 }
