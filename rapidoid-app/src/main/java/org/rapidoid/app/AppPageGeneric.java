@@ -238,7 +238,7 @@ public class AppPageGeneric extends AppGUI {
 				break;
 			}
 
-			String title = Cls.getFieldValue(scr, "title", U.camelPhrase(name));
+			String title = Cls.getFieldValue(scr, "title", UTILS.camelPhrase(name));
 			String url = Apps.screenUrl(scr);
 			menuItems[k++] = a(title).href(url);
 
@@ -250,7 +250,7 @@ public class AppPageGeneric extends AppGUI {
 		for (int j = 0; j < scaffolding.size(); j++) {
 			Class<?> scaff = scaffolding.get(j);
 			String name = English.plural(scaff.getSimpleName());
-			String title = U.camelSplit(name);
+			String title = UTILS.camelSplit(name);
 			String url = "/" + name.toLowerCase();
 			menuItems[k++] = a(title).href(url);
 
@@ -262,7 +262,7 @@ public class AppPageGeneric extends AppGUI {
 		for (; i < screens.length; i++) {
 			Class<?> scr = screens[i];
 			String name = Apps.screenName(scr);
-			String title = Cls.getFieldValue(scr, "title", U.camelPhrase(name));
+			String title = Cls.getFieldValue(scr, "title", UTILS.camelPhrase(name));
 			String url = Apps.screenUrl(scr);
 			menuItems[k++] = a(title).href(url);
 

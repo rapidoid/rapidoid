@@ -24,7 +24,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 
 import org.rapidoid.model.Property;
-import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 public class BeanProperty implements Property {
 
@@ -89,7 +89,7 @@ public class BeanProperty implements Property {
 		if (prop.equals("id")) {
 			return "ID";
 		}
-		return U.camelPhrase(prop);
+		return UTILS.camelPhrase(prop);
 	}
 
 	@Override

@@ -38,11 +38,6 @@ import java.util.regex.Pattern;
 
 public class U {
 
-	// regex taken from
-	// http://stackoverflow.com/questions/2559759/how-do-i-convert-camelcase-into-human-readable-names-in-java
-	private static Pattern CAMEL_SPLITTER_PATTERN = Pattern
-			.compile("(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
-
 	private U() {
 	}
 
@@ -584,14 +579,6 @@ public class U {
 
 	public static int num(String s) {
 		return Integer.parseInt(s);
-	}
-
-	public static String camelSplit(String s) {
-		return CAMEL_SPLITTER_PATTERN.matcher(s).replaceAll(" ");
-	}
-
-	public static String camelPhrase(String s) {
-		return capitalized(camelSplit(s).toLowerCase());
 	}
 
 	public static int limit(int min, int value, int max) {

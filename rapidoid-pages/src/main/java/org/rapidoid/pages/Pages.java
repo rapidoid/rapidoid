@@ -97,7 +97,7 @@ public class Pages {
 			pageName = U.mid(pageName, 0, -4);
 		}
 
-		return U.camelPhrase(pageName);
+		return UTILS.camelPhrase(pageName);
 	}
 
 	public static String titleOf(HttpExchange x, Object target) {

@@ -61,6 +61,11 @@ public class UTILS implements Constants {
 
 	private static long measureStart;
 
+	// regex taken from
+	// http://stackoverflow.com/questions/2559759/how-do-i-convert-camelcase-into-human-readable-names-in-java
+	private static final Pattern CAMEL_SPLITTER_PATTERN = Pattern
+			.compile("(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
+
 	private UTILS() {
 	}
 
@@ -714,6 +719,14 @@ public class UTILS implements Constants {
 
 	public static String fillIn(String template, String placeholder, String value) {
 		return template.replace("{{" + placeholder + "}}", value);
+	}
+
+	public static String camelSplit(String s) {
+		return CAMEL_SPLITTER_PATTERN.matcher(s).replaceAll(" ");
+	}
+
+	public static String camelPhrase(String s) {
+		return U.capitalized(camelSplit(s).toLowerCase());
 	}
 
 }
