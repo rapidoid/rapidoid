@@ -44,6 +44,7 @@ import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.IO;
+import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.util.UserInfo;
@@ -691,7 +692,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			}
 
 			if (sessionId == null) {
-				sessionId = U.rndStr(50);
+				sessionId = Rnd.rndStr(50);
 				setCookie(SESSION_COOKIE, sessionId, "path=/");
 				session.openSession(sessionId);
 			}

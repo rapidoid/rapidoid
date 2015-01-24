@@ -24,6 +24,7 @@ import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
@@ -368,7 +369,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 		int size = 0;
 		for (int i = 0; i < 1000000; i++) {
-			int add = U.rnd(100);
+			int add = Rnd.rnd(100);
 
 			for (int j = 0; j < 5; j++) {
 				size += add;
@@ -378,14 +379,14 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 			for (int j = 0; j < 5; j++) {
 				if (buf.size() > 0) {
-					if (U.rnd(2) == 0) {
-						int delFrom = U.rnd(size);
+					if (Rnd.rnd(2) == 0) {
+						int delFrom = Rnd.rnd(size);
 						int delN = size - delFrom;
 
 						size -= delN;
 						buf.deleteAfter(delFrom);
 					} else {
-						int delN = U.rnd(size);
+						int delN = Rnd.rnd(size);
 
 						size -= delN;
 						buf.deleteBefore(delN);

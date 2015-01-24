@@ -25,7 +25,7 @@ import java.net.URISyntaxException;
 
 import org.apache.commons.io.FileUtils;
 import org.rapidoid.util.IO;
-import org.rapidoid.util.U;
+import org.rapidoid.util.Rnd;
 import org.testng.annotations.Test;
 
 public class HttpServerHeadersTest extends HttpTestCommons {
@@ -55,7 +55,7 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 				if (x.cookie("ses", null) == null) {
 					x.setCookie("ses", "023B");
 				}
-				x.setCookie("key" + U.rnd(100), "val" + U.rnd(100));
+				x.setCookie("key" + Rnd.rnd(100), "val" + Rnd.rnd(100));
 
 				return x.writeJSON(x.cookies());
 			}

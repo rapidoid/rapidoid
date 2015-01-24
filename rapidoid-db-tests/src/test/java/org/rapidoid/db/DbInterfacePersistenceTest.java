@@ -22,6 +22,7 @@ package org.rapidoid.db;
 
 import org.rapidoid.config.Conf;
 import org.rapidoid.db.model.IPerson;
+import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
@@ -48,7 +49,7 @@ public class DbInterfacePersistenceTest extends DbTestCommons {
 		U.benchmarkMT(10, "update", count, new Runnable() {
 			@Override
 			public void run() {
-				int id = U.rnd(count) + 1;
+				int id = Rnd.rnd(count) + 1;
 				DB.update(id, DB.create(IPerson.class, "name", "x", "age", id * 100));
 			}
 		});

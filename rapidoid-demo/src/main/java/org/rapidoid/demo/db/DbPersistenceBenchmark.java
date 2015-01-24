@@ -22,6 +22,7 @@ package org.rapidoid.demo.db;
 
 import org.rapidoid.config.Conf;
 import org.rapidoid.db.DB;
+import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 
 public class DbPersistenceBenchmark {
@@ -48,7 +49,7 @@ public class DbPersistenceBenchmark {
 		U.benchmarkMT(Conf.cpus(), "update", size, new Runnable() {
 			@Override
 			public void run() {
-				DB.update(U.rnd(size) + 1, new Person("xyz", 10));
+				DB.update(Rnd.rnd(size) + 1, new Person("xyz", 10));
 			}
 		});
 

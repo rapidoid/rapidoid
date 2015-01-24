@@ -34,7 +34,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,7 +46,6 @@ import java.util.regex.Pattern;
 
 public class U {
 
-	protected static final Random RND = new Random();
 	private static ScheduledThreadPoolExecutor EXECUTOR;
 	private static long measureStart;
 
@@ -889,54 +887,6 @@ public class U {
 		} else {
 			return ((Comparable<T>) val1).compareTo(val2);
 		}
-	}
-
-	public static char rndChar() {
-		return (char) (65 + rnd(26));
-	}
-
-	public static String rndStr(int length) {
-		return rndStr(length, length);
-	}
-
-	public static String rndStr(int minLength, int maxLength) {
-		int len = minLength + rnd(maxLength - minLength + 1);
-		StringBuffer sb = new StringBuffer();
-
-		for (int i = 0; i < len; i++) {
-			sb.append(rndChar());
-		}
-
-		return sb.toString();
-	}
-
-	public static int rnd(int n) {
-		return RND.nextInt(n);
-	}
-
-	public static int rndExcept(int n, int except) {
-		if (n > 1 || except != 0) {
-			while (true) {
-				int num = RND.nextInt(n);
-				if (num != except) {
-					return num;
-				}
-			}
-		} else {
-			throw new RuntimeException("Cannot produce such number!");
-		}
-	}
-
-	public static <T> T rnd(T[] arr) {
-		return arr[rnd(arr.length)];
-	}
-
-	public static int rnd() {
-		return RND.nextInt();
-	}
-
-	public static long rndL() {
-		return RND.nextLong();
 	}
 
 }

@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.TagContext;
+import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
@@ -41,7 +42,7 @@ public class TagContextImpl implements TagContext, Serializable {
 	public int newBinding(Var<Object> binding) {
 		int hnd;
 		do {
-			hnd = Math.abs(U.rnd());
+			hnd = Math.abs(Rnd.rnd());
 		} while (bindings.containsKey(hnd));
 
 		bindings.put(hnd, binding);
@@ -53,7 +54,7 @@ public class TagContextImpl implements TagContext, Serializable {
 	public int newCommand(Cmd cmd) {
 		int hnd;
 		do {
-			hnd = Math.abs(U.rnd());
+			hnd = Math.abs(Rnd.rnd());
 		} while (commands.containsKey(hnd));
 
 		commands.put(hnd, cmd);

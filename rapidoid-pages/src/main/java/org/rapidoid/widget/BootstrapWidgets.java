@@ -28,6 +28,7 @@ import org.rapidoid.pages.Pages;
 import org.rapidoid.security.DataPermissions;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.Rnd;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
@@ -573,7 +574,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Tag[] radios(Collection<?> options, Var<?> var) {
-		return radios(U.rndStr(30), options, var);
+		return radios(Rnd.rndStr(30), options, var);
 	}
 
 	public static Tag[] checkboxes(String name, Collection<?> options, Var<?> var) {
@@ -590,7 +591,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Tag[] checkboxes(Collection<?> options, Var<?> var) {
-		return checkboxes(U.rndStr(30), options, var);
+		return checkboxes(Rnd.rndStr(30), options, var);
 	}
 
 	public static Object display(Object item) {

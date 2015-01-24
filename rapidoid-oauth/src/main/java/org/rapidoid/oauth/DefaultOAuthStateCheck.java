@@ -1,6 +1,7 @@
 package org.rapidoid.oauth;
 
 import org.rapidoid.config.Conf;
+import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 
 /*
@@ -31,7 +32,7 @@ public class DefaultOAuthStateCheck implements OAuthStateCheck {
 			return "OK";
 		}
 
-		String rnd = U.rndStr(10);
+		String rnd = Rnd.rndStr(10);
 		String hash = U.md5(clientSecret + rnd);
 		return rnd + "_" + hash;
 	}

@@ -24,6 +24,7 @@ import java.util.concurrent.CountDownLatch;
 
 import org.rapidoid.config.Conf;
 import org.rapidoid.db.model.Person;
+import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
@@ -52,7 +53,7 @@ public class DbClassPersistenceTest extends DbTestCommons {
 		U.benchmarkMT(10, "update", count, latch, new Runnable() {
 			@Override
 			public void run() {
-				int id = U.rnd(count) + 1;
+				int id = Rnd.rnd(count) + 1;
 				DB.update(id, new Person("x", id * 100));
 				latch.countDown();
 			}

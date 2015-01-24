@@ -33,6 +33,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 
 public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements TCPServer {
@@ -161,7 +162,7 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 	}
 
 	public synchronized RapidoidConnection newConnection() {
-		int rndWorker = U.rnd(workers.length);
+		int rndWorker = Rnd.rnd(workers.length);
 		return workers[rndWorker].newConnection();
 	}
 
