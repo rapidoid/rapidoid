@@ -21,8 +21,8 @@ package org.rapidoid.demo.taskplanner;
  */
 
 import org.rapidoid.app.Apps;
+import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.Conf;
 
 public class Main {
 

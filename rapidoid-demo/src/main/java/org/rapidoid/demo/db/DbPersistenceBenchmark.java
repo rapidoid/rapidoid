@@ -20,8 +20,8 @@ package org.rapidoid.demo.db;
  * #L%
  */
 
+import org.rapidoid.config.Conf;
 import org.rapidoid.db.DB;
-import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 
 public class DbPersistenceBenchmark {

@@ -22,11 +22,11 @@ package org.rapidoid.oauth;
 
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
+import org.rapidoid.config.Conf;
 import org.rapidoid.http.HTMLSnippets;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 
 public class OAuth {

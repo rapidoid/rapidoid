@@ -26,9 +26,9 @@ import java.util.List;
 
 import org.rapidoid.annotation.Composite;
 import org.rapidoid.annotation.Programmatic;
+import org.rapidoid.config.Conf;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanRead;
-import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 

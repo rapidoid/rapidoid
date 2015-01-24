@@ -1,8 +1,8 @@
 package org.rapidoid.http;
 
+import org.rapidoid.config.Conf;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.AppCtx;
-import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UserInfo;
 

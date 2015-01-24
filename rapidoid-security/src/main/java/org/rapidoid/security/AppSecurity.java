@@ -29,6 +29,7 @@ import java.util.Set;
 
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
+import org.rapidoid.config.Conf;
 import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.security.annotation.Manager;
@@ -36,7 +37,6 @@ import org.rapidoid.security.annotation.Moderator;
 import org.rapidoid.security.annotation.Role;
 import org.rapidoid.security.annotation.Roles;
 import org.rapidoid.util.CommonRoles;
-import org.rapidoid.util.Conf;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 

@@ -20,8 +20,8 @@ package org.rapidoid.demo.http;
  * #L%
  */
 
+import org.rapidoid.config.Conf;
 import org.rapidoid.net.TCP;
-import org.rapidoid.util.Conf;
 
 public class Main {
 

@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
+import org.rapidoid.config.Conf;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
@@ -42,7 +43,6 @@ import org.rapidoid.oauth.OAuthProvider;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
-import org.rapidoid.util.Conf;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 

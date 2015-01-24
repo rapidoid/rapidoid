@@ -22,8 +22,8 @@ package org.rapidoid.db;
 
 import java.util.concurrent.CountDownLatch;
 
+import org.rapidoid.config.Conf;
 import org.rapidoid.db.model.Person;
-import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 

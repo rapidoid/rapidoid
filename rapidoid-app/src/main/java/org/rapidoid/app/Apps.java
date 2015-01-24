@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.beany.Beany;
+import org.rapidoid.config.Conf;
 import org.rapidoid.db.DB;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
@@ -32,7 +33,6 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.log.Log;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.util.Cls;
-import org.rapidoid.util.Conf;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 

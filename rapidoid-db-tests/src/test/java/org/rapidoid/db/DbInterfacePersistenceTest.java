@@ -20,8 +20,8 @@ package org.rapidoid.db;
  * #L%
  */
 
+import org.rapidoid.config.Conf;
 import org.rapidoid.db.model.IPerson;
-import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 

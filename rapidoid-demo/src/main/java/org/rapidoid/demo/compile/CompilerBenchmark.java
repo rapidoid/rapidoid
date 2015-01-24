@@ -21,7 +21,7 @@ package org.rapidoid.demo.compile;
  */
 
 import org.rapidoid.compile.Compile;
-import org.rapidoid.util.Conf;
+import org.rapidoid.config.Conf;
 import org.rapidoid.util.U;
 import org.rapidoid.wrap.Int;
 

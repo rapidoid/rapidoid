@@ -22,7 +22,7 @@ package org.rapidoid.security;
 
 import java.util.List;
 
-import org.rapidoid.util.Conf;
+import org.rapidoid.config.Conf;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 

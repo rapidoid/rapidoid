@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.rapidoid.beany.Beany;
+import org.rapidoid.config.Conf;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
@@ -44,7 +45,6 @@ import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.rest.WebReq;
 import org.rapidoid.util.Arr;
 import org.rapidoid.util.Cls;
-import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.BootstrapWidgets;
 

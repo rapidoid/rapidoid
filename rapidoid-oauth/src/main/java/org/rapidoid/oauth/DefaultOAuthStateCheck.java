@@ -1,6 +1,6 @@
 package org.rapidoid.oauth;
 
-import org.rapidoid.util.Conf;
+import org.rapidoid.config.Conf;
 import org.rapidoid.util.U;
 
 /*

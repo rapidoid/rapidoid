@@ -1,15 +1,17 @@
-package org.rapidoid.util;
+package org.rapidoid.config;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /*
  * #%L
- * rapidoid-u
+ * rapidoid-config
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -31,7 +33,7 @@ public class Conf {
 
 	private static boolean initialized = false;
 
-	private static final ConcurrentMap<String, Object> CFG = U.concurrentMap();
+	private static final ConcurrentMap<String, Object> CFG = new ConcurrentHashMap<String, Object>();
 
 	private static synchronized void init() {
 		if (!initialized) {
@@ -39,12 +41,12 @@ public class Conf {
 			Properties props = new Properties();
 
 			try {
-				URL config = U.resource("config");
+				URL config = resource("config");
 				if (config != null) {
 					props.load(config.openStream());
 				}
 
-				config = U.resource("config.private");
+				config = resource("config.private");
 				if (config != null) {
 					props.load(config.openStream());
 				}
@@ -53,9 +55,13 @@ public class Conf {
 					configure(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
 				}
 			} catch (IOException e) {
-				throw U.rte("Cannot load config!", e);
+				throw new RuntimeException("Cannot load config!", e);
 			}
 		}
+	}
+
+	private static URL resource(String name) {
+		return Thread.currentThread().getContextClassLoader().getResource(name);
 	}
 
 	public static synchronized void args(String... args) {
@@ -84,7 +90,7 @@ public class Conf {
 	public static void configure(String name, String value) {
 		init();
 		String[] parts = value.split(",");
-		Object val = parts.length > 1 ? U.list(parts) : value;
+		Object val = parts.length > 1 ? Arrays.asList(parts) : value;
 		CFG.put(name, val);
 	}
 
@@ -120,7 +126,7 @@ public class Conf {
 
 	public static boolean has(String name, String value) {
 		Object opt = option(name);
-		return U.eq(opt, value);
+		return opt == value || (opt != null && opt.equals(value));
 	}
 
 	public static boolean is(String name) {
@@ -134,9 +140,11 @@ public class Conf {
 			if (opt instanceof Collection) {
 				return ((Collection<?>) opt).contains(value);
 			}
+
+			return opt.equals(value);
 		}
 
-		return U.eq(opt, value);
+		return opt == value;
 	}
 
 	public static int cpus() {

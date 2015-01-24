@@ -26,11 +26,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.config.Conf;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.Cls;
-import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 
 public class DB {

@@ -21,13 +21,13 @@ package org.rapidoid.http;
  */
 
 import org.rapidoid.bytes.BytesUtil;
+import org.rapidoid.config.Conf;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.Protocol;
-import org.rapidoid.util.Conf;
 import org.rapidoid.util.U;
 import org.rapidoid.wrap.Bool;
 import org.rapidoid.wrap.Int;
