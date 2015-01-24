@@ -219,4 +219,35 @@ public class DbClassSecurityTest extends DbTestCommons {
 		DB.shutdown();
 	}
 
+	@Test
+	public void testDbClearSecurity() {
+		AppCtx.reset();
+		final Foo foo = new Foo();
+		DB.sudo().persist(foo);
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.as("admin@debug").clear();
+			}
+		});
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.as("asdf").clear();
+			}
+		});
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.clear();
+			}
+		});
+
+		DB.shutdown();
+	}
+
+
 }

@@ -1146,12 +1146,12 @@ public class InMem {
 	public void clear() {
 		globalLock();
 		try {
-			each(new Operation<Object>() {
-				@Override
-				public void execute(Object obj) throws Exception {
-					delete(obj);
-				}
-			});
+
+			for (Entry<Long, Rec> entry : data.data.entrySet()) {
+				long id = entry.getKey();
+				delete(id);
+			}
+
 		} finally {
 			globalUnlock();
 		}
