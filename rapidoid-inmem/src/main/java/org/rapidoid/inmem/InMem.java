@@ -99,7 +99,8 @@ public class InMem {
 	protected static final PropertyFilter SEARCHABLE_PROPS = new PropertyFilter() {
 		@Override
 		public boolean eval(Prop prop) throws Exception {
-			return Cls.isAssignableTo(prop.getType(), Number.class, String.class, Boolean.class, Enum.class, Date.class);
+			return Cls
+					.isAssignableTo(prop.getType(), Number.class, String.class, Boolean.class, Enum.class, Date.class);
 		}
 	};
 
@@ -196,6 +197,9 @@ public class InMem {
 	}
 
 	public long insert(Object record) {
+		U.notNull(record, "record");
+		U.secure(canInsert(record), "Not enough privileges to insert the record!");
+
 		sharedLock();
 		try {
 			long id = data.ids.incrementAndGet();
@@ -598,6 +602,11 @@ public class InMem {
 	private boolean canRead(Object record) {
 		return sudo || Secure.hasRoleBasedObjectAccess(username(), record)
 				&& Secure.getObjectPermissions(username(), record).read;
+	}
+
+	private boolean canInsert(Object record) {
+		return sudo || Secure.hasRoleBasedObjectAccess(username(), record)
+				&& Secure.getObjectPermissions(username(), record).insert;
 	}
 
 	private <E> E getIfAllowed(long id, boolean validateId) {
