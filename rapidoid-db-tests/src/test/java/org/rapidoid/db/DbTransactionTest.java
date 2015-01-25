@@ -23,6 +23,7 @@ package org.rapidoid.db;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.rapidoid.db.model.Person;
+import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.util.U;
@@ -84,6 +85,64 @@ public class DbTransactionTest extends DbTestCommons {
 
 			eq(DB.size(), 0);
 		}
+	}
+
+	@Test
+	public void testReadonlyTransaction() {
+		throwsRuntimeException(new Runnable() {
+			@Override
+			public void run() {
+				DB.transaction(new Runnable() {
+					@Override
+					public void run() {
+						DB.insert(new Person("a", 1));
+					}
+				}, true);
+			}
+		}, "read-only transaction");
+
+		final long id = DB.insert(new Person("a", 1));
+
+		throwsRuntimeException(new Runnable() {
+			@Override
+			public void run() {
+				DB.transaction(new Runnable() {
+					@Override
+					public void run() {
+						DB.delete(id);
+					}
+				}, true);
+			}
+		}, "read-only transaction");
+
+		throwsRuntimeException(new Runnable() {
+			@Override
+			public void run() {
+				DB.transaction(new Runnable() {
+					@Override
+					public void run() {
+						DB.update(id, new Person());
+					}
+				}, true);
+			}
+		}, "read-only transaction");
+
+		DB.transaction(new Runnable() {
+			@Override
+			public void run() {
+				Object p = DB.get(id);
+				DB.refresh(p);
+				DB.getAll(Person.class);
+				DB.getAll(id);
+				DB.find(new Predicate<Person>() {
+					@Override
+					public boolean eval(Person p) throws Exception {
+						return true;
+					}
+				});
+			}
+		}, true);
+
 	}
 
 }

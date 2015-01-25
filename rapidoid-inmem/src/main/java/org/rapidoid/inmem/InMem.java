@@ -202,6 +202,8 @@ public class InMem {
 
 		sharedLock();
 		try {
+			failIfReadonlyTx();
+
 			long id = data.ids.incrementAndGet();
 			Beany.setId(record, id);
 
@@ -380,7 +382,9 @@ public class InMem {
 
 	public void delete(long id) {
 		sharedLock();
+
 		try {
+			failIfReadonlyTx();
 			validateId(id);
 
 			Rec old = data.data.get(id);
@@ -486,6 +490,8 @@ public class InMem {
 	}
 
 	private void update_(long id, Object record, boolean reflectRelChanges) {
+
+		failIfReadonlyTx();
 		validateId(id);
 
 		Rec old = data.data.get(id);
@@ -794,7 +800,7 @@ public class InMem {
 		data.txIdCounter.set(data.ids.get());
 		data.txChanges.clear();
 		data.txInsertions.clear();
-
+		data.txReadonly.set(readOnly);
 		data.insideTx.set(true);
 
 		boolean success = false;
@@ -1185,6 +1191,8 @@ public class InMem {
 		globalLock();
 		try {
 
+			failIfReadonlyTx();
+
 			for (Entry<Long, Rec> entry : data.data.entrySet()) {
 				long id = entry.getKey();
 				delete(id);
@@ -1261,6 +1269,10 @@ public class InMem {
 	public long getVersionOf(long id) {
 		Object ver = readColumn(id, "version");
 		return ver != null ? Cls.convert(ver, Long.class) : 0;
+	}
+
+	private void failIfReadonlyTx() {
+		U.must(!data.insideTx.get() || !data.txReadonly.get(), "Cannot modify data inside read-only transaction!");
 	}
 
 }

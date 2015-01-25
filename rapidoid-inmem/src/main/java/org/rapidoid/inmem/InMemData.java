@@ -69,6 +69,8 @@ public class InMemData {
 
 	final AtomicLong txIdCounter = new AtomicLong();
 
+	final AtomicBoolean txReadonly = new AtomicBoolean();
+
 	volatile ConcurrentNavigableMap<Long, Rec> prevData = new ConcurrentSkipListMap<Long, Rec>();
 
 	volatile ConcurrentNavigableMap<Long, Rec> data = new ConcurrentSkipListMap<Long, Rec>();

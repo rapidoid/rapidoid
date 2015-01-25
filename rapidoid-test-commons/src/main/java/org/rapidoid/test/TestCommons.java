@@ -288,6 +288,13 @@ public abstract class TestCommons {
 		}
 	}
 
+	protected Throwable rootCause(Throwable e) {
+		while (e.getCause() != null) {
+			e = e.getCause();
+		}
+		return e;
+	}
+
 	protected void throwsSecurityException(Runnable code) {
 		try {
 			code.run();
@@ -295,6 +302,17 @@ public abstract class TestCommons {
 			return;
 		}
 		fail("Expected SecurityException to be thrown!");
+	}
+
+	protected void throwsRuntimeException(Runnable code, String errMsgPart) {
+		try {
+			code.run();
+		} catch (RuntimeException e) {
+			Throwable err = rootCause(e);
+			isTrue(err.getMessage().contains(errMsgPart));
+			return;
+		}
+		fail("Expected RuntimeException to be thrown!");
 	}
 
 }
