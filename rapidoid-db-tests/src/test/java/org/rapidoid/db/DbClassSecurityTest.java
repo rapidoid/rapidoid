@@ -20,6 +20,7 @@ package org.rapidoid.db;
  * #L%
  */
 
+import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.AppCtx;
@@ -35,11 +36,15 @@ class Foo extends AbstractEntity {
 
 @CanInsert("LOGGED_IN")
 @CanRead("ANYBODY")
+@CanChange("MANAGER")
 @SuppressWarnings("serial")
 class Bar extends AbstractEntity {
+
 	@CanRead(MODERATOR)
+	@CanChange({})
 	public String name = "no name";
 
+	@CanChange(MANAGER)
 	public String desc = "desc";
 }
 
@@ -190,7 +195,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 	}
 
 	@Test
-	public void testReadColumnSecurity() {
+	public void testColumnGrainedReadSecurity() {
 		AppCtx.reset();
 		final Bar bar = new Bar();
 		bar.name = "abc";
@@ -232,6 +237,25 @@ public class DbClassSecurityTest extends DbTestCommons {
 				DB.readColumn(id, "name");
 			}
 		});
+
+		DB.shutdown();
+	}
+
+	@Test
+	public void testColumnGrainedUpdateSecurity() {
+		AppCtx.reset();
+		final Bar bar = new Bar();
+		bar.name = "abc";
+		DB.as("qwerty").persist(bar);
+
+		bar.name = "new name";
+		bar.desc = "new desc";
+		DB.as("manager@debug").update(bar);
+
+		Bar bar2 = DB.sudo().get(bar.id);
+
+		eq(bar2.name, "abc");
+		eq(bar2.desc, "new desc");
 
 		DB.shutdown();
 	}

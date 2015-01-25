@@ -495,6 +495,19 @@ public class InMem {
 
 		Beany.setId(record, id);
 
+		if (!sudo) {
+			boolean canUpdate = false;
+			for (Prop prop : Beany.propertiesOf(record)) {
+				if (!Secure.getPropertyPermissions(username(), entity.getClass(), entity, prop.getName()).change) {
+					prop.set(record, prop.get(entity, null));
+					canUpdate = true;
+				}
+			}
+			U.secure(canUpdate, "Not enough privileges to update any column of %s!", entity.getClass().getSimpleName());
+		}
+
+		secureUpdate(record);
+
 		boolean updated = data.data.replace(id, old, rec(record));
 
 		U.must(updated, "Concurrent modification occured while updating the object with ID=%s!", id);
@@ -1215,6 +1228,7 @@ public class InMem {
 		U.secure(canReadColumn(record, column), "Not enough privileges to read the column: %s!", column);
 	}
 
+	@SuppressWarnings("unused")
 	private void secureUpdateColumn(Object record, String column) {
 		U.secure(canUpdateColumn(record, column), "Not enough privileges to update the column: %s!", column);
 	}
