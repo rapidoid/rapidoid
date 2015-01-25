@@ -384,15 +384,15 @@ public class InMem {
 		try {
 			validateId(id);
 
-			Rec toRemove = data.data.get(id);
-			Object entity = obj(toRemove);
+			Rec old = data.data.get(id);
+			Object entity = obj(old);
 			secureDelete(entity);
 
-			Rec removed = data.data.remove(id);
-			U.must(toRemove == removed, "Concurrent modification occured while deleting the object with ID=%s!", id);
+			boolean removed = data.data.remove(id, old);
+			U.must(removed, "Concurrent modification occured while deleting the object with ID=%s!", id);
 
 			if (data.insideTx.get()) {
-				data.txChanges.putIfAbsent(id, removed);
+				data.txChanges.putIfAbsent(id, old);
 			}
 
 			deleteRelsFor(entity);
@@ -489,17 +489,21 @@ public class InMem {
 	private void update_(long id, Object record, boolean reflectRelChanges) {
 		validateId(id);
 
+		Rec old = data.data.get(id);
+		Object entity = obj(old);
+		secureUpdate(entity);
+
 		Beany.setId(record, id);
 
-		secureUpdate(record);
+		boolean updated = data.data.replace(id, old, rec(record));
 
-		Rec removed = data.data.replace(id, rec(record));
+		U.must(updated, "Concurrent modification occured while updating the object with ID=%s!", id);
 
 		if (data.insideTx.get()) {
-			data.txChanges.putIfAbsent(id, removed);
+			data.txChanges.putIfAbsent(id, old);
 		}
 
-		if (removed == null) {
+		if (old == null) {
 			throw new IllegalStateException("Cannot update non-existing record with ID=" + id);
 		}
 
