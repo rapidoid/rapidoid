@@ -87,7 +87,7 @@ public abstract class DAO<E> {
 	}
 
 	public <T> T read(long id, String column) {
-		return DB.read(id, column);
+		return DB.readColumn(id, column);
 	}
 
 }

@@ -463,6 +463,7 @@ public class InMem {
 			secureRead(tmp);
 
 			obj(rec, record);
+			resetInvisibleColumns(record);
 		} finally {
 			sharedUnlock();
 		}
@@ -532,13 +533,12 @@ public class InMem {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T> T read(long id, String column) {
+	public <T> T readColumn(long id, String column) {
 		sharedLock();
 		try {
-			validateId(id);
-			Map<String, Object> map = getIfAllowed(id, Map.class);
-			return (T) (map != null ? map.get(column) : null);
+			Object record = getIfAllowed(id, true);
+			secureReadColumn(record, column);
+			return Beany.getPropValue(record, column);
 		} finally {
 			sharedUnlock();
 		}
@@ -613,12 +613,14 @@ public class InMem {
 	private <E> E getIfAllowed(long id, boolean validateId) {
 		E record = get_(id, validateId);
 		secureRead(record);
+		resetInvisibleColumns(record);
 		return record;
 	}
 
 	private <E> E getIfAllowed(long id, Class<E> type) {
 		E record = get_(id, type);
 		secureRead(record);
+		resetInvisibleColumns(record);
 		return record;
 	}
 
@@ -1181,6 +1183,14 @@ public class InMem {
 		return record == null || sudo || Secure.canDelete(username(), record);
 	}
 
+	private boolean canReadColumn(Object record, String column) {
+		return record == null || sudo || Secure.canReadProperty(username(), record, column);
+	}
+
+	private boolean canUpdateColumn(Object record, String column) {
+		return record == null || sudo || Secure.canUpdateProperty(username(), record, column);
+	}
+
 	private void secureRead(Object record) {
 		U.secure(canRead(record), "Not enough privileges to read the record!");
 	}
@@ -1195,6 +1205,20 @@ public class InMem {
 
 	private void secureDelete(Object record) {
 		U.secure(canDelete(record), "Not enough privileges to delete the record!");
+	}
+
+	private void secureReadColumn(Object record, String column) {
+		U.secure(canReadColumn(record, column), "Not enough privileges to read the column: %s!", column);
+	}
+
+	private void secureUpdateColumn(Object record, String column) {
+		U.secure(canUpdateColumn(record, column), "Not enough privileges to update the column: %s!", column);
+	}
+
+	private void resetInvisibleColumns(Object record) {
+		if (!sudo) {
+			Secure.resetInvisibleProperties(username(), record);
+		}
 	}
 
 }

@@ -33,10 +33,20 @@ class Foo extends AbstractEntity {
 	public String name = "no name";
 }
 
+@CanInsert("LOGGED_IN")
+@CanRead("ANYBODY")
+@SuppressWarnings("serial")
+class Bar extends AbstractEntity {
+	@CanRead(MODERATOR)
+	public String name = "no name";
+
+	public String desc = "desc";
+}
+
 public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test(expectedExceptions = SecurityException.class)
-	public void testDbSecurityFailure() {
+	public void testSecurityFailure() {
 		AppCtx.reset();
 		Foo foo = new Foo();
 		DB.persist(foo);
@@ -44,7 +54,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 	}
 
 	@Test(expectedExceptions = SecurityException.class)
-	public void testDbSecurityFailure2() {
+	public void testSecurityFailure2() {
 		AppCtx.reset();
 		Foo foo = new Foo();
 		DB.as("moderator@debug").persist(foo);
@@ -52,7 +62,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 	}
 
 	@Test(expectedExceptions = SecurityException.class)
-	public void testDbSecurityFailure3() {
+	public void testSecurityFailure3() {
 		AppCtx.reset();
 		Foo foo = new Foo();
 		AppCtx.setUser(new UserInfo("abcde"));
@@ -61,7 +71,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 	}
 
 	@Test
-	public void testDbSudo() {
+	public void testSudo() {
 		AppCtx.reset();
 		Foo foo = new Foo();
 		DB.sudo().persist(foo);
@@ -72,7 +82,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 	}
 
 	@Test
-	public void testDbSecurity() {
+	public void testSecurity() {
 		AppCtx.reset();
 		final Foo foo = new Foo();
 		DB.as("admin@debug").persist(foo);
@@ -80,7 +90,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 	}
 
 	@Test
-	public void testDbSecurity2() {
+	public void testSecurity2() {
 		AppCtx.reset();
 		Foo foo = new Foo();
 		AppCtx.setUser(new UserInfo("manager@debug"));
@@ -89,7 +99,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 	}
 
 	@Test
-	public void testDbDeleteSecurity() {
+	public void testDeleteSecurity() {
 		AppCtx.reset();
 		final Foo foo = new Foo();
 		DB.sudo().persist(foo);
@@ -119,7 +129,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 	}
 
 	@Test
-	public void testDbUpdateSecurity() {
+	public void testUpdateSecurity() {
 		AppCtx.reset();
 		final Foo foo = new Foo();
 		DB.sudo().persist(foo);
@@ -149,7 +159,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 	}
 
 	@Test
-	public void testDbGetSecurity() {
+	public void testGetSecurity() {
 		AppCtx.reset();
 		final Foo foo = new Foo();
 		foo.name = "abc";
@@ -180,7 +190,54 @@ public class DbClassSecurityTest extends DbTestCommons {
 	}
 
 	@Test
-	public void testDbRefreshSecurity() {
+	public void testReadColumnSecurity() {
+		AppCtx.reset();
+		final Bar bar = new Bar();
+		bar.name = "abc";
+		final long id = DB.as("asd").persist(bar);
+
+		Bar bar2 = DB.get(id);
+		eq(bar2.name, null);
+		eq(bar2.desc, "desc");
+
+		Bar bar3 = new Bar();
+		bar3.id = id;
+		DB.refresh(bar3);
+		eq(bar3.name, null);
+		eq(bar3.desc, "desc");
+
+		String name = DB.as("moderator@debug").readColumn(id, "name");
+		eq(name, "abc");
+
+		String desc = DB.as("dfg").readColumn(id, "desc");
+		eq(desc, "desc");
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.as("admin@debug").readColumn(id, "name");
+			}
+		});
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.as("asdf").readColumn(id, "name");
+			}
+		});
+
+		throwsSecurityException(new Runnable() {
+			@Override
+			public void run() {
+				DB.readColumn(id, "name");
+			}
+		});
+
+		DB.shutdown();
+	}
+
+	@Test
+	public void testRefreshSecurity() {
 		AppCtx.reset();
 		final Foo foo = new Foo();
 		foo.name = "abc";
@@ -220,7 +277,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 	}
 
 	@Test
-	public void testDbClearSecurity() {
+	public void testClearSecurity() {
 		AppCtx.reset();
 		final Foo foo = new Foo();
 		DB.sudo().persist(foo);
@@ -248,6 +305,5 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 		DB.shutdown();
 	}
-
 
 }

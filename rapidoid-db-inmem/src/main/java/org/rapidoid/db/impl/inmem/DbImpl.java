@@ -128,8 +128,8 @@ public class DbImpl extends NamedActivity<Database> implements Database {
 	}
 
 	@Override
-	public <T> T read(long id, String column) {
-		return inmem.read(id, column);
+	public <T> T readColumn(long id, String column) {
+		return inmem.readColumn(id, column);
 	}
 
 	@Override

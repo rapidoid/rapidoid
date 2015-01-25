@@ -129,8 +129,8 @@ public class DB {
 		return db().persistedIdOf(record);
 	}
 
-	public static <E> E read(long id, String column) {
-		return db().read(id, column);
+	public static <E> E readColumn(long id, String column) {
+		return db().readColumn(id, column);
 	}
 
 	public static <E> List<E> find(Predicate<E> match) {

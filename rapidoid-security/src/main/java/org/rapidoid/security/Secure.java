@@ -24,7 +24,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
+import org.rapidoid.beany.Prop;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanDelete;
 import org.rapidoid.security.annotation.CanInsert;
@@ -221,6 +223,24 @@ public class Secure implements Constants {
 
 	public static boolean canDelete(String username, Object record) {
 		return hasRoleBasedObjectAccess(username, record) && getObjectPermissions(username, record).delete;
+	}
+
+	public static boolean canReadProperty(String username, Object record, String property) {
+		return hasRoleBasedObjectAccess(username, record) && getObjectPermissions(username, record).read
+				&& getPropertyPermissions(username, record.getClass(), record, property).read;
+	}
+
+	public static boolean canUpdateProperty(String username, Object record, String property) {
+		return hasRoleBasedObjectAccess(username, record) && getObjectPermissions(username, record).change
+				&& getPropertyPermissions(username, record.getClass(), record, property).change;
+	}
+
+	public static void resetInvisibleProperties(String username, Object record) {
+		for (Prop prop : Beany.propertiesOf(record)) {
+			if (!getPropertyPermissions(username, record.getClass(), record, prop.getName()).read) {
+				prop.set(record, null);
+			}
+		}
 	}
 
 }

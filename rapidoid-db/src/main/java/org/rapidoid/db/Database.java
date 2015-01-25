@@ -64,7 +64,7 @@ public interface Database extends Activity<Database> {
 
 	void delete(Object record);
 
-	<T> T read(long id, String column);
+	<T> T readColumn(long id, String column);
 
 	<E> List<E> find(Predicate<E> match);
 
