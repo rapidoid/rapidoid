@@ -191,8 +191,14 @@ public class FormField extends AbstractWidget {
 		}
 	}
 
-	protected Object readonly(Object item) {
-		return display(item);
+	protected Tag readonly(Object item) {
+		Object display = display(item);
+
+		if (display instanceof Tag) {
+			return (Tag) display;
+		} else {
+			return span(display).class_("display-wrap");
+		}
 	}
 
 	protected Object checkboxesInput(String name, Collection<?> options, Var<?> var) {
@@ -248,7 +254,11 @@ public class FormField extends AbstractWidget {
 			return content;
 		}
 
-		if (!isFieldProgrammatic() || mode == FormMode.SHOW) {
+		if (isFieldProgrammatic() && mode != FormMode.SHOW) {
+			return null;
+		}
+
+		if (mode != FormMode.SHOW) {
 			if (required) {
 				var = Vars.mandatory(var);
 			}

@@ -58,6 +58,9 @@ public class PagesTestCommons extends TestCommons {
 		if (content instanceof TagWidget<?>) {
 			TagWidget<HttpExchange> widget = (TagWidget<HttpExchange>) content;
 			content = widget.toTag(x);
+			if (content == null) {
+				return null;
+			}
 		}
 
 		if (!(content instanceof Tag)) {
