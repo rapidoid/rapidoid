@@ -45,7 +45,7 @@ public class DeleteAllDataScreen extends Screen {
 	public void onYesDelete() {
 		Log.info("yes");
 		hideModal();
-		DB.clear();
+		DB.sudo().clear();
 	}
 
 	public void onNo() {
