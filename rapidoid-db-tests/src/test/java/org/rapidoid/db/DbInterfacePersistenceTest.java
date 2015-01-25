@@ -43,7 +43,7 @@ public class DbInterfacePersistenceTest extends DbTestCommons {
 		UTILS.benchmarkMT(Conf.cpus(), "insert", count, new Runnable() {
 			@Override
 			public void run() {
-				DB.insert(DB.create(IPerson.class, "name", "abc", "age", -1));
+				DB.insert(DB.entity(IPerson.class, "name", "abc", "age", -1));
 			}
 		});
 
@@ -56,7 +56,7 @@ public class DbInterfacePersistenceTest extends DbTestCommons {
 			public void run() {
 				int id = Rnd.rnd(count) + 1;
 				Long version = DB.getVersionOf(id);
-				IPerson person = DB.create(IPerson.class, "version", version, "name", "x", "age", id * 100);
+				IPerson person = DB.entity(IPerson.class, "version", version, "name", "x", "age", id * 100);
 				try {
 					DB.update(id, person);
 				} catch (OptimisticConcurrencyControlException e) {

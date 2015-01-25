@@ -58,7 +58,7 @@ public class DAOTest extends DbTestCommons {
 		eq(dao.getEntityType(), IPerson.class);
 
 		eq(DB.size(), 0);
-		long id = dao.insert(DB.create(IPerson.class));
+		long id = dao.insert(DB.entity(IPerson.class));
 		eq(DB.size(), 1);
 
 		IPerson p = dao.get(id);

@@ -62,7 +62,7 @@ public class DbSchemaImpl implements DbSchema {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <E> E create(Class<E> clazz, Map<String, ?> properties) {
+	public <E> E entity(Class<E> clazz, Map<String, ?> properties) {
 		Class<E> entityType = getEntityTypeFor(clazz);
 		if (entityType.isInterface() && Entity.class.isAssignableFrom(entityType)) {
 			Class<? extends Entity> cls = (Class<? extends Entity>) entityType;

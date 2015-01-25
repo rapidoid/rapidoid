@@ -51,7 +51,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	@Test(expectedExceptions = SecurityException.class)
 	public void testSecurityFailure() {
 
-		IFoo foo = DB.create(IFoo.class);
+		IFoo foo = DB.entity(IFoo.class);
 		DB.persist(foo);
 		DB.shutdown();
 	}
@@ -59,7 +59,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	@Test(expectedExceptions = SecurityException.class)
 	public void testSecurityFailure2() {
 
-		IFoo foo = DB.create(IFoo.class);
+		IFoo foo = DB.entity(IFoo.class);
 		DB.as("moderator@debug").persist(foo);
 		DB.shutdown();
 	}
@@ -67,7 +67,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	@Test(expectedExceptions = SecurityException.class)
 	public void testSecurityFailure3() {
 
-		IFoo foo = DB.create(IFoo.class);
+		IFoo foo = DB.entity(IFoo.class);
 		AppCtx.setUser(new UserInfo("abcde"));
 		DB.persist(foo);
 		DB.shutdown();
@@ -76,7 +76,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	@Test
 	public void testSudo() {
 
-		IFoo foo = DB.create(IFoo.class);
+		IFoo foo = DB.entity(IFoo.class);
 		DB.sudo().persist(foo);
 		DB.sudo().update(foo);
 		DB.sudo().refresh(foo);
@@ -87,7 +87,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	@Test
 	public void testSecurity() {
 
-		final IFoo foo = DB.create(IFoo.class);
+		final IFoo foo = DB.entity(IFoo.class);
 		DB.as("admin@debug").persist(foo);
 		DB.shutdown();
 	}
@@ -95,7 +95,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	@Test
 	public void testSecurity2() {
 
-		IFoo foo = DB.create(IFoo.class);
+		IFoo foo = DB.entity(IFoo.class);
 		AppCtx.setUser(new UserInfo("manager@debug"));
 		DB.persist(foo);
 		DB.shutdown();
@@ -104,7 +104,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	@Test
 	public void testDeleteSecurity() {
 
-		final IFoo foo = DB.create(IFoo.class);
+		final IFoo foo = DB.entity(IFoo.class);
 		DB.sudo().persist(foo);
 
 		throwsSecurityException(new Runnable() {
@@ -134,7 +134,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	@Test
 	public void testUpdateSecurity() {
 
-		final IFoo foo = DB.create(IFoo.class);
+		final IFoo foo = DB.entity(IFoo.class);
 		DB.sudo().persist(foo);
 
 		throwsSecurityException(new Runnable() {
@@ -164,7 +164,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	@Test
 	public void testGetSecurity() {
 
-		final IFoo foo = DB.create(IFoo.class);
+		final IFoo foo = DB.entity(IFoo.class);
 		foo.name().set("abc");
 		final long id = DB.sudo().persist(foo);
 
@@ -195,7 +195,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	@Test
 	public void testColumnGrainedReadSecurity() {
 
-		final IBar bar = DB.create(IBar.class);
+		final IBar bar = DB.entity(IBar.class);
 		bar.name().set("abc");
 		bar.desc().set("desc");
 		final long id = DB.as("asd").persist(bar);
@@ -204,7 +204,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 		eq(bar2.name().get(), null);
 		eq(bar2.desc().get(), "desc");
 
-		IBar bar3 = DB.create(IBar.class);
+		IBar bar3 = DB.entity(IBar.class);
 		bar3.id().set(id);
 		DB.refresh(bar3);
 		eq(bar3.name().get(), null);
@@ -243,7 +243,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	@Test
 	public void testColumnGrainedUpdateSecurity() {
 
-		final IBar bar = DB.create(IBar.class);
+		final IBar bar = DB.entity(IBar.class);
 		bar.name().set("abc");
 		DB.as("qwerty").persist(bar);
 
@@ -265,11 +265,11 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	@Test
 	public void testRefreshSecurity() {
 
-		final IFoo foo = DB.create(IFoo.class);
+		final IFoo foo = DB.entity(IFoo.class);
 		foo.name().set("abc");
 		DB.sudo().persist(foo);
 
-		final IFoo foo2 = DB.create(IFoo.class);
+		final IFoo foo2 = DB.entity(IFoo.class);
 		foo2.id().set(foo.id().get());
 		foo2.name().set("no name");
 
@@ -306,7 +306,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	@Test
 	public void testClearSecurity() {
 
-		final IFoo foo = DB.create(IFoo.class);
+		final IFoo foo = DB.entity(IFoo.class);
 		DB.sudo().persist(foo);
 
 		throwsSecurityException(new Runnable() {

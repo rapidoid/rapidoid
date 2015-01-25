@@ -36,7 +36,7 @@ public class DbEntityConstructor implements EntityConstructor {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T create(Class<T> entityType) {
-		return (T) db.schema().create(entityType, Collections.EMPTY_MAP);
+		return (T) db.schema().entity(entityType, Collections.EMPTY_MAP);
 	}
 
 }

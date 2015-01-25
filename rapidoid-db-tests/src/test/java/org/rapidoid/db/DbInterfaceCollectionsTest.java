@@ -30,16 +30,16 @@ public class DbInterfaceCollectionsTest extends DbTestCommons {
 	@Test
 	public void testCollectionsPersistence() {
 
-		IProfile profile = DB.create(IProfile.class);
+		IProfile profile = DB.entity(IProfile.class);
 		notNull(profile);
 		eq(DB.size(), 0);
 
-		IPost post1 = DB.create(IPost.class, "content", "post 1");
+		IPost post1 = DB.entity(IPost.class, "content", "post 1");
 
-		IPost post2 = DB.create(IPost.class);
+		IPost post2 = DB.entity(IPost.class);
 		post2.content().set("post 2");
 
-		IPost post3 = DB.create(IPost.class, "content", "post 3");
+		IPost post3 = DB.entity(IPost.class, "content", "post 3");
 
 		profile.posts().add(post1);
 		eq(DB.size(), 1);
@@ -60,7 +60,7 @@ public class DbInterfaceCollectionsTest extends DbTestCommons {
 
 		int pn = 1;
 		for (IPost post : profile.posts()) {
-			IPerson person = DB.create(IPerson.class);
+			IPerson person = DB.entity(IPerson.class);
 			person.name().set("person " + pn);
 			person.age().set(pn * 10);
 			post.likes().add(person);

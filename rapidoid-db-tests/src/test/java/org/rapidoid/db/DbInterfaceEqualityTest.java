@@ -27,11 +27,11 @@ public class DbInterfaceEqualityTest extends DbTestCommons {
 
 	@Test
 	public void testEntityEquality() {
-		eq(DB.create(IPost.class, "id", 0L), DB.create(IPost.class, "id", 0));
-		eq(DB.create(IPost.class, "id", 123L), DB.create(IPost.class, "id", 123));
-		neq(DB.create(IPost.class, "id", 12345L), DB.create(IPost.class));
-		neq(DB.create(IPost.class), DB.create(IPost.class, "id", 5432));
-		neq(DB.create(IPost.class), DB.create(IPost.class));
+		eq(DB.entity(IPost.class, "id", 0L), DB.entity(IPost.class, "id", 0));
+		eq(DB.entity(IPost.class, "id", 123L), DB.entity(IPost.class, "id", 123));
+		neq(DB.entity(IPost.class, "id", 12345L), DB.entity(IPost.class));
+		neq(DB.entity(IPost.class), DB.entity(IPost.class, "id", 5432));
+		neq(DB.entity(IPost.class), DB.entity(IPost.class));
 	}
 
 }

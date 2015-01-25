@@ -33,7 +33,7 @@ public class Users {
 		T user = U.singleOrNone(DB.find(userClass, "username", u.username));
 
 		if (user == null) {
-			user = DB.create(userClass, Beany.read(u));
+			user = DB.entity(userClass, Beany.read(u));
 			DB.insert(user);
 		}
 

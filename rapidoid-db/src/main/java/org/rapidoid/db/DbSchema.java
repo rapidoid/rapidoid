@@ -24,7 +24,7 @@ import java.util.Map;
 
 public interface DbSchema {
 
-	<E> E create(Class<E> entityType, Map<String, ?> properties);
+	<E> E entity(Class<E> entityType, Map<String, ?> properties);
 
 	<E> DbDsl<E> dsl(Class<E> entityType);
 

@@ -30,12 +30,12 @@ public class DbInterfaceRelationsTest extends DbTestCommons {
 	@Test
 	public void testInverseRelations1() {
 
-		IProfile profile = DB.create(IProfile.class);
+		IProfile profile = DB.entity(IProfile.class);
 
-		IPost post1 = DB.create(IPost.class);
+		IPost post1 = DB.entity(IPost.class);
 		post1.content().set("post 1");
 
-		IPost post2 = DB.create(IPost.class);
+		IPost post2 = DB.entity(IPost.class);
 		post2.content().set("post 2");
 
 		profile.posts().add(post1);
@@ -65,12 +65,12 @@ public class DbInterfaceRelationsTest extends DbTestCommons {
 	@Test
 	public void testInverseRelations2() {
 
-		IProfile profile = DB.create(IProfile.class);
+		IProfile profile = DB.entity(IProfile.class);
 
-		IPost post1 = DB.create(IPost.class);
+		IPost post1 = DB.entity(IPost.class);
 		post1.content().set("post 1");
 
-		IPost post2 = DB.create(IPost.class);
+		IPost post2 = DB.entity(IPost.class);
 		post2.content().set("post 2");
 
 		post1.postedOn().set(profile);
