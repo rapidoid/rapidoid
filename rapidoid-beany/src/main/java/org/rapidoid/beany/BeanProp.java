@@ -193,7 +193,11 @@ public class BeanProp implements Prop {
 
 		switch (propKind) {
 		case NORMAL:
-			normalSet(target, null);
+			if (type.isPrimitive()) {
+				primitiveReset(target);
+			} else {
+				normalSet(target, null);
+			}
 			break;
 
 		case COLLECTION:
@@ -207,6 +211,47 @@ public class BeanProp implements Prop {
 		default:
 			throw U.notExpected();
 		}
+	}
+
+	private void primitiveReset(Object target) {
+		switch (typeKind) {
+
+		case BOOLEAN:
+			normalSet(target, false);
+			break;
+
+		case BYTE:
+			normalSet(target, (byte) 0);
+			break;
+
+		case SHORT:
+			normalSet(target, (short) 0);
+			break;
+
+		case CHAR:
+			normalSet(target, (char) 0);
+			break;
+
+		case INT:
+			normalSet(target, 0);
+			break;
+
+		case LONG:
+			normalSet(target, 0L);
+			break;
+
+		case FLOAT:
+			normalSet(target, (float) 0);
+			break;
+
+		case DOUBLE:
+			normalSet(target, (double) 0);
+			break;
+
+		default:
+			throw U.notExpected();
+		}
+
 	}
 
 	private void varSet(Object target, Object value) {
