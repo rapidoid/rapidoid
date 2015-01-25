@@ -500,6 +500,7 @@ public class InMem {
 			for (Prop prop : Beany.propertiesOf(record)) {
 				if (!Secure.getPropertyPermissions(username(), entity.getClass(), entity, prop.getName()).change) {
 					prop.set(record, prop.get(entity, null));
+				} else {
 					canUpdate = true;
 				}
 			}
