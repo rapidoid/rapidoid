@@ -30,6 +30,10 @@ public class Users {
 
 	public static <T> T current(Class<T> userClass) {
 		UserInfo u = Secure.user();
+		if (u == null) {
+			return null;
+		}
+
 		T user = U.singleOrNone(DB.find(userClass, "username", u.username));
 
 		if (user == null) {

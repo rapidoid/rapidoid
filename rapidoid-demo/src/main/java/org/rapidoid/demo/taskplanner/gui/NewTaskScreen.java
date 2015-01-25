@@ -70,10 +70,13 @@ public class NewTaskScreen extends Screen {
 	}
 
 	public void onAdd() {
-		task.owner.set(Users.current(User.class));
-		task.description = v.get();
-		DB.insert(task);
-		task = new Task();
+		User user = Users.current(User.class);
+		if (user != null) {
+			task.owner.set(user);
+			task.description = v.get();
+			DB.insert(task);
+			task = new Task();
+		}
 	}
 
 	public void onCancel() {
