@@ -20,8 +20,11 @@ package org.rapidoid.db;
  * #L%
  */
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.rapidoid.config.Conf;
 import org.rapidoid.db.model.IPerson;
+import org.rapidoid.util.OptimisticConcurrencyControlException;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
@@ -46,13 +49,25 @@ public class DbInterfacePersistenceTest extends DbTestCommons {
 
 		System.out.println("updating...");
 
+		final AtomicInteger occN = new AtomicInteger();
+
 		UTILS.benchmarkMT(10, "update", count, new Runnable() {
 			@Override
 			public void run() {
 				int id = Rnd.rnd(count) + 1;
-				DB.update(id, DB.create(IPerson.class, "name", "x", "age", id * 100));
+				Long version = DB.getVersionOf(id);
+				IPerson person = DB.create(IPerson.class, "version", version, "name", "x", "age", id * 100);
+				try {
+					DB.update(id, person);
+				} catch (OptimisticConcurrencyControlException e) {
+					eq(e.getRecordId(), id);
+					occN.incrementAndGet();
+				}
 			}
 		});
+
+		System.out.println("Total OCC exceptions: " + occN.get());
+		isTrue(occN.get() < count / 10);
 
 		DB.shutdown();
 		DB.init();

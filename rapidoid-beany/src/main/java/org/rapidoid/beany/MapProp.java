@@ -45,17 +45,15 @@ public class MapProp implements Prop {
 		this.typeKind = Cls.kindOf(type);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T get(Object target) {
-		return (T) map(target).get(key);
+		return getRaw(target);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T get(Object target, T defaultValue) {
-		Map<Object, Object> map = map(target);
-		return map.containsKey(key) ? (T) map.get(key) : defaultValue;
+	public <T> T getRaw(Object target) {
+		return (T) map(target).get(key);
 	}
 
 	@Override

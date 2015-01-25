@@ -241,6 +241,11 @@ public class DbImpl extends NamedActivity<Database> implements Database {
 	}
 
 	@Override
+	public long getVersionOf(long id) {
+		return inmem.getVersionOf(id);
+	}
+
+	@Override
 	public <E> DbColumn<E> column(Map<String, Object> map, String name, Class<E> type) {
 		return new DbColumnImpl<E>(map, name, type);
 	}

@@ -20,10 +20,11 @@ package org.rapidoid.db;
  * #L%
  */
 
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.rapidoid.config.Conf;
 import org.rapidoid.db.model.Person;
+import org.rapidoid.util.OptimisticConcurrencyControlException;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
@@ -48,16 +49,26 @@ public class DbClassPersistenceTest extends DbTestCommons {
 
 		System.out.println("updating...");
 
-		final CountDownLatch latch = new CountDownLatch(count);
+		final AtomicInteger occN = new AtomicInteger();
 
-		UTILS.benchmarkMT(10, "update", count, latch, new Runnable() {
+		UTILS.benchmarkMT(10, "update", count, new Runnable() {
 			@Override
 			public void run() {
 				int id = Rnd.rnd(count) + 1;
-				DB.update(id, new Person("x", id * 100));
-				latch.countDown();
+				Person person = new Person("x", id * 100);
+				person.version = DB.getVersionOf(id);
+
+				try {
+					DB.update(id, person);
+				} catch (OptimisticConcurrencyControlException e) {
+					eq(e.getRecordId(), id);
+					occN.incrementAndGet();
+				}
 			}
 		});
+
+		System.out.println("Total OCC exceptions: " + occN.get());
+		isTrue(occN.get() < count / 10);
 
 		DB.shutdown();
 		DB.init();

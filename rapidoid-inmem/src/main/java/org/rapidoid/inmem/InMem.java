@@ -30,7 +30,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -57,6 +56,7 @@ import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.OptimisticConcurrencyControlException;
 import org.rapidoid.util.SuccessException;
 import org.rapidoid.util.Tuple;
 import org.rapidoid.util.U;
@@ -127,7 +127,7 @@ public class InMem {
 			}
 		}), asUsername, null, false);
 
-		// TODO separate persistor thread into a new class
+		// TODO separate persistor thread into a new class and separate a DB store
 		this.persistor = (filename != null && !filename.isEmpty()) ? new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -205,6 +205,12 @@ public class InMem {
 			long id = data.ids.incrementAndGet();
 			Beany.setId(record, id);
 
+			// Optimistic concurrency control through the "version" property
+			if (Beany.hasProperty(record, "version")) {
+				// FIXME rollback version in TX fails
+				Beany.setPropValue(record, "version", 1);
+			}
+
 			if (data.insideTx.get()) {
 				if (data.txInsertions.putIfAbsent(id, INSERTION) != null) {
 					throw new IllegalStateException("Cannot insert changelog record with existing ID: " + id);
@@ -226,7 +232,7 @@ public class InMem {
 
 	private void updateChangesFromRels(Object entity) {
 		for (Prop prop : Beany.propertiesOf(entity).select(data.relPropSelector)) {
-			Object value = prop.get(entity);
+			Object value = prop.getRaw(entity);
 
 			if (hasEntityLinks(value)) {
 				EntityLinks links = entityLinks(value);
@@ -239,7 +245,7 @@ public class InMem {
 
 	private void deleteRelsFor(Object entity) {
 		for (Prop prop : Beany.propertiesOf(entity).select(data.relPropSelector)) {
-			Object value = prop.get(entity);
+			Object value = prop.getRaw(entity);
 
 			if (hasEntityLinks(value)) {
 				EntityLinks links = entityLinks(value);
@@ -291,8 +297,9 @@ public class InMem {
 	}
 
 	private RelPair getRelPair(Object entity, Prop prop, String rel, boolean inverse) {
+
 		Class<?> cls = prop.getRawTypeArg(0);
-		Class<? extends Object> entCls = unproxy(entity.getClass());
+		Class<? extends Object> entCls = Cls.unproxy(entity.getClass());
 
 		Class<?> srcType = inverse ? cls : entCls;
 		Class<?> destType = inverse ? entCls : cls;
@@ -322,14 +329,6 @@ public class InMem {
 		return relPair;
 	}
 
-	private static Class<?> unproxy(Class<?> cls) {
-		// TODO this is a hack, find better solution
-		if (Proxy.class.isAssignableFrom(cls)) {
-			return cls.getInterfaces()[0];
-		}
-		return cls;
-	}
-
 	private Prop findRelProperty(Class<?> fromCls, String rel, Class<?> toCls) {
 		Object entity = !fromCls.isInterface() ? data.constructor.create(fromCls) : null;
 
@@ -338,7 +337,7 @@ public class InMem {
 			String relName = null;
 
 			if (!fromCls.isInterface()) {
-				Object value = prop.get(entity);
+				Object value = prop.getRaw(entity);
 				if (hasEntityLinks(value)) {
 					EntityLinks links = entityLinks(value);
 					relName = links.relationName();
@@ -364,7 +363,7 @@ public class InMem {
 	private void relLink(String relation, Prop srcProp, long fromId, Prop destProp, long toId) {
 		if (srcProp != null && destProp != null) {
 			Object from = get(fromId);
-			EntityLinks srcRels = entityLinks(srcProp.get(from));
+			EntityLinks srcRels = entityLinks(srcProp.getRaw(from));
 			srcRels.addRelTo(toId);
 			update_(fromId, from, false);
 		}
@@ -373,7 +372,7 @@ public class InMem {
 	private void relUnlink(String relation, Prop srcProp, long fromId, Prop destProp, long toId) {
 		if (srcProp != null && destProp != null) {
 			Object from = get(fromId);
-			EntityLinks srcRels = entityLinks(srcProp.get(from));
+			EntityLinks srcRels = entityLinks(srcProp.getRaw(from));
 			srcRels.removeRelTo(toId);
 			update_(fromId, from, false);
 		}
@@ -389,7 +388,7 @@ public class InMem {
 			secureDelete(entity);
 
 			boolean removed = data.data.remove(id, old);
-			U.must(removed, "Concurrent modification occured while deleting the object with ID=%s!", id);
+			occErrorIf(!removed, "Concurrent modification occured while deleting the object with ID=%s!", id);
 
 			if (data.insideTx.get()) {
 				data.txChanges.putIfAbsent(id, old);
@@ -493,13 +492,20 @@ public class InMem {
 		Object entity = obj(old);
 		secureUpdate(entity);
 
+		// Optimistic concurrency control through the "version" property
+		Long oldVersion = U.or(Beany.getPropValueOfType(entity, "version", Long.class, null), 0L);
+		Long recordVersion = U.or(Beany.getPropValueOfType(record, "version", Long.class, null), 0L);
+
+		occErrorIf(!U.eq(oldVersion, recordVersion),
+				"Concurrent modification occured while updating the object with ID=%s!", id);
+
 		Beany.setId(record, id);
 
 		if (!sudo) {
 			boolean canUpdate = false;
 			for (Prop prop : Beany.propertiesOf(record)) {
 				if (!Secure.getPropertyPermissions(username(), entity.getClass(), entity, prop.getName()).change) {
-					prop.set(record, prop.get(entity, null));
+					prop.set(record, prop.get(entity));
 				} else {
 					canUpdate = true;
 				}
@@ -507,11 +513,16 @@ public class InMem {
 			U.secure(canUpdate, "Not enough privileges to update any column of %s!", entity.getClass().getSimpleName());
 		}
 
+		// Optimistic concurrency control through the "version" property
+		if (Beany.hasProperty(record, "version")) {
+			Beany.setPropValue(record, "version", oldVersion + 1);
+		}
+
 		secureUpdate(record);
 
 		boolean updated = data.data.replace(id, old, rec(record));
 
-		U.must(updated, "Concurrent modification occured while updating the object with ID=%s!", id);
+		occErrorIf(!updated, "Concurrent modification occured while updating the object with ID=%s!", id);
 
 		if (data.insideTx.get()) {
 			data.txChanges.putIfAbsent(id, old);
@@ -526,6 +537,12 @@ public class InMem {
 		}
 
 		data.lastChangedOn.set(System.currentTimeMillis());
+	}
+
+	private static void occErrorIf(boolean errCond, String msg, long id) {
+		if (errCond) {
+			throw new OptimisticConcurrencyControlException(U.format(msg, id), id);
+		}
 	}
 
 	public void update(Object record) {
@@ -556,7 +573,8 @@ public class InMem {
 		try {
 			Object record = getIfAllowed(id, true);
 			secureReadColumn(record, column);
-			return Beany.getPropValue(record, column);
+			T value = Beany.getPropValue(record, column);
+			return value;
 		} finally {
 			sharedUnlock();
 		}
@@ -1238,6 +1256,11 @@ public class InMem {
 		if (!sudo) {
 			Secure.resetInvisibleProperties(username(), record);
 		}
+	}
+
+	public long getVersionOf(long id) {
+		Object ver = readColumn(id, "version");
+		return ver != null ? Cls.convert(ver, Long.class) : 0;
 	}
 
 }

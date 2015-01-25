@@ -46,11 +46,11 @@ public class Secure implements Constants {
 	}
 
 	public static boolean hasRoleForClass(String username, String role, Class<?> clazz) {
-		return security.hasRole(username, role, clazz, null);
+		return security.hasRole(username, role, Cls.unproxy(clazz), null);
 	}
 
 	public static boolean hasRoleForRecord(String username, String role, Object record) {
-		return security.hasRole(username, role, record.getClass(), record);
+		return security.hasRole(username, role, Cls.unproxy(record.getClass()), record);
 	}
 
 	public static boolean isAdmin(String username) {
@@ -75,25 +75,29 @@ public class Secure implements Constants {
 
 	public static boolean canAccessClass(String username, Class<?> clazz) {
 		U.notNull(clazz, "class");
+		clazz = Cls.unproxy(clazz);
 		return hasRoleBasedClassAccess(username, clazz) && security.canAccessClass(username, clazz);
 	}
 
 	public static boolean hasRoleBasedClassAccess(String username, Class<?> clazz) {
 		U.notNull(clazz, "class");
+		clazz = Cls.unproxy(clazz);
 		return hasRoleBasedAccess(username, clazz, null);
 	}
 
 	public static boolean hasRoleBasedObjectAccess(String username, Object target) {
 		U.notNull(target, "target");
-		return hasRoleBasedAccess(username, target.getClass(), target);
+		return hasRoleBasedAccess(username, Cls.unproxy(target.getClass()), target);
 	}
 
 	private static boolean hasRoleBasedAccess(String username, Class<?> clazz, Object target) {
+		clazz = Cls.unproxy(clazz);
 		String[] roles = security.getRolesAllowed(clazz);
 		return roles.length == 0 || hasAnyRole(username, roles, clazz, target);
 	}
 
 	public static boolean hasAnyRole(String username, String[] roles, Class<?> clazz, Object target) {
+		clazz = Cls.unproxy(clazz);
 		for (String role : roles) {
 			if (security.hasRole(username, role, clazz, target)) {
 				return true;
@@ -106,6 +110,7 @@ public class Secure implements Constants {
 	public static DataPermissions getPropertyPermissions(String username, Class<?> clazz, Object target,
 			String propertyName) {
 		U.notNull(clazz, "class");
+		clazz = Cls.unproxy(clazz);
 
 		if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)
 				|| Object[].class.isAssignableFrom(clazz)) {
@@ -135,6 +140,7 @@ public class Secure implements Constants {
 
 	public static DataPermissions getClassPermissions(String username, Class<?> clazz) {
 		U.notNull(clazz, "class");
+		clazz = Cls.unproxy(clazz);
 
 		if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)
 				|| Object[].class.isAssignableFrom(clazz)) {
@@ -165,6 +171,7 @@ public class Secure implements Constants {
 	public static DataPermissions getObjectPermissions(String username, Object target) {
 		U.notNull(target, "target");
 		Class<?> clazz = target.getClass();
+		clazz = Cls.unproxy(clazz);
 
 		if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)
 				|| Object[].class.isAssignableFrom(clazz)) {

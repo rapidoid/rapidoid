@@ -32,7 +32,6 @@ import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
-import org.rapidoid.var.Vars;
 
 public class BeanProp implements Prop {
 
@@ -139,7 +138,8 @@ public class BeanProp implements Prop {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T get(Object target) {
+	public <T> T getRaw(Object target) {
+		// FIXME when target class isn't the property declaring class
 		try {
 			if (field != null) {
 				field.setAccessible(true);
@@ -155,23 +155,15 @@ public class BeanProp implements Prop {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T get(Object target, T defaultValue) {
-		try {
-			if (field != null) {
-				field.setAccessible(true);
-				return (T) Vars.unwrap(field.get(target));
-			} else {
-				getter.setAccessible(true);
-				return (T) Vars.unwrap(getter.invoke(target));
-			}
-		} catch (Exception e) {
-			throw U.rte(e);
-		}
+	public <T> T get(Object target) {
+		return (T) Beany.unwrap(getRaw(target));
 	}
 
 	@Override
 	public void set(Object target, Object value) {
 		U.must(!isReadOnly(), "Cannot assign value to a read-only property: %s", name);
+
+		// FIXME when target class isn't the property declaring class
 
 		value = Cls.convert(value, getType());
 
@@ -197,6 +189,8 @@ public class BeanProp implements Prop {
 	public void reset(Object target) {
 		U.must(!isReadOnly(), "Cannot reset a read-only property: %s", name);
 
+		// FIXME when target class isn't the property declaring class
+
 		switch (propKind) {
 		case NORMAL:
 			normalSet(target, null);
@@ -216,7 +210,8 @@ public class BeanProp implements Prop {
 	}
 
 	private void varSet(Object target, Object value) {
-		Vars.cast(get(target)).set(value);
+		Var<Object> var = getRaw(target);
+		var.set(value);
 	}
 
 	@SuppressWarnings("unchecked")

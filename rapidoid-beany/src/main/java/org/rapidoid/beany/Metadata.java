@@ -3,6 +3,7 @@ package org.rapidoid.beany;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 /*
@@ -28,6 +29,8 @@ import org.rapidoid.util.U;
 public class Metadata {
 
 	public static Map<Class<?>, Annotation> classAnnotations(Class<?> clazz) {
+		clazz = Cls.unproxy(clazz);
+
 		Map<Class<?>, Annotation> annotations = U.map();
 
 		for (Annotation ann : clazz.getAnnotations()) {
@@ -39,10 +42,12 @@ public class Metadata {
 
 	@SuppressWarnings("unchecked")
 	public static <T extends Annotation> T classAnnotation(Class<?> clazz, Class<T> annotationClass) {
+		clazz = Cls.unproxy(clazz);
 		return (T) classAnnotations(clazz).get(annotationClass);
 	}
 
 	public static Map<Class<?>, Annotation> propAnnotations(Class<?> clazz, String property) {
+		clazz = Cls.unproxy(clazz);
 
 		Map<Class<?>, Annotation> annotations = U.map();
 		Prop prop = Beany.property(clazz, property, false);
@@ -61,11 +66,13 @@ public class Metadata {
 
 	@SuppressWarnings("unchecked")
 	public static <T extends Annotation> T propAnnotation(Class<?> clazz, String property, Class<T> annotationClass) {
+		clazz = Cls.unproxy(clazz);
 		return (T) propAnnotations(clazz, property).get(annotationClass);
 	}
 
-	public static boolean isAnnotated(Class<?> target, Class<?> annotation) {
-		return classAnnotations(target).containsKey(annotation);
+	public static boolean isAnnotated(Class<?> clazz, Class<?> annotation) {
+		clazz = Cls.unproxy(clazz);
+		return classAnnotations(clazz).containsKey(annotation);
 	}
 
 	@SuppressWarnings("unchecked")

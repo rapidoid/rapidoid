@@ -856,4 +856,17 @@ public class Cls {
 		}
 	}
 
+	public static Class<?> unproxy(Class<?> cls) {
+		if (Proxy.class.isAssignableFrom(cls)) {
+			for (Class<?> interf : cls.getInterfaces()) {
+				if (!isJREClass(interf.getCanonicalName())) {
+					return interf;
+				}
+			}
+			throw U.rte("Cannot unproxy the class: %s!", cls);
+		} else {
+			return cls;
+		}
+	}
+
 }

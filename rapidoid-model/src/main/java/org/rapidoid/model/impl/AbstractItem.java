@@ -28,7 +28,6 @@ import org.rapidoid.beany.Prop;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
-import org.rapidoid.var.Var;
 
 public abstract class AbstractItem extends AbstractModel implements Item {
 
@@ -69,15 +68,6 @@ public abstract class AbstractItem extends AbstractModel implements Item {
 	@Override
 	public void set(String property, Object propValue) {
 		Prop prop = Beany.property(value, property, true);
-
-		if (Var.class.isAssignableFrom(prop.getType())) {
-			Var<Object> propVar = prop.get(value);
-			if (propVar != null) {
-				propVar.set(propValue);
-				return;
-			}
-		}
-
 		prop.set(value, propValue);
 	}
 

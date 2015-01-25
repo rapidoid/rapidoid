@@ -189,6 +189,10 @@ public class DB {
 		return db().getIdOf(record);
 	}
 
+	public static long getVersionOf(long id) {
+		return db().getVersionOf(id);
+	}
+
 	public static <E> DbColumn<E> column(Map<String, Object> map, String name, Class<E> type) {
 		return db().column(map, name, type);
 	}

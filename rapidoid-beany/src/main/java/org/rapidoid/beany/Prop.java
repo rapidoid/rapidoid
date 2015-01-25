@@ -29,7 +29,7 @@ public interface Prop {
 
 	<T> T get(Object target);
 
-	<T> T get(Object target, T defaultValue);
+	<T> T getRaw(Object target);
 
 	void set(Object target, Object value);
 

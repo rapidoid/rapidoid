@@ -150,6 +150,7 @@ public class DbStatisticalTest extends DbTestCommons {
 			break;
 
 		case 2:
+			op.person.version = DB.getVersionOf(op.id);
 			DB.update(op.id, op.person);
 			break;
 

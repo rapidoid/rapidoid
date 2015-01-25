@@ -19,6 +19,7 @@ import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.var.Vars;
 
 /*
  * #%L
@@ -255,13 +256,13 @@ public class Beany {
 		U.must(Cls.kindOf(bean) == TypeKind.OBJECT);
 
 		for (Prop prop : propertiesOf(bean)) {
-			Object value = prop.get(bean);
+			Object value = prop.getRaw(bean);
 
 			if (value instanceof SerializableBean<?>) {
 				SerializableBean<?> ser = (SerializableBean<?>) value;
 				value = ser.serializeBean();
 			} else {
-				value = serialize(value);
+				value = serialize(unwrap(value));
 			}
 
 			dest.put(prop.getName(), value);
@@ -279,7 +280,7 @@ public class Beany {
 			Object value = src.get(prop.getName());
 
 			if (value != null || !ignoreNullValues) {
-				Object propValue = prop.get(destBean);
+				Object propValue = prop.getRaw(destBean);
 				if (propValue != null && propValue instanceof SerializableBean) {
 					SerializableBean<Object> ser = (SerializableBean<Object>) propValue;
 					ser.deserializeBean(value);
@@ -324,7 +325,7 @@ public class Beany {
 			return (T) (map.containsKey(propertyName) ? map.get(propertyName) : defaultValue);
 		} else {
 			Prop prop = property(instance, propertyName, false);
-			return prop != null ? prop.get(instance, defaultValue) : defaultValue;
+			return prop != null ? (T) prop.get(instance) : defaultValue;
 		}
 	}
 
@@ -339,29 +340,31 @@ public class Beany {
 		}
 	}
 
+	public static <T> T getPropValueOfType(Object obj, String property, Class<T> returnType) {
+		T value = getPropValueOfType(obj, property, returnType, null);
+
+		if (value == null) {
+			throw U.rte("The property '%s' cannot be null!", property);
+		}
+
+		return value;
+	}
+
+	public static <T> T getPropValueOfType(Object obj, String property, Class<T> returnType, T defaultValue) {
+		Object id = getPropValue(obj, property, null);
+		return id != null ? Cls.convert(id, returnType) : defaultValue;
+	}
+
 	public static void setId(Object obj, long id) {
 		setPropValue(obj, "id", id);
 	}
 
 	public static long getId(Object obj) {
-		Long id = getIdIfExists(obj);
-
-		if (id == null) {
-			throw U.rte("The property 'id' cannot be null!");
-		}
-
-		return id;
+		return getPropValueOfType(obj, "id", Long.class);
 	}
 
 	public static Long getIdIfExists(Object obj) {
-		Object id = getPropValue(obj, "id", null);
-		if (id == null) {
-			return null;
-		} else if (id instanceof Number) {
-			return ((Number) id).longValue();
-		} else {
-			throw U.rte("The property 'id' must have numeric type, but it has type: " + id.getClass());
-		}
+		return getPropValueOfType(obj, "id", Long.class, null);
 	}
 
 	public static long[] getIds(Object... objs) {
@@ -456,6 +459,10 @@ public class Beany {
 		}
 
 		return projection;
+	}
+
+	public static Object unwrap(Object value) {
+		return Vars.unwrap(value);
 	}
 
 }

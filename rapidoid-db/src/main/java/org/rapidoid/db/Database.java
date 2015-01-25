@@ -92,6 +92,8 @@ public interface Database extends Activity<Database> {
 
 	long getIdOf(Object record);
 
+	long getVersionOf(long id);
+
 	<E> DbColumn<E> column(Map<String, Object> map, String name, Class<E> type);
 
 	<E> DbList<E> list(Object holder, String relation);
