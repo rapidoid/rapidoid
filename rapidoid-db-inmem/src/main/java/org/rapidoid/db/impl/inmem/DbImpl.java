@@ -153,6 +153,11 @@ public class DbImpl extends NamedActivity<Database> implements Database {
 	}
 
 	@Override
+	public <E> List<E> find(Iterable<Long> ids) {
+		return inmem.find(ids);
+	}
+
+	@Override
 	public <E> List<E> find(Class<E> clazz, Predicate<E> match, Comparator<E> orderBy) {
 		return inmem.find(clazz, match, orderBy);
 	}

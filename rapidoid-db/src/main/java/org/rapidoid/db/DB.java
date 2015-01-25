@@ -137,6 +137,10 @@ public class DB {
 		return db().find(match);
 	}
 
+	public static <E> List<E> find(Iterable<Long> ids) {
+		return db().find(ids);
+	}
+
 	public static <E> List<E> find(Class<E> clazz, Predicate<E> match, Comparator<E> orderBy) {
 		return db().find(clazz, match, orderBy);
 	}

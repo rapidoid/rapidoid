@@ -68,6 +68,8 @@ public interface Database extends Activity<Database> {
 
 	<E> List<E> find(Predicate<E> match);
 
+	<E> List<E> find(Iterable<Long> ids);
+
 	<E> List<E> find(Class<E> clazz, Predicate<E> match, Comparator<E> orderBy);
 
 	<E> List<E> find(String searchPhrase);

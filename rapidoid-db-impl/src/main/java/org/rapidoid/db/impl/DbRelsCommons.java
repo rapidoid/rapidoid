@@ -161,15 +161,15 @@ public abstract class DbRelsCommons<E> implements DbRelationInternals, Serializa
 	}
 
 	public Object[] toArray() {
-		return db.getAll(ids).toArray();
+		return db.find(ids).toArray();
 	}
 
 	public <T> T[] toArray(T[] arr) {
-		return db.getAll(ids).toArray(arr);
+		return db.find(ids).toArray(arr);
 	}
 
 	protected List<E> records() {
-		return db.<E> getAll(ids);
+		return db.<E> find(ids);
 	}
 
 	protected long getIdAt(int index) {

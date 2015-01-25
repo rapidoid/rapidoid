@@ -652,11 +652,41 @@ public class InMem {
 		return results;
 	}
 
+	@SuppressWarnings("unchecked")
+	public <E> List<E> find(Iterable<Long> ids) {
+		List<E> results = new ArrayList<E>();
+
+		sharedLock();
+		try {
+
+			for (long id : ids) {
+				E entity = (E) getIfAllowedOrNull(id, true);
+				if (entity != null) {
+					results.add(entity);
+				}
+			}
+
+			return results;
+		} finally {
+			sharedUnlock();
+		}
+	}
+
 	private <E> E getIfAllowed(long id, boolean validateId) {
 		E record = get_(id, validateId);
 		secureRead(record);
 		resetInvisibleColumns(record);
 		return record;
+	}
+
+	private <E> E getIfAllowedOrNull(long id, boolean validateId) {
+		E record = get_(id, validateId);
+		if (canRead(record)) {
+			resetInvisibleColumns(record);
+			return record;
+		} else {
+			return null;
+		}
 	}
 
 	private <E> E getIfAllowed(long id, Class<E> type) {
