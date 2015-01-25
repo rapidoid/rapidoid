@@ -238,7 +238,7 @@ public class Secure implements Constants {
 	public static void resetInvisibleProperties(String username, Object record) {
 		for (Prop prop : Beany.propertiesOf(record)) {
 			if (!getPropertyPermissions(username, record.getClass(), record, prop.getName()).read) {
-				prop.set(record, null);
+				prop.reset(record);
 			}
 		}
 	}

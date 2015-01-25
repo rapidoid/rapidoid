@@ -64,6 +64,11 @@ public class MapProp implements Prop {
 	}
 
 	@Override
+	public void reset(Object target) {
+		map(target).remove(key);
+	}
+
+	@Override
 	public String getName() {
 		return name;
 	}

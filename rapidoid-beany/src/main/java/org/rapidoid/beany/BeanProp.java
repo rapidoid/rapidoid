@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
@@ -185,6 +186,28 @@ public class BeanProp implements Prop {
 
 		case VAR:
 			varSet(target, value);
+			break;
+
+		default:
+			throw U.notExpected();
+		}
+	}
+
+	@Override
+	public void reset(Object target) {
+		U.must(!isReadOnly(), "Cannot reset a read-only property: %s", name);
+
+		switch (propKind) {
+		case NORMAL:
+			normalSet(target, null);
+			break;
+
+		case COLLECTION:
+			collSet(target, Collections.EMPTY_LIST);
+			break;
+
+		case VAR:
+			varSet(target, null);
 			break;
 
 		default:
