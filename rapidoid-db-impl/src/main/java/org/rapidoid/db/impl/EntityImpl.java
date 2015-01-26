@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.annotation.Relation;
+import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbColumn;
@@ -38,6 +39,7 @@ public class EntityImpl implements Entity {
 
 	private static final long serialVersionUID = -5556123216690345146L;
 
+	@SuppressWarnings("unused")
 	private final Class<?> type;
 
 	private final ConcurrentMap<String, Object> values;
@@ -69,7 +71,7 @@ public class EntityImpl implements Entity {
 
 	@Override
 	public String toString() {
-		return type.getSimpleName() + values;
+		return Beany.beanToStr(proxy, false);
 	}
 
 	private long getId() {

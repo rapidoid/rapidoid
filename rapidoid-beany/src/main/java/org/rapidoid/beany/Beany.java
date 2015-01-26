@@ -386,7 +386,7 @@ public class Beany {
 
 	public static String beanToStr(Object bean, boolean allowCustom) {
 
-		Class<? extends Object> clazz = bean.getClass();
+		Class<?> clazz = Cls.unproxy(bean.getClass());
 
 		if (allowCustom) {
 			Method m = Cls.getMethod(clazz, "toString");

@@ -28,6 +28,7 @@ import org.rapidoid.beany.Prop;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
+import org.rapidoid.util.Cls;
 
 public abstract class AbstractItem extends AbstractModel implements Item {
 
@@ -54,7 +55,7 @@ public abstract class AbstractItem extends AbstractModel implements Item {
 	@Override
 	public <T> T get(String property) {
 		if (property.equals("_class")) {
-			return (T) value.getClass().getSimpleName();
+			return (T) Cls.entityName(value);
 		} else if (property.equals("_toString")) {
 			return (T) value.toString();
 		} else if (property.equals("_str")) {
