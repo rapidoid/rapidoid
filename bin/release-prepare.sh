@@ -1,1 +1,1 @@
-mvn release:prepare -Darguments="-DskipTests" -Psrc-and-doc
+mvn release:prepare -Psrc-and-doc
