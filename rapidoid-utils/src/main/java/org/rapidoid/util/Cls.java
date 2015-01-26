@@ -889,4 +889,13 @@ public class Cls {
 		}
 	}
 
+	public static String entityName(Class<?> cls) {
+		return Cls.unproxy(cls).getSimpleName();
+	}
+
+	public static String entityName(Object entity) {
+		U.notNull(entity, "entity");
+		return entityName(entity.getClass());
+	}
+
 }

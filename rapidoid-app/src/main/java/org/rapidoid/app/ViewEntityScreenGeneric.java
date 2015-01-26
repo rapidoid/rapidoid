@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
 import org.rapidoid.security.Secure;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.FormWidget;
 
@@ -49,7 +50,7 @@ public class ViewEntityScreenGeneric extends Screen {
 
 	public void onEdit() {
 		String id = ctx().pathSegment(1);
-		ctx().redirect("/edit" + target.getClass().getSimpleName() + "/" + id);
+		ctx().redirect("/edit" + Cls.entityName(target) + "/" + id);
 	}
 
 	public void onDelete() {
