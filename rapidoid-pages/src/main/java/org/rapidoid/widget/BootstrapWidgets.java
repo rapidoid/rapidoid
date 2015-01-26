@@ -501,7 +501,7 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static String urlFor(Object entity) {
 		long id = Beany.getId(entity);
-		String className = entity.getClass().getSimpleName();
+		String className = Cls.unproxy(entity.getClass()).getSimpleName();
 		return U.format("/%s/%s", U.uncapitalized(className), id);
 	}
 

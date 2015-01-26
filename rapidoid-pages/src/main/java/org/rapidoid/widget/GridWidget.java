@@ -151,8 +151,7 @@ public class GridWidget extends AbstractWidget {
 	}
 
 	protected String onClickScript(Item item) {
-		String type = U.uncapitalized(item.value().getClass().getSimpleName());
-		String js = U.format("goAt('/%s/%s');", type, item.id());
+		String js = U.format("goAt('%s');", urlFor(item.value()));
 		return js;
 	}
 
