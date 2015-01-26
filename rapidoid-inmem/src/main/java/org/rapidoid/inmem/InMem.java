@@ -364,19 +364,19 @@ public class InMem {
 
 	private void relLink(String relation, Prop srcProp, long fromId, Prop destProp, long toId) {
 		if (srcProp != null && destProp != null) {
-			Object from = get(fromId);
+			Object from = get_(fromId, true);
 			EntityLinks srcRels = entityLinks(srcProp.getRaw(from));
 			srcRels.addRelTo(toId);
-			update_(fromId, from, false);
+			update_(fromId, from, false, false);
 		}
 	}
 
 	private void relUnlink(String relation, Prop srcProp, long fromId, Prop destProp, long toId) {
 		if (srcProp != null && destProp != null) {
-			Object from = get(fromId);
+			Object from = get_(fromId, true);
 			EntityLinks srcRels = entityLinks(srcProp.getRaw(from));
 			srcRels.removeRelTo(toId);
-			update_(fromId, from, false);
+			update_(fromId, from, false, false);
 		}
 	}
 
@@ -483,20 +483,23 @@ public class InMem {
 	public void update(long id, Object record) {
 		sharedLock();
 		try {
-			update_(id, record, true);
+			update_(id, record, true, true);
 		} finally {
 			sharedUnlock();
 		}
 	}
 
-	private void update_(long id, Object record, boolean reflectRelChanges) {
+	private void update_(long id, Object record, boolean reflectRelChanges, boolean checkSecurity) {
 
 		failIfReadonlyTx();
 		validateId(id);
 
 		Rec old = data.data.get(id);
 		Object entity = obj(old);
-		secureUpdate(entity);
+
+		if (checkSecurity) {
+			secureUpdate(entity);
+		}
 
 		// Optimistic concurrency control through the "version" property
 		Long oldVersion = U.or(Beany.getPropValueOfType(entity, "version", Long.class, null), 0L);
@@ -507,7 +510,7 @@ public class InMem {
 
 		Beany.setId(record, id);
 
-		if (!sudo) {
+		if (!sudo && checkSecurity) {
 			boolean canUpdate = false;
 			for (Prop prop : Beany.propertiesOf(record)) {
 				if (!Secure.getPropertyPermissions(username(), entity.getClass(), entity, prop.getName()).change) {
@@ -524,7 +527,9 @@ public class InMem {
 			Beany.setPropValue(record, "version", oldVersion + 1);
 		}
 
-		secureUpdate(record);
+		if (checkSecurity) {
+			secureUpdate(record);
+		}
 
 		boolean updated = data.data.replace(id, old, rec(record));
 
