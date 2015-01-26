@@ -93,6 +93,9 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 		} finally {
 			AppCtx.delUser();
+			if (x.hasSession()) {
+				session.saveSession(x.sessionId());
+			}
 		}
 	}
 

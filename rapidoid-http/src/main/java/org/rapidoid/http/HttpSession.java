@@ -39,4 +39,8 @@ public interface HttpSession extends Serializable {
 
 	boolean exists(String sessionId);
 
+	void saveSession(String sessionId);
+
+	void loadSession(String sessionId);
+
 }

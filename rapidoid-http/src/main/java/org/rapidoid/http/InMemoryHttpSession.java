@@ -74,4 +74,12 @@ public class InMemoryHttpSession implements HttpSession {
 		return session;
 	}
 
+	@Override
+	public void saveSession(String sessionId) {
+	}
+
+	@Override
+	public void loadSession(String sessionId) {
+	}
+
 }
