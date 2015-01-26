@@ -36,9 +36,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Pattern;
 
 import org.rapidoid.log.Log;
+import org.rapidoid.var.Var;
+import org.rapidoid.var.Vars;
 
 public class Cls {
 
@@ -794,7 +798,23 @@ public class Cls {
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T newInstance(Class<T> clazz) {
+
+		if (clazz == List.class) {
+			return (T) U.list();
+		} else if (clazz == Set.class) {
+			return (T) U.set();
+		} else if (clazz == Map.class) {
+			return (T) U.map();
+		} else if (clazz == ConcurrentMap.class) {
+			return (T) U.concurrentMap();
+		} else if (clazz == Var.class) {
+			return (T) Vars.var(null);
+		} else if (clazz == Object.class) {
+			return (T) new Object();
+		}
+
 		try {
 			Constructor<T> constr = clazz.getDeclaredConstructor();
 			boolean accessible = constr.isAccessible();
