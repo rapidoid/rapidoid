@@ -4,12 +4,15 @@ import java.lang.reflect.Proxy;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
+import org.rapidoid.annotation.DbEntity;
+import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.db.DbDsl;
 import org.rapidoid.db.DbSchema;
 import org.rapidoid.db.Entity;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.English;
+import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 
 /*
@@ -38,14 +41,27 @@ public class DbSchemaImpl implements DbSchema {
 
 	private final ConcurrentMap<String, Class<?>> entityTypesPlural = U.concurrentMap();
 
+	public DbSchemaImpl() {
+		for (Class<?> entityType : Scan.annotated(DbEntity.class)) {
+			putEntityType(entityType);
+		}
+		for (Class<?> entityType : Scan.annotated(Scaffold.class)) {
+			putEntityType(entityType);
+		}
+	}
+
 	@Override
 	public <E> DbDsl<E> dsl(Class<E> entityType) {
+		putEntityType(entityType);
+
+		return null; // FIXME implement this
+	}
+
+	private <E> void putEntityType(Class<E> entityType) {
 		String type = entityType.getSimpleName().toLowerCase();
 
 		entityTypes.putIfAbsent(type, entityType);
 		entityTypesPlural.putIfAbsent(English.plural(type), entityType);
-
-		return null; // FIXME implement this
 	}
 
 	@SuppressWarnings("unchecked")
