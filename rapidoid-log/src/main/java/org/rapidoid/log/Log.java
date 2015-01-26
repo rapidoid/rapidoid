@@ -34,7 +34,7 @@ public class Log {
 	public static final LogLevel ERROR = LogLevel.ERROR;
 	public static final LogLevel SEVERE = LogLevel.SEVERE;
 
-	protected static LogLevel LOG_LEVEL = INFO;
+	protected static LogLevel LOG_LEVEL = AUDIT;
 
 	private static Appendable LOG_OUTPUT = System.out;
 
