@@ -22,6 +22,7 @@ package org.rapidoid.pages.entity;
 
 public class Person {
 
+	public long id;
 	public String name;
 	public int age;
 

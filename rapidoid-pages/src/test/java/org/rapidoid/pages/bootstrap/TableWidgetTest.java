@@ -38,7 +38,13 @@ public class TableWidgetTest extends PagesTestCommons {
 		TagContext ctx = Tags.context();
 		setupMockExchange(ctx);
 
-		Items items = Models.beanItemsInfer(new Person("John", 20), new Person("Rambo", 50));
+		Person john = new Person("John", 20);
+		john.id = 1;
+		
+		Person rambo = new Person("Rambo", 50);
+		rambo.id = 2;
+
+		Items items = Models.beanItemsInfer(john, rambo);
 
 		GridWidget table = BootstrapWidgets.grid(items, null, 10);
 		print(ctx, table);
