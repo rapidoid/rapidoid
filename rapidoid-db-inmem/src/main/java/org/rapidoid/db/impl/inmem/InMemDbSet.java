@@ -29,6 +29,8 @@ import org.rapidoid.inmem.EntityLinksContainer;
 
 public class InMemDbSet<E> extends DefaultDbSet<E> implements EntityLinksContainer {
 
+	private static final long serialVersionUID = -1529994607352638762L;
+	
 	private final EntityLinks entityLinks = new DbEntityLinks(db, this, tracker);
 
 	public InMemDbSet(Database db, Object holder, String relation) {

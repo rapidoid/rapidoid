@@ -20,11 +20,12 @@ package org.rapidoid.beany;
  * #L%
  */
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import org.rapidoid.lambda.Predicate;
 
-public interface PropertySelector extends Predicate<Prop>, Comparator<Prop> {
+public interface PropertySelector extends Predicate<Prop>, Comparator<Prop>, Serializable {
 
 	String[] requiredProperties();
 

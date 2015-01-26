@@ -28,6 +28,7 @@ import org.rapidoid.db.DbSet;
 
 public class DbHelper {
 
+	@SuppressWarnings("serial")
 	public static final PropertyFilter DB_REL_PROPS = new PropertyFilter() {
 		@Override
 		public boolean eval(Prop prop) throws Exception {

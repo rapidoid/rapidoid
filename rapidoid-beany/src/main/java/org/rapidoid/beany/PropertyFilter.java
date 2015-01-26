@@ -20,6 +20,7 @@ package org.rapidoid.beany;
  * #L%
  */
 
+@SuppressWarnings("serial")
 public abstract class PropertyFilter implements PropertySelector {
 
 	@Override

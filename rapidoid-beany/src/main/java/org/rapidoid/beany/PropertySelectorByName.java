@@ -24,6 +24,8 @@ import java.util.Arrays;
 
 public abstract class PropertySelectorByName implements PropertySelector {
 
+	private static final long serialVersionUID = 7826078564960583655L;
+
 	private final String[] propertyNames;
 
 	public PropertySelectorByName(String... propertyNames) {

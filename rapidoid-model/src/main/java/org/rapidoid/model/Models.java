@@ -35,6 +35,7 @@ import org.rapidoid.model.impl.MapItem;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
+@SuppressWarnings("serial")
 public class Models {
 
 	public static <T> Items beanItems(Class<T> beanType, Object... beans) {

@@ -20,9 +20,12 @@ package org.rapidoid.beany;
  * #L%
  */
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 
-public class AnnotatedPropertyFilter extends PropertyFilter {
+public class AnnotatedPropertyFilter extends PropertyFilter implements Serializable {
+
+	private static final long serialVersionUID = 4053480601487489813L;
 
 	private final Class<? extends Annotation> annotated;
 

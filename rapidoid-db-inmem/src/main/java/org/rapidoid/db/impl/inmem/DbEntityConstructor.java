@@ -20,12 +20,15 @@ package org.rapidoid.db.impl.inmem;
  * #L%
  */
 
+import java.io.Serializable;
 import java.util.Collections;
 
 import org.rapidoid.db.Database;
 import org.rapidoid.inmem.EntityConstructor;
 
-public class DbEntityConstructor implements EntityConstructor {
+public class DbEntityConstructor implements EntityConstructor, Serializable {
+
+	private static final long serialVersionUID = -4132102852835102071L;
 
 	private final Database db;
 

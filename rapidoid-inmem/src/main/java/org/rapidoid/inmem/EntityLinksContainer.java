@@ -1,5 +1,7 @@
 package org.rapidoid.inmem;
 
+import java.io.Serializable;
+
 /*
  * #%L
  * rapidoid-inmem
@@ -20,7 +22,7 @@ package org.rapidoid.inmem;
  * #L%
  */
 
-public interface EntityLinksContainer {
+public interface EntityLinksContainer extends Serializable {
 
 	EntityLinks getEntityLinks();
 

@@ -20,6 +20,7 @@ package org.rapidoid.inmem;
  * #L%
  */
 
+import java.io.Serializable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
@@ -33,7 +34,9 @@ import org.rapidoid.beany.PropertySelector;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.util.Tuple;
 
-public class InMemData {
+public class InMemData implements Serializable {
+
+	private static final long serialVersionUID = 4124579290874253214L;
 
 	final long startedAt = System.currentTimeMillis();
 

@@ -30,6 +30,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -61,7 +62,10 @@ import org.rapidoid.util.SuccessException;
 import org.rapidoid.util.Tuple;
 import org.rapidoid.util.U;
 
-class Rec {
+class Rec implements Serializable {
+
+	private static final long serialVersionUID = 1669889751748592446L;
+
 	final Class<?> type;
 	final byte[] bytes;
 
@@ -80,7 +84,9 @@ class Rec {
  * - Isolation is serializable (with global lock),<br>
  * - Durability through on-commit callbacks.<br>
  */
-public class InMem {
+public class InMem implements Serializable {
+
+	private static final long serialVersionUID = -200957806998151795L;
 
 	private static final String META_UPTIME = "uptime";
 
@@ -96,6 +102,7 @@ public class InMem {
 
 	private static final Pattern P_WORD = Pattern.compile("\\w+");
 
+	@SuppressWarnings("serial")
 	protected static final PropertyFilter SEARCHABLE_PROPS = new PropertyFilter() {
 		@Override
 		public boolean eval(Prop prop) throws Exception {
@@ -112,6 +119,7 @@ public class InMem {
 
 	private final boolean sudo;
 
+	@SuppressWarnings("serial")
 	public InMem(String filename, EntitySerializer serializer, EntityConstructor constructor,
 			final Set<Class<?>> relClasses, String asUsername) {
 

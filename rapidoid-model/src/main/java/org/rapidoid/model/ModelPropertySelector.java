@@ -23,6 +23,7 @@ package org.rapidoid.model;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertySelectorByName;
 
+@SuppressWarnings("serial")
 public abstract class ModelPropertySelector extends PropertySelectorByName {
 
 	public ModelPropertySelector(String... propertyNames) {

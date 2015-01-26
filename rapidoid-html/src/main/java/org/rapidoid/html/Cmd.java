@@ -20,9 +20,12 @@ package org.rapidoid.html;
  * #L%
  */
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class Cmd {
+public class Cmd implements Serializable {
+
+	private static final long serialVersionUID = -8114841206759431125L;
 
 	public final String name;
 

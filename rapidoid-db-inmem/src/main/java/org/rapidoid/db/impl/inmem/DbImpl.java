@@ -22,6 +22,7 @@ package org.rapidoid.db.impl.inmem;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -44,7 +45,9 @@ import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.U;
 
-public class DbImpl extends NamedActivity<Database> implements Database {
+public class DbImpl extends NamedActivity<Database> implements Database, Serializable {
+
+	private static final long serialVersionUID = 8806801474242822143L;
 
 	@SuppressWarnings("unchecked")
 	private static final Set<Class<?>> REL_CLASSES = U.set(DbList.class, DbSet.class, DbRef.class);

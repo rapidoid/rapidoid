@@ -25,6 +25,8 @@ import org.rapidoid.log.Log;
 
 public class CustomizedDbImpl extends DbImpl {
 
+	private static final long serialVersionUID = -3304900771653853896L;
+
 	public CustomizedDbImpl(String name, String filename) {
 		super(name, filename);
 	}

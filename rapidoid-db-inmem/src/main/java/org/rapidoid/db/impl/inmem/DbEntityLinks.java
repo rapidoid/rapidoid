@@ -20,6 +20,7 @@ package org.rapidoid.db.impl.inmem;
  * #L%
  */
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import org.rapidoid.db.Database;
@@ -28,7 +29,9 @@ import org.rapidoid.db.impl.DbRelsCommons;
 import org.rapidoid.inmem.EntityLinks;
 import org.rapidoid.util.U;
 
-public class DbEntityLinks implements EntityLinks {
+public class DbEntityLinks implements EntityLinks, Serializable {
+
+	private static final long serialVersionUID = 2212521452392734563L;
 
 	private final Database db;
 
