@@ -21,15 +21,11 @@ package org.rapidoid.demo.taskplanner;
  */
 
 import org.rapidoid.app.Apps;
-import org.rapidoid.config.Conf;
-import org.rapidoid.log.Log;
 
 public class Main {
 
 	public static void main(String[] args) {
-		Conf.args("oauth-no-state");
-		Log.args(args);
-		Apps.run();
+		Apps.run("oauth-no-state");
 	}
 
 }

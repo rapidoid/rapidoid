@@ -43,11 +43,13 @@ public class Apps {
 	public static final ConcurrentMap<String, AppClasses> CLASSES = U.concurrentMap();
 
 	public static void main(String[] args) {
-		Conf.args(args);
-		run();
+		run(args);
 	}
 
-	public static void run() {
+	public static void run(String... args) {
+		Conf.args(args);
+		Log.args(args);
+
 		Log.info("Loaded database", "size", DB.size());
 
 		HTTPServer server = HTTP.server().build();
