@@ -32,8 +32,6 @@ import org.rapidoid.db.DbSet;
 @SuppressWarnings("serial")
 public class User extends AbstractEntity {
 
-	// public static final DbDsl<User> DSL = DB.dsl(User.class);
-
 	@Display
 	public String username;
 

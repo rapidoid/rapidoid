@@ -7,7 +7,6 @@ import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.db.AbstractEntity;
 import org.rapidoid.db.DB;
-import org.rapidoid.db.DbDsl;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
@@ -45,8 +44,6 @@ import org.rapidoid.util.CommonRoles;
 @CanDelete({ CommonRoles.OWNER, CommonRoles.ADMIN })
 @DbEntity
 public class Task extends AbstractEntity {
-
-	public static final DbDsl<Task> DSL = DB.dsl(Task.class);
 
 	@Display
 	@CanChange({ MODERATOR, OWNER })
