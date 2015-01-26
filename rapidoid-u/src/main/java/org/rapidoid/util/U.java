@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -312,9 +313,15 @@ public class U {
 		return map;
 	}
 
-	public static <K, V> ConcurrentMap<K, V> concurrentMap(Map<? extends K, ? extends V> src) {
+	public static <K, V> ConcurrentMap<K, V> concurrentMap(Map<? extends K, ? extends V> src, boolean ignoreNullValues) {
 		ConcurrentMap<K, V> map = concurrentMap();
-		map.putAll(src);
+
+		for (Entry<? extends K, ? extends V> e : src.entrySet()) {
+			if (!ignoreNullValues || e.getValue() != null) {
+				map.put(e.getKey(), e.getValue());
+			}
+		}
+
 		return map;
 	}
 
