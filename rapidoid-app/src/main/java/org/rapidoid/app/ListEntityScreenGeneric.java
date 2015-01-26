@@ -20,21 +20,50 @@ package org.rapidoid.app;
  * #L%
  */
 
+import org.rapidoid.annotation.Session;
+import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.tag.ButtonTag;
+import org.rapidoid.security.Secure;
+import org.rapidoid.util.Cls;
 import org.rapidoid.widget.GridWidget;
 
 public class ListEntityScreenGeneric extends Screen {
 
 	private final Class<?> entityType;
 
+	@Session
+	public Object newEntity;
+
 	public ListEntityScreenGeneric(Class<?> entityType) {
 		this.entityType = entityType;
 	}
 
 	public Object content() {
-		Tag caption = titleBox(entityType.getSimpleName() + " List");
+
+		String entityName = Cls.entityName(entityType);
+
+		Tag caption = titleBox(entityName + " List");
 		GridWidget grid = grid(entityType, "-id", 10);
-		return row(caption, grid);
+
+		boolean canAdd = Secure.canInsert(Secure.username(), DB.entity(entityType));
+		canAdd = false; // FIXME solve programmatic processing before save e.g. set owner
+		ButtonTag btnAdd = canAdd ? btn("Add " + entityName).cmd("Add") : null;
+
+		return row(caption, grid, btnAdd);
+	}
+
+	public void onAdd() {
+		showModal("addRecord");
+	}
+
+	public Tag addRecord() {
+		newEntity = DB.entity(entityType);
+		return modal("Add New " + Cls.entityName(entityType), create(newEntity), div(SAVE, CANCEL));
+	}
+
+	public void onSave() {
+		DB.insert(newEntity);
 	}
 
 }
