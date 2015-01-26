@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.rapidoid.beany.Beany;
 import org.rapidoid.log.Log;
+import org.rapidoid.util.Cls;
+import org.rapidoid.util.U;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -74,4 +76,35 @@ public class JSON {
 		JSON.parse("{}", Map.class);
 	}
 
+	public static String save(Object value) {
+		try {
+			Object ser = Beany.serialize(value);
+			Class<?> cls = value != null ? value.getClass() : null;
+			Map<String, Object> map = U.map("_", cls.getCanonicalName(), "v", ser);
+			return MAPPER.writeValueAsString(map);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Object load(String json) {
+		Map<String, Object> map = parseMap(json);
+		String clsName = (String) map.get("_");
+		Class<Object> type = Cls.getClassIfExists(clsName);
+		if (type == null) {
+			return null;
+		}
+
+		Object ser = map.get("v");
+
+		if (ser instanceof Map) {
+			Object value = Cls.newInstance(type);
+			Map<String, Object> props = (Map<String, Object>) ser;
+			Beany.update(value, props, false);
+			return value;
+		}
+
+		return ser;
+	}
 }
