@@ -23,6 +23,7 @@ package org.rapidoid.app;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
@@ -39,11 +40,10 @@ public class ViewEntityScreenGeneric extends Screen {
 		Tag caption = titleBox(U.capitalized(ctx().pathSegment(0)) + " Details");
 		FormWidget details = show(target);
 
-		if (Secure.getObjectPermissions(Secure.username(), target).delete) {
-			details = details.buttons(EDIT, BACK, DELETE);
-		} else {
-			details = details.buttons(EDIT, BACK);
-		}
+		ButtonTag btnEdit = Secure.canUpdate(Secure.username(), target) ? EDIT : null;
+		ButtonTag btnDelete = Secure.canDelete(Secure.username(), target) ? DELETE : null;
+
+		details = details.buttons(btnEdit, BACK, btnDelete);
 
 		return row(caption, details);
 	}
