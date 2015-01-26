@@ -428,14 +428,14 @@ public abstract class BootstrapWidgets extends HTML {
 		return Cls.customizable(FormWidget.class, dataManager, FormMode.CREATE, item, properties);
 	}
 
-	public static FormField field(DataManager dataManager, FormMode mode, FormLayout layout, Property prop,
+	public static FormFieldWidget field(DataManager dataManager, FormMode mode, FormLayout layout, Property prop,
 			String name, String desc, FieldType type, Collection<?> options, boolean required, Var<?> var,
 			DataPermissions permissions) {
-		return new FormField(dataManager, mode, layout, prop, name, desc, type, options, required, var, permissions);
+		return new FormFieldWidget(dataManager, mode, layout, prop, name, desc, type, options, required, var, permissions);
 	}
 
-	public static FormField field(DataManager dataManager, FormMode mode, FormLayout layout, Item item, Property prop) {
-		return new FormField(dataManager, mode, layout, item, prop);
+	public static FormFieldWidget field(DataManager dataManager, FormMode mode, FormLayout layout, Item item, Property prop) {
+		return new FormFieldWidget(dataManager, mode, layout, item, prop);
 	}
 
 	public static Tag page(boolean devMode, String pageTitle, Object head, Object body) {

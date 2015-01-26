@@ -42,7 +42,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 
-public class FormField extends AbstractWidget {
+public class FormFieldWidget extends AbstractWidget {
 
 	protected DataManager dataManager;
 	protected FormMode mode;
@@ -61,7 +61,7 @@ public class FormField extends AbstractWidget {
 	protected Tag label;
 	protected Tag input;
 
-	public FormField(DataManager dataManager, FormMode mode, FormLayout layout, Property prop, String name,
+	public FormFieldWidget(DataManager dataManager, FormMode mode, FormLayout layout, Property prop, String name,
 			String desc, FieldType type, Collection<?> options, boolean required, Var<?> var,
 			DataPermissions permissions) {
 
@@ -78,7 +78,7 @@ public class FormField extends AbstractWidget {
 		this.permissions = permissions;
 	}
 
-	public FormField(DataManager dataManager, FormMode mode, FormLayout layout, Item item, Property prop) {
+	public FormFieldWidget(DataManager dataManager, FormMode mode, FormLayout layout, Item item, Property prop) {
 		this.dataManager = dataManager;
 		this.mode = U.or(mode, FormMode.EDIT);
 		this.layout = layout;

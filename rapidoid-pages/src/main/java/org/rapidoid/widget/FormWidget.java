@@ -43,7 +43,7 @@ public class FormWidget extends AbstractWidget {
 
 	protected List<Property> props;
 
-	protected List<FormField> fields = U.list();
+	protected List<FormFieldWidget> fields = U.list();
 	protected Tag[] buttons;
 
 	protected FormLayout layout = FormLayout.VERTICAL;
@@ -65,7 +65,7 @@ public class FormWidget extends AbstractWidget {
 		this.layout = layout;
 
 		for (int i = 0; i < fieldNames.length; i++) {
-			fields.add(new FormField(dataManager, mode, layout, null, fieldNames[i], fieldLabels[i], fieldTypes[i],
+			fields.add(new FormFieldWidget(dataManager, mode, layout, null, fieldNames[i], fieldLabels[i], fieldTypes[i],
 					options[i], true, vars[i], null));
 		}
 
@@ -84,20 +84,20 @@ public class FormWidget extends AbstractWidget {
 		throw U.rte("Cannot find field '%s'!", fieldName);
 	}
 
-	public FormWidget field(String fieldName, FormField field) {
+	public FormWidget field(String fieldName, FormFieldWidget field) {
 		return field(fieldIndex(fieldName), field);
 	}
 
-	public FormWidget field(int fieldIndex, FormField field) {
+	public FormWidget field(int fieldIndex, FormFieldWidget field) {
 		this.fields.set(fieldIndex, field);
 		return this;
 	}
 
-	public FormField field(String fieldName) {
+	public FormFieldWidget field(String fieldName) {
 		return field(fieldIndex(fieldName));
 	}
 
-	public FormField field(int fieldIndex) {
+	public FormFieldWidget field(int fieldIndex) {
 		return this.fields.get(fieldIndex);
 	}
 
@@ -114,7 +114,7 @@ public class FormWidget extends AbstractWidget {
 
 	/************************** OTHER ********************************/
 
-	public FormWidget add(FormField field) {
+	public FormWidget add(FormFieldWidget field) {
 		if (field.getMode() == null) {
 			field.setMode(mode);
 		}
@@ -133,7 +133,7 @@ public class FormWidget extends AbstractWidget {
 
 		for (int i = 0; i < propN; i++) {
 			Property prop = props.get(i);
-			FormField field = field(dataManager, mode, layout, item, prop);
+			FormFieldWidget field = field(dataManager, mode, layout, item, prop);
 			fields.add(field);
 		}
 	}
@@ -147,7 +147,7 @@ public class FormWidget extends AbstractWidget {
 			Object target = item.value();
 			Class<?> targetClass = Cls.of(target);
 
-			for (FormField field : fields) {
+			for (FormFieldWidget field : fields) {
 				if (field.permissions == null) {
 					field.permissions = Secure.getPropertyPermissions(Secure.username(), targetClass, target,
 							field.name);
@@ -170,7 +170,7 @@ public class FormWidget extends AbstractWidget {
 
 	protected FormTag addFormFields(FormTag form) {
 		for (int i = 0; i < fields.size(); i++) {
-			FormField field = getField(i);
+			FormFieldWidget field = getField(i);
 			if (field != null) {
 				form = form.append(field);
 				hasFields = true;
@@ -188,8 +188,8 @@ public class FormWidget extends AbstractWidget {
 		return h4("Insufficient permissions!");
 	}
 
-	protected FormField getField(int index) {
-		FormField field = fields.get(index);
+	protected FormFieldWidget getField(int index) {
+		FormFieldWidget field = fields.get(index);
 
 		if (field != null) {
 			return field.isFieldAllowed() ? field : null;
