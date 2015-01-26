@@ -21,6 +21,7 @@ package org.rapidoid.http;
  */
 
 import org.rapidoid.util.AppCtx;
+import org.rapidoid.util.ImportExport;
 import org.rapidoid.var.impl.AbstractVar;
 
 public class SessionVar<T> extends AbstractVar<T> {
@@ -30,6 +31,11 @@ public class SessionVar<T> extends AbstractVar<T> {
 	private final String name;
 
 	private final T defaultValue;
+
+	public SessionVar(ImportExport props) {
+		name = props.get(A);
+		defaultValue = props.get(B);
+	}
 
 	public SessionVar(String name, T defaultValue) {
 		this.name = name;
@@ -53,6 +59,12 @@ public class SessionVar<T> extends AbstractVar<T> {
 	public void set(T value) {
 		HttpExchange x = AppCtx.exchange();
 		x.sessionSet(name, value);
+	}
+
+	@Override
+	public void exportTo(ImportExport props) {
+		props.put(A, name);
+		props.put(B, defaultValue);
 	}
 
 }

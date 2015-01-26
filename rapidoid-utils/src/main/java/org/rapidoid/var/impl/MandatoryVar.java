@@ -1,5 +1,6 @@
 package org.rapidoid.var.impl;
 
+import org.rapidoid.util.ImportExport;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
@@ -29,6 +30,10 @@ public class MandatoryVar<T> extends AbstractVar<T> {
 
 	private final Var<T> var;
 
+	public MandatoryVar(ImportExport props) {
+		var = props.get(A);
+	}
+
 	public MandatoryVar(Var<T> var) {
 		this.var = var;
 	}
@@ -42,6 +47,11 @@ public class MandatoryVar<T> extends AbstractVar<T> {
 	public void set(T value) {
 		U.must(!U.isEmpty(value), "Non-empty value is required!");
 		var.set(value);
+	}
+
+	@Override
+	public void exportTo(ImportExport props) {
+		props.put(A, var);
 	}
 
 }

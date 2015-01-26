@@ -1,5 +1,7 @@
 package org.rapidoid.var.impl;
 
+import org.rapidoid.util.ImportExport;
+
 /*
  * #%L
  * rapidoid-utils
@@ -26,6 +28,10 @@ public class SimpleVar<T> extends AbstractVar<T> {
 
 	private volatile T value;
 
+	public SimpleVar(ImportExport props) {
+		value = props.get(A);
+	}
+
 	public SimpleVar(T value) {
 		this.value = value;
 	}
@@ -38,6 +44,11 @@ public class SimpleVar<T> extends AbstractVar<T> {
 	@Override
 	public void set(T value) {
 		this.value = value;
+	}
+
+	@Override
+	public void exportTo(ImportExport props) {
+		props.put(A, value);
 	}
 
 }

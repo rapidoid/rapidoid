@@ -23,6 +23,8 @@ package org.rapidoid.beany;
 import java.util.Map;
 
 import org.rapidoid.util.U;
+import org.rapidoid.var.Var;
+import org.rapidoid.var.Vars;
 import org.testng.annotations.Test;
 
 enum ABC {
@@ -97,6 +99,13 @@ public class BeanySerializationTest extends BeanyTestCommons {
 	@Test
 	public void testPlainObjectSerialization() {
 		eq(Beany.serialize(new Object()), U.map());
+	}
+
+	@Test
+	public void testVarsSerialization() {
+		Var<?> var = Vars.var(123);
+		Object ser = Beany.serialize(var);
+		eq(ser, U.map("a", 123));
 	}
 
 }

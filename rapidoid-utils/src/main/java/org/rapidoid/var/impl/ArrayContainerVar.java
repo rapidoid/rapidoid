@@ -20,6 +20,7 @@ package org.rapidoid.var.impl;
  * #L%
  */
 
+import org.rapidoid.util.ImportExport;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 
@@ -27,9 +28,14 @@ public class ArrayContainerVar extends AbstractVar<Boolean> {
 
 	private static final long serialVersionUID = 6990464844550633598L;
 
-	private final Var<Object> container;
+	public final Var<Object> container;
 
-	private final Object item;
+	public final Object item;
+
+	public ArrayContainerVar(ImportExport props) {
+		container = props.get(A);
+		item = props.get(B);
+	}
 
 	public ArrayContainerVar(Var<Object> container, Object item) {
 		this.container = container;
@@ -48,6 +54,12 @@ public class ArrayContainerVar extends AbstractVar<Boolean> {
 		} else {
 			container.set(UTILS.exclude(container.get(), item));
 		}
+	}
+
+	@Override
+	public void exportTo(ImportExport props) {
+		props.put(A, container);
+		props.put(B, item);
 	}
 
 }

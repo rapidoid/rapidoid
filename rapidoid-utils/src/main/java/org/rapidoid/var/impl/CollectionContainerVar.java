@@ -22,6 +22,7 @@ package org.rapidoid.var.impl;
 
 import java.util.Collection;
 
+import org.rapidoid.util.ImportExport;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
@@ -33,6 +34,11 @@ public class CollectionContainerVar extends AbstractVar<Boolean> {
 	private final Var<Collection<Object>> container;
 
 	private final Object item;
+
+	public CollectionContainerVar(ImportExport props) {
+		container = props.get(A);
+		item = props.get(B);
+	}
 
 	public CollectionContainerVar(Var<Collection<Object>> container, Object item) {
 		this.container = container;
@@ -61,6 +67,12 @@ public class CollectionContainerVar extends AbstractVar<Boolean> {
 				coll.remove(item);
 			}
 		}
+	}
+
+	@Override
+	public void exportTo(ImportExport props) {
+		props.put(A, container);
+		props.put(B, item);
 	}
 
 }
