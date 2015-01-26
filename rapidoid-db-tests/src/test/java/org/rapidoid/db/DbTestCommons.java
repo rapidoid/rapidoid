@@ -36,7 +36,7 @@ public abstract class DbTestCommons extends TestCommons {
 		DBs.destroyAll();
 		DB.destroy();
 		DB.init();
-		Log.setLogLevel(LogLevel.DEBUG);
+		Log.setLogLevel(LogLevel.INFO);
 		AppCtx.reset();
 	}
 
