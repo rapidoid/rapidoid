@@ -155,7 +155,7 @@ public class AppPageGeneric extends AppGUI {
 				return null;
 			}
 
-			String entityClass = entity.getClass().getSimpleName();
+			String entityClass = Cls.unproxy(entity.getClass()).getSimpleName();
 			String reqType = U.capitalized(type);
 
 			if (entityClass.equals(reqType)) {
@@ -174,7 +174,7 @@ public class AppPageGeneric extends AppGUI {
 				return null;
 			}
 
-			String entityClass = entity.getClass().getSimpleName();
+			String entityClass = Cls.unproxy(entity.getClass()).getSimpleName();
 			String reqType = U.capitalized(type);
 
 			if (entityClass.equals(reqType)) {
