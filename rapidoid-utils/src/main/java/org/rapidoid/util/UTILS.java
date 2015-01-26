@@ -729,4 +729,8 @@ public class UTILS implements Constants {
 		return U.capitalized(camelSplit(s).toLowerCase());
 	}
 
+	public static ImportExport importExport(Map<String, Object> props) {
+		return new MapImportExport(props);
+	}
+
 }

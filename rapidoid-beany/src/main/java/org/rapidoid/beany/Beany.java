@@ -16,6 +16,7 @@ import java.util.Set;
 import org.rapidoid.annotation.Display;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.Exportable;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
@@ -254,6 +255,12 @@ public class Beany {
 		U.must(!bean.getClass().isArray());
 		U.must(!bean.getClass().isEnum());
 		U.must(Cls.kindOf(bean) == TypeKind.OBJECT);
+
+		if (bean instanceof Exportable) {
+			Exportable exportable = (Exportable) bean;
+			exportable.exportTo(UTILS.importExport(dest));
+			return;
+		}
 
 		for (Prop prop : propertiesOf(bean)) {
 			Object value = prop.getRaw(bean);
