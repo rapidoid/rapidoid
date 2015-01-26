@@ -1,5 +1,6 @@
 package org.rapidoid.demo.taskplanner.model;
 
+import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Optional;
 import org.rapidoid.annotation.Programmatic;
@@ -42,6 +43,7 @@ import org.rapidoid.util.CommonRoles;
 @CanChange({ CommonRoles.OWNER })
 @CanInsert(CommonRoles.LOGGED_IN)
 @CanDelete({ CommonRoles.OWNER, CommonRoles.ADMIN })
+@DbEntity
 public class Task extends AbstractEntity {
 
 	public static final DbDsl<Task> DSL = DB.dsl(Task.class);

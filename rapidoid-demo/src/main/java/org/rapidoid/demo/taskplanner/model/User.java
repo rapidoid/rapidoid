@@ -22,18 +22,19 @@ package org.rapidoid.demo.taskplanner.model;
 
 import java.util.Date;
 
+import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.db.AbstractEntity;
 import org.rapidoid.db.DB;
-import org.rapidoid.db.DbDsl;
 import org.rapidoid.db.DbSet;
 
 @Scaffold
 @SuppressWarnings("serial")
+@DbEntity
 public class User extends AbstractEntity {
 
-	public static final DbDsl<User> DSL = DB.dsl(User.class);
+	// public static final DbDsl<User> DSL = DB.dsl(User.class);
 
 	@Display
 	public String username;

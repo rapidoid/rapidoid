@@ -1,14 +1,8 @@
-package org.rapidoid.demo.taskplanner.model;
-
-import org.rapidoid.annotation.DbEntity;
-import org.rapidoid.db.AbstractEntity;
-import org.rapidoid.db.DB;
-import org.rapidoid.db.DbRef;
-import org.rapidoid.db.DbSet;
+package org.rapidoid.annotation;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-annotations
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -26,16 +20,14 @@ import org.rapidoid.db.DbSet;
  * #L%
  */
 
-@SuppressWarnings("serial")
-@DbEntity
-public class Comment extends AbstractEntity {
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 
-	public String content;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-	public DbRef<User> owner = DB.ref(this, "^owns");
-
-	public DbRef<Task> task = DB.ref(this, "^has");
-
-	public DbSet<User> likedBy = DB.set(this, "^likes");
+@Target({ TYPE })
+@Retention(RUNTIME)
+public @interface DbEntity {
 
 }
