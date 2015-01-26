@@ -733,4 +733,17 @@ public class UTILS implements Constants {
 		return new MapImportExport(props);
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T, V extends T> List<T> withoutNulls(V... values) {
+		List<T> list = U.list();
+
+		for (T val : values) {
+			if (val != null) {
+				list.add(val);
+			}
+		}
+
+		return list;
+	}
+
 }

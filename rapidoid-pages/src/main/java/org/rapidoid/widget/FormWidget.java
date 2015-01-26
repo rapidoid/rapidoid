@@ -33,6 +33,7 @@ import org.rapidoid.model.Property;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 
 public class FormWidget extends AbstractWidget {
@@ -44,7 +45,7 @@ public class FormWidget extends AbstractWidget {
 	protected List<Property> props;
 
 	protected List<FormFieldWidget> fields = U.list();
-	protected Tag[] buttons;
+	protected List<Tag> buttons;
 
 	protected FormLayout layout = FormLayout.VERTICAL;
 
@@ -65,11 +66,11 @@ public class FormWidget extends AbstractWidget {
 		this.layout = layout;
 
 		for (int i = 0; i < fieldNames.length; i++) {
-			fields.add(new FormFieldWidget(dataManager, mode, layout, null, fieldNames[i], fieldLabels[i], fieldTypes[i],
-					options[i], true, vars[i], null));
+			fields.add(new FormFieldWidget(dataManager, mode, layout, null, fieldNames[i], fieldLabels[i],
+					fieldTypes[i], options[i], true, vars[i], null));
 		}
 
-		this.buttons = buttons;
+		this.buttons = UTILS.withoutNulls(buttons);
 	}
 
 	/************************** FIELD ********************************/
@@ -104,11 +105,11 @@ public class FormWidget extends AbstractWidget {
 	/************************** BUTTONS ********************************/
 
 	public FormWidget buttons(ButtonTag... buttons) {
-		this.buttons = buttons;
+		this.buttons = UTILS.withoutNulls(buttons);
 		return this;
 	}
 
-	public Tag[] buttons() {
+	public List<Tag> buttons() {
 		return this.buttons;
 	}
 
