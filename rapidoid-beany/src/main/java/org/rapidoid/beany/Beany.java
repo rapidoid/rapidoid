@@ -44,6 +44,10 @@ import org.rapidoid.var.Vars;
 
 public class Beany {
 
+	private static final String GETTER = "^(get|is)[A-Z].*";
+
+	private static final String SETTER = "^set[A-Z].*";
+
 	protected static final Map<Class<?>, BeanProperties> BEAN_PROPERTIES = UTILS
 			.autoExpandingMap(new Mapper<Class<?>, BeanProperties>() {
 
@@ -86,7 +90,7 @@ public class Beany {
 				if ((modif & Modifier.PUBLIC) != 0 && (modif & Modifier.STATIC) == 0) {
 
 					String name = method.getName();
-					if (name.matches("^(get|set|is)[A-Z].*")) {
+					if ((name.matches(GETTER) && params.length == 0) || (name.matches(SETTER) && params.length == 1)) {
 
 						String propName;
 						if (name.startsWith("is")) {
@@ -103,11 +107,9 @@ public class Beany {
 						}
 
 						if (name.startsWith("set")) {
-							if (params.length == 1) {
-								prop.setSetter(method);
-								prop.setReadOnly(false);
-							}
-						} else if (params.length == 0) {
+							prop.setSetter(method);
+							prop.setReadOnly(false);
+						} else {
 							prop.setGetter(method);
 						}
 					} else if (!name.matches("^to[A-Z].*") && !name.equals("hashCode")) {
