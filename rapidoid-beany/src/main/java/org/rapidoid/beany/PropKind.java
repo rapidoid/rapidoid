@@ -22,6 +22,6 @@ package org.rapidoid.beany;
 
 public enum PropKind {
 
-	NORMAL, COLLECTION, VAR;
+	NORMAL, COLLECTION, MAP, VAR;
 
 }

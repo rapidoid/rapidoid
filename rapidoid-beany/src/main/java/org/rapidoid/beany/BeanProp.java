@@ -27,6 +27,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
@@ -81,6 +82,10 @@ public class BeanProp implements Prop {
 		if (Collection.class.isAssignableFrom(type)) {
 			readOnly = false;
 			propKind = PropKind.COLLECTION;
+
+		} else if (Map.class.isAssignableFrom(type)) {
+			readOnly = false;
+			propKind = PropKind.MAP;
 
 		} else if (Var.class.isAssignableFrom(type)) {
 			U.notNull(genericType, "generic type");
@@ -176,6 +181,10 @@ public class BeanProp implements Prop {
 			collSet(target, value);
 			break;
 
+		case MAP:
+			mapSet(target, value);
+			break;
+
 		case VAR:
 			varSet(target, value);
 			break;
@@ -202,6 +211,10 @@ public class BeanProp implements Prop {
 
 		case COLLECTION:
 			collSet(target, Collections.EMPTY_LIST);
+			break;
+
+		case MAP:
+			mapSet(target, Collections.EMPTY_MAP);
 			break;
 
 		case VAR:
@@ -263,8 +276,26 @@ public class BeanProp implements Prop {
 	private void collSet(Object target, Object value) {
 		U.must(value instanceof Collection<?>, "Expected a collection, but found: %s", value);
 		Collection<Object> coll = (Collection<Object>) get(target);
+
+		if (coll == null) {
+			coll = (Collection<Object>) Cls.newInstance(type);
+		}
+
 		coll.clear();
 		coll.addAll((Collection<Object>) value);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void mapSet(Object target, Object value) {
+		U.must(value instanceof Map, "Expected a map, but found: %s", value);
+		Map<Object, Object> map = (Map<Object, Object>) get(target);
+
+		if (map == null) {
+			map = (Map<Object, Object>) Cls.newInstance(type);
+		}
+
+		map.clear();
+		map.putAll((Map<Object, Object>) value);
 	}
 
 	private void normalSet(Object target, Object value) {
