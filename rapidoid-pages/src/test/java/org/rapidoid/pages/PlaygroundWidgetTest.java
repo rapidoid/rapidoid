@@ -43,7 +43,7 @@ public class PlaygroundWidgetTest extends PagesTestCommons {
 		hasRegex(ctx, play, "<span[^>]*?>10</span>");
 		hasRegex(ctx, play, "<button[^>]*?>\\+</button>");
 
-		hasRegex(ctx, play, "<input [^>]*?css=\"border: 1px;\">");
+		hasRegex(ctx, play, "<input [^>]*?style=\"border: 1px;\">");
 	}
 
 }
