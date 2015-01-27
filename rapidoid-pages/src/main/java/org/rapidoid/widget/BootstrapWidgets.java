@@ -324,6 +324,26 @@ public abstract class BootstrapWidgets extends HTML {
 		return col_(12, contents);
 	}
 
+	public static Tag mid2(Object... contents) {
+		return row(col5(), col2(contents), col5());
+	}
+
+	public static Tag mid4(Object... contents) {
+		return row(col4(), col4(contents), col4());
+	}
+
+	public static Tag mid6(Object... contents) {
+		return row(col3(), col6(contents), col3());
+	}
+
+	public static Tag mid8(Object... contents) {
+		return row(col2(), col8(contents), col2());
+	}
+
+	public static Tag mid10(Object... contents) {
+		return row(col1(), col10(contents), col1());
+	}
+
 	public static ButtonTag cmd(String cmd, Object... args) {
 		boolean primary = cmd.startsWith("^");
 		boolean danger = cmd.startsWith("!");
@@ -431,10 +451,12 @@ public abstract class BootstrapWidgets extends HTML {
 	public static FormFieldWidget field(DataManager dataManager, FormMode mode, FormLayout layout, Property prop,
 			String name, String desc, FieldType type, Collection<?> options, boolean required, Var<?> var,
 			DataPermissions permissions) {
-		return new FormFieldWidget(dataManager, mode, layout, prop, name, desc, type, options, required, var, permissions);
+		return new FormFieldWidget(dataManager, mode, layout, prop, name, desc, type, options, required, var,
+				permissions);
 	}
 
-	public static FormFieldWidget field(DataManager dataManager, FormMode mode, FormLayout layout, Item item, Property prop) {
+	public static FormFieldWidget field(DataManager dataManager, FormMode mode, FormLayout layout, Item item,
+			Property prop) {
 		return new FormFieldWidget(dataManager, mode, layout, item, prop);
 	}
 
