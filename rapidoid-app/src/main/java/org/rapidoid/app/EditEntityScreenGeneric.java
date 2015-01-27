@@ -34,10 +34,10 @@ public class EditEntityScreenGeneric extends Screen {
 	public Object content() {
 		target = entity();
 
-		Tag caption = titleBox("Edit " + U.capitalized(ctx().pathSegment(0).substring(4)));
+		Tag caption = h2("Edit " + U.capitalized(ctx().pathSegment(0).substring(4)));
 		FormWidget form = edit(target).buttons(SAVE, CANCEL);
 
-		return row(caption, form);
+		return mid6(caption, form);
 	}
 
 	public void onSave() {

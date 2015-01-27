@@ -37,7 +37,7 @@ public class ViewEntityScreenGeneric extends Screen {
 	public Object content() {
 		target = entity();
 
-		Tag caption = titleBox(U.capitalized(ctx().pathSegment(0)) + " Details");
+		Tag caption = h2(U.capitalized(ctx().pathSegment(0)) + " Details").style("margin-bottom:15px;");
 		FormWidget details = show(target);
 
 		ButtonTag btnEdit = Secure.canUpdate(Secure.username(), target) ? EDIT : null;
@@ -45,7 +45,7 @@ public class ViewEntityScreenGeneric extends Screen {
 
 		details = details.buttons(btnEdit, BACK, btnDelete);
 
-		return row(caption, details);
+		return mid6(caption, details);
 	}
 
 	public void onEdit() {
