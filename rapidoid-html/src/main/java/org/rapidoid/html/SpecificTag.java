@@ -26,9 +26,9 @@ public interface SpecificTag<TAG extends SpecificTag<?>> extends Tag, SpecificTa
 
 	TAG id(String id);
 
-	String css();
+	String style();
 
-	TAG css(String css);
+	TAG style(String css);
 
 	String class_();
 

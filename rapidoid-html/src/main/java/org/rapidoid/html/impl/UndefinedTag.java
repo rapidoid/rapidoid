@@ -68,12 +68,12 @@ public class UndefinedTag implements Tag {
 	}
 
 	@Override
-	public String css() {
+	public String style() {
 		throw U.notExpected();
 	}
 
 	@Override
-	public Tag css(String css) {
+	public Tag style(String css) {
 		throw U.notExpected();
 	}
 

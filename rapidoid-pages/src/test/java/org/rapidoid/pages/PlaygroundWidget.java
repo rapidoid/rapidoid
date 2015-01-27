@@ -58,7 +58,7 @@ public class PlaygroundWidget extends BootstrapWidgets {
 
 	public static Tag adder() {
 
-		final InputTag input = input().css("border: 1px;");
+		final InputTag input = input().style("border: 1px;");
 		final Tag coll = div();
 
 		ButtonTag b2 = button("+");

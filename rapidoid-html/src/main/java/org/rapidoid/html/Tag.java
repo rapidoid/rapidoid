@@ -26,9 +26,9 @@ public interface Tag extends TagBase<Tag> {
 
 	Tag id(String id);
 
-	String css();
+	String style();
 
-	Tag css(String css);
+	Tag style(String css);
 
 	String class_();
 
