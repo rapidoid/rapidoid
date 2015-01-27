@@ -29,7 +29,7 @@ Add the following snippet to the `<dependencies>` section in pom.xml:
 <dependency>
     <groupId>org.rapidoid</groupId>
     <artifactId>rapidoid-all</artifactId>
-    <version>1.0.1</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
