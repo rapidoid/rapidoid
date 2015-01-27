@@ -22,7 +22,6 @@ package org.rapidoid.http;
 
 import java.io.File;
 import java.io.OutputStream;
-import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -623,6 +622,13 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
+	public synchronized HttpExchangeBody sendFile(MediaType mediaType, byte[] bytes) {
+		setContentType(mediaType);
+		write(bytes);
+		return this;
+	}
+
+	@Override
 	public synchronized HttpExchangeException redirect(String url) {
 		responseCode(303);
 		addHeader(HttpHeader.LOCATION, url);
@@ -867,10 +873,10 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			}
 
 			if (!filename.contains("..") && STATIC_RESOURCE_PATTERN.matcher(filename).matches()) {
-				URL res = IO.resource("public/" + filename);
-				if (res != null) {
+				byte[] bytes = IO.loadBytes("public/" + filename);
+				if (bytes != null) {
 					startResponse(200);
-					sendFile(new File(res.getFile()));
+					sendFile(MediaType.getByFileName(filename), bytes);
 					return true;
 				}
 			}

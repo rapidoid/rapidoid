@@ -43,6 +43,10 @@ public class IO {
 		return classLoader().getResource(filename);
 	}
 
+	public static InputStream resourceAsStream(String filename) {
+		return classLoader().getResourceAsStream(filename);
+	}
+
 	public static ClassLoader classLoader() {
 		return Thread.currentThread().getContextClassLoader();
 	}

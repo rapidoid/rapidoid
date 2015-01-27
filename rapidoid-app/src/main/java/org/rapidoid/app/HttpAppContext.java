@@ -123,6 +123,11 @@ public class HttpAppContext implements AppContext {
 		return x.sendFile(file);
 	}
 
+	@Override
+	public HttpExchangeBody sendFile(MediaType mediaType, byte[] bytes) {
+		return x.sendFile(mediaType, bytes);
+	}
+
 	public HttpExchange close() {
 		return x.close();
 	}

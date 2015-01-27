@@ -24,10 +24,13 @@ import java.io.File;
 import java.io.OutputStream;
 
 import org.rapidoid.net.abstracts.CtxWrite;
+import org.rapidoid.net.mime.MediaType;
 
 public interface HttpExchangeBody extends CtxWrite<HttpExchangeBody> {
 
 	HttpExchangeBody sendFile(File file);
+
+	HttpExchangeBody sendFile(MediaType mediaType, byte[] bytes);
 
 	HttpExchangeException redirect(String url);
 
