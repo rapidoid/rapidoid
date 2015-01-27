@@ -3,9 +3,9 @@ Rapidoid
 
 Rapidoid aims to be the Coolest Full-stack Web Application Framework for Java!
 
-# Super-simple. Powerful. Secure. Self-contained. Cool! #
+# Super-simple. Powerful. Secure. Cool! #
 
-Navigating to [http://localhost:8080/teaser/hey/Joe/45](http://localhost:8080/teaser/hey/Joe/45) returns `Hey Joe (45)`
+Teaser:
 
 ```java
 @DbEntity
@@ -171,7 +171,7 @@ public class NewIssueScreen extends Screen {
 }
 ```
 
-Rapidoid will scan for `*Screen` classes on your classpath and will construct a nice and responseive GUI. It will start a fast embedded HTTP server (`rapidoid-http`).
+Rapidoid will scan for `*Screen` classes on your classpath and will construct a nice and responsive GUI. It will start a fast embedded HTTP server (`rapidoid-http`).
 
 * Navigate to:
  * [http://localhost:8080/](http://localhost:8080/)
