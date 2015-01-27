@@ -20,37 +20,10 @@ package org.rapidoid.app;
  * #L%
  */
 
-import org.rapidoid.db.DB;
-import org.rapidoid.html.Tag;
-import org.rapidoid.log.Log;
-import org.rapidoid.security.annotation.DevMode;
-
-@DevMode
-public class DeleteAllDataScreen extends Screen {
+public class SettingsScreenBuiltIn extends Screen {
 
 	public Object content() {
-		Tag caption = titleBox("Debug Mode - Delete All data");
-		return div(caption, div(btnDanger("DELETE ALL DATA!").cmd("DeleteAll"), CANCEL));
-	}
-
-	public void onDeleteAll() {
-		showModal("confirmDelete");
-	}
-
-	public Tag confirmDelete() {
-		return modal("Confirm data deletion", h1("Are you sure you want to delete all data in the database?"),
-				div(YES_DELETE, NO));
-	}
-
-	public void onYesDelete() {
-		Log.info("yes");
-		hideModal();
-		DB.sudo().clear();
-		ctx().goBack(1);
-	}
-
-	public void onNo() {
-		hideModal();
+		return h3("No settings available.");
 	}
 
 }

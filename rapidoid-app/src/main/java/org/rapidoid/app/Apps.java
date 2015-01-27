@@ -38,6 +38,8 @@ import org.rapidoid.util.U;
 
 public class Apps {
 
+	private static final String BUILT_IN_SCREEN_SUFFIX = "BuiltIn";
+
 	private static AppClasses APP_CLASSES;
 
 	public static final ConcurrentMap<String, AppClasses> CLASSES = U.concurrentMap();
@@ -63,7 +65,11 @@ public class Apps {
 	}
 
 	public static String screenName(Class<?> screenClass) {
-		return U.mid(screenClass.getSimpleName(), 0, -6);
+		String name = screenClass.getSimpleName();
+		if (name.endsWith(BUILT_IN_SCREEN_SUFFIX)) {
+			name = U.mid(name, 0, -BUILT_IN_SCREEN_SUFFIX.length());
+		}
+		return U.mid(name, 0, -6);
 	}
 
 	public static String screenUrl(Class<?> screenClass) {

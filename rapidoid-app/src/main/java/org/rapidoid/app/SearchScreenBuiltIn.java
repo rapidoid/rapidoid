@@ -31,11 +31,11 @@ import org.rapidoid.util.U;
 import org.rapidoid.widget.GridWidget;
 import org.rapidoid.widget.HighlightedGridWidget;
 
-public class SearchScreen extends Screen {
+public class SearchScreenBuiltIn extends Screen {
 
 	public Object content(HttpExchange x) {
 
-		final String query = x.param("q");
+		final String query = x.param("q", "");
 		List<Object> found = DB.find(query);
 		Items items = beanItems(Object.class, found.toArray());
 

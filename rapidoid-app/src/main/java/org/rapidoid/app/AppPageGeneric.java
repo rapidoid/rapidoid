@@ -60,6 +60,9 @@ public class AppPageGeneric extends AppGUI {
 
 	protected static final AppScreens APP_SCREENS = Cls.customizable(AppScreens.class);
 
+	protected static final Class<?>[] BUILT_IN_SCREENS = { SearchScreenBuiltIn.class, SettingsScreenBuiltIn.class,
+			DebugUserInfoScreenBuiltIn.class, DeleteAllDataScreenBuiltIn.class };
+
 	protected final HttpExchange x;
 
 	protected final AppClasses appCls;
@@ -143,6 +146,12 @@ public class AppPageGeneric extends AppGUI {
 		}
 
 		String path = x.path();
+
+		for (Class<?> scr : BUILT_IN_SCREENS) {
+			if (Apps.screenUrl(scr).equals(path)) {
+				return Cls.newInstance(scr);
+			}
+		}
 
 		Matcher m = ENTITY_EDIT.matcher(path);
 

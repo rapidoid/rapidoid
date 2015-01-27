@@ -27,7 +27,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.widget.FormWidget;
 
 @DevMode
-public class DebugUserInfoScreen extends Screen {
+public class DebugUserInfoScreenBuiltIn extends Screen {
 
 	public Object content() {
 		Tag caption = titleBox("Debug Mode - User Information");
