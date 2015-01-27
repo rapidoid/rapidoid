@@ -1014,6 +1014,7 @@ public class InMem implements Serializable {
 				try {
 					type = Class.forName(className);
 				} catch (ClassNotFoundException e) {
+					Log.error("Cannot find the class of a DB record!", "id", id, "class", className);
 					type = null;
 				}
 
@@ -1213,6 +1214,7 @@ public class InMem implements Serializable {
 	@SuppressWarnings("unchecked")
 	private <T> T obj(Rec rec) {
 		Class<T> destType = (Class<T>) rec.type;
+		U.notNull(destType, "DB record type");
 		T dest = data.constructor.create(destType);
 		return (T) obj(rec, dest);
 	}
