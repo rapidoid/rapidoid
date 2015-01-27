@@ -724,7 +724,7 @@ public class InMem implements Serializable {
 			}
 		};
 
-		return find(match2);
+		return sorted(find(match2), orderBy);
 	}
 
 	public <E> List<E> find(String searchPhrase) {
