@@ -141,16 +141,16 @@ public class AppPageGeneric extends AppGUI {
 	}
 
 	protected Object genericScreen() {
-		if (!x.query_().range().isEmpty()) {
-			return null;
-		}
-
 		String path = x.path();
 
 		for (Class<?> scr : BUILT_IN_SCREENS) {
 			if (Apps.screenUrl(scr).equals(path)) {
 				return Cls.newInstance(scr);
 			}
+		}
+
+		if (!x.query_().range().isEmpty()) {
+			return null;
 		}
 
 		Matcher m = ENTITY_EDIT.matcher(path);
