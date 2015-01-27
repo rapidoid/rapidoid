@@ -57,9 +57,7 @@ The software is released under the liberal Apache Public License v2, so it is fr
 # Step-by-step introduction
 
 A step-by-step tutorial is available at the official site:
-* [http://localhost:8080/](http://localhost:8080/)
-
-[http://www.rapidoid.org/](http://www.rapidoid.org/).
+[http://www.rapidoid.org/](http://www.rapidoid.org/)
 
 # Using with Maven
 
