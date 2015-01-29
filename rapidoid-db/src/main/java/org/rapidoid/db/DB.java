@@ -73,6 +73,10 @@ public class DB {
 		return db;
 	}
 
+	public static void setDb(Database db) {
+		DB.db = db;
+	}
+
 	public static long insert(Object record) {
 		return db().insert(record);
 	}
