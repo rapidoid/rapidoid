@@ -866,6 +866,7 @@ public class InMem implements Serializable {
 				txRollback();
 				if (txCallback != null) {
 					txCallback.onDone(null, e);
+					txCallback = null;
 				}
 			}
 
@@ -874,8 +875,14 @@ public class InMem implements Serializable {
 			data.txInsertions.clear();
 			data.insideTx.set(false);
 
-			if (success && txCallback != null) {
-				data.txCallbacks.add(txCallback);
+			if (persistor != null) {
+				if (success && txCallback != null) {
+					data.txCallbacks.add(txCallback);
+				}
+			} else {
+				if (success && txCallback != null) {
+					txCallback.onDone(null, null);
+				}
 			}
 
 			globalUnlock();
