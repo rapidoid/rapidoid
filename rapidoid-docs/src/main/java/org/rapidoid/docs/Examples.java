@@ -89,12 +89,20 @@ public class Examples {
 
 		for (int i = 2; i <= examplesN; i++) {
 
-			String snippet = IO.load("example" + i + ".snippet");
+			String snippFile = "src/main/java/org/rapidoid/docs/eg" + i + "/App.java";
+			String snippet = IO.load(snippFile);
+			U.must(snippet != null, "Cannot find: " + snippFile);
+
+			snippet = cleanSnippet(snippet);
 
 			Matcher m = p.matcher(snippet);
 			U.must(m.find());
 			int pos = m.start();
+
 			String desc = snippet.substring(0, pos).trim();
+			U.must(desc.startsWith("//"));
+			desc = desc.substring(2).trim();
+
 			snippet = snippet.substring(pos).trim();
 
 			snippet = col(rr, snippet);
@@ -109,6 +117,14 @@ public class Examples {
 		String html = UTILS.fillIn(docsT, "examples", examples);
 
 		IO.save(path + "index.html", html);
+	}
+
+	private static String cleanSnippet(String s) {
+		String comm = "#L%\n */";
+		int p = s.indexOf(comm);
+		U.must(p > 0);
+		s = s.substring(p + comm.length()).trim();
+		return s;
 	}
 
 	private static String col(String rr, String snippet) {
@@ -153,6 +169,10 @@ public class Examples {
 		saveTo(server, "/rapidoid.js", path + "../rapidoid.js");
 		saveTo(server, "/rapidoid.css", path + "../rapidoid.css");
 
+		for (int i = 1; i <= 5; i++) {
+			saveTo(server, "//bootstrap/css/theme-" + i + ".css", path + "../theme-" + i + ".css");
+		}
+
 		for (Class<?> cls : classes) {
 			String name = cls.getSimpleName();
 			if (name.endsWith("Screen")) {
@@ -175,6 +195,7 @@ public class Examples {
 		// TODO remove these hacks
 		out = out.replace("/rapidoid.css", "../rapidoid.css");
 		out = out.replace("/rapidoid.js", "../rapidoid.js");
+		out = out.replace("/bootstrap/css/theme-", "../theme-");
 		out = out.replace("\"//", "\"http://");
 		out = out.replace("href=\"/\"", "href=\"index.html\"");
 		out = out.replaceAll("(href|action)=\\\"/(\\w+)\\\"", "$1=\"$2.html\"");

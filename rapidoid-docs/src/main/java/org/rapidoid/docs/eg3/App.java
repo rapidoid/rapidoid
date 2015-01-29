@@ -20,6 +20,27 @@ package org.rapidoid.docs.eg3;
  * #L%
  */
 
+// Use method chaining to construct HTML tags:
+
+import org.rapidoid.app.Apps;
+import org.rapidoid.app.Screen;
+
 public class App {
+
 	public String title = "Example 3";
+
+	public static void main(String[] args) {
+		Apps.run(args);
+	}
+}
+
+class HomeScreen extends Screen {
+	public Object content() {
+		Object link = a("Foo").href("foo.html");
+		return h3("Welcome! Visit ", link);
+	}
+}
+
+class FooScreen {
+	public String content = "At the Foo screen!";
 }

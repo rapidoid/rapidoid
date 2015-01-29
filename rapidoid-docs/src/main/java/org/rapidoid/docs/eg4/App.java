@@ -1,4 +1,4 @@
-package org.rapidoid.docs.eg2;
+package org.rapidoid.docs.eg4;
 
 /*
  * #%L
@@ -20,8 +20,20 @@ package org.rapidoid.docs.eg2;
  * #L%
  */
 
-public class HomeScreen {
-	public String content() {
-		return "At the Home screen!";
-	}
+// Let's use the built-in theme 1:
+
+public class App {
+
+	public String theme = "1";
+
+	public String title = "Example 1";
+
+	public String content = "Nice theme!";
+
+}
+
+class FooScreen {
+}
+
+class BarScreen {
 }
