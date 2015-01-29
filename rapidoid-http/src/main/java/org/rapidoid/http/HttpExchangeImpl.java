@@ -36,6 +36,7 @@ import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.inject.IoC;
+import org.rapidoid.log.Log;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.net.mime.MediaType;
@@ -928,8 +929,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		this.responses = responses;
 		this.session = session;
 		this.router = router;
-		if (!Conf.production()) {
-			Conf.configure("mode", detectedDevMode() ? "dev" : "");
+		if (Conf.option("mode", null) == null) {
+			Conf.configure("mode", detectedDevMode() ? "dev" : "production");
+			Log.info("Auto-detected dev/production mode", "mode", Conf.option("mode"));
 		}
 	}
 
