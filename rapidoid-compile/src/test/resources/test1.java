@@ -19,14 +19,30 @@ package abc;
  * limitations under the License.
  * #L%
  */
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.annotation.Resource;
+
 import org.rapidoid.util.U;
 import org.rapidoid.log.Log;
 
+@mixo.Mixin
+@Resource
 public class Main {
+
+	@Resource
+	public String ggg;
+
+	@Resource
+	public void setMm(int mm) {
+	}
 
 	public static void main(String[] args) {
 		Runnable r1 = new Runnable() {

@@ -37,21 +37,20 @@ public class CompileTest extends TestCommons {
 	@Test
 	public void testCompile() throws Exception {
 
-		Compilation compilation = Compile.compile(IO.load("test1.java"),
+		Compilation compilation = Compile.compile(IO.load("test1.java"), IO.load("mixin.java"),
 				"public class Book { String title; int x = 1234; } class Foo {}", "public class Bar extends Foo {}",
 				"public class Fg extends Foo {}");
 
-		System.out.println(compilation);
-
 		Set<Class<?>> classes = compilation.loadClasses();
-		U.show(classes);
-		eq(classes.size(), 9);
+		eq(classes.size(), 10);
 
 		Set<String> classNames = compilation.getClassNames();
 		U.show(classNames);
 
+		eq(Cls.classMap(classes).get("Main").getAnnotations().length, 2);
+
 		Set<String> expectedClasses = U.set("abc.Main", "abc.Main$1", "abc.Person", "abc.Person$Insider",
-				"abc.PersonService", "Book", "Foo", "Bar", "Fg");
+				"abc.PersonService", "Book", "Foo", "Bar", "Fg", "mixo.Mixin");
 		eq(classNames, expectedClasses);
 
 		for (String clsName : expectedClasses) {

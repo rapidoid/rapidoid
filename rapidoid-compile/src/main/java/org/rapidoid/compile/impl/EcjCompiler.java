@@ -42,7 +42,9 @@ public class EcjCompiler implements ICompilerRequestor {
 	}
 
 	public EcjCompiler(INameEnvironment environment, IProblemFactory problemFactory) {
-		CompilerOptions options = new CompilerOptions(U.map(CompilerOptions.OPTION_Source, "1.8"));
+		String version = System.getProperty("java.version").substring(0, 3);
+		CompilerOptions options = new CompilerOptions(U.map(CompilerOptions.OPTION_Source, version,
+				CompilerOptions.OPTION_TargetPlatform, version));
 		compiler = new Compiler(environment, new ErrorPolicy(), options, this, problemFactory, null, null);
 	}
 
