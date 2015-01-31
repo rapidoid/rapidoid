@@ -525,7 +525,14 @@ public class U {
 	}
 
 	public static void show(Object... values) {
-		String text = values.length == 1 ? readable(values[0]) : readable(values);
+		String text;
+
+		if (values != null) {
+			text = values.length == 1 ? readable(values[0]) : readable(values);
+		} else {
+			text = "null";
+		}
+
 		System.out.println(">" + text + "<");
 	}
 
