@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 
+import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 
@@ -77,9 +79,16 @@ public class Scan {
 	public static List<Class<?>> classes(String packageName, String nameRegex, Predicate<Class<?>> filter,
 			Class<? extends Annotation> annotated, ClassLoader classLoader) {
 
-		packageName = U.or(packageName, "");
+		if (U.isEmpty(packageName) || packageName.equals("*")) {
+			packageName = "";
+		}
 
 		Pattern regex = nameRegex != null ? Pattern.compile(nameRegex) : null;
+
+		Classes ctxClasses = AppCtx.classes();
+		if (ctxClasses != null) {
+			return filterClasses(ctxClasses, packageName, regex, filter, annotated);
+		}
 
 		ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
 		Enumeration<URL> urls = resources(packageName);
@@ -103,6 +112,25 @@ public class Scan {
 		return classes;
 	}
 
+	private static List<Class<?>> filterClasses(Classes classes, String packageName, Pattern regex,
+			Predicate<Class<?>> filter, Class<? extends Annotation> annotated) {
+
+		List<Class<?>> matching = U.list();
+
+		for (Entry<String, Class<?>> e : classes.entrySet()) {
+			Class<?> cls = e.getValue();
+			String pkg = cls.getPackage() != null ? cls.getPackage().getName() : "";
+
+			if (pkg.startsWith(packageName + ".") || pkg.equals(packageName)) {
+				if (classMatches(cls, filter, annotated, regex)) {
+					matching.add(cls);
+				}
+			}
+		}
+
+		return matching;
+	}
+
 	public static List<Class<?>> annotated(Class<? extends Annotation> annotated) {
 		return classes(null, null, null, annotated, null);
 	}
@@ -112,7 +140,7 @@ public class Scan {
 	}
 
 	public static List<Class<?>> byName(String simpleName, Predicate<Class<?>> filter, ClassLoader classLoader) {
-		List<Class<?>> classes = classes("*", ".*\\." + simpleName, filter, null, classLoader);
+		List<Class<?>> classes = classes("*", "(.*\\.|^)" + simpleName, filter, null, classLoader);
 
 		if (classes.isEmpty()) {
 			Log.warn("No classes found on classpath with the specified simple name", "name", simpleName);
@@ -122,7 +150,7 @@ public class Scan {
 	}
 
 	public static List<Class<?>> bySuffix(String nameSuffix, Predicate<Class<?>> filter, ClassLoader classLoader) {
-		List<Class<?>> classes = classes("*", ".+\\w" + nameSuffix, filter, null, classLoader);
+		List<Class<?>> classes = classes("*", ".*\\w" + nameSuffix, filter, null, classLoader);
 
 		if (classes.isEmpty()) {
 			Log.warn("No classes found on classpath with the specified suffix", "suffix", nameSuffix);
@@ -195,10 +223,8 @@ public class Scan {
 								Class<?> cls = classLoader != null ? Class.forName(clsName, true, classLoader) : Class
 										.forName(clsName);
 
-								if (annotated == null || cls.getAnnotation(annotated) != null) {
-									if (filter == null || filter.eval(cls)) {
-										classes.add(cls);
-									}
+								if (classMatches(cls, filter, annotated, regex)) {
+									classes.add(cls);
 								}
 							} catch (Exception e) {
 								throw U.rte(e);
@@ -208,6 +234,14 @@ public class Scan {
 				}
 			}
 		}
+	}
+
+	private static boolean classMatches(Class<?> cls, Predicate<Class<?>> filter,
+			Class<? extends Annotation> annotated, Pattern regex) {
+
+		return (annotated == null || cls.getAnnotation(annotated) != null)
+				&& (regex == null || regex.matcher(cls.getCanonicalName()).matches())
+				&& (filter == null || Lambdas.eval(filter, cls));
 	}
 
 	private static Enumeration<URL> resources(String name) {

@@ -21,7 +21,6 @@ package org.rapidoid.app;
  */
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.beany.Beany;
 import org.rapidoid.config.Conf;
@@ -39,10 +38,6 @@ import org.rapidoid.util.U;
 public class Apps {
 
 	private static final String BUILT_IN_SCREEN_SUFFIX = "BuiltIn";
-
-	private static AppClasses APP_CLASSES;
-
-	public static final ConcurrentMap<String, AppClasses> CLASSES = U.concurrentMap();
 
 	public static void main(String[] args) {
 		run(args);
@@ -83,28 +78,14 @@ public class Apps {
 
 	public static synchronized AppClasses scanAppClasses(HttpExchange x, ClassLoader classLoader) {
 
-		if (x.hasSession()) {
-			String q = x.session("_app_classes_", null);
-			if (q != null) {
-				AppClasses cls = CLASSES.get(q);
-				if (cls != null) {
-					return cls;
-				}
-			}
-		}
+		Map<String, Class<?>> services = Cls.classMap(Scan.bySuffix("Service", null, classLoader));
+		Map<String, Class<?>> pages = Cls.classMap(Scan.bySuffix("Page", null, classLoader));
+		Map<String, Class<?>> apps = Cls.classMap(Scan.byName("App", null, classLoader));
+		Map<String, Class<?>> screens = Cls.classMap(Scan.bySuffix("Screen", null, classLoader));
 
-		if (APP_CLASSES == null) {
+		final Class<?> appClass = !apps.isEmpty() ? apps.get("App") : TheDefaultApp.class;
 
-			Map<String, Class<?>> services = Cls.classMap(Scan.bySuffix("Service", null, classLoader));
-			Map<String, Class<?>> pages = Cls.classMap(Scan.bySuffix("Page", null, classLoader));
-			Map<String, Class<?>> apps = Cls.classMap(Scan.byName("App", null, classLoader));
-			Map<String, Class<?>> screens = Cls.classMap(Scan.bySuffix("Screen", null, classLoader));
-
-			final Class<?> appClass = !apps.isEmpty() ? apps.get("App") : TheDefaultApp.class;
-
-			APP_CLASSES = new AppClasses(appClass, services, pages, screens);
-		}
-
+		AppClasses APP_CLASSES = new AppClasses(appClass, services, pages, screens);
 		return APP_CLASSES;
 	}
 
@@ -116,10 +97,6 @@ public class Apps {
 
 	public static boolean addon(Object obj, String configName) {
 		return config(obj, configName, false) || config(obj, "full", false);
-	}
-
-	public static void setAppClasses(AppClasses appClasses) {
-		APP_CLASSES = appClasses;
 	}
 
 }

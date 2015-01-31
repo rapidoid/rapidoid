@@ -28,6 +28,8 @@ public class AppCtx {
 
 	private Object exchange;
 
+	private Classes classes;
+
 	private AppCtx() {
 	}
 
@@ -83,6 +85,22 @@ public class AppCtx {
 	public static void delExchange() {
 		AppCtx ctx = ctx();
 		ctx.exchange = null;
+	}
+
+	public static void setClasses(Classes classes) {
+		AppCtx ctx = provideCtx();
+		U.must(ctx.classes == null, "The classes were already set!");
+		ctx.classes = classes;
+	}
+
+	public static Classes classes() {
+		AppCtx ctx = CTXS.get();
+		return ctx != null ? ctx.classes : null;
+	}
+
+	public static void delClasses() {
+		AppCtx ctx = ctx();
+		ctx.classes = null;
 	}
 
 }

@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -703,8 +704,8 @@ public class Cls {
 		}
 	}
 
-	public static Map<String, Class<?>> classMap(List<Class<?>> classes) {
-		Map<String, Class<?>> map = U.map();
+	public static Map<String, Class<?>> classMap(Iterable<Class<?>> classes) {
+		Map<String, Class<?>> map = new LinkedHashMap<String, Class<?>>();
 
 		for (Class<?> cls : classes) {
 			map.put(cls.getSimpleName(), cls);

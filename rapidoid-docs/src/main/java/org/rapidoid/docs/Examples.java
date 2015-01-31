@@ -25,9 +25,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.rapidoid.app.AppClasses;
 import org.rapidoid.app.AppHandler;
-import org.rapidoid.app.Apps;
 import org.rapidoid.config.Conf;
 import org.rapidoid.db.DB;
 import org.rapidoid.http.HTTP;
@@ -35,6 +33,8 @@ import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.oauth.OAuth;
+import org.rapidoid.util.AppCtx;
+import org.rapidoid.util.Classes;
 import org.rapidoid.util.IO;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
@@ -149,8 +149,7 @@ public class Examples {
 
 	public static void generate(String path, int exampleN, List<Class<?>> classes) {
 
-		AppClasses appClasses = AppClasses.from(classes);
-		Apps.setAppClasses(appClasses);
+		AppCtx.setClasses(Classes.from(classes));
 
 		HTTPServer server = HTTP.server().build();
 		OAuth.register(server);
