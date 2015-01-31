@@ -60,6 +60,8 @@ public interface HttpExchangeHeaders extends HttpExchangeBody {
 
 	HttpExchangeHeaders closeSession();
 
+	HttpExchangeHeaders clearSession();
+
 	HttpExchangeHeaders accessDeniedIf(boolean accessDeniedCondition);
 
 	HttpExchangeHeaders authorize(Class<?> clazz);

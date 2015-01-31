@@ -43,4 +43,6 @@ public interface HttpSession extends Serializable {
 
 	void loadSession(String sessionId);
 
+	void clearSession(String sessionId);
+
 }

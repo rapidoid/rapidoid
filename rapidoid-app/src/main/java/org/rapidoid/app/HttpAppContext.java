@@ -452,4 +452,9 @@ public class HttpAppContext implements AppContext {
 		x.sessionDeserialize(bytes);
 	}
 
+	@Override
+	public HttpExchangeHeaders clearSession() {
+		return x.clearSession();
+	}
+
 }

@@ -82,4 +82,10 @@ public class InMemoryHttpSession implements HttpSession {
 	public void loadSession(String sessionId) {
 	}
 
+	@Override
+	public void clearSession(String sessionId) {
+		ConcurrentMap<String, Object> session = session(sessionId);
+		session.clear();
+	}
+
 }

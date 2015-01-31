@@ -759,6 +759,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
+	public synchronized HttpExchangeHeaders clearSession() {
+		session.clearSession(sessionId());
+		return this;
+	}
+
+	@Override
 	public synchronized boolean hasSession() {
 		String sessId = cookie(SESSION_COOKIE, null);
 		return sessId != null && session.exists(sessId);
