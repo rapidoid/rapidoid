@@ -30,7 +30,7 @@ public class EcjCompilationUnit implements ICompilationUnit {
 
 	private static final Pattern PACKAGE_PATTERN = Pattern.compile("package\\s+([\\w\\.]+?)\\s*;");
 
-	private static final Pattern PUBLIC_CLASS_PATTERN = Pattern.compile("public\\s+class\\s+(\\w+?)\\b");
+	private static final Pattern PUBLIC_TYPE_PATTERN = Pattern.compile("public\\s+(?:class|enum|interface|\\@interface)\\s+(\\w+?)\\b");
 
 	private static final char[][] DEFAULT_PACKAGE = new char[0][];
 
@@ -71,7 +71,7 @@ public class EcjCompilationUnit implements ICompilationUnit {
 	}
 
 	private static String inferClassName(String src) {
-		Matcher m = PUBLIC_CLASS_PATTERN.matcher(src);
+		Matcher m = PUBLIC_TYPE_PATTERN.matcher(src);
 		if (m.find()) {
 			return m.group(1);
 		} else {
