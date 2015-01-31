@@ -142,10 +142,14 @@ public class IO {
 	}
 
 	public static void save(String filename, String content) {
+		save(filename, content.getBytes());
+	}
+
+	public static void save(String filename, byte[] content) {
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(filename);
-			out.write(content.getBytes());
+			out.write(content);
 			close(out, false);
 		} catch (Exception e) {
 			close(out, true);
