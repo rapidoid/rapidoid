@@ -96,7 +96,7 @@ public class Apps {
 	}
 
 	public static boolean addon(Object obj, String configName) {
-		return config(obj, configName, false) || config(obj, "full", false);
+		return config(obj, configName, false) || config(obj, "full", true);
 	}
 
 }
