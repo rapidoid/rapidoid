@@ -157,6 +157,14 @@ public class Scan {
 		return files;
 	}
 
+	public static List<File> dir(String dir, Predicate<File> filter) {
+		ArrayList<File> files = new ArrayList<File>();
+
+		getFiles(files, new File(dir), filter);
+
+		return files;
+	}
+
 	public static void files(String packageName, Collection<File> files, Predicate<File> filter) {
 		Enumeration<URL> urls = resources(packageName);
 
