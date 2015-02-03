@@ -24,13 +24,14 @@ div.title-box {
 	padding: 3px;
 	font-size: 20px;
 	font-weight: bold;
-	border-left-width: 0px;
-	border-right-width: 0px;
+	border-left-width: 1px;
+	border-right-width: 1px;
 	border-top-width: 1px;
 	border-bottom-width: 1px;
-	border-radius: 0px;
-	border-style: solid;
+	border-radius: 15px;
+	border-style: dashed;
 	border-color: #CCC;
+	background-color: #F5F5F5;
 	text-align: center;
 }
 
