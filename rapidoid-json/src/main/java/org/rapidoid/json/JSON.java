@@ -41,29 +41,41 @@ public class JSON {
 		return mapper;
 	}
 
-	public static String stringify(Object value) {
+	public static String jacksonStringify(Object value) {
 		try {
-			return MAPPER.writeValueAsString(Beany.serialize(value));
+			return MAPPER.writeValueAsString(value);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static String stringify(Object value) {
+		return jacksonStringify(Beany.serialize(value));
+	}
+
+	public static void jacksonStringify(Object value, OutputStream out) {
+		try {
+			MAPPER.writeValue(out, value);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	public static void stringify(Object value, OutputStream out) {
-		try {
-			MAPPER.writeValue(out, Beany.serialize(value));
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		jacksonStringify(Beany.serialize(value), out);
 	}
 
-	public static <T> T parse(String json, Class<T> valueType) {
+	public static <T> T jacksonParse(String json, Class<T> valueType) {
 		try {
 			return MAPPER.readValue(json, valueType);
 		} catch (Exception e) {
 			Log.error("Cannot parse JSON!", "json", json, "error", e);
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static <T> T parse(String json, Class<T> valueType) {
+		return jacksonParse(json, valueType);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -77,14 +89,10 @@ public class JSON {
 	}
 
 	public static String save(Object value) {
-		try {
-			Object ser = Beany.serialize(value);
-			Class<?> cls = value != null ? value.getClass() : null;
-			Map<String, Object> map = U.map("_", cls.getCanonicalName(), "v", ser);
-			return MAPPER.writeValueAsString(map);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		Object ser = Beany.serialize(value);
+		Class<?> cls = value != null ? value.getClass() : null;
+		Map<String, Object> map = U.map("_", cls.getCanonicalName(), "v", ser);
+		return jacksonStringify(map);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -107,4 +115,5 @@ public class JSON {
 
 		return ser;
 	}
+
 }
