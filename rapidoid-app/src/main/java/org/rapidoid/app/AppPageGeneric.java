@@ -36,7 +36,8 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.HttpExchangeException;
+import org.rapidoid.http.HttpNotFoundException;
+import org.rapidoid.http.HttpSuccessException;
 import org.rapidoid.http.HttpExchangeHolder;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
@@ -421,7 +422,8 @@ public class AppPageGeneric extends AppGUI {
 		try {
 			Pages.callCmdHandler(x, screen, new Cmd(cmd, false, args));
 		} catch (Exception e) {
-			if (UTILS.rootCause(e) instanceof HttpExchangeException) {
+			Throwable cause = UTILS.rootCause(e);
+			if (cause instanceof HttpSuccessException || cause instanceof HttpNotFoundException) {
 				Pages.store(x, screen);
 			}
 			throw U.rte(e);

@@ -32,7 +32,8 @@ import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.HttpExchangeException;
+import org.rapidoid.http.HttpNotFoundException;
+import org.rapidoid.http.HttpSuccessException;
 import org.rapidoid.inject.IoC;
 import org.rapidoid.json.JSON;
 import org.rapidoid.lambda.Lambdas;
@@ -261,7 +262,7 @@ public class Pages {
 				callCmdHandler(x, view, cmd);
 			} catch (Exception e) {
 				Throwable cause = UTILS.rootCause(e);
-				if (cause instanceof HttpExchangeException) {
+				if (cause instanceof HttpSuccessException || cause instanceof HttpNotFoundException) {
 					processView = false;
 				} else {
 					throw U.rte(e);
@@ -279,7 +280,7 @@ public class Pages {
 				}
 			} catch (Exception e) {
 				Throwable cause = UTILS.rootCause(e);
-				if (cause instanceof HttpExchangeException) {
+				if (cause instanceof HttpSuccessException || cause instanceof HttpNotFoundException) {
 					return null;
 				} else {
 					throw U.rte(e);

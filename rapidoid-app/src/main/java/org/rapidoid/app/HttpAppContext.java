@@ -32,9 +32,10 @@ import org.rapidoid.data.Data;
 import org.rapidoid.data.MultiData;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeBody;
-import org.rapidoid.http.HttpExchangeException;
+import org.rapidoid.http.HttpSuccessException;
 import org.rapidoid.http.HttpExchangeHeaders;
 import org.rapidoid.http.HttpHeader;
+import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.net.mime.MediaType;
@@ -136,7 +137,7 @@ public class HttpAppContext implements AppContext {
 		return x.closeIf(condition);
 	}
 
-	public HttpExchangeException redirect(String url) {
+	public HttpSuccessException redirect(String url) {
 		return x.redirect(url);
 	}
 
@@ -152,7 +153,7 @@ public class HttpAppContext implements AppContext {
 		return x.write(file);
 	}
 
-	public HttpExchangeException goBack(int steps) {
+	public HttpSuccessException goBack(int steps) {
 		return x.goBack(steps);
 	}
 
@@ -212,7 +213,7 @@ public class HttpAppContext implements AppContext {
 		return x.path_();
 	}
 
-	public HttpExchangeException notFound() {
+	public HttpNotFoundException notFound() {
 		return x.notFound();
 	}
 
@@ -224,7 +225,7 @@ public class HttpAppContext implements AppContext {
 		return x.subpath_();
 	}
 
-	public HttpExchangeException error() {
+	public HttpSuccessException error() {
 		return x.error();
 	}
 

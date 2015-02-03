@@ -23,14 +23,14 @@ import org.rapidoid.util.SuccessException;
  */
 
 @SuppressWarnings("serial")
-public class HttpExchangeException extends SuccessException {
+public class HttpSuccessException extends SuccessException {
 
-	private static final HttpExchangeException INSTANCE = new HttpExchangeException();
+	private static final HttpSuccessException INSTANCE = new HttpSuccessException();
 
-	private HttpExchangeException() {
+	private HttpSuccessException() {
 	}
 
-	public static HttpExchangeException get() {
+	public static HttpSuccessException get() {
 		return INSTANCE;
 	}
 

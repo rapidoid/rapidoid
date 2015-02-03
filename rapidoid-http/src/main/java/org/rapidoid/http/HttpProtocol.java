@@ -101,7 +101,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	private void handleError(HttpExchangeImpl x, Throwable e) {
 		Throwable cause = UTILS.rootCause(e);
-		if (cause instanceof HttpExchangeException) {
+		if (cause instanceof HttpSuccessException || cause instanceof HttpNotFoundException) {
 			// redirect, notFound etc.
 			x.completeResponse();
 		} else {

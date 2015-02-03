@@ -630,7 +630,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeException redirect(String url) {
+	public synchronized HttpSuccessException redirect(String url) {
 		responseCode(303);
 		addHeader(HttpHeader.LOCATION, url);
 		this.redirectUrl = url;
@@ -771,9 +771,14 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeException notFound() {
+	public synchronized boolean hasSession(String sessionId) {
+		return !U.isEmpty(sessionId) && session.exists(sessionId);
+	}
+
+	@Override
+	public synchronized HttpNotFoundException notFound() {
 		response(404, "Error: page not found!");
-		throw error();
+		throw HttpNotFoundException.get();
 	}
 
 	public synchronized UserInfo user() {
@@ -856,8 +861,10 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public synchronized HttpExchangeHeaders errorResponse(Throwable err) {
 		Throwable cause = UTILS.rootCause(err);
-		if (cause instanceof HttpExchangeException) {
+		if (cause instanceof HttpSuccessException) {
 			return this;
+		} else if (cause instanceof HttpNotFoundException) {
+			throw notFound();
 		} else if (cause instanceof SecurityException) {
 			return response(500, "Access Denied!", cause);
 		} else {
@@ -892,7 +899,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeException goBack(int steps) {
+	public synchronized HttpSuccessException goBack(int steps) {
 		String dest = "/";
 		List<String> stack = session(SESSION_PAGE_STACK, null);
 
@@ -942,8 +949,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public HttpExchangeException error() {
-		return HttpExchangeException.get();
+	public HttpSuccessException error() {
+		return HttpSuccessException.get();
 	}
 
 }

@@ -20,24 +20,16 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.io.File;
-import java.io.OutputStream;
+@SuppressWarnings("serial")
+public class HttpNotFoundException extends RuntimeException {
 
-import org.rapidoid.net.abstracts.CtxWrite;
-import org.rapidoid.net.mime.MediaType;
+	private static final HttpNotFoundException INSTANCE = new HttpNotFoundException();
 
-public interface HttpExchangeBody extends CtxWrite<HttpExchangeBody> {
+	private HttpNotFoundException() {
+	}
 
-	HttpExchangeBody sendFile(File file);
-
-	HttpExchangeBody sendFile(MediaType mediaType, byte[] bytes);
-
-	HttpSuccessException redirect(String url);
-
-	HttpSuccessException goBack(int steps);
-
-	HttpExchangeBody addToPageStack();
-
-	OutputStream outputStream();
+	public static HttpNotFoundException get() {
+		return INSTANCE;
+	}
 
 }
