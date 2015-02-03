@@ -227,7 +227,8 @@ public abstract class BootstrapWidgets extends HTML {
 		Tag ctrls = div().class_("form-group");
 
 		for (int i = 0; i < fields.length; i++) {
-			InputTag inp = input().type("text").class_("form-control").name(fields[i]).placeholder(placeholders[i]);
+			InputTag inp = input().type("text").class_("form-control").name(fields[i]).id("navbar-" + fields[i])
+					.placeholder(placeholders[i]);
 			ctrls = ctrls.append(inp);
 		}
 

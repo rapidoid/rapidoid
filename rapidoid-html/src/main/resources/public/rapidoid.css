@@ -49,11 +49,15 @@ span.highlight {
 	background-color: #FFB !important;
 }
 
+#navbar-q {
+	width: 100px;
+}
+
 .field-error {
 	font-weight: bold;
 	color: #700;
 }
 
 .nothing {
-	color: #BBB;	
+	color: #BBB;
 }
