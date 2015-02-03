@@ -20,6 +20,7 @@ package org.rapidoid.demo.taskplanner.gui.extra;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.demo.db.Person;
 import org.rapidoid.html.Tag;
@@ -34,6 +35,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.GridWidget;
 
+@Authors("Nikolche Mihajlovski")
 public class MixPage extends BootstrapWidgets {
 
 	@Session

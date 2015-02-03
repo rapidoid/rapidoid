@@ -22,12 +22,14 @@ package org.rapidoid.demo.http;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 
+@Authors("Nikolche Mihajlovski")
 public class HttpDemo {
 
 	public static void main(String[] args) {

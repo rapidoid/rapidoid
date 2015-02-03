@@ -1,5 +1,7 @@
 package org.rapidoid.oauth;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-oauth
@@ -20,6 +22,7 @@ package org.rapidoid.oauth;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class OAuthProvider {
 
 	public static OAuthProvider GOOGLE = new OAuthProvider("Google", "https://accounts.google.com/o/oauth2/auth",

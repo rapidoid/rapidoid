@@ -22,6 +22,7 @@ package org.rapidoid.db;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.config.Conf;
 import org.rapidoid.db.model.IPerson;
 import org.rapidoid.util.OptimisticConcurrencyControlException;
@@ -29,6 +30,7 @@ import org.rapidoid.util.Rnd;
 import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class DbInterfacePersistenceTest extends DbTestCommons {
 
 	@Test

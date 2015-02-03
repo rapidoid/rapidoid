@@ -28,5 +28,6 @@ import java.lang.annotation.Target;
 
 @Target({ TYPE })
 @Retention(RUNTIME)
+@Authors("Nikolche Mihajlovski")
 public @interface Autocreate {
 }

@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Display;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.Cls;
@@ -42,6 +43,7 @@ import org.rapidoid.var.Vars;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class Beany {
 
 	private static final String GETTER = "^(get|is)[A-Z].*";

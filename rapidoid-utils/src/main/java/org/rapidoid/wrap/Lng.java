@@ -1,5 +1,7 @@
 package org.rapidoid.wrap;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-utils
@@ -20,6 +22,7 @@ package org.rapidoid.wrap;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class Lng {
 
 	public long value;

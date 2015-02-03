@@ -20,9 +20,11 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.util.Builder;
 
+@Authors("Nikolche Mihajlovski")
 public interface TCPServerBuilder extends Builder<TCPServer> {
 
 	TCPServerBuilder bufSize(int bufSize);

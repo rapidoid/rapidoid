@@ -1,5 +1,7 @@
 package org.rapidoid.measure;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-measure
@@ -20,6 +22,7 @@ package org.rapidoid.measure;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class StatsMeasure implements Measure {
 
 	private long min = Long.MAX_VALUE;

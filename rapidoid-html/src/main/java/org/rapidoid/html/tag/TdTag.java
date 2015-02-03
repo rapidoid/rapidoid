@@ -20,8 +20,10 @@ package org.rapidoid.html.tag;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.SpecificTag;
 
+@Authors("Nikolche Mihajlovski")
 public interface TdTag extends SpecificTag<TdTag> {
 
 	String colspan();

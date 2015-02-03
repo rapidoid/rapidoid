@@ -31,6 +31,7 @@ import org.apache.oltu.oauth2.client.response.GitHubTokenResponse;
 import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
 import org.apache.oltu.oauth2.client.response.OAuthResourceResponse;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.json.JSON;
@@ -41,6 +42,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.util.UserInfo;
 
+@Authors("Nikolche Mihajlovski")
 public class OAuthTokenHandler implements Handler {
 
 	private final OAuthProvider provider;

@@ -22,11 +22,13 @@ package org.rapidoid.pojo;
 
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.pojo.impl.PojoDispatcherImpl;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class POJO {
 
 	public static final String SERVICE_SUFFIX = "Service";

@@ -20,9 +20,11 @@ package org.rapidoid.buffer;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.data.Range;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class RangeTest extends BufferTestCommons {
 
 	@Test

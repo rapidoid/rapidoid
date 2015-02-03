@@ -22,11 +22,13 @@ package org.rapidoid.var.impl;
 
 import java.util.Collection;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.ImportExport;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 
+@Authors("Nikolche Mihajlovski")
 public class CollectionContainerVar extends AbstractVar<Boolean> {
 
 	private static final long serialVersionUID = 6990464844550633598L;

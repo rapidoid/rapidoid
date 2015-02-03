@@ -1,5 +1,7 @@
 package org.rapidoid.pages;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-pages
@@ -20,6 +22,7 @@ package org.rapidoid.pages;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface PageRequest {
 
 }

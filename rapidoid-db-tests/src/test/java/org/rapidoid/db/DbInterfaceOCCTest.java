@@ -20,10 +20,12 @@ package org.rapidoid.db;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.db.model.IPerson;
 import org.rapidoid.util.OptimisticConcurrencyControlException;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class DbInterfaceOCCTest extends DbTestCommons {
 
 	@Test(expectedExceptions = OptimisticConcurrencyControlException.class)

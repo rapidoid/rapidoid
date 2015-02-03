@@ -27,8 +27,10 @@ import java.nio.channels.Selector;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.log.Log;
 
+@Authors("Nikolche Mihajlovski")
 public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 
 	protected final Selector selector;

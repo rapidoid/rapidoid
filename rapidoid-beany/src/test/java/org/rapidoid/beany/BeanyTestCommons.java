@@ -20,8 +20,10 @@ package org.rapidoid.beany;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.test.TestCommons;
 
+@Authors("Nikolche Mihajlovski")
 public abstract class BeanyTestCommons extends TestCommons {
 
 }

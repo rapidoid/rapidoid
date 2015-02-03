@@ -23,8 +23,10 @@ package org.rapidoid.compile;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.compile.impl.EcjCompilationUnit;
 
+@Authors("Nikolche Mihajlovski")
 public class Parse {
 
 	public static CompilationUnit parse(String source) {

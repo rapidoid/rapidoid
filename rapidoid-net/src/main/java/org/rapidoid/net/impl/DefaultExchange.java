@@ -25,6 +25,7 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufProvider;
 import org.rapidoid.data.BinaryMultiData;
@@ -38,6 +39,7 @@ import org.rapidoid.util.Constants;
 import org.rapidoid.util.Resetable;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvider, Resetable, Constants {
 
 	protected Channel conn;

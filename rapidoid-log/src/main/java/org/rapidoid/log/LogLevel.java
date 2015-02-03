@@ -20,6 +20,9 @@ package org.rapidoid.log;
  * #L%
  */
 
+/**
+ * @author Nikolche Mihajlovski
+ */
 public enum LogLevel {
 
 	TRACE, DEBUG, AUDIT, INFO, WARN, ERROR, SEVERE;

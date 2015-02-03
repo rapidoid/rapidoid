@@ -28,9 +28,11 @@ import org.eclipse.jdt.internal.compiler.env.ICompilationUnit;
 import org.eclipse.jdt.internal.compiler.env.INameEnvironment;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jdt.internal.compiler.problem.DefaultProblemFactory;
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.compile.Compilation;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class EcjCompiler implements ICompilerRequestor {
 
 	private final Compiler compiler;

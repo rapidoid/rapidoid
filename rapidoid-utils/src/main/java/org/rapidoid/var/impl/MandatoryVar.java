@@ -1,5 +1,6 @@
 package org.rapidoid.var.impl;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.ImportExport;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
@@ -24,6 +25,7 @@ import org.rapidoid.var.Var;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class MandatoryVar<T> extends AbstractVar<T> {
 
 	private static final long serialVersionUID = 7970150705828178233L;

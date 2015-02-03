@@ -22,6 +22,7 @@ package org.rapidoid.demo.taskplanner.gui;
 
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Screen;
@@ -37,6 +38,7 @@ import org.rapidoid.widget.FormWidget;
 import org.rapidoid.widget.GridWidget;
 
 @Order(1)
+@Authors("Nikolche Mihajlovski")
 public class NewTaskScreen extends Screen {
 
 	@Session

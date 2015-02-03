@@ -23,12 +23,14 @@ package org.rapidoid.db.impl.inmem;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.db.Database;
 import org.rapidoid.db.impl.DbRelChangesTracker;
 import org.rapidoid.db.impl.DbRelsCommons;
 import org.rapidoid.inmem.EntityLinks;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class DbEntityLinks implements EntityLinks, Serializable {
 
 	private static final long serialVersionUID = 2212521452392734563L;

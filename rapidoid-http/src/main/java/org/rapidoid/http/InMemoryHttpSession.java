@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.U;
 
 /*
@@ -26,6 +27,7 @@ import org.rapidoid.util.U;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class InMemoryHttpSession implements HttpSession {
 
 	private static final long serialVersionUID = -3390334080583841460L;

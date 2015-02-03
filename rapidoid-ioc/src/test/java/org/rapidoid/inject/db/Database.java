@@ -22,9 +22,11 @@ package org.rapidoid.inject.db;
 
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.inject.IoC;
 
+@Authors("Nikolche Mihajlovski")
 public class Database {
 
 	@Inject

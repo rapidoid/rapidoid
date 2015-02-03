@@ -20,9 +20,11 @@ package org.rapidoid.http;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.json.JSON;
 import org.rapidoid.net.impl.RapidoidServerLoop;
 
+@Authors("Nikolche Mihajlovski")
 public class HTTPServerImpl extends RapidoidServerLoop implements HTTPServer {
 
 	private final HttpSession session = new InMemoryHttpSession();

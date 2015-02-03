@@ -24,6 +24,7 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Optional;
 import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.beany.Beany;
@@ -42,6 +43,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 
+@Authors("Nikolche Mihajlovski")
 public class FormFieldWidget extends AbstractWidget {
 
 	protected DataManager dataManager;

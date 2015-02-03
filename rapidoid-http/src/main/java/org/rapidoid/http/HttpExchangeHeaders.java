@@ -1,5 +1,6 @@
 package org.rapidoid.http;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.net.mime.MediaType;
 
 /*
@@ -22,6 +23,7 @@ import org.rapidoid.net.mime.MediaType;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface HttpExchangeHeaders extends HttpExchangeBody {
 
 	HttpExchangeHeaders startResponse(int httpResponseCode);

@@ -24,6 +24,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
+/**
+ * @author Nikolche Mihajlovski
+ */
 public class Log {
 
 	public static final LogLevel TRACE = LogLevel.TRACE;

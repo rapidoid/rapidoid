@@ -20,8 +20,10 @@ package org.rapidoid.db;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.var.Var;
 
+@Authors("Nikolche Mihajlovski")
 public interface DbColumn<E> extends Var<E>, Comparable<DbColumn<E>> {
 
 }

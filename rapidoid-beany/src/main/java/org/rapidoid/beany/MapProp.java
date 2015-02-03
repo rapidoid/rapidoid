@@ -24,10 +24,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class MapProp implements Prop {
 
 	private final String name;

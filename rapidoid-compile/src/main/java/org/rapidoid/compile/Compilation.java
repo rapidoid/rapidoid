@@ -23,6 +23,9 @@ package org.rapidoid.compile;
 import java.util.List;
 import java.util.Set;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public interface Compilation {
 
 	Class<?> loadClass(String fullClassName) throws ClassNotFoundException;

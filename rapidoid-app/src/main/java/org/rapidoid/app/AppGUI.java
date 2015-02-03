@@ -22,6 +22,7 @@ package org.rapidoid.app;
 
 import java.util.Comparator;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.model.DbItems;
@@ -35,6 +36,7 @@ import org.rapidoid.widget.DataManager;
 import org.rapidoid.widget.FormWidget;
 import org.rapidoid.widget.GridWidget;
 
+@Authors("Nikolche Mihajlovski")
 public class AppGUI extends BootstrapWidgets {
 
 	public static <T> Items all(Class<T> type) {

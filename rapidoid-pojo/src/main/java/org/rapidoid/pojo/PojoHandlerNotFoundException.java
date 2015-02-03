@@ -1,5 +1,7 @@
 package org.rapidoid.pojo;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-pojo
@@ -21,6 +23,7 @@ package org.rapidoid.pojo;
  */
 
 @SuppressWarnings("serial")
+@Authors("Nikolche Mihajlovski")
 public class PojoHandlerNotFoundException extends Exception {
 
 }

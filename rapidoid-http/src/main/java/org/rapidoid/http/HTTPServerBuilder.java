@@ -20,8 +20,10 @@ package org.rapidoid.http;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.Builder;
 
+@Authors("Nikolche Mihajlovski")
 public interface HTTPServerBuilder extends Builder<HTTPServer> {
 
 	HTTPServerBuilder bufSize(int bufSize);

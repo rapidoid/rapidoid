@@ -22,8 +22,10 @@ package org.rapidoid.model;
 
 import java.io.Serializable;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.var.Var;
 
+@Authors("Nikolche Mihajlovski")
 public interface IModel extends Serializable {
 
 	String uri();

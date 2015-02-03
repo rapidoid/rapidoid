@@ -24,6 +24,7 @@ import static org.rapidoid.util.CommonRoles.*;
 
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Composite;
 import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.config.Conf;
@@ -91,6 +92,7 @@ class Issue extends AbstractEntity {
 
 }
 
+@Authors("Nikolche Mihajlovski")
 public class DataPermissionsTest extends SecurityTestCommons {
 
 	private static final String[] USERS = { null, "", "abc", "adm1", "adm2", "mng1", "mod1", "mod2" };

@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
@@ -36,9 +37,9 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpExchangeHolder;
 import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.http.HttpSuccessException;
-import org.rapidoid.http.HttpExchangeHolder;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
 import org.rapidoid.pages.Pages;
@@ -49,6 +50,7 @@ import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
+@Authors("Nikolche Mihajlovski")
 public class AppPageGeneric extends AppGUI {
 
 	protected static final String[] themes = { "1", "2", "3", "4", "5" };

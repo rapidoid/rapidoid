@@ -23,9 +23,11 @@ package org.rapidoid.buffer;
 import java.nio.ByteBuffer;
 import java.util.concurrent.Callable;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.pool.ArrayPool;
 import org.rapidoid.pool.Pool;
 
+@Authors("Nikolche Mihajlovski")
 public class BufGroup {
 
 	private final int factor;

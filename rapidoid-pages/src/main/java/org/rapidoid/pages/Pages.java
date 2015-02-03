@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.config.Conf;
 import org.rapidoid.html.Cmd;
@@ -50,6 +51,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.widget.BootstrapWidgets;
 
+@Authors("Nikolche Mihajlovski")
 public class Pages {
 
 	private static final String PAGE_RELOAD = "<h2>Reloading...</h2><script>location.reload();</script>";

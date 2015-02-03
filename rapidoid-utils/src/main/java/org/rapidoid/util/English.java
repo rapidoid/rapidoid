@@ -22,6 +22,9 @@ package org.rapidoid.util;
 
 import java.util.regex.Pattern;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public class English {
 
 	private static Pattern PLURAL1 = Pattern.compile(".*(s|x|z|ch|sh)$");

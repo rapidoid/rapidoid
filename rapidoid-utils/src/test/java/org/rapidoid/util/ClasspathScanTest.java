@@ -2,6 +2,7 @@ package org.rapidoid.util;
 
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
 
@@ -29,6 +30,7 @@ import org.testng.annotations.Test;
 class Foo {
 }
 
+@Authors("Nikolche Mihajlovski")
 public class ClasspathScanTest extends TestCommons {
 
 	@SuppressWarnings("unchecked")

@@ -20,6 +20,7 @@ package org.rapidoid.html;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.CanvasTag;
@@ -39,6 +40,7 @@ import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.html.tag.ThTag;
 import org.rapidoid.util.UTILS;
 
+@Authors("Nikolche Mihajlovski")
 public class HTML extends Tags {
 
 	public static final Tag NBSP = constant("&nbsp;");

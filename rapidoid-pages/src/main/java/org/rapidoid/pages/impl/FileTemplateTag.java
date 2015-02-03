@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
@@ -33,6 +34,7 @@ import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
+@Authors("Nikolche Mihajlovski")
 public class FileTemplateTag extends HardcodedTag {
 
 	private final String templateName;

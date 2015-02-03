@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
@@ -36,6 +37,7 @@ import org.rapidoid.log.Log;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class Scan {
 
 	private Scan() {

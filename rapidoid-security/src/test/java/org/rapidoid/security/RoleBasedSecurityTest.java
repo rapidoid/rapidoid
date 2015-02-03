@@ -22,6 +22,7 @@ package org.rapidoid.security;
 
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.config.Conf;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
@@ -31,6 +32,7 @@ class Foo {
 	public List<User> sharedWith;
 }
 
+@Authors("Nikolche Mihajlovski")
 public class RoleBasedSecurityTest extends SecurityTestCommons {
 
 	private void setupRoles() {

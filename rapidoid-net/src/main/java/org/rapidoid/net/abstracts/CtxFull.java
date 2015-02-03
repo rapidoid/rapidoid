@@ -1,5 +1,7 @@
 package org.rapidoid.net.abstracts;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-net
@@ -20,6 +22,7 @@ package org.rapidoid.net.abstracts;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface CtxFull<T, W> extends CtxWrite<W>, CtxRead<T>, CtxConnection<T>, CtxIO<T>, CtxProtocol<T>, CtxState<T> {
 
 }

@@ -1,5 +1,7 @@
 package org.rapidoid.util;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-utils
@@ -28,6 +30,7 @@ package org.rapidoid.util;
  * ONLY APPEND NEW ELEMENTS!
  */
 
+@Authors("Nikolche Mihajlovski")
 public enum TypeKind implements Constants {
 
 	NULL(F, F, T), BOOLEAN(T, F, T), BYTE(T, T, T), SHORT(T, T, T), CHAR(T, T, T), INT(T, T, T), LONG(T, T, T), FLOAT(

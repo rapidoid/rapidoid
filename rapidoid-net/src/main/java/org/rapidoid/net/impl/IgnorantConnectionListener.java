@@ -1,5 +1,6 @@
 package org.rapidoid.net.impl;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.net.abstracts.Channel;
 
 /*
@@ -22,6 +23,7 @@ import org.rapidoid.net.abstracts.Channel;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class IgnorantConnectionListener implements CtxListener {
 
 	@Override

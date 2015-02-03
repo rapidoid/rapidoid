@@ -20,8 +20,10 @@ package org.rapidoid.inmem;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.beany.Prop;
 
+@Authors("Nikolche Mihajlovski")
 public class RelPair {
 
 	final String name;

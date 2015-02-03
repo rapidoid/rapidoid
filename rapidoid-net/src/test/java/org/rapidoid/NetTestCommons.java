@@ -20,6 +20,7 @@ package org.rapidoid;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.TCP;
 import org.rapidoid.net.TCPServer;
@@ -27,6 +28,7 @@ import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.UTILS;
 
+@Authors("Nikolche Mihajlovski")
 public abstract class NetTestCommons extends TestCommons {
 
 	protected void server(Protocol protocol, Runnable client) {

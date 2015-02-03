@@ -1,5 +1,7 @@
 package org.rapidoid.pages.entity;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-pages
@@ -20,6 +22,7 @@ package org.rapidoid.pages.entity;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class Person {
 
 	public long id;

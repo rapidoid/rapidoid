@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import java.io.File;
 import java.nio.ByteBuffer;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.inject.IoC;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
@@ -31,6 +32,7 @@ import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
+@Authors("Nikolche Mihajlovski")
 public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	private final HttpParser parser = IoC.singleton(HttpParser.class);

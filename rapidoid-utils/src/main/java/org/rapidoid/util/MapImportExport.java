@@ -22,6 +22,9 @@ package org.rapidoid.util;
 
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public class MapImportExport implements ImportExport {
 
 	private final Map<String, Object> props;

@@ -2,6 +2,8 @@ package org.rapidoid.inmem;
 
 import java.io.Serializable;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-inmem
@@ -22,6 +24,7 @@ import java.io.Serializable;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface EntityLinksContainer extends Serializable {
 
 	EntityLinks getEntityLinks();

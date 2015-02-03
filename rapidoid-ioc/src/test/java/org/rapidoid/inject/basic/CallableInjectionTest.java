@@ -20,10 +20,12 @@ package org.rapidoid.inject.basic;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.inject.IoC;
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class CallableInjectionTest extends TestCommons {
 
 	@Test

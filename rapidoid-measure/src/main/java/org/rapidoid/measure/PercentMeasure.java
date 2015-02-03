@@ -22,6 +22,9 @@ package org.rapidoid.measure;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public class PercentMeasure implements Measure {
 
 	private final AtomicInteger total = new AtomicInteger();

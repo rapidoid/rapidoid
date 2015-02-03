@@ -1,5 +1,7 @@
 package org.rapidoid.data;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-buffer
@@ -20,6 +22,7 @@ package org.rapidoid.data;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface Data {
 
 	String get();

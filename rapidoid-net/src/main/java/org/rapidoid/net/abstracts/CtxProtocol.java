@@ -1,5 +1,7 @@
 package org.rapidoid.net.abstracts;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-net
@@ -20,6 +22,7 @@ package org.rapidoid.net.abstracts;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface CtxProtocol<T> {
 
 	boolean isInitial();

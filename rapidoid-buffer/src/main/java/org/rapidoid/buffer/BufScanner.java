@@ -1,5 +1,6 @@
 package org.rapidoid.buffer;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.Constants;
 
 /*
@@ -22,6 +23,7 @@ import org.rapidoid.util.Constants;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface BufScanner extends Constants {
 
 	int STOP = Integer.MIN_VALUE / 2;

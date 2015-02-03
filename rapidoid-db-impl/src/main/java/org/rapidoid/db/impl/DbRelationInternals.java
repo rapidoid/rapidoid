@@ -2,6 +2,8 @@ package org.rapidoid.db.impl;
 
 import java.util.Set;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-db-impl
@@ -22,6 +24,7 @@ import java.util.Set;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface DbRelationInternals {
 
 	boolean addId(long id);

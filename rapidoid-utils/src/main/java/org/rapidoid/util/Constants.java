@@ -2,6 +2,8 @@ package org.rapidoid.util;
 
 import java.nio.charset.Charset;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-utils
@@ -22,6 +24,7 @@ import java.nio.charset.Charset;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface Constants {
 
 	Object[] EMPTY_ARRAY = {};

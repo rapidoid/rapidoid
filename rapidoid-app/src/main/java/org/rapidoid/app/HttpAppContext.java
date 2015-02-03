@@ -26,20 +26,22 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.MultiData;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeBody;
-import org.rapidoid.http.HttpSuccessException;
 import org.rapidoid.http.HttpExchangeHeaders;
 import org.rapidoid.http.HttpHeader;
 import org.rapidoid.http.HttpNotFoundException;
+import org.rapidoid.http.HttpSuccessException;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.net.mime.MediaType;
 
+@Authors("Nikolche Mihajlovski")
 public class HttpAppContext implements AppContext {
 
 	private final HttpExchange x;

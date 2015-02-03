@@ -2,6 +2,8 @@ package org.rapidoid.model;
 
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-model
@@ -22,6 +24,7 @@ import java.util.List;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface Item extends IModel {
 
 	String id();

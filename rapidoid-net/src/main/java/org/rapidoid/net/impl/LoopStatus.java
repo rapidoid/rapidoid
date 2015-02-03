@@ -1,5 +1,7 @@
 package org.rapidoid.net.impl;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-net
@@ -20,6 +22,7 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public enum LoopStatus {
 
 	INIT, BEFORE_LOOP, LOOP, AFTER_LOOP, STOPPED;

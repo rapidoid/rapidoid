@@ -22,11 +22,13 @@ package org.rapidoid.pages;
 
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Scan;
 
+@Authors("Nikolche Mihajlovski")
 public class PageHandler implements Handler {
 
 	@Override

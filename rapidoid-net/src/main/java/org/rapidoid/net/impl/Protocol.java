@@ -1,5 +1,6 @@
 package org.rapidoid.net.impl;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.util.Constants;
 
@@ -23,6 +24,7 @@ import org.rapidoid.util.Constants;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface Protocol extends Constants {
 
 	long ALL = -1;

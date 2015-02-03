@@ -20,10 +20,12 @@ package org.rapidoid.db.model;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.db.AbstractEntity;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbList;
 
+@Authors("Nikolche Mihajlovski")
 public class Profile extends AbstractEntity {
 
 	private static final long serialVersionUID = 7386682836039719457L;

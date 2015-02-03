@@ -20,11 +20,13 @@ package org.rapidoid.demo.db;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.config.Conf;
 import org.rapidoid.db.DB;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
+@Authors("Nikolche Mihajlovski")
 public class DbCRUDBenchmark {
 
 	public static void main(String[] args) {

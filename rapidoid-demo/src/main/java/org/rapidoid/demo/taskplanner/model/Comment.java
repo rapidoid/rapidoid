@@ -1,5 +1,6 @@
 package org.rapidoid.demo.taskplanner.model;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.db.AbstractEntity;
 import org.rapidoid.db.DB;
@@ -28,6 +29,7 @@ import org.rapidoid.db.DbSet;
 
 @SuppressWarnings("serial")
 @DbEntity
+@Authors("Nikolche Mihajlovski")
 public class Comment extends AbstractEntity {
 
 	public String content;

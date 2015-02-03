@@ -1,5 +1,6 @@
 package org.rapidoid.db.model;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Relation;
 import org.rapidoid.db.DbColumn;
 import org.rapidoid.db.DbRef;
@@ -26,6 +27,7 @@ import org.rapidoid.db.Entity;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface IPost extends Entity {
 
 	DbColumn<String> content();

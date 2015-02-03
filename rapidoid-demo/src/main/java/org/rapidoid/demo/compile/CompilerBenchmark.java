@@ -20,12 +20,14 @@ package org.rapidoid.demo.compile;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.compile.Compile;
 import org.rapidoid.config.Conf;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.Int;
 
+@Authors("Nikolche Mihajlovski")
 public class CompilerBenchmark {
 
 	public static void main(String[] args) throws Throwable {

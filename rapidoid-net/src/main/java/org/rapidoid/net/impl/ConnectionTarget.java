@@ -23,8 +23,10 @@ package org.rapidoid.net.impl;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class ConnectionTarget {
 
 	SocketChannel socketChannel;

@@ -22,12 +22,14 @@ package org.rapidoid.model.impl;
 
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class BeanListItems<T> extends ListItems {
 
 	private static final long serialVersionUID = 7346765152583871241L;

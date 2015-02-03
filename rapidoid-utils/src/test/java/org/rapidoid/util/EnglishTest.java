@@ -20,9 +20,11 @@ package org.rapidoid.util;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class EnglishTest extends TestCommons {
 
 	@Test

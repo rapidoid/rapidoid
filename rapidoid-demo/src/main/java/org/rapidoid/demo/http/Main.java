@@ -20,9 +20,11 @@ package org.rapidoid.demo.http;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.config.Conf;
 import org.rapidoid.net.TCP;
 
+@Authors("Nikolche Mihajlovski")
 public class Main {
 
 	public static void main(String[] args) {

@@ -20,8 +20,10 @@ package org.rapidoid.html.customtag;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.Tag;
 
+@Authors("Nikolche Mihajlovski")
 public interface ColspanTag extends Tag {
 
 }

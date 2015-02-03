@@ -22,10 +22,12 @@ package org.rapidoid.db.impl;
 
 import java.util.HashSet;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.db.Database;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class DefaultDbRef<E> extends DbRelsCommons<E> implements DbRef<E> {
 
 	private static final long serialVersionUID = -1239566356630772624L;

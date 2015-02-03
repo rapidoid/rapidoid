@@ -37,6 +37,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Pattern;
 
+/**
+ * @author Nikolche Mihajlovski
+ */
 public class U {
 
 	private U() {

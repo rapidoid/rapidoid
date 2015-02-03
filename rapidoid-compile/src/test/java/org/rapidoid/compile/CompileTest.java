@@ -25,6 +25,7 @@ import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.util.Set;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.log.Log;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.Cls;
@@ -32,6 +33,7 @@ import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class CompileTest extends TestCommons {
 
 	@Test

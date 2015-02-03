@@ -1,5 +1,7 @@
 package org.rapidoid.app;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-app
@@ -20,6 +22,7 @@ package org.rapidoid.app;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class SettingsScreenBuiltIn extends Screen {
 
 	public Object content() {

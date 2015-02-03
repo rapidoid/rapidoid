@@ -1,5 +1,6 @@
 package org.rapidoid.oauth;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.config.Conf;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.UTILS;
@@ -24,6 +25,7 @@ import org.rapidoid.util.UTILS;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class DefaultOAuthStateCheck implements OAuthStateCheck {
 
 	@Override

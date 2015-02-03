@@ -1,5 +1,7 @@
 package org.rapidoid.activity;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-activity
@@ -20,6 +22,7 @@ package org.rapidoid.activity;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface Activity<T> {
 
 	String name();

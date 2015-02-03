@@ -20,6 +20,7 @@ package org.rapidoid.http;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.bytes.BytesUtil;
@@ -34,6 +35,7 @@ import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.Bool;
 import org.rapidoid.wrap.Int;
 
+@Authors("Nikolche Mihajlovski")
 public class MaxHttpPerfTest {
 
 	protected static final byte[] PREFIX = "Connection:".getBytes();

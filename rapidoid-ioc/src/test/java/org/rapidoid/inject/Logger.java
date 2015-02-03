@@ -1,5 +1,7 @@
 package org.rapidoid.inject;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-ioc
@@ -20,5 +22,6 @@ package org.rapidoid.inject;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class Logger {
 }

@@ -3,6 +3,7 @@ package org.rapidoid.beany;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.TypeKind;
 
 /*
@@ -25,6 +26,7 @@ import org.rapidoid.util.TypeKind;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface Prop {
 
 	<T> T get(Object target);

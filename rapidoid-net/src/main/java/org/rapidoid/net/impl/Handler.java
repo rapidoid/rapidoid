@@ -1,5 +1,7 @@
 package org.rapidoid.net.impl;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-net
@@ -20,6 +22,7 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface Handler<X> {
 
 	void handle(X x);

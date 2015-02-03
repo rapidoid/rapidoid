@@ -24,12 +24,14 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.SpecificTagBase;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagBase;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class TagProxy implements InvocationHandler, Serializable {
 
 	private static final long serialVersionUID = 8876053750757191711L;

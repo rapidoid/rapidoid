@@ -20,6 +20,7 @@ package org.rapidoid.net;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.inject.IoC;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.net.impl.RapidoidClientLoop;
@@ -27,6 +28,7 @@ import org.rapidoid.net.impl.RapidoidServerLoop;
 import org.rapidoid.net.impl.TCPClientBuilder;
 import org.rapidoid.net.impl.TCPServerBuilder;
 
+@Authors("Nikolche Mihajlovski")
 public class TCP {
 
 	public static TCPServerBuilder server() {

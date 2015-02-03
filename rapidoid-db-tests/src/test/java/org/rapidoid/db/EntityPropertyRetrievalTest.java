@@ -22,12 +22,14 @@ package org.rapidoid.db;
 
 import java.util.Set;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.db.model.IPerson;
 import org.rapidoid.db.model.Person;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class EntityPropertyRetrievalTest extends DbTestCommons {
 
 	@Test

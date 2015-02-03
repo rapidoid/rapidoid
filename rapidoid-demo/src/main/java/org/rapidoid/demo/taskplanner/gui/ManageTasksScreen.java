@@ -20,6 +20,7 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Order;
 import org.rapidoid.app.Screen;
 import org.rapidoid.demo.taskplanner.model.Task;
@@ -27,6 +28,7 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.widget.GridWidget;
 
 @Order(2)
+@Authors("Nikolche Mihajlovski")
 public class ManageTasksScreen extends Screen {
 
 	public String title = "Tasks Overview";

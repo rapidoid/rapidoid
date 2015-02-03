@@ -1,5 +1,7 @@
 package org.rapidoid.pool;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-utils
@@ -20,6 +22,7 @@ package org.rapidoid.pool;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface Pool<T> {
 
 	T get();

@@ -3,6 +3,8 @@ package org.rapidoid.http;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-http
@@ -23,6 +25,7 @@ import java.util.Map;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface HttpSession extends Serializable {
 
 	void openSession(String sessionId);

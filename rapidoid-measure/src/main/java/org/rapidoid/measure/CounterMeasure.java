@@ -22,6 +22,9 @@ package org.rapidoid.measure;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public class CounterMeasure implements Measure {
 
 	private AtomicInteger counter = new AtomicInteger();

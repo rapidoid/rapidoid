@@ -26,8 +26,11 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.rapidoid.annotation.Authors;
+
 @Target({ TYPE, FIELD, METHOD })
 @Retention(RUNTIME)
+@Authors("Nikolche Mihajlovski")
 public @interface CanInsert {
 
 	String[] value();

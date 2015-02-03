@@ -23,6 +23,7 @@ package org.rapidoid.db.model;
 import java.util.Comparator;
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.db.DB;
 import org.rapidoid.lambda.Predicate;
@@ -33,6 +34,7 @@ import org.rapidoid.model.impl.BeanListItems;
 import org.rapidoid.util.U;
 
 @SuppressWarnings("serial")
+@Authors("Nikolche Mihajlovski")
 public class DbItems<T> extends BeanListItems<T> {
 
 	private final Predicate<T> match;

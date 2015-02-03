@@ -1,5 +1,6 @@
 package org.rapidoid.util;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
 
@@ -23,6 +24,7 @@ import org.testng.annotations.Test;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class AppCtxTest extends TestCommons {
 
 	@Test

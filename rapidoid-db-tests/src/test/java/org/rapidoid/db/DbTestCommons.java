@@ -20,6 +20,7 @@ package org.rapidoid.db;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.test.TestCommons;
@@ -27,6 +28,7 @@ import org.rapidoid.util.AppCtx;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
+@Authors("Nikolche Mihajlovski")
 public abstract class DbTestCommons extends TestCommons {
 
 	@BeforeMethod(alwaysRun = true)

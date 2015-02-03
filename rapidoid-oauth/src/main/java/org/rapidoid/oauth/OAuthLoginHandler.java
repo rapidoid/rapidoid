@@ -20,9 +20,11 @@ package org.rapidoid.oauth;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 
+@Authors("Nikolche Mihajlovski")
 public class OAuthLoginHandler implements Handler {
 
 	private final OAuthProvider provider;

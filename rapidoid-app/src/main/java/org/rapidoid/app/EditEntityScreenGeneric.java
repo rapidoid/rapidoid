@@ -20,12 +20,14 @@ package org.rapidoid.app;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.FormWidget;
 
+@Authors("Nikolche Mihajlovski")
 public class EditEntityScreenGeneric extends Screen {
 
 	@Session

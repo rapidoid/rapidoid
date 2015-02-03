@@ -1,6 +1,7 @@
 package org.rapidoid.net;
 
 import org.rapidoid.activity.Activity;
+import org.rapidoid.annotation.Authors;
 
 /*
  * #%L
@@ -22,6 +23,7 @@ import org.rapidoid.activity.Activity;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface TCPServer extends Activity<TCPServer> {
 
 	String process(String input);

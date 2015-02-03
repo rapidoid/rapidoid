@@ -3,6 +3,8 @@ package org.rapidoid.util;
 import java.util.Collections;
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-utils
@@ -23,6 +25,7 @@ import java.util.List;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface CommonRoles {
 
 	String ANYBODY = "ANYBODY";

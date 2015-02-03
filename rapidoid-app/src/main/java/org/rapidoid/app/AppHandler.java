@@ -20,6 +20,7 @@ package org.rapidoid.app;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.db.DB;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
@@ -29,6 +30,7 @@ import org.rapidoid.pages.Pages;
 import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.util.CustomizableClassLoader;
 
+@Authors("Nikolche Mihajlovski")
 public class AppHandler implements Handler {
 
 	private CustomizableClassLoader classLoader;

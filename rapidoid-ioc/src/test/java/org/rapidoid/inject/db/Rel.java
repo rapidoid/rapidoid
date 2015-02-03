@@ -20,8 +20,10 @@ package org.rapidoid.inject.db;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Inject;
 
+@Authors("Nikolche Mihajlovski")
 public class Rel {
 	@Inject
 	Database db;

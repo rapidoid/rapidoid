@@ -20,6 +20,9 @@ package org.rapidoid.lambda;
  * #L%
  */
 
+/**
+ * @author Nikolche Mihajlovski
+ */
 public interface Operation<T> {
 
 	void execute(T obj) throws Exception;

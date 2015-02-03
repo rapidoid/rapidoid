@@ -1,5 +1,7 @@
 package org.rapidoid.bytes;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-buffer
@@ -20,6 +22,7 @@ package org.rapidoid.bytes;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface Bytes {
 
 	byte get(int position);

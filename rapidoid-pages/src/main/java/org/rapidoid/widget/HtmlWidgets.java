@@ -20,6 +20,7 @@ package org.rapidoid.widget;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
 import org.rapidoid.model.Item;
@@ -29,6 +30,7 @@ import org.rapidoid.pages.impl.MultiLanguageText;
 import org.rapidoid.pages.impl.SimpleHardcodedTag;
 import org.rapidoid.var.Var;
 
+@Authors("Nikolche Mihajlovski")
 public abstract class HtmlWidgets extends HTML {
 
 	public static Object i18n(String multiLanguageText, Object... formatArgs) {

@@ -1,5 +1,7 @@
 package org.rapidoid.security;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-security
@@ -20,6 +22,7 @@ package org.rapidoid.security;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class User {
 
 	public String username;

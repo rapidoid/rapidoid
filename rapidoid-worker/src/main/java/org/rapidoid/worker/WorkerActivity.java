@@ -1,6 +1,7 @@
 package org.rapidoid.worker;
 
 import org.rapidoid.activity.AbstractThreadActivity;
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.U;
@@ -25,6 +26,7 @@ import org.rapidoid.util.U;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class WorkerActivity<IN, OUT> extends AbstractThreadActivity<Worker<IN, OUT>> implements Worker<IN, OUT> {
 
 	private final WorkerQueue<IN> input;

@@ -1,5 +1,7 @@
 package org.rapidoid.demo.http;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-demo
@@ -20,6 +22,7 @@ package org.rapidoid.demo.http;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class Msg {
 
 	private final String message;

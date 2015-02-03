@@ -20,9 +20,11 @@ package org.rapidoid.html.tag;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.SpecificTag;
 import org.rapidoid.html.Tag;
 
+@Authors("Nikolche Mihajlovski")
 public interface FormTag extends SpecificTag<FormTag> {
 
 	String action();

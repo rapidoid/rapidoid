@@ -22,6 +22,9 @@ import java.util.Map;
  * #L%
  */
 
+/**
+ * @author Nikolche Mihajlovski
+ */
 public class Lambdas {
 
 	public static <FROM, TO> Mapper<FROM, TO> mapper(final Map<FROM, TO> map) {

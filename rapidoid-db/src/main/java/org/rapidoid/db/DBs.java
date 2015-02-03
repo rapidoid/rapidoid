@@ -22,10 +22,12 @@ package org.rapidoid.db;
 import java.util.Collections;
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.UTILS;
 
+@Authors("Nikolche Mihajlovski")
 public class DBs {
 
 	private static final Map<String, Database> DB_INSTANCES;

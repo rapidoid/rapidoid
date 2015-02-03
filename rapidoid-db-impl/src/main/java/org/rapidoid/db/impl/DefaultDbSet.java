@@ -23,9 +23,11 @@ package org.rapidoid.db.impl;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.db.Database;
 import org.rapidoid.db.DbSet;
 
+@Authors("Nikolche Mihajlovski")
 public class DefaultDbSet<E> extends DefaultDbCollection<E> implements DbSet<E> {
 
 	public DefaultDbSet(Database db, Object holder, String relation) {

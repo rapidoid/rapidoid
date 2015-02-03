@@ -23,6 +23,9 @@ package org.rapidoid.net.abstracts;
 import java.io.File;
 import java.nio.ByteBuffer;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public interface CtxWrite<T> {
 
 	T write(String s);

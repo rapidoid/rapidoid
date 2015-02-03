@@ -20,12 +20,14 @@ package org.rapidoid.app;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.db.DB;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeHolder;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public abstract class Screen extends AppGUI implements HttpExchangeHolder {
 
 	@Session

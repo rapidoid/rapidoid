@@ -21,8 +21,10 @@ package org.rapidoid.net.mime;
  */
 
 import org.rapidoid.NetTestCommons;
+import org.rapidoid.annotation.Authors;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class MediaTypeTest extends NetTestCommons {
 
 	@Test

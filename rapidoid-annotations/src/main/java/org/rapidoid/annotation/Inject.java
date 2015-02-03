@@ -28,6 +28,7 @@ import java.lang.annotation.Target;
 
 @Target({ FIELD })
 @Retention(RUNTIME)
+@Authors("Nikolche Mihajlovski")
 public @interface Inject {
 
 	boolean optional() default false;

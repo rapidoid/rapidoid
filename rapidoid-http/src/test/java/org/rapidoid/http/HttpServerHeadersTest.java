@@ -24,10 +24,12 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.apache.commons.io.FileUtils;
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.IO;
 import org.rapidoid.util.Rnd;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class HttpServerHeadersTest extends HttpTestCommons {
 
 	@Test

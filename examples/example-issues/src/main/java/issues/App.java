@@ -2,6 +2,7 @@ package issues;
 
 import org.rapidoid.app.Apps;
 
+@Authors("Nikolche Mihajlovski")
 public class App {
 
 	public String title = "Issue Management";

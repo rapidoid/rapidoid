@@ -20,9 +20,11 @@ package custom;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.db.impl.inmem.DbImpl;
 import org.rapidoid.log.Log;
 
+@Authors("Nikolche Mihajlovski")
 public class CustomizedDbImpl extends DbImpl {
 
 	private static final long serialVersionUID = -3304900771653853896L;

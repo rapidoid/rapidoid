@@ -31,6 +31,9 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
+/**
+ * @author Nikolche Mihajlovski
+ */
 public abstract class TestCommons {
 
 	protected static final Random RND = new Random();

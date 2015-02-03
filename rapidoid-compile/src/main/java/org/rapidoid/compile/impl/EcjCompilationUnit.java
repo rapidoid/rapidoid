@@ -24,8 +24,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.jdt.internal.compiler.env.ICompilationUnit;
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class EcjCompilationUnit implements ICompilationUnit {
 
 	private static final Pattern PACKAGE_PATTERN = Pattern.compile("package\\s+([\\w\\.]+?)\\s*;");
@@ -76,7 +78,7 @@ public class EcjCompilationUnit implements ICompilationUnit {
 		if (m.find()) {
 			return m.group(1);
 		} else {
-			throw U.rte("Couldn't find/infer the public class name from the source!");
+			throw U.rte("Couldn't find/infer the compilation unit name from the source!");
 		}
 	}
 

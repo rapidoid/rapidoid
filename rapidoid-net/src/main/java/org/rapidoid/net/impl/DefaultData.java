@@ -20,10 +20,12 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.buffer.BufProvider;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.Range;
 
+@Authors("Nikolche Mihajlovski")
 public class DefaultData implements Data {
 
 	private final BufProvider src;

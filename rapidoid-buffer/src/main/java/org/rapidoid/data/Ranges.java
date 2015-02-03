@@ -20,11 +20,13 @@ package org.rapidoid.data;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class Ranges {
 
 	public final Range[] ranges;

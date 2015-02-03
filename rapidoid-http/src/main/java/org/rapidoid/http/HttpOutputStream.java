@@ -23,6 +23,9 @@ package org.rapidoid.http;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public class HttpOutputStream extends OutputStream {
 
 	private final OutputStream out;

@@ -22,6 +22,9 @@ package org.rapidoid.model;
 
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public interface Items extends IModel, Iterable<Item> {
 
 	void insert(int index, Item item);

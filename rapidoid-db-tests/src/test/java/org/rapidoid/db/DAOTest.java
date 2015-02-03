@@ -20,6 +20,7 @@ package org.rapidoid.db;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.db.model.IPerson;
 import org.rapidoid.db.model.Person;
 import org.testng.annotations.Test;
@@ -30,6 +31,7 @@ class PersonService extends DAO<Person> {
 class PersonDAO extends DAO<IPerson> {
 }
 
+@Authors("Nikolche Mihajlovski")
 public class DAOTest extends DbTestCommons {
 
 	@Test

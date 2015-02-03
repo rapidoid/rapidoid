@@ -20,8 +20,10 @@ package org.rapidoid.http;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class HttpServerTest extends HttpTestCommons {
 
 	@Test

@@ -20,8 +20,10 @@ package org.rapidoid.html;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.var.Var;
 
+@Authors("Nikolche Mihajlovski")
 public interface SpecificTagBase<TAG> {
 
 	TAG content(Object... content);

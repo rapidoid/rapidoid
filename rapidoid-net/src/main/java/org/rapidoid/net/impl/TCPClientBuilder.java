@@ -20,9 +20,11 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.net.TCPClient;
 import org.rapidoid.util.Builder;
 
+@Authors("Nikolche Mihajlovski")
 public interface TCPClientBuilder extends Builder<TCPClient> {
 
 	TCPClientBuilder connections(int connections);

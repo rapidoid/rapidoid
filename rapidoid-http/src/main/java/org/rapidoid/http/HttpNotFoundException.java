@@ -1,5 +1,7 @@
 package org.rapidoid.http;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-http
@@ -21,6 +23,7 @@ package org.rapidoid.http;
  */
 
 @SuppressWarnings("serial")
+@Authors("Nikolche Mihajlovski")
 public class HttpNotFoundException extends RuntimeException {
 
 	private static final HttpNotFoundException INSTANCE = new HttpNotFoundException();

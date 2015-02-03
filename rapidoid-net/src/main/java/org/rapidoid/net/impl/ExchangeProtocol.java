@@ -20,11 +20,13 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Cls;
 
+@Authors("Nikolche Mihajlovski")
 public abstract class ExchangeProtocol<T extends DefaultExchange<?, ?>> implements Protocol, CtxListener {
 
 	private final Class<T> exchangeType;

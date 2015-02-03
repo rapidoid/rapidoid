@@ -21,9 +21,11 @@ package org.rapidoid.compile;
  */
 
 import org.eclipse.jdt.internal.compiler.env.ICompilationUnit;
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.compile.impl.EcjCompilationUnit;
 import org.rapidoid.compile.impl.EcjCompiler;
 
+@Authors("Nikolche Mihajlovski")
 public class Compile {
 
 	private static EcjCompiler getCompiler() {

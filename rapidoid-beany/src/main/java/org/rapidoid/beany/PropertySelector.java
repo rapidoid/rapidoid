@@ -23,8 +23,10 @@ package org.rapidoid.beany;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.lambda.Predicate;
 
+@Authors("Nikolche Mihajlovski")
 public interface PropertySelector extends Predicate<Prop>, Comparator<Prop>, Serializable {
 
 	String[] requiredProperties();

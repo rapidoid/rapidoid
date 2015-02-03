@@ -1,5 +1,6 @@
 package org.rapidoid.demo.taskplanner.model;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Optional;
@@ -43,6 +44,7 @@ import org.rapidoid.util.CommonRoles;
 @CanInsert(CommonRoles.LOGGED_IN)
 @CanDelete({ CommonRoles.OWNER, CommonRoles.ADMIN })
 @DbEntity
+@Authors("Nikolche Mihajlovski")
 public class Task extends AbstractEntity {
 
 	@Display

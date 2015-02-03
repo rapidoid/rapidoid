@@ -22,12 +22,14 @@ package org.rapidoid.net.impl;
 
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufProvider;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 
+@Authors("Nikolche Mihajlovski")
 public class DefaultBinaryMultiData implements BinaryMultiData {
 
 	private final BufProvider src;

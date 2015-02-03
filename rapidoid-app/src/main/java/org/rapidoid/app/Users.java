@@ -20,12 +20,14 @@ package org.rapidoid.app;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.db.DB;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UserInfo;
 
+@Authors("Nikolche Mihajlovski")
 public class Users {
 
 	public static <T> T current(Class<T> userClass) {

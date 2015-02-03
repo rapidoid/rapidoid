@@ -24,9 +24,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.Tag;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class HighlightWidget extends AbstractWidget {
 
 	private String text;

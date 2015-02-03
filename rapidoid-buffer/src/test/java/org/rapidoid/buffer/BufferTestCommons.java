@@ -22,11 +22,13 @@ package org.rapidoid.buffer;
 
 import java.nio.ByteBuffer;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.test.TestCommons;
 import org.testng.Assert;
 
+@Authors("Nikolche Mihajlovski")
 public class BufferTestCommons extends TestCommons {
 
 	protected void eq(String whole, Range range, String expected) {

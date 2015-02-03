@@ -20,9 +20,11 @@ package org.rapidoid.db;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.db.model.IPost;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class DbInterfaceEqualityTest extends DbTestCommons {
 
 	@Test

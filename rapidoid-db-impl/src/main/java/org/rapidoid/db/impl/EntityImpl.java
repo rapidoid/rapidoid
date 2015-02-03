@@ -23,6 +23,7 @@ package org.rapidoid.db.impl;
 import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentMap;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Relation;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
@@ -35,6 +36,7 @@ import org.rapidoid.db.Entity;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class EntityImpl implements Entity {
 
 	private static final long serialVersionUID = -5556123216690345146L;

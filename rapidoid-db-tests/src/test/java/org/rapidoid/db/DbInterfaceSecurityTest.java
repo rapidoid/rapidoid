@@ -20,6 +20,7 @@ package org.rapidoid.db;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanRead;
@@ -46,6 +47,7 @@ interface IBar extends Entity {
 	DbColumn<String> desc();
 }
 
+@Authors("Nikolche Mihajlovski")
 public class DbInterfaceSecurityTest extends DbTestCommons {
 
 	@Test(expectedExceptions = SecurityException.class)

@@ -22,6 +22,9 @@ package org.rapidoid.net.impl;
 
 import java.nio.channels.SocketChannel;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public class RapidoidChannel {
 
 	final SocketChannel socketChannel;

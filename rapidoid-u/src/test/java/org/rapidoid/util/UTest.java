@@ -29,6 +29,10 @@ import java.util.Set;
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
 
+/**
+ * @author Nikolche Mihajlovski
+ * @author Marina Mihajlovska
+ */
 public class UTest extends TestCommons {
 
 	@Test

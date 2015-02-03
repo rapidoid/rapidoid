@@ -1,5 +1,6 @@
 package org.rapidoid.html;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.var.Var;
 
 /*
@@ -22,6 +23,7 @@ import org.rapidoid.var.Var;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface TagBase<TAG extends Tag> {
 
 	String tagKind();

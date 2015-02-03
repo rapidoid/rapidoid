@@ -20,9 +20,11 @@ package org.rapidoid.security;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.CommonRoles;
 
+@Authors("Nikolche Mihajlovski")
 public abstract class SecurityTestCommons extends TestCommons implements CommonRoles {
 
 	protected void checkPermissions(String username, Class<?> clazz, Object target, String propertyName,

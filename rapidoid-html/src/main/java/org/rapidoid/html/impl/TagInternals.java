@@ -1,5 +1,7 @@
 package org.rapidoid.html.impl;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-html
@@ -20,6 +22,7 @@ package org.rapidoid.html.impl;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface TagInternals {
 
 	TagImpl base();

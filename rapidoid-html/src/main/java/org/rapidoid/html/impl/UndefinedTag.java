@@ -20,11 +20,13 @@ package org.rapidoid.html.impl;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagProcessor;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
+@Authors("Nikolche Mihajlovski")
 public class UndefinedTag implements Tag {
 
 	@Override

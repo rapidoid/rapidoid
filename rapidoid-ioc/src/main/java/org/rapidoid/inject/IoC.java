@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Autocreate;
 import org.rapidoid.annotation.Init;
 import org.rapidoid.annotation.Inject;
@@ -44,6 +45,7 @@ import org.rapidoid.util.F3;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
+@Authors("Nikolche Mihajlovski")
 public class IoC {
 
 	private static final Map<Class<?>, Object> SINGLETONS = U.map();

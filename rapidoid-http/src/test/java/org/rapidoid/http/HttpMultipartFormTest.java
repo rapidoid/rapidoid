@@ -23,11 +23,13 @@ package org.rapidoid.http;
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class HttpMultipartFormTest extends HttpTestCommons {
 
 	@Test

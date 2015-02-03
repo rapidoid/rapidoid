@@ -1,5 +1,6 @@
 package org.rapidoid.demo.taskplanner.gui;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.app.Screen;
 
 /*
@@ -22,6 +23,7 @@ import org.rapidoid.app.Screen;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class HomeScreen extends Screen {
 
 	public String title = "Welcome!";

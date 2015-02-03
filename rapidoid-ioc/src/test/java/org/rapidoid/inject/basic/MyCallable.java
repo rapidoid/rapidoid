@@ -22,8 +22,10 @@ package org.rapidoid.inject.basic;
 
 import java.util.concurrent.Callable;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Inject;
 
+@Authors("Nikolche Mihajlovski")
 public class MyCallable implements Callable<String> {
 
 	@Inject

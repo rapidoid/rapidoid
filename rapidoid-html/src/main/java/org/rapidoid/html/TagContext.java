@@ -2,6 +2,7 @@ package org.rapidoid.html;
 
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.var.Var;
 
 /*
@@ -24,6 +25,7 @@ import org.rapidoid.var.Var;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface TagContext {
 
 	int newBinding(Var<Object> binding);

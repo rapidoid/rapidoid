@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.beany.BeanProperties;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
@@ -36,6 +37,7 @@ import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 @SuppressWarnings("serial")
+@Authors("Nikolche Mihajlovski")
 public class Models {
 
 	public static <T> Items beanItems(Class<T> beanType, Object... beans) {

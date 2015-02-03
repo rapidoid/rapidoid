@@ -22,6 +22,7 @@ package org.rapidoid.demo.taskplanner.model;
 
 import java.util.Date;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.db.AbstractEntity;
@@ -30,6 +31,7 @@ import org.rapidoid.db.DbSet;
 
 @Scaffold
 @SuppressWarnings("serial")
+@Authors("Nikolche Mihajlovski")
 public class User extends AbstractEntity {
 
 	@Display

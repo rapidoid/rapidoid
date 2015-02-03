@@ -22,9 +22,11 @@ package org.rapidoid.app;
 
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.db.Database;
 import org.rapidoid.widget.DataManager;
 
+@Authors("Nikolche Mihajlovski")
 public class DbDataManager implements DataManager {
 
 	protected final Database db;

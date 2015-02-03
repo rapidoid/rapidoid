@@ -20,8 +20,10 @@ package org.rapidoid.net.abstracts;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.net.impl.ConnState;
 
+@Authors("Nikolche Mihajlovski")
 public interface CtxState<T> {
 
 	ConnState state();

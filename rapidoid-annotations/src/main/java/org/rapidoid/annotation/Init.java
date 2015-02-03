@@ -28,5 +28,6 @@ import java.lang.annotation.Target;
 
 @Target({ METHOD })
 @Retention(RUNTIME)
+@Authors("Nikolche Mihajlovski")
 public @interface Init {
 }

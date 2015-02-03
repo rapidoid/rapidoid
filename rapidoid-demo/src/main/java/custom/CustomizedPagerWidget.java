@@ -1,5 +1,6 @@
 package custom;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.Tag;
 import org.rapidoid.var.Var;
 import org.rapidoid.widget.PagerWidget;
@@ -24,6 +25,7 @@ import org.rapidoid.widget.PagerWidget;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class CustomizedPagerWidget extends PagerWidget {
 
 	public CustomizedPagerWidget(int from, int to, Var<Integer> pageNumber) {

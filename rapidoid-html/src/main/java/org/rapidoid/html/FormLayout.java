@@ -1,5 +1,7 @@
 package org.rapidoid.html;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-html
@@ -20,6 +22,7 @@ package org.rapidoid.html;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public enum FormLayout {
 
 	VERTICAL, HORIZONTAL, INLINE

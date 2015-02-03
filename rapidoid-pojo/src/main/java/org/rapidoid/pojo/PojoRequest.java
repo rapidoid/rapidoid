@@ -22,6 +22,9 @@ package org.rapidoid.pojo;
 
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public interface PojoRequest {
 
 	String command();

@@ -22,6 +22,9 @@ package org.rapidoid.db;
 
 import java.util.Set;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public interface DbSet<E> extends Set<E> {
 
 }

@@ -22,10 +22,12 @@ package org.rapidoid.util;
 
 import java.security.SecureClassLoader;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Predicate;
 
+@Authors("Nikolche Mihajlovski")
 public class CustomizableClassLoader extends SecureClassLoader {
 
 	private final Mapper<String, byte[]> classes;

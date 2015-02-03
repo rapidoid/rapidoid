@@ -6,6 +6,7 @@ import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
 import org.rapidoid.widget.FormWidget;
 
+@Authors("Nikolche Mihajlovski")
 public class NewIssueScreen extends Screen {
 
 	@Session

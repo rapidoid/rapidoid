@@ -20,11 +20,13 @@ package org.rapidoid.oauth;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 
+@Authors("Nikolche Mihajlovski")
 public class OAuthDemo {
 
 	public static void main(String[] args) {

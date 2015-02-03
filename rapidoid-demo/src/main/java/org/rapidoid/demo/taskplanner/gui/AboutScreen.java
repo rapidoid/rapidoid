@@ -20,6 +20,7 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.app.Screen;
 import org.rapidoid.db.DB;
 import org.rapidoid.demo.taskplanner.model.Task;
@@ -36,6 +37,7 @@ class Book {
 	public User author;
 }
 
+@Authors("Nikolche Mihajlovski")
 public class AboutScreen extends Screen {
 
 	public Object content() {

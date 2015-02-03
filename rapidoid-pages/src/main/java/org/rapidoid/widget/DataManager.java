@@ -22,6 +22,9 @@ package org.rapidoid.widget;
 
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public interface DataManager {
 
 	<T> List<T> getAll(Class<T> clazz);

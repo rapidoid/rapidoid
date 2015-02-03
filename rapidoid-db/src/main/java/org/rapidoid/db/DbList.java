@@ -22,6 +22,9 @@ package org.rapidoid.db;
 
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public interface DbList<E> extends List<E> {
 
 }

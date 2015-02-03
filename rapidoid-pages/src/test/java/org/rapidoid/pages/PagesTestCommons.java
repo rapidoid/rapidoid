@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
@@ -38,6 +39,7 @@ import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.var.Var;
 
+@Authors("Nikolche Mihajlovski")
 public class PagesTestCommons extends TestCommons {
 
 	@SuppressWarnings({ "unchecked" })

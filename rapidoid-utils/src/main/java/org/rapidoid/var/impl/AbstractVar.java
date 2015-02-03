@@ -20,10 +20,12 @@ package org.rapidoid.var.impl;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.Exportable;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
+@Authors("Nikolche Mihajlovski")
 public abstract class AbstractVar<T> implements Var<T>, Exportable {
 
 	private static final long serialVersionUID = -6006051524799076017L;

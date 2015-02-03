@@ -1,5 +1,7 @@
 package org.rapidoid.demo.taskplanner.model;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-demo
@@ -20,6 +22,7 @@ package org.rapidoid.demo.taskplanner.model;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public enum Priority {
 	LOW, MEDIUM, HIGH;
 }

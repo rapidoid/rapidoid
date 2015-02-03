@@ -2,6 +2,7 @@ package org.rapidoid.pages.impl;
 
 import java.io.OutputStream;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.impl.UndefinedTag;
 import org.rapidoid.http.HttpExchange;
@@ -26,6 +27,7 @@ import org.rapidoid.http.HttpExchange;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public abstract class HardcodedTag extends UndefinedTag {
 
 	public abstract void render(TagContext ctx, HttpExchange x, PageRenderer renderer, OutputStream out);

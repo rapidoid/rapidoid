@@ -20,6 +20,7 @@ package org.rapidoid.demo.taskplanner.gui.extra;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
@@ -30,6 +31,7 @@ import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 import org.rapidoid.widget.BootstrapWidgets;
 
+@Authors("Nikolche Mihajlovski")
 public class FormsPage extends BootstrapWidgets {
 
 	@Session

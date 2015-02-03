@@ -1,5 +1,7 @@
 package org.rapidoid.widget;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-pages
@@ -20,6 +22,7 @@ package org.rapidoid.widget;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public enum FormMode {
 
 	CREATE, EDIT, SHOW

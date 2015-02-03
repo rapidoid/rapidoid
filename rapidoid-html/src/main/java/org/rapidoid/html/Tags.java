@@ -23,6 +23,7 @@ package org.rapidoid.html;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.impl.ConstantTag;
 import org.rapidoid.html.impl.TagContextImpl;
 import org.rapidoid.html.impl.TagProxy;
@@ -34,6 +35,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 
+@Authors("Nikolche Mihajlovski")
 public class Tags extends BasicUtils {
 
 	public static <T> Var<T> var(T value) {

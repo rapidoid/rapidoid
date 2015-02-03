@@ -20,8 +20,10 @@ package org.rapidoid.demo.taskplanner;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.app.Apps;
 
+@Authors("Nikolche Mihajlovski")
 public class Main {
 
 	public static void main(String[] args) {

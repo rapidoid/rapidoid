@@ -1,5 +1,7 @@
 package org.rapidoid.http;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-http
@@ -20,6 +22,7 @@ package org.rapidoid.http;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface Router {
 
 	void generic(Handler handler);

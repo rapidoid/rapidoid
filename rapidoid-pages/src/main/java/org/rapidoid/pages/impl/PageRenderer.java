@@ -22,10 +22,12 @@ package org.rapidoid.pages.impl;
 
 import java.io.OutputStream;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.impl.TagRenderer;
 import org.rapidoid.http.HttpExchange;
 
+@Authors("Nikolche Mihajlovski")
 public class PageRenderer extends TagRenderer {
 
 	private static final PageRenderer INSTANCE = new PageRenderer();

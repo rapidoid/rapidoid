@@ -1,5 +1,7 @@
 package org.rapidoid.buffer;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-buffer
@@ -20,6 +22,7 @@ package org.rapidoid.buffer;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class IncompleteReadException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;

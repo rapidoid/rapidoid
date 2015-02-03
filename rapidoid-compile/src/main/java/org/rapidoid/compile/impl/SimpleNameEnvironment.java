@@ -25,9 +25,11 @@ import org.eclipse.jdt.internal.compiler.env.AccessRestriction;
 import org.eclipse.jdt.internal.compiler.env.IBinaryType;
 import org.eclipse.jdt.internal.compiler.env.INameEnvironment;
 import org.eclipse.jdt.internal.compiler.env.NameEnvironmentAnswer;
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class SimpleNameEnvironment implements INameEnvironment {
 
 	@Override

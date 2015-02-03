@@ -3,6 +3,7 @@ package org.rapidoid.beany;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
@@ -26,6 +27,7 @@ import org.rapidoid.util.U;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class Metadata {
 
 	public static Map<Class<?>, Annotation> classAnnotations(Class<?> clazz) {

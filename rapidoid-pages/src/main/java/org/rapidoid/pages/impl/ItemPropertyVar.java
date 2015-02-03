@@ -20,10 +20,12 @@ package org.rapidoid.pages.impl;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.model.Item;
 import org.rapidoid.util.ImportExport;
 import org.rapidoid.var.impl.AbstractVar;
 
+@Authors("Nikolche Mihajlovski")
 public class ItemPropertyVar<T> extends AbstractVar<T> {
 
 	private static final long serialVersionUID = -1208784804459879580L;

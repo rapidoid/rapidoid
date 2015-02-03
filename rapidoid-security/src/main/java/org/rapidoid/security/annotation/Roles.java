@@ -26,8 +26,11 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.rapidoid.annotation.Authors;
+
 @Target({ TYPE, METHOD, FIELD })
 @Retention(RUNTIME)
+@Authors("Nikolche Mihajlovski")
 public @interface Roles {
 
 	Role[] value();

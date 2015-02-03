@@ -20,9 +20,11 @@ package org.rapidoid.http;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Dates;
 
+@Authors("Nikolche Mihajlovski")
 public class HttpResponse {
 
 	private static final String CONTENT_LENGTH = "Content-Length:";

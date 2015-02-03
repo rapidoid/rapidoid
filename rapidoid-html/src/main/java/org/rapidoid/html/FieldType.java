@@ -1,5 +1,7 @@
 package org.rapidoid.html;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-html
@@ -20,6 +22,7 @@ package org.rapidoid.html;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public enum FieldType {
 
 	TEXT, PASSWORD, EMAIL, TEXTAREA, RADIOS, CHECKBOXES, CHECKBOX, DROPDOWN, MULTI_SELECT, LABEL

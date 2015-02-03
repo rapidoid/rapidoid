@@ -1,5 +1,7 @@
 package org.rapidoid.compile;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-compile
@@ -20,6 +22,7 @@ package org.rapidoid.compile;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class CodeDiagnostic {
 
 	public String message;

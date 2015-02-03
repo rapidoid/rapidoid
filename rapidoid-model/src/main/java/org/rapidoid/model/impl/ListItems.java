@@ -25,11 +25,13 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class ListItems extends AbstractModel implements Items {
 
 	private static final long serialVersionUID = -4233673233447713903L;

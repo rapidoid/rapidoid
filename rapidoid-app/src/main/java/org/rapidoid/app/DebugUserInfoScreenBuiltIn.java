@@ -20,6 +20,7 @@ package org.rapidoid.app;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.Tag;
 import org.rapidoid.security.Secure;
 import org.rapidoid.security.annotation.DevMode;
@@ -27,6 +28,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.widget.FormWidget;
 
 @DevMode
+@Authors("Nikolche Mihajlovski")
 public class DebugUserInfoScreenBuiltIn extends Screen {
 
 	public Object content() {

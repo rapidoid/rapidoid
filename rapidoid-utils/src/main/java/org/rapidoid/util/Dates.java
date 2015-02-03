@@ -26,6 +26,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public class Dates {
 
 	protected static final Calendar CALENDAR = Calendar.getInstance();

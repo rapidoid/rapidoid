@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.config.Conf;
@@ -31,6 +32,7 @@ import org.rapidoid.net.TCPClient;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements TCPClient {
 
 	private RapidoidWorker[] workers;

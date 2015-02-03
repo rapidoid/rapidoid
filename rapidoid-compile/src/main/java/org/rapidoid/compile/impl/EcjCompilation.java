@@ -27,6 +27,7 @@ import java.util.Set;
 import org.eclipse.jdt.core.compiler.CategorizedProblem;
 import org.eclipse.jdt.internal.compiler.ClassFile;
 import org.eclipse.jdt.internal.compiler.CompilationResult;
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.compile.CodeDiagnostic;
 import org.rapidoid.compile.Compilation;
 import org.rapidoid.lambda.Lambdas;
@@ -35,6 +36,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.util.CustomizableClassLoader;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class EcjCompilation implements Compilation {
 
 	private final Map<String, byte[]> classes = U.map();

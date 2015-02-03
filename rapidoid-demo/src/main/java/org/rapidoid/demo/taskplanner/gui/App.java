@@ -1,5 +1,7 @@
 package org.rapidoid.demo.taskplanner.gui;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-demo
@@ -20,6 +22,7 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class App {
 
 	public String title = "Task Planer";

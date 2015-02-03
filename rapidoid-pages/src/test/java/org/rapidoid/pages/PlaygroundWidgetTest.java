@@ -20,11 +20,13 @@ package org.rapidoid.pages;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class PlaygroundWidgetTest extends PagesTestCommons {
 
 	private static final String ATTRS = "[^>]*?";

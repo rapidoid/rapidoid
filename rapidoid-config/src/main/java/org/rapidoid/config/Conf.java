@@ -29,6 +29,9 @@ import java.util.concurrent.ConcurrentMap;
  * #L%
  */
 
+/**
+ * @author Nikolche Mihajlovski
+ */
 public class Conf {
 
 	private static boolean initialized = false;

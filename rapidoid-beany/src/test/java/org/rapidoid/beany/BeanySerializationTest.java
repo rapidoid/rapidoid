@@ -22,6 +22,7 @@ package org.rapidoid.beany;
 
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
@@ -51,6 +52,7 @@ class Bar {
 	public final Foo ff = new Foo();
 }
 
+@Authors("Nikolche Mihajlovski")
 public class BeanySerializationTest extends BeanyTestCommons {
 
 	@Test

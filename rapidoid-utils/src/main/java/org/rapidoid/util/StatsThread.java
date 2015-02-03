@@ -1,5 +1,6 @@
 package org.rapidoid.util;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.log.Log;
 
 /*
@@ -22,6 +23,7 @@ import org.rapidoid.log.Log;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class StatsThread extends Thread {
 
 	public StatsThread() {

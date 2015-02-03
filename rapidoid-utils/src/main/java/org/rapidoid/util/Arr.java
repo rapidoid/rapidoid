@@ -22,6 +22,9 @@ package org.rapidoid.util;
 
 import java.util.Arrays;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public class Arr {
 
 	public static int indexOf(Object[] arr, Object value) {

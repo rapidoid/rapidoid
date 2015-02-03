@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.CustomTag;
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
@@ -37,6 +38,7 @@ import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
+@Authors("Nikolche Mihajlovski")
 public class TagRenderer {
 
 	private static final byte[] EMIT_CLOSE = "')".getBytes();

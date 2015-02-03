@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Scaffold;
 
 @Scaffold
 @DbEntity
+@Authors("Nikolche Mihajlovski")
 public class Issue {
 
 	public long id;

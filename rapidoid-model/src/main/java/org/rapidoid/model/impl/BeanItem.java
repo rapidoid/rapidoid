@@ -1,5 +1,7 @@
 package org.rapidoid.model.impl;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-model
@@ -20,6 +22,7 @@ package org.rapidoid.model.impl;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class BeanItem extends AbstractItem {
 
 	private static final long serialVersionUID = 4793756823666203912L;

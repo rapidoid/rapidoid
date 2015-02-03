@@ -20,9 +20,11 @@ package org.rapidoid.net.abstracts;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.net.impl.RapidoidHelper;
 
+@Authors("Nikolche Mihajlovski")
 public interface CtxIO<T> {
 
 	Buf input();

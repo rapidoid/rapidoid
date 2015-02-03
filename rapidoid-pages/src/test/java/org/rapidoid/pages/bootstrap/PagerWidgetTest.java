@@ -20,6 +20,7 @@ package org.rapidoid.pages.bootstrap;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.rapidoid.pages.PagesTestCommons;
@@ -29,6 +30,7 @@ import org.rapidoid.widget.HtmlWidgets;
 import org.rapidoid.widget.PagerWidget;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class PagerWidgetTest extends PagesTestCommons {
 
 	@Test(enabled = false)

@@ -2,6 +2,7 @@ package org.rapidoid.var;
 
 import java.util.Collection;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.var.impl.ArrayContainerVar;
 import org.rapidoid.var.impl.CollectionContainerVar;
 import org.rapidoid.var.impl.EqualityVar;
@@ -28,6 +29,7 @@ import org.rapidoid.var.impl.SimpleVar;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class Vars {
 
 	public static <T> Var<T> var(T value) {

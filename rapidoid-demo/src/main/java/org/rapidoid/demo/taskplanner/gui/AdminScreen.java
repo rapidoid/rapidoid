@@ -20,6 +20,7 @@ package org.rapidoid.demo.taskplanner.gui;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.app.Screen;
 import org.rapidoid.db.DB;
 import org.rapidoid.log.Log;
@@ -32,6 +33,7 @@ import org.rapidoid.util.UTILS;
 @Admin
 @Manager
 @Roles({ @Role("RESTARTER") })
+@Authors("Nikolche Mihajlovski")
 public class AdminScreen extends Screen {
 
 	public Object[] content = { h2("Manage Application"), cmd("Shutdown") };

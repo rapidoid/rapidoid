@@ -20,11 +20,13 @@ package org.rapidoid.db;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.db.model.Person;
 import org.rapidoid.db.model.Post;
 import org.rapidoid.db.model.Profile;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class DbClassCollectionsTest extends DbTestCommons {
 
 	@Test

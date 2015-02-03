@@ -50,11 +50,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 
+@Authors("Nikolche Mihajlovski")
 public class UTILS implements Constants {
 
 	private static ScheduledThreadPoolExecutor EXECUTOR;

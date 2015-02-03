@@ -20,10 +20,12 @@ package org.rapidoid.pages.impl;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
+@Authors("Nikolche Mihajlovski")
 public class BuiltInCmdHandler {
 
 	public void on_set(Var<Object> var, Object value) {

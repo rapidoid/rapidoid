@@ -22,6 +22,7 @@ package org.rapidoid.net.impl;
 
 import java.util.concurrent.Callable;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.pool.ArrayPool;
@@ -41,6 +42,7 @@ import org.rapidoid.wrap.Shrt;
  * when implementing protocols, to avoid instantiating objects for each protocol
  * execution.
  */
+@Authors("Nikolche Mihajlovski")
 public class RapidoidHelper {
 
 	public final byte[] bytes = new byte[100 * 1024];

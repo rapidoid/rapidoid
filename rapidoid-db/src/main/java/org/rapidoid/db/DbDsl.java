@@ -2,6 +2,8 @@ package org.rapidoid.db;
 
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-db
@@ -22,6 +24,7 @@ import java.util.List;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface DbDsl<E> {
 
 	List<E> all();

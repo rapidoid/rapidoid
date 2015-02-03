@@ -22,6 +22,9 @@ package org.rapidoid.util;
 
 import java.lang.reflect.Method;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public class RuntimeInfo {
 
 	private static final Method getGarbageCollectorMXBeans;

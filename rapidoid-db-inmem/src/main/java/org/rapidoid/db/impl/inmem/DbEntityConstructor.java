@@ -23,9 +23,11 @@ package org.rapidoid.db.impl.inmem;
 import java.io.Serializable;
 import java.util.Collections;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.db.Database;
 import org.rapidoid.inmem.EntityConstructor;
 
+@Authors("Nikolche Mihajlovski")
 public class DbEntityConstructor implements EntityConstructor, Serializable {
 
 	private static final long serialVersionUID = -4132102852835102071L;

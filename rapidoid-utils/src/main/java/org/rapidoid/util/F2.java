@@ -1,5 +1,7 @@
 package org.rapidoid.util;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-utils
@@ -20,6 +22,7 @@ package org.rapidoid.util;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface F2<R, P1, P2> {
 
 	R execute(P1 param1, P2 param2) throws Exception;

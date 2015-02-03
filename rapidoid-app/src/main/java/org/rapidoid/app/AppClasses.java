@@ -23,8 +23,10 @@ package org.rapidoid.app;
 import java.util.Collection;
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class AppClasses {
 
 	public final Class<?> main;

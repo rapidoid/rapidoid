@@ -23,6 +23,7 @@ package org.rapidoid.widget;
 import java.util.Collection;
 import java.util.List;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
@@ -36,6 +37,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 
+@Authors("Nikolche Mihajlovski")
 public class FormWidget extends AbstractWidget {
 
 	protected final DataManager dataManager;

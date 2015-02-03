@@ -1,5 +1,6 @@
 package org.rapidoid.http;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.SuccessException;
 
 /*
@@ -23,6 +24,7 @@ import org.rapidoid.util.SuccessException;
  */
 
 @SuppressWarnings("serial")
+@Authors("Nikolche Mihajlovski")
 public class HttpSuccessException extends SuccessException {
 
 	private static final HttpSuccessException INSTANCE = new HttpSuccessException();

@@ -2,6 +2,7 @@ package org.rapidoid.db;
 
 import java.util.concurrent.ConcurrentMap;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.db.impl.DbProxy;
 import org.rapidoid.db.model.IPost;
 import org.rapidoid.util.U;
@@ -27,6 +28,7 @@ import org.testng.annotations.Test;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class DbProxyTest extends DbTestCommons {
 
 	@Test

@@ -20,12 +20,14 @@ package org.rapidoid.db.impl;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertyFilter;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
 
+@Authors("Nikolche Mihajlovski")
 public class DbHelper {
 
 	@SuppressWarnings("serial")

@@ -20,10 +20,12 @@ package org.rapidoid.widget;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.tag.TdTag;
 import org.rapidoid.model.Items;
 
 // TODO use grid decorator instead
+@Authors("Nikolche Mihajlovski")
 public class HighlightedGridWidget extends GridWidget {
 
 	private String regex;

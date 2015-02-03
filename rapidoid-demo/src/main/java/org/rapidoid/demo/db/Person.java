@@ -1,5 +1,7 @@
 package org.rapidoid.demo.db;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-demo
@@ -20,6 +22,7 @@ package org.rapidoid.demo.db;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class Person {
 
 	public long id;

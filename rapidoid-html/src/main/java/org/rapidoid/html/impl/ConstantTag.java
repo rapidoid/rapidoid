@@ -20,9 +20,11 @@ package org.rapidoid.html.impl;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagProcessor;
 
+@Authors("Nikolche Mihajlovski")
 public class ConstantTag extends UndefinedTag {
 
 	private final String code;

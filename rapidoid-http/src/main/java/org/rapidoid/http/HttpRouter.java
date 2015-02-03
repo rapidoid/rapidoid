@@ -20,6 +20,7 @@ package org.rapidoid.http;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.Range;
@@ -28,6 +29,7 @@ import org.rapidoid.util.SimpleHashTable;
 import org.rapidoid.util.SimpleList;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class HttpRouter implements Router {
 
 	private class Route {

@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
@@ -50,6 +51,7 @@ import org.rapidoid.util.UTILS;
 import org.rapidoid.util.UserInfo;
 import org.rapidoid.wrap.Bool;
 
+@Authors("Nikolche Mihajlovski")
 public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements HttpExchange,
 		HttpInterception, Constants {
 

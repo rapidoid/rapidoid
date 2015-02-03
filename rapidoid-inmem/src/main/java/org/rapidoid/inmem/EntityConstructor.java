@@ -1,5 +1,7 @@
 package org.rapidoid.inmem;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-inmem
@@ -20,6 +22,7 @@ package org.rapidoid.inmem;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface EntityConstructor {
 
 	<T> T create(Class<T> entityType);

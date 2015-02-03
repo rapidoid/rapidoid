@@ -26,6 +26,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.config.Conf;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
@@ -33,6 +34,7 @@ import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class DB {
 
 	private static final String IMPL_NAME = "org.rapidoid.db.impl.inmem.DbImpl";

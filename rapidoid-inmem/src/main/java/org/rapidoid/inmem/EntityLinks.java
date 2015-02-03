@@ -2,6 +2,8 @@ package org.rapidoid.inmem;
 
 import java.util.Collection;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-inmem
@@ -22,6 +24,7 @@ import java.util.Collection;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface EntityLinks {
 
 	String relationName();

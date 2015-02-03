@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.rapidoid.activity.NamedActivity;
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.db.Database;
 import org.rapidoid.db.DbColumn;
@@ -45,6 +46,7 @@ import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class DbImpl extends NamedActivity<Database> implements Database, Serializable {
 
 	private static final long serialVersionUID = 8806801474242822143L;

@@ -20,8 +20,10 @@ package org.rapidoid.buffer;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.bytes.Bytes;
 
+@Authors("Nikolche Mihajlovski")
 public class BufBytes implements Bytes {
 
 	private final Buf buf;

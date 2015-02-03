@@ -22,6 +22,9 @@ package org.rapidoid.model.impl;
 
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public class MapItem extends AbstractItem {
 
 	private static final long serialVersionUID = 4793756823666203912L;

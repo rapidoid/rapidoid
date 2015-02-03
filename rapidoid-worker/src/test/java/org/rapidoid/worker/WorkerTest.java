@@ -20,11 +20,13 @@ package org.rapidoid.worker;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class WorkerTest extends TestCommons {
 
 	@Test

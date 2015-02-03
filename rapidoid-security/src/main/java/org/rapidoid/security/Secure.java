@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.beany.Prop;
@@ -37,6 +38,7 @@ import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UserInfo;
 
+@Authors("Nikolche Mihajlovski")
 public class Secure implements Constants {
 
 	private static AppSecurity security = Cls.customizable(AppSecurity.class);

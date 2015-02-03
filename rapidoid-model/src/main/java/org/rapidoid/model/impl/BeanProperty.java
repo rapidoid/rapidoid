@@ -23,9 +23,11 @@ package org.rapidoid.model.impl;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.model.Property;
 import org.rapidoid.util.UTILS;
 
+@Authors("Nikolche Mihajlovski")
 public class BeanProperty implements Property {
 
 	private static final long serialVersionUID = 7627370931428864929L;

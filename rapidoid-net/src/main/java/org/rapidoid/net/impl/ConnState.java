@@ -20,8 +20,10 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.Resetable;
 
+@Authors("Nikolche Mihajlovski")
 public class ConnState implements Resetable {
 
 	public long n;

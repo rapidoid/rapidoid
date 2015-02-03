@@ -2,6 +2,8 @@ package org.rapidoid.data;
 
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-buffer
@@ -22,6 +24,7 @@ import java.util.Map;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface BinaryMultiData {
 
 	Map<String, byte[]> get();

@@ -20,8 +20,10 @@ package org.rapidoid.app;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.http.HttpExchange;
 
+@Authors("Nikolche Mihajlovski")
 public interface AppContext extends HttpExchange {
 
 }

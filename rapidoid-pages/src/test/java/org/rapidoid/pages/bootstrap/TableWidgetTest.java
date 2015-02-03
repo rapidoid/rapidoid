@@ -20,6 +20,7 @@ package org.rapidoid.pages.bootstrap;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.rapidoid.model.Items;
@@ -30,6 +31,7 @@ import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.GridWidget;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class TableWidgetTest extends PagesTestCommons {
 
 	@Test

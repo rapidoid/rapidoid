@@ -22,11 +22,13 @@ package org.rapidoid.http;
 
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.MultiData;
 import org.rapidoid.net.abstracts.CtxFull;
 
+@Authors("Nikolche Mihajlovski")
 public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, HttpExchangeHeaders {
 
 	/* REQUEST METHODS: */

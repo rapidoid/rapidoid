@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.Tags;
@@ -32,6 +33,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 
+@Authors("Nikolche Mihajlovski")
 public class TagImpl extends UndefinedTag implements TagInternals, Serializable {
 
 	private static final long serialVersionUID = -8137919597555179907L;

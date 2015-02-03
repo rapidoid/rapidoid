@@ -22,6 +22,9 @@ package org.rapidoid.util;
 
 import java.nio.ByteBuffer;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public class Bufs {
 
 	public static ByteBuffer expand(ByteBuffer buf, int newSize) {

@@ -23,6 +23,7 @@ package org.rapidoid.db;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.beany.BeanProperties;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
@@ -33,6 +34,7 @@ import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class DbEntityPropertiesTest extends DbTestCommons {
 
 	@Test

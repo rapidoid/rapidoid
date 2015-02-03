@@ -22,6 +22,7 @@ package org.rapidoid.app;
 
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.config.Conf;
 import org.rapidoid.db.DB;
@@ -35,6 +36,7 @@ import org.rapidoid.util.Cls;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class Apps {
 
 	private static final String BUILT_IN_SCREEN_SUFFIX = "BuiltIn";

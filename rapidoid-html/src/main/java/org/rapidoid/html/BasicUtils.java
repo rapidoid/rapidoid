@@ -22,9 +22,11 @@ package org.rapidoid.html;
 
 import java.util.Date;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
 public class BasicUtils {
 
 	public static boolean eq(Object a, Object b) {

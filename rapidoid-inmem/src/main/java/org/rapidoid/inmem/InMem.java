@@ -47,6 +47,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Relation;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
@@ -84,6 +85,7 @@ class Rec implements Serializable {
  * - Isolation is serializable (with global lock),<br>
  * - Durability through on-commit callbacks.<br>
  */
+@Authors("Nikolche Mihajlovski")
 public class InMem implements Serializable {
 
 	private static final long serialVersionUID = -200957806998151795L;

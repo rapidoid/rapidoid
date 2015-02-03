@@ -20,8 +20,10 @@ package org.rapidoid.http;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.inject.IoC;
 
+@Authors("Nikolche Mihajlovski")
 public class HTTP {
 
 	public static HTTPServerBuilder server() {

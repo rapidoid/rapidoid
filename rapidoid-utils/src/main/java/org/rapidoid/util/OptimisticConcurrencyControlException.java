@@ -1,5 +1,7 @@
 package org.rapidoid.util;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-utils
@@ -21,6 +23,7 @@ package org.rapidoid.util;
  */
 
 @SuppressWarnings("serial")
+@Authors("Nikolche Mihajlovski")
 public class OptimisticConcurrencyControlException extends RuntimeException {
 
 	private final long recordId;

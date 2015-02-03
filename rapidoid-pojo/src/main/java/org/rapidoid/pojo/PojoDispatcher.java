@@ -1,5 +1,7 @@
 package org.rapidoid.pojo;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-pojo
@@ -20,6 +22,7 @@ package org.rapidoid.pojo;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface PojoDispatcher {
 
 	Object dispatch(PojoRequest request) throws PojoHandlerNotFoundException, PojoDispatchException;

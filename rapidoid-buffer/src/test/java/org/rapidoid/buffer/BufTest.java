@@ -20,6 +20,7 @@ package org.rapidoid.buffer;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
@@ -28,6 +29,7 @@ import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class BufTest extends BufferTestCommons implements Constants {
 
 	@Test

@@ -20,6 +20,7 @@ package org.rapidoid;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.net.TCP;
@@ -30,6 +31,7 @@ import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class TcpClientTest extends NetTestCommons {
 
 	@Test

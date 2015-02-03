@@ -1,5 +1,7 @@
 package org.rapidoid.util;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-utils
@@ -20,6 +22,7 @@ package org.rapidoid.util;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public class AppCtx {
 
 	private static final ThreadLocal<AppCtx> CTXS = new ThreadLocal<AppCtx>();

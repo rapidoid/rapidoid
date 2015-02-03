@@ -20,6 +20,9 @@ package org.rapidoid.lambda;
  * #L%
  */
 
+/**
+ * @author Nikolche Mihajlovski
+ */
 public interface Callback<T> {
 
 	void onDone(T result, Throwable error);

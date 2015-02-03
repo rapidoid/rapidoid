@@ -20,10 +20,12 @@ package org.rapidoid.model;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertySelectorByName;
 
 @SuppressWarnings("serial")
+@Authors("Nikolche Mihajlovski")
 public abstract class ModelPropertySelector extends PropertySelectorByName {
 
 	public ModelPropertySelector(String... propertyNames) {

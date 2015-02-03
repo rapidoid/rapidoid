@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-model
@@ -24,6 +26,7 @@ import java.lang.reflect.ParameterizedType;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface Property extends Serializable {
 
 	String name();

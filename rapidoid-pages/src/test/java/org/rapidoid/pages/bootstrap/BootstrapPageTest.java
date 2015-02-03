@@ -20,6 +20,7 @@ package org.rapidoid.pages.bootstrap;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
@@ -29,6 +30,7 @@ import org.rapidoid.widget.BootstrapWidgets;
 import org.testng.annotations.Test;
 
 @SuppressWarnings("unused")
+@Authors("Nikolche Mihajlovski")
 public class BootstrapPageTest extends PagesTestCommons {
 
 	@Test

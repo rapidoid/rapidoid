@@ -23,9 +23,11 @@ package org.rapidoid.json;
 import java.util.List;
 import java.util.Set;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.U;
 
 @SuppressWarnings("unchecked")
+@Authors("Nikolche Mihajlovski")
 public class Person {
 
 	public long id;

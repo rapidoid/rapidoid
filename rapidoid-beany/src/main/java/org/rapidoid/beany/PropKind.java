@@ -1,5 +1,7 @@
 package org.rapidoid.beany;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-beany
@@ -20,6 +22,7 @@ package org.rapidoid.beany;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public enum PropKind {
 
 	NORMAL, COLLECTION, MAP, VAR;

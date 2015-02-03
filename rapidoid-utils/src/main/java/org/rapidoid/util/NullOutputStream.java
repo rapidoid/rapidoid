@@ -23,6 +23,9 @@ package org.rapidoid.util;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.rapidoid.annotation.Authors;
+
+@Authors("Nikolche Mihajlovski")
 public class NullOutputStream extends OutputStream {
 
 	@Override

@@ -41,10 +41,12 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Pattern;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.log.Log;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 
+@Authors("Nikolche Mihajlovski")
 public class Cls {
 
 	private static Pattern JRE_CLASS_PATTERN = Pattern

@@ -27,6 +27,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.config.Conf;
@@ -37,6 +38,7 @@ import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
+@Authors("Nikolche Mihajlovski")
 public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements TCPServer {
 
 	private volatile RapidoidWorker[] workers;

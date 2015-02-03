@@ -22,6 +22,7 @@ package org.rapidoid.db;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.db.model.Person;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
@@ -30,6 +31,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
 
+@Authors("Nikolche Mihajlovski")
 public class DbTransactionTest extends DbTestCommons {
 
 	@Test

@@ -2,6 +2,7 @@ package org.rapidoid.activity;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.util.U;
 
 /*
@@ -24,6 +25,7 @@ import org.rapidoid.util.U;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public abstract class LifecycleActivity<T> extends NamedActivity<T> {
 
 	private final AtomicBoolean active = new AtomicBoolean(false);

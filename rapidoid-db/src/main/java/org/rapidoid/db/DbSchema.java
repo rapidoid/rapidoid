@@ -2,6 +2,8 @@ package org.rapidoid.db;
 
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
+
 /*
  * #%L
  * rapidoid-db
@@ -22,6 +24,7 @@ import java.util.Map;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
 public interface DbSchema {
 
 	<E> E entity(Class<E> entityType, Map<String, ?> properties);

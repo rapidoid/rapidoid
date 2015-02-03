@@ -20,6 +20,9 @@ package org.rapidoid.lambda;
  * #L%
  */
 
+/**
+ * @author Nikolche Mihajlovski
+ */
 public interface Mapper<FROM, TO> {
 
 	TO map(FROM src) throws Exception;
