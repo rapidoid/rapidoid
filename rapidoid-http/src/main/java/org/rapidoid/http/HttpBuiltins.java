@@ -1,7 +1,6 @@
 package org.rapidoid.http;
 
 import org.rapidoid.config.Conf;
-import org.rapidoid.security.Secure;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UserInfo;
@@ -32,10 +31,8 @@ public class HttpBuiltins {
 		server.get("/_logout", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				if (x.hasSession() && Secure.isLoggedIn()) {
-					x.closeSession();
-				}
 				AppCtx.delUser();
+				x.sessionSet(UserInfo.class.getCanonicalName(), null);
 				throw x.goBack(0);
 			}
 		});
