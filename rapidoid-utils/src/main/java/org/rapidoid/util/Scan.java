@@ -141,21 +141,11 @@ public class Scan {
 
 	public static List<Class<?>> byName(String simpleName, Predicate<Class<?>> filter, ClassLoader classLoader) {
 		List<Class<?>> classes = classes("*", "(.*\\.|^)" + simpleName, filter, null, classLoader);
-
-		if (classes.isEmpty()) {
-			Log.warn("No classes found on classpath with the specified simple name", "name", simpleName);
-		}
-
 		return classes;
 	}
 
 	public static List<Class<?>> bySuffix(String nameSuffix, Predicate<Class<?>> filter, ClassLoader classLoader) {
 		List<Class<?>> classes = classes("*", ".*\\w" + nameSuffix, filter, null, classLoader);
-
-		if (classes.isEmpty()) {
-			Log.warn("No classes found on classpath with the specified suffix", "suffix", nameSuffix);
-		}
-
 		return classes;
 	}
 
