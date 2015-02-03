@@ -39,7 +39,7 @@ class Foo {
 
 	public ABC abc = ABC.B;
 
-	int invisible1 = 111;
+	int abcd = 111;
 
 	@SuppressWarnings("unused")
 	private int invisible2 = 111;
@@ -89,7 +89,7 @@ public class BeanySerializationTest extends BeanyTestCommons {
 
 	@Test
 	public void testBeanSerialization() {
-		Map<String, ? extends Object> foo = U.map("x", 12, "g", "gg", "abc", ABC.B);
+		Map<String, ? extends Object> foo = U.map("x", 12, "g", "gg", "abc", ABC.B, "abcd", 111);
 		Map<String, ? extends Object> bar = U.map("ff", foo);
 
 		eq(Beany.serialize(new Foo()), foo);

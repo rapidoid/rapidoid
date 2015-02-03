@@ -87,7 +87,8 @@ public class Beany {
 				Class<?>[] params = method.getParameterTypes();
 				Class<?> ret = method.getReturnType();
 
-				if ((modif & Modifier.PUBLIC) != 0 && (modif & Modifier.STATIC) == 0) {
+				if ((modif & Modifier.PRIVATE) == 0 && (modif & Modifier.PROTECTED) == 0
+						&& (modif & Modifier.STATIC) == 0) {
 
 					String name = method.getName();
 					if ((name.matches(GETTER) && params.length == 0) || (name.matches(SETTER) && params.length == 1)) {
@@ -156,7 +157,8 @@ public class Beany {
 			for (Field field : fields) {
 
 				int modif = field.getModifiers();
-				if ((modif & Modifier.PUBLIC) != 0 && (modif & Modifier.STATIC) == 0) {
+				if ((modif & Modifier.PRIVATE) == 0 && (modif & Modifier.PROTECTED) == 0
+						&& (modif & Modifier.STATIC) == 0) {
 					String fieldName = field.getName();
 					BeanProp prop = properties.get(fieldName);
 
