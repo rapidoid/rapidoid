@@ -22,4 +22,8 @@ package org.rapidoid.app;
 
 public class TheDefaultApp {
 
+	public String title = "Untitled app";
+
+	public boolean full = true;
+
 }

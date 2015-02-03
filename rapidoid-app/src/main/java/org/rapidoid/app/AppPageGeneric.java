@@ -144,6 +144,10 @@ public class AppPageGeneric extends AppGUI {
 	protected Object genericScreen() {
 		String path = x.path();
 
+		if (path.equals("/")) {
+			return appCls.main != null ? app : new TheDefaultApp();
+		}
+
 		for (Class<?> scr : BUILT_IN_SCREENS) {
 			if (Apps.screenUrl(scr).equals(path)) {
 				return Cls.newInstance(scr);
@@ -213,7 +217,7 @@ public class AppPageGeneric extends AppGUI {
 		if (cnt != null) {
 			return cnt;
 		} else {
-			if (screen != null && screen != app) {
+			if (screen != null && (screen != app || x.uri().equals("/"))) {
 				return "No content available!";
 			} else {
 				throw x.notFound();
