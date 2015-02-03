@@ -21,10 +21,12 @@ package org.rapidoid.buffer;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.data.Range;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class RangeTest extends BufferTestCommons {
 
 	@Test

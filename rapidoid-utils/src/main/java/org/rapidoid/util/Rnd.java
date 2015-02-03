@@ -23,8 +23,10 @@ package org.rapidoid.util;
 import java.util.Random;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Rnd {
 
 	protected static final Random RND = new Random();

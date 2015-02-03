@@ -1,6 +1,7 @@
 package org.rapidoid.util;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -31,6 +32,7 @@ import org.rapidoid.annotation.Authors;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public enum TypeKind implements Constants {
 
 	NULL(F, F, T), BOOLEAN(T, F, T), BYTE(T, T, T), SHORT(T, T, T), CHAR(T, T, T), INT(T, T, T), LONG(T, T, T), FLOAT(

@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.TypeKind;
 
 /*
@@ -27,6 +28,7 @@ import org.rapidoid.util.TypeKind;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface Prop {
 
 	<T> T get(Object target);

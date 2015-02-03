@@ -23,6 +23,7 @@ package org.rapidoid.rest;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pojo.PojoRequest;
 import org.rapidoid.pojo.impl.PojoDispatcherImpl;
@@ -30,6 +31,7 @@ import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class WebPojoDispatcher extends PojoDispatcherImpl {
 
 	public WebPojoDispatcher(Map<String, Class<?>> services) {

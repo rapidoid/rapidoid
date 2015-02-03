@@ -27,10 +27,12 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.db.Database;
 import org.rapidoid.db.DbList;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DefaultDbList<E> extends DefaultDbCollection<E> implements DbList<E> {
 
 	public DefaultDbList(Database db, Object holder, String relation) {

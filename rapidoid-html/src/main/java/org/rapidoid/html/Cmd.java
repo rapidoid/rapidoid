@@ -24,8 +24,10 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Cmd implements Serializable {
 
 	private static final long serialVersionUID = -8114841206759431125L;

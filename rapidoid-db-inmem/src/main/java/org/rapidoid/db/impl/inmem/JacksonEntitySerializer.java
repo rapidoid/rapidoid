@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.db.Database;
@@ -49,6 +50,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class JacksonEntitySerializer implements EntitySerializer {
 
 	private final Database db;

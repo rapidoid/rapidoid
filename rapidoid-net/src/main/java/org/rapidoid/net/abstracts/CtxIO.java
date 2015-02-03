@@ -21,10 +21,12 @@ package org.rapidoid.net.abstracts;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.net.impl.RapidoidHelper;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface CtxIO<T> {
 
 	Buf input();

@@ -23,12 +23,14 @@ package org.rapidoid.model.impl;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.model.IModel;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public abstract class AbstractModel implements IModel {
 
 	private static final long serialVersionUID = -7147599758816052755L;

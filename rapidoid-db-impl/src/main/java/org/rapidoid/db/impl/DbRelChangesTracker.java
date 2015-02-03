@@ -23,9 +23,11 @@ package org.rapidoid.db.impl;
 import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DbRelChangesTracker {
 
 	private final Set<Long> addedRelations = U.set();

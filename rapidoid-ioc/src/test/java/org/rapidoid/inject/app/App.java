@@ -24,10 +24,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Autocreate;
 import org.rapidoid.annotation.Init;
 import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.inject.Logger;
 
 @Autocreate
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class App {
 
 	static boolean READY = false;

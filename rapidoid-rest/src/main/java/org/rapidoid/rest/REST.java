@@ -23,6 +23,7 @@ package org.rapidoid.rest;
 import java.util.List;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.Handler;
@@ -33,6 +34,7 @@ import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class REST {
 
 	public static void run(Class<?>... classes) {

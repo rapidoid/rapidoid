@@ -22,6 +22,7 @@ package org.rapidoid.app;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ButtonTag;
@@ -30,6 +31,7 @@ import org.rapidoid.util.Cls;
 import org.rapidoid.widget.GridWidget;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class ListEntityScreenGeneric extends Screen {
 
 	private final Class<?> entityType;

@@ -33,6 +33,7 @@ import org.testng.annotations.BeforeMethod;
 
 /**
  * @author Nikolche Mihajlovski
+ * @since 2.0.0
  */
 public abstract class TestCommons {
 

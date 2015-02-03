@@ -24,6 +24,7 @@ import java.util.Map;
 
 /**
  * @author Nikolche Mihajlovski
+ * @since 2.0.0
  */
 public class Lambdas {
 

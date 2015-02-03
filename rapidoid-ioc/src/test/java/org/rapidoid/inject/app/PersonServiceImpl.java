@@ -22,9 +22,11 @@ package org.rapidoid.inject.app;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.inject.Logger;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class PersonServiceImpl implements PersonService {
 	@Inject
 	Logger logger;

@@ -23,8 +23,10 @@ package org.rapidoid.beany;
 import java.util.Arrays;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public abstract class PropertySelectorByName implements PropertySelector {
 
 	private static final long serialVersionUID = 7826078564960583655L;

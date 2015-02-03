@@ -32,6 +32,7 @@ import org.testng.annotations.Test;
 /**
  * @author Nikolche Mihajlovski
  * @author Marina Mihajlovska
+ * @since 2.0.0
  */
 public class UTest extends TestCommons {
 

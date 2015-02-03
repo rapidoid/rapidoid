@@ -1,6 +1,7 @@
 package org.rapidoid.app;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -23,6 +24,7 @@ import org.rapidoid.annotation.Authors;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class TheDefaultApp {
 
 	public String title = "Untitled app";

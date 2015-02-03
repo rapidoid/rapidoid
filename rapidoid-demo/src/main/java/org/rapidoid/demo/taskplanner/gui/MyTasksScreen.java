@@ -24,6 +24,7 @@ import java.util.Comparator;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Order;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.app.Screen;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.demo.taskplanner.model.Task;
@@ -38,6 +39,7 @@ import org.rapidoid.widget.GridWidget;
 @LoggedIn
 @Order(3)
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class MyTasksScreen extends Screen {
 
 	public Object content() {

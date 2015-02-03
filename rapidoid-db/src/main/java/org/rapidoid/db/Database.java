@@ -29,11 +29,13 @@ import java.util.Map;
 
 import org.rapidoid.activity.Activity;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface Database extends Activity<Database> {
 
 	void initAndLoad();

@@ -21,6 +21,7 @@ package org.rapidoid.http;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.net.abstracts.Channel;
@@ -29,6 +30,7 @@ import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class HttpParserTest extends HttpTestCommons {
 
 	private static final String CRLF = "\r\n";

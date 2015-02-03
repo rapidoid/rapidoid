@@ -25,8 +25,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Measures {
 
 	private final Map<String, Measure> measures = new HashMap<String, Measure>();

@@ -23,9 +23,11 @@ package org.rapidoid.pojo.impl;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.pojo.PojoRequest;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class PojoRequestImpl implements PojoRequest {
 
 	private final String command;

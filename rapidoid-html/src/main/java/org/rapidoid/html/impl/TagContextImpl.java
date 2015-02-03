@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.util.Rnd;
@@ -32,6 +33,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class TagContextImpl implements TagContext, Serializable {
 
 	private static final long serialVersionUID = 4007586215607855031L;

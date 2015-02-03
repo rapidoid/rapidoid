@@ -39,6 +39,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author Nikolche Mihajlovski
+ * @since 2.0.0
  */
 public class U {
 

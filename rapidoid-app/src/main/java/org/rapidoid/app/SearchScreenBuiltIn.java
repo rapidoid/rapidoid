@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
@@ -33,6 +34,7 @@ import org.rapidoid.widget.GridWidget;
 import org.rapidoid.widget.HighlightedGridWidget;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class SearchScreenBuiltIn extends Screen {
 
 	public Object content(HttpExchange x) {

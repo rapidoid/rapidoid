@@ -21,12 +21,14 @@ package org.rapidoid.net.impl;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufProvider;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.Range;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DecodedData implements Data {
 
 	private final BufProvider src;

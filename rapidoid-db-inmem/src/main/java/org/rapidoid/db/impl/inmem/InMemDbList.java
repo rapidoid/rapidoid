@@ -23,12 +23,14 @@ package org.rapidoid.db.impl.inmem;
 import java.util.List;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.db.Database;
 import org.rapidoid.db.impl.DefaultDbList;
 import org.rapidoid.inmem.EntityLinks;
 import org.rapidoid.inmem.EntityLinksContainer;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class InMemDbList<E> extends DefaultDbList<E> implements EntityLinksContainer {
 
 	private static final long serialVersionUID = -6191116014241708321L;

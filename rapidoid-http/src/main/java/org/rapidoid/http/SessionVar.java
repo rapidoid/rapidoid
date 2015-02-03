@@ -21,11 +21,13 @@ package org.rapidoid.http;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.ImportExport;
 import org.rapidoid.var.impl.AbstractVar;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class SessionVar<T> extends AbstractVar<T> {
 
 	private static final long serialVersionUID = 2761159925375675659L;

@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.db.DbColumn;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
@@ -35,6 +36,7 @@ import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DbProxy implements InvocationHandler, Serializable {
 
 	private static final long serialVersionUID = 8876053750757191711L;

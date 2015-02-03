@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.http.HttpExchange;
@@ -30,6 +31,7 @@ import org.rapidoid.util.U;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class SimpleHardcodedTag extends HardcodedTag {
 
 	private final byte[] content;

@@ -22,8 +22,10 @@ package org.rapidoid.compile.impl;
 
 import org.eclipse.jdt.internal.compiler.IErrorHandlingPolicy;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class ErrorPolicy implements IErrorHandlingPolicy {
 
 	public boolean stopOnFirstError() {

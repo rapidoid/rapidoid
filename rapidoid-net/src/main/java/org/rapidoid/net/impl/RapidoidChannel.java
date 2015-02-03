@@ -23,8 +23,10 @@ package org.rapidoid.net.impl;
 import java.nio.channels.SocketChannel;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class RapidoidChannel {
 
 	final SocketChannel socketChannel;

@@ -23,11 +23,13 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DBs {
 
 	private static final Map<String, Database> DB_INSTANCES;

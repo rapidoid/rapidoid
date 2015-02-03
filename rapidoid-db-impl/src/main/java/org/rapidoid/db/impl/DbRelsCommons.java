@@ -27,11 +27,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.SerializableBean;
 import org.rapidoid.db.Database;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public abstract class DbRelsCommons<E> implements DbRelationInternals, SerializableBean<Map<String, Object>>,
 		Comparable<DbRelsCommons<E>> {
 

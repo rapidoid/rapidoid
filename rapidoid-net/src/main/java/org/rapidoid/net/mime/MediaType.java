@@ -3,6 +3,7 @@ package org.rapidoid.net.mime;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.U;
 
 /*
@@ -26,6 +27,7 @@ import org.rapidoid.util.U;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class MediaType {
 
 	private static final Map<String, MediaType> FILE_EXTENSISONS = U.map();

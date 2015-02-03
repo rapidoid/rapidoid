@@ -24,8 +24,10 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class AnnotatedPropertyFilter extends PropertyFilter implements Serializable {
 
 	private static final long serialVersionUID = 4053480601487489813L;

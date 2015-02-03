@@ -24,10 +24,12 @@ import java.io.File;
 import java.io.OutputStream;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.net.abstracts.CtxWrite;
 import org.rapidoid.net.mime.MediaType;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface HttpExchangeBody extends CtxWrite<HttpExchangeBody> {
 
 	HttpExchangeBody sendFile(File file);

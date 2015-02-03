@@ -27,6 +27,7 @@ import java.util.Collections;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Optional;
 import org.rapidoid.annotation.Programmatic;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.html.FieldType;
@@ -44,6 +45,7 @@ import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class FormFieldWidget extends AbstractWidget {
 
 	protected DataManager dataManager;

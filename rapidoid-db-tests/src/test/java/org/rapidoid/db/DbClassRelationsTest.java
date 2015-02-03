@@ -21,12 +21,14 @@ package org.rapidoid.db;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.db.model.Post;
 import org.rapidoid.db.model.Profile;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DbClassRelationsTest extends DbTestCommons {
 
 	@Test

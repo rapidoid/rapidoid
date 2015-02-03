@@ -21,6 +21,7 @@ package org.rapidoid.http;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.Range;
@@ -36,6 +37,7 @@ import org.rapidoid.wrap.Int;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class HttpPipeliningTest extends HttpTestCommons {
 
 	protected static final byte[] REQ = "GET /hello H\r\nasf:asf\r\n\r\n".getBytes();

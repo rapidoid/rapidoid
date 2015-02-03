@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.db.model.Person;
 import org.rapidoid.lambda.Operation;
@@ -34,6 +35,7 @@ import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DbStatisticalTest extends DbTestCommons {
 
 	class Op {

@@ -13,6 +13,7 @@ import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
@@ -38,6 +39,7 @@ import org.rapidoid.log.Log;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Scan {
 
 	private Scan() {

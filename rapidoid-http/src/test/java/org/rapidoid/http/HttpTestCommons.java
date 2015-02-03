@@ -39,6 +39,7 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
@@ -49,6 +50,7 @@ import org.rapidoid.util.UTILS;
 import org.testng.Assert;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public abstract class HttpTestCommons extends TestCommons {
 
 	protected HTTPServer server;

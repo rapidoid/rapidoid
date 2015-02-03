@@ -21,6 +21,7 @@ package org.rapidoid.app;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.db.Database;
 import org.rapidoid.http.HTTPInterceptor;
 import org.rapidoid.http.HttpExchange;
@@ -28,6 +29,7 @@ import org.rapidoid.http.HttpInterception;
 import org.rapidoid.lambda.Callback;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class TxInterceptor implements HTTPInterceptor {
 
 	private final Database db;

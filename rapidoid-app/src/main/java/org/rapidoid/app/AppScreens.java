@@ -27,11 +27,13 @@ import java.util.Map.Entry;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Order;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.security.annotation.DevMode;
 import org.rapidoid.util.Arr;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class AppScreens implements Comparator<Class<?>> {
 
 	protected static final String SEARCH_SCREEN = "SearchScreen";

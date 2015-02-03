@@ -1,6 +1,7 @@
 package org.rapidoid.db.model;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.db.AbstractEntity;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbRef;
@@ -27,6 +28,7 @@ import org.rapidoid.db.DbSet;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Post extends AbstractEntity {
 
 	private static final long serialVersionUID = 3776106825040831514L;

@@ -22,10 +22,12 @@ package org.rapidoid.compile;
 
 import org.eclipse.jdt.internal.compiler.env.ICompilationUnit;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.compile.impl.EcjCompilationUnit;
 import org.rapidoid.compile.impl.EcjCompiler;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Compile {
 
 	private static EcjCompiler getCompiler() {

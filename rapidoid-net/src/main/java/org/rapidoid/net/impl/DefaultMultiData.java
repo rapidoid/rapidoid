@@ -23,6 +23,7 @@ package org.rapidoid.net.impl;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufProvider;
 import org.rapidoid.data.Data;
@@ -32,6 +33,7 @@ import org.rapidoid.data.Range;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DefaultMultiData implements MultiData {
 
 	private final BufProvider src;

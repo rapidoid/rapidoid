@@ -3,6 +3,7 @@ package org.rapidoid.inmem;
 import java.util.Collection;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -25,6 +26,7 @@ import org.rapidoid.annotation.Authors;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface EntityLinks {
 
 	String relationName();

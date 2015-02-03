@@ -7,6 +7,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
@@ -33,6 +34,7 @@ import org.rapidoid.wrap.Int;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface Buf {
 
 	IncompleteReadException INCOMPLETE_READ = new IncompleteReadException();

@@ -23,8 +23,10 @@ package org.rapidoid.util;
 import java.util.Arrays;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Tuple {
 
 	private final Object[] values;

@@ -21,6 +21,7 @@ package org.rapidoid.db;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanRead;
@@ -50,6 +51,7 @@ class Bar extends AbstractEntity {
 }
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test(expectedExceptions = SecurityException.class)

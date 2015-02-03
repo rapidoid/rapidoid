@@ -21,10 +21,12 @@ package org.rapidoid.demo.http;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.net.TCP;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Main {
 
 	public static void main(String[] args) {

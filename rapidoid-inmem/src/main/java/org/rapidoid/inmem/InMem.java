@@ -49,6 +49,7 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Relation;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertyFilter;
@@ -86,6 +87,7 @@ class Rec implements Serializable {
  * - Durability through on-commit callbacks.<br>
  */
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class InMem implements Serializable {
 
 	private static final long serialVersionUID = -200957806998151795L;

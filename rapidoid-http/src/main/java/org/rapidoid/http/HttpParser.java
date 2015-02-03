@@ -21,6 +21,7 @@ package org.rapidoid.http;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
@@ -35,6 +36,7 @@ import org.rapidoid.wrap.Bool;
 import org.rapidoid.wrap.Int;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class HttpParser implements Constants {
 
 	private static final byte[] CONNECTION = "Connection:".getBytes();

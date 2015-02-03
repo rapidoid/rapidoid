@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Scaffold;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.config.Conf;
@@ -51,6 +52,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class AppPageGeneric extends AppGUI {
 
 	protected static final String[] themes = { "1", "2", "3", "4", "5" };

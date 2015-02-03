@@ -21,12 +21,14 @@ package org.rapidoid.demo.db;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.db.DB;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DbPersistenceBenchmark {
 
 	public static void main(String[] args) {

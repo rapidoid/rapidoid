@@ -3,6 +3,7 @@ package org.rapidoid.var;
 import java.util.Collection;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.var.impl.ArrayContainerVar;
 import org.rapidoid.var.impl.CollectionContainerVar;
 import org.rapidoid.var.impl.EqualityVar;
@@ -30,6 +31,7 @@ import org.rapidoid.var.impl.SimpleVar;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Vars {
 
 	public static <T> Var<T> var(T value) {

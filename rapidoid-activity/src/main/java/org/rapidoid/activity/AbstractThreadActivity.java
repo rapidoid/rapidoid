@@ -1,6 +1,7 @@
 package org.rapidoid.activity;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 
 /*
@@ -24,6 +25,7 @@ import org.rapidoid.log.Log;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public abstract class AbstractThreadActivity<T> extends LifecycleActivity<T> implements Runnable {
 
 	protected final Thread thread;

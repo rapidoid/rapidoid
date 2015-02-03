@@ -21,9 +21,11 @@ package org.rapidoid.inmem;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Prop;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class RelPair {
 
 	final String name;

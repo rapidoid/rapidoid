@@ -22,6 +22,7 @@ package org.rapidoid.lambda;
 
 /**
  * @author Nikolche Mihajlovski
+ * @since 2.0.0
  */
 public interface Operation<T> {
 

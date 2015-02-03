@@ -23,6 +23,7 @@ package org.rapidoid.widget;
 import java.util.List;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.TdTag;
 import org.rapidoid.model.Item;
@@ -32,6 +33,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class GridWidget extends AbstractWidget {
 
 	private final Items items;

@@ -29,6 +29,7 @@ import java.lang.annotation.Target;
 @Target({ FIELD, METHOD, TYPE })
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public @interface Order {
 
 	int value();

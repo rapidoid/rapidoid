@@ -1,6 +1,7 @@
 package org.rapidoid.beany;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -24,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public abstract class PropertyFilter implements PropertySelector {
 
 	@Override

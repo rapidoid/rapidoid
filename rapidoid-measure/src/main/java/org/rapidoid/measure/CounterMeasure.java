@@ -23,8 +23,10 @@ package org.rapidoid.measure;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class CounterMeasure implements Measure {
 
 	private AtomicInteger counter = new AtomicInteger();

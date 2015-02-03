@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.lambda.Mapper;
@@ -33,6 +34,7 @@ import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class AppReloadHandler implements Handler, Mapper<String, byte[]> {
 
 	private final String path;

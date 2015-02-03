@@ -21,11 +21,13 @@ package org.rapidoid.pages.impl;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class BuiltInCmdHandler {
 
 	public void on_set(Var<Object> var, Object value) {

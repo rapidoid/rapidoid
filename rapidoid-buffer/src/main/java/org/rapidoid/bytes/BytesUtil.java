@@ -21,6 +21,7 @@ package org.rapidoid.bytes;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.util.Constants;
@@ -29,6 +30,7 @@ import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.Int;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class BytesUtil implements Constants {
 
 	public static final byte[] CHARS_SWITCH_CASE = new byte[128];

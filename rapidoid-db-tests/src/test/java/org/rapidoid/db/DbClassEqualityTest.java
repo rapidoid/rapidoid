@@ -21,10 +21,12 @@ package org.rapidoid.db;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.db.model.Post;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DbClassEqualityTest extends DbTestCommons {
 
 	@Test

@@ -3,6 +3,7 @@ package org.rapidoid.db;
 import java.io.Serializable;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.util.CommonRoles;
 
@@ -30,6 +31,7 @@ import org.rapidoid.util.CommonRoles;
  * Base class for persisted domain model entities.
  */
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public abstract class AbstractEntity implements CommonRoles, Serializable {
 
 	private static final long serialVersionUID = 8414835674684110203L;

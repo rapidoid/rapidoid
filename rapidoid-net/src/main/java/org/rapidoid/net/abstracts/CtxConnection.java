@@ -23,8 +23,10 @@ package org.rapidoid.net.abstracts;
 import java.net.InetSocketAddress;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface CtxConnection<T> {
 
 	String address();

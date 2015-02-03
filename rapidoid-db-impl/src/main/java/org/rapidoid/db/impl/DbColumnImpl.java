@@ -23,12 +23,14 @@ package org.rapidoid.db.impl;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.SerializableBean;
 import org.rapidoid.db.DbColumn;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DbColumnImpl<E> implements DbColumn<E>, SerializableBean<Object> {
 
 	private static final long serialVersionUID = 5047929644817533060L;

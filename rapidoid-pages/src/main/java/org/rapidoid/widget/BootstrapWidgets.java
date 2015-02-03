@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
@@ -56,6 +57,7 @@ import org.rapidoid.var.Vars;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public abstract class BootstrapWidgets extends HTML {
 
 	public static final ButtonTag SAVE = cmd("^Save");

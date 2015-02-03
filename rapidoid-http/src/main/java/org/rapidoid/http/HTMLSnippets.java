@@ -24,10 +24,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.IO;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class HTMLSnippets {
 
 	private static String PAGE_HTML;

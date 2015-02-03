@@ -23,10 +23,12 @@ package org.rapidoid.worker;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Workers {
 
 	private static final Map<String, Worker<?, ?>> WORKERS = U.concurrentMap();

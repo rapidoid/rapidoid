@@ -30,12 +30,14 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class BeanProp implements Prop {
 
 	private final String name;

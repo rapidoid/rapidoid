@@ -21,6 +21,7 @@ package org.rapidoid.demo.http;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.Range;
@@ -34,6 +35,7 @@ import org.rapidoid.util.Dates;
 import org.rapidoid.wrap.Bool;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class SimpleHttpProtocol implements Protocol {
 
 	private static final byte[] HTTP_200_OK = "HTTP/1.1 200 OK\r\n".getBytes();

@@ -1,6 +1,7 @@
 package org.rapidoid.db;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.var.Var;
 
 /*
@@ -24,6 +25,7 @@ import org.rapidoid.var.Var;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface DbRef<E> extends Var<E> {
 
 	boolean eq(Object obj);

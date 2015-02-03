@@ -3,6 +3,7 @@ package org.rapidoid.addon;
 import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.StatsThread;
 
 /*
@@ -26,6 +27,7 @@ import org.rapidoid.util.StatsThread;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class StatsAddon implements Callable<Object> {
 
 	@Override

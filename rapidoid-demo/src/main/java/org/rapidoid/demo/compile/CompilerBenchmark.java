@@ -21,6 +21,7 @@ package org.rapidoid.demo.compile;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.compile.Compile;
 import org.rapidoid.config.Conf;
 import org.rapidoid.util.U;
@@ -28,6 +29,7 @@ import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.Int;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class CompilerBenchmark {
 
 	public static void main(String[] args) throws Throwable {

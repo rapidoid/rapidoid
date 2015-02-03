@@ -23,9 +23,11 @@ package org.rapidoid.worker;
 import java.util.Queue;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class WorkerQueue<T> {
 
 	final Queue<T> queue;

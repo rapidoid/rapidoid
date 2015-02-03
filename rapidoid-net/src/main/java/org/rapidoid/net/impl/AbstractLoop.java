@@ -22,10 +22,12 @@ package org.rapidoid.net.impl;
 
 import org.rapidoid.activity.LifecycleActivity;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Runnable {
 
 	protected Thread ownerThread;

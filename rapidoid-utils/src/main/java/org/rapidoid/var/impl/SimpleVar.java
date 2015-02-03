@@ -1,6 +1,7 @@
 package org.rapidoid.var.impl;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.ImportExport;
 
 /*
@@ -24,6 +25,7 @@ import org.rapidoid.util.ImportExport;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class SimpleVar<T> extends AbstractVar<T> {
 
 	private static final long serialVersionUID = 7970150705828178233L;

@@ -25,10 +25,12 @@ import java.lang.reflect.Modifier;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class PojoServiceWrapper {
 
 	private final Map<String, Method> methods = U.map();

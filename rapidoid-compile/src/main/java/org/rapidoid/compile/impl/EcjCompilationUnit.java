@@ -25,9 +25,11 @@ import java.util.regex.Pattern;
 
 import org.eclipse.jdt.internal.compiler.env.ICompilationUnit;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class EcjCompilationUnit implements ICompilationUnit {
 
 	private static final Pattern PACKAGE_PATTERN = Pattern.compile("package\\s+([\\w\\.]+?)\\s*;");

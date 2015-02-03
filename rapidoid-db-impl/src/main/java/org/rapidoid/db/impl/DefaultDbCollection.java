@@ -25,10 +25,12 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.db.Database;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DefaultDbCollection<E> extends DbRelsCommons<E> implements Collection<E> {
 
 	public DefaultDbCollection(Database db, Object holder, String relation, Collection<Long> ids) {

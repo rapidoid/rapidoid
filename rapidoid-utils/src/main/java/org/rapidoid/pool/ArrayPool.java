@@ -23,11 +23,13 @@ package org.rapidoid.pool;
 import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.Arr;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class ArrayPool<T> implements Pool<T> {
 
 	private final Callable<T> factory;

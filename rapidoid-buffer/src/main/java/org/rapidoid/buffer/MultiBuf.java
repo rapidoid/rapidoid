@@ -27,6 +27,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.ByteBufferBytes;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
@@ -39,6 +40,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.wrap.Int;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class MultiBuf implements Buf, Constants {
 
 	private final byte[] HELPER = new byte[20];

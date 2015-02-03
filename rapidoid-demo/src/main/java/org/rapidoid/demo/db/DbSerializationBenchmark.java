@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Collections;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.db.impl.inmem.DbEntityConstructor;
 import org.rapidoid.db.impl.inmem.JacksonEntitySerializer;
@@ -31,6 +32,7 @@ import org.rapidoid.inmem.InMem;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DbSerializationBenchmark {
 
 	@SuppressWarnings("unchecked")

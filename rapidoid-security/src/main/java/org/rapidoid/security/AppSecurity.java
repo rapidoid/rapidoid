@@ -28,6 +28,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.config.Conf;
@@ -42,6 +43,7 @@ import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class AppSecurity implements Constants {
 
 	public String[] getRolesAllowed(Class<?> clazz) {

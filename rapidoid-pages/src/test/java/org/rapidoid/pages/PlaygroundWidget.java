@@ -21,6 +21,7 @@ package org.rapidoid.pages;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.InputTag;
@@ -31,6 +32,7 @@ import org.rapidoid.var.Var;
 import org.rapidoid.widget.BootstrapWidgets;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class PlaygroundWidget extends BootstrapWidgets {
 
 	public static Tag pageContent(HttpExchange x) {

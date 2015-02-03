@@ -27,6 +27,7 @@ import java.nio.ByteBuffer;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
@@ -42,6 +43,7 @@ import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.net.mime.MediaType;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class HttpAppContext implements AppContext {
 
 	private final HttpExchange x;

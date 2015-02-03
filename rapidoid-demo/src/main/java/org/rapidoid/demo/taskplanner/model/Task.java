@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Optional;
 import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.annotation.Scaffold;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.db.AbstractEntity;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbList;
@@ -45,6 +46,7 @@ import org.rapidoid.util.CommonRoles;
 @CanDelete({ CommonRoles.OWNER, CommonRoles.ADMIN })
 @DbEntity
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Task extends AbstractEntity {
 
 	@Display

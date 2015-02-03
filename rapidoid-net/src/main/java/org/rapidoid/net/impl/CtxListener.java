@@ -1,6 +1,7 @@
 package org.rapidoid.net.impl;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.net.abstracts.Channel;
 
 /*
@@ -24,6 +25,7 @@ import org.rapidoid.net.abstracts.Channel;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface CtxListener {
 
 	void onDone(Channel ctx, Object tag);

@@ -25,6 +25,7 @@ import java.util.List;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Session;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.app.Screen;
 import org.rapidoid.app.Users;
 import org.rapidoid.db.DB;
@@ -39,6 +40,7 @@ import org.rapidoid.widget.GridWidget;
 
 @Order(1)
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class NewTaskScreen extends Screen {
 
 	@Session

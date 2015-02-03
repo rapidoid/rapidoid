@@ -24,10 +24,12 @@ import java.io.Serializable;
 import java.util.Collections;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.db.Database;
 import org.rapidoid.inmem.EntityConstructor;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DbEntityConstructor implements EntityConstructor, Serializable {
 
 	private static final long serialVersionUID = -4132102852835102071L;

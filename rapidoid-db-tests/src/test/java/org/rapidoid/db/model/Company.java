@@ -1,6 +1,7 @@
 package org.rapidoid.db.model;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.db.AbstractEntity;
 
 /*
@@ -25,6 +26,7 @@ import org.rapidoid.db.AbstractEntity;
 
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Company extends AbstractEntity {
 
 	public String name;

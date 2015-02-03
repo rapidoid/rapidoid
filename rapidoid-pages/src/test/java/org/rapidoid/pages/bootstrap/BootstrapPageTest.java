@@ -21,6 +21,7 @@ package org.rapidoid.pages.bootstrap;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
@@ -31,6 +32,7 @@ import org.testng.annotations.Test;
 
 @SuppressWarnings("unused")
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class BootstrapPageTest extends PagesTestCommons {
 
 	@Test

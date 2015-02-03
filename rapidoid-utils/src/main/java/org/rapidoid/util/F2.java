@@ -1,6 +1,7 @@
 package org.rapidoid.util;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -23,6 +24,7 @@ import org.rapidoid.annotation.Authors;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface F2<R, P1, P2> {
 
 	R execute(P1 param1, P2 param2) throws Exception;

@@ -51,12 +51,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class UTILS implements Constants {
 
 	private static ScheduledThreadPoolExecutor EXECUTOR;

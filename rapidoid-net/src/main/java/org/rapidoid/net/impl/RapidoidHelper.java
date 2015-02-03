@@ -23,6 +23,7 @@ package org.rapidoid.net.impl;
 import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.pool.ArrayPool;
@@ -43,6 +44,7 @@ import org.rapidoid.wrap.Shrt;
  * execution.
  */
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class RapidoidHelper {
 
 	public final byte[] bytes = new byte[100 * 1024];

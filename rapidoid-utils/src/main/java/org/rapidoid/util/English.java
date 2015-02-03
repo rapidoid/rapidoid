@@ -23,8 +23,10 @@ package org.rapidoid.util;
 import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class English {
 
 	private static Pattern PLURAL1 = Pattern.compile(".*(s|x|z|ch|sh)$");

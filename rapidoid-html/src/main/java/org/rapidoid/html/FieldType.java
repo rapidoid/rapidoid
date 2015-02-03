@@ -1,6 +1,7 @@
 package org.rapidoid.html;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -23,6 +24,7 @@ import org.rapidoid.annotation.Authors;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public enum FieldType {
 
 	TEXT, PASSWORD, EMAIL, TEXTAREA, RADIOS, CHECKBOXES, CHECKBOX, DROPDOWN, MULTI_SELECT, LABEL

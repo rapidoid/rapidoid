@@ -33,6 +33,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.buffer.IncompleteReadException;
 import org.rapidoid.config.Conf;
@@ -44,6 +45,7 @@ import org.rapidoid.util.SimpleList;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private final Queue<RapidoidConnection> restarting;

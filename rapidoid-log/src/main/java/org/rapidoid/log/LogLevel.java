@@ -22,6 +22,7 @@ package org.rapidoid.log;
 
 /**
  * @author Nikolche Mihajlovski
+ * @since 2.0.0
  */
 public enum LogLevel {
 

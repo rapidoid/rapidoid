@@ -31,6 +31,7 @@ import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author Nikolche Mihajlovski
+ * @since 2.0.0
  */
 public class Conf {
 

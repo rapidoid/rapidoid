@@ -21,6 +21,7 @@ package org.rapidoid.widget;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.http.HttpExchange;
@@ -28,6 +29,7 @@ import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public abstract class AbstractWidget extends BootstrapWidgets implements TagWidget<HttpExchange>, Constants {
 
 	private HttpExchange x;

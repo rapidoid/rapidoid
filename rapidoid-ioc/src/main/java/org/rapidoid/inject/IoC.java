@@ -34,6 +34,7 @@ import org.rapidoid.annotation.Autocreate;
 import org.rapidoid.annotation.Init;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Session;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.config.Conf;
 import org.rapidoid.lambda.Lambdas;
@@ -46,6 +47,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class IoC {
 
 	private static final Map<Class<?>, Object> SINGLETONS = U.map();

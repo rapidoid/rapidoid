@@ -27,6 +27,7 @@ import java.util.List;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Composite;
 import org.rapidoid.annotation.Programmatic;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanRead;
@@ -93,6 +94,7 @@ class Issue extends AbstractEntity {
 }
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DataPermissionsTest extends SecurityTestCommons {
 
 	private static final String[] USERS = { null, "", "abc", "adm1", "adm2", "mng1", "mod1", "mod2" };

@@ -21,6 +21,7 @@ package org.rapidoid.http;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.data.Ranges;
@@ -28,6 +29,7 @@ import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class HttpParserPerfTest {
 
 	private static final BufGroup BUFS = new BufGroup(10);

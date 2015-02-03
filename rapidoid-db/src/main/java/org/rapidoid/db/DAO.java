@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
@@ -29,6 +30,7 @@ import org.rapidoid.util.U;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public abstract class DAO<E> {
 
 	private final Class<E> clazz;

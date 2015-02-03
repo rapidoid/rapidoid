@@ -2,6 +2,7 @@ package org.rapidoid.worker;
 
 import org.rapidoid.activity.Activity;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -24,6 +25,7 @@ import org.rapidoid.annotation.Authors;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface Worker<IN, OUT> extends Activity<Worker<IN, OUT>> {
 
 	boolean enqueue(IN task, boolean blocking);

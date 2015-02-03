@@ -1,6 +1,7 @@
 package org.rapidoid.measure;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.UTILS;
 
 /*
@@ -24,6 +25,7 @@ import org.rapidoid.util.UTILS;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class MeasuresThread extends Thread {
 
 	private final Measures statistics;

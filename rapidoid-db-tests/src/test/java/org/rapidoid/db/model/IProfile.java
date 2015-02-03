@@ -22,10 +22,12 @@ package org.rapidoid.db.model;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Relation;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.Entity;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface IProfile extends Entity {
 
 	@Relation("posted")

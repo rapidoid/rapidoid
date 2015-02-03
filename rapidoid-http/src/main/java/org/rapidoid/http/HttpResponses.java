@@ -23,9 +23,11 @@ package org.rapidoid.http;
 import java.util.List;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class HttpResponses {
 
 	// DIMENSIONS:

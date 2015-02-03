@@ -23,10 +23,12 @@ package org.rapidoid.rest;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pojo.PojoRequest;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class WebReq implements PojoRequest {
 
 	private final HttpExchange exchange;

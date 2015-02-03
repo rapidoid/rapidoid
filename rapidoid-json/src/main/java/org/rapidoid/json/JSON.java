@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.Cls;
@@ -33,6 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class JSON {
 
 	public static final ObjectMapper MAPPER = mapper();

@@ -24,10 +24,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.U;
 
 @SuppressWarnings("unchecked")
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Person {
 
 	public long id;

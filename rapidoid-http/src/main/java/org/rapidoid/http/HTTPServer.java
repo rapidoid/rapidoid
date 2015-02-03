@@ -21,9 +21,11 @@ package org.rapidoid.http;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.net.TCPServer;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface HTTPServer extends TCPServer {
 
 	HTTPServer route(String cmd, String url, Handler handler);

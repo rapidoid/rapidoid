@@ -21,9 +21,11 @@ package org.rapidoid.html.tag;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.html.SpecificTag;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface LinkTag extends SpecificTag<LinkTag> {
 
 	String href();

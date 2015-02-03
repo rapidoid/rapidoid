@@ -32,6 +32,7 @@ import java.nio.channels.SocketChannel;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.json.JSON;
@@ -41,6 +42,7 @@ import org.rapidoid.util.Resetable;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class RapidoidConnection implements Resetable, Channel, Constants {
 
 	private static final CtxListener IGNORE = new IgnorantConnectionListener();

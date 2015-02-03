@@ -29,6 +29,7 @@ import java.lang.annotation.Target;
 @Target({ TYPE })
 @Retention(SOURCE)
 @Authors("Nikolche Mihajlovski")
+@Since("2.1.0")
 public @interface Contributors {
 
 	String[] value();

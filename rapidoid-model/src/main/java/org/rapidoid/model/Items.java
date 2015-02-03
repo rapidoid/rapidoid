@@ -23,8 +23,10 @@ package org.rapidoid.model;
 import java.util.List;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface Items extends IModel, Iterable<Item> {
 
 	void insert(int index, Item item);

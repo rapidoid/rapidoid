@@ -1,6 +1,7 @@
 package org.rapidoid.security;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -23,6 +24,7 @@ import org.rapidoid.annotation.Authors;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DataPermissions {
 
 	public static final DataPermissions ALL = new DataPermissions(true, true, true, true);

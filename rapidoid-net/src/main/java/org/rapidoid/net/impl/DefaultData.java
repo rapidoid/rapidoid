@@ -21,11 +21,13 @@ package org.rapidoid.net.impl;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufProvider;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.Range;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class DefaultData implements Data {
 
 	private final BufProvider src;

@@ -21,10 +21,12 @@ package org.rapidoid.widget;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class PagerWidget extends AbstractWidget {
 
 	private int from;

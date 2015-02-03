@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -26,6 +27,7 @@ import org.rapidoid.annotation.Authors;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface HttpSession extends Serializable {
 
 	void openSession(String sessionId);

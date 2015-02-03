@@ -1,6 +1,7 @@
 package org.rapidoid.net.abstracts;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -23,6 +24,7 @@ import org.rapidoid.annotation.Authors;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public interface CtxFull<T, W> extends CtxWrite<W>, CtxRead<T>, CtxConnection<T>, CtxIO<T>, CtxProtocol<T>, CtxState<T> {
 
 }

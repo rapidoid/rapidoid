@@ -1,6 +1,7 @@
 package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.U;
@@ -27,6 +28,7 @@ import org.rapidoid.util.UserInfo;
  */
 
 @Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class HttpBuiltins {
 
 	public static void register(HTTPServer server) {
