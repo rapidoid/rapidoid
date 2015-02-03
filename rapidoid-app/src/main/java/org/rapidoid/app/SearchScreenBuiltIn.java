@@ -40,7 +40,7 @@ public class SearchScreenBuiltIn extends Screen {
 		Items items = beanItems(Object.class, found.toArray());
 
 		Tag queryInfo = !U.isEmpty(query) ? span(" for ", b(highlight(query))) : null;
-		Tag title = titleBox("Total " + found.size() + " search results", queryInfo, ":");
+		Tag title = titleBox("Total " + found.size() + " search results", queryInfo);
 
 		String regex = "(?i)" + Pattern.quote(query);
 		GridWidget grid = new HighlightedGridWidget(items, "", 10, "id", "_class", "_str").regex(regex);
