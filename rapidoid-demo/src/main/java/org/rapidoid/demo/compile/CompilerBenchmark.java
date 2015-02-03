@@ -26,7 +26,7 @@ import org.rapidoid.compile.Compile;
 import org.rapidoid.config.Conf;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.wrap.Int;
+import org.rapidoid.wrap.IntWrap;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -42,7 +42,7 @@ public class CompilerBenchmark {
 		final String src2 = "public class Book%s { String title=\"%s\"; int year = 0;} class Foo%s {}";
 		final String src3 = "public class Bar%s extends Foo%s {}";
 
-		final Int n = new Int();
+		final IntWrap n = new IntWrap();
 
 		UTILS.benchmarkMT(threads, "compile", count, new Runnable() {
 			@Override

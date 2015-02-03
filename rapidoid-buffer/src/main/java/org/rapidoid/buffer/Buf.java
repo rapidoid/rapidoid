@@ -11,7 +11,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
-import org.rapidoid.wrap.Int;
+import org.rapidoid.wrap.IntWrap;
 
 /*
  * #%L
@@ -147,6 +147,6 @@ public interface Buf {
 
 	int scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit);
 
-	void scanLnLn(Ranges ranges, Int result, byte end1, byte end2);
+	void scanLnLn(Ranges ranges, IntWrap result, byte end1, byte end2);
 
 }

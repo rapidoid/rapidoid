@@ -33,8 +33,8 @@ import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.wrap.Bool;
-import org.rapidoid.wrap.Int;
+import org.rapidoid.wrap.BoolWrap;
+import org.rapidoid.wrap.IntWrap;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -66,8 +66,8 @@ public class MaxHttpPerfTest {
 					Range[] ranges = helper.ranges1.ranges;
 					Ranges headers = helper.ranges2;
 
-					Bool isGet = helper.booleans[0];
-					Bool isKeepAlive = helper.booleans[1];
+					BoolWrap isGet = helper.booleans[0];
+					BoolWrap isKeepAlive = helper.booleans[1];
 
 					Range verb = ranges[ranges.length - 1];
 					Range uri = ranges[ranges.length - 2];
@@ -93,7 +93,7 @@ public class MaxHttpPerfTest {
 
 				Buf in = ctx.input();
 
-				Int pos = ctx.helper().integers[0];
+				IntWrap pos = ctx.helper().integers[0];
 
 				int poss = BytesUtil.parseLines(in.bytes(), lines, pos, in.position(), in.size(), (byte) 'v', (byte) 'e');
 

@@ -32,8 +32,8 @@ import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.wrap.Bool;
-import org.rapidoid.wrap.Int;
+import org.rapidoid.wrap.BoolWrap;
+import org.rapidoid.wrap.IntWrap;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")
@@ -53,8 +53,8 @@ public class HttpPipeliningTest extends HttpTestCommons {
 		final int connections = 1000;
 		final int pipelining = 10;
 
-		final Int counter = new Int();
-		final Bool err = new Bool();
+		final IntWrap counter = new IntWrap();
+		final BoolWrap err = new BoolWrap();
 
 		TCP.client().host("localhost").port(8080).connections(connections).protocol(new Protocol() {
 			@Override

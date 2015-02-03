@@ -25,16 +25,8 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Int {
+public class LongWrap {
 
-	public int value;
-
-	public Int() {
-		this(0);
-	}
-
-	public Int(int value) {
-		this.value = value;
-	}
+	public long value;
 
 }

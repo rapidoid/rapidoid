@@ -32,7 +32,7 @@ import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.Dates;
-import org.rapidoid.wrap.Bool;
+import org.rapidoid.wrap.BoolWrap;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -80,8 +80,8 @@ public class SimpleHttpProtocol implements Protocol {
 		Range[] ranges = helper.ranges1.ranges;
 		Ranges headers = helper.ranges2;
 
-		Bool isGet = helper.booleans[0];
-		Bool isKeepAlive = helper.booleans[1];
+		BoolWrap isGet = helper.booleans[0];
+		BoolWrap isKeepAlive = helper.booleans[1];
 
 		Range verb = ranges[ranges.length - 1];
 		Range uri = ranges[ranges.length - 2];

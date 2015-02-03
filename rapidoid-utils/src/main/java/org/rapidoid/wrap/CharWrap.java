@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Chr {
+public class CharWrap {
 
 	public char value;
 

@@ -37,7 +37,7 @@ import org.rapidoid.pool.Pool;
 import org.rapidoid.util.Arr;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
-import org.rapidoid.wrap.Int;
+import org.rapidoid.wrap.IntWrap;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -1329,7 +1329,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public void scanLnLn(Ranges ranges, Int result, byte end1, byte end2) {
+	public void scanLnLn(Ranges ranges, IntWrap result, byte end1, byte end2) {
 		assert invariant();
 
 		int nextPos = BytesUtil.parseLines(bytes(), ranges, result, _position, _limit, end1, end2);

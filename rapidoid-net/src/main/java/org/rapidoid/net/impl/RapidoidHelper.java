@@ -29,13 +29,13 @@ import org.rapidoid.data.Ranges;
 import org.rapidoid.pool.ArrayPool;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.util.Cls;
-import org.rapidoid.wrap.Bool;
-import org.rapidoid.wrap.Chr;
-import org.rapidoid.wrap.Dbl;
-import org.rapidoid.wrap.Flt;
-import org.rapidoid.wrap.Int;
-import org.rapidoid.wrap.Lng;
-import org.rapidoid.wrap.Shrt;
+import org.rapidoid.wrap.BoolWrap;
+import org.rapidoid.wrap.CharWrap;
+import org.rapidoid.wrap.DoubleWrap;
+import org.rapidoid.wrap.FloatWrap;
+import org.rapidoid.wrap.IntWrap;
+import org.rapidoid.wrap.LongWrap;
+import org.rapidoid.wrap.ShortWrap;
 
 /**
  * Helpers are instantiated per worker node (for thread-safe use), so they
@@ -61,19 +61,19 @@ public class RapidoidHelper {
 
 	public final Ranges ranges5 = new Ranges(100);
 
-	public final Bool[] booleans = new Bool[100];
+	public final BoolWrap[] booleans = new BoolWrap[100];
 
-	public final Shrt[] shorts = new Shrt[100];
+	public final ShortWrap[] shorts = new ShortWrap[100];
 
-	public final Chr[] chars = new Chr[100];
+	public final CharWrap[] chars = new CharWrap[100];
 
-	public final Int[] integers = new Int[100];
+	public final IntWrap[] integers = new IntWrap[100];
 
-	public final Lng[] longs = new Lng[100];
+	public final LongWrap[] longs = new LongWrap[100];
 
-	public final Flt[] floats = new Flt[100];
+	public final FloatWrap[] floats = new FloatWrap[100];
 
-	public final Dbl[] doubles = new Dbl[100];
+	public final DoubleWrap[] doubles = new DoubleWrap[100];
 
 	public final Pool<?> pool;
 
@@ -87,31 +87,31 @@ public class RapidoidHelper {
 	public RapidoidHelper(final Class<?> exchangeClass) {
 
 		for (int i = 0; i < booleans.length; i++) {
-			booleans[i] = new Bool();
+			booleans[i] = new BoolWrap();
 		}
 
 		for (int i = 0; i < shorts.length; i++) {
-			shorts[i] = new Shrt();
+			shorts[i] = new ShortWrap();
 		}
 
 		for (int i = 0; i < chars.length; i++) {
-			chars[i] = new Chr();
+			chars[i] = new CharWrap();
 		}
 
 		for (int i = 0; i < integers.length; i++) {
-			integers[i] = new Int();
+			integers[i] = new IntWrap();
 		}
 
 		for (int i = 0; i < longs.length; i++) {
-			longs[i] = new Lng();
+			longs[i] = new LongWrap();
 		}
 
 		for (int i = 0; i < floats.length; i++) {
-			floats[i] = new Flt();
+			floats[i] = new FloatWrap();
 		}
 
 		for (int i = 0; i < doubles.length; i++) {
-			doubles[i] = new Dbl();
+			doubles[i] = new DoubleWrap();
 		}
 
 		if (exchangeClass != null) {

@@ -25,8 +25,16 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Dbl {
+public class IntWrap {
 
-	public double value;
+	public int value;
+
+	public IntWrap() {
+		this(0);
+	}
+
+	public IntWrap(int value) {
+		this.value = value;
+	}
 
 }

@@ -32,8 +32,8 @@ import org.rapidoid.log.Log;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
-import org.rapidoid.wrap.Bool;
-import org.rapidoid.wrap.Int;
+import org.rapidoid.wrap.BoolWrap;
+import org.rapidoid.wrap.IntWrap;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -75,7 +75,7 @@ public class HttpParser implements Constants {
 
 	private static final byte[] GET = "GET".getBytes();
 
-	public void parse(Buf buf, Bool isGet, Bool isKeepAlive, Range body, Range verb, Range uri, Range path,
+	public void parse(Buf buf, BoolWrap isGet, BoolWrap isKeepAlive, Range body, Range verb, Range uri, Range path,
 			Range query, Range protocol, Ranges headers, RapidoidHelper helper) {
 
 		Bytes bytes = buf.bytes();
@@ -84,7 +84,7 @@ public class HttpParser implements Constants {
 		buf.scanUntil(SPACE, uri);
 		buf.scanLn(protocol);
 
-		Int result = helper.integers[0];
+		IntWrap result = helper.integers[0];
 		buf.scanLnLn(headers.reset(), result, (byte) 's', (byte) 'e');
 
 		int possibleClosePos = result.value;
@@ -100,7 +100,7 @@ public class HttpParser implements Constants {
 		}
 	}
 
-	public void parse2(Buf buf, Bool isGet, Bool isKeepAlive, Range body, Range verb, Range uri, Range path,
+	public void parse2(Buf buf, BoolWrap isGet, BoolWrap isKeepAlive, Range body, Range verb, Range uri, Range path,
 			Range query, Range protocol, Ranges headers, RapidoidHelper helper) {
 
 		Bytes bytes = buf.bytes();
@@ -109,7 +109,7 @@ public class HttpParser implements Constants {
 		buf.scanUntil(SPACE, uri);
 		buf.scanLn(protocol);
 
-		Int result = helper.integers[0];
+		IntWrap result = helper.integers[0];
 		int nextPos = BytesUtil.parseLines(bytes, headers.reset(), result, buf.position(), buf.limit(), (byte) 's',
 				(byte) 'e');
 

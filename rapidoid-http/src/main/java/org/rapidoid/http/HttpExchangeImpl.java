@@ -50,7 +50,7 @@ import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.util.UserInfo;
-import org.rapidoid.wrap.Bool;
+import org.rapidoid.wrap.BoolWrap;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -82,8 +82,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	private final KeyValueRanges files = new KeyValueRanges(50);
 
 	final Range body = new Range();
-	final Bool isGet = new Bool();
-	final Bool isKeepAlive = new Bool();
+	final BoolWrap isGet = new BoolWrap();
+	final BoolWrap isKeepAlive = new BoolWrap();
 
 	private boolean parsedParams;
 	private boolean parsedHeaders;

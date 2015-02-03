@@ -27,7 +27,7 @@ import org.rapidoid.data.Ranges;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.wrap.Int;
+import org.rapidoid.wrap.IntWrap;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -55,7 +55,7 @@ public class BytesUtil implements Constants {
 		return new StringBytes(s);
 	}
 
-	public static int parseLines(Bytes bytes, Ranges lines, Int res, int start, int limit, byte end1, byte end2) {
+	public static int parseLines(Bytes bytes, Ranges lines, IntWrap res, int start, int limit, byte end1, byte end2) {
 		byte b0 = 0, b1 = 0, b2 = 0, b3 = 0;
 		int ret = -1;
 		res.value = NOT_FOUND;
