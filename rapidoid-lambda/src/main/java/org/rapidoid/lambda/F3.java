@@ -1,11 +1,8 @@
-package org.rapidoid.util;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+package org.rapidoid.lambda;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-lambda
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -23,8 +20,10 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+/**
+ * @author Nikolche Mihajlovski
+ * @since 2.0.0
+ */
 public interface F3<R, P1, P2, P3> {
 
 	R execute(P1 param1, P2 param2, P3 param3) throws Exception;

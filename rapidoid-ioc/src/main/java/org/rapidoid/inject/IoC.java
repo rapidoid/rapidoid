@@ -37,12 +37,12 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.config.Conf;
+import org.rapidoid.lambda.F3;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.Builder;
 import org.rapidoid.util.Cls;
-import org.rapidoid.util.F3;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
