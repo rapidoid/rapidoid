@@ -53,7 +53,7 @@ import org.rapidoid.wrap.Bool;
 public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements HttpExchange,
 		HttpInterception, Constants {
 
-	private static final String SESSION_COOKIE = "JSESSIONID";
+	public static final String SESSION_COOKIE = "JSESSIONID";
 
 	public static final String SESSION_PAGE_STACK = "_page_stack_";
 
@@ -714,6 +714,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
+	public Map<String, Object> getSessionById(String sessionId) {
+		return session.getSession(sessionId);
+	}
+
+	@Override
 	public synchronized HttpExchangeHeaders sessionSet(String name, Object value) {
 		if (value != null) {
 			session.setAttribute(sessionId(), name, value);
@@ -759,15 +764,14 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeHeaders clearSession() {
-		session.clearSession(sessionId());
+	public synchronized HttpExchangeHeaders clearSession(String sessionId) {
+		session.clearSession(sessionId);
 		return this;
 	}
 
 	@Override
 	public synchronized boolean hasSession() {
-		String sessId = cookie(SESSION_COOKIE, null);
-		return sessId != null && session.exists(sessId);
+		return hasSession(cookie(SESSION_COOKIE, null));
 	}
 
 	@Override

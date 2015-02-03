@@ -60,7 +60,7 @@ public interface HttpExchangeHeaders extends HttpExchangeBody {
 
 	HttpExchangeHeaders closeSession();
 
-	HttpExchangeHeaders clearSession();
+	HttpExchangeHeaders clearSession(String sessionId);
 
 	HttpExchangeHeaders accessDeniedIf(boolean accessDeniedCondition);
 
@@ -69,6 +69,8 @@ public interface HttpExchangeHeaders extends HttpExchangeBody {
 	String sessionId();
 
 	boolean hasSession();
+
+	boolean hasSession(String sessionId);
 
 	int responseCode();
 

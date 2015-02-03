@@ -454,8 +454,18 @@ public class HttpAppContext implements AppContext {
 	}
 
 	@Override
-	public HttpExchangeHeaders clearSession() {
-		return x.clearSession();
+	public HttpExchangeHeaders clearSession(String sessionId) {
+		return x.clearSession(sessionId);
+	}
+
+	@Override
+	public Map<String, Object> getSessionById(String sessionId) {
+		return x.getSessionById(sessionId);
+	}
+
+	@Override
+	public boolean hasSession(String sessionId) {
+		return x.hasSession(sessionId);
 	}
 
 }

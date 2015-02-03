@@ -105,6 +105,8 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	Map<String, Object> session();
 
+	Map<String, Object> getSessionById(String sessionId);
+
 	<T> T session(String name);
 
 	<T> T session(String name, T defaultValue);
