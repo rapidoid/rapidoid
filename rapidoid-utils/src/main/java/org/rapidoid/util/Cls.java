@@ -463,7 +463,7 @@ public class Cls {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T createProxy(InvocationHandler handler, Class<?>... interfaces) {
-		return ((T) Proxy.newProxyInstance(classLoader(), interfaces, handler));
+		return ((T) Proxy.newProxyInstance(interfaces[0].getClassLoader(), interfaces, handler));
 	}
 
 	public static ClassLoader classLoader() {
