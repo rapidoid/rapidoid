@@ -31,14 +31,14 @@ import org.testng.annotations.Test;
 
 @CanInsert({ "ADMIN", "MANAGER" })
 @CanRead({ "AUTHOR" })
-interface IFoo extends Entity {
+interface IFoo extends IEntity {
 	DbColumn<String> name();
 }
 
 @CanInsert("LOGGED_IN")
 @CanRead("ANYBODY")
 @CanChange("MANAGER")
-interface IBar extends Entity {
+interface IBar extends IEntity {
 
 	@CanRead(MODERATOR)
 	@CanChange({})

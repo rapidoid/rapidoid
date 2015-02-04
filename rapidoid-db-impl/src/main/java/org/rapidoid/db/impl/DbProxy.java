@@ -31,7 +31,7 @@ import org.rapidoid.db.DbColumn;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
-import org.rapidoid.db.Entity;
+import org.rapidoid.db.IEntity;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
@@ -41,7 +41,7 @@ public class DbProxy implements InvocationHandler, Serializable {
 
 	private static final long serialVersionUID = 8876053750757191711L;
 
-	public static <E extends Entity> E create(Class<E> type, ConcurrentMap<String, Object> values) {
+	public static <E extends IEntity> E create(Class<E> type, ConcurrentMap<String, Object> values) {
 		EntityImpl entity = new EntityImpl(type, values);
 
 		E proxy = Cls.createProxy(new DbProxy(entity, type), type);
@@ -50,7 +50,7 @@ public class DbProxy implements InvocationHandler, Serializable {
 		return proxy;
 	}
 
-	public static <E extends Entity> E create(Class<E> type) {
+	public static <E extends IEntity> E create(Class<E> type) {
 		ConcurrentMap<String, Object> map = U.concurrentMap();
 		return create(type, map);
 	}
@@ -70,7 +70,7 @@ public class DbProxy implements InvocationHandler, Serializable {
 		Class<?>[] paramTypes = method.getParameterTypes();
 
 		if (methodClass.equals(Object.class) || methodClass.equals(EntityImpl.class)
-				|| methodClass.equals(Entity.class)) {
+				|| methodClass.equals(IEntity.class)) {
 			return method.invoke(entity, args);
 		}
 

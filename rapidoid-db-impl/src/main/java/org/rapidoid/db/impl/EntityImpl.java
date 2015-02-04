@@ -33,13 +33,13 @@ import org.rapidoid.db.DbColumn;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
-import org.rapidoid.db.Entity;
+import org.rapidoid.db.IEntity;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class EntityImpl implements Entity {
+public class EntityImpl implements IEntity {
 
 	private static final long serialVersionUID = -5556123216690345146L;
 
@@ -60,7 +60,7 @@ public class EntityImpl implements Entity {
 
 	private final DbColumn<Long> versionColumn;
 
-	private Entity proxy;
+	private IEntity proxy;
 
 	public EntityImpl(Class<?> type, ConcurrentMap<String, Object> values) {
 		this.type = type;
@@ -69,7 +69,7 @@ public class EntityImpl implements Entity {
 		this.versionColumn = DB.column(values, "version", Long.class);
 	}
 
-	public void setProxy(Entity proxy) {
+	public void setProxy(IEntity proxy) {
 		this.proxy = proxy;
 	}
 
@@ -158,9 +158,9 @@ public class EntityImpl implements Entity {
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof Entity))
+		if (!(obj instanceof IEntity))
 			return false;
-		Entity other = (Entity) obj;
+		IEntity other = (IEntity) obj;
 		if (id().get() == null || other.id().get() == null) {
 			return false;
 		}

@@ -24,11 +24,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Relation;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.db.DbList;
-import org.rapidoid.db.Entity;
+import org.rapidoid.db.IEntity;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface IProfile extends Entity {
+public interface IProfile extends IEntity {
 
 	@Relation("posted")
 	public DbList<IPost> posts();

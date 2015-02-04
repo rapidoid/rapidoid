@@ -11,7 +11,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.db.DbDsl;
 import org.rapidoid.db.DbSchema;
-import org.rapidoid.db.Entity;
+import org.rapidoid.db.IEntity;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.English;
 import org.rapidoid.util.Scan;
@@ -84,8 +84,8 @@ public class DbSchemaImpl implements DbSchema {
 	@Override
 	public <E> E entity(Class<E> clazz, Map<String, ?> properties) {
 		Class<E> entityType = getEntityTypeFor(clazz);
-		if (entityType.isInterface() && Entity.class.isAssignableFrom(entityType)) {
-			Class<? extends Entity> cls = (Class<? extends Entity>) entityType;
+		if (entityType.isInterface() && IEntity.class.isAssignableFrom(entityType)) {
+			Class<? extends IEntity> cls = (Class<? extends IEntity>) entityType;
 			return (E) DbProxy.create(cls, U.concurrentMap(properties, true));
 		} else {
 			E entity = Cls.newInstance(entityType);
@@ -97,10 +97,10 @@ public class DbSchemaImpl implements DbSchema {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <E> Class<E> getEntityTypeFor(Class<E> clazz) {
-		if (Entity.class.isAssignableFrom(clazz)) {
+		if (IEntity.class.isAssignableFrom(clazz)) {
 			if (Proxy.class.isAssignableFrom(clazz)) {
 				for (Class<?> interf : clazz.getInterfaces()) {
-					if (Entity.class.isAssignableFrom(interf)) {
+					if (IEntity.class.isAssignableFrom(interf)) {
 						return (Class<E>) interf;
 					}
 				}
