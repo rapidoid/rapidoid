@@ -31,6 +31,8 @@ public class EnglishTest extends TestCommons {
 
 	@Test
 	public void testPlural() {
+		eq(English.plural("todo"), "todos");
+		eq(English.plural("alumnus"), "alumni");
 		eq(English.plural("book"), "books");
 		eq(English.plural("hero"), "heroes");
 		eq(English.plural("box"), "boxes");
@@ -39,6 +41,8 @@ public class EnglishTest extends TestCommons {
 		eq(English.plural("toy"), "toys");
 		eq(English.plural("sky"), "skies");
 
+		eq(English.plural("TODO"), "TODOS");
+		eq(English.plural("ALUMNUS"), "ALUMNI");
 		eq(English.plural("BOOK"), "BOOKS");
 		eq(English.plural("HERO"), "HEROES");
 		eq(English.plural("BOX"), "BOXES");
@@ -46,6 +50,8 @@ public class EnglishTest extends TestCommons {
 		eq(English.plural("DISH"), "DISHES");
 		eq(English.plural("TOY"), "TOYS");
 		eq(English.plural("SKY"), "SKIES");
+		
+		eq(English.plural("Todo"), "Todos");
 	}
 
 }
