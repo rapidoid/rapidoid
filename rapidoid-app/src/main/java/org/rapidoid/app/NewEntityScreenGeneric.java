@@ -25,39 +25,34 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.ButtonTag;
-import org.rapidoid.security.Secure;
-import org.rapidoid.util.Cls;
-import org.rapidoid.widget.GridWidget;
+import org.rapidoid.util.U;
+import org.rapidoid.widget.FormWidget;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class ListEntityScreenGeneric extends Screen {
+@Since("2.1.0")
+public class NewEntityScreenGeneric extends Screen {
 
 	private final Class<?> entityType;
 
 	@Session
-	public Object newEntity;
+	private Object target;
 
-	public ListEntityScreenGeneric(Class<?> entityType) {
+	public NewEntityScreenGeneric(Class<?> entityType) {
 		this.entityType = entityType;
 	}
 
 	public Object content() {
+		target = DB.entity(entityType);
 
-		String entityName = Cls.entityName(entityType);
+		Tag caption = h2("New " + U.capitalized(ctx().pathSegment(0).substring(3)));
+		FormWidget form = edit(target).buttons(SAVE, CANCEL);
 
-		Tag caption = titleBox(entityName + " List");
-		GridWidget grid = grid(entityType, "-id", 10);
-
-		boolean canAdd = Secure.canInsert(Secure.username(), DB.entity(entityType));
-		ButtonTag btnAdd = canAdd ? btnPrimary("Add " + entityName).cmd("Add") : null;
-
-		return row(caption, grid, btnAdd);
+		return mid6(caption, form);
 	}
 
-	public void onAdd() {
-		throw ctx().redirect("/new" + Cls.entityName(entityType).toLowerCase());
+	public void onSave() {
+		DB.insert(target);
+		ctx().goBack(1);
 	}
 
 }

@@ -61,6 +61,8 @@ public class AppPageGeneric extends AppGUI {
 
 	protected static final Pattern ENTITY_EDIT = Pattern.compile("^/edit(\\w+?)/(\\d+)/?$");
 
+	protected static final Pattern ENTITY_NEW = Pattern.compile("^/new(\\w+?)/?$");
+
 	protected static final Pattern ENTITY_LIST = Pattern.compile("^/(\\w+?)/?$");
 
 	protected static final AppScreens APP_SCREENS = Cls.customizable(AppScreens.class);
@@ -179,6 +181,19 @@ public class AppPageGeneric extends AppGUI {
 			if (entityClass.equals(reqType)) {
 				return new EditEntityScreenGeneric();
 			}
+		}
+
+		m = ENTITY_NEW.matcher(path);
+
+		if (m.find()) {
+			String type = m.group(1);
+
+			Class<?> entityType = DB.schema().getEntityType(type);
+			if (entityType == null || !Metadata.isAnnotated(entityType, Scaffold.class)) {
+				return null;
+			}
+
+			return new NewEntityScreenGeneric(entityType);
 		}
 
 		m = ENTITY_VIEW.matcher(path);

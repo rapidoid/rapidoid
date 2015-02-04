@@ -54,7 +54,7 @@ public class ViewEntityScreenGeneric extends Screen {
 
 	public void onEdit() {
 		String id = ctx().pathSegment(1);
-		ctx().redirect("/edit" + Cls.entityName(target) + "/" + id);
+		ctx().redirect("/edit" + Cls.entityName(target).toLowerCase() + "/" + id);
 	}
 
 	public void onDelete() {
