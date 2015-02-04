@@ -3,7 +3,7 @@ package org.rapidoid.demo.taskplanner.model;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.AbstractEntity;
+import org.rapidoid.db.Entity;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
@@ -32,7 +32,7 @@ import org.rapidoid.db.DbSet;
 @DbEntity
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Comment extends AbstractEntity {
+public class Comment extends Entity {
 
 	public String content;
 

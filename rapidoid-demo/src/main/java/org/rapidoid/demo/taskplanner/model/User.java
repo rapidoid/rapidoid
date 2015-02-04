@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.AbstractEntity;
+import org.rapidoid.db.Entity;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbSet;
 
@@ -34,7 +34,7 @@ import org.rapidoid.db.DbSet;
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class User extends AbstractEntity {
+public class User extends Entity {
 
 	@Display
 	public String username;

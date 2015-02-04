@@ -32,7 +32,7 @@ import org.testng.annotations.Test;
 @CanInsert({ "ADMIN", "MANAGER" })
 @CanRead({ "AUTHOR" })
 @SuppressWarnings("serial")
-class Foo extends AbstractEntity {
+class Foo extends Entity {
 	public String name = "no name";
 }
 
@@ -40,7 +40,7 @@ class Foo extends AbstractEntity {
 @CanRead("ANYBODY")
 @CanChange("MANAGER")
 @SuppressWarnings("serial")
-class Bar extends AbstractEntity {
+class Bar extends Entity {
 
 	@CanRead(MODERATOR)
 	@CanChange({})

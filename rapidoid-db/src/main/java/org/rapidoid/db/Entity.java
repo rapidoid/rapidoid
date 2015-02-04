@@ -32,7 +32,7 @@ import org.rapidoid.util.CommonRoles;
  */
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class AbstractEntity implements CommonRoles, Serializable {
+public abstract class Entity implements CommonRoles, Serializable {
 
 	private static final long serialVersionUID = 8414835674684110203L;
 
@@ -56,7 +56,7 @@ public abstract class AbstractEntity implements CommonRoles, Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AbstractEntity other = (AbstractEntity) obj;
+		Entity other = (Entity) obj;
 		if (id != other.id)
 			return false;
 		return true;
