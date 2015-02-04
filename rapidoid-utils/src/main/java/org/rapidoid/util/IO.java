@@ -36,6 +36,7 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 import java.util.List;
+import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -144,6 +145,24 @@ public class IO {
 		}
 
 		return lines2;
+	}
+
+	public static Map<String, String> loadMap(String filename) {
+		InputStream input = classLoader().getResourceAsStream(filename);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+		Map<String, String> linesMap = U.map();
+
+		try {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				String[] parts = line.split("=");
+				linesMap.put(parts[0], parts[1]);
+			}
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
+
+		return linesMap;
 	}
 
 	public static void save(String filename, String content) {
