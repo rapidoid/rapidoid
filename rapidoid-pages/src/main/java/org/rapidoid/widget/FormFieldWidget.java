@@ -298,6 +298,10 @@ public class FormFieldWidget extends AbstractWidget {
 	protected FieldType getPropertyFieldType(Property prop) {
 		Class<?> type = prop.type();
 
+		if (type == Boolean.class || type == boolean.class) {
+			return FieldType.CHECKBOX;
+		}
+
 		if (type.isEnum()) {
 			return type.getEnumConstants().length <= 3 ? FieldType.RADIOS : FieldType.DROPDOWN;
 		}
