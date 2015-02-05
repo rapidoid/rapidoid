@@ -50,13 +50,13 @@ public class Examples {
 
 	public static void main(String[] args) {
 		Conf.args("oauth-no-state");
-		DB.destroy();
 
 		String path = "../../rapidoid.github.io/";
 		U.must(new File(path).exists());
 
 		int exampleN = 1;
 		while (true) {
+			AppCtx.reset();
 			List<Class<?>> classes = Scan.pkg("org.rapidoid.docs.eg" + exampleN);
 			if (classes.isEmpty()) {
 				break;
@@ -154,6 +154,7 @@ public class Examples {
 	public static void generate(String path, int exampleN, List<Class<?>> classes) {
 
 		AppCtx.setClasses(Classes.from(classes));
+		DB.destroy();
 
 		HTTPServer server = HTTP.server().build();
 		OAuth.register(server);
@@ -187,6 +188,7 @@ public class Examples {
 		}
 
 		server.shutdown();
+		AppCtx.delClasses();
 	}
 
 	private static void saveTo(HTTPServer server, String url, String filename) {
