@@ -20,6 +20,8 @@ package org.rapidoid.db.impl.inmem;
  * #L%
  */
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -290,6 +292,17 @@ public class DbImpl extends NamedActivity<Database> implements Database, Seriali
 	@Override
 	public Database sudo() {
 		return new DbImpl(name, inmem.sudo(), schema);
+	}
+
+	public byte[] export() {
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		inmem.saveTo(output);
+		return output.toByteArray();
+	}
+
+	public void load(byte[] data) {
+		ByteArrayInputStream input = new ByteArrayInputStream(data);
+		inmem.loadFrom(input);
 	}
 
 }
