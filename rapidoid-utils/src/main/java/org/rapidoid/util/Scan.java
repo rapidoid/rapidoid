@@ -83,10 +83,6 @@ public class Scan {
 	public static List<Class<?>> classes(String packageName, String nameRegex, Predicate<Class<?>> filter,
 			Class<? extends Annotation> annotated, ClassLoader classLoader) {
 
-		if (U.isEmpty(packageName) || packageName.equals("*")) {
-			packageName = "";
-		}
-
 		Pattern regex = nameRegex != null ? Pattern.compile(nameRegex) : null;
 
 		Classes ctxClasses = AppCtx.classes();
@@ -95,7 +91,9 @@ public class Scan {
 		}
 
 		ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
-		Enumeration<URL> urls = resources(packageName);
+
+		String pkgName = U.or(packageName, "");
+		Enumeration<URL> urls = resources(pkgName);
 
 		while (urls.hasMoreElements()) {
 			URL url = urls.nextElement();
@@ -103,7 +101,7 @@ public class Scan {
 
 			String path = file.getAbsolutePath();
 
-			String pkgPath = packageName.replace('.', File.separatorChar);
+			String pkgPath = pkgName.replace('.', File.separatorChar);
 			String rootPath = pkgPath.isEmpty() ? path : path.replace(File.separatorChar + pkgPath, "");
 
 			File root = new File(rootPath);
@@ -125,7 +123,7 @@ public class Scan {
 			Class<?> cls = e.getValue();
 			String pkg = cls.getPackage() != null ? cls.getPackage().getName() : "";
 
-			if (pkg.startsWith(packageName + ".") || pkg.equals(packageName)) {
+			if (packageName == null || pkg.startsWith(packageName + ".") || pkg.equals(packageName)) {
 				if (classMatches(cls, filter, annotated, regex)) {
 					matching.add(cls);
 				}
@@ -144,12 +142,12 @@ public class Scan {
 	}
 
 	public static List<Class<?>> byName(String simpleName, Predicate<Class<?>> filter, ClassLoader classLoader) {
-		List<Class<?>> classes = classes("*", "(.*\\.|^)" + simpleName, filter, null, classLoader);
+		List<Class<?>> classes = classes(null, "(.*\\.|^)" + simpleName, filter, null, classLoader);
 		return classes;
 	}
 
 	public static List<Class<?>> bySuffix(String nameSuffix, Predicate<Class<?>> filter, ClassLoader classLoader) {
-		List<Class<?>> classes = classes("*", ".*\\w" + nameSuffix, filter, null, classLoader);
+		List<Class<?>> classes = classes(null, ".*\\w" + nameSuffix, filter, null, classLoader);
 		return classes;
 	}
 
@@ -247,13 +245,7 @@ public class Scan {
 	}
 
 	private static Enumeration<URL> resources(String name) {
-
 		name = name.replace('.', '/');
-
-		if (name.equals("*")) {
-			name = "";
-		}
-
 		try {
 			return Cls.classLoader().getResources(name);
 		} catch (IOException e) {
