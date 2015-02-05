@@ -44,6 +44,10 @@ public class AppCtx {
 		return ctx;
 	}
 
+	public static boolean hasContext() {
+		return CTXS.get() != null;
+	}
+
 	private static AppCtx provideCtx() {
 		AppCtx ctx = CTXS.get();
 

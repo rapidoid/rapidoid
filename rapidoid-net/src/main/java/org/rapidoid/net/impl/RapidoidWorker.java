@@ -212,13 +212,17 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		try {
 			conn.done = false;
 
-			AppCtx.delExchange();
-			AppCtx.delUser();
+			if (AppCtx.hasContext()) {
+				AppCtx.delExchange();
+				AppCtx.delUser();
+			}
 
 			protocol.process(conn);
 
-			AppCtx.delExchange();
-			AppCtx.delUser();
+			if (AppCtx.hasContext()) {
+				AppCtx.delExchange();
+				AppCtx.delUser();
+			}
 
 			if (!conn.closed && !conn.isAsync()) {
 				conn.done();
