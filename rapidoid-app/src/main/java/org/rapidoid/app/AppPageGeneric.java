@@ -321,7 +321,7 @@ public class AppPageGeneric extends AppGUI {
 	}
 
 	protected Tag themesMenu() {
-		ATag theme = a_glyph("eye-open", "", caret());
+		ATag theme = a_awesome("eye", "", caret());
 
 		Object[] themess = new Object[themes.length];
 
@@ -356,7 +356,7 @@ public class AppPageGeneric extends AppGUI {
 			gh = a_awesome("github", "Sign in with GitHub").href(OAuth.getLoginURL(x, OAuthProvider.GITHUB, null));
 		}
 
-		return navbarDropdown(false, a_glyph("log-in", "Sign in", caret()), ga, fb, li, gh);
+		return navbarDropdown(false, a_awesome("user", "Sign in", caret()), ga, fb, li, gh);
 	}
 
 	protected Tag loggedInUserMenu() {
