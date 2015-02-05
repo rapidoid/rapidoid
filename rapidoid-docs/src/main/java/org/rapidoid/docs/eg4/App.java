@@ -20,15 +20,15 @@ package org.rapidoid.docs.eg4;
  * #L%
  */
 
-// Let's use the built-in theme 1:
+// Let's use the built-in theme 2:
 
 public class App {
 
-	public String theme = "1";
+	public String theme = "2";
 
-	public String title = "Example 1";
+	public String title = "Example 4";
 
-	public String content = "Nice theme!";
+	public String content = "Fancy theme!";
 
 }
 
