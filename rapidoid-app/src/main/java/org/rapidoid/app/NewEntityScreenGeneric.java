@@ -45,7 +45,7 @@ public class NewEntityScreenGeneric extends Screen {
 		target = DB.entity(entityType);
 
 		Tag caption = h2("New " + U.capitalized(ctx().pathSegment(0).substring(3)));
-		FormWidget form = edit(target).buttons(SAVE, CANCEL);
+		FormWidget form = create(target).buttons(SAVE, CANCEL);
 
 		return mid6(caption, form);
 	}
