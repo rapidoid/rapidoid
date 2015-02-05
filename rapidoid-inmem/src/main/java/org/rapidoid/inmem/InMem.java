@@ -60,6 +60,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.OptimisticConcurrencyControlException;
+import org.rapidoid.util.Scan;
 import org.rapidoid.util.SuccessException;
 import org.rapidoid.util.Tuple;
 import org.rapidoid.util.U;
@@ -1021,18 +1022,24 @@ public class InMem implements Serializable {
 				long id = idNum.longValue();
 				String className = ((String) map.get("_class"));
 
-				Class<?> type;
-				try {
-					type = Class.forName(className);
-				} catch (ClassNotFoundException e) {
-					Log.error("Cannot find the class of a DB record!", "id", id, "class", className);
-					type = null;
-				}
+				String[] nameParts = className.split("\\.");
+				String simpleName = nameParts[nameParts.length - 1];
+				List<Class<?>> classes = Scan.byName(simpleName, null, null);
 
-				data.data.put(id, new Rec(type, bytes));
+				if (classes.size() == 1) {
+					Class<?> type = classes.get(0);
+					data.data.put(id, new Rec(type, bytes));
 
-				if (id > data.ids.get()) {
-					data.ids.set(id);
+					if (id > data.ids.get()) {
+						data.ids.set(id);
+					}
+
+				} else {
+					if (classes.isEmpty()) {
+						Log.error("Cannot find the class of a DB record!", "id", id, "class", className);
+					} else {
+						Log.error("Found more than 1 class of a DB record!", "id", id, "class", className);
+					}
 				}
 			}
 
