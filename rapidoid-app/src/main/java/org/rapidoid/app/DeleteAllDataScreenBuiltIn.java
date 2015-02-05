@@ -42,7 +42,7 @@ public class DeleteAllDataScreenBuiltIn extends Screen {
 	}
 
 	public Tag confirmDelete() {
-		return modal("Confirm data deletion", h1("Are you sure you want to delete all data in the database?"),
+		return modal("Confirm data deletion", h2("Are you sure you want to delete all data in the database?"),
 				div(YES_DELETE, NO));
 	}
 
