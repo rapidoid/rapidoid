@@ -7,6 +7,7 @@ import java.util.List;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
+import org.rapidoid.config.Conf;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.HTML;
@@ -534,10 +535,12 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static String urlFor(Object entity) {
+
 		Long id = Beany.getIdIfExists(entity);
 		if (id != null) {
 			String className = Cls.entityName(entity);
-			return U.format("/%s/%s", U.uncapitalized(className), id);
+			String frm = Conf.is("generate") ? "%s%s.html" : "/%s/%s";
+			return U.format(frm, U.uncapitalized(className), id);
 		} else {
 			return "";
 		}
