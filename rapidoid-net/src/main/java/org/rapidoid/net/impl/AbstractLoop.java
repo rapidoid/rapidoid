@@ -50,6 +50,7 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 			beforeLoop();
 		} catch (Throwable e) {
 			Log.severe("Error occured before loop is started", "name", name, "error", e);
+			setStatus(LoopStatus.FAILED);
 			return;
 		}
 
