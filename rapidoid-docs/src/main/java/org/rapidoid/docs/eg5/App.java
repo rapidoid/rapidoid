@@ -28,8 +28,8 @@ import org.rapidoid.app.Screen;
 
 public class App {
 
-	public String title = "Custom screen order";
-	public String theme = "1";
+	String title = "Custom screen order";
+	String theme = "1";
 
 	public static void main(String[] args) {
 		Apps.run(args);
@@ -37,9 +37,7 @@ public class App {
 }
 
 @Order(2)
-class FooScreen extends Screen {
-}
+class FooScreen extends Screen {}
 
 @Order(1)
-class BarScreen extends Screen {
-}
+class BarScreen extends Screen {}

@@ -26,7 +26,7 @@ import org.rapidoid.app.Apps;
 
 public class App {
 
-	public String title = "Example 2";
+	String title = "Example 2";
 
 	public static void main(String[] args) {
 		Apps.run(args);
@@ -34,11 +34,11 @@ public class App {
 }
 
 class HomeScreen {
-	public String content() {
+	String content() {
 		return "At the Home screen!";
 	}
 }
 
 class FooScreen {
-	public String content = "At the Foo screen!";
+	String content = "At the Foo screen!";
 }

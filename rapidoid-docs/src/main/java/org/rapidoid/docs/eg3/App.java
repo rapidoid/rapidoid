@@ -27,7 +27,7 @@ import org.rapidoid.app.Screen;
 
 public class App {
 
-	public String title = "Example 3";
+	String title = "Example 3";
 
 	public static void main(String[] args) {
 		Apps.run(args);
@@ -35,12 +35,12 @@ public class App {
 }
 
 class HomeScreen extends Screen {
-	public Object content() {
+	Object content() {
 		Object link = a("Foo").href("foo.html");
 		return h3("Welcome! Visit ", link);
 	}
 }
 
 class FooScreen {
-	public String content = "At the Foo screen!";
+	String content = "At the Foo screen!";
 }

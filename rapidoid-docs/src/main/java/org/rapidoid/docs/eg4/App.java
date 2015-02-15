@@ -26,17 +26,15 @@ import org.rapidoid.app.Apps;
 
 public class App {
 
-	public String theme = "2";
-	public String title = "Example 4";
-	public String content = "Fancy theme!";
+	String theme = "2";
+	String title = "Example 4";
+	String content = "Fancy theme!";
 
 	public static void main(String[] args) {
 		Apps.run(args);
 	}
 }
 
-class FooScreen {
-}
+class FooScreen {}
 
-class BarScreen {
-}
+class BarScreen {}

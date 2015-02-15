@@ -23,12 +23,12 @@ import org.rapidoid.app.Apps;
  */
 
 public class App {
-	
-	public String title = "Example 1";
-	public String content = "Hello, World!";
-	
+
+	String title = "Example 1";
+	String content = "Hello, World!";
+
 	public static void main(String[] args) {
 		Apps.run(args);
 	}
-	
+
 }

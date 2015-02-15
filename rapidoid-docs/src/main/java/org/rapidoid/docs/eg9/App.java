@@ -29,7 +29,7 @@ public class App {
 
 	String title = "My app";
 	Object content = "Hello!";
-	public String theme = "5";
+	String theme = "5";
 
 	Object[] screens = { "ab", CdScreen.class };
 
@@ -38,11 +38,8 @@ public class App {
 	}
 }
 
-class CdScreen extends Screen {
-}
+class CdScreen extends Screen {}
 
-class BarScreen extends Screen {
-}
+class BarScreen extends Screen {}
 
-class AbScreen extends Screen {
-}
+class AbScreen extends Screen {}

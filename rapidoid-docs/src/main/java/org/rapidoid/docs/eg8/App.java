@@ -28,7 +28,7 @@ public class App {
 
 	String title = "My app";
 	Object content = "Hello!";
-	public String theme = "2";
+	String theme = "2";
 
 	boolean full = false;
 	boolean search = true;

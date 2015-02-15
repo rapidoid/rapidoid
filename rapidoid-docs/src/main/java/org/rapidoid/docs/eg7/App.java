@@ -28,7 +28,7 @@ public class App {
 
 	String title = "Facebook or Google";
 	Object content = "Hello!";
-	public String theme = "3";
+	String theme = "3";
 
 	boolean full = false;
 	boolean facebookLogin = true;
