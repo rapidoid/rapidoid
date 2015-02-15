@@ -21,6 +21,8 @@ package org.rapidoid.docs;
  */
 
 import java.io.File;
+import java.lang.reflect.Method;
+import java.net.BindException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,6 +39,7 @@ import org.rapidoid.lambda.Mapper;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Classes;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.IO;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
@@ -49,25 +52,35 @@ public class Examples {
 	private static final String JAVA_KEYWORDS = "abstract|continue|for|new|switch|assert|default|goto|package|synchronized|boolean|do|if|private|this|break|double|implements|protected|throw|byte|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|int|short|try|char|final|interface|static|void|class|finally|long|strictfp|volatile|const|float|native|super|while";
 
 	public static void main(String[] args) {
-		Conf.args("oauth-no-state");
+		Conf.args("oauth-no-state", "generate");
 
 		String path = "../../rapidoid.github.io/";
 		U.must(new File(path).exists());
 
+		HTTPServer server = HTTP.server().build();
+		OAuth.register(server);
+		HttpBuiltins.register(server);
+		server.serve(new AppHandler());
+		server.start();
+
 		int exampleN = 1;
 		while (true) {
+
 			AppCtx.reset();
 			List<Class<?>> classes = Scan.pkg("org.rapidoid.docs.eg" + exampleN);
 			if (classes.isEmpty()) {
 				break;
 			}
 
-			generate(path, exampleN, classes);
+			generate(server, path, exampleN, classes);
 
 			exampleN++;
 		}
 
 		generateIndex(path, exampleN - 1);
+
+		server.shutdown();
+
 		DB.shutdown();
 		DB.destroy();
 	}
@@ -151,16 +164,25 @@ public class Examples {
 		return snippet;
 	}
 
-	public static void generate(String path, int exampleN, List<Class<?>> classes) {
+	public static void generate(HTTPServer server, String path, int exampleN, List<Class<?>> classes) {
 
-		AppCtx.setClasses(Classes.from(classes));
+		Classes appClasses = Classes.from(classes);
+		AppCtx.setClasses(appClasses);
 		DB.destroy();
 
-		HTTPServer server = HTTP.server().build();
-		OAuth.register(server);
-		HttpBuiltins.register(server);
-		server.serve(new AppHandler());
-		server.start();
+		Class<?> appCls = appClasses.get("App");
+		if (appCls != null) {
+			Method main = Cls.getMethod(appCls, "main", String[].class);
+			try {
+				Cls.invokeStatic(main, (Object) new String[0]);
+			} catch (Throwable e) {
+				if (!(UTILS.rootCause(e) instanceof BindException)) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		Conf.args("oauth-no-state", "generate");
 
 		path += "examples/";
 		new File(path).mkdir();
@@ -177,9 +199,15 @@ public class Examples {
 			saveTo(server, "//bootstrap/css/theme-" + i + ".css", path + "../theme-" + i + ".css");
 		}
 
+		if (appClasses.containsKey("Movie")) {
+			for (int i = 1; i <= 5; i++) {
+				saveTo(server, "/movie/" + i, path + "movie" + i + ".html");
+			}
+		}
+
 		for (Class<?> cls : classes) {
 			String name = cls.getSimpleName();
-			if (name.endsWith("Screen")) {
+			if (name.endsWith("Screen") && !name.equals("HomeScreen")) {
 				name = U.mid(name, 0, -6);
 				String page = U.uncapitalized(name);
 				String url = "/" + page;
@@ -187,7 +215,6 @@ public class Examples {
 			}
 		}
 
-		server.shutdown();
 		AppCtx.delClasses();
 	}
 
