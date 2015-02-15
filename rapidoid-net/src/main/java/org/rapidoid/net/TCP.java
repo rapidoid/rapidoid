@@ -23,7 +23,6 @@ package org.rapidoid.net;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.inject.IoC;
-import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.net.impl.RapidoidClientLoop;
 import org.rapidoid.net.impl.RapidoidServerLoop;
 import org.rapidoid.net.impl.TCPClientBuilder;

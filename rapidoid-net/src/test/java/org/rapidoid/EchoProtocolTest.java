@@ -27,8 +27,8 @@ import java.io.IOException;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.F2;
+import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
 

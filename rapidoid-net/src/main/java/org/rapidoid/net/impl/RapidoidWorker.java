@@ -38,6 +38,7 @@ import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.buffer.IncompleteReadException;
 import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
+import org.rapidoid.net.Protocol;
 import org.rapidoid.pool.ArrayPool;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.util.AppCtx;

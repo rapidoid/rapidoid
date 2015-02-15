@@ -27,6 +27,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.inject.IoC;
 import org.rapidoid.log.Log;
+import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ExchangeProtocol;
 import org.rapidoid.util.AppCtx;

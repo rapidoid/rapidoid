@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.json.JSON;
+import org.rapidoid.net.Protocol;
 import org.rapidoid.net.impl.RapidoidServerLoop;
 
 @Authors("Nikolche Mihajlovski")

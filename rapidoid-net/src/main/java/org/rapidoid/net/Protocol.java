@@ -1,4 +1,4 @@
-package org.rapidoid.net.impl;
+package org.rapidoid.net;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
