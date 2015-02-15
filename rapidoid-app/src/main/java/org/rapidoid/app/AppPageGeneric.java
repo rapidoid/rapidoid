@@ -236,7 +236,7 @@ public class AppPageGeneric extends AppGUI {
 		if (cnt != null) {
 			return cnt;
 		} else {
-			if (screen != null && (screen != app || x.uri().equals("/"))) {
+			if (screen != null && (screen != app || x.uri().equals("/") || x.uri().equals("/index.html"))) {
 				return "No content available!";
 			} else {
 				throw x.notFound();
