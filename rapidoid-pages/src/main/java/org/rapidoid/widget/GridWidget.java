@@ -122,11 +122,11 @@ public class GridWidget extends AbstractWidget {
 				String currentOrder = order.get();
 
 				if (currentOrder.equals(prop.name())) {
-					sortIcon = glyphicon("chevron-down");
+					sortIcon = awesome("sort-amount-asc");
 				}
 
 				if (order != null && currentOrder.equals("-" + prop.name())) {
-					sortIcon = glyphicon("chevron-up");
+					sortIcon = awesome("sort-amount-desc");
 				}
 
 				sort = a_void(prop.caption(), " ", sortIcon).cmd("_sort", order, prop.name());
