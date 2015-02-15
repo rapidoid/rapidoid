@@ -6,3 +6,4 @@ Hide the navigation bar extras
 Customize login options in the login menu
 Display search in navigation
 Configure screens to be displayed
+Using the grid widget
