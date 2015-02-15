@@ -1,6 +1,7 @@
-package org.rapidoid.docs.eg4;
+package org.rapidoid.docs.eg9;
 
 import org.rapidoid.app.Apps;
+import org.rapidoid.app.Screen;
 
 /*
  * #%L
@@ -22,21 +23,26 @@ import org.rapidoid.app.Apps;
  * #L%
  */
 
-// Let's use the built-in theme 2:
+// Show only the Ab and Cd screens
 
 public class App {
 
-	public String theme = "2";
-	public String title = "Example 4";
-	public String content = "Fancy theme!";
+	String title = "My app";
+	Object content = "Hello!";
+	public String theme = "5";
+
+	Object[] screens = { "ab", CdScreen.class };
 
 	public static void main(String[] args) {
 		Apps.run(args);
 	}
 }
 
-class FooScreen {
+class CdScreen extends Screen {
 }
 
-class BarScreen {
+class BarScreen extends Screen {
+}
+
+class AbScreen extends Screen {
 }

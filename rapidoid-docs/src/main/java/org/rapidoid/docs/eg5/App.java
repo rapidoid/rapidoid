@@ -1,6 +1,8 @@
-package org.rapidoid.docs.eg4;
+package org.rapidoid.docs.eg5;
 
+import org.rapidoid.annotation.Order;
 import org.rapidoid.app.Apps;
+import org.rapidoid.app.Screen;
 
 /*
  * #%L
@@ -22,21 +24,22 @@ import org.rapidoid.app.Apps;
  * #L%
  */
 
-// Let's use the built-in theme 2:
+// Foo is second, Bar is first:
 
 public class App {
 
-	public String theme = "2";
-	public String title = "Example 4";
-	public String content = "Fancy theme!";
+	public String title = "Custom screen order";
+	public String theme = "1";
 
 	public static void main(String[] args) {
 		Apps.run(args);
 	}
 }
 
-class FooScreen {
+@Order(2)
+class FooScreen extends Screen {
 }
 
-class BarScreen {
+@Order(1)
+class BarScreen extends Screen {
 }

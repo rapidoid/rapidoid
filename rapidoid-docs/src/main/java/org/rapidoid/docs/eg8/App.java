@@ -1,4 +1,4 @@
-package org.rapidoid.docs.eg4;
+package org.rapidoid.docs.eg8;
 
 import org.rapidoid.app.Apps;
 
@@ -22,21 +22,18 @@ import org.rapidoid.app.Apps;
  * #L%
  */
 
-// Let's use the built-in theme 2:
+// Show the "search" box in the navigation
 
 public class App {
 
+	String title = "My app";
+	Object content = "Hello!";
 	public String theme = "2";
-	public String title = "Example 4";
-	public String content = "Fancy theme!";
+
+	boolean full = false;
+	boolean search = true;
 
 	public static void main(String[] args) {
 		Apps.run(args);
 	}
-}
-
-class FooScreen {
-}
-
-class BarScreen {
 }

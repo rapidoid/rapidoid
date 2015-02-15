@@ -1,4 +1,4 @@
-package org.rapidoid.docs.eg4;
+package org.rapidoid.docs.eg6;
 
 import org.rapidoid.app.Apps;
 
@@ -22,21 +22,17 @@ import org.rapidoid.app.Apps;
  * #L%
  */
 
-// Let's use the built-in theme 2:
+// No search or login extras in navigation
 
 public class App {
 
-	public String theme = "2";
-	public String title = "Example 4";
-	public String content = "Fancy theme!";
+	String title = "No extras here";
+	Object content = "Hello!";
+	public String theme = "4";
+
+	boolean full = false;
 
 	public static void main(String[] args) {
 		Apps.run(args);
 	}
-}
-
-class FooScreen {
-}
-
-class BarScreen {
 }
