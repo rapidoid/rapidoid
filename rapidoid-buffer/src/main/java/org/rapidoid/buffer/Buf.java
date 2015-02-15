@@ -143,6 +143,8 @@ public interface Buf {
 
 	String readN(int count);
 
+	byte[] readNbytes(int count);
+
 	void scanTo(byte sep, Range range, boolean failOnLimit);
 
 	int scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit);

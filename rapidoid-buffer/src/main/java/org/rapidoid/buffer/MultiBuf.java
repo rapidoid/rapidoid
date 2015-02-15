@@ -1264,6 +1264,18 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
+	public byte[] readNbytes(int count) {
+		assert invariant();
+
+		scanN(count, HELPER_RANGE);
+		byte[] bytes = new byte[count];
+		get(HELPER_RANGE, bytes, 0);
+
+		assert invariant();
+		return bytes;
+	}
+
+	@Override
 	public void scanTo(byte sep, Range range, boolean failOnLimit) {
 		assert invariant();
 
