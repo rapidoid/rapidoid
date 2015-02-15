@@ -120,4 +120,10 @@ public class HTTPServerImpl extends RapidoidServerLoop implements HTTPServer {
 		return this;
 	}
 
+	@Override
+	public HTTPServer addUpgrade(String upgradeName, HttpUpgradeHandler upgradeHandler, Protocol upgradeProtocol) {
+		((HttpProtocol) protocol).addUpgrade(upgradeName, upgradeHandler, upgradeProtocol);
+		return this;
+	}
+
 }

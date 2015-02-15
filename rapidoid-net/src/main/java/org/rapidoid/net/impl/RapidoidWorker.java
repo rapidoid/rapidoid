@@ -218,7 +218,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 				AppCtx.delUser();
 			}
 
-			protocol.process(conn);
+			conn.getProtocol().process(conn);
 
 			if (AppCtx.hasContext()) {
 				AppCtx.delExchange();
@@ -408,7 +408,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		conn.closed = false;
 
 		conn.key = key;
-
+		conn.setProtocol(protocol);
+		
 		if (isProtocolListener) {
 			conn.setListener((CtxListener) protocol);
 		}

@@ -185,4 +185,8 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 		return conn.output.asText();
 	}
 
+	public Protocol getProtocol() {
+		return protocol;
+	}
+
 }

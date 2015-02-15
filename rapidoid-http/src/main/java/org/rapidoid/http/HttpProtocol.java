@@ -30,6 +30,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ExchangeProtocol;
+import org.rapidoid.net.impl.RapidoidConnection;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
@@ -43,6 +44,8 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	private final Router router;
 
 	private final HttpResponses responses;
+
+	private final HttpUpgrades upgrades = new HttpUpgrades();
 
 	private HttpSession session;
 
@@ -67,10 +70,34 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		parser.parse(x.input(), x.isGet, x.isKeepAlive, x.body, x.verb, x.uri, x.path, x.query, x.protocol, x.headers,
 				x.helper());
 
+		String upgrade = x.header("Upgrade", null);
+		if (!U.isEmpty(upgrade)) {
+			processUpgrade(ctx, x, upgrade);
+			return;
+		}
+
 		U.rteIf(x.verb.isEmpty() || x.uri.isEmpty(), "Invalid HTTP request!");
 		U.rteIf(x.isGet.value && !x.body.isEmpty(), "Body is NOT allowed in HTTP GET requests!");
 
 		processRequest(x);
+	}
+
+	private void processUpgrade(Channel ctx, HttpExchangeImpl x, String upgrade) {
+		Log.debug("Starting HTTP protocol upgrade", "upgrade", upgrade);
+
+		HttpUpgradeHandler upgradeHandler = upgrades.getUpgrade(upgrade);
+		Protocol upgradeTo = upgrades.getProtocol(upgrade);
+
+		U.must(upgradeHandler != null && upgradeTo != null, "Upgrade not supported: %s", upgrade);
+
+		upgradeHandler.doUpgrade(x);
+
+		RapidoidConnection conn = (RapidoidConnection) ctx;
+		conn.setProtocol(upgradeTo);
+
+		conn.setInitial(true);
+		upgradeTo.process(ctx);
+		conn.setInitial(false);
 	}
 
 	private void processRequest(HttpExchangeImpl x) {
@@ -170,6 +197,10 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	public HTTPInterceptor getInterceptor() {
 		return interceptor;
+	}
+
+	public void addUpgrade(String upgradeName, HttpUpgradeHandler upgrade, Protocol protocol) {
+		upgrades.add(upgradeName, upgrade, protocol);
 	}
 
 }

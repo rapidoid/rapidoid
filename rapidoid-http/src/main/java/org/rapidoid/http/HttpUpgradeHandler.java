@@ -22,37 +22,11 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.net.Protocol;
-import org.rapidoid.net.TCPServer;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public interface HTTPServer extends TCPServer {
+@Since("2.?")
+public interface HttpUpgradeHandler {
 
-	HTTPServer route(String cmd, String url, Handler handler);
-
-	HTTPServer route(String cmd, String url, String response);
-
-	HTTPServer serve(String response);
-
-	HTTPServer serve(Handler handler);
-
-	HTTPServer get(String url, Handler handler);
-
-	HTTPServer post(String url, Handler handler);
-
-	HTTPServer put(String url, Handler handler);
-
-	HTTPServer delete(String url, Handler handler);
-
-	HTTPServer start();
-
-	HTTPServer shutdown();
-
-	HTTPInterceptor interceptor();
-
-	HTTPServer interceptor(HTTPInterceptor interceptor);
-
-	HTTPServer addUpgrade(String upgradeName, HttpUpgradeHandler upgradeHandler, Protocol protocol);
+	void doUpgrade(HttpExchangeImpl x);
 
 }

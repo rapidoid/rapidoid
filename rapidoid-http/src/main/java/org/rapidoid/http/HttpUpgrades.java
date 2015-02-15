@@ -20,39 +20,35 @@ package org.rapidoid.http;
  * #L%
  */
 
+import java.util.concurrent.ConcurrentMap;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.net.Protocol;
-import org.rapidoid.net.TCPServer;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public interface HTTPServer extends TCPServer {
+@Since("2.?")
+public class HttpUpgrades {
 
-	HTTPServer route(String cmd, String url, Handler handler);
+	private final ConcurrentMap<String, HttpUpgradeHandler> upgrades = U.concurrentMap();
 
-	HTTPServer route(String cmd, String url, String response);
+	private final ConcurrentMap<String, Protocol> protocols = U.concurrentMap();
 
-	HTTPServer serve(String response);
+	public void add(String upgradeName, HttpUpgradeHandler upgradeHandler, Protocol protocol) {
+		upgradeName = upgradeName.toLowerCase();
+		upgrades.put(upgradeName, upgradeHandler);
+		protocols.put(upgradeName, protocol);
+	}
 
-	HTTPServer serve(Handler handler);
+	public HttpUpgradeHandler getUpgrade(String upgradeName) {
+		upgradeName = upgradeName.toLowerCase();
+		return upgrades.get(upgradeName);
+	}
 
-	HTTPServer get(String url, Handler handler);
-
-	HTTPServer post(String url, Handler handler);
-
-	HTTPServer put(String url, Handler handler);
-
-	HTTPServer delete(String url, Handler handler);
-
-	HTTPServer start();
-
-	HTTPServer shutdown();
-
-	HTTPInterceptor interceptor();
-
-	HTTPServer interceptor(HTTPInterceptor interceptor);
-
-	HTTPServer addUpgrade(String upgradeName, HttpUpgradeHandler upgradeHandler, Protocol protocol);
+	public Protocol getProtocol(String upgradeName) {
+		upgradeName = upgradeName.toLowerCase();
+		return protocols.get(upgradeName);
+	}
 
 }
