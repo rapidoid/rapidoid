@@ -1,5 +1,7 @@
 package org.rapidoid.docs.eg1;
 
+import org.rapidoid.app.Apps;
+
 /*
  * #%L
  * rapidoid-docs
@@ -21,6 +23,12 @@ package org.rapidoid.docs.eg1;
  */
 
 public class App {
+	
 	public String title = "Example 1";
 	public String content = "Hello, World!";
+	
+	public static void main(String[] args) {
+		Apps.run(args);
+	}
+	
 }
