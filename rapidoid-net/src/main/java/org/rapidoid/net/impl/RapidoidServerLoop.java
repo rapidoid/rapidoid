@@ -181,6 +181,7 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 		RapidoidConnection conn = newConnection();
 		conn.setInitial(false);
 		conn.input.append(input);
+		conn.setProtocol(protocol);
 		process(conn);
 		return conn.output.asText();
 	}
