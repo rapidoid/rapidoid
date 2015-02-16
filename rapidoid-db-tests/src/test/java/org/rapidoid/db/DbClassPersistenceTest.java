@@ -60,7 +60,7 @@ public class DbClassPersistenceTest extends DbTestCommons {
 			public void run() {
 				int id = Rnd.rnd(count) + 1;
 				Person person = new Person("x", id * 100);
-				person.version = DB.getVersionOf(id);
+				person.setVersion(DB.getVersionOf(id));
 
 				try {
 					DB.update(id, person);
@@ -89,7 +89,7 @@ public class DbClassPersistenceTest extends DbTestCommons {
 
 		for (int id = 1; id <= count; id++) {
 			Person p = DB.get(id);
-			isTrue(p.id == id);
+			isTrue(p.getId() == id);
 			isTrue((p.name.equals("abc") && p.age == -1) || (p.name.equals("x") && p.age == id * 100));
 		}
 

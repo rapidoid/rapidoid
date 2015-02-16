@@ -57,8 +57,7 @@ public class DbInterfaceCollectionsTest extends DbTestCommons {
 		profile.posts().add(post3);
 		eq(DB.size(), 4);
 
-		notNull(profile.id());
-		notNull(profile.id().get());
+		notNull(profile.getId());
 		DB.persist(profile);
 		eq(DB.size(), 4);
 

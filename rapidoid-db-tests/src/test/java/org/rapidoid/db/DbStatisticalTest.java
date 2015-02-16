@@ -135,8 +135,8 @@ public class DbStatisticalTest extends DbTestCommons {
 		DB.each(new Operation<Person>() {
 			@Override
 			public void execute(Person p) throws Exception {
-				Person p2 = (Person) persons.get(p.id);
-				eq(p2.id, p.id);
+				Person p2 = (Person) persons.get(p.getId());
+				eq(p2.getId(), p.getId());
 				eq(p2.age, p.age);
 				eq(p2.name, p.name);
 			}
@@ -154,7 +154,7 @@ public class DbStatisticalTest extends DbTestCommons {
 			break;
 
 		case 2:
-			op.person.version = DB.getVersionOf(op.id);
+			op.person.setVersion(DB.getVersionOf(op.id));
 			DB.update(op.id, op.person);
 			break;
 

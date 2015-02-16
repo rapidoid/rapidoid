@@ -32,35 +32,9 @@ import org.rapidoid.util.CommonRoles;
  */
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class Entity implements CommonRoles, Serializable {
+public abstract class Entity extends EntityCommons implements IEntityCommons, CommonRoles, Serializable {
 
 	private static final long serialVersionUID = 8414835674684110203L;
-
-	public long id;
-
-	public long version;
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Entity other = (Entity) obj;
-		if (id != other.id)
-			return false;
-		return true;
-	}
 
 	@Override
 	public String toString() {

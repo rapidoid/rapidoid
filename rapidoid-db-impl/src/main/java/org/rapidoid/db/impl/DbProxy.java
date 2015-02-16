@@ -23,15 +23,19 @@ package org.rapidoid.db.impl;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.concurrent.ConcurrentMap;
+import java.util.Collections;
+import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.beany.Beany;
 import org.rapidoid.db.DbColumn;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
+import org.rapidoid.db.EntityCommons;
 import org.rapidoid.db.IEntity;
+import org.rapidoid.db.IEntityCommons;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
@@ -41,18 +45,21 @@ public class DbProxy implements InvocationHandler, Serializable {
 
 	private static final long serialVersionUID = 8876053750757191711L;
 
-	public static <E extends IEntity> E create(Class<E> type, ConcurrentMap<String, Object> values) {
-		EntityImpl entity = new EntityImpl(type, values);
+	@SuppressWarnings("unchecked")
+	public static <E extends IEntity> E create(Class<E> type, Map<String, ?> values) {
+		EntityImpl entity = new EntityImpl(type);
 
 		E proxy = Cls.createProxy(new DbProxy(entity, type), type);
 		entity.setProxy(proxy);
 
+		Beany.update(proxy, (Map<String, Object>) values, true);
+
 		return proxy;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <E extends IEntity> E create(Class<E> type) {
-		ConcurrentMap<String, Object> map = U.concurrentMap();
-		return create(type, map);
+		return (E) create(type, Collections.EMPTY_MAP);
 	}
 
 	private final EntityImpl entity;
@@ -70,6 +77,7 @@ public class DbProxy implements InvocationHandler, Serializable {
 		Class<?>[] paramTypes = method.getParameterTypes();
 
 		if (methodClass.equals(Object.class) || methodClass.equals(EntityImpl.class)
+				|| methodClass.equals(EntityCommons.class) || methodClass.equals(IEntityCommons.class)
 				|| methodClass.equals(IEntity.class)) {
 			return method.invoke(entity, args);
 		}

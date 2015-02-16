@@ -31,14 +31,14 @@ public class DbClassEqualityTest extends DbTestCommons {
 
 	@Test
 	public void testEntityEquality() {
-		eq(post(0L), post(0L));
+		neq(post(0L), post(0L));
 		eq(post(123L), post(123L));
 		neq(post(123L), post(547L));
 	}
 
 	private Post post(Long id) {
 		Post p = new Post();
-		p.id = id;
+		p.setId(id);
 		return p;
 	}
 

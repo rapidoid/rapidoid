@@ -86,7 +86,7 @@ public class DbSchemaImpl implements DbSchema {
 		Class<E> entityType = getEntityTypeFor(clazz);
 		if (entityType.isInterface() && IEntity.class.isAssignableFrom(entityType)) {
 			Class<? extends IEntity> cls = (Class<? extends IEntity>) entityType;
-			return (E) DbProxy.create(cls, U.concurrentMap(properties, true));
+			return (E) DbProxy.create(cls, properties);
 		} else {
 			E entity = Cls.newInstance(entityType);
 			Beany.update(entity, (Map<String, Object>) properties, true);

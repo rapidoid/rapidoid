@@ -88,7 +88,7 @@ public class DbInterfacePersistenceTest extends DbTestCommons {
 
 		for (int id = 1; id <= count; id++) {
 			IPerson p = DB.get(id);
-			isTrue(p.id().get() == id);
+			isTrue(p.getId() == id);
 			Integer age = p.age().get();
 			String name = p.name().get();
 			isTrue((name.equals("abc") && age == -1) || (name.equals("x") && age == id * 100));

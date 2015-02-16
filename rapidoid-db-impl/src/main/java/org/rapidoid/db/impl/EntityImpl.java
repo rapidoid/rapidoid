@@ -33,20 +33,19 @@ import org.rapidoid.db.DbColumn;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
+import org.rapidoid.db.EntityCommons;
 import org.rapidoid.db.IEntity;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class EntityImpl implements IEntity {
+public class EntityImpl extends EntityCommons implements IEntity {
 
 	private static final long serialVersionUID = -5556123216690345146L;
 
 	@SuppressWarnings("unused")
 	private final Class<?> type;
-
-	private final ConcurrentMap<String, Object> values;
 
 	private final ConcurrentMap<String, DbColumn<?>> columns = U.concurrentMap();
 
@@ -56,17 +55,12 @@ public class EntityImpl implements IEntity {
 
 	private final ConcurrentMap<String, DbRef<?>> refs = U.concurrentMap();
 
-	private final DbColumn<Long> idColumn;
-
-	private final DbColumn<Long> versionColumn;
+	private final ConcurrentMap<String, Object> values = U.concurrentMap();
 
 	private IEntity proxy;
 
-	public EntityImpl(Class<?> type, ConcurrentMap<String, Object> values) {
+	public EntityImpl(Class<?> type) {
 		this.type = type;
-		this.values = values;
-		this.idColumn = DB.column(values, "id", Long.class);
-		this.versionColumn = DB.column(values, "version", Long.class);
 	}
 
 	public void setProxy(IEntity proxy) {
@@ -76,11 +70,6 @@ public class EntityImpl implements IEntity {
 	@Override
 	public String toString() {
 		return Beany.beanToStr(proxy, false);
-	}
-
-	private long getId() {
-		Object id = values.get("id");
-		return id != null ? ((Number) id).longValue() : 0;
 	}
 
 	public DbColumn<?> column(Method method) {
@@ -150,33 +139,6 @@ public class EntityImpl implements IEntity {
 		int result = 1;
 		result = prime * result + (int) (getId() ^ (getId() >>> 32));
 		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof IEntity))
-			return false;
-		IEntity other = (IEntity) obj;
-		if (id().get() == null || other.id().get() == null) {
-			return false;
-		}
-		if (!id().get().equals(other.id().get()))
-			return false;
-		return true;
-	}
-
-	@Override
-	public DbColumn<Long> id() {
-		return idColumn;
-	}
-
-	@Override
-	public DbColumn<Long> version() {
-		return versionColumn;
 	}
 
 }

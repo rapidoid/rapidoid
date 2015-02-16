@@ -68,15 +68,15 @@ public class DbClassCRUDTest extends DbTestCommons {
 		Person p2 = db.get(id2, Person.class);
 		Person p3 = db.get(id3);
 
-		eq(p1.id, id1);
+		eq(p1.getId(), id1);
 		eq(p1.name, "abc");
 		eq(p1.age, 10);
 
-		eq(p2.id, id2);
+		eq(p2.getId(), id2);
 		eq(p2.name, "f");
 		eq(p2.age, 20);
 
-		eq(p3.id, id3);
+		eq(p3.getId(), id3);
 		eq(p3.name, "xy");
 		eq(p3.age, 30);
 
@@ -90,8 +90,8 @@ public class DbClassCRUDTest extends DbTestCommons {
 		List<Person> adults = db.find(pr);
 
 		eq(adults.size(), 2);
-		eq(adults.get(0).id, id2);
-		eq(adults.get(1).id, id3);
+		eq(adults.get(0).getId(), id2);
+		eq(adults.get(1).getId(), id3);
 
 		db.shutdown();
 	}

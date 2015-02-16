@@ -28,10 +28,6 @@ import org.rapidoid.util.CommonRoles;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface IEntity extends CommonRoles, Serializable {
-
-	DbColumn<Long> id();
-
-	DbColumn<Long> version();
+public interface IEntity extends IEntityCommons, CommonRoles, Serializable {
 
 }

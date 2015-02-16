@@ -56,7 +56,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test(expectedExceptions = SecurityException.class)
 	public void testSecurityFailure() {
-		
+
 		Foo foo = new Foo();
 		DB.persist(foo);
 		DB.shutdown();
@@ -64,7 +64,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test(expectedExceptions = SecurityException.class)
 	public void testSecurityFailure2() {
-		
+
 		Foo foo = new Foo();
 		DB.as("moderator@debug").persist(foo);
 		DB.shutdown();
@@ -72,7 +72,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test(expectedExceptions = SecurityException.class)
 	public void testSecurityFailure3() {
-		
+
 		Foo foo = new Foo();
 		AppCtx.setUser(new UserInfo("abcde"));
 		DB.persist(foo);
@@ -81,7 +81,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test
 	public void testSudo() {
-		
+
 		Foo foo = new Foo();
 		DB.sudo().persist(foo);
 		DB.sudo().update(foo);
@@ -92,7 +92,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test
 	public void testSecurity() {
-		
+
 		final Foo foo = new Foo();
 		DB.as("admin@debug").persist(foo);
 		DB.shutdown();
@@ -100,7 +100,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test
 	public void testSecurity2() {
-		
+
 		Foo foo = new Foo();
 		AppCtx.setUser(new UserInfo("manager@debug"));
 		DB.persist(foo);
@@ -109,7 +109,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test
 	public void testDeleteSecurity() {
-		
+
 		final Foo foo = new Foo();
 		DB.sudo().persist(foo);
 
@@ -139,7 +139,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test
 	public void testUpdateSecurity() {
-		
+
 		final Foo foo = new Foo();
 		DB.sudo().persist(foo);
 
@@ -169,7 +169,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test
 	public void testGetSecurity() {
-		
+
 		final Foo foo = new Foo();
 		foo.name = "abc";
 		final long id = DB.sudo().persist(foo);
@@ -200,7 +200,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test
 	public void testColumnGrainedReadSecurity() {
-		
+
 		final Bar bar = new Bar();
 		bar.name = "abc";
 		final long id = DB.as("asd").persist(bar);
@@ -210,7 +210,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 		eq(bar2.desc, "desc");
 
 		Bar bar3 = new Bar();
-		bar3.id = id;
+		bar3.setId(id);
 		DB.refresh(bar3);
 		eq(bar3.name, null);
 		eq(bar3.desc, "desc");
@@ -247,19 +247,19 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test
 	public void testColumnGrainedUpdateSecurity() {
-		
+
 		final Bar bar = new Bar();
 		bar.name = "abc";
 		DB.as("qwerty").persist(bar);
 
-		eq(bar.id, 1);
-		eq(bar.version, 1);
-		
+		eq(bar.getId(), 1);
+		eq(bar.getVersion(), 1);
+
 		bar.name = "new name";
 		bar.desc = "new desc";
 		DB.as("manager@debug").update(bar);
 
-		Bar bar2 = DB.sudo().get(bar.id);
+		Bar bar2 = DB.sudo().get(bar.getId());
 
 		eq(bar2.name, "abc");
 		eq(bar2.desc, "new desc");
@@ -269,13 +269,13 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test
 	public void testRefreshSecurity() {
-		
+
 		final Foo foo = new Foo();
 		foo.name = "abc";
 		DB.sudo().persist(foo);
 
 		final Foo foo2 = new Foo();
-		foo2.id = foo.id;
+		foo2.setId(foo.getId());
 
 		throwsSecurityException(new Runnable() {
 			@Override
@@ -309,7 +309,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test
 	public void testClearSecurity() {
-		
+
 		final Foo foo = new Foo();
 		DB.sudo().persist(foo);
 

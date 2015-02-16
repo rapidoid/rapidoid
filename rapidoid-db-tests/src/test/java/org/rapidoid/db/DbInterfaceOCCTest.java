@@ -35,10 +35,10 @@ public class DbInterfaceOCCTest extends DbTestCommons {
 		IPerson p1 = DB.entity(IPerson.class);
 		DB.persist(p1);
 
-		eq(p1.version().get().longValue(), 1);
+		eq(p1.getVersion(), 1);
 
 		IPerson p2 = DB.entity(IPerson.class);
-		p2.id().set(p1.id().get());
+		p2.setId(p1.getId());
 
 		DB.persist(p2);
 	}
@@ -48,13 +48,13 @@ public class DbInterfaceOCCTest extends DbTestCommons {
 		IPerson p1 = DB.entity(IPerson.class);
 		DB.persist(p1);
 
-		eq(p1.version().get().longValue(), 1);
+		eq(p1.getVersion(), 1);
 
 		IPerson p2 = DB.entity(IPerson.class);
-		p2.id().set(p1.id().get());
+		p2.setId(p1.getId());
 
 		DB.refresh(p2);
-		eq(p2.version().get().longValue(), 1);
+		eq(p2.getVersion(), 1);
 
 		DB.persist(p2);
 	}

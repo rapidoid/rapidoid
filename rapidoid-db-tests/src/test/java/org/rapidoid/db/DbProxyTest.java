@@ -55,15 +55,13 @@ public class DbProxyTest extends DbTestCommons {
 	}
 
 	private void check(final ConcurrentMap<String, Object> map, final IPost p) {
-		notNullAll(p.content(), p.likes(), p.id(), p.version());
+		notNullAll(p.content(), p.likes(), p.getId(), p.getVersion());
 
-		isTrue(p.id() == p.id());
-		isTrue(p.version() == p.version());
 		isTrue(p.content() == p.content());
 		isTrue(p.likes() == p.likes());
 
-		eq(p.id().get(), map.get("id"));
-		eq(p.version().get(), map.get("version"));
+		eq(p.getId(), map.get("id"));
+		eq(p.getVersion(), map.get("version"));
 		eq(p.content().get(), map.get("content"));
 	}
 

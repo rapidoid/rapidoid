@@ -2,6 +2,7 @@ package org.rapidoid.db.model;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.db.Entity;
 
 /*
  * #%L
@@ -23,13 +24,10 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
+@SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Person {
-
-	public long id;
-
-	public long version;
+public class Person extends Entity {
 
 	public String name;
 	public int age;
@@ -39,8 +37,7 @@ public class Person {
 	public Company worksAt;
 	public Profile profile;
 
-	public Person() {
-	}
+	public Person() {}
 
 	public Person(String name, int age) {
 		this.name = name;

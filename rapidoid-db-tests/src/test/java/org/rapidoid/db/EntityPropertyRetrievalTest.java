@@ -37,13 +37,15 @@ public class EntityPropertyRetrievalTest extends DbTestCommons {
 	@Test
 	public void testInterfaceProperties() {
 		Set<String> names = U.set(Beany.propertiesOf(IPerson.class).names);
-		eq(names, U.set("id", "version", "name", "age", "title", "address"));
+		eq(names, U.set("id", "version", "createdBy", "createdOn", "lastUpdatedBy", "lastUpdatedOn", "name", "age",
+				"title", "address"));
 	}
 
 	@Test
 	public void testClassProperties() {
 		Set<String> names = U.set(Beany.propertiesOf(Person.class).names);
-		eq(names, U.set("id", "version", "name", "age", "title", "address", "worksAt", "profile"));
+		eq(names, U.set("id", "version", "createdBy", "createdOn", "lastUpdatedBy", "lastUpdatedOn", "name", "age",
+				"title", "address", "worksAt", "profile"));
 	}
 
 }
