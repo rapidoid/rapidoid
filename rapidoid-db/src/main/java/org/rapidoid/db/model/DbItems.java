@@ -89,7 +89,7 @@ public class DbItems<T> extends BeanListItems<T> {
 	@Override
 	public Items orderedBy(String sortOrder) {
 		Comparator<T> orderBy = Beany.comparator(sortOrder);
-		return new DbItems<T>(null, match, orderBy);
+		return new DbItems<T>(beanType, match, orderBy);
 	}
 
 }

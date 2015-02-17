@@ -37,7 +37,7 @@ public class BeanListItems<T> extends ListItems {
 
 	private static final long serialVersionUID = 7346765152583871241L;
 
-	private final Class<T> beanType;
+	protected final Class<T> beanType;
 
 	public BeanListItems(Class<T> beanType) {
 		super("/" + (beanType != null ? beanType.getSimpleName().toLowerCase() : "?any"));
