@@ -1238,7 +1238,9 @@ public class InMem implements Serializable {
 			}
 		} catch (InterruptedException e) {}
 
-		new File(data.filename).delete();
+		if (data.filename != null) {
+			new File(data.filename).delete();
+		}
 	}
 
 	public boolean isActive() {
