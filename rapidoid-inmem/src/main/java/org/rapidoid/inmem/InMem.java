@@ -238,12 +238,22 @@ public class InMem implements Serializable {
 				Beany.setPropValue(record, VERSION, 1);
 			}
 
+			Date now = new Date();
+
 			if (Beany.hasProperty(record, CREATED_BY)) {
 				Beany.setPropValue(record, CREATED_BY, username());
 			}
 
 			if (Beany.hasProperty(record, CREATED_ON)) {
-				Beany.setPropValue(record, CREATED_ON, new Date());
+				Beany.setPropValue(record, CREATED_ON, now);
+			}
+
+			if (Beany.hasProperty(record, LAST_UPDATED_BY)) {
+				Beany.setPropValue(record, LAST_UPDATED_BY, username());
+			}
+
+			if (Beany.hasProperty(record, LAST_UPDATED_ON)) {
+				Beany.setPropValue(record, LAST_UPDATED_ON, now);
 			}
 
 			if (data.insideTx.get()) {
