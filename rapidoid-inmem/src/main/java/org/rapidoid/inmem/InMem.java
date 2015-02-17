@@ -97,6 +97,14 @@ public class InMem implements Serializable {
 
 	private static final String VERSION = "version";
 
+	private static final String CREATED_BY = "createdBy";
+
+	private static final String CREATED_ON = "createdOn";
+
+	private static final String LAST_UPDATED_BY = "lastUpdatedBy";
+
+	private static final String LAST_UPDATED_ON = "lastUpdatedOn";
+
 	private static final String META_UPTIME = "uptime";
 
 	private static final String META_TIMESTAMP = "timestamp";
@@ -230,6 +238,12 @@ public class InMem implements Serializable {
 				Beany.setPropValue(record, VERSION, 1);
 			}
 
+			if (Beany.hasProperty(record, CREATED_BY)) {
+				Beany.setPropValue(record, CREATED_BY, username());
+			}
+
+			if (Beany.hasProperty(record, CREATED_ON)) {
+				Beany.setPropValue(record, CREATED_ON, new Date());
 			}
 
 			if (data.insideTx.get()) {
@@ -552,6 +566,14 @@ public class InMem implements Serializable {
 
 		if (checkSecurity) {
 			secureUpdate(record);
+		}
+
+		if (Beany.hasProperty(record, LAST_UPDATED_BY)) {
+			Beany.setPropValue(record, LAST_UPDATED_BY, username());
+		}
+
+		if (Beany.hasProperty(record, LAST_UPDATED_ON)) {
+			Beany.setPropValue(record, LAST_UPDATED_ON, new Date());
 		}
 
 		boolean updated = data.data.replace(id, old, rec(record));
