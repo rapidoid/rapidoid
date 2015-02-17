@@ -20,6 +20,7 @@ package org.rapidoid.model.impl;
  * #L%
  */
 
+import java.util.Collections;
 import java.util.List;
 
 import org.rapidoid.annotation.Authors;
@@ -36,26 +37,46 @@ public class BeanListItems<T> extends ListItems {
 
 	private static final long serialVersionUID = 7346765152583871241L;
 
-	protected final Class<T> beanType;
-
-	protected final List<Property> properties;
+	private final Class<T> beanType;
 
 	public BeanListItems(Class<T> beanType) {
-		super("/" + beanType.getSimpleName().toLowerCase());
+		super("/" + (beanType != null ? beanType.getSimpleName().toLowerCase() : "?any"));
 		this.beanType = beanType;
-		this.properties = Models.propertiesOf(beanType);
 	}
 
 	@Override
-	public List<Property> properties(String... propertyNames) {
-		return propertyNames.length == 0 ? properties : filterProperties(propertyNames);
+	public List<Property> properties(Object... properties) {
+		return properties.length == 0 ? inferProperties() : filterProperties(properties);
 	}
 
-	private List<Property> filterProperties(String[] propertyNames) {
+	@SuppressWarnings("unchecked")
+	private List<Property> inferProperties() {
+		if (isEmpty()) {
+			return Collections.EMPTY_LIST;
+		}
+
+		Object item0 = get(0).value();
+		return Models.propertiesOf(item0);
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<Property> filterProperties(Object[] properties) {
+		if (isEmpty()) {
+			return Collections.EMPTY_LIST;
+		}
+
 		List<Property> props = U.list();
 
-		for (String pr : propertyNames) {
-			props.add(Models.propertyOf(beanType, pr));
+		Object item0 = get(0).value();
+		for (Object prop : properties) {
+			if (prop instanceof String) {
+				String strProp = (String) prop;
+				props.add(Models.propertyOf(Cls.of(item0), strProp));
+			} else if (prop instanceof Property) {
+				props.add((Property) prop);
+			} else {
+				throw U.rte("Invalid property: %s!", prop);
+			}
 		}
 
 		return props;
@@ -63,7 +84,7 @@ public class BeanListItems<T> extends ListItems {
 
 	@Override
 	public boolean fitsIn(Item item) {
-		return super.fitsIn(item) && Cls.instanceOf(item.value(), beanType);
+		return super.fitsIn(item) && (beanType == null || Cls.instanceOf(item.value(), beanType));
 	}
 
 }

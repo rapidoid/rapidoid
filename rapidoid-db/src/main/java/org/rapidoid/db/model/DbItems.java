@@ -66,7 +66,7 @@ public class DbItems<T> extends BeanListItems<T> {
 
 	@Override
 	protected List<Item> data() {
-		List<T> all = DB.find(beanType, match, orderBy);
+		List<T> all = DB.find(null, match, orderBy);
 		List<Item> records = U.list();
 
 		for (T t : all) {
@@ -89,7 +89,7 @@ public class DbItems<T> extends BeanListItems<T> {
 	@Override
 	public Items orderedBy(String sortOrder) {
 		Comparator<T> orderBy = Beany.comparator(sortOrder);
-		return new DbItems<T>(beanType, match, orderBy);
+		return new DbItems<T>(null, match, orderBy);
 	}
 
 }

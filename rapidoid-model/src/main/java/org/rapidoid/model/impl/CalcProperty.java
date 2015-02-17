@@ -25,37 +25,24 @@ import java.lang.reflect.ParameterizedType;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.Calc;
+import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class BeanProperty implements Property {
+@Since("2.2.0")
+public class CalcProperty implements Property {
 
-	private static final long serialVersionUID = 7627370931428864929L;
+	private static final long serialVersionUID = -2697490242616488024L;
 
 	private final String name;
 
-	private final Class<?> type;
+	private Calc<Object> calc;
 
-	private final ParameterizedType genericType;
-
-	private final String caption;
-
-	private final Annotation[] annotations;
-
-	public BeanProperty(String name, Class<?> type, ParameterizedType genericType, Annotation[] annotations) {
-		this(name, type, genericType, annotations, pretty(name));
-	}
-
-	public BeanProperty(String name, Class<?> type, ParameterizedType genericType, Annotation[] annotations,
-			String caption) {
+	public CalcProperty(String name, Calc<Object> calc) {
 		this.name = name;
-		this.type = type;
-		this.annotations = annotations;
-		this.caption = caption;
-		this.genericType = genericType;
+		this.calc = calc;
 	}
 
 	@Override
@@ -65,47 +52,31 @@ public class BeanProperty implements Property {
 
 	@Override
 	public Class<?> type() {
-		return type;
+		return Object.class;
 	}
 
 	@Override
 	public String caption() {
-		return caption;
+		return name;
 	}
 
-	@Override
 	public Annotation[] annotations() {
-		return annotations;
+		return null;
 	}
 
 	@Override
 	public ParameterizedType genericType() {
-		return genericType;
-	}
-
-	static String pretty(String prop) {
-		if (prop.startsWith("_")) {
-			prop = prop.substring(1);
-			if (prop.equals("toString") || prop.equals("str")) {
-				prop = "data";
-			}
-		}
-
-		if (prop.equals("id")) {
-			return "ID";
-		}
-		return UTILS.camelPhrase(prop);
+		return null;
 	}
 
 	@Override
 	public String toString() {
-		return "BeanProperty [name=" + name + ", type=" + type + ", genericType=" + genericType + ", caption="
-				+ caption + "]";
+		return "CalcProperty [name=" + name + ", calc=" + calc + "]";
 	}
 
 	@Override
 	public Object get(Item item) {
-		return item.get(name);
+		return Lambdas.eval(calc, item.value());
 	}
 
 }

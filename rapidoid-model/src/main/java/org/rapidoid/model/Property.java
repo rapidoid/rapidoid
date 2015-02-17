@@ -41,4 +41,6 @@ public interface Property extends Serializable {
 
 	Annotation[] annotations();
 
+	Object get(Item item);
+
 }

@@ -26,11 +26,14 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.db.DB;
+import org.rapidoid.db.IEntityCommons;
 import org.rapidoid.db.model.DbItems;
+import org.rapidoid.lambda.Calc;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
+import org.rapidoid.model.Property;
 import org.rapidoid.util.Cls;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.DataManager;
@@ -57,6 +60,19 @@ public class AppGUI extends BootstrapWidgets {
 		return new DbItems<T>(type, match, orderBy);
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> Items all(Predicate<T> match, Comparator<T> orderBy) {
+		return new DbItems<T>((Class<T>) IEntityCommons.class, match, orderBy);
+	}
+
+	public static <T> Items all(Predicate<T> match) {
+		return all(match, Beany.<T> comparator("id"));
+	}
+
+	public static <T> Property prop(String name, Calc<T> calc) {
+		return Models.property(name, calc);
+	}
+
 	public static Item item(Object value) {
 		return Models.item(value);
 	}
@@ -67,6 +83,10 @@ public class AppGUI extends BootstrapWidgets {
 
 	public static <T> GridWidget grid(Class<T> type, String sortOrder, int pageSize, String... properties) {
 		return grid(all(type, sortOrder), sortOrder, pageSize, properties);
+	}
+
+	public static <T> GridWidget grid(Predicate<T> match) {
+		return grid(all(match), "id", 10, new String[0]);
 	}
 
 	public static <T> GridWidget grid(Class<T> type, Predicate<T> match, String sortOrder, int pageSize,

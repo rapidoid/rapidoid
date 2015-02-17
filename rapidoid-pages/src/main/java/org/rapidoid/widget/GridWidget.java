@@ -37,13 +37,15 @@ import org.rapidoid.var.Var;
 public class GridWidget extends AbstractWidget {
 
 	private final Items items;
-	private final String sortOrder;
-	private final int pageSize;
-	private final String[] properties;
+
+	private String orderBy = "id";
+	private int pageSize = 10;
+	private Object[] properties = {};
+	private String rowCmd;
 
 	public GridWidget(Items items, String sortOrder, int pageSize, String... properties) {
 		this.items = items;
-		this.sortOrder = sortOrder;
+		this.orderBy = sortOrder;
 		this.pageSize = pageSize;
 		this.properties = properties;
 	}
@@ -55,15 +57,15 @@ public class GridWidget extends AbstractWidget {
 		int total = items.size();
 		int pages = (int) Math.ceil(total / (double) pageSize);
 
-		boolean ordered = !U.isEmpty(sortOrder);
+		boolean ordered = !U.isEmpty(orderBy);
 		Var<String> order = null;
 
 		Items slice = items;
 
-		String currentOrder = sortOrder;
+		String currentOrder = orderBy;
 
 		if (ordered) {
-			order = localVar("_order_" + items.uri(), sortOrder);
+			order = localVar("_order_" + items.uri(), orderBy);
 			currentOrder = order.get();
 			slice = slice.orderedBy(currentOrder);
 		}
@@ -143,13 +145,19 @@ public class GridWidget extends AbstractWidget {
 		Tag row = tr();
 
 		for (Property prop : properties) {
-			Object value = item.get(prop.name());
+			Object value = prop.get(item);
 			value = U.or(value, "");
 			row = row.append(cell(display(value)));
 		}
 
-		String js = onClickScript(item);
-		row = row.onclick(js).class_("pointer");
+		if (rowCmd != null) {
+			row = row.cmd(rowCmd, item.value());
+		} else {
+			String js = onClickScript(item);
+			row = row.onclick(js);
+		}
+
+		row = row.class_("pointer");
 
 		return row;
 	}
@@ -161,6 +169,42 @@ public class GridWidget extends AbstractWidget {
 
 	protected TdTag cell(Object value) {
 		return td(value);
+	}
+
+	public String orderBy() {
+		return orderBy;
+	}
+
+	public int pageSize() {
+		return pageSize;
+	}
+
+	public Object[] properties() {
+		return properties;
+	}
+
+	public GridWidget orderBy(String orderBy) {
+		this.orderBy = orderBy;
+		return this;
+	}
+
+	public GridWidget pageSize(int pageSize) {
+		this.pageSize = pageSize;
+		return this;
+	}
+
+	public GridWidget properties(Object... properties) {
+		this.properties = properties;
+		return this;
+	}
+
+	public String rowCmd() {
+		return rowCmd;
+	}
+
+	public GridWidget rowCmd(String rowCmd) {
+		this.rowCmd = rowCmd;
+		return this;
 	}
 
 }

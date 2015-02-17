@@ -29,13 +29,17 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.BeanProperties;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
+import org.rapidoid.lambda.Calc;
 import org.rapidoid.model.impl.BeanItem;
 import org.rapidoid.model.impl.BeanListItems;
 import org.rapidoid.model.impl.BeanProperty;
+import org.rapidoid.model.impl.BuiltInProperty;
+import org.rapidoid.model.impl.CalcProperty;
 import org.rapidoid.model.impl.ListItems;
 import org.rapidoid.model.impl.MapItem;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
@@ -64,6 +68,10 @@ public class Models {
 	}
 
 	public static Property propertyOf(Class<?> beanType, String property) {
+		if (property.startsWith("_")) {
+			return new BuiltInProperty(property);
+		}
+
 		BeanProperties props = Beany.propertiesOf(beanType);
 
 		if (beanType == Object.class) {
@@ -80,7 +88,7 @@ public class Models {
 		return properties(Beany.propertiesOf(target).select(new ModelPropertySelector() {
 			@Override
 			public boolean eval(Prop prop) throws Exception {
-				return true;
+				return isReadable(prop);
 			}
 		}));
 	}
@@ -127,7 +135,7 @@ public class Models {
 	public static boolean isEditable(Prop prop) {
 		String name = prop.getName();
 
-		if (name.equalsIgnoreCase("id") || name.equalsIgnoreCase("version")) {
+		if (UTILS.isSpecialProperty(name)) {
 			return false;
 		}
 
@@ -141,7 +149,7 @@ public class Models {
 	public static boolean isReadable(Prop prop) {
 		String name = prop.getName();
 
-		if (name.equalsIgnoreCase("id") || name.equalsIgnoreCase("version")) {
+		if (UTILS.isSpecialProperty(name)) {
 			return false;
 		}
 
@@ -158,6 +166,11 @@ public class Models {
 		}
 
 		return beanItems(beanType, beans);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> Property property(String name, Calc<T> calc) {
+		return new CalcProperty(name, (Calc<Object>) calc);
 	}
 
 }
