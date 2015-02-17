@@ -725,7 +725,8 @@ public class InMem implements Serializable {
 		Predicate<E> match2 = new Predicate<E>() {
 			@Override
 			public boolean eval(E record) throws Exception {
-				return clazz.isAssignableFrom(record.getClass()) && (match == null || match.eval(record));
+				return (clazz == null || clazz.isAssignableFrom(record.getClass()))
+						&& (match == null || match.eval(record));
 			}
 		};
 
@@ -1167,8 +1168,7 @@ public class InMem implements Serializable {
 			if (data.active.get()) {
 				try {
 					Thread.sleep(100);
-				} catch (InterruptedException e) {
-				}
+				} catch (InterruptedException e) {}
 			} else {
 				try {
 					persistData();
@@ -1185,8 +1185,7 @@ public class InMem implements Serializable {
 
 		try {
 			persistor.join();
-		} catch (InterruptedException e) {
-		}
+		} catch (InterruptedException e) {}
 
 		new File(data.filename).delete();
 	}
@@ -1214,8 +1213,7 @@ public class InMem implements Serializable {
 			persistor.interrupt();
 			try {
 				persistor.join();
-			} catch (InterruptedException e) {
-			}
+			} catch (InterruptedException e) {}
 		}
 	}
 
