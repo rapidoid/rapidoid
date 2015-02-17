@@ -93,6 +93,8 @@ public class InMem implements Serializable {
 
 	private static final long serialVersionUID = -200957806998151795L;
 
+	private static final String SUPERADMIN = "SUPERADMIN";
+
 	private static final String ID = "id";
 
 	private static final String VERSION = "version";
@@ -169,6 +171,9 @@ public class InMem implements Serializable {
 	}
 
 	protected String username() {
+		if (sudo) {
+			return SUPERADMIN;
+		}
 		return asUsername != null ? asUsername : Secure.username();
 	}
 
