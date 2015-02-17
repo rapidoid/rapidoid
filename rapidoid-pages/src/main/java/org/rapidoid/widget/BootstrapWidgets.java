@@ -395,6 +395,9 @@ public abstract class BootstrapWidgets extends HTML {
 		return div(contents).class_("title-box");
 	}
 
+	public static Tag right(Object... contents) {
+		return span(contents).class_("pull-right");
+	}
 
 	public static PanelWidget panel(Object... contents) {
 		return Cls.customizable(PanelWidget.class, new Object[] { UTILS.flat(contents) });
