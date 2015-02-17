@@ -52,7 +52,7 @@ public class Examples {
 	private static final String JAVA_KEYWORDS = "abstract|continue|for|new|switch|assert|default|goto|package|synchronized|boolean|do|if|private|this|break|double|implements|protected|throw|byte|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|int|short|try|char|final|interface|static|void|class|finally|long|strictfp|volatile|const|float|native|super|while";
 
 	public static void main(String[] args) {
-		Conf.args("oauth-no-state", "generate");
+		Conf.args("oauth-no-state", "generate", "oauth-domain=https://rapidoid.io");
 
 		String path = "../../rapidoid.github.io/";
 		U.must(new File(path).exists());
@@ -182,7 +182,7 @@ public class Examples {
 			}
 		}
 
-		Conf.args("oauth-no-state", "generate");
+		Conf.args("oauth-no-state", "generate", "oauth-domain=https://rapidoid.io");
 
 		path += "examples/";
 		new File(path).mkdir();
