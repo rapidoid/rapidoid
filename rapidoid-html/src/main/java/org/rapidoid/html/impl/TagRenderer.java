@@ -45,7 +45,7 @@ public class TagRenderer {
 
 	private static final byte[] EMIT_CLOSE = "')".getBytes();
 	private static final byte[] INDENT = "  ".getBytes();
-	private static final byte[] EMIT = "_emit('".getBytes();
+	private static final byte[] EMIT = "_emit(event, '".getBytes();
 	private static final byte[] _H = " _h=\"".getBytes();
 	private static final byte[] ON = " on".getBytes();
 	private static final byte[] EQ_DQUOTES = "=\"".getBytes();

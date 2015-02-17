@@ -13,7 +13,17 @@ function goAt(url) {
 	window.location.href = url;
 }
 
-function _emit(event) {
+function _stop(ev) {
+	if (typeof ev.stopPropagation != "undefined") {
+		ev.stopPropagation();
+	} else {
+		ev.cancelBubble = true;
+	}
+}
+
+function _emit(ev, eventId) {
+
+	_stop(ev);
 
 	var x = document.querySelectorAll("input,textarea");
 	var inputs = {};
@@ -46,7 +56,7 @@ function _emit(event) {
 	}
 
 	$.post(window.location.href, {
-		event : event,
+		event : eventId,
 		inputs : JSON.stringify(inputs)
 	}).done(function(data) {
 		if (data._redirect_) {
