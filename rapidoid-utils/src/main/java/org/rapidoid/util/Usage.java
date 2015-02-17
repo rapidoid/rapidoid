@@ -22,7 +22,6 @@ package org.rapidoid.util;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.2.0")
@@ -40,23 +39,4 @@ public class Usage implements Constants {
 		lastAppUsedOn = U.time();
 	}
 
-	public static void terminateIfIdleFor(final int idleSeconds) {
-		Log.warn("Will terminate if idle for " + idleSeconds + " seconds...");
-
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (!Thread.interrupted()) {
-					UTILS.sleep(500);
-					long lastUsed = getLastAppUsedOn();
-					long idleSec = (U.time() - lastUsed) / 1000;
-					if (idleSec >= idleSeconds) {
-						touchLastAppUsedOn();
-						Log.warn("Terminating application", "idle", idleSec, "threshold", idleSeconds);
-						System.exit(0);
-					}
-				}
-			}
-		}).start();
-	}
 }

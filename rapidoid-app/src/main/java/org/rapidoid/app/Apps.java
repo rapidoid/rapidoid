@@ -36,6 +36,8 @@ import org.rapidoid.oauth.OAuth;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Usage;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -101,6 +103,42 @@ public class Apps {
 
 	public static boolean addon(Object obj, String configName) {
 		return config(obj, configName, false) || config(obj, "full", true);
+	}
+
+	public static void terminate(final int afterSeconds) {
+		Log.warn("Terminating application in " + afterSeconds + " seconds...");
+		new Thread() {
+			@Override
+			public void run() {
+				UTILS.sleep(afterSeconds * 1000);
+				terminate();
+			}
+		}.start();
+	}
+
+	public static void terminateIfIdleFor(final int idleSeconds) {
+		Log.warn("Will terminate if idle for " + idleSeconds + " seconds...");
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (!Thread.interrupted()) {
+					UTILS.sleep(500);
+					long lastUsed = Usage.getLastAppUsedOn();
+					long idleSec = (U.time() - lastUsed) / 1000;
+					if (idleSec >= idleSeconds) {
+						Usage.touchLastAppUsedOn();
+						terminate();
+					}
+				}
+			}
+		}).start();
+	}
+
+	public static void terminate() {
+		Log.warn("Terminating application.");
+		DB.shutdown();
+		System.exit(0);
 	}
 
 }
