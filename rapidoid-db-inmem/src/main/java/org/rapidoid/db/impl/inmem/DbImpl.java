@@ -322,8 +322,6 @@ public class DbImpl extends NamedActivity<Database> implements Database, Seriali
 			properties.put(key, value);
 		}
 
-		U.show(properties);
-
 		Object entity = schema().entity(entityType, properties);
 		inmem.sudo().prefill(entity);
 	}
