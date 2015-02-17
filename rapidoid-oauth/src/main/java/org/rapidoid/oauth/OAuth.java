@@ -92,7 +92,7 @@ public class OAuth {
 		String clientId = Conf.option(name + ".clientId", "NO-CLIENT-ID");
 		String clientSecret = Conf.option(name + ".clientSecret", "NO-CLIENT-SECRET");
 
-		String callbackPath = "/_" + name + "OauthCallback";
+		String callbackPath = "/_" + name + "OauthCallback.html";
 		String redirectUrl = oauthDomain != null ? oauthDomain + callbackPath : x.constructUrl(callbackPath);
 
 		String state = STATE_CHECK.generateState(clientSecret, x.sessionId());
