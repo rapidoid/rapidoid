@@ -1,6 +1,7 @@
 package org.rapidoid.db;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -52,9 +53,9 @@ public class EntityCommons implements IEntityCommons, CommonRoles, Serializable 
 
 	private Date lastUpdatedOn;
 
-	private Map<String, Object> extras;
+	private Map<Object, Object> extras;
 
-	private Map<String, Object> tmps;
+	private Map<Object, Object> tmps;
 
 	@Override
 	public synchronized long id() {
@@ -148,84 +149,86 @@ public class EntityCommons implements IEntityCommons, CommonRoles, Serializable 
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized <K, V> ConcurrentMap<K, V> _map(String name) {
-		extras();
+	public synchronized <K, V> ConcurrentMap<K, V> _map(Object key) {
+		_extras();
 
-		if (!extras.containsKey(name)) {
-			extras.put(name, U.concurrentMap());
+		if (!extras.containsKey(key)) {
+			extras.put(key, U.concurrentMap());
 		}
 
-		return (ConcurrentMap<K, V>) extras.get(name);
+		return (ConcurrentMap<K, V>) extras.get(key);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized <T> List<T> _list(String name) {
-		extras();
+	public synchronized <T> List<T> _list(Object key) {
+		_extras();
 
-		if (!extras.containsKey(name)) {
-			extras.put(name, U.list());
+		if (!extras.containsKey(key)) {
+			extras.put(key, U.list());
 		}
 
-		return (List<T>) extras.get(name);
+		return (List<T>) extras.get(key);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized <T> Set<T> _set(String name) {
-		extras();
+	public synchronized <T> Set<T> _set(Object key) {
+		_extras();
 
-		if (!extras.containsKey(name)) {
-			extras.put(name, U.set());
+		if (!extras.containsKey(key)) {
+			extras.put(key, U.set());
 		}
 
-		return (Set<T>) extras.get(name);
+		return (Set<T>) extras.get(key);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized <T> Var<T> _var(String name, T defaultValue) {
-		extras();
+	public synchronized <T> Var<T> _var(Object key, T defaultValue) {
+		_extras();
 
-		if (!extras.containsKey(name)) {
-			extras.put(name, Vars.var(defaultValue));
+		if (!extras.containsKey(key)) {
+			extras.put(key, Vars.var(defaultValue));
 		}
 
-		return (Var<T>) extras.get(name);
+		return (Var<T>) extras.get(key);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized <T> T _extra(String name) {
-		return (T) extras().get(name);
+	public synchronized <T> T _extra(Object key) {
+		return (T) _extras().get(key);
 	}
 
 	@Override
-	public synchronized void _extra(String name, Object value) {
-		extras().put(name, value);
+	public synchronized void _extra(Object key, Object value) {
+		_extras().put(key, value);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized <T> T _tmp(String name) {
-		return (T) tmps().get(name);
+	public synchronized <T> T _tmp(Object key) {
+		return (T) _tmps().get(key);
 	}
 
 	@Override
-	public synchronized void _tmp(String name, Object value) {
-		tmps().put(name, value);
+	public synchronized void _tmp(Object key, Object value) {
+		_tmps().put(key, value);
 	}
 
-	private synchronized Map<String, Object> extras() {
+	@Override
+	public synchronized Map<Object, Object> _extras() {
 		if (extras == null) {
-			extras = U.map();
+			extras = Collections.synchronizedMap(U.map());
 		}
 		return extras;
 	}
 
-	private synchronized Map<String, Object> tmps() {
+	@Override
+	public synchronized Map<Object, Object> _tmps() {
 		if (tmps == null) {
-			tmps = U.map();
+			tmps = Collections.synchronizedMap(U.map());
 		}
 		return tmps;
 	}

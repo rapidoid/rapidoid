@@ -2,6 +2,7 @@ package org.rapidoid.db;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
@@ -40,20 +41,24 @@ public interface IEntityCommons {
 
 	void lastUpdatedOn(Date updatedOn);
 
-	<K, V> ConcurrentMap<K, V> _map(String name);
+	<K, V> ConcurrentMap<K, V> _map(Object key);
 
-	<T> List<T> _list(String name);
+	<T> List<T> _list(Object key);
 
-	<T> Set<T> _set(String name);
+	<T> Set<T> _set(Object key);
 
-	<T> Var<T> _var(String name, T defaultValue);
+	<T> Var<T> _var(Object key, T defaultValue);
 
-	<T> T _extra(String name);
+	<T> T _extra(Object key);
 
-	void _extra(String name, Object value);
+	void _extra(Object key, Object value);
 
-	<T> T _tmp(String name);
+	Map<Object, Object> _extras();
 
-	void _tmp(String name, Object value);
+	<T> T _tmp(Object key);
+
+	void _tmp(Object key, Object value);
+
+	Map<Object, Object> _tmps();
 
 }
