@@ -147,12 +147,6 @@ public class Models {
 	}
 
 	public static boolean isReadable(Prop prop) {
-		String name = prop.getName();
-
-		if (UTILS.isSpecialProperty(name)) {
-			return false;
-		}
-
 		return true;
 	}
 
