@@ -65,7 +65,7 @@ public class GridWidget extends AbstractWidget {
 		String currentOrder = orderBy;
 
 		if (ordered) {
-			order = localVar("_order_" + items.uri(), orderBy);
+			order = localVar("_order_" + widgetId(), orderBy);
 			currentOrder = order.get();
 			slice = slice.orderedBy(currentOrder);
 		}
@@ -74,7 +74,7 @@ public class GridWidget extends AbstractWidget {
 		Var<Integer> pageNumber = null;
 
 		if (paging) {
-			pageNumber = localVar("_page_" + items.uri(), 1, 1, pages);
+			pageNumber = localVar("_page_" + widgetId(), 1, 1, pages);
 			slice = getPage(slice, pageNumber.get());
 		}
 

@@ -94,9 +94,4 @@ public abstract class AbstractItem extends AbstractModel implements Item {
 		return value != null ? Models.readablePropertiesOf(value, propertyNames) : Collections.EMPTY_LIST;
 	}
 
-	@Override
-	public String uri() {
-		return "/" + value.getClass() + "/" + id();
-	}
-
 }

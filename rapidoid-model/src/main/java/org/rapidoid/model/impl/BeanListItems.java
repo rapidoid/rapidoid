@@ -40,7 +40,6 @@ public class BeanListItems<T> extends ListItems {
 	protected final Class<T> beanType;
 
 	public BeanListItems(Class<T> beanType) {
-		super("/" + (beanType != null ? beanType.getSimpleName().toLowerCase() : "?any"));
 		this.beanType = beanType;
 	}
 

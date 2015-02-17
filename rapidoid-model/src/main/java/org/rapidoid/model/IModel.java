@@ -30,8 +30,6 @@ import org.rapidoid.var.Var;
 @Since("2.0.0")
 public interface IModel extends Serializable {
 
-	String uri();
-
 	<T> T getExtra(String name, T defaultValue);
 
 	void setExtra(String name, Object value);

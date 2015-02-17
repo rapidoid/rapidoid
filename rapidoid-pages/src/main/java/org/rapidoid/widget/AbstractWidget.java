@@ -25,12 +25,15 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public abstract class AbstractWidget extends BootstrapWidgets implements TagWidget<HttpExchange>, Constants {
+
+	private int widgetNum = getWidgetNumber(this);
 
 	private HttpExchange x;
 
@@ -45,6 +48,21 @@ public abstract class AbstractWidget extends BootstrapWidgets implements TagWidg
 	public Tag toTag(HttpExchange x) {
 		this.x = x;
 		return create();
+	}
+
+	public String widgetId() {
+		return getClass().getSimpleName() + widgetNum;
+	}
+
+	private static int getWidgetNumber(AbstractWidget widget) {
+		HttpExchange x = AppCtx.exchange();
+		U.notNull(x, "HTTP exchange");
+
+		String extrName = "widget_counter_" + widget.getClass().getSimpleName();
+		Integer counter = U.or((Integer) x.extra(extrName), 1);
+		x.extra(extrName, counter + 1);
+
+		return counter;
 	}
 
 }
