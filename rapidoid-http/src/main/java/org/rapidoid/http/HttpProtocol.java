@@ -32,6 +32,7 @@ import org.rapidoid.net.impl.ExchangeProtocol;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Usage;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -62,6 +63,8 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		if (ctx.isInitial()) {
 			return;
 		}
+
+		Usage.touchLastAppUsedOn();
 
 		parser.parse(x.input(), x.isGet, x.isKeepAlive, x.body, x.verb, x.uri, x.path, x.query, x.protocol, x.headers,
 				x.helper());
