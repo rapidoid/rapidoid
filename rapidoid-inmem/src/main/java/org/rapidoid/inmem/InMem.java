@@ -222,12 +222,18 @@ public class InMem implements Serializable {
 	}
 
 	public long insert(Object record) {
+		return _insert(record, true);
+	}
+
+	private long _insert(Object record, boolean failOnReadOnlyTx) {
 		U.notNull(record, "record");
 		secureInsert(record);
 
 		sharedLock();
 		try {
-			failIfReadonlyTx();
+			if (failOnReadOnlyTx) {
+				failIfReadonlyTx();
+			}
 
 			long id = data.ids.incrementAndGet();
 			Beany.setId(record, id);
@@ -1380,6 +1386,10 @@ public class InMem implements Serializable {
 
 	private void failIfReadonlyTx() {
 		U.must(!data.insideTx.get() || !data.txReadonly.get(), "Cannot modify data inside read-only transaction!");
+	}
+
+	public void prefill(Object entity) {
+		_insert(entity, false);
 	}
 
 }

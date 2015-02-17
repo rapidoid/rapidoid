@@ -20,6 +20,7 @@ package org.rapidoid.app;
  * #L%
  */
 
+import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +84,13 @@ public class AppPageGeneric extends AppGUI {
 		this.appCls = appCls;
 		this.app = wireX(appCls.main != null ? Cls.newInstance(appCls.main) : new Object(), x);
 		this.screen = wireX(getScreen(), x);
+
+		if (appCls.main != null && DB.size() == 0) {
+			Method init = Cls.findMethod(appCls.main, "init");
+			if (init != null) {
+				Cls.invoke(init, app);
+			}
+		}
 
 		U.must(screen != null, "Cannot find a screen to process the request!");
 		Pages.load(x, screen);

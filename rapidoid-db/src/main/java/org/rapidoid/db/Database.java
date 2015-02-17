@@ -114,4 +114,6 @@ public interface Database extends Activity<Database> {
 
 	Database sudo();
 
+	void prefill(String data, Object... args);
+
 }

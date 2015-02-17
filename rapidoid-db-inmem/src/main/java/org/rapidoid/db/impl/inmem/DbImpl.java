@@ -305,4 +305,27 @@ public class DbImpl extends NamedActivity<Database> implements Database, Seriali
 		inmem.loadFrom(input);
 	}
 
+	@Override
+	public void prefill(String data, Object... args) {
+		data = U.format(data, args);
+
+		String entityName = U.capitalized(data.split(" ")[0]);
+		Class<?> entityType = schema().getEntityType(entityName);
+
+		String[] props = data.substring(entityName.length() + 1).split("\\s*\\,\\s*");
+		Map<String, Object> properties = U.map();
+
+		for (String prop : props) {
+			String[] kv = prop.trim().split("\\s*=\\s*");
+			String key = kv[0];
+			Object value = kv.length > 1 ? kv[1] : true;
+			properties.put(key, value);
+		}
+
+		U.show(properties);
+
+		Object entity = schema().entity(entityType, properties);
+		inmem.sudo().prefill(entity);
+	}
+
 }
