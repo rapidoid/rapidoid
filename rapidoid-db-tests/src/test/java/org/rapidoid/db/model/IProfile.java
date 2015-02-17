@@ -21,7 +21,7 @@ package org.rapidoid.db.model;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Relation;
+import org.rapidoid.annotation.Rel;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.IEntity;
@@ -30,7 +30,7 @@ import org.rapidoid.db.IEntity;
 @Since("2.0.0")
 public interface IProfile extends IEntity {
 
-	@Relation("posted")
+	@Rel("posted")
 	public DbList<IPost> posts();
 
 }

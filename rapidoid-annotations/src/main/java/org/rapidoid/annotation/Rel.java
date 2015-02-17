@@ -1,8 +1,8 @@
-package org.rapidoid.inject.db;
+package org.rapidoid.annotation;
 
 /*
  * #%L
- * rapidoid-ioc
+ * rapidoid-annotations
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,13 +20,18 @@ package org.rapidoid.inject.db;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Inject;
-import org.rapidoid.annotation.Since;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+@Target({ FIELD, METHOD })
+@Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Rel {
-	@Inject
-	Database db;
+public @interface Rel {
+
+	String value();
+
 }

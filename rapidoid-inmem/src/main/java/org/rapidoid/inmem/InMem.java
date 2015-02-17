@@ -48,7 +48,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Relation;
+import org.rapidoid.annotation.Rel;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
@@ -390,7 +390,7 @@ public class InMem implements Serializable {
 					relName = links.relationName();
 				}
 			} else {
-				Relation relation = prop.getAnnotation(Relation.class);
+				Rel relation = prop.getAnnotation(Rel.class);
 				if (relation != null) {
 					relName = relation.value();
 				}

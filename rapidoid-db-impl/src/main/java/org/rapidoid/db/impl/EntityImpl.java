@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Relation;
+import org.rapidoid.annotation.Rel;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
@@ -127,8 +127,8 @@ public class EntityImpl extends EntityCommons implements IEntity {
 		return res;
 	}
 
-	private static Relation rel(Method method) {
-		Relation rel = Metadata.get(method.getAnnotations(), Relation.class);
+	private static Rel rel(Method method) {
+		Rel rel = Metadata.get(method.getAnnotations(), Rel.class);
 		U.must(rel != null, "@Relation is required for method: %s", method);
 		return rel;
 	}

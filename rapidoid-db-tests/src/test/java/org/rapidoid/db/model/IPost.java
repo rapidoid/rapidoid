@@ -1,7 +1,7 @@
 package org.rapidoid.db.model;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Relation;
+import org.rapidoid.annotation.Rel;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.db.DbColumn;
 import org.rapidoid.db.DbRef;
@@ -34,10 +34,10 @@ public interface IPost extends IEntity {
 
 	DbColumn<String> content();
 
-	@Relation("^posted")
+	@Rel("^posted")
 	DbRef<IProfile> postedOn();
 
-	@Relation("likes")
+	@Rel("likes")
 	DbSet<IPerson> likes();
 
 }

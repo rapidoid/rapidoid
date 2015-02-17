@@ -36,6 +36,6 @@ public class Database {
 
 	final Map<String, Table> tables = IoC.autoExpandingInjectingMap(Table.class);
 
-	final Map<String, Rel> relations = IoC.autoExpandingInjectingMap(Rel.class);
+	final Map<String, Relat> relations = IoC.autoExpandingInjectingMap(Relat.class);
 
 }
