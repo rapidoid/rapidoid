@@ -339,24 +339,28 @@ public class AppPageGeneric extends AppGUI {
 		Tag ga = null, fb = null, li = null, gh = null;
 
 		if (addon("googleLogin")) {
-			ga = a_awesome("google", "Sign in with Google").href(OAuth.getLoginURL(x, OAuthProvider.GOOGLE, null));
+			ga = loginMenuItem(OAuthProvider.GOOGLE);
 		}
 
 		if (addon("facebookLogin")) {
-			fb = a_awesome("facebook", "Sign in with Facebook")
-					.href(OAuth.getLoginURL(x, OAuthProvider.FACEBOOK, null));
+			fb = loginMenuItem(OAuthProvider.FACEBOOK);
 		}
 
 		if (addon("linkedinLogin")) {
-			li = a_awesome("linkedin", "Sign in with LinkedIn")
-					.href(OAuth.getLoginURL(x, OAuthProvider.LINKEDIN, null));
+			li = loginMenuItem(OAuthProvider.LINKEDIN);
 		}
 
 		if (addon("githubLogin")) {
-			gh = a_awesome("github", "Sign in with GitHub").href(OAuth.getLoginURL(x, OAuthProvider.GITHUB, null));
+			gh = loginMenuItem(OAuthProvider.GITHUB);
 		}
 
 		return navbarDropdown(false, a_awesome("user", "Sign in", caret()), ga, fb, li, gh);
+	}
+
+	protected ATag loginMenuItem(OAuthProvider provider) {
+		String text = "Sign in with " + provider.getName();
+		String js = U.format("_popup('%s');", OAuth.getLoginURL(x, provider, null));
+		return a_awesome(provider.getName().toLowerCase(), text).onclick(js);
 	}
 
 	protected Tag loggedInUserMenu() {
