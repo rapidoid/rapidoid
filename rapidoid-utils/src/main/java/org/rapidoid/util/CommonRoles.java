@@ -28,23 +28,7 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface CommonRoles {
-
-	String ANYBODY = "ANYBODY";
-
-	String ADMIN = "ADMIN";
-
-	String MANAGER = "MANAGER";
-
-	String MODERATOR = "MODERATOR";
-
-	String LOGGED_IN = "LOGGED_IN";
-
-	String OWNER = "OWNER";
-
-	String SHARED_WITH = "SHARED_WITH";
-
-	String RESTARTER = "RESTARTER";
+public interface CommonRoles extends CommonWords {
 
 	List<String> ALL = Collections.unmodifiableList(U.list(ADMIN, MANAGER, MODERATOR, LOGGED_IN, OWNER, SHARED_WITH,
 			RESTARTER));
