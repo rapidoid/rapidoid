@@ -93,6 +93,10 @@ public class InMem implements Serializable {
 
 	private static final long serialVersionUID = -200957806998151795L;
 
+	private static final String ID = "id";
+
+	private static final String VERSION = "version";
+
 	private static final String META_UPTIME = "uptime";
 
 	private static final String META_TIMESTAMP = "timestamp";
@@ -221,9 +225,11 @@ public class InMem implements Serializable {
 			Beany.setId(record, id);
 
 			// Optimistic concurrency control through the "version" property
-			if (Beany.hasProperty(record, "version")) {
+			if (Beany.hasProperty(record, VERSION)) {
 				// FIXME rollback version in TX fails
-				Beany.setPropValue(record, "version", 1);
+				Beany.setPropValue(record, VERSION, 1);
+			}
+
 			}
 
 			if (data.insideTx.get()) {
@@ -519,8 +525,8 @@ public class InMem implements Serializable {
 		}
 
 		// Optimistic concurrency control through the "version" property
-		Long oldVersion = U.or(Beany.getPropValueOfType(entity, "version", Long.class, null), 0L);
-		Long recordVersion = U.or(Beany.getPropValueOfType(record, "version", Long.class, null), 0L);
+		Long oldVersion = U.or(Beany.getPropValueOfType(entity, VERSION, Long.class, null), 0L);
+		Long recordVersion = U.or(Beany.getPropValueOfType(record, VERSION, Long.class, null), 0L);
 
 		occErrorIf(!U.eq(oldVersion, recordVersion),
 				"Concurrent modification occured while updating the object with ID=%s!", id);
@@ -540,8 +546,8 @@ public class InMem implements Serializable {
 		}
 
 		// Optimistic concurrency control through the "version" property
-		if (Beany.hasProperty(record, "version")) {
-			Beany.setPropValue(record, "version", oldVersion + 1);
+		if (Beany.hasProperty(record, VERSION)) {
+			Beany.setPropValue(record, VERSION, oldVersion + 1);
 		}
 
 		if (checkSecurity) {
@@ -1018,7 +1024,7 @@ public class InMem implements Serializable {
 				Map<String, Object> map = U.map();
 				data.serializer.deserialize(bytes, map);
 
-				Number idNum = (Number) map.get("id");
+				Number idNum = (Number) map.get(ID);
 				U.must(idNum != null, "Found DB record without ID: %s", line);
 				long id = idNum.longValue();
 				String className = ((String) map.get("_class"));
@@ -1334,7 +1340,7 @@ public class InMem implements Serializable {
 	}
 
 	public long getVersionOf(long id) {
-		Object ver = readColumn(id, "version");
+		Object ver = readColumn(id, VERSION);
 		return ver != null ? Cls.convert(ver, Long.class) : 0;
 	}
 
