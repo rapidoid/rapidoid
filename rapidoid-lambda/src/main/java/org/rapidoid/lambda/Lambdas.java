@@ -54,4 +54,12 @@ public class Lambdas {
 		}
 	}
 
+	public static <FROM> Object eval(Calc<FROM> calc, FROM src) {
+		try {
+			return calc.calc(src);
+		} catch (Exception e) {
+			throw new RuntimeException(String.format("Cannot evaluate calculation %s on target: %s", calc, src), e);
+		}
+	}
+
 }
