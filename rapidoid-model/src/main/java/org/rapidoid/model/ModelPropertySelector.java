@@ -24,11 +24,15 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertySelectorByName;
+import org.rapidoid.util.Arr;
 
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public abstract class ModelPropertySelector extends PropertySelectorByName {
+
+	private static final String[] ORDER = { "id", "version", "createdBy", "createdOn", "lastUpdatedBy",
+			"lastUpdatedOn", "title", "name", "firstName", "lastName", "description" };
 
 	public ModelPropertySelector(String... propertyNames) {
 		super(propertyNames);
@@ -36,12 +40,17 @@ public abstract class ModelPropertySelector extends PropertySelectorByName {
 
 	@Override
 	public int compare(Prop p1, Prop p2) {
-		if (p1.getName().equals("id")) {
-			return -1;
-		} else if (p2.getName().equals("id")) {
-			return 1;
+		int pos1 = Arr.indexOf(ORDER, p1.getName());
+		if (pos1 < 0) {
+			pos1 = Integer.MAX_VALUE;
 		}
-		return 0;
+
+		int pos2 = Arr.indexOf(ORDER, p2.getName());
+		if (pos2 < 0) {
+			pos2 = Integer.MAX_VALUE;
+		}
+
+		return pos1 - pos2;
 	}
 
 }
