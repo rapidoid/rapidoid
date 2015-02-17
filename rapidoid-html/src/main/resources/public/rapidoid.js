@@ -88,3 +88,27 @@ function _emit(ev, eventId) {
 		console.log(data);
 	});
 }
+
+function _popup(popupUrl, onClosed) {
+	var ww = 800;
+	var hh = 600;
+
+	var left = (screen.width / 2) - (ww / 2);
+	var top = (screen.height / 2) - (hh / 2);
+
+	var win = window.open(popupUrl, "windowname1", 'width=' + ww + ', height='
+			+ hh + ', top=' + top + ', left=' + left);
+
+	if (win.focus) {
+		win.focus();
+	}
+
+	var winTimer = setInterval(function() {
+		if (win.closed) {
+			clearInterval(winTimer);
+			if (onClosed) {
+				onClosed(popupUrl);
+			}
+		}
+	}, 100);
+}
