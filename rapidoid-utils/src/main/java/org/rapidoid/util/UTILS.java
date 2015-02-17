@@ -43,6 +43,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -66,13 +67,15 @@ public class UTILS implements Constants {
 
 	private static long measureStart;
 
+	private static final Set<String> SPECIAL_PROPERTIES = U.set("id", "version", "createdby", "createdon",
+			"lastupdatedby", "lastupdatedon");
+
 	// regex taken from
 	// http://stackoverflow.com/questions/2559759/how-do-i-convert-camelcase-into-human-readable-names-in-java
 	private static final Pattern CAMEL_SPLITTER_PATTERN = Pattern
 			.compile("(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
 
-	private UTILS() {
-	}
+	private UTILS() {}
 
 	public static byte[] serialize(Object value) {
 		try {
@@ -749,6 +752,10 @@ public class UTILS implements Constants {
 		}
 
 		return list;
+	}
+
+	public static boolean isSpecialProperty(String name) {
+		return SPECIAL_PROPERTIES.contains(name.toLowerCase());
 	}
 
 }
