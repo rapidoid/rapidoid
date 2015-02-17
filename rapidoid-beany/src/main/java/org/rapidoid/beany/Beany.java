@@ -17,6 +17,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Exportable;
 import org.rapidoid.util.TypeKind;
@@ -443,7 +444,7 @@ public class Beany {
 		return sb.toString();
 	}
 
-	public static <E> Comparator<E> comparator(String orderBy) {
+	public static <E> Comparator<E> comparator(final String orderBy) {
 		final int sign = orderBy.startsWith("-") ? -1 : 1;
 		final String order = sign == 1 ? orderBy : orderBy.substring(1);
 
@@ -451,15 +452,20 @@ public class Beany {
 			@Override
 			public int compare(E o1, E o2) {
 
-				E val1 = getPropValue(o1, order);
-				E val2 = getPropValue(o2, order);
+				try {
+					E val1 = getPropValue(o1, order);
+					E val2 = getPropValue(o2, order);
 
-				U.must(val1 == null || val1 instanceof Comparable, "The property '%s' (%s) is not comparable!", order,
-						Cls.of((val1)));
-				U.must(val2 == null || val2 instanceof Comparable, "The property '%s' (%s) is not comparable!", order,
-						Cls.of((val2)));
+					U.must(val1 == null || val1 instanceof Comparable, "The property '%s' (%s) is not comparable!",
+							order, Cls.of((val1)));
+					U.must(val2 == null || val2 instanceof Comparable, "The property '%s' (%s) is not comparable!",
+							order, Cls.of((val2)));
 
-				return sign * U.compare(val1, val2);
+					return sign * U.compare(val1, val2);
+				} catch (Exception e) {
+					Log.error("Cannot compare values by: " + orderBy, e);
+					return 0;
+				}
 			}
 		};
 		return comparator;
