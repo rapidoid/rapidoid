@@ -94,62 +94,62 @@ public class EntityCommons implements IEntityCommons, CommonRoles, Serializable 
 	}
 
 	@Override
-	public long getId() {
+	public long id() {
 		return id;
 	}
 
 	@Override
-	public void setId(long id) {
+	public void id(long id) {
 		this.id = id;
 	}
 
 	@Override
-	public long getVersion() {
+	public long version() {
 		return version;
 	}
 
 	@Override
-	public void setVersion(long version) {
+	public void version(long version) {
 		this.version = version;
 	}
 
 	@Override
-	public String getCreatedBy() {
+	public String createdBy() {
 		return createdBy;
 	}
 
 	@Override
-	public void setCreatedBy(String createdBy) {
+	public void createdBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
 	@Override
-	public Date getCreatedOn() {
+	public Date createdOn() {
 		return createdOn;
 	}
 
 	@Override
-	public void setCreatedOn(Date createdOn) {
+	public void createdOn(Date createdOn) {
 		this.createdOn = createdOn;
 	}
 
 	@Override
-	public String getLastUpdatedBy() {
+	public String lastUpdatedBy() {
 		return lastUpdatedBy;
 	}
 
 	@Override
-	public void setLastUpdatedBy(String lastUpdatedBy) {
+	public void lastUpdatedBy(String lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
 	@Override
-	public Date getLastUpdatedOn() {
+	public Date lastUpdatedOn() {
 		return lastUpdatedOn;
 	}
 
 	@Override
-	public void setLastUpdatedOn(Date lastUpdatedOn) {
+	public void lastUpdatedOn(Date lastUpdatedOn) {
 		this.lastUpdatedOn = lastUpdatedOn;
 	}
 
@@ -177,7 +177,7 @@ public class EntityCommons implements IEntityCommons, CommonRoles, Serializable 
 		}
 
 		IEntityCommons other = (IEntityCommons) obj;
-		if (id != other.getId())
+		if (id != other.id())
 			return false;
 
 		return true;

@@ -210,7 +210,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 		eq(bar2.desc, "desc");
 
 		Bar bar3 = new Bar();
-		bar3.setId(id);
+		bar3.id(id);
 		DB.refresh(bar3);
 		eq(bar3.name, null);
 		eq(bar3.desc, "desc");
@@ -252,14 +252,14 @@ public class DbClassSecurityTest extends DbTestCommons {
 		bar.name = "abc";
 		DB.as("qwerty").persist(bar);
 
-		eq(bar.getId(), 1);
-		eq(bar.getVersion(), 1);
+		eq(bar.id(), 1);
+		eq(bar.version(), 1);
 
 		bar.name = "new name";
 		bar.desc = "new desc";
 		DB.as("manager@debug").update(bar);
 
-		Bar bar2 = DB.sudo().get(bar.getId());
+		Bar bar2 = DB.sudo().get(bar.id());
 
 		eq(bar2.name, "abc");
 		eq(bar2.desc, "new desc");
@@ -275,7 +275,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 		DB.sudo().persist(foo);
 
 		final Foo foo2 = new Foo();
-		foo2.setId(foo.getId());
+		foo2.id(foo.id());
 
 		throwsSecurityException(new Runnable() {
 			@Override

@@ -38,7 +38,7 @@ public class DbClassEqualityTest extends DbTestCommons {
 
 	private Post post(Long id) {
 		Post p = new Post();
-		p.setId(id);
+		p.id(id);
 		return p;
 	}
 

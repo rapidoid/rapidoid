@@ -45,8 +45,8 @@ public class DbClassRelationsTest extends DbTestCommons {
 		DB.refresh(post1);
 		DB.refresh(post2);
 
-		notNull(post1.getId());
-		notNull(post2.getId());
+		notNull(post1.id());
+		notNull(post2.id());
 
 		eq(profile.posts, U.list(post1, post2));
 		eq(post1.postedOn.get(), profile);

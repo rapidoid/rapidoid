@@ -35,10 +35,10 @@ public class DbClassOCCTest extends DbTestCommons {
 		Person p1 = new Person();
 		DB.persist(p1);
 
-		eq(p1.getVersion(), 1);
+		eq(p1.version(), 1);
 
 		Person p2 = new Person();
-		p2.setId(p1.getId());
+		p2.id(p1.id());
 
 		DB.persist(p2);
 	}
@@ -48,13 +48,13 @@ public class DbClassOCCTest extends DbTestCommons {
 		Person p1 = new Person();
 		DB.persist(p1);
 
-		eq(p1.getVersion(), 1);
+		eq(p1.version(), 1);
 
 		Person p2 = new Person();
-		p2.setId(p1.getId());
+		p2.id(p1.id());
 
 		DB.refresh(p2);
-		eq(p2.getVersion(), 1);
+		eq(p2.version(), 1);
 
 		DB.persist(p2);
 	}

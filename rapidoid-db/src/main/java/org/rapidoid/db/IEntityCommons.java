@@ -16,29 +16,29 @@ import org.rapidoid.var.Var;
 @Since("2.2.0")
 public interface IEntityCommons {
 
-	long getId();
+	long id();
 
-	void setId(long id);
+	void id(long id);
 
-	long getVersion();
+	long version();
 
-	void setVersion(long version);
+	void version(long version);
 
-	String getCreatedBy();
+	String createdBy();
 
-	void setCreatedBy(String createdBy);
+	void createdBy(String createdBy);
 
-	Date getCreatedOn();
+	Date createdOn();
 
-	void setCreatedOn(Date createdOn);
+	void createdOn(Date createdOn);
 
-	String getLastUpdatedBy();
+	String lastUpdatedBy();
 
-	void setLastUpdatedBy(String updatedBy);
+	void lastUpdatedBy(String updatedBy);
 
-	Date getLastUpdatedOn();
+	Date lastUpdatedOn();
 
-	void setLastUpdatedOn(Date updatedOn);
+	void lastUpdatedOn(Date updatedOn);
 
 	<K, V> ConcurrentMap<K, V> _map(String name);
 

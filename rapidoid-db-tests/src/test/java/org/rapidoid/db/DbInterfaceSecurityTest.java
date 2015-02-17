@@ -209,7 +209,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 		eq(bar2.desc().get(), "desc");
 
 		IBar bar3 = DB.entity(IBar.class);
-		bar3.setId(id);
+		bar3.id(id);
 		DB.refresh(bar3);
 		eq(bar3.name().get(), null);
 		eq(bar3.desc().get(), "desc");
@@ -251,14 +251,14 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 		bar.name().set("abc");
 		DB.as("qwerty").persist(bar);
 
-		eq(bar.getId(), 1);
-		eq(bar.getVersion(), 1);
+		eq(bar.id(), 1);
+		eq(bar.version(), 1);
 
 		bar.name().set("new name");
 		bar.desc().set("new desc");
 		DB.as("manager@debug").update(bar);
 
-		IBar bar2 = DB.sudo().get(bar.getId());
+		IBar bar2 = DB.sudo().get(bar.id());
 
 		eq(bar2.name().get(), "abc");
 		eq(bar2.desc().get(), "new desc");
@@ -274,7 +274,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 		DB.sudo().persist(foo);
 
 		final IFoo foo2 = DB.entity(IFoo.class);
-		foo2.setId(foo.getId());
+		foo2.id(foo.id());
 		foo2.name().set("no name");
 
 		throwsSecurityException(new Runnable() {
