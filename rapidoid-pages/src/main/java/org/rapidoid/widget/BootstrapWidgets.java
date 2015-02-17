@@ -12,6 +12,7 @@ import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.customtag.ColspanTag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
@@ -34,6 +35,7 @@ import org.rapidoid.util.Cls;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 
@@ -636,6 +638,7 @@ public abstract class BootstrapWidgets extends HTML {
 		return checkboxes(Rnd.rndStr(30), options, var);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Object display(Object item) {
 		if (item instanceof Var<?>) {
 			Var<?> var = (Var<?>) item;
@@ -646,6 +649,10 @@ public abstract class BootstrapWidgets extends HTML {
 		} else if (item instanceof Object[]) {
 			Object[] arr = (Object[]) item;
 			return display(U.iterator(arr));
+		} else if (item instanceof TagWidget) {
+			TagWidget<Object> widget = (TagWidget<Object>) item;
+			Tag tag = widget.toTag(AppCtx.exchange());
+			return tag;
 		}
 
 		return isEntity(item) ? a(item).href(urlFor(item)) : Cls.str(item);
