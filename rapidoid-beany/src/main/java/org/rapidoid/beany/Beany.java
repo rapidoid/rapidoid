@@ -92,10 +92,11 @@ public class Beany {
 				Class<?>[] params = method.getParameterTypes();
 				Class<?> ret = method.getReturnType();
 
-				if ((modif & Modifier.PRIVATE) == 0 && (modif & Modifier.PROTECTED) == 0
-						&& (modif & Modifier.STATIC) == 0) {
+				String name = method.getName();
 
-					String name = method.getName();
+				if (!name.startsWith("_") && !Modifier.isPrivate(modif) && !Modifier.isProtected(modif)
+						&& !Modifier.isStatic(modif)) {
+
 					if ((name.matches(GETTER) && params.length == 0) || (name.matches(SETTER) && params.length == 1)) {
 
 						String propName;
@@ -162,14 +163,17 @@ public class Beany {
 			for (Field field : fields) {
 
 				int modif = field.getModifiers();
-				if ((modif & Modifier.PRIVATE) == 0 && (modif & Modifier.PROTECTED) == 0
-						&& (modif & Modifier.STATIC) == 0) {
-					String fieldName = field.getName();
-					BeanProp prop = properties.get(fieldName);
+				if (!Modifier.isPrivate(modif) && !Modifier.isProtected(modif) && !Modifier.isStatic(modif)) {
 
-					if (prop == null) {
-						prop = new BeanProp(fieldName, field, (modif & Modifier.FINAL) != 0);
-						properties.put(fieldName, prop);
+					String fieldName = field.getName();
+
+					if (!fieldName.startsWith("_")) {
+						BeanProp prop = properties.get(fieldName);
+
+						if (prop == null) {
+							prop = new BeanProp(fieldName, field, (modif & Modifier.FINAL) != 0);
+							properties.put(fieldName, prop);
+						}
 					}
 				}
 			}
