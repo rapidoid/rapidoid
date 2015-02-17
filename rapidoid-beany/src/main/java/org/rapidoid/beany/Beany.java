@@ -422,8 +422,7 @@ public class Beany {
 			String name = prop.getName();
 
 			if (annotated
-					|| (!name.equalsIgnoreCase("id") && !name.equalsIgnoreCase("version")
-							&& prop.getTypeKind() != TypeKind.OBJECT && prop.getTypeKind() != TypeKind.DATE)) {
+					|| (!UTILS.isSpecialProperty(name) && prop.getTypeKind() != TypeKind.OBJECT && prop.getTypeKind() != TypeKind.DATE)) {
 
 				Object value = prop.get(bean);
 				if (value != null) {
