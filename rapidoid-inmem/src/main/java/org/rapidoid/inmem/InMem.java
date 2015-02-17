@@ -1222,7 +1222,9 @@ public class InMem implements Serializable {
 		data.active.set(false);
 
 		try {
-			persistor.join();
+			if (persistor != null) {
+				persistor.join();
+			}
 		} catch (InterruptedException e) {}
 
 		new File(data.filename).delete();
