@@ -39,6 +39,7 @@ import org.rapidoid.json.JSON;
 import org.rapidoid.log.Log;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.AppCtx;
+import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.util.UserInfo;
@@ -72,6 +73,7 @@ public class OAuthTokenHandler implements Handler {
 		Log.debug("Received OAuth code", "code", code, "state", state);
 
 		if (code != null && state != null) {
+
 			U.must(stateCheck.isValidState(state, clientSecret, x.sessionId()), "Invalid OAuth state!");
 
 			String redirectUrl = oauthDomain != null ? oauthDomain + callbackPath : x.constructUrl(callbackPath);
@@ -114,7 +116,8 @@ public class OAuthTokenHandler implements Handler {
 			AppCtx.setUser(user);
 			U.must(Secure.user() == user);
 
-			return x.goBack(0);
+			x.write(IO.load("close.html"));
+			return x;
 		} else {
 			String error = x.param("error");
 			if (error != null) {
