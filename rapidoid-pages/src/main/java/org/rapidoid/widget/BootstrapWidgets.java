@@ -395,11 +395,9 @@ public abstract class BootstrapWidgets extends HTML {
 		return div(contents).class_("title-box");
 	}
 
-	public static Tag panel(Object header, Object content, Object footer) {
-		Tag pheader = header != null ? div(header).class_("panel-heading") : null;
-		Tag pbody = content != null ? div(content).class_("panel-body") : null;
-		Tag pfooter = footer != null ? div(footer).class_("panel-footer") : null;
-		return div(pheader, pbody, pfooter).class_("panel panel-default");
+
+	public static PanelWidget panel(Object... contents) {
+		return Cls.customizable(PanelWidget.class, new Object[] { UTILS.flat(contents) });
 	}
 
 	public static <T> GridWidget grid(Class<T> type, Object[] items, String sortOrder, int pageSize,
