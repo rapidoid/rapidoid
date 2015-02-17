@@ -472,4 +472,14 @@ public class HttpAppContext implements AppContext {
 		return x.hasSession(sessionId);
 	}
 
+	@Override
+	public <T> T extra(Object key) {
+		return x.extra(key);
+	}
+
+	@Override
+	public void extra(Object key, Object value) {
+		x.extra(key, value);
+	}
+
 }

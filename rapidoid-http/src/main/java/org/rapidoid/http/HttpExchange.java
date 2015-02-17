@@ -131,4 +131,8 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	void sessionDeserialize(byte[] bytes);
 
+	<T> T extra(Object key);
+
+	void extra(Object key, Object value);
+
 }

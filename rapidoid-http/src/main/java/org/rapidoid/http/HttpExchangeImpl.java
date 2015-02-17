@@ -97,6 +97,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	private HttpResponses responses;
 	private HttpSession session;
 	private Router router;
+	private Map<Object, Object> extras;
 
 	final Range multipartBoundary = new Range();
 
@@ -146,6 +147,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 		isGet.value = false;
 		isKeepAlive.value = false;
+
+		extras = null;
 
 		verb.reset();
 		uri.reset();
@@ -959,6 +962,24 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public HttpSuccessException error() {
 		return HttpSuccessException.get();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public synchronized <T> T extra(Object key) {
+		return (T) _extras().get(key);
+	}
+
+	@Override
+	public synchronized void extra(Object key, Object value) {
+		_extras().put(key, value);
+	}
+
+	private synchronized Map<Object, Object> _extras() {
+		if (extras == null) {
+			extras = U.map();
+		}
+		return extras;
 	}
 
 }
