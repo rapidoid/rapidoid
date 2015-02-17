@@ -3,6 +3,7 @@ package org.rapidoid.db;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
@@ -39,122 +40,84 @@ public class EntityCommons implements IEntityCommons, CommonRoles, Serializable 
 
 	private static final long serialVersionUID = 8414835674684110203L;
 
-	private volatile long id;
+	private long id;
 
-	private volatile long version;
+	private long version;
 
-	private volatile String createdBy;
+	private String createdBy;
 
-	private volatile Date createdOn;
+	private Date createdOn;
 
-	private volatile String lastUpdatedBy;
+	private String lastUpdatedBy;
 
-	private volatile Date lastUpdatedOn;
+	private Date lastUpdatedOn;
 
-	private final ConcurrentMap<String, Object> extras = U.concurrentMap();
+	private Map<String, Object> extras;
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <K, V> ConcurrentMap<K, V> _map(String name) {
-		if (!extras.containsKey(name)) {
-			extras.putIfAbsent(name, U.concurrentMap());
-		}
-
-		return (ConcurrentMap<K, V>) extras.get(name);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> List<T> _list(String name) {
-		if (!extras.containsKey(name)) {
-			extras.putIfAbsent(name, U.list());
-		}
-
-		return (List<T>) extras.get(name);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> Set<T> _set(String name) {
-		if (!extras.containsKey(name)) {
-			extras.putIfAbsent(name, U.set());
-		}
-
-		return (Set<T>) extras.get(name);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> Var<T> _var(String name, T defaultValue) {
-		if (!extras.containsKey(name)) {
-			extras.putIfAbsent(name, Vars.var(defaultValue));
-		}
-
-		return (Var<T>) extras.get(name);
-	}
+	private Map<String, Object> tmps;
 
 	@Override
-	public long id() {
+	public synchronized long id() {
 		return id;
 	}
 
 	@Override
-	public void id(long id) {
+	public synchronized void id(long id) {
 		this.id = id;
 	}
 
 	@Override
-	public long version() {
+	public synchronized long version() {
 		return version;
 	}
 
 	@Override
-	public void version(long version) {
+	public synchronized void version(long version) {
 		this.version = version;
 	}
 
 	@Override
-	public String createdBy() {
+	public synchronized String createdBy() {
 		return createdBy;
 	}
 
 	@Override
-	public void createdBy(String createdBy) {
+	public synchronized void createdBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
 	@Override
-	public Date createdOn() {
+	public synchronized Date createdOn() {
 		return createdOn;
 	}
 
 	@Override
-	public void createdOn(Date createdOn) {
+	public synchronized void createdOn(Date createdOn) {
 		this.createdOn = createdOn;
 	}
 
 	@Override
-	public String lastUpdatedBy() {
+	public synchronized String lastUpdatedBy() {
 		return lastUpdatedBy;
 	}
 
 	@Override
-	public void lastUpdatedBy(String lastUpdatedBy) {
+	public synchronized void lastUpdatedBy(String lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
 	@Override
-	public Date lastUpdatedOn() {
+	public synchronized Date lastUpdatedOn() {
 		return lastUpdatedOn;
 	}
 
 	@Override
-	public void lastUpdatedOn(Date lastUpdatedOn) {
+	public synchronized void lastUpdatedOn(Date lastUpdatedOn) {
 		this.lastUpdatedOn = lastUpdatedOn;
 	}
 
 	@Override
-	public int hashCode() {
+	public synchronized int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (int) (id ^ (id >>> 32));
@@ -162,7 +125,7 @@ public class EntityCommons implements IEntityCommons, CommonRoles, Serializable 
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public synchronized boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -181,6 +144,90 @@ public class EntityCommons implements IEntityCommons, CommonRoles, Serializable 
 			return false;
 
 		return true;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public synchronized <K, V> ConcurrentMap<K, V> _map(String name) {
+		extras();
+
+		if (!extras.containsKey(name)) {
+			extras.put(name, U.concurrentMap());
+		}
+
+		return (ConcurrentMap<K, V>) extras.get(name);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public synchronized <T> List<T> _list(String name) {
+		extras();
+
+		if (!extras.containsKey(name)) {
+			extras.put(name, U.list());
+		}
+
+		return (List<T>) extras.get(name);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public synchronized <T> Set<T> _set(String name) {
+		extras();
+
+		if (!extras.containsKey(name)) {
+			extras.put(name, U.set());
+		}
+
+		return (Set<T>) extras.get(name);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public synchronized <T> Var<T> _var(String name, T defaultValue) {
+		extras();
+
+		if (!extras.containsKey(name)) {
+			extras.put(name, Vars.var(defaultValue));
+		}
+
+		return (Var<T>) extras.get(name);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public synchronized <T> T _extra(String name) {
+		return (T) extras().get(name);
+	}
+
+	@Override
+	public synchronized void _extra(String name, Object value) {
+		extras().put(name, value);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public synchronized <T> T _tmp(String name) {
+		return (T) tmps().get(name);
+	}
+
+	@Override
+	public synchronized void _tmp(String name, Object value) {
+		tmps().put(name, value);
+	}
+
+	private synchronized Map<String, Object> extras() {
+		if (extras == null) {
+			extras = U.map();
+		}
+		return extras;
+	}
+
+	private synchronized Map<String, Object> tmps() {
+		if (tmps == null) {
+			tmps = U.map();
+		}
+		return tmps;
 	}
 
 }

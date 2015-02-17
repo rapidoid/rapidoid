@@ -48,4 +48,12 @@ public interface IEntityCommons {
 
 	<T> Var<T> _var(String name, T defaultValue);
 
+	<T> T _extra(String name);
+
+	void _extra(String name, Object value);
+
+	<T> T _tmp(String name);
+
+	void _tmp(String name, Object value);
+
 }
