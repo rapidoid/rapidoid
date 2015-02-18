@@ -1,21 +1,23 @@
 <!-- EXAMPLE {{n}} -->
 
-<div class="row">
+<div class="sep-example"></div>
+
+<div id="example{{n}}-title" class="row">
 	<div class="col-md-12">
 		<h3 class="caption">{{title}}</h3>
 	</div>
 </div>
 
-<div class="row row-separated">
+<div id="example{{n}}-body" class="row row-separated">
 
-	<div class="col-md-4">
-		<div class="eg_title">{{desc}}</div>
-		<pre class="eg_code">
+	<div id="example{{n}}-left" class="col-md-4">
+		<div id="example{{n}}-codedesc" class="eg_title">{{desc}}</div>
+		<pre id="example{{n}}-code" class="eg_code">
 {{code}}
 </pre>
 	</div>
 
-	<div class="col-md-8">
+	<div id="example{{n}}-right" class="col-md-8">
 		<div class="app-example-title">Your application looks like this:</div>
 		<div class="embed-responsive embedd">
 			<iframe class="embed-responsive-item" src="examples/{{n}}/index.html"></iframe>

@@ -58,13 +58,13 @@
 	<div class="container-fluid">
 
 		<div class="row">
-			<div class="col-md-7">
+			<div class="col-md-7 col-sm-12">
 				<h4 id="main_subtitle">
 					<span class="rapidoid">Rapidoid - Cool Full-stack Web Framework for Java!</span>
 				</h4>
 			</div>
 
-			<div class="col-md-5">
+			<div class="col-md-5 col-sm-12">
 				<!-- Begin MailChimp Signup Form -->
 				<div id="mc_embed_signup">
 					<form
@@ -77,7 +77,7 @@
 							<input type="email" value="" name="EMAIL"
 								class="required email form-control input-sm" id="mce-EMAIL"
 								placeholder="Your e-mail address"> <input type="submit"
-								value="Subscribe to monthly newsletter" name="subscribe"
+								value="Subscribe to newsletter" name="subscribe"
 								id="mc-embedded-subscribe" class="button btn btn-primary btn-sm">
 						</div>
 						<div id="mce-responses" class="clear">
@@ -98,18 +98,27 @@
 			</div>
 		</div>
 
+<div class="row row-separated">
+  <div class="col-md-12">
+    <div id="showcase" class="thumbnail">
+      <a href="#quickstart"><img src="showcase.gif" alt="Rapidoid Showcase"></a>
+    </div>
+  </div>
+</div>
 
 <!-- EXAMPLE 1 -->
 
-<div class="row">
+<div class="sep-example"></div>
+
+<div id="example1-title" class="row row-separated">
 	<div class="col-md-12">
-		<h3 class="caption">Quick start</h3>
+		<h3 class="caption"><a id="quickstart"></a>Quick start</h3>
 	</div>
 </div>
 
-<div class="row row-separated">
+<div id="example1-body" class="row row-separated">
 
-		<div class="col-md-4">
+		<div id="example1-left" class="col-md-4">
 <div class="eg_title">Add Rapidoid as Maven dependency to your project:</div>
 <pre class="eg_code">
 &lt;<span class="_code_tag">dependency</span>&gt;
@@ -118,8 +127,8 @@
     &lt;<span class="_code_tag">version</span>&gt;2.1.1&lt;/<span class="_code_tag">version</span>&gt;
 &lt;/<span class="_code_tag">dependency</span>&gt;
 </pre>
-<div class="eg_title">Add the App class:</div>
-<pre class="eg_code">
+<div id="example1-codedesc" class="eg_title">Add the App class:</div>
+<pre id="example1-code" class="eg_code">
 <span class="_code_kw">public</span> <span class="_code_kw">class</span> <span class="_code_cls">App</span> {
 
     <span class="_code_kw">public</span> <span class="_code_cls">String</span> title = <span class="_code_str">"Example 1"</span>;
@@ -133,7 +142,7 @@
 
 		</div>
 
-		<div class="col-md-8">
+		<div id="example1-right" class="col-md-8">
 			<div class="app-example-title">Your application looks like this:</div>		
 			<div class="embed-responsive embedd">
 				<iframe class="embed-responsive-item" src="examples/1/index.html"></iframe>
