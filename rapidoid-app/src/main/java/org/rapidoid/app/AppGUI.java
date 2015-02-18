@@ -85,6 +85,10 @@ public class AppGUI extends BootstrapWidgets {
 		return grid(all(type, sortOrder), sortOrder, pageSize, properties);
 	}
 
+	public static <T> GridWidget grid(Class<T> type) {
+		return grid(all(type, "id"), "id", 10);
+	}
+
 	public static <T> GridWidget grid(Predicate<T> match) {
 		return grid(all(match), "id", 10, new String[0]);
 	}
