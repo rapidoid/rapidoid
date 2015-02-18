@@ -123,12 +123,16 @@ public class Examples {
 			snippet = snippet.substring(pos).trim();
 
 			snippet = col(rr, snippet);
-			
+
 			snippet = snippet.replaceAll("\n(\\s*)(.*)\\s//\\shere", "\n$1<span class=\"important-code\">$2</span>");
+
+			int lines = snippet.split("(?sm)\\n+").length;
+			String titleDesc = U.format("<span class=\"pull-right\">[FULL APPLICATION, only %s lines of code]</span>", lines);
+			String title = titles[i - 2] + titleDesc;
 
 			String example = UTILS.fillIn(egT, "n", i + "");
 			example = UTILS.fillIn(example, "code", snippet);
-			example = UTILS.fillIn(example, "title", titles[i - 2]);
+			example = UTILS.fillIn(example, "title", title);
 			example = UTILS.fillIn(example, "desc", desc);
 			examples += example;
 		}
@@ -173,7 +177,7 @@ public class Examples {
 		DB.destroy();
 
 		DB.start();
-		
+
 		Class<?> appCls = appClasses.get("App");
 		if (appCls != null) {
 			Method main = Cls.getMethod(appCls, "main", String[].class);
