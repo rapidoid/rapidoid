@@ -671,7 +671,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 				write(response);
 			}
 		} else {
-			String title = U.or(response, "Error occured!");
+			String title = U.or(response, "Internal server error!");
 			if (err != null) {
 				if (Conf.dev()) {
 					HTMLSnippets.writeErrorPage(this, title, err);
@@ -679,7 +679,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 					HTMLSnippets.writeFullPage(this, title, "");
 				}
 			} else {
-				HTMLSnippets.writeFullPage(this, title, "<h1>The requested page cannot be found!</h1>");
+				HTMLSnippets.writeFullPage(this, title, "");
 			}
 		}
 
