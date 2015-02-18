@@ -1,9 +1,11 @@
 package org.rapidoid.docs.eg10;
 
+import static org.rapidoid.app.AppGUI.*;
+
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.app.Apps;
-import org.rapidoid.app.Screen;
 import org.rapidoid.db.DB;
+import org.rapidoid.db.Entity;
 
 /*
  * #%L
@@ -32,31 +34,22 @@ public class App {
 	String theme = "4";
 
 	public static void main(String[] args) {
-		if (DB.size() == 0) {
-			DB.insert(new Movie("Rambo", 1985));
-			DB.insert(new Movie("Her", 2013));
-			DB.insert(new Movie("Batman", 1989));
-		}
 		Apps.run(args);
 	}
-}
 
-class HomeScreen extends Screen {
+	public void init() {
+		DB.prefill("movie title=Rambo, year=1985"); // here
+		DB.prefill("movie title=Her, year=2013"); // here
+		DB.prefill("movie title=Batman, year=1989"); // here
+	}
+
 	Object content() {
-		return grid(Movie.class, "year", 3);
+		return grid(Movie.class); // here
 	}
 }
 
 @Scaffold
-class Movie {
-	long id;
+class Movie extends Entity {
 	String title;
 	int year;
-
-	public Movie() {}
-
-	public Movie(String title, int year) {
-		this.title = title;
-		this.year = year;
-	}
 }
