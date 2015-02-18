@@ -23,8 +23,8 @@ import org.rapidoid.app.Apps;
  */
 
 public class App {
-	String title = "Example 1";
-	String content = "Hello, World!";
+	String title = "Example 1"; // here
+	String content = "Hello, World!"; // here
 
 	public static void main(String[] args) {
 		Apps.run(args);

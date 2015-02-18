@@ -1,5 +1,7 @@
 package org.rapidoid.docs.eg2;
 
+import org.rapidoid.app.Apps;
+
 /*
  * #%L
  * rapidoid-docs
@@ -22,8 +24,6 @@ package org.rapidoid.docs.eg2;
 
 // Add some screens:
 
-import org.rapidoid.app.Apps;
-
 public class App {
 	String title = "Example 2";
 
@@ -32,12 +32,12 @@ public class App {
 	}
 }
 
-class HomeScreen {
-	String content() {
-		return "At the Home screen!";
-	}
-}
+class HomeScreen { // here
+	String content() { // here
+		return "At the Home screen!"; // here
+	} // here
+} // here
 
-class FooScreen {
-	String content = "At the Foo screen!";
-}
+class FooScreen { // here
+	String content = "At the Foo screen!"; // here
+} // here

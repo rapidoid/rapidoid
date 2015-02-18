@@ -123,6 +123,8 @@ public class Examples {
 			snippet = snippet.substring(pos).trim();
 
 			snippet = col(rr, snippet);
+			
+			snippet = snippet.replaceAll("\n(.*)\\s//\\shere", "\n<span class=\"important-code\">$1</span>");
 
 			String example = UTILS.fillIn(egT, "n", i + "");
 			example = UTILS.fillIn(example, "code", snippet);

@@ -29,8 +29,8 @@ public class App {
 	Object content = "Hello!";
 	String theme = "2";
 
-	boolean full = false;
-	boolean search = true;
+	boolean full = false; // here
+	boolean search = true; // here
 
 	public static void main(String[] args) {
 		Apps.run(args);

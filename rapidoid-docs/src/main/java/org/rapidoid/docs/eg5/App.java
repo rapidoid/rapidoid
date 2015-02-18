@@ -35,8 +35,8 @@ public class App {
 	}
 }
 
-@Order(2)
+@Order(2) // here
 class FooScreen extends Screen {}
 
-@Order(1)
+@Order(1) // here
 class BarScreen extends Screen {}

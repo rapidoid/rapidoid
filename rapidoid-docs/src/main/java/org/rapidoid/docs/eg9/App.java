@@ -30,7 +30,7 @@ public class App {
 	Object content = "Hello!";
 	String theme = "5";
 
-	Object[] screens = { "ab", CdScreen.class };
+	Object[] screens = { "ab", CdScreen.class }; // here
 
 	public static void main(String[] args) {
 		Apps.run(args);

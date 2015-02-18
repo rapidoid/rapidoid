@@ -29,9 +29,9 @@ public class App {
 	Object content = "Hello!";
 	String theme = "3";
 
-	boolean full = false;
-	boolean facebookLogin = true;
-	boolean googleLogin = true;
+	boolean full = false; // here
+	boolean facebookLogin = true; // here
+	boolean googleLogin = true; // here
 
 	public static void main(String[] args) {
 		Apps.run(args);

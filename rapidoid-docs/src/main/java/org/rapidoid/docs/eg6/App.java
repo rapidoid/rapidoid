@@ -29,7 +29,7 @@ public class App {
 	Object content = "Hello!";
 	String theme = "4";
 
-	boolean full = false;
+	boolean full = false; // here
 
 	public static void main(String[] args) {
 		Apps.run(args);

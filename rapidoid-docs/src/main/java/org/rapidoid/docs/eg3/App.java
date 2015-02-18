@@ -1,5 +1,8 @@
 package org.rapidoid.docs.eg3;
 
+import org.rapidoid.app.Apps;
+import org.rapidoid.app.Screen;
+
 /*
  * #%L
  * rapidoid-docs
@@ -22,9 +25,6 @@ package org.rapidoid.docs.eg3;
 
 // Use method chaining to construct HTML tags:
 
-import org.rapidoid.app.Apps;
-import org.rapidoid.app.Screen;
-
 public class App {
 	String title = "Example 3";
 
@@ -35,8 +35,8 @@ public class App {
 
 class HomeScreen extends Screen {
 	Object content() {
-		Object link = a("Foo").href("foo.html");
-		return h3("Welcome! Visit ", link);
+		Object link = a("Foo").href("foo.html"); // here
+		return h3("Welcome! Visit ", link); // here
 	}
 }
 
