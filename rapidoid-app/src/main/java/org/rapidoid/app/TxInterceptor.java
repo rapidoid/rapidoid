@@ -24,8 +24,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.db.Database;
 import org.rapidoid.http.HTTPInterceptor;
-import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.http.HttpInterception;
+import org.rapidoid.http.HttpProtocol;
 import org.rapidoid.lambda.Callback;
 
 @Authors("Nikolche Mihajlovski")
@@ -40,13 +41,13 @@ public class TxInterceptor implements HTTPInterceptor {
 
 	@Override
 	public void intercept(HttpInterception interception) {
-		final HttpExchange x = interception.exchange();
+		final HttpExchangeImpl x = (HttpExchangeImpl) interception.exchange();
 
 		Callback<Void> callback = new Callback<Void>() {
 			@Override
 			public void onDone(Void result, Throwable error) {
 				if (error != null) {
-					x.errorResponse(error);
+					HttpProtocol.handleError(x, error);
 				}
 				x.done();
 			}

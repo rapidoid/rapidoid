@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.db.DB;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.http.HttpProtocol;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.pages.Pages;
@@ -54,7 +55,7 @@ public class AppHandler implements Handler {
 			@Override
 			public void onDone(Void result, Throwable error) {
 				if (error != null) {
-					x.errorResponse(error);
+					HttpProtocol.handleError((HttpExchangeImpl) x, error);
 				}
 				x.done();
 			}

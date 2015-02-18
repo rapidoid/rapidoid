@@ -106,11 +106,14 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		}
 	}
 
-	private void handleError(HttpExchangeImpl x, Throwable e) {
+	public static void handleError(HttpExchangeImpl x, Throwable e) {
 		Throwable cause = UTILS.rootCause(e);
 		if (cause instanceof HttpSuccessException || cause instanceof HttpNotFoundException) {
 			// redirect, notFound etc.
 			x.completeResponse();
+		} else if (cause instanceof ThreadDeath) {
+			Log.error("Thread death, probably timeout!", "request", x, "error", cause);
+			x.response(500, "Request timeout!", null);
 		} else {
 			Log.error("Internal server error!", "request", x, "error", cause);
 			x.errorResponse(e);
