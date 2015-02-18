@@ -170,6 +170,8 @@ public class Examples {
 		AppCtx.setClasses(appClasses);
 		DB.destroy();
 
+		DB.init();
+		
 		Class<?> appCls = appClasses.get("App");
 		if (appCls != null) {
 			Method main = Cls.getMethod(appCls, "main", String[].class);
