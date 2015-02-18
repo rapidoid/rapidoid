@@ -83,7 +83,9 @@ public class DbSchemaImpl implements DbSchema {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <E> E entity(Class<E> clazz, Map<String, ?> properties) {
+		U.notNull(clazz, "entity class");
 		Class<E> entityType = getEntityTypeFor(clazz);
+		U.notNull(entityType, "entity type");
 		if (entityType.isInterface() && IEntity.class.isAssignableFrom(entityType)) {
 			Class<? extends IEntity> cls = (Class<? extends IEntity>) entityType;
 			return (E) DbProxy.create(cls, properties);
@@ -108,6 +110,11 @@ public class DbSchemaImpl implements DbSchema {
 			}
 		}
 		return clazz;
+	}
+
+	@Override
+	public String toString() {
+		return "DbSchemaImpl [entityTypes=" + entityTypes + ", entityTypesPlural=" + entityTypesPlural + "]";
 	}
 
 }

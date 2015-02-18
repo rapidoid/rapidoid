@@ -311,6 +311,7 @@ public class DbImpl extends NamedActivity<Database> implements Database, Seriali
 
 		String entityName = U.capitalized(data.split(" ")[0]);
 		Class<?> entityType = schema().getEntityType(entityName);
+		U.must(entityType != null, "Cannot find entity '%s'!", entityName);
 
 		String[] props = data.substring(entityName.length() + 1).split("\\s*\\,\\s*");
 		Map<String, Object> properties = U.map();
