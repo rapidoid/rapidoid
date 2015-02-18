@@ -306,7 +306,7 @@ public class DbImpl extends NamedActivity<Database> implements Database, Seriali
 	}
 
 	@Override
-	public void prefill(String data, Object... args) {
+	public void init(String data, Object... args) {
 		data = U.format(data, args);
 
 		String entityName = U.capitalized(data.split(" ")[0]);

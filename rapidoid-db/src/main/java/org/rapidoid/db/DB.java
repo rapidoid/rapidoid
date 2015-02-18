@@ -270,8 +270,8 @@ public class DB {
 		return db().sudo();
 	}
 
-	public static void prefill(String data, Object... args) {
-		db().prefill(data, args);
+	public static void init(String data, Object... args) {
+		db().init(data, args);
 	}
 
 }

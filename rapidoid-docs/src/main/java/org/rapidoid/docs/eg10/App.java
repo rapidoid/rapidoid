@@ -38,9 +38,9 @@ public class App {
 	}
 
 	public void init() {
-		DB.prefill("movie title=Rambo, year=1985"); // here
-		DB.prefill("movie title=Her, year=2013"); // here
-		DB.prefill("movie title=Batman, year=1989"); // here
+		DB.init("movie title=Rambo, year=1985"); // here
+		DB.init("movie title=Her, year=2013"); // here
+		DB.init("movie title=Batman, year=1989"); // here
 	}
 
 	Object content() {
