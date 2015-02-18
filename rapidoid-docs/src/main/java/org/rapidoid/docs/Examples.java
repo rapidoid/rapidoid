@@ -172,7 +172,7 @@ public class Examples {
 		AppCtx.setClasses(appClasses);
 		DB.destroy();
 
-		DB.init();
+		DB.start();
 		
 		Class<?> appCls = appClasses.get("App");
 		if (appCls != null) {

@@ -38,7 +38,7 @@ import org.rapidoid.lambda.Predicate;
 @Since("2.0.0")
 public interface Database extends Activity<Database> {
 
-	void initAndLoad();
+	void loadAndStart();
 
 	long insert(Object record);
 

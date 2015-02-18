@@ -54,7 +54,7 @@ public class DB {
 		U.must(Database.class.isAssignableFrom(DB_IMPL_CLASS), "%s must implement %s!", dbImplName,
 				Database.class.getCanonicalName());
 
-		init();
+		start();
 	}
 
 	public static String path() {
@@ -67,9 +67,9 @@ public class DB {
 		return path;
 	}
 
-	public static void init() {
+	public static void start() {
 		db = (Database) Cls.customizable(DB.DB_IMPL_CLASS, "default", path() + "default.db");
-		db.initAndLoad();
+		db.loadAndStart();
 	}
 
 	public static Database db() {

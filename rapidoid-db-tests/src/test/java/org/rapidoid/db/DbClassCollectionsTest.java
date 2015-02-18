@@ -50,7 +50,7 @@ public class DbClassCollectionsTest extends DbTestCommons {
 		}
 
 		DB.shutdown();
-		DB.init();
+		DB.start();
 
 		eq(DB.size(), 7);
 

@@ -77,7 +77,7 @@ public class DbImpl extends NamedActivity<Database> implements Database, Seriali
 	}
 
 	@Override
-	public void initAndLoad() {
+	public void loadAndStart() {
 		inmem.initAndLoad();
 	}
 

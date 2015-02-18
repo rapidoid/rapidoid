@@ -74,7 +74,7 @@ public class DbInterfacePersistenceTest extends DbTestCommons {
 		isTrue(occN.get() < count / 10);
 
 		DB.shutdown();
-		DB.init();
+		DB.start();
 
 		checkDb(count);
 		checkDb(count);
