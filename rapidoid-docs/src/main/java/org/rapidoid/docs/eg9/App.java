@@ -26,7 +26,6 @@ import org.rapidoid.app.Screen;
 // Show only the Ab and Cd screens
 
 public class App {
-
 	String title = "My app";
 	Object content = "Hello!";
 	String theme = "5";

@@ -25,7 +25,6 @@ import org.rapidoid.app.Apps;
 // Let's use the built-in theme 2:
 
 public class App {
-
 	String theme = "2";
 	String title = "Example 4";
 	String content = "Fancy theme!";

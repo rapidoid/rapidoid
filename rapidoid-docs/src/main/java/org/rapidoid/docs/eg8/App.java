@@ -25,7 +25,6 @@ import org.rapidoid.app.Apps;
 // Show the "search" box in the navigation
 
 public class App {
-
 	String title = "My app";
 	Object content = "Hello!";
 	String theme = "2";

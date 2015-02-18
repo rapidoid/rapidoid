@@ -25,7 +25,6 @@ import org.rapidoid.app.Apps;
 // Show Facebook and Google login menu items
 
 public class App {
-
 	String title = "Facebook or Google";
 	Object content = "Hello!";
 	String theme = "3";

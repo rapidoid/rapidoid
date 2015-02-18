@@ -25,7 +25,6 @@ package org.rapidoid.docs.eg2;
 import org.rapidoid.app.Apps;
 
 public class App {
-
 	String title = "Example 2";
 
 	public static void main(String[] args) {

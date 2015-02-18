@@ -25,7 +25,6 @@ import org.rapidoid.app.Apps;
 // No search or login extras in navigation
 
 public class App {
-
 	String title = "No extras here";
 	Object content = "Hello!";
 	String theme = "4";

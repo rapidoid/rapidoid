@@ -27,7 +27,6 @@ import org.rapidoid.app.Screen;
 // Foo is second, Bar is first:
 
 public class App {
-
 	String title = "Custom screen order";
 	String theme = "1";
 

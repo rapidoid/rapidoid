@@ -26,7 +26,6 @@ import org.rapidoid.app.Apps;
 import org.rapidoid.app.Screen;
 
 public class App {
-
 	String title = "Example 3";
 
 	public static void main(String[] args) {
