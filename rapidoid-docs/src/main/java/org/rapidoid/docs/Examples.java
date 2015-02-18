@@ -124,7 +124,7 @@ public class Examples {
 
 			snippet = col(rr, snippet);
 			
-			snippet = snippet.replaceAll("\n(.*)\\s//\\shere", "\n<span class=\"important-code\">$1</span>");
+			snippet = snippet.replaceAll("\n(\\s*)(.*)\\s//\\shere", "\n$1<span class=\"important-code\">$2</span>");
 
 			String example = UTILS.fillIn(egT, "n", i + "");
 			example = UTILS.fillIn(example, "code", snippet);

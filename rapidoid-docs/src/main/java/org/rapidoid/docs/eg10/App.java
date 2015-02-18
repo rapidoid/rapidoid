@@ -44,7 +44,7 @@ public class App {
 	}
 
 	Object content() {
-		return grid(Movie.class); // here
+		return grid(Movie.class).orderBy("year"); // here
 	}
 }
 

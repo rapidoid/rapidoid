@@ -33,11 +33,11 @@ public class App {
 }
 
 class HomeScreen { // here
-	String content() { // here
+	Object content() { // here
 		return "At the Home screen!"; // here
-	} // here
-} // here
+	}
+}
 
 class FooScreen { // here
-	String content = "At the Foo screen!"; // here
-} // here
+	Object content = "At the Foo screen!"; // here
+}
