@@ -7,59 +7,14 @@ Rapidoid aims to be the Coolest Full-stack Web Application Framework for Java!
 
 ![Rapidoid showcase](http://www.rapidoid.org/showcase.gif)
 
-Teaser:
-
-```java
-@DbEntity
-@Scaffold
-@CanRead(LOGGED_IN)
-@CanChange({ OWNER })
-@CanInsert(LOGGED_IN)
-@CanDelete({ OWNER, ADMIN })
-public class Task {
-
-	public long id; // primary key
-
-	public long version; // optimistic CC
-
-	@Display
-	@CanChange({ MODERATOR, OWNER })
-	public String title;
-
-	@Display
-	@CanChange({ MODERATOR, OWNER, SHARED_WITH })
-	public Priority priority = Priority.MEDIUM;
-
-	@Optional
-	@CanChange({ MODERATOR, OWNER, SHARED_WITH })
-	public String description;
-
-	public int rating;
-
-	@Programmatic
-	public final DbRef<User> owner = DB.ref(this, "^owns");
-
-	@CanRead({ OWNER })
-	public final DbSet<User> sharedWith = DB.set(this, "sharedWith");
-
-	@Programmatic
-	@CanRead({ OWNER, SHARED_WITH })
-	public final DbList<Comment> comments = DB.list(this, "has");
-
-	@Programmatic
-	public final DbSet<User> likedBy = DB.set(this, "^likes");
-
-}
-```
-
 # Apache License v2
 
 The software is released under the liberal Apache Public License v2, so it is free to use for both commercial and non-commercial projects.
 
-# Step-by-step introduction
+# Documentation (step-by-step introduction)
 
 A step-by-step tutorial is available at the official site:
-[http://www.rapidoid.org/](http://www.rapidoid.org/)
+[http://www.rapidoid.org/](http://www.rapidoid.org/#quickstart)
 
 # Using with Maven
 
