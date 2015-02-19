@@ -27,7 +27,7 @@ import org.rapidoid.annotation.Since;
 @Since("2.0.0")
 public class TheDefaultApp {
 
-	public String title = "Untitled app";
+	public String title = "App";
 
 	public boolean full = true;
 
