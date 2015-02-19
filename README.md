@@ -1,9 +1,5 @@
-Rapidoid
+Rapidoid - Simple, Powerful, Secure.
 ========
-
-Rapidoid aims to be the Coolest Full-stack Web Application Framework for Java!
-
-# Super-simple. Powerful. Secure. Cool! #
 
 ![Rapidoid showcase](http://www.rapidoid.org/showcase.gif)
 
