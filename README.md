@@ -11,9 +11,10 @@ Rapidoid aims to be the Coolest Full-stack Web Application Framework for Java!
 
 The software is released under the liberal Apache Public License v2, so it is free to use for both commercial and non-commercial projects.
 
-# Documentation (step-by-step introduction)
+# Documentation (examples)
 
-A step-by-step tutorial is available at the official site:
+Please visit the official site:
+
 [http://www.rapidoid.org/](http://www.rapidoid.org/#quickstart)
 
 # Using with Maven
