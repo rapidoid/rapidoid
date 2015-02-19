@@ -21,7 +21,7 @@ Add the following snippet to the `<dependencies>` section in pom.xml:
 <dependency>
     <groupId>org.rapidoid</groupId>
     <artifactId>rapidoid-all</artifactId>
-    <version>2.1.1</version>
+    <version>2.2.0</version>
 </dependency>
 ```
 
