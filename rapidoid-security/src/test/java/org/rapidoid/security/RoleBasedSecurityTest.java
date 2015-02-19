@@ -29,7 +29,7 @@ import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
 class Foo {
-	public User owner;
+	public String createdBy;
 	public List<User> sharedWith;
 }
 
@@ -124,7 +124,7 @@ public class RoleBasedSecurityTest extends SecurityTestCommons {
 		isFalse(Secure.hasRoleForRecord("mng1", OWNER, foo));
 		isFalse(Secure.hasRoleForRecord("mod1", OWNER, foo));
 
-		foo.owner = new User("abc");
+		foo.createdBy = "abc";
 		foo.sharedWith = U.list();
 		foo.sharedWith.add(new User("adm1"));
 		foo.sharedWith.add(new User("mod1"));
@@ -165,7 +165,7 @@ public class RoleBasedSecurityTest extends SecurityTestCommons {
 		isFalse(Secure.hasRoleForRecord("mng1", SHARED_WITH, foo));
 		isFalse(Secure.hasRoleForRecord("mod1", SHARED_WITH, foo));
 
-		foo.owner = new User("abc");
+		foo.createdBy = "abc";
 		foo.sharedWith = U.list();
 		foo.sharedWith.add(new User("adm1"));
 		foo.sharedWith.add(new User("mod1"));

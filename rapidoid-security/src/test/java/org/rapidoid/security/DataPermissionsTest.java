@@ -20,7 +20,7 @@ package org.rapidoid.security;
  * #L%
  */
 
-import static org.rapidoid.util.CommonRoles.*;
+import static org.rapidoid.util.CommonWords.*;
 
 import java.util.List;
 
@@ -65,7 +65,7 @@ class Comment {
 	public boolean visible = true;
 
 	@Programmatic
-	public User owner;
+	public String createdBy;
 
 }
 
@@ -86,7 +86,7 @@ class Issue extends AbstractEntity {
 	public List<Comment> comments;
 
 	@Programmatic
-	public User owner;
+	public String createdBy;
 
 	@CanChange({ OWNER })
 	public List<User> sharedWith;
@@ -110,22 +110,22 @@ public class DataPermissionsTest extends SecurityTestCommons {
 
 		checkPermissions(null, Comment.class, "content", true, false);
 		checkPermissions(null, Comment.class, "visible", false, false);
-		checkPermissions(null, Comment.class, "owner", true, false);
+		checkPermissions(null, Comment.class, "createdBy", true, false);
 
 		checkPermissions("", Comment.class, "content", true, false);
 		checkPermissions("", Comment.class, "visible", false, false);
-		checkPermissions("", Comment.class, "owner", true, false);
+		checkPermissions("", Comment.class, "createdBy", true, false);
 
 		checkPermissions("abc", Comment.class, "content", true, false);
 		checkPermissions("abc", Comment.class, "visible", false, false);
-		checkPermissions("abc", Comment.class, "owner", true, false);
+		checkPermissions("abc", Comment.class, "createdBy", true, false);
 	}
 
 	@Test
 	public void testIssuePermissions() {
 		setupRoles();
 
-		String[] fields = { "title", "year", "author", "description", "comments", "owner", "sharedWith" };
+		String[] fields = { "title", "year", "author", "description", "comments", "createdBy", "sharedWith" };
 
 		for (String field : fields) {
 			for (String user : USERS) {
@@ -147,14 +147,14 @@ public class DataPermissionsTest extends SecurityTestCommons {
 			checkPermissions("other", Issue.class, issue, field, true, false);
 		}
 
-		issue.owner = new User("foo");
+		issue.createdBy = "the-owner";
 		issue.sharedWith = U.list(new User("bar"));
 
 		for (String field : fields) {
 			for (String user : USERS) {
 				checkPermissions(user, Issue.class, issue, field, false, false);
 			}
-			checkPermissions("foo", Issue.class, issue, field, true, true);
+			checkPermissions("the-owner", Issue.class, issue, field, true, true);
 			if (field.equals("comments")) {
 				checkPermissions("bar", Issue.class, issue, field, true, true);
 			} else {

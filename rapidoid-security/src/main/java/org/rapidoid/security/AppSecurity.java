@@ -149,9 +149,9 @@ public class AppSecurity implements Constants {
 			return false;
 		}
 
-		Object owner = Beany.getPropValue(record, "owner", null);
+		Object owner = Beany.getPropValue(record, "createdBy", null);
 
-		return owner != null && username.equalsIgnoreCase(Beany.getPropValue(owner, "username", ""));
+		return owner instanceof String && username.equalsIgnoreCase((String) owner);
 	}
 
 	public boolean isSharedWith(String username, Object record) {
