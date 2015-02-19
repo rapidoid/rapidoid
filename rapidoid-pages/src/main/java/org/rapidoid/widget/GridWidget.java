@@ -40,19 +40,19 @@ public class GridWidget extends AbstractWidget {
 
 	private String orderBy = "id";
 	private int pageSize = 10;
-	private Object[] properties = {};
+	private Object[] columns = {};
 	private String rowCmd;
 
-	public GridWidget(Items items, String sortOrder, int pageSize, String... properties) {
+	public GridWidget(Items items, String sortOrder, int pageSize, String... columns) {
 		this.items = items;
 		this.orderBy = sortOrder;
 		this.pageSize = pageSize;
-		this.properties = properties;
+		this.columns = columns;
 	}
 
 	@Override
 	protected Tag create() {
-		final List<Property> props = items.properties(properties);
+		final List<Property> props = items.properties(columns);
 
 		int total = items.size();
 		int pages = (int) Math.ceil(total / (double) pageSize);
@@ -179,8 +179,8 @@ public class GridWidget extends AbstractWidget {
 		return pageSize;
 	}
 
-	public Object[] properties() {
-		return properties;
+	public Object[] columns() {
+		return columns;
 	}
 
 	public GridWidget orderBy(String orderBy) {
@@ -193,8 +193,8 @@ public class GridWidget extends AbstractWidget {
 		return this;
 	}
 
-	public GridWidget properties(Object... properties) {
-		this.properties = properties;
+	public GridWidget columns(Object... columns) {
+		this.columns = columns;
 		return this;
 	}
 
