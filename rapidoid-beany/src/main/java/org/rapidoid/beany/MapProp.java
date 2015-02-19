@@ -61,6 +61,11 @@ public class MapProp implements Prop {
 	}
 
 	@Override
+	public void setRaw(Object target, Object value) {
+		map(target).put(key, value);
+	}
+
+	@Override
 	public void set(Object target, Object value) {
 		map(target).put(key, value);
 	}

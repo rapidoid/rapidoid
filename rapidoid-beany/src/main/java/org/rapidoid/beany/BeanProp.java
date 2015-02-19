@@ -169,6 +169,12 @@ public class BeanProp implements Prop {
 	}
 
 	@Override
+	public void setRaw(Object target, Object value) {
+		U.must(!isReadOnly(), "Cannot assign value to a read-only property: %s", name);
+		normalSet(target, value);
+	}
+
+	@Override
 	public void set(Object target, Object value) {
 		U.must(!isReadOnly(), "Cannot assign value to a read-only property: %s", name);
 

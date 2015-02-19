@@ -37,6 +37,8 @@ public interface Prop {
 
 	void set(Object target, Object value);
 
+	void setRaw(Object target, Object value);
+
 	void reset(Object target);
 
 	String getName();
