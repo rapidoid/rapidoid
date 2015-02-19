@@ -175,10 +175,10 @@ public class DataPermissionsTest extends SecurityTestCommons {
 
 		for (String user : USERS) {
 			checkPermissions(user, Category.class, "name", true, true);
-			checkPermissions(user, Category.class, "desc", false, false);
+			checkPermissions(user, Category.class, "desc", true, false);
 		}
 
-		checkPermissions("other", Category.class, "desc", false, true);
+		checkPermissions("other", Category.class, "desc", true, true);
 	}
 
 }

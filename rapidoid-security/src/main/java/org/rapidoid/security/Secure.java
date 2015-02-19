@@ -32,6 +32,7 @@ import org.rapidoid.beany.Prop;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanDelete;
 import org.rapidoid.security.annotation.CanInsert;
+import org.rapidoid.security.annotation.CanManage;
 import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Cls;
@@ -129,15 +130,22 @@ public class Secure implements Constants {
 		CanInsert canInsert = Metadata.propAnnotation(clazz, propertyName, CanInsert.class);
 		CanChange canChange = Metadata.propAnnotation(clazz, propertyName, CanChange.class);
 		CanDelete canDelete = Metadata.propAnnotation(clazz, propertyName, CanDelete.class);
+		CanManage canManage = Metadata.propAnnotation(clazz, propertyName, CanManage.class);
 
-		if (canRead == null && canInsert == null && canChange == null && canDelete == null) {
+		if (canRead == null && canInsert == null && canChange == null && canDelete == null && canManage == null) {
 			return DataPermissions.ALL;
 		}
 
-		boolean read = canRead != null && hasAnyRole(username, canRead.value(), clazz, target);
+		boolean read = canRead == null || hasAnyRole(username, canRead.value(), clazz, target);
+
 		boolean insert = canInsert != null && hasAnyRole(username, canInsert.value(), clazz, target);
 		boolean change = canChange != null && hasAnyRole(username, canChange.value(), clazz, target);
 		boolean delete = canDelete != null && hasAnyRole(username, canDelete.value(), clazz, target);
+
+		boolean manage = canManage != null && hasAnyRole(username, canManage.value(), clazz, target);
+		insert |= manage;
+		change |= manage;
+		delete |= manage;
 
 		return DataPermissions.from(read, insert, change, delete);
 	}
@@ -159,15 +167,22 @@ public class Secure implements Constants {
 		CanInsert canInsert = Metadata.classAnnotation(clazz, CanInsert.class);
 		CanChange canChange = Metadata.classAnnotation(clazz, CanChange.class);
 		CanDelete canDelete = Metadata.classAnnotation(clazz, CanDelete.class);
+		CanManage canManage = Metadata.classAnnotation(clazz, CanManage.class);
 
-		if (canRead == null && canInsert == null && canChange == null && canDelete == null) {
+		if (canRead == null && canInsert == null && canChange == null && canDelete == null && canManage == null) {
 			return DataPermissions.ALL;
 		}
 
-		boolean read = canRead != null && hasAnyRole(username, canRead.value(), clazz, null);
+		boolean read = canRead == null || hasAnyRole(username, canRead.value(), clazz, null);
+
 		boolean insert = canInsert != null && hasAnyRole(username, canInsert.value(), clazz, null);
 		boolean change = canChange != null && hasAnyRole(username, canChange.value(), clazz, null);
 		boolean delete = canDelete != null && hasAnyRole(username, canDelete.value(), clazz, null);
+
+		boolean manage = canManage != null && hasAnyRole(username, canManage.value(), clazz, null);
+		insert |= manage;
+		change |= manage;
+		delete |= manage;
 
 		return DataPermissions.from(read, insert, change, delete);
 	}
@@ -190,15 +205,22 @@ public class Secure implements Constants {
 		CanInsert canInsert = Metadata.classAnnotation(clazz, CanInsert.class);
 		CanChange canChange = Metadata.classAnnotation(clazz, CanChange.class);
 		CanDelete canDelete = Metadata.classAnnotation(clazz, CanDelete.class);
+		CanManage canManage = Metadata.classAnnotation(clazz, CanManage.class);
 
-		if (canRead == null && canInsert == null && canChange == null && canDelete == null) {
+		if (canRead == null && canInsert == null && canChange == null && canDelete == null && canManage == null) {
 			return DataPermissions.ALL;
 		}
 
-		boolean read = canRead != null && hasAnyRole(username, canRead.value(), clazz, target);
+		boolean read = canRead == null || hasAnyRole(username, canRead.value(), clazz, target);
+
 		boolean insert = canInsert != null && hasAnyRole(username, canInsert.value(), clazz, target);
 		boolean change = canChange != null && hasAnyRole(username, canChange.value(), clazz, target);
 		boolean delete = canDelete != null && hasAnyRole(username, canDelete.value(), clazz, target);
+
+		boolean manage = canManage != null && hasAnyRole(username, canManage.value(), clazz, target);
+		insert |= manage;
+		change |= manage;
+		delete |= manage;
 
 		return DataPermissions.from(read, insert, change, delete);
 	}
