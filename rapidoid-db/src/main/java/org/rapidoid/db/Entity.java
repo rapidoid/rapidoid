@@ -3,9 +3,13 @@ package org.rapidoid.db;
 import java.io.Serializable;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Rel;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
+import org.rapidoid.beany.Prop;
+import org.rapidoid.beany.PropertyFilter;
 import org.rapidoid.util.CommonRoles;
+import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -36,9 +40,49 @@ public abstract class Entity extends EntityCommons implements IEntityCommons, Co
 
 	private static final long serialVersionUID = 8414835674684110203L;
 
+	@SuppressWarnings("serial")
+	private static final PropertyFilter ANNOTATED_DB_REL_PROPS = new PropertyFilter() {
+		@Override
+		public boolean eval(Prop prop) throws Exception {
+			Class<?> type = prop.getType();
+
+			if (prop.getAnnotation(Rel.class) == null) {
+				return false;
+			}
+
+			return DbList.class.isAssignableFrom(type) || DbSet.class.isAssignableFrom(type)
+					|| DbRef.class.isAssignableFrom(type);
+		}
+	};
+
+	public Entity() {
+		initRelations(this);
+	}
+
 	@Override
 	public String toString() {
 		return Beany.beanToStr(this, false);
+	}
+
+	public static void initRelations(Object target) {
+		for (Prop prop : Beany.propertiesOf(target.getClass()).select(ANNOTATED_DB_REL_PROPS)) {
+
+			Rel rel = prop.getAnnotation(Rel.class);
+			U.must(!U.isEmpty(rel.value()), "Relation name must be specified!");
+
+			Object value = prop.getRaw(target);
+
+			if (value == null && !prop.isReadOnly()) {
+				Class<?> type = prop.getType();
+				if (DbList.class.equals(type)) {
+					prop.setRaw(target, DB.list(target, rel.value()));
+				} else if (DbSet.class.equals(type)) {
+					prop.setRaw(target, DB.set(target, rel.value()));
+				} else if (DbRef.class.equals(type)) {
+					prop.setRaw(target, DB.ref(target, rel.value()));
+				}
+			}
+		}
 	}
 
 }
