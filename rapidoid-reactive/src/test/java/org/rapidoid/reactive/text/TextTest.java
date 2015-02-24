@@ -20,11 +20,14 @@ public class TextTest extends TestCommons {
 		Text ab = abc.remove(c);
 		Text mn2 = ab.replace(mn1);
 		Text abU = ab.upper();
+		Text abL = abU.lower();
 
 		eq(abc.get(), "abc");
 		eq(ab.get(), "ab");
 		eq(mn2.get(), "mn");
 		eq(abU.get(), "AB");
+		eq(abL.get(), "ab");
+
 	}
 
 }

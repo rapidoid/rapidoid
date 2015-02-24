@@ -12,4 +12,6 @@ public interface Text {
 
 	Text upper();
 
+	Text lower();
+
 }
