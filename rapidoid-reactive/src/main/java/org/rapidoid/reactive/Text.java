@@ -10,4 +10,6 @@ public interface Text {
 
 	Text replace(Text v);
 
+	Text upper();
+
 }

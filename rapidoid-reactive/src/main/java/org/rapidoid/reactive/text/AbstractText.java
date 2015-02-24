@@ -18,4 +18,9 @@ public abstract class AbstractText implements Text {
 	public Text replace(Text v) {
 		return new ReplaceText(this, v);
 	}
+
+	@Override
+	public Text upper() {
+		return new UpperText(this);
+	}
 }
