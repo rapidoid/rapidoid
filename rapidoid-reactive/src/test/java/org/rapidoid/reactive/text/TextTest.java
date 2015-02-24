@@ -9,16 +9,20 @@ public class TextTest extends TestCommons {
 	@Test
 	public void testText() {
 
-		SimpleText x = new SimpleText("a");
-		eq(x.get(), "a");
+		SimpleText a = new SimpleText("a");
+		eq(a.get(), "a");
 
-		Text a = new SimpleText("b");
+		Text b = new SimpleText("b");
+		Text bc = new SimpleText("bc");
+		Text c = new SimpleText("c");
 
-		Text y = x.plus(a);
-		Text z = y.remove(a);
+		Text abc = a.plus(bc);
+		Text ab = abc.remove(c);
+		Text ad = ab.replace(b);
 
-		eq(y.get(), "ab");
-		eq(z.get(), "a");
+		eq(abc.get(), "abc");
+		eq(ab.get(), "ab");
+		eq(ad.get(), "ad");
 
 	}
 
