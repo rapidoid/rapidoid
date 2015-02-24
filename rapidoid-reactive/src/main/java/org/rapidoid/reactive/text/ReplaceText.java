@@ -14,7 +14,7 @@ public class ReplaceText extends AbstractText implements Text {
 
 	@Override
 	public String get() {
-		return t1.get().replace(t2.get(), "d");
+		return t1.get().replace(t1.get(), t2.get());
 	}
 
 }
