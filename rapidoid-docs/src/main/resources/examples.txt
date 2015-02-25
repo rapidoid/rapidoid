@@ -1,9 +1,0 @@
-An application consists of screens 
-Let's write some HTML in Java!
-Rapidoid has built-in themes!
-Ordering the screens
-Hide the navigation bar extras
-Customize login options in the login menu
-Display search in navigation
-Configure screens to be displayed
-Using the grid widget

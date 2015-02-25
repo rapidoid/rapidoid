@@ -2,6 +2,10 @@
 	cursor: pointer;
 }
 
+.idea-label {
+	font-weight: bold;
+}
+
 .display-wrap {
 	padding-top: 1px;
 	padding-bottom: 1px;

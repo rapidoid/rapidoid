@@ -1,4 +1,4 @@
-package org.rapidoid.docs.eg6;
+package org.rapidoid.docs.eg002;
 
 import org.rapidoid.app.Apps;
 
@@ -22,16 +22,22 @@ import org.rapidoid.app.Apps;
  * #L%
  */
 
-// No search or login extras in navigation
+// An application consists of screens :: Add some screens:
 
 public class App {
-	String title = "No extras here";
-	Object content = "Hello!";
-	String theme = "4";
-
-	boolean full = false; // here
+	String title = "Example 2";
 
 	public static void main(String[] args) {
 		Apps.run(args);
 	}
+}
+
+class HomeScreen { // here
+	Object content() { // here
+		return "At the Home screen!"; // here
+	}
+}
+
+class FooScreen { // here
+	Object content = "At the Foo screen!"; // here
 }

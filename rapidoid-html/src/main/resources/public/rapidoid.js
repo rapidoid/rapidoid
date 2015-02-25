@@ -16,10 +16,13 @@ function goAt(url) {
 function _stop(ev) {
 	if (typeof ev.stopPropagation != "undefined") {
 		ev.stopPropagation();
+	} else if (typeof ev.preventDefault != "undefined") {
+		ev.preventDefault();
 	} else {
 		ev.cancelBubble = true;
 	}
 }
+
 
 function _emit(ev, eventId) {
 

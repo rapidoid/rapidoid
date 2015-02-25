@@ -1,8 +1,14 @@
-package org.rapidoid.docs.eg5;
+package org.rapidoid.docs.eg006;
 
-import org.rapidoid.annotation.Order;
+import static org.rapidoid.app.AppGUI.*;
+import static org.rapidoid.widget.BootstrapWidgets.*;
+
+import org.rapidoid.annotation.Scaffold;
+import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Apps;
-import org.rapidoid.app.Screen;
+import org.rapidoid.db.DB;
+import org.rapidoid.db.Entity;
+import org.rapidoid.widget.FormWidget;
 
 /*
  * #%L
@@ -24,10 +30,10 @@ import org.rapidoid.app.Screen;
  * #L%
  */
 
-// Foo is second, Bar is first:
+// Using the form widget ("create" mode) :: Creating form for new entity 
 
 public class App {
-	String title = "Custom screen order";
+	String title = "New movie demo";
 	String theme = "1";
 
 	public static void main(String[] args) {
@@ -35,8 +41,28 @@ public class App {
 	}
 }
 
-@Order(2) // here
-class FooScreen extends Screen {}
+class HomeScreen {
+	@Session
+	Movie movie = new Movie();
 
-@Order(1) // here
-class BarScreen extends Screen {}
+	Object content() {
+		FormWidget f = create(movie); // here
+		f = f.buttons(SAVE, CANCEL); // here
+		return f;
+	}
+
+	public void onSave() {
+		DB.insert(movie);
+		movie = new Movie();
+	}
+
+	public void onCancel() {
+		movie = new Movie();
+	}
+}
+
+@Scaffold
+class Movie extends Entity {
+	String title;
+	int year;
+}

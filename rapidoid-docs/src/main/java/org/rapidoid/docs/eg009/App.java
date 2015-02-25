@@ -1,11 +1,15 @@
-package org.rapidoid.docs.eg10;
+package org.rapidoid.docs.eg009;
 
 import static org.rapidoid.app.AppGUI.*;
+import static org.rapidoid.widget.BootstrapWidgets.*;
 
 import org.rapidoid.annotation.Scaffold;
+import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Apps;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.Entity;
+import org.rapidoid.html.tag.ButtonTag;
+import org.rapidoid.widget.FormWidget;
 
 /*
  * #%L
@@ -27,11 +31,11 @@ import org.rapidoid.db.Entity;
  * #L%
  */
 
-// Grid widget automatically loading data from DB
+// Customizing form fields and buttons :: Customizing a form 
 
 public class App {
-	String title = "Grid Widget";
-	String theme = "4";
+	String title = "Custom form";
+	String theme = "5";
 
 	public static void main(String[] args) {
 		Apps.run(args);
@@ -39,12 +43,26 @@ public class App {
 
 	public void init() {
 		DB.init("movie title=Rambo, year=1985"); // here
-		DB.init("movie title=Her, year=2013"); // here
-		DB.init("movie title=Batman, year=1989"); // here
 	}
+}
+
+class HomeScreen {
+
+	@Session
+	Movie movie;
 
 	Object content() {
-		return grid(Movie.class).orderBy("year"); // here
+		movie = DB.get(1);
+		FormWidget f = create(movie, "year"); // here
+		ButtonTag ab = btn("Ab"); // here
+		ButtonTag cd = btnPrimary("Change year").cmd("ch"); // here
+		ButtonTag efg = btnDanger("!Efg"); // here
+		f = f.buttons(ab, cd, efg); // here
+		return f;
+	}
+
+	public void onCh() {
+		DB.update(movie);
 	}
 }
 

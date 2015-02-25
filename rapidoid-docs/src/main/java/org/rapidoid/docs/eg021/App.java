@@ -1,5 +1,6 @@
-package org.rapidoid.docs.eg2;
+package org.rapidoid.docs.eg021;
 
+import org.rapidoid.annotation.Inject;
 import org.rapidoid.app.Apps;
 
 /*
@@ -22,22 +23,38 @@ import org.rapidoid.app.Apps;
  * #L%
  */
 
-// Add some screens:
+// Dependency injection of singletons :: Injecting a singleton 
 
 public class App {
-	String title = "Example 2";
+	String title = "Singleton counter";
 
 	public static void main(String[] args) {
 		Apps.run(args);
 	}
 }
 
-class HomeScreen { // here
-	Object content() { // here
-		return "At the Home screen!"; // here
+class HomeScreen {
+	@Inject // here
+	Counter c; // here
+
+	Object content() {
+		return c.get();
 	}
 }
 
-class FooScreen { // here
-	Object content = "At the Foo screen!"; // here
+class OtherScreen {
+	@Inject // here
+	Counter c; // here
+
+	Object content() {
+		return c.get();
+	}
+}
+
+class Counter { // here
+	private int n = 0;
+
+	synchronized int get() {
+		return ++n;
+	}
 }

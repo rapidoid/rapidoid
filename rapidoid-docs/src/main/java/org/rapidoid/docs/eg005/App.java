@@ -1,6 +1,11 @@
-package org.rapidoid.docs.eg7;
+package org.rapidoid.docs.eg005;
 
+import static org.rapidoid.app.AppGUI.*;
+
+import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.app.Apps;
+import org.rapidoid.db.DB;
+import org.rapidoid.db.Entity;
 
 /*
  * #%L
@@ -22,18 +27,29 @@ import org.rapidoid.app.Apps;
  * #L%
  */
 
-// Show Facebook and Google login menu items
+// Using the grid widget :: Grid widget automatically loading data from DB
 
 public class App {
-	String title = "Facebook or Google";
-	Object content = "Hello!";
-	String theme = "3";
-
-	boolean full = false; // here
-	boolean facebookLogin = true; // here
-	boolean googleLogin = true; // here
+	String title = "Grid Widget";
+	String theme = "4";
 
 	public static void main(String[] args) {
 		Apps.run(args);
 	}
+
+	public void init() {
+		DB.init("movie title=Rambo, year=1985"); // here
+		DB.init("movie title=Her, year=2013"); // here
+		DB.init("movie title=Batman, year=1989"); // here
+	}
+
+	Object content() {
+		return grid(Movie.class).orderBy("year"); // here
+	}
+}
+
+@Scaffold
+class Movie extends Entity {
+	String title;
+	int year;
 }

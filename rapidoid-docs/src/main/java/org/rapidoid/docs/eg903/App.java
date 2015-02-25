@@ -1,7 +1,6 @@
-package org.rapidoid.docs.eg3;
+package org.rapidoid.docs.eg903;
 
 import org.rapidoid.app.Apps;
-import org.rapidoid.app.Screen;
 
 /*
  * #%L
@@ -23,23 +22,17 @@ import org.rapidoid.app.Screen;
  * #L%
  */
 
-// Use method chaining to construct HTML tags:
+// Display search in navigation :: Show the "search" box in the navigation
 
 public class App {
-	String title = "Example 3";
+	String title = "My app";
+	Object content = "Hello!";
+	String theme = "2";
+
+	boolean full = false; // here
+	boolean search = true; // here
 
 	public static void main(String[] args) {
 		Apps.run(args);
 	}
-}
-
-class HomeScreen extends Screen {
-	Object content() {
-		Object link = a("Foo").href("foo.html"); // here
-		return h3("Welcome! Visit ", link); // here
-	}
-}
-
-class FooScreen {
-	String content = "At the Foo screen!";
 }

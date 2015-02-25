@@ -1,4 +1,4 @@
-package org.rapidoid.docs.eg9;
+package org.rapidoid.docs.eg904;
 
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.Screen;
@@ -23,7 +23,7 @@ import org.rapidoid.app.Screen;
  * #L%
  */
 
-// Show only the Ab and Cd screens
+// Configure screens to be displayed :: Show only the Ab and Cd screens
 
 public class App {
 	String title = "My app";
@@ -39,6 +39,6 @@ public class App {
 
 class CdScreen extends Screen {}
 
-class BarScreen extends Screen {}
+class BarScreen extends Screen {} // here
 
 class AbScreen extends Screen {}

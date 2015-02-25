@@ -1,4 +1,4 @@
-package org.rapidoid.docs.eg4;
+package org.rapidoid.docs.eg902;
 
 import org.rapidoid.app.Apps;
 
@@ -22,18 +22,18 @@ import org.rapidoid.app.Apps;
  * #L%
  */
 
-// Let's use the built-in theme 2:
+// Customize login options in the login menu :: Show Facebook and Google login menu items
 
 public class App {
-	String title = "Example 4";
-	String content = "Fancy theme!";
-	String theme = "2"; // here
+	String title = "Facebook or Google";
+	Object content = "Hello!";
+	String theme = "3";
+
+	boolean full = false; // here
+	boolean facebookLogin = true; // here
+	boolean googleLogin = true; // here
 
 	public static void main(String[] args) {
 		Apps.run(args);
 	}
 }
-
-class FooScreen {}
-
-class BarScreen {}

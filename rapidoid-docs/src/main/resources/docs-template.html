@@ -46,10 +46,16 @@
         </ul>
 
 <div class="navbar-brand navbar-right">
+				<a data-count-api="/repos/rapidoid/rapidoid#stargazers_count" data-count-href="/rapidoid/rapidoid/stargazers" data-icon="octicon-star" href="https://github.com/rapidoid/rapidoid" class="github-button">Star</a>
+				<a data-count-api="/repos/rapidoid/rapidoid#forks_count" data-count-href="/rapidoid/rapidoid/network" data-icon="octicon-git-branch" href="https://github.com/rapidoid/rapidoid/fork" class="github-button">Fork</a>
 
-	            <a href="https://twitter.com/share" rel="nofollow" class="twitter-share-button navbar-btn" data-url="http://www.rapidoid.org/" data-text="#Rapidoid - Cool Full-stack Web Framework for #Java! #opensource" data-size="small">Tweet</a>
+				<script type="IN/Share" data-url="http://rapidoid.io/" data-counter="right"></script>
+				
 				<span class="g-plusone" data-size="medium"></span>
-				<script type="IN/Share" data-url="http://www.rapidoid.org/" data-counter="right"></script>
+				
+				<a href="https://twitter.com/share" rel="nofollow"
+					class="twitter-share-button navbar-btn" data-url="http://rapidoid.io"
+					data-text="Instantly develop web apps on-line with #Rapidoid and #Java8 #cloud!" data-size="small">Tweet</a>
 </div>
       </div>
     </div>
@@ -61,6 +67,7 @@
 			<div class="col-md-7 col-sm-12">
 				<h4 id="main_subtitle">
 					<span class="rapidoid">Rapidoid - Cool Full-stack Web Framework for Java!</span>
+					<a class="button btn btn-warning" href="http://rapidoid.io">Try it on-line!</a>
 				</h4>
 			</div>
 
@@ -98,13 +105,61 @@
 			</div>
 		</div>
 
-<div class="row row-separated">
+<!-- FEATURES -->
+
+<div class="row">
   <div class="col-md-12">
-    <div id="showcase" class="thumbnail">
-      <a href="#quickstart"><img src="showcase.gif" alt="Rapidoid Showcase"></a>
+    <div id="features">
+    	<h2>Features:</h2>
     </div>
   </div>
 </div>
+
+<div class="row">
+  <div class="col-md-3">
+<p><span class="feature-point fa fa-check-square-o"></span><b>CRUD and GUI Scaffolding</b></p>
+<p><span class="feature-point fa fa-check-square-o"></span><b>OAuth login</b> with Facebook, Google, Tweeter, LinkedIn </p> 
+<p><span class="feature-point fa fa-check-square-o"></span>MVC-like page-based <b>responsive GUI framework based on Bootstrap</b> </p> 
+<p><span class="feature-point fa fa-check-square-o"></span><b>DOM/DSL of HTML5 tags</b> </p> 
+<p><span class="feature-point fa fa-check-square-o"></span><b>customizable GUI widgets (grids, forms, etc.)</b> </p> 
+<p><span class="feature-point fa fa-check-square-o"></span>simple <b>dependency injection</b> </p> 
+<p><span class="feature-point fa fa-check-square-o"></span><b>role-based security</b>, configurable through annotations </p> 
+  </div>
+
+  <div class="col-md-3">
+<p><span class="feature-point fa fa-check-square-o"></span><b>embedded in-memory persisted DB with ACID transactions</b> </p> 
+<p><span class="feature-point fa fa-check-square-o"></span><b>automatic and transparrent transaction management</b> per request </p> 
+<p><span class="feature-point fa fa-check-square-o"></span><b>automatic read-only transactions for GET requests</b> </p> 
+<p><span class="feature-point fa fa-check-square-o"></span><b>Optimistic Concurency Control</b> </p> 
+<p><span class="feature-point fa fa-check-square-o"></span><b>ORM-like two-way relations</b> exposed as Java collections </p> 
+<p><span class="feature-point fa fa-check-square-o"></span><b>security-aware DB opearations</b> (read what you can read, write what you can write) </p> 
+  </div>
+  
+  <div class="col-md-3">
+<p><span class="feature-point fa fa-check-square-o"></span><b>built-in Bootstrap themes</b> </p> 
+<p><span class="feature-point fa fa-check-square-o"></span>basic <b>input validation</b> </p> 
+<p><span class="feature-point fa fa-check-square-o"></span>auto-detection of <b>dev/prod mode</b> </p> 
+<p><span class="feature-point fa fa-check-square-o"></span><b>smart diagnostics</b> depending on dev/prod mode </p> 
+<p><span class="feature-point fa fa-check-square-o"></span><b>dev-only components</b> (useful for debugging, auto-off in prod mode) </p> 
+<p><span class="feature-point fa fa-check-square-o"></span><b>full-text search</b> with match highlighting </p> 
+<p><span class="feature-point fa fa-check-square-o"></span><b>security-aware GUI rendering</b> (show what you can see/edit) </p> 
+  </div>
+  
+  <div class="col-md-3">
+<p><span class="feature-point fa fa-check-square-o"></span><b>POJO-based REST services</b> with automatic JSON serialization </p> 
+<p><span class="feature-point fa fa-check-square-o"></span><b>debugging tools</b> (login as, view user...) </p> 
+ <p><span class="feature-point fa fa-check-square-o"></span><b>embedded HTTP server</b> </p> 
+<p><span class="feature-point fa fa-check-square-o"></span>auto-expanding <b>off-heap buffers</b> </p> 
+<p><span class="feature-point fa fa-check-square-o"></span>high-performance <b>async TCP/IP client framework</b> </p> 
+<p><span class="feature-point fa fa-check-square-o"></span>high-performance <b>async TCP/IP server framework</b> (10M req/s)...    
+  </div>
+</div>
+
+<!-- 
+    <div id="showcase" class="thumbnail">
+      <a href="#quickstart"><img src="showcase.gif" alt="Rapidoid Showcase"></a>
+    </div>
+ -->
 
 <!-- EXAMPLE 1 -->
 
@@ -145,7 +200,7 @@
 		<div id="example1-right" class="col-md-8">
 			<div class="app-example-title">Your application looks like this:</div>		
 			<div class="embed-responsive embedd">
-				<iframe class="embed-responsive-item" src="examples/1/index.html"></iframe>
+				<iframe class="embed-responsive-item" src="examples/001/index.html"></iframe>
 			</div>
 		</div>
 
@@ -154,6 +209,7 @@
 {{examples}}
 
 </div>
+	<script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>	
 
 </body>
 </html>
