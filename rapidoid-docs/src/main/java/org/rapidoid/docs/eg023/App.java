@@ -1,7 +1,10 @@
-package org.rapidoid.docs.eg021;
+package org.rapidoid.docs.eg023;
 
-import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.app.Apps;
+import org.rapidoid.app.Screen;
+import org.rapidoid.db.DB;
+import org.rapidoid.db.Entity;
 
 /*
  * #%L
@@ -23,39 +26,33 @@ import org.rapidoid.app.Apps;
  * #L%
  */
 
-// Dependency injection of singletons :: Injecting a singleton 
+// Basic database CRUD operations :: Database CRUD is easy with the DB API: 
 
 public class App {
-	String title = "Singleton counter";
-	String theme = "2";
+	String title = "DB API";
+	String theme = "4";
 
 	public static void main(String[] args) {
 		Apps.run(args);
 	}
 }
 
-class HomeScreen {
-	@Inject // here
-	Counter c; // here
+class HomeScreen extends Screen {
+	Object[] content = { 
+		grid(Todo.class), cmd("Add")
+	};
 
-	Object content() {
-		return c.get();
+	public void onAdd() {
+		Todo todo = new Todo();
+		todo.content = "Learn Rapidoid!";
+		long id = DB.insert(todo); // here
+		Todo todo2 = DB.get(id); // here
+		todo2.content += " :)";
+		DB.update(todo2); // here
 	}
 }
 
-class OtherScreen {
-	@Inject // here
-	Counter c; // here
-
-	Object content() {
-		return c.get();
-	}
-}
-
-class Counter { // here
-	private int n = 0;
-
-	synchronized int get() {
-		return ++n;
-	}
+@Scaffold
+class Todo extends Entity {
+	String content;
 }

@@ -1,7 +1,10 @@
-package org.rapidoid.docs.eg021;
+package org.rapidoid.docs.eg022;
 
-import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Apps;
+import org.rapidoid.app.Screen;
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.tag.ButtonTag;
 
 /*
  * #%L
@@ -23,39 +26,28 @@ import org.rapidoid.app.Apps;
  * #L%
  */
 
-// Dependency injection of singletons :: Injecting a singleton 
+// Basic event handling and session storage :: Increase n when the "+" button is clicked: 
 
 public class App {
-	String title = "Singleton counter";
-	String theme = "2";
+	String title = "Clicky";
+	String theme = "3";
 
 	public static void main(String[] args) {
 		Apps.run(args);
 	}
 }
 
-class HomeScreen {
-	@Inject // here
-	Counter c; // here
+class HomeScreen extends Screen {
+	@Session // here
+	public int n = 0; // here
 
-	Object content() {
-		return c.get();
+	public Object content() {
+		Tag caption = h3(n, " clicks");
+		ButtonTag hi = btn("+").cmd("Inc"); // here
+		return row(caption, hi);
 	}
-}
 
-class OtherScreen {
-	@Inject // here
-	Counter c; // here
-
-	Object content() {
-		return c.get();
-	}
-}
-
-class Counter { // here
-	private int n = 0;
-
-	synchronized int get() {
-		return ++n;
+	public void onInc() { // here
+		n++;
 	}
 }
