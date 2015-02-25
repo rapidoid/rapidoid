@@ -14,17 +14,18 @@ public class TextTest extends TestCommons {
 
 		Text bc = new SimpleText("bc");
 		Text c = new SimpleText("c");
-		Text mn1 = new SimpleText("mn");
+		Text b = new SimpleText("b");
+		Text d = new SimpleText("d");
 
 		Text abc = a.plus(bc);
 		Text ab = abc.remove(c);
-		Text mn2 = ab.replace(mn1);
+		Text ad = ab.replace(b, d);
 		Text abU = ab.upper();
 		Text abL = abU.lower();
 
 		eq(abc.get(), "abc");
 		eq(ab.get(), "ab");
-		eq(mn2.get(), "mn");
+		eq(ad.get(), "ad");
 		eq(abU.get(), "AB");
 		eq(abL.get(), "ab");
 

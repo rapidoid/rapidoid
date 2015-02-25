@@ -15,8 +15,8 @@ public abstract class AbstractText implements Text {
 	}
 
 	@Override
-	public Text replace(Text v) {
-		return new ReplaceText(this, v);
+	public Text replace(Text v1, Text v2) {
+		return new ReplaceText(this, v1, v2);
 	}
 
 	@Override

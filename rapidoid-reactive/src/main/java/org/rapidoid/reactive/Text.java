@@ -8,7 +8,7 @@ public interface Text {
 
 	Text remove(Text v);
 
-	Text replace(Text v);
+	Text replace(Text v1, Text v2);
 
 	Text upper();
 
