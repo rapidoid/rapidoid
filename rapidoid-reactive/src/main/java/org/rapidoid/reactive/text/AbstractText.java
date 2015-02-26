@@ -28,4 +28,9 @@ public abstract class AbstractText implements Text {
 	public Text lower() {
 		return new LowerText(this);
 	}
+
+	@Override
+	public Text trim() {
+		return new TrimText(this);
+	}
 }

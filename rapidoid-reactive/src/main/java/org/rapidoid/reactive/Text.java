@@ -14,4 +14,6 @@ public interface Text {
 
 	Text lower();
 
+	Text trim();
+
 }
