@@ -24,6 +24,7 @@ public class TextTest extends TestCommons {
 		Text abU = ab.upper();
 		Text abL = abU.lower();
 		Text mT = m.trim();
+		Text sub = abc.substring(1, 3);
 
 		eq(abc.get(), "abc");
 		eq(ab.get(), "ab");
@@ -31,7 +32,7 @@ public class TextTest extends TestCommons {
 		eq(abU.get(), "AB");
 		eq(abL.get(), "ab");
 		eq(mT.get(), "m");
-
+		eq(sub.get(), "bc");
 	}
 
 }

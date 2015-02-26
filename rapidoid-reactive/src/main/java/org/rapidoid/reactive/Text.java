@@ -16,4 +16,6 @@ public interface Text {
 
 	Text trim();
 
+	Text substring(int beginIndex, int endIndex);
+
 }

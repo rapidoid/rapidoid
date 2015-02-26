@@ -33,4 +33,10 @@ public abstract class AbstractText implements Text {
 	public Text trim() {
 		return new TrimText(this);
 	}
+
+	@Override
+	public Text substring(int beginIndex, int endIndex) {
+		return new SubstringText(this, beginIndex, endIndex);
+	}
+
 }
