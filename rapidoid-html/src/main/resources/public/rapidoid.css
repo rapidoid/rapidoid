@@ -65,3 +65,30 @@ span.highlight {
 .nothing {
 	color: #BBB;
 }
+
+div.row-separated {
+	margin-top: 25px;
+}
+
+span._code_kw {
+	color: blue;
+}
+
+span._code_cls {
+	color: #400;
+}
+
+span._code_tag {
+	color: #377;
+}
+
+span._code_str {
+	color: #070;
+}
+
+pre.example-code, pre.example-output {
+	padding: 5px !important;
+	background: #FFF !important;
+	border-style: dashed !important;
+	border-color: #CCC !important;
+}
