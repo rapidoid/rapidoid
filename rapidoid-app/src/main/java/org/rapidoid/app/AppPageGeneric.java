@@ -45,6 +45,7 @@ import org.rapidoid.http.HttpSuccessException;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
 import org.rapidoid.pages.Pages;
+import org.rapidoid.pages.impl.ComplexView;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.English;
@@ -54,7 +55,7 @@ import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class AppPageGeneric extends AppGUI {
+public class AppPageGeneric extends AppGUI implements ComplexView {
 
 	protected static final String[] themes = { "1", "2", "3", "4", "5" };
 
@@ -93,7 +94,11 @@ public class AppPageGeneric extends AppGUI {
 		}
 
 		U.must(screen != null, "Cannot find a screen to process the request!");
-		Pages.load(x, screen);
+	}
+
+	@Override
+	public Object[] getSubViews() {
+		return new Object[] { app, screen };
 	}
 
 	private static <T> T wireX(T target, HttpExchange x) {

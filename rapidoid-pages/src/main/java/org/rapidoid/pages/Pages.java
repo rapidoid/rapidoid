@@ -39,8 +39,10 @@ import org.rapidoid.http.HttpSuccessException;
 import org.rapidoid.inject.IoC;
 import org.rapidoid.json.JSON;
 import org.rapidoid.lambda.Lambdas;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.pages.impl.BuiltInCmdHandler;
+import org.rapidoid.pages.impl.ComplexView;
 import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
@@ -217,10 +219,30 @@ public class Pages {
 	}
 
 	public static void load(HttpExchange x, Object target) {
-		IoC.autowire(target, Lambdas.mapper(x.session()));
+		Mapper<String, Object> sessionMapper = Lambdas.mapper(x.session());
+
+		IoC.autowire(target, sessionMapper);
+
+		if (target instanceof ComplexView) {
+			ComplexView complex = (ComplexView) target;
+			for (Object subview : complex.getSubViews()) {
+				IoC.autowire(subview, sessionMapper);
+			}
+		}
 	}
 
 	public static void store(HttpExchange x, Object target) {
+		storeFrom(x, target);
+
+		if (target instanceof ComplexView) {
+			ComplexView complex = (ComplexView) target;
+			for (Object subview : complex.getSubViews()) {
+				storeFrom(x, subview);
+			}
+		}
+	}
+
+	private static void storeFrom(HttpExchange x, Object target) {
 		for (Field field : IoC.getSessionFields(target)) {
 			Object value = Cls.getFieldValue(field, target);
 			x.sessionSet(field.getName(), value);
@@ -257,7 +279,7 @@ public class Pages {
 			}
 		}
 
-		Pages.load(x, view);
+		load(x, view);
 
 		boolean processView = true;
 
@@ -273,6 +295,9 @@ public class Pages {
 				}
 			}
 		}
+
+		// store event processing changes into the session
+		Pages.store(x, view);
 
 		String html;
 		if (processView) {
