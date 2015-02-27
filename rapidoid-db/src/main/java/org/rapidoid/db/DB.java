@@ -174,7 +174,9 @@ public class DB {
 	}
 
 	public static void shutdown() {
-		db().shutdown();
+		if (db() != null) {
+			db().shutdown();
+		}
 	}
 
 	public static long size() {
@@ -186,15 +188,19 @@ public class DB {
 	}
 
 	public static boolean isActive() {
-		return db().isActive();
+		return db() != null && db().isActive();
 	}
 
 	public static void halt() {
-		db().halt();
+		if (db() != null) {
+			db().halt();
+		}
 	}
 
 	public static void destroy() {
-		db().destroy();
+		if (db() != null) {
+			db().destroy();
+		}
 	}
 
 	public static long getIdOf(Object record) {
