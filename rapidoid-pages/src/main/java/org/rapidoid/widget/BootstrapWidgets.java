@@ -678,6 +678,11 @@ public abstract class BootstrapWidgets extends HTML {
 		return span(awesome("ban"), " N/A").class_("nothing");
 	}
 
+	public static Tag inline(Object... contents) {
+		Tag ctrls = div(contents).class_("form-group");
+		return form(ctrls).class_("form-inline");
+	}
+
 	public static SnippetWidget snippet(String code) {
 		return new SnippetWidget(code);
 	}
