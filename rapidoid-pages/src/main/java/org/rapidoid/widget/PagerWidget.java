@@ -47,7 +47,11 @@ public class PagerWidget extends AbstractWidget {
 		Tag next = next().navigate("_inc", pageNumber, 1);
 		Tag last = last().navigate("_set", pageNumber, to);
 
-		return pagination(first, prev, current, next, last);
+		return shouldDisplay() ? pagination(first, prev, current, next, last) : div();
+	}
+
+	protected boolean shouldDisplay() {
+		return to > 1;
 	}
 
 	protected Tag pagination(Tag first, Tag prev, Tag current, Tag next, Tag last) {
