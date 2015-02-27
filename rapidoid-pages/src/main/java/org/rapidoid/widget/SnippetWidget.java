@@ -51,7 +51,7 @@ public class SnippetWidget extends AbstractWidget {
 		return hardcoded("<pre class=\"example-code\">" + prettify() + "</pre>");
 	}
 
-	protected String prettify() {
+	public String prettify() {
 		String snippet = escape(code);
 
 		snippet = UTILS.replace(snippet, regex, new Mapper<String[], String>() {

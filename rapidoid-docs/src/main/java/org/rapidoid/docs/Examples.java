@@ -35,7 +35,7 @@ import org.rapidoid.db.DB;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
-import org.rapidoid.lambda.Mapper;
+import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Classes;
@@ -44,23 +44,15 @@ import org.rapidoid.util.IO;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.widget.BootstrapWidgets;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class Examples {
 
 	private static final int UPPER = 930;
-
 	private static final int LOWER = 30;
 
-	private static final String JAVA_KEYWORDS = "abstract|continue|for|new|switch|assert|default|goto|package|synchronized|boolean|do|if|private|this|break|double|implements|protected|throw|byte|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|int|short|try|char|final|interface|static|void|class|finally|long|strictfp|volatile|const|float|native|super|while";
-
-	private static final String tab = "\\t";
-	private static final String str1 = "(\"[^\"]*?\")";
-	private static final String str2 = "('[^']*?')";
-	private static final String kw = "\\b(" + JAVA_KEYWORDS + ")\\b";
-	private static final String cls = "\\b([A-Z]\\w+?)\\b";
-	private static final String rr = "(?:" + U.join("|", str1, str2, tab, kw, cls) + ")";
 	private static final Pattern p = Pattern.compile("\n");
 
 	public static void main(String[] args) {
@@ -113,6 +105,8 @@ public class Examples {
 
 		String examples = "";
 
+		AppCtx.setExchange(new HttpExchangeImpl());
+
 		for (int i = 2; i <= LOWER; i++) {
 			examples = processIndex(egT, examples, egNum(i));
 		}
@@ -151,9 +145,7 @@ public class Examples {
 
 		snippet = snippet.substring(pos).trim();
 
-		snippet = col(rr, snippet);
-
-		snippet = snippet.replaceAll("\n(\\s*)(.*)\\s//\\shere", "\n$1<span class=\"important-code\">$2</span>");
+		snippet = BootstrapWidgets.snippet(snippet).prettify();
 
 		String titleInfo = "";
 		String fullTitle = title + titleInfo;
@@ -176,26 +168,6 @@ public class Examples {
 		U.must(p > 0);
 		s = s.substring(p + comm.length()).trim();
 		return s;
-	}
-
-	private static String col(String rr, String snippet) {
-		snippet = UTILS.replace(snippet, rr, new Mapper<String[], String>() {
-			@Override
-			public String map(String[] src) throws Exception {
-				String s = src[0];
-				char ch = s.charAt(0);
-				if (Character.isUpperCase(ch)) {
-					return "<span class=\"_code_cls\">" + s + "</span>";
-				} else if (ch == '"' || ch == "'".charAt(0)) {
-					return "<span class=\"_code_str\">" + s + "</span>";
-				} else if (s.equals("\t")) {
-					return "    ";
-				} else {
-					return "<span class=\"_code_kw\">" + s + "</span>";
-				}
-			}
-		});
-		return snippet;
 	}
 
 	public static void generate(HTTPServer server, String path, String id, List<Class<?>> classes) {
@@ -267,6 +239,8 @@ public class Examples {
 		out = out.replace("\"//", "\"http://");
 		out = out.replace("href=\"/\"", "href=\"index.html\"");
 		out = out.replaceAll("(href|action)=\\\"/(\\w+)\\\"", "$1=\"$2.html\"");
+		out = out.replaceAll("_emit\\(event,\\s+'\\d+'\\)",
+				"alert('This is not a live demo, so this button does NOT work!');");
 
 		IO.save(filename, out);
 	}
