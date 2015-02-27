@@ -678,4 +678,8 @@ public abstract class BootstrapWidgets extends HTML {
 		return span(awesome("ban"), " N/A").class_("nothing");
 	}
 
+	public static SnippetWidget snippet(String code) {
+		return new SnippetWidget(code);
+	}
+
 }
