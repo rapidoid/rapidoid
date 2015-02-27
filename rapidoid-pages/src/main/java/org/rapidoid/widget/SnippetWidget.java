@@ -52,7 +52,9 @@ public class SnippetWidget extends AbstractWidget {
 	}
 
 	public String prettify() {
-		String snippet = escape(code);
+
+		// ignoring "\"" => "&quot
+		String snippet = code.replace("<", "&lt;").replace(">", "&gt;").replace("&", "&amp;");
 
 		snippet = UTILS.replace(snippet, regex, new Mapper<String[], String>() {
 			@Override
