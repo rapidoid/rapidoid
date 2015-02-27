@@ -89,6 +89,10 @@ public class AppGUI extends BootstrapWidgets {
 		return grid(all(type, "id"), "id", 10);
 	}
 
+	public static <T> GridWidget grid(String type) {
+		return grid(DB.schema().getEntityType(type));
+	}
+
 	public static <T> GridWidget grid(Predicate<T> match) {
 		return grid(all(match), "id", 10, new String[0]);
 	}
