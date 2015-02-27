@@ -683,6 +683,41 @@ public abstract class BootstrapWidgets extends HTML {
 		return form(ctrls).class_("form-inline");
 	}
 
+	public static Tag[] rows(int colsPerRow, boolean separated, Object... contents) {
+		return rows(colsPerRow, separated, U.list(contents));
+	}
+
+	public static Tag[] rows(int cols, boolean separated, Iterable<?> contents) {
+		List<Tag> rows = U.list();
+
+		Tag row = row();
+		if (separated) {
+			row = row.class_("row row-separated");
+		}
+
+		int n = 0;
+		int colSize = 12 / cols;
+
+		for (Object item : contents) {
+			n++;
+			if (n == 5) {
+				n = 1;
+				rows.add(row);
+				row = row();
+				if (separated) {
+					row = row.class_("row row-separated");
+				}
+			}
+			row = row.append(col_(colSize, item));
+		}
+
+		if (!row.isEmpty()) {
+			rows.add(row);
+		}
+
+		return rows.toArray(new Tag[rows.size()]);
+	}
+
 	public static SnippetWidget snippet(String code) {
 		return new SnippetWidget(code);
 	}
