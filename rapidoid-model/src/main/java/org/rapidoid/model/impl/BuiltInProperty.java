@@ -52,6 +52,11 @@ public class BuiltInProperty implements Property {
 
 	@Override
 	public String caption() {
+		if (name.equals("_class")) {
+			return "Type";
+		} else if (name.equals("_str")) {
+			return "Data";
+		}
 		return name;
 	}
 
