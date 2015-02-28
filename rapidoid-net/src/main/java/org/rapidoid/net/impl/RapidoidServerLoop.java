@@ -33,6 +33,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
+import org.rapidoid.net.Protocol;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Rnd;
@@ -182,8 +183,13 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 		RapidoidConnection conn = newConnection();
 		conn.setInitial(false);
 		conn.input.append(input);
+		conn.setProtocol(protocol);
 		process(conn);
 		return conn.output.asText();
+	}
+
+	public Protocol getProtocol() {
+		return protocol;
 	}
 
 }

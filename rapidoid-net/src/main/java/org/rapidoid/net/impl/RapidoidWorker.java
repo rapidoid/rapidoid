@@ -38,6 +38,7 @@ import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.buffer.IncompleteReadException;
 import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
+import org.rapidoid.net.Protocol;
 import org.rapidoid.pool.ArrayPool;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.util.AppCtx;
@@ -217,7 +218,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 				AppCtx.delUser();
 			}
 
-			protocol.process(conn);
+			conn.getProtocol().process(conn);
 
 			if (AppCtx.hasContext()) {
 				AppCtx.delExchange();
@@ -407,7 +408,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		conn.closed = false;
 
 		conn.key = key;
-
+		conn.setProtocol(protocol);
+		
 		if (isProtocolListener) {
 			conn.setListener((CtxListener) protocol);
 		}

@@ -670,14 +670,32 @@ public class UTILS implements Constants {
 		}
 	}
 
-	public static String md5(byte[] bytes) {
+	public static byte[] md5Bytes(byte[] bytes) {
 		MessageDigest md5 = digest("MD5");
 		md5.update(bytes);
-		return bytesAsText(md5.digest());
+		return md5.digest();
+	}
+
+	public static String md5(byte[] bytes) {
+		return bytesAsText(md5Bytes(bytes));
 	}
 
 	public static String md5(String data) {
 		return md5(data.getBytes());
+	}
+
+	public static byte[] sha1Bytes(byte[] bytes) {
+		MessageDigest sha1 = digest("SHA-1");
+		sha1.update(bytes);
+		return sha1.digest();
+	}
+
+	public static String sha1(byte[] bytes) {
+		return bytesAsText(sha1Bytes(bytes));
+	}
+
+	public static String sha1(String data) {
+		return sha1(data.getBytes());
 	}
 
 	public static String urlDecode(String value) {

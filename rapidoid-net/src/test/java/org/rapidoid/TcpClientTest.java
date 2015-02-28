@@ -24,11 +24,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
+import org.rapidoid.net.Protocol;
 import org.rapidoid.net.TCP;
 import org.rapidoid.net.TCPClient;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.net.impl.Protocol;
 import org.rapidoid.util.UTILS;
 import org.testng.annotations.Test;
 

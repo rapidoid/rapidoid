@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.json.JSON;
+import org.rapidoid.net.Protocol;
 import org.rapidoid.net.impl.RapidoidServerLoop;
 
 @Authors("Nikolche Mihajlovski")
@@ -116,6 +117,12 @@ public class HTTPServerImpl extends RapidoidServerLoop implements HTTPServer {
 	@Override
 	public HTTPServer interceptor(HTTPInterceptor interceptor) {
 		((HttpProtocol) protocol).setInterceptor(interceptor);
+		return this;
+	}
+
+	@Override
+	public HTTPServer addUpgrade(String upgradeName, HttpUpgradeHandler upgradeHandler, Protocol upgradeProtocol) {
+		((HttpProtocol) protocol).addUpgrade(upgradeName, upgradeHandler, upgradeProtocol);
 		return this;
 	}
 

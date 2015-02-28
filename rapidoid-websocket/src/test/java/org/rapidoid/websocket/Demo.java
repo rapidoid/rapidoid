@@ -1,8 +1,8 @@
-package org.rapidoid.net.impl;
+package org.rapidoid.websocket;
 
 /*
  * #%L
- * rapidoid-net
+ * rapidoid-websocket
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -22,34 +22,33 @@ package org.rapidoid.net.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.net.Protocol;
-import org.rapidoid.net.TCPClient;
-import org.rapidoid.util.Builder;
+import org.rapidoid.config.Conf;
+import org.rapidoid.http.HTTP;
+import org.rapidoid.http.HTTPServer;
+import org.rapidoid.http.Handler;
+import org.rapidoid.http.HttpExchange;
+import org.rapidoid.log.Log;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface TCPClientBuilder extends Builder<TCPClient> {
+public class Demo {
 
-	TCPClientBuilder connections(int connections);
+	public static void main(String[] args) {
+		Conf.args(args);
+		Log.args("debug");
 
-	TCPClientBuilder bufSize(int bufSize);
+		HTTPServer server = HTTP.server().build();
 
-	TCPClientBuilder host(String host);
+		server.serve(new Handler() {
+			@Override
+			public Object handle(HttpExchange x) {
+				return "Hi: " + x.uri();
+			}
+		});
 
-	TCPClientBuilder port(int port);
+		server.addUpgrade("WebSocket", new WebSocketUpgrade(), new WebSocketProtocol());
 
-	TCPClientBuilder workers(int workers);
-
-	TCPClientBuilder nagle();
-
-	TCPClientBuilder stats();
-
-	TCPClientBuilder micro();
-
-	TCPClientBuilder protocol(Protocol protocol);
-
-	TCPClientBuilder exchange(Class<? extends DefaultExchange<?, ?>> exchangeClass);
-
-	TCPClientBuilder helper(Class<? extends RapidoidHelper> helperClass);
+		server.start();
+	}
 
 }

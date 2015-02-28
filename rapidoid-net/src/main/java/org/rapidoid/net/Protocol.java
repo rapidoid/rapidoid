@@ -1,4 +1,9 @@
-package org.rapidoid.net.impl;
+package org.rapidoid.net;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.util.Constants;
 
 /*
  * #%L
@@ -20,32 +25,14 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.net.Protocol;
-import org.rapidoid.net.TCPServer;
-import org.rapidoid.util.Builder;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface TCPServerBuilder extends Builder<TCPServer> {
+public interface Protocol extends Constants {
 
-	TCPServerBuilder bufSize(int bufSize);
+	long ALL = -1;
 
-	TCPServerBuilder port(int port);
+	long OTHERS = -2;
 
-	TCPServerBuilder workers(int workers);
-
-	TCPServerBuilder nagle();
-
-	TCPServerBuilder stats();
-
-	TCPServerBuilder micro();
-
-	TCPServerBuilder protocol(Protocol protocol);
-
-	TCPServerBuilder exchange(Class<? extends DefaultExchange<?, ?>> exchangeClass);
-
-	TCPServerBuilder helper(Class<? extends RapidoidHelper> helperClass);
+	void process(final Channel ctx);
 
 }
