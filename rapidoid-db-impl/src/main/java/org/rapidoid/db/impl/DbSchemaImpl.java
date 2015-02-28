@@ -113,6 +113,25 @@ public class DbSchemaImpl implements DbSchema {
 	}
 
 	@Override
+	public Object entity(String data) {
+		String entityName = U.capitalized(data.split(" ")[0]);
+		Class<?> entityType = getEntityType(entityName);
+		U.must(entityType != null, "Cannot find entity '%s'!", entityName);
+
+		String[] props = data.substring(entityName.length() + 1).split("\\s*\\,\\s*");
+		Map<String, Object> properties = U.map();
+
+		for (String prop : props) {
+			String[] kv = prop.trim().split("\\s*=\\s*");
+			String key = kv[0];
+			Object value = kv.length > 1 ? kv[1] : true;
+			properties.put(key, value);
+		}
+
+		return entity(entityType, properties);
+	}
+
+	@Override
 	public String toString() {
 		return "DbSchemaImpl [entityTypes=" + entityTypes + ", entityTypesPlural=" + entityTypesPlural + "]";
 	}

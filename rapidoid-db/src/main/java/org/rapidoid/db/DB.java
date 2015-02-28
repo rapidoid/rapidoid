@@ -280,4 +280,12 @@ public class DB {
 		db().init(data, args);
 	}
 
+	public static void rql(String rql, Object... args) {
+		db().rql(rql, args);
+	}
+
+	public static <T> T entity(String data, Object... args) {
+		return db().entity(data, args);
+	}
+
 }
