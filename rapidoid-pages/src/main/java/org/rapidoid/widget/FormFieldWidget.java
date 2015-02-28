@@ -226,28 +226,28 @@ public class FormFieldWidget extends AbstractWidget {
 	}
 
 	protected Object textareaInput(String name, String desc, Var<?> var) {
-		TextareaTag textarea = textareaInput(var).name(name);
+		TextareaTag textarea = txtbig(var).name(name);
 		textarea = layout == FormLayout.INLINE ? textarea.placeholder(desc) : textarea;
 		return textarea;
 	}
 
 	protected Object emailInput(String name, String desc, Var<?> var) {
 		InputTag input;
-		input = emailInput(var).name(name);
+		input = email(var).name(name);
 		input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
 		return input;
 	}
 
 	protected Object passwordInput(String name, String desc, Var<?> var) {
 		InputTag input;
-		input = passwordInput(var).name(name);
+		input = password(var).name(name);
 		input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
 		return input;
 	}
 
 	protected Object textInput(String name, String desc, Var<?> var) {
 		InputTag input;
-		input = textInput(var).name(name);
+		input = txt(var).name(name);
 		input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
 		return input;
 	}

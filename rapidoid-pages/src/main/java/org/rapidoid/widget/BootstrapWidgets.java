@@ -513,6 +513,10 @@ public abstract class BootstrapWidgets extends HTML {
 		return items;
 	}
 
+	public static <T> Var<T> providedVar(String name, T defaultValue) {
+		return sessionVar(name, defaultValue);
+	}
+
 	public static <T> Var<T> sessionVar(String name, T defaultValue) {
 		return new SessionVar<T>(name, defaultValue);
 	}
@@ -557,20 +561,36 @@ public abstract class BootstrapWidgets extends HTML {
 		return Cls.customizable(HighlightWidget.class, text, regex);
 	}
 
-	public static InputTag emailInput(Var<?> var) {
+	public static InputTag email(Var<?> var) {
 		return input().type("email").class_("form-control").bind(var);
 	}
 
-	public static InputTag passwordInput(Var<?> var) {
+	public static InputTag email(String sessionVar) {
+		return email(providedVar(sessionVar, ""));
+	}
+
+	public static InputTag password(Var<?> var) {
 		return input().type("password").class_("form-control").bind(var);
 	}
 
-	public static InputTag textInput(Var<?> var) {
+	public static InputTag password(String sessionVar) {
+		return password(providedVar(sessionVar, ""));
+	}
+
+	public static InputTag txt(Var<?> var) {
 		return input().type("text").class_("form-control").bind(var);
 	}
 
-	public static TextareaTag textareaInput(Var<?> var) {
+	public static InputTag txt(String sessionVar) {
+		return txt(providedVar(sessionVar, ""));
+	}
+
+	public static TextareaTag txtbig(Var<?> var) {
 		return textarea().class_("form-control").bind(var);
+	}
+
+	public static TextareaTag txtbig(String sessionVar) {
+		return txtbig(providedVar(sessionVar, ""));
 	}
 
 	public static InputTag checkbox(Var<?> var) {
