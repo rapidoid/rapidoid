@@ -1,4 +1,4 @@
-package org.rapidoid.websocket;
+package org.rapidoid.websocket.impl;
 
 /*
  * #%L
@@ -30,7 +30,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.?")
+@Since("2.3.0")
 public class WebSocketUpgrade implements HttpUpgradeHandler, Constants {
 
 	private static final byte[] UPGRADE_RESPONSE = ("HTTP/1.1 101 Switching Protocols\r\n" + "Upgrade: websocket\r\n"

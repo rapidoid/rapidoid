@@ -22,37 +22,11 @@ package org.rapidoid.websocket;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.http.HTTPServer;
-import org.rapidoid.http.Handler;
-import org.rapidoid.http.HttpExchange;
-import org.rapidoid.log.Log;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
-public class Demo {
+public interface WSHandler {
 
-	public static void main(String[] args) {
-		Conf.args(args);
-		Log.args("debug");
-
-		HTTPServer server = WebSocket.serve(new WSHandler() {
-			@Override
-			public Object handle(WSExchange x) throws Exception {
-				String msg = x.msg();
-				Log.debug("Received WebSocket message", "message", msg);
-				return msg;
-			}
-		});
-
-		server.serve(new Handler() {
-			@Override
-			public Object handle(HttpExchange x) {
-				return "Hi: " + x.uri();
-			}
-		});
-
-		server.start();
-	}
+	Object handle(WSExchange x) throws Exception;
 
 }
