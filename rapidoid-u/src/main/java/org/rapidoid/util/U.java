@@ -43,8 +43,7 @@ import java.util.regex.Pattern;
  */
 public class U {
 
-	private U() {
-	}
+	private U() {}
 
 	public static String readable(Object obj) {
 		if (obj == null) {
@@ -221,6 +220,10 @@ public class U {
 
 	public static <T> T[] array(T... items) {
 		return items;
+	}
+
+	public static Object[] array(Iterable<?> items) {
+		return (items instanceof Collection) ? ((Collection<?>) items).toArray() : list(items).toArray();
 	}
 
 	public static <T> Set<T> set(Iterable<? extends T> values) {
