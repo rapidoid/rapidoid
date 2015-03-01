@@ -116,7 +116,7 @@ public class OAuthTokenHandler implements Handler {
 			AppCtx.setUser(user);
 			U.must(Secure.user() == user);
 
-			x.write(IO.load("close.html"));
+			x.write(IO.loadResourceAsString("close.html"));
 			return x;
 		} else {
 			String error = x.param("error");

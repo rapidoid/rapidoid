@@ -87,6 +87,20 @@ public class IO {
 		return output.toByteArray();
 	}
 
+	public static byte[] loadResource(String filename) {
+		InputStream input = classLoader().getResourceAsStream(filename);
+
+		if (input == null && !filename.endsWith(".default")) {
+			return loadBytes(filename + ".default");
+		}
+
+		return input != null ? loadBytes(input) : null;
+	}
+
+	public static String loadResourceAsString(String filename) {
+		return new String(loadResource(filename));
+	}
+
 	public static byte[] loadBytes(String filename) {
 		InputStream input = classLoader().getResourceAsStream(filename);
 
