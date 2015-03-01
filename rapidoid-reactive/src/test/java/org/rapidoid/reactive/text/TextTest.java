@@ -1,6 +1,7 @@
 package org.rapidoid.reactive.text;
 
 import org.junit.Test;
+import org.rapidoid.reactive.Num;
 import org.rapidoid.reactive.Text;
 import org.rapidoid.test.TestCommons;
 
@@ -26,6 +27,9 @@ public class TextTest extends TestCommons {
 		Text mT = m.trim();
 		Text sub = abc.substring(1, 3);
 
+		Num plusL = abc.length().plus(ab.length());
+		Num minusL = plusL.minus(a.length());
+
 		eq(abc.get(), "abc");
 		eq(ab.get(), "ab");
 		eq(ad.get(), "ad");
@@ -33,6 +37,9 @@ public class TextTest extends TestCommons {
 		eq(abL.get(), "ab");
 		eq(mT.get(), "m");
 		eq(sub.get(), "bc");
+
+		eq(plusL.get(), 5);
+		eq(minusL.get(), 4);
 	}
 
 }

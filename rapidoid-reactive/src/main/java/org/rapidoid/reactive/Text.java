@@ -18,4 +18,6 @@ public interface Text {
 
 	Text substring(int beginIndex, int endIndex);
 
+	Num length();
+
 }
