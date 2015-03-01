@@ -84,9 +84,9 @@ public class TagRenderer {
 			return;
 		} else if (content instanceof TagWidget) {
 			TagWidget<Object> widget = (TagWidget<Object>) content;
-			Tag tag = widget.toTag(extra);
-			if (tag != null) {
-				str(ctx, tag, level, inline, extra, out);
+			Object widgetContent = widget.render(extra);
+			if (widgetContent != null) {
+				str(ctx, widgetContent, level, inline, extra, out);
 			}
 			return;
 		} else if (content instanceof Object[]) {

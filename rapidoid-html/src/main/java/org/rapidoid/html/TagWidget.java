@@ -27,6 +27,6 @@ import org.rapidoid.annotation.Since;
 @Since("2.0.0")
 public interface TagWidget<EXTRA> {
 
-	Tag toTag(EXTRA extra);
+	Object render(EXTRA extra);
 
 }

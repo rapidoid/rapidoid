@@ -22,7 +22,6 @@ package org.rapidoid.widget;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.AppCtx;
@@ -42,12 +41,12 @@ public abstract class AbstractWidget extends BootstrapWidgets implements TagWidg
 		return x;
 	}
 
-	protected abstract Tag create();
+	protected abstract Object render();
 
 	@Override
-	public Tag toTag(HttpExchange x) {
+	public final Object render(HttpExchange x) {
 		this.x = x;
-		return create();
+		return render();
 	}
 
 	public String widgetId() {

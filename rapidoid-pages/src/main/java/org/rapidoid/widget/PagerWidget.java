@@ -40,7 +40,7 @@ public class PagerWidget extends AbstractWidget {
 	}
 
 	@Override
-	protected Tag create() {
+	protected Tag render() {
 		Tag first = first().navigate("_set", pageNumber, from);
 		Tag prev = prev().navigate("_dec", pageNumber, 1);
 		Tag current = current();

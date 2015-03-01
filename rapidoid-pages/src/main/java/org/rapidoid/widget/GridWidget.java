@@ -51,7 +51,7 @@ public class GridWidget extends AbstractWidget {
 	}
 
 	@Override
-	protected Tag create() {
+	protected Tag render() {
 		final List<Property> props = items.properties(columns);
 
 		int total = items.size();

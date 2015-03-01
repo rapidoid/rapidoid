@@ -253,7 +253,7 @@ public class FormFieldWidget extends AbstractWidget {
 	}
 
 	@Override
-	protected Tag create() {
+	protected Tag render() {
 		if (content != null) {
 			return content;
 		}

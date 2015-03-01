@@ -37,7 +37,7 @@ public class PanelWidget extends AbstractWidget {
 	}
 
 	@Override
-	protected Tag create() {
+	protected Tag render() {
 		Tag pheader = header != null ? div(header).class_("panel-heading") : null;
 		Tag pbody = content != null ? div(content).class_("panel-body") : null;
 		Tag pfooter = footer != null ? div(footer).class_("panel-footer") : null;

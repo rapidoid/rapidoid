@@ -42,7 +42,7 @@ public class HighlightWidget extends AbstractWidget {
 	}
 
 	@Override
-	protected Tag create() {
+	protected Tag render() {
 		return regex != null ? complexHighlight() : simpleHighlight();
 	}
 

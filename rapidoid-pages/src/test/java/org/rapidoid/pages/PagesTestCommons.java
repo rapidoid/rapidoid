@@ -61,7 +61,7 @@ public class PagesTestCommons extends TestCommons {
 	private Object preprocess(Object content, HttpExchange x) {
 		if (content instanceof TagWidget<?>) {
 			TagWidget<HttpExchange> widget = (TagWidget<HttpExchange>) content;
-			content = widget.toTag(x);
+			content = widget.render(x);
 			if (content == null) {
 				return null;
 			}

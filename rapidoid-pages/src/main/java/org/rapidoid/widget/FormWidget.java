@@ -162,7 +162,7 @@ public class FormWidget extends AbstractWidget {
 	}
 
 	@Override
-	protected FormTag create() {
+	protected FormTag render() {
 		initPermissions();
 
 		FormTag form = emptyForm();

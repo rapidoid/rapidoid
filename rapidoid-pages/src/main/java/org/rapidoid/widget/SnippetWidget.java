@@ -47,7 +47,7 @@ public class SnippetWidget extends AbstractWidget {
 	}
 
 	@Override
-	protected Tag create() {
+	protected Tag render() {
 		return hardcoded("<pre class=\"example-code\">" + prettify() + "</pre>");
 	}
 

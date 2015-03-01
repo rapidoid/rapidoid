@@ -671,8 +671,7 @@ public abstract class BootstrapWidgets extends HTML {
 			return display(U.iterator(arr));
 		} else if (item instanceof TagWidget) {
 			TagWidget<Object> widget = (TagWidget<Object>) item;
-			Tag tag = widget.toTag(AppCtx.exchange());
-			return tag;
+			return widget.render(AppCtx.exchange());
 		}
 
 		return isEntity(item) ? a(item).href(urlFor(item)) : Cls.str(item);
