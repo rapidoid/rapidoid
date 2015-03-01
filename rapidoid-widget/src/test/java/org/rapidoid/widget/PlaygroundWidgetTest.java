@@ -1,4 +1,4 @@
-package org.rapidoid.pages.impl;
+package org.rapidoid.widget;
 
 /*
  * #%L
@@ -22,44 +22,32 @@ package org.rapidoid.pages.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.model.Item;
-import org.rapidoid.util.ImportExport;
-import org.rapidoid.var.impl.AbstractVar;
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagContext;
+import org.rapidoid.html.Tags;
+import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class ItemPropertyVar<T> extends AbstractVar<T> {
+public class PlaygroundWidgetTest extends WidgetTestCommons {
 
-	private static final long serialVersionUID = -1208784804459879580L;
+	private static final String ATTRS = "[^>]*?";
 
-	private final Item item;
+	@Test
+	public void testPlaygroundWidget() {
+		TagContext ctx = Tags.context();
+		setupMockExchange(ctx);
 
-	private final String property;
+		Tag play = PlaygroundWidget.pageContent(null);
+		print(ctx, play);
 
-	public ItemPropertyVar(ImportExport props) {
-		item = props.get(A);
-		property = props.get(B);
-	}
+		hasRegex(ctx, play, "<table class=\"table" + ATTRS + ">");
 
-	public ItemPropertyVar(Item item, String property) {
-		this.item = item;
-		this.property = property;
-	}
+		hasRegex(ctx, play, "<button[^>]*?>\\-</button>");
+		hasRegex(ctx, play, "<span[^>]*?>10</span>");
+		hasRegex(ctx, play, "<button[^>]*?>\\+</button>");
 
-	@Override
-	public T get() {
-		return item.get(property);
-	}
-
-	@Override
-	public void set(T value) {
-		item.set(property, value);
-	}
-
-	@Override
-	public void exportTo(ImportExport props) {
-		props.put(A, item);
-		props.put(B, property);
+		hasRegex(ctx, play, "<input [^>]*?style=\"border: 1px;\">");
 	}
 
 }

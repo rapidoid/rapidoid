@@ -36,6 +36,7 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.model.Item;
+import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.security.DataPermissions;
 import org.rapidoid.util.Cls;
@@ -92,7 +93,7 @@ public class FormFieldWidget extends AbstractWidget {
 		this.type = mode != FormMode.SHOW ? getPropertyFieldType(prop) : FieldType.LABEL;
 		this.options = getPropertyOptions(prop);
 		this.required = Metadata.get(prop.annotations(), Optional.class) == null;
-		this.var = property(item, prop.name());
+		this.var = Models.propertyVar(item, prop.name());
 	}
 
 	protected String formLayoutClass(FormLayout layout) {

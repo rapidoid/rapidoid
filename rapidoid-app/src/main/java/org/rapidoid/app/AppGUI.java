@@ -34,6 +34,7 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
+import org.rapidoid.pages.PageGUI;
 import org.rapidoid.util.Cls;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.DataManager;
@@ -42,7 +43,7 @@ import org.rapidoid.widget.GridWidget;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class AppGUI extends BootstrapWidgets {
+public class AppGUI extends PageGUI {
 
 	public static <T> Items all(Class<T> type) {
 		return new DbItems<T>(type, null, Beany.<T> comparator("id"));

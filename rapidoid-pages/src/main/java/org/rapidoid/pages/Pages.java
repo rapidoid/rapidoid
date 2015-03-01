@@ -52,7 +52,6 @@ import org.rapidoid.util.Arr;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.widget.BootstrapWidgets;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -146,7 +145,7 @@ public class Pages {
 			return x;
 		}
 
-		return BootstrapWidgets.page(Conf.dev(), pageTitle, pageHead, content);
+		return PageGUI.page(Conf.dev(), pageTitle, pageHead, content);
 	}
 
 	public static Object render(HttpExchange x, Object page) {
@@ -389,10 +388,6 @@ public class Pages {
 		} else {
 			return false;
 		}
-	}
-
-	public static String viewId(HttpExchange x) {
-		return x.uri();
 	}
 
 }

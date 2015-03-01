@@ -22,6 +22,7 @@ package org.rapidoid.html;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.html.impl.ConstantTag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.CanvasTag;
@@ -61,6 +62,10 @@ public class HTML extends Tags {
 
 	public static boolean isTag(Object target, String tagKind) {
 		return isTag(target) && ((Tag) target).tagKind().equals(tagKind);
+	}
+
+	public static Tag hardcoded(String content) {
+		return new ConstantTag(content);
 	}
 
 	public static ATag a_void(Object... contents) {

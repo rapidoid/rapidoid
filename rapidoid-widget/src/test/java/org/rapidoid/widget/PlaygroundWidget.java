@@ -1,4 +1,4 @@
-package org.rapidoid.pages;
+package org.rapidoid.widget;
 
 /*
  * #%L
@@ -27,9 +27,7 @@ import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Models;
-import org.rapidoid.pages.entity.Person;
 import org.rapidoid.var.Var;
-import org.rapidoid.widget.BootstrapWidgets;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -45,7 +43,7 @@ public class PlaygroundWidget extends BootstrapWidgets {
 		if (data.length > 0) {
 			return div(grid(Models.beanItemsInfer(data), "", 10));
 		} else {
-			return div(i18n("No results!"));
+			return div(hardcoded("No results!"));
 		}
 	}
 

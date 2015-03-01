@@ -1,4 +1,4 @@
-package org.rapidoid.widget;
+package org.rapidoid.pages;
 
 /*
  * #%L
@@ -22,33 +22,41 @@ package org.rapidoid.widget;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
-import org.rapidoid.model.Item;
 import org.rapidoid.pages.impl.FileTemplateTag;
-import org.rapidoid.pages.impl.ItemPropertyVar;
 import org.rapidoid.pages.impl.MultiLanguageText;
-import org.rapidoid.pages.impl.SimpleHardcodedTag;
-import org.rapidoid.var.Var;
+import org.rapidoid.widget.BootstrapWidgets;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public abstract class HtmlWidgets extends HTML {
+@Since("2.3.0")
+public class PageGUI extends BootstrapWidgets {
 
 	public static Object i18n(String multiLanguageText, Object... formatArgs) {
 		return new MultiLanguageText(multiLanguageText, formatArgs);
-	}
-
-	public static <T> Var<T> property(Item item, String property) {
-		return new ItemPropertyVar<T>(item, property);
 	}
 
 	public static Tag render(String templateFileName, Object... namesAndValues) {
 		return new FileTemplateTag(templateFileName, namesAndValues);
 	}
 
-	public static Tag hardcoded(String content) {
-		return new SimpleHardcodedTag(content);
+	public static Tag modal(Object title, Object content, Object footer) {
+		return render("modal.html", "title", title, "content", content, "footer", footer, "cmdCloseModal",
+				xClose("closeModal"));
+	}
+
+	public static Tag xClose(String cmd) {
+		Tag sp1 = span(hardcoded("&times;")).attr("aria-hidden", "true");
+		Tag sp2 = span("Close").class_("sr-only");
+		return cmd(cmd).class_("close").content(sp1, sp2);
+	}
+
+	public static Tag page(boolean devMode, String pageTitle, Object head, Object body) {
+		String devOrProd = devMode ? "dev" : "prod";
+		return render("page-" + devOrProd + ".html", "title", pageTitle, "head", head, "body", body);
+	}
+
+	public static Tag page(boolean devMode, String pageTitle, Object body) {
+		return page(devMode, pageTitle, "", body);
 	}
 
 }

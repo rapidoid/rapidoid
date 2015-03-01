@@ -1,4 +1,4 @@
-package org.rapidoid.pages;
+package org.rapidoid.widget;
 
 /*
  * #%L
@@ -22,32 +22,41 @@ package org.rapidoid.pages;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
+import org.rapidoid.model.Items;
+import org.rapidoid.model.Models;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class PlaygroundWidgetTest extends PagesTestCommons {
-
-	private static final String ATTRS = "[^>]*?";
+public class TableWidgetTest extends WidgetTestCommons {
 
 	@Test
-	public void testPlaygroundWidget() {
+	public void testTableWidget() {
+
 		TagContext ctx = Tags.context();
 		setupMockExchange(ctx);
 
-		Tag play = PlaygroundWidget.pageContent(null);
-		print(ctx, play);
+		Person john = new Person("John", 20);
+		john.id = 1;
 
-		hasRegex(ctx, play, "<table class=\"table" + ATTRS + ">");
+		Person rambo = new Person("Rambo", 50);
+		rambo.id = 2;
 
-		hasRegex(ctx, play, "<button[^>]*?>\\-</button>");
-		hasRegex(ctx, play, "<span[^>]*?>10</span>");
-		hasRegex(ctx, play, "<button[^>]*?>\\+</button>");
+		Items items = Models.beanItemsInfer(john, rambo);
 
-		hasRegex(ctx, play, "<input [^>]*?style=\"border: 1px;\">");
+		GridWidget table = BootstrapWidgets.grid(items, null, 10);
+		print(ctx, table);
+
+		hasRegex(ctx, table, "<th[^>]*?>Name</th>");
+		hasRegex(ctx, table, "<th[^>]*?>Age</th>");
+
+		hasRegex(ctx, table, "<td[^>]*?>John</td>");
+		hasRegex(ctx, table, "<td[^>]*?>20</td>");
+
+		hasRegex(ctx, table, "<td[^>]*?>Rambo</td>");
+		hasRegex(ctx, table, "<td[^>]*?>50</td>");
 	}
 
 }

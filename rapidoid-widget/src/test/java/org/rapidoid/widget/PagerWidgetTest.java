@@ -1,4 +1,4 @@
-package org.rapidoid.pages.bootstrap;
+package org.rapidoid.widget;
 
 /*
  * #%L
@@ -24,16 +24,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
-import org.rapidoid.pages.PagesTestCommons;
 import org.rapidoid.var.Var;
-import org.rapidoid.widget.BootstrapWidgets;
-import org.rapidoid.widget.HtmlWidgets;
-import org.rapidoid.widget.PagerWidget;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class PagerWidgetTest extends PagesTestCommons {
+public class PagerWidgetTest extends WidgetTestCommons {
 
 	@Test(enabled = false)
 	public void testPagerWidget() {
@@ -41,7 +37,7 @@ public class PagerWidgetTest extends PagesTestCommons {
 		// FIXME: find the event numbers to be able to emit events
 
 		TagContext ctx = Tags.context();
-		Var<Integer> pageN = HtmlWidgets.var(3);
+		Var<Integer> pageN = BootstrapWidgets.var(3);
 
 		PagerWidget pager = BootstrapWidgets.pager(1, 7, pageN);
 		print(ctx, pager);

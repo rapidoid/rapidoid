@@ -35,11 +35,13 @@ import org.rapidoid.model.impl.BeanListItems;
 import org.rapidoid.model.impl.BeanProperty;
 import org.rapidoid.model.impl.BuiltInProperty;
 import org.rapidoid.model.impl.CalcProperty;
+import org.rapidoid.model.impl.ItemPropertyVar;
 import org.rapidoid.model.impl.ListItems;
 import org.rapidoid.model.impl.MapItem;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.var.Var;
 
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
@@ -165,6 +167,10 @@ public class Models {
 	@SuppressWarnings("unchecked")
 	public static <T> Property property(String name, Calc<T> calc) {
 		return new CalcProperty(name, (Calc<Object>) calc);
+	}
+
+	public static <T> Var<T> propertyVar(Item item, String property) {
+		return new ItemPropertyVar<T>(item, property);
 	}
 
 }

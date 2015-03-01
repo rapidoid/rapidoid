@@ -1,14 +1,7 @@
-package org.rapidoid.pages.impl;
-
-import java.io.IOException;
-import java.io.OutputStream;
+package org.rapidoid.widget;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagContext;
-import org.rapidoid.http.HttpExchange;
-import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -32,30 +25,15 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class SimpleHardcodedTag extends HardcodedTag {
+public class Person {
 
-	private final byte[] content;
+	public long id;
+	public String name;
+	public int age;
 
-	public SimpleHardcodedTag(String content) {
-		this(content.getBytes());
-	}
-
-	public SimpleHardcodedTag(byte[] content) {
-		this.content = content;
-	}
-
-	@Override
-	public void render(TagContext ctx, HttpExchange x, PageRenderer renderer, OutputStream out) {
-		try {
-			out.write(content);
-		} catch (IOException e) {
-			throw U.rte("Cannot render hardcoded tag!", e);
-		}
-	}
-
-	@Override
-	public Tag copy() {
-		return new SimpleHardcodedTag(content);
+	public Person(String name, int age) {
+		this.name = name;
+		this.age = age;
 	}
 
 }

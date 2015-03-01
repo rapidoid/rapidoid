@@ -28,7 +28,6 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
-import org.rapidoid.pages.Pages;
 import org.rapidoid.security.DataPermissions;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Cls;
@@ -90,22 +89,6 @@ public abstract class BootstrapWidgets extends HTML {
 	public static final ButtonTag BACK = navigate("Back");
 
 	public static final ButtonTag EDIT = cmd("^Edit");
-
-	public static Object i18n(String multiLanguageText, Object... formatArgs) {
-		return HtmlWidgets.i18n(multiLanguageText, formatArgs);
-	}
-
-	public static <T> Var<T> property(Item item, String property) {
-		return HtmlWidgets.property(item, property);
-	}
-
-	public static Tag render(String templateFileName, Object... namesAndValues) {
-		return HtmlWidgets.render(templateFileName, namesAndValues);
-	}
-
-	public static Tag hardcoded(String content) {
-		return HtmlWidgets.hardcoded(content);
-	}
 
 	public static TableTag table_(Object... contents) {
 		return table(contents).class_("table table-striped table-hover");
@@ -251,17 +234,6 @@ public abstract class BootstrapWidgets extends HTML {
 	public static Tag navbarPage(boolean fluid, Tag brand, Object[] navbarContent, Object pageContent) {
 		Object cont = div(pageContent).class_(containerMaybeFluid(fluid));
 		return body(nav_(fluid, false, brand, navbarContent), cont);
-	}
-
-	public static Tag modal(Object title, Object content, Object footer) {
-		return render("modal.html", "title", title, "content", content, "footer", footer, "cmdCloseModal",
-				xClose("closeModal"));
-	}
-
-	public static Tag xClose(String cmd) {
-		Tag sp1 = span(hardcoded("&times;")).attr("aria-hidden", "true");
-		Tag sp2 = span("Close").class_("sr-only");
-		return cmd(cmd).class_("close").content(sp1, sp2);
 	}
 
 	private static String leftOrRight(boolean onLeft) {
@@ -476,15 +448,6 @@ public abstract class BootstrapWidgets extends HTML {
 		return new FormFieldWidget(dataManager, mode, layout, item, prop);
 	}
 
-	public static Tag page(boolean devMode, String pageTitle, Object head, Object body) {
-		String devOrProd = devMode ? "dev" : "prod";
-		return render("page-" + devOrProd + ".html", "title", pageTitle, "head", head, "body", body);
-	}
-
-	public static Tag page(boolean devMode, String pageTitle, Object body) {
-		return page(devMode, pageTitle, "", body);
-	}
-
 	public static Tag media(Object left, Object title, Object body, String targetUrl) {
 
 		Tag mhead = h4(title).class_("media-heading");
@@ -523,18 +486,22 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static <T> Var<T> localVar(String name, T defaultValue) {
 		HttpExchange x = AppCtx.exchange();
-		return sessionVar(name + ":" + Pages.viewId(x), defaultValue);
+		return sessionVar(name + ":" + viewId(x), defaultValue);
 	}
 
 	public static Var<Integer> localVar(String name, int defaultValue, int min, int max) {
 		HttpExchange x = AppCtx.exchange();
-		Var<Integer> var = sessionVar(name + ":" + Pages.viewId(x), defaultValue);
+		Var<Integer> var = sessionVar(name + ":" + viewId(x), defaultValue);
 
 		// TODO put the constraints into the variable implementation
 		Integer pageN = U.limited(min, var.get(), max);
 		var.set(pageN);
 
 		return var;
+	}
+
+	public static String viewId(HttpExchange x) {
+		return x.uri();
 	}
 
 	public static boolean isEntity(Object obj) {
