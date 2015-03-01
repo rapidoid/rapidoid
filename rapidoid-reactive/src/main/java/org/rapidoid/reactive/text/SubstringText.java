@@ -1,14 +1,15 @@
 package org.rapidoid.reactive.text;
 
+import org.rapidoid.reactive.Num;
 import org.rapidoid.reactive.Text;
 
 public class SubstringText extends AbstractText implements Text {
 
 	private final Text t;
-	private final int beginIndex;
-	private final int endIndex;
+	private final Num beginIndex;
+	private final Num endIndex;
 
-	public SubstringText(Text t, int beginIndex, int endIndex) {
+	public SubstringText(Text t, Num beginIndex, Num endIndex) {
 		this.t = t;
 		this.beginIndex = beginIndex;
 		this.endIndex = endIndex;
@@ -16,7 +17,7 @@ public class SubstringText extends AbstractText implements Text {
 
 	@Override
 	public String get() {
-		return t.get().substring(beginIndex, endIndex);
+		return t.get().substring(beginIndex.get(), endIndex.get());
 	}
 
 }

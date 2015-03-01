@@ -3,6 +3,7 @@ package org.rapidoid.reactive.text;
 import org.junit.Test;
 import org.rapidoid.reactive.Num;
 import org.rapidoid.reactive.Text;
+import org.rapidoid.reactive.num.SimpleNum;
 import org.rapidoid.test.TestCommons;
 
 public class TextTest extends TestCommons {
@@ -12,6 +13,9 @@ public class TextTest extends TestCommons {
 
 		SimpleText a = new SimpleText("a");
 		eq(a.get(), "a");
+		
+		Num n1 = new SimpleNum(1);
+		Num n3 = new SimpleNum(3);
 
 		Text b = new SimpleText("b");
 		Text c = new SimpleText("c");
@@ -25,7 +29,7 @@ public class TextTest extends TestCommons {
 		Text abU = ab.upper();
 		Text abL = abU.lower();
 		Text mT = m.trim();
-		Text sub = abc.substring(1, 3);
+		Text sub = abc.substring(n1, n3);
 
 		Num plusL = abc.length().plus(ab.length());
 		Num minusL = plusL.minus(a.length());

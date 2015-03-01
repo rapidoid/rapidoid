@@ -36,7 +36,7 @@ public abstract class AbstractText implements Text {
 	}
 	
 	@Override
-	public Text substring(int beginIndex, int endIndex) {
+	public Text substring(Num beginIndex, Num endIndex) {
 		return new SubstringText(this, beginIndex, endIndex);
 	}
 

@@ -16,7 +16,7 @@ public interface Text {
 
 	Text trim();
 
-	Text substring(int beginIndex, int endIndex);
+	Text substring(Num beginIndex, Num endIndex);
 
 	Num length();
 
