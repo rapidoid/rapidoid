@@ -198,4 +198,12 @@ public class UTest extends TestCommons {
 		eq(U.isEmpty(U.list("2")), false);
 	}
 
+	@Test
+	public void testInsert() {
+		eq(U.insert("", 0, "ab"), "ab");
+		eq(U.insert("a", 0, "b"), "ba");
+		eq(U.insert("a", 1, "b"), "ab");
+		eq(U.insert("abc", 2, "123"), "ab123c");
+	}
+
 }

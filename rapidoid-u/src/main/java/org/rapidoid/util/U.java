@@ -605,6 +605,10 @@ public class U {
 		return s.substring(beginIndex, endIndex);
 	}
 
+	public static String insert(String target, int atIndex, String insertion) {
+		return target.substring(0, atIndex) + insertion + target.substring(atIndex);
+	}
+
 	public static int num(String s) {
 		return Integer.parseInt(s);
 	}
