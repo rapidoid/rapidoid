@@ -155,7 +155,7 @@ public class ExpressionsScreen extends Screen {
 	}
 
 	private Object generate() {
-		return rows(4, true, exprs);
+		return layout(4, true, exprs);
 	}
 
 }
