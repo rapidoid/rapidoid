@@ -37,8 +37,8 @@ public class HTMLSnippets {
 	private static String FULL_PAGE_HTML;
 
 	static {
-		PAGE_HTML = IO.loadResourceAsString("page.html");
-		FULL_PAGE_HTML = IO.loadResourceAsString("page-full.html");
+		PAGE_HTML = IO.loadResourceAsString("page.html", true);
+		FULL_PAGE_HTML = IO.loadResourceAsString("page-full.html", true);
 	}
 
 	public static HttpExchange writePage(HttpExchange x, String title, String content) {

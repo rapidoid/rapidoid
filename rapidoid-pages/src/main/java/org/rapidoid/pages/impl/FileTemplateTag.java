@@ -43,15 +43,13 @@ public class FileTemplateTag extends HardcodedTag {
 	private final Object[] namesAndValues;
 
 	public FileTemplateTag(String templateName, Object[] namesAndValues) {
-		U.must(IO.resource(templateName) != null, "Cannot find file: %s", templateName);
-
 		this.templateName = templateName;
 		this.namesAndValues = namesAndValues;
 	}
 
 	@Override
 	public void render(TagContext ctx, HttpExchange x, PageRenderer renderer, OutputStream out) {
-		String text = IO.loadResourceAsString(templateName);
+		String text = IO.loadResourceAsString(templateName, true);
 
 		for (int i = 0; i < namesAndValues.length / 2; i++) {
 			String placeholder = (String) namesAndValues[i * 2];

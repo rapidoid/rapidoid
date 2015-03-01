@@ -898,7 +898,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			}
 
 			if (!filename.contains("..") && STATIC_RESOURCE_PATTERN.matcher(filename).matches()) {
-				byte[] bytes = IO.loadResource("public/" + filename);
+				byte[] bytes = IO.loadResource("public/" + filename, true);
 				if (bytes != null) {
 					startResponse(200);
 					sendFile(MediaType.getByFileName(filename), bytes);
