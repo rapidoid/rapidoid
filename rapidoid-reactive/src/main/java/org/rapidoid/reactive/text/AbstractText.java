@@ -34,7 +34,7 @@ public abstract class AbstractText implements Text {
 	public Text trim() {
 		return new TrimText(this);
 	}
-	
+
 	@Override
 	public Text substring(Num beginIndex, Num endIndex) {
 		return new SubstringText(this, beginIndex, endIndex);
@@ -43,6 +43,11 @@ public abstract class AbstractText implements Text {
 	@Override
 	public Num length() {
 		return new LengthText(this);
+	}
+
+	@Override
+	public Num indexOf(Text v) {
+		return new IndexText(this, v);
 	}
 
 }

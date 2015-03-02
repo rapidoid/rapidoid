@@ -20,4 +20,6 @@ public interface Text {
 
 	Num length();
 
+	Num indexOf(Text v);
+
 }

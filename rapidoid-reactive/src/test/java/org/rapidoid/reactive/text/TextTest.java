@@ -13,7 +13,7 @@ public class TextTest extends TestCommons {
 
 		SimpleText a = new SimpleText("a");
 		eq(a.get(), "a");
-		
+
 		Num n1 = new SimpleNum(1);
 		Num n3 = new SimpleNum(3);
 
@@ -33,6 +33,7 @@ public class TextTest extends TestCommons {
 
 		Num plusL = abc.length().plus(ab.length());
 		Num minusL = plusL.minus(a.length());
+		Num index = abc.indexOf(b);
 
 		eq(abc.get(), "abc");
 		eq(ab.get(), "ab");
@@ -44,6 +45,7 @@ public class TextTest extends TestCommons {
 
 		eq(plusL.get(), 5);
 		eq(minusL.get(), 4);
+		eq(index.get(), 1);
 	}
 
 }
