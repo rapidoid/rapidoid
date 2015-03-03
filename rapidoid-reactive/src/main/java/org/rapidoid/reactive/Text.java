@@ -22,4 +22,6 @@ public interface Text {
 
 	Num indexOf(Text v);
 
+	Text mid(Num beginIndex, Num endIndex);
+
 }

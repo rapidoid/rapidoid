@@ -16,6 +16,7 @@ public class TextTest extends TestCommons {
 
 		Num n1 = new SimpleNum(1);
 		Num n3 = new SimpleNum(3);
+		Num nNeg = new SimpleNum(-1);
 
 		Text b = new SimpleText("b");
 		Text c = new SimpleText("c");
@@ -30,6 +31,7 @@ public class TextTest extends TestCommons {
 		Text abL = abU.lower();
 		Text mT = m.trim();
 		Text sub = abc.substring(n1, n3);
+		Text mid = abc.mid(n1, nNeg);
 
 		Num plusL = abc.length().plus(ab.length());
 		Num minusL = plusL.minus(a.length());
@@ -42,6 +44,7 @@ public class TextTest extends TestCommons {
 		eq(abL.get(), "ab");
 		eq(mT.get(), "m");
 		eq(sub.get(), "bc");
+		eq(mid.get(), "b");
 
 		eq(plusL.get(), 5);
 		eq(minusL.get(), 4);

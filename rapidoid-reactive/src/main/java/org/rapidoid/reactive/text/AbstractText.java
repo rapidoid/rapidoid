@@ -50,4 +50,9 @@ public abstract class AbstractText implements Text {
 		return new IndexText(this, v);
 	}
 
+	@Override
+	public Text mid(Num beginIndex, Num endIndex) {
+		return new MidText(this, beginIndex, endIndex);
+	}
+
 }
