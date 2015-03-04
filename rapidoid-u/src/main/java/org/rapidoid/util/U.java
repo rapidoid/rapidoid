@@ -645,4 +645,18 @@ public class U {
 		}
 	}
 
+	public static <T> List<T> range(Iterable<T> items, int fromIndex, int toIndex) {
+		// TODO more efficient implementation
+		List<T> list = list(items);
+
+		fromIndex = limited(0, fromIndex, list.size());
+		toIndex = limited(fromIndex, toIndex, list.size());
+
+		return U.list(list.subList(fromIndex, toIndex));
+	}
+
+	public static <T> List<T> page(Iterable<T> items, int page, int pageSize) {
+		return range(items, (page - 1) * pageSize, page * pageSize);
+	}
+
 }
