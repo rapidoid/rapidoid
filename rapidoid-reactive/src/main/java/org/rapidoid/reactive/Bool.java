@@ -6,4 +6,6 @@ public interface Bool {
 
 	Bool xor(Bool v);
 
+	Bool or(Bool v);
+
 }

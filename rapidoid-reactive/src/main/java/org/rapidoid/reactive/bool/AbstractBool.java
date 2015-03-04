@@ -9,4 +9,9 @@ public abstract class AbstractBool implements Bool {
 		return new XorBool(this, v);
 	}
 
+	@Override
+	public Bool or(Bool v) {
+		return new OrBool(this, v);
+	}
+
 }
