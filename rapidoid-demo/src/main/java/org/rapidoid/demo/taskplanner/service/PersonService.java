@@ -53,7 +53,7 @@ public class PersonService extends DAO<Person> {
 	public List<Person> add(Person p) {
 		Log.info("Inserting person", "person", p);
 		insert(p);
-		return getAll();
+		return all();
 	}
 
 	// e.g. /params?x=1&y=2

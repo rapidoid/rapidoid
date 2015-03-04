@@ -35,7 +35,7 @@ public class TaskService extends DAO<Task> {
 	public List<Task> add(Task task) {
 		Log.info("Inserting task", "task", task);
 		insert(task);
-		return getAll();
+		return all();
 	}
 
 }
