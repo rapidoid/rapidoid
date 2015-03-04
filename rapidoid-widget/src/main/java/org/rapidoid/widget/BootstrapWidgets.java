@@ -683,4 +683,8 @@ public abstract class BootstrapWidgets extends HTML {
 		return new SnippetWidget(code);
 	}
 
+	public static StreamWidget stream(Tag ngTemplate) {
+		return Cls.customizable(StreamWidget.class).template(ngTemplate);
+	}
+
 }
