@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
 import org.rapidoid.pages.impl.FileTemplateTag;
 import org.rapidoid.pages.impl.MultiLanguageText;
+import org.rapidoid.util.IO;
 import org.rapidoid.widget.BootstrapWidgets;
 
 @Authors("Nikolche Mihajlovski")
@@ -52,7 +53,10 @@ public class PageGUI extends BootstrapWidgets {
 
 	public static Tag page(boolean devMode, String pageTitle, Object head, Object body) {
 		String devOrProd = devMode ? "dev" : "prod";
-		return render("page-" + devOrProd + ".html", "title", pageTitle, "head", head, "body", body);
+		Tag assets = hardcoded(IO.loadResourceAsString("page-assets-" + devOrProd + ".html", true));
+		Tag meta = hardcoded(IO.loadResourceAsString("page-meta-" + devOrProd + ".html", true));
+		return render("page-" + devOrProd + ".html", "title", pageTitle, "head", head, "body", body, "assets", assets,
+				"meta", meta);
 	}
 
 	public static Tag page(boolean devMode, String pageTitle, Object body) {
