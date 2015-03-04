@@ -233,7 +233,9 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static Tag navbarPage(boolean fluid, Tag brand, Object[] navbarContent, Object pageContent) {
 		Object cont = div(pageContent).class_(containerMaybeFluid(fluid));
-		return body(nav_(fluid, false, brand, navbarContent), cont);
+		Tag body = body(nav_(fluid, false, brand, navbarContent), cont);
+		body = body.attr("ng-controller", "Main").attr("ng-app", "rapidoid-app");
+		return body;
 	}
 
 	private static String leftOrRight(boolean onLeft) {

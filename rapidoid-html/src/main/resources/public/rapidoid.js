@@ -115,3 +115,64 @@ function _popup(popupUrl, onClosed) {
 		}
 	}, 100);
 }
+
+var rapidoidApp = angular.module('rapidoid-app', [ 'infinite-scroll' ]);
+
+rapidoidApp.filter('rangex', function() {
+	return function(input, from, total) {
+
+		var output = [];
+
+		from = parseInt(from);
+		total = parseInt(total);
+
+		for (var i = from; i < from + total; i++) {
+			output.push(i);
+		}
+
+		return output;
+	}
+});
+
+rapidoidApp.filter('nth', function() {
+	return function(input, n, per) {
+		var out = [];
+
+		for (var i = 0; i < input.length; i++) {
+			if (i % per == n) {
+				out.push(input[i]);
+			}
+		}
+
+		return out;
+	}
+});
+
+rapidoidApp.controller('Main', [ '$scope', '$http', '$window',
+		function($scope, $http, $window) {
+
+			$scope.moreLess = function(item) {
+				item.more = !item.more;
+			}
+
+			$scope.upvote = function(item) {
+				item.vote = item.vote != 1 ? 1 : 0;
+			}
+
+			$scope.downvote = function(item) {
+				item.vote = item.vote != -1 ? -1 : 0;
+			}
+
+			$scope.changeFavLocal = function(item) {
+				var favs = JSON.parse(localStorage['favortites'] || '{}');
+				item.fav = !item.fav;
+				if (item.fav) {
+					favs[item.id] = true;
+				} else {
+					delete favs[item.id];
+				}
+				localStorage['favortites'] = JSON.stringify(favs);
+			}
+
+		} ]);
+
