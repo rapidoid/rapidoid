@@ -3,6 +3,7 @@ package org.rapidoid.demo.taskplanner.gui;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.Screen;
+import org.rapidoid.html.Tag;
 
 /*
  * #%L
@@ -30,6 +31,10 @@ public class HomeScreen extends Screen {
 
 	public String title = "Welcome!";
 
-	public Object content = row(h2("Welcome to Task Planer!"));
+	private Tag item = row(p("{{it.id}}: {{it.title}} {{it.rating}}"));
+
+	private Tag foreach = item.attr("ng-repeat", "it in items");
+
+	public Object content = stream(foreach).dataUrl("/task/page/{{page}}");
 
 }
