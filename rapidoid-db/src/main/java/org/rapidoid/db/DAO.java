@@ -86,8 +86,12 @@ public abstract class DAO<E> {
 		return DB.get(id, clazz);
 	}
 
-	public List<E> getAll() {
+	public List<E> all() {
 		return DB.getAll(clazz);
+	}
+
+	public List<E> page(int page) {
+		return U.page(DB.getAll(clazz), page, 20);
 	}
 
 	public <T> T read(long id, String column) {
