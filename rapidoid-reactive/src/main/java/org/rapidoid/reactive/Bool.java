@@ -8,4 +8,6 @@ public interface Bool {
 
 	Bool or(Bool v);
 
+	Bool and(Bool v);
+
 }
