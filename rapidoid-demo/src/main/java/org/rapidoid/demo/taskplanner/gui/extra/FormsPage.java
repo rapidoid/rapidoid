@@ -31,6 +31,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 import org.rapidoid.widget.BootstrapWidgets;
+import org.rapidoid.widget.ButtonWidget;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -81,7 +82,7 @@ public class FormsPage extends BootstrapWidgets {
 
 		final Object[][] options = { null, null, null, opt1, opt2, opt3, opt4, null, null };
 
-		final Tag[] buttons = { btn("Save").cmd("saveIt", vars[0]), cmd("Cancel", vars[0]) };
+		final ButtonWidget[] buttons = { btn("Save").command("saveIt", vars[0]), cmd("Cancel", vars[0]) };
 
 		return div(form_(layout, names, desc, types, options, vars, buttons), ul_li((Object[]) vars));
 	}

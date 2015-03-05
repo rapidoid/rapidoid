@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.demo.db.Person;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
-import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
@@ -34,6 +33,7 @@ import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.BootstrapWidgets;
+import org.rapidoid.widget.ButtonWidget;
 import org.rapidoid.widget.GridWidget;
 
 @Authors("Nikolche Mihajlovski")
@@ -53,9 +53,9 @@ public class MixPage extends BootstrapWidgets {
 
 		FormTag formR = navbarForm(false, "Login", arr("user", "pass"), arr("Username", "Password"));
 
-		ButtonTag abc = btnPrimary("abc");
+		ButtonWidget abc = btn("abc").primary();
 
-		ButtonTag xy = btnPrimary("X Z Y").cmd("xyz");
+		ButtonWidget xy = btn("X Z Y").command("xyz").info();
 
 		Items items = Models.mockBeanItems(20, Person.class);
 

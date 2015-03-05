@@ -62,33 +62,33 @@ import org.rapidoid.widget.impl.SessionVar;
 @Since("2.0.0")
 public abstract class BootstrapWidgets extends HTML {
 
-	public static final ButtonTag SAVE = cmd("^Save");
+	public static final ButtonWidget SAVE = cmd("^Save");
 
-	public static final ButtonTag ADD = cmd("^Add");
+	public static final ButtonWidget ADD = cmd("^Add");
 
-	public static final ButtonTag UPDATE = cmd("^Update");
+	public static final ButtonWidget UPDATE = cmd("^Update");
 
-	public static final ButtonTag INSERT = cmd("^Insert");
+	public static final ButtonWidget INSERT = cmd("^Insert");
 
-	public static final ButtonTag DELETE = cmd("!Delete");
+	public static final ButtonWidget DELETE = cmd("!Delete");
 
-	public static final ButtonTag YES_DELETE = cmd("!YesDelete").content("Yes, delete!");
+	public static final ButtonWidget YES_DELETE = cmd("!YesDelete").contents("Yes, delete!");
 
-	public static final ButtonTag REMOVE = cmd("!Remove");
+	public static final ButtonWidget REMOVE = cmd("!Remove");
 
-	public static final ButtonTag DESTROY = cmd("!Destroy");
+	public static final ButtonWidget DESTROY = cmd("!Destroy");
 
-	public static final ButtonTag YES = cmd("^Yes");
+	public static final ButtonWidget YES = cmd("^Yes");
 
-	public static final ButtonTag NO = cmd("No");
+	public static final ButtonWidget NO = cmd("No");
 
-	public static final ButtonTag OK = cmd("^OK");
+	public static final ButtonWidget OK = cmd("^OK");
 
-	public static final ButtonTag CANCEL = navigate("Cancel");
+	public static final ButtonWidget CANCEL = navigate("Cancel");
 
-	public static final ButtonTag BACK = navigate("Back");
+	public static final ButtonWidget BACK = navigate("Back");
 
-	public static final ButtonTag EDIT = cmd("^Edit");
+	public static final ButtonWidget EDIT = cmd("^Edit");
 
 	public static TableTag table_(Object... contents) {
 		return table(contents).class_("table table-striped table-hover");
@@ -134,28 +134,8 @@ public abstract class BootstrapWidgets extends HTML {
 		return a_void(awesome(fontAwesomeIcon), NBSP, contents);
 	}
 
-	public static ButtonTag btn(Object... contents) {
-		return button(contents).type("button").class_("btn btn-default");
-	}
-
-	public static ButtonTag btnPrimary(Object... contents) {
-		return button(contents).type("button").class_("btn btn-primary");
-	}
-
-	public static ButtonTag btnSuccess(Object... contents) {
-		return button(contents).type("button").class_("btn btn-success");
-	}
-
-	public static ButtonTag btnInfo(Object... contents) {
-		return button(contents).type("button").class_("btn btn-info");
-	}
-
-	public static ButtonTag btnWarning(Object... contents) {
-		return button(contents).type("button").class_("btn btn-warning");
-	}
-
-	public static ButtonTag btnDanger(Object... contents) {
-		return button(contents).type("button").class_("btn btn-danger");
+	public static ButtonWidget btn(Object... contents) {
+		return Cls.customizable(ButtonWidget.class).contents(contents);
 	}
 
 	public static Tag nav_(boolean fluid, boolean inverse, Tag brand, Object[] navbarContent) {
@@ -326,7 +306,7 @@ public abstract class BootstrapWidgets extends HTML {
 		return row(col1(), col10(contents), col1());
 	}
 
-	public static ButtonTag cmd(String cmd, Object... args) {
+	public static ButtonWidget cmd(String cmd, Object... args) {
 		boolean primary = cmd.startsWith("^");
 		boolean danger = cmd.startsWith("!");
 		boolean warning = cmd.startsWith("?");
@@ -337,28 +317,25 @@ public abstract class BootstrapWidgets extends HTML {
 
 		String caption = U.capitalized(cmd);
 
-		ButtonTag btn;
+		ButtonWidget btn = btn(caption);
 		if (primary) {
-			btn = btnPrimary(caption);
+			btn = btn.primary();
 		} else if (danger) {
-			btn = btnDanger(caption);
+			btn = btn.danger();
 		} else if (warning) {
-			btn = btnWarning(caption);
-		} else {
-			btn = btn(caption);
+			btn = btn.warning();
 		}
 
-		return btn.cmd(cmd, args);
+		return btn.command(cmd, args);
 	}
 
-	public static ButtonTag navigate(String cmd) {
+	public static ButtonWidget navigate(String cmd) {
 		String caption = U.capitalized(cmd);
-		ButtonTag btn = btn(caption);
-		return btn.navigate(cmd);
+		return btn(caption).linkTo(cmd);
 	}
 
-	public static ButtonTag[] cmds(String... commands) {
-		ButtonTag[] cmds = new ButtonTag[commands.length];
+	public static ButtonWidget[] cmds(String... commands) {
+		ButtonWidget[] cmds = new ButtonWidget[commands.length];
 
 		for (int i = 0; i < cmds.length; i++) {
 			cmds[i] = cmd(commands[i]);
@@ -398,7 +375,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static FormWidget form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc,
-			FieldType[] fieldTypes, Object[][] options, Var<?>[] vars, Tag[] buttons) {
+			FieldType[] fieldTypes, Object[][] options, Var<?>[] vars, ButtonWidget[] buttons) {
 		return Cls.customizable(FormWidget.class, layout, fieldsNames, fieldsDesc, fieldTypes, options, vars, buttons);
 	}
 

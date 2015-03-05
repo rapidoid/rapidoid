@@ -48,6 +48,7 @@ public class App {
 	}
 }
 
+@SuppressWarnings("serial")
 @Scaffold
 class Movie extends Entity {
 	String title;

@@ -27,6 +27,7 @@ import org.rapidoid.pages.impl.FileTemplateTag;
 import org.rapidoid.pages.impl.MultiLanguageText;
 import org.rapidoid.util.IO;
 import org.rapidoid.widget.BootstrapWidgets;
+import org.rapidoid.widget.ButtonWidget;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
@@ -45,10 +46,10 @@ public class PageGUI extends BootstrapWidgets {
 				xClose("closeModal"));
 	}
 
-	public static Tag xClose(String cmd) {
+	public static ButtonWidget xClose(String cmd) {
 		Tag sp1 = span(hardcoded("&times;")).attr("aria-hidden", "true");
 		Tag sp2 = span("Close").class_("sr-only");
-		return cmd(cmd).class_("close").content(sp1, sp2);
+		return cmd(cmd).class_("close").contents(sp1, sp2);
 	}
 
 	public static Tag page(boolean devMode, String pageTitle, Object head, Object body) {

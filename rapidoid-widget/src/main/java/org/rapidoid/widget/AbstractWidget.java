@@ -32,7 +32,7 @@ import org.rapidoid.util.U;
 @Since("2.0.0")
 public abstract class AbstractWidget extends BootstrapWidgets implements TagWidget<HttpExchange>, Constants {
 
-	private int widgetNum = getWidgetNumber(this);
+	private final int widgetNum = getWidgetNumber(this);
 
 	private HttpExchange x;
 
@@ -55,13 +55,16 @@ public abstract class AbstractWidget extends BootstrapWidgets implements TagWidg
 
 	private static int getWidgetNumber(AbstractWidget widget) {
 		HttpExchange x = AppCtx.exchange();
-		U.notNull(x, "HTTP exchange");
+		// U.notNull(x, "HTTP exchange");
 
-		String extrName = "widget_counter_" + widget.getClass().getSimpleName();
-		Integer counter = U.or((Integer) x.extra(extrName), 1);
-		x.extra(extrName, counter + 1);
-
-		return counter;
+		if (x != null) {
+			String extrName = "widget_counter_" + widget.getClass().getSimpleName();
+			Integer counter = U.or((Integer) x.extra(extrName), 1);
+			x.extra(extrName, counter + 1);
+			return counter;
+		} else {
+			return -1;
+		}
 	}
 
 }

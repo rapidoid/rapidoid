@@ -8,7 +8,7 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Apps;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.Entity;
-import org.rapidoid.html.tag.ButtonTag;
+import org.rapidoid.widget.ButtonWidget;
 import org.rapidoid.widget.FormWidget;
 
 /*
@@ -54,9 +54,9 @@ class HomeScreen {
 	Object content() {
 		movie = DB.get(1);
 		FormWidget f = create(movie, "year"); // here
-		ButtonTag ab = btn("Ab"); // here
-		ButtonTag cd = btnPrimary("Change year").cmd("ch"); // here
-		ButtonTag efg = btnDanger("!Efg"); // here
+		ButtonWidget ab = btn("Ab"); // here
+		ButtonWidget cd = btn("Change year").command("ch").primary(); // here
+		ButtonWidget efg = btn("!Efg").danger(); // here
 		f = f.buttons(ab, cd, efg); // here
 		return f;
 	}
@@ -66,6 +66,7 @@ class HomeScreen {
 	}
 }
 
+@SuppressWarnings("serial")
 @Scaffold
 class Movie extends Entity {
 	String title;

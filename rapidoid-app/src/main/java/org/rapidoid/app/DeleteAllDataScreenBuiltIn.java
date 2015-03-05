@@ -34,7 +34,7 @@ public class DeleteAllDataScreenBuiltIn extends Screen {
 
 	public Object content() {
 		Tag caption = titleBox("Debug Mode - Delete All data");
-		return div(caption, div(btnDanger("DELETE ALL DATA!").cmd("DeleteAll"), CANCEL));
+		return div(caption, div(btn("DELETE ALL DATA!").danger().command("DeleteAll"), CANCEL));
 	}
 
 	public void onDeleteAll() {

@@ -25,10 +25,10 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
+import org.rapidoid.widget.ButtonWidget;
 import org.rapidoid.widget.FormWidget;
 
 @Authors("Nikolche Mihajlovski")
@@ -44,8 +44,8 @@ public class ViewEntityScreenGeneric extends Screen {
 		Tag caption = h2(U.capitalized(ctx().pathSegment(0)) + " Details").style("margin-bottom:15px;");
 		FormWidget details = show(target);
 
-		ButtonTag btnEdit = Secure.canUpdate(Secure.username(), target) ? EDIT : null;
-		ButtonTag btnDelete = Secure.canDelete(Secure.username(), target) ? DELETE : null;
+		ButtonWidget btnEdit = Secure.canUpdate(Secure.username(), target) ? EDIT : null;
+		ButtonWidget btnDelete = Secure.canDelete(Secure.username(), target) ? DELETE : null;
 
 		details = details.buttons(btnEdit, BACK, btnDelete);
 

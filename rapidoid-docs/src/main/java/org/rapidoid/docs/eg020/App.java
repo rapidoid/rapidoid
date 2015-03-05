@@ -6,7 +6,7 @@ import static org.rapidoid.widget.BootstrapWidgets.*;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Apps;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.ButtonTag;
+import org.rapidoid.widget.ButtonWidget;
 
 /*
  * #%L
@@ -45,7 +45,7 @@ public class App {
 		Tag btns = div();
 		Tag row = div();
 		for (int i = 1; i <= 9; i++) {
-			ButtonTag b = cmd("" + i); // here
+			ButtonWidget b = cmd("" + i); // here
 			row = row.append(b); // here
 			if (i % 3 == 0) {
 				btns = btns.append(row); // here

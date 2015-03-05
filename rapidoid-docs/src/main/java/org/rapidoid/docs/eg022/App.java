@@ -4,7 +4,7 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.Screen;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.ButtonTag;
+import org.rapidoid.widget.ButtonWidget;
 
 /*
  * #%L
@@ -43,7 +43,7 @@ class HomeScreen extends Screen {
 
 	public Object content() {
 		Tag caption = h3(n, " clicks");
-		ButtonTag hi = btn("+").cmd("Inc"); // here
+		ButtonWidget hi = btn("+").command("Inc"); // here
 		return row(caption, hi);
 	}
 

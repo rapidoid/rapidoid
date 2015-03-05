@@ -27,10 +27,10 @@ import org.rapidoid.db.DB;
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.log.Log;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.util.U;
+import org.rapidoid.widget.ButtonWidget;
 
 @CanInsert("logged_in")
 class Book {
@@ -44,8 +44,8 @@ public class AboutScreen extends Screen {
 
 	public Object content() {
 		Tag mix = h2(a("Enter the mix").href("/mix"));
-		ButtonTag tx = btn("Transactional").cmd("tx");
-		ButtonTag dlg = cmd("Dialog");
+		ButtonWidget tx = btn("Transactional").command("tx");
+		ButtonWidget dlg = cmd("Dialog");
 
 		return arr(mix, tx, dlg, ADD);
 	}

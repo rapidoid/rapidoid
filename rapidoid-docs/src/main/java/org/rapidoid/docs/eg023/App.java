@@ -52,6 +52,7 @@ class HomeScreen extends Screen {
 	}
 }
 
+@SuppressWarnings("serial")
 @Scaffold
 class Todo extends Entity {
 	String content;

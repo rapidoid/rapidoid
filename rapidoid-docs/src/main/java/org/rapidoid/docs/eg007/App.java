@@ -65,6 +65,7 @@ class HomeScreen {
 	}
 }
 
+@SuppressWarnings("serial")
 @Scaffold
 class Movie extends Entity {
 	String title;
