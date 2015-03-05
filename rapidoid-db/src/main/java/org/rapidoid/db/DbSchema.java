@@ -39,6 +39,6 @@ public interface DbSchema {
 
 	<E> Class<E> getEntityTypeFor(Class<E> clazz);
 
-	Object entity(String data);
+	Object entity(String rql, Object... args);
 
 }

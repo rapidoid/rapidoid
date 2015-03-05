@@ -313,21 +313,22 @@ public class DbImpl extends NamedActivity<Database> implements Database, Seriali
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T entity(String data, Object... args) {
-		data = U.format(data, args);
-		return (T) schema().entity(data);
+	public <E> E entity(String rql, Object... args) {
+		return (E) schema().entity(rql, args);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void rql(String rql, Object... args) {
-		rql = rql.trim();
+	public <RESULT> RESULT rql(String rql, Object... args) {
+
 		int p = rql.indexOf(' ');
 		U.must(p > 0, "Invalid RQL syntax!");
+
 		String cmd = rql.substring(0, p).trim();
 		String data = rql.substring(p + 1).trim();
-		U.show(cmd, data, args);
+
 		if (cmd.equalsIgnoreCase("INSERT")) {
-			insert(entity(data, args));
+			return (RESULT) new Long(insert(entity(data, args)));
 		} else {
 			throw U.rte("Unknown RQL command: '%s'!", cmd);
 		}

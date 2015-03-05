@@ -113,19 +113,33 @@ public class DbSchemaImpl implements DbSchema {
 	}
 
 	@Override
-	public Object entity(String data) {
-		String entityName = U.capitalized(data.split(" ")[0]);
+	public Object entity(String rql, Object... args) {
+
+		String[] parts = rql.split(" ");
+
+		String entityName = U.capitalized(parts[0]);
 		Class<?> entityType = getEntityType(entityName);
 		U.must(entityType != null, "Cannot find entity '%s'!", entityName);
 
-		String[] props = data.substring(entityName.length() + 1).split("\\s*\\,\\s*");
 		Map<String, Object> properties = U.map();
+		if (parts.length > 1) {
 
-		for (String prop : props) {
-			String[] kv = prop.trim().split("\\s*=\\s*");
-			String key = kv[0];
-			Object value = kv.length > 1 ? kv[1] : true;
-			properties.put(key, value);
+			String[] props = rql.substring(entityName.length() + 1).split("\\s*\\,\\s*");
+
+			int argIndex = 0;
+			for (String prop : props) {
+				String[] kv = prop.trim().split("\\s*=\\s*");
+				String key = kv[0];
+				Object value;
+
+				if (kv.length > 1) {
+					value = kv[1].equals("?") ? args[argIndex++] : kv[1];
+				} else {
+					value = true;
+				}
+
+				properties.put(key, value);
+			}
 		}
 
 		return entity(entityType, properties);

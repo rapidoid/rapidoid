@@ -116,8 +116,8 @@ public interface Database extends Activity<Database> {
 
 	void init(String data, Object... args);
 
-	void rql(String rql, Object... args);
+	<RESULT> RESULT rql(String rql, Object... args);
 
-	<T> T entity(String data, Object... args);
+	<E> E entity(String rql, Object... args);
 
 }
