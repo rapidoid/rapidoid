@@ -33,7 +33,7 @@ public class Main {
 		Apps.run("oauth-no-state");
 		DB.clear();
 		for (int i = 0; i < 100; i++) {
-			DB.init("task title=abc%s, rating=123", i);
+			DB.init("task title=?, rating=123", "abc" + i);
 		}
 	}
 
