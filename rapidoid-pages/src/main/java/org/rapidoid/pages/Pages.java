@@ -208,6 +208,7 @@ public class Pages {
 
 	public static Object serve(HttpExchange x, Object view) {
 		load(x, view);
+		store(x, view);
 
 		Object result = render(x, view);
 
@@ -279,6 +280,7 @@ public class Pages {
 		}
 
 		load(x, view);
+		store(x, view);
 
 		boolean processView = true;
 
