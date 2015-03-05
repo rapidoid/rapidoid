@@ -110,14 +110,14 @@ public class ExpressionsScreen extends Screen {
 		expr("%LINE%", highlight("abcde"));
 		expr("%LINE%", highlight("abc123-gh7xyz", "\\d+"));
 		expr("%LINE%", email("em"));
-		expr("%LINE%", password("local.pass"));
-		expr("%LINE%", txt("session.aa"));
-		expr("%LINE%", txtbig("global.bb"));
-		expr("%LINE%", checkbox("ch"));
-		expr("%LINE%", dropdown(U.list("A", "B"), "v0"));
-		expr("%LINE%", multiSelect(U.list("A", "B"), "v1"));
-		expr("%LINE%", radios(U.list("A", "B"), "v2"));
-		expr("%LINE%", checkboxes(U.list("A", "B"), "v3"));
+		expr("%LINE%", password("pass"));
+		expr("%LINE%", txt("name", "Joe"));
+		expr("%LINE%", txtbig("desc", "Some text"));
+		expr("%LINE%", checkbox("ch", true));
+		expr("%LINE%", dropdown(U.list("A", "B"), "v0", "B"));
+		expr("%LINE%", multiSelect(U.list("A", "B", "C"), "v1", U.list("A", "C")));
+		expr("%LINE%", radios(U.list("A", "B"), "v2", "A"));
+		expr("%LINE%", checkboxes(U.list("A", "B", "C"), "v3", U.list("A", "C")));
 		expr("%LINE%", display(U.list("a", "b", "c")));
 		expr("%LINE%", inline("abc", checkbox(session("c", true)), OK));
 
@@ -146,7 +146,7 @@ public class ExpressionsScreen extends Screen {
 	}
 
 	private Object generate() {
-		return layout(exprs).cols(4);
+		return layout(exprs).cols(3);
 	}
 
 }
