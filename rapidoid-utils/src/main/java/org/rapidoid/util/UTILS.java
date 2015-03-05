@@ -480,7 +480,7 @@ public class UTILS implements Constants {
 			Collection<?> coll = (Collection<?>) arrOrColl;
 			return coll.contains(value);
 		} else {
-			throw U.illegalArg("Expected array or collection!");
+			throw U.illegalArg("Expected array or collection, but found: " + U.readable(arrOrColl));
 		}
 	}
 

@@ -62,6 +62,8 @@ import org.rapidoid.widget.impl.SessionVar;
 @Since("2.0.0")
 public abstract class BootstrapWidgets extends HTML {
 
+	public static final Tag NOTHING = span(awesome("ban"), " N/A").class_("nothing");
+
 	public static final ButtonWidget SAVE = cmd("^Save");
 
 	public static final ButtonWidget ADD = cmd("^Add");
@@ -456,23 +458,23 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static <T> Var<T> providedVar(String name, T defaultValue) {
-		return sessionVar(name, defaultValue);
+		return session(name, defaultValue);
 	}
 
 	public static HttpExchange httpExchange() {
 		return AppCtx.exchange();
 	}
 
-	public static <T> Var<T> sessionVar(String name, T defaultValue) {
+	public static <T> Var<T> session(String name, T defaultValue) {
 		return new SessionVar<T>(httpExchange(), name, defaultValue);
 	}
 
-	public static <T> Var<T> localVar(String name, T defaultValue) {
-		return sessionVar(name + ":" + viewId(httpExchange()), defaultValue);
+	public static <T> Var<T> local(String name, T defaultValue) {
+		return session(name + ":" + viewId(httpExchange()), defaultValue);
 	}
 
-	public static Var<Integer> localVar(String name, int defaultValue, int min, int max) {
-		Var<Integer> var = sessionVar(name + ":" + viewId(httpExchange()), defaultValue);
+	public static Var<Integer> local(String name, int defaultValue, int min, int max) {
+		Var<Integer> var = session(name + ":" + viewId(httpExchange()), defaultValue);
 
 		// TODO put the constraints into the variable implementation
 		Integer pageN = U.limited(min, var.get(), max);
@@ -635,14 +637,10 @@ public abstract class BootstrapWidgets extends HTML {
 		}
 
 		if (wrap.isEmpty()) {
-			return span(nothing()).class_("value-line");
+			return span(NOTHING).class_("value-line");
 		}
 
 		return wrap;
-	}
-
-	public static Tag nothing() {
-		return span(awesome("ban"), " N/A").class_("nothing");
 	}
 
 	public static Tag inline(Object... contents) {
