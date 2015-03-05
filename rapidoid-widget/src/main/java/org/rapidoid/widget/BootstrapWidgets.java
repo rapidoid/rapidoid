@@ -515,36 +515,40 @@ public abstract class BootstrapWidgets extends HTML {
 		return input().type("email").class_("form-control").bind(var);
 	}
 
-	public static InputTag email(String sessionVar) {
-		return email(providedVar(sessionVar, ""));
+	public static InputTag email(String var) {
+		return email(providedVar(var, ""));
 	}
 
 	public static InputTag password(Var<?> var) {
 		return input().type("password").class_("form-control").bind(var);
 	}
 
-	public static InputTag password(String sessionVar) {
-		return password(providedVar(sessionVar, ""));
+	public static InputTag password(String var) {
+		return password(providedVar(var, ""));
 	}
 
 	public static InputTag txt(Var<?> var) {
 		return input().type("text").class_("form-control").bind(var);
 	}
 
-	public static InputTag txt(String sessionVar) {
-		return txt(providedVar(sessionVar, ""));
+	public static InputTag txt(String var) {
+		return txt(providedVar(var, ""));
 	}
 
 	public static TextareaTag txtbig(Var<?> var) {
 		return textarea().class_("form-control").bind(var);
 	}
 
-	public static TextareaTag txtbig(String sessionVar) {
-		return txtbig(providedVar(sessionVar, ""));
+	public static TextareaTag txtbig(String var) {
+		return txtbig(providedVar(var, ""));
 	}
 
 	public static InputTag checkbox(Var<?> var) {
 		return input().type("checkbox").bind(var);
+	}
+
+	public static InputTag checkbox(String var) {
+		return checkbox(providedVar(var, false));
 	}
 
 	public static SelectTag dropdown(Collection<?> options, Var<?> var) {
@@ -560,6 +564,10 @@ public abstract class BootstrapWidgets extends HTML {
 		return dropdown;
 	}
 
+	public static SelectTag dropdown(Collection<?> options, String var) {
+		return dropdown(options, providedVar(var, null));
+	}
+
 	public static SelectTag multiSelect(Collection<?> options, Var<?> var) {
 		U.notNull(options, "multi-select options");
 		SelectTag select = select().class_("form-control").multiple(true);
@@ -571,6 +579,10 @@ public abstract class BootstrapWidgets extends HTML {
 		}
 
 		return select;
+	}
+
+	public static SelectTag multiSelect(Collection<?> options, String var) {
+		return multiSelect(options, providedVar(var, U.list()));
 	}
 
 	public static Tag[] radios(String name, Collection<?> options, Var<?> var) {
@@ -591,6 +603,10 @@ public abstract class BootstrapWidgets extends HTML {
 		return radios(Rnd.rndStr(30), options, var);
 	}
 
+	public static Tag[] radios(Collection<?> options, String var) {
+		return radios(options, providedVar(var, U.list()));
+	}
+
 	public static Tag[] checkboxes(String name, Collection<?> options, Var<?> var) {
 		U.notNull(options, "checkboxes options");
 		Tag[] checkboxes = new Tag[options.size()];
@@ -606,6 +622,10 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static Tag[] checkboxes(Collection<?> options, Var<?> var) {
 		return checkboxes(Rnd.rndStr(30), options, var);
+	}
+
+	public static Tag[] checkboxes(Collection<?> options, String var) {
+		return checkboxes(options, providedVar(var, U.list()));
 	}
 
 	@SuppressWarnings("unchecked")

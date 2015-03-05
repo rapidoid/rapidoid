@@ -28,6 +28,56 @@ import org.rapidoid.app.Screen;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.FA;
 
+// expr("%LINE%", i18n(String multiLanguageText, Object... formatArgs));
+// expr("%LINE%", property(Item item, String property));
+// expr("%LINE%", render(String templateFileName, Object... namesAndValues));
+// expr("%LINE%", hardcoded(String content));
+// expr("%LINE%", row(ColspanTag... cols));
+// expr("%LINE%", icon(String icon));
+// expr("%LINE%", glyphicon(String glyphicon));
+// expr("%LINE%", a_glyph(String glyphicon, "abc"));
+// expr("%LINE%", a_awesome(String fontAwesomeIcon, "abc"));
+// expr("%LINE%", nav_(boolean fluid, boolean inverse, Tag brand, Object[] navbarContent));
+// expr("%LINE%", containerMaybeFluid(boolean fluid));
+// expr("%LINE%", navbarMenu(boolean onLeft, int activeIndex, Object... menuItems));
+// expr("%LINE%", navbarDropdown(boolean onLeft, Tag menu, Object... subItems));
+// expr("%LINE%", navbarForm(boolean onLeft, Object btnContent, String[] fields, String[] placeholders));
+// expr("%LINE%", navbarSearchForm(String action));
+// expr("%LINE%", navbarPage(boolean fluid, Tag brand, Object[] navbarContent, Object pageContent));
+// expr("%LINE%", modal(Object title, Object content, Object footer));
+// expr("%LINE%", xClose(String cmd));
+// expr("%LINE%", caret());
+// expr("%LINE%", col_(int cols, "abc"));
+// expr("%LINE%", cmd(String cmd, Object... args));
+// expr("%LINE%", navigate(String cmd));
+// expr("%LINE%", cmds(String... commands));
+// expr("%LINE%", grid(Class<T>  type, Object[] items, String sortOrder, int pageSize,
+// grid(Class<T>  type, Collection<T>  items, String sortOrder, int pageSize,
+// grid(Items items, String sortOrder, int pageSize, String... properties));
+// expr("%LINE%", pager(int from, int to, Var<Integer>  pageNumber));
+// expr("%LINE%", form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc,
+// show(Object bean, String... properties));
+// expr("%LINE%", show(final Item item, String... properties));
+// expr("%LINE%", show(DataManager dataManager, final Item item, String... properties));
+// expr("%LINE%", edit(Object bean, String... properties));
+// expr("%LINE%", edit(final Item item, String... properties));
+// expr("%LINE%", edit(DataManager dataManager, final Item item, String... properties));
+// expr("%LINE%", create(Object bean, String... properties));
+// expr("%LINE%", create(final Item item, String... properties));
+// expr("%LINE%", create(DataManager dataManager, final Item item, String... properties));
+// expr("%LINE%", field(DataManager dataManager, FormMode mode, FormLayout layout, Property prop,
+// field(DataManager dataManager, FormMode mode, FormLayout layout, Item item,
+// page(boolean devMode, String pageTitle, Object head, Object body));
+// expr("%LINE%", page(boolean devMode, String pageTitle, Object body));
+// expr("%LINE%", media(Object left, Object title, Object body, String targetUrl));
+// expr("%LINE%", mediaList(U.<Object>  list("abc", "xyz")));
+// expr("%LINE%", providedVar(String name, T defaultValue));
+// expr("%LINE%", sessionVar(String name, T defaultValue));
+// expr("%LINE%", localVar(String name, T defaultValue));
+// expr("%LINE%", localVar(String name, int defaultValue, int min, int max));
+// expr("%LINE%", isEntity(Object obj));
+// expr("%LINE%", urlFor(Object entity));
+
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
 public class ExpressionsScreen extends Screen {
@@ -122,15 +172,15 @@ public class ExpressionsScreen extends Screen {
 		// expr("%LINE%", txtbig(Var<?> var));
 		expr("%LINE%", txtbig("global.bb"));
 		// expr("%LINE%", checkbox(Var<?> var));
-		expr("%LINE%", dropdown(U.list("A", "B"), sessionVar("v3", "B")));
+		expr("%LINE%", dropdown(U.list("A", "B"), session("v3", "B")));
 		// expr("%LINE%", multiSelect(Collection<?> options, Var<?> var));
 		// expr("%LINE%", radios(String name, Collection<?> options, Var<?> var));
 		// expr("%LINE%", radios(Collection<?> options, Var<?> var));
 		// expr("%LINE%", checkboxes(String name, Collection<?> options, Var<?> var));
 		// expr("%LINE%", checkboxes(Collection<?> options, Var<?> var));
 		expr("%LINE%", display(U.list("a", "b", "c")));
-		expr("%LINE%", nothing());
-		expr("%LINE%", inline("abc", checkbox(sessionVar("c", true)), OK));
+		expr("%LINE%", NOTHING);
+		expr("%LINE%", inline("abc", checkbox(session("c", true)), OK));
 
 		expr("%LINE%", SAVE);
 		expr("%LINE%", ADD);
