@@ -12,41 +12,31 @@ public class BoolTest extends TestCommons {
 		Bool t = new SimpleBool(true);
 		Bool f = new SimpleBool(false);
 
-		Bool x1 = t.xor(f);
-		Bool x2 = f.xor(t);
-		Bool x3 = t.xor(t);
-		Bool x4 = f.xor(f);
+		bool(t.xor(f), true);
+		bool(f.xor(t), true);
+		bool(t.xor(t), false);
+		bool(f.xor(f), false);
 
-		Bool or1 = t.or(f);
-		Bool or2 = f.or(t);
-		Bool or3 = t.or(t);
-		Bool or4 = f.or(f);
+		bool(t.or(f), true);
+		bool(f.or(t), true);
+		bool(t.or(t), true);
+		bool(f.or(f), false);
 
-		Bool and1 = t.and(f);
-		Bool and2 = f.and(t);
-		Bool and3 = t.and(t);
-		Bool and4 = f.and(f);
+		bool(t.and(f), false);
+		bool(f.and(t), false);
+		bool(t.and(t), true);
+		bool(f.and(f), false);
 
-		Bool notT = t.not();
-		Bool notF = f.not();
-
-		eq(x1.get(), true);
-		eq(x2.get(), true);
-		eq(x3.get(), false);
-		eq(x4.get(), false);
-
-		eq(or1.get(), true);
-		eq(or2.get(), true);
-		eq(or3.get(), true);
-		eq(or4.get(), false);
-
-		eq(and1.get(), false);
-		eq(and2.get(), false);
-		eq(and3.get(), true);
-		eq(and4.get(), false);
-
-		eq(notT.get(), false);
-		eq(notF.get(), true);
+		bool(t.not(), false);
+		bool(f.not(), true);
 
 	}
+
+	private void bool(Bool b, boolean bool) {
+		
+		Bool x = b;
+		
+		eq(x.get(), bool);
+	}
+
 }
