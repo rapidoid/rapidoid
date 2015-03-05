@@ -26,15 +26,10 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.impl.TagRenderer;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.HttpExchangeImpl;
-import org.rapidoid.http.HttpResponses;
-import org.rapidoid.http.InMemoryHttpSession;
-import org.rapidoid.net.impl.RapidoidConnection;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.var.Var;
@@ -47,7 +42,7 @@ public class WidgetTestCommons extends TestCommons {
 	protected static final Map<Integer, Object> NO_CHANGES = Collections.EMPTY_MAP;
 
 	protected void print(TagContext ctx, Object content) {
-		HttpExchange x = setupMockExchange(ctx);
+		HttpExchange x = setupMockExchange();
 
 		content = preprocess(content, x);
 
@@ -70,7 +65,7 @@ public class WidgetTestCommons extends TestCommons {
 	}
 
 	protected void has(TagContext ctx, Object content, String... containingTexts) {
-		HttpExchange x = setupMockExchange(ctx);
+		HttpExchange x = setupMockExchange();
 
 		content = preprocess(content, x);
 
@@ -83,7 +78,7 @@ public class WidgetTestCommons extends TestCommons {
 	}
 
 	protected void hasRegex(TagContext ctx, Object content, String... containingRegexes) {
-		HttpExchange x = setupMockExchange(ctx);
+		HttpExchange x = setupMockExchange();
 
 		content = preprocess(content, x);
 
@@ -98,18 +93,8 @@ public class WidgetTestCommons extends TestCommons {
 		eq(var.get(), value);
 	}
 
-	protected static HttpExchange setupMockExchange(TagContext ctx) {
-		HttpExchangeImpl x = new HttpExchangeImpl();
-
-		BufGroup bufs = new BufGroup(2);
-		RapidoidConnection conn = new RapidoidConnection(null, bufs);
-		x.setConnection(conn);
-
-		InMemoryHttpSession session = new InMemoryHttpSession();
-		session.openSession("sess1");
-		// session.setAttribute("sess1", Pages.SESSION_CTX, ctx);
-		x.init(new HttpResponses(false, false), session, null);
-
+	protected static HttpExchange setupMockExchange() {
+		HttpExchange x = new MockHttpExchange();
 		AppCtx.reset();
 		AppCtx.setExchange(x);
 		return x;

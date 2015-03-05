@@ -14,6 +14,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-http-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-net</artifactId>
 			<version>${project.version}</version>
 		</dependency>

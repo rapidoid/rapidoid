@@ -39,11 +39,11 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.HttpExchangeHolder;
 import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.http.HttpSuccessException;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
+import org.rapidoid.pages.HttpExchangeHolder;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.pages.impl.ComplexView;
 import org.rapidoid.security.Secure;
@@ -173,7 +173,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 			}
 		}
 
-		if (!x.query_().range().isEmpty()) {
+		if (!x.query().isEmpty()) {
 			return null;
 		}
 

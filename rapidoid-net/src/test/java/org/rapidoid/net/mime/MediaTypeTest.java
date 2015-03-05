@@ -23,6 +23,7 @@ package org.rapidoid.net.mime;
 import org.rapidoid.NetTestCommons;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.mime.MediaType;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")

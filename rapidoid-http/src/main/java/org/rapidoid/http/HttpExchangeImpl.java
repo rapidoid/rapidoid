@@ -39,9 +39,9 @@ import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.inject.IoC;
 import org.rapidoid.log.Log;
+import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
-import org.rapidoid.net.mime.MediaType;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Constants;
@@ -54,7 +54,7 @@ import org.rapidoid.wrap.BoolWrap;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements HttpExchange,
+public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements LowLevelHttpExchange,
 		HttpInterception, Constants {
 
 	public static final String SESSION_COOKIE = "JSESSIONID";
@@ -726,14 +726,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeHeaders sessionSet(String name, Object value) {
+	public synchronized void sessionSet(String name, Object value) {
 		if (value != null) {
 			session.setAttribute(sessionId(), name, value);
 		} else {
 			session.deleteAttribute(sessionId(), name);
 		}
-
-		return this;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -764,16 +762,14 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeHeaders closeSession() {
+	public synchronized void closeSession() {
 		session.closeSession(sessionId());
 		sessionId = null;
-		return this;
 	}
 
 	@Override
-	public synchronized HttpExchangeHeaders clearSession(String sessionId) {
+	public synchronized void clearSession(String sessionId) {
 		session.clearSession(sessionId);
-		return this;
 	}
 
 	@Override

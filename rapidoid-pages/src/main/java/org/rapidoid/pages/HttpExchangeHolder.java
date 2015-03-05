@@ -1,12 +1,12 @@
-package org.rapidoid.http;
+package org.rapidoid.pages;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.SuccessException;
+import org.rapidoid.http.HttpExchange;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-pages
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -24,18 +24,12 @@ import org.rapidoid.util.SuccessException;
  * #L%
  */
 
-@SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class HttpSuccessException extends SuccessException {
+public interface HttpExchangeHolder {
 
-	private static final HttpSuccessException INSTANCE = new HttpSuccessException();
+	void setHttpExchange(HttpExchange x);
 
-	private HttpSuccessException() {
-	}
-
-	public static HttpSuccessException get() {
-		return INSTANCE;
-	}
+	HttpExchange getHttpExchange();
 
 }

@@ -1,8 +1,5 @@
 package org.rapidoid.http;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 /*
  * #%L
  * rapidoid-http
@@ -23,12 +20,40 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.data.BinaryMultiData;
+import org.rapidoid.data.Data;
+import org.rapidoid.data.MultiData;
+
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public interface HttpExchangeHolder {
+@Since("2.3.0")
+public interface LowLevelHttpExchange extends HttpExchange {
 
-	void setHttpExchange(HttpExchange x);
+	Data verb_();
 
-	HttpExchange getHttpExchange();
+	Data uri_();
+
+	Data path_();
+
+	Data subpath_();
+
+	Data query_();
+
+	Data protocol_();
+
+	Data body_();
+
+	Data host_();
+
+	MultiData params_();
+
+	MultiData headers_();
+
+	MultiData cookies_();
+
+	MultiData data_();
+
+	BinaryMultiData files_();
 
 }

@@ -7,14 +7,12 @@ import org.rapidoid.annotation.Optional;
 import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.Entity;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbList;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
+import org.rapidoid.db.Entity;
 import org.rapidoid.security.annotation.CanChange;
-import org.rapidoid.security.annotation.CanDelete;
-import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.CommonRoles;
 

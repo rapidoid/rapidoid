@@ -1,8 +1,8 @@
-package org.rapidoid.http;
+package org.rapidoid.widget.impl;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-widget
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -22,7 +22,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.AppCtx;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.ImportExport;
 import org.rapidoid.var.impl.AbstractVar;
 
@@ -32,27 +32,30 @@ public class SessionVar<T> extends AbstractVar<T> {
 
 	private static final long serialVersionUID = 2761159925375675659L;
 
+	private final HttpExchange ctx;
+
 	private final String name;
 
 	private final T defaultValue;
 
-	public SessionVar(ImportExport props) {
+	public SessionVar(HttpExchange ctx, ImportExport props) {
+		this.ctx = ctx;
 		name = props.get(A);
 		defaultValue = props.get(B);
 	}
 
-	public SessionVar(String name, T defaultValue) {
+	public SessionVar(HttpExchange ctx, String name, T defaultValue) {
+		this.ctx = ctx;
 		this.name = name;
 		this.defaultValue = defaultValue;
 	}
 
 	@Override
 	public T get() {
-		HttpExchange x = AppCtx.exchange();
-		T val = x.session(name, null);
+		T val = ctx.session(name, null);
 
 		if (val == null) {
-			x.sessionSet(name, defaultValue);
+			ctx.sessionSet(name, defaultValue);
 			val = defaultValue;
 		}
 
@@ -61,8 +64,7 @@ public class SessionVar<T> extends AbstractVar<T> {
 
 	@Override
 	public void set(T value) {
-		HttpExchange x = AppCtx.exchange();
-		x.sessionSet(name, value);
+		ctx.sessionSet(name, value);
 	}
 
 	@Override

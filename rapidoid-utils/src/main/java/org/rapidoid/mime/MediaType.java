@@ -1,4 +1,4 @@
-package org.rapidoid.net.mime;
+package org.rapidoid.mime;
 
 import java.util.Map;
 
@@ -8,7 +8,7 @@ import org.rapidoid.util.U;
 
 /*
  * #%L
- * rapidoid-net
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%

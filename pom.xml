@@ -69,12 +69,13 @@
 		<module>rapidoid-test-commons</module>
 		<module>rapidoid-buffer</module>
 		<module>rapidoid-net</module>
+		<module>rapidoid-http-api</module>
 		<module>rapidoid-http</module>
 		<module>rapidoid-websocket</module>
-		<module>rapidoid-html</module>
 		<module>rapidoid-measure</module>
 		<module>rapidoid-pojo</module>
 		<module>rapidoid-rest</module>
+		<module>rapidoid-html</module>
 		<module>rapidoid-widget</module>
 		<module>rapidoid-pages</module>
 		<module>rapidoid-oauth</module>

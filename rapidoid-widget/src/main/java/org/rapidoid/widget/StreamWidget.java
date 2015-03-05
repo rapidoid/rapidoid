@@ -49,7 +49,7 @@ public class StreamWidget extends AbstractWidget {
 	}
 
 	protected String defaultDataUrl() {
-		String url = exchange().uri();
+		String url = ctx().uri();
 
 		if (url.endsWith("/")) {
 			url = U.mid(url, 0, -1);

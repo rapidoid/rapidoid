@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.db.DB;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.HttpExchangeHolder;
+import org.rapidoid.pages.HttpExchangeHolder;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -35,7 +35,7 @@ public abstract class Screen extends AppGUI implements HttpExchangeHolder {
 	@Session
 	public String modal = null;
 
-	private AppContext ctx;
+	private HttpExchange ctx;
 
 	protected void showModal(String modalName) {
 		modal = modalName;
@@ -68,10 +68,10 @@ public abstract class Screen extends AppGUI implements HttpExchangeHolder {
 
 	@Override
 	public void setHttpExchange(HttpExchange x) {
-		this.ctx = new HttpAppContext(x);
+		this.ctx = x;
 	}
 
-	protected AppContext ctx() {
+	protected HttpExchange ctx() {
 		U.must(ctx != null, "App context is not initialized yet!");
 		return ctx;
 	}

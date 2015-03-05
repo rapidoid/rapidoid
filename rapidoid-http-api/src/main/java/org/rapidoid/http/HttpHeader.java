@@ -5,7 +5,7 @@ import org.rapidoid.annotation.Since;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-http-api
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -23,18 +23,28 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
-@SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
-@Since("2.1.0")
-public class HttpNotFoundException extends RuntimeException {
+@Since("2.0.0")
+public class HttpHeader {
 
-	private static final HttpNotFoundException INSTANCE = new HttpNotFoundException();
+	public static final HttpHeader SET_COOKIE = new HttpHeader("Set-Cookie");
 
-	private HttpNotFoundException() {
+	public static final HttpHeader CONTENT_TYPE = new HttpHeader("Content-Type");
+
+	public static final HttpHeader CONTENT_DISPOSITION = new HttpHeader("Content-Disposition");
+
+	public static final HttpHeader CACHE_CONTROL = new HttpHeader("Cache-Control");
+
+	public static final HttpHeader LOCATION = new HttpHeader("Location");
+
+	private final byte[] bytes;
+
+	public HttpHeader(String name) {
+		this.bytes = name.getBytes();
 	}
 
-	public static HttpNotFoundException get() {
-		return INSTANCE;
+	public byte[] getBytes() {
+		return bytes;
 	}
 
 }

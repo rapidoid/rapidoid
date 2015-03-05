@@ -36,7 +36,7 @@ public abstract class AbstractWidget extends BootstrapWidgets implements TagWidg
 
 	private HttpExchange x;
 
-	protected HttpExchange exchange() {
+	protected HttpExchange ctx() {
 		U.notNull(x, "HTTP exchange");
 		return x;
 	}

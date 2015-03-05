@@ -119,5 +119,4 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 
 		shutdown();
 	}
-
 }

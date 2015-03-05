@@ -36,7 +36,7 @@ public class TableWidgetTest extends WidgetTestCommons {
 	public void testTableWidget() {
 
 		TagContext ctx = Tags.context();
-		setupMockExchange(ctx);
+		setupMockExchange();
 
 		Person john = new Person("John", 20);
 		john.id = 1;

@@ -3,10 +3,10 @@ package org.rapidoid.demo.taskplanner.model;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.Entity;
 import org.rapidoid.db.DB;
 import org.rapidoid.db.DbRef;
 import org.rapidoid.db.DbSet;
+import org.rapidoid.db.Entity;
 
 /*
  * #%L

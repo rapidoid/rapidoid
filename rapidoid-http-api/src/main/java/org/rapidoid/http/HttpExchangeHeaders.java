@@ -2,11 +2,11 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.net.mime.MediaType;
+import org.rapidoid.mime.MediaType;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-http-api
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -58,23 +58,11 @@ public interface HttpExchangeHeaders extends HttpExchangeBody {
 
 	HttpExchangeHeaders setCookie(String name, String value, String... extras);
 
-	HttpExchangeHeaders setContentType(MediaType contentType);
-
-	HttpExchangeHeaders sessionSet(String name, Object value);
-
-	HttpExchangeHeaders closeSession();
-
-	HttpExchangeHeaders clearSession(String sessionId);
+	HttpExchangeBody setContentType(MediaType contentType);
 
 	HttpExchangeHeaders accessDeniedIf(boolean accessDeniedCondition);
 
 	HttpExchangeHeaders authorize(Class<?> clazz);
-
-	String sessionId();
-
-	boolean hasSession();
-
-	boolean hasSession(String sessionId);
 
 	int responseCode();
 

@@ -2,7 +2,7 @@ package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-http-api
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -24,52 +24,30 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.data.BinaryMultiData;
-import org.rapidoid.data.Data;
-import org.rapidoid.data.MultiData;
-import org.rapidoid.net.abstracts.CtxFull;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, HttpExchangeHeaders {
+public interface HttpExchange extends HttpExchangeHeaders {
 
 	/* REQUEST METHODS: */
 
 	String verb();
 
-	Data verb_();
-
 	String uri();
-
-	Data uri_();
 
 	String path();
 
-	Data path_();
-
 	String subpath();
-
-	Data subpath_();
 
 	String query();
 
-	Data query_();
-
 	String protocol();
-
-	Data protocol_();
 
 	String body();
 
-	Data body_();
-
 	String host();
 
-	Data host_();
-
 	Map<String, String> params();
-
-	MultiData params_();
 
 	String param(String name);
 
@@ -77,15 +55,11 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	Map<String, String> headers();
 
-	MultiData headers_();
-
 	String header(String name);
 
 	String header(String name, String defaultValue);
 
 	Map<String, String> cookies();
-
-	MultiData cookies_();
 
 	String cookie(String name);
 
@@ -93,15 +67,11 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	Map<String, String> data();
 
-	MultiData data_();
-
 	String data(String name);
 
 	String data(String name, String defaultValue);
 
 	Map<String, byte[]> files();
-
-	BinaryMultiData files_();
 
 	byte[] file(String name);
 
@@ -115,7 +85,19 @@ public interface HttpExchange extends CtxFull<HttpExchange, HttpExchangeBody>, H
 
 	<T> T session(String name, T defaultValue);
 
+	void sessionSet(String name, Object value);
+
 	<T> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+
+	String sessionId();
+
+	void closeSession();
+
+	void clearSession(String sessionId);
+
+	boolean hasSession();
+
+	boolean hasSession(String sessionId);
 
 	String pathSegment(int segmentIndex);
 

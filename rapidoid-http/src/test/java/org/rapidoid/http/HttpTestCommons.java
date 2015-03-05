@@ -67,8 +67,10 @@ public abstract class HttpTestCommons extends TestCommons {
 		server();
 
 		server.get("/echo", new Handler() {
+
 			@Override
-			public Object handle(HttpExchange x) {
+			public Object handle(HttpExchange h) throws Exception {
+				LowLevelHttpExchange x = (LowLevelHttpExchange) h;
 				return x.verb_().get() + ":" + x.path_().get() + ":" + x.subpath_().get() + ":" + x.query_().get();
 			}
 		});
@@ -85,8 +87,8 @@ public abstract class HttpTestCommons extends TestCommons {
 			@Override
 			public Object handle(HttpExchange x) {
 				return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.data().get("a"), x.files()
-						.size(), UTILS.md5(x.files().get("f1")), UTILS.md5(x.files().get("f2")), UTILS.md5(U.or(
-						x.files().get("f3"), new byte[0])));
+						.size(), UTILS.md5(x.files().get("f1")), UTILS.md5(x.files().get("f2")), UTILS.md5(U.or(x
+						.files().get("f3"), new byte[0])));
 			}
 		});
 

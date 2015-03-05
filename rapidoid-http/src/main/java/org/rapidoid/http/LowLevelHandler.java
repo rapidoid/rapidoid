@@ -1,5 +1,8 @@
 package org.rapidoid.http;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 /*
  * #%L
  * rapidoid-http
@@ -20,28 +23,10 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.io.File;
-import java.io.OutputStream;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.net.abstracts.CtxWrite;
-import org.rapidoid.net.mime.MediaType;
-
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public interface HttpExchangeBody extends CtxWrite<HttpExchangeBody> {
+@Since("2.3.0")
+public interface LowLevelHandler {
 
-	HttpExchangeBody sendFile(File file);
-
-	HttpExchangeBody sendFile(MediaType mediaType, byte[] bytes);
-
-	HttpSuccessException redirect(String url);
-
-	HttpSuccessException goBack(int steps);
-
-	HttpExchangeBody addToPageStack();
-
-	OutputStream outputStream();
+	Object handle(LowLevelHttpExchange x) throws Exception;
 
 }
