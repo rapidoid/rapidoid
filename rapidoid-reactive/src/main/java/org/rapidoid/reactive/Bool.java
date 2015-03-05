@@ -10,4 +10,6 @@ public interface Bool {
 
 	Bool and(Bool v);
 
+	Bool not();
+
 }

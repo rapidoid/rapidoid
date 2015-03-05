@@ -19,4 +19,8 @@ public abstract class AbstractBool implements Bool {
 		return new AndBool(this, v);
 	}
 	
+	@Override
+	public Bool not() {
+		return new NotBool(this);
+	}
 }

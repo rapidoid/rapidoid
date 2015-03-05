@@ -26,7 +26,10 @@ public class BoolTest extends TestCommons {
 		Bool and2 = f.and(t);
 		Bool and3 = t.and(t);
 		Bool and4 = f.and(f);
-		
+
+		Bool notT = t.not();
+		Bool notF = f.not();
+
 		eq(x1.get(), true);
 		eq(x2.get(), true);
 		eq(x3.get(), false);
@@ -41,6 +44,9 @@ public class BoolTest extends TestCommons {
 		eq(and2.get(), false);
 		eq(and3.get(), true);
 		eq(and4.get(), false);
+
+		eq(notT.get(), false);
+		eq(notF.get(), true);
 
 	}
 }
