@@ -646,7 +646,15 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Tag inline(Object... contents) {
-		Tag ctrls = div(contents).class_("form-group");
+		Tag ctrls = div().class_("form-group");
+
+		for (int i = 0; i < contents.length; i++) {
+			if (i > 0) {
+				ctrls = ctrls.append(NBSP);
+			}
+			ctrls = ctrls.append(contents[i]);
+		}
+
 		return form(ctrls).class_("form-inline");
 	}
 
