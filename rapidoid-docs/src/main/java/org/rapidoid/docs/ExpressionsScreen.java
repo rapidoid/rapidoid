@@ -86,42 +86,17 @@ public class ExpressionsScreen extends Screen {
 
 	Object content() {
 
-		// expr("%LINE%", i18n(String multiLanguageText, Object... formatArgs));
-		// expr("%LINE%", property(Item item, String property));
-		// expr("%LINE%", render(String templateFileName, Object... namesAndValues));
-		// expr("%LINE%", hardcoded(String content));
-		expr("%LINE%", table_("abc"));
-		// expr("%LINE%", row(ColspanTag... cols));
-		expr("%LINE%", row("abc"));
-		expr("%LINE%", container("abc"));
-		expr("%LINE%", containerFluid("abc"));
-		// expr("%LINE%", icon(String icon));
-		// expr("%LINE%", glyphicon(String glyphicon));
-		expr("%LINE%", FA.COG);
-		expr("%LINE%", FA.FLAG);
-		// expr("%LINE%", a_glyph(String glyphicon, "abc"));
-		// expr("%LINE%", a_awesome(String fontAwesomeIcon, "abc"));
 		expr("%LINE%", btn("abc"));
 		expr("%LINE%", btn("abc").primary());
 		expr("%LINE%", btn("great").success());
 		expr("%LINE%", btn("information").info());
 		expr("%LINE%", btn("careful").warning());
 		expr("%LINE%", btn("Delete!").danger());
-		// expr("%LINE%", nav_(boolean fluid, boolean inverse, Tag brand, Object[] navbarContent));
-		// expr("%LINE%", containerMaybeFluid(boolean fluid));
-		expr("%LINE%", btnCollapse());
-		// expr("%LINE%", navbarMenu(boolean onLeft, int activeIndex, Object... menuItems));
-		// expr("%LINE%", navbarDropdown(boolean onLeft, Tag menu, Object... subItems));
-		expr("%LINE%", menuDivider());
-		// expr("%LINE%", navbarForm(boolean onLeft, Object btnContent, String[] fields, String[] placeholders));
-		// expr("%LINE%", navbarSearchForm(String action));
-		// expr("%LINE%", navbarPage(boolean fluid, Tag brand, Object[] navbarContent, Object pageContent));
-		// expr("%LINE%", modal(Object title, Object content, Object footer));
-		// expr("%LINE%", xClose(String cmd));
-		expr("%LINE%", caret());
 		expr("%LINE%", jumbotron("abc"));
 		expr("%LINE%", well("abc"));
-		// expr("%LINE%", col_(int cols, "abc"));
+		expr("%LINE%", FA.COG);
+		expr("%LINE%", FA.FLAG);
+		expr("%LINE%", row("abc"));
 		expr("%LINE%", row(col2("a"), col10("b")));
 		expr("%LINE%", row(col4("c"), col4("d"), col4("e")));
 		expr("%LINE%", row(col1("g"), col7("g"), col4("e")));
@@ -129,59 +104,24 @@ public class ExpressionsScreen extends Screen {
 		expr("%LINE%", mid4("de", right("f")));
 		expr("%LINE%", mid6("e", right("f")));
 		expr("%LINE%", mid8("g", right("h")));
-		// expr("%LINE%", cmd(String cmd, Object... args));
-		// expr("%LINE%", navigate(String cmd));
-		// expr("%LINE%", cmds(String... commands));
 		expr("%LINE%", titleBox("abc"));
 		expr("%LINE%", right("abc"));
 		expr("%LINE%", panel("abc"));
-		// expr("%LINE%", grid(Class<T> type, Object[] items, String sortOrder, int pageSize,
-		// grid(Class<T> type, Collection<T> items, String sortOrder, int pageSize,
-		// grid(Items items, String sortOrder, int pageSize, String... properties));
-		// expr("%LINE%", pager(int from, int to, Var<Integer> pageNumber));
-		// expr("%LINE%", form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc,
-		// show(Object bean, String... properties));
-		// expr("%LINE%", show(final Item item, String... properties));
-		// expr("%LINE%", show(DataManager dataManager, final Item item, String... properties));
-		// expr("%LINE%", edit(Object bean, String... properties));
-		// expr("%LINE%", edit(final Item item, String... properties));
-		// expr("%LINE%", edit(DataManager dataManager, final Item item, String... properties));
-		// expr("%LINE%", create(Object bean, String... properties));
-		// expr("%LINE%", create(final Item item, String... properties));
-		// expr("%LINE%", create(DataManager dataManager, final Item item, String... properties));
-		// expr("%LINE%", field(DataManager dataManager, FormMode mode, FormLayout layout, Property prop,
-		// field(DataManager dataManager, FormMode mode, FormLayout layout, Item item,
-		// page(boolean devMode, String pageTitle, Object head, Object body));
-		// expr("%LINE%", page(boolean devMode, String pageTitle, Object body));
-		// expr("%LINE%", media(Object left, Object title, Object body, String targetUrl));
-		// expr("%LINE%", mediaList(U.<Object> list("abc", "xyz")));
-		// expr("%LINE%", providedVar(String name, T defaultValue));
-		// expr("%LINE%", sessionVar(String name, T defaultValue));
-		// expr("%LINE%", localVar(String name, T defaultValue));
-		// expr("%LINE%", localVar(String name, int defaultValue, int min, int max));
-		// expr("%LINE%", isEntity(Object obj));
-		// expr("%LINE%", urlFor(Object entity));
 		expr("%LINE%", highlight("abcde"));
 		expr("%LINE%", highlight("abc123-gh7xyz", "\\d+"));
-		// expr("%LINE%", email(Var<?> var));
 		expr("%LINE%", email("em"));
-		// expr("%LINE%", password(Var<?> var));
 		expr("%LINE%", password("local.pass"));
-		// expr("%LINE%", txt(Var<?> var));
 		expr("%LINE%", txt("session.aa"));
-		// expr("%LINE%", txtbig(Var<?> var));
 		expr("%LINE%", txtbig("global.bb"));
-		// expr("%LINE%", checkbox(Var<?> var));
-		expr("%LINE%", dropdown(U.list("A", "B"), session("v3", "B")));
-		// expr("%LINE%", multiSelect(Collection<?> options, Var<?> var));
-		// expr("%LINE%", radios(String name, Collection<?> options, Var<?> var));
-		// expr("%LINE%", radios(Collection<?> options, Var<?> var));
-		// expr("%LINE%", checkboxes(String name, Collection<?> options, Var<?> var));
-		// expr("%LINE%", checkboxes(Collection<?> options, Var<?> var));
+		expr("%LINE%", checkbox("ch"));
+		expr("%LINE%", dropdown(U.list("A", "B"), "v0"));
+		expr("%LINE%", multiSelect(U.list("A", "B"), "v1"));
+		expr("%LINE%", radios(U.list("A", "B"), "v2"));
+		expr("%LINE%", checkboxes(U.list("A", "B"), "v3"));
 		expr("%LINE%", display(U.list("a", "b", "c")));
-		expr("%LINE%", NOTHING);
 		expr("%LINE%", inline("abc", checkbox(session("c", true)), OK));
 
+		expr("%LINE%", NOTHING);
 		expr("%LINE%", SAVE);
 		expr("%LINE%", ADD);
 		expr("%LINE%", UPDATE);
