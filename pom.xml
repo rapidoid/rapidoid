@@ -10,7 +10,7 @@
 
 	<groupId>org.rapidoid</groupId>
 	<artifactId>rapidoid</artifactId>
-	<version>2.3.0-SNAPSHOT</version>
+	<version>2.3.0</version>
 	<packaging>pom</packaging>
 
 	<name>Rapidoid</name>
@@ -43,7 +43,7 @@
 		<connection>scm:git:git://github.com/rapidoid/rapidoid.git</connection>
 		<developerConnection>scm:git:git@github.com:rapidoid/rapidoid.git</developerConnection>
 		<url>https://github.com/rapidoid/rapidoid</url>
-		<tag>HEAD</tag>
+		<tag>rapidoid-2.3.0</tag>
 	</scm>
 
 	<properties>
