@@ -202,6 +202,7 @@ public class Examples {
 		saveTo(server, "/search", path + "search.html");
 		saveTo(server, "/rapidoid.js", path + "../rapidoid.js");
 		saveTo(server, "/rapidoid.css", path + "../rapidoid.css");
+		saveTo(server, "/ng-infinite-scroll-1.0.min.js", path + "../ng-infinite-scroll-1.0.min.js");
 
 		for (int i = 1; i <= 5; i++) {
 			saveTo(server, "//bootstrap/css/theme-" + i + ".css", path + "../theme-" + i + ".css");
@@ -235,6 +236,7 @@ public class Examples {
 		// TODO remove these hacks
 		out = out.replace("/rapidoid.css", "../rapidoid.css");
 		out = out.replace("/rapidoid.js", "../rapidoid.js");
+		out = out.replace("/ng-infinite-scroll-1.0.min.js", "../ng-infinite-scroll-1.0.min.js");
 		out = out.replace("/bootstrap/css/theme-", "../theme-");
 		out = out.replace("\"//", "\"http://");
 		out = out.replace("href=\"/\"", "href=\"index.html\"");
