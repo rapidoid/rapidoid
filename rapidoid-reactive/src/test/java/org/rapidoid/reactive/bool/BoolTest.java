@@ -2,6 +2,8 @@ package org.rapidoid.reactive.bool;
 
 import org.junit.Test;
 import org.rapidoid.reactive.Bool;
+import org.rapidoid.reactive.Text;
+import org.rapidoid.reactive.text.SimpleText;
 import org.rapidoid.test.TestCommons;
 
 public class BoolTest extends TestCommons {
@@ -11,6 +13,9 @@ public class BoolTest extends TestCommons {
 
 		Bool t = new SimpleBool(true);
 		Bool f = new SimpleBool(false);
+
+		Text abc = new SimpleText("abc");
+		Text a = new SimpleText("a");
 
 		bool(t.xor(f), true);
 		bool(f.xor(t), true);
@@ -29,13 +34,14 @@ public class BoolTest extends TestCommons {
 
 		bool(t.not(), false);
 		bool(f.not(), true);
+		bool(abc.contains(a), true);
 
 	}
 
 	private void bool(Bool b, boolean bool) {
-		
+
 		Bool x = b;
-		
+
 		eq(x.get(), bool);
 	}
 

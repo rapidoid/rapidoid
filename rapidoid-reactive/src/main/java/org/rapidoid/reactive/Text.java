@@ -24,4 +24,6 @@ public interface Text {
 
 	Text mid(Num beginIndex, Num endIndex);
 
+	Bool contains(Text v);
+
 }

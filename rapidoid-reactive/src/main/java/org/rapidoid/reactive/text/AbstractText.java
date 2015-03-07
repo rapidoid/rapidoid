@@ -1,5 +1,6 @@
 package org.rapidoid.reactive.text;
 
+import org.rapidoid.reactive.Bool;
 import org.rapidoid.reactive.Num;
 import org.rapidoid.reactive.Text;
 
@@ -53,6 +54,11 @@ public abstract class AbstractText implements Text {
 	@Override
 	public Text mid(Num beginIndex, Num endIndex) {
 		return new MidText(this, beginIndex, endIndex);
+	}
+
+	@Override
+	public Bool contains(Text v) {
+		return new ContainsText(this, v);
 	}
 
 }
