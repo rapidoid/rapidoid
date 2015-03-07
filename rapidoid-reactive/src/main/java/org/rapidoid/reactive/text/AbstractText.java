@@ -66,4 +66,9 @@ public abstract class AbstractText implements Text {
 		return new EndsText(this, v);
 	}
 
+	@Override
+	public Bool startsWith(Text v) {
+		return new StartsText(this, v);
+	}
+
 }

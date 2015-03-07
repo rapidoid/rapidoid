@@ -28,4 +28,6 @@ public interface Text {
 
 	Bool endsWith(Text v);
 
+	Bool startsWith(Text v);
+
 }

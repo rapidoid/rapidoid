@@ -35,10 +35,12 @@ public class BoolTest extends TestCommons {
 
 		bool(t.not(), false);
 		bool(f.not(), true);
-		
+
 		bool(abc.contains(a), true);
-		
+
 		bool(abc.endsWith(bc), true);
+
+		bool(abc.startsWith(a), true);
 
 	}
 
