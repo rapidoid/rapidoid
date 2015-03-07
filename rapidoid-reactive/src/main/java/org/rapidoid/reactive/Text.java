@@ -26,4 +26,6 @@ public interface Text {
 
 	Bool contains(Text v);
 
+	Bool endsWith(Text v);
+
 }

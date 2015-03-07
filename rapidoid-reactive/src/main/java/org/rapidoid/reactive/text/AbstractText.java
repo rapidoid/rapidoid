@@ -61,4 +61,9 @@ public abstract class AbstractText implements Text {
 		return new ContainsText(this, v);
 	}
 
+	@Override
+	public Bool endsWith(Text v) {
+		return new EndsText(this, v);
+	}
+
 }

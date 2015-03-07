@@ -16,6 +16,7 @@ public class BoolTest extends TestCommons {
 
 		Text abc = new SimpleText("abc");
 		Text a = new SimpleText("a");
+		Text bc = new SimpleText("bc");
 
 		bool(t.xor(f), true);
 		bool(f.xor(t), true);
@@ -34,7 +35,10 @@ public class BoolTest extends TestCommons {
 
 		bool(t.not(), false);
 		bool(f.not(), true);
+		
 		bool(abc.contains(a), true);
+		
+		bool(abc.endsWith(bc), true);
 
 	}
 
