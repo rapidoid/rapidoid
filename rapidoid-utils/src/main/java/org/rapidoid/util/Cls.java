@@ -750,7 +750,7 @@ public class Cls {
 		return obj != null ? obj.getClass() : Object.class;
 	}
 
-	public static Object str(Object value) {
+	public static String str(Object value) {
 		return convert(value, String.class);
 	}
 

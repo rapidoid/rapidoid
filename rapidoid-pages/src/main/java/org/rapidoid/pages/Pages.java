@@ -156,7 +156,7 @@ public class Pages {
 				return x;
 			} else {
 				TagContext ctx = Tags.context();
-				x.sessionSet(Pages.SESSION_CTX, ctx);
+				x.sessionSet(SESSION_CTX, ctx);
 				PageRenderer.get().render(ctx, fullPage, x);
 				return x;
 			}
@@ -181,7 +181,7 @@ public class Pages {
 			}
 		}
 
-		String pageName = Pages.pageName(x);
+		String pageName = pageName(x);
 		if (pageName == null) {
 			return null;
 		}
@@ -196,7 +196,7 @@ public class Pages {
 		Object page = Cls.newInstance(pageClass);
 
 		if (isEmiting(x)) {
-			return Pages.emit(x, page);
+			return emit(x, page);
 		} else {
 			return serve(x, page);
 		}
@@ -267,7 +267,7 @@ public class Pages {
 			Map<Integer, String> errors = U.map();
 
 			if (cmd != null) {
-				Map<Integer, Object> inputs = Pages.inputs(x);
+				Map<Integer, Object> inputs = inputs(x);
 				ctx.emitValues(inputs, errors);
 			} else {
 				Log.warn("Invalid event!", "event", event);
@@ -298,13 +298,14 @@ public class Pages {
 		}
 
 		// store event processing changes into the session
-		Pages.store(x, view);
+		store(x, view);
+		load(x, view);
 
 		String html;
 		if (processView) {
 			Object content;
 			try {
-				content = Pages.contentOf(x, view);
+				content = contentOf(x, view);
 				if (content == null || content instanceof HttpExchange) {
 					return content;
 				}
@@ -317,13 +318,14 @@ public class Pages {
 				}
 			}
 			ctx = Tags.context();
-			x.sessionSet(Pages.SESSION_CTX, ctx);
+			x.sessionSet(SESSION_CTX, ctx);
 			html = PageRenderer.get().toHTML(ctx, content, x);
 		} else {
 			html = "Error!";
 		}
 
-		Pages.store(x, view);
+		store(x, view);
+		load(x, view);
 
 		if (x.redirectUrl() != null) {
 			x.startResponse(200);
