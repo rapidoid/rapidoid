@@ -44,6 +44,8 @@ public class BoolTest extends TestCommons {
 
 		bool(abc.isEmpty(), false);
 
+		bool(abc.eq(bc), false);
+
 	}
 
 	private void bool(Bool b, boolean bool) {

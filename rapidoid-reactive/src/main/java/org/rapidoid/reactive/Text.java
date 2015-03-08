@@ -32,4 +32,6 @@ public interface Text {
 
 	Bool isEmpty();
 
+	Bool eq(Text v);
+
 }

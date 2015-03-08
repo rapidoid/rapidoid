@@ -76,4 +76,9 @@ public abstract class AbstractText implements Text {
 		return new EmptyText(this);
 	}
 
+	@Override
+	public Bool eq(Text v) {
+		return new EqText(this, v);
+	}
+
 }
