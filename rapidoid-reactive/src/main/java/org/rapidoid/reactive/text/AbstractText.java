@@ -71,4 +71,9 @@ public abstract class AbstractText implements Text {
 		return new StartsText(this, v);
 	}
 
+	@Override
+	public Bool isEmpty() {
+		return new EmptyText(this);
+	}
+
 }

@@ -42,6 +42,8 @@ public class BoolTest extends TestCommons {
 
 		bool(abc.startsWith(a), true);
 
+		bool(abc.isEmpty(), false);
+
 	}
 
 	private void bool(Bool b, boolean bool) {

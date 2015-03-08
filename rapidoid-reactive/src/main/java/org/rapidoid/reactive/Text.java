@@ -30,4 +30,6 @@ public interface Text {
 
 	Bool startsWith(Text v);
 
+	Bool isEmpty();
+
 }
