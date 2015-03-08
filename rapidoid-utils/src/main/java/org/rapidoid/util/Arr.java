@@ -93,4 +93,8 @@ public class Arr {
 		return part;
 	}
 
+	public static boolean isArray(Object value) {
+		return value != null && value.getClass().isArray();
+	}
+
 }
