@@ -263,6 +263,8 @@ public class Pages {
 
 		boolean navigational = cmd != null && cmd.navigational;
 
+		load(x, view);
+
 		if (!navigational) {
 			Map<Integer, String> errors = U.map();
 
@@ -279,8 +281,8 @@ public class Pages {
 			}
 		}
 
-		load(x, view);
 		store(x, view);
+		load(x, view);
 
 		boolean processView = true;
 
@@ -343,7 +345,7 @@ public class Pages {
 
 	public static void callCmdHandler(HttpExchange x, Object target, Cmd cmd) {
 		if (!callCmdHandler(x, target, cmd, false)) {
-			callCmdHandler(x, BUILT_IN_HANDLER, cmd, true);
+			callCmdHandler(x, BUILT_IN_HANDLER, cmd, false);
 		}
 	}
 
