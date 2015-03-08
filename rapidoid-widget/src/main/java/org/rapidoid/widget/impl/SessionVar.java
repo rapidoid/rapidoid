@@ -52,13 +52,7 @@ public class SessionVar<T> extends AbstractVar<T> {
 
 	@Override
 	public T get() {
-		T val = ctx.session(name, null);
-
-		if (val == null) {
-			ctx.sessionSet(name, defaultValue);
-			val = defaultValue;
-		}
-
+		T val = ctx.session(name, defaultValue);
 		return val;
 	}
 
