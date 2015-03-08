@@ -141,19 +141,29 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		Object[] menuItems = new Object[screens.length + scaffolding.size()];
 		activeIndex = setupMenuItems(x.path(), screens, menuItems, scaffolding);
 
-		String theme = config("theme", null);
+		boolean showNavbar = Apps.config(app, "navbar", true);
 
-		ATag brand = a(Pages.titleOf(x, app)).href("/");
-		Tag userMenu = userMenu();
-		Tag themesMenu = theme == null ? themesMenu() : null;
-		Tag debugMenu = Conf.dev() ? debugMenu() : null;
-		FormTag searchForm = searchForm();
-		Tag navMenu = navbarMenu(true, activeIndex, menuItems);
-		Object[] navbarContent = arr(navMenu, debugMenu, themesMenu, userMenu, searchForm);
+		Object result;
 
 		String modal = Beany.getPropValue(screen, "modal", null);
 		Object modalContent = modal != null ? Beany.getPropValue(screen, modal, null) : null;
-		Tag result = navbarPage(isFluid(), brand, navbarContent, arr(pageContent, modalContent));
+
+		if (showNavbar) {
+			String theme = config("theme", null);
+			ATag brand = a(Pages.titleOf(x, app)).href("/");
+
+			Tag userMenu = userMenu();
+			Tag themesMenu = theme == null ? themesMenu() : null;
+			Tag debugMenu = Conf.dev() ? debugMenu() : null;
+			FormTag searchForm = searchForm();
+
+			Tag navMenu = navbarMenu(true, activeIndex, menuItems);
+			Object[] navbarContent = arr(navMenu, debugMenu, themesMenu, userMenu, searchForm);
+
+			result = navbarPage(isFluid(), brand, navbarContent, arr(pageContent, modalContent));
+		} else {
+			result = cleanPage(isFluid(), arr(pageContent, modalContent));
+		}
 
 		Pages.store(x, screen);
 

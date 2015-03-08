@@ -220,6 +220,13 @@ public abstract class BootstrapWidgets extends HTML {
 		return body;
 	}
 
+	public static Tag cleanPage(boolean fluid, Object pageContent) {
+		Object cont = div(pageContent).class_(containerMaybeFluid(fluid));
+		Tag body = body(cont);
+		body = body.class_("clean-page").attr("ng-controller", "Main").attr("ng-app", "rapidoid-app");
+		return body;
+	}
+
 	private static String leftOrRight(boolean onLeft) {
 		return onLeft ? "left" : "right";
 	}
