@@ -29,6 +29,7 @@ import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.security.DataPermissions;
 import org.rapidoid.util.AppCtx;
+import org.rapidoid.util.Arr;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.TypeKind;
@@ -470,12 +471,24 @@ public abstract class BootstrapWidgets extends HTML {
 		return session(name, defaultValue);
 	}
 
+	public static <T> Var<T> var(String name, T defaultValue) {
+		return providedVar(name, defaultValue);
+	}
+
+	public static <T> Var<T> var(String name) {
+		return var(name, null);
+	}
+
 	public static HttpExchange httpExchange() {
 		return AppCtx.exchange();
 	}
 
 	public static <T> Var<T> session(String name, T defaultValue) {
 		return new SessionVar<T>(httpExchange(), name, defaultValue);
+	}
+
+	public static <T> Var<T> session(String name) {
+		return session(name, null);
 	}
 
 	public static <T> Var<T> local(String name, T defaultValue) {
@@ -735,6 +748,34 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static StreamWidget stream(Tag ngTemplate) {
 		return Cls.customizable(StreamWidget.class).template(ngTemplate);
+	}
+
+	public static Object values(Object... values) {
+		List<Object> list = U.list();
+
+		for (Object value : values) {
+			if (Arr.isArray(value) && !hasGUIElements(value)) {
+				value = U.readable(value);
+			}
+			if (value == null || value instanceof Iterable<?>) {
+				value = U.readable(value);
+			}
+			list.add(row(value));
+		}
+
+		return layout(list);
+	}
+
+	private static boolean hasGUIElements(Object value) {
+		if (value instanceof Object[]) {
+			Object[] arr = (Object[]) value;
+			for (Object val : arr) {
+				if (val instanceof TagWidget<?> || val instanceof Tag) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }
