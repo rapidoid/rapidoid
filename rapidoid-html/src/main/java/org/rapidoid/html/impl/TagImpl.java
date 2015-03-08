@@ -30,6 +30,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.Tags;
+import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
@@ -164,6 +165,9 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 
 	@Override
 	public String attr(String attr) {
+		if (attr.equals("value") && binding != null) {
+			return Cls.str(binding.get());
+		}
 		return attrs.get(attr);
 	}
 

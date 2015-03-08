@@ -143,17 +143,32 @@ public class TagRenderer {
 
 		for (Entry<String, String> e : tag.attrs.entrySet()) {
 			String attr = e.getKey();
+			String value = e.getValue();
 
-			write(out, Constants.SPACE_);
-			write(out, HTML.escape(attr));
-			write(out, EQ_DQUOTES);
-			attrToStr(out, tag, attr, e.getValue());
-			write(out, DQUOTES);
+			if (tag.binding != null && attr.equals("value")) {
+				value = tag.attr(attr);
+			}
+
+			writeAttr(tag, out, attr, value);
 		}
 
 		for (String attr : tag.battrs) {
-			write(out, Constants.SPACE_);
-			write(out, HTML.escape(attr));
+			if (tag.binding == null || (!attr.equals("checked") && !attr.equals("selected"))) {
+				writeBAttr(out, attr);
+			}
+		}
+
+		if (tag.binding != null) {
+			Object b = tag.binding.get();
+			if (b instanceof Boolean) {
+				if ((Boolean) b) {
+					if (tag.name.equals("option")) {
+						writeBAttr(out, "selected");
+					} else if (tag.name.equals("input")) {
+						writeBAttr(out, "checked");
+					}
+				}
+			}
 		}
 
 		if (tag.cmd != null) {
@@ -191,6 +206,18 @@ public class TagRenderer {
 		write(out, Constants.CR_LF);
 		indent(out, level, inline);
 		closeTag(out, name);
+	}
+
+	private void writeBAttr(OutputStream out, String attr) {
+		write(out, Constants.SPACE_);
+		write(out, HTML.escape(attr));
+	}
+
+	private void writeAttr(TagImpl tag, OutputStream out, String attr, String value) {
+		writeBAttr(out, attr);
+		write(out, EQ_DQUOTES);
+		attrToStr(out, tag, attr, value);
+		write(out, DQUOTES);
 	}
 
 	private void closeTag(OutputStream out, String name) {
