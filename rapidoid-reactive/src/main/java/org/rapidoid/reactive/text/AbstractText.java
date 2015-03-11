@@ -81,4 +81,9 @@ public abstract class AbstractText implements Text {
 		return new EqText(this, v);
 	}
 
+	@Override
+	public Num lastIndexOf(Text v) {
+		return new LastIndexText(this, v);
+	}
+
 }
