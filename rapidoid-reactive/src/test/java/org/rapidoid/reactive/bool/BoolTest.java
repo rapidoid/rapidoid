@@ -2,7 +2,9 @@ package org.rapidoid.reactive.bool;
 
 import org.junit.Test;
 import org.rapidoid.reactive.Bool;
+import org.rapidoid.reactive.Num;
 import org.rapidoid.reactive.Text;
+import org.rapidoid.reactive.num.SimpleNum;
 import org.rapidoid.reactive.text.SimpleText;
 import org.rapidoid.test.TestCommons;
 
@@ -17,7 +19,10 @@ public class BoolTest extends TestCommons {
 		Text abc = new SimpleText("abc");
 		Text a = new SimpleText("a");
 		Text bc = new SimpleText("bc");
-
+		
+		Num n1 = new SimpleNum(1);
+		Num n2 = new SimpleNum(2);
+		
 		bool(t.xor(f), true);
 		bool(f.xor(t), true);
 		bool(t.xor(t), false);
@@ -45,7 +50,9 @@ public class BoolTest extends TestCommons {
 		bool(abc.isEmpty(), false);
 
 		bool(abc.eq(bc), false);
-
+		
+		bool(n1.eq(n2), false);
+		
 	}
 
 	private void bool(Bool b, boolean bool) {

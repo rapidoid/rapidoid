@@ -1,5 +1,6 @@
 package org.rapidoid.reactive.num;
 
+import org.rapidoid.reactive.Bool;
 import org.rapidoid.reactive.Num;
 
 public abstract class AbstractNum implements Num {
@@ -22,6 +23,11 @@ public abstract class AbstractNum implements Num {
 	@Override
 	public Num div(Num n) {
 		return new DivNum(this, n);
+	}
+
+	@Override
+	public Bool eq(Num n) {
+		return new EqNum(this, n);
 	}
 
 }

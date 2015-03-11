@@ -12,4 +12,6 @@ public interface Num {
 
 	Num div(Num n);
 
+	Bool eq(Num n);
+
 }
