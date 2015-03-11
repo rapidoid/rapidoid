@@ -14,12 +14,14 @@ public class NumTest extends TestCommons {
 
 		Num v5 = new SimpleNum(5);
 		Num v2 = new SimpleNum(2);
+		Num neg2 = new SimpleNum(-2);
 
 		Num y = x.plus(v5);
 		Num z = x.minus(v5);
 		Num w = z.mul(v2);
 		Num q = w.div(v2);
 		Num n = x.plus(y);
+		Num absN = neg2.abs();
 
 		eq(y.get(), 15);
 		eq(z.get(), 5);
@@ -35,6 +37,8 @@ public class NumTest extends TestCommons {
 
 		eq(w.get(), 390);
 		eq(q.get(), 195);
+		eq(absN.get(), 2);
+
 	}
 
 }

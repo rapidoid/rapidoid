@@ -14,4 +14,6 @@ public interface Num {
 
 	Bool eq(Num n);
 
+	Num abs();
+
 }

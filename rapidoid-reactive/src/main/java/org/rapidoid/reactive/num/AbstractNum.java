@@ -30,4 +30,9 @@ public abstract class AbstractNum implements Num {
 		return new EqNum(this, n);
 	}
 
+	@Override
+	public Num abs() {
+		return new AbsNum(this);
+	}
+
 }
