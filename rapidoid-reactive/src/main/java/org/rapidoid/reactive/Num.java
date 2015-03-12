@@ -16,4 +16,6 @@ public interface Num {
 
 	Num abs();
 
+	Bool gt(Num than);
+
 }
