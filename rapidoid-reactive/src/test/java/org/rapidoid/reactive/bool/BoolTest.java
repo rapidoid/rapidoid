@@ -54,8 +54,10 @@ public class BoolTest extends TestCommons {
 		bool(n1.eq(n2), false);
 
 		bool(n1.gt(n2), false);
-		
+
 		bool(n1.gte(n1), true);
+
+		bool(n1.lt(n2), true);
 
 	}
 

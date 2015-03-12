@@ -45,4 +45,9 @@ public abstract class AbstractNum implements Num {
 		return new GteNum(this, than);
 	}
 
+	@Override
+	public Bool lt(Num than) {
+		return new LtNum(this, than);
+	}
+
 }
