@@ -22,4 +22,6 @@ public interface Num {
 
 	Bool lt(Num than);
 
+	Bool lte(Num than);
+
 }

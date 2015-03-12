@@ -59,6 +59,8 @@ public class BoolTest extends TestCommons {
 
 		bool(n1.lt(n2), true);
 
+		bool(n2.lte(n2), true);
+
 	}
 
 	private void bool(Bool b, boolean bool) {
