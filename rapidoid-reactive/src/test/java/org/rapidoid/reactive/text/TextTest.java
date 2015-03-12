@@ -24,6 +24,7 @@ public class TextTest extends TestCommons {
 		Text d = new SimpleText("d");
 		Text m = new SimpleText(" m ");
 		Text abca = new SimpleText("abca");
+		Text strNb = new SimpleText("17");
 
 		Text abc = a.plus(bc);
 		Text ab = abc.remove(c);
@@ -33,6 +34,7 @@ public class TextTest extends TestCommons {
 		Text mT = m.trim();
 		Text sub = abc.substring(n1, n3);
 		Text mid = abc.mid(n1, nNeg);
+		Num parse = strNb.parseInt();
 
 		Num plusL = abc.length().plus(ab.length());
 		Num minusL = plusL.minus(a.length());
@@ -52,6 +54,7 @@ public class TextTest extends TestCommons {
 		eq(minusL.get(), 4);
 		eq(index.get(), 1);
 		eq(lastIndex.get(), 3);
+		eq(parse.get(), 17);
 	}
 
 }

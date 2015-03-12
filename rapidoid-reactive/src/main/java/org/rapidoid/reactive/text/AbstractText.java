@@ -86,4 +86,9 @@ public abstract class AbstractText implements Text {
 		return new LastIndexText(this, v);
 	}
 
+	@Override
+	public Num parseInt() {
+		return new ParseIntText(this);
+	}
+
 }

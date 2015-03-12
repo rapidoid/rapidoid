@@ -38,4 +38,6 @@ public interface Text {
 
 	Num lastIndexOf(Text v);
 
+	Num parseInt();
+
 }
