@@ -18,4 +18,6 @@ public interface Num {
 
 	Bool gt(Num than);
 
+	Bool gte(Num than);
+
 }
