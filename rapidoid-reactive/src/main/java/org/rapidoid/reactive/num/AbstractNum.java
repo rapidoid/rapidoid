@@ -55,4 +55,9 @@ public abstract class AbstractNum implements Num {
 		return new LteNum(this, than);
 	}
 
+	@Override
+	public Num mod(Num n) {
+		return new ModNum(this, n);
+	}
+
 }

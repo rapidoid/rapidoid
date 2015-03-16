@@ -22,6 +22,7 @@ public class NumTest extends TestCommons {
 		Num q = w.div(v2);
 		Num n = x.plus(y);
 		Num absN = neg2.abs();
+		Num mod = v5.mod(v2);
 
 		eq(y.get(), 15);
 		eq(z.get(), 5);
@@ -38,6 +39,7 @@ public class NumTest extends TestCommons {
 		eq(w.get(), 390);
 		eq(q.get(), 195);
 		eq(absN.get(), 2);
+		eq(mod.get(), 1);
 
 	}
 

@@ -24,4 +24,6 @@ public interface Num {
 
 	Bool lte(Num than);
 
+	Num mod(Num n);
+
 }
