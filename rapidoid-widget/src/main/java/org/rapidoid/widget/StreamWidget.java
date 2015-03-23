@@ -29,23 +29,37 @@ import org.rapidoid.util.U;
 @Since("2.3.0")
 public class StreamWidget extends AbstractWidget {
 
-	private Tag template;
+	private Object template;
 
 	private String dataUrl;
+
+	private int cols = 1;
 
 	@Override
 	protected Tag render() {
 		String url = U.or(dataUrl, defaultDataUrl());
 
-		Tag loading = div("Loading data...").attr("ng-show", "stream.busy");
+		Tag tmpla = div(div(template).attr("ng-if", "it")).attr("ng-controller", "StreamItemController");
+		Tag columns = div(tmpla).class_("col-md-{{12 / cols}}").attr("ng-repeat", "colN in [] | rangex:0:cols");
+		Tag tmpl = div(columns).attr("ng-repeat", "rowN in items | rowCount:cols").class_("row row-separated");
 
-		Tag scroll = div(template, loading).attr("infinite-scroll", "stream.nextPage()");
+		Tag loading = row("Loading data...").attr("ng-show", "stream.busy");
+
+		Tag scroll = infiniteScroll(tmpl, loading);
+
+		Tag stream = div(scroll).attr("ng-controller", "StreamController").attr("data-url", url)
+				.attr("ng-init", "cols = " + cols);
+		return stream;
+	}
+
+	protected Tag infiniteScroll(Object... contents) {
+		Tag scroll = div(contents);
 
 		scroll = scroll.attr("infinite-scroll-disabled", "stream.busy");
+		scroll = scroll.attr("infinite-scroll", "stream.nextPage()");
 		scroll = scroll.attr("infinite-scroll-distance", "1");
 
-		Tag stream = div(scroll).attr("ng-controller", "StreamController").attr("data-url", url);
-		return stream;
+		return scroll;
 	}
 
 	protected String defaultDataUrl() {
@@ -66,11 +80,11 @@ public class StreamWidget extends AbstractWidget {
 		return url + ".js";
 	}
 
-	public Tag template() {
+	public Object template() {
 		return template;
 	}
 
-	public StreamWidget template(Tag template) {
+	public StreamWidget template(Object template) {
 		this.template = template;
 		return this;
 	}
@@ -81,6 +95,15 @@ public class StreamWidget extends AbstractWidget {
 
 	public StreamWidget dataUrl(String dataUrl) {
 		this.dataUrl = dataUrl;
+		return this;
+	}
+
+	public int cols() {
+		return cols;
+	}
+
+	public StreamWidget cols(int cols) {
+		this.cols = cols;
 		return this;
 	}
 

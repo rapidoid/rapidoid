@@ -43,7 +43,7 @@ public class MixPage extends BootstrapWidgets {
 	@Session
 	private int n;
 
-	public Tag content(HttpExchange x) {
+	public Object content(HttpExchange x) {
 
 		final ATag brand = a("Welcome to the Mix!").href("/mix");
 
