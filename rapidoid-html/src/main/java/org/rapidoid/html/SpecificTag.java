@@ -2,6 +2,8 @@ package org.rapidoid.html;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Special;
+import org.rapidoid.var.Var;
 
 /*
  * #%L
@@ -25,7 +27,37 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface SpecificTag<TAG extends SpecificTag<?>> extends Tag, SpecificTagBase<TAG> {
+public interface SpecificTag<TAG extends SpecificTag<?>> extends Tag {
+
+	@Special
+	TAG content(Object... content);
+
+	@Special
+	TAG append(Object... content);
+
+	@Special
+	TAG prepend(Object... content);
+
+	@Special
+	TAG copy();
+
+	@Special
+	TAG withChild(int index, Object child);
+
+	@Special
+	TAG attr(String attr, String value);
+
+	@Special
+	TAG is(String attr, boolean value);
+
+	@Special
+	<T> TAG bind(Var<T> var);
+
+	@Special
+	TAG cmd(String cmd, Object... args);
+
+	@Special
+	TAG navigate(String cmd, Object... args);
 
 	String id();
 

@@ -26,7 +26,8 @@ import java.lang.reflect.Method;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.html.SpecificTagBase;
+import org.rapidoid.annotation.Special;
+import org.rapidoid.html.SpecificTag;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagBase;
 import org.rapidoid.util.Cls;
@@ -64,10 +65,16 @@ public class TagProxy implements InvocationHandler, Serializable {
 		Class<?> ret = method.getReturnType();
 		Class<?>[] paramTypes = method.getParameterTypes();
 
-		Method m2 = Cls.findMethod(SpecificTagBase.class, name, paramTypes);
 		if (methodClass.equals(Object.class) || methodClass.equals(TagBase.class)
-				|| methodClass.equals(TagInternals.class) || m2 != null) {
+				|| methodClass.equals(TagInternals.class)) {
 			return method.invoke(tag, args);
+		}
+
+		Method m2 = Cls.findMethod(SpecificTag.class, name, paramTypes);
+		if (m2 != null && m2.getAnnotation(Special.class) != null) {
+			m2 = Cls.findMethod(TagBase.class, name, paramTypes);
+			U.notNull(m2, "special tag method in TagBase");
+			return m2.invoke(tag, args);
 		}
 
 		boolean returnsTag = ret.isAssignableFrom(clazz);

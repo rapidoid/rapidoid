@@ -1,8 +1,8 @@
-package org.rapidoid.html;
+package org.rapidoid.annotation;
 
 /*
  * #%L
- * rapidoid-html
+ * rapidoid-annotations
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,32 +20,20 @@ package org.rapidoid.html;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.var.Var;
+import static java.lang.annotation.ElementType.CONSTRUCTOR;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+@Target({ FIELD, METHOD, TYPE, PARAMETER, CONSTRUCTOR })
+@Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public interface SpecificTagBase<TAG> {
-
-	TAG content(Object... content);
-
-	TAG append(Object... content);
-
-	TAG prepend(Object... content);
-
-	TAG copy();
-
-	TAG withChild(int index, Object child);
-
-	TAG attr(String attr, String value);
-
-	TAG is(String attr, boolean value);
-
-	<T> TAG bind(Var<T> var);
-
-	TAG cmd(String cmd, Object... args);
-
-	TAG navigate(String cmd, Object... args);
+@Since("2.4.0")
+public @interface Special {
 
 }
