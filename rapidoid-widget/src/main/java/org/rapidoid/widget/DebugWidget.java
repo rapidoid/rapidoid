@@ -20,12 +20,11 @@ package org.rapidoid.widget;
  * #L%
  */
 
-import java.util.List;
 import java.util.Map.Entry;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.U;
+import org.rapidoid.html.tag.TableTag;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.1")
@@ -33,15 +32,15 @@ public class DebugWidget extends AbstractWidget {
 
 	@Override
 	protected Object render() {
-		List<Object> list = U.list();
+		TableTag tbl = table_(tr(th("Name"), th("Value")));
 
 		for (Entry<String, Object> e : ctx().session().entrySet()) {
-			if (!e.getKey().contains("_")) {
-				list.add(div(e.getKey(), " = ", b(e.getValue())));
+			if (!e.getKey().startsWith("_")) {
+				tbl = tbl.append(tr(td(e.getKey()), td(e.getValue())));
 			}
 		}
 
-		return panel(list).header("Session");
+		return panel(tbl).header("Session");
 	}
 
 }
