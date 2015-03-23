@@ -251,5 +251,7 @@ rapidoidApp.factory('StreamData', function($http) {
 rapidoidApp.controller('StreamItemController', [ '$scope', '$http', '$window', '$attrs',
 		function($scope, $http, $window, $attrs) {
 			var index = $scope.rowN * $scope.cols + $scope.colN;
-			$scope.it = $scope.items[index];
+			$scope.it = function() {
+				return $scope.items[index];
+			};
 		} ]);

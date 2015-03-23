@@ -39,7 +39,7 @@ public class StreamWidget extends AbstractWidget {
 	protected Tag render() {
 		String url = U.or(dataUrl, defaultDataUrl());
 
-		Tag tmpla = div(div(template).attr("ng-if", "it")).attr("ng-controller", "StreamItemController");
+		Tag tmpla = div(div(template).attr("ng-if", "it()")).attr("ng-controller", "StreamItemController");
 		Tag columns = div(tmpla).class_("col-md-{{12 / cols}}").attr("ng-repeat", "colN in [] | rangex:0:cols");
 		Tag tmpl = div(columns).attr("ng-repeat", "rowN in items | rowCount:cols").class_("row row-separated");
 
