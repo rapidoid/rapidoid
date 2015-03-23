@@ -45,9 +45,8 @@ public class TagRenderer {
 
 	private static final byte[] EMIT_CLOSE = "')".getBytes();
 	private static final byte[] INDENT = "  ".getBytes();
-	private static final byte[] EMIT = "_emit(event, '".getBytes();
+	private static final byte[] EMIT = "_emit('".getBytes();
 	private static final byte[] _H = " _h=\"".getBytes();
-	private static final byte[] ON = " on".getBytes();
 	private static final byte[] EQ_DQUOTES = "=\"".getBytes();
 	private static final byte[] LT = "<".getBytes();
 	private static final byte[] DQUOTES = "\"".getBytes();
@@ -173,8 +172,7 @@ public class TagRenderer {
 
 		if (tag.cmd != null) {
 			int eventHnd = ctx.newCommand(tag.cmd);
-			write(out, ON);
-			write(out, "click");
+			write(out, " ng-click");
 			write(out, EQ_DQUOTES);
 			write(out, EMIT);
 			write(out, eventHnd + "");

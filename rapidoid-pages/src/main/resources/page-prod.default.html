@@ -11,6 +11,14 @@
 {{head}}
 </head>
 
+<body ng-controller="Main" ng-app="rapidoid-app">
+
+  <div ng-if="!bodyContent">
 {{body}}
+  </div>
+
+  <div compile="bodyContent" ng-if="bodyContent"></div>
+
+</body>
 
 </html>

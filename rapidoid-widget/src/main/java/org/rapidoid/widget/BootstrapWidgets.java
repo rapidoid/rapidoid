@@ -224,18 +224,14 @@ public abstract class BootstrapWidgets extends HTML {
 				"GET");
 	}
 
-	public static Tag navbarPage(boolean fluid, Tag brand, Object[] navbarContent, Object pageContent) {
+	public static Object navbarPage(boolean fluid, Tag brand, Object[] navbarContent, Object pageContent) {
 		Object cont = div(pageContent).class_(containerMaybeFluid(fluid));
-		Tag body = body(nav_(fluid, false, brand, navbarContent), cont);
-		body = body.attr("ng-controller", "Main").attr("ng-app", "rapidoid-app");
-		return body;
+		Tag navbar = nav_(fluid, false, brand, navbarContent);
+		return arr(navbar, cont);
 	}
 
-	public static Tag cleanPage(boolean fluid, Object pageContent) {
-		Object cont = div(pageContent).class_(containerMaybeFluid(fluid));
-		Tag body = body(cont);
-		body = body.class_("clean-page").attr("ng-controller", "Main").attr("ng-app", "rapidoid-app");
-		return body;
+	public static Object cleanPage(boolean fluid, Object pageContent) {
+		return div(pageContent).class_(containerMaybeFluid(fluid));
 	}
 
 	private static String leftOrRight(boolean onLeft) {

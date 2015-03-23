@@ -1,7 +1,3 @@
-body.clean-page {
-	margin-top: 10px;
-}
-
 .pointer {
 	cursor: pointer;
 }
@@ -70,8 +66,8 @@ span.highlight {
 	color: #BBB;
 }
 
-div.row-separated {
-	margin-top: 25px;
+div.row-separated>div {
+	margin-top: 15px;
 }
 
 span._code_kw {
