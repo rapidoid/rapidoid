@@ -64,13 +64,15 @@ public class CollectionContainerVar extends AbstractVar<Boolean> {
 					coll.add(item);
 				}
 			} else {
-				container.set(U.list(item));
+				coll = U.list(item);
 			}
 		} else {
 			if (coll != null) {
 				coll.remove(item);
 			}
 		}
+
+		container.set(coll);
 	}
 
 	@Override
