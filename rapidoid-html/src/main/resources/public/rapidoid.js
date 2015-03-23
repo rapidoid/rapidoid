@@ -190,14 +190,14 @@ rapidoidApp.controller('Main', [ '$scope', '$http', '$window', function($scope, 
 	}
 
 	$scope.changeFavLocal = function(item) {
-		var favs = JSON.parse(localStorage['favortites'] || '{}');
+		var favs = JSON.parse(localStorage['favorites'] || '{}');
 		item.fav = !item.fav;
 		if (item.fav) {
 			favs[item.id] = true;
 		} else {
 			delete favs[item.id];
 		}
-		localStorage['favortites'] = JSON.stringify(favs);
+		localStorage['favorites'] = JSON.stringify(favs);
 	}
 
 } ]);
