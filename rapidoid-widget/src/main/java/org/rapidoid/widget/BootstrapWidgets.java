@@ -103,8 +103,16 @@ public abstract class BootstrapWidgets extends HTML {
 		return div((Object[]) cols).class_("row");
 	}
 
+	public static Tag rowSeparated(ColspanTag... cols) {
+		return row(cols).class_("row row-separated");
+	}
+
 	public static Tag row(Object... contents) {
 		return row(col12(contents));
+	}
+
+	public static Tag rowSeparated(Object... contents) {
+		return row(contents).class_("row row-separated");
 	}
 
 	public static Tag container(Object... contents) {
