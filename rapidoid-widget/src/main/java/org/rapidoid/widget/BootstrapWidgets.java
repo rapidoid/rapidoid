@@ -788,4 +788,8 @@ public abstract class BootstrapWidgets extends HTML {
 		return false;
 	}
 
+	public static CardWidget card(Object... contents) {
+		return Cls.customizable(CardWidget.class).contents(contents);
+	}
+
 }

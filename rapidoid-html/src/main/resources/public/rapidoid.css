@@ -92,3 +92,22 @@ pre.example-code, pre.example-output {
 	border-style: dashed !important;
 	border-color: #CCC !important;
 }
+
+/**** CARDS *****/
+div.rapidoid-card {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #CCC;
+	border-radius: 3px;
+	padding: 10px;
+}
+
+div.rapidoid-card:hover {
+	border-color: #DDC;
+}
+
+div.rapidoid-card h6.rapidoid-card-caption {
+	margin: 0px;
+}
+
+}
