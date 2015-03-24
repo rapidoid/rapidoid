@@ -8,4 +8,6 @@ public interface NumList {
 
 	Num size();
 
+	Bool isEmpty();
+
 }

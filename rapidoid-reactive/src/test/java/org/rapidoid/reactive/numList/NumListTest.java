@@ -1,6 +1,7 @@
 package org.rapidoid.reactive.numList;
 
 import org.junit.Test;
+import org.rapidoid.reactive.Bool;
 import org.rapidoid.reactive.Num;
 import org.rapidoid.reactive.NumList;
 import org.rapidoid.reactive.num.SimpleNum;
@@ -44,6 +45,9 @@ public class NumListTest extends TestCommons {
 
 		Num size = list.size();
 		eq(size.get(), 4);
+
+		Bool empty = list.isEmpty();
+		eq(empty.get(), false);
 
 	}
 

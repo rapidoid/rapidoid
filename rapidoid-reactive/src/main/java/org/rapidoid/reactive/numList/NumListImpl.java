@@ -3,6 +3,7 @@ package org.rapidoid.reactive.numList;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.rapidoid.reactive.Bool;
 import org.rapidoid.reactive.Num;
 import org.rapidoid.reactive.NumList;
 
@@ -29,6 +30,11 @@ public class NumListImpl implements NumList {
 	@Override
 	public Num size() {
 		return new ListSize(list);
+	}
+
+	@Override
+	public Bool isEmpty() {
+		return new ListIsEmpty(list);
 	}
 
 }
