@@ -1,7 +1,5 @@
 package org.rapidoid.reactive;
 
-import org.rapidoid.reactive.text.SimpleText;
-
 public interface Text {
 
 	String get();
