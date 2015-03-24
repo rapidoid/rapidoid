@@ -26,4 +26,9 @@ public class NumListImpl implements NumList {
 		list.add(index, element);
 	}
 
+	@Override
+	public Num size() {
+		return new ListSize(list);
+	}
+
 }

@@ -6,4 +6,6 @@ public interface NumList {
 
 	void insert(int index, Num element);
 
+	Num size();
+
 }

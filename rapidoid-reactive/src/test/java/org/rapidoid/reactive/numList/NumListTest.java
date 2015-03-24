@@ -42,6 +42,9 @@ public class NumListTest extends TestCommons {
 		eq(second.get(), 1);
 		eq(third.get(), 2);
 
+		Num size = list.size();
+		eq(size.get(), 4);
+
 	}
 
 }
