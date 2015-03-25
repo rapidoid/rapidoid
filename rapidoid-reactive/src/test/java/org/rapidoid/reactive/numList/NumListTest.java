@@ -49,6 +49,9 @@ public class NumListTest extends TestCommons {
 		Bool empty = list.isEmpty();
 		eq(empty.get(), false);
 
+		Bool contains = list.contains(v1);
+		eq(contains.get(), true);
+
 	}
 
 }

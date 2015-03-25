@@ -10,4 +10,6 @@ public interface NumList {
 
 	Bool isEmpty();
 
+	Bool contains(Num element);
+
 }

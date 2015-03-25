@@ -37,4 +37,9 @@ public class NumListImpl implements NumList {
 		return new ListIsEmpty(list);
 	}
 
+	@Override
+	public Bool contains(Num element) {
+		return new ListContains(list, element);
+	}
+
 }
