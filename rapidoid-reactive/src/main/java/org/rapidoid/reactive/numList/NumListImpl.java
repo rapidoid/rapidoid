@@ -59,4 +59,11 @@ public class NumListImpl implements NumList {
 		}
 	}
 
+	@Override
+	public void addAll(Num... elements) {
+		for (Num element : elements) {
+			list.add(element);
+		}
+	}
+
 }

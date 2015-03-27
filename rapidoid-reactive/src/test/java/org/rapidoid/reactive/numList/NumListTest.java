@@ -68,6 +68,10 @@ public class NumListTest extends TestCommons {
 
 		eq(size.get(), 1);
 
+		list.addAll(v1, v2, v3);
+
+		eq(size.get(), 4);
+
 	}
 
 }

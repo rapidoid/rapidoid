@@ -18,4 +18,6 @@ public interface NumList {
 
 	void removeAll(Num... elements);
 
+	void addAll(Num... elements);
+
 }
