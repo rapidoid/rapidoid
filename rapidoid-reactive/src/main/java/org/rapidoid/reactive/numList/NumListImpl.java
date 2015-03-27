@@ -47,4 +47,9 @@ public class NumListImpl implements NumList {
 		list.add(element);
 	}
 
+	@Override
+	public void remove(Num element) {
+		list.remove(element);
+	}
+
 }

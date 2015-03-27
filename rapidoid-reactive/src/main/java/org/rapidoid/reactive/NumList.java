@@ -14,4 +14,6 @@ public interface NumList {
 
 	void add(Num element);
 
+	void remove(Num element);
+
 }
