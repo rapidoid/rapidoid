@@ -16,4 +16,6 @@ public interface NumList {
 
 	void remove(Num element);
 
+	void removeAll(Num... elements);
+
 }

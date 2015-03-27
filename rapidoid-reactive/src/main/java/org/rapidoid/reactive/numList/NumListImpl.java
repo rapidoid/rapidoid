@@ -52,4 +52,11 @@ public class NumListImpl implements NumList {
 		list.remove(element);
 	}
 
+	@Override
+	public void removeAll(Num... elements) {
+		for (Num element : elements) {
+			list.remove(element);
+		}
+	}
+
 }

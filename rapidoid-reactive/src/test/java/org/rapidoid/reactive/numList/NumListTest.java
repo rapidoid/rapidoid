@@ -64,6 +64,10 @@ public class NumListTest extends TestCommons {
 		eq(size.get(), 4);
 		eq(containsV0.get(), false);
 
+		list.removeAll(v1, v2, v3);
+
+		eq(size.get(), 1);
+
 	}
 
 }
