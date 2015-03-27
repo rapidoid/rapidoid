@@ -42,4 +42,9 @@ public class NumListImpl implements NumList {
 		return new ListContains(list, element);
 	}
 
+	@Override
+	public void add(Num element) {
+		list.add(element);
+	}
+
 }

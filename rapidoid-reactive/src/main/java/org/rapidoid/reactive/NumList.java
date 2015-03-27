@@ -12,4 +12,6 @@ public interface NumList {
 
 	Bool contains(Num element);
 
+	void add(Num element);
+
 }
