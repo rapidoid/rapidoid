@@ -45,6 +45,8 @@ public class HttpServerTest extends HttpTestCommons {
 		System.out.println("UTF-8 message = " + message);
 		System.out.println("UTF-8 message length = " + message.length());
 
+		eq(message.length(), 9);
+		
 		eq(get("/x?" + message), "GET:/x:/x:" + message);
 		eq(get("/echo?" + message), "GET:/echo::" + message);
 		eq(get("/echo/abc?" + message), "GET:/echo/abc:/abc:" + message);
