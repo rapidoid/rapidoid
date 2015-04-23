@@ -102,7 +102,6 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 
 		start();
 
-		byte[] rabbit = FileUtils.readFileToByteArray(IO.file("rabbit.jpg"));
 		byte[] ab = FileUtils.readFileToByteArray(IO.file("ab.html"));
 
 		for (int i = 0; i < 100; i++) {
@@ -113,10 +112,33 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 			eq(get("/bin"), "bin");
 			eq(get("/file/foo"), "abcde");
 			eq(get("/testfile1"), "TEST1");
-			eq(getBytes("/rabbit.jpg"), rabbit);
 			eq(getBytes("/ab"), ab);
 		}
 
 		shutdown();
 	}
+
+	@Test
+	public void shouldRenderRabbit() throws Exception { // :)
+
+		server();
+
+		server.get("/rabbit.jpg", new Handler() {
+			@Override
+			public Object handle(HttpExchange x) {
+				return x.sendFile(IO.file("rabbit.jpg"));
+			}
+		});
+
+		start();
+
+		byte[] rabbit = FileUtils.readFileToByteArray(IO.file("rabbit.jpg"));
+
+		for (int i = 0; i < 100; i++) {
+			eq(getBytes("/rabbit.jpg"), rabbit);
+		}
+
+		shutdown();
+	}
+
 }
