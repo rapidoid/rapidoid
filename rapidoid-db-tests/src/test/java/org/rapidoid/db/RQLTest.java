@@ -83,7 +83,7 @@ public class RQLTest extends DbTestCommons {
 
 	@Test
 	public void testRQLInsert() {
-		long id = DB.rql("INSERT Abc name=n1, n=123, z=false, lh=low");
+		Long id = DB.rql("INSERT Abc name=n1, n=123, z=false, lh=low");
 		Abc x = DB.get(id);
 
 		eq(x.name, "n1");
@@ -94,7 +94,7 @@ public class RQLTest extends DbTestCommons {
 
 	@Test
 	public void testRQLParameterizedInsert() {
-		long id = DB.rql("INSERT Abc name=?, n=123, z=?, lh=low", "n1", false);
+		Long id = DB.rql("INSERT Abc name=?, n=123, z=?, lh=low", "n1", false);
 		Abc x = DB.get(id);
 
 		eq(x.name, "n1");
