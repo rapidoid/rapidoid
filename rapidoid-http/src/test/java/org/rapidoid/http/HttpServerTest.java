@@ -20,6 +20,10 @@ package org.rapidoid.http;
  * #L%
  */
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.testng.annotations.Test;
@@ -29,10 +33,17 @@ import org.testng.annotations.Test;
 public class HttpServerTest extends HttpTestCommons {
 
 	@Test
-	public void shouldHandleHttpRequests() {
+	public void shouldHandleUTF8() {
 		defaultServerSetup();
 
+		System.out.println("file.encoding = " + System.getProperty("file.encoding"));
+		System.out.println("Charset.defaultCharset() = " + Charset.defaultCharset());
+		System.out.println("default writer.encoding = "
+				+ new OutputStreamWriter(new ByteArrayOutputStream()).getEncoding());
+
 		String message = "ažфbдšгcč";
+		System.out.println("UTF-8 message = " + message);
+		System.out.println("UTF-8 message length = " + message.length());
 
 		eq(get("/x?" + message), "GET:/x:/x:" + message);
 		eq(get("/echo?" + message), "GET:/echo::" + message);
