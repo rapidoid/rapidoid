@@ -32,12 +32,23 @@ import org.rapidoid.http.HttpExchangeBody;
 import org.rapidoid.http.HttpExchangeHeaders;
 import org.rapidoid.http.HttpHeader;
 import org.rapidoid.http.HttpNotFoundException;
+import org.rapidoid.http.HttpSession;
 import org.rapidoid.http.HttpSuccessException;
+import org.rapidoid.http.InMemoryHttpSession;
 import org.rapidoid.mime.MediaType;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
 public class MockHttpExchange implements HttpExchange {
+
+	private static final String SESSION_ID = "session1";
+
+	private final HttpSession session = new InMemoryHttpSession();
+
+	public MockHttpExchange() {
+		session.openSession(SESSION_ID);
+	}
 
 	@Override
 	public HttpExchangeHeaders startResponse(int httpResponseCode) {
@@ -401,32 +412,27 @@ public class MockHttpExchange implements HttpExchange {
 
 	@Override
 	public Map<String, Object> session() {
-		// TODO Auto-generated method stub
-		return null;
+		return session.getSession(SESSION_ID);
 	}
 
 	@Override
 	public Map<String, Object> getSessionById(String sessionId) {
-		// TODO Auto-generated method stub
-		return null;
+		return session.getSession(sessionId);
 	}
 
 	@Override
 	public <T> T session(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return (T) session.getAttribute(SESSION_ID, name);
 	}
 
 	@Override
 	public <T> T session(String name, T defaultValue) {
-		// TODO Auto-generated method stub
-		return null;
+		return (T) U.or(session.getAttribute(SESSION_ID, name), defaultValue);
 	}
 
 	@Override
 	public void sessionSet(String name, Object value) {
-		// TODO Auto-generated method stub
-
+		session.setAttribute(SESSION_ID, name, value);
 	}
 
 	@Override
@@ -437,32 +443,27 @@ public class MockHttpExchange implements HttpExchange {
 
 	@Override
 	public String sessionId() {
-		// TODO Auto-generated method stub
-		return null;
+		return SESSION_ID;
 	}
 
 	@Override
 	public void closeSession() {
-		// TODO Auto-generated method stub
-
+		session.closeSession(SESSION_ID);
 	}
 
 	@Override
 	public void clearSession(String sessionId) {
-		// TODO Auto-generated method stub
-
+		session.clearSession(sessionId);
 	}
 
 	@Override
 	public boolean hasSession() {
-		// TODO Auto-generated method stub
-		return false;
+		return session.exists(SESSION_ID);
 	}
 
 	@Override
 	public boolean hasSession(String sessionId) {
-		// TODO Auto-generated method stub
-		return false;
+		return session.exists(sessionId);
 	}
 
 	@Override
