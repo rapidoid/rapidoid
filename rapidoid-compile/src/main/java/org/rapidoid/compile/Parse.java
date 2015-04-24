@@ -37,7 +37,7 @@ public class Parse {
 
 	public static CompilationUnit unit(String source) {
 		String unitName = EcjCompilationUnit.inferClassName(source) + ".java";
-		ASTParser parser = parser(ASTParser.K_EXPRESSION, unitName, source);
+		ASTParser parser = parser(ASTParser.K_COMPILATION_UNIT, unitName, source);
 
 		ASTNode ast = parser.createAST(null);
 
