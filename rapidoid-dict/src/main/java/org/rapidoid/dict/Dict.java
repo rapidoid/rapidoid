@@ -22,6 +22,10 @@ package org.rapidoid.dict;
 
 import java.util.Map;
 
+/**
+ * @author Nikolche Mihajlovski
+ * @since 2.4.0
+ */
 public interface Dict extends Map<String, Object> {
 
 }
