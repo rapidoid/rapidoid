@@ -55,6 +55,7 @@
 
 	<modules>
 		<module>rapidoid-annotations</module>
+		<module>rapidoid-dict</module>
 		<module>rapidoid-u</module>
 		<module>rapidoid-config</module>
 		<module>rapidoid-lambda</module>
