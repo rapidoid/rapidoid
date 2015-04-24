@@ -21,25 +21,67 @@ package org.rapidoid.compile;
  */
 
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.Statement;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.compile.impl.EcjCompilationUnit;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.1.0")
 public class Parse {
 
-	public static CompilationUnit parse(String source) {
+	public static CompilationUnit unit(String source) {
+		String unitName = EcjCompilationUnit.inferClassName(source) + ".java";
+		ASTParser parser = parser(ASTParser.K_EXPRESSION, unitName, source);
+
+		ASTNode ast = parser.createAST(null);
+
+		if (ast instanceof CompilationUnit) {
+			return (CompilationUnit) ast;
+		} else {
+			return null;
+		}
+	}
+
+	public static Statement statements(String source) {
+		ASTParser parser = parser(ASTParser.K_STATEMENTS, "(statements)", source);
+
+		ASTNode ast = parser.createAST(null);
+		U.show(ast.getClass());
+
+		if (ast instanceof Statement) {
+			return (Statement) ast;
+		} else {
+			return null;
+		}
+	}
+
+	public static Expression expression(String source) {
+		ASTParser parser = parser(ASTParser.K_EXPRESSION, "(expression)", source);
+
+		ASTNode ast = parser.createAST(null);
+
+		if (ast instanceof Expression) {
+			return (Expression) ast;
+		} else {
+			return null;
+		}
+	}
+
+	private static ASTParser parser(int kind, String unitName, String source) {
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
 
-		parser.setUnitName(EcjCompilationUnit.inferClassName(source) + ".java");
+		parser.setUnitName(unitName);
 		parser.setSource(source.toCharArray());
-		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setKind(kind);
 		parser.setResolveBindings(true);
 
-		return (CompilationUnit) parser.createAST(null);
+		return parser;
 	}
 
 }
