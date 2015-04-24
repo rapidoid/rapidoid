@@ -37,6 +37,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Pattern;
 
+import org.rapidoid.dict.Dict;
+import org.rapidoid.dict.Dicts;
+
 /**
  * @author Nikolche Mihajlovski
  * @since 2.0.0
@@ -379,6 +382,40 @@ public class U {
 		}
 
 		return map;
+	}
+
+	public static Dict dict(Map<? extends String, ? extends Object> src) {
+		return Dicts.dict(src);
+	}
+
+	public static Dict dict() {
+		return Dicts.dict();
+	}
+
+	public static Dict dict(String key, Object value) {
+		return Dicts.dict(key, value);
+	}
+
+	public static Dict dict(String key1, Object value1, String key2, Object value2) {
+		return Dicts.dict(key1, value1, key2, value2);
+	}
+
+	public static Dict dict(String key1, Object value1, String key2, Object value2, String key3, Object value3) {
+		return Dicts.dict(key1, value1, key2, value2, key3, value3);
+	}
+
+	public static Dict dict(String key1, Object value1, String key2, Object value2, String key3, Object value3,
+			String key4, Object value4) {
+		return Dicts.dict(key1, value1, key2, value2, key3, value3, key4, value4);
+	}
+
+	public static Dict dict(String key1, Object value1, String key2, Object value2, String key3, Object value3,
+			String key4, Object value4, String key5, Object value5) {
+		return Dicts.dict(key1, value1, key2, value2, key3, value3, key4, value4, key5, value5);
+	}
+
+	public static Dict dict(Object... keysAndValues) {
+		return Dicts.dict(keysAndValues);
 	}
 
 	public static <T> Queue<T> queue(int maxSize) {
