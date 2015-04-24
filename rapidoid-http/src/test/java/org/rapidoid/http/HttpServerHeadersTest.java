@@ -134,7 +134,7 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 
 		byte[] rabbit = FileUtils.readFileToByteArray(IO.file("rabbit.jpg"));
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 1000; i++) {
 			eq(getBytes("/rabbit.jpg"), rabbit);
 		}
 

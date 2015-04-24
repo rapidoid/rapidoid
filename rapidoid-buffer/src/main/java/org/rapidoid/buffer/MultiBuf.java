@@ -469,8 +469,8 @@ public class MultiBuf implements Buf, Constants {
 		int len = singleCap - fromAddr;
 
 		int wrote = writePart(first, fromAddr, singleCap, mode, bytes, channel, buffer, destOffset, len);
-		if (wrote == 0) {
-			return 0;
+		if (wrote < len) {
+			return wrote;
 		}
 
 		int wroteTotal = wrote;
@@ -479,11 +479,11 @@ public class MultiBuf implements Buf, Constants {
 
 			wrote = writePart(bufs[i], 0, singleCap, mode, bytes, channel, buffer, destOffset + wroteTotal, singleCap);
 
-			if (wrote == 0) {
+			wroteTotal += wrote;
+
+			if (wrote < singleCap) {
 				return wroteTotal;
 			}
-
-			wroteTotal += wrote;
 		}
 
 		ByteBuffer last = bufs[toIndex];
