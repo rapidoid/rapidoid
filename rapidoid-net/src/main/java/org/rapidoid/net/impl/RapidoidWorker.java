@@ -71,6 +71,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private final BufGroup bufs;
 
+	private volatile long messagesProcessed;
+
 	public RapidoidWorker(String name, final BufGroup bufs, final Protocol protocol, final RapidoidHelper helper,
 			int bufSizeKB, boolean noNelay) {
 		super(name);
@@ -186,13 +188,13 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	}
 
 	public void process(RapidoidConnection conn) {
-		processMsgs(conn);
+		messagesProcessed += processMsgs(conn);
 
 		conn.completedInputPos = conn.input.position();
 	}
 
-	private int processMsgs(RapidoidConnection conn) {
-		int reqN = 0;
+	private long processMsgs(RapidoidConnection conn) {
+		long reqN = 0;
 
 		while (reqN < maxPipelineSize && conn.input().hasRemaining() && processNext(conn)) {
 			reqN++;
@@ -427,6 +429,10 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	public RapidoidConnection newConnection() {
 		return new RapidoidConnection(RapidoidWorker.this, bufs);
+	}
+
+	public long getMessagesProcessed() {
+		return messagesProcessed;
 	}
 
 }

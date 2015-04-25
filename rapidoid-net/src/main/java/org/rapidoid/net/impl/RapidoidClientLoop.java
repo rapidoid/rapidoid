@@ -31,12 +31,13 @@ import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.config.Conf;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.TCPClient;
+import org.rapidoid.net.TCPClientInfo;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements TCPClient {
+public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements TCPClient, TCPClientInfo {
 
 	private RapidoidWorker[] workers;
 
@@ -169,6 +170,22 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 		}
 
 		return super.shutdown();
+	}
+
+	@Override
+	public TCPClientInfo info() {
+		return this;
+	}
+
+	@Override
+	public long messagesProcessed() {
+		long total = 0;
+
+		for (int i = 0; i < workers.length; i++) {
+			total += workers[i].getMessagesProcessed();
+		}
+
+		return total;
 	}
 
 }

@@ -62,14 +62,18 @@ public class TcpClientTest extends NetTestCommons {
 	public void testTCPClientWithDefaultConnections() {
 		Log.setLogLevel(LogLevel.DEBUG);
 
-		TCPClient client = TCP.client().host("localhost").port(8080).connections(1).protocol(HI_CLIENT).build().start();
+		TCPClient client = TCP.client().host("localhost").port(8080).connections(5).protocol(HI_CLIENT).build().start();
 
 		// let the clients wait
 		UTILS.sleep(3000);
 
 		TCPServer server = TCP.server().port(8080).protocol(UPPERCASE_SERVER).build().start();
 
+		// let the server serve the clients
 		UTILS.sleep(3000);
+
+		eq(client.info().messagesProcessed(), 5);
+		eq(server.info().messagesProcessed(), 5);
 
 		client.shutdown();
 		server.shutdown();
@@ -80,13 +84,18 @@ public class TcpClientTest extends NetTestCommons {
 		Log.setLogLevel(LogLevel.DEBUG);
 
 		TCPClient client = TCP.client().build().start();
-		client.connect("localhost", 8080, HI_CLIENT, 1);
+		client.connect("localhost", 8080, HI_CLIENT, 10);
 
 		// let the clients wait
 		UTILS.sleep(3000);
 
 		TCPServer server = TCP.server().port(8080).protocol(UPPERCASE_SERVER).build().start();
+
+		// let the server serve the clients
 		UTILS.sleep(3000);
+
+		eq(client.info().messagesProcessed(), 10);
+		eq(server.info().messagesProcessed(), 10);
 
 		client.shutdown();
 		server.shutdown();
@@ -97,7 +106,7 @@ public class TcpClientTest extends NetTestCommons {
 		Log.setLogLevel(LogLevel.DEBUG);
 
 		TCPClient client = TCP.client().host("127.0.0.1").port(8080).connections(3).protocol(HI_CLIENT).build().start();
-		client.connect("localhost", 9090, HI_CLIENT, 1);
+		client.connect("localhost", 9090, HI_CLIENT, 2);
 
 		// let the clients wait
 		UTILS.sleep(3000);
@@ -105,7 +114,12 @@ public class TcpClientTest extends NetTestCommons {
 		TCPServer server1 = TCP.server().port(8080).protocol(UPPERCASE_SERVER).build().start();
 		TCPServer server2 = TCP.server().port(9090).protocol(UPPERCASE_SERVER).build().start();
 
+		// let the servers serve the clients
 		UTILS.sleep(3000);
+
+		eq(client.info().messagesProcessed(), 5);
+		eq(server1.info().messagesProcessed(), 3);
+		eq(server2.info().messagesProcessed(), 2);
 
 		client.shutdown();
 		server1.shutdown();

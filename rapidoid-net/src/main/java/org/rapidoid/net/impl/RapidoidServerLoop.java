@@ -35,13 +35,14 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.TCPServer;
+import org.rapidoid.net.TCPServerInfo;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements TCPServer {
+public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements TCPServer, TCPServerInfo {
 
 	private volatile RapidoidWorker[] workers;
 
@@ -127,7 +128,8 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 			for (int i = 0; i < workers.length; i++) {
 				RapidoidHelper helper = Cls.newInstance(helperClass, exchangeClass);
 				String workerName = "server" + (i + 1);
-				BufGroup bufGroup = new BufGroup(14); // 2^14B (16 KB per buffer segment)
+				BufGroup bufGroup = new BufGroup(14); // 2^14B (16 KB per buffer
+														// segment)
 				workers[i] = new RapidoidWorker(workerName, bufGroup, protocol, helper, bufSizeKB, noDelay);
 				new Thread(workers[i], workerName).start();
 			}
@@ -184,6 +186,22 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 
 	public Protocol getProtocol() {
 		return protocol;
+	}
+
+	@Override
+	public TCPServerInfo info() {
+		return this;
+	}
+
+	@Override
+	public long messagesProcessed() {
+		long total = 0;
+
+		for (int i = 0; i < workers.length; i++) {
+			total += workers[i].getMessagesProcessed();
+		}
+
+		return total;
 	}
 
 }

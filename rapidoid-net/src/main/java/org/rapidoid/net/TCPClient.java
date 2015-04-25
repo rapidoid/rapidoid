@@ -32,4 +32,6 @@ public interface TCPClient extends Activity<TCPClient> {
 
 	void connect(String serverHost, int serverPort, Protocol clientProtocol, int connections);
 
+	TCPClientInfo info();
+
 }

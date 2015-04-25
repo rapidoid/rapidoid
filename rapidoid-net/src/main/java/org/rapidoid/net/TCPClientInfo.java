@@ -1,9 +1,5 @@
 package org.rapidoid.net;
 
-import org.rapidoid.activity.Activity;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 /*
  * #%L
  * rapidoid-net
@@ -24,12 +20,8 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public interface TCPServer extends Activity<TCPServer> {
+public interface TCPClientInfo {
 
-	String process(String input);
-
-	TCPServerInfo info();
+	long messagesProcessed();
 
 }
