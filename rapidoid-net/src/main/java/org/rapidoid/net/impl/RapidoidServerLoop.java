@@ -38,7 +38,6 @@ import org.rapidoid.net.TCPServer;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -140,11 +139,6 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 	@Override
 	public synchronized TCPServer start() {
 		new Thread(this, "server").start();
-
-		// wait for the server thread to activate
-		while (status == LoopStatus.INIT || status == LoopStatus.BEFORE_LOOP) {
-			UTILS.sleep(50);
-		}
 
 		return super.start();
 	}

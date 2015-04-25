@@ -25,12 +25,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Runnable {
 
-	protected Thread ownerThread;
+	protected volatile Thread ownerThread;
 
 	protected volatile LoopStatus status = LoopStatus.INIT;
 
@@ -93,11 +94,11 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 			}
 		}
 
-		Log.info("Stopped event loop", "name", name);
-
 		if (status == LoopStatus.LOOP) {
 			status = LoopStatus.STOPPED;
 		}
+
+		Log.info("Stopped event loop", "name", name);
 	}
 
 	protected void beforeLoop() {
@@ -123,6 +124,40 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 	protected void checkOnSameThread() {
 		if (!onSameThread()) {
 			throw U.rte("Not on the owner thread, expected %s, but found: %s", ownerThread, Thread.currentThread());
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public T start() {
+		super.start();
+
+		waitToStart();
+
+		return (T) this;
+	}
+
+	public void waitToStart() {
+		// wait for the event loop to activate
+		while (status == LoopStatus.INIT || status == LoopStatus.BEFORE_LOOP) {
+			UTILS.sleep(50);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public T shutdown() {
+		super.shutdown();
+
+		waitToStop();
+
+		return (T) this;
+	}
+
+	public void waitToStop() {
+		// wait for the event loop to stop
+		while (status != LoopStatus.STOPPED && status != LoopStatus.FAILED) {
+			UTILS.sleep(50);
 		}
 	}
 

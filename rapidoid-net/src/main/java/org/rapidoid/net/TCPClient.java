@@ -28,4 +28,8 @@ import org.rapidoid.annotation.Since;
 @Since("2.0.0")
 public interface TCPClient extends Activity<TCPClient> {
 
+	void connect(String serverHost, int serverPort, Protocol clientProtocol);
+
+	void connect(String serverHost, int serverPort, Protocol clientProtocol, int connections);
+
 }

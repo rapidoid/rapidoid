@@ -57,7 +57,7 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 
 	// initial number of connections to the default server
 	@Inject(optional = true)
-	private int connections = 1;
+	private int connections = 0;
 
 	private final Protocol protocol;
 
@@ -91,9 +91,6 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 	}
 
 	private void openSockets() throws IOException {
-
-		U.notNull(host, "host");
-
 		workers = new RapidoidWorker[workersN];
 
 		for (int i = 0; i < workers.length; i++) {
@@ -103,24 +100,42 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 			new Thread(workers[i], workerName).start();
 		}
 
-		for (int c = 0; c < connections; c++) {
-			connect(host, port, protocol);
+		for (int i = 0; i < workers.length; i++) {
+			workers[i].waitToStart();
 		}
 	}
 
-	public synchronized void connect(String serverHost, int serverPort, Protocol clientProtocol) throws IOException {
+	@Override
+	public synchronized void connect(String serverHost, int serverPort, Protocol clientProtocol) {
 
 		InetSocketAddress addr = new InetSocketAddress(serverHost, serverPort);
-		SocketChannel socketChannel = socket();
+		SocketChannel socketChannel = openSocket();
 
-		workers[currentWorkerInd++].connect(new ConnectionTarget(socketChannel, addr, clientProtocol));
+		try {
+			RapidoidWorker targetWorker = workers[currentWorkerInd];
+			targetWorker.connect(new ConnectionTarget(socketChannel, addr, clientProtocol));
+		} catch (IOException e) {
+			throw U.rte("Cannot create a TCP client connection!", e);
+		}
 
+		switchToNextWorker();
+	}
+
+	@Override
+	public synchronized void connect(String serverHost, int serverPort, Protocol clientProtocol, int connectionsN) {
+		for (int i = 0; i < connectionsN; i++) {
+			connect(serverHost, serverPort, clientProtocol);
+		}
+	}
+
+	private synchronized void switchToNextWorker() {
+		currentWorkerInd++;
 		if (currentWorkerInd == workers.length) {
 			currentWorkerInd = 0;
 		}
 	}
 
-	protected static SocketChannel socket() {
+	protected static SocketChannel openSocket() {
 		try {
 			SocketChannel socketChannel = SocketChannel.open();
 
@@ -138,7 +153,11 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 	public synchronized TCPClient start() {
 		new Thread(this, "client").start();
 
-		return super.start();
+		super.start();
+
+		connect(host, port, protocol, connections);
+
+		return this;
 	}
 
 	@Override
