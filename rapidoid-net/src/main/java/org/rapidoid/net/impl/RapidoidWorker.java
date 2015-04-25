@@ -61,11 +61,9 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private final int maxPipelineSize;
 
-	final Protocol protocol;
+	final Protocol serverProtocol;
 
 	final RapidoidHelper helper;
-
-	private final boolean isProtocolListener;
 
 	private final int bufSize;
 
@@ -78,7 +76,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		super(name);
 		this.bufs = bufs;
 
-		this.protocol = protocol;
+		this.serverProtocol = protocol;
 		this.helper = helper;
 		this.maxPipelineSize = Conf.option("pipeline-max", Integer.MAX_VALUE);
 
@@ -89,8 +87,6 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		this.connecting = new ArrayBlockingQueue<ConnectionTarget>(queueSize);
 		this.connected = new ArrayBlockingQueue<RapidoidChannel>(queueSize);
 		this.done = new SimpleList<RapidoidConnection>(queueSize / 10, growFactor);
-
-		this.isProtocolListener = protocol instanceof CtxListener;
 
 		connections = new ArrayPool<RapidoidConnection>(new Callable<RapidoidConnection>() {
 			@Override
@@ -107,7 +103,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 		configureSocket(socketChannel);
 
-		connected.add(new RapidoidChannel(socketChannel, false));
+		connected.add(new RapidoidChannel(socketChannel, false, serverProtocol));
 		selector.wakeup();
 	}
 
@@ -146,7 +142,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		try {
 			ready = socketChannel.finishConnect();
 			U.rteIf(!ready, "Expected an established connection!");
-			connected.add(new RapidoidChannel(socketChannel, true));
+			connected.add(new RapidoidChannel(socketChannel, true, target.protocol));
 		} catch (ConnectException e) {
 			retryConnecting(target);
 		}
@@ -178,7 +174,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			if (conn.isClient()) {
 				InetSocketAddress addr = conn.getAddress();
 				close(key);
-				retryConnecting(new ConnectionTarget(null, addr));
+				retryConnecting(new ConnectionTarget(null, addr, conn.getProtocol()));
 			} else {
 				close(key);
 			}
@@ -366,7 +362,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 			try {
 				SelectionKey newKey = socketChannel.register(selector, SelectionKey.OP_READ);
-				RapidoidConnection conn = attachConn(newKey);
+				RapidoidConnection conn = attachConn(newKey, channel.protocol);
 				conn.setClient(channel.isClient);
 
 				try {
@@ -398,7 +394,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		}
 	}
 
-	private RapidoidConnection attachConn(SelectionKey key) {
+	private RapidoidConnection attachConn(SelectionKey key, Protocol protocol) {
 		Object attachment = key.attachment();
 		assert attachment == null || attachment instanceof ConnectionTarget;
 
@@ -409,8 +405,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 		conn.key = key;
 		conn.setProtocol(protocol);
-		
-		if (isProtocolListener) {
+
+		if (protocol instanceof CtxListener) {
 			conn.setListener((CtxListener) protocol);
 		}
 

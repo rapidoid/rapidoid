@@ -55,6 +55,7 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 	@Inject(optional = true)
 	private boolean noDelay = false;
 
+	// initial number of connections to the default server
 	@Inject(optional = true)
 	private int connections = 1;
 
@@ -63,6 +64,9 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 	private final Class<? extends RapidoidHelper> helperClass;
 
 	private final Class<? extends DefaultExchange<?, ?>> exchangeClass;
+
+	// round-robin workers for new connections
+	private int currentWorkerInd = 0;
 
 	public RapidoidClientLoop(Protocol protocol, Class<? extends DefaultExchange<?, ?>> exchangeClass,
 			Class<? extends RapidoidHelper> helperClass) {
@@ -90,35 +94,44 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 
 		U.notNull(host, "host");
 
-		InetSocketAddress addr = new InetSocketAddress(host, port);
-
 		workers = new RapidoidWorker[workersN];
 
 		for (int i = 0; i < workers.length; i++) {
 			RapidoidHelper helper = Cls.newInstance(helperClass, exchangeClass);
 			String workerName = "client" + (i + 1);
-			workers[i] = new RapidoidWorker(workerName, new BufGroup(13), protocol, helper, bufSizeKB, noDelay);
+			workers[i] = new RapidoidWorker(workerName, new BufGroup(13), null, helper, bufSizeKB, noDelay);
 			new Thread(workers[i], workerName).start();
 		}
 
-		int workerInd = 0;
-
 		for (int c = 0; c < connections; c++) {
+			connect(host, port, protocol);
+		}
+	}
 
+	public synchronized void connect(String serverHost, int serverPort, Protocol clientProtocol) throws IOException {
+
+		InetSocketAddress addr = new InetSocketAddress(serverHost, serverPort);
+		SocketChannel socketChannel = socket();
+
+		workers[currentWorkerInd++].connect(new ConnectionTarget(socketChannel, addr, clientProtocol));
+
+		if (currentWorkerInd == workers.length) {
+			currentWorkerInd = 0;
+		}
+	}
+
+	protected static SocketChannel socket() {
+		try {
 			SocketChannel socketChannel = SocketChannel.open();
 
-			if ((socketChannel.isOpen())) {
-				workers[workerInd++].connect(new ConnectionTarget(socketChannel, addr));
-
-				if (workerInd == workers.length) {
-					workerInd = 0;
-				}
-
-			} else {
+			if (!socketChannel.isOpen()) {
 				throw U.rte("Cannot open socket!");
 			}
-		}
 
+			return socketChannel;
+		} catch (IOException e) {
+			throw U.rte("Cannot open socket!", e);
+		}
 	}
 
 	@Override

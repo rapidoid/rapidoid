@@ -25,21 +25,25 @@ import java.nio.channels.SocketChannel;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.net.Protocol;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class ConnectionTarget {
 
-	SocketChannel socketChannel;
+	volatile SocketChannel socketChannel;
 
-	InetSocketAddress addr;
+	final InetSocketAddress addr;
 
-	long retryAfter;
+	volatile long retryAfter;
 
-	public ConnectionTarget(SocketChannel socketChannel, InetSocketAddress addr) {
+	final Protocol protocol;
+
+	public ConnectionTarget(SocketChannel socketChannel, InetSocketAddress addr, Protocol protocol) {
 		this.socketChannel = socketChannel;
 		this.addr = addr;
+		this.protocol = protocol;
 		this.retryAfter = U.time();
 	}
 
