@@ -25,6 +25,7 @@ import java.util.List;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.Screen;
+import org.rapidoid.extra.demo.DemoMovie;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.FA;
 
@@ -93,6 +94,10 @@ public class ExpressionsScreen extends Screen {
 		expr("%LINE%", btn("information").info());
 		expr("%LINE%", btn("careful").warning());
 		expr("%LINE%", btn("Delete!").danger());
+
+		expr("%LINE%", create(new DemoMovie()));
+		expr("%LINE%", show(new DemoMovie("The Matrix", 1999)));
+		expr("%LINE%", edit(new DemoMovie("The Imitation Game", 2014)));
 
 		expr("%LINE%", grid(U.orderedMap("Name", "John Doe", "Age", 99, "Address", N_A)));
 		expr("%LINE%", highlight("abcde"));
