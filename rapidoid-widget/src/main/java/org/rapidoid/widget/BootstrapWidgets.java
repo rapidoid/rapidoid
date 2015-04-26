@@ -65,6 +65,8 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static final Tag NOTHING = span(awesome("ban"), " N/A").class_("nothing");
 
+	public static final Tag N_A = NOTHING;
+
 	public static final DebugWidget DEBUG = Cls.customizable(DebugWidget.class);
 
 	public static final ButtonWidget SAVE = cmd("^Save");
