@@ -3,6 +3,7 @@ package org.rapidoid.widget;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -386,6 +387,10 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static GridWidget grid(Items items, String sortOrder, int pageSize, String... properties) {
 		return Cls.customizable(GridWidget.class, items, sortOrder, pageSize, properties);
+	}
+
+	public static <T> KeyValueGridWidget grid(Map<?, ?> map) {
+		return Cls.customizable(KeyValueGridWidget.class).map(map);
 	}
 
 	public static PagerWidget pager(int from, int to, Var<Integer> pageNumber) {
