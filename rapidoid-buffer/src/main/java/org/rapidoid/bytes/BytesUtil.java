@@ -382,8 +382,6 @@ public class BytesUtil implements Constants {
 	 * against the specified search prefix. Returns the position of the separator, or <code>-1</code> if the limit is
 	 * reached and separator not found. If the prefix is matched, the negative of the position is returned, to mark the
 	 * prefix match. Duplicated code for performance reasons.
-	 * 
-	 * @param range
 	 */
 	public static int scanUntilAndMatchPrefix(Bytes bytes, Range result, byte separator, int fromPos, int toPos,
 			int searchPrefix) {

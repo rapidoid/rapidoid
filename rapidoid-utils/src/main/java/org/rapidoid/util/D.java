@@ -5,7 +5,7 @@ import org.rapidoid.annotation.Since;
 
 /*
  * #%L
- * rapidoid-u
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
