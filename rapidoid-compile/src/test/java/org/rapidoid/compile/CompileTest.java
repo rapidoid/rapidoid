@@ -30,6 +30,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.D;
 import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
@@ -49,7 +50,7 @@ public class CompileTest extends TestCommons {
 		eq(classes.size(), 10);
 
 		Set<String> classNames = compilation.getClassNames();
-		U.show(classNames);
+		D.print(classNames);
 
 		eq(Cls.classMap(classes).get("Main").getAnnotations().length, 2);
 

@@ -1,15 +1,11 @@
-package org.rapidoid.db.model;
+package org.rapidoid.util;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.DB;
-import org.rapidoid.db.DbRef;
-import org.rapidoid.db.DbSet;
-import org.rapidoid.db.Entity;
 
 /*
  * #%L
- * rapidoid-db-tests
+ * rapidoid-u
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -28,27 +24,22 @@ import org.rapidoid.db.Entity;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class Post extends Entity {
+@Since("2.4.0")
+public class D {
 
-	private static final long serialVersionUID = 3776106825040831514L;
-
-	public String content;
-
-	public final DbRef<Profile> postedOn = DB.ref(this, "^posted");
-
-	public final DbSet<Person> likes = DB.set(this, "likes");
-
-	public Post() {
+	private D() {
 	}
 
-	public Post(String content) {
-		this.content = content;
-	}
+	public static void print(Object... values) {
+		String text;
 
-	@Override
-	public String toString() {
-		return "Post [content=" + content + "]";
+		if (values != null) {
+			text = values.length == 1 ? U.readable(values[0]) : U.readable(values);
+		} else {
+			text = "null";
+		}
+
+		System.out.println(">" + text + "<");
 	}
 
 }

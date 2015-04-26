@@ -28,7 +28,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.db.model.Person;
 import org.rapidoid.lambda.Predicate;
-import org.rapidoid.util.U;
+import org.rapidoid.util.D;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")
@@ -55,7 +55,7 @@ public class DbClassCRUDTest extends DbTestCommons {
 
 		db.shutdown();
 
-		U.show(new String(bytes));
+		D.print(new String(bytes));
 
 		db = DBs.instance(db.name() + "-new");
 

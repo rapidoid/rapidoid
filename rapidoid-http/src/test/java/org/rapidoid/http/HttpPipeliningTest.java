@@ -30,7 +30,7 @@ import org.rapidoid.net.Protocol;
 import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ConnState;
-import org.rapidoid.util.U;
+import org.rapidoid.util.D;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.BoolWrap;
 import org.rapidoid.wrap.IntWrap;
@@ -93,7 +93,7 @@ public class HttpPipeliningTest extends HttpTestCommons {
 		shutdown();
 
 		isFalse(err.value);
-		U.show(counter.value, counter.value / sec);
+		D.print(counter.value, counter.value / sec);
 	}
 
 }

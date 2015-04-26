@@ -36,6 +36,7 @@ import org.rapidoid.data.Ranges;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.util.Arr;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.D;
 import org.rapidoid.util.U;
 import org.rapidoid.wrap.IntWrap;
 
@@ -578,12 +579,12 @@ public class MultiBuf implements Buf, Constants {
 
 		for (int i = 0; i < bufN - 1; i++) {
 			ByteBuffer buf = bufs[i];
-			U.show(i + "]" + buf);
+			D.print(i + "]" + buf);
 		}
 
 		if (bufN > 0) {
 			ByteBuffer buf = bufs[bufN - 1];
-			U.show("LAST]" + buf);
+			D.print("LAST]" + buf);
 		}
 	}
 

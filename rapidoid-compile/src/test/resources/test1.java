@@ -86,7 +86,7 @@ class PersonService {
 		for (Entry<?, ?> entry : params.entrySet()) {
 			Object key = entry.getKey();
 			Object value = entry.getValue();
-			U.show(key, value);
+			D.print(key, value);
 		}
 		return new Date();
 	}

@@ -629,18 +629,6 @@ public class U {
 		return rte("This operation is not supported by this implementation!");
 	}
 
-	public static void show(Object... values) {
-		String text;
-
-		if (values != null) {
-			text = values.length == 1 ? readable(values[0]) : readable(values);
-		} else {
-			text = "null";
-		}
-
-		System.out.println(">" + text + "<");
-	}
-
 	public static boolean isEmpty(String value) {
 		return value == null || value.isEmpty();
 	}

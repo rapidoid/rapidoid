@@ -720,12 +720,12 @@ public class UTILS implements Constants {
 
 	public static void endMeasure() {
 		long delta = U.time() - measureStart;
-		U.show(delta + " ms");
+		D.print(delta + " ms");
 	}
 
 	public static void endMeasure(String info) {
 		long delta = U.time() - measureStart;
-		U.show(info + ": " + delta + " ms");
+		D.print(info + ": " + delta + " ms");
 	}
 
 	public static void sleep(long millis) {

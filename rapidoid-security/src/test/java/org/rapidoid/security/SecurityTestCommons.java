@@ -24,7 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.CommonRoles;
-import org.rapidoid.util.U;
+import org.rapidoid.util.D;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -41,7 +41,7 @@ public abstract class SecurityTestCommons extends TestCommons implements CommonR
 
 	protected void checkPermissions(String username, Class<?> clazz, String propertyName, boolean canRead,
 			boolean canUpdate) {
-		U.show("CHECKING", username, clazz, propertyName, canRead, canUpdate);
+		D.print("CHECKING", username, clazz, propertyName, canRead, canUpdate);
 		checkPermissions(username, clazz, null, propertyName, canRead, canUpdate);
 	}
 
