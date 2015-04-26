@@ -89,13 +89,35 @@ public class ExpressionsScreen extends Screen {
 		expr("%LINE%", btn("abc"));
 		expr("%LINE%", btn("abc").primary());
 		expr("%LINE%", btn("great").success());
+
 		expr("%LINE%", btn("information").info());
 		expr("%LINE%", btn("careful").warning());
 		expr("%LINE%", btn("Delete!").danger());
+
+		expr("%LINE%", grid(U.map("Name", "John Doe", "Age", 99, "Address", N_A)));
+		expr("%LINE%", highlight("abcde"));
+		expr("%LINE%", highlight("abc123-gh7xyz", "\\d+"));
+
+		expr("%LINE%", txt("name", "Joe"));
+		expr("%LINE%", password("pass"));
+		expr("%LINE%", txtbig("desc", "Some text"));
+		expr("%LINE%", email("em"));
+		expr("%LINE%", checkbox("ch", true));
+		expr("%LINE%", dropdown(U.list("A", "B"), "v0", "B"));
+		expr("%LINE%", multiSelect(U.list("A", "B", "C"), "v1", U.list("A", "C")));
+		expr("%LINE%", radios(U.list("A", "B"), "v2", "A"));
+		expr("%LINE%", checkboxes(U.list("A", "B", "C"), "v3", U.list("A", "C")));
+		expr("%LINE%", display(U.list("a", "b", "c")));
+		expr("%LINE%", inline("abc", checkbox(session("c", true)), OK));
+
+		expr("%LINE%", panel("abc"));
 		expr("%LINE%", jumbotron("abc"));
 		expr("%LINE%", well("abc"));
 		expr("%LINE%", FA.COG);
 		expr("%LINE%", FA.FLAG);
+		expr("%LINE%", titleBox("abc"));
+		expr("%LINE%", right("abc"));
+
 		expr("%LINE%", row("abc"));
 		expr("%LINE%", row(col2("a"), col10("b")));
 		expr("%LINE%", row(col4("c"), col4("d"), col4("e")));
@@ -104,22 +126,6 @@ public class ExpressionsScreen extends Screen {
 		expr("%LINE%", mid4("de", right("f")));
 		expr("%LINE%", mid6("e", right("f")));
 		expr("%LINE%", mid8("g", right("h")));
-		expr("%LINE%", titleBox("abc"));
-		expr("%LINE%", right("abc"));
-		expr("%LINE%", panel("abc"));
-		expr("%LINE%", highlight("abcde"));
-		expr("%LINE%", highlight("abc123-gh7xyz", "\\d+"));
-		expr("%LINE%", email("em"));
-		expr("%LINE%", password("pass"));
-		expr("%LINE%", txt("name", "Joe"));
-		expr("%LINE%", txtbig("desc", "Some text"));
-		expr("%LINE%", checkbox("ch", true));
-		expr("%LINE%", dropdown(U.list("A", "B"), "v0", "B"));
-		expr("%LINE%", multiSelect(U.list("A", "B", "C"), "v1", U.list("A", "C")));
-		expr("%LINE%", radios(U.list("A", "B"), "v2", "A"));
-		expr("%LINE%", checkboxes(U.list("A", "B", "C"), "v3", U.list("A", "C")));
-		expr("%LINE%", display(U.list("a", "b", "c")));
-		expr("%LINE%", inline("abc", checkbox(session("c", true)), OK));
 
 		expr("%LINE%", NOTHING);
 		expr("%LINE%", SAVE);
