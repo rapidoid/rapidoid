@@ -94,7 +94,7 @@ public class ExpressionsScreen extends Screen {
 		expr("%LINE%", btn("careful").warning());
 		expr("%LINE%", btn("Delete!").danger());
 
-		expr("%LINE%", grid(U.map("Name", "John Doe", "Age", 99, "Address", N_A)));
+		expr("%LINE%", grid(U.orderedMap("Name", "John Doe", "Age", 99, "Address", N_A)));
 		expr("%LINE%", highlight("abcde"));
 		expr("%LINE%", highlight("abc123-gh7xyz", "\\d+"));
 
@@ -113,9 +113,9 @@ public class ExpressionsScreen extends Screen {
 		expr("%LINE%", panel("abc"));
 		expr("%LINE%", jumbotron("abc"));
 		expr("%LINE%", well("abc"));
+		expr("%LINE%", titleBox("abc"));
 		expr("%LINE%", FA.COG);
 		expr("%LINE%", FA.FLAG);
-		expr("%LINE%", titleBox("abc"));
 		expr("%LINE%", right("abc"));
 
 		expr("%LINE%", row("abc"));
@@ -142,6 +142,8 @@ public class ExpressionsScreen extends Screen {
 		expr("%LINE%", CANCEL);
 		expr("%LINE%", BACK);
 		expr("%LINE%", EDIT);
+
+		expr("%LINE%", DEBUG);
 
 		return generate();
 	}
