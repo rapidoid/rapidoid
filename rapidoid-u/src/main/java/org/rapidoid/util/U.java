@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -376,6 +377,66 @@ public class U {
 		must(keysAndValues.length % 2 == 0, "Incorrect number of arguments (expected key-value pairs)!");
 
 		ConcurrentMap<K, V> map = concurrentMap();
+
+		for (int i = 0; i < keysAndValues.length / 2; i++) {
+			map.put((K) keysAndValues[i * 2], (V) keysAndValues[i * 2 + 1]);
+		}
+
+		return map;
+	}
+
+	public static <K, V> Map<K, V> orderedMap(Map<? extends K, ? extends V> src, boolean ignoreNullValues) {
+		Map<K, V> map = orderedMap();
+
+		for (Entry<? extends K, ? extends V> e : src.entrySet()) {
+			if (!ignoreNullValues || e.getValue() != null) {
+				map.put(e.getKey(), e.getValue());
+			}
+		}
+
+		return map;
+	}
+
+	public static <K, V> Map<K, V> orderedMap() {
+		return new LinkedHashMap<K, V>();
+	}
+
+	public static <K, V> Map<K, V> orderedMap(K key, V value) {
+		Map<K, V> map = orderedMap();
+		map.put(key, value);
+		return map;
+	}
+
+	public static <K, V> Map<K, V> orderedMap(K key1, V value1, K key2, V value2) {
+		Map<K, V> map = orderedMap(key1, value1);
+		map.put(key2, value2);
+		return map;
+	}
+
+	public static <K, V> Map<K, V> orderedMap(K key1, V value1, K key2, V value2, K key3, V value3) {
+		Map<K, V> map = orderedMap(key1, value1, key2, value2);
+		map.put(key3, value3);
+		return map;
+	}
+
+	public static <K, V> Map<K, V> orderedMap(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
+		Map<K, V> map = orderedMap(key1, value1, key2, value2, key3, value3);
+		map.put(key4, value4);
+		return map;
+	}
+
+	public static <K, V> Map<K, V> orderedMap(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4,
+			K key5, V value5) {
+		Map<K, V> map = orderedMap(key1, value1, key2, value2, key3, value3, key4, value4);
+		map.put(key5, value5);
+		return map;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <K, V> Map<K, V> orderedMap(Object... keysAndValues) {
+		must(keysAndValues.length % 2 == 0, "Incorrect number of arguments (expected key-value pairs)!");
+
+		Map<K, V> map = orderedMap();
 
 		for (int i = 0; i < keysAndValues.length / 2; i++) {
 			map.put((K) keysAndValues[i * 2], (V) keysAndValues[i * 2 + 1]);
