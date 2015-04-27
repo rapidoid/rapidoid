@@ -1,5 +1,8 @@
 package org.rapidoid.util;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
@@ -27,8 +30,7 @@ import org.rapidoid.annotation.Since;
 @Since("2.4.0")
 public class D {
 
-	private D() {
-	}
+	private D() {}
 
 	public static void print(Object... values) {
 		String text;
@@ -40,6 +42,12 @@ public class D {
 		}
 
 		System.out.println(">" + text + "<");
+	}
+
+	public static void printKV(Map<?, ?> map) {
+		for (Entry<?, ?> e : map.entrySet()) {
+			System.out.println(e.getKey() + "=" + e.getValue());
+		}
 	}
 
 }
