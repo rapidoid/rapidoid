@@ -115,7 +115,10 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 			serverSocketChannel.configureBlocking(false);
 			ServerSocket socket = serverSocketChannel.socket();
 
+			Log.info("Opening port to listen", "port", port);
+
 			InetSocketAddress addr = new InetSocketAddress(port);
+
 			socket.bind(addr);
 
 			Log.info("Opened socket", "address", addr);
@@ -125,6 +128,7 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 			Log.info("Waiting for connections...");
 
 			workers = new RapidoidWorker[workersN];
+
 			for (int i = 0; i < workers.length; i++) {
 				RapidoidHelper helper = Cls.newInstance(helperClass, exchangeClass);
 				String workerName = "server" + (i + 1);
@@ -133,6 +137,11 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 				workers[i] = new RapidoidWorker(workerName, bufGroup, protocol, helper, bufSizeKB, noDelay);
 				new Thread(workers[i], workerName).start();
 			}
+
+			for (RapidoidWorker worker : workers) {
+				worker.waitToStart();
+			}
+
 		} else {
 			throw U.rte("Cannot open socket!");
 		}
