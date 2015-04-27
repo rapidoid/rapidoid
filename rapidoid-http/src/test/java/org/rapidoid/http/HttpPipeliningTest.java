@@ -26,10 +26,9 @@ import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
-import org.rapidoid.net.Protocol;
 import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.net.impl.ConnState;
+import org.rapidoid.net.impl.FiniteStateProtocol;
 import org.rapidoid.util.D;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.BoolWrap;
@@ -56,36 +55,39 @@ public class HttpPipeliningTest extends HttpTestCommons {
 		final IntWrap counter = new IntWrap();
 		final BoolWrap err = new BoolWrap();
 
-		TCP.client().host("localhost").port(8080).connections(connections).protocol(new Protocol() {
-			@Override
-			public void process(final Channel ctx) {
-				ConnState state = ctx.state();
+		TCP.client().host("localhost").port(8080).connections(connections).protocol(new FiniteStateProtocol(2) {
 
+			@Override
+			protected int state0(Channel ctx) {
+				for (int i = 0; i < pipelining; i++) {
+					ctx.write(REQ);
+				}
+				return 1;
+			}
+
+			@Override
+			protected int state1(Channel ctx) {
 				final Ranges lines = ctx.helper().ranges1;
 				final Range resp = ctx.helper().ranges2.ranges[0];
 
-				if (state.n == 0) {
-					for (int i = 0; i < pipelining; i++) {
-						ctx.write(REQ);
-					}
-					state.n = 1;
-				} else if (state.n == 1) {
-					for (int i = 0; i < pipelining; i++) {
-						ctx.input().scanLnLn(lines.reset());
-						ctx.input().scanN(5, resp); // response body: "Hello"
+				for (int i = 0; i < pipelining; i++) {
+					ctx.input().scanLnLn(lines.reset());
+					ctx.input().scanN(5, resp); // response body: "Hello"
 
-						if (!BytesUtil.matches(ctx.input().bytes(), resp, RESP, true)) {
-							err.value = true;
-						}
-
-						counter.value++;
+					if (!BytesUtil.matches(ctx.input().bytes(), resp, RESP, true)) {
+						err.value = true;
 					}
 
-					for (int i = 0; i < pipelining; i++) {
-						ctx.write(REQ);
-					}
+					counter.value++;
 				}
+
+				for (int i = 0; i < pipelining; i++) {
+					ctx.write(REQ);
+				}
+
+				return 1;
 			}
+
 		}).build().start();
 
 		int sec = 5;
