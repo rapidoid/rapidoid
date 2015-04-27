@@ -42,8 +42,7 @@ public class Log {
 
 	private static Appendable LOG_OUTPUT = System.out;
 
-	private Log() {
-	}
+	private Log() {}
 
 	public static synchronized void args(String... args) {
 		for (String arg : args) {
@@ -76,7 +75,7 @@ public class Log {
 
 	private static void log(Appendable out, LogLevel level, String msg, String key1, Object value1, String key2,
 			Object value2, String key3, Object value3, int paramsN) {
-		if (level.ordinal() >= LOG_LEVEL.ordinal()) {
+		if (isEnabled(level)) {
 			try {
 				synchronized (out) {
 					out.append(level.name());
@@ -279,6 +278,38 @@ public class Log {
 
 	public static void severe(String msg, Throwable error) {
 		severe(msg, "error", error);
+	}
+
+	public static boolean isEnabled(LogLevel level) {
+		return level.ordinal() >= LOG_LEVEL.ordinal();
+	}
+
+	public static boolean isTraceEnabled() {
+		return isEnabled(TRACE);
+	}
+
+	public static boolean isDebugEnabled() {
+		return isEnabled(DEBUG);
+	}
+
+	public static boolean isAuditEnabled() {
+		return isEnabled(AUDIT);
+	}
+
+	public static boolean isInfoEnabled() {
+		return isEnabled(INFO);
+	}
+
+	public static boolean isWarnEnabled() {
+		return isEnabled(WARN);
+	}
+
+	public static boolean isErrorEnabled() {
+		return isEnabled(ERROR);
+	}
+
+	public static boolean isSevereEnabled() {
+		return isEnabled(SEVERE);
 	}
 
 }
