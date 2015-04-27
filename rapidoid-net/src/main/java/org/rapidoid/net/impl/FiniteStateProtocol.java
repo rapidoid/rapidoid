@@ -2,7 +2,7 @@ package org.rapidoid.net.impl;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-net
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
