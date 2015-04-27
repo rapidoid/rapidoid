@@ -507,24 +507,26 @@ public class U {
 		return a.equals(b);
 	}
 
-	public static RuntimeException rte(String message, Object... args) {
-		return new RuntimeException(nice(message, args));
+	public static RuntimeException rte(String message) {
+		String threadInfo = "[" + Thread.currentThread().getName() + "] ";
+		return new RuntimeException(threadInfo + message);
+	}
+
+	public static RuntimeException rte(String message, Throwable cause) {
+		String threadInfo = "[" + Thread.currentThread().getName() + "] ";
+		return new RuntimeException(threadInfo + message, cause);
 	}
 
 	public static RuntimeException rte(Throwable cause) {
-		return new RuntimeException(cause);
+		return rte("", cause);
 	}
 
-	public static RuntimeException rte(String message) {
-		return new RuntimeException(message);
+	public static RuntimeException rte(String message, Object... args) {
+		return rte(nice(message, args));
 	}
 
 	public static RuntimeException notExpected() {
 		return rte("This operation is not expected to be called!");
-	}
-
-	public static IllegalArgumentException illegalArg(String message) {
-		return new IllegalArgumentException(message);
 	}
 
 	public static void rteIf(boolean failureCondition, String msg) {
@@ -541,11 +543,7 @@ public class U {
 	}
 
 	public static RuntimeException rte(String message, Throwable cause, Object... args) {
-		return new RuntimeException(nice(message, args), cause);
-	}
-
-	public static RuntimeException rte(String message, Throwable cause) {
-		return new RuntimeException(message, cause);
+		return rte(nice(message, args), cause);
 	}
 
 	public static boolean must(boolean expectedCondition) {
@@ -581,6 +579,10 @@ public class U {
 			throw rte(message, readable(arg1), readable(arg2), readable(arg3));
 		}
 		return true;
+	}
+
+	public static IllegalArgumentException illegalArg(String message) {
+		return new IllegalArgumentException(message);
 	}
 
 	public static void secure(boolean condition, String msg) {
