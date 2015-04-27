@@ -23,6 +23,7 @@ package org.rapidoid.http.client;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HTTP;
+import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpTestCommons;
 import org.rapidoid.lambda.ResultCounterCallback;
 import org.rapidoid.log.Log;
@@ -40,10 +41,10 @@ public class HttpClientTest extends HttpTestCommons {
 	protected static final String SIMPLE_RESPONSE = "AbC";
 
 	@Test
-	public void testHttpServerPipelining() {
+	public void testHttpClient() {
 		Log.setLogLevel(LogLevel.DEBUG);
 
-		HTTP.serve(SIMPLE_RESPONSE);
+		HTTPServer localServer = HTTP.serve(SIMPLE_RESPONSE);
 
 		ResultCounterCallback<String> cb = new ResultCounterCallback<String>();
 
@@ -58,6 +59,7 @@ public class HttpClientTest extends HttpTestCommons {
 		}
 
 		client.shutdown();
+		localServer.shutdown();
 	}
 
 }
