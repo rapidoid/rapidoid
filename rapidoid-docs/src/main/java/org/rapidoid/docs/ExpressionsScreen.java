@@ -106,19 +106,23 @@ public class ExpressionsScreen extends Screen {
 		expr("%LINE%", txt("name", "Joe"));
 		expr("%LINE%", password("pass"));
 		expr("%LINE%", txtbig("desc", "Some text"));
+
 		expr("%LINE%", email("em"));
 		expr("%LINE%", checkbox("ch", true));
 		expr("%LINE%", dropdown(U.list("A", "B"), "v0", "B"));
+
 		expr("%LINE%", multiSelect(U.list("A", "B", "C"), "v1", U.list("A", "C")));
 		expr("%LINE%", radios(U.list("A", "B"), "v2", "A"));
 		expr("%LINE%", checkboxes(U.list("A", "B", "C"), "v3", U.list("A", "C")));
+
 		expr("%LINE%", display(U.list("a", "b", "c")));
 		expr("%LINE%", inline("abc", checkbox(session("c", true)), OK));
-
 		expr("%LINE%", panel("abc"));
+
 		expr("%LINE%", jumbotron("abc"));
 		expr("%LINE%", well("abc"));
 		expr("%LINE%", titleBox("abc"));
+
 		expr("%LINE%", FA.COG);
 		expr("%LINE%", FA.FLAG);
 		expr("%LINE%", right("abc"));
@@ -126,13 +130,15 @@ public class ExpressionsScreen extends Screen {
 		expr("%LINE%", row("abc"));
 		expr("%LINE%", row(col2("a"), col10("b")));
 		expr("%LINE%", row(col4("c"), col4("d"), col4("e")));
+
 		expr("%LINE%", row(col1("g"), col7("g"), col4("e")));
 		expr("%LINE%", mid2("ab"));
 		expr("%LINE%", mid4("de", right("f")));
+
 		expr("%LINE%", mid6("e", right("f")));
 		expr("%LINE%", mid8("g", right("h")));
 		expr("%LINE%", NOTHING);
-		
+
 		expr("%LINE%", SAVE);
 		expr("%LINE%", CANCEL);
 		expr("%LINE%", DEBUG);
