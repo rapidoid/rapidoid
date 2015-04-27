@@ -20,6 +20,7 @@ package org.rapidoid.data;
  * #L%
  */
 
+import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
@@ -108,6 +109,17 @@ public class Ranges {
 
 	public boolean isEmpty() {
 		return count == 0;
+	}
+
+	public List<String> toList(Bytes bytes, int from, int to) {
+		List<String> list = U.list();
+
+		for (int i = from; i <= to; i++) {
+			String s = ranges[i].str(bytes);
+			list.add(s);
+		}
+
+		return list;
 	}
 
 	public Map<String, String> toMap(Bytes bytes, int from, int to, String separator) {
