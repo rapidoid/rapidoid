@@ -131,24 +131,24 @@ public class ExpressionsScreen extends Screen {
 		expr("%LINE%", mid4("de", right("f")));
 		expr("%LINE%", mid6("e", right("f")));
 		expr("%LINE%", mid8("g", right("h")));
-
 		expr("%LINE%", NOTHING);
+		
 		expr("%LINE%", SAVE);
-		expr("%LINE%", ADD);
-		expr("%LINE%", UPDATE);
-		expr("%LINE%", INSERT);
-		expr("%LINE%", DELETE);
-		expr("%LINE%", YES_DELETE);
-		expr("%LINE%", REMOVE);
-		expr("%LINE%", DESTROY);
-		expr("%LINE%", YES);
-		expr("%LINE%", NO);
-		expr("%LINE%", OK);
 		expr("%LINE%", CANCEL);
-		expr("%LINE%", BACK);
-		expr("%LINE%", EDIT);
-
 		expr("%LINE%", DEBUG);
+
+		// expr("%LINE%", ADD);
+		// expr("%LINE%", UPDATE);
+		// expr("%LINE%", INSERT);
+		// expr("%LINE%", DELETE);
+		// expr("%LINE%", YES_DELETE);
+		// expr("%LINE%", REMOVE);
+		// expr("%LINE%", DESTROY);
+		// expr("%LINE%", YES);
+		// expr("%LINE%", NO);
+		// expr("%LINE%", OK);
+		// expr("%LINE%", BACK);
+		// expr("%LINE%", EDIT);
 
 		return generate();
 	}
