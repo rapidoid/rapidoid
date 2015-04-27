@@ -41,6 +41,8 @@ public abstract class TestCommons {
 
 	private volatile boolean hasError = false;
 
+	private long waitingFrom;
+
 	@BeforeMethod(alwaysRun = true)
 	public void init() {
 		hasError = false;
@@ -317,6 +319,16 @@ public abstract class TestCommons {
 			return;
 		}
 		fail("Expected RuntimeException to be thrown!");
+	}
+
+	protected void waiting() {
+		waitingFrom = System.currentTimeMillis();
+	}
+
+	protected void timeout(int ms) {
+		if (System.currentTimeMillis() - waitingFrom > ms) {
+			fail("Reached waiting timeout: " + ms + " ms!");
+		}
 	}
 
 }
