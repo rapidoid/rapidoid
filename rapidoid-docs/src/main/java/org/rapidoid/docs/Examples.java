@@ -67,6 +67,10 @@ public class Examples {
 		server.serve(new AppHandler());
 		server.start();
 
+		// FIXME For each example a server is created internally, trying to bind
+		// to 8080, which is already taken by the server above. Error messages
+		// appear, but the examples are successfully generated.
+
 		for (int i = 1; i <= LOWER; i++) {
 			processExample(path, server, egNum(i));
 		}
@@ -241,8 +245,7 @@ public class Examples {
 		out = out.replace("\"//", "\"http://");
 		out = out.replace("href=\"/\"", "href=\"index.html\"");
 		out = out.replaceAll("(href|action)=\\\"/(\\w+)\\\"", "$1=\"$2.html\"");
-		out = out.replaceAll("_emit\\(event,\\s+'\\d+'\\)",
-				"alert('This is not a live demo, so this button does NOT work!');");
+		out = out.replaceAll("_emit\\('\\d+'\\)", "alert('This is not a live demo, so this button does NOT work!');");
 
 		IO.save(filename, out);
 	}
