@@ -43,6 +43,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
@@ -774,6 +775,16 @@ public class UTILS implements Constants {
 
 	public static boolean isSpecialProperty(String name) {
 		return SPECIAL_PROPERTIES.contains(name.toLowerCase());
+	}
+
+	public static Map<String, String> lowercase(Map<String, String> map) {
+		Map<String, String> lower = U.map();
+
+		for (Entry<String, String> e : map.entrySet()) {
+			lower.put(e.getKey().toLowerCase(), e.getValue().toLowerCase());
+		}
+
+		return lower;
 	}
 
 }
