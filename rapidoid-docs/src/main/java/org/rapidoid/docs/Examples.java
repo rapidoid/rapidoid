@@ -104,6 +104,7 @@ public class Examples {
 	}
 
 	private static void generateIndex(String path) {
+		String expressions = IO.load("expressions.html");
 		String docsT = IO.load("docs-template.html");
 		String egT = IO.load("example-template.html");
 
@@ -119,7 +120,8 @@ public class Examples {
 			examples = processIndex(egT, examples, egNum(i));
 		}
 
-		String html = UTILS.fillIn(docsT, "examples", examples);
+		String html = UTILS.fillIn(docsT, "expressions", expressions);
+		html = UTILS.fillIn(html, "examples", examples);
 
 		IO.save(path + "index.html", html);
 	}
