@@ -136,7 +136,13 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	@Override
 	protected void connectOP(SelectionKey key) throws IOException {
+		U.must(key.isConnectable());
+
 		SocketChannel socketChannel = (SocketChannel) key.channel();
+		if (!socketChannel.isConnectionPending()) {
+			// not ready to retrieve the connection status
+			return;
+		}
 
 		ConnectionTarget target = (ConnectionTarget) key.attachment();
 
@@ -278,16 +284,20 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private void close(SelectionKey key) {
 		try {
-			RapidoidConnection conn = (RapidoidConnection) key.attachment();
+			Object attachment = key.attachment();
 
 			clearKey(key);
 
-			if (conn != null) {
-				if (!conn.closed) {
-					Log.trace("Closing connection", "connection", conn);
-					assert conn.key == key;
-					conn.reset();
-					connections.release(conn);
+			if (attachment instanceof RapidoidConnection) {
+				RapidoidConnection conn = (RapidoidConnection) attachment;
+
+				if (conn != null) {
+					if (!conn.closed) {
+						Log.trace("Closing connection", "connection", conn);
+						assert conn.key == key;
+						conn.reset();
+						connections.release(conn);
+					}
 				}
 			}
 
