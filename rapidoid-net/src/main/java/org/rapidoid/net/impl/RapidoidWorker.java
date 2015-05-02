@@ -181,8 +181,9 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 			if (conn.isClient()) {
 				InetSocketAddress addr = conn.getAddress();
+				Protocol protocol = conn.getProtocol();
 				close(key);
-				retryConnecting(new ConnectionTarget(null, addr, conn.getProtocol()));
+				retryConnecting(new ConnectionTarget(null, addr, protocol));
 			} else {
 				close(key);
 			}
