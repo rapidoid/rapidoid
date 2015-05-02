@@ -196,14 +196,17 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	private long processMsgs(RapidoidConnection conn) {
 		long reqN = 0;
 
-		while (reqN < maxPipelineSize && conn.input().hasRemaining() && processNext(conn)) {
+		while (reqN < maxPipelineSize && conn.input().hasRemaining() && processNext(conn, false)) {
 			reqN++;
 		}
 
 		return reqN;
 	}
 
-	private boolean processNext(RapidoidConnection conn) {
+	private boolean processNext(RapidoidConnection conn, boolean initial) {
+
+		U.must(initial || conn.input().hasRemaining());
+
 		int pos = conn.input().position();
 		int limit = conn.input().limit();
 		int osize = conn.output().size();
@@ -368,7 +371,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 				conn.setClient(channel.isClient);
 
 				try {
-					processNext(conn);
+					processNext(conn, true);
 				} finally {
 					conn.setInitial(false);
 				}
@@ -382,7 +385,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		while ((restartedConn = restarting.poll()) != null) {
 			Log.debug("restarting", "connection", restartedConn);
 
-			processNext(restartedConn);
+			processNext(restartedConn, true);
 		}
 
 		synchronized (done) {
