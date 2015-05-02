@@ -37,17 +37,17 @@ public class Range {
 
 	public int length = 0;
 
-	public Range() {
-	}
+	public Range() {}
 
 	public Range(int start, int length) {
 		this.start = start;
 		this.length = length;
 	}
 
-	public void reset() {
+	public Range reset() {
 		start = -1;
 		length = 0;
+		return this;
 	}
 
 	public int limit() {
