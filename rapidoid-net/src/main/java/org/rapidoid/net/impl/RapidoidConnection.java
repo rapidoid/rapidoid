@@ -342,4 +342,8 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 		return protocol;
 	}
 
+	public void log(String msg) {
+		state().log(msg);
+	}
+
 }

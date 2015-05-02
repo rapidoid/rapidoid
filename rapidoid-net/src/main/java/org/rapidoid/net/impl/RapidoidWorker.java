@@ -205,6 +205,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private boolean processNext(RapidoidConnection conn, boolean initial) {
 
+		conn.log(initial ? "<< INIT >>" : "<< PROCESS >>");
+
 		U.must(initial || conn.input().hasRemaining());
 
 		int pos = conn.input().position();
@@ -238,7 +240,9 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			return true;
 
 		} catch (IncompleteReadException e) {
+
 			Log.debug("Incomplete message");
+			conn.log("<< ROLLBACK >>");
 
 			// input not complete, so rollback
 			conn.input().position(pos);
@@ -250,6 +254,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			state.obj = stateObj;
 
 		} catch (ProtocolException e) {
+
+			conn.log("<< PROTOCOL ERROR >>");
 			Log.warn("Protocol error", "error", e);
 			conn.output().deleteAfter(osize);
 			conn.write(U.or(e.getMessage(), "Protocol error!"));
@@ -257,6 +263,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			conn.close(true);
 
 		} catch (Throwable e) {
+
+			conn.log("<< ERROR >>");
 			Log.error("Failed to process message!", e);
 			conn.close(true);
 		}
