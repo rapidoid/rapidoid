@@ -26,40 +26,57 @@ import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpTestCommons;
 import org.rapidoid.lambda.ResultCounterCallback;
-import org.rapidoid.log.Log;
-import org.rapidoid.log.LogLevel;
+import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.5.0")
 public class HttpClientTest extends HttpTestCommons {
 
-	private static final String GET_LOCALHOST = "GET / HTTP/1.1\nHost:localhost\n\n";
+	private static final String GET_LOCALHOST = "GET / HTTP/1.1\nHost: localhost\n\n";
 
-	private static final String GET_RAPIDOID_IO = "GET / HTTP/1.1\nHost:rapidoid.io\n\n";
+	private static final String GET_RAPIDOID_ORG = "GET / HTTP/1.1\nHost: www.rapidoid.org\n\n";
 
 	protected static final String SIMPLE_RESPONSE = "AbC";
 
 	@Test
 	public void testHttpClient() {
-		Log.setLogLevel(LogLevel.DEBUG);
+		for (int k = 0; k < 3; k++) {
 
-		HTTPServer localServer = HTTP.serve(SIMPLE_RESPONSE);
+			HTTPServer localServer = HTTP.serve(SIMPLE_RESPONSE);
 
-		ResultCounterCallback<String> cb = new ResultCounterCallback<String>();
+			ResultCounterCallback<String> cb1 = new ResultCounterCallback<String>();
+			ResultCounterCallback<String> cb2 = new ResultCounterCallback<String>();
 
-		HttpClient client = new HttpClient();
+			HttpClientCallback hcb1 = new HttpClientBodyCallback(cb1);
+			HttpClientCallback hcb2 = new HttpClientBodyCallback(cb2);
 
-		client.get("rapidoid.io", 80, GET_RAPIDOID_IO, cb);
-		client.get("localhost", 8080, GET_LOCALHOST, cb);
+			HttpClient client = new HttpClient();
 
-		waiting();
-		while (cb.getResultCount() < 2) {
-			timeout(5000);
+			int count = 1000;
+			for (int i = 0; i < count; i++) {
+				client.get("localhost", 8080, GET_LOCALHOST, hcb1);
+				client.get("www.rapidoid.org", 80, GET_RAPIDOID_ORG, hcb2);
+			}
+
+			waiting();
+			while (cb1.getResultCount() < count) {
+				timeout(50000);
+			}
+
+			waiting();
+			while (cb2.getResultCount() < count) {
+				timeout(60000);
+			}
+
+			eq(cb1.getResults(), U.set(SIMPLE_RESPONSE));
+			eq(cb2.getResults().size(), 1);
+
+			isTrue(cb2.getResults().iterator().next().length() > 5000);
+
+			client.shutdown();
+			localServer.shutdown();
 		}
-
-		client.shutdown();
-		localServer.shutdown();
 	}
 
 }

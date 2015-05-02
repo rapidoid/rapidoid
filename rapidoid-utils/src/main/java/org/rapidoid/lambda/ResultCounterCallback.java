@@ -1,9 +1,12 @@
 package org.rapidoid.lambda;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -29,17 +32,27 @@ import org.rapidoid.annotation.Since;
 @Since("2.5.0")
 public class ResultCounterCallback<T> implements Callback<T> {
 
+	// FIXME refactor the built-in callbacks using decorators
+
+	@SuppressWarnings("unchecked")
+	private final Set<T> results = Collections.synchronizedSet(U.<T> set());
+
 	private final AtomicLong resultsN = new AtomicLong();
 
 	@Override
 	public void onDone(T result, Throwable error) {
 		if (error == null) {
+			results.add(result);
 			resultsN.incrementAndGet();
 		}
 	}
 
 	public long getResultCount() {
 		return resultsN.get();
+	}
+
+	public Set<T> getResults() {
+		return results;
 	}
 
 }

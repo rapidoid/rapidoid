@@ -1,5 +1,10 @@
 package org.rapidoid.http.client;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.Buf;
+import org.rapidoid.data.Ranges;
+
 /*
  * #%L
  * rapidoid-http
@@ -20,23 +25,12 @@ package org.rapidoid.http.client;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.net.TCP;
-import org.rapidoid.net.TCPClient;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.5.0")
-public class HttpClient {
+public interface HttpClientCallback {
 
-	private final TCPClient clients = TCP.client().build().start();
+	void onResult(Buf buffer, Ranges head, Ranges body);
 
-	public void get(String host, int port, String request, HttpClientCallback callback) {
-		clients.connect(host, port, new HttpClientProtocol(request, callback));
-	}
-
-	public void shutdown() {
-		clients.shutdown();
-	}
+	void onError(String msg);
 
 }

@@ -27,7 +27,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
-import org.rapidoid.lambda.Callback;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.FiniteStateProtocol;
 import org.rapidoid.util.U;
@@ -39,9 +38,9 @@ public class HttpClientProtocol extends FiniteStateProtocol {
 
 	private final String request;
 
-	private final Callback<String> callback;
+	private final HttpClientCallback callback;
 
-	public HttpClientProtocol(String request, Callback<String> callback) {
+	public HttpClientProtocol(String request, HttpClientCallback callback) {
 		super(2);
 		this.request = request;
 		this.callback = callback;
@@ -66,11 +65,8 @@ public class HttpClientProtocol extends FiniteStateProtocol {
 	protected int state1(Channel ctx) {
 		ctx.log("receiving response");
 
-		final Ranges head = ctx.helper().ranges1;
-		final Range body = ctx.helper().ranges2.ranges[0];
-
-		head.reset();
-		body.reset();
+		final Ranges head = ctx.helper().ranges1.reset();
+		final Ranges body = ctx.helper().ranges2.reset();
 
 		Buf in = ctx.input();
 		in.scanLnLn(head);
@@ -79,17 +75,22 @@ public class HttpClientProtocol extends FiniteStateProtocol {
 		Map<String, String> headersLow = UTILS.lowercase(headers);
 
 		if ("chunked".equals(headersLow.get("transfer-encoding"))) {
+
 			ctx.log("got chunked encoding");
 			parseChunkedBody(in, body);
-			callback.onDone(body.str(in), null);
+			callback.onResult(in, head, body);
+
 		} else if (headersLow.containsKey("content-length")) {
+
 			ctx.log("got content length");
 			int clength = Integer.parseInt(headersLow.get("content-length"));
+
 			parseBodyByContentLength(in, body, clength);
-			callback.onDone(body.str(in), null);
+			callback.onResult(in, head, body);
+
 		} else {
 			ctx.log("invalid response");
-			callback.onDone(null, U.rte("Invalid HTTP response!"));
+			callback.onError("Cannot find Transfer-Encoding nor Content-Length headers!");
 		}
 
 		ctx.log("done");
@@ -97,14 +98,17 @@ public class HttpClientProtocol extends FiniteStateProtocol {
 		return STOP;
 	}
 
-	private void parseChunkedBody(Buf in, Range body) {
+	private void parseChunkedBody(Buf in, Ranges chunks) {
 		int count;
 		do {
 			String cnt = in.readLn();
 			count = Integer.parseInt(cnt, 16);
 
 			if (count > 0) {
-				in.scanN(count, body);
+				Range chunk = chunks.ranges[chunks.add()];
+				in.scanN(count, chunk);
+
+				// each chunk is terminated with a new line
 				String line = in.readLn();
 				U.must(line.isEmpty());
 			}
@@ -112,8 +116,9 @@ public class HttpClientProtocol extends FiniteStateProtocol {
 		} while (count > 0);
 	}
 
-	private void parseBodyByContentLength(Buf in, Range body, int clength) {
-		in.scanN(clength, body);
+	private void parseBodyByContentLength(Buf in, Ranges body, int clength) {
+		body.add(); // there will be only 1 body part
+		in.scanN(clength, body.ranges[0]);
 	}
 
 }
