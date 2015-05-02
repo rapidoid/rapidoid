@@ -20,6 +20,8 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
+import java.util.List;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.util.Resetable;
@@ -32,10 +34,28 @@ public class ConnState implements Resetable {
 
 	public volatile Object obj;
 
+	/* COMMENTED OUT FOR PRODUCTION (the log is used for debugging during development): */
+
+	// private final List<String> log = Collections.synchronizedList(U.<String> list());
 
 	public void reset() {
 		n = 0;
 		obj = null;
+		log("<<< RESET >>>");
+	}
+
+	/* The log is used for debugging during development. */
+	public void log(String msg) {
+		/* COMMENTED OUT FOR PRODUCTION: */
+		// log.add(msg);
+	}
+
+	/* The log is used for debugging during development. */
+	public List<String> log() {
+		return null;
+
+		/* COMMENTED OUT FOR PRODUCTION: */
+		// return log;
 	}
 
 }
