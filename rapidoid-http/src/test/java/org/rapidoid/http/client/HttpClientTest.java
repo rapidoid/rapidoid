@@ -53,19 +53,23 @@ public class HttpClientTest extends HttpTestCommons {
 
 			HttpClient client = new HttpClient();
 
-			int count = 1000;
-			for (int i = 0; i < count; i++) {
+			int count1 = 1000;
+			for (int i = 0; i < count1; i++) {
 				client.get("localhost", 8080, GET_LOCALHOST, hcb1);
+			}
+
+			int count2 = 10;
+			for (int i = 0; i < count2; i++) {
 				client.get("www.rapidoid.org", 80, GET_RAPIDOID_ORG, hcb2);
 			}
 
 			waiting();
-			while (cb1.getResultCount() < count) {
+			while (cb1.getResultCount() < count1) {
 				timeout(50000);
 			}
 
 			waiting();
-			while (cb2.getResultCount() < count) {
+			while (cb2.getResultCount() < count2) {
 				timeout(60000);
 			}
 
