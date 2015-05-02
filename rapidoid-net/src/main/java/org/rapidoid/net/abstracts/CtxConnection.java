@@ -41,4 +41,6 @@ public interface CtxConnection<T> {
 
 	T closeIf(boolean condition);
 
+	void log(String msg);
+
 }

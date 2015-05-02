@@ -52,7 +52,7 @@ public class HttpClientProtocol extends FiniteStateProtocol {
 	 */
 	@Override
 	protected int state0(Channel ctx) {
-		ctx.state().log("sending request");
+		ctx.log("sending request");
 
 		ctx.write(request.getBytes());
 
@@ -64,7 +64,7 @@ public class HttpClientProtocol extends FiniteStateProtocol {
 	 */
 	@Override
 	protected int state1(Channel ctx) {
-		ctx.state().log("receiving response");
+		ctx.log("receiving response");
 
 		final Ranges head = ctx.helper().ranges1;
 		final Range body = ctx.helper().ranges2.ranges[0];
@@ -79,20 +79,20 @@ public class HttpClientProtocol extends FiniteStateProtocol {
 		Map<String, String> headersLow = UTILS.lowercase(headers);
 
 		if ("chunked".equals(headersLow.get("transfer-encoding"))) {
-			ctx.state().log("got chunked encoding");
+			ctx.log("got chunked encoding");
 			parseChunkedBody(in, body);
 			callback.onDone(body.str(in), null);
 		} else if (headersLow.containsKey("content-length")) {
-			ctx.state().log("got content length");
+			ctx.log("got content length");
 			int clength = Integer.parseInt(headersLow.get("content-length"));
 			parseBodyByContentLength(in, body, clength);
 			callback.onDone(body.str(in), null);
 		} else {
-			ctx.state().log("invalid response");
+			ctx.log("invalid response");
 			callback.onDone(null, U.rte("Invalid HTTP response!"));
 		}
 
-		ctx.state().log("done");
+		ctx.log("done");
 		ctx.close(); // improve: keep-alive
 		return STOP;
 	}

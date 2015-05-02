@@ -978,4 +978,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return extras;
 	}
 
+	@Override
+	public void log(String msg) {
+		conn.log(msg);
+	}
+
 }
