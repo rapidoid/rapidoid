@@ -412,6 +412,11 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 		RapidoidConnection conn = connections.get();
 
+		// the connection is reset when closed
+		// but a protocol can modify the connection after closing it
+		// so it is reset again before reuse
+		conn.reset();
+
 		U.must(conn.closed);
 		conn.closed = false;
 
