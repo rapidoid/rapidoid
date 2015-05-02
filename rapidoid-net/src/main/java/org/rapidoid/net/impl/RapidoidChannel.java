@@ -25,6 +25,7 @@ import java.nio.channels.SocketChannel;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.net.Protocol;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -35,6 +36,10 @@ public class RapidoidChannel {
 	final Protocol protocol;
 
 	public RapidoidChannel(SocketChannel socketChannel, boolean isClient, Protocol protocol) {
+
+		U.notNull(socketChannel, "socket channel");
+		U.notNull(protocol, "channel protocol");
+
 		this.socketChannel = socketChannel;
 		this.isClient = isClient;
 		this.protocol = protocol;

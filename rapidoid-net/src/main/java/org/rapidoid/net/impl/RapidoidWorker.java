@@ -392,7 +392,9 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 			try {
 				SelectionKey newKey = socketChannel.register(selector, SelectionKey.OP_READ);
+				U.notNull(channel.protocol, "protocol");
 				RapidoidConnection conn = attachConn(newKey, channel.protocol);
+
 				conn.setClient(channel.isClient);
 
 				try {
@@ -425,6 +427,9 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	}
 
 	private RapidoidConnection attachConn(SelectionKey key, Protocol protocol) {
+		U.notNull(key, "protocol");
+		U.notNull(protocol, "protocol");
+
 		Object attachment = key.attachment();
 		assert attachment == null || attachment instanceof ConnectionTarget;
 

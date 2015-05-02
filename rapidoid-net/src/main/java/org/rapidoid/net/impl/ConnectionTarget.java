@@ -41,6 +41,9 @@ public class ConnectionTarget {
 	final Protocol protocol;
 
 	public ConnectionTarget(SocketChannel socketChannel, InetSocketAddress addr, Protocol protocol) {
+
+		U.notNull(protocol, "connection protocol");
+
 		this.socketChannel = socketChannel;
 		this.addr = addr;
 		this.protocol = protocol;
