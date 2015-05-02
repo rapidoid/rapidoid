@@ -134,4 +134,17 @@ public class Ranges {
 		return map;
 	}
 
+	public String getConcatenated(Bytes bytes, int from, int to, String separator) {
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = from; i <= to; i++) {
+			if (i > from && !U.isEmpty(separator)) {
+				sb.append(separator);
+			}
+			sb.append(ranges[i].str(bytes));
+		}
+
+		return sb.toString();
+	}
+
 }
