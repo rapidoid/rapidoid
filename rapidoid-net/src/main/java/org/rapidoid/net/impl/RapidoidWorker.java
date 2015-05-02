@@ -211,6 +211,10 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		int limit = conn.input().limit();
 		int osize = conn.output().size();
 
+		ConnState state = conn.state();
+		long stateN = state.n;
+		Object stateObj = state.obj;
+
 		try {
 			conn.done = false;
 
@@ -241,6 +245,9 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			conn.input().limit(limit);
 
 			conn.output().deleteAfter(osize);
+
+			state.n = stateN;
+			state.obj = stateObj;
 
 		} catch (ProtocolException e) {
 			Log.warn("Protocol error", "error", e);

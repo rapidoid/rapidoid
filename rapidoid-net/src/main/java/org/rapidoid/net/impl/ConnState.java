@@ -28,9 +28,10 @@ import org.rapidoid.util.Resetable;
 @Since("2.0.0")
 public class ConnState implements Resetable {
 
-	public long n;
+	public volatile long n;
 
-	public Object obj;
+	public volatile Object obj;
+
 
 	public void reset() {
 		n = 0;
