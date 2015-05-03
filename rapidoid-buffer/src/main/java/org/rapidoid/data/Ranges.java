@@ -147,4 +147,17 @@ public class Ranges {
 		return sb.toString();
 	}
 
+	public Range get(int index) {
+		assert index >= 0 && index < count;
+		return ranges[index];
+	}
+
+	public Range first() {
+		return get(0);
+	}
+
+	public Range last() {
+		return get(count - 1);
+	}
+
 }
