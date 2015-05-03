@@ -5,7 +5,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.lambda.Callback;
-import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -43,8 +42,8 @@ public class HttpClientBodyCallback implements HttpClientCallback {
 	}
 
 	@Override
-	public void onError(String msg) {
-		bodyCallback.onDone(null, U.rte(msg));
+	public void onError(Throwable error) {
+		bodyCallback.onDone(null, error);
 	}
 
 }

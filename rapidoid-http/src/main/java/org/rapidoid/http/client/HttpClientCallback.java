@@ -31,6 +31,6 @@ public interface HttpClientCallback {
 
 	void onResult(Buf buffer, Ranges head, Ranges body);
 
-	void onError(String msg);
+	void onError(Throwable error);
 
 }
