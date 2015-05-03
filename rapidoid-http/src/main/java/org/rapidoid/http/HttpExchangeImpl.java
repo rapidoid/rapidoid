@@ -123,6 +123,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	private String sessionId;
 	private Throwable error;
 	private boolean complete;
+	private boolean lowLevelProcessing;
 
 	public HttpExchangeImpl() {
 		reset();
@@ -186,6 +187,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		redirectUrl = null;
 		error = null;
 		complete = false;
+		lowLevelProcessing = false;
+	}
+
+	@Override
+	public void log(String msg) {
+		conn.log(msg);
 	}
 
 	@Override
@@ -466,19 +473,21 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 			return;
 		}
 
-		U.must(responseCode >= 100);
+		if (!lowLevelProcessing) {
+			U.must(responseCode >= 100);
 
-		write(new byte[0]);
+			write(new byte[0]);
 
-		U.must(bodyPos >= 0);
+			U.must(bodyPos >= 0);
 
-		long responseSize = output().size() - bodyPos;
-		U.must(responseSize <= Integer.MAX_VALUE, "Response too big!");
+			long responseSize = output().size() - bodyPos;
+			U.must(responseSize <= Integer.MAX_VALUE, "Response too big!");
 
-		int pos = startingPos + getResp(responseCode).contentLengthPos + 10;
-		output().putNumAsText(pos, responseSize, false);
+			int pos = startingPos + getResp(responseCode).contentLengthPos + 10;
+			output().putNumAsText(pos, responseSize, false);
 
-		closeIf(!isKeepAlive.value);
+			closeIf(!isKeepAlive.value);
+		}
 
 		complete = true;
 	}
@@ -979,8 +988,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public void log(String msg) {
-		conn.log(msg);
+	public synchronized void lowLevelProcessing() {
+		this.lowLevelProcessing = true;
+	}
+
+	public synchronized boolean isLowLevelProcessing() {
+		return lowLevelProcessing;
 	}
 
 }

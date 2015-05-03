@@ -22,6 +22,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.MultiData;
@@ -29,6 +30,12 @@ import org.rapidoid.data.MultiData;
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
 public interface LowLevelHttpExchange extends HttpExchange {
+
+	void lowLevelProcessing();
+
+	Buf input();
+
+	Buf output();
 
 	Data verb_();
 

@@ -153,6 +153,10 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 		HttpExchangeImpl x = (HttpExchangeImpl) xch;
 
+		if (x.isLowLevelProcessing()) {
+			return;
+		}
+
 		if (res != null) {
 			if (res instanceof byte[]) {
 				if (!x.hasContentType()) {
