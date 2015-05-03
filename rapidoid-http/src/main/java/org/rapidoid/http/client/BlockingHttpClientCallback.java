@@ -22,27 +22,32 @@ package org.rapidoid.http.client;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.net.TCP;
-import org.rapidoid.net.TCPClient;
+import org.rapidoid.buffer.Buf;
+import org.rapidoid.data.Range;
+import org.rapidoid.data.Ranges;
+import org.rapidoid.lambda.ResultOrError;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.5.0")
-public class HttpClient {
+public class BlockingHttpClientCallback implements HttpClientCallback {
 
-	private final TCPClient clients = TCP.client().build().start();
+	private final ResultOrError<byte[]> resultOrError = new ResultOrError<byte[]>();
 
-	public byte[] get(String host, int port, String request) {
-		BlockingHttpClientCallback callback = new BlockingHttpClientCallback();
-		clients.connect(host, port, new HttpClientProtocol(request, callback));
-		return callback.getResponse();
+	@Override
+	public void onResult(Buf buffer, Ranges head, Ranges body) {
+		Range whole = new Range();
+		whole.start = head.ranges[0].start;
+		whole.length = body.last().start + body.last().length;
+		resultOrError.setResult(whole.bytes(buffer));
 	}
 
-	public void get(String host, int port, String request, HttpClientCallback callback) {
-		clients.connect(host, port, new HttpClientProtocol(request, callback));
+	@Override
+	public void onError(Throwable error) {
+		resultOrError.setError(error);
 	}
 
-	public void shutdown() {
-		clients.shutdown();
+	public byte[] getResponse() {
+		return resultOrError.get();
 	}
 
 }
