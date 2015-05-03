@@ -178,7 +178,12 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		if (read == -1) {
 			// the other end closed the connection
 			Log.debug("The other end closed the connection!");
+			conn.closing = true;
+		}
 
+		process(conn);
+
+		if (conn.closing) {
 			if (conn.isClient()) {
 				InetSocketAddress addr = conn.getAddress();
 				Protocol protocol = conn.getProtocol();
@@ -187,11 +192,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			} else {
 				close(key);
 			}
-
-			return;
 		}
-
-		process(conn);
 	}
 
 	public void process(RapidoidConnection conn) {

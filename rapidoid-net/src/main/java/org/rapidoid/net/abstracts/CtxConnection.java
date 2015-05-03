@@ -41,6 +41,12 @@ public interface CtxConnection<T> {
 
 	T closeIf(boolean condition);
 
+	boolean isClosing();
+
+	boolean isClosed();
+
+	void waitUntilClosing();
+
 	void log(String msg);
 
 }

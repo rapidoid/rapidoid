@@ -66,6 +66,8 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 
 	public volatile boolean closed = true;
 
+	public volatile boolean closing = false;
+
 	volatile int completedInputPos;
 
 	private CtxListener listener;
@@ -93,6 +95,7 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 	public synchronized void reset() {
 		key = null;
 		closed = true;
+		closing = false;
 		input.clear();
 		output.clear();
 		closeAfterWrite = false;
@@ -105,6 +108,10 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 		isClient = false;
 		protocol = null;
 		state.reset();
+	}
+
+	public void log(String msg) {
+		state().log(msg);
 	}
 
 	@Override
@@ -342,8 +349,21 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 		return protocol;
 	}
 
-	public void log(String msg) {
-		state().log(msg);
+	@Override
+	public synchronized boolean isClosing() {
+		return closing;
+	}
+
+	@Override
+	public synchronized boolean isClosed() {
+		return closed;
+	}
+
+	@Override
+	public void waitUntilClosing() {
+		if (!isClosing()) {
+			throw Buf.INCOMPLETE_READ;
+		}
 	}
 
 }

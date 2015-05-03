@@ -996,4 +996,19 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return lowLevelProcessing;
 	}
 
+	@Override
+	public boolean isClosing() {
+		return conn.isClosing();
+	}
+
+	@Override
+	public boolean isClosed() {
+		return conn.isClosed();
+	}
+
+	@Override
+	public void waitUntilClosing() {
+		conn.waitUntilClosing();
+	}
+
 }
