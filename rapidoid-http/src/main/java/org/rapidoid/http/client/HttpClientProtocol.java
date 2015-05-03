@@ -89,8 +89,11 @@ public class HttpClientProtocol extends FiniteStateProtocol {
 			callback.onResult(in, head, body);
 
 		} else {
-			ctx.log("invalid response");
-			callback.onError("Cannot find Transfer-Encoding nor Content-Length headers!");
+			// no content length is provided, read until connection is closed
+			ctx.log("read until closed");
+
+			readBodyUntilClosed(ctx, body);
+			callback.onResult(in, head, body);
 		}
 
 		ctx.log("done");
@@ -119,6 +122,14 @@ public class HttpClientProtocol extends FiniteStateProtocol {
 	private void parseBodyByContentLength(Buf in, Ranges body, int clength) {
 		body.add(); // there will be only 1 body part
 		in.scanN(clength, body.ranges[0]);
+	}
+
+	private void readBodyUntilClosed(Channel ctx, Ranges body) {
+		ctx.waitUntilClosing();
+
+		body.add(); // there will be only 1 body part
+		Buf in = ctx.input();
+		in.scanN(in.remaining(), body.ranges[0]);
 	}
 
 }
