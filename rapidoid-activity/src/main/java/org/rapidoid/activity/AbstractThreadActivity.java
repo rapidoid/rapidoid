@@ -1,9 +1,5 @@
 package org.rapidoid.activity;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
-
 /*
  * #%L
  * rapidoid-activity
@@ -23,6 +19,11 @@ import org.rapidoid.log.Log;
  * limitations under the License.
  * #L%
  */
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
+
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

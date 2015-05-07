@@ -35,8 +35,7 @@ public class AppCtx {
 
 	private Classes classes;
 
-	private AppCtx() {
-	}
+	private AppCtx() {}
 
 	private static AppCtx ctx() {
 		AppCtx ctx = CTXS.get();

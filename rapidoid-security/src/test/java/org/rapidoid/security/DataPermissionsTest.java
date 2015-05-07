@@ -36,7 +36,7 @@ import org.testng.annotations.Test;
 
 @CanRead({ ANYBODY })
 @CanChange({ ANYBODY })
-class AbstractEntity {
+class AbstrEntity {
 
 	@CanChange({})
 	public long id;
@@ -71,7 +71,7 @@ class Comment {
 
 @CanRead({ OWNER, SHARED_WITH, "OTHER_ROLE" })
 @CanChange({ OWNER })
-class Issue extends AbstractEntity {
+class Issue extends AbstrEntity {
 
 	public String title;
 
