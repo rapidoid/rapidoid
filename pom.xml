@@ -83,7 +83,6 @@
 		<module>rapidoid-widget</module>
 		<module>rapidoid-pages</module>
 		<module>rapidoid-oauth</module>
-		<module>rapidoid-inmem</module>
 		<module>rapidoid-db</module>
 		<module>rapidoid-db-inmem</module>
 		<module>rapidoid-db-tests</module>
