@@ -29,6 +29,8 @@ public class UserInfo {
 
 	public volatile String username;
 
+	public volatile String passwordHash;
+
 	public volatile String email;
 
 	public volatile String name;

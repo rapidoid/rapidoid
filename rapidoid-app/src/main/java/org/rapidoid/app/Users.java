@@ -22,10 +22,8 @@ package org.rapidoid.app;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.Beany;
-import org.rapidoid.db.DB;
+import org.rapidoid.plugins.Plugins;
 import org.rapidoid.security.Secure;
-import org.rapidoid.util.U;
 import org.rapidoid.util.UserInfo;
 
 @Authors("Nikolche Mihajlovski")
@@ -38,11 +36,11 @@ public class Users {
 			return null;
 		}
 
-		T user = U.singleOrNone(DB.find(userClass, "username", u.username));
+		T user = (T) Plugins.users().findByUsername(userClass, u.username);
 
 		if (user == null) {
-			user = DB.entity(userClass, Beany.read(u));
-			DB.insert(user);
+			user = (T) Plugins.users().createUser(userClass, u.username, u.passwordHash, u.name, u.email, u.oauthId,
+					u.oauthProvider);
 		}
 
 		return user;

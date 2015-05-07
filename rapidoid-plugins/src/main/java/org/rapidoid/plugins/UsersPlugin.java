@@ -1,8 +1,5 @@
 package org.rapidoid.plugins;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 /*
  * #%L
  * rapidoid-plugins
@@ -23,28 +20,16 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class Plugins {
+public interface UsersPlugin {
 
-	public static DbPlugin db() {
-		return null;
-	}
+	<U> U findByUsername(Class<U> userClass, String username);
 
-	public static EntityPlugin entity() {
-		return null;
-	}
-
-	public static LanguagePlugin language() {
-		return null;
-	}
-
-	public static UsersPlugin users() {
-		return null;
-	}
-
-	public static LifecyclePlugin lifecycle() {
-		return null;
-	}
+	<U> U createUser(Class<U> userClass, String username, String passwordHash, String name, String email,
+			String oauthId, String oauthProvider);
 
 }
