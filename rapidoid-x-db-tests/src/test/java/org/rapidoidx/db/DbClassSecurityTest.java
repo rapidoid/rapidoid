@@ -33,7 +33,7 @@ import org.testng.annotations.Test;
 @CanInsert({ "ADMIN", "MANAGER" })
 @CanRead({ "AUTHOR" })
 @SuppressWarnings("serial")
-class Foo extends Entity {
+class Foo extends XEntity {
 	public String name = "no name";
 }
 
@@ -41,7 +41,7 @@ class Foo extends Entity {
 @CanRead("ANYBODY")
 @CanChange("MANAGER")
 @SuppressWarnings("serial")
-class Bar extends Entity {
+class Bar extends XEntity {
 
 	@CanRead(MODERATOR)
 	@CanChange({})

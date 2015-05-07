@@ -25,11 +25,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.DbList;
-import org.rapidoidx.db.Entity;
+import org.rapidoidx.db.XEntity;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class Profile extends Entity {
+public class Profile extends XEntity {
 
 	private static final long serialVersionUID = 7386682836039719457L;
 

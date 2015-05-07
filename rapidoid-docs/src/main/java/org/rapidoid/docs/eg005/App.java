@@ -5,7 +5,7 @@ import static org.rapidoid.app.AppGUI.*;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.app.Apps;
 import org.rapidoidx.db.XDB;
-import org.rapidoidx.db.Entity;
+import org.rapidoidx.db.XEntity;
 
 /*
  * #%L
@@ -50,7 +50,7 @@ public class App {
 
 @SuppressWarnings("serial")
 @Scaffold
-class Movie extends Entity {
+class Movie extends XEntity {
 	String title;
 	int year;
 }

@@ -8,7 +8,7 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Apps;
 import org.rapidoid.widget.FormWidget;
 import org.rapidoidx.db.XDB;
-import org.rapidoidx.db.Entity;
+import org.rapidoidx.db.XEntity;
 
 /*
  * #%L
@@ -67,7 +67,7 @@ class HomeScreen {
 
 @SuppressWarnings("serial")
 @Scaffold
-class Movie extends Entity {
+class Movie extends XEntity {
 	String title;
 	int year;
 }

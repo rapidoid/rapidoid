@@ -38,7 +38,7 @@ import org.rapidoid.util.U;
  */
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public abstract class Entity extends AbstractEntity implements CommonRoles, Serializable {
+public abstract class XEntity extends AbstractEntity implements CommonRoles, Serializable {
 
 	private static final long serialVersionUID = 8414835674684110203L;
 
@@ -57,7 +57,7 @@ public abstract class Entity extends AbstractEntity implements CommonRoles, Seri
 		}
 	};
 
-	public Entity() {
+	public XEntity() {
 		initRelations(this);
 	}
 

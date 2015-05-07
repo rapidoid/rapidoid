@@ -5,7 +5,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.DbRef;
 import org.rapidoidx.db.DbSet;
-import org.rapidoidx.db.Entity;
+import org.rapidoidx.db.XEntity;
 
 /*
  * #%L
@@ -30,7 +30,7 @@ import org.rapidoidx.db.Entity;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class Post extends Entity {
+public class Post extends XEntity {
 
 	private static final long serialVersionUID = 3776106825040831514L;
 

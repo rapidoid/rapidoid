@@ -4,7 +4,7 @@ import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.Screen;
 import org.rapidoidx.db.XDB;
-import org.rapidoidx.db.Entity;
+import org.rapidoidx.db.XEntity;
 
 /*
  * #%L
@@ -52,6 +52,6 @@ class HomeScreen extends Screen {
 
 @SuppressWarnings("serial")
 @Scaffold
-class Todo extends Entity {
+class Todo extends XEntity {
 	String content;
 }

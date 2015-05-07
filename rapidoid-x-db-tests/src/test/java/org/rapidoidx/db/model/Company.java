@@ -2,7 +2,7 @@ package org.rapidoidx.db.model;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoidx.db.Entity;
+import org.rapidoidx.db.XEntity;
 
 /*
  * #%L
@@ -28,7 +28,7 @@ import org.rapidoidx.db.Entity;
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class Company extends Entity {
+public class Company extends XEntity {
 
 	public String name;
 
