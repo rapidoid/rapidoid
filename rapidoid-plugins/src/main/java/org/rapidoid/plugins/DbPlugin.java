@@ -34,6 +34,8 @@ public interface DbPlugin {
 
 	<T> T get(long id);
 
+	<T> T get(long id, Class<T> clazz);
+
 	<T> T getIfExists(long id);
 
 	<T> List<T> getAll(Class<T> clazz);
@@ -42,9 +44,11 @@ public interface DbPlugin {
 
 	void update(long id, Object entity);
 
-	void insert(Object entity);
+	long insert(Object entity);
 
 	void delete(long id);
+
+	void delete(Object entity);
 
 	<T> List<T> find(String query);
 

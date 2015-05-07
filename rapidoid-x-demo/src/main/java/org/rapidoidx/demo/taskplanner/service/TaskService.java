@@ -24,8 +24,8 @@ import java.util.List;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.dao.DAO;
 import org.rapidoid.log.Log;
-import org.rapidoidx.db.DAO;
 import org.rapidoidx.demo.taskplanner.model.Task;
 
 @Authors("Nikolche Mihajlovski")

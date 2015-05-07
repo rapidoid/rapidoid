@@ -1,12 +1,10 @@
-package org.rapidoidx.db;
+package org.rapidoid.dao;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.util.Cls;
+import org.rapidoid.plugins.Plugins;
 import org.rapidoid.util.U;
 
 /*
@@ -30,8 +28,10 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
+/**
+ * @author Nikolche Mihajlovski
+ * @since 2.0.0
+ */
 public abstract class DAO<E> {
 
 	private final Class<E> clazz;
@@ -44,14 +44,15 @@ public abstract class DAO<E> {
 		U.must(daoClass.getSuperclass() == DAO.class, "Expected DAO to be superclass of %s, but found: %s!", daoClass,
 				daoClass.getSuperclass());
 
-		ParameterizedType genDao = Cls.generic(daoClass.getGenericSuperclass());
+		Type type = daoClass.getGenericSuperclass();
+		ParameterizedType genericDao = (type instanceof ParameterizedType) ? ((ParameterizedType) type) : null;
 
-		U.must(genDao != null && genDao.getActualTypeArguments().length > 0, "Cannot infer entity type for: %s",
-				daoClass);
+		U.must(genericDao != null && genericDao.getActualTypeArguments().length > 0,
+				"Cannot infer entity type for: %s", daoClass);
 
-		Type arg = genDao.getActualTypeArguments()[0];
+		Type arg = genericDao.getActualTypeArguments()[0];
 
-		return Cls.clazz(arg);
+		return type instanceof Class ? (Class<?>) type : Object.class;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -68,35 +69,31 @@ public abstract class DAO<E> {
 	}
 
 	public long insert(E record) {
-		return DB.insert(record);
+		return Plugins.db().insert(record);
 	}
 
 	public void update(long id, E record) {
-		DB.update(id, record);
+		Plugins.db().update(id, record);
 	}
 
 	public void delete(long id) {
-		DB.delete(id);
+		Plugins.db().delete(id);
 	}
 
 	public void delete(E record) {
-		DB.delete(record);
+		Plugins.db().delete(record);
 	}
 
 	public E get(long id) {
-		return DB.get(id, clazz);
+		return Plugins.db().get(id, clazz);
 	}
 
 	public List<E> all() {
-		return DB.getAll(clazz);
+		return Plugins.db().getAll(clazz);
 	}
 
 	public List<E> page(int page) {
-		return U.page(DB.getAll(clazz), page, 20);
-	}
-
-	public <T> T read(long id, String column) {
-		return DB.readColumn(id, column);
+		return U.page(Plugins.db().getAll(clazz), page, 20);
 	}
 
 }
