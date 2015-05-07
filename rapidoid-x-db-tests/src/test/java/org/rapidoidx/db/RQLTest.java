@@ -24,7 +24,6 @@ package org.rapidoidx.db;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Since;
-import org.rapidoidx.db.DB;
 import org.testng.annotations.Test;
 
 @DbEntity

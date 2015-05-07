@@ -24,7 +24,6 @@ package org.rapidoidx.db;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.util.U;
-import org.rapidoidx.db.DB;
 import org.rapidoidx.db.model.Post;
 import org.rapidoidx.db.model.Profile;
 import org.testng.annotations.Test;

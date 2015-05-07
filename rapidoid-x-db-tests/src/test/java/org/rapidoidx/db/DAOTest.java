@@ -23,8 +23,6 @@ package org.rapidoidx.db;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoidx.db.DAO;
-import org.rapidoidx.db.DB;
 import org.rapidoidx.db.model.IPerson;
 import org.rapidoidx.db.model.Person;
 import org.testng.annotations.Test;

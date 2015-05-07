@@ -28,9 +28,6 @@ import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.log.Log;
-import org.rapidoidx.websocket.WSExchange;
-import org.rapidoidx.websocket.WSHandler;
-import org.rapidoidx.websocket.WebSocket;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

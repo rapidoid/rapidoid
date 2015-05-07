@@ -23,7 +23,6 @@ package org.rapidoidx.db;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoidx.db.DB;
 import org.rapidoidx.db.model.IPost;
 import org.testng.annotations.Test;
 

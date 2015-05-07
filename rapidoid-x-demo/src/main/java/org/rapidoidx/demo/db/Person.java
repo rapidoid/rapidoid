@@ -1,4 +1,4 @@
-package org.rapidoid.demo.db;
+package org.rapidoidx.demo.db;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

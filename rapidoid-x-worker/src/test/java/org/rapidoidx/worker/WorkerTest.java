@@ -26,8 +26,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.UTILS;
-import org.rapidoidx.worker.Worker;
-import org.rapidoidx.worker.Workers;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")

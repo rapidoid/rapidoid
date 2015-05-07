@@ -1,4 +1,4 @@
-package org.rapidoid.demo.db;
+package org.rapidoidx.demo.db;
 
 /*
  * #%L
@@ -23,9 +23,9 @@ package org.rapidoid.demo.db;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.db.DB;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.UTILS;
+import org.rapidoidx.db.DB;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

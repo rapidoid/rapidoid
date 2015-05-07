@@ -24,7 +24,6 @@ package org.rapidoidx.db;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.util.OptimisticConcurrencyControlException;
-import org.rapidoidx.db.DB;
 import org.rapidoidx.db.model.IPerson;
 import org.testng.annotations.Test;
 

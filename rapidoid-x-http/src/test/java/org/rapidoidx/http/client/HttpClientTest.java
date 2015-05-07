@@ -28,9 +28,6 @@ import org.rapidoid.http.HTTPServer;
 import org.rapidoid.lambda.ResultCounterCallback;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
-import org.rapidoidx.http.client.HttpClient;
-import org.rapidoidx.http.client.HttpClientBodyCallback;
-import org.rapidoidx.http.client.HttpClientCallback;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")

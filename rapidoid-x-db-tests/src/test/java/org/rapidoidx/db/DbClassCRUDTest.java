@@ -29,9 +29,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.D;
-import org.rapidoidx.db.DB;
-import org.rapidoidx.db.DBs;
-import org.rapidoidx.db.Database;
 import org.rapidoidx.db.model.Person;
 import org.testng.annotations.Test;
 

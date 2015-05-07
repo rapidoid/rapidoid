@@ -32,7 +32,6 @@ import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.util.U;
-import org.rapidoidx.db.DB;
 import org.rapidoidx.db.model.Person;
 import org.testng.annotations.Test;
 

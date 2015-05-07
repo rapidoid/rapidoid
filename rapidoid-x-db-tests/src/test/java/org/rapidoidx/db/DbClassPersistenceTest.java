@@ -29,7 +29,6 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.util.OptimisticConcurrencyControlException;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.UTILS;
-import org.rapidoidx.db.DB;
 import org.rapidoidx.db.model.Person;
 import org.testng.annotations.Test;
 

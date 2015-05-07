@@ -1,4 +1,4 @@
-package org.rapidoid.demo.db;
+package org.rapidoidx.demo.db;
 
 /*
  * #%L
@@ -26,10 +26,10 @@ import java.util.Collections;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.db.impl.inmem.DbEntityConstructor;
-import org.rapidoid.db.impl.inmem.JacksonEntitySerializer;
-import org.rapidoid.inmem.InMem;
 import org.rapidoid.util.UTILS;
+import org.rapidoidx.db.impl.inmem.DbEntityConstructor;
+import org.rapidoidx.db.impl.inmem.JacksonEntitySerializer;
+import org.rapidoidx.inmem.InMem;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

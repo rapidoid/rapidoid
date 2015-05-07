@@ -29,8 +29,6 @@ import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.UserInfo;
-import org.rapidoidx.db.DB;
-import org.rapidoidx.db.DbColumn;
 import org.testng.annotations.Test;
 
 @CanInsert({ "ADMIN", "MANAGER" })

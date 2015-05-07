@@ -5,7 +5,6 @@ import java.util.concurrent.ConcurrentMap;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.util.U;
-import org.rapidoidx.db.DB;
 import org.rapidoidx.db.impl.DbProxy;
 import org.rapidoidx.db.model.IPost;
 import org.testng.annotations.Test;

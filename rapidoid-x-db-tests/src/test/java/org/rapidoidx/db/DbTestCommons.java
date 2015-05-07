@@ -27,8 +27,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.AppCtx;
-import org.rapidoidx.db.DB;
-import org.rapidoidx.db.DBs;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
