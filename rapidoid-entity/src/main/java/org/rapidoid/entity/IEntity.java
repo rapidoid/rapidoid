@@ -1,4 +1,4 @@
-package org.rapidoid.db;
+package org.rapidoid.entity;
 
 /*
  * #%L
@@ -26,16 +26,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.var.Var;
-
 /**
- * Common functionality for both class-based and interface-based persisted domain model entities.
+ * @author Nikolche Mihajlovski
+ * @since 2.2.0
  */
-@Authors("Nikolche Mihajlovski")
-@Since("2.2.0")
-public interface IEntityCommons {
+public interface IEntity {
 
 	long id();
 
@@ -66,8 +61,6 @@ public interface IEntityCommons {
 	<T> List<T> _list(Object key);
 
 	<T> Set<T> _set(Object key);
-
-	<T> Var<T> _var(Object key, T defaultValue);
 
 	<T> T _extra(Object key);
 

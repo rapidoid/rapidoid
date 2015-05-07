@@ -1,19 +1,15 @@
-package org.rapidoid.db;
+package org.rapidoid.entity;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.util.CommonRoles;
-import org.rapidoid.util.U;
-import org.rapidoid.var.Var;
-import org.rapidoid.var.Vars;
 
 /*
  * #%L
@@ -35,11 +31,11 @@ import org.rapidoid.var.Vars;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("2.2.0")
-public class EntityCommons implements IEntityCommons, CommonRoles, Serializable {
-
-	private static final long serialVersionUID = 8414835674684110203L;
+/**
+ * @author Nikolche Mihajlovski
+ * @since 2.2.0
+ */
+public abstract class AbstractEntity implements IEntity {
 
 	private long id;
 
@@ -136,11 +132,11 @@ public class EntityCommons implements IEntityCommons, CommonRoles, Serializable 
 			return false;
 		}
 
-		if (!(obj instanceof IEntityCommons)) {
+		if (!(obj instanceof IEntity)) {
 			return false;
 		}
 
-		IEntityCommons other = (IEntityCommons) obj;
+		IEntity other = (IEntity) obj;
 		if (id != other.id())
 			return false;
 
@@ -153,7 +149,7 @@ public class EntityCommons implements IEntityCommons, CommonRoles, Serializable 
 		_extras();
 
 		if (!extras.containsKey(key)) {
-			extras.put(key, U.concurrentMap());
+			extras.put(key, new ConcurrentHashMap<K, V>());
 		}
 
 		return (ConcurrentMap<K, V>) extras.get(key);
@@ -165,7 +161,7 @@ public class EntityCommons implements IEntityCommons, CommonRoles, Serializable 
 		_extras();
 
 		if (!extras.containsKey(key)) {
-			extras.put(key, U.list());
+			extras.put(key, new ArrayList<T>());
 		}
 
 		return (List<T>) extras.get(key);
@@ -177,22 +173,10 @@ public class EntityCommons implements IEntityCommons, CommonRoles, Serializable 
 		_extras();
 
 		if (!extras.containsKey(key)) {
-			extras.put(key, U.set());
+			extras.put(key, new LinkedHashSet<T>());
 		}
 
 		return (Set<T>) extras.get(key);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public synchronized <T> Var<T> _var(Object key, T defaultValue) {
-		_extras();
-
-		if (!extras.containsKey(key)) {
-			extras.put(key, Vars.var(defaultValue));
-		}
-
-		return (Var<T>) extras.get(key);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -220,7 +204,7 @@ public class EntityCommons implements IEntityCommons, CommonRoles, Serializable 
 	@Override
 	public synchronized Map<Object, Object> _extras() {
 		if (extras == null) {
-			extras = Collections.synchronizedMap(U.map());
+			extras = Collections.synchronizedMap(new HashMap<Object, Object>());
 		}
 		return extras;
 	}
@@ -228,7 +212,7 @@ public class EntityCommons implements IEntityCommons, CommonRoles, Serializable 
 	@Override
 	public synchronized Map<Object, Object> _tmps() {
 		if (tmps == null) {
-			tmps = Collections.synchronizedMap(U.map());
+			tmps = Collections.synchronizedMap(new HashMap<Object, Object>());
 		}
 		return tmps;
 	}
