@@ -87,6 +87,19 @@
 		<module>rapidoid-demo</module>
 		<module>rapidoid-docs</module>
 		<module>rapidoid-module-template</module>
+		<module>rapidoid-x</module>
+		<module>rapidoid-x-buffer</module>
+		<module>rapidoid-x-net</module>
+		<module>rapidoid-x-http</module>
+		<module>rapidoid-x-compile</module>
+		<module>rapidoid-x-worker</module>
+		<module>rapidoid-x-websocket</module>
+		<module>rapidoid-x-inmem</module>
+		<module>rapidoid-x-db</module>
+		<module>rapidoid-x-db-impl</module>
+		<module>rapidoid-x-db-inmem</module>
+		<module>rapidoid-x-db-tests</module>
+		<module>rapidoid-x-demo</module>
 	</modules>
 
 	<build>
@@ -122,30 +135,6 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>1.6</version>
-				<configuration>
-					<verbose>false</verbose>
-					<licenseName>apache_v2</licenseName>
-					<canUpdateCopyright>true</canUpdateCopyright>
-					<canUpdateDescription>true</canUpdateDescription>
-					<includes>
-						<include>**/*.java</include>
-					</includes>
-				</configuration>
-				<executions>
-					<execution>
-						<id>first</id>
-						<goals>
-							<goal>update-file-header</goal>
-						</goals>
-						<phase>process-sources</phase>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.18.1</version>
@@ -177,6 +166,31 @@
 
 		<pluginManagement>
 			<plugins>
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<version>1.6</version>
+					<configuration>
+						<licenseName>apache_v2</licenseName>
+						<verbose>false</verbose>
+						<canUpdateCopyright>true</canUpdateCopyright>
+						<canUpdateDescription>true</canUpdateDescription>
+						<includes>
+							<include>**/*.java</include>
+						</includes>
+					</configuration>
+					<executions>
+						<execution>
+							<id>first</id>
+							<goals>
+								<goal>update-file-header</goal>
+							</goals>
+							<phase>process-sources</phase>
+						</execution>
+					</executions>
+				</plugin>
+
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
