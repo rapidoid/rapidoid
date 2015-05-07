@@ -20,27 +20,6 @@ package org.rapidoid.app;
  * #L%
  */
 
-import java.util.Comparator;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.Beany;
-import org.rapidoid.db.DB;
-import org.rapidoid.db.IEntityCommons;
-import org.rapidoid.db.model.DbItems;
-import org.rapidoid.lambda.Calc;
-import org.rapidoid.lambda.Predicate;
-import org.rapidoid.model.Item;
-import org.rapidoid.model.Items;
-import org.rapidoid.model.Models;
-import org.rapidoid.model.Property;
-import org.rapidoid.pages.PageGUI;
-import org.rapidoid.util.Cls;
-import org.rapidoid.widget.BootstrapWidgets;
-import org.rapidoid.widget.DataManager;
-import org.rapidoid.widget.FormWidget;
-import org.rapidoid.widget.GridWidget;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class AppGUI extends PageGUI {
@@ -70,18 +49,6 @@ public class AppGUI extends PageGUI {
 		return all(match, Beany.<T> comparator("id"));
 	}
 
-	public static <T> Property prop(String name, Calc<T> calc) {
-		return Models.property(name, calc);
-	}
-
-	public static Item item(Object value) {
-		return Models.item(value);
-	}
-
-	public static <T> Items beanItems(Class<T> beanType, T... beans) {
-		return Models.beanItems(beanType, beans);
-	}
-
 	public static <T> GridWidget grid(Class<T> type, String sortOrder, int pageSize, String... properties) {
 		return grid(all(type, sortOrder), sortOrder, pageSize, properties);
 	}
@@ -106,34 +73,6 @@ public class AppGUI extends PageGUI {
 	public static <T> GridWidget grid(Class<T> type, Predicate<T> match, Comparator<T> orderBy, int pageSize,
 			String... properties) {
 		return grid(all(type, match, orderBy), null, pageSize, properties);
-	}
-
-	public static FormWidget show(Object bean, String... properties) {
-		return show(Models.item(bean), properties);
-	}
-
-	public static FormWidget show(final Item item, String... properties) {
-		return BootstrapWidgets.show(dataManager(), item, properties);
-	}
-
-	public static FormWidget edit(Object bean, String... properties) {
-		return edit(Models.item(bean), properties);
-	}
-
-	public static FormWidget edit(final Item item, String... properties) {
-		return BootstrapWidgets.edit(dataManager(), item, properties);
-	}
-
-	public static FormWidget create(Object bean, String... properties) {
-		return create(Models.item(bean), properties);
-	}
-
-	public static FormWidget create(final Item item, String... properties) {
-		return BootstrapWidgets.create(dataManager(), item, properties);
-	}
-
-	public static DataManager dataManager() {
-		return Cls.customizable(DbDataManager.class, DB.db());
 	}
 
 }
