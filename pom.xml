@@ -85,7 +85,6 @@
 		<module>rapidoid-oauth</module>
 		<module>rapidoid-inmem</module>
 		<module>rapidoid-db</module>
-		<module>rapidoid-db-impl</module>
 		<module>rapidoid-db-inmem</module>
 		<module>rapidoid-db-tests</module>
 		<module>rapidoid-app</module>
