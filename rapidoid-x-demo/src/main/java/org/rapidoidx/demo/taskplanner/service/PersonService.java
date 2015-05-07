@@ -30,6 +30,7 @@ import org.rapidoid.dao.DAO;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoidx.db.XDB;
+import org.rapidoidx.demo.taskplanner.model.Person;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

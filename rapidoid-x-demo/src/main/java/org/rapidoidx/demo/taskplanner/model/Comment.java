@@ -3,9 +3,10 @@ package org.rapidoidx.demo.taskplanner.model;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Since;
-import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.DbRef;
 import org.rapidoidx.db.DbSet;
+import org.rapidoidx.db.XDB;
+import org.rapidoidx.db.XEntity;
 
 /*
  * #%L
@@ -32,7 +33,7 @@ import org.rapidoidx.db.DbSet;
 @DbEntity
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Comment extends Entity {
+public class Comment extends XEntity {
 
 	public String content;
 

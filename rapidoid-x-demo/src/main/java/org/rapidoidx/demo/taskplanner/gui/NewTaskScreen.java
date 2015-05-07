@@ -61,8 +61,7 @@ public class NewTaskScreen extends Screen {
 		FormWidget frm = create(task).buttons(ADD, CANCEL);
 		frm.field("description").setType(FieldType.TEXTAREA);
 
-		frm.add(field(null, null, null, null, "abcd", null, FieldType.CHECKBOXES, U.list("AA", "b", "cDeF"), true, v2,
-				null));
+		frm.add(field(null, null, null, "abcd", null, FieldType.CHECKBOXES, U.list("AA", "b", "cDeF"), true, v2, null));
 
 		frm.field("description").setLabel(h3("my custom field"));
 

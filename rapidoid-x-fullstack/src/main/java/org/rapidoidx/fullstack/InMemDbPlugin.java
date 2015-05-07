@@ -21,26 +21,59 @@ package org.rapidoidx.fullstack;
  * #L%
  */
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Callback;
+import org.rapidoid.lambda.Operation;
+import org.rapidoid.lambda.Predicate;
 import org.rapidoid.plugins.DbPlugin;
-import org.rapidoidx.db.Database;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
 public class InMemDbPlugin implements DbPlugin {
 
-	protected final Database db;
+	@Override
+	public long insert(Object entity) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-	public InMemDbPlugin(Database db) {
-		this.db = db;
+	@Override
+	public void update(Object entity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void update(long id, Object entity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public long persist(Object record) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public long insertOrGetId(Object record) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
 	public <T> T get(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T get(long id, Class<T> clazz) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -53,19 +86,26 @@ public class InMemDbPlugin implements DbPlugin {
 
 	@Override
 	public <T> List<T> getAll(Class<T> clazz) {
-		return db.find(clazz, "");
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public void update(Object entity) {
+	public <E> List<E> getAll(long... ids) {
 		// TODO Auto-generated method stub
-
+		return null;
 	}
 
 	@Override
-	public void insert(Object entity) {
+	public <E> List<E> getAll(Iterable<Long> ids) {
 		// TODO Auto-generated method stub
+		return null;
+	}
 
+	@Override
+	public long refresh(Object entity) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
@@ -75,9 +115,63 @@ public class InMemDbPlugin implements DbPlugin {
 	}
 
 	@Override
+	public void delete(Object entity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
 	public <T> List<T> find(String query) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public <T> List<T> find(Class<T> clazz, Predicate<T> match, Comparator<T> orderBy) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <E> List<E> find(Predicate<E> match) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long size() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public <E> E entity(Class<E> entityType, Map<String, ?> properties) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <E> List<E> query(Class<E> clazz, String query, Object... args) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <RESULT> RESULT sql(String sql, Object... args) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <E> void each(Operation<E> lambda) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void transaction(Runnable transaction, boolean readOnly) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override

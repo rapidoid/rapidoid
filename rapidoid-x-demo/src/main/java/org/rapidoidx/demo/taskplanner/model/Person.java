@@ -23,20 +23,19 @@ package org.rapidoidx.demo.taskplanner.model;
 
 import java.util.Date;
 
-import javax.swing.text.html.parser.Entity;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
-import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.DbSet;
+import org.rapidoidx.db.XDB;
+import org.rapidoidx.db.XEntity;
 
 @Scaffold
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Person extends Entity {
+public class Person extends XEntity {
 
 	@Display
 	public String username;
@@ -46,6 +45,8 @@ public class Person extends Entity {
 	public String name;
 
 	public Date birthdate;
+
+	public int age;
 
 	public final DbSet<Task> tasksOwned = XDB.set(this, "owns");
 

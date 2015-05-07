@@ -27,14 +27,15 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
-import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.DbSet;
+import org.rapidoidx.db.XDB;
+import org.rapidoidx.db.XEntity;
 
 @Scaffold
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class User extends Entity {
+public class User extends XEntity {
 
 	@Display
 	public String username;

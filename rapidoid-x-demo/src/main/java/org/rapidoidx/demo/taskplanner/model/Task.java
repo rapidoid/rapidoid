@@ -10,10 +10,11 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.CommonRoles;
-import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.DbList;
 import org.rapidoidx.db.DbRef;
 import org.rapidoidx.db.DbSet;
+import org.rapidoidx.db.XDB;
+import org.rapidoidx.db.XEntity;
 
 /*
  * #%L
@@ -45,7 +46,7 @@ import org.rapidoidx.db.DbSet;
 @DbEntity
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Task extends Entity {
+public class Task extends XEntity {
 
 	@Display
 	@CanChange({ MODERATOR, OWNER })

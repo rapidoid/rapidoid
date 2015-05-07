@@ -35,6 +35,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.ButtonWidget;
 import org.rapidoid.widget.GridWidget;
+import org.rapidoidx.demo.taskplanner.model.Person;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
