@@ -1,4 +1,11 @@
-package custom;
+package org.rapidoidx.demo.taskplanner.model;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.DbEntity;
+import org.rapidoid.annotation.Since;
+import org.rapidoidx.db.DB;
+import org.rapidoidx.db.DbRef;
+import org.rapidoidx.db.DbSet;
 
 /*
  * #%L
@@ -20,25 +27,18 @@ package custom;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
-import org.rapidoidx.db.impl.inmem.DbImpl;
-
+@SuppressWarnings("serial")
+@DbEntity
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class CustomizedDbImpl extends DbImpl {
+public class Comment extends Entity {
 
-	private static final long serialVersionUID = -3304900771653853896L;
+	public String content;
 
-	public CustomizedDbImpl(String name, String filename) {
-		super(name, filename);
-	}
+	public DbRef<User> owner = DB.ref(this, "^owns");
 
-	@Override
-	public void delete(long id) {
-		Log.warn("deleting record", "id", id);
-		super.delete(id);
-	}
+	public DbRef<Task> task = DB.ref(this, "^has");
+
+	public DbSet<User> likedBy = DB.set(this, "^likes");
 
 }

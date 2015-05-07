@@ -1,4 +1,4 @@
-package custom;
+package org.rapidoidx.demo.taskplanner.gui;
 
 /*
  * #%L
@@ -22,23 +22,35 @@ package custom;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.app.Screen;
 import org.rapidoid.log.Log;
-import org.rapidoidx.db.impl.inmem.DbImpl;
+import org.rapidoid.security.annotation.Admin;
+import org.rapidoid.security.annotation.Manager;
+import org.rapidoid.security.annotation.Role;
+import org.rapidoid.security.annotation.Roles;
+import org.rapidoid.util.UTILS;
+import org.rapidoidx.db.DB;
 
+@Admin
+@Manager
+@Roles({ @Role("RESTARTER") })
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class CustomizedDbImpl extends DbImpl {
+public class AdminScreen extends Screen {
 
-	private static final long serialVersionUID = -3304900771653853896L;
+	public Object[] content = { h2("Manage Application"), cmd("Shutdown") };
 
-	public CustomizedDbImpl(String name, String filename) {
-		super(name, filename);
-	}
+	public void onShutdown() {
+		DB.shutdown();
 
-	@Override
-	public void delete(long id) {
-		Log.warn("deleting record", "id", id);
-		super.delete(id);
+		Log.warn("Shutting down the application...");
+		UTILS.schedule(new Runnable() {
+			@Override
+			public void run() {
+				Log.warn("Exit application");
+				System.exit(0);
+			}
+		}, 500);
 	}
 
 }

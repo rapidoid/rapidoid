@@ -1,4 +1,7 @@
-package custom;
+package org.rapidoidx.demo.taskplanner.gui;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -20,25 +23,8 @@ package custom;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
-import org.rapidoidx.db.impl.inmem.DbImpl;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class CustomizedDbImpl extends DbImpl {
-
-	private static final long serialVersionUID = -3304900771653853896L;
-
-	public CustomizedDbImpl(String name, String filename) {
-		super(name, filename);
-	}
-
-	@Override
-	public void delete(long id) {
-		Log.warn("deleting record", "id", id);
-		super.delete(id);
-	}
+public class HelpScreen {
 
 }

@@ -1,4 +1,4 @@
-package custom;
+package org.rapidoidx.demo.taskplanner.gui;
 
 /*
  * #%L
@@ -21,24 +21,24 @@ package custom;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
-import org.rapidoidx.db.impl.inmem.DbImpl;
+import org.rapidoid.app.Screen;
+import org.rapidoid.html.Tag;
+import org.rapidoid.widget.GridWidget;
+import org.rapidoidx.demo.taskplanner.model.Task;
 
+@Order(2)
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class CustomizedDbImpl extends DbImpl {
+public class ManageTasksScreen extends Screen {
 
-	private static final long serialVersionUID = -3304900771653853896L;
+	public String title = "Tasks Overview";
 
-	public CustomizedDbImpl(String name, String filename) {
-		super(name, filename);
-	}
-
-	@Override
-	public void delete(long id) {
-		Log.warn("deleting record", "id", id);
-		super.delete(id);
+	public Object content() {
+		Tag caption = titleBox("Manage tasks");
+		GridWidget grid = grid(Task.class, "-priority", 10, "id", "title", "priority");
+		return row(caption, grid);
 	}
 
 }

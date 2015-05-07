@@ -1,4 +1,4 @@
-package custom;
+package org.rapidoidx.demo.taskplanner;
 
 /*
  * #%L
@@ -22,23 +22,19 @@ package custom;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
-import org.rapidoidx.db.impl.inmem.DbImpl;
+import org.rapidoid.app.Apps;
+import org.rapidoidx.db.DB;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class CustomizedDbImpl extends DbImpl {
+public class Main {
 
-	private static final long serialVersionUID = -3304900771653853896L;
-
-	public CustomizedDbImpl(String name, String filename) {
-		super(name, filename);
-	}
-
-	@Override
-	public void delete(long id) {
-		Log.warn("deleting record", "id", id);
-		super.delete(id);
+	public static void main(String[] args) {
+		Apps.run("oauth-no-state");
+		DB.clear();
+		for (int i = 0; i < 100; i++) {
+			DB.init("task title=?, description=?, rating=?", "abc" + i, "Some description of the task " + i, i * 10);
+		}
 	}
 
 }

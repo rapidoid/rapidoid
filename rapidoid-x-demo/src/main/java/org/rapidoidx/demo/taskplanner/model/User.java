@@ -1,4 +1,4 @@
-package custom;
+package org.rapidoidx.demo.taskplanner.model;
 
 /*
  * #%L
@@ -20,25 +20,38 @@ package custom;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
-import org.rapidoidx.db.impl.inmem.DbImpl;
+import java.util.Date;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Display;
+import org.rapidoid.annotation.Scaffold;
+import org.rapidoid.annotation.Since;
+import org.rapidoidx.db.DB;
+import org.rapidoidx.db.DbSet;
+
+@Scaffold
+@SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class CustomizedDbImpl extends DbImpl {
+public class User extends Entity {
 
-	private static final long serialVersionUID = -3304900771653853896L;
+	@Display
+	public String username;
 
-	public CustomizedDbImpl(String name, String filename) {
-		super(name, filename);
-	}
+	public String email;
 
-	@Override
-	public void delete(long id) {
-		Log.warn("deleting record", "id", id);
-		super.delete(id);
-	}
+	public String name;
+
+	public Date birthdate;
+
+	public final DbSet<Task> tasksOwned = DB.set(this, "owns");
+
+	public final DbSet<Comment> commentsOwned = DB.set(this, "owns");
+
+	public final DbSet<Task> tasksLiked = DB.set(this, "likes");
+
+	public final DbSet<Task> sharedTasks = DB.set(this, "^sharedWith");
+
+	public final DbSet<Comment> commentsLiked = DB.set(this, "likes");
 
 }

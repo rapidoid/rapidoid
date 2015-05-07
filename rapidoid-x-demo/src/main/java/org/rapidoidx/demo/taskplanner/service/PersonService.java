@@ -1,4 +1,4 @@
-package custom;
+package org.rapidoidx.demo.taskplanner.service;
 
 /*
  * #%L
@@ -20,25 +20,44 @@ package custom;
  * #L%
  */
 
+import java.util.List;
+import java.util.Map;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
-import org.rapidoidx.db.impl.inmem.DbImpl;
+import org.rapidoidx.db.DAO;
+import org.rapidoidx.db.DB;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class CustomizedDbImpl extends DbImpl {
+public class PersonService extends DAO<Person> {
 
-	private static final long serialVersionUID = -3304900771653853896L;
-
-	public CustomizedDbImpl(String name, String filename) {
-		super(name, filename);
+	public List<Person> olderThan(final int age) {
+		return DB.find(new Predicate<Person>() {
+			@Override
+			public boolean eval(Person p) {
+				return p.age > age;
+			}
+		});
 	}
 
-	@Override
-	public void delete(long id) {
-		Log.warn("deleting record", "id", id);
-		super.delete(id);
+	// e.g. /hello
+	public String hello() {
+		return "Hello from PersonService";
+	}
+
+	// e.g. /person/add?name=nikolche&age=30
+	public List<Person> add(Person p) {
+		Log.info("Inserting person", "person", p);
+		insert(p);
+		return all();
+	}
+
+	// e.g. /params?x=1&y=2
+	public Map<String, Object> params(Map<String, Object> params) {
+		return params;
 	}
 
 }

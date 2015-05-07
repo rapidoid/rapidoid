@@ -1,4 +1,4 @@
-package custom;
+package org.rapidoidx.demo.taskplanner.service;
 
 /*
  * #%L
@@ -20,25 +20,22 @@ package custom;
  * #L%
  */
 
+import java.util.List;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
-import org.rapidoidx.db.impl.inmem.DbImpl;
+import org.rapidoidx.db.DAO;
+import org.rapidoidx.demo.taskplanner.model.Task;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class CustomizedDbImpl extends DbImpl {
+public class TaskService extends DAO<Task> {
 
-	private static final long serialVersionUID = -3304900771653853896L;
-
-	public CustomizedDbImpl(String name, String filename) {
-		super(name, filename);
-	}
-
-	@Override
-	public void delete(long id) {
-		Log.warn("deleting record", "id", id);
-		super.delete(id);
+	public List<Task> add(Task task) {
+		Log.info("Inserting task", "task", task);
+		insert(task);
+		return all();
 	}
 
 }
