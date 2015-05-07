@@ -54,7 +54,7 @@ public class AppGUI extends PageGUI {
 	}
 
 	public static <T> GridWidget grid(Class<T> type) {
-		return grid(all(type, "id"), "id", 10);
+		return grid(all(type, ""), "", 10);
 	}
 
 	public static <T> GridWidget grid(String type) {
