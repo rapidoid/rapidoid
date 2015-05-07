@@ -25,23 +25,23 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.DAO;
-import org.rapidoid.db.DB;
-import org.rapidoid.demo.db.Person;
+import org.rapidoid.dao.DAO;
+import org.rapidoid.demo.taskplanner.model.Person;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
+import org.rapidoid.plugins.Plugins;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class PersonService extends DAO<Person> {
 
 	public List<Person> olderThan(final int age) {
-		return DB.find(new Predicate<Person>() {
+		return Plugins.db().find(Person.class, new Predicate<Person>() {
 			@Override
 			public boolean eval(Person p) {
 				return p.age > age;
 			}
-		});
+		}, null);
 	}
 
 	// e.g. /hello

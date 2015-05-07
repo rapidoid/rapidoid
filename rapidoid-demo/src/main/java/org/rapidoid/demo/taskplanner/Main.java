@@ -30,10 +30,6 @@ public class Main {
 
 	public static void main(String[] args) {
 		Apps.run("oauth-no-state");
-		DB.clear();
-		for (int i = 0; i < 100; i++) {
-			DB.init("task title=?, description=?, rating=?", "abc" + i, "Some description of the task " + i, i * 10);
-		}
 	}
 
 }

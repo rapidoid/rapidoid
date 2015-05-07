@@ -24,18 +24,17 @@ import java.util.List;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.DAO;
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.log.Log;
+import org.rapidoid.plugins.Plugins;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class TaskService extends DAO<Task> {
+public class TaskService {
 
 	public List<Task> add(Task task) {
 		Log.info("Inserting task", "task", task);
-		insert(task);
-		return all();
+		return Plugins.db().getAll(Task.class);
 	}
 
 }
