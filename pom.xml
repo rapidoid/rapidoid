@@ -75,7 +75,6 @@
 		<module>rapidoid-net</module>
 		<module>rapidoid-http-api</module>
 		<module>rapidoid-http</module>
-		<module>rapidoid-websocket</module>
 		<module>rapidoid-measure</module>
 		<module>rapidoid-pojo</module>
 		<module>rapidoid-rest</module>
