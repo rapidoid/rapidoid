@@ -61,6 +61,7 @@
 		<module>rapidoid-lambda</module>
 		<module>rapidoid-log</module>
 		<module>rapidoid-utils</module>
+		<module>rapidoid-plugins</module>
 		<module>rapidoid-beany</module>
 		<module>rapidoid-model</module>
 		<module>rapidoid-ioc</module>
