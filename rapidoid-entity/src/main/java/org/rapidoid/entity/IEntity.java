@@ -2,7 +2,7 @@ package org.rapidoid.entity;
 
 /*
  * #%L
- * rapidoid-db
+ * rapidoid-entity
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
