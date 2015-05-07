@@ -40,7 +40,7 @@ import org.rapidoid.util.U;
 @Since("3.0.0")
 public class XDB {
 
-	private static final String IMPL_NAME = "org.rapidoid.db.impl.inmem.DbImpl";
+	private static final String IMPL_NAME = "org.rapidoidx.db.impl.inmem.DbImpl";
 
 	static final Class<Database> DB_IMPL_CLASS;
 
