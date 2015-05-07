@@ -36,7 +36,7 @@ import org.rapidoidx.db.XDB;
 @Manager
 @Roles({ @Role("RESTARTER") })
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class AdminScreen extends Screen {
 
 	public Object[] content = { h2("Manage Application"), cmd("Shutdown") };

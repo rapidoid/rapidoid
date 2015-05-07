@@ -31,7 +31,7 @@ import org.rapidoidx.demo.taskplanner.model.Task;
 
 @Order(2)
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class ManageTasksScreen extends Screen {
 
 	public String title = "Tasks Overview";

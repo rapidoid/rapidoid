@@ -35,7 +35,7 @@ import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.ButtonWidget;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class FormsPage extends BootstrapWidgets {
 
 	@Session

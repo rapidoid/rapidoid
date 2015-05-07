@@ -27,7 +27,7 @@ import org.rapidoid.app.Apps;
 import org.rapidoidx.db.XDB;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class Main {
 
 	public static void main(String[] args) {

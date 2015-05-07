@@ -40,7 +40,7 @@ class Book {
 }
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class AboutScreen extends Screen {
 
 	public Object content() {

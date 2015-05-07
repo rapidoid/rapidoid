@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public enum Priority {
 	LOW, MEDIUM, HIGH;
 }

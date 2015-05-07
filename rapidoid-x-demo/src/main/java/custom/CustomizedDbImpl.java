@@ -27,7 +27,7 @@ import org.rapidoid.log.Log;
 import org.rapidoidx.db.impl.inmem.DbImpl;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class CustomizedDbImpl extends DbImpl {
 
 	private static final long serialVersionUID = -3304900771653853896L;

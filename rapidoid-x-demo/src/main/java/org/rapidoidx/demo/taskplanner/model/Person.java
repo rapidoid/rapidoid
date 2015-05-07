@@ -34,7 +34,7 @@ import org.rapidoidx.db.XEntity;
 @Scaffold
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class Person extends XEntity {
 
 	@Display

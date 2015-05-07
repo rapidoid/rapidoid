@@ -30,7 +30,7 @@ import org.rapidoid.log.Log;
 import org.rapidoidx.demo.taskplanner.model.Task;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class TaskService extends DAO<Task> {
 
 	public List<Task> add(Task task) {

@@ -33,7 +33,7 @@ import org.rapidoidx.db.XDB;
 import org.rapidoidx.demo.taskplanner.model.Person;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class PersonService extends DAO<Person> {
 
 	public List<Person> olderThan(final int age) {

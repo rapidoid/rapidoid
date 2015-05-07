@@ -28,7 +28,7 @@ import org.rapidoid.widget.LayoutWidget;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.4.0")
+@Since("3.0.0")
 public class ControlsScreen extends Screen {
 
 	public Object content() {

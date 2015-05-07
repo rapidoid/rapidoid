@@ -45,7 +45,7 @@ import org.rapidoidx.db.XEntity;
 // @CanDelete({ CommonRoles.OWNER, CommonRoles.ADMIN })
 @DbEntity
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class Task extends XEntity {
 
 	@Display

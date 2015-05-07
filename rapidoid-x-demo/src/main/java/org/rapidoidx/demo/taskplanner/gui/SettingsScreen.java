@@ -28,7 +28,7 @@ import org.rapidoid.security.annotation.LoggedIn;
 
 @LoggedIn
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class SettingsScreen extends Screen {
 
 	public Object content = row(h2("Settings..."));

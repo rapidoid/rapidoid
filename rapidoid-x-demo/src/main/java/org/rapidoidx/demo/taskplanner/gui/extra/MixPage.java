@@ -38,7 +38,7 @@ import org.rapidoid.widget.GridWidget;
 import org.rapidoidx.demo.taskplanner.model.Person;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class MixPage extends BootstrapWidgets {
 
 	@Session

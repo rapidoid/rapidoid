@@ -32,7 +32,7 @@ import org.rapidoidx.db.XEntity;
 @SuppressWarnings("serial")
 @DbEntity
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class Comment extends XEntity {
 
 	public String content;

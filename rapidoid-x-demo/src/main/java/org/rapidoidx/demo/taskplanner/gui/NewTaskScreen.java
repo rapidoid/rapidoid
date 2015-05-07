@@ -41,7 +41,7 @@ import org.rapidoidx.demo.taskplanner.model.User;
 
 @Order(1)
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class NewTaskScreen extends Screen {
 
 	@Session

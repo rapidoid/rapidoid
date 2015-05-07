@@ -33,7 +33,7 @@ import org.rapidoidx.db.impl.inmem.JacksonEntitySerializer;
 import org.rapidoidx.inmem.InMem;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class DbSerializationBenchmark {
 
 	@SuppressWarnings("unchecked")

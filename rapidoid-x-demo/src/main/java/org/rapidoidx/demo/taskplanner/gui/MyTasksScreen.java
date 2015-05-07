@@ -40,7 +40,7 @@ import org.rapidoidx.demo.taskplanner.model.User;
 @LoggedIn
 @Order(3)
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class MyTasksScreen extends Screen {
 
 	public Object content() {

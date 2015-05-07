@@ -30,7 +30,7 @@ import org.rapidoid.widget.StreamWidget;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.0.0")
 public class HomeScreen extends Screen {
 
 	public String title = "Welcome!";
