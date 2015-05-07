@@ -32,7 +32,7 @@ import org.rapidoid.lambda.Predicate;
  * @author Nikolche Mihajlovski
  * @since 3.0.0
  */
-public interface DbPlugin {
+public interface DBPlugin {
 
 	long insert(Object entity);
 

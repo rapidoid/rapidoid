@@ -30,11 +30,11 @@ public class Plugins {
 		return null;
 	}
 
-	public static EntityPlugin entity() {
+	public static EntitiesPlugin entities() {
 		return null;
 	}
 
-	public static LanguagePlugin language() {
+	public static LanguagesPlugin languages() {
 		return null;
 	}
 

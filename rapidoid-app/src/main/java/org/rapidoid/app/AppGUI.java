@@ -70,7 +70,7 @@ public class AppGUI extends PageGUI {
 	}
 
 	public static <T> GridWidget grid(String type) {
-		return grid(Plugins.entity().getEntityType(type));
+		return grid(Plugins.entities().getEntityType(type));
 	}
 
 	public static <T> GridWidget grid(Predicate<T> match) {

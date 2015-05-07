@@ -42,7 +42,7 @@ public class NewEntityScreenGeneric extends Screen {
 	}
 
 	public Object content() {
-		target = Plugins.entity().create(entityType);
+		target = Plugins.entities().create(entityType);
 
 		Tag caption = h2("New " + U.capitalized(ctx().pathSegment(0).substring(3)));
 		FormWidget form = create(target).buttons(SAVE, CANCEL);

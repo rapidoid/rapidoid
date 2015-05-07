@@ -50,7 +50,7 @@ public class ListEntityScreenGeneric extends Screen {
 		Tag caption = titleBox(entityName + " List");
 		GridWidget grid = grid(entityType, 10);
 
-		boolean canAdd = Secure.canInsert(Secure.username(), Plugins.entity().create(entityType));
+		boolean canAdd = Secure.canInsert(Secure.username(), Plugins.entities().create(entityType));
 		ButtonWidget btnAdd = canAdd ? btn("Add " + entityName).primary().command("Add") : null;
 
 		return row(caption, grid, btnAdd);

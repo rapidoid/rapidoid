@@ -24,10 +24,10 @@ package org.rapidoid.plugins;
  * @author Nikolche Mihajlovski
  * @since 3.0.0
  */
-public interface LanguagePlugin {
+public interface EntitiesPlugin {
 
-	String singularToPlural(String noun);
+	Class<?> getEntityType(String simpleTypeName);
 
-	String pluralToSingular(String noun);
+	<E> E create(Class<E> entityType);
 
 }

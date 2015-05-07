@@ -30,11 +30,11 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
-import org.rapidoid.plugins.DbPlugin;
+import org.rapidoid.plugins.DBPlugin;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class InMemDbPlugin implements DbPlugin {
+public class InMemDbPlugin implements DBPlugin {
 
 	@Override
 	public long insert(Object entity) {

@@ -211,7 +211,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		if (m.find()) {
 			String type = m.group(1);
 
-			Class<?> entityType = Plugins.entity().getEntityType(type);
+			Class<?> entityType = Plugins.entities().getEntityType(type);
 			if (entityType == null || !Metadata.isAnnotated(entityType, Scaffold.class)) {
 				return null;
 			}
@@ -243,8 +243,8 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		if (m.find()) {
 			String type = m.group(1);
 
-			String type2 = U.or(Plugins.language().pluralToSingular(type), type);
-			Class<?> entityType = Plugins.entity().getEntityType(type2);
+			String type2 = U.or(Plugins.languages().pluralToSingular(type), type);
+			Class<?> entityType = Plugins.entities().getEntityType(type2);
 			if (entityType == null || !Metadata.isAnnotated(entityType, Scaffold.class)) {
 				return null;
 			}
