@@ -29,7 +29,7 @@ import org.rapidoid.util.U;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.5.0")
+@Since("3.0.0")
 public class ResultCounterCallback<T> implements Callback<T> {
 
 	// FIXME refactor the built-in callbacks using decorators

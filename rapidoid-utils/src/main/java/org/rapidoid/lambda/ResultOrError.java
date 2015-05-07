@@ -27,7 +27,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.5.0")
+@Since("3.0.0")
 public class ResultOrError<T> implements Callback<T> {
 
 	private volatile boolean done;
