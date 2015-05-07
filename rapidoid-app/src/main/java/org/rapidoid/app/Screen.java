@@ -23,9 +23,9 @@ package org.rapidoid.app;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.DB;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.HttpExchangeHolder;
+import org.rapidoid.plugins.Plugins;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -79,7 +79,7 @@ public abstract class Screen extends AppGUI implements HttpExchangeHolder {
 	@SuppressWarnings("unchecked")
 	protected <T> T entity() {
 		long id = Long.parseLong(ctx().pathSegment(1));
-		Object entity = DB.getIfExists(id);
+		Object entity = Plugins.db().getIfExists(id);
 
 		if (entity == null) {
 			throw ctx().notFound();

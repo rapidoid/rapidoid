@@ -22,13 +22,13 @@ package org.rapidoid.app;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.DB;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.http.HttpProtocol;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.pages.Pages;
+import org.rapidoid.plugins.Plugins;
 import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.util.CustomizableClassLoader;
 
@@ -63,7 +63,7 @@ public class AppHandler implements Handler {
 
 		x.async();
 
-		DB.transaction(new Runnable() {
+		Plugins.db().transaction(new Runnable() {
 			@Override
 			public void run() {
 				Object result = processReq(x, appCls);

@@ -22,9 +22,9 @@ package org.rapidoid.app;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
 import org.rapidoid.log.Log;
+import org.rapidoid.plugins.Plugins;
 import org.rapidoid.security.annotation.DevMode;
 
 @DevMode
@@ -49,7 +49,7 @@ public class DeleteAllDataScreenBuiltIn extends Screen {
 	public void onYesDelete() {
 		Log.info("yes");
 		hideModal();
-		DB.sudo().clear();
+		Plugins.db().deleteAllData();
 		ctx().goBack(1);
 	}
 

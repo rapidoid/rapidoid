@@ -25,10 +25,10 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Items;
+import org.rapidoid.plugins.Plugins;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.GridWidget;
 import org.rapidoid.widget.HighlightedGridWidget;
@@ -40,7 +40,7 @@ public class SearchScreenBuiltIn extends Screen {
 	public Object content(HttpExchange x) {
 
 		final String query = x.param("q", "");
-		List<Object> found = DB.find(query);
+		List<?> found = Plugins.db().find(query);
 		Items items = beanItems(Object.class, found.toArray());
 
 		Tag queryInfo = !U.isEmpty(query) ? span(" for ", b(highlight(query))) : null;

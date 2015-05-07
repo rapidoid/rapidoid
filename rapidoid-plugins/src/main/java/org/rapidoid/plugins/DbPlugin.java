@@ -1,8 +1,8 @@
-package org.rapidoid.app;
+package org.rapidoid.plugins;
 
 /*
  * #%L
- * rapidoid-app
+ * rapidoid-plugins
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,39 +20,35 @@ package org.rapidoid.app;
  * #L%
  */
 
+import java.util.List;
+
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.DB;
-import org.rapidoid.html.Tag;
-import org.rapidoid.util.U;
-import org.rapidoid.widget.FormWidget;
+import org.rapidoid.lambda.Callback;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.1.0")
-public class NewEntityScreenGeneric extends Screen {
+@Since("3.0.0")
+public interface DbPlugin {
 
-	private final Class<?> entityType;
+	<T> T get(long id);
 
-	@Session
-	private Object target;
+	<T> T getIfExists(long id);
 
-	public NewEntityScreenGeneric(Class<?> entityType) {
-		this.entityType = entityType;
-	}
+	<T> List<T> getAll(Class<T> clazz);
 
-	public Object content() {
-		target = DB.entity(entityType);
+	void update(Object entity);
 
-		Tag caption = h2("New " + U.capitalized(ctx().pathSegment(0).substring(3)));
-		FormWidget form = create(target).buttons(SAVE, CANCEL);
+	void insert(Object entity);
 
-		return mid6(caption, form);
-	}
+	void delete(long id);
 
-	public void onSave() {
-		Plugins.db().insert(target);
-		ctx().goBack(1);
-	}
+	<T> List<T> find(String query);
+
+	void transaction(Runnable tx, boolean readonly, Callback<Void> callback);
+
+	/**
+	 * WARNING: Deletes ALL data in the database! Use with care!
+	 */
+	void deleteAllData();
 
 }

@@ -23,8 +23,8 @@ package org.rapidoid.app;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
+import org.rapidoid.plugins.Plugins;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.FormWidget;
 
@@ -45,7 +45,7 @@ public class EditEntityScreenGeneric extends Screen {
 	}
 
 	public void onSave() {
-		DB.update(target);
+		Plugins.db().update(target);
 		ctx().goBack(1);
 	}
 

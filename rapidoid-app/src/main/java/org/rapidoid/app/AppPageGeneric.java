@@ -33,7 +33,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.config.Conf;
-import org.rapidoid.db.DB;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
@@ -46,6 +45,7 @@ import org.rapidoid.oauth.OAuthProvider;
 import org.rapidoid.pages.HttpExchangeHolder;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.pages.impl.ComplexView;
+import org.rapidoid.plugins.Plugins;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.English;
@@ -193,7 +193,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 			String type = m.group(1);
 			long id = Long.parseLong(m.group(2));
 
-			Object entity = DB.getIfExists(id);
+			Object entity = Plugins.db().getIfExists(id);
 			if (entity == null || !Metadata.isAnnotated(entity.getClass(), Scaffold.class)) {
 				return null;
 			}
@@ -225,7 +225,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 			String type = m.group(1);
 			long id = Long.parseLong(m.group(2));
 
-			Object entity = DB.getIfExists(id);
+			Object entity = Plugins.db().getIfExists(id);
 			if (entity == null || !Metadata.isAnnotated(entity.getClass(), Scaffold.class)) {
 				return null;
 			}
