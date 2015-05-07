@@ -20,25 +20,17 @@ package org.rapidoid.demo.taskplanner.model;
  * #L%
  */
 
-import java.util.Date;
-
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
 
 @Scaffold
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class User {
-
-	@Display
-	public String username;
-
-	public String email;
+public class Person {
 
 	public String name;
 
-	public Date birthdate;
+	public int age;
 
 }

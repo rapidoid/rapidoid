@@ -4,17 +4,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Optional;
-import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.DB;
-import org.rapidoid.db.DbList;
-import org.rapidoid.db.DbRef;
-import org.rapidoid.db.DbSet;
-import org.rapidoid.db.Entity;
+import org.rapidoid.app.entity.Entity;
+import org.rapidoid.extra.domain.LowHigh3;
 import org.rapidoid.security.annotation.CanChange;
-import org.rapidoid.security.annotation.CanRead;
-import org.rapidoid.util.CommonRoles;
 
 /*
  * #%L
@@ -37,11 +31,6 @@ import org.rapidoid.util.CommonRoles;
  */
 
 @Scaffold
-@SuppressWarnings("serial")
-// @CanRead(CommonRoles.LOGGED_IN)
-// @CanChange({ CommonRoles.OWNER })
-// @CanInsert(CommonRoles.LOGGED_IN)
-// @CanDelete({ CommonRoles.OWNER, CommonRoles.ADMIN })
 @DbEntity
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -53,25 +42,12 @@ public class Task extends Entity {
 
 	@Display
 	@CanChange({ MODERATOR, OWNER, SHARED_WITH })
-	public Priority priority = Priority.MEDIUM;
+	public LowHigh3 priority = LowHigh3.MEDIUM;
 
 	@Optional
 	@CanChange({ MODERATOR, OWNER, SHARED_WITH })
 	public String description;
 
 	public int rating;
-
-	@Programmatic
-	public final DbRef<User> owner = DB.ref(this, "^owns");
-
-	@CanRead({ CommonRoles.OWNER })
-	public final DbSet<User> sharedWith = DB.set(this, "sharedWith");
-
-	@Programmatic
-	@CanRead({ CommonRoles.OWNER, CommonRoles.SHARED_WITH })
-	public final DbList<Comment> comments = DB.list(this, "has");
-
-	@Programmatic
-	public final DbSet<User> likedBy = DB.set(this, "^likes");
 
 }

@@ -23,7 +23,7 @@ package org.rapidoid.demo.taskplanner.gui.extra;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.demo.db.Person;
+import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.FormTag;
@@ -57,7 +57,7 @@ public class MixPage extends BootstrapWidgets {
 
 		ButtonWidget xy = btn("X Z Y").command("xyz").info();
 
-		Items items = Models.mockBeanItems(20, Person.class);
+		Items items = Models.mockBeanItems(20, User.class);
 
 		Tag caption = h1("Manage persons");
 
