@@ -1,0 +1,412 @@
+package org.rapidoidx.buffer;
+
+/*
+ * #%L
+ * rapidoid-x-buffer
+ * %%
+ * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.util.Constants;
+import org.rapidoid.util.Rnd;
+import org.rapidoid.util.U;
+import org.rapidoidx.bytes.BytesUtil;
+import org.rapidoidx.data.Range;
+import org.rapidoidx.data.Ranges;
+import org.testng.annotations.Test;
+
+@Authors("Nikolche Mihajlovski")
+@Since("3.0.0")
+public class BufTest extends BufferTestCommons implements Constants {
+
+	@Test
+	public void shouldAppendData() {
+		BufGroup bufs = new BufGroup(2);
+		Buf buf = bufs.newBuf();
+
+		eq(buf, "");
+
+		buf.append("");
+		eq(buf, "");
+
+		buf.append("Foo");
+		eq(buf, "Foo");
+
+		buf.append("Bar");
+		eq(buf, "FooBar");
+
+		buf.append("Bazinga");
+		eq(buf, "FooBarBazinga");
+
+		buf.append("");
+		eq(buf, "FooBarBazinga");
+
+		buf.append("X");
+		eq(buf, "FooBarBazingaX");
+
+		buf.append("Y");
+		eq(buf, "FooBarBazingaXY");
+
+		buf.append("Z");
+		eq(buf, "FooBarBazingaXYZ");
+
+		buf.append("W");
+		eq(buf, "FooBarBazingaXYZW");
+	}
+
+	@Test
+	public void shouldShrinkOnLeft() {
+		BufGroup bufs = new BufGroup(2);
+		Buf buf = bufs.newBuf();
+
+		buf.append("abcdefgh-foo-bar-123456789-the-end");
+		eq(buf, "abcdefgh-foo-bar-123456789-the-end");
+
+		buf.deleteBefore(1);
+		eq(buf, "bcdefgh-foo-bar-123456789-the-end");
+
+		buf.deleteBefore(2);
+		eq(buf, "defgh-foo-bar-123456789-the-end");
+
+		buf.deleteBefore(1);
+		eq(buf, "efgh-foo-bar-123456789-the-end");
+
+		buf.deleteBefore(1);
+		eq(buf, "fgh-foo-bar-123456789-the-end");
+
+		buf.deleteBefore(4);
+		eq(buf, "foo-bar-123456789-the-end");
+
+		buf.deleteBefore(10);
+		eq(buf, "3456789-the-end");
+
+		buf.deleteBefore(8);
+		eq(buf, "the-end");
+
+		buf.deleteBefore(4);
+		eq(buf, "end");
+
+		buf.deleteBefore(2);
+		eq(buf, "d");
+
+		buf.deleteBefore(1);
+		eq(buf, "");
+
+		buf.deleteBefore(0);
+		eq(buf, "");
+	}
+
+	@Test
+	public void shouldShrinkOnRight() {
+		BufGroup bufs = new BufGroup(2);
+		Buf buf = bufs.newBuf();
+
+		buf.append("abcdefgh-foo-bar-123456789-the-end");
+		eq(buf, "abcdefgh-foo-bar-123456789-the-end");
+
+		buf.deleteLast(1);
+		eq(buf, "abcdefgh-foo-bar-123456789-the-en");
+
+		buf.deleteLast(2);
+		eq(buf, "abcdefgh-foo-bar-123456789-the-");
+
+		buf.deleteLast(1);
+		eq(buf, "abcdefgh-foo-bar-123456789-the");
+
+		buf.deleteLast(1);
+		eq(buf, "abcdefgh-foo-bar-123456789-th");
+
+		buf.deleteLast(4);
+		eq(buf, "abcdefgh-foo-bar-12345678");
+
+		buf.deleteLast(10);
+		eq(buf, "abcdefgh-foo-ba");
+
+		buf.deleteLast(8);
+		eq(buf, "abcdefg");
+
+		buf.deleteLast(4);
+		eq(buf, "abc");
+
+		buf.deleteLast(2);
+		eq(buf, "a");
+
+		buf.deleteLast(1);
+		eq(buf, "");
+
+		buf.deleteLast(0);
+		eq(buf, "");
+	}
+
+	@Test
+	public void shouldParseNumbers() {
+		BufGroup bufs = new BufGroup(2);
+		Buf buf = bufs.newBuf();
+		buf.append("5a1234567890fg-3450fg0x45g-3");
+
+		eq(buf.getN(new Range(0, 1)), 5);
+		eq(buf.getN(new Range(2, 10)), 1234567890);
+		eq(buf.getN(new Range(14, 5)), -3450);
+		eq(buf.getN(new Range(21, 1)), 0);
+		eq(buf.getN(new Range(23, 2)), 45);
+		eq(buf.getN(new Range(26, 2)), -3);
+	}
+
+	@Test
+	public void shouldFindSubsequences() {
+		BufGroup bufs = new BufGroup(2);
+		Buf buf = bufs.newBuf();
+
+		/************* 0123456789012345678901234567890 */
+		// buf.append("-abc-xAaw-54-bAr--The-End-");
+		buf.append("-abc-xaaw-54-bar--the-end-");
+
+		int max = buf.size();
+
+		checkMatch(buf, 0, max, "a", 1, 6, 7, 14, -1);
+		checkMatch(buf, 2, max, "a", 6, 7, 14, -1);
+		checkMatch(buf, 5, max, "a", 6, 7, 14, -1);
+		checkMatch(buf, 7, max, "a", 7, 14, -1);
+
+		checkMatch(buf, 0, max, "abc", 1, -1);
+		checkMatch(buf, 0, max, "-abc", 0, -1);
+
+		checkMatch(buf, 0, max, "the", 18, -1);
+		checkMatch(buf, 0, max, "end", 22, -1);
+
+		checkMatch(buf, 0, max, "+", -1);
+
+		checkMatch(buf, 0, max, "-", 0, 4, 9, 12, 16, 17, 21, 25, -1);
+	}
+
+	@Test
+	public void testScanUntil() {
+		BufGroup bufs = new BufGroup(2);
+		Buf buf = bufs.newBuf();
+
+		buf.append("first second  third\r\na b c\r\n");
+
+		buf.position(0);
+		buf.limit(buf.size());
+
+		Range range = new Range();
+
+		buf.scanUntil(SPACE, range);
+		eq(buf.get(range), "first");
+
+		buf.scanUntil(SPACE, range);
+		eq(buf.get(range), "second");
+
+		buf.scanUntil(SPACE, range);
+		eq(buf.get(range), "");
+
+		buf.scanLn(range);
+		eq(buf.get(range), "third");
+
+		buf.scanUntil(SPACE, range);
+		eq(buf.get(range), "a");
+
+		buf.scanUntil(SPACE, range);
+		eq(buf.get(range), "b");
+
+		buf.scanLn(range);
+		eq(buf.get(range), "c");
+
+		isFalse(buf.hasRemaining());
+	}
+
+	@Test
+	public void testScanWhile() {
+		BufGroup bufs = new BufGroup(2);
+		Buf buf = bufs.newBuf();
+
+		buf.append("abc:  xy:");
+
+		buf.position(0);
+		buf.limit(buf.size());
+
+		Range range = new Range();
+
+		buf.scanUntil(COL, range);
+		eq(buf.get(range), "abc");
+
+		eq(buf.position(), 4);
+
+		buf.scanWhile(SPACE, range);
+		eq(range, 4, 2);
+
+		eq(buf.position(), 6);
+
+		buf.scanUntil(COL, range);
+		eq(buf.get(range), "xy");
+
+		eq(buf.position(), 9);
+	}
+
+	@Test
+	public void testScanUntilAndMatchPrefix() {
+		final int NO_PREFIX = 0;
+		Range range = new Range();
+
+		eq(BytesUtil.scanUntilAndMatchPrefix(BytesUtil.from("\n"), range, LF, 0, 0, NO_PREFIX), 1);
+		eq(range, 0, 0);
+
+		eq(BytesUtil.scanUntilAndMatchPrefix(BytesUtil.from("a\n"), range, COL, 0, 0, NO_PREFIX), NOT_FOUND);
+		eq(range, -1, 0);
+
+		eq(BytesUtil.scanUntilAndMatchPrefix(BytesUtil.from("a\n"), range, LF, 0, 1, NO_PREFIX), 2);
+		eq(range, 0, 1);
+
+		eq(BytesUtil.scanUntilAndMatchPrefix(BytesUtil.from("ab:c"), range, COL, 0, 3, NO_PREFIX), 3);
+		eq(range, 0, 2);
+
+		for (int i = 0; i < 10; i++) {
+			String s = U.copyNtimes("a", i);
+
+			eq(BytesUtil.scanUntilAndMatchPrefix(BytesUtil.from(s + ":"), range, COL, 0, i, NO_PREFIX), i + 1);
+			eq(range, 0, i);
+
+			eq(BytesUtil.scanLnAndMatchPrefix(BytesUtil.from(s + "\n"), range, 0, i, NO_PREFIX), i + 1);
+			eq(range, 0, i);
+
+			eq(BytesUtil.scanLnAndMatchPrefix(BytesUtil.from(s + "\r\n"), range, 0, i + 1, NO_PREFIX), i + 2);
+			eq(range, 0, i);
+		}
+
+		eq(BytesUtil.scanLnAndMatchPrefix(BytesUtil.from("x\n"), range, 0, 0, NO_PREFIX), NOT_FOUND);
+		eq(range, -1, 0);
+		eq(BytesUtil.scanLnAndMatchPrefix(BytesUtil.from("x\r\n"), range, 0, 1, NO_PREFIX), NOT_FOUND);
+		eq(range, -1, 0);
+
+		eq(BytesUtil.scanLnAndMatchPrefix(BytesUtil.from("x\n"), range, 1, 1, NO_PREFIX), 2);
+		eq(range, 1, 0);
+		eq(BytesUtil.scanLnAndMatchPrefix(BytesUtil.from("x\r\n"), range, 1, 2, NO_PREFIX), 3);
+		eq(range, 1, 0);
+	}
+
+	@Test
+	public void testScanLnLn() {
+		for (int factor = 1; factor <= 10; factor++) {
+			BufGroup bufs = new BufGroup(factor);
+			Buf buf = bufs.newBuf();
+
+			String s = "GET /hi H\naa: bb\nxyz\r\n\r\n";
+			buf.append(s);
+
+			buf.position(0);
+			buf.limit(buf.size());
+
+			Range verb = new Range();
+			Range uri = new Range();
+			Range protocol = new Range();
+
+			buf.scanUntil(SPACE, verb);
+			eq(s, verb, "GET");
+
+			buf.scanUntil(SPACE, uri);
+			eq(s, uri, "/hi");
+
+			buf.scanLn(protocol);
+			eq(s, protocol, "H");
+
+			Ranges headers = new Ranges(10);
+			buf.scanLnLn(headers.reset());
+
+			eq(headers.count, 2);
+
+			eq(s, headers.ranges[0], "aa: bb");
+			eq(s, headers.ranges[1], "xyz");
+		}
+	}
+
+	@Test
+	public void testPutNumAsText() {
+		BufGroup bufs = new BufGroup(1);
+
+		String num = "1234567890";
+
+		for (int dig = 1; dig <= 10; dig++) {
+			int n = U.num(num.substring(0, dig));
+
+			Buf buf = bufs.newBuf();
+			buf.append(U.copyNtimes(" ", dig + 2));
+			buf.putNumAsText(1, n, true);
+			eq(buf.asText(), " " + n + " ");
+
+			Buf buf2 = bufs.newBuf();
+			buf2.append(U.copyNtimes(" ", dig + 3));
+			buf2.putNumAsText(1, -n, true);
+			eq(buf2.asText(), " " + (-n) + " ");
+
+			Buf buf3 = bufs.newBuf();
+			buf3.append(U.copyNtimes(" ", dig + 2));
+			buf3.putNumAsText(dig, n, false);
+			eq(buf3.asText(), " " + n + " ");
+
+			Buf buf4 = bufs.newBuf();
+			buf4.append(U.copyNtimes(" ", dig + 3));
+			buf4.putNumAsText(dig + 1, -n, false);
+			eq(buf4.asText(), " " + (-n) + " ");
+		}
+
+	}
+
+	@Test
+	public void testDeleteAfter() {
+		BufGroup bufs = new BufGroup(4);
+		Buf buf = bufs.newBuf();
+
+		int size = 0;
+		for (int i = 0; i < 1000000; i++) {
+			int add = Rnd.rnd(100);
+
+			for (int j = 0; j < 5; j++) {
+				size += add;
+				buf.append(U.copyNtimes(" ", add));
+				eq(buf.size(), size);
+			}
+
+			for (int j = 0; j < 5; j++) {
+				if (buf.size() > 0) {
+					if (Rnd.rnd(2) == 0) {
+						int delFrom = Rnd.rnd(size);
+						int delN = size - delFrom;
+
+						size -= delN;
+						buf.deleteAfter(delFrom);
+					} else {
+						int delN = Rnd.rnd(size);
+
+						size -= delN;
+						buf.deleteBefore(delN);
+					}
+				}
+			}
+		}
+	}
+
+	private void checkMatch(Buf buf, int start, int limit, String match, int... positions) {
+		for (int pos : positions) {
+			int p = BytesUtil.find(buf.bytes(), start, limit, match.getBytes(), true);
+			eq(p, pos);
+			start = p + 1;
+		}
+	}
+
+}
