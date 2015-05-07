@@ -3,7 +3,7 @@ package org.rapidoidx.demo.taskplanner.model;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Since;
-import org.rapidoidx.db.DB;
+import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.DbRef;
 import org.rapidoidx.db.DbSet;
 
@@ -35,10 +35,10 @@ public class Comment extends Entity {
 
 	public String content;
 
-	public DbRef<User> owner = DB.ref(this, "^owns");
+	public DbRef<User> owner = XDB.ref(this, "^owns");
 
-	public DbRef<Task> task = DB.ref(this, "^has");
+	public DbRef<Task> task = XDB.ref(this, "^has");
 
-	public DbSet<User> likedBy = DB.set(this, "^likes");
+	public DbSet<User> likedBy = XDB.set(this, "^likes");
 
 }

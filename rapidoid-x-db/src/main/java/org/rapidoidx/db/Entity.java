@@ -77,11 +77,11 @@ public abstract class Entity extends AbstractEntity implements CommonRoles, Seri
 			if (value == null && !prop.isReadOnly()) {
 				Class<?> type = prop.getType();
 				if (DbList.class.equals(type)) {
-					prop.setRaw(target, DB.list(target, rel.value()));
+					prop.setRaw(target, XDB.list(target, rel.value()));
 				} else if (DbSet.class.equals(type)) {
-					prop.setRaw(target, DB.set(target, rel.value()));
+					prop.setRaw(target, XDB.set(target, rel.value()));
 				} else if (DbRef.class.equals(type)) {
-					prop.setRaw(target, DB.ref(target, rel.value()));
+					prop.setRaw(target, XDB.ref(target, rel.value()));
 				}
 			}
 		}

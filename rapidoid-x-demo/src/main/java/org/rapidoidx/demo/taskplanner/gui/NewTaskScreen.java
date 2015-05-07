@@ -34,7 +34,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.widget.FormWidget;
 import org.rapidoid.widget.GridWidget;
-import org.rapidoidx.db.DB;
+import org.rapidoidx.db.XDB;
 import org.rapidoidx.demo.taskplanner.model.Task;
 import org.rapidoidx.demo.taskplanner.model.User;
 
@@ -78,7 +78,7 @@ public class NewTaskScreen extends Screen {
 		if (user != null) {
 			task.owner.set(user);
 			task.description = v.get();
-			DB.insert(task);
+			XDB.insert(task);
 			task = new Task();
 		}
 	}

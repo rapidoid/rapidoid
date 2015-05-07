@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
-import org.rapidoidx.db.DB;
+import org.rapidoidx.db.XDB;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -41,14 +41,14 @@ public class DbCRUDBenchmark {
 			@Override
 			public void run() {
 				String name = "Niko";
-				long id = DB.insert(new Person(name, 30));
-				Person p = DB.get(id);
+				long id = XDB.insert(new Person(name, 30));
+				Person p = XDB.get(id);
 				U.must(p.name.equals(name));
 			}
 		});
 
-		DB.shutdown();
-		DB.destroy();
+		XDB.shutdown();
+		XDB.destroy();
 	}
 
 }

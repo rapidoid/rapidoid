@@ -45,7 +45,7 @@ public class RQLTest extends DbTestCommons {
 
 	@Test
 	public void testRQLEntityConstruction() {
-		Abc x = DB.entity("abc name=n1, n=123, z, lh=high");
+		Abc x = XDB.entity("abc name=n1, n=123, z, lh=high");
 		eq(x.name, "n1");
 		eq(x.n, 123);
 		isTrue(x.z);
@@ -54,7 +54,7 @@ public class RQLTest extends DbTestCommons {
 
 	@Test
 	public void testRQLEntityConstructionDefaults() {
-		Abc x = DB.entity("Abc");
+		Abc x = XDB.entity("Abc");
 		eq(x.name, "a");
 		eq(x.n, 55);
 		isFalse(x.z);
@@ -63,7 +63,7 @@ public class RQLTest extends DbTestCommons {
 
 	@Test
 	public void testRQLParameterizedEntityConstruction() {
-		Abc x = DB.entity("abc name=?, n=?, z, lh=?", "n1", 123, LowHigh.HIGH);
+		Abc x = XDB.entity("abc name=?, n=?, z, lh=?", "n1", 123, LowHigh.HIGH);
 		eq(x.name, "n1");
 		eq(x.n, 123);
 		isTrue(x.z);
@@ -75,7 +75,7 @@ public class RQLTest extends DbTestCommons {
 		// RQL special characters
 		String strange = "thename, n=789, z=?,  ? ? , ?,,";
 
-		Abc x = DB.entity("abc name=?, z, lh=?", strange, LowHigh.HIGH);
+		Abc x = XDB.entity("abc name=?, z, lh=?", strange, LowHigh.HIGH);
 		eq(x.name, strange);
 		eq(x.n, 55);
 		isTrue(x.z);
@@ -84,8 +84,8 @@ public class RQLTest extends DbTestCommons {
 
 	@Test
 	public void testRQLInsert() {
-		Long id = DB.rql("INSERT Abc name=n1, n=123, z=false, lh=low");
-		Abc x = DB.get(id);
+		Long id = XDB.rql("INSERT Abc name=n1, n=123, z=false, lh=low");
+		Abc x = XDB.get(id);
 
 		eq(x.name, "n1");
 		eq(x.n, 123);
@@ -95,8 +95,8 @@ public class RQLTest extends DbTestCommons {
 
 	@Test
 	public void testRQLParameterizedInsert() {
-		Long id = DB.rql("INSERT Abc name=?, n=123, z=?, lh=low", "n1", false);
-		Abc x = DB.get(id);
+		Long id = XDB.rql("INSERT Abc name=?, n=123, z=?, lh=low", "n1", false);
+		Abc x = XDB.get(id);
 
 		eq(x.name, "n1");
 		eq(x.n, 123);

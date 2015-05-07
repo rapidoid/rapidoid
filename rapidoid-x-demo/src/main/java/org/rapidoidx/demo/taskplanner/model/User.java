@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
-import org.rapidoidx.db.DB;
+import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.DbSet;
 
 @Scaffold
@@ -44,14 +44,14 @@ public class User extends Entity {
 
 	public Date birthdate;
 
-	public final DbSet<Task> tasksOwned = DB.set(this, "owns");
+	public final DbSet<Task> tasksOwned = XDB.set(this, "owns");
 
-	public final DbSet<Comment> commentsOwned = DB.set(this, "owns");
+	public final DbSet<Comment> commentsOwned = XDB.set(this, "owns");
 
-	public final DbSet<Task> tasksLiked = DB.set(this, "likes");
+	public final DbSet<Task> tasksLiked = XDB.set(this, "likes");
 
-	public final DbSet<Task> sharedTasks = DB.set(this, "^sharedWith");
+	public final DbSet<Task> sharedTasks = XDB.set(this, "^sharedWith");
 
-	public final DbSet<Comment> commentsLiked = DB.set(this, "likes");
+	public final DbSet<Comment> commentsLiked = XDB.set(this, "likes");
 
 }

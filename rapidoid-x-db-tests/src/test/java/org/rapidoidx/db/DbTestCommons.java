@@ -39,8 +39,8 @@ public abstract class DbTestCommons extends TestCommons {
 	public void initDB() {
 		Log.warn("Destroying all databases: " + DBs.instances());
 		DBs.destroyAll();
-		DB.destroy();
-		DB.start();
+		XDB.destroy();
+		XDB.start();
 		Log.setLogLevel(LogLevel.INFO);
 		AppCtx.reset();
 	}

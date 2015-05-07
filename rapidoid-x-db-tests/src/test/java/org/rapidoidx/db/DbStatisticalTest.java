@@ -43,7 +43,7 @@ public class DbStatisticalTest extends DbTestCommons {
 		final int op = rnd(3);
 		final String name = rndStr(0, 100);
 		final int age = rnd();
-		final long id = rnd((int) (DB.size() * 2) + 10);
+		final long id = rnd((int) (XDB.size() * 2) + 10);
 		final Person person = new Person(name, age);
 		final boolean fail = rnd(30) == 0;
 	}
@@ -78,7 +78,7 @@ public class DbStatisticalTest extends DbTestCommons {
 
 					final AtomicBoolean complete = new AtomicBoolean(false);
 
-					DB.transaction(new Runnable() {
+					XDB.transaction(new Runnable() {
 						@Override
 						public void run() {
 							for (int i = 0; i < ops.length; i++) {
@@ -123,7 +123,7 @@ public class DbStatisticalTest extends DbTestCommons {
 			}
 		});
 
-		DB.shutdown();
+		XDB.shutdown();
 
 		System.out.println("Comparing data...");
 		compareData();
@@ -132,8 +132,8 @@ public class DbStatisticalTest extends DbTestCommons {
 	}
 
 	private void compareData() {
-		eq(DB.size(), persons.size());
-		DB.each(new Operation<Person>() {
+		eq(XDB.size(), persons.size());
+		XDB.each(new Operation<Person>() {
 			@Override
 			public void execute(Person p) throws Exception {
 				Person p2 = (Person) persons.get(p.id());
@@ -147,16 +147,16 @@ public class DbStatisticalTest extends DbTestCommons {
 	private void doDbOp(Op op, Ret ret) {
 		switch (op.op) {
 		case 0:
-			ret.id = DB.insert(op.person);
+			ret.id = XDB.insert(op.person);
 			break;
 
 		case 1:
-			DB.delete(op.id);
+			XDB.delete(op.id);
 			break;
 
 		case 2:
-			op.person.version(DB.getVersionOf(op.id));
-			DB.update(op.id, op.person);
+			op.person.version(XDB.getVersionOf(op.id));
+			XDB.update(op.id, op.person);
 			break;
 
 		default:

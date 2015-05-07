@@ -38,7 +38,7 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class DB {
+public class XDB {
 
 	private static final String IMPL_NAME = "org.rapidoid.db.impl.inmem.DbImpl";
 
@@ -69,7 +69,7 @@ public class DB {
 	}
 
 	public static void start() {
-		db = (Database) Cls.customizable(DB.DB_IMPL_CLASS, "default", path() + "default.db");
+		db = (Database) Cls.customizable(XDB.DB_IMPL_CLASS, "default", path() + "default.db");
 		db.loadAndStart();
 	}
 
@@ -79,7 +79,7 @@ public class DB {
 	}
 
 	public static void setDb(Database db) {
-		DB.db = db;
+		XDB.db = db;
 	}
 
 	public static long insert(Object record) {

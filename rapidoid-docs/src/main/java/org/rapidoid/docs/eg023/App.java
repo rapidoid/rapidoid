@@ -3,7 +3,7 @@ package org.rapidoid.docs.eg023;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.Screen;
-import org.rapidoidx.db.DB;
+import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.Entity;
 
 /*
@@ -43,10 +43,10 @@ class HomeScreen extends Screen {
 	public void onAdd() {
 		Todo todo = new Todo();
 		todo.content = "Learn Rapidoid!";
-		long id = DB.insert(todo); // here
-		Todo todo2 = DB.get(id); // here
+		long id = XDB.insert(todo); // here
+		Todo todo2 = XDB.get(id); // here
 		todo2.content += " :)";
-		DB.update(todo2); // here
+		XDB.update(todo2); // here
 	}
 }
 

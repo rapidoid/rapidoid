@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.UTILS;
-import org.rapidoidx.db.DB;
+import org.rapidoidx.db.XDB;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -44,7 +44,7 @@ public class DbPersistenceBenchmark {
 		UTILS.benchmarkMT(Conf.cpus(), "insert", size, new Runnable() {
 			@Override
 			public void run() {
-				DB.insert(new Person("abc", 10));
+				XDB.insert(new Person("abc", 10));
 			}
 		});
 
@@ -53,13 +53,13 @@ public class DbPersistenceBenchmark {
 		UTILS.benchmarkMT(Conf.cpus(), "update", size, new Runnable() {
 			@Override
 			public void run() {
-				DB.update(Rnd.rnd(size) + 1, new Person("xyz", 10));
+				XDB.update(Rnd.rnd(size) + 1, new Person("xyz", 10));
 			}
 		});
 
 		System.out.println("persisting...");
 
-		DB.shutdown();
+		XDB.shutdown();
 
 		UTILS.endMeasure("total");
 	}

@@ -39,8 +39,8 @@ public class DBs {
 		DB_INSTANCES = UTILS.autoExpandingMap(new Mapper<String, Database>() {
 			@Override
 			public Database map(String name) throws Exception {
-				String dbFilename = DB.path() + name + ".db";
-				return (Database) Cls.newInstance(DB.DB_IMPL_CLASS, name, dbFilename);
+				String dbFilename = XDB.path() + name + ".db";
+				return (Database) Cls.newInstance(XDB.DB_IMPL_CLASS, name, dbFilename);
 			}
 		});
 	}

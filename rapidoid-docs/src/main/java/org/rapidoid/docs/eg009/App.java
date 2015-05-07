@@ -8,7 +8,7 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Apps;
 import org.rapidoid.widget.ButtonWidget;
 import org.rapidoid.widget.FormWidget;
-import org.rapidoidx.db.DB;
+import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.Entity;
 
 /*
@@ -42,7 +42,7 @@ public class App {
 	}
 
 	public void init() {
-		DB.init("movie title=Rambo, year=1985"); // here
+		XDB.init("movie title=Rambo, year=1985"); // here
 	}
 }
 
@@ -52,7 +52,7 @@ class HomeScreen {
 	Movie movie;
 
 	Object content() {
-		movie = DB.get(1);
+		movie = XDB.get(1);
 		FormWidget f = create(movie, "year"); // here
 		ButtonWidget ab = btn("Ab"); // here
 		ButtonWidget cd = btn("Change year").command("ch").primary(); // here
@@ -62,7 +62,7 @@ class HomeScreen {
 	}
 
 	public void onCh() {
-		DB.update(movie);
+		XDB.update(movie);
 	}
 }
 

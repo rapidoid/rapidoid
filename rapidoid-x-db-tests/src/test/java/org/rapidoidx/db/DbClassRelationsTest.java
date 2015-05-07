@@ -42,9 +42,9 @@ public class DbClassRelationsTest extends DbTestCommons {
 		profile.posts.add(post1);
 		profile.posts.add(post2);
 
-		DB.persist(profile);
-		DB.refresh(post1);
-		DB.refresh(post2);
+		XDB.persist(profile);
+		XDB.refresh(post1);
+		XDB.refresh(post2);
 
 		notNull(post1.id());
 		notNull(post2.id());
@@ -55,15 +55,15 @@ public class DbClassRelationsTest extends DbTestCommons {
 
 		profile.posts.remove(post1);
 
-		DB.persist(profile);
-		DB.refresh(post1);
-		DB.refresh(post2);
+		XDB.persist(profile);
+		XDB.refresh(post1);
+		XDB.refresh(post2);
 
 		eq(profile.posts, U.list(post2));
 		isNull(post1.postedOn.get());
 		eq(post2.postedOn.get(), profile);
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 	@Test
@@ -76,9 +76,9 @@ public class DbClassRelationsTest extends DbTestCommons {
 		post1.postedOn.set(profile);
 		post2.postedOn.set(profile);
 
-		DB.persist(post1);
-		DB.persist(post2);
-		DB.refresh(profile);
+		XDB.persist(post1);
+		XDB.persist(post2);
+		XDB.refresh(profile);
 
 		eq(profile.posts, U.list(post1, post2));
 		eq(post1.postedOn.get(), profile);
@@ -86,15 +86,15 @@ public class DbClassRelationsTest extends DbTestCommons {
 
 		post1.postedOn.set(null);
 
-		DB.persist(post1);
-		DB.refresh(profile);
-		DB.refresh(post2);
+		XDB.persist(post1);
+		XDB.refresh(profile);
+		XDB.refresh(post2);
 
 		eq(profile.posts, U.list(post2));
 		isNull(post1.postedOn.get());
 		eq(post2.postedOn.get(), profile);
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 }

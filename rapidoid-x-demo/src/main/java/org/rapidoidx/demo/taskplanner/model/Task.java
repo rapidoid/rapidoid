@@ -10,7 +10,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.CommonRoles;
-import org.rapidoidx.db.DB;
+import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.DbList;
 import org.rapidoidx.db.DbRef;
 import org.rapidoidx.db.DbSet;
@@ -61,16 +61,16 @@ public class Task extends Entity {
 	public int rating;
 
 	@Programmatic
-	public final DbRef<User> owner = DB.ref(this, "^owns");
+	public final DbRef<User> owner = XDB.ref(this, "^owns");
 
 	@CanRead({ CommonRoles.OWNER })
-	public final DbSet<User> sharedWith = DB.set(this, "sharedWith");
+	public final DbSet<User> sharedWith = XDB.set(this, "sharedWith");
 
 	@Programmatic
 	@CanRead({ CommonRoles.OWNER, CommonRoles.SHARED_WITH })
-	public final DbList<Comment> comments = DB.list(this, "has");
+	public final DbList<Comment> comments = XDB.list(this, "has");
 
 	@Programmatic
-	public final DbSet<User> likedBy = DB.set(this, "^likes");
+	public final DbSet<User> likedBy = XDB.set(this, "^likes");
 
 }

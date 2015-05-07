@@ -48,7 +48,7 @@ public class DbClassPersistenceTest extends DbTestCommons {
 		UTILS.benchmarkMT(Conf.cpus(), "insert", count, new Runnable() {
 			@Override
 			public void run() {
-				DB.insert(new Person("abc", -1));
+				XDB.insert(new Person("abc", -1));
 			}
 		});
 
@@ -61,10 +61,10 @@ public class DbClassPersistenceTest extends DbTestCommons {
 			public void run() {
 				int id = Rnd.rnd(count) + 1;
 				Person person = new Person("x", id * 100);
-				person.version(DB.getVersionOf(id));
+				person.version(XDB.getVersionOf(id));
 
 				try {
-					DB.update(id, person);
+					XDB.update(id, person);
 				} catch (OptimisticConcurrencyControlException e) {
 					eq(e.getRecordId(), id);
 					occN.incrementAndGet();
@@ -75,8 +75,8 @@ public class DbClassPersistenceTest extends DbTestCommons {
 		System.out.println("Total OCC exceptions: " + occN.get());
 		isTrue(occN.get() < count / 10);
 
-		DB.shutdown();
-		DB.start();
+		XDB.shutdown();
+		XDB.start();
 
 		checkDb(count);
 		checkDb(count);
@@ -86,15 +86,15 @@ public class DbClassPersistenceTest extends DbTestCommons {
 	private void checkDb(final int count) {
 		UTILS.endMeasure("total");
 
-		eq(DB.size(), count);
+		eq(XDB.size(), count);
 
 		for (int id = 1; id <= count; id++) {
-			Person p = DB.get(id);
+			Person p = XDB.get(id);
 			isTrue(p.id() == id);
 			isTrue((p.name.equals("abc") && p.age == -1) || (p.name.equals("x") && p.age == id * 100));
 		}
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 }

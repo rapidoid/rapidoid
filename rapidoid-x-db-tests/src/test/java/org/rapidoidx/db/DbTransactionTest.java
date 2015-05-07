@@ -46,16 +46,16 @@ public class DbTransactionTest extends DbTestCommons {
 		UTILS.benchmarkMT(10, "tx", 10000, new Runnable() {
 			@Override
 			public void run() {
-				DB.transaction(new Runnable() {
+				XDB.transaction(new Runnable() {
 					@Override
 					public void run() {
-						DB.insert(new Person("a", 1));
+						XDB.insert(new Person("a", 1));
 
 						if (yesNo()) {
 							throw U.rte("tx error");
 						}
 
-						DB.insert(new Person("b", 2));
+						XDB.insert(new Person("b", 2));
 
 						n.addAndGet(2);
 					}
@@ -63,9 +63,9 @@ public class DbTransactionTest extends DbTestCommons {
 			}
 		});
 
-		DB.shutdown();
+		XDB.shutdown();
 
-		eq(DB.size(), n.get());
+		eq(XDB.size(), n.get());
 	}
 
 	@Test
@@ -74,21 +74,21 @@ public class DbTransactionTest extends DbTestCommons {
 
 		try {
 
-			DB.transaction(new Runnable() {
+			XDB.transaction(new Runnable() {
 				@Override
 				public void run() {
-					long id = DB.insert(new Person("a", 1));
-					DB.update(id, new Person("b", 2));
-					DB.delete(id);
+					long id = XDB.insert(new Person("a", 1));
+					XDB.update(id, new Person("b", 2));
+					XDB.delete(id);
 					throw U.rte("tx error");
 				}
 			}, false);
 
 			fail("Expected exception!");
 		} catch (Exception e) {
-			DB.shutdown();
+			XDB.shutdown();
 
-			eq(DB.size(), 0);
+			eq(XDB.size(), 0);
 		}
 	}
 
@@ -97,24 +97,24 @@ public class DbTransactionTest extends DbTestCommons {
 		throwsRuntimeException(new Runnable() {
 			@Override
 			public void run() {
-				DB.transaction(new Runnable() {
+				XDB.transaction(new Runnable() {
 					@Override
 					public void run() {
-						DB.insert(new Person("a", 1));
+						XDB.insert(new Person("a", 1));
 					}
 				}, true);
 			}
 		}, "read-only transaction");
 
-		final long id = DB.insert(new Person("a", 1));
+		final long id = XDB.insert(new Person("a", 1));
 
 		throwsRuntimeException(new Runnable() {
 			@Override
 			public void run() {
-				DB.transaction(new Runnable() {
+				XDB.transaction(new Runnable() {
 					@Override
 					public void run() {
-						DB.delete(id);
+						XDB.delete(id);
 					}
 				}, true);
 			}
@@ -123,23 +123,23 @@ public class DbTransactionTest extends DbTestCommons {
 		throwsRuntimeException(new Runnable() {
 			@Override
 			public void run() {
-				DB.transaction(new Runnable() {
+				XDB.transaction(new Runnable() {
 					@Override
 					public void run() {
-						DB.update(id, new Person());
+						XDB.update(id, new Person());
 					}
 				}, true);
 			}
 		}, "read-only transaction");
 
-		DB.transaction(new Runnable() {
+		XDB.transaction(new Runnable() {
 			@Override
 			public void run() {
-				Object p = DB.get(id);
-				DB.refresh(p);
-				DB.getAll(Person.class);
-				DB.getAll(id);
-				DB.find(new Predicate<Person>() {
+				Object p = XDB.get(id);
+				XDB.refresh(p);
+				XDB.getAll(Person.class);
+				XDB.getAll(id);
+				XDB.find(new Predicate<Person>() {
 					@Override
 					public boolean eval(Person p) throws Exception {
 						return true;

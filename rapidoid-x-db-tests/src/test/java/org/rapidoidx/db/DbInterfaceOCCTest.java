@@ -33,31 +33,31 @@ public class DbInterfaceOCCTest extends DbTestCommons {
 
 	@Test(expectedExceptions = OptimisticConcurrencyControlException.class)
 	public void testOCCFailure() {
-		IPerson p1 = DB.entity(IPerson.class);
-		DB.persist(p1);
+		IPerson p1 = XDB.entity(IPerson.class);
+		XDB.persist(p1);
 
 		eq(p1.version(), 1);
 
-		IPerson p2 = DB.entity(IPerson.class);
+		IPerson p2 = XDB.entity(IPerson.class);
 		p2.id(p1.id());
 
-		DB.persist(p2);
+		XDB.persist(p2);
 	}
 
 	@Test
 	public void testOCC() {
-		IPerson p1 = DB.entity(IPerson.class);
-		DB.persist(p1);
+		IPerson p1 = XDB.entity(IPerson.class);
+		XDB.persist(p1);
 
 		eq(p1.version(), 1);
 
-		IPerson p2 = DB.entity(IPerson.class);
+		IPerson p2 = XDB.entity(IPerson.class);
 		p2.id(p1.id());
 
-		DB.refresh(p2);
+		XDB.refresh(p2);
 		eq(p2.version(), 1);
 
-		DB.persist(p2);
+		XDB.persist(p2);
 	}
 
 }

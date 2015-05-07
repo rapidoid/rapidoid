@@ -32,7 +32,7 @@ import org.rapidoid.beany.Metadata;
 import org.rapidoid.entity.IEntity;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
-import org.rapidoidx.db.DB;
+import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.DbColumn;
 import org.rapidoidx.db.DbList;
 import org.rapidoidx.db.DbRef;
@@ -80,7 +80,7 @@ public class EntityImpl extends EntityCommons implements IEntity {
 
 		if (res == null) {
 			Class<Object> colType = Cls.clazz(Cls.generic(method.getGenericReturnType()).getActualTypeArguments()[0]);
-			DbColumn<Object> value = DB.column(values, method.getName(), colType);
+			DbColumn<Object> value = XDB.column(values, method.getName(), colType);
 			DbColumn<?> old = columns.putIfAbsent(name, value);
 			return U.or(old, value);
 		}
@@ -93,7 +93,7 @@ public class EntityImpl extends EntityCommons implements IEntity {
 		DbSet<?> res = sets.get(name);
 
 		if (res == null) {
-			DbSet<Object> value = DB.set(proxy, rel(method).value());
+			DbSet<Object> value = XDB.set(proxy, rel(method).value());
 			DbSet<?> old = sets.putIfAbsent(name, value);
 			return old != null ? old : value;
 		}
@@ -106,7 +106,7 @@ public class EntityImpl extends EntityCommons implements IEntity {
 		DbList<?> res = lists.get(name);
 
 		if (res == null) {
-			DbList<Object> value = DB.list(proxy, rel(method).value());
+			DbList<Object> value = XDB.list(proxy, rel(method).value());
 			DbList<?> old = lists.putIfAbsent(name, value);
 			return old != null ? old : value;
 		}
@@ -119,7 +119,7 @@ public class EntityImpl extends EntityCommons implements IEntity {
 		DbRef<?> res = refs.get(name);
 
 		if (res == null) {
-			DbRef<Object> value = DB.ref(proxy, rel(method).value());
+			DbRef<Object> value = XDB.ref(proxy, rel(method).value());
 			DbRef<?> old = refs.putIfAbsent(name, value);
 			return old != null ? old : value;
 		}

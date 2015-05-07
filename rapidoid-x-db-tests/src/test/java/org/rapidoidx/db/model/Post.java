@@ -2,7 +2,7 @@ package org.rapidoidx.db.model;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoidx.db.DB;
+import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.DbRef;
 import org.rapidoidx.db.DbSet;
 import org.rapidoidx.db.Entity;
@@ -36,9 +36,9 @@ public class Post extends Entity {
 
 	public String content;
 
-	public final DbRef<Profile> postedOn = DB.ref(this, "^posted");
+	public final DbRef<Profile> postedOn = XDB.ref(this, "^posted");
 
-	public final DbSet<Person> likes = DB.set(this, "likes");
+	public final DbSet<Person> likes = XDB.set(this, "likes");
 
 	public Post() {}
 

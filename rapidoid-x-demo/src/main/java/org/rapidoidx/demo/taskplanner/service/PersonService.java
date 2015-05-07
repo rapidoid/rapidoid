@@ -28,14 +28,14 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.dao.DAO;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
-import org.rapidoidx.db.DB;
+import org.rapidoidx.db.XDB;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class PersonService extends DAO<Person> {
 
 	public List<Person> olderThan(final int age) {
-		return DB.find(new Predicate<Person>() {
+		return XDB.find(new Predicate<Person>() {
 			@Override
 			public boolean eval(Person p) {
 				return p.age > age;

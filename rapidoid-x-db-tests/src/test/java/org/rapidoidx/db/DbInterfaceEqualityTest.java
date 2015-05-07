@@ -32,12 +32,12 @@ public class DbInterfaceEqualityTest extends DbTestCommons {
 
 	@Test
 	public void testEntityEquality() {
-		eq(DB.entity(IPost.class, "id", 1L), DB.entity(IPost.class, "id", 1));
-		eq(DB.entity(IPost.class, "id", 123L), DB.entity(IPost.class, "id", 123));
-		neq(DB.entity(IPost.class, "id", 12345L), DB.entity(IPost.class));
-		neq(DB.entity(IPost.class), DB.entity(IPost.class, "id", 5432));
-		neq(DB.entity(IPost.class), DB.entity(IPost.class));
-		neq(DB.entity(IPost.class, "id", 0L), DB.entity(IPost.class, "id", 0));
+		eq(XDB.entity(IPost.class, "id", 1L), XDB.entity(IPost.class, "id", 1));
+		eq(XDB.entity(IPost.class, "id", 123L), XDB.entity(IPost.class, "id", 123));
+		neq(XDB.entity(IPost.class, "id", 12345L), XDB.entity(IPost.class));
+		neq(XDB.entity(IPost.class), XDB.entity(IPost.class, "id", 5432));
+		neq(XDB.entity(IPost.class), XDB.entity(IPost.class));
+		neq(XDB.entity(IPost.class, "id", 0L), XDB.entity(IPost.class, "id", 0));
 	}
 
 }

@@ -35,49 +35,49 @@ public class DbInterfaceCollectionsTest extends DbTestCommons {
 	@Test
 	public void testCollectionsPersistence() {
 
-		IProfile profile = DB.entity(IProfile.class);
+		IProfile profile = XDB.entity(IProfile.class);
 		notNull(profile);
-		eq(DB.size(), 0);
+		eq(XDB.size(), 0);
 
-		IPost post1 = DB.entity(IPost.class, "content", "post 1");
+		IPost post1 = XDB.entity(IPost.class, "content", "post 1");
 
-		IPost post2 = DB.entity(IPost.class);
+		IPost post2 = XDB.entity(IPost.class);
 		post2.content().set("post 2");
 
-		IPost post3 = DB.entity(IPost.class, "content", "post 3");
+		IPost post3 = XDB.entity(IPost.class, "content", "post 3");
 
 		profile.posts().add(post1);
-		eq(DB.size(), 1);
+		eq(XDB.size(), 1);
 
-		DB.persist(profile);
-		eq(DB.size(), 2);
+		XDB.persist(profile);
+		eq(XDB.size(), 2);
 
 		profile.posts().add(post2);
-		eq(DB.size(), 3);
+		eq(XDB.size(), 3);
 
 		profile.posts().add(post3);
-		eq(DB.size(), 4);
+		eq(XDB.size(), 4);
 
 		notNull(profile.id());
-		DB.persist(profile);
-		eq(DB.size(), 4);
+		XDB.persist(profile);
+		eq(XDB.size(), 4);
 
 		int pn = 1;
 		for (IPost post : profile.posts()) {
-			IPerson person = DB.entity(IPerson.class);
+			IPerson person = XDB.entity(IPerson.class);
 			person.name().set("person " + pn);
 			person.age().set(pn * 10);
 			post.likes().add(person);
-			DB.persist(post);
+			XDB.persist(post);
 			pn++;
 		}
 
-		DB.shutdown();
-		DB.start();
+		XDB.shutdown();
+		XDB.start();
 
-		eq(DB.size(), 7);
+		eq(XDB.size(), 7);
 
-		post1 = DB.get(1);
+		post1 = XDB.get(1);
 		notNull(post1);
 		notNull(post1.likes());
 
@@ -85,20 +85,20 @@ public class DbInterfaceCollectionsTest extends DbTestCommons {
 		eq(post1.likes().size(), 1);
 		eq(post1.likes().iterator().next().name().get(), "person 1");
 
-		IProfile p = DB.get(2);
+		IProfile p = XDB.get(2);
 		eq(p.posts().size(), 3);
 
-		post2 = DB.get(3);
+		post2 = XDB.get(3);
 		eq(post2.content().get(), "post 2");
 		eq(post2.likes().size(), 1);
 		eq(post2.likes().iterator().next().name().get(), "person 2");
 
-		post3 = DB.get(4);
+		post3 = XDB.get(4);
 		eq(post3.content().get(), "post 3");
 		eq(post3.likes().size(), 1);
 		eq(post3.likes().iterator().next().name().get(), "person 3");
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 }

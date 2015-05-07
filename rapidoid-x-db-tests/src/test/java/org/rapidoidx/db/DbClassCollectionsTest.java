@@ -38,42 +38,42 @@ public class DbClassCollectionsTest extends DbTestCommons {
 		Profile profile = new Profile();
 
 		profile.posts.add(new Post("post 1"));
-		DB.persist(profile);
+		XDB.persist(profile);
 		profile.posts.add(new Post("post 2"));
 		profile.posts.add(new Post("post 3"));
-		DB.persist(profile);
+		XDB.persist(profile);
 
 		int pn = 1;
 		for (Post post : profile.posts) {
 			post.likes.add(new Person("person " + pn, pn * 10));
-			DB.persist(post);
+			XDB.persist(post);
 			pn++;
 		}
 
-		DB.shutdown();
-		DB.start();
+		XDB.shutdown();
+		XDB.start();
 
-		eq(DB.size(), 7);
+		eq(XDB.size(), 7);
 
-		Post post1 = DB.get(1);
+		Post post1 = XDB.get(1);
 		eq(post1.content, "post 1");
 		eq(post1.likes.size(), 1);
 		eq(post1.likes.iterator().next().name, "person 1");
 
-		Profile p = DB.get(2);
+		Profile p = XDB.get(2);
 		eq(p.posts.size(), 3);
 
-		Post post2 = DB.get(3);
+		Post post2 = XDB.get(3);
 		eq(post2.content, "post 2");
 		eq(post2.likes.size(), 1);
 		eq(post2.likes.iterator().next().name, "person 2");
 
-		Post post3 = DB.get(4);
+		Post post3 = XDB.get(4);
 		eq(post3.content, "post 3");
 		eq(post3.likes.size(), 1);
 		eq(post3.likes.iterator().next().name, "person 3");
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 }

@@ -52,7 +52,7 @@ public class DbProxyTest extends DbTestCommons {
 			}
 		});
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 	private void check(final ConcurrentMap<String, Object> map, final IPost p) {

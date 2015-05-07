@@ -59,16 +59,16 @@ public class DbClassSecurityTest extends DbTestCommons {
 	public void testSecurityFailure() {
 
 		Foo foo = new Foo();
-		DB.persist(foo);
-		DB.shutdown();
+		XDB.persist(foo);
+		XDB.shutdown();
 	}
 
 	@Test(expectedExceptions = SecurityException.class)
 	public void testSecurityFailure2() {
 
 		Foo foo = new Foo();
-		DB.as("moderator@debug").persist(foo);
-		DB.shutdown();
+		XDB.as("moderator@debug").persist(foo);
+		XDB.shutdown();
 	}
 
 	@Test(expectedExceptions = SecurityException.class)
@@ -76,27 +76,27 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 		Foo foo = new Foo();
 		AppCtx.setUser(new UserInfo("abcde"));
-		DB.persist(foo);
-		DB.shutdown();
+		XDB.persist(foo);
+		XDB.shutdown();
 	}
 
 	@Test
 	public void testSudo() {
 
 		Foo foo = new Foo();
-		DB.sudo().persist(foo);
-		DB.sudo().update(foo);
-		DB.sudo().refresh(foo);
-		DB.sudo().delete(foo);
-		DB.shutdown();
+		XDB.sudo().persist(foo);
+		XDB.sudo().update(foo);
+		XDB.sudo().refresh(foo);
+		XDB.sudo().delete(foo);
+		XDB.shutdown();
 	}
 
 	@Test
 	public void testSecurity() {
 
 		final Foo foo = new Foo();
-		DB.as("admin@debug").persist(foo);
-		DB.shutdown();
+		XDB.as("admin@debug").persist(foo);
+		XDB.shutdown();
 	}
 
 	@Test
@@ -104,68 +104,68 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 		Foo foo = new Foo();
 		AppCtx.setUser(new UserInfo("manager@debug"));
-		DB.persist(foo);
-		DB.shutdown();
+		XDB.persist(foo);
+		XDB.shutdown();
 	}
 
 	@Test
 	public void testDeleteSecurity() {
 
 		final Foo foo = new Foo();
-		DB.sudo().persist(foo);
+		XDB.sudo().persist(foo);
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("admin@debug").delete(foo);
+				XDB.as("admin@debug").delete(foo);
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("asdf").delete(foo);
+				XDB.as("asdf").delete(foo);
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.delete(foo);
+				XDB.delete(foo);
 			}
 		});
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 	@Test
 	public void testUpdateSecurity() {
 
 		final Foo foo = new Foo();
-		DB.sudo().persist(foo);
+		XDB.sudo().persist(foo);
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("admin@debug").update(foo);
+				XDB.as("admin@debug").update(foo);
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("asdf").update(foo);
+				XDB.as("asdf").update(foo);
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.update(foo);
+				XDB.update(foo);
 			}
 		});
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 	@Test
@@ -173,30 +173,30 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 		final Foo foo = new Foo();
 		foo.name = "abc";
-		final long id = DB.sudo().persist(foo);
+		final long id = XDB.sudo().persist(foo);
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("admin@debug").get(id);
+				XDB.as("admin@debug").get(id);
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("asdf").get(id);
+				XDB.as("asdf").get(id);
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.get(id);
+				XDB.get(id);
 			}
 		});
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 	@Test
@@ -204,46 +204,46 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 		final Bar bar = new Bar();
 		bar.name = "abc";
-		final long id = DB.as("asd").persist(bar);
+		final long id = XDB.as("asd").persist(bar);
 
-		Bar bar2 = DB.get(id);
+		Bar bar2 = XDB.get(id);
 		eq(bar2.name, null);
 		eq(bar2.desc, "desc");
 
 		Bar bar3 = new Bar();
 		bar3.id(id);
-		DB.refresh(bar3);
+		XDB.refresh(bar3);
 		eq(bar3.name, null);
 		eq(bar3.desc, "desc");
 
-		String name = DB.as("moderator@debug").readColumn(id, "name");
+		String name = XDB.as("moderator@debug").readColumn(id, "name");
 		eq(name, "abc");
 
-		String desc = DB.as("dfg").readColumn(id, "desc");
+		String desc = XDB.as("dfg").readColumn(id, "desc");
 		eq(desc, "desc");
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("admin@debug").readColumn(id, "name");
+				XDB.as("admin@debug").readColumn(id, "name");
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("asdf").readColumn(id, "name");
+				XDB.as("asdf").readColumn(id, "name");
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.readColumn(id, "name");
+				XDB.readColumn(id, "name");
 			}
 		});
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 	@Test
@@ -251,21 +251,21 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 		final Bar bar = new Bar();
 		bar.name = "abc";
-		DB.as("qwerty").persist(bar);
+		XDB.as("qwerty").persist(bar);
 
 		eq(bar.id(), 1);
 		eq(bar.version(), 1);
 
 		bar.name = "new name";
 		bar.desc = "new desc";
-		DB.as("manager@debug").update(bar);
+		XDB.as("manager@debug").update(bar);
 
-		Bar bar2 = DB.sudo().get(bar.id());
+		Bar bar2 = XDB.sudo().get(bar.id());
 
 		eq(bar2.name, "abc");
 		eq(bar2.desc, "new desc");
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 	@Test
@@ -273,7 +273,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 		final Foo foo = new Foo();
 		foo.name = "abc";
-		DB.sudo().persist(foo);
+		XDB.sudo().persist(foo);
 
 		final Foo foo2 = new Foo();
 		foo2.id(foo.id());
@@ -281,7 +281,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("admin@debug").refresh(foo2);
+				XDB.as("admin@debug").refresh(foo2);
 			}
 		});
 
@@ -290,7 +290,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("asdf").refresh(foo2);
+				XDB.as("asdf").refresh(foo2);
 			}
 		});
 
@@ -299,43 +299,43 @@ public class DbClassSecurityTest extends DbTestCommons {
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.refresh(foo2);
+				XDB.refresh(foo2);
 			}
 		});
 
 		eq(foo2.name, "no name");
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 	@Test
 	public void testClearSecurity() {
 
 		final Foo foo = new Foo();
-		DB.sudo().persist(foo);
+		XDB.sudo().persist(foo);
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("admin@debug").clear();
+				XDB.as("admin@debug").clear();
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("asdf").clear();
+				XDB.as("asdf").clear();
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.clear();
+				XDB.clear();
 			}
 		});
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 }

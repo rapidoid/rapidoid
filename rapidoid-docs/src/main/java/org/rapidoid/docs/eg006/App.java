@@ -7,7 +7,7 @@ import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Apps;
 import org.rapidoid.widget.FormWidget;
-import org.rapidoidx.db.DB;
+import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.Entity;
 
 /*
@@ -52,7 +52,7 @@ class HomeScreen {
 	}
 
 	public void onSave() {
-		DB.insert(movie);
+		XDB.insert(movie);
 		movie = new Movie();
 	}
 

@@ -28,7 +28,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.ButtonWidget;
-import org.rapidoidx.db.DB;
+import org.rapidoidx.db.XDB;
 import org.rapidoidx.demo.taskplanner.model.Task;
 import org.rapidoidx.demo.taskplanner.model.User;
 
@@ -59,10 +59,10 @@ public class AboutScreen extends Screen {
 	}
 
 	public void onTx() {
-		long id = DB.insert(task());
-		DB.update(id, task());
-		DB.update(1, task());
-		DB.delete(1);
+		long id = XDB.insert(task());
+		XDB.update(id, task());
+		XDB.update(1, task());
+		XDB.delete(1);
 		throw U.rte("some failure!");
 	}
 

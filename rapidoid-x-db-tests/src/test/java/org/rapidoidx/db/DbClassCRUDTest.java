@@ -38,7 +38,7 @@ public class DbClassCRUDTest extends DbTestCommons {
 
 	@Test
 	public void testCRUD() {
-		testDb(DB.db());
+		testDb(XDB.db());
 		testDb(DBs.instance("db1"));
 		testDb(DBs.instance("db2"));
 		testDb(DBs.instance("db3"));

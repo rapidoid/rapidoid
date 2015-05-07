@@ -57,232 +57,232 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	@Test(expectedExceptions = SecurityException.class)
 	public void testSecurityFailure() {
 
-		IFoo foo = DB.entity(IFoo.class);
-		DB.persist(foo);
-		DB.shutdown();
+		IFoo foo = XDB.entity(IFoo.class);
+		XDB.persist(foo);
+		XDB.shutdown();
 	}
 
 	@Test(expectedExceptions = SecurityException.class)
 	public void testSecurityFailure2() {
 
-		IFoo foo = DB.entity(IFoo.class);
-		DB.as("moderator@debug").persist(foo);
-		DB.shutdown();
+		IFoo foo = XDB.entity(IFoo.class);
+		XDB.as("moderator@debug").persist(foo);
+		XDB.shutdown();
 	}
 
 	@Test(expectedExceptions = SecurityException.class)
 	public void testSecurityFailure3() {
 
-		IFoo foo = DB.entity(IFoo.class);
+		IFoo foo = XDB.entity(IFoo.class);
 		AppCtx.setUser(new UserInfo("abcde"));
-		DB.persist(foo);
-		DB.shutdown();
+		XDB.persist(foo);
+		XDB.shutdown();
 	}
 
 	@Test
 	public void testSudo() {
 
-		IFoo foo = DB.entity(IFoo.class);
-		DB.sudo().persist(foo);
-		DB.sudo().update(foo);
-		DB.sudo().refresh(foo);
-		DB.sudo().delete(foo);
-		DB.shutdown();
+		IFoo foo = XDB.entity(IFoo.class);
+		XDB.sudo().persist(foo);
+		XDB.sudo().update(foo);
+		XDB.sudo().refresh(foo);
+		XDB.sudo().delete(foo);
+		XDB.shutdown();
 	}
 
 	@Test
 	public void testSecurity() {
 
-		final IFoo foo = DB.entity(IFoo.class);
-		DB.as("admin@debug").persist(foo);
-		DB.shutdown();
+		final IFoo foo = XDB.entity(IFoo.class);
+		XDB.as("admin@debug").persist(foo);
+		XDB.shutdown();
 	}
 
 	@Test
 	public void testSecurity2() {
 
-		IFoo foo = DB.entity(IFoo.class);
+		IFoo foo = XDB.entity(IFoo.class);
 		AppCtx.setUser(new UserInfo("manager@debug"));
-		DB.persist(foo);
-		DB.shutdown();
+		XDB.persist(foo);
+		XDB.shutdown();
 	}
 
 	@Test
 	public void testDeleteSecurity() {
 
-		final IFoo foo = DB.entity(IFoo.class);
-		DB.sudo().persist(foo);
+		final IFoo foo = XDB.entity(IFoo.class);
+		XDB.sudo().persist(foo);
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("admin@debug").delete(foo);
+				XDB.as("admin@debug").delete(foo);
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("asdf").delete(foo);
+				XDB.as("asdf").delete(foo);
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.delete(foo);
+				XDB.delete(foo);
 			}
 		});
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 	@Test
 	public void testUpdateSecurity() {
 
-		final IFoo foo = DB.entity(IFoo.class);
-		DB.sudo().persist(foo);
+		final IFoo foo = XDB.entity(IFoo.class);
+		XDB.sudo().persist(foo);
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("admin@debug").update(foo);
+				XDB.as("admin@debug").update(foo);
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("asdf").update(foo);
+				XDB.as("asdf").update(foo);
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.update(foo);
+				XDB.update(foo);
 			}
 		});
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 	@Test
 	public void testGetSecurity() {
 
-		final IFoo foo = DB.entity(IFoo.class);
+		final IFoo foo = XDB.entity(IFoo.class);
 		foo.name().set("abc");
-		final long id = DB.sudo().persist(foo);
+		final long id = XDB.sudo().persist(foo);
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("admin@debug").get(id);
+				XDB.as("admin@debug").get(id);
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("asdf").get(id);
+				XDB.as("asdf").get(id);
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.get(id);
+				XDB.get(id);
 			}
 		});
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 	@Test
 	public void testColumnGrainedReadSecurity() {
 
-		final IBar bar = DB.entity(IBar.class);
+		final IBar bar = XDB.entity(IBar.class);
 		bar.name().set("abc");
 		bar.desc().set("desc");
-		final long id = DB.as("asd").persist(bar);
+		final long id = XDB.as("asd").persist(bar);
 
-		IBar bar2 = DB.get(id);
+		IBar bar2 = XDB.get(id);
 		eq(bar2.name().get(), null);
 		eq(bar2.desc().get(), "desc");
 
-		IBar bar3 = DB.entity(IBar.class);
+		IBar bar3 = XDB.entity(IBar.class);
 		bar3.id(id);
-		DB.refresh(bar3);
+		XDB.refresh(bar3);
 		eq(bar3.name().get(), null);
 		eq(bar3.desc().get(), "desc");
 
-		String name = DB.as("moderator@debug").readColumn(id, "name");
+		String name = XDB.as("moderator@debug").readColumn(id, "name");
 		eq(name, "abc");
 
-		String desc = DB.as("dfg").readColumn(id, "desc");
+		String desc = XDB.as("dfg").readColumn(id, "desc");
 		eq(desc, "desc");
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("admin@debug").readColumn(id, "name");
+				XDB.as("admin@debug").readColumn(id, "name");
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("asdf").readColumn(id, "name");
+				XDB.as("asdf").readColumn(id, "name");
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.readColumn(id, "name");
+				XDB.readColumn(id, "name");
 			}
 		});
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 	@Test
 	public void testColumnGrainedUpdateSecurity() {
 
-		final IBar bar = DB.entity(IBar.class);
+		final IBar bar = XDB.entity(IBar.class);
 		bar.name().set("abc");
-		DB.as("qwerty").persist(bar);
+		XDB.as("qwerty").persist(bar);
 
 		eq(bar.id(), 1);
 		eq(bar.version(), 1);
 
 		bar.name().set("new name");
 		bar.desc().set("new desc");
-		DB.as("manager@debug").update(bar);
+		XDB.as("manager@debug").update(bar);
 
-		IBar bar2 = DB.sudo().get(bar.id());
+		IBar bar2 = XDB.sudo().get(bar.id());
 
 		eq(bar2.name().get(), "abc");
 		eq(bar2.desc().get(), "new desc");
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 	@Test
 	public void testRefreshSecurity() {
 
-		final IFoo foo = DB.entity(IFoo.class);
+		final IFoo foo = XDB.entity(IFoo.class);
 		foo.name().set("abc");
-		DB.sudo().persist(foo);
+		XDB.sudo().persist(foo);
 
-		final IFoo foo2 = DB.entity(IFoo.class);
+		final IFoo foo2 = XDB.entity(IFoo.class);
 		foo2.id(foo.id());
 		foo2.name().set("no name");
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("admin@debug").refresh(foo2);
+				XDB.as("admin@debug").refresh(foo2);
 			}
 		});
 
@@ -291,7 +291,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("asdf").refresh(foo2);
+				XDB.as("asdf").refresh(foo2);
 			}
 		});
 
@@ -300,43 +300,43 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.refresh(foo2);
+				XDB.refresh(foo2);
 			}
 		});
 
 		eq(foo2.name().get(), "no name");
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 	@Test
 	public void testClearSecurity() {
 
-		final IFoo foo = DB.entity(IFoo.class);
-		DB.sudo().persist(foo);
+		final IFoo foo = XDB.entity(IFoo.class);
+		XDB.sudo().persist(foo);
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("admin@debug").clear();
+				XDB.as("admin@debug").clear();
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.as("asdf").clear();
+				XDB.as("asdf").clear();
 			}
 		});
 
 		throwsSecurityException(new Runnable() {
 			@Override
 			public void run() {
-				DB.clear();
+				XDB.clear();
 			}
 		});
 
-		DB.shutdown();
+		XDB.shutdown();
 	}
 
 }

@@ -44,13 +44,13 @@ public class DAOTest extends DbTestCommons {
 		// exercise the entity type inference
 		eq(service.getEntityType(), Person.class);
 
-		eq(DB.size(), 0);
+		eq(XDB.size(), 0);
 		long id = service.insert(new Person("aa", 123));
-		eq(DB.size(), 1);
+		eq(XDB.size(), 1);
 
 		Person p = service.get(id);
 		service.delete(p);
-		eq(DB.size(), 0);
+		eq(XDB.size(), 0);
 	}
 
 	@Test
@@ -61,13 +61,13 @@ public class DAOTest extends DbTestCommons {
 		// exercise the entity type inference
 		eq(dao.getEntityType(), IPerson.class);
 
-		eq(DB.size(), 0);
-		long id = dao.insert(DB.entity(IPerson.class));
-		eq(DB.size(), 1);
+		eq(XDB.size(), 0);
+		long id = dao.insert(XDB.entity(IPerson.class));
+		eq(XDB.size(), 1);
 
 		IPerson p = dao.get(id);
 		dao.delete(p);
-		eq(DB.size(), 0);
+		eq(XDB.size(), 0);
 	}
 
 }

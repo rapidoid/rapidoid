@@ -23,7 +23,7 @@ package org.rapidoidx.db.model;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoidx.db.DB;
+import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.DbList;
 import org.rapidoidx.db.Entity;
 
@@ -33,7 +33,7 @@ public class Profile extends Entity {
 
 	private static final long serialVersionUID = 7386682836039719457L;
 
-	public final DbList<Post> posts = DB.list(this, "posted");
+	public final DbList<Post> posts = XDB.list(this, "posted");
 
 	@Override
 	public String toString() {
