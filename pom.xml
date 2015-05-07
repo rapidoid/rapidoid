@@ -103,6 +103,7 @@
 		<module>rapidoid-x-db-impl</module>
 		<module>rapidoid-x-db-inmem</module>
 		<module>rapidoid-x-db-tests</module>
+		<module>rapidoid-x-fullstack</module>
 		<module>rapidoid-x-demo</module>
 	</modules>
 
