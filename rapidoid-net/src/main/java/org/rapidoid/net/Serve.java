@@ -20,8 +20,24 @@ package org.rapidoid.net;
  * #L%
  */
 
-public interface TCPClientInfo {
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.inject.IoC;
+import org.rapidoid.net.impl.RapidoidServerLoop;
+import org.rapidoid.net.impl.TCPServerBuilder;
 
-	long messagesProcessed();
+@Authors("Nikolche Mihajlovski")
+@Since("3.0.0")
+public class Serve {
+
+	public static TCPServerBuilder server() {
+		return IoC.builder(TCPServerBuilder.class, TCPServer.class, RapidoidServerLoop.class);
+	}
+
+	public static TCPServer listen(Protocol protocol) {
+		TCPServer server = Serve.server().protocol(protocol).build();
+		server.start();
+		return server;
+	}
 
 }
