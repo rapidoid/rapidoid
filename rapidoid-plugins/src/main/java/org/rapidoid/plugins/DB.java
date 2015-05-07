@@ -103,6 +103,10 @@ public class DB {
 		return Plugins.db().find(searchPhrase);
 	}
 
+	public static long size() {
+		return Plugins.db().size();
+	}
+
 	public static <E> void each(Operation<E> lambda) {
 		Plugins.db().each(lambda);
 	}

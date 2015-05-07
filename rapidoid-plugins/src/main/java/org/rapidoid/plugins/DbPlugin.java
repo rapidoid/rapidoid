@@ -68,6 +68,8 @@ public interface DbPlugin {
 
 	<E> List<E> find(Predicate<E> match);
 
+	long size();
+
 	<E> E entity(Class<E> entityType, Map<String, ?> properties);
 
 	<E> List<E> query(Class<E> clazz, String query, Object... args);
