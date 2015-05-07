@@ -52,7 +52,7 @@ public abstract class DAO<E> {
 
 		Type arg = genericDao.getActualTypeArguments()[0];
 
-		return type instanceof Class ? (Class<?>) type : Object.class;
+		return arg instanceof Class ? (Class<?>) arg : Object.class;
 	}
 
 	@SuppressWarnings("unchecked")
