@@ -23,8 +23,8 @@ package org.rapidoid.app;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.DB;
 import org.rapidoid.html.Tag;
+import org.rapidoid.plugins.Plugins;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
 import org.rapidoid.widget.ButtonWidget;
@@ -48,9 +48,9 @@ public class ListEntityScreenGeneric extends Screen {
 		String entityName = Cls.entityName(entityType);
 
 		Tag caption = titleBox(entityName + " List");
-		GridWidget grid = grid(entityType, "-id", 10);
+		GridWidget grid = grid(entityType, 10);
 
-		boolean canAdd = Secure.canInsert(Secure.username(), DB.entity(entityType));
+		boolean canAdd = Secure.canInsert(Secure.username(), Plugins.entity().create(entityType));
 		ButtonWidget btnAdd = canAdd ? btn("Add " + entityName).primary().command("Add") : null;
 
 		return row(caption, grid, btnAdd);

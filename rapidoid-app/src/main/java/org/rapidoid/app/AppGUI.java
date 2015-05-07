@@ -1,5 +1,16 @@
 package org.rapidoid.app;
 
+import java.util.Comparator;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.beany.Beany;
+import org.rapidoid.lambda.Predicate;
+import org.rapidoid.model.Items;
+import org.rapidoid.pages.PageGUI;
+import org.rapidoid.plugins.Plugins;
+import org.rapidoid.widget.GridWidget;
+
 /*
  * #%L
  * rapidoid-app
@@ -58,7 +69,7 @@ public class AppGUI extends PageGUI {
 	}
 
 	public static <T> GridWidget grid(String type) {
-		return grid(DB.schema().getEntityType(type));
+		return grid(Plugins.entity().getEntityType(type));
 	}
 
 	public static <T> GridWidget grid(Predicate<T> match) {

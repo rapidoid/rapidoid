@@ -86,7 +86,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		this.app = wireX(appCls.main != null ? Cls.newInstance(appCls.main) : new Object(), x);
 		this.screen = wireX(getScreen(), x);
 
-		if (appCls.main != null && DB.size() == 0) {
+		if (appCls.main != null) {
 			Method init = Cls.findMethod(appCls.main, "init");
 			if (init != null) {
 				Cls.invoke(init, app);
@@ -211,7 +211,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		if (m.find()) {
 			String type = m.group(1);
 
-			Class<?> entityType = DB.schema().getEntityType(type);
+			Class<?> entityType = Plugins.entity().getEntityType(type);
 			if (entityType == null || !Metadata.isAnnotated(entityType, Scaffold.class)) {
 				return null;
 			}

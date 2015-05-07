@@ -1,8 +1,8 @@
-package org.rapidoid.app;
+package org.rapidoid.plugins;
 
 /*
  * #%L
- * rapidoid-app
+ * rapidoid-plugins
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,26 +20,15 @@ package org.rapidoid.app;
  * #L%
  */
 
-import java.util.List;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.Database;
-import org.rapidoid.widget.DataManager;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class DbDataManager implements DataManager {
+@Since("3.0.0")
+public interface EntityPlugin {
 
-	protected final Database db;
+	Class<?> getEntityType(String simpleTypeName);
 
-	public DbDataManager(Database db) {
-		this.db = db;
-	}
-
-	@Override
-	public <T> List<T> getAll(Class<T> clazz) {
-		return db.find(clazz, "");
-	}
+	<E> E create(Class<E> entityType);
 
 }

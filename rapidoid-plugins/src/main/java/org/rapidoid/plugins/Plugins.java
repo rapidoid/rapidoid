@@ -31,5 +31,9 @@ public class Plugins {
 		return null;
 	}
 
+	public static EntityPlugin entity() {
+		return null;
+	}
+
 
 }
