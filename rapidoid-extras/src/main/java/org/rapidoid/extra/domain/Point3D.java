@@ -22,13 +22,10 @@ package org.rapidoid.extra.domain;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.db.Entity;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.2.0")
-public class Point3D extends Entity {
-
-	private static final long serialVersionUID = 2482788605164111044L;
+public class Point3D {
 
 	public double x;
 
