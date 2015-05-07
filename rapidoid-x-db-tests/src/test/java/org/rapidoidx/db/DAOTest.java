@@ -36,7 +36,7 @@ class PersonDAO extends DAO<IPerson> {}
 @Since("3.0.0")
 public class DAOTest extends DbTestCommons {
 
-	@Test
+	@Test(enabled = false)
 	public void testDAOWithClassEntity() {
 
 		PersonService service = new PersonService();
@@ -53,7 +53,7 @@ public class DAOTest extends DbTestCommons {
 		eq(XDB.size(), 0);
 	}
 
-	@Test
+	@Test(enabled = false)
 	public void testDAOWithInterfaceEntity() {
 
 		PersonDAO dao = new PersonDAO();

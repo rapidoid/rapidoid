@@ -20,7 +20,6 @@ package org.rapidoid.dao;
  * #L%
  */
 
-import org.rapidoid.plugins.DB;
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
 
@@ -38,19 +37,6 @@ public class DAOTest extends TestCommons {
 
 		// exercise the entity type inference
 		eq(service.getEntityType(), Person.class);
-	}
-
-	@Test(enabled = false)
-	public void testCRUDinDAO() {
-		PersonService service = new PersonService();
-
-		eq(DB.size(), 0);
-		long id = service.insert(new Person("aa", 123));
-		eq(DB.size(), 1);
-
-		Person p = service.get(id);
-		service.delete(p);
-		eq(DB.size(), 0);
 	}
 
 }
