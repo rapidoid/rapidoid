@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.log.Log;
-import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.DB;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -34,7 +34,7 @@ public class TaskService {
 
 	public List<Task> add(Task task) {
 		Log.info("Inserting task", "task", task);
-		return Plugins.db().getAll(Task.class);
+		return DB.getAll(Task.class);
 	}
 
 }

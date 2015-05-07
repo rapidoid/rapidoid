@@ -4,7 +4,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.DB;
 import org.rapidoid.util.U;
 
 /*
@@ -68,31 +68,31 @@ public abstract class DAO<E> {
 	}
 
 	public long insert(E record) {
-		return Plugins.db().insert(record);
+		return DB.insert(record);
 	}
 
 	public void update(long id, E record) {
-		Plugins.db().update(id, record);
+		DB.update(id, record);
 	}
 
 	public void delete(long id) {
-		Plugins.db().delete(id);
+		DB.delete(id);
 	}
 
 	public void delete(E record) {
-		Plugins.db().delete(record);
+		DB.delete(record);
 	}
 
 	public E get(long id) {
-		return Plugins.db().get(id, clazz);
+		return DB.get(id, clazz);
 	}
 
 	public List<E> all() {
-		return Plugins.db().getAll(clazz);
+		return DB.getAll(clazz);
 	}
 
 	public List<E> page(int page) {
-		return U.page(Plugins.db().getAll(clazz), page, 20);
+		return U.page(DB.getAll(clazz), page, 20);
 	}
 
 }

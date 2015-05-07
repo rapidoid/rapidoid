@@ -24,10 +24,14 @@ package org.rapidoid.plugins;
  * @author Nikolche Mihajlovski
  * @since 3.0.0
  */
-public interface LifecyclePlugin {
+public class Languages {
 
-	void onStart(String[] args);
+	public static String singularToPlural(String noun) {
+		return Plugins.languages().singularToPlural(noun);
+	}
 
-	void onShutdown();
+	public static String pluralToSingular(String noun) {
+		return Plugins.languages().pluralToSingular(noun);
+	}
 
 }

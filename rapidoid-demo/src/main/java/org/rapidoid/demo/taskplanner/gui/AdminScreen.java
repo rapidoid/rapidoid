@@ -24,7 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.Screen;
 import org.rapidoid.log.Log;
-import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.Lifecycle;
 import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Role;
@@ -41,7 +41,7 @@ public class AdminScreen extends Screen {
 	public Object[] content = { h2("Manage Application"), cmd("Shutdown") };
 
 	public void onShutdown() {
-		Plugins.lifecycle().onShutdown();
+		Lifecycle.onShutdown();
 
 		Log.warn("Shutting down the application...");
 		UTILS.schedule(new Runnable() {

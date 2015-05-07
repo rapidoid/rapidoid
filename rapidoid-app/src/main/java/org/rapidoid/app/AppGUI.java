@@ -9,7 +9,7 @@ import org.rapidoid.lambda.Predicate;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.impl.DbItems;
 import org.rapidoid.pages.PageGUI;
-import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.Entities;
 import org.rapidoid.widget.GridWidget;
 
 /*
@@ -70,7 +70,7 @@ public class AppGUI extends PageGUI {
 	}
 
 	public static <T> GridWidget grid(String type) {
-		return grid(Plugins.entities().getEntityType(type));
+		return grid(Entities.getEntityType(type));
 	}
 
 	public static <T> GridWidget grid(Predicate<T> match) {

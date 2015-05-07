@@ -29,7 +29,7 @@ import org.rapidoid.dao.DAO;
 import org.rapidoid.demo.taskplanner.model.Person;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
-import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.DB;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -37,7 +37,7 @@ public class PersonService extends DAO<Person> {
 
 	public List<Person> findByName(String search) {
 		final String s = search.toLowerCase();
-		return Plugins.db().find(Person.class, new Predicate<Person>() {
+		return DB.find(Person.class, new Predicate<Person>() {
 			@Override
 			public boolean eval(Person p) {
 				return p.name.toLowerCase().contains(s);

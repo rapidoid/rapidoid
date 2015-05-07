@@ -38,7 +38,7 @@ import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
-import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.DB;
 import org.rapidoid.security.DataPermissions;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
@@ -352,7 +352,7 @@ public class FormFieldWidget extends AbstractWidget {
 
 	protected Collection<?> getOptionsOfType(Class<?> clazz) {
 		if (Cls.kindOf(clazz) == TypeKind.OBJECT && Beany.hasProperty(clazz, "id")) {
-			return Plugins.db().getAll(clazz);
+			return DB.getAll(clazz);
 		} else {
 			return Collections.EMPTY_LIST;
 		}

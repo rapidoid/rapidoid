@@ -22,13 +22,13 @@ package org.rapidoid.app;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.Users;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.UserInfo;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Users {
+public class UsersTool {
 
 	public static <T> T current(Class<T> userClass) {
 		UserInfo u = Secure.user();
@@ -36,10 +36,10 @@ public class Users {
 			return null;
 		}
 
-		T user = (T) Plugins.users().findByUsername(userClass, u.username);
+		T user = (T) Users.findByUsername(userClass, u.username);
 
 		if (user == null) {
-			user = (T) Plugins.users().createUser(userClass, u.username, u.passwordHash, u.name, u.email, u.oauthId,
+			user = (T) Users.createUser(userClass, u.username, u.passwordHash, u.name, u.email, u.oauthId,
 					u.oauthProvider);
 		}
 

@@ -1,4 +1,4 @@
-package org.rapidoid.plugins;
+package org.rapidoid.plugins.spec;
 
 /*
  * #%L

@@ -27,7 +27,7 @@ import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.Screen;
-import org.rapidoid.app.Users;
+import org.rapidoid.app.UsersTool;
 import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.FieldType;
@@ -73,7 +73,7 @@ public class NewTaskScreen extends Screen {
 	}
 
 	public void onAdd() {
-		User user = Users.current(User.class);
+		User user = UsersTool.current(User.class);
 		if (user != null) {
 			task.owner = user;
 			task.description = v.get();

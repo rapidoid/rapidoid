@@ -24,11 +24,16 @@ package org.rapidoid.plugins;
  * @author Nikolche Mihajlovski
  * @since 3.0.0
  */
-public interface UsersPlugin {
+public class Users {
 
-	<U> U findByUsername(Class<U> userClass, String username);
+	public static <U> U findByUsername(Class<U> userClass, String username) {
+		return Plugins.users().findByUsername(userClass, username);
+	}
 
-	<U> U createUser(Class<U> userClass, String username, String passwordHash, String name, String email,
-			String oauthId, String oauthProvider);
+	public static <U> U createUser(Class<U> userClass, String username, String passwordHash, String name, String email,
+			String oauthId, String oauthProvider) {
+		return Plugins.users().createUser(userClass, username, passwordHash, name, email, oauthId, oauthProvider);
+
+	}
 
 }

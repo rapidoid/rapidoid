@@ -29,7 +29,7 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
-import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.DB;
 import org.rapidoid.security.DataPermissions;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Arr;
@@ -450,7 +450,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static <E> GridWidget grid(Class<E> entityType, int pageSize, String... properties) {
-		List<E> all = Plugins.db().getAll(entityType);
+		List<E> all = DB.getAll(entityType);
 		return grid(entityType, all, "", pageSize, properties);
 	}
 

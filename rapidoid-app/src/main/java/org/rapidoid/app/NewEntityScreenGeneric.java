@@ -24,7 +24,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
-import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.DB;
+import org.rapidoid.plugins.Entities;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.FormWidget;
 
@@ -42,7 +43,7 @@ public class NewEntityScreenGeneric extends Screen {
 	}
 
 	public Object content() {
-		target = Plugins.entities().create(entityType);
+		target = Entities.create(entityType);
 
 		Tag caption = h2("New " + U.capitalized(ctx().pathSegment(0).substring(3)));
 		FormWidget form = create(target).buttons(SAVE, CANCEL);
@@ -51,7 +52,7 @@ public class NewEntityScreenGeneric extends Screen {
 	}
 
 	public void onSave() {
-		Plugins.db().insert(target);
+		DB.insert(target);
 		ctx().goBack(1);
 	}
 

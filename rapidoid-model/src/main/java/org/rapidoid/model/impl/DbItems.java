@@ -30,7 +30,7 @@ import org.rapidoid.lambda.Predicate;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
-import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.DB;
 import org.rapidoid.util.U;
 
 @SuppressWarnings("serial")
@@ -50,7 +50,7 @@ public class DbItems<T> extends BeanListItems<T> {
 
 	@Override
 	public void add(Item item) {
-		Plugins.db().insert(item.value());
+		DB.insert(item.value());
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class DbItems<T> extends BeanListItems<T> {
 	@Override
 	protected List<Item> data() {
 
-		List<T> all = Plugins.db().find(beanType, match, orderBy);
+		List<T> all = DB.find(beanType, match, orderBy);
 		List<Item> records = U.list();
 
 		for (T t : all) {
@@ -78,12 +78,12 @@ public class DbItems<T> extends BeanListItems<T> {
 
 	@Override
 	public void remove(int index) {
-		Plugins.db().delete(idOf(index));
+		DB.delete(idOf(index));
 	}
 
 	@Override
 	public void set(int index, Item item) {
-		Plugins.db().update(idOf(index), item.value());
+		DB.update(idOf(index), item.value());
 	}
 
 	@Override

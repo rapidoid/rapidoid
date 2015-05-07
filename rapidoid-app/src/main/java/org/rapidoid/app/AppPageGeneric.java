@@ -45,7 +45,9 @@ import org.rapidoid.oauth.OAuthProvider;
 import org.rapidoid.pages.HttpExchangeHolder;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.pages.impl.ComplexView;
-import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.DB;
+import org.rapidoid.plugins.Entities;
+import org.rapidoid.plugins.Languages;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.English;
@@ -193,7 +195,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 			String type = m.group(1);
 			long id = Long.parseLong(m.group(2));
 
-			Object entity = Plugins.db().getIfExists(id);
+			Object entity = DB.getIfExists(id);
 			if (entity == null || !Metadata.isAnnotated(entity.getClass(), Scaffold.class)) {
 				return null;
 			}
@@ -211,7 +213,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		if (m.find()) {
 			String type = m.group(1);
 
-			Class<?> entityType = Plugins.entities().getEntityType(type);
+			Class<?> entityType = Entities.getEntityType(type);
 			if (entityType == null || !Metadata.isAnnotated(entityType, Scaffold.class)) {
 				return null;
 			}
@@ -225,7 +227,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 			String type = m.group(1);
 			long id = Long.parseLong(m.group(2));
 
-			Object entity = Plugins.db().getIfExists(id);
+			Object entity = DB.getIfExists(id);
 			if (entity == null || !Metadata.isAnnotated(entity.getClass(), Scaffold.class)) {
 				return null;
 			}
@@ -243,8 +245,8 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		if (m.find()) {
 			String type = m.group(1);
 
-			String type2 = U.or(Plugins.languages().pluralToSingular(type), type);
-			Class<?> entityType = Plugins.entities().getEntityType(type2);
+			String type2 = U.or(Languages.pluralToSingular(type), type);
+			Class<?> entityType = Entities.getEntityType(type2);
 			if (entityType == null || !Metadata.isAnnotated(entityType, Scaffold.class)) {
 				return null;
 			}

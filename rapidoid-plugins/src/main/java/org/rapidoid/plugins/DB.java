@@ -159,4 +159,8 @@ public class DB {
 		return Plugins.db().sql(sql, args);
 	}
 
+	public static void deleteAllData() {
+		Plugins.db().deleteAllData();
+	}
+
 }

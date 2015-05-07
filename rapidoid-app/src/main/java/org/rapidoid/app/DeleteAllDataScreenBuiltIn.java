@@ -24,7 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
 import org.rapidoid.log.Log;
-import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.DB;
 import org.rapidoid.security.annotation.DevMode;
 
 @DevMode
@@ -49,7 +49,7 @@ public class DeleteAllDataScreenBuiltIn extends Screen {
 	public void onYesDelete() {
 		Log.info("yes");
 		hideModal();
-		Plugins.db().deleteAllData();
+		DB.deleteAllData();
 		ctx().goBack(1);
 	}
 

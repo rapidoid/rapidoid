@@ -1,10 +1,4 @@
-package org.rapidoid.plugins;
-
-import org.rapidoid.plugins.spec.DBPlugin;
-import org.rapidoid.plugins.spec.EntitiesPlugin;
-import org.rapidoid.plugins.spec.LanguagesPlugin;
-import org.rapidoid.plugins.spec.LifecyclePlugin;
-import org.rapidoid.plugins.spec.UsersPlugin;
+package org.rapidoid.plugins.spec;
 
 /*
  * #%L
@@ -30,26 +24,10 @@ import org.rapidoid.plugins.spec.UsersPlugin;
  * @author Nikolche Mihajlovski
  * @since 3.0.0
  */
-public final class Plugins {
+public interface LifecyclePlugin {
 
-	static DBPlugin db() {
-		return null;
-	}
+	void onStart(String[] args);
 
-	static EntitiesPlugin entities() {
-		return null;
-	}
-
-	static LanguagesPlugin languages() {
-		return null;
-	}
-
-	static UsersPlugin users() {
-		return null;
-	}
-
-	static LifecyclePlugin lifecycle() {
-		return null;
-	}
+	void onShutdown();
 
 }

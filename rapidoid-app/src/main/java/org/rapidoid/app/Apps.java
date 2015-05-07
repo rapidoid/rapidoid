@@ -32,7 +32,7 @@ import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.log.Log;
 import org.rapidoid.oauth.OAuth;
-import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.Lifecycle;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
@@ -53,7 +53,7 @@ public class Apps {
 		Conf.args(args);
 		Log.args(args);
 
-		Plugins.lifecycle().onStart(args);
+		Lifecycle.onStart(args);
 
 		HTTPServer server = HTTP.server().build();
 
@@ -137,7 +137,7 @@ public class Apps {
 
 	public static void terminate() {
 		Log.warn("Terminating application.");
-		Plugins.lifecycle().onShutdown();
+		Lifecycle.onShutdown();
 		System.exit(0);
 	}
 

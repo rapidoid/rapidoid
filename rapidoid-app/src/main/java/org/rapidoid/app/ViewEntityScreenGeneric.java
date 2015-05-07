@@ -24,7 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
-import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.DB;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
@@ -63,7 +63,7 @@ public class ViewEntityScreenGeneric extends Screen {
 
 	public void onYesDelete() {
 		long id = Long.parseLong(ctx().pathSegment(1));
-		Plugins.db().delete(id);
+		DB.delete(id);
 
 		hideModal();
 		ctx().goBack(1);
