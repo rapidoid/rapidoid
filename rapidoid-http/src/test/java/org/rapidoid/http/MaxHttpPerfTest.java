@@ -95,7 +95,8 @@ public class MaxHttpPerfTest {
 
 				IntWrap pos = ctx.helper().integers[0];
 
-				int poss = BytesUtil.parseLines(in.bytes(), lines, pos, in.position(), in.size(), (byte) 'v', (byte) 'e');
+				int poss = BytesUtil.parseLines(in.bytes(), lines, pos, in.position(), in.size(), (byte) 'v',
+						(byte) 'e');
 
 				in.position(poss);
 

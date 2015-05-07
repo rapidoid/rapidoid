@@ -42,8 +42,7 @@ import org.rapidoid.log.Log;
 @Since("2.0.0")
 public class Scan {
 
-	private Scan() {
-	}
+	private Scan() {}
 
 	public static synchronized void args(String... args) {
 		for (String arg : args) {

@@ -6,10 +6,10 @@ import static org.rapidoid.widget.BootstrapWidgets.*;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Apps;
-import org.rapidoid.db.DB;
-import org.rapidoid.db.Entity;
 import org.rapidoid.widget.ButtonWidget;
 import org.rapidoid.widget.FormWidget;
+import org.rapidoidx.db.DB;
+import org.rapidoidx.db.Entity;
 
 /*
  * #%L

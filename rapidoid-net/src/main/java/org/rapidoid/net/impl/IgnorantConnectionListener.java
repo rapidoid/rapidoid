@@ -29,7 +29,6 @@ import org.rapidoid.net.abstracts.Channel;
 public class IgnorantConnectionListener implements CtxListener {
 
 	@Override
-	public void onDone(Channel conn, Object tag) {
-	}
+	public void onDone(Channel conn, Object tag) {}
 
 }

@@ -42,11 +42,11 @@ public class Rnd {
 	public static String rndStr(int minLength, int maxLength) {
 		int len = minLength + rnd(maxLength - minLength + 1);
 		StringBuffer sb = new StringBuffer();
-	
+
 		for (int i = 0; i < len; i++) {
 			sb.append(rndChar());
 		}
-	
+
 		return sb.toString();
 	}
 

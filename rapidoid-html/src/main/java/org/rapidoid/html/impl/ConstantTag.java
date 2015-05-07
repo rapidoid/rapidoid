@@ -43,8 +43,7 @@ public class ConstantTag extends UndefinedTag {
 		return this;
 	}
 
-	public void traverse(TagProcessor<Tag> processor) {
-	}
+	public void traverse(TagProcessor<Tag> processor) {}
 
 	@Override
 	public String tagKind() {

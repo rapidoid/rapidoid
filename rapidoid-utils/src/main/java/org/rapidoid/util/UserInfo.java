@@ -39,8 +39,7 @@ public class UserInfo {
 
 	public volatile String oauthProvider;
 
-	public UserInfo() {
-	}
+	public UserInfo() {}
 
 	public UserInfo(String username) {
 		this.username = username;

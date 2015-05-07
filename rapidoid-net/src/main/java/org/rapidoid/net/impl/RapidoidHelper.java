@@ -38,9 +38,8 @@ import org.rapidoid.wrap.LongWrap;
 import org.rapidoid.wrap.ShortWrap;
 
 /**
- * Helpers are instantiated per worker node (for thread-safe use), so they
- * contain various data structures that can be used as temporary data holders
- * when implementing protocols, to avoid instantiating objects for each protocol
+ * Helpers are instantiated per worker node (for thread-safe use), so they contain various data structures that can be
+ * used as temporary data holders when implementing protocols, to avoid instantiating objects for each protocol
  * execution.
  */
 @Authors("Nikolche Mihajlovski")

@@ -33,7 +33,7 @@ import org.rapidoid.util.U;
 public class Person {
 
 	public long id;
-	
+
 	public String name;
 
 	public int age;
@@ -44,8 +44,7 @@ public class Person {
 
 	public List<?> lst = U.list(1, "bn", false);
 
-	public Person() {
-	}
+	public Person() {}
 
 	public Person(String name, int age) {
 		this.name = name;

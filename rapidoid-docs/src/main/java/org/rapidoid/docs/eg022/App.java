@@ -38,7 +38,8 @@ public class App {
 }
 
 class HomeScreen extends Screen {
-	@Session // here
+	@Session
+	// here
 	public int n = 0; // here
 
 	public Object content() {

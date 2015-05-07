@@ -28,8 +28,7 @@ import org.testng.annotations.Test;
  */
 
 @MyAnnot
-class Foo {
-}
+class Foo {}
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

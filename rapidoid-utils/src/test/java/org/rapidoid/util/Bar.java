@@ -21,5 +21,4 @@ package org.rapidoid.util;
  */
 
 @MyAnnot
-class Bar {
-}
+class Bar {}

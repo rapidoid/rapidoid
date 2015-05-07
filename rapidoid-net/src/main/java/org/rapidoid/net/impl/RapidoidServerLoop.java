@@ -92,8 +92,7 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 	}
 
 	@Override
-	protected void doProcessing() {
-	}
+	protected void doProcessing() {}
 
 	@Override
 	protected final void beforeLoop() {

@@ -31,7 +31,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.AppHandler;
 import org.rapidoid.config.Conf;
-import org.rapidoid.db.DB;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
@@ -45,6 +44,7 @@ import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.widget.BootstrapWidgets;
+import org.rapidoidx.db.DB;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

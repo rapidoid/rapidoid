@@ -31,8 +31,7 @@ public class ByteBufferBytes implements Bytes {
 
 	private ByteBuffer buf;
 
-	public ByteBufferBytes() {
-	}
+	public ByteBufferBytes() {}
 
 	public ByteBufferBytes(ByteBuffer buf) {
 		this.buf = buf;

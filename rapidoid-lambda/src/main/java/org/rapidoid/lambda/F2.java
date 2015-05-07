@@ -1,6 +1,5 @@
 package org.rapidoid.lambda;
 
-
 /*
  * #%L
  * rapidoid-lambda

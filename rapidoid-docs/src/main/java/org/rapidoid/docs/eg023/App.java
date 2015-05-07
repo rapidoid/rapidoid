@@ -3,8 +3,8 @@ package org.rapidoid.docs.eg023;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.Screen;
-import org.rapidoid.db.DB;
-import org.rapidoid.db.Entity;
+import org.rapidoidx.db.DB;
+import org.rapidoidx.db.Entity;
 
 /*
  * #%L
@@ -38,9 +38,7 @@ public class App {
 }
 
 class HomeScreen extends Screen {
-	Object[] content = { 
-		grid(Todo.class), cmd("Add")
-	};
+	Object[] content = { grid(Todo.class), cmd("Add") };
 
 	public void onAdd() {
 		Todo todo = new Todo();

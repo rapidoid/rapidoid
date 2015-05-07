@@ -38,10 +38,10 @@ import org.rapidoid.util.CommonRoles;
 
 @Scaffold
 @SuppressWarnings("serial")
-//@CanRead(CommonRoles.LOGGED_IN)
-//@CanChange({ CommonRoles.OWNER })
-//@CanInsert(CommonRoles.LOGGED_IN)
-//@CanDelete({ CommonRoles.OWNER, CommonRoles.ADMIN })
+// @CanRead(CommonRoles.LOGGED_IN)
+// @CanChange({ CommonRoles.OWNER })
+// @CanInsert(CommonRoles.LOGGED_IN)
+// @CanDelete({ CommonRoles.OWNER, CommonRoles.ADMIN })
 @DbEntity
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

@@ -50,7 +50,7 @@ public class EnglishTest extends TestCommons {
 		eq(English.plural("DISH"), "DISHES");
 		eq(English.plural("TOY"), "TOYS");
 		eq(English.plural("SKY"), "SKIES");
-		
+
 		eq(English.plural("Todo"), "Todos");
 	}
 

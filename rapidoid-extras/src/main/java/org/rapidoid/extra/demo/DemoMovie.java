@@ -31,8 +31,7 @@ public class DemoMovie {
 
 	public int year;
 
-	public DemoMovie() {
-	}
+	public DemoMovie() {}
 
 	public DemoMovie(String title, int year) {
 		this.title = title;

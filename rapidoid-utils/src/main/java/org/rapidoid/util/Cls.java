@@ -60,8 +60,7 @@ public class Cls {
 
 	private static final Map<String, TypeKind> KINDS = initKinds();
 
-	private Cls() {
-	}
+	private Cls() {}
 
 	protected static Map<String, TypeKind> initKinds() {
 

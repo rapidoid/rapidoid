@@ -31,23 +31,18 @@ import org.rapidoid.annotation.Since;
 public class NullOutputStream extends OutputStream {
 
 	@Override
-	public void write(int b) {
-	}
+	public void write(int b) {}
 
 	@Override
-	public void write(byte[] b, int off, int len) {
-	}
+	public void write(byte[] b, int off, int len) {}
 
 	@Override
-	public void write(byte[] b) throws IOException {
-	}
+	public void write(byte[] b) throws IOException {}
 
 	@Override
-	public void flush() throws IOException {
-	}
+	public void flush() throws IOException {}
 
 	@Override
-	public void close() throws IOException {
-	}
+	public void close() throws IOException {}
 
 }

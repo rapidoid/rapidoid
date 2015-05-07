@@ -30,5 +30,4 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public @interface Autocreate {
-}
+public @interface Autocreate {}
