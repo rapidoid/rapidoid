@@ -7,6 +7,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.model.Items;
+import org.rapidoid.model.impl.DbItems;
 import org.rapidoid.pages.PageGUI;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.widget.GridWidget;
@@ -53,7 +54,7 @@ public class AppGUI extends PageGUI {
 
 	@SuppressWarnings("unchecked")
 	public static <T> Items all(Predicate<T> match, Comparator<T> orderBy) {
-		return new DbItems<T>((Class<T>) IEntityCommons.class, match, orderBy);
+		return new DbItems<T>((Class<T>) Object.class, match, orderBy);
 	}
 
 	public static <T> Items all(Predicate<T> match) {
