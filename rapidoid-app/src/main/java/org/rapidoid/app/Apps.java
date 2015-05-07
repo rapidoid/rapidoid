@@ -26,13 +26,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.config.Conf;
-import org.rapidoid.db.DB;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.log.Log;
 import org.rapidoid.oauth.OAuth;
+import org.rapidoid.plugins.Plugins;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
@@ -53,7 +53,7 @@ public class Apps {
 		Conf.args(args);
 		Log.args(args);
 
-		Log.info("Loaded database", "size", DB.size());
+		Plugins.lifecycle().onStart(args);
 
 		HTTPServer server = HTTP.server().build();
 
@@ -137,7 +137,7 @@ public class Apps {
 
 	public static void terminate() {
 		Log.warn("Terminating application.");
-		DB.shutdown();
+		Plugins.lifecycle().onShutdown();
 		System.exit(0);
 	}
 

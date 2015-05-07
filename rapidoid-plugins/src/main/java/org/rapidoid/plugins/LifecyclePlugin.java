@@ -1,8 +1,5 @@
 package org.rapidoid.plugins;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 /*
  * #%L
  * rapidoid-plugins
@@ -23,21 +20,15 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class Plugins {
+public interface LifecyclePlugin {
 
-	public static DbPlugin db() {
-		return null;
-	}
+	void onStart(String[] args);
 
-	public static EntityPlugin entity() {
-		return null;
-	}
-
-
-	public static LifecyclePlugin lifecycle() {
-		return null;
-	}
+	void onShutdown();
 
 }
