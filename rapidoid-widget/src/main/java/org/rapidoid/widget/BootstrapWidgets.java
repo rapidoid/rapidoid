@@ -1,7 +1,6 @@
 package org.rapidoid.widget;
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,6 @@ import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.lambda.Calc;
-import org.rapidoid.lambda.Predicate;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
