@@ -15,6 +15,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-dao</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-x-db-impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>

@@ -30,6 +30,7 @@ import java.util.Map;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
+import org.rapidoid.entity.AbstractEntity;
 import org.rapidoid.entity.IEntity;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
@@ -76,8 +77,7 @@ public class DbProxy implements InvocationHandler, Serializable {
 		Class<?>[] paramTypes = method.getParameterTypes();
 
 		if (methodClass.equals(Object.class) || methodClass.equals(EntityImpl.class)
-				|| methodClass.equals(EntityCommons.class) || methodClass.equals(IEntityCommons.class)
-				|| methodClass.equals(IEntity.class)) {
+				|| methodClass.equals(AbstractEntity.class) || methodClass.equals(IEntity.class)) {
 			return method.invoke(entity, args);
 		}
 

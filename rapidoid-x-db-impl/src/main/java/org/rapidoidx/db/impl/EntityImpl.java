@@ -21,6 +21,7 @@ package org.rapidoidx.db.impl;
  * #L%
  */
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentMap;
 
@@ -29,18 +30,19 @@ import org.rapidoid.annotation.Rel;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
+import org.rapidoid.entity.AbstractEntity;
 import org.rapidoid.entity.IEntity;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
-import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.DbColumn;
 import org.rapidoidx.db.DbList;
 import org.rapidoidx.db.DbRef;
 import org.rapidoidx.db.DbSet;
+import org.rapidoidx.db.XDB;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class EntityImpl extends EntityCommons implements IEntity {
+public class EntityImpl extends AbstractEntity implements IEntity, Serializable {
 
 	private static final long serialVersionUID = -5556123216690345146L;
 

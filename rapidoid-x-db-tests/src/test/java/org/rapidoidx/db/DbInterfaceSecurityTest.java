@@ -28,6 +28,7 @@ import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.AppCtx;
+import org.rapidoid.util.CommonRoles;
 import org.rapidoid.util.UserInfo;
 import org.testng.annotations.Test;
 
@@ -40,7 +41,7 @@ interface IFoo extends IEntity {
 @CanInsert("LOGGED_IN")
 @CanRead("ANYBODY")
 @CanChange("MANAGER")
-interface IBar extends IEntity {
+interface IBar extends IEntity, CommonRoles {
 
 	@CanRead(MODERATOR)
 	@CanChange({})
