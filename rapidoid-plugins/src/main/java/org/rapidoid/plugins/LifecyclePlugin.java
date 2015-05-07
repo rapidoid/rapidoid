@@ -20,11 +20,10 @@ package org.rapidoid.plugins;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-@Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
+/**
+ * @author Nikolche Mihajlovski
+ * @since 3.0.0
+ */
 public interface LifecyclePlugin {
 
 	void onStart(String[] args);

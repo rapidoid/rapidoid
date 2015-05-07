@@ -23,13 +23,13 @@ package org.rapidoid.plugins;
 import java.util.Comparator;
 import java.util.List;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Predicate;
 
-@Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
+/**
+ * @author Nikolche Mihajlovski
+ * @since 3.0.0
+ */
 public interface DbPlugin {
 
 	<T> T get(long id);
