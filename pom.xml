@@ -95,7 +95,7 @@
 		<module>rapidoid-x</module>
 		<module>rapidoid-x-buffer</module>
 		<module>rapidoid-x-net</module>
-		<module>rapidoid-x-http</module>
+		<module>rapidoid-x-http-client</module>
 		<module>rapidoid-x-compile</module>
 		<module>rapidoid-x-worker</module>
 		<module>rapidoid-x-websocket</module>

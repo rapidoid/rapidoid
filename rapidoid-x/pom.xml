@@ -20,12 +20,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-x-net</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-x-buffer</artifactId>
+			<artifactId>rapidoid-x-http</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -40,7 +35,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-x-fullstack</artifactId>
+			<artifactId>rapidoid-x-http-client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

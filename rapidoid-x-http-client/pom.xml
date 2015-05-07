@@ -8,9 +8,9 @@
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-x-http</artifactId>
+	<artifactId>rapidoid-x-http-client</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid X HTTP</description>
+	<description>Rapidoid X HTTP Client</description>
 
 	<dependencies>
 		<dependency>
