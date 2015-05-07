@@ -20,7 +20,11 @@ package org.rapidoid.demo.taskplanner.model;
  * #L%
  */
 
+import java.util.Date;
+import java.util.Set;
+
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
 
@@ -29,8 +33,23 @@ import org.rapidoid.annotation.Since;
 @Since("2.0.0")
 public class Person {
 
+	@Display
+	public String username;
+
+	public String email;
+
 	public String name;
 
-	public int age;
+	public Date birthdate;
+
+	public Set<Task> tasksOwned;
+
+	public Set<Comment> commentsOwned;
+
+	public Set<Task> tasksLiked;
+
+	public Set<Task> sharedTasks;
+
+	public Set<Comment> commentsLiked;
 
 }

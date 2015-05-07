@@ -21,11 +21,16 @@ package org.rapidoid.demo.taskplanner.model;
  */
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Display;
+import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.security.annotation.CanRead;
+import org.rapidoid.util.CommonRoles;
 
 @Scaffold
 @Authors("Nikolche Mihajlovski")
@@ -40,5 +45,18 @@ public class User {
 	public String name;
 
 	public Date birthdate;
+
+	@Programmatic
+	public User owner;
+
+	@CanRead({ CommonRoles.OWNER })
+	public Set<User> sharedWith;
+
+	@Programmatic
+	@CanRead({ CommonRoles.OWNER, CommonRoles.SHARED_WITH })
+	public List<Comment> comments;
+
+	@Programmatic
+	public Set<User> likedBy;
 
 }

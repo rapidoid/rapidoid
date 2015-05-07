@@ -28,7 +28,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.app.Screen;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.demo.taskplanner.model.Task;
-import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.Tag;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.security.Secure;
@@ -48,8 +47,7 @@ public class MyTasksScreen extends Screen {
 		GridWidget grid1 = grid(Task.class, new Predicate<Task>() {
 			@Override
 			public boolean eval(Task t) throws Exception {
-				User user = t.owner.get();
-				return user != null && U.eq(user.username, Secure.username());
+				return t.owner != null && U.eq(t.owner.username, Secure.username());
 			}
 		}, "-priority", 10, "id", "title", "priority");
 

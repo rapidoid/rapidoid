@@ -1,14 +1,20 @@
 package org.rapidoid.demo.taskplanner.model;
 
+import java.util.List;
+import java.util.Set;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Optional;
+import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.entity.Entity;
 import org.rapidoid.extra.domain.LowHigh3;
 import org.rapidoid.security.annotation.CanChange;
+import org.rapidoid.security.annotation.CanRead;
+import org.rapidoid.util.CommonRoles;
 
 /*
  * #%L
@@ -49,5 +55,18 @@ public class Task extends Entity {
 	public String description;
 
 	public int rating;
+
+	@Programmatic
+	public User owner;
+
+	@CanRead({ CommonRoles.OWNER })
+	public Set<User> sharedWith;
+
+	@Programmatic
+	@CanRead({ CommonRoles.OWNER, CommonRoles.SHARED_WITH })
+	public List<Comment> comments;
+
+	@Programmatic
+	public Set<User> likedBy;
 
 }

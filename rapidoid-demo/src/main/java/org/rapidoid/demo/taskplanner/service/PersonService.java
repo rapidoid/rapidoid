@@ -35,11 +35,12 @@ import org.rapidoid.plugins.Plugins;
 @Since("2.0.0")
 public class PersonService extends DAO<Person> {
 
-	public List<Person> olderThan(final int age) {
+	public List<Person> findByName(String search) {
+		final String s = search.toLowerCase();
 		return Plugins.db().find(Person.class, new Predicate<Person>() {
 			@Override
 			public boolean eval(Person p) {
-				return p.age > age;
+				return p.name.toLowerCase().contains(s);
 			}
 		}, null);
 	}

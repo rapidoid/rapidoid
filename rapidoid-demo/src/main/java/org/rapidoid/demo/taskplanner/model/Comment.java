@@ -1,5 +1,7 @@
 package org.rapidoid.demo.taskplanner.model;
 
+import java.util.Set;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Since;
@@ -31,5 +33,11 @@ import org.rapidoid.entity.AbstractEntity;
 public class Comment extends AbstractEntity {
 
 	public String content;
+
+	public User owner;
+
+	public Task task;
+
+	public Set<User> likedBy;
 
 }
