@@ -20,11 +20,13 @@ package org.rapidoid.plugins;
  * #L%
  */
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Callback;
+import org.rapidoid.lambda.Predicate;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -38,11 +40,15 @@ public interface DbPlugin {
 
 	void update(Object entity);
 
+	void update(long id, Object entity);
+
 	void insert(Object entity);
 
 	void delete(long id);
 
 	<T> List<T> find(String query);
+
+	<T> List<T> find(Class<T> clazz, Predicate<T> match, Comparator<T> orderBy);
 
 	void transaction(Runnable tx, boolean readonly, Callback<Void> callback);
 
