@@ -91,7 +91,7 @@
 		<module>rapidoid-compile</module>
 		<module>rapidoid-app</module>
 		<module>rapidoid-extras</module>
-		<module>rapidoid-all</module>
+		<module>rapidoid-web</module>
 		<module>rapidoid-demo</module>
 		<module>rapidoid-docs</module>
 		<module>rapidoid-module-template</module>

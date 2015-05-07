@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>org.rapidoid</groupId>
 		<artifactId>rapidoid</artifactId>
-		<version>2.5.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-all</artifactId>
+	<artifactId>rapidoid-web</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid All</description>
+	<description>Rapidoid Web</description>
 
 	<dependencies>
 		<dependency>
@@ -20,21 +20,6 @@
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-extras</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-measure</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-compile</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-db-inmem</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
