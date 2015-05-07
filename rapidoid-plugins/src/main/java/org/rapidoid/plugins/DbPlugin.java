@@ -22,8 +22,10 @@ package org.rapidoid.plugins;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import org.rapidoid.lambda.Callback;
+import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 
 /**
@@ -31,6 +33,16 @@ import org.rapidoid.lambda.Predicate;
  * @since 3.0.0
  */
 public interface DbPlugin {
+
+	long insert(Object entity);
+
+	void update(Object entity);
+
+	void update(long id, Object entity);
+
+	long persist(Object record);
+
+	long insertOrGetId(Object record);
 
 	<T> T get(long id);
 
@@ -40,11 +52,11 @@ public interface DbPlugin {
 
 	<T> List<T> getAll(Class<T> clazz);
 
-	void update(Object entity);
+	<E> List<E> getAll(long... ids);
 
-	void update(long id, Object entity);
+	<E> List<E> getAll(Iterable<Long> ids);
 
-	long insert(Object entity);
+	long refresh(Object entity);
 
 	void delete(long id);
 
@@ -53,6 +65,18 @@ public interface DbPlugin {
 	<T> List<T> find(String query);
 
 	<T> List<T> find(Class<T> clazz, Predicate<T> match, Comparator<T> orderBy);
+
+	<E> List<E> find(Predicate<E> match);
+
+	<E> E entity(Class<E> entityType, Map<String, ?> properties);
+
+	<E> List<E> query(Class<E> clazz, String query, Object... args);
+
+	<RESULT> RESULT sql(String sql, Object... args);
+
+	<E> void each(Operation<E> lambda);
+
+	void transaction(Runnable transaction, boolean readOnly);
 
 	void transaction(Runnable tx, boolean readonly, Callback<Void> callback);
 
