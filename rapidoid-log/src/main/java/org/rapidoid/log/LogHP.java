@@ -106,7 +106,7 @@ package org.rapidoid.log;
 
 /**
  * @author Nikolche Mihajlovski
- * @since 2.5.0
+ * @since 3.0.0
  */
 public class LogHP {
 
