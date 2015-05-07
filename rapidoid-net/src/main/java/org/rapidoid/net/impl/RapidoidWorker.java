@@ -21,8 +21,6 @@ package org.rapidoid.net.impl;
  */
 
 import java.io.IOException;
-import java.net.ConnectException;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.channels.ClosedChannelException;
@@ -48,10 +46,6 @@ import org.rapidoid.util.U;
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
-
-	private final Queue<RapidoidConnection> restarting;
-
-	private final Queue<ConnectionTarget> connecting;
 
 	private final Queue<RapidoidChannel> connected;
 
@@ -85,8 +79,6 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		final int queueSize = Conf.micro() ? 1000 : 1000000;
 		final int growFactor = Conf.micro() ? 2 : 10;
 
-		this.restarting = new ArrayBlockingQueue<RapidoidConnection>(queueSize);
-		this.connecting = new ArrayBlockingQueue<ConnectionTarget>(queueSize);
 		this.connected = new ArrayBlockingQueue<RapidoidChannel>(queueSize);
 		this.done = new SimpleList<RapidoidConnection>(queueSize / 10, growFactor);
 
@@ -109,21 +101,6 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		selector.wakeup();
 	}
 
-	public void connect(ConnectionTarget target) throws IOException {
-
-		configureSocket(target.socketChannel);
-
-		connecting.add(target);
-
-		if (target.socketChannel.connect(target.addr)) {
-			Log.debug("Opened socket, connected", "address", target.addr);
-		} else {
-			Log.debug("Opened socket, connecting...", "address", target.addr);
-		}
-
-		selector.wakeup();
-	}
-
 	private void configureSocket(SocketChannel socketChannel) throws IOException, SocketException {
 		socketChannel.configureBlocking(false);
 
@@ -132,35 +109,6 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		socket.setReceiveBufferSize(bufSize);
 		socket.setSendBufferSize(bufSize);
 		socket.setReuseAddress(true);
-	}
-
-	@Override
-	protected void connectOP(SelectionKey key) throws IOException {
-		U.must(key.isConnectable());
-
-		SocketChannel socketChannel = (SocketChannel) key.channel();
-		if (!socketChannel.isConnectionPending()) {
-			// not ready to retrieve the connection status
-			return;
-		}
-
-		ConnectionTarget target = (ConnectionTarget) key.attachment();
-
-		boolean ready;
-		try {
-			ready = socketChannel.finishConnect();
-			U.rteIf(!ready, "Expected an established connection!");
-			connected.add(new RapidoidChannel(socketChannel, true, target.protocol));
-		} catch (ConnectException e) {
-			retryConnecting(target);
-		}
-	}
-
-	private void retryConnecting(ConnectionTarget target) throws IOException {
-		Log.debug("Reconnecting...", "address", target.addr);
-		target.socketChannel = SocketChannel.open();
-		target.retryAfter = U.time() + 1000;
-		connect(target);
 	}
 
 	@Override
@@ -184,14 +132,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		process(conn);
 
 		if (conn.closing) {
-			if (conn.isClient()) {
-				InetSocketAddress addr = conn.getAddress();
-				Protocol protocol = conn.getProtocol();
-				close(key);
-				retryConnecting(new ConnectionTarget(null, addr, protocol));
-			} else {
-				close(key);
-			}
+			close(key);
 		}
 	}
 
@@ -364,27 +305,6 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	@Override
 	protected void doProcessing() {
 
-		long now = U.time();
-		int connectingN = connecting.size();
-
-		for (int i = 0; i < connectingN; i++) {
-			ConnectionTarget target = connecting.poll();
-			assert target != null;
-
-			if (target.retryAfter < now) {
-				Log.debug("connecting", "address", target.addr);
-
-				try {
-					SelectionKey newKey = target.socketChannel.register(selector, SelectionKey.OP_CONNECT);
-					newKey.attach(target);
-				} catch (ClosedChannelException e) {
-					Log.warn("Closed channel", e);
-				}
-			} else {
-				connecting.add(target);
-			}
-		}
-
 		RapidoidChannel channel;
 
 		while ((channel = connected.poll()) != null) {
@@ -410,13 +330,6 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			}
 		}
 
-		RapidoidConnection restartedConn;
-		while ((restartedConn = restarting.poll()) != null) {
-			Log.debug("restarting", "connection", restartedConn);
-
-			processNext(restartedConn, true);
-		}
-
 		synchronized (done) {
 			for (int i = 0; i < done.size(); i++) {
 				RapidoidConnection conn = done.get(i);
@@ -432,8 +345,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		U.notNull(key, "protocol");
 		U.notNull(protocol, "protocol");
 
-		Object attachment = key.attachment();
-		assert attachment == null || attachment instanceof ConnectionTarget;
+		assert key.attachment() == null;
 
 		RapidoidConnection conn = connections.get();
 
@@ -461,10 +373,6 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	protected void failedOP(SelectionKey key, Throwable e) {
 		Log.error("Network error", e);
 		close(key);
-	}
-
-	public void restart(RapidoidConnection conn) {
-		restarting.add(conn);
 	}
 
 	public RapidoidConnection newConnection() {

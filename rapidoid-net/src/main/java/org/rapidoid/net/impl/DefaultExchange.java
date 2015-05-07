@@ -189,12 +189,6 @@ public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvide
 	}
 
 	@Override
-	public T restart() {
-		conn.restart();
-		return meT();
-	}
-
-	@Override
 	public W async() {
 		conn.async();
 		return meW();

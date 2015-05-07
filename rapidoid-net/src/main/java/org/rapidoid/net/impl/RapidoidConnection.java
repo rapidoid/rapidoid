@@ -316,12 +316,6 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 	}
 
 	@Override
-	public synchronized Channel restart() {
-		worker.restart(this);
-		return this;
-	}
-
-	@Override
 	public synchronized Channel async() {
 		this.async = true;
 		this.done = false;

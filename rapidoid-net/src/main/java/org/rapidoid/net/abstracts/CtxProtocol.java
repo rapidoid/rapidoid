@@ -29,6 +29,4 @@ public interface CtxProtocol<T> {
 
 	boolean isInitial();
 
-	T restart();
-
 }
