@@ -1,6 +1,7 @@
 package org.rapidoid.widget;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,10 +25,13 @@ import org.rapidoid.html.tag.SelectTag;
 import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.lambda.Calc;
+import org.rapidoid.lambda.Predicate;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
+import org.rapidoid.plugins.Plugins;
 import org.rapidoid.security.DataPermissions;
 import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Arr;
@@ -407,11 +411,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static FormWidget show(final Item item, String... properties) {
-		return show(null, item, properties);
-	}
-
-	public static FormWidget show(DataManager dataManager, final Item item, String... properties) {
-		return Cls.customizable(FormWidget.class, dataManager, FormMode.SHOW, item, properties);
+		return show(item, properties);
 	}
 
 	public static FormWidget edit(Object bean, String... properties) {
@@ -419,11 +419,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static FormWidget edit(final Item item, String... properties) {
-		return edit(null, item, properties);
-	}
-
-	public static FormWidget edit(DataManager dataManager, final Item item, String... properties) {
-		return Cls.customizable(FormWidget.class, dataManager, FormMode.EDIT, item, properties);
+		return edit(item, properties);
 	}
 
 	public static FormWidget create(Object bean, String... properties) {
@@ -431,23 +427,33 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static FormWidget create(final Item item, String... properties) {
-		return create(null, item, properties);
+		return create(item, properties);
 	}
 
-	public static FormWidget create(DataManager dataManager, final Item item, String... properties) {
-		return Cls.customizable(FormWidget.class, dataManager, FormMode.CREATE, item, properties);
+	public static FormFieldWidget field(FormMode mode, FormLayout layout, Property prop, String name, String desc,
+			FieldType type, Collection<?> options, boolean required, Var<?> var, DataPermissions permissions) {
+		return new FormFieldWidget(mode, layout, prop, name, desc, type, options, required, var, permissions);
 	}
 
-	public static FormFieldWidget field(DataManager dataManager, FormMode mode, FormLayout layout, Property prop,
-			String name, String desc, FieldType type, Collection<?> options, boolean required, Var<?> var,
-			DataPermissions permissions) {
-		return new FormFieldWidget(dataManager, mode, layout, prop, name, desc, type, options, required, var,
-				permissions);
+	public static FormFieldWidget field(FormMode mode, FormLayout layout, Item item, Property prop) {
+		return new FormFieldWidget(mode, layout, item, prop);
 	}
 
-	public static FormFieldWidget field(DataManager dataManager, FormMode mode, FormLayout layout, Item item,
-			Property prop) {
-		return new FormFieldWidget(dataManager, mode, layout, item, prop);
+	public static <T> Property prop(String name, Calc<T> calc) {
+		return Models.property(name, calc);
+	}
+
+	public static Item item(Object value) {
+		return Models.item(value);
+	}
+
+	public static <T> Items beanItems(Class<T> beanType, T... beans) {
+		return Models.beanItems(beanType, beans);
+	}
+
+	public static <E> GridWidget grid(Class<E> entityType, int pageSize, String... properties) {
+		List<E> all = Plugins.db().getAll(entityType);
+		return grid(entityType, all, "", pageSize, properties);
 	}
 
 	public static Tag media(Object left, Object title, Object body, String targetUrl) {

@@ -41,7 +41,6 @@ import org.rapidoid.var.Var;
 @Since("2.0.0")
 public class FormWidget extends AbstractWidget {
 
-	protected final DataManager dataManager;
 	protected final Item item;
 	protected final FormMode mode;
 
@@ -54,23 +53,21 @@ public class FormWidget extends AbstractWidget {
 
 	protected boolean hasFields = false;
 
-	public FormWidget(DataManager dataManager, FormMode mode, Item item, String... properties) {
-		this.dataManager = dataManager;
+	public FormWidget(FormMode mode, Item item, String... properties) {
 		this.mode = mode;
 		this.item = item;
 		init(item, properties);
 	}
 
-	public FormWidget(DataManager dataManager, FormMode mode, FormLayout layout, String[] fieldNames,
-			String[] fieldLabels, FieldType[] fieldTypes, Collection<?>[] options, Var<?>[] vars, ButtonWidget[] buttons) {
-		this.dataManager = dataManager;
+	public FormWidget(FormMode mode, FormLayout layout, String[] fieldNames, String[] fieldLabels,
+			FieldType[] fieldTypes, Collection<?>[] options, Var<?>[] vars, ButtonWidget[] buttons) {
 		this.mode = mode;
 		this.item = null;
 		this.layout = layout;
 
 		for (int i = 0; i < fieldNames.length; i++) {
-			fields.add(new FormFieldWidget(dataManager, mode, layout, null, fieldNames[i], fieldLabels[i],
-					fieldTypes[i], options[i], true, vars[i], null));
+			fields.add(new FormFieldWidget(mode, layout, null, fieldNames[i], fieldLabels[i], fieldTypes[i],
+					options[i], true, vars[i], null));
 		}
 
 		this.buttons = UTILS.withoutNulls(buttons);
@@ -137,7 +134,7 @@ public class FormWidget extends AbstractWidget {
 
 		for (int i = 0; i < propN; i++) {
 			Property prop = props.get(i);
-			FormFieldWidget field = field(dataManager, mode, layout, item, prop);
+			FormFieldWidget field = field(mode, layout, item, prop);
 			fields.add(field);
 		}
 	}

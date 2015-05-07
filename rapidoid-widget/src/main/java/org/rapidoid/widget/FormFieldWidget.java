@@ -38,6 +38,7 @@ import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
+import org.rapidoid.plugins.Plugins;
 import org.rapidoid.security.DataPermissions;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.TypeKind;
@@ -49,7 +50,6 @@ import org.rapidoid.var.Vars;
 @Since("2.0.0")
 public class FormFieldWidget extends AbstractWidget {
 
-	protected DataManager dataManager;
 	protected FormMode mode;
 	protected Property prop;
 	protected FormLayout layout = FormLayout.VERTICAL;
@@ -66,11 +66,9 @@ public class FormFieldWidget extends AbstractWidget {
 	protected Tag label;
 	protected Tag input;
 
-	public FormFieldWidget(DataManager dataManager, FormMode mode, FormLayout layout, Property prop, String name,
-			String desc, FieldType type, Collection<?> options, boolean required, Var<?> var,
-			DataPermissions permissions) {
+	public FormFieldWidget(FormMode mode, FormLayout layout, Property prop, String name, String desc, FieldType type,
+			Collection<?> options, boolean required, Var<?> var, DataPermissions permissions) {
 
-		this.dataManager = dataManager;
 		this.mode = U.or(mode, FormMode.EDIT);
 		this.layout = layout;
 		this.prop = prop;
@@ -83,8 +81,7 @@ public class FormFieldWidget extends AbstractWidget {
 		this.permissions = permissions;
 	}
 
-	public FormFieldWidget(DataManager dataManager, FormMode mode, FormLayout layout, Item item, Property prop) {
-		this.dataManager = dataManager;
+	public FormFieldWidget(FormMode mode, FormLayout layout, Item item, Property prop) {
 		this.mode = U.or(mode, FormMode.EDIT);
 		this.layout = layout;
 		this.prop = prop;
@@ -355,7 +352,7 @@ public class FormFieldWidget extends AbstractWidget {
 
 	protected Collection<?> getOptionsOfType(Class<?> clazz) {
 		if (Cls.kindOf(clazz) == TypeKind.OBJECT && Beany.hasProperty(clazz, "id")) {
-			return dataManager != null ? dataManager.getAll(clazz) : Collections.EMPTY_LIST;
+			return Plugins.db().getAll(clazz);
 		} else {
 			return Collections.EMPTY_LIST;
 		}
@@ -463,14 +460,6 @@ public class FormFieldWidget extends AbstractWidget {
 
 	public void setInput(Tag input) {
 		this.input = input;
-	}
-
-	public DataManager getDataManager() {
-		return dataManager;
-	}
-
-	public void setDataManager(DataManager dataManager) {
-		this.dataManager = dataManager;
 	}
 
 }
