@@ -59,14 +59,15 @@
 
 	<modules>
 		<module>rapidoid-annotations</module>
+		<module>rapidoid-lambda</module>
 		<module>rapidoid-entity</module>
+		<module>rapidoid-plugins</module>
+		<module>rapidoid-dao</module>
 		<module>rapidoid-dict</module>
 		<module>rapidoid-u</module>
 		<module>rapidoid-config</module>
-		<module>rapidoid-lambda</module>
 		<module>rapidoid-log</module>
 		<module>rapidoid-utils</module>
-		<module>rapidoid-plugins</module>
 		<module>rapidoid-beany</module>
 		<module>rapidoid-model</module>
 		<module>rapidoid-ioc</module>
