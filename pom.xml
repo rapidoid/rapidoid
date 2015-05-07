@@ -25,13 +25,6 @@
 
 	<inceptionYear>2014</inceptionYear>
 
-	<licenses>
-		<license>
-			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		</license>
-	</licenses>
-
 	<developers>
 		<developer>
 			<name>Nikolche Mihajlovski</name>
@@ -39,6 +32,17 @@
 			<url>http://www.nikolche.com</url>
 		</developer>
 	</developers>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+		<license>
+			<name>GNU Affero General Public License, Version 3</name>
+			<url>http://www.gnu.org/licenses/agpl.txt</url>
+		</license>
+	</licenses>
 
 	<scm>
 		<connection>scm:git:git://github.com/rapidoid/rapidoid.git</connection>
