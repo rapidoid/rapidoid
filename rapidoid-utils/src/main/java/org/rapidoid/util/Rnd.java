@@ -32,7 +32,8 @@ public class Rnd {
 	protected static final Random RND = new Random();
 
 	public static char rndChar() {
-		return (char) (65 + rnd(26));
+		int rnd = rnd(36);
+		return rnd < 10 ? (char) ('0' + rnd) : (char) ('a' + rnd - 10);
 	}
 
 	public static String rndStr(int length) {
