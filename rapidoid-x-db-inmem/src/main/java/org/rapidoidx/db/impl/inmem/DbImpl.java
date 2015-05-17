@@ -134,7 +134,7 @@ public class DbImpl extends NamedActivity<Database> implements Database, Seriali
 
 	@Override
 	public long persistedIdOf(Object record) {
-		return inmem.insertOfGetId(record);
+		return inmem.insertOrGetId(record);
 	}
 
 	@Override

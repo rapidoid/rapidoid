@@ -639,7 +639,7 @@ public class InMem implements Serializable {
 		}
 	}
 
-	public long insertOfGetId(Object record) {
+	public long insertOrGetId(Object record) {
 		Long id = Beany.getIdIfExists(record);
 		if (id == null || id <= 0) {
 			return insert(record);
