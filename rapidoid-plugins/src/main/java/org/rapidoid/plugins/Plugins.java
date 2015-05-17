@@ -1,5 +1,10 @@
 package org.rapidoid.plugins;
 
+import org.rapidoid.plugins.impl.AbstractDBPlugin;
+import org.rapidoid.plugins.impl.AbstractEntitiesPlugin;
+import org.rapidoid.plugins.impl.AbstractLanguagesPlugin;
+import org.rapidoid.plugins.impl.AbstractLifecyclePlugin;
+import org.rapidoid.plugins.impl.AbstractUsersPlugin;
 import org.rapidoid.plugins.spec.DBPlugin;
 import org.rapidoid.plugins.spec.EntitiesPlugin;
 import org.rapidoid.plugins.spec.LanguagesPlugin;
@@ -32,24 +37,30 @@ import org.rapidoid.plugins.spec.UsersPlugin;
  */
 public final class Plugins {
 
+	private static volatile LifecyclePlugin lifecyclePlugin = new AbstractLifecyclePlugin();
+	private static volatile LanguagesPlugin languagesPlugin = new AbstractLanguagesPlugin();
+	private static volatile DBPlugin dbPlugin = new AbstractDBPlugin();
+	private static volatile EntitiesPlugin entitiesPlugin = new AbstractEntitiesPlugin();
+	private static volatile UsersPlugin usersPlugin = new AbstractUsersPlugin();
+
 	static DBPlugin db() {
-		return null;
+		return dbPlugin;
 	}
 
 	static EntitiesPlugin entities() {
-		return null;
+		return entitiesPlugin;
 	}
 
 	static LanguagesPlugin languages() {
-		return null;
+		return languagesPlugin;
 	}
 
 	static UsersPlugin users() {
-		return null;
+		return usersPlugin;
 	}
 
 	static LifecyclePlugin lifecycle() {
-		return null;
+		return lifecyclePlugin;
 	}
 
 }
