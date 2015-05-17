@@ -777,11 +777,16 @@ public class UTILS implements Constants {
 		return SPECIAL_PROPERTIES.contains(name.toLowerCase());
 	}
 
-	public static Map<String, String> lowercase(Map<String, String> map) {
-		Map<String, String> lower = U.map();
+	@SuppressWarnings("unchecked")
+	public static <T> Map<String, T> lowercase(Map<String, T> map) {
+		Map<String, T> lower = U.map();
 
-		for (Entry<String, String> e : map.entrySet()) {
-			lower.put(e.getKey().toLowerCase(), e.getValue().toLowerCase());
+		for (Entry<String, T> e : map.entrySet()) {
+			T val = e.getValue();
+			if (val instanceof String) {
+				val = (T) ((String) val).toLowerCase();
+			}
+			lower.put(e.getKey().toLowerCase(), val);
 		}
 
 		return lower;
