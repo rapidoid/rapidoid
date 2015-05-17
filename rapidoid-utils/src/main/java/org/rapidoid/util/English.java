@@ -39,15 +39,15 @@ public class English {
 
 	private static final Map<String, String> IRREGULAR_PLURAL = IO.loadMap("irregular-plural.txt");
 
-	public static String plural(String s) {
-		if (U.isEmpty(s)) {
-			return s;
+	public static String plural(String noun) {
+		if (U.isEmpty(noun)) {
+			return noun;
 		}
 
-		if (IRREGULAR_PLURAL.containsKey(s.toLowerCase())) {
-			boolean capital = Character.isUpperCase(s.charAt(0));
-			boolean upper = Character.isUpperCase(s.charAt(s.length() - 1));
-			String pl = IRREGULAR_PLURAL.get(s.toLowerCase());
+		if (IRREGULAR_PLURAL.containsKey(noun.toLowerCase())) {
+			boolean capital = Character.isUpperCase(noun.charAt(0));
+			boolean upper = Character.isUpperCase(noun.charAt(noun.length() - 1));
+			String pl = IRREGULAR_PLURAL.get(noun.toLowerCase());
 
 			if (upper) {
 				return pl.toUpperCase();
@@ -55,22 +55,56 @@ public class English {
 				return (capital ? U.capitalized(pl) : pl);
 			}
 
-		} else if (PLURAL1.matcher(s).matches()) {
-			return s + "es";
-		} else if (PLURAL2.matcher(s).matches()) {
-			return s + "es";
-		} else if (PLURAL3.matcher(s).matches()) {
-			return U.mid(s, 0, -1) + "ies";
-		} else if (PLURAL1U.matcher(s).matches()) {
-			return s + "ES";
-		} else if (PLURAL2U.matcher(s).matches()) {
-			return s + "ES";
-		} else if (PLURAL3U.matcher(s).matches()) {
-			return U.mid(s, 0, -1) + "IES";
+		} else if (PLURAL1.matcher(noun).matches()) {
+			return noun + "es";
+		} else if (PLURAL2.matcher(noun).matches()) {
+			return noun + "es";
+		} else if (PLURAL3.matcher(noun).matches()) {
+			return U.mid(noun, 0, -1) + "ies";
+		} else if (PLURAL1U.matcher(noun).matches()) {
+			return noun + "ES";
+		} else if (PLURAL2U.matcher(noun).matches()) {
+			return noun + "ES";
+		} else if (PLURAL3U.matcher(noun).matches()) {
+			return U.mid(noun, 0, -1) + "IES";
 		} else {
-			boolean upper = Character.isUpperCase(s.charAt(s.length() - 1));
-			return s + (upper ? "S" : "s");
+			boolean upper = Character.isUpperCase(noun.charAt(noun.length() - 1));
+			return noun + (upper ? "S" : "s");
 		}
+	}
+
+	public static String singular(String noun) {
+		if (U.isEmpty(noun)) {
+			return noun;
+		}
+
+		if (noun.toLowerCase().endsWith("s")) {
+			String singular = U.mid(noun, 0, -1);
+			if (plural(singular).equals(noun)) {
+				return singular;
+			}
+		}
+
+		if (noun.toLowerCase().endsWith("es")) {
+			String singular = U.mid(noun, 0, -2);
+			if (plural(singular).equals(noun)) {
+				return singular;
+			}
+		}
+
+		if (noun.toLowerCase().endsWith("ies")) {
+			String singular = U.mid(noun, 0, -1);
+			if (!singular.isEmpty()) {
+				boolean upper = Character.isUpperCase(singular.charAt(singular.length() - 1));
+				singular += upper ? 'Y' : 'y';
+				if (plural(singular).equals(noun)) {
+					return singular;
+				}
+			}
+		}
+
+		// FIXME handle irregular plural
+		return noun;
 	}
 
 }
