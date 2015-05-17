@@ -62,6 +62,12 @@ public class Apps {
 	}
 
 	public static void run(Object... args) {
+		// register default plugins
+		Plugins.register(new DefaultDBPlugin());
+		Plugins.register(new DefaultEntitiesPlugin());
+		Plugins.register(new DefaultLanguagesPlugin());
+		Plugins.register(new DefaultLifecyclePlugin());
+		Plugins.register(new DefaultUsersPlugin());
 
 		Set<String> config = U.set();
 
