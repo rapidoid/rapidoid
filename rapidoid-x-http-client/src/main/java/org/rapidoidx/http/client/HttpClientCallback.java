@@ -7,7 +7,7 @@ import org.rapidoidx.data.Ranges;
 
 /*
  * #%L
- * rapidoid-x-http
+ * rapidoid-x-http-client
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
