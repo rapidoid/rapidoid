@@ -89,6 +89,7 @@
 		<module>rapidoid-oauth</module>
 		<module>rapidoid-app</module>
 		<module>rapidoid-extras</module>
+		<module>rapidoid-jpa</module>
 		<module>rapidoid-web</module>
 		<module>rapidoid-demo</module>
 		<module>rapidoid-docs</module>
