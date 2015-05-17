@@ -514,4 +514,9 @@ public class MockHttpExchange implements HttpExchange {
 
 	}
 
+	@Override
+	public String realAddress() {
+		return null;
+	}
+
 }

@@ -1011,4 +1011,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		conn.waitUntilClosing();
 	}
 
+	@Override
+	public String realAddress() {
+		return header("X-Forwarded-For", address());
+	}
+
 }

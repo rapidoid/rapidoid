@@ -117,4 +117,6 @@ public interface HttpExchange extends HttpExchangeHeaders {
 
 	void extra(Object key, Object value);
 
+	String realAddress();
+
 }
