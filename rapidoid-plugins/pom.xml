@@ -15,7 +15,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-lambda</artifactId>
+			<artifactId>rapidoid-beany</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-entity</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
