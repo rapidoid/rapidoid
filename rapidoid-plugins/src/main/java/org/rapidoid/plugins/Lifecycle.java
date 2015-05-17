@@ -26,7 +26,7 @@ package org.rapidoid.plugins;
  */
 public class Lifecycle {
 
-	public static void onStart(String[] args) {
+	public static void onStart(Object[] args) {
 		Plugins.lifecycle().onStart(args);
 	}
 

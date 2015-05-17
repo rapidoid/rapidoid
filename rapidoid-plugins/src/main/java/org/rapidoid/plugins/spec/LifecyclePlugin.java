@@ -26,7 +26,7 @@ package org.rapidoid.plugins.spec;
  */
 public interface LifecyclePlugin {
 
-	void onStart(String[] args);
+	void onStart(Object[] args);
 
 	void onShutdown();
 
