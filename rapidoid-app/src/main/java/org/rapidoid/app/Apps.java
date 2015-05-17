@@ -21,6 +21,7 @@ package org.rapidoid.app;
  */
 
 import java.util.Map;
+import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -33,6 +34,17 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.log.Log;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.plugins.Lifecycle;
+import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.impl.DefaultDBPlugin;
+import org.rapidoid.plugins.impl.DefaultEntitiesPlugin;
+import org.rapidoid.plugins.impl.DefaultLanguagesPlugin;
+import org.rapidoid.plugins.impl.DefaultLifecyclePlugin;
+import org.rapidoid.plugins.impl.DefaultUsersPlugin;
+import org.rapidoid.plugins.spec.DBPlugin;
+import org.rapidoid.plugins.spec.EntitiesPlugin;
+import org.rapidoid.plugins.spec.LanguagesPlugin;
+import org.rapidoid.plugins.spec.LifecyclePlugin;
+import org.rapidoid.plugins.spec.UsersPlugin;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
@@ -46,12 +58,20 @@ public class Apps {
 	private static final String BUILT_IN_SCREEN_SUFFIX = "BuiltIn";
 
 	public static void main(String[] args) {
-		run(args);
+		run((Object[]) args);
 	}
 
-	public static void run(String... args) {
-		Conf.args(args);
-		Log.args(args);
+	public static void run(Object... args) {
+
+		Set<String> config = U.set();
+
+		for (Object arg : args) {
+			processArg(config, arg);
+		}
+
+		String[] configArgs = config.toArray(new String[config.size()]);
+		Conf.args(configArgs);
+		Log.args(configArgs);
 
 		Lifecycle.onStart(args);
 
@@ -63,6 +83,24 @@ public class Apps {
 		server.serve(new AppHandler());
 
 		server.start();
+	}
+
+	private static void processArg(Set<String> config, Object arg) {
+		if (arg instanceof String) {
+			config.add((String) arg);
+		} else if (arg instanceof DBPlugin) {
+			Plugins.register((DBPlugin) arg);
+		} else if (arg instanceof EntitiesPlugin) {
+			Plugins.register((EntitiesPlugin) arg);
+		} else if (arg instanceof LanguagesPlugin) {
+			Plugins.register((LanguagesPlugin) arg);
+		} else if (arg instanceof LifecyclePlugin) {
+			Plugins.register((LifecyclePlugin) arg);
+		} else if (arg instanceof UsersPlugin) {
+			Plugins.register((UsersPlugin) arg);
+		} else {
+			throw U.rte("Argument not suported: " + arg);
+		}
 	}
 
 	public static String screenName(Class<?> screenClass) {

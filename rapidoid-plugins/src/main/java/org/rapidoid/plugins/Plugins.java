@@ -63,4 +63,24 @@ public final class Plugins {
 		return lifecyclePlugin;
 	}
 
+	public static void register(LifecyclePlugin lifecyclePlugin) {
+		Plugins.lifecyclePlugin = lifecyclePlugin;
+	}
+
+	public static void register(LanguagesPlugin languagesPlugin) {
+		Plugins.languagesPlugin = languagesPlugin;
+	}
+
+	public static void register(DBPlugin dbPlugin) {
+		Plugins.dbPlugin = dbPlugin;
+	}
+
+	public static void register(EntitiesPlugin entitiesPlugin) {
+		Plugins.entitiesPlugin = entitiesPlugin;
+	}
+
+	public static void register(UsersPlugin usersPlugin) {
+		Plugins.usersPlugin = usersPlugin;
+	}
+
 }
