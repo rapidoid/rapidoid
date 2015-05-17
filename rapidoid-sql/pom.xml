@@ -7,36 +7,39 @@
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-app</artifactId>
+	<artifactId>rapidoid-sql</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid App</description>
+	<description>Rapidoid SQL</description>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-dao</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-sql</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-pages</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-oauth</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-test-commons</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-utils</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.35</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.187</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.3.2</version>
 		</dependency>
 	</dependencies>
 
