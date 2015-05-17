@@ -2,7 +2,7 @@ package org.rapidoid.plugins.impl;
 
 /*
  * #%L
- * rapidoid-app
+ * rapidoid-plugins
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%

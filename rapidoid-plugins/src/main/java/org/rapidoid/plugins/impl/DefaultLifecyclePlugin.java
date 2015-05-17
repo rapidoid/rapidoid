@@ -4,7 +4,7 @@ import org.rapidoid.plugins.spec.LifecyclePlugin;
 
 /*
  * #%L
- * rapidoid-app
+ * rapidoid-plugins
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
