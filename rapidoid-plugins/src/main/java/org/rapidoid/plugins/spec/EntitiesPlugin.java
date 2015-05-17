@@ -1,5 +1,7 @@
 package org.rapidoid.plugins.spec;
 
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-plugins
@@ -26,8 +28,12 @@ package org.rapidoid.plugins.spec;
  */
 public interface EntitiesPlugin {
 
-	Class<?> getEntityType(String simpleTypeName);
+	<E> Class<E> getEntityType(String simpleTypeName);
+
+	<E> Class<E> getEntityTypeFor(Class<E> clazz);
 
 	<E> E create(Class<E> entityType);
+
+	<E> E create(Class<E> entityType, Map<String, ?> properties);
 
 }

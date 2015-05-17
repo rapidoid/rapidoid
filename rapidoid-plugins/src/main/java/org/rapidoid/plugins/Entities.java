@@ -1,5 +1,7 @@
 package org.rapidoid.plugins;
 
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-plugins
@@ -26,12 +28,20 @@ package org.rapidoid.plugins;
  */
 public class Entities {
 
-	public static Class<?> getEntityType(String simpleTypeName) {
+	public static <E> Class<E> getEntityType(String simpleTypeName) {
 		return Plugins.entities().getEntityType(simpleTypeName);
+	}
+
+	public static <E> Class<E> getEntityType(Class<E> clazz) {
+		return Plugins.entities().getEntityTypeFor(clazz);
 	}
 
 	public static <E> E create(Class<E> entityType) {
 		return Plugins.entities().create(entityType);
+	}
+
+	public static <E> E create(Class<E> entityType, Map<String, ?> properties) {
+		return Plugins.entities().create(entityType, properties);
 	}
 
 }
