@@ -54,6 +54,16 @@ public abstract class AbstractEntity implements IEntity {
 	private Map<Object, Object> tmps;
 
 	@Override
+	public synchronized <T> T get(String attr) {
+		return _extra(attr);
+	}
+
+	@Override
+	public synchronized void set(String attr, Object value) {
+		_extra(attr, value);
+	}
+
+	@Override
 	public synchronized long id() {
 		return id;
 	}
@@ -180,13 +190,11 @@ public abstract class AbstractEntity implements IEntity {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public synchronized <T> T _extra(Object key) {
+	private <T> T _extra(Object key) {
 		return (T) _extras().get(key);
 	}
 
-	@Override
-	public synchronized void _extra(Object key, Object value) {
+	private void _extra(Object key, Object value) {
 		_extras().put(key, value);
 	}
 

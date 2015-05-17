@@ -56,15 +56,15 @@ public interface IEntity {
 
 	void lastUpdatedOn(Date updatedOn);
 
+	<T> T get(String attr);
+
+	void set(String attr, Object value);
+
 	<K, V> ConcurrentMap<K, V> _map(Object key);
 
 	<T> List<T> _list(Object key);
 
 	<T> Set<T> _set(Object key);
-
-	<T> T _extra(Object key);
-
-	void _extra(Object key, Object value);
 
 	Map<Object, Object> _extras();
 
