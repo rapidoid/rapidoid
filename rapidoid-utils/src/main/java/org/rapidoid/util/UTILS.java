@@ -792,4 +792,36 @@ public class UTILS implements Constants {
 		return lower;
 	}
 
+	public static void multiThreaded(int threadsN, final Mapper<Integer, Void> executable) {
+
+		final CountDownLatch latch = new CountDownLatch(threadsN);
+
+		for (int i = 1; i <= threadsN; i++) {
+			final Integer n = i;
+			new Thread() {
+				public void run() {
+					Lambdas.eval(executable, n);
+					latch.countDown();
+				};
+			}.start();
+		}
+
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static void multiThreaded(int threadsN, final Runnable executable) {
+		multiThreaded(threadsN, new Mapper<Integer, Void>() {
+			@Override
+			public Void map(Integer n) throws Exception {
+				executable.run();
+				return null;
+			}
+
+		});
+	}
+
 }
