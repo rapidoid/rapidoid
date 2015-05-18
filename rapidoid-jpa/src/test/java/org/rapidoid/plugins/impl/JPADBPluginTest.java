@@ -60,6 +60,8 @@ public class JPADBPluginTest extends TestCommons {
 			}
 		}, false);
 
+		eq(db.size(), 3);
+
 		List<Object> all = db.getAll();
 		System.out.println(all);
 

@@ -272,4 +272,9 @@ public abstract class DefaultDBPlugin extends AbstractDBPlugin {
 		throw U.notSupported();
 	}
 
+	@Override
+	public long size() {
+		return getAll().size();
+	}
+
 }

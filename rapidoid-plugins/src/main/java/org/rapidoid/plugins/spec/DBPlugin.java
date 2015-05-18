@@ -64,6 +64,8 @@ public interface DBPlugin {
 
 	<E> void each(final Operation<E> lambda);
 
+	long size();
+
 	<T> List<T> fullTextSearch(String query);
 
 	<T> List<T> find(Class<T> clazz, Predicate<T> match, Comparator<T> orderBy);

@@ -95,6 +95,10 @@ public class DB {
 		Plugins.db().each(lambda);
 	}
 
+	public static long size() {
+		return Plugins.db().size();
+	}
+
 	public static <E> List<E> find(Predicate<E> match) {
 		return Plugins.db().find(match);
 	}

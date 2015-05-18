@@ -155,4 +155,9 @@ public class AbstractDBPlugin implements DBPlugin {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
+	@Override
+	public long size() {
+		throw new AbstractMethodError("Not implemented!");
+	}
+
 }

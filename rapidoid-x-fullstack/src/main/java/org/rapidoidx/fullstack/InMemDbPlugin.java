@@ -180,4 +180,10 @@ public class InMemDbPlugin implements DBPlugin {
 
 	}
 
+	@Override
+	public long size() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
