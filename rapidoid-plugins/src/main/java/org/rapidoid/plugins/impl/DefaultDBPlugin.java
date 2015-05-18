@@ -229,15 +229,10 @@ public abstract class DefaultDBPlugin extends AbstractDBPlugin {
 
 	@Override
 	public void deleteAllData() {
-		transaction(new Runnable() {
-			@Override
-			public void run() {
-				List<Object> all = getAll();
-				for (Object entity : all) {
-					delete(entity);
-				}
-			}
-		}, false);
+		List<Object> all = getAll();
+		for (Object entity : all) {
+			delete(entity);
+		}
 	}
 
 	@Override
