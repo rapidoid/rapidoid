@@ -12,6 +12,7 @@ import javax.persistence.metamodel.Metamodel;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
+import org.rapidoid.lambda.Callback;
 import org.rapidoid.plugins.impl.DefaultDBPlugin;
 import org.rapidoid.util.U;
 
@@ -113,6 +114,20 @@ public class JPADBPlugin extends DefaultDBPlugin {
 		}
 
 		em.getTransaction().commit();
+	}
+
+	@Override
+	public void transaction(Runnable tx, boolean readonly, Callback<Void> callback) {
+		// FIXME make async
+
+		try {
+			transaction(tx, readonly);
+		} catch (Throwable e) {
+			callback.onDone(null, e);
+			return;
+		}
+
+		callback.onDone(null, null);
 	}
 
 }
