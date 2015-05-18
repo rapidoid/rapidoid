@@ -409,7 +409,8 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static FormWidget show(final Item item, String... properties) {
-		return show(item, properties);
+		// FIXME make fluent and customizable!
+		return new FormWidget(FormMode.SHOW, item, properties);
 	}
 
 	public static FormWidget edit(Object bean, String... properties) {
@@ -417,7 +418,8 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static FormWidget edit(final Item item, String... properties) {
-		return edit(item, properties);
+		// FIXME make fluent and customizable!
+		return new FormWidget(FormMode.EDIT, item, properties);
 	}
 
 	public static FormWidget create(Object bean, String... properties) {
@@ -425,7 +427,8 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static FormWidget create(final Item item, String... properties) {
-		return create(item, properties);
+		// FIXME make fluent and customizable!
+		return new FormWidget(FormMode.CREATE, item, properties);
 	}
 
 	public static FormFieldWidget field(FormMode mode, FormLayout layout, Property prop, String name, String desc,
