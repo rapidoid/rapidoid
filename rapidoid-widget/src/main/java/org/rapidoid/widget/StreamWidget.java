@@ -41,7 +41,7 @@ public class StreamWidget extends AbstractWidget {
 
 		Tag tmpla = div(div(template).attr("ng-if", "it()")).attr("ng-controller", "StreamItemController");
 		Tag columns = div(tmpla).class_("col-md-{{12 / cols}}").attr("ng-repeat", "colN in [] | rangex:0:cols");
-		Tag tmpl = div(columns).attr("ng-repeat", "rowN in items | rowCount:cols").class_("row row-separated");
+		Tag tmpl = div(columns).attr("ng-repeat", "rowN in items | rowCount:cols").class_("row row-separated-mini");
 
 		Tag loading = row("Loading data...").attr("ng-show", "stream.busy");
 
