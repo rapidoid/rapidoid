@@ -12,6 +12,7 @@ import org.rapidoid.entity.Book;
 import org.rapidoid.entity.Movie;
 import org.rapidoid.jpa.dbplugin.JPADBPlugin;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
 /*
@@ -60,7 +61,10 @@ public class JPADBPluginTest extends TestCommons {
 		}, false);
 
 		List<Object> all = db.getAll();
+		System.out.println(all);
+
 		eq(all.size(), 3);
+		eq(U.set(all), U.set(b1, b2, m1));
 
 		em.close();
 		emf.close();
