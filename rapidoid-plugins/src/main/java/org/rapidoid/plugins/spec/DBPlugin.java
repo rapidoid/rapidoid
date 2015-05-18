@@ -52,7 +52,7 @@ public interface DBPlugin {
 
 	<T> List<T> getAll(Class<T> clazz);
 
-	<E> List<E> getAll(Class<E> clazz, long... ids);
+	<E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize);
 
 	<E> List<E> getAll(Class<E> clazz, Iterable<Long> ids);
 
