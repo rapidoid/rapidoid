@@ -62,7 +62,10 @@ public class SQLTest extends TestCommons {
 
 		SQL.run("INSERT INTO movie VALUES (?, ?)", 10, "Rambo");
 		SQL.run("INSERT INTO movie VALUES (?, ?)", 20, "Hackers");
-		SQL.run("INSERT INTO movie VALUES (?, ?)", 30, "Terminator");
+
+		for (int i = 0; i < 1000; i++) {
+			SQL.run("INSERT INTO movie VALUES (?, ?)", 100 + i, "movie" + i);
+		}
 
 		List<Map<String, Object>> rows = SQL.get("SELECT * FROM movie WHERE id < ?", 25);
 		System.out.println(rows);
