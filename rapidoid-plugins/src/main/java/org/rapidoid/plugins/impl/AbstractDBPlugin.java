@@ -61,52 +61,17 @@ public class AbstractDBPlugin implements DBPlugin {
 	}
 
 	@Override
-	public <T> T get(long id) {
-		throw new AbstractMethodError("Not implemented!");
-	}
-
-	@Override
-	public <T> T get(long id, Class<T> clazz) {
-		throw new AbstractMethodError("Not implemented!");
-	}
-
-	@Override
-	public <T> T getIfExists(long id) {
-		throw new AbstractMethodError("Not implemented!");
-	}
-
-	@Override
 	public <T> List<T> getAll(Class<T> clazz) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
 	@Override
-	public <E> List<E> getAll(long... ids) {
-		throw new AbstractMethodError("Not implemented!");
-	}
-
-	@Override
-	public <E> List<E> getAll(Iterable<Long> ids) {
-		throw new AbstractMethodError("Not implemented!");
-	}
-
-	@Override
-	public long refresh(Object entity) {
-		throw new AbstractMethodError("Not implemented!");
-	}
-
-	@Override
-	public void delete(long id) {
+	public void refresh(Object entity) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
 	@Override
 	public void delete(Object entity) {
-		throw new AbstractMethodError("Not implemented!");
-	}
-
-	@Override
-	public <T> List<T> find(String query) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
@@ -117,11 +82,6 @@ public class AbstractDBPlugin implements DBPlugin {
 
 	@Override
 	public <E> List<E> find(Predicate<E> match) {
-		throw new AbstractMethodError("Not implemented!");
-	}
-
-	@Override
-	public long size() {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
@@ -157,6 +117,41 @@ public class AbstractDBPlugin implements DBPlugin {
 
 	@Override
 	public void deleteAllData() {
+		throw new AbstractMethodError("Not implemented!");
+	}
+
+	@Override
+	public <T> T get(Class<T> clazz, long id) {
+		throw new AbstractMethodError("Not implemented!");
+	}
+
+	@Override
+	public <T> T getIfExists(Class<T> clazz, long id) {
+		throw new AbstractMethodError("Not implemented!");
+	}
+
+	@Override
+	public <E> List<E> getAll() {
+		throw new AbstractMethodError("Not implemented!");
+	}
+
+	@Override
+	public <E> List<E> getAll(Class<E> clazz, long... ids) {
+		throw new AbstractMethodError("Not implemented!");
+	}
+
+	@Override
+	public <E> List<E> getAll(Class<E> clazz, Iterable<Long> ids) {
+		throw new AbstractMethodError("Not implemented!");
+	}
+
+	@Override
+	public <E> void delete(Class<E> clazz, long id) {
+		throw new AbstractMethodError("Not implemented!");
+	}
+
+	@Override
+	public <T> List<T> fullTextSearch(String query) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 

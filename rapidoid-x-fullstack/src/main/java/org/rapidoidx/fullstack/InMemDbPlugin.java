@@ -67,19 +67,19 @@ public class InMemDbPlugin implements DBPlugin {
 	}
 
 	@Override
-	public <T> T get(long id) {
+	public <T> T get(Class<T> clazz, long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <T> T get(long id, Class<T> clazz) {
+	public <T> T getIfExists(Class<T> clazz, long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <T> T getIfExists(long id) {
+	public <E> List<E> getAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -91,25 +91,25 @@ public class InMemDbPlugin implements DBPlugin {
 	}
 
 	@Override
-	public <E> List<E> getAll(long... ids) {
+	public <E> List<E> getAll(Class<E> clazz, long... ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <E> List<E> getAll(Iterable<Long> ids) {
+	public <E> List<E> getAll(Class<E> clazz, Iterable<Long> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public long refresh(Object entity) {
+	public void refresh(Object entity) {
 		// TODO Auto-generated method stub
-		return 0;
+
 	}
 
 	@Override
-	public void delete(long id) {
+	public <E> void delete(Class<E> clazz, long id) {
 		// TODO Auto-generated method stub
 
 	}
@@ -121,7 +121,13 @@ public class InMemDbPlugin implements DBPlugin {
 	}
 
 	@Override
-	public <T> List<T> find(String query) {
+	public <E> void each(Operation<E> lambda) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public <T> List<T> fullTextSearch(String query) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -136,12 +142,6 @@ public class InMemDbPlugin implements DBPlugin {
 	public <E> List<E> find(Predicate<E> match) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public long size() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
@@ -160,12 +160,6 @@ public class InMemDbPlugin implements DBPlugin {
 	public <RESULT> RESULT sql(String sql, Object... args) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public <E> void each(Operation<E> lambda) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

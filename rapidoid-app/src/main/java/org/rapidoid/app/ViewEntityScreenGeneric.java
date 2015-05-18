@@ -33,7 +33,11 @@ import org.rapidoid.widget.FormWidget;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class ViewEntityScreenGeneric extends Screen {
+public class ViewEntityScreenGeneric extends AbstractEntityScreenGeneric {
+
+	public ViewEntityScreenGeneric(Class<?> entityType) {
+		super(entityType);
+	}
 
 	@Session
 	private Object target;

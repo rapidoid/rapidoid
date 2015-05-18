@@ -21,36 +21,29 @@ package org.rapidoid.app;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.DB;
-import org.rapidoid.util.U;
-import org.rapidoid.widget.FormWidget;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class EditEntityScreenGeneric extends AbstractEntityScreenGeneric {
+@Since("3.0.0")
+public abstract class AbstractEntityScreenGeneric extends Screen {
 
-	@Session
-	private Object target;
+	protected final Class<?> entityType;
 
-	public EditEntityScreenGeneric(Class<?> entityType) {
-		super(entityType);
+	public AbstractEntityScreenGeneric(Class<?> entityType) {
+		this.entityType = entityType;
 	}
 
-	public Object content() {
-		target = entity();
+	@SuppressWarnings("unchecked")
+	protected <T> T entity() {
+		long id = Long.parseLong(ctx().pathSegment(1));
+		Object entity = DB.getIfExists(entityType, id);
 
-		Tag caption = h2("Edit " + U.capitalized(ctx().pathSegment(0).substring(4)));
-		FormWidget form = edit(target).buttons(SAVE, CANCEL);
+		if (entity == null) {
+			throw ctx().notFound();
+		}
 
-		return mid6(caption, form);
-	}
-
-	public void onSave() {
-		DB.update(target);
-		ctx().goBack(1);
+		return (T) entity;
 	}
 
 }

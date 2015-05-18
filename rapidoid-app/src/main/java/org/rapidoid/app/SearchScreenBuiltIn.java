@@ -40,7 +40,7 @@ public class SearchScreenBuiltIn extends Screen {
 	public Object content(HttpExchange x) {
 
 		final String query = x.param("q", "");
-		List<?> found = DB.find(query);
+		List<?> found = DB.fullTextSearch(query);
 		Items items = beanItems(Object.class, found.toArray());
 
 		Tag queryInfo = !U.isEmpty(query) ? span(" for ", b(highlight(query))) : null;

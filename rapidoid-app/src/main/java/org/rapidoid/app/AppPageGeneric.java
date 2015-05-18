@@ -31,7 +31,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
-import org.rapidoid.beany.Metadata;
 import org.rapidoid.config.Conf;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
@@ -46,7 +45,6 @@ import org.rapidoid.pages.HttpExchangeHolder;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.pages.impl.ComplexView;
 import org.rapidoid.plugins.DB;
-import org.rapidoid.plugins.Entities;
 import org.rapidoid.plugins.Languages;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Cls;
@@ -195,16 +193,18 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 			String type = m.group(1);
 			long id = Long.parseLong(m.group(2));
 
-			Object entity = DB.getIfExists(id);
-			if (entity == null || !Metadata.isAnnotated(entity.getClass(), Scaffold.class)) {
+			Class<?> entityType = Scaffolding.getScaffoldingEntity(type);
+			if (entityType == null) {
 				return null;
 			}
+
+			Object entity = DB.getIfExists(entityType, id);
 
 			String entityClass = Cls.entityName(entity);
 			String reqType = U.capitalized(type);
 
 			if (entityClass.equals(reqType)) {
-				return new EditEntityScreenGeneric();
+				return new EditEntityScreenGeneric(entityType);
 			}
 		}
 
@@ -213,8 +213,8 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		if (m.find()) {
 			String type = m.group(1);
 
-			Class<?> entityType = Entities.getEntityType(type);
-			if (entityType == null || !Metadata.isAnnotated(entityType, Scaffold.class)) {
+			Class<?> entityType = Scaffolding.getScaffoldingEntity(type);
+			if (entityType == null) {
 				return null;
 			}
 
@@ -227,16 +227,18 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 			String type = m.group(1);
 			long id = Long.parseLong(m.group(2));
 
-			Object entity = DB.getIfExists(id);
-			if (entity == null || !Metadata.isAnnotated(entity.getClass(), Scaffold.class)) {
+			Class<?> entityType = Scaffolding.getScaffoldingEntity(type);
+			if (entityType == null) {
 				return null;
 			}
+
+			Object entity = DB.getIfExists(entityType, id);
 
 			String entityClass = Cls.entityName(entity);
 			String reqType = U.capitalized(type);
 
 			if (entityClass.equals(reqType)) {
-				return new ViewEntityScreenGeneric();
+				return new ViewEntityScreenGeneric(entityType);
 			}
 		}
 
@@ -244,10 +246,10 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 
 		if (m.find()) {
 			String type = m.group(1);
-
 			String type2 = U.or(Languages.pluralToSingular(type), type);
-			Class<?> entityType = Entities.getEntityType(type2);
-			if (entityType == null || !Metadata.isAnnotated(entityType, Scaffold.class)) {
+
+			Class<?> entityType = Scaffolding.getScaffoldingEntity(type2);
+			if (entityType == null) {
 				return null;
 			}
 

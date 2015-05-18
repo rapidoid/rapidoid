@@ -21,36 +21,23 @@ package org.rapidoid.app;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Session;
+import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.html.Tag;
-import org.rapidoid.plugins.DB;
-import org.rapidoid.util.U;
-import org.rapidoid.widget.FormWidget;
+import org.rapidoid.beany.Metadata;
+import org.rapidoid.plugins.Entities;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class EditEntityScreenGeneric extends AbstractEntityScreenGeneric {
+@Since("3.0.0")
+public class Scaffolding {
 
-	@Session
-	private Object target;
+	public static Class<?> getScaffoldingEntity(String type) {
+		Class<?> entityType = Entities.getEntityType(type);
 
-	public EditEntityScreenGeneric(Class<?> entityType) {
-		super(entityType);
-	}
+		if (entityType == null || !Metadata.isAnnotated(entityType, Scaffold.class)) {
+			return null;
+		}
 
-	public Object content() {
-		target = entity();
-
-		Tag caption = h2("Edit " + U.capitalized(ctx().pathSegment(0).substring(4)));
-		FormWidget form = edit(target).buttons(SAVE, CANCEL);
-
-		return mid6(caption, form);
-	}
-
-	public void onSave() {
-		DB.update(target);
-		ctx().goBack(1);
+		return entityType;
 	}
 
 }

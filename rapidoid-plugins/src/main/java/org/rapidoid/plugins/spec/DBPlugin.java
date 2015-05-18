@@ -44,39 +44,37 @@ public interface DBPlugin {
 
 	long insertOrGetId(Object record);
 
-	<T> T get(long id);
+	<T> T get(Class<T> clazz, long id);
 
-	<T> T get(long id, Class<T> clazz);
+	<T> T getIfExists(Class<T> clazz, long id);
 
-	<T> T getIfExists(long id);
+	<E> List<E> getAll();
 
 	<T> List<T> getAll(Class<T> clazz);
 
-	<E> List<E> getAll(long... ids);
+	<E> List<E> getAll(Class<E> clazz, long... ids);
 
-	<E> List<E> getAll(Iterable<Long> ids);
+	<E> List<E> getAll(Class<E> clazz, Iterable<Long> ids);
 
-	long refresh(Object entity);
+	void refresh(Object entity);
 
-	void delete(long id);
+	<E> void delete(Class<E> clazz, long id);
 
 	void delete(Object entity);
 
-	<T> List<T> find(String query);
+	<E> void each(final Operation<E> lambda);
+
+	<T> List<T> fullTextSearch(String query);
 
 	<T> List<T> find(Class<T> clazz, Predicate<T> match, Comparator<T> orderBy);
 
 	<E> List<E> find(Predicate<E> match);
-
-	long size();
 
 	<E> E entity(Class<E> entityType, Map<String, ?> properties);
 
 	<E> List<E> query(Class<E> clazz, String query, Object... args);
 
 	<RESULT> RESULT sql(String sql, Object... args);
-
-	<E> void each(Operation<E> lambda);
 
 	void transaction(Runnable transaction, boolean readOnly);
 

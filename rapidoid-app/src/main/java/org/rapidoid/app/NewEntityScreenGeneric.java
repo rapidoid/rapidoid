@@ -31,15 +31,13 @@ import org.rapidoid.widget.FormWidget;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.1.0")
-public class NewEntityScreenGeneric extends Screen {
-
-	private final Class<?> entityType;
+public class NewEntityScreenGeneric extends AbstractEntityScreenGeneric {
 
 	@Session
 	private Object target;
 
 	public NewEntityScreenGeneric(Class<?> entityType) {
-		this.entityType = entityType;
+		super(entityType);
 	}
 
 	public Object content() {

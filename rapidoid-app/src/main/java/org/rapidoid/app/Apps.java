@@ -35,7 +35,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.plugins.Lifecycle;
 import org.rapidoid.plugins.Plugins;
-import org.rapidoid.plugins.impl.DefaultDBPlugin;
+import org.rapidoid.plugins.impl.AbstractDBPlugin;
 import org.rapidoid.plugins.impl.DefaultEntitiesPlugin;
 import org.rapidoid.plugins.impl.DefaultLanguagesPlugin;
 import org.rapidoid.plugins.impl.DefaultLifecyclePlugin;
@@ -63,7 +63,7 @@ public class Apps {
 
 	public static void run(Object... args) {
 		// register default plugins
-		Plugins.register(new DefaultDBPlugin());
+		Plugins.register(new AbstractDBPlugin());
 		Plugins.register(new DefaultEntitiesPlugin());
 		Plugins.register(new DefaultLanguagesPlugin());
 		Plugins.register(new DefaultLifecyclePlugin());

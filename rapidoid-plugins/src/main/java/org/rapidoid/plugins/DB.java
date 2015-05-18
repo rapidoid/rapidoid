@@ -55,40 +55,44 @@ public class DB {
 		return Plugins.db().insertOrGetId(record);
 	}
 
-	public static void delete(long id) {
-		Plugins.db().delete(id);
+	public static <E> void delete(Class<E> clazz, long id) {
+		Plugins.db().delete(clazz, id);
 	}
 
 	public static void delete(Object record) {
 		Plugins.db().delete(record);
 	}
 
-	public static <T> T get(long id) {
-		return Plugins.db().get(id);
+	public static <T> T getIfExists(Class<T> clazz, long id) {
+		return Plugins.db().getIfExists(clazz, id);
 	}
 
-	public static <T> T getIfExists(long id) {
-		return Plugins.db().getIfExists(id);
+	public static <T> T get(Class<T> clazz, long id) {
+		return Plugins.db().get(clazz, id);
 	}
 
-	public static <T> T get(long id, Class<T> clazz) {
-		return Plugins.db().get(id, clazz);
+	public static <E> List<E> getAll() {
+		return Plugins.db().getAll();
 	}
 
 	public static <E> List<E> getAll(Class<E> clazz) {
 		return Plugins.db().getAll(clazz);
 	}
 
-	public static <E> List<E> getAll(long... ids) {
-		return Plugins.db().getAll(ids);
+	public static <E> List<E> getAll(Class<E> clazz, long... ids) {
+		return Plugins.db().getAll(clazz, ids);
 	}
 
-	public static <E> List<E> getAll(Iterable<Long> ids) {
-		return Plugins.db().getAll(ids);
+	public static <E> List<E> getAll(Class<E> clazz, Iterable<Long> ids) {
+		return Plugins.db().getAll(clazz, ids);
 	}
 
 	public static <E> void refresh(E record) {
 		Plugins.db().refresh(record);
+	}
+
+	public static <E> void each(final Operation<E> lambda) {
+		Plugins.db().each(lambda);
 	}
 
 	public static <E> List<E> find(Predicate<E> match) {
@@ -99,16 +103,8 @@ public class DB {
 		return Plugins.db().find(clazz, match, orderBy);
 	}
 
-	public static <E> List<E> find(String searchPhrase) {
-		return Plugins.db().find(searchPhrase);
-	}
-
-	public static long size() {
-		return Plugins.db().size();
-	}
-
-	public static <E> void each(Operation<E> lambda) {
-		Plugins.db().each(lambda);
+	public static <E> List<E> fullTextSearch(String searchPhrase) {
+		return Plugins.db().fullTextSearch(searchPhrase);
 	}
 
 	public static void transaction(Runnable transaction, boolean readOnly) {

@@ -32,15 +32,13 @@ import org.rapidoid.widget.GridWidget;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class ListEntityScreenGeneric extends Screen {
-
-	private final Class<?> entityType;
+public class ListEntityScreenGeneric extends AbstractEntityScreenGeneric {
 
 	@Session
 	public Object newEntity;
 
 	public ListEntityScreenGeneric(Class<?> entityType) {
-		this.entityType = entityType;
+		super(entityType);
 	}
 
 	public Object content() {

@@ -25,7 +25,6 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.HttpExchangeHolder;
-import org.rapidoid.plugins.DB;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -74,18 +73,6 @@ public abstract class Screen extends AppGUI implements HttpExchangeHolder {
 	protected HttpExchange ctx() {
 		U.must(ctx != null, "App context is not initialized yet!");
 		return ctx;
-	}
-
-	@SuppressWarnings("unchecked")
-	protected <T> T entity() {
-		long id = Long.parseLong(ctx().pathSegment(1));
-		Object entity = DB.getIfExists(id);
-
-		if (entity == null) {
-			throw ctx().notFound();
-		}
-
-		return (T) entity;
 	}
 
 }

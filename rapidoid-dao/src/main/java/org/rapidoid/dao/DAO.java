@@ -76,7 +76,7 @@ public abstract class DAO<E> {
 	}
 
 	public void delete(long id) {
-		DB.delete(id);
+		DB.delete(clazz, id);
 	}
 
 	public void delete(E record) {
@@ -84,7 +84,7 @@ public abstract class DAO<E> {
 	}
 
 	public E get(long id) {
-		return DB.get(id, clazz);
+		return DB.get(clazz, id);
 	}
 
 	public List<E> all() {
