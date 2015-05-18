@@ -91,12 +91,6 @@ public class InMemDbPlugin implements DBPlugin {
 	}
 
 	@Override
-	public <E> List<E> getAll(Class<E> clazz, long... ids) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public <E> List<E> getAll(Class<E> clazz, Iterable<Long> ids) {
 		// TODO Auto-generated method stub
 		return null;
@@ -184,6 +178,12 @@ public class InMemDbPlugin implements DBPlugin {
 	public long size() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public <E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -79,8 +79,8 @@ public class DB {
 		return Plugins.db().getAll(clazz);
 	}
 
-	public static <E> List<E> getAll(Class<E> clazz, long... ids) {
-		return Plugins.db().getAll(clazz, ids);
+	public static <E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
+		return Plugins.db().getAll(clazz, pageNumber, pageSize);
 	}
 
 	public static <E> List<E> getAll(Class<E> clazz, Iterable<Long> ids) {

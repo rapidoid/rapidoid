@@ -136,7 +136,7 @@ public class AbstractDBPlugin implements DBPlugin {
 	}
 
 	@Override
-	public <E> List<E> getAll(Class<E> clazz, long... ids) {
+	public <E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 

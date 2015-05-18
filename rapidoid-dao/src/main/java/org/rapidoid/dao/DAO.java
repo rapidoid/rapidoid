@@ -92,7 +92,7 @@ public abstract class DAO<E> {
 	}
 
 	public List<E> page(int page) {
-		return U.page(DB.getAll(clazz), page, 20);
+		return DB.getAll(clazz, page, 20);
 	}
 
 }

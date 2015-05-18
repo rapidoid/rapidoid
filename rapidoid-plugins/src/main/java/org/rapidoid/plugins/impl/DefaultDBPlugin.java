@@ -100,14 +100,8 @@ public abstract class DefaultDBPlugin extends AbstractDBPlugin {
 	}
 
 	@Override
-	public <E> List<E> getAll(Class<E> clazz, long... ids) {
-		List<E> results = new ArrayList<E>(ids.length);
-
-		for (long id : ids) {
-			results.add(this.<E> get(clazz, id));
-		}
-
-		return results;
+	public <E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
+		return U.page(getAll(clazz), pageNumber, pageSize);
 	}
 
 	@Override
