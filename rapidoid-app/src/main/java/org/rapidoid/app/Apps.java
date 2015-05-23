@@ -104,8 +104,6 @@ public class Apps {
 			Plugins.register((LifecyclePlugin) arg);
 		} else if (arg instanceof UsersPlugin) {
 			Plugins.register((UsersPlugin) arg);
-		} else {
-			throw U.rte("Argument not suported: " + arg);
 		}
 	}
 
