@@ -156,6 +156,16 @@ body {
 	padding: 10px 15px;
 }
 
+#navbar-q {
+	width: 120px;
+}
+
+.navbar-form button, .navbar-form input {
+	padding-top: 0px;
+	padding-bottom: 0px;
+	height: 29px;
+}
+
 /***** Social button fixes */
 #twitter-widget-0, .g-plusone {
 	margin: 0px !important;
