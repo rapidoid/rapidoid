@@ -446,15 +446,13 @@ span.highlight {
 div.title-box {
 	margin: 0px;
 	margin-bottom: 10px;
-	padding: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	font-size: 24px;
 	border-left-width: 0px;
 	border-right-width: 0px;
 	border-top-width: 1px;
 	border-bottom-width: 1px;
-	border-style: solid;
-	text-align: center;
-	border-color: #555;
 }
 
 /***** Card widget *****/
