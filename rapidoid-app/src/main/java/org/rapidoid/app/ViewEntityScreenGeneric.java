@@ -67,7 +67,7 @@ public class ViewEntityScreenGeneric extends AbstractEntityScreenGeneric {
 
 	public void onYesDelete() {
 		long id = Long.parseLong(ctx().pathSegment(1));
-		DB.delete(id);
+		DB.delete(entityType, id);
 
 		hideModal();
 		ctx().goBack(1);

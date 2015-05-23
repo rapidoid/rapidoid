@@ -62,7 +62,7 @@ public class AboutScreen extends Screen {
 		long id = DB.insert(task());
 		DB.update(id, task());
 		DB.update(1, task());
-		DB.delete(1);
+		DB.delete(Task.class, 1);
 		throw U.rte("some failure!");
 	}
 
