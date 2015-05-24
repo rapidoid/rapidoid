@@ -27,7 +27,6 @@ import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.demo.taskplanner.model.Person;
 import org.rapidoid.http.HttpExchange;
 
 @Authors("Nikolche Mihajlovski")
@@ -77,12 +76,6 @@ public class MyService {
 	// e.g. /setOf/a/b/c/a/b
 	public Set<String> setOf(Set<String> params) {
 		return params;
-	}
-
-	// e.g. /addPerson?name=nick&age=30
-	public Person addPerson(Person p) {
-		System.out.println("Creating " + p);
-		return p;
 	}
 
 	// e.g. /redir/ping

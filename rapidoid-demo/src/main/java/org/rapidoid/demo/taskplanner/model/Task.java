@@ -3,18 +3,23 @@ package org.rapidoid.demo.taskplanner.model;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Optional;
 import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.entity.Entity;
 import org.rapidoid.extra.domain.LowHigh3;
+import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.security.annotation.CanChange;
-import org.rapidoid.security.annotation.CanRead;
-import org.rapidoid.util.CommonRoles;
+import org.rapidoid.security.annotation.CanManage;
+import org.rapidoid.util.Role;
 
 /*
  * #%L
@@ -37,36 +42,35 @@ import org.rapidoid.util.CommonRoles;
  */
 
 @Scaffold
-@DbEntity
+@Entity
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Task extends Entity {
+public class Task extends JPAEntity {
 
 	@Display
-	@CanChange({ MODERATOR, OWNER })
+	@CanChange({ Role.MODERATOR })
 	public String title;
 
 	@Display
-	@CanChange({ MODERATOR, OWNER, SHARED_WITH })
+	@CanChange({ Role.MODERATOR, Role.OWNER, Role.SHARED_WITH })
 	public LowHigh3 priority = LowHigh3.MEDIUM;
 
 	@Optional
-	@CanChange({ MODERATOR, OWNER, SHARED_WITH })
 	public String description;
 
 	public int rating;
 
 	@Programmatic
+	@CanManage({ Role.OWNER })
+	@ManyToOne
 	public User owner;
 
-	@CanRead({ CommonRoles.OWNER })
+	@CanManage({ Role.OWNER })
+	@ManyToMany
 	public Set<User> sharedWith;
 
 	@Programmatic
-	@CanRead({ CommonRoles.OWNER, CommonRoles.SHARED_WITH })
+	@OneToMany(mappedBy = "task", cascade = { CascadeType.REMOVE })
 	public List<Comment> comments;
-
-	@Programmatic
-	public Set<User> likedBy;
 
 }

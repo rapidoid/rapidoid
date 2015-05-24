@@ -21,21 +21,26 @@ package org.rapidoid.demo.taskplanner.model;
  */
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Display;
-import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.security.annotation.CanRead;
-import org.rapidoid.util.CommonRoles;
+import org.rapidoid.jpa.JPAEntity;
+import org.rapidoid.security.annotation.CanManage;
+import org.rapidoid.util.Role;
 
 @Scaffold
+@Entity
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class User {
+@CanManage({ Role.MODERATOR, Role.OWNER, Role.SHARED_WITH })
+public class User extends JPAEntity {
 
 	@Display
 	public String username;
@@ -46,17 +51,13 @@ public class User {
 
 	public Date birthdate;
 
-	@Programmatic
-	public User owner;
+	@OneToMany(mappedBy = "owner")
+	public Set<Task> ownedTasks;
 
-	@CanRead({ CommonRoles.OWNER })
-	public Set<User> sharedWith;
+	@OneToMany(mappedBy = "owner")
+	public Set<Comment> ownedComments;
 
-	@Programmatic
-	@CanRead({ CommonRoles.OWNER, CommonRoles.SHARED_WITH })
-	public List<Comment> comments;
-
-	@Programmatic
-	public Set<User> likedBy;
+	@ManyToMany(mappedBy = "sharedWith")
+	public Set<Task> sharedTasks;
 
 }

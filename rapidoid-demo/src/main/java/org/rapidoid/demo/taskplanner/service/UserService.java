@@ -26,34 +26,34 @@ import java.util.Map;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.dao.DAO;
-import org.rapidoid.demo.taskplanner.model.Person;
+import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.DB;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class PersonService extends DAO<Person> {
+public class UserService extends DAO<User> {
 
-	public List<Person> findByName(String search) {
+	public List<User> findByName(String search) {
 		final String s = search.toLowerCase();
-		return DB.find(Person.class, new Predicate<Person>() {
+		return DB.find(User.class, new Predicate<User>() {
 			@Override
-			public boolean eval(Person p) {
-				return p.name.toLowerCase().contains(s);
+			public boolean eval(User u) {
+				return u.name.toLowerCase().contains(s);
 			}
 		}, null);
 	}
 
 	// e.g. /hello
 	public String hello() {
-		return "Hello from PersonService";
+		return "Hello from UserService";
 	}
 
-	// e.g. /person/add?name=nikolche&age=30
-	public List<Person> add(Person p) {
-		Log.info("Inserting person", "person", p);
-		insert(p);
+	// e.g. /user/add?username=niko&name=nikolche&age=31
+	public List<User> add(User u) {
+		Log.info("Inserting user", "user", u);
+		insert(u);
 		return all();
 	}
 

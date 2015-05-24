@@ -27,9 +27,7 @@ import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.Screen;
-import org.rapidoid.app.UsersTool;
 import org.rapidoid.demo.taskplanner.model.Task;
-import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.DB;
@@ -64,7 +62,7 @@ public class NewTaskScreen extends Screen {
 
 		frm.field("description").setLabel(h3("my custom field"));
 
-		frm.field("comments").setInput(div((Object[]) radios(U.list("a", "bb", "ccc"), v)));
+		// frm.field("comments").setInput(div((Object[]) radios(U.list("a", "bb", "ccc"), v)));
 
 		Tag caption2 = titleBox("Most recent tasks");
 		GridWidget grid = grid(Task.class, "-id", 7, "id", "priority", "title");
@@ -73,13 +71,13 @@ public class NewTaskScreen extends Screen {
 	}
 
 	public void onAdd() {
-		User user = UsersTool.current(User.class);
-		if (user != null) {
-			task.owner = user;
-			task.description = v.get();
-			DB.insert(task);
-			task = new Task();
-		}
+		task.description = v.get();
+		DB.insert(task);
+		task = new Task();
+		// User user = UsersTool.current(User.class);
+		// if (user != null) {
+		// // task.owner = user;
+		// }
 	}
 
 	public void onCancel() {

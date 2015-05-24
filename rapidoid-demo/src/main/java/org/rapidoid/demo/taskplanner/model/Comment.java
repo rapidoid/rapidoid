@@ -1,11 +1,11 @@
 package org.rapidoid.demo.taskplanner.model;
 
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.entity.AbstractEntity;
+import org.rapidoid.jpa.JPAEntity;
 
 /*
  * #%L
@@ -27,17 +27,17 @@ import org.rapidoid.entity.AbstractEntity;
  * #L%
  */
 
-@DbEntity
+@Entity
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Comment extends AbstractEntity {
+public class Comment extends JPAEntity {
 
 	public String content;
 
+	@ManyToOne
 	public User owner;
 
+	@ManyToOne
 	public Task task;
-
-	public Set<User> likedBy;
 
 }

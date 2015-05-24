@@ -22,14 +22,14 @@ package org.rapidoid.demo.taskplanner;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.Apps;
+import org.rapidoid.quick.Quick;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class Main {
 
 	public static void main(String[] args) {
-		Apps.run("oauth-no-state");
+		Quick.run("oauth-no-state");
 	}
 
 }
