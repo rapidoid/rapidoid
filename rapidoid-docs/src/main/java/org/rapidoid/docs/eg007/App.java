@@ -1,14 +1,14 @@
 package org.rapidoid.docs.eg007;
 
-import static org.rapidoid.app.AppGUI.*;
-import static org.rapidoid.widget.BootstrapWidgets.*;
+import static org.rapidoid.widget.BootstrapWidgets.CANCEL;
+import static org.rapidoid.widget.BootstrapWidgets.SAVE;
+import static org.rapidoid.widget.BootstrapWidgets.edit;
 
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Apps;
 import org.rapidoid.widget.FormWidget;
 import org.rapidoidx.db.XDB;
-import org.rapidoidx.db.XEntity;
 
 /*
  * #%L
@@ -65,9 +65,8 @@ class HomeScreen {
 	}
 }
 
-@SuppressWarnings("serial")
 @Scaffold
-class Movie extends XEntity {
+class Movie {
 	String title;
 	int year;
 }

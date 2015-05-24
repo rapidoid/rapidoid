@@ -1,11 +1,10 @@
 package org.rapidoid.docs.eg005;
 
-import static org.rapidoid.app.AppGUI.*;
+import static org.rapidoid.app.AppGUI.grid;
 
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.app.Apps;
 import org.rapidoidx.db.XDB;
-import org.rapidoidx.db.XEntity;
 
 /*
  * #%L
@@ -48,9 +47,8 @@ public class App {
 	}
 }
 
-@SuppressWarnings("serial")
 @Scaffold
-class Movie extends XEntity {
+class Movie {
 	String title;
 	int year;
 }
