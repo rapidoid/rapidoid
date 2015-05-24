@@ -20,58 +20,14 @@ package org.rapidoid.entity;
  * #L%
  */
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentMap;
-
 /**
  * @author Nikolche Mihajlovski
  * @since 2.2.0
  */
 public interface IEntity {
 
-	long id();
+	String id();
 
-	void id(long id);
-
-	long version();
-
-	void version(long version);
-
-	String createdBy();
-
-	void createdBy(String createdBy);
-
-	Date createdOn();
-
-	void createdOn(Date createdOn);
-
-	String lastUpdatedBy();
-
-	void lastUpdatedBy(String updatedBy);
-
-	Date lastUpdatedOn();
-
-	void lastUpdatedOn(Date updatedOn);
-
-	<T> T get(String attr);
-
-	void set(String attr, Object value);
-
-	<K, V> ConcurrentMap<K, V> _map(Object key);
-
-	<T> List<T> _list(Object key);
-
-	<T> Set<T> _set(Object key);
-
-	Map<Object, Object> _extras();
-
-	<T> T _tmp(Object key);
-
-	void _tmp(Object key, Object value);
-
-	Map<Object, Object> _tmps();
+	String version();
 
 }

@@ -27,11 +27,12 @@ import javax.persistence.Version;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.entity.AbstractEntity;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
 @MappedSuperclass
-public abstract class JPAEntity {
+public abstract class JPAEntity extends AbstractEntity {
 
 	@Id
 	@GeneratedValue
@@ -39,6 +40,16 @@ public abstract class JPAEntity {
 
 	@Version
 	private Long version;
+
+	@Override
+	public String id() {
+		return id + "";
+	}
+
+	@Override
+	public String version() {
+		return version + "";
+	}
 
 	public Long getId() {
 		return id;
@@ -56,35 +67,12 @@ public abstract class JPAEntity {
 		this.version = version;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
+	public boolean isOwner(String username) {
+		return false;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-
-		JPAEntity other = (JPAEntity) obj;
-
-		if (id == null || other.id == null) {
-			return this == obj;
-		}
-
-		return id.equals(other.id);
-	}
-
-	@Override
-	public String toString() {
-		return super.toString() + "[id=" + id + ", version=" + version + "]";
+	public boolean isSharedWith(String username) {
+		return false;
 	}
 
 }
