@@ -30,10 +30,10 @@ import org.rapidoid.annotation.Rel;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
-import org.rapidoid.entity.AbstractEntity;
 import org.rapidoid.entity.IEntity;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
+import org.rapidoidx.db.AbstractRichEntity;
 import org.rapidoidx.db.DbColumn;
 import org.rapidoidx.db.DbList;
 import org.rapidoidx.db.DbRef;
@@ -42,7 +42,7 @@ import org.rapidoidx.db.XDB;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class EntityImpl extends AbstractEntity implements IEntity, Serializable {
+public class EntityImpl extends AbstractRichEntity implements IEntity, Serializable {
 
 	private static final long serialVersionUID = -5556123216690345146L;
 
@@ -133,14 +133,6 @@ public class EntityImpl extends AbstractEntity implements IEntity, Serializable 
 		Rel rel = Metadata.get(method.getAnnotations(), Rel.class);
 		U.must(rel != null, "@Relation is required for method: %s", method);
 		return rel;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id() ^ (id() >>> 32));
-		return result;
 	}
 
 }

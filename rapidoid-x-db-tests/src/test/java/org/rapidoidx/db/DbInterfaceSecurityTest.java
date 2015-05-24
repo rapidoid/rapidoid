@@ -212,7 +212,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 		eq(bar2.desc().get(), "desc");
 
 		IBar bar3 = XDB.entity(IBar.class);
-		bar3.id(id);
+		bar3.id("" + id);
 		XDB.refresh(bar3);
 		eq(bar3.name().get(), null);
 		eq(bar3.desc().get(), "desc");
@@ -261,7 +261,7 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 		bar.desc().set("new desc");
 		XDB.as("manager@debug").update(bar);
 
-		IBar bar2 = XDB.sudo().get(bar.id());
+		IBar bar2 = XDB.sudo().get(Long.valueOf(bar.id()));
 
 		eq(bar2.name().get(), "abc");
 		eq(bar2.desc().get(), "new desc");

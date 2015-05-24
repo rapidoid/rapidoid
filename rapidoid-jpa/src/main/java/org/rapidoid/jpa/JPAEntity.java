@@ -51,6 +51,16 @@ public abstract class JPAEntity extends AbstractEntity {
 		return version + "";
 	}
 
+	@Override
+	public void id(String id) {
+		setId(id != null ? Long.valueOf(id) : null);
+	}
+
+	@Override
+	public void version(String version) {
+		setVersion(version != null ? Long.valueOf(version) : null);
+	}
+
 	public Long getId() {
 		return id;
 	}

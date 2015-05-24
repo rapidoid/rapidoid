@@ -90,7 +90,7 @@ public class DbClassPersistenceTest extends DbTestCommons {
 
 		for (int id = 1; id <= count; id++) {
 			Person p = XDB.get(id);
-			isTrue(p.id() == id);
+			eq(p.id(), id);
 			isTrue((p.name.equals("abc") && p.age == -1) || (p.name.equals("x") && p.age == id * 100));
 		}
 

@@ -260,7 +260,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 		bar.desc = "new desc";
 		XDB.as("manager@debug").update(bar);
 
-		Bar bar2 = XDB.sudo().get(bar.id());
+		Bar bar2 = XDB.sudo().get(Long.valueOf(bar.id()));
 
 		eq(bar2.name, "abc");
 		eq(bar2.desc, "new desc");

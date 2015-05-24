@@ -34,13 +34,13 @@ import org.rapidoid.annotation.Since;
 @Since("3.0.0")
 public interface RichEntity {
 
-	long id();
+	String id();
 
-	void id(long id);
+	void id(String id);
 
-	long version();
+	String version();
 
-	void version(long version);
+	void version(String version);
 
 	String createdBy();
 

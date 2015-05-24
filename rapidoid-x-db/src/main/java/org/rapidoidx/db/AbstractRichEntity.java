@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.entity.IEntity;
 
 /*
  * #%L
@@ -37,11 +38,11 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public abstract class AbstractRichEntity implements RichEntity {
+public abstract class AbstractRichEntity implements RichEntity, IEntity {
 
-	private long id;
+	private String id;
 
-	private long version;
+	private String version;
 
 	private String createdBy;
 
@@ -66,23 +67,31 @@ public abstract class AbstractRichEntity implements RichEntity {
 	}
 
 	@Override
-	public synchronized long id() {
+	public synchronized String id() {
 		return id;
 	}
 
 	@Override
-	public synchronized void id(long id) {
+	public synchronized void id(String id) {
 		this.id = id;
 	}
 
+	public synchronized void id(Long id) {
+		this.id = id != null ? id + "" : null;
+	}
+
 	@Override
-	public synchronized long version() {
+	public synchronized String version() {
 		return version;
 	}
 
 	@Override
-	public synchronized void version(long version) {
+	public synchronized void version(String version) {
 		this.version = version;
+	}
+
+	public synchronized void version(Long version) {
+		this.version = version != null ? version + "" : null;
 	}
 
 	@Override
@@ -126,32 +135,27 @@ public abstract class AbstractRichEntity implements RichEntity {
 	}
 
 	@Override
-	public synchronized int hashCode() {
+	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
 	@Override
-	public synchronized boolean equals(Object obj) {
+	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
-
-		if (id == 0) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
-
-		if (!(obj instanceof RichEntity)) {
+		AbstractRichEntity other = (AbstractRichEntity) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
-		}
-
-		RichEntity other = (RichEntity) obj;
-		if (id != other.id())
-			return false;
-
 		return true;
 	}
 

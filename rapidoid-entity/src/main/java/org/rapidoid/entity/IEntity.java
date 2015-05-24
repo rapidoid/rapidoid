@@ -30,4 +30,8 @@ public interface IEntity {
 
 	String version();
 
+	void id(String id);
+
+	void version(String version);
+
 }
