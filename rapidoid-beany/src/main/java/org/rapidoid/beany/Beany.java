@@ -14,8 +14,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Display;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.ToString;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.Cls;
@@ -406,7 +406,7 @@ public class Beany {
 			}
 		}
 
-		BeanProperties props = propertiesOf(bean).annotated(Display.class);
+		BeanProperties props = propertiesOf(bean).annotated(ToString.class);
 		boolean annotated = true;
 
 		if (props.isEmpty()) {

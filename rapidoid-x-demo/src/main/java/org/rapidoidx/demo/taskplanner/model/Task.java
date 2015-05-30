@@ -2,7 +2,7 @@ package org.rapidoidx.demo.taskplanner.model;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
-import org.rapidoid.annotation.Display;
+import org.rapidoid.annotation.ToString;
 import org.rapidoid.annotation.Optional;
 import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.annotation.Scaffold;
@@ -48,11 +48,11 @@ import org.rapidoidx.db.XEntity;
 @Since("3.0.0")
 public class Task extends XEntity {
 
-	@Display
+	@ToString
 	@CanChange({ MODERATOR, OWNER })
 	public String title;
 
-	@Display
+	@ToString
 	@CanChange({ MODERATOR, OWNER, SHARED_WITH })
 	public Priority priority = Priority.MEDIUM;
 

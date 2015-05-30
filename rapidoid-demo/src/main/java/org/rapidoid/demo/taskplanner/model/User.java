@@ -28,7 +28,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Display;
+import org.rapidoid.annotation.ToString;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.jpa.JPAEntity;
@@ -42,7 +42,7 @@ import org.rapidoid.util.Role;
 @CanManage({ Role.MODERATOR, Role.OWNER, Role.SHARED_WITH })
 public class User extends JPAEntity {
 
-	@Display
+	@ToString
 	public String username;
 
 	public String email;

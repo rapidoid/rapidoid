@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Display;
+import org.rapidoid.annotation.ToString;
 import org.rapidoid.annotation.Optional;
 import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.annotation.Scaffold;
@@ -47,11 +47,11 @@ import org.rapidoid.util.Role;
 @Since("2.0.0")
 public class Task extends JPAEntity {
 
-	@Display
+	@ToString
 	@CanChange({ Role.MODERATOR })
 	public String title;
 
-	@Display
+	@ToString
 	@CanChange({ Role.MODERATOR, Role.OWNER, Role.SHARED_WITH })
 	public LowHigh3 priority = LowHigh3.MEDIUM;
 
