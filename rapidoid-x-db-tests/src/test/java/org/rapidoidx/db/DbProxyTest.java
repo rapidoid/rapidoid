@@ -38,8 +38,8 @@ public class DbProxyTest extends DbTestCommons {
 	public void testDbProxy() {
 
 		final ConcurrentMap<String, Object> map = U.concurrentMap();
-		map.put("id", 1234567890123L);
-		map.put("version", 346578789843490123L);
+		map.put("id", "1234567890123");
+		map.put("version", "346578789843490123");
 		map.put("content", "dsafasfasf");
 
 		final IPost t = DbProxy.create(IPost.class, map);
