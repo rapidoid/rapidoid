@@ -284,8 +284,10 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 
 		for (Entry<String, String> entry : paramsMap.entrySet()) {
 			Prop prop = props.get(entry.getKey());
-			Object value = entry.getValue();
-			prop.set(instance, value);
+			if (prop != null) {
+				Object value = entry.getValue();
+				prop.set(instance, value);
+			}
 		}
 	}
 
