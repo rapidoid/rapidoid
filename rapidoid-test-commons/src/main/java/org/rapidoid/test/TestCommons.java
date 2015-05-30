@@ -179,6 +179,10 @@ public abstract class TestCommons {
 		}
 	}
 
+	protected void eq(String actual, long expected) {
+		eq(Long.parseLong(actual), expected);
+	}
+
 	protected void expectedException() {
 		try {
 			Assert.fail("Expected exception!");
