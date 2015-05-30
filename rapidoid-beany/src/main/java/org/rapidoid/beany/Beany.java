@@ -6,6 +6,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.rapidoid.annotation.ToString;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.Cls;
+import org.rapidoid.util.Dates;
 import org.rapidoid.util.Exportable;
 import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
@@ -407,7 +409,6 @@ public class Beany {
 		}
 
 		BeanProperties props = propertiesOf(bean).annotated(ToString.class);
-		boolean annotated = true;
 
 		if (props.isEmpty()) {
 
@@ -416,7 +417,6 @@ public class Beany {
 				return U.or((String) nameProp.get(bean), "");
 			}
 
-			annotated = false;
 			props = propertiesOf(bean);
 		}
 
@@ -424,24 +424,24 @@ public class Beany {
 
 		for (Prop prop : props) {
 			String name = prop.getName();
+			Object value = prop.get(bean);
 
-			if (annotated
-					|| (!UTILS.isSpecialProperty(name) && prop.getTypeKind() != TypeKind.OBJECT && prop.getTypeKind() != TypeKind.DATE)) {
-
-				Object value = prop.get(bean);
-				if (value != null) {
-
-					if (sb.length() > 0) {
-						sb.append(", ");
-					}
-
-					if (value instanceof Number) {
-						value = name + ": " + value;
-					}
-
-					sb.append(value);
-				}
+			if (sb.length() > 0) {
+				sb.append(", ");
 			}
+
+			if (prop.getTypeKind() == TypeKind.OBJECT) {
+				value = value == bean ? "[this]" : "[obj]";
+			}
+
+			if (value instanceof Date) {
+				Date date = (Date) value;
+				value = Dates.str(date);
+			}
+
+			sb.append(name);
+			sb.append(": ");
+			sb.append(value);
 		}
 
 		return sb.toString();
