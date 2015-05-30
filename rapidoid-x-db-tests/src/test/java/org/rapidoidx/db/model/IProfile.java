@@ -24,12 +24,12 @@ package org.rapidoidx.db.model;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Rel;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.entity.IEntity;
 import org.rapidoidx.db.DbList;
+import org.rapidoidx.db.RichEntity;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public interface IProfile extends IEntity {
+public interface IProfile extends RichEntity {
 
 	@Rel("posted")
 	public DbList<IPost> posts();

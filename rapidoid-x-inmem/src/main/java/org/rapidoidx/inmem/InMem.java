@@ -1068,9 +1068,10 @@ public class InMem implements Serializable {
 				Map<String, Object> map = U.map();
 				data.serializer.deserialize(bytes, map);
 
-				Number idNum = (Number) map.get(ID);
-				U.must(idNum != null, "Found DB record without ID: %s", line);
-				long id = idNum.longValue();
+				Object idObj = map.get(ID);
+				U.must(idObj != null, "Found DB record without ID: %s", line);
+
+				long id = Cls.convert(idObj, Long.class);
 				String className = ((String) map.get("_class"));
 
 				String[] nameParts = className.split("\\.");

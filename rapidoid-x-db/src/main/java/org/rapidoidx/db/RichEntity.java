@@ -29,18 +29,11 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.entity.IEntity;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public interface RichEntity {
-
-	String id();
-
-	void id(String id);
-
-	String version();
-
-	void version(String version);
+public interface RichEntity extends IEntity {
 
 	String createdBy();
 

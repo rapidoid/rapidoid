@@ -56,14 +56,13 @@ public class DbEntityPropertiesTest extends DbTestCommons {
 		Map<String, Object> likes = U.map("relation", "likes", "ids", U.set());
 		Map<String, Object> postedOn = U.map("relation", "^posted", "ids", U.set());
 
-		eq(postProps, U.map("id", 123L, "version", 456L, "createdOn", null, "createdBy", null, "lastUpdatedOn", null,
+		eq(postProps, U.map("id", "123", "version", "456", "createdOn", null, "createdBy", null, "lastUpdatedOn", null,
 				"lastUpdatedBy", null, "likes", likes, "postedOn", postedOn, "content", "abc"));
 
 		profile.posts().add(post1);
 		Map<String, Object> profileProps = Beany.read(profile);
-		eq(profileProps, U.map("id", 0L, "version", 0L, "createdOn", null, "createdBy", null, "lastUpdatedOn", null,
-				"lastUpdatedBy", null, "posts", U.map("relation", "posted", "ids", U.list(123L))));
-
+		eq(profileProps, U.map("id", null, "version", null, "createdOn", null, "createdBy", null, "lastUpdatedOn",
+				null, "lastUpdatedBy", null, "posts", U.map("relation", "posted", "ids", U.list(123L))));
 		IProfile profile2 = XDB.entity(IProfile.class);
 		Beany.update(profile2, profileProps, false);
 

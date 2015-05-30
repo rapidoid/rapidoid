@@ -2,8 +2,8 @@ package org.rapidoidx.db.model;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.entity.IEntity;
 import org.rapidoidx.db.DbColumn;
+import org.rapidoidx.db.RichEntity;
 
 /*
  * #%L
@@ -28,7 +28,7 @@ import org.rapidoidx.db.DbColumn;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public interface ICompany extends IEntity {
+public interface ICompany extends RichEntity {
 
 	DbColumn<String> name();
 

@@ -3,10 +3,10 @@ package org.rapidoidx.db.model;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Rel;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.entity.IEntity;
 import org.rapidoidx.db.DbColumn;
 import org.rapidoidx.db.DbRef;
 import org.rapidoidx.db.DbSet;
+import org.rapidoidx.db.RichEntity;
 
 /*
  * #%L
@@ -31,7 +31,7 @@ import org.rapidoidx.db.DbSet;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public interface IPost extends IEntity {
+public interface IPost extends RichEntity {
 
 	DbColumn<String> content();
 

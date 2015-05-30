@@ -38,6 +38,7 @@ import org.rapidoidx.db.DbColumn;
 import org.rapidoidx.db.DbList;
 import org.rapidoidx.db.DbRef;
 import org.rapidoidx.db.DbSet;
+import org.rapidoidx.db.RichEntity;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -77,7 +78,8 @@ public class DbProxy implements InvocationHandler, Serializable {
 		Class<?>[] paramTypes = method.getParameterTypes();
 
 		if (methodClass.equals(Object.class) || methodClass.equals(EntityImpl.class)
-				|| methodClass.equals(AbstractRichEntity.class) || methodClass.equals(IEntity.class)) {
+				|| methodClass.equals(AbstractRichEntity.class) || methodClass.equals(IEntity.class)
+				|| methodClass.equals(RichEntity.class)) {
 			return method.invoke(entity, args);
 		}
 
