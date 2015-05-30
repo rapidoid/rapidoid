@@ -519,4 +519,22 @@ public class MockHttpExchange implements HttpExchange {
 		return null;
 	}
 
+	@Override
+	public Map<String, String> vars() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String var(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String var(String name, String defaultValue) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

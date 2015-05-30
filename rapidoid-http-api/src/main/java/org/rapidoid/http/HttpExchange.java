@@ -77,6 +77,21 @@ public interface HttpExchange extends HttpExchangeHeaders {
 
 	byte[] file(String name, byte[] defaultValue);
 
+	/**
+	 * Vars include params + data.
+	 */
+	Map<String, String> vars();
+
+	/**
+	 * Vars include params + data.
+	 */
+	String var(String name);
+
+	/**
+	 * Vars include params + data.
+	 */
+	String var(String name, String defaultValue);
+
 	Map<String, Object> session();
 
 	Map<String, Object> getSessionById(String sessionId);

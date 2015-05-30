@@ -98,6 +98,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	private HttpSession session;
 	private Router router;
 	private Map<Object, Object> extras;
+	private Map<String, String> vars;
 
 	final Range multipartBoundary = new Range();
 
@@ -165,6 +166,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		cookies.reset();
 		data.reset();
 		files.reset();
+		vars = null;
 
 		parsedParams = false;
 		parsedHeaders = false;
@@ -422,6 +424,27 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public synchronized byte[] file(String name, byte[] defaultValue) {
 		return U.or(files_().get(name), defaultValue);
+	}
+
+	@Override
+	public synchronized Map<String, String> vars() {
+		if (vars == null) {
+			vars = U.map();
+			vars.putAll(params());
+			vars.putAll(data());
+		}
+
+		return vars;
+	}
+
+	@Override
+	public synchronized String var(String name) {
+		return U.notNull(vars().get(name), "FILE[%s]", name);
+	}
+
+	@Override
+	public synchronized String var(String name, String defaultValue) {
+		return U.or(vars().get(name), defaultValue);
 	}
 
 	@Override
