@@ -54,7 +54,7 @@ public class DbStatisticalTest extends DbTestCommons {
 		boolean ok = false;
 	}
 
-	private final Map<Object, Object> persons = Collections.synchronizedMap(U.map());
+	private final Map<Long, Object> persons = Collections.synchronizedMap(U.<Long, Object> map());
 
 	@Test
 	public void testDbOperations() {
@@ -136,7 +136,8 @@ public class DbStatisticalTest extends DbTestCommons {
 		XDB.each(new Operation<Person>() {
 			@Override
 			public void execute(Person p) throws Exception {
-				Person p2 = (Person) persons.get(p.id());
+				Person p2 = (Person) persons.get(num(p.id()));
+				notNull(p2);
 				eq(p2.id(), p.id());
 				eq(p2.age, p.age);
 				eq(p2.name, p.name);

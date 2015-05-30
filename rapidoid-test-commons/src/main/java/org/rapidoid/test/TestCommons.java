@@ -335,4 +335,8 @@ public abstract class TestCommons {
 		}
 	}
 
+	protected static long num(String num) {
+		return Long.parseLong(num);
+	}
+
 }
