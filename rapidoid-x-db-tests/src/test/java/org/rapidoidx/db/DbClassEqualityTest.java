@@ -32,7 +32,9 @@ public class DbClassEqualityTest extends DbTestCommons {
 
 	@Test
 	public void testEntityEquality() {
-		neq(post(0L), post(0L));
+		neq(post(null), post(null));
+		neq(post(null), post(123L));
+		neq(post(12L), post(null));
 		eq(post(123L), post(123L));
 		neq(post(123L), post(547L));
 	}

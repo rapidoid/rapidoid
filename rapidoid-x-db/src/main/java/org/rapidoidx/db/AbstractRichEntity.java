@@ -148,15 +148,18 @@ public abstract class AbstractRichEntity implements RichEntity, IEntity {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+
+		if (!(obj instanceof IEntity)) {
 			return false;
-		AbstractRichEntity other = (AbstractRichEntity) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
+		}
+
+		IEntity other = (IEntity) obj;
+
+		if (id == null || other.id() == null) {
 			return false;
-		return true;
+		}
+
+		return id.equals(other.id());
 	}
 
 	@SuppressWarnings("unchecked")
