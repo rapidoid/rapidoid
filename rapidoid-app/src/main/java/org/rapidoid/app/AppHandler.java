@@ -27,10 +27,13 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.http.HttpProtocol;
 import org.rapidoid.lambda.Callback;
+import org.rapidoid.log.Log;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.plugins.DB;
 import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.util.CustomizableClassLoader;
+import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -66,8 +69,21 @@ public class AppHandler implements Handler {
 		DB.transaction(new Runnable() {
 			@Override
 			public void run() {
-				Object result = processReq(x, appCls);
-				HttpProtocol.processResponse(x, result);
+				Object result;
+
+				try {
+					result = processReq(x, appCls);
+				} catch (Exception e) {
+					Log.error("Exception occured while processing request inside transaction!", UTILS.rootCause(e));
+					throw U.rte(e);
+				}
+
+				try {
+					HttpProtocol.processResponse(x, result);
+				} catch (Exception e) {
+					Log.error("Exception occured while finalizing response inside transaction!", UTILS.rootCause(e));
+					throw U.rte(e);
+				}
 			}
 		}, x.isGetReq(), callback);
 
