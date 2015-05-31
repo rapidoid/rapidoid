@@ -21,7 +21,6 @@ package org.rapidoid.app;
  */
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
@@ -39,7 +38,7 @@ public class AppClasses {
 	public final Map<String, Class<?>> pages;
 	public final Map<String, Class<?>> screens;
 
-	public final Map<String, Object> ctx = Collections.synchronizedMap(U.<String, Object> map());
+	public final Map<String, Object> ctx = U.synchronizedMap();
 
 	public AppClasses(Class<?> main, Map<String, Class<?>> services, Map<String, Class<?>> pages,
 			Map<String, Class<?>> screens) {

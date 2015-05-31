@@ -21,7 +21,6 @@ package org.rapidoidx.db;
  * #L%
  */
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -54,7 +53,7 @@ public class DbStatisticalTest extends DbTestCommons {
 		boolean ok = false;
 	}
 
-	private final Map<Long, Object> persons = Collections.synchronizedMap(U.<Long, Object> map());
+	private final Map<Long, Object> persons = U.synchronizedMap();
 
 	@Test
 	public void testDbOperations() {

@@ -23,6 +23,7 @@ package org.rapidoid.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -443,6 +444,10 @@ public class U {
 		}
 
 		return map;
+	}
+
+	public static <K, V> Map<K, V> synchronizedMap() {
+		return Collections.synchronizedMap(U.<K, V> map());
 	}
 
 	public static Dict dict(Map<? extends String, ? extends Object> src) {

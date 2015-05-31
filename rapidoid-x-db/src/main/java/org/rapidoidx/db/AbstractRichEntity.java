@@ -1,9 +1,7 @@
 package org.rapidoidx.db;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +12,7 @@ import java.util.concurrent.ConcurrentMap;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.entity.IEntity;
+import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -221,7 +220,7 @@ public abstract class AbstractRichEntity implements RichEntity, IEntity {
 	@Override
 	public synchronized Map<Object, Object> _extras() {
 		if (extras == null) {
-			extras = Collections.synchronizedMap(new HashMap<Object, Object>());
+			extras = U.synchronizedMap();
 		}
 		return extras;
 	}
@@ -229,7 +228,7 @@ public abstract class AbstractRichEntity implements RichEntity, IEntity {
 	@Override
 	public synchronized Map<Object, Object> _tmps() {
 		if (tmps == null) {
-			tmps = Collections.synchronizedMap(new HashMap<Object, Object>());
+			tmps = U.synchronizedMap();
 		}
 		return tmps;
 	}
