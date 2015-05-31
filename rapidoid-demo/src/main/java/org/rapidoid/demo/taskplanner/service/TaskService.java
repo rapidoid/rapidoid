@@ -21,12 +21,14 @@ package org.rapidoid.demo.taskplanner.service;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.dao.DAO;
+import org.rapidoid.app.CRUD;
 import org.rapidoid.demo.taskplanner.model.Task;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class TaskService extends DAO<Task> {
+@RESTful("/tasks")
+public class TaskService extends CRUD<Task> {
 
 }

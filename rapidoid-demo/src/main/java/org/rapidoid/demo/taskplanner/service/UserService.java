@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.dao.DAO;
 import org.rapidoid.demo.taskplanner.model.User;
@@ -33,6 +34,7 @@ import org.rapidoid.plugins.DB;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
+@RESTful("/user")
 public class UserService extends DAO<User> {
 
 	public List<User> findByName(String search) {
