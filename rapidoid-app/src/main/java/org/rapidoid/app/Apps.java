@@ -58,6 +58,8 @@ public class Apps {
 
 	private static final String BUILT_IN_SCREEN_SUFFIX = "BuiltIn";
 
+	private static AppClasses APP_CLASSES;
+
 	public static void main(String[] args) {
 		run((Object[]) args);
 	}
@@ -139,7 +141,13 @@ public class Apps {
 	}
 
 	public static synchronized AppClasses getAppClasses(HttpExchange x, ClassLoader classLoader) {
-		return scanAppClasses(x, classLoader); // FIXME cache already scanned
+		// FIXME detect changes and invalidate cache
+
+		if (APP_CLASSES == null) {
+			APP_CLASSES = scanAppClasses(x, classLoader);
+		}
+
+		return APP_CLASSES;
 	}
 
 	@SuppressWarnings("unchecked")
