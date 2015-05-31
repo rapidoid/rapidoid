@@ -63,7 +63,7 @@ public abstract class AbstractItem extends AbstractModel implements Item {
 		} else if (property.equals("_toString")) {
 			return (T) value.toString();
 		} else if (property.equals("_str")) {
-			return (T) Beany.beanToStr(value, false);
+			return (T) Beany.beanToNiceText(value, false);
 		}
 
 		Prop prop = Beany.property(value, property, true);

@@ -479,7 +479,7 @@ public abstract class BootstrapWidgets extends HTML {
 
 			Tag left = h6("(ID", NBSP, "=", NBSP, id, ")");
 			Object header = span(result.getClass().getSimpleName());
-			items[ind++] = media(left, header, small(Beany.beanToStr(result, true)), url);
+			items[ind++] = media(left, header, small(Beany.beanToNiceText(result, true)), url);
 		}
 
 		return items;

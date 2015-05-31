@@ -447,6 +447,53 @@ public class Beany {
 		return sb.toString();
 	}
 
+	public static String beanToNiceText(Object bean, boolean allowCustom) {
+
+		Class<?> clazz = Cls.unproxy(bean.getClass());
+
+		if (allowCustom) {
+			Method m = Cls.getMethod(clazz, "toString");
+			if (!m.getDeclaringClass().equals(Object.class)) {
+				return bean.toString();
+			}
+		}
+
+		BeanProperties props = propertiesOf(bean).annotated(ToString.class);
+
+		if (props.isEmpty()) {
+
+			Prop nameProp = property(bean, "name", false);
+			if (nameProp != null && nameProp.getType() == String.class) {
+				return U.or((String) nameProp.get(bean), "");
+			}
+
+			props = propertiesOf(bean);
+		}
+
+		StringBuilder sb = new StringBuilder();
+
+		for (Prop prop : props) {
+			String name = prop.getName();
+			Object value = prop.get(bean);
+
+			if (value != null && prop.getTypeKind() != TypeKind.OBJECT && prop.getTypeKind() != TypeKind.DATE) {
+
+				if (sb.length() > 0) {
+					sb.append(", ");
+				}
+
+				if (!(value instanceof String)) {
+					sb.append(name);
+					sb.append(": ");
+				}
+
+				sb.append(value);
+			}
+		}
+
+		return sb.toString();
+	}
+
 	public static <E> Comparator<E> comparator(final String orderBy) {
 		final int sign = orderBy.startsWith("-") ? -1 : 1;
 		final String order = sign == 1 ? orderBy : orderBy.substring(1);
