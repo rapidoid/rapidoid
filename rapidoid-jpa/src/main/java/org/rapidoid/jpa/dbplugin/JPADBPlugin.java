@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.EntityType;
@@ -103,17 +104,41 @@ public class JPADBPlugin extends DefaultDBPlugin {
 	}
 
 	@Override
-	public void transaction(Runnable tx, boolean readonly) {
-		em().getTransaction().begin();
+	public void transaction(Runnable action, boolean readonly) {
+		EntityTransaction tx = em().getTransaction();
+
+		if (readonly) {
+			runTxReadOnly(action, tx);
+		} else {
+			runTxRW(action, tx);
+		}
+	}
+
+	private void runTxReadOnly(Runnable action, EntityTransaction tx) {
+		tx.begin();
+		tx.setRollbackOnly();
 
 		try {
-			tx.run();
+			action.run();
 		} catch (Throwable e) {
-			em().getTransaction().rollback();
+			tx.rollback();
 			throw U.rte("Transaction execution error, rolled back!", e);
 		}
 
-		em().getTransaction().commit();
+		tx.rollback();
+	}
+
+	private void runTxRW(Runnable action, EntityTransaction tx) {
+		tx.begin();
+
+		try {
+			action.run();
+		} catch (Throwable e) {
+			tx.rollback();
+			throw U.rte("Transaction execution error, rolled back!", e);
+		}
+
+		tx.commit();
 	}
 
 	@Override
