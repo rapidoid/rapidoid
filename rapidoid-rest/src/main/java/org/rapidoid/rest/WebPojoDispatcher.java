@@ -33,6 +33,7 @@ import org.rapidoid.annotation.PUT;
 import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
+import org.rapidoid.aop.AOP;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pojo.PojoDispatchException;
@@ -160,6 +161,12 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 	protected void preprocess(PojoRequest req, Method method, Object service, Object[] args) {
 		HttpExchange x = ((WebReq) req).getExchange();
 		x.setTransactionMode(TransactionMode.READ_ONLY);
+	}
+
+	@Override
+	protected Object invoke(PojoRequest req, Method method, Object service, Object[] args) {
+		HttpExchange x = ((WebReq) req).getExchange();
+		return AOP.invoke(x, method, service, args);
 	}
 
 }

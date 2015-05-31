@@ -26,6 +26,8 @@ import java.util.Set;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Transaction;
+import org.rapidoid.aop.AOP;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.HTTP;
@@ -81,6 +83,8 @@ public class Apps {
 		String[] configArgs = config.toArray(new String[config.size()]);
 		Conf.args(configArgs);
 		Log.args(configArgs);
+
+		AOP.register(Transaction.class, new TransactionInterceptor());
 
 		Lifecycle.onStart(args);
 

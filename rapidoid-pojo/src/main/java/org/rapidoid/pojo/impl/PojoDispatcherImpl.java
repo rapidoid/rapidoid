@@ -34,6 +34,7 @@ import java.util.Set;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Param;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.aop.AOP;
 import org.rapidoid.beany.BeanProperties;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
@@ -116,12 +117,14 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		Object[] args = setupArgs(request, method, service, parts, paramsFrom);
 
 		preprocess(request, method, service, args);
-
-		Object result = Cls.invoke(method, service, args);
-
+		Object result = invoke(request, method, service, args);
 		result = postprocess(request, method, service, args, result);
 
 		return result;
+	}
+
+	protected Object invoke(PojoRequest req, Method method, Object service, Object[] args) {
+		return AOP.invoke(null, method, service, args);
 	}
 
 	private Object[] setupArgs(PojoRequest request, Method method, Object service, String[] parts, int paramsFrom)
