@@ -1,8 +1,8 @@
-package org.rapidoid.rest.annotation;
+package org.rapidoid.pojo.impl;
 
 /*
  * #%L
- * rapidoid-rest
+ * rapidoid-pojo
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,23 +20,27 @@ package org.rapidoid.rest.annotation;
  * #L%
  */
 
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import java.lang.reflect.Method;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
-@Target({ METHOD })
-@Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public @interface REST {
+public class DispatchTarget {
 
-	String url();
+	Class<?> clazz;
 
-	String verb();
+	Method method;
+
+	public DispatchTarget(Class<?> clazz, Method method) {
+		this.clazz = clazz;
+		this.method = method;
+	}
+
+	@Override
+	public String toString() {
+		return "DispatchTarget [clazz=" + clazz + ", method=" + method + "]";
+	}
 
 }

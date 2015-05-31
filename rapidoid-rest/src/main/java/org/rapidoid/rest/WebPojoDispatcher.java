@@ -20,15 +20,30 @@ package org.rapidoid.rest;
  * #L%
  */
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.DELETE;
+import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.POST;
+import org.rapidoid.annotation.PUT;
+import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.TransactionMode;
+import org.rapidoid.beany.Metadata;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.pojo.PojoDispatchException;
+import org.rapidoid.pojo.PojoHandlerNotFoundException;
 import org.rapidoid.pojo.PojoRequest;
+import org.rapidoid.pojo.impl.DispatchReq;
 import org.rapidoid.pojo.impl.PojoDispatcherImpl;
+import org.rapidoid.util.Arr;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -56,6 +71,95 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 		} else {
 			return super.getCustomArg(request, type, parts, paramsFrom, paramsSize);
 		}
+	}
+
+	@Override
+	protected List<String> getServiceNames(Class<?> service) {
+		RESTful restful = Metadata.classAnnotation(service, RESTful.class);
+
+		if (restful != null) {
+			return U.list(restful.value());
+		} else {
+			return super.getServiceNames(service);
+		}
+	}
+
+	@Override
+	public Object dispatch(PojoRequest req) throws PojoHandlerNotFoundException, PojoDispatchException {
+		try {
+			return super.dispatch(req);
+		} catch (PojoHandlerNotFoundException e) {
+			return alternativeDispatch(req);
+		}
+	}
+
+	private Object alternativeDispatch(PojoRequest req) throws PojoHandlerNotFoundException, PojoDispatchException {
+		String[] parts = uriParts(req.path());
+
+		for (int i = 0; i < parts.length; i++) {
+			try {
+				String path = U.join("/", Arr.subarray(parts, 0, i));
+				return process(req, req.command(), path, parts, i + 1);
+			} catch (PojoHandlerNotFoundException e) {
+				// ignore, continue trying...
+			}
+		}
+
+		throw notFound();
+	}
+
+	private static String[] uriParts(String uri) {
+		if (uri.isEmpty() || uri.equals("/")) {
+			return EMPTY_STRING_ARRAY;
+		}
+
+		return uri.replaceAll("^/", "").replaceAll("/$", "").split("/");
+	}
+
+	@Override
+	protected List<DispatchReq> getMethodActions(String servicePath, Method method) {
+		List<DispatchReq> reqs = U.list();
+
+		for (Annotation ann : method.getAnnotations()) {
+			DispatchReq req = req(servicePath, ann, method);
+			if (req != null) {
+				reqs.add(req);
+			}
+		}
+
+		return reqs;
+	}
+
+	private DispatchReq req(String servicePath, Annotation ann, Method method) {
+		String url;
+
+		if (ann instanceof GET) {
+			url = ((GET) ann).value();
+		} else if (ann instanceof POST) {
+			url = ((POST) ann).value();
+		} else if (ann instanceof PUT) {
+			url = ((PUT) ann).value();
+		} else if (ann instanceof DELETE) {
+			url = ((DELETE) ann).value();
+		} else {
+			return null;
+		}
+
+		String name = reqName(method, url);
+		String path = UTILS.path(servicePath, name);
+		String verb = ann.annotationType().getSimpleName();
+
+		return new DispatchReq(verb, path);
+	}
+
+	private String reqName(Method method, String url) {
+		return U.isEmpty(url) ? method.getName() : url;
+	}
+
+	@Override
+	protected void preprocess(PojoRequest req, Method method, Object service, Object[] args) {
+		HttpExchange x = ((WebReq) req).getExchange();
+		x.setTransactionMode(TransactionMode.READ_ONLY);
 	}
 
 }

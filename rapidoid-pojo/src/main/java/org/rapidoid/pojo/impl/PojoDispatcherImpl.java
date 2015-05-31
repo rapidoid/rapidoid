@@ -20,8 +20,10 @@ package org.rapidoid.pojo.impl;
  * #L%
  */
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -30,12 +32,13 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Param;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.BeanProperties;
 import org.rapidoid.beany.Beany;
+import org.rapidoid.beany.Metadata;
 import org.rapidoid.beany.Prop;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.pojo.POJO;
+import org.rapidoid.log.Log;
 import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
@@ -50,98 +53,92 @@ import org.rapidoid.util.UTILS;
 @Since("2.0.0")
 public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 
-	private static final Map<Class<?>, PojoServiceWrapper> WRAPPERS = UTILS
-			.autoExpandingMap(new Mapper<Class<?>, PojoServiceWrapper>() {
-				@Override
-				public PojoServiceWrapper map(Class<?> serviceClass) throws Exception {
-					return new PojoServiceWrapper(serviceClass);
-				}
-			});
+	private static final String[] NO_PARTS = {};
 
-	private final Map<String, Class<?>> services;
+	protected final Map<DispatchReq, DispatchTarget> mappings = U.map();
 
 	public PojoDispatcherImpl(Map<String, Class<?>> services) {
-		this.services = services;
+		init(services);
 	}
 
-	@SuppressWarnings("unused")
-	private static String nameOf(Class<?> serviceClass) {
-		return U.mid(serviceClass.getSimpleName(), 0, -POJO.SERVICE_SUFFIX.length());
+	private void init(Map<String, Class<?>> services) {
+		for (Class<?> service : services.values()) {
+			List<String> servicePaths = getServiceNames(service);
+			for (String servicePath : servicePaths) {
+
+				for (Method method : service.getMethods()) {
+					if (shouldExpose(method)) {
+						List<DispatchReq> actions = getMethodActions(servicePath, method);
+
+						for (DispatchReq action : actions) {
+							mappings.put(action, new DispatchTarget(service, method));
+							Log.info("Registered web handler", "request", action, "method", method);
+						}
+					}
+				}
+
+			}
+		}
+	}
+
+	protected List<String> getServiceNames(Class<?> service) {
+		return U.list(service.getSimpleName());
 	}
 
 	@Override
-	public Object dispatch(PojoRequest request) throws PojoHandlerNotFoundException, PojoDispatchException {
-		String[] parts = uriParts(request.path());
-		int length = parts.length;
-
-		if (length == 0) {
-			return process(request, "main", "index", parts, 0);
-		}
-
-		if (length >= 1) {
-			try {
-				return process(request, parts[0], "index", parts, 1);
-			} catch (PojoHandlerNotFoundException e) {
-				// ignore, continue trying...
-			}
-
-			try {
-				return process(request, "main", parts[0], parts, 1);
-			} catch (PojoHandlerNotFoundException e) {
-				// ignore, continue trying...
-			}
-		}
-
-		if (length >= 2) {
-			return process(request, parts[0], parts[1], parts, 2);
-		}
-
-		throw notFound();
+	public Object dispatch(PojoRequest req) throws PojoHandlerNotFoundException, PojoDispatchException {
+		return process(req, req.command(), req.path(), NO_PARTS, 0);
 	}
 
-	private Object process(PojoRequest request, String service, String action, String[] parts, int paramsFrom)
+	protected Object process(PojoRequest req, String command, String path, String[] parts, int paramsFrom)
 			throws PojoHandlerNotFoundException, PojoDispatchException {
 
-		PojoServiceWrapper wrapper = wrapper(service);
+		// normalize the path
+		path = UTILS.path(path);
 
-		if (wrapper != null) {
-			Method method = wrapper.getMethod(action);
-			if (method != null) {
-				Object serviceInstance = Cls.newInstance(wrapper.getTarget());
-				return doDispatch(request, method, serviceInstance, parts, paramsFrom);
+		DispatchTarget target = mappings.get(new DispatchReq(command, path));
+
+		if (target != null) {
+			Object serviceInstance = Cls.newInstance(target.clazz);
+			if (target.method != null) {
+				return doDispatch(req, target.method, serviceInstance, parts, paramsFrom);
+			} else {
+				throw notFound();
 			}
 		}
 
 		throw notFound();
-	}
-
-	private PojoServiceWrapper wrapper(String service) {
-
-		String name = U.capitalized(service) + "Service";
-
-		Class<?> serviceClass = services.get(name);
-		if (serviceClass == null) {
-			return null;
-		}
-
-		return WRAPPERS.get(serviceClass);
 	}
 
 	private Object doDispatch(PojoRequest request, Method method, Object service, String[] parts, int paramsFrom)
 			throws PojoHandlerNotFoundException, PojoDispatchException {
-		if (method != null) {
 
-			Object[] args;
-			try {
-				int paramsSize = parts.length - paramsFrom;
-				Class<?>[] types = method.getParameterTypes();
-				args = new Object[types.length];
+		Object[] args = setupArgs(request, method, service, parts, paramsFrom);
 
-				int simpleParamIndex = 0;
+		preprocess(request, method, service, args);
 
-				for (int i = 0; i < types.length; i++) {
-					Class<?> type = types[i];
-					TypeKind kind = Cls.kindOf(type);
+		Object result = Cls.invoke(method, service, args);
+
+		result = postprocess(request, method, service, args, result);
+
+		return result;
+	}
+
+	private Object[] setupArgs(PojoRequest request, Method method, Object service, String[] parts, int paramsFrom)
+			throws PojoDispatchException {
+
+		Object[] args;
+
+		try {
+			int paramsSize = parts.length - paramsFrom;
+			Class<?>[] types = method.getParameterTypes();
+			args = new Object[types.length];
+
+			int subUrlParamIndex = 0;
+
+			for (int i = 0; i < types.length; i++) {
+				Class<?> type = types[i];
+				TypeKind kind = Cls.kindOf(type);
 
 					if (kind.isSimple()) {
 
@@ -151,31 +148,32 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 							throw error(null, "Not enough parameters!");
 						}
 
-					} else if (type.equals(Object.class)) {
-						Class<?> defaultType = getDefaultType(service);
+				} else if (type.equals(Object.class)) {
+					Class<?> defaultType = getDefaultType(service);
 
-						if (defaultType != null) {
-							args[i] = instantiateArg(request, defaultType);
-						} else {
-							throw error(null, "Cannot provide value for parameter of type Object!");
-						}
+					if (defaultType != null) {
+						args[i] = instantiateArg(request, defaultType);
 					} else {
-						args[i] = complexArg(i, type, request, parts, paramsFrom, paramsSize);
+						throw error(null, "Cannot provide value for parameter of type Object!");
 					}
+				} else {
+					args[i] = complexArg(i, type, request, parts, paramsFrom, paramsSize);
 				}
-			} catch (Throwable e) {
-				throw new PojoDispatchException("Cannot dispatch to POJO target!", e);
 			}
-
-			Object result = Cls.invoke(method, service, args);
-			if (result == null && method.getReturnType().equals(void.class)) {
-				result = "OK";
-			}
-			return result;
-
-		} else {
-			throw notFound();
+		} catch (Throwable e) {
+			throw new PojoDispatchException("Cannot dispatch to POJO target!", e);
 		}
+
+		return args;
+	}
+
+	protected void preprocess(PojoRequest request, Method method, Object service, Object[] args) {}
+
+	protected Object postprocess(PojoRequest request, Method method, Object service, Object[] args, Object result) {
+		if (result == null && method.getReturnType().equals(void.class)) {
+			result = "OK";
+		}
+		return result;
 	}
 
 	protected Object complexArg(int i, Class<?> type, PojoRequest request, String[] parts, int paramsFrom,
@@ -279,6 +277,20 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		return params;
 	}
 
+	protected List<DispatchReq> getMethodActions(String servicePath, Method method) {
+		String path = UTILS.path(servicePath, method.getName());
+		return U.list(new DispatchReq("", path));
+	}
+
+	private boolean shouldExpose(Method method) {
+		boolean isUserDefined = !method.getDeclaringClass().equals(Object.class);
+
+		int modifiers = method.getModifiers();
+		boolean isPublic = !Modifier.isAbstract(modifiers) && Modifier.isPublic(modifiers);
+
+		return isUserDefined && isPublic;
+	}
+
 	private static void setBeanProperties(Object instance, Map<String, String> paramsMap) {
 		BeanProperties props = Beany.propertiesOf(instance.getClass());
 
@@ -291,20 +303,12 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		}
 	}
 
-	private static PojoDispatchException error(Throwable cause, String msg, Object... args) {
+	protected static PojoDispatchException error(Throwable cause, String msg, Object... args) {
 		return new PojoDispatchException(U.nice(msg, args), cause);
 	}
 
-	private static PojoHandlerNotFoundException notFound() {
+	protected static PojoHandlerNotFoundException notFound() {
 		return new PojoHandlerNotFoundException();
-	}
-
-	private static String[] uriParts(String uri) {
-		if (uri.isEmpty() || uri.equals("/")) {
-			return EMPTY_STRING_ARRAY;
-		}
-
-		return uri.replaceAll("^/", "").replaceAll("/$", "").split("/");
 	}
 
 }

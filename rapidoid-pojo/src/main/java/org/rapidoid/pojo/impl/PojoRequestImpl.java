@@ -31,13 +31,13 @@ import org.rapidoid.pojo.PojoRequest;
 public class PojoRequestImpl implements PojoRequest {
 
 	private final String command;
-	private final String uri;
-	private final Map<String, String> extra;
+	private final String path;
+	private final Map<String, String> params;
 
-	public PojoRequestImpl(String command, String uri, Map<String, String> extra) {
+	public PojoRequestImpl(String command, String path, Map<String, String> params) {
 		this.command = command;
-		this.uri = uri;
-		this.extra = extra;
+		this.path = path;
+		this.params = params;
 	}
 
 	@Override
@@ -47,17 +47,17 @@ public class PojoRequestImpl implements PojoRequest {
 
 	@Override
 	public String path() {
-		return uri;
+		return path;
 	}
 
 	@Override
 	public Map<String, String> params() {
-		return extra;
+		return params;
 	}
 
 	@Override
 	public String toString() {
-		return "PojoRequestImpl [command=" + command + ", uri=" + uri + ", extra=" + extra + "]";
+		return "PojoRequestImpl [command=" + command + ", path=" + path + ", params=" + params + "]";
 	}
 
 }
