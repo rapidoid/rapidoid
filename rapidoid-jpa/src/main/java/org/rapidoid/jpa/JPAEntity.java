@@ -43,12 +43,12 @@ public abstract class JPAEntity extends AbstractEntity {
 
 	@Override
 	public String id() {
-		return id + "";
+		return id != null ? id + "" : null;
 	}
 
 	@Override
 	public String version() {
-		return version + "";
+		return version != null ? version + "" : null;
 	}
 
 	@Override
