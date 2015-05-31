@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.TransactionMode;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -119,6 +120,14 @@ public interface HttpExchange extends HttpExchangeHeaders {
 	boolean isGetReq();
 
 	boolean isPostReq();
+
+	TransactionMode getTransactionMode();
+
+	void setTransactionMode(TransactionMode txMode);
+
+	void setClassLoader(ClassLoader classLoader);
+
+	ClassLoader getClassLoader();
 
 	/* HELPERS: */
 

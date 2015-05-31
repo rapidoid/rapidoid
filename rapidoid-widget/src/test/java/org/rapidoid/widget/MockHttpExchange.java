@@ -27,6 +27,7 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeBody;
 import org.rapidoid.http.HttpExchangeHeaders;
@@ -533,6 +534,30 @@ public class MockHttpExchange implements HttpExchange {
 
 	@Override
 	public String var(String name, String defaultValue) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TransactionMode getTransactionMode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setTransactionMode(TransactionMode txMode) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setClassLoader(ClassLoader classLoader) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public ClassLoader getClassLoader() {
 		// TODO Auto-generated method stub
 		return null;
 	}

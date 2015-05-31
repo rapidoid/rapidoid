@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
@@ -85,6 +86,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	final BoolWrap isGet = new BoolWrap();
 	final BoolWrap isKeepAlive = new BoolWrap();
 
+	private TransactionMode txMode = null;
+
 	private boolean parsedParams;
 	private boolean parsedHeaders;
 	private boolean parsedBody;
@@ -126,6 +129,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	private boolean complete;
 	private boolean lowLevelProcessing;
 
+	private ClassLoader classLoader;
+
 	public HttpExchangeImpl() {
 		reset();
 
@@ -149,6 +154,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 		isGet.value = false;
 		isKeepAlive.value = false;
+		txMode = null;
 
 		extras = null;
 
@@ -1037,6 +1043,26 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	@Override
 	public String realAddress() {
 		return header("X-Forwarded-For", address());
+	}
+
+	@Override
+	public synchronized TransactionMode getTransactionMode() {
+		return txMode;
+	}
+
+	@Override
+	public synchronized void setTransactionMode(TransactionMode txMode) {
+		this.txMode = txMode;
+	}
+
+	@Override
+	public synchronized void setClassLoader(ClassLoader classLoader) {
+		this.classLoader = classLoader;
+	}
+
+	@Override
+	public synchronized ClassLoader getClassLoader() {
+		return classLoader;
 	}
 
 }
