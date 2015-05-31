@@ -132,6 +132,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		try {
 			int paramsSize = parts.length - paramsFrom;
 			Class<?>[] types = method.getParameterTypes();
+			Annotation[][] annotations = method.getParameterAnnotations();
 			args = new Object[types.length];
 
 			int subUrlParamIndex = 0;
@@ -140,13 +141,21 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 				Class<?> type = types[i];
 				TypeKind kind = Cls.kindOf(type);
 
-					if (kind.isSimple()) {
+				if (kind.isSimple()) {
 
-						if (parts.length > paramsFrom + simpleParamIndex) {
-							args[i] = Cls.convert(parts[paramsFrom + simpleParamIndex++], type);
+					Param param = Metadata.get(annotations[i], Param.class);
+
+					if (param != null) {
+						String paramName = param.value();
+						String val = request.params().get(paramName);
+						args[i] = Cls.convert(val, type);
+					} else {
+						if (parts.length > paramsFrom + subUrlParamIndex) {
+							args[i] = Cls.convert(parts[paramsFrom + subUrlParamIndex++], type);
 						} else {
 							throw error(null, "Not enough parameters!");
 						}
+					}
 
 				} else if (type.equals(Object.class)) {
 					Class<?> defaultType = getDefaultType(service);
