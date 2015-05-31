@@ -1,8 +1,8 @@
-package org.rapidoid.rest.annotation;
+package org.rapidoid.annotation;
 
 /*
  * #%L
- * rapidoid-rest
+ * rapidoid-annotations
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -25,9 +25,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
 
 @Target({ METHOD })
 @Retention(RUNTIME)

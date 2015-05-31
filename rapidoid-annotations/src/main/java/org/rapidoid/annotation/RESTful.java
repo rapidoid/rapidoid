@@ -1,8 +1,8 @@
-package org.rapidoid.rest.annotation;
+package org.rapidoid.annotation;
 
 /*
  * #%L
- * rapidoid-rest
+ * rapidoid-annotations
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,20 +20,17 @@ package org.rapidoid.rest.annotation;
  * #L%
  */
 
-import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-@Target({ METHOD })
+@Target({ TYPE })
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public @interface PUT {
+public @interface RESTful {
 
 	String value() default "";
 
