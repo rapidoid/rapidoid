@@ -31,12 +31,21 @@ import org.hibernate.jpa.boot.internal.SettingsImpl;
 import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.jpa.dbplugin.EntityManagerProvider;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class QuickJPA {
+public class QuickJPA implements EntityManagerProvider {
+
+	private final Object[] args;
+
+	private EntityManager em;
+
+	public QuickJPA(Object... args) {
+		this.args = args;
+	}
 
 	@SuppressWarnings("deprecation")
 	public static EntityManager createEM(Object[] args) {
@@ -65,6 +74,14 @@ public class QuickJPA {
 				U.map(), cfg);
 
 		EntityManager em = ff.createEntityManager();
+		return em;
+	}
+
+	@Override
+	public synchronized EntityManager getEntityManager() {
+		if (em == null) {
+			em = createEM(args);
+		}
 		return em;
 	}
 

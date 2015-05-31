@@ -1,8 +1,8 @@
-package org.rapidoid.quick;
+package org.rapidoid.jpa.dbplugin;
 
 /*
  * #%L
- * rapidoid-quick
+ * rapidoid-jpa
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,39 +20,15 @@ package org.rapidoid.quick;
  * #L%
  */
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.Apps;
-import org.rapidoid.jpa.dbplugin.JPADBPlugin;
-import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class Quick {
+public interface EntityManagerProvider {
 
-	public static void main(String[] args) {
-		run((Object[]) args);
-	}
-
-	public static void run(Object... args) {
-		JPADBPlugin db = new JPADBPlugin(new QuickJPA(args));
-
-		List<Object> appArgs = U.<Object> list(db);
-		appArgs.addAll(U.list(args));
-
-		Apps.run(U.array(appArgs));
-	}
-
-	public static EntityManager createJPAEM(Object[] args) {
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu-main-h2", U.map());
-		EntityManager em = emf.createEntityManager();
-		return em;
-	}
+	EntityManager getEntityManager();
 
 }

@@ -40,27 +40,27 @@ import org.rapidoid.util.U;
 @Since("3.0.0")
 public class JPADBPlugin extends DefaultDBPlugin {
 
-	private final EntityManager em;
+	private final EntityManagerProvider emProvider;
 
-	public JPADBPlugin(EntityManager em) {
-		this.em = em;
+	public JPADBPlugin(EntityManagerProvider emProvider) {
+		this.emProvider = emProvider;
 	}
 
 	@Override
 	public long insert(Object entity) {
-		em.persist(entity);
+		em().persist(entity);
 		return Beany.getId(entity);
 	}
 
 	@Override
 	public void update(long id, Object entity) {
 		Beany.setId(entity, id);
-		em.persist(entity);
+		em().persist(entity);
 	}
 
 	@Override
 	public <T> T getIfExists(Class<T> clazz, long id) {
-		return em.find(clazz, id);
+		return em().find(clazz, id);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -68,7 +68,7 @@ public class JPADBPlugin extends DefaultDBPlugin {
 	public <E> List<E> getAll() {
 		List<E> all = U.list();
 
-		Metamodel metamodel = em.getMetamodel();
+		Metamodel metamodel = em().getMetamodel();
 		Set<EntityType<?>> entityTypes = metamodel.getEntities();
 
 		for (EntityType<?> entityType : entityTypes) {
@@ -81,39 +81,39 @@ public class JPADBPlugin extends DefaultDBPlugin {
 
 	@Override
 	public <T> List<T> getAll(Class<T> clazz) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaBuilder cb = em().getCriteriaBuilder();
 		CriteriaQuery<T> query = cb.createQuery(clazz);
 		CriteriaQuery<T> all = query.select(query.from(clazz));
-		return em.createQuery(all).getResultList();
+		return em().createQuery(all).getResultList();
 	}
 
 	@Override
 	public void refresh(Object entity) {
-		em.refresh(entity);
+		em().refresh(entity);
 	}
 
 	@Override
 	public <E> void delete(Class<E> clazz, long id) {
-		em.remove(get(clazz, id));
+		em().remove(get(clazz, id));
 	}
 
 	@Override
 	public void delete(Object record) {
-		em.remove(record);
+		em().remove(record);
 	}
 
 	@Override
 	public void transaction(Runnable tx, boolean readonly) {
-		em.getTransaction().begin();
+		em().getTransaction().begin();
 
 		try {
 			tx.run();
 		} catch (Throwable e) {
-			em.getTransaction().rollback();
+			em().getTransaction().rollback();
 			throw U.rte("Transaction execution error, rolled back!", e);
 		}
 
-		em.getTransaction().commit();
+		em().getTransaction().commit();
 	}
 
 	@Override
@@ -128,6 +128,10 @@ public class JPADBPlugin extends DefaultDBPlugin {
 		}
 
 		callback.onDone(null, null);
+	}
+
+	protected EntityManager em() {
+		return emProvider.getEntityManager();
 	}
 
 }
