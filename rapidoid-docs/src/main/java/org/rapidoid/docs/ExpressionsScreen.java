@@ -116,7 +116,7 @@ public class ExpressionsScreen extends Screen {
 		expr("%LINE%", checkboxes(U.list("A", "B", "C"), "v3", U.list("A", "C")));
 
 		expr("%LINE%", display(U.list("a", "b", "c")));
-		expr("%LINE%", inline("abc", checkbox(session("c", true)), OK));
+		expr("%LINE%", inline("abc", checkbox(providedVar("c", true)), OK));
 		expr("%LINE%", panel("abc"));
 
 		expr("%LINE%", jumbotron("abc"));
