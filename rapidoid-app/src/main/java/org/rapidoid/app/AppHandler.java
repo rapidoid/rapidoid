@@ -24,7 +24,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.HttpProtocol;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.util.CustomizableClassLoader;
@@ -48,8 +47,9 @@ public class AppHandler implements Handler {
 	@Override
 	public Object handle(final HttpExchange x) throws Exception {
 		x.setClassLoader(classLoader);
-		Object result = processReq(x);
-		HttpProtocol.processResponse(x, result);
+
+		TxHelper.runInTx(x);
+
 		return x;
 	}
 
