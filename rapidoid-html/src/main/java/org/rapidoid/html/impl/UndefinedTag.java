@@ -176,7 +176,7 @@ public class UndefinedTag implements Tag {
 	}
 
 	@Override
-	public <T> Tag bind(Var<T> var) {
+	public <T> Tag var(Var<T> var) {
 		throw U.notExpected();
 	}
 

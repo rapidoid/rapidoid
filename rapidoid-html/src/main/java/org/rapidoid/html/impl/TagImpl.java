@@ -216,7 +216,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> Tag bind(Var<T> var) {
+	public <T> Tag var(Var<T> var) {
 		Tag _copy = (Tag) Tags.withValue(proxy, var.get());
 		TagImpl impl = impl(_copy);
 

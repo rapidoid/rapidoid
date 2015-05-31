@@ -552,7 +552,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static InputTag email(Var<?> var) {
-		return input().type("email").class_("form-control").bind(var);
+		return input().type("email").class_("form-control").var(var);
 	}
 
 	public static InputTag email(String var) {
@@ -564,7 +564,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static InputTag password(Var<?> var) {
-		return input().type("password").class_("form-control").bind(var);
+		return input().type("password").class_("form-control").var(var);
 	}
 
 	public static InputTag password(String var) {
@@ -576,7 +576,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static InputTag txt(Var<?> var) {
-		return input().type("text").class_("form-control").bind(var);
+		return input().type("text").class_("form-control").var(var);
 	}
 
 	public static InputTag txt(String var) {
@@ -588,7 +588,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static TextareaTag txtbig(Var<?> var) {
-		return textarea().class_("form-control").bind(var);
+		return textarea().class_("form-control").var(var);
 	}
 
 	public static TextareaTag txtbig(String var) {
@@ -600,7 +600,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static InputTag checkbox(Var<?> var) {
-		return input().type("checkbox").bind(var);
+		return input().type("checkbox").var(var);
 	}
 
 	public static InputTag checkbox(String var) {
@@ -617,7 +617,7 @@ public abstract class BootstrapWidgets extends HTML {
 
 		for (Object opt : options) {
 			Var<Boolean> optVar = Vars.eq(var, opt);
-			OptionTag op = option(opt).value(str(opt)).bind(optVar);
+			OptionTag op = option(opt).value(str(opt)).var(optVar);
 			dropdown = dropdown.append(op);
 		}
 
@@ -638,7 +638,7 @@ public abstract class BootstrapWidgets extends HTML {
 
 		for (Object opt : options) {
 			Var<Boolean> optVar = Vars.has(var, opt);
-			OptionTag op = option(opt).value(str(opt)).bind(optVar);
+			OptionTag op = option(opt).value(str(opt)).var(optVar);
 			select = select.append(op);
 		}
 
@@ -660,7 +660,7 @@ public abstract class BootstrapWidgets extends HTML {
 		int i = 0;
 		for (Object opt : options) {
 			Var<Boolean> optVar = Vars.eq(var, opt);
-			InputTag radio = input().type("radio").name(name).value(str(opt)).bind(optVar);
+			InputTag radio = input().type("radio").name(name).value(str(opt)).var(optVar);
 			radios[i] = label(radio, opt).class_("radio-inline");
 			i++;
 		}
@@ -685,7 +685,7 @@ public abstract class BootstrapWidgets extends HTML {
 		int i = 0;
 		for (Object opt : options) {
 			Var<Boolean> optVar = Vars.has(var, opt);
-			InputTag cc = input().type("checkbox").name(name).value(str(opt)).bind(optVar);
+			InputTag cc = input().type("checkbox").name(name).value(str(opt)).var(optVar);
 			checkboxes[i] = label(cc, opt).class_("radio-checkbox");
 			i++;
 		}

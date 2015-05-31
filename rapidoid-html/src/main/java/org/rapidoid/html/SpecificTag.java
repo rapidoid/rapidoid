@@ -51,7 +51,7 @@ public interface SpecificTag<TAG extends SpecificTag<?>> extends Tag {
 	TAG is(String attr, boolean value);
 
 	@Special
-	<T> TAG bind(Var<T> var);
+	<T> TAG var(Var<T> var);
 
 	@Special
 	TAG cmd(String cmd, Object... args);
