@@ -26,25 +26,17 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.pojo.impl.PojoDispatcherImpl;
 import org.rapidoid.util.Cls;
-import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class POJO {
 
-	public static final String SERVICE_SUFFIX = "Service";
-
-	public static List<Class<?>> scanServices() {
-		return Scan.bySuffix(SERVICE_SUFFIX, null, null);
-	}
-
 	public static PojoDispatcher dispatcher(Class<?>... serviceClasses) {
 		return new PojoDispatcherImpl(Cls.classMap(U.list(serviceClasses)));
 	}
 
-	public static PojoDispatcher serviceDispatcher() {
-		List<Class<?>> services = scanServices();
+	public static PojoDispatcher serviceDispatcher(List<Class<?>> services) {
 		return dispatcher(services.toArray(new Class[services.size()]));
 	}
 

@@ -23,15 +23,16 @@ package org.rapidoid.rest;
 import java.util.List;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.pojo.POJO;
 import org.rapidoid.pojo.PojoDispatchException;
 import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.pojo.PojoHandlerNotFoundException;
+import org.rapidoid.util.Scan;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -39,6 +40,16 @@ public class REST {
 
 	public static void run(Class<?>... classes) {
 		serve(new WebPojoDispatcher(classes));
+	}
+
+	public static void run() {
+		List<Class<?>> services = Scan.annotated(RESTful.class);
+		run(services.toArray(new Class[services.size()]));
+	}
+
+	public static void main(String[] args) {
+		Conf.args(args);
+		run();
 	}
 
 	private static void serve(final PojoDispatcher dispatcher) {
@@ -54,16 +65,6 @@ public class REST {
 				}
 			}
 		});
-	}
-
-	public static void start() {
-		List<Class<?>> services = POJO.scanServices();
-		run(services.toArray(new Class[services.size()]));
-	}
-
-	public static void main(String[] args) {
-		Conf.args(args);
-		start();
 	}
 
 }

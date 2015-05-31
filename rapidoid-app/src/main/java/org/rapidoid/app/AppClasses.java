@@ -24,7 +24,9 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.beany.Metadata;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -54,7 +56,7 @@ public class AppClasses {
 			String name = cls.getSimpleName();
 			if (name.equals("App")) {
 				main = cls;
-			} else if (name.endsWith("Service")) {
+			} else if (Metadata.isAnnotated(cls, RESTful.class)) {
 				services.put(name, cls);
 			} else if (name.endsWith("Screen")) {
 				screens.put(name, cls);
