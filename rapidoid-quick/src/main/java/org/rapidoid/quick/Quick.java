@@ -47,6 +47,8 @@ public class Quick {
 		appArgs.addAll(U.list(args));
 
 		Apps.run(U.array(appArgs));
+
+		QuickJPA.createEM(args);
 	}
 
 	public static EntityManager createJPAEM(Object[] args) {
