@@ -24,20 +24,16 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.http.HttpProtocol;
-import org.rapidoid.lambda.Callback;
-import org.rapidoid.log.Log;
 import org.rapidoid.pages.Pages;
-import org.rapidoid.plugins.DB;
 import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.util.CustomizableClassLoader;
-import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class AppHandler implements Handler {
+
+	private static final String DISPATCHER = "dispatcher";
 
 	private CustomizableClassLoader classLoader;
 
@@ -51,47 +47,23 @@ public class AppHandler implements Handler {
 
 	@Override
 	public Object handle(final HttpExchange x) throws Exception {
-
-		final AppClasses appCls = Apps.scanAppClasses(x, classLoader);
-
-		Callback<Void> callback = new Callback<Void>() {
-			@Override
-			public void onDone(Void result, Throwable error) {
-				if (error != null) {
-					HttpProtocol.handleError((HttpExchangeImpl) x, error);
-				}
-				x.done();
-			}
-		};
-
-		x.async();
-
-		DB.transaction(new Runnable() {
-			@Override
-			public void run() {
-				Object result;
-
-				try {
-					result = processReq(x, appCls);
-				} catch (Exception e) {
-					Log.error("Exception occured while processing request inside transaction!", UTILS.rootCause(e));
-					throw U.rte(e);
-				}
-
-				try {
-					HttpProtocol.processResponse(x, result);
-				} catch (Exception e) {
-					Log.error("Exception occured while finalizing response inside transaction!", UTILS.rootCause(e));
-					throw U.rte(e);
-				}
-			}
-		}, x.isGetReq(), callback);
-
+		x.setClassLoader(classLoader);
+		Object result = processReq(x);
+		HttpProtocol.processResponse(x, result);
 		return x;
 	}
 
-	private Object processReq(HttpExchange x, AppClasses appCls) {
-		WebPojoDispatcher dispatcher = new WebPojoDispatcher(appCls.services);
+	static Object processReq(HttpExchange x) {
+
+		final AppClasses appCls = Apps.getAppClasses(x, x.getClassLoader());
+
+		WebPojoDispatcher dispatcher = (WebPojoDispatcher) appCls.ctx.get(DISPATCHER);
+
+		if (dispatcher == null) {
+			dispatcher = new WebPojoDispatcher(appCls.services);
+			appCls.ctx.put(DISPATCHER, dispatcher);
+		}
+
 		Object result = Pages.dispatch(x, dispatcher, appCls.pages);
 
 		if (result != null) {

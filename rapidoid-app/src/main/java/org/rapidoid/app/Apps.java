@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.config.Conf;
@@ -126,7 +127,7 @@ public class Apps {
 
 	public static synchronized AppClasses scanAppClasses(HttpExchange x, ClassLoader classLoader) {
 
-		Map<String, Class<?>> services = Cls.classMap(Scan.bySuffix("Service", null, classLoader));
+		Map<String, Class<?>> services = Cls.classMap(Scan.annotated(RESTful.class, classLoader));
 		Map<String, Class<?>> pages = Cls.classMap(Scan.bySuffix("Page", null, classLoader));
 		Map<String, Class<?>> apps = Cls.classMap(Scan.byName("App", null, classLoader));
 		Map<String, Class<?>> screens = Cls.classMap(Scan.bySuffix("Screen", null, classLoader));
@@ -135,6 +136,10 @@ public class Apps {
 
 		AppClasses APP_CLASSES = new AppClasses(appClass, services, pages, screens);
 		return APP_CLASSES;
+	}
+
+	public static synchronized AppClasses getAppClasses(HttpExchange x, ClassLoader classLoader) {
+		return scanAppClasses(x, classLoader); // FIXME cache already scanned
 	}
 
 	@SuppressWarnings("unchecked")
