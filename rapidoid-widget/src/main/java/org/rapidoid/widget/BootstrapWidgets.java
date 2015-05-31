@@ -486,7 +486,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static <T> Var<T> providedVar(String name, T defaultValue) {
-		return session(name, defaultValue);
+		return local(name, defaultValue);
 	}
 
 	public static <T> Var<T> var(String name, T defaultValue) {
