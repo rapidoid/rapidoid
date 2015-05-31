@@ -19,7 +19,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-pojo</artifactId>
+			<artifactId>rapidoid-dispatch</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

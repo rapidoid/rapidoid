@@ -7,9 +7,9 @@
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-pojo</artifactId>
+	<artifactId>rapidoid-dispatch</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid POJO</description>
+	<description>Rapidoid Dispatch</description>
 
 	<dependencies>
 		<dependency>

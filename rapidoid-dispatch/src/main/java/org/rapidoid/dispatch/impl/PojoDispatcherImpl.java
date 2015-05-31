@@ -1,8 +1,8 @@
-package org.rapidoid.pojo.impl;
+package org.rapidoid.dispatch.impl;
 
 /*
  * #%L
- * rapidoid-pojo
+ * rapidoid-dispatch
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -39,11 +39,11 @@ import org.rapidoid.beany.BeanProperties;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.beany.Prop;
+import org.rapidoid.dispatch.PojoDispatchException;
+import org.rapidoid.dispatch.PojoDispatcher;
+import org.rapidoid.dispatch.PojoHandlerNotFoundException;
+import org.rapidoid.dispatch.PojoRequest;
 import org.rapidoid.log.Log;
-import org.rapidoid.pojo.PojoDispatchException;
-import org.rapidoid.pojo.PojoDispatcher;
-import org.rapidoid.pojo.PojoHandlerNotFoundException;
-import org.rapidoid.pojo.PojoRequest;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.TypeKind;

@@ -1,8 +1,8 @@
-package org.rapidoid.pojo.impl;
+package org.rapidoid.dispatch.impl;
 
 /*
  * #%L
- * rapidoid-pojo
+ * rapidoid-dispatch
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -24,7 +24,7 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.pojo.PojoRequest;
+import org.rapidoid.dispatch.PojoRequest;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

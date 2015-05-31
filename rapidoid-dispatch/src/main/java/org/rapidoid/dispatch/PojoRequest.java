@@ -1,8 +1,8 @@
-package org.rapidoid.pojo;
+package org.rapidoid.dispatch;
 
 /*
  * #%L
- * rapidoid-pojo
+ * rapidoid-dispatch
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%

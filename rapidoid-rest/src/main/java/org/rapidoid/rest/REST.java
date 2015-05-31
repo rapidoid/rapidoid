@@ -26,12 +26,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.dispatch.PojoDispatchException;
+import org.rapidoid.dispatch.PojoDispatcher;
+import org.rapidoid.dispatch.PojoHandlerNotFoundException;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.pojo.PojoDispatchException;
-import org.rapidoid.pojo.PojoDispatcher;
-import org.rapidoid.pojo.PojoHandlerNotFoundException;
 import org.rapidoid.util.Scan;
 
 @Authors("Nikolche Mihajlovski")

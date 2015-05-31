@@ -1,11 +1,8 @@
-package org.rapidoid.pojo;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+package org.rapidoid.dispatch.impl;
 
 /*
  * #%L
- * rapidoid-pojo
+ * rapidoid-dispatch
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -23,10 +20,27 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public interface PojoDispatcher {
+import java.lang.reflect.Method;
 
-	Object dispatch(PojoRequest request) throws PojoHandlerNotFoundException, PojoDispatchException;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+@Authors("Nikolche Mihajlovski")
+@Since("3.0.0")
+public class DispatchTarget {
+
+	Class<?> clazz;
+
+	Method method;
+
+	public DispatchTarget(Class<?> clazz, Method method) {
+		this.clazz = clazz;
+		this.method = method;
+	}
+
+	@Override
+	public String toString() {
+		return "DispatchTarget [clazz=" + clazz + ", method=" + method + "]";
+	}
 
 }

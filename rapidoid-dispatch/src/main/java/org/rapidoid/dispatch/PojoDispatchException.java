@@ -1,11 +1,11 @@
-package org.rapidoid.pojo;
+package org.rapidoid.dispatch;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 /*
  * #%L
- * rapidoid-pojo
+ * rapidoid-dispatch
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -26,6 +26,10 @@ import org.rapidoid.annotation.Since;
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class PojoHandlerNotFoundException extends Exception {
+public class PojoDispatchException extends Exception {
+
+	public PojoDispatchException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
 
 }
