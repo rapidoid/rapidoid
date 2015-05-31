@@ -28,9 +28,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.ToString;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.ToString;
 import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.security.annotation.CanManage;
 import org.rapidoid.util.Role;

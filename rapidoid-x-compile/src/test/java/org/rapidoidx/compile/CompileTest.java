@@ -34,8 +34,6 @@ import org.rapidoid.util.Cls;
 import org.rapidoid.util.D;
 import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
-import org.rapidoidx.compile.Compilation;
-import org.rapidoidx.compile.Compile;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")

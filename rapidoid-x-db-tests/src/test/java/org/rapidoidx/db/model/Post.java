@@ -2,9 +2,9 @@ package org.rapidoidx.db.model;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.DbRef;
 import org.rapidoidx.db.DbSet;
+import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.XEntity;
 
 /*

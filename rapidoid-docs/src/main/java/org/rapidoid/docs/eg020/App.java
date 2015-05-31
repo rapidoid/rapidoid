@@ -1,7 +1,9 @@
 package org.rapidoid.docs.eg020;
 
-import static org.rapidoid.html.HTML.*;
-import static org.rapidoid.widget.BootstrapWidgets.*;
+import static org.rapidoid.html.HTML.div;
+import static org.rapidoid.html.HTML.h4;
+import static org.rapidoid.widget.BootstrapWidgets.cmd;
+import static org.rapidoid.widget.BootstrapWidgets.row;
 
 import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Apps;

@@ -24,7 +24,6 @@ package org.rapidoidx.compile;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.test.TestCommons;
-import org.rapidoidx.compile.Parse;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")

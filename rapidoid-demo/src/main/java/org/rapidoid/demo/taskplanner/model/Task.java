@@ -10,11 +10,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.ToString;
 import org.rapidoid.annotation.Optional;
 import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.ToString;
 import org.rapidoid.extra.domain.LowHigh3;
 import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.security.annotation.CanChange;
