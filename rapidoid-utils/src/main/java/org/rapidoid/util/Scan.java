@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
@@ -41,6 +42,8 @@ import org.rapidoid.log.Log;
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class Scan {
+
+	private static final Map<Tuple, List<Class<?>>> CLASSES_CACHE = U.map();
 
 	private Scan() {}
 
@@ -81,73 +84,27 @@ public class Scan {
 
 	public static List<Class<?>> classes(String packageName, String nameRegex, Predicate<Class<?>> filter,
 			Class<? extends Annotation> annotated, ClassLoader classLoader) {
-
-		Pattern regex = nameRegex != null ? Pattern.compile(nameRegex) : null;
-
-		Classes ctxClasses = AppCtx.classes();
-		if (ctxClasses != null) {
-			return filterClasses(ctxClasses, packageName, regex, filter, annotated);
-		}
-
-		ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
-
-		String pkgName = U.or(packageName, "");
-		Enumeration<URL> urls = resources(pkgName);
-
-		while (urls.hasMoreElements()) {
-			URL url = urls.nextElement();
-			File file = new File(url.getFile());
-
-			String path = file.getAbsolutePath();
-
-			String pkgPath = pkgName.replace('.', File.separatorChar);
-			String rootPath = pkgPath.isEmpty() ? path : path.replace(File.separatorChar + pkgPath, "");
-
-			File root = new File(rootPath);
-			U.must(root.exists());
-			U.must(root.isDirectory());
-
-			getClasses(classes, root, file, regex, filter, annotated, classLoader);
-		}
-
-		return classes;
-	}
-
-	private static List<Class<?>> filterClasses(Classes classes, String packageName, Pattern regex,
-			Predicate<Class<?>> filter, Class<? extends Annotation> annotated) {
-
-		List<Class<?>> matching = U.list();
-
-		for (Entry<String, Class<?>> e : classes.entrySet()) {
-			Class<?> cls = e.getValue();
-			String pkg = cls.getPackage() != null ? cls.getPackage().getName() : "";
-
-			if (packageName == null || pkg.startsWith(packageName + ".") || pkg.equals(packageName)) {
-				if (classMatches(cls, filter, annotated, regex)) {
-					matching.add(cls);
-				}
-			}
-		}
-
-		return matching;
+		return scanClasses(packageName, nameRegex, filter, annotated, classLoader);
 	}
 
 	public static List<Class<?>> annotated(Class<? extends Annotation> annotated) {
-		return classes(null, null, null, annotated, null);
+		return scanClasses(null, null, null, annotated, null);
+	}
+
+	public static List<Class<?>> annotated(Class<? extends Annotation> annotated, ClassLoader classLoader) {
+		return scanClasses(null, null, null, annotated, classLoader);
 	}
 
 	public static List<Class<?>> pkg(String packageName) {
-		return classes(packageName, null, null, null, null);
+		return scanClasses(packageName, null, null, null, null);
 	}
 
 	public static List<Class<?>> byName(String simpleName, Predicate<Class<?>> filter, ClassLoader classLoader) {
-		List<Class<?>> classes = classes(null, "(.*\\.|^)" + simpleName, filter, null, classLoader);
-		return classes;
+		return scanClasses(null, "(.*\\.|^)" + simpleName, filter, null, classLoader);
 	}
 
 	public static List<Class<?>> bySuffix(String nameSuffix, Predicate<Class<?>> filter, ClassLoader classLoader) {
-		List<Class<?>> classes = classes(null, ".*\\w" + nameSuffix, filter, null, classLoader);
-		return classes;
+		return scanClasses(null, ".*\\w" + nameSuffix, filter, null, classLoader);
 	}
 
 	public static List<File> files(String packageName, Predicate<File> filter) {
@@ -195,6 +152,83 @@ public class Scan {
 				}
 			}
 		}
+	}
+
+	private static List<Class<?>> scanClasses(String packageName, String nameRegex, Predicate<Class<?>> filter,
+			Class<? extends Annotation> annotated, ClassLoader classLoader) {
+
+		boolean caching = classLoader == null;
+		Tuple cacheKey = null;
+
+		if (caching) {
+			cacheKey = new Tuple(packageName, nameRegex, filter, annotated, classLoader);
+			List<Class<?>> classes = CLASSES_CACHE.get(cacheKey);
+			if (classes != null) {
+				return classes;
+			}
+		}
+
+		List<Class<?>> classes;
+		Classes ctxClasses = AppCtx.classes();
+		Pattern regex = nameRegex != null ? Pattern.compile(nameRegex) : null;
+
+		if (ctxClasses != null) {
+			classes = filterClasses(ctxClasses, packageName, regex, filter, annotated);
+		} else {
+			classes = retrieveClasses(packageName, filter, annotated, regex, classLoader);
+		}
+
+		if (caching) {
+			CLASSES_CACHE.put(cacheKey, classes);
+		}
+
+		return classes;
+	}
+
+	private static List<Class<?>> retrieveClasses(String packageName, Predicate<Class<?>> filter,
+			Class<? extends Annotation> annotated, Pattern regex, ClassLoader classLoader) {
+
+		List<Class<?>> classes = new ArrayList<Class<?>>();
+
+		String pkgName = U.or(packageName, "");
+		Enumeration<URL> urls = resources(pkgName);
+
+		while (urls.hasMoreElements()) {
+			URL url = urls.nextElement();
+			File file = new File(url.getFile());
+
+			String path = file.getAbsolutePath();
+
+			String pkgPath = pkgName.replace('.', File.separatorChar);
+			String rootPath = pkgPath.isEmpty() ? path : path.replace(File.separatorChar + pkgPath, "");
+
+			File root = new File(rootPath);
+			U.must(root.exists());
+			U.must(root.isDirectory());
+
+			getClasses(classes, root, file, regex, filter, annotated, classLoader);
+		}
+
+		return classes;
+	}
+
+	private static List<Class<?>> filterClasses(Classes classes, String packageName, Pattern regex,
+			Predicate<Class<?>> filter, Class<? extends Annotation> annotated) {
+
+		List<Class<?>> matching = U.list();
+
+		for (Entry<String, Class<?>> e : classes.entrySet()) {
+			Class<?> cls = e.getValue();
+			String pkg = cls.getPackage() != null ? cls.getPackage().getName() : "";
+
+			if (packageName == null || pkg.startsWith(packageName + ".") || pkg.equals(packageName)) {
+				if (classMatches(cls, filter, annotated, regex)) {
+					matching.add(cls);
+				}
+			}
+		}
+
+		return matching;
 	}
 
 	private static void getClasses(Collection<Class<?>> classes, File root, File parent, Pattern regex,
