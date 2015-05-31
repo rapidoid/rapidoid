@@ -32,23 +32,8 @@ import org.rapidoid.util.UTILS;
 
 public class TxHelper {
 
-	static void runInTx(final HttpExchange x) {
-
-		TransactionMode txMode = x.getTransactionMode();
-
-		Callback<Void> callback = new Callback<Void>() {
-			@Override
-			public void onDone(Void result, Throwable error) {
-				if (error != null) {
-					HttpProtocol.handleError((HttpExchangeImpl) x, error);
-				}
-				x.done();
-			}
-		};
-
-		x.async();
-
-		DB.transaction(new Runnable() {
+	public static void runInTx(final HttpExchange x) {
+		runInTx(x, new Runnable() {
 			@Override
 			public void run() {
 				Object result;
@@ -67,6 +52,26 @@ public class TxHelper {
 					throw U.rte(e);
 				}
 			}
-		}, txMode == TransactionMode.READ_ONLY, callback);
+		});
 	}
+
+	public static void runInTx(final HttpExchange x, Runnable runnable) {
+
+		TransactionMode txMode = x.getTransactionMode();
+
+		Callback<Void> callback = new Callback<Void>() {
+			@Override
+			public void onDone(Void result, Throwable error) {
+				if (error != null) {
+					HttpProtocol.handleError((HttpExchangeImpl) x, error);
+				}
+				x.done();
+			}
+		};
+
+		x.async();
+
+		DB.transaction(runnable, txMode == TransactionMode.READ_ONLY, callback);
+	}
+
 }
