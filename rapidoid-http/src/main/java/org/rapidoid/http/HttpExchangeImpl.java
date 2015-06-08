@@ -132,6 +132,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	private ClassLoader classLoader;
 
+	private final Map<String, Object> locals = U.synchronizedMap();
+
 	public HttpExchangeImpl() {
 		reset();
 
@@ -183,6 +185,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 		session = null;
 		router = null;
+
+		locals.clear();
 
 		resetResponse();
 	}
@@ -760,6 +764,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
+	public synchronized Map<String, Object> locals() {
+		return locals;
+	}
+
+	@Override
 	public Map<String, Object> getSessionById(String sessionId) {
 		return session.getSession(sessionId);
 	}
@@ -857,6 +866,17 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	public synchronized void sessionDeserialize(byte[] bytes) {
 		// create a session if doesn't exist
 		session.deserialize(sessionId(), bytes);
+	}
+
+	@Override
+	public synchronized byte[] serializeLocals() {
+		return UTILS.serialize(locals);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public synchronized void deserializeLocals(byte[] bytes) {
+		locals.putAll((Map<String, Object>) UTILS.deserialize(bytes));
 	}
 
 	@Override

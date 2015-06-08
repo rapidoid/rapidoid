@@ -220,13 +220,14 @@ public class Pages {
 
 	public static void load(HttpExchange x, Object target) {
 		Mapper<String, Object> sessionMapper = Lambdas.mapper(x.session());
+		Mapper<String, Object> pageMapper = Lambdas.mapper(x.locals());
 
-		IoC.autowire(target, sessionMapper);
+		IoC.autowire(target, sessionMapper, pageMapper);
 
 		if (target instanceof ComplexView) {
 			ComplexView complex = (ComplexView) target;
 			for (Object subview : complex.getSubViews()) {
-				IoC.autowire(subview, sessionMapper);
+				IoC.autowire(subview, sessionMapper, pageMapper);
 			}
 		}
 	}
@@ -345,7 +346,7 @@ public class Pages {
 	}
 
 	public static byte[] stateOf(HttpExchange x) {
-		return x.hasSession() ? x.sessionSerialize() : null;
+		return x.hasSession() ? x.serializeLocals() : null;
 	}
 
 	public static void callCmdHandler(HttpExchange x, Object target, Cmd cmd) {

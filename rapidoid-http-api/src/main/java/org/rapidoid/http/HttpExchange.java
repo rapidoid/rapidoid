@@ -96,6 +96,8 @@ public interface HttpExchange extends HttpExchangeHeaders {
 
 	Map<String, Object> session();
 
+	Map<String, Object> locals();
+
 	Map<String, Object> getSessionById(String sessionId);
 
 	<T> T session(String name);
@@ -137,6 +139,10 @@ public interface HttpExchange extends HttpExchangeHeaders {
 	byte[] sessionSerialize();
 
 	void sessionDeserialize(byte[] bytes);
+
+	byte[] serializeLocals();
+
+	void deserializeLocals(byte[] bytes);
 
 	<T> T extra(Object key);
 

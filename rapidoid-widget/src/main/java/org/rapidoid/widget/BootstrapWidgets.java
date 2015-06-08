@@ -41,6 +41,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
+import org.rapidoid.widget.impl.LocalVar;
 import org.rapidoid.widget.impl.SessionVar;
 
 /*
@@ -487,7 +488,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static <T extends Serializable> Var<T> providedVar(String name, T defaultValue) {
-		return session(name, defaultValue);
+		return local(name, defaultValue);
 	}
 
 	public static <T extends Serializable> Var<T> var(String name, T defaultValue) {
@@ -511,11 +512,11 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static <T extends Serializable> Var<T> local(String name, T defaultValue) {
-		return session(name + ":" + viewId(httpExchange()), defaultValue);
+		return new LocalVar<T>(name, defaultValue);
 	}
 
 	public static Var<Integer> local(String name, int defaultValue, int min, int max) {
-		Var<Integer> var = session(name + ":" + viewId(httpExchange()), defaultValue);
+		Var<Integer> var = local(name, defaultValue);
 
 		// TODO put the constraints into the variable implementation
 		Integer pageN = U.limited(min, var.get(), max);

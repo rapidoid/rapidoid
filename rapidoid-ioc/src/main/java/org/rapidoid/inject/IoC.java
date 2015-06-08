@@ -33,6 +33,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Autocreate;
 import org.rapidoid.annotation.Init;
 import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.Local;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
@@ -54,24 +55,37 @@ public class IoC {
 	private static final Set<Class<?>> MANAGED_CLASSES = U.set();
 	private static final Set<Object> MANAGED_INSTANCES = U.set();
 	private static final Map<Object, Object> IOC_INSTANCES = U.map();
+
 	private static final Map<Class<?>, List<Field>> INJECTABLE_FIELDS = UTILS
 			.autoExpandingMap(new Mapper<Class<?>, List<Field>>() {
 				@Override
 				public List<Field> map(Class<?> clazz) throws Exception {
 					List<Field> fields = Cls.getFieldsAnnotated(clazz, Inject.class);
-					Log.debug("Retrieved injectable fields", "class", clazz, "fields", fields);
+					Log.debug("Retrieved @Inject fields", "class", clazz, "fields", fields);
 					return fields;
 				}
 			});
+
 	private static final Map<Class<?>, List<Field>> SESSION_FIELDS = UTILS
 			.autoExpandingMap(new Mapper<Class<?>, List<Field>>() {
 				@Override
 				public List<Field> map(Class<?> clazz) throws Exception {
 					List<Field> fields = Cls.getFieldsAnnotated(clazz, Session.class);
-					Log.debug("Retrieved session fields", "class", clazz, "fields", fields);
+					Log.debug("Retrieved @Session fields", "class", clazz, "fields", fields);
 					return fields;
 				}
 			});
+
+	private static final Map<Class<?>, List<Field>> LOCAL_FIELDS = UTILS
+			.autoExpandingMap(new Mapper<Class<?>, List<Field>>() {
+				@Override
+				public List<Field> map(Class<?> clazz) throws Exception {
+					List<Field> fields = Cls.getFieldsAnnotated(clazz, Local.class);
+					Log.debug("Retrieved @Local fields", "class", clazz, "fields", fields);
+					return fields;
+				}
+			});
+
 	private static final Map<Class<?>, Set<Object>> INJECTION_PROVIDERS = U.map();
 	private static final Map<Class<?>, List<F3<Object, Object, Method, Object[]>>> INTERCEPTORS = U.map();
 
@@ -89,6 +103,7 @@ public class IoC {
 		IOC_INSTANCES.clear();
 		INJECTABLE_FIELDS.clear();
 		SESSION_FIELDS.clear();
+		LOCAL_FIELDS.clear();
 		INJECTION_PROVIDERS.clear();
 		INTERCEPTORS.clear();
 	}
@@ -154,13 +169,13 @@ public class IoC {
 
 	public static synchronized <T> T autowire(T target) {
 		Log.debug("Autowire", "target", target);
-		autowire(target, null, null);
+		autowire(target, null, null, null);
 		return target;
 	}
 
-	public static synchronized <T> T autowire(T target, Mapper<String, Object> session) {
+	public static synchronized <T> T autowire(T target, Mapper<String, Object> session, Mapper<String, Object> bindings) {
 		Log.debug("Autowire", "target", target);
-		autowire(target, null, session);
+		autowire(target, null, session, bindings);
 		return target;
 	}
 
@@ -177,6 +192,12 @@ public class IoC {
 	private static <T> T provideSessionValue(Object target, Class<T> type, String name, Mapper<String, Object> session) {
 		U.notNull(session, "session");
 		Object value = Lambdas.eval(session, name);
+		return value != null ? Cls.convert(value, type) : null;
+	}
+
+	private static <T> T provideBindValue(Object target, Class<T> type, String name, Mapper<String, Object> bindings) {
+		U.notNull(bindings, "bindings");
+		Object value = Lambdas.eval(bindings, name);
 		return value != null ? Cls.convert(value, type) : null;
 	}
 
@@ -306,8 +327,10 @@ public class IoC {
 		return (T) instance;
 	}
 
-	private static void autowire(Object target, Map<String, Object> properties, Mapper<String, Object> session) {
-		Log.debug("Autowiring", "target", target);
+	private static void autowire(Object target, Map<String, Object> properties, Mapper<String, Object> session,
+			Mapper<String, Object> locals) {
+
+		Log.debug("Autowiring", "target", target, "session", session, "bindings", locals);
 
 		for (Field field : INJECTABLE_FIELDS.get(target.getClass())) {
 
@@ -327,6 +350,16 @@ public class IoC {
 
 			if (value != null) {
 				Log.debug("Injecting session field value", "target", target, "field", field.getName(), "value", value);
+				Cls.setFieldValue(target, field.getName(), value);
+			}
+		}
+
+		for (Field field : LOCAL_FIELDS.get(target.getClass())) {
+
+			Object value = provideBindValue(target, field.getType(), field.getName(), locals);
+
+			if (value != null) {
+				Log.debug("Injecting bind field value", "target", target, "field", field.getName(), "value", value);
 				Cls.setFieldValue(target, field.getName(), value);
 			}
 		}
@@ -351,7 +384,7 @@ public class IoC {
 
 			manage(target);
 
-			autowire(target, properties, null);
+			autowire(target, properties, null, null);
 
 			invokePostConstruct(target);
 
@@ -432,6 +465,10 @@ public class IoC {
 
 	public static synchronized List<Field> getSessionFields(Object target) {
 		return SESSION_FIELDS.get(target.getClass());
+	}
+
+	public static synchronized List<Field> getLocalFields(Object target) {
+		return LOCAL_FIELDS.get(target.getClass());
 	}
 
 }

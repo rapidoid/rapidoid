@@ -563,4 +563,22 @@ public class MockHttpExchange implements HttpExchange {
 		return null;
 	}
 
+	@Override
+	public Map<String, Object> locals() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public byte[] serializeLocals() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deserializeLocals(byte[] bytes) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

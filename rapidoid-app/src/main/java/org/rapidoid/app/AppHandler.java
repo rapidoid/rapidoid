@@ -56,49 +56,35 @@ public class AppHandler implements Handler {
 	}
 
 	static Object processReq(HttpExchange x) {
-		if (!x.hasSession()) {
-			// create a session
-			U.must(x.sessionId() != null);
-			U.must(x.hasSession());
+		if (x.isPostReq()) {
+			String state = x.data("__state", null);
+			if (!U.isEmpty(state) && !state.equals("null")) {
+				byte[] bytes = JSON.parseBytes('"' + state + '"');
+				x.deserializeLocals(bytes);
+			}
 		}
 
-		try {
+		final AppClasses appCls = Apps.getAppClasses(x, x.getClassLoader());
 
-			if (x.isPostReq()) {
-				String state = x.data("__state", null);
-				if (!U.isEmpty(state) && !state.equals("null")) {
-					byte[] bytes = JSON.parseBytes('"' + state + '"');
-					x.sessionDeserialize(bytes);
-				}
-			}
+		WebPojoDispatcher dispatcher = (WebPojoDispatcher) appCls.ctx.get(DISPATCHER);
 
-			final AppClasses appCls = Apps.getAppClasses(x, x.getClassLoader());
+		if (dispatcher == null) {
+			dispatcher = new WebPojoDispatcher(appCls.services);
+			appCls.ctx.put(DISPATCHER, dispatcher);
+		}
 
-			WebPojoDispatcher dispatcher = (WebPojoDispatcher) appCls.ctx.get(DISPATCHER);
+		Object result = Pages.dispatch(x, dispatcher, appCls.pages);
 
-			if (dispatcher == null) {
-				dispatcher = new WebPojoDispatcher(appCls.services);
-				appCls.ctx.put(DISPATCHER, dispatcher);
-			}
+		if (result != null) {
+			return result;
+		}
 
-			Object result = Pages.dispatch(x, dispatcher, appCls.pages);
+		Object view = new AppPageGeneric(x, appCls);
 
-			if (result != null) {
-				return result;
-			}
-
-			Object view = new AppPageGeneric(x, appCls);
-
-			if (Pages.isEmiting(x)) {
-				return Pages.emit(x, view);
-			} else {
-				return Pages.serve(x, view);
-			}
-
-		} finally {
-			if (x.hasSession()) {
-				x.closeSession();
-			}
+		if (Pages.isEmiting(x)) {
+			return Pages.emit(x, view);
+		} else {
+			return Pages.serve(x, view);
 		}
 	}
 }
