@@ -20,45 +20,46 @@ package org.rapidoid.widget.impl;
  * #L%
  */
 
+import java.io.Serializable;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.ImportExport;
 import org.rapidoid.var.impl.AbstractVar;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class SessionVar<T> extends AbstractVar<T> {
+public class SessionVar<T extends Serializable> extends AbstractVar<T> {
 
 	private static final long serialVersionUID = 2761159925375675659L;
-
-	private final HttpExchange ctx;
 
 	private final String name;
 
 	private final T defaultValue;
 
-	public SessionVar(HttpExchange ctx, ImportExport props) {
-		this.ctx = ctx;
+	public SessionVar(ImportExport props) {
 		name = props.get(A);
 		defaultValue = props.get(B);
 	}
 
-	public SessionVar(HttpExchange ctx, String name, T defaultValue) {
-		this.ctx = ctx;
+	public SessionVar(String name, T defaultValue) {
 		this.name = name;
 		this.defaultValue = defaultValue;
 	}
 
 	@Override
 	public T get() {
-		T val = ctx.session(name, defaultValue);
+		HttpExchange x = AppCtx.exchange();
+		T val = x.session(name, defaultValue);
 		return val;
 	}
 
 	@Override
 	public void set(T value) {
-		ctx.sessionSet(name, value);
+		HttpExchange x = AppCtx.exchange();
+		x.sessionSet(name, value);
 	}
 
 	@Override

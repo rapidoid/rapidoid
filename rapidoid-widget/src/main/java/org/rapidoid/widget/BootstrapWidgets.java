@@ -1,5 +1,6 @@
 package org.rapidoid.widget;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -485,15 +486,15 @@ public abstract class BootstrapWidgets extends HTML {
 		return items;
 	}
 
-	public static <T> Var<T> providedVar(String name, T defaultValue) {
-		return local(name, defaultValue);
+	public static <T extends Serializable> Var<T> providedVar(String name, T defaultValue) {
+		return session(name, defaultValue);
 	}
 
-	public static <T> Var<T> var(String name, T defaultValue) {
+	public static <T extends Serializable> Var<T> var(String name, T defaultValue) {
 		return providedVar(name, defaultValue);
 	}
 
-	public static <T> Var<T> var(String name) {
+	public static <T extends Serializable> Var<T> var(String name) {
 		return var(name, null);
 	}
 
@@ -501,15 +502,15 @@ public abstract class BootstrapWidgets extends HTML {
 		return AppCtx.exchange();
 	}
 
-	public static <T> Var<T> session(String name, T defaultValue) {
-		return new SessionVar<T>(httpExchange(), name, defaultValue);
+	public static <T extends Serializable> Var<T> session(String name, T defaultValue) {
+		return new SessionVar<T>(name, defaultValue);
 	}
 
-	public static <T> Var<T> session(String name) {
+	public static <T extends Serializable> Var<T> session(String name) {
 		return session(name, null);
 	}
 
-	public static <T> Var<T> local(String name, T defaultValue) {
+	public static <T extends Serializable> Var<T> local(String name, T defaultValue) {
 		return session(name + ":" + viewId(httpExchange()), defaultValue);
 	}
 
@@ -629,7 +630,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static SelectTag dropdown(Collection<?> options, String var, Object defaultValue) {
-		return dropdown(options, providedVar(var, defaultValue));
+		return dropdown(options, providedVar(var, UTILS.serializable(defaultValue)));
 	}
 
 	public static SelectTag multiSelect(Collection<?> options, Var<?> var) {
@@ -650,7 +651,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static SelectTag multiSelect(Collection<?> options, String var, Collection<?> defaultValue) {
-		return multiSelect(options, providedVar(var, defaultValue));
+		return multiSelect(options, providedVar(var, UTILS.serializable(defaultValue)));
 	}
 
 	public static Tag[] radios(String name, Collection<?> options, Var<?> var) {
@@ -676,7 +677,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Tag[] radios(Collection<?> options, String var, Object defaultValue) {
-		return radios(options, providedVar(var, defaultValue));
+		return radios(options, providedVar(var, UTILS.serializable(defaultValue)));
 	}
 
 	public static Tag[] checkboxes(String name, Collection<?> options, Var<?> var) {
@@ -701,7 +702,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Tag[] checkboxes(Collection<?> options, String var, Collection<?> defaultValue) {
-		return checkboxes(options, providedVar(var, defaultValue));
+		return checkboxes(options, providedVar(var, UTILS.serializable(defaultValue)));
 	}
 
 	@SuppressWarnings("unchecked")

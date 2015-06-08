@@ -24,9 +24,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.json.JSON;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.util.CustomizableClassLoader;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -54,29 +56,49 @@ public class AppHandler implements Handler {
 	}
 
 	static Object processReq(HttpExchange x) {
-
-		final AppClasses appCls = Apps.getAppClasses(x, x.getClassLoader());
-
-		WebPojoDispatcher dispatcher = (WebPojoDispatcher) appCls.ctx.get(DISPATCHER);
-
-		if (dispatcher == null) {
-			dispatcher = new WebPojoDispatcher(appCls.services);
-			appCls.ctx.put(DISPATCHER, dispatcher);
+		if (!x.hasSession()) {
+			// create a session
+			U.must(x.sessionId() != null);
+			U.must(x.hasSession());
 		}
 
-		Object result = Pages.dispatch(x, dispatcher, appCls.pages);
+		try {
 
-		if (result != null) {
-			return result;
-		}
+			if (x.isPostReq()) {
+				String state = x.data("__state", null);
+				if (!U.isEmpty(state) && !state.equals("null")) {
+					byte[] bytes = JSON.parseBytes('"' + state + '"');
+					x.sessionDeserialize(bytes);
+				}
+			}
 
-		Object view = new AppPageGeneric(x, appCls);
+			final AppClasses appCls = Apps.getAppClasses(x, x.getClassLoader());
 
-		if (Pages.isEmiting(x)) {
-			return Pages.emit(x, view);
-		} else {
-			return Pages.serve(x, view);
+			WebPojoDispatcher dispatcher = (WebPojoDispatcher) appCls.ctx.get(DISPATCHER);
+
+			if (dispatcher == null) {
+				dispatcher = new WebPojoDispatcher(appCls.services);
+				appCls.ctx.put(DISPATCHER, dispatcher);
+			}
+
+			Object result = Pages.dispatch(x, dispatcher, appCls.pages);
+
+			if (result != null) {
+				return result;
+			}
+
+			Object view = new AppPageGeneric(x, appCls);
+
+			if (Pages.isEmiting(x)) {
+				return Pages.emit(x, view);
+			} else {
+				return Pages.serve(x, view);
+			}
+
+		} finally {
+			if (x.hasSession()) {
+				x.closeSession();
+			}
 		}
 	}
-
 }

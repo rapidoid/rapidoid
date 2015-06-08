@@ -29,6 +29,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -844,6 +845,15 @@ public class UTILS implements Constants {
 			sb.append(separator);
 		}
 		sb.append(value);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T extends Serializable> T serializable(Object value) {
+		if (value == null || value instanceof Serializable) {
+			return (T) value;
+		} else {
+			throw U.rte("Not serializable: " + value);
+		}
 	}
 
 }

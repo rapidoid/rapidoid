@@ -10,6 +10,7 @@ if (theme && theme != 'default') {
 function goAt(url) {
     window.location.href = url;
 }
+
 function _appendScript(url) {
     var script = document.createElement('script');
     script.type = 'text/javascript';
@@ -147,16 +148,22 @@ rapidoidApp.controller('Main', [ '$scope', '$http', '$window', function($scope, 
 
         $.post(window.location.href, {
             event : eventId,
-            inputs : JSON.stringify(inputs)
+            inputs : JSON.stringify(inputs),
+            __state : window.__state
         }).done(function(data) {
             if (data._redirect_) {
                 goAt(data._redirect_);
                 return;
             }
-            for ( var sel in data) {
+
+            if (data._state_) {
+                window.__state = data._state_;
+            }
+
+            for ( var sel in data._sel_) {
                 if (sel == "!errors") {
                     $('.field-error').html('');
-                    errors = data[sel];
+                    errors = data._sel_[sel];
                     for ( var h in errors) {
                         var err = errors[h];
 
@@ -171,7 +178,7 @@ rapidoidApp.controller('Main', [ '$scope', '$http', '$window', function($scope, 
                     }
                 } else {
                     if (sel == 'body') {
-                        $scope.bodyContent = data[sel];
+                        $scope.bodyContent = data._sel_[sel];
                         $scope.$apply();
                     } else {
                         alert('Selector not supported: ' + sel);

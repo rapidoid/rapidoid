@@ -245,7 +245,7 @@ public class Pages {
 	private static void storeFrom(HttpExchange x, Object target) {
 		for (Field field : IoC.getSessionFields(target)) {
 			Object value = Cls.getFieldValue(field, target);
-			x.sessionSet(field.getName(), value);
+			x.sessionSet(field.getName(), UTILS.serializable(value));
 		}
 	}
 
@@ -340,7 +340,12 @@ public class Pages {
 
 	private static Object changes(HttpExchange x, String html) {
 		x.json();
-		return U.map("body", html);
+		Map<String, String> sel = U.map("body", html);
+		return U.map("_sel_", sel, "_state_", stateOf(x));
+	}
+
+	public static byte[] stateOf(HttpExchange x) {
+		return x.hasSession() ? x.sessionSerialize() : null;
 	}
 
 	public static void callCmdHandler(HttpExchange x, Object target, Cmd cmd) {

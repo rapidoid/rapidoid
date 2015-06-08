@@ -23,8 +23,11 @@ package org.rapidoid.pages;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.impl.FileTemplateTag;
 import org.rapidoid.pages.impl.MultiLanguageText;
+import org.rapidoid.pages.impl.StateTag;
+import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.IO;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.ButtonWidget;
@@ -54,10 +57,15 @@ public class PageGUI extends BootstrapWidgets {
 
 	public static Tag page(boolean devMode, String pageTitle, Object head, Object body) {
 		String devOrProd = devMode ? "dev" : "prod";
+
 		Tag assets = hardcoded(IO.loadResourceAsString("page-assets-" + devOrProd + ".html", true));
 		Tag meta = hardcoded(IO.loadResourceAsString("page-meta-" + devOrProd + ".html", true));
+
+		HttpExchange x = AppCtx.exchange();
+		Object state = new StateTag(x);
+
 		return render("page-" + devOrProd + ".html", "title", pageTitle, "head", head, "body", body, "assets", assets,
-				"meta", meta);
+				"meta", meta, "state", state);
 	}
 
 	public static Tag page(boolean devMode, String pageTitle, Object body) {
