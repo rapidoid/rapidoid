@@ -22,6 +22,7 @@ package org.rapidoid.http;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -764,7 +765,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized void sessionSet(String name, Object value) {
+	public synchronized void sessionSet(String name, Serializable value) {
 		if (value != null) {
 			session.setAttribute(sessionId(), name, value);
 		} else {
@@ -788,7 +789,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized <T> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs) {
+	public synchronized <T extends Serializable> T sessionGetOrCreate(String name, Class<T> valueClass,
+			Object... constructorArgs) {
 		T value = (T) session.getAttribute(sessionId(), name);
 
 		if (value == null) {
@@ -842,12 +844,17 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized byte[] sessionSerialize() {
-		return UTILS.serialize(session);
+		if (sessionId != null) {
+			return session.serialize(sessionId);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public synchronized void sessionDeserialize(byte[] bytes) {
-		session = (HttpSession) UTILS.deserialize(bytes);
+		// create a session if doesn't exist
+		session.deserialize(sessionId(), bytes);
 	}
 
 	@Override

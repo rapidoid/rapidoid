@@ -20,6 +20,7 @@ package org.rapidoid.http;
  * #L%
  */
 
+import java.io.Serializable;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
@@ -101,9 +102,9 @@ public interface HttpExchange extends HttpExchangeHeaders {
 
 	<T> T session(String name, T defaultValue);
 
-	void sessionSet(String name, Object value);
+	void sessionSet(String name, Serializable value);
 
-	<T> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+	<T extends Serializable> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
 
 	String sessionId();
 

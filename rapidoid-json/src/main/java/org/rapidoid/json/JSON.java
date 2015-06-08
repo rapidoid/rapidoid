@@ -120,4 +120,8 @@ public class JSON {
 		return ser;
 	}
 
+	public static byte[] parseBytes(String json) {
+		return parse(json, byte[].class);
+	}
+
 }

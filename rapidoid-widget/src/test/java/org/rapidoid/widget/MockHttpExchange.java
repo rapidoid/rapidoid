@@ -22,6 +22,7 @@ package org.rapidoid.widget;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Map;
 
@@ -432,17 +433,6 @@ public class MockHttpExchange implements HttpExchange {
 	}
 
 	@Override
-	public void sessionSet(String name, Object value) {
-		session.setAttribute(SESSION_ID, name, value);
-	}
-
-	@Override
-	public <T> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String sessionId() {
 		return SESSION_ID;
 	}
@@ -558,6 +548,17 @@ public class MockHttpExchange implements HttpExchange {
 
 	@Override
 	public ClassLoader getClassLoader() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void sessionSet(String name, Serializable value) {
+		session.setAttribute(SESSION_ID, name, value);
+	}
+
+	@Override
+	public <T extends Serializable> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs) {
 		// TODO Auto-generated method stub
 		return null;
 	}

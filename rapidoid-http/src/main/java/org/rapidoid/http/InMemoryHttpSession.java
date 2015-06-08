@@ -1,5 +1,6 @@
 package org.rapidoid.http;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
@@ -7,6 +8,7 @@ import java.util.concurrent.ConcurrentMap;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 /*
  * #%L
@@ -34,11 +36,11 @@ public class InMemoryHttpSession implements HttpSession {
 
 	private static final long serialVersionUID = -3390334080583841460L;
 
-	private final ConcurrentMap<String, ConcurrentMap<String, Object>> sessions = U.concurrentMap();
+	private final ConcurrentMap<String, Map<String, Object>> sessions = U.concurrentMap();
 
 	@Override
 	public void openSession(String sessionId) {
-		Object prev = sessions.putIfAbsent(sessionId, U.<String, Object> concurrentMap());
+		Object prev = sessions.putIfAbsent(sessionId, U.<String, Object> map());
 		U.must(prev == null, "There is already an existing session with ID=%s", sessionId);
 	}
 
@@ -48,7 +50,7 @@ public class InMemoryHttpSession implements HttpSession {
 	}
 
 	@Override
-	public void setAttribute(String sessionId, String attribute, Object value) {
+	public void setAttribute(String sessionId, String attribute, Serializable value) {
 		session(sessionId).put(attribute, value);
 	}
 
@@ -72,8 +74,8 @@ public class InMemoryHttpSession implements HttpSession {
 		return sessions.containsKey(sessionId);
 	}
 
-	private ConcurrentMap<String, Object> session(String sessionId) {
-		ConcurrentMap<String, Object> session = sessions.get(sessionId);
+	private Map<String, Object> session(String sessionId) {
+		Map<String, Object> session = sessions.get(sessionId);
 		U.must(session != null, "Cannot find session with ID=%s", sessionId);
 		return session;
 	}
@@ -86,8 +88,24 @@ public class InMemoryHttpSession implements HttpSession {
 
 	@Override
 	public void clearSession(String sessionId) {
-		ConcurrentMap<String, Object> session = session(sessionId);
+		Map<String, Object> session = session(sessionId);
 		session.clear();
+	}
+
+	@Override
+	public byte[] serialize(String sessionId) {
+		return sessionId != null ? UTILS.serialize(session(sessionId)) : null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void deserialize(String sessionId, byte[] data) {
+		U.notNull(sessionId, "session ID");
+
+		if (data != null) {
+			Map<String, Object> session = (Map<String, Object>) UTILS.deserialize(data);
+			sessions.put(sessionId, session);
+		}
 	}
 
 }

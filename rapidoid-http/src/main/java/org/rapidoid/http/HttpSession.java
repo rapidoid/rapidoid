@@ -34,7 +34,7 @@ public interface HttpSession extends Serializable {
 
 	Map<String, Object> getSession(String sessionId);
 
-	void setAttribute(String sessionId, String attribute, Object value);
+	void setAttribute(String sessionId, String attribute, Serializable value);
 
 	Object getAttribute(String sessionId, String attribute);
 
@@ -49,5 +49,9 @@ public interface HttpSession extends Serializable {
 	void loadSession(String sessionId);
 
 	void clearSession(String sessionId);
+
+	byte[] serialize(String sessionId);
+
+	void deserialize(String sessionId, byte[] data);
 
 }
