@@ -803,7 +803,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized void closeSession() {
-		session.closeSession(sessionId());
+		if (hasSession()) {
+			session.closeSession(sessionId);
+		}
 		sessionId = null;
 	}
 
@@ -814,12 +816,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 
 	@Override
 	public synchronized boolean hasSession() {
-		return hasSession(cookie(SESSION_COOKIE, null));
+		return hasSession(sessionId) || hasSession(cookie(SESSION_COOKIE, null));
 	}
 
 	@Override
-	public synchronized boolean hasSession(String sessionId) {
-		return !U.isEmpty(sessionId) && session.exists(sessionId);
+	public synchronized boolean hasSession(String sessId) {
+		return !U.isEmpty(sessId) && session.exists(sessId);
 	}
 
 	@Override
