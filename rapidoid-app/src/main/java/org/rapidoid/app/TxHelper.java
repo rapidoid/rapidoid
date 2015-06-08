@@ -23,6 +23,7 @@ package org.rapidoid.app;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeImpl;
+import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.http.HttpProtocol;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.log.Log;
@@ -41,8 +42,12 @@ public class TxHelper {
 				try {
 					result = AppHandler.processReq(x);
 				} catch (Exception e) {
-					Log.error("Exception occured while processing request inside transaction!", UTILS.rootCause(e));
-					throw U.rte(e);
+					if (UTILS.rootCause(e) instanceof HttpNotFoundException) {
+						throw U.rte(e);
+					} else {
+						Log.error("Exception occured while processing request inside transaction!", UTILS.rootCause(e));
+						throw U.rte(e);
+					}
 				}
 
 				try {
