@@ -1,5 +1,7 @@
 package org.rapidoid.entity;
 
+import java.io.Serializable;
+
 /*
  * #%L
  * rapidoid-entity
@@ -24,7 +26,7 @@ package org.rapidoid.entity;
  * @author Nikolche Mihajlovski
  * @since 2.2.0
  */
-public interface IEntity {
+public interface IEntity extends Serializable {
 
 	String id();
 

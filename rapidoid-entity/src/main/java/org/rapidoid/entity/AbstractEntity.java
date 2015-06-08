@@ -26,6 +26,8 @@ package org.rapidoid.entity;
  */
 public abstract class AbstractEntity implements IEntity {
 
+	private static final long serialVersionUID = 6714174690388273909L;
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

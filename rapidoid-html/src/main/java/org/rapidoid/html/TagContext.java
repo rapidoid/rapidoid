@@ -1,5 +1,6 @@
 package org.rapidoid.html;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
@@ -28,7 +29,7 @@ import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface TagContext {
+public interface TagContext extends Serializable {
 
 	int newBinding(Var<Object> binding);
 
