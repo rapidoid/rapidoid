@@ -33,15 +33,31 @@ public class DebugWidget extends AbstractWidget {
 
 	@Override
 	protected Object render() {
+		return arr(sessionPanel(), localPanel());
+	}
 
-		Map<String, Object> visibleSessionAttributes = U.map();
+	protected PanelWidget sessionPanel() {
+		Map<String, Object> visibleAttributes = U.map();
 
 		for (Entry<String, Object> e : ctx().session().entrySet()) {
 			if (!e.getKey().startsWith("_")) {
-				visibleSessionAttributes.put(e.getKey(), e.getValue());
+				visibleAttributes.put(e.getKey(), e.getValue());
 			}
 		}
 
-		return panel(grid(visibleSessionAttributes)).header("Session");
+		return panel(grid(visibleAttributes)).header("Session scope");
 	}
+
+	protected PanelWidget localPanel() {
+		Map<String, Object> visibleAttributes = U.map();
+
+		for (Entry<String, Object> e : ctx().locals().entrySet()) {
+			if (!e.getKey().startsWith("_")) {
+				visibleAttributes.put(e.getKey(), e.getValue());
+			}
+		}
+
+		return panel(grid(visibleAttributes)).header("Local scope");
+	}
+
 }
