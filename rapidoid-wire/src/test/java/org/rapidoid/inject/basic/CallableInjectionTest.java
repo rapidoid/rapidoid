@@ -22,7 +22,7 @@ package org.rapidoid.inject.basic;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.inject.IoC;
+import org.rapidoid.inject.Wire;
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
 
@@ -32,9 +32,9 @@ public class CallableInjectionTest extends TestCommons {
 
 	@Test
 	public void shouldInject() throws Exception {
-		IoC.manage(MyCallable.class);
+		Wire.manage(MyCallable.class);
 
-		Foo foo = IoC.singleton(Foo.class);
+		Foo foo = Wire.singleton(Foo.class);
 
 		notNullAll(foo, foo.callable);
 		hasType(foo.callable, MyCallable.class);

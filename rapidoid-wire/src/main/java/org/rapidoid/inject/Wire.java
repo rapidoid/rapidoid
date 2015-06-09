@@ -49,7 +49,7 @@ import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class IoC {
+public class Wire {
 
 	private static final Map<Class<?>, Object> SINGLETONS = U.map();
 	private static final Set<Class<?>> MANAGED_CLASSES = U.set();

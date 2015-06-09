@@ -22,7 +22,7 @@ package org.rapidoid.inject.db;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.inject.IoC;
+import org.rapidoid.inject.Wire;
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
 
@@ -32,9 +32,9 @@ public class DbInjectionTest extends TestCommons {
 
 	@Test
 	public void shouldInject() throws Exception {
-		Database db = IoC.singleton(Database.class);
-		isTrue(db == IoC.singleton(Database.class));
-		isTrue(db == IoC.singleton(Database.class));
+		Database db = Wire.singleton(Database.class);
+		isTrue(db == Wire.singleton(Database.class));
+		isTrue(db == Wire.singleton(Database.class));
 
 		notNull(db.tables);
 

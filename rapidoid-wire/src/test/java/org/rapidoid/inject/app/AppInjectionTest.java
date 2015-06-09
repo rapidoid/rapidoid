@@ -22,7 +22,7 @@ package org.rapidoid.inject.app;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.inject.IoC;
+import org.rapidoid.inject.Wire;
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
 
@@ -32,11 +32,11 @@ public class AppInjectionTest extends TestCommons {
 
 	@Test
 	public void shouldInjectAndCallPostConstruct() {
-		IoC.manage(App.class, PersonServiceImpl.class);
+		Wire.manage(App.class, PersonServiceImpl.class);
 		isTrue(App.READY);
 
-		App app = IoC.singleton(App.class);
-		same(app, IoC.singleton(App.class), IoC.singleton(App.class));
+		App app = Wire.singleton(App.class);
+		same(app, Wire.singleton(App.class), Wire.singleton(App.class));
 
 		notNull(app.personService);
 		notNull(app.bookService);

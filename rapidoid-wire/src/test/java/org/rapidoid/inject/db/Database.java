@@ -25,7 +25,7 @@ import java.util.Map;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.inject.IoC;
+import org.rapidoid.inject.Wire;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -34,8 +34,8 @@ public class Database {
 	@Inject
 	Transactor transactor;
 
-	final Map<String, Table> tables = IoC.autoExpandingInjectingMap(Table.class);
+	final Map<String, Table> tables = Wire.autoExpandingInjectingMap(Table.class);
 
-	final Map<String, Relat> relations = IoC.autoExpandingInjectingMap(Relat.class);
+	final Map<String, Relat> relations = Wire.autoExpandingInjectingMap(Relat.class);
 
 }
