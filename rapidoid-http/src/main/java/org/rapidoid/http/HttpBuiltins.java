@@ -3,9 +3,9 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.util.AppCtx;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UserInfo;
 
 /*
  * #%L
@@ -35,7 +35,7 @@ public class HttpBuiltins {
 		server.get("/_logout", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				AppCtx.delUser();
+				Ctx.delUser();
 				x.sessionSet(UserInfo.class.getCanonicalName(), null);
 				throw x.goBack(0);
 			}
@@ -55,9 +55,9 @@ public class HttpBuiltins {
 				user.email = username;
 				user.name = U.capitalized(username);
 
-				AppCtx.delUser();
+				Ctx.delUser();
 				x.sessionSet(UserInfo.class.getCanonicalName(), user);
-				AppCtx.setUser(user);
+				Ctx.setUser(user);
 
 				throw x.goBack(0);
 			}

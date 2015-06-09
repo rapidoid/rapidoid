@@ -23,10 +23,10 @@ package org.rapidoidx.db;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.AppCtx;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -42,7 +42,7 @@ public abstract class DbTestCommons extends TestCommons {
 		XDB.destroy();
 		XDB.start();
 		Log.setLogLevel(LogLevel.INFO);
-		AppCtx.reset();
+		Ctx.reset();
 	}
 
 }

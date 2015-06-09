@@ -26,12 +26,12 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.impl.TagRenderer;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.AppCtx;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
@@ -95,8 +95,8 @@ public class WidgetTestCommons extends TestCommons {
 
 	protected static HttpExchange setupMockExchange() {
 		HttpExchange x = new MockHttpExchange();
-		AppCtx.reset();
-		AppCtx.setExchange(x);
+		Ctx.reset();
+		Ctx.setExchange(x);
 		return x;
 	}
 

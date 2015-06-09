@@ -22,10 +22,10 @@ package org.rapidoid.net.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.pool.Pool;
-import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Cls;
 
 @Authors("Nikolche Mihajlovski")
@@ -46,9 +46,9 @@ public abstract class ExchangeProtocol<T extends DefaultExchange<?>> implements 
 		exchange.reset();
 		exchange.setConnection(ctx);
 
-		AppCtx.setExchange(exchange);
+		Ctx.setExchange(exchange);
 		process(ctx, exchange);
-		AppCtx.delExchange();
+		Ctx.delExchange();
 	}
 
 	protected abstract void process(Channel ctx, T exchange);

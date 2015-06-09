@@ -22,9 +22,9 @@ package org.rapidoid.widget;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 
@@ -54,7 +54,7 @@ public abstract class AbstractWidget extends BootstrapWidgets implements TagWidg
 	}
 
 	private static int getWidgetNumber(AbstractWidget widget) {
-		HttpExchange x = AppCtx.exchange();
+		HttpExchange x = Ctx.exchange();
 		// U.notNull(x, "HTTP exchange");
 
 		if (x != null) {

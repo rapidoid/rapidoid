@@ -31,13 +31,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.AppHandler;
 import org.rapidoid.config.Conf;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Classes;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.oauth.OAuth;
-import org.rapidoid.util.AppCtx;
-import org.rapidoid.util.Classes;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.IO;
 import org.rapidoid.util.Scan;
@@ -96,7 +96,7 @@ public class Examples {
 			return;
 		}
 
-		AppCtx.reset();
+		Ctx.reset();
 		List<Class<?>> classes = Scan.pkg(pkg);
 		U.must(!classes.isEmpty());
 
@@ -110,7 +110,7 @@ public class Examples {
 
 		String examples = "";
 
-		AppCtx.setExchange(new HttpExchangeImpl());
+		Ctx.setExchange(new HttpExchangeImpl());
 
 		for (int i = 2; i <= LOWER; i++) {
 			examples = processIndex(egT, examples, egNum(i));
@@ -179,7 +179,7 @@ public class Examples {
 	public static void generate(HTTPServer server, String path, String id, List<Class<?>> classes) {
 
 		Classes appClasses = Classes.from(classes);
-		AppCtx.setClasses(appClasses);
+		Ctx.setClasses(appClasses);
 		XDB.destroy();
 
 		XDB.start();
@@ -230,7 +230,7 @@ public class Examples {
 			}
 		}
 
-		AppCtx.delClasses();
+		Ctx.delClasses();
 	}
 
 	private static void saveTo(HTTPServer server, String url, String filename) {

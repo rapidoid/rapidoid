@@ -29,16 +29,16 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.beany.Prop;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanDelete;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanManage;
 import org.rapidoid.security.annotation.CanRead;
-import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UserInfo;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -230,7 +230,7 @@ public class Secure implements Constants {
 	}
 
 	public static UserInfo user() {
-		return AppCtx.user();
+		return Ctx.user();
 	}
 
 	public static boolean isLoggedIn() {

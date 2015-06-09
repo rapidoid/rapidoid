@@ -25,13 +25,13 @@ import java.nio.ByteBuffer;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.inject.IoC;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ExchangeProtocol;
 import org.rapidoid.net.impl.RapidoidConnection;
-import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.util.Usage;
@@ -106,7 +106,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	private void processRequest(HttpExchangeImpl x) {
 		x.init(responses, session, router);
 
-		AppCtx.setUser(x.user());
+		Ctx.setUser(x.user());
 
 		try {
 
@@ -127,7 +127,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			}
 
 		} finally {
-			AppCtx.delUser();
+			Ctx.delUser();
 			if (x.hasSession()) {
 				session.saveSession(x.sessionId());
 			}

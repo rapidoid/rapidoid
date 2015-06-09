@@ -1,8 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.ctx;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-ctx
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -22,18 +22,21 @@ package org.rapidoid.util;
 
 import java.util.LinkedHashMap;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-@Authors("Nikolche Mihajlovski")
-@Since("2.1.0")
+/**
+ * @author Nikolche Mihajlovski
+ * @since 2.1.0
+ */
 public class Classes extends LinkedHashMap<String, Class<?>> {
 
 	private static final long serialVersionUID = 8987037790459772014L;
 
 	public static Classes from(Iterable<Class<?>> classes) {
 		Classes clss = new Classes();
-		clss.putAll(Cls.classMap(classes));
+
+		for (Class<?> cls : classes) {
+			clss.put(cls.getSimpleName(), cls);
+		}
+
 		return clss;
 	}
 

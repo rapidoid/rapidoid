@@ -33,6 +33,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.config.Conf;
+import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.KeyValueRanges;
@@ -51,7 +52,6 @@ import org.rapidoid.util.IO;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.util.UserInfo;
 import org.rapidoid.wrap.BoolWrap;
 
 @Authors("Nikolche Mihajlovski")

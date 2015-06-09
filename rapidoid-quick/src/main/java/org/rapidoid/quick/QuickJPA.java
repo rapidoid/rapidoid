@@ -31,7 +31,7 @@ import org.hibernate.jpa.boot.internal.SettingsImpl;
 import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.PersistorFactory;
+import org.rapidoid.ctx.PersistorFactory;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 

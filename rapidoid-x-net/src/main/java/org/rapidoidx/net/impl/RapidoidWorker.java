@@ -36,10 +36,10 @@ import java.util.concurrent.Callable;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.log.Log;
 import org.rapidoid.pool.ArrayPool;
 import org.rapidoid.pool.Pool;
-import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.SimpleList;
 import org.rapidoid.util.U;
 import org.rapidoidx.buffer.BufGroup;
@@ -240,16 +240,16 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		try {
 			conn.done = false;
 
-			if (AppCtx.hasContext()) {
-				AppCtx.delExchange();
-				AppCtx.delUser();
+			if (Ctx.hasContext()) {
+				Ctx.delExchange();
+				Ctx.delUser();
 			}
 
 			conn.getProtocol().process(conn);
 
-			if (AppCtx.hasContext()) {
-				AppCtx.delExchange();
-				AppCtx.delUser();
+			if (Ctx.hasContext()) {
+				Ctx.delExchange();
+				Ctx.delUser();
 			}
 
 			if (!conn.closed && !conn.isAsync()) {

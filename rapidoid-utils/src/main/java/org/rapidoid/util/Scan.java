@@ -15,6 +15,8 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Classes;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
@@ -169,7 +171,7 @@ public class Scan {
 		}
 
 		List<Class<?>> classes;
-		Classes ctxClasses = AppCtx.classes();
+		Classes ctxClasses = Ctx.classes();
 		Pattern regex = nameRegex != null ? Pattern.compile(nameRegex) : null;
 
 		if (ctxClasses != null) {

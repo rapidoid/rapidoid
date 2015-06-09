@@ -1,11 +1,8 @@
-package org.rapidoid.util;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+package org.rapidoid.ctx;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-ctx
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -23,8 +20,10 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("3.1.0")
+/**
+ * @author Nikolche Mihajlovski
+ * @since 3.1.0
+ */
 public interface AppExchange {
 
 	<P> P persistor();

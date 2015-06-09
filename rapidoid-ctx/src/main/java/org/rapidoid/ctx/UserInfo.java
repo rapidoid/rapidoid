@@ -1,13 +1,10 @@
-package org.rapidoid.util;
+package org.rapidoid.ctx;
 
 import java.io.Serializable;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-ctx
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -25,8 +22,10 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+/**
+ * @author Nikolche Mihajlovski
+ * @since 2.0.0
+ */
 public class UserInfo implements Serializable {
 
 	private static final long serialVersionUID = 7062732348562440194L;

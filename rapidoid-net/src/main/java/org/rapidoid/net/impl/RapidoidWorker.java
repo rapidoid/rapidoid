@@ -35,11 +35,11 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.buffer.IncompleteReadException;
 import org.rapidoid.config.Conf;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.pool.ArrayPool;
 import org.rapidoid.pool.Pool;
-import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.SimpleList;
 import org.rapidoid.util.U;
 
@@ -169,16 +169,16 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		try {
 			conn.done = false;
 
-			if (AppCtx.hasContext()) {
-				AppCtx.delExchange();
-				AppCtx.delUser();
+			if (Ctx.hasContext()) {
+				Ctx.delExchange();
+				Ctx.delUser();
 			}
 
 			conn.getProtocol().process(conn);
 
-			if (AppCtx.hasContext()) {
-				AppCtx.delExchange();
-				AppCtx.delUser();
+			if (Ctx.hasContext()) {
+				Ctx.delExchange();
+				Ctx.delUser();
 			}
 
 			if (!conn.closed && !conn.isAsync()) {

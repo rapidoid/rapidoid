@@ -23,11 +23,11 @@ package org.rapidoidx.db;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanRead;
-import org.rapidoid.util.AppCtx;
-import org.rapidoid.util.UserInfo;
 import org.testng.annotations.Test;
 
 @CanInsert({ "ADMIN", "MANAGER" })
@@ -75,7 +75,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 	public void testSecurityFailure3() {
 
 		Foo foo = new Foo();
-		AppCtx.setUser(new UserInfo("abcde"));
+		Ctx.setUser(new UserInfo("abcde"));
 		XDB.persist(foo);
 		XDB.shutdown();
 	}
@@ -103,7 +103,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 	public void testSecurity2() {
 
 		Foo foo = new Foo();
-		AppCtx.setUser(new UserInfo("manager@debug"));
+		Ctx.setUser(new UserInfo("manager@debug"));
 		XDB.persist(foo);
 		XDB.shutdown();
 	}

@@ -22,9 +22,9 @@ package org.rapidoid.app;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.plugins.Users;
 import org.rapidoid.security.Secure;
-import org.rapidoid.util.UserInfo;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

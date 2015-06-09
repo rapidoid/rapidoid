@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufGroup;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagWidget;
@@ -37,7 +38,6 @@ import org.rapidoid.http.InMemoryHttpSession;
 import org.rapidoid.net.impl.RapidoidConnection;
 import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.AppCtx;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
@@ -114,8 +114,8 @@ public class PagesTestCommons extends TestCommons {
 		session.setAttribute("sess1", Pages.SESSION_CTX, ctx);
 		x.init(new HttpResponses(false, false), session, null);
 
-		AppCtx.reset();
-		AppCtx.setExchange(x);
+		Ctx.reset();
+		Ctx.setExchange(x);
 		return x;
 	}
 

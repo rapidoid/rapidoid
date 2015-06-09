@@ -2,6 +2,8 @@ package org.rapidoid.util;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.Test;
 
@@ -35,16 +37,16 @@ public class AppCtxTest extends TestCommons {
 			@Override
 			public void run() {
 
-				AppCtx.reset();
+				Ctx.reset();
 
 				UserInfo user = new UserInfo();
 				user.username = rndStr(10);
 
-				AppCtx.setUser(user);
+				Ctx.setUser(user);
 
-				eq(AppCtx.user(), user);
+				eq(Ctx.user(), user);
 
-				AppCtx.reset();
+				Ctx.reset();
 			}
 		});
 	}

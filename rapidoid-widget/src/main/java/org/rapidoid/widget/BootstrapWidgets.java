@@ -10,6 +10,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.config.Conf;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.HTML;
@@ -32,7 +33,6 @@ import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.plugins.DB;
 import org.rapidoid.security.DataPermissions;
-import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.Arr;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.Rnd;
@@ -500,7 +500,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static HttpExchange httpExchange() {
-		return AppCtx.exchange();
+		return Ctx.exchange();
 	}
 
 	public static <T extends Serializable> Var<T> session(String name, T defaultValue) {
@@ -719,7 +719,7 @@ public abstract class BootstrapWidgets extends HTML {
 			return display(U.iterator(arr));
 		} else if (item instanceof TagWidget) {
 			TagWidget<Object> widget = (TagWidget<Object>) item;
-			return widget.render(AppCtx.exchange());
+			return widget.render(Ctx.exchange());
 		}
 
 		return isEntity(item) ? a(item).href(urlFor(item)) : Cls.str(item);

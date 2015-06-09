@@ -24,8 +24,8 @@ import java.io.Serializable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.ImportExport;
 import org.rapidoid.var.impl.AbstractVar;
 
@@ -51,14 +51,14 @@ public class SessionVar<T extends Serializable> extends AbstractVar<T> {
 
 	@Override
 	public T get() {
-		HttpExchange x = AppCtx.exchange();
+		HttpExchange x = Ctx.exchange();
 		T val = x.session(name, defaultValue);
 		return val;
 	}
 
 	@Override
 	public void set(T value) {
-		HttpExchange x = AppCtx.exchange();
+		HttpExchange x = Ctx.exchange();
 		x.sessionSet(name, value);
 	}
 

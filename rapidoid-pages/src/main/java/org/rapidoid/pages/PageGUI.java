@@ -22,12 +22,12 @@ package org.rapidoid.pages;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.impl.FileTemplateTag;
 import org.rapidoid.pages.impl.MultiLanguageText;
 import org.rapidoid.pages.impl.StateTag;
-import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.IO;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.ButtonWidget;
@@ -61,7 +61,7 @@ public class PageGUI extends BootstrapWidgets {
 		Tag assets = hardcoded(IO.loadResourceAsString("page-assets-" + devOrProd + ".html", true));
 		Tag meta = hardcoded(IO.loadResourceAsString("page-meta-" + devOrProd + ".html", true));
 
-		HttpExchange x = AppCtx.exchange();
+		HttpExchange x = Ctx.exchange();
 		Object state = new StateTag(x);
 
 		return render("page-" + devOrProd + ".html", "title", pageTitle, "head", head, "body", body, "assets", assets,

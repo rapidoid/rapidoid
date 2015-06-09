@@ -66,6 +66,7 @@
 		<module>rapidoid-u</module>
 		<module>rapidoid-config</module>
 		<module>rapidoid-log</module>
+		<module>rapidoid-ctx</module>
 		<module>rapidoid-utils</module>
 		<module>rapidoid-beany</module>
 		<module>rapidoid-model</module>

@@ -29,6 +29,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufProvider;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.AppExchange;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.KeyValueRanges;
@@ -36,8 +38,6 @@ import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.abstracts.CtxFull;
-import org.rapidoid.util.AppCtx;
-import org.rapidoid.util.AppExchange;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Resetable;
 import org.rapidoid.util.U;
@@ -219,7 +219,7 @@ public abstract class DefaultExchange<T> implements CtxFull<T>, BufProvider, Res
 	@Override
 	public synchronized <P> P persistor() {
 		if (persistor == null) {
-			persistor = AppCtx.getPersistorFactory().createPersistor();
+			persistor = Ctx.getPersistorFactory().createPersistor();
 		}
 
 		return (P) persistor;

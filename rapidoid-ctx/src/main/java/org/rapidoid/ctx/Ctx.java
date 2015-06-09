@@ -1,11 +1,8 @@
-package org.rapidoid.util;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+package org.rapidoid.ctx;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-ctx
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -23,25 +20,31 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class AppCtx {
+/**
+ * @author Nikolche Mihajlovski
+ * @since 2.0.0
+ */
+public class Ctx {
 
-	private static final ThreadLocal<AppCtx> CTXS = new ThreadLocal<AppCtx>();
+	private static final ThreadLocal<Ctx> CTXS = new ThreadLocal<Ctx>();
 
 	private static volatile PersistorFactory persistorFactory = null;
 
 	private UserInfo user;
 
-	private AppExchange exchange;
+	private Object exchange;
 
 	private Classes classes;
 
-	private AppCtx() {}
+	private Ctx() {}
 
-	private static AppCtx ctx() {
-		AppCtx ctx = CTXS.get();
-		U.must(ctx != null, "App ctx wasn't set!");
+	private static Ctx ctx() {
+		Ctx ctx = CTXS.get();
+
+		if (ctx == null) {
+			throw new IllegalStateException("App ctx wasn't set!");
+		}
+
 		return ctx;
 	}
 
@@ -49,11 +52,11 @@ public class AppCtx {
 		return CTXS.get() != null;
 	}
 
-	private static AppCtx provideCtx() {
-		AppCtx ctx = CTXS.get();
+	private static Ctx provideCtx() {
+		Ctx ctx = CTXS.get();
 
 		if (ctx == null) {
-			ctx = new AppCtx();
+			ctx = new Ctx();
 			CTXS.set(ctx);
 		}
 
@@ -65,51 +68,63 @@ public class AppCtx {
 	}
 
 	public static void setUser(UserInfo user) {
-		AppCtx ctx = provideCtx();
-		U.must(ctx.user == null, "The username was already set!");
+		Ctx ctx = provideCtx();
+
+		if (ctx.user != null) {
+			throw new IllegalStateException("The user was already set!");
+		}
+
 		ctx.user = user;
 	}
 
 	public static UserInfo user() {
-		AppCtx ctx = CTXS.get();
+		Ctx ctx = CTXS.get();
 		return ctx != null ? ctx.user : null;
 	}
 
 	public static void delUser() {
-		AppCtx ctx = ctx();
+		Ctx ctx = ctx();
 		ctx.user = null;
 	}
 
-	public static void setExchange(AppExchange exchange) {
-		AppCtx ctx = provideCtx();
-		U.must(ctx.exchange == null, "The exchange was already set!");
+	public static void setExchange(Object exchange) {
+		Ctx ctx = provideCtx();
+
+		if (ctx.exchange != null) {
+			throw new IllegalStateException("The exchange was already set!");
+		}
+
 		ctx.exchange = exchange;
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <T extends AppExchange> T exchange() {
-		AppCtx ctx = CTXS.get();
+		Ctx ctx = CTXS.get();
 		return ctx != null ? (T) ctx.exchange : null;
 	}
 
 	public static void delExchange() {
-		AppCtx ctx = ctx();
+		Ctx ctx = ctx();
 		ctx.exchange = null;
 	}
 
 	public static void setClasses(Classes classes) {
-		AppCtx ctx = provideCtx();
-		U.must(ctx.classes == null, "The classes were already set!");
+		Ctx ctx = provideCtx();
+
+		if (ctx.classes != null) {
+			throw new IllegalStateException("The classes were already set!");
+		}
+
 		ctx.classes = classes;
 	}
 
 	public static Classes classes() {
-		AppCtx ctx = CTXS.get();
+		Ctx ctx = CTXS.get();
 		return ctx != null ? ctx.classes : null;
 	}
 
 	public static void delClasses() {
-		AppCtx ctx = ctx();
+		Ctx ctx = ctx();
 		ctx.classes = null;
 	}
 
@@ -118,11 +133,11 @@ public class AppCtx {
 	}
 
 	public static void setPersistorFactory(PersistorFactory persistorFactory) {
-		AppCtx.persistorFactory = persistorFactory;
+		Ctx.persistorFactory = persistorFactory;
 	}
 
 	public static <P> P persistor() {
-		AppExchange x = AppCtx.exchange();
+		AppExchange x = Ctx.exchange();
 		return x.persistor();
 	}
 
