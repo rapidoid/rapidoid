@@ -25,6 +25,6 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface CtxFull<T, W> extends CtxWrite<W>, CtxRead<T>, CtxConnection<T>, CtxIO<T>, CtxProtocol<T>, CtxState<T> {
+public interface CtxFull<T> extends CtxWrite<T>, CtxRead<T>, CtxConnection<T>, CtxIO<T>, CtxProtocol<T>, CtxState<T> {
 
 }

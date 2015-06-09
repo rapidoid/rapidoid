@@ -30,8 +30,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.HttpExchangeBody;
-import org.rapidoid.http.HttpExchangeHeaders;
 import org.rapidoid.http.HttpHeader;
 import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.http.HttpSession;
@@ -53,31 +51,31 @@ public class MockHttpExchange implements HttpExchange {
 	}
 
 	@Override
-	public HttpExchangeHeaders startResponse(int httpResponseCode) {
+	public HttpExchange startResponse(int httpResponseCode) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeHeaders response(int httpResponseCode) {
+	public HttpExchange response(int httpResponseCode) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeHeaders response(int httpResponseCode, String response) {
+	public HttpExchange response(int httpResponseCode, String response) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeHeaders response(int httpResponseCode, String response, Throwable err) {
+	public HttpExchange response(int httpResponseCode, String response, Throwable err) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeHeaders errorResponse(Throwable err) {
+	public HttpExchange errorResponse(Throwable err) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -95,67 +93,67 @@ public class MockHttpExchange implements HttpExchange {
 	}
 
 	@Override
-	public HttpExchangeHeaders plain() {
+	public HttpExchange plain() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeHeaders html() {
+	public HttpExchange html() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeHeaders json() {
+	public HttpExchange json() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeHeaders binary() {
+	public HttpExchange binary() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeHeaders download(String filename) {
+	public HttpExchange download(String filename) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeHeaders addHeader(byte[] name, byte[] value) {
+	public HttpExchange addHeader(byte[] name, byte[] value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeHeaders addHeader(HttpHeader name, String value) {
+	public HttpExchange addHeader(HttpHeader name, String value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeHeaders setCookie(String name, String value, String... extras) {
+	public HttpExchange setCookie(String name, String value, String... extras) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeBody setContentType(MediaType contentType) {
+	public HttpExchange setContentType(MediaType contentType) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeHeaders accessDeniedIf(boolean accessDeniedCondition) {
+	public HttpExchange accessDeniedIf(boolean accessDeniedCondition) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeHeaders authorize(Class<?> clazz) {
+	public HttpExchange authorize(Class<?> clazz) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -179,13 +177,13 @@ public class MockHttpExchange implements HttpExchange {
 	}
 
 	@Override
-	public HttpExchangeBody sendFile(File file) {
+	public HttpExchange sendFile(File file) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeBody sendFile(MediaType mediaType, byte[] bytes) {
+	public HttpExchange sendFile(MediaType mediaType, byte[] bytes) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -203,7 +201,7 @@ public class MockHttpExchange implements HttpExchange {
 	}
 
 	@Override
-	public HttpExchangeBody addToPageStack() {
+	public HttpExchange addToPageStack() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -215,61 +213,61 @@ public class MockHttpExchange implements HttpExchange {
 	}
 
 	@Override
-	public HttpExchangeBody write(String s) {
+	public HttpExchange write(String s) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeBody writeln(String s) {
+	public HttpExchange writeln(String s) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeBody write(byte[] bytes) {
+	public HttpExchange write(byte[] bytes) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeBody write(byte[] bytes, int offset, int length) {
+	public HttpExchange write(byte[] bytes, int offset, int length) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeBody write(ByteBuffer buf) {
+	public HttpExchange write(ByteBuffer buf) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeBody write(File file) {
+	public HttpExchange write(File file) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeBody writeJSON(Object value) {
+	public HttpExchange writeJSON(Object value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeBody send() {
+	public HttpExchange send() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeBody async() {
+	public HttpExchange async() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchangeBody done() {
+	public HttpExchange done() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -578,7 +576,7 @@ public class MockHttpExchange implements HttpExchange {
 	@Override
 	public void deserializeLocals(byte[] bytes) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

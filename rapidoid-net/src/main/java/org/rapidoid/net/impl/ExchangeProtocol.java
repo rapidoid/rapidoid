@@ -30,7 +30,7 @@ import org.rapidoid.util.Cls;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class ExchangeProtocol<T extends DefaultExchange<?, ?>> implements Protocol, CtxListener {
+public abstract class ExchangeProtocol<T extends DefaultExchange<?>> implements Protocol, CtxListener {
 
 	private final Class<T> exchangeType;
 

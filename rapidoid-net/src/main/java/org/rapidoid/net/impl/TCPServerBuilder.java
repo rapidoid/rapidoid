@@ -44,7 +44,7 @@ public interface TCPServerBuilder extends Builder<TCPServer> {
 
 	TCPServerBuilder protocol(Protocol protocol);
 
-	TCPServerBuilder exchange(Class<? extends DefaultExchange<?, ?>> exchangeClass);
+	TCPServerBuilder exchange(Class<? extends DefaultExchange<?>> exchangeClass);
 
 	TCPServerBuilder helper(Class<? extends RapidoidHelper> helperClass);
 

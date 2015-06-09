@@ -56,8 +56,8 @@ import org.rapidoid.wrap.BoolWrap;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchangeBody> implements LowLevelHttpExchange,
-		HttpInterception, Constants {
+public class HttpExchangeImpl extends DefaultExchange<HttpExchange> implements LowLevelHttpExchange, HttpInterception,
+		Constants {
 
 	public static final String SESSION_COOKIE = "JSESSIONID";
 
@@ -315,7 +315,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeBody send() {
+	public synchronized HttpExchange send() {
 		conn.send();
 		return this;
 	}
@@ -482,7 +482,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 		return this;
 	}
 
-	private HttpExchangeHeaders responseCode(int responseCode) {
+	private HttpExchange responseCode(int responseCode) {
 		if (this.responseCode > 0) {
 			assert startingPos >= 0;
 			output().deleteAfter(startingPos);
@@ -601,37 +601,37 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeBody write(String s) {
+	public synchronized HttpExchange write(String s) {
 		ensureHeadersComplete();
 		return super.write(s);
 	}
 
 	@Override
-	public synchronized HttpExchangeBody writeln(String s) {
+	public synchronized HttpExchange writeln(String s) {
 		ensureHeadersComplete();
 		return super.writeln(s);
 	}
 
 	@Override
-	public synchronized HttpExchangeBody write(byte[] bytes) {
+	public synchronized HttpExchange write(byte[] bytes) {
 		ensureHeadersComplete();
 		return super.write(bytes);
 	}
 
 	@Override
-	public synchronized HttpExchangeBody write(byte[] bytes, int offset, int length) {
+	public synchronized HttpExchange write(byte[] bytes, int offset, int length) {
 		ensureHeadersComplete();
 		return super.write(bytes, offset, length);
 	}
 
 	@Override
-	public synchronized HttpExchangeBody write(ByteBuffer buf) {
+	public synchronized HttpExchange write(ByteBuffer buf) {
 		ensureHeadersComplete();
 		return super.write(buf);
 	}
 
 	@Override
-	public synchronized HttpExchangeBody write(File file) {
+	public synchronized HttpExchange write(File file) {
 		if (!hasContentType()) {
 			download(file.getName());
 		}
@@ -641,7 +641,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeBody writeJSON(Object value) {
+	public synchronized HttpExchange writeJSON(Object value) {
 		if (!hasContentType()) {
 			json();
 		}
@@ -665,7 +665,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeBody sendFile(File file) {
+	public synchronized HttpExchange sendFile(File file) {
 		U.must(file.exists());
 		setContentType(MediaType.getByFileName(file.getAbsolutePath()));
 		write(file);
@@ -673,7 +673,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeBody sendFile(MediaType mediaType, byte[] bytes) {
+	public synchronized HttpExchange sendFile(MediaType mediaType, byte[] bytes) {
 		setContentType(mediaType);
 		write(bytes);
 		return this;
@@ -694,17 +694,17 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeHeaders response(int httpResponseCode) {
+	public synchronized HttpExchange response(int httpResponseCode) {
 		return response(httpResponseCode, null, null);
 	}
 
 	@Override
-	public synchronized HttpExchangeHeaders response(int httpResponseCode, String response) {
+	public synchronized HttpExchange response(int httpResponseCode, String response) {
 		return response(httpResponseCode, response, null);
 	}
 
 	@Override
-	public synchronized HttpExchangeHeaders response(int httpResponseCode, String response, Throwable err) {
+	public synchronized HttpExchange response(int httpResponseCode, String response, Throwable err) {
 
 		responseCode(httpResponseCode);
 		ensureHeadersComplete();
@@ -730,7 +730,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeHeaders startResponse(int httpResponseCode) {
+	public synchronized HttpExchange startResponse(int httpResponseCode) {
 		return responseCode(httpResponseCode);
 	}
 
@@ -925,7 +925,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeHeaders accessDeniedIf(boolean accessDeniedCondition) {
+	public synchronized HttpExchange accessDeniedIf(boolean accessDeniedCondition) {
 		if (accessDeniedCondition) {
 			throw new SecurityException("Access denied!");
 		}
@@ -933,7 +933,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeHeaders errorResponse(Throwable err) {
+	public synchronized HttpExchange errorResponse(Throwable err) {
 		Throwable cause = UTILS.rootCause(err);
 		if (cause instanceof HttpSuccessException) {
 			return this;
@@ -947,7 +947,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@Override
-	public synchronized HttpExchangeHeaders authorize(Class<?> clazz) {
+	public synchronized HttpExchange authorize(Class<?> clazz) {
 		return accessDeniedIf(!Secure.canAccessClass(Secure.username(), clazz));
 	}
 
@@ -996,7 +996,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange, HttpExchange
 	}
 
 	@SuppressWarnings("unchecked")
-	public synchronized HttpExchangeBody addToPageStack() {
+	public synchronized HttpExchange addToPageStack() {
 		List<String> stack = sessionGetOrCreate(SESSION_PAGE_STACK, ArrayList.class);
 
 		String last = !stack.isEmpty() ? stack.get(stack.size() - 1) : null;

@@ -20,16 +20,20 @@ package org.rapidoid.http;
  * #L%
  */
 
+import java.io.File;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.nio.ByteBuffer;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
+import org.rapidoid.mime.MediaType;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface HttpExchange extends HttpExchangeHeaders {
+public interface HttpExchange {
 
 	/* REQUEST METHODS: */
 
@@ -132,7 +136,7 @@ public interface HttpExchange extends HttpExchangeHeaders {
 
 	ClassLoader getClassLoader();
 
-	/* HELPERS: */
+	/* RESPONSE: */
 
 	String constructUrl(String path);
 
@@ -149,5 +153,82 @@ public interface HttpExchange extends HttpExchangeHeaders {
 	void extra(Object key, Object value);
 
 	String realAddress();
+
+	HttpExchange startResponse(int httpResponseCode);
+
+	HttpExchange response(int httpResponseCode);
+
+	HttpExchange response(int httpResponseCode, String response);
+
+	HttpExchange response(int httpResponseCode, String response, Throwable err);
+
+	HttpExchange errorResponse(Throwable err);
+
+	HttpNotFoundException notFound();
+
+	HttpSuccessException error();
+
+	HttpExchange plain();
+
+	HttpExchange html();
+
+	HttpExchange json();
+
+	HttpExchange binary();
+
+	HttpExchange download(String filename);
+
+	HttpExchange addHeader(byte[] name, byte[] value);
+
+	HttpExchange addHeader(HttpHeader name, String value);
+
+	HttpExchange setCookie(String name, String value, String... extras);
+
+	HttpExchange setContentType(MediaType contentType);
+
+	HttpExchange accessDeniedIf(boolean accessDeniedCondition);
+
+	HttpExchange authorize(Class<?> clazz);
+
+	int responseCode();
+
+	String redirectUrl();
+
+	boolean serveStatic();
+
+	/* BODY */
+
+	HttpExchange sendFile(File file);
+
+	HttpExchange sendFile(MediaType mediaType, byte[] bytes);
+
+	HttpSuccessException redirect(String url);
+
+	HttpSuccessException goBack(int steps);
+
+	HttpExchange addToPageStack();
+
+	OutputStream outputStream();
+
+	HttpExchange write(String s);
+
+	HttpExchange writeln(String s);
+
+	HttpExchange write(byte[] bytes);
+
+	HttpExchange write(byte[] bytes, int offset, int length);
+
+	HttpExchange write(ByteBuffer buf);
+
+	HttpExchange write(File file);
+
+	HttpExchange writeJSON(Object value);
+
+	HttpExchange send();
+
+	// due to async() web handling option, it ain't over till the fat lady sings "done"
+	HttpExchange async();
+
+	HttpExchange done();
 
 }

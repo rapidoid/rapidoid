@@ -42,7 +42,7 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvider, Resetable, Constants {
+public abstract class DefaultExchange<T> implements CtxFull<T>, BufProvider, Resetable, Constants {
 
 	protected Channel conn;
 
@@ -64,14 +64,14 @@ public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvide
 	}
 
 	@Override
-	public W write(String s) {
+	public T write(String s) {
 		byte[] bytes = s.getBytes();
 		conn.write(bytes);
 		return wrote(bytes.length);
 	}
 
 	@Override
-	public W writeln(String s) {
+	public T writeln(String s) {
 		byte[] bytes = s.getBytes();
 		conn.write(bytes);
 		conn.write(CR_LF);
@@ -79,26 +79,26 @@ public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvide
 	}
 
 	@Override
-	public W write(byte[] bytes) {
+	public T write(byte[] bytes) {
 		conn.write(bytes);
 		return wrote(bytes.length);
 	}
 
 	@Override
-	public W write(byte[] bytes, int offset, int length) {
+	public T write(byte[] bytes, int offset, int length) {
 		conn.write(bytes, offset, length);
 		return wrote(length);
 	}
 
 	@Override
-	public W write(ByteBuffer buf) {
+	public T write(ByteBuffer buf) {
 		int n = buf.remaining();
 		conn.write(buf);
 		return wrote(n);
 	}
 
 	@Override
-	public W write(File file) {
+	public T write(File file) {
 		long size = file.length();
 		U.must(size < Integer.MAX_VALUE);
 		conn.write(file);
@@ -106,26 +106,26 @@ public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvide
 	}
 
 	@Override
-	public W writeJSON(Object value) {
+	public T writeJSON(Object value) {
 		conn.writeJSON(value);
-		return meW();
+		return me();
 	}
 
-	private W wrote(int count) {
+	private T wrote(int count) {
 		totalWritten.addAndGet(count);
-		return meW();
+		return me();
 	}
 
 	@Override
 	public T close() {
 		conn.close();
-		return meT();
+		return me();
 	}
 
 	@Override
 	public T closeIf(boolean condition) {
 		conn.closeIf(condition);
-		return meT();
+		return me();
 	}
 
 	@Override
@@ -189,9 +189,9 @@ public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvide
 	}
 
 	@Override
-	public W async() {
+	public T async() {
 		conn.async();
-		return meW();
+		return me();
 	}
 
 	@Override
@@ -200,19 +200,14 @@ public abstract class DefaultExchange<T, W> implements CtxFull<T, W>, BufProvide
 	}
 
 	@Override
-	public W done() {
+	public T done() {
 		conn.done();
-		return meW();
+		return me();
 	}
 
 	@SuppressWarnings("unchecked")
-	protected T meT() {
+	protected T me() {
 		return (T) this;
-	}
-
-	@SuppressWarnings("unchecked")
-	protected W meW() {
-		return (W) this;
 	}
 
 }
