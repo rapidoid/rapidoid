@@ -156,7 +156,7 @@ public class JPADBPlugin extends DefaultDBPlugin {
 	}
 
 	protected EntityManager em() {
-		return emProvider.getEntityManager();
+		return emProvider.createEntityManager();
 	}
 
 }

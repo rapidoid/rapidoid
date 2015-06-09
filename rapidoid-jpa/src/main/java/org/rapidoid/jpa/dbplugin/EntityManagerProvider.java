@@ -29,6 +29,6 @@ import org.rapidoid.annotation.Since;
 @Since("3.0.0")
 public interface EntityManagerProvider {
 
-	EntityManager getEntityManager();
+	EntityManager createEntityManager();
 
 }

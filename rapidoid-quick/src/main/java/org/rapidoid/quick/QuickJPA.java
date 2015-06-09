@@ -78,7 +78,7 @@ public class QuickJPA implements EntityManagerProvider {
 	}
 
 	@Override
-	public synchronized EntityManager getEntityManager() {
+	public synchronized EntityManager createEntityManager() {
 		if (em == null) {
 			em = createEM(args);
 		}

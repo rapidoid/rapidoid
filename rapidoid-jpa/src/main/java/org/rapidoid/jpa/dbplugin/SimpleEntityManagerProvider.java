@@ -31,7 +31,7 @@ public class SimpleEntityManagerProvider implements EntityManagerProvider {
 	}
 
 	@Override
-	public EntityManager getEntityManager() {
+	public EntityManager createEntityManager() {
 		return em;
 	}
 
