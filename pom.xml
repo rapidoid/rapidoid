@@ -71,7 +71,7 @@
 		<module>rapidoid-beany</module>
 		<module>rapidoid-model</module>
 		<module>rapidoid-sql</module>
-		<module>rapidoid-ioc</module>
+		<module>rapidoid-wire</module>
 		<module>rapidoid-json</module>
 		<module>rapidoid-security</module>
 		<module>rapidoid-activity</module>
