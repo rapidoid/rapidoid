@@ -30,6 +30,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.Apps;
 import org.rapidoid.jpa.dbplugin.JPADBPlugin;
+import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -41,7 +42,8 @@ public class Quick {
 	}
 
 	public static void run(Object... args) {
-		JPADBPlugin db = new JPADBPlugin(new QuickJPA(args));
+		AppCtx.setPersistorFactory(new QuickJPA(args));
+		JPADBPlugin db = new JPADBPlugin();
 
 		List<Object> appArgs = U.<Object> list(db);
 		appArgs.addAll(U.list(args));

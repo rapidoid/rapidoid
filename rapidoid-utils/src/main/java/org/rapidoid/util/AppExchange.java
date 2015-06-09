@@ -1,8 +1,11 @@
-package org.rapidoid.jpa.dbplugin;
+package org.rapidoid.util;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
- * rapidoid-jpa
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,19 +23,10 @@ package org.rapidoid.jpa.dbplugin;
  * #L%
  */
 
-import javax.persistence.EntityManager;
+@Authors("Nikolche Mihajlovski")
+@Since("3.1.0")
+public interface AppExchange {
 
-public class SimpleEntityManagerProvider implements EntityManagerProvider {
-
-	private final EntityManager em;
-
-	public SimpleEntityManagerProvider(EntityManager em) {
-		this.em = em;
-	}
-
-	@Override
-	public EntityManager createEntityManager() {
-		return em;
-	}
+	<P> P persistor();
 
 }

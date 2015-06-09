@@ -29,9 +29,11 @@ public class AppCtx {
 
 	private static final ThreadLocal<AppCtx> CTXS = new ThreadLocal<AppCtx>();
 
+	private static volatile PersistorFactory persistorFactory = null;
+
 	private UserInfo user;
 
-	private Object exchange;
+	private AppExchange exchange;
 
 	private Classes classes;
 
@@ -78,14 +80,14 @@ public class AppCtx {
 		ctx.user = null;
 	}
 
-	public static void setExchange(Object exchange) {
+	public static void setExchange(AppExchange exchange) {
 		AppCtx ctx = provideCtx();
 		U.must(ctx.exchange == null, "The exchange was already set!");
 		ctx.exchange = exchange;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T exchange() {
+	public static <T extends AppExchange> T exchange() {
 		AppCtx ctx = CTXS.get();
 		return ctx != null ? (T) ctx.exchange : null;
 	}
@@ -109,6 +111,19 @@ public class AppCtx {
 	public static void delClasses() {
 		AppCtx ctx = ctx();
 		ctx.classes = null;
+	}
+
+	public static PersistorFactory getPersistorFactory() {
+		return persistorFactory;
+	}
+
+	public static void setPersistorFactory(PersistorFactory persistorFactory) {
+		AppCtx.persistorFactory = persistorFactory;
+	}
+
+	public static <P> P persistor() {
+		AppExchange x = AppCtx.exchange();
+		return x.persistor();
 	}
 
 }

@@ -31,13 +31,13 @@ import org.hibernate.jpa.boot.internal.SettingsImpl;
 import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.jpa.dbplugin.EntityManagerProvider;
+import org.rapidoid.util.PersistorFactory;
 import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class QuickJPA implements EntityManagerProvider {
+public class QuickJPA implements PersistorFactory {
 
 	private final Object[] args;
 
@@ -78,7 +78,7 @@ public class QuickJPA implements EntityManagerProvider {
 	}
 
 	@Override
-	public synchronized EntityManager createEntityManager() {
+	public synchronized EntityManager createPersistor() {
 		if (em == null) {
 			em = createEM(args);
 		}

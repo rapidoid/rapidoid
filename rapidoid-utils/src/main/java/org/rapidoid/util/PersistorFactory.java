@@ -1,10 +1,5 @@
 package org.rapidoid.util;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.test.TestCommons;
-import org.testng.annotations.Test;
-
 /*
  * #%L
  * rapidoid-utils
@@ -25,28 +20,13 @@ import org.testng.annotations.Test;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class AppCtxTest extends TestCommons {
+@Since("3.1.0")
+public interface PersistorFactory {
 
-	@Test
-	public void testAppCtx() {
-		multiThreaded(1000, 1000000, new Runnable() {
-			@Override
-			public void run() {
-
-				AppCtx.reset();
-
-				UserInfo user = new UserInfo();
-				user.username = rndStr(10);
-
-				AppCtx.setUser(user);
-
-				eq(AppCtx.user(), user);
-
-				AppCtx.reset();
-			}
-		});
-	}
+	<T> T createPersistor();
 
 }

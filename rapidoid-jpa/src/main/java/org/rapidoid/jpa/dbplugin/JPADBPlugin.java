@@ -15,6 +15,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.plugins.impl.DefaultDBPlugin;
+import org.rapidoid.util.AppCtx;
 import org.rapidoid.util.U;
 
 /*
@@ -40,12 +41,6 @@ import org.rapidoid.util.U;
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
 public class JPADBPlugin extends DefaultDBPlugin {
-
-	private final EntityManagerProvider emProvider;
-
-	public JPADBPlugin(EntityManagerProvider emProvider) {
-		this.emProvider = emProvider;
-	}
 
 	@Override
 	public long insert(Object entity) {
@@ -156,7 +151,7 @@ public class JPADBPlugin extends DefaultDBPlugin {
 	}
 
 	protected EntityManager em() {
-		return emProvider.createEntityManager();
+		return AppCtx.persistor();
 	}
 
 }

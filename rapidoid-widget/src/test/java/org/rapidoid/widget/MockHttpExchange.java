@@ -36,11 +36,13 @@ import org.rapidoid.http.HttpSession;
 import org.rapidoid.http.HttpSuccessException;
 import org.rapidoid.http.InMemoryHttpSession;
 import org.rapidoid.mime.MediaType;
+import org.rapidoid.net.impl.ConnState;
+import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
-public class MockHttpExchange implements HttpExchange {
+public class MockHttpExchange extends DefaultExchange<HttpExchange> implements HttpExchange {
 
 	private static final String SESSION_ID = "session1";
 
@@ -578,6 +580,48 @@ public class MockHttpExchange implements HttpExchange {
 	public void deserializeLocals(byte[] bytes) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public <T> T persistor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isClosing() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isClosed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void waitUntilClosing() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void log(String msg) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean isInitial() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ConnState state() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,8 +1,8 @@
-package org.rapidoid.jpa.dbplugin;
+package org.rapidoid.util;
 
 /*
  * #%L
- * rapidoid-jpa
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
@@ -20,15 +20,19 @@ package org.rapidoid.jpa.dbplugin;
  * #L%
  */
 
-import javax.persistence.EntityManager;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+public class SimplePersistorFactory implements PersistorFactory {
 
-@Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
-public interface EntityManagerProvider {
+	private final Object persistor;
 
-	EntityManager createEntityManager();
+	public SimplePersistorFactory(Object persistor) {
+		this.persistor = persistor;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T createPersistor() {
+		return (T) persistor;
+	}
 
 }

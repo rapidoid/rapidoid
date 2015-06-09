@@ -30,10 +30,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.mime.MediaType;
+import org.rapidoid.util.AppExchange;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface HttpExchange {
+public interface HttpExchange extends AppExchange {
 
 	/* REQUEST METHODS: */
 
