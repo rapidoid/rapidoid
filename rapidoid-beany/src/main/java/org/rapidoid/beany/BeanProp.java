@@ -79,7 +79,15 @@ public class BeanProp implements Prop {
 		U.must(field != null || getter != null, "Invalid property: %s", name);
 
 		// TODO: improve inference from getter and setter
-		type = rawType = field != null ? field.getType() : getter.getReturnType();
+		if (getter != null) {
+			rawType = getter.getReturnType();
+		} else if (setter != null) {
+			rawType = setter.getParameterTypes()[0];
+		} else {
+			rawType = field.getType();
+		}
+		type = rawType;
+
 		Type gType = field != null ? field.getGenericType() : getter.getGenericReturnType();
 		genericType = rawGenericType = Cls.generic(gType);
 
@@ -312,15 +320,16 @@ public class BeanProp implements Prop {
 		try {
 			if (field != null) {
 				field.setAccessible(true);
-				field.set(target, value);
+				field.set(target, Cls.convert(value, field.getType()));
 			} else if (setter != null) {
 				setter.setAccessible(true);
-				setter.invoke(target, value);
+				setter.invoke(target, Cls.convert(value, setter.getParameterTypes()[0]));
 			} else if (getter != null) {
 				throw U.notExpected();
 			}
 		} catch (Exception e) {
-			throw U.rte(e);
+			throw U.rte("Cannot set %s %s.%s = %s (%s)", e, getType(), getDeclaringType(), getName(), value,
+					Cls.of(value));
 		}
 	}
 
