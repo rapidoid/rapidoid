@@ -46,6 +46,8 @@ public class MockHttpExchange implements HttpExchange {
 
 	private final HttpSession session = new InMemoryHttpSession();
 
+	private final Map<String, Object> locals = U.synchronizedMap();
+
 	public MockHttpExchange() {
 		session.openSession(SESSION_ID);
 	}
@@ -563,8 +565,7 @@ public class MockHttpExchange implements HttpExchange {
 
 	@Override
 	public Map<String, Object> locals() {
-		// TODO Auto-generated method stub
-		return null;
+		return locals;
 	}
 
 	@Override
