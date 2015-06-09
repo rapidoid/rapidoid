@@ -3,9 +3,13 @@ Rapidoid - Simple, Powerful, Secure.
 
 ![Rapidoid showcase](http://www.rapidoid.org/showcase.gif)
 
-# Apache License v2
+# Apache License v2 
 
-The software is released under the liberal Apache Public License v2, so it is free to use for both commercial and non-commercial projects.
+The main distribution of the framework is released under the liberal Apache Public License v2, so it is free to use for both commercial and non-commercial projects.
+
+# Additional experimental modules (rapidoid-x-*) under AGPL
+
+There are additional experimental modules (named rapidoid-x-*) under Affero GPL.
 
 # Documentation (examples)
 
@@ -20,14 +24,14 @@ Add the following snippet to the `<dependencies>` section in pom.xml:
 ```xml
 <dependency>
     <groupId>org.rapidoid</groupId>
-    <artifactId>rapidoid-all</artifactId>
-    <version>2.3.0</version>
+    <artifactId>rapidoid-quick</artifactId>
+    <version>3.0.0</version>
 </dependency>
 ```
 
 # Quick start
 
-* Add the `rapidoid-all` dependency to your Maven project (as described above).
+* Add the `rapidoid-quick` dependency to your Maven project (as described above).
 
 * Add the file App.java:
  
