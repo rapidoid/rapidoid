@@ -68,7 +68,7 @@ public class Book extends JPAEntity {
 }
 ```
 
-Run the App class. Rapidoid will scan your classpath, detect JPA entities, REST services, GUI elements and it will start a fast embedded HTTP server.
+Run the App class. No need to use any web container. Rapidoid will scan your classpath, detect *JPA* entities, *RESTful* services, *GUI* elements and it will start a *fast* embedded *HTTP* server + embedded *in-memory* *H2SQL* database for *quick* development and prototyping.
 
 * Navigate to:
  * [http://localhost:8080/](http://localhost:8080/)
@@ -106,7 +106,7 @@ public class MainService {
 }
 ```
 
-Run the App class. Rapidoid will scan your classpath, detect JPA entities, REST services, GUI elements and it will start a fast embedded HTTP server.
+Run the App class. No need to use any web container. Rapidoid will scan your classpath, detect *JPA* entities, *RESTful* services, *GUI* elements and it will start a *fast* embedded *HTTP* server + embedded *in-memory* *H2SQL* database for *quick* development and prototyping.
 
 * Navigate to:
  * [http://localhost:8080/hey/joe/22](http://localhost:8080/hey/joe/22) (returns `Hey joe (22)`)
