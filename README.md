@@ -1,25 +1,12 @@
-Rapidoid - Simple, Powerful, Secure.
+Rapidoid - Simple. Powerful. Secure. Fast!
 ========
 
 ![Rapidoid showcase](http://www.rapidoid.org/showcase.gif)
 
-# Apache License v2 
 
-The main distribution of the framework is released under the liberal Apache Public License v2, so it is free to use for both commercial and non-commercial projects.
+# Quick start: GUI + CRUD Scaffolding + RESTful services + JPA (Hibernate + in-mem H2SQL)   
 
-# Additional experimental modules (rapidoid-x-*) under AGPL
-
-There are additional experimental modules (named rapidoid-x-*) under Affero GPL.
-
-# Documentation (examples)
-
-Please visit the official site:
-
-[http://www.rapidoid.org/](http://www.rapidoid.org/#quickstart)
-
-# Using with Maven
-
-Add the following snippet to the `<dependencies>` section in pom.xml:
+* Add the following snippet to the `<dependencies>` section in pom.xml:
 
 ```xml
 <dependency>
@@ -28,10 +15,6 @@ Add the following snippet to the `<dependencies>` section in pom.xml:
     <version>3.0.0</version>
 </dependency>
 ```
-
-# Quick start
-
-* Add the `rapidoid-quick` dependency to your Maven project (as described above).
 
 * Add the file App.java:
  
@@ -42,7 +25,10 @@ import org.rapidoid.plugins.DB;
 import org.rapidoid.quick.Quick;
 
 @RESTful
-public class App {
+public class App extends AppGUI {
+
+	String title = "Library";
+	Object content = panel("Welcome to the library!").header("Welcome!");
 
 	public static void main(String[] args) {
 		Quick.run(args);
@@ -50,16 +36,13 @@ public class App {
 
 	@GET("/allbooks")
 	public Object index() {
-		return DB.getAll(Book.class);
+		return DB.getAll(Book.class); // using JPA (Hibernate)
 	}
 
 	@GET("/addbook") // for debugging
 	@POST("/addbook")
-	public Object addBook(String title, int year) {
-		Book b = new Book();
-		b.title = title;
-		b.year = year;
-		return DB.insert(b);
+	public Object addBook(Book book) {
+		return DB.insert(book); // using JPA (Hibernate)
 	}
 
 }
@@ -89,8 +72,11 @@ Run the App class. Rapidoid will scan your classpath, detect JPA entities, REST 
 
 * Navigate to:
  * [http://localhost:8080/](http://localhost:8080/)
+ * [http://localhost:8080/addbook?title=book1&year=2015](http://localhost:8080/addbook?title=book1&year=2015)
+ * [http://localhost:8080/addbook?title=book2&year=2013](http://localhost:8080/addbook?title=book2&year=2013)
+ * [http://localhost:8080/allbooks](http://localhost:8080/allbooks)
 
-# More about REST services
+# More about RESTful services
 
 * Add the MainService.java file:
  
@@ -126,6 +112,20 @@ Run the App class. Rapidoid will scan your classpath, detect JPA entities, REST 
  * [http://localhost:8080/hey/joe/22](http://localhost:8080/hey/joe/22) (returns `Hey joe (22)`)
  * [http://localhost:8080/foo/aa/bbb/c](http://localhost:8080/foo/aa/bbb/c) (returns `["aa","bbb","c"]`)
  * [http://localhost:8080/barbar?x=1&y=2](http://localhost:8080/barbar?x=1&y=2) (returns `{"y":"2","x":"1"}`)
+
+# Apache License v2
+
+The main distribution of the framework is released under the liberal Apache Public License v2, so it is free to use for both commercial and non-commercial projects.
+
+# Additional experimental modules (rapidoid-x-*) under AGPL
+
+There are additional experimental modules (named rapidoid-x-*) under Affero GPL.
+
+# Documentation (examples)
+
+Please visit the official site:
+
+[http://www.rapidoid.org/](http://www.rapidoid.org/#quickstart)
 
 # Contributing
 
