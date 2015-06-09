@@ -48,13 +48,13 @@ public class App {
 		Quick.run(args);
 	}
 
-	@GET("/books")
+	@GET("/allbooks")
 	public Object index() {
 		return DB.getAll(Book.class);
 	}
 
-	@GET("/newbook") // for debugging
-	@POST("/newbook")
+	@GET("/addbook") // for debugging
+	@POST("/addbook")
 	public Object addBook(String title, int year) {
 		Book b = new Book();
 		b.title = title;
@@ -70,9 +70,11 @@ public class App {
 ```java
 
 import javax.persistence.Entity;
+import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.jpa.JPAEntity;
 
 @Entity
+@Scaffold
 @SuppressWarnings("serial")
 public class Book extends JPAEntity {
 
@@ -93,24 +95,24 @@ Run the App class. Rapidoid will scan your classpath, detect JPA entities, REST 
 * Add the MainService.java file:
  
 ```java
+import org.rapidoid.annotation.*;
 import java.util.List;
 import java.util.Map;
 
 @RESTful("/")
 public class MainService {
 
-    public String index() {
-        return "hi!";
-    }
-
+    @GET
     public String hey(String name, int age) {
         return "Hey " + name + " (" + age + ")";
     }
 
+    @GET
     public List<String> foo(List<String> params) {
         return params;
     }
 
+    @GET("/barbar")
     public Map<String, Object> bar(Map<String, Object> params) {
         return params;
     }
@@ -118,13 +120,12 @@ public class MainService {
 }
 ```
 
-Rapidoid will scan for `*Service` classes on your classpath and start a fast embedded HTTP server (`rapidoid-http`).
+Run the App class. Rapidoid will scan your classpath, detect JPA entities, REST services, GUI elements and it will start a fast embedded HTTP server.
 
 * Navigate to:
- * [http://localhost:8080/](http://localhost:8080/) (returns `hi!`)
  * [http://localhost:8080/hey/joe/22](http://localhost:8080/hey/joe/22) (returns `Hey joe (22)`)
  * [http://localhost:8080/foo/aa/bbb/c](http://localhost:8080/foo/aa/bbb/c) (returns `["aa","bbb","c"]`)
- * [http://localhost:8080/bar?x=1&y=2](http://localhost:8080/bar?x=1&y=2) (returns `{"y":"2","x":"1"}`)
+ * [http://localhost:8080/barbar?x=1&y=2](http://localhost:8080/barbar?x=1&y=2) (returns `{"y":"2","x":"1"}`)
 
 # Contributing
 
