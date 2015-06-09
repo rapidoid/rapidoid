@@ -36,110 +36,59 @@ Add the following snippet to the `<dependencies>` section in pom.xml:
 * Add the file App.java:
  
 ```java
-import org.rapidoid.app.Apps;
-
-public class App {
-
-	public String title = "Issue Management";
-
-	public boolean full = true;
-
-	public boolean fluid = false;
-
-	public String theme = "1";
-
-	public static void main(String[] args) {
-		Apps.run(args);
-	}
-
-}
-```
-
-* Add the file HomeScreen.java:
- 
-```java
-import org.rapidoid.app.Screen;
-import org.rapidoid.db.DB;
-
-public class HomeScreen extends Screen {
-
-	public Object content() {
-		return render("home.html", "count", DB.getAll(Issue.class).size());
-	}
-
-}
-```
-
-* Add the file Issue.java:
- 
-```java
 
 import org.rapidoid.annotation.*;
+import org.rapidoid.plugins.DB;
+import org.rapidoid.quick.Quick;
 
-@Scaffold
-@DbEntity
-public class Issue {
+@RESTful
+public class App {
 
-	public long id;
+	public static void main(String[] args) {
+		Quick.run(args);
+	}
 
-	public String title;
+	@GET("/books")
+	public Object index() {
+		return DB.getAll(Book.class);
+	}
 
-	public Priority priority = Priority.MEDIUM;
-
-	@Optional
-	public String description;
+	@GET("/newbook") // for debugging
+	@POST("/newbook")
+	public Object addBook(String title, int year) {
+		Book b = new Book();
+		b.title = title;
+		b.year = year;
+		return DB.insert(b);
+	}
 
 }
 ```
 
-* Add the file Priority.java:
+* Add the file Book.java:
  
 ```java
-public enum Priority {
-	LOW, MEDIUM, HIGH;
-}
 
-```
+import javax.persistence.Entity;
+import org.rapidoid.jpa.JPAEntity;
 
-* Add the file NewIssueScreen.java:
- 
-```java
+@Entity
+@SuppressWarnings("serial")
+public class Book extends JPAEntity {
 
-import org.rapidoid.annotation.Session;
-import org.rapidoid.app.Screen;
-import org.rapidoid.db.DB;
-import org.rapidoid.html.Tag;
-import org.rapidoid.widget.FormWidget;
+	String title;
 
-public class NewIssueScreen extends Screen {
-
-	@Session
-	public Issue issue = new Issue();
-
-	public Object content() {
-		Tag title = h2("Add new issue").style("margin-bottom:15px");
-		FormWidget form = create(issue).buttons(SAVE, CANCEL);
-		return mid6(title, form);
-	}
-
-	public void onSave() {
-		DB.insert(issue);
-		issue = new Issue();
-	}
-
-	public void onCancel() {
-		issue = new Issue();
-	}
+	int year;
 
 }
 ```
 
-Rapidoid will scan for `*Screen` classes on your classpath and will construct a nice and responsive GUI. It will start a fast embedded HTTP server (`rapidoid-http`).
+Run the App class. Rapidoid will scan your classpath, detect JPA entities, REST services, GUI elements and it will start a fast embedded HTTP server.
 
 * Navigate to:
  * [http://localhost:8080/](http://localhost:8080/)
 
-# REST services
+# More about REST services
 
 * Add the MainService.java file:
  
@@ -147,6 +96,7 @@ Rapidoid will scan for `*Screen` classes on your classpath and will construct a 
 import java.util.List;
 import java.util.Map;
 
+@RESTful("/")
 public class MainService {
 
     public String index() {
