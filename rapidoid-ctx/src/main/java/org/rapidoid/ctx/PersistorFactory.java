@@ -26,6 +26,6 @@ package org.rapidoid.ctx;
  */
 public interface PersistorFactory {
 
-	<T> T createPersistor();
+	<P> P createPersistor();
 
 }

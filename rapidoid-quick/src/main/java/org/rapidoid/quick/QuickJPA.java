@@ -77,12 +77,13 @@ public class QuickJPA implements PersistorFactory {
 		return em;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized EntityManager createPersistor() {
+	public synchronized <P> P createPersistor() {
 		if (em == null) {
 			em = createEM(args);
 		}
-		return em;
+		return (P) em;
 	}
 
 }

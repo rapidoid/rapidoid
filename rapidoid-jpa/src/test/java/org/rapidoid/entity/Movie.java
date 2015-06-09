@@ -25,6 +25,7 @@ import javax.persistence.Entity;
 import org.rapidoid.jpa.JPAEntity;
 
 @Entity
+@SuppressWarnings("serial")
 public class Movie extends JPAEntity {
 
 	private String title;

@@ -66,6 +66,10 @@ public class Apps {
 		run((Object[]) args);
 	}
 
+	public static void run(String[] args) {
+		run((Object[]) args);
+	}
+
 	public static void run(Object... args) {
 		// register default plugins
 		Plugins.register(new AbstractDBPlugin());

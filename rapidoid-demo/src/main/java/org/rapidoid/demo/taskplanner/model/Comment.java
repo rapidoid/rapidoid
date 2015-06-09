@@ -30,6 +30,7 @@ import org.rapidoid.jpa.JPAEntity;
 @Entity
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
+@SuppressWarnings("serial")
 public class Comment extends JPAEntity {
 
 	public String content;

@@ -39,6 +39,8 @@ import org.rapidoid.util.U;
 @Since("3.0.0")
 public abstract class AbstractRichEntity implements RichEntity, IEntity {
 
+	private static final long serialVersionUID = 285058706160317450L;
+
 	private String id;
 
 	private String version;
