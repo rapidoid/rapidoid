@@ -72,10 +72,10 @@ public class Book extends JPAEntity {
 Run the App class. No need to use any web container. Rapidoid will scan your classpath, detect *JPA* entities, *RESTful* services, *GUI* elements and it will start a *fast* embedded *HTTP* server + embedded *in-memory* *H2SQL* database for *quick* development and prototyping.
 
 * Navigate to:
- * [http://localhost:8080/](http://localhost:8080/)
- * [http://localhost:8080/addbook?title=book1&year=2015](http://localhost:8080/addbook?title=book1&year=2015)
- * [http://localhost:8080/addbook?title=book2&year=2013](http://localhost:8080/addbook?title=book2&year=2013)
- * [http://localhost:8080/allbooks](http://localhost:8080/allbooks)
+ * [http://localhost:8080/](http://localhost:8080/) (displays the application GUI)
+ * [http://localhost:8080/addbook?title=book1&year=2015](http://localhost:8080/addbook?title=book1&year=2015) (inserts book and returns ID: `1`)
+ * [http://localhost:8080/addbook?title=book2&year=2013](http://localhost:8080/addbook?title=book2&year=2013) (inserts book and returns ID: `2`)
+ * [http://localhost:8080/allbooks](http://localhost:8080/allbooks) (returns `[{"id":"1","title":"book1","year":2015,"version":0},{"id":"2","title":"book2","year":2013,"version":0}]`)
 
 # More about RESTful services
 
