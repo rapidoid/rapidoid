@@ -21,6 +21,7 @@ Rapidoid - Simple. Powerful. Secure. Fast!
 ```java
 
 import org.rapidoid.annotation.*;
+import org.rapidoid.app.AppGUI;
 import org.rapidoid.plugins.DB;
 import org.rapidoid.quick.Quick;
 
