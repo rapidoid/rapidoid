@@ -47,7 +47,7 @@ import org.rapidoid.util.U;
 @Since("2.0.0")
 public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
-	private final Queue<RapidoidChannel> connected;
+	private final Queue<SocketChannel> connected;
 
 	private final SimpleList<RapidoidConnection> done;
 
@@ -67,6 +67,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private volatile long messagesProcessed;
 
+	RapidoidWorker next;
+
 	public RapidoidWorker(String name, final BufGroup bufs, final Protocol protocol, final RapidoidHelper helper,
 			int bufSizeKB, boolean noNelay) {
 		super(name);
@@ -79,7 +81,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		final int queueSize = Conf.micro() ? 1000 : 1000000;
 		final int growFactor = Conf.micro() ? 2 : 10;
 
-		this.connected = new ArrayBlockingQueue<RapidoidChannel>(queueSize);
+		this.connected = new ArrayBlockingQueue<SocketChannel>(queueSize);
 		this.done = new SimpleList<RapidoidConnection>(queueSize / 10, growFactor);
 
 		connections = new ArrayPool<RapidoidConnection>(new Callable<RapidoidConnection>() {
@@ -93,11 +95,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		this.noDelay = noNelay;
 	}
 
-	public void accept(SocketChannel socketChannel) throws IOException {
-
-		configureSocket(socketChannel);
-
-		connected.add(new RapidoidChannel(socketChannel, false, serverProtocol));
+	public void accept(SocketChannel socketChannel) {
+		connected.add(socketChannel);
 		selector.wakeup();
 	}
 
@@ -305,9 +304,18 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	@Override
 	protected void doProcessing() {
 
-		RapidoidChannel channel;
+		SocketChannel schannel;
 
-		while ((channel = connected.poll()) != null) {
+		while ((schannel = connected.poll()) != null) {
+
+			try {
+				configureSocket(schannel);
+			} catch (IOException e) {
+				Log.error("Cannot configure channel!", e);
+				continue;
+			}
+
+			RapidoidChannel channel = new RapidoidChannel(schannel, false, serverProtocol);
 
 			SocketChannel socketChannel = channel.socketChannel;
 			Log.debug("connected", "address", socketChannel.socket().getRemoteSocketAddress());
