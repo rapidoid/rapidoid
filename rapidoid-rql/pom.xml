@@ -7,19 +7,14 @@
 		<version>3.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-x-db-impl</artifactId>
+	<artifactId>rapidoid-rql</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid X DB Implementation Commons</description>
+	<description>Rapidoid RQL</description>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-x-db</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-rql</artifactId>
+			<artifactId>rapidoid-plugins</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -29,17 +24,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<configuration>
-					<licenseName>agpl_v3</licenseName>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 
 </project>
