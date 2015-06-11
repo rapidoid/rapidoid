@@ -71,12 +71,12 @@ public class Apps {
 	}
 
 	public static void run(Object... args) {
-		// register default plugins
-		Plugins.register(new AbstractDBPlugin());
-		Plugins.register(new DefaultEntitiesPlugin());
-		Plugins.register(new DefaultLanguagesPlugin());
-		Plugins.register(new DefaultLifecyclePlugin());
-		Plugins.register(new DefaultUsersPlugin());
+		bootstrap(args);
+		serve(args);
+	}
+
+	public static void bootstrap(Object... args) {
+		registerDefaultPlugins();
 
 		Set<String> config = U.set();
 
@@ -91,7 +91,9 @@ public class Apps {
 		AOP.register(Transaction.class, new TransactionInterceptor());
 
 		Lifecycle.onStart(args);
+	}
 
+	public static HTTPServer serve(Object... args) {
 		HTTPServer server = HTTP.server().build();
 
 		OAuth.register(server);
@@ -99,10 +101,20 @@ public class Apps {
 
 		server.serve(new AppHandler());
 
-		server.start();
+		return server.start();
+	}
+
+	public static void registerDefaultPlugins() {
+		Plugins.register(new AbstractDBPlugin());
+		Plugins.register(new DefaultEntitiesPlugin());
+		Plugins.register(new DefaultLanguagesPlugin());
+		Plugins.register(new DefaultLifecyclePlugin());
+		Plugins.register(new DefaultUsersPlugin());
 	}
 
 	private static void processArg(Set<String> config, Object arg) {
+		Log.info("Processing start-up argument", "arg", arg);
+
 		if (arg instanceof String) {
 			config.add((String) arg);
 		} else if (arg instanceof DBPlugin) {
@@ -202,6 +214,10 @@ public class Apps {
 		Log.warn("Terminating application.");
 		Lifecycle.onShutdown();
 		System.exit(0);
+	}
+
+	public static void reset() {
+		APP_CLASSES = null;
 	}
 
 }

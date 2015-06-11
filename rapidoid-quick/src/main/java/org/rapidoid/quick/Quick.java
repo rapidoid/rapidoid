@@ -46,14 +46,23 @@ public class Quick {
 	}
 
 	public static void run(Object... args) {
+		bootstrap(args);
+		serve(args);
+	}
+
+	public static void serve(Object... args) {
+		Apps.serve(args);
+	}
+
+	public static void bootstrap(Object... args) {
 		Ctx.setPersistorFactory(new QuickJPA(args));
 		JPADBPlugin db = new JPADBPlugin();
 
 		List<Object> appArgs = U.<Object> list(db);
 		appArgs.addAll(U.list(args));
+		Apps.bootstrap(U.array(appArgs));
 
-		Apps.run(U.array(appArgs));
-
+		// eager JPA initialization
 		QuickJPA.createEM(args);
 	}
 
