@@ -1,5 +1,6 @@
 package org.rapidoid.plugins;
 
+import org.rapidoid.log.Log;
 import org.rapidoid.plugins.impl.AbstractDBPlugin;
 import org.rapidoid.plugins.impl.AbstractEntitiesPlugin;
 import org.rapidoid.plugins.impl.AbstractLanguagesPlugin;
@@ -64,22 +65,27 @@ public final class Plugins {
 	}
 
 	public static void register(LifecyclePlugin lifecyclePlugin) {
+		Log.info("Registering Lifecycle plugin", "plugin", lifecyclePlugin);
 		Plugins.lifecyclePlugin = lifecyclePlugin;
 	}
 
 	public static void register(LanguagesPlugin languagesPlugin) {
+		Log.info("Registering Languages plugin", "plugin", languagesPlugin);
 		Plugins.languagesPlugin = languagesPlugin;
 	}
 
 	public static void register(DBPlugin dbPlugin) {
+		Log.info("Registering DB plugin", "plugin", dbPlugin);
 		Plugins.dbPlugin = dbPlugin;
 	}
 
 	public static void register(EntitiesPlugin entitiesPlugin) {
+		Log.info("Registering Entities plugin", "plugin", entitiesPlugin);
 		Plugins.entitiesPlugin = entitiesPlugin;
 	}
 
 	public static void register(UsersPlugin usersPlugin) {
+		Log.info("Registering Users plugin", "plugin", usersPlugin);
 		Plugins.usersPlugin = usersPlugin;
 	}
 
