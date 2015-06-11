@@ -6,6 +6,10 @@ import org.rapidoid.plugins.impl.AbstractEntitiesPlugin;
 import org.rapidoid.plugins.impl.AbstractLanguagesPlugin;
 import org.rapidoid.plugins.impl.AbstractLifecyclePlugin;
 import org.rapidoid.plugins.impl.AbstractUsersPlugin;
+import org.rapidoid.plugins.impl.DefaultEntitiesPlugin;
+import org.rapidoid.plugins.impl.DefaultLanguagesPlugin;
+import org.rapidoid.plugins.impl.DefaultLifecyclePlugin;
+import org.rapidoid.plugins.impl.DefaultUsersPlugin;
 import org.rapidoid.plugins.spec.DBPlugin;
 import org.rapidoid.plugins.spec.EntitiesPlugin;
 import org.rapidoid.plugins.spec.LanguagesPlugin;
@@ -87,6 +91,14 @@ public final class Plugins {
 	public static void register(UsersPlugin usersPlugin) {
 		Log.info("Registering Users plugin", "plugin", usersPlugin);
 		Plugins.usersPlugin = usersPlugin;
+	}
+
+	public static void bootstrap() {
+		Plugins.register(new AbstractDBPlugin());
+		Plugins.register(new DefaultEntitiesPlugin());
+		Plugins.register(new DefaultLanguagesPlugin());
+		Plugins.register(new DefaultLifecyclePlugin());
+		Plugins.register(new DefaultUsersPlugin());
 	}
 
 }

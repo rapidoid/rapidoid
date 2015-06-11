@@ -38,11 +38,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.plugins.Lifecycle;
 import org.rapidoid.plugins.Plugins;
-import org.rapidoid.plugins.impl.AbstractDBPlugin;
-import org.rapidoid.plugins.impl.DefaultEntitiesPlugin;
-import org.rapidoid.plugins.impl.DefaultLanguagesPlugin;
-import org.rapidoid.plugins.impl.DefaultLifecyclePlugin;
-import org.rapidoid.plugins.impl.DefaultUsersPlugin;
 import org.rapidoid.plugins.spec.DBPlugin;
 import org.rapidoid.plugins.spec.EntitiesPlugin;
 import org.rapidoid.plugins.spec.LanguagesPlugin;
@@ -76,7 +71,7 @@ public class Apps {
 	}
 
 	public static void bootstrap(Object... args) {
-		registerDefaultPlugins();
+		Plugins.bootstrap();
 
 		Set<String> config = U.set();
 
@@ -102,14 +97,6 @@ public class Apps {
 		server.serve(new AppHandler());
 
 		return server.start();
-	}
-
-	public static void registerDefaultPlugins() {
-		Plugins.register(new AbstractDBPlugin());
-		Plugins.register(new DefaultEntitiesPlugin());
-		Plugins.register(new DefaultLanguagesPlugin());
-		Plugins.register(new DefaultLifecyclePlugin());
-		Plugins.register(new DefaultUsersPlugin());
 	}
 
 	private static void processArg(Set<String> config, Object arg) {
