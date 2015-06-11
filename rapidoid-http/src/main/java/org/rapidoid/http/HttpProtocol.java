@@ -26,7 +26,6 @@ import java.nio.ByteBuffer;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctx;
-import org.rapidoid.inject.IoC;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
@@ -35,12 +34,13 @@ import org.rapidoid.net.impl.RapidoidConnection;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.util.Usage;
+import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
-	private final HttpParser parser = IoC.singleton(HttpParser.class);
+	private final HttpParser parser = Wire.singleton(HttpParser.class);
 
 	private final Router router;
 

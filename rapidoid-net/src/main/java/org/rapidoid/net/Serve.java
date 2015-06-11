@@ -22,16 +22,16 @@ package org.rapidoid.net;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.inject.IoC;
 import org.rapidoid.net.impl.RapidoidServerLoop;
 import org.rapidoid.net.impl.TCPServerBuilder;
+import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
 public class Serve {
 
 	public static TCPServerBuilder server() {
-		return IoC.builder(TCPServerBuilder.class, TCPServer.class, RapidoidServerLoop.class);
+		return Wire.builder(TCPServerBuilder.class, TCPServer.class, RapidoidServerLoop.class);
 	}
 
 	public static TCPServer listen(Protocol protocol) {

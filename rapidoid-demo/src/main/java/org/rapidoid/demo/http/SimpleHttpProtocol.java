@@ -27,11 +27,11 @@ import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.http.HttpParser;
-import org.rapidoid.inject.IoC;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.Dates;
+import org.rapidoid.wire.Wire;
 import org.rapidoid.wrap.BoolWrap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,7 +70,7 @@ public class SimpleHttpProtocol implements Protocol {
 
 	private static final byte[] URI_JSON = "/json".getBytes();
 
-	private static final HttpParser HTTP_PARSER = IoC.singleton(HttpParser.class);
+	private static final HttpParser HTTP_PARSER = Wire.singleton(HttpParser.class);
 
 	public static final ObjectMapper MAPPER = mapper();
 

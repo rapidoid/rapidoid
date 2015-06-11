@@ -22,8 +22,8 @@ package org.rapidoid.inject.db;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.inject.Wire;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.wire.Wire;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")

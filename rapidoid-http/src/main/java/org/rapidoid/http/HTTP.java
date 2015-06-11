@@ -22,14 +22,14 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.inject.IoC;
+import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class HTTP {
 
 	public static HTTPServerBuilder server() {
-		return IoC.builder(HTTPServerBuilder.class, HTTPServer.class, HTTPServerImpl.class);
+		return Wire.builder(HTTPServerBuilder.class, HTTPServer.class, HTTPServerImpl.class);
 	}
 
 	public static HTTPServer serve(String response) {

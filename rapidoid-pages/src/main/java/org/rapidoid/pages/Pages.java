@@ -38,7 +38,6 @@ import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.http.HttpSuccessException;
-import org.rapidoid.inject.IoC;
 import org.rapidoid.json.JSON;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
@@ -52,6 +51,7 @@ import org.rapidoid.util.Arr;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -222,12 +222,12 @@ public class Pages {
 		Mapper<String, Object> sessionMapper = Lambdas.mapper(x.session());
 		Mapper<String, Object> pageMapper = Lambdas.mapper(x.locals());
 
-		IoC.autowire(target, sessionMapper, pageMapper);
+		Wire.autowire(target, sessionMapper, pageMapper);
 
 		if (target instanceof ComplexView) {
 			ComplexView complex = (ComplexView) target;
 			for (Object subview : complex.getSubViews()) {
-				IoC.autowire(subview, sessionMapper, pageMapper);
+				Wire.autowire(subview, sessionMapper, pageMapper);
 			}
 		}
 	}
@@ -244,7 +244,7 @@ public class Pages {
 	}
 
 	private static void storeFrom(HttpExchange x, Object target) {
-		for (Field field : IoC.getSessionFields(target)) {
+		for (Field field : Wire.getSessionFields(target)) {
 			Object value = Cls.getFieldValue(field, target);
 			x.sessionSet(field.getName(), UTILS.serializable(value));
 		}

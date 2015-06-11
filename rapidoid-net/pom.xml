@@ -19,7 +19,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-ioc</artifactId>
+			<artifactId>rapidoid-wire</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

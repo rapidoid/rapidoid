@@ -40,7 +40,6 @@ import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
-import org.rapidoid.inject.IoC;
 import org.rapidoid.log.Log;
 import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.impl.ConnState;
@@ -52,6 +51,7 @@ import org.rapidoid.util.IO;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.wire.Wire;
 import org.rapidoid.wrap.BoolWrap;
 
 @Authors("Nikolche Mihajlovski")
@@ -63,7 +63,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange> implements L
 
 	public static final String SESSION_PAGE_STACK = "_page_stack_";
 
-	private final static HttpParser PARSER = IoC.singleton(HttpParser.class);
+	private final static HttpParser PARSER = Wire.singleton(HttpParser.class);
 
 	private static final byte[] HEADER_SEP = ": ".getBytes();
 

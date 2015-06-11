@@ -1,4 +1,4 @@
-package org.rapidoid.inject;
+package org.rapidoid.wire;
 
 /*
  * #%L
@@ -48,7 +48,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("3.1.0")
 public class Wire {
 
 	private static final Map<Class<?>, Object> SINGLETONS = U.map();

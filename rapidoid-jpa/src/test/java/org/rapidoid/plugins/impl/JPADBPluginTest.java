@@ -8,8 +8,8 @@ import javax.persistence.Persistence;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.AppExchange;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.entity.Book;
 import org.rapidoid.entity.Movie;
 import org.rapidoid.jpa.dbplugin.JPADBPlugin;

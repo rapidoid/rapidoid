@@ -23,7 +23,7 @@ package org.rapidoidx.net;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.inject.IoC;
+import org.rapidoid.wire.Wire;
 import org.rapidoidx.net.impl.RapidoidClientLoop;
 import org.rapidoidx.net.impl.RapidoidServerLoop;
 
@@ -32,7 +32,7 @@ import org.rapidoidx.net.impl.RapidoidServerLoop;
 public class TCP {
 
 	public static TCPServerBuilder server() {
-		return IoC.builder(TCPServerBuilder.class, TCPServer.class, RapidoidServerLoop.class);
+		return Wire.builder(TCPServerBuilder.class, TCPServer.class, RapidoidServerLoop.class);
 	}
 
 	public static TCPServer listen(Protocol protocol) {
@@ -42,7 +42,7 @@ public class TCP {
 	}
 
 	public static TCPClientBuilder client() {
-		return IoC.builder(TCPClientBuilder.class, TCPClient.class, RapidoidClientLoop.class);
+		return Wire.builder(TCPClientBuilder.class, TCPClient.class, RapidoidClientLoop.class);
 	}
 
 	public static TCPClient connect(String host, int port, Protocol protocol) {
