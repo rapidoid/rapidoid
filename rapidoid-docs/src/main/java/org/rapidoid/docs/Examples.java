@@ -31,8 +31,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.AppHandler;
 import org.rapidoid.config.Conf;
-import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Classes;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
@@ -44,7 +44,6 @@ import org.rapidoid.util.Scan;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.widget.BootstrapWidgets;
-import org.rapidoidx.db.XDB;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -82,9 +81,6 @@ public class Examples {
 		generateIndex(path);
 
 		server.shutdown();
-
-		XDB.shutdown();
-		XDB.destroy();
 	}
 
 	private static void processExample(String path, HTTPServer server, String id) {
@@ -180,9 +176,6 @@ public class Examples {
 
 		Classes appClasses = Classes.from(classes);
 		Ctx.setClasses(appClasses);
-		XDB.destroy();
-
-		XDB.start();
 
 		Class<?> appCls = appClasses.get("App");
 		if (appCls != null) {

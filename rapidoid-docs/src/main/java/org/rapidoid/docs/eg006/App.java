@@ -7,8 +7,8 @@ import static org.rapidoid.widget.BootstrapWidgets.create;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Apps;
+import org.rapidoid.plugins.DB;
 import org.rapidoid.widget.FormWidget;
-import org.rapidoidx.db.XDB;
 
 /*
  * #%L
@@ -52,7 +52,7 @@ class HomeScreen {
 	}
 
 	public void onSave() {
-		XDB.insert(movie);
+		DB.insert(movie);
 		movie = new Movie();
 	}
 

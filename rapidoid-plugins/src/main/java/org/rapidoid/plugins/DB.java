@@ -163,4 +163,8 @@ public class DB {
 		Plugins.db().deleteAllData();
 	}
 
+	public static void init(String string) {
+		// FIXME implement this
+	}
+
 }

@@ -4,7 +4,7 @@ import static org.rapidoid.app.AppGUI.grid;
 
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.app.Apps;
-import org.rapidoidx.db.XDB;
+import org.rapidoid.plugins.DB;
 
 /*
  * #%L
@@ -37,9 +37,9 @@ public class App {
 	}
 
 	public void init() {
-		XDB.init("movie title=Rambo, year=1985"); // here
-		XDB.init("movie title=Her, year=2013"); // here
-		XDB.init("movie title=Batman, year=1989"); // here
+		DB.init("movie title=Rambo, year=1985"); // here
+		DB.init("movie title=Her, year=2013"); // here
+		DB.init("movie title=Batman, year=1989"); // here
 	}
 
 	Object content() {

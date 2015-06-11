@@ -7,8 +7,8 @@ import static org.rapidoid.widget.BootstrapWidgets.edit;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Apps;
+import org.rapidoid.plugins.DB;
 import org.rapidoid.widget.FormWidget;
-import org.rapidoidx.db.XDB;
 
 /*
  * #%L
@@ -41,7 +41,7 @@ public class App {
 	}
 
 	public void init() {
-		XDB.init("movie title=Rambo, year=1985"); // here
+		DB.init("movie title=Rambo, year=1985"); // here
 	}
 }
 
@@ -50,18 +50,18 @@ class HomeScreen {
 	Movie movie;
 
 	Object content() {
-		movie = XDB.get(1); // here
+		movie = DB.get(Movie.class, 1); // here
 		FormWidget f = edit(movie); // here
 		f = f.buttons(SAVE, CANCEL); // here
 		return f;
 	}
 
 	public void onSave() { // here
-		XDB.update(movie);
+		DB.update(movie);
 	}
 
 	public void onCancel() { // here
-		movie = XDB.get(1);
+		movie = DB.get(Movie.class, 1);
 	}
 }
 
