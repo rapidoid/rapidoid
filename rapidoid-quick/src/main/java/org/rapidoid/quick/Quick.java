@@ -38,6 +38,10 @@ import org.rapidoid.util.U;
 public class Quick {
 
 	public static void main(String[] args) {
+		run(args);
+	}
+
+	public static void run(String[] args) {
 		run((Object[]) args);
 	}
 
