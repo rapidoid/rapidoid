@@ -1,8 +1,10 @@
 package org.rapidoid.docs.eg023;
 
-import org.rapidoid.annotation.Scaffold;
+import javax.persistence.Entity;
+
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.Screen;
+import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.plugins.DB;
 
 /*
@@ -49,7 +51,7 @@ class HomeScreen extends Screen {
 	}
 }
 
-@Scaffold
-class Todo {
+@Entity
+class Todo extends JPAEntity {
 	String content;
 }

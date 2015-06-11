@@ -2,8 +2,11 @@ package org.rapidoid.docs.eg005;
 
 import static org.rapidoid.app.AppGUI.grid;
 
+import javax.persistence.Entity;
+
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.app.Apps;
+import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.plugins.DB;
 
 /*
@@ -48,7 +51,8 @@ public class App {
 }
 
 @Scaffold
-class Movie {
+@Entity
+class Movie extends JPAEntity {
 	String title;
 	int year;
 }

@@ -4,9 +4,11 @@ import static org.rapidoid.widget.BootstrapWidgets.CANCEL;
 import static org.rapidoid.widget.BootstrapWidgets.SAVE;
 import static org.rapidoid.widget.BootstrapWidgets.edit;
 
-import org.rapidoid.annotation.Scaffold;
+import javax.persistence.Entity;
+
 import org.rapidoid.annotation.Session;
 import org.rapidoid.app.Apps;
+import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.plugins.DB;
 import org.rapidoid.widget.FormWidget;
 
@@ -65,8 +67,8 @@ class HomeScreen {
 	}
 }
 
-@Scaffold
-class Movie {
+@Entity
+class Movie extends JPAEntity {
 	String title;
 	int year;
 }
