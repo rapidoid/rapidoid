@@ -39,6 +39,8 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.rql.ParsedRQL;
+import org.rapidoid.rql.RQL;
 import org.rapidoid.util.U;
 import org.rapidoidx.db.Database;
 import org.rapidoidx.db.DbColumn;
@@ -321,17 +323,13 @@ public class DbImpl extends NamedActivity<Database> implements Database, Seriali
 	@SuppressWarnings("unchecked")
 	@Override
 	public <RESULT> RESULT rql(String rql, Object... args) {
+		ParsedRQL act = RQL.parse(rql, args);
 
-		int p = rql.indexOf(' ');
-		U.must(p > 0, "Invalid RQL syntax!");
-
-		String cmd = rql.substring(0, p).trim();
-		String data = rql.substring(p + 1).trim();
-
-		if (cmd.equalsIgnoreCase("INSERT")) {
-			return (RESULT) new Long(insert(entity(data, args)));
+		if ("INSERT".equalsIgnoreCase(act.command)) {
+			Object ent = entity(act.target, act.args);
+			return (RESULT) new Long(insert(ent));
 		} else {
-			throw U.rte("Unknown RQL command: '%s'!", cmd);
+			throw U.rte("Unknown RQL command: '%s'!", act.command);
 		}
 	}
 

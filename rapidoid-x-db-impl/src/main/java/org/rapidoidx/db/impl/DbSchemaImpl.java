@@ -10,6 +10,7 @@ import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.entity.IEntity;
+import org.rapidoid.rql.RQL;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.English;
 import org.rapidoid.util.Scan;
@@ -115,35 +116,7 @@ public class DbSchemaImpl implements DbSchema {
 
 	@Override
 	public Object entity(String rql, Object... args) {
-
-		String[] parts = rql.split(" ");
-
-		String entityName = U.capitalized(parts[0]);
-		Class<?> entityType = getEntityType(entityName);
-		U.must(entityType != null, "Cannot find entity '%s'!", entityName);
-
-		Map<String, Object> properties = U.map();
-		if (parts.length > 1) {
-
-			String[] props = rql.substring(entityName.length() + 1).split("\\s*\\,\\s*");
-
-			int argIndex = 0;
-			for (String prop : props) {
-				String[] kv = prop.trim().split("\\s*=\\s*");
-				String key = kv[0];
-				Object value;
-
-				if (kv.length > 1) {
-					value = kv[1].equals("?") ? args[argIndex++] : kv[1];
-				} else {
-					value = true;
-				}
-
-				properties.put(key, value);
-			}
-		}
-
-		return entity(entityType, properties);
+		return RQL.entity(rql, args);
 	}
 
 	@Override
