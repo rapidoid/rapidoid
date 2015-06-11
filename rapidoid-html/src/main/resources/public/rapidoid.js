@@ -3,7 +3,7 @@ try {
     var m = /\bTHEME=(\w+?)\b/g.exec(document.cookie);
     theme = m[1];
 } catch (e) {}
-if (theme && theme != 'default') {
+if (theme && theme != 'none') {
     document.write('<link href="/bootstrap/css/theme-' + theme + '.css" rel="stylesheet">');
 }
 
