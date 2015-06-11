@@ -149,16 +149,15 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		Object modalContent = modal != null ? Beany.getPropValue(screen, modal, null) : null;
 
 		if (showNavbar) {
-			String theme = config("theme", null);
 			ATag brand = a(Pages.titleOf(x, app)).href("/");
 
 			Tag userMenu = userMenu();
-			Tag themesMenu = theme == null ? themesMenu() : null;
+
 			Tag debugMenu = Conf.dev() ? debugMenu() : null;
 			FormTag searchForm = searchForm();
 
 			Tag navMenu = navbarMenu(true, activeIndex, menuItems);
-			Object[] navbarContent = arr(navMenu, debugMenu, themesMenu, userMenu, searchForm);
+			Object[] navbarContent = arr(navMenu, debugMenu, userMenu, searchForm);
 
 			result = navbarPage(isFluid(), brand, navbarContent, arr(pageContent, modalContent));
 		} else {
@@ -348,19 +347,18 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		return dropdownMenu;
 	}
 
-	protected Tag themesMenu() {
-		ATag theme = a_awesome("eye", "", caret());
+	protected ATag[] themesMenuOpttions() {
+		ATag[] themess = new ATag[themes.length];
 
-		Object[] themess = new Object[themes.length];
+		Tag eye = awesome("eye");
 
 		for (int i = 0; i < themes.length; i++) {
 			String thm = themes[i];
 			String js = U.format("document.cookie='THEME=%s; path=/'; location.reload();", thm);
-			themess[i] = a_void("Theme " + U.capitalized(thm)).onclick(js);
+			themess[i] = a_void(eye, NBSP, "Theme " + U.capitalized(thm)).onclick(js);
 		}
 
-		Tag themesMenu = addon("themes") ? navbarDropdown(false, theme, themess) : null;
-		return themesMenu;
+		return themess;
 	}
 
 	protected Tag loggedOutUserMenu() {
@@ -411,9 +409,15 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		ATag userInfo = a_awesome("bug", "User info").href("/debuguserinfo");
 		ATag delAll = a_awesome("bug", "Delete All Data").href("/deletealldata");
 
+		Tag sep = menuDivider();
+
+		String theme = config("theme", null);
+		ATag[] themesOpts = theme == null ? themesMenuOpttions() : null;
+		Tag themeSep = themesOpts != null ? sep : null;
+
 		return navbarDropdown(false, debug, debugLoginUrl("admin"), debugLoginUrl("manager"),
-				debugLoginUrl("moderator"), debugLoginUrl("foo"), debugLoginUrl("bar"), menuDivider(), userInfo,
-				menuDivider(), delAll);
+				debugLoginUrl("moderator"), debugLoginUrl("foo"), debugLoginUrl("bar"), sep, userInfo, themeSep,
+				themesOpts, sep, delAll);
 	}
 
 	protected ATag debugLoginUrl(String username) {
