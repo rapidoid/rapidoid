@@ -1,6 +1,6 @@
 package org.rapidoid.docs.eg004;
 
-import org.rapidoid.app.Apps;
+import org.rapidoid.quick.Quick;
 
 /*
  * #%L
@@ -30,7 +30,7 @@ public class App {
 	String theme = "2"; // here
 
 	public static void main(String[] args) {
-		Apps.run(args);
+		Quick.run(args);
 	}
 }
 

@@ -5,9 +5,9 @@ import static org.rapidoid.app.AppGUI.grid;
 import javax.persistence.Entity;
 
 import org.rapidoid.annotation.Scaffold;
-import org.rapidoid.app.Apps;
 import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.plugins.DB;
+import org.rapidoid.quick.Quick;
 
 /*
  * #%L
@@ -36,7 +36,7 @@ public class App {
 	String theme = "4";
 
 	public static void main(String[] args) {
-		Apps.run(args);
+		Quick.run(args);
 	}
 
 	public void init() {

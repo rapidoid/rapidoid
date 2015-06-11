@@ -1,9 +1,9 @@
 package org.rapidoid.docs.eg022;
 
 import org.rapidoid.annotation.Session;
-import org.rapidoid.app.Apps;
 import org.rapidoid.app.Screen;
 import org.rapidoid.html.Tag;
+import org.rapidoid.quick.Quick;
 import org.rapidoid.widget.ButtonWidget;
 
 /*
@@ -33,7 +33,7 @@ public class App {
 	String theme = "3";
 
 	public static void main(String[] args) {
-		Apps.run(args);
+		Quick.run(args);
 	}
 }
 

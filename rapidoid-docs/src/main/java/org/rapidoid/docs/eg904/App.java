@@ -1,7 +1,7 @@
 package org.rapidoid.docs.eg904;
 
-import org.rapidoid.app.Apps;
 import org.rapidoid.app.Screen;
+import org.rapidoid.quick.Quick;
 
 /*
  * #%L
@@ -33,7 +33,7 @@ public class App {
 	Object[] screens = { "ab", CdScreen.class }; // here
 
 	public static void main(String[] args) {
-		Apps.run(args);
+		Quick.run(args);
 	}
 }
 

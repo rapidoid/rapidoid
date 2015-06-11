@@ -1,6 +1,6 @@
 package org.rapidoid.docs.eg002;
 
-import org.rapidoid.app.Apps;
+import org.rapidoid.quick.Quick;
 
 /*
  * #%L
@@ -28,7 +28,7 @@ public class App {
 	String title = "Example 2";
 
 	public static void main(String[] args) {
-		Apps.run(args);
+		Quick.run(args);
 	}
 }
 

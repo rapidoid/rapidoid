@@ -1,8 +1,8 @@
 package org.rapidoid.docs.eg900;
 
 import org.rapidoid.annotation.Order;
-import org.rapidoid.app.Apps;
 import org.rapidoid.app.Screen;
+import org.rapidoid.quick.Quick;
 
 /*
  * #%L
@@ -31,7 +31,7 @@ public class App {
 	String theme = "1";
 
 	public static void main(String[] args) {
-		Apps.run(args);
+		Quick.run(args);
 	}
 }
 

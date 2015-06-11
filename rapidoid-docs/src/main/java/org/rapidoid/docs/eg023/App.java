@@ -2,10 +2,10 @@ package org.rapidoid.docs.eg023;
 
 import javax.persistence.Entity;
 
-import org.rapidoid.app.Apps;
 import org.rapidoid.app.Screen;
 import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.plugins.DB;
+import org.rapidoid.quick.Quick;
 
 /*
  * #%L
@@ -34,7 +34,7 @@ public class App {
 	String theme = "4";
 
 	public static void main(String[] args) {
-		Apps.run(args);
+		Quick.run(args);
 	}
 }
 

@@ -7,9 +7,9 @@ import javax.persistence.Entity;
 
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Session;
-import org.rapidoid.app.Apps;
 import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.plugins.DB;
+import org.rapidoid.quick.Quick;
 import org.rapidoid.widget.ButtonWidget;
 import org.rapidoid.widget.FormWidget;
 
@@ -40,7 +40,7 @@ public class App {
 	String theme = "5";
 
 	public static void main(String[] args) {
-		Apps.run(args);
+		Quick.run(args);
 	}
 
 	public void init() {

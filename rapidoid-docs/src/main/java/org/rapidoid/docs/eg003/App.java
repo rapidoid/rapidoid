@@ -1,7 +1,7 @@
 package org.rapidoid.docs.eg003;
 
-import org.rapidoid.app.Apps;
 import org.rapidoid.app.Screen;
+import org.rapidoid.quick.Quick;
 
 /*
  * #%L
@@ -29,7 +29,7 @@ public class App {
 	String title = "Example 3";
 
 	public static void main(String[] args) {
-		Apps.run(args);
+		Quick.run(args);
 	}
 }
 

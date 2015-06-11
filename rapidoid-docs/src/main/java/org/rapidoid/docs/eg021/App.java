@@ -1,7 +1,7 @@
 package org.rapidoid.docs.eg021;
 
 import org.rapidoid.annotation.Inject;
-import org.rapidoid.app.Apps;
+import org.rapidoid.quick.Quick;
 
 /*
  * #%L
@@ -30,7 +30,7 @@ public class App {
 	String theme = "2";
 
 	public static void main(String[] args) {
-		Apps.run(args);
+		Quick.run(args);
 	}
 }
 

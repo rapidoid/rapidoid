@@ -1,6 +1,6 @@
 package org.rapidoid.docs.eg901;
 
-import org.rapidoid.app.Apps;
+import org.rapidoid.quick.Quick;
 
 /*
  * #%L
@@ -32,6 +32,6 @@ public class App {
 	boolean full = false; // here
 
 	public static void main(String[] args) {
-		Apps.run(args);
+		Quick.run(args);
 	}
 }
