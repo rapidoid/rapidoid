@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.AppHandler;
+import org.rapidoid.app.Apps;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Classes;
 import org.rapidoid.ctx.Ctx;
@@ -38,6 +39,7 @@ import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.oauth.OAuth;
+import org.rapidoid.quick.Quick;
 import org.rapidoid.util.Cls;
 import org.rapidoid.util.IO;
 import org.rapidoid.util.Scan;
@@ -93,6 +95,9 @@ public class Examples {
 		}
 
 		Ctx.reset();
+		Scan.reset();
+		Apps.reset();
+
 		List<Class<?>> classes = Scan.pkg(pkg);
 		U.must(!classes.isEmpty());
 
@@ -190,6 +195,8 @@ public class Examples {
 		}
 
 		Conf.args("oauth-no-state", "generate", "oauth-domain=https://rapidoid.io");
+
+		Quick.bootstrap();
 
 		path += "examples/";
 		new File(path).mkdir();

@@ -49,6 +49,10 @@ public class Scan {
 
 	private Scan() {}
 
+	public static void reset() {
+		CLASSES_CACHE.clear();
+	}
+
 	public static synchronized void args(String... args) {
 		for (String arg : args) {
 			if (arg.matches("\\+\\w+")) {
