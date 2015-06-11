@@ -34,6 +34,9 @@ import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.Dates;
 import org.rapidoid.wrap.BoolWrap;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
+
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class SimpleHttpProtocol implements Protocol {
@@ -68,6 +71,14 @@ public class SimpleHttpProtocol implements Protocol {
 	private static final byte[] URI_JSON = "/json".getBytes();
 
 	private static final HttpParser HTTP_PARSER = IoC.singleton(HttpParser.class);
+
+	public static final ObjectMapper MAPPER = mapper();
+
+	private static ObjectMapper mapper() {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.registerModule(new AfterburnerModule());
+		return mapper;
+	}
 
 	public void process(Channel ctx) {
 		if (ctx.isInitial()) {
@@ -149,7 +160,12 @@ public class SimpleHttpProtocol implements Protocol {
 
 		int posBefore = output.size();
 
-		ctx.writeJSON(new Msg("Hello, World!"));
+		Msg msg = new Msg("Hello, World!");
+		try {
+			MAPPER.writeValue(output.asOutputStream(), msg);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 
 		int posAfter = output.size();
 		output.putNumAsText(posConLen, posAfter - posBefore, false);
