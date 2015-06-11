@@ -160,23 +160,23 @@ rapidoidApp.controller('Main', [ '$scope', '$http', '$window', function($scope, 
                 window.__state = data._state_;
             }
 
-            for ( var sel in data._sel_) {
-                if (sel == "!errors") {
-                    $('.field-error').html('');
-                    errors = data._sel_[sel];
-                    for ( var h in errors) {
-                        var err = errors[h];
+            if (data["!errors"]) {
+                $('.field-error').html('');
+                errors = data["!errors"];
+                for ( var h in errors) {
+                    var err = errors[h];
 
-                        var x = document.querySelectorAll("input,textarea,option");
-                        for (var i = 0; i < x.length; i++) {
-                            var t = $(x[i]);
-                            var _h = t.attr('_h');
-                            if (_h == h) {
-                                $(t).next('.field-error').html(err);
-                            }
+                    var x = document.querySelectorAll("input,textarea,option");
+                    for (var i = 0; i < x.length; i++) {
+                        var t = $(x[i]);
+                        var _h = t.attr('_h');
+                        if (_h == h) {
+                            $(t).next('.field-error').html(err);
                         }
                     }
-                } else {
+                }
+            } else {
+                for ( var sel in data._sel_) {
                     if (sel == 'body') {
                         $scope.bodyContent = data._sel_[sel];
                         $scope.$apply();
