@@ -10,6 +10,7 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.plugins.DB;
 import org.rapidoid.quick.Quick;
+import org.rapidoid.rql.RQL;
 import org.rapidoid.widget.ButtonWidget;
 import org.rapidoid.widget.FormWidget;
 
@@ -44,7 +45,7 @@ public class App {
 	}
 
 	public void init() {
-		DB.init("movie title=Rambo, year=1985"); // here
+		RQL.run("INSERT Movie title=Rambo, year=1985"); // here
 	}
 }
 

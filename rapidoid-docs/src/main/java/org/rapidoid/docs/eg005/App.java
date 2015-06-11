@@ -6,8 +6,8 @@ import javax.persistence.Entity;
 
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.jpa.JPAEntity;
-import org.rapidoid.plugins.DB;
 import org.rapidoid.quick.Quick;
+import org.rapidoid.rql.RQL;
 
 /*
  * #%L
@@ -40,9 +40,9 @@ public class App {
 	}
 
 	public void init() {
-		DB.init("movie title=Rambo, year=1985"); // here
-		DB.init("movie title=Her, year=2013"); // here
-		DB.init("movie title=Batman, year=1989"); // here
+		RQL.run("INSERT Movie title=Rambo, year=1985"); // here
+		RQL.run("INSERT Movie title=Her, year=2013"); // here
+		RQL.run("INSERT Movie title=Batman, year=1989"); // here
 	}
 
 	Object content() {

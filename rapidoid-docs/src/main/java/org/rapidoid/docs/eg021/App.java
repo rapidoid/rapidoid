@@ -35,8 +35,7 @@ public class App {
 }
 
 class HomeScreen {
-	@Inject
-	// here
+	@Inject // here
 	Counter c; // here
 
 	Object content() {
@@ -45,8 +44,7 @@ class HomeScreen {
 }
 
 class OtherScreen {
-	@Inject
-	// here
+	@Inject // here
 	Counter c; // here
 
 	Object content() {
