@@ -347,10 +347,8 @@ public class Scan {
 			if (classpathProp != null) {
 				String[] classpathEntries = classpathProp.split(File.pathSeparator);
 				for (String cpe : classpathEntries) {
-					if (cpe.endsWith("/")) {
-						cpe = U.mid(cpe, 0, -1);
-					}
-					CLASSPATH.add(cpe);
+					cpe = U.trimr(cpe, '/');
+					CLASSPATH.add(new File(cpe).getAbsolutePath());
 				}
 			}
 
@@ -359,11 +357,8 @@ public class Scan {
 			URL[] urls = ((URLClassLoader) cl).getURLs();
 
 			for (URL url : urls) {
-				String path = url.getPath();
-				if (path.endsWith("/")) {
-					path = U.mid(path, 0, -1);
-				}
-				CLASSPATH.add(path);
+				String path = U.trimr(url.getPath(), '/');
+				CLASSPATH.add(new File(path).getAbsolutePath());
 			}
 		}
 
