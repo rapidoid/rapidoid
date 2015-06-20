@@ -753,7 +753,7 @@ public class U {
 	}
 
 	public static String trimr(String s, char suffix) {
-		return trimr(s, "" + suffix);
+		return (!s.isEmpty() && s.charAt(s.length() - 1) == suffix) ? mid(s, 0, -1) : s;
 	}
 
 	public static String trimr(String s, String suffix) {
@@ -761,11 +761,11 @@ public class U {
 	}
 
 	public static String triml(String s, char prefix) {
-		return triml(s, "" + prefix);
+		return (!s.isEmpty() && s.charAt(0) == prefix) ? s.substring(1) : s;
 	}
 
 	public static String triml(String s, String prefix) {
-		return s.endsWith(prefix) ? mid(s, 0, -prefix.length()) : s;
+		return s.endsWith(prefix) ? s.substring(prefix.length()) : s;
 	}
 
 }

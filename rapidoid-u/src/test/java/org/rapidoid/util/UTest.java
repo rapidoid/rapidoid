@@ -206,4 +206,18 @@ public class UTest extends TestCommons {
 		eq(U.insert("abc", 2, "123"), "ab123c");
 	}
 
+	@Test
+	public void testTriml() {
+		eq(U.triml("/abc/", "/"), "abc/");
+		eq(U.triml(".abc.", '.'), "abc.");
+		eq(U.triml("/abc/", '.'), "/abc/");
+	}
+
+	@Test
+	public void testTrimr() {
+		eq(U.trimr("/abc/", "/"), "/abc");
+		eq(U.trimr(".abc.", '.'), ".abc");
+		eq(U.trimr("/abc/", '.'), "/abc/");
+	}
+
 }
