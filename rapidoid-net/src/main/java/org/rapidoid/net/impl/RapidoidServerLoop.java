@@ -48,7 +48,7 @@ import org.rapidoid.util.U;
 @Since("2.0.0")
 public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPServer, TCPServerInfo {
 
-	private volatile RapidoidWorker[] workers;
+	private volatile RapidoidWorker[] ioWorkers;
 
 	private RapidoidWorker currentWorker;
 
@@ -56,7 +56,7 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 	private int port = 8080;
 
 	@Inject(optional = true)
-	private int workersN = Conf.cpus();
+	private int workers = Conf.cpus();
 
 	@Inject(optional = true)
 	private int bufSizeKB = 16;
@@ -140,26 +140,26 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 	}
 
 	private void initWorkers() {
-		workers = new RapidoidWorker[workersN];
+		ioWorkers = new RapidoidWorker[workers];
 
-		for (int i = 0; i < workers.length; i++) {
+		for (int i = 0; i < ioWorkers.length; i++) {
 			RapidoidHelper helper = Cls.newInstance(helperClass, exchangeClass);
 			String workerName = "server" + (i + 1);
 			BufGroup bufGroup = new BufGroup(14); // 2^14B (16 KB per buffer
 													// segment)
-			workers[i] = new RapidoidWorker(workerName, bufGroup, protocol, helper, bufSizeKB, noDelay);
+			ioWorkers[i] = new RapidoidWorker(workerName, bufGroup, protocol, helper, bufSizeKB, noDelay);
 
 			if (i > 0) {
-				workers[i - 1].next = workers[i];
+				ioWorkers[i - 1].next = ioWorkers[i];
 			}
 
-			new Thread(workers[i], workerName).start();
+			new Thread(ioWorkers[i], workerName).start();
 		}
 
-		workers[workers.length - 1].next = workers[0];
-		currentWorker = workers[0];
+		ioWorkers[ioWorkers.length - 1].next = ioWorkers[0];
+		currentWorker = ioWorkers[0];
 
-		for (RapidoidWorker worker : workers) {
+		for (RapidoidWorker worker : ioWorkers) {
 			worker.waitToStart();
 		}
 	}
@@ -175,7 +175,7 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 	public synchronized TCPServer shutdown() {
 		stopLoop();
 
-		for (RapidoidWorker worker : workers) {
+		for (RapidoidWorker worker : ioWorkers) {
 			worker.stopLoop();
 		}
 
@@ -192,8 +192,8 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 	}
 
 	public synchronized RapidoidConnection newConnection() {
-		int rndWorker = Rnd.rnd(workers.length);
-		return workers[rndWorker].newConnection();
+		int rndWorker = Rnd.rnd(ioWorkers.length);
+		return ioWorkers[rndWorker].newConnection();
 	}
 
 	public synchronized void process(RapidoidConnection conn) {
@@ -202,7 +202,7 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 
 	@Override
 	public synchronized String process(String input) {
-		if (workers == null) {
+		if (ioWorkers == null) {
 			initWorkers();
 		}
 
@@ -227,8 +227,8 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 	public long messagesProcessed() {
 		long total = 0;
 
-		for (int i = 0; i < workers.length; i++) {
-			total += workers[i].getMessagesProcessed();
+		for (int i = 0; i < ioWorkers.length; i++) {
+			total += ioWorkers[i].getMessagesProcessed();
 		}
 
 		return total;
