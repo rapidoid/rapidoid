@@ -56,6 +56,9 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 	private int port = 8080;
 
 	@Inject(optional = true)
+	private String address = "0.0.0.0";
+
+	@Inject(optional = true)
 	private int workers = Conf.cpus();
 
 	@Inject(optional = true)
@@ -117,7 +120,7 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 
 			Log.info("Opening port to listen", "port", port);
 
-			InetSocketAddress addr = new InetSocketAddress(port);
+			InetSocketAddress addr = new InetSocketAddress(address, port);
 
 			socket.setReceiveBufferSize(16 * 1024);
 			socket.setReuseAddress(true);
