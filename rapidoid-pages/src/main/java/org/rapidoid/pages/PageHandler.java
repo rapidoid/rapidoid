@@ -24,10 +24,10 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.util.Cls;
-import org.rapidoid.util.Scan;
+import org.rapidoid.scan.Scan;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

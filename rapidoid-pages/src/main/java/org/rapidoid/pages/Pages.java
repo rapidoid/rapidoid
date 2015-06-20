@@ -27,7 +27,9 @@ import java.util.Map.Entry;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.arr.Arr;
 import org.rapidoid.beany.Beany;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.dispatch.PojoDispatchException;
 import org.rapidoid.dispatch.PojoHandlerNotFoundException;
@@ -47,8 +49,6 @@ import org.rapidoid.pages.impl.ComplexView;
 import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.rest.WebReq;
-import org.rapidoid.util.Arr;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.wire.Wire;

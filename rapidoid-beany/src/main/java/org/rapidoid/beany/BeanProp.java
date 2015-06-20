@@ -31,8 +31,8 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.Cls;
-import org.rapidoid.util.TypeKind;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.cls.TypeKind;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 

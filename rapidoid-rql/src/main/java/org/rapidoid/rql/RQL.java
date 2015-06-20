@@ -33,7 +33,6 @@ import org.rapidoid.util.U;
 public class RQL {
 
 	public static ParsedRQL parse(String rql, Object... args) {
-
 		int p = rql.indexOf(' ');
 		U.must(p > 0, "Invalid RQL syntax!");
 
@@ -85,6 +84,6 @@ public class RQL {
 		} else {
 			throw U.rte("Unknown RQL command: '%s'!", act.command);
 		}
-
 	}
+
 }

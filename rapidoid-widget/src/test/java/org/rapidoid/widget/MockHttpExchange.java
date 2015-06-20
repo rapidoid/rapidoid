@@ -42,6 +42,7 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
+@SuppressWarnings("unchecked")
 public class MockHttpExchange extends DefaultExchange<HttpExchange> implements HttpExchange {
 
 	private static final String SESSION_ID = "session1";

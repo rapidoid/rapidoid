@@ -109,7 +109,7 @@ public class BeanySerializationTest extends BeanyTestCommons {
 	public void testVarsSerialization() {
 		Var<?> var = Vars.var(123);
 		Object ser = Beany.serialize(var);
-		eq(ser, U.map("a", 123));
+		eq(ser, 123);
 	}
 
 }

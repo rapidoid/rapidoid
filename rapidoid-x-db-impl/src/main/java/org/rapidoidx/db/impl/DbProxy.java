@@ -31,7 +31,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.entity.IEntity;
-import org.rapidoid.util.Cls;
+import org.rapidoid.util.Proxies;
 import org.rapidoid.util.U;
 import org.rapidoidx.db.AbstractRichEntity;
 import org.rapidoidx.db.DbColumn;
@@ -50,7 +50,7 @@ public class DbProxy implements InvocationHandler, Serializable {
 	public static <E extends IEntity> E create(Class<E> type, Map<String, ?> values) {
 		EntityImpl entity = new EntityImpl(type);
 
-		E proxy = Cls.createProxy(new DbProxy(entity, type), type);
+		E proxy = Proxies.createProxy(new DbProxy(entity, type), type);
 		entity.setProxy(proxy);
 
 		Beany.update(proxy, (Map<String, Object>) values, true);

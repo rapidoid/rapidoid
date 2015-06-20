@@ -29,7 +29,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.BeanProperties;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
-import org.rapidoid.util.TypeKind;
+import org.rapidoid.cls.TypeKind;
 import org.rapidoid.util.U;
 import org.rapidoidx.db.impl.DbProxy;
 import org.rapidoidx.db.model.IPost;

@@ -44,7 +44,22 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-pool</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-cls</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-activity</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-scan</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

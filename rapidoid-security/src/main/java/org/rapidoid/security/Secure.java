@@ -29,6 +29,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.beany.Prop;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.security.annotation.CanChange;
@@ -36,7 +37,6 @@ import org.rapidoid.security.annotation.CanDelete;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanManage;
 import org.rapidoid.security.annotation.CanRead;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 

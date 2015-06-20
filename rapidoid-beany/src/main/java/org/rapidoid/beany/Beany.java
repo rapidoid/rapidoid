@@ -17,14 +17,14 @@ import java.util.Set;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.ToString;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.cls.TypeKind;
+import org.rapidoid.dates.Dates;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.Cls;
-import org.rapidoid.util.Dates;
-import org.rapidoid.util.Exportable;
-import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 
 /*
@@ -221,6 +221,10 @@ public class Beany {
 		if (Cls.kindOf(value) != TypeKind.OBJECT || value instanceof Enum) {
 			return value;
 
+		} else if (value instanceof Var<?>) {
+			Var<?> var = (Var<?>) value;
+			return serialize(var.get());
+
 		} else if (value instanceof Set) {
 			Set<Object> set = U.set();
 			for (Object item : ((Set<?>) value)) {
@@ -270,12 +274,6 @@ public class Beany {
 		U.must(!bean.getClass().isArray());
 		U.must(!bean.getClass().isEnum());
 		U.must(Cls.kindOf(bean) == TypeKind.OBJECT);
-
-		if (bean instanceof Exportable) {
-			Exportable exportable = (Exportable) bean;
-			exportable.exportTo(UTILS.importExport(dest));
-			return;
-		}
 
 		for (Prop prop : propertiesOf(bean)) {
 			Object value = prop.getRaw(bean);

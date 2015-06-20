@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.2.0")
-public class Usage implements Constants {
+public class Usage {
 
 	private static long lastAppUsedOn = U.time();
 

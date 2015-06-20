@@ -23,7 +23,6 @@ package org.rapidoid.model.impl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.model.Item;
-import org.rapidoid.util.ImportExport;
 import org.rapidoid.var.impl.AbstractVar;
 
 @Authors("Nikolche Mihajlovski")
@@ -35,11 +34,6 @@ public class ItemPropertyVar<T> extends AbstractVar<T> {
 	private final Item item;
 
 	private final String property;
-
-	public ItemPropertyVar(ImportExport props) {
-		item = props.get(A);
-		property = props.get(B);
-	}
 
 	public ItemPropertyVar(Item item, String property) {
 		this.item = item;
@@ -54,12 +48,6 @@ public class ItemPropertyVar<T> extends AbstractVar<T> {
 	@Override
 	public void set(T value) {
 		item.set(property, value);
-	}
-
-	@Override
-	public void exportTo(ImportExport props) {
-		props.put(A, item);
-		props.put(B, property);
 	}
 
 }

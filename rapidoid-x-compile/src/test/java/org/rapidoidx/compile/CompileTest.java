@@ -28,9 +28,9 @@ import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.log.Log;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.D;
 import org.rapidoid.util.IO;
 import org.rapidoid.util.U;

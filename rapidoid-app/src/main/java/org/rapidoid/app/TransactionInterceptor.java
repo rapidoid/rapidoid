@@ -27,9 +27,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.aop.AOPInterceptor;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.plugins.DB;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 public class TransactionInterceptor implements AOPInterceptor {

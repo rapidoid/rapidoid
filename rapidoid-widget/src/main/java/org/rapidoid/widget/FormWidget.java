@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
@@ -32,7 +33,6 @@ import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
 import org.rapidoid.security.Secure;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;

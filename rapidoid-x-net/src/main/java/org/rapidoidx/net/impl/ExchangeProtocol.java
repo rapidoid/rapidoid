@@ -23,9 +23,9 @@ package org.rapidoidx.net.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.pool.Pool;
-import org.rapidoid.util.Cls;
 import org.rapidoidx.net.Protocol;
 import org.rapidoidx.net.abstracts.Channel;
 

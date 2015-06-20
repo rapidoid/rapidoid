@@ -23,10 +23,10 @@ package org.rapidoid.app;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.Entities;
 import org.rapidoid.security.Secure;
-import org.rapidoid.util.Cls;
 import org.rapidoid.widget.ButtonWidget;
 import org.rapidoid.widget.GridWidget;
 

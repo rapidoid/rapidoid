@@ -32,7 +32,7 @@ import org.rapidoid.dispatch.PojoHandlerNotFoundException;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.util.Scan;
+import org.rapidoid.scan.Scan;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

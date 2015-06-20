@@ -27,10 +27,11 @@ import java.lang.reflect.Method;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Special;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.html.SpecificTag;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagBase;
-import org.rapidoid.util.Cls;
+import org.rapidoid.util.Proxies;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -42,7 +43,7 @@ public class TagProxy implements InvocationHandler, Serializable {
 	public static <TAG extends Tag> TAG create(Class<?> tagInterface, String tagName, Object[] contents) {
 		TagImpl tag = new TagImpl(tagInterface, tagName, contents);
 
-		TAG proxy = Cls.createProxy(new TagProxy(tag, tagInterface), tagInterface, TagInternals.class);
+		TAG proxy = Proxies.createProxy(new TagProxy(tag, tagInterface), tagInterface, TagInternals.class);
 		tag.setProxy(proxy);
 
 		return proxy;

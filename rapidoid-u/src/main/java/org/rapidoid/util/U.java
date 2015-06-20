@@ -752,4 +752,20 @@ public class U {
 		return range(items, (page - 1) * pageSize, page * pageSize);
 	}
 
+	public static String trimr(String s, char suffix) {
+		return trimr(s, "" + suffix);
+	}
+
+	public static String trimr(String s, String suffix) {
+		return s.endsWith(suffix) ? mid(s, 0, -suffix.length()) : s;
+	}
+
+	public static String triml(String s, char prefix) {
+		return triml(s, "" + prefix);
+	}
+
+	public static String triml(String s, String prefix) {
+		return s.endsWith(prefix) ? mid(s, 0, -prefix.length()) : s;
+	}
+
 }

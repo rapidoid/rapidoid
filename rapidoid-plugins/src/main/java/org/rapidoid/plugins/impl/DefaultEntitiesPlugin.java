@@ -7,10 +7,10 @@ import java.util.concurrent.ConcurrentMap;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.beany.Beany;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.entity.IEntity;
 import org.rapidoid.plugins.spec.EntitiesPlugin;
-import org.rapidoid.util.Cls;
-import org.rapidoid.util.Scan;
+import org.rapidoid.scan.Scan;
 import org.rapidoid.util.U;
 
 /*

@@ -26,11 +26,11 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
+import org.rapidoid.dates.Dates;
 import org.rapidoid.http.HttpParser;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
-import org.rapidoid.util.Dates;
 import org.rapidoid.wire.Wire;
 import org.rapidoid.wrap.BoolWrap;
 

@@ -35,12 +35,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufGroup;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.net.TCPServerInfo;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 

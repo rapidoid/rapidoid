@@ -35,7 +35,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.PropertySelector;
 import org.rapidoid.lambda.Callback;
-import org.rapidoid.util.Tuple;
+import org.rapidoid.tuple.Tuple;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

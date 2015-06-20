@@ -6,8 +6,8 @@ import java.util.Map;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;

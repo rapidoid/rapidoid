@@ -39,14 +39,14 @@ import org.rapidoid.beany.BeanProperties;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.beany.Prop;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.cls.TypeKind;
 import org.rapidoid.dispatch.PojoDispatchException;
 import org.rapidoid.dispatch.PojoDispatcher;
 import org.rapidoid.dispatch.PojoHandlerNotFoundException;
 import org.rapidoid.dispatch.PojoRequest;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.TypeKind;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 

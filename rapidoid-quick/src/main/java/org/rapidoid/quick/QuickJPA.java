@@ -32,7 +32,7 @@ import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.PersistorFactory;
-import org.rapidoid.util.Scan;
+import org.rapidoid.scan.Scan;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")

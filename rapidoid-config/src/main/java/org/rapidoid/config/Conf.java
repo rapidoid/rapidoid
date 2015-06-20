@@ -173,4 +173,30 @@ public class Conf {
 		return true;
 	}
 
+	public static String system(String key) {
+		String value = option(key, null);
+
+		if (value == null) {
+			value = System.getProperty(key);
+		}
+
+		if (value == null) {
+			value = System.getenv(key);
+		}
+
+		return value;
+	}
+
+	public static String JAVA_HOME() {
+		return system("JAVA_HOME");
+	}
+
+	public static String HOSTNAME() {
+		return system("HOSTNAME");
+	}
+
+	public static String IP_ADDRESS() {
+		return system("IP_ADDRESS");
+	}
+
 }

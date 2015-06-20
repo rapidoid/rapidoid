@@ -55,6 +55,8 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.cls.TypeKind;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
@@ -474,51 +476,6 @@ public class UTILS implements Constants {
 		return output.toString();
 	}
 
-	public static boolean contains(Object arrOrColl, Object value) {
-		if (arrOrColl instanceof Object[]) {
-			Object[] arr = (Object[]) arrOrColl;
-			return Arr.indexOf(arr, value) >= 0;
-		} else if (arrOrColl instanceof Collection<?>) {
-			Collection<?> coll = (Collection<?>) arrOrColl;
-			return coll.contains(value);
-		} else {
-			throw U.illegalArg("Expected array or collection, but found: " + U.readable(arrOrColl));
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Object include(Object arrOrColl, Object item) {
-		if (arrOrColl instanceof Object[]) {
-			Object[] arr = (Object[]) arrOrColl;
-			return Arr.indexOf(arr, item) < 0 ? Arr.expand(arr, item) : arr;
-		} else if (arrOrColl instanceof Collection<?>) {
-			Collection<Object> coll = (Collection<Object>) arrOrColl;
-			if (!coll.contains(item)) {
-				coll.add(item);
-			}
-			return coll;
-		} else {
-			throw U.illegalArg("Expected array or collection!");
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Object exclude(Object arrOrColl, Object item) {
-		if (arrOrColl instanceof Object[]) {
-			Object[] arr = (Object[]) arrOrColl;
-			int ind = Arr.indexOf(arr, item);
-			return ind >= 0 ? Arr.deleteAt(arr, ind) : arr;
-		} else if (arrOrColl instanceof Collection<?>) {
-			Collection<Object> coll = (Collection<Object>) arrOrColl;
-			if (coll.contains(item)) {
-				coll.remove(item);
-			}
-			return coll;
-		} else {
-			throw U.illegalArg("Expected array or collection!");
-		}
-	}
-
 	public static boolean waitInterruption(long millis) {
 		try {
 			Thread.sleep(millis);
@@ -755,10 +712,6 @@ public class UTILS implements Constants {
 
 	public static String camelPhrase(String s) {
 		return U.capitalized(camelSplit(s).toLowerCase());
-	}
-
-	public static ImportExport importExport(Map<String, Object> props) {
-		return new MapImportExport(props);
 	}
 
 	@SuppressWarnings("unchecked")

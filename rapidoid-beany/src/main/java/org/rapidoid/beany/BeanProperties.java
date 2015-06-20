@@ -32,9 +32,9 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 

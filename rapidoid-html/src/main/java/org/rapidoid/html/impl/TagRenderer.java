@@ -29,12 +29,12 @@ import java.util.Map.Entry;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.html.CustomTag;
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagWidget;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;

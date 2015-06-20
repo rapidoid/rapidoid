@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.util.ImportExport;
 import org.rapidoid.var.impl.AbstractVar;
 
 @Authors("Nikolche Mihajlovski")
@@ -38,11 +37,6 @@ public class SessionVar<T extends Serializable> extends AbstractVar<T> {
 	private final String name;
 
 	private final T defaultValue;
-
-	public SessionVar(ImportExport props) {
-		name = props.get(A);
-		defaultValue = props.get(B);
-	}
 
 	public SessionVar(String name, T defaultValue) {
 		this.name = name;
@@ -60,12 +54,6 @@ public class SessionVar<T extends Serializable> extends AbstractVar<T> {
 	public void set(T value) {
 		HttpExchange x = Ctx.exchange();
 		x.sessionSet(name, value);
-	}
-
-	@Override
-	public void exportTo(ImportExport props) {
-		props.put(A, name);
-		props.put(B, defaultValue);
 	}
 
 }

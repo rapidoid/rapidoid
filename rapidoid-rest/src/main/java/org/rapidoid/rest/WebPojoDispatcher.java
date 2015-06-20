@@ -34,15 +34,15 @@ import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.aop.AOP;
+import org.rapidoid.arr.Arr;
 import org.rapidoid.beany.Metadata;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.dispatch.PojoDispatchException;
 import org.rapidoid.dispatch.PojoHandlerNotFoundException;
 import org.rapidoid.dispatch.PojoRequest;
 import org.rapidoid.dispatch.impl.DispatchReq;
 import org.rapidoid.dispatch.impl.PojoDispatcherImpl;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.util.Arr;
-import org.rapidoid.util.Cls;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 

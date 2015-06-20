@@ -24,6 +24,7 @@ import java.security.SecureClassLoader;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Predicate;

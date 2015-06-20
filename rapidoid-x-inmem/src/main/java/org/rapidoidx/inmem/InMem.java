@@ -54,16 +54,16 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertyFilter;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
+import org.rapidoid.scan.Scan;
 import org.rapidoid.security.Secure;
-import org.rapidoid.util.Cls;
+import org.rapidoid.tuple.Tuple;
 import org.rapidoid.util.OptimisticConcurrencyControlException;
-import org.rapidoid.util.Scan;
 import org.rapidoid.util.SuccessException;
-import org.rapidoid.util.Tuple;
 import org.rapidoid.util.U;
 
 class Rec implements Serializable {
