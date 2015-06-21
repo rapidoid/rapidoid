@@ -25,10 +25,10 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.io.IO;
 import org.rapidoid.pages.impl.FileTemplateTag;
 import org.rapidoid.pages.impl.MultiLanguageText;
 import org.rapidoid.pages.impl.StateTag;
-import org.rapidoid.util.IO;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.ButtonWidget;
 

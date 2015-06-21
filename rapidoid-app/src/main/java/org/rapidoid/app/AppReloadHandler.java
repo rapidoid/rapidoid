@@ -27,10 +27,10 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.io.IO;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.CustomizableClassLoader;
-import org.rapidoid.util.IO;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")

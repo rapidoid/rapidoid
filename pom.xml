@@ -75,6 +75,7 @@
 		<module>rapidoid-ctx</module>
 		<module>rapidoid-scan</module>
 		<module>rapidoid-pool</module>
+		<module>rapidoid-io</module>
 		<module>rapidoid-utils</module>
 		<module>rapidoid-beany</module>
 		<module>rapidoid-model</module>

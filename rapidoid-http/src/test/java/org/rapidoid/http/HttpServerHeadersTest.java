@@ -26,7 +26,7 @@ import java.net.URISyntaxException;
 import org.apache.commons.io.FileUtils;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.IO;
+import org.rapidoid.io.IO;
 import org.rapidoid.util.Rnd;
 import org.testng.annotations.Test;
 

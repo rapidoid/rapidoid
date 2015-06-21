@@ -30,7 +30,7 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagProcessor;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.util.IO;
+import org.rapidoid.io.IO;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 

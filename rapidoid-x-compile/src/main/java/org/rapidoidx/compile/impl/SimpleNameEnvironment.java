@@ -28,7 +28,7 @@ import org.eclipse.jdt.internal.compiler.env.INameEnvironment;
 import org.eclipse.jdt.internal.compiler.env.NameEnvironmentAnswer;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.IO;
+import org.rapidoid.io.IO;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")

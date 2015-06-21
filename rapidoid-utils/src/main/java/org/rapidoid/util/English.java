@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.io.IO;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

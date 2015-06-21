@@ -25,7 +25,7 @@ import java.io.PrintStream;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.IO;
+import org.rapidoid.io.IO;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
