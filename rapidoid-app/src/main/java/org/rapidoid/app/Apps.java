@@ -23,6 +23,7 @@ package org.rapidoid.app;
 import java.util.Map;
 import java.util.Set;
 
+import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
@@ -138,10 +139,10 @@ public class Apps {
 
 		Map<String, Class<?>> services = Cls.classMap(Scan.annotated(RESTful.class, classLoader));
 		Map<String, Class<?>> pages = Cls.classMap(Scan.bySuffix("Page", null, classLoader));
-		Map<String, Class<?>> apps = Cls.classMap(Scan.byName("App", null, classLoader));
+		Map<String, Class<?>> apps = Cls.classMap(Scan.annotated(App.class, classLoader));
 		Map<String, Class<?>> screens = Cls.classMap(Scan.bySuffix("Screen", null, classLoader));
 
-		final Class<?> appClass = !apps.isEmpty() ? apps.get("App") : TheDefaultApp.class;
+		final Class<?> appClass = !apps.isEmpty() ? apps.values().iterator().next() : TheDefaultApp.class;
 
 		AppClasses APP_CLASSES = new AppClasses(appClass, services, pages, screens);
 		return APP_CLASSES;

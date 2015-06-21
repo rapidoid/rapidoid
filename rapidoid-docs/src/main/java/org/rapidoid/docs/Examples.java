@@ -182,7 +182,7 @@ public class Examples {
 		Classes appClasses = Classes.from(classes);
 		Ctx.setClasses(appClasses);
 
-		Class<?> appCls = appClasses.get("App");
+		Class<?> appCls = appClasses.get("Main");
 		if (appCls != null) {
 			Method main = Cls.getMethod(appCls, "main", String[].class);
 			try {

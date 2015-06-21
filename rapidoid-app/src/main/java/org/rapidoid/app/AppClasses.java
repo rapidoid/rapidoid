@@ -23,6 +23,7 @@ package org.rapidoid.app;
 import java.util.Collection;
 import java.util.Map;
 
+import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
@@ -56,7 +57,7 @@ public class AppClasses {
 
 		for (Class<?> cls : classes) {
 			String name = cls.getSimpleName();
-			if (name.equals("App")) {
+			if (Metadata.isAnnotated(cls, App.class)) {
 				main = cls;
 			} else if (Metadata.isAnnotated(cls, RESTful.class)) {
 				services.put(name, cls);
