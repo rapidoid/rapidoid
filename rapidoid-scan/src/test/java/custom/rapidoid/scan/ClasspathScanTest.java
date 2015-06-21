@@ -1,12 +1,18 @@
-package org.rapidoid.scan;
+package custom.rapidoid.scan;
 
 import java.util.List;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.scan.Scan;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
+
+import cccccc.Ccccc;
+
+import com.moja.Aaa;
 
 /*
  * #%L
@@ -53,6 +59,16 @@ public class ClasspathScanTest extends TestCommons {
 		List<Class<?>> classes = Scan.annotated(MyAnnot.class);
 
 		eq(U.set(classes), U.set(Foo.class, Bar.class));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testScanAll() {
+		List<Class<?>> classes = Scan.classes();
+
+		eq(U.set(classes),
+				U.set(Foo.class, Bar.class, MyAnnot.class, ClasspathScanTest.class, Aaa.class,
+						Cls.getClassIfExists("Bbb"), Ccccc.class));
 	}
 
 }

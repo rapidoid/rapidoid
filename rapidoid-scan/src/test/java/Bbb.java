@@ -1,5 +1,3 @@
-package org.rapidoid.scan;
-
 /*
  * #%L
  * rapidoid-scan
@@ -19,20 +17,6 @@ package org.rapidoid.scan;
  * limitations under the License.
  * #L%
  */
-
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-@Target({ TYPE })
-@Retention(RUNTIME)
-@Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public @interface MyAnnot {
+public class Bbb {
 
 }

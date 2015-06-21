@@ -8,6 +8,8 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,6 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.ctx.Classes;
 import org.rapidoid.ctx.Ctx;
+import org.rapidoid.io.IO;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
@@ -53,11 +56,33 @@ import org.rapidoid.util.U;
 @Since("2.0.0")
 public class Scan {
 
+	private static final String[] SKIP_PKG = { "com", "org", "net", "io" };
+	private static final Set<String> SKIP_PACKAGES = new HashSet<String>();
+	private static final Map<String, Set<String>> SKIP_SUBPACKAGES = new HashMap<String, Set<String>>();
+
 	private static final Set<String> CLASSPATH = new TreeSet<String>();
 
 	private static final Map<Tuple, List<Class<?>>> CLASSES_CACHE = U.map();
 
 	private Scan() {}
+
+	static {
+		SKIP_PACKAGES.addAll(IO.loadLines("scan-ignore.txt"));
+		SKIP_PACKAGES.add("java");
+		SKIP_PACKAGES.add("javax");
+		SKIP_PACKAGES.add("META-INF");
+		SKIP_PACKAGES.add("license");
+		SKIP_PACKAGES.add("public");
+		SKIP_PACKAGES.add("static");
+
+		for (String pkg : SKIP_PKG) {
+			SKIP_SUBPACKAGES.put(pkg, U.set(IO.loadLines(U.format("scan-ignore-%s.txt", pkg))));
+		}
+
+		SKIP_SUBPACKAGES.get("org").add("xml");
+		SKIP_SUBPACKAGES.get("org").add("dom4j");
+		SKIP_SUBPACKAGES.get("com").add("fasterxml");
+	}
 
 	public static synchronized void reset() {
 		CLASSPATH.clear();
@@ -97,6 +122,10 @@ public class Scan {
 		}
 
 		return null;
+	}
+
+	public static synchronized List<Class<?>> classes() {
+		return classes(null, null, null, null, null);
 	}
 
 	public static synchronized List<Class<?>> classes(String packageName, String nameRegex, Predicate<Class<?>> filter,
@@ -176,6 +205,8 @@ public class Scan {
 	private static List<Class<?>> scanClasses(String packageName, String nameRegex, Predicate<Class<?>> filter,
 			Class<? extends Annotation> annotated, ClassLoader classLoader) {
 
+		packageName = U.or(packageName, "");
+
 		boolean caching = classLoader == null;
 		Tuple cacheKey = null;
 
@@ -210,11 +241,11 @@ public class Scan {
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 
 		String pkgName = U.or(packageName, "");
-		Enumeration<URL> urls = resources(pkgName);
 
-		while (urls.hasMoreElements()) {
-			URL url = urls.nextElement();
-			File file = new File(url.getFile());
+		Set<String> classpath = getClasspath();
+
+		for (String cpe : classpath) {
+			File file = new File(cpe);
 
 			String path = file.getAbsolutePath();
 
@@ -222,10 +253,17 @@ public class Scan {
 			String rootPath = pkgPath.isEmpty() ? path : path.replace(File.separatorChar + pkgPath, "");
 
 			File root = new File(rootPath);
-			U.must(root.exists());
-			U.must(root.isDirectory());
 
-			getClasses(classes, root, file, regex, filter, annotated, classLoader);
+			U.must(root.exists());
+			if (root.isDirectory()) {
+				Log.debug("Scanning directory", "name", root.getAbsolutePath());
+				getClassesFromDir(classes, root, file, regex, filter, annotated, classLoader);
+			} else if (root.isFile() && root.getAbsolutePath().toLowerCase().endsWith(".jar")) {
+				Log.debug("Scanning JAR", "name", root.getAbsolutePath());
+				getClassesFromJAR(root.getAbsolutePath(), classes, packageName, regex, filter, annotated, classLoader);
+			} else {
+				throw U.rte("Invalid classpath entry: %s", cpe);
+			}
 		}
 
 		return classes;
@@ -250,48 +288,57 @@ public class Scan {
 		return matching;
 	}
 
-	private static void getClasses(Collection<Class<?>> classes, File root, File parent, Pattern regex,
+	private static void getClassesFromDir(Collection<Class<?>> classes, File root, File parent, Pattern regex,
 			Predicate<Class<?>> filter, Class<? extends Annotation> annotated, ClassLoader classLoader) {
 
 		if (parent.isDirectory()) {
 			Log.debug("scanning directory", "dir", parent);
-			for (File f : parent.listFiles()) {
-				if (f.isDirectory()) {
-					getClasses(classes, root, f, regex, filter, annotated, classLoader);
+			for (File file : parent.listFiles()) {
+				if (file.isDirectory()) {
+					getClassesFromDir(classes, root, file, regex, filter, annotated, classLoader);
 				} else {
-					Log.debug("scanned file", "file", f);
-					if (f.getName().endsWith(".class")) {
+					String rootPath = U.trimr(root.getAbsolutePath(), File.separatorChar);
+					int from = rootPath.length() + 1;
+					String relName = file.getAbsolutePath().substring(from);
 
-						String clsFile = f.getAbsolutePath();
-						String rootPath = root.getAbsolutePath();
-						U.must(clsFile.startsWith(rootPath));
-
-						String clsName = filenameToClassname(clsFile, rootPath);
-
-						if (regex == null || regex.matcher(clsName).matches()) {
-							try {
-								Log.debug("loading class", "name", clsName);
-
-								Class<?> cls = classLoader != null ? Class.forName(clsName, true, classLoader) : Class
-										.forName(clsName);
-
-								if (classMatches(cls, filter, annotated, regex)) {
-									classes.add(cls);
-								}
-							} catch (Exception e) {
-								throw U.rte(e);
-							}
-						}
+					if (!ignore(relName)) {
+						scanFile(classes, regex, filter, annotated, classLoader, relName);
 					}
 				}
 			}
 		}
 	}
 
-	private static String filenameToClassname(String clsFile, String rootPath) {
-		rootPath = U.trimr(rootPath, File.separatorChar);
-		int from = rootPath.length() + 1;
-		return U.mid(clsFile, from, -6).replace(File.separatorChar, '.');
+	private static void scanFile(Collection<Class<?>> classes, Pattern regex, Predicate<Class<?>> filter,
+			Class<? extends Annotation> annotated, ClassLoader classLoader, String relName) {
+		Log.debug("scanned file", "file", relName);
+
+		if (relName.endsWith(".class")) {
+
+			String clsName = U.mid(relName, 0, -6).replace(File.separatorChar, '.');
+
+			if (regex == null || regex.matcher(clsName).matches()) {
+				try {
+					Log.debug("loading class", "name", clsName);
+
+					Class<?> cls = classLoader != null ? Class.forName(clsName, true, classLoader) : Class
+							.forName(clsName);
+
+					// regex match is tested before the class is loaded
+					if (classMatches(cls, filter, annotated, null)) {
+						classes.add(cls);
+					}
+				} catch (NoClassDefFoundError e1) {
+					// do nothing
+				} catch (Exception e) {
+					throw U.rte(e);
+				}
+			}
+		}
+	}
+
+	private static String pkgToPath(String pkg) {
+		return pkg.replace('.', File.separatorChar);
 	}
 
 	private static boolean classMatches(Class<?> cls, Predicate<Class<?>> filter,
@@ -311,24 +358,21 @@ public class Scan {
 		}
 	}
 
-	public static synchronized List<Class<?>> jar(String filename, String pkg) {
-		List<Class<?>> classes = U.list();
+	private static List<Class<?>> getClassesFromJAR(String jarName, List<Class<?>> classes, String pkg, Pattern regex,
+			Predicate<Class<?>> filter, Class<? extends Annotation> annotated, ClassLoader classLoader) {
 
 		try {
-			ZipInputStream zip = new ZipInputStream(new URL("file://" + filename).openStream());
+			String pkgPath = pkgToPath(pkg);
+			ZipInputStream zip = new ZipInputStream(new URL("file://" + jarName).openStream());
 
 			ZipEntry e;
 			while ((e = zip.getNextEntry()) != null) {
-				String name = e.getName();
-				if (name.endsWith(".class")) {
-					String clsName = filenameToClassname(name, null);
+				if (!e.isDirectory()) {
+					String name = e.getName();
 
-					if (U.isEmpty(pkg) || clsName.startsWith(pkg + ".")) {
-						try {
-							Class<?> cls = Class.forName(clsName);
-							classes.add(cls);
-						} catch (NoClassDefFoundError e1) {
-							// do nothing
+					if (!ignore(name)) {
+						if (U.isEmpty(pkg) || name.startsWith(pkgPath)) {
+							scanFile(classes, regex, filter, annotated, classLoader, name);
 						}
 					}
 				}
@@ -338,6 +382,34 @@ public class Scan {
 		}
 
 		return classes;
+	}
+
+	private static boolean ignore(String name) {
+		String pkgName = U.triml(name, File.separatorChar);
+
+		int p1 = pkgName.indexOf(File.separatorChar);
+		int p2 = -1;
+
+		if (p1 > 0) {
+			String part1 = pkgName.substring(0, p1);
+			if (SKIP_PACKAGES.contains(part1)) {
+				return true;
+			}
+
+			p2 = pkgName.indexOf(File.separatorChar, p1 + 1);
+			if (p2 > 0) {
+				String part2 = pkgName.substring(p1 + 1, p2);
+				if (U.isEmpty(part2)) {
+					return true;
+				}
+				Set<String> subpkg = SKIP_SUBPACKAGES.get(part1);
+				if (subpkg != null && subpkg.contains(part2)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	public static synchronized Set<String> getClasspath() {

@@ -1,5 +1,4 @@
-package org.rapidoid.scan;
-
+package custom.rapidoid.scan;
 
 /*
  * #%L
@@ -21,5 +20,19 @@ package org.rapidoid.scan;
  * #L%
  */
 
-@MyAnnot
-class Bar {}
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+@Target({ TYPE })
+@Retention(RUNTIME)
+@Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
+public @interface MyAnnot {
+
+}
