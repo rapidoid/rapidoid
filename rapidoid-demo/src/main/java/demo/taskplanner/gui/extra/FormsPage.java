@@ -1,4 +1,4 @@
-package org.rapidoid.demo.taskplanner.gui.extra;
+package demo.taskplanner.gui.extra;
 
 /*
  * #%L

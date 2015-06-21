@@ -1,4 +1,4 @@
-package org.rapidoid.demo.taskplanner.model;
+package demo.taskplanner.model;
 
 /*
  * #%L

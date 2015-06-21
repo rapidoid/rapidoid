@@ -1,4 +1,4 @@
-package org.rapidoid.demo.taskplanner.service;
+package demo.taskplanner.service;
 
 /*
  * #%L

@@ -1,4 +1,4 @@
-package org.rapidoid.demo.taskplanner.service;
+package demo.taskplanner.service;
 
 /*
  * #%L
@@ -27,10 +27,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.dao.DAO;
-import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.DB;
+
+import demo.taskplanner.model.User;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

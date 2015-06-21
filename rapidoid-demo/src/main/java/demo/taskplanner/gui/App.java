@@ -1,11 +1,7 @@
-package org.rapidoid.demo.taskplanner.model;
-
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+package demo.taskplanner.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.jpa.JPAEntity;
 
 /*
  * #%L
@@ -27,18 +23,32 @@ import org.rapidoid.jpa.JPAEntity;
  * #L%
  */
 
-@Entity
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-@SuppressWarnings("serial")
-public class Comment extends JPAEntity {
+public class App {
 
-	public String content;
+	public String title = "Task Planer";
 
-	@ManyToOne
-	public User owner;
+//	public String theme = "1";
 
-	@ManyToOne
-	public Task task;
+	public boolean search = true;
+
+//	public boolean themes = true;
+
+	public boolean fluid = false;
+
+	public boolean settings = true;
+
+	public boolean googleLogin = true;
+
+	public boolean facebookLogin = true;
+
+	public boolean linkedinLogin = true;
+
+	public boolean githubLogin = true;
+
+	public boolean auth = true;
+
+	// public Object[] screens = { HomeScreen.class, "NewTask", "tasksScreen" };
 
 }

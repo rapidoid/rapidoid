@@ -1,4 +1,4 @@
-package org.rapidoid.demo.taskplanner.gui;
+package demo.taskplanner.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

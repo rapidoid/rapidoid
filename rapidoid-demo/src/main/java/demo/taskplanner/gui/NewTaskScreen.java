@@ -1,4 +1,4 @@
-package org.rapidoid.demo.taskplanner.gui;
+package demo.taskplanner.gui;
 
 /*
  * #%L
@@ -26,8 +26,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Transaction;
 import org.rapidoid.app.Screen;
-import org.rapidoid.demo.taskplanner.model.Task;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.DB;
@@ -35,6 +35,8 @@ import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.widget.FormWidget;
 import org.rapidoid.widget.GridWidget;
+
+import demo.taskplanner.model.Task;
 
 @Order(1)
 @Authors("Nikolche Mihajlovski")
@@ -70,10 +72,17 @@ public class NewTaskScreen extends Screen {
 		return row(col4(caption1, frm), col8(caption2, grid));
 	}
 
+	@Transaction
 	public void onAdd() {
-		task.description = v.get();
-		DB.insert(task);
-		task = new Task();
+		DB.transaction(new Runnable() {
+			@Override
+			public void run() {
+				task.description = v.get();
+				DB.insert(task);
+				task = new Task();
+			}
+		}, false);
+
 		// User user = UsersTool.current(User.class);
 		// if (user != null) {
 		// // task.owner = user;

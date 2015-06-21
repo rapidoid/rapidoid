@@ -1,7 +1,12 @@
-package org.rapidoid.demo.taskplanner.gui;
+package demo.taskplanner.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.app.Screen;
+import org.rapidoid.html.Tag;
+import org.rapidoid.widget.CardWidget;
+import org.rapidoid.widget.FA;
+import org.rapidoid.widget.StreamWidget;
 
 /*
  * #%L
@@ -25,30 +30,23 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class App {
+public class HomeScreen extends Screen {
 
-	public String title = "Task Planer";
+	public String title = "Welcome!";
 
-//	public String theme = "1";
+	public Object content() {
+		boolean fav = true;
+		Tag star = fav ? FA.STAR : FA.STAR_O;
+		Tag upvote = FA.THUMBS_O_UP;
+		Tag downvote = FA.THUMBS_O_DOWN;
 
-	public boolean search = true;
+		CardWidget card = card(h3("{{it().priority}} priority"), h4("Desc: {{it().description}}"));
+		card = card.controls(upvote, "123", downvote, star);
+		card = card.header("{{it().title}}");
 
-//	public boolean themes = true;
+		StreamWidget stream = stream(card).cols(3).dataUrl("/task/page/{{page}}");
 
-	public boolean fluid = false;
-
-	public boolean settings = true;
-
-	public boolean googleLogin = true;
-
-	public boolean facebookLogin = true;
-
-	public boolean linkedinLogin = true;
-
-	public boolean githubLogin = true;
-
-	public boolean auth = true;
-
-	// public Object[] screens = { HomeScreen.class, "NewTask", "tasksScreen" };
+		return arr(cmd("Refresh").info(), stream);
+	}
 
 }

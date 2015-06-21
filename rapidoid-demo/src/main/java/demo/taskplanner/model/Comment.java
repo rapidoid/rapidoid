@@ -1,12 +1,11 @@
-package org.rapidoid.demo.taskplanner.gui;
+package demo.taskplanner.model;
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.Screen;
-import org.rapidoid.html.Tag;
-import org.rapidoid.widget.CardWidget;
-import org.rapidoid.widget.FA;
-import org.rapidoid.widget.StreamWidget;
+import org.rapidoid.jpa.JPAEntity;
 
 /*
  * #%L
@@ -28,25 +27,18 @@ import org.rapidoid.widget.StreamWidget;
  * #L%
  */
 
+@Entity
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class HomeScreen extends Screen {
+@SuppressWarnings("serial")
+public class Comment extends JPAEntity {
 
-	public String title = "Welcome!";
+	public String content;
 
-	public Object content() {
-		boolean fav = true;
-		Tag star = fav ? FA.STAR : FA.STAR_O;
-		Tag upvote = FA.THUMBS_O_UP;
-		Tag downvote = FA.THUMBS_O_DOWN;
+	@ManyToOne
+	public User owner;
 
-		CardWidget card = card(h3("{{it().priority}} priority"), h4("Desc: {{it().description}}"));
-		card = card.controls(upvote, "123", downvote, star);
-		card = card.header("{{it().title}}");
-
-		StreamWidget stream = stream(card).cols(3).dataUrl("/task/page/{{page}}");
-
-		return arr(cmd("Refresh").info(), stream);
-	}
+	@ManyToOne
+	public Task task;
 
 }

@@ -1,4 +1,4 @@
-package org.rapidoid.demo.taskplanner.gui;
+package demo.taskplanner.gui;
 
 /*
  * #%L
@@ -22,15 +22,17 @@ package org.rapidoid.demo.taskplanner.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Transaction;
 import org.rapidoid.app.Screen;
-import org.rapidoid.demo.taskplanner.model.Task;
-import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.Tag;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.DB;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.ButtonWidget;
+
+import demo.taskplanner.model.Task;
+import demo.taskplanner.model.User;
 
 @CanInsert("logged_in")
 class Book {
@@ -58,6 +60,7 @@ public class AboutScreen extends Screen {
 		return modal("Confirm deletion", h1("Are you sure?"), div(YES, NO));
 	}
 
+	@Transaction
 	public void onTx() {
 		long id = DB.insert(task());
 		DB.update(id, task());

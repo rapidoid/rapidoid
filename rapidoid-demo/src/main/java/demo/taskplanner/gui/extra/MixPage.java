@@ -1,4 +1,4 @@
-package org.rapidoid.demo.taskplanner.gui.extra;
+package demo.taskplanner.gui.extra;
 
 /*
  * #%L
@@ -23,7 +23,6 @@ package org.rapidoid.demo.taskplanner.gui.extra;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.demo.taskplanner.model.User;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.FormTag;
@@ -35,6 +34,8 @@ import org.rapidoid.util.U;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.ButtonWidget;
 import org.rapidoid.widget.GridWidget;
+
+import demo.taskplanner.model.User;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
