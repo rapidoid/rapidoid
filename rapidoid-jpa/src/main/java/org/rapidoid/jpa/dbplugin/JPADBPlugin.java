@@ -17,6 +17,7 @@ import org.rapidoid.ctx.Ctx;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.plugins.impl.DefaultDBPlugin;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 /*
  * #%L
@@ -44,8 +45,33 @@ public class JPADBPlugin extends DefaultDBPlugin {
 
 	@Override
 	public long insert(Object entity) {
-		em().persist(entity);
-		return Beany.getId(entity);
+
+		EntityTransaction tx = em().getTransaction();
+
+		boolean txWasActive = tx.isActive();
+
+		if (!txWasActive) {
+			tx.begin();
+		}
+
+		try {
+			em().persist(entity);
+			em().flush();
+
+			long id = Beany.getId(entity);
+
+			if (!txWasActive) {
+				tx.commit();
+			}
+
+			return id;
+
+		} catch (Throwable e) {
+			if (!txWasActive) {
+				tx.rollback();
+			}
+			throw U.rte("Transaction execution error, rolled back!", e);
+		}
 	}
 
 	@Override
@@ -110,7 +136,12 @@ public class JPADBPlugin extends DefaultDBPlugin {
 	}
 
 	private void runTxReadOnly(Runnable action, EntityTransaction tx) {
-		tx.begin();
+		boolean txWasActive = tx.isActive();
+
+		if (!txWasActive) {
+			tx.begin();
+		}
+
 		tx.setRollbackOnly();
 
 		try {
@@ -120,11 +151,17 @@ public class JPADBPlugin extends DefaultDBPlugin {
 			throw U.rte("Transaction execution error, rolled back!", e);
 		}
 
-		tx.rollback();
+		if (!txWasActive) {
+			tx.rollback();
+		}
 	}
 
 	private void runTxRW(Runnable action, EntityTransaction tx) {
-		tx.begin();
+		boolean txWasActive = tx.isActive();
+
+		if (!txWasActive) {
+			tx.begin();
+		}
 
 		try {
 			action.run();
@@ -133,7 +170,9 @@ public class JPADBPlugin extends DefaultDBPlugin {
 			throw U.rte("Transaction execution error, rolled back!", e);
 		}
 
-		tx.commit();
+		if (!txWasActive) {
+			tx.commit();
+		}
 	}
 
 	@Override
