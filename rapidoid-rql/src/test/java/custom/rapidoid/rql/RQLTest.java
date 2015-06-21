@@ -1,4 +1,4 @@
-package org.rapidoid.rql;
+package custom.rapidoid.rql;
 
 /*
  * #%L
@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.plugins.Plugins;
+import org.rapidoid.rql.RQL;
 import org.rapidoid.test.TestCommons;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
