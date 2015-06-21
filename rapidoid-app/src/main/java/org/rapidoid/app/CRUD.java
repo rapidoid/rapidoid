@@ -71,7 +71,7 @@ public class CRUD<E> {
 		return clazz;
 	}
 
-	@GET("/")
+	@GET("/get")
 	public E get(long id) {
 		return DB.get(clazz, id);
 	}
