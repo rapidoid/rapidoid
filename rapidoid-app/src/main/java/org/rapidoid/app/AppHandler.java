@@ -24,11 +24,15 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpNotFoundException;
+import org.rapidoid.http.HttpProtocol;
 import org.rapidoid.json.JSON;
+import org.rapidoid.log.Log;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.util.CustomizableClassLoader;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -50,7 +54,25 @@ public class AppHandler implements Handler {
 	public Object handle(final HttpExchange x) throws Exception {
 		x.setClassLoader(classLoader);
 
-		TxHelper.runInTx(x);
+		Object result;
+
+		try {
+			result = AppHandler.processReq(x);
+		} catch (Exception e) {
+			if (UTILS.rootCause(e) instanceof HttpNotFoundException) {
+				throw U.rte(e);
+			} else {
+				// Log.error("Exception occured while processing request!", UTILS.rootCause(e));
+				throw U.rte(e);
+			}
+		}
+
+		try {
+			HttpProtocol.processResponse(x, result);
+		} catch (Exception e) {
+			Log.error("Exception occured while finalizing response inside transaction!", UTILS.rootCause(e));
+			throw U.rte(e);
+		}
 
 		return x;
 	}

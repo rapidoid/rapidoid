@@ -25,10 +25,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.transaction.Transactional;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.aop.AOP;
 import org.rapidoid.app.Apps;
+import org.rapidoid.app.TransactionInterceptor;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.jpa.dbplugin.JPADBPlugin;
 import org.rapidoid.util.U;
@@ -61,6 +64,9 @@ public class Quick {
 		List<Object> appArgs = U.<Object> list(db);
 		appArgs.addAll(U.list(args));
 		Apps.bootstrap(U.array(appArgs));
+
+		// TODO provide better support for javax.transaction.Transactional
+		AOP.register(Transactional.class, new TransactionInterceptor());
 
 		// eager JPA initialization
 		QuickJPA.createEM(args);

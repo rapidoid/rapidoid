@@ -29,6 +29,7 @@ import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.aop.AOPInterceptor;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.log.Log;
 import org.rapidoid.plugins.DB;
 import org.rapidoid.util.U;
 
@@ -37,8 +38,7 @@ public class TransactionInterceptor implements AOPInterceptor {
 	@Override
 	public Object intercept(Annotation ann, Object ctx, final Method m, final Object target, final Object... args) {
 		HttpExchange x = (HttpExchange) ctx;
-		Transaction tx = (Transaction) ann;
-		TransactionMode txMode = tx.value();
+		TransactionMode txMode = getTxMode(ann);
 
 		final boolean readOnly;
 		if (txMode == TransactionMode.AUTO) {
@@ -58,6 +58,17 @@ public class TransactionInterceptor implements AOPInterceptor {
 		}, readOnly);
 
 		return result.get();
+	}
+
+	private TransactionMode getTxMode(Annotation ann) {
+		if (ann instanceof Transaction) {
+			Transaction tx = (Transaction) ann;
+			TransactionMode txMode = tx.value();
+			return txMode;
+		} else {
+			Log.warn("Providing LIMITED support for this transaction annotation!", "annotation", ann);
+			return TransactionMode.AUTO;
+		}
 	}
 
 }
