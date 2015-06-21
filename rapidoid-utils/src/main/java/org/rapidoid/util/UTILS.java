@@ -667,7 +667,7 @@ public class UTILS implements Constants {
 
 	public static synchronized void schedule(Runnable task, long delay) {
 		if (EXECUTOR == null) {
-			EXECUTOR = new ScheduledThreadPoolExecutor(3);
+			EXECUTOR = new ScheduledThreadPoolExecutor(100);
 		}
 
 		EXECUTOR.schedule(task, delay, TimeUnit.MILLISECONDS);

@@ -137,17 +137,21 @@ public class JPADBPlugin extends DefaultDBPlugin {
 	}
 
 	@Override
-	public void transaction(Runnable tx, boolean readonly, Callback<Void> callback) {
-		// FIXME make async
+	public void transaction(final Runnable tx, final boolean readonly, final Callback<Void> callback) {
+		UTILS.schedule(new Runnable() {
 
-		try {
-			transaction(tx, readonly);
-		} catch (Throwable e) {
-			callback.onDone(null, e);
-			return;
-		}
+			@Override
+			public void run() {
+				try {
+					transaction(tx, readonly);
+				} catch (Throwable e) {
+					callback.onDone(null, e);
+					return;
+				}
 
-		callback.onDone(null, null);
+				callback.onDone(null, null);
+			}
+		}, 0);
 	}
 
 	protected EntityManager em() {
