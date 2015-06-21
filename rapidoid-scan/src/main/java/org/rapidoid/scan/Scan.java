@@ -254,15 +254,19 @@ public class Scan {
 
 			File root = new File(rootPath);
 
-			U.must(root.exists());
-			if (root.isDirectory()) {
-				Log.debug("Scanning directory", "name", root.getAbsolutePath());
-				getClassesFromDir(classes, root, file, regex, filter, annotated, classLoader);
-			} else if (root.isFile() && root.getAbsolutePath().toLowerCase().endsWith(".jar")) {
-				Log.debug("Scanning JAR", "name", root.getAbsolutePath());
-				getClassesFromJAR(root.getAbsolutePath(), classes, packageName, regex, filter, annotated, classLoader);
+			if (root.exists()) {
+				if (root.isDirectory()) {
+					Log.debug("Scanning directory", "name", root.getAbsolutePath());
+					getClassesFromDir(classes, root, file, regex, filter, annotated, classLoader);
+				} else if (root.isFile() && root.getAbsolutePath().toLowerCase().endsWith(".jar")) {
+					Log.debug("Scanning JAR", "name", root.getAbsolutePath());
+					getClassesFromJAR(root.getAbsolutePath(), classes, packageName, regex, filter, annotated,
+							classLoader);
+				} else {
+					Log.warn("Invalid classpath entry: " + cpe);
+				}
 			} else {
-				throw U.rte("Invalid classpath entry: %s", cpe);
+				Log.warn("Classpath entry doesn't exist: " + cpe);
 			}
 		}
 
