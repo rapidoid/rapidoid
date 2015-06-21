@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.aop.AOP;
 import org.rapidoid.arr.Arr;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
@@ -110,7 +111,7 @@ public class Pages {
 		Method m = Cls.findMethod(target.getClass(), "title", HttpExchange.class);
 
 		if (m != null) {
-			return Cls.invoke(m, target, x);
+			return AOP.invoke(x, m, target, x);
 		}
 
 		try {
@@ -122,12 +123,12 @@ public class Pages {
 
 	public static Object contentOf(HttpExchange x, Object target) {
 		Method m = Cls.findMethod(target.getClass(), "content", HttpExchange.class);
-		return m != null ? Cls.invoke(m, target, x) : Beany.getPropValue(target, "content", null);
+		return m != null ? AOP.invoke(x, m, target, x) : Beany.getPropValue(target, "content", null);
 	}
 
 	public static Object headOf(HttpExchange x, Object target) {
 		Method m = Cls.findMethod(target.getClass(), "head", HttpExchange.class);
-		return m != null ? Cls.invoke(m, target, x) : Beany.getPropValue(target, "head", null);
+		return m != null ? AOP.invoke(x, m, target, x) : Beany.getPropValue(target, "head", null);
 	}
 
 	public static Object page(HttpExchange x, Object page) {
@@ -361,7 +362,7 @@ public class Pages {
 		Method m = Cls.findMethodByArgs(target.getClass(), handlerName, cmd.args);
 
 		if (m != null) {
-			Cls.invoke(m, target, cmd.args);
+			AOP.invoke(x, m, target, cmd.args);
 			return true;
 		}
 
@@ -369,7 +370,7 @@ public class Pages {
 		m = Cls.findMethodByArgs(target.getClass(), handlerName, args2);
 
 		if (m != null) {
-			Cls.invoke(m, target, args2);
+			AOP.invoke(x, m, target, args2);
 			return true;
 		}
 
@@ -379,19 +380,19 @@ public class Pages {
 		m = Cls.findMethodByArgs(target.getClass(), handlerName, args2);
 
 		if (m != null) {
-			Cls.invoke(m, target, args2);
+			AOP.invoke(x, m, target, args2);
 			return true;
 		}
 
 		Method on = Cls.findMethod(target.getClass(), "on", String.class, Object[].class);
 		if (on != null) {
-			Cls.invoke(on, target, cmd.name, cmd.args);
+			AOP.invoke(x, on, target, cmd.name, cmd.args);
 			return true;
 		}
 
 		on = Cls.findMethod(target.getClass(), "on", HttpExchange.class, String.class, Object[].class);
 		if (on != null) {
-			Cls.invoke(on, target, x, cmd.name, cmd.args);
+			AOP.invoke(x, on, target, x, cmd.name, cmd.args);
 			return true;
 		}
 

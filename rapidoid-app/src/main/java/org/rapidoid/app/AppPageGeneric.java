@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.aop.AOP;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
@@ -89,7 +90,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		if (appCls.main != null) {
 			Method init = Cls.findMethod(appCls.main, "init");
 			if (init != null) {
-				Cls.invoke(init, app);
+				AOP.invoke(x, init, app);
 			}
 		}
 
