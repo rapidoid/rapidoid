@@ -30,6 +30,20 @@ import org.testng.annotations.Test;
 public class CryptoTest extends TestCommons {
 
 	@Test
+	public void testDigest() {
+		notNull(Crypto.digest("MD5"));
+		notNull(Crypto.digest("SHA-1"));
+		notNull(Crypto.digest("SHA-512"));
+	}
+
+	@Test
+	public void testSecret() {
+		notNull(Crypto.secret());
+		isTrue(Crypto.secret() == Crypto.secret());
+		eq(Crypto.secret().length(), 100);
+	}
+
+	@Test
 	public void testMD5() {
 		eq(Crypto.md5("abc"), "900150983cd24fb0d6963f7d28e17f72");
 		eq(Crypto.md5("x"), "9dd4e461268c8034f5c8564e155c67a6");
