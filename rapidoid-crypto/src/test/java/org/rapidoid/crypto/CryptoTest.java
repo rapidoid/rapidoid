@@ -2,7 +2,7 @@ package org.rapidoid.crypto;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-crypto
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
  * %%
