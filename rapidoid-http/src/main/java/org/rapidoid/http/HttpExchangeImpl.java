@@ -31,7 +31,6 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.UserInfo;
@@ -56,8 +55,8 @@ import org.rapidoid.wrap.BoolWrap;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class HttpExchangeImpl extends DefaultExchange<HttpExchange> implements LowLevelHttpExchange, HttpInterception,
-		Constants {
+public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implements LowLevelHttpExchange,
+		HttpExchangeInternals, HttpInterception, Constants {
 
 	public static final String SESSION_COOKIE = "JSESSIONID";
 
@@ -86,8 +85,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange> implements L
 	final Range body = new Range();
 	final BoolWrap isGet = new BoolWrap();
 	final BoolWrap isKeepAlive = new BoolWrap();
-
-	private TransactionMode txMode = null;
 
 	private boolean parsedParams;
 	private boolean parsedHeaders;
@@ -157,7 +154,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange> implements L
 
 		isGet.value = false;
 		isKeepAlive.value = false;
-		txMode = null;
 
 		extras = null;
 
@@ -315,7 +311,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange> implements L
 	}
 
 	@Override
-	public synchronized HttpExchange send() {
+	public synchronized HttpExchangeImpl send() {
 		conn.send();
 		return this;
 	}
@@ -601,37 +597,37 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange> implements L
 	}
 
 	@Override
-	public synchronized HttpExchange write(String s) {
+	public synchronized HttpExchangeImpl write(String s) {
 		ensureHeadersComplete();
 		return super.write(s);
 	}
 
 	@Override
-	public synchronized HttpExchange writeln(String s) {
+	public synchronized HttpExchangeImpl writeln(String s) {
 		ensureHeadersComplete();
 		return super.writeln(s);
 	}
 
 	@Override
-	public synchronized HttpExchange write(byte[] bytes) {
+	public synchronized HttpExchangeImpl write(byte[] bytes) {
 		ensureHeadersComplete();
 		return super.write(bytes);
 	}
 
 	@Override
-	public synchronized HttpExchange write(byte[] bytes, int offset, int length) {
+	public synchronized HttpExchangeImpl write(byte[] bytes, int offset, int length) {
 		ensureHeadersComplete();
 		return super.write(bytes, offset, length);
 	}
 
 	@Override
-	public synchronized HttpExchange write(ByteBuffer buf) {
+	public synchronized HttpExchangeImpl write(ByteBuffer buf) {
 		ensureHeadersComplete();
 		return super.write(buf);
 	}
 
 	@Override
-	public synchronized HttpExchange write(File file) {
+	public synchronized HttpExchangeImpl write(File file) {
 		if (!hasContentType()) {
 			download(file.getName());
 		}
@@ -641,7 +637,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange> implements L
 	}
 
 	@Override
-	public synchronized HttpExchange writeJSON(Object value) {
+	public synchronized HttpExchangeImpl writeJSON(Object value) {
 		if (!hasContentType()) {
 			json();
 		}
@@ -952,7 +948,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange> implements L
 	}
 
 	@Override
-	public synchronized boolean serveStatic() {
+	public synchronized boolean serveStaticFile() {
 		if (isGetReq()) {
 			String filename = path().substring(1);
 
@@ -1072,16 +1068,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchange> implements L
 	@Override
 	public String realAddress() {
 		return header("X-Forwarded-For", address());
-	}
-
-	@Override
-	public synchronized TransactionMode getTransactionMode() {
-		return txMode;
-	}
-
-	@Override
-	public synchronized void setTransactionMode(TransactionMode txMode) {
-		this.txMode = txMode;
 	}
 
 	@Override

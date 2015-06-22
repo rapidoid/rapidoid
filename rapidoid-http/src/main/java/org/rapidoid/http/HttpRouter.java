@@ -111,7 +111,7 @@ public class HttpRouter implements Router {
 		Range path = x.path_().range();
 
 		if (x.isGetReq() && BytesUtil.find(buf.bytes(), path.start + 1, path.limit(), (byte) '.', true) >= 0) {
-			if (x.serveStatic()) {
+			if (x.serveStaticFile()) {
 				return;
 			}
 		}

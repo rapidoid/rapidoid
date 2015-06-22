@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpExchangeInternals;
 import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.http.HttpProtocol;
 import org.rapidoid.json.JSON;
@@ -52,7 +53,8 @@ public class AppHandler implements Handler {
 
 	@Override
 	public Object handle(final HttpExchange x) throws Exception {
-		x.setClassLoader(classLoader);
+		HttpExchangeInternals xi = (HttpExchangeInternals) x;
+		xi.setClassLoader(classLoader);
 
 		Object result;
 
@@ -78,15 +80,17 @@ public class AppHandler implements Handler {
 	}
 
 	static Object processReq(HttpExchange x) {
+		HttpExchangeInternals xi = (HttpExchangeInternals) x;
+
 		if (x.isPostReq()) {
 			String state = x.data("__state", null);
 			if (!U.isEmpty(state) && !state.equals("null")) {
 				byte[] bytes = JSON.parseBytes('"' + state + '"');
-				x.deserializeLocals(bytes);
+				xi.deserializeLocals(bytes);
 			}
 		}
 
-		final AppClasses appCls = Apps.getAppClasses(x, x.getClassLoader());
+		final AppClasses appCls = Apps.getAppClasses(x, xi.getClassLoader());
 
 		WebPojoDispatcher dispatcher = (WebPojoDispatcher) appCls.ctx.get(DISPATCHER);
 

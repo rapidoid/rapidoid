@@ -28,7 +28,6 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.ctx.AppExchange;
 import org.rapidoid.mime.MediaType;
 
@@ -103,7 +102,7 @@ public interface HttpExchange extends AppExchange {
 
 	Map<String, Object> locals();
 
-	Map<String, Object> getSessionById(String sessionId);
+	String sessionId();
 
 	<T> T session(String name);
 
@@ -113,15 +112,9 @@ public interface HttpExchange extends AppExchange {
 
 	<T extends Serializable> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
 
-	String sessionId();
-
 	void closeSession();
 
-	void clearSession(String sessionId);
-
 	boolean hasSession();
-
-	boolean hasSession(String sessionId);
 
 	String pathSegment(int segmentIndex);
 
@@ -129,25 +122,9 @@ public interface HttpExchange extends AppExchange {
 
 	boolean isPostReq();
 
-	TransactionMode getTransactionMode();
-
-	void setTransactionMode(TransactionMode txMode);
-
-	void setClassLoader(ClassLoader classLoader);
-
-	ClassLoader getClassLoader();
-
 	/* RESPONSE: */
 
 	String constructUrl(String path);
-
-	byte[] sessionSerialize();
-
-	void sessionDeserialize(byte[] bytes);
-
-	byte[] serializeLocals();
-
-	void deserializeLocals(byte[] bytes);
 
 	<T> T extra(Object key);
 
@@ -195,9 +172,7 @@ public interface HttpExchange extends AppExchange {
 
 	String redirectUrl();
 
-	boolean serveStatic();
-
-	/* BODY */
+	boolean serveStaticFile();
 
 	HttpExchange sendFile(File file);
 
@@ -224,8 +199,6 @@ public interface HttpExchange extends AppExchange {
 	HttpExchange write(File file);
 
 	HttpExchange writeJSON(Object value);
-
-	HttpExchange send();
 
 	// due to async() web handling option, it ain't over till the fat lady sings "done"
 	HttpExchange async();

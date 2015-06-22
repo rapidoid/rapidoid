@@ -28,8 +28,8 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpExchangeInternals;
 import org.rapidoid.http.HttpHeader;
 import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.http.HttpSession;
@@ -43,7 +43,7 @@ import org.rapidoid.util.U;
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
 @SuppressWarnings("unchecked")
-public class MockHttpExchange extends DefaultExchange<HttpExchange> implements HttpExchange {
+public class MockHttpExchange extends DefaultExchange<MockHttpExchange> implements HttpExchange, HttpExchangeInternals {
 
 	private static final String SESSION_ID = "session1";
 
@@ -176,7 +176,7 @@ public class MockHttpExchange extends DefaultExchange<HttpExchange> implements H
 	}
 
 	@Override
-	public boolean serveStatic() {
+	public boolean serveStaticFile() {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -218,61 +218,61 @@ public class MockHttpExchange extends DefaultExchange<HttpExchange> implements H
 	}
 
 	@Override
-	public HttpExchange write(String s) {
+	public MockHttpExchange write(String s) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchange writeln(String s) {
+	public MockHttpExchange writeln(String s) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchange write(byte[] bytes) {
+	public MockHttpExchange write(byte[] bytes) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchange write(byte[] bytes, int offset, int length) {
+	public MockHttpExchange write(byte[] bytes, int offset, int length) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchange write(ByteBuffer buf) {
+	public MockHttpExchange write(ByteBuffer buf) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchange write(File file) {
+	public MockHttpExchange write(File file) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchange writeJSON(Object value) {
+	public MockHttpExchange writeJSON(Object value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchange send() {
+	public MockHttpExchange send() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchange async() {
+	public MockHttpExchange async() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public HttpExchange done() {
+	public MockHttpExchange done() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -529,18 +529,6 @@ public class MockHttpExchange extends DefaultExchange<HttpExchange> implements H
 	public String var(String name, String defaultValue) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public TransactionMode getTransactionMode() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setTransactionMode(TransactionMode txMode) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

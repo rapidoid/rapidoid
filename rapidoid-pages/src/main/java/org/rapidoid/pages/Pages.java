@@ -39,6 +39,7 @@ import org.rapidoid.html.TagContext;
 import org.rapidoid.html.Tags;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpExchangeInternals;
 import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.http.HttpSuccessException;
 import org.rapidoid.json.JSON;
@@ -168,7 +169,7 @@ public class Pages {
 
 	public static Object dispatch(HttpExchange x, WebPojoDispatcher serviceDispatcher, Map<String, Class<?>> pages) {
 
-		if (x.serveStatic()) {
+		if (x.serveStaticFile()) {
 			return x;
 		}
 
@@ -347,7 +348,8 @@ public class Pages {
 	}
 
 	public static byte[] stateOf(HttpExchange x) {
-		return x.hasSession() ? x.serializeLocals() : null;
+		HttpExchangeInternals xi = (HttpExchangeInternals) x;
+		return x.hasSession() ? xi.serializeLocals() : null;
 	}
 
 	public static void callCmdHandler(HttpExchange x, Object target, Cmd cmd) {

@@ -20,49 +20,32 @@ package org.rapidoid.http;
  * #L%
  */
 
+import java.util.Map;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.Buf;
-import org.rapidoid.data.BinaryMultiData;
-import org.rapidoid.data.Data;
-import org.rapidoid.data.MultiData;
+import org.rapidoid.ctx.AppExchange;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.3.0")
-public interface LowLevelHttpExchange extends HttpExchange {
+@Since("2.0.0")
+public interface HttpExchangeInternals extends AppExchange {
 
-	void lowLevelProcessing();
+	Map<String, Object> getSessionById(String sessionId);
 
-	Buf input();
+	void clearSession(String sessionId);
 
-	Buf output();
+	boolean hasSession(String sessionId);
 
-	Data verb_();
+	void setClassLoader(ClassLoader classLoader);
 
-	Data uri_();
+	ClassLoader getClassLoader();
 
-	Data path_();
+	byte[] sessionSerialize();
 
-	Data subpath_();
+	void sessionDeserialize(byte[] bytes);
 
-	Data query_();
+	byte[] serializeLocals();
 
-	Data protocol_();
-
-	Data body_();
-
-	Data host_();
-
-	MultiData params_();
-
-	MultiData headers_();
-
-	MultiData cookies_();
-
-	MultiData data_();
-
-	BinaryMultiData files_();
-
-	LowLevelHttpExchange send();
+	void deserializeLocals(byte[] bytes);
 
 }
