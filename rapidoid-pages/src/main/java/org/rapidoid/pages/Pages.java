@@ -195,7 +195,6 @@ public class Pages {
 		}
 
 		Object page = Cls.newInstance(pageClass);
-		x.tmps().put(SESSION_CTX, Tags.context());
 
 		if (isEmiting(x)) {
 			return emit(x, page);
@@ -209,6 +208,8 @@ public class Pages {
 	}
 
 	public static Object serve(HttpExchange x, Object view) {
+		x.tmps().put(SESSION_CTX, Tags.context());
+
 		load(x, view);
 		store(x, view);
 
@@ -259,9 +260,11 @@ public class Pages {
 	}
 
 	public static Object emit(HttpExchange x, Object view) {
+
 		int event = U.num(x.data("event"));
 
-		TagContext ctx = x.tmp(SESSION_CTX);
+		TagContext ctx = Tags.context();
+		x.tmps().put(SESSION_CTX, ctx);
 
 		Cmd cmd = ctx.getEventCmd(event);
 
