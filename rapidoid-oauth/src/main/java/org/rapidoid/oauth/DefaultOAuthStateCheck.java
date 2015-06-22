@@ -3,8 +3,8 @@ package org.rapidoid.oauth;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.util.Crypto;
 import org.rapidoid.util.Rnd;
-import org.rapidoid.util.UTILS;
 
 /*
  * #%L
@@ -37,7 +37,7 @@ public class DefaultOAuthStateCheck implements OAuthStateCheck {
 		}
 
 		String rnd = Rnd.rndStr(10);
-		String hash = UTILS.md5(clientSecret + rnd);
+		String hash = Crypto.md5(clientSecret + rnd);
 		return rnd + "_" + hash;
 	}
 
@@ -52,7 +52,7 @@ public class DefaultOAuthStateCheck implements OAuthStateCheck {
 			return false;
 		}
 
-		String hash = UTILS.md5(clientSecret + parts[0]);
+		String hash = Crypto.md5(clientSecret + parts[0]);
 		return parts[1].equals(hash);
 	}
 

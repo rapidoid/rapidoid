@@ -36,8 +36,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.nio.ByteBuffer;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -619,42 +617,6 @@ public class UTILS implements Constants {
 		}
 
 		return sb.toString();
-	}
-
-	private static MessageDigest digest(String algorithm) {
-		try {
-			return MessageDigest.getInstance(algorithm);
-		} catch (NoSuchAlgorithmException e) {
-			throw U.rte("Cannot find algorithm: " + algorithm);
-		}
-	}
-
-	public static byte[] md5Bytes(byte[] bytes) {
-		MessageDigest md5 = digest("MD5");
-		md5.update(bytes);
-		return md5.digest();
-	}
-
-	public static String md5(byte[] bytes) {
-		return bytesAsText(md5Bytes(bytes));
-	}
-
-	public static String md5(String data) {
-		return md5(data.getBytes());
-	}
-
-	public static byte[] sha1Bytes(byte[] bytes) {
-		MessageDigest sha1 = digest("SHA-1");
-		sha1.update(bytes);
-		return sha1.digest();
-	}
-
-	public static String sha1(byte[] bytes) {
-		return bytesAsText(sha1Bytes(bytes));
-	}
-
-	public static String sha1(String data) {
-		return sha1(data.getBytes());
 	}
 
 	public static String urlDecode(String value) {

@@ -45,6 +45,7 @@ import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.io.IO;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.util.Crypto;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.testng.Assert;
@@ -87,7 +88,7 @@ public abstract class HttpTestCommons extends TestCommons {
 			@Override
 			public Object handle(HttpExchange x) {
 				return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.data().get("a"), x.files()
-						.size(), UTILS.md5(x.files().get("f1")), UTILS.md5(x.files().get("f2")), UTILS.md5(U.or(x
+						.size(), Crypto.md5(x.files().get("f1")), Crypto.md5(x.files().get("f2")), Crypto.md5(U.or(x
 						.files().get("f3"), new byte[0])));
 			}
 		});
@@ -251,7 +252,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected String resourceMD5(String filename) throws IOException, URISyntaxException {
-		return UTILS.md5(FileUtils.readFileToByteArray(new File(IO.resource(filename).toURI())));
+		return Crypto.md5(FileUtils.readFileToByteArray(new File(IO.resource(filename).toURI())));
 	}
 
 }

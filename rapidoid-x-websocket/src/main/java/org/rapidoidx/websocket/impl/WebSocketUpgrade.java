@@ -27,8 +27,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.http.HttpUpgradeHandler;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.Crypto;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -53,7 +53,7 @@ public class WebSocketUpgrade implements HttpUpgradeHandler, Constants {
 		U.must(wsVer.equals("13"), "The WebSocket protocol version '%s' is not supported!", wsVer);
 		U.must(wsProtocol == null, "The WebSocket sub-protocol(s) '%s' is/are not supported!", wsProtocol);
 
-		byte[] hash = UTILS.sha1Bytes((wsKey + GUID).getBytes());
+		byte[] hash = Crypto.sha1Bytes((wsKey + GUID).getBytes());
 
 		x.output().append(SEC_WEBSOCKET_ACCEPT);
 		x.output().append(Base64.encodeBase64(hash));
