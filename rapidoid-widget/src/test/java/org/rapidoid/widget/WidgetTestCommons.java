@@ -31,6 +31,7 @@ import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.impl.TagRenderer;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.var.Var;
 
@@ -94,7 +95,7 @@ public class WidgetTestCommons extends TestCommons {
 	}
 
 	protected static HttpExchange setupMockExchange() {
-		HttpExchange x = new MockHttpExchange();
+		HttpExchange x = new HttpExchangeImpl();
 		Ctx.reset();
 		Ctx.setExchange(x);
 		return x;

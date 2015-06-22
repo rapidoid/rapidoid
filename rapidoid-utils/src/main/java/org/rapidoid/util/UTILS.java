@@ -761,4 +761,9 @@ public class UTILS implements Constants {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <K, V> Map<K, V> cast(Map<?, ?> map) {
+		return (Map<K, V>) map;
+	}
+
 }

@@ -28,7 +28,7 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface HttpSession extends Serializable {
+public interface SessionPersistor extends Serializable {
 
 	void openSession(String sessionId);
 

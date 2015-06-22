@@ -20,6 +20,7 @@ package org.rapidoid.widget;
  * #L%
  */
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -51,7 +52,7 @@ public class DebugWidget extends AbstractWidget {
 	protected PanelWidget localPanel() {
 		Map<String, Object> visibleAttributes = U.map();
 
-		for (Entry<String, Object> e : ctx().locals().entrySet()) {
+		for (Entry<String, Serializable> e : ctx().locals().entrySet()) {
 			if (!e.getKey().startsWith("_")) {
 				visibleAttributes.put(e.getKey(), e.getValue());
 			}

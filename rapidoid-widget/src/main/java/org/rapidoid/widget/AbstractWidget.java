@@ -55,12 +55,11 @@ public abstract class AbstractWidget extends BootstrapWidgets implements TagWidg
 
 	private static int getWidgetNumber(AbstractWidget widget) {
 		HttpExchange x = Ctx.exchange();
-		// U.notNull(x, "HTTP exchange");
 
 		if (x != null) {
 			String extrName = "widget_counter_" + widget.getClass().getSimpleName();
-			Integer counter = U.or((Integer) x.extra(extrName), 1);
-			x.extra(extrName, counter + 1);
+			Integer counter = U.or((Integer) x.tmp(extrName, null), 1);
+			x.tmps().put(extrName, counter + 1);
 			return counter;
 		} else {
 			return -1;

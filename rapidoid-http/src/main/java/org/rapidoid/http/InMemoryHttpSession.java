@@ -32,7 +32,7 @@ import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class InMemoryHttpSession implements HttpSession {
+public class InMemoryHttpSession implements SessionPersistor {
 
 	private static final long serialVersionUID = -3390334080583841460L;
 

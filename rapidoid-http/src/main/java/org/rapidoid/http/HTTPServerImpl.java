@@ -30,7 +30,7 @@ import org.rapidoid.net.impl.RapidoidServerLoop;
 @Since("2.0.0")
 public class HTTPServerImpl extends RapidoidServerLoop implements HTTPServer {
 
-	private final HttpSession session = new InMemoryHttpSession();
+	private final SessionPersistor session = new InMemoryHttpSession();
 
 	public HTTPServerImpl() {
 		super(new HttpProtocol(new HttpRouter()), HttpExchangeImpl.class, null);

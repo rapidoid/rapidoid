@@ -98,39 +98,67 @@ public interface HttpExchange extends AppExchange {
 	 */
 	String var(String name, String defaultValue);
 
-	Map<String, Object> session();
-
-	Map<String, Object> locals();
-
-	String sessionId();
-
-	<T> T session(String name);
-
-	<T> T session(String name, T defaultValue);
-
-	void sessionSet(String name, Serializable value);
-
-	<T extends Serializable> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
-
-	void closeSession();
-
-	boolean hasSession();
-
 	String pathSegment(int segmentIndex);
+
+	String realAddress();
 
 	boolean isGetReq();
 
 	boolean isPostReq();
 
+	/* STATE: */
+
+	String sessionId();
+
+	void sessionSet(String name, Serializable value);
+
+	void closeSession();
+
+	boolean hasSession();
+
+	/* SESSION SCOPE: */
+
+	Map<String, Object> session();
+
+	<T> T session(String name);
+
+	<T> T session(String name, T defaultValue);
+
+	<T> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+
+	/* COOKIEPACK SCOPE: */
+
+	Map<String, Serializable> cookiepack();
+
+	<T extends Serializable> T cookiepack(String name);
+
+	<T extends Serializable> T cookiepack(String name, T defaultValue);
+
+	<T extends Serializable> T cookiepackGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+
+	/* LOCAL SCOPE: */
+
+	Map<String, Serializable> locals();
+
+	<T extends Serializable> T local(String key);
+
+	<T extends Serializable> T local(String key, T defaultValue);
+
+	<T extends Serializable> T localGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+
+	/* TMP SCOPE: */
+
+	Map<String, Object> tmps();
+
+	<T> T tmp(String key);
+
+	<T> T tmp(String key, T defaultValue);
+
+	<T> T tmpGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+
 	/* RESPONSE: */
 
 	String constructUrl(String path);
-
-	<T> T extra(Object key);
-
-	void extra(Object key, Object value);
-
-	String realAddress();
 
 	HttpExchange startResponse(int httpResponseCode);
 

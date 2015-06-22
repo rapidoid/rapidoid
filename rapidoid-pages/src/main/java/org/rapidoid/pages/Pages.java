@@ -222,7 +222,9 @@ public class Pages {
 
 	public static void load(HttpExchange x, Object target) {
 		Mapper<String, Object> sessionMapper = Lambdas.mapper(x.session());
-		Mapper<String, Object> pageMapper = Lambdas.mapper(x.locals());
+
+		Map<String, Object> locals = UTILS.cast(x.locals());
+		Mapper<String, Object> pageMapper = Lambdas.mapper(locals);
 
 		Wire.autowire(target, sessionMapper, pageMapper);
 

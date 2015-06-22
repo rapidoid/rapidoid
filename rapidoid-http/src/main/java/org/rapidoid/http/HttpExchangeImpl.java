@@ -24,14 +24,11 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.data.BinaryMultiData;
@@ -60,8 +57,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	public static final String SESSION_COOKIE = "JSESSIONID";
 
-	public static final String SESSION_PAGE_STACK = "_page_stack_";
-
 	private final static HttpParser PARSER = Wire.singleton(HttpParser.class);
 
 	private static final byte[] HEADER_SEP = ": ".getBytes();
@@ -83,6 +78,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private final KeyValueRanges files = new KeyValueRanges(50);
 
 	final Range body = new Range();
+	final Range multipartBoundary = new Range();
+	private final Range subpathRange = new Range();
+
 	final BoolWrap isGet = new BoolWrap();
 	final BoolWrap isKeepAlive = new BoolWrap();
 
@@ -96,16 +94,19 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private boolean hasContentType;
 	private int startingPos;
 	private HttpResponses responses;
-	private HttpSession session;
 	private Router router;
-	private Map<Object, Object> extras;
+	private SessionPersistor sessionPersistor;
+
 	private Map<String, String> vars;
 
-	final Range multipartBoundary = new Range();
+	/* STATE */
+
+	private Map<String, Object> session;
+	private Map<String, Serializable> cookiepack;
+	private Map<String, Serializable> locals;
+	private Map<String, Object> tmps;
 
 	/**********/
-
-	private final Range subpathRange = new Range();
 
 	private final Data _body;
 	private final Data _uri;
@@ -128,8 +129,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private boolean lowLevelProcessing;
 
 	private ClassLoader classLoader;
-
-	private final Map<String, Object> locals = U.synchronizedMap();
 
 	public HttpExchangeImpl() {
 		reset();
@@ -155,7 +154,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		isGet.value = false;
 		isKeepAlive.value = false;
 
-		extras = null;
+		tmps = null;
 
 		verb.reset();
 		uri.reset();
@@ -179,10 +178,13 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 		sessionId = null;
 
-		session = null;
+		sessionPersistor = null;
 		router = null;
 
-		locals.clear();
+		session = null;
+		cookiepack = null;
+		locals = null;
+		tmps = null;
 
 		resetResponse();
 	}
@@ -436,7 +438,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public synchronized Map<String, String> vars() {
 		if (vars == null) {
-			vars = U.map();
+			vars = U.synchronizedMap();
 			vars.putAll(params());
 			vars.putAll(data());
 		}
@@ -736,100 +738,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public synchronized String sessionId() {
-		if (sessionId == null) {
-			sessionId = cookie(SESSION_COOKIE, null);
-
-			if (sessionId != null && !session.exists(sessionId)) {
-				sessionId = null;
-			}
-
-			if (sessionId == null) {
-				sessionId = Rnd.rndStr(50);
-				setCookie(SESSION_COOKIE, sessionId, "path=/");
-				session.openSession(sessionId);
-			}
-		}
-
-		return sessionId;
-	}
-
-	@Override
-	public synchronized Map<String, Object> session() {
-		return session.getSession(sessionId());
-	}
-
-	@Override
-	public synchronized Map<String, Object> locals() {
-		return locals;
-	}
-
-	@Override
-	public Map<String, Object> getSessionById(String sessionId) {
-		return session.getSession(sessionId);
-	}
-
-	@Override
-	public synchronized void sessionSet(String name, Serializable value) {
-		if (value != null) {
-			session.setAttribute(sessionId(), name, value);
-		} else {
-			session.deleteAttribute(sessionId(), name);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public synchronized <T> T session(String name, T defaultValue) {
-		return U.or((T) session.getAttribute(sessionId(), name), defaultValue);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public synchronized <T> T session(String name) {
-		T value = (T) session.getAttribute(sessionId(), name);
-		U.notNull(value, "session[" + name + "]");
-		return value;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public synchronized <T extends Serializable> T sessionGetOrCreate(String name, Class<T> valueClass,
-			Object... constructorArgs) {
-		T value = (T) session.getAttribute(sessionId(), name);
-
-		if (value == null) {
-			value = Cls.newInstance(valueClass, constructorArgs);
-			session.setAttribute(sessionId(), name, value);
-		}
-
-		return value;
-	}
-
-	@Override
-	public synchronized void closeSession() {
-		if (hasSession()) {
-			session.closeSession(sessionId);
-		}
-		sessionId = null;
-	}
-
-	@Override
-	public synchronized void clearSession(String sessionId) {
-		session.clearSession(sessionId);
-	}
-
-	@Override
-	public synchronized boolean hasSession() {
-		return hasSession(sessionId) || hasSession(cookie(SESSION_COOKIE, null));
-	}
-
-	@Override
-	public synchronized boolean hasSession(String sessId) {
-		return !U.isEmpty(sessId) && session.exists(sessId);
-	}
-
-	@Override
 	public synchronized HttpNotFoundException notFound() {
 		response(404, "Error: page not found!");
 		throw HttpNotFoundException.get();
@@ -852,7 +760,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public synchronized byte[] sessionSerialize() {
 		if (sessionId != null) {
-			return session.serialize(sessionId);
+			return sessionPersistor.serialize(sessionId);
 		} else {
 			return null;
 		}
@@ -861,7 +769,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public synchronized void sessionDeserialize(byte[] bytes) {
 		// create a session if doesn't exist
-		session.deserialize(sessionId(), bytes);
+		sessionPersistor.deserialize(sessionId(), bytes);
 	}
 
 	@Override
@@ -872,7 +780,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized void deserializeLocals(byte[] bytes) {
-		locals.putAll((Map<String, Object>) UTILS.deserialize(bytes));
+		locals.putAll((Map<String, Serializable>) UTILS.deserialize(bytes));
 	}
 
 	@Override
@@ -970,47 +878,17 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized HttpSuccessException goBack(int steps) {
-		String dest = "/";
-		List<String> stack = session(SESSION_PAGE_STACK, null);
-
-		if (stack != null) {
-			if (!stack.isEmpty()) {
-				dest = stack.get(stack.size() - 1);
-			}
-
-			for (int i = 0; i < steps; i++) {
-				if (!stack.isEmpty()) {
-					stack.remove(stack.size() - 1);
-					if (!stack.isEmpty()) {
-						dest = stack.remove(stack.size() - 1);
-					}
-				}
-			}
-		}
-
-		throw redirect(dest);
+		throw PageStack.goBack(this, steps);
 	}
 
-	@SuppressWarnings("unchecked")
 	public synchronized HttpExchange addToPageStack() {
-		List<String> stack = sessionGetOrCreate(SESSION_PAGE_STACK, ArrayList.class);
-
-		String last = !stack.isEmpty() ? stack.get(stack.size() - 1) : null;
-		String current = uri();
-
-		if (!U.eq(current, last)) {
-			stack.add(current);
-			if (stack.size() > 7) {
-				stack.remove(0);
-			}
-		}
-
+		PageStack.addToPageStack(this);
 		return this;
 	}
 
-	public synchronized void init(HttpResponses responses, HttpSession session, Router router) {
+	public synchronized void init(HttpResponses responses, SessionPersistor session, Router router) {
 		this.responses = responses;
-		this.session = session;
+		this.sessionPersistor = session;
 		this.router = router;
 		if (Conf.option("mode", null) == null) {
 			Conf.configure("mode", detectedDevMode() ? "dev" : "production");
@@ -1021,24 +899,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public HttpSuccessException error() {
 		return HttpSuccessException.get();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public synchronized <T> T extra(Object key) {
-		return (T) _extras().get(key);
-	}
-
-	@Override
-	public synchronized void extra(Object key, Object value) {
-		_extras().put(key, value);
-	}
-
-	private synchronized Map<Object, Object> _extras() {
-		if (extras == null) {
-			extras = U.map();
-		}
-		return extras;
 	}
 
 	@Override
@@ -1078,6 +938,164 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public synchronized ClassLoader getClassLoader() {
 		return classLoader;
+	}
+
+	@Override
+	public synchronized Map<String, Object> tmps() {
+		if (tmps == null) {
+			tmps = U.synchronizedMap();
+		}
+		return tmps;
+	}
+
+	@Override
+	public synchronized Map<String, Serializable> cookiepack() {
+		if (cookiepack == null) {
+			cookiepack = U.synchronizedMap();
+		}
+		return cookiepack;
+	}
+
+	@Override
+	public synchronized Map<String, Serializable> locals() {
+		if (locals == null) {
+			locals = U.synchronizedMap();
+		}
+		return locals;
+	}
+
+	@Override
+	public synchronized Map<String, Object> session() {
+		if (session == null) {
+			session = getSessionById(sessionId());
+		}
+		return session;
+	}
+
+	@Override
+	public synchronized String sessionId() {
+		if (sessionId == null) {
+			sessionId = cookie(SESSION_COOKIE, null);
+
+			if (sessionId != null && !sessionPersistor.exists(sessionId)) {
+				sessionId = null;
+			}
+
+			if (sessionId == null) {
+				sessionId = Rnd.rndStr(50);
+				setCookie(SESSION_COOKIE, sessionId, "path=/");
+				sessionPersistor.openSession(sessionId);
+			}
+		}
+
+		return sessionId;
+	}
+
+	@Override
+	public Map<String, Object> getSessionById(String sessionId) {
+		return sessionPersistor.getSession(sessionId);
+	}
+
+	@Override
+	public synchronized void sessionSet(String name, Serializable value) {
+		if (value != null) {
+			sessionPersistor.setAttribute(sessionId(), name, value);
+		} else {
+			sessionPersistor.deleteAttribute(sessionId(), name);
+		}
+	}
+
+	@Override
+	public synchronized void closeSession() {
+		if (hasSession()) {
+			sessionPersistor.closeSession(sessionId);
+		}
+		sessionId = null;
+	}
+
+	@Override
+	public synchronized void clearSession(String sessionId) {
+		sessionPersistor.clearSession(sessionId);
+	}
+
+	@Override
+	public synchronized boolean hasSession() {
+		return hasSession(sessionId) || hasSession(cookie(SESSION_COOKIE, null));
+	}
+
+	@Override
+	public synchronized boolean hasSession(String sessId) {
+		return !U.isEmpty(sessId) && sessionPersistor.exists(sessId);
+	}
+
+	/* SESSION SCOPE GETTERS */
+
+	@Override
+	public synchronized <T> T session(String name, T defaultValue) {
+		return Scopes.get("session", session, name, defaultValue);
+	}
+
+	@Override
+	public synchronized <T> T session(String name) {
+		return Scopes.get("session", session, name);
+	}
+
+	@Override
+	public synchronized <T> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs) {
+		return Scopes.getOrCreate("session", session(), name, valueClass, constructorArgs);
+	}
+
+	/* COOKIEPACK SCOPE GETTERS */
+
+	@Override
+	public synchronized <T extends Serializable> T cookiepack(String name, T defaultValue) {
+		return Scopes.get("cookiepack", cookiepack, name, defaultValue);
+	}
+
+	@Override
+	public synchronized <T extends Serializable> T cookiepack(String name) {
+		return Scopes.get("cookiepack", cookiepack, name);
+	}
+
+	@Override
+	public synchronized <T extends Serializable> T cookiepackGetOrCreate(String name, Class<T> valueClass,
+			Object... constructorArgs) {
+		return Scopes.getOrCreate("cookiepack", cookiepack(), name, valueClass, constructorArgs);
+	}
+
+	/* LOCALS SCOPE GETTERS */
+
+	@Override
+	public synchronized <T extends Serializable> T local(String name, T defaultValue) {
+		return Scopes.get("locals", locals, name, defaultValue);
+	}
+
+	@Override
+	public synchronized <T extends Serializable> T local(String name) {
+		return Scopes.get("locals", locals, name);
+	}
+
+	@Override
+	public synchronized <T extends Serializable> T localGetOrCreate(String name, Class<T> valueClass,
+			Object... constructorArgs) {
+		return Scopes.getOrCreate("locals", locals(), name, valueClass, constructorArgs);
+	}
+
+	/* TMPS SCOPE GETTERS */
+
+	@Override
+	public synchronized <T> T tmp(String name, T defaultValue) {
+		return Scopes.get("tmps", tmps, name, defaultValue);
+	}
+
+	@Override
+	public synchronized <T> T tmp(String name) {
+		return Scopes.get("tmps", tmps, name);
+	}
+
+	@Override
+	public synchronized <T> T tmpGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs) {
+		return Scopes.getOrCreate("tmps", tmps(), name, valueClass, constructorArgs);
 	}
 
 }

@@ -48,7 +48,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	private final HttpUpgrades upgrades = new HttpUpgrades();
 
-	private HttpSession session;
+	private SessionPersistor session;
 
 	private HTTPInterceptor interceptor;
 
@@ -202,7 +202,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		return router;
 	}
 
-	public void setSession(HttpSession session) {
+	public void setSession(SessionPersistor session) {
 		this.session = session;
 	}
 
