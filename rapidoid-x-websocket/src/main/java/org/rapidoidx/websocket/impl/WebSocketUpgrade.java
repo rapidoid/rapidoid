@@ -24,10 +24,10 @@ package org.rapidoidx.websocket.impl;
 import org.apache.commons.codec.binary.Base64;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.crypto.Crypto;
 import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.http.HttpUpgradeHandler;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.Crypto;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")

@@ -609,16 +609,6 @@ public class UTILS implements Constants {
 		return String.format(msg, totalMem / megs, usedMem / megs, maxMem / megs);
 	}
 
-	public static String bytesAsText(byte[] bytes) {
-		StringBuilder sb = new StringBuilder();
-
-		for (int i = 0; i < bytes.length; i++) {
-			sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-		}
-
-		return sb.toString();
-	}
-
 	public static String urlDecode(String value) {
 		try {
 			return URLDecoder.decode(value, "UTF-8");

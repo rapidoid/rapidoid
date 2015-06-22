@@ -25,8 +25,8 @@ import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.crypto.Crypto;
 import org.rapidoid.io.IO;
-import org.rapidoid.util.Crypto;
 import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 

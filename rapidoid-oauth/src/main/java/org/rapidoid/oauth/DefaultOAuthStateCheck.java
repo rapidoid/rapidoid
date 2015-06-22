@@ -3,7 +3,7 @@ package org.rapidoid.oauth;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.util.Crypto;
+import org.rapidoid.crypto.Crypto;
 import org.rapidoid.util.Rnd;
 
 /*

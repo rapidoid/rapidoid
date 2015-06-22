@@ -1,4 +1,4 @@
-package org.rapidoid.util;
+package org.rapidoid.crypto;
 
 /*
  * #%L
@@ -33,12 +33,11 @@ import javax.crypto.spec.SecretKeySpec;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.1.0")
 public class Crypto {
-
-	private static String appSecret;
 
 	public static MessageDigest digest(String algorithm) {
 		try {
@@ -65,7 +64,7 @@ public class Crypto {
 	}
 
 	public static String md5(byte[] bytes) {
-		return UTILS.bytesAsText(md5Bytes(bytes));
+		return U.bytesAsText(md5Bytes(bytes));
 	}
 
 	public static String md5(String data) {
@@ -79,7 +78,7 @@ public class Crypto {
 	}
 
 	public static String sha1(byte[] bytes) {
-		return UTILS.bytesAsText(sha1Bytes(bytes));
+		return U.bytesAsText(sha1Bytes(bytes));
 	}
 
 	public static String sha1(String data) {
@@ -93,7 +92,7 @@ public class Crypto {
 	}
 
 	public static String sha512(byte[] bytes) {
-		return UTILS.bytesAsText(sha512Bytes(bytes));
+		return U.bytesAsText(sha512Bytes(bytes));
 	}
 
 	public static String sha512(String data) {
@@ -101,14 +100,17 @@ public class Crypto {
 	}
 
 	public static synchronized String secret() {
-		if (appSecret == null) {
-			appSecret = Conf.secret();
-			if (appSecret == null) {
-				appSecret = Rnd.rndStr(100);
+		String secret = Conf.secret();
+
+		if (secret == null) {
+			if (Conf.dev()) {
+				secret = "";
+			} else {
+				throw U.rte("Application secret must be specified!");
 			}
 		}
 
-		return appSecret;
+		return secret;
 	}
 
 	public static byte[] aes(byte[] key, byte[] data, boolean encrypt) {

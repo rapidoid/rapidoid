@@ -66,6 +66,7 @@
 		<module>rapidoid-tuple</module>
 		<module>rapidoid-u</module>
 		<module>rapidoid-config</module>
+		<module>rapidoid-crypto</module>
 		<module>rapidoid-arr</module>
 		<module>rapidoid-dates</module>
 		<module>rapidoid-log</module>

@@ -1,4 +1,4 @@
-package org.rapidoid.util;
+package org.rapidoid.crypto;
 
 /*
  * #%L
@@ -22,7 +22,9 @@ package org.rapidoid.util;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.util.U;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")
@@ -40,7 +42,12 @@ public class CryptoTest extends TestCommons {
 	public void testSecret() {
 		notNull(Crypto.secret());
 		isTrue(Crypto.secret() == Crypto.secret());
-		eq(Crypto.secret().length(), 100);
+
+		// default secret in dev mode is an empty string
+		eq(Crypto.secret(), "");
+
+		Conf.args("secret=mysecret");
+		eq(Crypto.secret(), "mysecret");
 	}
 
 	@Test
@@ -74,7 +81,7 @@ public class CryptoTest extends TestCommons {
 	@Test
 	public void testEncrypt() {
 		for (int i = 0; i < 10000; i++) {
-			String msg1 = Rnd.rndStr(0, 10000);
+			String msg1 = U.copyNtimes("x", i);
 			byte[] enc = Crypto.encrypt(msg1.getBytes());
 			byte[] dec = Crypto.decrypt(enc);
 			String msg2 = new String(dec);
