@@ -1,6 +1,14 @@
-package org.rapidoid.docs.eg001;
+package org.rapidoid.docs.eg005;
 
+import static org.rapidoid.app.AppGUI.grid;
+
+import javax.persistence.Entity;
+
+import org.rapidoid.annotation.App;
+import org.rapidoid.annotation.Scaffold;
+import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.quick.Quick;
+import org.rapidoid.rql.RQL;
 
 /*
  * #%L
@@ -22,11 +30,31 @@ import org.rapidoid.quick.Quick;
  * #L%
  */
 
-public class App {
-	String title = "Example 1"; // here
-	String content = "Hello, World!"; // here
+// Using the grid widget :: Grid widget automatically loading data from DB
+
+@App
+public class Main {
+	String title = "Grid Widget";
+	String theme = "4";
 
 	public static void main(String[] args) {
 		Quick.run(args);
 	}
+
+	public void init() {
+		RQL.run("INSERT Movie title=Rambo, year=1985"); // here
+		RQL.run("INSERT Movie title=Her, year=2013"); // here
+		RQL.run("INSERT Movie title=Batman, year=1989"); // here
+	}
+
+	Object content() {
+		return grid(Movie.class).orderBy("year"); // here
+	}
+}
+
+@Scaffold
+@Entity
+class Movie extends JPAEntity {
+	String title;
+	int year;
 }

@@ -1,5 +1,6 @@
 package org.rapidoid.docs.eg901;
 
+import org.rapidoid.annotation.App;
 import org.rapidoid.quick.Quick;
 
 /*
@@ -24,7 +25,8 @@ import org.rapidoid.quick.Quick;
 
 // Hide the navigation bar extras :: No search or login extras in navigation
 
-public class App {
+@App
+public class Main {
 	String title = "No extras here";
 	Object content = "Hello!";
 	String theme = "4";

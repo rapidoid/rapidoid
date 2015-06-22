@@ -5,6 +5,7 @@ import static org.rapidoid.html.HTML.h4;
 import static org.rapidoid.widget.BootstrapWidgets.cmd;
 import static org.rapidoid.widget.BootstrapWidgets.row;
 
+import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.html.Tag;
 import org.rapidoid.quick.Quick;
@@ -32,7 +33,8 @@ import org.rapidoid.widget.ButtonWidget;
 
 // Constructing GUI and handling events :: Constructing buttons, handling clicks 
 
-public class App {
+@App
+public class Main {
 	String title = "Numbers";
 	String theme = "3";
 

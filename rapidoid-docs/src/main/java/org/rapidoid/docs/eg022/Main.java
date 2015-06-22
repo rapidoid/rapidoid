@@ -1,6 +1,11 @@
-package org.rapidoid.docs.eg002;
+package org.rapidoid.docs.eg022;
 
+import org.rapidoid.annotation.App;
+import org.rapidoid.annotation.Session;
+import org.rapidoid.app.Screen;
+import org.rapidoid.html.Tag;
 import org.rapidoid.quick.Quick;
+import org.rapidoid.widget.ButtonWidget;
 
 /*
  * #%L
@@ -22,22 +27,29 @@ import org.rapidoid.quick.Quick;
  * #L%
  */
 
-// An application consists of screens :: Add some screens:
+// Basic event handling and session storage :: Increase n when the "+" button is clicked: 
 
-public class App {
-	String title = "Example 2";
+@App
+public class Main {
+	String title = "Clicky";
+	String theme = "3";
 
 	public static void main(String[] args) {
 		Quick.run(args);
 	}
 }
 
-class HomeScreen { // here
-	Object content() { // here
-		return "At the Home screen!"; // here
-	}
-}
+class HomeScreen extends Screen {
+	@Session // here
+	public int n = 0; // here
 
-class FooScreen { // here
-	Object content = "At the Foo screen!"; // here
+	public Object content() {
+		Tag caption = h3(n, " clicks");
+		ButtonWidget hi = btn("+").command("Inc"); // here
+		return row(caption, hi);
+	}
+
+	public void onInc() { // here
+		n++;
+	}
 }

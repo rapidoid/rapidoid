@@ -1,13 +1,7 @@
-package org.rapidoid.docs.eg005;
+package org.rapidoid.docs.eg004;
 
-import static org.rapidoid.app.AppGUI.grid;
-
-import javax.persistence.Entity;
-
-import org.rapidoid.annotation.Scaffold;
-import org.rapidoid.jpa.JPAEntity;
+import org.rapidoid.annotation.App;
 import org.rapidoid.quick.Quick;
-import org.rapidoid.rql.RQL;
 
 /*
  * #%L
@@ -29,30 +23,19 @@ import org.rapidoid.rql.RQL;
  * #L%
  */
 
-// Using the grid widget :: Grid widget automatically loading data from DB
+// Rapidoid has built-in themes! :: Let's use the built-in theme 2:
 
-public class App {
-	String title = "Grid Widget";
-	String theme = "4";
+@App
+public class Main {
+	String title = "Example 4";
+	String content = "Fancy theme!";
+	String theme = "2"; // here
 
 	public static void main(String[] args) {
 		Quick.run(args);
 	}
-
-	public void init() {
-		RQL.run("INSERT Movie title=Rambo, year=1985"); // here
-		RQL.run("INSERT Movie title=Her, year=2013"); // here
-		RQL.run("INSERT Movie title=Batman, year=1989"); // here
-	}
-
-	Object content() {
-		return grid(Movie.class).orderBy("year"); // here
-	}
 }
 
-@Scaffold
-@Entity
-class Movie extends JPAEntity {
-	String title;
-	int year;
-}
+class FooScreen {}
+
+class BarScreen {}

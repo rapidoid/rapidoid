@@ -1,5 +1,6 @@
-package org.rapidoid.docs.eg903;
+package org.rapidoid.docs.eg002;
 
+import org.rapidoid.annotation.App;
 import org.rapidoid.quick.Quick;
 
 /*
@@ -22,17 +23,23 @@ import org.rapidoid.quick.Quick;
  * #L%
  */
 
-// Display search in navigation :: Show the "search" box in the navigation
+// An application consists of screens :: Add some screens:
 
-public class App {
-	String title = "My app";
-	Object content = "Hello!";
-	String theme = "2";
-
-	boolean full = false; // here
-	boolean search = true; // here
+@App
+public class Main {
+	String title = "Example 2";
 
 	public static void main(String[] args) {
 		Quick.run(args);
 	}
+}
+
+class HomeScreen { // here
+	Object content() { // here
+		return "At the Home screen!"; // here
+	}
+}
+
+class FooScreen { // here
+	Object content = "At the Foo screen!"; // here
 }

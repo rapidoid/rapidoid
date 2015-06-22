@@ -1,6 +1,6 @@
-package org.rapidoid.docs.eg904;
+package org.rapidoid.docs.eg001;
 
-import org.rapidoid.app.Screen;
+import org.rapidoid.annotation.App;
 import org.rapidoid.quick.Quick;
 
 /*
@@ -23,22 +23,12 @@ import org.rapidoid.quick.Quick;
  * #L%
  */
 
-// Configure screens to be displayed :: Show only the Ab and Cd screens
-
-public class App {
-	String title = "My app";
-	Object content = "Hello!";
-	String theme = "5";
-
-	Object[] screens = { "ab", CdScreen.class }; // here
+@App
+public class Main {
+	String title = "Example 1"; // here
+	String content = "Hello, World!"; // here
 
 	public static void main(String[] args) {
 		Quick.run(args);
 	}
 }
-
-class CdScreen extends Screen {}
-
-class BarScreen extends Screen {} // here
-
-class AbScreen extends Screen {}

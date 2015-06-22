@@ -1,10 +1,8 @@
-package org.rapidoid.docs.eg023;
+package org.rapidoid.docs.eg900;
 
-import javax.persistence.Entity;
-
+import org.rapidoid.annotation.App;
+import org.rapidoid.annotation.Order;
 import org.rapidoid.app.Screen;
-import org.rapidoid.jpa.JPAEntity;
-import org.rapidoid.plugins.DB;
 import org.rapidoid.quick.Quick;
 
 /*
@@ -27,31 +25,20 @@ import org.rapidoid.quick.Quick;
  * #L%
  */
 
-// Basic database CRUD operations :: Database CRUD is easy with the DB API: 
+// Ordering the screens :: Foo is second, Bar is first:
 
-public class App {
-	String title = "DB API";
-	String theme = "4";
+@App
+public class Main {
+	String title = "Custom screen order";
+	String theme = "1";
 
 	public static void main(String[] args) {
 		Quick.run(args);
 	}
 }
 
-class HomeScreen extends Screen {
-	Object[] content = { grid(Todo.class), cmd("Add") };
+@Order(2) // here
+class FooScreen extends Screen {}
 
-	public void onAdd() {
-		Todo todo = new Todo();
-		todo.content = "Learn Rapidoid!";
-		long id = DB.insert(todo); // here
-		Todo todo2 = DB.get(Todo.class, id); // here
-		todo2.content += " :)";
-		DB.update(todo2); // here
-	}
-}
-
-@Entity
-class Todo extends JPAEntity {
-	String content;
-}
+@Order(1) // here
+class BarScreen extends Screen {}

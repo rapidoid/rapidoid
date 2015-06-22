@@ -1,10 +1,7 @@
-package org.rapidoid.docs.eg022;
+package org.rapidoid.docs.eg902;
 
-import org.rapidoid.annotation.Session;
-import org.rapidoid.app.Screen;
-import org.rapidoid.html.Tag;
+import org.rapidoid.annotation.App;
 import org.rapidoid.quick.Quick;
-import org.rapidoid.widget.ButtonWidget;
 
 /*
  * #%L
@@ -26,28 +23,19 @@ import org.rapidoid.widget.ButtonWidget;
  * #L%
  */
 
-// Basic event handling and session storage :: Increase n when the "+" button is clicked: 
+// Customize login options in the login menu :: Show Facebook and Google login menu items
 
-public class App {
-	String title = "Clicky";
+@App
+public class Main {
+	String title = "Facebook or Google";
+	Object content = "Hello!";
 	String theme = "3";
+
+	boolean full = false; // here
+	boolean facebookLogin = true; // here
+	boolean googleLogin = true; // here
 
 	public static void main(String[] args) {
 		Quick.run(args);
-	}
-}
-
-class HomeScreen extends Screen {
-	@Session // here
-	public int n = 0; // here
-
-	public Object content() {
-		Tag caption = h3(n, " clicks");
-		ButtonWidget hi = btn("+").command("Inc"); // here
-		return row(caption, hi);
-	}
-
-	public void onInc() { // here
-		n++;
 	}
 }

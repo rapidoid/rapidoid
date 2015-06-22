@@ -1,6 +1,7 @@
-package org.rapidoid.docs.eg021;
+package org.rapidoid.docs.eg904;
 
-import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.App;
+import org.rapidoid.app.Screen;
 import org.rapidoid.quick.Quick;
 
 /*
@@ -23,39 +24,23 @@ import org.rapidoid.quick.Quick;
  * #L%
  */
 
-// Dependency injection of singletons :: Injecting a singleton 
+// Configure screens to be displayed :: Show only the Ab and Cd screens
 
-public class App {
-	String title = "Singleton counter";
-	String theme = "2";
+@App
+public class Main {
+	String title = "My app";
+	Object content = "Hello!";
+	String theme = "5";
+
+	Object[] screens = { "ab", CdScreen.class }; // here
 
 	public static void main(String[] args) {
 		Quick.run(args);
 	}
 }
 
-class HomeScreen {
-	@Inject // here
-	Counter c; // here
+class CdScreen extends Screen {}
 
-	Object content() {
-		return c.get();
-	}
-}
+class BarScreen extends Screen {} // here
 
-class OtherScreen {
-	@Inject // here
-	Counter c; // here
-
-	Object content() {
-		return c.get();
-	}
-}
-
-class Counter { // here
-	private int n = 0;
-
-	synchronized int get() {
-		return ++n;
-	}
-}
+class AbScreen extends Screen {}

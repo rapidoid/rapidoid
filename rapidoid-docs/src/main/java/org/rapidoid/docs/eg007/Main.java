@@ -6,6 +6,7 @@ import static org.rapidoid.widget.BootstrapWidgets.edit;
 
 import javax.persistence.Entity;
 
+import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.plugins.DB;
@@ -35,7 +36,8 @@ import org.rapidoid.widget.FormWidget;
 
 // Using the form widget ("edit" mode) :: Creating form for editing entity
 
-public class App {
+@App
+public class Main {
 	String title = "Edit movie demo";
 	String theme = "2";
 

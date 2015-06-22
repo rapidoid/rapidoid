@@ -1,5 +1,7 @@
-package org.rapidoid.docs.eg004;
+package org.rapidoid.docs.eg021;
 
+import org.rapidoid.annotation.App;
+import org.rapidoid.annotation.Inject;
 import org.rapidoid.quick.Quick;
 
 /*
@@ -22,18 +24,40 @@ import org.rapidoid.quick.Quick;
  * #L%
  */
 
-// Rapidoid has built-in themes! :: Let's use the built-in theme 2:
+// Dependency injection of singletons :: Injecting a singleton 
 
-public class App {
-	String title = "Example 4";
-	String content = "Fancy theme!";
-	String theme = "2"; // here
+@App
+public class Main {
+	String title = "Singleton counter";
+	String theme = "2";
 
 	public static void main(String[] args) {
 		Quick.run(args);
 	}
 }
 
-class FooScreen {}
+class HomeScreen {
+	@Inject // here
+	Counter c; // here
 
-class BarScreen {}
+	Object content() {
+		return c.get();
+	}
+}
+
+class OtherScreen {
+	@Inject // here
+	Counter c; // here
+
+	Object content() {
+		return c.get();
+	}
+}
+
+class Counter { // here
+	private int n = 0;
+
+	synchronized int get() {
+		return ++n;
+	}
+}
