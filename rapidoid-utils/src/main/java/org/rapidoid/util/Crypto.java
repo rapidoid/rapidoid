@@ -20,8 +20,15 @@ package org.rapidoid.util;
  * #L%
  */
 
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -38,6 +45,16 @@ public class Crypto {
 			return MessageDigest.getInstance(algorithm);
 		} catch (NoSuchAlgorithmException e) {
 			throw U.rte("Cannot find crypto algorithm: " + algorithm);
+		}
+	}
+
+	public static Cipher cipher(String transformation) {
+		try {
+			return Cipher.getInstance(transformation);
+		} catch (NoSuchAlgorithmException e) {
+			throw U.rte("Cannot find crypto algorithm: " + transformation);
+		} catch (NoSuchPaddingException e) {
+			throw U.rte("No such padding: " + transformation);
 		}
 	}
 
@@ -92,6 +109,46 @@ public class Crypto {
 		}
 
 		return appSecret;
+	}
+
+	public static byte[] aes(byte[] key, byte[] data, boolean encrypt) {
+		Cipher cipher = cipher("AES");
+
+		final SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+		try {
+			cipher.init(encrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, secretKey);
+		} catch (InvalidKeyException e) {
+			throw U.rte("Invalid key for the cypher!");
+		}
+
+		byte[] enc;
+		try {
+			enc = cipher.doFinal(data);
+		} catch (IllegalBlockSizeException e) {
+			throw U.rte("Illegal block size!");
+		} catch (BadPaddingException e) {
+			throw U.rte("Bad padding!");
+		}
+
+		return enc;
+	}
+
+	public static byte[] encrypt(String secret, byte[] dataToEncrypt) {
+		byte[] key = md5Bytes(secret.getBytes());
+		return aes(key, dataToEncrypt, true);
+	}
+
+	public static byte[] decrypt(String secret, byte[] dataToDecrypt) {
+		byte[] key = md5Bytes(secret.getBytes());
+		return aes(key, dataToDecrypt, false);
+	}
+
+	public static byte[] encrypt(byte[] dataToEncrypt) {
+		return encrypt(secret(), dataToEncrypt);
+	}
+
+	public static byte[] decrypt(byte[] dataToDecrypt) {
+		return decrypt(secret(), dataToDecrypt);
 	}
 
 }

@@ -71,4 +71,15 @@ public class CryptoTest extends TestCommons {
 				"cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e");
 	}
 
+	@Test
+	public void testEncrypt() {
+		for (int i = 0; i < 10000; i++) {
+			String msg1 = Rnd.rndStr(0, 10000);
+			byte[] enc = Crypto.encrypt(msg1.getBytes());
+			byte[] dec = Crypto.decrypt(enc);
+			String msg2 = new String(dec);
+			eq(msg2, msg1);
+		}
+	}
+
 }
