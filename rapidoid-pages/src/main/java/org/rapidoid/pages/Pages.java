@@ -59,7 +59,7 @@ import org.rapidoid.wire.Wire;
 @Since("2.0.0")
 public class Pages {
 
-	private static final String PAGE_RELOAD = "<h2>Reloading...</h2><script>location.reload();</script>";
+	private static final String PAGE_RELOAD = "<h2>&nbsp;Reloading...</h2><script>location.reload();</script>";
 
 	public static final String SESSION_CTX = "_ctx_";
 
@@ -257,7 +257,7 @@ public class Pages {
 	public static Object emit(HttpExchange x, Object view) {
 		int event = U.num(x.data("event"));
 
-		TagContext ctx = x.session(SESSION_CTX, null);
+		TagContext ctx = x.tmp(SESSION_CTX, null);
 
 		// if the context has been lost, reload the page
 		if (ctx == null) {

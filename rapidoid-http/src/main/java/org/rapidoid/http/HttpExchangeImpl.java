@@ -760,13 +760,13 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized byte[] serializeLocals() {
-		return UTILS.serialize(locals);
+		return locals != null ? UTILS.serialize(locals) : null;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized void deserializeLocals(byte[] bytes) {
-		locals.putAll((Map<String, Serializable>) UTILS.deserialize(bytes));
+		locals = (Map<String, Serializable>) UTILS.deserialize(bytes);
 	}
 
 	@Override
