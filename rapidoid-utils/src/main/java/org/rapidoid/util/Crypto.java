@@ -33,11 +33,11 @@ public class Crypto {
 
 	private static String appSecret;
 
-	private static MessageDigest digest(String algorithm) {
+	public static MessageDigest digest(String algorithm) {
 		try {
 			return MessageDigest.getInstance(algorithm);
 		} catch (NoSuchAlgorithmException e) {
-			throw U.rte("Cannot find algorithm: " + algorithm);
+			throw U.rte("Cannot find crypto algorithm: " + algorithm);
 		}
 	}
 
