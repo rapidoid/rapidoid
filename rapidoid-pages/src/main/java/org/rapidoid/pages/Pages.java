@@ -157,8 +157,7 @@ public class Pages {
 			if (fullPage instanceof HttpExchange) {
 				return x;
 			} else {
-				TagContext ctx = Tags.context();
-				x.tmps().put(SESSION_CTX, ctx);
+				TagContext ctx = x.tmp(SESSION_CTX);
 				PageRenderer.get().render(ctx, fullPage, x);
 				return x;
 			}
@@ -196,6 +195,7 @@ public class Pages {
 		}
 
 		Object page = Cls.newInstance(pageClass);
+		x.tmps().put(SESSION_CTX, Tags.context());
 
 		if (isEmiting(x)) {
 			return emit(x, page);
@@ -254,15 +254,14 @@ public class Pages {
 		}
 	}
 
+	public static final Object reloadOnEmit(HttpExchange x) {
+		return changes(x, PAGE_RELOAD);
+	}
+
 	public static Object emit(HttpExchange x, Object view) {
 		int event = U.num(x.data("event"));
 
-		TagContext ctx = x.tmp(SESSION_CTX, null);
-
-		// if the context has been lost, reload the page
-		if (ctx == null) {
-			return changes(x, PAGE_RELOAD);
-		}
+		TagContext ctx = x.tmp(SESSION_CTX);
 
 		Cmd cmd = ctx.getEventCmd(event);
 
@@ -324,8 +323,6 @@ public class Pages {
 					throw U.rte(e);
 				}
 			}
-			ctx = Tags.context();
-			x.tmps().put(SESSION_CTX, ctx);
 			html = PageRenderer.get().toHTML(ctx, content, x);
 		} else {
 			html = "Error!";
