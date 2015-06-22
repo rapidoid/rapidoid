@@ -173,6 +173,10 @@ public class Conf {
 		return true;
 	}
 
+	public static String secret() {
+		return option("secret", null);
+	}
+
 	public static String system(String key) {
 		String value = option(key, null);
 

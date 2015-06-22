@@ -59,6 +59,7 @@ public class Main {
 
 			System.out.println("\nAvailable options:");
 			opt("mode=(dev|production)", "configure DEV or PRODUCTION mode");
+			opt("secret=<SECRET>", "configure app-specific secret token for encryption");
 			opt("port=<P>", "listen at port P (default: 8080)");
 			opt("address=<ADDR>", "listen at address ADDR (default: 0.0.0.0)");
 			opt("cpus=<C>", "optimize for C number of CPUs (default: the actual number of the CPUs)");

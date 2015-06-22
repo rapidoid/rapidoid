@@ -25,10 +25,13 @@ import java.security.NoSuchAlgorithmException;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.1.0")
 public class Crypto {
+
+	private static String appSecret;
 
 	private static MessageDigest digest(String algorithm) {
 		try {
@@ -78,6 +81,17 @@ public class Crypto {
 
 	public static String sha512(String data) {
 		return sha512(data.getBytes());
+	}
+
+	public static synchronized String secret() {
+		if (appSecret == null) {
+			appSecret = Conf.secret();
+			if (appSecret == null) {
+				appSecret = Rnd.rndStr(100);
+			}
+		}
+
+		return appSecret;
 	}
 
 }
