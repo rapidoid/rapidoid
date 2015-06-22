@@ -26,6 +26,7 @@ import java.nio.ByteBuffer;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctx;
+import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
@@ -48,7 +49,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	private final HttpUpgrades upgrades = new HttpUpgrades();
 
-	private SessionPersistor session;
+	private SessionStore session;
 
 	private HTTPInterceptor interceptor;
 
@@ -128,9 +129,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 		} finally {
 			Ctx.delUser();
-			if (x.hasSession()) {
-				session.saveSession(x.sessionId());
-			}
+			x.storeSession();
 		}
 	}
 
@@ -202,7 +201,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		return router;
 	}
 
-	public void setSession(SessionPersistor session) {
+	public void setSession(SessionStore session) {
 		this.session = session;
 	}
 

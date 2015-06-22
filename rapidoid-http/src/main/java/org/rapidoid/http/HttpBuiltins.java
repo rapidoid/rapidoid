@@ -32,14 +32,17 @@ import org.rapidoid.util.U;
 public class HttpBuiltins {
 
 	public static void register(HTTPServer server) {
+
 		server.get("/_logout", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
 				Ctx.delUser();
-				x.sessionSet(UserInfo.class.getCanonicalName(), null);
+				x.cookiepack().remove("username");
+				x.cookiepack().remove("name");
 				throw x.goBack(0);
 			}
 		});
+
 		server.get("/_debugLogin", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
@@ -56,11 +59,13 @@ public class HttpBuiltins {
 				user.name = U.capitalized(username);
 
 				Ctx.delUser();
-				x.sessionSet(UserInfo.class.getCanonicalName(), user);
+				x.cookiepack().put("username", user.username);
+				x.cookiepack().put("name", user.name);
 				Ctx.setUser(user);
 
 				throw x.goBack(0);
 			}
 		});
+
 	}
 }

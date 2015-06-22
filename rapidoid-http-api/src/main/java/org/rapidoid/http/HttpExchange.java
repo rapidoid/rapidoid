@@ -110,12 +110,6 @@ public interface HttpExchange extends AppExchange {
 
 	String sessionId();
 
-	void sessionSet(String name, Serializable value);
-
-	void closeSession();
-
-	boolean hasSession();
-
 	/* SESSION SCOPE: */
 
 	Map<String, Object> session();

@@ -34,7 +34,7 @@ import org.rapidoid.html.TagWidget;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.http.HttpResponses;
-import org.rapidoid.http.InMemoryHttpSession;
+import org.rapidoid.http.session.InMemorySessionStore;
 import org.rapidoid.net.impl.RapidoidConnection;
 import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.test.TestCommons;
@@ -109,10 +109,9 @@ public class PagesTestCommons extends TestCommons {
 		RapidoidConnection conn = new RapidoidConnection(null, bufs);
 		x.setConnection(conn);
 
-		InMemoryHttpSession session = new InMemoryHttpSession();
-		session.openSession("sess1");
-		session.setAttribute("sess1", Pages.SESSION_CTX, ctx);
-		x.init(new HttpResponses(false, false), session, null);
+		InMemorySessionStore sessions = new InMemorySessionStore();
+		x.tmps().put(Pages.SESSION_CTX, ctx);
+		x.init(new HttpResponses(false, false), sessions, null);
 
 		Ctx.reset();
 		Ctx.setExchange(x);

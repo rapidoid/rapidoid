@@ -22,6 +22,8 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.session.InMemorySessionStore;
+import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.json.JSON;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.impl.RapidoidServerLoop;
@@ -30,7 +32,7 @@ import org.rapidoid.net.impl.RapidoidServerLoop;
 @Since("2.0.0")
 public class HTTPServerImpl extends RapidoidServerLoop implements HTTPServer {
 
-	private final SessionPersistor session = new InMemoryHttpSession();
+	private final SessionStore session = new InMemorySessionStore();
 
 	public HTTPServerImpl() {
 		super(new HttpProtocol(new HttpRouter()), HttpExchangeImpl.class, null);

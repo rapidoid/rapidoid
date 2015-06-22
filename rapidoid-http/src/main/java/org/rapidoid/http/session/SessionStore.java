@@ -1,6 +1,5 @@
-package org.rapidoid.http;
+package org.rapidoid.http.session;
 
-import java.io.Serializable;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
@@ -28,30 +27,12 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface SessionPersistor extends Serializable {
-
-	void openSession(String sessionId);
-
-	Map<String, Object> getSession(String sessionId);
-
-	void setAttribute(String sessionId, String attribute, Serializable value);
-
-	Object getAttribute(String sessionId, String attribute);
-
-	void deleteAttribute(String sessionId, String attribute);
-
-	void closeSession(String sessionId);
+public interface SessionStore {
 
 	boolean exists(String sessionId);
 
-	void saveSession(String sessionId);
+	Map<String, Object> get(String sessionId);
 
-	void loadSession(String sessionId);
-
-	void clearSession(String sessionId);
-
-	byte[] serialize(String sessionId);
-
-	void deserialize(String sessionId, byte[] data);
+	void set(String sessionId, Map<String, Object> session);
 
 }

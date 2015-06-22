@@ -158,7 +158,7 @@ public class Pages {
 				return x;
 			} else {
 				TagContext ctx = Tags.context();
-				x.sessionSet(SESSION_CTX, ctx);
+				x.tmps().put(SESSION_CTX, ctx);
 				PageRenderer.get().render(ctx, fullPage, x);
 				return x;
 			}
@@ -250,7 +250,7 @@ public class Pages {
 	private static void storeFrom(HttpExchange x, Object target) {
 		for (Field field : Wire.getSessionFields(target)) {
 			Object value = Cls.getFieldValue(field, target);
-			x.sessionSet(field.getName(), UTILS.serializable(value));
+			x.session().put(field.getName(), UTILS.serializable(value));
 		}
 	}
 
@@ -325,7 +325,7 @@ public class Pages {
 				}
 			}
 			ctx = Tags.context();
-			x.sessionSet(SESSION_CTX, ctx);
+			x.tmps().put(SESSION_CTX, ctx);
 			html = PageRenderer.get().toHTML(ctx, content, x);
 		} else {
 			html = "Error!";
@@ -351,7 +351,7 @@ public class Pages {
 
 	public static byte[] stateOf(HttpExchange x) {
 		HttpExchangeInternals xi = (HttpExchangeInternals) x;
-		return x.hasSession() ? xi.serializeLocals() : null;
+		return xi.serializeLocals();
 	}
 
 	public static void callCmdHandler(HttpExchange x, Object target, Cmd cmd) {

@@ -20,29 +20,24 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.AppExchange;
+import org.rapidoid.http.session.SessionStore;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public interface HttpExchangeInternals extends AppExchange {
 
-	Map<String, Object> getSessionById(String sessionId);
-
-	void clearSession(String sessionId);
-
-	boolean hasSession(String sessionId);
-
 	void setClassLoader(ClassLoader classLoader);
 
 	ClassLoader getClassLoader();
 
-	byte[] sessionSerialize();
+	void setSessionStore(SessionStore sessionStore);
 
-	void sessionDeserialize(byte[] bytes);
+	SessionStore getSessionStore();
+
+	void storeSession();
 
 	byte[] serializeLocals();
 

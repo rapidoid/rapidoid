@@ -53,7 +53,7 @@ public class SessionVar<T extends Serializable> extends AbstractVar<T> {
 	@Override
 	public void set(T value) {
 		HttpExchange x = Ctx.exchange();
-		x.sessionSet(name, value);
+		x.session().put(name, value);
 	}
 
 }

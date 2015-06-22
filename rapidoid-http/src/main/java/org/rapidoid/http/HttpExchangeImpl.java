@@ -37,6 +37,7 @@ import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
+import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.mime.MediaType;
@@ -44,7 +45,6 @@ import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.wire.Wire;
@@ -95,7 +95,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private int startingPos;
 	private HttpResponses responses;
 	private Router router;
-	private SessionPersistor sessionPersistor;
 
 	private Map<String, String> vars;
 
@@ -129,6 +128,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private boolean lowLevelProcessing;
 
 	private ClassLoader classLoader;
+	private SessionStore sessionStore;
 
 	public HttpExchangeImpl() {
 		reset();
@@ -178,7 +178,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 		sessionId = null;
 
-		sessionPersistor = null;
+		classLoader = null;
+		sessionStore = null;
 		router = null;
 
 		session = null;
@@ -758,21 +759,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public synchronized byte[] sessionSerialize() {
-		if (sessionId != null) {
-			return sessionPersistor.serialize(sessionId);
-		} else {
-			return null;
-		}
-	}
-
-	@Override
-	public synchronized void sessionDeserialize(byte[] bytes) {
-		// create a session if doesn't exist
-		sessionPersistor.deserialize(sessionId(), bytes);
-	}
-
-	@Override
 	public synchronized byte[] serializeLocals() {
 		return UTILS.serialize(locals);
 	}
@@ -886,10 +872,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		return this;
 	}
 
-	public synchronized void init(HttpResponses responses, SessionPersistor session, Router router) {
+	public synchronized void init(HttpResponses responses, SessionStore sessionStore, Router router) {
 		this.responses = responses;
-		this.sessionPersistor = session;
+		this.sessionStore = sessionStore;
 		this.router = router;
+
 		if (Conf.option("mode", null) == null) {
 			Conf.configure("mode", detectedDevMode() ? "dev" : "production");
 			Log.info("Auto-detected dev/production mode", "mode", Conf.option("mode"));
@@ -941,6 +928,16 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
+	public synchronized void setSessionStore(SessionStore sessionStore) {
+		this.sessionStore = sessionStore;
+	}
+
+	@Override
+	public synchronized SessionStore getSessionStore() {
+		return sessionStore;
+	}
+
+	@Override
 	public synchronized Map<String, Object> tmps() {
 		if (tmps == null) {
 			tmps = U.synchronizedMap();
@@ -967,9 +964,17 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public synchronized Map<String, Object> session() {
 		if (session == null) {
-			session = getSessionById(sessionId());
+			session = sessionStore.get(sessionId());
 		}
 		return session;
+	}
+
+	private synchronized boolean hasSession() {
+		if (sessionId == null) {
+			sessionId = cookie(SESSION_COOKIE, null);
+		}
+
+		return sessionId != null;
 	}
 
 	@Override
@@ -977,55 +982,13 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		if (sessionId == null) {
 			sessionId = cookie(SESSION_COOKIE, null);
 
-			if (sessionId != null && !sessionPersistor.exists(sessionId)) {
-				sessionId = null;
-			}
-
 			if (sessionId == null) {
-				sessionId = Rnd.rndStr(50);
+				sessionId = helper().randomSHA512();
 				setCookie(SESSION_COOKIE, sessionId, "path=/");
-				sessionPersistor.openSession(sessionId);
 			}
 		}
 
 		return sessionId;
-	}
-
-	@Override
-	public Map<String, Object> getSessionById(String sessionId) {
-		return sessionPersistor.getSession(sessionId);
-	}
-
-	@Override
-	public synchronized void sessionSet(String name, Serializable value) {
-		if (value != null) {
-			sessionPersistor.setAttribute(sessionId(), name, value);
-		} else {
-			sessionPersistor.deleteAttribute(sessionId(), name);
-		}
-	}
-
-	@Override
-	public synchronized void closeSession() {
-		if (hasSession()) {
-			sessionPersistor.closeSession(sessionId);
-		}
-		sessionId = null;
-	}
-
-	@Override
-	public synchronized void clearSession(String sessionId) {
-		sessionPersistor.clearSession(sessionId);
-	}
-
-	@Override
-	public synchronized boolean hasSession() {
-		return hasSession(sessionId) || hasSession(cookie(SESSION_COOKIE, null));
-	}
-
-	@Override
-	public synchronized boolean hasSession(String sessId) {
-		return !U.isEmpty(sessId) && sessionPersistor.exists(sessId);
 	}
 
 	/* SESSION SCOPE GETTERS */
@@ -1096,6 +1059,13 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public synchronized <T> T tmpGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs) {
 		return Scopes.getOrCreate("tmps", tmps(), name, valueClass, constructorArgs);
+	}
+
+	@Override
+	public synchronized void storeSession() {
+		if (sessionId != null) {
+			sessionStore.set(sessionId, session);
+		}
 	}
 
 }
