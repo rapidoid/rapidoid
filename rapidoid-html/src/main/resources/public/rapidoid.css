@@ -171,7 +171,7 @@
 /***** Code style */
 .example-code {
 	font-weight: bold;
-	background-color: #FFD;
+	background-color: #F7F7F7;
 	border: 1px dashed;
 	border-color: #AAA;
 	padding: 5px;
@@ -232,6 +232,10 @@ span._code_tag {
 
 span._code_str {
 	color: #070;
+}
+
+span._code_num {
+	color: #077;
 }
 
 /***** Helpers  *****/

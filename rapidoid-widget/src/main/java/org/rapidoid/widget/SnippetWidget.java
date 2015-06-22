@@ -36,9 +36,10 @@ public class SnippetWidget extends AbstractWidget {
 	private static final String tab = "\\t";
 	private static final String str1 = "(\"[^\"]*?\")";
 	private static final String str2 = "('[^']*?')";
+	private static final String num = "(\\d+)";
 	private static final String kw = "\\b(" + JAVA_KEYWORDS + ")\\b";
 	private static final String cls = "\\b([A-Z]\\w+?)\\b";
-	private static final String regex = "(?:" + U.join("|", str1, str2, tab, kw, cls) + ")";
+	private static final String regex = "(?:" + U.join("|", str1, str2, num, tab, kw, cls) + ")";
 
 	protected String code;
 
@@ -65,6 +66,8 @@ public class SnippetWidget extends AbstractWidget {
 					return "<span class=\"_code_cls\">" + s + "</span>";
 				} else if (ch == '"' || ch == "'".charAt(0)) {
 					return "<span class=\"_code_str\">" + s + "</span>";
+				} else if (Character.isDigit(ch)) {
+					return "<span class=\"_code_num\">" + s + "</span>";
 				} else if (s.equals("\t")) {
 					return "    ";
 				} else {
