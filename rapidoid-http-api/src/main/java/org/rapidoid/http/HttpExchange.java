@@ -100,7 +100,7 @@ public interface HttpExchange extends AppExchange {
 
 	String pathSegment(int segmentIndex);
 
-	String realAddress();
+	String realIpAddress();
 
 	boolean isGetReq();
 

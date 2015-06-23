@@ -917,7 +917,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public String realAddress() {
+	public String realIpAddress() {
 		return header("X-Forwarded-For", address());
 	}
 
