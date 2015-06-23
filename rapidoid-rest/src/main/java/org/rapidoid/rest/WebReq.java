@@ -49,7 +49,7 @@ public class WebReq implements PojoRequest {
 
 	@Override
 	public Map<String, String> params() {
-		return exchange.vars();
+		return exchange.data();
 	}
 
 	public HttpExchange getExchange() {

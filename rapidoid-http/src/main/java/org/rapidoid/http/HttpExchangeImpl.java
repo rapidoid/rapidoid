@@ -97,7 +97,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private HttpResponses responses;
 	private Router router;
 
-	private Map<String, String> vars;
+	private Map<String, String> data;
 
 	private Map<String, String> errors;
 
@@ -173,7 +173,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		cookies.reset();
 		posted.reset();
 		files.reset();
-		vars = null;
+		data = null;
 
 		parsedParams = false;
 		parsedHeaders = false;
@@ -417,7 +417,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized String posted(String name) {
-		return U.notNull(posted_().get(name), "DATA[%s]", name);
+		return U.notNull(posted_().get(name), "POSTED[%s]", name);
 	}
 
 	@Override
@@ -441,24 +441,24 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public synchronized Map<String, String> vars() {
-		if (vars == null) {
-			vars = U.synchronizedMap();
-			vars.putAll(params());
-			vars.putAll(posted());
+	public synchronized Map<String, String> data() {
+		if (data == null) {
+			data = U.synchronizedMap();
+			data.putAll(params());
+			data.putAll(posted());
 		}
 
-		return vars;
+		return data;
 	}
 
 	@Override
-	public synchronized String var(String name) {
-		return U.notNull(vars().get(name), "VAR[%s]", name);
+	public synchronized String data(String name) {
+		return U.notNull(data().get(name), "DATA[%s]", name);
 	}
 
 	@Override
-	public synchronized String var(String name, String defaultValue) {
-		return U.or(vars().get(name), defaultValue);
+	public synchronized String data(String name, String defaultValue) {
+		return U.or(data().get(name), defaultValue);
 	}
 
 	@Override

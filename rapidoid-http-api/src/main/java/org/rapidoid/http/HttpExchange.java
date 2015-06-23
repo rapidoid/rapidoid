@@ -84,19 +84,19 @@ public interface HttpExchange extends AppExchange {
 	byte[] file(String name, byte[] defaultValue);
 
 	/**
-	 * Vars include params + data.
+	 * Data includes params + data.
 	 */
-	Map<String, String> vars();
+	Map<String, String> data();
 
 	/**
-	 * Vars include params + data.
+	 * Data includes params + data.
 	 */
-	String var(String name);
+	String data(String name);
 
 	/**
-	 * Vars include params + data.
+	 * Data includes params + data.
 	 */
-	String var(String name, String defaultValue);
+	String data(String name, String defaultValue);
 
 	String pathSegment(int segmentIndex);
 
