@@ -56,7 +56,7 @@ public class Conf {
 				}
 
 				for (Entry<Object, Object> e : props.entrySet()) {
-					configure(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
+					set(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
 				}
 			} catch (IOException e) {
 				throw new RuntimeException("Cannot load config!", e);
@@ -86,12 +86,12 @@ public class Conf {
 					value = "true";
 				}
 
-				configure(name, value);
+				set(name, value);
 			}
 		}
 	}
 
-	public static void configure(String name, String value) {
+	public static void set(String name, String value) {
 		init();
 		String[] parts = value.split(",");
 		Object val = parts.length > 1 ? Arrays.asList(parts) : value;
@@ -169,7 +169,7 @@ public class Conf {
 	}
 
 	private static boolean configureDevMode() {
-		configure("mode", "dev");
+		set("mode", "dev");
 		return true;
 	}
 

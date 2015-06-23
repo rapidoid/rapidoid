@@ -882,7 +882,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		this.router = router;
 
 		if (Conf.option("mode", null) == null) {
-			Conf.configure("mode", detectedDevMode() ? "dev" : "production");
+			Conf.set("mode", detectedDevMode() ? "dev" : "production");
 			Log.info("Auto-detected dev/production mode", "mode", Conf.option("mode"));
 		}
 	}
