@@ -26,7 +26,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.impl.ConstantTag;
-import org.rapidoid.html.impl.TagContextImpl;
 import org.rapidoid.html.impl.TagProxy;
 import org.rapidoid.html.impl.UndefinedTag;
 import org.rapidoid.html.tag.InputTag;
@@ -40,12 +39,8 @@ import org.rapidoid.var.Vars;
 @Since("2.0.0")
 public class Tags extends BasicUtils {
 
-	public static <T> Var<T> var(T value) {
-		return Vars.var(value);
-	}
-
-	public static TagContext context() {
-		return new TagContextImpl();
+	public static <T> Var<T> var(String name, T value) {
+		return Vars.var(name, value);
 	}
 
 	public static <TAG extends Tag> TAG tag(Class<TAG> clazz, String tagName, Object... contents) {

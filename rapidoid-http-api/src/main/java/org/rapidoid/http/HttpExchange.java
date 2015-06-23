@@ -152,6 +152,10 @@ public interface HttpExchange extends AppExchange {
 
 	/* RESPONSE: */
 
+	Map<String, String> errors();
+
+	boolean hasErrors();
+
 	String constructUrl(String path);
 
 	HttpExchange startResponse(int httpResponseCode);

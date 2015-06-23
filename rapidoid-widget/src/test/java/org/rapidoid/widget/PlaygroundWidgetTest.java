@@ -23,8 +23,6 @@ package org.rapidoid.widget;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagContext;
-import org.rapidoid.html.Tags;
 import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")
@@ -35,19 +33,18 @@ public class PlaygroundWidgetTest extends WidgetTestCommons {
 
 	@Test
 	public void testPlaygroundWidget() {
-		TagContext ctx = Tags.context();
 		setupMockExchange();
 
 		Tag play = PlaygroundWidget.pageContent(null);
-		print(ctx, play);
+		print(play);
 
-		hasRegex(ctx, play, "<table class=\"table" + ATTRS + ">");
+		hasRegex(play, "<table class=\"table" + ATTRS + ">");
 
-		hasRegex(ctx, play, "<button[^>]*?>\\-</button>");
-		hasRegex(ctx, play, "<span[^>]*?>10</span>");
-		hasRegex(ctx, play, "<button[^>]*?>\\+</button>");
+		hasRegex(play, "<button[^>]*?>\\-</button>");
+		hasRegex(play, "<span[^>]*?>10</span>");
+		hasRegex(play, "<button[^>]*?>\\+</button>");
 
-		hasRegex(ctx, play, "<input [^>]*?style=\"border: 1px;\">");
+		hasRegex(play, "<input [^>]*?style=\"border: 1px;\">");
 	}
 
 }

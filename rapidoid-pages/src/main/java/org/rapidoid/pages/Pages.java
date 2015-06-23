@@ -35,8 +35,6 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.dispatch.PojoDispatchException;
 import org.rapidoid.dispatch.PojoHandlerNotFoundException;
 import org.rapidoid.html.Cmd;
-import org.rapidoid.html.TagContext;
-import org.rapidoid.html.Tags;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeInternals;
@@ -51,6 +49,7 @@ import org.rapidoid.pages.impl.ComplexView;
 import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.rest.WebReq;
+import org.rapidoid.util.D;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.wire.Wire;
@@ -61,27 +60,10 @@ public class Pages {
 
 	private static final String PAGE_RELOAD = "<h2>&nbsp;Reloading...</h2><script>location.reload();</script>";
 
-	public static final String SESSION_CTX = "_ctx_";
-
 	private static final BuiltInCmdHandler BUILT_IN_HANDLER = new BuiltInCmdHandler();
 
 	public static void registerPages(HTTPServer server) {
 		server.serve(new PageHandler());
-	}
-
-	@SuppressWarnings("unchecked")
-	protected static Map<Integer, Object> inputs(HttpExchange x) {
-		String inputs = x.data("inputs");
-		U.notNull(inputs, "inputs");
-
-		Map<Integer, Object> inputsMap = U.map();
-
-		Map<String, Object> inp = JSON.parse(inputs, Map.class);
-		for (Entry<String, Object> e : inp.entrySet()) {
-			inputsMap.put(U.num(e.getKey()), e.getValue());
-		}
-
-		return inputsMap;
 	}
 
 	public static String pageName(HttpExchange x) {
@@ -157,8 +139,7 @@ public class Pages {
 			if (fullPage instanceof HttpExchange) {
 				return x;
 			} else {
-				TagContext ctx = x.tmp(SESSION_CTX);
-				PageRenderer.get().render(ctx, fullPage, x);
+				PageRenderer.get().render(fullPage, x);
 				return x;
 			}
 		} else {
@@ -208,8 +189,6 @@ public class Pages {
 	}
 
 	public static Object serve(HttpExchange x, Object view) {
-		x.tmps().put(SESSION_CTX, Tags.context());
-
 		load(x, view);
 		store(x, view);
 
@@ -225,14 +204,14 @@ public class Pages {
 		Mapper<String, Object> sessionMapper = Lambdas.mapper(x.session());
 
 		Map<String, Object> locals = UTILS.cast(x.locals());
-		Mapper<String, Object> pageMapper = Lambdas.mapper(locals);
+		Mapper<String, Object> localsMapper = Lambdas.mapper(locals);
 
-		Wire.autowire(target, sessionMapper, pageMapper);
+		Wire.autowire(target, sessionMapper, localsMapper);
 
 		if (target instanceof ComplexView) {
 			ComplexView complex = (ComplexView) target;
 			for (Object subview : complex.getSubViews()) {
-				Wire.autowire(subview, sessionMapper, pageMapper);
+				Wire.autowire(subview, sessionMapper, localsMapper);
 			}
 		}
 	}
@@ -261,41 +240,45 @@ public class Pages {
 
 	public static Object emit(HttpExchange x, Object view) {
 
-		int event = U.num(x.data("event"));
+		String event = x.data("event");
+		boolean navigational = Boolean.parseBoolean(x.data("navigational"));
+		String evArgs = x.data("args", null);
+		Object[] args = {}; // FIXME
+		boolean validEvent = !U.isEmpty(event);
 
-		TagContext ctx = Tags.context();
-		x.tmps().put(SESSION_CTX, ctx);
-
-		Cmd cmd = ctx.getEventCmd(event);
-
-		boolean navigational = cmd != null && cmd.navigational;
+		if (!navigational) {
+			doBinding(x, event, validEvent);
+		}
 
 		load(x, view);
 
-		if (!navigational) {
-			Map<Integer, String> errors = U.map();
-
-			if (cmd != null) {
-				Map<Integer, Object> inputs = inputs(x);
-				ctx.emitValues(inputs, errors);
+		Object content;
+		try {
+			content = contentOf(x, view);
+			if (content == null || content instanceof HttpExchange) {
+				return content;
+			}
+		} catch (Exception e) {
+			Throwable cause = UTILS.rootCause(e);
+			if (cause instanceof HttpSuccessException || cause instanceof HttpNotFoundException) {
+				return null;
 			} else {
-				Log.warn("Invalid event!", "event", event);
+				throw U.rte(e);
 			}
+		}
 
-			if (!errors.isEmpty()) {
-				x.json();
-				return U.map("!errors", errors);
-			}
+		if (x.hasErrors()) {
+			x.json();
+			return U.map("!errors", x.errors());
 		}
 
 		store(x, view);
 		load(x, view);
 
 		boolean processView = true;
-
-		if (cmd != null) {
+		if (validEvent) {
 			try {
-				callCmdHandler(x, view, cmd);
+				callCmdHandler(x, view, new Cmd(event, navigational, args));
 			} catch (Exception e) {
 				Throwable cause = UTILS.rootCause(e);
 				if (cause instanceof HttpSuccessException || cause instanceof HttpNotFoundException) {
@@ -310,29 +293,7 @@ public class Pages {
 		store(x, view);
 		load(x, view);
 
-		String html;
-		if (processView) {
-			Object content;
-			try {
-				content = contentOf(x, view);
-				if (content == null || content instanceof HttpExchange) {
-					return content;
-				}
-			} catch (Exception e) {
-				Throwable cause = UTILS.rootCause(e);
-				if (cause instanceof HttpSuccessException || cause instanceof HttpNotFoundException) {
-					return null;
-				} else {
-					throw U.rte(e);
-				}
-			}
-			html = PageRenderer.get().toHTML(ctx, content, x);
-		} else {
-			html = "Error!";
-		}
-
-		store(x, view);
-		load(x, view);
+		String html = processView ? PageRenderer.get().toHTML(content, x) : "Error!";
 
 		if (x.redirectUrl() != null) {
 			x.startResponse(200);
@@ -341,6 +302,27 @@ public class Pages {
 		}
 
 		return changes(x, html);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static void doBinding(HttpExchange x, String event, boolean validEvent) {
+		if (validEvent) {
+			String inputs = x.data("inputs");
+			U.notNull(inputs, "inputs");
+			Map<String, Object> inputsMap = JSON.parse(inputs, Map.class);
+			emitValues(x, inputsMap);
+		} else {
+			Log.warn("Invalid event!", "event", event);
+		}
+	}
+
+	private static void emitValues(HttpExchange x, final Map<String, Object> values) {
+		for (Entry<String, Object> e : values.entrySet()) {
+			String inputId = e.getKey();
+			Object value = e.getValue();
+
+			x.locals().put(inputId, UTILS.serializable(value));
+		}
 	}
 
 	private static Object changes(HttpExchange x, String html) {

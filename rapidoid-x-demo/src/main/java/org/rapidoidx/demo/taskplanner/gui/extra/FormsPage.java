@@ -39,16 +39,16 @@ import org.rapidoid.widget.ButtonWidget;
 public class FormsPage extends BootstrapWidgets {
 
 	@Session
-	private Var<?>[] vars1 = Vars.vars("niko1", "rapidoid", "niko@rapi.doid", "No", arr("Manager", "Moderator"),
-			"Male", arr("A", "C"), "Very interesting!", true);
+	private Var<?>[] vars1 = Vars.vars("misc", "niko1", "rapidoid", "niko@rapi.doid", "No",
+			arr("Manager", "Moderator"), "Male", arr("A", "C"), "Very interesting!", true);
 
 	@Session
-	private Var<?>[] vars2 = Vars.vars("niko2", "rapidoid", "niko@rapi.doid", "Yes", arr("Manager", "Moderator"),
-			"Male", arr("A", "C"), "Very interesting!", true);
+	private Var<?>[] vars2 = Vars.vars("misc", "niko2", "rapidoid", "niko@rapi.doid", "Yes",
+			arr("Manager", "Moderator"), "Male", arr("A", "C"), "Very interesting!", true);
 
 	@Session
-	private Var<?>[] vars3 = Vars.vars("niko3", "rapidoid", "niko@rapi.doid", "No", arr("Manager", "Moderator"),
-			"Male", arr("A", "C"), "Very interesting!", true);
+	private Var<?>[] vars3 = Vars.vars("misc", "niko3", "rapidoid", "niko@rapi.doid", "No",
+			arr("Manager", "Moderator"), "Male", arr("A", "C"), "Very interesting!", true);
 
 	public Object content(HttpExchange x) {
 

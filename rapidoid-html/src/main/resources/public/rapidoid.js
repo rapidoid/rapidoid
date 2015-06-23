@@ -30,6 +30,19 @@ function _stop(ev) {
     }
 }
 
+/* http://stackoverflow.com/questions/2144386/javascript-delete-cookie */
+function _delete_cookie(name, path, domain) {
+    if (get_cookie(name)) {
+        document.cookie = name + "=" + ((path) ? ";path=" + path : "") + ((domain) ? ";domain=" + domain : "")
+                + ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
+    }
+}
+
+function _logout() {
+    _delete_cookie('JSESSIONID', '/', '');
+    _delete_cookie('COOKIEPACK', '/', '');
+}
+
 function _popup(popupUrl, onClosed) {
     var ww = 800;
     var hh = 600;
@@ -112,7 +125,7 @@ rapidoidApp.directive('compile', [ '$compile', function($compile) {
 
 rapidoidApp.controller('Main', [ '$scope', '$http', '$window', function($scope, $http, $window) {
 
-    $scope._emit = function(eventId) {
+    $scope._emit = function(eventId, eventNav, eventArgs) {
 
         // _stop(ev);
 
@@ -148,6 +161,8 @@ rapidoidApp.controller('Main', [ '$scope', '$http', '$window', function($scope, 
 
         $.post(window.location.href, {
             event : eventId,
+            navigational : eventNav,
+            args : eventArgs,
             inputs : JSON.stringify(inputs),
             __state : window.__state
         }).done(function(data) {

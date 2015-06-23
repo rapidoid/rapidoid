@@ -29,6 +29,8 @@ import org.rapidoid.annotation.Since;
 @Since("2.0.0")
 public interface Var<T> extends Serializable {
 
+	String name();
+
 	T get();
 
 	void set(T value);

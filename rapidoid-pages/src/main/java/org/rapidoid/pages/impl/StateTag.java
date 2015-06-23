@@ -26,7 +26,6 @@ import java.io.OutputStream;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagProcessor;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.json.JSON;
@@ -44,7 +43,7 @@ public class StateTag extends HardcodedTag {
 	}
 
 	@Override
-	public void render(TagContext ctx, HttpExchange x, PageRenderer renderer, OutputStream out) {
+	public void render(HttpExchange x, PageRenderer renderer, OutputStream out) {
 		String json = JSON.stringify(Pages.stateOf(x));
 		try {
 			out.write(json.getBytes());

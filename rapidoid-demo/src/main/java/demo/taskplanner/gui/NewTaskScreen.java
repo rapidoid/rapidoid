@@ -53,7 +53,7 @@ public class NewTaskScreen extends Screen {
 	private Var<String> v = var("abc");
 
 	@Session
-	private Var<List<String>> v2 = var(U.list("b", "AA"));
+	private Var<List<String>> v2 = var("v2", U.list("b", "AA"));
 
 	public Object content() {
 		Tag caption1 = titleBox("Add new task");

@@ -82,4 +82,9 @@ public class DbColumnImpl<E> implements DbColumn<E>, SerializableBean<Object> {
 		return U.compare(get(), col.get());
 	}
 
+	@Override
+	public String name() {
+		return name;
+	}
+
 }

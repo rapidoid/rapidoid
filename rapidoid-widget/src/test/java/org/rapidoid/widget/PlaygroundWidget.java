@@ -49,7 +49,7 @@ public class PlaygroundWidget extends BootstrapWidgets {
 
 	public static Tag counter(int start) {
 
-		final Var<Integer> num = var(start);
+		final Var<Integer> num = var("count", start);
 
 		ButtonTag b1 = button("+");
 

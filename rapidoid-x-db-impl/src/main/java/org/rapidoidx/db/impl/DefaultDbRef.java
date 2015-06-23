@@ -74,4 +74,9 @@ public class DefaultDbRef<E> extends DbRelsCommons<E> implements DbRef<E> {
 		return U.eq(get(), obj);
 	}
 
+	@Override
+	public String name() {
+		return name;
+	}
+
 }

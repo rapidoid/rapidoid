@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctx;
-import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.impl.TagRenderer;
 import org.rapidoid.http.HttpExchange;
@@ -42,12 +41,12 @@ public class WidgetTestCommons extends TestCommons {
 	@SuppressWarnings({ "unchecked" })
 	protected static final Map<Integer, Object> NO_CHANGES = Collections.EMPTY_MAP;
 
-	protected void print(TagContext ctx, Object content) {
+	protected void print(Object content) {
 		HttpExchange x = setupMockExchange();
 
 		content = preprocess(content, x);
 
-		String html = TagRenderer.get().toHTML(ctx, content, x);
+		String html = TagRenderer.get().toHTML(content, x);
 		notNull(html);
 		System.out.println(html);
 	}
@@ -65,12 +64,12 @@ public class WidgetTestCommons extends TestCommons {
 		return content;
 	}
 
-	protected void has(TagContext ctx, Object content, String... containingTexts) {
+	protected void has(Object content, String... containingTexts) {
 		HttpExchange x = setupMockExchange();
 
 		content = preprocess(content, x);
 
-		String html = TagRenderer.get().toHTML(ctx, content, x);
+		String html = TagRenderer.get().toHTML(content, x);
 		notNull(html);
 
 		for (String text : containingTexts) {
@@ -78,12 +77,12 @@ public class WidgetTestCommons extends TestCommons {
 		}
 	}
 
-	protected void hasRegex(TagContext ctx, Object content, String... containingRegexes) {
+	protected void hasRegex(Object content, String... containingRegexes) {
 		HttpExchange x = setupMockExchange();
 
 		content = preprocess(content, x);
 
-		String html = TagRenderer.get().toHTML(ctx, content, x);
+		String html = TagRenderer.get().toHTML(content, x);
 
 		for (String regex : containingRegexes) {
 			isTrue(Pattern.compile(regex).matcher(html).find());

@@ -31,7 +31,8 @@ public class SimpleVar<T> extends AbstractVar<T> {
 
 	private volatile T value;
 
-	public SimpleVar(T value) {
+	public SimpleVar(String name, T value) {
+		super(name);
 		this.value = value;
 	}
 

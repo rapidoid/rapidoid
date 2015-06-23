@@ -35,12 +35,13 @@ public class LocalVar<T extends Serializable> extends AbstractVar<T> {
 
 	private static final long serialVersionUID = 2761159925375675659L;
 
-	private final String name;
+	private final String localKey;
 
 	private final T defaultValue;
 
-	public LocalVar(String name, T defaultValue) {
-		this.name = name;
+	public LocalVar(String localKey, T defaultValue) {
+		super(localKey);
+		this.localKey = localKey;
 		this.defaultValue = defaultValue;
 	}
 
@@ -48,13 +49,13 @@ public class LocalVar<T extends Serializable> extends AbstractVar<T> {
 	@Override
 	public T get() {
 		HttpExchange x = Ctx.exchange();
-		return (T) U.or(x.locals().get(name), defaultValue);
+		return (T) U.or(x.locals().get(localKey), defaultValue);
 	}
 
 	@Override
 	public void set(T value) {
 		HttpExchange x = Ctx.exchange();
-		x.locals().put(name, value);
+		x.locals().put(localKey, value);
 	}
 
 }

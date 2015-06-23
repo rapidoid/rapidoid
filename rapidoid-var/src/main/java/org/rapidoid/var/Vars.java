@@ -34,16 +34,16 @@ import org.rapidoid.var.impl.SimpleVar;
 @Since("2.0.0")
 public class Vars {
 
-	public static <T> Var<T> var(T value) {
-		return new SimpleVar<T>(value);
+	public static <T> Var<T> var(String name, T value) {
+		return new SimpleVar<T>(name, value);
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> Var<T>[] vars(T... values) {
+	public static <T> Var<T>[] vars(String name, T... values) {
 		Var<T>[] vars = new Var[values.length];
 
 		for (int i = 0; i < vars.length; i++) {
-			vars[i] = var(values[i]);
+			vars[i] = var(name + "[" + i + "]", values[i]);
 		}
 
 		return vars;
@@ -51,22 +51,23 @@ public class Vars {
 
 	@SuppressWarnings("unchecked")
 	public static Var<Boolean> eq(Var<?> var, Object value) {
-		return new EqualityVar((Var<Object>) var, value);
+		return new EqualityVar(var.name() + " == " + value, (Var<Object>) var, value);
 	}
 
 	@SuppressWarnings("unchecked")
 	public static Var<Boolean> has(Var<?> container, Object item) {
 		Object arrOrColl = container.get();
 
+		String name = container.name() + "[" + item + "]";
 		if (arrOrColl instanceof Collection) {
-			return new CollectionContainerVar((Var<Collection<Object>>) container, item);
+			return new CollectionContainerVar(name, (Var<Collection<Object>>) container, item);
 		} else {
-			return new ArrayContainerVar((Var<Object>) container, item);
+			return new ArrayContainerVar(name, (Var<Object>) container, item);
 		}
 	}
 
 	public static <T> Var<T> mandatory(Var<T> var) {
-		return new MandatoryVar<T>(var);
+		return new MandatoryVar<T>(var.name(), var);
 	}
 
 	@SuppressWarnings("unchecked")

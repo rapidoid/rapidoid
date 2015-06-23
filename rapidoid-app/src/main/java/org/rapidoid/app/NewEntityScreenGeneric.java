@@ -21,11 +21,9 @@ package org.rapidoid.app;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.DB;
-import org.rapidoid.plugins.Entities;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.FormWidget;
 
@@ -33,24 +31,19 @@ import org.rapidoid.widget.FormWidget;
 @Since("2.1.0")
 public class NewEntityScreenGeneric extends AbstractEntityScreenGeneric {
 
-	@Session
-	private Object target;
-
 	public NewEntityScreenGeneric(Class<?> entityType) {
 		super(entityType);
 	}
 
 	public Object content() {
-		target = Entities.create(entityType);
-
 		Tag caption = h2("New " + U.capitalized(ctx().pathSegment(0).substring(3)));
-		FormWidget form = create(target).buttons(SAVE, CANCEL);
+		FormWidget form = create(entity).buttons(SAVE, CANCEL, INSERT);
 
 		return mid6(caption, form);
 	}
 
 	public void onSave() {
-		DB.insert(target);
+		DB.insert(entity);
 		ctx().goBack(1);
 	}
 

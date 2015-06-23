@@ -490,4 +490,9 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "AppPageGeneric [screen=" + screen + "]";
+	}
+
 }

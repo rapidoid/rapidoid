@@ -60,12 +60,10 @@ public abstract class ProtocolBridge {
 		U.notNull(holder, "channel holder");
 
 		if (holder.channel() == null) {
-			System.out.println("JOK: " + holder);
 			// client not connected, so maybe later...
 			throw Buf.INCOMPLETE_READ;
 		}
 
-		System.out.println("JEEE :: " + holder);
 		return holder.channel();
 	}
 

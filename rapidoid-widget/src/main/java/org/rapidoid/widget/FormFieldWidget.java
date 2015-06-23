@@ -32,11 +32,13 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.TextareaTag;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
@@ -90,7 +92,21 @@ public class FormFieldWidget extends AbstractWidget {
 		this.type = mode != FormMode.SHOW ? getPropertyFieldType(prop) : FieldType.LABEL;
 		this.options = getPropertyOptions(prop);
 		this.required = Metadata.get(prop.annotations(), Optional.class) == null;
-		this.var = Models.propertyVar(item, prop.name());
+		this.var = initVar(item, prop);
+	}
+
+	private Var<?> initVar(Item item, Property prop) {
+		HttpExchange x = Ctx.exchange();
+		Object target = U.or(item.value(), item);
+		String varName = target.getClass().getSimpleName() + "." + prop.name();
+		Object initValue = x.locals().get(varName);
+
+		try {
+			return Models.propertyVar(varName, item, prop.name(), initValue);
+		} catch (Exception e) {
+			x.errors().put(varName, "Invalid value!");
+			return Models.propertyVar(varName, item, prop.name(), null);
+		}
 	}
 
 	protected String formLayoutClass(FormLayout layout) {

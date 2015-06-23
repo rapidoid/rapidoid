@@ -223,7 +223,7 @@ public class Beany {
 
 		} else if (value instanceof Var<?>) {
 			Var<?> var = (Var<?>) value;
-			return serialize(var.get());
+			return serialize(U.map(var.name(), var.get()));
 
 		} else if (value instanceof Set) {
 			Set<Object> set = U.set();

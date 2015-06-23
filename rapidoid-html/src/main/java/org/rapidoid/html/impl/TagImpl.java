@@ -55,7 +55,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 
 	final Set<String> battrs = U.set();
 
-	int _h = -1;
+	String _h = null;
 
 	Tag proxy;
 
@@ -210,7 +210,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 		return _copy;
 	}
 
-	public int hnd() {
+	public String hnd() {
 		return _h;
 	}
 

@@ -56,6 +56,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		HttpExchangeInternals, HttpInterception, Constants {
 
 	public static final String SESSION_COOKIE = "JSESSIONID";
+	public static final String COOKIEPACK_COOKIE = "COOKIEPACK";
 
 	private final static HttpParser PARSER = Wire.singleton(HttpParser.class);
 
@@ -97,6 +98,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private Router router;
 
 	private Map<String, String> vars;
+
+	private Map<String, String> errors;
 
 	/* STATE */
 
@@ -186,6 +189,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		cookiepack = null;
 		locals = null;
 		tmps = null;
+		errors = null;
 
 		resetResponse();
 	}
@@ -449,7 +453,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized String var(String name) {
-		return U.notNull(vars().get(name), "FILE[%s]", name);
+		return U.notNull(vars().get(name), "VAR[%s]", name);
 	}
 
 	@Override
@@ -938,6 +942,19 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
+	public synchronized boolean hasErrors() {
+		return !U.isEmpty(errors);
+	}
+
+	@Override
+	public synchronized Map<String, String> errors() {
+		if (errors == null) {
+			errors = U.synchronizedMap();
+		}
+		return errors;
+	}
+
+	@Override
 	public synchronized Map<String, Object> tmps() {
 		if (tmps == null) {
 			tmps = U.synchronizedMap();
@@ -967,28 +984,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			session = sessionStore.get(sessionId());
 		}
 		return session;
-	}
-
-	private synchronized boolean hasSession() {
-		if (sessionId == null) {
-			sessionId = cookie(SESSION_COOKIE, null);
-		}
-
-		return sessionId != null;
-	}
-
-	@Override
-	public synchronized String sessionId() {
-		if (sessionId == null) {
-			sessionId = cookie(SESSION_COOKIE, null);
-
-			if (sessionId == null) {
-				sessionId = helper().randomSHA512();
-				setCookie(SESSION_COOKIE, sessionId, "path=/");
-			}
-		}
-
-		return sessionId;
 	}
 
 	/* SESSION SCOPE GETTERS */
@@ -1061,11 +1056,35 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		return Scopes.getOrCreate("tmps", tmps(), name, valueClass, constructorArgs);
 	}
 
+	/* SESSION */
+
 	@Override
 	public synchronized void storeSession() {
 		if (sessionId != null) {
 			sessionStore.set(sessionId, session);
 		}
+	}
+
+	private synchronized boolean hasSession() {
+		if (sessionId == null) {
+			sessionId = cookie(SESSION_COOKIE, null);
+		}
+
+		return sessionId != null;
+	}
+
+	@Override
+	public synchronized String sessionId() {
+		if (sessionId == null) {
+			sessionId = cookie(SESSION_COOKIE, null);
+
+			if (sessionId == null) {
+				sessionId = helper().randomSHA512();
+				setCookie(SESSION_COOKIE, sessionId, "path=/");
+			}
+		}
+
+		return sessionId;
 	}
 
 }

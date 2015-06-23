@@ -53,7 +53,7 @@ public abstract class AbstractModel implements IModel {
 		Var<T> var = getExtra(name, null);
 
 		if (var == null) {
-			var = Vars.var(defaultValue);
+			var = Vars.var("model(" + name + ")", defaultValue);
 			setExtra(name, var);
 		}
 

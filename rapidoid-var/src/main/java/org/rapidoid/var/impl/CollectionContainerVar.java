@@ -38,7 +38,8 @@ public class CollectionContainerVar extends AbstractVar<Boolean> {
 
 	private final Object item;
 
-	public CollectionContainerVar(Var<Collection<Object>> container, Object item) {
+	public CollectionContainerVar(String name, Var<Collection<Object>> container, Object item) {
+		super(name);
 		this.container = container;
 		this.item = item;
 	}

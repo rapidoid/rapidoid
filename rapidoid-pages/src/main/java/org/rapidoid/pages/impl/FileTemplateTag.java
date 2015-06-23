@@ -27,7 +27,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagProcessor;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.io.IO;
@@ -48,12 +47,12 @@ public class FileTemplateTag extends HardcodedTag {
 	}
 
 	@Override
-	public void render(TagContext ctx, HttpExchange x, PageRenderer renderer, OutputStream out) {
+	public void render(HttpExchange x, PageRenderer renderer, OutputStream out) {
 		String text = IO.loadResourceAsString(templateName, true);
 
 		for (int i = 0; i < namesAndValues.length / 2; i++) {
 			String placeholder = (String) namesAndValues[i * 2];
-			String value = renderer.toHTML(ctx, namesAndValues[i * 2 + 1], x);
+			String value = renderer.toHTML(namesAndValues[i * 2 + 1], x);
 
 			text = UTILS.fillIn(text, placeholder, value);
 		}

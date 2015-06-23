@@ -35,7 +35,8 @@ public class EqualityVar extends AbstractVar<Boolean> {
 
 	private final Object val;
 
-	public EqualityVar(Var<Object> var, Object val) {
+	public EqualityVar(String name, Var<Object> var, Object val) {
+		super(name);
 		this.var = var;
 		this.val = val;
 	}

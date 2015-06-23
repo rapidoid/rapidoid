@@ -29,7 +29,6 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.Statement;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.D;
 import org.rapidoidx.compile.impl.EcjCompilationUnit;
 
 @Authors("Nikolche Mihajlovski")
@@ -53,7 +52,6 @@ public class Parse {
 		ASTParser parser = parser(ASTParser.K_STATEMENTS, "(statements)", source);
 
 		ASTNode ast = parser.createAST(null);
-		D.print(ast.getClass());
 
 		if (ast instanceof Statement) {
 			return (Statement) ast;

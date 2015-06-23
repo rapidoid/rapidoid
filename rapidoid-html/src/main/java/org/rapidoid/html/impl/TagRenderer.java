@@ -33,8 +33,8 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.html.CustomTag;
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagWidget;
+import org.rapidoid.json.JSON;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
@@ -43,9 +43,13 @@ import org.rapidoid.var.Var;
 @Since("2.0.0")
 public class TagRenderer {
 
-	private static final byte[] EMIT_CLOSE = "')".getBytes();
+	private static final byte[] TRUE = "true".getBytes();
+	private static final byte[] FALSE = "false".getBytes();
+	private static final byte[] EMIT_CLOSE = ")".getBytes();
 	private static final byte[] INDENT = "  ".getBytes();
 	private static final byte[] EMIT = "_emit('".getBytes();
+	private static final byte[] EMIT_SEP1 = "', ".getBytes();
+	private static final byte[] EMIT_SEP2 = ", ".getBytes();
 	private static final byte[] _H = " _h=\"".getBytes();
 	private static final byte[] EQ_DQUOTES = "=\"".getBytes();
 	private static final byte[] LT = "<".getBytes();
@@ -59,18 +63,18 @@ public class TagRenderer {
 		return INSTANCE;
 	}
 
-	public String toHTML(TagContext ctx, Object content, Object extra) {
+	public String toHTML(Object content, Object extra) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		str(ctx, content, extra, out);
+		str(content, extra, out);
 		return out.toString();
 	}
 
-	public void str(TagContext ctx, Object content, Object extra, OutputStream out) {
-		str(ctx, content, 0, false, extra, out);
+	public void str(Object content, Object extra, OutputStream out) {
+		str(content, 0, false, extra, out);
 	}
 
 	@SuppressWarnings("unchecked")
-	public void str(TagContext ctx, Object content, int level, boolean inline, Object extra, OutputStream out) {
+	public void str(Object content, int level, boolean inline, Object extra, OutputStream out) {
 
 		if (content instanceof ConstantTag) {
 			ConstantTag constantTag = ((ConstantTag) content);
@@ -79,20 +83,20 @@ public class TagRenderer {
 		} else if (content instanceof Tag) {
 			Tag tag = (Tag) content;
 			TagInternals tagi = (TagInternals) tag;
-			str(ctx, tagi.base(), level, inline, extra, out);
+			str(tagi.base(), level, inline, extra, out);
 			return;
 		} else if (content instanceof TagWidget) {
 			TagWidget<Object> widget = (TagWidget<Object>) content;
 			Object widgetContent = widget.render(extra);
 			if (widgetContent != null) {
-				str(ctx, widgetContent, level, inline, extra, out);
+				str(widgetContent, level, inline, extra, out);
 			}
 			return;
 		} else if (content instanceof Object[]) {
-			join(ctx, (Object[]) content, level, inline, extra, out);
+			join((Object[]) content, level, inline, extra, out);
 			return;
 		} else if (content instanceof Collection<?>) {
-			join(ctx, (Collection<?>) content, level, inline, extra, out);
+			join((Collection<?>) content, level, inline, extra, out);
 			return;
 		}
 
@@ -100,30 +104,28 @@ public class TagRenderer {
 		write(out, HTML.escape(U.readable(content)));
 	}
 
-	protected void join(TagContext ctx, Collection<?> items, int level, boolean inline, Object extra, OutputStream out) {
+	protected void join(Collection<?> items, int level, boolean inline, Object extra, OutputStream out) {
 		for (Object item : items) {
 			if (!inline) {
 				write(out, Constants.CR_LF);
 			}
-			str(ctx, item, level + 1, inline, extra, out);
+			str(item, level + 1, inline, extra, out);
 		}
 	}
 
-	protected void join(TagContext ctx, Object[] items, int level, boolean inline, Object extra, OutputStream out) {
+	protected void join(Object[] items, int level, boolean inline, Object extra, OutputStream out) {
 		for (int i = 0; i < items.length; i++) {
 			if (!inline) {
 				write(out, Constants.CR_LF);
 			}
-			str(ctx, items[i], level + 1, inline, extra, out);
+			str(items[i], level + 1, inline, extra, out);
 		}
 	}
 
-	public void str(TagContext ctx, TagImpl tag, int level, boolean inline, Object extra, OutputStream out) {
-
-		U.notNull(ctx, "tag context");
+	public void str(TagImpl tag, int level, boolean inline, Object extra, OutputStream out) {
 
 		if (tag.binding != null) {
-			tag._h = ctx.newBinding(tag.binding);
+			tag._h = tag.binding.name();
 		}
 
 		String name = HTML.escape(tag.name);
@@ -134,7 +136,7 @@ public class TagRenderer {
 		write(out, LT);
 		write(out, name);
 
-		if (tag._h >= 0) {
+		if (tag._h != null) {
 			write(out, _H);
 			attrToStr(out, tag, "_h", tag._h);
 			write(out, DQUOTES);
@@ -171,11 +173,14 @@ public class TagRenderer {
 		}
 
 		if (tag.cmd != null) {
-			int eventHnd = ctx.newCommand(tag.cmd);
 			write(out, " ng-click");
 			write(out, EQ_DQUOTES);
 			write(out, EMIT);
-			write(out, eventHnd + "");
+			write(out, tag.cmd.name);
+			write(out, EMIT_SEP1);
+			write(out, tag.cmd.navigational ? TRUE : FALSE);
+			write(out, EMIT_SEP2);
+			JSON.jacksonStringify(tag.cmd.args, out);
 			write(out, EMIT_CLOSE);
 			write(out, DQUOTES);
 		}
@@ -192,13 +197,13 @@ public class TagRenderer {
 		}
 
 		if (inline || shouldRenderInline(name, contents)) {
-			str(ctx, contents, level + 1, true, extra, out);
+			str(contents, level + 1, true, extra, out);
 			closeTag(out, name);
 			return;
 		}
 
 		if (contents != null) {
-			str(ctx, contents, level, inline, extra, out);
+			str(contents, level, inline, extra, out);
 		}
 
 		write(out, Constants.CR_LF);

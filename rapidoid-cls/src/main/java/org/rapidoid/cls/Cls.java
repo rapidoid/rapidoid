@@ -775,7 +775,7 @@ public class Cls {
 		} else if (clazz == ConcurrentMap.class) {
 			return (T) U.concurrentMap();
 		} else if (clazz == Var.class) {
-			return (T) Vars.var(null);
+			return (T) Vars.var("<new>", null);
 		} else if (clazz == Object.class) {
 			return (T) new Object();
 		}

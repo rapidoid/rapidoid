@@ -24,7 +24,6 @@ import java.io.OutputStream;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.html.TagContext;
 import org.rapidoid.html.impl.TagRenderer;
 import org.rapidoid.http.HttpExchange;
 
@@ -39,17 +38,17 @@ public class PageRenderer extends TagRenderer {
 	}
 
 	@Override
-	public void str(TagContext ctx, Object content, int level, boolean inline, Object extra, OutputStream out) {
+	public void str(Object content, int level, boolean inline, Object extra, OutputStream out) {
 		if (content instanceof HardcodedTag) {
 			HardcodedTag hardcoded = ((HardcodedTag) content);
-			hardcoded.render(ctx, (HttpExchange) extra, this, out);
+			hardcoded.render((HttpExchange) extra, this, out);
 		} else {
-			super.str(ctx, content, level, inline, extra, out);
+			super.str(content, level, inline, extra, out);
 		}
 	}
 
-	public void render(TagContext ctx, Object content, HttpExchange x) {
-		str(ctx, content, x, x.outputStream());
+	public void render(Object content, HttpExchange x) {
+		str(content, x, x.outputStream());
 	}
 
 }

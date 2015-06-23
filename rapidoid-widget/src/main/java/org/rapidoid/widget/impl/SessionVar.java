@@ -34,26 +34,27 @@ public class SessionVar<T extends Serializable> extends AbstractVar<T> {
 
 	private static final long serialVersionUID = 2761159925375675659L;
 
-	private final String name;
+	private final String sessionKey;
 
 	private final T defaultValue;
 
-	public SessionVar(String name, T defaultValue) {
-		this.name = name;
+	public SessionVar(String sessionKey, T defaultValue) {
+		super(sessionKey);
+		this.sessionKey = sessionKey;
 		this.defaultValue = defaultValue;
 	}
 
 	@Override
 	public T get() {
 		HttpExchange x = Ctx.exchange();
-		T val = x.session(name, defaultValue);
+		T val = x.session(sessionKey, defaultValue);
 		return val;
 	}
 
 	@Override
 	public void set(T value) {
 		HttpExchange x = Ctx.exchange();
-		x.session().put(name, value);
+		x.session().put(sessionKey, value);
 	}
 
 }

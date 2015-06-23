@@ -35,9 +35,14 @@ public class ItemPropertyVar<T> extends AbstractVar<T> {
 
 	private final String property;
 
-	public ItemPropertyVar(Item item, String property) {
+	public ItemPropertyVar(String name, Item item, String property, T initValue) {
+		super(name);
 		this.item = item;
 		this.property = property;
+
+		if (initValue != null) {
+			set(initValue);
+		}
 	}
 
 	@Override

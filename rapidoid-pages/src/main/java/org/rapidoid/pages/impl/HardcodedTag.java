@@ -4,7 +4,6 @@ import java.io.OutputStream;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.html.TagContext;
 import org.rapidoid.html.impl.UndefinedTag;
 import org.rapidoid.http.HttpExchange;
 
@@ -32,7 +31,7 @@ import org.rapidoid.http.HttpExchange;
 @Since("2.0.0")
 public abstract class HardcodedTag extends UndefinedTag {
 
-	public abstract void render(TagContext ctx, HttpExchange x, PageRenderer renderer, OutputStream out);
+	public abstract void render(HttpExchange x, PageRenderer renderer, OutputStream out);
 
 	@Override
 	public String tagKind() {

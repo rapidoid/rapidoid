@@ -29,7 +29,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagContext;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeImpl;
@@ -47,12 +46,12 @@ public class PagesTestCommons extends TestCommons {
 	@SuppressWarnings({ "unchecked" })
 	protected static final Map<Integer, Object> NO_CHANGES = Collections.EMPTY_MAP;
 
-	protected void print(TagContext ctx, Object content) {
-		HttpExchange x = setupMockExchange(ctx);
+	protected void print(Object content) {
+		HttpExchange x = setupMockExchange();
 
 		content = preprocess(content, x);
 
-		String html = PageRenderer.get().toHTML(ctx, content, x);
+		String html = PageRenderer.get().toHTML(content, x);
 		notNull(html);
 		System.out.println(html);
 	}
@@ -73,12 +72,12 @@ public class PagesTestCommons extends TestCommons {
 		return content;
 	}
 
-	protected void has(TagContext ctx, Object content, String... containingTexts) {
-		HttpExchange x = setupMockExchange(ctx);
+	protected void has(Object content, String... containingTexts) {
+		HttpExchange x = setupMockExchange();
 
 		content = preprocess(content, x);
 
-		String html = PageRenderer.get().toHTML(ctx, content, x);
+		String html = PageRenderer.get().toHTML(content, x);
 		notNull(html);
 
 		for (String text : containingTexts) {
@@ -86,12 +85,12 @@ public class PagesTestCommons extends TestCommons {
 		}
 	}
 
-	protected void hasRegex(TagContext ctx, Object content, String... containingRegexes) {
-		HttpExchange x = setupMockExchange(ctx);
+	protected void hasRegex(Object content, String... containingRegexes) {
+		HttpExchange x = setupMockExchange();
 
 		content = preprocess(content, x);
 
-		String html = PageRenderer.get().toHTML(ctx, content, x);
+		String html = PageRenderer.get().toHTML(content, x);
 
 		for (String regex : containingRegexes) {
 			isTrue(Pattern.compile(regex).matcher(html).find());
@@ -102,7 +101,7 @@ public class PagesTestCommons extends TestCommons {
 		eq(var.get(), value);
 	}
 
-	protected static HttpExchange setupMockExchange(TagContext ctx) {
+	protected static HttpExchange setupMockExchange() {
 		HttpExchangeImpl x = new HttpExchangeImpl();
 
 		BufGroup bufs = new BufGroup(2);
@@ -110,7 +109,6 @@ public class PagesTestCommons extends TestCommons {
 		x.setConnection(conn);
 
 		InMemorySessionStore sessions = new InMemorySessionStore();
-		x.tmps().put(Pages.SESSION_CTX, ctx);
 		x.init(new HttpResponses(false, false), sessions, null);
 
 		Ctx.reset();

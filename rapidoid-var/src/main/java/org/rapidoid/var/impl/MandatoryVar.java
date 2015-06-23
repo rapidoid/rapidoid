@@ -33,7 +33,8 @@ public class MandatoryVar<T> extends AbstractVar<T> {
 
 	private final Var<T> var;
 
-	public MandatoryVar(Var<T> var) {
+	public MandatoryVar(String name, Var<T> var) {
+		super(name);
 		this.var = var;
 	}
 

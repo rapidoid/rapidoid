@@ -23,8 +23,6 @@ package org.rapidoid.pages.bootstrap;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagContext;
-import org.rapidoid.html.Tags;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.PagesTestCommons;
 import org.rapidoid.widget.BootstrapWidgets;
@@ -49,11 +47,10 @@ public class BootstrapPageTest extends PagesTestCommons {
 
 		};
 
-		TagContext ctx = Tags.context();
-		print(ctx, page);
+		print(page);
 
-		has(ctx, page, "<title>Some title</title>");
-		hasRegex(ctx, page, "<div[^>]*?>abc</div>");
+		has(page, "<title>Some title</title>");
+		hasRegex(page, "<div[^>]*?>abc</div>");
 	}
 
 	@Test
@@ -66,11 +63,10 @@ public class BootstrapPageTest extends PagesTestCommons {
 
 		};
 
-		TagContext ctx = Tags.context();
-		print(ctx, page);
+		print(page);
 
-		has(ctx, page, "<title>Some title</title>");
-		hasRegex(ctx, page, "<div[^>]*?>abc</div>");
+		has(page, "<title>Some title</title>");
+		hasRegex(page, "<div[^>]*?>abc</div>");
 	}
 
 }

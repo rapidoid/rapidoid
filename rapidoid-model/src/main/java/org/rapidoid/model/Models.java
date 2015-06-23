@@ -169,8 +169,8 @@ public class Models {
 		return new CalcProperty(name, (Calc<Object>) calc);
 	}
 
-	public static <T> Var<T> propertyVar(Item item, String property) {
-		return new ItemPropertyVar<T>(item, property);
+	public static <T> Var<T> propertyVar(String name, Item item, String property, T initValue) {
+		return new ItemPropertyVar<T>(name, item, property, initValue);
 	}
 
 }

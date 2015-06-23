@@ -35,7 +35,8 @@ public class ArrayContainerVar extends AbstractVar<Boolean> {
 
 	public final Object item;
 
-	public ArrayContainerVar(Var<Object> container, Object item) {
+	public ArrayContainerVar(String name, Var<Object> container, Object item) {
+		super(name);
 		this.container = container;
 		this.item = item;
 	}

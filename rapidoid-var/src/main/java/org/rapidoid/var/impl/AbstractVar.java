@@ -31,9 +31,20 @@ public abstract class AbstractVar<T> implements Var<T> {
 
 	private static final long serialVersionUID = -6006051524799076017L;
 
+	private final String name;
+
+	public AbstractVar(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public String toString() {
 		return U.readable(get());
+	}
+
+	@Override
+	public String name() {
+		return name;
 	}
 
 }
