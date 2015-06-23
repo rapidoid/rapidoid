@@ -87,7 +87,7 @@ public abstract class HttpTestCommons extends TestCommons {
 			@SuppressWarnings("unchecked")
 			@Override
 			public Object handle(HttpExchange x) {
-				return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.data().get("a"), x.files()
+				return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.posted().get("a"), x.files()
 						.size(), Crypto.md5(x.files().get("f1")), Crypto.md5(x.files().get("f2")), Crypto.md5(U.or(x
 						.files().get("f3"), new byte[0])));
 			}

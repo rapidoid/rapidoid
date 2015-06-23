@@ -75,7 +75,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private final KeyValueRanges params = new KeyValueRanges(50);
 	private final KeyValueRanges headersKV = new KeyValueRanges(50);
 	private final KeyValueRanges cookies = new KeyValueRanges(50);
-	private final KeyValueRanges data = new KeyValueRanges(50);
+	private final KeyValueRanges posted = new KeyValueRanges(50);
 	private final KeyValueRanges files = new KeyValueRanges(50);
 
 	final Range body = new Range();
@@ -120,7 +120,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private final MultiData _params;
 	private final MultiData _headers;
 	private final MultiData _cookies;
-	private final MultiData _data;
+	private final MultiData _posted;
 	private final BinaryMultiData _files;
 
 	private int responseCode;
@@ -146,7 +146,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		this._params = multiData(params);
 		this._headers = multiData(headersKV);
 		this._cookies = multiData(cookies);
-		this._data = multiData(data);
+		this._posted = multiData(posted);
 		this._files = binaryMultiData(files);
 	}
 
@@ -171,7 +171,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		headersKV.reset();
 		headers.reset();
 		cookies.reset();
-		data.reset();
+		posted.reset();
 		files.reset();
 		vars = null;
 
@@ -251,19 +251,19 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public synchronized MultiData data_() {
+	public synchronized MultiData posted_() {
 		if (!parsedBody) {
-			PARSER.parseBody(input(), headersKV, body, data, files, helper());
+			PARSER.parseBody(input(), headersKV, body, posted, files, helper());
 			parsedBody = true;
 		}
 
-		return _data;
+		return _posted;
 	}
 
 	@Override
 	public synchronized BinaryMultiData files_() {
 		if (!parsedBody) {
-			PARSER.parseBody(input(), headersKV, body, data, files, helper());
+			PARSER.parseBody(input(), headersKV, body, posted, files, helper());
 			parsedBody = true;
 		}
 
@@ -327,7 +327,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	public synchronized String toString() {
 		return "HttpExchange [uri=" + uri() + ", verb=" + verb() + ", path=" + path() + ", subpath=" + subpath()
 				+ ", query=" + query() + ", protocol=" + protocol() + ", body=" + body() + ", headers=" + headers()
-				+ ", params=" + params() + ", cookies=" + cookies() + ", data=" + data() + ", files=" + files() + "]";
+				+ ", params=" + params() + ", cookies=" + cookies() + ", data=" + posted() + ", files=" + files() + "]";
 	}
 
 	@Override
@@ -411,18 +411,18 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public synchronized Map<String, String> data() {
-		return data_().get();
+	public synchronized Map<String, String> posted() {
+		return posted_().get();
 	}
 
 	@Override
-	public synchronized String data(String name) {
-		return U.notNull(data_().get(name), "DATA[%s]", name);
+	public synchronized String posted(String name) {
+		return U.notNull(posted_().get(name), "DATA[%s]", name);
 	}
 
 	@Override
-	public synchronized String data(String name, String defaultValue) {
-		return U.or(data_().get(name), defaultValue);
+	public synchronized String posted(String name, String defaultValue) {
+		return U.or(posted_().get(name), defaultValue);
 	}
 
 	@Override
@@ -445,7 +445,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		if (vars == null) {
 			vars = U.synchronizedMap();
 			vars.putAll(params());
-			vars.putAll(data());
+			vars.putAll(posted());
 		}
 
 		return vars;

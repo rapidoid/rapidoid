@@ -83,7 +83,7 @@ public class AppHandler implements Handler {
 		HttpExchangeInternals xi = (HttpExchangeInternals) x;
 
 		if (x.isPostReq()) {
-			String state = x.data("__state", null);
+			String state = x.posted("__state", null);
 			if (!U.isEmpty(state) && !state.equals("null")) {
 				byte[] bytes = JSON.parseBytes('"' + state + '"');
 				xi.deserializeLocals(bytes);

@@ -240,9 +240,9 @@ public class Pages {
 
 	public static Object emit(HttpExchange x, Object view) {
 
-		String event = x.data("event");
-		boolean navigational = Boolean.parseBoolean(x.data("navigational"));
-		String evArgs = x.data("args", null);
+		String event = x.posted("event");
+		boolean navigational = Boolean.parseBoolean(x.posted("navigational"));
+		String evArgs = x.posted("args", null);
 		Object[] args = {}; // FIXME
 		boolean validEvent = !U.isEmpty(event);
 
@@ -307,7 +307,7 @@ public class Pages {
 	@SuppressWarnings("unchecked")
 	private static void doBinding(HttpExchange x, String event, boolean validEvent) {
 		if (validEvent) {
-			String inputs = x.data("inputs");
+			String inputs = x.posted("inputs");
 			U.notNull(inputs, "inputs");
 			Map<String, Object> inputsMap = JSON.parse(inputs, Map.class);
 			emitValues(x, inputsMap);

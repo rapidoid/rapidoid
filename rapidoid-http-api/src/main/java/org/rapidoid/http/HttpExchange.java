@@ -71,11 +71,11 @@ public interface HttpExchange extends AppExchange {
 
 	String cookie(String name, String defaultValue);
 
-	Map<String, String> data();
+	Map<String, String> posted();
 
-	String data(String name);
+	String posted(String name);
 
-	String data(String name, String defaultValue);
+	String posted(String name, String defaultValue);
 
 	Map<String, byte[]> files();
 
