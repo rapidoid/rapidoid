@@ -40,7 +40,6 @@ import org.rapidoid.util.Role;
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 @CanManage({ Role.MODERATOR, Role.OWNER, Role.SHARED_WITH })
-@SuppressWarnings("serial")
 public class User extends JPAEntity {
 
 	@ToString

@@ -34,8 +34,6 @@ import org.rapidoid.entity.AbstractEntity;
 @MappedSuperclass
 public abstract class JPAEntity extends AbstractEntity {
 
-	private static final long serialVersionUID = 8195529318277626122L;
-
 	@Id
 	@GeneratedValue
 	private Long id;

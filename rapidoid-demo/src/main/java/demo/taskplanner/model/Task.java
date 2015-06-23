@@ -47,8 +47,6 @@ import org.rapidoid.util.Role;
 @Since("2.0.0")
 public class Task extends JPAEntity {
 
-	private static final long serialVersionUID = 7135693132885405825L;
-
 	@ToString
 	@CanChange({ Role.MODERATOR })
 	public String title;

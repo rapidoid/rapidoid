@@ -25,7 +25,6 @@ import javax.persistence.Entity;
 import org.rapidoid.jpa.JPAEntity;
 
 @Entity
-@SuppressWarnings("serial")
 public class Book extends JPAEntity {
 
 	private String title;
