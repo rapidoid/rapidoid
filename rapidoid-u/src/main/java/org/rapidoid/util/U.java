@@ -586,8 +586,8 @@ public class U {
 		return true;
 	}
 
-	public static IllegalArgumentException illegalArg(String message) {
-		return new IllegalArgumentException(message);
+	public static IllegalArgumentException illegalArg(String message, Object... args) {
+		return new IllegalArgumentException(format(message, args));
 	}
 
 	public static void secure(boolean condition, String msg) {
@@ -776,6 +776,12 @@ public class U {
 		}
 
 		return sb.toString();
+	}
+
+	public static void validateArg(String argumentName, boolean isValid) {
+		if (!isValid) {
+			throw illegalArg("The argument '%s' has invalid value!", argumentName);
+		}
 	}
 
 }
