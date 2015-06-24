@@ -33,7 +33,8 @@ public class Scopes {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T get(String scopeName, Map<String, ?> scope, String name, T defaultValue) {
-		return (T) (scope != null ? scope.get(name) : null);
+		T val = (T) (scope != null ? scope.get(name) : null);
+		return U.or(val, defaultValue);
 	}
 
 	@SuppressWarnings("unchecked")
