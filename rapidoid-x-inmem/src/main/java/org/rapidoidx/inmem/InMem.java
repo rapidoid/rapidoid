@@ -55,6 +55,7 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertyFilter;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.cls.TypeKind;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
@@ -467,7 +468,8 @@ public class InMem implements Serializable {
 	}
 
 	public void delete(Object record) {
-		delete(Beany.getId(record));
+		U.validateArg("record", Cls.kindOf(record) == TypeKind.OBJECT);
+		delete(Beany.getLongId(record));
 	}
 
 	public <E> E get(long id) {
