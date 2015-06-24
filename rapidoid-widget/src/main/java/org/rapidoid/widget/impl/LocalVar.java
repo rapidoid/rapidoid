@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.util.U;
 import org.rapidoid.var.impl.AbstractVar;
 
 @Authors("Nikolche Mihajlovski")
@@ -45,11 +44,11 @@ public class LocalVar<T extends Serializable> extends AbstractVar<T> {
 		this.defaultValue = defaultValue;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public T get() {
 		HttpExchange x = Ctx.exchange();
-		return (T) U.or(x.locals().get(localKey), defaultValue);
+		T val = x.local(localKey, defaultValue);
+		return val;
 	}
 
 	@Override
