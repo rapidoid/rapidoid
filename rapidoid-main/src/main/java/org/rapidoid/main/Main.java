@@ -51,17 +51,18 @@ public class Main {
 
 	public static void processHelp(Object[] args) {
 		if (args.length == 1 && args[0].equals("--help")) {
-			System.out.println("Usage:");
-			System.out.println("  java [-cp <classpath>] -jar <app>.jar [option1 option2 ...] ");
+			show("Usage:");
+			show("  java [-cp <classpath>] -jar <app>.jar [option1 option2 ...] ");
 
-			System.out.println("\nExample:");
-			System.out.println("  java -jar myapp.jar port=9090 address=127.0.0.1 cpus=2 workers=4");
+			show("\nExample:");
+			show("  java -jar myapp.jar port=9090 address=127.0.0.1 cpus=2 workers=4 stateless");
 
-			System.out.println("\nAvailable options:");
+			show("\nAvailable options:");
 			opt("mode=(dev|production)", "configure DEV or PRODUCTION mode");
 			opt("secret=<SECRET>", "configure app-specific secret token for encryption");
 			opt("port=<P>", "listen at port P (default: 8080)");
 			opt("address=<ADDR>", "listen at address ADDR (default: 0.0.0.0)");
+			opt("stateless", "Run in stateless mode, session becomes cookiepack (default: false)");
 			opt("cpus=<C>", "optimize for C number of CPUs (default: the actual number of the CPUs)");
 			opt("workers=<W>", "start W number of I/O workers (default: the configured number of CPUs)");
 			opt("nodelay", "set the TCP_NODELAY flag to disable Nagle's algorithm (default: false)");
@@ -73,7 +74,11 @@ public class Main {
 	}
 
 	private static void opt(String opt, String desc) {
-		System.out.println("  " + opt + U.copyNtimes(" ", 17 - opt.length()) + " - " + desc);
+		show("  " + opt + U.copyNtimes(" ", 17 - opt.length()) + " - " + desc);
+	}
+
+	private static void show(String msg) {
+		System.out.println(msg);
 	}
 
 }

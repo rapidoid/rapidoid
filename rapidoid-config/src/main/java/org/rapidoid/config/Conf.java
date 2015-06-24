@@ -159,6 +159,10 @@ public class Conf {
 		return has("size", "micro");
 	}
 
+	public static boolean stateless() {
+		return is("stateless");
+	}
+
 	public static boolean production() {
 		return has("mode", "production");
 	}
