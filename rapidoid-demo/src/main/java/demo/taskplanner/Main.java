@@ -46,7 +46,7 @@ public class Main {
 	public void tx() {
 		Task task = new Task();
 		task.title = "DON'T GO TO THE DATABASE!";
-		long id = DB.insert(task);
+		String id = DB.insert(task);
 		DB.update(id, task);
 		throw U.rte("some failure!");
 	}

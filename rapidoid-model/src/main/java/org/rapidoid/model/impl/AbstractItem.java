@@ -46,8 +46,7 @@ public abstract class AbstractItem extends AbstractModel implements Item {
 
 	@Override
 	public String id() {
-		Long id = Beany.getIdIfExists(value);
-		return id != null ? "" + id : null;
+		return Beany.getIdIfExists(value);
 	}
 
 	@Override

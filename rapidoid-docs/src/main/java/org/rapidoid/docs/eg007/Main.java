@@ -55,7 +55,7 @@ class HomeScreen {
 	Movie movie;
 
 	Object content() {
-		movie = DB.get(Movie.class, 1); // here
+		movie = DB.get(Movie.class, "1"); // here
 		FormWidget f = edit(movie); // here
 		f = f.buttons(SAVE, CANCEL); // here
 		return f;
@@ -66,7 +66,7 @@ class HomeScreen {
 	}
 
 	public void onCancel() { // here
-		movie = DB.get(Movie.class, 1);
+		movie = DB.get(Movie.class, "1");
 	}
 }
 

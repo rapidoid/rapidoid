@@ -47,7 +47,7 @@ public class DAOTest extends DbTestCommons {
 		eq(service.getEntityType(), Person.class);
 
 		eq(XDB.size(), 0);
-		long id = service.insert(new Person("aa", 123));
+		String id = service.insert(new Person("aa", 123));
 		eq(XDB.size(), 1);
 
 		Person p = service.get(id);
@@ -64,7 +64,7 @@ public class DAOTest extends DbTestCommons {
 		eq(dao.getEntityType(), IPerson.class);
 
 		eq(XDB.size(), 0);
-		long id = dao.insert(XDB.entity(IPerson.class));
+		String id = dao.insert(XDB.entity(IPerson.class));
 		eq(XDB.size(), 1);
 
 		IPerson p = dao.get(id);

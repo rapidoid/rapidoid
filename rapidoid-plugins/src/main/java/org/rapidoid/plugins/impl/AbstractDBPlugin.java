@@ -36,7 +36,7 @@ import org.rapidoid.plugins.spec.DBPlugin;
 public class AbstractDBPlugin implements DBPlugin {
 
 	@Override
-	public long insert(Object entity) {
+	public String insert(Object entity) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
@@ -46,17 +46,17 @@ public class AbstractDBPlugin implements DBPlugin {
 	}
 
 	@Override
-	public void update(long id, Object entity) {
+	public void update(String id, Object entity) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
 	@Override
-	public long persist(Object record) {
+	public String persist(Object record) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
 	@Override
-	public long insertOrGetId(Object record) {
+	public String insertOrGetId(Object record) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
@@ -121,12 +121,12 @@ public class AbstractDBPlugin implements DBPlugin {
 	}
 
 	@Override
-	public <T> T get(Class<T> clazz, long id) {
+	public <T> T get(Class<T> clazz, String id) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
 	@Override
-	public <T> T getIfExists(Class<T> clazz, long id) {
+	public <T> T getIfExists(Class<T> clazz, String id) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
@@ -141,12 +141,12 @@ public class AbstractDBPlugin implements DBPlugin {
 	}
 
 	@Override
-	public <E> List<E> getAll(Class<E> clazz, Iterable<Long> ids) {
+	public <E> List<E> getAll(Class<E> clazz, Iterable<String> ids) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
 	@Override
-	public <E> void delete(Class<E> clazz, long id) {
+	public <E> void delete(Class<E> clazz, String id) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 

@@ -54,7 +54,7 @@ class HomeScreen {
 	Movie movie;
 
 	Object content() {
-		movie = DB.get(Movie.class, 1); // here
+		movie = DB.get(Movie.class, "1"); // here
 		FormWidget f = show(movie); // here
 		f = f.buttons(BACK); // here
 		return f;

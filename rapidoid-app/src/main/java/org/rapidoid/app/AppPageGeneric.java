@@ -191,7 +191,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 
 		if (m.find()) {
 			String type = m.group(1);
-			long id = Long.parseLong(m.group(2));
+			String id = m.group(2);
 
 			Class<?> entityType = Scaffolding.getScaffoldingEntity(type);
 			if (entityType == null) {
@@ -225,7 +225,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 
 		if (m.find()) {
 			String type = m.group(1);
-			long id = Long.parseLong(m.group(2));
+			String id = m.group(2);
 
 			Class<?> entityType = Scaffolding.getScaffoldingEntity(type);
 			if (entityType == null) {

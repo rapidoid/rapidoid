@@ -72,24 +72,24 @@ public class CRUD<E> {
 	}
 
 	@GET("/get")
-	public E get(long id) {
+	public E get(String id) {
 		return DB.get(clazz, id);
 	}
 
 	@POST("/insert")
-	public long insert(E record) {
+	public String insert(E record) {
 		return DB.insert(record);
 	}
 
 	@POST("/update")
 	@PUT
-	public void update(long id, E record) {
+	public void update(String id, E record) {
 		DB.update(id, record);
 	}
 
 	@POST("/delete")
 	@DELETE
-	public void delete(long id) {
+	public void delete(String id) {
 		DB.delete(id);
 	}
 

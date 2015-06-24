@@ -517,7 +517,7 @@ public class InMem implements Serializable {
 		sharedLock();
 		try {
 
-			long id = Beany.getId(record);
+			long id = Beany.getLongId(record);
 			validateId(id);
 			Rec rec = getRec(id);
 
@@ -626,11 +626,11 @@ public class InMem implements Serializable {
 	}
 
 	public void update(Object record) {
-		update(Beany.getId(record), record);
+		update(Beany.getLongId(record), record);
 	}
 
 	public long persist(Object record) {
-		Long id = Beany.getIdIfExists(record);
+		Long id = Beany.getLongIdIfExists(record);
 		if (id == null || id <= 0) {
 			return insert(record);
 		} else {
@@ -640,7 +640,7 @@ public class InMem implements Serializable {
 	}
 
 	public long insertOrGetId(Object record) {
-		Long id = Beany.getIdIfExists(record);
+		Long id = Beany.getLongIdIfExists(record);
 		if (id == null || id <= 0) {
 			return insert(record);
 		} else {

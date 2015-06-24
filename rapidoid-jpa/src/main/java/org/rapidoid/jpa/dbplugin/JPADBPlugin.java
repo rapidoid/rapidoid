@@ -44,7 +44,7 @@ import org.rapidoid.util.UTILS;
 public class JPADBPlugin extends DefaultDBPlugin {
 
 	@Override
-	public long insert(Object entity) {
+	public String insert(Object entity) {
 
 		EntityTransaction tx = em().getTransaction();
 
@@ -58,7 +58,7 @@ public class JPADBPlugin extends DefaultDBPlugin {
 			em().persist(entity);
 			em().flush();
 
-			long id = Beany.getId(entity);
+			String id = Beany.getId(entity);
 
 			if (!txWasActive) {
 				tx.commit();
@@ -75,13 +75,13 @@ public class JPADBPlugin extends DefaultDBPlugin {
 	}
 
 	@Override
-	public void update(long id, Object entity) {
+	public void update(String id, Object entity) {
 		Beany.setId(entity, id);
 		em().persist(entity);
 	}
 
 	@Override
-	public <T> T getIfExists(Class<T> clazz, long id) {
+	public <T> T getIfExists(Class<T> clazz, String id) {
 		return em().find(clazz, id);
 	}
 
@@ -115,7 +115,7 @@ public class JPADBPlugin extends DefaultDBPlugin {
 	}
 
 	@Override
-	public <E> void delete(Class<E> clazz, long id) {
+	public <E> void delete(Class<E> clazz, String id) {
 		em().remove(get(clazz, id));
 	}
 

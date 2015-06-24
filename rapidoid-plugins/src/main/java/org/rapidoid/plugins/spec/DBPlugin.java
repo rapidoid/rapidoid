@@ -34,19 +34,19 @@ import org.rapidoid.lambda.Predicate;
  */
 public interface DBPlugin {
 
-	long insert(Object entity);
+	String insert(Object entity);
 
 	void update(Object entity);
 
-	void update(long id, Object entity);
+	void update(String id, Object entity);
 
-	long persist(Object record);
+	String persist(Object record);
 
-	long insertOrGetId(Object record);
+	String insertOrGetId(Object record);
 
-	<T> T get(Class<T> clazz, long id);
+	<T> T get(Class<T> clazz, String id);
 
-	<T> T getIfExists(Class<T> clazz, long id);
+	<T> T getIfExists(Class<T> clazz, String id);
 
 	<E> List<E> getAll();
 
@@ -54,11 +54,11 @@ public interface DBPlugin {
 
 	<E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize);
 
-	<E> List<E> getAll(Class<E> clazz, Iterable<Long> ids);
+	<E> List<E> getAll(Class<E> clazz, Iterable<String> ids);
 
 	void refresh(Object entity);
 
-	<E> void delete(Class<E> clazz, long id);
+	<E> void delete(Class<E> clazz, String id);
 
 	void delete(Object entity);
 

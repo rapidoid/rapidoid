@@ -254,7 +254,7 @@ public class DbImpl extends NamedActivity<Database> implements Database, Seriali
 
 	@Override
 	public long getIdOf(Object record) {
-		return U.or(Beany.getIdIfExists(record), -1L);
+		return U.or(Beany.getLongIdIfExists(record), -1L);
 	}
 
 	@Override

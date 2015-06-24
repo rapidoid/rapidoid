@@ -40,7 +40,7 @@ public abstract class AbstractEntityScreenGeneric extends Screen {
 
 	@SuppressWarnings("unchecked")
 	protected <T> T entity() {
-		long id = Long.parseLong(ctx().pathSegment(1));
+		String id = ctx().pathSegment(1);
 		Object entity = DB.getIfExists(entityType, id);
 
 		if (entity == null) {

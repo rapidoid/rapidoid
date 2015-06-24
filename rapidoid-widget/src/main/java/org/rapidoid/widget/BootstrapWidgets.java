@@ -476,7 +476,7 @@ public abstract class BootstrapWidgets extends HTML {
 		int ind = 0;
 
 		for (Object result : found) {
-			long id = Beany.getId(result);
+			String id = Beany.getId(result);
 			String url = urlFor(result);
 
 			Tag left = h6("(ID", NBSP, "=", NBSP, id, ")");
@@ -535,7 +535,7 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static String urlFor(Object entity) {
 
-		Long id = Beany.getIdIfExists(entity);
+		String id = Beany.getIdIfExists(entity);
 		if (id != null) {
 			String className = Cls.entityName(entity);
 			String frm = Conf.is("generate") ? "%s%s.html" : "/%s/%s";

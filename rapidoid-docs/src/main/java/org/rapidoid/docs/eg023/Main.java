@@ -46,7 +46,7 @@ class HomeScreen extends Screen {
 	public void onAdd() {
 		Todo todo = new Todo();
 		todo.content = "Learn Rapidoid!";
-		long id = DB.insert(todo); // here
+		String id = DB.insert(todo); // here
 		Todo todo2 = DB.get(Todo.class, id); // here
 		todo2.content += " :)";
 		DB.update(todo2); // here

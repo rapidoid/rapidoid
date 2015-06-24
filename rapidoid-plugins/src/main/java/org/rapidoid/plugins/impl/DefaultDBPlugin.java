@@ -58,9 +58,9 @@ public abstract class DefaultDBPlugin extends AbstractDBPlugin {
 	};
 
 	@Override
-	public long persist(Object record) {
-		Long id = Beany.getIdIfExists(record);
-		if (id == null || id <= 0) {
+	public String persist(Object record) {
+		String id = Beany.getIdIfExists(record);
+		if (id == null) {
 			return insert(record);
 		} else {
 			update(id, record);
@@ -79,9 +79,9 @@ public abstract class DefaultDBPlugin extends AbstractDBPlugin {
 	}
 
 	@Override
-	public long insertOrGetId(Object record) {
-		Long id = Beany.getIdIfExists(record);
-		if (id == null || id <= 0) {
+	public String insertOrGetId(Object record) {
+		String id = Beany.getIdIfExists(record);
+		if (id == null) {
 			return insert(record);
 		} else {
 			return id;
@@ -89,10 +89,10 @@ public abstract class DefaultDBPlugin extends AbstractDBPlugin {
 	}
 
 	@Override
-	public <E> List<E> getAll(Class<E> clazz, Iterable<Long> ids) {
+	public <E> List<E> getAll(Class<E> clazz, Iterable<String> ids) {
 		List<E> results = new ArrayList<E>();
 
-		for (long id : ids) {
+		for (String id : ids) {
 			results.add(this.<E> get(clazz, id));
 		}
 
@@ -105,7 +105,7 @@ public abstract class DefaultDBPlugin extends AbstractDBPlugin {
 	}
 
 	@Override
-	public <E> E get(Class<E> clazz, long id) {
+	public <E> E get(Class<E> clazz, String id) {
 		E entity = getIfExists(clazz, id);
 
 		if (entity == null) {

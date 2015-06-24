@@ -37,9 +37,9 @@ import org.rapidoid.plugins.spec.DBPlugin;
 public class InMemDbPlugin implements DBPlugin {
 
 	@Override
-	public long insert(Object entity) {
+	public String insert(Object entity) {
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
 
 	@Override
@@ -49,31 +49,31 @@ public class InMemDbPlugin implements DBPlugin {
 	}
 
 	@Override
-	public void update(long id, Object entity) {
+	public void update(String id, Object entity) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public long persist(Object record) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public long insertOrGetId(Object record) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public <T> T get(Class<T> clazz, long id) {
+	public String persist(Object record) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <T> T getIfExists(Class<T> clazz, long id) {
+	public String insertOrGetId(Object record) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T get(Class<T> clazz, String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T getIfExists(Class<T> clazz, String id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -91,7 +91,13 @@ public class InMemDbPlugin implements DBPlugin {
 	}
 
 	@Override
-	public <E> List<E> getAll(Class<E> clazz, Iterable<Long> ids) {
+	public <E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <E> List<E> getAll(Class<E> clazz, Iterable<String> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -103,7 +109,7 @@ public class InMemDbPlugin implements DBPlugin {
 	}
 
 	@Override
-	public <E> void delete(Class<E> clazz, long id) {
+	public <E> void delete(Class<E> clazz, String id) {
 		// TODO Auto-generated method stub
 
 	}
@@ -118,6 +124,12 @@ public class InMemDbPlugin implements DBPlugin {
 	public <E> void each(Operation<E> lambda) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public long size() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
@@ -172,18 +184,6 @@ public class InMemDbPlugin implements DBPlugin {
 	public void deleteAllData() {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public long size() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public <E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

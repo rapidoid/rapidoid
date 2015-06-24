@@ -62,10 +62,10 @@ public class AboutScreen extends Screen {
 
 	@Transaction
 	public void onTx() {
-		long id = DB.insert(task());
+		String id = DB.insert(task());
 		DB.update(id, task());
-		DB.update(1, task());
-		DB.delete(Task.class, 1);
+		DB.update("1", task());
+		DB.delete(Task.class, "1");
 		throw U.rte("some failure!");
 	}
 

@@ -35,11 +35,11 @@ import org.rapidoid.util.U;
  */
 public class DB {
 
-	public static long insert(Object record) {
+	public static String insert(Object record) {
 		return Plugins.db().insert(record);
 	}
 
-	public static void update(long id, Object record) {
+	public static void update(String id, Object record) {
 		Plugins.db().update(id, record);
 	}
 
@@ -47,15 +47,15 @@ public class DB {
 		Plugins.db().update(record);
 	}
 
-	public static long persist(Object record) {
+	public static String persist(Object record) {
 		return Plugins.db().persist(record);
 	}
 
-	public static long insertOrGetId(Object record) {
+	public static String insertOrGetId(Object record) {
 		return Plugins.db().insertOrGetId(record);
 	}
 
-	public static <E> void delete(Class<E> clazz, long id) {
+	public static <E> void delete(Class<E> clazz, String id) {
 		Plugins.db().delete(clazz, id);
 	}
 
@@ -63,11 +63,11 @@ public class DB {
 		Plugins.db().delete(record);
 	}
 
-	public static <T> T getIfExists(Class<T> clazz, long id) {
+	public static <T> T getIfExists(Class<T> clazz, String id) {
 		return Plugins.db().getIfExists(clazz, id);
 	}
 
-	public static <T> T get(Class<T> clazz, long id) {
+	public static <T> T get(Class<T> clazz, String id) {
 		return Plugins.db().get(clazz, id);
 	}
 
@@ -83,7 +83,7 @@ public class DB {
 		return Plugins.db().getAll(clazz, pageNumber, pageSize);
 	}
 
-	public static <E> List<E> getAll(Class<E> clazz, Iterable<Long> ids) {
+	public static <E> List<E> getAll(Class<E> clazz, Iterable<String> ids) {
 		return Plugins.db().getAll(clazz, ids);
 	}
 

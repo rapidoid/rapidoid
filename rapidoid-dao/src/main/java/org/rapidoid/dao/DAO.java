@@ -67,15 +67,15 @@ public abstract class DAO<E> {
 		return clazz;
 	}
 
-	public long insert(E record) {
+	public String insert(E record) {
 		return DB.insert(record);
 	}
 
-	public void update(long id, E record) {
+	public void update(String id, E record) {
 		DB.update(id, record);
 	}
 
-	public void delete(long id) {
+	public void delete(String id) {
 		DB.delete(clazz, id);
 	}
 
@@ -83,7 +83,7 @@ public abstract class DAO<E> {
 		DB.delete(record);
 	}
 
-	public E get(long id) {
+	public E get(String id) {
 		return DB.get(clazz, id);
 	}
 

@@ -57,7 +57,7 @@ class HomeScreen {
 	Movie movie;
 
 	Object content() {
-		movie = DB.get(Movie.class, 1);
+		movie = DB.get(Movie.class, "1");
 		FormWidget f = create(movie, "year"); // here
 		ButtonWidget ab = btn("Ab"); // here
 		ButtonWidget cd = btn("Change year").command("ch").primary(); // here

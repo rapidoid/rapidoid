@@ -126,8 +126,8 @@ public class ListItems extends AbstractModel implements Items {
 		return list;
 	}
 
-	protected long idOf(int index) {
-		return Long.parseLong(data().get(index).id());
+	protected String idOf(int index) {
+		return data().get(index).id();
 	}
 
 	@Override
