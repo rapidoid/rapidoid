@@ -57,6 +57,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	public static final String SESSION_COOKIE = "JSESSIONID";
 	public static final String COOKIEPACK_COOKIE = "COOKIEPACK";
+	private static final String COOKIPACK_SESSION = "_session_";
 
 	private final static HttpParser PARSER = Wire.singleton(HttpParser.class);
 
@@ -981,7 +982,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public synchronized Map<String, Object> session() {
 		if (session == null) {
-			session = sessionStore.get(sessionId());
+			if (Conf.stateless()) {
+				session = U.synchronizedMap();
+				cookiepack().put(COOKIPACK_SESSION, UTILS.serializable(session));
+			} else {
+				session = sessionStore.get(sessionId());
+			}
 		}
 		return session;
 	}
