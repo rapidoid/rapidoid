@@ -49,7 +49,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	private final HttpUpgrades upgrades = new HttpUpgrades();
 
-	private SessionStore session;
+	private SessionStore sessionStore;
 
 	private HTTPInterceptor interceptor;
 
@@ -62,7 +62,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	@Override
 	protected void process(Channel ctx, HttpExchangeImpl x) {
 		U.notNull(responses, "responses");
-		U.notNull(session, "session");
+		U.notNull(sessionStore, "sessionStore");
 		U.notNull(router, "router");
 
 		if (ctx.isInitial()) {
@@ -105,31 +105,33 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	}
 
 	private void processRequest(HttpExchangeImpl x) {
-		x.init(responses, session, router);
-
 		Ctx.setUser(x.user());
 
 		try {
-
-			try {
-				if (interceptor != null) {
-					interceptor.intercept(x);
-				} else {
-					x.run();
-				}
-			} catch (Throwable e) {
-				handleError(x, e);
-			}
-
-			if (x.hasError()) {
-				handleError(x, x.getError());
-			} else if (!x.isAsync()) {
-				x.completeResponse();
-			}
-
+			
+			x.init(responses, sessionStore, router);
+			executeRequest(x);
+			
 		} finally {
 			Ctx.delUser();
-			x.storeSession();
+		}
+	}
+
+	private void executeRequest(HttpExchangeImpl x) {
+		try {
+			if (interceptor != null) {
+				interceptor.intercept(x);
+			} else {
+				x.run();
+			}
+		} catch (Throwable e) {
+			handleError(x, e);
+		}
+
+		if (x.hasError()) {
+			handleError(x, x.getError());
+		} else if (!x.isAsync()) {
+			x.completeResponse();
 		}
 	}
 
@@ -201,8 +203,8 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		return router;
 	}
 
-	public void setSession(SessionStore session) {
-		this.session = session;
+	public void setSessionStore(SessionStore sessionStore) {
+		this.sessionStore = sessionStore;
 	}
 
 	public void setInterceptor(HTTPInterceptor interceptor) {

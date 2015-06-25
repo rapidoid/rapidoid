@@ -511,6 +511,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			return;
 		}
 
+		finish();
+
 		if (!lowLevelProcessing) {
 			U.must(responseCode >= 100);
 
@@ -1063,6 +1065,10 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	/* SESSION */
+
+	public synchronized void finish() {
+		storeSession();
+	}
 
 	@Override
 	public synchronized void storeSession() {

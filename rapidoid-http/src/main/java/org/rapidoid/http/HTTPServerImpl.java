@@ -36,7 +36,7 @@ public class HTTPServerImpl extends RapidoidServerLoop implements HTTPServer {
 
 	public HTTPServerImpl() {
 		super(new HttpProtocol(new HttpRouter()), HttpExchangeImpl.class, null);
-		((HttpProtocol) protocol).setSession(session);
+		((HttpProtocol) protocol).setSessionStore(session);
 	}
 
 	@Override
