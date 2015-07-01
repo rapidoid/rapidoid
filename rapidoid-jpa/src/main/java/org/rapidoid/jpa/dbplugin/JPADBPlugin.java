@@ -82,7 +82,7 @@ public class JPADBPlugin extends DefaultDBPlugin {
 
 	@Override
 	public <T> T getIfExists(Class<T> clazz, String id) {
-		return em().find(clazz, id);
+		return em().find(clazz, castId(id));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -195,6 +195,11 @@ public class JPADBPlugin extends DefaultDBPlugin {
 
 	protected EntityManager em() {
 		return Ctx.persistor();
+	}
+
+	protected Object castId(String id) {
+		// TODO: detect ID type
+		return Long.valueOf(id);
 	}
 
 }
