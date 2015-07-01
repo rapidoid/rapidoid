@@ -23,8 +23,8 @@ package demo.taskplanner.gui;
 import java.util.List;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Local;
 import org.rapidoid.annotation.Order;
-import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.app.Screen;
@@ -43,16 +43,13 @@ import demo.taskplanner.model.Task;
 @Since("2.0.0")
 public class NewTaskScreen extends Screen {
 
-	@Session
 	private Task task = new Task();
 
-	@Session
+	@Local
 	private List<String> comments = U.list();
 
-	@Session
 	private Var<String> v = var("abc");
 
-	@Session
 	private Var<List<String>> v2 = var("v2", U.list("b", "AA"));
 
 	public Object content() {

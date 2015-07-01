@@ -21,7 +21,6 @@ package org.rapidoid.app;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.html.Tag;
@@ -35,21 +34,20 @@ import org.rapidoid.widget.FormWidget;
 @Since("2.0.0")
 public class ViewEntityScreenGeneric extends AbstractEntityScreenGeneric {
 
+	private Object entity;
+
 	public ViewEntityScreenGeneric(Class<?> entityType) {
 		super(entityType);
 	}
 
-	@Session
-	private Object target;
-
 	public Object content() {
-		target = entity();
+		this.entity = getEntityById();
 
 		Tag caption = h2(U.capitalized(ctx().pathSegment(0)) + " Details").style("margin-bottom:15px;");
-		FormWidget details = show(target);
+		FormWidget details = show(entity);
 
-		ButtonWidget btnEdit = Secure.canUpdate(Secure.username(), target) ? EDIT : null;
-		ButtonWidget btnDelete = Secure.canDelete(Secure.username(), target) ? DELETE : null;
+		ButtonWidget btnEdit = Secure.canUpdate(Secure.username(), entity) ? EDIT : null;
+		ButtonWidget btnDelete = Secure.canDelete(Secure.username(), entity) ? DELETE : null;
 
 		details = details.buttons(btnEdit, BACK, btnDelete);
 
@@ -58,7 +56,7 @@ public class ViewEntityScreenGeneric extends AbstractEntityScreenGeneric {
 
 	public void onEdit() {
 		String id = ctx().pathSegment(1);
-		ctx().redirect("/edit" + Cls.entityName(target).toLowerCase() + "/" + id);
+		ctx().redirect("/edit" + Cls.entityName(entity).toLowerCase() + "/" + id);
 	}
 
 	public void onDelete() {

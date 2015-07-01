@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.DB;
+import org.rapidoid.plugins.Entities;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.FormWidget;
 
@@ -31,8 +32,11 @@ import org.rapidoid.widget.FormWidget;
 @Since("2.1.0")
 public class NewEntityScreenGeneric extends AbstractEntityScreenGeneric {
 
+	private Object entity;
+
 	public NewEntityScreenGeneric(Class<?> entityType) {
 		super(entityType);
+		this.entity = Entities.create(entityType);
 	}
 
 	public Object content() {

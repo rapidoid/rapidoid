@@ -23,7 +23,6 @@ package org.rapidoid.app;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.plugins.DB;
-import org.rapidoid.plugins.Entities;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -31,15 +30,12 @@ public abstract class AbstractEntityScreenGeneric extends Screen {
 
 	protected final Class<?> entityType;
 
-	protected final Object entity;
-
 	public AbstractEntityScreenGeneric(Class<?> entityType) {
 		this.entityType = entityType;
-		this.entity = Entities.create(entityType);
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <T> T entity() {
+	protected <T> T getEntityById() {
 		String id = ctx().pathSegment(1);
 		Object entity = DB.getIfExists(entityType, id);
 
@@ -52,7 +48,7 @@ public abstract class AbstractEntityScreenGeneric extends Screen {
 
 	@Override
 	public String toString() {
-		return "AbstractEntityScreenGeneric [entityType=" + entityType + ", entity=" + entity + "]";
+		return "AbstractEntityScreenGeneric [entityType=" + entityType + "]";
 	}
 
 }
