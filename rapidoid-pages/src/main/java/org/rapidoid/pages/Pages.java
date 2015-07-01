@@ -49,7 +49,7 @@ import org.rapidoid.pages.impl.ComplexView;
 import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.rest.WebReq;
-import org.rapidoid.util.D;
+import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.wire.Wire;
@@ -201,7 +201,8 @@ public class Pages {
 	}
 
 	public static void load(HttpExchange x, Object target) {
-		Mapper<String, Object> sessionMapper = Lambdas.mapper(x.session());
+		Map<String, Object> sessionMap = UTILS.cast(x.session());
+		Mapper<String, Object> sessionMapper = Lambdas.mapper(sessionMap);
 
 		Map<String, Object> locals = UTILS.cast(x.locals());
 		Mapper<String, Object> localsMapper = Lambdas.mapper(locals);
@@ -242,8 +243,10 @@ public class Pages {
 
 		String event = x.posted("event");
 		boolean navigational = Boolean.parseBoolean(x.posted("navigational"));
+
 		String evArgs = x.posted("args", null);
-		Object[] args = {}; // FIXME
+		Object[] args = evArgs != null ? JSON.jacksonParse(evArgs, Object[].class) : Constants.EMPTY_ARRAY;
+
 		boolean validEvent = !U.isEmpty(event);
 
 		if (!navigational) {
