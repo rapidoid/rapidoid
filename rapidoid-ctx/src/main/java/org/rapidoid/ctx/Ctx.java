@@ -136,9 +136,10 @@ public class Ctx {
 		Ctx.persistorFactory = persistorFactory;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <P> P persistor() {
 		AppExchange x = Ctx.exchange();
-		return x.persistor();
+		return (P) (x != null ? x.persistor() : Ctx.persistorFactory.createPersistor());
 	}
 
 }
