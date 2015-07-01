@@ -25,6 +25,7 @@ import java.util.Arrays;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -42,6 +43,12 @@ public class Cmd implements Serializable {
 		this.name = cmd;
 		this.navigational = navigational;
 		this.args = args;
+
+		for (int i = 0; i < args.length; i++) {
+			if (args[i] instanceof Var<?>) {
+				args[i] = ((Var<?>) args[i]).name();
+			}
+		}
 	}
 
 	@Override
