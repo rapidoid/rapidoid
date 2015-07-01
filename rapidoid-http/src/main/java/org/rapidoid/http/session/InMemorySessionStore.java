@@ -1,5 +1,6 @@
 package org.rapidoid.http.session;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
@@ -31,15 +32,15 @@ import org.rapidoid.util.U;
 @Since("2.0.0")
 public class InMemorySessionStore implements SessionStore {
 
-	private final ConcurrentMap<String, Map<String, Object>> sessions = U.concurrentMap();
+	private final ConcurrentMap<String, Map<String, Serializable>> sessions = U.concurrentMap();
 
 	public boolean exists(String sessionId) {
 		return sessions.containsKey(sessionId);
 	}
 
 	@Override
-	public Map<String, Object> get(String sessionId) {
-		Map<String, Object> session = sessions.get(sessionId);
+	public Map<String, Serializable> get(String sessionId) {
+		Map<String, Serializable> session = sessions.get(sessionId);
 
 		if (session == null) {
 			session = U.synchronizedMap();
@@ -49,7 +50,7 @@ public class InMemorySessionStore implements SessionStore {
 	}
 
 	@Override
-	public void set(String sessionId, Map<String, Object> session) {
+	public void set(String sessionId, Map<String, Serializable> session) {
 		if (!U.isEmpty(session)) {
 			sessions.put(sessionId, session);
 		} else {

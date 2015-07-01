@@ -104,7 +104,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	/* STATE */
 
-	private Map<String, Object> session;
+	private Map<String, Serializable> session;
 	private Map<String, Serializable> cookiepack;
 	private Map<String, Serializable> locals;
 	private Map<String, Object> tmps;
@@ -984,7 +984,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public synchronized Map<String, Object> session() {
+	public synchronized Map<String, Serializable> session() {
 		if (session == null) {
 			if (Conf.stateless()) {
 				session = U.synchronizedMap();
@@ -999,17 +999,18 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	/* SESSION SCOPE GETTERS */
 
 	@Override
-	public synchronized <T> T session(String name, T defaultValue) {
+	public synchronized <T extends Serializable> T session(String name, T defaultValue) {
 		return Scopes.get("session", session, name, defaultValue);
 	}
 
 	@Override
-	public synchronized <T> T session(String name) {
+	public synchronized <T extends Serializable> T session(String name) {
 		return Scopes.get("session", session, name);
 	}
 
 	@Override
-	public synchronized <T> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs) {
+	public synchronized <T extends Serializable> T sessionGetOrCreate(String name, Class<T> valueClass,
+			Object... constructorArgs) {
 		return Scopes.getOrCreate("session", session(), name, valueClass, constructorArgs);
 	}
 

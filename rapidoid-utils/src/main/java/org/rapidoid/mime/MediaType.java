@@ -84,7 +84,7 @@ public class MediaType {
 	public static final MediaType APPLICATION_JAVA_SERIALIZED_OBJECT = create("application/java-serialized-object",
 			"ser");
 	public static final MediaType APPLICATION_JAVA_VM = create("application/java-vm", "class");
-	public static final MediaType APPLICATION_JSON_UTF8 = createUTF8("application/json", "json");
+	public static final MediaType APPLICATION_JSON_UTF8 = createUTF8("application/json", "json", "map");
 	public static final MediaType APPLICATION_JSONML_JSON_UTF8 = createUTF8("application/jsonml+json", "jsonml");
 	public static final MediaType APPLICATION_LOST_XML = create("application/lost+xml", "lostxml");
 	public static final MediaType APPLICATION_M3G = create("application/m3g", "m3g");

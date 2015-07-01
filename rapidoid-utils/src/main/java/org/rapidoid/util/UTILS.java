@@ -46,6 +46,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -617,12 +618,12 @@ public class UTILS implements Constants {
 		}
 	}
 
-	public static synchronized void schedule(Runnable task, long delay) {
+	public static synchronized ScheduledFuture<?> schedule(Runnable task, long delay) {
 		if (EXECUTOR == null) {
 			EXECUTOR = new ScheduledThreadPoolExecutor(100);
 		}
 
-		EXECUTOR.schedule(task, delay, TimeUnit.MILLISECONDS);
+		return EXECUTOR.schedule(task, delay, TimeUnit.MILLISECONDS);
 	}
 
 	public static void startMeasure() {

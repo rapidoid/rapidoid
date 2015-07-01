@@ -20,6 +20,8 @@ package demo.taskplanner;
  * #L%
  */
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.rapidoid.annotation.Authors;
@@ -39,6 +41,9 @@ public class Main {
 
 	public static void main(String[] args) {
 		Quick.run("oauth-no-state");
+		for (int i = 0; i < 12; i++) {
+			DB.insert(new Task());
+		}
 	}
 
 	@Transactional
@@ -49,6 +54,11 @@ public class Main {
 		String id = DB.insert(task);
 		DB.update(id, task);
 		throw U.rte("some failure!");
+	}
+
+	@GET("/task/page")
+	public List<Task> tasks(int page) {
+		return page < 5 ? DB.getAll(Task.class) : null;
 	}
 
 }

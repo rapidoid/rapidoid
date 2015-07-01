@@ -1,5 +1,6 @@
 package org.rapidoid.http.session;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
@@ -31,8 +32,8 @@ public interface SessionStore {
 
 	boolean exists(String sessionId);
 
-	Map<String, Object> get(String sessionId);
+	Map<String, Serializable> get(String sessionId);
 
-	void set(String sessionId, Map<String, Object> session);
+	void set(String sessionId, Map<String, Serializable> session);
 
 }

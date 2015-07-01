@@ -112,13 +112,13 @@ public interface HttpExchange extends AppExchange {
 
 	/* SESSION SCOPE: */
 
-	Map<String, Object> session();
+	Map<String, Serializable> session();
 
-	<T> T session(String name);
+	<T extends Serializable> T session(String name);
 
-	<T> T session(String name, T defaultValue);
+	<T extends Serializable> T session(String name, T defaultValue);
 
-	<T> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+	<T extends Serializable> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
 
 	/* COOKIEPACK SCOPE: */
 

@@ -40,7 +40,7 @@ public class DebugWidget extends AbstractWidget {
 	protected PanelWidget sessionPanel() {
 		Map<String, Object> visibleAttributes = U.map();
 
-		for (Entry<String, Object> e : ctx().session().entrySet()) {
+		for (Entry<String, Serializable> e : ctx().session().entrySet()) {
 			if (!e.getKey().startsWith("_")) {
 				visibleAttributes.put(e.getKey(), e.getValue());
 			}
