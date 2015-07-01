@@ -779,6 +779,17 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
+	public synchronized byte[] serializeCookiepack() {
+		return cookiepack != null ? UTILS.serialize(cookiepack) : null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public synchronized void deserializeCookiepack(byte[] bytes) {
+		cookiepack = (Map<String, Serializable>) UTILS.deserialize(bytes);
+	}
+
+	@Override
 	public synchronized OutputStream outputStream() {
 		return new HttpOutputStream(this);
 	}

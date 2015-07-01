@@ -43,4 +43,8 @@ public interface HttpExchangeInternals extends AppExchange {
 
 	void deserializeLocals(byte[] bytes);
 
+	byte[] serializeCookiepack();
+
+	void deserializeCookiepack(byte[] bytes);
+
 }
