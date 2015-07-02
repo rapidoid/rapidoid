@@ -46,9 +46,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,8 +62,6 @@ import org.rapidoid.log.Log;
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class UTILS implements Constants {
-
-	private static ScheduledThreadPoolExecutor EXECUTOR;
 
 	private static long measureStart;
 
@@ -616,14 +611,6 @@ public class UTILS implements Constants {
 		} catch (UnsupportedEncodingException e) {
 			throw U.rte(e);
 		}
-	}
-
-	public static synchronized ScheduledFuture<?> schedule(Runnable task, long delay) {
-		if (EXECUTOR == null) {
-			EXECUTOR = new ScheduledThreadPoolExecutor(100);
-		}
-
-		return EXECUTOR.schedule(task, delay, TimeUnit.MILLISECONDS);
 	}
 
 	public static void startMeasure() {

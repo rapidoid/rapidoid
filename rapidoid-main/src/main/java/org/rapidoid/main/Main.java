@@ -63,6 +63,7 @@ public class Main {
 			opt("port=<P>", "listen at port P (default: 8080)");
 			opt("address=<ADDR>", "listen at address ADDR (default: 0.0.0.0)");
 			opt("stateless", "Run in stateless mode, session becomes cookiepack (default: false)");
+			opt("threads=<T>", "start T threads for the job executor service (default: 100)");
 			opt("cpus=<C>", "optimize for C number of CPUs (default: the actual number of the CPUs)");
 			opt("workers=<W>", "start W number of I/O workers (default: the configured number of CPUs)");
 			opt("nodelay", "set the TCP_NODELAY flag to disable Nagle's algorithm (default: false)");
