@@ -59,18 +59,37 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 
 	@Override
 	protected boolean isCustomType(Class<?> type) {
-		return type.equals(HttpExchange.class) || super.isCustomType(type);
+		return type.equals(HttpExchange.class) || type.equals(byte[].class) || type.equals(byte[][].class)
+				|| super.isCustomType(type);
 	}
 
 	@Override
 	protected Object getCustomArg(PojoRequest request, Class<?> type, String[] parts, int paramsFrom, int paramsSize) {
 		if (type.equals(HttpExchange.class)) {
-			U.must(request instanceof WebReq);
-			WebReq webReq = (WebReq) request;
-			return webReq.getExchange();
+			return exchange(request);
+		} else if (type.equals(byte[].class)) {
+			HttpExchange x = exchange(request);
+			U.must(x.files().size() == 1, "Expected exactly 1 file uploaded for the byte[] parameter!");
+			return U.single(x.files().values());
+		} else if (type.equals(byte[][].class)) {
+			HttpExchange x = exchange(request);
+			byte[][] files = new byte[x.files().size()][];
+
+			int ind = 0;
+			for (byte[] file : x.files().values()) {
+				files[ind++] = file;
+			}
+
+			return files;
 		} else {
 			return super.getCustomArg(request, type, parts, paramsFrom, paramsSize);
 		}
+	}
+
+	private HttpExchange exchange(PojoRequest request) {
+		U.must(request instanceof WebReq);
+		WebReq webReq = (WebReq) request;
+		return webReq.getExchange();
 	}
 
 	@Override

@@ -26,8 +26,10 @@ import javax.transaction.Transactional;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.plugins.DB;
 import org.rapidoid.quick.Quick;
 import org.rapidoid.util.U;
@@ -59,6 +61,11 @@ public class Main {
 	@GET("/task/page")
 	public List<Task> tasks(int page) {
 		return page < 5 ? DB.getAll(Task.class) : null;
+	}
+
+	@POST("/fileup")
+	public Object uploaded(HttpExchange x, byte[][] files) {
+		return files;
 	}
 
 }
