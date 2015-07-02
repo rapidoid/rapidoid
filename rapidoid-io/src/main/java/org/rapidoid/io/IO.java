@@ -144,6 +144,10 @@ public class IO {
 
 	public static List<String> loadLines(String filename) {
 		InputStream input = classLoader().getResourceAsStream(filename);
+		if (input == null) {
+			return null;
+		}
+
 		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 		List<String> lines = U.list();
 
@@ -177,14 +181,20 @@ public class IO {
 
 	public static Map<String, String> loadMap(String filename) {
 		InputStream input = classLoader().getResourceAsStream(filename);
+		if (input == null) {
+			return null;
+		}
+
 		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 		Map<String, String> linesMap = U.map();
 
 		try {
 			String line;
 			while ((line = reader.readLine()) != null) {
-				String[] parts = line.split("=");
-				linesMap.put(parts[0], parts[1]);
+				if (!U.isEmpty(line)) {
+					String[] parts = line.split("=", 2);
+					linesMap.put(parts[0], parts.length > 1 ? parts[1] : "");
+				}
 			}
 		} catch (IOException e) {
 			throw U.rte(e);
