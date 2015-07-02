@@ -135,6 +135,7 @@ public class Pages {
 	public static Object render(HttpExchange x, Object page) {
 
 		Object fullPage = page(x, page);
+
 		if (fullPage != null) {
 			if (fullPage instanceof HttpExchange) {
 				return x;

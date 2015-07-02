@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.http.HttpExchangeInternals;
 import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.http.HttpProtocol;
@@ -88,6 +89,13 @@ public class AppHandler implements Handler {
 				byte[] bytes = JSON.parseBytes('"' + state + '"');
 				xi.deserializeLocals(bytes);
 			}
+		}
+
+		String cookiepack = x.cookie(HttpExchangeImpl.COOKIEPACK_COOKIE, null);
+		if (!U.isEmpty(cookiepack) && !cookiepack.equals("null")) {
+			String cpackStr = '"' + cookiepack + '"';
+			byte[] cpbytes = JSON.parseBytes(cpackStr);
+			xi.deserializeCookiepack(cpbytes);
 		}
 
 		final AppClasses appCls = Apps.getAppClasses(x, xi.getClassLoader());

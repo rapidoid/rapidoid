@@ -39,6 +39,7 @@ import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.io.IO;
+import org.rapidoid.json.JSON;
 import org.rapidoid.log.Log;
 import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.impl.ConnState;
@@ -474,6 +475,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized HttpExchange addHeader(byte[] name, byte[] value) {
+		U.must(!writesBody, "Cannot add header because the body is being rendered already!");
+
 		if (responseCode <= 0) {
 			responseCode(200);
 		}
@@ -599,6 +602,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	public synchronized void ensureHeadersComplete() {
 		if (!writesBody) {
+			beforeClosingHeaders();
 			if (!hasContentType) {
 				html();
 			}
@@ -1111,6 +1115,14 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		}
 
 		return sessionId;
+	}
+
+	private void beforeClosingHeaders() {
+		byte[] cpack = serializeCookiepack();
+		if (cpack != null) {
+			String json = U.mid(JSON.jacksonStringify(cpack), 1, -1);
+			setCookie(COOKIEPACK_COOKIE, json, "path=/");
+		}
 	}
 
 }

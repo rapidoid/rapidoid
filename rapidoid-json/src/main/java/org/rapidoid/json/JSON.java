@@ -10,6 +10,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 
+import com.fasterxml.jackson.core.Base64Variants;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
@@ -42,6 +43,7 @@ public class JSON {
 
 	private static ObjectMapper mapper() {
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.setBase64Variant(Base64Variants.MODIFIED_FOR_URL);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.registerModule(new AfterburnerModule());
 		return mapper;

@@ -46,7 +46,10 @@ public class HomeScreen extends Screen {
 
 		StreamWidget stream = stream(card).cols(3).dataUrl("/task/page/{{page}}");
 
-		return arr(cmd("Refresh").info(), stream);
+		int n = ctx().cookiepack("xy", 0) + 1;
+		ctx().cookiepack().put("xy", n);
+
+		return arr("Req" + n, " ", cmd("Refresh ").info(), stream);
 	}
 
 }
