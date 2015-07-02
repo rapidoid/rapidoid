@@ -22,8 +22,6 @@ package demo.taskplanner;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Cookie;
 import org.rapidoid.annotation.GET;
@@ -31,6 +29,7 @@ import org.rapidoid.annotation.Header;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Transaction;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.plugins.DB;
 import org.rapidoid.quick.Quick;
@@ -57,7 +56,7 @@ public class Main {
 		}
 	}
 
-	@Transactional
+	@Transaction
 	@GET
 	public void tx() {
 		Task task = new Task();
