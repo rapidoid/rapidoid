@@ -141,7 +141,7 @@ public class Apps {
 		Map<String, Class<?>> apps = Cls.classMap(Scan.annotated(App.class, classLoader));
 		Map<String, Class<?>> screens = Cls.classMap(Scan.bySuffix("Screen", null, classLoader));
 
-		final Class<?> appClass = !apps.isEmpty() ? apps.values().iterator().next() : TheDefaultApp.class;
+		final Class<?> appClass = !apps.isEmpty() ? apps.values().iterator().next() : null;
 
 		AppClasses APP_CLASSES = new AppClasses(appClass, services, pages, screens);
 		return APP_CLASSES;

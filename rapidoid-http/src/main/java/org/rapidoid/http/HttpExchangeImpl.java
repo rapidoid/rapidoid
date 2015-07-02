@@ -754,7 +754,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized HttpNotFoundException notFound() {
-		response(404, "Error: page not found!");
+		response(404, "Page not found!");
 		throw HttpNotFoundException.get();
 	}
 

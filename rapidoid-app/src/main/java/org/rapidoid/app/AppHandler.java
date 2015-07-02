@@ -108,17 +108,21 @@ public class AppHandler implements Handler {
 		}
 
 		Object result = Pages.dispatch(x, dispatcher, appCls.pages);
-
 		if (result != null) {
 			return result;
 		}
 
-		Object view = new AppPageGeneric(x, appCls);
+		if (!U.isEmpty(appCls.screens) || appCls.main != null) {
+			Object view = new AppPageGeneric(x, appCls);
 
-		if (Pages.isEmiting(x)) {
-			return Pages.emit(x, view);
-		} else {
-			return Pages.serve(x, view);
+			if (Pages.isEmiting(x)) {
+				return Pages.emit(x, view);
+			} else {
+				return Pages.serve(x, view);
+			}
 		}
+
+		throw x.notFound();
 	}
+
 }

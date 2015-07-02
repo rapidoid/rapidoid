@@ -22,6 +22,7 @@ package org.rapidoid.main;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
 import org.rapidoid.quick.Quick;
 import org.rapidoid.util.U;
 
@@ -32,6 +33,7 @@ public class Rapidoid {
 	private static boolean initialized = false;
 
 	public static synchronized void run(String[] args) {
+		Log.info("Starting Rapidoid...");
 		U.must(!initialized, "Already initialized!");
 		initialized = true;
 

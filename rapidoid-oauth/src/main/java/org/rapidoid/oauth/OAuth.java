@@ -89,6 +89,10 @@ public class OAuth {
 
 	public static String getLoginURL(HttpExchange x, OAuthProvider provider, String oauthDomain) {
 
+		if (Conf.oauth() == null) {
+			return "";
+		}
+
 		oauthDomain = U.or(oauthDomain, Conf.option("oauth-domain", (String) null));
 
 		String name = provider.getName().toLowerCase();
