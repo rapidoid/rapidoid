@@ -3,29 +3,8 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence"
 	version="1.0">
 
-	<persistence-unit name="pu-main-h2">
+	<persistence-unit name="pu">
 		<properties>
-			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
-			<property name="hibernate.hbm2ddl.auto" value="update" />
-			<property name="hibernate.connection.driver_class" value="org.h2.Driver" />
-			<property name="hibernate.connection.username" value="sa" />
-			<property name="hibernate.connection.password" value="" />
-			<property name="hibernate.connection.url" value="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1" />
-			<property name="hibernate.format_sql" value="false" />
-			<property name="hibernate.show_sql" value="true" />
-		</properties>
-	</persistence-unit>
-
-	<persistence-unit name="pu-test-h2">
-		<properties>
-			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
-			<property name="hibernate.hbm2ddl.auto" value="update" />
-			<property name="hibernate.connection.driver_class" value="org.h2.Driver" />
-			<property name="hibernate.connection.username" value="sa" />
-			<property name="hibernate.connection.password" value="" />
-			<property name="hibernate.connection.url" value="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1" />
-			<property name="hibernate.format_sql" value="false" />
-			<property name="hibernate.show_sql" value="true" />
 		</properties>
 	</persistence-unit>
 

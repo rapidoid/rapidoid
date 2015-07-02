@@ -36,6 +36,8 @@ public class Ctx {
 
 	private Classes classes;
 
+	private Object persistor;
+
 	private Ctx() {}
 
 	private static Ctx ctx() {
@@ -128,6 +130,38 @@ public class Ctx {
 		ctx.classes = null;
 	}
 
+	public static void setPersistor(Object persistor) {
+		Ctx ctx = provideCtx();
+
+		if (ctx.persistor != null) {
+			throw new IllegalStateException("The persistor was already set!");
+		}
+
+		ctx.persistor = persistor;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <P> P persistor() {
+
+		AppExchange x = Ctx.exchange();
+		if (x != null) {
+			return x.persistor();
+		}
+
+		Ctx ctx = provideCtx();
+
+		if (ctx.persistor == null) {
+			ctx.persistor = Ctx.persistorFactory.createPersistor();
+		}
+
+		return (P) ctx.persistor;
+	}
+
+	public static void delPersistor() {
+		Ctx ctx = ctx();
+		ctx.persistor = null;
+	}
+
 	public static PersistorFactory getPersistorFactory() {
 		return persistorFactory;
 	}
@@ -136,10 +170,22 @@ public class Ctx {
 		Ctx.persistorFactory = persistorFactory;
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <P> P persistor() {
-		AppExchange x = Ctx.exchange();
-		return (P) (x != null ? x.persistor() : Ctx.persistorFactory.createPersistor());
+	public static void clear() {
+		delClasses();
+		delExchange();
+		delUser();
+		delPersistor();
+	}
+
+	public Ctx copy() {
+		Ctx ctx = new Ctx();
+
+		ctx.classes = this.classes;
+		ctx.exchange = this.exchange;
+		ctx.user = this.user;
+		ctx.persistor = this.persistor;
+
+		return ctx;
 	}
 
 }

@@ -34,6 +34,8 @@ import org.rapidoid.app.Apps;
 import org.rapidoid.app.TransactionInterceptor;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.jpa.dbplugin.JPADBPlugin;
+import org.rapidoid.log.Log;
+import org.rapidoid.util.Schedule;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -57,7 +59,7 @@ public class Quick {
 		Apps.serve(args);
 	}
 
-	public static void bootstrap(Object... args) {
+	public static void bootstrap(final Object... args) {
 		Ctx.setPersistorFactory(new QuickJPA(args));
 		JPADBPlugin db = new JPADBPlugin();
 
@@ -68,12 +70,16 @@ public class Quick {
 		// TODO provide better support for javax.transaction.Transactional
 		AOP.register(Transactional.class, new TransactionInterceptor());
 
-		// eager JPA initialization
-		QuickJPA.createEM(args);
+		Schedule.job(new Runnable() {
+			@Override
+			public void run() {
+				Log.info("The executor is ready.");
+			}
+		}, 0);
 	}
 
 	public static EntityManager createJPAEM(Object[] args) {
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu-main-h2", U.map());
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu", U.map());
 		EntityManager em = emf.createEntityManager();
 		return em;
 	}

@@ -21,9 +21,10 @@ package org.rapidoid.quick;
  */
 
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
@@ -31,7 +32,9 @@ import org.hibernate.jpa.boot.internal.SettingsImpl;
 import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.PersistorFactory;
+import org.rapidoid.io.IO;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.util.U;
 
@@ -41,49 +44,75 @@ public class QuickJPA implements PersistorFactory {
 
 	private final Object[] args;
 
-	private EntityManager em;
+	@SuppressWarnings("deprecation")
+	private static org.hibernate.ejb.HibernateEntityManagerFactory emFactory;
 
 	public QuickJPA(Object... args) {
 		this.args = args;
 	}
 
 	@SuppressWarnings("deprecation")
-	public static EntityManager createEM(Object[] args) {
-		org.hibernate.cfg.AnnotationConfiguration cfg = new org.hibernate.cfg.AnnotationConfiguration();
+	private static synchronized org.hibernate.ejb.HibernateEntityManagerFactory emFactory(Object[] args) {
 
-		List<Class<?>> entityTypes = Scan.annotated(Entity.class);
-		for (Class<?> entityType : entityTypes) {
-			cfg.addAnnotatedClass(entityType);
+		if (emFactory == null) {
+
+			org.hibernate.cfg.AnnotationConfiguration cfg = new org.hibernate.cfg.AnnotationConfiguration();
+
+			List<Class<?>> entityTypes = Scan.annotated(Entity.class);
+			for (Class<?> entityType : entityTypes) {
+				cfg.addAnnotatedClass(entityType);
+			}
+
+			for (Object arg : args) {
+				if (arg instanceof Class<?>) {
+					Class<?> entityType = (Class<?>) arg;
+					if (!entityTypes.contains(entityType)) {
+						cfg.addAnnotatedClass(entityType);
+					}
+				}
+			}
+
+			cfg.addProperties(hibernateProperties());
+			SessionFactory sf = cfg.buildSessionFactory();
+
+			SessionFactoryImplementor sfi = (SessionFactoryImplementor) sf;
+
+			SettingsImpl settings = new SettingsImpl();
+
+			emFactory = new EntityManagerFactoryImpl("pu", sfi, settings, U.map(), cfg);
 		}
 
-		for (Object arg : args) {
-			if (arg instanceof Class<?>) {
-				Class<?> entityType = (Class<?>) arg;
-				if (!entityTypes.contains(entityType)) {
-					cfg.addAnnotatedClass(entityType);
-				}
+		return emFactory;
+	}
+
+	public static Properties hibernateProperties() {
+
+		Properties properties = new Properties();
+		Map<String, String> props;
+
+		if (Conf.production()) {
+			props = IO.loadMap("hibernate-prod.properties");
+			if (props == null) {
+				props = IO.loadMap("hibernate-prod.default.properties");
+			}
+		} else {
+			props = IO.loadMap("hibernate-dev.properties");
+			if (props == null) {
+				props = IO.loadMap("hibernate-dev.default.properties");
 			}
 		}
 
-		SessionFactory sf = cfg.buildSessionFactory();
+		if (props != null) {
+			properties.putAll(props);
+		}
 
-		SessionFactoryImplementor sfi = (SessionFactoryImplementor) sf;
-
-		SettingsImpl settings = new SettingsImpl();
-		org.hibernate.ejb.HibernateEntityManagerFactory ff = new EntityManagerFactoryImpl("pu-main-h2", sfi, settings,
-				U.map(), cfg);
-
-		EntityManager em = ff.createEntityManager();
-		return em;
+		return properties;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized <P> P createPersistor() {
-		if (em == null) {
-			em = createEM(args);
-		}
-		return (P) em;
+		return (P) emFactory(args).createEntityManager();
 	}
 
 }

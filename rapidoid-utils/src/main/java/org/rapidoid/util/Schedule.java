@@ -46,7 +46,11 @@ public class Schedule implements Constants {
 	}
 
 	public static synchronized ScheduledFuture<?> job(Runnable job, long delay) {
-		return executor().schedule(job, delay, TimeUnit.MILLISECONDS);
+		return executor().schedule(wrap(job), delay, TimeUnit.MILLISECONDS);
+	}
+
+	public static Runnable wrap(Runnable job) {
+		return new WrapperJob(job);
 	}
 
 }
