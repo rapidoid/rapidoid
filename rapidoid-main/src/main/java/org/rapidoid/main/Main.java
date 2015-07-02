@@ -28,14 +28,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.scan.Scan;
-import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.1.0")
 public class Main {
 
 	public static void main(String[] args) {
-		processHelp(args);
+		MainHelp.processHelp(args);
 
 		List<Class<?>> app = Scan.annotated(App.class);
 		if (!app.isEmpty()) {
@@ -47,39 +46,6 @@ public class Main {
 				Cls.invokeStatic(main, mainArgs);
 			}
 		}
-	}
-
-	public static void processHelp(Object[] args) {
-		if (args.length == 1 && args[0].equals("--help")) {
-			show("Usage:");
-			show("  java [-cp <classpath>] -jar <app>.jar [option1 option2 ...] ");
-
-			show("\nExample:");
-			show("  java -jar myapp.jar port=9090 address=127.0.0.1 cpus=2 workers=4 stateless");
-
-			show("\nAvailable options:");
-			opt("mode=(dev|production)", "configure DEV or PRODUCTION mode");
-			opt("secret=<SECRET>", "configure app-specific secret token for encryption");
-			opt("port=<P>", "listen at port P (default: 8080)");
-			opt("address=<ADDR>", "listen at address ADDR (default: 0.0.0.0)");
-			opt("stateless", "Run in stateless mode, session becomes cookiepack (default: false)");
-			opt("threads=<T>", "start T threads for the job executor service (default: 100)");
-			opt("cpus=<C>", "optimize for C number of CPUs (default: the actual number of the CPUs)");
-			opt("workers=<W>", "start W number of I/O workers (default: the configured number of CPUs)");
-			opt("nodelay", "set the TCP_NODELAY flag to disable Nagle's algorithm (default: false)");
-			opt("blockingAccept", "accept connection in BLOCKING mode (default: false)");
-			opt("bufSizeKB=<SIZE>", "TCP socket buffer size in KB (default: 16)");
-
-			System.exit(0);
-		}
-	}
-
-	private static void opt(String opt, String desc) {
-		show("  " + opt + U.copyNtimes(" ", 17 - opt.length()) + " - " + desc);
-	}
-
-	private static void show(String msg) {
-		System.out.println(msg);
 	}
 
 }

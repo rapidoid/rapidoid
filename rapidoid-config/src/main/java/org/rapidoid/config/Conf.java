@@ -163,13 +163,22 @@ public class Conf {
 		return is("stateless");
 	}
 
+	public static String oauth() {
+		return option("oauth", null);
+	}
+
 	public static boolean production() {
 		return has("mode", "production");
 	}
 
 	public static boolean dev() {
-		assert configureDevMode();
-		return has("mode", "dev");
+		if (production()) {
+			return false;
+		}
+
+		assert configureDevMode(); // in debug mode
+
+		return has("mode", "dev") || !production();
 	}
 
 	private static boolean configureDevMode() {

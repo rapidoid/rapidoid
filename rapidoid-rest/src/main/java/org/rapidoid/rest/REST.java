@@ -47,7 +47,7 @@ public class REST {
 		run(services.toArray(new Class[services.size()]));
 	}
 
-	public static void main(String[] args) {
+	public static void run(String[] args) {
 		Conf.args(args);
 		run();
 	}

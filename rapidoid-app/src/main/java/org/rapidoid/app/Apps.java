@@ -34,7 +34,6 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
-import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.log.Log;
 import org.rapidoid.oauth.OAuth;
@@ -93,7 +92,7 @@ public class Apps {
 		HTTPServer server = HTTP.server().build();
 
 		OAuth.register(server);
-		HttpBuiltins.register(server);
+		// HttpBuiltins.register(server); // TODO make it configurable
 
 		server.serve(new AppHandler());
 

@@ -46,6 +46,10 @@ public class OAuth {
 	public static void register(HTTPServer server, String oauthDomain, OAuthStateCheck stateCheck,
 			OAuthProvider... providers) {
 
+		if (Conf.oauth() == null) {
+			return;
+		}
+
 		oauthDomain = U.or(oauthDomain, Conf.option("oauth-domain", (String) null));
 
 		OAuth.STATE_CHECK = stateCheck;

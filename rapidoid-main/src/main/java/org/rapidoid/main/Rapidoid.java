@@ -35,7 +35,7 @@ public class Rapidoid {
 		U.must(!initialized, "Already initialized!");
 		initialized = true;
 
-		Main.processHelp(args);
+		MainHelp.processHelp(args);
 		Quick.run(args);
 	}
 

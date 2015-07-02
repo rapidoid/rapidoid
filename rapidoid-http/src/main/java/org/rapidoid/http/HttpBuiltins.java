@@ -32,40 +32,31 @@ import org.rapidoid.util.U;
 public class HttpBuiltins {
 
 	public static void register(HTTPServer server) {
+		if (Conf.dev()) {
+			server.get("/_debugLogin", new Handler() {
+				@Override
+				public Object handle(HttpExchange x) {
+					x.accessDeniedIf(!Conf.dev());
 
-		server.get("/_logout", new Handler() {
-			@Override
-			public Object handle(HttpExchange x) {
-				Ctx.delUser();
-				x.cookiepack().remove("username");
-				x.cookiepack().remove("name");
-				throw x.goBack(0);
-			}
-		});
+					String username = x.param("user");
+					U.must(username.matches("\\w+"));
 
-		server.get("/_debugLogin", new Handler() {
-			@Override
-			public Object handle(HttpExchange x) {
-				x.accessDeniedIf(!Conf.dev());
+					username += "@debug";
 
-				String username = x.param("user");
-				U.must(username.matches("\\w+"));
+					UserInfo user = new UserInfo();
+					user.username = username;
+					user.email = username;
+					user.name = U.capitalized(username);
 
-				username += "@debug";
+					Ctx.delUser();
+					x.cookiepack().put("username", user.username);
+					x.cookiepack().put("name", user.name);
+					Ctx.setUser(user);
 
-				UserInfo user = new UserInfo();
-				user.username = username;
-				user.email = username;
-				user.name = U.capitalized(username);
-
-				Ctx.delUser();
-				x.cookiepack().put("username", user.username);
-				x.cookiepack().put("name", user.name);
-				Ctx.setUser(user);
-
-				throw x.goBack(0);
-			}
-		});
-
+					throw x.goBack(0);
+				}
+			});
+		}
 	}
+
 }

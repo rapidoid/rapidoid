@@ -329,7 +329,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	public synchronized String toString() {
 		return "HttpExchange [uri=" + uri() + ", verb=" + verb() + ", path=" + path() + ", subpath=" + subpath()
 				+ ", query=" + query() + ", protocol=" + protocol() + ", body=" + body() + ", headers=" + headers()
-				+ ", params=" + params() + ", cookies=" + cookies() + ", data=" + posted() + ", files=" + files() + "]";
+				+ ", params=" + params() + ", cookies=" + cookies() + ", data=" + posted() + ", files="
+				+ files().keySet() + "]";
 	}
 
 	@Override
