@@ -16,8 +16,8 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.plugins.impl.DefaultDBPlugin;
+import org.rapidoid.util.Schedule;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 /*
  * #%L
@@ -177,7 +177,7 @@ public class JPADBPlugin extends DefaultDBPlugin {
 
 	@Override
 	public void transaction(final Runnable tx, final boolean readonly, final Callback<Void> callback) {
-		UTILS.schedule(new Runnable() {
+		Schedule.job(new Runnable() {
 
 			@Override
 			public void run() {
@@ -190,6 +190,7 @@ public class JPADBPlugin extends DefaultDBPlugin {
 
 				callback.onDone(null, null);
 			}
+
 		}, 0);
 	}
 
