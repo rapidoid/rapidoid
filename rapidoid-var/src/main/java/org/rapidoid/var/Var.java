@@ -1,5 +1,7 @@
 package org.rapidoid.var;
 
+import java.io.Serializable;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
@@ -25,7 +27,7 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface Var<T> {
+public interface Var<T> extends Serializable {
 
 	String name();
 
