@@ -152,11 +152,16 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 						String paramName = param.value();
 						String val = request.params().get(paramName);
 						args[i] = Cls.convert(val, type);
+					} else if (isCustomSimpleArg(request, annotations[i])) {
+						args[i] = Cls.convert(customSimpleArg(request, annotations[i]), type);
 					} else {
-						if (parts.length > paramsFrom + subUrlParamIndex) {
-							args[i] = Cls.convert(parts[paramsFrom + subUrlParamIndex++], type);
-						} else {
-							throw error(null, "Not enough parameters!");
+
+						if (args[i] == null) {
+							if (parts.length > paramsFrom + subUrlParamIndex) {
+								args[i] = Cls.convert(parts[paramsFrom + subUrlParamIndex++], type);
+							} else {
+								throw error(null, "Not enough parameters!");
+							}
 						}
 					}
 
@@ -177,6 +182,14 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		}
 
 		return args;
+	}
+
+	protected boolean isCustomSimpleArg(PojoRequest request, Annotation[] annotations) {
+		return false;
+	}
+
+	protected Object customSimpleArg(PojoRequest request, Annotation[] annotations) {
+		return null;
 	}
 
 	protected void preprocess(PojoRequest request, Method method, Object service, Object[] args) {}

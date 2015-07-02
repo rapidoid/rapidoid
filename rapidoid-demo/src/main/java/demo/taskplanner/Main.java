@@ -25,7 +25,9 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Cookie;
 import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.Header;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
@@ -71,8 +73,9 @@ public class Main {
 	}
 
 	@POST("/fileup")
-	public Object uploaded(HttpExchange x, byte[][] files) {
-		return files;
+	public Object uploaded(HttpExchange x, byte[][] files, @Cookie("JSESSIONID") String js,
+			@Cookie("COOKIEPACK") String cp, @Header("Host") String host, @Header("Accept") String accept) {
+		return U.array(js, cp, host, accept, files);
 	}
 
 }

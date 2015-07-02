@@ -26,8 +26,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Cookie;
 import org.rapidoid.annotation.DELETE;
 import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.Header;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.PUT;
 import org.rapidoid.annotation.RESTful;
@@ -182,6 +184,29 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 	protected Object invoke(PojoRequest req, Method method, Object service, Object[] args) {
 		HttpExchange x = ((WebReq) req).getExchange();
 		return AOP.invoke(x, method, service, args);
+	}
+
+	@Override
+	protected Object customSimpleArg(PojoRequest request, Annotation[] annotations) {
+
+		Cookie cookie = Metadata.get(annotations, Cookie.class);
+		if (cookie != null) {
+			HttpExchange x = exchange(request);
+			return x.cookie(cookie.value(), null);
+		}
+
+		Header header = Metadata.get(annotations, Header.class);
+		if (header != null) {
+			HttpExchange x = exchange(request);
+			return x.header(header.value(), null);
+		}
+
+		return null;
+	}
+
+	@Override
+	protected boolean isCustomSimpleArg(PojoRequest request, Annotation[] annotations) {
+		return Metadata.get(annotations, Cookie.class) != null || Metadata.get(annotations, Header.class) != null;
 	}
 
 }
