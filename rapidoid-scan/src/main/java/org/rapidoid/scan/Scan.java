@@ -1,6 +1,7 @@
 package org.rapidoid.scan;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.net.URL;
@@ -365,9 +366,12 @@ public class Scan {
 	private static List<Class<?>> getClassesFromJAR(String jarName, List<Class<?>> classes, String pkg, Pattern regex,
 			Predicate<Class<?>> filter, Class<? extends Annotation> annotated, ClassLoader classLoader) {
 
+		ZipInputStream zip = null;
 		try {
 			String pkgPath = pkgToPath(pkg);
-			ZipInputStream zip = new ZipInputStream(new URL("file://" + jarName).openStream());
+			File jarFile = new File(jarName);
+			FileInputStream jarInputStream = new FileInputStream(jarFile);
+			zip = new ZipInputStream(jarInputStream);
 
 			ZipEntry e;
 			while ((e = zip.getNextEntry()) != null) {
@@ -382,7 +386,15 @@ public class Scan {
 				}
 			}
 		} catch (Exception e) {
-			throw U.rte(e);
+			Log.error("Cannot scan JAR: " + jarName, e);
+		} finally {
+			if (zip != null) {
+				try {
+					zip.close();
+				} catch (IOException e) {
+					Log.error("Couldn't close the ZIP stream!", e);
+				}
+			}
 		}
 
 		return classes;
