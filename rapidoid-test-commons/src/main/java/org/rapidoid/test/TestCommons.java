@@ -180,7 +180,70 @@ public abstract class TestCommons {
 
 	protected void eq(byte[] actual, byte[] expected) {
 		try {
-			Assert.assertEquals(expected, actual);
+			Assert.assertArrayEquals(expected, actual);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
+	}
+
+	protected void eq(char[] actual, char[] expected) {
+		try {
+			Assert.assertArrayEquals(expected, actual);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
+	}
+
+	protected void eq(int[] actual, int[] expected) {
+		try {
+			Assert.assertArrayEquals(expected, actual);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
+	}
+
+	protected void eq(long[] actual, long[] expected) {
+		try {
+			Assert.assertArrayEquals(expected, actual);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
+	}
+
+	protected void eq(float[] actual, float[] expected, float delta) {
+		try {
+			Assert.assertArrayEquals(expected, actual, delta);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
+	}
+
+	protected void eq(double[] actual, double[] expected, double delta) {
+		try {
+			Assert.assertArrayEquals(expected, actual, delta);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
+	}
+
+	protected void eq(boolean[] actual, boolean[] expected) {
+		try {
+			Assert.assertArrayEquals(expected, actual);
+		} catch (AssertionError e) {
+			registerError(e);
+			throw e;
+		}
+	}
+
+	protected void eq(Object[] actual, Object[] expected) {
+		try {
+			Assert.assertArrayEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
