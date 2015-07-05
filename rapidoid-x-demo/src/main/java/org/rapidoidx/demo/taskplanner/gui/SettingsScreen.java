@@ -9,7 +9,7 @@ import org.rapidoid.security.annotation.LoggedIn;
  * #%L
  * rapidoid-x-demo
  * %%
- * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
+ * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by

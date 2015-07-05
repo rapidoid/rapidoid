@@ -1,13 +1,10 @@
 package org.rapidoid.activity;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 /*
  * #%L
  * rapidoid-activity
  * %%
- * Copyright (C) 2014 - 2015 Nikolche Mihajlovski
+ * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +19,9 @@ import org.rapidoid.annotation.Since;
  * limitations under the License.
  * #L%
  */
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

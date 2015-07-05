@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -15,10 +16,10 @@
 
 	<name>Rapidoid</name>
 	<url>http://www.rapidoid.org</url>
-	<description>The way of rapid development of high-performance (web) applications</description>
+	<description>Full-stack web framework and high-performance network protocol framework</description>
 
 	<organization>
-		<name>Nikolche Mihajlovski</name>
+		<name>Nikolche Mihajlovski and contributors</name>
 		<url>http://www.nikolche.com</url>
 	</organization>
 
@@ -31,6 +32,19 @@
 			<url>http://www.nikolche.com</url>
 		</developer>
 	</developers>
+
+	<contributors>
+		<!-- Chronologically ordered: -->
+		<contributor>
+			<name>Marina Mihajlovska</name>
+		</contributor>
+		<contributor>
+			<name>Kristina Spirovska</name>
+		</contributor>
+		<contributor>
+			<name>Daniel Kalevski</name>
+		</contributor>
+	</contributors>
 
 	<licenses>
 		<license>
