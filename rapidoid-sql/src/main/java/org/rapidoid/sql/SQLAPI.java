@@ -94,7 +94,7 @@ public class SQLAPI {
 	}
 
 	public SQLAPI hsql() {
-		return driver("org.hsqldb.jdbc.JDBCDriver").url("jdbc:h2:mem:<db>").user("sa").password("");
+		return driver("org.hsqldb.jdbc.JDBCDriver").url("jdbc:hsqldb:mem:<db>").user("sa").password("");
 	}
 
 	private String dbUrl() {
