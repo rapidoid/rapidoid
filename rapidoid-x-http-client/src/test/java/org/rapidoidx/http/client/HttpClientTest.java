@@ -41,46 +41,57 @@ public class HttpClientTest extends TestCommons {
 	protected static final String SIMPLE_RESPONSE = "AbC";
 
 	@Test
-	public void testHttpClient() {
+	public void testHttpClientOnLocalServer() {
 		for (int k = 0; k < 3; k++) {
 
 			HTTPServer localServer = HTTP.serve(SIMPLE_RESPONSE);
 
-			ResultCounterCallback<String> cb1 = new ResultCounterCallback<String>();
-			ResultCounterCallback<String> cb2 = new ResultCounterCallback<String>();
+			ResultCounterCallback<String> cb = new ResultCounterCallback<String>();
 
-			HttpClientCallback hcb1 = new HttpClientBodyCallback(cb1);
-			HttpClientCallback hcb2 = new HttpClientBodyCallback(cb2);
+			HttpClientCallback hcb = new HttpClientBodyCallback(cb);
 
 			HttpClient client = new HttpClient();
 
 			int count1 = 1000;
 			for (int i = 0; i < count1; i++) {
-				client.get("localhost", 8080, GET_LOCALHOST, hcb1);
-			}
-
-			int count2 = 10;
-			for (int i = 0; i < count2; i++) {
-				client.get("www.rapidoid.org", 80, GET_RAPIDOID_ORG, hcb2);
+				client.get("localhost", 8080, GET_LOCALHOST, hcb);
 			}
 
 			waiting();
-			while (cb1.getResultCount() < count1) {
+			while (cb.getResultCount() < count1) {
 				timeout(50000);
 			}
 
-			waiting();
-			while (cb2.getResultCount() < count2) {
-				timeout(60000);
-			}
-
-			eq(cb1.getResults(), U.set(SIMPLE_RESPONSE));
-			eq(cb2.getResults().size(), 1);
-
-			isTrue(cb2.getResults().iterator().next().length() > 5000);
+			eq(cb.getResults(), U.set(SIMPLE_RESPONSE));
 
 			client.shutdown();
 			localServer.shutdown();
+		}
+	}
+
+	@Test
+	public void testHttpClientOnRealWebSites() {
+		for (int k = 0; k < 3; k++) {
+			ResultCounterCallback<String> cb = new ResultCounterCallback<String>();
+
+			HttpClientCallback hcb = new HttpClientBodyCallback(cb);
+
+			HttpClient client = new HttpClient();
+
+			int count = 3;
+			for (int i = 0; i < count; i++) {
+				client.get("www.rapidoid.org", 80, GET_RAPIDOID_ORG, hcb);
+			}
+
+			waiting();
+			while (cb.getResultCount() < count) {
+				timeout(60000);
+			}
+
+			eq(cb.getResults().size(), 1);
+			isTrue(cb.getResults().iterator().next().length() > 5000);
+
+			client.shutdown();
 		}
 	}
 
