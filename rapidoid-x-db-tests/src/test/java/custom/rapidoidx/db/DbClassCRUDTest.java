@@ -32,7 +32,7 @@ import org.rapidoid.util.D;
 import org.rapidoidx.db.DBs;
 import org.rapidoidx.db.Database;
 import org.rapidoidx.db.XDB;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import custom.rapidoidx.db.model.Person;
 

@@ -1,7 +1,7 @@
 package org.rapidoid.log;
 
 import org.rapidoid.test.TestCommons;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 /*
  * #%L

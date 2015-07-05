@@ -27,7 +27,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.util.U;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import custom.rapidoidx.db.model.IPerson;
 import custom.rapidoidx.db.model.Person;

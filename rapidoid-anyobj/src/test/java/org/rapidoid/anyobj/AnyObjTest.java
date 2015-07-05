@@ -22,7 +22,7 @@ package org.rapidoid.anyobj;
 
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 /**
  * @author Nikolche Mihajlovski

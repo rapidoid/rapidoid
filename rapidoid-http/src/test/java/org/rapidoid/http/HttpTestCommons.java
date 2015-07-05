@@ -38,6 +38,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.junit.Assert;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
@@ -48,7 +49,6 @@ import org.rapidoid.io.IO;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
-import org.testng.Assert;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

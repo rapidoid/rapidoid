@@ -24,7 +24,7 @@ package org.rapidoidx.buffer;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoidx.data.Range;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

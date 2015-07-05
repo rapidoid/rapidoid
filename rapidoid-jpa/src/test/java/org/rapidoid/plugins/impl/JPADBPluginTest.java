@@ -16,7 +16,7 @@ import org.rapidoid.jpa.dbplugin.JPADBPlugin;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.SimplePersistorFactory;
 import org.rapidoid.util.U;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 /*
  * #%L

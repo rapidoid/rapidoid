@@ -26,7 +26,7 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.PagesTestCommons;
 import org.rapidoid.widget.BootstrapWidgets;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 @SuppressWarnings("unused")
 @Authors("Nikolche Mihajlovski")

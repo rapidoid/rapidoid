@@ -32,7 +32,7 @@ import org.rapidoid.util.Schedule;
 import org.rapidoid.util.UTILS;
 import org.rapidoidx.net.Protocol;
 import org.rapidoidx.net.abstracts.Channel;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

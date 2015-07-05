@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.util.U;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 class Foo {
 	public String createdBy;

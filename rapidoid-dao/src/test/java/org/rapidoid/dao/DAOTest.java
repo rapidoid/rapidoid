@@ -21,7 +21,7 @@ package org.rapidoid.dao;
  */
 
 import org.rapidoid.test.TestCommons;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 class PersonService extends DAO<Person> {}
 

@@ -21,6 +21,8 @@ package custom.rapidoidx.db;
  * #L%
  */
 
+import org.junit.After;
+import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctx;
@@ -30,15 +32,13 @@ import org.rapidoid.scan.Scan;
 import org.rapidoid.test.TestCommons;
 import org.rapidoidx.db.DBs;
 import org.rapidoidx.db.XDB;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
 public abstract class DbTestCommons extends TestCommons {
 
-	@BeforeMethod(alwaysRun = true)
-	@AfterMethod(alwaysRun = true)
+	@Before
+	@After
 	public void initDB() {
 		Scan.classes();
 		Log.warn("Destroying all databases: " + DBs.instances());

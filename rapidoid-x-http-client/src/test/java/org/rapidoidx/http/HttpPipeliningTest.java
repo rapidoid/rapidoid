@@ -39,7 +39,7 @@ import org.rapidoidx.data.Ranges;
 import org.rapidoidx.net.TCP;
 import org.rapidoidx.net.abstracts.Channel;
 import org.rapidoidx.net.impl.FiniteStateProtocol;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

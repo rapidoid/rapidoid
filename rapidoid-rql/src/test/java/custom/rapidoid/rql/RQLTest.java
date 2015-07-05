@@ -20,14 +20,14 @@ package custom.rapidoid.rql;
  * #L%
  */
 
+import org.junit.Before;
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.rql.RQL;
 import org.rapidoid.test.TestCommons;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
 
 @DbEntity
 class Abc {
@@ -46,7 +46,7 @@ enum LowHigh {
 @Since("3.0.0")
 public class RQLTest extends TestCommons {
 
-	@BeforeTest
+	@Before
 	public void setup() {
 		Plugins.bootstrap();
 	}

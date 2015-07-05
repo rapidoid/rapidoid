@@ -7,7 +7,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.util.U;
 import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.impl.DbProxy;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import custom.rapidoidx.db.model.IPost;
 

@@ -23,7 +23,7 @@ package org.rapidoid.dates;
 import java.util.Calendar;
 
 import org.rapidoid.test.TestCommons;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 /**
  * @author Nikolche Mihajlovski

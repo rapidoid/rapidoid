@@ -21,6 +21,7 @@ package custom.rapidoidx.db;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctx;
@@ -30,7 +31,6 @@ import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanRead;
 import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.XEntity;
-import org.testng.annotations.Test;
 
 @CanInsert({ "ADMIN", "MANAGER" })
 @CanRead({ "AUTHOR" })
@@ -57,7 +57,7 @@ class Bar extends XEntity {
 @Since("3.0.0")
 public class DbClassSecurityTest extends DbTestCommons {
 
-	@Test(expectedExceptions = SecurityException.class)
+	@Test(expected = SecurityException.class)
 	public void testSecurityFailure() {
 
 		Foo foo = new Foo();
@@ -65,7 +65,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 		XDB.shutdown();
 	}
 
-	@Test(expectedExceptions = SecurityException.class)
+	@Test(expected = SecurityException.class)
 	public void testSecurityFailure2() {
 
 		Foo foo = new Foo();
@@ -73,7 +73,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 		XDB.shutdown();
 	}
 
-	@Test(expectedExceptions = SecurityException.class)
+	@Test(expected = SecurityException.class)
 	public void testSecurityFailure3() {
 
 		Foo foo = new Foo();

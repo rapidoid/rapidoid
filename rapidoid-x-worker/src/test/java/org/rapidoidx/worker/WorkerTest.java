@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.UTILS;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

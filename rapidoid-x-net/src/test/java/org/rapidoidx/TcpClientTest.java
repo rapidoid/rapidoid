@@ -31,7 +31,7 @@ import org.rapidoidx.net.TCP;
 import org.rapidoidx.net.TCPClient;
 import org.rapidoidx.net.TCPServer;
 import org.rapidoidx.net.abstracts.Channel;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

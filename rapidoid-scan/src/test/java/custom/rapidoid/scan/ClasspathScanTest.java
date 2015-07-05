@@ -8,7 +8,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import cccccc.Ccccc;
 

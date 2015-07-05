@@ -29,7 +29,7 @@ import org.rapidoid.util.U;
 import org.rapidoidx.bytes.BytesUtil;
 import org.rapidoidx.data.Range;
 import org.rapidoidx.data.Ranges;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

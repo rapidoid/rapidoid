@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.util.U;
 import org.rapidoidx.db.XDB;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import custom.rapidoidx.db.model.Post;
 import custom.rapidoidx.db.model.Profile;

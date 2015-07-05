@@ -27,7 +27,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 enum ABC {
 	A, B, C

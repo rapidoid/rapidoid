@@ -21,11 +21,11 @@ package custom.rapidoidx.db;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.util.OptimisticConcurrencyControlException;
 import org.rapidoidx.db.XDB;
-import org.testng.annotations.Test;
 
 import custom.rapidoidx.db.model.Person;
 
@@ -33,7 +33,7 @@ import custom.rapidoidx.db.model.Person;
 @Since("3.0.0")
 public class DbClassOCCTest extends DbTestCommons {
 
-	@Test(expectedExceptions = OptimisticConcurrencyControlException.class)
+	@Test(expected = OptimisticConcurrencyControlException.class)
 	public void testOCCFailure() {
 		Person p1 = new Person();
 		XDB.persist(p1);

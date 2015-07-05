@@ -5,7 +5,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.test.TestCommons;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 /*
  * #%L

@@ -20,8 +20,8 @@ package org.rapidoid.arr;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.test.TestCommons;
-import org.testng.annotations.Test;
 
 /**
  * @author Nikolche Mihajlovski
@@ -49,7 +49,7 @@ public class ArrTest extends TestCommons {
 		eq(subarr, new String[] { "bb", "c", "ddd" });
 	}
 
-	@Test(expectedExceptions = { RuntimeException.class })
+	@Test(expected = RuntimeException.class)
 	public void testSubarrayException() {
 		Arr.subarray(new String[] { "aa", "bb", "c" }, 2, 1);
 	}

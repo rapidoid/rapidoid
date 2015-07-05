@@ -23,13 +23,12 @@ package org.rapidoid.widget;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.var.Var;
-import org.testng.annotations.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class PagerWidgetTest extends WidgetTestCommons {
 
-	@Test(enabled = false)
+	// @Test
 	public void testPagerWidget() {
 
 		// FIXME: find the event numbers to be able to emit events

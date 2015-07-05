@@ -34,7 +34,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.D;
 import org.rapidoid.util.U;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

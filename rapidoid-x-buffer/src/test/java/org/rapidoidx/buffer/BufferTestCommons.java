@@ -28,7 +28,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.test.TestCommons;
 import org.rapidoidx.data.KeyValueRanges;
 import org.rapidoidx.data.Range;
-import org.testng.Assert;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -50,13 +49,13 @@ public class BufferTestCommons extends TestCommons {
 	}
 
 	protected void eq(Range range, int start, int length) {
-		Assert.assertEquals(range.start, start);
-		Assert.assertEquals(range.length, length);
+		eq(range.start, start);
+		eq(range.length, length);
 	}
 
 	protected void isNone(Range range) {
-		Assert.assertEquals(range.start, -1);
-		Assert.assertEquals(range.length, 0);
+		eq(range.start, -1);
+		eq(range.length, 0);
 	}
 
 	protected void eq(Buf buf, String expected) {

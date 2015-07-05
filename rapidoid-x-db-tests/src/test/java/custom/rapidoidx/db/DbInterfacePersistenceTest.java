@@ -30,7 +30,7 @@ import org.rapidoid.util.OptimisticConcurrencyControlException;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.UTILS;
 import org.rapidoidx.db.XDB;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import custom.rapidoidx.db.model.IPerson;
 

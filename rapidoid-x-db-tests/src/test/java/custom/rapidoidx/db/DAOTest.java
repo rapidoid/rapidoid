@@ -25,7 +25,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.dao.DAO;
 import org.rapidoidx.db.XDB;
-import org.testng.annotations.Test;
 
 import custom.rapidoidx.db.model.IPerson;
 import custom.rapidoidx.db.model.Person;
@@ -38,7 +37,7 @@ class PersonDAO extends DAO<IPerson> {}
 @Since("3.0.0")
 public class DAOTest extends DbTestCommons {
 
-	@Test(enabled = false)
+	// @Test
 	public void testDAOWithClassEntity() {
 
 		PersonService service = new PersonService();
@@ -55,7 +54,7 @@ public class DAOTest extends DbTestCommons {
 		eq(XDB.size(), 0);
 	}
 
-	@Test(enabled = false)
+	// @Test
 	public void testDAOWithInterfaceEntity() {
 
 		PersonDAO dao = new PersonDAO();

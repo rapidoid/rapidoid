@@ -24,6 +24,7 @@ package custom.rapidoidx.db;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
@@ -32,7 +33,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.util.U;
 import org.rapidoidx.db.XDB;
-import org.testng.annotations.Test;
 
 import custom.rapidoidx.db.model.Person;
 
@@ -63,6 +63,7 @@ public class DbStatisticalTest extends DbTestCommons {
 		Log.setLogLevel(LogLevel.SEVERE);
 
 		multiThreaded(Conf.cpus(), 50000, new Runnable() {
+
 			@Override
 			public synchronized void run() {
 
@@ -129,11 +130,11 @@ public class DbStatisticalTest extends DbTestCommons {
 		System.out.println("Comparing data...");
 		compareData();
 		System.out.println("Total " + persons.size() + " records.");
-
 	}
 
 	private void compareData() {
 		eq(XDB.size(), persons.size());
+
 		XDB.each(new Operation<Person>() {
 			@Override
 			public void execute(Person p) throws Exception {
@@ -170,22 +171,22 @@ public class DbStatisticalTest extends DbTestCommons {
 	private void doShadowOp(Op op, Ret ret) {
 		switch (op.op) {
 		case 0:
-			assert persons.put(ret.id, op.person) == null;
+			isNull(persons.put(ret.id, op.person));
 			break;
 
 		case 1:
 			if (!ret.illegalId) {
-				assert persons.remove(op.id) != null;
+				notNull(persons.remove(op.id));
 			} else {
-				assert !persons.containsKey(op.id);
+				isFalse(persons.containsKey(op.id));
 			}
 			break;
 
 		case 2:
 			if (!ret.illegalId) {
-				assert persons.put(op.id, op.person) != null;
+				notNull(persons.put(op.id, op.person));
 			} else {
-				assert !persons.containsKey(op.id);
+				isFalse(persons.containsKey(op.id));
 			}
 			break;
 

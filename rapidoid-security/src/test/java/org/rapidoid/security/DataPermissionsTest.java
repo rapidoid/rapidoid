@@ -36,7 +36,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.U;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 @CanRead({ ANYBODY })
 @CanChange({ ANYBODY })

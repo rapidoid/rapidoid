@@ -25,11 +25,11 @@ import java.net.URL;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
-import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 
 /**
  * @author Nikolche Mihajlovski
@@ -43,12 +43,12 @@ public abstract class TestCommons {
 
 	private long waitingFrom;
 
-	@BeforeMethod(alwaysRun = true)
+	@Before
 	public void init() {
 		hasError = false;
 	}
 
-	@AfterMethod(alwaysRun = true)
+	@After
 	public void checkForErrors() {
 		if (hasError) {
 			Assert.fail("Assertion error(s) occured, probably were caught or were thrown on non-main thread!");
@@ -116,9 +116,9 @@ public abstract class TestCommons {
 		}
 	}
 
-	protected void neq(Object actual, Object expected) {
+	protected void neq(Object actual, Object unexpected) {
 		try {
-			Assert.assertNotEquals(actual, expected);
+			Assert.assertNotEquals(unexpected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -127,7 +127,7 @@ public abstract class TestCommons {
 
 	protected void eq(Object actual, Object expected) {
 		try {
-			Assert.assertEquals(actual, expected);
+			Assert.assertEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -136,7 +136,7 @@ public abstract class TestCommons {
 
 	protected void eq(String actual, String expected) {
 		try {
-			Assert.assertEquals(actual, expected);
+			Assert.assertEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -145,7 +145,7 @@ public abstract class TestCommons {
 
 	protected void eq(char actual, char expected) {
 		try {
-			Assert.assertEquals(actual, expected);
+			Assert.assertEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -154,7 +154,7 @@ public abstract class TestCommons {
 
 	protected void eq(long actual, long expected) {
 		try {
-			Assert.assertEquals(actual, expected);
+			Assert.assertEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -162,8 +162,16 @@ public abstract class TestCommons {
 	}
 
 	protected void eq(double actual, double expected) {
+		eq(actual, expected, 0);
+	}
+
+	protected void eqApprox(double actual, double expected) {
+		eq(actual, expected, 0.0000000001);
+	}
+
+	protected void eq(double actual, double expected, double delta) {
 		try {
-			Assert.assertEquals(actual, expected);
+			Assert.assertEquals(expected, actual, delta);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -172,7 +180,7 @@ public abstract class TestCommons {
 
 	protected void eq(byte[] actual, byte[] expected) {
 		try {
-			Assert.assertEquals(actual, expected);
+			Assert.assertEquals(expected, actual);
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;
@@ -192,9 +200,9 @@ public abstract class TestCommons {
 		}
 	}
 
-	protected void hasType(Object instance, Class<?> clazz) {
+	protected void hasType(Object instance, Class<?> expectedClass) {
 		try {
-			Assert.assertEquals(instance.getClass(), clazz);
+			Assert.assertEquals(expectedClass, instance.getClass());
 		} catch (AssertionError e) {
 			registerError(e);
 			throw e;

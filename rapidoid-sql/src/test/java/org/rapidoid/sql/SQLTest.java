@@ -26,7 +26,7 @@ import java.util.Map;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
 
