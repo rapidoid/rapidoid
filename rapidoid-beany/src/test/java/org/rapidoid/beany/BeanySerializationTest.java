@@ -84,11 +84,12 @@ public class BeanySerializationTest extends BeanyTestCommons {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testArraySerialization() {
-		eq(Beany.serialize(U.array("f", 3, true)), U.array("f", 3, true));
+		eq((Object[]) Beany.serialize(U.array("f", 3, true)), U.array("f", 3, true));
 
 		int[] a1 = { 1, 2, 3 };
 		int[] a2 = { 1, 2, 3 };
-		eq(Beany.serialize(a1), a2);
+
+		eq((int[]) Beany.serialize(a1), a2);
 	}
 
 	@Test
