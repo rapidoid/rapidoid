@@ -320,7 +320,7 @@ public class Scan {
 
 		if (relName.endsWith(".class")) {
 
-			String clsName = U.mid(relName, 0, -6).replace(File.separatorChar, '.');
+			String clsName = U.mid(relName, 0, -6).replace('/', '.').replace('\\', '.');
 
 			if (regex == null || regex.matcher(clsName).matches()) {
 				try {
