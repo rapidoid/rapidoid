@@ -33,16 +33,16 @@ public class AnyObjTest extends TestCommons {
 	@Test
 	public void testExclude() {
 		String[] arr = { "a", "b", "c" };
-		eq(AnyObj.exclude(arr, "a"), U.array("b", "c"));
-		eq(AnyObj.exclude(arr, "b"), U.array("a", "c"));
-		eq(AnyObj.exclude(arr, "c"), U.array("a", "b"));
+		eq((Object[]) AnyObj.exclude(arr, "a"), U.array("b", "c"));
+		eq((Object[]) AnyObj.exclude(arr, "b"), U.array("a", "c"));
+		eq((Object[]) AnyObj.exclude(arr, "c"), U.array("a", "b"));
 	}
 
 	@Test
 	public void testInclude() {
 		String[] arr = { "a", "b", "c" };
-		eq(AnyObj.include(arr, "a"), U.array("a", "b", "c"));
-		eq(AnyObj.include(arr, "d"), U.array("a", "b", "c", "d"));
+		eq((Object[]) AnyObj.include(arr, "a"), U.array("a", "b", "c"));
+		eq((Object[]) AnyObj.include(arr, "d"), U.array("a", "b", "c", "d"));
 	}
 
 }
