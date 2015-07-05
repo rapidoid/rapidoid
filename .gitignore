@@ -33,3 +33,7 @@ target
 
 */*.private
 *.private
+
+.idea/*
+
+*.iml
