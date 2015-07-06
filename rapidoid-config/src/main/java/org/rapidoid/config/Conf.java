@@ -159,10 +159,6 @@ public class Conf {
 		return has("size", "micro");
 	}
 
-	public static boolean stateless() {
-		return is("stateless");
-	}
-
 	public static String oauth() {
 		return option("oauth", null);
 	}

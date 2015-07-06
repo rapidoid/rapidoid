@@ -1002,7 +1002,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public synchronized Map<String, Serializable> session() {
 		if (session == null) {
-			if (Conf.stateless()) {
+			if (RapidoidConf.stateless()) {
 				session = U.synchronizedMap();
 				cookiepack().put(COOKIPACK_SESSION, UTILS.serializable(session));
 			} else {
