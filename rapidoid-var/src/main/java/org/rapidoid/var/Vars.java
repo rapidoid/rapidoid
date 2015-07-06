@@ -1,12 +1,7 @@
 package org.rapidoid.var;
 
-import java.util.Collection;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.var.impl.ArrayContainerVar;
-import org.rapidoid.var.impl.CollectionContainerVar;
-import org.rapidoid.var.impl.EqualityVar;
 import org.rapidoid.var.impl.MandatoryVar;
 import org.rapidoid.var.impl.SimpleVar;
 
@@ -47,23 +42,6 @@ public class Vars {
 		}
 
 		return vars;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Var<Boolean> eq(Var<?> var, Object value) {
-		return new EqualityVar(var.name() + " == " + value, (Var<Object>) var, value);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Var<Boolean> has(Var<?> container, Object item) {
-		Object arrOrColl = container.get();
-
-		String name = container.name() + "[" + item + "]";
-		if (arrOrColl instanceof Collection) {
-			return new CollectionContainerVar(name, (Var<Collection<Object>>) container, item);
-		} else {
-			return new ArrayContainerVar(name, (Var<Object>) container, item);
-		}
 	}
 
 	public static <T> Var<T> mandatory(Var<T> var) {

@@ -1,8 +1,8 @@
-package org.rapidoid.var.impl;
+package org.rapidoid.widget.impl;
 
 /*
  * #%L
- * rapidoid-var
+ * rapidoid-widget
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -27,7 +27,7 @@ import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class EqualityVar extends AbstractVar<Boolean> {
+public class EqualityVar extends WidgetVar<Boolean> {
 
 	private static final long serialVersionUID = 6990464844550633598L;
 
@@ -35,10 +35,17 @@ public class EqualityVar extends AbstractVar<Boolean> {
 
 	private final Object val;
 
-	public EqualityVar(String name, Var<Object> var, Object val) {
-		super(name);
+	public EqualityVar(String name, Var<Object> var, Object val, boolean initial) {
+		super(name, initial);
 		this.var = var;
 		this.val = val;
+		init();
+	}
+
+	private void init() {
+		if (!initial) {
+			set(getBool());
+		}
 	}
 
 	@Override

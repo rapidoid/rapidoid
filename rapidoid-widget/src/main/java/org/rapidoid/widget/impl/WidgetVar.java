@@ -24,32 +24,32 @@ import java.io.Serializable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.http.HttpExchange;
+import org.rapidoid.util.U;
+import org.rapidoid.var.impl.AbstractVar;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.1.0")
-public class LocalVar<T extends Serializable> extends WidgetVar<T> {
+@Since("4.0.2")
+public abstract class WidgetVar<T extends Serializable> extends AbstractVar<T> {
 
 	private static final long serialVersionUID = 2761159925375675659L;
 
-	private final String localKey;
+	protected boolean initial;
 
-	private final T defaultValue;
-
-	public LocalVar(String localKey, T defaultValue, boolean initial) {
-		super(localKey, initial);
-		this.localKey = localKey;
-		this.defaultValue = defaultValue;
+	public WidgetVar(String name, boolean initial) {
+		super(name);
+		this.initial = initial;
 	}
 
-	@Override
-	public T get() {
-		T val = ctx().local(localKey, defaultValue);
-		return val;
+	protected HttpExchange ctx() {
+		HttpExchange x = Ctx.exchange();
+		return x;
 	}
 
-	@Override
-	public void set(T value) {
-		ctx().locals().put(localKey, value);
+	protected boolean getBool() {
+		return U.or(Cls.convert(ctx().local(name(), null), Boolean.class), false);
 	}
 
 }

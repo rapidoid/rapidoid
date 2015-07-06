@@ -1,8 +1,8 @@
-package org.rapidoid.var.impl;
+package org.rapidoid.widget.impl;
 
 /*
  * #%L
- * rapidoid-var
+ * rapidoid-widget
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,25 +20,38 @@ package org.rapidoid.var.impl;
  * #L%
  */
 
+import java.util.Collection;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.anyobj.AnyObj;
+import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class ArrayContainerVar extends AbstractVar<Boolean> {
+public class CollectionContainerVar extends WidgetVar<Boolean> {
 
 	private static final long serialVersionUID = 6990464844550633598L;
 
-	public final Var<Object> container;
+	private final Var<Collection<Object>> container;
 
-	public final Object item;
+	private final Object item;
 
-	public ArrayContainerVar(String name, Var<Object> container, Object item) {
-		super(name);
+	public CollectionContainerVar(String name, Var<Collection<Object>> container, Object item, boolean initial) {
+		super(name, initial);
 		this.container = container;
 		this.item = item;
+		init();
+	}
+
+	private void init() {
+		if (!initial) {
+			if (container.get() == null) {
+				container.set(U.list());
+			}
+			set(getBool());
+		}
 	}
 
 	@Override
@@ -48,11 +61,23 @@ public class ArrayContainerVar extends AbstractVar<Boolean> {
 
 	@Override
 	public void set(Boolean value) {
+		Collection<Object> coll = container.get();
+
 		if (value) {
-			container.set(AnyObj.include(container.get(), item));
+			if (coll != null) {
+				if (!coll.contains(item)) {
+					coll.add(item);
+				}
+			} else {
+				coll = U.list(item);
+			}
 		} else {
-			container.set(AnyObj.exclude(container.get(), item));
+			if (coll != null) {
+				coll.remove(item);
+			}
 		}
+
+		container.set(coll);
 	}
 
 }

@@ -24,13 +24,10 @@ import java.io.Serializable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctx;
-import org.rapidoid.http.HttpExchange;
-import org.rapidoid.var.impl.AbstractVar;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class SessionVar<T extends Serializable> extends AbstractVar<T> {
+public class SessionVar<T extends Serializable> extends WidgetVar<T> {
 
 	private static final long serialVersionUID = 2761159925375675659L;
 
@@ -39,22 +36,20 @@ public class SessionVar<T extends Serializable> extends AbstractVar<T> {
 	private final T defaultValue;
 
 	public SessionVar(String sessionKey, T defaultValue) {
-		super(sessionKey);
+		super(sessionKey, false);
 		this.sessionKey = sessionKey;
 		this.defaultValue = defaultValue;
 	}
 
 	@Override
 	public T get() {
-		HttpExchange x = Ctx.exchange();
-		T val = x.session(sessionKey, defaultValue);
+		T val = ctx().session(sessionKey, defaultValue);
 		return val;
 	}
 
 	@Override
 	public void set(T value) {
-		HttpExchange x = Ctx.exchange();
-		x.session().put(sessionKey, value);
+		ctx().session().put(sessionKey, value);
 	}
 
 }

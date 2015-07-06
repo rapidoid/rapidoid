@@ -40,7 +40,9 @@ import org.rapidoid.util.Rnd;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
-import org.rapidoid.var.Vars;
+import org.rapidoid.widget.impl.ArrayContainerVar;
+import org.rapidoid.widget.impl.CollectionContainerVar;
+import org.rapidoid.widget.impl.EqualityVar;
 import org.rapidoid.widget.impl.LocalVar;
 import org.rapidoid.widget.impl.SessionVar;
 
@@ -499,7 +501,7 @@ public abstract class BootstrapWidgets extends HTML {
 		return var(name, null);
 	}
 
-	public static HttpExchange httpExchange() {
+	public static HttpExchange http() {
 		return Ctx.exchange();
 	}
 
@@ -512,7 +514,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static <T extends Serializable> Var<T> local(String name, T defaultValue) {
-		return new LocalVar<T>(name, defaultValue);
+		return new LocalVar<T>(name, defaultValue, http().isGetReq());
 	}
 
 	public static Var<Integer> local(String name, int defaultValue, int min, int max) {
@@ -618,7 +620,7 @@ public abstract class BootstrapWidgets extends HTML {
 		SelectTag dropdown = select().class_("form-control").multiple(false);
 
 		for (Object opt : options) {
-			Var<Boolean> optVar = Vars.eq(var, opt);
+			Var<Boolean> optVar = varEq(var, opt);
 			OptionTag op = option(opt).value(str(opt)).var(optVar);
 			dropdown = dropdown.append(op);
 		}
@@ -639,7 +641,7 @@ public abstract class BootstrapWidgets extends HTML {
 		SelectTag select = select().class_("form-control").multiple(true);
 
 		for (Object opt : options) {
-			Var<Boolean> optVar = Vars.has(var, opt);
+			Var<Boolean> optVar = varHas(var, opt);
 			OptionTag op = option(opt).value(str(opt)).var(optVar);
 			select = select.append(op);
 		}
@@ -661,7 +663,7 @@ public abstract class BootstrapWidgets extends HTML {
 
 		int i = 0;
 		for (Object opt : options) {
-			Var<Boolean> optVar = Vars.eq(var, opt);
+			Var<Boolean> optVar = varEq(var, opt);
 			InputTag radio = input().type("radio").name(name).value(str(opt)).var(optVar);
 			radios[i] = label(radio, opt).class_("radio-inline");
 			i++;
@@ -684,13 +686,15 @@ public abstract class BootstrapWidgets extends HTML {
 	public static Tag[] checkboxes(String name, Collection<?> options, Var<?> var) {
 		U.notNull(options, "checkboxes options");
 		Tag[] checkboxes = new Tag[options.size()];
+
 		int i = 0;
 		for (Object opt : options) {
-			Var<Boolean> optVar = Vars.has(var, opt);
+			Var<Boolean> optVar = varHas(var, opt);
 			InputTag cc = input().type("checkbox").name(name).value(str(opt)).var(optVar);
 			checkboxes[i] = label(cc, opt).class_("radio-checkbox");
 			i++;
 		}
+
 		return checkboxes;
 	}
 
@@ -806,6 +810,27 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static CardWidget card(Object... contents) {
 		return Cls.customizable(CardWidget.class).contents(contents);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Var<Boolean> varHas(Var<?> container, Object item) {
+		Object arrOrColl = container.get();
+
+		Object itemId = Beany.hasProperty(item, "id") ? Beany.getIdIfExists(item) : String.valueOf(item);
+		String varName = container.name() + "[" + itemId + "]";
+
+		if (arrOrColl instanceof Collection) {
+			return new CollectionContainerVar(varName, (Var<Collection<Object>>) container, item, http().isGetReq());
+		} else {
+			return new ArrayContainerVar(varName, (Var<Object>) container, item, http().isGetReq());
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Var<Boolean> varEq(Var<?> var, Object item) {
+		Object itemId = Beany.hasProperty(item, "id") ? Beany.getIdIfExists(item) : String.valueOf(item);
+		String varName = var.name() + "[" + itemId + "]";
+		return new EqualityVar(varName, (Var<Object>) var, item, http().isGetReq());
 	}
 
 }
