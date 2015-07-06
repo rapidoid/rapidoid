@@ -197,9 +197,10 @@ public class Pages {
 		load(x, view);
 		store(x, view);
 
+		x.addToPageStack();
+
 		Object result = render(x, view);
 
-		x.addToPageStack();
 		store(x, view);
 
 		return result;

@@ -31,11 +31,11 @@ import org.rapidoid.util.U;
 @Since("3.1.0")
 public class PageStack {
 
-	public static final String SESSION_PAGE_STACK = "_page_stack_";
+	public static final String ATTR_PAGE_STACK = "_page_stack_";
 
 	public static HttpSuccessException goBack(HttpExchangeImpl x, int steps) {
 		String dest = "/";
-		List<String> stack = x.session(SESSION_PAGE_STACK, null);
+		List<String> stack = x.cookiepack(ATTR_PAGE_STACK, null);
 
 		if (stack != null) {
 			if (!stack.isEmpty()) {
@@ -57,7 +57,7 @@ public class PageStack {
 
 	@SuppressWarnings("unchecked")
 	public static void addToPageStack(HttpExchangeImpl x) {
-		List<String> stack = x.sessionGetOrCreate(SESSION_PAGE_STACK, ArrayList.class);
+		List<String> stack = x.cookiepackGetOrCreate(ATTR_PAGE_STACK, ArrayList.class);
 
 		String last = !stack.isEmpty() ? stack.get(stack.size() - 1) : null;
 		String current = x.uri();
