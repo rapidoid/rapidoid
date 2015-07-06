@@ -333,7 +333,7 @@ public class Scan {
 					if (classMatches(cls, filter, annotated, null)) {
 						classes.add(cls);
 					}
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					Log.warn("Error while loading class", "name", clsName, "error", e);
 				}
 			}
