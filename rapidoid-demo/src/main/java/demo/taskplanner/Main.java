@@ -31,8 +31,8 @@ import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.main.Rapidoid;
 import org.rapidoid.plugins.DB;
-import org.rapidoid.quick.Quick;
 import org.rapidoid.util.Schedule;
 import org.rapidoid.util.U;
 
@@ -44,7 +44,8 @@ import demo.taskplanner.model.Task;
 public class Main {
 
 	public static void main(String[] args) {
-		Quick.run("oauth-no-state");
+		Rapidoid.run("oauth-no-state");
+
 		for (int i = 0; i < 120; i++) {
 			Schedule.job(new Runnable() {
 				@Override

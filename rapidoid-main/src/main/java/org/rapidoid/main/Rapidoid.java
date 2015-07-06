@@ -32,7 +32,11 @@ public class Rapidoid {
 
 	private static boolean initialized = false;
 
-	public static synchronized void run(String[] args) {
+	public static void run(String[] args) {
+		run((Object[]) args);
+	}
+
+	public static synchronized void run(Object... args) {
 		Log.info("Starting Rapidoid...");
 		U.must(!initialized, "Already initialized!");
 		initialized = true;
