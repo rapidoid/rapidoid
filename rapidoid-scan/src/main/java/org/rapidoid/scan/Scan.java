@@ -333,10 +333,8 @@ public class Scan {
 					if (classMatches(cls, filter, annotated, null)) {
 						classes.add(cls);
 					}
-				} catch (NoClassDefFoundError e1) {
-					// do nothing
 				} catch (Exception e) {
-					throw U.rte(e);
+					Log.warn("Error while loading class", "name", clsName, "error", e);
 				}
 			}
 		}
