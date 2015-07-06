@@ -1,6 +1,7 @@
 package org.rapidoid.ctx;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /*
  * #%L
@@ -27,6 +28,10 @@ import java.io.Serializable;
  * @since 2.0.0
  */
 public class UserInfo implements Serializable {
+
+	private static final String USERNAME = "_USER.USERNAME";
+	private static final String EMAIL = "_USER.EMAIL";
+	private static final String NAME = "_USER.NAME";
 
 	private static final long serialVersionUID = 7062732348562440194L;
 
@@ -77,6 +82,22 @@ public class UserInfo implements Serializable {
 		} else if (!username.equals(other.username))
 			return false;
 		return true;
+	}
+
+	public static UserInfo from(Map<String, ?> scope) {
+		UserInfo user = new UserInfo();
+
+		user.username = (String) scope.get(USERNAME);
+		user.email = (String) scope.get(EMAIL);
+		user.name = (String) scope.get(NAME);
+
+		return user.username != null ? user : null;
+	}
+
+	public void saveTo(Map<String, Serializable> scope) {
+		scope.put(USERNAME, this.username);
+		scope.put(EMAIL, this.email);
+		scope.put(NAME, this.name);
 	}
 
 }

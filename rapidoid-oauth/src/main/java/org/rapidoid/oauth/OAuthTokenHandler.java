@@ -112,8 +112,7 @@ public class OAuthTokenHandler implements Handler {
 			user.username = user.email;
 			user.oauthId = String.valueOf(auth.get("id"));
 
-			x.cookiepack().put("username", user.username);
-			x.cookiepack().put("name", user.name);
+			user.saveTo(x.cookiepack());
 			Ctx.setUser(user);
 			U.must(Secure.user() == user);
 

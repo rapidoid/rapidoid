@@ -46,6 +46,7 @@ import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.RapidoidConf;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.wire.Wire;
@@ -759,7 +760,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	public synchronized UserInfo user() {
-		return hasSession() ? (UserInfo) session(UserInfo.class.getCanonicalName(), null) : null;
+		return cookiepack != null ? UserInfo.from(cookiepack()) : null;
 	}
 
 	@Override
@@ -1096,7 +1097,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		}
 	}
 
-	private synchronized boolean hasSession() {
+	public synchronized boolean hasSession() {
 		if (sessionId == null) {
 			sessionId = cookie(SESSION_COOKIE, null);
 		}

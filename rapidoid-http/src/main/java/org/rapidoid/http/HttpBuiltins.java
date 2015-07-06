@@ -50,8 +50,7 @@ public class HttpBuiltins {
 					user.name = U.capitalized(username);
 
 					Ctx.delUser();
-					x.cookiepack().put("username", user.username);
-					x.cookiepack().put("name", user.name);
+					user.saveTo(x.cookiepack());
 					Ctx.setUser(user);
 
 					throw x.goBack(0);
