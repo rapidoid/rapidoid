@@ -91,6 +91,10 @@ public class Pages {
 	}
 
 	public static String titleOf(HttpExchange x, Object target) {
+		if (target == null || target.getClass().equals(Object.class)) {
+			return "App";
+		}
+
 		Method m = Cls.findMethod(target.getClass(), "title", HttpExchange.class);
 
 		if (m != null) {
