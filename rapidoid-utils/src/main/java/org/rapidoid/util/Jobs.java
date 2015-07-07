@@ -28,17 +28,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 
-/**
- * Deprecated. Use {@link Jobs} instead.
- */
 @Authors("Nikolche Mihajlovski")
-@Since("4.0.0")
-@Deprecated
-public class Schedule implements Constants {
+@Since("4.1.0")
+public class Jobs implements Constants {
 
 	private static ScheduledThreadPoolExecutor EXECUTOR;
 
-	private Schedule() {}
+	private Jobs() {}
 
 	public static synchronized ScheduledThreadPoolExecutor executor() {
 		if (EXECUTOR == null) {
@@ -49,8 +45,12 @@ public class Schedule implements Constants {
 		return EXECUTOR;
 	}
 
-	public static synchronized ScheduledFuture<?> job(Runnable job, long delay) {
+	public static ScheduledFuture<?> schedule(Runnable job, long delay) {
 		return executor().schedule(wrap(job), delay, TimeUnit.MILLISECONDS);
+	}
+
+	public static ScheduledFuture<?> execute(Runnable job) {
+		return schedule(job, 0);
 	}
 
 	public static Runnable wrap(Runnable job) {

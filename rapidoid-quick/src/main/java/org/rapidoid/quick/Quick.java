@@ -35,7 +35,7 @@ import org.rapidoid.app.TransactionInterceptor;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.jpa.dbplugin.JPADBPlugin;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.Schedule;
+import org.rapidoid.util.Jobs;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -70,7 +70,7 @@ public class Quick {
 		// TODO provide better support for javax.transaction.Transactional
 		AOP.register(Transactional.class, new TransactionInterceptor());
 
-		Schedule.job(new Runnable() {
+		Jobs.schedule(new Runnable() {
 			@Override
 			public void run() {
 				Log.info("The executor is ready.");

@@ -25,14 +25,14 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.F2;
-import org.rapidoid.util.Schedule;
+import org.rapidoid.util.Jobs;
 import org.rapidoid.util.UTILS;
 import org.rapidoidx.net.Protocol;
 import org.rapidoidx.net.abstracts.Channel;
-import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -78,7 +78,7 @@ public class EchoProtocolTest extends NetTestCommons {
 			public void process(final Channel ctx) {
 				final String in = ctx.readln();
 
-				Schedule.job(new Runnable() {
+				Jobs.schedule(new Runnable() {
 					@Override
 					public void run() {
 						ctx.write(in.toUpperCase()).write(CR_LF).done().closeIf(in.equals("bye"));

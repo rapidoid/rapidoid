@@ -29,7 +29,7 @@ import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Role;
 import org.rapidoid.security.annotation.Roles;
-import org.rapidoid.util.Schedule;
+import org.rapidoid.util.Jobs;
 
 @Admin
 @Manager
@@ -44,7 +44,7 @@ public class AdminScreen extends Screen {
 		Lifecycle.onShutdown();
 
 		Log.warn("Shutting down the application...");
-		Schedule.job(new Runnable() {
+		Jobs.schedule(new Runnable() {
 			@Override
 			public void run() {
 				Log.warn("Exit application");
