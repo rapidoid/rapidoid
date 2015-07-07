@@ -391,9 +391,9 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 	}
 
 	protected Tag loggedInUserMenu() {
-		ATag profile = a_glyph("user", userDisplay(), caret());
-		ATag settings = addon("settings") ? a_glyph("cog", " Settings").href("/settings") : null;
-		ATag logout = a_glyph("log-out", "Logout").href("/_logout");
+		ATag profile = a_awesome("user", userDisplay(), caret());
+		ATag settings = addon("settings") ? a_awesome("cog", " Settings").href("/settings") : null;
+		ATag logout = a_awesome("sign-out", "Logout").href("/_logout");
 
 		return navbarDropdown(false, profile, settings, logout);
 	}
