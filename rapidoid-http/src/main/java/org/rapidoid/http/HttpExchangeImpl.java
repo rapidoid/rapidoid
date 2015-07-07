@@ -907,6 +907,13 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			Conf.set("mode", detectedDevMode() ? "dev" : "production");
 			Log.info("Auto-detected dev/production mode", "mode", Conf.option("mode"));
 		}
+
+		String cookiepack = cookie(HttpExchangeImpl.COOKIEPACK_COOKIE, null);
+		if (!U.isEmpty(cookiepack) && !cookiepack.equals("null")) {
+			String cpackStr = '"' + cookiepack + '"';
+			byte[] cpbytes = JSON.parseBytes(cpackStr);
+			deserializeCookiepack(cpbytes);
+		}
 	}
 
 	@Override

@@ -105,13 +105,12 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	}
 
 	private void processRequest(HttpExchangeImpl x) {
-		Ctx.setUser(x.user());
 
+		x.init(responses, sessionStore, router);
+
+		Ctx.setUser(x.user());
 		try {
-			
-			x.init(responses, sessionStore, router);
 			executeRequest(x);
-			
 		} finally {
 			Ctx.delUser();
 		}

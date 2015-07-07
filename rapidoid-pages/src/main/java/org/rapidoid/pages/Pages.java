@@ -144,6 +144,7 @@ public class Pages {
 			if (fullPage instanceof HttpExchange) {
 				return x;
 			} else {
+				x.addToPageStack();
 				PageRenderer.get().render(fullPage, x);
 				return x;
 			}
@@ -196,8 +197,6 @@ public class Pages {
 	public static Object serve(HttpExchange x, Object view) {
 		load(x, view);
 		store(x, view);
-
-		x.addToPageStack();
 
 		Object result = render(x, view);
 
