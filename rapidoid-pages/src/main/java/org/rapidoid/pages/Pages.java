@@ -33,7 +33,6 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.html.Cmd;
-import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeInternals;
 import org.rapidoid.http.HttpNotFoundException;
@@ -57,10 +56,6 @@ public class Pages {
 	private static final String PAGE_RELOAD = "<h2>&nbsp;Reloading...</h2><script>location.reload();</script>";
 
 	private static final BuiltInCmdHandler BUILT_IN_HANDLER = new BuiltInCmdHandler();
-
-	public static void registerPages(HTTPServer server) {
-		server.serve(new PageHandler());
-	}
 
 	public static String getPageName(HttpExchange x) {
 		String path = x.path();
