@@ -54,7 +54,7 @@ public class Schedule implements Constants {
 	}
 
 	public static Runnable wrap(Runnable job) {
-		return new WrapperJob(job);
+		return Jobs.wrap(job);
 	}
 
 }

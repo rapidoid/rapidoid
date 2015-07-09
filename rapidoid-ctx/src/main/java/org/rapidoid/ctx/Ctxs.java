@@ -32,8 +32,12 @@ public class Ctxs {
 
 	private Ctxs() {}
 
+	public static Ctx get() {
+		return CTXS.get();
+	}
+
 	public static Ctx ctx() {
-		Ctx ctx = CTXS.get();
+		Ctx ctx = get();
 
 		if (ctx == null) {
 			throw new IllegalStateException("App ctx wasn't set!");
@@ -43,26 +47,25 @@ public class Ctxs {
 	}
 
 	public static boolean hasContext() {
-		return CTXS.get() != null;
-	}
-
-	private static Ctx provide() {
-		Ctx ctx = CTXS.get();
-
-		if (ctx == null) {
-			ctx = new Ctx();
-			CTXS.set(ctx);
-		}
-
-		return ctx;
+		return get() != null;
 	}
 
 	public static void reset() {
 		CTXS.remove();
 	}
 
-	public static void open() {
-		provide().clear();
+	public static void attach(Ctx ctx) {
+		if (!hasContext()) {
+			CTXS.set(ctx);
+		} else {
+			throw new IllegalStateException("The context was already opened!");
+		}
+	}
+
+	public static Ctx open() {
+		Ctx ctx = new Ctx();
+		attach(ctx);
+		return ctx;
 	}
 
 	public static void close() {

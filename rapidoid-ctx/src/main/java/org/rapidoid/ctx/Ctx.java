@@ -36,33 +36,33 @@ public class Ctx {
 
 	Ctx() {}
 
-	public UserInfo user() {
+	public synchronized UserInfo user() {
 		return user;
 	}
 
-	public void setUser(UserInfo user) {
+	public synchronized void setUser(UserInfo user) {
 		this.user = user;
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T exchange() {
+	public synchronized <T> T exchange() {
 		return (T) exchange;
 	}
 
-	public void setExchange(Object exchange) {
+	public synchronized void setExchange(Object exchange) {
 		this.exchange = exchange;
 	}
 
-	public Classes classes() {
+	public synchronized Classes classes() {
 		return classes;
 	}
 
-	public void setClasses(Classes classes) {
+	public synchronized void setClasses(Classes classes) {
 		this.classes = classes;
 	}
 
 	@SuppressWarnings("unchecked")
-	public <P> P persistor() {
+	public synchronized <P> P persistor() {
 		if (this.persistor == null) {
 			this.persistor = Ctxs.createPersistor();
 		}
@@ -70,26 +70,28 @@ public class Ctx {
 		return (P) this.persistor;
 	}
 
-	public void setPersistor(Object persistor) {
+	public synchronized void setPersistor(Object persistor) {
 		this.persistor = persistor;
 	}
 
-	public void clear() {
+	public synchronized void clear() {
 		setClasses(null);
 		setExchange(null);
 		setUser(null);
 		setPersistor(null);
 	}
 
-	public Ctx copy() {
+	public synchronized Ctx copy() {
 		Ctx ctx = new Ctx();
+		this.assignTo(ctx);
+		return ctx;
+	}
 
+	public synchronized void assignTo(Ctx ctx) {
 		ctx.classes = this.classes;
 		ctx.exchange = this.exchange;
 		ctx.user = this.user;
 		ctx.persistor = this.persistor;
-
-		return ctx;
 	}
 
 }

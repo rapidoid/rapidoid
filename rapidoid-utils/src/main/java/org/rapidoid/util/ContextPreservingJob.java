@@ -20,20 +20,38 @@ package org.rapidoid.util;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.log.Log;
 
-public class WrapperJob implements Runnable {
+@Authors("Nikolche Mihajlovski")
+@Since("4.1.0")
+public class ContextPreservingJob implements Runnable {
 
 	private final Runnable job;
 
-	public WrapperJob(Runnable job) {
+	private final Ctx ctx;
+
+	public ContextPreservingJob(Runnable job, Ctx ctx) {
 		this.job = job;
+		this.ctx = ctx;
 	}
 
 	@Override
 	public void run() {
+		if (ctx != null) {
+			Ctxs.attach(ctx);
+		} else {
+			Ctxs.open();
+		}
+
 		try {
 			job.run();
+		} catch (Throwable e) {
+			Log.error("Job execution failed!", e);
+			throw U.rte("Job execution failed!", e);
 		} finally {
 			Ctxs.close();
 		}
