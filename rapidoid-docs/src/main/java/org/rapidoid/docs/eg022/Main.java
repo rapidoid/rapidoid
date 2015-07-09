@@ -2,7 +2,7 @@ package org.rapidoid.docs.eg022;
 
 import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Session;
-import org.rapidoid.app.Screen;
+import org.rapidoid.app.GUI;
 import org.rapidoid.html.Tag;
 import org.rapidoid.quick.Quick;
 import org.rapidoid.widget.ButtonWidget;
@@ -39,7 +39,7 @@ public class Main {
 	}
 }
 
-class HomeScreen extends Screen {
+class HomeScreen extends GUI {
 	@Session // here
 	public int n = 0; // here
 

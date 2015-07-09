@@ -2,7 +2,7 @@ package org.rapidoidx.demo.taskplanner.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.Screen;
+import org.rapidoid.app.GUI;
 import org.rapidoid.html.Tag;
 import org.rapidoid.widget.CardWidget;
 import org.rapidoid.widget.FA;
@@ -31,7 +31,7 @@ import org.rapidoid.widget.StreamWidget;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class HomeScreen extends Screen {
+public class HomeScreen extends GUI {
 
 	public String title = "Welcome!";
 

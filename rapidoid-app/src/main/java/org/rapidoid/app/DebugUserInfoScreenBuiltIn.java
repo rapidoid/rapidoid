@@ -31,7 +31,7 @@ import org.rapidoid.widget.FormWidget;
 @DevMode
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class DebugUserInfoScreenBuiltIn extends Screen {
+public class DebugUserInfoScreenBuiltIn extends GUI {
 
 	public Object content() {
 		Tag caption = titleBox("Debug Mode - User Information");

@@ -23,7 +23,7 @@ package demo.taskplanner.gui;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
-import org.rapidoid.app.Screen;
+import org.rapidoid.app.GUI;
 import org.rapidoid.html.Tag;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.DB;
@@ -42,7 +42,7 @@ class Book {
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class AboutScreen extends Screen {
+public class AboutScreen extends GUI {
 
 	public Object content() {
 		Tag mix = h2(a("Enter the mix").href("/mix"));

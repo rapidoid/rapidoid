@@ -27,7 +27,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.Screen;
+import org.rapidoid.app.GUI;
 import org.rapidoid.app.UsersTool;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.Tag;
@@ -42,7 +42,7 @@ import org.rapidoidx.demo.taskplanner.model.User;
 @Order(1)
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class NewTaskScreen extends Screen {
+public class NewTaskScreen extends GUI {
 
 	@Session
 	private Task task = new Task();

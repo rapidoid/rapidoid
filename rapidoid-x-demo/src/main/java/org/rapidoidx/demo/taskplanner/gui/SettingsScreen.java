@@ -2,7 +2,7 @@ package org.rapidoidx.demo.taskplanner.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.Screen;
+import org.rapidoid.app.GUI;
 import org.rapidoid.security.annotation.LoggedIn;
 
 /*
@@ -29,7 +29,7 @@ import org.rapidoid.security.annotation.LoggedIn;
 @LoggedIn
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class SettingsScreen extends Screen {
+public class SettingsScreen extends GUI {
 
 	public Object content = row(h2("Settings..."));
 

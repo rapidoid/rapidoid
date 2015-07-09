@@ -35,7 +35,7 @@ import org.rapidoid.widget.HighlightedGridWidget;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class SearchScreenBuiltIn extends Screen {
+public class SearchScreenBuiltIn extends GUI {
 
 	public Object content(HttpExchange x) {
 

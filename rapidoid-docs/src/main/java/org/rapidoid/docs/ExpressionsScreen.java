@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.Screen;
+import org.rapidoid.app.GUI;
 import org.rapidoid.extra.demo.DemoMovie;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.FA;
@@ -81,7 +81,7 @@ import org.rapidoid.widget.FA;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
-public class ExpressionsScreen extends Screen {
+public class ExpressionsScreen extends GUI {
 
 	List<Object> exprs = U.list();
 

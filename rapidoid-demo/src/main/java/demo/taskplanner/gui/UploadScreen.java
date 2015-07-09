@@ -2,7 +2,7 @@ package demo.taskplanner.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.Screen;
+import org.rapidoid.app.GUI;
 
 /*
  * #%L
@@ -26,7 +26,7 @@ import org.rapidoid.app.Screen;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")
-public class UploadScreen extends Screen {
+public class UploadScreen extends GUI {
 
 	public String title = "Upload!";
 

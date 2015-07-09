@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class SettingsScreenBuiltIn extends Screen {
+public class SettingsScreenBuiltIn extends GUI {
 
 	public Object content() {
 		return h3("No settings available.");

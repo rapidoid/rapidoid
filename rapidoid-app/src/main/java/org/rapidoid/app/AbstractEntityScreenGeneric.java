@@ -26,7 +26,7 @@ import org.rapidoid.plugins.DB;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public abstract class AbstractEntityScreenGeneric extends Screen {
+public abstract class AbstractEntityScreenGeneric extends GUI {
 
 	protected final Class<?> entityType;
 

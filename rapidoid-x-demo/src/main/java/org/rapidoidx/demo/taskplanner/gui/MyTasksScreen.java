@@ -26,7 +26,7 @@ import java.util.Comparator;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.Screen;
+import org.rapidoid.app.GUI;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.html.Tag;
 import org.rapidoid.lambda.Predicate;
@@ -41,7 +41,7 @@ import org.rapidoidx.demo.taskplanner.model.User;
 @Order(3)
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class MyTasksScreen extends Screen {
+public class MyTasksScreen extends GUI {
 
 	public Object content() {
 		Tag c1 = titleBox("Tasks owned by me");

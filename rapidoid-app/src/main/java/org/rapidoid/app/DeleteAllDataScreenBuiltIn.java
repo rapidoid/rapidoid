@@ -30,7 +30,7 @@ import org.rapidoid.security.annotation.DevMode;
 @DevMode
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class DeleteAllDataScreenBuiltIn extends Screen {
+public class DeleteAllDataScreenBuiltIn extends GUI {
 
 	public Object content() {
 		Tag caption = titleBox("Debug Mode - Delete All data");

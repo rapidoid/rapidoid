@@ -1,7 +1,7 @@
 package org.rapidoid.docs.eg003;
 
 import org.rapidoid.annotation.App;
-import org.rapidoid.app.Screen;
+import org.rapidoid.app.GUI;
 import org.rapidoid.quick.Quick;
 
 /*
@@ -35,7 +35,7 @@ public class Main {
 	}
 }
 
-class HomeScreen extends Screen {
+class HomeScreen extends GUI {
 	Object content() {
 		Object link = a("Foo").href("foo.html"); // here
 		return h3("Welcome! Visit ", link); // here

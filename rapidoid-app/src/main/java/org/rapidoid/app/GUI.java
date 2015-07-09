@@ -21,7 +21,7 @@ package org.rapidoid.app;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Session;
+import org.rapidoid.annotation.Local;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.HttpExchangeHolder;
@@ -29,9 +29,9 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class Screen extends AppGUI implements HttpExchangeHolder {
+public abstract class GUI extends AppGUI implements HttpExchangeHolder {
 
-	@Session
+	@Local
 	public String modal = null;
 
 	private HttpExchange ctx;
