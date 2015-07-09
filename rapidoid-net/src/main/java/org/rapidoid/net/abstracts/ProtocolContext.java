@@ -1,5 +1,15 @@
 package org.rapidoid.net.abstracts;
 
+import java.io.File;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.Buf;
+import org.rapidoid.net.impl.ConnState;
+import org.rapidoid.net.impl.RapidoidHelper;
+
 /*
  * #%L
  * rapidoid-net
@@ -20,14 +30,11 @@ package org.rapidoid.net.abstracts;
  * #L%
  */
 
-import java.net.InetSocketAddress;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface CtxConnection<T> {
+public interface ProtocolContext<T> {
+
+	/* CONNECTION */
 
 	String address();
 
@@ -48,5 +55,54 @@ public interface CtxConnection<T> {
 	void waitUntilClosing();
 
 	void log(String msg);
+
+	/* PROTOCOL */
+
+	boolean isInitial();
+
+	/* WRITE */
+
+	T write(String s);
+
+	T writeln(String s);
+
+	T write(byte[] bytes);
+
+	T write(byte[] bytes, int offset, int length);
+
+	T write(ByteBuffer buf);
+
+	T write(File file);
+
+	T writeJSON(Object value);
+
+	T send();
+
+	/* ASYNC */
+
+	// due to async() web handling option, it ain't over till the fat lady sings "done"
+	T async();
+
+	T done();
+
+	/* READ */
+
+	String readln();
+
+	String readN(int count);
+
+	/* IO */
+
+	Buf input();
+
+	Buf output();
+
+	RapidoidHelper helper();
+
+	/* EXTRAS */
+
+	ConnState state();
+
+	<P> P persistor();
 
 }

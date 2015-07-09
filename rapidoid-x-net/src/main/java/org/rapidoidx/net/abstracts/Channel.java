@@ -26,6 +26,6 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public interface Channel extends CtxFull<Channel, Channel> {
+public interface Channel extends ProtocolContext<Channel> {
 
 }

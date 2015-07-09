@@ -65,11 +65,11 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 
 	private final Class<? extends RapidoidHelper> helperClass;
 
-	private final Class<? extends DefaultExchange<?, ?>> exchangeClass;
+	private final Class<? extends DefaultExchange<?>> exchangeClass;
 
 	private ServerSocketChannel serverSocketChannel;
 
-	public RapidoidServerLoop(Protocol protocol, Class<? extends DefaultExchange<?, ?>> exchangeClass,
+	public RapidoidServerLoop(Protocol protocol, Class<? extends DefaultExchange<?>> exchangeClass,
 			Class<? extends RapidoidHelper> helperClass) {
 		super("server");
 		this.protocol = protocol;

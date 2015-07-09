@@ -31,7 +31,7 @@ import org.rapidoidx.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public abstract class ExchangeProtocol<T extends DefaultExchange<?, ?>> implements Protocol, CtxListener {
+public abstract class ExchangeProtocol<T extends DefaultExchange<?>> implements Protocol, CtxListener {
 
 	private final Class<T> exchangeType;
 

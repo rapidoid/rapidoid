@@ -69,12 +69,12 @@ public class RapidoidClientLoop extends AbstractEventLoop<TCPClient> implements 
 
 	private final Class<? extends RapidoidHelper> helperClass;
 
-	private final Class<? extends DefaultExchange<?, ?>> exchangeClass;
+	private final Class<? extends DefaultExchange<?>> exchangeClass;
 
 	// round-robin workers for new connections
 	private int currentWorkerInd = 0;
 
-	public RapidoidClientLoop(Protocol protocol, Class<? extends DefaultExchange<?, ?>> exchangeClass,
+	public RapidoidClientLoop(Protocol protocol, Class<? extends DefaultExchange<?>> exchangeClass,
 			Class<? extends RapidoidHelper> helperClass) {
 		super("client");
 

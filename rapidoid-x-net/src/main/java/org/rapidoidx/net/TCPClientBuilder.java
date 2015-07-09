@@ -51,7 +51,7 @@ public interface TCPClientBuilder extends Builder<TCPClient> {
 
 	TCPClientBuilder protocol(Protocol protocol);
 
-	TCPClientBuilder exchange(Class<? extends DefaultExchange<?, ?>> exchangeClass);
+	TCPClientBuilder exchange(Class<? extends DefaultExchange<?>> exchangeClass);
 
 	TCPClientBuilder helper(Class<? extends RapidoidHelper> helperClass);
 

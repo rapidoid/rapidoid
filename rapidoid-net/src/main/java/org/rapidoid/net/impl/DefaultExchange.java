@@ -36,14 +36,14 @@ import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
 import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.net.abstracts.CtxFull;
+import org.rapidoid.net.abstracts.ProtocolContext;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Resetable;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class DefaultExchange<T> implements CtxFull<T>, BufProvider, Resetable, Constants {
+public abstract class DefaultExchange<T> implements ProtocolContext<T>, BufProvider, Resetable, Constants {
 
 	protected Channel conn;
 
