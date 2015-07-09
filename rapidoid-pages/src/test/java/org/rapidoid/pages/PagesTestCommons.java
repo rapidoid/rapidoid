@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.junit.After;
+import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufGroup;
@@ -45,6 +47,16 @@ public class PagesTestCommons extends TestCommons {
 
 	@SuppressWarnings({ "unchecked" })
 	protected static final Map<Integer, Object> NO_CHANGES = Collections.EMPTY_MAP;
+
+	@Before
+	public void init() {
+		Ctxs.open(); // open context for each test
+	}
+
+	@After
+	public void cleanup() {
+		Ctxs.close(); // clean-up the context for each test
+	}
 
 	protected void print(Object content) {
 		HttpExchange x = setupMockExchange();
@@ -111,8 +123,6 @@ public class PagesTestCommons extends TestCommons {
 		InMemorySessionStore sessions = new InMemorySessionStore();
 		x.init(new HttpResponses(false, false), sessions, null);
 
-		Ctxs.close();
-		Ctxs.open();
 		Ctxs.ctx().setExchange(x);
 		return x;
 	}
