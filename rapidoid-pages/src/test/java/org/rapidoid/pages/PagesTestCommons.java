@@ -111,7 +111,7 @@ public class PagesTestCommons extends TestCommons {
 		InMemorySessionStore sessions = new InMemorySessionStore();
 		x.init(new HttpResponses(false, false), sessions, null);
 
-		Ctxs.reset();
+		Ctxs.close();
 		Ctxs.open();
 		Ctxs.ctx().setExchange(x);
 		return x;

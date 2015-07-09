@@ -94,7 +94,7 @@ public class Examples {
 			return;
 		}
 
-		Ctxs.reset();
+		Ctxs.close();
 		Scan.reset();
 		Apps.reset();
 

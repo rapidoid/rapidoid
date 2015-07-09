@@ -50,10 +50,6 @@ public class Ctxs {
 		return get() != null;
 	}
 
-	public static void reset() {
-		CTXS.remove();
-	}
-
 	public static void attach(Ctx ctx) {
 		if (!hasContext()) {
 			CTXS.set(ctx);

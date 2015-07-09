@@ -46,7 +46,7 @@ public abstract class DbTestCommons extends TestCommons {
 		XDB.destroy();
 		XDB.start();
 		Log.setLogLevel(LogLevel.INFO);
-		Ctxs.reset();
+		Ctxs.close();
 	}
 
 }
