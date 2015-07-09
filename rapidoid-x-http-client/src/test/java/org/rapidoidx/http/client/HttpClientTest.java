@@ -21,6 +21,7 @@ package org.rapidoidx.http.client;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HTTP;
@@ -28,7 +29,6 @@ import org.rapidoid.http.HTTPServer;
 import org.rapidoid.lambda.ResultCounterCallback;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
-import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -69,7 +69,7 @@ public class HttpClientTest extends TestCommons {
 		}
 	}
 
-	@Test
+	// @Test
 	public void testHttpClientOnRealWebSites() {
 		for (int k = 0; k < 3; k++) {
 			ResultCounterCallback<String> cb = new ResultCounterCallback<String>();

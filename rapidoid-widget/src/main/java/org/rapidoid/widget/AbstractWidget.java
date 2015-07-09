@@ -22,7 +22,7 @@ package org.rapidoid.widget;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.Constants;
@@ -54,7 +54,7 @@ public abstract class AbstractWidget extends BootstrapWidgets implements TagWidg
 	}
 
 	private static int getWidgetNumber(AbstractWidget widget) {
-		HttpExchange x = Ctx.exchange();
+		HttpExchange x = Ctxs.ctx().exchange();
 
 		if (x != null) {
 			String extrName = "widget_counter_" + widget.getClass().getSimpleName();

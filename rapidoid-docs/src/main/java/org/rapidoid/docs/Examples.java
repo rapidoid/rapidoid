@@ -34,7 +34,7 @@ import org.rapidoid.app.Apps;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Classes;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
@@ -94,7 +94,7 @@ public class Examples {
 			return;
 		}
 
-		Ctx.reset();
+		Ctxs.reset();
 		Scan.reset();
 		Apps.reset();
 
@@ -111,7 +111,8 @@ public class Examples {
 
 		String examples = "";
 
-		Ctx.setExchange(new HttpExchangeImpl());
+		Ctxs.open();
+		Ctxs.ctx().setExchange(new HttpExchangeImpl());
 
 		for (int i = 2; i <= LOWER; i++) {
 			examples = processIndex(egT, examples, egNum(i));
@@ -180,7 +181,7 @@ public class Examples {
 	public static void generate(HTTPServer server, String path, String id, List<Class<?>> classes) {
 
 		Classes appClasses = Classes.from(classes);
-		Ctx.setClasses(appClasses);
+		Ctxs.ctx().setClasses(appClasses);
 
 		Class<?> appCls = appClasses.get("Main");
 		if (appCls != null) {
@@ -230,7 +231,7 @@ public class Examples {
 			}
 		}
 
-		Ctx.delClasses();
+		Ctxs.ctx().setClasses(null);
 	}
 
 	private static void saveTo(HTTPServer server, String url, String filename) {

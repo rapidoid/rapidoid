@@ -13,7 +13,7 @@ import javax.persistence.metamodel.Metamodel;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.plugins.impl.DefaultDBPlugin;
 import org.rapidoid.util.Jobs;
@@ -195,7 +195,7 @@ public class JPADBPlugin extends DefaultDBPlugin {
 	}
 
 	protected EntityManager em() {
-		return Ctx.persistor();
+		return Ctxs.ctx().persistor();
 	}
 
 	protected Object castId(String id) {

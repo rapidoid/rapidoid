@@ -26,10 +26,6 @@ package org.rapidoid.ctx;
  */
 public class Ctx {
 
-	private static final ThreadLocal<Ctx> CTXS = new ThreadLocal<Ctx>();
-
-	private static volatile PersistorFactory persistorFactory = null;
-
 	private UserInfo user;
 
 	private Object exchange;
@@ -38,143 +34,51 @@ public class Ctx {
 
 	private Object persistor;
 
-	private Ctx() {}
+	Ctx() {}
 
-	private static Ctx ctx() {
-		Ctx ctx = CTXS.get();
-
-		if (ctx == null) {
-			throw new IllegalStateException("App ctx wasn't set!");
-		}
-
-		return ctx;
+	public UserInfo user() {
+		return user;
 	}
 
-	public static boolean hasContext() {
-		return CTXS.get() != null;
-	}
-
-	private static Ctx provideCtx() {
-		Ctx ctx = CTXS.get();
-
-		if (ctx == null) {
-			ctx = new Ctx();
-			CTXS.set(ctx);
-		}
-
-		return ctx;
-	}
-
-	public static void reset() {
-		CTXS.remove();
-	}
-
-	public static void setUser(UserInfo user) {
-		Ctx ctx = provideCtx();
-
-		if (ctx.user != null) {
-			throw new IllegalStateException("The user was already set!");
-		}
-
-		ctx.user = user;
-	}
-
-	public static UserInfo user() {
-		Ctx ctx = CTXS.get();
-		return ctx != null ? ctx.user : null;
-	}
-
-	public static void delUser() {
-		Ctx ctx = ctx();
-		ctx.user = null;
-	}
-
-	public static void setExchange(Object exchange) {
-		Ctx ctx = provideCtx();
-
-		if (ctx.exchange != null) {
-			throw new IllegalStateException("The exchange was already set!");
-		}
-
-		ctx.exchange = exchange;
+	public void setUser(UserInfo user) {
+		this.user = user;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends AppExchange> T exchange() {
-		Ctx ctx = CTXS.get();
-		return ctx != null ? (T) ctx.exchange : null;
+	public <T> T exchange() {
+		return (T) exchange;
 	}
 
-	public static void delExchange() {
-		Ctx ctx = ctx();
-		ctx.exchange = null;
+	public void setExchange(Object exchange) {
+		this.exchange = exchange;
 	}
 
-	public static void setClasses(Classes classes) {
-		Ctx ctx = provideCtx();
-
-		if (ctx.classes != null) {
-			throw new IllegalStateException("The classes were already set!");
-		}
-
-		ctx.classes = classes;
+	public Classes classes() {
+		return classes;
 	}
 
-	public static Classes classes() {
-		Ctx ctx = CTXS.get();
-		return ctx != null ? ctx.classes : null;
-	}
-
-	public static void delClasses() {
-		Ctx ctx = ctx();
-		ctx.classes = null;
-	}
-
-	public static void setPersistor(Object persistor) {
-		Ctx ctx = provideCtx();
-
-		if (ctx.persistor != null) {
-			throw new IllegalStateException("The persistor was already set!");
-		}
-
-		ctx.persistor = persistor;
+	public void setClasses(Classes classes) {
+		this.classes = classes;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <P> P persistor() {
-
-		AppExchange x = Ctx.exchange();
-		if (x != null) {
-			return x.persistor();
+	public <P> P persistor() {
+		if (this.persistor == null) {
+			this.persistor = Ctxs.createPersistor();
 		}
 
-		Ctx ctx = provideCtx();
-
-		if (ctx.persistor == null) {
-			ctx.persistor = Ctx.persistorFactory.createPersistor();
-		}
-
-		return (P) ctx.persistor;
+		return (P) this.persistor;
 	}
 
-	public static void delPersistor() {
-		Ctx ctx = ctx();
-		ctx.persistor = null;
+	public void setPersistor(Object persistor) {
+		this.persistor = persistor;
 	}
 
-	public static PersistorFactory getPersistorFactory() {
-		return persistorFactory;
-	}
-
-	public static void setPersistorFactory(PersistorFactory persistorFactory) {
-		Ctx.persistorFactory = persistorFactory;
-	}
-
-	public static void clear() {
-		delClasses();
-		delExchange();
-		delUser();
-		delPersistor();
+	public void clear() {
+		setClasses(null);
+		setExchange(null);
+		setUser(null);
+		setPersistor(null);
 	}
 
 	public Ctx copy() {

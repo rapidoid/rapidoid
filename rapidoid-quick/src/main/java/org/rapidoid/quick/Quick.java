@@ -32,7 +32,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.TransactionInterceptor;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.jpa.dbplugin.JPADBPlugin;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.Jobs;
@@ -60,7 +60,7 @@ public class Quick {
 	}
 
 	public static void bootstrap(final Object... args) {
-		Ctx.setPersistorFactory(new QuickJPA(args));
+		Ctxs.setPersistorFactory(new QuickJPA(args));
 		JPADBPlugin db = new JPADBPlugin();
 
 		List<Object> appArgs = U.<Object> list(db);

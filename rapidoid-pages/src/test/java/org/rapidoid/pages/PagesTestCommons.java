@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufGroup;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.http.HttpExchange;
@@ -111,8 +111,9 @@ public class PagesTestCommons extends TestCommons {
 		InMemorySessionStore sessions = new InMemorySessionStore();
 		x.init(new HttpResponses(false, false), sessions, null);
 
-		Ctx.reset();
-		Ctx.setExchange(x);
+		Ctxs.reset();
+		Ctxs.open();
+		Ctxs.ctx().setExchange(x);
 		return x;
 	}
 

@@ -6,17 +6,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.AppExchange;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.entity.Book;
 import org.rapidoid.entity.Movie;
 import org.rapidoid.jpa.dbplugin.JPADBPlugin;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.SimplePersistorFactory;
 import org.rapidoid.util.U;
-import org.junit.Test;
 
 /*
  * #%L
@@ -48,12 +47,8 @@ public class JPADBPluginTest extends TestCommons {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("test-pu");
 		EntityManager em = emf.createEntityManager();
 
-		Ctx.setPersistorFactory(new SimplePersistorFactory(em));
-
-		AppExchange x = mock(AppExchange.class);
-		returns(x.persistor(), em);
-
-		Ctx.setExchange(x);
+		Ctxs.setPersistorFactory(new SimplePersistorFactory(em));
+		Ctxs.open();
 
 		final JPADBPlugin db = new JPADBPlugin();
 
@@ -80,6 +75,7 @@ public class JPADBPluginTest extends TestCommons {
 
 		em.close();
 		emf.close();
+		Ctxs.close();
 	}
 
 }

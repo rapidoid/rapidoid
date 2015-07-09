@@ -30,7 +30,7 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanDelete;
@@ -230,7 +230,7 @@ public class Secure implements Constants {
 	}
 
 	public static UserInfo user() {
-		return Ctx.user();
+		return Ctxs.hasContext() ? Ctxs.ctx().user() : null;
 	}
 
 	public static boolean isLoggedIn() {

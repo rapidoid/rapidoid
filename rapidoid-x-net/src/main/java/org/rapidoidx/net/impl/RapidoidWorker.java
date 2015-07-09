@@ -36,7 +36,7 @@ import java.util.concurrent.Callable;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.log.Log;
 import org.rapidoid.pool.ArrayPool;
 import org.rapidoid.pool.Pool;
@@ -49,6 +49,8 @@ import org.rapidoidx.net.Protocol;
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
 public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
+
+	public static boolean EXTRA_SAFE = false;
 
 	private final Queue<RapidoidConnection> restarting;
 
@@ -240,16 +242,10 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		try {
 			conn.done = false;
 
-			if (Ctx.hasContext()) {
-				Ctx.delExchange();
-				Ctx.delUser();
-			}
-
-			conn.getProtocol().process(conn);
-
-			if (Ctx.hasContext()) {
-				Ctx.delExchange();
-				Ctx.delUser();
+			if (EXTRA_SAFE) {
+				processNextExtraSafe(conn);
+			} else {
+				conn.getProtocol().process(conn);
 			}
 
 			if (!conn.closed && !conn.isAsync()) {
@@ -290,6 +286,22 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		}
 
 		return false;
+	}
+
+	private void processNextExtraSafe(RapidoidConnection conn) {
+		if (Ctxs.hasContext()) {
+			Log.warn("Detected unclosed context before processing message!");
+			Ctxs.close();
+		}
+
+		try {
+			conn.getProtocol().process(conn);
+		} finally {
+			if (Ctxs.hasContext()) {
+				Log.warn("Detected unclosed context after processing message!");
+				Ctxs.close();
+			}
+		}
 	}
 
 	public void close(RapidoidConnection conn) {

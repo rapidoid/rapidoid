@@ -25,7 +25,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.Scan;
@@ -46,7 +46,7 @@ public abstract class DbTestCommons extends TestCommons {
 		XDB.destroy();
 		XDB.start();
 		Log.setLogLevel(LogLevel.INFO);
-		Ctx.reset();
+		Ctxs.reset();
 	}
 
 }

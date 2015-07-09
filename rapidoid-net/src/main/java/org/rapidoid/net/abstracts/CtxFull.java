@@ -27,4 +27,6 @@ import org.rapidoid.annotation.Since;
 @Since("2.0.0")
 public interface CtxFull<T> extends CtxWrite<T>, CtxRead<T>, CtxConnection<T>, CtxIO<T>, CtxProtocol<T>, CtxState<T> {
 
+	<P> P persistor();
+
 }

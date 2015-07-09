@@ -24,7 +24,7 @@ package custom.rapidoidx.db;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.entity.IEntity;
 import org.rapidoid.security.annotation.CanChange;
@@ -77,7 +77,8 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	public void testSecurityFailure3() {
 
 		IFoo foo = XDB.entity(IFoo.class);
-		Ctx.setUser(new UserInfo("abcde"));
+		Ctxs.open();
+		Ctxs.ctx().setUser(new UserInfo("abcde"));
 		XDB.persist(foo);
 		XDB.shutdown();
 	}
@@ -103,9 +104,9 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 
 	@Test
 	public void testSecurity2() {
-
 		IFoo foo = XDB.entity(IFoo.class);
-		Ctx.setUser(new UserInfo("manager@debug"));
+		Ctxs.open();
+		Ctxs.ctx().setUser(new UserInfo("manager@debug"));
 		XDB.persist(foo);
 		XDB.shutdown();
 	}

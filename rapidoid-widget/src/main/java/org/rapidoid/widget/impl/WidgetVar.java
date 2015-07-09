@@ -25,7 +25,7 @@ import java.io.Serializable;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
 import org.rapidoid.var.impl.AbstractVar;
@@ -44,7 +44,7 @@ public abstract class WidgetVar<T extends Serializable> extends AbstractVar<T> {
 	}
 
 	protected HttpExchange ctx() {
-		HttpExchange x = Ctx.exchange();
+		HttpExchange x = Ctxs.ctx().exchange();
 		return x;
 	}
 

@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.ctx.Classes;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.io.IO;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Predicate;
@@ -220,7 +220,7 @@ public class Scan {
 		}
 
 		List<Class<?>> classes;
-		Classes ctxClasses = Ctx.classes();
+		Classes ctxClasses = Ctxs.hasContext() ? Ctxs.ctx().classes() : null;
 		Pattern regex = nameRegex != null ? Pattern.compile(nameRegex) : null;
 
 		if (ctxClasses != null) {

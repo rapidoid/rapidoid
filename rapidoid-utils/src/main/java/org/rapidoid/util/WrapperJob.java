@@ -20,7 +20,7 @@ package org.rapidoid.util;
  * #L%
  */
 
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 
 public class WrapperJob implements Runnable {
 
@@ -35,7 +35,7 @@ public class WrapperJob implements Runnable {
 		try {
 			job.run();
 		} finally {
-			Ctx.clear();
+			Ctxs.close();
 		}
 	}
 

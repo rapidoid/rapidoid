@@ -33,7 +33,7 @@ import org.apache.oltu.oauth2.client.response.OAuthResourceResponse;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
@@ -112,8 +112,9 @@ public class OAuthTokenHandler implements Handler {
 			user.username = user.email;
 			user.oauthId = String.valueOf(auth.get("id"));
 
+			Ctxs.ctx().setUser(user);
 			user.saveTo(x.cookiepack());
-			Ctx.setUser(user);
+
 			U.must(Secure.user() == user);
 
 			x.write(IO.loadResourceAsString("close.html", true));

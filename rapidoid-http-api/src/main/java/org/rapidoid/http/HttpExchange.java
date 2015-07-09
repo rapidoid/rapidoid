@@ -28,12 +28,11 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.AppExchange;
 import org.rapidoid.mime.MediaType;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface HttpExchange extends AppExchange {
+public interface HttpExchange {
 
 	/* REQUEST METHODS: */
 

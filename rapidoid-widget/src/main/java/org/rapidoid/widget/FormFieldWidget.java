@@ -32,7 +32,7 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
@@ -96,7 +96,7 @@ public class FormFieldWidget extends AbstractWidget {
 	}
 
 	private Var<?> initVar(Item item, Property prop) {
-		HttpExchange x = Ctx.exchange();
+		HttpExchange x = Ctxs.ctx().exchange();
 		Object target = U.or(item.value(), item);
 		String varName = target.getClass().getSimpleName() + "." + prop.name();
 		Object initValue = x.locals().get(varName);

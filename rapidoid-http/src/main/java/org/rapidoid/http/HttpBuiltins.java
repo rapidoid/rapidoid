@@ -3,7 +3,7 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.util.RapidoidConf;
 import org.rapidoid.util.U;
@@ -49,9 +49,8 @@ public class HttpBuiltins {
 					user.email = username;
 					user.name = U.capitalized(username);
 
-					Ctx.delUser();
+					Ctxs.ctx().setUser(user);
 					user.saveTo(x.cookiepack());
-					Ctx.setUser(user);
 
 					throw x.goBack(0);
 				}

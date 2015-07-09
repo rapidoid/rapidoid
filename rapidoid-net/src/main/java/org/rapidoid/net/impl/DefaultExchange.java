@@ -29,8 +29,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufProvider;
-import org.rapidoid.ctx.AppExchange;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.KeyValueRanges;
@@ -44,19 +43,16 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class DefaultExchange<T> implements CtxFull<T>, BufProvider, Resetable, Constants, AppExchange {
+public abstract class DefaultExchange<T> implements CtxFull<T>, BufProvider, Resetable, Constants {
 
 	protected Channel conn;
 
 	protected AtomicLong totalWritten = new AtomicLong();
 
-	private Object persistor;
-
 	@Override
 	public synchronized void reset() {
 		conn = null;
 		totalWritten.set(0);
-		persistor = null;
 	}
 
 	public void setConnection(Channel conn) {
@@ -215,14 +211,9 @@ public abstract class DefaultExchange<T> implements CtxFull<T>, BufProvider, Res
 		return (T) this;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized <P> P persistor() {
-		if (persistor == null) {
-			persistor = Ctx.getPersistorFactory().createPersistor();
-		}
-
-		return (P) persistor;
+		return Ctxs.ctx().persistor();
 	}
 
 }

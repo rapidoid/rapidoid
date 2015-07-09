@@ -13,7 +13,7 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.config.Conf;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.HTML;
@@ -502,7 +502,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static HttpExchange http() {
-		return Ctx.exchange();
+		return Ctxs.ctx().exchange();
 	}
 
 	public static <T extends Serializable> Var<T> session(String name, T defaultValue) {
@@ -723,7 +723,7 @@ public abstract class BootstrapWidgets extends HTML {
 			return display(U.iterator(arr));
 		} else if (item instanceof TagWidget) {
 			TagWidget<Object> widget = (TagWidget<Object>) item;
-			return widget.render(Ctx.exchange());
+			return widget.render(http());
 		}
 
 		return isEntity(item) ? a(item).href(urlFor(item)) : Cls.str(item);

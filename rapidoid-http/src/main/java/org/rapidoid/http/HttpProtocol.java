@@ -25,7 +25,7 @@ import java.nio.ByteBuffer;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
@@ -108,11 +108,11 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 		x.init(responses, sessionStore, router);
 
-		Ctx.setUser(x.user());
+		Ctxs.ctx().setUser(x.user());
 		try {
 			executeRequest(x);
 		} finally {
-			Ctx.delUser();
+			Ctxs.ctx().setUser(null);
 		}
 	}
 

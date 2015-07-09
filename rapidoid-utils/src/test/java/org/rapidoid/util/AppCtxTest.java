@@ -1,11 +1,11 @@
 package org.rapidoid.util;
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.test.TestCommons;
-import org.junit.Test;
 
 /*
  * #%L
@@ -34,20 +34,21 @@ public class AppCtxTest extends TestCommons {
 	@Test
 	public void testAppCtx() {
 		multiThreaded(1000, 1000000, new Runnable() {
+
 			@Override
 			public void run() {
-
-				Ctx.reset();
+				Ctxs.open();
 
 				UserInfo user = new UserInfo();
 				user.username = rndStr(10);
 
-				Ctx.setUser(user);
+				Ctxs.ctx().setUser(user);
 
-				eq(Ctx.user(), user);
+				eq(Ctxs.ctx().user(), user);
 
-				Ctx.reset();
+				Ctxs.close();
 			}
+
 		});
 	}
 

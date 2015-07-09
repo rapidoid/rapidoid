@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.impl.TagRenderer;
 import org.rapidoid.http.HttpExchange;
@@ -95,8 +95,8 @@ public class WidgetTestCommons extends TestCommons {
 
 	protected static HttpExchange setupMockExchange() {
 		HttpExchange x = new HttpExchangeImpl();
-		Ctx.reset();
-		Ctx.setExchange(x);
+		Ctxs.open();
+		Ctxs.ctx().setExchange(x);
 		return x;
 	}
 
