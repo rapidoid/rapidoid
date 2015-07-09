@@ -32,8 +32,6 @@ import org.rapidoid.arr.Arr;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
-import org.rapidoid.dispatch.PojoDispatchException;
-import org.rapidoid.dispatch.PojoHandlerNotFoundException;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpExchange;
@@ -47,8 +45,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.pages.impl.BuiltInCmdHandler;
 import org.rapidoid.pages.impl.ComplexView;
 import org.rapidoid.pages.impl.PageRenderer;
-import org.rapidoid.rest.WebPojoDispatcher;
-import org.rapidoid.rest.WebReq;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
@@ -66,7 +62,7 @@ public class Pages {
 		server.serve(new PageHandler());
 	}
 
-	public static String pageName(HttpExchange x) {
+	public static String getPageName(HttpExchange x) {
 		String path = x.path();
 
 		if (path.endsWith(".html")) {
@@ -153,27 +149,20 @@ public class Pages {
 		}
 	}
 
-	public static Object dispatch(HttpExchange x, WebPojoDispatcher serviceDispatcher, Map<String, Class<?>> pages) {
+	public static boolean isEmiting(HttpExchange x) {
+		return x.isPostReq();
+	}
 
-		if (x.serveStaticFile()) {
-			return x;
+	public static Object dispatch(HttpExchange x, Object page) {
+		if (Pages.isEmiting(x)) {
+			return Pages.emit(x, page);
+		} else {
+			return Pages.serve(x, page);
 		}
+	}
 
-		if (serviceDispatcher != null) {
-			try {
-				return serviceDispatcher.dispatch(new WebReq(x));
-			} catch (PojoHandlerNotFoundException e) {
-				// / just ignore, will try to dispatch a page next...
-			} catch (PojoDispatchException e) {
-				return x.errorResponse(e);
-			}
-		}
-
-		String pageName = pageName(x);
-		if (pageName == null) {
-			return null;
-		}
-
+	public static Object dispatchIfExists(HttpExchange x, Map<String, Class<?>> pages) {
+		String pageName = Pages.getPageName(x);
 		String pageClassName = U.capitalized(pageName) + "Page";
 
 		Class<?> pageClass = pages.get(pageClassName);
@@ -183,15 +172,7 @@ public class Pages {
 
 		Object page = Cls.newInstance(pageClass);
 
-		if (isEmiting(x)) {
-			return emit(x, page);
-		} else {
-			return serve(x, page);
-		}
-	}
-
-	public static boolean isEmiting(HttpExchange x) {
-		return x.isPostReq();
+		return dispatch(x, page);
 	}
 
 	public static Object serve(HttpExchange x, Object view) {

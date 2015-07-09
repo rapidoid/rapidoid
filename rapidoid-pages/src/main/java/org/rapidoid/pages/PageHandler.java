@@ -38,7 +38,7 @@ public class PageHandler implements Handler {
 
 		Map<String, Class<?>> pages = Cls.classMap(Scan.bySuffix("Page", null, null));
 
-		Object result = Pages.dispatch(x, null, pages);
+		Object result = Pages.dispatch(x, pages);
 
 		return result != null ? result : x.notFound();
 	}

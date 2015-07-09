@@ -22,6 +22,8 @@ package org.rapidoid.app;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.dispatch.PojoDispatchException;
+import org.rapidoid.dispatch.PojoHandlerNotFoundException;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeInternals;
@@ -31,6 +33,7 @@ import org.rapidoid.json.JSON;
 import org.rapidoid.log.Log;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.rest.WebPojoDispatcher;
+import org.rapidoid.rest.WebReq;
 import org.rapidoid.util.CustomizableClassLoader;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
@@ -92,26 +95,52 @@ public class AppHandler implements Handler {
 
 		final AppClasses appCls = Apps.getAppClasses(x, xi.getClassLoader());
 
-		WebPojoDispatcher dispatcher = (WebPojoDispatcher) appCls.ctx.get(DISPATCHER);
+		Object result = dispatch(x, appCls);
 
+		if (result != null) {
+			return result;
+		} else {
+			throw x.notFound();
+		}
+	}
+
+	public static Object dispatch(HttpExchange x, AppClasses appCls) {
+
+		// static files
+		if (x.serveStaticFile()) {
+			return x;
+		}
+
+		WebPojoDispatcher dispatcher = (WebPojoDispatcher) appCls.ctx.get(DISPATCHER);
+		// TODO address race conditions (currently not a problem)
 		if (dispatcher == null) {
 			dispatcher = new WebPojoDispatcher(appCls.services);
 			appCls.ctx.put(DISPATCHER, dispatcher);
 		}
 
-		Object result = Pages.dispatch(x, dispatcher, appCls.pages);
+		// REST services
+		if (dispatcher != null) {
+			try {
+				return dispatcher.dispatch(new WebReq(x));
+			} catch (PojoHandlerNotFoundException e) {
+				// / just ignore, will try to dispatch a page next...
+			} catch (PojoDispatchException e) {
+				return x.errorResponse(e);
+			}
+		}
+
+		// GUI pages
+
+		Object result = Pages.dispatchIfExists(x, appCls.pages);
 		if (result != null) {
 			return result;
 		}
 
-		if (!U.isEmpty(appCls.screens) || appCls.main != null) {
-			Object view = new AppPageGeneric(x, appCls);
+		// App screens
 
-			if (Pages.isEmiting(x)) {
-				return Pages.emit(x, view);
-			} else {
-				return Pages.serve(x, view);
-			}
+		if (!U.isEmpty(appCls.screens) || appCls.main != null) {
+			Object genericPage = new AppPageGeneric(x, appCls);
+			return Pages.dispatch(x, genericPage);
 		}
 
 		throw x.notFound();
