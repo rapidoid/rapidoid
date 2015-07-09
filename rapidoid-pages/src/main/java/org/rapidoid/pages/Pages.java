@@ -163,9 +163,13 @@ public class Pages {
 
 	public static Object dispatchIfExists(HttpExchange x, Map<String, Class<?>> pages) {
 		String pageName = Pages.getPageName(x);
-		String pageClassName = U.capitalized(pageName) + "Page";
+		String pageClassName = U.capitalized(pageName);
 
 		Class<?> pageClass = pages.get(pageClassName);
+		if (pageClass == null) {
+			pageClass = pages.get(pageClassName + "Page");
+		}
+
 		if (pageClass == null) {
 			return null;
 		}

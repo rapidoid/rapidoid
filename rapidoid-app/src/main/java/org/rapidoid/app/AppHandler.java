@@ -22,6 +22,7 @@ package org.rapidoid.app;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.app.builtin.AppPageGeneric;
 import org.rapidoid.dispatch.PojoDispatchException;
 import org.rapidoid.dispatch.PojoHandlerNotFoundException;
 import org.rapidoid.http.Handler;

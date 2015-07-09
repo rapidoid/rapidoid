@@ -2,6 +2,7 @@ package org.rapidoid.docs.eg900;
 
 import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Order;
+import org.rapidoid.annotation.Screen;
 import org.rapidoid.app.GUI;
 import org.rapidoid.quick.Quick;
 
@@ -37,8 +38,10 @@ public class Main {
 	}
 }
 
+@Screen
 @Order(2) // here
 class FooScreen extends GUI {}
 
+@Screen
 @Order(1) // here
 class BarScreen extends GUI {}

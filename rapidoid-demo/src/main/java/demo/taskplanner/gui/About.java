@@ -21,6 +21,7 @@ package demo.taskplanner.gui;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.app.GUI;
@@ -42,7 +43,8 @@ class Book {
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class AboutScreen extends GUI {
+@Screen
+public class About extends GUI {
 
 	public Object content() {
 		Tag mix = h2(a("Enter the mix").href("/mix"));

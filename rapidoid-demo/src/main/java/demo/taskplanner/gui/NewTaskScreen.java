@@ -25,6 +25,7 @@ import java.util.List;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Local;
 import org.rapidoid.annotation.Order;
+import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.app.GUI;
@@ -38,6 +39,7 @@ import org.rapidoid.widget.GridWidget;
 
 import demo.taskplanner.model.Task;
 
+@Screen
 @Order(1)
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

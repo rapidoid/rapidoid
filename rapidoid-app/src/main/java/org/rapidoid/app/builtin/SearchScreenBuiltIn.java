@@ -1,4 +1,4 @@
-package org.rapidoid.app;
+package org.rapidoid.app.builtin;
 
 /*
  * #%L
@@ -20,35 +20,37 @@ package org.rapidoid.app;
  * #L%
  */
 
+import java.util.List;
+import java.util.regex.Pattern;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.app.GUI;
 import org.rapidoid.html.Tag;
+import org.rapidoid.http.HttpExchange;
+import org.rapidoid.model.Items;
 import org.rapidoid.plugins.DB;
-import org.rapidoid.plugins.Entities;
 import org.rapidoid.util.U;
-import org.rapidoid.widget.FormWidget;
+import org.rapidoid.widget.GridWidget;
+import org.rapidoid.widget.HighlightedGridWidget;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.1.0")
-public class NewEntityScreenGeneric extends AbstractEntityScreenGeneric {
+@Since("2.0.0")
+public class SearchScreenBuiltIn extends GUI {
 
-	private Object entity;
+	public Object content(HttpExchange x) {
 
-	public NewEntityScreenGeneric(Class<?> entityType) {
-		super(entityType);
-		this.entity = Entities.create(entityType);
-	}
+		final String query = x.param("q", "");
+		List<?> found = DB.fullTextSearch(query);
+		Items items = beanItems(Object.class, found.toArray());
 
-	public Object content() {
-		Tag caption = h2("New " + U.capitalized(ctx().pathSegment(0).substring(3)));
-		FormWidget form = create(entity).buttons(SAVE, CANCEL, INSERT);
+		Tag queryInfo = !U.isEmpty(query) ? span(" for ", b(highlight(query))) : null;
+		Tag title = titleBox("Total " + found.size() + " search results", queryInfo);
 
-		return mid6(caption, form);
-	}
+		String regex = "(?i)" + Pattern.quote(query);
+		GridWidget grid = new HighlightedGridWidget(items, "", 10, "id", "_class", "_str").regex(regex);
 
-	public void onSave() {
-		DB.insert(entity);
-		ctx().goBack(1);
+		return div(title, grid);
 	}
 
 }

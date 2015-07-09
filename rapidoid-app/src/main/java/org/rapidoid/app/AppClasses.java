@@ -25,7 +25,9 @@ import java.util.Map;
 
 import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.RESTful;
+import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.dispatch.PojoDispatcher;
@@ -63,9 +65,9 @@ public class AppClasses {
 				main = cls;
 			} else if (Metadata.isAnnotated(cls, RESTful.class)) {
 				services.put(name, cls);
-			} else if (name.endsWith("Screen")) {
+			} else if (Metadata.isAnnotated(cls, Screen.class)) {
 				screens.put(name, cls);
-			} else if (name.endsWith("Page")) {
+			} else if (Metadata.isAnnotated(cls, Page.class)) {
 				pages.put(name, cls);
 			}
 		}

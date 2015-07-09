@@ -1,4 +1,4 @@
-package org.rapidoid.app;
+package org.rapidoid.app.builtin;
 
 /*
  * #%L
@@ -21,27 +21,41 @@ package org.rapidoid.app;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.html.Tag;
+import org.rapidoid.plugins.Entities;
 import org.rapidoid.security.Secure;
-import org.rapidoid.security.annotation.DevMode;
-import org.rapidoid.util.U;
-import org.rapidoid.widget.FormWidget;
+import org.rapidoid.widget.ButtonWidget;
+import org.rapidoid.widget.GridWidget;
 
-@DevMode
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class DebugUserInfoScreenBuiltIn extends GUI {
+public class ListEntityScreenGeneric extends AbstractEntityScreenGeneric {
+
+	@Session
+	public Object newEntity;
+
+	public ListEntityScreenGeneric(Class<?> entityType) {
+		super(entityType);
+	}
 
 	public Object content() {
-		Tag caption = titleBox("Debug Mode - User Information");
-		if (Secure.isLoggedIn()) {
-			Object userDetails = show(Secure.user(), "name", "username", "email");
-			FormWidget userRoles = show(U.map("roles", Secure.getUserRoles(Secure.username())));
-			return row(caption, userDetails, userRoles);
-		} else {
-			return row(caption, h4("Not logged in!"));
-		}
+
+		String entityName = Cls.entityName(entityType);
+
+		Tag caption = titleBox(entityName + " List");
+		GridWidget grid = grid(entityType, 10);
+
+		boolean canAdd = Secure.canInsert(Secure.username(), Entities.create(entityType));
+		ButtonWidget btnAdd = canAdd ? btn("Add " + entityName).primary().command("Add") : null;
+
+		return row(caption, grid, btnAdd);
+	}
+
+	public void onAdd() {
+		throw ctx().redirect("/new" + Cls.entityName(entityType).toLowerCase());
 	}
 
 }

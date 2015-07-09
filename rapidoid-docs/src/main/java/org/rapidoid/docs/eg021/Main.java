@@ -2,6 +2,7 @@ package org.rapidoid.docs.eg021;
 
 import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.Screen;
 import org.rapidoid.quick.Quick;
 
 /*
@@ -36,6 +37,7 @@ public class Main {
 	}
 }
 
+@Screen
 class HomeScreen {
 	@Inject // here
 	Counter c; // here
@@ -45,6 +47,7 @@ class HomeScreen {
 	}
 }
 
+@Screen
 class OtherScreen {
 	@Inject // here
 	Counter c; // here

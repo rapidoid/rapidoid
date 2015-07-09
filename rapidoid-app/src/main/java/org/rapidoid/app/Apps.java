@@ -25,7 +25,9 @@ import java.util.Set;
 
 import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.RESTful;
+import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.aop.AOP;
@@ -120,10 +122,11 @@ public class Apps {
 
 	public static String screenName(Class<?> screenClass) {
 		String name = screenClass.getSimpleName();
-		if (name.endsWith(BUILT_IN_SCREEN_SUFFIX)) {
-			name = U.mid(name, 0, -BUILT_IN_SCREEN_SUFFIX.length());
-		}
-		return U.mid(name, 0, -6);
+
+		name = U.trimr(name, BUILT_IN_SCREEN_SUFFIX);
+		name = U.trimr(name, "Screen");
+
+		return name;
 	}
 
 	public static String screenUrl(Class<?> screenClass) {
@@ -138,9 +141,9 @@ public class Apps {
 	public static synchronized AppClasses scanAppClasses(HttpExchange x, ClassLoader classLoader) {
 
 		Map<String, Class<?>> services = Cls.classMap(Scan.annotated(RESTful.class, classLoader));
-		Map<String, Class<?>> pages = Cls.classMap(Scan.bySuffix("Page", null, classLoader));
+		Map<String, Class<?>> pages = Cls.classMap(Scan.annotated(Page.class, classLoader));
 		Map<String, Class<?>> apps = Cls.classMap(Scan.annotated(App.class, classLoader));
-		Map<String, Class<?>> screens = Cls.classMap(Scan.bySuffix("Screen", null, classLoader));
+		Map<String, Class<?>> screens = Cls.classMap(Scan.annotated(Screen.class, classLoader));
 
 		final Class<?> appClass = !apps.isEmpty() ? apps.values().iterator().next() : null;
 

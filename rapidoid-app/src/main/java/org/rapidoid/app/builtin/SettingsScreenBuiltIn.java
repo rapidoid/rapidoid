@@ -1,7 +1,8 @@
-package org.rapidoid.app;
+package org.rapidoid.app.builtin;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.app.GUI;
 
 /*
  * #%L

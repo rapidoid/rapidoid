@@ -23,6 +23,7 @@ package org.rapidoid.pages;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.http.Handler;
@@ -36,7 +37,7 @@ public class PageHandler implements Handler {
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
 
-		Map<String, Class<?>> pages = Cls.classMap(Scan.bySuffix("Page", null, null));
+		Map<String, Class<?>> pages = Cls.classMap(Scan.annotated(Page.class));
 
 		Object result = Pages.dispatch(x, pages);
 

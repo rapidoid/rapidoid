@@ -223,7 +223,7 @@ public class Examples {
 
 		for (Class<?> cls : classes) {
 			String name = cls.getSimpleName();
-			if (name.endsWith("Screen") && !name.equals("HomeScreen")) {
+			if (name.endsWith("Screen") && !name.equals("HomeScreen") && !name.equals("Home")) {
 				name = U.mid(name, 0, -6);
 				String page = U.uncapitalized(name);
 				String url = "/" + page;

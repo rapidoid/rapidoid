@@ -1,4 +1,4 @@
-package org.rapidoid.app;
+package org.rapidoid.app.builtin;
 
 /*
  * #%L
@@ -31,6 +31,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOP;
+import org.rapidoid.app.AppClasses;
+import org.rapidoid.app.AppGUI;
+import org.rapidoid.app.AppScreens;
+import org.rapidoid.app.Apps;
+import org.rapidoid.app.Scaffolding;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
@@ -459,9 +464,6 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 				}
 			} else if (scr instanceof String) {
 				String name = U.capitalized((String) scr);
-				if (!name.endsWith("Screen")) {
-					name += "Screen";
-				}
 				Class<?> screenCls = appCls.screens.get(name);
 				if (isScreenAllowed(screenCls)) {
 					filtered.put(name, screenCls);

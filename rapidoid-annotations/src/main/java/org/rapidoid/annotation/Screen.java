@@ -1,12 +1,8 @@
-package org.rapidoid.docs.eg004;
-
-import org.rapidoid.annotation.App;
-import org.rapidoid.annotation.Screen;
-import org.rapidoid.quick.Quick;
+package org.rapidoid.annotation;
 
 /*
  * #%L
- * rapidoid-docs
+ * rapidoid-annotations
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -24,21 +20,16 @@ import org.rapidoid.quick.Quick;
  * #L%
  */
 
-// Rapidoid has built-in themes! :: Let's use the built-in theme 2:
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@App
-public class Main {
-	String title = "Example 4";
-	String content = "Fancy theme!";
-	String theme = "2"; // here
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-	public static void main(String[] args) {
-		Quick.run(args);
-	}
+@Target({ TYPE })
+@Retention(RUNTIME)
+@Authors("Nikolche Mihajlovski")
+@Since("4.1.0")
+public @interface Screen {
+
 }
-
-@Screen
-class FooScreen {}
-
-@Screen
-class BarScreen {}

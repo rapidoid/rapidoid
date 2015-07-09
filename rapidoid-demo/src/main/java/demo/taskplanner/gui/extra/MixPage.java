@@ -21,6 +21,7 @@ package demo.taskplanner.gui.extra;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
@@ -37,6 +38,7 @@ import org.rapidoid.widget.GridWidget;
 
 import demo.taskplanner.model.User;
 
+@Page
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class MixPage extends BootstrapWidgets {

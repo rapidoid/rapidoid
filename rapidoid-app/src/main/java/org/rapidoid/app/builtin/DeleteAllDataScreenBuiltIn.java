@@ -1,4 +1,4 @@
-package org.rapidoid.app;
+package org.rapidoid.app.builtin;
 
 /*
  * #%L
@@ -22,33 +22,40 @@ package org.rapidoid.app;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.app.GUI;
 import org.rapidoid.html.Tag;
+import org.rapidoid.log.Log;
 import org.rapidoid.plugins.DB;
-import org.rapidoid.util.U;
-import org.rapidoid.widget.FormWidget;
+import org.rapidoid.security.annotation.DevMode;
 
+@DevMode
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class EditEntityScreenGeneric extends AbstractEntityScreenGeneric {
-
-	private Object entity;
-
-	public EditEntityScreenGeneric(Class<?> entityType) {
-		super(entityType);
-	}
+public class DeleteAllDataScreenBuiltIn extends GUI {
 
 	public Object content() {
-		this.entity = getEntityById();
-
-		Tag caption = h2("Edit " + U.capitalized(ctx().pathSegment(0).substring(4)));
-		FormWidget form = edit(entity).buttons(SAVE, CANCEL);
-
-		return mid6(caption, form);
+		Tag caption = titleBox("Debug Mode - Delete All data");
+		return div(caption, div(btn("DELETE ALL DATA!").danger().command("DeleteAll"), CANCEL));
 	}
 
-	public void onSave() {
-		DB.update(entity);
+	public void onDeleteAll() {
+		showModal("confirmDelete");
+	}
+
+	public Tag confirmDelete() {
+		return modal("Confirm data deletion", h2("Are you sure you want to delete all data in the database?"),
+				div(YES_DELETE, NO));
+	}
+
+	public void onYesDelete() {
+		Log.info("yes");
+		hideModal();
+		DB.deleteAllData();
 		ctx().goBack(1);
+	}
+
+	public void onNo() {
+		hideModal();
 	}
 
 }

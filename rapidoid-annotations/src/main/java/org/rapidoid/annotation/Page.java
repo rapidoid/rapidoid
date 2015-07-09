@@ -1,12 +1,8 @@
-package demo.taskplanner.gui;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.app.GUI;
+package org.rapidoid.annotation;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-annotations
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -24,14 +20,16 @@ import org.rapidoid.app.GUI;
  * #L%
  */
 
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+@Target({ TYPE })
+@Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("4.0.0")
-public class UploadScreen extends GUI {
-
-	public String title = "Upload!";
-
-	public Object content() {
-		return render("upload.html");
-	}
+@Since("4.1.0")
+public @interface Page {
 
 }

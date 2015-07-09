@@ -1,12 +1,13 @@
-package org.rapidoid.docs.eg004;
+package demo.taskplanner.gui;
 
-import org.rapidoid.annotation.App;
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Screen;
-import org.rapidoid.quick.Quick;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.app.GUI;
 
 /*
  * #%L
- * rapidoid-docs
+ * rapidoid-demo
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -24,21 +25,15 @@ import org.rapidoid.quick.Quick;
  * #L%
  */
 
-// Rapidoid has built-in themes! :: Let's use the built-in theme 2:
+@Screen
+@Authors("Nikolche Mihajlovski")
+@Since("4.0.0")
+public class Upload extends GUI {
 
-@App
-public class Main {
-	String title = "Example 4";
-	String content = "Fancy theme!";
-	String theme = "2"; // here
+	public String title = "Upload!";
 
-	public static void main(String[] args) {
-		Quick.run(args);
+	public Object content() {
+		return render("upload.html");
 	}
+
 }
-
-@Screen
-class FooScreen {}
-
-@Screen
-class BarScreen {}

@@ -1,4 +1,4 @@
-package org.rapidoid.app;
+package org.rapidoid.app.builtin;
 
 /*
  * #%L
@@ -22,33 +22,33 @@ package org.rapidoid.app;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.DB;
+import org.rapidoid.plugins.Entities;
+import org.rapidoid.util.U;
+import org.rapidoid.widget.FormWidget;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
-public abstract class AbstractEntityScreenGeneric extends GUI {
+@Since("2.1.0")
+public class NewEntityScreenGeneric extends AbstractEntityScreenGeneric {
 
-	protected final Class<?> entityType;
+	private Object entity;
 
-	public AbstractEntityScreenGeneric(Class<?> entityType) {
-		this.entityType = entityType;
+	public NewEntityScreenGeneric(Class<?> entityType) {
+		super(entityType);
+		this.entity = Entities.create(entityType);
 	}
 
-	@SuppressWarnings("unchecked")
-	protected <T> T getEntityById() {
-		String id = ctx().pathSegment(1);
-		Object entity = DB.getIfExists(entityType, id);
+	public Object content() {
+		Tag caption = h2("New " + U.capitalized(ctx().pathSegment(0).substring(3)));
+		FormWidget form = create(entity).buttons(SAVE, CANCEL, INSERT);
 
-		if (entity == null) {
-			throw ctx().notFound();
-		}
-
-		return (T) entity;
+		return mid6(caption, form);
 	}
 
-	@Override
-	public String toString() {
-		return "AbstractEntityScreenGeneric [entityType=" + entityType + "]";
+	public void onSave() {
+		DB.insert(entity);
+		ctx().goBack(1);
 	}
 
 }

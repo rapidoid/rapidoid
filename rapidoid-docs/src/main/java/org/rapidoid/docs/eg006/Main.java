@@ -7,6 +7,7 @@ import static org.rapidoid.widget.BootstrapWidgets.create;
 import javax.persistence.Entity;
 
 import org.rapidoid.annotation.App;
+import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.plugins.DB;
@@ -45,7 +46,8 @@ public class Main {
 	}
 }
 
-class HomeScreen {
+@Screen
+class Home {
 	@Session
 	Movie movie = new Movie();
 
