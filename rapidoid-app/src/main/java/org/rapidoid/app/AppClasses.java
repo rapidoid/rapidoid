@@ -28,6 +28,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Metadata;
+import org.rapidoid.dispatch.PojoDispatcher;
+import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -38,8 +40,7 @@ public class AppClasses {
 	public final Map<String, Class<?>> services;
 	public final Map<String, Class<?>> pages;
 	public final Map<String, Class<?>> screens;
-
-	public final Map<String, Object> ctx = U.synchronizedMap();
+	public final PojoDispatcher dispatcher;
 
 	public AppClasses(Class<?> main, Map<String, Class<?>> services, Map<String, Class<?>> pages,
 			Map<String, Class<?>> screens) {
@@ -47,6 +48,7 @@ public class AppClasses {
 		this.services = services;
 		this.pages = pages;
 		this.screens = screens;
+		this.dispatcher = new WebPojoDispatcher(services);
 	}
 
 	public static AppClasses from(Class<?>... classes) {
@@ -80,7 +82,7 @@ public class AppClasses {
 	@Override
 	public String toString() {
 		return "AppClasses [main=" + main + ", services=" + services + ", pages=" + pages + ", screens=" + screens
-				+ "]";
+				+ ", dispatcher=" + dispatcher + "]";
 	}
 
 }

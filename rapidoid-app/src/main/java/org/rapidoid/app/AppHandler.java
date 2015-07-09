@@ -32,7 +32,6 @@ import org.rapidoid.http.HttpProtocol;
 import org.rapidoid.json.JSON;
 import org.rapidoid.log.Log;
 import org.rapidoid.pages.Pages;
-import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.rest.WebReq;
 import org.rapidoid.util.CustomizableClassLoader;
 import org.rapidoid.util.U;
@@ -41,8 +40,6 @@ import org.rapidoid.util.UTILS;
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class AppHandler implements Handler {
-
-	private static final String DISPATCHER = "dispatcher";
 
 	private CustomizableClassLoader classLoader;
 
@@ -111,17 +108,10 @@ public class AppHandler implements Handler {
 			return x;
 		}
 
-		WebPojoDispatcher dispatcher = (WebPojoDispatcher) appCls.ctx.get(DISPATCHER);
-		// TODO address race conditions (currently not a problem)
-		if (dispatcher == null) {
-			dispatcher = new WebPojoDispatcher(appCls.services);
-			appCls.ctx.put(DISPATCHER, dispatcher);
-		}
-
 		// REST services
-		if (dispatcher != null) {
+		if (appCls.dispatcher != null) {
 			try {
-				return dispatcher.dispatch(new WebReq(x));
+				return appCls.dispatcher.dispatch(new WebReq(x));
 			} catch (PojoHandlerNotFoundException e) {
 				// / just ignore, will try to dispatch a page next...
 			} catch (PojoDispatchException e) {
