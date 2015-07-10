@@ -29,7 +29,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.dao.DAO;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
-import org.rapidoid.plugins.DB;
+import org.rapidoid.plugins.db.DB;
 
 import demo.taskplanner.model.User;
 

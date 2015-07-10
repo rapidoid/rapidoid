@@ -30,7 +30,7 @@ import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.PUT;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.plugins.DB;
+import org.rapidoid.plugins.db.DB;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")

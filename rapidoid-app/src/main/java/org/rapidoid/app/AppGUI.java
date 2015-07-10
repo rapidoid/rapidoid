@@ -9,7 +9,7 @@ import org.rapidoid.lambda.Predicate;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.impl.DbItems;
 import org.rapidoid.pages.PageGUI;
-import org.rapidoid.plugins.Entities;
+import org.rapidoid.plugins.entities.Entities;
 import org.rapidoid.widget.GridWidget;
 
 /*

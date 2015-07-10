@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
-import org.rapidoid.plugins.Lifecycle;
+import org.rapidoid.plugins.lifecycle.Lifecycle;
 import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Role;

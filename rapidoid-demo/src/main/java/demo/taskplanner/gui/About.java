@@ -27,7 +27,7 @@ import org.rapidoid.annotation.Transaction;
 import org.rapidoid.app.GUI;
 import org.rapidoid.html.Tag;
 import org.rapidoid.log.Log;
-import org.rapidoid.plugins.DB;
+import org.rapidoid.plugins.db.DB;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.ButtonWidget;

@@ -16,7 +16,7 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Callback;
-import org.rapidoid.plugins.impl.DBPluginBase;
+import org.rapidoid.plugins.db.DBPluginBase;
 import org.rapidoid.util.U;
 
 /*

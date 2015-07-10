@@ -30,7 +30,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
-import org.rapidoid.plugins.spec.DBPlugin;
+import org.rapidoid.plugins.db.DBPlugin;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

@@ -6,7 +6,7 @@ import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Screen;
 import org.rapidoid.app.GUI;
 import org.rapidoid.jpa.JPAEntity;
-import org.rapidoid.plugins.DB;
+import org.rapidoid.plugins.db.DB;
 import org.rapidoid.quick.Quick;
 
 /*

@@ -42,7 +42,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
-import org.rapidoid.plugins.DB;
+import org.rapidoid.plugins.db.DB;
 import org.rapidoid.security.DataPermissions;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;

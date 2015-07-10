@@ -30,7 +30,7 @@ import org.rapidoid.aop.AOPInterceptor;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.log.Log;
-import org.rapidoid.plugins.DB;
+import org.rapidoid.plugins.db.DB;
 import org.rapidoid.util.U;
 
 public class TransactionInterceptor implements AOPInterceptor {

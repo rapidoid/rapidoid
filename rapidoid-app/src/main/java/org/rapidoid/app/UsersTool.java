@@ -23,7 +23,7 @@ package org.rapidoid.app;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.UserInfo;
-import org.rapidoid.plugins.Users;
+import org.rapidoid.plugins.users.Users;
 import org.rapidoid.security.Secure;
 
 @Authors("Nikolche Mihajlovski")

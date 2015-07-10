@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
 import org.rapidoid.html.Tag;
 import org.rapidoid.log.Log;
-import org.rapidoid.plugins.DB;
+import org.rapidoid.plugins.db.DB;
 import org.rapidoid.security.annotation.DevMode;
 
 @DevMode

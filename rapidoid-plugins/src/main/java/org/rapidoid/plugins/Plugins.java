@@ -3,20 +3,20 @@ package org.rapidoid.plugins;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
-import org.rapidoid.plugins.impl.DefaultDBPlugin;
-import org.rapidoid.plugins.impl.DefaultEmailPlugin;
-import org.rapidoid.plugins.impl.DefaultEntitiesPlugin;
-import org.rapidoid.plugins.impl.DefaultLanguagesPlugin;
-import org.rapidoid.plugins.impl.DefaultLifecyclePlugin;
-import org.rapidoid.plugins.impl.DefaultSMSPlugin;
-import org.rapidoid.plugins.impl.DefaultUsersPlugin;
-import org.rapidoid.plugins.spec.DBPlugin;
-import org.rapidoid.plugins.spec.EmailPlugin;
-import org.rapidoid.plugins.spec.EntitiesPlugin;
-import org.rapidoid.plugins.spec.LanguagesPlugin;
-import org.rapidoid.plugins.spec.LifecyclePlugin;
-import org.rapidoid.plugins.spec.SMSPlugin;
-import org.rapidoid.plugins.spec.UsersPlugin;
+import org.rapidoid.plugins.db.DBPlugin;
+import org.rapidoid.plugins.db.DefaultDBPlugin;
+import org.rapidoid.plugins.email.DefaultEmailPlugin;
+import org.rapidoid.plugins.email.EmailPlugin;
+import org.rapidoid.plugins.entities.DefaultEntitiesPlugin;
+import org.rapidoid.plugins.entities.EntitiesPlugin;
+import org.rapidoid.plugins.languages.DefaultLanguagesPlugin;
+import org.rapidoid.plugins.languages.LanguagesPlugin;
+import org.rapidoid.plugins.lifecycle.DefaultLifecyclePlugin;
+import org.rapidoid.plugins.lifecycle.LifecyclePlugin;
+import org.rapidoid.plugins.sms.DefaultSMSPlugin;
+import org.rapidoid.plugins.sms.SMSPlugin;
+import org.rapidoid.plugins.users.DefaultUsersPlugin;
+import org.rapidoid.plugins.users.UsersPlugin;
 
 /*
  * #%L
@@ -50,31 +50,31 @@ public final class Plugins {
 	private static volatile EmailPlugin emailPlugin = new DefaultEmailPlugin();
 	private static volatile SMSPlugin smsPlugin = new DefaultSMSPlugin();
 
-	static DBPlugin db() {
+	public static DBPlugin db() {
 		return dbPlugin;
 	}
 
-	static EntitiesPlugin entities() {
+	public static EntitiesPlugin entities() {
 		return entitiesPlugin;
 	}
 
-	static LanguagesPlugin languages() {
+	public static LanguagesPlugin languages() {
 		return languagesPlugin;
 	}
 
-	static UsersPlugin users() {
+	public static UsersPlugin users() {
 		return usersPlugin;
 	}
 
-	static LifecyclePlugin lifecycle() {
+	public static LifecyclePlugin lifecycle() {
 		return lifecyclePlugin;
 	}
 
-	static EmailPlugin email() {
+	public static EmailPlugin email() {
 		return emailPlugin;
 	}
 
-	static SMSPlugin sms() {
+	public static SMSPlugin sms() {
 		return smsPlugin;
 	}
 

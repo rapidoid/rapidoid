@@ -30,7 +30,7 @@ import org.rapidoid.lambda.Predicate;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
-import org.rapidoid.plugins.DB;
+import org.rapidoid.plugins.db.DB;
 import org.rapidoid.util.U;
 
 @SuppressWarnings("serial")

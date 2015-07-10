@@ -33,9 +33,9 @@ import org.rapidoid.annotation.Transaction;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.main.Rapidoid;
-import org.rapidoid.plugins.DB;
-import org.rapidoid.plugins.Email;
-import org.rapidoid.plugins.SMS;
+import org.rapidoid.plugins.db.DB;
+import org.rapidoid.plugins.email.Email;
+import org.rapidoid.plugins.sms.SMS;
 import org.rapidoid.util.U;
 
 import demo.taskplanner.model.Task;

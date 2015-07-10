@@ -24,7 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Metadata;
-import org.rapidoid.plugins.Entities;
+import org.rapidoid.plugins.entities.Entities;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

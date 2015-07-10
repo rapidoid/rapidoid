@@ -24,8 +24,8 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.plugins.DB;
-import org.rapidoid.plugins.Entities;
+import org.rapidoid.plugins.db.DB;
+import org.rapidoid.plugins.entities.Entities;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
