@@ -1,13 +1,16 @@
-package org.rapidoid.util;
-
-import java.nio.charset.Charset;
+package org.rapidoid.plugins.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.job.Jobs;
+import org.rapidoid.lambda.Callback;
+import org.rapidoid.log.Log;
+import org.rapidoid.util.Constants;
+import org.rapidoid.util.U;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-plugins
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -26,51 +29,19 @@ import org.rapidoid.annotation.Since;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public interface Constants {
+@Since("4.1.0")
+public class DefaultSMSPlugin extends AbstractSMSPlugin {
 
-	Object[] EMPTY_ARRAY = {};
+	private static final String MAIL_DESC = "SMS plugin implementation hasn't been registered, so cannot send SMS:\n"
+			+ "To numbers: %s\nContent: %s" + Constants.SEPARATOR_LINE;
 
-	String[] EMPTY_STRING_ARRAY = {};
+	@Override
+	public void send(Iterable<String> toNumbers, String content, Callback<Void> callback) {
 
-	Charset UTF_8 = Charset.forName("UTF-8");
+		Log.error(U.format(MAIL_DESC, toNumbers, content));
 
-	int NOT_FOUND = Integer.MIN_VALUE;
-
-	boolean T = true;
-
-	boolean F = false;
-
-	byte BYTE_0 = 0;
-
-	byte SPACE = ' ';
-
-	byte CR = 13;
-
-	byte LF = 10;
-
-	byte[] CR_LF_CR_LF = { CR, LF, CR, LF };
-
-	byte[] CR_LF = { CR, LF };
-
-	byte[] LF_LF = { LF, LF };
-
-	byte[] SPACE_ = { SPACE };
-
-	byte[] CR_ = { CR };
-
-	byte[] LF_ = { LF };
-
-	byte ASTERISK = '?';
-
-	byte EQ = '=';
-
-	byte AMP = '&';
-
-	byte COL = ':';
-
-	byte SEMI_COL = ';';
-
-	String SEPARATOR_LINE = "\n--------------------------------------------------------------\n";
+		Jobs.callIfNotNull(callback, null,
+				U.rte("SMS plugin implementation hasn't been registered, so cannot send SMS!"));
+	}
 
 }

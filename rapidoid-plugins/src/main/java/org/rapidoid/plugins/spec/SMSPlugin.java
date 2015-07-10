@@ -1,13 +1,12 @@
-package org.rapidoid.util;
-
-import java.nio.charset.Charset;
+package org.rapidoid.plugins.spec;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.Callback;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-plugins
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -26,51 +25,9 @@ import org.rapidoid.annotation.Since;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public interface Constants {
+@Since("4.1.0")
+public interface SMSPlugin {
 
-	Object[] EMPTY_ARRAY = {};
-
-	String[] EMPTY_STRING_ARRAY = {};
-
-	Charset UTF_8 = Charset.forName("UTF-8");
-
-	int NOT_FOUND = Integer.MIN_VALUE;
-
-	boolean T = true;
-
-	boolean F = false;
-
-	byte BYTE_0 = 0;
-
-	byte SPACE = ' ';
-
-	byte CR = 13;
-
-	byte LF = 10;
-
-	byte[] CR_LF_CR_LF = { CR, LF, CR, LF };
-
-	byte[] CR_LF = { CR, LF };
-
-	byte[] LF_LF = { LF, LF };
-
-	byte[] SPACE_ = { SPACE };
-
-	byte[] CR_ = { CR };
-
-	byte[] LF_ = { LF };
-
-	byte ASTERISK = '?';
-
-	byte EQ = '=';
-
-	byte AMP = '&';
-
-	byte COL = ':';
-
-	byte SEMI_COL = ';';
-
-	String SEPARATOR_LINE = "\n--------------------------------------------------------------\n";
+	void send(Iterable<String> toNumbers, String content, Callback<Void> callback);
 
 }
