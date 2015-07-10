@@ -31,9 +31,11 @@ import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.main.Rapidoid;
 import org.rapidoid.plugins.DB;
-import org.rapidoid.util.Jobs;
+import org.rapidoid.plugins.Email;
+import org.rapidoid.plugins.SMS;
 import org.rapidoid.util.U;
 
 import demo.taskplanner.model.Task;
@@ -44,6 +46,11 @@ import demo.taskplanner.model.Task;
 public class Main {
 
 	public static void main(String[] args) {
+		SMS.send("+1234567890", "Hey!", null);
+
+		Email.send("someone@somewhere.rapidoid.io", "Hey!",
+				"Dear Someone,\n\nHow are you?\nThis is just a test e-mail!\n\nRegards,\nSomebody", null);
+
 		Rapidoid.run("oauth-no-state");
 
 		for (int i = 0; i < 120; i++) {
