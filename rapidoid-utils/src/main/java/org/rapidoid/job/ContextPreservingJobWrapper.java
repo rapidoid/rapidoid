@@ -1,4 +1,4 @@
-package org.rapidoid.util;
+package org.rapidoid.job;
 
 /*
  * #%L
@@ -25,16 +25,17 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.log.Log;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class ContextPreservingJob implements Runnable {
+public class ContextPreservingJobWrapper implements Runnable {
 
 	private final Runnable job;
 
 	private final Ctx ctx;
 
-	public ContextPreservingJob(Runnable job, Ctx ctx) {
+	public ContextPreservingJobWrapper(Runnable job, Ctx ctx) {
 		this.job = job;
 		this.ctx = ctx;
 	}

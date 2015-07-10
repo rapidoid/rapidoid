@@ -26,6 +26,6 @@ package org.rapidoid.lambda;
  */
 public interface Callback<T> {
 
-	void onDone(T result, Throwable error);
+	void onDone(T result, Throwable error) throws Exception;
 
 }

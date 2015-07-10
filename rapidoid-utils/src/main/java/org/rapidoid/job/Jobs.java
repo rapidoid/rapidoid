@@ -1,4 +1,4 @@
-package org.rapidoid.util;
+package org.rapidoid.job;
 
 /*
  * #%L
@@ -28,6 +28,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.lambda.Callback;
+import org.rapidoid.util.Constants;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -55,7 +57,17 @@ public class Jobs implements Constants {
 	}
 
 	public static Runnable wrap(Runnable job) {
-		return new ContextPreservingJob(job, Ctxs.get());
+		return new ContextPreservingJobWrapper(job, Ctxs.get());
+	}
+
+	public static <T> void callIfNotNull(Callback<T> callback, T result, Throwable error) {
+		if (callback != null) {
+			Jobs.execute(new CallbackExecutorJob<T>(callback, result, error));
+		}
+	}
+
+	public static <T> void call(Callback<T> callback, T result, Throwable error) {
+		Jobs.execute(new CallbackExecutorJob<T>(callback, result, error));
 	}
 
 }

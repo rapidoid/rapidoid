@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.job.Jobs;
 
 /**
  * Deprecated. Use {@link Jobs} instead.

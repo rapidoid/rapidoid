@@ -8,6 +8,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.test.TestCommons;
 
 /*

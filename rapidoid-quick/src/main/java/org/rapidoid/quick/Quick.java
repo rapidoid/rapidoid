@@ -33,9 +33,9 @@ import org.rapidoid.aop.AOP;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.TransactionInterceptor;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.jpa.dbplugin.JPADBPlugin;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.Jobs;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")

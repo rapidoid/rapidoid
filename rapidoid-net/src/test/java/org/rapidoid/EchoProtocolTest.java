@@ -27,10 +27,10 @@ import java.io.IOException;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.util.Jobs;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")

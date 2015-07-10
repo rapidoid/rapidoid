@@ -56,6 +56,7 @@ import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertyFilter;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
@@ -923,7 +924,7 @@ public class InMem implements Serializable {
 				Log.error("Error in transaction, rolling back", e);
 				txRollback();
 				if (txCallback != null) {
-					txCallback.onDone(null, e);
+					Jobs.call(txCallback, null, e);
 					txCallback = null;
 				}
 			}
@@ -939,7 +940,7 @@ public class InMem implements Serializable {
 				}
 			} else {
 				if (success && txCallback != null) {
-					txCallback.onDone(null, null);
+					Jobs.call(txCallback, null, null);
 				}
 			}
 

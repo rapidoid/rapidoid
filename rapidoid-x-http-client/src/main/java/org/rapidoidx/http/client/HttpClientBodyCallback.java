@@ -2,6 +2,7 @@ package org.rapidoidx.http.client;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Callback;
 import org.rapidoidx.buffer.Buf;
 import org.rapidoidx.data.Ranges;
@@ -39,12 +40,12 @@ public class HttpClientBodyCallback implements HttpClientCallback {
 
 	@Override
 	public void onResult(Buf buffer, Ranges head, Ranges body) {
-		bodyCallback.onDone(body.getConcatenated(buffer.bytes(), 0, body.count - 1, ""), null);
+		Jobs.call(bodyCallback, body.getConcatenated(buffer.bytes(), 0, body.count - 1, ""), null);
 	}
 
 	@Override
 	public void onError(Throwable error) {
-		bodyCallback.onDone(null, error);
+		Jobs.call(bodyCallback, null, error);
 	}
 
 }

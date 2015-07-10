@@ -14,8 +14,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Callback;
-import org.rapidoid.util.Jobs;
 import org.rapidoid.plugins.impl.DBPluginBase;
 import org.rapidoid.util.U;
 
@@ -184,11 +184,11 @@ public class JPADBPlugin extends DBPluginBase {
 				try {
 					transaction(tx, readonly);
 				} catch (Throwable e) {
-					callback.onDone(null, e);
+					Jobs.call(callback, null, e);
 					return;
 				}
 
-				callback.onDone(null, null);
+				Jobs.call(callback, null, null);
 			}
 
 		}, 0);
