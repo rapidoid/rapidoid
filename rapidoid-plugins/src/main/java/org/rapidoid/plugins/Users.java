@@ -1,5 +1,8 @@
 package org.rapidoid.plugins;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 /*
  * #%L
  * rapidoid-plugins
@@ -20,10 +23,8 @@ package org.rapidoid.plugins;
  * #L%
  */
 
-/**
- * @author Nikolche Mihajlovski
- * @since 3.0.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("3.0.0")
 public class Users {
 
 	public static <U> U findByUsername(Class<U> userClass, String username) {

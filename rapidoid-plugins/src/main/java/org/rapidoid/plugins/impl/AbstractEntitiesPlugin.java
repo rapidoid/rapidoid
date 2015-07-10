@@ -2,6 +2,8 @@ package org.rapidoid.plugins.impl;
 
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.plugins.spec.EntitiesPlugin;
 
 /*
@@ -24,11 +26,9 @@ import org.rapidoid.plugins.spec.EntitiesPlugin;
  * #L%
  */
 
-/**
- * @author Nikolche Mihajlovski
- * @since 3.0.0
- */
-public class AbstractEntitiesPlugin implements EntitiesPlugin {
+@Authors("Nikolche Mihajlovski")
+@Since("3.0.0")
+public abstract class AbstractEntitiesPlugin implements EntitiesPlugin {
 
 	@Override
 	public <E> Class<E> getEntityType(String simpleTypeName) {

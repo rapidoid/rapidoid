@@ -2,6 +2,9 @@ package org.rapidoid.plugins.spec;
 
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 /*
  * #%L
  * rapidoid-plugins
@@ -22,10 +25,8 @@ import java.util.Map;
  * #L%
  */
 
-/**
- * @author Nikolche Mihajlovski
- * @since 3.0.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("3.0.0")
 public interface EntitiesPlugin {
 
 	<E> Class<E> getEntityType(String simpleTypeName);

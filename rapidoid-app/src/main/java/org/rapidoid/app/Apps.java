@@ -74,8 +74,6 @@ public class Apps {
 	}
 
 	public static void bootstrap(Object... args) {
-		Plugins.bootstrap();
-
 		Set<String> config = U.set();
 
 		for (Object arg : args) {

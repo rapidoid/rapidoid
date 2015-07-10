@@ -24,15 +24,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.U;
 
-/**
- * @author Nikolche Mihajlovski
- * @since 3.0.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("3.0.0")
 public class DB {
 
 	public static String insert(Object record) {

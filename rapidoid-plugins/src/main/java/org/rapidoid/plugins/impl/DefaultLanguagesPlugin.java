@@ -1,5 +1,7 @@
 package org.rapidoid.plugins.impl;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.plugins.spec.LanguagesPlugin;
 import org.rapidoid.util.English;
 
@@ -23,10 +25,8 @@ import org.rapidoid.util.English;
  * #L%
  */
 
-/**
- * @author Nikolche Mihajlovski
- * @since 3.0.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("3.0.0")
 public class DefaultLanguagesPlugin implements LanguagesPlugin {
 
 	@Override

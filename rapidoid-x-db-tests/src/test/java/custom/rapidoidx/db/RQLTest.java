@@ -21,12 +21,10 @@ package custom.rapidoidx.db;
  * #L%
  */
 
-import org.junit.Before;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.plugins.Plugins;
 import org.rapidoidx.db.XDB;
 
 @DbEntity
@@ -45,11 +43,6 @@ enum LowHigh {
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
 public class RQLTest extends DbTestCommons {
-
-	@Before
-	public void init() {
-		Plugins.bootstrap();
-	}
 
 	@Test
 	public void testRQLEntityConstruction() {

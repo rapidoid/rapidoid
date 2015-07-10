@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
@@ -29,11 +31,9 @@ import org.rapidoid.plugins.spec.DBPlugin;
  * #L%
  */
 
-/**
- * @author Nikolche Mihajlovski
- * @since 3.0.0
- */
-public class AbstractDBPlugin implements DBPlugin {
+@Authors("Nikolche Mihajlovski")
+@Since("3.0.0")
+public abstract class AbstractDBPlugin implements DBPlugin {
 
 	@Override
 	public String insert(Object entity) {

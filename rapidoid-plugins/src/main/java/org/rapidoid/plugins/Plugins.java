@@ -1,19 +1,21 @@
 package org.rapidoid.plugins;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
-import org.rapidoid.plugins.impl.AbstractDBPlugin;
-import org.rapidoid.plugins.impl.AbstractEntitiesPlugin;
-import org.rapidoid.plugins.impl.AbstractLanguagesPlugin;
-import org.rapidoid.plugins.impl.AbstractLifecyclePlugin;
-import org.rapidoid.plugins.impl.AbstractUsersPlugin;
+import org.rapidoid.plugins.impl.DefaultDBPlugin;
+import org.rapidoid.plugins.impl.DefaultEmailPlugin;
 import org.rapidoid.plugins.impl.DefaultEntitiesPlugin;
 import org.rapidoid.plugins.impl.DefaultLanguagesPlugin;
 import org.rapidoid.plugins.impl.DefaultLifecyclePlugin;
+import org.rapidoid.plugins.impl.DefaultSMSPlugin;
 import org.rapidoid.plugins.impl.DefaultUsersPlugin;
 import org.rapidoid.plugins.spec.DBPlugin;
+import org.rapidoid.plugins.spec.EmailPlugin;
 import org.rapidoid.plugins.spec.EntitiesPlugin;
 import org.rapidoid.plugins.spec.LanguagesPlugin;
 import org.rapidoid.plugins.spec.LifecyclePlugin;
+import org.rapidoid.plugins.spec.SMSPlugin;
 import org.rapidoid.plugins.spec.UsersPlugin;
 
 /*
@@ -36,17 +38,17 @@ import org.rapidoid.plugins.spec.UsersPlugin;
  * #L%
  */
 
-/**
- * @author Nikolche Mihajlovski
- * @since 3.0.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("3.0.0")
 public final class Plugins {
 
-	private static volatile LifecyclePlugin lifecyclePlugin = new AbstractLifecyclePlugin();
-	private static volatile LanguagesPlugin languagesPlugin = new AbstractLanguagesPlugin();
-	private static volatile DBPlugin dbPlugin = new AbstractDBPlugin();
-	private static volatile EntitiesPlugin entitiesPlugin = new AbstractEntitiesPlugin();
-	private static volatile UsersPlugin usersPlugin = new AbstractUsersPlugin();
+	private static volatile LifecyclePlugin lifecyclePlugin = new DefaultLifecyclePlugin();
+	private static volatile LanguagesPlugin languagesPlugin = new DefaultLanguagesPlugin();
+	private static volatile DBPlugin dbPlugin = new DefaultDBPlugin();
+	private static volatile EntitiesPlugin entitiesPlugin = new DefaultEntitiesPlugin();
+	private static volatile UsersPlugin usersPlugin = new DefaultUsersPlugin();
+	private static volatile EmailPlugin emailPlugin = new DefaultEmailPlugin();
+	private static volatile SMSPlugin smsPlugin = new DefaultSMSPlugin();
 
 	static DBPlugin db() {
 		return dbPlugin;
@@ -66,6 +68,14 @@ public final class Plugins {
 
 	static LifecyclePlugin lifecycle() {
 		return lifecyclePlugin;
+	}
+
+	static EmailPlugin email() {
+		return emailPlugin;
+	}
+
+	static SMSPlugin sms() {
+		return smsPlugin;
 	}
 
 	public static void register(LifecyclePlugin lifecyclePlugin) {
@@ -93,12 +103,14 @@ public final class Plugins {
 		Plugins.usersPlugin = usersPlugin;
 	}
 
-	public static void bootstrap() {
-		Plugins.register(new AbstractDBPlugin());
-		Plugins.register(new DefaultEntitiesPlugin());
-		Plugins.register(new DefaultLanguagesPlugin());
-		Plugins.register(new DefaultLifecyclePlugin());
-		Plugins.register(new DefaultUsersPlugin());
+	public static void register(EmailPlugin emailPlugin) {
+		Log.info("Registering Email plugin", "plugin", emailPlugin);
+		Plugins.emailPlugin = emailPlugin;
+	}
+
+	public static void register(SMSPlugin smsPlugin) {
+		Log.info("Registering SMS plugin", "plugin", smsPlugin);
+		Plugins.smsPlugin = smsPlugin;
 	}
 
 }

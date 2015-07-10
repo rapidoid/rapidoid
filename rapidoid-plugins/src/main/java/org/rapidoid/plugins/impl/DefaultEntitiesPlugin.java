@@ -4,8 +4,10 @@ import java.lang.reflect.Proxy;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
+import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Scaffold;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.entity.IEntity;
@@ -33,10 +35,8 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-/**
- * @author Nikolche Mihajlovski
- * @since 3.0.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("3.0.0")
 public class DefaultEntitiesPlugin implements EntitiesPlugin {
 
 	private final ConcurrentMap<String, Class<?>> entityTypes = U.concurrentMap();

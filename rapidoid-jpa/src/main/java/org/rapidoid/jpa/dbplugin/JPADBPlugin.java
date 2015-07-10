@@ -15,8 +15,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.lambda.Callback;
-import org.rapidoid.plugins.impl.DefaultDBPlugin;
 import org.rapidoid.util.Jobs;
+import org.rapidoid.plugins.impl.DBPluginBase;
 import org.rapidoid.util.U;
 
 /*
@@ -41,7 +41,7 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class JPADBPlugin extends DefaultDBPlugin {
+public class JPADBPlugin extends DBPluginBase {
 
 	@Override
 	public String insert(Object entity) {
