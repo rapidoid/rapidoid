@@ -39,7 +39,10 @@ public class BufGroup {
 
 	private final Pool<ByteBuffer> pool;
 
-	public BufGroup(int factor) {
+	private final boolean synchronizedBuffers;
+
+	public BufGroup(int factor, boolean synchronizedBuffers) {
+		this.synchronizedBuffers = synchronizedBuffers;
 		this.factor = factor;
 		this.capacity = (int) Math.pow(2, factor);
 
@@ -51,8 +54,18 @@ public class BufGroup {
 		}, 1000);
 	}
 
+	public BufGroup(int factor) {
+		this(factor, false);
+	}
+
 	public Buf newBuf(String name) {
-		return new MultiBuf(pool, factor, name);
+		Buf buf = new MultiBuf(pool, factor, name);
+
+		if (synchronizedBuffers) {
+			buf = new SynchronizedBuf(buf);
+		}
+
+		return buf;
 	}
 
 	public Buf newBuf() {
