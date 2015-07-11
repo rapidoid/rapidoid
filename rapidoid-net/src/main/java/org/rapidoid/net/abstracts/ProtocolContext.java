@@ -56,6 +56,8 @@ public interface ProtocolContext<T> {
 
 	void log(String msg);
 
+	long requestId();
+
 	/* PROTOCOL */
 
 	boolean isInitial();

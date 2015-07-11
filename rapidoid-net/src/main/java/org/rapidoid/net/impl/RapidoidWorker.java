@@ -38,14 +38,16 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
-import org.rapidoid.pool.ArrayPool;
 import org.rapidoid.pool.Pool;
+import org.rapidoid.pool.Pools;
 import org.rapidoid.util.SimpleList;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
+
+	public static int MAX_IO_WORKERS = 1024;
 
 	public static boolean EXTRA_SAFE = false;
 
@@ -155,9 +157,18 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private boolean processNext(RapidoidConnection conn, boolean initial) {
 
-		conn.log(initial ? "<< INIT >>" : "<< PROCESS >>");
+		if (initial) {
+			conn.log("<< INIT >>");
 
-		U.must(initial || conn.input().hasRemaining());
+			conn.requestId = -1;
+		} else {
+			conn.log("<< PROCESS >>");
+			U.must(conn.input().hasRemaining());
+
+			conn.requestId = helper.requestIdGen;
+			helper.requestIdGen += MAX_IO_WORKERS;
+			helper.requestCounter++;
+		}
 
 		int pos = conn.input().position();
 		int limit = conn.input().limit();

@@ -97,11 +97,18 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 
 	@Override
 	protected final void beforeLoop() {
+		validate();
+
 		try {
 			openSocket();
 		} catch (IOException e) {
 			throw U.rte("Cannot open socket!", e);
 		}
+	}
+
+	private void validate() {
+		U.must(workers <= RapidoidWorker.MAX_IO_WORKERS, "Too many workers! Maximum = %s",
+				RapidoidWorker.MAX_IO_WORKERS);
 	}
 
 	private void openSocket() throws IOException {

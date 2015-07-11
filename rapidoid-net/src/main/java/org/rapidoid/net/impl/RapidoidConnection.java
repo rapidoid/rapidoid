@@ -84,6 +84,7 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 	private boolean isClient;
 
 	private Protocol protocol;
+	volatile long requestId;
 
 	public RapidoidConnection(RapidoidWorker worker, BufGroup bufs) {
 		this.worker = worker;
@@ -108,6 +109,7 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 		done = false;
 		isClient = false;
 		protocol = null;
+		requestId = 0;
 		state.reset();
 	}
 
@@ -293,11 +295,6 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 		return input().readN(count);
 	}
 
-	@Override
-	public synchronized long connId() {
-		return id;
-	}
-
 	public synchronized ConnState state() {
 		return state;
 	}
@@ -364,6 +361,16 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 	@Override
 	public <P> P persistor() {
 		return Ctxs.ctx().persistor();
+	}
+
+	@Override
+	public synchronized long connId() {
+		return id;
+	}
+
+	@Override
+	public long requestId() {
+		return requestId;
 	}
 
 }

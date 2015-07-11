@@ -105,6 +105,8 @@ public interface HttpExchange {
 
 	boolean isPostReq();
 
+	long requestId();
+
 	/* STATE: */
 
 	String sessionId();

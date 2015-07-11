@@ -80,6 +80,10 @@ public class RapidoidHelper {
 
 	public final DoubleWrap[] doubles = new DoubleWrap[100];
 
+	public long requestIdGen = 0;
+
+	public long requestCounter = 0;
+
 	public final Pool<?> pool;
 
 	public final Object exchange;

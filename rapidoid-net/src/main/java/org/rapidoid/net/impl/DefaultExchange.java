@@ -49,14 +49,18 @@ public abstract class DefaultExchange<T> implements ProtocolContext<T>, BufProvi
 
 	protected AtomicLong totalWritten = new AtomicLong();
 
+	protected long requestId = 0;
+
 	@Override
 	public synchronized void reset() {
-		conn = null;
-		totalWritten.set(0);
+		this.conn = null;
+		this.totalWritten.set(0);
+		this.requestId = 0;
 	}
 
-	public void setConnection(Channel conn) {
+	public synchronized void setConnection(Channel conn) {
 		this.conn = conn;
+		this.requestId = conn.requestId();
 	}
 
 	@Override
@@ -214,6 +218,11 @@ public abstract class DefaultExchange<T> implements ProtocolContext<T>, BufProvi
 	@Override
 	public synchronized <P> P persistor() {
 		return Ctxs.ctx().persistor();
+	}
+
+	@Override
+	public long requestId() {
+		return requestId;
 	}
 
 }
