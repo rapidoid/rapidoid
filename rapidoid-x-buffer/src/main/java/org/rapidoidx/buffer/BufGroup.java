@@ -26,8 +26,8 @@ import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.pool.ArrayPool;
 import org.rapidoid.pool.Pool;
+import org.rapidoid.pool.Pools;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -43,7 +43,7 @@ public class BufGroup {
 		this.factor = factor;
 		this.capacity = (int) Math.pow(2, factor);
 
-		pool = new ArrayPool<ByteBuffer>(new Callable<ByteBuffer>() {
+		pool = Pools.create(new Callable<ByteBuffer>() {
 			@Override
 			public ByteBuffer call() {
 				return ByteBuffer.allocateDirect(capacity);

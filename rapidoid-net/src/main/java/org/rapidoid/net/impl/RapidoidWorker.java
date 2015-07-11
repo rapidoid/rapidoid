@@ -86,7 +86,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		this.connected = new ArrayBlockingQueue<SocketChannel>(queueSize);
 		this.done = new SimpleList<RapidoidConnection>(queueSize / 10, growFactor);
 
-		connections = new ArrayPool<RapidoidConnection>(new Callable<RapidoidConnection>() {
+		connections = Pools.create(new Callable<RapidoidConnection>() {
 			@Override
 			public RapidoidConnection call() throws Exception {
 				return newConnection();

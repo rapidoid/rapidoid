@@ -38,8 +38,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.log.Log;
-import org.rapidoid.pool.ArrayPool;
 import org.rapidoid.pool.Pool;
+import org.rapidoid.pool.Pools;
 import org.rapidoid.util.SimpleList;
 import org.rapidoid.util.U;
 import org.rapidoidx.buffer.BufGroup;
@@ -93,7 +93,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		this.connected = new ArrayBlockingQueue<RapidoidChannel>(queueSize);
 		this.done = new SimpleList<RapidoidConnection>(queueSize / 10, growFactor);
 
-		connections = new ArrayPool<RapidoidConnection>(new Callable<RapidoidConnection>() {
+		connections = Pools.create(new Callable<RapidoidConnection>() {
 			@Override
 			public RapidoidConnection call() throws Exception {
 				return newConnection();

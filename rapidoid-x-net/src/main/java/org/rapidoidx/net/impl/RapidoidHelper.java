@@ -26,8 +26,8 @@ import java.util.concurrent.Callable;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.pool.ArrayPool;
 import org.rapidoid.pool.Pool;
+import org.rapidoid.pool.Pools;
 import org.rapidoid.wrap.BoolWrap;
 import org.rapidoid.wrap.CharWrap;
 import org.rapidoid.wrap.DoubleWrap;
@@ -116,7 +116,7 @@ public class RapidoidHelper {
 
 		if (exchangeClass != null) {
 			exchange = Cls.newInstance(exchangeClass);
-			pool = new ArrayPool(new Callable() {
+			pool = Pools.create(new Callable() {
 				@Override
 				public Object call() throws Exception {
 					return Cls.newInstance(exchangeClass);
