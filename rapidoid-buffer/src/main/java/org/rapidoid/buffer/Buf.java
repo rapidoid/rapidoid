@@ -151,4 +151,6 @@ public interface Buf {
 
 	void scanLnLn(Ranges ranges, IntWrap result, byte end1, byte end2);
 
+	void setReadOnly(boolean readOnly);
+
 }

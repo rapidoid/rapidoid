@@ -157,7 +157,9 @@ public class BufTest extends BufferTestCommons implements Constants {
 	public void shouldParseNumbers() {
 		BufGroup bufs = new BufGroup(2);
 		Buf buf = bufs.newBuf();
+
 		buf.append("5a1234567890fg-3450fg0x45g-3");
+		buf.setReadOnly(true);
 
 		eq(buf.getN(new Range(0, 1)), 5);
 		eq(buf.getN(new Range(2, 10)), 1234567890);
@@ -175,6 +177,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 		/************* 0123456789012345678901234567890 */
 		// buf.append("-abc-xAaw-54-bAr--The-End-");
 		buf.append("-abc-xaaw-54-bar--the-end-");
+		buf.setReadOnly(true);
 
 		int max = buf.size();
 
@@ -200,6 +203,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 		Buf buf = bufs.newBuf();
 
 		buf.append("first second  third\r\na b c\r\n");
+		buf.setReadOnly(true);
 
 		buf.position(0);
 		buf.limit(buf.size());
@@ -236,6 +240,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 		Buf buf = bufs.newBuf();
 
 		buf.append("abc:  xy:");
+		buf.setReadOnly(true);
 
 		buf.position(0);
 		buf.limit(buf.size());
@@ -307,6 +312,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 			String s = "GET /hi H\naa: bb\nxyz\r\n\r\n";
 			buf.append(s);
+			buf.setReadOnly(true);
 
 			buf.position(0);
 			buf.limit(buf.size());
