@@ -73,13 +73,14 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	RapidoidWorker next;
 
-	public RapidoidWorker(String name, final BufGroup bufs, final Protocol protocol, final RapidoidHelper helper,
-			int bufSizeKB, boolean noNelay) {
+	public RapidoidWorker(String name, final Protocol protocol, final RapidoidHelper helper, int bufSizeKB,
+			boolean noNelay) {
 		super(name);
-		this.bufs = bufs;
 
+		this.bufs = new BufGroup(14); // 2^14B (16 KB per buffer segment)
 		this.serverProtocol = protocol;
 		this.helper = helper;
+
 		this.maxPipelineSize = Conf.option("pipeline-max", Integer.MAX_VALUE);
 
 		final int queueSize = Conf.micro() ? 1000 : 1000000;
@@ -174,6 +175,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		int limit = conn.input().limit();
 		int osize = conn.output().size();
 
+		conn.input().setReadOnly(true);
+
 		ConnState state = conn.state();
 		long stateN = state.n;
 		Object stateObj = state.obj;
@@ -186,6 +189,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			} else {
 				conn.getProtocol().process(conn);
 			}
+
+			conn.input().setReadOnly(false);
 
 			if (!conn.closed && !conn.isAsync()) {
 				conn.done();
@@ -202,6 +207,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			// input not complete, so rollback
 			conn.input().position(pos);
 			conn.input().limit(limit);
+			conn.input().setReadOnly(false);
 
 			conn.output().deleteAfter(osize);
 

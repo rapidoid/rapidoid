@@ -34,8 +34,6 @@ import java.util.Set;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.BufGroup;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
@@ -60,12 +58,6 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 
 	@Inject(optional = true)
 	private int workers = Conf.cpus();
-
-	@Inject(optional = true)
-	private int bufSizeKB = 16;
-
-	@Inject(optional = true)
-	private boolean noDelay = false;
 
 	@Inject(optional = true)
 	private boolean blockingAccept = false;
@@ -153,17 +145,15 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 		ioWorkers = new RapidoidWorker[workers];
 
 		for (int i = 0; i < ioWorkers.length; i++) {
-			RapidoidHelper helper = Cls.newInstance(helperClass, exchangeClass);
-			String workerName = "server" + (i + 1);
-			BufGroup bufGroup = new BufGroup(14); // 2^14B (16 KB per buffer
-													// segment)
-			ioWorkers[i] = new RapidoidWorker(workerName, bufGroup, protocol, helper, bufSizeKB, noDelay);
+
+			RapidoidWorkerThread workerThread = new RapidoidWorkerThread(i, protocol, exchangeClass, helperClass);
+			workerThread.start();
+
+			ioWorkers[i] = workerThread.getWorker();
 
 			if (i > 0) {
 				ioWorkers[i - 1].next = ioWorkers[i];
 			}
-
-			new Thread(ioWorkers[i], workerName).start();
 		}
 
 		ioWorkers[ioWorkers.length - 1].next = ioWorkers[0];
