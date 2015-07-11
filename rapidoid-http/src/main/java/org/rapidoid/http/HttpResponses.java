@@ -47,7 +47,7 @@ public class HttpResponses {
 
 	private static final String[] CONNS = { "close", "keep-alive" };
 
-	private HttpResponse[][] responses = new HttpResponse[600][];
+	private final HttpResponse[][] responses = new HttpResponse[600][];
 
 	public HttpResponses(boolean withServerHeader, boolean withDateHeader) {
 		for (String respCode : RESPONSE_CODES) {

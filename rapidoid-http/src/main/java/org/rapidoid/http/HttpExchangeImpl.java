@@ -92,16 +92,16 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private boolean parsedHeaders;
 	private boolean parsedBody;
 
-	private int bodyPos;
+	private int responseBodyPos;
+	private int responseContentLengthPos;
+	private boolean writesResponseBody;
+	private boolean responseHasContentType;
+	private int responseStartingPos;
 
-	private boolean writesBody;
-	private boolean hasContentType;
-	private int startingPos;
 	private HttpResponses responses;
 	private Router router;
 
 	private Map<String, String> data;
-
 	private Map<String, String> errors;
 
 	/* STATE */
@@ -198,9 +198,10 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	private void resetResponse() {
-		writesBody = false;
-		bodyPos = -1;
-		hasContentType = false;
+		writesResponseBody = false;
+		responseBodyPos = -1;
+		responseContentLengthPos = -1;
+		responseHasContentType = false;
 		responses = null;
 		responseCode = -1;
 		redirectUrl = null;
@@ -477,7 +478,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized HttpExchange addHeader(byte[] name, byte[] value) {
-		U.must(!writesBody, "Cannot add header because the body is being rendered already!");
+		U.must(!writesResponseBody, "Cannot add header because the body is being rendered already!");
 
 		if (responseCode <= 0) {
 			responseCode(200);
@@ -493,17 +494,23 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	private HttpExchange responseCode(int responseCode) {
 		if (this.responseCode > 0) {
-			assert startingPos >= 0;
-			output().deleteAfter(startingPos);
+			assert responseStartingPos >= 0;
+			output().deleteAfter(responseStartingPos);
 		}
 
 		this.responseCode = responseCode;
 
-		startingPos = output().size();
-		output().append(getResp(responseCode).bytes());
-		hasContentType = false;
-		writesBody = false;
-		bodyPos = -1;
+		responseStartingPos = output().size();
+
+		HttpResponse resp = responses.get(responseCode, isKeepAlive.value);
+		assert resp != null;
+
+		output().append(resp.bytes());
+		responseContentLengthPos = responseStartingPos + resp.contentLengthPos + 10;
+
+		responseHasContentType = false;
+		writesResponseBody = false;
+		responseBodyPos = -1;
 
 		return this;
 	}
@@ -523,24 +530,17 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 			write(new byte[0]);
 
-			U.must(bodyPos >= 0);
+			U.must(responseBodyPos >= 0);
 
-			long responseSize = output().size() - bodyPos;
+			long responseSize = output().size() - responseBodyPos;
 			U.must(responseSize <= Integer.MAX_VALUE, "Response too big!");
 
-			int pos = startingPos + getResp(responseCode).contentLengthPos + 10;
-			output().putNumAsText(pos, responseSize, false);
+			output().putNumAsText(responseContentLengthPos, responseSize, false);
 
 			closeIf(!isKeepAlive.value);
 		}
 
 		complete = true;
-	}
-
-	private HttpResponse getResp(int code) {
-		HttpResponse resp = responses.get(code, isKeepAlive.value);
-		assert resp != null;
-		return resp;
 	}
 
 	@Override
@@ -563,14 +563,14 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized HttpExchange setContentType(MediaType mediaType) {
-		U.must(!hasContentType, "Content type was already set!");
+		U.must(!responseHasContentType, "Content type was already set!");
 
 		if (mediaType != null) {
 			addHeader(HttpHeader.CONTENT_TYPE.getBytes(), mediaType.getBytes());
 		}
 
 		// this must be at the end of this method, because state might get restarted
-		hasContentType = true;
+		responseHasContentType = true;
 
 		return this;
 	}
@@ -603,14 +603,14 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	public synchronized void ensureHeadersComplete() {
-		if (!writesBody) {
+		if (!writesResponseBody) {
 			beforeClosingHeaders();
-			if (!hasContentType) {
+			if (!responseHasContentType) {
 				html();
 			}
-			writesBody = true;
+			writesResponseBody = true;
 			write(CR_LF);
-			bodyPos = output().size();
+			responseBodyPos = output().size();
 		}
 	}
 
@@ -675,7 +675,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	public synchronized boolean hasContentType() {
-		return hasContentType;
+		return responseHasContentType;
 	}
 
 	@Override
