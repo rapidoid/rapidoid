@@ -903,9 +903,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		this.sessionStore = sessionStore;
 		this.router = router;
 
-		if (Conf.option("mode", null) == null) {
-			Conf.set("mode", detectedDevMode() ? "dev" : "production");
-			Log.info("Auto-detected dev/production mode", "mode", Conf.option("mode"));
+		synchronized (Conf.class) {
+			if (Conf.option("mode", null) == null) {
+				Conf.set("mode", detectedDevMode() ? "dev" : "production");
+				Log.info("Auto-detected dev/production mode", "mode", Conf.option("mode"));
+			}
 		}
 
 		String cookiepack = cookie(HttpExchangeImpl.COOKIEPACK_COOKIE, null);
