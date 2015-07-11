@@ -158,7 +158,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 		HttpExchangeImpl x = (HttpExchangeImpl) xch;
 
-		if (x.isLowLevelProcessing()) {
+		if (x.isLowLevelProcessing() || x.isAsync()) {
 			return;
 		}
 
