@@ -36,7 +36,6 @@ import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Local;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.aop.AOP;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
@@ -376,7 +375,7 @@ public class Wire {
 		List<Method> methods = Cls.getMethodsAnnotated(target.getClass(), Init.class);
 
 		for (Method method : methods) {
-			AOP.invoke(null, method, target);
+			Cls.invoke(null, method, target);
 		}
 	}
 

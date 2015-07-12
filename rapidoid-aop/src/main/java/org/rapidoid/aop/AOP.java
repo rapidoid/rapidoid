@@ -40,7 +40,7 @@ public class AOP {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T invoke(Object ctx, Method m, Object target, Object... args) {
+	public static <T> T invoke(Object context, Method m, Object target, Object... args) {
 		// simple and limited AOP invocation interceptor, only 1 annotation pet method is supported
 
 		for (Annotation ann : m.getAnnotations()) {
@@ -48,7 +48,7 @@ public class AOP {
 			AOPInterceptor interceptor = INTERCEPTORS.get(annotation);
 
 			if (interceptor != null) {
-				return (T) interceptor.intercept(ann, ctx, m, target, args);
+				return (T) interceptor.intercept(ann, context, m, target, args);
 			}
 		}
 
