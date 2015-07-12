@@ -232,4 +232,8 @@ public interface HttpExchange {
 
 	HttpExchange done();
 
+	/* EXTRAS: */
+
+	<P> P persistor();
+
 }
