@@ -375,7 +375,7 @@ public class Wire {
 		List<Method> methods = Cls.getMethodsAnnotated(target.getClass(), Init.class);
 
 		for (Method method : methods) {
-			Cls.invoke(null, method, target);
+			Cls.invoke(method, target);
 		}
 	}
 
