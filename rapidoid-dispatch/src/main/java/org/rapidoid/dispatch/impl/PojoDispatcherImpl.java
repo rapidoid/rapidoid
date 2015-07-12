@@ -150,7 +150,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 
 					if (param != null) {
 						String paramName = param.value();
-						String val = request.params().get(paramName);
+						Object val = request.params().get(paramName);
 						args[i] = Cls.convert(val, type);
 					} else if (isCustomSimpleArg(request, annotations[i])) {
 						args[i] = Cls.convert(customSimpleArg(request, annotations[i]), type);
@@ -293,12 +293,13 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		}
 	}
 
-	private Map<String, String> mapArg(PojoRequest request, String[] parts, int paramsFrom) {
-		Map<String, String> params = request.params();
+	private Map<String, Object> mapArg(PojoRequest request, String[] parts, int paramsFrom) {
+		Map<String, Object> params = request.params();
 
 		for (int j = paramsFrom; j < parts.length; j++) {
 			params.put("" + (j - paramsFrom + 1), parts[j]);
 		}
+
 		return params;
 	}
 
@@ -316,10 +317,10 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		return isUserDefined && isPublic;
 	}
 
-	private static void setBeanProperties(Object instance, Map<String, String> paramsMap) {
+	private static void setBeanProperties(Object instance, Map<String, Object> paramsMap) {
 		BeanProperties props = Beany.propertiesOf(instance.getClass());
 
-		for (Entry<String, String> entry : paramsMap.entrySet()) {
+		for (Entry<String, Object> entry : paramsMap.entrySet()) {
 			Prop prop = props.get(entry.getKey());
 			if (prop != null) {
 				Object value = entry.getValue();

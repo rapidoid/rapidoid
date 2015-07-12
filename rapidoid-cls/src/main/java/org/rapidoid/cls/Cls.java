@@ -647,6 +647,10 @@ public class Cls {
 		case STRING:
 			if (value instanceof Date) {
 				return (T) Dates.str((Date) value);
+			} else if (value instanceof byte[]) {
+				return (T) new String((byte[]) value);
+			} else if (value instanceof char[]) {
+				return (T) new String((char[]) value);
 			} else {
 				return (T) U.readable(value);
 			}

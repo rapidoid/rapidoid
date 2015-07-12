@@ -32,9 +32,9 @@ public class PojoRequestImpl implements PojoRequest {
 
 	private final String command;
 	private final String path;
-	private final Map<String, String> params;
+	private final Map<String, Object> params;
 
-	public PojoRequestImpl(String command, String path, Map<String, String> params) {
+	public PojoRequestImpl(String command, String path, Map<String, Object> params) {
 		this.command = command;
 		this.path = path;
 		this.params = params;
@@ -51,7 +51,7 @@ public class PojoRequestImpl implements PojoRequest {
 	}
 
 	@Override
-	public Map<String, String> params() {
+	public Map<String, Object> params() {
 		return params;
 	}
 

@@ -83,17 +83,17 @@ public interface HttpExchange {
 	byte[] file(String name, byte[] defaultValue);
 
 	/**
-	 * Data includes params + data.
+	 * Data includes params + posted.
 	 */
 	Map<String, String> data();
 
 	/**
-	 * Data includes params + data.
+	 * Data includes params + posted.
 	 */
 	String data(String name);
 
 	/**
-	 * Data includes params + data.
+	 * Data includes params + posted.
 	 */
 	String data(String name, String defaultValue);
 

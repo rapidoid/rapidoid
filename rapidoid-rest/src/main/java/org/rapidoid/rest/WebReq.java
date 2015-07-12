@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.dispatch.PojoRequest;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -48,8 +49,13 @@ public class WebReq implements PojoRequest {
 	}
 
 	@Override
-	public Map<String, String> params() {
-		return exchange.data();
+	public Map<String, Object> params() {
+		Map<String, Object> params = U.map();
+
+		params.putAll(exchange.data());
+		params.putAll(exchange.files());
+
+		return params;
 	}
 
 	public HttpExchange getExchange() {
