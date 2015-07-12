@@ -13,6 +13,8 @@ import org.rapidoid.plugins.languages.DefaultLanguagesPlugin;
 import org.rapidoid.plugins.languages.LanguagesPlugin;
 import org.rapidoid.plugins.lifecycle.DefaultLifecyclePlugin;
 import org.rapidoid.plugins.lifecycle.LifecyclePlugin;
+import org.rapidoid.plugins.remotecache.DefaultRemoteCachePlugin;
+import org.rapidoid.plugins.remotecache.RemoteCachePlugin;
 import org.rapidoid.plugins.sms.DefaultSMSPlugin;
 import org.rapidoid.plugins.sms.SMSPlugin;
 import org.rapidoid.plugins.users.DefaultUsersPlugin;
@@ -49,6 +51,7 @@ public final class Plugins {
 	private static volatile UsersPlugin usersPlugin = new DefaultUsersPlugin();
 	private static volatile EmailPlugin emailPlugin = new DefaultEmailPlugin();
 	private static volatile SMSPlugin smsPlugin = new DefaultSMSPlugin();
+	private static volatile RemoteCachePlugin remoteCachePlugin = new DefaultRemoteCachePlugin();
 
 	public static DBPlugin db() {
 		return dbPlugin;
@@ -76,6 +79,10 @@ public final class Plugins {
 
 	public static SMSPlugin sms() {
 		return smsPlugin;
+	}
+
+	public static RemoteCachePlugin remoteCache() {
+		return remoteCachePlugin;
 	}
 
 	public static void register(LifecyclePlugin lifecyclePlugin) {
@@ -111,6 +118,11 @@ public final class Plugins {
 	public static void register(SMSPlugin smsPlugin) {
 		Log.info("Registering SMS plugin", "plugin", smsPlugin);
 		Plugins.smsPlugin = smsPlugin;
+	}
+
+	public static void register(RemoteCachePlugin remoteCachePlugin) {
+		Log.info("Registering RemoteCache plugin", "plugin", remoteCachePlugin);
+		Plugins.remoteCachePlugin = remoteCachePlugin;
 	}
 
 }
