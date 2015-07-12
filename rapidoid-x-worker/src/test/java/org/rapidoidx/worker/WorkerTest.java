@@ -21,12 +21,12 @@ package org.rapidoidx.worker;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.UTILS;
-import org.junit.Test;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -71,7 +71,7 @@ public class WorkerTest extends TestCommons {
 		wrk1.start();
 		wrk2.start();
 
-		UTILS.sleep(1000);
+		U.sleep(1000);
 
 		eq(wrk1.pendingTasksCount(), 0);
 		eq(wrk2.pendingTasksCount(), 0);
@@ -85,7 +85,7 @@ public class WorkerTest extends TestCommons {
 		isTrue(wrk1.enqueue("aaaaa", false));
 		isTrue(wrk2.enqueue(77, false));
 
-		UTILS.sleep(1000);
+		U.sleep(1000);
 
 		wrk1.halt();
 		wrk2.shutdown();

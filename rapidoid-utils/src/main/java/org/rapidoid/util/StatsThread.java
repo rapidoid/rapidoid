@@ -39,7 +39,7 @@ public class StatsThread extends Thread {
 		Log.info("Starting stats thread...");
 
 		while (!Thread.interrupted()) {
-			UTILS.sleep(1000);
+			U.sleep(1000);
 			String stats = UTILS.getCpuMemStats();
 			if (!stats.equals(lastStats)) {
 				System.out.println(stats);

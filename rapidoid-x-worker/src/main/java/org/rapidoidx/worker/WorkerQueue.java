@@ -25,7 +25,7 @@ import java.util.Queue;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -52,7 +52,7 @@ public class WorkerQueue<T> {
 		T item;
 
 		while ((item = queue.poll()) == null) {
-			UTILS.sleep(100);
+			U.sleep(100);
 		}
 
 		return item;
@@ -60,7 +60,7 @@ public class WorkerQueue<T> {
 
 	public void put(T item) {
 		while (!queue.offer(item)) {
-			UTILS.sleep(100);
+			U.sleep(100);
 		}
 	}
 

@@ -21,6 +21,7 @@ package org.rapidoidx.http;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
@@ -30,7 +31,7 @@ import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.D;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.U;
 import org.rapidoid.wrap.BoolWrap;
 import org.rapidoid.wrap.IntWrap;
 import org.rapidoidx.bytes.BytesUtil;
@@ -39,7 +40,6 @@ import org.rapidoidx.data.Ranges;
 import org.rapidoidx.net.TCP;
 import org.rapidoidx.net.abstracts.Channel;
 import org.rapidoidx.net.impl.FiniteStateProtocol;
-import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -106,7 +106,7 @@ public class HttpPipeliningTest extends TestCommons {
 		}).build().start();
 
 		int sec = 5;
-		UTILS.sleep(sec * 1000);
+		U.sleep(sec * 1000);
 
 		server.shutdown();
 

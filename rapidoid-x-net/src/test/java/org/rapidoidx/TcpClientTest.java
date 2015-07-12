@@ -21,17 +21,17 @@ package org.rapidoidx;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.U;
 import org.rapidoidx.net.Protocol;
 import org.rapidoidx.net.TCP;
 import org.rapidoidx.net.TCPClient;
 import org.rapidoidx.net.TCPServer;
 import org.rapidoidx.net.abstracts.Channel;
-import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -66,12 +66,12 @@ public class TcpClientTest extends NetTestCommons {
 		TCPClient client = TCP.client().host("localhost").port(8080).connections(5).protocol(HI_CLIENT).build().start();
 
 		// let the clients wait
-		UTILS.sleep(3000);
+		U.sleep(3000);
 
 		TCPServer server = TCP.server().port(8080).protocol(UPPERCASE_SERVER).build().start();
 
 		// let the server serve the clients
-		UTILS.sleep(3000);
+		U.sleep(3000);
 
 		eq(client.info().messagesProcessed(), 5);
 		eq(server.info().messagesProcessed(), 5);
@@ -88,12 +88,12 @@ public class TcpClientTest extends NetTestCommons {
 		client.connect("localhost", 8080, HI_CLIENT, 10, false, null);
 
 		// let the clients wait
-		UTILS.sleep(3000);
+		U.sleep(3000);
 
 		TCPServer server = TCP.server().port(8080).protocol(UPPERCASE_SERVER).build().start();
 
 		// let the server serve the clients
-		UTILS.sleep(3000);
+		U.sleep(3000);
 
 		eq(client.info().messagesProcessed(), 10);
 		eq(server.info().messagesProcessed(), 10);
@@ -110,13 +110,13 @@ public class TcpClientTest extends NetTestCommons {
 		client.connect("localhost", 9090, HI_CLIENT, 2, false, null);
 
 		// let the clients wait
-		UTILS.sleep(3000);
+		U.sleep(3000);
 
 		TCPServer server1 = TCP.server().port(8080).protocol(UPPERCASE_SERVER).build().start();
 		TCPServer server2 = TCP.server().port(9090).protocol(UPPERCASE_SERVER).build().start();
 
 		// let the servers serve the clients
-		UTILS.sleep(3000);
+		U.sleep(3000);
 
 		eq(client.info().messagesProcessed(), 5);
 		eq(server1.info().messagesProcessed(), 3);

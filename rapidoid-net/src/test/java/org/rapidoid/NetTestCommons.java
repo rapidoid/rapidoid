@@ -27,7 +27,7 @@ import org.rapidoid.net.Protocol;
 import org.rapidoid.net.Serve;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -36,14 +36,14 @@ public abstract class NetTestCommons extends TestCommons {
 	protected void server(Protocol protocol, Runnable client) {
 		TCPServer server = Serve.listen(protocol);
 
-		UTILS.sleep(300);
+		U.sleep(300);
 		System.out.println("----------------------------------------");
 
 		try {
 			client.run();
 		} finally {
 			server.shutdown();
-			UTILS.sleep(300);
+			U.sleep(300);
 			System.out.println("--- SERVER STOPPED ---");
 		}
 

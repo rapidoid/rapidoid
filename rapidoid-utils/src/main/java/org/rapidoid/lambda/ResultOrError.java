@@ -23,7 +23,6 @@ package org.rapidoid.lambda;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -56,7 +55,7 @@ public class ResultOrError<T> implements Callback<T> {
 
 	public T get() {
 		while (!done) {
-			UTILS.sleep(10);
+			U.sleep(10);
 		}
 
 		if (error != null) {

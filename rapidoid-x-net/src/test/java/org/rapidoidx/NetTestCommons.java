@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.U;
 import org.rapidoidx.net.Protocol;
 import org.rapidoidx.net.TCP;
 import org.rapidoidx.net.TCPServer;
@@ -37,14 +37,14 @@ public abstract class NetTestCommons extends TestCommons {
 	protected void server(Protocol protocol, Runnable client) {
 		TCPServer server = TCP.listen(protocol);
 
-		UTILS.sleep(300);
+		U.sleep(300);
 		System.out.println("----------------------------------------");
 
 		try {
 			client.run();
 		} finally {
 			server.shutdown();
-			UTILS.sleep(300);
+			U.sleep(300);
 			System.out.println("--- SERVER STOPPED ---");
 		}
 

@@ -49,7 +49,6 @@ import org.rapidoid.plugins.lifecycle.LifecyclePlugin;
 import org.rapidoid.plugins.users.UsersPlugin;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 import org.rapidoid.util.Usage;
 
 @Authors("Nikolche Mihajlovski")
@@ -174,7 +173,7 @@ public class Apps {
 		new Thread() {
 			@Override
 			public void run() {
-				UTILS.sleep(afterSeconds * 1000);
+				U.sleep(afterSeconds * 1000);
 				terminate();
 			}
 		}.start();
@@ -187,7 +186,7 @@ public class Apps {
 			@Override
 			public void run() {
 				while (!Thread.interrupted()) {
-					UTILS.sleep(500);
+					U.sleep(500);
 					long lastUsed = Usage.getLastAppUsedOn();
 					long idleSec = (U.time() - lastUsed) / 1000;
 					if (idleSec >= idleSeconds) {

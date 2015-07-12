@@ -106,13 +106,13 @@ public abstract class HttpTestCommons extends TestCommons {
 	protected void start() {
 		server.start();
 
-		UTILS.sleep(300);
+		U.sleep(300);
 		System.out.println("----------------------------------------");
 	}
 
 	protected void shutdown() {
 		server.shutdown();
-		UTILS.sleep(300);
+		U.sleep(300);
 		System.out.println("--- SERVER STOPPED ---");
 	}
 

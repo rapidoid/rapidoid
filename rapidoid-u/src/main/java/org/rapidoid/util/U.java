@@ -784,4 +784,20 @@ public class U {
 		}
 	}
 
+	/**
+	 * Sleeps (calling Thread.sleep) for the specified period.
+	 * 
+	 * If the thread is interrupted while sleeping, throws {@link ThreadDeath} to stop the thread.
+	 * 
+	 * @param millis
+	 *            the length of time to sleep in milliseconds.
+	 */
+	public static void sleep(long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			throw new ThreadDeath();
+		}
+	}
+
 }

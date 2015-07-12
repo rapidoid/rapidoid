@@ -627,14 +627,6 @@ public class UTILS implements Constants {
 		D.print(info + ": " + delta + " ms");
 	}
 
-	public static void sleep(long millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (InterruptedException e) {
-			throw new ThreadDeath();
-		}
-	}
-
 	public static Throwable rootCause(Throwable e) {
 		while (e.getCause() != null) {
 			e = e.getCause();

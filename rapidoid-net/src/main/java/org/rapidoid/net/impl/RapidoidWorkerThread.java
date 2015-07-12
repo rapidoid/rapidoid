@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.net.Protocol;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.U;
 import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")
@@ -71,7 +71,7 @@ public class RapidoidWorkerThread extends Thread {
 
 	public RapidoidWorker getWorker() {
 		while (worker == null) {
-			UTILS.sleep(50);
+			U.sleep(50);
 		}
 
 		return worker;

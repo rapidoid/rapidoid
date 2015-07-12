@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -141,7 +140,7 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 	public void waitToStart() {
 		// wait for the event loop to activate
 		while (status == LoopStatus.INIT || status == LoopStatus.BEFORE_LOOP) {
-			UTILS.sleep(50);
+			U.sleep(50);
 		}
 	}
 
@@ -158,7 +157,7 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 	public void waitToStop() {
 		// wait for the event loop to stop
 		while (status != LoopStatus.STOPPED && status != LoopStatus.FAILED) {
-			UTILS.sleep(50);
+			U.sleep(50);
 		}
 	}
 
