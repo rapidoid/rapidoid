@@ -1,12 +1,10 @@
-package org.rapidoid.plugins.sms;
+package org.rapidoid.concurrent;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Callback;
+import org.rapidoid.util.U;
 
 /*
  * #%L
- * rapidoid-plugins
+ * rapidoid-concurrent
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -24,13 +22,26 @@ import org.rapidoid.concurrent.Callback;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public abstract class AbstractSMSPlugin implements SMSPlugin {
+/**
+ * @author Nikolche Mihajlovski
+ * @since 4.1.0
+ */
+public class Callbacks {
 
-	@Override
-	public void send(Iterable<String> toNumbers, String content, Callback<Void> callback) {
-		throw new AbstractMethodError("Not implemented!");
+	public static <T> void done(Callback<T> callback, T result, Throwable error) {
+		try {
+			callback.onDone(result, error);
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
+	}
+
+	public static <T> void success(Callback<T> callback, T result) {
+		done(callback, result, null);
+	}
+
+	public static <T> void error(Callback<T> callback, Throwable error) {
+		done(callback, null, error);
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
 import org.rapidoid.util.U;
 
 /*

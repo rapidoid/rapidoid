@@ -23,11 +23,11 @@ package org.rapidoidx.fullstack;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.HTTPInterceptor;
 import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.http.HttpInterception;
 import org.rapidoid.http.HttpProtocol;
-import org.rapidoid.lambda.Callback;
 import org.rapidoidx.db.Database;
 
 @Authors("Nikolche Mihajlovski")

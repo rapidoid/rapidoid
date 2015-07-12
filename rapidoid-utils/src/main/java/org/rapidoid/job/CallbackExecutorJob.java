@@ -22,7 +22,7 @@ package org.rapidoid.job;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.lambda.Callback;
+import org.rapidoid.concurrent.Callback;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

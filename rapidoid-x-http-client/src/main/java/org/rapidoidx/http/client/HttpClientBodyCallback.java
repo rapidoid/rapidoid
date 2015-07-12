@@ -2,8 +2,8 @@ package org.rapidoidx.http.client;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.lambda.Callback;
 import org.rapidoidx.buffer.Buf;
 import org.rapidoidx.data.Ranges;
 

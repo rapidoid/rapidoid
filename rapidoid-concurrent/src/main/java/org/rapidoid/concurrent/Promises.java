@@ -1,8 +1,10 @@
-package org.rapidoid.lambda;
+package org.rapidoid.concurrent;
+
+import org.rapidoid.concurrent.impl.PromiseImpl;
 
 /*
  * #%L
- * rapidoid-lambda
+ * rapidoid-concurrent
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -22,10 +24,12 @@ package org.rapidoid.lambda;
 
 /**
  * @author Nikolche Mihajlovski
- * @since 2.0.0
+ * @since 4.1.0
  */
-public interface Callback<T> {
+public class Promises {
 
-	void onDone(T result, Throwable error) throws Exception;
+	public static <T> Promise<T> create() {
+		return new PromiseImpl<T>();
+	}
 
 }

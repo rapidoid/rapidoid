@@ -26,7 +26,7 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.lambda.Callback;
+import org.rapidoid.concurrent.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.plugins.Plugins;

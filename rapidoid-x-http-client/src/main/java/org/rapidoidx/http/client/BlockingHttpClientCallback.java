@@ -23,7 +23,9 @@ package org.rapidoidx.http.client;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.lambda.ResultOrError;
+import org.rapidoid.concurrent.Callbacks;
+import org.rapidoid.concurrent.Promise;
+import org.rapidoid.concurrent.Promises;
 import org.rapidoidx.buffer.Buf;
 import org.rapidoidx.data.Range;
 import org.rapidoidx.data.Ranges;
@@ -32,23 +34,26 @@ import org.rapidoidx.data.Ranges;
 @Since("3.0.0")
 public class BlockingHttpClientCallback implements HttpClientCallback {
 
-	private final ResultOrError<byte[]> resultOrError = new ResultOrError<byte[]>();
+	private final Promise<byte[]> promise = Promises.create();
 
 	@Override
 	public void onResult(Buf buffer, Ranges head, Ranges body) {
 		Range whole = new Range();
 		whole.start = head.ranges[0].start;
 		whole.length = body.last().start + body.last().length;
-		resultOrError.setResult(whole.bytes(buffer));
+
+		byte[] result = whole.bytes(buffer);
+
+		Callbacks.done(promise, result, null);
 	}
 
 	@Override
 	public void onError(Throwable error) {
-		resultOrError.setError(error);
+		Callbacks.done(promise, null, error);
 	}
 
 	public byte[] getResponse() {
-		return resultOrError.get();
+		return promise.get();
 	}
 
 }

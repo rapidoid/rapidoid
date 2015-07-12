@@ -71,14 +71,15 @@
 
 	<modules>
 		<module>rapidoid-annotations</module>
+		<module>rapidoid-u</module>
+		<module>rapidoid-dict</module>
+		<module>rapidoid-tuple</module>
+		<module>rapidoid-config</module>
 		<module>rapidoid-lambda</module>
+		<module>rapidoid-concurrent</module>
 		<module>rapidoid-entity</module>
 		<module>rapidoid-plugins</module>
 		<module>rapidoid-dao</module>
-		<module>rapidoid-dict</module>
-		<module>rapidoid-tuple</module>
-		<module>rapidoid-u</module>
-		<module>rapidoid-config</module>
 		<module>rapidoid-crypto</module>
 		<module>rapidoid-arr</module>
 		<module>rapidoid-dates</module>

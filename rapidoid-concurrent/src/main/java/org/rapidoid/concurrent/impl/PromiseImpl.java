@@ -1,8 +1,8 @@
-package org.rapidoid.lambda;
+package org.rapidoid.concurrent.impl;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-concurrent
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,13 +20,16 @@ package org.rapidoid.lambda;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+import java.util.concurrent.TimeoutException;
+
+import org.rapidoid.concurrent.Promise;
 import org.rapidoid.util.U;
 
-@Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
-public class ResultOrError<T> implements Callback<T> {
+/**
+ * @author Nikolche Mihajlovski
+ * @since 4.1.0
+ */
+public class PromiseImpl<T> implements Promise<T> {
 
 	private volatile boolean done;
 
@@ -54,15 +57,46 @@ public class ResultOrError<T> implements Callback<T> {
 	}
 
 	public T get() {
+		try {
+			return get(Long.MAX_VALUE);
+		} catch (TimeoutException e) {
+			throw U.notExpected();
+		}
+	}
+
+	@Override
+	public T get(long timeoutMs) throws TimeoutException {
+		return get(timeoutMs, 5);
+	}
+
+	@Override
+	public T get(long timeoutMs, long sleepingIntervalMs) throws TimeoutException {
+		long waitingSince = U.time();
+
 		while (!done) {
-			U.sleep(10);
+			if (U.time() - waitingSince > timeoutMs) {
+				throw new TimeoutException();
+			}
+
+			U.sleep(sleepingIntervalMs);
 		}
 
 		if (error != null) {
-			throw U.rte("Cannot get result, there was an error!", error);
+			throw U.rte("Cannot get the result, there was an error!", error);
 		}
 
 		return result;
+	}
+
+	@Override
+	public boolean isDone() {
+		return done;
+	}
+
+	@Override
+	public boolean isSuccessful() {
+		U.must(done, "The promise is not done yet!");
+		return error == null;
 	}
 
 }

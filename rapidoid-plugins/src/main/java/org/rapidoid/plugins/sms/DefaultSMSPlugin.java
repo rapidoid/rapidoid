@@ -2,8 +2,8 @@ package org.rapidoid.plugins.sms;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.lambda.Callback;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;

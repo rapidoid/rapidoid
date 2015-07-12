@@ -13,9 +13,9 @@ import javax.persistence.metamodel.Metamodel;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
+import org.rapidoid.concurrent.Callback;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.lambda.Callback;
 import org.rapidoid.plugins.db.DBPluginBase;
 import org.rapidoid.util.U;
 

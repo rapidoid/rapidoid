@@ -16,7 +16,7 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertyFilter;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.lambda.Callback;
+import org.rapidoid.concurrent.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.plugins.entities.Entities;

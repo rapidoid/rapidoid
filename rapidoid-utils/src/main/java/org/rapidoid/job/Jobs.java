@@ -26,9 +26,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.lambda.Callback;
 import org.rapidoid.util.Constants;
 
 @Authors("Nikolche Mihajlovski")

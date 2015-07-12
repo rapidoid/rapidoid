@@ -36,7 +36,7 @@ import org.rapidoid.activity.NamedActivity;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
-import org.rapidoid.lambda.Callback;
+import org.rapidoid.concurrent.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.rql.ParsedRQL;
