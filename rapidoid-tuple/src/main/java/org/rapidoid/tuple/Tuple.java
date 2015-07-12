@@ -34,6 +34,10 @@ public class Tuple {
 		this.values = values;
 	}
 
+	public Object[] values() {
+		return values;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
