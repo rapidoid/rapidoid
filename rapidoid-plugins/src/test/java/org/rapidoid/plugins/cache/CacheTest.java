@@ -1,4 +1,4 @@
-package org.rapidoid.plugins.remotecache;
+package org.rapidoid.plugins.cache;
 
 /*
  * #%L
@@ -26,9 +26,10 @@ import java.util.concurrent.TimeoutException;
 import org.junit.Test;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
+import org.rapidoid.plugins.cache.Cache;
 import org.rapidoid.util.U;
 
-public class RemoteCacheTest {
+public class CacheTest {
 
 	/*
 	 * Just a demo of the API.
@@ -37,19 +38,19 @@ public class RemoteCacheTest {
 	@Test(expected = AbstractMethodError.class)
 	public void remoteCacheAPIDemo() {
 
-		RemoteCache.set("key1", U.set(1, 2, 3), 1000);
+		Cache.set("key1", U.set(1, 2, 3), 1000);
 
-		RemoteCache.set("key2", "abc", 1500, new Callback<Void>() {
+		Cache.set("key2", "abc", 1500, new Callback<Void>() {
 			@Override
 			public void onDone(Void result, Throwable error) throws Exception {}
 		});
 
-		RemoteCache.get("key1", new Callback<Set<Integer>>() {
+		Cache.get("key1", new Callback<Set<Integer>>() {
 			@Override
 			public void onDone(Set<Integer> result, Throwable error) throws Exception {}
 		});
 
-		Future<String> s = RemoteCache.get("key2");
+		Future<String> s = Cache.get("key2");
 
 		String ss = s.get();
 
@@ -57,7 +58,7 @@ public class RemoteCacheTest {
 			s.get(100);
 		} catch (TimeoutException e) {}
 
-		Future<Void> set = RemoteCache.set(new Integer(123), U.map("aa", true), 5000);
+		Future<Void> set = Cache.set(new Integer(123), U.map("aa", true), 5000);
 		set.get();
 	}
 

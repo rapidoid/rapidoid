@@ -1,12 +1,8 @@
-package org.rapidoid.plugins.remotecache;
+package org.rapidoid.plugins.cache;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
-import org.rapidoid.concurrent.Future;
-import org.rapidoid.concurrent.Promise;
-import org.rapidoid.concurrent.Promises;
-import org.rapidoid.plugins.Plugins;
 
 /*
  * #%L
@@ -30,26 +26,10 @@ import org.rapidoid.plugins.Plugins;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class RemoteCache {
+public interface CachePlugin {
 
-	public static void set(Object key, Object value, long timeToLiveMs, Callback<Void> callback) {
-		Plugins.remoteCache().set(key, value, timeToLiveMs, callback);
-	}
+	void set(Object key, Object value, long timeToLiveMs, Callback<Void> callback);
 
-	public static <T> void get(Object key, Callback<T> callback) {
-		Plugins.remoteCache().get(key, callback);
-	}
-
-	public static Future<Void> set(Object key, Object value, long timeToLiveMs) {
-		Promise<Void> promise = Promises.create();
-		set(key, value, timeToLiveMs, promise);
-		return promise;
-	}
-
-	public static <T> Future<T> get(Object key) {
-		Promise<T> promise = Promises.create();
-		get(key, promise);
-		return promise;
-	}
+	<T> void get(Object key, Callback<T> callback);
 
 }

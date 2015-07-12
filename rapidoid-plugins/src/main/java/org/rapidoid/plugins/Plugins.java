@@ -3,6 +3,8 @@ package org.rapidoid.plugins;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
+import org.rapidoid.plugins.cache.CachePlugin;
+import org.rapidoid.plugins.cache.DefaultCachePlugin;
 import org.rapidoid.plugins.db.DBPlugin;
 import org.rapidoid.plugins.db.DefaultDBPlugin;
 import org.rapidoid.plugins.email.DefaultEmailPlugin;
@@ -13,8 +15,6 @@ import org.rapidoid.plugins.languages.DefaultLanguagesPlugin;
 import org.rapidoid.plugins.languages.LanguagesPlugin;
 import org.rapidoid.plugins.lifecycle.DefaultLifecyclePlugin;
 import org.rapidoid.plugins.lifecycle.LifecyclePlugin;
-import org.rapidoid.plugins.remotecache.DefaultRemoteCachePlugin;
-import org.rapidoid.plugins.remotecache.RemoteCachePlugin;
 import org.rapidoid.plugins.sms.DefaultSMSPlugin;
 import org.rapidoid.plugins.sms.SMSPlugin;
 import org.rapidoid.plugins.users.DefaultUsersPlugin;
@@ -51,7 +51,7 @@ public final class Plugins {
 	private static volatile UsersPlugin usersPlugin = new DefaultUsersPlugin();
 	private static volatile EmailPlugin emailPlugin = new DefaultEmailPlugin();
 	private static volatile SMSPlugin smsPlugin = new DefaultSMSPlugin();
-	private static volatile RemoteCachePlugin remoteCachePlugin = new DefaultRemoteCachePlugin();
+	private static volatile CachePlugin cachePlugin = new DefaultCachePlugin();
 
 	public static DBPlugin db() {
 		return dbPlugin;
@@ -81,8 +81,8 @@ public final class Plugins {
 		return smsPlugin;
 	}
 
-	public static RemoteCachePlugin remoteCache() {
-		return remoteCachePlugin;
+	public static CachePlugin remoteCache() {
+		return cachePlugin;
 	}
 
 	public static void register(LifecyclePlugin lifecyclePlugin) {
@@ -120,9 +120,9 @@ public final class Plugins {
 		Plugins.smsPlugin = smsPlugin;
 	}
 
-	public static void register(RemoteCachePlugin remoteCachePlugin) {
-		Log.info("Registering RemoteCache plugin", "plugin", remoteCachePlugin);
-		Plugins.remoteCachePlugin = remoteCachePlugin;
+	public static void register(CachePlugin cachePlugin) {
+		Log.info("Registering Cache plugin", "plugin", cachePlugin);
+		Plugins.cachePlugin = cachePlugin;
 	}
 
 }

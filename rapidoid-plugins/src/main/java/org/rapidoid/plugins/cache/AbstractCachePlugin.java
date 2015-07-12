@@ -1,7 +1,8 @@
-package org.rapidoid.plugins.remotecache;
+package org.rapidoid.plugins.cache;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
 
 /*
  * #%L
@@ -25,6 +26,16 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class DefaultRemoteCachePlugin extends AbstractRemoteCachePlugin {
+public abstract class AbstractCachePlugin implements CachePlugin {
+
+	@Override
+	public void set(Object key, Object value, long timeToLiveMs, Callback<Void> callback) {
+		throw new AbstractMethodError("Not implemented!");
+	}
+
+	@Override
+	public <T> void get(Object key, Callback<T> callback) {
+		throw new AbstractMethodError("Not implemented!");
+	}
 
 }
