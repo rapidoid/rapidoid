@@ -1,12 +1,8 @@
 package org.rapidoid.plugins.cache;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.plugins.Plugins;
-
 /*
  * #%L
- * rapidoid-plugins
+ * rapidoid-cache-guava
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -24,12 +20,27 @@ import org.rapidoid.plugins.Plugins;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
+import org.rapidoid.concurrent.Callbacks;
+
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class Cache {
+public class NoCache<K, V> extends AbstractCache<K, V> {
 
-	public static <K, V> ICache<K, V> create(String cacheName, long timeToLiveMs, boolean resetTimeToLiveWhenAccessed) {
-		return Plugins.cache().create(cacheName, timeToLiveMs, resetTimeToLiveWhenAccessed);
+	public NoCache(String cacheName, long timeToLiveMs, boolean resetTimeToLiveWhenAccessed) {
+		super(cacheName, timeToLiveMs, true);
+	}
+
+	@Override
+	protected void doSet(K key, V value, long timeToLiveMs, Callback<Void> callback) {
+		Callbacks.success(callback, null);
+	}
+
+	@Override
+	protected void doGet(K key, Callback<V> callback) {
+		Callbacks.success(callback, null);
 	}
 
 }

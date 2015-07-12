@@ -2,7 +2,6 @@ package org.rapidoid.plugins.cache;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Callback;
 
 /*
  * #%L
@@ -28,8 +27,6 @@ import org.rapidoid.concurrent.Callback;
 @Since("4.1.0")
 public interface CachePlugin {
 
-	void set(Object key, Object value, long timeToLiveMs, Callback<Void> callback);
-
-	<T> void get(Object key, Callback<T> callback);
+	<K, V> ICache<K, V> create(String cacheName, long timeToLiveMs, boolean resetTimeToLiveWhenAccessed);
 
 }

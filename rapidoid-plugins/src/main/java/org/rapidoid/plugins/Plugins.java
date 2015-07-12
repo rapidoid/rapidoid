@@ -81,7 +81,7 @@ public final class Plugins {
 		return smsPlugin;
 	}
 
-	public static CachePlugin remoteCache() {
+	public static CachePlugin cache() {
 		return cachePlugin;
 	}
 

@@ -1,9 +1,5 @@
 package org.rapidoid.plugins.cache;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.plugins.Plugins;
-
 /*
  * #%L
  * rapidoid-plugins
@@ -24,12 +20,25 @@ import org.rapidoid.plugins.Plugins;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
+import org.rapidoid.concurrent.Future;
+
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class Cache {
+public interface ICache<K, V> {
 
-	public static <K, V> ICache<K, V> create(String cacheName, long timeToLiveMs, boolean resetTimeToLiveWhenAccessed) {
-		return Plugins.cache().create(cacheName, timeToLiveMs, resetTimeToLiveWhenAccessed);
-	}
+	void set(K key, V value, Callback<Void> callback);
+
+	void set(K key, V value, long timeToLiveMs, Callback<Void> callback);
+
+	void get(K key, Callback<V> callback);
+
+	Future<Void> set(K key, V value);
+
+	Future<Void> set(K key, V value, long timeToLiveMs);
+
+	Future<V> get(K key);
 
 }

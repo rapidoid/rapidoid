@@ -20,45 +20,48 @@ package org.rapidoid.plugins.cache;
  * #L%
  */
 
-import java.util.Set;
 import java.util.concurrent.TimeoutException;
 
 import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
-import org.rapidoid.plugins.cache.Cache;
+import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 
-public class CacheTest {
+@Authors("Nikolche Mihajlovski")
+@Since("4.1.0")
+public class CacheTest extends TestCommons {
 
-	/*
-	 * Just a demo of the API.
+	/**
+	 * The default cache implementation is {@link NoCache}.
 	 */
-	@SuppressWarnings("unused")
-	@Test(expected = AbstractMethodError.class)
+	@Test
 	public void remoteCacheAPIDemo() {
 
-		Cache.set("key1", U.set(1, 2, 3), 1000);
+		ICache<String, Object> cache = Cache.create("testcache", 1000, true);
 
-		Cache.set("key2", "abc", 1500, new Callback<Void>() {
+		cache.set("key1", U.set(1, 2, 3), 1000);
+
+		cache.set("key2", "abc", 1500, new Callback<Void>() {
 			@Override
 			public void onDone(Void result, Throwable error) throws Exception {}
 		});
 
-		Cache.get("key1", new Callback<Set<Integer>>() {
+		cache.get("key1", new Callback<Object>() {
 			@Override
-			public void onDone(Set<Integer> result, Throwable error) throws Exception {}
+			public void onDone(Object result, Throwable error) throws Exception {}
 		});
 
-		Future<String> s = Cache.get("key2");
-
-		String ss = s.get();
+		Future<Object> s = cache.get("key2");
+		isNull(s.get());
 
 		try {
 			s.get(100);
 		} catch (TimeoutException e) {}
 
-		Future<Void> set = Cache.set(new Integer(123), U.map("aa", true), 5000);
+		Future<Void> set = cache.set("abcd", U.map("aa", true), 5000);
 		set.get();
 	}
 

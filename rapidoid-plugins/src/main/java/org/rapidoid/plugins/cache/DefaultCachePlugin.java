@@ -27,4 +27,9 @@ import org.rapidoid.annotation.Since;
 @Since("4.1.0")
 public class DefaultCachePlugin extends AbstractCachePlugin {
 
+	@Override
+	public <K, V> ICache<K, V> create(String cacheName, long timeToLiveMs, boolean resetTimeToLiveWhenAccessed) {
+		return new NoCache<K, V>(cacheName, timeToLiveMs, resetTimeToLiveWhenAccessed);
+	}
+
 }

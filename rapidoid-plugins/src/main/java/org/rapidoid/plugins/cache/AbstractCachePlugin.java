@@ -2,7 +2,6 @@ package org.rapidoid.plugins.cache;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Callback;
 
 /*
  * #%L
@@ -29,12 +28,7 @@ import org.rapidoid.concurrent.Callback;
 public abstract class AbstractCachePlugin implements CachePlugin {
 
 	@Override
-	public void set(Object key, Object value, long timeToLiveMs, Callback<Void> callback) {
-		throw new AbstractMethodError("Not implemented!");
-	}
-
-	@Override
-	public <T> void get(Object key, Callback<T> callback) {
+	public <K, V> ICache<K, V> create(String cacheName, long timeToLiveMs, boolean resetTimeToLiveWhenAccessed) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
