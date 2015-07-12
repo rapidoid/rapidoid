@@ -28,17 +28,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Param;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOP;
-import org.rapidoid.beany.BeanProperties;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
-import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.dispatch.PojoDispatchException;
@@ -232,7 +229,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 
 			try {
 				Object instance = constructor.newInstance();
-				setBeanProperties(instance, request.params());
+				Beany.update(instance, request.params());
 				return instance;
 
 			} catch (Exception e) {
@@ -245,7 +242,6 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		} catch (SecurityException e) {
 			throw error(e, "Cannot retrieve the constructor with 0 parameters for type '%s'!", type.getCanonicalName());
 		}
-
 	}
 
 	protected Object getCustomArg(PojoRequest request, Class<?> type, String[] parts, int paramsFrom, int paramsSize) {
@@ -315,18 +311,6 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		boolean isPublic = !Modifier.isAbstract(modifiers) && Modifier.isPublic(modifiers);
 
 		return isUserDefined && isPublic;
-	}
-
-	private static void setBeanProperties(Object instance, Map<String, Object> paramsMap) {
-		BeanProperties props = Beany.propertiesOf(instance.getClass());
-
-		for (Entry<String, Object> entry : paramsMap.entrySet()) {
-			Prop prop = props.get(entry.getKey());
-			if (prop != null) {
-				Object value = entry.getValue();
-				prop.set(instance, value);
-			}
-		}
 	}
 
 	protected static PojoDispatchException error(Throwable cause, String msg, Object... args) {
