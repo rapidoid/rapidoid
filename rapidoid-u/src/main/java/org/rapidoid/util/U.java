@@ -741,9 +741,9 @@ public class U {
 		return sb.toString();
 	}
 
-	public static void validateArg(String argumentName, boolean isValid) {
-		if (!isValid) {
-			throw illegalArg("The argument '%s' has invalid value!", argumentName);
+	public static void argMust(boolean expectedCondition, String message, Object... args) {
+		if (!expectedCondition) {
+			throw illegalArg(message, args);
 		}
 	}
 

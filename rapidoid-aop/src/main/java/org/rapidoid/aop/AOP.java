@@ -2,7 +2,7 @@ package org.rapidoid.aop;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-aop
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

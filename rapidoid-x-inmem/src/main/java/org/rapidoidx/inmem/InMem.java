@@ -469,7 +469,7 @@ public class InMem implements Serializable {
 	}
 
 	public void delete(Object record) {
-		U.validateArg("record", Cls.kindOf(record) == TypeKind.OBJECT);
+		U.argMust(Cls.kindOf(record) == TypeKind.OBJECT, "Invalid record type: %s", Cls.of(record));
 		delete(Beany.getLongId(record));
 	}
 
