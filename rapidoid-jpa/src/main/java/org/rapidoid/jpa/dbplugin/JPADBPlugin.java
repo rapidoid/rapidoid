@@ -45,6 +45,7 @@ public class JPADBPlugin extends DBPluginBase {
 
 	@Override
 	public String insert(Object entity) {
+		ensureNotInReadOnlyTransation();
 
 		EntityTransaction tx = em().getTransaction();
 
@@ -76,6 +77,7 @@ public class JPADBPlugin extends DBPluginBase {
 
 	@Override
 	public void update(String id, Object entity) {
+		ensureNotInReadOnlyTransation();
 		Beany.setId(entity, id);
 		em().persist(entity);
 	}
@@ -116,11 +118,13 @@ public class JPADBPlugin extends DBPluginBase {
 
 	@Override
 	public <E> void delete(Class<E> clazz, String id) {
+		ensureNotInReadOnlyTransation();
 		em().remove(get(clazz, id));
 	}
 
 	@Override
 	public void delete(Object record) {
+		ensureNotInReadOnlyTransation();
 		em().remove(record);
 	}
 
@@ -192,6 +196,11 @@ public class JPADBPlugin extends DBPluginBase {
 			}
 
 		}, 0);
+	}
+
+	private void ensureNotInReadOnlyTransation() {
+		EntityTransaction tx = em().getTransaction();
+		U.must(!tx.isActive() || !tx.getRollbackOnly(), "Cannot perform writes inside read-only transaction!");
 	}
 
 	protected EntityManager em() {
