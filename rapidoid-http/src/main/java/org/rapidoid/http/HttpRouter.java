@@ -110,11 +110,7 @@ public class HttpRouter implements Router {
 		Range action = x.verb_().range();
 		Range path = x.path_().range();
 
-		if (x.isGetReq() && BytesUtil.find(buf.bytes(), path.start + 1, path.limit(), (byte) '.', true) >= 0) {
-			if (x.serveStaticFile()) {
-				return;
-			}
-		}
+		// serveStaticFileIfExists(x, buf, path);
 
 		long hash = hash(buf, action, path);
 		SimpleList<Route> candidates = routes.get(hash);
@@ -142,6 +138,15 @@ public class HttpRouter implements Router {
 		}
 
 		throw x.notFound();
+	}
+
+	@SuppressWarnings("unused")
+	private void serveStaticFileIfExists(HttpExchangeImpl x, Buf buf, Range path) {
+		if (x.isGetReq() && BytesUtil.find(buf.bytes(), path.start + 1, path.limit(), (byte) '.', true) >= 0) {
+			if (x.serveStaticFile()) {
+				return;
+			}
+		}
 	}
 
 	private void handle(Handler handler, HttpExchangeImpl x) {
