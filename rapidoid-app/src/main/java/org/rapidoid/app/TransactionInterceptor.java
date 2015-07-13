@@ -22,12 +22,12 @@ package org.rapidoid.app;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.aop.AOPInterceptor;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.db.DB;
@@ -37,7 +37,8 @@ public class TransactionInterceptor implements AOPInterceptor {
 
 	@Override
 	public Object intercept(Annotation ann, Object ctx, final Method m, final Object target, final Object... args) {
-		HttpExchange x = (HttpExchange) ctx;
+
+		final HttpExchange x = (HttpExchange) ctx;
 		TransactionMode txMode = getTxMode(ann);
 
 		final boolean readOnly;
@@ -48,16 +49,25 @@ public class TransactionInterceptor implements AOPInterceptor {
 			readOnly = txMode == TransactionMode.READ_ONLY;
 		}
 
-		final AtomicReference<Object> result = new AtomicReference<Object>();
+		x.async();
 
 		DB.transaction(new Runnable() {
 			@Override
 			public void run() {
-				result.set(Cls.invoke(m, target, args));
+				x.result(Cls.invoke(m, target, args));
 			}
-		}, readOnly);
+		}, readOnly, new Callback<Void>() {
 
-		return result.get();
+			@Override
+			public void onDone(Void result, Throwable error) throws Exception {
+				if (error != null) {
+					x.error(error);
+				}
+				x.done();
+			}
+		});
+
+		return x;
 	}
 
 	private TransactionMode getTxMode(Annotation ann) {
