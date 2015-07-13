@@ -224,8 +224,11 @@ public class Scan {
 		Pattern regex = nameRegex != null ? Pattern.compile(nameRegex) : null;
 
 		if (ctxClasses != null) {
+			Log.info("Filtering " + ctxClasses.size() + " classes", "annotated", annotated, "package", packageName,
+					"name", nameRegex);
 			classes = filterClasses(ctxClasses, packageName, regex, filter, annotated);
 		} else {
+			Log.info("Retrieving classes", "annotated", annotated, "package", packageName, "name", nameRegex);
 			classes = retrieveClasses(packageName, filter, annotated, regex, classLoader);
 		}
 
