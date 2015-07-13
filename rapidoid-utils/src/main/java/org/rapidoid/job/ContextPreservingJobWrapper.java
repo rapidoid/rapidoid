@@ -42,10 +42,18 @@ public class ContextPreservingJobWrapper implements Runnable {
 
 	@Override
 	public void run() {
-		if (ctx != null) {
-			Ctxs.attach(ctx);
-		} else {
-			Ctxs.open();
+		U.must(!Ctxs.hasContext(), "Detected context leak!");
+
+		try {
+			if (ctx != null) {
+				Ctxs.attach(ctx);
+			} else {
+				Ctxs.open();
+			}
+
+		} catch (Throwable e) {
+			Log.error("Job context initialization failed!", e);
+			throw U.rte("Job context initialization failed!", e);
 		}
 
 		try {
