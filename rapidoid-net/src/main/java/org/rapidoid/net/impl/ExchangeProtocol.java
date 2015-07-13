@@ -33,14 +33,16 @@ import org.rapidoid.pool.Pool;
 public abstract class ExchangeProtocol<T extends DefaultExchange<?>> implements Protocol, CtxListener {
 
 	private final Class<T> exchangeType;
+	private final boolean useExchangePool;
 
-	public ExchangeProtocol(final Class<T> exchangeType) {
+	public ExchangeProtocol(final Class<T> exchangeType, boolean useExchangePool) {
 		this.exchangeType = exchangeType;
+		this.useExchangePool = useExchangePool;
 	}
 
 	@Override
 	public void process(Channel ctx) {
-		T exchange = pool(ctx.helper()).get();
+		T exchange = useExchangePool ? pool(ctx.helper()).get() : Cls.newInstance(exchangeType);
 		assert Cls.instanceOf(exchange, exchangeType);
 
 		exchange.reset();
@@ -62,7 +64,9 @@ public abstract class ExchangeProtocol<T extends DefaultExchange<?>> implements 
 	public void onDone(Channel conn, Object tag) {
 		assert Cls.instanceOf(tag, exchangeType);
 
-		pool(conn.helper()).release((T) tag);
+		if (useExchangePool) {
+			pool(conn.helper()).release((T) tag);
+		}
 	}
 
 	@SuppressWarnings("unchecked")

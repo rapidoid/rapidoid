@@ -54,7 +54,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	private HTTPInterceptor interceptor;
 
 	public HttpProtocol(Router router) {
-		super(HttpExchangeImpl.class);
+		super(HttpExchangeImpl.class, true);
 		this.router = router;
 		this.responses = new HttpResponses(true, true);
 	}
