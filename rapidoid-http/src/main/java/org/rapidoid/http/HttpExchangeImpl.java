@@ -846,7 +846,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public synchronized HttpExchange errorResponse(Throwable err) {
+	public synchronized HttpExchange error(Throwable err) {
 		Throwable cause = UTILS.rootCause(err);
 		if (cause instanceof HttpSuccessException) {
 			return this;

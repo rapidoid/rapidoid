@@ -149,7 +149,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			x.response(500, "Request timeout!", null);
 		} else {
 			Log.error("Internal server error!", "request", x, "error", cause);
-			x.errorResponse(e);
+			x.error(e);
 			x.completeResponse();
 		}
 	}

@@ -167,7 +167,7 @@ public interface HttpExchange {
 
 	HttpExchange response(int httpResponseCode, String response, Throwable err);
 
-	HttpExchange errorResponse(Throwable err);
+	HttpExchange error(Throwable err);
 
 	HttpNotFoundException notFound();
 
