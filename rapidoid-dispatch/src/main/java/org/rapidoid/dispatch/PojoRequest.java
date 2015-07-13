@@ -33,6 +33,8 @@ public interface PojoRequest {
 
 	String path();
 
+	Object param(String name);
+
 	Map<String, Object> params();
 
 }

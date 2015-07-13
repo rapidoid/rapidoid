@@ -62,4 +62,19 @@ public class WebReq implements PojoRequest {
 		return exchange;
 	}
 
+	@Override
+	public Object param(String name) {
+		Object value = exchange.param(name);
+
+		if (value == null) {
+			value = exchange.posted(name);
+
+			if (value == null) {
+				value = exchange.file(name);
+			}
+		}
+
+		return value;
+	}
+
 }

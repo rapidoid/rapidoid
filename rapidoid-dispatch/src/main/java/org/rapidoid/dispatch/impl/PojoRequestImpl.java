@@ -56,6 +56,11 @@ public class PojoRequestImpl implements PojoRequest {
 	}
 
 	@Override
+	public Object param(String name) {
+		return params.get(name);
+	}
+
+	@Override
 	public String toString() {
 		return "PojoRequestImpl [command=" + command + ", path=" + path + ", params=" + params + "]";
 	}

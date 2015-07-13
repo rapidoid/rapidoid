@@ -147,7 +147,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 
 					if (param != null) {
 						String paramName = param.value();
-						Object val = request.params().get(paramName);
+						Object val = request.param(paramName);
 						args[i] = Cls.convert(val, type);
 					} else if (isCustomSimpleArg(request, annotations[i])) {
 						args[i] = Cls.convert(customSimpleArg(request, annotations[i]), type);
