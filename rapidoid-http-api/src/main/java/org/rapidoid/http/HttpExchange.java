@@ -28,6 +28,7 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.io.CachedResource;
 import org.rapidoid.mime.MediaType;
 
 @Authors("Nikolche Mihajlovski")
@@ -204,6 +205,8 @@ public interface HttpExchange {
 	boolean serveStaticFile();
 
 	HttpExchange sendFile(File file);
+
+	HttpExchange sendFile(CachedResource resource);
 
 	HttpExchange sendFile(MediaType mediaType, byte[] bytes);
 

@@ -20,8 +20,6 @@ package org.rapidoid.app;
  * #L%
  */
 
-import java.io.File;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.builtin.AppPageGeneric;
@@ -31,7 +29,6 @@ import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeInternals;
 import org.rapidoid.http.HttpNotFoundException;
-import org.rapidoid.io.IO;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.rest.WebReq;
 import org.rapidoid.util.CustomizableClassLoader;
@@ -91,7 +88,11 @@ public class AppHandler implements Handler {
 
 	public Object dispatch(HttpExchange x, AppClasses appCls) {
 		HttpExchangeInternals xi = (HttpExchangeInternals) x;
-		// xi.preload();
+
+		// static files
+		if (x.serveStaticFile()) {
+			return x;
+		}
 
 		// REST services
 		if (appCls.dispatcher != null) {
@@ -102,11 +103,6 @@ public class AppHandler implements Handler {
 			} catch (PojoDispatchException e) {
 				return x.error(e);
 			}
-		}
-
-		// static files
-		if (x.serveStaticFile()) {
-			return x;
 		}
 
 		// Prepare GUI state
@@ -127,11 +123,7 @@ public class AppHandler implements Handler {
 			return Pages.dispatch(x, genericPage);
 		}
 
-		File pageFile = IO.file("abc.page");
-		if (pageFile.exists()) {
-			return x.html().write(pageFile);
-		}
-
 		throw x.notFound();
 	}
+
 }

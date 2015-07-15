@@ -38,7 +38,7 @@ import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.http.session.SessionStore;
-import org.rapidoid.io.IO;
+import org.rapidoid.io.CachedResource;
 import org.rapidoid.json.JSON;
 import org.rapidoid.log.Log;
 import org.rapidoid.mime.MediaType;
@@ -684,6 +684,14 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
+	public synchronized HttpExchange sendFile(CachedResource resource) {
+		U.must(resource.exists());
+		setContentType(MediaType.getByFileName(resource.getFilename()));
+		write(resource.getContent());
+		return this;
+	}
+
+	@Override
 	public synchronized HttpExchange sendFile(MediaType mediaType, byte[] bytes) {
 		setContentType(mediaType);
 		write(bytes);
@@ -877,10 +885,10 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 				}
 
 				if (!filename.contains("..") && STATIC_RESOURCE_PATTERN.matcher(filename).matches()) {
-					File file = IO.file("public/" + filename);
+					CachedResource resource = CachedResource.from("public/" + filename);
 
-					if (file.exists()) {
-						sendFile(file);
+					if (resource.exists()) {
+						sendFile(resource);
 						return true;
 					} else {
 						return false;
