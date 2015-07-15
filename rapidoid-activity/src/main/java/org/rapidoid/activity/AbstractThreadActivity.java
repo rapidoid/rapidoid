@@ -77,7 +77,7 @@ public abstract class AbstractThreadActivity<T> extends LifecycleActivity<T> imp
 				try {
 					loop();
 				} catch (Exception e) {
-					Log.error("Worker processing error!", "activity", name, "error", e);
+					onError(e);
 				}
 			}
 
@@ -87,6 +87,10 @@ public abstract class AbstractThreadActivity<T> extends LifecycleActivity<T> imp
 		}
 
 		Log.info("Finished activity thread", "name", name);
+	}
+
+	protected void onError(Exception e) {
+		Log.error("Activity error!", "activity", name, "error", e);
 	}
 
 	protected abstract void loop();
