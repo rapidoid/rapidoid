@@ -2,7 +2,7 @@ package org.rapidoid.plugins.cache;
 
 /*
  * #%L
- * rapidoid-cache-guava
+ * rapidoid-plugins
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
