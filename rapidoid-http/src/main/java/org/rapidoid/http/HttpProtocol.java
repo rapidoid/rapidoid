@@ -20,9 +20,6 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.io.File;
-import java.nio.ByteBuffer;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctxs;
@@ -158,38 +155,12 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 		HttpExchangeImpl x = (HttpExchangeImpl) xch;
 
-		if (x.isLowLevelProcessing() || x.isAsync()) {
+		if (x.isLowLevelProcessing() || x.isAsync() || res == xch) {
 			return;
 		}
 
 		if (res != null) {
-			if (res instanceof byte[]) {
-				if (!x.hasContentType()) {
-					x.binary();
-				}
-				x.write((byte[]) res);
-			} else if (res instanceof String) {
-				if (!x.hasContentType()) {
-					x.json();
-				}
-				x.write((String) res);
-			} else if (res instanceof ByteBuffer) {
-				if (!x.hasContentType()) {
-					x.binary();
-				}
-				x.write((ByteBuffer) res);
-			} else if (res instanceof File) {
-				File file = (File) res;
-				x.sendFile(file);
-			} else if (res.getClass().getSimpleName().endsWith("Page")) {
-				x.html().write(res.toString());
-			} else if (!(res instanceof HttpExchangeImpl)) {
-				if (!x.hasContentType()) {
-					x.json();
-				}
-				x.writeJSON(res);
-			}
-
+			x.result(res);
 		} else {
 			if (!x.hasContentType()) {
 				x.html();

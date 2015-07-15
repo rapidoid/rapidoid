@@ -1133,4 +1133,42 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		}
 	}
 
+
+	@Override
+	public HttpExchange result(Object res) {
+		if (res instanceof byte[]) {
+			if (!hasContentType()) {
+				binary();
+			}
+			write((byte[]) res);
+
+		} else if (res instanceof String) {
+			if (!hasContentType()) {
+				json();
+			}
+			write((String) res);
+
+		} else if (res instanceof ByteBuffer) {
+			if (!hasContentType()) {
+				binary();
+			}
+			write((ByteBuffer) res);
+
+		} else if (res instanceof File) {
+			File file = (File) res;
+			sendFile(file);
+
+		} else if (res.getClass().getSimpleName().endsWith("Page")) {
+			html().write(res.toString());
+
+		} else {
+			if (!hasContentType()) {
+				json();
+			}
+			writeJSON(res);
+		}
+
+		return this;
+	}
+
 }

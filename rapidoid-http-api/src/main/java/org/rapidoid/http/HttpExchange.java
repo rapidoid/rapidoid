@@ -153,6 +153,8 @@ public interface HttpExchange {
 
 	/* RESPONSE: */
 
+	HttpExchange result(Object result);
+
 	Map<String, String> errors();
 
 	boolean hasErrors();
