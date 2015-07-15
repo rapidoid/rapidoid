@@ -90,7 +90,7 @@ public class AppHandler implements Handler {
 		HttpExchangeInternals xi = (HttpExchangeInternals) x;
 
 		// static files
-		if (x.serveStaticFile()) {
+		if (x.isGetReq() && x.serveStaticFile()) {
 			return x;
 		}
 

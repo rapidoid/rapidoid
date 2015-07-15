@@ -104,6 +104,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private Map<String, String> data;
 	private Map<String, String> errors;
 
+	private String resourceName;
+	private boolean resourceNameHasExtension;
+
 	/* STATE */
 
 	private Map<String, Serializable> session;
@@ -874,30 +877,23 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized boolean serveStaticFile() {
-		if (isGetReq()) {
-			String path = path();
-
-			if (path.indexOf('.') > 0) {
-				String filename = path.substring(1);
-
-				if (filename.isEmpty()) {
-					filename = "index.html";
-				}
-
-				if (!filename.contains("..") && STATIC_RESOURCE_PATTERN.matcher(filename).matches()) {
-					CachedResource resource = CachedResource.from("public/" + filename);
-
-					if (resource.exists()) {
-						sendFile(resource);
-						return true;
-					} else {
-						return false;
-					}
-				}
-			}
+		if (serveStaticFile("public/" + resourceName())) {
+			return true;
 		}
 
-		return false;
+		return !resourceNameHasExtension() && serveStaticFile("public/" + resourceName() + ".html");
+	}
+
+	@Override
+	public synchronized boolean serveStaticFile(String filename) {
+		CachedResource resource = CachedResource.from(filename);
+
+		if (resource.exists()) {
+			sendFile(resource);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -1214,6 +1210,29 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		super.async();
 		preload();
 		return this;
+	}
+
+	@Override
+	public synchronized String resourceName() {
+		if (resourceName == null) {
+			resourceName = path().substring(1);
+
+			if (resourceName.isEmpty()) {
+				resourceName = "index";
+				resourceNameHasExtension = false;
+			} else {
+				U.must(!resourceName.contains("..") && STATIC_RESOURCE_PATTERN.matcher(resourceName).matches(),
+						"Invalid path: %s", path());
+				resourceNameHasExtension = resourceName.contains(".");
+			}
+		}
+
+		return resourceName;
+	}
+
+	public boolean resourceNameHasExtension() {
+		resourceName(); // make sure it is calculated
+		return resourceNameHasExtension;
 	}
 
 }

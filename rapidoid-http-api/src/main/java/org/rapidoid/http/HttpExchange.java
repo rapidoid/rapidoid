@@ -108,6 +108,8 @@ public interface HttpExchange {
 
 	long requestId();
 
+	String resourceName();
+
 	/* STATE: */
 
 	String sessionId();
@@ -203,6 +205,8 @@ public interface HttpExchange {
 	String redirectUrl();
 
 	boolean serveStaticFile();
+
+	boolean serveStaticFile(String filename);
 
 	HttpExchange sendFile(File file);
 
