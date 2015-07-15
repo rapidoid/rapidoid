@@ -20,6 +20,8 @@ package org.rapidoid.app;
  * #L%
  */
 
+import java.io.File;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.builtin.AppPageGeneric;
@@ -29,9 +31,7 @@ import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeInternals;
 import org.rapidoid.http.HttpNotFoundException;
-import org.rapidoid.http.HttpProtocol;
-import org.rapidoid.json.JSON;
-import org.rapidoid.log.Log;
+import org.rapidoid.io.IO;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.rest.WebReq;
 import org.rapidoid.util.CustomizableClassLoader;
@@ -54,13 +54,14 @@ public class AppHandler implements Handler {
 
 	@Override
 	public Object handle(final HttpExchange x) throws Exception {
+
 		HttpExchangeInternals xi = (HttpExchangeInternals) x;
 		xi.setClassLoader(classLoader);
 
 		Object result;
 
 		try {
-			result = AppHandler.processReq(x);
+			result = processReq(x);
 		} catch (Exception e) {
 			if (UTILS.rootCause(e) instanceof HttpNotFoundException) {
 				throw U.rte(e);
@@ -70,26 +71,12 @@ public class AppHandler implements Handler {
 			}
 		}
 
-		try {
-			HttpProtocol.processResponse(x, result);
-		} catch (Exception e) {
-			Log.error("Exception occured while finalizing response inside transaction!", UTILS.rootCause(e));
-			throw U.rte(e);
-		}
+		return result;
 
-		return x;
 	}
 
-	static Object processReq(HttpExchange x) {
+	public Object processReq(HttpExchange x) {
 		HttpExchangeInternals xi = (HttpExchangeInternals) x;
-
-		if (x.isPostReq()) {
-			String state = x.posted("__state", null);
-			if (!U.isEmpty(state) && !state.equals("null")) {
-				byte[] bytes = JSON.parseBytes('"' + state + '"');
-				xi.deserializeLocals(bytes);
-			}
-		}
 
 		final AppClasses appCls = Apps.getAppClasses(x, xi.getClassLoader());
 

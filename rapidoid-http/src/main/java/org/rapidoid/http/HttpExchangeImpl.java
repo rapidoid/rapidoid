@@ -334,7 +334,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized String verb() {
-		return verb_().get();
+		return isGet.value ? "GET" : verb_().get();
 	}
 
 	@Override
@@ -1133,6 +1133,29 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		}
 	}
 
+	@Override
+	public synchronized void preload() {
+		uri();
+		verb();
+		path();
+		query();
+		protocol();
+		headers();
+		params();
+		data();
+		files();
+	}
+
+	@Override
+	public void loadState() {
+		if (isPostReq()) {
+			String state = posted("__state", null);
+			if (!U.isEmpty(state) && !state.equals("null")) {
+				byte[] bytes = JSON.parseBytes('"' + state + '"');
+				deserializeLocals(bytes);
+			}
+		}
+	}
 
 	@Override
 	public HttpExchange result(Object res) {
@@ -1168,6 +1191,13 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			writeJSON(res);
 		}
 
+		return this;
+	}
+
+	@Override
+	public HttpExchangeImpl async() {
+		super.async();
+		preload();
 		return this;
 	}
 

@@ -46,4 +46,8 @@ public interface HttpExchangeInternals {
 
 	void deserializeCookiepack(byte[] bytes);
 
+	void preload();
+
+	void loadState();
+
 }
