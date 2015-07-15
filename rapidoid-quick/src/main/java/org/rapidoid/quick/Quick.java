@@ -60,7 +60,7 @@ public class Quick {
 	}
 
 	public static void bootstrap(final Object... args) {
-		Ctxs.setPersistorFactory(new QuickJPA(args));
+		Ctxs.setPersisterProvider(new QuickJPA(args));
 		JPADBPlugin db = new JPADBPlugin();
 
 		List<Object> appArgs = U.<Object> list(db);

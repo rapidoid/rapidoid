@@ -1,10 +1,8 @@
-package org.rapidoid.util;
-
-import org.rapidoid.ctx.PersistorFactory;
+package org.rapidoid.ctx;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-ctx
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -22,19 +20,14 @@ import org.rapidoid.ctx.PersistorFactory;
  * #L%
  */
 
+/**
+ * @author Nikolche Mihajlovski
+ * @since 3.1.0
+ */
+public interface PersisterProvider {
 
-public class SimplePersistorFactory implements PersistorFactory {
+	<P> P openPersister();
 
-	private final Object persistor;
-
-	public SimplePersistorFactory(Object persistor) {
-		this.persistor = persistor;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T createPersistor() {
-		return (T) persistor;
-	}
+	void closePersister(Object persister);
 
 }

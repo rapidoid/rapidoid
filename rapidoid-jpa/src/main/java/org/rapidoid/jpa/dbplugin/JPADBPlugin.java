@@ -129,8 +129,8 @@ public class JPADBPlugin extends DBPluginBase {
 	}
 
 	@Override
-	public void transaction(Runnable action, boolean readonly) {
-		EntityTransaction tx = em().getTransaction();
+	public void transaction(final Runnable action, boolean readonly) {
+		final EntityTransaction tx = em().getTransaction();
 
 		if (readonly) {
 			runTxReadOnly(action, tx);
@@ -204,7 +204,7 @@ public class JPADBPlugin extends DBPluginBase {
 	}
 
 	protected EntityManager em() {
-		return Ctxs.ctx().persistor();
+		return Ctxs.ctx().persister();
 	}
 
 	protected Object castId(String id) {

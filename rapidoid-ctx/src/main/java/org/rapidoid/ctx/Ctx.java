@@ -26,72 +26,78 @@ package org.rapidoid.ctx;
  */
 public class Ctx {
 
-	private UserInfo user;
+	private volatile UserInfo user;
 
-	private Object exchange;
+	private volatile Object exchange;
 
-	private Classes classes;
+	private volatile Classes classes;
 
-	private Object persistor;
+	private volatile Object persister;
+
+	private volatile int referenceCounter;
 
 	Ctx() {}
 
-	public synchronized UserInfo user() {
+	public UserInfo user() {
 		return user;
 	}
 
-	public synchronized void setUser(UserInfo user) {
+	public void setUser(UserInfo user) {
 		this.user = user;
 	}
 
 	@SuppressWarnings("unchecked")
-	public synchronized <T> T exchange() {
+	public <T> T exchange() {
 		return (T) exchange;
 	}
 
-	public synchronized void setExchange(Object exchange) {
+	public void setExchange(Object exchange) {
 		this.exchange = exchange;
 	}
 
-	public synchronized Classes classes() {
+	public Classes classes() {
 		return classes;
 	}
 
-	public synchronized void setClasses(Classes classes) {
+	public void setClasses(Classes classes) {
 		this.classes = classes;
 	}
 
 	@SuppressWarnings("unchecked")
-	public synchronized <P> P persistor() {
-		if (this.persistor == null) {
-			this.persistor = Ctxs.createPersistor();
+	public synchronized <P> P persister() {
+		if (this.persister == null) {
+			this.persister = Ctxs.createPersister();
 		}
 
-		return (P) this.persistor;
+		return (P) this.persister;
 	}
 
-	public synchronized void setPersistor(Object persistor) {
-		this.persistor = persistor;
+	public void setPersister(Object persister) {
+		this.persister = persister;
 	}
 
-	public synchronized void clear() {
-		setClasses(null);
-		setExchange(null);
-		setUser(null);
-		setPersistor(null);
+	synchronized void span() {
+		referenceCounter++;
 	}
 
-	public synchronized Ctx copy() {
-		Ctx ctx = new Ctx();
-		this.assignTo(ctx);
-		return ctx;
+	synchronized void close() {
+		referenceCounter--;
+
+		if (referenceCounter == 0) {
+			if (persister != null) {
+				Ctxs.closePersister(persister);
+				persister = null;
+			}
+
+		} else if (referenceCounter < 0) {
+			throw new IllegalStateException("Reference counter < 0 for context: " + this);
+		}
 	}
 
-	public synchronized void assignTo(Ctx ctx) {
-		ctx.classes = this.classes;
-		ctx.exchange = this.exchange;
-		ctx.user = this.user;
-		ctx.persistor = this.persistor;
+	@Override
+	public String toString() {
+		return super.toString() + "[user=" + user + ", exchange=" + exchange + ", classes=" + classes + ", persister="
+				+ persister + ", referenceCounter=" + referenceCounter + "]";
 	}
 
 }

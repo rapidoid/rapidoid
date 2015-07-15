@@ -28,7 +28,7 @@ public class Ctxs {
 
 	private static final ThreadLocal<Ctx> CTXS = new ThreadLocal<Ctx>();
 
-	private static volatile PersistorFactory persistorFactory = null;
+	private static volatile PersisterProvider persisterProvider = null;
 
 	private Ctxs() {}
 
@@ -52,9 +52,10 @@ public class Ctxs {
 
 	public static void attach(Ctx ctx) {
 		if (!hasContext()) {
+			ctx.span();
 			CTXS.set(ctx);
 		} else {
-			throw new IllegalStateException("The context was already opened!");
+			throw new IllegalStateException("The context was already opened: " + ctx());
 		}
 	}
 
@@ -65,19 +66,29 @@ public class Ctxs {
 	}
 
 	public static void close() {
+		Ctx ctx = get();
+
+		if (ctx != null) {
+			ctx.close();
+		}
+
 		CTXS.remove();
 	}
 
-	public static PersistorFactory getPersistorFactory() {
-		return persistorFactory;
+	public static PersisterProvider getPersisterProvider() {
+		return persisterProvider;
 	}
 
-	public static void setPersistorFactory(PersistorFactory persistorFactory) {
-		Ctxs.persistorFactory = persistorFactory;
+	public static void setPersisterProvider(PersisterProvider persisterProvider) {
+		Ctxs.persisterProvider = persisterProvider;
 	}
 
-	public static Object createPersistor() {
-		return persistorFactory.createPersistor();
+	public static Object createPersister() {
+		return persisterProvider.openPersister();
+	}
+
+	public static void closePersister(Object persister) {
+		persisterProvider.closePersister(persister);
 	}
 
 }

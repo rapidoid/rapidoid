@@ -14,7 +14,7 @@ import org.rapidoid.entity.Book;
 import org.rapidoid.entity.Movie;
 import org.rapidoid.jpa.dbplugin.JPADBPlugin;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.SimplePersistorFactory;
+import org.rapidoid.util.SimplePersistorProvider;
 import org.rapidoid.util.U;
 
 /*
@@ -47,7 +47,7 @@ public class JPADBPluginTest extends TestCommons {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("test-pu");
 		EntityManager em = emf.createEntityManager();
 
-		Ctxs.setPersistorFactory(new SimplePersistorFactory(em));
+		Ctxs.setPersisterProvider(new SimplePersistorProvider(em));
 		Ctxs.open();
 
 		final JPADBPlugin db = new JPADBPlugin();

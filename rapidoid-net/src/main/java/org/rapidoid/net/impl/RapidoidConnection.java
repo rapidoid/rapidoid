@@ -360,7 +360,7 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 
 	@Override
 	public <P> P persistor() {
-		return Ctxs.ctx().persistor();
+		return Ctxs.ctx().persister();
 	}
 
 	@Override

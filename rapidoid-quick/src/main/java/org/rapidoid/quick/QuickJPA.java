@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
@@ -33,14 +34,14 @@ import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.ctx.PersistorFactory;
+import org.rapidoid.ctx.PersisterProvider;
 import org.rapidoid.io.IO;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class QuickJPA implements PersistorFactory {
+public class QuickJPA implements PersisterProvider {
 
 	private final Object[] args;
 
@@ -111,8 +112,14 @@ public class QuickJPA implements PersistorFactory {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized <P> P createPersistor() {
+	public <P> P openPersister() {
 		return (P) emFactory(args).createEntityManager();
+	}
+
+	@Override
+	public void closePersister(Object persister) {
+		EntityManager em = (EntityManager) persister;
+		em.close();
 	}
 
 }

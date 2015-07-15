@@ -217,7 +217,7 @@ public abstract class DefaultExchange<T> implements ProtocolContext<T>, BufProvi
 
 	@Override
 	public synchronized <P> P persistor() {
-		return Ctxs.ctx().persistor();
+		return Ctxs.ctx().persister();
 	}
 
 	@Override
