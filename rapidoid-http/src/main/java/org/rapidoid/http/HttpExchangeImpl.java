@@ -867,21 +867,28 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public synchronized boolean serveStaticFile() {
 		if (isGetReq()) {
-			String filename = path().substring(1);
+			String path = path();
 
-			if (filename.isEmpty()) {
-				filename = "index.html";
-			}
+			if (path.indexOf('.') > 0) {
+				String filename = path.substring(1);
 
-			if (!filename.contains("..") && STATIC_RESOURCE_PATTERN.matcher(filename).matches()) {
-				byte[] bytes = IO.loadResource("public/" + filename, true);
-				if (bytes != null) {
-					startResponse(200);
-					sendFile(MediaType.getByFileName(filename), bytes);
-					return true;
+				if (filename.isEmpty()) {
+					filename = "index.html";
+				}
+
+				if (!filename.contains("..") && STATIC_RESOURCE_PATTERN.matcher(filename).matches()) {
+					File file = IO.file("public/" + filename);
+
+					if (file.exists()) {
+						sendFile(file);
+						return true;
+					} else {
+						return false;
+					}
 				}
 			}
 		}
+
 		return false;
 	}
 

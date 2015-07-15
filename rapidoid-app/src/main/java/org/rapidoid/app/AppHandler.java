@@ -89,12 +89,9 @@ public class AppHandler implements Handler {
 		}
 	}
 
-	public static Object dispatch(HttpExchange x, AppClasses appCls) {
-
-		// static files
-		if (x.serveStaticFile()) {
-			return x;
-		}
+	public Object dispatch(HttpExchange x, AppClasses appCls) {
+		HttpExchangeInternals xi = (HttpExchangeInternals) x;
+		// xi.preload();
 
 		// REST services
 		if (appCls.dispatcher != null) {
@@ -103,9 +100,18 @@ public class AppHandler implements Handler {
 			} catch (PojoHandlerNotFoundException e) {
 				// / just ignore, will try to dispatch a page next...
 			} catch (PojoDispatchException e) {
-				return x.errorResponse(e);
+				return x.error(e);
 			}
 		}
+
+		// static files
+		if (x.serveStaticFile()) {
+			return x;
+		}
+
+		// Prepare GUI state
+
+		xi.loadState();
 
 		// GUI pages
 
@@ -121,7 +127,11 @@ public class AppHandler implements Handler {
 			return Pages.dispatch(x, genericPage);
 		}
 
+		File pageFile = IO.file("abc.page");
+		if (pageFile.exists()) {
+			return x.html().write(pageFile);
+		}
+
 		throw x.notFound();
 	}
-
 }
