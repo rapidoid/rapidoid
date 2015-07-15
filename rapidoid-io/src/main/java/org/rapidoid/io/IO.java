@@ -74,7 +74,7 @@ public class IO {
 	public static byte[] loadBytes(InputStream input) {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-		byte[] buffer = new byte[4 * 1024];
+		byte[] buffer = new byte[16 * 1024];
 
 		try {
 			int readN = 0;
