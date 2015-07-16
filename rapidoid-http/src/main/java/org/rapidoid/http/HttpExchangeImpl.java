@@ -137,8 +137,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private SessionStore sessionStore;
 
 	public HttpExchangeImpl() {
-		reset();
-
 		this._body = data(body);
 		this._uri = data(uri);
 		this._verb = data(verb);
@@ -151,6 +149,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		this._cookies = multiData(cookies);
 		this._posted = multiData(posted);
 		this._files = binaryMultiData(files);
+
+		reset();
 	}
 
 	@Override
