@@ -35,19 +35,30 @@ public class DecodedData implements Data {
 
 	private final Range range;
 
+	private String value;
+
 	public DecodedData(BufProvider src, Range range) {
 		this.src = src;
 		this.range = range;
 	}
 
 	@Override
-	public String get() {
-		return !range.isEmpty() ? UTILS.urlDecode(src.buffer().get(range)) : "";
+	public synchronized String get() {
+		if (value == null) {
+			value = !range.isEmpty() ? UTILS.urlDecode(src.buffer().get(range)) : "";
+		}
+
+		return value;
 	}
 
 	@Override
 	public Range range() {
 		return range;
+	}
+
+	@Override
+	public synchronized void reset() {
+		value = null;
 	}
 
 }

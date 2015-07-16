@@ -194,6 +194,19 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		tmps = null;
 		errors = null;
 
+		_body.reset();
+		_uri.reset();
+		_verb.reset();
+		_path.reset();
+		_subpath.reset();
+		_query.reset();
+		_protocol.reset();
+		_params.reset();
+		_headers.reset();
+		_cookies.reset();
+		_posted.reset();
+		_files.reset();
+
 		resetResponse();
 	}
 

@@ -37,4 +37,6 @@ public interface MultiData {
 
 	KeyValueRanges ranges();
 
+	void reset();
+
 }

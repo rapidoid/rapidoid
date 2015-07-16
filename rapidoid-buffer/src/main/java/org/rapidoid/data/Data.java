@@ -31,4 +31,6 @@ public interface Data {
 
 	Range range();
 
+	void reset();
+
 }

@@ -35,4 +35,6 @@ public interface BinaryMultiData {
 
 	KeyValueRanges ranges();
 
+	void reset();
+
 }

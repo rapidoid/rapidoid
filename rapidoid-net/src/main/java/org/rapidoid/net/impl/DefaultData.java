@@ -34,14 +34,20 @@ public class DefaultData implements Data {
 
 	private final Range range;
 
+	private String value;
+
 	public DefaultData(BufProvider src, Range range) {
 		this.src = src;
 		this.range = range;
 	}
 
 	@Override
-	public String get() {
-		return !range.isEmpty() ? src.buffer().get(range) : "";
+	public synchronized String get() {
+		if (value == null) {
+			value = !range.isEmpty() ? src.buffer().get(range) : "";
+		}
+
+		return value;
 	}
 
 	@Override
@@ -52,6 +58,11 @@ public class DefaultData implements Data {
 	@Override
 	public String toString() {
 		return "Data [range=" + range + "]";
+	}
+
+	@Override
+	public synchronized void reset() {
+		value = null;
 	}
 
 }

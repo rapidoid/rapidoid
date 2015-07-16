@@ -24,11 +24,9 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufProvider;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.KeyValueRanges;
-import org.rapidoid.data.Range;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -38,14 +36,20 @@ public class DefaultBinaryMultiData implements BinaryMultiData {
 
 	private final KeyValueRanges ranges;
 
+	private Map<String, byte[]> values;
+
 	public DefaultBinaryMultiData(BufProvider src, KeyValueRanges ranges) {
 		this.src = src;
 		this.ranges = ranges;
 	}
 
 	@Override
-	public Map<String, byte[]> get() {
-		return ranges.toBinaryMap(src.buffer(), true);
+	public synchronized Map<String, byte[]> get() {
+		if (values == null) {
+			values = ranges.toBinaryMap(src.buffer(), true);
+		}
+
+		return values;
 	}
 
 	@Override
@@ -60,9 +64,12 @@ public class DefaultBinaryMultiData implements BinaryMultiData {
 
 	@Override
 	public byte[] get(String name) {
-		Buf buf = src.buffer();
-		Range range = ranges.get(buf, name.getBytes(), false);
-		return range != null ? range.bytes(buf) : null;
+		return get().get(name);
+	}
+
+	@Override
+	public synchronized void reset() {
+		values = null;
 	}
 
 }
