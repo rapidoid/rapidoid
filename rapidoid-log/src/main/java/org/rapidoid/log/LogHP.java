@@ -23,13 +23,13 @@ package org.rapidoid.log;
 /*
  * Code generation template:
 
- trace|Trace
- debug|Debug
- audit|Audit
- info|Info
- warn|Warn
- error|Error
- severe|Severe
+trace|Trace|TRACE
+debug|Debug|DEBUG
+audit|Audit|AUDIT
+info|Info|INFO
+warn|Warn|WARN
+error|Error|ERROR
+severe|Severe|SEVERE
 
  public static void {{1}}(String msg, String key, long value) {
  if (Log.is{{2}}Enabled()) {

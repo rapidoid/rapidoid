@@ -74,7 +74,8 @@ public class Log {
 	}
 
 	private static void log(Appendable out, LogLevel level, String msg, String key1, Object value1, String key2,
-			Object value2, String key3, Object value3, int paramsN) {
+			Object value2, String key3, Object value3, String key4, Object value4, String key5, Object value5,
+			int paramsN) {
 		if (isEnabled(level)) {
 			try {
 				synchronized (out) {
@@ -103,6 +104,21 @@ public class Log {
 						printKeyValue(out, key1, value1);
 						printKeyValue(out, key2, value2);
 						printKeyValue(out, key3, value3);
+						break;
+
+					case 4:
+						printKeyValue(out, key1, value1);
+						printKeyValue(out, key2, value2);
+						printKeyValue(out, key3, value3);
+						printKeyValue(out, key4, value4);
+						break;
+
+					case 5:
+						printKeyValue(out, key1, value1);
+						printKeyValue(out, key2, value2);
+						printKeyValue(out, key3, value3);
+						printKeyValue(out, key4, value4);
+						printKeyValue(out, key5, value5);
 						break;
 
 					default:
@@ -141,143 +157,8 @@ public class Log {
 	}
 
 	private static void log(LogLevel level, String msg, String key1, Object value1, String key2, Object value2,
-			String key3, Object value3, int paramsN) {
-		log(LOG_OUTPUT, level, msg, key1, value1, key2, value2, key3, value3, paramsN);
-	}
-
-	public static void trace(String msg) {
-		log(TRACE, msg, null, null, null, null, null, null, 0);
-	}
-
-	public static void trace(String msg, String key, Object value) {
-		log(TRACE, msg, key, value, null, null, null, null, 1);
-	}
-
-	public static void trace(String msg, String key1, Object value1, String key2, Object value2) {
-		log(TRACE, msg, key1, value1, key2, value2, null, null, 2);
-	}
-
-	public static void trace(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
-		log(TRACE, msg, key1, value1, key2, value2, key3, value3, 3);
-	}
-
-	public static void debug(String msg) {
-		log(DEBUG, msg, null, null, null, null, null, null, 0);
-	}
-
-	public static void debug(String msg, String key, Object value) {
-		log(DEBUG, msg, key, value, null, null, null, null, 1);
-	}
-
-	public static void debug(String msg, String key1, Object value1, String key2, Object value2) {
-		log(DEBUG, msg, key1, value1, key2, value2, null, null, 2);
-	}
-
-	public static void debug(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
-		log(DEBUG, msg, key1, value1, key2, value2, key3, value3, 3);
-	}
-
-	public static void audit(String msg) {
-		log(AUDIT, msg, null, null, null, null, null, null, 0);
-	}
-
-	public static void audit(String msg, String key, Object value) {
-		log(AUDIT, msg, key, value, null, null, null, null, 1);
-	}
-
-	public static void audit(String msg, String key1, Object value1, String key2, Object value2) {
-		log(AUDIT, msg, key1, value1, key2, value2, null, null, 2);
-	}
-
-	public static void audit(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
-		log(AUDIT, msg, key1, value1, key2, value2, key3, value3, 3);
-	}
-
-	public static void info(String msg) {
-		log(INFO, msg, null, null, null, null, null, null, 0);
-	}
-
-	public static void info(String msg, String key, Object value) {
-		log(INFO, msg, key, value, null, null, null, null, 1);
-	}
-
-	public static void info(String msg, String key1, Object value1, String key2, Object value2) {
-		log(INFO, msg, key1, value1, key2, value2, null, null, 2);
-	}
-
-	public static void info(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
-		log(INFO, msg, key1, value1, key2, value2, key3, value3, 3);
-	}
-
-	public static void warn(String msg) {
-		log(WARN, msg, null, null, null, null, null, null, 0);
-	}
-
-	public static void warn(String msg, String key, Object value) {
-		log(WARN, msg, key, value, null, null, null, null, 1);
-	}
-
-	public static void warn(String msg, String key1, Object value1, String key2, Object value2) {
-		log(WARN, msg, key1, value1, key2, value2, null, null, 2);
-	}
-
-	public static void warn(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
-		log(WARN, msg, key1, value1, key2, value2, key3, value3, 3);
-	}
-
-	public static void warn(String msg, Throwable error) {
-		warn(msg, "error", error);
-	}
-
-	public static void error(String msg) {
-		log(ERROR, msg, null, null, null, null, null, null, 0);
-	}
-
-	public static void error(String msg, String key, Object value) {
-		log(ERROR, msg, key, value, null, null, null, null, 1);
-	}
-
-	public static void error(String msg, String key1, Object value1, String key2, Object value2) {
-		log(ERROR, msg, key1, value1, key2, value2, null, null, 2);
-	}
-
-	public static void error(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
-		log(ERROR, msg, key1, value1, key2, value2, key3, value3, 3);
-	}
-
-	public static void error(String msg, Throwable error) {
-		error(msg, "error", error);
-	}
-
-	public static void error(Throwable error) {
-		error("error occured!", "error", error);
-	}
-
-	public static void severe(String msg) {
-		log(SEVERE, msg, null, null, null, null, null, null, 0);
-	}
-
-	public static void severe(String msg, String key, Object value) {
-		log(SEVERE, msg, key, value, null, null, null, null, 1);
-	}
-
-	public static void severe(String msg, String key1, Object value1, String key2, Object value2) {
-		log(SEVERE, msg, key1, value1, key2, value2, null, null, 2);
-	}
-
-	public static void severe(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
-		log(SEVERE, msg, key1, value1, key2, value2, key3, value3, 3);
-	}
-
-	public static void severe(String msg, Throwable error) {
-		severe(msg, "error", error);
+			String key3, Object value3, String key4, Object value4, String key5, Object value5, int paramsN) {
+		log(LOG_OUTPUT, level, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, paramsN);
 	}
 
 	public static boolean isEnabled(LogLevel level) {
@@ -310,6 +191,209 @@ public class Log {
 
 	public static boolean isSevereEnabled() {
 		return isEnabled(SEVERE);
+	}
+
+	public static void warn(String msg, Throwable error) {
+		warn(msg, "error", error);
+	}
+
+	public static void error(String msg, Throwable error) {
+		error(msg, "error", error);
+	}
+
+	public static void severe(String msg, Throwable error) {
+		severe(msg, "error", error);
+	}
+
+	/*********************************** AUTOMATICALLY GENERATED: ****************************************/
+
+	public static void trace(String msg) {
+		log(TRACE, msg, null, null, null, null, null, null, null, null, null, null, 0);
+	}
+
+	public static void trace(String msg, String key, Object value) {
+		log(TRACE, msg, key, value, null, null, null, null, null, null, null, null, 1);
+	}
+
+	public static void trace(String msg, String key1, Object value1, String key2, Object value2) {
+		log(TRACE, msg, key1, value1, key2, value2, null, null, null, null, null, null, 2);
+	}
+
+	public static void trace(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3) {
+		log(TRACE, msg, key1, value1, key2, value2, key3, value3, null, null, null, null, 3);
+	}
+
+	public static void trace(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3, String key4, Object value4) {
+		log(TRACE, msg, key1, value1, key2, value2, key3, value3, key4, value4, null, null, 4);
+	}
+
+	public static void trace(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3, String key4, Object value4, String key5, Object value5) {
+		log(TRACE, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
+	}
+
+	public static void debug(String msg) {
+		log(DEBUG, msg, null, null, null, null, null, null, null, null, null, null, 0);
+	}
+
+	public static void debug(String msg, String key, Object value) {
+		log(DEBUG, msg, key, value, null, null, null, null, null, null, null, null, 1);
+	}
+
+	public static void debug(String msg, String key1, Object value1, String key2, Object value2) {
+		log(DEBUG, msg, key1, value1, key2, value2, null, null, null, null, null, null, 2);
+	}
+
+	public static void debug(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3) {
+		log(DEBUG, msg, key1, value1, key2, value2, key3, value3, null, null, null, null, 3);
+	}
+
+	public static void debug(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3, String key4, Object value4) {
+		log(DEBUG, msg, key1, value1, key2, value2, key3, value3, key4, value4, null, null, 4);
+	}
+
+	public static void debug(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3, String key4, Object value4, String key5, Object value5) {
+		log(DEBUG, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
+	}
+
+	public static void audit(String msg) {
+		log(AUDIT, msg, null, null, null, null, null, null, null, null, null, null, 0);
+	}
+
+	public static void audit(String msg, String key, Object value) {
+		log(AUDIT, msg, key, value, null, null, null, null, null, null, null, null, 1);
+	}
+
+	public static void audit(String msg, String key1, Object value1, String key2, Object value2) {
+		log(AUDIT, msg, key1, value1, key2, value2, null, null, null, null, null, null, 2);
+	}
+
+	public static void audit(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3) {
+		log(AUDIT, msg, key1, value1, key2, value2, key3, value3, null, null, null, null, 3);
+	}
+
+	public static void audit(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3, String key4, Object value4) {
+		log(AUDIT, msg, key1, value1, key2, value2, key3, value3, key4, value4, null, null, 4);
+	}
+
+	public static void audit(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3, String key4, Object value4, String key5, Object value5) {
+		log(AUDIT, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
+	}
+
+	public static void info(String msg) {
+		log(INFO, msg, null, null, null, null, null, null, null, null, null, null, 0);
+	}
+
+	public static void info(String msg, String key, Object value) {
+		log(INFO, msg, key, value, null, null, null, null, null, null, null, null, 1);
+	}
+
+	public static void info(String msg, String key1, Object value1, String key2, Object value2) {
+		log(INFO, msg, key1, value1, key2, value2, null, null, null, null, null, null, 2);
+	}
+
+	public static void info(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3) {
+		log(INFO, msg, key1, value1, key2, value2, key3, value3, null, null, null, null, 3);
+	}
+
+	public static void info(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3, String key4, Object value4) {
+		log(INFO, msg, key1, value1, key2, value2, key3, value3, key4, value4, null, null, 4);
+	}
+
+	public static void info(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3, String key4, Object value4, String key5, Object value5) {
+		log(INFO, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
+	}
+
+	public static void warn(String msg) {
+		log(WARN, msg, null, null, null, null, null, null, null, null, null, null, 0);
+	}
+
+	public static void warn(String msg, String key, Object value) {
+		log(WARN, msg, key, value, null, null, null, null, null, null, null, null, 1);
+	}
+
+	public static void warn(String msg, String key1, Object value1, String key2, Object value2) {
+		log(WARN, msg, key1, value1, key2, value2, null, null, null, null, null, null, 2);
+	}
+
+	public static void warn(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3) {
+		log(WARN, msg, key1, value1, key2, value2, key3, value3, null, null, null, null, 3);
+	}
+
+	public static void warn(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3, String key4, Object value4) {
+		log(WARN, msg, key1, value1, key2, value2, key3, value3, key4, value4, null, null, 4);
+	}
+
+	public static void warn(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3, String key4, Object value4, String key5, Object value5) {
+		log(WARN, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
+	}
+
+	public static void error(String msg) {
+		log(ERROR, msg, null, null, null, null, null, null, null, null, null, null, 0);
+	}
+
+	public static void error(String msg, String key, Object value) {
+		log(ERROR, msg, key, value, null, null, null, null, null, null, null, null, 1);
+	}
+
+	public static void error(String msg, String key1, Object value1, String key2, Object value2) {
+		log(ERROR, msg, key1, value1, key2, value2, null, null, null, null, null, null, 2);
+	}
+
+	public static void error(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3) {
+		log(ERROR, msg, key1, value1, key2, value2, key3, value3, null, null, null, null, 3);
+	}
+
+	public static void error(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3, String key4, Object value4) {
+		log(ERROR, msg, key1, value1, key2, value2, key3, value3, key4, value4, null, null, 4);
+	}
+
+	public static void error(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3, String key4, Object value4, String key5, Object value5) {
+		log(ERROR, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
+	}
+
+	public static void severe(String msg) {
+		log(SEVERE, msg, null, null, null, null, null, null, null, null, null, null, 0);
+	}
+
+	public static void severe(String msg, String key, Object value) {
+		log(SEVERE, msg, key, value, null, null, null, null, null, null, null, null, 1);
+	}
+
+	public static void severe(String msg, String key1, Object value1, String key2, Object value2) {
+		log(SEVERE, msg, key1, value1, key2, value2, null, null, null, null, null, null, 2);
+	}
+
+	public static void severe(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3) {
+		log(SEVERE, msg, key1, value1, key2, value2, key3, value3, null, null, null, null, 3);
+	}
+
+	public static void severe(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3, String key4, Object value4) {
+		log(SEVERE, msg, key1, value1, key2, value2, key3, value3, key4, value4, null, null, 4);
+	}
+
+	public static void severe(String msg, String key1, Object value1, String key2, Object value2, String key3,
+			Object value3, String key4, Object value4, String key5, Object value5) {
+		log(SEVERE, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
 	}
 
 }
