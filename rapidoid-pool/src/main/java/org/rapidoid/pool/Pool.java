@@ -30,6 +30,8 @@ public interface Pool<T> {
 
 	void release(T obj);
 
-	int instances();
+	int size();
+
+	int objectsCreated();
 
 }

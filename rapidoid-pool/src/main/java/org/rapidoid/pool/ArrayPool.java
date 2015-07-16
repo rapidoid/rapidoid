@@ -22,6 +22,7 @@ package org.rapidoid.pool;
 
 import java.util.concurrent.Callable;
 
+import org.rapidoid.AbstractInsightful;
 import org.rapidoid.arr.Arr;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
@@ -30,7 +31,7 @@ import org.rapidoid.util.U;
  * @author Nikolche Mihajlovski
  * @since 2.0.0
  */
-public class ArrayPool<T> implements Pool<T> {
+public class ArrayPool<T> extends AbstractInsightful implements Pool<T> {
 
 	private final Callable<T> factory;
 
@@ -41,7 +42,8 @@ public class ArrayPool<T> implements Pool<T> {
 	private int instancesN = 0;
 
 	@SuppressWarnings("unchecked")
-	public ArrayPool(Callable<T> factory, int capacity) {
+	public ArrayPool(String name, Callable<T> factory, int capacity) {
+		super("pool", name);
 		this.factory = factory;
 		this.free = (T[]) new Object[capacity];
 	}
@@ -69,7 +71,8 @@ public class ArrayPool<T> implements Pool<T> {
 		if (freeN >= free.length) {
 			int expandFactor = free.length < 1000000 ? 10 : 2;
 			int newSize = free.length * expandFactor;
-			Log.warn("Pool wasn't big enough, expanding...", "old size", free.length, "new size", newSize);
+			Log.info("The pool wasn't big enough, expanding...", "name", getName(), "old size", free.length,
+					"new size", newSize);
 			free = Arr.expand(free, expandFactor);
 		}
 
@@ -77,8 +80,18 @@ public class ArrayPool<T> implements Pool<T> {
 	}
 
 	@Override
-	public int instances() {
+	public int objectsCreated() {
 		return instancesN;
+	}
+
+	@Override
+	public int size() {
+		return freeN;
+	}
+
+	@Override
+	public String toString() {
+		return getName() + "#" + size();
 	}
 
 }

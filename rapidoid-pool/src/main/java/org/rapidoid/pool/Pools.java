@@ -28,8 +28,8 @@ import java.util.concurrent.Callable;
  */
 public class Pools {
 
-	public static <T> Pool<T> create(Callable<T> factory, int capacity) {
-		return new ThreadSafeArrayPool<T>(factory, capacity);
+	public static <T> Pool<T> create(String name, Callable<T> factory, int capacity) {
+		return new SynchronizedArrayPool<T>(name, factory, capacity);
 	}
 
 }

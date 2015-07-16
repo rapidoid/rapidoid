@@ -125,7 +125,7 @@ public class RapidoidHelper {
 
 		if (exchangeClass != null) {
 			exchange = Cls.newInstance(exchangeClass);
-			pool = Pools.create(new Callable() {
+			pool = Pools.create("exchanges", new Callable() {
 				@Override
 				public Object call() throws Exception {
 					return Cls.newInstance(exchangeClass);

@@ -28,8 +28,8 @@ import java.util.concurrent.Callable;
  */
 public class SynchronizedArrayPool<T> extends ArrayPool<T> {
 
-	public SynchronizedArrayPool(Callable<T> factory, int capacity) {
-		super(factory, capacity);
+	public SynchronizedArrayPool(String name, Callable<T> factory, int capacity) {
+		super(name, factory, capacity);
 	}
 
 	@Override
@@ -43,8 +43,13 @@ public class SynchronizedArrayPool<T> extends ArrayPool<T> {
 	}
 
 	@Override
-	public synchronized int instances() {
-		return super.instances();
+	public synchronized int objectsCreated() {
+		return super.objectsCreated();
+	}
+
+	@Override
+	public synchronized int size() {
+		return super.size();
 	}
 
 }

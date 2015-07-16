@@ -32,14 +32,14 @@ public class ThreadSafeArrayPool<T> extends ArrayPool<T> {
 
 	private final Pool<T> synchronizedPool;
 
-	public ThreadSafeArrayPool(Callable<T> factory, int capacity) {
-		super(factory, capacity);
-		this.synchronizedPool = new SynchronizedArrayPool<T>(factory, capacity);
+	public ThreadSafeArrayPool(String name, Callable<T> factory, int capacity) {
+		super(name, factory, capacity);
+		this.synchronizedPool = new SynchronizedArrayPool<T>(name, factory, capacity);
 	}
 
 	@Override
 	public T get() {
-		if (Thread.currentThread() == ownerThread) {
+		if (Thread.currentThread() == ownerThread && super.size() > 0) {
 			return super.get();
 		} else {
 			return synchronizedPool.get();
@@ -56,12 +56,13 @@ public class ThreadSafeArrayPool<T> extends ArrayPool<T> {
 	}
 
 	@Override
-	public int instances() {
-		if (Thread.currentThread() == ownerThread) {
-			return super.instances();
-		} else {
-			return synchronizedPool.instances();
-		}
+	public int objectsCreated() {
+		return super.objectsCreated() + synchronizedPool.objectsCreated();
+	}
+
+	@Override
+	public int size() {
+		return super.size() + synchronizedPool.size();
 	}
 
 }

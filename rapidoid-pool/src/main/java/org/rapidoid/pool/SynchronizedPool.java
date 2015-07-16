@@ -40,8 +40,13 @@ public class SynchronizedPool<T> implements Pool<T> {
 		pool.release(obj);
 	}
 
-	public synchronized int instances() {
-		return pool.instances();
+	public synchronized int objectsCreated() {
+		return pool.objectsCreated();
+	}
+
+	@Override
+	public synchronized int size() {
+		return pool.size();
 	}
 
 }

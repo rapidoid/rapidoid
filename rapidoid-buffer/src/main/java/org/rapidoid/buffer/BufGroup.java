@@ -45,7 +45,7 @@ public class BufGroup {
 		this.factor = factor;
 		this.capacity = (int) Math.pow(2, factor);
 
-		pool = Pools.create(new Callable<ByteBuffer>() {
+		pool = Pools.create("buffers", new Callable<ByteBuffer>() {
 			@Override
 			public ByteBuffer call() {
 				return ByteBuffer.allocateDirect(capacity);
@@ -82,7 +82,7 @@ public class BufGroup {
 	}
 
 	public int instances() {
-		return pool.instances();
+		return pool.objectsCreated();
 	}
 
 }
