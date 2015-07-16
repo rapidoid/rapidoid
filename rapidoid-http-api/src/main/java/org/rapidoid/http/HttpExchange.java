@@ -106,6 +106,8 @@ public interface HttpExchange {
 
 	boolean isPostReq();
 
+	boolean isDevMode();
+
 	long requestId();
 
 	String resourceName();
@@ -240,6 +242,8 @@ public interface HttpExchange {
 	HttpExchange async();
 
 	HttpExchange done();
+
+	HttpExchange render(CachedResource template, Object... namesAndValues);
 
 	/* EXTRAS: */
 

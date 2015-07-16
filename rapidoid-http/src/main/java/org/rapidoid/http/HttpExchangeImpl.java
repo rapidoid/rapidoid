@@ -689,8 +689,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public synchronized HttpExchange sendFile(CachedResource resource) {
 		U.must(resource.exists());
-		setContentType(MediaType.getByFileName(resource.getFilename()));
-		write(resource.getContent());
+		setContentType(MediaType.getByFileName(resource.getName()));
+		write(resource.getBytes());
 		return this;
 	}
 
@@ -808,7 +808,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		return new HttpOutputStream(this);
 	}
 
-	private synchronized boolean detectedDevMode() {
+	@Override
+	public synchronized boolean isDevMode() {
 		if (Conf.production()) {
 			return false;
 		}
@@ -913,7 +914,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 		synchronized (Conf.class) {
 			if (Conf.option("mode", null) == null) {
-				Conf.set("mode", detectedDevMode() ? "dev" : "production");
+				Conf.set("mode", isDevMode() ? "dev" : "production");
 				Log.info("Auto-detected dev/production mode", "mode", Conf.option("mode"));
 			}
 		}
@@ -1233,6 +1234,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	public boolean resourceNameHasExtension() {
 		resourceName(); // make sure it is calculated
 		return resourceNameHasExtension;
+	}
+
+	@Override
+	public HttpExchange render(CachedResource template, Object... namesAndValues) {
+		String text = UTILS.fillIn(template.toString(), namesAndValues);
+		return write(text.getBytes());
 	}
 
 }

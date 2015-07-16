@@ -109,9 +109,19 @@ public class AppHandler implements Handler {
 
 		xi.loadState();
 
-		// GUI pages
+		// Instantiate main app object (if possible)
 
-		Object result = Pages.dispatchIfExists(x, appCls.pages);
+		Object app = Apps.instantiate(appCls.main, x);
+
+		// GUI pages from file resources
+
+		if (Pages.serveFromFile(x, app)) {
+			return x;
+		}
+
+		// GUI pages from Java components
+
+		Object result = Pages.dispatchIfExists(x, appCls.pages, app);
 		if (result != null) {
 			return result;
 		}
@@ -119,11 +129,10 @@ public class AppHandler implements Handler {
 		// App screens
 
 		if (!U.isEmpty(appCls.screens) || appCls.main != null) {
-			Object genericPage = new AppPageGeneric(x, appCls);
+			Object genericPage = new AppPageGeneric(x, appCls, app);
 			return Pages.dispatch(x, genericPage);
 		}
 
 		throw x.notFound();
 	}
-
 }

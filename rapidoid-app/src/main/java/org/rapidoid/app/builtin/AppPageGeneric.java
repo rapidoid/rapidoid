@@ -48,7 +48,6 @@ import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.http.HttpSuccessException;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.oauth.OAuthProvider;
-import org.rapidoid.pages.HttpExchangeHolder;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.pages.impl.ComplexView;
 import org.rapidoid.plugins.db.DB;
@@ -86,11 +85,11 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 
 	protected final Object screen;
 
-	public AppPageGeneric(HttpExchange x, AppClasses appCls) {
+	public AppPageGeneric(HttpExchange x, AppClasses appCls, Object app) {
 		this.x = x;
 		this.appCls = appCls;
-		this.app = wireX(appCls.main != null ? Cls.newInstance(appCls.main) : new Object(), x);
-		this.screen = wireX(getScreen(), x);
+		this.app = app;
+		this.screen = Apps.wireExchange(getScreen(), x);
 
 		if (appCls.main != null) {
 			Method init = Cls.findMethod(appCls.main, "init");
@@ -105,13 +104,6 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 	@Override
 	public Object[] getSubViews() {
 		return new Object[] { app, screen };
-	}
-
-	private static <T> T wireX(T target, HttpExchange x) {
-		if (target instanceof HttpExchangeHolder) {
-			((HttpExchangeHolder) target).setHttpExchange(x);
-		}
-		return target;
 	}
 
 	public String title() {

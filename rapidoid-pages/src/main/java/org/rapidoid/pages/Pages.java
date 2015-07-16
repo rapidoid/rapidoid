@@ -31,12 +31,12 @@ import org.rapidoid.aop.AOP;
 import org.rapidoid.arr.Arr;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.config.Conf;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeInternals;
 import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.http.HttpSuccessException;
+import org.rapidoid.io.CachedResource;
 import org.rapidoid.json.JSON;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
@@ -124,7 +124,7 @@ public class Pages {
 			return x;
 		}
 
-		return PageGUI.page(Conf.dev(), pageTitle, pageHead, content);
+		return PageGUI.page(pageTitle, pageHead, content);
 	}
 
 	public static Object render(HttpExchange x, Object page) {
@@ -156,7 +156,7 @@ public class Pages {
 		}
 	}
 
-	public static Object dispatchIfExists(HttpExchange x, Map<String, Class<?>> pages) {
+	public static Object dispatchIfExists(HttpExchange x, Map<String, Class<?>> pages, Object app) {
 		String pageName = Pages.getPageName(x);
 		String pageClassName = U.capitalized(pageName);
 
@@ -375,6 +375,34 @@ public class Pages {
 		} else {
 			return false;
 		}
+	}
+
+	public static boolean serveFromFile(HttpExchange x, Object app) {
+		return serveFromFile(x, x.resourceName() + ".page.html", app)
+				|| serveFromFile(x, "pages/" + x.resourceName() + ".html", app);
+	}
+
+	public static boolean serveFromFile(HttpExchange x, String filename, Object app) {
+		CachedResource resource = CachedResource.from(filename);
+
+		if (resource.exists()) {
+			x.html();
+			String title = titleOf(x, app);
+			render(x, title, "", resource);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static void render(HttpExchange x, String pageTitle, Object head, Object body) {
+		String devOrProd = x.isDevMode() ? "dev" : "prod";
+
+		CachedResource page = CachedResource.from("page-" + devOrProd + ".html");
+		CachedResource assets = CachedResource.from("page-assets-" + devOrProd + ".html");
+		CachedResource meta = CachedResource.from("page-meta-" + devOrProd + ".html");
+
+		x.render(page, "title", pageTitle, "head", head, "body", body, "assets", assets, "meta", meta, "state", "{}");
 	}
 
 }
