@@ -93,7 +93,7 @@ public class Wire {
 	public static synchronized void reset() {
 		Log.info("Reseting IoC state");
 
-		Log.setLogLevel(Log.INFO);
+		Log.setLogLevel(Log.LEVEL_INFO);
 		Conf.args();
 
 		Beany.reset();
