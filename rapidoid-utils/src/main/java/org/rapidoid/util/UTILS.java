@@ -638,6 +638,19 @@ public class UTILS implements Constants {
 		return template.replace("{{" + placeholder + "}}", value);
 	}
 
+	public static String fillIn(String template, Object... namesAndValues) {
+		String text = template.toString();
+
+		for (int i = 0; i < namesAndValues.length / 2; i++) {
+			String placeholder = (String) namesAndValues[i * 2];
+			String value = Cls.str(namesAndValues[i * 2 + 1]);
+
+			text = fillIn(text, placeholder, value);
+		}
+
+		return text;
+	}
+
 	public static String camelSplit(String s) {
 		return CAMEL_SPLITTER_PATTERN.matcher(s).replaceAll(" ");
 	}
