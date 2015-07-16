@@ -33,7 +33,7 @@ public class CachedResource {
 
 	private static final ConcurrentMap<String, CachedResource> FILES = U.concurrentMap();
 
-	private final String filename;
+	private final String name;
 
 	private volatile byte[] bytes;
 
@@ -41,8 +41,10 @@ public class CachedResource {
 
 	private volatile long lastModified;
 
-	public CachedResource(String filename) {
-		this.filename = filename;
+	private volatile String content;
+
+	public CachedResource(String name) {
+		this.name = name;
 	}
 
 	public static CachedResource from(String filename) {
@@ -59,34 +61,68 @@ public class CachedResource {
 		return cachedFile;
 	}
 
-	public byte[] getContent() {
+	public synchronized byte[] getBytes() {
 		// micro-caching the file content, expires after 1 second
 		if (U.time() - lastUpdatedOn >= 1000) {
-			File file = new File(filename);
+			load(name);
 
-			// a normal file on the file system
-			if (file.exists() && file.lastModified() > this.lastModified) {
-				this.lastModified = file.lastModified();
-				bytes = IO.loadBytes(filename);
-			} else {
-				// it might not exist or it might be on the classpath or compressed in a JAR
-				if (bytes == null) {
-					bytes = IO.loadBytes(filename);
-				}
+			if (bytes == null) {
+				// if the resource doesn't exist, try loading the default resource
+				load(getDefaultFilename(name));
 			}
 
+			content = null; // invalidate
 			lastUpdatedOn = U.time();
 		}
 
 		return bytes;
 	}
 
-	public boolean exists() {
-		return getContent() != null;
+	protected void load(String filename) {
+		File file = new File(filename);
+
+		if (file.exists()) {
+			// a normal file on the file system
+			if (file.lastModified() > this.lastModified) {
+				this.lastModified = file.lastModified();
+				this.bytes = IO.loadBytes(filename);
+			}
+		} else {
+			// it might not exist or it might be on the classpath or compressed in a JAR
+			this.bytes = IO.loadBytes(filename);
+		}
 	}
 
-	public String getFilename() {
-		return filename;
+	protected String getDefaultFilename(String filename) {
+		int lastDotPos = filename.lastIndexOf('.');
+
+		if (lastDotPos > 0) {
+			return U.insert(filename, lastDotPos, ".default");
+		} else {
+			return filename + ".default";
+		}
+	}
+
+	public synchronized String getContent() {
+		if (content == null) {
+			byte[] b = getBytes();
+			content = b != null ? new String(b) : null;
+		}
+
+		return content;
+	}
+
+	public boolean exists() {
+		return getBytes() != null;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public String toString() {
+		return getContent();
 	}
 
 }

@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.io.IO;
+import org.rapidoid.io.CachedResource;
 import org.rapidoid.pages.impl.FileTemplateTag;
 import org.rapidoid.pages.impl.MultiLanguageText;
 import org.rapidoid.pages.impl.StateTag;
@@ -55,21 +55,21 @@ public class PageGUI extends BootstrapWidgets {
 		return cmd(cmd).class_("close").contents(sp1, sp2);
 	}
 
-	public static Tag page(boolean devMode, String pageTitle, Object head, Object body) {
-		String devOrProd = devMode ? "dev" : "prod";
-
-		Tag assets = hardcoded(IO.loadResourceAsString("page-assets-" + devOrProd + ".html", true));
-		Tag meta = hardcoded(IO.loadResourceAsString("page-meta-" + devOrProd + ".html", true));
-
+	public static Tag page(String pageTitle, Object head, Object body) {
 		HttpExchange x = Ctxs.ctx().exchange();
+		String devOrProd = x.isDevMode() ? "dev" : "prod";
+
+		CachedResource assets = CachedResource.from("page-assets-" + devOrProd + ".html");
+		CachedResource meta = CachedResource.from("page-meta-" + devOrProd + ".html");
+
 		Object state = new StateTag(x);
 
 		return render("page-" + devOrProd + ".html", "title", pageTitle, "head", head, "body", body, "assets", assets,
 				"meta", meta, "state", state);
 	}
 
-	public static Tag page(boolean devMode, String pageTitle, Object body) {
-		return page(devMode, pageTitle, "", body);
+	public static Tag page(String pageTitle, Object body) {
+		return page(pageTitle, "", body);
 	}
 
 }

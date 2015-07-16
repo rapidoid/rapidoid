@@ -29,7 +29,7 @@ import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagProcessor;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.io.IO;
+import org.rapidoid.io.CachedResource;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
@@ -48,7 +48,7 @@ public class FileTemplateTag extends HardcodedTag {
 
 	@Override
 	public void render(HttpExchange x, PageRenderer renderer, OutputStream out) {
-		String text = IO.loadResourceAsString(templateName, true);
+		String text = U.or(CachedResource.from(templateName).getContent(), "");
 
 		for (int i = 0; i < namesAndValues.length / 2; i++) {
 			String placeholder = (String) namesAndValues[i * 2];

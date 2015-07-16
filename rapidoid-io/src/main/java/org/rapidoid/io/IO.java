@@ -88,31 +88,8 @@ public class IO {
 		return output.toByteArray();
 	}
 
-	public static byte[] loadResource(String filename, boolean enableDefaults) {
-		byte[] input = readResourceBytes(filename);
-
-		if (input == null && enableDefaults) {
-			int lastDotPos = filename.lastIndexOf('.');
-
-			if (lastDotPos > 0) {
-				filename = U.insert(filename, lastDotPos, ".default");
-			} else {
-				filename = filename + ".default";
-			}
-
-			input = loadBytes(filename);
-		}
-
-		return input;
-	}
-
-	private static byte[] readResourceBytes(String filename) {
-		InputStream input = classLoader().getResourceAsStream(filename);
-		return input != null ? loadBytes(input) : null;
-	}
-
-	public static String loadResourceAsString(String filename, boolean enableDefaults) {
-		return new String(loadResource(filename, enableDefaults));
+	public static String loadResourceAsString(String filename) {
+		return new String(loadBytes(filename));
 	}
 
 	public static byte[] loadBytes(String filename) {

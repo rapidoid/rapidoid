@@ -25,31 +25,32 @@ import java.io.PrintStream;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.io.IO;
+import org.rapidoid.io.CachedResource;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class HTMLSnippets {
 
-	private static String PAGE_HTML;
+	private static CachedResource PAGE_HTML;
 
-	private static String FULL_PAGE_HTML;
+	private static CachedResource FULL_PAGE_HTML;
 
 	static {
-		PAGE_HTML = IO.loadResourceAsString("page.html", true);
-		FULL_PAGE_HTML = IO.loadResourceAsString("page-full.html", true);
+		PAGE_HTML = CachedResource.from("page.html");
+		FULL_PAGE_HTML = CachedResource.from("page-full.html");
 	}
 
 	public static HttpExchange writePage(HttpExchange x, String title, String content) {
-		String html = UTILS.fillIn(PAGE_HTML, "title", title);
+		String html = UTILS.fillIn(PAGE_HTML.getContent(), "title", title);
 		html = UTILS.fillIn(html, "content", content);
 		x.write(html);
 		return x;
 	}
 
 	public static HttpExchange writeFullPage(HttpExchange x, String title, String content) {
-		String html = FULL_PAGE_HTML.replaceAll("\\{\\{title\\}\\}", title).replaceAll("\\{\\{content\\}\\}", content);
+		String html = FULL_PAGE_HTML.getContent().replaceAll("\\{\\{title\\}\\}", title)
+				.replaceAll("\\{\\{content\\}\\}", content);
 		x.write(html);
 		return x;
 	}

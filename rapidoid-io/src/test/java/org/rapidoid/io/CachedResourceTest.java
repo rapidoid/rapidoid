@@ -29,7 +29,7 @@ public class CachedResourceTest extends TestCommons {
 	public void testWithExistingFiles() {
 		CachedResource file = CachedResource.from("abc.txt");
 		isTrue(file.exists());
-		eq(file.getContent(), "ABC!".getBytes());
+		eq(file.getBytes(), "ABC!".getBytes());
 	}
 
 	// typically 1M reads should take less than a second
@@ -43,7 +43,7 @@ public class CachedResourceTest extends TestCommons {
 		// should be fast
 		for (int i = 0; i < 1000000; i++) {
 			CachedResource file = CachedResource.from("abc.txt");
-			notNull(file.getContent());
+			notNull(file.getBytes());
 		}
 	}
 
@@ -51,7 +51,7 @@ public class CachedResourceTest extends TestCommons {
 	public void testWithNonexistingFiles() {
 		CachedResource file = CachedResource.from("asfgsafd");
 		isFalse(file.exists());
-		isNull(file.getContent());
+		isNull(file.getBytes());
 	}
 
 }
