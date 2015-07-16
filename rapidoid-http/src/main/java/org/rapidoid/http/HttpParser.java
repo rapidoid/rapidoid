@@ -100,38 +100,6 @@ public class HttpParser implements Constants {
 		}
 	}
 
-	public void parse2(Buf buf, BoolWrap isGet, BoolWrap isKeepAlive, Range body, Range verb, Range uri, Range path,
-			Range query, Range protocol, Ranges headers, RapidoidHelper helper) {
-
-		Bytes bytes = buf.bytes();
-
-		buf.scanUntil(SPACE, verb);
-		buf.scanUntil(SPACE, uri);
-		buf.scanLn(protocol);
-
-		IntWrap result = helper.integers[0];
-		int nextPos = BytesUtil.parseLines(bytes, headers.reset(), result, buf.position(), buf.limit(), (byte) 's',
-				(byte) 'e');
-
-		if (nextPos < 0) {
-			throw Buf.INCOMPLETE_READ;
-		}
-
-		buf.position(nextPos);
-
-		int possibleClosePos = result.value;
-		isKeepAlive.value = possibleClosePos < 0 ? true : isKeepAlive(bytes, headers, helper);
-
-		BytesUtil.split(bytes, uri, ASTERISK, path, query, false);
-
-		if (BytesUtil.matches(bytes, verb, GET, true)) {
-			isGet.value = true;
-		} else {
-			isGet.value = false;
-			parseBody(buf, body, headers, helper);
-		}
-	}
-
 	private boolean isKeepAlive(Bytes bytes, Ranges headers, RapidoidHelper helper) {
 		Range connHdr = headers.getByPrefix(bytes, CONNECTION, false);
 		return connHdr != null ? getKeepAliveValue(bytes, connHdr, helper) : true;
