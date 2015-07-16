@@ -74,10 +74,6 @@ public class MultiBuf implements Buf, Constants {
 
 	private int _limit;
 
-	int ccc = BufScanner.MORE;
-
-	int[] cccc = new int[300];
-
 	private OutputStream outputStream;
 
 	private final ByteBufferBytes singleBytes = new ByteBufferBytes();
