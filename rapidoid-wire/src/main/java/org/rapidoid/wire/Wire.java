@@ -46,7 +46,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.util.Builder;
 import org.rapidoid.util.Proxies;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.1.0")
@@ -57,7 +56,7 @@ public class Wire {
 	private static final Set<Object> MANAGED_INSTANCES = U.set();
 	private static final Map<Object, Object> IOC_INSTANCES = U.map();
 
-	private static final Map<Class<?>, List<Field>> INJECTABLE_FIELDS = UTILS
+	private static final Map<Class<?>, List<Field>> INJECTABLE_FIELDS = U
 			.autoExpandingMap(new Mapper<Class<?>, List<Field>>() {
 				@Override
 				public List<Field> map(Class<?> clazz) throws Exception {
@@ -67,7 +66,7 @@ public class Wire {
 				}
 			});
 
-	private static final Map<Class<?>, List<Field>> SESSION_FIELDS = UTILS
+	private static final Map<Class<?>, List<Field>> SESSION_FIELDS = U
 			.autoExpandingMap(new Mapper<Class<?>, List<Field>>() {
 				@Override
 				public List<Field> map(Class<?> clazz) throws Exception {
@@ -77,7 +76,7 @@ public class Wire {
 				}
 			});
 
-	private static final Map<Class<?>, List<Field>> LOCAL_FIELDS = UTILS
+	private static final Map<Class<?>, List<Field>> LOCAL_FIELDS = U
 			.autoExpandingMap(new Mapper<Class<?>, List<Field>>() {
 				@Override
 				public List<Field> map(Class<?> clazz) throws Exception {
@@ -93,9 +92,7 @@ public class Wire {
 	public static synchronized void reset() {
 		Log.info("Reseting IoC state");
 
-		Log.setLogLevel(Log.LEVEL_INFO);
 		Conf.args();
-
 		Beany.reset();
 
 		SINGLETONS.clear();
@@ -110,7 +107,7 @@ public class Wire {
 	}
 
 	public static <K, V> Map<K, V> autoExpandingInjectingMap(final Class<V> clazz) {
-		return UTILS.autoExpandingMap(new Mapper<K, V>() {
+		return U.autoExpandingMap(new Mapper<K, V>() {
 			@Override
 			public V map(K src) throws Exception {
 				return inject(Cls.newInstance(clazz));

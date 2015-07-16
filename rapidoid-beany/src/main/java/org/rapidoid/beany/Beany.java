@@ -23,7 +23,6 @@ import org.rapidoid.dates.Dates;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 
@@ -55,7 +54,7 @@ public class Beany {
 
 	private static final String SETTER = "^set[A-Z].*";
 
-	protected static final Map<Class<?>, BeanProperties> BEAN_PROPERTIES = UTILS
+	protected static final Map<Class<?>, BeanProperties> BEAN_PROPERTIES = U
 			.autoExpandingMap(new Mapper<Class<?>, BeanProperties>() {
 
 				@Override

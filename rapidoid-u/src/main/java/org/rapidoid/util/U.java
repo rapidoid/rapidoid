@@ -39,6 +39,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Pattern;
 
+import org.rapidoid.lambda.Mapper;
+
 /**
  * @author Nikolche Mihajlovski
  * @since 2.0.0
@@ -761,6 +763,44 @@ public class U {
 		} catch (InterruptedException e) {
 			throw new ThreadDeath();
 		}
+	}
+
+	public static <K, V> Map<K, V> autoExpandingMap(final Class<?> clazz) {
+		return autoExpandingMap(new Mapper<K, V>() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public V map(K src) throws Exception {
+				try {
+					return (V) clazz.newInstance();
+				} catch (Exception e) {
+					throw U.rte(e);
+				}
+			}
+		});
+	}
+
+	@SuppressWarnings("serial")
+	public static <K, V> Map<K, V> autoExpandingMap(final Mapper<K, V> valueFactory) {
+		return new ConcurrentHashMap<K, V>() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public synchronized V get(Object key) {
+				V val = super.get(key);
+
+				if (val == null) {
+					try {
+						val = valueFactory.map((K) key);
+					} catch (Exception e) {
+						throw rte(e);
+					}
+
+					put((K) key, val);
+				}
+
+				return val;
+			}
+		};
 	}
 
 }

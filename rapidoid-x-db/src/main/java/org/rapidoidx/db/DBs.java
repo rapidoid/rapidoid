@@ -27,7 +27,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.lambda.Mapper;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -36,7 +36,7 @@ public class DBs {
 	private static final Map<String, Database> DB_INSTANCES;
 
 	static {
-		DB_INSTANCES = UTILS.autoExpandingMap(new Mapper<String, Database>() {
+		DB_INSTANCES = U.autoExpandingMap(new Mapper<String, Database>() {
 			@Override
 			public Database map(String name) throws Exception {
 				String dbFilename = XDB.path() + name + ".db";

@@ -36,7 +36,6 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -53,7 +52,7 @@ public class BeanProperties implements Iterable<Prop> {
 
 	public final ConcurrentMap<String, Object> extras = U.concurrentMap();
 
-	public final Map<PropertySelector, BeanProperties> selections = UTILS
+	public final Map<PropertySelector, BeanProperties> selections = U
 			.autoExpandingMap(new Mapper<PropertySelector, BeanProperties>() {
 				@Override
 				public BeanProperties map(PropertySelector selector) throws Exception {

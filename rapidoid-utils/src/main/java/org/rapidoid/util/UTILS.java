@@ -44,7 +44,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -416,38 +415,6 @@ public class UTILS implements Constants {
 
 	public static short shortFrom(byte a, byte b) {
 		return (short) ((a << 8) + b);
-	}
-
-	public static <K, V> Map<K, V> autoExpandingMap(final Class<V> clazz) {
-		return autoExpandingMap(new Mapper<K, V>() {
-			@Override
-			public V map(K src) throws Exception {
-				return Cls.newInstance(clazz);
-			}
-		});
-	}
-
-	@SuppressWarnings("serial")
-	public static <K, V> Map<K, V> autoExpandingMap(final Mapper<K, V> valueFactory) {
-		return new ConcurrentHashMap<K, V>() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public synchronized V get(Object key) {
-				V val = super.get(key);
-
-				if (val == null) {
-					try {
-						val = valueFactory.map((K) key);
-					} catch (Exception e) {
-						throw new RuntimeException(e);
-					}
-
-					put((K) key, val);
-				}
-
-				return val;
-			}
-		};
 	}
 
 	public static String replace(String s, String regex, Mapper<String[], String> replacer) {
