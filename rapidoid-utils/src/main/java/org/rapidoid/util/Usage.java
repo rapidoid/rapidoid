@@ -27,15 +27,15 @@ import org.rapidoid.annotation.Since;
 @Since("2.2.0")
 public class Usage {
 
-	private static long lastAppUsedOn = U.time();
+	private static volatile long lastAppUsedOn = U.time();
 
 	private Usage() {}
 
-	public static synchronized long getLastAppUsedOn() {
+	public static long getLastAppUsedOn() {
 		return lastAppUsedOn;
 	}
 
-	public static synchronized void touchLastAppUsedOn() {
+	public static void touchLastAppUsedOn() {
 		lastAppUsedOn = U.time();
 	}
 
