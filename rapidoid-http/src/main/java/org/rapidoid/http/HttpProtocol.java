@@ -71,16 +71,22 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		parser.parse(x.input(), x.isGet, x.isKeepAlive, x.body, x.verb, x.uri, x.path, x.query, x.protocol, x.headers,
 				x.helper());
 
-		String upgrade = x.header("Upgrade", null);
-		if (!U.isEmpty(upgrade)) {
-			processUpgrade(ctx, x, upgrade);
-			return;
+		if (upgradable()) {
+			String upgrade = x.header("Upgrade", null);
+			if (!U.isEmpty(upgrade)) {
+				processUpgrade(ctx, x, upgrade);
+				return;
+			}
 		}
 
 		U.rteIf(x.verb.isEmpty() || x.uri.isEmpty(), "Invalid HTTP request!");
 		U.rteIf(x.isGet.value && !x.body.isEmpty(), "Body is NOT allowed in HTTP GET requests!");
 
 		processRequest(x);
+	}
+
+	protected boolean upgradable() {
+		return false;
 	}
 
 	private void processUpgrade(Channel ctx, HttpExchangeImpl x, String upgrade) {
