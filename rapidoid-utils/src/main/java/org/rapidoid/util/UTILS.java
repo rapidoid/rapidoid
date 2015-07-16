@@ -48,6 +48,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.rapidoid.Insights;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -524,7 +525,7 @@ public class UTILS implements Constants {
 
 		String data = String.format("%s: %s in %s ms (%s/sec)", name, count, ms, avgs);
 
-		System.out.println(data + " | " + getCpuMemStats());
+		System.out.println(data + " | " + Insights.getCpuMemStats());
 	}
 
 	public static void benchmarkMT(int threadsN, final String name, final int count, final CountDownLatch outsideLatch,
@@ -558,18 +559,6 @@ public class UTILS implements Constants {
 
 	public static void benchmarkMT(int threadsN, final String name, final int count, final Runnable runnable) {
 		benchmarkMT(threadsN, name, count, null, runnable);
-	}
-
-	public static String getCpuMemStats() {
-		Runtime rt = Runtime.getRuntime();
-		long totalMem = rt.totalMemory();
-		long maxMem = rt.maxMemory();
-		long freeMem = rt.freeMemory();
-		long usedMem = totalMem - freeMem;
-		int megs = 1024 * 1024;
-
-		String msg = "MEM [total=%s MB, used=%s MB, max=%s MB]";
-		return String.format(msg, totalMem / megs, usedMem / megs, maxMem / megs);
 	}
 
 	public static String urlDecode(String value) {

@@ -1,8 +1,8 @@
-package org.rapidoid.lambda;
+package org.rapidoid;
 
 /*
  * #%L
- * rapidoid-u
+ * rapidoid-insights
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -22,10 +22,14 @@ package org.rapidoid.lambda;
 
 /**
  * @author Nikolche Mihajlovski
- * @since 2.0.0
+ * @since 4.1.0
  */
-public interface Mapper<FROM, TO> {
+public interface Insightful {
 
-	TO map(FROM src) throws Exception;
+	String getKind();
+
+	String getName();
+
+	Thread getCreatorThread();
 
 }

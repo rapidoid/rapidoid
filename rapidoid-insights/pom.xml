@@ -7,19 +7,19 @@
 		<version>4.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-pool</artifactId>
+	<artifactId>rapidoid-insights</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid Pool</description>
+	<description>Rapidoid Insights</description>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-insights</artifactId>
+			<artifactId>rapidoid-u</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-arr</artifactId>
+			<artifactId>rapidoid-log</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

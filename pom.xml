@@ -85,6 +85,7 @@
 		<module>rapidoid-arr</module>
 		<module>rapidoid-dates</module>
 		<module>rapidoid-log</module>
+		<module>rapidoid-insights</module>
 		<module>rapidoid-var</module>
 		<module>rapidoid-anyobj</module>
 		<module>rapidoid-cls</module>

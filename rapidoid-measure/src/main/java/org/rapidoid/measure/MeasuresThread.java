@@ -1,8 +1,8 @@
 package org.rapidoid.measure;
 
+import org.rapidoid.Insights;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.UTILS;
 
 /*
  * #%L
@@ -42,7 +42,7 @@ public class MeasuresThread extends Thread {
 			while (true) {
 				String info = statistics.info();
 				if (!lastInfo.equals(info)) {
-					System.out.println(UTILS.getCpuMemStats() + " " + info);
+					System.out.println(Insights.getCpuMemStats() + " " + info);
 					lastInfo = info;
 				}
 				Thread.sleep(1000);
