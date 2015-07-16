@@ -84,4 +84,15 @@ public class BufferTestCommons extends TestCommons {
 		}
 	}
 
+	protected Buf buf(String content) {
+		BufGroup bufs = new BufGroup(2);
+		Buf buf = bufs.newBuf();
+
+		eq(buf, "");
+
+		buf.append(content);
+
+		return buf;
+	}
+
 }

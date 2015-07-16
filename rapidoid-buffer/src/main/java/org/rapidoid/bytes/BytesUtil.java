@@ -35,6 +35,10 @@ public class BytesUtil implements Constants {
 
 	public static final byte[] CHARS_SWITCH_CASE = new byte[128];
 
+	private static final String URI_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._:/?#[]!$&()'+,;=%";
+
+	private static final boolean[] URI_ALLOWED_CHARACTER = new boolean[128];
+
 	static {
 		for (int ch = 0; ch < 128; ch++) {
 			if (ch >= 'a' && ch <= 'z') {
@@ -44,6 +48,8 @@ public class BytesUtil implements Constants {
 			} else {
 				CHARS_SWITCH_CASE[ch] = (byte) ch;
 			}
+
+			URI_ALLOWED_CHARACTER[ch] = URI_CHARACTERS.indexOf(ch) >= 0;
 		}
 	}
 
@@ -348,7 +354,6 @@ public class BytesUtil implements Constants {
 
 		target.start = start;
 		target.length = finish - start + 1;
-
 	}
 
 	public static boolean split(Bytes bytes, Range target, byte sep, Range before, Range after, boolean trimParts) {
@@ -542,6 +547,43 @@ public class BytesUtil implements Constants {
 
 		result.reset();
 		return NOT_FOUND;
+	}
+
+	public static boolean isValidURI(Bytes bytes, Range uri) {
+		int start = uri.start;
+		int len = uri.length;
+		int last = uri.last();
+
+		if (len == 0 || bytes.get(start) != '/') {
+			return false;
+		}
+
+		byte prev = '/';
+		for (int p = start + 1; p <= last; p++) {
+			byte b = bytes.get(p);
+
+			if (b <= 0 || !URI_ALLOWED_CHARACTER[b]) {
+				return false;
+			}
+
+			// disallow OR .. OR // OR ./ OR /.
+			if (b == '.' || b == '/') {
+				if (prev == '.' || prev == '/') {
+					return false;
+				}
+			}
+
+			prev = b;
+		}
+
+		if (len > 1) {
+			byte b = bytes.get(last);
+			if (b == '.') {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 }

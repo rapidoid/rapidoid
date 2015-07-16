@@ -25,7 +25,6 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -64,8 +63,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private final static HttpParser PARSER = Wire.singleton(HttpParser.class);
 
 	private static final byte[] HEADER_SEP = ": ".getBytes();
-
-	private static final Pattern STATIC_RESOURCE_PATTERN = Pattern.compile("^[a-zA-Z0-9_\\.\\-/]+$");
 
 	final Range uri = new Range();
 	final Range verb = new Range();
@@ -1222,8 +1219,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 				resourceName = "index";
 				resourceNameHasExtension = false;
 			} else {
-				U.must(!resourceName.contains("..") && STATIC_RESOURCE_PATTERN.matcher(resourceName).matches(),
-						"Invalid path: %s", path());
 				resourceNameHasExtension = resourceName.contains(".");
 			}
 		}

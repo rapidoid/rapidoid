@@ -22,6 +22,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.log.Log;
@@ -79,10 +80,32 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			}
 		}
 
-		U.rteIf(x.verb.isEmpty() || x.uri.isEmpty(), "Invalid HTTP request!");
-		U.rteIf(x.isGet.value && !x.body.isEmpty(), "Body is NOT allowed in HTTP GET requests!");
+		x.init(responses, sessionStore, router);
+
+		String err = validateRequest(x);
+		if (err != null) {
+			x.startResponse(404).html().write(err);
+			x.completeResponse();
+			return;
+		}
 
 		processRequest(x);
+	}
+
+	private String validateRequest(HttpExchangeImpl x) {
+		if (x.verb.isEmpty()) {
+			return "HTTP verb cannot be empty!";
+		}
+
+		if (!BytesUtil.isValidURI(x.input().bytes(), x.uri)) {
+			return "Invalid HTTP URI!";
+		}
+
+		if (x.isGet.value && !x.body.isEmpty()) {
+			return "Body is NOT allowed in HTTP GET requests!";
+		}
+
+		return null; // OK, not error
 	}
 
 	protected boolean upgradable() {
@@ -108,9 +131,6 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	}
 
 	private void processRequest(HttpExchangeImpl x) {
-
-		x.init(responses, sessionStore, router);
-
 		Ctxs.ctx().setUser(x.user());
 		try {
 			executeRequest(x);
