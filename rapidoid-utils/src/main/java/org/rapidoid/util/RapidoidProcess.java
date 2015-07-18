@@ -26,8 +26,12 @@ import java.io.InputStreamReader;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 
+@Authors("Nikolche Mihajlovski")
+@Since("4.1.0")
 public class RapidoidProcess {
 
 	private final String[] command;
