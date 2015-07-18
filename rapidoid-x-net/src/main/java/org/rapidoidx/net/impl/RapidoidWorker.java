@@ -74,6 +74,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private final int bufSize;
 
+	private final long bufSizeLimit;
+
 	private final boolean noDelay;
 
 	private final BufGroup bufs;
@@ -93,6 +95,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		this.helper = helper;
 		this.maxPipelineSize = Conf.option("pipeline-max", 1000000L);
 		this.selectorTimeout = Conf.option("selector-timeout", 5);
+		this.bufSizeLimit = Conf.option("buffer-limit", 1024L * 1024); // 1 MB
 
 		final int queueSize = Conf.micro() ? 1000 : 1000000;
 		final int growFactor = Conf.micro() ? 2 : 10;
@@ -184,20 +187,22 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		RapidoidConnection conn = (RapidoidConnection) key.attachment();
 
-		long read;
-		try {
-			read = conn.input.append(socketChannel);
-		} catch (Exception e) {
-			read = -1;
-		}
+		if (conn.input.size() < bufSizeLimit) {
+			long read;
+			try {
+				read = conn.input.append(socketChannel);
+			} catch (Exception e) {
+				read = -1;
+			}
 
-		if (read == -1) {
-			// the other end closed the connection
-			Log.debug("The other end closed the connection!");
-			conn.closing = true;
-		}
+			if (read == -1) {
+				// the other end closed the connection
+				Log.debug("The other end closed the connection!");
+				conn.closing = true;
+			}
 
-		dataIn.value(read);
+			dataIn.value(read);
+		}
 
 		process(conn);
 
@@ -255,6 +260,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		Object stateObj = state.obj;
 
 		try {
+
 			conn.done = false;
 
 			if (EXTRA_SAFE) {
@@ -266,6 +272,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			if (!conn.closed && !conn.isAsync()) {
 				conn.done();
 			}
+
+			conn.input().deleteBefore(conn.input().checkpoint());
 
 			Log.debug("Completed message processing");
 			return true;

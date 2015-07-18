@@ -75,6 +75,8 @@ public class MultiBuf implements Buf, Constants {
 
 	private long _limit;
 
+	private long _checkpoint;
+
 	private OutputStream outputStream;
 
 	private final ByteBufferBytes singleBytes = new ByteBufferBytes();
@@ -86,8 +88,6 @@ public class MultiBuf implements Buf, Constants {
 	private long _size;
 
 	private boolean readOnly = false;
-
-	private long checkpoint;
 
 	public MultiBuf(Pool<ByteBuffer> bufPool, int factor, String name) {
 		this.bufPool = bufPool;
@@ -1382,12 +1382,12 @@ public class MultiBuf implements Buf, Constants {
 
 	@Override
 	public long checkpoint() {
-		return checkpoint;
+		return _checkpoint;
 	}
 
 	@Override
 	public void checkpoint(long checkpoint) {
-		this.checkpoint = checkpoint;
+		this._checkpoint = checkpoint;
 	}
 
 }

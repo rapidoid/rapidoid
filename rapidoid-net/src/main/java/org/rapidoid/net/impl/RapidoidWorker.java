@@ -171,7 +171,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			helper.requestCounter++;
 		}
 
-		int pos = conn.input().position();
+		// prepare for a rollback in case the message isn't complete yet
+		conn.input().checkpoint(conn.input().position());
 		int limit = conn.input().limit();
 		int osize = conn.output().size();
 
@@ -196,16 +197,18 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 				conn.done();
 			}
 
-			Log.debug("Completed message processing");
+			conn.input().deleteBefore(conn.input().checkpoint());
+
+			// Log.debug("Completed message processing");
 			return true;
 
 		} catch (IncompleteReadException e) {
 
-			Log.debug("Incomplete message");
+			// Log.debug("Incomplete message");
 			conn.log("<< ROLLBACK >>");
 
 			// input not complete, so rollback
-			conn.input().position(pos);
+			conn.input().position(conn.input().checkpoint());
 			conn.input().limit(limit);
 			conn.input().setReadOnly(false);
 

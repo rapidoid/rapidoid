@@ -153,4 +153,8 @@ public interface Buf {
 
 	void setReadOnly(boolean readOnly);
 
+	int checkpoint();
+
+	void checkpoint(int checkpoint);
+
 }
