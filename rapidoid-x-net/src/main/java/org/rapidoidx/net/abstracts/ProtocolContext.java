@@ -57,6 +57,12 @@ public interface ProtocolContext<T> {
 
 	void log(String msg);
 
+	Channel nextOp(int nextOp);
+
+	Channel nextWrite();
+
+	Channel mode(int mode);
+
 	/* PROTOCOL */
 
 	boolean isInitial();

@@ -58,7 +58,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private final Queue<RapidoidChannel> connected;
 
-	private final SimpleList<RapidoidConnection> done;
+	private final SimpleList<RapidoidConnection> waitingToWrite;
 
 	private final Pool<RapidoidConnection> connections;
 
@@ -85,7 +85,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 		this.serverProtocol = protocol;
 		this.helper = helper;
-		this.maxPipelineSize = Conf.option("pipeline-max", Integer.MAX_VALUE);
+		this.maxPipelineSize = Conf.option("pipeline-max", 1000000L);
 		this.selectorTimeout = Conf.option("selector-timeout", 5);
 
 		final int queueSize = Conf.micro() ? 1000 : 1000000;
@@ -94,7 +94,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		this.restarting = new ArrayBlockingQueue<RapidoidConnection>(queueSize);
 		this.connecting = new ArrayBlockingQueue<ConnectionTarget>(queueSize);
 		this.connected = new ArrayBlockingQueue<RapidoidChannel>(queueSize);
-		this.done = new SimpleList<RapidoidConnection>(queueSize / 10, growFactor);
+		this.waitingToWrite = new SimpleList<RapidoidConnection>(queueSize / 10, growFactor);
+
 
 		connections = Pools.create("connections", new Callable<RapidoidConnection>() {
 			@Override
@@ -221,18 +222,18 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	private long processMsgs(RapidoidConnection conn) {
 		long reqN = 0;
 
-		while (reqN < maxPipelineSize && conn.input().hasRemaining() && processNext(conn, false)) {
+		while (reqN < maxPipelineSize && conn.input().hasRemaining() && processNext(conn, false, false)) {
 			reqN++;
 		}
 
 		return reqN;
 	}
 
-	private boolean processNext(RapidoidConnection conn, boolean initial) {
+	private boolean processNext(RapidoidConnection conn, boolean initial, boolean write) {
 
 		conn.log(initial ? "<< INIT >>" : "<< PROCESS >>");
 
-		U.must(initial || conn.input().hasRemaining());
+		U.must(initial || write || conn.input().hasRemaining());
 
 		// prepare for a rollback in case the message isn't complete yet
 		conn.input().checkpoint(conn.input().position());
@@ -366,9 +367,10 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 				close(conn);
 			} else {
 				if (complete) {
-					key.interestOps(SelectionKey.OP_READ);
+					key.interestOps(conn.mode != 0 ? conn.mode : conn.nextOp);
+					processNext(conn, false, true);
 				} else {
-					key.interestOps(SelectionKey.OP_READ + SelectionKey.OP_WRITE);
+					key.interestOps(conn.mode != 0 ? conn.mode : (SelectionKey.OP_READ + SelectionKey.OP_WRITE));
 				}
 				conn.wrote(complete);
 			}
@@ -378,6 +380,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	}
 
 	public void wantToWrite(RapidoidConnection conn) {
+		U.must(conn.mode != SelectionKey.OP_READ);
+
 		if (onSameThread()) {
 			conn.key.interestOps(SelectionKey.OP_WRITE);
 		} else {
@@ -386,8 +390,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	}
 
 	private void wantToWriteAsync(RapidoidConnection conn) {
-		synchronized (done) {
-			done.add(conn);
+		synchronized (waitingToWrite) {
+			waitingToWrite.add(conn);
 		}
 
 		selector.wakeup();
@@ -439,7 +443,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 				}
 
 				try {
-					processNext(conn, true);
+					processNext(conn, true, false);
 				} finally {
 					conn.setInitial(false);
 				}
@@ -453,17 +457,17 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		while ((restartedConn = restarting.poll()) != null) {
 			Log.debug("restarting", "connection", restartedConn);
 
-			processNext(restartedConn, true);
+			processNext(restartedConn, true, false);
 		}
 
-		synchronized (done) {
-			for (int i = 0; i < done.size(); i++) {
-				RapidoidConnection conn = done.get(i);
+		synchronized (waitingToWrite) {
+			for (int i = 0; i < waitingToWrite.size(); i++) {
+				RapidoidConnection conn = waitingToWrite.get(i);
 				if (conn.key != null && conn.key.isValid()) {
 					conn.key.interestOps(SelectionKey.OP_WRITE);
 				}
 			}
-			done.clear();
+			waitingToWrite.clear();
 		}
 	}
 

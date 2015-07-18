@@ -89,6 +89,10 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 
 	private ChannelHolderImpl holder;
 
+	public volatile int nextOp = SelectionKey.OP_READ;
+
+	public volatile int mode = 0;
+
 	public RapidoidConnection(RapidoidWorker worker, BufGroup bufs) {
 		this.worker = worker;
 		this.input = bufs.newBuf("input#" + connId());
@@ -386,6 +390,23 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 	@Override
 	public ChannelHolder createHolder() {
 		return new ChannelHolderImpl(this);
+	}
+
+	@Override
+	public Channel nextOp(int nextOp) {
+		this.nextOp = nextOp;
+		return this;
+	}
+
+	@Override
+	public Channel nextWrite() {
+		return nextOp(SelectionKey.OP_WRITE);
+	}
+
+	@Override
+	public Channel mode(int mode) {
+		this.mode = mode;
+		return this;
 	}
 
 }

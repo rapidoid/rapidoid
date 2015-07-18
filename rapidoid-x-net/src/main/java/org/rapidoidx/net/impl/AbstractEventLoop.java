@@ -129,14 +129,15 @@ public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 		try {
 			Set<SelectionKey> selectedKeys = selector.selectedKeys();
 			synchronized (selectedKeys) {
+				if (!selectedKeys.isEmpty()) {
+					Iterator<?> iter = selectedKeys.iterator();
 
-				Iterator<?> iter = selectedKeys.iterator();
+					while (iter.hasNext()) {
+						SelectionKey key = (SelectionKey) iter.next();
+						iter.remove();
 
-				while (iter.hasNext()) {
-					SelectionKey key = (SelectionKey) iter.next();
-					iter.remove();
-
-					processKey(key);
+						processKey(key);
+					}
 				}
 			}
 		} catch (ClosedSelectorException e) {
