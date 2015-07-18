@@ -64,6 +64,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private final long maxPipelineSize;
 
+	private final int selectorTimeout;
+
 	final Protocol serverProtocol;
 
 	final RapidoidHelper helper;
@@ -84,6 +86,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		this.serverProtocol = protocol;
 		this.helper = helper;
 		this.maxPipelineSize = Conf.option("pipeline-max", Integer.MAX_VALUE);
+		this.selectorTimeout = Conf.option("selector-timeout", 5);
 
 		final int queueSize = Conf.micro() ? 1000 : 1000000;
 		final int growFactor = Conf.micro() ? 2 : 10;
@@ -516,6 +519,11 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	public long getMessagesProcessed() {
 		return messagesProcessed;
+	}
+
+	@Override
+	protected long getSelectorTimeout() {
+		return selectorTimeout;
 	}
 
 }

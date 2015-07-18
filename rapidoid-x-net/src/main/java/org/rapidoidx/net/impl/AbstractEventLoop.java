@@ -121,7 +121,7 @@ public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 		}
 
 		try {
-			selector.select(50);
+			selector.select(getSelectorTimeout());
 		} catch (IOException e) {
 			Log.error("Select failed!", e);
 		}
@@ -142,6 +142,10 @@ public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 		} catch (ClosedSelectorException e) {
 			// do nothing
 		}
+	}
+
+	protected long getSelectorTimeout() {
+		return 10;
 	}
 
 	protected abstract void doProcessing();
