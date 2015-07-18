@@ -33,11 +33,13 @@ import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Callable;
 
+import org.rapidoid.Insights;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.log.Log;
+import org.rapidoid.measure.StatsMeasure;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.pool.Pools;
 import org.rapidoid.util.SimpleList;
@@ -78,6 +80,10 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private volatile long messagesProcessed;
 
+	private final StatsMeasure dataIn;
+
+	private final StatsMeasure dataOut;
+
 	public RapidoidWorker(String name, final BufGroup bufs, final Protocol protocol, final RapidoidHelper helper,
 			int bufSizeKB, boolean noNelay) {
 		super(name);
@@ -96,6 +102,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		this.connected = new ArrayBlockingQueue<RapidoidChannel>(queueSize);
 		this.waitingToWrite = new SimpleList<RapidoidConnection>(queueSize / 10, growFactor);
 
+		this.dataIn = Insights.stats(name + ":datain");
+		this.dataOut = Insights.stats(name + ":dataout");
 
 		connections = Pools.create("connections", new Callable<RapidoidConnection>() {
 			@Override
@@ -188,6 +196,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			Log.debug("The other end closed the connection!");
 			conn.closing = true;
 		}
+
+		dataIn.value(read);
 
 		process(conn);
 
@@ -359,7 +369,9 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		try {
 			long wrote = conn.output.writeTo(socketChannel);
 			assert wrote >= 0;
+
 			conn.output.deleteBefore(wrote);
+			dataOut.value(wrote);
 
 			boolean complete = conn.output.size() == 0;
 
