@@ -107,12 +107,6 @@ public abstract class DefaultExchange<T> implements ProtocolContext<T>, BufProvi
 		return wrote((int) size);
 	}
 
-	@Override
-	public T writeJSON(Object value) {
-		conn.writeJSON(value);
-		return me();
-	}
-
 	private T wrote(int count) {
 		totalWritten.addAndGet(count);
 		return me();

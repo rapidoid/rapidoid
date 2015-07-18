@@ -34,7 +34,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.json.JSON;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Resetable;
 import org.rapidoid.util.U;
@@ -175,12 +174,6 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 			throw U.rte(e);
 		}
 
-		return this;
-	}
-
-	@Override
-	public synchronized Channel writeJSON(Object value) {
-		JSON.stringify(value, output.asOutputStream());
 		return this;
 	}
 

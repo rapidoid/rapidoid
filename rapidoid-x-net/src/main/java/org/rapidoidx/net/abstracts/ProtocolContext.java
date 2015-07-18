@@ -77,8 +77,6 @@ public interface ProtocolContext<T> {
 
 	T write(File file);
 
-	T writeJSON(Object value);
-
 	T send();
 
 	/* ASYNC */
