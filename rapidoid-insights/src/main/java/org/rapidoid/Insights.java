@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.measure.Measure;
+import org.rapidoid.measure.StatsMeasure;
 import org.rapidoid.util.U;
 
 /*
@@ -34,12 +36,27 @@ public class Insights {
 
 	private static final Map<String, List<Insightful>> RESOURCES = U.autoExpandingMap(ArrayList.class);
 
+	private static final Map<String, List<Object>> INFOS = U.autoExpandingMap(ArrayList.class);
+
+	private static final Map<String, List<Object>> RESETABLE_INFOS = U.autoExpandingMap(ArrayList.class);
+
 	public static void register(Insightful resource) {
 		RESOURCES.get(resource.getKind()).add(resource);
 	}
 
 	public static String getInfo() {
-		return RESOURCES.toString();
+		String info = RESETABLE_INFOS.toString() + " :: " + INFOS.toString() + " :: " + RESOURCES.toString();
+
+		for (List<Object> list : RESETABLE_INFOS.values()) {
+			for (Object item : list) {
+				if (item instanceof Measure) {
+					Measure m = (Measure) item;
+					m.reset();
+				}
+			}
+		}
+
+		return info;
 	}
 
 	public static String getCpuMemStats() {
@@ -53,6 +70,20 @@ public class Insights {
 
 		String msg = "MEM [total=%s MB, used=%s MB, max=%s MB]";
 		return String.format(msg, totalMem / megs, usedMem / megs, maxMem / megs);
+	}
+
+	public static void show() {
+		new InsightsThread().start();
+	}
+
+	public static void register(String name, Object info) {
+		INFOS.get(name).add(info);
+	}
+
+	public static StatsMeasure stats(String name) {
+		StatsMeasure measure = new StatsMeasure();
+		RESETABLE_INFOS.get(name).add(measure);
+		return measure;
 	}
 
 }

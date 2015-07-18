@@ -27,35 +27,46 @@ import org.rapidoid.annotation.Since;
 @Since("2.0.0")
 public class StatsMeasure implements Measure {
 
-	private long min = Long.MAX_VALUE;
-	private long max = Long.MIN_VALUE;
+	private long min;
+	private long max;
 	private long sum = 0;
 	private long count = 0;
+	private volatile long ticks = 0;
 
 	@Override
 	public String get() {
-		return count > 0 ? String.format("[%s..%s..%s]/%s", min, sum / count, max, count) : null;
+		return count > 0 ? String.format("%s:[%s..%s..%s]#%s", sum, min, sum / count, max, count) : "" + ticks;
 	}
 
 	@Override
 	public void reset() {
-		min = Long.MAX_VALUE;
-		max = Long.MIN_VALUE;
+		min = 0;
+		max = 0;
 		sum = 0;
 		count = 0;
+		ticks = 0;
 	}
 
-	public synchronized void add(long value) {
-		if (min > value) {
+	public void tick() {
+		ticks++;
+	}
+
+	public synchronized void value(long value) {
+		if (count == 0 || min > value) {
 			min = value;
 		}
 
-		if (max < value) {
+		if (count == 0 || max < value) {
 			max = value;
 		}
 
 		count++;
 		sum += value;
+	}
+
+	@Override
+	public String toString() {
+		return get();
 	}
 
 }

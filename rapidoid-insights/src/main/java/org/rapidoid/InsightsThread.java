@@ -33,19 +33,14 @@ public class InsightsThread extends Thread {
 		super("stats");
 	}
 
-	private String lastStats;
-
 	@Override
 	public void run() {
 		Log.info("Starting Insights thread...");
 
 		while (!Thread.interrupted()) {
 			U.sleep(1000);
-			String stats = Insights.getCpuMemStats() + "\n" + Insights.getInfo();
-			if (!stats.equals(lastStats)) {
-				System.out.println(stats);
-				lastStats = stats;
-			}
+			String stats = Insights.getCpuMemStats() + " :: " + Insights.getInfo();
+			System.out.println(stats + "\n");
 		}
 
 		Log.info("Stopped Insights thread.");
