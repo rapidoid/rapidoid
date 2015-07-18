@@ -272,4 +272,14 @@ public class SynchronizedBuf implements Buf {
 		buf.setReadOnly(readOnly);
 	}
 
+	@Override
+	public synchronized long checkpoint() {
+		return buf.checkpoint();
+	}
+
+	@Override
+	public synchronized void checkpoint(long checkpoint) {
+		buf.checkpoint(checkpoint);
+	}
+
 }

@@ -1368,4 +1368,14 @@ public class MultiBuf implements Buf, Constants {
 		this.readOnly = readOnly;
 	}
 
+	@Override
+	public long checkpoint() {
+		return checkpoint;
+	}
+
+	@Override
+	public void checkpoint(long checkpoint) {
+		this.checkpoint = checkpoint;
+	}
+
 }
