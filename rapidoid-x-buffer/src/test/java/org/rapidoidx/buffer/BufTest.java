@@ -180,7 +180,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 		buf.append("-abc-xaaw-54-bar--the-end-");
 		buf.setReadOnly(true);
 
-		int max = buf.size();
+		long max = buf.size();
 
 		checkMatch(buf, 0, max, "a", 1, 6, 7, 14, -1);
 		checkMatch(buf, 2, max, "a", 6, 7, 14, -1);
@@ -407,9 +407,9 @@ public class BufTest extends BufferTestCommons implements Constants {
 		}
 	}
 
-	private void checkMatch(Buf buf, int start, int limit, String match, int... positions) {
-		for (int pos : positions) {
-			int p = BytesUtil.find(buf.bytes(), start, limit, match.getBytes(), true);
+	private void checkMatch(Buf buf, long start, long limit, String match, long... positions) {
+		for (long pos : positions) {
+			long p = BytesUtil.find(buf.bytes(), start, limit, match.getBytes(), true);
 			eq(p, pos);
 			start = p + 1;
 		}

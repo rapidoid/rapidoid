@@ -34,13 +34,13 @@ public class Range {
 
 	public static final Range NONE = new Range();
 
-	public int start = -1;
+	public long start = -1;
 
-	public int length = 0;
+	public long length = 0;
 
 	public Range() {}
 
-	public Range(int start, int length) {
+	public Range(long start, long length) {
 		this.start = start;
 		this.length = length;
 	}
@@ -51,11 +51,11 @@ public class Range {
 		return this;
 	}
 
-	public int limit() {
+	public long limit() {
 		return start + length;
 	}
 
-	public int last() {
+	public long last() {
 		return start + length - 1;
 	}
 
@@ -68,36 +68,36 @@ public class Range {
 		return start < 0 || length <= 0;
 	}
 
-	public void ends(int endPos) {
+	public void ends(long endPos) {
 		length = endPos - start;
 	}
 
-	public void starts(int startPos) {
+	public void starts(long startPos) {
 		start = startPos;
 	}
 
-	public void set(int start, int length) {
+	public void set(long start, long length) {
 		this.start = start;
 		this.length = length;
 	}
 
-	public void setInterval(int start, int limit) {
+	public void setInterval(long start, long limit) {
 		assert start <= limit;
 		this.start = start;
 		this.length = limit - start;
 	}
 
 	public String get(String whole) {
-		return start >= 0 ? whole.substring(start, start + length) : "";
+		return start >= 0 ? whole.substring((int) start, (int) (start + length)) : "";
 	}
 
 	public byte[] bytes(Buf src) {
-		byte[] bytes = new byte[length];
+		byte[] bytes = new byte[(int) length];
 		src.get(this, bytes, 0);
 		return bytes;
 	}
 
-	public static Range fromTo(int from, int to) {
+	public static Range fromTo(long from, long to) {
 		U.must(from <= to, "Invalid range!");
 
 		return new Range(from, to - from);
@@ -115,7 +115,7 @@ public class Range {
 		set(range.start, range.length);
 	}
 
-	public void strip(int left, int right) {
+	public void strip(long left, long right) {
 		start += left;
 		length -= left + right;
 	}

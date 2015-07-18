@@ -36,12 +36,12 @@ public class BufBytes implements Bytes {
 	}
 
 	@Override
-	public byte get(int position) {
+	public byte get(long position) {
 		return buf.get(position);
 	}
 
 	@Override
-	public int limit() {
+	public long limit() {
 		return buf.limit();
 	}
 

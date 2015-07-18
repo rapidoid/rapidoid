@@ -35,12 +35,12 @@ public class ByteArrayBytes implements Bytes {
 	}
 
 	@Override
-	public byte get(int position) {
-		return bytes[position];
+	public byte get(long position) {
+		return bytes[(int) position];
 	}
 
 	@Override
-	public int limit() {
+	public long limit() {
 		return bytes.length;
 	}
 

@@ -29,7 +29,7 @@ import java.nio.channels.WritableByteChannel;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.wrap.IntWrap;
+import org.rapidoid.wrap.LongWrap;
 import org.rapidoidx.bytes.Bytes;
 import org.rapidoidx.data.Range;
 import org.rapidoidx.data.Ranges;
@@ -44,11 +44,11 @@ public class SynchronizedBuf implements Buf {
 		this.buf = buf;
 	}
 
-	public synchronized byte get(int position) {
+	public synchronized byte get(long position) {
 		return buf.get(position);
 	}
 
-	public synchronized void put(int position, byte value) {
+	public synchronized void put(long position, byte value) {
 		buf.put(position, value);
 	}
 
@@ -56,11 +56,11 @@ public class SynchronizedBuf implements Buf {
 		buf.append(value);
 	}
 
-	public synchronized void put(int position, byte[] bytes, int offset, int length) {
+	public synchronized void put(long position, byte[] bytes, int offset, int length) {
 		buf.put(position, bytes, offset, length);
 	}
 
-	public synchronized int size() {
+	public synchronized long size() {
 		return buf.size();
 	}
 
@@ -68,11 +68,11 @@ public class SynchronizedBuf implements Buf {
 		buf.append(wrap);
 	}
 
-	public synchronized int append(ReadableByteChannel channel) throws IOException {
+	public synchronized long append(ReadableByteChannel channel) throws IOException {
 		return buf.append(channel);
 	}
 
-	public synchronized int append(String s) {
+	public synchronized long append(String s) {
 		return buf.append(s);
 	}
 
@@ -88,23 +88,23 @@ public class SynchronizedBuf implements Buf {
 		return buf.data();
 	}
 
-	public synchronized int writeTo(WritableByteChannel channel) throws IOException {
+	public synchronized long writeTo(WritableByteChannel channel) throws IOException {
 		return buf.writeTo(channel);
 	}
 
-	public synchronized int writeTo(ByteBuffer buffer) {
+	public synchronized long writeTo(ByteBuffer buffer) {
 		return buf.writeTo(buffer);
 	}
 
-	public synchronized void deleteBefore(int position) {
+	public synchronized void deleteBefore(long position) {
 		buf.deleteBefore(position);
 	}
 
-	public synchronized void deleteAfter(int position) {
+	public synchronized void deleteAfter(long position) {
 		buf.deleteAfter(position);
 	}
 
-	public synchronized void deleteLast(int count) {
+	public synchronized void deleteLast(long count) {
 		buf.deleteLast(count);
 	}
 
@@ -140,7 +140,7 @@ public class SynchronizedBuf implements Buf {
 		return buf.first();
 	}
 
-	public synchronized int putNumAsText(int position, long num, boolean forward) {
+	public synchronized long putNumAsText(long position, long num, boolean forward) {
 		return buf.putNumAsText(position, num, forward);
 	}
 
@@ -152,7 +152,7 @@ public class SynchronizedBuf implements Buf {
 		return buf.next();
 	}
 
-	public synchronized void back(int count) {
+	public synchronized void back(long count) {
 		buf.back(count);
 	}
 
@@ -164,23 +164,23 @@ public class SynchronizedBuf implements Buf {
 		return buf.hasRemaining();
 	}
 
-	public synchronized int remaining() {
+	public synchronized long remaining() {
 		return buf.remaining();
 	}
 
-	public synchronized int position() {
+	public synchronized long position() {
 		return buf.position();
 	}
 
-	public synchronized int limit() {
+	public synchronized long limit() {
 		return buf.limit();
 	}
 
-	public synchronized void position(int position) {
+	public synchronized void position(long position) {
 		buf.position(position);
 	}
 
-	public synchronized void limit(int limit) {
+	public synchronized void limit(long limit) {
 		buf.limit(limit);
 	}
 
@@ -200,7 +200,7 @@ public class SynchronizedBuf implements Buf {
 		buf.scanWhile(value, range);
 	}
 
-	public synchronized void skip(int count) {
+	public synchronized void skip(long count) {
 		buf.skip(count);
 	}
 
@@ -212,11 +212,11 @@ public class SynchronizedBuf implements Buf {
 		return buf.bufCount();
 	}
 
-	public synchronized int bufferIndexOf(int position) {
+	public synchronized int bufferIndexOf(long position) {
 		return buf.bufferIndexOf(position);
 	}
 
-	public synchronized int bufferOffsetOf(int position) {
+	public synchronized int bufferOffsetOf(long position) {
 		return buf.bufferOffsetOf(position);
 	}
 
@@ -240,7 +240,7 @@ public class SynchronizedBuf implements Buf {
 		buf.scanLnLn(ranges);
 	}
 
-	public synchronized void scanN(int count, Range range) {
+	public synchronized void scanN(long count, Range range) {
 		buf.scanN(count, range);
 	}
 
@@ -248,7 +248,7 @@ public class SynchronizedBuf implements Buf {
 		return buf.readLn();
 	}
 
-	public synchronized String readN(int count) {
+	public synchronized String readN(long count) {
 		return buf.readN(count);
 	}
 
@@ -260,11 +260,11 @@ public class SynchronizedBuf implements Buf {
 		buf.scanTo(sep, range, failOnLimit);
 	}
 
-	public synchronized int scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit) {
+	public synchronized long scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit) {
 		return buf.scanTo(sep1, sep2, range, failOnLimit);
 	}
 
-	public synchronized void scanLnLn(Ranges ranges, IntWrap result, byte end1, byte end2) {
+	public synchronized void scanLnLn(Ranges ranges, LongWrap result, byte end1, byte end2) {
 		buf.scanLnLn(ranges, result, end1, end2);
 	}
 

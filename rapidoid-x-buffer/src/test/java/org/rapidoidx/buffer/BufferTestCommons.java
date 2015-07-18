@@ -48,7 +48,7 @@ public class BufferTestCommons extends TestCommons {
 		}
 	}
 
-	protected void eq(Range range, int start, int length) {
+	protected void eq(Range range, long start, long length) {
 		eq(range.start, start);
 		eq(range.length, length);
 	}
@@ -62,7 +62,7 @@ public class BufferTestCommons extends TestCommons {
 		eq(buf.size(), expected.getBytes().length);
 		eq(buf.data(), expected);
 
-		byte[] bbytes = new byte[buf.size()];
+		byte[] bbytes = new byte[(int) buf.size()];
 		ByteBuffer bufy = ByteBuffer.wrap(bbytes);
 		buf.writeTo(bufy);
 		eq(new String(bbytes), expected);

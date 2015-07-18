@@ -28,8 +28,8 @@ import org.rapidoid.annotation.Since;
 @Since("3.0.0")
 public interface Bytes {
 
-	byte get(int position);
+	byte get(long position);
 
-	int limit();
+	long limit();
 
 }

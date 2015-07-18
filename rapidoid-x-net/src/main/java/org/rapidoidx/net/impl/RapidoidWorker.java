@@ -62,7 +62,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private final Pool<RapidoidConnection> connections;
 
-	private final int maxPipelineSize;
+	private final long maxPipelineSize;
 
 	final Protocol serverProtocol;
 
@@ -172,7 +172,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		RapidoidConnection conn = (RapidoidConnection) key.attachment();
 
-		int read;
+		long read;
 		try {
 			read = conn.input.append(socketChannel);
 		} catch (Exception e) {
@@ -231,9 +231,10 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 		U.must(initial || conn.input().hasRemaining());
 
-		int pos = conn.input().position();
-		int limit = conn.input().limit();
-		int osize = conn.output().size();
+		// prepare for a rollback in case the message isn't complete yet
+		conn.input().checkpoint(conn.input().position());
+		long limit = conn.input().limit();
+		long osize = conn.output().size();
 
 		ConnState state = conn.state();
 		long stateN = state.n;
@@ -261,9 +262,10 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			conn.log("<< ROLLBACK >>");
 
 			// input not complete, so rollback
-			conn.input().position(pos);
+			conn.input().position(conn.input().checkpoint());
 			conn.input().limit(limit);
 
+			// TODO use checkpoint for the write
 			conn.output().deleteAfter(osize);
 
 			state.n = stateN;
@@ -283,6 +285,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 			conn.log("<< ERROR >>");
 			Log.error("Failed to process message!", e);
 			conn.close(true);
+		} finally {
+			conn.input().checkpoint(-1);
 		}
 
 		return false;
@@ -349,7 +353,8 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		checkOnSameThread();
 
 		try {
-			int wrote = conn.output.writeTo(socketChannel);
+			long wrote = conn.output.writeTo(socketChannel);
+			assert wrote >= 0;
 			conn.output.deleteBefore(wrote);
 
 			boolean complete = conn.output.size() == 0;

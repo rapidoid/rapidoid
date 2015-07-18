@@ -39,12 +39,12 @@ public class ByteBufferBytes implements Bytes {
 	}
 
 	@Override
-	public byte get(int position) {
-		return buf.get(position);
+	public byte get(long position) {
+		return buf.get((int) position);
 	}
 
 	@Override
-	public int limit() {
+	public long limit() {
 		return buf.limit();
 	}
 

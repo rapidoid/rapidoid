@@ -21,10 +21,10 @@ package org.rapidoidx.buffer;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoidx.data.Range;
-import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -35,7 +35,7 @@ public class RangeTest extends BufferTestCommons {
 		Range rng = new Range();
 		isTrue(rng.isEmpty());
 
-		int[] borders = { Integer.MIN_VALUE, -1111, -1, 0, 1, 1111, Integer.MAX_VALUE };
+		long[] borders = { Long.MIN_VALUE, -1111, -1, 0, 1, 1111, Long.MAX_VALUE };
 
 		for (int i = 0; i < borders.length; i++) {
 			for (int j = 0; j < borders.length; j++) {
@@ -48,7 +48,7 @@ public class RangeTest extends BufferTestCommons {
 		}
 	}
 
-	private void check(Range rng, int a, int b) {
+	private void check(Range rng, long a, long b) {
 		rng.set(a, b);
 
 		eq(rng, a, b);

@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.wrap.IntWrap;
+import org.rapidoid.wrap.LongWrap;
 import org.rapidoidx.data.Range;
 import org.rapidoidx.data.Ranges;
 
@@ -56,13 +56,13 @@ public class BytesUtil implements Constants {
 		return new StringBytes(s);
 	}
 
-	public static int parseLines(Bytes bytes, Ranges lines, IntWrap res, int start, int limit, byte end1, byte end2) {
+	public static long parseLines(Bytes bytes, Ranges lines, LongWrap res, long start, long limit, byte end1, byte end2) {
 		byte b0 = 0, b1 = 0, b2 = 0, b3 = 0;
-		int ret = -1;
+		long ret = -1;
 		res.value = NOT_FOUND;
 
-		int i;
-		int from = start;
+		long i;
+		long from = start;
 		for (i = start; i < limit; i++) {
 			b0 = b1;
 			b1 = b2;
@@ -70,7 +70,7 @@ public class BytesUtil implements Constants {
 			b3 = bytes.get(i);
 
 			if (b3 == LF) {
-				int len;
+				long len;
 
 				if (b2 == CR) {
 					len = i - from - 1;
@@ -97,18 +97,18 @@ public class BytesUtil implements Constants {
 		return ret;
 	}
 
-	public static int parseLines(Bytes bytes, Ranges lines, int start, int limit) {
+	public static long parseLines(Bytes bytes, Ranges lines, long start, long limit) {
 		byte b0 = 0, b1 = 0;
-		int ret = -1;
+		long ret = -1;
 
-		int i;
-		int from = start;
+		long i;
+		long from = start;
 		for (i = start; i < limit; i++) {
 			b0 = b1;
 			b1 = bytes.get(i);
 
 			if (b1 == LF) {
-				int len;
+				long len;
 
 				if (b0 == CR) {
 					len = i - from - 1;
@@ -129,17 +129,17 @@ public class BytesUtil implements Constants {
 		return ret;
 	}
 
-	public static int parseLine(Bytes bytes, Range line, int start, int limit) {
+	public static long parseLine(Bytes bytes, Range line, long start, long limit) {
 		byte b0 = 0, b1 = 0;
-		int ret = -1;
+		long ret = -1;
 
-		int i;
+		long i;
 		for (i = start; i < limit; i++) {
 			b0 = b1;
 			b1 = bytes.get(i);
 
 			if (b1 == LF) {
-				int len;
+				long len;
 
 				if (b0 == CR) {
 					len = i - start - 1;
@@ -170,15 +170,17 @@ public class BytesUtil implements Constants {
 	}
 
 	public static byte[] getBytes(Bytes bytes, Range range) {
-		byte[] byteArr = new byte[range.length];
+		byte[] byteArr = new byte[(int) range.length];
+
 		for (int i = 0; i < byteArr.length; i++) {
 			byteArr[i] = bytes.get(range.start + i);
 		}
+
 		return byteArr;
 	}
 
-	public static int scan(Bytes bytes, int from, int to, byte value) {
-		for (int i = from; i <= to; i++) {
+	public static long scan(Bytes bytes, long from, long to, byte value) {
+		for (long i = from; i <= to; i++) {
 			if (bytes.get(i) == value) {
 				return i;
 			}
@@ -187,8 +189,8 @@ public class BytesUtil implements Constants {
 		return -1;
 	}
 
-	public static int scanNoCase(Bytes bytes, int from, int to, byte value) {
-		for (int i = from; i <= to; i++) {
+	public static long scanNoCase(Bytes bytes, long from, long to, byte value) {
+		for (long i = from; i <= to; i++) {
 			byte b = bytes.get(i);
 
 			if (b == value || (b >= 'A' && CHARS_SWITCH_CASE[b] == value)) {
@@ -199,7 +201,7 @@ public class BytesUtil implements Constants {
 		return -1;
 	}
 
-	public static boolean match(Bytes bytes, int start, byte[] match, int offset, int length, boolean caseSensitive) {
+	public static boolean match(Bytes bytes, long start, byte[] match, int offset, int length, boolean caseSensitive) {
 
 		boolean result;
 		if (caseSensitive) {
@@ -211,7 +213,7 @@ public class BytesUtil implements Constants {
 		return result;
 	}
 
-	public static boolean matchNoCase(Bytes bytes, int start, byte[] match, int offset, int length) {
+	public static boolean matchNoCase(Bytes bytes, long start, byte[] match, int offset, int length) {
 		for (int i = 0; i < length; i++) {
 			byte b = bytes.get(start + i);
 			if (b != match[offset + i] && (b < 'A' || CHARS_SWITCH_CASE[b] != match[offset + i])) {
@@ -221,7 +223,7 @@ public class BytesUtil implements Constants {
 		return true;
 	}
 
-	public static boolean matchSensitive(Bytes bytes, int start, byte[] match, int offset, int length) {
+	public static boolean matchSensitive(Bytes bytes, long start, byte[] match, int offset, int length) {
 		for (int i = 0; i < length; i++) {
 			if (bytes.get(start + i) != match[offset + i]) {
 				return false;
@@ -231,11 +233,11 @@ public class BytesUtil implements Constants {
 		return true;
 	}
 
-	public static boolean match(Bytes bytes, int start, byte[] match, boolean caseSensitive) {
+	public static boolean match(Bytes bytes, long start, byte[] match, boolean caseSensitive) {
 		return match(bytes, start, match, 0, match.length, caseSensitive);
 	}
 
-	public static int find(Bytes bytes, int start, int limit, byte match, boolean caseSensitive) {
+	public static long find(Bytes bytes, long start, long limit, byte match, boolean caseSensitive) {
 
 		assert start >= 0;
 		assert limit >= 0;
@@ -251,11 +253,11 @@ public class BytesUtil implements Constants {
 		}
 	}
 
-	public static int find(Bytes bytes, int start, int limit, byte[] match, boolean caseSensitive) {
+	public static long find(Bytes bytes, long start, long limit, byte[] match, boolean caseSensitive) {
 		return find(bytes, start, limit, match, 0, match.length, caseSensitive);
 	}
 
-	public static int find(Bytes bytes, int start, int limit, byte[] match, int offset, int length,
+	public static long find(Bytes bytes, long start, long limit, byte[] match, int offset, int length,
 			boolean caseSensitive) {
 
 		assert start >= 0;
@@ -263,7 +265,7 @@ public class BytesUtil implements Constants {
 		assert offset >= 0;
 		assert length >= 0;
 
-		int result;
+		long result;
 		if (caseSensitive) {
 			result = findSensitive(bytes, start, limit, match, offset, length);
 		} else {
@@ -273,17 +275,17 @@ public class BytesUtil implements Constants {
 		return result;
 	}
 
-	private static int findNoCase(Bytes bytes, int start, int limit, byte[] match, int offset, int length) {
+	private static long findNoCase(Bytes bytes, long start, long limit, byte[] match, long offset, long length) {
 		throw U.notReady();
 	}
 
-	private static int findSensitive(Bytes bytes, int start, int limit, byte[] match, int offset, int length) {
+	private static long findSensitive(Bytes bytes, long start, long limit, byte[] match, int offset, int length) {
 		if (limit - start < length) {
 			return -1;
 		}
 
-		int pos = start;
-		int last = limit - length;
+		long pos = start;
+		long last = limit - length;
 
 		while ((pos = scan(bytes, pos, last, match[0])) >= 0) {
 			if (matchSensitive(bytes, pos, match, offset, length)) {
@@ -317,7 +319,7 @@ public class BytesUtil implements Constants {
 		return result;
 	}
 
-	public static boolean containsAt(Bytes bytes, Range target, int offset, byte[] match, boolean caseSensitive) {
+	public static boolean containsAt(Bytes bytes, Range target, long offset, byte[] match, boolean caseSensitive) {
 
 		if (offset < 0 || target.length < offset + match.length || target.start < 0 || target.last() >= bytes.limit()) {
 			return false;
@@ -330,9 +332,9 @@ public class BytesUtil implements Constants {
 
 	public static void trim(Bytes bytes, Range target) {
 
-		int start = target.start;
-		int len = target.length;
-		int finish = start + len - 1;
+		long start = target.start;
+		long len = target.length;
+		long finish = start + len - 1;
 
 		if (start < 0 || len == 0) {
 
@@ -354,7 +356,7 @@ public class BytesUtil implements Constants {
 
 	public static boolean split(Bytes bytes, Range target, byte sep, Range before, Range after, boolean trimParts) {
 
-		int pos = find(bytes, target.start, target.limit(), sep, true);
+		long pos = find(bytes, target.start, target.limit(), sep, true);
 
 		if (pos >= 0) {
 			before.setInterval(target.start, pos);
@@ -384,12 +386,12 @@ public class BytesUtil implements Constants {
 	 * reached and separator not found. If the prefix is matched, the negative of the position is returned, to mark the
 	 * prefix match. Duplicated code for performance reasons.
 	 */
-	public static int scanUntilAndMatchPrefix(Bytes bytes, Range result, byte separator, int fromPos, int toPos,
-			int searchPrefix) {
+	public static long scanUntilAndMatchPrefix(Bytes bytes, Range result, byte separator, long fromPos, long toPos,
+			long searchPrefix) {
 
 		byte b0, b1, b2, b3;
 
-		int p = fromPos;
+		long p = fromPos;
 		if (p <= toPos) {
 			b0 = bytes.get(p);
 			if (b0 == separator) {
@@ -437,14 +439,14 @@ public class BytesUtil implements Constants {
 			return NOT_FOUND;
 		}
 
-		int prefix = UTILS.intFrom(b0, b1, b2, b3);
+		long prefix = UTILS.intFrom(b0, b1, b2, b3);
 
 		boolean matchedPrefix = prefix == searchPrefix;
 
-		for (int i = p; i <= toPos; i++) {
+		for (long i = p; i <= toPos; i++) {
 			if (bytes.get(i) == separator) {
 				result.setInterval(fromPos, i);
-				int nextPos = i + 1;
+				long nextPos = i + 1;
 				return matchedPrefix ? -nextPos : nextPos;
 			}
 		}
@@ -459,11 +461,11 @@ public class BytesUtil implements Constants {
 	 * limit is reached and separator not found. If the prefix is matched, the negative of the position is returned, to
 	 * mark the prefix match. Duplicated code for performance reasons.
 	 */
-	public static int scanLnAndMatchPrefix(Bytes bytes, Range result, int fromPos, int toPos, int searchPrefix) {
+	public static long scanLnAndMatchPrefix(Bytes bytes, Range result, long fromPos, long toPos, long searchPrefix) {
 
 		byte b0, b1, b2, b3;
 
-		int p = fromPos;
+		long p = fromPos;
 		if (p <= toPos) {
 			b0 = bytes.get(p);
 			if (b0 == LF) {
@@ -523,11 +525,11 @@ public class BytesUtil implements Constants {
 			return NOT_FOUND;
 		}
 
-		int prefix = UTILS.intFrom(b0, b1, b2, b3);
+		long prefix = UTILS.intFrom(b0, b1, b2, b3);
 
 		boolean matchedPrefix = prefix == searchPrefix;
 
-		for (int i = p; i <= toPos; i++) {
+		for (long i = p; i <= toPos; i++) {
 			if (bytes.get(i) == LF) {
 
 				if (bytes.get(i - 1) == CR) {
@@ -536,7 +538,7 @@ public class BytesUtil implements Constants {
 					result.setInterval(fromPos, i);
 				}
 
-				int nextPos = i + 1;
+				long nextPos = i + 1;
 				return matchedPrefix ? -nextPos : nextPos;
 			}
 		}

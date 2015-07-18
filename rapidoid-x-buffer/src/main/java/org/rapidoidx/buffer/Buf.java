@@ -8,7 +8,7 @@ import java.nio.channels.WritableByteChannel;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.wrap.IntWrap;
+import org.rapidoid.wrap.LongWrap;
 import org.rapidoidx.bytes.Bytes;
 import org.rapidoidx.data.Range;
 import org.rapidoidx.data.Ranges;
@@ -40,21 +40,21 @@ public interface Buf {
 
 	IncompleteReadException INCOMPLETE_READ = new IncompleteReadException();
 
-	byte get(int position);
+	byte get(long position);
 
-	void put(int position, byte value);
+	void put(long position, byte value);
 
 	void append(byte value);
 
-	void put(int position, byte[] bytes, int offset, int length);
+	void put(long position, byte[] bytes, int offset, int length);
 
-	int size();
+	long size();
 
 	void append(ByteBuffer wrap);
 
-	int append(ReadableByteChannel channel) throws IOException;
+	long append(ReadableByteChannel channel) throws IOException;
 
-	int append(String s);
+	long append(String s);
 
 	void append(byte[] bytes);
 
@@ -62,15 +62,15 @@ public interface Buf {
 
 	String data();
 
-	int writeTo(WritableByteChannel channel) throws IOException;
+	long writeTo(WritableByteChannel channel) throws IOException;
 
-	int writeTo(ByteBuffer buffer);
+	long writeTo(ByteBuffer buffer);
 
-	void deleteBefore(int position);
+	void deleteBefore(long position);
 
-	void deleteAfter(int position);
+	void deleteAfter(long position);
 
-	void deleteLast(int count);
+	void deleteLast(long count);
 
 	int unitCount();
 
@@ -88,27 +88,27 @@ public interface Buf {
 
 	ByteBuffer first();
 
-	int putNumAsText(int position, long num, boolean forward);
+	long putNumAsText(long position, long num, boolean forward);
 
 	void get(Range range, byte[] dest, int offset);
 
 	byte next();
 
-	void back(int count);
+	void back(long count);
 
 	byte peek();
 
 	boolean hasRemaining();
 
-	int remaining();
+	long remaining();
 
-	int position();
+	long position();
 
-	int limit();
+	long limit();
 
-	void position(int position);
+	void position(long position);
 
-	void limit(int limit);
+	void limit(long limit);
 
 	void upto(byte value, Range range);
 
@@ -118,15 +118,15 @@ public interface Buf {
 
 	void scanWhile(byte value, Range range);
 
-	void skip(int count);
+	void skip(long count);
 
 	ByteBuffer bufAt(int index);
 
 	int bufCount();
 
-	int bufferIndexOf(int position);
+	int bufferIndexOf(long position);
 
-	int bufferOffsetOf(int position);
+	int bufferOffsetOf(long position);
 
 	OutputStream asOutputStream();
 
@@ -138,19 +138,19 @@ public interface Buf {
 
 	void scanLnLn(Ranges ranges);
 
-	void scanN(int count, Range range);
+	void scanN(long count, Range range);
 
 	String readLn();
 
-	String readN(int count);
+	String readN(long count);
 
 	byte[] readNbytes(int count);
 
 	void scanTo(byte sep, Range range, boolean failOnLimit);
 
-	int scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit);
+	long scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit);
 
-	void scanLnLn(Ranges ranges, IntWrap result, byte end1, byte end2);
+	void scanLnLn(Ranges ranges, LongWrap result, byte end1, byte end2);
 
 	void setReadOnly(boolean readOnly);
 

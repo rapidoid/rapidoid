@@ -66,7 +66,7 @@ public class Ranges {
 		return super.toString() + "[" + count + "]";
 	}
 
-	public int max() {
+	public long max() {
 		return ranges.length;
 	}
 
@@ -100,7 +100,7 @@ public class Ranges {
 		return count++;
 	}
 
-	public void add(int start, int length) {
+	public void add(long start, long length) {
 		if (count >= max()) {
 			throw U.rte("too many key-values!");
 		}

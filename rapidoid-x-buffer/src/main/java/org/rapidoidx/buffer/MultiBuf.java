@@ -34,7 +34,7 @@ import org.rapidoid.pool.Pool;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.D;
 import org.rapidoid.util.U;
-import org.rapidoid.wrap.IntWrap;
+import org.rapidoid.wrap.LongWrap;
 import org.rapidoidx.bytes.ByteBufferBytes;
 import org.rapidoidx.bytes.Bytes;
 import org.rapidoidx.bytes.BytesUtil;
@@ -57,9 +57,9 @@ public class MultiBuf implements Buf, Constants {
 
 	private final Pool<ByteBuffer> bufPool;
 
-	private final int factor;
+	private final long factor;
 
-	private final int addrMask;
+	private final long addrMask;
 
 	private final int singleCap;
 
@@ -67,13 +67,13 @@ public class MultiBuf implements Buf, Constants {
 
 	private int bufN;
 
-	private int shrinkN;
+	private long shrinkN;
 
 	private final String name;
 
-	private int _position;
+	private long _position;
 
-	private int _limit;
+	private long _limit;
 
 	private OutputStream outputStream;
 
@@ -83,9 +83,11 @@ public class MultiBuf implements Buf, Constants {
 
 	private Bytes _bytes = multiBytes;
 
-	private int _size;
+	private long _size;
 
 	private boolean readOnly = false;
+
+	private long checkpoint;
 
 	public MultiBuf(Pool<ByteBuffer> bufPool, int factor, String name) {
 		this.bufPool = bufPool;
@@ -97,10 +99,10 @@ public class MultiBuf implements Buf, Constants {
 		assert invariant(true);
 	}
 
-	private int addrMask() {
-		int mask = 1;
+	private long addrMask() {
+		long mask = 1;
 
-		for (int i = 0; i < factor - 1; i++) {
+		for (long i = 0; i < factor - 1; i++) {
 			mask <<= 1;
 			mask |= 1;
 		}
@@ -115,7 +117,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public byte get(int position) {
+	public byte get(long position) {
 		assert invariant(false);
 		assert position >= 0;
 
@@ -123,19 +125,19 @@ public class MultiBuf implements Buf, Constants {
 
 		position += shrinkN;
 
-		ByteBuffer buf = bufs[position >> factor];
+		ByteBuffer buf = bufs[(int) (position >> factor)];
 		assert buf != null;
 
 		assert invariant(false);
-		return buf.get(position & addrMask);
+		return buf.get((int) (position & addrMask));
 	}
 
-	private void validatePos(int pos, int space) {
+	private void validatePos(long pos, long space) {
 		if (pos < 0) {
 			throw U.rte("Invalid position: " + pos);
 		}
 
-		int least = pos + space;
+		long least = pos + space;
 
 		boolean hasEnough = least <= _size() && least <= _limit;
 
@@ -145,7 +147,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public void put(int position, byte value) {
+	public void put(long position, byte value) {
 		assert invariant(true);
 		assert position >= 0;
 
@@ -153,16 +155,16 @@ public class MultiBuf implements Buf, Constants {
 
 		position += shrinkN;
 
-		ByteBuffer buf = bufs[position >> factor];
+		ByteBuffer buf = bufs[(int) (position >> factor)];
 		assert buf != null;
 
-		buf.put(position & addrMask, value);
+		buf.put((int) (position & addrMask), value);
 
 		assert invariant(true);
 	}
 
 	@Override
-	public int size() {
+	public long size() {
 		assert invariant(false);
 
 		assert _size == _size();
@@ -170,8 +172,18 @@ public class MultiBuf implements Buf, Constants {
 		return _size;
 	}
 
-	private int _size() {
-		return bufN > 0 ? (bufN - 1) * singleCap + bufs[bufN - 1].position() - shrinkN : 0;
+	private long _size() {
+		if (bufN > 0) {
+			long s = (bufN - 1);
+
+			s *= singleCap;
+			s += bufs[bufN - 1].position();
+			s -= shrinkN;
+
+			return s;
+		} else {
+			return 0;
+		}
 	}
 
 	private void expandUnit() {
@@ -202,10 +214,10 @@ public class MultiBuf implements Buf, Constants {
 	 * Precondition: received event that the channel has data to be read.
 	 */
 	@Override
-	public int append(ReadableByteChannel channel) throws IOException {
+	public long append(ReadableByteChannel channel) throws IOException {
 		assert invariant(true);
 
-		int totalRead = 0;
+		long totalRead = 0;
 
 		try {
 
@@ -216,10 +228,10 @@ public class MultiBuf implements Buf, Constants {
 			do {
 				ByteBuffer dest = writableBuf();
 
-				int space = dest.remaining();
+				long space = dest.remaining();
 				assert space > 0;
 
-				int read = channel.read(dest);
+				long read = channel.read(dest);
 				if (read >= 0) {
 					totalRead += read;
 				} else {
@@ -276,7 +288,7 @@ public class MultiBuf implements Buf, Constants {
 	public void append(byte[] src, int offset, int length) {
 		assert invariant(true);
 
-		int sizeBefore = _size();
+		long sizeBefore = _size();
 
 		if (length > 0) {
 			ByteBuffer buf = writableBuf();
@@ -335,7 +347,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public int append(String s) {
+	public long append(String s) {
 		assert invariant(true);
 
 		byte[] bytes = s.getBytes();
@@ -357,8 +369,8 @@ public class MultiBuf implements Buf, Constants {
 	public String data() {
 		assert invariant(false);
 
-		byte[] bytes = new byte[_size()];
-		int total = readAll(bytes, 0, 0, bytes.length);
+		byte[] bytes = new byte[(int) _size()];
+		long total = readAll(bytes, 0, 0, bytes.length);
 
 		assert total == bytes.length;
 
@@ -374,8 +386,8 @@ public class MultiBuf implements Buf, Constants {
 			return "";
 		}
 
-		byte[] bytes = new byte[range.length];
-		int total = readAll(bytes, 0, range.start, range.length);
+		byte[] bytes = new byte[(int) range.length];
+		long total = readAll(bytes, 0, range.start, range.length);
 
 		assert total == bytes.length;
 
@@ -387,25 +399,25 @@ public class MultiBuf implements Buf, Constants {
 	public void get(Range range, byte[] dest, int offset) {
 		assert invariant(false);
 
-		int total = readAll(dest, offset, range.start, range.length);
+		long total = readAll(dest, offset, range.start, range.length);
 
 		assert total == range.length;
 		assert invariant(false);
 	}
 
-	private int writeToHelper(Range range) {
+	private long writeToHelper(Range range) {
 		assert invariant(false);
 		return readAll(HELPER, 0, range.start, range.length);
 	}
 
-	private int readAll(byte[] bytes, int destOffset, int offset, int length) {
+	private long readAll(byte[] bytes, long destOffset, long offset, long length) {
 		assert invariant(false);
 
 		if (offset + length > _size()) {
 			throw new IllegalArgumentException("offset + length > buffer size!");
 		}
 
-		int wrote;
+		long wrote;
 		try {
 			wrote = writeTo(TO_BYTES, offset, length, bytes, null, null, destOffset);
 		} catch (IOException e) {
@@ -417,10 +429,10 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public int writeTo(WritableByteChannel channel) throws IOException {
+	public long writeTo(WritableByteChannel channel) throws IOException {
 		assert invariant(true);
 
-		int wrote = writeTo(TO_CHANNEL, 0, _size(), null, channel, null, 0);
+		long wrote = writeTo(TO_CHANNEL, 0, _size(), null, channel, null, 0);
 		assert U.must(wrote <= _size(), "Incorrect write to channel!");
 
 		assert invariant(true);
@@ -428,11 +440,11 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public int writeTo(ByteBuffer buffer) {
+	public long writeTo(ByteBuffer buffer) {
 		assert invariant(true);
 
 		try {
-			int wrote = writeTo(TO_BUFFER, 0, _size(), null, null, buffer, 0);
+			long wrote = writeTo(TO_BUFFER, 0, _size(), null, null, buffer, 0);
 			assert wrote == _size();
 			assert invariant(true);
 			return wrote;
@@ -442,21 +454,21 @@ public class MultiBuf implements Buf, Constants {
 		}
 	}
 
-	private int writeTo(int mode, int offset, int length, byte[] bytes, WritableByteChannel channel, ByteBuffer buffer,
-			int destOffset) throws IOException {
+	private long writeTo(int mode, long offset, long length, byte[] bytes, WritableByteChannel channel,
+			ByteBuffer buffer, long destOffset) throws IOException {
 		if (_size() == 0) {
 			assert length == 0;
 			return 0;
 		}
 
-		int fromPos = (offset + shrinkN);
-		int toPos = fromPos + length - 1;
+		long fromPos = offset + shrinkN;
+		long toPos = fromPos + length - 1;
 
-		int fromInd = fromPos >> factor;
-		int toInd = toPos >> factor;
+		int fromInd = (int) (fromPos >> factor);
+		int toInd = (int) (toPos >> factor);
 
-		int fromAddr = fromPos & addrMask;
-		int toAddr = toPos & addrMask;
+		int fromAddr = (int) (fromPos & addrMask);
+		int toAddr = (int) (toPos & addrMask);
 
 		assert fromInd <= toInd;
 
@@ -467,18 +479,18 @@ public class MultiBuf implements Buf, Constants {
 		}
 	}
 
-	private int multiWriteTo(int mode, int fromIndex, int toIndex, int fromAddr, int toAddr, byte[] bytes,
-			WritableByteChannel channel, ByteBuffer buffer, int destOffset) throws IOException {
+	private long multiWriteTo(int mode, int fromIndex, int toIndex, int fromAddr, int toAddr, byte[] bytes,
+			WritableByteChannel channel, ByteBuffer buffer, long destOffset) throws IOException {
 
 		ByteBuffer first = bufs[fromIndex];
-		int len = singleCap - fromAddr;
+		long len = singleCap - fromAddr;
 
-		int wrote = writePart(first, fromAddr, singleCap, mode, bytes, channel, buffer, destOffset, len);
+		long wrote = writePart(first, fromAddr, singleCap, mode, bytes, channel, buffer, destOffset, len);
 		if (wrote < len) {
 			return wrote;
 		}
 
-		int wroteTotal = wrote;
+		long wroteTotal = wrote;
 
 		for (int i = fromIndex + 1; i < toIndex; i++) {
 
@@ -497,8 +509,8 @@ public class MultiBuf implements Buf, Constants {
 		return wroteTotal;
 	}
 
-	private int writePart(ByteBuffer src, int pos, int limit, int mode, byte[] bytes, WritableByteChannel channel,
-			ByteBuffer buffer, int destOffset, int len) throws IOException {
+	private long writePart(ByteBuffer src, int pos, int limit, int mode, byte[] bytes, WritableByteChannel channel,
+			ByteBuffer buffer, long destOffset, long len) throws IOException {
 
 		// backup buf positions
 		int posBackup = src.position();
@@ -509,23 +521,23 @@ public class MultiBuf implements Buf, Constants {
 
 		assert src.remaining() == len || len < 0;
 
-		int count;
+		long count;
 
 		switch (mode) {
 		case TO_BYTES:
 			if (len >= 0) {
-				src.get(bytes, destOffset, len);
+				src.get(bytes, (int) destOffset, (int) len);
 				count = len;
 			} else {
 				count = src.remaining();
-				src.get(bytes, destOffset, count);
+				src.get(bytes, (int) destOffset, (int) count);
 			}
 			break;
 
 		case TO_CHANNEL:
 			count = 0;
 			while (src.hasRemaining()) {
-				int wrote = channel.write(src);
+				long wrote = channel.write(src);
 				count += wrote;
 				if (wrote == 0) {
 					break;
@@ -595,7 +607,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public void deleteBefore(int count) {
+	public void deleteBefore(long count) {
 		assert invariant(true);
 
 		if (count == _size()) {
@@ -661,11 +673,11 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public void put(int position, byte[] bytes, int offset, int length) {
+	public void put(long position, byte[] bytes, int offset, int length) {
 		assert invariant(true);
 
 		// TODO optimize
-		int pos = position;
+		long pos = position;
 		for (int i = offset; i < offset + length; i++) {
 			put(pos++, bytes[i]);
 		}
@@ -683,7 +695,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public void deleteAfter(int position) {
+	public void deleteAfter(long position) {
 		assert invariant(true);
 
 		if (bufN == 0 || position == _size()) {
@@ -694,16 +706,16 @@ public class MultiBuf implements Buf, Constants {
 		assert validPosition(position);
 
 		if (bufN == 1) {
-			int newPos = position + shrinkN;
-			assert newPos <= singleCap;
-			first().position(newPos);
+			long newPos = position + shrinkN;
+			assert newPos <= Integer.MAX_VALUE && newPos <= singleCap;
+			first().position((int) newPos);
 			if (newPos == 0) {
 				removeLastBuf();
 			}
 		} else {
 			position += shrinkN;
-			int index = position >> factor;
-			int addr = position & addrMask;
+			int index = (int) (position >> factor);
+			int addr = (int) (position & addrMask);
 
 			// make it the last buffer
 			while (index < bufN - 1) {
@@ -730,7 +742,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public void deleteLast(int count) {
+	public void deleteLast(long count) {
 		assert invariant(true);
 
 		deleteAfter(_size() - count);
@@ -738,7 +750,7 @@ public class MultiBuf implements Buf, Constants {
 		assert invariant(true);
 	}
 
-	private boolean validPosition(int position) {
+	private boolean validPosition(long position) {
 		assert U.must(position >= 0 && position < _size(), "Invalid position: %s", position);
 		return true;
 	}
@@ -773,9 +785,9 @@ public class MultiBuf implements Buf, Constants {
 			throw U.rte("Too many digits!");
 		}
 
-		int count = writeToHelper(range);
+		long count = writeToHelper(range);
 
-		int value = 0;
+		long value = 0;
 
 		boolean negative = HELPER[0] == '-';
 		int start = negative ? 1 : 0;
@@ -783,7 +795,7 @@ public class MultiBuf implements Buf, Constants {
 		for (int i = start; i < count; i++) {
 			byte b = HELPER[i];
 			if (b >= '0' && b <= '9') {
-				int digit = b - '0';
+				long digit = b - '0';
 				value = value * 10 + digit;
 			} else {
 				assert invariant(false);
@@ -802,12 +814,12 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public int putNumAsText(int position, long n, boolean forward) {
+	public long putNumAsText(long position, long n, boolean forward) {
 		assert invariant(true);
 
-		int direction = forward ? 0 : -1;
+		long direction = forward ? 0 : -1;
 
-		int space;
+		long space;
 
 		if (n >= 0) {
 			if (n < 10) {
@@ -820,9 +832,9 @@ public class MultiBuf implements Buf, Constants {
 				put(position + direction + 1, (byte) (dig2 + '0'));
 				space = 2;
 			} else {
-				int digitsN = (int) Math.ceil(Math.log10(n + 1));
+				long digitsN = (long) Math.ceil(Math.log10(n + 1));
 
-				int pos = position + digitsN - 1 + direction * digitsN;
+				long pos = position + digitsN - 1 + direction * digitsN;
 				if (!forward) {
 					pos++;
 				}
@@ -844,7 +856,7 @@ public class MultiBuf implements Buf, Constants {
 				put(position, (byte) ('-'));
 				space = putNumAsText(position + 1, -n, forward) + 1;
 			} else {
-				int digits = putNumAsText(position, -n, forward);
+				long digits = putNumAsText(position, -n, forward);
 				put(position - digits, (byte) ('-'));
 				space = digits + 1;
 			}
@@ -855,7 +867,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@SuppressWarnings("unused")
-	private int rebase(int pos, int bufInd) {
+	private long rebase(long pos, long bufInd) {
 		return (bufInd << factor) + pos - shrinkN;
 	}
 
@@ -870,7 +882,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public void back(int count) {
+	public void back(long count) {
 		assert invariant(false);
 
 		_position--;
@@ -899,19 +911,19 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public int remaining() {
+	public long remaining() {
 		assert invariant(false);
 		return _limit - _position;
 	}
 
 	@Override
-	public int position() {
+	public long position() {
 		assert invariant(false);
 		return _position;
 	}
 
 	@Override
-	public int limit() {
+	public long limit() {
 		assert invariant(false);
 		return _limit;
 	}
@@ -929,14 +941,14 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public void position(int position) {
+	public void position(long position) {
 		assert invariant(false);
 		_position = position;
 		assert invariant(false);
 	}
 
 	@Override
-	public void limit(int limit) {
+	public void limit(long limit) {
 		assert invariant(false);
 		_limit = limit;
 		assert invariant(false);
@@ -975,25 +987,25 @@ public class MultiBuf implements Buf, Constants {
 
 		requireRemaining(1);
 
-		int start = position();
-		int limit = limit();
-		int last = limit - 1;
+		long start = position();
+		long limit = limit();
+		long last = limit - 1;
 
-		int fromPos = (start + shrinkN);
-		int toPos = (last + shrinkN);
+		long fromPos = start + shrinkN;
+		long toPos = last + shrinkN;
 
-		int fromInd = fromPos >> factor;
-		int toInd = toPos >> factor;
+		int fromInd = (int) (fromPos >> factor);
+		int toInd = (int) (toPos >> factor);
 
-		int fromAddr = fromPos & addrMask;
-		int toAddr = toPos & addrMask;
+		int fromAddr = (int) (fromPos & addrMask);
+		int toAddr = (int) (toPos & addrMask);
 
 		assert U.must(fromInd >= 0, "bad start: %s", start);
 		assert U.must(toInd >= 0, "bad end: %s", last);
 
 		ByteBuffer src = bufs[fromInd];
 
-		int absPos = start;
+		long absPos = start;
 
 		for (int pos = fromAddr; pos < singleCap; pos++) {
 			byte b = src.get(pos);
@@ -1054,25 +1066,25 @@ public class MultiBuf implements Buf, Constants {
 
 		requireRemaining(1);
 
-		int start = position();
-		int limit = limit();
-		int last = limit - 1;
+		long start = position();
+		long limit = limit();
+		long last = limit - 1;
 
-		int fromPos = (start + shrinkN);
-		int toPos = (last + shrinkN);
+		long fromPos = start + shrinkN;
+		long toPos = last + shrinkN;
 
-		int fromInd = fromPos >> factor;
-		int toInd = toPos >> factor;
+		int fromInd = (int) (fromPos >> factor);
+		int toInd = (int) (toPos >> factor);
 
-		int fromAddr = fromPos & addrMask;
-		int toAddr = toPos & addrMask;
+		int fromAddr = (int) (fromPos & addrMask);
+		int toAddr = (int) (toPos & addrMask);
 
 		assert U.must(fromInd >= 0, "bad start: %s", start);
 		assert U.must(toInd >= 0, "bad end: %s", last);
 
 		ByteBuffer src = bufs[fromInd];
 
-		int absPos = start;
+		long absPos = start;
 
 		for (int pos = fromAddr; pos < singleCap; pos++) {
 			byte b = src.get(pos);
@@ -1127,14 +1139,14 @@ public class MultiBuf implements Buf, Constants {
 		throw INCOMPLETE_READ;
 	}
 
-	private void requireRemaining(int n) {
+	private void requireRemaining(long n) {
 		if (remaining() < n) {
 			throw Buf.INCOMPLETE_READ;
 		}
 	}
 
 	@Override
-	public void skip(int count) {
+	public void skip(long count) {
 		assert invariant(false);
 
 		requireRemaining(count);
@@ -1144,7 +1156,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public int bufferIndexOf(int position) {
+	public int bufferIndexOf(long position) {
 		assert invariant(false);
 
 		assert position >= 0;
@@ -1153,7 +1165,7 @@ public class MultiBuf implements Buf, Constants {
 
 		position += shrinkN;
 
-		int index = position >> factor;
+		int index = (int) (position >> factor);
 		assert bufs[index] != null;
 
 		assert invariant(false);
@@ -1161,7 +1173,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public int bufferOffsetOf(int position) {
+	public int bufferOffsetOf(long position) {
 		assert invariant(false);
 
 		assert position >= 0;
@@ -1171,7 +1183,7 @@ public class MultiBuf implements Buf, Constants {
 		position += shrinkN;
 
 		assert invariant(false);
-		return position & addrMask;
+		return (int) (position & addrMask);
 	}
 
 	@Override
@@ -1212,7 +1224,7 @@ public class MultiBuf implements Buf, Constants {
 	@Override
 	public void scanLn(Range line) {
 		assert invariant(false);
-		int pos = BytesUtil.parseLine(bytes(), line, position(), size());
+		long pos = BytesUtil.parseLine(bytes(), line, position(), size());
 
 		if (pos < 0) {
 			assert invariant(false);
@@ -1227,7 +1239,7 @@ public class MultiBuf implements Buf, Constants {
 	public void scanLnLn(Ranges lines) {
 		assert invariant(false);
 
-		int pos = BytesUtil.parseLines(bytes(), lines, position(), size());
+		long pos = BytesUtil.parseLines(bytes(), lines, position(), size());
 
 		if (pos < 0) {
 			assert invariant(false);
@@ -1239,7 +1251,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public void scanN(int count, Range range) {
+	public void scanN(long count, Range range) {
 		assert invariant(false);
 
 		get(_position + count - 1);
@@ -1261,7 +1273,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public String readN(int count) {
+	public String readN(long count) {
 		assert invariant(false);
 
 		scanN(count, HELPER_RANGE);
@@ -1287,7 +1299,7 @@ public class MultiBuf implements Buf, Constants {
 	public void scanTo(byte sep, Range range, boolean failOnLimit) {
 		assert invariant(false);
 
-		int pos = BytesUtil.find(bytes(), _position, _limit, sep, true);
+		long pos = BytesUtil.find(bytes(), _position, _limit, sep, true);
 
 		if (pos >= 0) {
 			consumeAndSkip(pos, range, 1);
@@ -1304,11 +1316,11 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public int scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit) {
+	public long scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit) {
 		assert invariant(false);
 
-		int pos1 = BytesUtil.find(bytes(), _position, _limit, sep1, true);
-		int pos2 = BytesUtil.find(bytes(), _position, _limit, sep2, true);
+		long pos1 = BytesUtil.find(bytes(), _position, _limit, sep1, true);
+		long pos2 = BytesUtil.find(bytes(), _position, _limit, sep2, true);
 
 		boolean found1 = pos1 >= 0;
 		boolean found2 = pos2 >= 0;
@@ -1343,16 +1355,16 @@ public class MultiBuf implements Buf, Constants {
 		}
 	}
 
-	private void consumeAndSkip(int toPos, Range range, int skip) {
+	private void consumeAndSkip(long toPos, Range range, long skip) {
 		range.setInterval(_position, toPos);
 		_position = toPos + skip;
 	}
 
 	@Override
-	public void scanLnLn(Ranges ranges, IntWrap result, byte end1, byte end2) {
+	public void scanLnLn(Ranges ranges, LongWrap result, byte end1, byte end2) {
 		assert invariant(false);
 
-		int nextPos = BytesUtil.parseLines(bytes(), ranges, result, _position, _limit, end1, end2);
+		long nextPos = BytesUtil.parseLines(bytes(), ranges, result, _position, _limit, end1, end2);
 
 		if (nextPos < 0) {
 			throw Buf.INCOMPLETE_READ;

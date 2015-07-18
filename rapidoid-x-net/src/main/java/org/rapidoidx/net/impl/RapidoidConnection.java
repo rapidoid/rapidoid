@@ -70,7 +70,7 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 
 	public volatile boolean closing = false;
 
-	volatile int completedInputPos;
+	volatile long completedInputPos;
 
 	private CtxListener listener;
 
