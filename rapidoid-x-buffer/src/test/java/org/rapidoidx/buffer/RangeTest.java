@@ -31,20 +31,6 @@ import org.junit.Test;
 public class RangeTest extends BufferTestCommons {
 
 	@Test
-	public void shouldBackupAndRestore() {
-		Range range = new Range(10, 3);
-		eq(range, 10, 3);
-
-		long backup = range.backup();
-
-		range.set(7, 17);
-		eq(range, 7, 17);
-
-		range.restore(backup);
-		eq(range, 10, 3);
-	}
-
-	@Test
 	public void statisticalTest() {
 		Range rng = new Range();
 		isTrue(rng.isEmpty());
@@ -67,12 +53,6 @@ public class RangeTest extends BufferTestCommons {
 
 		eq(rng, a, b);
 		eq(rng.limit(), rng.start + rng.length);
-
-		long backup = rng.backup();
-		rng.set(rnd(), rnd());
-
-		rng.restore(backup);
-		eq(rng, a, b);
 	}
 
 }

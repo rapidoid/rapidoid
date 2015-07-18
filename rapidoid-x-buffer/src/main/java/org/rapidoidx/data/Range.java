@@ -97,35 +97,6 @@ public class Range {
 		return bytes;
 	}
 
-	public long backup() {
-		long backup = start;
-
-		backup -= Integer.MIN_VALUE;
-		backup <<= 32;
-		backup += length;
-
-		return backup;
-	}
-
-	public void restore(long backup) {
-		length = (int) backup;
-		backup -= length;
-		start = (int) ((backup >>> 32) + Integer.MIN_VALUE);
-	}
-
-	public boolean sameAs(long backup) {
-		int len = (int) backup;
-
-		if (len != length) {
-			return false;
-		}
-
-		backup -= len;
-		int st = (int) ((backup >>> 32) + Integer.MIN_VALUE);
-
-		return st == start;
-	}
-
 	public static Range fromTo(int from, int to) {
 		U.must(from <= to, "Invalid range!");
 
