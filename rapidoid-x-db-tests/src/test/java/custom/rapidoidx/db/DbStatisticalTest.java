@@ -60,7 +60,7 @@ public class DbStatisticalTest extends DbTestCommons {
 	@Test
 	public void testDbOperations() {
 
-		Log.setLogLevel(LogLevel.SEVERE);
+		Log.setLogLevel(LogLevel.ERROR);
 
 		multiThreaded(Conf.cpus(), 50000, new Runnable() {
 

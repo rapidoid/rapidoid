@@ -35,31 +35,25 @@ public class LogTest extends TestCommons {
 
 		isTrue(Log.isTraceEnabled());
 		isTrue(Log.isDebugEnabled());
-		isTrue(Log.isAuditEnabled());
 		isTrue(Log.isInfoEnabled());
 		isTrue(Log.isWarnEnabled());
 		isTrue(Log.isErrorEnabled());
-		isTrue(Log.isSevereEnabled());
 
 		Log.setLogLevel(LogLevel.INFO);
 
 		isFalse(Log.isTraceEnabled());
 		isFalse(Log.isDebugEnabled());
-		isFalse(Log.isAuditEnabled());
 		isTrue(Log.isInfoEnabled());
 		isTrue(Log.isWarnEnabled());
 		isTrue(Log.isErrorEnabled());
-		isTrue(Log.isSevereEnabled());
 
-		Log.setLogLevel(LogLevel.SEVERE);
+		Log.setLogLevel(LogLevel.ERROR);
 
 		isFalse(Log.isTraceEnabled());
 		isFalse(Log.isDebugEnabled());
-		isFalse(Log.isAuditEnabled());
 		isFalse(Log.isInfoEnabled());
 		isFalse(Log.isWarnEnabled());
-		isFalse(Log.isErrorEnabled());
-		isTrue(Log.isSevereEnabled());
+		isTrue(Log.isErrorEnabled());
 	}
 
 	@Test
@@ -67,8 +61,8 @@ public class LogTest extends TestCommons {
 
 		// force real mutability of the log level field,
 		// to disable unrealistic compiler optimization
-		Log.setLogLevel(LogLevel.TRACE);
-		LogHP.trace("some msg", "key1", "abccc", "key2", 2234);
+		Log.setLogLevel(LogLevel.DEBUG);
+		LogHP.debug("some msg", "key1", "abccc", "key2", 2234);
 
 		Log.setLogLevel(LogLevel.INFO);
 		int total = 2000000000;
@@ -76,7 +70,7 @@ public class LogTest extends TestCommons {
 		long before = System.currentTimeMillis();
 
 		for (int i = 0; i < total; i++) {
-			LogHP.trace("some msg", "key1", "abccc", "key2", i);
+			LogHP.debug("some msg", "key1", "abccc", "key2", i);
 		}
 
 		long ms = System.currentTimeMillis() - before;

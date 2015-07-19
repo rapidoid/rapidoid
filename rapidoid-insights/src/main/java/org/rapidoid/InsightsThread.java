@@ -40,7 +40,7 @@ public class InsightsThread extends Thread {
 		while (!Thread.interrupted()) {
 			U.sleep(1000);
 			String stats = Insights.getCpuMemStats() + " :: " + Insights.getInfo();
-			System.out.println(stats + "\n");
+			Log.debug(stats);
 		}
 
 		Log.info("Stopped Insights thread.");

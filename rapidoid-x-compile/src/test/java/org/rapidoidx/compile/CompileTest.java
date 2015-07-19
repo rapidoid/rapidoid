@@ -21,20 +21,17 @@ package org.rapidoidx.compile;
  * #L%
  */
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.util.Set;
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.io.IO;
-import org.rapidoid.log.Log;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.D;
 import org.rapidoid.util.U;
-import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -68,13 +65,7 @@ public class CompileTest extends TestCommons {
 		Class<?> mainClass = compilation.loadClass("abc.Main");
 		Method main = Cls.getMethod(mainClass, "main", String[].class);
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		Log.setLogOutput(new PrintStream(out));
-
 		Cls.invoke(main, null, new Object[] { new String[] {} });
-
-		String output = new String(out.toByteArray());
-		eq(output, IO.load("test1.out"));
 	}
 
 }

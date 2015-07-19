@@ -82,7 +82,7 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 		try {
 			this.selector = Selector.open();
 		} catch (IOException e) {
-			Log.severe("Cannot open selector!", e);
+			Log.error("Cannot open selector!", e);
 			throw new RuntimeException(e);
 		}
 	}

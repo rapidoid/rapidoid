@@ -284,7 +284,7 @@ public class InMem implements Serializable {
 
 			data.lastChangedOn.set(System.currentTimeMillis());
 
-			Log.audit("Inserted DB record", "id", id);
+			Log.info("Inserted DB record", "id", id);
 			return id;
 		} finally {
 			sharedUnlock();
@@ -461,7 +461,7 @@ public class InMem implements Serializable {
 
 			data.lastChangedOn.set(System.currentTimeMillis());
 
-			Log.audit("Deleted DB record", "id", id);
+			Log.info("Deleted DB record", "id", id);
 
 		} finally {
 			sharedUnlock();
@@ -619,7 +619,7 @@ public class InMem implements Serializable {
 
 		data.lastChangedOn.set(System.currentTimeMillis());
 
-		Log.audit("Updated DB record", "id", id);
+		Log.info("Updated DB record", "id", id);
 	}
 
 	private static void occErrorIf(boolean errCond, String msg, long id) {

@@ -45,7 +45,7 @@ public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 		try {
 			sel = Selector.open();
 		} catch (IOException e) {
-			Log.severe("Cannot open selector!", e);
+			Log.error("Cannot open selector!", e);
 			throw new RuntimeException(e);
 		}
 
@@ -116,7 +116,7 @@ public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 		try {
 			doProcessing();
 		} catch (Throwable e) {
-			Log.severe("Event processing error!", e);
+			Log.error("Event processing error!", e);
 		}
 
 		try {

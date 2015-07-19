@@ -23,6 +23,7 @@ package custom.rapidoidx.db;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Predicate;
@@ -31,7 +32,6 @@ import org.rapidoid.log.LogLevel;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoidx.db.XDB;
-import org.junit.Test;
 
 import custom.rapidoidx.db.model.Person;
 
@@ -41,7 +41,7 @@ public class DbTransactionTest extends DbTestCommons {
 
 	@Test
 	public void testMultiThreadedTransactionAtomicity() {
-		Log.setLogLevel(LogLevel.SEVERE);
+		Log.setLogLevel(LogLevel.ERROR);
 
 		final AtomicInteger n = new AtomicInteger();
 
@@ -72,7 +72,7 @@ public class DbTransactionTest extends DbTestCommons {
 
 	@Test
 	public void testDeleteRollback() {
-		Log.setLogLevel(LogLevel.SEVERE);
+		Log.setLogLevel(LogLevel.ERROR);
 
 		try {
 
