@@ -149,10 +149,10 @@ public class Pages {
 	}
 
 	public static Object dispatch(HttpExchange x, Object page) {
-		if (Pages.isEmiting(x)) {
-			return Pages.emit(x, page);
+		if (isEmiting(x)) {
+			return emit(x, page);
 		} else {
-			return Pages.serve(x, page);
+			return serve(x, page);
 		}
 	}
 

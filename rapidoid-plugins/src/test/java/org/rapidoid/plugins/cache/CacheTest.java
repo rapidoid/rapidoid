@@ -38,7 +38,7 @@ public class CacheTest extends TestCommons {
 	 * The default cache implementation is {@link NoCache}.
 	 */
 	@Test
-	public void remoteCacheAPIDemo() {
+	public void showCacheAPI() {
 
 		ICache<String, Object> cache = Cache.create("testcache", 1000, true);
 
