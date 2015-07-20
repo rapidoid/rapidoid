@@ -1,3 +1,5 @@
+/* Rapidoid Extras */
+
 var theme;
 try {
     var m = /\bTHEME=(\w+?)\b/g.exec(document.cookie);
