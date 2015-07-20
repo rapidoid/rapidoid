@@ -20,11 +20,11 @@ window.__state = {{state}};
 
 <body ng-controller="Main" ng-app="app">
 
-  <div ng-if="!bodyContent">
+  <div ng-if="!ajaxBodyContent">
 {{body}}
   </div>
 
-  <div compile="bodyContent" ng-if="bodyContent"></div>
+  <div compile="ajaxBodyContent" ng-if="ajaxBodyContent"></div>
 
 </body>
 

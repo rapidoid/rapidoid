@@ -193,7 +193,7 @@ rapidoidApp.controller('Main', [ '$scope', '$http', '$window', function($scope, 
             } else {
                 for ( var sel in data._sel_) {
                     if (sel == 'body') {
-                        $scope.bodyContent = data._sel_[sel];
+                        $scope.ajaxBodyContent = data._sel_[sel];
                         $scope.$apply();
                     } else {
                         alert('Selector not supported: ' + sel);
