@@ -463,6 +463,7 @@ public class U {
 	}
 
 	public static <T> BlockingQueue<T> queue(int maxSize) {
+		U.argMust(maxSize > 0, "Maximum queue size must be > 0!");
 		return new ArrayBlockingQueue<T>(maxSize);
 	}
 

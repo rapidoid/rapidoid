@@ -22,6 +22,7 @@ package org.rapidoidx.worker;
  */
 
 import java.util.Map;
+import java.util.Queue;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -37,8 +38,11 @@ public class Workers {
 	public static <IN, OUT> Worker<IN, OUT> add(String workerId, int inputQueueLimit, int outputQueueLimit,
 			Mapper<IN, OUT> mapper) {
 
-		WorkerQueue<IN> input = new WorkerQueue<IN>(U.<IN> queue(inputQueueLimit), inputQueueLimit);
-		WorkerQueue<OUT> output = new WorkerQueue<OUT>(U.<OUT> queue(outputQueueLimit), outputQueueLimit);
+		Queue<IN> inQueue = inputQueueLimit > 0 ? U.<IN> queue(inputQueueLimit) : U.<IN> queue();
+		Queue<OUT> outQueue = inputQueueLimit > 0 ? U.<OUT> queue(outputQueueLimit) : U.<OUT> queue();
+
+		WorkerQueue<IN> input = new WorkerQueue<IN>(inQueue, inputQueueLimit);
+		WorkerQueue<OUT> output = new WorkerQueue<OUT>(outQueue, outputQueueLimit);
 
 		WorkerActivity<IN, OUT> worker = new WorkerActivity<IN, OUT>(workerId, input, output, mapper);
 		WORKERS.put(workerId, worker);
