@@ -21,6 +21,7 @@ package demo.taskplanner;
  */
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Cookie;
@@ -60,7 +61,7 @@ public class Main {
 					Task task = new Task();
 					DB.insert(task);
 				}
-			}, 100);
+			}, 100, TimeUnit.MILLISECONDS);
 		}
 	}
 

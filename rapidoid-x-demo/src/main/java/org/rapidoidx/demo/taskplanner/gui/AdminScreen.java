@@ -21,6 +21,8 @@ package org.rapidoidx.demo.taskplanner.gui;
  * #L%
  */
 
+import java.util.concurrent.TimeUnit;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
@@ -51,7 +53,7 @@ public class AdminScreen extends GUI {
 				Log.warn("Exit application");
 				System.exit(0);
 			}
-		}, 500);
+		}, 500, TimeUnit.MILLISECONDS);
 	}
 
 }

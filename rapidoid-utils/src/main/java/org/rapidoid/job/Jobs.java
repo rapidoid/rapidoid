@@ -48,12 +48,20 @@ public class Jobs implements Constants {
 		return EXECUTOR;
 	}
 
-	public static ScheduledFuture<?> schedule(Runnable job, long delay) {
-		return executor().schedule(wrap(job), delay, TimeUnit.MILLISECONDS);
+	public static ScheduledFuture<?> schedule(Runnable job, long delay, TimeUnit unit) {
+		return executor().schedule(wrap(job), delay, unit);
+	}
+
+	public static ScheduledFuture<?> scheduleAtFixedRate(Runnable job, long initialDelay, long period, TimeUnit unit) {
+		return executor().scheduleAtFixedRate(wrap(job), initialDelay, period, unit);
+	}
+
+	public static ScheduledFuture<?> scheduleWithFixedDelay(Runnable job, long initialDelay, long delay, TimeUnit unit) {
+		return executor().scheduleWithFixedDelay(wrap(job), initialDelay, delay, unit);
 	}
 
 	public static ScheduledFuture<?> execute(Runnable job) {
-		return schedule(job, 0);
+		return schedule(job, 0, TimeUnit.MILLISECONDS);
 	}
 
 	public static Runnable wrap(Runnable job) {

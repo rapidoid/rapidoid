@@ -181,7 +181,7 @@ public class JPADBPlugin extends DBPluginBase {
 
 	@Override
 	public void transaction(final Runnable tx, final boolean readonly, final Callback<Void> callback) {
-		Jobs.schedule(new Runnable() {
+		Jobs.execute(new Runnable() {
 
 			@Override
 			public void run() {
@@ -195,7 +195,7 @@ public class JPADBPlugin extends DBPluginBase {
 				Jobs.call(callback, null, null);
 			}
 
-		}, 0);
+		});
 	}
 
 	private void ensureNotInReadOnlyTransation() {

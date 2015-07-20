@@ -23,6 +23,7 @@ package org.rapidoid;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
@@ -82,7 +83,7 @@ public class EchoProtocolTest extends NetTestCommons {
 					public void run() {
 						ctx.write(in.toUpperCase()).write(CR_LF).done().closeIf(in.equals("bye"));
 					}
-				}, 1000);
+				}, 1, TimeUnit.SECONDS);
 
 				ctx.async();
 			}

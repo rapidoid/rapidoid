@@ -70,12 +70,12 @@ public class Quick {
 		// TODO provide better support for javax.transaction.Transactional
 		AOP.register(Transactional.class, new TransactionInterceptor());
 
-		Jobs.schedule(new Runnable() {
+		Jobs.execute(new Runnable() {
 			@Override
 			public void run() {
 				Log.info("The executor is ready.");
 			}
-		}, 0);
+		});
 	}
 
 	public static EntityManager createJPAEM(Object[] args) {
