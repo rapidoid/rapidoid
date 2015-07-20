@@ -35,7 +35,6 @@ public class ResultCounterCallback<T> implements Callback<T> {
 
 	// FIXME refactor the built-in callbacks using decorators
 
-	@SuppressWarnings("unchecked")
 	private final Set<T> results = Collections.synchronizedSet(U.<T> set());
 
 	private final AtomicLong resultsN = new AtomicLong();

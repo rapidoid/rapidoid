@@ -615,7 +615,6 @@ public class UTILS implements Constants {
 		return U.capitalized(camelSplit(s).toLowerCase());
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T, V extends T> List<T> withoutNulls(V... values) {
 		List<T> list = U.list();
 

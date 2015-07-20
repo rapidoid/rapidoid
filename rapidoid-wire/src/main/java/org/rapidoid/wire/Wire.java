@@ -408,7 +408,6 @@ public class Wire {
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	private static <T> T proxyWrap(T instance) {
 		Set<F3<Object, Object, Method, Object[]>> done = U.set();
 

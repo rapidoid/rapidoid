@@ -34,6 +34,7 @@ import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
@@ -230,8 +231,12 @@ public class U {
 		return (items instanceof Collection) ? ((Collection<?>) items).toArray() : list(items).toArray();
 	}
 
+	public static <T> Set<T> set() {
+		return new LinkedHashSet<T>();
+	}
+
 	public static <T> Set<T> set(Iterable<? extends T> values) {
-		Set<T> set = new LinkedHashSet<T>();
+		Set<T> set = set();
 
 		for (T val : values) {
 			set.add(val);
@@ -241,7 +246,7 @@ public class U {
 	}
 
 	public static <T> Set<T> set(T... values) {
-		Set<T> set = new LinkedHashSet<T>();
+		Set<T> set = set();
 
 		for (T val : values) {
 			set.add(val);
@@ -250,8 +255,12 @@ public class U {
 		return set;
 	}
 
+	public static <T> List<T> list() {
+		return new ArrayList<T>();
+	}
+
 	public static <T> List<T> list(Iterable<? extends T> values) {
-		List<T> list = new ArrayList<T>();
+		List<T> list = list();
 
 		for (T item : values) {
 			list.add(item);
@@ -261,7 +270,7 @@ public class U {
 	}
 
 	public static <T> List<T> list(T... values) {
-		List<T> list = new ArrayList<T>();
+		List<T> list = list();
 
 		for (T item : values) {
 			list.add(item);
@@ -270,14 +279,14 @@ public class U {
 		return list;
 	}
 
+	public static <K, V> Map<K, V> map() {
+		return new HashMap<K, V>();
+	}
+
 	public static <K, V> Map<K, V> map(Map<? extends K, ? extends V> src) {
 		Map<K, V> map = map();
 		map.putAll(src);
 		return map;
-	}
-
-	public static <K, V> Map<K, V> map() {
-		return new HashMap<K, V>();
 	}
 
 	public static <K, V> Map<K, V> map(K key, V value) {
@@ -324,6 +333,10 @@ public class U {
 		return map;
 	}
 
+	public static <K, V> ConcurrentMap<K, V> concurrentMap() {
+		return new ConcurrentHashMap<K, V>();
+	}
+
 	public static <K, V> ConcurrentMap<K, V> concurrentMap(Map<? extends K, ? extends V> src, boolean ignoreNullValues) {
 		ConcurrentMap<K, V> map = concurrentMap();
 
@@ -334,10 +347,6 @@ public class U {
 		}
 
 		return map;
-	}
-
-	public static <K, V> ConcurrentMap<K, V> concurrentMap() {
-		return new ConcurrentHashMap<K, V>();
 	}
 
 	public static <K, V> ConcurrentMap<K, V> concurrentMap(K key, V value) {
@@ -385,6 +394,10 @@ public class U {
 		return map;
 	}
 
+	public static <K, V> Map<K, V> orderedMap() {
+		return new LinkedHashMap<K, V>();
+	}
+
 	public static <K, V> Map<K, V> orderedMap(Map<? extends K, ? extends V> src, boolean ignoreNullValues) {
 		Map<K, V> map = orderedMap();
 
@@ -395,10 +408,6 @@ public class U {
 		}
 
 		return map;
-	}
-
-	public static <K, V> Map<K, V> orderedMap() {
-		return new LinkedHashMap<K, V>();
 	}
 
 	public static <K, V> Map<K, V> orderedMap(K key, V value) {
@@ -449,8 +458,12 @@ public class U {
 		return Collections.synchronizedMap(U.<K, V> map());
 	}
 
-	public static <T> Queue<T> queue(int maxSize) {
-		return maxSize > 0 ? new ArrayBlockingQueue<T>(maxSize) : new ConcurrentLinkedQueue<T>();
+	public static <T> Queue<T> queue() {
+		return new ConcurrentLinkedQueue<T>();
+	}
+
+	public static <T> BlockingQueue<T> queue(int maxSize) {
+		return new ArrayBlockingQueue<T>(maxSize);
 	}
 
 	public static <T> T or(T value, T fallback) {
