@@ -17,6 +17,7 @@ import org.rapidoid.plugins.lifecycle.DefaultLifecyclePlugin;
 import org.rapidoid.plugins.lifecycle.LifecyclePlugin;
 import org.rapidoid.plugins.sms.DefaultSMSPlugin;
 import org.rapidoid.plugins.sms.SMSPlugin;
+import org.rapidoid.plugins.templates.TemplatesPlugin;
 import org.rapidoid.plugins.users.DefaultUsersPlugin;
 import org.rapidoid.plugins.users.UsersPlugin;
 
@@ -52,6 +53,7 @@ public final class Plugins {
 	private static volatile EmailPlugin emailPlugin = new DefaultEmailPlugin();
 	private static volatile SMSPlugin smsPlugin = new DefaultSMSPlugin();
 	private static volatile CachePlugin cachePlugin = new DefaultCachePlugin();
+	private static volatile TemplatesPlugin templatesPlugin = new DefaultTemplatesPlugin();
 
 	public static DBPlugin db() {
 		return dbPlugin;
@@ -83,6 +85,10 @@ public final class Plugins {
 
 	public static CachePlugin cache() {
 		return cachePlugin;
+	}
+
+	public static TemplatesPlugin templates() {
+		return templatesPlugin;
 	}
 
 	public static void register(LifecyclePlugin lifecyclePlugin) {
@@ -123,6 +129,11 @@ public final class Plugins {
 	public static void register(CachePlugin cachePlugin) {
 		Log.info("Registering Cache plugin", "plugin", cachePlugin);
 		Plugins.cachePlugin = cachePlugin;
+	}
+
+	public static void register(TemplatesPlugin templatesPlugin) {
+		Log.info("Registering Templates plugin", "plugin", templatesPlugin);
+		Plugins.templatesPlugin = templatesPlugin;
 	}
 
 }
