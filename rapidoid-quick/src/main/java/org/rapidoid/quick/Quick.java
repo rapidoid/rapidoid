@@ -34,8 +34,8 @@ import org.rapidoid.app.Apps;
 import org.rapidoid.app.TransactionInterceptor;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.jpa.dbplugin.JPADBPlugin;
 import org.rapidoid.log.Log;
+import org.rapidoid.plugins.db.hibernate.HibernateDBPlugin;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -61,7 +61,7 @@ public class Quick {
 
 	public static void bootstrap(final Object... args) {
 		Ctxs.setPersisterProvider(new QuickJPA(args));
-		JPADBPlugin db = new JPADBPlugin();
+		HibernateDBPlugin db = new HibernateDBPlugin();
 
 		List<Object> appArgs = U.<Object> list(db);
 		appArgs.addAll(U.list(args));

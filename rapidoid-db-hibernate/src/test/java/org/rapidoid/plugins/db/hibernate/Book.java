@@ -1,8 +1,8 @@
-package org.rapidoid.entity;
+package org.rapidoid.plugins.db.hibernate;
 
 /*
  * #%L
- * rapidoid-jpa
+ * rapidoid-db-hibernate
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -25,13 +25,13 @@ import javax.persistence.Entity;
 import org.rapidoid.jpa.JPAEntity;
 
 @Entity
-public class Movie extends JPAEntity {
+public class Book extends JPAEntity {
 
 	private String title;
 
-	public Movie() {}
+	public Book() {}
 
-	public Movie(String title) {
+	public Book(String title) {
 		this.title = title;
 	}
 

@@ -1,4 +1,4 @@
-package org.rapidoid.plugins.impl;
+package org.rapidoid.plugins.db.hibernate;
 
 import java.util.List;
 
@@ -10,16 +10,13 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.entity.Book;
-import org.rapidoid.entity.Movie;
-import org.rapidoid.jpa.dbplugin.JPADBPlugin;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.SimplePersistorProvider;
 import org.rapidoid.util.U;
 
 /*
  * #%L
- * rapidoid-jpa
+ * rapidoid-db-hibernate
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -39,7 +36,7 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class JPADBPluginTest extends TestCommons {
+public class HibernateDBPluginTest extends TestCommons {
 
 	@Test
 	public void testBasicCRUD() {
@@ -50,7 +47,7 @@ public class JPADBPluginTest extends TestCommons {
 		Ctxs.setPersisterProvider(new SimplePersistorProvider(em));
 		Ctxs.open();
 
-		final JPADBPlugin db = new JPADBPlugin();
+		final HibernateDBPlugin db = new HibernateDBPlugin();
 
 		final Book b1 = new Book("book 1");
 		final Book b2 = new Book("book 2");

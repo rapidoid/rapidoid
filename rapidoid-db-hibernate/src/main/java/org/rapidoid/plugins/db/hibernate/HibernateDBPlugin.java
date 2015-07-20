@@ -1,4 +1,4 @@
-package org.rapidoid.jpa.dbplugin;
+package org.rapidoid.plugins.db.hibernate;
 
 import java.util.List;
 import java.util.Set;
@@ -21,7 +21,7 @@ import org.rapidoid.util.U;
 
 /*
  * #%L
- * rapidoid-jpa
+ * rapidoid-db-hibernate
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -41,7 +41,7 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class JPADBPlugin extends DBPluginBase {
+public class HibernateDBPlugin extends DBPluginBase {
 
 	@Override
 	public String insert(Object entity) {
