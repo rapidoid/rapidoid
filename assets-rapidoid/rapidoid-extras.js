@@ -67,7 +67,7 @@ function _popup(popupUrl, onClosed) {
     }, 100);
 }
 
-var rapidoidApp = angular.module('rapidoid-app', [ 'infinite-scroll', 'ngSanitize' ]);
+var rapidoidApp = angular.module('app', [ 'infinite-scroll', 'ngSanitize' ]);
 
 function range(from, total) {
     var rangeArr = [];
