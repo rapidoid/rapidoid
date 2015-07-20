@@ -2,6 +2,7 @@ package org.rapidoid.plugins.db.hibernate;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -181,21 +182,15 @@ public class HibernateDBPlugin extends DBPluginBase {
 
 	@Override
 	public void transaction(final Runnable tx, final boolean readonly, final Callback<Void> callback) {
-		Jobs.execute(new Runnable() {
+		Jobs.execute(new Callable<Void>() {
 
 			@Override
-			public void run() {
-				try {
-					transaction(tx, readonly);
-				} catch (Throwable e) {
-					Jobs.call(callback, null, e);
-					return;
-				}
-
-				Jobs.call(callback, null, null);
+			public Void call() throws Exception {
+				transaction(tx, readonly);
+				return null;
 			}
 
-		});
+		}, callback);
 	}
 
 	private void ensureNotInReadOnlyTransation() {

@@ -20,6 +20,7 @@ package org.rapidoid.job;
  * #L%
  */
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -52,16 +53,34 @@ public class Jobs implements Constants {
 		return executor().schedule(wrap(job), delay, unit);
 	}
 
+	public static <T> ScheduledFuture<?> schedule(Callable<T> job, long delay, TimeUnit unit, Callback<T> callback) {
+		return schedule(callbackJob(job, callback), delay, unit);
+	}
+
 	public static ScheduledFuture<?> scheduleAtFixedRate(Runnable job, long initialDelay, long period, TimeUnit unit) {
 		return executor().scheduleAtFixedRate(wrap(job), initialDelay, period, unit);
+	}
+
+	public static <T> ScheduledFuture<?> scheduleAtFixedRate(Callable<T> job, long initialDelay, long period,
+			TimeUnit unit, Callback<T> callback) {
+		return scheduleAtFixedRate(callbackJob(job, callback), initialDelay, period, unit);
 	}
 
 	public static ScheduledFuture<?> scheduleWithFixedDelay(Runnable job, long initialDelay, long delay, TimeUnit unit) {
 		return executor().scheduleWithFixedDelay(wrap(job), initialDelay, delay, unit);
 	}
 
+	public static <T> ScheduledFuture<?> scheduleWithFixedDelay(Callable<T> job, long initialDelay, long delay,
+			TimeUnit unit, Callback<T> callback) {
+		return scheduleWithFixedDelay(callbackJob(job, callback), initialDelay, delay, unit);
+	}
+
 	public static ScheduledFuture<?> execute(Runnable job) {
 		return schedule(job, 0, TimeUnit.MILLISECONDS);
+	}
+
+	public static <T> ScheduledFuture<?> execute(Callable<T> job, Callback<T> callback) {
+		return execute(callbackJob(job, callback));
 	}
 
 	public static Runnable wrap(Runnable job) {
@@ -76,6 +95,24 @@ public class Jobs implements Constants {
 
 	public static <T> void call(Callback<T> callback, T result, Throwable error) {
 		Jobs.execute(new CallbackExecutorJob<T>(callback, result, error));
+	}
+
+	private static <T> Runnable callbackJob(final Callable<T> job, final Callback<T> callback) {
+		return new Runnable() {
+			@Override
+			public void run() {
+				T result;
+
+				try {
+					result = job.call();
+				} catch (Throwable e) {
+					call(callback, null, e);
+					return;
+				}
+
+				call(callback, result, null);
+			}
+		};
 	}
 
 }
