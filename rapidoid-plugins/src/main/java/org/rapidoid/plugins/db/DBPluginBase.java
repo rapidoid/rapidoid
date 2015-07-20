@@ -6,8 +6,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
@@ -17,6 +16,9 @@ import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertyFilter;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.concurrent.Callback;
+import org.rapidoid.concurrent.Promise;
+import org.rapidoid.concurrent.Promises;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.plugins.entities.Entities;
@@ -195,30 +197,23 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 	}
 
 	@Override
-	public void transaction(Runnable transaction, boolean readOnly) {
+	public void transaction(final Runnable tx, final boolean readonly, final Callback<Void> callback) {
+		Jobs.execute(new Callable<Void>() {
 
-		final AtomicReference<Throwable> error = new AtomicReference<Throwable>();
-		final CountDownLatch latch = new CountDownLatch(1);
-
-		Callback<Void> txCallback = new Callback<Void>() {
 			@Override
-			public void onDone(Void result, Throwable e) {
-				latch.countDown();
-				error.set(e);
+			public Void call() throws Exception {
+				transaction(tx, readonly);
+				return null;
 			}
-		};
 
-		transaction(transaction, readOnly, txCallback);
+		}, callback);
+	}
 
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
-
-		if (error.get() != null) {
-			throw new RuntimeException("Transaction failure!", error.get());
-		}
+	@Override
+	public void transaction(Runnable transaction, boolean readOnly) {
+		Promise<Void> promise = Promises.create();
+		transaction(transaction, readOnly, promise);
+		promise.get();
 	}
 
 	@Override
