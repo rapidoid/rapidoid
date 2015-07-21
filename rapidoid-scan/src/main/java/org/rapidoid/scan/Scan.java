@@ -219,6 +219,8 @@ public class Scan {
 			}
 		}
 
+		long startingAt = U.time();
+
 		List<Class<?>> classes;
 		Classes ctxClasses = Ctxs.hasContext() ? Ctxs.ctx().classes() : null;
 		Pattern regex = nameRegex != null ? Pattern.compile(nameRegex) : null;
@@ -236,6 +238,9 @@ public class Scan {
 			CLASSES_CACHE.put(cacheKey, classes);
 		}
 
+		long timeMs = U.time() - startingAt;
+		Log.info("Finished classpath scan", "time", timeMs + "ms");
+
 		return classes;
 	}
 
@@ -247,6 +252,8 @@ public class Scan {
 		String pkgName = U.or(packageName, "");
 
 		Set<String> classpath = getClasspath();
+
+		Set<String> jars = U.set();
 
 		for (String cpe : classpath) {
 			File file = new File(cpe);
@@ -260,12 +267,14 @@ public class Scan {
 
 			if (root.exists()) {
 				if (root.isDirectory()) {
-					Log.debug("Scanning directory", "name", root.getAbsolutePath());
-					getClassesFromDir(classes, root, file, regex, filter, annotated, classLoader);
+					if (shouldScanDir(root.getAbsolutePath())) {
+						Log.debug("Scanning directory", "name", root.getAbsolutePath());
+						getClassesFromDir(classes, root, file, regex, filter, annotated, classLoader);
+					} else {
+						Log.debug("Skipping directory", "name", root.getAbsolutePath());
+					}
 				} else if (root.isFile() && root.getAbsolutePath().toLowerCase().endsWith(".jar")) {
-					Log.debug("Scanning JAR", "name", root.getAbsolutePath());
-					getClassesFromJAR(root.getAbsolutePath(), classes, packageName, regex, filter, annotated,
-							classLoader);
+					jars.add(root.getAbsolutePath());
 				} else {
 					Log.warn("Invalid classpath entry: " + cpe);
 				}
@@ -274,7 +283,26 @@ public class Scan {
 			}
 		}
 
+		for (String jarName : jars) {
+			if (shouldScanJAR(jarName)) {
+				Log.debug("Scanning JAR", "name", jarName);
+				getClassesFromJAR(jarName, classes, packageName, regex, filter, annotated, classLoader);
+			} else {
+				Log.debug("Skipping JAR", "name", jarName);
+			}
+		}
+
 		return classes;
+	}
+
+	private static boolean shouldScanDir(String dir) {
+		return true;
+	}
+
+	private static boolean shouldScanJAR(String jar) {
+		File file = new File(jar);
+		String simpleName = file.getName();
+		return simpleName.startsWith("app.") || simpleName.startsWith("app-");
 	}
 
 	private static List<Class<?>> filterClasses(Classes classes, String packageName, Pattern regex,
