@@ -38,7 +38,8 @@ public enum TypeKind {
 			true, true), INT(true, true, true), LONG(true, true, true), FLOAT(true, true, true), DOUBLE(true, true,
 			true), STRING(false, false, true), BOOLEAN_OBJ(false, false, true), BYTE_OBJ(false, true, true), SHORT_OBJ(
 			false, true, true), CHAR_OBJ(false, true, true), INT_OBJ(false, true, true), LONG_OBJ(false, true, true), FLOAT_OBJ(
-			false, true, true), DOUBLE_OBJ(false, true, true), OBJECT(false, false, false), DATE(false, false, true);
+			false, true, true), DOUBLE_OBJ(false, true, true), OBJECT(false, false, false), DATE(false, false, true), UUID(
+			false, false, true);
 
 	private final boolean primitive;
 

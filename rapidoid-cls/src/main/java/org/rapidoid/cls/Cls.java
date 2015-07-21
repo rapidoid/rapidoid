@@ -37,6 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Pattern;
 
@@ -103,6 +104,8 @@ public class Cls {
 		kinds.put("java.lang.Double", TypeKind.DOUBLE_OBJ);
 
 		kinds.put("java.util.Date", TypeKind.DATE);
+
+		kinds.put("java.util.UUID", TypeKind.UUID);
 
 		return kinds;
 	}
@@ -547,6 +550,9 @@ public class Cls {
 
 		case DATE:
 			return (T) Dates.date(value);
+
+		case UUID:
+			return (T) UUID.fromString(value);
 
 		default:
 			throw U.notExpected();
