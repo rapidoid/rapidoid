@@ -85,7 +85,7 @@ public class HibernateDBPlugin extends DBPluginBase {
 
 	@Override
 	public <T> T getIfExists(Class<T> clazz, String id) {
-		return em().find(clazz, castId(id));
+		return em().find(clazz, castId(clazz, id));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -200,11 +200,6 @@ public class HibernateDBPlugin extends DBPluginBase {
 
 	protected EntityManager em() {
 		return Ctxs.ctx().persister();
-	}
-
-	protected Object castId(String id) {
-		// TODO: detect ID type
-		return Long.valueOf(id);
 	}
 
 }

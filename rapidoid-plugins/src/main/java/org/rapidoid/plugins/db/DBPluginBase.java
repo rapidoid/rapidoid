@@ -266,4 +266,8 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 		return U.list(getAll()).size();
 	}
 
+	protected Object castId(Class<?> clazz, String id) {
+		return Cls.convert(id, Beany.property(clazz, "id", true).getType());
+	}
+
 }
