@@ -22,7 +22,6 @@ package org.rapidoid.app;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.List;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DELETE;
@@ -94,12 +93,12 @@ public class CRUD<E> {
 	}
 
 	@GET("/all")
-	public List<E> all() {
+	public Iterable<E> all() {
 		return DB.getAll(clazz);
 	}
 
 	@GET("/page")
-	public List<E> page(int page) {
+	public Iterable<E> page(int page) {
 		return DB.getAll(clazz, page, 20);
 	}
 

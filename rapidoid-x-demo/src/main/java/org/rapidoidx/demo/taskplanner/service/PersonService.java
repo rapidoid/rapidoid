@@ -51,7 +51,7 @@ public class PersonService extends DAO<Person> {
 	}
 
 	// e.g. /person/add?name=nikolche&age=30
-	public List<Person> add(Person p) {
+	public Iterable<Person> add(Person p) {
 		Log.info("Inserting person", "person", p);
 		insert(p);
 		return all();

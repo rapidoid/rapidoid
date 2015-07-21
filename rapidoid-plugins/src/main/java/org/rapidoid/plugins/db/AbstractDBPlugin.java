@@ -1,7 +1,6 @@
 package org.rapidoid.plugins.db;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
@@ -60,7 +59,7 @@ public abstract class AbstractDBPlugin implements DBPlugin {
 	}
 
 	@Override
-	public <T> List<T> getAll(Class<T> clazz) {
+	public <T> Iterable<T> getAll(Class<T> clazz) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
@@ -75,12 +74,12 @@ public abstract class AbstractDBPlugin implements DBPlugin {
 	}
 
 	@Override
-	public <T> List<T> find(Class<T> clazz, Predicate<T> match, Comparator<T> orderBy) {
+	public <T> Iterable<T> find(Class<T> clazz, Predicate<T> match, Comparator<T> orderBy) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
 	@Override
-	public <E> List<E> find(Predicate<E> match) {
+	public <E> Iterable<E> find(Predicate<E> match) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
@@ -90,7 +89,7 @@ public abstract class AbstractDBPlugin implements DBPlugin {
 	}
 
 	@Override
-	public <E> List<E> query(Class<E> clazz, String query, Object... args) {
+	public <E> Iterable<E> query(Class<E> clazz, String query, Object... args) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
@@ -130,17 +129,17 @@ public abstract class AbstractDBPlugin implements DBPlugin {
 	}
 
 	@Override
-	public <E> List<E> getAll() {
+	public <E> Iterable<E> getAll() {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
 	@Override
-	public <E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
+	public <E> Iterable<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
 	@Override
-	public <E> List<E> getAll(Class<E> clazz, Iterable<String> ids) {
+	public <E> Iterable<E> getAll(Class<E> clazz, Iterable<String> ids) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
@@ -150,7 +149,7 @@ public abstract class AbstractDBPlugin implements DBPlugin {
 	}
 
 	@Override
-	public <T> List<T> fullTextSearch(String query) {
+	public <T> Iterable<T> fullTextSearch(String query) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 

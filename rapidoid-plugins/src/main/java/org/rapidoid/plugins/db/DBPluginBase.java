@@ -91,7 +91,7 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 	}
 
 	@Override
-	public <E> List<E> getAll(Class<E> clazz, Iterable<String> ids) {
+	public <E> Iterable<E> getAll(Class<E> clazz, Iterable<String> ids) {
 		List<E> results = new ArrayList<E>();
 
 		for (String id : ids) {
@@ -102,7 +102,7 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 	}
 
 	@Override
-	public <E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
+	public <E> Iterable<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
 		return U.page(getAll(clazz), pageNumber, pageSize);
 	}
 
@@ -123,7 +123,7 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 	}
 
 	@Override
-	public <E> List<E> find(final Class<E> clazz, final Predicate<E> match, final Comparator<E> orderBy) {
+	public <E> Iterable<E> find(final Class<E> clazz, final Predicate<E> match, final Comparator<E> orderBy) {
 
 		Predicate<E> match2 = new Predicate<E>() {
 			@Override
@@ -136,15 +136,15 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 		return sorted(find(match2), orderBy);
 	}
 
-	protected <E> List<E> sorted(List<E> records, Comparator<E> orderBy) {
+	protected <E> Iterable<E> sorted(Iterable<E> records, Comparator<E> orderBy) {
 		if (orderBy != null) {
-			Collections.sort(records, orderBy);
+			Collections.sort(U.list(records), orderBy);
 		}
 		return records;
 	}
 
 	@Override
-	public <E> List<E> fullTextSearch(String searchPhrase) {
+	public <E> Iterable<E> fullTextSearch(String searchPhrase) {
 		final String search = searchPhrase.toLowerCase();
 
 		Predicate<E> match = new Predicate<E>() {
@@ -169,7 +169,7 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 	}
 
 	@Override
-	public <E> List<E> query(final Class<E> clazz, final String query, final Object... args) {
+	public <E> Iterable<E> query(final Class<E> clazz, final String query, final Object... args) {
 
 		Predicate<E> match = new Predicate<E>() {
 			@Override
@@ -218,14 +218,14 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 
 	@Override
 	public void deleteAllData() {
-		List<Object> all = getAll();
+		Iterable<Object> all = getAll();
 		for (Object entity : all) {
 			delete(entity);
 		}
 	}
 
 	@Override
-	public <E> List<E> find(final Predicate<E> match) {
+	public <E> Iterable<E> find(final Predicate<E> match) {
 		final List<E> results = new ArrayList<E>();
 
 		each(new Operation<E>() {
@@ -263,7 +263,7 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 
 	@Override
 	public long size() {
-		return getAll().size();
+		return U.list(getAll()).size();
 	}
 
 }

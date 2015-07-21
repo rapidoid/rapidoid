@@ -2,7 +2,6 @@ package org.rapidoid.dao;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.List;
 
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.util.U;
@@ -87,11 +86,11 @@ public abstract class DAO<E> {
 		return DB.get(clazz, id);
 	}
 
-	public List<E> all() {
+	public Iterable<E> all() {
 		return DB.getAll(clazz);
 	}
 
-	public List<E> page(int page) {
+	public Iterable<E> page(int page) {
 		return DB.getAll(clazz, page, 20);
 	}
 

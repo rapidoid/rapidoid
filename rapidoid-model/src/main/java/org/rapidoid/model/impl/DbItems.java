@@ -65,8 +65,7 @@ public class DbItems<T> extends BeanListItems<T> {
 
 	@Override
 	protected List<Item> data() {
-
-		List<T> all = DB.find(beanType, match, orderBy);
+		Iterable<T> all = DB.find(beanType, match, orderBy);
 		List<Item> records = U.list();
 
 		for (T t : all) {

@@ -368,7 +368,7 @@ public class FormFieldWidget extends AbstractWidget {
 
 	protected Collection<?> getOptionsOfType(Class<?> clazz) {
 		if (Cls.kindOf(clazz) == TypeKind.OBJECT && Beany.hasProperty(clazz, "id")) {
-			return DB.getAll(clazz);
+			return U.list(DB.getAll(clazz));
 		} else {
 			return Collections.EMPTY_LIST;
 		}

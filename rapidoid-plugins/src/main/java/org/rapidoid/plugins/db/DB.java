@@ -73,19 +73,19 @@ public class DB {
 		return Plugins.db().get(clazz, id);
 	}
 
-	public static <E> List<E> getAll() {
+	public static <E> Iterable<E> getAll() {
 		return Plugins.db().getAll();
 	}
 
-	public static <E> List<E> getAll(Class<E> clazz) {
+	public static <E> Iterable<E> getAll(Class<E> clazz) {
 		return Plugins.db().getAll(clazz);
 	}
 
-	public static <E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
+	public static <E> Iterable<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
 		return Plugins.db().getAll(clazz, pageNumber, pageSize);
 	}
 
-	public static <E> List<E> getAll(Class<E> clazz, Iterable<String> ids) {
+	public static <E> Iterable<E> getAll(Class<E> clazz, Iterable<String> ids) {
 		return Plugins.db().getAll(clazz, ids);
 	}
 
@@ -101,15 +101,15 @@ public class DB {
 		return Plugins.db().size();
 	}
 
-	public static <E> List<E> find(Predicate<E> match) {
+	public static <E> Iterable<E> find(Predicate<E> match) {
 		return Plugins.db().find(match);
 	}
 
-	public static <E> List<E> find(Class<E> clazz, Predicate<E> match, Comparator<E> orderBy) {
+	public static <E> Iterable<E> find(Class<E> clazz, Predicate<E> match, Comparator<E> orderBy) {
 		return Plugins.db().find(clazz, match, orderBy);
 	}
 
-	public static <E> List<E> fullTextSearch(String searchPhrase) {
+	public static <E> Iterable<E> fullTextSearch(String searchPhrase) {
 		return Plugins.db().fullTextSearch(searchPhrase);
 	}
 
@@ -153,7 +153,7 @@ public class DB {
 		return entity(entityType, U.map(prop1, value1, prop2, value2, prop3, value3, prop4, value4, prop5, value5));
 	}
 
-	public static <E> List<E> query(Class<E> clazz, String query, Object... args) {
+	public static <E> Iterable<E> query(Class<E> clazz, String query, Object... args) {
 		return Plugins.db().query(clazz, query, args);
 	}
 
@@ -165,7 +165,7 @@ public class DB {
 		Plugins.db().deleteAllData();
 	}
 
-	public static <T> List<T> read(Class<T> clazz, String id, String... properties) {
+	public static <T> Iterable<T> read(Class<T> clazz, String id, String... properties) {
 		return null;
 	}
 

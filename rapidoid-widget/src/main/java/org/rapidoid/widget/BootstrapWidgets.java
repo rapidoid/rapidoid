@@ -386,9 +386,9 @@ public abstract class BootstrapWidgets extends HTML {
 		return grid(Models.beanItems(type, items), sortOrder, pageSize, properties);
 	}
 
-	public static <T> GridWidget grid(Class<T> type, Collection<T> items, String sortOrder, int pageSize,
+	public static <T> GridWidget grid(Class<T> type, Iterable<T> items, String sortOrder, int pageSize,
 			String... properties) {
-		return grid(type, items.toArray(), sortOrder, pageSize, properties);
+		return grid(type, U.array(items), sortOrder, pageSize, properties);
 	}
 
 	public static GridWidget grid(Items items, String sortOrder, int pageSize, String... properties) {
@@ -457,7 +457,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static <E> GridWidget grid(Class<E> entityType, int pageSize, String... properties) {
-		List<E> all = DB.getAll(entityType);
+		Iterable<E> all = DB.getAll(entityType);
 		return grid(entityType, all, "", pageSize, properties);
 	}
 

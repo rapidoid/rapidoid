@@ -39,7 +39,7 @@ public class DBTest extends TestCommons {
 	@SuppressWarnings("unused")
 	@Test
 	public void showDbAPI() throws IOException {
-		List<Book> books = DB.read(Book.class, "id1", "title", "year", "comments");
+		Iterable<Book> books = DB.read(Book.class, "id1", "title", "year", "comments");
 
 		DB.addToSet("user1", "likes", "movie1");
 		DB.removeFromSet("user2", "likes", "book4");

@@ -20,7 +20,6 @@ package demo.taskplanner.service;
  * #L%
  */
 
-import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
@@ -38,7 +37,7 @@ import demo.taskplanner.model.User;
 @RESTful("/user")
 public class UserService extends DAO<User> {
 
-	public List<User> findByName(String search) {
+	public Iterable<User> findByName(String search) {
 		final String s = search.toLowerCase();
 		return DB.find(User.class, new Predicate<User>() {
 			@Override
@@ -54,7 +53,7 @@ public class UserService extends DAO<User> {
 	}
 
 	// e.g. /user/add?username=niko&name=nikolche&age=31
-	public List<User> add(User u) {
+	public Iterable<User> add(User u) {
 		Log.info("Inserting user", "user", u);
 		insert(u);
 		return all();

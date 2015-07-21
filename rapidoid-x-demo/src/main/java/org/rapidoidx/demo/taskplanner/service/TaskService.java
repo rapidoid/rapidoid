@@ -21,8 +21,6 @@ package org.rapidoidx.demo.taskplanner.service;
  * #L%
  */
 
-import java.util.List;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.dao.DAO;
@@ -33,7 +31,7 @@ import org.rapidoidx.demo.taskplanner.model.Task;
 @Since("3.0.0")
 public class TaskService extends DAO<Task> {
 
-	public List<Task> add(Task task) {
+	public Iterable<Task> add(Task task) {
 		Log.info("Inserting task", "task", task);
 		insert(task);
 		return all();

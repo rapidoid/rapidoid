@@ -21,7 +21,6 @@ package org.rapidoid.plugins.db;
  */
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
@@ -48,13 +47,13 @@ public interface DBPlugin {
 
 	<T> T getIfExists(Class<T> clazz, String id);
 
-	<E> List<E> getAll();
+	<E> Iterable<E> getAll();
 
-	<T> List<T> getAll(Class<T> clazz);
+	<T> Iterable<T> getAll(Class<T> clazz);
 
-	<E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize);
+	<E> Iterable<E> getAll(Class<E> clazz, int pageNumber, int pageSize);
 
-	<E> List<E> getAll(Class<E> clazz, Iterable<String> ids);
+	<E> Iterable<E> getAll(Class<E> clazz, Iterable<String> ids);
 
 	void refresh(Object entity);
 
@@ -66,15 +65,15 @@ public interface DBPlugin {
 
 	long size();
 
-	<T> List<T> fullTextSearch(String query);
+	<T> Iterable<T> fullTextSearch(String query);
 
-	<T> List<T> find(Class<T> clazz, Predicate<T> match, Comparator<T> orderBy);
+	<T> Iterable<T> find(Class<T> clazz, Predicate<T> match, Comparator<T> orderBy);
 
-	<E> List<E> find(Predicate<E> match);
+	<E> Iterable<E> find(Predicate<E> match);
 
 	<E> E entity(Class<E> entityType, Map<String, ?> properties);
 
-	<E> List<E> query(Class<E> clazz, String query, Object... args);
+	<E> Iterable<E> query(Class<E> clazz, String query, Object... args);
 
 	<RESULT> RESULT sql(String sql, Object... args);
 

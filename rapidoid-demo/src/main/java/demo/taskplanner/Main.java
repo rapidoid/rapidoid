@@ -20,7 +20,6 @@ package demo.taskplanner;
  * #L%
  */
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.rapidoid.annotation.Authors;
@@ -76,7 +75,7 @@ public class Main {
 	}
 
 	@GET("/task/page")
-	public List<Task> tasks(int page) {
+	public Iterable<Task> tasks(int page) {
 		return page < 5 ? DB.getAll(Task.class) : null;
 	}
 
