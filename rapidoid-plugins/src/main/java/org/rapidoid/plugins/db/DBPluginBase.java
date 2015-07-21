@@ -91,6 +91,11 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 	}
 
 	@Override
+	public <E> Iterable<E> getAll() {
+		throw U.notSupported();
+	}
+
+	@Override
 	public <E> Iterable<E> getAll(Class<E> clazz, Iterable<String> ids) {
 		List<E> results = new ArrayList<E>();
 
@@ -120,6 +125,13 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 	@Override
 	public <E> E entity(Class<E> entityType, Map<String, ?> properties) {
 		return Entities.create(entityType, properties);
+	}
+
+	@Override
+	public void refresh(Object entity) {
+		String id = Beany.getId(entity);
+		Object refreshedEntity = get(entity.getClass(), id);
+		Beany.update(entity, Beany.read(refreshedEntity));
 	}
 
 	@Override
