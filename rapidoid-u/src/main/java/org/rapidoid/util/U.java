@@ -796,7 +796,8 @@ public class U {
 
 	@SuppressWarnings("serial")
 	public static <K, V> Map<K, V> autoExpandingMap(final Mapper<K, V> valueFactory) {
-		return new ConcurrentHashMap<K, V>() {
+		return Collections.synchronizedMap(new HashMap<K, V>() {
+
 			@SuppressWarnings("unchecked")
 			@Override
 			public synchronized V get(Object key) {
@@ -814,7 +815,10 @@ public class U {
 
 				return val;
 			}
-		};
+
+		});
+	}
+
 	}
 
 }
