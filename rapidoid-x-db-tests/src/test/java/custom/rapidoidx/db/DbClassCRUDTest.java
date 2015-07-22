@@ -25,6 +25,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Predicate;
@@ -32,7 +33,6 @@ import org.rapidoid.util.D;
 import org.rapidoidx.db.DBs;
 import org.rapidoidx.db.Database;
 import org.rapidoidx.db.XDB;
-import org.junit.Test;
 
 import custom.rapidoidx.db.model.Person;
 

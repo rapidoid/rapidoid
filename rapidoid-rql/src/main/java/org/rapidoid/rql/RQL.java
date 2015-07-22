@@ -29,7 +29,7 @@ import org.rapidoid.plugins.entities.Entities;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.1.0")
+@Since("4.0.0")
 public class RQL {
 
 	public static ParsedRQL parse(String rql, Object... args) {

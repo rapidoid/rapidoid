@@ -22,11 +22,11 @@ package org.rapidoid.security;
 
 import java.util.List;
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.util.U;
-import org.junit.Test;
 
 class Foo {
 	public String createdBy;

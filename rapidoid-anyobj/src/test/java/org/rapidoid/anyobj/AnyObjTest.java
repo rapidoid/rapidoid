@@ -20,13 +20,13 @@ package org.rapidoid.anyobj;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
-import org.junit.Test;
 
 /**
  * @author Nikolche Mihajlovski
- * @since 3.1.0
+ * @since 4.0.0
  */
 public class AnyObjTest extends TestCommons {
 

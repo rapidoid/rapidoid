@@ -28,7 +28,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
-import org.rapidoid.scan.Scan;
 import org.rapidoid.test.TestCommons;
 import org.rapidoidx.db.DBs;
 import org.rapidoidx.db.XDB;
@@ -40,7 +39,6 @@ public abstract class DbTestCommons extends TestCommons {
 	@Before
 	@After
 	public void initDB() {
-		Scan.classes();
 		Log.warn("Destroying all databases: " + DBs.instances());
 		DBs.destroyAll();
 		XDB.destroy();

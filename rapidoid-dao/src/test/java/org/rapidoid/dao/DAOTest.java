@@ -20,8 +20,8 @@ package org.rapidoid.dao;
  * #L%
  */
 
-import org.rapidoid.test.TestCommons;
 import org.junit.Test;
+import org.rapidoid.test.TestCommons;
 
 class PersonService extends DAO<Person> {}
 

@@ -20,6 +20,7 @@ package org.rapidoid.http;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
@@ -27,7 +28,6 @@ import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.U;
-import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

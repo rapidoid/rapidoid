@@ -24,11 +24,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.IO;
 import org.rapidoid.util.Rnd;
-import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
 @Target({ TYPE })
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("3.1.0")
+@Since("4.0.0")
 public @interface App {
 
 }

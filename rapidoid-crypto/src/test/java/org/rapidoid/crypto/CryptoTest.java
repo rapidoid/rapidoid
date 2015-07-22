@@ -20,15 +20,15 @@ package org.rapidoid.crypto;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
-import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.1.0")
+@Since("4.0.0")
 public class CryptoTest extends TestCommons {
 
 	@Test

@@ -24,7 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.1.0")
+@Since("4.0.0")
 public class ParsedRQL {
 
 	public final String command;

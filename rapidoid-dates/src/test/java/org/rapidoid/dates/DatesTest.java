@@ -22,8 +22,8 @@ package org.rapidoid.dates;
 
 import java.util.Calendar;
 
-import org.rapidoid.test.TestCommons;
 import org.junit.Test;
+import org.rapidoid.test.TestCommons;
 
 /**
  * @author Nikolche Mihajlovski

@@ -21,10 +21,10 @@ package org.rapidoidx.buffer;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.util.U;
-import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

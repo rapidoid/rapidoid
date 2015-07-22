@@ -20,11 +20,11 @@ package org.rapidoid.inject.basic;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.wire.Wire;
-import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

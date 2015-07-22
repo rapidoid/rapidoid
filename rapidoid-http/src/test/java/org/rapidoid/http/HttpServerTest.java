@@ -24,9 +24,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

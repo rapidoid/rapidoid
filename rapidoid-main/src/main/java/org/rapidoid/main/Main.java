@@ -30,7 +30,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.scan.Scan;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.1.0")
+@Since("4.0.0")
 public class Main {
 
 	public static void main(String[] args) {

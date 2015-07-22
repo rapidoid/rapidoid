@@ -23,11 +23,11 @@ package custom.rapidoidx.db;
 
 import java.util.Set;
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.util.U;
-import org.junit.Test;
 
 import custom.rapidoidx.db.model.IPerson;
 import custom.rapidoidx.db.model.Person;

@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.rapidoid.test.TestCommons;
 import org.junit.Test;
+import org.rapidoid.test.TestCommons;
 
 /**
  * @author Nikolche Mihajlovski

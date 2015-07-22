@@ -21,10 +21,10 @@ package custom.rapidoidx.db;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoidx.db.XDB;
-import org.junit.Test;
 
 import custom.rapidoidx.db.model.IPost;
 

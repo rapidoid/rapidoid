@@ -48,7 +48,7 @@ import org.rapidoid.util.Proxies;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.1.0")
+@Since("4.0.0")
 public class Wire {
 
 	private static final Map<Class<?>, Object> SINGLETONS = U.map();

@@ -23,6 +23,7 @@ package custom.rapidoidx.db;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
@@ -30,7 +31,6 @@ import org.rapidoid.util.OptimisticConcurrencyControlException;
 import org.rapidoid.util.Rnd;
 import org.rapidoid.util.UTILS;
 import org.rapidoidx.db.XDB;
-import org.junit.Test;
 
 import custom.rapidoidx.db.model.Person;
 

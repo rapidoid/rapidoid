@@ -36,7 +36,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.1.0")
+@Since("4.0.0")
 public class Crypto {
 
 	public static MessageDigest digest(String algorithm) {

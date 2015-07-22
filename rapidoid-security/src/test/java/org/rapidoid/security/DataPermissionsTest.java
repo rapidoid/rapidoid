@@ -28,6 +28,7 @@ import static org.rapidoid.util.CommonWords.SHARED_WITH;
 
 import java.util.List;
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Composite;
 import org.rapidoid.annotation.Programmatic;
@@ -36,7 +37,6 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.U;
-import org.junit.Test;
 
 @CanRead({ ANYBODY })
 @CanChange({ ANYBODY })

@@ -23,12 +23,12 @@ package org.rapidoid.http;
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.io.IO;
 import org.rapidoid.util.U;
-import org.junit.Test;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

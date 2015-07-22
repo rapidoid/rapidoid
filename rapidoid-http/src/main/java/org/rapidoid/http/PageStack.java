@@ -28,7 +28,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.1.0")
+@Since("4.0.0")
 public class PageStack {
 
 	public static final String ATTR_PAGE_STACK = "_page_stack_";
