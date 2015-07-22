@@ -819,6 +819,37 @@ public class U {
 		});
 	}
 
+	public static <K1, K2, V> Map<K1, Map<K2, V>> mapOfMaps() {
+		return autoExpandingMap(new Mapper<K1, Map<K2, V>>() {
+
+			@Override
+			public Map<K2, V> map(K1 src) throws Exception {
+				return synchronizedMap();
+			}
+
+		});
+	}
+
+	public static <K, V> Map<K, List<V>> mapOfLists() {
+		return autoExpandingMap(new Mapper<K, List<V>>() {
+
+			@Override
+			public List<V> map(K src) throws Exception {
+				return Collections.synchronizedList(U.<V> list());
+			}
+
+		});
+	}
+
+	public static <K, V> Map<K, Set<V>> mapOfSets() {
+		return autoExpandingMap(new Mapper<K, Set<V>>() {
+
+			@Override
+			public Set<V> map(K src) throws Exception {
+				return Collections.synchronizedSet(U.<V> set());
+			}
+
+		});
 	}
 
 }
