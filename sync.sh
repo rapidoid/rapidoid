@@ -1,6 +1,9 @@
 # add the main Rapidoid repository as upstream
 git remote add upstream https://github.com/rapidoid/rapidoid.git
 
+# pull in case there are some changes in the origin
+git pull origin
+
 # fetch all the branches of the main Rapidoid repository
 git fetch upstream
 
