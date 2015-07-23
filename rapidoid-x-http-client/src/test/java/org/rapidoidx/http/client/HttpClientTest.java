@@ -42,9 +42,11 @@ public class HttpClientTest extends ContextAwareTest {
 
 	@Test
 	public void testHttpClientOnLocalServer() {
+		router.serve(SIMPLE_RESPONSE);
+
 		for (int k = 0; k < 3; k++) {
 
-			HTTPServer localServer = HTTP.serve(SIMPLE_RESPONSE);
+			HTTPServer localServer = HTTP.server().build().start();
 
 			ResultCounterCallback<String> cb = new ResultCounterCallback<String>();
 
