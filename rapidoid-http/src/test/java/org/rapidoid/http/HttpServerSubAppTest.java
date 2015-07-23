@@ -26,6 +26,7 @@ import java.net.URISyntaxException;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.appctx.AppCtx;
 import org.rapidoid.appctx.Application;
 import org.rapidoid.appctx.Applications;
 import org.rapidoid.appctx.WebApp;
@@ -38,31 +39,38 @@ public class HttpServerSubAppTest extends HttpTestCommons {
 	@Test
 	public void shouldHandleSubAppRequests() throws IOException, URISyntaxException {
 
-		Application myapp = new WebApp("myapp", "My App", null, null, U.set("my"), null, null, null);
-		Applications.main().register(myapp);
+		Applications apps = new Applications("apps");
 
-		server = HTTP.server().build();
+		Application myapp = new WebApp("myapp", "My App", null, null, U.set("/my"), null, null, null);
+		apps.register(myapp);
 
-		router.get("/ab", new Handler() {
-			@Override
-			public Object handle(HttpExchange x) {
-				return U.join(":", "special", x.uri(), x.uriContext(), x.path(), x.subpath());
-			}
-		});
+		Application defaultApp = new WebApp("defapp", "Default", null, null, null, null, null, null);
+		apps.setDefaultApp(defaultApp);
 
-		router.serve(new Handler() {
-			@Override
-			public Object handle(HttpExchange x) {
-				return U.join(":", "generic", x.uri(), x.uriContext(), x.path(), x.subpath());
-			}
-		});
+		myapp.getRouter().get("/ab", info("my-special"));
+		myapp.getRouter().generic(info("my-generic"));
 
+		defaultApp.getRouter().get("/cd", info("def-special"));
+		defaultApp.getRouter().generic(info("def-generic"));
+
+		server = HTTP.server().applications(apps).build();
 		start();
 
-		eq(get("/"), "generic:/:/::");
-		eq(get("/ab"), "special:/ab:/:/ab:");
+		eq(get("/my/ab"), "my-special: id=myapp, uri=/my/ab, uriContext=/my, path=/ab, subpath=");
+
+		// TODO add more tests here
 
 		shutdown();
 	}
 
+	private Handler info(final String desc) {
+		return new Handler() {
+			@Override
+			public Object handle(HttpExchange x) {
+				String id = AppCtx.app().getId();
+				return U.format("%s: id=%s, uri=%s, uriContext=%s, path=%s, subpath=%s", desc, id, x.uri(),
+						x.uriContext(), x.path(), x.subpath());
+			}
+		};
+	}
 }

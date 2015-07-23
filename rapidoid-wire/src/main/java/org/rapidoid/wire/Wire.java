@@ -447,7 +447,9 @@ public class Wire {
 			@Override
 			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 				if (method.getDeclaringClass().equals(Builder.class)) {
-					return inject(Cls.newInstance(implClass, properties), properties);
+					T instance = inject(Cls.newInstance(implClass, properties), properties);
+					Beany.update(instance, properties);
+					return instance;
 				} else {
 					U.must(args.length == 1, "expected 1 argument!");
 					properties.put(method.getName(), args[0]);

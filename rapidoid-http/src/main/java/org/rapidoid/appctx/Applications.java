@@ -1,6 +1,7 @@
 package org.rapidoid.appctx;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -32,11 +33,17 @@ import org.rapidoid.util.U;
 @Since("4.1.0")
 public class Applications {
 
-	private static final Applications MAIN = new Applications();
+	private static final Applications MAIN = new Applications("main");
+
+	private final String name;
 
 	private final Map<String, Map<String, Application>> appsByURL = U.mapOfMaps();
 
 	private Application defaultApp;
+
+	public Applications(String name) {
+		this.name = name;
+	}
 
 	public static Applications main() {
 		return MAIN;
@@ -47,7 +54,13 @@ public class Applications {
 	}
 
 	public synchronized void register(Application app) {
-		for (String hostname : app.getHostnames()) {
+		Set<String> hosts = app.getHostnames();
+
+		if (hosts.isEmpty()) {
+			hosts = U.set("*");
+		}
+
+		for (String hostname : hosts) {
 			for (String uriPath : app.getUriContexts()) {
 				U.must(!appsByURL.get(hostname).containsKey(uriPath),
 						"An application has already been registered with the URI path: %s", uriPath);
@@ -61,12 +74,16 @@ public class Applications {
 	}
 
 	public Application get(String hostname, String uriContext) {
-		return U.or(appsByURL.get(hostname).get(uriContext), defaultApp);
+		if (appsByURL.containsKey(hostname)) {
+			return U.or(appsByURL.get(hostname).get(uriContext), defaultApp);
+		} else {
+			return U.or(appsByURL.get("*").get(uriContext), defaultApp);
+		}
 	}
 
 	@Override
 	public String toString() {
-		return "Applications [appsByURL=" + appsByURL + "]";
+		return "Applications [name=" + name + ", appsByURL=" + appsByURL + ", defaultApp=" + defaultApp + "]";
 	}
 
 	public static RootApplication root() {
@@ -83,6 +100,10 @@ public class Applications {
 		Plugins.register(new AppClasspathEntitiesPlugin());
 
 		return app;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 }

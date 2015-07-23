@@ -22,8 +22,8 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.appctx.AppCtx;
 import org.rapidoid.appctx.Application;
-import org.rapidoid.appctx.Applications;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.session.SessionStore;
@@ -32,6 +32,7 @@ import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ExchangeProtocol;
 import org.rapidoid.net.impl.RapidoidConnection;
+import org.rapidoid.util.D;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.util.Usage;
@@ -50,6 +51,8 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	private SessionStore sessionStore;
 
 	private HTTPInterceptor interceptor;
+
+	private HTTPServerImpl server;
 
 	public HttpProtocol() {
 		super(HttpExchangeImpl.class, true);
@@ -149,9 +152,10 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	private Application getApp(HttpExchangeImpl x) {
 		String uriContext = "/" + x.pathSegment(0);
+		D.print(uriContext);
 
-		Application app = Applications.main().get(x.host(), uriContext);
-		U.must(app != null, "The application must be provided!");
+		Application app = server.applications.get(x.host(), uriContext);
+		U.must(app != null, "Cannot find matching application in: " + server.applications.getName());
 
 		if (app.getUriContexts().contains(uriContext)) {
 			x.setUriContext(uriContext);
@@ -186,7 +190,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			x.completeResponse();
 		} else if (cause instanceof HttpNotFoundException) {
 			// notFound
-			Log.warn("HTTP resource not found!", "uri", x.uri());
+			Log.warn("HTTP resource not found!", "app", AppCtx.app().getId(), "uri", x.uri());
 			x.completeResponse();
 		} else if (cause instanceof ThreadDeath) {
 			Log.error("Thread death, probably timeout!", "request", x, "error", cause);
@@ -230,6 +234,10 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	public void addUpgrade(String upgradeName, HttpUpgradeHandler upgrade, Protocol protocol) {
 		upgrades.add(upgradeName, upgrade, protocol);
+	}
+
+	public void setServer(HTTPServerImpl server) {
+		this.server = server;
 	}
 
 }

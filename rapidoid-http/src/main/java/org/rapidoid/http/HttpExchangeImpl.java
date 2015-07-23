@@ -861,7 +861,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized String pathSegment(int segmentIndex) {
-		return path().substring(1).split("/")[segmentIndex];
+		return U.triml(path(), "/").split("/")[segmentIndex];
 	}
 
 	@Override

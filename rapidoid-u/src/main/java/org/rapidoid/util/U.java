@@ -852,19 +852,4 @@ public class U {
 		});
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> Set<T> emptySet() {
-		return Collections.EMPTY_SET;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> List<T> emptyList() {
-		return Collections.EMPTY_LIST;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <K, V> Map<K, V> emptyMap() {
-		return Collections.EMPTY_MAP;
-	}
-
 }

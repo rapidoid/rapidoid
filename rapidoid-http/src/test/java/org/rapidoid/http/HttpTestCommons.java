@@ -25,11 +25,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -38,6 +40,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicHeader;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -136,10 +139,17 @@ public abstract class HttpTestCommons extends TestCommons {
 		System.out.println("--- SERVER STOPPED ---");
 	}
 
+	private CloseableHttpClient makeClient() {
+		Collection<? extends Header> headers = U.list(new BasicHeader("host", "localhost"));
+		CloseableHttpClient client = HttpClientBuilder.create().setDefaultHeaders(headers).disableAutomaticRetries()
+				.build();
+		return client;
+	}
+
 	protected String upload(String path, Map<String, String> params, Map<String, String> files) throws IOException,
 			ClientProtocolException {
 
-		CloseableHttpClient client = HttpClientBuilder.create().disableAutomaticRetries().build();
+		CloseableHttpClient client = makeClient();
 
 		try {
 			HttpPost httppost = new HttpPost(localhost(path));
@@ -185,7 +195,7 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	protected String get(String url) {
 		try {
-			CloseableHttpClient client = HttpClientBuilder.create().disableAutomaticRetries().build();
+			CloseableHttpClient client = makeClient();
 
 			HttpGet get = new HttpGet(localhost(url));
 
@@ -203,7 +213,7 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	protected byte[] getBytes(String url) {
 		try {
-			CloseableHttpClient client = HttpClientBuilder.create().disableAutomaticRetries().build();
+			CloseableHttpClient client = makeClient();
 
 			HttpGet get = new HttpGet(localhost(url));
 

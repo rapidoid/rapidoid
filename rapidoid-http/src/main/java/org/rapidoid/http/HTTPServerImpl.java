@@ -22,6 +22,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.appctx.Applications;
 import org.rapidoid.http.session.InMemorySessionStore;
 import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.json.JSON;
@@ -34,8 +35,11 @@ public class HTTPServerImpl extends RapidoidServerLoop implements HTTPServer {
 
 	private final SessionStore session = new InMemorySessionStore();
 
+	Applications applications = Applications.main();
+
 	public HTTPServerImpl() {
 		super(new HttpProtocol(), HttpExchangeImpl.class, null);
+		((HttpProtocol) protocol).setServer(this);
 		((HttpProtocol) protocol).setSessionStore(session);
 	}
 
@@ -67,6 +71,11 @@ public class HTTPServerImpl extends RapidoidServerLoop implements HTTPServer {
 	public HTTPServer addUpgrade(String upgradeName, HttpUpgradeHandler upgradeHandler, Protocol upgradeProtocol) {
 		((HttpProtocol) protocol).addUpgrade(upgradeName, upgradeHandler, upgradeProtocol);
 		return this;
+	}
+
+	@Override
+	public String toString() {
+		return "HTTPServerImpl [session=" + session + ", applications=" + applications + "]";
 	}
 
 }
