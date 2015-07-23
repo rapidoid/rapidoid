@@ -55,7 +55,7 @@ public class HttpPipeliningTest extends ContextAwareTest {
 
 		HTTPServer server = HTTP.server().build();
 
-		server.get("/hello", new Handler() {
+		router.get("/hello", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
 				return "Hello";

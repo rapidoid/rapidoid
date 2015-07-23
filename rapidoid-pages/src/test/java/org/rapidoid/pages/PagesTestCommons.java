@@ -121,7 +121,7 @@ public class PagesTestCommons extends TestCommons {
 		x.setConnection(conn);
 
 		InMemorySessionStore sessions = new InMemorySessionStore();
-		x.init(new HttpResponses(false, false), sessions, null);
+		x.init(new HttpResponses(false, false), sessions);
 
 		Ctxs.ctx().setExchange(x);
 		return x;

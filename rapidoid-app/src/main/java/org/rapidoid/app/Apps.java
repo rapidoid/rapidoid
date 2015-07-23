@@ -31,7 +31,8 @@ import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.aop.AOP;
-import org.rapidoid.apps.Scan;
+import org.rapidoid.appctx.Application;
+import org.rapidoid.appctx.Scan;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
@@ -60,20 +61,12 @@ public class Apps {
 
 	private static AppClasses APP_CLASSES;
 
-	public static void main(String[] args) {
-		run((Object[]) args);
+	public static void run(Application app, Object... args) {
+		bootstrap(app, args);
+		serve(app, args);
 	}
 
-	public static void run(String[] args) {
-		run((Object[]) args);
-	}
-
-	public static void run(Object... args) {
-		bootstrap(args);
-		serve(args);
-	}
-
-	public static void bootstrap(Object... args) {
+	public static void bootstrap(Application app, Object... args) {
 		Set<String> config = U.set();
 
 		for (Object arg : args) {
@@ -89,13 +82,13 @@ public class Apps {
 		Lifecycle.onStart(args);
 	}
 
-	public static HTTPServer serve(Object... args) {
+	public static HTTPServer serve(Application app, Object... args) {
 		HTTPServer server = HTTP.server().build();
 
-		OAuth.register(server);
-		HttpBuiltins.register(server);
+		OAuth.register(app);
+		HttpBuiltins.register(app);
 
-		server.serve(new AppHandler());
+		app.getRouter().serve(new AppHandler());
 
 		return server.start();
 	}

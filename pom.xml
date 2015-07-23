@@ -106,7 +106,6 @@
 		<module>rapidoid-test-appctx-helper</module>
 		<module>rapidoid-buffer</module>
 		<module>rapidoid-net</module>
-		<module>rapidoid-appctx</module>
 		<module>rapidoid-http-api</module>
 		<module>rapidoid-http</module>
 		<module>rapidoid-measure</module>

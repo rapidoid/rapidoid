@@ -22,8 +22,8 @@ package org.rapidoid.main;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.apps.Application;
-import org.rapidoid.apps.Applications;
+import org.rapidoid.appctx.Application;
+import org.rapidoid.appctx.Applications;
 import org.rapidoid.log.Log;
 import org.rapidoid.quick.Quick;
 import org.rapidoid.util.U;

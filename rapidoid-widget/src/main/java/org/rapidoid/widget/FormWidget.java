@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.apps.AppCtx;
+import org.rapidoid.appctx.AppCtx;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;

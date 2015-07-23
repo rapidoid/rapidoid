@@ -29,12 +29,17 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-appctx</artifactId>
+			<artifactId>rapidoid-security</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-test-appctx-helper</artifactId>
+			<artifactId>rapidoid-plugins</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-test-commons</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

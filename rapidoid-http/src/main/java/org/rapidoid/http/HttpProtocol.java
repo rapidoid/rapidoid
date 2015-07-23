@@ -22,8 +22,8 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.apps.Application;
-import org.rapidoid.apps.Applications;
+import org.rapidoid.appctx.Application;
+import org.rapidoid.appctx.Applications;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.session.SessionStore;
@@ -43,8 +43,6 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	private final HttpParser parser = Wire.singleton(HttpParser.class);
 
-	private final Router router;
-
 	private final HttpResponses responses;
 
 	private final HttpUpgrades upgrades = new HttpUpgrades();
@@ -53,9 +51,8 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	private HTTPInterceptor interceptor;
 
-	public HttpProtocol(Router router) {
+	public HttpProtocol() {
 		super(HttpExchangeImpl.class, true);
-		this.router = router;
 		this.responses = new HttpResponses(true, true);
 	}
 
@@ -63,7 +60,6 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	protected void process(Channel ctx, HttpExchangeImpl x) {
 		U.notNull(responses, "responses");
 		U.notNull(sessionStore, "sessionStore");
-		U.notNull(router, "router");
 
 		if (ctx.isInitial()) {
 			return;
@@ -71,8 +67,8 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 		Usage.touchLastAppUsedOn();
 
-		parser.parse(x.input(), x.isGet, x.isKeepAlive, x.rBody, x.rVerb, x.rUri, x.rPath, x.rQuery, x.rProtocol, x.headers,
-				x.helper());
+		parser.parse(x.input(), x.isGet, x.isKeepAlive, x.rBody, x.rVerb, x.rUri, x.rPath, x.rQuery, x.rProtocol,
+				x.headers, x.helper());
 
 		if (upgradable()) {
 			String upgrade = x.header("Upgrade", null);
@@ -83,7 +79,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		}
 
 		// FIXME separate responses from session store and router, per app
-		x.init(responses, sessionStore, router);
+		x.init(responses, sessionStore);
 
 		String err = validateRequest(x);
 		if (err != null) {
@@ -139,8 +135,11 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		Ctxs.ctx().setApp(app);
 		Ctxs.ctx().setUser(x.user());
 
+		Router router = app.getRouter();
+		U.notNull(router, "application router");
+
 		try {
-			executeRequest(x);
+			executeRequest(router, x);
 
 		} finally {
 			Ctxs.ctx().setUser(null);
@@ -149,7 +148,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	}
 
 	private Application getApp(HttpExchangeImpl x) {
-		String uriContext = x.pathSegment(0);
+		String uriContext = "/" + x.pathSegment(0);
 
 		Application app = Applications.main().get(x.host(), uriContext);
 		U.must(app != null, "The application must be provided!");
@@ -161,12 +160,12 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		return app;
 	}
 
-	private void executeRequest(HttpExchangeImpl x) {
+	private void executeRequest(Router router, HttpExchangeImpl x) {
 		try {
 			if (interceptor != null) {
 				interceptor.intercept(x);
 			} else {
-				x.run();
+				router.dispatch(x);
 			}
 		} catch (Throwable e) {
 			handleError(x, e);
@@ -215,10 +214,6 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			}
 			throw x.notFound();
 		}
-	}
-
-	public Router getRouter() {
-		return router;
 	}
 
 	public void setSessionStore(SessionStore sessionStore) {

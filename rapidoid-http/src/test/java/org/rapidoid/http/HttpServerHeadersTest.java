@@ -39,21 +39,21 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 
 		server();
 
-		server.get("/file", new Handler() {
+		router.get("/file", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
 				return x.download(x.subpath().substring(1) + ".txt").write("ab").write("cde");
 			}
 		});
 
-		server.get("/bin", new Handler() {
+		router.get("/bin", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
 				return x.binary().write("bin");
 			}
 		});
 
-		server.get("/session", new Handler() {
+		router.get("/session", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
 				if (x.cookie("ses", null) == null) {
@@ -65,35 +65,35 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 			}
 		});
 
-		server.get("/async", new Handler() {
+		router.get("/async", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
 				return x.async().write("now").done();
 			}
 		});
 
-		server.get("/testfile1", new Handler() {
+		router.get("/testfile1", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
 				return IO.file("test1.txt");
 			}
 		});
 
-		server.get("/rabbit.jpg", new Handler() {
+		router.get("/rabbit.jpg", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
 				return x.sendFile(IO.file("rabbit.jpg"));
 			}
 		});
 
-		server.get("/ab", new Handler() {
+		router.get("/ab", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
 				return x.sendFile(IO.file("ab.html"));
 			}
 		});
 
-		server.serve(new Handler() {
+		router.serve(new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
 				return x.setCookie("asd", "f").html().write("a<b>b</b>c");
@@ -123,7 +123,7 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 
 		server();
 
-		server.get("/rabbit.jpg", new Handler() {
+		router.get("/rabbit.jpg", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
 				return x.sendFile(IO.file("rabbit.jpg"));

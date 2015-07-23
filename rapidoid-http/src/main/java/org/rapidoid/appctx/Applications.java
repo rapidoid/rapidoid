@@ -1,14 +1,16 @@
-package org.rapidoid.apps;
+package org.rapidoid.appctx;
 
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.plugins.Plugins;
 import org.rapidoid.util.U;
 
 /*
  * #%L
- * rapidoid-appctx
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -69,6 +71,18 @@ public class Applications {
 
 	public static RootApplication root() {
 		return new RootApplication();
+	}
+
+	public static Application openRootContext() {
+		Application app = Applications.root();
+		Applications.main().setDefaultApp(app);
+
+		Ctxs.open();
+		Ctxs.ctx().setApp(app);
+
+		Plugins.register(new AppClasspathEntitiesPlugin());
+
+		return app;
 	}
 
 }

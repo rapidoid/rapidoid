@@ -2,6 +2,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.appctx.Application;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
@@ -32,9 +33,9 @@ import org.rapidoid.util.U;
 @Since("2.0.0")
 public class HttpBuiltins {
 
-	public static void register(HTTPServer server) {
-		if (Conf.dev() && RapidoidConf.debuglogin()) {
-			server.get("/_debugLogin", new Handler() {
+	public static void register(Application app) {
+		if (app.dev() && RapidoidConf.debuglogin()) {
+			app.getRouter().get("/_debugLogin", new Handler() {
 				@Override
 				public Object handle(HttpExchange x) {
 					x.accessDeniedIf(!Conf.dev());

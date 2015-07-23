@@ -1,14 +1,8 @@
-package org.rapidoid.apps;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.ctx.UserInfo;
-import org.rapidoid.util.U;
+package org.rapidoid.appctx;
 
 /*
  * #%L
- * rapidoid-appctx
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -26,22 +20,33 @@ import org.rapidoid.util.U;
  * #L%
  */
 
+import java.util.Set;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Classes;
+import org.rapidoid.http.Router;
+
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class AppCtx {
+public interface Application {
 
-	public static UserInfo user() {
-		UserInfo user = Ctxs.ctx().user();
-		U.must(user != null, "Not logged in!");
-		return user;
-	}
+	String getId();
 
-	public static boolean isLoggedIn() {
-		return Ctxs.ctx().user() != null;
-	}
+	String getTitle();
 
-	public static String username() {
-		return isLoggedIn() ? user().username : null;
-	}
+	Set<String> getOwners();
+
+	Set<String> getHostnames();
+
+	Set<String> getUriContexts();
+
+	AppMode getMode();
+
+	Router getRouter();
+
+	Classes getClasses();
+
+	boolean dev();
 
 }

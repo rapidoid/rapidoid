@@ -29,22 +29,6 @@ import org.rapidoid.net.TCPServer;
 @Since("2.0.0")
 public interface HTTPServer extends TCPServer {
 
-	HTTPServer route(String cmd, String url, Handler handler);
-
-	HTTPServer route(String cmd, String url, String response);
-
-	HTTPServer serve(String response);
-
-	HTTPServer serve(Handler handler);
-
-	HTTPServer get(String url, Handler handler);
-
-	HTTPServer post(String url, Handler handler);
-
-	HTTPServer put(String url, Handler handler);
-
-	HTTPServer delete(String url, Handler handler);
-
 	HTTPServer start();
 
 	HTTPServer shutdown();

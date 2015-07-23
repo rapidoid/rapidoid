@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface HttpInterception extends Runnable {
+public interface HttpInterception {
 
 	HttpExchange exchange();
 

@@ -31,9 +31,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.AppHandler;
 import org.rapidoid.app.Apps;
-import org.rapidoid.apps.AppMode;
-import org.rapidoid.apps.Application;
-import org.rapidoid.apps.Scan;
+import org.rapidoid.appctx.AppMode;
+import org.rapidoid.appctx.Application;
+import org.rapidoid.appctx.Applications;
+import org.rapidoid.appctx.Scan;
+import org.rapidoid.appctx.WebApp;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Classes;
@@ -65,10 +67,12 @@ public class Examples {
 		String path = "../../rapidoid.github.io/";
 		U.must(new File(path).exists());
 
+		Application app = Applications.openRootContext();
+
 		HTTPServer server = HTTP.server().build();
-		OAuth.register(server);
-		HttpBuiltins.register(server);
-		server.serve(new AppHandler());
+		OAuth.register(app);
+		HttpBuiltins.register(app);
+		app.getRouter().serve(new AppHandler());
 		server.start();
 
 		// FIXME For each example a server is created internally, trying to bind
@@ -184,7 +188,7 @@ public class Examples {
 	public static void generate(HTTPServer server, String path, String id, List<Class<?>> classes) {
 
 		Classes appClasses = Classes.from(classes);
-		Application app = new Application(id, "app", null, null, U.set("/"), AppMode.DEVELOPMENT, appClasses);
+		Application app = new WebApp(id, "app", null, null, U.set("/"), AppMode.DEVELOPMENT, null, appClasses);
 		Ctxs.ctx().setApp(app);
 
 		Class<?> appCls = appClasses.get("Main");

@@ -28,7 +28,7 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.apps.AppCtx;
+import org.rapidoid.appctx.AppCtx;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
@@ -97,10 +97,10 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private boolean responseHasContentType;
 	private int responseStartingPos;
 
+	private String path = null;
 	private String uriContext = "/";
 
 	private HttpResponses responses;
-	private Router router;
 
 	private Map<String, String> data;
 	private Map<String, String> errors;
@@ -182,6 +182,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		files.reset();
 		data = null;
 
+		path = null;
+		uriContext = "/";
+
 		parsedParams = false;
 		parsedHeaders = false;
 		parsedBody = false;
@@ -190,7 +193,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 		classLoader = null;
 		sessionStore = null;
-		router = null;
 
 		session = null;
 		cookiepack = null;
@@ -361,7 +363,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized String path() {
-		return path_().get();
+		if (path == null) {
+			path = path_().get();
+		}
+
+		return path;
 	}
 
 	@Override
@@ -839,11 +845,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public synchronized void run() {
-		router.dispatch(this);
-	}
-
-	@Override
 	public synchronized HttpExchange exchange() {
 		return this;
 	}
@@ -921,10 +922,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		return this;
 	}
 
-	public synchronized void init(HttpResponses responses, SessionStore sessionStore, Router router) {
+	public synchronized void init(HttpResponses responses, SessionStore sessionStore) {
 		this.responses = responses;
 		this.sessionStore = sessionStore;
-		this.router = router;
 
 		synchronized (Conf.class) {
 			if (Conf.option("mode", null) == null) {
@@ -1265,7 +1265,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	public synchronized HttpExchangeImpl setUriContext(String uriContext) {
-		U.must(uri().startsWith(uriContext));
+		String uriPath = path();
+		U.must(uriPath.startsWith(uriContext));
+
+		this.path = U.triml(uriPath, uriContext);
+		this.rPath.strip(uriContext.length(), 0);
 		this.uriContext = uriContext;
 
 		return this;

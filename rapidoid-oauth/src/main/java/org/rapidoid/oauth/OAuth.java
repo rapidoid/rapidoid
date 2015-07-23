@@ -24,9 +24,9 @@ import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.appctx.Application;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.HTMLSnippets;
-import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
@@ -39,11 +39,11 @@ public class OAuth {
 
 	private static OAuthStateCheck STATE_CHECK;
 
-	public static void register(HTTPServer server, OAuthProvider... providers) {
-		register(server, null, new DefaultOAuthStateCheck(), providers);
+	public static void register(Application app, OAuthProvider... providers) {
+		register(app, null, new DefaultOAuthStateCheck(), providers);
 	}
 
-	public static void register(HTTPServer server, String oauthDomain, OAuthStateCheck stateCheck,
+	public static void register(Application app, String oauthDomain, OAuthStateCheck stateCheck,
 			OAuthProvider... providers) {
 
 		if (Conf.oauth() == null) {
@@ -70,16 +70,16 @@ public class OAuth {
 			String clientId = Conf.option(name + ".clientId", "NO-CLIENT-ID");
 			String clientSecret = Conf.option(name + ".clientSecret", "NO-CLIENT-SECRET");
 
-			server.get(loginPath, new OAuthLoginHandler(provider, oauthDomain));
-			server.get(callbackPath, new OAuthTokenHandler(provider, oauthDomain, stateCheck, clientId, clientSecret,
-					callbackPath));
+			app.getRouter().get(loginPath, new OAuthLoginHandler(provider, oauthDomain));
+			app.getRouter().get(callbackPath,
+					new OAuthTokenHandler(provider, oauthDomain, stateCheck, clientId, clientSecret, callbackPath));
 
 			loginHtml.append(U.format(LOGIN_BTN, name, provider.getName()));
 		}
 
 		loginHtml.append("</div>");
 
-		server.get("/_oauthLogin", new Handler() {
+		app.getRouter().get("/_oauthLogin", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) throws Exception {
 				return HTMLSnippets.writePage(x, "Login with OAuth provider", loginHtml.toString());

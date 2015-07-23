@@ -24,6 +24,8 @@ package org.rapidoidx.demo.taskplanner;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.Apps;
+import org.rapidoid.appctx.Application;
+import org.rapidoid.appctx.Applications;
 import org.rapidoidx.db.XDB;
 
 @Authors("Nikolche Mihajlovski")
@@ -31,7 +33,9 @@ import org.rapidoidx.db.XDB;
 public class Main {
 
 	public static void main(String[] args) {
-		Apps.run("oauth-no-state");
+		Application app = Applications.openRootContext();
+		Apps.run(app, "oauth-no-state");
+
 		XDB.clear();
 		for (int i = 0; i < 100; i++) {
 			XDB.init("task title=?, description=?, rating=?", "abc" + i, "Some description of the task " + i, i * 10);

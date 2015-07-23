@@ -23,7 +23,7 @@ package org.rapidoid.app.builtin;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.apps.AppCtx;
+import org.rapidoid.appctx.AppCtx;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.entities.Entities;

@@ -22,27 +22,25 @@ package org.rapidoid.test;
 
 import org.junit.After;
 import org.junit.Before;
-import org.rapidoid.apps.AppClasspathEntitiesPlugin;
-import org.rapidoid.apps.Applications;
-import org.rapidoid.apps.RootApplication;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.appctx.Application;
+import org.rapidoid.appctx.Applications;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.plugins.Plugins;
+import org.rapidoid.http.Router;
 
-/**
- * @author Nikolche Mihajlovski
- * @since 2.0.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("4.1.0")
 public abstract class ContextAwareTest extends TestCommons {
+
+	protected Application app;
+
+	protected Router router;
 
 	@Before
 	public void openContext() {
-		RootApplication app = Applications.root();
-		Applications.main().setDefaultApp(app);
-
-		Ctxs.open();
-		Ctxs.ctx().setApp(app);
-
-		Plugins.register(new AppClasspathEntitiesPlugin());
+		app = Applications.openRootContext();
+		router = app.getRouter();
 	}
 
 	@After

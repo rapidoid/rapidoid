@@ -27,7 +27,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
-import org.rapidoid.apps.AppCtx;
+import org.rapidoid.appctx.AppCtx;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.html.Tag;
 import org.rapidoid.lambda.Predicate;

@@ -1,8 +1,8 @@
-package org.rapidoid.demo.http;
+package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,38 +20,49 @@ package org.rapidoid.demo.http;
  * #L%
  */
 
-import java.util.concurrent.atomic.AtomicLong;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.appctx.Application;
 import org.rapidoid.appctx.Applications;
-import org.rapidoid.config.Conf;
-import org.rapidoid.http.HTTP;
-import org.rapidoid.http.HTTPServer;
-import org.rapidoid.http.Handler;
-import org.rapidoid.http.HttpExchange;
+import org.rapidoid.appctx.WebApp;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class HttpDemo {
+@Since("4.1.0")
+public class HttpServerSubAppTest extends HttpTestCommons {
 
-	public static void main(String[] args) {
-		Conf.args(args);
-		Application app = Applications.openRootContext();
+	@Test
+	public void shouldHandleSubAppRequests() throws IOException, URISyntaxException {
 
-		final AtomicLong n = new AtomicLong();
+		Application myapp = new WebApp("myapp", "My App", null, null, U.set("my"), null, null, null);
+		Applications.main().register(myapp);
 
-		HTTPServer server = HTTP.server().build();
+		server = HTTP.server().build();
 
-		app.getRouter().get("/hi", new Handler() {
+		router.get("/ab", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
-				return "[" + n.incrementAndGet() + "] Hi: " + x.uri();
+				return U.join(":", "special", x.uri(), x.uriContext(), x.path(), x.subpath());
 			}
 		});
 
-		server.start();
+		router.serve(new Handler() {
+			@Override
+			public Object handle(HttpExchange x) {
+				return U.join(":", "generic", x.uri(), x.uriContext(), x.path(), x.subpath());
+			}
+		});
+
+		start();
+
+		eq(get("/"), "generic:/:/::");
+		eq(get("/ab"), "special:/ab:/:/ab:");
+
+		shutdown();
 	}
 
 }

@@ -1,4 +1,4 @@
-package org.rapidoid.apps;
+package org.rapidoid.appctx;
 
 import java.util.Collections;
 
@@ -10,7 +10,7 @@ import org.rapidoid.util.U;
 
 /*
  * #%L
- * rapidoid-appctx
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -30,12 +30,12 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class RootApplication extends Application {
+public class RootApplication extends WebApp {
 
 	@SuppressWarnings("unchecked")
 	public RootApplication() {
-		super("root", "App", Collections.EMPTY_SET, Collections.EMPTY_SET, U.set("/"), AppMode.DEVELOPMENT, Classes
-				.from(ClasspathUtil.getAllClasses()));
+		super("root", "App", Collections.EMPTY_SET, Collections.EMPTY_SET, U.set("/"), AppMode.DEVELOPMENT, null,
+				Classes.from(ClasspathUtil.getAllClasses()));
 	}
 
 }

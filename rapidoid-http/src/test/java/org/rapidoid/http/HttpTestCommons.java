@@ -38,23 +38,43 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.appctx.Application;
+import org.rapidoid.appctx.Applications;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.crypto.Crypto;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.io.IO;
-import org.rapidoid.test.ContextAwareTest;
+import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class HttpTestCommons extends ContextAwareTest {
+public abstract class HttpTestCommons extends TestCommons {
+
+	protected Application app;
 
 	protected HTTPServer server;
+
+	protected Router router;
+
+	@Before
+	public void openContext() {
+		app = Applications.openRootContext();
+		router = app.getRouter();
+	}
+
+	@After
+	public void closeContext() {
+		Ctxs.close();
+	}
 
 	protected String localhost(String url) {
 		return "http://localhost:8080" + url;
@@ -67,7 +87,7 @@ public abstract class HttpTestCommons extends ContextAwareTest {
 	protected void defaultServerSetup() {
 		server();
 
-		server.get("/echo", new Handler() {
+		router.get("/echo", new Handler() {
 
 			@Override
 			public Object handle(HttpExchange h) throws Exception {
@@ -76,14 +96,14 @@ public abstract class HttpTestCommons extends ContextAwareTest {
 			}
 		});
 
-		server.get("/hello", new Handler() {
+		router.get("/hello", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
 				return "Hello";
 			}
 		});
 
-		server.post("/upload", new Handler() {
+		router.post("/upload", new Handler() {
 			@SuppressWarnings("unchecked")
 			@Override
 			public Object handle(HttpExchange x) {
@@ -93,7 +113,7 @@ public abstract class HttpTestCommons extends ContextAwareTest {
 			}
 		});
 
-		server.serve(new Handler() {
+		router.serve(new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
 				return U.join(":", x.verb(), x.path(), x.subpath(), x.query());

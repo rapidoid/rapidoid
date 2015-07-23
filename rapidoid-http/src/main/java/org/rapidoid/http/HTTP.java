@@ -22,6 +22,8 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.appctx.Application;
+import org.rapidoid.appctx.Applications;
 import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")
@@ -33,11 +35,15 @@ public class HTTP {
 	}
 
 	public static HTTPServer serve(String response) {
-		return HTTP.server().build().serve(response).start();
+		Application app = Applications.openRootContext();
+		app.getRouter().serve(response);
+		return HTTP.server().build().start();
 	}
 
 	public static HTTPServer serve(Handler handler) {
-		return HTTP.server().build().serve(handler).start();
+		Application app = Applications.openRootContext();
+		app.getRouter().serve(handler);
+		return HTTP.server().build().start();
 	}
 
 }

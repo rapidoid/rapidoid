@@ -1,14 +1,18 @@
-package org.rapidoid.apps;
+package org.rapidoid.appctx;
 
+import java.util.Collections;
 import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Classes;
+import org.rapidoid.http.HttpRouter;
+import org.rapidoid.http.Router;
+import org.rapidoid.util.U;
 
 /*
  * #%L
- * rapidoid-appctx
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -28,7 +32,7 @@ import org.rapidoid.ctx.Classes;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class Application {
+public class WebApp implements Application {
 
 	private final String id;
 
@@ -42,43 +46,59 @@ public class Application {
 
 	private final AppMode mode;
 
+	private final Router router;
+
 	private final Classes classes;
 
-	public Application(String id, String title, Set<String> owners, Set<String> hostnames, Set<String> uriContexts,
-			AppMode mode, Classes classes) {
+	@SuppressWarnings("unchecked")
+	public WebApp(String id, String title, Set<String> owners, Set<String> hostnames, Set<String> uriContexts,
+			AppMode mode, Router router, Classes classes) {
 		this.id = id;
-		this.title = title;
-		this.owners = owners;
-		this.hostnames = hostnames;
-		this.uriContexts = uriContexts;
-		this.mode = mode;
-		this.classes = classes;
+		this.router = U.or(router, new HttpRouter());
+		this.title = U.or(title, "App");
+		this.owners = U.or(owners, Collections.EMPTY_SET);
+		this.hostnames = U.or(hostnames, Collections.EMPTY_SET);
+		this.uriContexts = U.or(uriContexts, Collections.EMPTY_SET);
+		this.mode = U.or(mode, AppMode.DEVELOPMENT);
+		this.classes = U.or(classes, new Classes());
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}
 
+	@Override
 	public String getTitle() {
 		return title;
 	}
 
+	@Override
 	public Set<String> getOwners() {
 		return owners;
 	}
 
+	@Override
 	public Set<String> getHostnames() {
 		return hostnames;
 	}
 
+	@Override
 	public Set<String> getUriContexts() {
 		return uriContexts;
 	}
 
+	@Override
 	public AppMode getMode() {
 		return mode;
 	}
 
+	@Override
+	public Router getRouter() {
+		return router;
+	}
+
+	@Override
 	public Classes getClasses() {
 		return classes;
 	}
@@ -87,6 +107,11 @@ public class Application {
 	public String toString() {
 		return "Application [id=" + id + ", title=" + title + ", owners=" + owners + ", hostnames=" + hostnames
 				+ ", uriPaths=" + uriContexts + ", mode=" + mode + ", classes #" + classes.size() + "]";
+	}
+
+	@Override
+	public boolean dev() {
+		return mode == AppMode.DEVELOPMENT;
 	}
 
 }

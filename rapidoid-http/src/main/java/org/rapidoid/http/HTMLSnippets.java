@@ -26,6 +26,7 @@ import java.io.PrintStream;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.CachedResource;
+import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
@@ -42,15 +43,18 @@ public class HTMLSnippets {
 	}
 
 	public static HttpExchange writePage(HttpExchange x, String title, String content) {
-		String html = UTILS.fillIn(PAGE_HTML.getContent(), "title", title);
+		String templ = PAGE_HTML.getContent();
+		U.must(templ != null, "Cannot find page resource!");
+		String html = UTILS.fillIn(templ, "title", title);
 		html = UTILS.fillIn(html, "content", content);
 		x.write(html);
 		return x;
 	}
 
 	public static HttpExchange writeFullPage(HttpExchange x, String title, String content) {
-		String html = FULL_PAGE_HTML.getContent().replaceAll("\\{\\{title\\}\\}", title)
-				.replaceAll("\\{\\{content\\}\\}", content);
+		String templ = FULL_PAGE_HTML.getContent();
+		U.must(templ != null, "Cannot find full page resource!");
+		String html = templ.replaceAll("\\{\\{title\\}\\}", title).replaceAll("\\{\\{content\\}\\}", content);
 		x.write(html);
 		return x;
 	}

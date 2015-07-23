@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.appctx;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -24,27 +24,9 @@ import org.rapidoid.annotation.Since;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public interface Router {
+@Since("4.1.0")
+public enum AppMode {
 
-	Router route(String cmd, String url, Handler handler);
-
-	Router route(String cmd, String url, String response);
-
-	Router serve(String response);
-
-	Router serve(Handler handler);
-
-	Router get(String url, Handler handler);
-
-	Router post(String url, Handler handler);
-
-	Router put(String url, Handler handler);
-
-	Router delete(String url, Handler handler);
-
-	void generic(Handler handler);
-
-	void dispatch(HttpExchangeImpl x);
+	DEVELOPMENT, TEST, PRODUCTION;
 
 }

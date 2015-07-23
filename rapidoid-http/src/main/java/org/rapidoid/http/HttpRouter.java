@@ -54,31 +54,6 @@ public class HttpRouter implements Router {
 		this.genericHandler = handler;
 	}
 
-	@Override
-	public void route(String action, String url, Handler handler) {
-		// verbs are case-sensitive, forcing uppercase convention
-		if (!action.matches("[A-Z_][A-Z0-9_]*")) {
-			throw new IllegalArgumentException(
-					"Only uppercase letters, digits and underscore are allowed! Invalid action: " + action);
-		}
-
-		if (!url.matches("[a-zA-Z0-9_/\\.\\-\\~]*")) {
-			throw new IllegalArgumentException("Invalid url: " + url);
-		}
-
-		if (url.endsWith("/")) {
-			url = url.substring(0, url.length() - 1);
-		}
-
-		if (!url.startsWith("/")) {
-			url = "/" + url;
-		}
-
-		Log.info("Registering handler", "action", action, "url", url);
-
-		addRoute(action, url, handler);
-	}
-
 	private void addRoute(String action, String path, Handler handler) {
 		assert action.length() >= 1;
 		assert path.length() >= 1;
@@ -158,6 +133,82 @@ public class HttpRouter implements Router {
 		}
 
 		HttpProtocol.processResponse(x, res);
+	}
+
+	@Override
+	public HttpRouter route(String action, String url, Handler handler) {
+		// verbs are case-sensitive, forcing uppercase convention
+		if (!action.matches("[A-Z_][A-Z0-9_]*")) {
+			throw new IllegalArgumentException(
+					"Only uppercase letters, digits and underscore are allowed! Invalid action: " + action);
+		}
+
+		if (!url.matches("[a-zA-Z0-9_/\\.\\-\\~]*")) {
+			throw new IllegalArgumentException("Invalid url: " + url);
+		}
+
+		if (url.endsWith("/")) {
+			url = url.substring(0, url.length() - 1);
+		}
+
+		if (!url.startsWith("/")) {
+			url = "/" + url;
+		}
+
+		Log.info("Registering handler", "action", action, "url", url);
+
+		addRoute(action, url, handler);
+
+		return this;
+	}
+
+	@Override
+	public HttpRouter route(String cmd, String url, String response) {
+		route(cmd, url, contentHandler(response));
+		return this;
+	}
+
+	@Override
+	public HttpRouter serve(Handler handler) {
+		generic(handler);
+		return this;
+	}
+
+	@Override
+	public HttpRouter serve(String response) {
+		return serve(contentHandler(response));
+	}
+
+	@Override
+	public HttpRouter get(String url, Handler handler) {
+		return route("GET", url, handler);
+	}
+
+	@Override
+	public HttpRouter post(String url, Handler handler) {
+		return route("POST", url, handler);
+	}
+
+	@Override
+	public HttpRouter put(String url, Handler handler) {
+		return route("PUT", url, handler);
+	}
+
+	@Override
+	public HttpRouter delete(String url, Handler handler) {
+		return route("DELETE", url, handler);
+	}
+
+	private static Handler contentHandler(String response) {
+		final byte[] bytes = response.getBytes();
+
+		return new Handler() {
+			@Override
+			public Object handle(HttpExchange x) {
+				x.html();
+				return bytes;
+			}
+		};
 	}
 
 }

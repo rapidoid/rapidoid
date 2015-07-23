@@ -32,9 +32,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.TransactionInterceptor;
-import org.rapidoid.apps.AppClasspathEntitiesPlugin;
-import org.rapidoid.apps.Application;
-import org.rapidoid.apps.Applications;
+import org.rapidoid.appctx.AppClasspathEntitiesPlugin;
+import org.rapidoid.appctx.Application;
+import org.rapidoid.appctx.Applications;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
@@ -51,11 +51,11 @@ public class Quick {
 		serve(app, args);
 	}
 
-	public static void serve(Application app, Object[] args) {
-		Apps.serve(args);
+	public static void serve(Application app, Object... args) {
+		Apps.serve(app, args);
 	}
 
-	public static void bootstrap(Application app, final Object[] args) {
+	public static void bootstrap(Application app, final Object... args) {
 		Applications.main().setDefaultApp(app);
 
 		Ctxs.open();
@@ -65,7 +65,7 @@ public class Quick {
 
 		List<Object> appArgs = U.<Object> list(db);
 		appArgs.addAll(U.list(args));
-		Apps.bootstrap(U.array(appArgs));
+		Apps.bootstrap(app, U.array(appArgs));
 
 		Applications.main().register(app);
 

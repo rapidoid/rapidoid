@@ -35,67 +35,8 @@ public class HTTPServerImpl extends RapidoidServerLoop implements HTTPServer {
 	private final SessionStore session = new InMemorySessionStore();
 
 	public HTTPServerImpl() {
-		super(new HttpProtocol(new HttpRouter()), HttpExchangeImpl.class, null);
+		super(new HttpProtocol(), HttpExchangeImpl.class, null);
 		((HttpProtocol) protocol).setSessionStore(session);
-	}
-
-	@Override
-	public HTTPServer route(String cmd, String url, Handler handler) {
-		router().route(cmd, url, handler);
-		return this;
-	}
-
-	@Override
-	public HTTPServer route(String cmd, String url, String response) {
-		router().route(cmd, url, contentHandler(response));
-		return this;
-	}
-
-	@Override
-	public HTTPServer serve(Handler handler) {
-		router().generic(handler);
-		return this;
-	}
-
-	@Override
-	public HTTPServer serve(String response) {
-		return serve(contentHandler(response));
-	}
-
-	private Router router() {
-		return ((HttpProtocol) protocol).getRouter();
-	}
-
-	@Override
-	public HTTPServer get(String url, Handler handler) {
-		return route("GET", url, handler);
-	}
-
-	@Override
-	public HTTPServer post(String url, Handler handler) {
-		return route("POST", url, handler);
-	}
-
-	@Override
-	public HTTPServer put(String url, Handler handler) {
-		return route("PUT", url, handler);
-	}
-
-	@Override
-	public HTTPServer delete(String url, Handler handler) {
-		return route("DELETE", url, handler);
-	}
-
-	private static Handler contentHandler(String response) {
-		final byte[] bytes = response.getBytes();
-
-		return new Handler() {
-			@Override
-			public Object handle(HttpExchange x) {
-				x.html();
-				return bytes;
-			}
-		};
 	}
 
 	@Override
