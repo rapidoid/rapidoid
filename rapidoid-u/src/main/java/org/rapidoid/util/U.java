@@ -744,7 +744,7 @@ public class U {
 	}
 
 	public static String triml(String s, String prefix) {
-		return s.endsWith(prefix) ? s.substring(prefix.length()) : s;
+		return s.startsWith(prefix) ? s.substring(prefix.length()) : s;
 	}
 
 	public static String bytesAsText(byte[] bytes) {

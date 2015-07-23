@@ -209,6 +209,8 @@ public class UTest extends TestCommons {
 	@Test
 	public void testTriml() {
 		eq(U.triml("/abc/", "/"), "abc/");
+		eq(U.triml("/abc/", "/a"), "bc/");
+		eq(U.triml("/abc/", "/abc/"), "");
 		eq(U.triml(".abc.", '.'), "abc.");
 		eq(U.triml("/abc/", '.'), "/abc/");
 	}
@@ -216,6 +218,8 @@ public class UTest extends TestCommons {
 	@Test
 	public void testTrimr() {
 		eq(U.trimr("/abc/", "/"), "/abc");
+		eq(U.trimr("/abc/", "c/"), "/ab");
+		eq(U.trimr("/abc/", "/abc/"), "");
 		eq(U.trimr(".abc.", '.'), ".abc");
 		eq(U.trimr("/abc/", '.'), "/abc/");
 	}
