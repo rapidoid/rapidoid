@@ -75,9 +75,7 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test(expected = SecurityException.class)
 	public void testSecurityFailure3() {
-
 		Foo foo = new Foo();
-		Ctxs.open();
 		Ctxs.ctx().setUser(new UserInfo("abcde"));
 		XDB.persist(foo);
 		XDB.shutdown();
@@ -104,7 +102,6 @@ public class DbClassSecurityTest extends DbTestCommons {
 
 	@Test
 	public void testSecurity2() {
-		Ctxs.open();
 		Ctxs.ctx().setUser(new UserInfo("manager@debug"));
 
 		Foo foo = new Foo();
