@@ -29,7 +29,7 @@ import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.ContextAwareTest;
 import org.rapidoid.util.D;
 import org.rapidoid.util.U;
 import org.rapidoid.wrap.BoolWrap;
@@ -43,7 +43,7 @@ import org.rapidoidx.net.impl.FiniteStateProtocol;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class HttpPipeliningTest extends TestCommons {
+public class HttpPipeliningTest extends ContextAwareTest {
 
 	protected static final byte[] REQ = "GET /hello H\r\nasf:asf\r\n\r\n".getBytes();
 

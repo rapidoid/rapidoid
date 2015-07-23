@@ -22,6 +22,7 @@ package org.rapidoid.app.builtin;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.apps.AppCtx;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.db.DB;
@@ -46,8 +47,8 @@ public class ViewEntityScreenGeneric extends AbstractEntityScreenGeneric {
 		Tag caption = h2(U.capitalized(ctx().pathSegment(0)) + " Details").style("margin-bottom:15px;");
 		FormWidget details = show(entity);
 
-		ButtonWidget btnEdit = Secure.canUpdate(Secure.username(), entity) ? EDIT : null;
-		ButtonWidget btnDelete = Secure.canDelete(Secure.username(), entity) ? DELETE : null;
+		ButtonWidget btnEdit = Secure.canUpdate(AppCtx.username(), entity) ? EDIT : null;
+		ButtonWidget btnDelete = Secure.canDelete(AppCtx.username(), entity) ? DELETE : null;
 
 		details = details.buttons(btnEdit, BACK, btnDelete);
 

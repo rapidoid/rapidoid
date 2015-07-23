@@ -51,6 +51,8 @@ import java.util.regex.Pattern;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Rel;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.apps.AppCtx;
+import org.rapidoid.apps.Scan;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertyFilter;
@@ -61,7 +63,6 @@ import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
-import org.rapidoid.scan.Scan;
 import org.rapidoid.security.Secure;
 import org.rapidoid.tuple.Tuple;
 import org.rapidoid.util.OptimisticConcurrencyControlException;
@@ -177,7 +178,7 @@ public class InMem implements Serializable {
 		if (sudo) {
 			return SUPERADMIN;
 		}
-		return asUsername != null ? asUsername : Secure.username();
+		return asUsername != null ? asUsername : AppCtx.username();
 	}
 
 	public void initAndLoad() {

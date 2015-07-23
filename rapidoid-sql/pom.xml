@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-test-commons</artifactId>
+			<artifactId>rapidoid-test-appctx-helper</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

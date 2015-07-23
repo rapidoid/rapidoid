@@ -53,6 +53,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
@@ -537,13 +539,19 @@ public class UTILS implements Constants {
 
 		long time = U.time();
 
+		final Ctx ctx = Ctxs.get();
+
 		for (int i = 1; i <= threadsN; i++) {
 			new Thread() {
 				public void run() {
+					Ctxs.attach(ctx);
+
 					benchmark(name, countPerThread, runnable);
 					if (outsideLatch == null) {
 						latch.countDown();
 					}
+
+					Ctxs.close();
 				};
 			}.start();
 		}

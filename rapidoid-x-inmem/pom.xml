@@ -14,12 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-beany</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-security</artifactId>
+			<artifactId>rapidoid-appctx</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

@@ -13,10 +13,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -24,13 +22,10 @@ import java.util.zip.ZipInputStream;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.ctx.Classes;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.io.IO;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
-import org.rapidoid.tuple.Tuple;
 import org.rapidoid.util.U;
 
 /*
@@ -55,7 +50,7 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Scan {
+public class ClasspathUtil {
 
 	private static final String[] SKIP_PKG = { "com", "org", "net", "io" };
 	private static final Set<String> SKIP_PACKAGES = new HashSet<String>();
@@ -63,9 +58,7 @@ public class Scan {
 
 	private static final Set<String> CLASSPATH = new TreeSet<String>();
 
-	private static final Map<Tuple, List<Class<?>>> CLASSES_CACHE = U.map();
-
-	private Scan() {}
+	private ClasspathUtil() {}
 
 	static {
 		SKIP_PACKAGES.addAll(IO.loadLines("scan-ignore.txt"));
@@ -87,73 +80,6 @@ public class Scan {
 
 	public static synchronized void reset() {
 		CLASSPATH.clear();
-		CLASSES_CACHE.clear();
-	}
-
-	public static synchronized void args(String... args) {
-		for (String arg : args) {
-			if (arg.matches("\\+\\w+")) {
-				addon(arg.substring(1));
-			}
-		}
-	}
-
-	private static Object addon(String addonName) {
-		U.must(addonName.matches("\\w+"), "Invalid add-on name, must be alphanumeric!");
-
-		String addonClassName = "org.rapidoid.addon." + U.capitalized(addonName) + "Addon";
-		Class<?> addonCls = Cls.getClassIfExists(addonClassName);
-
-		if (addonCls != null) {
-			if (Callable.class.isAssignableFrom(addonCls)) {
-				Callable<?> addon = (Callable<?>) Cls.newInstance(addonCls);
-				try {
-					Object addonResult = addon.call();
-					Log.info("Executed add-on", "add-on", addonName, "add-on class", addonClassName, "result",
-							addonResult);
-					return addonResult;
-				} catch (Exception e) {
-					throw U.rte(e);
-				}
-			} else {
-				Log.warn("Found add-on, but it's not a Runnable!", "add-on", addonName, "add-on class", addonClassName);
-			}
-		} else {
-			Log.debug("No add-on was found", "add-on", addonName, "add-on class", addonClassName);
-		}
-
-		return null;
-	}
-
-	public static synchronized List<Class<?>> classes() {
-		return classes(null, null, null, null, null);
-	}
-
-	public static synchronized List<Class<?>> classes(String packageName, String nameRegex, Predicate<Class<?>> filter,
-			Class<? extends Annotation> annotated, ClassLoader classLoader) {
-		return scanClasses(packageName, nameRegex, filter, annotated, classLoader);
-	}
-
-	public static synchronized List<Class<?>> annotated(Class<? extends Annotation> annotated) {
-		return scanClasses(null, null, null, annotated, null);
-	}
-
-	public static synchronized List<Class<?>> annotated(Class<? extends Annotation> annotated, ClassLoader classLoader) {
-		return scanClasses(null, null, null, annotated, classLoader);
-	}
-
-	public static synchronized List<Class<?>> pkg(String packageName) {
-		return scanClasses(packageName, null, null, null, null);
-	}
-
-	public static synchronized List<Class<?>> byName(String simpleName, Predicate<Class<?>> filter,
-			ClassLoader classLoader) {
-		return scanClasses(null, "(.*\\.|^)" + simpleName, filter, null, classLoader);
-	}
-
-	public static synchronized List<Class<?>> bySuffix(String nameSuffix, Predicate<Class<?>> filter,
-			ClassLoader classLoader) {
-		return scanClasses(null, ".*\\w" + nameSuffix, filter, null, classLoader);
 	}
 
 	public static synchronized List<File> files(String packageName, Predicate<File> filter) {
@@ -203,45 +129,26 @@ public class Scan {
 		}
 	}
 
-	private static List<Class<?>> scanClasses(String packageName, String nameRegex, Predicate<Class<?>> filter,
+	public static List<Class<?>> scanClasses(String packageName, String nameRegex, Predicate<Class<?>> filter,
 			Class<? extends Annotation> annotated, ClassLoader classLoader) {
 
 		packageName = U.or(packageName, "");
 
-		boolean caching = classLoader == null;
-		Tuple cacheKey = null;
-
-		if (caching) {
-			cacheKey = new Tuple(packageName, nameRegex, filter, annotated, classLoader);
-			List<Class<?>> classes = CLASSES_CACHE.get(cacheKey);
-			if (classes != null) {
-				return classes;
-			}
-		}
-
 		long startingAt = U.time();
 
-		List<Class<?>> classes;
-		Classes ctxClasses = Ctxs.hasContext() ? Ctxs.ctx().classes() : null;
 		Pattern regex = nameRegex != null ? Pattern.compile(nameRegex) : null;
 
-		if (ctxClasses != null) {
-			Log.info("Filtering " + ctxClasses.size() + " classes", "annotated", annotated, "package", packageName,
-					"name", nameRegex);
-			classes = filterClasses(ctxClasses, packageName, regex, filter, annotated);
-		} else {
-			Log.info("Retrieving classes", "annotated", annotated, "package", packageName, "name", nameRegex);
-			classes = retrieveClasses(packageName, filter, annotated, regex, classLoader);
-		}
-
-		if (caching) {
-			CLASSES_CACHE.put(cacheKey, classes);
-		}
+		Log.info("Retrieving classes", "annotated", annotated, "package", packageName, "name", nameRegex);
+		List<Class<?>> classes = retrieveClasses(packageName, filter, annotated, regex, classLoader);
 
 		long timeMs = U.time() - startingAt;
-		Log.info("Finished classpath scan", "time", timeMs + "ms");
+		Log.info("Finished classpath scan", "time", timeMs + "ms", "classes", classes);
 
 		return classes;
+	}
+
+	public static List<Class<?>> getAllClasses() {
+		return scanClasses(null, null, null, null, null);
 	}
 
 	private static List<Class<?>> retrieveClasses(String packageName, Predicate<Class<?>> filter,
@@ -305,25 +212,6 @@ public class Scan {
 		return simpleName.startsWith("app.") || simpleName.startsWith("app-");
 	}
 
-	private static List<Class<?>> filterClasses(Classes classes, String packageName, Pattern regex,
-			Predicate<Class<?>> filter, Class<? extends Annotation> annotated) {
-
-		List<Class<?>> matching = U.list();
-
-		for (Entry<String, Class<?>> e : classes.entrySet()) {
-			Class<?> cls = e.getValue();
-			String pkg = cls.getPackage() != null ? cls.getPackage().getName() : "";
-
-			if (packageName == null || pkg.startsWith(packageName + ".") || pkg.equals(packageName)) {
-				if (classMatches(cls, filter, annotated, regex)) {
-					matching.add(cls);
-				}
-			}
-		}
-
-		return matching;
-	}
-
 	private static void getClassesFromDir(Collection<Class<?>> classes, File root, File parent, Pattern regex,
 			Predicate<Class<?>> filter, Class<? extends Annotation> annotated, ClassLoader classLoader) {
 
@@ -360,7 +248,7 @@ public class Scan {
 					Class<?> cls = classLoader != null ? Class.forName(clsName, true, classLoader) : Class
 							.forName(clsName);
 
-					// regex match is tested before the class is loaded
+					// regex match was tested before the class was loaded
 					if (classMatches(cls, filter, annotated, null)) {
 						classes.add(cls);
 					}
@@ -373,14 +261,6 @@ public class Scan {
 
 	private static String pkgToPath(String pkg) {
 		return pkg.replace('.', File.separatorChar);
-	}
-
-	private static boolean classMatches(Class<?> cls, Predicate<Class<?>> filter,
-			Class<? extends Annotation> annotated, Pattern regex) {
-
-		return (annotated == null || cls.getAnnotation(annotated) != null)
-				&& (regex == null || regex.matcher(cls.getCanonicalName()).matches())
-				&& (filter == null || Lambdas.eval(filter, cls));
 	}
 
 	private static Enumeration<URL> resources(String name) {
@@ -480,6 +360,14 @@ public class Scan {
 		}
 
 		return CLASSPATH;
+	}
+
+	public static boolean classMatches(Class<?> cls, Predicate<Class<?>> filter, Class<? extends Annotation> annotated,
+			Pattern regex) {
+
+		return (annotated == null || cls.getAnnotation(annotated) != null)
+				&& (regex == null || (cls.getCanonicalName() != null && regex.matcher(cls.getCanonicalName()).matches()))
+				&& (filter == null || Lambdas.eval(filter, cls));
 	}
 
 }

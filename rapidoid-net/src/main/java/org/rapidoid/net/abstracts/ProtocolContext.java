@@ -105,6 +105,4 @@ public interface ProtocolContext<T> {
 
 	ConnState state();
 
-	<P> P persistor();
-
 }

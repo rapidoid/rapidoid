@@ -26,8 +26,8 @@ import java.util.List;
 import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.apps.Scan;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.scan.Scan;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")

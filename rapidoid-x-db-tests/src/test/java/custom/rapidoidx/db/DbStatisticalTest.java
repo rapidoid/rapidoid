@@ -22,12 +22,13 @@ package custom.rapidoidx.db;
  */
 
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
@@ -50,80 +51,99 @@ public class DbStatisticalTest extends DbTestCommons {
 	}
 
 	class Ret {
-		long id = -1;
-		boolean illegalId = false;
-		boolean ok = false;
+		volatile long id = -1;
+		volatile boolean illegalId = false;
+		volatile boolean ok = false;
 	}
 
 	private final Map<Long, Object> persons = U.synchronizedMap();
 
 	@Test
-	public void testDbOperations() {
+	public void testDbOperations() throws Exception {
 
 		Log.setLogLevel(LogLevel.ERROR);
 
-		multiThreaded(Conf.cpus(), 50000, new Runnable() {
+		XDB.clear();
+
+		int count = 5000;
+		final CountDownLatch latch = new CountDownLatch(count);
+
+		Runnable job = new Runnable() {
 
 			@Override
 			public synchronized void run() {
+				try {
+					int n = rnd(10) + 1;
+					final Op[] ops = new Op[n];
+					final Ret[] rets = new Ret[n];
 
-				int n = rnd(10) + 1;
-				final Op[] ops = new Op[n];
-				final Ret[] rets = new Ret[n];
+					for (int i = 0; i < ops.length; i++) {
+						ops[i] = new Op();
+						rets[i] = new Ret();
+					}
 
-				for (int i = 0; i < ops.length; i++) {
-					ops[i] = new Op();
-					rets[i] = new Ret();
-				}
+					if (yesNo()) {
 
-				if (yesNo()) {
+						final AtomicBoolean complete = new AtomicBoolean(false);
 
-					final AtomicBoolean complete = new AtomicBoolean(false);
+						XDB.transaction(new Runnable() {
+							@Override
+							public void run() {
+								for (int i = 0; i < ops.length; i++) {
 
-					XDB.transaction(new Runnable() {
-						@Override
-						public void run() {
-							for (int i = 0; i < ops.length; i++) {
+									try {
+										doDbOp(ops[i], rets[i]);
+									} catch (IllegalArgumentException e) {
+										rets[i].illegalId = true;
+										throw U.rte(e);
+									}
 
-								try {
-									doDbOp(ops[i], rets[i]);
-								} catch (IllegalArgumentException e) {
-									rets[i].illegalId = true;
-									throw U.rte(e);
+									if (ops[i].fail) {
+										throw U.rte("err");
+									}
 								}
 
-								if (ops[i].fail) {
-									throw U.rte("err");
-								}
+								complete.set(true);
 							}
+						}, false, null);
 
-							complete.set(true);
+						for (int i = 0; i < ops.length; i++) {
+							if (ops[i].fail || !rets[i].ok || rets[i].illegalId) {
+								return;
+							}
 						}
-					}, false, null);
 
-					for (int i = 0; i < ops.length; i++) {
-						if (ops[i].fail || !rets[i].ok || rets[i].illegalId) {
-							return;
+						U.must(complete.get());
+
+						for (int i = 0; i < ops.length; i++) {
+							doShadowOp(ops[i], rets[i]);
 						}
+
+					} else {
+
+						try {
+							doDbOp(ops[0], rets[0]);
+						} catch (IllegalArgumentException e) {
+							if (!e.getMessage().contains("Cannot find DB record with id=")) {
+								e.printStackTrace();
+							}
+							rets[0].illegalId = true;
+						}
+
+						doShadowOp(ops[0], rets[0]);
+
 					}
-
-					U.must(complete.get());
-
-					for (int i = 0; i < ops.length; i++) {
-						doShadowOp(ops[i], rets[i]);
-					}
-
-				} else {
-					try {
-						doDbOp(ops[0], rets[0]);
-					} catch (IllegalArgumentException e) {
-						rets[0].illegalId = true;
-					}
-
-					doShadowOp(ops[0], rets[0]);
+				} finally {
+					latch.countDown();
 				}
 			}
-		});
+		};
+
+		for (int j = 0; j < count; j++) {
+			Jobs.execute(job);
+		}
+
+		latch.await();
 
 		XDB.shutdown();
 

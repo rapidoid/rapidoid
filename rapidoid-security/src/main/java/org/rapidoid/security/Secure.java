@@ -30,8 +30,6 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanDelete;
 import org.rapidoid.security.annotation.CanInsert;
@@ -227,19 +225,6 @@ public class Secure implements Constants {
 
 	public static List<String> getUserRoles(String username) {
 		return security.getUserRoles(username);
-	}
-
-	public static UserInfo user() {
-		return Ctxs.hasContext() ? Ctxs.ctx().user() : null;
-	}
-
-	public static boolean isLoggedIn() {
-		return user() != null;
-	}
-
-	public static String username() {
-		UserInfo user = user();
-		return user != null ? user.username : null;
 	}
 
 	public static boolean canRead(String username, Object record) {

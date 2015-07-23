@@ -27,12 +27,12 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.lambda.ResultCounterCallback;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.ContextAwareTest;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class HttpClientTest extends TestCommons {
+public class HttpClientTest extends ContextAwareTest {
 
 	private static final String GET_LOCALHOST = "GET / HTTP/1.1\nHost: localhost\n\n";
 

@@ -34,6 +34,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-ctx</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-config</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -45,11 +50,6 @@
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-log</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-ctx</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

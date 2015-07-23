@@ -36,6 +36,8 @@ import org.rapidoid.app.AppGUI;
 import org.rapidoid.app.AppScreens;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.Scaffolding;
+import org.rapidoid.apps.AppCtx;
+import org.rapidoid.apps.Scan;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
@@ -52,7 +54,6 @@ import org.rapidoid.pages.Pages;
 import org.rapidoid.pages.impl.ComplexView;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.plugins.languages.Languages;
-import org.rapidoid.scan.Scan;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.English;
 import org.rapidoid.util.U;
@@ -336,7 +337,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		Tag dropdownMenu = null;
 		if (addon("auth") || addon("googleLogin") || addon("facebookLogin") || addon("linkedinLogin")
 				|| addon("githubLogin")) {
-			if (Secure.isLoggedIn()) {
+			if (AppCtx.isLoggedIn()) {
 				dropdownMenu = loggedInUserMenu();
 			} else {
 				dropdownMenu = loggedOutUserMenu();
@@ -396,7 +397,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 	}
 
 	protected String userDisplay() {
-		String username = Secure.username();
+		String username = AppCtx.username();
 		int pos = username.indexOf('@');
 		return pos > 0 ? username.substring(0, pos) : username;
 	}
@@ -469,7 +470,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 	}
 
 	protected boolean isScreenAllowed(Class<?> screenCls) {
-		return Secure.canAccessClass(Secure.username(), screenCls);
+		return Secure.canAccessClass(AppCtx.username(), screenCls);
 	}
 
 	public void on(String cmd, Object[] args) {

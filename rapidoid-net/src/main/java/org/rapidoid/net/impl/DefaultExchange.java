@@ -29,7 +29,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufProvider;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.KeyValueRanges;
@@ -213,11 +212,6 @@ public abstract class DefaultExchange<T> implements ProtocolContext<T>, BufProvi
 	@SuppressWarnings("unchecked")
 	protected T me() {
 		return (T) this;
-	}
-
-	@Override
-	public synchronized <P> P persistor() {
-		return Ctxs.ctx().persister();
 	}
 
 	@Override

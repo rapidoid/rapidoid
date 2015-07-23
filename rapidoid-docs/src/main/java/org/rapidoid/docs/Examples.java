@@ -31,6 +31,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.AppHandler;
 import org.rapidoid.app.Apps;
+import org.rapidoid.apps.AppMode;
+import org.rapidoid.apps.Application;
+import org.rapidoid.apps.Scan;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Classes;
@@ -42,7 +45,7 @@ import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.io.IO;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.quick.Quick;
-import org.rapidoid.scan.Scan;
+import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.widget.BootstrapWidgets;
@@ -95,7 +98,7 @@ public class Examples {
 		}
 
 		Ctxs.close();
-		Scan.reset();
+		ClasspathUtil.reset();
 		Apps.reset();
 
 		List<Class<?>> classes = Scan.pkg(pkg);
@@ -181,7 +184,8 @@ public class Examples {
 	public static void generate(HTTPServer server, String path, String id, List<Class<?>> classes) {
 
 		Classes appClasses = Classes.from(classes);
-		Ctxs.ctx().setClasses(appClasses);
+		Application app = new Application(id, "app", null, null, U.set("/"), AppMode.DEVELOPMENT, appClasses);
+		Ctxs.ctx().setApp(app);
 
 		Class<?> appCls = appClasses.get("Main");
 		if (appCls != null) {
@@ -231,7 +235,7 @@ public class Examples {
 			}
 		}
 
-		Ctxs.ctx().setClasses(null);
+		Ctxs.ctx().setApp(null);
 	}
 
 	private static void saveTo(HTTPServer server, String url, String filename) {

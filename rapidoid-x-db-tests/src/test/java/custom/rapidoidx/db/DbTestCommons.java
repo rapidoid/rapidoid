@@ -25,16 +25,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.ContextAwareTest;
 import org.rapidoidx.db.DBs;
 import org.rapidoidx.db.XDB;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public abstract class DbTestCommons extends TestCommons {
+public abstract class DbTestCommons extends ContextAwareTest {
 
 	@Before
 	@After
@@ -44,7 +43,6 @@ public abstract class DbTestCommons extends TestCommons {
 		XDB.destroy();
 		XDB.start();
 		Log.setLogLevel(LogLevel.INFO);
-		Ctxs.close();
 	}
 
 }

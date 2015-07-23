@@ -89,12 +89,12 @@
 		<module>rapidoid-var</module>
 		<module>rapidoid-anyobj</module>
 		<module>rapidoid-cls</module>
-		<module>rapidoid-ctx</module>
 		<module>rapidoid-scan</module>
 		<module>rapidoid-pool</module>
 		<module>rapidoid-io</module>
 		<module>rapidoid-utils</module>
 		<module>rapidoid-beany</module>
+		<module>rapidoid-ctx</module>
 		<module>rapidoid-model</module>
 		<module>rapidoid-sql</module>
 		<module>rapidoid-rql</module>
@@ -103,8 +103,10 @@
 		<module>rapidoid-security</module>
 		<module>rapidoid-activity</module>
 		<module>rapidoid-test-commons</module>
+		<module>rapidoid-test-appctx-helper</module>
 		<module>rapidoid-buffer</module>
 		<module>rapidoid-net</module>
+		<module>rapidoid-appctx</module>
 		<module>rapidoid-http-api</module>
 		<module>rapidoid-http</module>
 		<module>rapidoid-measure</module>

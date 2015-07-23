@@ -28,7 +28,9 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.apps.AppCtx;
 import org.rapidoid.config.Conf;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
@@ -883,7 +885,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized HttpExchange authorize(Class<?> clazz) {
-		return accessDeniedIf(!Secure.canAccessClass(Secure.username(), clazz));
+		return accessDeniedIf(!Secure.canAccessClass(AppCtx.username(), clazz));
 	}
 
 	@Override
@@ -1248,6 +1250,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	public HttpExchange render(CachedResource template, Object... namesAndValues) {
 		String text = UTILS.fillIn(template.toString(), namesAndValues);
 		return write(text.getBytes());
+	}
+
+	@Override
+	public <P> P persister() {
+		return Ctxs.ctx().persister();
 	}
 
 }

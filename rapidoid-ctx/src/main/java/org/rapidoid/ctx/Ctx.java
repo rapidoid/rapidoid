@@ -1,5 +1,8 @@
 package org.rapidoid.ctx;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 /*
  * #%L
  * rapidoid-ctx
@@ -20,17 +23,15 @@ package org.rapidoid.ctx;
  * #L%
  */
 
-/**
- * @author Nikolche Mihajlovski
- * @since 2.0.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Ctx {
 
 	private volatile UserInfo user;
 
 	private volatile Object exchange;
 
-	private volatile Classes classes;
+	private volatile Object app;
 
 	private volatile Object persister;
 
@@ -55,12 +56,13 @@ public class Ctx {
 		this.exchange = exchange;
 	}
 
-	public Classes classes() {
-		return classes;
+	@SuppressWarnings("unchecked")
+	public <T> T app() {
+		return (T) app;
 	}
 
-	public void setClasses(Classes classes) {
-		this.classes = classes;
+	public void setApp(Object app) {
+		this.app = app;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -96,7 +98,7 @@ public class Ctx {
 
 	@Override
 	public String toString() {
-		return super.toString() + "[user=" + user + ", exchange=" + exchange + ", classes=" + classes + ", persister="
+		return super.toString() + "[user=" + user + ", exchange=" + exchange + ", app=" + app + ", persister="
 				+ persister + ", referenceCounter=" + referenceCounter + "]";
 	}
 

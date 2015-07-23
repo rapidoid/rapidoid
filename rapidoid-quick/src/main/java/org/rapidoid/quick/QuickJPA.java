@@ -33,10 +33,10 @@ import org.hibernate.jpa.boot.internal.SettingsImpl;
 import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.apps.Scan;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.PersisterProvider;
 import org.rapidoid.io.IO;
-import org.rapidoid.scan.Scan;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")

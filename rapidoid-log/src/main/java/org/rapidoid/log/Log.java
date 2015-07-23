@@ -243,11 +243,11 @@ public class Log {
 	}
 
 	public static void warn(String msg, Throwable error) {
-		warn(msg, "error", error);
+		warn(msg, "error", error.getMessage());
 	}
 
 	public static void error(String msg, Throwable error) {
-		error(msg, "error", error);
+		error(msg, "error", error.getMessage());
 	}
 
 	/*********************************** AUTOMATICALLY GENERATED: ****************************************/

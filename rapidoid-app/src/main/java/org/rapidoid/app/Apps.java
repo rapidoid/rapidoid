@@ -31,6 +31,8 @@ import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.aop.AOP;
+import org.rapidoid.apps.Applications;
+import org.rapidoid.apps.Scan;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
@@ -48,7 +50,6 @@ import org.rapidoid.plugins.languages.LanguagesPlugin;
 import org.rapidoid.plugins.lifecycle.Lifecycle;
 import org.rapidoid.plugins.lifecycle.LifecyclePlugin;
 import org.rapidoid.plugins.users.UsersPlugin;
-import org.rapidoid.scan.Scan;
 import org.rapidoid.util.U;
 import org.rapidoid.util.Usage;
 
@@ -75,6 +76,8 @@ public class Apps {
 
 	public static void bootstrap(Object... args) {
 		Set<String> config = U.set();
+
+		Applications.bootstrap();
 
 		for (Object arg : args) {
 			processArg(config, arg);

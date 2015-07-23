@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.apps.AppCtx;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
@@ -150,7 +151,7 @@ public class FormWidget extends AbstractWidget {
 
 			for (FormFieldWidget field : fields) {
 				if (field.permissions == null) {
-					field.permissions = Secure.getPropertyPermissions(Secure.username(), targetClass, target,
+					field.permissions = Secure.getPropertyPermissions(AppCtx.username(), targetClass, target,
 							field.name);
 				}
 			}

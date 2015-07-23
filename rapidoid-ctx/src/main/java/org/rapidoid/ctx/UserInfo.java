@@ -3,6 +3,9 @@ package org.rapidoid.ctx;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 /*
  * #%L
  * rapidoid-ctx
@@ -23,10 +26,8 @@ import java.util.Map;
  * #L%
  */
 
-/**
- * @author Nikolche Mihajlovski
- * @since 2.0.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class UserInfo implements Serializable {
 
 	private static final String USERNAME = "_USER.USERNAME";

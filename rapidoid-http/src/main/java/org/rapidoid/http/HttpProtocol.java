@@ -22,6 +22,8 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.apps.Application;
+import org.rapidoid.apps.Applications;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.session.SessionStore;
@@ -80,6 +82,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			}
 		}
 
+		// FIXME separate responses from session store and router, per app
 		x.init(responses, sessionStore, router);
 
 		String err = validateRequest(x);
@@ -131,11 +134,18 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	}
 
 	private void processRequest(HttpExchangeImpl x) {
+		Application app = Applications.main().get(x.host(), x.pathSegment(0));
+		U.must(app != null, "The application must be provided!");
+
+		Ctxs.ctx().setApp(app);
 		Ctxs.ctx().setUser(x.user());
+
 		try {
 			executeRequest(x);
+
 		} finally {
 			Ctxs.ctx().setUser(null);
+			Ctxs.ctx().setApp(null);
 		}
 	}
 

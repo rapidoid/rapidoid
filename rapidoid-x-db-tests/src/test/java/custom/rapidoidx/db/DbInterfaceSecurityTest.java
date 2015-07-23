@@ -77,7 +77,6 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	public void testSecurityFailure3() {
 
 		IFoo foo = XDB.entity(IFoo.class);
-		Ctxs.open();
 		Ctxs.ctx().setUser(new UserInfo("abcde"));
 		XDB.persist(foo);
 		XDB.shutdown();
@@ -105,7 +104,6 @@ public class DbInterfaceSecurityTest extends DbTestCommons {
 	@Test
 	public void testSecurity2() {
 		IFoo foo = XDB.entity(IFoo.class);
-		Ctxs.open();
 		Ctxs.ctx().setUser(new UserInfo("manager@debug"));
 		XDB.persist(foo);
 		XDB.shutdown();

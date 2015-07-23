@@ -2,7 +2,6 @@ package org.rapidoid.beany;
 
 import org.junit.Assert;
 import org.junit.Test;
-
 /*
  * #%L
  * rapidoid-beany
@@ -22,7 +21,6 @@ import org.junit.Test;
  * limitations under the License.
  * #L%
  */
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 

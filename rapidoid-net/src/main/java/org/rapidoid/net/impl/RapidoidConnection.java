@@ -35,7 +35,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.json.JSON;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
@@ -356,11 +355,6 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 		if (!isClosing()) {
 			throw Buf.INCOMPLETE_READ;
 		}
-	}
-
-	@Override
-	public <P> P persistor() {
-		return Ctxs.ctx().persister();
 	}
 
 	@Override

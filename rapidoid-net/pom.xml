@@ -24,12 +24,17 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-ctx</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-json</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-test-commons</artifactId>
+			<artifactId>rapidoid-test-appctx-helper</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

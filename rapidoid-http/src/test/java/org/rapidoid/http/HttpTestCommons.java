@@ -46,13 +46,13 @@ import org.rapidoid.crypto.Crypto;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.io.IO;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.ContextAwareTest;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class HttpTestCommons extends TestCommons {
+public abstract class HttpTestCommons extends ContextAwareTest {
 
 	protected HTTPServer server;
 

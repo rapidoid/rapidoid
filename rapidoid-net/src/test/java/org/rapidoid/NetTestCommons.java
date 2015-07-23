@@ -26,12 +26,12 @@ import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.Serve;
 import org.rapidoid.net.TCPServer;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.ContextAwareTest;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class NetTestCommons extends TestCommons {
+public abstract class NetTestCommons extends ContextAwareTest {
 
 	protected void server(Protocol protocol, Runnable client) {
 		TCPServer server = Serve.listen(protocol);

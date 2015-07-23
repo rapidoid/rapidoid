@@ -22,16 +22,16 @@ package org.rapidoid.app;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.apps.AppCtx;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.plugins.users.Users;
-import org.rapidoid.security.Secure;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class UsersTool {
 
 	public static <T> T current(Class<T> userClass) {
-		UserInfo u = Secure.user();
+		UserInfo u = AppCtx.user();
 		if (u == null) {
 			return null;
 		}

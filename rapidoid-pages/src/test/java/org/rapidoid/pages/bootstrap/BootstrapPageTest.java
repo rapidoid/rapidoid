@@ -20,13 +20,13 @@ package org.rapidoid.pages.bootstrap;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.PagesTestCommons;
 import org.rapidoid.widget.BootstrapWidgets;
-import org.junit.Test;
 
 @SuppressWarnings("unused")
 @Authors("Nikolche Mihajlovski")

@@ -247,6 +247,6 @@ public interface HttpExchange {
 
 	/* EXTRAS: */
 
-	<P> P persistor();
+	<P> P persister();
 
 }

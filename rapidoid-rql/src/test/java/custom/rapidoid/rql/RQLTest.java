@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.rql.RQL;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.ContextAwareTest;
 
 @DbEntity
 class Abc {
@@ -42,7 +42,7 @@ enum LowHigh {
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class RQLTest extends TestCommons {
+public class RQLTest extends ContextAwareTest {
 
 	@Test
 	public void testRQLEntityConstruction() {

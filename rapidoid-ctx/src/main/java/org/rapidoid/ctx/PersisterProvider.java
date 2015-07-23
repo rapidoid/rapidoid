@@ -1,5 +1,8 @@
 package org.rapidoid.ctx;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 /*
  * #%L
  * rapidoid-ctx
@@ -20,10 +23,8 @@ package org.rapidoid.ctx;
  * #L%
  */
 
-/**
- * @author Nikolche Mihajlovski
- * @since 3.1.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("4.0.0")
 public interface PersisterProvider {
 
 	<P> P openPersister();
