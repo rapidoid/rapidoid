@@ -1,7 +1,7 @@
 package org.rapidoid.docs.eg902;
 
 import org.rapidoid.annotation.App;
-import org.rapidoid.quick.Quick;
+import org.rapidoid.main.Rapidoid;
 
 /*
  * #%L
@@ -36,6 +36,6 @@ public class Main {
 	boolean googleLogin = true; // here
 
 	public static void main(String[] args) {
-		Quick.run(args);
+		Rapidoid.run(args);
 	}
 }

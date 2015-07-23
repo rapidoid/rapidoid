@@ -71,7 +71,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 		Usage.touchLastAppUsedOn();
 
-		parser.parse(x.input(), x.isGet, x.isKeepAlive, x.body, x.verb, x.uri, x.path, x.query, x.protocol, x.headers,
+		parser.parse(x.input(), x.isGet, x.isKeepAlive, x.rBody, x.rVerb, x.rUri, x.rPath, x.rQuery, x.rProtocol, x.headers,
 				x.helper());
 
 		if (upgradable()) {
@@ -96,15 +96,15 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	}
 
 	private String validateRequest(HttpExchangeImpl x) {
-		if (x.verb.isEmpty()) {
+		if (x.rVerb.isEmpty()) {
 			return "HTTP verb cannot be empty!";
 		}
 
-		if (!BytesUtil.isValidURI(x.input().bytes(), x.uri)) {
+		if (!BytesUtil.isValidURI(x.input().bytes(), x.rUri)) {
 			return "Invalid HTTP URI!";
 		}
 
-		if (x.isGet.value && !x.body.isEmpty()) {
+		if (x.isGet.value && !x.rBody.isEmpty()) {
 			return "Body is NOT allowed in HTTP GET requests!";
 		}
 
@@ -134,8 +134,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	}
 
 	private void processRequest(HttpExchangeImpl x) {
-		Application app = Applications.main().get(x.host(), x.pathSegment(0));
-		U.must(app != null, "The application must be provided!");
+		Application app = getApp(x);
 
 		Ctxs.ctx().setApp(app);
 		Ctxs.ctx().setUser(x.user());
@@ -147,6 +146,19 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			Ctxs.ctx().setUser(null);
 			Ctxs.ctx().setApp(null);
 		}
+	}
+
+	private Application getApp(HttpExchangeImpl x) {
+		String uriContext = x.pathSegment(0);
+
+		Application app = Applications.main().get(x.host(), uriContext);
+		U.must(app != null, "The application must be provided!");
+
+		if (app.getUriContexts().contains(uriContext)) {
+			x.setUriContext(uriContext);
+		}
+
+		return app;
 	}
 
 	private void executeRequest(HttpExchangeImpl x) {

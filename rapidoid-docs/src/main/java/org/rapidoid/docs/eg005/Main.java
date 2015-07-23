@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.jpa.JPAEntity;
-import org.rapidoid.quick.Quick;
+import org.rapidoid.main.Rapidoid;
 import org.rapidoid.rql.RQL;
 
 /*
@@ -38,7 +38,7 @@ public class Main {
 	String theme = "4";
 
 	public static void main(String[] args) {
-		Quick.run(args);
+		Rapidoid.run(args);
 	}
 
 	public void init() {

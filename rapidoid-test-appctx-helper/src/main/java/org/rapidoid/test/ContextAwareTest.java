@@ -22,8 +22,11 @@ package org.rapidoid.test;
 
 import org.junit.After;
 import org.junit.Before;
+import org.rapidoid.apps.AppClasspathEntitiesPlugin;
 import org.rapidoid.apps.Applications;
+import org.rapidoid.apps.RootApplication;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.plugins.Plugins;
 
 /**
  * @author Nikolche Mihajlovski
@@ -33,7 +36,13 @@ public abstract class ContextAwareTest extends TestCommons {
 
 	@Before
 	public void openContext() {
-		Applications.bootstrap();
+		RootApplication app = Applications.root();
+		Applications.main().setDefaultApp(app);
+
+		Ctxs.open();
+		Ctxs.ctx().setApp(app);
+
+		Plugins.register(new AppClasspathEntitiesPlugin());
 	}
 
 	@After

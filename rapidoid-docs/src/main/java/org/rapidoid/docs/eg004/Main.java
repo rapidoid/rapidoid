@@ -2,7 +2,7 @@ package org.rapidoid.docs.eg004;
 
 import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Screen;
-import org.rapidoid.quick.Quick;
+import org.rapidoid.main.Rapidoid;
 
 /*
  * #%L
@@ -33,7 +33,7 @@ public class Main {
 	String theme = "2"; // here
 
 	public static void main(String[] args) {
-		Quick.run(args);
+		Rapidoid.run(args);
 	}
 }
 

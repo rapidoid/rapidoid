@@ -22,6 +22,8 @@ package org.rapidoid.main;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.apps.Application;
+import org.rapidoid.apps.Applications;
 import org.rapidoid.log.Log;
 import org.rapidoid.quick.Quick;
 import org.rapidoid.util.U;
@@ -36,13 +38,35 @@ public class Rapidoid {
 		run((Object[]) args);
 	}
 
+	public static void run(Application app, String[] args) {
+		run(app, (Object[]) args);
+	}
+
 	public static synchronized void run(Object... args) {
+		Application noApp = null;
+		run(noApp, args);
+	}
+
+	public static synchronized void run(Application app, Object... args) {
 		Log.info("Starting Rapidoid...");
 		U.must(!initialized, "Already initialized!");
 		initialized = true;
 
+		if (app == null) {
+			app = Applications.root();
+		}
+
 		MainHelp.processHelp(args);
-		Quick.run(args);
+
+		Quick.run(app, args);
+	}
+
+	public static void register(Application app) {
+		Applications.main().register(app);
+	}
+
+	public static void unregister(Application app) {
+		Applications.main().unregister(app);
 	}
 
 }

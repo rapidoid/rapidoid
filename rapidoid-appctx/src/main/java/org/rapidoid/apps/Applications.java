@@ -4,8 +4,6 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.plugins.Plugins;
 import org.rapidoid.util.U;
 
 /*
@@ -48,7 +46,7 @@ public class Applications {
 
 	public synchronized void register(Application app) {
 		for (String hostname : app.getHostnames()) {
-			for (String uriPath : app.getUriPaths()) {
+			for (String uriPath : app.getUriContexts()) {
 				U.must(!appsByURL.get(hostname).containsKey(uriPath),
 						"An application has already been registered with the URI path: %s", uriPath);
 				appsByURL.get(hostname).put(uriPath, app);
@@ -56,8 +54,12 @@ public class Applications {
 		}
 	}
 
-	public Application get(String hostname, String uriPath) {
-		return U.or(appsByURL.get(hostname).get(uriPath), defaultApp);
+	public synchronized void unregister(Application app) {
+		throw U.notReady();
+	}
+
+	public Application get(String hostname, String uriContext) {
+		return U.or(appsByURL.get(hostname).get(uriContext), defaultApp);
 	}
 
 	@Override
@@ -65,16 +67,8 @@ public class Applications {
 		return "Applications [appsByURL=" + appsByURL + "]";
 	}
 
-	public static RootApplication bootstrap() {
-		RootApplication app = new RootApplication();
-		Applications.main().setDefaultApp(app);
-
-		Ctxs.open();
-		Ctxs.ctx().setApp(app);
-
-		Plugins.register(new AppClasspathEntitiesPlugin());
-
-		return app;
+	public static RootApplication root() {
+		return new RootApplication();
 	}
 
 }

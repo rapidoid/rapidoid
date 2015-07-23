@@ -98,6 +98,8 @@ public interface HttpExchange {
 	 */
 	String data(String name, String defaultValue);
 
+	String uriContext();
+
 	String pathSegment(int segmentIndex);
 
 	String realIpAddress();

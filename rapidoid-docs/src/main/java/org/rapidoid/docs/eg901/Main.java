@@ -1,7 +1,7 @@
 package org.rapidoid.docs.eg901;
 
 import org.rapidoid.annotation.App;
-import org.rapidoid.quick.Quick;
+import org.rapidoid.main.Rapidoid;
 
 /*
  * #%L
@@ -34,6 +34,6 @@ public class Main {
 	boolean full = false; // here
 
 	public static void main(String[] args) {
-		Quick.run(args);
+		Rapidoid.run(args);
 	}
 }

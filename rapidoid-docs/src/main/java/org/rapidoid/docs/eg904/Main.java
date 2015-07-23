@@ -3,7 +3,7 @@ package org.rapidoid.docs.eg904;
 import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Screen;
 import org.rapidoid.app.GUI;
-import org.rapidoid.quick.Quick;
+import org.rapidoid.main.Rapidoid;
 
 /*
  * #%L
@@ -36,7 +36,7 @@ public class Main {
 	Object[] screens = { "ab", CdScreen.class }; // here
 
 	public static void main(String[] args) {
-		Quick.run(args);
+		Rapidoid.run(args);
 	}
 }
 

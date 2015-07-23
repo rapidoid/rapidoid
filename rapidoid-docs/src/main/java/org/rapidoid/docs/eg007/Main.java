@@ -10,8 +10,8 @@ import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.jpa.JPAEntity;
+import org.rapidoid.main.Rapidoid;
 import org.rapidoid.plugins.db.DB;
-import org.rapidoid.quick.Quick;
 import org.rapidoid.rql.RQL;
 import org.rapidoid.widget.FormWidget;
 
@@ -43,7 +43,7 @@ public class Main {
 	String theme = "2";
 
 	public static void main(String[] args) {
-		Quick.run(args);
+		Rapidoid.run(args);
 	}
 
 	public void init() {

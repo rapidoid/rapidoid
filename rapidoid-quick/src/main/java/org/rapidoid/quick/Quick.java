@@ -32,9 +32,13 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.TransactionInterceptor;
+import org.rapidoid.apps.AppClasspathEntitiesPlugin;
+import org.rapidoid.apps.Application;
+import org.rapidoid.apps.Applications;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
+import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.db.hibernate.HibernateDBPlugin;
 import org.rapidoid.util.U;
 
@@ -42,30 +46,30 @@ import org.rapidoid.util.U;
 @Since("3.0.0")
 public class Quick {
 
-	public static void main(String[] args) {
-		run(args);
+	public static void run(Application app, Object[] args) {
+		bootstrap(app, args);
+		serve(app, args);
 	}
 
-	public static void run(String[] args) {
-		run((Object[]) args);
-	}
-
-	public static void run(Object... args) {
-		bootstrap(args);
-		serve(args);
-	}
-
-	public static void serve(Object... args) {
+	public static void serve(Application app, Object[] args) {
 		Apps.serve(args);
 	}
 
-	public static void bootstrap(final Object... args) {
+	public static void bootstrap(Application app, final Object[] args) {
+		Applications.main().setDefaultApp(app);
+
+		Ctxs.open();
 		Ctxs.setPersisterProvider(new QuickJPA(args));
+
 		HibernateDBPlugin db = new HibernateDBPlugin();
 
 		List<Object> appArgs = U.<Object> list(db);
 		appArgs.addAll(U.list(args));
 		Apps.bootstrap(U.array(appArgs));
+
+		Applications.main().register(app);
+
+		Plugins.register(new AppClasspathEntitiesPlugin());
 
 		// TODO provide better support for javax.transaction.Transactional
 		AOP.register(Transactional.class, new TransactionInterceptor());

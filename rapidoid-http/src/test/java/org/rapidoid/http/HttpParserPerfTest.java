@@ -58,8 +58,8 @@ public class HttpParserPerfTest {
 					req.reset();
 					Buf buf = reqs[n % 4];
 					buf.position(0);
-					parser.parse(buf, req.isGet, req.isKeepAlive, req.body, req.verb, req.uri, req.path, req.query,
-							req.protocol, req.headers, helper);
+					parser.parse(buf, req.isGet, req.isKeepAlive, req.rBody, req.rVerb, req.rUri, req.rPath, req.rQuery,
+							req.rProtocol, req.headers, helper);
 					n++;
 				}
 			});

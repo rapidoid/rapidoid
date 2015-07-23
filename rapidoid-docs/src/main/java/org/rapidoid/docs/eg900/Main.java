@@ -4,7 +4,7 @@ import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Screen;
 import org.rapidoid.app.GUI;
-import org.rapidoid.quick.Quick;
+import org.rapidoid.main.Rapidoid;
 
 /*
  * #%L
@@ -34,7 +34,7 @@ public class Main {
 	String theme = "1";
 
 	public static void main(String[] args) {
-		Quick.run(args);
+		Rapidoid.run(args);
 	}
 }
 

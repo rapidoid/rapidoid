@@ -61,76 +61,76 @@ public class HttpParserTest extends HttpTestCommons {
 	public void shouldParseRequest1() {
 		HttpExchangeImpl req = parse(REQ1);
 
-		eq(REQ1, req.verb, "GET");
-		eq(REQ1, req.path, "/foo/bar");
+		eq(REQ1, req.rVerb, "GET");
+		eq(REQ1, req.rPath, "/foo/bar");
 		eqs(REQ1, req.params_().ranges(), "a", "5", "b", "", "n", "%20");
 		eq(req.params_().get(), U.map("a", "5", "b", "", "n", " "));
-		eq(REQ1, req.protocol, "HTTP/1.1");
+		eq(REQ1, req.rProtocol, "HTTP/1.1");
 		eqs(REQ1, req.headers_().ranges(), "Host", "www.test.com", "Set-Cookie", "aaa=2");
 
-		isNone(req.body);
+		isNone(req.rBody);
 	}
 
 	@Test
 	public void shouldParseRequest2() {
 		HttpExchangeImpl req = parse(REQ2);
 
-		eq(REQ2, req.verb, "POST");
-		eq(REQ2, req.path, "/something/else/here");
+		eq(REQ2, req.rVerb, "POST");
+		eq(REQ2, req.rPath, "/something/else/here");
 		eqs(REQ2, req.params_().ranges(), "x", "abc");
-		eq(REQ2, req.protocol, "HTTP/STRANGE");
+		eq(REQ2, req.rProtocol, "HTTP/STRANGE");
 		eqs(REQ2, req.headers_().ranges(), "Host", "a.b.c.org", "", "ign", "ored", "", "My-Header", "same",
 				"My-Header", "again", CONTENT_LENGTH, "5");
-		eq(REQ2, req.body, "BODYa");
+		eq(REQ2, req.rBody, "BODYa");
 	}
 
 	@Test
 	public void shouldParseRequest3() {
 		HttpExchangeImpl req = parse(REQ3);
 
-		eq(REQ3, req.verb, "PUT");
-		eq(REQ3, req.path, "/books");
+		eq(REQ3, req.rVerb, "PUT");
+		eq(REQ3, req.rPath, "/books");
 		eqs(REQ3, req.params_().ranges());
-		eq(REQ3, req.protocol, "HTTP/1.0");
+		eq(REQ3, req.rProtocol, "HTTP/1.0");
 		eqs(REQ3, req.headers_().ranges(), "CoNNectioN", "keep-alive", "AAAAA", "c = 2", CONTENT_LENGTH, "6");
-		eq(REQ3, req.body, "BODYab");
+		eq(REQ3, req.rBody, "BODYab");
 	}
 
 	@Test
 	public void shouldParseRequest4() {
 		HttpExchangeImpl req = parse(REQ4);
 
-		eq(REQ4, req.verb, "DELETE");
-		eq(REQ4, req.path, "/");
+		eq(REQ4, req.rVerb, "DELETE");
+		eq(REQ4, req.rPath, "/");
 		eqs(REQ4, req.params_().ranges(), "a", "", "bb", "c", "d", "");
-		eq(REQ4, req.protocol, "MY-PROTOCOL");
+		eq(REQ4, req.rProtocol, "MY-PROTOCOL");
 		eqs(REQ4, req.headers_().ranges(), CONTENT_LENGTH, "7");
-		eq(REQ4, req.body, "BODYabc");
+		eq(REQ4, req.rBody, "BODYabc");
 	}
 
 	@Test
 	public void shouldParseRequest5() {
 		HttpExchangeImpl req = parse(REQ5);
 
-		eq(REQ5, req.verb, "ABCD");
-		eq(REQ5, req.path, "///");
+		eq(REQ5, req.rVerb, "ABCD");
+		eq(REQ5, req.rPath, "///");
 		eqs(REQ5, req.params_().ranges(), "??", "");
 		eq(req.params_().get(), U.map("??", ""));
-		eq(REQ5, req.protocol, "HTTP/1.1");
+		eq(REQ5, req.rProtocol, "HTTP/1.1");
 		eqs(REQ5, req.headers_().ranges(), CONTENT_LENGTH, "8");
-		eq(REQ5, req.body, "BODYabcd");
+		eq(REQ5, req.rBody, "BODYabcd");
 	}
 
 	@Test
 	public void shouldParseRequest6() {
 		HttpExchangeImpl req = parse(REQ6);
 
-		eq(REQ6, req.verb, "GET");
-		eq(REQ6, req.path, "/");
+		eq(REQ6, req.rVerb, "GET");
+		eq(REQ6, req.rPath, "/");
 		eqs(REQ6, req.params_().ranges(), "x", "");
-		eq(REQ6, req.protocol, "A");
+		eq(REQ6, req.rProtocol, "A");
 		eqs(REQ6, req.headers_().ranges());
-		isNone(req.body);
+		isNone(req.rBody);
 	}
 
 	private HttpExchangeImpl parse(String reqs) {
@@ -145,8 +145,8 @@ public class HttpParserTest extends HttpTestCommons {
 		req.setConnection(conn);
 
 		HttpParser parser = new HttpParser();
-		parser.parse(reqbuf, req.isGet, req.isKeepAlive, req.body, req.verb, req.uri, req.path, req.query,
-				req.protocol, req.headers, HELPER);
+		parser.parse(reqbuf, req.isGet, req.isKeepAlive, req.rBody, req.rVerb, req.rUri, req.rPath, req.rQuery,
+				req.rProtocol, req.headers, HELPER);
 
 		return req;
 	}

@@ -38,19 +38,19 @@ public class Application {
 
 	private final Set<String> hostnames;
 
-	private final Set<String> uriPaths;
+	private final Set<String> uriContexts;
 
 	private final AppMode mode;
 
 	private final Classes classes;
 
-	public Application(String id, String title, Set<String> owners, Set<String> hostnames, Set<String> uriPaths,
+	public Application(String id, String title, Set<String> owners, Set<String> hostnames, Set<String> uriContexts,
 			AppMode mode, Classes classes) {
 		this.id = id;
 		this.title = title;
 		this.owners = owners;
 		this.hostnames = hostnames;
-		this.uriPaths = uriPaths;
+		this.uriContexts = uriContexts;
 		this.mode = mode;
 		this.classes = classes;
 	}
@@ -71,8 +71,8 @@ public class Application {
 		return hostnames;
 	}
 
-	public Set<String> getUriPaths() {
-		return uriPaths;
+	public Set<String> getUriContexts() {
+		return uriContexts;
 	}
 
 	public AppMode getMode() {
@@ -86,7 +86,7 @@ public class Application {
 	@Override
 	public String toString() {
 		return "Application [id=" + id + ", title=" + title + ", owners=" + owners + ", hostnames=" + hostnames
-				+ ", uriPaths=" + uriPaths + ", mode=" + mode + ", classes #" + classes.size() + "]";
+				+ ", uriPaths=" + uriContexts + ", mode=" + mode + ", classes #" + classes.size() + "]";
 	}
 
 }

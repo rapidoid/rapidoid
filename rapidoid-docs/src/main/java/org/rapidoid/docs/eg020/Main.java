@@ -8,7 +8,7 @@ import static org.rapidoid.widget.BootstrapWidgets.row;
 import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.html.Tag;
-import org.rapidoid.quick.Quick;
+import org.rapidoid.main.Rapidoid;
 import org.rapidoid.widget.ButtonWidget;
 
 /*
@@ -39,7 +39,7 @@ public class Main {
 	String theme = "3";
 
 	public static void main(String[] args) {
-		Quick.run(args);
+		Rapidoid.run(args);
 	}
 
 	@Session

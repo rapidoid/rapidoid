@@ -248,6 +248,7 @@ public class Log {
 
 	public static void error(String msg, Throwable error) {
 		error(msg, "error", error.getMessage());
+		error.printStackTrace();
 	}
 
 	/*********************************** AUTOMATICALLY GENERATED: ****************************************/

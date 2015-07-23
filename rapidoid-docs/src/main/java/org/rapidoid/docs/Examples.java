@@ -43,8 +43,8 @@ import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.io.IO;
+import org.rapidoid.main.Rapidoid;
 import org.rapidoid.oauth.OAuth;
-import org.rapidoid.quick.Quick;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
@@ -201,7 +201,7 @@ public class Examples {
 
 		Conf.args("oauth-no-state", "generate", "oauth-domain=https://rapidoid.io");
 
-		Quick.bootstrap();
+		Rapidoid.register(app);
 
 		path += "examples/";
 		new File(path).mkdir();

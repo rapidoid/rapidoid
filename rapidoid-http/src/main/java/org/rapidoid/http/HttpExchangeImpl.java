@@ -66,11 +66,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	private static final byte[] HEADER_SEP = ": ".getBytes();
 
-	final Range uri = new Range();
-	final Range verb = new Range();
-	final Range path = new Range();
-	final Range query = new Range();
-	final Range protocol = new Range();
+	final Range rUri = new Range();
+	final Range rVerb = new Range();
+	final Range rPath = new Range();
+	final Range rQuery = new Range();
+	final Range rProtocol = new Range();
 
 	final Ranges headers = new Ranges(50);
 
@@ -80,7 +80,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private final KeyValueRanges posted = new KeyValueRanges(50);
 	private final KeyValueRanges files = new KeyValueRanges(50);
 
-	final Range body = new Range();
+	final Range rBody = new Range();
 	final Range multipartBoundary = new Range();
 	private final Range subpathRange = new Range();
 
@@ -96,6 +96,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private boolean writesResponseBody;
 	private boolean responseHasContentType;
 	private int responseStartingPos;
+
+	private String uriContext = "/";
 
 	private HttpResponses responses;
 	private Router router;
@@ -139,13 +141,13 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private SessionStore sessionStore;
 
 	public HttpExchangeImpl() {
-		this._body = data(body);
-		this._uri = data(uri);
-		this._verb = data(verb);
-		this._path = decodedData(path);
+		this._body = data(rBody);
+		this._uri = data(rUri);
+		this._verb = data(rVerb);
+		this._path = decodedData(rPath);
 		this._subpath = decodedData(subpathRange);
-		this._query = decodedData(query);
-		this._protocol = data(protocol);
+		this._query = decodedData(rQuery);
+		this._protocol = data(rProtocol);
 		this._params = multiData(params);
 		this._headers = multiData(headersKV);
 		this._cookies = multiData(cookies);
@@ -164,12 +166,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 		tmps = null;
 
-		verb.reset();
-		uri.reset();
-		path.reset();
-		query.reset();
-		protocol.reset();
-		body.reset();
+		rVerb.reset();
+		rUri.reset();
+		rPath.reset();
+		rQuery.reset();
+		rProtocol.reset();
+		rBody.reset();
 		multipartBoundary.reset();
 
 		params.reset();
@@ -233,7 +235,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public synchronized MultiData params_() {
 		if (!parsedParams) {
-			if (!query.isEmpty()) {
+			if (!rQuery.isEmpty()) {
 				PARSER.parseParams(input(), params, query_().range());
 			}
 
@@ -272,7 +274,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public synchronized MultiData posted_() {
 		if (!parsedBody) {
-			PARSER.parseBody(input(), headersKV, body, posted, files, helper());
+			PARSER.parseBody(input(), headersKV, rBody, posted, files, helper());
 			parsedBody = true;
 		}
 
@@ -282,7 +284,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public synchronized BinaryMultiData files_() {
 		if (!parsedBody) {
-			PARSER.parseBody(input(), headersKV, body, posted, files, helper());
+			PARSER.parseBody(input(), headersKV, rBody, posted, files, helper());
 			parsedBody = true;
 		}
 
@@ -1241,7 +1243,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		return resourceName;
 	}
 
-	public boolean resourceNameHasExtension() {
+	public synchronized boolean resourceNameHasExtension() {
 		resourceName(); // make sure it is calculated
 		return resourceNameHasExtension;
 	}
@@ -1255,6 +1257,18 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public <P> P persister() {
 		return Ctxs.ctx().persister();
+	}
+
+	@Override
+	public synchronized String uriContext() {
+		return uriContext;
+	}
+
+	public synchronized HttpExchangeImpl setUriContext(String uriContext) {
+		U.must(uri().startsWith(uriContext));
+		this.uriContext = uriContext;
+
+		return this;
 	}
 
 }
