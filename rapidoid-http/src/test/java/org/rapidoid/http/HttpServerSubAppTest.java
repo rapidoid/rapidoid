@@ -56,9 +56,15 @@ public class HttpServerSubAppTest extends HttpTestCommons {
 		server = HTTP.server().applications(apps).build();
 		start();
 
-		eq(get("/my/ab"), "my-special: id=myapp, uri=/my/ab, uriContext=/my, path=/ab, subpath=");
+		eq(get("/my"), "my-generic: id=myapp, uri=/my, uriContext=/my, path=/, subpath=/, segments=my");
+		eq(get("/my/"), "my-generic: id=myapp, uri=/my, uriContext=/my, path=/, subpath=/, segments=my");
+		eq(get("/my/ab"), "my-special: id=myapp, uri=/my/ab, uriContext=/my, path=/ab, subpath=/, segments=my:ab");
+		eq(get("/my/ab/"), "my-special: id=myapp, uri=/my/ab, uriContext=/my, path=/ab, subpath=/, segments=my:ab");
 
-		// TODO add more tests here
+		eq(get("/"), "def-generic: id=defapp, uri=/, uriContext=/, path=/, subpath=/, segments=");
+
+		eq(get("/xyz"), "def-generic: id=defapp, uri=/xyz, uriContext=/, path=/xyz, subpath=/xyz, segments=xyz");
+		eq(get("/xyz/"), "def-generic: id=defapp, uri=/xyz, uriContext=/, path=/xyz, subpath=/xyz, segments=xyz");
 
 		shutdown();
 	}
@@ -68,8 +74,8 @@ public class HttpServerSubAppTest extends HttpTestCommons {
 			@Override
 			public Object handle(HttpExchange x) {
 				String id = AppCtx.app().getId();
-				return U.format("%s: id=%s, uri=%s, uriContext=%s, path=%s, subpath=%s", desc, id, x.uri(),
-						x.uriContext(), x.path(), x.subpath());
+				return U.format("%s: id=%s, uri=%s, uriContext=%s, path=%s, subpath=%s, segments=%s", desc, id,
+						x.uri(), x.uriContext(), x.path(), x.subpath(), U.join(":", x.pathSegments()));
 			}
 		};
 	}

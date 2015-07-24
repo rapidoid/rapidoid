@@ -373,7 +373,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized String subpath() {
-		return subpath_().get();
+		String subp = subpath_().get();
+		return !U.isEmpty(subp) ? subp : "/";
 	}
 
 	@Override

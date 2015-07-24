@@ -72,6 +72,8 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		parser.parse(x.input(), x.isGet, x.isKeepAlive, x.rBody, x.rVerb, x.rUri, x.rPath, x.rQuery, x.rProtocol,
 				x.headers, x.helper());
 
+		removeTrailingSlash(x);
+
 		if (upgradable()) {
 			String upgrade = x.header("Upgrade", null);
 			if (!U.isEmpty(upgrade)) {
@@ -91,6 +93,16 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		}
 
 		processRequest(x);
+	}
+
+	private void removeTrailingSlash(HttpExchangeImpl x) {
+		if (x.rPath.length > 1 && x.input().get(x.rPath.last()) == '/') {
+			x.rPath.length--;
+		}
+
+		if (x.rUri.length > 1 && x.input().get(x.rUri.last()) == '/') {
+			x.rUri.length--;
+		}
 	}
 
 	private String validateRequest(HttpExchangeImpl x) {
