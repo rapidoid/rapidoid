@@ -21,8 +21,12 @@ package org.rapidoid.io;
  */
 
 import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.test.TestCommons;
 
+@Authors("Nikolche Mihajlovski")
+@Since("4.1.0")
 public class CachedResourceTest extends TestCommons {
 
 	@Test

@@ -3,6 +3,8 @@ package org.rapidoid.io;
 import java.io.File;
 import java.util.concurrent.ConcurrentMap;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.U;
 
 /*
@@ -25,10 +27,8 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-/**
- * @author Nikolche Mihajlovski
- * @since 4.1.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("4.1.0")
 public class CachedResource {
 
 	private static final ConcurrentMap<String, CachedResource> FILES = U.concurrentMap();

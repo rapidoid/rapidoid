@@ -38,12 +38,12 @@ import java.nio.channels.FileChannel.MapMode;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.util.U;
 
-/**
- * @author Nikolche Mihajlovski
- * @since 2.0.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class IO {
 
 	public static URL resource(String filename) {
