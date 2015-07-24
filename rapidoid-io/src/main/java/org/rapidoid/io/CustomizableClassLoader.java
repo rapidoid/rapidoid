@@ -1,8 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.io;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-io
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -28,6 +28,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

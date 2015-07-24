@@ -29,9 +29,9 @@ import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeInternals;
 import org.rapidoid.http.HttpNotFoundException;
+import org.rapidoid.io.CustomizableClassLoader;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.rest.WebReq;
-import org.rapidoid.util.CustomizableClassLoader;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
