@@ -289,11 +289,17 @@ public class Beany {
 	}
 
 	public static void update(Object destBean, Map<String, Object> src) {
-		update(destBean, src, false);
+		update(destBean, src, false, false);
+	}
+
+	public static void update(Object destBean, Map<String, Object> src, boolean ignoreNullValues) {
+		update(destBean, src, ignoreNullValues, false);
 	}
 
 	@SuppressWarnings("unchecked")
-	public static void update(Object destBean, Map<String, Object> src, boolean ignoreNullValues) {
+	public static void update(Object destBean, Map<String, Object> src, boolean ignoreNullValues,
+			boolean ignoreReadOnlyProperties) {
+
 		if (destBean instanceof Map) {
 			((Map<String, Object>) destBean).putAll(src);
 			return;
@@ -301,6 +307,10 @@ public class Beany {
 
 		for (Prop prop : propertiesOf(destBean)) {
 			Object value = src.get(prop.getName());
+
+			if (ignoreReadOnlyProperties && prop.isReadOnly()) {
+				continue;
+			}
 
 			if (value == null) {
 				// differentiate non-existing entries from existing entries with null value
