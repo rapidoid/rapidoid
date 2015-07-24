@@ -32,7 +32,6 @@ import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ExchangeProtocol;
 import org.rapidoid.net.impl.RapidoidConnection;
-import org.rapidoid.util.D;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.util.Usage;
@@ -152,7 +151,6 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 
 	private Application getApp(HttpExchangeImpl x) {
 		String uriContext = "/" + x.pathSegment(0);
-		D.print(uriContext);
 
 		Application app = server.applications.get(x.host(), uriContext);
 		U.must(app != null, "Cannot find matching application in: " + server.applications.getName());
