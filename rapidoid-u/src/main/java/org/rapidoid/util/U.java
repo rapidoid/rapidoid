@@ -852,4 +852,9 @@ public class U {
 		});
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> T cast(Object value) {
+		return (T) value;
+	}
+
 }
