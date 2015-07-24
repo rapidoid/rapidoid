@@ -99,6 +99,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	private String path = null;
 	private String uriContext = "/";
+	private String[] pathSegments;
 
 	private HttpResponses responses;
 
@@ -861,7 +862,16 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized String pathSegment(int segmentIndex) {
-		return U.triml(path(), "/").split("/")[segmentIndex];
+		return pathSegments()[segmentIndex];
+	}
+
+	@Override
+	public synchronized String[] pathSegments() {
+		if (pathSegments == null) {
+			pathSegments = U.triml(path(), "/").split("/");
+		}
+
+		return pathSegments;
 	}
 
 	@Override

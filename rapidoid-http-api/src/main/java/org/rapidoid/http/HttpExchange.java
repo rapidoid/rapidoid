@@ -100,6 +100,8 @@ public interface HttpExchange {
 
 	String uriContext();
 
+	String[] pathSegments();
+
 	String pathSegment(int segmentIndex);
 
 	String realIpAddress();
