@@ -1284,6 +1284,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			this.path = "/";
 		}
 
+		pathSegments = null; // re-calculate path segments
+		pathSegments();
+
 		this.rPath.strip(uriContext.length(), 0);
 		this.uriContext = uriContext;
 
