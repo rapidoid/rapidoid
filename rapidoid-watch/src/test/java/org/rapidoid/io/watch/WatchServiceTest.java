@@ -20,6 +20,7 @@ package org.rapidoid.io.watch;
  * #L%
  */
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,6 +29,8 @@ import java.util.List;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.io.CachedResource;
+import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
@@ -44,7 +47,7 @@ public class WatchServiceTest extends TestCommons {
 			}
 		});
 
-		U.sleep(1000);
+		giveItTimeToRefresh();
 
 		watch.stop();
 	}
@@ -60,8 +63,99 @@ public class WatchServiceTest extends TestCommons {
 
 		isTrue(dir == dir2);
 
-		// FIXME change the directory content and check the changes
+		giveItTimeToRefresh();
 
+		// CREATE FILE a.tmp
+
+		String fileA = tmpPath + "/a.tmp";
+		IO.save(fileA, "aa");
+
+		giveItTimeToRefresh();
+
+		CachedResource resA = CachedResource.from(fileA);
+		eq(dir.files(), U.set(resA));
+		eq(dir.folders(), U.set());
+
+		// CREATE FILE b.tmp
+
+		String fileB = tmpPath + "/b.tmp";
+		IO.save(fileB, "bb");
+
+		giveItTimeToRefresh();
+
+		CachedResource resB = CachedResource.from(fileB);
+		eq(dir.files(), U.set(resA, resB));
+		eq(dir.folders(), U.set());
+
+		// CREATE FOLDER ccc
+
+		String dirC = tmpPath + "/ccc";
+		isTrue(new File(dirC).mkdir());
+
+		giveItTimeToRefresh();
+
+		eq(dir.files(), U.set(resA, resB));
+		eq(dir.folders(), U.set(dirC));
+
+		// DELETE FILE a.tmp
+
+		isTrue(new File(fileA).delete());
+
+		giveItTimeToRefresh();
+
+		eq(dir.files(), U.set(resB));
+		eq(dir.folders(), U.set(dirC));
+
+		// MODIFY FILE b.tmp
+
+		IO.save(fileB, "bbbbb");
+
+		giveItTimeToRefresh();
+
+		eq(dir.files(), U.set(resB));
+		eq(dir.folders(), U.set(dirC));
+
+		// CREATE FILE ccc/x.tmp
+
+		String fileX = tmpPath + "/ccc/x.tmp";
+		IO.save(fileX, "x");
+
+		giveItTimeToRefresh();
+
+		CachedResource resX = CachedResource.from(fileX);
+		eq(dir.files(), U.set(resB, resX));
+		eq(dir.folders(), U.set(dirC));
+
+		// DELETE FILE ccc/x.tmp
+
+		isTrue(new File(fileX).delete());
+
+		giveItTimeToRefresh();
+
+		eq(dir.files(), U.set(resB));
+		eq(dir.folders(), U.set(dirC));
+
+		// DELETE FOLDER ccc
+
+		isTrue(new File(dirC).delete());
+
+		giveItTimeToRefresh();
+
+		eq(dir.files(), U.set(resB));
+		eq(dir.folders(), U.set());
+
+		// DELETE FILE b.tmp
+
+		isTrue(new File(fileB).delete());
+
+		giveItTimeToRefresh();
+
+		eq(dir.files(), U.set());
+		eq(dir.folders(), U.set());
+
+	}
+
+	private void giveItTimeToRefresh() {
 		U.sleep(1000);
 	}
 
