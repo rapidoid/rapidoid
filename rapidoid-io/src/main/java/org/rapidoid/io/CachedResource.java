@@ -122,7 +122,7 @@ public class CachedResource {
 
 	@Override
 	public String toString() {
-		return getContent();
+		return "Res(" + name + ")";
 	}
 
 }
