@@ -68,7 +68,7 @@ public class CachedResource {
 
 			if (bytes == null) {
 				// if the resource doesn't exist, try loading the default resource
-				load(getDefaultFilename(name));
+				load(IO.getDefaultFilename(name));
 			}
 
 			content = null; // invalidate
@@ -90,16 +90,6 @@ public class CachedResource {
 		} else {
 			// it might not exist or it might be on the classpath or compressed in a JAR
 			this.bytes = IO.loadBytes(filename);
-		}
-	}
-
-	protected String getDefaultFilename(String filename) {
-		int lastDotPos = filename.lastIndexOf('.');
-
-		if (lastDotPos > 0) {
-			return U.insert(filename, lastDotPos, ".default");
-		} else {
-			return filename + ".default";
 		}
 	}
 

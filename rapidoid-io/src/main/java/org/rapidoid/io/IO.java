@@ -239,4 +239,23 @@ public class IO {
 		return mmap(filename, mode, 0, file.length());
 	}
 
+	public static String getDefaultFilename(String filename) {
+		int lastDotPos = filename.lastIndexOf('.');
+
+		if (lastDotPos > 0) {
+			return U.insert(filename, lastDotPos, ".default");
+		} else {
+			return filename + ".default";
+		}
+	}
+
+	public static String getReadOrDefaultFilename(String filename) {
+		if (resource(filename) != null) {
+			return filename;
+		} else {
+			String name = getDefaultFilename(filename);
+			return resource(name) != null ? name : filename;
+		}
+	}
+
 }
