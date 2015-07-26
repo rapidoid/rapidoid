@@ -49,6 +49,7 @@ import org.rapidoid.plugins.entities.EntitiesPlugin;
 import org.rapidoid.plugins.languages.LanguagesPlugin;
 import org.rapidoid.plugins.lifecycle.Lifecycle;
 import org.rapidoid.plugins.lifecycle.LifecyclePlugin;
+import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
 import org.rapidoid.plugins.users.UsersPlugin;
 import org.rapidoid.util.U;
 import org.rapidoid.util.Usage;
@@ -77,6 +78,7 @@ public class Apps {
 		Conf.args(configArgs);
 		Log.args(configArgs);
 
+		Plugins.register(new MustacheTemplatesPlugin());
 		AOP.register(Transaction.class, new TransactionInterceptor());
 
 		Lifecycle.onStart(args);

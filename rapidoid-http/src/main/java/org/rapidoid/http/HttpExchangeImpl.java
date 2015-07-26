@@ -45,6 +45,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
+import org.rapidoid.plugins.templates.ITemplate;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.RapidoidConf;
@@ -1260,9 +1261,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public HttpExchange render(CachedResource template, Object... namesAndValues) {
-		String text = UTILS.fillIn(template.toString(), namesAndValues);
-		return write(text.getBytes());
+	public HttpExchange render(ITemplate template, Object... namesAndValues) {
+		template.render(this.outputStream(), this, U.map(namesAndValues));
+		return this;
 	}
 
 	@Override

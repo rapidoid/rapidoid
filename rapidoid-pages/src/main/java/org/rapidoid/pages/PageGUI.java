@@ -25,10 +25,11 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.io.CachedResource;
 import org.rapidoid.pages.impl.FileTemplateTag;
 import org.rapidoid.pages.impl.MultiLanguageText;
 import org.rapidoid.pages.impl.StateTag;
+import org.rapidoid.plugins.templates.ITemplate;
+import org.rapidoid.plugins.templates.Templates;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.ButtonWidget;
 
@@ -41,7 +42,11 @@ public class PageGUI extends BootstrapWidgets {
 	}
 
 	public static Tag render(String templateFileName, Object... namesAndValues) {
-		return new FileTemplateTag(templateFileName, namesAndValues);
+		return render(Templates.fromFile(templateFileName), namesAndValues);
+	}
+
+	public static Tag render(ITemplate template, Object... namesAndValues) {
+		return new FileTemplateTag(template, namesAndValues);
 	}
 
 	public static Tag modal(Object title, Object content, Object footer) {
@@ -59,8 +64,8 @@ public class PageGUI extends BootstrapWidgets {
 		HttpExchange x = Ctxs.ctx().exchange();
 		String devOrProd = x.isDevMode() ? "dev" : "prod";
 
-		CachedResource assets = CachedResource.from("page-assets-" + devOrProd + ".html");
-		CachedResource meta = CachedResource.from("page-meta-" + devOrProd + ".html");
+		ITemplate assets = Templates.fromFile("page-assets-" + devOrProd + ".html");
+		ITemplate meta = Templates.fromFile("page-meta-" + devOrProd + ".html");
 
 		Object state = new StateTag(x);
 

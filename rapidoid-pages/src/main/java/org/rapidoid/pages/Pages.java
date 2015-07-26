@@ -44,6 +44,8 @@ import org.rapidoid.log.Log;
 import org.rapidoid.pages.impl.BuiltInCmdHandler;
 import org.rapidoid.pages.impl.ComplexView;
 import org.rapidoid.pages.impl.PageRenderer;
+import org.rapidoid.plugins.templates.ITemplate;
+import org.rapidoid.plugins.templates.Templates;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
@@ -398,9 +400,9 @@ public class Pages {
 	public static void render(HttpExchange x, String pageTitle, Object head, Object body) {
 		String devOrProd = x.isDevMode() ? "dev" : "prod";
 
-		CachedResource page = CachedResource.from("page-" + devOrProd + ".html");
-		CachedResource assets = CachedResource.from("page-assets-" + devOrProd + ".html");
-		CachedResource meta = CachedResource.from("page-meta-" + devOrProd + ".html");
+		ITemplate page = Templates.fromFile("page-" + devOrProd + ".html");
+		ITemplate assets = Templates.fromFile("page-assets-" + devOrProd + ".html");
+		ITemplate meta = Templates.fromFile("page-meta-" + devOrProd + ".html");
 
 		x.render(page, "title", pageTitle, "head", head, "body", body, "assets", assets, "meta", meta, "state", "{}");
 	}

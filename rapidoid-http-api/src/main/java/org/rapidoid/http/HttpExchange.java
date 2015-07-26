@@ -30,6 +30,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.CachedResource;
 import org.rapidoid.mime.MediaType;
+import org.rapidoid.plugins.templates.ITemplate;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -247,7 +248,7 @@ public interface HttpExchange {
 
 	HttpExchange done();
 
-	HttpExchange render(CachedResource template, Object... namesAndValues);
+	HttpExchange render(ITemplate template, Object... namesAndValues);
 
 	/* EXTRAS: */
 
