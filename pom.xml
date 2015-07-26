@@ -129,6 +129,7 @@
 		<module>rapidoid-main</module>
 		<module>rapidoid-demo</module>
 		<module>rapidoid-docs</module>
+		<module>rapidoid-integration-tests</module>
 		<module>rapidoid-module-template</module>
 		<module>rapidoid-x</module>
 		<module>rapidoid-x-buffer</module>
