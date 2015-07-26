@@ -86,7 +86,7 @@ public class HttpServerSubAppTest extends HttpTestCommons {
 			public Object handle(HttpExchange x) {
 				String id = AppCtx.app().getId();
 				return U.format("%s: id=%s, uri=%s, ctx=%s, path=%s, subpath=%s, segments=%s", desc, id, x.uri(),
-						x.uriContext(), x.path(), x.subpath(), U.join(":", x.pathSegments()));
+						x.home(), x.path(), x.subpath(), U.join(":", x.pathSegments()));
 			}
 		};
 	}

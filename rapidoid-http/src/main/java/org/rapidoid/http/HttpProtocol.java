@@ -168,7 +168,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		U.must(app != null, "Cannot find matching application in: " + server.applications.getName());
 
 		if (app.getUriContexts().contains(uriContext)) {
-			x.setUriContext(uriContext);
+			x.setHome(uriContext);
 		}
 
 		return app;

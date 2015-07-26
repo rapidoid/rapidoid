@@ -99,7 +99,7 @@ public interface HttpExchange {
 	 */
 	String data(String name, String defaultValue);
 
-	String uriContext();
+	String home();
 
 	String[] pathSegments();
 

@@ -99,7 +99,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private int responseStartingPos;
 
 	private String path = null;
-	private String uriContext = "/";
+	private String home = "/";
 	private String[] pathSegments;
 
 	private HttpResponses responses;
@@ -185,7 +185,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		data = null;
 
 		path = null;
-		uriContext = "/";
+		home = "/";
 
 		parsedParams = false;
 		parsedHeaders = false;
@@ -1272,26 +1272,26 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public synchronized String uriContext() {
-		return uriContext;
+	public synchronized String home() {
+		return home;
 	}
 
-	public synchronized HttpExchangeImpl setUriContext(String uriContext) {
+	public synchronized HttpExchangeImpl setHome(String home) {
 		String uriPath = path();
-		U.must(uriPath.startsWith(uriContext));
+		U.must(uriPath.startsWith(home));
 
-		this.path = uriPath.substring(uriContext.length());
+		this.path = uriPath.substring(home.length());
 		if (U.isEmpty(this.path)) {
 			this.path = "/";
 			this.rPath.length = 1;
 		} else {
-			this.rPath.strip(uriContext.length(), 0);
+			this.rPath.strip(home.length(), 0);
 		}
 
 		pathSegments = null; // re-calculate path segments
 		pathSegments();
 
-		this.uriContext = uriContext;
+		this.home = home;
 
 		return this;
 	}
