@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
 
-{{meta}}
+{{{meta}}}
 
 <title>{{title}}</title>
 
-{{assets}}
+{{{assets}}}
 
-{{head}}
+{{{head}}}
 
 <script>
-window.__state = {{state}};
+window.__state = {{{state}}};
 </script>
 
 <link href="/img/favicon.png" rel="shortcut icon">
@@ -21,7 +21,7 @@ window.__state = {{state}};
 <body ng-controller="Main" ng-app="app">
 
   <div ng-if="!ajaxBodyContent">
-{{body}}
+{{{body}}}<br>
   </div>
 
   <div compile="ajaxBodyContent" ng-if="ajaxBodyContent"></div>
