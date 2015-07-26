@@ -184,15 +184,15 @@ public abstract class HttpTestCommons extends TestCommons {
 	protected String upload(String uri, Map<String, String> params, Map<String, String> files) throws IOException,
 			ClientProtocolException {
 		Map<String, String> headers = U.map("Cookie", "COOKIE1=a", "COOKIE", "foo=bar");
-		return HTTP.post(localhost(uri), headers, params, files);
+		return new String(HTTP.post(localhost(uri), headers, params, files));
 	}
 
 	protected String get(String uri) {
-		return HTTP.get(localhost(uri));
+		return new String(HTTP.get(localhost(uri)));
 	}
 
 	protected byte[] getBytes(String uri) {
-		return HTTP.getBytes(localhost(uri));
+		return HTTP.get(localhost(uri));
 	}
 
 }

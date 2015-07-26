@@ -42,7 +42,7 @@ public class HttpServerTest extends IntegrationTestCommons {
 
 		HTTPServer server = HTTP.server().applications(Applications.main()).build().start();
 
-		eq(HTTP.get("http://localhost:8080/"), "home");
+		eq(new String(HTTP.get("http://localhost:8080/")), "home");
 
 		server.shutdown();
 	}

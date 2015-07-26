@@ -35,7 +35,6 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.junit.Assert;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.IO;
@@ -55,7 +54,7 @@ public class HTTP {
 		return HttpClientBuilder.create().build();
 	}
 
-	public static String post(String uri, Map<String, String> headers, Map<String, String> data,
+	public static byte[] post(String uri, Map<String, String> headers, Map<String, String> data,
 			Map<String, String> files) throws IOException, ClientProtocolException {
 
 		headers = U.safe(headers);
@@ -96,9 +95,8 @@ public class HTTP {
 				U.must(statusCode == 200, "Expected HTTP status code 200, but found: %s", statusCode);
 
 				InputStream resp = response.getEntity().getContent();
-				String decoded = IOUtils.toString(resp, "UTF-8");
+				return IOUtils.toByteArray(resp);
 
-				return decoded;
 			} finally {
 				response.close();
 			}
@@ -107,7 +105,7 @@ public class HTTP {
 		}
 	}
 
-	public static String get(String uri) {
+	public static byte[] get(String uri) {
 		try {
 			CloseableHttpClient client = client(uri);
 
@@ -119,24 +117,6 @@ public class HTTP {
 
 			int statusCode = response.getStatusLine().getStatusCode();
 			U.must(statusCode == 200, "Expected HTTP status code 200, but found: %s", statusCode);
-
-			InputStream resp = response.getEntity().getContent();
-
-			return IOUtils.toString(resp, "UTF-8");
-		} catch (Throwable e) {
-			throw U.rte(e);
-		}
-	}
-
-	public static byte[] getBytes(String uri) {
-		try {
-			CloseableHttpClient client = client(uri);
-
-			HttpGet get = new HttpGet(uri);
-
-			CloseableHttpResponse response = client.execute(get);
-
-			Assert.assertEquals(200, response.getStatusLine().getStatusCode());
 
 			InputStream resp = response.getEntity().getContent();
 
