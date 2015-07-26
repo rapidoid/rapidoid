@@ -31,7 +31,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.AppHandler;
 import org.rapidoid.app.Apps;
-import org.rapidoid.appctx.AppMode;
 import org.rapidoid.appctx.Application;
 import org.rapidoid.appctx.Applications;
 import org.rapidoid.appctx.Scan;
@@ -188,7 +187,7 @@ public class Examples {
 	public static void generate(HTTPServer server, String path, String id, List<Class<?>> classes) {
 
 		Classes appClasses = Classes.from(classes);
-		Application app = new WebApp(id, "app", null, null, U.set("/"), AppMode.DEVELOPMENT, null, appClasses);
+		Application app = new WebApp(id, "app", "/", appClasses);
 		Ctxs.ctx().setApp(app);
 
 		Class<?> appCls = appClasses.get("Main");

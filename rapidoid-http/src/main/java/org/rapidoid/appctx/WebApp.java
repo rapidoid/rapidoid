@@ -1,6 +1,5 @@
 package org.rapidoid.appctx;
 
-import java.util.Collections;
 import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
@@ -50,17 +49,32 @@ public class WebApp implements Application {
 
 	private final Classes classes;
 
-	@SuppressWarnings("unchecked")
 	public WebApp(String id, String title, Set<String> owners, Set<String> hostnames, Set<String> uriContexts,
 			AppMode mode, Router router, Classes classes) {
 		this.id = id;
 		this.router = U.or(router, new HttpRouter());
 		this.title = U.or(title, "App");
-		this.owners = U.or(owners, Collections.EMPTY_SET);
-		this.hostnames = U.or(hostnames, Collections.EMPTY_SET);
-		this.uriContexts = U.or(uriContexts, Collections.EMPTY_SET);
+		this.owners = U.safe(owners);
+		this.hostnames = U.safe(hostnames);
+		this.uriContexts = U.safe(uriContexts);
 		this.mode = U.or(mode, AppMode.DEVELOPMENT);
 		this.classes = U.or(classes, new Classes());
+	}
+
+	public WebApp(String id, String title, String uriPath, Classes classes) {
+		this(id, title, null, null, uriPath != null ? U.set(uriPath) : null, AppMode.DEVELOPMENT, null, classes);
+	}
+
+	public WebApp(String id, String uriPath, Classes classes) {
+		this(id, id, uriPath, classes);
+	}
+
+	public WebApp(String id) {
+		this(id, "/", null);
+	}
+
+	public WebApp() {
+		this("app-id");
 	}
 
 	@Override
