@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -143,6 +144,34 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	private ClassLoader classLoader;
 	private SessionStore sessionStore;
+
+	private final Callable<Map<String, String>> lazyData = new Callable<Map<String, String>>() {
+		@Override
+		public Map<String, String> call() throws Exception {
+			return data();
+		}
+	};
+
+	private final Callable<Map<String, byte[]>> lazyFiles = new Callable<Map<String, byte[]>>() {
+		@Override
+		public Map<String, byte[]> call() throws Exception {
+			return files();
+		}
+	};
+
+	private final Callable<Map<String, String>> lazyCookies = new Callable<Map<String, String>>() {
+		@Override
+		public Map<String, String> call() throws Exception {
+			return cookies();
+		}
+	};
+
+	private final Callable<Map<String, String>> lazyHeaders = new Callable<Map<String, String>>() {
+		@Override
+		public Map<String, String> call() throws Exception {
+			return headers();
+		}
+	};
 
 	public HttpExchangeImpl() {
 		this._body = data(rBody);
@@ -1272,8 +1301,10 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public synchronized Map<String, Object> model() {
 		if (model == null) {
-			model = U.map("req", this, "data", data(), "files", files(), "cookies", cookies(), "headers", headers());
+			model = U.map("req", this, "data", lazyData, "files", lazyFiles, "cookies", lazyCookies, "headers",
+					lazyHeaders);
 			model.put("verb", verb());
+			model.put("uri", uri());
 			model.put("path", path());
 			model.put("home", home());
 		}
