@@ -438,7 +438,7 @@ public class Wire {
 		return instance;
 	}
 
-	public static <T, B extends Builder<T>> B builder(final Class<B> builderClass, final Class<T> builtClass,
+	public static <T, B extends Builder<T>> B builder(final Class<B> builderInterface, final Class<T> builtInterface,
 			final Class<? extends T> implClass) {
 
 		final Map<String, Object> properties = U.map();
@@ -458,7 +458,7 @@ public class Wire {
 			}
 		};
 
-		B builder = Proxies.implement(handler, builderClass);
+		B builder = Proxies.implement(handler, builderInterface);
 		return builder;
 	}
 
