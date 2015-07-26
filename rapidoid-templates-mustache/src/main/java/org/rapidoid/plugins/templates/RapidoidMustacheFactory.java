@@ -22,6 +22,7 @@ package org.rapidoid.plugins.templates;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.io.IO;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.FragmentKey;
@@ -46,6 +47,18 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 	protected LoadingCache<FragmentKey, Mustache> createLambdaCache() {
 		lambdaCache = super.createLambdaCache();
 		return lambdaCache;
+	}
+
+	@Override
+	public Mustache compile(String filename) {
+		String name = IO.getReadOrDefaultFilename(filename);
+		return super.compile(name);
+	}
+
+	@Override
+	public Mustache compilePartial(String filename) {
+		String name = IO.getReadOrDefaultFilename(filename);
+		return super.compilePartial(name);
 	}
 
 	public void invalidateCache() {
