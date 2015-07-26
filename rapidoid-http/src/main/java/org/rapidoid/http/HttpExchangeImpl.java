@@ -1280,15 +1280,17 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		String uriPath = path();
 		U.must(uriPath.startsWith(uriContext));
 
-		this.path = U.triml(uriPath, uriContext);
+		this.path = uriPath.substring(uriContext.length());
 		if (U.isEmpty(this.path)) {
 			this.path = "/";
+			this.rPath.length = 1;
+		} else {
+			this.rPath.strip(uriContext.length(), 0);
 		}
 
 		pathSegments = null; // re-calculate path segments
 		pathSegments();
 
-		this.rPath.strip(uriContext.length(), 0);
 		this.uriContext = uriContext;
 
 		return this;
