@@ -38,6 +38,8 @@ import org.rapidoid.http.HttpResponses;
 import org.rapidoid.http.session.InMemorySessionStore;
 import org.rapidoid.net.impl.RapidoidConnection;
 import org.rapidoid.pages.impl.PageRenderer;
+import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.var.Var;
 
@@ -51,6 +53,7 @@ public class PagesTestCommons extends TestCommons {
 	@Before
 	public void init() {
 		Ctxs.open(); // open context for each test
+		Plugins.register(new MustacheTemplatesPlugin());
 	}
 
 	@After
