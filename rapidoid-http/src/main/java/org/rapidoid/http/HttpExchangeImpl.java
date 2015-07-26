@@ -1307,6 +1307,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			model.put("uri", uri());
 			model.put("path", path());
 			model.put("home", home());
+			model.put("dev", isDevMode());
 		}
 
 		return model;

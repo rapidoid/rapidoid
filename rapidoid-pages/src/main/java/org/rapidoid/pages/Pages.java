@@ -398,13 +398,9 @@ public class Pages {
 	}
 
 	public static void render(HttpExchange x, String pageTitle, Object head, Object body) {
-		String devOrProd = x.isDevMode() ? "dev" : "prod";
+		ITemplate page = Templates.fromFile("page.html");
 
-		ITemplate page = Templates.fromFile("page-" + devOrProd + ".html");
-		ITemplate assets = Templates.fromFile("page-assets-" + devOrProd + ".html");
-		ITemplate meta = Templates.fromFile("page-meta-" + devOrProd + ".html");
-
-		x.render(page, "title", pageTitle, "head", head, "body", body, "assets", assets, "meta", meta, "state", "{}");
+		x.render(page, "title", pageTitle, "head_extra", head, "body", body, "state", "{}");
 	}
 
 }

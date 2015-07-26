@@ -62,15 +62,9 @@ public class PageGUI extends BootstrapWidgets {
 
 	public static Tag page(String pageTitle, Object head, Object body) {
 		HttpExchange x = Ctxs.ctx().exchange();
-		String devOrProd = x.isDevMode() ? "dev" : "prod";
-
-		ITemplate assets = Templates.fromFile("page-assets-" + devOrProd + ".html");
-		ITemplate meta = Templates.fromFile("page-meta-" + devOrProd + ".html");
-
 		Object state = new StateTag(x);
 
-		return render("page-" + devOrProd + ".html", "title", pageTitle, "head", head, "body", body, "assets", assets,
-				"meta", meta, "state", state);
+		return render("page.html", "title", pageTitle, "head_extra", head, "body", body, "state", state);
 	}
 
 	public static Tag page(String pageTitle, Object body) {
