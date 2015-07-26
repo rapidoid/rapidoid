@@ -107,6 +107,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private Map<String, String> data;
 	private Map<String, String> errors;
 
+	private Map<String, Object> model;
+
 	private String resourceName;
 	private boolean resourceNameHasExtension;
 
@@ -183,6 +185,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		posted.reset();
 		files.reset();
 		data = null;
+		model = null;
 
 		path = null;
 		home = "/";
@@ -1262,8 +1265,20 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public HttpExchange render(ITemplate template, Object... namesAndValues) {
-		template.render(this.outputStream(), this, U.map(namesAndValues));
+		template.render(this.outputStream(), U.map(namesAndValues), model());
 		return this;
+	}
+
+	@Override
+	public synchronized Map<String, Object> model() {
+		if (model == null) {
+			model = U.map("req", this, "data", data(), "files", files(), "cookies", cookies(), "headers", headers());
+			model.put("verb", verb());
+			model.put("path", path());
+			model.put("home", home());
+		}
+
+		return model;
 	}
 
 	@Override

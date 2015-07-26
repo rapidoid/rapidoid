@@ -64,7 +64,7 @@ public class FileTemplateTag extends HardcodedTag {
 			scope.put(placeholder, value);
 		}
 
-		template.render(out, scope, x);
+		template.render(out, scope, x.model());
 	}
 
 	@Override

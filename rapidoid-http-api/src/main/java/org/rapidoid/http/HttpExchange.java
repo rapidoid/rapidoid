@@ -254,4 +254,6 @@ public interface HttpExchange {
 
 	<P> P persister();
 
+	Object model();
+
 }
