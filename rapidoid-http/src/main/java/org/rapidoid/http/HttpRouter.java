@@ -50,11 +50,11 @@ public class HttpRouter implements Router {
 	private Handler genericHandler;
 
 	@Override
-	public void generic(Handler handler) {
+	public synchronized void generic(Handler handler) {
 		this.genericHandler = handler;
 	}
 
-	private void addRoute(String action, String path, Handler handler) {
+	private synchronized void addRoute(String action, String path, Handler handler) {
 		assert action.length() >= 1;
 		assert path.length() >= 1;
 
@@ -69,17 +69,20 @@ public class HttpRouter implements Router {
 	}
 
 	private long hash(String action, String path) {
-		int hash = action.charAt(0) * 17 + action.length() * 19 + path.charAt(0);
-		return hash;
+		return action.charAt(0) * 17 + action.length() * 19 + path.charAt(0);
 	}
 
 	private long hash(Buf buf, Range action, Range path) {
-		int hash = buf.get(action.start) * 17 + action.length * 19 + buf.get(path.start);
-		return hash;
+		return buf.get(action.start) * 17 + action.length * 19 + buf.get(path.start);
 	}
 
 	@Override
 	public void dispatch(HttpExchangeImpl x) {
+		Handler handler = findHandler(x);
+		handle(handler, x);
+	}
+
+	private Handler findHandler(HttpExchangeImpl x) {
 
 		Buf buf = x.input();
 		Range action = x.verb_().range();
@@ -88,28 +91,33 @@ public class HttpRouter implements Router {
 		// serveStaticFileIfExists(x, buf, path);
 
 		long hash = hash(buf, action, path);
-		SimpleList<Route> candidates = routes.get(hash);
 
-		if (candidates != null) {
-			for (int i = 0; i < candidates.size(); i++) {
-				Route route = candidates.get(i);
+		synchronized (this) {
 
-				if (BytesUtil.matches(buf.bytes(), action, route.action, true)
-						&& BytesUtil.startsWith(buf.bytes(), path, route.path, true)) {
-					int pos = path.start + route.path.length;
-					if (path.limit() == pos || buf.get(pos) == '/') {
-						x.setSubpath(pos, path.limit());
-						handle(route.handler, x);
-						return;
+			SimpleList<Route> candidates = routes.get(hash);
+			candidates = routes.get(hash);
+
+			if (candidates != null) {
+
+				for (int i = 0; i < candidates.size(); i++) {
+					Route route = candidates.get(i);
+
+					if (BytesUtil.matches(buf.bytes(), action, route.action, true)
+							&& BytesUtil.startsWith(buf.bytes(), path, route.path, true)) {
+
+						int pos = path.start + route.path.length;
+						if (path.limit() == pos || buf.get(pos) == '/') {
+							x.setSubpath(pos, path.limit());
+							return route.handler;
+						}
 					}
 				}
 			}
-		}
 
-		if (genericHandler != null) {
-			x.setSubpath(path.start, path.limit());
-			handle(genericHandler, x);
-			return;
+			if (genericHandler != null) {
+				x.setSubpath(path.start, path.limit());
+				return genericHandler;
+			}
 		}
 
 		throw x.notFound();
@@ -147,9 +155,7 @@ public class HttpRouter implements Router {
 			throw new IllegalArgumentException("Invalid url: " + url);
 		}
 
-		if (url.endsWith("/")) {
-			url = url.substring(0, url.length() - 1);
-		}
+		url = U.trimr(url, "/");
 
 		if (!url.startsWith("/")) {
 			url = "/" + url;
