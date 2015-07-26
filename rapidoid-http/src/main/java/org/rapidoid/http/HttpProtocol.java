@@ -200,7 +200,9 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			x.completeResponse();
 		} else if (cause instanceof HttpNotFoundException) {
 			// notFound
-			Log.warn("HTTP resource not found!", "app", AppCtx.app().getId(), "uri", x.uri());
+			if (!x.uri().equals("/favicon.ico")) {
+				Log.warn("HTTP resource not found!", "app", AppCtx.app().getId(), "uri", x.uri());
+			}
 			x.completeResponse();
 		} else if (cause instanceof ThreadDeath) {
 			Log.error("Thread death, probably timeout!", "request", x, "error", cause);
