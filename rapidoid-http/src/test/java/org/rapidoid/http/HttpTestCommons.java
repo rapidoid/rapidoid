@@ -22,25 +22,12 @@ package org.rapidoid.http;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
-import java.util.Collection;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.Header;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicHeader;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -56,7 +43,6 @@ import org.rapidoid.data.Range;
 import org.rapidoid.io.IO;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -79,8 +65,8 @@ public abstract class HttpTestCommons extends TestCommons {
 		Ctxs.close();
 	}
 
-	protected String localhost(String url) {
-		return "http://localhost:8080" + url;
+	protected String localhost(String uri) {
+		return "http://localhost:8080" + uri;
 	}
 
 	protected void server() {
@@ -139,96 +125,6 @@ public abstract class HttpTestCommons extends TestCommons {
 		System.out.println("--- SERVER STOPPED ---");
 	}
 
-	private CloseableHttpClient makeClient() {
-		Collection<? extends Header> headers = U.list(new BasicHeader("host", "localhost"));
-		CloseableHttpClient client = HttpClientBuilder.create().setDefaultHeaders(headers).disableAutomaticRetries()
-				.build();
-		return client;
-	}
-
-	protected String upload(String path, Map<String, String> params, Map<String, String> files) throws IOException,
-			ClientProtocolException {
-
-		CloseableHttpClient client = makeClient();
-
-		try {
-			HttpPost httppost = new HttpPost(localhost(path));
-
-			MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-
-			for (Entry<String, String> entry : files.entrySet()) {
-				ContentType contentType = ContentType.create("application/octet-stream");
-				String filename = entry.getValue();
-				builder = builder.addBinaryBody(entry.getKey(), resourceFile(filename), contentType, filename);
-			}
-
-			for (Entry<String, String> entry : params.entrySet()) {
-				ContentType contentType = ContentType.create("text/plain", "UTF-8");
-				builder = builder.addTextBody(entry.getKey(), entry.getValue(), contentType);
-			}
-
-			httppost.setEntity(builder.build());
-
-			httppost.addHeader("Cookie", "COOKIE1=a");
-			httppost.addHeader("COOKIE", "foo=bar");
-
-			System.out.println("REQUEST " + httppost.getRequestLine());
-
-			UTILS.startMeasure();
-			CloseableHttpResponse response = client.execute(httppost);
-			UTILS.endMeasure();
-
-			try {
-				Assert.assertEquals(200, response.getStatusLine().getStatusCode());
-
-				InputStream resp = response.getEntity().getContent();
-				String decoded = IOUtils.toString(resp, "UTF-8");
-
-				return decoded;
-			} finally {
-				response.close();
-			}
-		} finally {
-			client.close();
-		}
-	}
-
-	protected String get(String url) {
-		try {
-			CloseableHttpClient client = makeClient();
-
-			HttpGet get = new HttpGet(localhost(url));
-
-			CloseableHttpResponse result = client.execute(get);
-
-			eq(result.getStatusLine().getStatusCode(), 200);
-
-			InputStream resp = result.getEntity().getContent();
-
-			return IOUtils.toString(resp, "UTF-8");
-		} catch (Throwable e) {
-			throw U.rte(e);
-		}
-	}
-
-	protected byte[] getBytes(String url) {
-		try {
-			CloseableHttpClient client = makeClient();
-
-			HttpGet get = new HttpGet(localhost(url));
-
-			CloseableHttpResponse result = client.execute(get);
-
-			Assert.assertEquals(200, result.getStatusLine().getStatusCode());
-
-			InputStream resp = result.getEntity().getContent();
-
-			return IOUtils.toByteArray(resp);
-		} catch (Throwable e) {
-			throw U.rte(e);
-		}
-	}
-
 	protected void eq(String whole, Range range, String expected) {
 		eq(range.get(whole), expected);
 	}
@@ -283,6 +179,20 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	protected String resourceMD5(String filename) throws IOException, URISyntaxException {
 		return Crypto.md5(FileUtils.readFileToByteArray(new File(IO.resource(filename).toURI())));
+	}
+
+	protected String upload(String uri, Map<String, String> params, Map<String, String> files) throws IOException,
+			ClientProtocolException {
+		Map<String, String> headers = U.map("Cookie", "COOKIE1=a", "COOKIE", "foo=bar");
+		return HTTP.post(localhost(uri), headers, params, files);
+	}
+
+	protected String get(String uri) {
+		return HTTP.get(localhost(uri));
+	}
+
+	protected byte[] getBytes(String uri) {
+		return HTTP.getBytes(localhost(uri));
 	}
 
 }
