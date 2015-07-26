@@ -471,6 +471,25 @@ public class U {
 		return value != null ? value : fallback;
 	}
 
+	public static String safe(String s) {
+		return or(s, "");
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> safe(List<T> list) {
+		return or(list, Collections.EMPTY_LIST);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> Set<T> safe(Set<T> list) {
+		return or(list, Collections.EMPTY_SET);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <K, V> Map<K, V> safe(Map<K, V> list) {
+		return or(list, Collections.EMPTY_MAP);
+	}
+
 	public static long time() {
 		return System.currentTimeMillis();
 	}

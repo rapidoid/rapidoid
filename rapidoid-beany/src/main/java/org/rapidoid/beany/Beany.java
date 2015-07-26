@@ -442,7 +442,7 @@ public class Beany {
 
 			Prop nameProp = property(bean, "name", false);
 			if (nameProp != null && nameProp.getType() == String.class) {
-				return U.or((String) nameProp.get(bean), "");
+				return U.safe((String) nameProp.get(bean));
 			}
 
 			props = propertiesOf(bean);
@@ -492,7 +492,7 @@ public class Beany {
 
 			Prop nameProp = property(bean, "name", false);
 			if (nameProp != null && nameProp.getType() == String.class) {
-				return U.or((String) nameProp.get(bean), "");
+				return U.safe((String) nameProp.get(bean));
 			}
 
 			props = propertiesOf(bean);
