@@ -1,10 +1,13 @@
 package org.rapidoid.io;
 
 import java.io.File;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.concurrent.ConcurrentMap;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 
 /*
@@ -43,6 +46,8 @@ public class CachedResource {
 
 	private volatile String content;
 
+	private volatile Reader reader;
+
 	public CachedResource(String name) {
 		this.name = name;
 	}
@@ -62,6 +67,13 @@ public class CachedResource {
 	}
 
 	public synchronized byte[] getBytes() {
+		loadResource();
+
+		U.must(exists(), "The resource %s doesn't exist!", name);
+		return bytes;
+	}
+
+	protected void loadResource() {
 		// micro-caching the file content, expires after 1 second
 		if (U.time() - lastUpdatedOn >= 1000) {
 			load(name);
@@ -70,12 +82,13 @@ public class CachedResource {
 				// if the resource doesn't exist, try loading the default resource
 				load(IO.getDefaultFilename(name));
 			}
-
-			content = null; // invalidate
-			lastUpdatedOn = U.time();
 		}
+	}
 
-		return bytes;
+	protected void invalidate() {
+		content = null;
+		reader = null;
+		lastUpdatedOn = U.time();
 	}
 
 	protected void load(String filename) {
@@ -84,16 +97,22 @@ public class CachedResource {
 		if (file.exists()) {
 			// a normal file on the file system
 			if (file.lastModified() > this.lastModified) {
+				Log.debug("Reloading file", "name", filename);
 				this.lastModified = file.lastModified();
 				this.bytes = IO.loadBytes(filename);
+				invalidate();
 			}
 		} else {
 			// it might not exist or it might be on the classpath or compressed in a JAR
+			Log.debug("Reloading classpath resource", "name", filename);
 			this.bytes = IO.loadBytes(filename);
+			invalidate();
 		}
 	}
 
 	public synchronized String getContent() {
+		U.must(exists(), "The resource %s doesn't exist!", name);
+
 		if (content == null) {
 			byte[] b = getBytes();
 			content = b != null ? new String(b) : null;
@@ -103,7 +122,8 @@ public class CachedResource {
 	}
 
 	public boolean exists() {
-		return getBytes() != null;
+		loadResource();
+		return bytes != null;
 	}
 
 	public String getName() {
@@ -113,6 +133,16 @@ public class CachedResource {
 	@Override
 	public String toString() {
 		return "Res(" + name + ")";
+	}
+
+	public synchronized Reader getReader() {
+		U.must(exists(), "The resource %s doesn't exist!", name);
+
+		if (reader == null) {
+			reader = new StringReader(getContent());
+		}
+
+		return reader;
 	}
 
 }
