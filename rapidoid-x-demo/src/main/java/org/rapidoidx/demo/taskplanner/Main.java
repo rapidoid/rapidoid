@@ -34,7 +34,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		Application app = Applications.openRootContext();
-		Apps.run(app, "oauth-no-state");
+		Apps.run(app, args, "oauth-no-state");
 
 		XDB.clear();
 		for (int i = 0; i < 100; i++) {

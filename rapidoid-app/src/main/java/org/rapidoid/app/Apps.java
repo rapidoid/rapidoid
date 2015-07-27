@@ -62,29 +62,29 @@ public class Apps {
 
 	private static AppClasses APP_CLASSES;
 
-	public static void run(Application app, Object... args) {
-		bootstrap(app, args);
-		serve(app, args);
+	public static void run(Application app, String[] args, Object... config) {
+		bootstrap(app, args, config);
+		serve(app, args, config);
 	}
 
-	public static void bootstrap(Application app, Object... args) {
-		Set<String> config = U.set();
+	public static void bootstrap(Application app, String[] args, Object... config) {
+		Set<String> configArgs = U.set(args);
 
-		for (Object arg : args) {
-			processArg(config, arg);
+		for (Object arg : config) {
+			processArg(configArgs, arg);
 		}
 
-		String[] configArgs = config.toArray(new String[config.size()]);
-		Conf.args(configArgs);
-		Log.args(configArgs);
+		String[] configArgsArr = configArgs.toArray(new String[configArgs.size()]);
+		Conf.args(configArgsArr);
+		Log.args(configArgsArr);
 
 		Plugins.register(new MustacheTemplatesPlugin());
 		AOP.register(Transaction.class, new TransactionInterceptor());
 
-		Lifecycle.onStart(args);
+		Lifecycle.onStart(configArgsArr);
 	}
 
-	public static HTTPServer serve(Application app, Object... args) {
+	public static HTTPServer serve(Application app, String[] args, Object... config) {
 		HTTPServer server = HTTP.server().build();
 
 		OAuth.register(app);

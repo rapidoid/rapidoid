@@ -46,30 +46,30 @@ import org.rapidoid.util.U;
 @Since("3.0.0")
 public class Quick {
 
-	public static void run(Application app, Object[] args) {
-		bootstrap(app, args);
-		serve(app, args);
+	public static void run(Application app, String[] args, Object... config) {
+		bootstrap(app, args, config);
+		serve(app, args, config);
 	}
 
-	public static void serve(Application app, Object... args) {
-		Apps.serve(app, args);
+	public static void serve(Application app, String[] args, Object... config) {
+		Apps.serve(app, args, config);
 	}
 
-	public static void bootstrap(Application app, final Object... args) {
+	public static void bootstrap(Application app, final String[] args, Object... config) {
 		Applications.main().setDefaultApp(app);
 
 		Ctxs.open();
-		Ctxs.setPersisterProvider(new QuickJPA(args));
+		Ctxs.setPersisterProvider(new QuickJPA(config));
 
 		HibernateDBPlugin db = new HibernateDBPlugin();
 
-		List<Object> appArgs = U.<Object> list(db);
-		appArgs.addAll(U.list(args));
-		Apps.bootstrap(app, U.array(appArgs));
+		Plugins.register(new AppClasspathEntitiesPlugin());
+
+		List<Object> appConfig = U.<Object> list(config);
+		appConfig.add(db);
+		Apps.bootstrap(app, args, U.array(appConfig));
 
 		Applications.main().register(app);
-
-		Plugins.register(new AppClasspathEntitiesPlugin());
 
 		// TODO provide better support for javax.transaction.Transactional
 		AOP.register(Transactional.class, new TransactionInterceptor());

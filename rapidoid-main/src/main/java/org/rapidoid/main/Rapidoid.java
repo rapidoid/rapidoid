@@ -34,20 +34,12 @@ public class Rapidoid {
 
 	private static boolean initialized = false;
 
-	public static void run(String[] args) {
-		run((Object[]) args);
-	}
-
-	public static void run(Application app, String[] args) {
-		run(app, (Object[]) args);
-	}
-
-	public static synchronized void run(Object... args) {
+	public static synchronized void run(String[] args, Object... config) {
 		Application noApp = null;
-		run(noApp, args);
+		run(noApp, args, config);
 	}
 
-	public static synchronized void run(Application app, Object... args) {
+	public static synchronized void run(Application app, String[] args, Object... config) {
 		Log.info("Starting Rapidoid...");
 		U.must(!initialized, "Already initialized!");
 		initialized = true;
@@ -58,7 +50,7 @@ public class Rapidoid {
 
 		MainHelp.processHelp(args);
 
-		Quick.run(app, args);
+		Quick.run(app, args, config);
 	}
 
 	public static void register(Application app) {

@@ -51,7 +51,7 @@ public class Main {
 		Email.send("someone@somewhere.rapidoid.io", "Hey!",
 				"Dear Someone,\n\nHow are you?\nThis is just a test e-mail!\n\nRegards,\nSomebody", null);
 
-		Rapidoid.run("oauth-no-state");
+		Rapidoid.run(args, "oauth-no-state");
 
 		for (int i = 0; i < 120; i++) {
 			Jobs.schedule(new Runnable() {
