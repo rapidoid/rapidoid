@@ -20,9 +20,13 @@ package org.rapidoid.plugins.templates;
  * #L%
  */
 
+import java.io.Reader;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.io.CachedResource;
 import org.rapidoid.io.IO;
+import org.rapidoid.log.Log;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.FragmentKey;
@@ -50,20 +54,28 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 	}
 
 	@Override
-	public Mustache compile(String filename) {
-		String name = IO.getReadOrDefaultFilename(filename);
-		return super.compile(name);
+	public Mustache compile(String name) {
+		String filename = IO.getReadOrDefaultFilename(name);
+		Log.debug("Compiling template", "name", filename);
+		return super.compilePartial(filename);
 	}
 
 	@Override
-	public Mustache compilePartial(String filename) {
-		String name = IO.getReadOrDefaultFilename(filename);
-		return super.compilePartial(name);
+	public Mustache compilePartial(String name) {
+		String filename = IO.getReadOrDefaultFilename(name);
+		Log.debug("Compiling partial", "name", filename);
+		return super.compilePartial(filename);
 	}
 
 	public void invalidateCache() {
 		mustacheCache.invalidateAll();
 		lambdaCache.invalidateAll();
+	}
+
+	@Override
+	public Reader getReader(String resourceName) {
+		CachedResource res = CachedResource.from(resourceName);
+		return res.getReader();
 	}
 
 }
