@@ -865,13 +865,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized boolean isDevMode() {
-		if (Conf.production()) {
-			return false;
-		}
-
-		String host = host();
-		return host == null || host.equals("localhost") || host.equals("127.0.0.1") || host.startsWith("localhost:")
-				|| host.startsWith("127.0.0.1:");
+		return AppCtx.app().dev();
 	}
 
 	@Override
@@ -969,13 +963,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	public synchronized void init(HttpResponses responses, SessionStore sessionStore) {
 		this.responses = responses;
 		this.sessionStore = sessionStore;
-
-		synchronized (Conf.class) {
-			if (Conf.option("mode", null) == null) {
-				Conf.set("mode", isDevMode() ? "dev" : "production");
-				Log.info("Auto-detected dev/production mode", "mode", Conf.option("mode"));
-			}
-		}
 
 		String cookiepack = cookie(HttpExchangeImpl.COOKIEPACK_COOKIE, null);
 		if (!U.isEmpty(cookiepack) && !cookiepack.equals("null")) {
