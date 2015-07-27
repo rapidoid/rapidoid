@@ -20,7 +20,6 @@
 <script src="/rapidoid.min.js"></script>
 <link href="/rapidoid.min.css" rel="stylesheet">
 {{/dev}}
-
 {{^dev}}
 <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 
@@ -38,7 +37,7 @@
 <link href="/app.css" rel="stylesheet">
 <link href="/img/favicon.png" rel="shortcut icon">
 
-{{{head}}}
+{{>head}}
 {{{head_extra}}}
 <script>
 window.__state = {{{state}}};
