@@ -67,7 +67,8 @@ public class DefaultMultiData implements MultiData {
 
 	@Override
 	public String get(String name) {
-		return get().get(name);
+		Data data = get_(name);
+		return data != null ? data.get() : null;
 	}
 
 	@Override
