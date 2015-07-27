@@ -58,7 +58,7 @@ public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 		}
 
 		if (key.isAcceptable()) {
-			Log.debug("accepting", "key", key);
+			Log.trace("accepting", "key", key);
 
 			try {
 				acceptOP(key);
@@ -71,7 +71,7 @@ public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 			}
 
 		} else if (key.isConnectable()) {
-			Log.debug("connection event", "key", key);
+			Log.trace("connection event", "key", key);
 
 			try {
 				connectOP(key);
@@ -83,7 +83,7 @@ public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 				Log.error("connect failed for key: " + key, e);
 			}
 		} else if (key.isReadable()) {
-			Log.debug("reading", "key", key);
+			Log.trace("reading", "key", key);
 
 			try {
 				readOP(key);
@@ -96,7 +96,7 @@ public abstract class AbstractEventLoop<T> extends AbstractLoop<T> {
 			}
 
 		} else if (key.isWritable()) {
-			Log.debug("writing", "key", key);
+			Log.trace("writing", "key", key);
 
 			try {
 				writeOP(key);
