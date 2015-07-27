@@ -46,8 +46,6 @@ public class CachedResource {
 
 	private volatile String content;
 
-	private volatile Reader reader;
-
 	public CachedResource(String name) {
 		this.name = name;
 	}
@@ -87,7 +85,6 @@ public class CachedResource {
 
 	protected void invalidate() {
 		content = null;
-		reader = null;
 		lastUpdatedOn = U.time();
 	}
 
@@ -137,12 +134,7 @@ public class CachedResource {
 
 	public synchronized Reader getReader() {
 		U.must(exists(), "The resource %s doesn't exist!", name);
-
-		if (reader == null) {
-			reader = new StringReader(getContent());
-		}
-
-		return reader;
+		return new StringReader(getContent());
 	}
 
 }
