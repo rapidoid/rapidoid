@@ -55,7 +55,6 @@ public class CachedResourceTest extends TestCommons {
 	public void testWithNonexistingFiles() {
 		CachedResource file = CachedResource.from("asfgsafd");
 		isFalse(file.exists());
-		isNull(file.getBytes());
 	}
 
 }
