@@ -40,19 +40,18 @@ import org.rapidoid.net.impl.RapidoidConnection;
 import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.ContextAwareTest;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class PagesTestCommons extends TestCommons {
+public class PagesTestCommons extends ContextAwareTest {
 
 	@SuppressWarnings({ "unchecked" })
 	protected static final Map<Integer, Object> NO_CHANGES = Collections.EMPTY_MAP;
 
 	@Before
 	public void init() {
-		Ctxs.open(); // open context for each test
 		Plugins.register(new MustacheTemplatesPlugin());
 	}
 
