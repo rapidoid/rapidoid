@@ -156,32 +156,39 @@ public class ClasspathUtil {
 
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 
-		String pkgName = U.or(packageName, "");
+		String pkgName = U.safe(packageName);
+		String pkgPath = pkgName.replace('.', File.separatorChar);
 
 		Set<String> classpath = getClasspath();
+
+		Log.info("Scanning classpath", "classpath", classpath);
 
 		Set<String> jars = U.set();
 
 		for (String cpe : classpath) {
-			File file = new File(cpe);
+			File cpEntry = new File(cpe);
 
-			String path = file.getAbsolutePath();
+			if (cpEntry.exists()) {
+				if (cpEntry.isDirectory()) {
+					if (shouldScanDir(cpEntry.getAbsolutePath())) {
+						Log.debug("Scanning directory", "root", cpEntry.getAbsolutePath());
 
-			String pkgPath = pkgName.replace('.', File.separatorChar);
-			String rootPath = pkgPath.isEmpty() ? path : path.replace(File.separatorChar + pkgPath, "");
+						File startingDir;
+						if (pkgPath.isEmpty()) {
+							startingDir = cpEntry;
+						} else {
+							startingDir = new File(cpEntry.getAbsolutePath(), pkgPath);
+						}
 
-			File root = new File(rootPath);
-
-			if (root.exists()) {
-				if (root.isDirectory()) {
-					if (shouldScanDir(root.getAbsolutePath())) {
-						Log.debug("Scanning directory", "name", root.getAbsolutePath());
-						getClassesFromDir(classes, root, file, regex, filter, annotated, classLoader);
+						if (startingDir.exists()) {
+							getClassesFromDir(classes, cpEntry, startingDir, pkgName, regex, filter, annotated,
+									classLoader);
+						}
 					} else {
-						Log.debug("Skipping directory", "name", root.getAbsolutePath());
+						Log.debug("Skipping directory", "root", cpEntry.getAbsolutePath());
 					}
-				} else if (root.isFile() && root.getAbsolutePath().toLowerCase().endsWith(".jar")) {
-					jars.add(root.getAbsolutePath());
+				} else if (cpEntry.isFile() && cpEntry.getAbsolutePath().toLowerCase().endsWith(".jar")) {
+					jars.add(cpEntry.getAbsolutePath());
 				} else {
 					Log.warn("Invalid classpath entry: " + cpe);
 				}
@@ -212,22 +219,21 @@ public class ClasspathUtil {
 		return simpleName.startsWith("app.") || simpleName.startsWith("app-");
 	}
 
-	private static void getClassesFromDir(Collection<Class<?>> classes, File root, File parent, Pattern regex,
+	private static void getClassesFromDir(Collection<Class<?>> classes, File root, File dir, String pkg, Pattern regex,
 			Predicate<Class<?>> filter, Class<? extends Annotation> annotated, ClassLoader classLoader) {
+		U.must(dir.isDirectory());
+		Log.debug("Traversing directory", "root", root, "dir", dir);
 
-		if (parent.isDirectory()) {
-			Log.debug("scanning directory", "dir", parent);
-			for (File file : parent.listFiles()) {
-				if (file.isDirectory()) {
-					getClassesFromDir(classes, root, file, regex, filter, annotated, classLoader);
-				} else {
-					String rootPath = U.trimr(root.getAbsolutePath(), File.separatorChar);
-					int from = rootPath.length() + 1;
-					String relName = file.getAbsolutePath().substring(from);
+		for (File file : dir.listFiles()) {
+			if (file.isDirectory()) {
+				getClassesFromDir(classes, root, file, pkg, regex, filter, annotated, classLoader);
+			} else {
+				String rootPath = U.trimr(root.getAbsolutePath(), File.separatorChar);
+				int from = rootPath.length() + 1;
+				String relName = file.getAbsolutePath().substring(from);
 
-					if (!ignore(relName)) {
-						scanFile(classes, regex, filter, annotated, classLoader, relName);
-					}
+				if (!ignore(relName)) {
+					scanFile(classes, regex, filter, annotated, classLoader, relName);
 				}
 			}
 		}
