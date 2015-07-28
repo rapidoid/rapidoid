@@ -16,4 +16,10 @@ cat assets/*.css >> $DISTRO_CSS
 cat assets-rapidoid/rapidoid-extras.css >> $DISTRO_CSS
 ls -l $DISTRO_CSS
 
+# COPY TO DOCS
+DOCS=../rapidoid.github.io/
+cp $DISTRO_JS $DOCS/rapidoid.min.js
+cp $DISTRO_CSS $DOCS/rapidoid.min.css
+cp rapidoid-html/src/main/resources/public/bootstrap/css/theme-default.css $DOCS/theme-default.css
+
 # TODO: angular.textangular(textAngular-sanitize.min.js+textAngular.min.js),angular.angucomplete-alt,angular.file-upload,bootstrap.lightbox
