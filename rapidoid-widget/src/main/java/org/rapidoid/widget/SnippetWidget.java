@@ -52,16 +52,19 @@ public class SnippetWidget extends AbstractWidget {
 		return hardcoded("<pre class=\"example-code\">" + prettify() + "</pre>");
 	}
 
-	public String prettify() {
-
+	public static String prettify(String sourceCode, boolean escape) {
 		// ignoring "\"" => "&quot
-		String snippet = code.replace("<", "&lt;").replace(">", "&gt;").replace("&", "&amp;");
+		String snippet = escape ? sourceCode.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+				: sourceCode;
 
 		snippet = UTILS.replace(snippet, regex, new Mapper<String[], String>() {
 			@Override
 			public String map(String[] src) throws Exception {
 				String s = src[0];
 				char ch = s.charAt(0);
+
+				// FIXME @Annotations
+
 				if (Character.isUpperCase(ch)) {
 					return "<span class=\"_code_cls\">" + s + "</span>";
 				} else if (ch == '"' || ch == "'".charAt(0)) {
@@ -79,6 +82,10 @@ public class SnippetWidget extends AbstractWidget {
 		snippet = snippet.replaceAll("\n(\\s*)(.*)\\s//\\shere", "\n$1<span class=\"important-code\">$2</span>");
 
 		return snippet.trim();
+	}
+
+	public String prettify() {
+		return prettify(code, true);
 	}
 
 }
