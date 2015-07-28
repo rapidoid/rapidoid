@@ -58,6 +58,8 @@ public class ClasspathUtil {
 
 	private static final Set<String> CLASSPATH = new TreeSet<String>();
 
+	private static boolean ignoreRapidoidClasses = true;
+
 	private ClasspathUtil() {}
 
 	static {
@@ -316,6 +318,10 @@ public class ClasspathUtil {
 	}
 
 	private static boolean ignore(String name) {
+		if (ignoreRapidoidClasses && (name.startsWith("org.rapidoid.") || name.startsWith("org.rapidoidx."))) {
+			return true;
+		}
+
 		String pkgName = U.triml(name, File.separatorChar);
 
 		int p1 = pkgName.indexOf(File.separatorChar);
@@ -374,6 +380,10 @@ public class ClasspathUtil {
 		return (annotated == null || cls.getAnnotation(annotated) != null)
 				&& (regex == null || (cls.getCanonicalName() != null && regex.matcher(cls.getCanonicalName()).matches()))
 				&& (filter == null || Lambdas.eval(filter, cls));
+	}
+
+	public static void setIgnoreRapidoidClasses(boolean ignoreRapidoidClasses) {
+		ClasspathUtil.ignoreRapidoidClasses = ignoreRapidoidClasses;
 	}
 
 }

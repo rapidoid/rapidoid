@@ -1305,8 +1305,6 @@ qunix
 raidenjpa
 raml
 randombits
-rapidoid
-rapidoidx
 rapidpm
 rarefiedredis
 rasdaman
