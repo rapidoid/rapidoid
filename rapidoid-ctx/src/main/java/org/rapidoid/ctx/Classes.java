@@ -20,16 +20,23 @@ package org.rapidoid.ctx;
  * #L%
  */
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.tuple.Tuple;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.1.0")
 public class Classes extends LinkedHashMap<String, Class<?>> {
 
 	private static final long serialVersionUID = 8987037790459772014L;
+
+	private final Map<Tuple, List<Class<?>>> cache = Collections.synchronizedMap(new HashMap<Tuple, List<Class<?>>>());
 
 	public static Classes from(Iterable<Class<?>> classes) {
 		Classes clss = new Classes();
@@ -39,6 +46,10 @@ public class Classes extends LinkedHashMap<String, Class<?>> {
 		}
 
 		return clss;
+	}
+
+	public Map<Tuple, List<Class<?>>> getCache() {
+		return cache;
 	}
 
 }

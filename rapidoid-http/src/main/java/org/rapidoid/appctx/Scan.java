@@ -40,8 +40,6 @@ import org.rapidoid.util.U;
 @Since("2.0.0")
 public class Scan {
 
-	private static final Map<Tuple, List<Class<?>>> CLASSES_CACHE = U.map();
-
 	private Scan() {}
 
 	public static List<Class<?>> classes() {
@@ -78,21 +76,19 @@ public class Scan {
 
 		packageName = U.or(packageName, "");
 
-		boolean caching = classLoader == null;
 		Tuple cacheKey = null;
-
-		if (caching) {
-			cacheKey = new Tuple(packageName, nameRegex, filter, annotated, classLoader);
-			List<Class<?>> classes = CLASSES_CACHE.get(cacheKey);
-			if (classes != null) {
-				return classes;
-			}
-		}
-
-		long startingAt = U.time();
 
 		Application app = Ctxs.ctx().app();
 		Classes appClasses = app.getClasses();
+		Map<Tuple, List<Class<?>>> cache = appClasses.getCache();
+
+		cacheKey = new Tuple(packageName, nameRegex, filter, annotated, classLoader);
+		List<Class<?>> cachedClasses = cache.get(cacheKey);
+		if (cachedClasses != null) {
+			return cachedClasses;
+		}
+
+		long startingAt = U.time();
 
 		Log.info("Filtering " + appClasses.size() + " classes", "annotated", annotated, "package", packageName, "name",
 				nameRegex);
@@ -101,9 +97,7 @@ public class Scan {
 
 		List<Class<?>> classes = filterClasses(appClasses, packageName, regex, filter, annotated);
 
-		if (caching) {
-			CLASSES_CACHE.put(cacheKey, classes);
-		}
+		cache.put(cacheKey, classes);
 
 		long timeMs = U.time() - startingAt;
 		Log.info("Finished classpath scan", "time", timeMs + "ms", "classes", classes);
