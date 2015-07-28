@@ -60,8 +60,6 @@ public class Apps {
 
 	private static final String BUILT_IN_SCREEN_SUFFIX = "BuiltIn";
 
-	private static AppClasses APP_CLASSES;
-
 	public static void run(Application app, String[] args, Object... config) {
 		bootstrap(app, args, config);
 		serve(app, args, config);
@@ -131,7 +129,7 @@ public class Apps {
 		return scanAppClasses(x, null);
 	}
 
-	public static synchronized AppClasses scanAppClasses(HttpExchange x, ClassLoader classLoader) {
+	public static AppClasses scanAppClasses(HttpExchange x, ClassLoader classLoader) {
 
 		Map<String, Class<?>> services = Cls.classMap(Scan.annotated(RESTful.class, classLoader));
 		Map<String, Class<?>> pages = Cls.classMap(Scan.annotated(Page.class, classLoader));
@@ -140,18 +138,11 @@ public class Apps {
 
 		final Class<?> appClass = !apps.isEmpty() ? apps.values().iterator().next() : null;
 
-		AppClasses APP_CLASSES = new AppClasses(appClass, services, pages, screens);
-		return APP_CLASSES;
+		return new AppClasses(appClass, services, pages, screens);
 	}
 
-	public static synchronized AppClasses getAppClasses(HttpExchange x, ClassLoader classLoader) {
-		// FIXME detect changes and invalidate cache
-
-		if (APP_CLASSES == null) {
-			APP_CLASSES = scanAppClasses(x, classLoader);
-		}
-
-		return APP_CLASSES;
+	public static AppClasses getAppClasses(HttpExchange x, ClassLoader classLoader) {
+		return scanAppClasses(x, classLoader);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -198,10 +189,6 @@ public class Apps {
 		Log.warn("Terminating application.");
 		Lifecycle.onShutdown();
 		System.exit(0);
-	}
-
-	public static void reset() {
-		APP_CLASSES = null;
 	}
 
 	public static Object instantiate(Class<?> appClass, HttpExchange x) {
