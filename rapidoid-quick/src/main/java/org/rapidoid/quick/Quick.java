@@ -57,6 +57,7 @@ public class Quick {
 
 	public static void bootstrap(Application app, final String[] args, Object... config) {
 		Applications.main().setDefaultApp(app);
+		Applications.main().register(app);
 
 		Ctxs.open();
 		Ctxs.setPersisterProvider(new QuickJPA(config));
@@ -68,8 +69,6 @@ public class Quick {
 		List<Object> appConfig = U.<Object> list(config);
 		appConfig.add(db);
 		Apps.bootstrap(app, args, U.array(appConfig));
-
-		Applications.main().register(app);
 
 		// TODO provide better support for javax.transaction.Transactional
 		AOP.register(Transactional.class, new TransactionInterceptor());

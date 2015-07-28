@@ -39,7 +39,7 @@ public class Applications {
 
 	private final Map<String, Map<String, Application>> appsByURL = U.mapOfMaps();
 
-	private Application defaultApp;
+	private volatile Application defaultApp;
 
 	public Applications(String name) {
 		this.name = name;
@@ -104,6 +104,11 @@ public class Applications {
 
 	public String getName() {
 		return name;
+	}
+
+	public synchronized void clear() {
+		appsByURL.clear();
+		defaultApp = null;
 	}
 
 }
