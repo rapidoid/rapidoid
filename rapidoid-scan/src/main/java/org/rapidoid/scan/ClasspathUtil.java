@@ -59,6 +59,8 @@ public class ClasspathUtil {
 	private static final Set<String> CLASSPATH = new TreeSet<String>();
 
 	private static boolean ignoreRapidoidClasses = true;
+	private static final String ORG_RAPIDOID_DIR = "org" + File.separatorChar + "rapidoid" + File.separatorChar;
+	private static final String ORG_RAPIDOIDX_DIR = "org" + File.separatorChar + "rapidoidx" + File.separatorChar;
 
 	private ClasspathUtil() {}
 
@@ -318,24 +320,26 @@ public class ClasspathUtil {
 	}
 
 	private static boolean ignore(String name) {
-		if (ignoreRapidoidClasses && (name.startsWith("org.rapidoid.") || name.startsWith("org.rapidoidx."))) {
-			return true;
+		String pkgDirName = U.triml(name, File.separatorChar);
+
+		if (ignoreRapidoidClasses) {
+			if (pkgDirName.startsWith(ORG_RAPIDOID_DIR) || pkgDirName.startsWith(ORG_RAPIDOIDX_DIR)) {
+				return true;
+			}
 		}
 
-		String pkgName = U.triml(name, File.separatorChar);
-
-		int p1 = pkgName.indexOf(File.separatorChar);
+		int p1 = pkgDirName.indexOf(File.separatorChar);
 		int p2 = -1;
 
 		if (p1 > 0) {
-			String part1 = pkgName.substring(0, p1);
+			String part1 = pkgDirName.substring(0, p1);
 			if (SKIP_PACKAGES.contains(part1)) {
 				return true;
 			}
 
-			p2 = pkgName.indexOf(File.separatorChar, p1 + 1);
+			p2 = pkgDirName.indexOf(File.separatorChar, p1 + 1);
 			if (p2 > 0) {
-				String part2 = pkgName.substring(p1 + 1, p2);
+				String part2 = pkgDirName.substring(p1 + 1, p2);
 				if (U.isEmpty(part2)) {
 					return true;
 				}
