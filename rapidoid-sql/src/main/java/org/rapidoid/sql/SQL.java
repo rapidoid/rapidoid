@@ -22,6 +22,11 @@ package org.rapidoid.sql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -87,6 +92,32 @@ public class SQL {
 
 	public static <T> List<Map<String, Object>> get(String sql, Object... args) {
 		return API.getRows(sql, args);
+	}
+
+	public static List<Map<String, Object>> rows(ResultSet rs) throws SQLException {
+		List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+		while (rs.next()) {
+			rows.add(row(rs));
+		}
+		return rows;
+	}
+
+	public static Map<String, Object> row(ResultSet rs) throws SQLException {
+		Map<String, Object> row = new LinkedHashMap<String, Object>();
+
+		ResultSetMetaData meta = rs.getMetaData();
+		int columnsNumber = meta.getColumnCount();
+
+		for (int i = 1; i <= columnsNumber; i++) {
+			Object obj = rs.getObject(i);
+			row.put(meta.getColumnLabel(i), obj);
+		}
+
+		return row;
+	}
+
+	public static Connection getConnection() {
+		return API.getConnection();
 	}
 
 }

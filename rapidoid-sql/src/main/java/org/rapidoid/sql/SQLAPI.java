@@ -24,12 +24,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.rapidoid.log.Log;
+import org.rapidoid.util.U;
 
 public class SQLAPI {
 
@@ -136,7 +136,12 @@ public class SQLAPI {
 		}
 	}
 
-	private Connection getConnection() {
+	public Connection getConnection() {
+		ensureIsInitialized();
+		return provideConnection();
+	}
+
+	private Connection provideConnection() {
 		// TODO use a connection pool!
 
 		try {
@@ -195,7 +200,7 @@ public class SQLAPI {
 
 	public void run(String sql, Object... args) {
 		ensureIsInitialized();
-		Connection conn = getConnection();
+		Connection conn = provideConnection();
 		PreparedStatement stmt = null;
 
 		try {
@@ -214,47 +219,29 @@ public class SQLAPI {
 			run(sql, args);
 		} catch (Exception e) {
 			// ignore the exception
+			Log.warn("Ignoring exception", "error", U.safe(e.getMessage()));
 		}
 	}
 
 	public <T> List<Map<String, Object>> getRows(String sql, Object... args) {
 		ensureIsInitialized();
-		Connection conn = getConnection();
+		Connection conn = provideConnection();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
 
 		try {
 			stmt = createStatement(conn, sql, args);
 			rs = stmt.executeQuery();
-
-			while (rs.next()) {
-				rows.add(readRow(rs));
-			}
+			return SQL.rows(rs);
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
+
 		} finally {
 			close(rs);
 			close(stmt);
 			close(conn);
 		}
-
-		return rows;
-	}
-
-	static Map<String, Object> readRow(ResultSet rs) throws SQLException {
-		Map<String, Object> row = new LinkedHashMap<String, Object>();
-
-		ResultSetMetaData meta = rs.getMetaData();
-		int columnsNumber = meta.getColumnCount();
-
-		for (int i = 1; i <= columnsNumber; i++) {
-			Object obj = rs.getObject(i);
-			row.put(meta.getColumnLabel(i), obj);
-		}
-
-		return row;
 	}
 
 }
