@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="" />
+<meta name="author" content="" />
+
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script src="rapidoid.min.js"></script>
+
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+<link href="docs.css" type="text/css" rel="stylesheet" />
+<link href="rapidoid.min.css" type="text/css" rel="stylesheet" />
+<link href="theme-default.css" type="text/css" rel="stylesheet" />
+
+<title>Rapidoid - Cool Full-stack Web Framework for Java!</title>
+
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+<script src="//platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
+
+</head>
+
+<body>
+
+  <nav role="navigation" class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <button data-target="#collapsable" class="navbar-toggle collapsed" data-toggle="collapse" type="button">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Rapidoid</a>
+      </div>
+      <div id="collapsable" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-left">
+	  <li class="active"><a href="/">Getting started</a></li>
+	  <li><a href="community.html">Community &amp; Support</a></li>
+	  <li><a href="https://github.com/rapidoid/rapidoid">Source on GitHub</a></li>
+        </ul>
+
+<div class="navbar-brand navbar-right">
+				<a data-count-api="/repos/rapidoid/rapidoid#stargazers_count" data-count-href="/rapidoid/rapidoid/stargazers" data-icon="octicon-star" href="https://github.com/rapidoid/rapidoid" class="github-button">Star</a>
+				<a data-count-api="/repos/rapidoid/rapidoid#forks_count" data-count-href="/rapidoid/rapidoid/network" data-icon="octicon-git-branch" href="https://github.com/rapidoid/rapidoid/fork" class="github-button">Fork</a>
+
+				<script type="IN/Share" data-url="http://rapidoid.org/" data-counter="right"></script>
+				
+				<span class="g-plusone" data-size="medium"></span>
+				
+				<a href="https://twitter.com/share" rel="nofollow"
+					class="twitter-share-button navbar-btn" data-url="http://rapidoid.org"
+					data-text="Instantly develop web apps on-line with #Rapidoid and #Java8 #cloud!" data-size="small">Tweet</a>
+</div>
+      </div>
+    </div>
+  </nav>
+
+	<div class="container">
+
+		<div class="row">
+			<div class="col-md-7 col-sm-12">
+				<h4 id="main_subtitle">
+					<span class="rapidoid">Rapidoid - Cool Full-stack Web Framework for Java!</span>
+					<a class="button btn btn-warning" href="http://rapidoid.org">Try it on-line!</a>
+				</h4>
+			</div>
+
+			<div class="col-md-5 col-sm-12">
+{{>subscribe}}
+			</div>
+		</div>
+
+<!-- FEATURES -->
+
+<div class="row">
+  <div class="col-md-6">
+    <div id="features">
+    	<h2>Features:</h2>
+    </div>
+<p><span class="feature-point fa fa-check-square-o"></span><b>CRUD and GUI Scaffolding</b></p>
+<p><span class="feature-point fa fa-check-square-o"></span>auto-expanding <b>off-heap buffers</b> </p> 
+<p><span class="feature-point fa fa-check-square-o"></span>high-performance <b>async TCP/IP client framework</b> </p> 
+<p><span class="feature-point fa fa-check-square-o"></span>high-performance <b>async TCP/IP server framework</b> (10M req/s)...    
+  </div>
+  
+  <div class="col-md-6">
+    <div id="features">
+        {{>maven}}
+    </div>
+  </div>
+  
+</div>
+
+{{#examples}}
+{{>example}}
+{{/examples}}
+
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="caption"><a id="showcase"></a>Showcase snippets (expressions)</h3>
+    </div>
+</div>
+
+{{>expressions}}
+
+</div>
+	<script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>	
+
+</body>
+</html>

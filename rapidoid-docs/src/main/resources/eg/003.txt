@@ -1,0 +1,5 @@
+GET /
+GET /hey/Joe/50
+GET /hello?name=Highlander&age=900
+GET /foo
+POST /foo/aaa/123/bc

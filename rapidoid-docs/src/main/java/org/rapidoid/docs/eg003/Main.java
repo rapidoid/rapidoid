@@ -1,7 +1,12 @@
 package org.rapidoid.docs.eg003;
 
-import org.rapidoid.annotation.App;
-import org.rapidoid.app.GUI;
+import java.util.List;
+import java.util.Map;
+
+import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.POST;
+import org.rapidoid.annotation.Param;
+import org.rapidoid.annotation.RESTful;
 import org.rapidoid.main.Rapidoid;
 
 /*
@@ -24,24 +29,33 @@ import org.rapidoid.main.Rapidoid;
  * #L%
  */
 
-// Let's write some HTML in Java! :: Use method chaining to construct HTML tags:
+// RESTful services :: It is very easy to create RESTful services
 
-@App
+@RESTful
 public class Main {
-	String title = "Example 3";
 
 	public static void main(String[] args) {
 		Rapidoid.run(args);
 	}
-}
 
-class HomeScreen extends GUI {
-	Object content() {
-		Object link = a("Foo").href("foo.html"); // here
-		return h3("Welcome! Visit ", link); // here
+	@GET
+	public String hey(String name, int age) {
+		return "Hey " + name + " (" + age + ")";
 	}
-}
 
-class FooScreen {
-	String content = "At the Foo screen!";
+	@GET("/hello")
+	public String hey2(@Param("name") String s, @Param("age") int years) {
+		return "Hey " + s + " (" + years + ")";
+	}
+
+	@POST
+	public List<String> foo(List<String> params) {
+		return params;
+	}
+
+	@GET("/barbar")
+	public Map<String, Object> bar(Map<String, Object> params) {
+		return params;
+	}
+
 }

@@ -1,7 +1,7 @@
-package org.rapidoid.docs.eg004;
+package org.rapidoid.docs.eg103;
 
 import org.rapidoid.annotation.App;
-import org.rapidoid.annotation.Screen;
+import org.rapidoid.app.GUI;
 import org.rapidoid.main.Rapidoid;
 
 /*
@@ -24,21 +24,24 @@ import org.rapidoid.main.Rapidoid;
  * #L%
  */
 
-// Rapidoid has built-in themes! :: Let's use the built-in theme 2:
+// Let's write some HTML in Java! :: Use method chaining to construct HTML tags:
 
 @App
 public class Main {
-	String title = "Example 4";
-	String content = "Fancy theme!";
-	String theme = "2"; // here
+	String title = "Example 3";
 
 	public static void main(String[] args) {
 		Rapidoid.run(args);
 	}
 }
 
-@Screen
-class FooScreen {}
+class HomeScreen extends GUI {
+	Object content() {
+		Object link = a("Foo").href("foo.html"); // here
+		return h3("Welcome! Visit ", link); // here
+	}
+}
 
-@Screen
-class BarScreen {}
+class FooScreen {
+	String content = "At the Foo screen!";
+}

@@ -1,0 +1,4 @@
+GET /
+GET /upper/abc
+GET /upper/XyZaBc
+POST /upper/XyZaBc

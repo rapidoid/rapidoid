@@ -1,19 +1,17 @@
-package org.rapidoid.docs.eg009;
+package org.rapidoid.docs.eg106;
 
-import static org.rapidoid.widget.BootstrapWidgets.btn;
+import static org.rapidoid.widget.BootstrapWidgets.CANCEL;
+import static org.rapidoid.widget.BootstrapWidgets.SAVE;
 import static org.rapidoid.widget.BootstrapWidgets.create;
 
 import javax.persistence.Entity;
 
 import org.rapidoid.annotation.App;
-import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.main.Rapidoid;
 import org.rapidoid.plugins.db.DB;
-import org.rapidoid.rql.RQL;
-import org.rapidoid.widget.ButtonWidget;
 import org.rapidoid.widget.FormWidget;
 
 /*
@@ -36,44 +34,39 @@ import org.rapidoid.widget.FormWidget;
  * #L%
  */
 
-// Customizing form fields and buttons :: Customizing a form 
+// Using the form widget ("create" mode) :: Creating form for new entity 
 
 @App
 public class Main {
-	String title = "Custom form";
-	String theme = "5";
+	String title = "New movie demo";
+	String theme = "1";
 
 	public static void main(String[] args) {
 		Rapidoid.run(args);
-	}
-
-	public void init() {
-		RQL.run("INSERT Movie title=Rambo, year=1985"); // here
 	}
 }
 
 @Screen
 class Home {
-
 	@Session
-	Movie movie;
+	Movie movie = new Movie();
 
 	Object content() {
-		movie = DB.get(Movie.class, "1");
-		FormWidget f = create(movie, "year"); // here
-		ButtonWidget ab = btn("Ab"); // here
-		ButtonWidget cd = btn("Change year").command("ch").primary(); // here
-		ButtonWidget efg = btn("!Efg").danger(); // here
-		f = f.buttons(ab, cd, efg); // here
+		FormWidget f = create(movie); // here
+		f = f.buttons(SAVE, CANCEL); // here
 		return f;
 	}
 
-	public void onCh() {
-		DB.update(movie);
+	public void onSave() {
+		DB.insert(movie);
+		movie = new Movie();
+	}
+
+	public void onCancel() {
+		movie = new Movie();
 	}
 }
 
-@Scaffold
 @Entity
 class Movie extends JPAEntity {
 	String title;

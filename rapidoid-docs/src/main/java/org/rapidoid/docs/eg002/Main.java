@@ -1,7 +1,7 @@
 package org.rapidoid.docs.eg002;
 
-import org.rapidoid.annotation.App;
-import org.rapidoid.annotation.Screen;
+import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.RESTful;
 import org.rapidoid.main.Rapidoid;
 
 /*
@@ -24,25 +24,25 @@ import org.rapidoid.main.Rapidoid;
  * #L%
  */
 
-// An application consists of screens :: Add some screens:
+// Hello, world 2! :: Let's start Rapidoid:
 
-@App
+@RESTful
 public class Main {
-	String title = "Example 2";
 
 	public static void main(String[] args) {
 		Rapidoid.run(args);
 	}
-}
 
-@Screen
-class HomeScreen { // here
-	Object content() { // here
-		return "At the Home screen!"; // here
+	@GET
+	public String upper(String s) {
+		return s.toUpperCase();
 	}
 }
 
-@Screen
-class Foo { // here
-	Object content = "At the Foo screen!"; // here
+@RESTful
+class Opa {
+	@GET
+	public String iha() {
+		return "jee";
+	}
 }

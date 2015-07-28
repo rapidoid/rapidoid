@@ -1,19 +1,14 @@
-package org.rapidoid.docs.eg007;
+package org.rapidoid.docs.eg105;
 
-import static org.rapidoid.widget.BootstrapWidgets.CANCEL;
-import static org.rapidoid.widget.BootstrapWidgets.SAVE;
-import static org.rapidoid.widget.BootstrapWidgets.edit;
+import static org.rapidoid.app.AppGUI.grid;
 
 import javax.persistence.Entity;
 
 import org.rapidoid.annotation.App;
-import org.rapidoid.annotation.Screen;
-import org.rapidoid.annotation.Session;
+import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.main.Rapidoid;
-import org.rapidoid.plugins.db.DB;
 import org.rapidoid.rql.RQL;
-import org.rapidoid.widget.FormWidget;
 
 /*
  * #%L
@@ -35,12 +30,12 @@ import org.rapidoid.widget.FormWidget;
  * #L%
  */
 
-// Using the form widget ("edit" mode) :: Creating form for editing entity
+// Using the grid widget :: Grid widget automatically loading data from DB
 
 @App
 public class Main {
-	String title = "Edit movie demo";
-	String theme = "2";
+	String title = "Grid Widget";
+	String theme = "4";
 
 	public static void main(String[] args) {
 		Rapidoid.run(args);
@@ -48,30 +43,16 @@ public class Main {
 
 	public void init() {
 		RQL.run("INSERT Movie title=Rambo, year=1985"); // here
+		RQL.run("INSERT Movie title=Her, year=2013"); // here
+		RQL.run("INSERT Movie title=Batman, year=1989"); // here
 	}
-}
-
-@Screen
-class Home {
-	@Session
-	Movie movie;
 
 	Object content() {
-		movie = DB.get(Movie.class, "1"); // here
-		FormWidget f = edit(movie); // here
-		f = f.buttons(SAVE, CANCEL); // here
-		return f;
-	}
-
-	public void onSave() { // here
-		DB.update(movie);
-	}
-
-	public void onCancel() { // here
-		movie = DB.get(Movie.class, "1");
+		return grid(Movie.class).orderBy("year"); // here
 	}
 }
 
+@Scaffold
 @Entity
 class Movie extends JPAEntity {
 	String title;

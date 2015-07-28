@@ -1,4 +1,4 @@
-package org.rapidoid.docs.eg001;
+package org.rapidoid.docs.eg101;
 
 import org.rapidoid.annotation.App;
 import org.rapidoid.main.Rapidoid;

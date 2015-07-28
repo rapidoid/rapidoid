@@ -1,14 +1,8 @@
-package org.rapidoid.docs.eg005;
-
-import static org.rapidoid.app.AppGUI.grid;
-
-import javax.persistence.Entity;
+package org.rapidoid.docs.eg102;
 
 import org.rapidoid.annotation.App;
-import org.rapidoid.annotation.Scaffold;
-import org.rapidoid.jpa.JPAEntity;
+import org.rapidoid.annotation.Screen;
 import org.rapidoid.main.Rapidoid;
-import org.rapidoid.rql.RQL;
 
 /*
  * #%L
@@ -30,31 +24,25 @@ import org.rapidoid.rql.RQL;
  * #L%
  */
 
-// Using the grid widget :: Grid widget automatically loading data from DB
+// An application consists of screens :: Add some screens:
 
 @App
 public class Main {
-	String title = "Grid Widget";
-	String theme = "4";
+	String title = "Example 2";
 
 	public static void main(String[] args) {
 		Rapidoid.run(args);
 	}
+}
 
-	public void init() {
-		RQL.run("INSERT Movie title=Rambo, year=1985"); // here
-		RQL.run("INSERT Movie title=Her, year=2013"); // here
-		RQL.run("INSERT Movie title=Batman, year=1989"); // here
-	}
-
-	Object content() {
-		return grid(Movie.class).orderBy("year"); // here
+@Screen
+class HomeScreen { // here
+	Object content() { // here
+		return "At the Home screen!"; // here
 	}
 }
 
-@Scaffold
-@Entity
-class Movie extends JPAEntity {
-	String title;
-	int year;
+@Screen
+class Foo { // here
+	Object content = "At the Foo screen!"; // here
 }

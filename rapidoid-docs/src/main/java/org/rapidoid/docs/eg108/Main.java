@@ -1,8 +1,7 @@
-package org.rapidoid.docs.eg006;
+package org.rapidoid.docs.eg108;
 
-import static org.rapidoid.widget.BootstrapWidgets.CANCEL;
-import static org.rapidoid.widget.BootstrapWidgets.SAVE;
-import static org.rapidoid.widget.BootstrapWidgets.create;
+import static org.rapidoid.widget.BootstrapWidgets.BACK;
+import static org.rapidoid.widget.BootstrapWidgets.show;
 
 import javax.persistence.Entity;
 
@@ -12,6 +11,7 @@ import org.rapidoid.annotation.Session;
 import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.main.Rapidoid;
 import org.rapidoid.plugins.db.DB;
+import org.rapidoid.rql.RQL;
 import org.rapidoid.widget.FormWidget;
 
 /*
@@ -34,36 +34,32 @@ import org.rapidoid.widget.FormWidget;
  * #L%
  */
 
-// Using the form widget ("create" mode) :: Creating form for new entity 
+// Using the form widget ("view" mode) :: Creating form for displaying entity
 
 @App
 public class Main {
-	String title = "New movie demo";
-	String theme = "1";
+	String title = "Show movie demo";
+	String theme = "3";
 
 	public static void main(String[] args) {
 		Rapidoid.run(args);
+	}
+
+	public void init() {
+		RQL.run("INSERT Movie title=Rambo, year=1985"); // here
 	}
 }
 
 @Screen
 class Home {
 	@Session
-	Movie movie = new Movie();
+	Movie movie;
 
 	Object content() {
-		FormWidget f = create(movie); // here
-		f = f.buttons(SAVE, CANCEL); // here
+		movie = DB.get(Movie.class, "1"); // here
+		FormWidget f = show(movie); // here
+		f = f.buttons(BACK); // here
 		return f;
-	}
-
-	public void onSave() {
-		DB.insert(movie);
-		movie = new Movie();
-	}
-
-	public void onCancel() {
-		movie = new Movie();
 	}
 }
 

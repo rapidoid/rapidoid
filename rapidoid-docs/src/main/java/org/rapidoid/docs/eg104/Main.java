@@ -1,18 +1,8 @@
-package org.rapidoid.docs.eg008;
-
-import static org.rapidoid.widget.BootstrapWidgets.BACK;
-import static org.rapidoid.widget.BootstrapWidgets.show;
-
-import javax.persistence.Entity;
+package org.rapidoid.docs.eg104;
 
 import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Screen;
-import org.rapidoid.annotation.Session;
-import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.main.Rapidoid;
-import org.rapidoid.plugins.db.DB;
-import org.rapidoid.rql.RQL;
-import org.rapidoid.widget.FormWidget;
 
 /*
  * #%L
@@ -34,37 +24,21 @@ import org.rapidoid.widget.FormWidget;
  * #L%
  */
 
-// Using the form widget ("view" mode) :: Creating form for displaying entity
+// Rapidoid has built-in themes! :: Let's use the built-in theme 2:
 
 @App
 public class Main {
-	String title = "Show movie demo";
-	String theme = "3";
+	String title = "Example 4";
+	String content = "Fancy theme!";
+	String theme = "2"; // here
 
 	public static void main(String[] args) {
 		Rapidoid.run(args);
 	}
-
-	public void init() {
-		RQL.run("INSERT Movie title=Rambo, year=1985"); // here
-	}
 }
 
 @Screen
-class Home {
-	@Session
-	Movie movie;
+class FooScreen {}
 
-	Object content() {
-		movie = DB.get(Movie.class, "1"); // here
-		FormWidget f = show(movie); // here
-		f = f.buttons(BACK); // here
-		return f;
-	}
-}
-
-@Entity
-class Movie extends JPAEntity {
-	String title;
-	int year;
-}
+@Screen
+class BarScreen {}
