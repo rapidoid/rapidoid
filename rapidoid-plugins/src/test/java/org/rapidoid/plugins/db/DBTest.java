@@ -21,8 +21,6 @@ package org.rapidoid.plugins.db;
  */
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Set;
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
@@ -36,20 +34,9 @@ public class DBTest extends TestCommons {
 	/**
 	 * A demo example of DB API usage.
 	 */
-	@SuppressWarnings("unused")
 	@Test
 	public void showDbAPI() throws IOException {
-		Iterable<Book> books = DB.read(Book.class, "id1", "title", "year", "comments");
-
-		DB.addToSet("user1", "likes", "movie1");
-		DB.removeFromSet("user2", "likes", "book4");
-		Set<String> liked = DB.getSetItems("user1", "likes");
-		int size = DB.getSetSize("user1", "likes");
-
-		DB.addToList("user2", "todos", "buy something");
-		DB.removeFromList("user3", "todos", "go somewhere");
-		List<String> todos = DB.getListItems("user1", "todos");
-		int size2 = DB.getListSize("user1", "todos");
+		// FIXME New API changes rescheduled for some later release
 	}
 
 }

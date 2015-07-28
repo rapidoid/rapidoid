@@ -21,9 +21,7 @@ package org.rapidoid.plugins.db;
  */
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -163,50 +161,6 @@ public class DB {
 
 	public static void deleteAllData() {
 		Plugins.db().deleteAllData();
-	}
-
-	public static <T> Iterable<T> read(Class<T> clazz, String id, String... properties) {
-		return null;
-	}
-
-	public static void addToSet(String recordId, String setName, String item) {}
-
-	public static void removeFromSet(String recordId, String setName, String item) {}
-
-	public static Set<String> getSetItems(String recordId, String setName) {
-		return null;
-	}
-
-	public static int getSetSize(String recordId, String setName) {
-		return 0;
-	}
-
-	public static void addToList(String recordId, String listName, String item) {}
-
-	public static void removeFromList(String recordId, String listName, String item) {}
-
-	public static List<String> getListItems(String recordId, String listName) {
-		return null;
-	}
-
-	public static int getListSize(String recordId, String listName) {
-		return 0;
-	}
-
-	public static void putToMap(String recordId, String mapName, String key, String value) {}
-
-	public static String getFromMap(String recordId, String mapName, String key) {
-		return null;
-	}
-
-	public static void removeFromMap(String recordId, String mapName, String key) {}
-
-	public static Map<String, String> getMapItems(String recordId, String mapName) {
-		return null;
-	}
-
-	public static int getMapSize(String recordId, String mapName) {
-		return 0;
 	}
 
 }
