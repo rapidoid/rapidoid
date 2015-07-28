@@ -42,7 +42,6 @@ import org.rapidoid.data.Ranges;
 import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.io.CachedResource;
 import org.rapidoid.json.JSON;
-import org.rapidoid.log.Log;
 import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;

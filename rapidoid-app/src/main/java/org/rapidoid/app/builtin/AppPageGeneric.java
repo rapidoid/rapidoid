@@ -40,7 +40,6 @@ import org.rapidoid.appctx.AppCtx;
 import org.rapidoid.appctx.Scan;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.config.Conf;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
