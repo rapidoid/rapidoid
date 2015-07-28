@@ -152,7 +152,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 
 			Tag userMenu = userMenu();
 
-			Tag debugMenu = Conf.dev() ? debugMenu() : null;
+			Tag debugMenu = x.isDevMode() ? debugMenu() : null;
 			FormTag searchForm = searchForm();
 
 			Tag navMenu = navbarMenu(true, activeIndex, menuItems);
