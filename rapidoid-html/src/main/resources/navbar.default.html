@@ -12,13 +12,17 @@
         <div id="collapsable" class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-left"></ul>
 
+{{^loggedIn}}
             <ul class="nav navbar-nav navbar-right">
 {{>signin}}
             </ul>
+{{/loggedIn}}
 
+{{#loggedIn}}
             <ul class="nav navbar-nav navbar-right">
 {{>profile}}
             </ul>
+{{/loggedIn}}
 
 {{>search}}
 

@@ -1301,6 +1301,10 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			List<String> providers = U.list("google", "facebook", "linkedin", "github");
 			Map<String, Object> oauth = U.map("popup", true, "providers", providers);
 			model.put("oauth", oauth);
+
+			boolean loggedIn = AppCtx.isLoggedIn();
+			model.put("loggedIn", loggedIn);
+			model.put("user", loggedIn ? AppCtx.user() : null);
 		}
 
 		return model;
