@@ -30,60 +30,93 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
+import org.rapidoid.util.U;
+
+@Authors("Nikolche Mihajlovski")
+@Since("3.0.0")
 public class SQL {
 
-	private static final SQLAPI API = new SQLAPI();
+	private static SQLAPI DEFAULT;
 
 	public static SQLAPI newInstance() {
 		return new SQLAPI();
 	}
 
+	public static synchronized SQLAPI defaultInstance() {
+		if (DEFAULT == null) {
+			DEFAULT = new SQLAPI();
+
+			String url = JDBCConfig.url();
+			String driver = JDBCConfig.driver();
+			String username = JDBCConfig.username();
+			String password = JDBCConfig.password();
+
+			DEFAULT.url(url);
+			DEFAULT.driver(driver);
+			DEFAULT.user(username);
+			DEFAULT.password(password);
+
+			String maskedPassword = U.isEmpty(password) ? "<empty>" : "<specified>";
+			Log.info("Initialized the default JDBC/SQL API", "url", url, "driver", driver, "username", username,
+					"password", maskedPassword);
+		}
+
+		return DEFAULT;
+	}
+
 	public static SQLAPI user(String user) {
-		return API.user(user);
+		return defaultInstance().user(user);
 	}
 
 	public static SQLAPI password(String password) {
-		return API.password(password);
+		return defaultInstance().password(password);
 	}
 
 	public static SQLAPI driver(String driver) {
-		return API.driver(driver);
+		return defaultInstance().driver(driver);
+	}
+
+	public static SQLAPI connectionPool(ConnectionPool connectionPool) {
+		return defaultInstance().connectionPool(connectionPool);
 	}
 
 	public static SQLAPI host(String host) {
-		return API.host(host);
+		return defaultInstance().host(host);
 	}
 
 	public static SQLAPI port(int port) {
-		return API.port(port);
+		return defaultInstance().port(port);
 	}
 
 	public static SQLAPI db(String databaseName) {
-		return API.db(databaseName);
+		return defaultInstance().db(databaseName);
 	}
 
 	public static SQLAPI url(String url) {
-		return API.url(url);
+		return defaultInstance().url(url);
 	}
 
 	public static SQLAPI mysql() {
-		return API.mysql();
+		return defaultInstance().mysql();
 	}
 
 	public static SQLAPI h2() {
-		return API.h2();
+		return defaultInstance().h2();
 	}
 
 	public static SQLAPI hsql() {
-		return API.hsql();
+		return defaultInstance().hsql();
 	}
 
-	public static void run(String sql, Object... args) {
-		API.run(sql, args);
+	public static void execute(String sql, Object... args) {
+		defaultInstance().execute(sql, args);
 	}
 
-	public static void tryToRun(String sql, Object... args) {
-		API.tryToRun(sql, args);
+	public static void tryToExecute(String sql, Object... args) {
+		defaultInstance().tryToExecute(sql, args);
 	}
 
 	public static PreparedStatement statement(Connection conn, String sql, Object... args) {
@@ -91,7 +124,7 @@ public class SQL {
 	}
 
 	public static <T> List<Map<String, Object>> get(String sql, Object... args) {
-		return API.getRows(sql, args);
+		return defaultInstance().getRows(sql, args);
 	}
 
 	public static List<Map<String, Object>> rows(ResultSet rs) throws SQLException {
@@ -117,7 +150,11 @@ public class SQL {
 	}
 
 	public static Connection getConnection() {
-		return API.getConnection();
+		return defaultInstance().getConnection();
+	}
+
+	public static void release(Connection connection) {
+		defaultInstance().release(connection);
 	}
 
 }

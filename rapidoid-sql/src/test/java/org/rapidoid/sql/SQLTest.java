@@ -38,7 +38,7 @@ public class SQLTest extends TestCommons {
 
 		// only testing if the driver is properly loaded and trying to connect
 		try {
-			SQL.run("create table abc (id int)");
+			SQL.execute("create table abc (id int)");
 		} catch (Exception e) {
 			eq(e.getCause().getClass(), CommunicationsException.class);
 		}
@@ -57,14 +57,14 @@ public class SQLTest extends TestCommons {
 	}
 
 	private void insertAndCheckData() {
-		SQL.tryToRun("DROP TABLE movie");
-		SQL.run("CREATE TABLE movie (id int, title varchar(99))");
+		SQL.tryToExecute("DROP TABLE movie");
+		SQL.execute("CREATE TABLE movie (id int, title varchar(99))");
 
-		SQL.run("INSERT INTO movie VALUES (?, ?)", 10, "Rambo");
-		SQL.run("INSERT INTO movie VALUES (?, ?)", 20, "Hackers");
+		SQL.execute("INSERT INTO movie VALUES (?, ?)", 10, "Rambo");
+		SQL.execute("INSERT INTO movie VALUES (?, ?)", 20, "Hackers");
 
 		for (int i = 0; i < 1000; i++) {
-			SQL.run("INSERT INTO movie VALUES (?, ?)", 100 + i, "movie" + i);
+			SQL.execute("INSERT INTO movie VALUES (?, ?)", 100 + i, "movie" + i);
 		}
 
 		List<Map<String, Object>> rows = SQL.get("SELECT * FROM movie WHERE id < ?", 25);

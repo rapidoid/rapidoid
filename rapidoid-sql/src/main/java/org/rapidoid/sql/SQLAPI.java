@@ -28,9 +28,13 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
+@Since("3.0.0")
 public class SQLAPI {
 
 	private boolean initialized;
@@ -42,6 +46,7 @@ public class SQLAPI {
 	private String completeUrl;
 	private String host = "localhost";
 	private int port;
+	private ConnectionPool connectionPool = new NoConnectionPool();
 
 	public synchronized SQLAPI user(String user) {
 		this.user = user;
@@ -57,6 +62,12 @@ public class SQLAPI {
 
 	public synchronized SQLAPI driver(String driver) {
 		this.driver = driver;
+		this.initialized = false;
+		return this;
+	}
+
+	public synchronized SQLAPI connectionPool(ConnectionPool connectionPool) {
+		this.connectionPool = connectionPool;
 		this.initialized = false;
 		return this;
 	}
@@ -97,7 +108,7 @@ public class SQLAPI {
 		return driver("org.hsqldb.jdbc.JDBCDriver").url("jdbc:hsqldb:mem:<db>").user("sa").password("");
 	}
 
-	private String dbUrl() {
+	private String jdbcUrl() {
 		return completeUrl;
 	}
 
@@ -126,8 +137,10 @@ public class SQLAPI {
 	}
 
 	private void setupCompleteUrl() {
-		completeUrl = url.replace("<db>", db).replace("<user>", user).replace("<password>", password)
-				.replace("<host>", host);
+		U.notNull(url, "JDBC URL");
+
+		completeUrl = url.replace("<db>", U.safe(db)).replace("<user>", U.safe(user))
+				.replace("<password>", U.safe(password)).replace("<host>", U.safe(host));
 
 		if (port > 0) {
 			completeUrl = completeUrl.replace("<port>", "" + port);
@@ -139,21 +152,6 @@ public class SQLAPI {
 	public Connection getConnection() {
 		ensureIsInitialized();
 		return provideConnection();
-	}
-
-	private Connection provideConnection() {
-		// TODO use a connection pool!
-
-		try {
-			if (user != null && password != null) {
-				return DriverManager.getConnection(dbUrl(), user, password);
-			} else {
-				return DriverManager.getConnection(dbUrl());
-			}
-
-		} catch (SQLException e) {
-			throw new RuntimeException("Cannot create JDBC connection!", e);
-		}
 	}
 
 	private static void close(Connection conn) {
@@ -198,7 +196,7 @@ public class SQLAPI {
 		}
 	}
 
-	public void run(String sql, Object... args) {
+	public void execute(String sql, Object... args) {
 		ensureIsInitialized();
 		Connection conn = provideConnection();
 		PreparedStatement stmt = null;
@@ -214,9 +212,9 @@ public class SQLAPI {
 		}
 	}
 
-	public void tryToRun(String sql, Object... args) {
+	public void tryToExecute(String sql, Object... args) {
 		try {
-			run(sql, args);
+			execute(sql, args);
 		} catch (Exception e) {
 			// ignore the exception
 			Log.warn("Ignoring exception", "error", U.safe(e.getMessage()));
@@ -242,6 +240,80 @@ public class SQLAPI {
 			close(stmt);
 			close(conn);
 		}
+	}
+
+	private Connection provideConnection() {
+		try {
+			Connection conn;
+
+			if (user != null) {
+				String pass = U.safe(password);
+				conn = connectionPool.getConnection(jdbcUrl(), user, pass);
+
+				if (conn == null) {
+					conn = DriverManager.getConnection(jdbcUrl(), user, pass);
+				}
+			} else {
+				conn = connectionPool.getConnection(jdbcUrl());
+
+				if (conn == null) {
+					conn = DriverManager.getConnection(jdbcUrl());
+				}
+			}
+
+			return conn;
+
+		} catch (SQLException e) {
+			throw new RuntimeException("Cannot create JDBC connection!", e);
+		}
+	}
+
+	public void release(Connection connection) {
+		try {
+			connectionPool.releaseConnection(connection);
+		} catch (SQLException e) {
+			Log.error("Error while releasing a JDBC connection!", e);
+		}
+	}
+
+	public boolean isInitialized() {
+		return initialized;
+	}
+
+	public String user() {
+		return user;
+	}
+
+	public String password() {
+		return password;
+	}
+
+	public String driver() {
+		return driver;
+	}
+
+	public String bb() {
+		return db;
+	}
+
+	public String url() {
+		return url;
+	}
+
+	public String getCompleteUrl() {
+		return completeUrl;
+	}
+
+	public String host() {
+		return host;
+	}
+
+	public int port() {
+		return port;
+	}
+
+	public ConnectionPool getConnectionPool() {
+		return connectionPool;
 	}
 
 }
