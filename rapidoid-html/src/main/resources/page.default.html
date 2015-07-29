@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>{{title}}</title>
+<title>{{app.title}}</title>
 
 {{#dev}}
 <script src="/jquery-2.1.1.min.js"></script>
@@ -32,16 +32,18 @@
 
 <script src="//cdn.rapidoid.org/1.0.0/rapidoid.min.js"></script>
 <link href="//cdn.rapidoid.org/1.0.0/rapidoid.min.css">
+
 {{/dev}}
 
 <script src="/app.js"></script>
 <link href="/app.css" rel="stylesheet">
 <link href="/img/favicon.png" rel="shortcut icon">
+<link href="bootstrap/css/theme-default.css" type="text/css" rel="stylesheet" />
 
 {{>head}}
 {{{head_extra}}}
 <script>
-window.__state = {{{state}}};
+window.__state = {{{req.renderState}}};
 </script>
 
 </head>
@@ -49,7 +51,7 @@ window.__state = {{{state}}};
 <body ng-controller="Main" ng-app="app">
 
   <div ng-if="!ajaxBodyContent">
-{{{body}}}<br>
+{{#screen}}{{>screen}}{{/screen}}<br>
   </div>
 
   <div compile="ajaxBodyContent" ng-if="ajaxBodyContent"></div>

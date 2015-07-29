@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -42,6 +43,7 @@ import org.rapidoid.data.Ranges;
 import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.io.CachedResource;
 import org.rapidoid.json.JSON;
+import org.rapidoid.log.Log;
 import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
@@ -1279,8 +1281,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public HttpExchange render(ITemplate template, Object... namesAndValues) {
-		template.render(this.outputStream(), U.map(namesAndValues), model());
+	public HttpExchange render(ITemplate template, Object model) {
+		template.render(this.outputStream(), model, model());
 		return this;
 	}
 
@@ -1294,6 +1296,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			model.put("path", path());
 			model.put("home", home());
 			model.put("dev", isDevMode());
+			model.put("app", AppCtx.app());
+
+			List<String> providers = U.list("google", "facebook", "linkedin", "github");
+			Map<String, Object> oauth = U.map("popup", true, "providers", providers);
+			model.put("oauth", oauth);
 		}
 
 		return model;
@@ -1327,6 +1334,15 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		this.home = home;
 
 		return this;
+	}
+
+	public String renderState() {
+		try {
+			return JSON.jacksonStringify(serializeLocals());
+		} catch (Exception e) {
+			Log.error("Cannot render state tag!", e);
+			return "{}";
+		}
 	}
 
 }

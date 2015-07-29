@@ -400,7 +400,7 @@ public class Pages {
 	public static void render(HttpExchange x, String pageTitle, Object head, Object body) {
 		ITemplate page = Templates.fromFile("page.html");
 
-		x.render(page, "title", pageTitle, "head_extra", head, "body", body, "state", "{}");
+		x.render(page, U.map("title", pageTitle, "head_extra", head, "body", body, "state", "{}"));
 	}
 
 }

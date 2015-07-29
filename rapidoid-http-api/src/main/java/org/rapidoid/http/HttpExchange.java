@@ -248,7 +248,7 @@ public interface HttpExchange {
 
 	HttpExchange done();
 
-	HttpExchange render(ITemplate template, Object... namesAndValues);
+	HttpExchange render(ITemplate template, Object model);
 
 	/* EXTRAS: */
 

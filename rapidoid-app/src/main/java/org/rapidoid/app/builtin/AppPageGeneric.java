@@ -53,6 +53,8 @@ import org.rapidoid.pages.Pages;
 import org.rapidoid.pages.impl.ComplexView;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.plugins.languages.Languages;
+import org.rapidoid.plugins.templates.ITemplate;
+import org.rapidoid.plugins.templates.Templates;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.English;
 import org.rapidoid.util.U;
@@ -129,7 +131,6 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		Map<String, Class<?>> mainScreens = filterScreens();
 
 		Object pageContent = null;
-		int activeIndex = -1;
 
 		pageContent = pageContent();
 
@@ -137,34 +138,22 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		List<Class<?>> scaffolding = Scan.annotated(Scaffold.class);
 
 		Object[] menuItems = new Object[screens.length + scaffolding.size()];
-		activeIndex = setupMenuItems(x.path(), screens, menuItems, scaffolding);
+		int activeIndex = setupMenuItems(x.path(), screens, menuItems, scaffolding);
 
 		boolean showNavbar = Apps.config(app, "navbar", true);
-
-		Object result;
 
 		String modal = Beany.getPropValue(screen, "modal", null);
 		Object modalContent = modal != null ? Beany.getPropValue(screen, modal, null) : null;
 
-		if (showNavbar) {
-			ATag brand = a(Pages.titleOf(x, app)).href("/");
+		Map<String, Object> model = U.map("navbar", showNavbar, "modal", modalContent, "fluid", isFluid(), "title",
+				title(), "body", pageContent, "state", "{}", "screen", true);
 
-			Tag userMenu = userMenu();
-
-			Tag debugMenu = x.isDevMode() ? debugMenu() : null;
-			FormTag searchForm = searchForm();
-
-			Tag navMenu = navbarMenu(true, activeIndex, menuItems);
-			Object[] navbarContent = arr(navMenu, debugMenu, userMenu, searchForm);
-
-			result = navbarPage(isFluid(), brand, navbarContent, arr(pageContent, modalContent));
-		} else {
-			result = cleanPage(isFluid(), arr(pageContent, modalContent));
-		}
+		ITemplate page = Templates.fromFile("page.html");
+		x.render(page, model);
 
 		Pages.store(x, screen);
 
-		return result;
+		return x;
 	}
 
 	protected Object genericScreen() {
@@ -332,98 +321,8 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		return activeIndex;
 	}
 
-	protected Tag userMenu() {
-		Tag dropdownMenu = null;
-		if (addon("auth") || addon("googleLogin") || addon("facebookLogin") || addon("linkedinLogin")
-				|| addon("githubLogin")) {
-			if (AppCtx.isLoggedIn()) {
-				dropdownMenu = loggedInUserMenu();
-			} else {
-				dropdownMenu = loggedOutUserMenu();
-			}
-		}
-		return dropdownMenu;
-	}
-
-	protected ATag[] themesMenuOpttions() {
-		ATag[] themess = new ATag[themes.length];
-
-		Tag eye = awesome("eye");
-
-		for (int i = 0; i < themes.length; i++) {
-			String thm = themes[i];
-			String js = U.format("document.cookie='THEME=%s; path=/'; location.reload();", thm);
-			themess[i] = a_void(eye, NBSP, "Theme " + U.capitalized(thm)).onclick(js);
-		}
-
-		return themess;
-	}
-
-	protected Tag loggedOutUserMenu() {
-		Tag ga = null, fb = null, li = null, gh = null;
-
-		if (addon("googleLogin")) {
-			ga = loginMenuItem(OAuthProvider.GOOGLE);
-		}
-
-		if (addon("facebookLogin")) {
-			fb = loginMenuItem(OAuthProvider.FACEBOOK);
-		}
-
-		if (addon("linkedinLogin")) {
-			li = loginMenuItem(OAuthProvider.LINKEDIN);
-		}
-
-		if (addon("githubLogin")) {
-			gh = loginMenuItem(OAuthProvider.GITHUB);
-		}
-
-		return navbarDropdown(false, a_awesome("user", "Sign in", caret()), ga, fb, li, gh);
-	}
-
-	protected ATag loginMenuItem(OAuthProvider provider) {
-		String text = "Sign in with " + provider.getName();
-		String js = U.format("_popup('%s');", OAuth.getLoginURL(x, provider, null));
-		return a_awesome(provider.getName().toLowerCase(), text).onclick(js);
-	}
-
-	protected Tag loggedInUserMenu() {
-		ATag profile = a_awesome("user", userDisplay(), caret());
-		ATag settings = addon("settings") ? a_awesome("cog", " Settings").href("/settings") : null;
-		ATag logout = a_awesome("sign-out", "Logout").href("/_logout");
-
-		return navbarDropdown(false, profile, settings, logout);
-	}
-
-	protected String userDisplay() {
-		String username = AppCtx.username();
-		int pos = username.indexOf('@');
-		return pos > 0 ? username.substring(0, pos) : username;
-	}
-
-	protected Tag debugMenu() {
-		ATag debug = a_awesome("bug", " ", caret());
-
-		ATag userInfo = a_awesome("bug", "User info").href("/debuguserinfo");
-		ATag delAll = a_awesome("bug", "Delete All Data").href("/deletealldata");
-
-		Tag sep = menuDivider();
-
-		String theme = config("theme", null);
-		ATag[] themesOpts = theme == null ? themesMenuOpttions() : null;
-		Tag themeSep = themesOpts != null ? sep : null;
-
-		return navbarDropdown(false, debug, debugLoginUrl("admin"), debugLoginUrl("manager"),
-				debugLoginUrl("moderator"), debugLoginUrl("foo"), debugLoginUrl("bar"), sep, userInfo, themeSep,
-				themesOpts, sep, delAll);
-	}
-
-	protected ATag debugLoginUrl(String username) {
-		return a_awesome("bug", "Sign in as " + U.capitalized(username)).href("/_debugLogin?user=" + username);
-	}
-
 	protected boolean isFluid() {
-		return config("fluid", true);
+		return config("fluid", false);
 	}
 
 	protected Object getScreen() {

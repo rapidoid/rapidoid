@@ -22,12 +22,9 @@ package org.rapidoid.pages;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.html.Tag;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.impl.FileTemplateTag;
 import org.rapidoid.pages.impl.MultiLanguageText;
-import org.rapidoid.pages.impl.StateTag;
 import org.rapidoid.plugins.templates.ITemplate;
 import org.rapidoid.plugins.templates.Templates;
 import org.rapidoid.widget.BootstrapWidgets;
@@ -61,10 +58,7 @@ public class PageGUI extends BootstrapWidgets {
 	}
 
 	public static Tag page(String pageTitle, Object head, Object body) {
-		HttpExchange x = Ctxs.ctx().exchange();
-		Object state = new StateTag(x);
-
-		return render("page.html", "title", pageTitle, "head_extra", head, "body", body, "state", state);
+		return render("page.html", "title", pageTitle, "head_extra", head, "body", body);
 	}
 
 	public static Tag page(String pageTitle, Object body) {

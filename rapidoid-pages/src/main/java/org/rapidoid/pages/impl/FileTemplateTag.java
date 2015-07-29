@@ -53,14 +53,9 @@ public class FileTemplateTag extends HardcodedTag {
 		for (int i = 0; i < namesAndValues.length / 2; i++) {
 			String placeholder = (String) namesAndValues[i * 2];
 			Object value = namesAndValues[i * 2 + 1];
+			U.must(!(value instanceof ITemplate));
 
-			if (value instanceof ITemplate) {
-				ITemplate templ = (ITemplate) value;
-				value = templ.render(x);
-			} else {
-				value = renderer.toHTML(value, x);
-			}
-
+			value = renderer.toHTML(value, x);
 			scope.put(placeholder, value);
 		}
 
