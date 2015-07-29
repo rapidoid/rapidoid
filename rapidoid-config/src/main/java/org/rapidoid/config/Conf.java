@@ -68,27 +68,41 @@ public class Conf {
 		return Thread.currentThread().getContextClassLoader().getResource(name);
 	}
 
-	public static synchronized void args(String... args) {
+	public static void args(String... args) {
+		args(null, args);
+	}
+
+	public static synchronized void args(String[] mainArgs, String... extraArgs) {
 		CFG.clear();
 		initialized = false;
 		init();
 
-		if (args != null) {
-			for (String arg : args) {
-				String name, value;
-
-				int pos = arg.indexOf('=');
-				if (pos > 0) {
-					name = arg.substring(0, pos);
-					value = arg.substring(pos + 1);
-				} else {
-					name = arg;
-					value = "true";
-				}
-
-				set(name, value);
+		if (mainArgs != null) {
+			for (String arg : mainArgs) {
+				processArg(arg);
 			}
 		}
+
+		if (extraArgs != null) {
+			for (String arg : extraArgs) {
+				processArg(arg);
+			}
+		}
+	}
+
+	private static void processArg(String arg) {
+		String name, value;
+
+		int pos = arg.indexOf('=');
+		if (pos > 0) {
+			name = arg.substring(0, pos);
+			value = arg.substring(pos + 1);
+		} else {
+			name = arg;
+			value = "true";
+		}
+
+		set(name, value);
 	}
 
 	public static void set(String name, String value) {
