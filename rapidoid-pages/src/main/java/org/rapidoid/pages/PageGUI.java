@@ -58,7 +58,7 @@ public class PageGUI extends BootstrapWidgets {
 	}
 
 	public static Tag page(String pageTitle, Object head, Object body) {
-		return render("page.html", "title", pageTitle, "head_extra", head, "body", body);
+		return render("page.html", "title", pageTitle, "head_extra", head, "content", body);
 	}
 
 	public static Tag page(String pageTitle, Object body) {
