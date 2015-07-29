@@ -20,8 +20,6 @@ package org.rapidoid.quick;
  * #L%
  */
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -56,19 +54,16 @@ public class Quick {
 	}
 
 	public static void bootstrap(Application app, final String[] args, Object... config) {
+		Apps.bootstrap(app, args, config);
+
 		Applications.main().setDefaultApp(app);
 		Applications.main().register(app);
 
 		Ctxs.open();
 		Ctxs.setPersisterProvider(new QuickJPA(config));
 
-		HibernateDBPlugin db = new HibernateDBPlugin();
-
+		Plugins.register(new HibernateDBPlugin());
 		Plugins.register(new AppClasspathEntitiesPlugin());
-
-		List<Object> appConfig = U.<Object> list(config);
-		appConfig.add(db);
-		Apps.bootstrap(app, args, U.array(appConfig));
 
 		// TODO provide better support for javax.transaction.Transactional
 		AOP.register(Transactional.class, new TransactionInterceptor());

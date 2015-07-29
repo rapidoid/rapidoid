@@ -23,6 +23,16 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.mchange</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.2.1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-test-appctx-helper</artifactId>
 			<version>${project.version}</version>
@@ -45,11 +55,6 @@
 			<artifactId>h2</artifactId>
 			<version>1.4.187</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<version>2.3.2</version>
 		</dependency>
 	</dependencies>
 

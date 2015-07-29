@@ -51,8 +51,20 @@ public class SQLTest extends TestCommons {
 	}
 
 	@Test
+	public void testWithH2AndC3P0() {
+		new C3P0ConnectionPool(SQL.h2().db("test"));
+		insertAndCheckData();
+	}
+
+	@Test
 	public void testWithHSQLDB() {
 		SQL.hsql().db("test");
+		insertAndCheckData();
+	}
+
+	@Test
+	public void testWithHSQLDBAndC3P0() {
+		new C3P0ConnectionPool(SQL.hsql().db("test"));
 		insertAndCheckData();
 	}
 
