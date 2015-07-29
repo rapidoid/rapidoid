@@ -101,9 +101,13 @@ public class OAuth {
 		String clientSecret = Conf.option(name + ".clientSecret", "NO-CLIENT-SECRET");
 
 		String callbackPath = "/_" + name + "OauthCallback.html";
+
+		boolean popup = x.param("popup", null) != null;
+
 		String redirectUrl = oauthDomain != null ? oauthDomain + callbackPath : x.constructUrl(callbackPath);
 
-		String state = STATE_CHECK.generateState(clientSecret, x.sessionId());
+		String statePrefix = popup ? "P" : "N";
+		String state = statePrefix + STATE_CHECK.generateState(clientSecret, x.sessionId());
 
 		try {
 			OAuthClientRequest request = OAuthClientRequest.authorizationLocation(provider.getAuthEndpoint())
