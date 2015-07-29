@@ -9,8 +9,13 @@ if (theme && theme != 'none') {
     document.write('<link href="/bootstrap/css/theme-' + theme + '.css" rel="stylesheet">');
 }
 
-function goAt(url) {
+function _goAt(url) {
     window.location.href = url;
+}
+
+function _setTheme(theme) {
+    document.cookie = 'THEME=' + theme + '; path=/';
+    location.reload();
 }
 
 function _appendScript(url) {
@@ -32,17 +37,10 @@ function _stop(ev) {
     }
 }
 
-/* http://stackoverflow.com/questions/2144386/javascript-delete-cookie */
-function _delete_cookie(name, path, domain) {
-    if (get_cookie(name)) {
-        document.cookie = name + "=" + ((path) ? ";path=" + path : "") + ((domain) ? ";domain=" + domain : "")
-                + ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
-    }
-}
-
 function _logout() {
-    _delete_cookie('JSESSIONID', '/', '');
-    _delete_cookie('COOKIEPACK', '/', '');
+    $.removeCookie('JSESSIONID', '/', '');
+    $.removeCookie('COOKIEPACK', '/', '');
+    location.reload();
 }
 
 function _popup(popupUrl, onClosed) {
@@ -169,7 +167,7 @@ rapidoidApp.controller('Main', [ '$scope', '$http', '$window', function($scope, 
             __state : window.__state
         }).done(function(data) {
             if (data._redirect_) {
-                goAt(data._redirect_);
+                _goAt(data._redirect_);
                 return;
             }
 
