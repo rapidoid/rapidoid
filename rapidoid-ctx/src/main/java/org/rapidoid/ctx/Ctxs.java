@@ -53,8 +53,10 @@ public class Ctxs {
 
 	public static void attach(Ctx ctx) {
 		if (!hasContext()) {
-			ctx.span();
-			CTXS.set(ctx);
+			if (ctx != null) {
+				ctx.span();
+				CTXS.set(ctx);
+			}
 		} else {
 			throw new IllegalStateException("The context was already opened: " + ctx());
 		}
