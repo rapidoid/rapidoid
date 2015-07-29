@@ -47,7 +47,9 @@ window.__state = {{{req.renderState}}};
 
 </head>
 
-<body ng-controller="Main" ng-app="app">
+<body class="rapidoid" ng-controller="Main" ng-app="app">
+
+{{>modal}}
 
   <div ng-if="!ajaxBodyContent">
 {{>content}}

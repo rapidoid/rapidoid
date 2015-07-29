@@ -67,6 +67,15 @@ function _popup(popupUrl, onClosed) {
     }, 100);
 }
 
+function _modal(title, content, footer, options) {
+    $('#_modal_title').html(title || '');
+    $('#_modal_body').html(content || '');
+    if (footer) {
+        $('#_modal_footer').html(footer || '');
+    }
+    $('#_modal_box').modal(options || {});
+}
+
 var rapidoidApp = angular.module('app', [ 'infinite-scroll', 'ngSanitize' ]);
 
 function range(from, total) {

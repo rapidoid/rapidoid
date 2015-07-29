@@ -27,6 +27,7 @@ import org.rapidoid.pages.impl.FileTemplateTag;
 import org.rapidoid.pages.impl.MultiLanguageText;
 import org.rapidoid.plugins.templates.ITemplate;
 import org.rapidoid.plugins.templates.Templates;
+import org.rapidoid.util.U;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.ButtonWidget;
 
@@ -47,8 +48,7 @@ public class PageGUI extends BootstrapWidgets {
 	}
 
 	public static Tag modal(Object title, Object content, Object footer) {
-		return render("modal.html", "title", title, "content", content, "footer", footer, "cmdCloseModal",
-				xClose("closeModal"));
+		throw U.notSupported();
 	}
 
 	public static ButtonWidget xClose(String cmd) {
