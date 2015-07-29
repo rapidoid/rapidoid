@@ -22,6 +22,7 @@ package org.rapidoid.main;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.app.AppHandler;
 import org.rapidoid.appctx.Application;
 import org.rapidoid.appctx.Applications;
 import org.rapidoid.log.Log;
@@ -46,6 +47,7 @@ public class Rapidoid {
 
 		if (app == null) {
 			app = Applications.root();
+			app.getRouter().generic(new AppHandler());
 		}
 
 		MainHelp.processHelp(args);
