@@ -32,7 +32,6 @@
 
 <script src="//cdn.rapidoid.org/1.0.0/rapidoid.min.js"></script>
 <link href="//cdn.rapidoid.org/1.0.0/rapidoid.min.css">
-
 {{/dev}}
 
 <script src="/app.js"></script>
@@ -51,7 +50,7 @@ window.__state = {{{req.renderState}}};
 <body ng-controller="Main" ng-app="app">
 
   <div ng-if="!ajaxBodyContent">
-{{#screen}}{{>screen}}{{/screen}}<br>
+{{>content}}
   </div>
 
   <div compile="ajaxBodyContent" ng-if="ajaxBodyContent"></div>

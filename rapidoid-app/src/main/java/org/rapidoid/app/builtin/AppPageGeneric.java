@@ -41,16 +41,13 @@ import org.rapidoid.appctx.Scan;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.html.Cmd;
-import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.http.HttpSuccessException;
-import org.rapidoid.oauth.OAuth;
-import org.rapidoid.oauth.OAuthProvider;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.pages.impl.ComplexView;
+import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.plugins.languages.Languages;
 import org.rapidoid.plugins.templates.ITemplate;
@@ -145,8 +142,10 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		String modal = Beany.getPropValue(screen, "modal", null);
 		Object modalContent = modal != null ? Beany.getPropValue(screen, modal, null) : null;
 
+		String content = PageRenderer.get().toHTML(pageContent, x);
+
 		Map<String, Object> model = U.map("navbar", showNavbar, "modal", modalContent, "fluid", isFluid(), "title",
-				title(), "body", pageContent, "state", "{}", "screen", true);
+				title(), "content", content, "state", "{}", "screen", true);
 
 		ITemplate page = Templates.fromFile("page.html");
 		x.render(page, model);
