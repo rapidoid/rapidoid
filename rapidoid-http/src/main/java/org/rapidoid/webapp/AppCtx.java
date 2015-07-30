@@ -1,11 +1,9 @@
-package org.rapidoid.appctx;
-
-import java.util.Collections;
+package org.rapidoid.webapp;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Classes;
-import org.rapidoid.scan.ClasspathUtil;
+import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.util.U;
 
 /*
@@ -30,12 +28,24 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class RootWebApp extends WebApp {
+public class AppCtx {
 
-	@SuppressWarnings("unchecked")
-	public RootWebApp() {
-		super("root", "App", Collections.EMPTY_SET, Collections.EMPTY_SET, U.set("/"), AppMode.DEVELOPMENT, null,
-				Classes.from(ClasspathUtil.getAllClasses()));
+	public static UserInfo user() {
+		UserInfo user = Ctxs.ctx().user();
+		U.must(user != null, "Not logged in!");
+		return user;
+	}
+
+	public static boolean isLoggedIn() {
+		return Ctxs.ctx().user() != null;
+	}
+
+	public static String username() {
+		return isLoggedIn() ? user().username : null;
+	}
+
+	public static WebApp app() {
+		return Ctxs.ctx().app();
 	}
 
 }

@@ -2,12 +2,12 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.WebApp;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.util.RapidoidConf;
 import org.rapidoid.util.U;
+import org.rapidoid.webapp.WebApp;
 
 /*
  * #%L

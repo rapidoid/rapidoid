@@ -22,8 +22,8 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.util.Builder;
+import org.rapidoid.webapp.WebAppGroup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

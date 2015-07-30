@@ -26,10 +26,10 @@ import java.net.URISyntaxException;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.AppCtx;
-import org.rapidoid.appctx.WebApp;
-import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.util.U;
+import org.rapidoid.webapp.AppCtx;
+import org.rapidoid.webapp.WebApp;
+import org.rapidoid.webapp.WebAppGroup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

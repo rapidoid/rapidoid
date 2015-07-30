@@ -30,15 +30,15 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.TransactionInterceptor;
-import org.rapidoid.appctx.AppClasspathEntitiesPlugin;
-import org.rapidoid.appctx.WebApp;
-import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.db.hibernate.HibernateDBPlugin;
 import org.rapidoid.util.U;
+import org.rapidoid.webapp.AppClasspathEntitiesPlugin;
+import org.rapidoid.webapp.WebApp;
+import org.rapidoid.webapp.WebAppGroup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

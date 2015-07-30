@@ -36,8 +36,6 @@ import org.rapidoid.app.AppGUI;
 import org.rapidoid.app.AppScreens;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.Scaffolding;
-import org.rapidoid.appctx.AppCtx;
-import org.rapidoid.appctx.Scan;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.html.Cmd;
@@ -56,6 +54,8 @@ import org.rapidoid.security.Secure;
 import org.rapidoid.util.English;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.webapp.AppCtx;
+import org.rapidoid.webapp.Scan;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

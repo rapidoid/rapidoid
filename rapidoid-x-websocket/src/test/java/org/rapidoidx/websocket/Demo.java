@@ -23,13 +23,13 @@ package org.rapidoidx.websocket;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.WebApp;
-import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.log.Log;
+import org.rapidoid.webapp.WebApp;
+import org.rapidoid.webapp.WebAppGroup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

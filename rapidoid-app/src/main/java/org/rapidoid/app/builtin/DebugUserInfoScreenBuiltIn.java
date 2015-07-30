@@ -23,11 +23,11 @@ package org.rapidoid.app.builtin;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
-import org.rapidoid.appctx.AppCtx;
 import org.rapidoid.html.Tag;
 import org.rapidoid.security.Secure;
 import org.rapidoid.security.annotation.DevMode;
 import org.rapidoid.util.U;
+import org.rapidoid.webapp.AppCtx;
 import org.rapidoid.widget.FormWidget;
 
 @DevMode

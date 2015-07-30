@@ -1,8 +1,8 @@
-package org.rapidoid.main;
+package org.rapidoid.webapp;
 
 /*
  * #%L
- * rapidoid-main
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,32 +20,11 @@ package org.rapidoid.main;
  * #L%
  */
 
-import java.lang.reflect.Method;
-import java.util.List;
-
-import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.webapp.Scan;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.0.0")
-public class Main {
-
-	public static void main(String[] args) {
-		MainHelp.processHelp(args);
-
-		List<Class<?>> app = Scan.annotated(App.class);
-		if (!app.isEmpty()) {
-			Class<?> appCls = app.get(0);
-
-			Method main = Cls.getMethod(appCls, "main", String[].class);
-			if (main != null) {
-				Object[] mainArgs = new Object[] { args };
-				Cls.invokeStatic(main, mainArgs);
-			}
-		}
-	}
+@Since("4.1.0")
+public class AppMenu {
 
 }

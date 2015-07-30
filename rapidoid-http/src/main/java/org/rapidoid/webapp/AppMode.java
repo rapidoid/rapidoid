@@ -1,4 +1,4 @@
-package org.rapidoid.appctx;
+package org.rapidoid.webapp;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

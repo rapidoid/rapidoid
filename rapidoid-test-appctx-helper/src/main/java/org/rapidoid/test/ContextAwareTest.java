@@ -24,10 +24,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.WebApp;
-import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.Router;
+import org.rapidoid.webapp.WebApp;
+import org.rapidoid.webapp.WebAppGroup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

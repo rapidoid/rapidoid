@@ -22,8 +22,6 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.AppCtx;
-import org.rapidoid.appctx.WebApp;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.session.SessionStore;
@@ -35,6 +33,8 @@ import org.rapidoid.net.impl.RapidoidConnection;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.util.Usage;
+import org.rapidoid.webapp.AppCtx;
+import org.rapidoid.webapp.WebApp;
 import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")

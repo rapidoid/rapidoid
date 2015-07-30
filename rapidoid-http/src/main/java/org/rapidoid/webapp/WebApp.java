@@ -1,4 +1,4 @@
-package org.rapidoid.appctx;
+package org.rapidoid.webapp;
 
 import java.util.Set;
 
@@ -48,6 +48,8 @@ public class WebApp {
 	private final Router router;
 
 	private final Classes classes;
+
+	private volatile AppMenu menu = new AppMenu();
 
 	public WebApp(String id, String title, Set<String> owners, Set<String> hostnames, Set<String> uriContexts,
 			AppMode mode, Router router, Classes classes) {
@@ -111,6 +113,14 @@ public class WebApp {
 
 	public boolean dev() {
 		return getMode().equals(AppMode.DEVELOPMENT);
+	}
+
+	public AppMenu getMenu() {
+		return menu;
+	}
+
+	public void setMenu(AppMenu menu) {
+		this.menu = menu;
 	}
 
 }

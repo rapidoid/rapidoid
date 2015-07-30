@@ -8,13 +8,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.Scan;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.entity.IEntity;
 import org.rapidoid.rql.RQL;
 import org.rapidoid.util.English;
 import org.rapidoid.util.U;
+import org.rapidoid.webapp.Scan;
 import org.rapidoidx.db.DbDsl;
 import org.rapidoidx.db.DbSchema;
 

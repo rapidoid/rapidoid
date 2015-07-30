@@ -30,7 +30,6 @@ import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.AppCtx;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
@@ -53,6 +52,7 @@ import org.rapidoid.util.Constants;
 import org.rapidoid.util.RapidoidConf;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.webapp.AppCtx;
 import org.rapidoid.wire.Wire;
 import org.rapidoid.wrap.BoolWrap;
 

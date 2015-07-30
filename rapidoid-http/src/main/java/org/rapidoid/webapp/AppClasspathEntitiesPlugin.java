@@ -1,4 +1,4 @@
-package org.rapidoid.appctx;
+package org.rapidoid.webapp;
 
 import java.lang.reflect.Proxy;
 import java.util.Map;

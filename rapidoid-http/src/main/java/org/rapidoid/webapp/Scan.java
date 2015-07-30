@@ -1,4 +1,4 @@
-package org.rapidoid.appctx;
+package org.rapidoid.webapp;
 
 import java.lang.annotation.Annotation;
 import java.util.List;

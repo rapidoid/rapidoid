@@ -22,12 +22,12 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.http.session.InMemorySessionStore;
 import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.jackson.JSON;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.impl.RapidoidServerLoop;
+import org.rapidoid.webapp.WebAppGroup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

@@ -24,12 +24,12 @@ import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.WebApp;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.HTMLSnippets;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
+import org.rapidoid.webapp.WebApp;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

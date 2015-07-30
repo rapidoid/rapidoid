@@ -31,8 +31,6 @@ import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.aop.AOP;
-import org.rapidoid.appctx.WebApp;
-import org.rapidoid.appctx.Scan;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
@@ -53,6 +51,8 @@ import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
 import org.rapidoid.plugins.users.UsersPlugin;
 import org.rapidoid.util.U;
 import org.rapidoid.util.Usage;
+import org.rapidoid.webapp.Scan;
+import org.rapidoid.webapp.WebApp;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

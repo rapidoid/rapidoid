@@ -51,8 +51,6 @@ import java.util.regex.Pattern;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Rel;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.AppCtx;
-import org.rapidoid.appctx.Scan;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertyFilter;
@@ -68,6 +66,8 @@ import org.rapidoid.tuple.Tuple;
 import org.rapidoid.util.OptimisticConcurrencyControlException;
 import org.rapidoid.util.SuccessException;
 import org.rapidoid.util.U;
+import org.rapidoid.webapp.AppCtx;
+import org.rapidoid.webapp.Scan;
 
 class Rec implements Serializable {
 

@@ -33,8 +33,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.WebApp;
-import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.ctx.Ctxs;
@@ -43,6 +41,8 @@ import org.rapidoid.data.Range;
 import org.rapidoid.io.IO;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
+import org.rapidoid.webapp.WebApp;
+import org.rapidoid.webapp.WebAppGroup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
