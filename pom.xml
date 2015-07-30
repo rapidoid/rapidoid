@@ -101,7 +101,7 @@
 		<module>rapidoid-sql</module>
 		<module>rapidoid-rql</module>
 		<module>rapidoid-wire</module>
-		<module>rapidoid-json</module>
+		<module>rapidoid-jackson</module>
 		<module>rapidoid-security</module>
 		<module>rapidoid-activity</module>
 		<module>rapidoid-test-commons</module>

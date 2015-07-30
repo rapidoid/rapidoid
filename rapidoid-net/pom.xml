@@ -29,7 +29,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-json</artifactId>
+			<artifactId>rapidoid-jackson</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
