@@ -23,8 +23,8 @@ package org.rapidoid.main;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.AppHandler;
-import org.rapidoid.appctx.Application;
-import org.rapidoid.appctx.Applications;
+import org.rapidoid.appctx.WebApp;
+import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.log.Log;
 import org.rapidoid.quick.Quick;
 import org.rapidoid.util.U;
@@ -36,17 +36,17 @@ public class Rapidoid {
 	private static boolean initialized = false;
 
 	public static synchronized void run(String[] args, Object... config) {
-		Application noApp = null;
+		WebApp noApp = null;
 		run(noApp, args, config);
 	}
 
-	public static synchronized void run(Application app, String[] args, Object... config) {
+	public static synchronized void run(WebApp app, String[] args, Object... config) {
 		Log.info("Starting Rapidoid...");
 		U.must(!initialized, "Already initialized!");
 		initialized = true;
 
 		if (app == null) {
-			app = Applications.root();
+			app = WebAppGroup.root();
 			app.getRouter().generic(new AppHandler());
 		}
 
@@ -55,12 +55,12 @@ public class Rapidoid {
 		Quick.run(app, args, config);
 	}
 
-	public static void register(Application app) {
-		Applications.main().register(app);
+	public static void register(WebApp app) {
+		WebAppGroup.main().register(app);
 	}
 
-	public static void unregister(Application app) {
-		Applications.main().unregister(app);
+	public static void unregister(WebApp app) {
+		WebAppGroup.main().unregister(app);
 	}
 
 }

@@ -22,8 +22,8 @@ package org.rapidoid.oauth;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.Application;
-import org.rapidoid.appctx.Applications;
+import org.rapidoid.appctx.WebApp;
+import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.log.Log;
@@ -34,7 +34,7 @@ import org.rapidoid.log.LogLevel;
 public class OAuthDemo {
 
 	public static void main(String[] args) {
-		Application app = Applications.openRootContext();
+		WebApp app = WebAppGroup.openRootContext();
 		Log.setLogLevel(LogLevel.DEBUG);
 		HTTPServer server = HTTP.server().build();
 		OAuth.register(app);

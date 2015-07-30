@@ -31,8 +31,8 @@ import org.rapidoid.aop.AOP;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.TransactionInterceptor;
 import org.rapidoid.appctx.AppClasspathEntitiesPlugin;
-import org.rapidoid.appctx.Application;
-import org.rapidoid.appctx.Applications;
+import org.rapidoid.appctx.WebApp;
+import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
@@ -44,20 +44,20 @@ import org.rapidoid.util.U;
 @Since("3.0.0")
 public class Quick {
 
-	public static void run(Application app, String[] args, Object... config) {
+	public static void run(WebApp app, String[] args, Object... config) {
 		bootstrap(app, args, config);
 		serve(app, args, config);
 	}
 
-	public static void serve(Application app, String[] args, Object... config) {
+	public static void serve(WebApp app, String[] args, Object... config) {
 		Apps.serve(app, args, config);
 	}
 
-	public static void bootstrap(Application app, final String[] args, Object... config) {
+	public static void bootstrap(WebApp app, final String[] args, Object... config) {
 		Apps.bootstrap(app, args, config);
 
-		Applications.main().setDefaultApp(app);
-		Applications.main().register(app);
+		WebAppGroup.main().setDefaultApp(app);
+		WebAppGroup.main().register(app);
 
 		Ctxs.open();
 		Ctxs.setPersisterProvider(new QuickJPA(config));

@@ -2,7 +2,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.Application;
+import org.rapidoid.appctx.WebApp;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
@@ -33,7 +33,7 @@ import org.rapidoid.util.U;
 @Since("2.0.0")
 public class HttpBuiltins {
 
-	public static void register(Application app) {
+	public static void register(WebApp app) {
 		if (app.dev() && RapidoidConf.debuglogin()) {
 			app.getRouter().get("/_debugLogin", new Handler() {
 				@Override

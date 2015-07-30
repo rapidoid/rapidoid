@@ -27,9 +27,8 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.appctx.AppCtx;
-import org.rapidoid.appctx.Application;
-import org.rapidoid.appctx.Applications;
 import org.rapidoid.appctx.WebApp;
+import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -39,12 +38,12 @@ public class HttpServerSubAppTest extends HttpTestCommons {
 	@Test
 	public void shouldHandleSubAppRequests() throws IOException, URISyntaxException {
 
-		Applications apps = new Applications("apps");
+		WebAppGroup apps = new WebAppGroup("apps");
 
-		Application myapp = new WebApp("myapp", "My App", "/my", null);
+		WebApp myapp = new WebApp("myapp", "My App", "/my", null);
 		apps.register(myapp);
 
-		Application defaultApp = new WebApp("defapp", "Default", null, null);
+		WebApp defaultApp = new WebApp("defapp", "Default", null, null);
 		apps.setDefaultApp(defaultApp);
 
 		myapp.getRouter().get("/ab", info("my-special"));

@@ -33,8 +33,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.Application;
-import org.rapidoid.appctx.Applications;
+import org.rapidoid.appctx.WebApp;
+import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.ctx.Ctxs;
@@ -48,7 +48,7 @@ import org.rapidoid.util.U;
 @Since("2.0.0")
 public abstract class HttpTestCommons extends TestCommons {
 
-	protected Application app;
+	protected WebApp app;
 
 	protected HTTPServer server;
 
@@ -56,7 +56,7 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	@Before
 	public void openContext() {
-		app = Applications.openRootContext();
+		app = WebAppGroup.openRootContext();
 		router = app.getRouter();
 	}
 

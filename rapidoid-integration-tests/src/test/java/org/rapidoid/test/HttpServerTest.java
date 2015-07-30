@@ -23,8 +23,8 @@ package org.rapidoid.test;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.Application;
-import org.rapidoid.appctx.Applications;
+import org.rapidoid.appctx.WebApp;
+import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handlers;
@@ -35,12 +35,12 @@ public class HttpServerTest extends IntegrationTestCommons {
 
 	@Test
 	public void testHttpServer() {
-		Application app = Applications.openRootContext();
+		WebApp app = WebAppGroup.openRootContext();
 
 		app.getRouter().get("/", Handlers.html("home"));
 		app.getRouter().generic(Handlers.json("123"));
 
-		HTTPServer server = HTTP.server().applications(Applications.main()).build().start();
+		HTTPServer server = HTTP.server().applications(WebAppGroup.main()).build().start();
 
 		eq(new String(HTTP.get("http://localhost:8080/")), "home");
 

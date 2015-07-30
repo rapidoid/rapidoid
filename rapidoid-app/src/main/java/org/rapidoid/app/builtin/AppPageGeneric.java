@@ -124,7 +124,6 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 	}
 
 	public Object content() {
-
 		Map<String, Class<?>> mainScreens = filterScreens();
 
 		Object pageContent = null;

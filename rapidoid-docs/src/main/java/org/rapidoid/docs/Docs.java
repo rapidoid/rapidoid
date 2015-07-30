@@ -30,7 +30,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.AppHandler;
 import org.rapidoid.appctx.AppMode;
-import org.rapidoid.appctx.Applications;
+import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.appctx.WebApp;
 import org.rapidoid.ctx.Classes;
 import org.rapidoid.http.HTTP;
@@ -145,8 +145,8 @@ public class Docs {
 		WebApp app = new WebApp("eg" + id, "App", null, null, U.set("/"), AppMode.PRODUCTION, null, classes);
 		app.getRouter().generic(new AppHandler());
 
-		Applications.main().clear();
-		Applications.main().setDefaultApp(app);
+		WebAppGroup.main().clear();
+		WebAppGroup.main().setDefaultApp(app);
 
 		List<?> results = getResults(id);
 
@@ -155,7 +155,7 @@ public class Docs {
 				"results", results);
 		examples.add(model);
 
-		Applications.main().setDefaultApp(null);
+		WebAppGroup.main().setDefaultApp(null);
 	}
 
 	private static List<?> getResults(String id) {

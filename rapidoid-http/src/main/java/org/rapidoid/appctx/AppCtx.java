@@ -44,7 +44,7 @@ public class AppCtx {
 		return isLoggedIn() ? user().username : null;
 	}
 
-	public static Application app() {
+	public static WebApp app() {
 		return Ctxs.ctx().app();
 	}
 

@@ -22,7 +22,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.Applications;
+import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.http.session.InMemorySessionStore;
 import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.jackson.JSON;
@@ -35,7 +35,7 @@ public class HTTPServerImpl extends RapidoidServerLoop implements HTTPServer {
 
 	private final SessionStore session = new InMemorySessionStore();
 
-	Applications applications = Applications.main();
+	WebAppGroup applications = WebAppGroup.main();
 
 	public HTTPServerImpl() {
 		super(new HttpProtocol(), HttpExchangeImpl.class, null);

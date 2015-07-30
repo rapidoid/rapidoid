@@ -24,8 +24,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.Application;
-import org.rapidoid.appctx.Applications;
+import org.rapidoid.appctx.WebApp;
+import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
@@ -38,7 +38,7 @@ public class HttpDemo {
 
 	public static void main(String[] args) {
 		Conf.args(args);
-		Application app = Applications.openRootContext();
+		WebApp app = WebAppGroup.openRootContext();
 
 		final AtomicLong n = new AtomicLong();
 

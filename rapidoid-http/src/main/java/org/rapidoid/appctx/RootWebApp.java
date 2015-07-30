@@ -30,10 +30,10 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class RootApplication extends WebApp {
+public class RootWebApp extends WebApp {
 
 	@SuppressWarnings("unchecked")
-	public RootApplication() {
+	public RootWebApp() {
 		super("root", "App", Collections.EMPTY_SET, Collections.EMPTY_SET, U.set("/"), AppMode.DEVELOPMENT, null,
 				Classes.from(ClasspathUtil.getAllClasses()));
 	}

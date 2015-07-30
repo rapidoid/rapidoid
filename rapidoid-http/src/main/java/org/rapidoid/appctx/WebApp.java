@@ -31,7 +31,7 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class WebApp implements Application {
+public class WebApp {
 
 	private final String id;
 
@@ -77,55 +77,40 @@ public class WebApp implements Application {
 		this("app-id");
 	}
 
-	@Override
 	public String getId() {
 		return id;
 	}
 
-	@Override
 	public String getTitle() {
 		return title;
 	}
 
-	@Override
 	public Set<String> getOwners() {
 		return owners;
 	}
 
-	@Override
 	public Set<String> getHostnames() {
 		return hostnames;
 	}
 
-	@Override
 	public Set<String> getUriContexts() {
 		return uriContexts;
 	}
 
-	@Override
 	public AppMode getMode() {
 		return mode;
 	}
 
-	@Override
 	public Router getRouter() {
 		return router;
 	}
 
-	@Override
 	public Classes getClasses() {
 		return classes;
 	}
 
-	@Override
-	public String toString() {
-		return "Application [id=" + id + ", title=" + title + ", owners=" + owners + ", hostnames=" + hostnames
-				+ ", uriPaths=" + uriContexts + ", mode=" + mode + ", classes #" + classes.size() + "]";
-	}
-
-	@Override
 	public boolean dev() {
-		return mode == AppMode.DEVELOPMENT;
+		return getMode().equals(AppMode.DEVELOPMENT);
 	}
 
 }

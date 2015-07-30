@@ -24,8 +24,8 @@ package org.rapidoidx.demo.taskplanner;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.Apps;
-import org.rapidoid.appctx.Application;
-import org.rapidoid.appctx.Applications;
+import org.rapidoid.appctx.WebApp;
+import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoidx.db.XDB;
 
 @Authors("Nikolche Mihajlovski")
@@ -33,7 +33,7 @@ import org.rapidoidx.db.XDB;
 public class Main {
 
 	public static void main(String[] args) {
-		Application app = Applications.openRootContext();
+		WebApp app = WebAppGroup.openRootContext();
 		Apps.run(app, args, "oauth-no-state");
 
 		XDB.clear();

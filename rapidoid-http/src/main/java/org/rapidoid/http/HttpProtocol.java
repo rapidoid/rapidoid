@@ -23,7 +23,7 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.appctx.AppCtx;
-import org.rapidoid.appctx.Application;
+import org.rapidoid.appctx.WebApp;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.session.SessionStore;
@@ -144,7 +144,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 	}
 
 	private void processRequest(HttpExchangeImpl x) {
-		Application app = getApp(x);
+		WebApp app = getApp(x);
 
 		Ctxs.ctx().setApp(app);
 		Ctxs.ctx().setUser(x.user());
@@ -161,10 +161,10 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		}
 	}
 
-	private Application getApp(HttpExchangeImpl x) {
+	private WebApp getApp(HttpExchangeImpl x) {
 		String uriContext = "/" + x.pathSegment(0);
 
-		Application app = server.applications.get(x.host(), uriContext);
+		WebApp app = server.applications.get(x.host(), uriContext);
 		U.must(app != null, "Cannot find matching application in: " + server.applications.getName());
 
 		if (app.getUriContexts().contains(uriContext)) {

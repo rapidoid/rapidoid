@@ -31,29 +31,29 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class Applications {
+public class WebAppGroup {
 
-	private static final Applications MAIN = new Applications("main");
+	private static final WebAppGroup MAIN = new WebAppGroup("main");
 
 	private final String name;
 
-	private final Map<String, Map<String, Application>> appsByURL = U.mapOfMaps();
+	private final Map<String, Map<String, WebApp>> appsByURL = U.mapOfMaps();
 
-	private volatile Application defaultApp;
+	private volatile WebApp defaultApp;
 
-	public Applications(String name) {
+	public WebAppGroup(String name) {
 		this.name = name;
 	}
 
-	public static Applications main() {
+	public static WebAppGroup main() {
 		return MAIN;
 	}
 
-	public synchronized void setDefaultApp(Application defaultApp) {
+	public synchronized void setDefaultApp(WebApp defaultApp) {
 		this.defaultApp = defaultApp;
 	}
 
-	public synchronized void register(Application app) {
+	public synchronized void register(WebApp app) {
 		Set<String> hosts = app.getHostnames();
 
 		if (hosts.isEmpty()) {
@@ -63,17 +63,17 @@ public class Applications {
 		for (String hostname : hosts) {
 			for (String uriPath : app.getUriContexts()) {
 				U.must(!appsByURL.get(hostname).containsKey(uriPath),
-						"An application has already been registered with the URI path: %s", uriPath);
+						"An WebApp has already been registered with the URI path: %s", uriPath);
 				appsByURL.get(hostname).put(uriPath, app);
 			}
 		}
 	}
 
-	public synchronized void unregister(Application app) {
+	public synchronized void unregister(WebApp app) {
 		throw U.notReady();
 	}
 
-	public Application get(String hostname, String uriContext) {
+	public WebApp get(String hostname, String uriContext) {
 		if (appsByURL.containsKey(hostname)) {
 			return U.or(appsByURL.get(hostname).get(uriContext), defaultApp);
 		} else {
@@ -83,16 +83,16 @@ public class Applications {
 
 	@Override
 	public String toString() {
-		return "Applications [name=" + name + ", appsByURL=" + appsByURL + ", defaultApp=" + defaultApp + "]";
+		return "WebApps [name=" + name + ", appsByURL=" + appsByURL + ", defaultApp=" + defaultApp + "]";
 	}
 
-	public static RootApplication root() {
-		return new RootApplication();
+	public static RootWebApp root() {
+		return new RootWebApp();
 	}
 
-	public static Application openRootContext() {
-		Application app = Applications.root();
-		Applications.main().setDefaultApp(app);
+	public static WebApp openRootContext() {
+		WebApp app = WebAppGroup.root();
+		WebAppGroup.main().setDefaultApp(app);
 
 		Ctxs.open();
 		Ctxs.ctx().setApp(app);

@@ -23,8 +23,8 @@ package org.rapidoidx.websocket;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.Application;
-import org.rapidoid.appctx.Applications;
+import org.rapidoid.appctx.WebApp;
+import org.rapidoid.appctx.WebAppGroup;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
@@ -39,7 +39,7 @@ public class Demo {
 		Conf.args(args);
 		Log.args("debug");
 
-		Application app = Applications.openRootContext();
+		WebApp app = WebAppGroup.openRootContext();
 
 		HTTPServer server = WebSocket.serve(new WSHandler() {
 			@Override

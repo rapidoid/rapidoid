@@ -78,7 +78,7 @@ public class Scan {
 
 		Tuple cacheKey = null;
 
-		Application app = Ctxs.ctx().app();
+		WebApp app = Ctxs.ctx().app();
 		Classes appClasses = app.getClasses();
 		Map<Tuple, List<Class<?>>> cache = appClasses.getCache();
 

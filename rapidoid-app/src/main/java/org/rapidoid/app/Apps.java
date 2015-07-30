@@ -31,7 +31,7 @@ import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.aop.AOP;
-import org.rapidoid.appctx.Application;
+import org.rapidoid.appctx.WebApp;
 import org.rapidoid.appctx.Scan;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
@@ -60,12 +60,12 @@ public class Apps {
 
 	private static final String BUILT_IN_SCREEN_SUFFIX = "BuiltIn";
 
-	public static void run(Application app, String[] args, Object... config) {
+	public static void run(WebApp app, String[] args, Object... config) {
 		bootstrap(app, args, config);
 		serve(app, args, config);
 	}
 
-	public static void bootstrap(Application app, String[] args, Object... config) {
+	public static void bootstrap(WebApp app, String[] args, Object... config) {
 		Set<String> configArgs = U.set(args);
 
 		for (Object arg : config) {
@@ -82,7 +82,7 @@ public class Apps {
 		Lifecycle.onStart(configArgsArr);
 	}
 
-	public static HTTPServer serve(Application app, String[] args, Object... config) {
+	public static HTTPServer serve(WebApp app, String[] args, Object... config) {
 		HTTPServer server = HTTP.server().build();
 
 		OAuth.register(app);

@@ -24,7 +24,7 @@ import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.appctx.Application;
+import org.rapidoid.appctx.WebApp;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.HTMLSnippets;
 import org.rapidoid.http.Handler;
@@ -39,11 +39,11 @@ public class OAuth {
 
 	private static OAuthStateCheck STATE_CHECK;
 
-	public static void register(Application app, OAuthProvider... providers) {
+	public static void register(WebApp app, OAuthProvider... providers) {
 		register(app, null, new DefaultOAuthStateCheck(), providers);
 	}
 
-	public static void register(Application app, String oauthDomain, OAuthStateCheck stateCheck,
+	public static void register(WebApp app, String oauthDomain, OAuthStateCheck stateCheck,
 			OAuthProvider... providers) {
 
 		if (Conf.oauth() == null) {
