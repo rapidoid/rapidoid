@@ -36,7 +36,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeInternals;
 import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.http.HttpSuccessException;
-import org.rapidoid.io.CachedResource;
+import org.rapidoid.io.Res;
 import org.rapidoid.json.JSON;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
@@ -385,7 +385,7 @@ public class Pages {
 	}
 
 	public static boolean serveFromFile(HttpExchange x, String filename, Object app) {
-		CachedResource resource = CachedResource.from(filename);
+		Res resource = Res.from(filename);
 
 		if (resource.exists()) {
 			x.html();

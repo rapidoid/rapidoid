@@ -25,7 +25,7 @@ import java.io.PrintStream;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.io.CachedResource;
+import org.rapidoid.io.Res;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
@@ -33,13 +33,13 @@ import org.rapidoid.util.UTILS;
 @Since("2.0.0")
 public class HTMLSnippets {
 
-	private static CachedResource PAGE_HTML;
+	private static Res PAGE_HTML;
 
-	private static CachedResource FULL_PAGE_HTML;
+	private static Res FULL_PAGE_HTML;
 
 	static {
-		PAGE_HTML = CachedResource.from("page.html");
-		FULL_PAGE_HTML = CachedResource.from("page-full.html");
+		PAGE_HTML = Res.from("page.html");
+		FULL_PAGE_HTML = Res.from("page-full.html");
 	}
 
 	public static HttpExchange writePage(HttpExchange x, String title, String content) {

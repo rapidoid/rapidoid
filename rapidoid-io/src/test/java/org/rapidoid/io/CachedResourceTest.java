@@ -31,7 +31,7 @@ public class CachedResourceTest extends TestCommons {
 
 	@Test
 	public void testWithExistingFiles() {
-		CachedResource file = CachedResource.from("abc.txt");
+		Res file = Res.from("abc.txt");
 		isTrue(file.exists());
 		eq(file.getBytes(), "ABC!".getBytes());
 	}
@@ -41,19 +41,19 @@ public class CachedResourceTest extends TestCommons {
 	public void shouldBeFast() {
 		for (int i = 0; i < 900; i++) {
 			// fill-in the cache (with non-existing resources)
-			CachedResource.from("abc.txt" + i);
+			Res.from("abc.txt" + i);
 		}
 
 		// should be fast
 		for (int i = 0; i < 1000000; i++) {
-			CachedResource file = CachedResource.from("abc.txt");
+			Res file = Res.from("abc.txt");
 			notNull(file.getBytes());
 		}
 	}
 
 	@Test
 	public void testWithNonexistingFiles() {
-		CachedResource file = CachedResource.from("asfgsafd");
+		Res file = Res.from("asfgsafd");
 		isFalse(file.exists());
 	}
 

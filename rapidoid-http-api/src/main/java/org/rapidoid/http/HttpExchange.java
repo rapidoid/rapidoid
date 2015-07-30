@@ -28,7 +28,7 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.io.CachedResource;
+import org.rapidoid.io.Res;
 import org.rapidoid.mime.MediaType;
 import org.rapidoid.plugins.templates.ITemplate;
 
@@ -217,7 +217,7 @@ public interface HttpExchange {
 
 	HttpExchange sendFile(File file);
 
-	HttpExchange sendFile(CachedResource resource);
+	HttpExchange sendFile(Res resource);
 
 	HttpExchange sendFile(MediaType mediaType, byte[] bytes);
 

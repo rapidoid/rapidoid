@@ -29,7 +29,7 @@ import java.util.List;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.io.CachedResource;
+import org.rapidoid.io.Res;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.test.TestCommons;
@@ -72,7 +72,7 @@ public class WatchServiceTest extends TestCommons {
 
 		giveItTimeToRefresh();
 
-		CachedResource resA = CachedResource.from(fileA);
+		Res resA = Res.from(fileA);
 		eq(dir.files(), U.set(resA));
 		eq(dir.folders(), U.set());
 
@@ -83,7 +83,7 @@ public class WatchServiceTest extends TestCommons {
 
 		giveItTimeToRefresh();
 
-		CachedResource resB = CachedResource.from(fileB);
+		Res resB = Res.from(fileB);
 		eq(dir.files(), U.set(resA, resB));
 		eq(dir.folders(), U.set());
 
@@ -122,7 +122,7 @@ public class WatchServiceTest extends TestCommons {
 
 		giveItTimeToRefresh();
 
-		CachedResource resX = CachedResource.from(fileX);
+		Res resX = Res.from(fileX);
 		eq(dir.files(), U.set(resB, resX));
 		eq(dir.folders(), U.set(dirC));
 

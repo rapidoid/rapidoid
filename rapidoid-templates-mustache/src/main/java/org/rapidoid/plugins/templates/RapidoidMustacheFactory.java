@@ -24,7 +24,7 @@ import java.io.Reader;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.io.CachedResource;
+import org.rapidoid.io.Res;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 
@@ -74,7 +74,7 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 
 	@Override
 	public Reader getReader(String resourceName) {
-		CachedResource res = CachedResource.from(resourceName);
+		Res res = Res.from(resourceName);
 		return res.getReader();
 	}
 

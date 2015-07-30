@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.io.CachedResource;
+import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
@@ -59,7 +59,7 @@ public class Dir implements FilesystemChangeListener {
 
 	private final File dir;
 
-	private final Set<CachedResource> files = U.set();
+	private final Set<Res> files = U.set();
 
 	private final Set<String> folders = U.set();
 
@@ -109,7 +109,7 @@ public class Dir implements FilesystemChangeListener {
 
 			@Override
 			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-				files.add(CachedResource.from(file.toAbsolutePath().toString()));
+				files.add(Res.from(file.toAbsolutePath().toString()));
 				return super.visitFile(file, attrs);
 			}
 
@@ -128,7 +128,7 @@ public class Dir implements FilesystemChangeListener {
 		dirty = false;
 	}
 
-	public synchronized Set<CachedResource> files() {
+	public synchronized Set<Res> files() {
 		return files;
 	}
 

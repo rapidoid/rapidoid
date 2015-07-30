@@ -37,7 +37,7 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.io.CachedResource;
+import org.rapidoid.io.Res;
 import org.rapidoid.json.JSON;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
@@ -114,7 +114,7 @@ public class OAuthTokenHandler implements Handler {
 			Ctxs.ctx().setUser(user);
 			user.saveTo(x.cookiepack());
 
-			x.write(CachedResource.from("close.html").getBytes());
+			x.write(Res.from("close.html").getBytes());
 			return x;
 		} else {
 			String error = x.param("error");

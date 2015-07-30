@@ -32,9 +32,9 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class CachedResource {
+public class Res {
 
-	private static final ConcurrentMap<String, CachedResource> FILES = U.concurrentMap();
+	private static final ConcurrentMap<String, Res> FILES = U.concurrentMap();
 
 	private final String name;
 
@@ -46,15 +46,15 @@ public class CachedResource {
 
 	private volatile String content;
 
-	public CachedResource(String name) {
+	public Res(String name) {
 		this.name = name;
 	}
 
-	public static CachedResource from(String filename) {
-		CachedResource cachedFile = FILES.get(filename);
+	public static Res from(String filename) {
+		Res cachedFile = FILES.get(filename);
 
 		if (cachedFile == null) {
-			cachedFile = new CachedResource(filename);
+			cachedFile = new Res(filename);
 
 			if (FILES.size() < 1000) {
 				FILES.putIfAbsent(filename, cachedFile);
