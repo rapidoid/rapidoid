@@ -2,7 +2,7 @@ package org.rapidoid.jackson;
 
 /*
  * #%L
- * rapidoid-json
+ * rapidoid-jackson
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

@@ -17,7 +17,7 @@ import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 
 /*
  * #%L
- * rapidoid-json
+ * rapidoid-jackson
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
