@@ -1,0 +1,8 @@
+- id : 123
+  name : John Doe
+  age : 50
+  nonExistingProperty : 123
+
+- id : 567
+  name : Highlander
+  age : 900
