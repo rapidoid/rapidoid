@@ -1,4 +1,4 @@
-package org.rapidoid.json;
+package org.rapidoid.jackson;
 
 import java.io.OutputStream;
 import java.util.Map;

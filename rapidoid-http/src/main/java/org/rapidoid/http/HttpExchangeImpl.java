@@ -42,7 +42,7 @@ import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.io.Res;
-import org.rapidoid.json.JSON;
+import org.rapidoid.jackson.JSON;
 import org.rapidoid.log.Log;
 import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.impl.ConnState;

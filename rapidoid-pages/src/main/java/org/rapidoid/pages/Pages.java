@@ -37,7 +37,7 @@ import org.rapidoid.http.HttpExchangeInternals;
 import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.http.HttpSuccessException;
 import org.rapidoid.io.Res;
-import org.rapidoid.json.JSON;
+import org.rapidoid.jackson.JSON;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;

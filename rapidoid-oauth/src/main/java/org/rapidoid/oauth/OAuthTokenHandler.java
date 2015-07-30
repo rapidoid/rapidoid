@@ -38,7 +38,7 @@ import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.io.Res;
-import org.rapidoid.json.JSON;
+import org.rapidoid.jackson.JSON;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;

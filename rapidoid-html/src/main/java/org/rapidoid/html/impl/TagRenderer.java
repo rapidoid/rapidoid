@@ -34,7 +34,7 @@ import org.rapidoid.html.CustomTag;
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
-import org.rapidoid.json.JSON;
+import org.rapidoid.jackson.JSON;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;

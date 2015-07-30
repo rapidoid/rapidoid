@@ -1,4 +1,4 @@
-package org.rapidoid.json;
+package org.rapidoid.jackson;
 
 /*
  * #%L
@@ -25,6 +25,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.jackson.JSON;
 import org.rapidoid.test.TestCommons;
 
 @Authors("Nikolche Mihajlovski")
