@@ -1,7 +1,10 @@
 package org.rapidoid.concurrent;
 
+import java.util.concurrent.TimeoutException;
+
+import org.rapidoid.concurrent.impl.FutureImpl;
 import org.rapidoid.lambda.Mapper;
-import org.rapidoid.log.Log;
+import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -27,33 +30,18 @@ import org.rapidoid.log.Log;
  * @author Nikolche Mihajlovski
  * @since 4.1.0
  */
-public class Callbacks {
+public class Futures {
 
-	public static <T> void done(Callback<T> callback, T result, Throwable error) {
-		if (callback != null) {
-			try {
-				callback.onDone(result, error);
-			} catch (Exception e) {
-				Log.error("Callback error", e);
-			}
-		}
-	}
-
-	public static <T> void success(Callback<T> callback, T result) {
-		done(callback, result, null);
-	}
-
-	public static <T> void error(Callback<T> callback, Throwable error) {
-		done(callback, null, error);
-	}
-
-	public static <FROM, TO> Callback<FROM> mapping(final Callback<TO> callback, final Mapper<FROM, TO> mapper) {
-		return new Callback<FROM>() {
+	public static <FROM, TO> Future<TO> mapping(final Future<FROM> future, final Mapper<FROM, TO> mapper) {
+		return new FutureImpl<TO>() {
 
 			@Override
-			public void onDone(FROM result, Throwable error) throws Exception {
-				TO mapped = error == null ? mapper.map(result) : null;
-				Callbacks.done(callback, mapped, error);
+			public TO get(long timeoutMs, long sleepingIntervalMs) throws TimeoutException {
+				try {
+					return mapper.map(future.get(timeoutMs, sleepingIntervalMs));
+				} catch (Exception e) {
+					throw U.rte(e);
+				}
 			}
 
 		};
