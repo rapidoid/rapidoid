@@ -61,7 +61,7 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 				}
 				x.setCookie("key" + Rnd.rnd(100), "val" + Rnd.rnd(100));
 
-				return x.writeJSON(x.cookies());
+				return x.html().result("oki");
 			}
 		});
 
@@ -108,7 +108,7 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 			eq(get("/"), "a<b>b</b>c");
 			eq(get("/xy"), "a<b>b</b>c");
 			eq(get("/async"), "now");
-			eq(get("/session"), "{}");
+			eq(get("/session"), "oki");
 			eq(get("/bin"), "bin");
 			eq(get("/file/foo"), "abcde");
 			eq(get("/testfile1"), "TEST1");
