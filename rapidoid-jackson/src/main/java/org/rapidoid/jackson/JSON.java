@@ -86,6 +86,15 @@ public class JSON {
 		return jacksonParse(json, valueType);
 	}
 
+	public static <T> T parse(byte[] json, Class<T> valueType) {
+		try {
+			return MAPPER.readValue(json, valueType);
+		} catch (Exception e) {
+			Log.error("Cannot parse JSON!", "json", json, "error", e);
+			throw new RuntimeException(e);
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> parseMap(String json) {
 		return parse(json, Map.class);
