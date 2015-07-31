@@ -37,7 +37,7 @@ public class DefaultOAuthStateCheck implements OAuthStateCheck {
 		}
 
 		String rnd = Rnd.rndStr(10);
-		String hash = Crypto.md5(clientSecret + rnd);
+		String hash = Crypto.sha512(clientSecret + rnd);
 		return rnd + "_" + hash;
 	}
 
@@ -52,7 +52,7 @@ public class DefaultOAuthStateCheck implements OAuthStateCheck {
 			return false;
 		}
 
-		String hash = Crypto.md5(clientSecret + parts[0]);
+		String hash = Crypto.sha512(clientSecret + parts[0]);
 		return parts[1].equals(hash);
 	}
 
