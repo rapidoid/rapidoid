@@ -26,7 +26,6 @@ import java.util.concurrent.Callable;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.crypto.Crypto;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.pool.Pool;
@@ -135,11 +134,6 @@ public class RapidoidHelper {
 			exchange = null;
 			pool = null;
 		}
-	}
-
-	public String randomSHA512() {
-		RND.nextBytes(bytes128);
-		return Crypto.sha512(bytes128);
 	}
 
 }

@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
@@ -1175,7 +1176,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			sessionId = cookie(SESSION_COOKIE, null);
 
 			if (sessionId == null) {
-				sessionId = helper().randomSHA512();
+				sessionId = UUID.randomUUID().toString();
 				setCookie(SESSION_COOKIE, sessionId, "path=/");
 			}
 		}
