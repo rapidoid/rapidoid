@@ -49,6 +49,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.rapidoid.Insights;
+import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -726,6 +727,15 @@ public class UTILS implements Constants {
 	@SuppressWarnings("unchecked")
 	public static <K, V> Map<K, V> cast(Map<?, ?> map) {
 		return (Map<K, V>) map;
+	}
+
+	public static void loop(final Runnable loop) {
+		new RapidoidThread() {
+			@Override
+			protected void loop() {
+				loop.run();
+			}
+		}.start();
 	}
 
 }
