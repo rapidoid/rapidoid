@@ -591,6 +591,12 @@ public class UTILS implements Constants {
 		D.print(info + ": " + delta + " ms");
 	}
 
+	public static void endMeasure(long count, String info) {
+		long delta = U.time() - measureStart;
+		long freq = Math.round(1000 * (double) count / delta);
+		D.print(U.format("%s %s in %s ms (%s/sec)", count, info, delta, freq));
+	}
+
 	public static Throwable rootCause(Throwable e) {
 		while (e.getCause() != null) {
 			e = e.getCause();
