@@ -20,6 +20,9 @@ package org.rapidoid.util;
  * #L%
  */
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -42,6 +45,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.lambda.Mapper;
 
 /**
@@ -898,6 +902,30 @@ public class U {
 		} catch (InterruptedException e) {
 			new ThreadDeath();
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T dynamic(final Class<T> targetInterface, final Dynamic dynamic) {
+		final Object obj = new Object();
+
+		InvocationHandler handler = new InvocationHandler() {
+
+			@Override
+			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
+				if (method.getDeclaringClass().equals(Object.class)) {
+					if (method.getName().equals("toString")) {
+						return targetInterface.getSimpleName() + "@" + Integer.toHexString(obj.hashCode());
+					}
+					return method.invoke(obj, args);
+				}
+
+				return dynamic.call(method, safe(args));
+			}
+
+		};
+
+		return ((T) Proxy.newProxyInstance(targetInterface.getClassLoader(), new Class[] { targetInterface }, handler));
 	}
 
 }

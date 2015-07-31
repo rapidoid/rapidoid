@@ -20,6 +20,8 @@ package org.rapidoid.util;
  * #L%
  */
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
+import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.test.TestCommons;
 
 /**
@@ -222,6 +225,36 @@ public class UTest extends TestCommons {
 		eq(U.trimr("/abc/", "/abc/"), "");
 		eq(U.trimr(".abc.", '.'), ".abc");
 		eq(U.trimr("/abc/", '.'), "/abc/");
+	}
+
+	@Test
+	public void testDynamic() {
+		Dynamic dynamic = new Dynamic() {
+			@Override
+			public Object call(Method m, Object[] args) {
+				return m.getName() + ":" + U.join(",", args);
+			}
+		};
+
+		EgInterface dyn = U.dynamic(EgInterface.class, dynamic);
+		EgInterface dyn2 = U.dynamic(EgInterface.class, dynamic);
+
+		isTrue(dyn != dyn2);
+
+		isTrue(dyn instanceof Proxy);
+		isTrue(dyn2 instanceof Proxy);
+
+		isTrue(dyn instanceof EgInterface);
+		isTrue(dyn2 instanceof EgInterface);
+
+		isTrue(dyn.toString().startsWith("EgInterface@"));
+		isTrue(dyn2.toString().startsWith("EgInterface@"));
+
+		neq(dyn.toString(), dyn2.toString());
+
+		eq(dyn.hey(), "hey:");
+		eq(dyn.abc(123, true), "abc:123,true");
+		eq(dyn2.abc(4, false), "abc:4,false");
 	}
 
 }
