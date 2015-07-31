@@ -27,7 +27,7 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public abstract class AbstractLoopThread extends Thread {
+public abstract class AbstractLoopThread extends RapidoidThread {
 
 	private volatile long sleepMs = 5;
 

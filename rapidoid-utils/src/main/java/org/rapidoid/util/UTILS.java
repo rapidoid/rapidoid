@@ -49,6 +49,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.rapidoid.Insights;
+import org.rapidoid.activity.AbstractLoopThread;
 import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -730,7 +731,7 @@ public class UTILS implements Constants {
 	}
 
 	public static RapidoidThread loop(final Runnable loop) {
-		RapidoidThread thread = new RapidoidThread() {
+		RapidoidThread thread = new AbstractLoopThread() {
 			@Override
 			protected void loop() {
 				loop.run();
