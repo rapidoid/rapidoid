@@ -873,4 +873,12 @@ public class Cls {
 		return entityName(entity.getClass());
 	}
 
+	public static boolean isSimple(Object target) {
+		return kindOf(target).isSimple();
+	}
+
+	public static boolean isNumber(Object target) {
+		return kindOf(target).isNumber();
+	}
+
 }
