@@ -50,6 +50,8 @@ import org.rapidoid.lambda.Mapper;
  */
 public class U {
 
+	private static final Object[] EMPTY_ARRAY = {};
+
 	private U() {}
 
 	public static String readable(Object obj) {
@@ -475,6 +477,10 @@ public class U {
 
 	public static String safe(String s) {
 		return or(s, "");
+	}
+
+	public static Object[] safe(Object[] arr) {
+		return or(arr, EMPTY_ARRAY);
 	}
 
 	@SuppressWarnings("unchecked")
