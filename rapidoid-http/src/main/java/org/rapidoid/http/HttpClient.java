@@ -36,6 +36,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.nio.entity.NByteArrayEntity;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Callbacks;
 import org.rapidoid.concurrent.Future;
@@ -65,7 +66,7 @@ public class HttpClient {
 		data = U.safe(data);
 		files = U.safe(files);
 
-		HttpPost httppost = new HttpPost(uri);
+		HttpPost req = new HttpPost(uri);
 
 		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 
@@ -81,27 +82,24 @@ public class HttpClient {
 			builder = builder.addTextBody(entry.getKey(), entry.getValue(), contentType);
 		}
 
-		httppost.setEntity(builder.build());
+		NByteArrayEntity entity = new NByteArrayEntity(builder.build().toString().getBytes());
+		req.setEntity(entity);
 
 		for (Entry<String, String> e : headers.entrySet()) {
-			httppost.addHeader(e.getKey(), e.getValue());
+			req.addHeader(e.getKey(), e.getValue());
 		}
 
-		Log.debug("Starting HTTP POST request", "request", httppost.getRequestLine());
+		Log.debug("Starting HTTP POST request", "request", req.getRequestLine());
 
-		return execute(client, httppost, callback);
+		return execute(client, req, callback);
 	}
 
 	public Future<byte[]> get(String uri, Callback<byte[]> callback) {
-		try {
-			HttpGet req = new HttpGet(uri);
+		HttpGet req = new HttpGet(uri);
 
-			Log.debug("Starting HTTP GET request", "request", req.getRequestLine());
+		Log.debug("Starting HTTP GET request", "request", req.getRequestLine());
 
-			return execute(client, req, callback);
-		} catch (Throwable e) {
-			throw U.rte(e);
-		}
+		return execute(client, req, callback);
 	}
 
 	private Future<byte[]> execute(CloseableHttpAsyncClient client, HttpRequestBase req, Callback<byte[]> callback) {

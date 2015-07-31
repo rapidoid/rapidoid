@@ -540,6 +540,10 @@ public class U {
 		return rte(nice(message, args));
 	}
 
+	public static RuntimeException cancelled() {
+		return rte("This operation was cancelled!");
+	}
+
 	public static RuntimeException notExpected() {
 		return rte("This operation is not expected to be called!");
 	}

@@ -729,13 +729,17 @@ public class UTILS implements Constants {
 		return (Map<K, V>) map;
 	}
 
-	public static void loop(final Runnable loop) {
-		new RapidoidThread() {
+	public static RapidoidThread loop(final Runnable loop) {
+		RapidoidThread thread = new RapidoidThread() {
 			@Override
 			protected void loop() {
 				loop.run();
 			}
-		}.start();
+		};
+
+		thread.start();
+
+		return thread;
 	}
 
 }

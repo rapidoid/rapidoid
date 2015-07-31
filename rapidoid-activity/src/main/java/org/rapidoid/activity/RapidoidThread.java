@@ -42,8 +42,10 @@ public abstract class RapidoidThread extends Thread {
 		while (!Thread.interrupted()) {
 			try {
 				loop();
+			} catch (ThreadDeath e) {
+				throw e;
 			} catch (Throwable e) {
-				Log.error("Exception occured while watching for changes", e);
+				Log.error("Exception occured inside the thread loop!", e);
 			}
 
 			U.sleep(sleepMs);
