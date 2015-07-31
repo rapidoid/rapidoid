@@ -44,8 +44,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5</version>
+			<artifactId>httpasyncclient</artifactId>
+			<version>4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
