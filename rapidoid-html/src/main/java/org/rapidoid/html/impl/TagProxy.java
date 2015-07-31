@@ -28,10 +28,10 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Special;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.cls.Proxies;
 import org.rapidoid.html.SpecificTag;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagBase;
-import org.rapidoid.util.Proxies;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")

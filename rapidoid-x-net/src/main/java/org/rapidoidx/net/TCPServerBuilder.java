@@ -23,7 +23,7 @@ package org.rapidoidx.net;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.Builder;
+import org.rapidoid.beany.Builder;
 import org.rapidoidx.net.impl.DefaultExchange;
 import org.rapidoidx.net.impl.RapidoidHelper;
 

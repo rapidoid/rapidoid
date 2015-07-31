@@ -1,11 +1,8 @@
-package org.rapidoid.util;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+package org.rapidoid.beany;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-beany
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -23,19 +20,12 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class InterceptorProxy {
+/**
+ * @author Nikolche Mihajlovski
+ * @since 2.0.0
+ */
+public interface Builder<T> {
 
-	private final String description;
-
-	public InterceptorProxy(String description) {
-		this.description = description;
-	}
-
-	@Override
-	public String toString() {
-		return "proxy(" + description + ")@" + Integer.toHexString(hashCode());
-	}
+	T build();
 
 }

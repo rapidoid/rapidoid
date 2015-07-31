@@ -37,14 +37,14 @@ import org.rapidoid.annotation.Local;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
+import org.rapidoid.beany.Builder;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.cls.Proxies;
 import org.rapidoid.config.Conf;
 import org.rapidoid.lambda.F3;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.Builder;
-import org.rapidoid.util.Proxies;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")

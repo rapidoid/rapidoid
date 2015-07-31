@@ -1,8 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.cls;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-cls
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -25,8 +25,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 
-import org.rapidoid.cls.Cls;
 import org.rapidoid.log.Log;
+import org.rapidoid.util.U;
 
 public class Proxies {
 
