@@ -20,32 +20,13 @@ package org.rapidoid.concurrent.impl;
  * #L%
  */
 
-import java.util.concurrent.TimeoutException;
-
 import org.rapidoid.concurrent.Promise;
-import org.rapidoid.util.U;
 
 /**
  * @author Nikolche Mihajlovski
  * @since 4.1.0
  */
-public class PromiseImpl<T> implements Promise<T> {
-
-	private volatile boolean done;
-
-	private volatile T result;
-
-	private volatile Throwable error;
-
-	public void setResult(T result) {
-		this.result = result;
-		done = true;
-	}
-
-	public void setError(Throwable error) {
-		this.error = error;
-		done = true;
-	}
+public class PromiseImpl<T> extends FutureImpl<T> implements Promise<T> {
 
 	@Override
 	public void onDone(T result, Throwable error) {
@@ -54,49 +35,6 @@ public class PromiseImpl<T> implements Promise<T> {
 		} else {
 			setResult(result);
 		}
-	}
-
-	public T get() {
-		try {
-			return get(Long.MAX_VALUE);
-		} catch (TimeoutException e) {
-			throw U.notExpected();
-		}
-	}
-
-	@Override
-	public T get(long timeoutMs) throws TimeoutException {
-		return get(timeoutMs, 5);
-	}
-
-	@Override
-	public T get(long timeoutMs, long sleepingIntervalMs) throws TimeoutException {
-		long waitingSince = U.time();
-
-		while (!done) {
-			if (U.time() - waitingSince > timeoutMs) {
-				throw new TimeoutException();
-			}
-
-			U.sleep(sleepingIntervalMs);
-		}
-
-		if (error != null) {
-			throw U.rte("Cannot get the result, there was an error!", error);
-		}
-
-		return result;
-	}
-
-	@Override
-	public boolean isDone() {
-		return done;
-	}
-
-	@Override
-	public boolean isSuccessful() {
-		U.must(done, "The promise is not done yet!");
-		return error == null;
 	}
 
 }
