@@ -40,7 +40,7 @@ import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Map;
 
-import org.rapidoid.activity.RapidoidThread;
+import org.rapidoid.activity.AbstractLoopThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
@@ -48,7 +48,7 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class WatcherThread extends RapidoidThread {
+public class WatcherThread extends AbstractLoopThread {
 
 	private final Map<WatchKey, Path> keys = U.map();
 

@@ -22,13 +22,36 @@ package org.rapidoid.activity;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class RapidoidThread extends Thread {
+public abstract class AbstractLoopThread extends Thread {
 
-	public RapidoidThread(Runnable runnable) {
-		super(runnable);
+	private volatile long sleepMs = 5;
+
+	public AbstractLoopThread() {}
+
+	public AbstractLoopThread(long sleepMs) {
+		this.sleepMs = sleepMs;
 	}
+
+	@Override
+	public final void run() {
+		while (!Thread.interrupted()) {
+			try {
+				loop();
+			} catch (ThreadDeath e) {
+				throw e;
+			} catch (Throwable e) {
+				Log.error("Exception occured inside the thread loop!", e);
+			}
+
+			U.sleep(sleepMs);
+		}
+	}
+
+	protected abstract void loop();
 
 }

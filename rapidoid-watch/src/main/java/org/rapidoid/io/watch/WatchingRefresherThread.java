@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
-import org.rapidoid.activity.RapidoidThread;
+import org.rapidoid.activity.AbstractLoopThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
@@ -33,7 +33,7 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class WatchingRefresherThread extends RapidoidThread {
+public class WatchingRefresherThread extends AbstractLoopThread {
 
 	private final ClassRefresher refresher;
 

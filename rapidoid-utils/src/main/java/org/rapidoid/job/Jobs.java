@@ -25,6 +25,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.rapidoid.activity.RapidoidThreadFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
@@ -43,7 +44,7 @@ public class Jobs implements Constants {
 	public static synchronized ScheduledThreadPoolExecutor executor() {
 		if (EXECUTOR == null) {
 			int threads = Conf.option("threads", 100);
-			EXECUTOR = new ScheduledThreadPoolExecutor(threads);
+			EXECUTOR = new ScheduledThreadPoolExecutor(threads, new RapidoidThreadFactory("jobs"));
 		}
 
 		return EXECUTOR;
