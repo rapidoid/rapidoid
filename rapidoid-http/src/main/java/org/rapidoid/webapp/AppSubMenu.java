@@ -24,30 +24,24 @@ import java.util.List;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class AppMenu {
+public class AppSubMenu {
 
-	private final List<AppMenuItem> items;
+	private final List<AppSubMenuItem> items;
 
-	public AppMenu(List<AppMenuItem> items) {
+	public AppSubMenu(List<AppSubMenuItem> items) {
 		this.items = items;
-	}
-
-	public List<AppMenuItem> getItems() {
-		return items;
 	}
 
 	@Override
 	public String toString() {
-		return U.join("\n", items);
+		return "AppSubMenu [items=" + items + "]";
 	}
 
-	public static AppMenu from(Object data) {
-		return Cls.struct(AppMenu.class, AppMenuItem.class, data);
+	public List<AppSubMenuItem> getItems() {
+		return items;
 	}
 
 }

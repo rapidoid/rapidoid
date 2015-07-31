@@ -49,7 +49,7 @@ public class WebApp {
 
 	private final Classes classes;
 
-	private volatile AppMenu menu = new AppMenu();
+	private volatile AppMenu menu;
 
 	public WebApp(String id, String title, Set<String> owners, Set<String> hostnames, Set<String> uriContexts,
 			AppMode mode, Router router, Classes classes) {

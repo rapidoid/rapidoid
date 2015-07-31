@@ -20,34 +20,51 @@ package org.rapidoid.webapp;
  * #L%
  */
 
-import java.util.List;
+import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class AppMenu {
+public class AppSubMenuItem {
 
-	private final List<AppMenuItem> items;
+	private String caption;
 
-	public AppMenu(List<AppMenuItem> items) {
-		this.items = items;
-	}
+	private String target;
 
-	public List<AppMenuItem> getItems() {
-		return items;
+	private final Map<String, Object> extra;
+
+	public AppSubMenuItem(String caption, Object target, Map<String, Object> extra) {
+		this.caption = caption;
+		this.extra = extra;
+		this.target = target != null ? Cls.str(target) : "";
 	}
 
 	@Override
 	public String toString() {
-		return U.join("\n", items);
+		return "AppSubMenuItem [" + caption + " => " + target + ", extra=" + extra + "]";
 	}
 
-	public static AppMenu from(Object data) {
-		return Cls.struct(AppMenu.class, AppMenuItem.class, data);
+	public String getCaption() {
+		return caption;
+	}
+
+	public void setCaption(String caption) {
+		this.caption = caption;
+	}
+
+	public String getTarget() {
+		return target;
+	}
+
+	public void setTarget(String target) {
+		this.target = target;
+	}
+
+	public Map<String, Object> getExtra() {
+		return extra;
 	}
 
 }
