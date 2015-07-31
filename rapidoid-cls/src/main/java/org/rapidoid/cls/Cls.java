@@ -32,10 +32,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
@@ -879,6 +881,60 @@ public class Cls {
 
 	public static boolean isNumber(Object target) {
 		return kindOf(target).isNumber();
+	}
+
+	public static <T, T2> T struct(Class<T> clazz1, Class<T2> clazz2, Object obj) {
+		List<Object> items = U.list();
+
+		if (obj instanceof Map<?, ?>) {
+			Map<?, ?> map = U.cast(obj);
+
+			for (Entry<?, ?> e : map.entrySet()) {
+				items.add(createFromEntry(clazz2, e, null));
+			}
+
+		} else if (obj instanceof List<?>) {
+			List<?> list = U.cast(obj);
+
+			for (Object o : list) {
+
+				if (o instanceof Map<?, ?>) {
+					Map<?, ?> map = U.cast(o);
+
+					if (!map.isEmpty()) {
+						if (map.size() == 1) {
+							items.add(createFromEntry(clazz2, map.entrySet().iterator().next(), null));
+						} else {
+							// more than 1 element
+							Map<String, Object> extra = U.map();
+							Iterator<Entry<Object, Object>> it = U.cast(map.entrySet().iterator());
+							Entry<?, ?> firstEntry = it.next();
+
+							while (it.hasNext()) {
+								Entry<?, ?> e = U.cast(it.next());
+								extra.put(Cls.str(e.getKey()), e.getValue());
+							}
+
+							items.add(createFromEntry(clazz2, firstEntry, extra));
+						}
+					}
+
+				} else {
+					items.add(Cls.newInstance(clazz2, Cls.str(o), null, null));
+				}
+			}
+
+		} else {
+			items.add(Cls.newInstance(clazz2, Cls.str(obj), null, null));
+		}
+
+		return Cls.newInstance(clazz1, items);
+	}
+
+	private static <T2> T2 createFromEntry(Class<T2> clazz2, Entry<?, ?> e, Map<String, Object> extra) {
+		String key = Cls.str(e.getKey());
+		T2 item = Cls.newInstance(clazz2, key, e.getValue(), extra);
+		return item;
 	}
 
 }
