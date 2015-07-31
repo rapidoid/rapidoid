@@ -58,6 +58,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	public void openContext() {
 		app = WebAppGroup.openRootContext();
 		router = app.getRouter();
+		HTTP.DEFAULT_CLIENT.reset();
 	}
 
 	@After

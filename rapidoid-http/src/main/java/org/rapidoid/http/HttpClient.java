@@ -21,6 +21,7 @@ package org.rapidoid.http;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -37,6 +38,9 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.nio.entity.NByteArrayEntity;
+import org.rapidoid.activity.RapidoidThreadFactory;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Callbacks;
 import org.rapidoid.concurrent.Future;
@@ -46,12 +50,19 @@ import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 
+@Authors("Nikolche Mihajlovski")
+@Since("4.1.0")
 public class HttpClient {
 
-	private final CloseableHttpAsyncClient client;
+	private CloseableHttpAsyncClient client;
 
 	public HttpClient() {
-		this(HttpAsyncClients.createDefault());
+		this(asyncClient());
+	}
+
+	private static CloseableHttpAsyncClient asyncClient() {
+		return HttpAsyncClients.custom().setThreadFactory(new RapidoidThreadFactory("http-client"))
+				.disableCookieManagement().disableConnectionState().disableAuthCaching().build();
 	}
 
 	public HttpClient(CloseableHttpAsyncClient client) {
@@ -89,7 +100,7 @@ public class HttpClient {
 			req.addHeader(e.getKey(), e.getValue());
 		}
 
-		Log.debug("Starting HTTP POST request", "request", req.getRequestLine());
+		Log.info("Starting HTTP POST request", "request", req.getRequestLine());
 
 		return execute(client, req, callback);
 	}
@@ -97,15 +108,15 @@ public class HttpClient {
 	public Future<byte[]> get(String uri, Callback<byte[]> callback) {
 		HttpGet req = new HttpGet(uri);
 
-		Log.debug("Starting HTTP GET request", "request", req.getRequestLine());
+		Log.info("Starting HTTP GET request", "request", req.getRequestLine());
 
 		return execute(client, req, callback);
 	}
 
 	private Future<byte[]> execute(CloseableHttpAsyncClient client, HttpRequestBase req, Callback<byte[]> callback) {
 
-		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000)
-				.setConnectionRequestTimeout(5000).build();
+		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(10000).setConnectTimeout(10000)
+				.setConnectionRequestTimeout(10000).build();
 		req.setConfig(requestConfig);
 
 		Promise<byte[]> promise = Promises.create();
@@ -155,6 +166,20 @@ public class HttpClient {
 				Callbacks.error(promise, U.cancelled());
 			}
 		};
+	}
+
+	public synchronized void close() {
+		try {
+			client.close();
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
+	}
+
+	public synchronized void reset() {
+		close();
+		client = asyncClient();
+		client.start();
 	}
 
 }

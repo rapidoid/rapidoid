@@ -36,7 +36,6 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 
 	@Test
 	public void shouldHandleHttpRequests() throws IOException, URISyntaxException {
-
 		server();
 
 		router.get("/file", new Handler() {
@@ -120,7 +119,6 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 
 	@Test
 	public void shouldRenderRabbit() throws Exception { // :)
-
 		server();
 
 		router.get("/rabbit.jpg", new Handler() {
