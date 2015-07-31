@@ -38,6 +38,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import org.rapidoid.lambda.Mapper;
@@ -874,6 +876,22 @@ public class U {
 	@SuppressWarnings("unchecked")
 	public static <T> T cast(Object value) {
 		return (T) value;
+	}
+
+	public static void wait(CountDownLatch latch) {
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			new ThreadDeath();
+		}
+	}
+
+	public static void wait(CountDownLatch latch, long timeout, TimeUnit unit) {
+		try {
+			latch.await(timeout, unit);
+		} catch (InterruptedException e) {
+			new ThreadDeath();
+		}
 	}
 
 }
