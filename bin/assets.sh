@@ -3,17 +3,20 @@ DISTRO_JS=$DISTRO/rapidoid.min.js
 DISTRO_CSS=$DISTRO/rapidoid.min.css
 
 # JS
-curl 'cdn.jsdelivr.net/g/underscorejs,jquery.cookie,jquery.easing,jquery.validation(jquery.validate.min.js+additional-methods.min.js),jquery.easy-pie-chart,jquery.parallax,jquery.prettycheckable,jquery.scrollto,jquery.timeago,angularjs(angular-sanitize.min.js+angular-resource.min.js+angular-animate.min.js+angular-cookies.min.js+angular-route.min.js+angular-loader.min.js+angular-touch.min.js),noty(packaged/jquery.noty.packaged.min.js),numeraljs,sortable,chartist.js,jquery.flot(jquery.flot.min.js+jquery.colorhelpers.min.js+jquery.flot.canvas.min.js+jquery.flot.categories.min.js+jquery.flot.crosshair.min.js+jquery.flot.errorbars.min.js+jquery.flot.fillbetween.min.js+jquery.flot.image.min.js+jquery.flot.navigate.min.js+jquery.flot.pie.min.js+jquery.flot.resize.min.js+jquery.flot.selection.min.js+jquery.flot.stack.min.js+jquery.flot.symbol.min.js+jquery.flot.threshold.min.js+jquery.flot.time.min.js),mustache.js' | sed 's/sourceMappingURL//g' > $DISTRO_JS
+curl 'cdn.jsdelivr.net/g/underscorejs,jquery.cookie,jquery.easing,jquery.easy-pie-chart,jquery.validation(jquery.validate.min.js+additional-methods.min.js),jquery.parallax,jquery.prettycheckable,jquery.scrollto,jquery.timeago,angularjs(angular-sanitize.min.js+angular-resource.min.js+angular-animate.min.js+angular-cookies.min.js+angular-route.min.js+angular-loader.min.js+angular-touch.min.js),noty(packaged/jquery.noty.packaged.min.js),numeraljs,sortable,mustache.js,sweetalert,momentjs,select2,medium-editor,dropzone,typeahead.js,gmaps,sortable' | sed 's/sourceMappingURL//g' > $DISTRO_JS
 cat assets/*.js >> $DISTRO_JS
 echo >> $DISTRO_JS
 echo >> $DISTRO_JS
 cat assets-rapidoid/rapidoid-extras.js | uglifyjs >> $DISTRO_JS
-ls -l $DISTRO_JS
 
 # CSS
-curl 'cdn.jsdelivr.net/g/chartist.js(chartist.min.css)' > $DISTRO_CSS
+curl 'cdn.jsdelivr.net/g/sweetalert(sweetalert.css),select2(css/select2.min.css),medium-editor(css/medium-editor.min.css+css/themes/default.min.css),dropzone(dropzone.min.css)' > $DISTRO_CSS
 cat assets/*.css >> $DISTRO_CSS
 cat assets-rapidoid/rapidoid-extras.css >> $DISTRO_CSS
+
+echo
+
+ls -l $DISTRO_JS
 ls -l $DISTRO_CSS
 
 # COPY TO DOCS
@@ -22,4 +25,5 @@ cp $DISTRO_JS $DOCS/rapidoid.min.js
 cp $DISTRO_CSS $DOCS/rapidoid.min.css
 cp rapidoid-html/src/main/resources/public/bootstrap/css/theme-default.css $DOCS/theme-default.css
 
-# TODO: angular.textangular(textAngular-sanitize.min.js+textAngular.min.js),angular.angucomplete-alt,angular.file-upload,bootstrap.lightbox
+echo
+echo

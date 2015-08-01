@@ -293,3 +293,7 @@ rapidoidApp.controller('StreamItemController', [ '$scope', '$http', '$window', '
                 return $scope.items[index];
             };
         } ]);
+
+$(function() {
+    $('select').select2();
+});
