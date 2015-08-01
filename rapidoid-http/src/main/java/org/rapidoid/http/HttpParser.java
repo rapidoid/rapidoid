@@ -51,6 +51,8 @@ public class HttpParser implements Constants {
 
 	private static final byte[] MULTIPART_FORM_DATA_BOUNDARY2 = "multipart/form-data;boundary=".getBytes();
 
+	private static final byte[] MULTIPART_FORM_DATA = "multipart/form-data;".getBytes();
+
 	private static final byte[] CONTENT_TYPE = "Content-Type".getBytes();
 
 	private static final byte[] CONTENT_DISPOSITION = "Content-Disposition".getBytes();
@@ -209,6 +211,11 @@ public class HttpParser implements Constants {
 		Range multipartBoundary = helper.ranges5.ranges[0];
 
 		if (isMultipartForm(src, headers, multipartBoundary)) {
+
+			if (multipartBoundary.isEmpty()) {
+				detectMultipartBoundary(src, body, multipartBoundary);
+			}
+
 			helper.bytes[0] = '-';
 			helper.bytes[1] = '-';
 
@@ -220,6 +227,11 @@ public class HttpParser implements Constants {
 		} else {
 			parseURLEncodedKV(src, data, body);
 		}
+	}
+
+	private void detectMultipartBoundary(Buf src, Range body, Range multipartBoundary) {
+		BytesUtil.parseLine(src.bytes(), multipartBoundary, body.start, body.limit());
+		multipartBoundary.strip(2, 0);
 	}
 
 	/* http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4.2 */
@@ -235,8 +247,6 @@ public class HttpParser implements Constants {
 		try {
 
 			while ((pos2 = BytesUtil.find(src.bytes(), start, limit, helper.bytes, 0, sepLen, true)) >= 0) {
-				// System.out.println("****** PARSE MULTI *** pos2=" + pos2);
-
 				if (pos1 >= 0 && pos2 >= 0) {
 					int from = pos1 + sepLen + 2;
 					int to = pos2 - 2;
@@ -249,7 +259,7 @@ public class HttpParser implements Constants {
 
 		} catch (Throwable e) {
 			Log.warn("Multipart parse error!", e);
-			throw U.rte("Multipart data parse error!");
+			throw U.rte("Multipart data parse error!", e);
 		}
 	}
 
@@ -358,8 +368,6 @@ public class HttpParser implements Constants {
 		Range contType = headers.get(buf, CONTENT_TYPE, false);
 
 		if (contType != null) {
-			// TODO improve parsing of "multipart" and "data boundary"
-
 			if (BytesUtil.startsWith(buf.bytes(), contType, MULTIPART_FORM_DATA_BOUNDARY1, false)) {
 				multipartBoundary.setInterval(contType.start + MULTIPART_FORM_DATA_BOUNDARY1.length, contType.limit());
 				return true;
@@ -367,6 +375,11 @@ public class HttpParser implements Constants {
 
 			if (BytesUtil.startsWith(buf.bytes(), contType, MULTIPART_FORM_DATA_BOUNDARY2, false)) {
 				multipartBoundary.setInterval(contType.start + MULTIPART_FORM_DATA_BOUNDARY2.length, contType.limit());
+				return true;
+			}
+
+			if (BytesUtil.startsWith(buf.bytes(), contType, MULTIPART_FORM_DATA, false)) {
+				multipartBoundary.reset();
 				return true;
 			}
 		}
