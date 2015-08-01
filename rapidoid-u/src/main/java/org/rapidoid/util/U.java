@@ -175,6 +175,18 @@ public class U {
 		return s;
 	}
 
+	public static void print(Object... values) {
+		String text;
+
+		if (values != null) {
+			text = values.length == 1 ? readable(values[0]) : readable(values);
+		} else {
+			text = "null";
+		}
+
+		System.out.println(text);
+	}
+
 	public static <T> String join(String sep, T... items) {
 		return render(items, "%s", sep);
 	}
@@ -471,7 +483,7 @@ public class U {
 	}
 
 	public static <T> BlockingQueue<T> queue(int maxSize) {
-		U.argMust(maxSize > 0, "Maximum queue size must be > 0!");
+		argMust(maxSize > 0, "Maximum queue size must be > 0!");
 		return new ArrayBlockingQueue<T>(maxSize);
 	}
 
@@ -759,7 +771,7 @@ public class U {
 		fromIndex = limited(0, fromIndex, list.size());
 		toIndex = limited(fromIndex, toIndex, list.size());
 
-		return U.list(list.subList(fromIndex, toIndex));
+		return list(list.subList(fromIndex, toIndex));
 	}
 
 	public static <T> List<T> page(Iterable<T> items, int page, int pageSize) {
@@ -823,7 +835,7 @@ public class U {
 				try {
 					return (V) clazz.newInstance();
 				} catch (Exception e) {
-					throw U.rte(e);
+					throw rte(e);
 				}
 			}
 		});
