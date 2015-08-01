@@ -27,6 +27,7 @@ import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
@@ -43,6 +44,7 @@ public class MicroServicesTest extends IntegrationTestCommons {
 
 	@Test
 	public void testMicroserviceCommunication() {
+		HTTP.DEFAULT_CLIENT.reset();
 		WebApp app = WebAppGroup.openRootContext();
 
 		app.getRouter().generic(new Handler() {
@@ -97,6 +99,7 @@ public class MicroServicesTest extends IntegrationTestCommons {
 
 		loop.interrupt();
 		server.shutdown();
+		Ctxs.close();
 	}
 
 }

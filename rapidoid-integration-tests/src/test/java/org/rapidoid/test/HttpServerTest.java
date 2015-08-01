@@ -23,6 +23,7 @@ package org.rapidoid.test;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handlers;
@@ -35,6 +36,7 @@ public class HttpServerTest extends IntegrationTestCommons {
 
 	@Test
 	public void testHttpServer() {
+		HTTP.DEFAULT_CLIENT.reset();
 		WebApp app = WebAppGroup.openRootContext();
 
 		app.getRouter().get("/", Handlers.html("home"));
@@ -46,6 +48,7 @@ public class HttpServerTest extends IntegrationTestCommons {
 		eq(new String(HTTP.post("http://localhost:8080/")), "123");
 
 		server.shutdown();
+		Ctxs.close();
 	}
 
 }
