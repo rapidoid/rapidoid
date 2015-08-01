@@ -67,6 +67,8 @@ public class HttpParser implements Constants {
 
 	private static final byte[] _UTF_8 = "UTF-8".getBytes();
 
+	private static final byte[] _ISO_8859_1 = "ISO-8859-1".getBytes();
+
 	private static final byte[] CONTENT_TRANSFER_ENCODING = "Content-Transfer-Encoding".getBytes();
 
 	private static final byte[] _7BIT = "7bit".getBytes();
@@ -316,7 +318,11 @@ public class HttpParser implements Constants {
 				charset.strip(CHARSET_EQ.length, 0);
 				BytesUtil.trim(src.bytes(), charset);
 
-				U.rteIf(!BytesUtil.matches(src.bytes(), charset, _UTF_8, false), "Only the UTF-8 charset is supported!");
+				if (!BytesUtil.matches(src.bytes(), charset, _UTF_8, false)
+						&& !BytesUtil.matches(src.bytes(), charset, _ISO_8859_1, false)) {
+					Log.warn("Tipically the UTF-8 and ISO-8859-1 charsets are expected, but received different!",
+							"charset", src.get(charset));
+				}
 			}
 		}
 
