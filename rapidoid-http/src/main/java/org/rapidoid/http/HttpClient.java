@@ -20,6 +20,7 @@ package org.rapidoid.http;
  * #L%
  */
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -82,23 +83,30 @@ public class HttpClient {
 		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 
 		for (Entry<String, String> entry : files.entrySet()) {
-			ContentType contentType = ContentType.create("application/octet-stream");
 			String filename = entry.getValue();
 			File file = IO.file(filename);
-			builder = builder.addBinaryBody(entry.getKey(), file, contentType, filename);
+			builder = builder.addBinaryBody(entry.getKey(), file, ContentType.DEFAULT_BINARY, filename);
 		}
 
 		for (Entry<String, String> entry : data.entrySet()) {
-			ContentType contentType = ContentType.create("text/plain", "UTF-8");
-			builder = builder.addTextBody(entry.getKey(), entry.getValue(), contentType);
+			builder = builder.addTextBody(entry.getKey(), entry.getValue(), ContentType.DEFAULT_TEXT);
 		}
 
-		NByteArrayEntity entity = new NByteArrayEntity(builder.build().toString().getBytes());
-		req.setEntity(entity);
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		try {
+			builder.build().writeTo(stream);
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
+
+		byte[] bytes = stream.toByteArray();
+		NByteArrayEntity entity = new NByteArrayEntity(bytes, ContentType.MULTIPART_FORM_DATA);
 
 		for (Entry<String, String> e : headers.entrySet()) {
 			req.addHeader(e.getKey(), e.getValue());
 		}
+
+		req.setEntity(entity);
 
 		Log.info("Starting HTTP POST request", "request", req.getRequestLine());
 
