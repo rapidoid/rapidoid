@@ -14,6 +14,23 @@
 	border-radius: 3px;
 }
 
+/***** Default Gmap dimensions */
+div.gmap-default {
+	width: 100%;
+	height: 400px;
+}
+
+/***** Removing the outline of the nav tabs */
+.nav-tabs>.active>a, .nav-tabs>.active>a:hover {
+	outline: none;
+}
+
+/***** Hover effect for close (e.g. "x") buttons */
+i.btn-close:hover {
+	background: #A00;
+	color: white;
+}
+
 /***** Showcase utils */
 .feature-point {
 	margin-right: 5px !important;

@@ -1,299 +1,213 @@
 /* Rapidoid Extras */
+Rapidoid = (function() {
 
-var theme;
-try {
-    var m = /\bTHEME=(\w+?)\b/g.exec(document.cookie);
-    theme = m[1];
-} catch (e) {}
-if (theme && theme != 'none') {
-    document.write('<link href="/bootstrap/css/theme-' + theme + '.css" rel="stylesheet">');
-}
-
-function _goAt(url) {
-    window.location.href = url;
-}
-
-function _setTheme(theme) {
-    document.cookie = 'THEME=' + theme + '; path=/';
-    location.reload();
-}
-
-function _appendScript(url) {
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = url;
-
-    var head = document.getElementsByTagName('head')[0];
-    head.appendChild(script);
-}
-
-function _stop(ev) {
-    if (typeof ev.stopPropagation != "undefined") {
-        ev.stopPropagation();
-    } else if (typeof ev.preventDefault != "undefined") {
-        ev.preventDefault();
-    } else {
-        ev.cancelBubble = true;
-    }
-}
-
-function _logout() {
-    $.removeCookie('JSESSIONID', '/', '');
-    $.removeCookie('COOKIEPACK', '/', '');
-    location.reload();
-}
-
-function _popup(popupUrl, onClosed) {
-    var ww = 800;
-    var hh = 600;
-
-    var left = (screen.width / 2) - (ww / 2);
-    var top = (screen.height / 2) - (hh / 2);
-
-    var win = window
-            .open(popupUrl, "windowname1", 'width=' + ww + ', height=' + hh + ', top=' + top + ', left=' + left);
-
-    if (win.focus) {
-        win.focus();
+    var theme;
+    try {
+        var m = /\bTHEME=(\w+?)\b/g.exec(document.cookie);
+        theme = m[1];
+    } catch (e) {}
+    if (theme && theme != 'none') {
+        document.write('<link href="/bootstrap/css/theme-' + theme + '.css" rel="stylesheet">');
     }
 
-    var winTimer = setInterval(function() {
-        if (win.closed) {
-            clearInterval(winTimer);
-            if (onClosed) {
-                onClosed(popupUrl);
-            }
+    function _goAt(url) {
+        window.location.href = url;
+    }
+
+    function _setTheme(theme) {
+        document.cookie = 'THEME=' + theme + '; path=/';
+        location.reload();
+    }
+
+    function _appendScript(url) {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = url;
+
+        var head = document.getElementsByTagName('head')[0];
+        head.appendChild(script);
+    }
+
+    function _stop(ev) {
+        if (typeof ev.stopPropagation != "undefined") {
+            ev.stopPropagation();
+        } else if (typeof ev.preventDefault != "undefined") {
+            ev.preventDefault();
+        } else {
+            ev.cancelBubble = true;
         }
-    }, 100);
-}
-
-function _modal(title, content, footer, options) {
-    $('#_modal_title').html(title || '');
-    $('#_modal_body').html(content || '');
-    if (footer) {
-        $('#_modal_footer').html(footer || '');
-    }
-    $('#_modal_box').modal(options || {});
-}
-
-var rapidoidApp = angular.module('app', [ 'infinite-scroll', 'ngSanitize' ]);
-
-function range(from, total) {
-    var rangeArr = [];
-
-    for (var i = from; i < from + total; i++) {
-        rangeArr.push(i);
     }
 
-    return rangeArr;
-}
-
-rapidoidApp.filter('rangex', function() {
-    return function(input, from, total) {
-        from = parseInt(from);
-        total = parseInt(total);
-        return range(from, total);
+    function _logout() {
+        $.removeCookie('JSESSIONID', '/', '');
+        $.removeCookie('COOKIEPACK', '/', '');
+        location.reload();
     }
-});
 
-rapidoidApp.filter('rowCount', function() {
-    return function(input, cols) {
-        return range(0, Math.ceil(input.length / cols));
+    function _popup(popupUrl, onClosed) {
+        var ww = 800;
+        var hh = 600;
+
+        var left = (screen.width / 2) - (ww / 2);
+        var top = (screen.height / 2) - (hh / 2);
+
+        var win = window.open(popupUrl, "windowname1", 'width=' + ww + ', height=' + hh + ', top=' + top + ', left='
+                + left);
+
+        if (win.focus) {
+            win.focus();
+        }
+
+        var winTimer = setInterval(function() {
+            if (win.closed) {
+                clearInterval(winTimer);
+                if (onClosed) {
+                    onClosed(popupUrl);
+                }
+            }
+        }, 100);
     }
-});
 
-rapidoidApp.filter('modn', function() {
-    return function(arr, n, remainder) {
-        remainder = remainder || 0;
-        return arr.filter(function(item, index) {
-            return index % n == remainder;
-        })
-    };
-});
+    function _modal(title, content, footer, options) {
+        $('#_modal_title').html(title || '');
+        $('#_modal_body').html(content || '');
+        if (footer) {
+            $('#_modal_footer').html(footer || '');
+        }
+        $('#_modal_box').modal(options || {});
+    }
 
-// Based on:
-// http://stackoverflow.com/questions/17417607/angular-ng-bind-html-unsafe-and-directive-within-it
-rapidoidApp.directive('compile', [ '$compile', function($compile) {
-    return function(scope, element, attrs) {
-        scope.$watch(function(scope) {
-            // watch the 'compile' expression for changes
-            return scope.$eval(attrs.compile);
-        }, function(value) {
-            // when the 'compile' expression changes
-            // assign it into the current DOM
-            element.html(value);
+    var app = angular.module('app', [ 'infinite-scroll', 'ngSanitize', 'ui.bootstrap' ]);
 
-            // compile the new DOM and link it to the current
-            // scope.
-            // NOTE: we only compile .childNodes so that
-            // we don't get into infinite loop compiling ourselves
-            $compile(element.contents())(scope);
-        });
-    };
-} ]);
+    // Based on:
+    // http://stackoverflow.com/questions/17417607/angular-ng-bind-html-unsafe-and-directive-within-it
+    app.directive('compile', [ '$compile', function($compile) {
+        return function(scope, element, attrs) {
+            scope.$watch(function(scope) {
+                // watch the 'compile' expression for changes
+                return scope.$eval(attrs.compile);
+            }, function(value) {
+                // when the 'compile' expression changes
+                // assign it into the current DOM
+                element.html(value);
 
-rapidoidApp.controller('Main', [ '$scope', '$http', '$window', function($scope, $http, $window) {
+                // compile the new DOM and link it to the current
+                // scope.
+                // NOTE: we only compile .childNodes so that
+                // we don't get into infinite loop compiling ourselves
+                $compile(element.contents())(scope);
+            });
+        };
+    } ]);
 
-    $scope._emit = function(eventId, eventNav, eventArgs) {
+    var _scopeInitializers = [];
 
-        // _stop(ev);
+    function _initializer(initializer) {
+        _scopeInitializers.push(initializer);
+    }
 
-        var x = document.querySelectorAll("input,textarea");
-        var inputs = {};
-        for (var i = 0; i < x.length; i++) {
-            var t = $(x[i]);
-            var _h = t.attr('_h');
+    function _initScope($scope, $http, $window) {
+        for (var i = 0; i < _scopeInitializers.length; i++) {
+            _scopeInitializers[i]($scope, $http, $window);
+        }
+    }
 
-            if (_h) {
-                var val;
+    app.controller('Main', [ '$scope', '$http', '$window', function($scope, $http, $window) {
 
-                if (t.prop('type') == 'checkbox' || t.prop('type') == 'radio') {
-                    val = t.prop('checked');
-                } else {
-                    val = t.val();
+        $scope._emit = function(eventId, eventNav, eventArgs) {
+
+            // _stop(ev);
+
+            var x = document.querySelectorAll("input,textarea");
+            var inputs = {};
+            for (var i = 0; i < x.length; i++) {
+                var t = $(x[i]);
+                var _h = t.attr('_h');
+
+                if (_h) {
+                    var val;
+
+                    if (t.prop('type') == 'checkbox' || t.prop('type') == 'radio') {
+                        val = t.prop('checked');
+                    } else {
+                        val = t.val();
+                    }
+
+                    inputs[_h] = val;
+                }
+            }
+
+            x = document.querySelectorAll("option");
+
+            for (var i = 0; i < x.length; i++) {
+                var t = $(x[i]);
+                var _h = t.attr('_h');
+
+                if (_h) {
+                    inputs[_h] = t.prop('selected');
+                }
+            }
+
+            $.post(window.location.href, {
+                event : eventId,
+                navigational : eventNav,
+                args : eventArgs,
+                inputs : JSON.stringify(inputs),
+                __state : window.__state
+            }).done(function(data) {
+                if (data._redirect_) {
+                    _goAt(data._redirect_);
+                    return;
                 }
 
-                inputs[_h] = val;
-            }
-        }
+                if (data._state_) {
+                    window.__state = data._state_;
+                }
 
-        x = document.querySelectorAll("option");
+                if (data["!errors"]) {
+                    $('.field-error').html('');
+                    errors = data["!errors"];
+                    for ( var h in errors) {
+                        var err = errors[h];
 
-        for (var i = 0; i < x.length; i++) {
-            var t = $(x[i]);
-            var _h = t.attr('_h');
-
-            if (_h) {
-                inputs[_h] = t.prop('selected');
-            }
-        }
-
-        $.post(window.location.href, {
-            event : eventId,
-            navigational : eventNav,
-            args : eventArgs,
-            inputs : JSON.stringify(inputs),
-            __state : window.__state
-        }).done(function(data) {
-            if (data._redirect_) {
-                _goAt(data._redirect_);
-                return;
-            }
-
-            if (data._state_) {
-                window.__state = data._state_;
-            }
-
-            if (data["!errors"]) {
-                $('.field-error').html('');
-                errors = data["!errors"];
-                for ( var h in errors) {
-                    var err = errors[h];
-
-                    var x = document.querySelectorAll("input,textarea,option");
-                    for (var i = 0; i < x.length; i++) {
-                        var t = $(x[i]);
-                        var _h = t.attr('_h');
-                        if (_h == h) {
-                            $(t).next('.field-error').html(err);
+                        var x = document.querySelectorAll("input,textarea,option");
+                        for (var i = 0; i < x.length; i++) {
+                            var t = $(x[i]);
+                            var _h = t.attr('_h');
+                            if (_h == h) {
+                                $(t).next('.field-error').html(err);
+                            }
+                        }
+                    }
+                } else {
+                    for ( var sel in data._sel_) {
+                        if (sel == 'body') {
+                            $scope.ajaxBodyContent = data._sel_[sel];
+                            $scope.$apply();
+                        } else {
+                            alert('Selector not supported: ' + sel);
                         }
                     }
                 }
-            } else {
-                for ( var sel in data._sel_) {
-                    if (sel == 'body') {
-                        $scope.ajaxBodyContent = data._sel_[sel];
-                        $scope.$apply();
-                    } else {
-                        alert('Selector not supported: ' + sel);
-                    }
-                }
-            }
-        }).fail(function(data) {
-            alert("Error!");
-            console.log(data);
-        });
-    }
-
-    $scope.moreLess = function(item) {
-        item.more = !item.more;
-    }
-
-    $scope.upvote = function(item) {
-        item.vote = item.vote != 1 ? 1 : 0;
-    }
-
-    $scope.downvote = function(item) {
-        item.vote = item.vote != -1 ? -1 : 0;
-    }
-
-    $scope.changeFavLocal = function(item) {
-        var favs = JSON.parse(localStorage['favorites'] || '{}');
-        item.fav = !item.fav;
-        if (item.fav) {
-            favs[item.id] = true;
-        } else {
-            delete favs[item.id];
+            }).fail(function(data) {
+                swal("Communication error", "Couldn't connect to the server!", "error");
+                console.log(data);
+            });
         }
-        localStorage['favorites'] = JSON.stringify(favs);
-    }
 
-} ]);
+        _initScope($scope, $http, $window);
 
-rapidoidApp.factory('StreamData', [ '$http', function($http) {
+    } ]);
 
-    var StreamData = function(dataUrl) {
-        this.items = [];
-        this.busy = false;
-        this.page = 1;
-        this.dataUrl = dataUrl;
-        this.cols = 3;
+    return {
+        goAt : _goAt,
+        setTheme : _setTheme,
+        appendScript : _appendScript,
+        logout : _logout,
+        popup : _popup,
+        modal : _modal,
+        app : app,
+        initializer : _initializer
     };
 
-    StreamData.prototype.nextPage = function() {
-        if (this.busy)
-            return;
-        this.busy = true;
-
-        var url = this.dataUrl.replace('{{page}}', '' + this.page);
-
-        $http.get(url).success(function(data) {
-            var items = data;
-            for (var i = 0; i < items.length; i++) {
-                this.items.push(items[i]);
-            }
-            this.page++;
-            this.busy = false;
-        }.bind(this));
-    };
-
-    StreamData.prototype.zoom = function(delta) {
-        var cols = this.cols + delta;
-        if (cols >= 1 && cols <= 4) {
-            this.cols = cols;
-        }
-    }
-
-    return StreamData;
-
-} ]);
-
-rapidoidApp.controller('StreamController', [ '$scope', '$http', '$window', '$attrs', 'StreamData',
-        function($scope, $http, $window, $attrs, StreamData) {
-            var dataUrl = $attrs.url;
-            $scope.stream = new StreamData(dataUrl);
-            $scope.items = $scope.stream.items;
-            $scope.cols = 1;
-        } ]);
-
-rapidoidApp.controller('StreamItemController', [ '$scope', '$http', '$window', '$attrs',
-        function($scope, $http, $window, $attrs) {
-            var index = $scope.rowN * $scope.cols + $scope.colN;
-            $scope.it = function() {
-                return $scope.items[index];
-            };
-        } ]);
-
-$(function() {
-    $('select').select2();
-});
+})();

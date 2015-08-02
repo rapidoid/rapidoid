@@ -9,6 +9,10 @@
 
 <title>{{title}}</title>
 
+{{#maps}}
+<script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+{{/maps}}
+
 {{#dev}}
 <script src="/jquery-2.1.4.min.js"></script>
 
@@ -49,13 +53,13 @@ window.__state = {{{req.renderState}}};
 
 <body class="rapidoid" ng-controller="Main" ng-app="app">
 
-{{>modal}}
-
   <div ng-if="!ajaxBodyContent">
 {{>content}}
   </div>
 
   <div compile="ajaxBodyContent" ng-if="ajaxBodyContent"></div>
+
+{{>modal}}
 
 </body>
 

@@ -2,7 +2,7 @@
     <ul role="menu" class="dropdown-menu">
 {{#oauth.popup}}
 {{#oauth.providers}}
-        <li><a onclick="_popup('/_{{.}}Login?popup');" href="javascript:void(0);"><span class="fa fa-{{.}}"></span>&nbsp;Sign in with {{.}}</a></li>
+        <li><a onclick="Rapidoid.popup('/_{{.}}Login?popup');" href="javascript:void(0);"><span class="fa fa-{{.}}"></span>&nbsp;Sign in with <span class="capitalized">{{.}}</span></a></li>
 {{/oauth.providers}}
 {{/oauth.popup}}
 {{^oauth.popup}}
