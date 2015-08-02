@@ -138,15 +138,14 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 
 		boolean showNavbar = Apps.config(app, "navbar", true);
 
-		String modal = Beany.getPropValue(screen, "modal", null);
-		Object modalContent = modal != null ? Beany.getPropValue(screen, modal, null) : null;
-
 		String content = PageRenderer.get().toHTML(pageContent, x);
 
-		Map<String, Object> model = U.map("navbar", showNavbar, "modal", modalContent, "fluid", isFluid(), "title",
-				title(), "content", content, "state", "{}", "screen", true);
+
+		Map<String, Object> model = U.map("navbar", showNavbar, "fluid", isFluid(), "title", title(), "content",
+				content, "state", "{}", "screen", true);
 
 		ITemplate page = Templates.fromFile("page.html");
+
 		x.render(page, model);
 
 		Pages.store(x, screen);
