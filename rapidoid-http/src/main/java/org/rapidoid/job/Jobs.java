@@ -32,6 +32,7 @@ import org.rapidoid.concurrent.Callback;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.Constants;
 
 @Authors("Nikolche Mihajlovski")
@@ -87,9 +88,15 @@ public class Jobs implements Constants {
 
 	public static Runnable wrap(Runnable job) {
 		Ctx ctx = Ctxs.get();
-		if (ctx != null && ctx.exchange() != null) {
 
+		if (ctx != null) {
+			Object x = ctx.exchange();
+			if (x instanceof HttpExchange) {
+				HttpExchange xch = (HttpExchange) x;
+				xch.async();
+			}
 		}
+
 		return new ContextPreservingJobWrapper(job, ctx);
 	}
 
