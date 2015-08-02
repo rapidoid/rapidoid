@@ -32,7 +32,7 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class Micro {
+public class Services {
 
 	private static final Mapper<byte[], Object> JSON_BYTES_TO_OBJ = new Mapper<byte[], Object>() {
 		@Override

@@ -32,7 +32,7 @@ import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.Micro;
+import org.rapidoid.http.Services;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.webapp.WebApp;
@@ -57,8 +57,8 @@ public class MicroServicesTest extends IntegrationTestCommons {
 		HTTPServer server = HTTP.server().applications(WebAppGroup.main()).build().start();
 
 		// a blocking call
-		eq(Micro.get("http://localhost:8080/?n=7"), 8);
-		eq(Micro.post("http://localhost:8080/?n=7"), 8);
+		eq(Services.get("http://localhost:8080/?n=7"), 8);
+		eq(Services.post("http://localhost:8080/?n=7"), 8);
 
 		int count = 10000;
 		final CountDownLatch latch = new CountDownLatch(count);
@@ -88,9 +88,9 @@ public class MicroServicesTest extends IntegrationTestCommons {
 			};
 
 			if (i % 2 == 0) {
-				Micro.get("http://localhost:8080/?n=" + i, callback);
+				Services.get("http://localhost:8080/?n=" + i, callback);
 			} else {
-				Micro.post("http://localhost:8080/?n=" + i, callback);
+				Services.post("http://localhost:8080/?n=" + i, callback);
 			}
 		}
 
