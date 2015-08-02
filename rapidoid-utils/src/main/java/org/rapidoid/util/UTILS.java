@@ -45,12 +45,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.rapidoid.Insights;
 import org.rapidoid.activity.AbstractLoopThread;
 import org.rapidoid.activity.RapidoidThread;
+import org.rapidoid.activity.RapidoidThreadFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -76,6 +78,9 @@ public class UTILS implements Constants {
 	// http://stackoverflow.com/questions/2559759/how-do-i-convert-camelcase-into-human-readable-names-in-java
 	private static final Pattern CAMEL_SPLITTER_PATTERN = Pattern
 			.compile("(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
+
+	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(8,
+			new RapidoidThreadFactory("utils"));
 
 	private UTILS() {}
 

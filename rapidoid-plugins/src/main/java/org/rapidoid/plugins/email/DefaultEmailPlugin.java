@@ -3,7 +3,7 @@ package org.rapidoid.plugins.email;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
-import org.rapidoid.job.Jobs;
+import org.rapidoid.concurrent.Callbacks;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
@@ -41,8 +41,7 @@ public class DefaultEmailPlugin extends AbstractEmailPlugin {
 
 		Log.error(U.format(MAIL_DESC, to, cc, bcc, subject, body));
 
-		Jobs.callIfNotNull(callback, null,
-				U.rte("Email plugin implementation hasn't been registered, so cannot send e-mail!"));
+		Callbacks.error(callback, U.rte("Email plugin implementation hasn't been registered, so cannot send e-mail!"));
 	}
 
 }

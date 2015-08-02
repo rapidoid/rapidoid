@@ -2,7 +2,7 @@ package org.rapidoid.job;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -30,6 +30,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.config.Conf;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.util.Constants;
 
@@ -85,7 +86,11 @@ public class Jobs implements Constants {
 	}
 
 	public static Runnable wrap(Runnable job) {
-		return new ContextPreservingJobWrapper(job, Ctxs.get());
+		Ctx ctx = Ctxs.get();
+		if (ctx != null && ctx.exchange() != null) {
+
+		}
+		return new ContextPreservingJobWrapper(job, ctx);
 	}
 
 	public static <T> void callIfNotNull(Callback<T> callback, T result, Throwable error) {

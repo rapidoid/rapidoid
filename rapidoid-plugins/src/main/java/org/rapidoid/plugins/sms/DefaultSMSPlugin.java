@@ -3,7 +3,7 @@ package org.rapidoid.plugins.sms;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
-import org.rapidoid.job.Jobs;
+import org.rapidoid.concurrent.Callbacks;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
@@ -32,16 +32,15 @@ import org.rapidoid.util.U;
 @Since("4.1.0")
 public class DefaultSMSPlugin extends AbstractSMSPlugin {
 
-	private static final String MAIL_DESC = "SMS plugin implementation hasn't been registered, so cannot send SMS:\n"
+	private static final String SMS_DESC = "SMS plugin implementation hasn't been registered, so cannot send SMS:\n"
 			+ "To numbers: %s\nContent: %s" + Constants.SEPARATOR_LINE;
 
 	@Override
 	public void send(Iterable<String> toNumbers, String content, Callback<Void> callback) {
 
-		Log.error(U.format(MAIL_DESC, toNumbers, content));
+		Log.error(U.format(SMS_DESC, toNumbers, content));
 
-		Jobs.callIfNotNull(callback, null,
-				U.rte("SMS plugin implementation hasn't been registered, so cannot send SMS!"));
+		Callbacks.error(callback, U.rte("SMS plugin implementation hasn't been registered, so cannot send SMS!"));
 	}
 
 }

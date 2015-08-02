@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
@@ -18,7 +17,6 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Promise;
 import org.rapidoid.concurrent.Promises;
-import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.plugins.entities.Entities;
@@ -210,15 +208,7 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 
 	@Override
 	public void transaction(final Runnable tx, final boolean readonly, final Callback<Void> callback) {
-		Jobs.execute(new Callable<Void>() {
-
-			@Override
-			public Void call() throws Exception {
-				transaction(tx, readonly);
-				return null;
-			}
-
-		}, callback);
+		throw U.notSupported();
 	}
 
 	@Override

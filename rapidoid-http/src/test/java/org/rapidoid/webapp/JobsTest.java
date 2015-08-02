@@ -1,4 +1,4 @@
-package org.rapidoid.util;
+package org.rapidoid.webapp;
 
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -13,7 +13,7 @@ import org.rapidoid.test.TestCommons;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

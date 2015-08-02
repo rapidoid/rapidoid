@@ -2,7 +2,7 @@ package org.rapidoid.job;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -22,47 +22,28 @@ package org.rapidoid.job;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctx;
-import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.log.Log;
-import org.rapidoid.util.U;
+import org.rapidoid.concurrent.Callback;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class ContextPreservingJobWrapper implements Runnable {
+public class CallbackExecutorJob<T> implements Runnable {
 
-	private final Runnable job;
+	private final Callback<T> callback;
+	private final T result;
+	private final Throwable error;
 
-	private final Ctx ctx;
-
-	public ContextPreservingJobWrapper(Runnable job, Ctx ctx) {
-		this.job = job;
-		this.ctx = ctx;
+	public CallbackExecutorJob(Callback<T> callback, T result, Throwable error) {
+		this.callback = callback;
+		this.result = result;
+		this.error = error;
 	}
 
 	@Override
 	public void run() {
-		U.must(!Ctxs.hasContext(), "Detected context leak!");
-
 		try {
-			if (ctx != null) {
-				Ctxs.attach(ctx);
-			} else {
-				Ctxs.open();
-			}
-
-		} catch (Throwable e) {
-			Log.error("Job context initialization failed!", e);
-			throw U.rte("Job context initialization failed!", e);
-		}
-
-		try {
-			job.run();
-		} catch (Throwable e) {
-			Log.error("Job execution failed!", e);
-			throw U.rte("Job execution failed!", e);
-		} finally {
-			Ctxs.close();
+			callback.onDone(result, error);
+		} catch (Exception e) {
+			throw new RuntimeException("Error occured while executing callback!", e);
 		}
 	}
 

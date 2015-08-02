@@ -21,13 +21,10 @@ package org.rapidoid.util;
  */
 
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.job.Jobs;
 
 /**
  * Deprecated. Use {@link Jobs} instead.
@@ -37,25 +34,10 @@ import org.rapidoid.job.Jobs;
 @Deprecated
 public class Schedule implements Constants {
 
-	private static ScheduledThreadPoolExecutor EXECUTOR;
-
 	private Schedule() {}
 
-	public static synchronized ScheduledThreadPoolExecutor executor() {
-		if (EXECUTOR == null) {
-			int threads = Conf.option("threads", 100);
-			EXECUTOR = new ScheduledThreadPoolExecutor(threads);
-		}
-
-		return EXECUTOR;
-	}
-
 	public static synchronized ScheduledFuture<?> job(Runnable job, long delay) {
-		return executor().schedule(wrap(job), delay, TimeUnit.MILLISECONDS);
-	}
-
-	public static Runnable wrap(Runnable job) {
-		return Jobs.wrap(job);
+		return UTILS.EXECUTOR.schedule(job, delay, TimeUnit.MILLISECONDS);
 	}
 
 }

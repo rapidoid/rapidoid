@@ -28,7 +28,6 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
@@ -78,7 +77,7 @@ public class EchoProtocolTest extends NetTestCommons {
 			public void process(final Channel ctx) {
 				final String in = ctx.readln();
 
-				Jobs.schedule(new Runnable() {
+				UTILS.EXECUTOR.schedule(new Runnable() {
 					@Override
 					public void run() {
 						ctx.write(in.toUpperCase()).write(CR_LF).done().closeIf(in.equals("bye"));
