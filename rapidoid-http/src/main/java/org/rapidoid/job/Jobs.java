@@ -98,12 +98,12 @@ public class Jobs implements Constants {
 				HttpExchange xch = (HttpExchange) x;
 				xch.async();
 			}
+
+			// increment reference counter
+			ctx = ctx.span(); // currently the same ctx is returned
 		}
 
-		// increment reference counter
-		Ctx spannedCtx = ctx.span(); // currently the same ctx is returned
-
-		return new ContextPreservingJobWrapper(job, spannedCtx);
+		return new ContextPreservingJobWrapper(job, ctx);
 	}
 
 	public static <T> void callIfNotNull(Callback<T> callback, T result, Throwable error) {
