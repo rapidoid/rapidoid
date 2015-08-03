@@ -1,0 +1,59 @@
+{
+    "items" : [ {
+	"title" : "Portlet",
+	"subtitle" : "weekly stats...",
+    "heading" : "Heading 1",
+	"content" : "aaaaaaaaaaaaa",
+	"badge_class" : "",
+	"icon" : "calendar",
+	"item1" : true,
+	"classActions" : true
+}, {
+	"title" : "Portlet",
+	"subtitle" : "monthly stats...",
+    "heading" : "Heading 2",
+	"content" : "bbbbbbbbbbbbbbb",
+	"badge_class" : "caption-green",
+	"icon" : "",
+	"item2" : true,
+	"classActions" : true
+}, {
+	"title" : "Portlet",
+	"subtitle" : "weekly stats...",
+    "heading" : "Heading 3",
+	"content" : "ccccccccccccc",
+	"badge_class" : "caption-red",
+	"icon" : "cog",
+	"item3" : true,
+	"classActions" : true
+}, {
+	"title" : "Pagination",
+	"subtitle" : "",
+    "heading" : "Heading 4",
+	"content" : "dddddddddddddd",
+	"badge_class" : "caption-purple",
+	"icon" : "cog",
+	"item4" : true,
+	"classActions" : true
+}, {
+	"title" : "Form Input",
+	"subtitle" : "more samples...",
+    "heading" : "Heading 5",
+	"content" : "eeeeeeeeeeeeeee",
+	"badge_class" : "",
+	"icon" : "search",
+	"item5" : true,
+	"classActions" : false
+}, {
+	"title" : "Tabs",
+	"subtitle" : "more samples...",
+    "heading" : "Heading 6",
+	"content1" : "content 1",
+	"content2" : "content 2",
+	"content3" : "content 3",
+	"badge_class" : "caption-red",
+	"icon" : "pushpin",
+	"item6" : true,
+	"classActions" : false
+} ]
+}
