@@ -97,7 +97,10 @@ public class Jobs implements Constants {
 			}
 		}
 
-		return new ContextPreservingJobWrapper(job, ctx);
+		// increment reference counter
+		Ctx spannedCtx = ctx.span(); // currently the same ctx is returned
+
+		return new ContextPreservingJobWrapper(job, spannedCtx);
 	}
 
 	public static <T> void callIfNotNull(Callback<T> callback, T result, Throwable error) {

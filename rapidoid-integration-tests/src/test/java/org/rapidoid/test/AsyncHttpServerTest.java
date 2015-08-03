@@ -31,6 +31,7 @@ import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.job.Jobs;
+import org.rapidoid.log.Log;
 import org.rapidoid.webapp.WebApp;
 import org.rapidoid.webapp.WebAppGroup;
 
@@ -40,6 +41,7 @@ public class AsyncHttpServerTest extends IntegrationTestCommons {
 
 	@Test
 	public void testAsyncHttpServer() {
+		Log.debugging();
 		HTTP.DEFAULT_CLIENT.reset();
 		WebApp app = WebAppGroup.openRootContext();
 
@@ -52,15 +54,15 @@ public class AsyncHttpServerTest extends IntegrationTestCommons {
 					@Override
 					public void run() {
 						x.write("O");
-						Jobs.schedule(new Runnable() {
 
+						Jobs.schedule(new Runnable() {
 							@Override
 							public void run() {
 								x.write("K");
 								x.done();
 							}
-
 						}, 1, TimeUnit.SECONDS);
+
 					}
 
 				}, 1, TimeUnit.SECONDS);

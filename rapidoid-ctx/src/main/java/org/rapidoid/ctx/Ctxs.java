@@ -55,7 +55,6 @@ public class Ctxs {
 	public static void attach(Ctx ctx) {
 		if (!hasContext()) {
 			if (ctx != null) {
-				ctx.span();
 				CTXS.set(ctx);
 			}
 		} else {

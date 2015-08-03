@@ -43,7 +43,7 @@ public class Ctx {
 
 	private volatile Object app;
 
-	private volatile int referenceCounter;
+	private volatile int referenceCounter = 1;
 
 	private volatile ThreadLocal<Object> persisters = new ThreadLocal<Object>();
 
