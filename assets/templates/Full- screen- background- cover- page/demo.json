@@ -1,0 +1,15 @@
+{
+    "title":"Cover",
+    "tabs":[{
+    		"value" : "View full screen",
+    		"active" : true
+    	},{
+    		"value" : "Features",
+    		"active" : false
+    	},{
+    		"value" : "Contact",
+    		"active" : 	false
+    	}],
+    "heading" : "Full screen background cover page.",	
+    "content" : "Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background color and photo to make it your own."
+}
