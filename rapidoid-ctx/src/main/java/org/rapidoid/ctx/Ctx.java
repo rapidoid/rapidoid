@@ -100,7 +100,7 @@ public class Ctx {
 		referenceCounter--;
 
 		if (referenceCounter == 0) {
-			clearContext();
+			clear();
 			this.persisters = new ThreadLocal<Object>();
 
 		} else if (referenceCounter < 0) {
@@ -108,8 +108,13 @@ public class Ctx {
 		}
 	}
 
-	private synchronized void clearContext() {
+	private synchronized void clear() {
 		Log.debug("Clearing context", "ctx", this);
+
+		this.referenceCounter = 0;
+		this.user = null;
+		this.exchange = null;
+		this.app = null;
 
 		for (Object persister : allPersisters) {
 			Ctxs.closePersister(persister);
