@@ -1,5 +1,9 @@
 package org.rapidoid.ctx;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
@@ -34,9 +38,11 @@ public class Ctx {
 
 	private volatile Object app;
 
-	private volatile Object persister;
-
 	private volatile int referenceCounter;
+
+	private volatile ThreadLocal<Object> persisters = new ThreadLocal<Object>();
+
+	private final List<Object> allPersisters = Collections.synchronizedList(new ArrayList<Object>(5));
 
 	Ctx() {}
 
@@ -68,15 +74,15 @@ public class Ctx {
 
 	@SuppressWarnings("unchecked")
 	public synchronized <P> P persister() {
-		if (this.persister == null) {
-			this.persister = Ctxs.createPersister();
+		Object persister = this.persisters.get();
+
+		if (persister == null) {
+			persister = Ctxs.createPersister();
+			this.persisters.set(persister);
+			allPersisters.add(persister);
 		}
 
-		return (P) this.persister;
-	}
-
-	public void setPersister(Object persister) {
-		this.persister = persister;
+		return (P) persister;
 	}
 
 	synchronized void span() {
@@ -89,20 +95,28 @@ public class Ctx {
 		referenceCounter--;
 
 		if (referenceCounter == 0) {
-			if (persister != null) {
-				Ctxs.closePersister(persister);
-				persister = null;
-			}
+			clearContext();
+			this.persisters = new ThreadLocal<Object>();
 
 		} else if (referenceCounter < 0) {
 			throw new IllegalStateException("Reference counter < 0 for context: " + this);
 		}
 	}
 
+	private synchronized void clearContext() {
+		Log.debug("Clearing context", "ctx", this);
+
+		for (Object persister : allPersisters) {
+			Ctxs.closePersister(persister);
+		}
+
+		allPersisters.clear();
+	}
+
 	@Override
-	public String toString() {
-		return super.toString() + "[user=" + user + ", exchange=" + exchange + ", app=" + app + ", persister="
-				+ persister + ", referenceCounter=" + referenceCounter + "]";
+	public synchronized String toString() {
+		return "Ctx [user=" + user + ", exchange=" + exchange + ", app=" + app + ", referenceCounter="
+				+ referenceCounter + ", allPersisters=" + allPersisters.size() + "]";
 	}
 
 }

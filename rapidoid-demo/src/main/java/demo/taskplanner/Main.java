@@ -30,6 +30,7 @@ import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.RESTful;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
@@ -65,6 +66,8 @@ public class Main {
 				}
 			}, 100, TimeUnit.MILLISECONDS);
 		}
+
+		Ctxs.close();
 	}
 
 	@Transaction
