@@ -20,6 +20,10 @@ package org.rapidoid.app;
  * #L%
  */
 
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.builtin.AppPageGeneric;
@@ -30,7 +34,11 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeInternals;
 import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.io.CustomizableClassLoader;
+import org.rapidoid.io.Res;
+import org.rapidoid.log.Log;
 import org.rapidoid.pages.Pages;
+import org.rapidoid.plugins.templates.ITemplate;
+import org.rapidoid.plugins.templates.Templates;
 import org.rapidoid.rest.WebReq;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
@@ -38,6 +46,8 @@ import org.rapidoid.util.UTILS;
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class AppHandler implements Handler {
+
+	private static final Pattern DIRECTIVE = Pattern.compile("\\s*\\Q<!--\\E\\s+([\\w\\+\\-\\, ]+)\\s+\\Q-->\\E\\s*");
 
 	private CustomizableClassLoader classLoader;
 
@@ -115,7 +125,7 @@ public class AppHandler implements Handler {
 
 		// GUI pages from file resources
 
-		if (Pages.serveFromFile(x, app)) {
+		if (smartServeFromFile(x, "dynamic/" + x.resourceName() + ".html", app)) {
 			return x;
 		}
 
@@ -135,4 +145,50 @@ public class AppHandler implements Handler {
 
 		throw x.notFound();
 	}
+
+	public static boolean smartServeFromFile(HttpExchange x, String filename, Object app) {
+		Res resource = Res.from(filename);
+
+		if (resource.exists()) {
+			x.html();
+			String title = Pages.titleOf(x, app);
+
+			ITemplate page = Templates.fromFile("page.html");
+			String content = U.safe(resource.getContent());
+
+			Map<Object, Object> model = U.map("title", title, "head_extra", "", "content", content, "state", "{}",
+					"navbar", true, "maps", false, "fluid", false);
+
+			String[] contentParts = content.split("\n", 2);
+			if (contentParts.length == 2) {
+				String line = contentParts[0];
+
+				Matcher m = DIRECTIVE.matcher(line);
+				if (m.matches()) {
+					String directives = m.group(1);
+					for (String directive : directives.split(",")) {
+						directive = directive.trim();
+						if (!U.isEmpty(directive)) {
+							if (directive.startsWith("+")) {
+								model.put(directive.substring(1), true);
+							} else if (directive.startsWith("-")) {
+								model.put(directive.substring(1), false);
+							} else {
+								Log.warn("Unknown directive!", "directive", directive, "file", filename);
+							}
+						}
+					}
+
+					model.put("content", contentParts[1]); // content without the directive
+				}
+			}
+
+			x.render(page, model);
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }
