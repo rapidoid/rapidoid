@@ -62,8 +62,8 @@ public class Ctxs {
 		}
 	}
 
-	public static Ctx open() {
-		Ctx ctx = new Ctx();
+	public static Ctx open(String tag) {
+		Ctx ctx = new Ctx(tag);
 		Log.debug("Opening context", "ctx", ctx);
 		attach(ctx);
 		return ctx;

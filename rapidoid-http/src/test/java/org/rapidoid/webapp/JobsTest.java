@@ -45,7 +45,7 @@ public class JobsTest extends TestCommons {
 
 			@Override
 			public void run() {
-				Ctxs.open();
+				Ctxs.open("test-job");
 
 				final WebApp app = new WebApp(null, null, null, null, null, AppMode.DEVELOPMENT, null, null);
 				final UserInfo user = new UserInfo();

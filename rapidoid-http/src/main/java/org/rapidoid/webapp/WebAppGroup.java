@@ -94,7 +94,7 @@ public class WebAppGroup {
 		WebApp app = WebAppGroup.root();
 		WebAppGroup.main().setDefaultApp(app);
 
-		Ctxs.open();
+		Ctxs.open("root");
 		Ctxs.ctx().setApp(app);
 
 		Plugins.register(new AppClasspathEntitiesPlugin());

@@ -34,6 +34,7 @@ import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -90,6 +91,8 @@ public class Jobs implements Constants {
 		Ctx ctx = Ctxs.get();
 
 		if (ctx != null) {
+			U.must(ctx.app() != null, "Application wasn't attached to the context!");
+
 			Object x = ctx.exchange();
 			if (x instanceof HttpExchange) {
 				HttpExchange xch = (HttpExchange) x;

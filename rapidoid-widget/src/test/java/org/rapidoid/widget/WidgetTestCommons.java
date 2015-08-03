@@ -45,7 +45,7 @@ public class WidgetTestCommons extends TestCommons {
 
 	@Before
 	public void init() {
-		Ctxs.open(); // open context for each test
+		Ctxs.open("test-widget"); // open context for each test
 	}
 
 	@After

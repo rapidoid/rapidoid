@@ -47,7 +47,7 @@ public abstract class ExchangeProtocol<T extends DefaultExchange<?>> implements 
 		exchange.reset();
 		exchange.setConnection(ctx);
 
-		Ctxs.open();
+		Ctxs.open("x-request");
 		try {
 			Ctxs.ctx().setExchange(exchange);
 			process(ctx, exchange);

@@ -60,7 +60,7 @@ public class Quick {
 		WebAppGroup.main().setDefaultApp(app);
 		WebAppGroup.main().register(app);
 
-		Ctx ctx = Ctxs.open();
+		Ctx ctx = Ctxs.open("quick");
 		ctx.setApp(app);
 		Ctxs.setPersisterProvider(new QuickJPA(config));
 

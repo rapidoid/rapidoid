@@ -46,10 +46,10 @@ public class ContextPreservingJobWrapper implements Runnable {
 
 		try {
 			if (ctx != null) {
-				U.must(ctx.app() != null, "Application wasn't attached to the context!");
+				U.must(ctx.app() != null, "Application wasn't attached to the context: %s", ctx);
 				Ctxs.attach(ctx);
 			} else {
-				Ctxs.open();
+				Ctxs.open("job");
 				Log.info("Opening new context");
 			}
 

@@ -92,7 +92,14 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			return;
 		}
 
-		processRequest(x);
+		Ctxs.open("reqest");
+		Ctxs.ctx().setExchange(x);
+
+		try {
+			processRequest(x);
+		} finally {
+			Ctxs.close();
+		}
 	}
 
 	private void removeTrailingSlash(HttpExchangeImpl x) {
@@ -152,13 +159,8 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 		Router router = app.getRouter();
 		U.notNull(router, "application router");
 
-		try {
-			executeRequest(router, x);
-
-		} finally {
-			Ctxs.ctx().setUser(null);
-			Ctxs.ctx().setApp(null);
-		}
+		executeRequest(router, x);
+		// the context must live on, since async jobs might be scheduled...
 	}
 
 	private WebApp getApp(HttpExchangeImpl x) {

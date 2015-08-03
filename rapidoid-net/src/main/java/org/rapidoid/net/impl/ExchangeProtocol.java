@@ -23,7 +23,6 @@ package org.rapidoid.net.impl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.pool.Pool;
@@ -48,13 +47,7 @@ public abstract class ExchangeProtocol<T extends DefaultExchange<?>> implements 
 		exchange.reset();
 		exchange.setConnection(ctx);
 
-		Ctxs.open();
-		try {
-			Ctxs.ctx().setExchange(exchange);
-			process(ctx, exchange);
-		} finally {
-			Ctxs.close();
-		}
+		process(ctx, exchange);
 	}
 
 	protected abstract void process(Channel ctx, T exchange);

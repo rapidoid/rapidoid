@@ -37,6 +37,8 @@ public class Ctx {
 
 	private final long id = ID_COUNTER.incrementAndGet();
 
+	private final String tag;
+
 	private volatile UserInfo user;
 
 	private volatile Object exchange;
@@ -49,36 +51,48 @@ public class Ctx {
 
 	private final List<Object> allPersisters = Collections.synchronizedList(new ArrayList<Object>(5));
 
-	Ctx() {}
+	private volatile boolean closed = false;
+
+	Ctx(String tag) {
+		this.tag = tag;
+	}
 
 	public UserInfo user() {
+		ensureNotClosed();
 		return user;
 	}
 
 	public void setUser(UserInfo user) {
+		ensureNotClosed();
 		this.user = user;
 	}
 
 	@SuppressWarnings("unchecked")
 	public <T> T exchange() {
+		ensureNotClosed();
 		return (T) exchange;
 	}
 
 	public void setExchange(Object exchange) {
+		ensureNotClosed();
 		this.exchange = exchange;
 	}
 
 	@SuppressWarnings("unchecked")
 	public <T> T app() {
+		ensureNotClosed();
 		return (T) app;
 	}
 
 	public void setApp(Object app) {
+		ensureNotClosed();
 		this.app = app;
 	}
 
 	@SuppressWarnings("unchecked")
 	public synchronized <P> P persister() {
+		ensureNotClosed();
+
 		Object persister = this.persisters.get();
 
 		if (persister == null) {
@@ -90,18 +104,22 @@ public class Ctx {
 		return (P) persister;
 	}
 
-	synchronized void span() {
+	public synchronized Ctx span() {
+		ensureNotClosed();
 		referenceCounter++;
 		Log.debug("Spanning context", "ctx", this);
+		return this;
 	}
 
 	synchronized void close() {
+		ensureNotClosed();
+
 		Log.debug("Closing context", "ctx", this);
+
 		referenceCounter--;
 
 		if (referenceCounter == 0) {
 			clear();
-			this.persisters = new ThreadLocal<Object>();
 
 		} else if (referenceCounter < 0) {
 			throw new IllegalStateException("Reference counter < 0 for context: " + this);
@@ -109,24 +127,40 @@ public class Ctx {
 	}
 
 	private synchronized void clear() {
+		ensureNotClosed();
+
 		Log.debug("Clearing context", "ctx", this);
 
 		this.referenceCounter = 0;
 		this.user = null;
 		this.exchange = null;
 		this.app = null;
+		this.persisters = null;
 
 		for (Object persister : allPersisters) {
 			Ctxs.closePersister(persister);
 		}
 
 		allPersisters.clear();
+
+		closed = true;
+	}
+
+	private void ensureNotClosed() {
+		if (closed) {
+			throw new RuntimeException("The context is closed!");
+		}
 	}
 
 	@Override
 	public synchronized String toString() {
-		return "Ctx#" + id + "  [user=" + user + ", exchange=" + exchange + ", app=" + app + ", referenceCounter="
-				+ referenceCounter + ", allPersisters=" + allPersisters.size() + "]";
+		String isClosed = closed ? " <CLOSED>" : "";
+		return "Ctx#" + id + ":" + tag + isClosed + " [user=" + user + ", exchange=" + exchange + ", app=" + app
+				+ ", referenceCounter=" + referenceCounter + ", allPersisters=" + allPersisters.size() + "]";
+	}
+
+	public boolean isClosed() {
+		return closed;
 	}
 
 }

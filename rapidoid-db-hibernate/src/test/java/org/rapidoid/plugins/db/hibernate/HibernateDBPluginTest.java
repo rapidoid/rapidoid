@@ -45,7 +45,7 @@ public class HibernateDBPluginTest extends TestCommons {
 		EntityManager em = emf.createEntityManager();
 
 		Ctxs.setPersisterProvider(new SimplePersistorProvider(em));
-		Ctxs.open();
+		Ctxs.open("test");
 
 		final HibernateDBPlugin db = new HibernateDBPlugin();
 

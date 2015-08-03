@@ -1,15 +1,8 @@
-package org.rapidoid.util;
-
-import org.junit.Test;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.ctx.UserInfo;
-import org.rapidoid.test.TestCommons;
+package org.rapidoid.ctx;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-ctx
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -27,29 +20,34 @@ import org.rapidoid.test.TestCommons;
  * #L%
  */
 
+import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.test.TestCommons;
+
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class AppCtxTest extends TestCommons {
+@Since("4.1.0")
+public class CtxTest extends TestCommons {
 
 	@Test
-	public void testAppCtx() {
-		multiThreaded(1000, 1000000, new Runnable() {
+	public void testCtxLifecycle() {
+		Ctx ctx = Ctxs.open("root");
 
-			@Override
-			public void run() {
-				Ctxs.open("test");
+		Ctx ctx1 = ctx.span();
+		Ctx ctx2 = ctx.span();
+		Ctx ctx3 = ctx.span();
 
-				UserInfo user = new UserInfo();
-				user.username = rndStr(10);
+		ctx.close();
+		isFalse(ctx.isClosed());
 
-				Ctxs.ctx().setUser(user);
+		ctx1.close();
+		isFalse(ctx.isClosed());
 
-				eq(Ctxs.ctx().user(), user);
+		ctx3.close();
+		isFalse(ctx.isClosed());
 
-				Ctxs.close();
-			}
-
-		});
+		ctx2.close();
+		isTrue(ctx.isClosed());
 	}
 
 }
