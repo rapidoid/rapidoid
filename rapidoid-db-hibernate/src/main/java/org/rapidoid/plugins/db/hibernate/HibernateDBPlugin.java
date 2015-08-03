@@ -70,7 +70,9 @@ public class HibernateDBPlugin extends DBPluginBase {
 
 		} catch (Throwable e) {
 			if (!txWasActive) {
-				tx.rollback();
+				if (tx.isActive()) {
+					tx.rollback();
+				}
 			}
 			throw U.rte("Transaction execution error, rolled back!", e);
 		}
