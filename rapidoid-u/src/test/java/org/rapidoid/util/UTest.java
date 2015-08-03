@@ -264,7 +264,8 @@ public class UTest extends TestCommons {
 	public void testEvalJS() throws ScriptException {
 		eq(U.evalJS("1 + 2"), 3);
 		eq(U.evalJS("1 + 'ab'"), "1ab");
-		eq(U.evalJS("(function (x) { return U.capitalized(x); })('hey')"), "Hey");
+		eq(U.evalJS("(function (x) { return x.toUpperCase(); })('abc')"), "ABC");
+		eq(U.evalJS("x + y + y.length", U.map("x", "10", "y", "abcd")), "10abcd4");
 	}
 
 	@Test
