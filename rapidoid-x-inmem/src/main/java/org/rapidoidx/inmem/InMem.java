@@ -1060,7 +1060,7 @@ public class InMem implements Serializable {
 			String line = reader.readLine();
 			byte[] bytes = line.getBytes();
 
-			U.must(line != null, "Missing meta-data at the first line in the database file!");
+			U.notNull(line, "Missing meta-data at the first line in the database file!");
 
 			Map<String, Object> meta = U.map();
 			data.serializer.deserialize(bytes, meta);

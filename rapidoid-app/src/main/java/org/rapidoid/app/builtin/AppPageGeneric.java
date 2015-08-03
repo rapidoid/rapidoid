@@ -96,7 +96,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 			}
 		}
 
-		U.must(screen != null, "Cannot find a screen to process the request!");
+		U.notNull(screen, "Cannot find a screen to process the request!");
 	}
 
 	@Override

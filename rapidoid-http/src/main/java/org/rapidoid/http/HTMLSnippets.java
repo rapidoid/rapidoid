@@ -44,7 +44,7 @@ public class HTMLSnippets {
 
 	public static HttpExchange writePage(HttpExchange x, String title, String content) {
 		String templ = PAGE_HTML.getContent();
-		U.must(templ != null, "Cannot find page resource!");
+		U.notNull(templ, "Cannot find page resource!");
 		String html = UTILS.fillIn(templ, "title", title);
 		html = UTILS.fillIn(html, "content", content);
 		x.write(html);
@@ -53,7 +53,7 @@ public class HTMLSnippets {
 
 	public static HttpExchange writeFullPage(HttpExchange x, String title, String content) {
 		String templ = FULL_PAGE_HTML.getContent();
-		U.must(templ != null, "Cannot find full page resource!");
+		U.notNull(templ, "Cannot find full page resource!");
 		String html = templ.replaceAll("\\{\\{title\\}\\}", title).replaceAll("\\{\\{content\\}\\}", content);
 		x.write(html);
 		return x;

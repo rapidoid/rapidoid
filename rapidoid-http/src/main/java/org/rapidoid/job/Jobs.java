@@ -91,7 +91,7 @@ public class Jobs implements Constants {
 		Ctx ctx = Ctxs.get();
 
 		if (ctx != null) {
-			U.must(ctx.app() != null, "Application wasn't attached to the context!");
+			U.notNull(ctx.app(), "Application wasn't attached to the context!");
 
 			Object x = ctx.exchange();
 			if (x instanceof HttpExchange) {

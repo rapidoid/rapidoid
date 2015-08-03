@@ -32,7 +32,7 @@ public class AppCtx {
 
 	public static UserInfo user() {
 		UserInfo user = Ctxs.ctx().user();
-		U.must(user != null, "Not logged in!");
+		U.notNull(user, "Not logged in!");
 		return user;
 	}
 

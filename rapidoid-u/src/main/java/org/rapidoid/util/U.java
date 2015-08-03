@@ -651,9 +651,15 @@ public class U {
 		}
 	}
 
-	public static <T> T notNull(T value, String desc, Object... descArgs) {
+	public static <T> T notNull(T value, String msgOrDesc, Object... descArgs) {
 		if (value == null) {
-			throw rte("%s must NOT be null!", nice(desc, descArgs));
+			if (msgOrDesc.endsWith("!")) {
+				// message
+				throw rte(msgOrDesc, descArgs);
+			} else {
+				// description
+				throw rte("%s must NOT be null!", nice(msgOrDesc, descArgs));
+			}
 		}
 
 		return value;

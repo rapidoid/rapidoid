@@ -74,7 +74,7 @@ public class XDB {
 	}
 
 	public static Database db() {
-		assert U.must(db != null, "Database not initialized!");
+		U.notNull(db, "Database not initialized!");
 		return db;
 	}
 

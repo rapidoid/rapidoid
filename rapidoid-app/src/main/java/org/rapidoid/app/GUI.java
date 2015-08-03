@@ -71,7 +71,7 @@ public abstract class GUI extends AppGUI implements HttpExchangeHolder {
 	}
 
 	protected HttpExchange ctx() {
-		U.must(ctx != null, "App context is not initialized yet!");
+		U.notNull(ctx, "App context is not initialized yet!");
 		return ctx;
 	}
 
