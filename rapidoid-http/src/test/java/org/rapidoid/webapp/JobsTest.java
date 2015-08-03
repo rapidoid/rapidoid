@@ -35,10 +35,10 @@ import org.rapidoid.test.TestCommons;
 @Since("4.1.0")
 public class JobsTest extends TestCommons {
 
-	@Test(timeout = 10000)
+	@Test(timeout = 20000)
 	public void testJobsExecution() {
 
-		int total = 300000;
+		int total = 100000;
 		final AtomicInteger counter = new AtomicInteger();
 
 		multiThreaded(1000, total, new Runnable() {
@@ -47,15 +47,18 @@ public class JobsTest extends TestCommons {
 			public void run() {
 				Ctxs.open();
 
+				final WebApp app = new WebApp(null, null, null, null, null, AppMode.DEVELOPMENT, null, null);
 				final UserInfo user = new UserInfo();
 				user.username = rndStr(50);
+
 				Ctxs.ctx().setUser(user);
-				ensureUser(user);
+				Ctxs.ctx().setApp(app);
+				ensureProperContext(user, app);
 
 				ScheduledFuture<?> future = Jobs.execute(new Runnable() {
 					@Override
 					public void run() {
-						ensureUser(user);
+						ensureProperContext(user, app);
 						counter.incrementAndGet();
 					}
 				});
@@ -75,8 +78,9 @@ public class JobsTest extends TestCommons {
 		eq(counter.get(), total);
 	}
 
-	private void ensureUser(UserInfo user) {
+	private void ensureProperContext(UserInfo user, WebApp app) {
 		eq(Ctxs.ctx().user(), user);
+		eq(Ctxs.ctx().app(), app);
 	}
 
 }
