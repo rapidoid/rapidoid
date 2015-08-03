@@ -28,6 +28,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.script.ScriptException;
+import javax.script.SimpleBindings;
+
 import org.junit.Test;
 import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.test.TestCommons;
@@ -255,6 +258,23 @@ public class UTest extends TestCommons {
 		eq(dyn.hey(), "hey:");
 		eq(dyn.abc(123, true), "abc:123,true");
 		eq(dyn2.abc(4, false), "abc:4,false");
+	}
+
+	@Test
+	public void testEvalJS() throws ScriptException {
+		eq(U.evalJS("1 + 2"), 3);
+		eq(U.evalJS("1 + 'ab'"), "1ab");
+		eq(U.evalJS("(function (x) { return U.capitalized(x); })('hey')"), "Hey");
+	}
+
+	@Test
+	public void testCompileJS() throws ScriptException {
+		eq(U.compileJS("1 + 2").eval(), 3);
+		eq(U.compileJS("1 + 'ab'").eval(), "1ab");
+
+		Map<String, Object> map = U.cast(U.map("U", new U()));
+		SimpleBindings bindings = new SimpleBindings(map);
+		eq(U.compileJS("(function (x) { return U.capitalized(x); })('hey')").eval(bindings), "Hey");
 	}
 
 }

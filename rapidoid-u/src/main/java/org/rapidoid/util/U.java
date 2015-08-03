@@ -45,6 +45,15 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+import javax.script.Compilable;
+import javax.script.CompiledScript;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import javax.script.SimpleBindings;
+import javax.script.SimpleScriptContext;
+
 import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.lambda.Mapper;
 
@@ -55,8 +64,6 @@ import org.rapidoid.lambda.Mapper;
 public class U {
 
 	private static final Object[] EMPTY_ARRAY = {};
-
-	private U() {}
 
 	public static String readable(Object obj) {
 		if (obj == null) {
@@ -942,6 +949,31 @@ public class U {
 		};
 
 		return ((T) Proxy.newProxyInstance(targetInterface.getClassLoader(), new Class[] { targetInterface }, handler));
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T evalJS(String js) throws ScriptException {
+		ScriptEngineManager factory = new ScriptEngineManager();
+		ScriptEngine engine = factory.getEngineByName("JavaScript");
+
+		SimpleScriptContext context = new SimpleScriptContext();
+
+		SimpleBindings bindings = new SimpleBindings();
+		bindings.put("U", new U());
+
+		context.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
+
+		return (T) engine.eval(js, context);
+	}
+
+	public static CompiledScript compileJS(String js) throws ScriptException {
+		ScriptEngineManager factory = new ScriptEngineManager();
+		ScriptEngine engine = factory.getEngineByName("JavaScript");
+
+		must(engine instanceof Compilable, "The JavaScript engine cannot compile!");
+
+		Compilable compilable = (Compilable) engine;
+		return compilable.compile(js);
 	}
 
 }
