@@ -50,7 +50,7 @@ public class ContextPreservingJobWrapper implements Runnable {
 				Ctxs.attach(ctx);
 			} else {
 				Ctxs.open("job");
-				Log.info("Opening new context");
+				Log.debug("Opening new context");
 			}
 
 		} catch (Throwable e) {
