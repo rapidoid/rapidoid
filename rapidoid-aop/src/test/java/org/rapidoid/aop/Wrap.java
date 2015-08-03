@@ -24,9 +24,23 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
-public interface AOPInterceptor {
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
-	Object intercept(Callable<Object> forward, Annotation ann, Object ctx, Method m, Object target, Object[] args)
-			throws Exception;
+@Authors("Nikolche Mihajlovski")
+@Since("4.1.0")
+public class Wrap implements AOPInterceptor {
+
+	private final String suffix;
+
+	public Wrap(String suffix) {
+		this.suffix = suffix;
+	}
+
+	@Override
+	public Object intercept(Callable<Object> forward, Annotation ann, Object ctx, Method m, Object target, Object[] args)
+			throws Exception {
+		return suffix + ":" + forward.call() + ":" + suffix;
+	}
 
 }

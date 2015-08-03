@@ -38,7 +38,7 @@ public class TransactionInterceptor implements AOPInterceptor {
 
 	@Override
 	public Object intercept(final Callable<Object> forward, Annotation ann, Object ctx, final Method m,
-			final Object target, final Object... args) {
+			final Object target, final Object[] args) {
 
 		final HttpExchange x = (HttpExchange) ctx;
 		TransactionMode txMode = getTxMode(ann);

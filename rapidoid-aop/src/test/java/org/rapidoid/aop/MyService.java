@@ -20,13 +20,18 @@ package org.rapidoid.aop;
  * #L%
  */
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
-public interface AOPInterceptor {
+@Authors("Nikolche Mihajlovski")
+@Since("4.1.0")
+public class MyService {
 
-	Object intercept(Callable<Object> forward, Annotation ann, Object ctx, Method m, Object target, Object[] args)
-			throws Exception;
+	@A
+	@B
+	@C
+	public String hey() {
+		return "hey";
+	}
 
 }

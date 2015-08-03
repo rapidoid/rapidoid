@@ -20,13 +20,16 @@ package org.rapidoid.aop;
  * #L%
  */
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-public interface AOPInterceptor {
+import java.lang.annotation.Retention;
 
-	Object intercept(Callable<Object> forward, Annotation ann, Object ctx, Method m, Object target, Object[] args)
-			throws Exception;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+@Authors("Nikolche Mihajlovski")
+@Since("4.1.0")
+@Retention(RUNTIME)
+public @interface A {
 
 }

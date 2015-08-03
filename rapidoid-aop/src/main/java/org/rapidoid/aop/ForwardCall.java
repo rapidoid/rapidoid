@@ -28,18 +28,19 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.log.Log;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class ForwardCall implements Callable<Object> {
 
-	private final InterceptorConfig[] interceptors;
+	private final Object context;
 	private final Annotation[] annotations;
 	private final Method m;
-	private final Object[] args;
-	private final int index;
 	private final Object target;
-	private final Object context;
+	private final Object[] args;
+	private final InterceptorConfig[] interceptors;
+	private final int index;
 
 	public ForwardCall(Object context, Annotation[] annotations, Method m, Object target, Object[] args,
 			InterceptorConfig[] interceptors, int index) {
@@ -65,7 +66,8 @@ public class ForwardCall implements Callable<Object> {
 			}
 
 			if (any || ann != null) {
-				Callable<Object> forward = new ForwardCall(ic, annotations, m, ann, args, interceptors, i + 1);
+				Callable<Object> forward = new ForwardCall(ic, annotations, m, target, args, interceptors, i + 1);
+				Log.debug("Intercepting AOP call", "method", m, "annotation", ann);
 				return ic.interceptor.intercept(forward, ann, context, m, target, args);
 			}
 		}
