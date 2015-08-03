@@ -30,6 +30,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.TransactionInterceptor;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
@@ -59,7 +60,8 @@ public class Quick {
 		WebAppGroup.main().setDefaultApp(app);
 		WebAppGroup.main().register(app);
 
-		Ctxs.open();
+		Ctx ctx = Ctxs.open();
+		ctx.setApp(app);
 		Ctxs.setPersisterProvider(new QuickJPA(config));
 
 		Plugins.register(new HibernateDBPlugin());
