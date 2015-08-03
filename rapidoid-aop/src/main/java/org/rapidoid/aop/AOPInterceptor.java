@@ -22,9 +22,10 @@ package org.rapidoid.aop;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
 
 public interface AOPInterceptor {
 
-	Object intercept(Annotation ann, Object ctx, Method m, Object target, Object... args);
+	Object intercept(Callable<Object> forward, Annotation ann, Object ctx, Method m, Object target, Object... args);
 
 }

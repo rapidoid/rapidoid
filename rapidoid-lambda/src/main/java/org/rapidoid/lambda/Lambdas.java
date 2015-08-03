@@ -1,6 +1,9 @@
 package org.rapidoid.lambda;
 
 import java.util.Map;
+import java.util.concurrent.Callable;
+
+import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -59,6 +62,14 @@ public class Lambdas {
 			return calc.calc(src);
 		} catch (Exception e) {
 			throw new RuntimeException(String.format("Cannot evaluate calculation %s on target: %s", calc, src), e);
+		}
+	}
+
+	public static Object call(Callable<Object> callable) {
+		try {
+			return callable.call();
+		} catch (Exception e) {
+			throw U.rte("Error occured during the call!", e);
 		}
 	}
 

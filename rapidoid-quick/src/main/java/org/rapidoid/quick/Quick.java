@@ -27,6 +27,7 @@ import javax.transaction.Transactional;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Transaction;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.TransactionInterceptor;
@@ -54,6 +55,7 @@ public class Quick {
 		Apps.serve(app, args, config);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void bootstrap(WebApp app, final String[] args, Object... config) {
 		Apps.bootstrap(app, args, config);
 
@@ -67,8 +69,8 @@ public class Quick {
 		Plugins.register(new HibernateDBPlugin());
 		Plugins.register(new AppClasspathEntitiesPlugin());
 
-		// TODO provide better support for javax.transaction.Transactional
-		AOP.register(Transactional.class, new TransactionInterceptor());
+		AOP.reset();
+		AOP.intercept(new TransactionInterceptor(), Transaction.class, Transactional.class);
 
 		Jobs.execute(new Runnable() {
 			@Override

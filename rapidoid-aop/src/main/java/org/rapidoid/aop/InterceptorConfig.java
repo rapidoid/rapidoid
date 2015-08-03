@@ -21,33 +21,23 @@ package org.rapidoid.aop;
  */
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
+import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.arr.Arr;
-import org.rapidoid.lambda.Lambdas;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
-public class AOP {
+@Since("4.1.0")
+public class InterceptorConfig {
 
-	private static volatile InterceptorConfig[] INTERCEPTORS = {};
+	public final Set<Class<? extends Annotation>> annotated;
 
-	public static void reset() {
-		INTERCEPTORS = new InterceptorConfig[0];
-	}
+	public final AOPInterceptor interceptor;
 
-	public static synchronized void intercept(AOPInterceptor interceptor, Class<? extends Annotation>... annotated) {
-		InterceptorConfig config = new InterceptorConfig(interceptor, annotated);
-		INTERCEPTORS = Arr.expand(INTERCEPTORS, config);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> T invoke(Object context, Method m, Object target, Object... args) {
-		Annotation[] annotations = m.getAnnotations();
-		ForwardCall call = new ForwardCall(context, annotations, m, target, args, INTERCEPTORS, 0);
-		return (T) Lambdas.call(call);
+	public InterceptorConfig(AOPInterceptor interceptor, Class<? extends Annotation>[] annotated) {
+		this.annotated = U.set(annotated);
+		this.interceptor = interceptor;
 	}
 
 }

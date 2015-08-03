@@ -77,7 +77,7 @@ public class Apps {
 		Log.args(configArgsArr);
 
 		Plugins.register(new MustacheTemplatesPlugin());
-		AOP.register(Transaction.class, new TransactionInterceptor());
+		AOP.intercept(new TransactionInterceptor(), Transaction.class);
 
 		Lifecycle.onStart(configArgsArr);
 	}
