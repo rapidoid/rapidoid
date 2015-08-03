@@ -551,14 +551,19 @@ public class UTILS implements Constants {
 		for (int i = 1; i <= threadsN; i++) {
 			new Thread() {
 				public void run() {
-					Ctxs.attach(ctx);
+					Ctxs.attach(ctx != null ? ctx.span() : null);
 
-					benchmark(name, countPerThread, runnable);
-					if (outsideLatch == null) {
-						latch.countDown();
+					try {
+						benchmark(name, countPerThread, runnable);
+						if (outsideLatch == null) {
+							latch.countDown();
+						}
+
+					} finally {
+						if (ctx != null) {
+							Ctxs.close();
+						}
 					}
-
-					Ctxs.close();
 				};
 			}.start();
 		}
