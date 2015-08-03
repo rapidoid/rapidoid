@@ -36,7 +36,6 @@ import org.rapidoid.app.AppGUI;
 import org.rapidoid.app.AppScreens;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.Scaffolding;
-import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.tag.FormTag;
@@ -139,7 +138,6 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		boolean showNavbar = Apps.config(app, "navbar", true);
 
 		String content = PageRenderer.get().toHTML(pageContent, x);
-
 
 		Map<String, Object> model = U.map("navbar", showNavbar, "fluid", isFluid(), "title", title(), "content",
 				content, "state", "{}", "screen", true);
