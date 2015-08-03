@@ -32,6 +32,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.job.Jobs;
+import org.rapidoid.log.Log;
 import org.rapidoid.main.Rapidoid;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.plugins.email.Email;
@@ -46,6 +47,8 @@ import demo.taskplanner.model.Task;
 public class Main {
 
 	public static void main(String[] args) {
+		Log.debugging();
+
 		SMS.send("+1234567890", "Hey!", null);
 
 		Email.send("someone@somewhere.rapidoid.io", "Hey!",
