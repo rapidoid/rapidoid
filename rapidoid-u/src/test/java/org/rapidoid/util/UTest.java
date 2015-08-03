@@ -274,7 +274,17 @@ public class UTest extends TestCommons {
 
 		Map<String, Object> map = U.cast(U.map("U", new U()));
 		SimpleBindings bindings = new SimpleBindings(map);
-		eq(U.compileJS("(function (x) { return U.capitalized(x); })('hey')").eval(bindings), "Hey");
+
+		Object res1;
+		try {
+			// Rhino style
+			res1 = U.compileJS("(function (x) { return U.capitalized(x); })('hey')").eval(bindings);
+		} catch (Exception e) {
+			// Nashorn style
+			res1 = U.compileJS("(function (x) { return U.class.static.capitalized(x); })('hey')").eval(bindings);
+		}
+
+		eq(res1, "Hey");
 	}
 
 }
