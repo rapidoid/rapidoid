@@ -70,13 +70,17 @@ public class Ctxs {
 	}
 
 	public static void close() {
-		Ctx ctx = get();
+		try {
+			Ctx ctx = get();
 
-		if (ctx != null) {
-			ctx.close();
+			if (ctx != null) {
+				ctx.close();
+			} else {
+				throw new RuntimeException("There is no opened context!");
+			}
+		} finally {
+			CTXS.remove();
 		}
-
-		CTXS.remove();
 	}
 
 	public static PersisterProvider getPersisterProvider() {

@@ -39,13 +39,25 @@ public abstract class ContextAwareTest extends TestCommons {
 
 	@Before
 	public void openContext() {
+		closeOpenedContexts();
+
 		app = WebAppGroup.openRootContext();
 		router = app.getRouter();
 	}
 
+	private void closeOpenedContexts() {
+		while (true) {
+			try {
+				Ctxs.close();
+			} catch (Exception e) {
+				return;
+			}
+		}
+	}
+
 	@After
 	public void closeContext() {
-		Ctxs.close();
+		closeOpenedContexts();
 	}
 
 }

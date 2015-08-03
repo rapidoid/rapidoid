@@ -36,13 +36,19 @@ import org.rapidoidx.db.XDB;
 public abstract class DbTestCommons extends ContextAwareTest {
 
 	@Before
-	@After
 	public void initDB() {
 		Log.warn("Destroying all databases: " + DBs.instances());
 		DBs.destroyAll();
 		XDB.destroy();
 		XDB.start();
 		Log.setLogLevel(LogLevel.INFO);
+	}
+
+	@After
+	public void shutdownDB() {
+		Log.warn("Destroying all databases: " + DBs.instances());
+		DBs.destroyAll();
+		XDB.destroy();
 	}
 
 }

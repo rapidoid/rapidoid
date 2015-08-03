@@ -60,6 +60,10 @@ public class Log {
 		return LOG_LEVEL;
 	}
 
+	public static void debugging() {
+		setLogLevel(LEVEL_DEBUG);
+	}
+
 	private static String getCallingClass() {
 		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
 
@@ -386,10 +390,6 @@ public class Log {
 	public static void error(String msg, String key1, Object value1, String key2, Object value2, String key3,
 			Object value3, String key4, Object value4, String key5, Object value5) {
 		log(LEVEL_ERROR, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
-	}
-
-	public static void debugging() {
-		setLogLevel(LEVEL_DEBUG);
 	}
 
 }
