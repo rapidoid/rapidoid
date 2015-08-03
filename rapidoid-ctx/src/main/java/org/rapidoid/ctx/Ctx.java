@@ -2,6 +2,7 @@ package org.rapidoid.ctx;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
 
 /*
  * #%L
@@ -80,9 +81,11 @@ public class Ctx {
 
 	synchronized void span() {
 		referenceCounter++;
+		Log.debug("Spanning context", "ctx", this);
 	}
 
 	synchronized void close() {
+		Log.debug("Closing context", "ctx", this);
 		referenceCounter--;
 
 		if (referenceCounter == 0) {

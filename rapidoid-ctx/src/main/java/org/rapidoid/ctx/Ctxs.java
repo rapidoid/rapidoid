@@ -2,6 +2,7 @@ package org.rapidoid.ctx;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
 
 /*
  * #%L
@@ -64,6 +65,7 @@ public class Ctxs {
 
 	public static Ctx open() {
 		Ctx ctx = new Ctx();
+		Log.debug("Opening context", "ctx", ctx);
 		attach(ctx);
 		return ctx;
 	}
