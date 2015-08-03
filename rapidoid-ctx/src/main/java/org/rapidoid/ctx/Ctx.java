@@ -3,6 +3,7 @@ package org.rapidoid.ctx;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -31,6 +32,10 @@ import org.rapidoid.log.Log;
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class Ctx {
+
+	private static final AtomicLong ID_COUNTER = new AtomicLong();
+
+	private final long id = ID_COUNTER.incrementAndGet();
 
 	private volatile UserInfo user;
 
@@ -115,7 +120,7 @@ public class Ctx {
 
 	@Override
 	public synchronized String toString() {
-		return "Ctx [user=" + user + ", exchange=" + exchange + ", app=" + app + ", referenceCounter="
+		return "Ctx#" + id + "  [user=" + user + ", exchange=" + exchange + ", app=" + app + ", referenceCounter="
 				+ referenceCounter + ", allPersisters=" + allPersisters.size() + "]";
 	}
 
