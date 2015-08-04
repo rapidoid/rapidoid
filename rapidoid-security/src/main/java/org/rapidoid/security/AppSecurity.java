@@ -21,6 +21,7 @@ package org.rapidoid.security;
  */
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -46,10 +47,9 @@ import org.rapidoid.util.U;
 @Since("2.0.0")
 public class AppSecurity implements Constants {
 
-	public String[] getRolesAllowed(Class<?> clazz) {
+	public String[] getRolesAllowed(Map<Class<?>, Annotation> annotations) {
 
 		Set<String> roles = U.set();
-		Map<Class<?>, Annotation> annotations = Metadata.classAnnotations(clazz);
 
 		for (Entry<Class<?>, Annotation> e : annotations.entrySet()) {
 			Annotation ann = e.getValue();
@@ -67,12 +67,22 @@ public class AppSecurity implements Constants {
 				Role[] values = ((Roles) ann).value();
 				U.must(values.length > 0, "At least one role must be specified in @Roles annotation!");
 				for (Role r : values) {
-					roles.add(r.annotationType().getSimpleName().toUpperCase());
+					roles.add(r.value().toUpperCase());
 				}
 			}
 		}
 
 		return roles.toArray(new String[roles.size()]);
+	}
+
+	public String[] getRolesAllowed(Class<?> clazz) {
+		Map<Class<?>, Annotation> annotations = Metadata.classAnnotations(clazz);
+		return getRolesAllowed(annotations);
+	}
+
+	public String[] getRolesAllowed(Method method) {
+		Map<Class<?>, Annotation> annotations = Metadata.methodAnnotations(method);
+		return getRolesAllowed(annotations);
 	}
 
 	public boolean canAccessClass(String username, Class<?> clazz) {

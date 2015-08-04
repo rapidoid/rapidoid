@@ -20,6 +20,7 @@ package org.rapidoid.security;
  * #L%
  */
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +83,12 @@ public class Secure implements Constants {
 		return hasRoleBasedClassAccess(username, clazz) && security.canAccessClass(username, clazz);
 	}
 
+	public static boolean canAccessMethod(String username, Method method) {
+		U.notNull(method, "method");
+		Class<?> clazz = method.getDeclaringClass();
+		return canAccessClass(username, clazz) && hasRoleBasedMethodAccess(username, method);
+	}
+
 	public static boolean hasRoleBasedClassAccess(String username, Class<?> clazz) {
 		U.notNull(clazz, "class");
 		clazz = Cls.unproxy(clazz);
@@ -99,10 +106,26 @@ public class Secure implements Constants {
 		return roles.length == 0 || hasAnyRole(username, roles, clazz, target);
 	}
 
+	public static boolean hasRoleBasedMethodAccess(String username, Method method) {
+		U.notNull(method, "method");
+		String[] roles = security.getRolesAllowed(method);
+		return roles.length == 0 || hasAnyRole(username, roles);
+	}
+
 	public static boolean hasAnyRole(String username, String[] roles, Class<?> clazz, Object target) {
 		clazz = Cls.unproxy(clazz);
 		for (String role : roles) {
 			if (security.hasRole(username, role, clazz, target)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean hasAnyRole(String username, String[] roles) {
+		for (String role : roles) {
+			if (security.hasRole(username, role)) {
 				return true;
 			}
 		}
