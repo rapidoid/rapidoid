@@ -1,6 +1,7 @@
 package org.rapidoid.beany;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
@@ -48,6 +49,21 @@ public class Metadata {
 	public static <T extends Annotation> T classAnnotation(Class<?> clazz, Class<T> annotationClass) {
 		clazz = Cls.unproxy(clazz);
 		return (T) classAnnotations(clazz).get(annotationClass);
+	}
+
+	public static Map<Class<?>, Annotation> methodAnnotations(Method method) {
+		Map<Class<?>, Annotation> annotations = U.map();
+
+		for (Annotation ann : method.getAnnotations()) {
+			annotations.put(ann.annotationType(), ann);
+		}
+
+		return annotations;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T extends Annotation> T methodAnnotation(Method method, Class<T> annotationClass) {
+		return (T) methodAnnotations(method).get(annotationClass);
 	}
 
 	public static Map<Class<?>, Annotation> propAnnotations(Class<?> clazz, String property) {
