@@ -1,92 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-
-<link href="/img/favicon.png" rel="shortcut icon">
-
-<title>{{title}}</title>
-
 <style type="text/css">
 html,body,.container {
 	height: 100%;
 }
-
-.container {
-	display: table;
-	width: 100%;
-	margin-top: -50px;
-	padding-top: 50px;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-}
-
-nav {
-	background: green;
-	height: 50px;
-	margin-bottom: 0px !important;
-}
-
 .row {
 	height: 100%;
-	display: table-row;
 }
 
-.col-md-3.no-float,.col-md-6.no-float,.col-md-9.no-float,.col-md-12.no-float {
-	float: none;
-}
-
-.col-md-3 {
-	display: table-cell;
-	width: 25%;
-}
-
-.col-md-6 {
-	display: table-cell;
-	width: 50%;
-}
-
-.col-md-9 {
-	display: table-cell;
-	width: 75%;
-}
-
-.col-md-12 {
-	display: table-cell;
-	width: 100%;
-}
 </style>
-
-</head>
-
-<body>
-
-	<nav class="navbar navbar-default" role="navigation">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="/">{{title}}</a>
-			</div>
-		</div>
-	</nav>
-
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12 no-float">{{content}}</div>
-		</div>
-	</div>
-
-</body>
-</html>

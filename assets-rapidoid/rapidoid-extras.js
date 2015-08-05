@@ -1,14 +1,15 @@
 /* Rapidoid Extras */
 Rapidoid = (function() {
 
-    var theme;
-    try {
-        var m = /\bTHEME=(\w+?)\b/g.exec(document.cookie);
-        theme = m[1];
-    } catch (e) {}
-    if (theme && theme != 'none') {
-        document.write('<link href="/bootstrap/css/theme-' + theme + '.css" rel="stylesheet">');
-    }
+    // var theme;
+    // try {
+    // var m = /\bTHEME=(\w+?)\b/g.exec(document.cookie);
+    // theme = m[1];
+    // } catch (e) {}
+    // if (theme && theme != 'none') {
+    // document.write('<link href="/bootstrap/css/theme-' + theme + '.css"
+    // rel="stylesheet">');
+    // }
 
     function _goAt(url) {
         window.location.href = url;
@@ -77,127 +78,58 @@ Rapidoid = (function() {
         $('#_modal_box').modal(options || {});
     }
 
-    var app = angular.module('app', [ 'infinite-scroll', 'ngSanitize', 'ui.bootstrap' ]);
+    var scopeInitializers = [];
 
-    // Based on:
-    // http://stackoverflow.com/questions/17417607/angular-ng-bind-html-unsafe-and-directive-within-it
-    app.directive('compile', [ '$compile', function($compile) {
-        return function(scope, element, attrs) {
-            scope.$watch(function(scope) {
-                // watch the 'compile' expression for changes
-                return scope.$eval(attrs.compile);
-            }, function(value) {
-                // when the 'compile' expression changes
-                // assign it into the current DOM
-                element.html(value);
-
-                // compile the new DOM and link it to the current
-                // scope.
-                // NOTE: we only compile .childNodes so that
-                // we don't get into infinite loop compiling ourselves
-                $compile(element.contents())(scope);
-            });
-        };
-    } ]);
-
-    var _scopeInitializers = [];
-
-    function _initializer(initializer) {
-        _scopeInitializers.push(initializer);
+    function initializer(init) {
+        scopeInitializers.push(init);
     }
 
-    function _initScope($scope, $http, $window) {
-        for (var i = 0; i < _scopeInitializers.length; i++) {
-            _scopeInitializers[i]($scope, $http, $window);
+    function _initScope($scope) {
+        for (var i = 0; i < scopeInitializers.length; i++) {
+            scopeInitializers[i]($scope);
         }
     }
 
-    app.controller('Main', [ '$scope', '$http', '$window', function($scope, $http, $window) {
+    var plugins = [];
 
-        $scope._emit = function(eventId, eventNav, eventArgs) {
+    function plugin(pl) {
+        plugins.push(pl);
+    }
 
-            // _stop(ev);
+    function runPlugins(app) {
+        for (var i = 0; i < plugins.length; i++) {
+            plugins[i](app);
+        }
+    }
 
-            var x = document.querySelectorAll("input,textarea");
-            var inputs = {};
-            for (var i = 0; i < x.length; i++) {
-                var t = $(x[i]);
-                var _h = t.attr('_h');
+    function initApp(app) {
+        runPlugins(app);
+    }
 
-                if (_h) {
-                    var val;
+    function initMain($scope) {
+        _initScope($scope);
+    }
 
-                    if (t.prop('type') == 'checkbox' || t.prop('type') == 'radio') {
-                        val = t.prop('checked');
-                    } else {
-                        val = t.val();
-                    }
+    function createApp(main, extraDependencies) {
+        var dependencies = [ 'infinite-scroll', 'ngSanitize', 'ui.bootstrap' ];
 
-                    inputs[_h] = val;
-                }
+        if (extraDependencies) {
+            for (var i = 0; i < extraDependencies.length; i++) {
+                dependencies.push(extraDependencies[i]);
             }
-
-            x = document.querySelectorAll("option");
-
-            for (var i = 0; i < x.length; i++) {
-                var t = $(x[i]);
-                var _h = t.attr('_h');
-
-                if (_h) {
-                    inputs[_h] = t.prop('selected');
-                }
-            }
-
-            $.post(window.location.href, {
-                event : eventId,
-                navigational : eventNav,
-                args : eventArgs,
-                inputs : JSON.stringify(inputs),
-                __state : window.__state
-            }).done(function(data) {
-                if (data._redirect_) {
-                    _goAt(data._redirect_);
-                    return;
-                }
-
-                if (data._state_) {
-                    window.__state = data._state_;
-                }
-
-                if (data["!errors"]) {
-                    $('.field-error').html('');
-                    errors = data["!errors"];
-                    for ( var h in errors) {
-                        var err = errors[h];
-
-                        var x = document.querySelectorAll("input,textarea,option");
-                        for (var i = 0; i < x.length; i++) {
-                            var t = $(x[i]);
-                            var _h = t.attr('_h');
-                            if (_h == h) {
-                                $(t).next('.field-error').html(err);
-                            }
-                        }
-                    }
-                } else {
-                    for ( var sel in data._sel_) {
-                        if (sel == 'body') {
-                            $scope.ajaxBodyContent = data._sel_[sel];
-                            $scope.$apply();
-                        } else {
-                            alert('Selector not supported: ' + sel);
-                        }
-                    }
-                }
-            }).fail(function(data) {
-                swal("Communication error", "Couldn't connect to the server!", "error");
-                console.log(data);
-            });
         }
 
-        _initScope($scope, $http, $window);
+        var app = angular.module('app', dependencies);
 
-    } ]);
+        initApp(app);
+
+        app.controller('Main', [ '$scope', '$http', '$window', '$attrs', function($scope, $http, $window, $attrs) {
+            initMain($scope);
+            main($scope, $http, $window, $attrs);
+        } ]);
+
+        return app;
+    }
 
     return {
         goAt : _goAt,
@@ -206,8 +138,11 @@ Rapidoid = (function() {
         logout : _logout,
         popup : _popup,
         modal : _modal,
-        app : app,
-        initializer : _initializer
+
+        createApp : createApp,
+        initializer : initializer,
+        plugin : plugin,
+        initApp : initApp
     };
 
 })();

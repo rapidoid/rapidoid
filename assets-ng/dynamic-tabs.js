@@ -2,20 +2,12 @@
  * Derived from: https://github.com/imjustd/chrome-tabs (Copyright (c) Dimitar Stojanov, MIT license)
  */
 
-Rapidoid.initializer(function($scope, $http, $window) {
+Rapidoid.initializer(function($scope) {
 
-    var counter = 1;
     $scope.tabs = [];
 
-    $scope.addTab = function(title, content) {
-        title = title || 'Untitled ' + (counter++);
-        content = content || '';
-
-        $scope.tabs.push({
-            title : title,
-            content : content
-        });
-
+    $scope.addTab = function(tab) {
+        $scope.tabs.push(tab);
         $scope.tabs[$scope.tabs.length - 1].active = true;
     };
 
