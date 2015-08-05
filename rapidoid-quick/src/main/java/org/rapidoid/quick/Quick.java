@@ -30,6 +30,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.app.Apps;
+import org.rapidoid.app.AuthInterceptor;
 import org.rapidoid.app.TransactionInterceptor;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
@@ -37,6 +38,13 @@ import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.db.hibernate.HibernateDBPlugin;
+import org.rapidoid.security.annotation.Admin;
+import org.rapidoid.security.annotation.DevMode;
+import org.rapidoid.security.annotation.LoggedIn;
+import org.rapidoid.security.annotation.Manager;
+import org.rapidoid.security.annotation.Moderator;
+import org.rapidoid.security.annotation.Role;
+import org.rapidoid.security.annotation.Roles;
 import org.rapidoid.util.U;
 import org.rapidoid.webapp.AppClasspathEntitiesPlugin;
 import org.rapidoid.webapp.WebApp;
@@ -70,6 +78,8 @@ public class Quick {
 		Plugins.register(new AppClasspathEntitiesPlugin());
 
 		AOP.reset();
+		AOP.intercept(new AuthInterceptor(), Admin.class, Manager.class, Moderator.class, LoggedIn.class,
+				DevMode.class, Role.class, Roles.class);
 		AOP.intercept(new TransactionInterceptor(), Transaction.class, Transactional.class);
 
 		Jobs.execute(new Runnable() {
