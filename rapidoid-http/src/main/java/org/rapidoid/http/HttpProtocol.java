@@ -202,7 +202,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			x.completeResponse();
 		} else if (cause instanceof HttpNotFoundException) {
 			// notFound
-			if (!x.uri().equals("/favicon.ico")) {
+			if (!x.uri().equals("/favicon.ico") && !x.uri().endsWith(".map.js")) {
 				Log.warn("HTTP resource not found!", "app", AppCtx.app().getId(), "uri", x.uri());
 			}
 			x.completeResponse();
