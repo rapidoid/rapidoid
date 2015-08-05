@@ -583,7 +583,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		finish();
 
 		if (!lowLevelProcessing) {
-			U.must(responseCode >= 100);
+			U.must(responseCode >= 100, "Invalid response code: %s, URI=%s", responseCode, uri());
 
 			write(new byte[0]);
 
