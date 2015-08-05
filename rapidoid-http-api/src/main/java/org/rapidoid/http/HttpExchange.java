@@ -250,6 +250,8 @@ public interface HttpExchange {
 
 	HttpExchange render(ITemplate template, Object model);
 
+	HttpExchange renderPage(Object model);
+
 	/* EXTRAS: */
 
 	<P> P persister();

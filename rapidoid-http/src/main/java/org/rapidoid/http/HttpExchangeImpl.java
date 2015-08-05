@@ -48,6 +48,7 @@ import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.plugins.templates.ITemplate;
+import org.rapidoid.plugins.templates.Templates;
 import org.rapidoid.security.Secure;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.RapidoidConf;
@@ -794,14 +795,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			}
 		} else {
 			String title = U.or(response, "Internal server error!");
+
 			if (err != null) {
-				if (Conf.dev()) {
-					HTMLSnippets.writeErrorPage(this, title, err);
-				} else {
-					HTMLSnippets.writeFullPage(this, title, "");
-				}
+				String details = Conf.dev() ? HTMLHelpers.stackTrace(title, err) : "";
+				renderPage(U.map("title", title, "error", true, "navbar", true, "content", details));
 			} else {
-				HTMLSnippets.writeFullPage(this, title, "");
+				renderPage(U.map("title", title, "error", httpResponseCode >= 400));
 			}
 		}
 
@@ -1284,6 +1283,13 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public HttpExchange render(ITemplate template, Object model) {
 		template.render(this.outputStream(), model, model());
+		return this;
+	}
+
+	@Override
+	public HttpExchange renderPage(Object model) {
+		ITemplate page = Templates.fromFile("page.html");
+		page.render(this.outputStream(), model, model());
 		return this;
 	}
 

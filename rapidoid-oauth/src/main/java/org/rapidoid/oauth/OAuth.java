@@ -25,7 +25,6 @@ import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.http.HTMLSnippets;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
@@ -43,8 +42,7 @@ public class OAuth {
 		register(app, null, new DefaultOAuthStateCheck(), providers);
 	}
 
-	public static void register(WebApp app, String oauthDomain, OAuthStateCheck stateCheck,
-			OAuthProvider... providers) {
+	public static void register(WebApp app, String oauthDomain, OAuthStateCheck stateCheck, OAuthProvider... providers) {
 
 		if (Conf.oauth() == null) {
 			return;
@@ -82,7 +80,8 @@ public class OAuth {
 		app.getRouter().get("/_oauthLogin", new Handler() {
 			@Override
 			public Object handle(HttpExchange x) throws Exception {
-				return HTMLSnippets.writePage(x, "Login with OAuth provider", loginHtml.toString());
+				return x.renderPage(U.map("title", "Login with OAuth provider", "content", loginHtml.toString(),
+						"navbar", true));
 			}
 		});
 	}

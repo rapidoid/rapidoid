@@ -49,16 +49,20 @@
 
 {{>head}}
 {{{head_extra}}}
+
+{{^error}}
 <script>
 window.__state = {{{req.renderState}}};
 </script>
+{{/error}}
 
 </head>
 
+{{^error}}
 <body class="rapidoid" ng-controller="Main" ng-app="app">
 
   <div ng-if="!ajaxBodyContent">
-{{>content}}
+{{^error}}{{>page-content}}{{/error}}
   </div>
 
   <div compile="ajaxBodyContent" ng-if="ajaxBodyContent"></div>
@@ -66,6 +70,8 @@ window.__state = {{{req.renderState}}};
 {{>modal}}
 
 </body>
+{{/error}}
+{{#error}}{{>page-error}}{{/error}}
 
 </html>
 {{/req.params.embedded}}

@@ -25,46 +25,12 @@ import java.io.PrintStream;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.io.Res;
-import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class HTMLSnippets {
+public class HTMLHelpers {
 
-	private static Res PAGE_HTML;
-
-	private static Res FULL_PAGE_HTML;
-
-	static {
-		PAGE_HTML = Res.from("page.html");
-		FULL_PAGE_HTML = Res.from("page-full.html");
-	}
-
-	public static HttpExchange writePage(HttpExchange x, String title, String content) {
-		String templ = PAGE_HTML.getContent();
-		U.notNull(templ, "Cannot find page resource!");
-		String html = UTILS.fillIn(templ, "title", title);
-		html = UTILS.fillIn(html, "content", content);
-		x.write(html);
-		return x;
-	}
-
-	public static HttpExchange writeFullPage(HttpExchange x, String title, String content) {
-		String templ = FULL_PAGE_HTML.getContent();
-		U.notNull(templ, "Cannot find full page resource!");
-		String html = templ.replaceAll("\\{\\{title\\}\\}", title).replaceAll("\\{\\{content\\}\\}", content);
-		x.write(html);
-		return x;
-	}
-
-	public static HttpExchange writeErrorPage(HttpExchange x, String title, Throwable err) {
-		String content = stackTrace("Stack trace: ", err);
-		return writeFullPage(x, title, content);
-	}
-
-	private static String stackTrace(String title, Throwable err) {
+	public static String stackTrace(String title, Throwable err) {
 		ByteArrayOutputStream buf = new ByteArrayOutputStream();
 		err.printStackTrace(new PrintStream(buf));
 
