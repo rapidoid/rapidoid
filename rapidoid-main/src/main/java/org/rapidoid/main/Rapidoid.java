@@ -20,9 +20,17 @@ package org.rapidoid.main;
  * #L%
  */
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.AppHandler;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.config.Conf;
+import org.rapidoid.io.Res;
+import org.rapidoid.jackson.YAML;
 import org.rapidoid.log.Log;
 import org.rapidoid.quick.Quick;
 import org.rapidoid.util.U;
@@ -45,12 +53,34 @@ public class Rapidoid {
 		U.must(!initialized, "Already initialized!");
 		initialized = true;
 
+		MainHelp.processHelp(args);
+
+		Res confRes = Res.from("config/app.yaml");
+		if (confRes.exists()) {
+			Map<String, Object> conf = YAML.parseMap(confRes.getContent());
+
+			for (Entry<String, Object> e : conf.entrySet()) {
+				String key = e.getKey();
+				Object val = e.getValue();
+				String value;
+
+				if (val instanceof Collection<?>) {
+					value = U.join(",", (Collection<?>) val);
+				} else if (Cls.isSimple(val)) {
+					value = Cls.str(val);
+				} else {
+					throw U.rte("Unsupported configuration value type: %s for key: %s", val.getClass(), key);
+				}
+
+				Log.info("Configuring", key, value);
+				Conf.set(key, value);
+			}
+		}
+
 		if (app == null) {
 			app = WebAppGroup.root();
 			app.getRouter().generic(new AppHandler());
 		}
-
-		MainHelp.processHelp(args);
 
 		Quick.run(app, args, config);
 	}
