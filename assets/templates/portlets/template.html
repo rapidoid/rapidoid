@@ -9,138 +9,104 @@ Licensed under MIT
 <div class="content">
 	<div class="container">
 		<div class="row">
-			{{#items}}
-			<div class="col-md-6 margin-bottom-30">
-				<div class="portlet">
-					<div class="portlet-title">
-						<div class="caption {{badge_class}}">
-							<i class="glyphicon glyphicon-{{icon}}"></i>
-							{{#item6}}
-								<span class="caption-subject">
-							{{/item6}} 
-							{{^item6}} 
-								<span class="caption-subject text-uppercase">
-							{{/item6}} 
-								{{title}}
-							 	</span> 
-							 	<span class="caption-helper">{{subtitle}}</span>
+			{{#portlets}}
+				<div class="col-md-6 margin-bottom-30">
+					<div class="portlet">
+						<div class="portlet-title">
+					
+							<div class="caption {{badge_class}}">
+								<i class="glyphicon glyphicon-{{icon}}"></i>
+								<span class="caption-subject {{titleClass}}">{{title}}</span> 
+								<span class="caption-helper">{{subtitle}}</span>
+							</div>
+
+							{{#classActions}}
+								<div class="actions">
+							{{/classActions}} 
+						
+							{{#typeBtnLinks}} 
+								{{#btnLinks}}
+									<a href="javascript:;" class="btn {{btnClass}} {{active}}">
+										<i class="glyphicon glyphicon-{{icon}}"></i> {{value}}
+									</a>
+								{{/btnLinks}}
+							{{/typeBtnLinks}} 
+						
+							{{#typeLabels}}
+								<div class="btn-group" data-toggle="buttons">
+									{{#labels}}
+										<label class="btn grey-salsa {{active}}">
+											 <input type="radio" name="options" class="toggle" id={{id}}>{{value}}
+										</label>
+									{{/labels}}
+								</div>
+							{{/typeLabels}}
+
+							{{#typePagination}}
+								<ul class="pagination">
+									<li><a href="#" aria-label="Previous">
+											<span aria-hidden="true">«</span>
+										</a>
+									</li>
+								{{#pagination}}
+									<li class={{active}}><a href="#">{{value}}</a></li>
+								{{/pagination}}
+									<li><a href="#" aria-label="Next"> 
+											<span aria-hidden="true">»</span>
+										</a>
+									</li>
+								</ul>
+							{{/typePagination}}
+						
+							{{#typeFormInput}}
+								<div class="inputs">
+									<div class="portlet-input input-inline input-medium">
+										<div class="input-group">
+											<input type="text" class="form-control input-circle-left"
+												placeholder="search..."> 
+											<span class="input-group-btn">
+											<button class="btn btn-cfircle-right btn-default"
+													type="submit">{{formInputVal}}</button>
+											</span>
+										</div>
+									</div>
+								</div>
+							{{/typeFormInput}}
+						
+							{{#typeTabs}}
+								<ul class="nav nav-tabs">
+									{{#tabs}}
+										<li class={{active}}><a href="#portlet_{{id}}" data-toggle="tab"> {{value}} </a></li>
+									{{/tabs}}
+								</ul>
+							{{/typeTabs}}
+						
+							{{#classActions}}
+								</div>
+							{{/classActions}}
 						</div>
 
-						{{#classActions}}
-							<div class="actions">
-						{{/classActions}} 
-						
-						{{#item1}} 
-							<a href="javascript:;" class="btn">
-								<i class="glyphicon glyphicon-pencil"></i> Edit
-							</a>
-							<a href="javascript:;" class="btn"> 
-								<i class="glyphicon glyphicon-paperclip"></i> Add
-							</a>
-							<a href="javascript:;" class="btn btn-circle">
-								<i class="glyphicon glyphicon-resize-full"></i>
-							</a> 
-						{{/item1}} 
-						
-						{{#item2}}
-							<div class="btn-group" data-toggle="buttons">
-								<label class="btn grey-salsa active"> <input
-									type="radio" name="options" class="toggle" id="option1">Today
-								</label> <label class="btn grey-salsa"> <input type="radio"
-									name="options" class="toggle" id="option2">Week
-								</label> <label class="btn grey-salsa"> <input type="radio"
-									name="options" class="toggle" id="option2">Month
-								</label>
-							</div>
-						{{/item2}}
-
-						{{#item3}}
-							<a href="javascript:;" class="btn btn-red btn-circle active">
-								<i class="glyphicon glyphicon-paperclip"></i>
-							</a>
-							<a href="javascript:;" class="btn btn-red btn-circle">
-								<i class="glyphicon glyphicon-pencil"></i>
-							</a>
-							<a href="javascript:;" class="btn btn-red btn-circle">
-								<i class="glyphicon glyphicon-trash"></i>
-							</a>
-							<a href="javascript:;" class="btn btn-red btn-circle">
-								<i class="glyphicon glyphicon-search"></i>
-							</a>
-						{{/item3}}
-						
-						{{#item4}}
-							<ul class="pagination">
-								<li><a href="#" aria-label="Previous">
-									<span aria-hidden="true">«</span>
-									</a>
-								</li>
-								<li><a href="#">1</a></li>
-								<li class="active"><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#" aria-label="Next"> 
-									<span aria-hidden="true">»</span>
-									</a>
-								</li>
-							</ul>
-
-						{{/item4}}
-						
-						{{#item5}}
-							<div class="inputs">
-								<div class="portlet-input input-inline input-medium">
-									<div class="input-group">
-										<input type="text" class="form-control input-circle-left"
-											placeholder="search..."> <span
-											class="input-group-btn">
-											<button class="btn btn-cfircle-right btn-default"
-												type="submit">Go!</button>
-										</span>
+						<div class="portlet-body">
+							{{#typeTabs}}
+								<div class="portlet-body">
+									<div class="tab-content">
+										{{#tabs}}
+											<div class="tab-pane {{active}}" id="portlet_{{id}}">
+												<h4>{{value}}</h4>
+												<p>{{content}}</p>
+											</div>
+										{{/tabs}}
 									</div>
 								</div>
-							</div>
-						{{/item5}}
-						
-						{{#item6}}
-							<ul class="nav nav-tabs">
-								<li><a href="#portlet_tab3" data-toggle="tab"> Tab 3 </a></li>
-								<li><a href="#portlet_tab2" data-toggle="tab"> Tab 2 </a></li>
-								<li class="active"><a href="#portlet_tab1" data-toggle="tab"> Tab 1 </a></li>
-							</ul>
-						{{/item6}}
-						
-						{{#classActions}}
-							</div>
-						{{/classActions}}
-					</div>
-
-					<div class="portlet-body">
-						{{#item6}}
-							<div class="portlet-body">
-								<div class="tab-content">
-									<div class="tab-pane active" id="portlet_tab1">
-										<h4>Tab 1</h4>
-										<p>{{content1}}</p>
-									</div>
-									<div class="tab-pane" id="portlet_tab2">
-										<h4>Tab 2</h4>
-										<p>{{content2}}</p>
-									</div>
-									<div class="tab-pane" id="portlet_tab3">
-										<h4>Tab 3</h4>
-										<p>{{content3}}</p>
-									</div>
-								</div>
-							</div>
-						{{/item6}}
-						{{^item6}}
-							<h4>{{heading}}</h4>
-							<p>{{content}}</p>
-						{{/item6}}
+							{{/typeTabs}}
+							{{^typeTabs}}
+								<h4>{{heading}}</h4>
+								<p>{{content}}</p>
+							{{/typeTabs}}
+						</div>
 					</div>
 				</div>
-			</div>
-			{{/items}}
+			{{/portlets}}
 		</div>
 	</div>
 </div>

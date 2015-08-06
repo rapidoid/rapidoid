@@ -1,59 +1,89 @@
 {
-    "items" : [ {
+    "portlets" : [ {
 	"title" : "Portlet",
+	"titleClass" : "text-uppercase",
 	"subtitle" : "weekly stats...",
     "heading" : "Heading 1",
 	"content" : "aaaaaaaaaaaaa",
 	"badge_class" : "",
 	"icon" : "calendar",
-	"item1" : true,
+	"typeBtnLinks" : true,
+	"btnLinks" : [
+		{"icon" : "pencil", "value" : "Add"},
+		{"icon" : "paperclip", "value" : "Edit"},
+		{"icon" : "resize-full", "value" : ""}
+	],
 	"classActions" : true
 }, {
 	"title" : "Portlet",
+	"titleClass" : "text-uppercase",
 	"subtitle" : "monthly stats...",
     "heading" : "Heading 2",
 	"content" : "bbbbbbbbbbbbbbb",
 	"badge_class" : "caption-green",
 	"icon" : "",
-	"item2" : true,
+	"typeLabels" : true,
+	"labels" : [
+		{"id" : "option1", "value" : "Today", "active" : "active"},
+		{"id" : "option2", "value" : "Week", "active" : ""},
+		{"id" : "option3", "value" : "Month", "active" : ""}
+	],
 	"classActions" : true
 }, {
 	"title" : "Portlet",
+	"titleClass" : "text-uppercase",
 	"subtitle" : "weekly stats...",
     "heading" : "Heading 3",
 	"content" : "ccccccccccccc",
 	"badge_class" : "caption-red",
+	"btnClass" : "btn-red btn-circle",
 	"icon" : "cog",
-	"item3" : true,
+	"typeBtnLinks" : true,
+	"btnLinks" : [
+		{"icon" : "paperclip", "active" : "active"},
+		{"icon" : "pencil", "active" : ""},
+		{"icon" : "trash", "active" : ""},
+		{"icon" : "search", "active" : false}
+	],
 	"classActions" : true
 }, {
 	"title" : "Pagination",
+	"titleClass" : "text-uppercase",
 	"subtitle" : "",
     "heading" : "Heading 4",
 	"content" : "dddddddddddddd",
 	"badge_class" : "caption-purple",
 	"icon" : "cog",
-	"item4" : true,
+	"typePagination" : true,
+	"pagination" : [
+		{"value" : "1", "active" : ""},
+		{"value" : "2", "active" : "active"},
+		{"value" : "3", "active" : ""}
+	],
 	"classActions" : true
 }, {
 	"title" : "Form Input",
+	"titleClass" : "text-uppercase",
 	"subtitle" : "more samples...",
     "heading" : "Heading 5",
 	"content" : "eeeeeeeeeeeeeee",
 	"badge_class" : "",
 	"icon" : "search",
-	"item5" : true,
+	"typeFormInput" : true,
+	"formInputVal" : "Go!",
 	"classActions" : false
 }, {
 	"title" : "Tabs",
 	"subtitle" : "more samples...",
     "heading" : "Heading 6",
-	"content1" : "content 1",
-	"content2" : "content 2",
-	"content3" : "content 3",
 	"badge_class" : "caption-red",
 	"icon" : "pushpin",
-	"item6" : true,
+	"typeTabs" : true,
+	"tabs" : [
+		{"id" : "tab3", "content" : "content 3", "value" : "Tab 3", "active" : ""},
+		{"id" : "tab2", "content" : "content 2", "value" : "Tab 2", "active" : ""},
+		{"id" : "tab1", "content" : "content 1", "value" : "Tab 1", "active" : "active"}
+	],
 	"classActions" : false
 } ]
 }
