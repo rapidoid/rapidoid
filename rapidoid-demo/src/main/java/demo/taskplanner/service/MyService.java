@@ -26,8 +26,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Web;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.http.HttpExchange;
 
 @Authors("Nikolche Mihajlovski")

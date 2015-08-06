@@ -21,8 +21,8 @@ package demo.taskplanner.service;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Web;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.app.CRUD;
 
 import demo.taskplanner.model.Task;

@@ -25,11 +25,9 @@ import java.util.Set;
 
 import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Page;
-import org.rapidoid.annotation.Web;
-import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
@@ -65,6 +63,7 @@ public class Apps {
 		serve(app, args, config);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void bootstrap(WebApp app, String[] args, Object... config) {
 		Set<String> configArgs = U.set(args);
 
@@ -131,14 +130,12 @@ public class Apps {
 
 	public static AppClasses scanAppClasses(HttpExchange x, ClassLoader classLoader) {
 
-		Map<String, Class<?>> services = Cls.classMap(Scan.annotated(Web.class, classLoader));
-		Map<String, Class<?>> pages = Cls.classMap(Scan.annotated(Page.class, classLoader));
 		Map<String, Class<?>> apps = Cls.classMap(Scan.annotated(App.class, classLoader));
-		Map<String, Class<?>> screens = Cls.classMap(Scan.annotated(Screen.class, classLoader));
+		Map<String, Class<?>> services = Cls.classMap(Scan.annotated(Web.class, classLoader));
 
 		final Class<?> appClass = !apps.isEmpty() ? apps.values().iterator().next() : null;
 
-		return new AppClasses(appClass, services, pages, screens);
+		return new AppClasses(appClass, services);
 	}
 
 	public static AppClasses getAppClasses(HttpExchange x, ClassLoader classLoader) {

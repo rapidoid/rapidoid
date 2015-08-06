@@ -23,8 +23,8 @@ package demo.taskplanner.service;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Web;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.dao.DAO;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;

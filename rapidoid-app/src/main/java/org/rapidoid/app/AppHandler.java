@@ -131,14 +131,14 @@ public class AppHandler implements Handler {
 
 		// GUI pages from Java components
 
-		Object result = Pages.dispatchIfExists(x, appCls.pages, app);
+		Object result = Pages.dispatchIfExists(x, appCls.components, app);
 		if (result != null) {
 			return result;
 		}
 
 		// App screens
 
-		if (!U.isEmpty(appCls.screens) || appCls.main != null) {
+		if (!U.isEmpty(appCls.components) || appCls.main != null) {
 			Object genericPage = new AppPageGeneric(x, appCls, app);
 			return Pages.dispatch(x, genericPage);
 		}

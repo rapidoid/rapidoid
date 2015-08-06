@@ -1,7 +1,7 @@
 package org.rapidoid.docs.eg102;
 
 import org.rapidoid.annotation.App;
-import org.rapidoid.annotation.Screen;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.main.Rapidoid;
 
 /*
@@ -35,14 +35,14 @@ public class Main {
 	}
 }
 
-@Screen
+@Web
 class HomeScreen { // here
 	Object content() { // here
 		return "At the Home screen!"; // here
 	}
 }
 
-@Screen
+@Web
 class Foo { // here
 	Object content = "At the Foo screen!"; // here
 }

@@ -318,7 +318,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 
 	protected Object getScreen() {
 		// TODO use screens.get(...) instead of iteration
-		for (Class<?> screen : appCls.screens.values()) {
+		for (Class<?> screen : appCls.components.values()) {
 			if (Apps.screenUrl(screen).equals(x.path())) {
 				x.authorize(screen);
 				return Cls.newInstance(screen);
@@ -332,7 +332,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		Object[] screensConfig = config("screens", null);
 
 		if (screensConfig == null) {
-			screensConfig = appCls.screens.values().toArray();
+			screensConfig = appCls.components.values().toArray();
 		}
 
 		Map<String, Class<?>> filtered = new LinkedHashMap<String, Class<?>>();
@@ -340,13 +340,13 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		for (Object scr : screensConfig) {
 			if (scr instanceof Class<?>) {
 				Class<?> cls = (Class<?>) scr;
-				Class<?> screenCls = appCls.screens.get(cls.getSimpleName());
+				Class<?> screenCls = appCls.components.get(cls.getSimpleName());
 				if (isScreenAllowed(screenCls)) {
 					filtered.put(cls.getSimpleName(), screenCls);
 				}
 			} else if (scr instanceof String) {
 				String name = U.capitalized((String) scr);
-				Class<?> screenCls = appCls.screens.get(name);
+				Class<?> screenCls = appCls.components.get(name);
 				if (isScreenAllowed(screenCls)) {
 					filtered.put(name, screenCls);
 				}

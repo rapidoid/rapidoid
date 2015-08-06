@@ -96,10 +96,10 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 
 	@Override
 	protected List<String> getServiceNames(Class<?> service) {
-		Web restful = Metadata.classAnnotation(service, Web.class);
+		Web web = Metadata.classAnnotation(service, Web.class);
 
-		if (restful != null) {
-			return U.list(restful.value());
+		if (web != null) {
+			return U.list(web.value());
 		} else {
 			return super.getServiceNames(service);
 		}

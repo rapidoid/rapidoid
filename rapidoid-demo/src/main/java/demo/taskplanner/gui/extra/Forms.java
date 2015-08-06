@@ -21,9 +21,9 @@ package demo.taskplanner.gui.extra;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
@@ -34,7 +34,7 @@ import org.rapidoid.var.Vars;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.ButtonWidget;
 
-@Page
+@Web
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class Forms extends BootstrapWidgets {

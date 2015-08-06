@@ -3,7 +3,7 @@ package org.rapidoid.docs.eg023;
 import javax.persistence.Entity;
 
 import org.rapidoid.annotation.App;
-import org.rapidoid.annotation.Screen;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.app.GUI;
 import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.main.Rapidoid;
@@ -41,7 +41,7 @@ public class Main {
 	}
 }
 
-@Screen
+@Web
 class HomeScreen extends GUI {
 	Object[] content = { grid(Todo.class), cmd("Add") };
 

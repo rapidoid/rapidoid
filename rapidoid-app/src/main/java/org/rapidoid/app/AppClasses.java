@@ -25,10 +25,8 @@ import java.util.Map;
 
 import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Page;
-import org.rapidoid.annotation.Web;
-import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.dispatch.PojoDispatcher;
 import org.rapidoid.rest.WebPojoDispatcher;
@@ -39,25 +37,18 @@ import org.rapidoid.util.U;
 public class AppClasses {
 
 	public final Class<?> main;
-	public final Map<String, Class<?>> services;
-	public final Map<String, Class<?>> pages;
-	public final Map<String, Class<?>> screens;
+	public final Map<String, Class<?>> components;
 	public final PojoDispatcher dispatcher;
 
-	public AppClasses(Class<?> main, Map<String, Class<?>> services, Map<String, Class<?>> pages,
-			Map<String, Class<?>> screens) {
+	public AppClasses(Class<?> main, Map<String, Class<?>> services) {
 		this.main = main;
-		this.services = services;
-		this.pages = pages;
-		this.screens = screens;
+		this.components = services;
 		this.dispatcher = new WebPojoDispatcher(services);
 	}
 
 	public static AppClasses from(Class<?>... classes) {
 		Class<?> main = null;
 		Map<String, Class<?>> services = U.map();
-		Map<String, Class<?>> pages = U.map();
-		Map<String, Class<?>> screens = U.map();
 
 		for (Class<?> cls : classes) {
 			String name = cls.getSimpleName();
@@ -65,14 +56,10 @@ public class AppClasses {
 				main = cls;
 			} else if (Metadata.isAnnotated(cls, Web.class)) {
 				services.put(name, cls);
-			} else if (Metadata.isAnnotated(cls, Screen.class)) {
-				screens.put(name, cls);
-			} else if (Metadata.isAnnotated(cls, Page.class)) {
-				pages.put(name, cls);
 			}
 		}
 
-		return new AppClasses(main, services, pages, screens);
+		return new AppClasses(main, services);
 	}
 
 	public static AppClasses from(Collection<Class<?>> classes) {
@@ -83,8 +70,7 @@ public class AppClasses {
 
 	@Override
 	public String toString() {
-		return "AppClasses [main=" + main + ", services=" + services + ", pages=" + pages + ", screens=" + screens
-				+ ", dispatcher=" + dispatcher + "]";
+		return "AppClasses [main=" + main + ", services=" + components + ", dispatcher=" + dispatcher + "]";
 	}
 
 }

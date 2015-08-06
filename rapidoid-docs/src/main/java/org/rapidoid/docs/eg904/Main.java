@@ -1,7 +1,7 @@
 package org.rapidoid.docs.eg904;
 
 import org.rapidoid.annotation.App;
-import org.rapidoid.annotation.Screen;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.app.GUI;
 import org.rapidoid.main.Rapidoid;
 
@@ -40,11 +40,11 @@ public class Main {
 	}
 }
 
-@Screen
+@Web
 class CdScreen extends GUI {}
 
-@Screen
+@Web
 class BarScreen extends GUI {} // here
 
-@Screen
+@Web
 class AbScreen extends GUI {}

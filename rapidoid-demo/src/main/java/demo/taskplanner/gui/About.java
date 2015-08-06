@@ -21,9 +21,9 @@ package demo.taskplanner.gui;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.app.GUI;
 import org.rapidoid.html.Tag;
 import org.rapidoid.log.Log;
@@ -43,7 +43,7 @@ class Book {
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-@Screen
+@Web
 public class About extends GUI {
 
 	public Object content() {

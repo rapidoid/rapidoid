@@ -23,8 +23,8 @@ package demo.taskplanner.gui;
 import java.util.concurrent.TimeUnit;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.app.GUI;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
@@ -34,7 +34,7 @@ import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Role;
 import org.rapidoid.security.annotation.Roles;
 
-@Screen
+@Web
 @Admin
 @Manager
 @Roles({ @Role("RESTARTER") })

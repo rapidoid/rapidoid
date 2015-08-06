@@ -1,8 +1,8 @@
 package demo.taskplanner.gui;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.app.GUI;
 
 /*
@@ -25,7 +25,7 @@ import org.rapidoid.app.GUI;
  * #L%
  */
 
-@Screen
+@Web
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")
 public class Upload extends GUI {

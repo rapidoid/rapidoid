@@ -1,7 +1,7 @@
 package org.rapidoid.docs.eg104;
 
 import org.rapidoid.annotation.App;
-import org.rapidoid.annotation.Screen;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.main.Rapidoid;
 
 /*
@@ -37,8 +37,8 @@ public class Main {
 	}
 }
 
-@Screen
+@Web
 class FooScreen {}
 
-@Screen
+@Web
 class BarScreen {}
