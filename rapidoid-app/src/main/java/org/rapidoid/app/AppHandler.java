@@ -151,13 +151,12 @@ public class AppHandler implements Handler {
 
 		if (resource.exists()) {
 			x.html();
-			String title = Pages.titleOf(x, app);
 
 			ITemplate page = Templates.fromFile("page.html");
 			String content = U.safe(resource.getContent());
 
-			Map<Object, Object> model = U.map("title", title, "head_extra", "", "content", content, "state", "{}",
-					"navbar", true, "maps", false, "fluid", false);
+			Map<Object, Object> model = U.map("head_extra", "", "content", content, "state", "{}", "navbar", true,
+					"maps", false, "fluid", false);
 
 			String[] contentParts = content.split("\n", 2);
 			if (contentParts.length == 2) {

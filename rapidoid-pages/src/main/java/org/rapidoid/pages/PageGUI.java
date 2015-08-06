@@ -57,12 +57,12 @@ public class PageGUI extends BootstrapWidgets {
 		return cmd(cmd).class_("close").contents(sp1, sp2);
 	}
 
-	public static Tag page(String pageTitle, Object head, Object body) {
-		return render("page.html", "title", pageTitle, "head_extra", head, "content", body);
+	public static Tag page(Object head, Object body) {
+		return render("page.html", "head_extra", head, "content", body);
 	}
 
-	public static Tag page(String pageTitle, Object body) {
-		return page(pageTitle, "", body);
+	public static Tag page(Object body) {
+		return page("", body);
 	}
 
 }

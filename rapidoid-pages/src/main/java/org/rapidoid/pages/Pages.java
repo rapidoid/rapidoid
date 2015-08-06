@@ -70,34 +70,6 @@ public class Pages {
 		return U.capitalized(path.substring(1));
 	}
 
-	public static String defaultPageTitle(Class<?> pageClass) {
-		String pageName = pageClass.getSimpleName();
-
-		if (pageName.endsWith("Page")) {
-			pageName = U.mid(pageName, 0, -4);
-		}
-
-		return UTILS.camelPhrase(pageName);
-	}
-
-	public static String titleOf(HttpExchange x, Object target) {
-		if (target == null || target.getClass().equals(Object.class)) {
-			return "App";
-		}
-
-		Method m = Cls.findMethod(target.getClass(), "title", HttpExchange.class);
-
-		if (m != null) {
-			return AOP.invoke(x, m, target, x);
-		}
-
-		try {
-			return Beany.getPropValue(target, "title");
-		} catch (Exception e) {
-			return defaultPageTitle(target.getClass());
-		}
-	}
-
 	public static Object contentOf(HttpExchange x, Object target) {
 		Method m = Cls.findMethod(target.getClass(), "content", HttpExchange.class);
 		return m != null ? AOP.invoke(x, m, target, x) : Beany.getPropValue(target, "content", null);
@@ -110,7 +82,6 @@ public class Pages {
 
 	public static Object page(HttpExchange x, Object page) {
 
-		String pageTitle = titleOf(x, page);
 		Object pageHead = U.or(headOf(x, page), "");
 		Object content = contentOf(x, page);
 
@@ -123,7 +94,7 @@ public class Pages {
 			return x;
 		}
 
-		return PageGUI.page(pageTitle, pageHead, content);
+		return PageGUI.page(pageHead, content);
 	}
 
 	public static Object render(HttpExchange x, Object page) {

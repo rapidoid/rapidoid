@@ -35,8 +35,6 @@ public class WebApp {
 
 	private final String id;
 
-	private final String title;
-
 	private final Set<String> owners;
 
 	private final Set<String> hostnames;
@@ -48,6 +46,8 @@ public class WebApp {
 	private final Router router;
 
 	private final Classes classes;
+
+	private volatile String title;
 
 	private volatile AppMenu menu;
 
@@ -85,6 +85,10 @@ public class WebApp {
 
 	public String getTitle() {
 		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public Set<String> getOwners() {

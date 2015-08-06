@@ -23,9 +23,11 @@ package org.rapidoid.pages.bootstrap;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.pages.PagesTestCommons;
+import org.rapidoid.webapp.AppCtx;
 import org.rapidoid.widget.BootstrapWidgets;
 
 @SuppressWarnings("unused")
@@ -33,18 +35,19 @@ import org.rapidoid.widget.BootstrapWidgets;
 @Since("2.0.0")
 public class BootstrapPageTest extends PagesTestCommons {
 
+	public void confSetup() {
+		Conf.set("title", "Some title");
+	}
+
 	@Test
 	public void testPojoPage() {
+		AppCtx.app().setTitle("Some title");
+
 		Object page = new Object() {
 
 			public Tag content(HttpExchange x) {
 				return BootstrapWidgets.div("abc");
 			}
-
-			public String title() {
-				return "Some title";
-			}
-
 		};
 
 		print(page);
@@ -55,11 +58,11 @@ public class BootstrapPageTest extends PagesTestCommons {
 
 	@Test
 	public void testPojoPage2() {
+		AppCtx.app().setTitle("Some title");
+
 		Object page = new Object() {
 
 			public Tag content = BootstrapWidgets.div("abc");
-
-			public String title = "Some title";
 
 		};
 

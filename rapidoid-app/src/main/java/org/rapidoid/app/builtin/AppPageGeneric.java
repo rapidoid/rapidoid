@@ -104,10 +104,6 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		return new Object[] { app, screen };
 	}
 
-	public String title() {
-		return Pages.titleOf(x, app);
-	}
-
 	public Object head() {
 		String theme = config("theme", null);
 		return theme != null ? link().href(themeUrl(theme)).rel("stylesheet") : null;

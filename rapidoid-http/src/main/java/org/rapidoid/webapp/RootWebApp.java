@@ -35,7 +35,7 @@ public class RootWebApp extends WebApp {
 
 	@SuppressWarnings("unchecked")
 	public RootWebApp() {
-		super("root", Conf.option("title", "App"), Collections.EMPTY_SET, Collections.EMPTY_SET, U.set("/"),
+		super("root", Conf.option("title", null), Collections.EMPTY_SET, Collections.EMPTY_SET, U.set("/"),
 				AppMode.DEVELOPMENT, null, Classes.from(ClasspathUtil.getAllClasses()));
 	}
 
