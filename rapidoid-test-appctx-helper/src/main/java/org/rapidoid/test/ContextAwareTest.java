@@ -24,6 +24,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.Router;
 import org.rapidoid.webapp.WebApp;
@@ -39,8 +40,8 @@ public abstract class ContextAwareTest extends TestCommons {
 
 	@Before
 	public void openContext() {
+		Conf.reset();
 		closeOpenedContexts();
-
 		app = WebAppGroup.openRootContext();
 		router = app.getRouter();
 	}

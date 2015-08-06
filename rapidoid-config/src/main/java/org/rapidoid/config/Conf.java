@@ -235,4 +235,10 @@ public class Conf {
 		return system("IP_ADDRESS");
 	}
 
+	public synchronized static void reset() {
+		init();
+		CFG.clear();
+		initialized = false;
+	}
+
 }
