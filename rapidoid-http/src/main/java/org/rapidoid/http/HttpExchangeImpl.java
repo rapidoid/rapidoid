@@ -800,9 +800,10 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 			if (err != null) {
 				String details = Conf.dev() ? HTMLHelpers.stackTrace(title, err) : "";
-				renderPage(U.map("title", title, "error", true, "navbar", true, "content", details));
+				renderPage(U.map("title", title, "error", true, "code", httpResponseCode, "navbar", true, "content",
+						details));
 			} else {
-				renderPage(U.map("title", title, "error", httpResponseCode >= 400));
+				renderPage(U.map("title", title, "code", httpResponseCode, "error", httpResponseCode >= 400));
 			}
 		}
 
