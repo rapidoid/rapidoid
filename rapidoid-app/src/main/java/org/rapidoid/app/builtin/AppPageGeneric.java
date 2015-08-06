@@ -151,7 +151,7 @@ public class AppPageGeneric extends AppGUI implements ComplexView {
 		String path = x.path();
 
 		if (path.equals("/")) {
-			return appCls.main != null ? app : new TheDefaultApp();
+			return appCls.main != null ? app : new Object();
 		}
 
 		for (Class<?> scr : BUILT_IN_SCREENS) {
