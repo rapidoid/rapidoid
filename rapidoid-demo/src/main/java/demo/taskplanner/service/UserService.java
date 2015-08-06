@@ -23,7 +23,7 @@ package demo.taskplanner.service;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.RESTful;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.dao.DAO;
 import org.rapidoid.lambda.Predicate;
@@ -34,7 +34,7 @@ import demo.taskplanner.model.User;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-@RESTful("/user")
+@Web("/user")
 public class UserService extends DAO<User> {
 
 	public Iterable<User> findByName(String search) {

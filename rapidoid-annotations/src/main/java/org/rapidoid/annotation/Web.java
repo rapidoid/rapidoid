@@ -29,8 +29,8 @@ import java.lang.annotation.Target;
 @Target({ TYPE })
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
-public @interface RESTful {
+@Since("4.1.0")
+public @interface Web {
 
 	String value() default "";
 

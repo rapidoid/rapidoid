@@ -26,7 +26,7 @@ import java.util.Set;
 import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Page;
-import org.rapidoid.annotation.RESTful;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.annotation.Screen;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
@@ -131,7 +131,7 @@ public class Apps {
 
 	public static AppClasses scanAppClasses(HttpExchange x, ClassLoader classLoader) {
 
-		Map<String, Class<?>> services = Cls.classMap(Scan.annotated(RESTful.class, classLoader));
+		Map<String, Class<?>> services = Cls.classMap(Scan.annotated(Web.class, classLoader));
 		Map<String, Class<?>> pages = Cls.classMap(Scan.annotated(Page.class, classLoader));
 		Map<String, Class<?>> apps = Cls.classMap(Scan.annotated(App.class, classLoader));
 		Map<String, Class<?>> screens = Cls.classMap(Scan.annotated(Screen.class, classLoader));

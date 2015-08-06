@@ -6,7 +6,7 @@ import java.util.Map;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Param;
-import org.rapidoid.annotation.RESTful;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.main.Rapidoid;
 
 /*
@@ -31,7 +31,7 @@ import org.rapidoid.main.Rapidoid;
 
 // RESTful services :: It is very easy to create RESTful services
 
-@RESTful
+@Web
 public class Main {
 
 	public static void main(String[] args) {

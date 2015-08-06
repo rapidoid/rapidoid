@@ -27,7 +27,7 @@ import org.rapidoid.annotation.Cookie;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Header;
 import org.rapidoid.annotation.POST;
-import org.rapidoid.annotation.RESTful;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.ctx.Ctxs;
@@ -44,7 +44,7 @@ import demo.taskplanner.model.Task;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-@RESTful
+@Web
 public class Main {
 
 	public static void main(String[] args) {

@@ -1,7 +1,7 @@
 package org.rapidoid.docs.eg002;
 
 import org.rapidoid.annotation.GET;
-import org.rapidoid.annotation.RESTful;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.main.Rapidoid;
 
 /*
@@ -26,7 +26,7 @@ import org.rapidoid.main.Rapidoid;
 
 // Hello, world 2! :: Let's start Rapidoid:
 
-@RESTful
+@Web
 public class Main {
 
 	public static void main(String[] args) {
@@ -39,7 +39,7 @@ public class Main {
 	}
 }
 
-@RESTful
+@Web
 class Opa {
 	@GET
 	public String iha() {

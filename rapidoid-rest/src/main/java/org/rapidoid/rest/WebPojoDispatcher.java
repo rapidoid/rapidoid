@@ -32,7 +32,7 @@ import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Header;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.PUT;
-import org.rapidoid.annotation.RESTful;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.arr.Arr;
@@ -96,7 +96,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 
 	@Override
 	protected List<String> getServiceNames(Class<?> service) {
-		RESTful restful = Metadata.classAnnotation(service, RESTful.class);
+		Web restful = Metadata.classAnnotation(service, Web.class);
 
 		if (restful != null) {
 			return U.list(restful.value());
