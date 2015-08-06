@@ -27,6 +27,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 import org.rapidoid.webapp.WebApp;
 
@@ -45,6 +46,7 @@ public class OAuth {
 	public static void register(WebApp app, String oauthDomain, OAuthStateCheck stateCheck, OAuthProvider... providers) {
 
 		if (Conf.oauth() == null) {
+			Log.warn("OAuth is disabled!");
 			return;
 		}
 
@@ -89,6 +91,7 @@ public class OAuth {
 	public static String getLoginURL(HttpExchange x, OAuthProvider provider, String oauthDomain) {
 
 		if (Conf.oauth() == null) {
+			Log.warn("OAuth is disabled!");
 			return "";
 		}
 

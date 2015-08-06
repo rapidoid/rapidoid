@@ -2,8 +2,10 @@ package org.rapidoid.config;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -73,8 +75,6 @@ public class Conf {
 	}
 
 	public static synchronized void args(String[] mainArgs, String... extraArgs) {
-		CFG.clear();
-		initialized = false;
 		init();
 
 		if (mainArgs != null) {
@@ -173,8 +173,17 @@ public class Conf {
 		return has("size", "micro");
 	}
 
-	public static String oauth() {
-		return option("oauth", null);
+	@SuppressWarnings("unchecked")
+	public static List<String> oauth() {
+		Object oauth = option("oauth");
+
+		if (oauth instanceof List<?>) {
+			return (List<String>) oauth;
+		} else {
+			List<String> lst = new ArrayList<String>();
+			lst.add(String.valueOf(oauth));
+			return lst;
+		}
 	}
 
 	public static boolean production() {
