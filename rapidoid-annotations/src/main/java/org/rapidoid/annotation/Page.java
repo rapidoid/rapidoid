@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public @interface View {
+public @interface Page {
 
 	String value() default "";
 

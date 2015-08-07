@@ -32,7 +32,7 @@ import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Header;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.PUT;
-import org.rapidoid.annotation.View;
+import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.Web;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOP;
@@ -168,8 +168,8 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 			url = ((PUT) ann).value();
 		} else if (ann instanceof DELETE) {
 			url = ((DELETE) ann).value();
-		} else if (ann instanceof View) {
-			url = ((View) ann).value();
+		} else if (ann instanceof Page) {
+			url = ((Page) ann).value();
 		} else {
 			return null;
 		}
@@ -177,7 +177,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 		String name = reqName(method, url);
 		String path = UTILS.path(componentPath, name);
 
-		if (!(ann instanceof View)) {
+		if (!(ann instanceof Page)) {
 			String verb = ann.annotationType().getSimpleName();
 			return U.list(new DispatchReq(verb, path, true));
 		} else {
