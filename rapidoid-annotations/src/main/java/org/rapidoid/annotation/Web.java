@@ -32,6 +32,6 @@ import java.lang.annotation.Target;
 @Since("4.1.0")
 public @interface Web {
 
-	String value() default "";
+	String value() default "/";
 
 }
