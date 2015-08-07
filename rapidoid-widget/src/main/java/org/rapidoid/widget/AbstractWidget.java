@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.html.TagWidget;
+import org.rapidoid.html.impl.TagRenderer;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
@@ -63,6 +64,11 @@ public abstract class AbstractWidget extends BootstrapWidgets implements TagWidg
 		Integer counter = U.or((Integer) x.tmp(extrName, null), 1);
 		x.tmps().put(extrName, counter + 1);
 		return counter;
+	}
+
+	@Override
+	public String toString() {
+		return TagRenderer.get().toHTML(this, x);
 	}
 
 }

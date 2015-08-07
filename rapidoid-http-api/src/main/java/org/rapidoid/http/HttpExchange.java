@@ -252,6 +252,8 @@ public interface HttpExchange {
 
 	HttpExchange renderPage(Object model);
 
+	HttpExchange renderPage(Object model1, Object model2);
+
 	/* EXTRAS: */
 
 	<P> P persister();

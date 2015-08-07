@@ -26,7 +26,6 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.builtin.AppPageGeneric;
 import org.rapidoid.dispatch.PojoDispatchException;
 import org.rapidoid.dispatch.PojoHandlerNotFoundException;
 import org.rapidoid.http.Handler;
@@ -36,8 +35,6 @@ import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.io.CustomizableClassLoader;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
-import org.rapidoid.pages.Pages;
-import org.rapidoid.plugins.templates.ITemplate;
 import org.rapidoid.plugins.templates.Templates;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
@@ -99,14 +96,17 @@ public class AppHandler implements Handler {
 		HttpExchangeInternals xi = (HttpExchangeInternals) x;
 
 		// static files
+
 		if (x.isGetReq() && x.serveStaticFile()) {
 			return x;
 		}
 
-		// REST services
+		// REST services or views (as POJO methods)
+
+		Object result = null;
 		if (appCls.dispatcher != null) {
 			try {
-				return appCls.dispatcher.dispatch(new WebReq(x));
+				result = appCls.dispatcher.dispatch(new WebReq(x));
 			} catch (PojoHandlerNotFoundException e) {
 				// / just ignore, will try to dispatch a page next...
 			} catch (PojoDispatchException e) {
@@ -122,42 +122,35 @@ public class AppHandler implements Handler {
 
 		Object app = Apps.instantiate(appCls.main, x);
 
-		// GUI pages from file resources
+		if (result == null) {
+			// try generic app screens
+			result = genericScreen();
+		}
 
-		if (smartServeFromFile(x, "dynamic/" + x.resourceName() + ".html", app)) {
+		// serve pages from file templates
+
+		if (smartServeFromFile(x, "dynamic/" + x.resourceName() + ".html", app, result)) {
 			return x;
 		}
 
-		// GUI pages from Java components
-
-		Object result = Pages.dispatchIfExists(x, appCls.components, app);
 		if (result != null) {
 			return result;
-		}
-
-		// App screens
-
-		if (!U.isEmpty(appCls.components) || appCls.main != null) {
-			Object genericPage = new AppPageGeneric(x, appCls, app);
-			return Pages.dispatch(x, genericPage);
 		}
 
 		throw x.notFound();
 	}
 
-	public static boolean smartServeFromFile(HttpExchange x, String filename, Object app) {
+	public static boolean smartServeFromFile(HttpExchange x, String filename, Object app, Object result) {
 		Res resource = Res.from(filename);
 
 		if (resource.exists()) {
 			x.html();
 
-			ITemplate page = Templates.fromFile("page.html");
-			String content = U.safe(resource.getContent());
+			String template = U.safe(resource.getContent());
 
-			Map<Object, Object> model = U.map("head_extra", "", "content", content, "state", "{}", "navbar", true,
-					"maps", false, "fluid", false);
+			Map<String, Object> model = U.map("result", result);
 
-			String[] contentParts = content.split("\n", 2);
+			String[] contentParts = template.split("\n", 2);
 			if (contentParts.length == 2) {
 				String line = contentParts[0];
 
@@ -177,16 +170,124 @@ public class AppHandler implements Handler {
 						}
 					}
 
-					model.put("content", contentParts[1]); // content without the directive
+					template = contentParts[1]; // without the directive
 				}
 			}
 
-			x.render(page, model);
+			model.put("content", template);
+			String content = Templates.fromString(template).render(model, result);
+
+			model.put("content", content); // content without the directive
+
+			x.renderPage(model);
 
 			return true;
 		} else {
 			return false;
 		}
 	}
+
+	protected Object genericScreen() {
+		// String path = x.path();
+		//
+		// if (path.equals("/")) {
+		// return appCls.main != null ? app : new Object();
+		// }
+		//
+		// for (Class<?> scr : BUILT_IN_SCREENS) {
+		// if (Apps.screenUrl(scr).equals(path)) {
+		// return Cls.newInstance(scr);
+		// }
+		// }
+		//
+		// if (!x.query().isEmpty()) {
+		// return null;
+		// }
+		//
+		// Matcher m = ENTITY_EDIT.matcher(path);
+		//
+		// if (m.find()) {
+		// String type = m.group(1);
+		// String id = m.group(2);
+		//
+		// Class<?> entityType = Scaffolding.getScaffoldingEntity(type);
+		// if (entityType == null) {
+		// return null;
+		// }
+		//
+		// Object entity = DB.getIfExists(entityType, id);
+		//
+		// String entityClass = Cls.entityName(entity);
+		// String reqType = U.capitalized(type);
+		//
+		// if (entityClass.equals(reqType)) {
+		// return new EditEntityScreenGeneric(entityType);
+		// }
+		// }
+		//
+		// m = ENTITY_NEW.matcher(path);
+		//
+		// if (m.find()) {
+		// String type = m.group(1);
+		//
+		// Class<?> entityType = Scaffolding.getScaffoldingEntity(type);
+		// if (entityType == null) {
+		// return null;
+		// }
+		//
+		// return new NewEntityScreenGeneric(entityType);
+		// }
+		//
+		// m = ENTITY_VIEW.matcher(path);
+		//
+		// if (m.find()) {
+		// String type = m.group(1);
+		// String id = m.group(2);
+		//
+		// Class<?> entityType = Scaffolding.getScaffoldingEntity(type);
+		// if (entityType == null) {
+		// return null;
+		// }
+		//
+		// Object entity = DB.getIfExists(entityType, id);
+		//
+		// String entityClass = Cls.entityName(entity);
+		// String reqType = U.capitalized(type);
+		//
+		// if (entityClass.equals(reqType)) {
+		// return new ViewEntityScreenGeneric(entityType);
+		// }
+		// }
+		//
+		// m = ENTITY_LIST.matcher(path);
+		//
+		// if (m.find()) {
+		// String type = m.group(1);
+		// String type2 = U.or(Languages.pluralToSingular(type), type);
+		//
+		// Class<?> entityType = Scaffolding.getScaffoldingEntity(type2);
+		// if (entityType == null) {
+		// return null;
+		// }
+		//
+		// return new ListEntityScreenGeneric(entityType);
+		// }
+		//
+		// return null;
+
+		return null;
+	}
+
+	// public void on(String cmd, Object[] args) {
+	// try {
+	// Pages.callCmdHandler(x, screen, new Cmd(cmd, false, args));
+	// } catch (Exception e) {
+	// Throwable cause = UTILS.rootCause(e);
+	// if (cause instanceof HttpSuccessException || cause instanceof HttpNotFoundException) {
+	// Pages.store(x, screen);
+	// }
+	// throw U.rte(e);
+	// }
+	// }
 
 }

@@ -23,10 +23,7 @@ package org.rapidoid.pages;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
-import org.rapidoid.pages.impl.FileTemplateTag;
 import org.rapidoid.pages.impl.MultiLanguageText;
-import org.rapidoid.plugins.templates.ITemplate;
-import org.rapidoid.plugins.templates.Templates;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.ButtonWidget;
@@ -39,14 +36,6 @@ public class PageGUI extends BootstrapWidgets {
 		return new MultiLanguageText(multiLanguageText, formatArgs);
 	}
 
-	public static Tag render(String templateFileName, Object... namesAndValues) {
-		return render(Templates.fromFile(templateFileName), namesAndValues);
-	}
-
-	public static Tag render(ITemplate template, Object... namesAndValues) {
-		return new FileTemplateTag(template, namesAndValues);
-	}
-
 	public static Tag modal(Object title, Object content, Object footer) {
 		throw U.notSupported();
 	}
@@ -55,14 +44,6 @@ public class PageGUI extends BootstrapWidgets {
 		Tag sp1 = span(hardcoded("&times;")).attr("aria-hidden", "true");
 		Tag sp2 = span("Close").class_("sr-only");
 		return cmd(cmd).class_("close").contents(sp1, sp2);
-	}
-
-	public static Tag page(Object head, Object body) {
-		return render("page.html", "head_extra", head, "content", body);
-	}
-
-	public static Tag page(Object body) {
-		return page("", body);
 	}
 
 }

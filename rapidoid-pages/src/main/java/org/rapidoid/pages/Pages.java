@@ -42,7 +42,6 @@ import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.pages.impl.BuiltInCmdHandler;
 import org.rapidoid.pages.impl.ComplexView;
-import org.rapidoid.pages.impl.PageRenderer;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
@@ -80,40 +79,6 @@ public class Pages {
 		return m != null ? AOP.invoke(x, m, target, x) : Beany.getPropValue(target, "head", null);
 	}
 
-	public static Object page(HttpExchange x, Object page) {
-
-		Object pageHead = U.or(headOf(x, page), "");
-		Object content = contentOf(x, page);
-
-		if (content == null) {
-			return null;
-		}
-
-		if (content instanceof HttpExchange) {
-			U.must(x == content, "Different HTTP exchange than expected!");
-			return x;
-		}
-
-		return PageGUI.page(pageHead, content);
-	}
-
-	public static Object render(HttpExchange x, Object page) {
-
-		Object fullPage = page(x, page);
-
-		if (fullPage != null) {
-			if (fullPage instanceof HttpExchange) {
-				return x;
-			} else {
-				x.addToPageStack();
-				PageRenderer.get().render(fullPage, x);
-				return x;
-			}
-		} else {
-			throw x.notFound();
-		}
-	}
-
 	public static boolean isEmiting(HttpExchange x) {
 		return x.isPostReq();
 	}
@@ -122,7 +87,7 @@ public class Pages {
 		if (isEmiting(x)) {
 			return emit(x, page);
 		} else {
-			return serve(x, page);
+			throw U.notSupported();
 		}
 	}
 
@@ -142,17 +107,6 @@ public class Pages {
 		Object page = Cls.newInstance(pageClass);
 
 		return dispatch(x, page);
-	}
-
-	public static Object serve(HttpExchange x, Object view) {
-		load(x, view);
-		store(x, view);
-
-		Object result = render(x, view);
-
-		store(x, view);
-
-		return result;
 	}
 
 	public static void load(HttpExchange x, Object target) {
@@ -251,7 +205,7 @@ public class Pages {
 		store(x, view);
 		load(x, view);
 
-		String html = processView ? PageRenderer.get().toHTML(content, x) : "Error!";
+		String html = content.toString();
 
 		if (x.redirectUrl() != null) {
 			x.startResponse(200);

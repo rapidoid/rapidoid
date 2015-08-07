@@ -69,6 +69,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	private final static HttpParser PARSER = Wire.singleton(HttpParser.class);
 
+	private static final ITemplate PAGE = Templates.fromFile("page.html");
+
 	private static final byte[] HEADER_SEP = ": ".getBytes();
 
 	final Range rUri = new Range();
@@ -1291,8 +1293,13 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public HttpExchange renderPage(Object model) {
-		ITemplate page = Templates.fromFile("page.html");
-		page.render(this.outputStream(), model, model());
+		PAGE.render(this.outputStream(), model, model());
+		return this;
+	}
+
+	@Override
+	public HttpExchange renderPage(Object model1, Object model2) {
+		PAGE.render(this.outputStream(), model1, model2, model());
 		return this;
 	}
 
