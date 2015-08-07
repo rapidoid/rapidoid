@@ -64,7 +64,7 @@ public class Tags extends BasicUtils {
 			} else {
 				Tag tag = (Tag) contents;
 				processor.handle(tag);
-				traverse(tag.content(), processor);
+				traverse(tag.contents(), processor);
 			}
 		} else if (contents instanceof TagWidget) {
 			Object widgetContent = ((TagWidget<?>) contents).render(null);
@@ -96,7 +96,7 @@ public class Tags extends BasicUtils {
 			}
 		} else if (tag instanceof TextareaTag) {
 			TextareaTag textArea = (TextareaTag) tag;
-			return (T) textArea.content(value != null ? str(value) : "");
+			return (T) textArea.contents(value != null ? str(value) : "");
 		} else if (tag instanceof OptionTag) {
 			OptionTag optionTag = (OptionTag) tag;
 			return (T) optionTag.selected(value != null ? bool(value) : false);

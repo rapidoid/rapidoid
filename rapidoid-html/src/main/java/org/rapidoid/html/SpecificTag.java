@@ -30,7 +30,7 @@ import org.rapidoid.var.Var;
 public interface SpecificTag<TAG extends SpecificTag<?>> extends Tag {
 
 	@Special
-	TAG content(Object... content);
+	TAG contents(Object... content);
 
 	@Special
 	TAG append(Object... content);

@@ -32,12 +32,12 @@ import org.rapidoid.var.Var;
 public class UndefinedTag implements Tag {
 
 	@Override
-	public Object content() {
+	public Object contents() {
 		throw U.notExpected();
 	}
 
 	@Override
-	public Tag content(Object... content) {
+	public Tag contents(Object... content) {
 		throw U.notExpected();
 	}
 

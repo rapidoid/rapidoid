@@ -128,12 +128,12 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 	}
 
 	@Override
-	public Object content() {
+	public Object contents() {
 		return contents;
 	}
 
 	@Override
-	public Tag content(Object... content) {
+	public Tag contents(Object... content) {
 		Tag _copy = copy();
 		TagImpl impl = impl(_copy);
 

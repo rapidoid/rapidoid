@@ -30,9 +30,9 @@ public interface TagBase<TAG extends Tag> {
 
 	String tagKind();
 
-	Object content();
+	Object contents();
 
-	TAG content(Object... content);
+	TAG contents(Object... content);
 
 	TAG append(Object... content);
 
