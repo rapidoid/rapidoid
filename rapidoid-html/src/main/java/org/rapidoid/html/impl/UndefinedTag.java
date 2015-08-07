@@ -186,11 +186,6 @@ public class UndefinedTag implements Tag {
 	}
 
 	@Override
-	public Tag navigate(String cmd, Object... args) {
-		throw U.notExpected();
-	}
-
-	@Override
 	public Tag extra(String attr, Object value) {
 		throw U.notExpected();
 	}

@@ -62,6 +62,4 @@ public interface TagBase<TAG extends Tag> {
 
 	TAG cmd(String cmd, Object... args);
 
-	TAG navigate(String cmd, Object... args);
-
 }
