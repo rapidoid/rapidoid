@@ -55,21 +55,21 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 
 	protected final Map<DispatchReq, DispatchTarget> mappings = U.map();
 
-	public PojoDispatcherImpl(Map<String, Class<?>> services) {
-		init(services);
+	public PojoDispatcherImpl(Map<String, Class<?>> components) {
+		init(components);
 	}
 
-	private void init(Map<String, Class<?>> services) {
-		for (Class<?> service : services.values()) {
-			List<String> servicePaths = getServiceNames(service);
-			for (String servicePath : servicePaths) {
+	private void init(Map<String, Class<?>> components) {
+		for (Class<?> component : components.values()) {
+			List<String> componentPaths = getComponentNames(component);
+			for (String componentPath : componentPaths) {
 
-				for (Method method : service.getMethods()) {
+				for (Method method : component.getMethods()) {
 					if (shouldExpose(method)) {
-						List<DispatchReq> actions = getMethodActions(servicePath, method);
+						List<DispatchReq> actions = getMethodActions(componentPath, method);
 
 						for (DispatchReq action : actions) {
-							mappings.put(action, new DispatchTarget(service, method));
+							mappings.put(action, new DispatchTarget(component, method));
 							Log.info("Registered web handler", "request", action, "method", method);
 						}
 					}
@@ -79,8 +79,8 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		}
 	}
 
-	protected List<String> getServiceNames(Class<?> service) {
-		return U.list(service.getSimpleName());
+	protected List<String> getComponentNames(Class<?> component) {
+		return U.list(component.getSimpleName());
 	}
 
 	@Override
@@ -97,9 +97,9 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		DispatchTarget target = mappings.get(new DispatchReq(command, path));
 
 		if (target != null) {
-			Object serviceInstance = Cls.newInstance(target.clazz);
+			Object componentInstance = Cls.newInstance(target.clazz);
 			if (target.method != null) {
-				return doDispatch(req, target.method, serviceInstance, parts, paramsFrom);
+				return doDispatch(req, target.method, componentInstance, parts, paramsFrom);
 			} else {
 				throw notFound();
 			}
@@ -108,23 +108,23 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		throw notFound();
 	}
 
-	private Object doDispatch(PojoRequest request, Method method, Object service, String[] parts, int paramsFrom)
+	private Object doDispatch(PojoRequest request, Method method, Object component, String[] parts, int paramsFrom)
 			throws PojoHandlerNotFoundException, PojoDispatchException {
 
-		Object[] args = setupArgs(request, method, service, parts, paramsFrom);
+		Object[] args = setupArgs(request, method, component, parts, paramsFrom);
 
-		preprocess(request, method, service, args);
-		Object result = invoke(request, method, service, args);
-		result = postprocess(request, method, service, args, result);
+		preprocess(request, method, component, args);
+		Object result = invoke(request, method, component, args);
+		result = postprocess(request, method, component, args, result);
 
 		return result;
 	}
 
-	protected Object invoke(PojoRequest req, Method method, Object service, Object[] args) {
-		return AOP.invoke(null, method, service, args);
+	protected Object invoke(PojoRequest req, Method method, Object component, Object[] args) {
+		return AOP.invoke(null, method, component, args);
 	}
 
-	private Object[] setupArgs(PojoRequest request, Method method, Object service, String[] parts, int paramsFrom)
+	private Object[] setupArgs(PojoRequest request, Method method, Object component, String[] parts, int paramsFrom)
 			throws PojoDispatchException {
 
 		Object[] args;
@@ -163,7 +163,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 					}
 
 				} else if (type.equals(Object.class)) {
-					Class<?> defaultType = getDefaultType(service);
+					Class<?> defaultType = getDefaultType(component);
 
 					if (defaultType != null) {
 						args[i] = instantiateArg(request, defaultType);
@@ -189,9 +189,9 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		return null;
 	}
 
-	protected void preprocess(PojoRequest request, Method method, Object service, Object[] args) {}
+	protected void preprocess(PojoRequest request, Method method, Object component, Object[] args) {}
 
-	protected Object postprocess(PojoRequest request, Method method, Object service, Object[] args, Object result) {
+	protected Object postprocess(PojoRequest request, Method method, Object component, Object[] args, Object result) {
 		if (result == null && method.getReturnType().equals(void.class)) {
 			result = "OK";
 		}
@@ -218,8 +218,8 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		}
 	}
 
-	private Class<?> getDefaultType(Object service) {
-		Object clazz = Beany.getPropValue(service, "clazz");
+	private Class<?> getDefaultType(Object component) {
+		Object clazz = Beany.getPropValue(component, "clazz");
 		return (Class<?>) (clazz instanceof Class ? clazz : null);
 	}
 
@@ -299,8 +299,8 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		return params;
 	}
 
-	protected List<DispatchReq> getMethodActions(String servicePath, Method method) {
-		String path = UTILS.path(servicePath, method.getName());
+	protected List<DispatchReq> getMethodActions(String componentPath, Method method) {
+		String path = UTILS.path(componentPath, method.getName());
 		return U.list(new DispatchReq("", path));
 	}
 

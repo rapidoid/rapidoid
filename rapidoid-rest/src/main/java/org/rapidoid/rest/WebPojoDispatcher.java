@@ -32,6 +32,7 @@ import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Header;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.PUT;
+import org.rapidoid.annotation.View;
 import org.rapidoid.annotation.Web;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOP;
@@ -51,8 +52,8 @@ import org.rapidoid.util.UTILS;
 @Since("2.0.0")
 public class WebPojoDispatcher extends PojoDispatcherImpl {
 
-	public WebPojoDispatcher(Map<String, Class<?>> services) {
-		super(services);
+	public WebPojoDispatcher(Map<String, Class<?>> components) {
+		super(components);
 	}
 
 	public WebPojoDispatcher(Class<?>... classes) {
@@ -69,10 +70,12 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 	protected Object getCustomArg(PojoRequest request, Class<?> type, String[] parts, int paramsFrom, int paramsSize) {
 		if (type.equals(HttpExchange.class)) {
 			return exchange(request);
+
 		} else if (type.equals(byte[].class)) {
 			HttpExchange x = exchange(request);
 			U.must(x.files().size() == 1, "Expected exactly 1 file uploaded for the byte[] parameter!");
 			return U.single(x.files().values());
+
 		} else if (type.equals(byte[][].class)) {
 			HttpExchange x = exchange(request);
 			byte[][] files = new byte[x.files().size()][];
@@ -83,6 +86,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 			}
 
 			return files;
+
 		} else {
 			return super.getCustomArg(request, type, parts, paramsFrom, paramsSize);
 		}
@@ -95,13 +99,13 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 	}
 
 	@Override
-	protected List<String> getServiceNames(Class<?> service) {
-		Web web = Metadata.classAnnotation(service, Web.class);
+	protected List<String> getComponentNames(Class<?> component) {
+		Web web = Metadata.classAnnotation(component, Web.class);
 
 		if (web != null) {
 			return U.list(web.value());
 		} else {
-			return super.getServiceNames(service);
+			return super.getComponentNames(component);
 		}
 	}
 
@@ -138,7 +142,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 	}
 
 	@Override
-	protected List<DispatchReq> getMethodActions(String servicePath, Method method) {
+	protected List<DispatchReq> getMethodActions(String componentPath, Method method) {
 		List<DispatchReq> reqs = U.list();
 
 		for (Annotation ann : method.getAnnotations()) {
@@ -151,7 +155,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 		return reqs;
 	}
 
-	private DispatchReq req(String servicePath, Annotation ann, Method method) {
+	private List<DispatchReq> req(String componentPath, Annotation ann, Method method) {
 		String url;
 
 		if (ann instanceof GET) {
@@ -178,12 +182,12 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 	}
 
 	@Override
-	protected void preprocess(PojoRequest req, Method method, Object service, Object[] args) {}
+	protected void preprocess(PojoRequest req, Method method, Object component, Object[] args) {}
 
 	@Override
-	protected Object invoke(PojoRequest req, Method method, Object service, Object[] args) {
+	protected Object invoke(PojoRequest req, Method method, Object component, Object[] args) {
 		HttpExchange x = ((WebReq) req).getExchange();
-		return AOP.invoke(x, method, service, args);
+		return AOP.invoke(x, method, component, args);
 	}
 
 	@Override
