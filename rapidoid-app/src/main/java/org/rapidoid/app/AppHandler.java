@@ -39,7 +39,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.pages.Pages;
 import org.rapidoid.plugins.templates.ITemplate;
 import org.rapidoid.plugins.templates.Templates;
-import org.rapidoid.rest.WebReq;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 

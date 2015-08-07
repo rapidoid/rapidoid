@@ -1,4 +1,4 @@
-package org.rapidoid.rest;
+package org.rapidoid.app;
 
 /*
  * #%L
@@ -146,9 +146,9 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 		List<DispatchReq> reqs = U.list();
 
 		for (Annotation ann : method.getAnnotations()) {
-			DispatchReq req = req(servicePath, ann, method);
+			List<DispatchReq> req = req(componentPath, ann, method);
 			if (req != null) {
-				reqs.add(req);
+				reqs.addAll(req);
 			}
 		}
 
@@ -166,15 +166,21 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 			url = ((PUT) ann).value();
 		} else if (ann instanceof DELETE) {
 			url = ((DELETE) ann).value();
+		} else if (ann instanceof View) {
+			url = ((View) ann).value();
 		} else {
 			return null;
 		}
 
 		String name = reqName(method, url);
-		String path = UTILS.path(servicePath, name);
-		String verb = ann.annotationType().getSimpleName();
+		String path = UTILS.path(componentPath, name);
 
-		return new DispatchReq(verb, path);
+		if (!(ann instanceof View)) {
+			String verb = ann.annotationType().getSimpleName();
+			return U.list(new DispatchReq(verb, path));
+		} else {
+			return U.list(new DispatchReq("GET", path), new DispatchReq("POST", path));
+		}
 	}
 
 	private String reqName(Method method, String url) {

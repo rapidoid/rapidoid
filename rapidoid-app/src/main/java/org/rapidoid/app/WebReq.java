@@ -1,4 +1,4 @@
-package org.rapidoid.rest;
+package org.rapidoid.app;
 
 /*
  * #%L

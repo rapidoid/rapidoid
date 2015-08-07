@@ -29,7 +29,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Web;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.dispatch.PojoDispatcher;
-import org.rapidoid.rest.WebPojoDispatcher;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")

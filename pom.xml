@@ -112,7 +112,6 @@
 		<module>rapidoid-http</module>
 		<module>rapidoid-measure</module>
 		<module>rapidoid-dispatch</module>
-		<module>rapidoid-rest</module>
 		<module>rapidoid-html</module>
 		<module>rapidoid-widget</module>
 		<module>rapidoid-pages</module>
