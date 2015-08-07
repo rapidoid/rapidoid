@@ -69,8 +69,12 @@ public class JSON {
 		}
 	}
 
-	public static void stringify(Object value, OutputStream out) {
+	public static void stringifyBeany(Object value, OutputStream out) {
 		jacksonStringify(Beany.serialize(value), out);
+	}
+
+	public static void stringify(Object value, OutputStream out) {
+		jacksonStringify(value, out);
 	}
 
 	public static <T> T jacksonParse(String json, Class<T> valueType) {

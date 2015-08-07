@@ -190,7 +190,7 @@ public class Pages {
 		boolean processView = true;
 		if (validEvent) {
 			try {
-				callCmdHandler(x, view, new Cmd(event, navigational, args));
+				callCmdHandler(x, view, new Cmd(event, args));
 			} catch (Exception e) {
 				Throwable cause = UTILS.rootCause(e);
 				if (cause instanceof HttpSuccessException || cause instanceof HttpNotFoundException) {

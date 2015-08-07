@@ -43,13 +43,10 @@ import org.rapidoid.var.Var;
 @Since("2.0.0")
 public class TagRenderer {
 
-	private static final byte[] TRUE = "true".getBytes();
-	private static final byte[] FALSE = "false".getBytes();
 	private static final byte[] EMIT_CLOSE = ")".getBytes();
 	private static final byte[] INDENT = "  ".getBytes();
 	private static final byte[] EMIT = "_emit('".getBytes();
 	private static final byte[] EMIT_SEP1 = "', ".getBytes();
-	private static final byte[] EMIT_SEP2 = ", ".getBytes();
 	private static final byte[] _H = " _h=\"".getBytes();
 	private static final byte[] EQ_DQUOTES = "=\"".getBytes();
 	private static final byte[] LT = "<".getBytes();
@@ -178,8 +175,6 @@ public class TagRenderer {
 			write(out, EMIT);
 			write(out, tag.cmd.name);
 			write(out, EMIT_SEP1);
-			write(out, tag.cmd.navigational ? TRUE : FALSE);
-			write(out, EMIT_SEP2);
 			JSON.jacksonStringify(tag.cmd.args, out);
 			write(out, EMIT_CLOSE);
 			write(out, DQUOTES);

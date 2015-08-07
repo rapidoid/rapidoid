@@ -1,8 +1,8 @@
-package org.rapidoid.app;
+package org.rapidoid.webapp;
 
 /*
  * #%L
- * rapidoid-app
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -23,7 +23,6 @@ package org.rapidoid.app;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Cookie;
@@ -33,12 +32,12 @@ import org.rapidoid.annotation.Header;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.PUT;
 import org.rapidoid.annotation.Page;
-import org.rapidoid.annotation.Web;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.arr.Arr;
 import org.rapidoid.beany.Metadata;
-import org.rapidoid.cls.Cls;
+import org.rapidoid.ctx.Classes;
 import org.rapidoid.dispatch.DispatchResult;
 import org.rapidoid.dispatch.PojoDispatchException;
 import org.rapidoid.dispatch.PojoHandlerNotFoundException;
@@ -53,12 +52,8 @@ import org.rapidoid.util.UTILS;
 @Since("2.0.0")
 public class WebPojoDispatcher extends PojoDispatcherImpl {
 
-	public WebPojoDispatcher(Map<String, Class<?>> components) {
+	public WebPojoDispatcher(Classes components) {
 		super(components);
-	}
-
-	public WebPojoDispatcher(Class<?>... classes) {
-		this(Cls.classMap(U.list(classes)));
 	}
 
 	@Override

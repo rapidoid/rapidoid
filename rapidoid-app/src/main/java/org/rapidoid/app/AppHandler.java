@@ -21,6 +21,7 @@ package org.rapidoid.app;
  */
 
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,17 +29,24 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.dispatch.DispatchResult;
 import org.rapidoid.dispatch.PojoDispatchException;
+import org.rapidoid.dispatch.PojoDispatcher;
 import org.rapidoid.dispatch.PojoHandlerNotFoundException;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.http.HttpExchangeInternals;
 import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.io.CustomizableClassLoader;
 import org.rapidoid.io.Res;
+import org.rapidoid.jackson.JSON;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.templates.Templates;
+import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.webapp.AppCtx;
+import org.rapidoid.webapp.WebApp;
+import org.rapidoid.webapp.WebReq;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -80,11 +88,7 @@ public class AppHandler implements Handler {
 	}
 
 	public Object processReq(HttpExchange x) {
-		HttpExchangeInternals xi = (HttpExchangeInternals) x;
-
-		final AppClasses appCls = Apps.getAppClasses(x, xi.getClassLoader());
-
-		Object result = dispatch(x, appCls);
+		Object result = dispatch((HttpExchangeImpl) x);
 
 		if (result != null) {
 			return result;
@@ -93,8 +97,8 @@ public class AppHandler implements Handler {
 		}
 	}
 
-	public Object dispatch(HttpExchange x, AppClasses appCls) {
-		HttpExchangeInternals xi = (HttpExchangeInternals) x;
+	@SuppressWarnings("unchecked")
+	public Object dispatch(HttpExchangeImpl x) {
 
 		// static files
 
@@ -102,42 +106,71 @@ public class AppHandler implements Handler {
 			return x;
 		}
 
-		// dispatch REST services or views (as POJO methods)
+		WebApp app = AppCtx.app();
+		PojoDispatcher dispatcher = app.getDispatcher();
 
-		Object result = null;
-		DispatchResult dispatchResult = null;
-
-		if (appCls.dispatcher != null) {
-			try {
-				dispatchResult = appCls.dispatcher.dispatch(new WebReq(x));
-				result = dispatchResult.getResult();
-			} catch (PojoHandlerNotFoundException e) {
-				// / just ignore, will try to dispatch a page next...
-			} catch (PojoDispatchException e) {
-				return x.error(e);
-			}
-		}
-
-		if (dispatchResult != null && dispatchResult.isService()) {
-			return result;
-		}
+		boolean hasEvent = false;
 
 		// Prepare GUI state
 
-		xi.loadState();
+		x.loadState();
 
-		// Instantiate main app object (if possible)
+		// if an event was emitted, process it
 
-		Object app = Apps.instantiate(appCls.main, x);
+		if (x.isPostReq()) {
+			String event = x.posted("_event", null);
+			if (!U.isEmpty(event)) {
+				hasEvent = true;
+
+				String evArgs = x.posted("_args", null);
+				Object[] args = evArgs != null ? JSON.jacksonParse(evArgs, Object[].class) : Constants.EMPTY_ARRAY;
+
+				String inputstr = x.posted("_inputs");
+				U.notNull(inputstr, "inputs");
+				Map<String, Object> inputs = JSON.parse(inputstr, Map.class);
+
+				// bind inputs
+				for (Entry<String, Object> e : inputs.entrySet()) {
+					String inputId = e.getKey();
+					Object value = e.getValue();
+
+					x.locals().put(inputId, UTILS.serializable(value + ":"));
+				}
+
+				DispatchResult dispatchResult = doDispatch(x, dispatcher);
+				U.must(dispatchResult != null && !dispatchResult.isService());
+
+				// in case of binding or validation errors
+				if (x.hasErrors()) {
+					x.json();
+					return U.map("!errors", x.errors());
+				}
+			}
+		}
+
+		// FIXME: call the command handler
+
+		// dispatch REST services or views (as POJO methods)
+
+		DispatchResult dispatchResult = doDispatch(x, dispatcher);
+
+		Object result = null;
+		if (dispatchResult != null) {
+			result = dispatchResult.getResult();
+
+			if (dispatchResult.isService()) {
+				return result;
+			}
+		}
 
 		if (result == null) {
 			// try generic app screens
 			result = genericScreen();
 		}
 
-		// serve pages from file templates
+		// serve dynamic pages from file templates
 
-		if (smartServeFromFile(x, "dynamic/" + x.resourceName() + ".html", app, result)) {
+		if (serveDynamicPage(x, result, hasEvent)) {
 			return x;
 		}
 
@@ -148,55 +181,89 @@ public class AppHandler implements Handler {
 		throw x.notFound();
 	}
 
-	public static boolean smartServeFromFile(HttpExchange x, String filename, Object app, Object result) {
+	private DispatchResult doDispatch(HttpExchange x, PojoDispatcher dispatcher) {
+		DispatchResult dispatchResult = null;
+
+		if (dispatcher != null) {
+			try {
+				dispatchResult = dispatcher.dispatch(new WebReq(x));
+			} catch (PojoHandlerNotFoundException e) {
+				// / just ignore, will try to dispatch a page next...
+			} catch (PojoDispatchException e) {
+				throw U.rte("Dispatch error!", e);
+			}
+		}
+		return dispatchResult;
+	}
+
+	public boolean serveDynamicPage(HttpExchangeImpl x, Object result, boolean hasEvent) {
+		String filename = "dynamic/" + x.resourceName() + ".html";
 		Res resource = Res.from(filename);
 
+		Map<String, Object> model;
 		if (resource.exists()) {
-			x.html();
-
-			String template = U.safe(resource.getContent());
-
-			Map<String, Object> model = U.map("result", result);
-
-			String[] contentParts = template.split("\n", 2);
-			if (contentParts.length == 2) {
-				String line = contentParts[0];
-
-				Matcher m = DIRECTIVE.matcher(line);
-				if (m.matches()) {
-					String directives = m.group(1);
-					for (String directive : directives.split(",")) {
-						directive = directive.trim();
-						if (!U.isEmpty(directive)) {
-							if (directive.startsWith("+")) {
-								model.put(directive.substring(1), true);
-							} else if (directive.startsWith("-")) {
-								model.put(directive.substring(1), false);
-							} else {
-								Log.warn("Unknown directive!", "directive", directive, "file", filename);
-							}
-						}
-					}
-
-					template = contentParts[1]; // without the directive
-				}
-			}
-
-			String content = Templates.fromString(template).render(model, result);
-			model.put("content", content); // content without the directive
-
-			x.renderPage(model);
-
-			return true;
-
+			model = pageModel(filename, result, resource);
 		} else if (result != null) {
-			x.html();
-			Map<String, Object> model = U.map("result", result, "content", result, "navbar", true);
-			x.renderPage(model);
-			return true;
+			model = U.map("result", result, "content", result, "navbar", true);
 		} else {
 			return false;
 		}
+
+		model.put("embedded", hasEvent || x.param("embedded", null) != null);
+
+		if (hasEvent) {
+			serveEventResponse(x, x.renderPageToHTML(model));
+		} else {
+			x.renderPage(model);
+		}
+
+		return true;
+	}
+
+	private void serveEventResponse(HttpExchangeImpl x, String html) {
+		x.startResponse(200);
+		x.json();
+
+		if (x.redirectUrl() != null) {
+			x.writeJSON(U.map("_redirect_", x.redirectUrl()));
+		} else {
+			Map<String, String> sel = U.map("body", html);
+			x.writeJSON(U.map("_sel_", sel, "_state_", x.serializeLocals()));
+		}
+	}
+
+	private static Map<String, Object> pageModel(String filename, Object result, Res resource) {
+		String template = U.safe(resource.getContent());
+
+		Map<String, Object> model = U.map("result", result);
+
+		String[] contentParts = template.split("\n", 2);
+		if (contentParts.length == 2) {
+			String line = contentParts[0];
+
+			Matcher m = DIRECTIVE.matcher(line);
+			if (m.matches()) {
+				String directives = m.group(1);
+				for (String directive : directives.split(",")) {
+					directive = directive.trim();
+					if (!U.isEmpty(directive)) {
+						if (directive.startsWith("+")) {
+							model.put(directive.substring(1), true);
+						} else if (directive.startsWith("-")) {
+							model.put(directive.substring(1), false);
+						} else {
+							Log.warn("Unknown directive!", "directive", directive, "file", filename);
+						}
+					}
+				}
+
+				template = contentParts[1]; // without the directive
+			}
+		}
+
+		String content = Templates.fromString(template).render(model, result);
+		model.put("content", content); // content without the directive
+		return model;
 	}
 
 	protected Object genericScreen() {

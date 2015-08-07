@@ -35,7 +35,6 @@ import org.rapidoid.io.IO;
 import org.rapidoid.main.Rapidoid;
 import org.rapidoid.plugins.templates.Templates;
 import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.util.D;
 import org.rapidoid.util.U;
 import org.rapidoid.webapp.AppMode;
 import org.rapidoid.webapp.WebApp;
@@ -133,7 +132,6 @@ public class Docs {
 
 		snippet = snippet.substring(pos).trim();
 		snippet = SnippetWidget.prettify(snippet, true);
-		D.print(snippet);
 
 		String titleInfo = "";
 		String fullTitle = title + titleInfo;
@@ -142,7 +140,7 @@ public class Docs {
 		Iterable<Class<?>> clss = ClasspathUtil.scanClasses("org.rapidoid.docs.eg" + id, null, null, null, null);
 
 		Classes classes = Classes.from(clss);
-		WebApp app = new WebApp("eg" + id, "App", null, null, U.set("/"), AppMode.PRODUCTION, null, classes);
+		WebApp app = new WebApp("eg" + id, "App", null, null, U.set("/"), AppMode.PRODUCTION, null, null, classes);
 		app.getRouter().generic(new AppHandler());
 
 		WebAppGroup.main().clear();

@@ -37,11 +37,8 @@ public class Cmd implements Serializable {
 
 	public final Object[] args;
 
-	public final boolean navigational;
-
-	public Cmd(String cmd, boolean navigational, Object[] args) {
+	public Cmd(String cmd, Object[] args) {
 		this.name = cmd;
-		this.navigational = navigational;
 		this.args = args;
 
 		for (int i = 0; i < args.length; i++) {
@@ -53,7 +50,7 @@ public class Cmd implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Cmd [name=" + name + ", args=" + Arrays.toString(args) + ", navigational=" + navigational + "]";
+		return "Cmd [name=" + name + ", args=" + Arrays.toString(args) + "]";
 	}
 
 }

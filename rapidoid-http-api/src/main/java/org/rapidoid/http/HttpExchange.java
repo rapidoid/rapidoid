@@ -252,7 +252,7 @@ public interface HttpExchange {
 
 	HttpExchange renderPage(Object model);
 
-	HttpExchange renderPage(Object model1, Object model2);
+	String renderPageToHTML(Object model);
 
 	/* EXTRAS: */
 

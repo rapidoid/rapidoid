@@ -34,9 +34,9 @@ Rapidoid.initializer(function($scope) {
         }
 
         $.post(window.location.href, {
-            event : eventId,
-            args : eventArgs,
-            inputs : JSON.stringify(inputs),
+            _event : eventId,
+            _args : eventArgs,
+            _inputs : JSON.stringify(inputs),
             __state : window.__state
         }).done(function(data) {
             if (data._redirect_) {
@@ -64,17 +64,22 @@ Rapidoid.initializer(function($scope) {
                     }
                 }
             } else {
+                if (data._sel_ === undefined) {
+                    swal("Application error!", "The command couldn't be executed!", "error");
+                    return;
+                }
+
                 for ( var sel in data._sel_) {
                     if (sel == 'body') {
                         $scope.ajaxBodyContent = data._sel_[sel];
                         $scope.$apply();
                     } else {
-                        alert('Selector not supported: ' + sel);
+                        swal('Selector not supported: ' + sel);
                     }
                 }
             }
         }).fail(function(data) {
-            swal("Communication error", "Couldn't connect to the server!", "error");
+            swal("Communication error!", "Couldn't connect to the server!", "error");
             console.log(data);
         });
     };

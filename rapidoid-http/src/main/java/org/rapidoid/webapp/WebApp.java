@@ -5,6 +5,7 @@ import java.util.Set;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Classes;
+import org.rapidoid.dispatch.PojoDispatcher;
 import org.rapidoid.http.HttpRouter;
 import org.rapidoid.http.Router;
 import org.rapidoid.util.U;
@@ -45,6 +46,8 @@ public class WebApp {
 
 	private final Router router;
 
+	private final PojoDispatcher dispatcher;
+
 	private final Classes classes;
 
 	private volatile String title;
@@ -52,9 +55,10 @@ public class WebApp {
 	private volatile AppMenu menu;
 
 	public WebApp(String id, String title, Set<String> owners, Set<String> hostnames, Set<String> uriContexts,
-			AppMode mode, Router router, Classes classes) {
+			AppMode mode, Router router, PojoDispatcher dispatcher, Classes classes) {
 		this.id = id;
 		this.router = U.or(router, new HttpRouter());
+		this.dispatcher = U.or(dispatcher, new WebPojoDispatcher(classes));
 		this.title = U.or(title, "App");
 		this.owners = U.safe(owners);
 		this.hostnames = U.safe(hostnames);
@@ -64,7 +68,7 @@ public class WebApp {
 	}
 
 	public WebApp(String id, String title, String uriPath, Classes classes) {
-		this(id, title, null, null, uriPath != null ? U.set(uriPath) : null, AppMode.DEVELOPMENT, null, classes);
+		this(id, title, null, null, uriPath != null ? U.set(uriPath) : null, AppMode.DEVELOPMENT, null, null, classes);
 	}
 
 	public WebApp(String id, String uriPath, Classes classes) {
@@ -109,6 +113,10 @@ public class WebApp {
 
 	public Router getRouter() {
 		return router;
+	}
+
+	public PojoDispatcher getDispatcher() {
+		return dispatcher;
 	}
 
 	public Classes getClasses() {

@@ -57,7 +57,9 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 	protected final Map<DispatchReq, DispatchTarget> mappings = U.map();
 
 	public PojoDispatcherImpl(Map<String, Class<?>> components) {
-		init(components);
+		if (components != null) {
+			init(components);
+		}
 	}
 
 	private void init(Map<String, Class<?>> components) {

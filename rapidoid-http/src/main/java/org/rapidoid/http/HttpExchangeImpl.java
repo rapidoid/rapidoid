@@ -1293,14 +1293,17 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public HttpExchange renderPage(Object model) {
+		if (!hasContentType()) {
+			html();
+		}
+
 		PAGE.render(this.outputStream(), model, model());
 		return this;
 	}
 
 	@Override
-	public HttpExchange renderPage(Object model1, Object model2) {
-		PAGE.render(this.outputStream(), model1, model2, model());
-		return this;
+	public String renderPageToHTML(Object model) {
+		return PAGE.render(model, model());
 	}
 
 	@Override

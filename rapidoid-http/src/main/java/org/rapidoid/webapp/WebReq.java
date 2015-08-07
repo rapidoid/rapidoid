@@ -1,8 +1,8 @@
-package org.rapidoid.app;
+package org.rapidoid.webapp;
 
 /*
  * #%L
- * rapidoid-app
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

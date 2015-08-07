@@ -1,4 +1,4 @@
-{{^req.params.embedded}}
+{{^embedded}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,21 +58,7 @@ window.__state = {{{req.renderState}}};
 
 </head>
 
-{{^error}}
-<body class="rapidoid" ng-controller="Main" ng-app="app">
-
-  <div ng-if="!ajaxBodyContent">
-{{^error}}{{>page-content}}{{/error}}
-  </div>
-
-  <div compile="ajaxBodyContent" ng-if="ajaxBodyContent"></div>
-
-{{>modal}}
-
-</body>
-{{/error}}
-{{#error}}{{>page-error}}{{/error}}
+{{>page-body}}
 
 </html>
-{{/req.params.embedded}}
-{{#req.params.embedded}}{{{body}}}{{/req.params.embedded}}
+{{/embedded}}{{#embedded}}{{>page-embedded}}{{/embedded}}
