@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.dispatch.DispatchResult;
 import org.rapidoid.dispatch.PojoDispatchException;
 import org.rapidoid.dispatch.PojoHandlerNotFoundException;
 import org.rapidoid.http.Handler;
@@ -101,17 +102,24 @@ public class AppHandler implements Handler {
 			return x;
 		}
 
-		// REST services or views (as POJO methods)
+		// dispatch REST services or views (as POJO methods)
 
 		Object result = null;
+		DispatchResult dispatchResult = null;
+
 		if (appCls.dispatcher != null) {
 			try {
-				result = appCls.dispatcher.dispatch(new WebReq(x));
+				dispatchResult = appCls.dispatcher.dispatch(new WebReq(x));
+				result = dispatchResult.getResult();
 			} catch (PojoHandlerNotFoundException e) {
 				// / just ignore, will try to dispatch a page next...
 			} catch (PojoDispatchException e) {
 				return x.error(e);
 			}
+		}
+
+		if (dispatchResult != null && dispatchResult.isService()) {
+			return result;
 		}
 
 		// Prepare GUI state
@@ -174,13 +182,17 @@ public class AppHandler implements Handler {
 				}
 			}
 
-			model.put("content", template);
 			String content = Templates.fromString(template).render(model, result);
-
 			model.put("content", content); // content without the directive
 
 			x.renderPage(model);
 
+			return true;
+
+		} else if (result != null) {
+			x.html();
+			Map<String, Object> model = U.map("result", result, "content", result, "navbar", true);
+			x.renderPage(model);
 			return true;
 		} else {
 			return false;

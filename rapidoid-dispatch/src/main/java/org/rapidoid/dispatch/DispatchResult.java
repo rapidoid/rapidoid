@@ -1,8 +1,5 @@
 package org.rapidoid.dispatch;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 /*
  * #%L
  * rapidoid-dispatch
@@ -23,10 +20,33 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public interface PojoDispatcher {
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
-	DispatchResult dispatch(PojoRequest request) throws PojoHandlerNotFoundException, PojoDispatchException;
+@Authors("Nikolche Mihajlovski")
+@Since("4.1.0")
+public class DispatchResult {
+
+	private final Object result;
+
+	private final boolean service;
+
+	public DispatchResult(Object result, boolean service) {
+		this.result = result;
+		this.service = service;
+	}
+
+	public Object getResult() {
+		return result;
+	}
+
+	public boolean isService() {
+		return service;
+	}
+
+	@Override
+	public String toString() {
+		return "DispatchResult [result=" + result + ", service=" + service + "]";
+	}
 
 }

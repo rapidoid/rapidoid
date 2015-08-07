@@ -38,6 +38,7 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
+import org.rapidoid.dispatch.DispatchResult;
 import org.rapidoid.dispatch.PojoDispatchException;
 import org.rapidoid.dispatch.PojoDispatcher;
 import org.rapidoid.dispatch.PojoHandlerNotFoundException;
@@ -84,22 +85,30 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 	}
 
 	@Override
-	public Object dispatch(PojoRequest req) throws PojoHandlerNotFoundException, PojoDispatchException {
+	public DispatchResult dispatch(PojoRequest req) throws PojoHandlerNotFoundException, PojoDispatchException {
 		return process(req, req.command(), req.path(), NO_PARTS, 0);
 	}
 
-	protected Object process(PojoRequest req, String command, String path, String[] parts, int paramsFrom)
+	protected DispatchResult process(PojoRequest req, String command, String path, String[] parts, int paramsFrom)
 			throws PojoHandlerNotFoundException, PojoDispatchException {
 
 		// normalize the path
 		path = UTILS.path(path);
 
-		DispatchTarget target = mappings.get(new DispatchReq(command, path));
+		// try a service
+		DispatchTarget target = mappings.get(new DispatchReq(command, path, true));
+		boolean service = target != null;
+
+		if (!service) {
+			// try a view (GUI)
+			target = mappings.get(new DispatchReq(command, path, false));
+		}
 
 		if (target != null) {
 			Object componentInstance = Cls.newInstance(target.clazz);
 			if (target.method != null) {
-				return doDispatch(req, target.method, componentInstance, parts, paramsFrom);
+				Object callResult = doDispatch(req, target.method, componentInstance, parts, paramsFrom);
+				return new DispatchResult(callResult, service);
 			} else {
 				throw notFound();
 			}
@@ -301,7 +310,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 
 	protected List<DispatchReq> getMethodActions(String componentPath, Method method) {
 		String path = UTILS.path(componentPath, method.getName());
-		return U.list(new DispatchReq("", path));
+		return U.list(new DispatchReq("", path, true));
 	}
 
 	private boolean shouldExpose(Method method) {

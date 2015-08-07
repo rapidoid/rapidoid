@@ -27,27 +27,31 @@ import org.rapidoid.annotation.Since;
 @Since("3.0.0")
 public class DispatchReq {
 
-	String command;
+	final String command;
 
-	String path;
+	final String path;
 
-	public DispatchReq(String command, String path) {
+	final boolean service;
+
+	public DispatchReq(String command, String path, boolean service) {
 		super();
 		this.command = command;
 		this.path = path;
+		this.service = service;
 	}
 
 	@Override
 	public String toString() {
-		return "DispatchReq [command=" + command + ", path=" + path + "]";
+		return "DispatchReq [command=" + command + ", path=" + path + ", service=" + service + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((path == null) ? 0 : path.hashCode());
 		result = prime * result + ((command == null) ? 0 : command.hashCode());
+		result = prime * result + ((path == null) ? 0 : path.hashCode());
+		result = prime * result + (service ? 1231 : 1237);
 		return result;
 	}
 
@@ -60,15 +64,17 @@ public class DispatchReq {
 		if (getClass() != obj.getClass())
 			return false;
 		DispatchReq other = (DispatchReq) obj;
+		if (command == null) {
+			if (other.command != null)
+				return false;
+		} else if (!command.equals(other.command))
+			return false;
 		if (path == null) {
 			if (other.path != null)
 				return false;
 		} else if (!path.equals(other.path))
 			return false;
-		if (command == null) {
-			if (other.command != null)
-				return false;
-		} else if (!command.equals(other.command))
+		if (service != other.service)
 			return false;
 		return true;
 	}

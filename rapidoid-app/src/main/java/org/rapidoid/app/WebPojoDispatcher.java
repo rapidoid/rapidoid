@@ -39,6 +39,7 @@ import org.rapidoid.aop.AOP;
 import org.rapidoid.arr.Arr;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.dispatch.DispatchResult;
 import org.rapidoid.dispatch.PojoDispatchException;
 import org.rapidoid.dispatch.PojoHandlerNotFoundException;
 import org.rapidoid.dispatch.PojoRequest;
@@ -110,7 +111,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 	}
 
 	@Override
-	public Object dispatch(PojoRequest req) throws PojoHandlerNotFoundException, PojoDispatchException {
+	public DispatchResult dispatch(PojoRequest req) throws PojoHandlerNotFoundException, PojoDispatchException {
 		try {
 			return super.dispatch(req);
 		} catch (PojoHandlerNotFoundException e) {
@@ -118,7 +119,8 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 		}
 	}
 
-	private Object alternativeDispatch(PojoRequest req) throws PojoHandlerNotFoundException, PojoDispatchException {
+	private DispatchResult alternativeDispatch(PojoRequest req) throws PojoHandlerNotFoundException,
+			PojoDispatchException {
 		String[] parts = uriParts(req.path());
 
 		for (int i = 0; i < parts.length; i++) {
@@ -177,9 +179,9 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 
 		if (!(ann instanceof View)) {
 			String verb = ann.annotationType().getSimpleName();
-			return U.list(new DispatchReq(verb, path));
+			return U.list(new DispatchReq(verb, path, true));
 		} else {
-			return U.list(new DispatchReq("GET", path), new DispatchReq("POST", path));
+			return U.list(new DispatchReq("GET", path, false), new DispatchReq("POST", path, false));
 		}
 	}
 
