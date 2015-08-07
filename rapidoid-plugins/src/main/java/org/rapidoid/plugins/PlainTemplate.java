@@ -20,22 +20,36 @@ package org.rapidoid.plugins;
  * #L%
  */
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.plugins.templates.ITemplate;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class DefaultTemplatesPlugin extends AbstractTemplatesPlugin {
+public class PlainTemplate implements ITemplate {
 
-	@Override
-	public ITemplate fromFile(String filename) {
-		return new PlainTemplate("");
+	private final String content;
+
+	public PlainTemplate(String content) {
+		this.content = content;
 	}
 
 	@Override
-	public ITemplate fromString(String template) {
-		return new PlainTemplate(template);
+	public void render(OutputStream output, Object... scopes) {
+		try {
+			output.write(content.getBytes());
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
+	}
+
+	@Override
+	public String render(Object... scopes) {
+		return content;
 	}
 
 }
