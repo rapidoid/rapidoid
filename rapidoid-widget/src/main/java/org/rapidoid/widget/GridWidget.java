@@ -163,7 +163,7 @@ public class GridWidget extends AbstractWidget {
 	}
 
 	protected String onClickScript(Item item) {
-		String js = U.format("goAt('%s');", urlFor(item.value()));
+		String js = U.format("Rapidoid.goAt('%s');", urlFor(item.value()));
 		return js;
 	}
 

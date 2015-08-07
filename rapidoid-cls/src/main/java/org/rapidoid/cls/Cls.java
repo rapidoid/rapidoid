@@ -883,6 +883,13 @@ public class Cls {
 		return kindOf(target).isNumber();
 	}
 
+	public static boolean isBean(Object target) {
+		return kindOf(target) == TypeKind.OBJECT && !(target instanceof Collection<?>)
+				&& !(target instanceof Map<?, ?>) && !(target instanceof Object[])
+				&& !target.getClass().getPackage().getName().startsWith("java.")
+				&& !target.getClass().getPackage().getName().startsWith("javax.");
+	}
+
 	public static <T, T2> T struct(Class<T> clazz1, Class<T2> clazz2, Object obj) {
 		List<Object> items = U.list();
 
