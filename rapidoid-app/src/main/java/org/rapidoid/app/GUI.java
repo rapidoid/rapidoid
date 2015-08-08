@@ -21,47 +21,16 @@ package org.rapidoid.app;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Local;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public abstract class GUI extends AppGUI {
 
-	@Local
-	public String modal = null;
-
-	private HttpExchange ctx;
-
-	protected void showModal(String modalName) {
-		modal = modalName;
-	}
-
-	protected void hideModal() {
-		modal = null;
-	}
-
-	public void onCloseModal() {
-		modal = null;
-	}
-
-	public void onCancel(HttpExchange x) {
-		if (modal != null) {
-			hideModal();
-		} else {
-			x.goBack(1);
-		}
-	}
-
-	public void onBack(HttpExchange x) {
-		x.goBack(1);
-	}
-
 	protected HttpExchange ctx() {
-		U.notNull(ctx, "App context is not initialized yet!");
-		return ctx;
+		return Ctxs.get().exchange();
 	}
 
 }

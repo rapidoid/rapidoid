@@ -39,7 +39,6 @@ public class DeleteAllDataScreenBuiltIn extends GUI {
 	}
 
 	public void onDeleteAll() {
-		hideModal();
 		DB.deleteAllData();
 		ctx().goBack(1);
 	}
