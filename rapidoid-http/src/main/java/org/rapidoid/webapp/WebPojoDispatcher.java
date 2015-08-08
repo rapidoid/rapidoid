@@ -29,6 +29,7 @@ import org.rapidoid.annotation.Cookie;
 import org.rapidoid.annotation.DELETE;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Header;
+import org.rapidoid.annotation.On;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.PUT;
 import org.rapidoid.annotation.Page;
@@ -43,6 +44,7 @@ import org.rapidoid.dispatch.PojoDispatchException;
 import org.rapidoid.dispatch.PojoHandlerNotFoundException;
 import org.rapidoid.dispatch.PojoRequest;
 import org.rapidoid.dispatch.impl.DispatchReq;
+import org.rapidoid.dispatch.impl.DispatchReqKind;
 import org.rapidoid.dispatch.impl.PojoDispatcherImpl;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
@@ -155,6 +157,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 	private List<DispatchReq> req(String componentPath, Annotation ann, Method method) {
 		String url;
 
+		String event = null;
 		if (ann instanceof GET) {
 			url = ((GET) ann).value();
 		} else if (ann instanceof POST) {
@@ -165,6 +168,10 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 			url = ((DELETE) ann).value();
 		} else if (ann instanceof Page) {
 			url = ((Page) ann).value();
+		} else if (ann instanceof On) {
+			On on = (On) ann;
+			url = on.page();
+			event = on.event();
 		} else {
 			return null;
 		}
@@ -172,11 +179,14 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 		String name = reqName(method, url);
 		String path = UTILS.path(componentPath, name);
 
-		if (!(ann instanceof Page)) {
-			String verb = ann.annotationType().getSimpleName();
-			return U.list(new DispatchReq(verb, path, true));
+		if (ann instanceof Page) {
+			return U.list(new DispatchReq("GET", path, DispatchReqKind.PAGE), new DispatchReq("POST", path,
+					DispatchReqKind.PAGE));
+		} else if (ann instanceof On) {
+			return U.list(new DispatchReq(event.toUpperCase(), path, DispatchReqKind.EVENT));
 		} else {
-			return U.list(new DispatchReq("GET", path, false), new DispatchReq("POST", path, false));
+			String verb = ann.annotationType().getSimpleName().toUpperCase();
+			return U.list(new DispatchReq(verb, path, DispatchReqKind.SERVICE));
 		}
 	}
 
@@ -189,8 +199,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 
 	@Override
 	protected Object invoke(PojoRequest req, Method method, Object component, Object[] args) {
-		HttpExchange x = ((WebReq) req).getExchange();
-		return AOP.invoke(x, method, component, args);
+		return AOP.invoke(null, method, component, args);
 	}
 
 	@Override

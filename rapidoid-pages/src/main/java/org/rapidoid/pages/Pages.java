@@ -190,7 +190,7 @@ public class Pages {
 		boolean processView = true;
 		if (validEvent) {
 			try {
-				callCmdHandler(x, view, new Cmd(event, args));
+				// callCmdHandler(x, view, new Cmd(event, args));
 			} catch (Exception e) {
 				Throwable cause = UTILS.rootCause(e);
 				if (cause instanceof HttpSuccessException || cause instanceof HttpNotFoundException) {
@@ -246,59 +246,6 @@ public class Pages {
 	public static byte[] stateOf(HttpExchange x) {
 		HttpExchangeInternals xi = (HttpExchangeInternals) x;
 		return xi.serializeLocals();
-	}
-
-	public static void callCmdHandler(HttpExchange x, Object target, Cmd cmd) {
-		if (!callCmdHandler(x, target, cmd, false)) {
-			callCmdHandler(x, BUILT_IN_HANDLER, cmd, false);
-		}
-	}
-
-	private static boolean callCmdHandler(HttpExchange x, Object target, Cmd cmd, boolean failIfNotFound) {
-
-		String handlerName = "on" + U.capitalized(cmd.name);
-		Method m = Cls.findMethodByArgs(target.getClass(), handlerName, cmd.args);
-
-		if (m != null) {
-			AOP.invoke(x, m, target, cmd.args);
-			return true;
-		}
-
-		Object[] args2 = Arr.expand(cmd.args, x);
-		m = Cls.findMethodByArgs(target.getClass(), handlerName, args2);
-
-		if (m != null) {
-			AOP.invoke(x, m, target, args2);
-			return true;
-		}
-
-		args2 = new Object[cmd.args.length + 1];
-		args2[0] = x;
-		System.arraycopy(cmd.args, 0, args2, 1, cmd.args.length);
-		m = Cls.findMethodByArgs(target.getClass(), handlerName, args2);
-
-		if (m != null) {
-			AOP.invoke(x, m, target, args2);
-			return true;
-		}
-
-		Method on = Cls.findMethod(target.getClass(), "on", String.class, Object[].class);
-		if (on != null) {
-			AOP.invoke(x, on, target, cmd.name, cmd.args);
-			return true;
-		}
-
-		on = Cls.findMethod(target.getClass(), "on", HttpExchange.class, String.class, Object[].class);
-		if (on != null) {
-			AOP.invoke(x, on, target, x, cmd.name, cmd.args);
-			return true;
-		}
-
-		if (failIfNotFound) {
-			throw U.rte("Cannot find handler '%s' for the command '%s' and args: %s", handlerName, cmd.name, cmd.args);
-		} else {
-			return false;
-		}
 	}
 
 }

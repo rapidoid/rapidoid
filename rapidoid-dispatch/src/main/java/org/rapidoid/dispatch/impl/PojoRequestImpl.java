@@ -30,11 +30,13 @@ import org.rapidoid.dispatch.PojoRequest;
 @Since("2.0.0")
 public class PojoRequestImpl implements PojoRequest {
 
+	private final boolean event;
 	private final String command;
 	private final String path;
 	private final Map<String, Object> params;
 
-	public PojoRequestImpl(String command, String path, Map<String, Object> params) {
+	public PojoRequestImpl(boolean event, String command, String path, Map<String, Object> params) {
+		this.event = event;
 		this.command = command;
 		this.path = path;
 		this.params = params;
@@ -62,7 +64,13 @@ public class PojoRequestImpl implements PojoRequest {
 
 	@Override
 	public String toString() {
-		return "PojoRequestImpl [command=" + command + ", path=" + path + ", params=" + params + "]";
+		return "PojoRequestImpl [event=" + event + ", command=" + command + ", path=" + path + ", params=" + params
+				+ "]";
+	}
+
+	@Override
+	public boolean isEvent() {
+		return event;
 	}
 
 }

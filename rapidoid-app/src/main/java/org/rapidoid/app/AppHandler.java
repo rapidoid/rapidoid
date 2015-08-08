@@ -31,6 +31,8 @@ import org.rapidoid.dispatch.DispatchResult;
 import org.rapidoid.dispatch.PojoDispatchException;
 import org.rapidoid.dispatch.PojoDispatcher;
 import org.rapidoid.dispatch.PojoHandlerNotFoundException;
+import org.rapidoid.dispatch.PojoRequest;
+import org.rapidoid.dispatch.impl.DispatchReqKind;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeImpl;
@@ -46,6 +48,7 @@ import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.webapp.AppCtx;
 import org.rapidoid.webapp.WebApp;
+import org.rapidoid.webapp.WebEventReq;
 import org.rapidoid.webapp.WebReq;
 
 @Authors("Nikolche Mihajlovski")
@@ -84,7 +87,6 @@ public class AppHandler implements Handler {
 		}
 
 		return result;
-
 	}
 
 	public Object processReq(HttpExchange x) {
@@ -134,31 +136,37 @@ public class AppHandler implements Handler {
 					String inputId = e.getKey();
 					Object value = e.getValue();
 
-					x.locals().put(inputId, UTILS.serializable(value + ":"));
+					x.locals().put(inputId, UTILS.serializable(value));
 				}
 
-				DispatchResult dispatchResult = doDispatch(x, dispatcher);
-				U.must(dispatchResult != null && !dispatchResult.isService());
+				DispatchResult dispatchResult = doDispatch(dispatcher, new WebReq(x));
+				U.must(dispatchResult != null && dispatchResult.getKind() == DispatchReqKind.PAGE);
 
 				// in case of binding or validation errors
 				if (x.hasErrors()) {
 					x.json();
 					return U.map("!errors", x.errors());
 				}
+
+				// call the command handler
+				DispatchResult dr = on(x, dispatcher, event, args);
+				if (dr == null) {
+					x.json();
+					Log.warn("No event handler was found!", "event", event, "page", x.path());
+					return U.map();
+				}
 			}
 		}
 
-		// FIXME: call the command handler
-
 		// dispatch REST services or views (as POJO methods)
 
-		DispatchResult dispatchResult = doDispatch(x, dispatcher);
+		DispatchResult dispatchResult = doDispatch(dispatcher, new WebReq(x));
 
 		Object result = null;
 		if (dispatchResult != null) {
 			result = dispatchResult.getResult();
 
-			if (dispatchResult.isService()) {
+			if (dispatchResult.getKind() == DispatchReqKind.SERVICE) {
 				return result;
 			}
 		}
@@ -181,19 +189,15 @@ public class AppHandler implements Handler {
 		throw x.notFound();
 	}
 
-	private DispatchResult doDispatch(HttpExchange x, PojoDispatcher dispatcher) {
-		DispatchResult dispatchResult = null;
-
-		if (dispatcher != null) {
-			try {
-				dispatchResult = dispatcher.dispatch(new WebReq(x));
-			} catch (PojoHandlerNotFoundException e) {
-				// / just ignore, will try to dispatch a page next...
-			} catch (PojoDispatchException e) {
-				throw U.rte("Dispatch error!", e);
-			}
+	private DispatchResult doDispatch(PojoDispatcher dispatcher, PojoRequest req) {
+		try {
+			return dispatcher.dispatch(req);
+		} catch (PojoHandlerNotFoundException e) {
+			// / just ignore, will try to dispatch a page next...
+			return null;
+		} catch (PojoDispatchException e) {
+			throw U.rte("Dispatch error!", e);
 		}
-		return dispatchResult;
 	}
 
 	public boolean serveDynamicPage(HttpExchangeImpl x, Object result, boolean hasEvent) {
@@ -357,16 +361,12 @@ public class AppHandler implements Handler {
 		return null;
 	}
 
-	// public void on(String cmd, Object[] args) {
-	// try {
-	// Pages.callCmdHandler(x, screen, new Cmd(cmd, false, args));
-	// } catch (Exception e) {
-	// Throwable cause = UTILS.rootCause(e);
-	// if (cause instanceof HttpSuccessException || cause instanceof HttpNotFoundException) {
-	// Pages.store(x, screen);
-	// }
-	// throw U.rte(e);
-	// }
-	// }
+	public DispatchResult on(HttpExchange x, PojoDispatcher dispatcher, String event, Object[] args) {
+
+		Map<String, Object> state = U.cast(x.locals());
+		WebEventReq req = new WebEventReq(x.path(), event.toUpperCase(), args, state);
+
+		return doDispatch(dispatcher, req);
+	}
 
 }

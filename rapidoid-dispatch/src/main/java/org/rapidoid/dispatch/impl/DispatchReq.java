@@ -31,18 +31,17 @@ public class DispatchReq {
 
 	final String path;
 
-	final boolean service;
+	final DispatchReqKind kind;
 
-	public DispatchReq(String command, String path, boolean service) {
-		super();
+	public DispatchReq(String command, String path, DispatchReqKind kind) {
 		this.command = command;
 		this.path = path;
-		this.service = service;
+		this.kind = kind;
 	}
 
 	@Override
 	public String toString() {
-		return "DispatchReq [command=" + command + ", path=" + path + ", service=" + service + "]";
+		return "DispatchReq [command=" + command + ", path=" + path + ", kind=" + kind + "]";
 	}
 
 	@Override
@@ -50,8 +49,8 @@ public class DispatchReq {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((command == null) ? 0 : command.hashCode());
+		result = prime * result + ((kind == null) ? 0 : kind.hashCode());
 		result = prime * result + ((path == null) ? 0 : path.hashCode());
-		result = prime * result + (service ? 1231 : 1237);
 		return result;
 	}
 
@@ -69,12 +68,12 @@ public class DispatchReq {
 				return false;
 		} else if (!command.equals(other.command))
 			return false;
+		if (kind != other.kind)
+			return false;
 		if (path == null) {
 			if (other.path != null)
 				return false;
 		} else if (!path.equals(other.path))
-			return false;
-		if (service != other.service)
 			return false;
 		return true;
 	}

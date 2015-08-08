@@ -1,4 +1,7 @@
-package org.rapidoid.dispatch;
+package org.rapidoid.dispatch.impl;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -20,23 +23,8 @@ package org.rapidoid.dispatch;
  * #L%
  */
 
-import java.util.Map;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public interface PojoRequest {
-
-	String command();
-
-	String path();
-
-	boolean isEvent();
-
-	Object param(String name);
-
-	Map<String, Object> params();
-
+@Since("4.1.0")
+public enum DispatchReqKind {
+	SERVICE, PAGE, EVENT;
 }

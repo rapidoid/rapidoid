@@ -25,61 +25,49 @@ import java.util.Map;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.dispatch.PojoRequest;
-import org.rapidoid.http.HttpExchange;
-import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class WebReq implements PojoRequest {
+@Since("4.1.0")
+public class WebEventReq implements PojoRequest {
 
-	private final HttpExchange exchange;
+	private final String path;
 
-	public WebReq(HttpExchange x) {
-		this.exchange = x;
+	private final String event;
+
+	private final Object[] args;
+
+	private final Map<String, Object> state;
+
+	public WebEventReq(String path, String event, Object[] args, Map<String, Object> state) {
+		this.path = path;
+		this.event = event;
+		this.args = args;
+		this.state = state;
 	}
 
 	@Override
 	public String command() {
-		return exchange.verb();
+		return event;
 	}
 
 	@Override
 	public String path() {
-		return exchange.path();
+		return path;
 	}
 
 	@Override
 	public Map<String, Object> params() {
-		Map<String, Object> params = U.map();
-
-		params.putAll(exchange.data());
-		params.putAll(exchange.files());
-
-		return params;
-	}
-
-	public HttpExchange getExchange() {
-		return exchange;
+		return state;
 	}
 
 	@Override
 	public Object param(String name) {
-		Object value = exchange.param(name);
-
-		if (value == null) {
-			value = exchange.posted(name);
-
-			if (value == null) {
-				value = exchange.file(name);
-			}
-		}
-
-		return value;
+		return state.get(name);
 	}
 
 	@Override
 	public boolean isEvent() {
-		return false;
+		return true;
 	}
 
 }

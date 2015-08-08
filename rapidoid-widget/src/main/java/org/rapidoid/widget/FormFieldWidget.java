@@ -47,6 +47,7 @@ import org.rapidoid.security.DataPermissions;
 import org.rapidoid.util.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
+import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -98,7 +99,7 @@ public class FormFieldWidget extends AbstractWidget {
 	private Var<?> initVar(Item item, Property prop) {
 		HttpExchange x = Ctxs.ctx().exchange();
 		Object target = U.or(item.value(), item);
-		String varName = target.getClass().getSimpleName() + "." + prop.name();
+		String varName = Wire.propVarName(target, prop.name());
 		Object initValue = x.locals().get(varName);
 
 		try {

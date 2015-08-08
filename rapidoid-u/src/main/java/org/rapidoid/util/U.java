@@ -305,7 +305,7 @@ public class U {
 	}
 
 	public static <K, V> Map<K, V> map() {
-		return new HashMap<K, V>();
+		return new LinkedHashMap<K, V>();
 	}
 
 	public static <K, V> Map<K, V> map(Map<? extends K, ? extends V> src) {

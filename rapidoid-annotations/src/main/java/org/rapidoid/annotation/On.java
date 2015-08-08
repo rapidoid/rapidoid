@@ -1,8 +1,8 @@
-package org.rapidoid.dispatch;
+package org.rapidoid.annotation;
 
 /*
  * #%L
- * rapidoid-dispatch
+ * rapidoid-annotations
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,23 +20,20 @@ package org.rapidoid.dispatch;
  * #L%
  */
 
-import java.util.Map;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
+@Target({ METHOD })
+@Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public interface PojoRequest {
+@Since("4.1.0")
+public @interface On {
 
-	String command();
+	String event();
 
-	String path();
-
-	boolean isEvent();
-
-	Object param(String name);
-
-	Map<String, Object> params();
+	String page() default "";
 
 }

@@ -296,7 +296,7 @@ public class Wire {
 		T instance = getInjectableByName(type, name, properties, false);
 
 		if (target != null) {
-			instance = getInjectableByName(type, target.getClass().getSimpleName() + "." + name, properties, true);
+			instance = getInjectableByName(type, propVarName(target, name), properties, true);
 		}
 
 		if (instance == null) {
@@ -468,6 +468,17 @@ public class Wire {
 
 	public static synchronized List<Field> getLocalFields(Object target) {
 		return LOCAL_FIELDS.get(target.getClass());
+	}
+
+	public static String propVarName(Object target, String name) {
+		return name;
+
+		// TODO consider complex names (e.g. Person.name in future
+		// if (Cls.isBean(target)) {
+		// return target.getClass().getSimpleName() + "." + name;
+		// } else {
+		// return name;
+		// }
 	}
 
 }

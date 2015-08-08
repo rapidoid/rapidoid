@@ -22,6 +22,7 @@ package org.rapidoid.dispatch;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.dispatch.impl.DispatchReqKind;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -29,24 +30,24 @@ public class DispatchResult {
 
 	private final Object result;
 
-	private final boolean service;
+	private final DispatchReqKind kind;
 
-	public DispatchResult(Object result, boolean service) {
+	public DispatchResult(Object result, DispatchReqKind kind) {
 		this.result = result;
-		this.service = service;
+		this.kind = kind;
 	}
 
 	public Object getResult() {
 		return result;
 	}
 
-	public boolean isService() {
-		return service;
+	public DispatchReqKind getKind() {
+		return kind;
 	}
 
 	@Override
 	public String toString() {
-		return "DispatchResult [result=" + result + ", service=" + service + "]";
+		return "DispatchResult [result=" + result + ", kind=" + kind + "]";
 	}
 
 }
