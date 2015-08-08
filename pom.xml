@@ -114,7 +114,6 @@
 		<module>rapidoid-dispatch</module>
 		<module>rapidoid-html</module>
 		<module>rapidoid-widget</module>
-		<module>rapidoid-pages</module>
 		<module>rapidoid-oauth</module>
 		<module>rapidoid-app</module>
 		<module>rapidoid-extras</module>

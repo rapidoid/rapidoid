@@ -44,6 +44,7 @@ import org.rapidoid.widget.impl.ArrayContainerVar;
 import org.rapidoid.widget.impl.CollectionContainerVar;
 import org.rapidoid.widget.impl.EqualityVar;
 import org.rapidoid.widget.impl.LocalVar;
+import org.rapidoid.widget.impl.MultiLanguageWidget;
 import org.rapidoid.widget.impl.SessionVar;
 
 /*
@@ -831,6 +832,16 @@ public abstract class BootstrapWidgets extends HTML {
 		Object itemId = Beany.hasProperty(item, "id") ? Beany.getIdIfExists(item) : String.valueOf(item);
 		String varName = var.name() + "[" + itemId + "]";
 		return new EqualityVar(varName, (Var<Object>) var, item, http().isGetReq());
+	}
+
+	public static Object i18n(String multiLanguageText, Object... formatArgs) {
+		return new MultiLanguageWidget(multiLanguageText, formatArgs);
+	}
+
+	public static ButtonWidget xClose(String cmd) {
+		Tag sp1 = span(hardcoded("&times;")).attr("aria-hidden", "true");
+		Tag sp2 = span("Close").class_("sr-only");
+		return cmd(cmd).class_("close").contents(sp1, sp2);
 	}
 
 }

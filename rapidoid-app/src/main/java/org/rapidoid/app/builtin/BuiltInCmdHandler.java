@@ -1,4 +1,4 @@
-package org.rapidoid.pages;
+package org.rapidoid.app.builtin;
 
 /*
  * #%L
@@ -22,28 +22,44 @@ package org.rapidoid.pages;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.html.Tag;
-import org.rapidoid.pages.impl.MultiLanguageText;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.util.U;
-import org.rapidoid.widget.BootstrapWidgets;
-import org.rapidoid.widget.ButtonWidget;
+import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.3.0")
-public class PageGUI extends BootstrapWidgets {
+@Since("2.0.0")
+public class BuiltInCmdHandler {
 
-	public static Object i18n(String multiLanguageText, Object... formatArgs) {
-		return new MultiLanguageText(multiLanguageText, formatArgs);
+	public void on_set(Var<Object> var, Object value) {
+		var.set(value);
 	}
 
-	public static Tag modal(Object title, Object content, Object footer) {
-		throw U.notSupported();
+	public void on_inc(Var<Integer> var, Integer value) {
+		var.set(var.get() + value);
 	}
 
-	public static ButtonWidget xClose(String cmd) {
-		Tag sp1 = span(hardcoded("&times;")).attr("aria-hidden", "true");
-		Tag sp2 = span("Close").class_("sr-only");
-		return cmd(cmd).class_("close").contents(sp1, sp2);
+	public void on_dec(Var<Integer> var, Integer value) {
+		var.set(var.get() - value);
+	}
+
+	public void on_sort(Var<String> var, String value) {
+		String before = var.get();
+		if (!U.isEmpty(before) && !U.isEmpty(value)) {
+			if (!value.startsWith("-") && before.equals(value)) {
+				var.set("-" + value);
+				return;
+			}
+		}
+
+		var.set(value);
+	}
+
+	public void onCancel(HttpExchange x) {
+		x.goBack(1);
+	}
+
+	public void onBack(HttpExchange x) {
+		x.goBack(1);
 	}
 
 }

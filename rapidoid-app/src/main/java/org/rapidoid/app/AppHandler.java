@@ -55,6 +55,8 @@ import org.rapidoid.webapp.WebReq;
 @Since("2.0.0")
 public class AppHandler implements Handler {
 
+	private static final String PAGE_RELOAD = "<h2>&nbsp;Reloading...</h2><script>location.reload();</script>";
+
 	private static final Pattern DIRECTIVE = Pattern.compile("\\s*\\Q<!--\\E\\s+([\\w\\+\\-\\, ]+)\\s+\\Q-->\\E\\s*");
 
 	private CustomizableClassLoader classLoader;
@@ -367,6 +369,11 @@ public class AppHandler implements Handler {
 		WebEventReq req = new WebEventReq(x.path(), event.toUpperCase(), args, state);
 
 		return doDispatch(dispatcher, req);
+	}
+
+	public static final void reload(HttpExchange x) {
+		Map<String, String> sel = U.map("body", PAGE_RELOAD);
+		x.writeJSON(U.map("_sel_", sel));
 	}
 
 }

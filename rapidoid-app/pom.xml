@@ -24,12 +24,17 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-rql</artifactId>
+			<artifactId>rapidoid-widget</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-pages</artifactId>
+			<artifactId>rapidoid-templates-mustache</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-rql</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

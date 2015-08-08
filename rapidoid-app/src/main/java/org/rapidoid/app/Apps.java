@@ -38,7 +38,6 @@ import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.log.Log;
 import org.rapidoid.oauth.OAuth;
-import org.rapidoid.pages.HttpExchangeHolder;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.db.DBPlugin;
 import org.rapidoid.plugins.entities.EntitiesPlugin;
@@ -189,14 +188,7 @@ public class Apps {
 	}
 
 	public static Object instantiate(Class<?> appClass, HttpExchange x) {
-		return appClass != null ? wireExchange(Cls.newInstance(appClass), x) : new Object();
-	}
-
-	public static <T> T wireExchange(T target, HttpExchange x) {
-		if (target instanceof HttpExchangeHolder) {
-			((HttpExchangeHolder) target).setHttpExchange(x);
-		}
-		return target;
+		return appClass != null ? Cls.newInstance(appClass) : new Object();
 	}
 
 }

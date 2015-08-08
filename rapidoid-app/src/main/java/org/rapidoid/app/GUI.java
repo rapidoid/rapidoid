@@ -24,12 +24,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Local;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.pages.HttpExchangeHolder;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class GUI extends AppGUI implements HttpExchangeHolder {
+public abstract class GUI extends AppGUI {
 
 	@Local
 	public String modal = null;
@@ -58,16 +57,6 @@ public abstract class GUI extends AppGUI implements HttpExchangeHolder {
 
 	public void onBack(HttpExchange x) {
 		x.goBack(1);
-	}
-
-	@Override
-	public HttpExchange getHttpExchange() {
-		return ctx;
-	}
-
-	@Override
-	public void setHttpExchange(HttpExchange x) {
-		this.ctx = x;
 	}
 
 	protected HttpExchange ctx() {

@@ -61,19 +61,12 @@ public class ViewEntityScreenGeneric extends AbstractEntityScreenGeneric {
 	}
 
 	public void onDelete() {
-		showModal("confirmDeletion");
-	}
-
-	public void onYesDelete() {
+		// TODO ask h4("Are you sure you want to delete the record?"), div(YES_DELETE, CANCEL));
 		String id = ctx().pathSegment(1);
 		DB.delete(entityType, id);
 
 		hideModal();
 		ctx().goBack(1);
-	}
-
-	public Tag confirmDeletion() {
-		return modal("Confirm deletion", h4("Are you sure you want to delete the record?"), div(YES_DELETE, CANCEL));
 	}
 
 }

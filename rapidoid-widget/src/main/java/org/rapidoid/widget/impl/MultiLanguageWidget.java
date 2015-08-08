@@ -1,7 +1,4 @@
-package org.rapidoid.pages;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+package org.rapidoid.widget.impl;
 
 /*
  * #%L
@@ -23,8 +20,27 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.util.U;
+
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface PageRequest {
+public class MultiLanguageWidget {
+
+	private final String multiLanguageText;
+
+	private final Object[] formatArgs;
+
+	public MultiLanguageWidget(String multiLanguageText, Object... formatArgs) {
+		this.multiLanguageText = multiLanguageText;
+		this.formatArgs = formatArgs;
+	}
+
+	@Override
+	public String toString() {
+		// TODO implement internationalization
+		return U.format(multiLanguageText, formatArgs);
+	}
 
 }

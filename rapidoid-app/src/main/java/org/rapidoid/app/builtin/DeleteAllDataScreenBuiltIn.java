@@ -24,7 +24,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
 import org.rapidoid.html.Tag;
-import org.rapidoid.log.Log;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.security.annotation.DevMode;
 
@@ -35,27 +34,14 @@ public class DeleteAllDataScreenBuiltIn extends GUI {
 
 	public Object content() {
 		Tag caption = titleBox("Debug Mode - Delete All data");
+		// TODO ask "Are you sure you want to delete all data in the database?"
 		return div(caption, div(btn("DELETE ALL DATA!").danger().command("DeleteAll"), CANCEL));
 	}
 
 	public void onDeleteAll() {
-		showModal("confirmDelete");
-	}
-
-	public Tag confirmDelete() {
-		return modal("Confirm data deletion", h2("Are you sure you want to delete all data in the database?"),
-				div(YES_DELETE, NO));
-	}
-
-	public void onYesDelete() {
-		Log.info("yes");
 		hideModal();
 		DB.deleteAllData();
 		ctx().goBack(1);
-	}
-
-	public void onNo() {
-		hideModal();
 	}
 
 }

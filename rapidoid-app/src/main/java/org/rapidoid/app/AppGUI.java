@@ -8,8 +8,8 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.impl.DbItems;
-import org.rapidoid.pages.PageGUI;
 import org.rapidoid.plugins.entities.Entities;
+import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.GridWidget;
 
 /*
@@ -34,7 +34,7 @@ import org.rapidoid.widget.GridWidget;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class AppGUI extends PageGUI {
+public class AppGUI extends BootstrapWidgets {
 
 	public static <T> Items all(Class<T> type) {
 		return new DbItems<T>(type, null, Beany.<T> comparator("id"));

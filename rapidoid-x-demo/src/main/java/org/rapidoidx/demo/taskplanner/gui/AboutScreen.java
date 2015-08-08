@@ -25,7 +25,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
 import org.rapidoid.html.Tag;
-import org.rapidoid.log.Log;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.util.U;
 import org.rapidoid.widget.ButtonWidget;
@@ -51,14 +50,6 @@ public class AboutScreen extends GUI {
 		return arr(mix, tx, dlg, ADD);
 	}
 
-	public Tag addBook() {
-		return modal("Add new book", create(new Book()), div(SAVE, CANCEL));
-	}
-
-	public Tag yesNo() {
-		return modal("Confirm deletion", h1("Are you sure?"), div(YES, NO));
-	}
-
 	public void onTx() {
 		long id = XDB.insert(task());
 		XDB.update(id, task());
@@ -71,24 +62,6 @@ public class AboutScreen extends GUI {
 		Task task = new Task();
 		task.title = "DON'T GO TO THE DATABASE!";
 		return task;
-	}
-
-	public void onDialog() {
-		showModal("yesNo");
-	}
-
-	public void onAdd() {
-		showModal("addBook");
-	}
-
-	public void onYes() {
-		Log.info("yes");
-		hideModal();
-	}
-
-	public void onNo() {
-		Log.info("no");
-		hideModal();
 	}
 
 }
