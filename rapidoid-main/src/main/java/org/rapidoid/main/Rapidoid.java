@@ -34,6 +34,7 @@ import org.rapidoid.jackson.YAML;
 import org.rapidoid.log.Log;
 import org.rapidoid.quick.Quick;
 import org.rapidoid.util.U;
+import org.rapidoid.webapp.AppMenu;
 import org.rapidoid.webapp.WebApp;
 import org.rapidoid.webapp.WebAppGroup;
 
@@ -80,6 +81,13 @@ public class Rapidoid {
 		if (app == null) {
 			app = WebAppGroup.root();
 			app.getRouter().generic(new AppHandler());
+
+			Res menuRes = Res.from("config/menu.yaml");
+			if (menuRes.exists()) {
+				Object menuData = YAML.parse(menuRes.getContent(), Object.class);
+				AppMenu menu = AppMenu.from(menuData);
+				app.setMenu(menu);
+			}
 		}
 
 		Quick.run(app, args, config);

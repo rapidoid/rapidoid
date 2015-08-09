@@ -24,47 +24,19 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class AppSubMenuItem {
-
-	private String caption;
-
-	private String target;
-
-	private final Map<String, Object> extra;
+public class AppSubMenuItem extends AbstractMenuItem {
 
 	public AppSubMenuItem(String caption, Object target, Map<String, Object> extra) {
-		this.caption = caption;
-		this.extra = extra;
-		this.target = target != null ? Cls.str(target) : "";
+		super(caption, target, extra);
 	}
 
 	@Override
 	public String toString() {
-		return "AppSubMenuItem [" + caption + " => " + target + ", extra=" + extra + "]";
-	}
-
-	public String getCaption() {
-		return caption;
-	}
-
-	public void setCaption(String caption) {
-		this.caption = caption;
-	}
-
-	public String getTarget() {
-		return target;
-	}
-
-	public void setTarget(String target) {
-		this.target = target;
-	}
-
-	public Map<String, Object> getExtra() {
-		return extra;
+		return "AppSubMenuItem [caption=" + caption + ", target=" + target + ", javascript=" + javascript + ", icon="
+				+ icon + ", extra=" + extra + "]";
 	}
 
 }

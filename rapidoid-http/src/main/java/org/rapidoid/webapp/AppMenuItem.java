@@ -28,47 +28,15 @@ import org.rapidoid.cls.Cls;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class AppMenuItem {
-
-	private String caption;
-
-	private String target;
+public class AppMenuItem extends AbstractMenuItem {
 
 	private AppSubMenu submenu;
 
-	private final Map<String, Object> extra;
-
 	public AppMenuItem(String caption, Object target, Map<String, Object> extra) {
-		this.caption = caption;
-		this.extra = extra;
-
-		if (Cls.isSimple(target)) {
-			this.target = Cls.str(target);
-		} else {
+		super(caption, target, extra);
+		if (!Cls.isSimple(target)) {
 			this.submenu = Cls.struct(AppSubMenu.class, AppSubMenuItem.class, target);
 		}
-	}
-
-	@Override
-	public String toString() {
-		return "AppMenuItem [caption=" + caption + ", target=" + target + ", submenu=" + submenu + ", extra=" + extra
-				+ "]";
-	}
-
-	public String getCaption() {
-		return caption;
-	}
-
-	public void setCaption(String caption) {
-		this.caption = caption;
-	}
-
-	public String getTarget() {
-		return target;
-	}
-
-	public void setTarget(String target) {
-		this.target = target;
 	}
 
 	public AppSubMenu getSubmenu() {
@@ -79,8 +47,10 @@ public class AppMenuItem {
 		this.submenu = submenu;
 	}
 
-	public Map<String, Object> getExtra() {
-		return extra;
+	@Override
+	public String toString() {
+		return "AppMenuItem [submenu=" + submenu + ", caption=" + caption + ", target=" + target + ", javascript="
+				+ javascript + ", icon=" + icon + ", extra=" + extra + "]";
 	}
 
 }
