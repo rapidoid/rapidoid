@@ -28,6 +28,7 @@ import org.rapidoid.annotation.Transaction;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.aop.AOPInterceptor;
 import org.rapidoid.concurrent.Callback;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.log.Log;
@@ -40,7 +41,7 @@ public class TransactionInterceptor implements AOPInterceptor {
 	public Object intercept(final Callable<Object> forward, Annotation ann, Object ctx, final Method m,
 			final Object target, final Object[] args) {
 
-		final HttpExchange x = (HttpExchange) ctx;
+		final HttpExchange x = Ctxs.ctx().exchange();
 		TransactionMode txMode = getTxMode(ann);
 
 		final boolean readOnly;
