@@ -56,28 +56,6 @@ public class Rapidoid {
 
 		MainHelp.processHelp(args);
 
-		Res confRes = Res.from("config/app.yaml");
-		if (confRes.exists()) {
-			Map<String, Object> conf = YAML.parseMap(confRes.getContent());
-
-			for (Entry<String, Object> e : conf.entrySet()) {
-				String key = e.getKey();
-				Object val = e.getValue();
-				String value;
-
-				if (val instanceof Collection<?>) {
-					value = U.join(",", (Collection<?>) val);
-				} else if (Cls.isSimple(val)) {
-					value = Cls.str(val);
-				} else {
-					throw U.rte("Unsupported configuration value type: %s for key: %s", val.getClass(), key);
-				}
-
-				Log.info("Configuring", key, value);
-				Conf.set(key, value);
-			}
-		}
-
 		if (app == null) {
 			app = WebAppGroup.root();
 			app.getRouter().generic(new AppHandler());
@@ -96,6 +74,35 @@ public class Rapidoid {
 				}
 			});
 
+			final Res confRes = Res.from("config/app.yaml").trackChanges();
+
+			confRes.getChangeListeners().add(new Runnable() {
+				@Override
+				public void run() {
+					if (confRes.exists()) {
+						Map<String, Object> conf = YAML.parseMap(confRes.getContent());
+
+						for (Entry<String, Object> e : conf.entrySet()) {
+							String key = e.getKey();
+							Object val = e.getValue();
+							String value;
+
+							if (val instanceof Collection<?>) {
+								value = U.join(",", (Collection<?>) val);
+							} else if (Cls.isSimple(val)) {
+								value = Cls.str(val);
+							} else {
+								throw U.rte("Unsupported configuration value type: %s for key: %s", val.getClass(), key);
+							}
+
+							Log.info("Configuring", key, value);
+							Conf.set(key, value);
+						}
+
+						rootApp.setTitle(Conf.option("title", "App"));
+					}
+				}
+			});
 		}
 
 		Quick.run(app, args, config);
