@@ -82,12 +82,20 @@ public class Rapidoid {
 			app = WebAppGroup.root();
 			app.getRouter().generic(new AppHandler());
 
-			Res menuRes = Res.from("config/menu.yaml");
-			if (menuRes.exists()) {
-				Object menuData = YAML.parse(menuRes.getContent(), Object.class);
-				AppMenu menu = AppMenu.from(menuData);
-				app.setMenu(menu);
-			}
+			final Res menuRes = Res.from("config/menu.yaml").trackChanges();
+
+			final WebApp rootApp = app;
+			menuRes.getChangeListeners().add(new Runnable() {
+				@Override
+				public void run() {
+					if (menuRes.exists()) {
+						Object menuData = YAML.parse(menuRes.getContent(), Object.class);
+						AppMenu menu = AppMenu.from(menuData);
+						rootApp.setMenu(menu);
+					}
+				}
+			});
+
 		}
 
 		Quick.run(app, args, config);
