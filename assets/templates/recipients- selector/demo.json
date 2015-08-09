@@ -1,0 +1,22 @@
+{	
+    "panel" :  {
+	"title" : "Recipients Selector w/ jQuery Checkbox Buttons",
+	"subtitle" : "Choose your recipients, and display the results below!",
+	"content" : "NOTE: These elements are not hooked together - like many other samples on bootsnipp.com, this is a framework sample.",
+	"checkBoxes" : [ 
+		{"value" : "All Guests", "checked" : "true"},
+		{"value" : "Not Yet Invited"},
+		{"value" : "Yes RSVP"},
+		{"value" : "No RSVP"},
+		{"value" : "Maybe RSVP"},
+		{"value" : "Not Yet Replied"}
+	],
+	"persons" : [
+		{"person" : "Aaaaa Bbbbb", "email" : "bbbbbb@.com", "image" : "http://placehold.it/50x50"},
+		{"person" : "Ccccc Dddddd", "email" : "dddddddd@.com", "image" : "http://placehold.it/50x50"},
+		{"person" : "Eeeee Ffff", "email" : "ffffffff@.com", "image" : "http://placehold.it/50x50"},
+		{"person" : "Gggggg Hhhhhh", "email" : "hhhhh@.com", "image" : "http://placehold.it/50x50"}
+	],
+	"footerText" : "4 guest(s) selected"
+    } 
+}

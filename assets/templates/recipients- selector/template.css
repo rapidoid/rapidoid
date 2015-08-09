@@ -1,0 +1,34 @@
+/*
+ * Derived from: http://bootsnipp.com/snippets/featured/recipients-selector (Copyright (c) 2013 Bootsnipp.com, MIT license, see http://bootsnipp.com/license)
+ */
+.recipients .panel-body {
+	overflow: auto;
+	max-height: 200px;
+}
+
+.recipients .recipient {
+	display: block;
+	float: left;
+	width: 140px;
+	margin: 0 5px 5px 0;
+	font-size: 0.85em;
+	overflow: hidden;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.recipients .recipient img {
+	float: left;
+	height: 28px;
+	margin-right: 5px;
+}
+
+.recipients .recipient .email {
+	font-size: 0.9em;
+	color: #999;
+	overflow: hidden;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
