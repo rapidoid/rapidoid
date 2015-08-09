@@ -34,6 +34,7 @@ public class WebEventReq implements PojoRequest {
 
 	private final String event;
 
+	@SuppressWarnings("unused")
 	private final Object[] args;
 
 	private final Map<String, Object> state;
