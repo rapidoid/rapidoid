@@ -175,7 +175,7 @@ public class AppHandler implements Handler {
 
 		if (result == null) {
 			// try generic app screens
-			result = genericScreen();
+			result = GenericGUI.genericScreen();
 		}
 
 		// serve dynamic pages from file templates
@@ -258,97 +258,6 @@ public class AppHandler implements Handler {
 		String content = Templates.fromString(template).render(model, result);
 		model.put("content", content); // content without the directive
 		return model;
-	}
-
-	protected Object genericScreen() {
-		// String path = x.path();
-		//
-		// if (path.equals("/")) {
-		// return appCls.main != null ? app : new Object();
-		// }
-		//
-		// for (Class<?> scr : BUILT_IN_SCREENS) {
-		// if (Apps.screenUrl(scr).equals(path)) {
-		// return Cls.newInstance(scr);
-		// }
-		// }
-		//
-		// if (!x.query().isEmpty()) {
-		// return null;
-		// }
-		//
-		// Matcher m = ENTITY_EDIT.matcher(path);
-		//
-		// if (m.find()) {
-		// String type = m.group(1);
-		// String id = m.group(2);
-		//
-		// Class<?> entityType = Scaffolding.getScaffoldingEntity(type);
-		// if (entityType == null) {
-		// return null;
-		// }
-		//
-		// Object entity = DB.getIfExists(entityType, id);
-		//
-		// String entityClass = Cls.entityName(entity);
-		// String reqType = U.capitalized(type);
-		//
-		// if (entityClass.equals(reqType)) {
-		// return new EditEntityScreenGeneric(entityType);
-		// }
-		// }
-		//
-		// m = ENTITY_NEW.matcher(path);
-		//
-		// if (m.find()) {
-		// String type = m.group(1);
-		//
-		// Class<?> entityType = Scaffolding.getScaffoldingEntity(type);
-		// if (entityType == null) {
-		// return null;
-		// }
-		//
-		// return new NewEntityScreenGeneric(entityType);
-		// }
-		//
-		// m = ENTITY_VIEW.matcher(path);
-		//
-		// if (m.find()) {
-		// String type = m.group(1);
-		// String id = m.group(2);
-		//
-		// Class<?> entityType = Scaffolding.getScaffoldingEntity(type);
-		// if (entityType == null) {
-		// return null;
-		// }
-		//
-		// Object entity = DB.getIfExists(entityType, id);
-		//
-		// String entityClass = Cls.entityName(entity);
-		// String reqType = U.capitalized(type);
-		//
-		// if (entityClass.equals(reqType)) {
-		// return new ViewEntityScreenGeneric(entityType);
-		// }
-		// }
-		//
-		// m = ENTITY_LIST.matcher(path);
-		//
-		// if (m.find()) {
-		// String type = m.group(1);
-		// String type2 = U.or(Languages.pluralToSingular(type), type);
-		//
-		// Class<?> entityType = Scaffolding.getScaffoldingEntity(type2);
-		// if (entityType == null) {
-		// return null;
-		// }
-		//
-		// return new ListEntityScreenGeneric(entityType);
-		// }
-		//
-		// return null;
-
-		return null;
 	}
 
 	public DispatchResult on(HttpExchange x, PojoDispatcher dispatcher, String event, Object[] args) {
