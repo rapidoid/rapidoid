@@ -1,51 +1,51 @@
-{{#navbar}}
+@(#navbar)@
 <nav role="navigation" class="navbar navbar-default">
-    <div class="container{{#fluid}}-fluid{{/fluid}}">
+    <div class="container@(#fluid)@-fluid@(/fluid)@">
 
         <div class="navbar-header">
             <button data-target="#collapsable" class="navbar-toggle collapsed" data-toggle="collapse" type="button">
                 <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{home}}">{{app.title}} {{app.menu.items.size}}</a>
+            <a class="navbar-brand" href="@(home)@">@(app.title)@</a>
         </div>
 
         <div id="collapsable" class="collapse navbar-collapse">
 
-            {{#app.menu.items}}
+            @(#app.menu.items)@
             <ul class="nav navbar-nav navbar-left">
                 <li class="dropdown">
-                    <a{{#submenu}} class="dropdown-toggle" data-toggle="dropdown"{{/submenu}} href="{{target}}">{{caption}}{{#submenu}}<span class="caret"></span>{{/submenu}}</a>
-                    {{#submenu}}
+                    <a@(#submenu)@ class="dropdown-toggle" data-toggle="dropdown"@(/submenu)@ href="@(target)@">@(caption)@@(#submenu)@<span class="caret"></span>@(/submenu)@</a>
+                    @(#submenu)@
                     <ul role="menu" class="dropdown-menu">
-                        {{#items}}
-                        {{#javascript}}
-                        <li><a onclick="{{javascript}}" href="javascript:void(0);">{{#icon}}<span class="{{icon}}"></span>&nbsp; {{/icon}}{{caption}}</a></li>
-                        {{/javascript}}
-                        {{^javascript}}
-                        <li><a href="{{target}}">{{#icon}}<span class="{{icon}}"></span>&nbsp; {{/icon}}{{caption}}</a></li>
-                        {{/javascript}}
-                        {{/items}}
+                        @(#items)@
+                        @(#javascript)@
+                        <li><a onclick="@(javascript)@" href="javascript:void(0);">@(#icon)@<span class="@(icon)@"></span>&nbsp; @(/icon)@@(caption)@</a></li>
+                        @(/javascript)@
+                        @(^javascript)@
+                        <li><a href="@(target)@">@(#icon)@<span class="@(icon)@"></span>&nbsp; @(/icon)@@(caption)@</a></li>
+                        @(/javascript)@
+                        @(/items)@
                     </ul>
-                    {{/submenu}}
+                    @(/submenu)@
                 </li>
             </ul>
-            {{/app.menu.items}}
+            @(/app.menu.items)@
 
-{{^loggedIn}}
+@(^loggedIn)@
             <ul class="nav navbar-nav navbar-right">
-{{>signin}}
+@(>signin)@
             </ul>
-{{/loggedIn}}
+@(/loggedIn)@
 
-{{#loggedIn}}
+@(#loggedIn)@
             <ul class="nav navbar-nav navbar-right">
-{{>profile}}
+@(>profile)@
             </ul>
-{{/loggedIn}}
+@(/loggedIn)@
 
-{{>search}}
+@(>search)@
 
         </div>
     </div>
 </nav>
-{{/navbar}}
+@(/navbar)@

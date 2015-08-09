@@ -4,14 +4,14 @@
 <div class="row">
     <div class="col-md-12">
         <div class="server-error-holder" style="padding: 40px 15px; text-align: center;">
-            <h1>{{code}}</h1>
-            <h2>{{title}}</h2>
-            <div class="server-error-details">{{{content}}}</div>
+            <h1>@(code)@</h1>
+            <h2>@(title)@</h2>
+            <div class="server-error-details">@({content})@</div>
             <div class="server-error-actions" style="margin-top: 15px; margin-bottom: 15px;">
-                <a href="{{home}}" class="btn btn-primary btn-lg" style="margin-right: 10px;"><span class="fa fa-home"></span> Take Me Home </a>
-                {{#support_url}}
-                <a href="{{support_url}}" class="btn btn-default btn-lg" style="margin-right: 10px;"><span class="fa fa-envelope"></span> Contact Support </a>
-                {{/support_url}}
+                <a href="@(home)@" class="btn btn-primary btn-lg" style="margin-right: 10px;"><span class="fa fa-home"></span> Take Me Home </a>
+                @(#support_url)@
+                <a href="@(support_url)@" class="btn btn-default btn-lg" style="margin-right: 10px;"><span class="fa fa-envelope"></span> Contact Support </a>
+                @(/support_url)@
             </div>
         </div>
     </div>

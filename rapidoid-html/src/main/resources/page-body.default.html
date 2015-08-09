@@ -1,14 +1,14 @@
-{{^error}}
+@(^error)@
 <body class="rapidoid" ng-controller="Main" ng-app="app">
 
   <div ng-if="!ajaxBodyContent">
-{{^error}}{{>page-content}}{{/error}}
+@(^error)@@(>page-content)@@(/error)@
   </div>
 
   <div compile="ajaxBodyContent" ng-if="ajaxBodyContent"></div>
 
-{{>modal}}
+@(>modal)@
 
 </body>
-{{/error}}
-{{#error}}{{>page-error}}{{/error}}
+@(/error)@
+@(#error)@@(>page-error)@@(/error)@

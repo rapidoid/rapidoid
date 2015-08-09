@@ -21,12 +21,15 @@ package org.rapidoid.plugins.templates;
  */
 
 import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.io.Res;
 import org.rapidoid.io.IO;
+import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
+import org.rapidoid.util.U;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.FragmentKey;
@@ -37,9 +40,20 @@ import com.google.common.cache.LoadingCache;
 @Since("4.1.0")
 public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 
+	private static final String SM = "@(";
+
+	private static final String EM = ")@";
+
 	private volatile LoadingCache<String, Mustache> mustacheCache;
 
 	private volatile LoadingCache<FragmentKey, Mustache> lambdaCache;
+
+	private final ThreadLocal<Map<String, Mustache>> partialCache = new ThreadLocal<Map<String, Mustache>>() {
+		@Override
+		protected Map<String, Mustache> initialValue() {
+			return new HashMap<String, Mustache>();
+		}
+	};
 
 	@Override
 	protected LoadingCache<String, Mustache> createMustacheCache() {
@@ -57,14 +71,39 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 	public Mustache compile(String name) {
 		String filename = IO.getRealOrDefaultFilename(name);
 		Log.debug("Compiling template", "name", filename);
-		return super.compilePartial(filename);
+		return customCompile(filename);
 	}
 
 	@Override
 	public Mustache compilePartial(String name) {
 		String filename = IO.getRealOrDefaultFilename(name);
 		Log.debug("Compiling partial", "name", filename);
-		return super.compilePartial(filename);
+		return customCompile(filename);
+	}
+
+	@Override
+	public Mustache compile(Reader reader, String file, String sm, String em) {
+		throw U.notExpected();
+	}
+
+	private Mustache customCompile(String filename) {
+		Map<String, Mustache> cache = partialCache.get();
+		try {
+			Mustache mustache = cache.get(filename);
+			if (mustache == null) {
+				mustache = mc.compile(getReader(filename), filename, SM, EM);
+				cache.put(filename, mustache);
+				mustache.init();
+			}
+			return mustache;
+		} finally {
+			cache.remove(filename);
+		}
+	}
+
+	@Override
+	public Mustache compile(Reader reader, String name) {
+		return super.compile(reader, name, SM, EM);
 	}
 
 	public void invalidateCache() {
