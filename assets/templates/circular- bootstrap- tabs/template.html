@@ -1,0 +1,57 @@
+<!-- Derived from: http://bootsnipp.com/snippets/featured/content-in-bootstrap-tabs (Copyright (c) 2013 Bootsnipp.com, MIT license, see http://bootsnipp.com/license) -->
+
+<section style="background: #efefe9;">
+	<div class="container">
+		<div class="row">
+			<div class="board">
+				<div class="board-inner">
+					<ul class="nav nav-tabs" id="myTab">
+						<div class="liner"></div>
+						
+						{{#tabs}}	
+            	         <li class="{{active}}">
+            		         <a href="#{{id}}" data-toggle="tab" title="{{iconComment}}">
+                		     	<span class="round-tabs {{tabNb}}">
+                           	 		 <i class="glyphicon glyphicon-{{icon}}"></i>
+                      		 	</span> 
+                  			</a>
+                  		</li>
+                  		{{/tabs}}
+                  		
+					</ul>
+				</div>
+
+				<div class="tab-content">
+				
+					{{#tabs}}
+					<div class="tab-pane fade{{active}}" id="{{id}}">
+						<h3 class="head text-center">
+							{{title}}<sup>{{titleSup}}</sup>
+							{{#doner}}
+								<span style="color: #f48260;">{{titleIcon}}</span>
+								{{titlePiece}}
+								</h3>
+								<p class="narrow text-center">{{content}}</p>
+							{{/doner}}
+							{{^doner}}
+								{{titlePiece}}
+								<span style="color: #f48260;">{{titleIcon}}</span>
+								</h3>
+								<p class="narrow text-center">{{content}}</p>
+								
+								<p class="text-center">
+									<a href="" class="btn btn-success btn-outline-rounded green">{{btnVal}}
+										<span style="margin-left: 10px;" class="glyphicon glyphicon-{{btnIcon}}"></span>
+									</a>
+								</p>
+							{{/doner}}	
+					</div>
+					{{/tabs}}
+					
+					<div class="clearfix"></div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</section>
