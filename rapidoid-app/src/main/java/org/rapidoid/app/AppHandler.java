@@ -57,7 +57,7 @@ public class AppHandler implements Handler {
 
 	private static final String PAGE_RELOAD = "<h2>&nbsp;Reloading...</h2><script>location.reload();</script>";
 
-	private static final Pattern DIRECTIVE = Pattern.compile("\\s*\\Q<!--\\E\\s+([\\w\\+\\-\\, ]+)\\s+\\Q-->\\E\\s*");
+	private static final Pattern DIRECTIVE = Pattern.compile("\\s*\\Q<!--#\\E\\s*(\\{.+\\})\\s*\\Q-->\\E\\s*");
 
 	private CustomizableClassLoader classLoader;
 
@@ -249,20 +249,8 @@ public class AppHandler implements Handler {
 
 			Matcher m = DIRECTIVE.matcher(line);
 			if (m.matches()) {
-				String directives = m.group(1);
-				for (String directive : directives.split(",")) {
-					directive = directive.trim();
-					if (!U.isEmpty(directive)) {
-						if (directive.startsWith("+")) {
-							model.put(directive.substring(1), true);
-						} else if (directive.startsWith("-")) {
-							model.put(directive.substring(1), false);
-						} else {
-							Log.warn("Unknown directive!", "directive", directive, "file", filename);
-						}
-					}
-				}
-
+				Map<String, Object> directives = JSON.parseMap(m.group(1));
+				model.putAll(directives);
 				template = contentParts[1]; // without the directive
 			}
 		}
