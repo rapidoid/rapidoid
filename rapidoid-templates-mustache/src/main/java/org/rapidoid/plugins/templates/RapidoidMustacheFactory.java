@@ -55,14 +55,14 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 
 	@Override
 	public Mustache compile(String name) {
-		String filename = IO.getReadOrDefaultFilename(name);
+		String filename = IO.getRealOrDefaultFilename(name);
 		Log.debug("Compiling template", "name", filename);
 		return super.compilePartial(filename);
 	}
 
 	@Override
 	public Mustache compilePartial(String name) {
-		String filename = IO.getReadOrDefaultFilename(name);
+		String filename = IO.getRealOrDefaultFilename(name);
 		Log.debug("Compiling partial", "name", filename);
 		return super.compilePartial(filename);
 	}

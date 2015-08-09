@@ -249,7 +249,7 @@ public class IO {
 		}
 	}
 
-	public static String getReadOrDefaultFilename(String filename) {
+	public static String getRealOrDefaultFilename(String filename) {
 		if (resource(filename) != null) {
 			return filename;
 		} else {
