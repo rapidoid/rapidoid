@@ -2,7 +2,7 @@ package org.rapidoid.app.builtin;
 
 /*
  * #%L
- * rapidoid-pages
+ * rapidoid-app
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
