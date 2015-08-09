@@ -3,7 +3,10 @@ package org.rapidoid.io;
 import java.io.File;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.List;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -36,6 +39,8 @@ public class Res {
 
 	private static final ConcurrentMap<String, Res> FILES = U.concurrentMap();
 
+	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(1);
+
 	private final String name;
 
 	private volatile byte[] bytes;
@@ -45,6 +50,10 @@ public class Res {
 	private volatile long lastModified;
 
 	private volatile String content;
+
+	private volatile boolean trackingChanges;
+
+	private final List<Runnable> changeListeners = U.synchronizedList();
 
 	public Res(String name) {
 		this.name = name;
@@ -80,6 +89,8 @@ public class Res {
 				// if the resource doesn't exist, try loading the default resource
 				load(IO.getDefaultFilename(name));
 			}
+
+			notifyChangeListeners();
 		}
 	}
 
@@ -135,6 +146,39 @@ public class Res {
 	public synchronized Reader getReader() {
 		U.must(exists(), "The resource %s doesn't exist!", name);
 		return new StringReader(getContent());
+	}
+
+	public List<Runnable> getChangeListeners() {
+		return changeListeners;
+	}
+
+	private void notifyChangeListeners() {
+		if (!changeListeners.isEmpty()) {
+			Log.debug("Resource might have changed", "name", name);
+		}
+
+		for (Runnable listener : changeListeners) {
+			try {
+				listener.run();
+			} catch (Throwable e) {
+				Log.error("Error while processing resource changes!", e);
+			}
+		}
+	}
+
+	public synchronized Res trackChanges() {
+		if (!trackingChanges) {
+			this.trackingChanges = true;
+			EXECUTOR.scheduleWithFixedDelay(new Runnable() {
+				@Override
+				public void run() {
+					// loading the resource causes the resource to check for changes
+					loadResource();
+				}
+			}, 0, 1, TimeUnit.SECONDS);
+		}
+
+		return this;
 	}
 
 }
