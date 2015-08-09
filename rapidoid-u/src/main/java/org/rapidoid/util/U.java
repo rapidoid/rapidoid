@@ -256,6 +256,11 @@ public class U {
 		return (items instanceof Collection) ? ((Collection<?>) items).toArray() : list(items).toArray();
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> Set<T> synchronizedSet() {
+		return (Set<T>) Collections.synchronizedSet(set());
+	}
+
 	public static <T> Set<T> set() {
 		return new LinkedHashSet<T>();
 	}
@@ -278,6 +283,11 @@ public class U {
 		}
 
 		return set;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> synchronizedList() {
+		return (List<T>) Collections.synchronizedList(list());
 	}
 
 	public static <T> List<T> list() {
