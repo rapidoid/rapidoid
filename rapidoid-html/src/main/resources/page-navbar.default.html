@@ -9,43 +9,8 @@
             @(>page-brand)@
         </div>
 
-        <div id="collapsable" class="collapse navbar-collapse">
+@(>page-menu)@
 
-            @(#app.menu.items)@
-            <ul class="nav navbar-nav navbar-left">
-                <li class="dropdown">
-                    <a@(#submenu)@ class="dropdown-toggle" data-toggle="dropdown"@(/submenu)@ href="@(target)@">@(caption)@@(#submenu)@<span class="caret"></span>@(/submenu)@</a>
-                    @(#submenu)@
-                    <ul role="menu" class="dropdown-menu">
-                        @(#items)@
-                        @(#javascript)@
-                        <li><a onclick="@(javascript)@" href="javascript:void(0);">@(#icon)@<span class="@(icon)@"></span>&nbsp; @(/icon)@@(caption)@</a></li>
-                        @(/javascript)@
-                        @(^javascript)@
-                        <li><a href="@(target)@">@(#icon)@<span class="@(icon)@"></span>&nbsp; @(/icon)@@(caption)@</a></li>
-                        @(/javascript)@
-                        @(/items)@
-                    </ul>
-                    @(/submenu)@
-                </li>
-            </ul>
-            @(/app.menu.items)@
-
-@(^loggedIn)@@(#login)@
-            <ul class="nav navbar-nav navbar-right">
-@(>page-signin)@
-            </ul>
-@(/login)@@(/loggedIn)@
-
-@(#loggedIn)@@(#profile)@
-            <ul class="nav navbar-nav navbar-right">
-@(>page-profile)@
-            </ul>
-@(/profile)@@(/loggedIn)@
-
-@(#search)@@(>page-search)@@(/search)@
-
-        </div>
     </div>
 </nav>
 @(/navbar)@

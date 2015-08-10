@@ -39,6 +39,8 @@ public abstract class AbstractMenuItem {
 
 	protected String icon;
 
+	protected boolean divider = false;
+
 	protected final Map<String, Object> extra;
 
 	public AbstractMenuItem(String caption, Object target, Map<String, Object> extra) {
@@ -50,14 +52,18 @@ public abstract class AbstractMenuItem {
 			this.icon = Cls.str(iconExtra);
 		}
 
+		if (!caption.isEmpty() && caption.replace("-", "").isEmpty()) {
+			// e.g. ---
+			this.divider = true;
+		}
+
 		if (Cls.isSimple(target)) {
-			String targ = U.safe(Cls.str(target));
+			String targ = U.safe(Cls.str(target)).trim();
+
 			if (targ.startsWith("javascript:")) {
 				this.javascript = targ.substring(11).trim();
-				this.target = null;
 			} else {
 				this.target = targ.trim();
-				this.javascript = null;
 			}
 		}
 	}
@@ -96,6 +102,14 @@ public abstract class AbstractMenuItem {
 
 	public Map<String, Object> getExtra() {
 		return extra;
+	}
+
+	public boolean isDivider() {
+		return divider;
+	}
+
+	public void setDivider(boolean divider) {
+		this.divider = divider;
 	}
 
 }
