@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -70,11 +71,11 @@ public class Conf {
 		return Thread.currentThread().getContextClassLoader().getResource(name);
 	}
 
-	public static void args(String... args) {
-		args(null, args);
+	public static synchronized void args(String... args) {
+		args(args, (Object[]) null);
 	}
 
-	public static synchronized void args(String[] mainArgs, String... extraArgs) {
+	public static synchronized void args(String[] mainArgs, Object... extraArgs) {
 		init();
 
 		if (mainArgs != null) {
@@ -84,8 +85,10 @@ public class Conf {
 		}
 
 		if (extraArgs != null) {
-			for (String arg : extraArgs) {
-				processArg(arg);
+			for (Object arg : extraArgs) {
+				if (arg instanceof String) {
+					processArg((String) arg);
+				}
 			}
 		}
 	}
@@ -235,10 +238,14 @@ public class Conf {
 		return system("IP_ADDRESS");
 	}
 
-	public synchronized static void reset() {
+	public static synchronized void reset() {
 		init();
 		CFG.clear();
 		initialized = false;
+	}
+
+	public static synchronized Map<String, Object> get() {
+		return CFG;
 	}
 
 }

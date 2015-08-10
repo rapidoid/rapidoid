@@ -5,6 +5,7 @@ import java.util.Collections;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
 import org.rapidoid.ctx.Classes;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.util.U;
@@ -36,7 +37,7 @@ public class RootWebApp extends WebApp {
 	@SuppressWarnings("unchecked")
 	public RootWebApp() {
 		super("root", Conf.option("title", null), Collections.EMPTY_SET, Collections.EMPTY_SET, U.set("/"),
-				AppMode.DEVELOPMENT, null, null, Classes.from(ClasspathUtil.getAllClasses()));
+				AppMode.DEVELOPMENT, null, null, Classes.from(ClasspathUtil.getAllClasses()), new Config(Conf.get()));
 	}
 
 }

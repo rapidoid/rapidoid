@@ -56,6 +56,8 @@ public class Rapidoid {
 
 		MainHelp.processHelp(args);
 
+		Conf.args(args, config);
+
 		if (app == null) {
 			app = WebAppGroup.root();
 			app.getRouter().generic(new AppHandler());
@@ -97,6 +99,7 @@ public class Rapidoid {
 
 							Log.info("Configuring", key, value);
 							Conf.set(key, value);
+							rootApp.getConfig().put(key, value);
 						}
 
 						rootApp.setTitle(Conf.option("title", "App"));

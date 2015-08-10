@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.AppHandler;
+import org.rapidoid.config.Config;
 import org.rapidoid.ctx.Classes;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.io.IO;
@@ -140,7 +141,9 @@ public class Docs {
 		Iterable<Class<?>> clss = ClasspathUtil.scanClasses("org.rapidoid.docs.eg" + id, null, null, null, null);
 
 		Classes classes = Classes.from(clss);
-		WebApp app = new WebApp("eg" + id, "App", null, null, U.set("/"), AppMode.PRODUCTION, null, null, classes);
+		Config config = new Config();
+		WebApp app = new WebApp("eg" + id, "App", null, null, U.set("/"), AppMode.PRODUCTION, null, null, classes,
+				config);
 		app.getRouter().generic(new AppHandler());
 
 		WebAppGroup.main().clear();

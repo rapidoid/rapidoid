@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Config;
 import org.rapidoid.ctx.Classes;
 import org.rapidoid.dispatch.PojoDispatcher;
 import org.rapidoid.http.HttpRouter;
@@ -50,12 +51,14 @@ public class WebApp {
 
 	private final Classes classes;
 
+	private final Config config;
+
 	private volatile String title;
 
 	private volatile AppMenu menu;
 
 	public WebApp(String id, String title, Set<String> owners, Set<String> hostnames, Set<String> uriContexts,
-			AppMode mode, Router router, PojoDispatcher dispatcher, Classes classes) {
+			AppMode mode, Router router, PojoDispatcher dispatcher, Classes classes, Config config) {
 		this.id = id;
 		this.router = U.or(router, new HttpRouter());
 		this.dispatcher = U.or(dispatcher, new WebPojoDispatcher(classes));
@@ -65,10 +68,12 @@ public class WebApp {
 		this.uriContexts = U.safe(uriContexts);
 		this.mode = U.or(mode, AppMode.DEVELOPMENT);
 		this.classes = U.or(classes, new Classes());
+		this.config = U.or(config, new Config());
 	}
 
 	public WebApp(String id, String title, String uriPath, Classes classes) {
-		this(id, title, null, null, uriPath != null ? U.set(uriPath) : null, AppMode.DEVELOPMENT, null, null, classes);
+		this(id, title, null, null, uriPath != null ? U.set(uriPath) : null, AppMode.DEVELOPMENT, null, null, classes,
+				null);
 	}
 
 	public WebApp(String id, String uriPath, Classes classes) {
@@ -133,6 +138,10 @@ public class WebApp {
 
 	public void setMenu(AppMenu menu) {
 		this.menu = menu;
+	}
+
+	public Config getConfig() {
+		return config;
 	}
 
 }
