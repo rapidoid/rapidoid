@@ -1,6 +1,7 @@
 package org.rapidoid.docs.eg001;
 
-import org.rapidoid.annotation.App;
+import org.rapidoid.annotation.Page;
+import org.rapidoid.annotation.Web;
 import org.rapidoid.main.Rapidoid;
 
 /*
@@ -25,12 +26,16 @@ import org.rapidoid.main.Rapidoid;
 
 // Hello, world! :: Let's start Rapidoid:
 
-@App
+@Web
 public class Main {
-	String title = "Example 1"; // here
-	String content = "Hello, World!"; // here
 
 	public static void main(String[] args) {
 		Rapidoid.run(args);
 	}
+
+	@Page("/")
+	public String hello() {
+		return "Hello, world!";
+	}
+
 }
