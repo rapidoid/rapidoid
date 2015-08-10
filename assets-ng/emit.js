@@ -2,12 +2,15 @@ Rapidoid.initializer(function($scope) {
 
     $scope._emit = function(eventId, eventArgs) {
 
+        eventId = eventId || 'bind';
+        eventArgs = eventArgs || [];
+
         var x = document.querySelectorAll("input,textarea");
 
         var inputs = {};
         for (var i = 0; i < x.length; i++) {
             var t = $(x[i]);
-            var _h = t.attr('_h');
+            var _h = t.attr('_h') || t.attr('id') || t.attr('name');
 
             if (_h) {
                 var val;
@@ -26,7 +29,7 @@ Rapidoid.initializer(function($scope) {
 
         for (var i = 0; i < x.length; i++) {
             var t = $(x[i]);
-            var _h = t.attr('_h');
+            var _h = t.attr('_h') || t.attr('id') || t.attr('name');
 
             if (_h) {
                 inputs[_h] = t.prop('selected');

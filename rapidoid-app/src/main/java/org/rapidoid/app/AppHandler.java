@@ -142,7 +142,10 @@ public class AppHandler implements Handler {
 				}
 
 				DispatchResult dispatchResult = doDispatch(dispatcher, new WebReq(x));
-				U.must(dispatchResult != null && dispatchResult.getKind() == DispatchReqKind.PAGE);
+
+				if (dispatchResult != null) {
+					U.must(dispatchResult.getKind() == DispatchReqKind.PAGE);
+				}
 
 				// in case of binding or validation errors
 				if (x.hasErrors()) {
