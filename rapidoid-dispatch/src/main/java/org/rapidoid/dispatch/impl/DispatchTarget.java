@@ -21,6 +21,7 @@ package org.rapidoid.dispatch.impl;
  */
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -29,18 +30,21 @@ import org.rapidoid.annotation.Since;
 @Since("3.0.0")
 public class DispatchTarget {
 
-	Class<?> clazz;
+	final Class<?> clazz;
 
-	Method method;
+	final Method method;
 
-	public DispatchTarget(Class<?> clazz, Method method) {
+	final Map<String, Object> config;
+
+	public DispatchTarget(Class<?> clazz, Method method, Map<String, Object> config) {
 		this.clazz = clazz;
 		this.method = method;
+		this.config = config;
 	}
 
 	@Override
 	public String toString() {
-		return "DispatchTarget [clazz=" + clazz + ", method=" + method + "]";
+		return "DispatchTarget [clazz=" + clazz + ", method=" + method + ", config=" + config + "]";
 	}
 
 }

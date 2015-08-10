@@ -20,6 +20,8 @@ package org.rapidoid.dispatch;
  * #L%
  */
 
+import java.util.Map;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.dispatch.impl.DispatchReqKind;
@@ -32,9 +34,12 @@ public class DispatchResult {
 
 	private final DispatchReqKind kind;
 
-	public DispatchResult(Object result, DispatchReqKind kind) {
+	private final Map<String, Object> config;
+
+	public DispatchResult(Object result, DispatchReqKind kind, Map<String, Object> config) {
 		this.result = result;
 		this.kind = kind;
+		this.config = config;
 	}
 
 	public Object getResult() {
@@ -43,6 +48,10 @@ public class DispatchResult {
 
 	public DispatchReqKind getKind() {
 		return kind;
+	}
+
+	public Map<String, Object> getConfig() {
+		return config;
 	}
 
 	@Override

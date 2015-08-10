@@ -34,4 +34,16 @@ public @interface Page {
 
 	String value() default "";
 
+	boolean raw() default false;
+
+	boolean navbar() default true;
+
+	boolean search() default false;
+
+	boolean profile() default true;
+
+	boolean login() default true;
+
+	String title() default "";
+
 }

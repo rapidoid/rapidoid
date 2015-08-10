@@ -23,6 +23,7 @@ package org.rapidoid.webapp;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Cookie;
@@ -156,22 +157,40 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 
 	private List<DispatchReq> req(String componentPath, Annotation ann, Method method) {
 		String url;
-
 		String event = null;
+		Map<String, Object> config = U.synchronizedMap();
+
 		if (ann instanceof GET) {
 			url = ((GET) ann).value();
+
 		} else if (ann instanceof POST) {
 			url = ((POST) ann).value();
+
 		} else if (ann instanceof PUT) {
 			url = ((PUT) ann).value();
+
 		} else if (ann instanceof DELETE) {
 			url = ((DELETE) ann).value();
+
 		} else if (ann instanceof Page) {
-			url = ((Page) ann).value();
+			Page page = (Page) ann;
+			url = page.value();
+
+			config.put("raw", page.raw());
+			config.put("navbar", page.navbar());
+			config.put("search", page.search());
+			config.put("profile", page.profile());
+			config.put("login", page.login());
+
+			if (!page.title().isEmpty()) {
+				config.put("title", page.title());
+			}
+
 		} else if (ann instanceof On) {
 			On on = (On) ann;
 			url = on.page();
 			event = on.event();
+
 		} else {
 			return null;
 		}
@@ -180,13 +199,13 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 		String path = UTILS.path(componentPath, name);
 
 		if (ann instanceof Page) {
-			return U.list(new DispatchReq("GET", path, DispatchReqKind.PAGE), new DispatchReq("POST", path,
-					DispatchReqKind.PAGE));
+			return U.list(new DispatchReq("GET", path, DispatchReqKind.PAGE, config), new DispatchReq("POST", path,
+					DispatchReqKind.PAGE, config));
 		} else if (ann instanceof On) {
-			return U.list(new DispatchReq(event.toUpperCase(), path, DispatchReqKind.EVENT));
+			return U.list(new DispatchReq(event.toUpperCase(), path, DispatchReqKind.EVENT, config));
 		} else {
 			String verb = ann.annotationType().getSimpleName().toUpperCase();
-			return U.list(new DispatchReq(verb, path, DispatchReqKind.SERVICE));
+			return U.list(new DispatchReq(verb, path, DispatchReqKind.SERVICE, config));
 		}
 	}
 

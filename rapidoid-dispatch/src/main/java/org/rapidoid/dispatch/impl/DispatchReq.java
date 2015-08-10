@@ -20,6 +20,8 @@ package org.rapidoid.dispatch.impl;
  * #L%
  */
 
+import java.util.Map;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
@@ -33,10 +35,13 @@ public class DispatchReq {
 
 	final DispatchReqKind kind;
 
-	public DispatchReq(String command, String path, DispatchReqKind kind) {
+	final Map<String, Object> config;
+
+	public DispatchReq(String command, String path, DispatchReqKind kind, Map<String, Object> config) {
 		this.command = command;
 		this.path = path;
 		this.kind = kind;
+		this.config = config;
 	}
 
 	@Override

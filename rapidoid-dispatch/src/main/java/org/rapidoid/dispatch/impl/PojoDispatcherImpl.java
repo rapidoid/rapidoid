@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -72,7 +73,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 						List<DispatchReq> actions = getMethodActions(componentPath, method);
 
 						for (DispatchReq action : actions) {
-							mappings.put(action, new DispatchTarget(component, method));
+							mappings.put(action, new DispatchTarget(component, method, action.config));
 							Log.info("Registered web handler", "kind", action.kind, "command", action.command, "path",
 									action.path, "method", method);
 						}
@@ -100,7 +101,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 
 		if (req.isEvent()) {
 			// find the event handler
-			DispatchTarget target = mappings.get(new DispatchReq(command, path, DispatchReqKind.EVENT));
+			DispatchTarget target = mappings.get(new DispatchReq(command, path, DispatchReqKind.EVENT, null));
 
 			if (target != null) {
 				return call(req, parts, paramsFrom, target, DispatchReqKind.EVENT);
@@ -109,12 +110,12 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		} else {
 
 			// try a service
-			DispatchTarget target = mappings.get(new DispatchReq(command, path, DispatchReqKind.SERVICE));
+			DispatchTarget target = mappings.get(new DispatchReq(command, path, DispatchReqKind.SERVICE, null));
 			boolean isService = target != null;
 
 			if (!isService) {
 				// try a web page
-				target = mappings.get(new DispatchReq(command, path, DispatchReqKind.PAGE));
+				target = mappings.get(new DispatchReq(command, path, DispatchReqKind.PAGE, null));
 			}
 
 			if (target != null) {
@@ -130,7 +131,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		Object componentInstance = Cls.newInstance(target.clazz);
 		if (target.method != null) {
 			Object callResult = doDispatch(req, target.method, componentInstance, parts, paramsFrom);
-			return new DispatchResult(callResult, kind);
+			return new DispatchResult(callResult, kind, target.config);
 		} else {
 			throw notFound();
 		}
@@ -327,9 +328,10 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		return params;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected List<DispatchReq> getMethodActions(String componentPath, Method method) {
 		String path = UTILS.path(componentPath, method.getName());
-		return U.list(new DispatchReq("", path, DispatchReqKind.SERVICE));
+		return U.list(new DispatchReq("", path, DispatchReqKind.SERVICE, Collections.EMPTY_MAP));
 	}
 
 	private boolean shouldExpose(Method method) {

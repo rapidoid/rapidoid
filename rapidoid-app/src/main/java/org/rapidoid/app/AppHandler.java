@@ -162,13 +162,13 @@ public class AppHandler implements Handler {
 
 		// dispatch REST services or views (as POJO methods)
 
-		DispatchResult dispatchResult = doDispatch(dispatcher, new WebReq(x));
+		DispatchResult dres = doDispatch(dispatcher, new WebReq(x));
 
 		Object result = null;
-		if (dispatchResult != null) {
-			result = dispatchResult.getResult();
+		if (dres != null) {
+			result = dres.getResult();
 
-			if (dispatchResult.getKind() == DispatchReqKind.SERVICE) {
+			if (dres.getKind() == DispatchReqKind.SERVICE) {
 				return result;
 			}
 		}
@@ -178,9 +178,11 @@ public class AppHandler implements Handler {
 			result = GenericGUI.genericScreen();
 		}
 
+		Map<String, Object> config = dres != null ? dres.getConfig() : null;
+
 		// serve dynamic pages from file templates
 
-		if (serveDynamicPage(x, result, hasEvent)) {
+		if (serveDynamicPage(x, result, hasEvent, config)) {
 			return x;
 		}
 
@@ -202,7 +204,7 @@ public class AppHandler implements Handler {
 		}
 	}
 
-	public boolean serveDynamicPage(HttpExchangeImpl x, Object result, boolean hasEvent) {
+	public boolean serveDynamicPage(HttpExchangeImpl x, Object result, boolean hasEvent, Map<String, Object> config) {
 		String filename = "dynamic/" + x.resourceName() + ".html";
 		Res resource = Res.from(filename);
 
@@ -215,7 +217,14 @@ public class AppHandler implements Handler {
 			return false;
 		}
 
+		WebApp app = AppCtx.app();
+		model.put("title", app.getTitle());
 		model.put("embedded", hasEvent || x.param("embedded", null) != null);
+
+		// the @Page configuration overrides the previous
+		if (config != null) {
+			model.putAll(config);
+		}
 
 		if (hasEvent) {
 			serveEventResponse(x, x.renderPageToHTML(model));

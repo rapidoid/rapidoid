@@ -6,7 +6,7 @@
             <button data-target="#collapsable" class="navbar-toggle collapsed" data-toggle="collapse" type="button">
                 <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="@(home)@">@(app.title)@</a>
+            <a class="navbar-brand" href="@(home)@">@(title)@</a>
         </div>
 
         <div id="collapsable" class="collapse navbar-collapse">
@@ -31,19 +31,19 @@
             </ul>
             @(/app.menu.items)@
 
-@(^loggedIn)@
+@(^loggedIn)@@(#login)@
             <ul class="nav navbar-nav navbar-right">
 @(>page-signin)@
             </ul>
-@(/loggedIn)@
+@(/login)@@(/loggedIn)@
 
-@(#loggedIn)@
+@(#loggedIn)@@(#profile)@
             <ul class="nav navbar-nav navbar-right">
 @(>page-profile)@
             </ul>
-@(/loggedIn)@
+@(/profile)@@(/loggedIn)@
 
-@(>page-search)@
+@(#search)@@(>page-search)@@(/search)@
 
         </div>
     </div>
