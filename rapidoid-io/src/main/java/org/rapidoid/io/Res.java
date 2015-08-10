@@ -3,6 +3,7 @@ package org.rapidoid.io;
 import java.io.File;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -83,6 +84,8 @@ public class Res {
 	protected void loadResource() {
 		// micro-caching the file content, expires after 1 second
 		if (U.time() - lastUpdatedOn >= 1000) {
+			byte[] oldBytes = bytes;
+
 			load(name);
 
 			if (bytes == null) {
@@ -90,13 +93,16 @@ public class Res {
 				load(IO.getDefaultFilename(name));
 			}
 
-			notifyChangeListeners();
+			if (!U.eq(oldBytes, bytes) && (oldBytes == null || bytes == null || !Arrays.equals(oldBytes, bytes))) {
+				invalidate();
+			}
 		}
 	}
 
 	protected void invalidate() {
 		content = null;
 		lastUpdatedOn = U.time();
+		notifyChangeListeners();
 	}
 
 	protected void load(String filename) {
@@ -108,13 +114,11 @@ public class Res {
 				Log.debug("Reloading file", "name", filename);
 				this.lastModified = file.lastModified();
 				this.bytes = IO.loadBytes(filename);
-				invalidate();
 			}
 		} else {
 			// it might not exist or it might be on the classpath or compressed in a JAR
 			Log.debug("Reloading classpath resource", "name", filename);
 			this.bytes = IO.loadBytes(filename);
-			invalidate();
 		}
 	}
 
@@ -154,7 +158,7 @@ public class Res {
 
 	private void notifyChangeListeners() {
 		if (!changeListeners.isEmpty()) {
-			Log.debug("Resource might have changed", "name", name);
+			Log.info("Resource has changed, reloading...", "name", name);
 		}
 
 		for (Runnable listener : changeListeners) {
