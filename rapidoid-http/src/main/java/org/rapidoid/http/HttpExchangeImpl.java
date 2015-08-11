@@ -1273,6 +1273,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 				resourceName = "index";
 				resourceNameHasExtension = false;
 			} else {
+				if (resourceName.endsWith(".html")) {
+					resourceName = U.mid(resourceName, 0, -5);
+				}
 				resourceNameHasExtension = resourceName.contains(".");
 			}
 		}
