@@ -38,7 +38,6 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.io.Res;
 import org.rapidoid.jackson.JSON;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
@@ -72,12 +71,19 @@ public class OAuthTokenHandler implements Handler {
 
 		Log.debug("Received OAuth code", "code", code, "state", state);
 
-		if (code != null && state != null) {
+		if (code != null && !U.isEmpty(state)) {
 
 			String id = clientId.get();
 			String secret = clientSecret.get();
 
+			char statePrefix = state.charAt(0);
+			U.must(statePrefix == 'P' || statePrefix == 'N', "Invalid OAuth state prefix!");
+			state = state.substring(1);
+
 			U.must(stateCheck.isValidState(state, secret, x.sessionId()), "Invalid OAuth state!");
+
+			boolean popup = statePrefix == 'P';
+			Log.debug("OAuth validated", "popup", popup);
 
 			String domain = oauthDomain.get();
 			String redirectUrl = domain != null ? domain + callbackPath : x.constructUrl(callbackPath);
@@ -119,8 +125,7 @@ public class OAuthTokenHandler implements Handler {
 			Ctxs.ctx().setUser(user);
 			user.saveTo(x.cookiepack());
 
-			x.write(Res.from("close.html").getBytes());
-			return x;
+			return x.goBack(1);
 		} else {
 			String error = x.param("error");
 			if (error != null) {
@@ -129,7 +134,7 @@ public class OAuthTokenHandler implements Handler {
 			}
 		}
 
-		throw U.rte("OAuth error!");
+		throw U.rte("Invalid OAuth request!");
 	}
 
 	private String token(OAuthClientRequest request, OAuthClient oAuthClient) throws Exception {

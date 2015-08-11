@@ -104,7 +104,7 @@ public class OAuth {
 		String clientId = appcfg.entry("oauth", name, "id").byDefault("NO-CLIENT-ID-CONFIGURED").get();
 		String clientSecret = appcfg.entry("oauth", name, "secret").byDefault("NO-CLIENT-SECRET-CONFIGURED").get();
 
-		String callbackPath = "/_" + name + "OauthCallback.html";
+		String callbackPath = "/_" + name + "OauthCallback";
 
 		boolean popup = x.param("popup", null) != null;
 
