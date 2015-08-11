@@ -24,11 +24,13 @@ import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
+import org.rapidoid.config.ConfigEntry;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
+import org.rapidoid.webapp.AppCtx;
 import org.rapidoid.webapp.WebApp;
 
 @Authors("Nikolche Mihajlovski")
@@ -40,17 +42,17 @@ public class OAuth {
 	private static OAuthStateCheck STATE_CHECK;
 
 	public static void register(WebApp app, OAuthProvider... providers) {
-		register(app, null, new DefaultOAuthStateCheck(), providers);
+		register(app, new DefaultOAuthStateCheck(), providers);
 	}
 
-	public static void register(WebApp app, String oauthDomain, OAuthStateCheck stateCheck, OAuthProvider... providers) {
+	public static void register(WebApp app, OAuthStateCheck stateCheck, OAuthProvider... providers) {
+		Config appcfg = app.getConfig();
 
-		if (Conf.oauth() == null) {
-			Log.warn("OAuth is disabled!");
-			return;
+		if (!appcfg.has("oauth")) {
+			Log.warn("OAuth is currently not configured!");
 		}
 
-		oauthDomain = U.or(oauthDomain, Conf.option("oauth-domain", (String) null));
+		ConfigEntry oauthDomain = appcfg.entry("oauth", "domain").byDefault(null);
 
 		OAuth.STATE_CHECK = stateCheck;
 
@@ -67,8 +69,8 @@ public class OAuth {
 			String loginPath = "/_" + name + "Login";
 			String callbackPath = "/_" + name + "OauthCallback";
 
-			String clientId = Conf.option(name + ".clientId", "NO-CLIENT-ID");
-			String clientSecret = Conf.option(name + ".clientSecret", "NO-CLIENT-SECRET");
+			ConfigEntry clientId = appcfg.entry("oauth", name, "id").byDefault("NO-CLIENT-ID-CONFIGURED");
+			ConfigEntry clientSecret = appcfg.entry("oauth", name, "secret").byDefault("NO-CLIENT-SECRET-CONFIGURED");
 
 			app.getRouter().get(loginPath, new OAuthLoginHandler(provider, oauthDomain));
 			app.getRouter().get(callbackPath,
@@ -90,17 +92,17 @@ public class OAuth {
 
 	public static String getLoginURL(HttpExchange x, OAuthProvider provider, String oauthDomain) {
 
-		if (Conf.oauth() == null) {
-			Log.warn("OAuth is disabled!");
-			return "";
-		}
+		WebApp app = AppCtx.app();
+		Config appcfg = app.getConfig();
 
-		oauthDomain = U.or(oauthDomain, Conf.option("oauth-domain", (String) null));
+		if (!appcfg.has("oauth")) {
+			Log.warn("OAuth is currently not configured!");
+		}
 
 		String name = provider.getName().toLowerCase();
 
-		String clientId = Conf.option(name + ".clientId", "NO-CLIENT-ID");
-		String clientSecret = Conf.option(name + ".clientSecret", "NO-CLIENT-SECRET");
+		String clientId = appcfg.entry("oauth", name, "id").byDefault("NO-CLIENT-ID-CONFIGURED").get();
+		String clientSecret = appcfg.entry("oauth", name, "secret").byDefault("NO-CLIENT-SECRET-CONFIGURED").get();
 
 		String callbackPath = "/_" + name + "OauthCallback.html";
 

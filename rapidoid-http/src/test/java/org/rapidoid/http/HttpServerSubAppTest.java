@@ -40,10 +40,10 @@ public class HttpServerSubAppTest extends HttpTestCommons {
 
 		WebAppGroup apps = new WebAppGroup("apps");
 
-		WebApp myapp = new WebApp("myapp", "My App", "/my", null);
+		WebApp myapp = new WebApp("myapp", "/my", null);
 		apps.register(myapp);
 
-		WebApp defaultApp = new WebApp("defapp", "Default", null, null);
+		WebApp defaultApp = new WebApp("defapp", null, null);
 		apps.setDefaultApp(defaultApp);
 
 		myapp.getRouter().get("/ab", info("my-special"));

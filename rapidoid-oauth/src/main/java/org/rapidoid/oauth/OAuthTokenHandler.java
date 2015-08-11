@@ -33,6 +33,7 @@ import org.apache.oltu.oauth2.client.response.OAuthResourceResponse;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.ConfigEntry;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.http.Handler;
@@ -48,14 +49,14 @@ import org.rapidoid.util.UTILS;
 public class OAuthTokenHandler implements Handler {
 
 	private final OAuthProvider provider;
-	private final String oauthDomain;
+	private final ConfigEntry oauthDomain;
 	private final OAuthStateCheck stateCheck;
-	private final String clientId;
-	private final String clientSecret;
+	private final ConfigEntry clientId;
+	private final ConfigEntry clientSecret;
 	private final String callbackPath;
 
-	public OAuthTokenHandler(OAuthProvider provider, String oauthDomain, OAuthStateCheck stateCheck, String clientId,
-			String clientSecret, String callbackPath) {
+	public OAuthTokenHandler(OAuthProvider provider, ConfigEntry oauthDomain, OAuthStateCheck stateCheck,
+			ConfigEntry clientId, ConfigEntry clientSecret, String callbackPath) {
 		this.provider = provider;
 		this.oauthDomain = oauthDomain;
 		this.stateCheck = stateCheck;
@@ -73,12 +74,16 @@ public class OAuthTokenHandler implements Handler {
 
 		if (code != null && state != null) {
 
-			U.must(stateCheck.isValidState(state, clientSecret, x.sessionId()), "Invalid OAuth state!");
+			String id = clientId.get();
+			String secret = clientSecret.get();
 
-			String redirectUrl = oauthDomain != null ? oauthDomain + callbackPath : x.constructUrl(callbackPath);
+			U.must(stateCheck.isValidState(state, secret, x.sessionId()), "Invalid OAuth state!");
+
+			String domain = oauthDomain.get();
+			String redirectUrl = domain != null ? domain + callbackPath : x.constructUrl(callbackPath);
 
 			TokenRequestBuilder reqBuilder = OAuthClientRequest.tokenLocation(provider.getTokenEndpoint())
-					.setGrantType(GrantType.AUTHORIZATION_CODE).setClientId(clientId).setClientSecret(clientSecret)
+					.setGrantType(GrantType.AUTHORIZATION_CODE).setClientId(id).setClientSecret(secret)
 					.setRedirectURI(redirectUrl).setCode(code);
 
 			OAuthClientRequest request = paramsInBody() ? reqBuilder.buildBodyMessage() : reqBuilder.buildBodyMessage();

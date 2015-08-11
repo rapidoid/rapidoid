@@ -53,16 +53,13 @@ public class WebApp {
 
 	private final Config config;
 
-	private volatile String title;
-
 	private volatile AppMenu menu;
 
-	public WebApp(String id, String title, Set<String> owners, Set<String> hostnames, Set<String> uriContexts,
-			AppMode mode, Router router, PojoDispatcher dispatcher, Classes classes, Config config) {
+	public WebApp(String id, Set<String> owners, Set<String> hostnames, Set<String> uriContexts, AppMode mode,
+			Router router, PojoDispatcher dispatcher, Classes classes, Config config) {
 		this.id = id;
 		this.router = U.or(router, new HttpRouter());
 		this.dispatcher = U.or(dispatcher, new WebPojoDispatcher(classes));
-		this.title = U.or(title, "App");
 		this.owners = U.safe(owners);
 		this.hostnames = U.safe(hostnames);
 		this.uriContexts = U.safe(uriContexts);
@@ -71,13 +68,8 @@ public class WebApp {
 		this.config = U.or(config, new Config());
 	}
 
-	public WebApp(String id, String title, String uriPath, Classes classes) {
-		this(id, title, null, null, uriPath != null ? U.set(uriPath) : null, AppMode.DEVELOPMENT, null, null, classes,
-				null);
-	}
-
 	public WebApp(String id, String uriPath, Classes classes) {
-		this(id, id, uriPath, classes);
+		this(id, null, null, uriPath != null ? U.set(uriPath) : null, AppMode.DEVELOPMENT, null, null, classes, null);
 	}
 
 	public WebApp(String id) {
@@ -93,11 +85,11 @@ public class WebApp {
 	}
 
 	public String getTitle() {
-		return title;
+		return config.option("title", "Untitled");
 	}
 
 	public void setTitle(String title) {
-		this.title = title;
+		config.put("title", title);
 	}
 
 	public Set<String> getOwners() {

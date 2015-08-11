@@ -1,17 +1,5 @@
 package org.rapidoid.config;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 /*
  * #%L
  * rapidoid-config
@@ -38,46 +26,13 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class Conf {
 
-	private static boolean initialized = false;
-
-	private static final ConcurrentMap<String, Object> CFG = new ConcurrentHashMap<String, Object>();
-
-	private static synchronized void init() {
-		if (!initialized) {
-			initialized = true;
-			Properties props = new Properties();
-
-			try {
-				URL config = resource("config");
-				if (config != null) {
-					props.load(config.openStream());
-				}
-
-				config = resource("config.private");
-				if (config != null) {
-					props.load(config.openStream());
-				}
-
-				for (Entry<Object, Object> e : props.entrySet()) {
-					set(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
-				}
-			} catch (IOException e) {
-				throw new RuntimeException("Cannot load config!", e);
-			}
-		}
-	}
-
-	private static URL resource(String name) {
-		return Thread.currentThread().getContextClassLoader().getResource(name);
-	}
+	private static final Config ROOT = new Config();
 
 	public static synchronized void args(String... args) {
 		args(args, (Object[]) null);
 	}
 
 	public static synchronized void args(String[] mainArgs, Object... extraArgs) {
-		init();
-
 		if (mainArgs != null) {
 			for (String arg : mainArgs) {
 				processArg(arg);
@@ -105,67 +60,43 @@ public class Conf {
 			value = "true";
 		}
 
-		set(name, value);
-	}
-
-	public static void set(String name, String value) {
-		init();
-		String[] parts = value.split(",");
-		Object val = parts.length > 1 ? Arrays.asList(parts) : value;
-		CFG.put(name, val);
+		ROOT.put(name, value);
 	}
 
 	public static void unconfigure(String name) {
-		init();
-		CFG.remove(name);
+		ROOT.remove(name);
 	}
 
 	public static Object option(String name) {
-		init();
-		return CFG.get(name);
+		return ROOT.get(name);
 	}
 
 	public static String option(String name, String defaultValue) {
-		init();
-		return CFG.containsKey(name) ? (String) CFG.get(name) : defaultValue;
+		return ROOT.containsKey(name) ? (String) ROOT.get(name) : defaultValue;
 	}
 
 	public static int option(String name, int defaultValue) {
-		String n = option(name, (String) null);
-		return n != null ? Integer.parseInt(n) : defaultValue;
+		return ROOT.option(name, defaultValue);
 	}
 
 	public static long option(String name, long defaultValue) {
-		String n = option(name, (String) null);
-		return n != null ? Long.parseLong(n) : defaultValue;
+		return ROOT.option(name, defaultValue);
 	}
 
 	public static double option(String name, double defaultValue) {
-		String n = option(name, (String) null);
-		return n != null ? Double.parseDouble(n) : defaultValue;
+		return ROOT.option(name, defaultValue);
 	}
 
-	public static boolean has(String name, String value) {
-		Object opt = option(name);
-		return opt == value || (opt != null && opt.equals(value));
+	public static boolean has(String name, Object value) {
+		return ROOT.has(name, value);
 	}
 
 	public static boolean is(String name) {
-		return has(name, "true");
+		return ROOT.is(name);
 	}
 
-	public static boolean contains(String name, String value) {
-		Object opt = option(name);
-
-		if (opt != null) {
-			if (opt instanceof Collection) {
-				return ((Collection<?>) opt).contains(value);
-			}
-
-			return opt.equals(value);
-		}
-
-		return opt == value;
+	public static boolean contains(String name, Object value) {
+		return ROOT.contains(name, value);
 	}
 
 	public static int cpus() {
@@ -174,19 +105,6 @@ public class Conf {
 
 	public static boolean micro() {
 		return has("size", "micro");
-	}
-
-	@SuppressWarnings("unchecked")
-	public static List<String> oauth() {
-		Object oauth = option("oauth");
-
-		if (oauth instanceof List<?>) {
-			return (List<String>) oauth;
-		} else {
-			List<String> lst = new ArrayList<String>();
-			lst.add(String.valueOf(oauth));
-			return lst;
-		}
 	}
 
 	public static boolean production() {
@@ -204,7 +122,7 @@ public class Conf {
 	}
 
 	private static boolean configureDevMode() {
-		set("mode", "dev");
+		ROOT.put("mode", "dev");
 		return true;
 	}
 
@@ -238,14 +156,16 @@ public class Conf {
 		return system("IP_ADDRESS");
 	}
 
-	public static synchronized void reset() {
-		init();
-		CFG.clear();
-		initialized = false;
+	public static void reset() {
+		ROOT.clear();
 	}
 
-	public static synchronized Map<String, Object> get() {
-		return CFG;
+	public static Config root() {
+		return ROOT;
+	}
+
+	public static void set(String key, Object value) {
+		ROOT.put(key, value);
 	}
 
 }

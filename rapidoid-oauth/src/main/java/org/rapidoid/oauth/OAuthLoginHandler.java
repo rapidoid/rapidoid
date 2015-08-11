@@ -22,6 +22,7 @@ package org.rapidoid.oauth;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.ConfigEntry;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 
@@ -30,16 +31,17 @@ import org.rapidoid.http.HttpExchange;
 public class OAuthLoginHandler implements Handler {
 
 	private final OAuthProvider provider;
-	private final String oauthDomain;
+	private final ConfigEntry oauthDomain;
 
-	public OAuthLoginHandler(OAuthProvider provider, String oauthDomain) {
+	public OAuthLoginHandler(OAuthProvider provider, ConfigEntry oauthDomain) {
 		this.provider = provider;
 		this.oauthDomain = oauthDomain;
 	}
 
 	@Override
 	public Object handle(HttpExchange x) throws Exception {
-		return x.redirect(OAuth.getLoginURL(x, provider, oauthDomain));
+		String domain = oauthDomain.get();
+		return x.redirect(OAuth.getLoginURL(x, provider, domain));
 	}
 
 }

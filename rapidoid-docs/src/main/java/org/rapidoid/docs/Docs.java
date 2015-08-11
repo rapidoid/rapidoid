@@ -142,8 +142,7 @@ public class Docs {
 
 		Classes classes = Classes.from(clss);
 		Config config = new Config();
-		WebApp app = new WebApp("eg" + id, "App", null, null, U.set("/"), AppMode.PRODUCTION, null, null, classes,
-				config);
+		WebApp app = new WebApp("eg" + id, null, null, U.set("/"), AppMode.PRODUCTION, null, null, classes, config);
 		app.getRouter().generic(new AppHandler());
 
 		WebAppGroup.main().clear();

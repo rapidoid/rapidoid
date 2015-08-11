@@ -38,7 +38,11 @@ class Foo {
 public class RoleBasedSecurityTest extends SecurityTestCommons {
 
 	private void setupRoles() {
-		Conf.args("role-admin=adm1,adm2", "role-manager=mng1", "role-moderator=mod1,mod2", "role-abc=abc");
+		List<String> admin = U.list("adm1", "adm2");
+		List<String> manager = U.list("mng1");
+		List<String> moderator = U.list("mod1", "mod2");
+		List<String> abc = U.list("abc");
+		Conf.set("roles", U.map("admin", admin, "manager", manager, "moderator", moderator, "abc", abc));
 	}
 
 	@Test

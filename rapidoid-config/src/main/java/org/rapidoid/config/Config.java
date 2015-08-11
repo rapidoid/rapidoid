@@ -20,21 +20,89 @@ package org.rapidoid.config;
  * #L%
  */
 
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Nikolche Mihajlovski
  * @since 4.1.0
  */
-public class Config extends HashMap<String, Object> {
+public class Config extends ConcurrentHashMap<String, Object> {
 
-	private static final long serialVersionUID = 4190029346807534155L;
+	private static final long serialVersionUID = 2218993389190953636L;
 
 	public Config(Map<String, Object> config) {
 		putAll(config);
 	}
 
 	public Config() {}
+
+	public String option(String name) {
+		Object opt = get(name);
+		return opt != null ? opt.toString() : null;
+	}
+
+	public String option(String name, String defaultValue) {
+		return containsKey(name) ? (String) get(name) : defaultValue;
+	}
+
+	public int option(String name, int defaultValue) {
+		String n = option(name);
+		return n != null ? Integer.parseInt(n) : defaultValue;
+	}
+
+	public long option(String name, long defaultValue) {
+		String n = option(name);
+		return n != null ? Long.parseLong(n) : defaultValue;
+	}
+
+	public double option(String name, double defaultValue) {
+		String n = option(name);
+		return n != null ? Double.parseDouble(n) : defaultValue;
+	}
+
+	public boolean has(String name, Object value) {
+		Object opt = get(name);
+		return opt == value || (opt != null && opt.equals(value));
+	}
+
+	public boolean has(String name) {
+		return containsKey(name);
+	}
+
+	public boolean is(String name) {
+		return has(name, true);
+	}
+
+	public boolean contains(String name, Object value) {
+		Object opt = get(name);
+
+		if (opt != null) {
+			if (opt instanceof Collection) {
+				return ((Collection<?>) opt).contains(value);
+			} else {
+				throw new RuntimeException("Expected collection for config entry: " + name);
+			}
+		}
+
+		return false;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Config sub(String name) {
+		Object map = get(name);
+
+		if (map instanceof Map<?, ?>) {
+			Map<String, Object> submap = (Map<String, Object>) map;
+			return new Config(submap);
+		} else {
+			return new Config();
+		}
+	}
+
+	public ConfigEntry entry(String... name) {
+		return new ConfigEntry(this, name);
+	}
 
 }

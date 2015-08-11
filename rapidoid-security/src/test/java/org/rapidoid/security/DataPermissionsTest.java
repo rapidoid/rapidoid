@@ -104,8 +104,14 @@ public class DataPermissionsTest extends SecurityTestCommons {
 	private static final String[] USERS = { null, "", "abc", "adm1", "adm2", "mng1", "mod1", "mod2" };
 
 	private void setupRoles() {
-		Conf.args("role-admin=adm1,adm2", "role-manager=mng1", "role-moderator=mod1,mod2", "role-abc=abc",
-				"role-other_role=other");
+		List<String> admin = U.list("adm1", "adm2");
+		List<String> manager = U.list("mng1");
+		List<String> moderator = U.list("mod1", "mod2");
+		List<String> abc = U.list("abc");
+		List<String> other_role = U.list("other");
+
+		Conf.set("roles",
+				U.map("admin", admin, "manager", manager, "moderator", moderator, "abc", abc, "other_role", other_role));
 	}
 
 	@Test

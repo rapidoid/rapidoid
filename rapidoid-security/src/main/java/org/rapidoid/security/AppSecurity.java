@@ -126,8 +126,8 @@ public class AppSecurity implements Constants {
 			return !U.isEmpty(username);
 		}
 
-		String roleConfig = "role-" + role.toLowerCase();
-		return !U.isEmpty(username) && Conf.contains(roleConfig, username);
+		String roleConfig = role.toLowerCase();
+		return !U.isEmpty(username) && Conf.root().sub("roles").contains(roleConfig, username);
 	}
 
 	public boolean isAdmin(String username) {
