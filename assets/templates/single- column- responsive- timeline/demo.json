@@ -1,0 +1,36 @@
+{	
+    "timeline" :  {
+	"titlePiece1" : "Timeline",
+	"titlePiece2" : "using Bootstrap's",
+	"titlePiece3" : ".panel",
+	"part1" : {	
+		"date" : "26. 3. 2015",
+		"iconHeart" : "glyphicon glyphicon-heart",
+		"titlePiece1" : "Someone",
+		"titlePiece2" : " favourited your photo.",
+		"iconPicture" : "glyphicon glyphicon-picture",
+		"img" : "//placehold.it/350x150",
+		"iconPlus" : "glyphicon glyphicon-plus",
+		"title" : "New content added",
+		"content" : "Some new content has been added.",
+		"footer" : "Footer is also supported!"
+	},
+	"part2" : {
+		"date" : "25. 3. 2015",
+		"iconPlus" : "glyphicon glyphicon-plus",
+		"title" : "New content added",
+		"contentPiece1" : "Anything you can do with",
+		"contentPiece2" : ".panel.",
+		"contentPiece3" : ", can be done in timeline too!",
+		"items":[
+			{"value" : "like"},
+			{"value" : "list"},
+			{"value" : "groups"},
+			{"value" : "and"},
+			{"value" : "tables"}
+		]
+	},
+	"iconSign" : "glyphicon glyphicon-info-sign",
+	"content" : "That is all."
+	}
+}
