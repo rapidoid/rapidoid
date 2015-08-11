@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 
@@ -54,9 +55,11 @@ public class Res {
 
 	private volatile boolean trackingChanges;
 
+	private volatile String cachedFileName;
+
 	private final List<Runnable> changeListeners = U.synchronizedList();
 
-	public Res(String name) {
+	private Res(String name) {
 		this.name = name;
 	}
 
@@ -84,16 +87,26 @@ public class Res {
 	protected void loadResource() {
 		// micro-caching the file content, expires after 1 second
 		if (U.time() - lastUpdatedOn >= 1000) {
-			byte[] oldBytes = bytes;
+			boolean needsInvalidation = false;
 
-			load(name);
+			synchronized (this) {
 
-			if (bytes == null) {
-				// if the resource doesn't exist, try loading the default resource
-				load(IO.getDefaultFilename(name));
+				byte[] oldBytes = bytes;
+
+				byte[] res = load(name);
+
+				if (res == null) {
+					// if the resource doesn't exist, try loading the default resource
+					res = load(IO.getDefaultFilename(name));
+				}
+
+				this.bytes = res;
+
+				needsInvalidation = !U.eq(oldBytes, bytes)
+						&& (oldBytes == null || bytes == null || !Arrays.equals(oldBytes, bytes));
 			}
 
-			if (!U.eq(oldBytes, bytes) && (oldBytes == null || bytes == null || !Arrays.equals(oldBytes, bytes))) {
+			if (needsInvalidation) {
 				invalidate();
 			}
 		}
@@ -105,20 +118,27 @@ public class Res {
 		notifyChangeListeners();
 	}
 
-	protected void load(String filename) {
-		File file = new File(filename);
+	protected byte[] load(String filename) {
+		String name = Conf.path() + "/" + filename;
+		File file = IO.file(name);
 
 		if (file.exists()) {
+			Log.debug("File exists", "name", name);
 			// a normal file on the file system
-			if (file.lastModified() > this.lastModified) {
-				Log.debug("Reloading file", "name", filename);
+			if (file.lastModified() > this.lastModified || !name.equals(cachedFileName)) {
+				Log.debug("Reloading file", "name", name);
 				this.lastModified = file.lastModified();
-				this.bytes = IO.loadBytes(filename);
+				this.cachedFileName = name;
+				return IO.loadBytes(name);
+			} else {
+				Log.debug("File not modified", "name", name);
+				return bytes;
 			}
 		} else {
 			// it might not exist or it might be on the classpath or compressed in a JAR
-			Log.debug("Reloading classpath resource", "name", filename);
-			this.bytes = IO.loadBytes(filename);
+			Log.debug("Reloading classpath resource", "name", name);
+			this.cachedFileName = null;
+			return IO.loadBytes(name);
 		}
 	}
 

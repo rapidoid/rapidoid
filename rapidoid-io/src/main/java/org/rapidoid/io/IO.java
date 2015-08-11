@@ -58,7 +58,18 @@ public class IO {
 		return Thread.currentThread().getContextClassLoader();
 	}
 
+	public static String name(String resourceName) {
+		int urlPos = resourceName.indexOf("://");
+		if (urlPos > 0) {
+			return resourceName;
+		} else {
+			return resourceName.replace('/', File.separatorChar).replace('\\', File.separatorChar);
+		}
+	}
+
 	public static File file(String filename) {
+		filename = name(filename);
+
 		File file = new File(filename);
 
 		if (!file.exists()) {

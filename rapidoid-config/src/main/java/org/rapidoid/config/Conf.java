@@ -168,4 +168,14 @@ public class Conf {
 		ROOT.put(key, value);
 	}
 
+	public static String path() {
+		String path = option("path", "rapidoid");
+
+		if (path.endsWith("/") || path.endsWith("\\")) {
+			path = path.substring(0, path.length() - 1);
+		}
+
+		return path;
+	}
+
 }

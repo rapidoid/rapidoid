@@ -937,11 +937,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized boolean serveStaticFile() {
-		if (serveStaticFile("public/" + resourceName())) {
+		if (serveStaticFile("static/" + resourceName())) {
 			return true;
 		}
 
-		return !resourceNameHasExtension() && serveStaticFile("public/" + resourceName() + ".html");
+		return !resourceNameHasExtension() && serveStaticFile("static/" + resourceName() + ".html");
 	}
 
 	@Override

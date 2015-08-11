@@ -60,7 +60,7 @@ public class Rapidoid {
 			app = WebAppGroup.root();
 			app.getRouter().generic(new AppHandler());
 
-			final Res menuRes = Res.from("config/menu.yaml").trackChanges();
+			final Res menuRes = Res.from("menu.yaml").trackChanges();
 
 			final WebApp rootApp = app;
 			menuRes.getChangeListeners().add(new Runnable() {
@@ -74,7 +74,7 @@ public class Rapidoid {
 				}
 			});
 
-			final Res confRes = Res.from("config/app.yaml").trackChanges();
+			final Res confRes = Res.from("app.yaml").trackChanges();
 
 			confRes.getChangeListeners().add(new Runnable() {
 				@Override
