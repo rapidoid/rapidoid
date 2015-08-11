@@ -52,7 +52,7 @@ public class OAuth {
 			Log.warn("OAuth is currently not configured!");
 		}
 
-		ConfigEntry oauthDomain = appcfg.entry("oauth", "domain").byDefault(null);
+		ConfigEntry oauthDomain = appcfg.entry("domain").byDefault(null);
 
 		OAuth.STATE_CHECK = stateCheck;
 
