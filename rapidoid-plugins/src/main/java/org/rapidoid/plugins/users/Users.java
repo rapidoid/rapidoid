@@ -28,6 +28,10 @@ import org.rapidoid.plugins.Plugins;
 @Since("3.0.0")
 public class Users {
 
+	public static UsersPlugin instance(String name) {
+		return Plugins.users(name);
+	}
+
 	public static <U> U findByUsername(Class<U> userClass, String username) {
 		return Plugins.users().findByUsername(userClass, username);
 	}

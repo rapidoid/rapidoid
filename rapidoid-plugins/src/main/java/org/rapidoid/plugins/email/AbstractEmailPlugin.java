@@ -3,6 +3,7 @@ package org.rapidoid.plugins.email;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
+import org.rapidoid.plugins.AbstractPlugin;
 
 /*
  * #%L
@@ -26,7 +27,11 @@ import org.rapidoid.concurrent.Callback;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public abstract class AbstractEmailPlugin implements EmailPlugin {
+public abstract class AbstractEmailPlugin extends AbstractPlugin implements EmailPlugin {
+
+	public AbstractEmailPlugin(String name) {
+		super(name);
+	}
 
 	@Override
 	public void send(Iterable<String> to, Iterable<String> cc, Iterable<String> bcc, String subject, String body,

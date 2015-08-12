@@ -25,7 +25,11 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class DefaultLifecyclePlugin implements LifecyclePlugin {
+public class DefaultLifecyclePlugin extends AbstractLifecyclePlugin {
+
+	public DefaultLifecyclePlugin() {
+		super("default");
+	}
 
 	@Override
 	public void onStart(Object[] args) {}

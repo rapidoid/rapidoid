@@ -30,6 +30,10 @@ import org.rapidoid.util.U;
 @Since("4.1.0")
 public class Email {
 
+	public static EmailPlugin instance(String name) {
+		return Plugins.email(name);
+	}
+
 	public static void send(String to, String subject, String body, Callback<Void> callback) {
 		send(U.list(to), null, null, subject, body, callback);
 	}

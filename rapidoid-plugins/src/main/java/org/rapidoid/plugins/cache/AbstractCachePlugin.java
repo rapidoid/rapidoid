@@ -2,6 +2,7 @@ package org.rapidoid.plugins.cache;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.plugins.AbstractPlugin;
 
 /*
  * #%L
@@ -25,7 +26,11 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public abstract class AbstractCachePlugin implements CachePlugin {
+public abstract class AbstractCachePlugin extends AbstractPlugin implements CachePlugin {
+
+	public AbstractCachePlugin(String name) {
+		super(name);
+	}
 
 	@Override
 	public <K, V> ICache<K, V> create(String cacheName, long timeToLiveMs, boolean resetTimeToLiveWhenAccessed) {

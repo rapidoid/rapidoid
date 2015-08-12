@@ -1,8 +1,4 @@
-package org.rapidoid.plugins.users;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.plugins.Plugin;
+package org.rapidoid.plugins.templates;
 
 /*
  * #%L
@@ -24,13 +20,26 @@ import org.rapidoid.plugins.Plugin;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.plugins.PlainTemplate;
+
 @Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
-public interface UsersPlugin extends Plugin {
+@Since("4.1.0")
+public class DefaultTemplatesPlugin extends AbstractTemplatesPlugin {
 
-	<U> U findByUsername(Class<U> userClass, String username);
+	public DefaultTemplatesPlugin() {
+		super("default");
+	}
 
-	<U> U createUser(Class<U> userClass, String username, String passwordHash, String name, String email,
-			String oauthId, String oauthProvider);
+	@Override
+	public ITemplate fromFile(String filename) {
+		return new PlainTemplate("");
+	}
+
+	@Override
+	public ITemplate fromString(String template) {
+		return new PlainTemplate(template);
+	}
 
 }

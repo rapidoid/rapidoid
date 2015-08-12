@@ -2,6 +2,7 @@ package org.rapidoid.plugins.languages;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.plugins.AbstractPlugin;
 
 /*
  * #%L
@@ -25,7 +26,11 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public abstract class AbstractLanguagesPlugin implements LanguagesPlugin {
+public abstract class AbstractLanguagesPlugin extends AbstractPlugin implements LanguagesPlugin {
+
+	public AbstractLanguagesPlugin(String name) {
+		super(name);
+	}
 
 	@Override
 	public String singularToPlural(String noun) {

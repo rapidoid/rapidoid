@@ -1,8 +1,4 @@
-package org.rapidoid.plugins.users;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.plugins.Plugin;
+package org.rapidoid.plugins;
 
 /*
  * #%L
@@ -24,13 +20,21 @@ import org.rapidoid.plugins.Plugin;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 @Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
-public interface UsersPlugin extends Plugin {
+@Since("4.1.0")
+public abstract class AbstractPlugin implements Plugin {
 
-	<U> U findByUsername(Class<U> userClass, String username);
+	private final String name;
 
-	<U> U createUser(Class<U> userClass, String username, String passwordHash, String name, String email,
-			String oauthId, String oauthProvider);
+	public AbstractPlugin(String name) {
+		this.name = name;
+	}
+
+	public String name() {
+		return name;
+	}
 
 }

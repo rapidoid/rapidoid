@@ -22,7 +22,6 @@ package org.rapidoid.plugins.templates;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.plugins.AbstractTemplatesPlugin;
 
 import com.github.mustachejava.MustacheFactory;
 
@@ -31,6 +30,10 @@ import com.github.mustachejava.MustacheFactory;
 public class MustacheTemplatesPlugin extends AbstractTemplatesPlugin {
 
 	private final MustacheFactory factory = new RapidoidMustacheFactory();
+
+	public MustacheTemplatesPlugin() {
+		super("mustache");
+	}
 
 	@Override
 	public ITemplate fromFile(String filename) {

@@ -26,7 +26,11 @@ import org.rapidoid.util.English;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class DefaultLanguagesPlugin implements LanguagesPlugin {
+public class DefaultLanguagesPlugin extends AbstractLanguagesPlugin {
+
+	public DefaultLanguagesPlugin() {
+		super("default");
+	}
 
 	@Override
 	public String singularToPlural(String noun) {

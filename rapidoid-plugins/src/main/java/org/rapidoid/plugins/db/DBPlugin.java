@@ -28,10 +28,11 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.plugins.Plugin;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public interface DBPlugin {
+public interface DBPlugin extends Plugin {
 
 	String insert(Object entity);
 

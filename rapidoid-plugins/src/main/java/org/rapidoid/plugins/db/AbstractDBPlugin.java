@@ -8,6 +8,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
+import org.rapidoid.plugins.AbstractPlugin;
 
 /*
  * #%L
@@ -31,7 +32,11 @@ import org.rapidoid.lambda.Predicate;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public abstract class AbstractDBPlugin implements DBPlugin {
+public abstract class AbstractDBPlugin extends AbstractPlugin implements DBPlugin {
+
+	public AbstractDBPlugin(String name) {
+		super(name);
+	}
 
 	@Override
 	public String insert(Object entity) {

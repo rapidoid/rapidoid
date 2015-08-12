@@ -27,4 +27,8 @@ import org.rapidoid.annotation.Since;
 @Since("3.0.0")
 public class DefaultUsersPlugin extends AbstractUsersPlugin {
 
+	public DefaultUsersPlugin() {
+		super("default");
+	}
+
 }

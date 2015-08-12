@@ -3,6 +3,7 @@ package org.rapidoid.plugins.sms;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
+import org.rapidoid.plugins.AbstractPlugin;
 
 /*
  * #%L
@@ -26,7 +27,11 @@ import org.rapidoid.concurrent.Callback;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public abstract class AbstractSMSPlugin implements SMSPlugin {
+public abstract class AbstractSMSPlugin extends AbstractPlugin implements SMSPlugin {
+
+	public AbstractSMSPlugin(String name) {
+		super(name);
+	}
 
 	@Override
 	public void send(Iterable<String> toNumbers, String content, Callback<Void> callback) {

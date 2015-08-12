@@ -1,7 +1,10 @@
 package org.rapidoid.plugins;
 
+import java.util.Map;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.cache.CachePlugin;
 import org.rapidoid.plugins.cache.DefaultCachePlugin;
@@ -17,9 +20,11 @@ import org.rapidoid.plugins.lifecycle.DefaultLifecyclePlugin;
 import org.rapidoid.plugins.lifecycle.LifecyclePlugin;
 import org.rapidoid.plugins.sms.DefaultSMSPlugin;
 import org.rapidoid.plugins.sms.SMSPlugin;
+import org.rapidoid.plugins.templates.DefaultTemplatesPlugin;
 import org.rapidoid.plugins.templates.TemplatesPlugin;
 import org.rapidoid.plugins.users.DefaultUsersPlugin;
 import org.rapidoid.plugins.users.UsersPlugin;
+import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -41,9 +46,25 @@ import org.rapidoid.plugins.users.UsersPlugin;
  * #L%
  */
 
+/*
+ Used for code generation:
+
+ Lifecycle|lifecycle
+ Languages|languages
+ DB|db
+ Entities|entities
+ Users|users
+ Email|email
+ SMS|sms
+ Cache|cache
+ Templates|templates
+ */
+
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
 public final class Plugins {
+
+	private static final Map<String, Map<String, Plugin>> PLUGINS = U.mapOfMaps();
 
 	private static volatile LifecyclePlugin lifecyclePlugin = new DefaultLifecyclePlugin();
 	private static volatile LanguagesPlugin languagesPlugin = new DefaultLanguagesPlugin();
@@ -91,49 +112,50 @@ public final class Plugins {
 		return templatesPlugin;
 	}
 
-	public static void register(LifecyclePlugin lifecyclePlugin) {
-		Log.info("Registering Lifecycle plugin", "plugin", lifecyclePlugin);
-		Plugins.lifecyclePlugin = lifecyclePlugin;
+	public static void register(Plugin plugin) {
+		for (Class<?> interf : Cls.getImplementedInterfaces(plugin.getClass())) {
+			if (Plugin.class.isAssignableFrom(interf) && !Plugin.class.equals(interf)) {
+				String name = plugin.name();
+				Log.info("Registering plugin", "plugin", plugin, "name", name, "type", interf);
+				PLUGINS.get(interf).put(name, plugin);
+			}
+		}
 	}
 
-	public static void register(LanguagesPlugin languagesPlugin) {
-		Log.info("Registering Languages plugin", "plugin", languagesPlugin);
-		Plugins.languagesPlugin = languagesPlugin;
+	public static LifecyclePlugin lifecycle(String name) {
+		return (LifecyclePlugin) PLUGINS.get(LifecyclePlugin.class).get(name);
 	}
 
-	public static void register(DBPlugin dbPlugin) {
-		Log.info("Registering DB plugin", "plugin", dbPlugin);
-		Plugins.dbPlugin = dbPlugin;
+	public static LanguagesPlugin languages(String name) {
+		return (LanguagesPlugin) PLUGINS.get(LanguagesPlugin.class).get(name);
 	}
 
-	public static void register(EntitiesPlugin entitiesPlugin) {
-		Log.info("Registering Entities plugin", "plugin", entitiesPlugin);
-		Plugins.entitiesPlugin = entitiesPlugin;
+	public static DBPlugin db(String name) {
+		return (DBPlugin) PLUGINS.get(DBPlugin.class).get(name);
 	}
 
-	public static void register(UsersPlugin usersPlugin) {
-		Log.info("Registering Users plugin", "plugin", usersPlugin);
-		Plugins.usersPlugin = usersPlugin;
+	public static EntitiesPlugin entities(String name) {
+		return (EntitiesPlugin) PLUGINS.get(EntitiesPlugin.class).get(name);
 	}
 
-	public static void register(EmailPlugin emailPlugin) {
-		Log.info("Registering Email plugin", "plugin", emailPlugin);
-		Plugins.emailPlugin = emailPlugin;
+	public static UsersPlugin users(String name) {
+		return (UsersPlugin) PLUGINS.get(UsersPlugin.class).get(name);
 	}
 
-	public static void register(SMSPlugin smsPlugin) {
-		Log.info("Registering SMS plugin", "plugin", smsPlugin);
-		Plugins.smsPlugin = smsPlugin;
+	public static EmailPlugin email(String name) {
+		return (EmailPlugin) PLUGINS.get(EmailPlugin.class).get(name);
 	}
 
-	public static void register(CachePlugin cachePlugin) {
-		Log.info("Registering Cache plugin", "plugin", cachePlugin);
-		Plugins.cachePlugin = cachePlugin;
+	public static SMSPlugin sms(String name) {
+		return (SMSPlugin) PLUGINS.get(SMSPlugin.class).get(name);
 	}
 
-	public static void register(TemplatesPlugin templatesPlugin) {
-		Log.info("Registering Templates plugin", "plugin", templatesPlugin);
-		Plugins.templatesPlugin = templatesPlugin;
+	public static CachePlugin cache(String name) {
+		return (CachePlugin) PLUGINS.get(CachePlugin.class).get(name);
+	}
+
+	public static TemplatesPlugin templates(String name) {
+		return (TemplatesPlugin) PLUGINS.get(TemplatesPlugin.class).get(name);
 	}
 
 }

@@ -28,6 +28,10 @@ import org.rapidoid.plugins.Plugins;
 @Since("3.0.0")
 public class Languages {
 
+	public static LanguagesPlugin instance(String name) {
+		return Plugins.languages(name);
+	}
+
 	public static String singularToPlural(String noun) {
 		return Plugins.languages().singularToPlural(noun);
 	}

@@ -2,6 +2,7 @@ package org.rapidoid.plugins.users;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.plugins.AbstractPlugin;
 
 /*
  * #%L
@@ -25,7 +26,11 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public abstract class AbstractUsersPlugin implements UsersPlugin {
+public abstract class AbstractUsersPlugin extends AbstractPlugin implements UsersPlugin {
+
+	public AbstractUsersPlugin(String name) {
+		super(name);
+	}
 
 	@Override
 	public <U> U findByUsername(Class<U> userClass, String username) {

@@ -73,6 +73,7 @@ public class CassandraDBPlugin extends DBPluginBase {
 	}
 
 	public CassandraDBPlugin(Cluster cluster) {
+		super("cassandra");
 		this.cluster = cluster;
 	}
 

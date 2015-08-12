@@ -22,10 +22,11 @@ package org.rapidoid.plugins.templates;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.plugins.Plugin;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public interface TemplatesPlugin {
+public interface TemplatesPlugin extends Plugin {
 
 	ITemplate fromFile(String filename);
 

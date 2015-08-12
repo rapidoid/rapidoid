@@ -22,21 +22,11 @@ package org.rapidoid.plugins;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.plugins.templates.ITemplate;
-import org.rapidoid.plugins.templates.TemplatesPlugin;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public abstract class AbstractTemplatesPlugin implements TemplatesPlugin {
+public interface Plugin {
 
-	@Override
-	public ITemplate fromFile(String filename) {
-		throw new AbstractMethodError("Not implemented!");
-	}
-
-	@Override
-	public ITemplate fromString(String template) {
-		throw new AbstractMethodError("Not implemented!");
-	}
+	String name();
 
 }

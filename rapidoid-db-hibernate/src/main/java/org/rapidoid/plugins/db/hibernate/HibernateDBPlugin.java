@@ -44,6 +44,10 @@ import org.rapidoid.util.U;
 @Since("3.0.0")
 public class HibernateDBPlugin extends DBPluginBase {
 
+	public HibernateDBPlugin() {
+		super("hibernate");
+	}
+
 	@Override
 	public String insert(Object entity) {
 		ensureNotInReadOnlyTransation();

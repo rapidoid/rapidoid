@@ -3,6 +3,7 @@ package org.rapidoid.plugins.email;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
+import org.rapidoid.plugins.Plugin;
 
 /*
  * #%L
@@ -26,7 +27,7 @@ import org.rapidoid.concurrent.Callback;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public interface EmailPlugin {
+public interface EmailPlugin extends Plugin {
 
 	void send(Iterable<String> to, Iterable<String> cc, Iterable<String> bcc, String subject, String body,
 			Callback<Void> callback);

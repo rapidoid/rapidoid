@@ -28,6 +28,10 @@ import org.rapidoid.plugins.Plugins;
 @Since("4.1.0")
 public class Templates {
 
+	public static TemplatesPlugin instance(String name) {
+		return Plugins.templates(name);
+	}
+
 	public static ITemplate fromFile(String filename) {
 		return Plugins.templates().fromFile(filename);
 	}

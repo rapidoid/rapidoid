@@ -35,6 +35,10 @@ public class DefaultSMSPlugin extends AbstractSMSPlugin {
 	private static final String SMS_DESC = "SMS plugin implementation hasn't been registered, so cannot send SMS:\n"
 			+ "To numbers: %s\nContent: %s" + Constants.SEPARATOR_LINE;
 
+	public DefaultSMSPlugin() {
+		super("default");
+	}
+
 	@Override
 	public void send(Iterable<String> toNumbers, String content, Callback<Void> callback) {
 

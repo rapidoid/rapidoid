@@ -35,6 +35,10 @@ public class DefaultEmailPlugin extends AbstractEmailPlugin {
 	private static final String MAIL_DESC = "Email plugin implementation hasn't been registered, so cannot send e-mail:\n"
 			+ "To: %s\nCc: %s\nBcc: %s\nSubject: %s\nBody:\n%s" + Constants.SEPARATOR_LINE;
 
+	public DefaultEmailPlugin() {
+		super("default");
+	}
+
 	@Override
 	public void send(Iterable<String> to, Iterable<String> cc, Iterable<String> bcc, String subject, String body,
 			Callback<Void> callback) {

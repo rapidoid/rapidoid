@@ -30,6 +30,10 @@ import org.rapidoid.util.U;
 @Since("4.1.0")
 public class SMS {
 
+	public static SMSPlugin instance(String name) {
+		return Plugins.sms(name);
+	}
+
 	public static void send(String toNumber, String content, Callback<Void> callback) {
 		send(U.list(toNumber), content, callback);
 	}

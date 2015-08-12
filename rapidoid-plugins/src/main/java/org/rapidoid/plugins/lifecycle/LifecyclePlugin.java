@@ -2,6 +2,7 @@ package org.rapidoid.plugins.lifecycle;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.plugins.Plugin;
 
 /*
  * #%L
@@ -25,7 +26,7 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public interface LifecyclePlugin {
+public interface LifecyclePlugin extends Plugin {
 
 	void onStart(Object[] args);
 

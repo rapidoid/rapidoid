@@ -28,6 +28,10 @@ import org.rapidoid.plugins.Plugins;
 @Since("4.1.0")
 public class Cache {
 
+	public static CachePlugin instance(String name) {
+		return Plugins.cache(name);
+	}
+
 	public static <K, V> ICache<K, V> create(String cacheName, long timeToLiveMs, boolean resetTimeToLiveWhenAccessed) {
 		return Plugins.cache().create(cacheName, timeToLiveMs, resetTimeToLiveWhenAccessed);
 	}

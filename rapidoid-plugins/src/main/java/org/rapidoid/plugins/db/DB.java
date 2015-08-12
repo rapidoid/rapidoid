@@ -35,6 +35,10 @@ import org.rapidoid.util.U;
 @Since("3.0.0")
 public class DB {
 
+	public static DBPlugin instance(String name) {
+		return Plugins.db(name);
+	}
+
 	public static String insert(Object record) {
 		return Plugins.db().insert(record);
 	}

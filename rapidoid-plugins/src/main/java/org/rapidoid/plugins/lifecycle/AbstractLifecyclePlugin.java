@@ -2,6 +2,7 @@ package org.rapidoid.plugins.lifecycle;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.plugins.AbstractPlugin;
 
 /*
  * #%L
@@ -25,7 +26,11 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public abstract class AbstractLifecyclePlugin implements LifecyclePlugin {
+public abstract class AbstractLifecyclePlugin extends AbstractPlugin implements LifecyclePlugin {
+
+	public AbstractLifecyclePlugin(String name) {
+		super(name);
+	}
 
 	@Override
 	public void onStart(Object[] args) {

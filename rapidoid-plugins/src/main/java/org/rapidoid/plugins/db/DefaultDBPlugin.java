@@ -27,4 +27,8 @@ import org.rapidoid.annotation.Since;
 @Since("3.0.0")
 public class DefaultDBPlugin extends AbstractDBPlugin {
 
+	public DefaultDBPlugin() {
+		super("default");
+	}
+
 }

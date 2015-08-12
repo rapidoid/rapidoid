@@ -57,6 +57,10 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 		}
 	};
 
+	public DBPluginBase(String name) {
+		super(name);
+	}
+
 	@Override
 	public String persist(Object record) {
 		String id = Beany.getIdIfExists(record);

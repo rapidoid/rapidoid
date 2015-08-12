@@ -2,7 +2,7 @@ package org.rapidoid.plugins.cache.guava;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.plugins.cache.CachePlugin;
+import org.rapidoid.plugins.cache.AbstractCachePlugin;
 import org.rapidoid.plugins.cache.ICache;
 
 /*
@@ -27,7 +27,11 @@ import org.rapidoid.plugins.cache.ICache;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class GuavaCachePlugin implements CachePlugin {
+public class GuavaCachePlugin extends AbstractCachePlugin {
+
+	public GuavaCachePlugin() {
+		super("guava");
+	}
 
 	@Override
 	public <K, V> ICache<K, V> create(String cacheName, long timeToLiveMs, boolean resetTimeToLiveWhenAccessed) {

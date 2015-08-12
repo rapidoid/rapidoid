@@ -30,6 +30,10 @@ import org.rapidoid.plugins.Plugins;
 @Since("3.0.0")
 public class Entities {
 
+	public static EntitiesPlugin instance(String name) {
+		return Plugins.entities(name);
+	}
+
 	public static <E> Class<E> getEntityType(String simpleTypeName) {
 		return Plugins.entities().getEntityType(simpleTypeName);
 	}

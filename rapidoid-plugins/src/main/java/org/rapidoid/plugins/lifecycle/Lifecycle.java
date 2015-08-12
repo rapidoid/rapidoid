@@ -28,6 +28,10 @@ import org.rapidoid.plugins.Plugins;
 @Since("3.0.0")
 public class Lifecycle {
 
+	public static LifecyclePlugin instance(String name) {
+		return Plugins.lifecycle(name);
+	}
+
 	public static void onStart(Object[] args) {
 		Plugins.lifecycle().onStart(args);
 	}
