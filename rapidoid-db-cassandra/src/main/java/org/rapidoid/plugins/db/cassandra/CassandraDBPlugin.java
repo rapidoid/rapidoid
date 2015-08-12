@@ -1,14 +1,19 @@
 package org.rapidoid.plugins.db.cassandra;
 
+import java.util.List;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.concurrent.Callback;
+import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.db.DBPluginBase;
 import org.rapidoid.util.U;
 
 import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Cluster.Builder;
+import com.datastax.driver.core.PoolingOptions;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.mapping.Mapper;
@@ -41,6 +46,31 @@ import com.datastax.driver.mapping.UDTMapper;
 public class CassandraDBPlugin extends DBPluginBase {
 
 	private final Cluster cluster;
+
+	public CassandraDBPlugin() {
+		this(defaultCluster());
+	}
+
+	public static Cluster defaultCluster() {
+		Builder builder = Cluster.builder();
+
+		List<String> peers = Conf.nested("cassandra", "peers");
+
+		if (peers != null) {
+			for (String peer : peers) {
+				Log.warn("Adding Cassandra peer (contact point)", "peer", peer);
+				builder.addContactPoint(peer);
+			}
+		} else {
+			Log.warn("Cassandra peers (contact points) were not configured, using 127.0.0.1 as default!");
+			builder.addContactPoint("127.0.0.1");
+		}
+
+		PoolingOptions poolingOptions = new PoolingOptions(); // TODO improve
+		Cluster cluster = builder.withPoolingOptions(poolingOptions).build();
+
+		return cluster;
+	}
 
 	public CassandraDBPlugin(Cluster cluster) {
 		this.cluster = cluster;
