@@ -27,7 +27,7 @@ import org.rapidoid.test.TestCommons;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class CachedResourceTest extends TestCommons {
+public class ResTest extends TestCommons {
 
 	@Test
 	public void testWithExistingFiles() {
@@ -45,15 +45,18 @@ public class CachedResourceTest extends TestCommons {
 		}
 
 		// should be fast
-		for (int i = 0; i < 1000000; i++) {
-			Res file = Res.from("abc.txt");
-			notNull(file.getBytes());
-		}
+		multiThreaded(100, 1000000, new Runnable() {
+			@Override
+			public void run() {
+				Res file = Res.from("abc.txt");
+				notNull(file.getBytes());
+			}
+		});
 	}
 
 	@Test
 	public void testWithNonexistingFiles() {
-		Res file = Res.from("asfgsafd");
+		Res file = Res.from("some-non-existing-file");
 		isFalse(file.exists());
 	}
 

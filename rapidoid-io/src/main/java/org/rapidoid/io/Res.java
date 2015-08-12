@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 
@@ -86,8 +85,8 @@ public class Res {
 
 	protected void loadResource() {
 		// micro-caching the file content, expires after 1 second
-		if (U.time() - lastUpdatedOn >= 1000) {
-			boolean needsInvalidation = false;
+		if (U.time() - lastUpdatedOn >= 500) {
+			boolean hasChanged = false;
 
 			synchronized (this) {
 
@@ -102,29 +101,29 @@ public class Res {
 
 				this.bytes = res;
 
-				needsInvalidation = !U.eq(oldBytes, bytes)
+				hasChanged = !U.eq(oldBytes, bytes)
 						&& (oldBytes == null || bytes == null || !Arrays.equals(oldBytes, bytes));
+
+				lastUpdatedOn = U.time();
+				if (hasChanged) {
+					content = null;
+				}
 			}
 
-			if (needsInvalidation) {
-				invalidate();
+			if (hasChanged) {
+				notifyChangeListeners();
 			}
 		}
 	}
 
-	protected void invalidate() {
-		content = null;
-		lastUpdatedOn = U.time();
-		notifyChangeListeners();
-	}
-
 	protected byte[] load(String filename) {
-		String name = Conf.path() + "/" + filename;
 		File file = IO.file(name);
 
 		if (file.exists()) {
-			Log.debug("File exists", "name", name);
+
 			// a normal file on the file system
+			Log.debug("File exists", "name", name);
+
 			if (file.lastModified() > this.lastModified || !name.equals(cachedFileName)) {
 				Log.debug("Reloading file", "name", name);
 				this.lastModified = file.lastModified();
@@ -135,6 +134,7 @@ public class Res {
 				return bytes;
 			}
 		} else {
+
 			// it might not exist or it might be on the classpath or compressed in a JAR
 			Log.debug("Reloading classpath resource", "name", name);
 			this.cachedFileName = null;
@@ -199,7 +199,7 @@ public class Res {
 					// loading the resource causes the resource to check for changes
 					loadResource();
 				}
-			}, 0, 1, TimeUnit.SECONDS);
+			}, 0, 300, TimeUnit.MILLISECONDS);
 		}
 
 		return this;
