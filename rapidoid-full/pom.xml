@@ -7,27 +7,20 @@
 		<version>4.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-integration-tests</artifactId>
+	<artifactId>rapidoid-full</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid Integration Tests</description>
+	<description>Rapidoid Full</description>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-full</artifactId>
+			<artifactId>rapidoid-main</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-test-commons</artifactId>
+			<artifactId>rapidoid-db-cassandra</artifactId>
 			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

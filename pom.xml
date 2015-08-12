@@ -125,6 +125,7 @@
 		<module>rapidoid-web</module>
 		<module>rapidoid-quick</module>
 		<module>rapidoid-main</module>
+		<module>rapidoid-full</module>
 		<module>rapidoid-demo</module>
 		<module>rapidoid-docs</module>
 		<module>rapidoid-integration-tests</module>

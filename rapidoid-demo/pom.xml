@@ -53,7 +53,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-main</artifactId>
+			<artifactId>rapidoid-full</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
