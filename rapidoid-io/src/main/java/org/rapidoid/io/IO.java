@@ -59,7 +59,7 @@ public class IO {
 	}
 
 	public static String name(String resourceName) {
-		int urlPos = resourceName.indexOf("://");
+		int urlPos = resourceName.indexOf(":/");
 		if (urlPos > 0) {
 			return resourceName;
 		} else {

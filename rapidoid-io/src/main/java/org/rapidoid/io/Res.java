@@ -95,8 +95,10 @@ public class Res {
 				byte[] res = load(name);
 
 				if (res == null) {
+					String defaultFilename = IO.getDefaultFilename(name);
+					Log.debug("Trying to load the default resource", "name", defaultFilename);
 					// if the resource doesn't exist, try loading the default resource
-					res = load(IO.getDefaultFilename(name));
+					res = load(defaultFilename);
 				}
 
 				this.bytes = res;
@@ -117,28 +119,28 @@ public class Res {
 	}
 
 	protected byte[] load(String filename) {
-		File file = IO.file(name);
+		File file = IO.file(filename);
 
 		if (file.exists()) {
 
 			// a normal file on the file system
-			Log.debug("File exists", "name", name);
+			Log.debug("File exists", "file", file);
 
-			if (file.lastModified() > this.lastModified || !name.equals(cachedFileName)) {
-				Log.debug("Reloading file", "name", name);
+			if (file.lastModified() > this.lastModified || !filename.equals(cachedFileName)) {
+				Log.debug("Reloading file", "file", file);
 				this.lastModified = file.lastModified();
-				this.cachedFileName = name;
-				return IO.loadBytes(name);
+				this.cachedFileName = filename;
+				return IO.loadBytes(filename);
 			} else {
-				Log.debug("File not modified", "name", name);
+				Log.debug("File not modified", "file", file);
 				return bytes;
 			}
 		} else {
-
 			// it might not exist or it might be on the classpath or compressed in a JAR
-			Log.debug("Reloading classpath resource", "name", name);
-			this.cachedFileName = null;
-			return IO.loadBytes(name);
+			Log.debug("Trying to load classpath resource", "file", file);
+			byte[] res = IO.loadBytes(filename);
+			this.cachedFileName = (res != null) ? filename : null;
+			return res;
 		}
 	}
 

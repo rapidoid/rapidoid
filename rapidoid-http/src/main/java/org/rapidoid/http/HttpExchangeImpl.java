@@ -937,19 +937,19 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized boolean serveStaticFile() {
-		if (serveStaticFile("static/" + resourceName())) {
+		if (serveStaticFile(resourceName())) {
 			return true;
 		}
 
-		return !resourceNameHasExtension() && serveStaticFile("static/" + resourceName() + ".html");
+		return !resourceNameHasExtension() && serveStaticFile(resourceName() + ".html");
 	}
 
 	@Override
 	public synchronized boolean serveStaticFile(String filename) {
-		Res resource = Res.from(filename);
+		Res res = Res.from(Conf.staticPath() + "/" + filename);
 
-		if (resource.exists()) {
-			sendFile(resource);
+		if (res.exists()) {
+			sendFile(res);
 			return true;
 		} else {
 			return false;

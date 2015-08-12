@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.dispatch.DispatchResult;
 import org.rapidoid.dispatch.PojoDispatchException;
 import org.rapidoid.dispatch.PojoDispatcher;
@@ -208,12 +209,11 @@ public class AppHandler implements Handler {
 	}
 
 	public boolean serveDynamicPage(HttpExchangeImpl x, Object result, boolean hasEvent, Map<String, Object> config) {
-		String filename = "dynamic/" + x.resourceName() + ".html";
-		Res resource = Res.from(filename);
+		Res resource = Res.from(Conf.templatesPath() + "/" + x.resourceName() + ".html");
 
 		Map<String, Object> model;
 		if (resource.exists()) {
-			model = pageModel(filename, result, resource);
+			model = pageModel(result, resource);
 		} else if (result != null) {
 			model = U.map("result", result, "content", result, "navbar", true);
 		} else {
@@ -250,7 +250,7 @@ public class AppHandler implements Handler {
 		}
 	}
 
-	private static Map<String, Object> pageModel(String filename, Object result, Res resource) {
+	private static Map<String, Object> pageModel(Object result, Res resource) {
 		String template = U.safe(resource.getContent());
 
 		Map<String, Object> model = U.map("result", result);

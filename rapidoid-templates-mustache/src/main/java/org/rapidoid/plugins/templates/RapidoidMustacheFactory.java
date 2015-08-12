@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
@@ -113,8 +114,7 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 
 	@Override
 	public Reader getReader(String resourceName) {
-		Res res = Res.from(resourceName);
-		return res.getReader();
+		return Res.from(Conf.templatesPath() + "/" + resourceName).getReader();
 	}
 
 }

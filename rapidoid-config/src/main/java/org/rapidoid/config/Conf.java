@@ -168,13 +168,30 @@ public class Conf {
 		ROOT.put(key, value);
 	}
 
-	public static String path() {
-		String path = option("path", "rapidoid");
+	public static String rootPath() {
+		return cleanPath(option("root", "rapidoid"));
+	}
 
+	public static String configPath() {
+		return cleanPath(option("config", rootPath()));
+	}
+
+	public static String staticPath() {
+		return cleanPath(option("static", rootPath() + "/static"));
+	}
+
+	public static String dynamicPath() {
+		return cleanPath(option("dynamic", rootPath() + "/dynamic"));
+	}
+
+	public static String templatesPath() {
+		return cleanPath(option("templates", rootPath() + "/templates"));
+	}
+
+	private static String cleanPath(String path) {
 		if (path.endsWith("/") || path.endsWith("\\")) {
 			path = path.substring(0, path.length() - 1);
 		}
-
 		return path;
 	}
 
