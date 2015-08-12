@@ -32,7 +32,7 @@ public class DefaultOAuthStateCheck implements OAuthStateCheck {
 
 	@Override
 	public String generateState(String clientSecret, String sessionId) {
-		if (Conf.is("oauth-no-state")) {
+		if (Boolean.TRUE.equals(Conf.nested("oauth", "stateless"))) {
 			return "OK";
 		}
 
@@ -43,7 +43,7 @@ public class DefaultOAuthStateCheck implements OAuthStateCheck {
 
 	@Override
 	public boolean isValidState(String state, String clientSecret, String sessionId) {
-		if (Conf.is("oauth-no-state")) {
+		if (Boolean.TRUE.equals(Conf.nested("oauth", "stateless"))) {
 			return state.equals("OK");
 		}
 
