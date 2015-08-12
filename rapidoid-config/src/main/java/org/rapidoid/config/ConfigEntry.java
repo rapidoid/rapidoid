@@ -39,17 +39,7 @@ public class ConfigEntry {
 
 	@SuppressWarnings("unchecked")
 	public <T> T get() {
-		Config cfg = config;
-
-		for (int i = 0; i < nameParts.length - 1; i++) {
-			cfg = cfg.sub(nameParts[i]);
-
-			if (cfg == null) {
-				return null;
-			}
-		}
-
-		Object val = cfg.get(nameParts[nameParts.length - 1]);
+		Object val = config.nested(nameParts);
 		return (T) (val != null ? val : defaultValue);
 	}
 

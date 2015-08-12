@@ -105,4 +105,18 @@ public class Config extends ConcurrentHashMap<String, Object> {
 		return new ConfigEntry(this, name);
 	}
 
+	@SuppressWarnings("unchecked")
+	public <T> T nested(String... name) {
+		Config cfg = this;
+		for (int i = 0; i < name.length - 1; i++) {
+			cfg = cfg.sub(name[i]);
+
+			if (cfg == null) {
+				return null;
+			}
+		}
+
+		return (T) cfg.get(name[name.length - 1]);
+	}
+
 }

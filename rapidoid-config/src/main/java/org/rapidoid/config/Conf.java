@@ -168,6 +168,10 @@ public class Conf {
 		ROOT.put(key, value);
 	}
 
+	public static <T> T nested(String... name) {
+		return ROOT.nested(name);
+	}
+
 	public static String rootPath() {
 		return cleanPath(option("root", "rapidoid"));
 	}
@@ -193,6 +197,10 @@ public class Conf {
 			path = path.substring(0, path.length() - 1);
 		}
 		return path;
+	}
+
+	public static Config sub(String name) {
+		return root().sub(name);
 	}
 
 }
