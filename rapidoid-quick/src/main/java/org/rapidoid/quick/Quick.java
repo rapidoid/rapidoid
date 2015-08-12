@@ -32,12 +32,14 @@ import org.rapidoid.aop.AOP;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.AuthInterceptor;
 import org.rapidoid.app.TransactionInterceptor;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.cache.guava.GuavaCachePlugin;
+import org.rapidoid.plugins.db.DBPlugin;
 import org.rapidoid.plugins.db.hibernate.HibernateDBPlugin;
 import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.DevMode;
@@ -75,9 +77,18 @@ public class Quick {
 		ctx.setApp(app);
 		Ctxs.setPersisterProvider(new QuickJPA(config));
 
-		Plugins.register(new HibernateDBPlugin());
 		Plugins.register(new AppClasspathEntitiesPlugin());
 		Plugins.register(new GuavaCachePlugin());
+
+		// optional modules
+		Class<?> cassandraPluginCls = Cls.getClassIfExists("org.rapidoid.plugins.db.cassandra.CassandraDBPlugin");
+		if (cassandraPluginCls != null) {
+			Log.info("Detected Casandra plugin");
+			DBPlugin dbPlugin = (DBPlugin) Cls.newInstance(cassandraPluginCls);
+			Plugins.register(dbPlugin);
+		}
+
+		Plugins.register(new HibernateDBPlugin());
 
 		AOP.reset();
 		AOP.intercept(new AuthInterceptor(), Admin.class, Manager.class, Moderator.class, LoggedIn.class,
