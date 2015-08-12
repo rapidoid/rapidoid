@@ -120,6 +120,32 @@ public final class Plugins {
 				PLUGINS.get(interf).put(name, plugin);
 			}
 		}
+
+		setPlugin(plugin);
+	}
+
+	private static void setPlugin(Plugin plugin) {
+		if (plugin instanceof LifecyclePlugin) {
+			lifecyclePlugin = (LifecyclePlugin) plugin;
+		} else if (plugin instanceof LanguagesPlugin) {
+			languagesPlugin = (LanguagesPlugin) plugin;
+		} else if (plugin instanceof DBPlugin) {
+			dbPlugin = (DBPlugin) plugin;
+		} else if (plugin instanceof EntitiesPlugin) {
+			entitiesPlugin = (EntitiesPlugin) plugin;
+		} else if (plugin instanceof UsersPlugin) {
+			usersPlugin = (UsersPlugin) plugin;
+		} else if (plugin instanceof EmailPlugin) {
+			emailPlugin = (EmailPlugin) plugin;
+		} else if (plugin instanceof SMSPlugin) {
+			smsPlugin = (SMSPlugin) plugin;
+		} else if (plugin instanceof CachePlugin) {
+			cachePlugin = (CachePlugin) plugin;
+		} else if (plugin instanceof TemplatesPlugin) {
+			templatesPlugin = (TemplatesPlugin) plugin;
+		} else {
+			throw U.notExpected();
+		}
 	}
 
 	public static LifecyclePlugin lifecycle(String name) {
