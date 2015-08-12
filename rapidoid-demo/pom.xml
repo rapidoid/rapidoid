@@ -37,7 +37,7 @@
 									</descriptorRefs>
 									<archive>
 										<manifest>
-											<mainClass>org.rapidoidx.demo.http.Main</mainClass>
+											<mainClass>org.rapidoid.demo.http.Main</mainClass>
 										</manifest>
 									</archive>
 								</configuration>
