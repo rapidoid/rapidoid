@@ -37,6 +37,7 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.cache.guava.GuavaCachePlugin;
 import org.rapidoid.plugins.db.hibernate.HibernateDBPlugin;
 import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.DevMode;
@@ -76,6 +77,7 @@ public class Quick {
 
 		Plugins.register(new HibernateDBPlugin());
 		Plugins.register(new AppClasspathEntitiesPlugin());
+		Plugins.register(new GuavaCachePlugin());
 
 		AOP.reset();
 		AOP.intercept(new AuthInterceptor(), Admin.class, Manager.class, Moderator.class, LoggedIn.class,
