@@ -58,6 +58,7 @@ public class SQL {
 			DEFAULT.driver(driver);
 			DEFAULT.user(username);
 			DEFAULT.password(password);
+			DEFAULT.pooled();
 
 			String maskedPassword = U.isEmpty(password) ? "<empty>" : "<specified>";
 			Log.info("Initialized the default JDBC/SQL API", "url", url, "driver", driver, "username", username,
@@ -109,6 +110,10 @@ public class SQL {
 
 	public static SQLAPI hsql() {
 		return defaultInstance().hsql();
+	}
+
+	public static SQLAPI pooled() {
+		return defaultInstance().pooled();
 	}
 
 	public static void execute(String sql, Object... args) {

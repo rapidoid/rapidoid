@@ -316,4 +316,9 @@ public class SQLAPI {
 		return connectionPool;
 	}
 
+	public SQLAPI pooled() {
+		new C3P0ConnectionPool(this);
+		return this;
+	}
+
 }
