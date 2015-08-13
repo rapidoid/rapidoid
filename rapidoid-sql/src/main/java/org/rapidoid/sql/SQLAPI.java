@@ -113,6 +113,10 @@ public class SQLAPI {
 	}
 
 	private void registerJDBCDriver() {
+		if (driver == null) {
+			driver = JDBCConfig.driver();
+		}
+
 		validateArgNotNull("driver", driver);
 
 		try {
