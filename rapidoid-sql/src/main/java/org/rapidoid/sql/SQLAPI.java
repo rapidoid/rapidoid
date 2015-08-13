@@ -221,7 +221,7 @@ public class SQLAPI {
 		}
 	}
 
-	public <T> List<Map<String, Object>> getRows(String sql, Object... args) {
+	public <T> List<Map<String, Object>> query(String sql, Object... args) {
 		ensureIsInitialized();
 		Connection conn = provideConnection();
 		PreparedStatement stmt = null;

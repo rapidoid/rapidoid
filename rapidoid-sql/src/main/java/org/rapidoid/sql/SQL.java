@@ -129,7 +129,7 @@ public class SQL {
 	}
 
 	public static <T> List<Map<String, Object>> get(String sql, Object... args) {
-		return defaultInstance().getRows(sql, args);
+		return defaultInstance().query(sql, args);
 	}
 
 	public static List<Map<String, Object>> rows(ResultSet rs) throws SQLException {
