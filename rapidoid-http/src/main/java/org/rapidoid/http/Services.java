@@ -23,44 +23,28 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
-import org.rapidoid.concurrent.Callbacks;
 import org.rapidoid.concurrent.Future;
-import org.rapidoid.concurrent.Futures;
-import org.rapidoid.jackson.JSON;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class Services {
 
-	private static final Mapper<byte[], Object> JSON_BYTES_TO_OBJ = new Mapper<byte[], Object>() {
-		@Override
-		public Object map(byte[] src) throws Exception {
-			return src != null ? JSON.parse(src, Object.class) : null;
-		}
-	};
+	public static final ServicesClient DEFAULT_CLIENT = new ServicesClient();
 
-	public static <T> Future<T> get(final String uri, final Callback<T> callback) {
-		Mapper<byte[], T> mapper = U.cast(JSON_BYTES_TO_OBJ);
-		Callback<byte[]> cb = Callbacks.mapping(callback, mapper);
-		return Futures.mapping(HTTP.get(uri, cb), mapper);
+	public static <T> Future<T> get(String uri, Callback<T> callback) {
+		return DEFAULT_CLIENT.get(uri, callback);
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> T get(final String uri) {
-		return (T) get(uri, null).get();
+	public static <T> T get(String uri) {
+		return DEFAULT_CLIENT.get(uri);
 	}
 
-	public static <T> Future<T> post(final String uri, final Callback<T> callback) {
-		Mapper<byte[], T> mapper = U.cast(JSON_BYTES_TO_OBJ);
-		Callback<byte[]> cb = Callbacks.mapping(callback, mapper);
-		return Futures.mapping(HTTP.post(uri, null, null, null, cb), mapper);
+	public static <T> Future<T> post(String uri, Callback<T> callback) {
+		return DEFAULT_CLIENT.post(uri, callback);
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> T post(final String uri) {
-		return (T) post(uri, null).get();
+	public static <T> T post(String uri) {
+		return DEFAULT_CLIENT.post(uri);
 	}
 
 }
