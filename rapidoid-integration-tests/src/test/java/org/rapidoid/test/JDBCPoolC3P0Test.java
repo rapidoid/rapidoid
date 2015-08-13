@@ -58,7 +58,8 @@ public class JDBCPoolC3P0Test extends IntegrationTestCommons {
 	@Test(timeout = 30000)
 	public void testJDBCWithTextconfig() {
 
-		Conf.args("jdbc.url=jdbc:h2:mem:mydb", "jdbc.username=sa");
+		Conf.set("jdbc", "url", "jdbc:h2:mem:mydb");
+		Conf.set("jdbc", "username", "sa");
 
 		new C3P0ConnectionPool(SQL.defaultInstance());
 
