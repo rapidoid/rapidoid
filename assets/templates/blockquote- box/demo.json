@@ -1,0 +1,40 @@
+{	
+    "boxes" :  [{
+    	"titlePage" : true,
+    	"title" : "Blockquote Box"
+    },{
+		"title" : "Bootsnipp",
+		"content" : "content 1",
+		"img" : "http://placehold.it/60/8e44ad/FFF&text=B",
+		"boxImg" : true	
+	},{
+		"title" : "Let's music play",
+		"content" : "content 2",
+		"badge_class" : "blockquote-primary",	
+		"icon" : "music glyphicon-lg",
+		"link" : "http://www.jquery2dotnet.com/search/label/jquery",
+		"linkVal" : "jquery2dotnet",
+		"boxPrimary" : true	
+	},{
+		"title" : "Tree conifer",
+		"content" : "content 3",
+		"badge_class" : "blockquote-success",	
+		"icon" : "tree-conifer glyphicon-lg",
+		"nextBoxRight" : true
+	},{
+		"title" : "Information",
+		"content" : "content 4",
+		"badge_class" : "blockquote-info",	
+		"icon" : "info-sign glyphicon-lg"
+	},{
+		"title" : "Warning",
+		"content" : "content 5",
+		"badge_class" : "blockquote-warning",	
+		"icon" : "warning-sign glyphicon-lg"
+	},{
+		"title" : "Danger",
+		"content" : "content 6",
+		"badge_class" : "blockquote-danger",	
+		"icon" : "record glyphicon-lg"
+	}]
+}
