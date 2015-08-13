@@ -1,0 +1,19 @@
+{	
+    "progresses" :  [{
+    	"pageTitle" : true,
+    	"title" : "Progess bar Colors",
+    	"content" : "Progress bars comes with customized colors and transparent background that would fit any colored widget or portlet"
+    },{
+		"width" : "50%",
+		"badge_class" : "success"	
+	},{
+		"width" : "60%",
+		"badge_class" : "info"	
+	},{
+		"width" : "40%",
+		"badge_class" : "warning"	
+	},{
+		"width" : "20%",
+		"badge_class" : "danger"	
+	}]
+}
