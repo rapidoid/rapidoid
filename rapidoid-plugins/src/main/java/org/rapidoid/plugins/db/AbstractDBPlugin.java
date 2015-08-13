@@ -94,6 +94,11 @@ public abstract class AbstractDBPlugin extends AbstractPlugin implements DBPlugi
 	}
 
 	@Override
+	public Iterable<Map<String, Object>> query(String query, Object... args) {
+		throw new AbstractMethodError("Not implemented!");
+	}
+
+	@Override
 	public <E> Iterable<E> query(Class<E> clazz, String query, Object... args) {
 		throw new AbstractMethodError("Not implemented!");
 	}

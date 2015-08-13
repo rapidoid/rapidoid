@@ -74,6 +74,8 @@ public interface DBPlugin extends Plugin {
 
 	<E> E entity(Class<E> entityType, Map<String, ?> properties);
 
+	Iterable<Map<String, Object>> query(String query, Object... args);
+
 	<E> Iterable<E> query(Class<E> clazz, String query, Object... args);
 
 	<RESULT> RESULT sql(String sql, Object... args);

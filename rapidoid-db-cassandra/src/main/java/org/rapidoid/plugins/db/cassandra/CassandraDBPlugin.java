@@ -1,6 +1,7 @@
 package org.rapidoid.plugins.db.cassandra;
 
 import java.util.List;
+import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -13,8 +14,11 @@ import org.rapidoid.util.U;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Cluster.Builder;
+import com.datastax.driver.core.ColumnDefinitions;
+import com.datastax.driver.core.ColumnDefinitions.Definition;
 import com.datastax.driver.core.PoolingOptions;
 import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
@@ -130,6 +134,38 @@ public class CassandraDBPlugin extends DBPluginBase {
 		} finally {
 			close(session);
 		}
+	}
+
+	@Override
+	public Iterable<Map<String, Object>> query(String cql, Object... args) {
+		Session session = getSession();
+
+		try {
+			ResultSet rs = session.execute(cql, args);
+			return results(rs.all());
+
+		} finally {
+			close(session);
+		}
+	}
+
+	private static Iterable<Map<String, Object>> results(List<Row> rows) {
+		List<Map<String, Object>> results = U.list();
+
+		for (Row row : rows) {
+			Map<String, Object> result = U.map();
+			ColumnDefinitions cols = row.getColumnDefinitions();
+
+			for (Definition col : cols.asList()) {
+				String name = col.getName();
+				Object val = row.getObject(name);
+				result.put(name, val);
+			}
+
+			results.add(result);
+		}
+
+		return results;
 	}
 
 	@Override
