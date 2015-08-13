@@ -538,15 +538,7 @@ public class U {
 	}
 
 	public static boolean eq(Object a, Object b) {
-		if (a == b) {
-			return true;
-		}
-
-		if (a == null || b == null) {
-			return false;
-		}
-
-		return a.equals(b);
+		return a == null ? b == null : a.equals(b);
 	}
 
 	public static RuntimeException rte(String message) {
