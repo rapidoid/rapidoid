@@ -149,7 +149,7 @@ public class Res {
 			Log.trace("Resource file exists", "name", shortName, "file", file);
 
 			if (file.lastModified() > this.lastModified || !filename.equals(cachedFileName)) {
-				Log.info("Detected resource file change", "name", shortName, "file", file);
+				Log.info("Loading resource file", "name", shortName, "file", file);
 				this.lastModified = file.lastModified();
 				return IO.loadBytes(filename);
 			} else {

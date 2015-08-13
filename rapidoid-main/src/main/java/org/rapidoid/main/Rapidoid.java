@@ -48,6 +48,7 @@ public class Rapidoid {
 
 		Conf.args(args, config);
 
+		Log.info("Working directory is: " + System.getProperty("user.dir"));
 
 		if (app == null) {
 			app = AppTool.createRootApp();
