@@ -20,19 +20,12 @@ package org.rapidoid.main;
  * #L%
  */
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.AppHandler;
 import org.rapidoid.config.Conf;
-import org.rapidoid.io.Res;
-import org.rapidoid.jackson.YAML;
 import org.rapidoid.log.Log;
 import org.rapidoid.quick.Quick;
 import org.rapidoid.util.U;
-import org.rapidoid.webapp.AppMenu;
 import org.rapidoid.webapp.WebApp;
 import org.rapidoid.webapp.WebAppGroup;
 
@@ -42,12 +35,11 @@ public class Rapidoid {
 
 	private static boolean initialized = false;
 
-	public static synchronized void run(String[] args, Object... config) {
-		WebApp noApp = null;
-		run(noApp, args, config);
+	public static synchronized WebApp run(String[] args, Object... config) {
+		return run(null, args, config);
 	}
 
-	public static synchronized void run(WebApp app, String[] args, Object... config) {
+	public static synchronized WebApp run(WebApp app, String[] args, Object... config) {
 		Log.info("Starting Rapidoid...");
 		U.must(!initialized, "Already initialized!");
 		initialized = true;
@@ -56,55 +48,13 @@ public class Rapidoid {
 
 		Conf.args(args, config);
 
+
 		if (app == null) {
-			app = WebAppGroup.root();
-			app.getRouter().generic(new AppHandler());
-
-			String menufile = "menu.yaml";
-			String firstMenuFile = Conf.configPath() + "/" + menufile;
-			String defaultMenuFile = Conf.configPathDefault() + "/" + menufile;
-			final Res menuRes = Res.from(menufile, true, firstMenuFile, defaultMenuFile).trackChanges();
-
-			final WebApp rootApp = app;
-			menuRes.getChangeListeners().add(new Runnable() {
-				@Override
-				public void run() {
-					if (menuRes.exists()) {
-						Object menuData = YAML.parse(menuRes.getContent(), Object.class);
-						AppMenu menu = AppMenu.from(menuData);
-						rootApp.setMenu(menu);
-					}
-				}
-			});
-
-			String appfile = "app.yaml";
-			String firstAppFile = Conf.configPath() + "/" + appfile;
-			String defaultAppFile = Conf.configPathDefault() + "/" + appfile;
-			final Res confRes = Res.from(appfile, true, firstAppFile, defaultAppFile).trackChanges();
-
-			confRes.getChangeListeners().add(new Runnable() {
-				@Override
-				public void run() {
-					if (confRes.exists()) {
-						Map<String, Object> conf = YAML.parseMap(confRes.getContent());
-
-						Conf.reset();
-						rootApp.getConfig().clear();
-
-						for (Entry<String, Object> e : conf.entrySet()) {
-							String key = e.getKey();
-							Object value = e.getValue();
-
-							Log.info("Configuring", key, value);
-							Conf.set(key, value);
-							rootApp.getConfig().put(key, value);
-						}
-					}
-				}
-			});
+			app = AppTool.createRootApp();
 		}
 
 		Quick.run(app, args, config);
+		return app;
 	}
 
 	public static void register(WebApp app) {
