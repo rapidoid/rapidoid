@@ -716,7 +716,8 @@ public class UTILS implements Constants {
 			}
 		}
 
-		return sb.toString();
+		String path = sb.toString();
+		return path.isEmpty() ? "/" : path;
 	}
 
 	public static void append(StringBuilder sb, String separator, String value) {

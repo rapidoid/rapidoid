@@ -24,8 +24,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
+import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.cache.guava.GuavaCachePlugin;
+import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
 import org.rapidoid.quick.Quick;
 import org.rapidoid.util.U;
+import org.rapidoid.webapp.AppClasspathEntitiesPlugin;
 import org.rapidoid.webapp.WebApp;
 import org.rapidoid.webapp.WebAppGroup;
 
@@ -49,6 +53,10 @@ public class Rapidoid {
 		Conf.args(args, config);
 
 		Log.info("Working directory is: " + System.getProperty("user.dir"));
+
+		Plugins.register(new MustacheTemplatesPlugin());
+		Plugins.register(new AppClasspathEntitiesPlugin());
+		Plugins.register(new GuavaCachePlugin());
 
 		if (app == null) {
 			app = AppTool.createRootApp();

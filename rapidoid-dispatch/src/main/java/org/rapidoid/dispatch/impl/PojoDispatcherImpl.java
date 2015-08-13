@@ -65,6 +65,8 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 
 	private void init(Map<String, Class<?>> components) {
 		for (Class<?> component : components.values()) {
+			Log.info("Processing POJO", "class", component);
+
 			List<String> componentPaths = getComponentNames(component);
 			for (String componentPath : componentPaths) {
 

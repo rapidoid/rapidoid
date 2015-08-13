@@ -38,7 +38,6 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugins;
-import org.rapidoid.plugins.cache.guava.GuavaCachePlugin;
 import org.rapidoid.plugins.db.DBPlugin;
 import org.rapidoid.plugins.db.hibernate.HibernateDBPlugin;
 import org.rapidoid.security.annotation.Admin;
@@ -49,7 +48,6 @@ import org.rapidoid.security.annotation.Moderator;
 import org.rapidoid.security.annotation.Role;
 import org.rapidoid.security.annotation.Roles;
 import org.rapidoid.util.U;
-import org.rapidoid.webapp.AppClasspathEntitiesPlugin;
 import org.rapidoid.webapp.WebApp;
 import org.rapidoid.webapp.WebAppGroup;
 
@@ -76,9 +74,6 @@ public class Quick {
 		Ctx ctx = Ctxs.open("quick");
 		ctx.setApp(app);
 		Ctxs.setPersisterProvider(new QuickJPA(config));
-
-		Plugins.register(new AppClasspathEntitiesPlugin());
-		Plugins.register(new GuavaCachePlugin());
 
 		// optional modules
 		Class<?> cassandraPluginCls = Cls.getClassIfExists("org.rapidoid.plugins.db.cassandra.CassandraDBPlugin");
