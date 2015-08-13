@@ -28,6 +28,12 @@ public class Conf {
 
 	private static final Config ROOT = new Config();
 
+	private static String rootPath = rootPathDefault();
+	private static String staticPath = staticPathDefault();
+	private static String dynamicPath = dynamicPathDefault();
+	private static String configPath = configPathDefault();
+	private static String templatesPath = templatesPathDefault();
+
 	public static synchronized void args(String... args) {
 		args(args, (Object[]) null);
 	}
@@ -49,7 +55,8 @@ public class Conf {
 	}
 
 	private static void processArg(String arg) {
-		String name, value;
+		String name;
+		Object value;
 
 		int pos = arg.indexOf('=');
 		if (pos > 0) {
@@ -57,10 +64,25 @@ public class Conf {
 			value = arg.substring(pos + 1);
 		} else {
 			name = arg;
-			value = "true";
+			value = true;
 		}
 
 		ROOT.put(name, value);
+		processArgIfSpecial(name, value);
+	}
+
+	private static void processArgIfSpecial(String name, Object value) {
+		if (name.equals("path")) {
+			rootPath = value.toString();
+		} else if (name.equals("static")) {
+			staticPath = value.toString();
+		} else if (name.equals("dynamic")) {
+			dynamicPath = value.toString();
+		} else if (name.equals("templates")) {
+			templatesPath = value.toString();
+		} else if (name.equals("config")) {
+			configPath = value.toString();
+		}
 	}
 
 	public static void unconfigure(String name) {
@@ -177,7 +199,7 @@ public class Conf {
 	}
 
 	public static String rootPath() {
-		return cleanPath(option("root", rootPathDefault()));
+		return rootPath;
 	}
 
 	public static String configPathDefault() {
@@ -185,7 +207,7 @@ public class Conf {
 	}
 
 	public static String configPath() {
-		return cleanPath(option("config", configPathDefault()));
+		return configPath;
 	}
 
 	public static String staticPathDefault() {
@@ -193,7 +215,7 @@ public class Conf {
 	}
 
 	public static String staticPath() {
-		return cleanPath(option("static", staticPathDefault()));
+		return staticPath;
 	}
 
 	public static String dynamicPathDefault() {
@@ -201,7 +223,7 @@ public class Conf {
 	}
 
 	public static String dynamicPath() {
-		return cleanPath(option("dynamic", dynamicPathDefault()));
+		return dynamicPath;
 	}
 
 	public static String templatesPathDefault() {
@@ -209,7 +231,7 @@ public class Conf {
 	}
 
 	public static String templatesPath() {
-		return cleanPath(option("templates", templatesPathDefault()));
+		return templatesPath;
 	}
 
 	private static String cleanPath(String path) {
@@ -223,24 +245,24 @@ public class Conf {
 		return root().sub(name);
 	}
 
-	public static void setRootPath(String path) {
-		set("path", path);
+	public static void setRootPath(String rootPath) {
+		Conf.rootPath = cleanPath(rootPath);
 	}
 
-	public static void setStaticPath(String path) {
-		set("static", path);
+	public static void setStaticPath(String staticPath) {
+		Conf.staticPath = cleanPath(staticPath);
 	}
 
-	public static void setDynamicPath(String path) {
-		set("dynamic", path);
+	public static void setDynamicPath(String dynamicPath) {
+		Conf.dynamicPath = cleanPath(dynamicPath);
 	}
 
-	public static void setConfigPath(String path) {
-		set("config", path);
+	public static void setConfigPath(String configPath) {
+		Conf.configPath = cleanPath(configPath);
 	}
 
-	public static void setTemplatesPath(String path) {
-		set("templates", path);
+	public static void setTemplatesPath(String templatesPath) {
+		Conf.templatesPath = cleanPath(templatesPath);
 	}
 
 }
