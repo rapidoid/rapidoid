@@ -137,7 +137,6 @@ public class Docs {
 		String titleInfo = "";
 		String fullTitle = title + titleInfo;
 
-		ClasspathUtil.setIgnoreRapidoidClasses(true);
 		Iterable<Class<?>> clss = ClasspathUtil.scanClasses("org.rapidoid.docs.eg" + id, null, null, null, null);
 
 		Classes classes = Classes.from(clss);
