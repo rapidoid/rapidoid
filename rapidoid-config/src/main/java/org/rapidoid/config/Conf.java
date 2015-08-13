@@ -189,7 +189,7 @@ public class Conf {
 	}
 
 	public static String staticPathDefault() {
-		return rootPath() + "/static";
+		return rootPathDefault() + "/static";
 	}
 
 	public static String staticPath() {
@@ -197,7 +197,7 @@ public class Conf {
 	}
 
 	public static String dynamicPathDefault() {
-		return rootPath() + "/dynamic";
+		return rootPathDefault() + "/dynamic";
 	}
 
 	public static String dynamicPath() {
@@ -205,7 +205,7 @@ public class Conf {
 	}
 
 	public static String templatesPathDefault() {
-		return rootPath() + "/templates";
+		return rootPathDefault() + "/templates";
 	}
 
 	public static String templatesPath() {
@@ -221,6 +221,26 @@ public class Conf {
 
 	public static Config sub(String name) {
 		return root().sub(name);
+	}
+
+	public static void setRootPath(String path) {
+		set("path", path);
+	}
+
+	public static void setStaticPath(String path) {
+		set("static", path);
+	}
+
+	public static void setDynamicPath(String path) {
+		set("dynamic", path);
+	}
+
+	public static void setConfigPath(String path) {
+		set("config", path);
+	}
+
+	public static void setTemplatesPath(String path) {
+		set("templates", path);
 	}
 
 }
