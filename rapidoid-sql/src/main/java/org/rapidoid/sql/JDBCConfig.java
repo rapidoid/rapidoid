@@ -30,11 +30,11 @@ import org.rapidoid.util.U;
 public class JDBCConfig {
 
 	public static String url() {
-		return Conf.option("jdbc.url", null);
+		return Conf.nested("jdbc", "url");
 	}
 
 	public static String driver() {
-		String driver = Conf.option("jdbc.driver", null);
+		String driver = Conf.nested("jdbc", "driver");
 
 		if (driver == null && !U.isEmpty(url())) {
 			driver = inferDriverFromUrl(url());
@@ -44,11 +44,11 @@ public class JDBCConfig {
 	}
 
 	public static String username() {
-		return Conf.option("jdbc.username", null);
+		return Conf.nested("jdbc", "username");
 	}
 
 	public static String password() {
-		return Conf.option("jdbc.password", null);
+		return Conf.nested("jdbc", "password");
 	}
 
 	public static String inferDriverFromUrl(String url) {
