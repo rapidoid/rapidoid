@@ -190,6 +190,10 @@ public class Conf {
 		ROOT.put(key, value);
 	}
 
+	public static void set(String key, String subkey, Object value) {
+		ROOT.sub(key).put(subkey, value);
+	}
+
 	public static <T> T nested(String... name) {
 		return ROOT.nested(name);
 	}

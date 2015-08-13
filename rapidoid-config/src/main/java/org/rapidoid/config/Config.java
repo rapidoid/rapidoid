@@ -90,15 +90,22 @@ public class Config extends ConcurrentHashMap<String, Object> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Config sub(String name) {
-		Object map = get(name);
+	public synchronized Config sub(String name) {
+		Map<String, Object> submap = (Map<String, Object>) get(name);
 
-		if (map instanceof Map<?, ?>) {
-			Map<String, Object> submap = (Map<String, Object>) map;
-			return new Config(submap);
+		if (submap == null) {
+			submap = new Config();
+			put(name, submap);
+		} else if (submap instanceof Map) {
+			if (!(submap instanceof Config)) {
+				submap = new Config(submap);
+				put(name, submap);
+			}
 		} else {
-			return new Config();
+			throw new RuntimeException("Invalid submap type: " + submap.getClass());
 		}
+
+		return (Config) submap;
 	}
 
 	public ConfigEntry entry(String... name) {
