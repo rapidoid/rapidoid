@@ -60,7 +60,10 @@ public class Rapidoid {
 			app = WebAppGroup.root();
 			app.getRouter().generic(new AppHandler());
 
-			final Res menuRes = Res.from(Conf.configPath() + "/menu.yaml").trackChanges();
+			String menufile = "menu.yaml";
+			String firstMenuFile = Conf.configPath() + "/" + menufile;
+			String defaultMenuFile = Conf.configPathDefault() + "/" + menufile;
+			final Res menuRes = Res.from(menufile, true, firstMenuFile, defaultMenuFile).trackChanges();
 
 			final WebApp rootApp = app;
 			menuRes.getChangeListeners().add(new Runnable() {
@@ -74,7 +77,10 @@ public class Rapidoid {
 				}
 			});
 
-			final Res confRes = Res.from(Conf.configPath() + "/app.yaml").trackChanges();
+			String appfile = "app.yaml";
+			String firstAppFile = Conf.configPath() + "/" + appfile;
+			String defaultAppFile = Conf.configPathDefault() + "/" + appfile;
+			final Res confRes = Res.from(appfile, true, firstAppFile, defaultAppFile).trackChanges();
 
 			confRes.getChangeListeners().add(new Runnable() {
 				@Override

@@ -30,10 +30,30 @@ import org.rapidoid.test.TestCommons;
 public class ResTest extends TestCommons {
 
 	@Test
-	public void testWithExistingFiles() {
-		Res file = Res.from("abc.txt");
+	public void testWhereDefaultsDontExist() {
+		Res file = Res.from("abc", true, "abc.html", "abc.txt", "abc.doc");
+
+		eq(file.getShortName(), "abc");
 		isTrue(file.exists());
 		eq(file.getBytes(), "ABC!".getBytes());
+	}
+
+	@Test
+	public void testWhereDefaultsAlsoExist() {
+		Res file = Res.from("n-m", true, "nm.txt", "abc.txt", "abc.doc");
+
+		eq(file.getShortName(), "n-m");
+		isTrue(file.exists());
+		eq(file.getContent(), "ABC!");
+	}
+
+	@Test
+	public void testWhereOnlyDefaultsExist() {
+		Res file = Res.from("n-m2", true, "non-existing", "nm.txt", "non-existing2");
+
+		isTrue(file.exists());
+		eq(file.getShortName(), "n-m2");
+		eq(file.getContent(), "NMDEF");
 	}
 
 	// typically 1M reads should take less than a second
@@ -41,14 +61,14 @@ public class ResTest extends TestCommons {
 	public void shouldBeFast() {
 		for (int i = 0; i < 900; i++) {
 			// fill-in the cache (with non-existing resources)
-			Res.from("abc.txt" + i);
+			Res.from("abc", true, "abc.txt" + i);
 		}
 
 		// should be fast
 		multiThreaded(100, 1000000, new Runnable() {
 			@Override
 			public void run() {
-				Res file = Res.from("abc.txt");
+				Res file = Res.from("ABC", true, "abc.txt");
 				notNull(file.getBytes());
 			}
 		});
@@ -56,7 +76,8 @@ public class ResTest extends TestCommons {
 
 	@Test
 	public void testWithNonexistingFiles() {
-		Res file = Res.from("some-non-existing-file");
+		Res file = Res.from("?", true, "some-non-existing-file");
+		eq(file.getShortName(), "?");
 		isFalse(file.exists());
 	}
 

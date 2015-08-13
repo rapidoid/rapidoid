@@ -751,7 +751,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	@Override
 	public synchronized HttpExchange sendFile(Res resource) {
 		U.must(resource.exists());
-		setContentType(MediaType.getByFileName(resource.getName()));
+		setContentType(MediaType.getByFileName(resource.getShortName()));
 		write(resource.getBytes());
 		return this;
 	}
@@ -946,7 +946,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized boolean serveStaticFile(String filename) {
-		Res res = Res.from(Conf.staticPath() + "/" + filename);
+		String firstFile = Conf.staticPath() + "/" + filename;
+		String defaultFile = Conf.staticPathDefault() + "/" + filename;
+		Res res = Res.from(filename, true, firstFile, defaultFile);
 
 		if (res.exists()) {
 			sendFile(res);

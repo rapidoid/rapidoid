@@ -172,24 +172,44 @@ public class Conf {
 		return ROOT.nested(name);
 	}
 
+	public static String rootPathDefault() {
+		return "rapidoid";
+	}
+
 	public static String rootPath() {
-		return cleanPath(option("root", "rapidoid"));
+		return cleanPath(option("root", rootPathDefault()));
+	}
+
+	public static String configPathDefault() {
+		return rootPathDefault();
 	}
 
 	public static String configPath() {
-		return cleanPath(option("config", rootPath()));
+		return cleanPath(option("config", configPathDefault()));
+	}
+
+	public static String staticPathDefault() {
+		return rootPath() + "/static";
 	}
 
 	public static String staticPath() {
-		return cleanPath(option("static", rootPath() + "/static"));
+		return cleanPath(option("static", staticPathDefault()));
+	}
+
+	public static String dynamicPathDefault() {
+		return rootPath() + "/dynamic";
 	}
 
 	public static String dynamicPath() {
-		return cleanPath(option("dynamic", rootPath() + "/dynamic"));
+		return cleanPath(option("dynamic", dynamicPathDefault()));
+	}
+
+	public static String templatesPathDefault() {
+		return rootPath() + "/templates";
 	}
 
 	public static String templatesPath() {
-		return cleanPath(option("templates", rootPath() + "/templates"));
+		return cleanPath(option("templates", templatesPathDefault()));
 	}
 
 	private static String cleanPath(String path) {

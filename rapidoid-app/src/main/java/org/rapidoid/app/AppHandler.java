@@ -209,11 +209,14 @@ public class AppHandler implements Handler {
 	}
 
 	public boolean serveDynamicPage(HttpExchangeImpl x, Object result, boolean hasEvent, Map<String, Object> config) {
-		Res resource = Res.from(Conf.templatesPath() + "/" + x.resourceName() + ".html");
+		String filename = x.resourceName() + ".html";
+		String firstFile = Conf.templatesPath() + "/" + filename;
+		String defaultFile = Conf.templatesPathDefault() + "/" + filename;
+		Res res = Res.from(filename, true, firstFile, defaultFile);
 
 		Map<String, Object> model;
-		if (resource.exists()) {
-			model = pageModel(result, resource);
+		if (res.exists()) {
+			model = pageModel(result, res);
 		} else if (result != null) {
 			model = U.map("result", result, "content", result, "navbar", true);
 		} else {

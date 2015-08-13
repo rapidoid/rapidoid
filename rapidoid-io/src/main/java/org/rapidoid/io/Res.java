@@ -5,6 +5,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -38,11 +39,13 @@ import org.rapidoid.util.U;
 @Since("4.1.0")
 public class Res {
 
-	private static final ConcurrentMap<String, Res> FILES = U.concurrentMap();
+	private static final ConcurrentMap<Set<String>, Res> FILES = U.concurrentMap();
 
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(1);
 
-	private final String name;
+	private final String shortName;
+
+	private final Set<String> filenames;
 
 	private volatile byte[] bytes;
 
@@ -58,18 +61,33 @@ public class Res {
 
 	private final List<Runnable> changeListeners = U.synchronizedList();
 
-	private Res(String name) {
-		this.name = name;
+	private Res(String shortName, Set<String> filenames) {
+		this.shortName = shortName;
+		this.filenames = filenames;
 	}
 
 	public static Res from(String filename) {
-		Res cachedFile = FILES.get(filename);
+		return from(filename, true, filename);
+	}
+
+	public static Res from(String shortName, boolean withDefaults, String... filenames) {
+		Set<String> fnames = U.set(filenames);
+
+		if (withDefaults) {
+			for (String filename : filenames) {
+				fnames.add(IO.getDefaultFilename(filename));
+			}
+		}
+
+		U.must(!fnames.isEmpty(), "Resource filename(s) must be specified!");
+
+		Res cachedFile = FILES.get(fnames);
 
 		if (cachedFile == null) {
-			cachedFile = new Res(filename);
+			cachedFile = new Res(shortName, fnames);
 
 			if (FILES.size() < 1000) {
-				FILES.putIfAbsent(filename, cachedFile);
+				FILES.putIfAbsent(fnames, cachedFile);
 			}
 		}
 
@@ -79,7 +97,7 @@ public class Res {
 	public synchronized byte[] getBytes() {
 		loadResource();
 
-		U.must(exists(), "The resource %s doesn't exist!", name);
+		mustExist();
 		return bytes;
 	}
 
@@ -90,23 +108,27 @@ public class Res {
 
 			synchronized (this) {
 
-				byte[] oldBytes = bytes;
+				byte[] old = bytes;
+				byte[] res = null;
 
-				byte[] res = load(name);
+				for (String filename : filenames) {
+					Log.trace("Trying to load the resource", "name", shortName, "file", filename);
+					res = load(filename);
+					if (res != null) {
+						Log.trace("Loaded the resource", "name", shortName, "file", filename);
+						this.cachedFileName = filename;
+						break;
+					}
+				}
 
 				if (res == null) {
-					String defaultFilename = IO.getDefaultFilename(name);
-					Log.debug("Trying to load the default resource", "name", defaultFilename);
-					// if the resource doesn't exist, try loading the default resource
-					res = load(defaultFilename);
+					this.cachedFileName = null;
 				}
 
 				this.bytes = res;
-
-				hasChanged = !U.eq(oldBytes, bytes)
-						&& (oldBytes == null || bytes == null || !Arrays.equals(oldBytes, bytes));
-
+				hasChanged = !U.eq(old, bytes) && (old == null || bytes == null || !Arrays.equals(old, bytes));
 				lastUpdatedOn = U.time();
+
 				if (hasChanged) {
 					content = null;
 				}
@@ -124,28 +146,26 @@ public class Res {
 		if (file.exists()) {
 
 			// a normal file on the file system
-			Log.debug("File exists", "file", file);
+			Log.trace("Resource file exists", "name", shortName, "file", file);
 
 			if (file.lastModified() > this.lastModified || !filename.equals(cachedFileName)) {
-				Log.debug("Reloading file", "file", file);
+				Log.info("Detected resource file change", "name", shortName, "file", file);
 				this.lastModified = file.lastModified();
-				this.cachedFileName = filename;
 				return IO.loadBytes(filename);
 			} else {
-				Log.debug("File not modified", "file", file);
+				Log.trace("Resource file not modified", "name", shortName, "file", file);
 				return bytes;
 			}
 		} else {
 			// it might not exist or it might be on the classpath or compressed in a JAR
-			Log.debug("Trying to load classpath resource", "file", file);
+			Log.trace("Trying to load classpath resource", "name", shortName, "file", file);
 			byte[] res = IO.loadBytes(filename);
-			this.cachedFileName = (res != null) ? filename : null;
 			return res;
 		}
 	}
 
 	public synchronized String getContent() {
-		U.must(exists(), "The resource %s doesn't exist!", name);
+		mustExist();
 
 		if (content == null) {
 			byte[] b = getBytes();
@@ -160,18 +180,22 @@ public class Res {
 		return bytes != null;
 	}
 
-	public String getName() {
-		return name;
+	public String getShortName() {
+		return shortName;
 	}
 
 	@Override
 	public String toString() {
-		return "Res(" + name + ")";
+		return "Res(" + shortName + ")";
 	}
 
 	public synchronized Reader getReader() {
-		U.must(exists(), "The resource %s doesn't exist!", name);
+		mustExist();
 		return new StringReader(getContent());
+	}
+
+	private void mustExist() {
+		U.must(exists(), "The resource '%s' doesn't exist! Path: ", shortName, filenames);
 	}
 
 	public List<Runnable> getChangeListeners() {
@@ -180,7 +204,7 @@ public class Res {
 
 	private void notifyChangeListeners() {
 		if (!changeListeners.isEmpty()) {
-			Log.info("Resource has changed, reloading...", "name", name);
+			Log.info("Resource has changed, reloading...", "name", shortName);
 		}
 
 		for (Runnable listener : changeListeners) {

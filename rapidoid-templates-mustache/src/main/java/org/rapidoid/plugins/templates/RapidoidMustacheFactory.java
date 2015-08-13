@@ -114,7 +114,10 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 
 	@Override
 	public Reader getReader(String resourceName) {
-		return Res.from(Conf.templatesPath() + "/" + resourceName).getReader();
+		String filename = resourceName;
+		String firstFile = Conf.templatesPath() + "/" + filename;
+		String defaultFile = Conf.templatesPathDefault() + "/" + filename;
+		return Res.from(filename, true, firstFile, defaultFile).getReader();
 	}
 
 }
