@@ -8,6 +8,7 @@ import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Param;
 import org.rapidoid.annotation.Web;
 import org.rapidoid.main.Rapidoid;
+import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -29,7 +30,7 @@ import org.rapidoid.main.Rapidoid;
  * #L%
  */
 
-// RESTful services :: It is very easy to create RESTful services
+// More RESTful services :: Let's create more RESTful services:
 
 @Web
 public class Main {
@@ -40,7 +41,7 @@ public class Main {
 
 	@GET
 	public String hey(String name, int age) {
-		return "Hey " + name + " (" + age + ")";
+		return U.format("Hey %s (%s)", name, age);
 	}
 
 	@GET("/hello")

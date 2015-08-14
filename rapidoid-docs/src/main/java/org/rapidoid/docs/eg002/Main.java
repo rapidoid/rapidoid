@@ -1,8 +1,11 @@
 package org.rapidoid.docs.eg002;
 
+import java.util.Map;
+
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Web;
 import org.rapidoid.main.Rapidoid;
+import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -24,7 +27,7 @@ import org.rapidoid.main.Rapidoid;
  * #L%
  */
 
-// Hello, world 2! :: Let's start Rapidoid:
+// Hello, RESTful services! :: Let's start Rapidoid and implement a RESTful service:
 
 @Web
 public class Main {
@@ -34,15 +37,10 @@ public class Main {
 	}
 
 	@GET
-	public String upper(String s) {
-		return s.toUpperCase();
+	public Map<String, ?> upper(String s) {
+		String up = s.toUpperCase();
+		int len = s.length();
+		return U.map("src", s, "upper", up, "length", len);
 	}
-}
 
-@Web
-class Opa {
-	@GET
-	public String iha() {
-		return "jee";
-	}
 }

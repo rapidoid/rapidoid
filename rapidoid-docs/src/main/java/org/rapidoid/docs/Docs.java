@@ -73,8 +73,8 @@ public class Docs {
 
 		IntWrap nn = new IntWrap();
 
-		// processFirst(examples, nn, 3);
-		processAll(examples, nn);
+		processFirst(examples, nn, 3);
+		// processAll(examples, nn);
 
 		Map<String, ?> model = U.map("examples", examples);
 		String html = Templates.fromFile("docs.html").render(model);
@@ -193,7 +193,7 @@ public class Docs {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			result = "<b>404 Not found!</b>";
+			result = "<span class=\"not-found\">404 Not found!</span>";
 		}
 
 		if (result == null) {

@@ -1,5 +1,7 @@
 GET /
 GET /hey/Joe/50
 GET /hello?name=Highlander&age=900
-GET /foo
+GET /foo/x/y
 POST /foo/aaa/123/bc
+GET /barbar?x=1&y=23
+GET /barbar?name=Abc&year=2015

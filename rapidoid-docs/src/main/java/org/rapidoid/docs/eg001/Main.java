@@ -3,6 +3,7 @@ package org.rapidoid.docs.eg001;
 import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.Web;
 import org.rapidoid.main.Rapidoid;
+import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -24,7 +25,7 @@ import org.rapidoid.main.Rapidoid;
  * #L%
  */
 
-// Hello, world! :: Let's start Rapidoid:
+// Hello, web pages! :: Let's start Rapidoid and implement some web pages:
 
 @Web
 public class Main {
@@ -36,6 +37,16 @@ public class Main {
 	@Page("/")
 	public String hello() {
 		return "Hello, world!";
+	}
+
+	@Page(title = "Saying 'hi'")
+	public String hi(String name) {
+		return U.format("Hi, %s!", name);
+	}
+
+	@Page(raw = true)
+	public Object simple() {
+		return "<p><b>RAW</b> HTML!<p>";
 	}
 
 }

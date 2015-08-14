@@ -1,4 +1,4 @@
 GET /
-GET /abc
-POST /abc
-POST /xy
+GET /hi/Rapidoid
+POST /hi/there
+GET /simple

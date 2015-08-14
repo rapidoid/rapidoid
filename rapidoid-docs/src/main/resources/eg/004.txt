@@ -1,0 +1,2 @@
+GET /params?x=1&y=2
+POST /params?title=Rapidoid&year=2015
