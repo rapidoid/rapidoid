@@ -1,0 +1,45 @@
+<!-- Derived from: http://bootsnipp.com/snippets/featured/tiny-navbar (Copyright (c) 2013 Bootsnipp.com, MIT license, see http://bootsnipp.com/license) -->
+
+<div class="container">
+	<nav class="navbar navbar-default navbar-xs" role="navigation">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+			
+			{{#navbar}} 
+			<a class="navbar-brand" href="#"><b>{{navbarBrand}}</b></a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse"
+			id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				{{#icons}}
+				<li><a href="#"><i class="glyphicon glyphicon-{{icon}}"></i></a></li>
+				{{/icons}}
+
+				<li class="dropdown"><a href="#" class="dropdown-toggle"
+					data-toggle="dropdown"><b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						{{#dropdownMenu}}
+							{{#divider}}
+								<li class="divider"></li> 
+							{{/divider}}
+							{{^divider}}
+								<li><a href="#">{{value}}</a></li> 
+							{{/divider}} 
+						{{/dropdownMenu}}
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<!-- /.navbar-collapse -->
+			{{/navbar}}
+	</nav>
+</div>

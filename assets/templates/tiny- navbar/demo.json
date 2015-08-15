@@ -1,0 +1,19 @@
+{	
+    "navbar" :  {
+    	"navbarBrand":"Tiny Navbar",
+    	"icons" : [
+	    	{"icon" : "adjust"},
+	    	{"icon" : "bell"},
+	    	{"icon" : "user"}
+    	],
+    	"dropdownMenu" : [
+	    	{"value" : "Action"},
+	    	{"value" : "Another action"},
+	    	{"value" : "Something else here"},
+	    	{"value" : "", "divider" : true},
+	    	{"value" : "Separated link"},
+	    	{"value" : "", "divider" : true},
+	    	{"value" : "One more separated link"}
+    	]
+    }
+}
