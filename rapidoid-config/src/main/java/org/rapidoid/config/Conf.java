@@ -254,6 +254,10 @@ public class Conf {
 	public static void setRootPath(String rootPath) {
 		Log.info("Setting 'root' application path", "path", rootPath);
 		Conf.rootPath = cleanPath(rootPath);
+		setStaticPath(Conf.rootPath + "/static");
+		setDynamicPath(Conf.rootPath + "/dynamic");
+		setConfigPath(Conf.rootPath);
+		setTemplatesPath(Conf.rootPath + "/templates");
 	}
 
 	public static void setStaticPath(String staticPath) {
