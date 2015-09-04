@@ -195,7 +195,7 @@ public class Res {
 	}
 
 	private void mustExist() {
-		U.must(exists(), "The resource '%s' doesn't exist! Path: ", shortName, filenames);
+		U.must(exists(), "The resource '%s' doesn't exist! Path: %s", shortName, filenames);
 	}
 
 	public List<Runnable> getChangeListeners() {
