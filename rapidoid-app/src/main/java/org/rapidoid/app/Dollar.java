@@ -83,7 +83,7 @@ public class Dollar {
 
 	public final TemplatesPlugin templates = Plugins.templates();
 
-	public final SQLAPI mysql = SQL.mysql().pooled();
+	public final SQLAPI mysql = SQL.newInstance().mysql().pooled();
 
 	public final SQLAPI jdbc;
 
