@@ -1,3 +1,2 @@
-mvn clean install -DskipTests=true -Pdemo
-cp bin/rapidoid-demo.jar ./rapidoid.jar
+mvn clean install -DskipTests=true -Pfull
 ls -l rapidoid.jar

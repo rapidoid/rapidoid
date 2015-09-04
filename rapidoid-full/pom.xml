@@ -11,6 +11,45 @@
 	<packaging>jar</packaging>
 	<description>Rapidoid Full</description>
 
+	<profiles>
+		<profile>
+			<id>full</id>
+			<build>
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>create-my-bundle</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<finalName>rapidoid</finalName>
+									<appendAssemblyId>false</appendAssemblyId>
+									<outputDirectory>${project.parent.basedir}</outputDirectory>
+
+									<descriptorRefs>
+										<descriptorRef>jar-with-dependencies</descriptorRef>
+									</descriptorRefs>
+									<archive>
+										<manifest>
+											<mainClass>org.rapidoid.main.Main</mainClass>
+										</manifest>
+									</archive>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+
+		</profile>
+	</profiles>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
