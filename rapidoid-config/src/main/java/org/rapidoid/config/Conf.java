@@ -1,5 +1,7 @@
 package org.rapidoid.config;
 
+import org.rapidoid.log.Log;
+
 /*
  * #%L
  * rapidoid-config
@@ -73,15 +75,15 @@ public class Conf {
 
 	private static void processArgIfSpecial(String name, Object value) {
 		if (name.equals("path")) {
-			rootPath = value.toString();
+			setRootPath(value.toString());
 		} else if (name.equals("static")) {
-			staticPath = value.toString();
+			setStaticPath(value.toString());
 		} else if (name.equals("dynamic")) {
-			dynamicPath = value.toString();
+			setDynamicPath(value.toString());
 		} else if (name.equals("templates")) {
-			templatesPath = value.toString();
+			setTemplatesPath(value.toString());
 		} else if (name.equals("config")) {
-			configPath = value.toString();
+			setConfigPath(value.toString());
 		}
 	}
 
@@ -250,22 +252,27 @@ public class Conf {
 	}
 
 	public static void setRootPath(String rootPath) {
+		Log.info("Setting 'root' application path", "path", rootPath);
 		Conf.rootPath = cleanPath(rootPath);
 	}
 
 	public static void setStaticPath(String staticPath) {
+		Log.info("Setting 'static' application path", "path", staticPath);
 		Conf.staticPath = cleanPath(staticPath);
 	}
 
 	public static void setDynamicPath(String dynamicPath) {
+		Log.info("Setting 'dynamic' application path", "path", dynamicPath);
 		Conf.dynamicPath = cleanPath(dynamicPath);
 	}
 
 	public static void setConfigPath(String configPath) {
+		Log.info("Setting 'config' application path", "path", configPath);
 		Conf.configPath = cleanPath(configPath);
 	}
 
 	public static void setTemplatesPath(String templatesPath) {
+		Log.info("Setting 'templates' application path", "path", templatesPath);
 		Conf.templatesPath = cleanPath(templatesPath);
 	}
 
