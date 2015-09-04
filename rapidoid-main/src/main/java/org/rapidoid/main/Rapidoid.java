@@ -62,13 +62,13 @@ public class Rapidoid {
 
 		Log.info("Working directory is: " + System.getProperty("user.dir"));
 
-		Plugins.register(new MustacheTemplatesPlugin());
-		Plugins.register(new AppClasspathEntitiesPlugin());
-		Plugins.register(new GuavaCachePlugin());
-
 		if (app == null) {
 			app = AppTool.createRootApp();
 		}
+
+		Plugins.register(new MustacheTemplatesPlugin());
+		Plugins.register(new AppClasspathEntitiesPlugin());
+		Plugins.register(new GuavaCachePlugin());
 
 		Quick.run(app, args, config);
 		return app;

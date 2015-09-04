@@ -60,6 +60,8 @@ public class AppTool {
 			}
 		});
 
+		menuRes.getBytes(); // trigger loading
+
 		String appfile = "app.yaml";
 		String firstAppFile = Conf.configPath() + "/" + appfile;
 		String defaultAppFile = Conf.configPathDefault() + "/" + appfile;
@@ -85,6 +87,8 @@ public class AppTool {
 				}
 			}
 		});
+
+		confRes.getBytes(); // trigger loading
 
 		return app;
 	}
