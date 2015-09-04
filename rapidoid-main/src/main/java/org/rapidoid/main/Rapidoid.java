@@ -32,6 +32,10 @@ import org.rapidoid.util.U;
 import org.rapidoid.webapp.AppClasspathEntitiesPlugin;
 import org.rapidoid.webapp.WebApp;
 import org.rapidoid.webapp.WebAppGroup;
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.core.util.StatusPrinter;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")
@@ -44,11 +48,15 @@ public class Rapidoid {
 	}
 
 	public static synchronized WebApp run(WebApp app, String[] args, Object... config) {
-		Log.info("Starting Rapidoid...");
+		Log.info("Starting Rapidoid...\n");
 		U.must(!initialized, "Already initialized!");
 		initialized = true;
 
 		MainHelp.processHelp(args);
+
+		// print internal state
+		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+		StatusPrinter.print(lc);
 
 		Conf.args(args, config);
 
