@@ -1,5 +1,6 @@
 package org.rapidoid.app;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -110,8 +111,17 @@ public class Dollar {
 		return cassandra.query(cql, args);
 	}
 
+	public Iterable<Map<String, Object>> cql(String cql) {
+		return cql(cql, new Object[0]);
+	}
+
 	public DollarPage page(Object value, Map<String, Object> config) {
 		return new DollarPage(value, config);
+	}
+
+	@SuppressWarnings("unchecked")
+	public DollarPage page(Object value) {
+		return page(value, Collections.EMPTY_MAP);
 	}
 
 }
