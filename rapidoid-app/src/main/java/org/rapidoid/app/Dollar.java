@@ -87,10 +87,10 @@ public class Dollar {
 
 	public final Map<String, Object> bindings;
 
-	private final HttpExchange exchange;
+	public final HttpExchange req;
 
 	public Dollar(HttpExchange x, Map<String, Object> bindings) {
-		this.exchange = x;
+		this.req = x;
 		this.bindings = bindings;
 		this.jdbc = SQL.newInstance().mysql();
 	}
@@ -106,10 +106,6 @@ public class Dollar {
 
 	public Iterable<Map<String, Object>> cql(String cql, Object... args) {
 		return cassandra.query(cql, args);
-	}
-
-	public HttpExchange req() {
-		return exchange;
 	}
 
 	public DollarPage page(Object value, Map<String, Object> config) {
