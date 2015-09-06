@@ -33,7 +33,18 @@ import org.rapidoid.util.U;
 @Since("4.2.0")
 public class IOTool {
 
-	public List<String> list(String dir) {
+	public List<File> files(String dir) {
+		List<String> names = filenames(dir);
+		List<File> files = U.list();
+
+		for (String name : names) {
+			files.add(new File(name));
+		}
+
+		return files;
+	}
+
+	public List<String> filenames(String dir) {
 		List<String> found = U.list();
 		IO.findAll(new File(dir), found);
 		return found;
