@@ -114,4 +114,16 @@ public class Scripting {
 		return GUI.multi(GUI.h2("The $ properties:"), GUI.grid(desc), GUI.h2("Bindings:"), GUI.grid(dollar.bindings));
 	}
 
+	public static Object descObj(Object obj) {
+		Map<String, Object> desc = U.map();
+		BeanProperties props = Beany.propertiesOf(obj);
+
+		for (Prop prop : props) {
+			desc.put(prop.getName(), prop.getType());
+		}
+
+		String title = U.format("Properties of %s:", obj.getClass().getSimpleName());
+		return GUI.multi(GUI.h2(title), GUI.grid(desc));
+	}
+
 }

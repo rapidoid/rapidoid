@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.dispatch.DispatchResult;
 import org.rapidoid.dispatch.PojoDispatchException;
@@ -192,7 +193,11 @@ public class AppHandler implements Handler {
 				config = page.getConfig();
 				result = page.getValue();
 			} else if (result != null) {
-				return result;
+				if (canDescribe(result)) {
+					result = Scripting.descObj(result);
+				} else {
+					return result;
+				}
 			}
 		}
 
@@ -212,6 +217,16 @@ public class AppHandler implements Handler {
 		}
 
 		throw x.notFound();
+	}
+
+	private boolean canDescribe(Object obj) {
+		if (!Cls.isBean(obj)) {
+			return false;
+		}
+
+		// TODO maybe more checks here?
+
+		return true;
 	}
 
 	private DispatchResult doDispatch(PojoDispatcher dispatcher, PojoRequest req) {
