@@ -269,4 +269,18 @@ public class IO {
 		}
 	}
 
+	public static void findAll(File dir, List<String> found) {
+		File[] files = dir.listFiles();
+
+		if (files != null) {
+			for (File f : files) {
+				found.add(f.getAbsolutePath());
+
+				if (f.isDirectory()) {
+					findAll(f, found);
+				}
+			}
+		}
+	}
+
 }
