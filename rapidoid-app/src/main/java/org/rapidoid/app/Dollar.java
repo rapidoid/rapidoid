@@ -18,7 +18,6 @@ import org.rapidoid.plugins.db.DBPlugin;
 import org.rapidoid.plugins.email.EmailPlugin;
 import org.rapidoid.plugins.entities.EntitiesPlugin;
 import org.rapidoid.plugins.languages.LanguagesPlugin;
-import org.rapidoid.plugins.lifecycle.LifecyclePlugin;
 import org.rapidoid.plugins.sms.SMSPlugin;
 import org.rapidoid.plugins.templates.TemplatesPlugin;
 import org.rapidoid.plugins.users.UsersPlugin;
@@ -61,8 +60,6 @@ public class Dollar {
 	public final HttpClient http = HTTP.DEFAULT_CLIENT;
 
 	public final ServicesClient services = Services.DEFAULT_CLIENT;
-
-	public final LifecyclePlugin lifecycle = Plugins.lifecycle();
 
 	public final LanguagesPlugin languages = Plugins.languages();
 
