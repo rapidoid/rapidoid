@@ -140,12 +140,12 @@ public class HttpParser implements Constants {
 		parseURLEncodedKV(buf, params, range);
 	}
 
-	private void parseURLEncodedKV(Buf buf, KeyValueRanges params, Range range) {
+	private void parseURLEncodedKV(Buf buf, KeyValueRanges params, Range body) {
 		int pos = buf.position();
 		int limit = buf.limit();
 
-		buf.position(range.start);
-		buf.limit(range.limit());
+		buf.position(body.start);
+		buf.limit(body.limit());
 
 		while (buf.hasRemaining()) {
 			int ind = params.add();
@@ -207,7 +207,10 @@ public class HttpParser implements Constants {
 		}
 	}
 
-	public void parseBody(Buf src, KeyValueRanges headers, Range body, KeyValueRanges data, KeyValueRanges files,
+	/**
+	 * @return <code>false</code> if JSON data was posted, so it wasn't completely parsed.
+	 */
+	public boolean parseBody(Buf src, KeyValueRanges headers, Range body, KeyValueRanges data, KeyValueRanges files,
 			RapidoidHelper helper) {
 
 		Range multipartBoundary = helper.ranges5.ranges[0];
@@ -227,8 +230,17 @@ public class HttpParser implements Constants {
 
 			parseMultiParts(src, body, data, files, multipartBoundary, helper);
 		} else {
-			parseURLEncodedKV(src, data, body);
+			if (!body.isEmpty()) {
+				// if not posted as JSON data
+				if (src.get(body.start) != '{') {
+					parseURLEncodedKV(src, data, body);
+				} else {
+					return false;
+				}
+			}
 		}
+
+		return true;
 	}
 
 	private void detectMultipartBoundary(Buf src, Range body, Range multipartBoundary) {

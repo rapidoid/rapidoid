@@ -83,4 +83,9 @@ public class DefaultMultiData implements MultiData {
 		values = null;
 	}
 
+	@Override
+	public void putExtras(Map<String, String> extras) {
+		get().putAll(extras);
+	}
+
 }

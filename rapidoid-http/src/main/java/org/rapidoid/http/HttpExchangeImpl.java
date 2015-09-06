@@ -313,9 +313,16 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public synchronized MultiData posted_() {
 		if (!parsedBody) {
-			PARSER.parseBody(input(), headersKV, rBody, posted, files, helper());
+			boolean completed = PARSER.parseBody(input(), headersKV, rBody, posted, files, helper());
+
+			if (!completed) {
+				Map<String, String> map = JSON.jacksonParse(body(), Map.class);
+				_posted.putExtras(map);
+			}
+
 			parsedBody = true;
 		}
 

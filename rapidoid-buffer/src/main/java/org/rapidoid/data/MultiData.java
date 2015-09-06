@@ -39,4 +39,6 @@ public interface MultiData {
 
 	void reset();
 
+	void putExtras(Map<String, String> extras);
+
 }
