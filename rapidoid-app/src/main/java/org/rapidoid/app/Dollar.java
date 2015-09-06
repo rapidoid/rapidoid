@@ -87,7 +87,7 @@ public class Dollar {
 
 	public final SQLAPI mysql = SQL.newInstance().mysql().pooled();
 
-	public final IOTool io = new IOTool();
+	public final IOTool io = new IOToolImpl();
 
 	public final SQLAPI jdbc = SQL.defaultInstance();
 

@@ -25,19 +25,46 @@ import java.util.List;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.io.IO;
+import org.rapidoid.io.Res;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.2.0")
-public interface IOTool {
+public class IOToolImpl implements IOTool {
 
-	List<File> files(String dir);
+	@Override
+	public List<File> files(String dir) {
+		List<String> names = filenames(dir);
+		List<File> files = U.list();
 
-	List<String> filenames(String dir);
+		for (String name : names) {
+			files.add(new File(name));
+		}
 
-	byte[] load(String filename);
+		return files;
+	}
 
-	void save(String filename, byte[] data);
+	@Override
+	public List<String> filenames(String dir) {
+		List<String> found = U.list();
+		IO.findAll(new File(dir), found);
+		return found;
+	}
 
-	File file(String filename);
+	@Override
+	public byte[] load(String filename) {
+		return Res.from(filename).getBytes();
+	}
+
+	@Override
+	public void save(String filename, byte[] data) {
+		IO.save(filename, data);
+	}
+
+	@Override
+	public File file(String filename) {
+		return IO.file(filename);
+	}
 
 }
