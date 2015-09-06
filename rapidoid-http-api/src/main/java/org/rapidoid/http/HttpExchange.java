@@ -27,6 +27,7 @@ import java.nio.ByteBuffer;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.Res;
 import org.rapidoid.mime.MediaType;
@@ -56,33 +57,33 @@ public interface HttpExchange {
 
 	Map<String, String> params();
 
-	String param(String name);
+	String param(@P("name") String name);
 
-	String param(String name, String defaultValue);
+	String param(@P("name") String name, @P("defaultValue") String defaultValue);
 
 	Map<String, String> headers();
 
-	String header(String name);
+	String header(@P("name") String name);
 
-	String header(String name, String defaultValue);
+	String header(@P("name") String name, @P("defaultValue") String defaultValue);
 
 	Map<String, String> cookies();
 
-	String cookie(String name);
+	String cookie(@P("name") String name);
 
-	String cookie(String name, String defaultValue);
+	String cookie(@P("name") String name, @P("defaultValue") String defaultValue);
 
 	Map<String, String> posted();
 
-	String posted(String name);
+	String posted(@P("name") String name);
 
-	String posted(String name, String defaultValue);
+	String posted(@P("name") String name, @P("defaultValue") String defaultValue);
 
 	Map<String, byte[]> files();
 
-	byte[] file(String name);
+	byte[] file(@P("name") String name);
 
-	byte[] file(String name, byte[] defaultValue);
+	byte[] file(@P("name") String name, @P("defaultValue") byte[] defaultValue);
 
 	/**
 	 * Data includes params + posted.
@@ -92,18 +93,18 @@ public interface HttpExchange {
 	/**
 	 * Data includes params + posted.
 	 */
-	String data(String name);
+	String data(@P("name") String name);
 
 	/**
 	 * Data includes params + posted.
 	 */
-	String data(String name, String defaultValue);
+	String data(@P("name") String name, @P("defaultValue") String defaultValue);
 
 	String home();
 
 	String[] pathSegments();
 
-	String pathSegment(int segmentIndex);
+	String pathSegment(@P("segmentIndex") int segmentIndex);
 
 	String realIpAddress();
 
@@ -125,61 +126,61 @@ public interface HttpExchange {
 
 	Map<String, Serializable> session();
 
-	<T extends Serializable> T session(String name);
+	<T extends Serializable> T session(@P("name") String name);
 
-	<T extends Serializable> T session(String name, T defaultValue);
+	<T extends Serializable> T session(@P("name") String name, @P("defaultValue") T defaultValue);
 
-	<T extends Serializable> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+	<T extends Serializable> T sessionGetOrCreate(@P("name") String name, @P("valueClass") Class<T> valueClass, @P("constructorArgs") Object... constructorArgs);
 
 	/* COOKIEPACK SCOPE: */
 
 	Map<String, Serializable> cookiepack();
 
-	<T extends Serializable> T cookiepack(String name);
+	<T extends Serializable> T cookiepack(@P("name") String name);
 
-	<T extends Serializable> T cookiepack(String name, T defaultValue);
+	<T extends Serializable> T cookiepack(@P("name") String name, @P("defaultValue") T defaultValue);
 
-	<T extends Serializable> T cookiepackGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+	<T extends Serializable> T cookiepackGetOrCreate(@P("name") String name, @P("valueClass") Class<T> valueClass, @P("constructorArgs") Object... constructorArgs);
 
 	/* LOCAL SCOPE: */
 
 	Map<String, Serializable> locals();
 
-	<T extends Serializable> T local(String key);
+	<T extends Serializable> T local(@P("key") String key);
 
-	<T extends Serializable> T local(String key, T defaultValue);
+	<T extends Serializable> T local(@P("key") String key, @P("defaultValue") T defaultValue);
 
-	<T extends Serializable> T localGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+	<T extends Serializable> T localGetOrCreate(@P("name") String name, @P("valueClass") Class<T> valueClass, @P("constructorArgs") Object... constructorArgs);
 
 	/* TMP SCOPE: */
 
 	Map<String, Object> tmps();
 
-	<T> T tmp(String key);
+	<T> T tmp(@P("key") String key);
 
-	<T> T tmp(String key, T defaultValue);
+	<T> T tmp(@P("key") String key, @P("defaultValue") T defaultValue);
 
-	<T> T tmpGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+	<T> T tmpGetOrCreate(@P("name") String name, @P("valueClass") Class<T> valueClass, @P("constructorArgs") Object... constructorArgs);
 
 	/* RESPONSE: */
 
-	HttpExchange result(Object result);
+	HttpExchange result(@P("result") Object result);
 
 	Map<String, String> errors();
 
 	boolean hasErrors();
 
-	String constructUrl(String path);
+	String constructUrl(@P("path") String path);
 
-	HttpExchange startResponse(int httpResponseCode);
+	HttpExchange startResponse(@P("httpResponseCode") int httpResponseCode);
 
-	HttpExchange response(int httpResponseCode);
+	HttpExchange response(@P("httpResponseCode") int httpResponseCode);
 
-	HttpExchange response(int httpResponseCode, String response);
+	HttpExchange response(@P("httpResponseCode") int httpResponseCode, @P("response") String response);
 
-	HttpExchange response(int httpResponseCode, String response, Throwable err);
+	HttpExchange response(@P("httpResponseCode") int httpResponseCode, @P("response") String response, @P("err") Throwable err);
 
-	HttpExchange error(Throwable err);
+	HttpExchange error(@P("err") Throwable err);
 
 	HttpNotFoundException notFound();
 
@@ -193,19 +194,19 @@ public interface HttpExchange {
 
 	HttpExchange binary();
 
-	HttpExchange download(String filename);
+	HttpExchange download(@P("filename") String filename);
 
-	HttpExchange addHeader(byte[] name, byte[] value);
+	HttpExchange addHeader(@P("name") byte[] name, @P("value") byte[] value);
 
-	HttpExchange addHeader(HttpHeader name, String value);
+	HttpExchange addHeader(@P("name") HttpHeader name, @P("value") String value);
 
-	HttpExchange setCookie(String name, String value, String... extras);
+	HttpExchange setCookie(@P("name") String name, @P("value") String value, @P("extras") String... extras);
 
-	HttpExchange setContentType(MediaType contentType);
+	HttpExchange setContentType(@P("contentType") MediaType contentType);
 
-	HttpExchange accessDeniedIf(boolean accessDeniedCondition);
+	HttpExchange accessDeniedIf(@P("accessDeniedCondition") boolean accessDeniedCondition);
 
-	HttpExchange authorize(Class<?> clazz);
+	HttpExchange authorize(@P("clazz") Class<?> clazz);
 
 	int responseCode();
 
@@ -213,17 +214,17 @@ public interface HttpExchange {
 
 	boolean serveStaticFile();
 
-	boolean serveStaticFile(String filename);
+	boolean serveStaticFile(@P("filename") String filename);
 
-	HttpExchange sendFile(File file);
+	HttpExchange sendFile(@P("file") File file);
 
-	HttpExchange sendFile(Res resource);
+	HttpExchange sendFile(@P("resource") Res resource);
 
-	HttpExchange sendFile(MediaType mediaType, byte[] bytes);
+	HttpExchange sendFile(@P("mediaType") MediaType mediaType, @P("bytes") byte[] bytes);
 
-	HttpSuccessException redirect(String url);
+	HttpSuccessException redirect(@P("url") String url);
 
-	HttpSuccessException goBack(int steps);
+	HttpSuccessException goBack(@P("steps") int steps);
 
 	HttpExchange addToPageStack();
 
@@ -233,26 +234,26 @@ public interface HttpExchange {
 
 	HttpExchange writeln(String s);
 
-	HttpExchange write(byte[] bytes);
+	HttpExchange write(@P("bytes") byte[] bytes);
 
-	HttpExchange write(byte[] bytes, int offset, int length);
+	HttpExchange write(@P("bytes") byte[] bytes, @P("offset") int offset, @P("length") int length);
 
-	HttpExchange write(ByteBuffer buf);
+	HttpExchange write(@P("buf") ByteBuffer buf);
 
-	HttpExchange write(File file);
+	HttpExchange write(@P("file") File file);
 
-	HttpExchange writeJSON(Object value);
+	HttpExchange writeJSON(@P("value") Object value);
 
-	// due to async() web handling option, it ain't over till the fat lady sings "done"
+	// due to async() web handling option, @P("ain") it ain't over till the fat lady sings "done"
 	HttpExchange async();
 
 	HttpExchange done();
 
-	HttpExchange render(ITemplate template, Object model);
+	HttpExchange render(@P("template") ITemplate template, @P("model") Object model);
 
-	HttpExchange renderPage(Object model);
+	HttpExchange renderPage(@P("model") Object model);
 
-	String renderPageToHTML(Object model);
+	String renderPageToHTML(@P("model") Object model);
 
 	/* EXTRAS: */
 

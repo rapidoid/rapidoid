@@ -1,6 +1,7 @@
 package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 
 /*
@@ -27,23 +28,23 @@ import org.rapidoid.annotation.Since;
 @Since("2.0.0")
 public interface Router {
 
-	Router route(String cmd, String url, Handler handler);
+	Router route(@P("cmd") String cmd, @P("url") String url, @P("handler") Handler handler);
 
-	Router route(String cmd, String url, String response);
+	Router route(@P("cmd") String cmd, @P("url") String url, @P("response") String response);
 
-	Router serve(String response);
+	Router serve(@P("response") String response);
 
-	Router serve(Handler handler);
+	Router serve(@P("handler") Handler handler);
 
-	Router get(String url, Handler handler);
+	Router get(@P("url") String url, @P("handler") Handler handler);
 
-	Router post(String url, Handler handler);
+	Router post(@P("url") String url, @P("handler") Handler handler);
 
-	Router put(String url, Handler handler);
+	Router put(@P("url") String url, @P("handler") Handler handler);
 
-	Router delete(String url, Handler handler);
+	Router delete(@P("url") String url, @P("handler") Handler handler);
 
-	void generic(Handler handler);
+	void generic(@P("handler") Handler handler);
 
 	void dispatch(HttpExchangeImpl x);
 

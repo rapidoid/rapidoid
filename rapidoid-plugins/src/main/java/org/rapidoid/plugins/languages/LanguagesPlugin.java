@@ -1,6 +1,7 @@
 package org.rapidoid.plugins.languages;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.plugins.Plugin;
 
@@ -28,8 +29,8 @@ import org.rapidoid.plugins.Plugin;
 @Since("3.0.0")
 public interface LanguagesPlugin extends Plugin {
 
-	String singularToPlural(String noun);
+	String singularToPlural(@P("noun") String noun);
 
-	String pluralToSingular(String noun);
+	String pluralToSingular(@P("noun") String noun);
 
 }

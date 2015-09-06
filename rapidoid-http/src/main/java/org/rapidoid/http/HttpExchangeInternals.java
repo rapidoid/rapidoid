@@ -21,6 +21,7 @@ package org.rapidoid.http;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.session.SessionStore;
 
@@ -28,11 +29,11 @@ import org.rapidoid.http.session.SessionStore;
 @Since("2.0.0")
 public interface HttpExchangeInternals {
 
-	void setClassLoader(ClassLoader classLoader);
+	void setClassLoader(@P("classLoader") ClassLoader classLoader);
 
 	ClassLoader getClassLoader();
 
-	void setSessionStore(SessionStore sessionStore);
+	void setSessionStore(@P("sessionStore") SessionStore sessionStore);
 
 	SessionStore getSessionStore();
 
@@ -40,11 +41,11 @@ public interface HttpExchangeInternals {
 
 	byte[] serializeLocals();
 
-	void deserializeLocals(byte[] bytes);
+	void deserializeLocals(@P("bytes") byte[] bytes);
 
 	byte[] serializeCookiepack();
 
-	void deserializeCookiepack(byte[] bytes);
+	void deserializeCookiepack(@P("bytes") byte[] bytes);
 
 	void preload();
 

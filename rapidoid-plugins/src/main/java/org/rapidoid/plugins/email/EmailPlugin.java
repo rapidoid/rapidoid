@@ -1,6 +1,7 @@
 package org.rapidoid.plugins.email;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.plugins.Plugin;
@@ -29,7 +30,7 @@ import org.rapidoid.plugins.Plugin;
 @Since("4.1.0")
 public interface EmailPlugin extends Plugin {
 
-	void send(Iterable<String> to, Iterable<String> cc, Iterable<String> bcc, String subject, String body,
+	void send(@P("to") Iterable<String> to, @P("cc") Iterable<String> cc, @P("bcc") Iterable<String> bcc, @P("subject") String subject, @P("body") String body,
 			Callback<Void> callback);
 
 }

@@ -24,20 +24,21 @@ import java.io.File;
 import java.util.List;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.2.0")
 public interface IOTool {
 
-	List<File> files(String dir);
+	List<File> files(@P("dir") String dir);
 
-	List<String> filenames(String dir);
+	List<String> filenames(@P("dir") String dir);
 
-	byte[] load(String filename);
+	byte[] load(@P("filename") String filename);
 
-	void save(String filename, byte[] data);
+	void save(@P("filename") String filename, @P("data") byte[] data);
 
-	File file(String filename);
+	File file(@P("filename") String filename);
 
 }

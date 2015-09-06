@@ -1,6 +1,7 @@
 package org.rapidoid.plugins.lifecycle;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.plugins.Plugin;
 
@@ -28,7 +29,7 @@ import org.rapidoid.plugins.Plugin;
 @Since("3.0.0")
 public interface LifecyclePlugin extends Plugin {
 
-	void onStart(Object[] args);
+	void onStart(@P("args") Object[] args);
 
 	void onShutdown();
 

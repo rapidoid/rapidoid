@@ -23,6 +23,7 @@ package org.rapidoid.plugins;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
@@ -31,6 +32,6 @@ public interface Plugin {
 
 	String name();
 
-	void configure(Map<String, Object> config);
+	void configure(@P("config") Map<String, Object> config);
 
 }

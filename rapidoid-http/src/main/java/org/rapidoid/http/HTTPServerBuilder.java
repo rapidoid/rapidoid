@@ -21,6 +21,7 @@ package org.rapidoid.http;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Builder;
 import org.rapidoid.webapp.WebAppGroup;
@@ -29,13 +30,13 @@ import org.rapidoid.webapp.WebAppGroup;
 @Since("2.0.0")
 public interface HTTPServerBuilder extends Builder<HTTPServer> {
 
-	HTTPServerBuilder applications(WebAppGroup applications);
+	HTTPServerBuilder applications(@P("applications") WebAppGroup applications);
 
-	HTTPServerBuilder bufSize(int bufSize);
+	HTTPServerBuilder bufSize(@P("bufSize") int bufSize);
 
-	HTTPServerBuilder port(int port);
+	HTTPServerBuilder port(@P("port") int port);
 
-	HTTPServerBuilder workers(int workers);
+	HTTPServerBuilder workers(@P("workers") int workers);
 
 	HTTPServerBuilder nagle();
 

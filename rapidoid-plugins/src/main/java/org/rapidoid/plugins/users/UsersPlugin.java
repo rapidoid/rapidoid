@@ -1,6 +1,7 @@
 package org.rapidoid.plugins.users;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.plugins.Plugin;
 
@@ -28,9 +29,9 @@ import org.rapidoid.plugins.Plugin;
 @Since("3.0.0")
 public interface UsersPlugin extends Plugin {
 
-	<U> U findByUsername(Class<U> userClass, String username);
+	<U> U findByUsername(@P("userClass") Class<U> userClass, @P("username") String username);
 
-	<U> U createUser(Class<U> userClass, String username, String passwordHash, String name, String email,
-			String oauthId, String oauthProvider);
+	<U> U createUser(@P("userClass") Class<U> userClass, @P("username") String username, @P("passwordHash") String passwordHash, @P("name") String name, @P("email") String email,
+			String oauthId, @P("oauthProvider") String oauthProvider);
 
 }

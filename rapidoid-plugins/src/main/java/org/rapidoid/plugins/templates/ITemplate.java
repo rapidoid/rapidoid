@@ -23,14 +23,15 @@ package org.rapidoid.plugins.templates;
 import java.io.OutputStream;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public interface ITemplate {
 
-	void render(OutputStream output, Object... scopes);
+	void render(@P("output") OutputStream output, @P("scopes") Object... scopes);
 
-	String render(Object... scopes);
+	String render(@P("scopes") Object... scopes);
 
 }

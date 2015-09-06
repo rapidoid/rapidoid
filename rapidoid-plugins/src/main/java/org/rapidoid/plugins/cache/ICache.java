@@ -21,6 +21,7 @@ package org.rapidoid.plugins.cache;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
@@ -29,16 +30,16 @@ import org.rapidoid.concurrent.Future;
 @Since("4.1.0")
 public interface ICache<K, V> {
 
-	void set(K key, V value, Callback<Void> callback);
+	void set(@P("key") K key, @P("value") V value, @P("callback") Callback<Void> callback);
 
-	void set(K key, V value, long timeToLiveMs, Callback<Void> callback);
+	void set(@P("key") K key, @P("value") V value, @P("timeToLiveMs") long timeToLiveMs, @P("callback") Callback<Void> callback);
 
-	void get(K key, Callback<V> callback);
+	void get(@P("key") K key, @P("callback") Callback<V> callback);
 
-	Future<Void> set(K key, V value);
+	Future<Void> set(@P("key") K key, @P("value") V value);
 
-	Future<Void> set(K key, V value, long timeToLiveMs);
+	Future<Void> set(@P("key") K key, @P("value") V value, @P("timeToLiveMs") long timeToLiveMs);
 
-	Future<V> get(K key);
+	Future<V> get(@P("key") K key);
 
 }

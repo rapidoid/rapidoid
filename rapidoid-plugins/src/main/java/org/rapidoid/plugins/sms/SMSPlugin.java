@@ -1,6 +1,7 @@
 package org.rapidoid.plugins.sms;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.plugins.Plugin;
@@ -29,6 +30,6 @@ import org.rapidoid.plugins.Plugin;
 @Since("4.1.0")
 public interface SMSPlugin extends Plugin {
 
-	void send(Iterable<String> toNumbers, String content, Callback<Void> callback);
+	void send(@P("toNumbers") Iterable<String> toNumbers, @P("content") String content, @P("callback") Callback<Void> callback);
 
 }

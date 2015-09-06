@@ -24,16 +24,17 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public interface ConnectionPool {
 
-	Connection getConnection(String jdbcUrl) throws SQLException;
+	Connection getConnection(@P("jdbcUrl") String jdbcUrl) throws SQLException;
 
-	Connection getConnection(String jdbcUrl, String username, String password) throws SQLException;
+	Connection getConnection(@P("jdbcUrl") String jdbcUrl, @P("username") String username, @P("password") String password) throws SQLException;
 
-	void releaseConnection(Connection connection) throws SQLException;
+	void releaseConnection(@P("connection") Connection connection) throws SQLException;
 
 }

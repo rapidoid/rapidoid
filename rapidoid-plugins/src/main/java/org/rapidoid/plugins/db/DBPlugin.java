@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.lambda.Operation;
@@ -34,55 +35,55 @@ import org.rapidoid.plugins.Plugin;
 @Since("3.0.0")
 public interface DBPlugin extends Plugin {
 
-	String insert(Object entity);
+	String insert(@P("entity") Object entity);
 
-	void update(Object entity);
+	void update(@P("entity") Object entity);
 
-	void update(String id, Object entity);
+	void update(@P("id") String id, @P("entity") Object entity);
 
-	String persist(Object record);
+	String persist(@P("record") Object record);
 
-	String insertOrGetId(Object record);
+	String insertOrGetId(@P("record") Object record);
 
-	<T> T get(Class<T> clazz, String id);
+	<T> T get(@P("clazz") Class<T> clazz, @P("id") String id);
 
-	<T> T getIfExists(Class<T> clazz, String id);
+	<T> T getIfExists(@P("clazz") Class<T> clazz, @P("id") String id);
 
 	<E> Iterable<E> getAll();
 
-	<T> Iterable<T> getAll(Class<T> clazz);
+	<T> Iterable<T> getAll(@P("clazz") Class<T> clazz);
 
-	<E> Iterable<E> getAll(Class<E> clazz, int pageNumber, int pageSize);
+	<E> Iterable<E> getAll(@P("clazz") Class<E> clazz, @P("pageNumber") int pageNumber, @P("pageSize") int pageSize);
 
-	<E> Iterable<E> getAll(Class<E> clazz, Iterable<String> ids);
+	<E> Iterable<E> getAll(@P("clazz") Class<E> clazz, @P("ids") Iterable<String> ids);
 
-	void refresh(Object entity);
+	void refresh(@P("entity") Object entity);
 
-	<E> void delete(Class<E> clazz, String id);
+	<E> void delete(@P("clazz") Class<E> clazz, @P("id") String id);
 
-	void delete(Object entity);
+	void delete(@P("entity") Object entity);
 
-	<E> void each(final Operation<E> lambda);
+	<E> void each(@P("lambda") final Operation<E> lambda);
 
 	long size();
 
-	<T> Iterable<T> fullTextSearch(String query);
+	<T> Iterable<T> fullTextSearch(@P("query") String query);
 
-	<T> Iterable<T> find(Class<T> clazz, Predicate<T> match, Comparator<T> orderBy);
+	<T> Iterable<T> find(@P("clazz") Class<T> clazz, @P("match") Predicate<T> match, @P("orderBy") Comparator<T> orderBy);
 
-	<E> Iterable<E> find(Predicate<E> match);
+	<E> Iterable<E> find(@P("match") Predicate<E> match);
 
-	<E> E entity(Class<E> entityType, Map<String, ?> properties);
+	<E> E entity(@P("entityType") Class<E> entityType, @P("properties") Map<String, ?> properties);
 
-	Iterable<Map<String, Object>> query(String query, Object... args);
+	Iterable<Map<String, Object>> query(@P("query") String query, @P("args") Object... args);
 
-	<E> Iterable<E> query(Class<E> clazz, String query, Object... args);
+	<E> Iterable<E> query(@P("clazz") Class<E> clazz, @P("query") String query, @P("args") Object... args);
 
-	<RESULT> RESULT sql(String sql, Object... args);
+	<RESULT> RESULT sql(@P("sql") String sql, @P("args") Object... args);
 
-	void transaction(Runnable transaction, boolean readOnly);
+	void transaction(@P("transaction") Runnable transaction, @P("readOnly") boolean readOnly);
 
-	void transaction(Runnable tx, boolean readonly, Callback<Void> callback);
+	void transaction(@P("tx") Runnable tx, @P("readonly") boolean readonly, @P("callback") Callback<Void> callback);
 
 	/**
 	 * WARNING: Deletes ALL data in the database! Use with care!

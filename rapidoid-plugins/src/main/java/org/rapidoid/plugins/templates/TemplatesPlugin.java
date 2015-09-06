@@ -21,6 +21,7 @@ package org.rapidoid.plugins.templates;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.plugins.Plugin;
 
@@ -28,8 +29,8 @@ import org.rapidoid.plugins.Plugin;
 @Since("4.1.0")
 public interface TemplatesPlugin extends Plugin {
 
-	ITemplate fromFile(String filename);
+	ITemplate fromFile(@P("filename") String filename);
 
-	ITemplate fromString(String template);
+	ITemplate fromString(@P("template") String template);
 
 }

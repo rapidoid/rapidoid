@@ -21,6 +21,7 @@ package org.rapidoid.http;
  */
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.TCPServer;
@@ -35,8 +36,8 @@ public interface HTTPServer extends TCPServer {
 
 	HTTPInterceptor interceptor();
 
-	HTTPServer interceptor(HTTPInterceptor interceptor);
+	HTTPServer interceptor(@P("interceptor") HTTPInterceptor interceptor);
 
-	HTTPServer addUpgrade(String upgradeName, HttpUpgradeHandler upgradeHandler, Protocol protocol);
+	HTTPServer addUpgrade(@P("upgradeName") String upgradeName, @P("upgradeHandler") HttpUpgradeHandler upgradeHandler, @P("protocol") Protocol protocol);
 
 }

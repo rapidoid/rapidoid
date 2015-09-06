@@ -1,6 +1,7 @@
 package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 
 /*
@@ -27,6 +28,6 @@ import org.rapidoid.annotation.Since;
 @Since("2.0.0")
 public interface HTTPInterceptor {
 
-	void intercept(HttpInterception interception);
+	void intercept(@P("interception") HttpInterception interception);
 
 }

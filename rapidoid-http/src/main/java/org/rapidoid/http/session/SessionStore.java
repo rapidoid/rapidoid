@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 
 /*
@@ -30,10 +31,10 @@ import org.rapidoid.annotation.Since;
 @Since("2.0.0")
 public interface SessionStore {
 
-	boolean exists(String sessionId);
+	boolean exists(@P("sessionId") String sessionId);
 
-	Map<String, Serializable> get(String sessionId);
+	Map<String, Serializable> get(@P("sessionId") String sessionId);
 
-	void set(String sessionId, Map<String, Serializable> session);
+	void set(@P("sessionId") String sessionId, @P("session") Map<String, Serializable> session);
 
 }
