@@ -20,6 +20,8 @@ package org.rapidoid.plugins;
  * #L%
  */
 
+import java.util.Map;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
@@ -28,5 +30,7 @@ import org.rapidoid.annotation.Since;
 public interface Plugin {
 
 	String name();
+
+	void configure(Map<String, Object> config);
 
 }

@@ -20,6 +20,9 @@ package org.rapidoid.plugins;
  * #L%
  */
 
+import java.util.Collections;
+import java.util.Map;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
@@ -29,6 +32,9 @@ public abstract class AbstractPlugin implements Plugin {
 
 	private final String name;
 
+	@SuppressWarnings("unchecked")
+	private volatile Map<String, Object> config = Collections.EMPTY_MAP;
+
 	public AbstractPlugin(String name) {
 		this.name = name;
 	}
@@ -36,5 +42,20 @@ public abstract class AbstractPlugin implements Plugin {
 	public String name() {
 		return name;
 	}
+
+	@Override
+	public void configure(Map<String, Object> config) {
+		this.config = config;
+		stop();
+		start();
+	}
+
+	public Map<String, Object> config() {
+		return config;
+	}
+
+	protected void start() {}
+
+	protected void stop() {}
 
 }

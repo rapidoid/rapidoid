@@ -5,6 +5,7 @@ import java.util.Map;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.cache.CachePlugin;
 import org.rapidoid.plugins.cache.DefaultCachePlugin;
@@ -66,6 +67,8 @@ public final class Plugins {
 
 	private static final Map<String, Map<String, Plugin>> PLUGINS = U.mapOfMaps();
 
+	private static final Map<String, Plugin> PLUGINS_BY_NAME = U.synchronizedMap();
+
 	private static volatile LifecyclePlugin lifecyclePlugin = new DefaultLifecyclePlugin();
 	private static volatile LanguagesPlugin languagesPlugin = new DefaultLanguagesPlugin();
 	private static volatile DBPlugin dbPlugin = new DefaultDBPlugin();
@@ -118,8 +121,12 @@ public final class Plugins {
 				String name = plugin.name();
 				Log.info("Registering plugin", "plugin", plugin, "name", name, "type", interf);
 				PLUGINS.get(interf).put(name, plugin);
+				PLUGINS_BY_NAME.put(name, plugin);
 			}
 		}
+
+		// initial plugin configuration
+		plugin.configure(Conf.sub(plugin.name()));
 
 		setPlugin(plugin);
 	}
@@ -182,6 +189,10 @@ public final class Plugins {
 
 	public static TemplatesPlugin templates(String name) {
 		return (TemplatesPlugin) PLUGINS.get(TemplatesPlugin.class).get(name);
+	}
+
+	public static Plugin get(String name) {
+		return PLUGINS_BY_NAME.get(name);
 	}
 
 }
