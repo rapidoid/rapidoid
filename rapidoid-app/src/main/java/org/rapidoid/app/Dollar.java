@@ -25,6 +25,8 @@ import org.rapidoid.sql.SQL;
 import org.rapidoid.sql.SQLAPI;
 import org.rapidoid.util.U;
 
+import redis.clients.jedis.Jedis;
+
 /*
  * #%L
  * rapidoid-app
@@ -128,6 +130,10 @@ public class Dollar {
 	@SuppressWarnings("unchecked")
 	public DollarPage page(Object value) {
 		return page(value, Collections.EMPTY_MAP);
+	}
+
+	public final Jedis jedis() {
+		return JedisTool.get();
 	}
 
 }
