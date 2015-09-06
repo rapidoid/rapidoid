@@ -89,16 +89,15 @@ public class Dollar {
 
 	public final IOTool io = new IOTool();
 
-	public final SQLAPI jdbc;
-
-	public final Map<String, Object> bindings;
+	public final SQLAPI jdbc = SQL.defaultInstance();
 
 	public final HttpExchange req;
+
+	public final Map<String, Object> bindings;
 
 	public Dollar(HttpExchange x, Map<String, Object> bindings) {
 		this.req = x;
 		this.bindings = bindings;
-		this.jdbc = SQL.newInstance().mysql();
 	}
 
 	public List<Map<String, Object>> sql(String sql, Object... args) {
