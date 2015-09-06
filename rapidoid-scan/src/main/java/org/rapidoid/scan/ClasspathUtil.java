@@ -228,7 +228,13 @@ public class ClasspathUtil {
 		U.must(dir.isDirectory());
 		Log.debug("Traversing directory", "root", root, "dir", dir);
 
-		for (File file : dir.listFiles()) {
+		File[] files = dir.listFiles();
+		if (files == null) {
+			Log.warn("Not a folder!", "dir", dir);
+			return;
+		}
+
+		for (File file : files) {
 			if (file.isDirectory()) {
 				getClassesFromDir(classes, root, file, pkg, regex, filter, annotated, classLoader);
 			} else {
