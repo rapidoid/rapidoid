@@ -25,15 +25,8 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.script.CompiledScript;
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.BeanProperties;
-import org.rapidoid.beany.Beany;
-import org.rapidoid.beany.Prop;
 import org.rapidoid.config.Conf;
 import org.rapidoid.dispatch.DispatchResult;
 import org.rapidoid.dispatch.PojoDispatchException;
@@ -188,12 +181,12 @@ public class AppHandler implements Handler {
 		// serve dynamic pages from a script
 
 		if (result == null) {
-			result = runDynamicScript(x);
+			result = Scripting.runDynamicScript(x);
 
 			if (result == x) {
-				result = desc(x);
+				result = Scripting.desc(x);
 			} else if (result instanceof Dollar) {
-				result = desc((Dollar) result);
+				result = Scripting.desc((Dollar) result);
 			} else if (result instanceof DollarPage) {
 				DollarPage page = (DollarPage) result;
 				config = page.getConfig();
@@ -219,35 +212,6 @@ public class AppHandler implements Handler {
 		}
 
 		throw x.notFound();
-	}
-
-	private static Object desc(HttpExchangeImpl x) {
-		Map<String, Object> desc = U.map();
-
-		desc.put("verb", x.verb());
-		desc.put("uri", x.uri());
-		desc.put("path", x.path());
-		desc.put("home", x.home());
-		desc.put("dev", x.isDevMode());
-
-		boolean loggedIn = AppCtx.isLoggedIn();
-		desc.put("loggedIn", loggedIn);
-		desc.put("user", loggedIn ? AppCtx.user() : null);
-
-		return GUI.multi(GUI.h2("Request details:"), GUI.grid(desc), GUI.h2("Request params:"), GUI.grid(x.data()),
-				GUI.h2("Cookies:"), GUI.grid(x.cookies()));
-	}
-
-	private static Object desc(Dollar dollar) {
-		Map<String, Object> desc = U.map();
-		BeanProperties props = Beany.propertiesOf(dollar);
-
-		for (Prop prop : props) {
-			Object val = prop.get(dollar);
-			desc.put(prop.getName(), val.getClass().getSimpleName());
-		}
-
-		return GUI.multi(GUI.h2("The $ properties:"), GUI.grid(desc), GUI.h2("Bindings:"), GUI.grid(dollar.bindings));
 	}
 
 	private DispatchResult doDispatch(PojoDispatcher dispatcher, PojoRequest req) {
@@ -341,42 +305,6 @@ public class AppHandler implements Handler {
 	public static final void reload(HttpExchange x) {
 		Map<String, String> sel = U.map("body", PAGE_RELOAD);
 		x.writeJSON(U.map("_sel_", sel));
-	}
-
-	public Object runDynamicScript(HttpExchangeImpl x) {
-		String scriptName = x.isGetReq() ? x.resourceName() : x.verb().toUpperCase() + "_" + x.resourceName();
-		String filename = scriptName + ".js";
-		String firstFile = Conf.dynamicPath() + "/" + filename;
-		String defaultFile = Conf.dynamicPathDefault() + "/" + filename;
-		Res res = Res.from(filename, true, firstFile, defaultFile);
-
-		if (!res.exists()) {
-			return null;
-		}
-
-		String js = res.getContent();
-		CompiledScript compiled;
-		try {
-			compiled = U.compileJS(js);
-		} catch (ScriptException e) {
-			throw U.rte("Script compilation error!", e);
-		}
-
-		Map<String, Object> bindings = U.map();
-
-		for (Entry<String, String> e : x.data().entrySet()) {
-			bindings.put("$" + e.getKey(), e.getValue());
-		}
-
-		Dollar dollar = new Dollar(x, bindings);
-
-		bindings.put("$", dollar);
-
-		try {
-			return compiled.eval(new SimpleBindings(bindings));
-		} catch (ScriptException e) {
-			throw U.rte("Script execution error!", e);
-		}
 	}
 
 }
