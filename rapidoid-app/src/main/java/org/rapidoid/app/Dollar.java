@@ -49,13 +49,17 @@ import org.rapidoid.util.U;
 @Since("4.1.0")
 public class Dollar {
 
-	public final Map<?, ?> map = U.map();
+	/************ DATA CONTAINERS *************/
+
+	public final Map<?, ?> extra = U.map();
 
 	public final Map<Object, Map<Object, Object>> maps = U.mapOfMaps();
 
 	public final Map<Object, List<Object>> lists = U.mapOfLists();
 
 	public final Map<Object, Set<Object>> sets = U.mapOfSets();
+
+	/************ SERVICES *************/
 
 	public final HttpClient http = HTTP.DEFAULT_CLIENT;
 
@@ -104,6 +108,10 @@ public class Dollar {
 			jdbc.execute(sql, args);
 			return null;
 		}
+	}
+
+	public Iterable<Map<String, Object>> sql(String sql) {
+		return sql(sql, new Object[0]);
 	}
 
 	public Iterable<Map<String, Object>> cql(String cql, Object... args) {
