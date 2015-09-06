@@ -69,6 +69,13 @@ public class Scripting {
 
 		Dollar dollar = new Dollar(x, bindings);
 
+		BeanProperties props = Beany.propertiesOf(Dollar.class);
+
+		for (Prop prop : props) {
+			Object val = prop.get(dollar);
+			bindings.put(prop.getName(), val);
+		}
+
 		bindings.put("$", dollar);
 
 		try {
@@ -97,7 +104,7 @@ public class Scripting {
 
 	public static Object desc(Dollar dollar) {
 		Map<String, Object> desc = U.map();
-		BeanProperties props = Beany.propertiesOf(dollar);
+		BeanProperties props = Beany.propertiesOf(Dollar.class);
 
 		for (Prop prop : props) {
 			Object val = prop.get(dollar);
