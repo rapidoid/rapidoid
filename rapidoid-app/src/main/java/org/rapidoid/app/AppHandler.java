@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.dispatch.DispatchResult;
 import org.rapidoid.dispatch.PojoDispatchException;
@@ -182,22 +181,8 @@ public class AppHandler implements Handler {
 		// serve dynamic pages from a script
 
 		if (result == null) {
-			result = Scripting.runDynamicScript(x);
-
-			if (result == x) {
-				result = Scripting.desc(x);
-			} else if (result instanceof Dollar) {
-				result = Scripting.desc((Dollar) result);
-			} else if (result instanceof DollarPage) {
-				DollarPage page = (DollarPage) result;
-				config = page.getConfig();
-				result = page.getValue();
-			} else if (result != null) {
-				if (canDescribe(result)) {
-					result = Scripting.descObj(result);
-				} else {
-					return result;
-				}
+			if (Scripting.runDynamicScript(x, hasEvent, config)) {
+				return x;
 			}
 		}
 
@@ -206,6 +191,10 @@ public class AppHandler implements Handler {
 			result = GenericGUI.genericScreen();
 		}
 
+		return view(x, result, hasEvent, config);
+	}
+
+	public static Object view(HttpExchange x, Object result, boolean hasEvent, Map<String, Object> config) {
 		// serve dynamic pages from file templates
 
 		if (serveDynamicPage(x, result, hasEvent, config)) {
@@ -213,20 +202,11 @@ public class AppHandler implements Handler {
 		}
 
 		if (result != null) {
-			return result;
+			x.result(result);
+			return x;
 		}
 
 		throw x.notFound();
-	}
-
-	private boolean canDescribe(Object obj) {
-		if (!Cls.isBean(obj)) {
-			return false;
-		}
-
-		// TODO maybe more checks here?
-
-		return true;
 	}
 
 	private DispatchResult doDispatch(PojoDispatcher dispatcher, PojoRequest req) {
@@ -240,7 +220,7 @@ public class AppHandler implements Handler {
 		}
 	}
 
-	public boolean serveDynamicPage(HttpExchangeImpl x, Object result, boolean hasEvent, Map<String, Object> config) {
+	public static boolean serveDynamicPage(HttpExchange x, Object result, boolean hasEvent, Map<String, Object> config) {
 		String filename = x.resourceName() + ".html";
 		String firstFile = Conf.templatesPath() + "/" + filename;
 		String defaultFile = Conf.templatesPathDefault() + "/" + filename;
@@ -267,7 +247,7 @@ public class AppHandler implements Handler {
 		}
 
 		if (hasEvent) {
-			serveEventResponse(x, x.renderPageToHTML(model));
+			serveEventResponse((HttpExchangeImpl) x, x.renderPageToHTML(model));
 		} else {
 			x.renderPage(model);
 		}
@@ -275,7 +255,7 @@ public class AppHandler implements Handler {
 		return true;
 	}
 
-	private void serveEventResponse(HttpExchangeImpl x, String html) {
+	private static void serveEventResponse(HttpExchangeImpl x, String html) {
 		x.startResponse(200);
 		x.json();
 

@@ -32,9 +32,12 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.BeanProperties;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
+import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.io.Res;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.util.U;
 import org.rapidoid.webapp.AppCtx;
 
@@ -42,13 +45,31 @@ import org.rapidoid.webapp.AppCtx;
 @Since("4.2.0")
 public class Scripting {
 
-	public static Object runDynamicScript(HttpExchangeImpl x) {
+	public static boolean runDynamicScript(final HttpExchangeImpl x, final boolean hasEvent,
+			final Map<String, Object> config) {
+		final CompiledScript script = script(x);
+
+		if (script != null) {
+			Jobs.execute(new Runnable() {
+				@Override
+				public void run() {
+					x.async();
+					runScript(x, script, hasEvent, config);
+				}
+			});
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private static CompiledScript script(HttpExchangeImpl x) {
 		String scriptName = x.isGetReq() ? x.resourceName() : x.verb().toUpperCase() + "_" + x.resourceName();
 		String filename = scriptName + ".js";
 		String firstFile = Conf.dynamicPath() + "/" + filename;
 		String defaultFile = Conf.dynamicPathDefault() + "/" + filename;
-		Res res = Res.from(filename, true, firstFile, defaultFile);
 
+		Res res = Res.from(filename, true, firstFile, defaultFile);
 		if (!res.exists()) {
 			return null;
 		}
@@ -61,6 +82,11 @@ public class Scripting {
 			throw U.rte("Script compilation error!", e);
 		}
 
+		return compiled;
+	}
+
+	protected static void runScript(HttpExchangeImpl x, CompiledScript script, boolean hasEvent,
+			Map<String, Object> config) {
 		Map<String, Object> bindings = U.map();
 
 		for (Entry<String, String> e : x.data().entrySet()) {
@@ -79,13 +105,60 @@ public class Scripting {
 		bindings.put("$", dollar);
 
 		try {
-			return compiled.eval(new SimpleBindings(bindings));
+			script.eval(new SimpleBindings(bindings));
 		} catch (ScriptException e) {
 			throw U.rte("Script execution error!", e);
 		}
 	}
 
-	public static Object desc(HttpExchangeImpl x) {
+	public static void onScriptResult(HttpExchange x, Object result) {
+		boolean rendered = calcFinalResult(x, result);
+
+		if (!rendered) {
+			x.result(result);
+		}
+
+		x.done();
+	}
+
+	private static boolean calcFinalResult(HttpExchange x, Object result) {
+		Map<String, Object> config = U.map();
+
+		if (result == x) {
+			result = desc(x);
+
+		} else if (result instanceof Dollar) {
+			result = desc((Dollar) result);
+
+		} else if (result instanceof DollarPage) {
+			DollarPage page = (DollarPage) result;
+			config = page.getConfig();
+			result = page.getValue();
+
+		} else if (result != null) {
+			if (canDescribe(result)) {
+				result = descObj(result);
+			} else {
+				return false;
+			}
+		}
+
+		AppHandler.view(x, result, false, config);
+
+		return true;
+	}
+
+	private static boolean canDescribe(Object obj) {
+		if (!Cls.isBean(obj)) {
+			return false;
+		}
+
+		// TODO maybe more checks here?
+
+		return true;
+	}
+
+	public static Object desc(HttpExchange x) {
 		Map<String, Object> desc = U.map();
 
 		desc.put("verb", x.verb());

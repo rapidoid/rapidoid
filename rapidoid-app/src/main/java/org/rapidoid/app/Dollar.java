@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HttpClient;
 import org.rapidoid.http.HttpExchange;
@@ -102,7 +103,7 @@ public class Dollar {
 		this.bindings = bindings;
 	}
 
-	public List<Map<String, Object>> sql(String sql, Object... args) {
+	public List<Map<String, Object>> sql(String sql, Object[] args) {
 		if (sql.trim().toLowerCase().startsWith("select ")) {
 			return jdbc.query(sql, args);
 		} else {
@@ -115,8 +116,12 @@ public class Dollar {
 		return sql(sql, new Object[0]);
 	}
 
-	public Iterable<Map<String, Object>> cql(String cql, Object... args) {
+	public Iterable<Map<String, Object>> cql(String cql, Object[] args) {
 		return cassandra.query(cql, args);
+	}
+
+	public void cql(String cql, Object[] args, Callback<Iterable<Map<String, Object>>> callback) {
+		cassandra.queryAsync(cql, callback, args);
 	}
 
 	public Iterable<Map<String, Object>> cql(String cql) {
@@ -132,8 +137,12 @@ public class Dollar {
 		return page(value, Collections.EMPTY_MAP);
 	}
 
-	public final Jedis jedis() {
+	public Jedis jedis() {
 		return JedisTool.get();
+	}
+
+	public void result(Object result) {
+		Scripting.onScriptResult(req, result);
 	}
 
 }
