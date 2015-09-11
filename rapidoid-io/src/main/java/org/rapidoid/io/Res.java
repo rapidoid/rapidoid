@@ -59,6 +59,8 @@ public class Res {
 
 	private volatile String cachedFileName;
 
+	private volatile Object attachment;
+
 	private final List<Runnable> changeListeners = U.synchronizedList();
 
 	private Res(String shortName, Set<String> filenames) {
@@ -131,6 +133,7 @@ public class Res {
 
 				if (hasChanged) {
 					content = null;
+					attachment = null;
 				}
 			}
 
@@ -229,6 +232,15 @@ public class Res {
 		}
 
 		return this;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T attachment() {
+		return exists() ? (T) attachment : null;
+	}
+
+	public void attach(Object attachment) {
+		this.attachment = attachment;
 	}
 
 }
