@@ -7,7 +7,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.concurrent.Callback;
+import org.rapidoid.concurrent.Callbacks;
 import org.rapidoid.config.Conf;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.db.DBPluginBase;
 import org.rapidoid.util.U;
@@ -18,12 +20,15 @@ import com.datastax.driver.core.ColumnDefinitions;
 import com.datastax.driver.core.ColumnDefinitions.Definition;
 import com.datastax.driver.core.PoolingOptions;
 import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.ResultSetFuture;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import com.datastax.driver.mapping.Result;
 import com.datastax.driver.mapping.UDTMapper;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
 
 /*
  * #%L
@@ -49,7 +54,9 @@ import com.datastax.driver.mapping.UDTMapper;
 @Since("4.1.0")
 public class CassandraDBPlugin extends DBPluginBase {
 
-	private final Cluster cluster;
+	private volatile Cluster cluster;
+
+	private volatile Session sharedSession;
 
 	public CassandraDBPlugin() {
 		this(defaultCluster());
@@ -76,6 +83,22 @@ public class CassandraDBPlugin extends DBPluginBase {
 		return cluster;
 	}
 
+	public synchronized Session provideSession() {
+		try {
+			if (cluster.isClosed()) {
+				cluster = defaultCluster();
+			}
+
+			if (sharedSession == null || sharedSession.isClosed()) {
+				sharedSession = cluster.connect();
+			}
+
+			return sharedSession;
+		} catch (Exception e) {
+			throw U.rte("Couldn't initialize the Cassandra session!", e);
+		}
+	}
+
 	public CassandraDBPlugin(Cluster cluster) {
 		super("cassandra");
 		this.cluster = cluster;
@@ -83,70 +106,59 @@ public class CassandraDBPlugin extends DBPluginBase {
 
 	@Override
 	public String insert(Object entity) {
-		Session session = getSession();
+		Mapper<Object> mapper = getMapperFor(entity, provideSession());
+		mapper.save(entity);
 
-		try {
-			Mapper<Object> mapper = getMapperFor(entity, session);
-			mapper.save(entity);
-
-			return Beany.getId(entity);
-		} finally {
-			close(session);
-		}
+		return Beany.getId(entity);
 	}
 
 	@Override
 	public void update(String id, Object entity) {
-		Session session = getSession();
-
-		try {
-			Mapper<Object> mapper = getMapperFor(entity, session);
-			mapper.save(entity);
-		} finally {
-			close(session);
-		}
+		Mapper<Object> mapper = getMapperFor(entity, provideSession());
+		mapper.save(entity);
 	}
 
 	@Override
 	public <T> T getIfExists(Class<T> clazz, String id) {
-		Session session = getSession();
+		Mapper<T> mapper = new MappingManager(provideSession()).mapper(clazz);
 
-		try {
-			Mapper<T> mapper = new MappingManager(session).mapper(clazz);
+		Object idCorrectType = castId(clazz, id);
+		T entity = mapper.get(idCorrectType);
 
-			Object idCorrectType = castId(clazz, id);
-			T entity = mapper.get(idCorrectType);
-
-			return entity;
-		} finally {
-			close(session);
-		}
+		return entity;
 	}
 
 	@Override
 	public <E> void delete(Class<E> clazz, String id) {
-		Session session = getSession();
-
-		try {
-			Mapper<E> mapper = new MappingManager(session).mapper(clazz);
-			Object idCorrectType = castId(clazz, id);
-			mapper.delete(idCorrectType);
-		} finally {
-			close(session);
-		}
+		Mapper<E> mapper = new MappingManager(provideSession()).mapper(clazz);
+		Object idCorrectType = castId(clazz, id);
+		mapper.delete(idCorrectType);
 	}
 
 	@Override
 	public Iterable<Map<String, Object>> query(String cql, Object... args) {
-		Session session = getSession();
+		ResultSet rs = provideSession().execute(cql, args);
+		return results(rs.all());
+	}
 
-		try {
-			ResultSet rs = session.execute(cql, args);
-			return results(rs.all());
+	@Override
+	public void queryAsync(String cql, final Callback<Iterable<Map<String, Object>>> callback, Object... args) {
+		final ResultSetFuture future = provideSession().executeAsync(cql, args);
 
-		} finally {
-			close(session);
-		}
+		Futures.addCallback(future, new FutureCallback<ResultSet>() {
+
+			@Override
+			public void onSuccess(ResultSet rs) {
+				Iterable<Map<String, Object>> result = results(rs.all());
+				Callbacks.done(callback, result, null);
+			}
+
+			@Override
+			public void onFailure(Throwable t) {
+				Callbacks.done(callback, null, t);
+			}
+
+		}, Jobs.executor());
 	}
 
 	private static Iterable<Map<String, Object>> results(List<Row> rows) {
@@ -170,17 +182,13 @@ public class CassandraDBPlugin extends DBPluginBase {
 
 	@Override
 	public <E> Iterable<E> query(Class<E> clazz, String query, Object... args) {
-		Session session = getSession();
+		Session session = provideSession();
 
-		try {
-			ResultSet rs = session.execute(query, args);
-			Mapper<E> mapper = new MappingManager(session).mapper(clazz);
-			Result<E> result = mapper.map(rs);
+		ResultSet rs = session.execute(query, args);
+		Mapper<E> mapper = new MappingManager(session).mapper(clazz);
+		Result<E> result = mapper.map(rs);
 
-			return result;
-		} finally {
-			close(session);
-		}
+		return result;
 	}
 
 	@Override
@@ -216,15 +224,22 @@ public class CassandraDBPlugin extends DBPluginBase {
 		return entityType.getSimpleName().toLowerCase();
 	}
 
-	public Session getSession() {
-		return cluster.connect();
-	}
+	@Override
+	protected void stop() {
+		if (sharedSession != null && !sharedSession.isClosed()) {
+			try {
+				sharedSession.close();
+			} catch (Exception e) {
+				Log.error("Couldn't close the session!", e);
+			}
+		}
 
-	public void close(Session session) {
-		try {
-			session.close();
-		} catch (Exception e) {
-			Log.error("Couldn't close the session!", e);
+		if (cluster != null && !cluster.isClosed()) {
+			try {
+				cluster.close();
+			} catch (Exception e) {
+				Log.error("Couldn't close the cluster!", e);
+			}
 		}
 	}
 

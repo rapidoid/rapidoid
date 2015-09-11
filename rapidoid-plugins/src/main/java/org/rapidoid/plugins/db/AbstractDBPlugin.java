@@ -168,4 +168,14 @@ public abstract class AbstractDBPlugin extends AbstractPlugin implements DBPlugi
 		throw new AbstractMethodError("Not implemented!");
 	}
 
+	@Override
+	public <E> void queryAsync(Class<E> clazz, String query, Callback<Iterable<E>> callback, Object... args) {
+		throw new AbstractMethodError("Not implemented!");
+	}
+
+	@Override
+	public void queryAsync(String query, Callback<Iterable<Map<String, Object>>> callback, Object... args) {
+		throw new AbstractMethodError("Not implemented!");
+	}
+
 }

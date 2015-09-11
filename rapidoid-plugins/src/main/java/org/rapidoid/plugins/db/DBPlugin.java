@@ -79,6 +79,12 @@ public interface DBPlugin extends Plugin {
 
 	<E> Iterable<E> query(@P("clazz") Class<E> clazz, @P("query") String query, @P("args") Object... args);
 
+	void queryAsync(@P("query") String query, Callback<Iterable<Map<String, Object>>> callback,
+			@P("args") Object... args);
+
+	<E> void queryAsync(@P("clazz") Class<E> clazz, @P("query") String query, Callback<Iterable<E>> callback,
+			@P("args") Object... args);
+
 	<RESULT> RESULT sql(@P("sql") String sql, @P("args") Object... args);
 
 	void transaction(@P("transaction") Runnable transaction, @P("readOnly") boolean readOnly);
