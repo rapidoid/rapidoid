@@ -50,10 +50,10 @@ public class Scripting {
 		final CompiledScript script = script(x);
 
 		if (script != null) {
+			x.async();
 			Jobs.execute(new Runnable() {
 				@Override
 				public void run() {
-					x.async();
 					runScript(x, script, hasEvent, config);
 				}
 			});
@@ -74,12 +74,17 @@ public class Scripting {
 			return null;
 		}
 
-		String js = res.getContent();
-		CompiledScript compiled;
-		try {
-			compiled = U.compileJS(js);
-		} catch (ScriptException e) {
-			throw U.rte("Script compilation error!", e);
+		CompiledScript compiled = res.attachment();
+
+		if (compiled == null) {
+			String js = res.getContent();
+			try {
+				compiled = U.compileJS(js);
+			} catch (ScriptException e) {
+				throw U.rte("Script compilation error!", e);
+			}
+
+			res.attach(compiled);
 		}
 
 		return compiled;
@@ -88,19 +93,17 @@ public class Scripting {
 	protected static void runScript(HttpExchangeImpl x, CompiledScript script, boolean hasEvent,
 			Map<String, Object> config) {
 		Map<String, Object> bindings = U.map();
+		Dollar dollar = new Dollar(x, bindings);
 
 		for (Entry<String, String> e : x.data().entrySet()) {
 			bindings.put("$" + e.getKey(), e.getValue());
 		}
 
-		Dollar dollar = new Dollar(x, bindings);
-
-		BeanProperties props = Beany.propertiesOf(Dollar.class);
-
-		for (Prop prop : props) {
-			Object val = prop.get(dollar);
-			bindings.put(prop.getName(), val);
-		}
+		// BeanProperties props = Beany.propertiesOf(Dollar.class);
+		// for (Prop prop : props) {
+		// Object val = prop.get(dollar);
+		// bindings.put(prop.getName(), val);
+		// }
 
 		bindings.put("$", dollar);
 
