@@ -137,7 +137,7 @@ public class Dollar {
 		return page(value, Collections.EMPTY_MAP);
 	}
 
-	public Jedis jedis() {
+	public Jedis redis() {
 		return JedisTool.get();
 	}
 
