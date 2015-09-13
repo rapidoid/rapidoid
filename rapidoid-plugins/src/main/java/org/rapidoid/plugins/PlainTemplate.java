@@ -25,6 +25,7 @@ import java.io.OutputStream;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
 import org.rapidoid.plugins.templates.ITemplate;
 import org.rapidoid.util.U;
 
@@ -40,6 +41,7 @@ public class PlainTemplate implements ITemplate {
 
 	@Override
 	public void render(OutputStream output, Object... scopes) {
+		Log.warn("Using the plain template!");
 		try {
 			output.write(content.getBytes());
 		} catch (IOException e) {
