@@ -69,7 +69,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	private final static HttpParser PARSER = Wire.singleton(HttpParser.class);
 
-	private static final ITemplate PAGE = Templates.fromFile("page.html");
+	private static volatile ITemplate PAGE_TEMPLATE;
 
 	private static final byte[] HEADER_SEP = ": ".getBytes();
 
@@ -1311,13 +1311,20 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			html();
 		}
 
-		PAGE.render(this.outputStream(), model, model());
+		pageTemplate().render(this.outputStream(), model, model());
 		return this;
 	}
 
 	@Override
 	public String renderPageToHTML(Object model) {
-		return PAGE.render(model, model());
+		return pageTemplate().render(model, model());
+	}
+
+	private static ITemplate pageTemplate() {
+		if (PAGE_TEMPLATE == null) {
+			PAGE_TEMPLATE = Templates.fromFile("page.html");
+		}
+		return PAGE_TEMPLATE;
 	}
 
 	@Override
