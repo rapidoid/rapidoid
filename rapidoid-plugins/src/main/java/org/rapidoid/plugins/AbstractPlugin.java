@@ -25,6 +25,8 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -33,7 +35,9 @@ public abstract class AbstractPlugin implements Plugin {
 	private final String name;
 
 	@SuppressWarnings("unchecked")
-	private volatile Map<String, Object> config = Collections.EMPTY_MAP;
+	private volatile Map<String, ?> config = Collections.EMPTY_MAP;
+
+	private volatile boolean active = false;
 
 	public AbstractPlugin(String name) {
 		this.name = name;
@@ -44,18 +48,50 @@ public abstract class AbstractPlugin implements Plugin {
 	}
 
 	@Override
-	public void configure(Map<String, Object> config) {
+	public synchronized void configure(Map<String, ?> config) {
 		this.config = config;
-		stop();
-		start();
+		Log.info("Configuring plugin", "name", name, "config", config, "plugin", this, "active", active);
+		restart();
 	}
 
-	public Map<String, Object> config() {
-		return config;
+	@Override
+	public synchronized void restart() {
+		Log.info("Restarting plugin", "name", name, "config", config, "plugin", this, "active", active);
+
+		try {
+			doRestart();
+		} catch (Exception e) {
+			active = false;
+			Log.error("Cannot initialize/restart the plugin: " + name, e);
+		}
+
+		Log.info("Plugin is ready", "name", name, "config", config, "plugin", this, "active", active);
+		active = true;
 	}
 
-	protected void start() {}
+	@SuppressWarnings("unchecked")
+	public synchronized Map<String, Object> config() {
+		return (Map<String, Object>) config;
+	}
 
-	protected void stop() {}
+	protected void doRestart() throws Exception {}
+
+	@Override
+	public synchronized boolean isActive() {
+		return this.active;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T option(String subname, T defaultValue) {
+		Object value = config().get(subname);
+
+		if (value == null) {
+			Log.warn(U.format("The plugin configuration '%s' was not specified for the plugin '%s', using default: %s",
+					subname, name, defaultValue));
+			value = defaultValue;
+		}
+
+		return (T) value;
+	}
 
 }

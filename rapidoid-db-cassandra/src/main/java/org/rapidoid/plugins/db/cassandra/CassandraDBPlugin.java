@@ -8,7 +8,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Callbacks;
-import org.rapidoid.config.Conf;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.db.DBPluginBase;
@@ -59,34 +58,51 @@ public class CassandraDBPlugin extends DBPluginBase {
 	private volatile Session sharedSession;
 
 	public CassandraDBPlugin() {
-		this(defaultCluster());
+		super("cassandra");
 	}
 
-	public static Cluster defaultCluster() {
+	@Override
+	protected void doRestart() throws Exception {
+		stopIfRunning();
+		initialize();
+	}
+
+	private void stopIfRunning() {
+		if (sharedSession != null && !sharedSession.isClosed()) {
+			try {
+				sharedSession.close();
+			} catch (Exception e) {
+				Log.error("Couldn't close the session!", e);
+			}
+		}
+
+		if (cluster != null && !cluster.isClosed()) {
+			try {
+				cluster.close();
+			} catch (Exception e) {
+				Log.error("Couldn't close the cluster!", e);
+			}
+		}
+	}
+
+	private void initialize() {
 		Builder builder = Cluster.builder();
 
-		List<String> peers = Conf.nested("cassandra", "peers");
+		List<String> servers = option("servers", U.list("127.0.0.1"));
 
-		if (peers != null) {
-			for (String peer : peers) {
-				Log.warn("Adding Cassandra peer (contact point)", "peer", peer);
-				builder.addContactPoint(peer);
-			}
-		} else {
-			Log.warn("Cassandra peers (contact points) were not configured, using 127.0.0.1 as default!");
-			builder.addContactPoint("127.0.0.1");
+		for (String server : servers) {
+			Log.warn("Adding Cassandra peer (contact point)", "peer", server);
+			builder.addContactPoint(server);
 		}
 
 		PoolingOptions poolingOptions = new PoolingOptions(); // TODO improve
-		Cluster cluster = builder.withPoolingOptions(poolingOptions).build();
-
-		return cluster;
+		this.cluster = builder.withPoolingOptions(poolingOptions).build();
 	}
 
 	public synchronized Session provideSession() {
 		try {
 			if (cluster.isClosed()) {
-				cluster = defaultCluster();
+				restart();
 			}
 
 			if (sharedSession == null || sharedSession.isClosed()) {
@@ -97,11 +113,6 @@ public class CassandraDBPlugin extends DBPluginBase {
 		} catch (Exception e) {
 			throw U.rte("Couldn't initialize the Cassandra session!", e);
 		}
-	}
-
-	public CassandraDBPlugin(Cluster cluster) {
-		super("cassandra");
-		this.cluster = cluster;
 	}
 
 	@Override
@@ -224,23 +235,12 @@ public class CassandraDBPlugin extends DBPluginBase {
 		return entityType.getSimpleName().toLowerCase();
 	}
 
-	@Override
-	protected void stop() {
-		if (sharedSession != null && !sharedSession.isClosed()) {
-			try {
-				sharedSession.close();
-			} catch (Exception e) {
-				Log.error("Couldn't close the session!", e);
-			}
-		}
+	public synchronized Cluster cluster() {
+		return cluster;
+	}
 
-		if (cluster != null && !cluster.isClosed()) {
-			try {
-				cluster.close();
-			} catch (Exception e) {
-				Log.error("Couldn't close the cluster!", e);
-			}
-		}
+	public synchronized Session session() {
+		return provideSession();
 	}
 
 }

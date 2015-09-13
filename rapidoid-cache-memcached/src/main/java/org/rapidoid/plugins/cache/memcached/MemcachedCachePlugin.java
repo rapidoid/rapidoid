@@ -1,6 +1,5 @@
 package org.rapidoid.plugins.cache.memcached;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -10,7 +9,6 @@ import net.spy.memcached.MemcachedClient;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
 import org.rapidoid.plugins.cache.AbstractCachePlugin;
 import org.rapidoid.plugins.cache.ICache;
 import org.rapidoid.util.U;
@@ -45,32 +43,19 @@ public class MemcachedCachePlugin extends AbstractCachePlugin {
 		super("memcached");
 	}
 
-	@SuppressWarnings({ "unchecked" })
 	@Override
-	protected void start() {
-		try {
-			List<String> servers = (List<String>) config().get("servers");
-
-			if (servers == null) {
-				Log.warn("Memcached servers 'memcached.servers' were not configured, using localhost:11211 as default!");
-				servers = U.list("localhost:11211");
-			}
-
-			this.client = new MemcachedClient(new BinaryConnectionFactory(), AddrUtil.getAddresses(servers));
-		} catch (IOException e) {
-			throw U.rte("Cannot initialize the Memcached client!");
-		}
-	}
-
-	@Override
-	protected void stop() {
+	protected void doRestart() throws Exception {
 		if (this.client != null) {
 			this.client.shutdown(5, TimeUnit.SECONDS);
 			this.client = null;
 		}
+
+		List<String> servers = option("servers", U.list("localhost:11211"));
+
+		this.client = new MemcachedClient(new BinaryConnectionFactory(), AddrUtil.getAddresses(servers));
 	}
 
-	public MemcachedClient client() {
+	public synchronized MemcachedClient client() {
 		return client;
 	}
 

@@ -95,7 +95,8 @@ public class MemcachedCache<K, V> extends AbstractCache<K, V> {
 	}
 
 	private String key(K key) {
-		return name + ":::" + Cls.str(key);
+		String skey = Cls.str(key);
+		return !U.isEmpty(name) ? name + ":::" + skey : skey;
 	}
 
 }

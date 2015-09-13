@@ -32,6 +32,10 @@ public interface Plugin {
 
 	String name();
 
-	void configure(@P("config") Map<String, Object> config);
+	void configure(@P("config") Map<String, ?> config);
+
+	boolean isActive();
+
+	void restart();
 
 }

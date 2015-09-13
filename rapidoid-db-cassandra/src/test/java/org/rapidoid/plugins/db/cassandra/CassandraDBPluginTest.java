@@ -3,15 +3,16 @@ package org.rapidoid.plugins.db.cassandra;
 import java.util.List;
 import java.util.UUID;
 
+import org.junit.Ignore;
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.PoolingOptions;
 import com.datastax.driver.core.Session;
 
 /*
@@ -38,6 +39,7 @@ import com.datastax.driver.core.Session;
  * This integration test must be manually enabled and executed, due to its delicate requirement: having access to at
  * least one Cassandra node (hostnames "cassandra_test1" and "cassandra_test2").
  */
+@Ignore
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class CassandraDBPluginTest extends TestCommons {
@@ -46,16 +48,15 @@ public class CassandraDBPluginTest extends TestCommons {
 	private static final String DROP_KEYSPACE = "DROP KEYSPACE rapidoid_test";
 	private static final String CREATE_TABLE_MOVIE = "CREATE TABLE rapidoid_test.movie (id uuid primary key, title varchar, year int)";
 
-	// @Test
+	@Test
 	public void testBasicCassandraCRUD() {
-		PoolingOptions poolingOptions = new PoolingOptions();
 
-		Cluster cluster = Cluster.builder().addContactPoint("cassandra_test1").addContactPoint("cassandra_test2")
-				.withPoolingOptions(poolingOptions).build();
+		Conf.set("cassandra", U.map("servers", U.list("cassandra_test1", "cassandra_test2")));
 
-		Plugins.register(new CassandraDBPlugin(cluster));
+		CassandraDBPlugin cassandra = new CassandraDBPlugin();
+		Plugins.register(cassandra);
 
-		Session session = cluster.connect();
+		Session session = cassandra.session();
 
 		try {
 			session.execute(DROP_KEYSPACE);

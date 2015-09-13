@@ -24,12 +24,14 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeoutException;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Callbacks;
 import org.rapidoid.concurrent.Future;
+import org.rapidoid.config.Conf;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.cache.Cache;
 import org.rapidoid.plugins.cache.ICache;
@@ -37,16 +39,20 @@ import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 
+/**
+ * This integration test must be manually enabled and executed, due to its delicate requirement: having access to a
+ * Memcached server at localhost:11211.
+ */
+@Ignore
 @Authors("Nikolche Mihajlovski")
 @Since("4.2.0")
 public class MemcachedCacheTest extends TestCommons {
 
 	@Before
 	public void setup() {
+		Conf.set("memcached", U.map("servers", U.list("localhost:11211")));
 		MemcachedCachePlugin memcached = new MemcachedCachePlugin();
 		Plugins.register(memcached);
-		Object hosts = null;
-		memcached.configure(U.map("hosts", hosts));
 	}
 
 	@Test
