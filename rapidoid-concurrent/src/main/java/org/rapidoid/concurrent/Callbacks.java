@@ -1,5 +1,7 @@
 package org.rapidoid.concurrent;
 
+import java.util.concurrent.CountDownLatch;
+
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 
@@ -56,6 +58,15 @@ public class Callbacks {
 				Callbacks.done(callback, mapped, error);
 			}
 
+		};
+	}
+
+	public static <T> Callback<T> countDown(final CountDownLatch latch) {
+		return new Callback<T>() {
+			@Override
+			public void onDone(T result, Throwable error) throws Exception {
+				latch.countDown();
+			}
 		};
 	}
 

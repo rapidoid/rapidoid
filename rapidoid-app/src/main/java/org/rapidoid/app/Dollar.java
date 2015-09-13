@@ -86,6 +86,8 @@ public class Dollar {
 
 	public final CachePlugin cache = Plugins.cache();
 
+	public final CachePlugin memcached = Plugins.cache("memcached");
+
 	public final TemplatesPlugin templates = Plugins.templates();
 
 	public final SQLAPI mysql = SQL.defaultInstance();
