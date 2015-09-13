@@ -32,11 +32,13 @@ import org.rapidoid.app.AppHandler;
 import org.rapidoid.config.Config;
 import org.rapidoid.ctx.Classes;
 import org.rapidoid.http.HTTP;
+import org.rapidoid.http.HttpException;
 import org.rapidoid.io.IO;
 import org.rapidoid.main.Rapidoid;
 import org.rapidoid.plugins.templates.Templates;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.webapp.AppMode;
 import org.rapidoid.webapp.WebApp;
 import org.rapidoid.webapp.WebAppGroup;
@@ -181,7 +183,7 @@ public class Docs {
 		String verb = parts[0];
 		String uri = parts[1];
 
-		String uri2 = uri.contains("?") ? uri.replace("?", "?embedded=true&") : uri + "?embedded=true";
+		String uri2 = uri.contains("?") ? uri.replace("?", "?_embedded=true&") : uri + "?_embedded=true";
 
 		String result = null;
 
@@ -192,8 +194,12 @@ public class Docs {
 				result = new String(HTTP.post("http://localhost:8080" + uri2, null, null, null));
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			result = "<span class=\"not-found\">404 Not found!</span>";
+			Throwable cause = UTILS.rootCause(e);
+			if (cause instanceof HttpException && cause.getMessage().contains("404")) {
+				result = "<span class=\"not-found\">404 Not found!</span>";
+			} else {
+				e.printStackTrace();
+			}
 		}
 
 		if (result == null) {

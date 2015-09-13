@@ -439,7 +439,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized Map<String, String> params() {
-		return params_().get();
+		Map<String, String> reqParams = params_().get();
+		reqParams.remove("_embedded");
+		return reqParams;
 	}
 
 	@Override

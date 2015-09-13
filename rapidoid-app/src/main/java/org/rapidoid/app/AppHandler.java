@@ -239,7 +239,7 @@ public class AppHandler implements Handler {
 
 		WebApp app = AppCtx.app();
 		model.put("title", app.getTitle());
-		model.put("embedded", hasEvent || x.param("embedded", null) != null);
+		model.put("embedded", hasEvent || x.param("_embedded", null) != null);
 
 		// the @Page configuration overrides the previous
 		if (config != null) {
