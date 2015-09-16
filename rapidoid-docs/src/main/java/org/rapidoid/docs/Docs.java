@@ -23,8 +23,6 @@ package org.rapidoid.docs;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -48,8 +46,6 @@ import org.rapidoid.wrap.IntWrap;
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class Docs {
-
-	private static final Pattern p = Pattern.compile("\n");
 
 	public static void main(String[] args) {
 		// Log.setLogLevel(LogLevel.DEBUG);
@@ -75,75 +71,49 @@ public class Docs {
 
 		IntWrap nn = new IntWrap();
 
-		processFirst(examples, nn, 3);
-		// processAll(examples, nn);
+		List<String> eglist = IO.loadLines("examples.txt");
+		List<String> processed = processAll(examples, nn, eglist);
 
 		Map<String, ?> model = U.map("examples", examples);
 		String html = Templates.fromFile("docs.html").render(model);
 		IO.save(path + "index.html", html);
 	}
 
-	@SuppressWarnings("unused")
-	private static void processFirst(List<Map<String, ?>> examples, IntWrap nn, int firstN) {
-		for (int i = 1; i <= firstN; i++) {
-			processIndex(nn, examples, egNum(i));
+	private static List<String> processAll(List<Map<String, ?>> examples, IntWrap nn, List<String> eglist) {
+		List<String> processed = U.list();
+
+		for (String eg : eglist) {
+			eg = eg.trim();
+
+			String[] parts = eg.split("\\:");
+			if (parts.length == 2 && !eg.startsWith("#")) {
+				processIndex(nn, examples, parts[0].trim(), parts[1].trim());
+			}
 		}
+
+		return processed;
 	}
 
-	private static void processAll(List<Map<String, ?>> examples, IntWrap nn) {
-		for (int i = 1; i <= 30; i++) {
-			processIndex(nn, examples, egNum(i));
-		}
-
-		for (int i = 100; i <= 130; i++) {
-			processIndex(nn, examples, egNum(i));
-		}
-
-		for (int i = 900; i <= 930; i++) {
-			processIndex(nn, examples, egNum(i));
-		}
-	}
-
-	private static void processIndex(IntWrap nn, List<Map<String, ?>> examples, String id) {
+	private static void processIndex(IntWrap nn, List<Map<String, ?>> examples, String id, String title) {
 		System.out.println();
 		System.out.println();
 		System.out.println(id);
 		System.out.println();
 		System.out.println();
-		String snippFile = "src/main/java/org/rapidoid/docs/eg" + id + "/Main.java";
 
-		String snippet = IO.load(snippFile);
+		List<String> javaFiles = U.list();
+		List<String> resFiles = U.list();
 
-		if (snippet == null) {
-			return;
-		}
+		IO.findAll(new File("src/main/java/org/rapidoid/docs/" + id), javaFiles);
+		IO.findAll(new File("src/main/java/org/rapidoid/docs/" + id), resFiles);
 
-		snippet = cleanSnippet(snippet);
+		List<?> snippets = snippets(id, javaFiles, resFiles);
 
-		Matcher m = p.matcher(snippet);
-		U.must(m.find());
-		int pos = m.start();
-
-		String titleAndDesc = snippet.substring(0, pos).trim();
-		U.must(titleAndDesc.startsWith("//"));
-		titleAndDesc = titleAndDesc.substring(2).trim();
-
-		String[] titleAndDescParts = titleAndDesc.split("\\s*::\\s*");
-		U.must(titleAndDescParts.length >= 2);
-		String title = titleAndDescParts[0];
-		String desc = titleAndDescParts[1];
-
-		snippet = snippet.substring(pos).trim();
-		snippet = SnippetWidget.prettify(snippet, true);
-
-		String titleInfo = "";
-		String fullTitle = title + titleInfo;
-
-		Iterable<Class<?>> clss = ClasspathUtil.scanClasses("org.rapidoid.docs.eg" + id, null, null, null, null);
+		Iterable<Class<?>> clss = ClasspathUtil.scanClasses("org.rapidoid.docs." + id, null, null, null, null);
 
 		Classes classes = Classes.from(clss);
 		Config config = new Config();
-		WebApp app = new WebApp("eg" + id, null, null, U.set("/"), AppMode.PRODUCTION, null, null, classes, config);
+		WebApp app = new WebApp(id, null, null, U.set("/"), AppMode.PRODUCTION, null, null, classes, config);
 		app.getRouter().generic(new AppHandler());
 
 		WebAppGroup.main().clear();
@@ -151,16 +121,35 @@ public class Docs {
 
 		List<?> results = getResults(id);
 
+		// title += " :: " + id;
 		nn.value++;
-		Map<String, ?> model = U.map("n", id, "nn", nn.value, "code", snippet, "title", fullTitle, "desc", desc,
+		String desc = "desc";
+		Map<String, ?> model = U.map("n", id, "nn", nn.value, "snippets", snippets, "title", title, "desc", desc,
 				"results", results);
 		examples.add(model);
 
 		WebAppGroup.main().setDefaultApp(null);
 	}
 
+	private static List<?> snippets(String id, List<String> files, List<String> resFiles) {
+		List<Object> snippets = U.list();
+
+		for (String file : files) {
+			String snippet = IO.load(file);
+
+			snippet = cleanSnippet(snippet);
+
+			snippet = SnippetWidget.prettify(snippet, true);
+
+			String desc = new File(file).getName();
+			snippets.add(U.map("desc", desc, "code", snippet));
+		}
+
+		return snippets;
+	}
+
 	private static List<?> getResults(String id) {
-		List<String> lines = IO.loadLines("eg/" + id + ".txt");
+		List<String> lines = IO.loadLines("tests/" + id + ".txt");
 
 		List<Object> results = U.list();
 
@@ -211,10 +200,6 @@ public class Docs {
 
 	private static String nonHttpResult(String line) {
 		return "?";
-	}
-
-	private static String egNum(int n) {
-		return n < 10 ? "00" + n : n < 100 ? "0" + n : "" + n;
 	}
 
 	private static String cleanSnippet(String s) {

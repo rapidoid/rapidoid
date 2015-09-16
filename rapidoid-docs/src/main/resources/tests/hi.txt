@@ -1,4 +1,2 @@
-GET /
 GET /hi/Rapidoid
 POST /hi/there
-GET /simple

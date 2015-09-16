@@ -19,7 +19,7 @@
 <link href="rapidoid.min.css" type="text/css" rel="stylesheet" />
 <link href="theme-default.css" type="text/css" rel="stylesheet" />
 
-<title>Rapidoid - Cool Full-stack Web Framework for Java!</title>
+<title>Rapidoid - The No-bullshit Web Framework for Java!</title>
 
 <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
 <script src="//platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
@@ -67,7 +67,7 @@
 		<div class="row">
 			<div class="col-md-7 col-sm-12">
 				<h4 id="main_subtitle">
-					<span class="rapidoid">Rapidoid - Cool Full-stack Web Framework for Java!</span>
+					<div id="rapidoid-title">No-bullshit Web Framework for Java!</div>
 				</h4>
 			</div>
 
@@ -76,17 +76,43 @@
 			</div>
 		</div>
 
-<!-- FEATURES -->
+<!-- GETTING STARTED WITH DOCKER -->
+
+<!-- 
+<div class="sep-example"></div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="caption"><span class="badge badge-docker">Docker</span><span class="docker-code">sudo docker run -d -p 8080:8080 rapidoid/rapidoid</span></div>
+    </div>
+</div>
+ -->
+
+<!-- GETTING STARTED WITH JAVA -->
+
+<div class="sep-example"></div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="caption">Getting started :: Adding Rapidoid to your Java project</div>
+    </div>
+</div>
 
 <div class="row">
   
   <div class="col-md-6">
-    <div id="features">
         (~>maven~)
-    </div>
   </div>
 
   <div class="col-md-6">
+<div class="eg_title">Add Main.java as entry point:</div>
+<pre class="eg_code">
+<span class="_code_kw">public</span> <span class="_code_kw">class</span> <span class="_code_cls">Main</span> {
+    <span class="_code_kw">public</span> <span class="_code_kw">static</span> <span class="_code_kw">void</span> main(<span class="_code_cls">String</span>[] args) {
+        <span class="_code_cls">Rapidoid</span>.run(args);
+    }
+}
+</pre>
   </div>
   
 </div>

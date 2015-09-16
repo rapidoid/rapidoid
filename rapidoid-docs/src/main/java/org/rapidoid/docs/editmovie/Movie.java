@@ -1,9 +1,4 @@
-package org.rapidoid.docs.eg001;
-
-import org.rapidoid.annotation.Page;
-import org.rapidoid.annotation.Web;
-import org.rapidoid.main.Rapidoid;
-import org.rapidoid.util.U;
+package org.rapidoid.docs.editmovie;
 
 /*
  * #%L
@@ -25,28 +20,7 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-// Hello, web pages! :: Let's start Rapidoid and implement some web pages:
-
-@Web
-public class Main {
-
-	public static void main(String[] args) {
-		Rapidoid.run(args);
-	}
-
-	@Page("/")
-	public String hello() {
-		return "Hello, world!";
-	}
-
-	@Page(title = "Saying 'hi'")
-	public String hi(String name) {
-		return U.format("Hi, %s!", name);
-	}
-
-	@Page(raw = true)
-	public Object simple() {
-		return "<p><b>RAW</b> HTML!<p>";
-	}
-
+public class Movie {
+	public String title;
+	public int year;
 }

@@ -1,0 +1,1 @@
+GET /table?name=Highlander&age=700&weapon=sword

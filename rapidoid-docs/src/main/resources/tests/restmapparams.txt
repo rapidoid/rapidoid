@@ -1,0 +1,2 @@
+GET /echo?x=1&y=23
+GET /echo?name=Abc&year=2015

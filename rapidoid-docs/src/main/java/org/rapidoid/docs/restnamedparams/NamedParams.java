@@ -1,14 +1,8 @@
-package org.rapidoid.docs.eg003;
-
-import java.util.List;
-import java.util.Map;
+package org.rapidoid.docs.restnamedparams;
 
 import org.rapidoid.annotation.GET;
-import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Param;
 import org.rapidoid.annotation.Web;
-import org.rapidoid.main.Rapidoid;
-import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -30,33 +24,12 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-// More RESTful services :: Let's create more RESTful services:
-
 @Web
-public class Main {
-
-	public static void main(String[] args) {
-		Rapidoid.run(args);
-	}
+public class NamedParams {
 
 	@GET
-	public String hey(String name, int age) {
-		return U.format("Hey %s (%s)", name, age);
-	}
-
-	@GET("/hello")
-	public String hey2(@Param("name") String s, @Param("age") int years) {
-		return "Hey " + s + " (" + years + ")";
-	}
-
-	@POST
-	public List<String> foo(List<String> params) {
-		return params;
-	}
-
-	@GET("/barbar")
-	public Map<String, Object> bar(Map<String, Object> params) {
-		return params;
+	public int sum(@Param("x") int x, @Param("y") int y) {
+		return x + y;
 	}
 
 }

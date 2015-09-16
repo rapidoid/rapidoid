@@ -1,0 +1,13 @@
+#injection: Dependency injection
+hellorest: "Hello world" RESTful service
+restparams: URL parts as Parameters
+restjson: Automatic JSON serialization
+restnamedparams: Named URL Parameters
+restlistparams: URL Parameters as List
+restmapparams: URL Parameters as Map
+hello: Hello, web pages!
+hi: Building HTML pages with Java
+raw: Raw HTML pages
+showmovie: Display bean properties
+editmovie: Edit bean properties
+paramgrid: Create key-value data grid from a Map

@@ -1,11 +1,8 @@
-package org.rapidoid.docs.eg002;
-
-import java.util.Map;
+package org.rapidoid.docs.injection;
 
 import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Web;
-import org.rapidoid.main.Rapidoid;
-import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -27,20 +24,15 @@ import org.rapidoid.util.U;
  * #L%
  */
 
-// Hello, RESTful services! :: Let's start Rapidoid and implement a RESTful service:
-
 @Web
-public class Main {
+public class Foo {
 
-	public static void main(String[] args) {
-		Rapidoid.run(args);
-	}
+	@Inject
+	public Bar bar;
 
-	@GET
-	public Map<String, ?> upper(String s) {
-		String up = s.toUpperCase();
-		int len = s.length();
-		return U.map("src", s, "upper", up, "length", len);
+	@GET("/")
+	public String hello() {
+		return ":" + bar;
 	}
 
 }

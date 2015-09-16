@@ -1,0 +1,2 @@
+GET /sum?x=1&y=2
+GET /sum?y=10&x=5&z=12345

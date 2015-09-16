@@ -1,0 +1,2 @@
+GET /upper/abc
+POST /parts/just-some-words
