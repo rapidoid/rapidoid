@@ -130,7 +130,8 @@ public interface HttpExchange {
 
 	<T extends Serializable> T session(@P("name") String name, @P("defaultValue") T defaultValue);
 
-	<T extends Serializable> T sessionGetOrCreate(@P("name") String name, @P("valueClass") Class<T> valueClass, @P("constructorArgs") Object... constructorArgs);
+	<T extends Serializable> T sessionGetOrCreate(@P("name") String name, @P("valueClass") Class<T> valueClass,
+			@P("constructorArgs") Object... constructorArgs);
 
 	/* COOKIEPACK SCOPE: */
 
@@ -140,7 +141,8 @@ public interface HttpExchange {
 
 	<T extends Serializable> T cookiepack(@P("name") String name, @P("defaultValue") T defaultValue);
 
-	<T extends Serializable> T cookiepackGetOrCreate(@P("name") String name, @P("valueClass") Class<T> valueClass, @P("constructorArgs") Object... constructorArgs);
+	<T extends Serializable> T cookiepackGetOrCreate(@P("name") String name, @P("valueClass") Class<T> valueClass,
+			@P("constructorArgs") Object... constructorArgs);
 
 	/* LOCAL SCOPE: */
 
@@ -150,7 +152,8 @@ public interface HttpExchange {
 
 	<T extends Serializable> T local(@P("key") String key, @P("defaultValue") T defaultValue);
 
-	<T extends Serializable> T localGetOrCreate(@P("name") String name, @P("valueClass") Class<T> valueClass, @P("constructorArgs") Object... constructorArgs);
+	<T extends Serializable> T localGetOrCreate(@P("name") String name, @P("valueClass") Class<T> valueClass,
+			@P("constructorArgs") Object... constructorArgs);
 
 	/* TMP SCOPE: */
 
@@ -160,7 +163,8 @@ public interface HttpExchange {
 
 	<T> T tmp(@P("key") String key, @P("defaultValue") T defaultValue);
 
-	<T> T tmpGetOrCreate(@P("name") String name, @P("valueClass") Class<T> valueClass, @P("constructorArgs") Object... constructorArgs);
+	<T> T tmpGetOrCreate(@P("name") String name, @P("valueClass") Class<T> valueClass,
+			@P("constructorArgs") Object... constructorArgs);
 
 	/* RESPONSE: */
 
@@ -178,7 +182,8 @@ public interface HttpExchange {
 
 	HttpExchange response(@P("httpResponseCode") int httpResponseCode, @P("response") String response);
 
-	HttpExchange response(@P("httpResponseCode") int httpResponseCode, @P("response") String response, @P("err") Throwable err);
+	HttpExchange response(@P("httpResponseCode") int httpResponseCode, @P("response") String response,
+			@P("err") Throwable err);
 
 	HttpExchange error(@P("err") Throwable err);
 
@@ -257,7 +262,7 @@ public interface HttpExchange {
 
 	/* EXTRAS: */
 
-	<P> P persister();
+	<T> T persister();
 
 	Object model();
 

@@ -1265,6 +1265,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			writeJSON(res);
 		}
 
+		done();
 		return this;
 	}
 
@@ -1352,7 +1353,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public <P> P persister() {
+	public <T> T persister() {
 		return Ctxs.ctx().persister();
 	}
 
