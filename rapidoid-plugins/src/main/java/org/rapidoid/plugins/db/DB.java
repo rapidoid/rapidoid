@@ -21,6 +21,7 @@ package org.rapidoid.plugins.db;
  */
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
@@ -75,19 +76,19 @@ public class DB {
 		return Plugins.db().get(clazz, id);
 	}
 
-	public static <E> Iterable<E> getAll() {
+	public static <E> List<E> getAll() {
 		return Plugins.db().getAll();
 	}
 
-	public static <E> Iterable<E> getAll(Class<E> clazz) {
+	public static <E> List<E> getAll(Class<E> clazz) {
 		return Plugins.db().getAll(clazz);
 	}
 
-	public static <E> Iterable<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
+	public static <E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
 		return Plugins.db().getAll(clazz, pageNumber, pageSize);
 	}
 
-	public static <E> Iterable<E> getAll(Class<E> clazz, Iterable<String> ids) {
+	public static <E> List<E> getAll(Class<E> clazz, List<String> ids) {
 		return Plugins.db().getAll(clazz, ids);
 	}
 
@@ -103,15 +104,15 @@ public class DB {
 		return Plugins.db().size();
 	}
 
-	public static <E> Iterable<E> find(Predicate<E> match) {
+	public static <E> List<E> find(Predicate<E> match) {
 		return Plugins.db().find(match);
 	}
 
-	public static <E> Iterable<E> find(Class<E> clazz, Predicate<E> match, Comparator<E> orderBy) {
+	public static <E> List<E> find(Class<E> clazz, Predicate<E> match, Comparator<E> orderBy) {
 		return Plugins.db().find(clazz, match, orderBy);
 	}
 
-	public static <E> Iterable<E> fullTextSearch(String searchPhrase) {
+	public static <E> List<E> fullTextSearch(String searchPhrase) {
 		return Plugins.db().fullTextSearch(searchPhrase);
 	}
 
@@ -155,7 +156,7 @@ public class DB {
 		return entity(entityType, U.map(prop1, value1, prop2, value2, prop3, value3, prop4, value4, prop5, value5));
 	}
 
-	public static <E> Iterable<E> query(Class<E> clazz, String query, Object... args) {
+	public static <E> List<E> query(Class<E> clazz, String query, Object... args) {
 		return Plugins.db().query(clazz, query, args);
 	}
 

@@ -21,6 +21,7 @@ package org.rapidoid.plugins.db;
  */
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
@@ -49,13 +50,13 @@ public interface DBPlugin extends Plugin {
 
 	<T> T getIfExists(@P("clazz") Class<T> clazz, @P("id") String id);
 
-	<E> Iterable<E> getAll();
+	<E> List<E> getAll();
 
-	<T> Iterable<T> getAll(@P("clazz") Class<T> clazz);
+	<T> List<T> getAll(@P("clazz") Class<T> clazz);
 
-	<E> Iterable<E> getAll(@P("clazz") Class<E> clazz, @P("pageNumber") int pageNumber, @P("pageSize") int pageSize);
+	<E> List<E> getAll(@P("clazz") Class<E> clazz, @P("pageNumber") int pageNumber, @P("pageSize") int pageSize);
 
-	<E> Iterable<E> getAll(@P("clazz") Class<E> clazz, @P("ids") Iterable<String> ids);
+	<E> List<E> getAll(@P("clazz") Class<E> clazz, @P("ids") List<String> ids);
 
 	void refresh(@P("entity") Object entity);
 
@@ -67,22 +68,21 @@ public interface DBPlugin extends Plugin {
 
 	long size();
 
-	<T> Iterable<T> fullTextSearch(@P("query") String query);
+	<T> List<T> fullTextSearch(@P("query") String query);
 
-	<T> Iterable<T> find(@P("clazz") Class<T> clazz, @P("match") Predicate<T> match, @P("orderBy") Comparator<T> orderBy);
+	<T> List<T> find(@P("clazz") Class<T> clazz, @P("match") Predicate<T> match, @P("orderBy") Comparator<T> orderBy);
 
-	<E> Iterable<E> find(@P("match") Predicate<E> match);
+	<E> List<E> find(@P("match") Predicate<E> match);
 
 	<E> E entity(@P("entityType") Class<E> entityType, @P("properties") Map<String, ?> properties);
 
-	Iterable<Map<String, Object>> query(@P("query") String query, @P("args") Object... args);
+	List<Map<String, Object>> query(@P("query") String query, @P("args") Object... args);
 
-	<E> Iterable<E> query(@P("clazz") Class<E> clazz, @P("query") String query, @P("args") Object... args);
+	<E> List<E> query(@P("clazz") Class<E> clazz, @P("query") String query, @P("args") Object... args);
 
-	void queryAsync(@P("query") String query, Callback<Iterable<Map<String, Object>>> callback,
-			@P("args") Object... args);
+	void queryAsync(@P("query") String query, Callback<List<Map<String, Object>>> callback, @P("args") Object... args);
 
-	<E> void queryAsync(@P("clazz") Class<E> clazz, @P("query") String query, Callback<Iterable<E>> callback,
+	<E> void queryAsync(@P("clazz") Class<E> clazz, @P("query") String query, Callback<List<E>> callback,
 			@P("args") Object... args);
 
 	<RESULT> RESULT sql(@P("sql") String sql, @P("args") Object... args);

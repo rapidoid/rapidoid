@@ -114,19 +114,19 @@ public class Dollar {
 		}
 	}
 
-	public Iterable<Map<String, Object>> sql(String sql) {
+	public List<Map<String, Object>> sql(String sql) {
 		return sql(sql, new Object[0]);
 	}
 
-	public Iterable<Map<String, Object>> cql(String cql, Object[] args) {
+	public List<Map<String, Object>> cql(String cql, Object[] args) {
 		return cassandra.query(cql, args);
 	}
 
-	public void cql(String cql, Object[] args, Callback<Iterable<Map<String, Object>>> callback) {
+	public void cql(String cql, Object[] args, Callback<List<Map<String, Object>>> callback) {
 		cassandra.queryAsync(cql, callback, args);
 	}
 
-	public Iterable<Map<String, Object>> cql(String cql) {
+	public List<Map<String, Object>> cql(String cql) {
 		return cql(cql, new Object[0]);
 	}
 

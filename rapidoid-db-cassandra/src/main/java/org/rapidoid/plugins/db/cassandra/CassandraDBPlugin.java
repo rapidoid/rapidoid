@@ -147,20 +147,20 @@ public class CassandraDBPlugin extends DBPluginBase {
 	}
 
 	@Override
-	public Iterable<Map<String, Object>> query(String cql, Object... args) {
+	public List<Map<String, Object>> query(String cql, Object... args) {
 		ResultSet rs = provideSession().execute(cql, args);
 		return results(rs.all());
 	}
 
 	@Override
-	public void queryAsync(String cql, final Callback<Iterable<Map<String, Object>>> callback, Object... args) {
+	public void queryAsync(String cql, final Callback<List<Map<String, Object>>> callback, Object... args) {
 		final ResultSetFuture future = provideSession().executeAsync(cql, args);
 
 		Futures.addCallback(future, new FutureCallback<ResultSet>() {
 
 			@Override
 			public void onSuccess(ResultSet rs) {
-				Iterable<Map<String, Object>> result = results(rs.all());
+				List<Map<String, Object>> result = results(rs.all());
 				Callbacks.done(callback, result, null);
 			}
 
@@ -172,7 +172,7 @@ public class CassandraDBPlugin extends DBPluginBase {
 		}, Jobs.executor());
 	}
 
-	private static Iterable<Map<String, Object>> results(List<Row> rows) {
+	private static List<Map<String, Object>> results(List<Row> rows) {
 		List<Map<String, Object>> results = U.list();
 
 		for (Row row : rows) {
@@ -192,18 +192,18 @@ public class CassandraDBPlugin extends DBPluginBase {
 	}
 
 	@Override
-	public <E> Iterable<E> query(Class<E> clazz, String query, Object... args) {
+	public <E> List<E> query(Class<E> clazz, String query, Object... args) {
 		Session session = provideSession();
 
 		ResultSet rs = session.execute(query, args);
 		Mapper<E> mapper = new MappingManager(session).mapper(clazz);
 		Result<E> result = mapper.map(rs);
 
-		return result;
+		return result.all();
 	}
 
 	@Override
-	public <E> Iterable<E> getAll(Class<E> clazz) {
+	public <E> List<E> getAll(Class<E> clazz) {
 		throw U.notSupported();
 	}
 

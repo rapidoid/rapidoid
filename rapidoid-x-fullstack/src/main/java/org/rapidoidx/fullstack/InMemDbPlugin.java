@@ -101,7 +101,7 @@ public class InMemDbPlugin extends AbstractDBPlugin {
 	}
 
 	@Override
-	public <E> List<E> getAll(Class<E> clazz, Iterable<String> ids) {
+	public <E> List<E> getAll(Class<E> clazz, List<String> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -1,6 +1,7 @@
 package org.rapidoid.plugins.db;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
@@ -64,7 +65,7 @@ public abstract class AbstractDBPlugin extends AbstractPlugin implements DBPlugi
 	}
 
 	@Override
-	public <T> Iterable<T> getAll(Class<T> clazz) {
+	public <T> List<T> getAll(Class<T> clazz) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
@@ -79,12 +80,12 @@ public abstract class AbstractDBPlugin extends AbstractPlugin implements DBPlugi
 	}
 
 	@Override
-	public <T> Iterable<T> find(Class<T> clazz, Predicate<T> match, Comparator<T> orderBy) {
+	public <T> List<T> find(Class<T> clazz, Predicate<T> match, Comparator<T> orderBy) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
 	@Override
-	public <E> Iterable<E> find(Predicate<E> match) {
+	public <E> List<E> find(Predicate<E> match) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
@@ -94,12 +95,12 @@ public abstract class AbstractDBPlugin extends AbstractPlugin implements DBPlugi
 	}
 
 	@Override
-	public Iterable<Map<String, Object>> query(String query, Object... args) {
+	public List<Map<String, Object>> query(String query, Object... args) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
 	@Override
-	public <E> Iterable<E> query(Class<E> clazz, String query, Object... args) {
+	public <E> List<E> query(Class<E> clazz, String query, Object... args) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
@@ -139,17 +140,17 @@ public abstract class AbstractDBPlugin extends AbstractPlugin implements DBPlugi
 	}
 
 	@Override
-	public <E> Iterable<E> getAll() {
+	public <E> List<E> getAll() {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
 	@Override
-	public <E> Iterable<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
+	public <E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
 	@Override
-	public <E> Iterable<E> getAll(Class<E> clazz, Iterable<String> ids) {
+	public <E> List<E> getAll(Class<E> clazz, List<String> ids) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
@@ -159,7 +160,7 @@ public abstract class AbstractDBPlugin extends AbstractPlugin implements DBPlugi
 	}
 
 	@Override
-	public <T> Iterable<T> fullTextSearch(String query) {
+	public <T> List<T> fullTextSearch(String query) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
@@ -169,12 +170,12 @@ public abstract class AbstractDBPlugin extends AbstractPlugin implements DBPlugi
 	}
 
 	@Override
-	public <E> void queryAsync(Class<E> clazz, String query, Callback<Iterable<E>> callback, Object... args) {
+	public <E> void queryAsync(Class<E> clazz, String query, Callback<List<E>> callback, Object... args) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
 	@Override
-	public void queryAsync(String query, Callback<Iterable<Map<String, Object>>> callback, Object... args) {
+	public void queryAsync(String query, Callback<List<Map<String, Object>>> callback, Object... args) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 
