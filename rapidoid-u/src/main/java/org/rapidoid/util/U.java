@@ -38,6 +38,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
@@ -826,7 +827,7 @@ public class U {
 	/**
 	 * Sleeps (calling Thread.sleep) for the specified period.
 	 * 
-	 * If the thread is interrupted while sleeping, throws {@link ThreadDeath} to stop the thread.
+	 * If the thread is interrupted while sleeping, throws {@link CancellationException} to propagate the interruption.
 	 * 
 	 * @param millis
 	 *            the length of time to sleep in milliseconds.
@@ -835,7 +836,7 @@ public class U {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
-			throw new ThreadDeath();
+			throw new CancellationException();
 		}
 	}
 
@@ -921,7 +922,7 @@ public class U {
 		try {
 			latch.await();
 		} catch (InterruptedException e) {
-			new ThreadDeath();
+			throw new CancellationException();
 		}
 	}
 
@@ -929,7 +930,7 @@ public class U {
 		try {
 			latch.await(timeout, unit);
 		} catch (InterruptedException e) {
-			new ThreadDeath();
+			throw new CancellationException();
 		}
 	}
 
