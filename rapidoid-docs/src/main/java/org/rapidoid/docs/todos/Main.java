@@ -1,18 +1,13 @@
-package org.rapidoid.docs.eg106;
-
-import static org.rapidoid.widget.BootstrapWidgets.CANCEL;
-import static org.rapidoid.widget.BootstrapWidgets.SAVE;
-import static org.rapidoid.widget.BootstrapWidgets.create;
+package org.rapidoid.docs.todos;
 
 import javax.persistence.Entity;
 
 import org.rapidoid.annotation.App;
-import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Web;
+import org.rapidoid.app.GUI;
 import org.rapidoid.jpa.JPAEntity;
 import org.rapidoid.main.Rapidoid;
 import org.rapidoid.plugins.db.DB;
-import org.rapidoid.widget.FormWidget;
 
 /*
  * #%L
@@ -34,12 +29,12 @@ import org.rapidoid.widget.FormWidget;
  * #L%
  */
 
-// Using the form widget ("create" mode) :: Creating form for new entity 
+// Basic database CRUD operations :: Database CRUD is easy with the DB API: 
 
 @App
 public class Main {
-	String title = "New movie demo";
-	String theme = "1";
+	String title = "DB API";
+	String theme = "4";
 
 	public static void main(String[] args) {
 		Rapidoid.run(args);
@@ -47,28 +42,20 @@ public class Main {
 }
 
 @Web
-class Home {
-	@Session
-	Movie movie = new Movie();
+class HomeScreen extends GUI {
+	Object[] content = { grid(Todo.class), cmd("Add") };
 
-	Object content() {
-		FormWidget f = create(movie); // here
-		f = f.buttons(SAVE, CANCEL); // here
-		return f;
-	}
-
-	public void onSave() {
-		DB.insert(movie);
-		movie = new Movie();
-	}
-
-	public void onCancel() {
-		movie = new Movie();
+	public void onAdd() {
+		Todo todo = new Todo();
+		todo.content = "Learn Rapidoid!";
+		String id = DB.insert(todo); // here
+		Todo todo2 = DB.get(Todo.class, id); // here
+		todo2.content += " :)";
+		DB.update(todo2); // here
 	}
 }
 
 @Entity
-class Movie extends JPAEntity {
-	String title;
-	int year;
+class Todo extends JPAEntity {
+	String content;
 }

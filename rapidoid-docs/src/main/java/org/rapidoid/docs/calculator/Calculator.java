@@ -1,11 +1,14 @@
-package org.rapidoid.docs.eg022;
+package org.rapidoid.docs.calculator;
 
-import org.rapidoid.annotation.App;
+import static org.rapidoid.html.HTML.div;
+import static org.rapidoid.html.HTML.h4;
+import static org.rapidoid.widget.BootstrapWidgets.cmd;
+import static org.rapidoid.widget.BootstrapWidgets.row;
+
+import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Web;
-import org.rapidoid.app.GUI;
 import org.rapidoid.html.Tag;
-import org.rapidoid.main.Rapidoid;
 import org.rapidoid.widget.ButtonWidget;
 
 /*
@@ -28,30 +31,26 @@ import org.rapidoid.widget.ButtonWidget;
  * #L%
  */
 
-// Basic event handling and session storage :: Increase n when the "+" button is clicked: 
-
-@App
-public class Main {
-	String title = "Clicky";
-	String theme = "3";
-
-	public static void main(String[] args) {
-		Rapidoid.run(args);
-	}
-}
-
 @Web
-class Home extends GUI {
-	@Session // here
-	public int n = 0; // here
+public class Calculator {
 
-	public Object content() {
-		Tag caption = h3(n, " clicks");
-		ButtonWidget hi = btn("+").command("Inc"); // here
-		return row(caption, hi);
+	@Page("/")
+	public Object calc() {
+		Tag btns = div();
+		Tag row = div();
+		for (int i = 1; i <= 9; i++) {
+			ButtonWidget b = cmd("" + i); // here
+			row = row.append(b); // here
+			if (i % 3 == 0) {
+				btns = btns.append(row); // here
+				row = div();
+			}
+		}
+		
+		return row(btns, h4("You pressed: ", "?op"));
 	}
 
-	public void onInc() { // here
-		n++;
+	public void on(String cmd, Object... args) { // here
+		//op += cmd;
 	}
 }

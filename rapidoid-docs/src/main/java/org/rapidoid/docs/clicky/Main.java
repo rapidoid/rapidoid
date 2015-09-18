@@ -1,8 +1,12 @@
-package org.rapidoid.docs.eg104;
+package org.rapidoid.docs.clicky;
 
 import org.rapidoid.annotation.App;
+import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Web;
+import org.rapidoid.app.GUI;
+import org.rapidoid.html.Tag;
 import org.rapidoid.main.Rapidoid;
+import org.rapidoid.widget.ButtonWidget;
 
 /*
  * #%L
@@ -24,13 +28,12 @@ import org.rapidoid.main.Rapidoid;
  * #L%
  */
 
-// Rapidoid has built-in themes! :: Let's use the built-in theme 2:
+// Basic event handling and session storage :: Increase n when the "+" button is clicked: 
 
 @App
 public class Main {
-	String title = "Example 4";
-	String content = "Fancy theme!";
-	String theme = "2"; // here
+	String title = "Clicky";
+	String theme = "3";
 
 	public static void main(String[] args) {
 		Rapidoid.run(args);
@@ -38,7 +41,17 @@ public class Main {
 }
 
 @Web
-class FooScreen {}
+class Home extends GUI {
+	@Session // here
+	public int n = 0; // here
 
-@Web
-class BarScreen {}
+	public Object content() {
+		Tag caption = h3(n, " clicks");
+		ButtonWidget hi = btn("+").command("Inc"); // here
+		return row(caption, hi);
+	}
+
+	public void onInc() { // here
+		n++;
+	}
+}

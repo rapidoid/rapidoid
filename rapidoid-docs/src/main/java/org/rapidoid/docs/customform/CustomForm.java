@@ -1,4 +1,4 @@
-package org.rapidoid.docs.eg109;
+package org.rapidoid.docs.customform;
 
 import static org.rapidoid.widget.BootstrapWidgets.btn;
 import static org.rapidoid.widget.BootstrapWidgets.create;
@@ -36,30 +36,11 @@ import org.rapidoid.widget.FormWidget;
  * #L%
  */
 
-// Customizing form fields and buttons :: Customizing a form 
-
-@App
-public class Main {
-	String title = "Custom form";
-	String theme = "5";
-
-	public static void main(String[] args) {
-		Rapidoid.run(args);
-	}
-
-	public void init() {
-		RQL.run("INSERT Movie title=Rambo, year=1985"); // here
-	}
-}
-
 @Web
-class Home {
-
-	@Session
-	Movie movie;
-
+public class CustomForm {
+	
 	Object content() {
-		movie = DB.get(Movie.class, "1");
+		Movie movie = DB.get(Movie.class, "1");
 		FormWidget f = create(movie, "year"); // here
 		ButtonWidget ab = btn("Ab"); // here
 		ButtonWidget cd = btn("Change year").command("ch").primary(); // here
@@ -69,7 +50,7 @@ class Home {
 	}
 
 	public void onCh() {
-		DB.update(movie);
+		// DB.update(movie);
 	}
 }
 

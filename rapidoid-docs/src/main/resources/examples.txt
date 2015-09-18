@@ -11,3 +11,6 @@ raw: Raw HTML pages
 showmovie: Display bean properties
 editmovie: Edit bean properties
 paramgrid: Create key-value data grid from a Map
+xyz: Big
+customform: Customizing form fields and buttons
+calculator: Constructing GUI and handling events

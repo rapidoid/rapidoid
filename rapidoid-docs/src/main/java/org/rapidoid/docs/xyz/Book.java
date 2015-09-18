@@ -1,7 +1,4 @@
-package org.rapidoid.docs.eg901;
-
-import org.rapidoid.annotation.App;
-import org.rapidoid.main.Rapidoid;
+package org.rapidoid.docs.xyz;
 
 /*
  * #%L
@@ -23,17 +20,8 @@ import org.rapidoid.main.Rapidoid;
  * #L%
  */
 
-// Hide the navigation bar extras :: No search or login extras in navigation
+public class Book {
 
-@App
-public class Main {
-	String title = "No extras here";
-	Object content = "Hello!";
-	String theme = "4";
-
-	boolean full = false; // here
-
-	public static void main(String[] args) {
-		Rapidoid.run(args);
-	}
+	String title;
+	
 }
