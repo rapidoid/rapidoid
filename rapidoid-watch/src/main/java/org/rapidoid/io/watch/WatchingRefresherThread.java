@@ -64,9 +64,7 @@ public class WatchingRefresherThread extends AbstractLoopThread {
 			filenames.clear();
 		}
 
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {}
+		U.sleep(100);
 	}
 
 	protected void reload(Set<String> filenames) {

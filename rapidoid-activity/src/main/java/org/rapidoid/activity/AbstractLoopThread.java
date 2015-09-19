@@ -20,6 +20,8 @@ package org.rapidoid.activity;
  * #L%
  */
 
+import java.util.concurrent.CancellationException;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
@@ -44,6 +46,9 @@ public abstract class AbstractLoopThread extends RapidoidThread {
 				loop();
 			} catch (ThreadDeath e) {
 				throw e;
+			} catch (CancellationException e) {
+				Log.error("The thread was interrupted!");
+				return;
 			} catch (Throwable e) {
 				Log.error("Exception occured inside the thread loop!", e);
 			}

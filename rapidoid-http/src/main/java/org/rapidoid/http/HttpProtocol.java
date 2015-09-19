@@ -20,6 +20,8 @@ package org.rapidoid.http;
  * #L%
  */
 
+import java.util.concurrent.CancellationException;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.BytesUtil;
@@ -206,6 +208,9 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 				Log.warn("HTTP resource not found!", "app", AppCtx.app().getId(), "uri", x.uri());
 			}
 			x.completeResponse();
+		} else if (cause instanceof CancellationException) {
+			Log.error("Thread interruption, probably timeout!", "request", x, "error", cause);
+			x.response(500, "Request timeout!", null);
 		} else if (cause instanceof ThreadDeath) {
 			Log.error("Thread death, probably timeout!", "request", x, "error", cause);
 			x.response(500, "Request timeout!", null);

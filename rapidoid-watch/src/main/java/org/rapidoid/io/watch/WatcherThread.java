@@ -39,6 +39,7 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Map;
+import java.util.concurrent.CancellationException;
 
 import org.rapidoid.activity.AbstractLoopThread;
 import org.rapidoid.annotation.Authors;
@@ -121,7 +122,7 @@ public class WatcherThread extends AbstractLoopThread {
 		try {
 			key = watcher.take();
 		} catch (InterruptedException x) {
-			throw new ThreadDeath();
+			throw new CancellationException();
 		}
 
 		Path dir = keys.get(key);

@@ -20,6 +20,8 @@ package org.rapidoid.activity;
  * #L%
  */
 
+import java.util.concurrent.CancellationException;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
@@ -76,6 +78,9 @@ public abstract class AbstractThreadActivity<T> extends LifecycleActivity<T> imp
 			while (!Thread.interrupted()) {
 				try {
 					loop();
+				} catch (CancellationException e) {
+					Log.info("Interrupted activity thread", "name", name);
+					return;
 				} catch (Exception e) {
 					onError(e);
 				}
