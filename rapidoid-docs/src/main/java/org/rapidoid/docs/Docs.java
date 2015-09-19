@@ -74,6 +74,8 @@ public class Docs {
 		List<String> eglist = IO.loadLines("examples.txt");
 		List<String> processed = processAll(examples, nn, eglist);
 
+		System.out.println("Processed: " + processed);
+
 		Map<String, ?> model = U.map("examples", examples);
 		String html = Templates.fromFile("docs.html").render(model);
 		IO.save(path + "index.html", html);

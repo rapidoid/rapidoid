@@ -1,5 +1,9 @@
 package org.rapidoid.docs.injection;
 
+import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.Web;
+
 /*
  * #%L
  * rapidoid-docs
@@ -20,6 +24,19 @@ package org.rapidoid.docs.injection;
  * #L%
  */
 
+@Web("/bar")
 public class Bar {
+
+	@Inject	// here
+	public Foo foo;
+
+	@GET("/hi")
+	public String hello() {
+		return foo.msg();
+	}
+
+	public String msg() {
+		return "Hello from Bar!";
+	}
 
 }

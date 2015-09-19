@@ -24,15 +24,21 @@ import org.rapidoid.annotation.Web;
  * #L%
  */
 
-@Web
+@Web("/foo")
 public class Foo {
 
-	@Inject
+	@Inject	// here
 	public Bar bar;
 
-	@GET("/")
+	private int count;
+
+	@GET("/hi")
 	public String hello() {
-		return ":" + bar;
+		return ++count + ": " + bar.msg();
+	}
+
+	public String msg() {
+		return "Hello from Foo!";
 	}
 
 }

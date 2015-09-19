@@ -48,6 +48,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -130,8 +131,9 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 
 	private DispatchResult call(PojoRequest req, String[] parts, int paramsFrom, DispatchTarget target,
 			DispatchReqKind kind) throws PojoHandlerNotFoundException, PojoDispatchException {
-		Object componentInstance = Cls.newInstance(target.clazz);
+
 		if (target.method != null) {
+			Object componentInstance = Wire.singleton(target.clazz);
 			Object callResult = doDispatch(req, target.method, componentInstance, parts, paramsFrom);
 			return new DispatchResult(callResult, kind, target.config);
 		} else {
