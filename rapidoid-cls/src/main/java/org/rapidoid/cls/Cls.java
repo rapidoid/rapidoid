@@ -726,6 +726,10 @@ public class Cls {
 		return convert(value, String.class);
 	}
 
+	public static boolean bool(Object value) {
+		return U.or(convert(value, Boolean.class), false);
+	}
+
 	public static ParameterizedType generic(Type type) {
 		return (type instanceof ParameterizedType) ? ((ParameterizedType) type) : null;
 	}

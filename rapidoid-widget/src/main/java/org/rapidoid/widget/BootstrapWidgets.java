@@ -75,8 +75,6 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static final Tag N_A = NOTHING;
 
-	public static final DebugWidget DEBUG = Cls.customizable(DebugWidget.class);
-
 	public static final ButtonWidget SAVE = cmd("^Save");
 
 	public static final ButtonWidget ADD = cmd("^Add");
@@ -121,6 +119,18 @@ public abstract class BootstrapWidgets extends HTML {
 		return row(col12(contents));
 	}
 
+	public static Tag columns(Object left, Object right) {
+		return row(col6(left), col6(right));
+	}
+
+	public static Tag columns(Object left, Object middle, Object right) {
+		return row(col4(left), col4(middle), col4(right));
+	}
+
+	public static Tag columns(Object left, Object middleLeft, Object middleRight, Object right) {
+		return row(col3(left), col3(middleLeft), col3(middleRight), col3(right));
+	}
+
 	public static Tag rowSeparated(Object... contents) {
 		return row(contents).class_("row row-separated");
 	}
@@ -158,7 +168,17 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static ButtonWidget btn(Object... contents) {
-		return Cls.customizable(ButtonWidget.class).contents(contents);
+		ButtonWidget btn = Cls.customizable(ButtonWidget.class).contents(contents);
+
+		for (Object content : contents) {
+			if (content instanceof String) {
+				String cmd = (String) content;
+				btn = btn.command(cmd);
+				break;
+			}
+		}
+
+		return btn;
 	}
 
 	public static Tag nav_(boolean fluid, boolean inverse, Tag brand, Object[] navbarContent) {
@@ -842,6 +862,14 @@ public abstract class BootstrapWidgets extends HTML {
 		Tag sp1 = span(hardcoded("&times;")).attr("aria-hidden", "true");
 		Tag sp2 = span("Close").class_("sr-only");
 		return cmd(cmd).class_("close").contents(sp1, sp2);
+	}
+
+	public static DebugWidget debug() {
+		return Cls.customizable(DebugWidget.class);
+	}
+
+	public static Object box(Object... contents) {
+		return span(contents).class_("box");
 	}
 
 }

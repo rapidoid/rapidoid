@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.dispatch.DispatchResult;
 import org.rapidoid.dispatch.PojoDispatchException;
@@ -42,9 +43,7 @@ import org.rapidoid.http.HttpNotFoundException;
 import org.rapidoid.io.CustomizableClassLoader;
 import org.rapidoid.io.Res;
 import org.rapidoid.jackson.JSON;
-import org.rapidoid.log.Log;
 import org.rapidoid.plugins.templates.Templates;
-import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.webapp.AppCtx;
@@ -102,7 +101,6 @@ public class AppHandler implements Handler {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public Object dispatch(HttpExchangeImpl x) {
 
 		// static files
@@ -114,67 +112,47 @@ public class AppHandler implements Handler {
 		WebApp app = AppCtx.app();
 		PojoDispatcher dispatcher = app.getDispatcher();
 
-		boolean hasEvent = false;
-
 		// Prepare GUI state
 
 		x.loadState();
 
 		// if an event was emitted, process it
 
-		if (x.isPostReq()) {
-			String event = x.posted("_event", null);
-			if (!U.isEmpty(event)) {
-				hasEvent = true;
+		boolean hasEvent = x.isPostReq() && !U.isEmpty(x.data("_event", null));
 
-				String evArgs = x.posted("_args", null);
-				Object[] args = evArgs != null ? JSON.jacksonParse(evArgs, Object[].class) : Constants.EMPTY_ARRAY;
+		Object result = null;
 
-				String inputstr = x.posted("_inputs");
-				U.notNull(inputstr, "inputs");
-				Map<String, Object> inputs = JSON.parse(inputstr, Map.class);
+		if (hasEvent) {
+			bindInputs(x);
 
-				// bind inputs
-				for (Entry<String, Object> e : inputs.entrySet()) {
-					String inputId = e.getKey();
-					Object value = e.getValue();
+			DispatchResult dispatchResult = doDispatch(dispatcher, new WebReq(x));
+			if (dispatchResult != null) {
+				U.must(dispatchResult.getKind() == DispatchReqKind.PAGE);
+				result = dispatchResult.getResult();
+			}
 
-					x.locals().put(inputId, UTILS.serializable(value));
-				}
-
-				DispatchResult dispatchResult = doDispatch(dispatcher, new WebReq(x));
-
-				if (dispatchResult != null) {
-					U.must(dispatchResult.getKind() == DispatchReqKind.PAGE);
-				}
-
-				// in case of binding or validation errors
-				if (x.hasErrors()) {
-					x.json();
-					return U.map("!errors", x.errors());
-				}
-
-				// call the command handler
-				DispatchResult dr = on(x, dispatcher, event, args);
-				if (dr == null) {
-					x.json();
-					Log.warn("No event handler was found!", "event", event, "page", x.path());
-					return U.map();
-				}
+			// in case of binding or validation errors
+			if (x.hasErrors()) {
+				x.json();
+				return U.map("!errors", x.errors());
 			}
 		}
 
+		Map<String, Object> config = null;
+
 		// dispatch REST services or views (as POJO methods)
 
-		DispatchResult dres = doDispatch(dispatcher, new WebReq(x));
-		Map<String, Object> config = dres != null ? dres.getConfig() : null;
+		if (result == null) {
+			DispatchResult dres = doDispatch(dispatcher, new WebReq(x));
 
-		Object result = null;
-		if (dres != null) {
-			result = dres.getResult();
+			if (dres != null) {
+				result = dres.getResult();
+				config = dres.getConfig();
 
-			if (dres.getKind() == DispatchReqKind.SERVICE) {
-				return result;
+				if (dres.getKind() == DispatchReqKind.SERVICE) {
+					x.json();
+					return result;
+				}
 			}
 		}
 
@@ -192,6 +170,20 @@ public class AppHandler implements Handler {
 		}
 
 		return view(x, result, hasEvent, config);
+	}
+
+	private void bindInputs(HttpExchangeImpl x) {
+		Map<String, Object> inputs = x.data("_inputs", null);
+
+		if (inputs != null) {
+			// bind inputs
+			for (Entry<String, Object> e : inputs.entrySet()) {
+				String inputId = e.getKey();
+				Object value = e.getValue();
+
+				x.locals().put(inputId, UTILS.serializable(value));
+			}
+		}
 	}
 
 	public static Object view(HttpExchange x, Object result, boolean hasEvent, Map<String, Object> config) {
@@ -226,7 +218,7 @@ public class AppHandler implements Handler {
 		String defaultFile = Conf.templatesPathDefault() + "/" + filename;
 		Res res = Res.from(filename, true, firstFile, defaultFile);
 
-		Map<String, Object> model = U.cast(U.map("navbar", true, "login", true, "profile", true));
+		Map<String, Object> model = U.cast(U.map("login", true, "profile", true));
 
 		if (res.exists()) {
 			model.putAll(pageModel(result, res));
@@ -238,7 +230,9 @@ public class AppHandler implements Handler {
 		}
 
 		WebApp app = AppCtx.app();
-		model.put("title", app.getTitle());
+
+		String title = app.getTitle();
+		model.put("title", title);
 		model.put("embedded", hasEvent || x.param("_embedded", null) != null);
 
 		// the @Page configuration overrides the previous
@@ -246,7 +240,13 @@ public class AppHandler implements Handler {
 			model.putAll(config);
 		}
 
-		if (hasEvent) {
+		if (!Cls.bool(model.get("navbar"))) {
+			model.put("navbar", U.isEmpty(title));
+		}
+
+		model.put("navbar", U.isEmpty(title));
+
+		if (hasEvent && x.param("_embedded", null) == null) {
 			serveEventResponse((HttpExchangeImpl) x, x.renderPageToHTML(model));
 		} else {
 			x.renderPage(model);

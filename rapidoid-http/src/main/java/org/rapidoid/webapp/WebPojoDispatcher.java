@@ -30,7 +30,6 @@ import org.rapidoid.annotation.Cookie;
 import org.rapidoid.annotation.DELETE;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Header;
-import org.rapidoid.annotation.On;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.PUT;
 import org.rapidoid.annotation.Page;
@@ -157,7 +156,6 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 
 	private List<DispatchReq> req(String componentPath, Annotation ann, Method method) {
 		String url;
-		String event = null;
 		Map<String, Object> config = U.synchronizedMap();
 
 		if (ann instanceof GET) {
@@ -186,11 +184,6 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 				config.put("title", page.title());
 			}
 
-		} else if (ann instanceof On) {
-			On on = (On) ann;
-			url = on.page();
-			event = on.event();
-
 		} else {
 			return null;
 		}
@@ -201,8 +194,6 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 		if (ann instanceof Page) {
 			return U.list(new DispatchReq("GET", path, DispatchReqKind.PAGE, config), new DispatchReq("POST", path,
 					DispatchReqKind.PAGE, config));
-		} else if (ann instanceof On) {
-			return U.list(new DispatchReq(event.toUpperCase(), path, DispatchReqKind.EVENT, config));
 		} else {
 			String verb = ann.annotationType().getSimpleName().toUpperCase();
 			return U.list(new DispatchReq(verb, path, DispatchReqKind.SERVICE, config));

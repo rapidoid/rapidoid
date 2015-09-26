@@ -754,4 +754,19 @@ public class UTILS implements Constants {
 		return thread;
 	}
 
+	public static boolean isRapidoidType(Class<?> clazz) {
+		try {
+			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
+				String pkg = c.getCanonicalName();
+				if (pkg.startsWith("org.rapidoid.") || pkg.startsWith("org.rapidoidx.")) {
+					return !pkg.startsWith("org.rapidoid.docs.");
+				}
+			}
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
+
+		return false;
+	}
+
 }

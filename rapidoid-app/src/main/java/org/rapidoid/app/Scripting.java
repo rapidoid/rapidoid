@@ -95,7 +95,7 @@ public class Scripting {
 		Map<String, Object> bindings = U.map();
 		Dollar dollar = new Dollar(x, bindings);
 
-		for (Entry<String, String> e : x.data().entrySet()) {
+		for (Entry<String, Object> e : x.data().entrySet()) {
 			bindings.put("$" + e.getKey(), e.getValue());
 		}
 

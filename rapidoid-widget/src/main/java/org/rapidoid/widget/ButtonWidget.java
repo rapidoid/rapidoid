@@ -28,7 +28,7 @@ import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
-public class ButtonWidget extends AbstractWidget {
+public class ButtonWidget extends AbstractCommandWidget<ButtonWidget> {
 
 	private Object[] contents = {};
 
@@ -38,19 +38,13 @@ public class ButtonWidget extends AbstractWidget {
 
 	private String class_;
 
-	private String command;
-
-	private Object[] cmdArgs;
-
-	public ButtonWidget() {}
-
 	@Override
 	protected Tag render() {
 		String cls = U.or(class_, "btn btn-" + kind);
 		ButtonTag btn = button(contents).type("button").class_(cls);
 
-		if (command != null) {
-			btn = btn.cmd(command, cmdArgs);
+		if (command() != null) {
+			btn = btn.cmd(command(), cmdArgs());
 		} else if (linkTo != null) {
 			btn = btn.navigate(linkTo);
 		}
@@ -92,20 +86,6 @@ public class ButtonWidget extends AbstractWidget {
 		return this;
 	}
 
-	public ButtonWidget command(String cmd, Object... cmdArgs) {
-		this.command = cmd;
-		this.cmdArgs = cmdArgs;
-		return this;
-	}
-
-	public String command() {
-		return command;
-	}
-
-	public Object[] cmdArgs() {
-		return cmdArgs;
-	}
-
 	public String kind() {
 		return kind;
 	}
@@ -130,6 +110,11 @@ public class ButtonWidget extends AbstractWidget {
 
 	public ButtonWidget class_(String class_) {
 		this.class_ = class_;
+		return this;
+	}
+
+	public ButtonWidget onClick(Runnable onClickHandler) {
+		setHandler(onClickHandler);
 		return this;
 	}
 

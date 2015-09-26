@@ -36,7 +36,7 @@ public @interface Page {
 
 	boolean raw() default false;
 
-	boolean navbar() default true;
+	boolean navbar() default false;
 
 	boolean search() default false;
 

@@ -34,7 +34,7 @@ public class DebugWidget extends AbstractWidget {
 
 	@Override
 	protected Object render() {
-		return arr(sessionPanel(), localPanel());
+		return multi(sessionPanel(), localPanel());
 	}
 
 	protected PanelWidget sessionPanel() {

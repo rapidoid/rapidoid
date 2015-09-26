@@ -110,7 +110,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	private HttpResponses responses;
 
-	private Map<String, String> data;
+	private Map<String, Object> data;
 	private Map<String, String> errors;
 
 	private Map<String, Object> model;
@@ -150,9 +150,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private ClassLoader classLoader;
 	private SessionStore sessionStore;
 
-	private final Callable<Map<String, String>> lazyData = new Callable<Map<String, String>>() {
+	private final Callable<Map<String, Object>> lazyData = new Callable<Map<String, Object>>() {
 		@Override
-		public Map<String, String> call() throws Exception {
+		public Map<String, Object> call() throws Exception {
 			return data();
 		}
 	};
@@ -515,7 +515,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public synchronized Map<String, String> data() {
+	public synchronized Map<String, Object> data() {
 		if (data == null) {
 			data = U.synchronizedMap();
 			data.putAll(params());
@@ -525,14 +525,16 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		return data;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized String data(String name) {
-		return U.notNull(data().get(name), "DATA[%s]", name);
+	public synchronized <T> T data(String name) {
+		return (T) U.notNull(data().get(name), "DATA[%s]", name);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized String data(String name, String defaultValue) {
-		return U.or(data().get(name), defaultValue);
+	public synchronized <T> T data(String name, T defaultValue) {
+		return (T) U.or(data().get(name), defaultValue);
 	}
 
 	@Override
@@ -811,8 +813,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 			if (err != null) {
 				String details = Conf.dev() ? HTMLHelpers.stackTrace(title, err) : "";
-				renderPage(U.map("title", title, "error", true, "code", httpResponseCode, "navbar", true, "content",
-						details));
+				renderPage(U.map("title", title, "error", true, "code", httpResponseCode, "navbar", !U.isEmpty(title),
+						"content", details));
 			} else {
 				renderPage(U.map("title", title, "code", httpResponseCode, "error", httpResponseCode >= 400));
 			}
@@ -1255,7 +1257,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			File file = (File) res;
 			sendFile(file);
 
-		} else if (res.getClass().getSimpleName().endsWith("Page")) {
+		} else if (UTILS.isRapidoidType(res.getClass())) {
 			html().write(res.toString());
 
 		} else {

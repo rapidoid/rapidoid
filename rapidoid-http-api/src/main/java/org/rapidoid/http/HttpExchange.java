@@ -88,17 +88,17 @@ public interface HttpExchange {
 	/**
 	 * Data includes params + posted.
 	 */
-	Map<String, String> data();
+	Map<String, Object> data();
 
 	/**
 	 * Data includes params + posted.
 	 */
-	String data(@P("name") String name);
+	<T> T data(@P("name") String name);
 
 	/**
 	 * Data includes params + posted.
 	 */
-	String data(@P("name") String name, @P("defaultValue") String defaultValue);
+	<T> T data(@P("name") String name, @P("defaultValue") T defaultValue);
 
 	String home();
 

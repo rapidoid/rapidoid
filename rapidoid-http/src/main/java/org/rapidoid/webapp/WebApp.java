@@ -85,7 +85,7 @@ public class WebApp {
 	}
 
 	public String getTitle() {
-		return config.option("title", "Untitled");
+		return config.option("title", null);
 	}
 
 	public void setTitle(String title) {
