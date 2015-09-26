@@ -1,0 +1,2 @@
+GET /calc
+POST /calc { "_event" : "num", "_args" : [4] }

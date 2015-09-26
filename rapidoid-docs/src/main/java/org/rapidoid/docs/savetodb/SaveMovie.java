@@ -1,11 +1,9 @@
-package org.rapidoid.docs.customform;
+package org.rapidoid.docs.savetodb;
 
-import static org.rapidoid.widget.BootstrapWidgets.btn;
-import static org.rapidoid.widget.BootstrapWidgets.create;
-
-import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.Web;
+import org.rapidoid.app.GUI;
+import org.rapidoid.plugins.db.DB;
 import org.rapidoid.widget.ButtonWidget;
 import org.rapidoid.widget.FormWidget;
 
@@ -30,18 +28,23 @@ import org.rapidoid.widget.FormWidget;
  */
 
 @Web
-public class CustomForm {
+public class SaveMovie extends GUI {
 
 	@Page("/")
-	public Object content() {
-		Movie movie = new Movie();
-		FormWidget f = create(movie, "year");
-		ButtonWidget changeYear = btn("Change year").command("NewYear").primary();
-		f = f.buttons(btn("Ab"), changeYear, btn("!Efg").danger());
+	public Object movieForm() {
+		final Movie movie = new Movie();
+		FormWidget f = edit(movie);
+
+		ButtonWidget save = btn("Save").onClick(new Runnable() {
+			@Override
+			public void run() {
+				DB.insert(movie);
+			}
+		});
+
+		f = f.buttons(save);
+
 		return f;
 	}
 
-	public void onNewYear() {
-		// DB.update(movie);
-	}
 }

@@ -1,0 +1,2 @@
+GET /counter
+POST /counter { "_event" : "+", "_args" : [], "_inputs" : {} }

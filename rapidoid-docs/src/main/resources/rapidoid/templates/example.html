@@ -24,8 +24,28 @@
             (~#results~)
             <div>
                 <span class="badge eg-(~verb~) eg-verb">(~verb~)</span> <span class="badge eg-uri">(~uri~)</span>
+            </div>
+            (~#data~)
+            <div class="post-data">
+                <span class="label label-default eg-data">(~data~)</span>
+            </div>
+            (~/data~)
+
+(~#result~)
+                <div class="eg-result">
+<!-- EXAMPLE#(~n~) HTML STARTS HERE -->
+(~{result}~)
+<!-- EXAMPLE#(~n~) HTML END HERE -->
                 </div>
-                <div class="eg-result">(~{result}~)</div>
+(~/result~)
+
+(~#error~)
+                <div class="eg-error">
+<!-- EXAMPLE#(~n~) ERROR STARTS HERE -->
+(~{error}~)
+<!-- EXAMPLE#(~n~) ERROR END HERE -->
+                </div>
+(~/error~)
             (~/results~)
         </div>
     </div>

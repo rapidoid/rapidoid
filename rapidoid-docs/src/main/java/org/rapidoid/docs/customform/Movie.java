@@ -1,13 +1,8 @@
 package org.rapidoid.docs.customform;
 
-import static org.rapidoid.widget.BootstrapWidgets.btn;
-import static org.rapidoid.widget.BootstrapWidgets.create;
-
-import org.rapidoid.annotation.GET;
-import org.rapidoid.annotation.Page;
-import org.rapidoid.annotation.Web;
-import org.rapidoid.widget.ButtonWidget;
-import org.rapidoid.widget.FormWidget;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /*
  * #%L
@@ -29,19 +24,12 @@ import org.rapidoid.widget.FormWidget;
  * #L%
  */
 
-@Web
-public class CustomForm {
+@Entity
+public class Movie {
+	@Id
+	@GeneratedValue
+	public Long id;
 
-	@Page("/")
-	public Object content() {
-		Movie movie = new Movie();
-		FormWidget f = create(movie, "year");
-		ButtonWidget changeYear = btn("Change year").command("NewYear").primary();
-		f = f.buttons(btn("Ab"), changeYear, btn("!Efg").danger());
-		return f;
-	}
-
-	public void onNewYear() {
-		// DB.update(movie);
-	}
+	String title;
+	int year;
 }

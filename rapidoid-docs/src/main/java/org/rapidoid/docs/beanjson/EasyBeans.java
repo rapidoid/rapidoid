@@ -1,13 +1,7 @@
-package org.rapidoid.docs.customform;
-
-import static org.rapidoid.widget.BootstrapWidgets.btn;
-import static org.rapidoid.widget.BootstrapWidgets.create;
+package org.rapidoid.docs.beanjson;
 
 import org.rapidoid.annotation.GET;
-import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.Web;
-import org.rapidoid.widget.ButtonWidget;
-import org.rapidoid.widget.FormWidget;
 
 /*
  * #%L
@@ -30,18 +24,11 @@ import org.rapidoid.widget.FormWidget;
  */
 
 @Web
-public class CustomForm {
+public class EasyBeans {
 
-	@Page("/")
-	public Object content() {
-		Movie movie = new Movie();
-		FormWidget f = create(movie, "year");
-		ButtonWidget changeYear = btn("Change year").command("NewYear").primary();
-		f = f.buttons(btn("Ab"), changeYear, btn("!Efg").danger());
-		return f;
+	@GET
+	public Book echo(Book book) {
+		return book;
 	}
 
-	public void onNewYear() {
-		// DB.update(movie);
-	}
 }

@@ -141,7 +141,7 @@ public class ExpressionsScreen extends GUI {
 
 		expr("%LINE%", SAVE);
 		expr("%LINE%", CANCEL);
-		expr("%LINE%", DEBUG);
+		expr("%LINE%", debug());
 
 		// expr("%LINE%", ADD);
 		// expr("%LINE%", UPDATE);

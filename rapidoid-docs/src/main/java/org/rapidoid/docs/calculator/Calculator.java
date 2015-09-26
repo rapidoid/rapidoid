@@ -1,14 +1,10 @@
 package org.rapidoid.docs.calculator;
 
-import static org.rapidoid.html.HTML.div;
-import static org.rapidoid.html.HTML.h4;
-import static org.rapidoid.widget.BootstrapWidgets.cmd;
-import static org.rapidoid.widget.BootstrapWidgets.row;
-
 import org.rapidoid.annotation.Page;
-import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Web;
+import org.rapidoid.app.GUI;
 import org.rapidoid.html.Tag;
+import org.rapidoid.util.Val;
 import org.rapidoid.widget.ButtonWidget;
 
 /*
@@ -32,25 +28,35 @@ import org.rapidoid.widget.ButtonWidget;
  */
 
 @Web
-public class Calculator {
+public class Calculator extends GUI {
 
-	@Page("/")
+	@Page
 	public Object calc() {
 		Tag btns = div();
 		Tag row = div();
+
+		final Val<String> pressed = new Val<String>("?");
+
 		for (int i = 1; i <= 9; i++) {
-			ButtonWidget b = cmd("" + i); // here
-			row = row.append(b); // here
+			final String digit = "" + i;
+
+			ButtonWidget b = btn(digit).command("num", i);
+
+			b.onClick(new Runnable() {
+				@Override
+				public void run() {
+					pressed.set(digit);
+				}
+			});
+
+			row = row.append(b);
 			if (i % 3 == 0) {
-				btns = btns.append(row); // here
+				btns = btns.append(row);
 				row = div();
 			}
 		}
-		
-		return row(btns, h4("You pressed: ", "?op"));
+
+		return row(btns, h4("You pressed: ", pressed));
 	}
 
-	public void on(String cmd, Object... args) { // here
-		//op += cmd;
-	}
 }

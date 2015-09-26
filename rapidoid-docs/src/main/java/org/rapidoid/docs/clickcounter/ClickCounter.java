@@ -1,13 +1,10 @@
-package org.rapidoid.docs.customform;
+package org.rapidoid.docs.clickcounter;
 
-import static org.rapidoid.widget.BootstrapWidgets.btn;
-import static org.rapidoid.widget.BootstrapWidgets.create;
-
-import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.Web;
+import org.rapidoid.app.GUI;
+import org.rapidoid.html.Tag;
 import org.rapidoid.widget.ButtonWidget;
-import org.rapidoid.widget.FormWidget;
 
 /*
  * #%L
@@ -30,18 +27,22 @@ import org.rapidoid.widget.FormWidget;
  */
 
 @Web
-public class CustomForm {
+public class ClickCounter extends GUI {
 
-	@Page("/")
-	public Object content() {
-		Movie movie = new Movie();
-		FormWidget f = create(movie, "year");
-		ButtonWidget changeYear = btn("Change year").command("NewYear").primary();
-		f = f.buttons(btn("Ab"), changeYear, btn("!Efg").danger());
-		return f;
+	int n = 0;
+
+	@Page
+	public Object counter() {
+		ButtonWidget inc = btn("+").onClick(new Runnable() {
+			@Override
+			public void run() {
+				n++;
+			}
+		});
+
+		Tag info = span("You clicked ", n, " times!");
+
+		return row(info, inc);
 	}
 
-	public void onNewYear() {
-		// DB.update(movie);
-	}
 }

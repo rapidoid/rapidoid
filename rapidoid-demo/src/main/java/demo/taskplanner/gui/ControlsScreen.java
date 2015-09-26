@@ -46,7 +46,7 @@ public class ControlsScreen extends GUI {
 		Object a9 = checkboxes(U.list("A", "B", "C"), "v3", U.list("A", "C"));
 
 		LayoutWidget lay = layout(a1, a2, a3, a4, a5, a6, a7, a8, a9).cols(3);
-		return arr(cmd("abc").warning(), lay, DEBUG);
+		return arr(cmd("abc").warning(), lay, debug());
 	}
 
 }

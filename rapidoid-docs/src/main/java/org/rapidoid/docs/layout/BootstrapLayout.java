@@ -1,4 +1,9 @@
-package org.rapidoid.docs.xyz;
+package org.rapidoid.docs.layout;
+
+import org.rapidoid.annotation.Page;
+import org.rapidoid.annotation.Web;
+import org.rapidoid.app.GUI;
+import org.rapidoid.html.Tag;
 
 /*
  * #%L
@@ -20,8 +25,15 @@ package org.rapidoid.docs.xyz;
  * #L%
  */
 
-public class Book {
+@Web
+public class BootstrapLayout extends GUI {
 
-	String title;
-	
+	@Page("/")
+	public Object layout() {
+		Tag r1 = row(col4("A"), col4("B"), col4("C"));
+		Tag r2 = row(col1("2/12"), col7("7/12"), col4("3/12"));
+		Tag r3 = mid4("4/12 in the middle");
+		return multi(r1, r2, r3);
+	}
+
 }

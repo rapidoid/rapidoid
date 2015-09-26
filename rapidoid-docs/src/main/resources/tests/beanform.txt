@@ -1,0 +1,2 @@
+GET /movies
+POST /movies { "_event" : "Save", "_args" : [], "_inputs" : { "title" : "Chappie", "year" : 2015 } }

@@ -32,9 +32,11 @@ import org.rapidoid.ctx.Classes;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HttpException;
 import org.rapidoid.io.IO;
+import org.rapidoid.jackson.JSON;
 import org.rapidoid.main.Rapidoid;
 import org.rapidoid.plugins.templates.Templates;
 import org.rapidoid.scan.ClasspathUtil;
+import org.rapidoid.util.D;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.webapp.AppMode;
@@ -46,6 +48,12 @@ import org.rapidoid.wrap.IntWrap;
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class Docs {
+
+	private static final String STATE = "__state";
+	private static final String STATE_SUFFIX = "\"-->";
+	private static final String STATE_PREFIX = "<!--state::\"";
+
+	private static String viewState;
 
 	public static void main(String[] args) {
 		// Log.setLogLevel(LogLevel.DEBUG);
@@ -86,6 +94,10 @@ public class Docs {
 
 		for (String eg : eglist) {
 			eg = eg.trim();
+
+			if (eg.equals("---")) {
+				break;
+			}
 
 			String[] parts = eg.split("\\:");
 			if (parts.length == 2 && !eg.startsWith("#")) {
@@ -169,35 +181,62 @@ public class Docs {
 		return results;
 	}
 
-	private static Map<String, String> getResult(String line) {
-		String[] parts = line.split("\\s", 2);
+	@SuppressWarnings("unchecked")
+	private static Map<String, ?> getResult(String line) {
+		String[] parts = line.split("\\s", 3);
 		String verb = parts[0];
 		String uri = parts[1];
+
+		Map<String, Object> data = parts.length > 2 ? JSON.jacksonParse(parts[2], Map.class) : null;
+		if (data != null) {
+			data.put(STATE, viewState);
+		}
 
 		String uri2 = uri.contains("?") ? uri.replace("?", "?_embedded=true&") : uri + "?_embedded=true";
 
 		String result = null;
+		String error = null;
 
 		try {
 			if ("GET".equalsIgnoreCase(verb)) {
 				result = new String(HTTP.get("http://localhost:8080" + uri2));
 			} else if ("POST".equalsIgnoreCase(verb)) {
-				result = new String(HTTP.post("http://localhost:8080" + uri2, null, null, null));
+				String postData = JSON.jacksonStringify(data);
+				result = new String(HTTP.post("http://localhost:8080" + uri2, null, postData));
 			}
 		} catch (Exception e) {
 			Throwable cause = UTILS.rootCause(e);
 			if (cause instanceof HttpException && cause.getMessage().contains("404")) {
-				result = "<span class=\"not-found\">404 Not found!</span>";
+				error = "<span class=\"not-found\">404 Not found!</span>";
 			} else {
 				e.printStackTrace();
 			}
 		}
 
-		if (result == null) {
-			result = nonHttpResult(line);
+		viewState = "";
+
+		if (result == null && error == null) {
+			error = nonHttpResult(line);
+		} else {
+			if (result != null && result.startsWith(STATE_PREFIX)) {
+				String[] resparts = result.split("\\n", 2);
+				String state = resparts[0].trim();
+				result = resparts[1].trim();
+
+				U.must(state.endsWith(STATE_SUFFIX));
+				viewState = U.mid(state, STATE_PREFIX.length(), -STATE_SUFFIX.length());
+			}
 		}
 
-		return U.map("verb", verb, "uri", uri, "result", result);
+		D.print(viewState);
+
+		String dataDesc = null;
+		if (data != null) {
+			// data.put(STATE, "...");
+			data.remove(STATE);
+			dataDesc = JSON.jacksonStringify(data);
+		}
+		return U.map("verb", verb, "uri", uri, "result", result, "error", error, "data", dataDesc);
 	}
 
 	private static String nonHttpResult(String line) {

@@ -1,13 +1,8 @@
-package org.rapidoid.docs.customform;
+package org.rapidoid.docs.highlighting;
 
-import static org.rapidoid.widget.BootstrapWidgets.btn;
-import static org.rapidoid.widget.BootstrapWidgets.create;
-
-import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.Web;
-import org.rapidoid.widget.ButtonWidget;
-import org.rapidoid.widget.FormWidget;
+import org.rapidoid.app.GUI;
 
 /*
  * #%L
@@ -30,18 +25,11 @@ import org.rapidoid.widget.FormWidget;
  */
 
 @Web
-public class CustomForm {
+public class Highlighting extends GUI {
 
 	@Page("/")
-	public Object content() {
-		Movie movie = new Movie();
-		FormWidget f = create(movie, "year");
-		ButtonWidget changeYear = btn("Change year").command("NewYear").primary();
-		f = f.buttons(btn("Ab"), changeYear, btn("!Efg").danger());
-		return f;
+	public Object letters() {
+		return highlight("ab-cd-efg", "\\w+");
 	}
 
-	public void onNewYear() {
-		// DB.update(movie);
-	}
 }
