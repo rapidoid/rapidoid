@@ -70,34 +70,34 @@ public class CRUD<E> {
 		return clazz;
 	}
 
-	@GET("/get")
+	@GET(url = "/get")
 	public E get(String id) {
 		return DB.get(clazz, id);
 	}
 
-	@POST("/insert")
+	@POST(url = "/insert")
 	public String insert(E record) {
 		return DB.insert(record);
 	}
 
-	@POST("/update")
+	@POST(url = "/update")
 	@PUT
 	public void update(String id, E record) {
 		DB.update(id, record);
 	}
 
-	@POST("/delete")
+	@POST(url = "/delete")
 	@DELETE
 	public void delete(String id) {
 		DB.delete(id);
 	}
 
-	@GET("/all")
+	@GET(url = "/all")
 	public Iterable<E> all() {
 		return DB.getAll(clazz);
 	}
 
-	@GET("/page")
+	@GET(url = "/page")
 	public Iterable<E> page(int page) {
 		return DB.getAll(clazz, page, 20);
 	}

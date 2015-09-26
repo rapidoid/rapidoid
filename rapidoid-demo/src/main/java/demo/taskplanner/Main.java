@@ -80,12 +80,12 @@ public class Main {
 		throw U.rte("some failure!");
 	}
 
-	@GET("/task/page")
+	@GET(url = "/task/page")
 	public Iterable<Task> tasks(int page) {
 		return page < 5 ? DB.getAll(Task.class) : null;
 	}
 
-	@POST("/fileup")
+	@POST(url = "/fileup")
 	public Object uploaded(HttpExchange x, byte[][] files, @Cookie("JSESSIONID") String js,
 			@Cookie("COOKIEPACK") String cp, @Header("Host") String host, @Header("Accept") String accept) {
 		return U.array(js, cp, host, accept, files);

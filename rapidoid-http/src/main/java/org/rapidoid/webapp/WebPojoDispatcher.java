@@ -159,16 +159,16 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 		Map<String, Object> config = U.synchronizedMap();
 
 		if (ann instanceof GET) {
-			url = ((GET) ann).value();
+			url = ((GET) ann).url();
 
 		} else if (ann instanceof POST) {
-			url = ((POST) ann).value();
+			url = ((POST) ann).url();
 
 		} else if (ann instanceof PUT) {
-			url = ((PUT) ann).value();
+			url = ((PUT) ann).url();
 
 		} else if (ann instanceof DELETE) {
-			url = ((DELETE) ann).value();
+			url = ((DELETE) ann).url();
 
 		} else if (ann instanceof Page) {
 			Page page = (Page) ann;
