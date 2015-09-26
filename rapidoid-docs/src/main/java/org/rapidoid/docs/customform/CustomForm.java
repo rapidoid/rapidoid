@@ -1,11 +1,8 @@
 package org.rapidoid.docs.customform;
 
-import static org.rapidoid.widget.BootstrapWidgets.btn;
-import static org.rapidoid.widget.BootstrapWidgets.create;
-
-import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.Web;
+import org.rapidoid.app.GUI;
 import org.rapidoid.widget.ButtonWidget;
 import org.rapidoid.widget.FormWidget;
 
@@ -30,9 +27,9 @@ import org.rapidoid.widget.FormWidget;
  */
 
 @Web
-public class CustomForm {
+public class CustomForm extends GUI {
 
-	@Page("/")
+	@Page(url = "/")
 	public Object content() {
 		Movie movie = new Movie();
 		FormWidget f = create(movie, "year");

@@ -29,7 +29,7 @@ import org.rapidoid.widget.ButtonWidget;
 @Web
 public class Movies {
 
-	@Page(value = "/", title = "Edit movie details")
+	@Page(url = "/", title = "Edit movie details")
 	public Object movie() {
 		Movie movie = new Movie();
 		movie.title = "Chappie";

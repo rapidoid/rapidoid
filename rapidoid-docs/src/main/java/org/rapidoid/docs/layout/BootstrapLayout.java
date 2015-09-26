@@ -28,7 +28,7 @@ import org.rapidoid.html.Tag;
 @Web
 public class BootstrapLayout extends GUI {
 
-	@Page("/")
+	@Page(url="/")
 	public Object layout() {
 		Tag r1 = row(col4("A"), col4("B"), col4("C"));
 		Tag r2 = row(col1("2/12"), col7("7/12"), col4("3/12"));

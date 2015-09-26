@@ -172,7 +172,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 
 		} else if (ann instanceof Page) {
 			Page page = (Page) ann;
-			url = page.value();
+			url = page.url();
 
 			config.put("raw", page.raw());
 			config.put("navbar", page.navbar());
