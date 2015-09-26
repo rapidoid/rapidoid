@@ -71,6 +71,25 @@ public class HttpClient {
 		client.start();
 	}
 
+	public Future<byte[]> post(String uri, Map<String, String> headers, String postData, Callback<byte[]> callback) {
+
+		headers = U.safe(headers);
+
+		HttpPost req = new HttpPost(uri);
+
+		NByteArrayEntity entity = new NByteArrayEntity(postData.getBytes(), ContentType.APPLICATION_FORM_URLENCODED);
+
+		for (Entry<String, String> e : headers.entrySet()) {
+			req.addHeader(e.getKey(), e.getValue());
+		}
+
+		req.setEntity(entity);
+
+		Log.info("Starting HTTP POST request", "request", req.getRequestLine());
+
+		return execute(client, req, callback);
+	}
+
 	public Future<byte[]> post(String uri, Map<String, String> headers, Map<String, String> data,
 			Map<String, String> files, Callback<byte[]> callback) {
 

@@ -48,6 +48,15 @@ public class HTTP {
 		return post(uri, headers, data, files, null).get();
 	}
 
+	public static Future<byte[]> post(String uri, Map<String, String> headers, String postData,
+			Callback<byte[]> callback) {
+		return DEFAULT_CLIENT.post(uri, headers, postData, callback);
+	}
+
+	public static byte[] post(String uri, Map<String, String> headers, String postData) {
+		return post(uri, headers, postData, null).get();
+	}
+
 	public static byte[] post(String uri) {
 		return post(uri, null, null, null, null).get();
 	}
