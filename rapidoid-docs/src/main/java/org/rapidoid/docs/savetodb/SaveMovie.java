@@ -30,7 +30,7 @@ import org.rapidoid.widget.FormWidget;
 @Web
 public class SaveMovie extends GUI {
 
-	@Page(url="/")
+	@Page(url = "/")
 	public Object movieForm() {
 		final Movie movie = new Movie();
 		FormWidget f = edit(movie);
