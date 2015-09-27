@@ -28,7 +28,9 @@ import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.cache.guava.GuavaCachePlugin;
 import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
 import org.rapidoid.quick.Quick;
+import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.webapp.AppClasspathEntitiesPlugin;
 import org.rapidoid.webapp.WebApp;
 import org.rapidoid.webapp.WebAppGroup;
@@ -44,11 +46,15 @@ public class Rapidoid {
 	private static boolean initialized = false;
 
 	public static synchronized WebApp run(String[] args, Object... config) {
-		return run(null, args, config);
+		return initAndStart(null, args, config);
 	}
 
 	public static synchronized WebApp run(WebApp app, String[] args, Object... config) {
-		Log.info("Starting Rapidoid...\n");
+		return initAndStart(app, args, config);
+	}
+
+	private static WebApp initAndStart(WebApp app, String[] args, Object... config) {
+		Log.info("Starting Rapidoid...");
 		U.must(!initialized, "Already initialized!");
 		initialized = true;
 
@@ -56,22 +62,44 @@ public class Rapidoid {
 
 		// print internal state
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-		StatusPrinter.print(lc);
 
 		Conf.args(args, config);
 
 		Log.info("Working directory is: " + System.getProperty("user.dir"));
 
+		inferAndSetRootPackage();
+
 		if (app == null) {
 			app = AppTool.createRootApp();
 		}
 
+		registerDefaultPlugins();
+
+		Quick.run(app, args, config);
+
+		System.out.println();
+		StatusPrinter.print(lc);
+		System.out.println();
+
+		return app;
+	}
+
+	private static void registerDefaultPlugins() {
 		Plugins.register(new MustacheTemplatesPlugin());
 		Plugins.register(new AppClasspathEntitiesPlugin());
 		Plugins.register(new GuavaCachePlugin());
+	}
 
-		Quick.run(app, args, config);
-		return app;
+	private static void inferAndSetRootPackage() {
+		Class<?> callerCls = UTILS.getCallingClassOf(Rapidoid.class);
+
+		if (callerCls != null) {
+			String rootPkg = callerCls.getPackage().getName();
+			Log.info("Setting root application package: " + rootPkg);
+			ClasspathUtil.setRootPackage(rootPkg);
+		} else {
+			Log.warn("Couldn't calculate the application root package!");
+		}
 	}
 
 	public static void register(WebApp app) {

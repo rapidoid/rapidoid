@@ -59,6 +59,8 @@ public class ClasspathUtil {
 	private static final Set<String> CLASSPATH = new TreeSet<String>();
 
 	private static boolean ignoreRapidoidClasses = true;
+	private static String rootPackage = null;
+
 	private static final String ORG_RAPIDOID_DIR = "org" + File.separatorChar + "rapidoid" + File.separatorChar;
 	private static final String ORG_RAPIDOIDX_DIR = "org" + File.separatorChar + "rapidoidx" + File.separatorChar;
 
@@ -152,7 +154,7 @@ public class ClasspathUtil {
 	}
 
 	public static List<Class<?>> getAllClasses() {
-		return scanClasses(null, null, null, null, null);
+		return scanClasses(rootPackage, null, null, null, null);
 	}
 
 	private static List<Class<?>> retrieveClasses(String packageName, Predicate<Class<?>> filter,
@@ -394,6 +396,14 @@ public class ClasspathUtil {
 
 	public static void setIgnoreRapidoidClasses(boolean ignoreRapidoidClasses) {
 		ClasspathUtil.ignoreRapidoidClasses = ignoreRapidoidClasses;
+	}
+
+	public static String getRootPackage() {
+		return rootPackage;
+	}
+
+	public static void setRootPackage(String rootPackage) {
+		ClasspathUtil.rootPackage = rootPackage;
 	}
 
 }

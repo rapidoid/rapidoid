@@ -769,4 +769,26 @@ public class UTILS implements Constants {
 		return false;
 	}
 
+	public static Class<?> getCallingClassOf(Class<?> calledClass) {
+		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+
+		// skip the first 2 elements:
+		// [0] java.lang.Thread.getStackTrace
+		// [1] org.rapidoid.util.UTILS.getCallingClassOf
+
+		for (int i = 2; i < trace.length; i++) {
+			String cls = trace[i].getClassName();
+			if (!cls.equals(calledClass.getCanonicalName())) {
+				try {
+					return Class.forName(cls);
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+					return null;
+				}
+			}
+		}
+
+		return null;
+	}
+
 }
