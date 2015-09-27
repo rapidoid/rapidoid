@@ -169,7 +169,7 @@ public class CassandraDBPlugin extends DBPluginBase {
 				Callbacks.done(callback, null, t);
 			}
 
-		}, Jobs.executor());
+		}, Jobs.scheduler());
 	}
 
 	private static List<Map<String, Object>> results(List<Row> rows) {

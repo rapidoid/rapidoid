@@ -21,8 +21,10 @@ package org.rapidoid.job;
  */
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.rapidoid.activity.RapidoidThreadFactory;
@@ -40,21 +42,32 @@ import org.rapidoid.util.U;
 @Since("4.1.0")
 public class Jobs implements Constants {
 
-	private static ScheduledThreadPoolExecutor EXECUTOR;
+	private static ScheduledExecutorService SCHEDULER;
+
+	private static Executor EXECUTOR;
 
 	private Jobs() {}
 
-	public static synchronized ScheduledThreadPoolExecutor executor() {
+	public static synchronized ScheduledExecutorService scheduler() {
+		if (SCHEDULER == null) {
+			int threads = Conf.option("threads", 100);
+			SCHEDULER = Executors.newScheduledThreadPool(threads / 2, new RapidoidThreadFactory("jobs"));
+		}
+
+		return SCHEDULER;
+	}
+
+	public static synchronized Executor executor() {
 		if (EXECUTOR == null) {
 			int threads = Conf.option("threads", 100);
-			EXECUTOR = new ScheduledThreadPoolExecutor(threads, new RapidoidThreadFactory("jobs"));
+			EXECUTOR = Executors.newFixedThreadPool(threads);
 		}
 
 		return EXECUTOR;
 	}
 
 	public static ScheduledFuture<?> schedule(Runnable job, long delay, TimeUnit unit) {
-		return executor().schedule(wrap(job), delay, unit);
+		return scheduler().schedule(wrap(job), delay, unit);
 	}
 
 	public static <T> ScheduledFuture<?> schedule(Callable<T> job, long delay, TimeUnit unit, Callback<T> callback) {
@@ -62,7 +75,7 @@ public class Jobs implements Constants {
 	}
 
 	public static ScheduledFuture<?> scheduleAtFixedRate(Runnable job, long initialDelay, long period, TimeUnit unit) {
-		return executor().scheduleAtFixedRate(wrap(job), initialDelay, period, unit);
+		return scheduler().scheduleAtFixedRate(wrap(job), initialDelay, period, unit);
 	}
 
 	public static <T> ScheduledFuture<?> scheduleAtFixedRate(Callable<T> job, long initialDelay, long period,
@@ -71,7 +84,7 @@ public class Jobs implements Constants {
 	}
 
 	public static ScheduledFuture<?> scheduleWithFixedDelay(Runnable job, long initialDelay, long delay, TimeUnit unit) {
-		return executor().scheduleWithFixedDelay(wrap(job), initialDelay, delay, unit);
+		return scheduler().scheduleWithFixedDelay(wrap(job), initialDelay, delay, unit);
 	}
 
 	public static <T> ScheduledFuture<?> scheduleWithFixedDelay(Callable<T> job, long initialDelay, long delay,
@@ -79,12 +92,12 @@ public class Jobs implements Constants {
 		return scheduleWithFixedDelay(callbackJob(job, callback), initialDelay, delay, unit);
 	}
 
-	public static ScheduledFuture<?> execute(Runnable job) {
-		return schedule(job, 0, TimeUnit.MILLISECONDS);
+	public static void execute(Runnable job) {
+		executor().execute(wrap(job));
 	}
 
-	public static <T> ScheduledFuture<?> execute(Callable<T> job, Callback<T> callback) {
-		return execute(callbackJob(job, callback));
+	public static <T> void execute(Callable<T> job, Callback<T> callback) {
+		execute(callbackJob(job, callback));
 	}
 
 	public static Runnable wrap(Runnable job) {
