@@ -118,7 +118,7 @@ public class Scripting {
 			return;
 		}
 
-		if (result != null && !dollar.hasResult()) {
+		if (result != null && !dollar.hasResult() && Cls.isSimple(result)) {
 			dollar.result(result);
 		}
 	}
