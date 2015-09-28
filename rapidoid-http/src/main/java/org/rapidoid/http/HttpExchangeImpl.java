@@ -149,6 +149,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	private ClassLoader classLoader;
 	private SessionStore sessionStore;
+	private Handler handler;
 
 	private final Callable<Map<String, Object>> lazyData = new Callable<Map<String, Object>>() {
 		@Override
@@ -232,6 +233,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 		classLoader = null;
 		sessionStore = null;
+		handler = null;
 
 		session = null;
 		cookiepack = null;
@@ -756,6 +758,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		U.must(file.exists());
 		setContentType(MediaType.getByFileName(file.getAbsolutePath()));
 		write(file);
+		done();
 		return this;
 	}
 
@@ -764,6 +767,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		U.must(resource.exists());
 		setContentType(MediaType.getByFileName(resource.getShortName()));
 		write(resource.getBytes());
+		done();
 		return this;
 	}
 
@@ -771,6 +775,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	public synchronized HttpExchange sendFile(MediaType mediaType, byte[] bytes) {
 		setContentType(mediaType);
 		write(bytes);
+		done();
 		return this;
 	}
 
@@ -1315,7 +1320,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		}
 
 		pageTemplate().render(this.outputStream(), model, model());
-		return this;
+
+		return done();
 	}
 
 	@Override
@@ -1384,12 +1390,39 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		return this;
 	}
 
-	public String renderState() {
+	public synchronized String renderState() {
 		try {
 			return JSON.jacksonStringify(serializeLocals());
 		} catch (Exception e) {
 			Log.error("Cannot render state tag!", e);
 			return "{}";
+		}
+	}
+
+	@Override
+	public synchronized Runnable asAsyncJob(Handler handler) {
+		this.handler = handler;
+		return this.async();
+	}
+
+	@Override
+	public synchronized void run() {
+		runInAsyncContext();
+	}
+
+	private void runInAsyncContext() {
+		Object result;
+
+		try {
+			U.notNull(handler, "async handler");
+			result = handler.handle(this);
+		} catch (Throwable e) {
+			HttpProtocol.handleError(this, e);
+			return;
+		}
+
+		if (result != null && !(result instanceof HttpExchange)) {
+			HttpProtocol.processResponse(this, result);
 		}
 	}
 

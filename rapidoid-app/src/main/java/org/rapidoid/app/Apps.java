@@ -86,7 +86,7 @@ public class Apps {
 		OAuth.register(app);
 		HttpBuiltins.register(app);
 
-		app.getRouter().serve(new AppHandler());
+		app.getRouter().serve(new AsyncAppHandler());
 
 		return server.start();
 	}

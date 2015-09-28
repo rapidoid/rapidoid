@@ -25,7 +25,7 @@ import java.util.Map.Entry;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.AppHandler;
+import org.rapidoid.app.AsyncAppHandler;
 import org.rapidoid.config.Conf;
 import org.rapidoid.io.Res;
 import org.rapidoid.jackson.YAML;
@@ -44,7 +44,7 @@ public class AppTool {
 
 	public static WebApp createRootApp() {
 		RootWebApp app = WebAppGroup.root();
-		app.getRouter().generic(new AppHandler());
+		app.getRouter().generic(new AsyncAppHandler());
 
 		String menufile = "menu.yaml";
 		String firstMenuFile = Conf.configPath() + "/" + menufile;

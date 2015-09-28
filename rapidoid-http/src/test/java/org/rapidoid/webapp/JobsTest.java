@@ -1,6 +1,7 @@
 package org.rapidoid.webapp;
 
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
@@ -55,13 +56,13 @@ public class JobsTest extends TestCommons {
 				Ctxs.ctx().setApp(app);
 				ensureProperContext(user, app);
 
-				ScheduledFuture<?> future = Jobs.execute(new Runnable() {
+				ScheduledFuture<?> future = Jobs.schedule(new Runnable() {
 					@Override
 					public void run() {
 						ensureProperContext(user, app);
 						counter.incrementAndGet();
 					}
-				});
+				}, 100, TimeUnit.MILLISECONDS);
 
 				try {
 					future.get();

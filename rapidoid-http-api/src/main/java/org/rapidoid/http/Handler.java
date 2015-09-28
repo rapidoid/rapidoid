@@ -5,7 +5,7 @@ import org.rapidoid.annotation.Since;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-http-api
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

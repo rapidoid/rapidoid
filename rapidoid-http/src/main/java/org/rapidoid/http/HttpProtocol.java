@@ -219,23 +219,27 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			x.error(e);
 			x.completeResponse();
 		}
+
+		x.done();
 	}
 
 	public static void processResponse(HttpExchange xch, Object res) {
 
 		HttpExchangeImpl x = (HttpExchangeImpl) xch;
 
-		if (x.isLowLevelProcessing() || x.isAsync() || res == xch) {
+		if (x.isLowLevelProcessing() || res instanceof HttpExchange) {
 			return;
 		}
 
 		if (res != null) {
 			x.result(res);
 		} else {
-			if (!x.hasContentType()) {
-				x.html();
+			if (!x.isAsync()) {
+				if (!x.hasContentType()) {
+					x.html();
+				}
+				throw x.notFound();
 			}
-			throw x.notFound();
 		}
 	}
 

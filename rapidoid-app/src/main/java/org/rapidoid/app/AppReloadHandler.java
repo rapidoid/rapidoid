@@ -27,6 +27,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.io.CustomizableClassLoader;
 import org.rapidoid.io.IO;
 import org.rapidoid.lambda.Mapper;
@@ -62,7 +63,9 @@ public class AppReloadHandler implements Handler, Mapper<String, byte[]> {
 		CustomizableClassLoader classLoader = new CustomizableClassLoader(this,
 				(Predicate<String>) Predicate.ALWAYS_TRUE, true);
 
-		AppHandler handler = new AppHandler(classLoader);
+		((HttpExchangeImpl) x).setClassLoader(classLoader);
+
+		AppHandler handler = new AppHandler();
 		return handler.handle(x);
 	}
 

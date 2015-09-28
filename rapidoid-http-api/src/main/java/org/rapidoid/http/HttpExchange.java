@@ -35,7 +35,7 @@ import org.rapidoid.plugins.templates.ITemplate;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface HttpExchange {
+public interface HttpExchange extends Runnable {
 
 	/* REQUEST METHODS: */
 
@@ -265,5 +265,7 @@ public interface HttpExchange {
 	<T> T persister();
 
 	Object model();
+
+	Runnable asAsyncJob(Handler handler);
 
 }

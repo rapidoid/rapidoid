@@ -54,7 +54,7 @@ public class BufGroup {
 	}
 
 	public BufGroup(int factor) {
-		this(factor, false);
+		this(factor, true);
 	}
 
 	public Buf newBuf(String name) {

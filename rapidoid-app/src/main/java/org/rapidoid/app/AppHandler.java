@@ -38,9 +38,6 @@ import org.rapidoid.dispatch.impl.DispatchReqKind;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeImpl;
-import org.rapidoid.http.HttpExchangeInternals;
-import org.rapidoid.http.HttpNotFoundException;
-import org.rapidoid.io.CustomizableClassLoader;
 import org.rapidoid.io.Res;
 import org.rapidoid.jackson.JSON;
 import org.rapidoid.plugins.templates.Templates;
@@ -59,49 +56,12 @@ public class AppHandler implements Handler {
 
 	private static final Pattern DIRECTIVE = Pattern.compile("\\s*\\Q<!--#\\E\\s*(\\{.+\\})\\s*\\Q-->\\E\\s*");
 
-	private CustomizableClassLoader classLoader;
-
-	public AppHandler() {
-		this(null);
-	}
-
-	public AppHandler(CustomizableClassLoader classLoader) {
-		this.classLoader = classLoader;
-	}
-
 	@Override
 	public Object handle(final HttpExchange x) throws Exception {
-
-		HttpExchangeInternals xi = (HttpExchangeInternals) x;
-		xi.setClassLoader(classLoader);
-
-		Object result;
-
-		try {
-			result = processReq(x);
-		} catch (Exception e) {
-			if (UTILS.rootCause(e) instanceof HttpNotFoundException) {
-				throw U.rte(e);
-			} else {
-				// Log.error("Exception occured while processing request!", UTILS.rootCause(e));
-				throw U.rte(e);
-			}
-		}
-
-		return result;
+		return dispatch((HttpExchangeImpl) x);
 	}
 
-	public Object processReq(HttpExchange x) {
-		Object result = dispatch((HttpExchangeImpl) x);
-
-		if (result != null) {
-			return result;
-		} else {
-			throw x.notFound();
-		}
-	}
-
-	public Object dispatch(HttpExchangeImpl x) {
+	private Object dispatch(HttpExchangeImpl x) {
 
 		// static files
 
@@ -140,7 +100,7 @@ public class AppHandler implements Handler {
 
 		Map<String, Object> config = null;
 
-		// dispatch REST services or views (as POJO methods)
+		// dispatch REST services or PAGES (as POJO methods)
 
 		if (result == null) {
 			DispatchResult dres = doDispatch(dispatcher, new WebReq(x));
@@ -189,6 +149,12 @@ public class AppHandler implements Handler {
 	public static Object view(HttpExchange x, Object result, boolean hasEvent, Map<String, Object> config) {
 		// serve dynamic pages from file templates
 
+		// FIXME enable
+		// if (Cls.bool(config.get("raw"))) {
+		// x.html();
+		// return result;
+		// }
+
 		if (serveDynamicPage(x, result, hasEvent, config)) {
 			return x;
 		}
@@ -236,6 +202,7 @@ public class AppHandler implements Handler {
 		model.put("embedded", hasEvent || x.param("_embedded", null) != null);
 
 		// the @Page configuration overrides the previous
+
 		if (config != null) {
 			model.putAll(config);
 		}
