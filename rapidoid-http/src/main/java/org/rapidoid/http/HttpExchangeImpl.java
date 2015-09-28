@@ -321,7 +321,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			boolean completed = PARSER.parseBody(input(), headersKV, rBody, posted, files, helper());
 
 			if (!completed) {
-				Map<String, String> map = JSON.jacksonParse(body(), Map.class);
+				Map<String, String> map = JSON.parse(body(), Map.class);
 				_posted.putExtras(map);
 			}
 
@@ -1209,7 +1209,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private void beforeClosingHeaders() {
 		byte[] cpack = serializeCookiepack();
 		if (cpack != null) {
-			String json = U.mid(JSON.jacksonStringify(cpack), 1, -1);
+			String json = U.mid(JSON.stringify(cpack), 1, -1);
 			setCookie(COOKIEPACK_COOKIE, json, "path=/");
 		}
 	}
@@ -1392,7 +1392,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	public synchronized String renderState() {
 		try {
-			return JSON.jacksonStringify(serializeLocals());
+			return JSON.stringify(serializeLocals());
 		} catch (Exception e) {
 			Log.error("Cannot render state tag!", e);
 			return "{}";

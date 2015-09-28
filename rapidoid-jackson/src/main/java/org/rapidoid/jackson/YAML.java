@@ -1,9 +1,7 @@
 package org.rapidoid.jackson;
 
+import java.io.OutputStream;
 import java.util.Map;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
 
 import com.fasterxml.jackson.core.Base64Variants;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -32,8 +30,10 @@ import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
+/**
+ * @author Nikolche Mihajlovski
+ * @since 4.1.0
+ */
 public class YAML {
 
 	public static final ObjectMapper MAPPER = mapper();
@@ -54,9 +54,25 @@ public class YAML {
 		}
 	}
 
+	public static void stringify(Object value, OutputStream out) {
+		try {
+			MAPPER.writeValue(out, value);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static <T> T parse(String yaml, Class<T> valueType) {
 		try {
-			return MAPPER.readValue(yaml.getBytes(), valueType);
+			return MAPPER.readValue(yaml, valueType);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static <T> T parse(byte[] yaml, Class<T> valueType) {
+		try {
+			return MAPPER.readValue(yaml, valueType);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -64,7 +80,15 @@ public class YAML {
 
 	public static <T> T parse(String yaml, TypeReference<T> valueType) {
 		try {
-			return MAPPER.readValue(yaml.getBytes(), valueType);
+			return MAPPER.readValue(yaml, valueType);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static <T> T parse(byte[] yaml, TypeReference<T> valueType) {
+		try {
+			return MAPPER.readValue(yaml, valueType);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

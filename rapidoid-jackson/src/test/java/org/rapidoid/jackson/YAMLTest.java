@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
 import org.rapidoid.io.IO;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
@@ -34,8 +32,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 class Persons extends TypeReference<List<Person>> {}
 
-@Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
+/**
+ * @author Nikolche Mihajlovski
+ * @since 4.1.0
+ */
 public class YAMLTest extends TestCommons {
 
 	private final TypeReference<List<Person>> personList = new TypeReference<List<Person>>() {};

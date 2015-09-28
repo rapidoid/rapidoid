@@ -175,7 +175,7 @@ public class TagRenderer {
 			write(out, EMIT);
 			write(out, tag.cmd.name);
 			write(out, EMIT_SEP1);
-			JSON.jacksonStringify(tag.cmd.args, out);
+			JSON.stringify(tag.cmd.args, out);
 			write(out, EMIT_CLOSE);
 			write(out, DQUOTES);
 		}

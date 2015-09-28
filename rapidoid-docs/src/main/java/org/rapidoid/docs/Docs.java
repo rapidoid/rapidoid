@@ -187,7 +187,7 @@ public class Docs {
 		String verb = parts[0];
 		String uri = parts[1];
 
-		Map<String, Object> data = parts.length > 2 ? JSON.jacksonParse(parts[2], Map.class) : null;
+		Map<String, Object> data = parts.length > 2 ? JSON.parse(parts[2], Map.class) : null;
 		if (data != null) {
 			data.put(STATE, viewState);
 		}
@@ -201,7 +201,7 @@ public class Docs {
 			if ("GET".equalsIgnoreCase(verb)) {
 				result = new String(HTTP.get("http://localhost:8080" + uri2));
 			} else if ("POST".equalsIgnoreCase(verb)) {
-				String postData = JSON.jacksonStringify(data);
+				String postData = JSON.stringify(data);
 				result = new String(HTTP.post("http://localhost:8080" + uri2, null, postData));
 			}
 		} catch (Exception e) {
@@ -234,7 +234,7 @@ public class Docs {
 		if (data != null) {
 			// data.put(STATE, "...");
 			data.remove(STATE);
-			dataDesc = JSON.jacksonStringify(data);
+			dataDesc = JSON.stringify(data);
 		}
 		return U.map("verb", verb, "uri", uri, "result", result, "error", error, "data", dataDesc);
 	}

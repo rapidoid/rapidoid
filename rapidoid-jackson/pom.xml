@@ -29,17 +29,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-beany</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-log</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-test-commons</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-io</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

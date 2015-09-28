@@ -1,5 +1,6 @@
 package org.rapidoid.beany;
 
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -22,6 +23,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.Proxies;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.dates.Dates;
+import org.rapidoid.jackson.JSON;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
@@ -588,6 +590,42 @@ public class Beany {
 
 		B builder = Proxies.implement(handler, builderInterface);
 		return builder;
+	}
+
+	public static String toJSON(Object value) {
+		return JSON.stringify(serialize(value));
+	}
+
+	public static void toJSON(Object value, OutputStream out) {
+		JSON.stringify(Beany.serialize(value), out);
+	}
+
+	public static String save(Object value) {
+		Object ser = Beany.serialize(value);
+		Class<?> cls = value != null ? value.getClass() : null;
+		Map<String, Object> map = U.map("_", cls.getCanonicalName(), "v", ser);
+		return JSON.stringify(map);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Object load(String json) {
+		Map<String, Object> map = JSON.parseMap(json);
+		String clsName = (String) map.get("_");
+		Class<Object> type = Cls.getClassIfExists(clsName);
+		if (type == null) {
+			return null;
+		}
+
+		Object ser = map.get("v");
+
+		if (ser instanceof Map) {
+			Object value = Cls.newInstance(type);
+			Map<String, Object> props = (Map<String, Object>) ser;
+			Beany.update(value, props, false);
+			return value;
+		}
+
+		return ser;
 	}
 
 }
