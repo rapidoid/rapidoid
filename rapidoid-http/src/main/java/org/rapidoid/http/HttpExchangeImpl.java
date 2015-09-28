@@ -101,7 +101,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private int responseBodyPos;
 	private int responseContentLengthPos;
 	private boolean writesResponseBody;
-	private boolean responseHasContentType;
+	private MediaType responseContentType;
 	private int responseStartingPos;
 
 	private String path = null;
@@ -261,7 +261,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		writesResponseBody = false;
 		responseBodyPos = -1;
 		responseContentLengthPos = -1;
-		responseHasContentType = false;
+		responseContentType = null;
 		responses = null;
 		responseCode = -1;
 		redirectUrl = null;
@@ -581,7 +581,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		output().append(resp.bytes());
 		responseContentLengthPos = responseStartingPos + resp.contentLengthPos + 10;
 
-		responseHasContentType = false;
+		responseContentType = null;
 		writesResponseBody = false;
 		responseBodyPos = -1;
 
@@ -636,7 +636,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized HttpExchange setContentType(MediaType mediaType) {
-		U.must(!responseHasContentType, "Content type was already set!");
+		U.must(responseContentType == null, "Content type was already set!");
 
 		if (mediaType == null) {
 			mediaType = MediaType.BINARY;
@@ -645,7 +645,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		addHeader(HttpHeader.CONTENT_TYPE.getBytes(), mediaType.getBytes());
 
 		// this must be at the end of this method, because state might get restarted
-		responseHasContentType = true;
+		responseContentType = mediaType;
 
 		return this;
 	}
@@ -680,7 +680,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	public synchronized void ensureHeadersComplete() {
 		if (!writesResponseBody) {
 			beforeClosingHeaders();
-			if (!responseHasContentType) {
+			if (responseContentType == null) {
 				html();
 			}
 			writesResponseBody = true;
@@ -750,7 +750,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	public synchronized boolean hasContentType() {
-		return responseHasContentType;
+		return responseContentType != null;
+	}
+
+	public MediaType getResponseContentType() {
+		return responseContentType;
 	}
 
 	@Override
@@ -1253,7 +1257,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			if (!hasContentType()) {
 				json();
 			}
-			write((String) res);
+
+			if (U.eq(getResponseContentType(), MediaType.JSON_UTF_8)) {
+				writeJSON((String) res);
+			} else {
+				write((String) res);
+			}
 
 		} else if (res instanceof ByteBuffer) {
 			if (!hasContentType()) {
@@ -1272,7 +1281,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			if (!hasContentType()) {
 				json();
 			}
-			writeJSON(res);
+			if (U.eq(getResponseContentType(), MediaType.JSON_UTF_8)) {
+				writeJSON(res);
+			} else {
+				write("" + res);
+			}
 		}
 
 		done();
