@@ -29,7 +29,7 @@ import demo.taskplanner.model.Task;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-@Web("/tasks")
+@Web(url = "/tasks")
 public class TaskService extends CRUD<Task> {
 
 }

@@ -34,7 +34,7 @@ import demo.taskplanner.model.User;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-@Web("/user")
+@Web(url = "/user")
 public class UserService extends DAO<User> {
 
 	public Iterable<User> findByName(String search) {

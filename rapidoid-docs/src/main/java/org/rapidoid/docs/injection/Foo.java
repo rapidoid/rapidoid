@@ -24,10 +24,10 @@ import org.rapidoid.annotation.Web;
  * #L%
  */
 
-@Web("/foo")
+@Web(url = "/foo")
 public class Foo {
 
-	@Inject	// here
+	@Inject
 	public Bar bar;
 
 	private int count;

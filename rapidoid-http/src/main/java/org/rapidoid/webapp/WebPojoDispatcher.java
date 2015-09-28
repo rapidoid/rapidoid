@@ -101,7 +101,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 		Web web = Metadata.classAnnotation(component, Web.class);
 
 		if (web != null) {
-			return U.list(web.value());
+			return U.list(web.url());
 		} else {
 			return super.getComponentNames(component);
 		}
