@@ -110,8 +110,6 @@ public interface Req {
 
 	long requestId();
 
-	String resourceName();
-
 	/* STATE: */
 
 	String sessionId();

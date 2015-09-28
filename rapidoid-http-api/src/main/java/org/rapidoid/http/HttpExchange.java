@@ -30,6 +30,12 @@ import org.rapidoid.annotation.Since;
 @Since("2.0.0")
 public interface HttpExchange extends Req, Resp, Runnable {
 
+	/* REQUEST: */
+
+	String resourceName();
+
+	String verbAndResourceName();
+
 	/* RESPONSE: */
 
 	Map<String, String> errors();

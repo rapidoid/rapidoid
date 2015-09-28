@@ -66,10 +66,10 @@ public class Scripting {
 	}
 
 	private static CompiledScript script(HttpExchangeImpl x) {
-		String scriptName = x.isGetReq() ? x.resourceName() : x.verb().toUpperCase() + "_" + x.resourceName();
+		String scriptName = x.isGetReq() ? x.verbAndResourceName() : x.verb().toUpperCase() + "_" + x.resourceName();
 		String filename = scriptName + ".js";
-		String firstFile = Conf.dynamicPath() + "/" + filename;
-		String defaultFile = Conf.dynamicPathDefault() + "/" + filename;
+		String firstFile = Conf.rootPath() + "/" + filename;
+		String defaultFile = Conf.rootPathDefault() + "/" + filename;
 
 		Res res = Res.from(filename, true, firstFile, defaultFile);
 		if (!res.exists()) {

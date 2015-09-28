@@ -1318,6 +1318,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		return resourceName;
 	}
 
+	@Override
+	public synchronized String verbAndResourceName() {
+		return verb().toUpperCase() + "/" + resourceName();
+	}
+
 	public synchronized boolean resourceNameHasExtension() {
 		resourceName(); // make sure it is calculated
 		return resourceNameHasExtension;
