@@ -52,7 +52,7 @@ public class AppTool {
 		final Res menuRes = Res.from(menufile, true, firstMenuFile, defaultMenuFile).trackChanges();
 
 		final WebApp rootApp = app;
-		menuRes.getChangeListeners().add(new Runnable() {
+		menuRes.onChange("app tool", new Runnable() {
 			@Override
 			public void run() {
 				if (menuRes.exists()) {
@@ -70,7 +70,7 @@ public class AppTool {
 		String defaultAppFile = Conf.configPathDefault() + "/" + appfile;
 		final Res confRes = Res.from(appfile, true, firstAppFile, defaultAppFile).trackChanges();
 
-		confRes.getChangeListeners().add(new Runnable() {
+		confRes.onChange("app tool", new Runnable() {
 			@Override
 			public void run() {
 				if (confRes.exists()) {

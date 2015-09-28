@@ -79,7 +79,8 @@ public class Rapidoid {
 
 		System.out.println();
 		StatusPrinter.print(lc);
-		System.out.println();
+
+		Log.info("Rapidoid is ready.");
 
 		return app;
 	}

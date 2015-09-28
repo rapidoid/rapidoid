@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -61,7 +61,7 @@ public class Res {
 
 	private volatile Object attachment;
 
-	private final List<Runnable> changeListeners = U.synchronizedList();
+	private final Map<String, Runnable> changeListeners = U.synchronizedMap();
 
 	private Res(String shortName, Set<String> filenames) {
 		this.shortName = shortName;
@@ -201,8 +201,9 @@ public class Res {
 		U.must(exists(), "The resource '%s' doesn't exist! Path: %s", shortName, filenames);
 	}
 
-	public List<Runnable> getChangeListeners() {
-		return changeListeners;
+	public Res onChange(String name, Runnable listener) {
+		changeListeners.put(name, listener);
+		return this;
 	}
 
 	private void notifyChangeListeners() {
@@ -210,7 +211,7 @@ public class Res {
 			Log.info("Resource has changed, reloading...", "name", shortName);
 		}
 
-		for (Runnable listener : changeListeners) {
+		for (Runnable listener : changeListeners.values()) {
 			try {
 				listener.run();
 			} catch (Throwable e) {
