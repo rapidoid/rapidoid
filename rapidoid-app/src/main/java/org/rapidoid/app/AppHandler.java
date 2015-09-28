@@ -211,10 +211,8 @@ public class AppHandler implements Handler {
 		}
 
 		if (!Cls.bool(model.get("navbar"))) {
-			model.put("navbar", U.isEmpty(title));
+			model.put("navbar", !U.isEmpty(model.get("title")));
 		}
-
-		model.put("navbar", U.isEmpty(title));
 
 		if (hasEvent && x.param("_embedded", null) == null) {
 			serveEventResponse((HttpExchangeImpl) x, x.renderPageToHTML(model));
