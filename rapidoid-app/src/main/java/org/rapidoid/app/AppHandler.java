@@ -149,11 +149,10 @@ public class AppHandler implements Handler {
 	public static Object view(HttpExchange x, Object result, boolean hasEvent, Map<String, Object> config) {
 		// serve dynamic pages from file templates
 
-		// FIXME enable
-		// if (Cls.bool(config.get("raw"))) {
-		// x.html();
-		// return result;
-		// }
+		if (Cls.bool(config.get("raw"))) {
+			x.html();
+			return result;
+		}
 
 		if (serveDynamicPage(x, result, hasEvent, config)) {
 			return x;

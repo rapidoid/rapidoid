@@ -27,7 +27,6 @@ import java.util.Map;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
@@ -70,16 +69,37 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 
 	@Override
 	public Mustache compile(String name) {
-		String filename = IO.getRealOrDefaultFilename(name);
-		Log.debug("Compiling template", "name", filename);
-		return customCompile(filename);
+		return compileIfChanged(name, false);
+	}
+
+	private Mustache compileIfChanged(String filename, boolean partial) {
+
+		Mustache template = mustacheCache.getIfPresent(filename);
+
+		if (template == null) {
+
+			String desc = partial ? "partial" : "template";
+			Log.info("Compiling Mustache " + desc, "name", filename);
+
+			Res res = getResource(filename);
+			template = customCompile(filename, res);
+
+			res.onChange("mustache", new Runnable() {
+				@Override
+				public void run() {
+					invalidateCache();
+				}
+			}).trackChanges();
+
+			mustacheCache.put(filename, template);
+		}
+
+		return template;
 	}
 
 	@Override
 	public Mustache compilePartial(String name) {
-		String filename = IO.getRealOrDefaultFilename(name);
-		Log.debug("Compiling partial", "name", filename);
-		return customCompile(filename);
+		return compileIfChanged(name, true);
 	}
 
 	@Override
@@ -87,12 +107,12 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 		throw U.notExpected();
 	}
 
-	private Mustache customCompile(String filename) {
+	private Mustache customCompile(String filename, Res resource) {
 		Map<String, Mustache> cache = partialCache.get();
 		try {
 			Mustache mustache = cache.get(filename);
 			if (mustache == null) {
-				mustache = mc.compile(getReader(filename), filename, SM, EM);
+				mustache = mc.compile(resource.getReader(), filename, SM, EM);
 				cache.put(filename, mustache);
 				mustache.init();
 			}
@@ -108,16 +128,20 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 	}
 
 	public void invalidateCache() {
+		Log.info("Invalidating Mustache cache");
 		mustacheCache.invalidateAll();
 		lambdaCache.invalidateAll();
 	}
 
 	@Override
 	public Reader getReader(String resourceName) {
-		String filename = resourceName;
+		return getResource(resourceName).getReader();
+	}
+
+	private Res getResource(String filename) {
 		String firstFile = Conf.templatesPath() + "/" + filename;
 		String defaultFile = Conf.templatesPathDefault() + "/" + filename;
-		return Res.from(filename, true, firstFile, defaultFile).getReader();
+		return Res.from(filename, true, firstFile, defaultFile);
 	}
 
 }
