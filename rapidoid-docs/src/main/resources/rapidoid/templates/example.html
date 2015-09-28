@@ -1,52 +1,52 @@
-<!-- EXAMPLE (~n~) -->
+<!-- EXAMPLE {{n}} -->
 
 <div class="sep-example"></div>
 
-<div id="example(~n~)-title" class="row">
+<div id="example{{n}}-title" class="row">
 	<div class="col-md-12">
-		<div class="caption"><span class="badge badge-eg-num">(~nn~)</span> (~title~)</div>
+		<div class="caption"><span class="badge badge-eg-num">{{nn}}</span> {{title}}</div>
 	</div>
 </div>
 
-<div id="example(~n~)-body" class="row">
+<div id="example{{n}}-body" class="row">
 
-	<div id="example(~n~)-left" class="col-md-6">
-(~#snippets~)
-		<div id="example(~n~)-codedesc" class="eg_title">(~{desc}~)</div>
-		<pre id="example(~n~)-code" class="eg_code">
-(~{code}~)
+	<div id="example{{n}}-left" class="col-md-6">
+{{#snippets}}
+		<div id="example{{n}}-codedesc" class="eg_title">{{{desc}}}</div>
+		<pre id="example{{n}}-code" class="eg_code">
+{{{code}}}
 </pre>
-(~/snippets~)
+{{/snippets}}
 	</div>
 
-    <div id="example(~n~)-right" class="col-md-6">
-        <div id="example(~n~)-results" class="results">
-            (~#results~)
+    <div id="example{{n}}-right" class="col-md-6">
+        <div id="example{{n}}-results" class="results">
+            {{#results}}
             <div>
-                <span class="badge eg-(~verb~) eg-verb">(~verb~)</span> <span class="badge eg-uri">(~uri~)</span>
+                <span class="badge eg-{{verb}} eg-verb">{{verb}}</span> <span class="badge eg-uri">{{uri}}</span>
             </div>
-            (~#data~)
+            {{#data}}
             <div class="post-data">
-                <span class="label label-default eg-data">(~data~)</span>
+                <span class="label label-default eg-data">{{data}}</span>
             </div>
-            (~/data~)
+            {{/data}}
 
-(~#result~)
+{{#result}}
                 <div class="eg-result">
-<!-- EXAMPLE#(~n~) HTML STARTS HERE -->
-(~{result}~)
-<!-- EXAMPLE#(~n~) HTML END HERE -->
+<!-- EXAMPLE#{{n}} HTML STARTS HERE -->
+{{{result}}}
+<!-- EXAMPLE#{{n}} HTML END HERE -->
                 </div>
-(~/result~)
+{{/result}}
 
-(~#error~)
+{{#error}}
                 <div class="eg-error">
-<!-- EXAMPLE#(~n~) ERROR STARTS HERE -->
-(~{error}~)
-<!-- EXAMPLE#(~n~) ERROR END HERE -->
+<!-- EXAMPLE#{{n}} ERROR STARTS HERE -->
+{{{error}}}
+<!-- EXAMPLE#{{n}} ERROR END HERE -->
                 </div>
-(~/error~)
-            (~/results~)
+{{/error}}
+            {{/results}}
         </div>
     </div>
 

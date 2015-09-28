@@ -1,5 +1,5 @@
-(~^raw~)
-(~^embedded~)
+{{^raw}}
+{{^embedded}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,17 +8,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>(~title~)</title>
+<title>{{title}}</title>
 
-(~#full~)
-(~>page-full~)
-(~/full~)
+{{#full}}
+{{>page-full}}
+{{/full}}
 
-(~#maps~)
+{{#maps}}
 <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
-(~/maps~)
+{{/maps}}
 
-(~#dev~)
+{{#dev}}
 <script src="/jquery-2.1.4.min.js"></script>
 
 <script src="/bootstrap/js/bootstrap-3.3.5.min.js"></script>
@@ -29,8 +29,8 @@
 
 <script src="/rapidoid.min.js"></script>
 <link href="/rapidoid.min.css" rel="stylesheet">
-(~/dev~)
-(~^dev~)
+{{/dev}}
+{{^dev}}
 <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -41,27 +41,27 @@
 
 <script src="//cdn.jsdelivr.net/rapidoid/4.1.0/rapidoid.min.js"></script>
 <link href="//cdn.jsdelivr.net/rapidoid/4.1.0/rapidoid.min.css" rel="stylesheet">
-(~/dev~)
+{{/dev}}
 
 <script src="/app.js"></script>
 <link href="/app.css" rel="stylesheet">
 <link href="/img/favicon.png" rel="shortcut icon">
 <link href="bootstrap/css/theme-default.css" type="text/css" rel="stylesheet" />
 
-(~>page-head~)
-(~{head_extra}~)
+{{>page-head}}
+{{{head_extra}}}
 
-(~^error~)
+{{^error}}
 <script>
-window.__state = (~{req.renderState}~);
+window.__state = {{{req.renderState}}};
 </script>
-(~/error~)
+{{/error}}
 
 </head>
 
-(~>page-body~)
+{{>page-body}}
 
 </html>
-(~/embedded~)(~#embedded~)(~>page-embedded~)(~/embedded~)
-(~/raw~)
-(~#raw~)(~{content}~)(~/raw~)
+{{/embedded}}{{#embedded}}{{>page-embedded}}{{/embedded}}
+{{/raw}}
+{{#raw}}{{{content}}}{{/raw}}

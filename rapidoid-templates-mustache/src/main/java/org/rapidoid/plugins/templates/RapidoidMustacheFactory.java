@@ -41,9 +41,9 @@ import com.google.common.cache.LoadingCache;
 @Since("4.1.0")
 public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 
-	private static final String SM = "(~";
+	private static final String SM = "{{";
 
-	private static final String EM = "~)";
+	private static final String EM = "}}";
 
 	private volatile LoadingCache<String, Mustache> mustacheCache;
 
