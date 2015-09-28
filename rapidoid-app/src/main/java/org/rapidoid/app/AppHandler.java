@@ -116,6 +116,10 @@ public class AppHandler implements Handler {
 			}
 		}
 
+		if (config == null) {
+			config = U.map();
+		}
+
 		// serve dynamic pages from a script
 
 		if (result == null) {
