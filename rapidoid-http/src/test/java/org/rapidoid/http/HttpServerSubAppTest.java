@@ -94,6 +94,7 @@ public class HttpServerSubAppTest extends HttpTestCommons {
 			@Override
 			public Object handle(HttpExchange x) {
 				String id = AppCtx.app().getId();
+				x.plain();
 				return U.format("%s: id=%s, host=%s, uri=%s, ctx=%s, path=%s, subpath=%s, segments=%s", desc, id,
 						x.host(), x.uri(), x.home(), x.path(), x.subpath(), U.join(":", x.pathSegments()));
 			}

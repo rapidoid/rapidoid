@@ -79,10 +79,10 @@ public abstract class HttpTestCommons extends TestCommons {
 		server();
 
 		router.get("/echo", new Handler() {
-
 			@Override
 			public Object handle(HttpExchange h) throws Exception {
 				LowLevelHttpExchange x = (LowLevelHttpExchange) h;
+				x.plain();
 				return x.verb_().get() + ":" + x.path_().get() + ":" + x.subpath_().get() + ":" + x.query_().get();
 			}
 		});
@@ -99,7 +99,7 @@ public abstract class HttpTestCommons extends TestCommons {
 			@Override
 			public Object handle(HttpExchange x) {
 				Log.info("Uploaded files", "files", x.files().keySet());
-
+				x.plain();
 				return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.posted().get("a"), x.files()
 						.size(), Crypto.md5(x.files().get("f1")), Crypto.md5(x.files().get("f2")), Crypto.md5(U.or(x
 						.files().get("f3"), new byte[0])));
@@ -109,6 +109,7 @@ public abstract class HttpTestCommons extends TestCommons {
 		router.serve(new Handler() {
 			@Override
 			public Object handle(HttpExchange x) {
+				x.html();
 				return U.join(":", x.verb(), x.path(), x.subpath(), x.query());
 			}
 		});
