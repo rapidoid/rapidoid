@@ -1447,4 +1447,24 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		}
 	}
 
+	@Override
+	public String dbQuery() {
+		String verbResName = verbAndResourceName();
+		String resName = verbResName + ".(sql|cql|jpql)";
+
+		String concrete = Conf.rootPath() + "/" + verbResName;
+		String fallback = Conf.rootPathDefault() + "/" + verbResName;
+
+		String firstSQL = concrete + ".sql";
+		String firstCQL = concrete + ".cql";
+		String firstJPQL = concrete + ".jpql";
+
+		String defaultSQL = fallback + ".sql";
+		String defaultCQL = fallback + ".cql";
+		String defaultJPQL = fallback + ".jpql";
+
+		Res res = Res.from(resName, true, firstSQL, firstCQL, firstJPQL, defaultSQL, defaultCQL, defaultJPQL);
+		return res.getContent();
+	}
+
 }

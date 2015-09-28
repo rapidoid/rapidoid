@@ -62,4 +62,6 @@ public interface HttpExchange extends Req, Resp, Runnable {
 
 	Runnable asAsyncJob(Handler handler);
 
+	String dbQuery();
+
 }

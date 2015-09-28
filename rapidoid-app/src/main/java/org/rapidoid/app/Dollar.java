@@ -107,6 +107,11 @@ public class Dollar {
 		this.bindings = bindings;
 	}
 
+	@Override
+	public String toString() {
+		return "$";
+	}
+
 	public List<Map<String, Object>> sql(String sql, Object[] args) {
 		if (sql.trim().toLowerCase().startsWith("select ")) {
 			return jdbc.query(sql, args);
@@ -154,9 +159,8 @@ public class Dollar {
 		return hasResult;
 	}
 
-	@Override
-	public String toString() {
-		return "$";
+	public String query() {
+		return req.dbQuery();
 	}
 
 }
