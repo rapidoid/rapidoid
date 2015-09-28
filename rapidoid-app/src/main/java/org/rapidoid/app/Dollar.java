@@ -154,4 +154,9 @@ public class Dollar {
 		return hasResult;
 	}
 
+	@Override
+	public String toString() {
+		return "$";
+	}
+
 }

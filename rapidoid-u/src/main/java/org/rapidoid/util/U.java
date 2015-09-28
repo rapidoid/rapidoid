@@ -543,13 +543,11 @@ public class U {
 	}
 
 	public static RuntimeException rte(String message) {
-		String threadInfo = "[" + Thread.currentThread().getName() + "] ";
-		return new RuntimeException(threadInfo + message);
+		return new RuntimeException(message);
 	}
 
 	public static RuntimeException rte(String message, Throwable cause) {
-		String threadInfo = "[" + Thread.currentThread().getName() + "] ";
-		return new RuntimeException(threadInfo + message, cause);
+		return new RuntimeException(message, cause);
 	}
 
 	public static RuntimeException rte(Throwable cause) {

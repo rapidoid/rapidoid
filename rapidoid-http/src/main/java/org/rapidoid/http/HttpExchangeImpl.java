@@ -817,9 +817,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			String title = U.or(response, "Internal server error!");
 
 			if (err != null) {
-				String details = Conf.dev() ? HTMLHelpers.stackTrace(title, err) : "";
+				String details = err.getMessage();
+
+				details = U.trimr(details, "(<Unknown Source>#1)");
+
 				renderPage(U.map("title", title, "error", true, "code", httpResponseCode, "navbar", !U.isEmpty(title),
-						"content", details));
+						"details", details));
 			} else {
 				renderPage(U.map("title", title, "code", httpResponseCode, "error", httpResponseCode >= 400));
 			}
