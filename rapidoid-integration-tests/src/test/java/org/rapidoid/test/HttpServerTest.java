@@ -40,12 +40,12 @@ public class HttpServerTest extends IntegrationTestCommons {
 		WebApp app = WebAppGroup.openRootContext();
 
 		app.getRouter().get("/", Handlers.html("home"));
-		app.getRouter().generic(Handlers.json("123"));
+		app.getRouter().generic(Handlers.json("abc"));
 
 		HTTPServer server = HTTP.server().applications(WebAppGroup.main()).build().start();
 
 		eq(new String(HTTP.get("http://localhost:8080/")), "home");
-		eq(new String(HTTP.post("http://localhost:8080/")), "123");
+		eq(new String(HTTP.post("http://localhost:8080/")), "\"abc\"");
 
 		server.shutdown();
 		Ctxs.close();
