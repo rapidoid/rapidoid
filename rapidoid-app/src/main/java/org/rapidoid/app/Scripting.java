@@ -36,8 +36,10 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeImpl;
+import org.rapidoid.http.HttpProtocol;
 import org.rapidoid.io.Res;
 import org.rapidoid.job.Jobs;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 import org.rapidoid.webapp.AppCtx;
 
@@ -107,10 +109,17 @@ public class Scripting {
 
 		bindings.put("$", dollar);
 
+		Object result;
 		try {
-			script.eval(new SimpleBindings(bindings));
-		} catch (ScriptException e) {
-			throw U.rte("Script execution error!", e);
+			result = script.eval(new SimpleBindings(bindings));
+		} catch (Throwable e) {
+			Log.error("Script error", e);
+			HttpProtocol.handleError(x, e);
+			return;
+		}
+
+		if (result != null && !dollar.hasResult()) {
+			dollar.result(result);
 		}
 	}
 
@@ -184,7 +193,7 @@ public class Scripting {
 
 		for (Prop prop : props) {
 			Object val = prop.get(dollar);
-			desc.put(prop.getName(), val.getClass().getSimpleName());
+			desc.put(prop.getName(), val != null ? val.getClass().getSimpleName() : "NULL");
 		}
 
 		return GUI.multi(GUI.h2("The $ properties:"), GUI.grid(desc), GUI.h2("Bindings:"), GUI.grid(dollar.bindings));

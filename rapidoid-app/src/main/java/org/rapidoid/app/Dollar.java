@@ -100,6 +100,8 @@ public class Dollar {
 
 	public final Map<String, Object> bindings;
 
+	private volatile boolean hasResult = false;
+
 	public Dollar(HttpExchange x, Map<String, Object> bindings) {
 		this.req = x;
 		this.bindings = bindings;
@@ -144,7 +146,12 @@ public class Dollar {
 	}
 
 	public void result(Object result) {
+		hasResult = true;
 		Scripting.onScriptResult(req, result);
+	}
+
+	public boolean hasResult() {
+		return hasResult;
 	}
 
 }
