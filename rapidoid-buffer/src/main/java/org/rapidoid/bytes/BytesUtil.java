@@ -586,4 +586,38 @@ public class BytesUtil implements Constants {
 		return true;
 	}
 
+	public static int getIntPrefixOf(Bytes bytes, int fromPos, int toPos) {
+		byte b0, b1, b2, b3;
+
+		int p = fromPos;
+		if (p <= toPos) {
+			b0 = bytes.get(p);
+		} else {
+			return 0;
+		}
+
+		p++;
+		if (p <= toPos) {
+			b1 = bytes.get(p);
+		} else {
+			return UTILS.intFrom(b0, BYTE_0, BYTE_0, BYTE_0);
+		}
+
+		p++;
+		if (p <= toPos) {
+			b2 = bytes.get(p);
+		} else {
+			return UTILS.intFrom(b0, b1, BYTE_0, BYTE_0);
+		}
+
+		p++;
+		if (p <= toPos) {
+			b3 = bytes.get(p);
+		} else {
+			return UTILS.intFrom(b0, b1, b2, BYTE_0);
+		}
+
+		return UTILS.intFrom(b0, b1, b2, b3);
+	}
+
 }
