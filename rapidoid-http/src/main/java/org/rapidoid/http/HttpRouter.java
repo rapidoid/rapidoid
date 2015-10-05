@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
+import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.Range;
 import org.rapidoid.log.Log;
@@ -69,11 +70,14 @@ public class HttpRouter implements Router {
 	}
 
 	private long hash(String action, String path) {
-		return action.charAt(0) * 17 + path.length() * 19 + path.charAt(path.length() - 1);
+		Bytes bytes = BytesUtil.from(action + " " + path);
+		Range actionRange = Range.fromTo(0, action.length());
+		Range pathRange = Range.fromTo(action.length() + 1, bytes.limit());
+		return hash(bytes, actionRange, pathRange);
 	}
 
-	private long hash(Buf buf, Range action, Range path) {
-		return buf.get(action.start) * 17 + path.length * 19 + buf.get(path.last());
+	private long hash(Bytes bytes, Range action, Range path) {
+		return bytes.get(action.start) * 17 + action.length * 19 + action.length;
 	}
 
 	@Override
@@ -83,7 +87,7 @@ public class HttpRouter implements Router {
 	}
 
 	public Handler findHandler(Buf buf, Range action, Range path) {
-		long hash = hash(buf, action, path);
+		long hash = hash(buf.bytes(), action, path);
 
 		SimpleList<Route> candidates = routes.get(hash);
 
@@ -114,7 +118,7 @@ public class HttpRouter implements Router {
 
 		// serveStaticFileIfExists(x, buf, path);
 
-		long hash = hash(buf, action, path);
+		long hash = hash(buf.bytes(), action, path);
 
 		synchronized (this) {
 
