@@ -159,11 +159,11 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	private boolean processNext(RapidoidConnection conn, boolean initial) {
 
 		if (initial) {
-			conn.log("<< INIT >>");
+			// conn.log("<< INIT >>");
 
 			conn.requestId = -1;
 		} else {
-			conn.log("<< PROCESS >>");
+			// conn.log("<< PROCESS >>");
 			U.must(conn.input().hasRemaining());
 
 			conn.requestId = helper.requestIdGen;
