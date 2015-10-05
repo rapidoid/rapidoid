@@ -115,9 +115,7 @@ public class KeyValueRanges {
 		return map;
 	}
 
-	public Map<String, String> toMap(Buf src, boolean urlDecodeKeys, boolean urlDecodeVals) {
-		Map<String, String> map = U.map();
-
+	public void toMap(Buf src, boolean urlDecodeKeys, boolean urlDecodeVals, Map<String, String> dest) {
 		for (int i = 0; i < count; i++) {
 			String key = keys[i].str(src.bytes());
 			String val = values[i].str(src.bytes());
@@ -129,9 +127,13 @@ public class KeyValueRanges {
 				val = UTILS.urlDecode(val);
 			}
 
-			map.put(key, val);
+			dest.put(key, val);
 		}
+	}
 
+	public Map<String, String> toMap(Buf src, boolean urlDecodeKeys, boolean urlDecodeVals) {
+		Map<String, String> map = U.map();
+		toMap(src, urlDecodeKeys, urlDecodeVals, map);
 		return map;
 	}
 

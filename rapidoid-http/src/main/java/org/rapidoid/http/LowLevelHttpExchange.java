@@ -59,8 +59,6 @@ public interface LowLevelHttpExchange extends HttpExchange {
 
 	MultiData cookies_();
 
-	MultiData posted_();
-
 	BinaryMultiData files_();
 
 	LowLevelHttpExchange send();

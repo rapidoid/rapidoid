@@ -69,17 +69,41 @@ public class HttpRouter implements Router {
 	}
 
 	private long hash(String action, String path) {
-		return action.charAt(0) * 17 + action.length() * 19 + path.charAt(0);
+		return action.charAt(0) * 17 + path.length() * 19 + path.charAt(path.length() - 1);
 	}
 
 	private long hash(Buf buf, Range action, Range path) {
-		return buf.get(action.start) * 17 + action.length * 19 + buf.get(path.start);
+		return buf.get(action.start) * 17 + path.length * 19 + buf.get(path.last());
 	}
 
 	@Override
 	public void dispatch(HttpExchangeImpl x) {
 		Handler handler = findHandler(x);
 		handle(handler, x);
+	}
+
+	public Handler findHandler(Buf buf, Range action, Range path) {
+		long hash = hash(buf, action, path);
+
+		SimpleList<Route> candidates = routes.get(hash);
+
+		if (candidates != null) {
+
+			for (int i = 0; i < candidates.size(); i++) {
+				Route route = candidates.get(i);
+
+				if (BytesUtil.matches(buf.bytes(), action, route.action, true)
+						&& BytesUtil.startsWith(buf.bytes(), path, route.path, true)) {
+
+					int pos = path.start + route.path.length;
+					if (path.limit() == pos || buf.get(pos) == '/') {
+						return route.handler;
+					}
+				}
+			}
+		}
+
+		return null;
 	}
 
 	private Handler findHandler(HttpExchangeImpl x) {

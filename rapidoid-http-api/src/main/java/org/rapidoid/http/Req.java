@@ -67,11 +67,11 @@ public interface Req {
 
 	String cookie(@P("name") String name, @P("defaultValue") String defaultValue);
 
-	Map<String, String> posted();
+	Map<String, Object> posted();
 
-	String posted(@P("name") String name);
+	<T extends Serializable> T posted(@P("name") String name);
 
-	String posted(@P("name") String name, @P("defaultValue") String defaultValue);
+	<T extends Serializable> T posted(@P("name") String name, @P("defaultValue") T defaultValue);
 
 	Map<String, byte[]> files();
 

@@ -137,8 +137,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	private final MultiData _params;
 	private final MultiData _headers;
 	private final MultiData _cookies;
-	private final MultiData _posted;
 	private final BinaryMultiData _files;
+
+	private volatile Map<String, Object> postedData;
 
 	private int responseCode;
 	private String redirectUrl;
@@ -190,7 +191,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		this._params = multiData(params);
 		this._headers = multiData(headersKV);
 		this._cookies = multiData(cookies);
-		this._posted = multiData(posted);
 		this._files = binaryMultiData(files);
 
 		reset();
@@ -225,6 +225,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		path = null;
 		home = "/";
 
+		postedData = null;
+
 		parsedParams = false;
 		parsedHeaders = false;
 		parsedBody = false;
@@ -251,7 +253,6 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		_params.reset();
 		_headers.reset();
 		_cookies.reset();
-		_posted.reset();
 		_files.reset();
 
 		resetResponse();
@@ -475,18 +476,21 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public synchronized Map<String, String> posted() {
-		return posted_().get();
+	public synchronized Map<String, Object> posted() {
+		doParseBody();
+		return postedData;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized String posted(String name) {
-		return U.notNull(posted_().get(name), "POSTED[%s]", name);
+	public synchronized <T extends Serializable> T posted(String name) {
+		return (T) U.notNull(posted().get(name), "POSTED[%s]", name);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized String posted(String name, String defaultValue) {
-		return U.or(posted_().get(name), defaultValue);
+	public synchronized <T extends Serializable> T posted(String name, T defaultValue) {
+		return (T) U.or(posted().get(name), defaultValue);
 	}
 
 	@Override
