@@ -175,11 +175,13 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 	public synchronized TCPServer shutdown() {
 		stopLoop();
 
-		for (RapidoidWorker worker : ioWorkers) {
-			worker.stopLoop();
+		if (ioWorkers != null) {
+			for (RapidoidWorker worker : ioWorkers) {
+				worker.stopLoop();
+			}
 		}
 
-		if ((serverSocketChannel.isOpen()) && (selector.isOpen())) {
+		if (serverSocketChannel != null && selector != null && serverSocketChannel.isOpen() && selector.isOpen()) {
 			try {
 				selector.close();
 				serverSocketChannel.close();
