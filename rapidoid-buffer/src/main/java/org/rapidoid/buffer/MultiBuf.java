@@ -806,20 +806,40 @@ public class MultiBuf implements Buf, Constants {
 	public int putNumAsText(int position, long n, boolean forward) {
 		assert invariant(true);
 
-		int direction = forward ? 0 : -1;
+		boolean appending;
+		int direction;
+
+		if (forward) {
+			direction = 0;
+			appending = position == size();
+		} else {
+			direction = -1;
+			appending = false;
+		}
 
 		int space;
 
 		if (n >= 0) {
 			if (n < 10) {
-				put(position, (byte) (n + '0'));
+				if (appending) {
+					append((byte) (n + '0'));
+				} else {
+					put(position, (byte) (n + '0'));
+				}
 				space = 1;
+
 			} else if (n < 100) {
 				long dig1 = n / 10;
 				long dig2 = n % 10;
-				put(position + direction, (byte) (dig1 + '0'));
-				put(position + direction + 1, (byte) (dig2 + '0'));
+				if (appending) {
+					append((byte) (dig1 + '0'));
+					append((byte) (dig2 + '0'));
+				} else {
+					put(position + direction, (byte) (dig1 + '0'));
+					put(position + direction + 1, (byte) (dig2 + '0'));
+				}
 				space = 2;
+
 			} else {
 				int digitsN = (int) Math.ceil(Math.log10(n + 1));
 
@@ -831,8 +851,11 @@ public class MultiBuf implements Buf, Constants {
 				while (true) {
 					long digit = n % 10;
 					byte dig = (byte) (digit + 48);
-					put(pos--, dig);
-
+					if (appending) {
+						append(dig);
+					} else {
+						put(pos--, dig);
+					}
 					if (n < 10) {
 						break;
 					}
