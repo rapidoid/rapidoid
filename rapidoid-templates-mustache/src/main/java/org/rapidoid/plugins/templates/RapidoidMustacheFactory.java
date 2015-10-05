@@ -81,7 +81,7 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 			String desc = partial ? "partial" : "template";
 			Log.info("Compiling Mustache " + desc, "name", filename);
 
-			Res res = getResource(filename);
+			Res res = getResource(filename, partial);
 			template = customCompile(filename, res);
 
 			res.onChange("mustache", new Runnable() {
@@ -135,12 +135,13 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 
 	@Override
 	public Reader getReader(String resourceName) {
-		return getResource(resourceName).getReader();
+		return getResource(resourceName, false).getReader();
 	}
 
-	private Res getResource(String filename) {
-		String firstFile = Conf.templatesPath() + "/" + filename;
-		String defaultFile = Conf.templatesPathDefault() + "/" + filename;
+	private Res getResource(String filename, boolean partial) {
+		String sub = partial ? "/partials/" : "/templates/";
+		String firstFile = Conf.rootPath() + sub + filename;
+		String defaultFile = Conf.rootPathDefault() + sub + filename;
 		return Res.from(filename, true, firstFile, defaultFile);
 	}
 

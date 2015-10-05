@@ -34,7 +34,6 @@ public class Conf {
 	private static String staticPath = staticPathDefault();
 	private static String dynamicPath = dynamicPathDefault();
 	private static String configPath = configPathDefault();
-	private static String templatesPath = templatesPathDefault();
 
 	public static synchronized void args(String... args) {
 		init(args, (Object[]) null);
@@ -80,8 +79,6 @@ public class Conf {
 			setStaticPath(value.toString());
 		} else if (name.equals("dynamic")) {
 			setDynamicPath(value.toString());
-		} else if (name.equals("templates")) {
-			setTemplatesPath(value.toString());
 		} else if (name.equals("config")) {
 			setConfigPath(value.toString());
 		}
@@ -232,14 +229,6 @@ public class Conf {
 		return dynamicPath;
 	}
 
-	public static String templatesPathDefault() {
-		return rootPathDefault() + "/templates";
-	}
-
-	public static String templatesPath() {
-		return templatesPath;
-	}
-
 	private static String cleanPath(String path) {
 		if (path.endsWith("/") || path.endsWith("\\")) {
 			path = path.substring(0, path.length() - 1);
@@ -257,7 +246,6 @@ public class Conf {
 		setStaticPath(Conf.rootPath + "/static");
 		setDynamicPath(Conf.rootPath + "/dynamic");
 		setConfigPath(Conf.rootPath);
-		setTemplatesPath(Conf.rootPath + "/templates");
 	}
 
 	public static void setStaticPath(String staticPath) {
@@ -273,11 +261,6 @@ public class Conf {
 	public static void setConfigPath(String configPath) {
 		Log.info("Setting 'config' application path", "path", configPath);
 		Conf.configPath = cleanPath(configPath);
-	}
-
-	public static void setTemplatesPath(String templatesPath) {
-		Log.info("Setting 'templates' application path", "path", templatesPath);
-		Conf.templatesPath = cleanPath(templatesPath);
 	}
 
 }
