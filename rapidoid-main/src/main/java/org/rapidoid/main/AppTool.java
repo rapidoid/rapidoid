@@ -56,7 +56,15 @@ public class AppTool {
 			@Override
 			public void run() {
 				if (menuRes.exists()) {
-					Object menuData = YAML.parse(menuRes.getContent(), Object.class);
+					Object menuData;
+					String menuYaml = menuRes.getContent().trim();
+
+					if (!U.isEmpty(menuYaml)) {
+						menuData = YAML.parse(menuYaml, Object.class);
+					} else {
+						menuData = U.map();
+					}
+
 					AppMenu menu = AppMenu.from(menuData);
 					rootApp.setMenu(menu);
 				}
