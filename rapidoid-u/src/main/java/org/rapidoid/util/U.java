@@ -511,6 +511,30 @@ public class U {
 		return or(s, "");
 	}
 
+	public static boolean safe(Boolean b) {
+		return or(b, false);
+	}
+
+	public static int safe(Integer num) {
+		return or(num, 0);
+	}
+
+	public static long safe(Long num) {
+		return or(num, 0L);
+	}
+
+	public static byte safe(Byte num) {
+		return or(num, (byte) 0);
+	}
+
+	public static float safe(Float num) {
+		return or(num, 0.0f);
+	}
+
+	public static double safe(Double num) {
+		return or(num, 0.0);
+	}
+
 	public static Object[] safe(Object[] arr) {
 		return or(arr, EMPTY_ARRAY);
 	}
@@ -981,6 +1005,19 @@ public class U {
 
 		Compilable compilable = (Compilable) engine;
 		return compilable.compile(js);
+	}
+
+	public static <T> boolean isIn(T value, T... candidates) {
+		for (T candidate : candidates) {
+			if (U.eq(value, candidate)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static <T> Is<T> is(T value) {
+		return new Is<T>(value);
 	}
 
 }

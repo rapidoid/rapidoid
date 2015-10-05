@@ -288,4 +288,22 @@ public class UTest extends TestCommons {
 		eq(res1, "Hey");
 	}
 
+	@Test
+	public void testIsIn() {
+		isTrue(U.is(null).in(null, ""));
+		isTrue(U.is(null).in("x", null));
+		isFalse(U.is(null).in("x", 123));
+
+		isFalse(U.is("a").in("x", "sd"));
+		isTrue(U.is("a").in("a", "b"));
+		isTrue(U.is("a").in("x", "a"));
+	}
+
+	@Test
+	public void testSafe() {
+		eq(U.safe(3), 3);
+
+		eq(U.safe((Long) null), 0L);
+	}
+
 }
