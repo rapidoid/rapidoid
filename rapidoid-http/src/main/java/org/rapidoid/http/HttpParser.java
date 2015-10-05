@@ -20,6 +20,8 @@ package org.rapidoid.http;
  * #L%
  */
 
+import java.util.Map;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
@@ -28,6 +30,7 @@ import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
+import org.rapidoid.jackson.JSON;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.Constants;
@@ -405,6 +408,21 @@ public class HttpParser implements Constants {
 		multipartBoundary.reset();
 
 		return false;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void parsePosted(Buf input, KeyValueRanges headersKV, Range rBody, KeyValueRanges posted,
+			KeyValueRanges files, RapidoidHelper helper, Map<String, Object> dest) {
+
+		boolean completed = parseBody(input, headersKV, rBody, posted, files, helper);
+
+		Map<String, String> urlEncodedParamsDest = U.cast(dest);
+		posted.toMap(input, true, true, urlEncodedParamsDest);
+
+		if (!completed) {
+			Map<String, Object> jsonData = JSON.parse(input.get(rBody), Map.class);
+			dest.putAll(jsonData);
+		}
 	}
 
 }

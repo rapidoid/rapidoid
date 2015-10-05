@@ -315,30 +315,18 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public synchronized MultiData posted_() {
-		if (!parsedBody) {
-			boolean completed = PARSER.parseBody(input(), headersKV, rBody, posted, files, helper());
-
-			if (!completed) {
-				Map<String, String> map = JSON.parse(body(), Map.class);
-				_posted.putExtras(map);
-			}
-
-			parsedBody = true;
-		}
-
-		return _posted;
+	public synchronized BinaryMultiData files_() {
+		doParseBody();
+		return _files;
 	}
 
-	@Override
-	public synchronized BinaryMultiData files_() {
+	private void doParseBody() {
 		if (!parsedBody) {
-			PARSER.parseBody(input(), headersKV, rBody, posted, files, helper());
 			parsedBody = true;
-		}
 
-		return _files;
+			postedData = U.map();
+			PARSER.parsePosted(input(), headersKV, rBody, posted, files, helper(), postedData);
+		}
 	}
 
 	public synchronized Data subpath_() {
