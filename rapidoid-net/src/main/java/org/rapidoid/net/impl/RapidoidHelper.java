@@ -55,6 +55,16 @@ public class RapidoidHelper {
 
 	public final KeyValueRanges pairs = new KeyValueRanges(100);
 
+	public final KeyValueRanges pairs1 = new KeyValueRanges(100);
+
+	public final KeyValueRanges pairs2 = new KeyValueRanges(100);
+
+	public final KeyValueRanges pairs3 = new KeyValueRanges(100);
+
+	public final KeyValueRanges pairs4 = new KeyValueRanges(100);
+
+	public final KeyValueRanges pairs5 = new KeyValueRanges(100);
+
 	public final Ranges ranges1 = new Ranges(100);
 
 	public final Ranges ranges2 = new Ranges(100);
