@@ -103,6 +103,11 @@ public class Res {
 		return bytes;
 	}
 
+	public byte[] getBytesOrNull() {
+		loadResource();
+		return bytes;
+	}
+
 	protected void loadResource() {
 		// micro-caching the file content, expires after 1 second
 		if (U.time() - lastUpdatedOn >= 500) {
