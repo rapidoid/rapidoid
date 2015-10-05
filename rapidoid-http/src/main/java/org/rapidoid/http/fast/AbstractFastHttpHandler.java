@@ -1,8 +1,8 @@
-package org.rapidoid.demo.http;
+package org.rapidoid.http.fast;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,30 +20,21 @@ package org.rapidoid.demo.http;
  * #L%
  */
 
-import java.util.concurrent.Callable;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.http.On;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class Main {
+@Since("4.3.0")
+public abstract class AbstractFastHttpHandler implements FastHttpHandler {
 
-	public static void main(String[] args) {
-		Conf.init(args);
+	@Override
+	public boolean needsParams() {
+		return false;
+	}
 
-		On.get("/plaintext").plain("Hello world!");
-
-		On.get("/json").json(new Callable<Object>() {
-			@Override
-			public Object call() throws Exception {
-				return new Msg("Hello, World!");
-			}
-		});
-
-		On.listen(8080);
+	@Override
+	public boolean needsHeadersAndCookies() {
+		return false;
 	}
 
 }

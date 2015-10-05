@@ -1,8 +1,8 @@
-package org.rapidoid.demo.http;
+package org.rapidoid.http.fast;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,30 +20,32 @@ package org.rapidoid.demo.http;
  * #L%
  */
 
-import java.util.concurrent.Callable;
+import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.http.On;
+import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class Main {
+@Since("4.3.0")
+public class FastStaticHttpHandler extends AbstractFastHttpHandler {
 
-	public static void main(String[] args) {
-		Conf.init(args);
+	private final FastHttp http;
 
-		On.get("/plaintext").plain("Hello world!");
+	private final byte[] contentType;
 
-		On.get("/json").json(new Callable<Object>() {
-			@Override
-			public Object call() throws Exception {
-				return new Msg("Hello, World!");
-			}
-		});
+	private final byte[] response;
 
-		On.listen(8080);
+	public FastStaticHttpHandler(FastHttp http, byte[] contentType, byte[] response) {
+		this.http = http;
+		this.contentType = contentType;
+		this.response = response;
+	}
+
+	@Override
+	public boolean handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
+		http.write200(ctx, isKeepAlive, contentType, response);
+		return true;
 	}
 
 }

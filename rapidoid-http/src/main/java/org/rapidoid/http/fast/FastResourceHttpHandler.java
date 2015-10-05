@@ -1,8 +1,8 @@
-package org.rapidoid.demo.http;
+package org.rapidoid.http.fast;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,30 +20,39 @@ package org.rapidoid.demo.http;
  * #L%
  */
 
-import java.util.concurrent.Callable;
+import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.http.On;
+import org.rapidoid.io.Res;
+import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class Main {
+@Since("4.3.0")
+public class FastResourceHttpHandler extends AbstractFastHttpHandler {
 
-	public static void main(String[] args) {
-		Conf.init(args);
+	private final FastHttp http;
 
-		On.get("/plaintext").plain("Hello world!");
+	private final byte[] contentType;
 
-		On.get("/json").json(new Callable<Object>() {
-			@Override
-			public Object call() throws Exception {
-				return new Msg("Hello, World!");
-			}
-		});
+	private final Res resource;
 
-		On.listen(8080);
+	public FastResourceHttpHandler(FastHttp http, byte[] contentType, Res resource) {
+		this.http = http;
+		this.contentType = contentType;
+		this.resource = resource;
+	}
+
+	@Override
+	public boolean handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
+		byte[] bytes = resource.getBytesOrNull();
+
+		if (bytes != null) {
+			http.write200(ctx, isKeepAlive, contentType, bytes);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
