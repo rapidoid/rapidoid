@@ -53,6 +53,10 @@ public class Rapidoid {
 		return initAndStart(app, args, config);
 	}
 
+	public static synchronized boolean isInitialized() {
+		return initialized;
+	}
+
 	private static WebApp initAndStart(WebApp app, String[] args, Object... config) {
 		Log.info("Starting Rapidoid...");
 		U.must(!initialized, "Already initialized!");
@@ -63,7 +67,7 @@ public class Rapidoid {
 		// print internal state
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 
-		Conf.args(args, config);
+		Conf.init(args, config);
 
 		Log.info("Working directory is: " + System.getProperty("user.dir"));
 

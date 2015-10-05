@@ -35,6 +35,7 @@ import org.rapidoid.app.TransactionInterceptor;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.http.HTTPServer;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugins;
@@ -55,13 +56,13 @@ import org.rapidoid.webapp.WebAppGroup;
 @Since("3.0.0")
 public class Quick {
 
-	public static void run(WebApp app, String[] args, Object... config) {
+	public static HTTPServer run(WebApp app, String[] args, Object... config) {
 		bootstrap(app, args, config);
-		serve(app, args, config);
+		return serve(app, args, config);
 	}
 
-	public static void serve(WebApp app, String[] args, Object... config) {
-		Apps.serve(app, args, config);
+	public static HTTPServer serve(WebApp app, String[] args, Object... config) {
+		return Apps.serve(app, args, config);
 	}
 
 	@SuppressWarnings("unchecked")

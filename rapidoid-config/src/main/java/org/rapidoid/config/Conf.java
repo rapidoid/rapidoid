@@ -37,10 +37,10 @@ public class Conf {
 	private static String templatesPath = templatesPathDefault();
 
 	public static synchronized void args(String... args) {
-		args(args, (Object[]) null);
+		init(args, (Object[]) null);
 	}
 
-	public static synchronized void args(String[] mainArgs, Object... extraArgs) {
+	public static synchronized void init(String[] mainArgs, Object... extraArgs) {
 		if (mainArgs != null) {
 			for (String arg : mainArgs) {
 				processArg(arg);
