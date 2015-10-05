@@ -95,7 +95,6 @@ public abstract class HttpTestCommons extends TestCommons {
 		});
 
 		router.post("/upload", new Handler() {
-			@SuppressWarnings("unchecked")
 			@Override
 			public Object handle(HttpExchange x) {
 				Log.info("Uploaded files", "files", x.files().keySet());
