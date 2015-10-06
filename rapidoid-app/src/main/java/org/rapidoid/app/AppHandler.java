@@ -54,7 +54,7 @@ public class AppHandler implements Handler {
 
 	private static final String PAGE_RELOAD = "<h2>&nbsp;Reloading...</h2><script>location.reload();</script>";
 
-	private static final Pattern DIRECTIVE = Pattern.compile("\\s*\\Q<!--#\\E\\s*(\\{.+\\})\\s*\\Q-->\\E\\s*");
+	private static final Pattern DIRECTIVE = Pattern.compile("\\s*<!--\\s*#\\s*(\\{.+\\})\\s*-->\\s*");
 
 	@Override
 	public Object handle(final HttpExchange x) throws Exception {
