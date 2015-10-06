@@ -200,7 +200,7 @@ public class AppHandler implements Handler {
 
 		WebApp app = AppCtx.app();
 
-		String title = app.getTitle();
+		String title = U.or(app.getTitle(), x.host());
 		model.put("title", title);
 		model.put("embedded", hasEvent || x.param("_embedded", null) != null);
 
