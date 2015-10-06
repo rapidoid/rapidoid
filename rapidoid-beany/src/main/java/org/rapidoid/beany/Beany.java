@@ -378,7 +378,7 @@ public class Beany {
 			U.must(map.containsKey(propertyName), "The map must contain key: %s", propertyName);
 			return (T) map.get(propertyName);
 		} else {
-			return property(instance, propertyName, true).get(instance);
+			return property(instance.getClass(), propertyName, true).get(instance);
 		}
 	}
 
