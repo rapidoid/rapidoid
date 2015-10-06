@@ -79,10 +79,18 @@ public class AppTool {
 		final Res confRes = Res.from(appfile, true, firstAppFile, defaultAppFile).trackChanges();
 
 		confRes.onChange("app tool", new Runnable() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public void run() {
 				if (confRes.exists()) {
-					Map<String, Object> conf = YAML.parseMap(confRes.getContent());
+					String appYaml = confRes.getContent().trim();
+
+					Map<String, Object> conf;
+					if (!U.isEmpty(appYaml)) {
+						conf = YAML.parse(appYaml, Map.class);
+					} else {
+						conf = U.map();
+					}
 
 					Conf.reset();
 					rootApp.getConfig().clear();

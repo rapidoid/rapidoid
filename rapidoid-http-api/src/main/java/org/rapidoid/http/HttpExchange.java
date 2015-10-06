@@ -58,7 +58,7 @@ public interface HttpExchange extends Req, Resp, Runnable {
 
 	<T> T persister();
 
-	Object model();
+	Map<String, Object> model();
 
 	Runnable asAsyncJob(Handler handler);
 
