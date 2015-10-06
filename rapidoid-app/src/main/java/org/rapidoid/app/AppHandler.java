@@ -190,7 +190,7 @@ public class AppHandler implements Handler {
 		Map<String, Object> model = U.cast(U.map("login", true, "profile", true));
 
 		if (res.exists()) {
-			model.putAll(pageModel(result, res));
+			model.putAll(generatePageContent(x, result, res));
 		} else if (result != null) {
 			model.put("result", result);
 			model.put("content", result);
@@ -235,10 +235,12 @@ public class AppHandler implements Handler {
 		}
 	}
 
-	private static Map<String, Object> pageModel(Object result, Res resource) {
+	private static Map<String, Object> generatePageContent(HttpExchange x, Object result, Res resource) {
 		String template = U.safe(resource.getContent());
 
-		Map<String, Object> model = U.map("result", result);
+		Map<String, Object> model = x.model();
+
+		model.put("result", result);
 
 		String[] contentParts = template.split("\n", 2);
 		if (contentParts.length == 2) {
@@ -252,7 +254,7 @@ public class AppHandler implements Handler {
 			}
 		}
 
-		String content = Templates.fromString(template).render(model, result);
+		String content = Templates.fromString(template).render(result, model);
 		model.put("content", content); // content without the directive
 		return model;
 	}
