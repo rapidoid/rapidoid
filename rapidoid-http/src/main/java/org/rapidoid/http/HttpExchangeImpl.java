@@ -805,23 +805,17 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 		responseCode(httpResponseCode);
 		ensureHeadersComplete();
 
-		if (Conf.production()) {
-			if (response != null) {
-				write(response);
-			}
+		String title = U.or(response, "Internal server error!");
+
+		if (err != null) {
+			String details = err.getMessage();
+
+			details = U.trimr(details, "(<Unknown Source>#1)");
+
+			renderPage(U.map("title", title, "error", true, "code", httpResponseCode, "navbar", !U.isEmpty(title),
+					"details", details));
 		} else {
-			String title = U.or(response, "Internal server error!");
-
-			if (err != null) {
-				String details = err.getMessage();
-
-				details = U.trimr(details, "(<Unknown Source>#1)");
-
-				renderPage(U.map("title", title, "error", true, "code", httpResponseCode, "navbar", !U.isEmpty(title),
-						"details", details));
-			} else {
-				renderPage(U.map("title", title, "code", httpResponseCode, "error", httpResponseCode >= 400));
-			}
+			renderPage(U.map("title", title, "code", httpResponseCode, "error", httpResponseCode >= 400));
 		}
 
 		return this;
