@@ -9,7 +9,7 @@ import org.rapidoid.concurrent.Callback;
 
 /*
  * #%L
- * rapidoid-http-api
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

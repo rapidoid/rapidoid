@@ -2,7 +2,7 @@ package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-main
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

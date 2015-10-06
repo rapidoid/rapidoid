@@ -8,7 +8,7 @@ import org.rapidoid.net.TCPServer;
 
 /*
  * #%L
- * rapidoid-main
+ * rapidoid-http
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
