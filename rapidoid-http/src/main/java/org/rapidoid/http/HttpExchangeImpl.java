@@ -1363,6 +1363,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			boolean loggedIn = AppCtx.isLoggedIn();
 			model.put("loggedIn", loggedIn);
 			model.put("user", loggedIn ? AppCtx.user() : null);
+
+			model.put("version", UTILS.version());
 		}
 
 		return model;

@@ -43,6 +43,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -59,6 +60,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.io.IO;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
@@ -68,6 +70,19 @@ import org.rapidoid.log.Log;
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class UTILS implements Constants {
+
+	private static final Properties PROPS = new Properties();
+	private static final String VERSION;
+
+	static {
+		try {
+			PROPS.load(IO.resourceAsStream("rapidoid.properties"));
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
+
+		VERSION = PROPS.getProperty("version");
+	}
 
 	private static long measureStart;
 
@@ -791,4 +806,7 @@ public class UTILS implements Constants {
 		return null;
 	}
 
+	public static String version() {
+		return VERSION;
+	}
 }
