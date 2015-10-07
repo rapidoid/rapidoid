@@ -38,6 +38,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -1018,6 +1019,16 @@ public class U {
 
 	public static <T> Is<T> is(T value) {
 		return new Is<T>(value);
+	}
+
+	public static boolean exists(Callable<?> accessChain) {
+		try {
+			return accessChain != null && accessChain.call() != null;
+		} catch (NullPointerException e) {
+			return false;
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
 	}
 
 }

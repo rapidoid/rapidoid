@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
@@ -304,6 +305,35 @@ public class UTest extends TestCommons {
 		eq(U.safe(3), 3);
 
 		eq(U.safe((Long) null), 0L);
+	}
+
+	@Test
+	public void testExists() {
+		isFalse(U.exists(null));
+
+		isFalse(U.exists(new Callable<Object>() {
+			@Override
+			public Object call() throws Exception {
+				return null;
+			}
+		}));
+
+		isFalse(U.exists(new Callable<Object>() {
+			@SuppressWarnings("null")
+			@Override
+			public Object call() throws Exception {
+				String s = null;
+				return s.length(); // throws NPE!
+			}
+		}));
+
+		isTrue(U.exists(new Callable<Object>() {
+			@Override
+			public Object call() throws Exception {
+				String s = "abc";
+				return s.length();
+			}
+		}));
 	}
 
 }
