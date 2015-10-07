@@ -29,7 +29,7 @@ import org.rapidoid.concurrent.Callback;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public interface ParamsAwareHandler {
+public interface AsyncRawHandler {
 
 	Object handle(Map<String, Object> params, OutputStream out, Callback<Object> callback) throws Exception;
 

@@ -24,7 +24,7 @@ import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.ParamsAwareHandler;
+import org.rapidoid.http.ParamHandler;
 import org.rapidoid.http.fast.FastCallableHttpHandler;
 import org.rapidoid.http.fast.FastHttp;
 import org.rapidoid.http.fast.FastParamsAwareHttpHandler;
@@ -64,7 +64,7 @@ public class OnAction {
 		}
 	}
 
-	private void register(byte[] contentType, ParamsAwareHandler handler) {
+	private void register(byte[] contentType, ParamHandler handler) {
 		for (FastHttp http : httpImpls) {
 			http.on(verb, path, new FastParamsAwareHttpHandler(http, contentType, handler));
 		}
@@ -93,7 +93,7 @@ public class OnAction {
 		return chain;
 	}
 
-	public <T> ServerSetup plain(ParamsAwareHandler handler) {
+	public <T> ServerSetup plain(ParamHandler handler) {
 		register(FastHttp.CONTENT_TYPE_PLAIN, handler);
 		return chain;
 	}
@@ -120,7 +120,7 @@ public class OnAction {
 		return chain;
 	}
 
-	public <T> ServerSetup html(ParamsAwareHandler handler) {
+	public <T> ServerSetup html(ParamHandler handler) {
 		register(FastHttp.CONTENT_TYPE_HTML, handler);
 		return chain;
 	}
@@ -147,7 +147,7 @@ public class OnAction {
 		return chain;
 	}
 
-	public <T> ServerSetup json(ParamsAwareHandler handler) {
+	public <T> ServerSetup json(ParamHandler handler) {
 		register(FastHttp.CONTENT_TYPE_JSON, handler);
 		return chain;
 	}
@@ -174,7 +174,7 @@ public class OnAction {
 		return chain;
 	}
 
-	public <T> ServerSetup binary(ParamsAwareHandler handler) {
+	public <T> ServerSetup binary(ParamHandler handler) {
 		register(FastHttp.CONTENT_TYPE_BINARY, handler);
 		return chain;
 	}
