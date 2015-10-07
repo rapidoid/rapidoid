@@ -21,6 +21,7 @@ package org.rapidoid.plugins.templates;
  */
 
 import java.io.Reader;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,8 +33,14 @@ import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
 
 import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.DefaultMustacheVisitor;
 import com.github.mustachejava.FragmentKey;
 import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheException;
+import com.github.mustachejava.MustacheVisitor;
+import com.github.mustachejava.ObjectHandler;
+import com.github.mustachejava.TemplateContext;
+import com.github.mustachejava.codes.ValueCode;
 import com.google.common.cache.LoadingCache;
 
 @Authors("Nikolche Mihajlovski")
@@ -43,6 +50,8 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 	private static final String SM = "{{";
 
 	private static final String EM = "}}";
+
+	private static final ObjectHandler CUSTOM_OBJECT_HANDLER = new CustomObjectHandler();
 
 	private volatile LoadingCache<String, Mustache> mustacheCache;
 
@@ -54,6 +63,10 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 			return new HashMap<String, Mustache>();
 		}
 	};
+
+	public RapidoidMustacheFactory() {
+		setObjectHandler(CUSTOM_OBJECT_HANDLER);
+	}
 
 	@Override
 	protected LoadingCache<String, Mustache> createMustacheCache() {
@@ -73,7 +86,6 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 	}
 
 	private Mustache compileIfChanged(String filename, boolean partial) {
-
 		Mustache template = mustacheCache.getIfPresent(filename);
 
 		if (template == null) {
@@ -116,6 +128,7 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 				cache.put(filename, mustache);
 				mustache.init();
 			}
+
 			return mustache;
 		} finally {
 			cache.remove(filename);
@@ -143,6 +156,30 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 		String firstFile = Conf.rootPath() + sub + filename;
 		String defaultFile = Conf.rootPathDefault() + sub + filename;
 		return Res.from(filename, true, firstFile, defaultFile);
+	}
+
+	@Override
+	public MustacheVisitor createMustacheVisitor() {
+		return new DefaultMustacheVisitor(this) {
+			@Override
+			public void value(TemplateContext tc, String var, boolean encoded) {
+				list.add(new ValueCode(tc, df, var, encoded) {
+					@Override
+					public Writer execute(Writer writer, Object[] scopes) {
+						try {
+							final Object object = get(scopes);
+							if (object == null) {
+								identity(writer);
+								return writer;
+							}
+							return super.execute(writer, scopes);
+						} catch (Exception e) {
+							throw new MustacheException("Failed to get value for " + name, e, tc);
+						}
+					}
+				});
+			}
+		};
 	}
 
 }
