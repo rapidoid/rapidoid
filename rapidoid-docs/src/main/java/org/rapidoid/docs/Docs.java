@@ -49,6 +49,7 @@ import org.rapidoid.wrap.IntWrap;
 @Since("4.1.0")
 public class Docs {
 
+	private static final String ERROR_404 = "<span class=\"not-found\">404 Not found!</span>";
 	private static final String STATE = "__state";
 	private static final String STATE_SUFFIX = "\"-->";
 	private static final String STATE_PREFIX = "<!--state::\"";
@@ -75,16 +76,18 @@ public class Docs {
 		System.out.println();
 		System.out.println();
 
-		List<Map<String, ?>> examples = U.list();
+		List<Map<String, ?>> examplesl = U.list();
+		IntWrap nl = new IntWrap();
+		List<String> eglistl = IO.loadLines("examplesl.txt");
+		processAll(examplesl, nl, eglistl);
 
-		IntWrap nn = new IntWrap();
+		List<Map<String, ?>> examplesh = U.list();
+		IntWrap nh = new IntWrap();
+		List<String> eglisth = IO.loadLines("examplesh.txt");
+		processAll(examplesh, nh, eglisth);
 
-		List<String> eglist = IO.loadLines("examples.txt");
-		List<String> processed = processAll(examples, nn, eglist);
-
-		System.out.println("Processed: " + processed);
-
-		Map<String, ?> model = U.map("examples", examples);
+		Map<String, ?> model = U.map("examplesh", examplesh, "examplesl", examplesl, "version", UTILS.version()
+				.replace("-SNAPSHOT", ""));
 		String html = Templates.fromFile("docs.html").render(model);
 		IO.save(path + "index.html", html);
 	}
@@ -101,14 +104,16 @@ public class Docs {
 
 			String[] parts = eg.split("\\:");
 			if (parts.length == 2 && !eg.startsWith("#")) {
-				processIndex(nn, examples, parts[0].trim(), parts[1].trim());
+				processExample(nn, examples, parts[0].trim(), parts[1].trim());
+			} else {
+				System.out.println("Ignoring: " + eg);
 			}
 		}
 
 		return processed;
 	}
 
-	private static void processIndex(IntWrap nn, List<Map<String, ?>> examples, String id, String title) {
+	private static void processExample(IntWrap nn, List<Map<String, ?>> examples, String id, String title) {
 		System.out.println();
 		System.out.println();
 		System.out.println(id);
@@ -187,6 +192,15 @@ public class Docs {
 		String verb = parts[0];
 		String uri = parts[1];
 
+		if (parts.length > 2 && parts[2].startsWith("=>")) {
+			String result = parts[2].substring(2);
+			if (result.equals("404")) {
+				return U.map("verb", verb, "uri", uri, "error", ERROR_404);
+			} else {
+				return U.map("verb", verb, "uri", uri, "result", result);
+			}
+		}
+
 		Map<String, Object> data = parts.length > 2 ? JSON.parse(parts[2], Map.class) : null;
 		if (data != null) {
 			data.put(STATE, viewState);
@@ -207,7 +221,7 @@ public class Docs {
 		} catch (Exception e) {
 			Throwable cause = UTILS.rootCause(e);
 			if (cause instanceof HttpException && cause.getMessage().contains("404")) {
-				error = "<span class=\"not-found\">404 Not found!</span>";
+				error = ERROR_404;
 			} else {
 				e.printStackTrace();
 			}

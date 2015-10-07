@@ -62,7 +62,7 @@
     </div>
   </nav>
 
-	<div class="container">
+<div class="container">
 
 		<div class="row">
 			<div class="col-md-7 col-sm-12">
@@ -83,25 +83,56 @@
 
 <div class="row">
     <div class="col-md-12">
-        <div class="caption"><span class="badge badge-docker">Docker</span><span class="docker-code">sudo docker run -d -p 8080:8080 rapidoid/rapidoid</span></div>
+        <div class="caption"><span class="option-x">OPTION A</span>Using Rapidoid with Docker</div>
+        <div><span class="docker-code">docker run -d -p 8080:8080 rapidoid/rapidoid</span></div>
     </div>
 </div>
  -->
 
-<!-- GETTING STARTED WITH JAVA -->
+<!-- GETTING STARTED WITH JAVA LOW-LEVEL -->
 
 <div class="sep-example"></div>
 
 <div class="row">
     <div class="col-md-12">
-        <div class="caption">Getting started :: Adding Rapidoid to your Java project</div>
+        <div class="caption"><span class="option-x">OPTION A</span>Using Rapidoid's Low-level API</div>
     </div>
 </div>
 
 <div class="row">
   
   <div class="col-md-6">
-        {{>maven}}
+        {{>mavenl}}
+  </div>
+
+  <div class="col-md-6">
+<div class="low-level-desc">
+<p><b>Low-level vs. high-level API</b></p>
+<p>The low-level HTTP API provides access to the extremely fast Rapidoid HTTP server implemented from scratch on top of Java NIO.</p> 
+<p>The high-level API is built on top of Rapidoid HTTP server, provides many advanced features for building modern POJO-based web applications.</p> 
+</div>
+  </div>
+  
+</div>
+
+{{#examplesl}}
+{{>example}}
+{{/examplesl}}
+
+<!-- GETTING STARTED WITH JAVA HIGH-LEVEL -->
+
+<div class="sep-example"></div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="caption"><span class="option-x">OPTION B</span>Using Rapidoid's High-level API</div>
+    </div>
+</div>
+
+<div class="row">
+  
+  <div class="col-md-6">
+        {{>mavenh}}
   </div>
 
   <div class="col-md-6">
@@ -117,9 +148,9 @@
   
 </div>
 
-{{#examples}}
+{{#examplesh}}
 {{>example}}
-{{/examples}}
+{{/examplesh}}
 
 </div>
 	<script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>	
