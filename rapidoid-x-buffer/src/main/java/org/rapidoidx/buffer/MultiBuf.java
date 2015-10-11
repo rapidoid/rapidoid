@@ -379,17 +379,27 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	@Override
-	public String get(Range range) {
+	public byte[] getBytes(Range range) {
 		assert invariant(false);
 
 		if (range.isEmpty()) {
-			return "";
+			return new byte[0];
 		}
 
 		byte[] bytes = new byte[(int) range.length];
 		long total = readAll(bytes, 0, range.start, range.length);
 
 		assert total == bytes.length;
+
+		assert invariant(false);
+		return bytes;
+	}
+
+	@Override
+	public String get(Range range) {
+		assert invariant(false);
+
+		byte[] bytes = getBytes(range);
 
 		assert invariant(false);
 		return new String(bytes);

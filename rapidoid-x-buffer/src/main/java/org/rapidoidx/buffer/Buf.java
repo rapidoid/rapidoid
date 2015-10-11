@@ -80,6 +80,8 @@ public interface Buf {
 
 	String get(Range range);
 
+	byte[] getBytes(Range range);
+
 	long getN(Range range);
 
 	boolean isSingle();

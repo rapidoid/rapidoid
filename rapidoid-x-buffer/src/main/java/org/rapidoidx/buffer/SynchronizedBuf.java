@@ -140,6 +140,11 @@ public class SynchronizedBuf implements Buf {
 	}
 
 	@Override
+	public synchronized byte[] getBytes(Range range) {
+		return buf.getBytes(range);
+	}
+
+	@Override
 	public synchronized String get(Range range) {
 		return buf.get(range);
 	}
