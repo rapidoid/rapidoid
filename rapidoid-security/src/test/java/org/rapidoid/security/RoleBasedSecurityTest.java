@@ -20,9 +20,9 @@ package org.rapidoid.security;
  * #L%
  */
 
-import static org.rapidoid.ctx.UserRoles.LOGGED_IN;
-import static org.rapidoid.ctx.UserRoles.OWNER;
-import static org.rapidoid.ctx.UserRoles.SHARED_WITH;
+import static org.rapidoid.ctx.Roles.LOGGED_IN;
+import static org.rapidoid.ctx.Roles.OWNER;
+import static org.rapidoid.ctx.Roles.SHARED_WITH;
 
 import java.util.List;
 

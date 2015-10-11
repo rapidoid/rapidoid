@@ -7,9 +7,9 @@ import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.ToString;
+import org.rapidoid.ctx.Roles;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanRead;
-import org.rapidoid.util.CommonRoles;
 import org.rapidoidx.db.DbList;
 import org.rapidoidx.db.DbRef;
 import org.rapidoidx.db.DbSet;
@@ -39,25 +39,25 @@ import org.rapidoidx.db.XEntity;
 
 @Scaffold
 @SuppressWarnings("serial")
-// @CanRead(CommonRoles.LOGGED_IN)
-// @CanChange({ CommonRoles.OWNER })
-// @CanInsert(CommonRoles.LOGGED_IN)
-// @CanDelete({ CommonRoles.OWNER, CommonRoles.ADMIN })
+// @CanRead(UserRoles.LOGGED_IN)
+// @CanChange({ UserRoles.OWNER })
+// @CanInsert(UserRoles.LOGGED_IN)
+// @CanDelete({ UserRoles.OWNER, UserRoles.ADMIN })
 @DbEntity
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
 public class Task extends XEntity {
 
 	@ToString
-	@CanChange({ MODERATOR, OWNER })
+	@CanChange({ Roles.MODERATOR, Roles.OWNER })
 	public String title;
 
 	@ToString
-	@CanChange({ MODERATOR, OWNER, SHARED_WITH })
+	@CanChange({ Roles.MODERATOR, Roles.OWNER, Roles.SHARED_WITH })
 	public Priority priority = Priority.MEDIUM;
 
 	@Optional
-	@CanChange({ MODERATOR, OWNER, SHARED_WITH })
+	@CanChange({ Roles.MODERATOR, Roles.OWNER, Roles.SHARED_WITH })
 	public String description;
 
 	public int rating;
@@ -65,11 +65,11 @@ public class Task extends XEntity {
 	@Programmatic
 	public final DbRef<User> owner = XDB.ref(this, "^owns");
 
-	@CanRead({ CommonRoles.OWNER })
+	@CanRead({ Roles.OWNER })
 	public final DbSet<User> sharedWith = XDB.set(this, "sharedWith");
 
 	@Programmatic
-	@CanRead({ CommonRoles.OWNER, CommonRoles.SHARED_WITH })
+	@CanRead({ Roles.OWNER, Roles.SHARED_WITH })
 	public final DbList<Comment> comments = XDB.list(this, "has");
 
 	@Programmatic

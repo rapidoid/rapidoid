@@ -31,7 +31,7 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")
-public class UserRoles {
+public class Roles {
 
 	public static final String ANYBODY = "ANYBODY";
 
@@ -56,8 +56,9 @@ public class UserRoles {
 	public static final List<String> COMMON_ROLES = Collections.unmodifiableList(Arrays.asList(ADMIN, MANAGER,
 			MODERATOR, LOGGED_IN, OWNER, RESTARTER));
 
-	public static Set<String> getUserRoles(String username) {
+	public static Set<String> getRolesFor(String username) {
 		Set<String> roles = new HashSet<String>();
+		// FIXME implement this
 		return roles;
 	}
 

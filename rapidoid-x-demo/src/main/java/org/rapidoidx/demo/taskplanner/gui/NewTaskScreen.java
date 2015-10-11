@@ -28,7 +28,6 @@ import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
-import org.rapidoid.app.UsersTool;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.Tag;
 import org.rapidoid.util.U;
@@ -37,7 +36,6 @@ import org.rapidoid.widget.FormWidget;
 import org.rapidoid.widget.GridWidget;
 import org.rapidoidx.db.XDB;
 import org.rapidoidx.demo.taskplanner.model.Task;
-import org.rapidoidx.demo.taskplanner.model.User;
 
 @Order(1)
 @Authors("Nikolche Mihajlovski")
@@ -74,13 +72,10 @@ public class NewTaskScreen extends GUI {
 	}
 
 	public void onAdd() {
-		User user = UsersTool.current(User.class);
-		if (user != null) {
-			task.owner.set(user);
-			task.description = v.get();
-			XDB.insert(task);
-			task = new Task();
-		}
+		task.owner.set(null);
+		task.description = v.get();
+		XDB.insert(task);
+		task = new Task();
 	}
 
 	public void onCancel() {

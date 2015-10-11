@@ -64,7 +64,7 @@ public class UserInfo implements Serializable {
 	}
 
 	public UserInfo(String username, String email, String name, String oauthId, String oauthProvider) {
-		this(username, email, name, oauthId, oauthProvider, UserRoles.getUserRoles(username));
+		this(username, email, name, oauthId, oauthProvider, Roles.getRolesFor(username));
 	}
 
 	public UserInfo(String username, String email, String name, String oauthId, String oauthProvider, Set<String> roles) {

@@ -32,7 +32,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.config.Conf;
-import org.rapidoid.ctx.UserRoles;
+import org.rapidoid.ctx.Roles;
 import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.security.annotation.Manager;
@@ -55,13 +55,13 @@ public class AppSecurity implements Constants {
 			Class<? extends Annotation> type = ann.annotationType();
 
 			if (type.equals(Admin.class)) {
-				roles.add(UserRoles.ADMIN);
+				roles.add(Roles.ADMIN);
 			} else if (type.equals(Manager.class)) {
-				roles.add(UserRoles.MANAGER);
+				roles.add(Roles.MANAGER);
 			} else if (type.equals(Moderator.class)) {
-				roles.add(UserRoles.MODERATOR);
+				roles.add(Roles.MODERATOR);
 			} else if (type.equals(LoggedIn.class)) {
-				roles.add(UserRoles.LOGGED_IN);
+				roles.add(Roles.LOGGED_IN);
 			} else if (type.equals(HasRole.class)) {
 				Role[] values = ((HasRole) ann).value();
 				U.must(values.length > 0, "At least one role must be specified in @Roles annotation!");
@@ -90,7 +90,7 @@ public class AppSecurity implements Constants {
 
 	public boolean hasRole(String username, String role, Class<?> clazz, Object record) {
 
-		if (UserRoles.ANYBODY.equalsIgnoreCase(role)) {
+		if (Roles.ANYBODY.equalsIgnoreCase(role)) {
 			return true;
 		}
 
@@ -100,11 +100,11 @@ public class AppSecurity implements Constants {
 
 		if (record != null) {
 
-			if (role.equalsIgnoreCase(UserRoles.OWNER)) {
+			if (role.equalsIgnoreCase(Roles.OWNER)) {
 				return isOwnerOf(username, record);
 			}
 
-			if (role.equalsIgnoreCase(UserRoles.SHARED_WITH)) {
+			if (role.equalsIgnoreCase(Roles.SHARED_WITH)) {
 				return isSharedWith(username, record);
 			}
 		}
@@ -121,7 +121,7 @@ public class AppSecurity implements Constants {
 			return true;
 		}
 
-		if (role.equalsIgnoreCase(UserRoles.LOGGED_IN)) {
+		if (role.equalsIgnoreCase(Roles.LOGGED_IN)) {
 			return !U.isEmpty(username);
 		}
 
