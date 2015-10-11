@@ -25,15 +25,26 @@ import java.util.Map;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class AppMenuItem extends AbstractMenuItem {
 
+	private static final String CONFIG_RIGHT = "(right)";
+
 	private AppSubMenu submenu;
+
+	private boolean right;
 
 	public AppMenuItem(String caption, Object target, Map<String, Object> extra) {
 		super(caption, target, extra);
+
+		if (this.caption.endsWith(CONFIG_RIGHT)) {
+			this.caption = U.trimr(this.caption, CONFIG_RIGHT).trim();
+			this.right = true;
+		}
+
 		if (!Cls.isSimple(target)) {
 			this.submenu = Cls.struct(AppSubMenu.class, AppSubMenuItem.class, target);
 		}
@@ -47,10 +58,18 @@ public class AppMenuItem extends AbstractMenuItem {
 		this.submenu = submenu;
 	}
 
+	public boolean isRight() {
+		return right;
+	}
+
+	public void setRight(boolean right) {
+		this.right = right;
+	}
+
 	@Override
 	public String toString() {
-		return "AppMenuItem [submenu=" + submenu + ", caption=" + caption + ", target=" + target + ", javascript="
-				+ javascript + ", icon=" + icon + ", extra=" + extra + "]";
+		return "AppMenuItem [submenu=" + submenu + ", right=" + right + ", caption=" + caption + ", target=" + target
+				+ ", javascript=" + javascript + ", icon=" + icon + ", divider=" + divider + ", extra=" + extra + "]";
 	}
 
 }

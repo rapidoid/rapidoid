@@ -44,7 +44,7 @@ public abstract class AbstractMenuItem {
 	protected final Map<String, Object> extra;
 
 	public AbstractMenuItem(String caption, Object target, Map<String, Object> extra) {
-		this.caption = caption;
+		this.caption = caption.trim();
 		this.extra = extra;
 
 		Object iconExtra = extra != null ? extra.get("icon") : null;

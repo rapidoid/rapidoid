@@ -20,11 +20,13 @@ package org.rapidoid.webapp;
  * #L%
  */
 
+import java.util.Collections;
 import java.util.List;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.lambda.Predicate;
 import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -48,6 +50,30 @@ public class AppMenu {
 
 	public static AppMenu from(Object data) {
 		return Cls.struct(AppMenu.class, AppMenuItem.class, data);
+	}
+
+	public List<AppMenuItem> leftItems() {
+		return U.filter(items, new Predicate<AppMenuItem>() {
+			@Override
+			public boolean eval(AppMenuItem menuItem) throws Exception {
+				return !menuItem.isRight();
+			}
+		});
+	}
+
+	public List<AppMenuItem> rightItems() {
+		return U.filter(items, new Predicate<AppMenuItem>() {
+			@Override
+			public boolean eval(AppMenuItem menuItem) throws Exception {
+				return menuItem.isRight();
+			}
+		});
+	}
+
+	public List<AppMenuItem> rightItemsReversed() {
+		List<AppMenuItem> list = rightItems();
+		Collections.reverse(list);
+		return list;
 	}
 
 }
