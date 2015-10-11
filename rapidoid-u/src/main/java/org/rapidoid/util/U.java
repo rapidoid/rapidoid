@@ -56,6 +56,7 @@ import javax.script.SimpleBindings;
 
 import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.lambda.Predicate;
 
 /**
  * @author Nikolche Mihajlovski
@@ -1028,6 +1029,34 @@ public class U {
 			return false;
 		} catch (Exception e) {
 			throw U.rte(e);
+		}
+	}
+
+	public static <T> List<T> filter(List<T> items, Predicate<T> predicate) {
+		List<T> filtered = list();
+		addIf(items, filtered, predicate);
+		return filtered;
+	}
+
+	public static <T> Set<T> filter(Set<T> items, Predicate<T> predicate) {
+		Set<T> filtered = set();
+		addIf(items, filtered, predicate);
+		return filtered;
+	}
+
+	public static <T> void addIf(Collection<T> src, Collection<T> dest, Predicate<T> predicate) {
+		for (T item : src) {
+			boolean shouldAdd;
+
+			try {
+				shouldAdd = predicate.eval(item);
+			} catch (Exception e) {
+				throw rte(e);
+			}
+
+			if (shouldAdd) {
+				dest.add(item);
+			}
 		}
 	}
 
