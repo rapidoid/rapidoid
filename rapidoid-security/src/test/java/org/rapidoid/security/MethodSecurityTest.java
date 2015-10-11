@@ -33,7 +33,7 @@ import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Moderator;
 import org.rapidoid.security.annotation.Role;
-import org.rapidoid.security.annotation.Roles;
+import org.rapidoid.security.annotation.HasRole;
 import org.rapidoid.util.U;
 
 class MyService {
@@ -49,11 +49,11 @@ class MyService {
 	public void noAnn() {}
 
 	@Moderator
-	@Roles(@Role("abc"))
+	@HasRole(@Role("abc"))
 	public void dd() {}
 
 	@Manager
-	@Roles({ @Role("abc"), @Role("xyz") })
+	@HasRole({ @Role("abc"), @Role("xyz") })
 	public void ee() {}
 
 }
@@ -62,7 +62,7 @@ class MyService {
  * A ROLE MUST BE ALLOWED IN BOTH THE CLASS AND METHOD ANNOTATIONS
  */
 @Manager
-@Roles({ @Role("root"), @Role("xyz") })
+@HasRole({ @Role("root"), @Role("xyz") })
 class MyService2 {
 
 	@Admin
@@ -76,11 +76,11 @@ class MyService2 {
 	public void noAnn() {}
 
 	@Moderator
-	@Roles(@Role("abc"))
+	@HasRole(@Role("abc"))
 	public void dd() {}
 
 	@Manager
-	@Roles({ @Role("abc"), @Role("xyz") })
+	@HasRole({ @Role("abc"), @Role("xyz") })
 	public void ee() {}
 
 }

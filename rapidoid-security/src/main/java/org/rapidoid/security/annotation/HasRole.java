@@ -35,7 +35,7 @@ import org.rapidoid.annotation.Since;
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public @interface Roles {
+public @interface HasRole {
 
 	Role[] value();
 

@@ -31,12 +31,12 @@ import org.rapidoid.log.Log;
 import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Role;
-import org.rapidoid.security.annotation.Roles;
+import org.rapidoid.security.annotation.HasRole;
 import org.rapidoidx.db.XDB;
 
 @Admin
 @Manager
-@Roles({ @Role("RESTARTER") })
+@HasRole({ @Role("RESTARTER") })
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
 public class AdminScreen extends GUI {

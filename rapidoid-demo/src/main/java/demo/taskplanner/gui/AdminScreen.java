@@ -32,12 +32,12 @@ import org.rapidoid.plugins.lifecycle.Lifecycle;
 import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Role;
-import org.rapidoid.security.annotation.Roles;
+import org.rapidoid.security.annotation.HasRole;
 
 @Web
 @Admin
 @Manager
-@Roles({ @Role("RESTARTER") })
+@HasRole({ @Role("RESTARTER") })
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class AdminScreen extends GUI {

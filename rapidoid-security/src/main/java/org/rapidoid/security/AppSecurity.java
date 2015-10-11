@@ -38,7 +38,7 @@ import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Moderator;
 import org.rapidoid.security.annotation.Role;
-import org.rapidoid.security.annotation.Roles;
+import org.rapidoid.security.annotation.HasRole;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 
@@ -62,8 +62,8 @@ public class AppSecurity implements Constants {
 				roles.add(UserRoles.MODERATOR);
 			} else if (type.equals(LoggedIn.class)) {
 				roles.add(UserRoles.LOGGED_IN);
-			} else if (type.equals(Roles.class)) {
-				Role[] values = ((Roles) ann).value();
+			} else if (type.equals(HasRole.class)) {
+				Role[] values = ((HasRole) ann).value();
 				U.must(values.length > 0, "At least one role must be specified in @Roles annotation!");
 				for (Role r : values) {
 					roles.add(r.value().toUpperCase());

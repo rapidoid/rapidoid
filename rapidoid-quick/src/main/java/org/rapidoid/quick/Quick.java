@@ -47,7 +47,7 @@ import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Moderator;
 import org.rapidoid.security.annotation.Role;
-import org.rapidoid.security.annotation.Roles;
+import org.rapidoid.security.annotation.HasRole;
 import org.rapidoid.util.U;
 import org.rapidoid.webapp.WebApp;
 import org.rapidoid.webapp.WebAppGroup;
@@ -88,7 +88,7 @@ public class Quick {
 
 		AOP.reset();
 		AOP.intercept(new AuthInterceptor(), Admin.class, Manager.class, Moderator.class, LoggedIn.class,
-				DevMode.class, Role.class, Roles.class);
+				DevMode.class, Role.class, HasRole.class);
 		AOP.intercept(new TransactionInterceptor(), Transaction.class, Transactional.class);
 
 		Jobs.execute(new Runnable() {
