@@ -1,5 +1,7 @@
 package org.rapidoid.measure;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
@@ -31,7 +33,8 @@ public class StatsMeasure implements Measure {
 	private long max;
 	private long sum = 0;
 	private long count = 0;
-	private volatile long ticks = 0;
+
+	private final AtomicLong ticks = new AtomicLong();
 
 	@Override
 	public String get() {
@@ -44,11 +47,11 @@ public class StatsMeasure implements Measure {
 		max = 0;
 		sum = 0;
 		count = 0;
-		ticks = 0;
+		ticks.set(0);
 	}
 
 	public void tick() {
-		ticks++;
+		ticks.incrementAndGet();
 	}
 
 	public synchronized void value(long value) {
