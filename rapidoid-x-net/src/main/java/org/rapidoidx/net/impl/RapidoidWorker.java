@@ -134,9 +134,9 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		connecting.add(target);
 
 		if (target.socketChannel.connect(target.addr)) {
-			Log.debug("Opened socket, connected", "address", target.addr);
+			Log.info("Opened socket, connected", "address", target.addr);
 		} else {
-			Log.debug("Opened socket, connecting...", "address", target.addr);
+			Log.info("Opened socket, connecting...", "address", target.addr);
 		}
 
 		selector.wakeup();
@@ -168,6 +168,9 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 		try {
 			ready = socketChannel.finishConnect();
 			U.rteIf(!ready, "Expected an established connection!");
+
+			Log.info("Connected", "address", target.addr);
+
 			connected.add(new RapidoidChannel(socketChannel, true, target.protocol, target.holder,
 					target.autoreconnecting, target.state));
 		} catch (ConnectException e) {
