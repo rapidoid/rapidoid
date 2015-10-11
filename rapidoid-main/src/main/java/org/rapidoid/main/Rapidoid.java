@@ -58,7 +58,7 @@ public class Rapidoid {
 	}
 
 	private static WebApp initAndStart(WebApp app, String[] args, Object... config) {
-		Log.info("Starting Rapidoid...");
+		Log.info("Starting Rapidoid...", "version", UTILS.version());
 		U.must(!initialized, "Already initialized!");
 		initialized = true;
 
