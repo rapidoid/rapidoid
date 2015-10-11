@@ -23,8 +23,8 @@ package org.rapidoid.app.builtin;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
+import org.rapidoid.ctx.UserRoles;
 import org.rapidoid.html.Tag;
-import org.rapidoid.security.Secure;
 import org.rapidoid.security.annotation.DevMode;
 import org.rapidoid.util.U;
 import org.rapidoid.webapp.AppCtx;
@@ -39,7 +39,7 @@ public class DebugUserInfoScreenBuiltIn extends GUI {
 		Tag caption = titleBox("Debug Mode - User Information");
 		if (AppCtx.isLoggedIn()) {
 			Object userDetails = show(AppCtx.user(), "name", "username", "email");
-			FormWidget userRoles = show(U.map("roles", Secure.getUserRoles(AppCtx.username())));
+			FormWidget userRoles = show(U.map("roles", UserRoles.getUserRoles(AppCtx.username())));
 			return row(caption, userDetails, userRoles);
 		} else {
 			return row(caption, h4("Not logged in!"));

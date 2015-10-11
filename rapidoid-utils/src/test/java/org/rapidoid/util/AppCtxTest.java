@@ -39,8 +39,7 @@ public class AppCtxTest extends TestCommons {
 			public void run() {
 				Ctxs.open("test");
 
-				UserInfo user = new UserInfo();
-				user.username = rndStr(10);
+				UserInfo user = new UserInfo(rndStr(10));
 
 				Ctxs.ctx().setUser(user);
 

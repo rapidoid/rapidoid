@@ -27,20 +27,6 @@ import org.rapidoid.annotation.Since;
 @Since("2.2.0")
 public interface CommonWords {
 
-	String ANYBODY = "ANYBODY";
-
-	String ADMIN = "ADMIN";
-
-	String MANAGER = "MANAGER";
-
-	String MODERATOR = "MODERATOR";
-
-	String LOGGED_IN = "LOGGED_IN";
-
-	String OWNER = "OWNER";
-
-	String RESTARTER = "RESTARTER";
-
 	/* SHARE */
 
 	String SHARE = "SHARE";

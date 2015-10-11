@@ -20,11 +20,11 @@ package org.rapidoid.security;
  * #L%
  */
 
-import static org.rapidoid.util.CommonWords.ANYBODY;
-import static org.rapidoid.util.CommonWords.MANAGER;
-import static org.rapidoid.util.CommonWords.MODERATOR;
-import static org.rapidoid.util.CommonWords.OWNER;
-import static org.rapidoid.util.CommonWords.SHARED_WITH;
+import static org.rapidoid.ctx.UserRoles.ANYBODY;
+import static org.rapidoid.ctx.UserRoles.MANAGER;
+import static org.rapidoid.ctx.UserRoles.MODERATOR;
+import static org.rapidoid.ctx.UserRoles.OWNER;
+import static org.rapidoid.ctx.UserRoles.SHARED_WITH;
 
 import java.util.List;
 

@@ -44,11 +44,10 @@ public class HttpBuiltins {
 					U.must(username.matches("\\w+"));
 
 					username += "@debug";
+					String email = username;
+					String name = U.capitalized(username);
 
-					UserInfo user = new UserInfo();
-					user.username = username;
-					user.email = username;
-					user.name = U.capitalized(username);
+					UserInfo user = new UserInfo(username, email, name);
 
 					Ctxs.ctx().setUser(user);
 					user.saveTo(x.cookiepack());

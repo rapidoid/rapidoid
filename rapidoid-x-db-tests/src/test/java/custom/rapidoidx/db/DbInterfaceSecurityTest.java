@@ -26,11 +26,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
+import org.rapidoid.ctx.UserRoles;
 import org.rapidoid.entity.IEntity;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanRead;
-import org.rapidoid.util.CommonRoles;
 import org.rapidoidx.db.DbColumn;
 import org.rapidoidx.db.XDB;
 
@@ -43,13 +43,13 @@ interface IFoo extends IEntity {
 @CanInsert("LOGGED_IN")
 @CanRead("ANYBODY")
 @CanChange("MANAGER")
-interface IBar extends IEntity, CommonRoles {
+interface IBar extends IEntity {
 
-	@CanRead(MODERATOR)
+	@CanRead(UserRoles.MODERATOR)
 	@CanChange({})
 	DbColumn<String> name();
 
-	@CanChange(MANAGER)
+	@CanChange(UserRoles.MANAGER)
 	DbColumn<String> desc();
 }
 

@@ -49,8 +49,7 @@ public class JobsTest extends TestCommons {
 				Ctxs.open("test-job");
 
 				final WebApp app = new WebApp();
-				final UserInfo user = new UserInfo();
-				user.username = rndStr(50);
+				final UserInfo user = new UserInfo(rndStr(50));
 
 				Ctxs.ctx().setUser(user);
 				Ctxs.ctx().setApp(app);

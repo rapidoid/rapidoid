@@ -22,7 +22,6 @@ package org.rapidoid.security;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
@@ -244,10 +243,6 @@ public class Secure implements Constants {
 		delete |= manage;
 
 		return DataPermissions.from(read, insert, change, delete);
-	}
-
-	public static List<String> getUserRoles(String username) {
-		return security.getUserRoles(username);
 	}
 
 	public static boolean canRead(String username, Object record) {

@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
+import org.rapidoid.ctx.UserRoles;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanRead;
@@ -45,11 +46,11 @@ class Foo extends XEntity {
 @SuppressWarnings("serial")
 class Bar extends XEntity {
 
-	@CanRead(MODERATOR)
+	@CanRead(UserRoles.MODERATOR)
 	@CanChange({})
 	public String name = "no name";
 
-	@CanChange(MANAGER)
+	@CanChange(UserRoles.MANAGER)
 	public String desc = "desc";
 }
 

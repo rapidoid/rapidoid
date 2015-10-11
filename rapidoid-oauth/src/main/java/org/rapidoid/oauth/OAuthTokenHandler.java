@@ -114,13 +114,13 @@ public class OAuthTokenHandler implements Handler {
 					U.or(auth.get("first_name"), auth.get("given_name")));
 			String lastName = (String) U.or(auth.get("lastName"), U.or(auth.get("last_name"), auth.get("family_name")));
 
-			UserInfo user = new UserInfo();
+			String name = U.or((String) auth.get("name"), firstName + " " + lastName);
+			String oauthProvider = provider.getName();
+			String email = (String) U.or(auth.get("email"), auth.get("emailAddress"));
+			String username = email;
+			String oauthId = String.valueOf(auth.get("id"));
 
-			user.name = U.or((String) auth.get("name"), firstName + " " + lastName);
-			user.oauthProvider = provider.getName();
-			user.email = (String) U.or(auth.get("email"), auth.get("emailAddress"));
-			user.username = user.email;
-			user.oauthId = String.valueOf(auth.get("id"));
+			UserInfo user = new UserInfo(username, email, name, oauthId, oauthProvider);
 
 			Ctxs.ctx().setUser(user);
 			user.saveTo(x.cookiepack());

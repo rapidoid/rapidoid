@@ -23,7 +23,6 @@ package org.rapidoid.security;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -33,13 +32,13 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.config.Conf;
+import org.rapidoid.ctx.UserRoles;
 import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Moderator;
 import org.rapidoid.security.annotation.Role;
 import org.rapidoid.security.annotation.Roles;
-import org.rapidoid.util.CommonRoles;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 
@@ -56,13 +55,13 @@ public class AppSecurity implements Constants {
 			Class<? extends Annotation> type = ann.annotationType();
 
 			if (type.equals(Admin.class)) {
-				roles.add(CommonRoles.ADMIN);
+				roles.add(UserRoles.ADMIN);
 			} else if (type.equals(Manager.class)) {
-				roles.add(CommonRoles.MANAGER);
+				roles.add(UserRoles.MANAGER);
 			} else if (type.equals(Moderator.class)) {
-				roles.add(CommonRoles.MODERATOR);
+				roles.add(UserRoles.MODERATOR);
 			} else if (type.equals(LoggedIn.class)) {
-				roles.add(CommonRoles.LOGGED_IN);
+				roles.add(UserRoles.LOGGED_IN);
 			} else if (type.equals(Roles.class)) {
 				Role[] values = ((Roles) ann).value();
 				U.must(values.length > 0, "At least one role must be specified in @Roles annotation!");
@@ -91,7 +90,7 @@ public class AppSecurity implements Constants {
 
 	public boolean hasRole(String username, String role, Class<?> clazz, Object record) {
 
-		if (CommonRoles.ANYBODY.equalsIgnoreCase(role)) {
+		if (UserRoles.ANYBODY.equalsIgnoreCase(role)) {
 			return true;
 		}
 
@@ -101,11 +100,11 @@ public class AppSecurity implements Constants {
 
 		if (record != null) {
 
-			if (role.equalsIgnoreCase(CommonRoles.OWNER)) {
+			if (role.equalsIgnoreCase(UserRoles.OWNER)) {
 				return isOwnerOf(username, record);
 			}
 
-			if (role.equalsIgnoreCase(CommonRoles.SHARED_WITH)) {
+			if (role.equalsIgnoreCase(UserRoles.SHARED_WITH)) {
 				return isSharedWith(username, record);
 			}
 		}
@@ -122,7 +121,7 @@ public class AppSecurity implements Constants {
 			return true;
 		}
 
-		if (role.equalsIgnoreCase(CommonRoles.LOGGED_IN)) {
+		if (role.equalsIgnoreCase(UserRoles.LOGGED_IN)) {
 			return !U.isEmpty(username);
 		}
 
@@ -180,22 +179,6 @@ public class AppSecurity implements Constants {
 		}
 
 		return false;
-	}
-
-	public List<String> getBuiltInRoles() {
-		return CommonRoles.ALL;
-	}
-
-	public List<String> getUserRoles(String username) {
-		List<String> roles = U.list();
-
-		for (String role : getBuiltInRoles()) {
-			if (hasRole(username, role)) {
-				roles.add(role);
-			}
-		}
-
-		return roles;
 	}
 
 }

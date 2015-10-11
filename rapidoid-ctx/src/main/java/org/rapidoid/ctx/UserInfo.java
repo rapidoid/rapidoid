@@ -2,9 +2,11 @@ package org.rapidoid.ctx;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -36,22 +38,67 @@ public class UserInfo implements Serializable {
 
 	private static final long serialVersionUID = 7062732348562440194L;
 
-	public volatile String username;
+	private static final UserInfo ANONYMOUS = new UserInfo("anonymous", null, "Anonymous", null, null,
+			U.set("ANONYMOUS"));
 
-	public volatile String passwordHash;
+	public final String username;
 
-	public volatile String email;
+	public final String email;
 
-	public volatile String name;
+	public final String name;
 
-	public volatile String oauthId;
+	public final String oauthId;
 
-	public volatile String oauthProvider;
+	public final String oauthProvider;
 
-	public UserInfo() {}
+	public volatile Set<String> roles;
+
+	public volatile Map<String, Boolean> is;
 
 	public UserInfo(String username) {
+		this(username, username, username);
+	}
+
+	public UserInfo(String username, String email, String name) {
+		this(username, email, name, null, null);
+	}
+
+	public UserInfo(String username, String email, String name, String oauthId, String oauthProvider) {
+		this(username, email, name, oauthId, oauthProvider, UserRoles.getUserRoles(username));
+	}
+
+	public UserInfo(String username, String email, String name, String oauthId, String oauthProvider, Set<String> roles) {
 		this.username = username;
+		this.email = email;
+		this.name = name;
+		this.oauthId = oauthId;
+		this.oauthProvider = oauthProvider;
+		this.roles = roles;
+		this.is = rolesMap(roles);
+	}
+
+	private static Map<String, Boolean> rolesMap(Set<String> roles) {
+		Map<String, Boolean> rolesMap = U.map();
+
+		for (String role : U.safe(roles)) {
+			rolesMap.put(role, true);
+		}
+
+		return rolesMap;
+	}
+
+	public static UserInfo from(Map<String, ?> scope) {
+		String username = (String) scope.get(USERNAME);
+		String email = (String) scope.get(EMAIL);
+		String name = (String) scope.get(NAME);
+
+		return username != null ? new UserInfo(username, email, name) : ANONYMOUS;
+	}
+
+	public void saveTo(Map<String, Serializable> scope) {
+		scope.put(USERNAME, this.username);
+		scope.put(EMAIL, this.email);
+		scope.put(NAME, this.name);
 	}
 
 	@Override
@@ -83,22 +130,6 @@ public class UserInfo implements Serializable {
 		} else if (!username.equals(other.username))
 			return false;
 		return true;
-	}
-
-	public static UserInfo from(Map<String, ?> scope) {
-		UserInfo user = new UserInfo();
-
-		user.username = (String) scope.get(USERNAME);
-		user.email = (String) scope.get(EMAIL);
-		user.name = (String) scope.get(NAME);
-
-		return user.username != null ? user : null;
-	}
-
-	public void saveTo(Map<String, Serializable> scope) {
-		scope.put(USERNAME, this.username);
-		scope.put(EMAIL, this.email);
-		scope.put(NAME, this.name);
 	}
 
 }

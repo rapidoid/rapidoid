@@ -8,7 +8,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertyFilter;
-import org.rapidoid.util.CommonRoles;
 import org.rapidoid.util.U;
 
 /*
@@ -37,7 +36,7 @@ import org.rapidoid.util.U;
  */
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public abstract class XEntity extends AbstractRichEntity implements CommonRoles, Serializable {
+public abstract class XEntity extends AbstractRichEntity implements Serializable {
 
 	private static final long serialVersionUID = 8414835674684110203L;
 
