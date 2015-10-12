@@ -37,12 +37,12 @@ public class StatsMeasure implements Measure {
 	private final AtomicLong ticks = new AtomicLong();
 
 	@Override
-	public String get() {
+	public synchronized String get() {
 		return count > 0 ? String.format("%s:[%s..%s..%s]#%s", sum, min, sum / count, max, count) : "" + ticks;
 	}
 
 	@Override
-	public void reset() {
+	public synchronized void reset() {
 		min = 0;
 		max = 0;
 		sum = 0;
