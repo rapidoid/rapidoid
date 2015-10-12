@@ -1,4 +1,4 @@
-package org.rapidoid.util;
+package org.rapidoid.config;
 
 /*
  * #%L
@@ -25,25 +25,24 @@ import java.io.File;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.config.Config;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")
-public class LiveTest extends TestCommons {
+public class RefreshingConfigTest extends TestCommons {
 
 	@Test
-	public void testLiveConfig() {
+	public void testRefreshingConfig() {
 		File tmp = createTempFile();
 		Log.info("Created temporary file", "file", tmp);
 
 		Conf.setRootPath(tmp.getParent());
 
 		String filename = tmp.getName();
-		Config config = Live.config("", filename);
+		Config config = Conf.refreshing("", filename);
 
 		eq(config.toMap(), U.map());
 

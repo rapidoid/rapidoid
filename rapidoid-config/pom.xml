@@ -14,12 +14,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-u</artifactId>
+			<artifactId>rapidoid-io</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-log</artifactId>
+			<artifactId>rapidoid-jackson</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

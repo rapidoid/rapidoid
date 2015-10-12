@@ -1,6 +1,11 @@
 package org.rapidoid.config;
 
+import java.util.Map;
+
+import org.rapidoid.data.YAML;
+import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
+import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -261,6 +266,40 @@ public class Conf {
 	public static void setConfigPath(String configPath) {
 		Log.info("Setting 'config' application path", "path", configPath);
 		Conf.configPath = cleanPath(configPath);
+	}
+
+	public static Config refreshing(String path, String filename) {
+		Log.info("Initializing auto-refreshing config", "path", path, "filename", filename);
+		path = U.safe(path);
+
+		String firstFile = U.path(Conf.rootPath(), path, filename);
+		String defaultFile = U.path(Conf.rootPathDefault(), path, filename);
+
+		final Config config = new Config();
+		final Res res = Res.from(filename, true, firstFile, defaultFile);
+
+		res.onChange(path + ":" + filename, new Runnable() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public void run() {
+				Map<String, Object> configData = U.map();
+
+				if (res.exists()) {
+					byte[] bytes = res.getBytesOrNull();
+
+					if (bytes != null && bytes.length > 0) {
+						configData = YAML.parse(bytes, Map.class);
+					}
+				}
+
+				config.assign(configData);
+			}
+		});
+
+		res.trackChanges();
+		res.exists(); // trigger loading
+
+		return config;
 	}
 
 }

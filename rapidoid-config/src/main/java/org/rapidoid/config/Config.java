@@ -153,4 +153,9 @@ public class Config {
 		return properties.toString();
 	}
 
+	@SuppressWarnings("unchecked")
+	public <T> T get(String key) {
+		return (T) properties.get(key);
+	}
+
 }
