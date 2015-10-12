@@ -39,7 +39,7 @@ public class UserInfo implements Serializable {
 	private static final long serialVersionUID = 7062732348562440194L;
 
 	private static final UserInfo ANONYMOUS = new UserInfo("anonymous", null, "Anonymous", null, null,
-			U.set("ANONYMOUS"));
+			Roles.ROLES_ANONYMOUS);
 
 	public final String username;
 

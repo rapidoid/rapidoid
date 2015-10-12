@@ -2,7 +2,6 @@ package org.rapidoid.ctx;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,29 +32,32 @@ import org.rapidoid.annotation.Since;
 @Since("4.4.0")
 public class Roles {
 
-	public static final String ANYBODY = "ANYBODY";
+	public static final String ANYBODY = "anybody";
 
-	public static final String ADMIN = "ADMIN";
+	public static final String ADMIN = "admin";
 
-	public static final String MANAGER = "MANAGER";
+	public static final String MANAGER = "manager";
 
-	public static final String MODERATOR = "MODERATOR";
+	public static final String MODERATOR = "moderator";
 
-	public static final String LOGGED_IN = "LOGGED_IN";
+	public static final String LOGGED_IN = "logged_in";
 
-	public static final String OWNER = "OWNER";
+	public static final String OWNER = "owner";
 
-	public static final String AUTHOR = "AUTHOR";
+	public static final String AUTHOR = "author";
 
-	public static final String SHARED_WITH = "SHARED_WITH";
+	public static final String SHARED_WITH = "shared_with";
 
-	public static final String RESTARTER = "RESTARTER";
+	public static final String RESTARTER = "restarter";
 
-	public static final String ANONYMOUS = "ANONYMOUS";
+	public static final String ANONYMOUS = "anonymous";
 
 	public static final List<String> COMMON_ROLES = Collections.unmodifiableList(Arrays.asList(ADMIN, MANAGER,
 			MODERATOR, LOGGED_IN, OWNER, RESTARTER));
 
+	public static final Set<String> ROLES_ANONYMOUS = U.set(ANONYMOUS);
+
+	public static final Set<String> ROLES_LOGGED_IN = U.set(LOGGED_IN);
 	public static Set<String> getRolesFor(String username) {
 		Set<String> roles = new HashSet<String>();
 		// FIXME implement this
