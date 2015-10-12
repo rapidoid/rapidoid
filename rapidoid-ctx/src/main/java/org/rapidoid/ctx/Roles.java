@@ -1,12 +1,17 @@
 package org.rapidoid.ctx;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
+import org.rapidoid.util.U;
 
 /*
  * #%L
@@ -58,10 +63,36 @@ public class Roles {
 	public static final Set<String> ROLES_ANONYMOUS = U.set(ANONYMOUS);
 
 	public static final Set<String> ROLES_LOGGED_IN = U.set(LOGGED_IN);
+
+	@SuppressWarnings("unchecked")
 	public static Set<String> getRolesFor(String username) {
-		Set<String> roles = new HashSet<String>();
-		// FIXME implement this
-		return roles;
+		if (U.isEmpty(username)) {
+			return ROLES_ANONYMOUS;
+		}
+
+		Config users = Conf.users();
+
+		Map<String, Object> user = users.get(username);
+		if (user == null) {
+			return ROLES_LOGGED_IN;
+		}
+
+		Object roles = U.cast(user.get("roles"));
+
+		if (U.isCollection(roles)) {
+			Set<String> roleSet = U.set();
+			for (String role : (Collection<String>) roles) {
+				roleSet.add(role.toLowerCase());
+			}
+			return roleSet;
+
+		} else if (roles instanceof String) {
+			String role = (String) roles;
+			return U.set(role.toLowerCase());
+
+		} else {
+			return ROLES_LOGGED_IN;
+		}
 	}
 
 }

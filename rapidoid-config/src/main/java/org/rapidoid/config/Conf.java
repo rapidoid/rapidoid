@@ -35,6 +35,8 @@ public class Conf {
 
 	private static final Config ROOT = new Config();
 
+	private static final Config USERS = refreshing("", "users.yaml");
+
 	private static String rootPath = rootPathDefault();
 	private static String staticPath = staticPathDefault();
 	private static String dynamicPath = dynamicPathDefault();
@@ -300,6 +302,10 @@ public class Conf {
 		res.exists(); // trigger loading
 
 		return config;
+	}
+
+	public static Config users() {
+		return USERS;
 	}
 
 }

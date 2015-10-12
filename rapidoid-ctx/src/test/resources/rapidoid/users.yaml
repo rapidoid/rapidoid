@@ -1,0 +1,15 @@
+niko:
+  email: niko@rapidoid.org.abcde
+  password: easy
+  roles:
+    - owner
+    - admin
+    - moderator
+
+chuck:
+  password: chuck
+  roles: ["moderator", "restarter"]
+
+abc:
+  password: abc
+  roles: guest
