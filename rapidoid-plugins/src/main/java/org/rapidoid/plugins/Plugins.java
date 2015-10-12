@@ -126,7 +126,7 @@ public final class Plugins {
 		}
 
 		// initial plugin configuration
-		plugin.configure(Conf.sub(plugin.name()));
+		plugin.configure(Conf.sub(plugin.name()).toMap());
 
 		setPlugin(plugin);
 	}

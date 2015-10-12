@@ -89,11 +89,11 @@ public class Conf {
 	}
 
 	public static Object option(String name) {
-		return ROOT.get(name);
+		return ROOT.option(name);
 	}
 
 	public static String option(String name, String defaultValue) {
-		return ROOT.containsKey(name) ? (String) ROOT.get(name) : defaultValue;
+		return ROOT.option(name, defaultValue);
 	}
 
 	public static int option(String name, int defaultValue) {

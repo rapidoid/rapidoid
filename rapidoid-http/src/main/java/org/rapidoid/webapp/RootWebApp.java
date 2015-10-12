@@ -37,7 +37,8 @@ public class RootWebApp extends WebApp {
 	@SuppressWarnings("unchecked")
 	public RootWebApp() {
 		super("root", Collections.EMPTY_SET, Collections.EMPTY_SET, U.set("/"), Conf.dev() ? AppMode.DEVELOPMENT
-				: AppMode.PRODUCTION, null, null, Classes.from(ClasspathUtil.getAllClasses()), new Config(Conf.root()));
+				: AppMode.PRODUCTION, null, null, Classes.from(ClasspathUtil.getAllClasses()), new Config(Conf.root()
+				.toMap()));
 	}
 
 }

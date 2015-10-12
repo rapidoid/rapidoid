@@ -21,35 +21,39 @@ package org.rapidoid.config;
  */
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+
+import org.rapidoid.util.U;
 
 /**
  * @author Nikolche Mihajlovski
  * @since 4.1.0
  */
-public class Config extends ConcurrentHashMap<String, Object> {
+public class Config {
 
-	private static final long serialVersionUID = 2218993389190953636L;
+	private final Map<String, Object> properties;
 
-	public Config(Map<String, Object> config) {
-		putAll(config);
+	public Config(Map<String, Object> configProperties) {
+		this.properties = Collections.synchronizedMap(configProperties);
 	}
 
-	public Config() {}
+	public Config() {
+		this(U.<String, Object> map());
+	}
 
 	public String option(String name) {
-		Object opt = get(name);
-		return opt != null ? opt.toString() : null;
+		Object opt = properties.get(name);
+		return opt != null ? U.str(opt) : null;
 	}
 
 	public String option(String name, String defaultValue) {
-		return containsKey(name) ? (String) get(name) : defaultValue;
+		return U.or(U.str(properties.get(name)), defaultValue);
 	}
 
 	public int option(String name, int defaultValue) {
 		String n = option(name);
-		return n != null ? Integer.parseInt(n) : defaultValue;
+		return n != null ? U.num(n) : defaultValue;
 	}
 
 	public long option(String name, long defaultValue) {
@@ -63,12 +67,12 @@ public class Config extends ConcurrentHashMap<String, Object> {
 	}
 
 	public boolean has(String name, Object value) {
-		Object opt = get(name);
-		return opt == value || (opt != null && opt.equals(value));
+		Object val = properties.get(name);
+		return U.eq(val, value);
 	}
 
 	public boolean has(String name) {
-		return containsKey(name);
+		return properties.containsKey(name);
 	}
 
 	public boolean is(String name) {
@@ -76,7 +80,7 @@ public class Config extends ConcurrentHashMap<String, Object> {
 	}
 
 	public boolean contains(String name, Object value) {
-		Object opt = get(name);
+		Object opt = properties.get(name);
 
 		if (opt != null) {
 			if (opt instanceof Collection) {
@@ -91,21 +95,16 @@ public class Config extends ConcurrentHashMap<String, Object> {
 
 	@SuppressWarnings("unchecked")
 	public synchronized Config sub(String name) {
-		Map<String, Object> submap = (Map<String, Object>) get(name);
+		Map<String, Object> submap = (Map<String, Object>) properties.get(name);
 
 		if (submap == null) {
-			submap = new Config();
+			submap = U.map();
 			put(name, submap);
-		} else if (submap instanceof Map) {
-			if (!(submap instanceof Config)) {
-				submap = new Config(submap);
-				put(name, submap);
-			}
-		} else {
+		} else if (!(submap instanceof Map)) {
 			throw new RuntimeException("Invalid submap type: " + submap.getClass());
 		}
 
-		return (Config) submap;
+		return new Config(submap);
 	}
 
 	public ConfigEntry entry(String... name) {
@@ -123,7 +122,35 @@ public class Config extends ConcurrentHashMap<String, Object> {
 			}
 		}
 
-		return (T) cfg.get(name[name.length - 1]);
+		return (T) cfg.option(name[name.length - 1]);
+	}
+
+	public Map<String, Object> toMap() {
+		return U.map(properties);
+	}
+
+	public void clear() {
+		properties.clear();
+	}
+
+	public void put(String key, Object value) {
+		properties.put(key, value);
+	}
+
+	public void remove(String name) {
+		properties.remove(name);
+	}
+
+	public void assign(Map<String, Object> newProperties) {
+		synchronized (properties) {
+			properties.clear();
+			properties.putAll(newProperties);
+		}
+	}
+
+	@Override
+	public String toString() {
+		return properties.toString();
 	}
 
 }
