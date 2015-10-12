@@ -1062,31 +1062,37 @@ public class U {
 	}
 
 	public static String uri(String... parts) {
-		return "/" + constructPath("/", parts);
+		return "/" + constructPath("/", false, parts);
 	}
 
 	public static String path(String... parts) {
-		return constructPath(File.separator, parts);
+		return constructPath(File.separator, true, parts);
 	}
 
-	private static String constructPath(String separator, String... parts) {
-		StringBuilder sb = new StringBuilder();
+	private static String constructPath(String separator, boolean preserveFirstSegment, String... parts) {
+		String s = "";
 
-		for (String part : parts) {
+		for (int i = 0; i < parts.length; i++) {
+			String part = parts[i];
+
 			// trim '/'s and '\'s
-			part = triml(part, "/");
-			part = trimr(part, "/");
-			part = trimr(part, "\\");
+			if (!preserveFirstSegment || i > 0) {
+				part = triml(part, "/");
+			}
+
+			if (!preserveFirstSegment || part.length() > 1 || i > 0) {
+				part = trimr(part, "/");
+				part = trimr(part, "\\");
+			}
 
 			if (!U.isEmpty(part)) {
-				if (sb.length() > 0) {
-					sb.append(separator);
+				if (!s.isEmpty() && !s.endsWith(separator)) {
+					s += separator;
 				}
-				sb.append(part);
+				s += part;
 			}
 		}
 
-		return sb.toString();
+		return s;
 	}
-
 }
