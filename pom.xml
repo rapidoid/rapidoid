@@ -110,6 +110,7 @@
 		<module>rapidoid-net</module>
 		<module>rapidoid-http-api</module>
 		<module>rapidoid-http</module>
+		<module>rapidoid-http-fast</module>
 		<module>rapidoid-rest</module>
 		<module>rapidoid-measure</module>
 		<module>rapidoid-dispatch</module>

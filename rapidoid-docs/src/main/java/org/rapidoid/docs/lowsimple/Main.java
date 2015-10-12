@@ -2,8 +2,8 @@ package org.rapidoid.docs.lowsimple;
 
 import java.util.Map;
 
-import org.rapidoid.http.On;
-import org.rapidoid.http.ParamHandler;
+import org.rapidoid.http.fast.On;
+import org.rapidoid.http.fast.ParamHandler;
 import org.rapidoid.util.U;
 
 /*

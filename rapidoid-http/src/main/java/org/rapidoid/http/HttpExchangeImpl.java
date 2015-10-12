@@ -41,6 +41,7 @@ import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
+import org.rapidoid.http.fast.HttpParser;
 import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;

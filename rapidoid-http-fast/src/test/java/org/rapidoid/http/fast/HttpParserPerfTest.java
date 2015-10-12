@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.http.fast;
 
 /*
  * #%L
@@ -24,9 +24,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
+import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.wrap.BoolWrap;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -47,7 +49,18 @@ public class HttpParserPerfTest {
 		final Buf[] reqs = { r(REQ1), r(REQ2), r(REQ3), r(REQ4) };
 		final RapidoidHelper helper = new RapidoidHelper(null);
 
-		final HttpExchangeImpl req = new HttpExchangeImpl();
+		Range[] ranges = helper.ranges1.ranges;
+		final Ranges headers = helper.ranges2;
+
+		final BoolWrap isGet = helper.booleans[0];
+		final BoolWrap isKeepAlive = helper.booleans[1];
+
+		final Range verb = ranges[ranges.length - 1];
+		final Range uri = ranges[ranges.length - 2];
+		final Range path = ranges[ranges.length - 3];
+		final Range query = ranges[ranges.length - 4];
+		final Range protocol = ranges[ranges.length - 5];
+		final Range body = ranges[ranges.length - 6];
 
 		for (int i = 0; i < 10; i++) {
 			UTILS.benchmark("parse", 3000000, new Runnable() {
@@ -55,11 +68,9 @@ public class HttpParserPerfTest {
 
 				@Override
 				public void run() {
-					req.reset();
 					Buf buf = reqs[n % 4];
 					buf.position(0);
-					parser.parse(buf, req.isGet, req.isKeepAlive, req.rBody, req.rVerb, req.rUri, req.rPath, req.rQuery,
-							req.rProtocol, req.headers, helper);
+					parser.parse(buf, isGet, isKeepAlive, body, verb, uri, path, query, protocol, headers, helper);
 					n++;
 				}
 			});

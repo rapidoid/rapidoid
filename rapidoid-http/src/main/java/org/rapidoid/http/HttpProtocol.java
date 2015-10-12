@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.http.fast.HttpParser;
 import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;

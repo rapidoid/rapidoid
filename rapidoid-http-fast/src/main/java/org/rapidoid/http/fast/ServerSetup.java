@@ -1,8 +1,7 @@
-package org.rapidoid.http;
+package org.rapidoid.http.fast;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.fast.FastHttp;
 import org.rapidoid.net.Serve;
 import org.rapidoid.net.TCPServer;
 

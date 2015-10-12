@@ -25,7 +25,7 @@ import java.util.concurrent.Callable;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.http.On;
+import org.rapidoid.http.fast.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

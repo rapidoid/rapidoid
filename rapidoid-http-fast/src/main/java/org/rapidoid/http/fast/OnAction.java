@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.http.fast;
 
 /*
  * #%L
@@ -24,12 +24,6 @@ import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.ParamHandler;
-import org.rapidoid.http.fast.FastCallableHttpHandler;
-import org.rapidoid.http.fast.FastHttp;
-import org.rapidoid.http.fast.FastParamsAwareHttpHandler;
-import org.rapidoid.http.fast.FastResourceHttpHandler;
-import org.rapidoid.http.fast.FastStaticHttpHandler;
 import org.rapidoid.io.Res;
 
 @Authors("Nikolche Mihajlovski")

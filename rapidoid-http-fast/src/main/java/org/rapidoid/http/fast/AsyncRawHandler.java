@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.http.fast;
 
 import java.io.OutputStream;
 import java.util.Map;
