@@ -66,7 +66,7 @@ public class AppSecurity implements Constants {
 				Role[] values = ((HasRole) ann).value();
 				U.must(values.length > 0, "At least one role must be specified in @Roles annotation!");
 				for (Role r : values) {
-					roles.add(r.value().toUpperCase());
+					roles.add(r.value().toLowerCase());
 				}
 			}
 		}
