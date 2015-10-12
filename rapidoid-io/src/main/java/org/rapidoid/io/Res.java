@@ -109,30 +109,31 @@ public class Res {
 	}
 
 	protected void loadResource() {
-		// micro-caching the file content, expires after 1 second
+		// micro-caching the file content, expires after 500ms
 		if (U.time() - lastUpdatedOn >= 500) {
 			boolean hasChanged = false;
 
 			synchronized (this) {
 
 				byte[] old = bytes;
-				byte[] res = null;
+				byte[] foundRes = null;
 
 				for (String filename : filenames) {
 					Log.trace("Trying to load the resource", "name", shortName, "file", filename);
-					res = load(filename);
+					byte[] res = load(filename);
 					if (res != null) {
 						Log.trace("Loaded the resource", "name", shortName, "file", filename);
+						foundRes = res;
 						this.cachedFileName = filename;
 						break;
 					}
 				}
 
-				if (res == null) {
+				if (foundRes == null) {
 					this.cachedFileName = null;
 				}
 
-				this.bytes = res;
+				this.bytes = foundRes;
 				hasChanged = !U.eq(old, bytes) && (old == null || bytes == null || !Arrays.equals(old, bytes));
 				lastUpdatedOn = U.time();
 
@@ -167,8 +168,7 @@ public class Res {
 		} else {
 			// it might not exist or it might be on the classpath or compressed in a JAR
 			Log.trace("Trying to load classpath resource", "name", shortName, "file", file);
-			byte[] res = IO.loadBytes(filename);
-			return res;
+			return IO.loadBytes(filename);
 		}
 	}
 
