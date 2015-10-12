@@ -1077,7 +1077,7 @@ public class U {
 		String s = "";
 
 		for (int i = 0; i < parts.length; i++) {
-			String part = parts[i];
+			String part = U.safe(parts[i]);
 
 			// trim '/'s and '\'s
 			if (!preserveFirstSegment || i > 0) {
