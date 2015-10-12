@@ -2,7 +2,7 @@ package org.rapidoid.dict;
 
 /*
  * #%L
- * rapidoid-dict
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
