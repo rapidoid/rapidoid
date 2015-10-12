@@ -46,33 +46,13 @@ public class AppTool {
 		RootWebApp app = WebAppGroup.root();
 		app.getRouter().generic(new AsyncAppHandler());
 
-		String menufile = "menu.yaml";
-		String firstMenuFile = Conf.configPath() + "/" + menufile;
-		String defaultMenuFile = Conf.configPathDefault() + "/" + menufile;
-		final Res menuRes = Res.from(menufile, true, firstMenuFile, defaultMenuFile).trackChanges();
+		setupMenuConfig(app);
+		setupAppConfig(app);
 
-		final WebApp rootApp = app;
-		menuRes.onChange("app tool", new Runnable() {
-			@Override
-			public void run() {
-				if (menuRes.exists()) {
-					Object menuData;
-					String menuYaml = menuRes.getContent().trim();
+		return app;
+	}
 
-					if (!U.isEmpty(menuYaml)) {
-						menuData = YAML.parse(menuYaml, Object.class);
-					} else {
-						menuData = U.map();
-					}
-
-					AppMenu menu = AppMenu.from(menuData);
-					rootApp.setMenu(menu);
-				}
-			}
-		});
-
-		menuRes.exists(); // trigger loading
-
+	private static void setupAppConfig(final WebApp rootApp) {
 		String appfile = "app.yaml";
 		String firstAppFile = Conf.configPath() + "/" + appfile;
 		String defaultAppFile = Conf.configPathDefault() + "/" + appfile;
@@ -118,7 +98,34 @@ public class AppTool {
 		});
 
 		confRes.exists(); // trigger loading
-
-		return app;
 	}
+
+	private static void setupMenuConfig(final WebApp app) {
+		String menufile = "menu.yaml";
+		String firstMenuFile = Conf.configPath() + "/" + menufile;
+		String defaultMenuFile = Conf.configPathDefault() + "/" + menufile;
+		final Res menuRes = Res.from(menufile, true, firstMenuFile, defaultMenuFile).trackChanges();
+
+		menuRes.onChange("app tool", new Runnable() {
+			@Override
+			public void run() {
+				if (menuRes.exists()) {
+					Object menuData;
+					String menuYaml = menuRes.getContent().trim();
+
+					if (!U.isEmpty(menuYaml)) {
+						menuData = YAML.parse(menuYaml, Object.class);
+					} else {
+						menuData = U.map();
+					}
+
+					AppMenu menu = AppMenu.from(menuData);
+					app.setMenu(menu);
+				}
+			}
+		});
+
+		menuRes.exists(); // trigger loading
+	}
+
 }
