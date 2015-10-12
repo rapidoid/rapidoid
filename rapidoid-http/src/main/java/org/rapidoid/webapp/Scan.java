@@ -13,7 +13,6 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.tuple.Tuple;
 import org.rapidoid.util.U;
 
 /*
@@ -76,13 +75,13 @@ public class Scan {
 
 		packageName = U.or(packageName, "");
 
-		Tuple cacheKey = null;
+		List<?> cacheKey = null;
 
 		WebApp app = Ctxs.ctx().app();
 		Classes appClasses = app.getClasses();
-		Map<Tuple, List<Class<?>>> cache = appClasses.getCache();
+		Map<List<?>, List<Class<?>>> cache = appClasses.getCache();
 
-		cacheKey = new Tuple(packageName, nameRegex, filter, annotated, classLoader);
+		cacheKey = U.list(packageName, nameRegex, filter, annotated, classLoader);
 		List<Class<?>> cachedClasses = cache.get(cacheKey);
 		if (cachedClasses != null) {
 			return cachedClasses;

@@ -62,7 +62,6 @@ import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.security.Secure;
-import org.rapidoid.tuple.Tuple;
 import org.rapidoid.util.OptimisticConcurrencyControlException;
 import org.rapidoid.util.SuccessException;
 import org.rapidoid.util.U;
@@ -366,7 +365,7 @@ public class InMem implements Serializable {
 		Class<?> srcType = inverse ? cls : entCls;
 		Class<?> destType = inverse ? entCls : cls;
 
-		Tuple key = new Tuple(rel, srcType, destType);
+		List<?> key = U.list(rel, srcType, destType);
 		RelPair relPair = data.relPairs.get(key);
 
 		Prop srcProp, destProp;

@@ -22,6 +22,7 @@ package org.rapidoidx.inmem;
  */
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
@@ -35,7 +36,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.PropertySelector;
 import org.rapidoid.concurrent.Callback;
-import org.rapidoid.tuple.Tuple;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -53,7 +53,7 @@ public class InMemData implements Serializable {
 
 	final PropertySelector relPropSelector;
 
-	final ConcurrentMap<Tuple, RelPair> relPairs = new ConcurrentHashMap<Tuple, RelPair>();
+	final ConcurrentMap<List<?>, RelPair> relPairs = new ConcurrentHashMap<List<?>, RelPair>();
 
 	final AtomicLong ids = new AtomicLong();
 
