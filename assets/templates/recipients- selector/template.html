@@ -1,0 +1,40 @@
+<!-- Derived from: http://bootsnipp.com/snippets/featured/recipients-selector (Copyright (c) 2013 Bootsnipp.com, MIT license, see http://bootsnipp.com/license) -->
+
+<div class="container">
+	{{#panel}}
+    	<h3>{{title}}<br />
+        	<small>{{subtitle}}</small>
+    	</h3>    
+    	<p><code>{{content}}</code></p>
+    	<br/>
+
+		<div class="panel panel-default recipients">
+       		<div class="panel-heading">
+	   	    	{{#checkBoxes}}
+    	       		<span class="button-checkbox">
+    	           		<button type="button" class="btn btn-sm" data-color="default">{{value}}</button>
+    	            	{{#checked}}
+    	            		<input type="checkbox" id="showall" class="hidden" checked />
+        	        	{{/checked}}
+        	        	{{^checked}}
+            	   	 	<input type="checkbox" id="showall" class="hidden" />
+            	    	{{/checked}}
+           	 		</span>
+				{{/checkBoxes}}            
+        	</div>
+
+        	<div class="panel-body">
+        		{{#persons}}
+            		<div class="recipient" title="{{person}}{{email}}">
+                		<img src="{{image}}" /> {{person}} <div class="email">{{email}}</div>
+            		</div>
+            	{{/persons}}
+        	</div>
+        	
+        	<div class="panel-footer">
+           		<span class="text-muted">{{footerText}}</span>
+        	</div>
+        	
+    	</div>
+    {{/panel}}
+</div>

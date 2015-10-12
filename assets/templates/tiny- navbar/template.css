@@ -1,0 +1,21 @@
+/*
+ * Derived from: http://bootsnipp.com/snippets/featured/tiny-navbar (Copyright (c) 2013 Bootsnipp.com, MIT license, see http://bootsnipp.com/license)
+ */
+ 
+.navbar-xs {
+	min-height: 22px;
+	border-radius: 0
+}
+
+.navbar-xs .navbar-brand {
+	padding: 2px 8px;
+	font-size: 14px;
+	line-height: 14px;
+}
+
+.navbar-xs .navbar-nav>li>a {
+	border-right: 1px solid #ddd;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	line-height: 16px
+}

@@ -1,0 +1,64 @@
+<!-- Derived from: http://bootsnipp.com/snippets/featured/full-screen-background-cover-page (Copyright (c) 2013 Bootsnipp.com, MIT license, see http://bootsnipp.com/license) -->
+
+<div class="site-wrapper">
+	<div class="site-wrapper-inner">
+		<div class="cover-container">
+			<div class="masthead clearfix">
+				<div class="inner">
+					<h3 class="masthead-brand">{{title}}</h3>
+
+					<ul class="nav masthead-nav">
+					{{#tabs}}
+					{{#active}}
+						<li class="active"><a
+							href="http://bootsnipp.com/iframe/g6GWQ" target="_blank">{{value}}</a></li>
+					{{/active}}
+					{{^active}}
+						<li><a href="#">{{value}}</a></li>
+					{{/active}}
+					{{/tabs}}
+					</ul>
+				</div>
+			</div>
+
+			<div class="inner cover">
+				<h1 class="cover-heading">{{heading}}</h1>
+
+				<p class="lead">
+						{{content}}
+						</br><small><a href="http://bootsnipp.com/iframe/g6GWQ" target="_blank">Best
+							viewed on full screen</a></small>
+
+				</p>
+
+				<p class="lead">
+					<a class="btn btn-lg btn-info" href="#">Learn more</a>
+				</p>
+			</div>
+
+			<div class="mastfoot">
+				<div class="inner">
+					<!-- Validation -->
+
+					<p>
+						<a
+							href="http://validator.w3.org/check?uri=http%3A%2F%2Fbootsnipp.com%2Fiframe%2Fg6GWQ"
+							target="_blank"><small>HTML</small><sup>5</sup></a>
+					</p>
+
+
+					<p>
+						<a href="https://github.com/twbs/bootlint" target="_blank"><small>Checked
+								with Bootlint</small></a>
+					</p>
+
+
+
+					<p>
+						© 2014 Your Name ~ <a href="http://getbootstrap.com/">Bootstrap</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

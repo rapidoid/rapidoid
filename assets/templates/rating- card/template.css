@@ -1,0 +1,40 @@
+/*
+ * Derived from: http://bootsnipp.com/snippets/featured/rating-card (Copyright (c) 2013 Bootsnipp.com, MIT license, see http://bootsnipp.com/license)
+ */
+
+/* http://www.jquery2dotnet.com/ */
+
+body {
+	margin-top: 20px;
+}
+
+.glyphicon {
+	margin-right: 5px;
+}
+
+.rating .glyphicon {
+	font-size: 22px;
+}
+
+.rating-num {
+	margin-top: 0px;
+	font-size: 54px;
+}
+
+.progress {
+	margin-bottom: 5px;
+}
+
+.progress-bar {
+	text-align: left;
+}
+
+.rating-desc .col-md-3 {
+	padding-right: 0px;
+}
+
+.sr-only {
+	margin-left: 5px;
+	overflow: visible;
+	clip: auto;
+}

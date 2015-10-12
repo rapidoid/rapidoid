@@ -1,0 +1,40 @@
+<!-- Derived from: http://bootsnipp.com/maridlcrmn/snippets/QbEpr (Copyright (c) 2013 Bootsnipp.com, MIT license, see http://bootsnipp.com/license) -->
+
+<div class="container text-center">
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3" role="tabpanel">
+			<!-- Nav tabs -->
+			<ul class="nav nav-justified" id="nav-tabs" role="tablist">
+				{{#items}} {{#active}}
+				<li role="presentation" class="active">{{/active}} {{^active}}
+				
+				<li role="presentation">{{/active}} <a href="#{{id}}"
+					aria-controls="{{id}}" role="tab" data-toggle="tab"> <img
+						class="img-circle" src={{image}} /> <span class="quote"><i
+							class="fa fa-quote-left"></i></span>
+				</a></li> {{/items}}
+			</ul>
+
+			<!-- Tab panes -->
+			<div class="tab-content" id="tabs-collapse">
+				{{#items}} {{#active}}
+				<div role="tabpanel" class="tab-pane fade in active" id={{id}}>
+					{{/active}} {{^active}}
+					<div role="tabpanel" class="tab-pane fade" id={{id}}>
+						{{/active}}
+						<div class="tab-inner">
+							<p class="lead">{{quote}}</p>
+							<hr>
+							<p>
+								<strong class="text-uppercase">{{person}}</strong>
+							</p>
+							<p>
+								<em class="text-capitalize">{{proffesion}}</em> at <a href="#">{{employer}}</a>
+							</p>
+						</div>
+					</div>
+					{{/items}}
+				</div>
+			</div>
+		</div>
+	</div>
