@@ -21,6 +21,7 @@ package org.rapidoid.test;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
@@ -408,6 +409,18 @@ public abstract class TestCommons {
 
 	protected static long num(String num) {
 		return Long.parseLong(num);
+	}
+
+	protected File createTempFile() {
+		File file;
+		try {
+			file = File.createTempFile("temp", "" + System.nanoTime());
+		} catch (IOException e) {
+			throw new RuntimeException("Couldn't create temporary file!", e);
+		}
+
+		file.deleteOnExit();
+		return file;
 	}
 
 }
