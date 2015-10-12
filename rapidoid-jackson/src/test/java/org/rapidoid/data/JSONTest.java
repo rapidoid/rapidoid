@@ -1,4 +1,4 @@
-package org.rapidoid.xml;
+package org.rapidoid.data;
 
 /*
  * #%L
@@ -20,43 +20,33 @@ package org.rapidoid.xml;
  * #L%
  */
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Map;
+
+import org.junit.Test;
+import org.rapidoid.data.JSON;
+import org.rapidoid.test.TestCommons;
 
 /**
  * @author Nikolche Mihajlovski
- * @since 4.4.0
+ * @since 2.0.0
  */
-@XmlRootElement
-public class Person {
+public class JSONTest extends TestCommons {
 
-	private String name;
+	@SuppressWarnings("unchecked")
+	@Test
+	public void json() {
+		User p = new User("john", 25);
 
-	private int age;
+		String json = JSON.stringify(p);
+		System.out.println(json);
 
-	public Person() {}
+		User p2 = JSON.parse(json, User.class);
+		eq(p2.name, p.name);
+		eq(p2.age, p.age);
 
-	public Person(String name, int age) {
-		this.name = name;
-		this.age = age;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	@XmlElement
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public int getAge() {
-		return age;
-	}
-
-	@XmlElement
-	public void setAge(int age) {
-		this.age = age;
+		Map<String, ?> map = JSON.parse(json, Map.class);
+		eq(map.get("name"), p.name);
+		eq(map.get("age"), p.age);
 	}
 
 }

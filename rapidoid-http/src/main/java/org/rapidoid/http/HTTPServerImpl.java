@@ -22,9 +22,9 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.data.JSON;
 import org.rapidoid.http.session.InMemorySessionStore;
 import org.rapidoid.http.session.SessionStore;
-import org.rapidoid.jackson.JSON;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.impl.RapidoidServerLoop;
 import org.rapidoid.webapp.WebAppGroup;

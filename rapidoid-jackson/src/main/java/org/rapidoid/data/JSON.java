@@ -1,4 +1,4 @@
-package org.rapidoid.jackson;
+package org.rapidoid.data;
 
 import java.io.OutputStream;
 import java.util.Map;
@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.Base64Variants;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 
 /*
@@ -32,14 +31,14 @@ import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 
 /**
  * @author Nikolche Mihajlovski
- * @since 4.1.0
+ * @since 2.0.0
  */
-public class YAML {
+public class JSON {
 
 	public static final ObjectMapper MAPPER = mapper();
 
 	private static ObjectMapper mapper() {
-		ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+		ObjectMapper mapper = new ObjectMapper();
 		mapper.setBase64Variant(Base64Variants.MODIFIED_FOR_URL);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		mapper.registerModule(new AfterburnerModule());
@@ -62,41 +61,50 @@ public class YAML {
 		}
 	}
 
-	public static <T> T parse(String yaml, Class<T> valueType) {
+	public static <T> T parse(String json, Class<T> valueType) {
 		try {
-			return MAPPER.readValue(yaml, valueType);
+			return MAPPER.readValue(json, valueType);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public static <T> T parse(byte[] yaml, Class<T> valueType) {
+	public static <T> T parse(byte[] json, Class<T> valueType) {
 		try {
-			return MAPPER.readValue(yaml, valueType);
+			return MAPPER.readValue(json, valueType);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public static <T> T parse(String yaml, TypeReference<T> valueType) {
+	public static <T> T parse(String json, TypeReference<T> valueType) {
 		try {
-			return MAPPER.readValue(yaml, valueType);
+			return MAPPER.readValue(json, valueType);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public static <T> T parse(byte[] yaml, TypeReference<T> valueType) {
+	public static <T> T parse(byte[] json, TypeReference<T> valueType) {
 		try {
-			return MAPPER.readValue(yaml, valueType);
+			return MAPPER.readValue(json, valueType);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> parseMap(String yaml) {
-		return parse(yaml, Map.class);
+	public static Map<String, Object> parseMap(String json) {
+		return parse(json, Map.class);
+	}
+
+	public static void warmup() {
+		JSON.stringify(123);
+		JSON.parse("{}", Map.class);
+	}
+
+	public static byte[] parseBytes(String json) {
+		return parse(json, byte[].class);
 	}
 
 }

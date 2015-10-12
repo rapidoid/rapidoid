@@ -1,4 +1,4 @@
-package org.rapidoid.jackson;
+package org.rapidoid.data;
 
 /*
  * #%L
@@ -20,34 +20,42 @@ package org.rapidoid.jackson;
  * #L%
  */
 
-import java.util.List;
-import java.util.Set;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-import org.rapidoid.util.U;
-
-@SuppressWarnings("unchecked")
 /**
  * @author Nikolche Mihajlovski
- * @since 2.0.0
+ * @since 4.4.0
  */
+@XmlRootElement
 public class Person {
 
-	public long id;
+	private String name;
 
-	public String name;
-
-	public int age;
-
-	public String[] tags = { "aa", "bbb" };
-
-	public Set<?> ss = U.set(1, "bn", false);
-
-	public List<?> lst = U.list(1, "bn", false);
+	private int age;
 
 	public Person() {}
 
 	public Person(String name, int age) {
 		this.name = name;
+		this.age = age;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	@XmlElement
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	@XmlElement
+	public void setAge(int age) {
 		this.age = age;
 	}
 

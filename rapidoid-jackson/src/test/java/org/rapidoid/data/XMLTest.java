@@ -1,4 +1,4 @@
-package org.rapidoid.jackson;
+package org.rapidoid.data;
 
 /*
  * #%L
@@ -20,32 +20,27 @@ package org.rapidoid.jackson;
  * #L%
  */
 
-import java.util.Map;
-
 import org.junit.Test;
+import org.rapidoid.data.XML;
 import org.rapidoid.test.TestCommons;
 
 /**
  * @author Nikolche Mihajlovski
- * @since 2.0.0
+ * @since 4.4.0
  */
-public class JSONTest extends TestCommons {
+public class XMLTest extends TestCommons {
 
-	@SuppressWarnings("unchecked")
 	@Test
-	public void json() {
-		Person p = new Person("john", 25);
+	public void testXMLSerialization() {
+		String xml = XML.stringify(new Person("abc", 123));
+		System.out.println(xml);
 
-		String json = JSON.stringify(p);
-		System.out.println(json);
+		isTrue(xml.contains("<name>abc</name>"));
+		isTrue(xml.contains("<age>123</age>"));
 
-		Person p2 = JSON.parse(json, Person.class);
-		eq(p2.name, p.name);
-		eq(p2.age, p.age);
-
-		Map<String, ?> map = JSON.parse(json, Map.class);
-		eq(map.get("name"), p.name);
-		eq(map.get("age"), p.age);
+		Person p = XML.parse(xml, Person.class);
+		eq(p.getName(), "abc");
+		eq(p.getAge(), 123);
 	}
 
 }

@@ -23,9 +23,9 @@ package org.rapidoid.webapp;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.data.YAML;
 import org.rapidoid.http.HttpTestCommons;
 import org.rapidoid.io.Res;
-import org.rapidoid.jackson.YAML;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

@@ -1,4 +1,4 @@
-package org.rapidoid.jackson;
+package org.rapidoid.data;
 
 /*
  * #%L
@@ -24,13 +24,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+import org.rapidoid.data.YAML;
 import org.rapidoid.io.IO;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.U;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-class Persons extends TypeReference<List<Person>> {}
+class Persons extends TypeReference<List<User>> {}
 
 /**
  * @author Nikolche Mihajlovski
@@ -38,7 +39,7 @@ class Persons extends TypeReference<List<Person>> {}
  */
 public class YAMLTest extends TestCommons {
 
-	private final TypeReference<List<Person>> personList = new TypeReference<List<Person>>() {};
+	private final TypeReference<List<User>> personList = new TypeReference<List<User>>() {};
 
 	@Test
 	public void parseMap() {
@@ -51,15 +52,15 @@ public class YAMLTest extends TestCommons {
 	public void parseBeans() {
 		String yaml = IO.load("persons.yaml");
 
-		List<Person> persons = YAML.parse(yaml, personList);
+		List<User> persons = YAML.parse(yaml, personList);
 		eq(persons.size(), 2);
 
-		Person p1 = persons.get(0);
+		User p1 = persons.get(0);
 		eq(p1.id, 123);
 		eq(p1.name, "John Doe");
 		eq(p1.age, 50);
 
-		Person p2 = persons.get(1);
+		User p2 = persons.get(1);
 		eq(p2.name, "Highlander");
 		eq(p2.age, 900);
 	}

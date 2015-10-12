@@ -1,4 +1,4 @@
-package org.rapidoid.xml;
+package org.rapidoid.data;
 
 /*
  * #%L
@@ -20,26 +20,35 @@ package org.rapidoid.xml;
  * #L%
  */
 
-import org.junit.Test;
-import org.rapidoid.test.TestCommons;
+import java.util.List;
+import java.util.Set;
 
+import org.rapidoid.util.U;
+
+@SuppressWarnings("unchecked")
 /**
  * @author Nikolche Mihajlovski
- * @since 4.4.0
+ * @since 2.0.0
  */
-public class XMLTest extends TestCommons {
+public class User {
 
-	@Test
-	public void testXMLSerialization() {
-		String xml = XML.stringify(new Person("abc", 123));
-		System.out.println(xml);
+	public long id;
 
-		isTrue(xml.contains("<name>abc</name>"));
-		isTrue(xml.contains("<age>123</age>"));
+	public String name;
 
-		Person p = XML.parse(xml, Person.class);
-		eq(p.getName(), "abc");
-		eq(p.getAge(), 123);
+	public int age;
+
+	public String[] tags = { "aa", "bbb" };
+
+	public Set<?> ss = U.set(1, "bn", false);
+
+	public List<?> lst = U.list(1, "bn", false);
+
+	public User() {}
+
+	public User(String name, int age) {
+		this.name = name;
+		this.age = age;
 	}
 
 }

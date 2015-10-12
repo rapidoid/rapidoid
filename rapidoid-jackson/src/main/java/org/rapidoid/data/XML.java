@@ -1,4 +1,4 @@
-package org.rapidoid.xml;
+package org.rapidoid.data;
 
 /*
  * #%L
