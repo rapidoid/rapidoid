@@ -48,7 +48,8 @@ public class Config {
 	}
 
 	public String option(String name, String defaultValue) {
-		return U.or(U.str(properties.get(name)), defaultValue);
+		Object obj = properties.get(name);
+		return obj != null ? U.str(obj) : defaultValue;
 	}
 
 	public int option(String name, int defaultValue) {
