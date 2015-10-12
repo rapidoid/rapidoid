@@ -767,6 +767,10 @@ public class U {
 		return target.substring(0, atIndex) + insertion + target.substring(atIndex);
 	}
 
+	public static String str(Object value) {
+		return String.valueOf(value);
+	}
+
 	public static int num(String s) {
 		return Integer.parseInt(s);
 	}
@@ -1095,4 +1099,5 @@ public class U {
 
 		return s;
 	}
+
 }
