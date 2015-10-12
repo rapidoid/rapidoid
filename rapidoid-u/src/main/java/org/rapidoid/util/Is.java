@@ -1,5 +1,10 @@
 package org.rapidoid.util;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-u
@@ -34,6 +39,22 @@ public class Is<T> {
 
 	public boolean in(T... candidates) {
 		return U.isIn(value, candidates);
+	}
+
+	public boolean map() {
+		return value instanceof Map<?, ?>;
+	}
+
+	public boolean list() {
+		return value instanceof List<?>;
+	}
+
+	public boolean set() {
+		return value instanceof Set<?>;
+	}
+
+	public boolean collection() {
+		return value instanceof Collection<?>;
 	}
 
 }
