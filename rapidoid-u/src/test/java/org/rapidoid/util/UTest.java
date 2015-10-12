@@ -20,6 +20,7 @@ package org.rapidoid.util;
  * #L%
  */
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -334,6 +335,33 @@ public class UTest extends TestCommons {
 				return s.length();
 			}
 		}));
+	}
+
+	@Test
+	public void testUri() {
+		eq(U.uri(""), "/");
+		eq(U.uri("", "a"), "/a");
+		eq(U.uri("b", ""), "/b");
+		eq(U.uri("/", "x"), "/x");
+		eq(U.uri("/", "/x"), "/x");
+		eq(U.uri("/ab\\", "cd\\"), "/ab/cd");
+		eq(U.uri("/ab", "/cd/"), "/ab/cd");
+		eq(U.uri("/ab/", "/cd/"), "/ab/cd");
+		eq(U.uri("x", "123", "w"), "/x/123/w");
+	}
+
+	@Test
+	public void testPath() {
+		eq(U.path(""), "");
+		eq(U.path("", "a"), "a");
+		eq(U.path("b", ""), "b");
+		eq(U.path("/", "x"), "x");
+		eq(U.path("/", "/x"), "x");
+
+		String abcd = "ab" + File.separator + "cd";
+		eq(U.path("/ab\\", "cd\\"), abcd);
+		eq(U.path("/ab", "/cd/"), abcd);
+		eq(U.path("/ab/", "/cd/"), abcd);
 	}
 
 }

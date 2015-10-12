@@ -50,7 +50,6 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -191,7 +190,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 		}
 
 		String name = reqName(method, url);
-		String path = UTILS.path(componentPath, name);
+		String path = U.uri(componentPath, name);
 
 		if (ann instanceof Page) {
 			return U.list(new DispatchReq("GET", path, DispatchReqKind.PAGE, config), new DispatchReq("POST", path,

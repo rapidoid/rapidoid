@@ -20,6 +20,7 @@ package org.rapidoid.util;
  * #L%
  */
 
+import java.io.File;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -1058,6 +1059,34 @@ public class U {
 				dest.add(item);
 			}
 		}
+	}
+
+	public static String uri(String... parts) {
+		return "/" + constructPath("/", parts);
+	}
+
+	public static String path(String... parts) {
+		return constructPath(File.separator, parts);
+	}
+
+	private static String constructPath(String separator, String... parts) {
+		StringBuilder sb = new StringBuilder();
+
+		for (String part : parts) {
+			// trim '/'s and '\'s
+			part = triml(part, "/");
+			part = trimr(part, "/");
+			part = trimr(part, "\\");
+
+			if (!U.isEmpty(part)) {
+				if (sb.length() > 0) {
+					sb.append(separator);
+				}
+				sb.append(part);
+			}
+		}
+
+		return sb.toString();
 	}
 
 }

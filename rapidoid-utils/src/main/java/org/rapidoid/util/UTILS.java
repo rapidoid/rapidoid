@@ -719,22 +719,6 @@ public class UTILS implements Constants {
 		});
 	}
 
-	public static String path(String... parts) {
-		StringBuilder sb = new StringBuilder();
-
-		for (String part : parts) {
-			// trim '/'s
-			part = part.replaceAll("^/", "").replaceAll("/$", "");
-
-			if (!U.isEmpty(part)) {
-				append(sb, "/", part);
-			}
-		}
-
-		String path = sb.toString();
-		return path.isEmpty() ? "/" : path;
-	}
-
 	public static void append(StringBuilder sb, String separator, String value) {
 		if (sb.length() > 0) {
 			sb.append(separator);
@@ -809,4 +793,5 @@ public class UTILS implements Constants {
 	public static String version() {
 		return VERSION;
 	}
+
 }
