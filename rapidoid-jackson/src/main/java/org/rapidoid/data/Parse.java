@@ -20,8 +20,6 @@ package org.rapidoid.data;
  * #L%
  */
 
-import org.rapidoid.util.U;
-
 /**
  * @author Nikolche Mihajlovski
  * @since 4.4.0
@@ -99,7 +97,7 @@ public class Parse {
 			}
 		}
 
-		throw U.rte("Not a valid JSON, XML nor YAML format!", firstException);
+		throw new RuntimeException("Not a valid JSON, XML nor YAML format!", firstException);
 	}
 
 	static DataFormat[] detectDataFormat(byte[] data) {

@@ -28,8 +28,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.rapidoid.util.U;
-
 /**
  * @author Nikolche Mihajlovski
  * @since 4.4.0
@@ -51,7 +49,7 @@ public class XML {
 			return out.toString();
 
 		} catch (JAXBException e) {
-			throw U.rte(e);
+			throw new RuntimeException(e);
 		}
 	}
 
