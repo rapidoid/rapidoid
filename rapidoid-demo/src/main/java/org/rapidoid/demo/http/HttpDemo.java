@@ -25,10 +25,10 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.WebServer;
 import org.rapidoid.webapp.WebApp;
 import org.rapidoid.webapp.WebAppGroup;
 
@@ -42,7 +42,7 @@ public class HttpDemo {
 
 		final AtomicLong n = new AtomicLong();
 
-		HTTPServer server = HTTP.server().build();
+		HTTPServer server = WebServer.build();
 
 		app.getRouter().get("/hi", new Handler() {
 			@Override

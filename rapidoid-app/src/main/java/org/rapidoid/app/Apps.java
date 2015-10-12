@@ -32,10 +32,10 @@ import org.rapidoid.aop.AOP;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
-import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.HttpBuiltins;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.WebServer;
 import org.rapidoid.log.Log;
 import org.rapidoid.oauth.OAuth;
 import org.rapidoid.plugins.Plugins;
@@ -81,7 +81,7 @@ public class Apps {
 	}
 
 	public static HTTPServer serve(WebApp app, String[] args, Object... config) {
-		HTTPServer server = HTTP.server().build();
+		HTTPServer server = WebServer.build();
 
 		OAuth.register(app);
 		HttpBuiltins.register(app);

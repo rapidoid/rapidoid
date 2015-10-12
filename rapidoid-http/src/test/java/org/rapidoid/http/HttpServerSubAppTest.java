@@ -52,7 +52,7 @@ public class HttpServerSubAppTest extends HttpTestCommons {
 		defaultApp.getRouter().get("/x", info("def-special"));
 		defaultApp.getRouter().generic(info("def-generic"));
 
-		server = HTTP.server().applications(apps).build();
+		server = WebServer.create().applications(apps).build();
 		start();
 
 		eq(get("/my"), "my-generic: id=myapp, host=localhost:8080, uri=/my, ctx=/my, path=/, subpath=/, segments=");

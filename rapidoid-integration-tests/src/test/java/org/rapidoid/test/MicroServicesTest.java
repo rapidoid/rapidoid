@@ -32,7 +32,8 @@ import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.Services;
+import org.rapidoid.http.REST;
+import org.rapidoid.http.WebServer;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.webapp.WebApp;
@@ -54,11 +55,11 @@ public class MicroServicesTest extends IntegrationTestCommons {
 				return U.num(x.param("n")) + 1;
 			}
 		});
-		HTTPServer server = HTTP.server().applications(WebAppGroup.main()).build().start();
+		HTTPServer server = WebServer.create().applications(WebAppGroup.main()).build().start();
 
 		// a blocking call
-		eq(Services.get("http://localhost:8080/?n=7"), 8);
-		eq(Services.post("http://localhost:8080/?n=7"), 8);
+		eq(REST.get("http://localhost:8080/?n=7", Integer.class).intValue(), 8);
+		eq(REST.post("http://localhost:8080/?n=7", Integer.class).intValue(), 8);
 
 		int count = 10000;
 		final CountDownLatch latch = new CountDownLatch(count);
@@ -88,9 +89,9 @@ public class MicroServicesTest extends IntegrationTestCommons {
 			};
 
 			if (i % 2 == 0) {
-				Services.get("http://localhost:8080/?n=" + i, callback);
+				REST.get("http://localhost:8080/?n=" + i, Integer.class, callback);
 			} else {
-				Services.post("http://localhost:8080/?n=" + i, callback);
+				REST.post("http://localhost:8080/?n=" + i, Integer.class, callback);
 			}
 		}
 

@@ -27,6 +27,7 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handlers;
+import org.rapidoid.http.WebServer;
 import org.rapidoid.webapp.WebApp;
 import org.rapidoid.webapp.WebAppGroup;
 
@@ -42,7 +43,7 @@ public class HttpServerTest extends IntegrationTestCommons {
 		app.getRouter().get("/", Handlers.html("home"));
 		app.getRouter().generic(Handlers.json("abc"));
 
-		HTTPServer server = HTTP.server().applications(WebAppGroup.main()).build().start();
+		HTTPServer server = WebServer.create().applications(WebAppGroup.main()).build().start();
 
 		eq(new String(HTTP.get("http://localhost:8080/")), "home");
 		eq(new String(HTTP.post("http://localhost:8080/")), "\"abc\"");

@@ -2,7 +2,7 @@ package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-rest
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,18 +20,20 @@ package org.rapidoid.http;
  * #L%
  */
 
-@SuppressWarnings("serial")
-public class HttpException extends RuntimeException {
+import org.rapidoid.data.Parse;
+import org.rapidoid.lambda.Mapper;
 
-	private final int statusCode;
+public class RESTResultMapper<T> implements Mapper<byte[], T> {
 
-	public HttpException(int statusCode) {
-		super("HTTP " + statusCode + " error!");
-		this.statusCode = statusCode;
+	private final Class<T> resultType;
+
+	public RESTResultMapper(Class<T> resultType) {
+		this.resultType = resultType;
 	}
 
-	public int getStatusCode() {
-		return statusCode;
+	@Override
+	public T map(byte[] src) throws Exception {
+		return Parse.data(src, resultType);
 	}
 
 }

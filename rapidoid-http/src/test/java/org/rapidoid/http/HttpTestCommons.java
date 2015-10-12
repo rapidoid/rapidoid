@@ -72,7 +72,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected void server() {
-		server = HTTP.server().build();
+		server = WebServer.build();
 	}
 
 	protected void defaultServerSetup() {

@@ -24,8 +24,8 @@ package org.rapidoidx.http.client;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
+import org.rapidoid.http.WebServer;
 import org.rapidoid.lambda.ResultCounterCallback;
 import org.rapidoid.test.ContextAwareTest;
 import org.rapidoid.util.U;
@@ -46,7 +46,7 @@ public class HttpClientTest extends ContextAwareTest {
 
 		for (int k = 0; k < 3; k++) {
 
-			HTTPServer localServer = HTTP.server().build().start();
+			HTTPServer localServer = WebServer.build().start();
 
 			ResultCounterCallback<String> cb = new ResultCounterCallback<String>();
 

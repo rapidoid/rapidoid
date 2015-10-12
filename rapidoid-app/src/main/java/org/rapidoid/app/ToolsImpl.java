@@ -10,8 +10,8 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HttpClient;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.Services;
-import org.rapidoid.http.ServicesClient;
+import org.rapidoid.http.REST;
+import org.rapidoid.http.RESTClient;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.cache.CachePlugin;
 import org.rapidoid.plugins.db.DBPlugin;
@@ -53,7 +53,7 @@ public class ToolsImpl implements Tools {
 
 	private final HttpClient http = HTTP.DEFAULT_CLIENT;
 
-	private final ServicesClient services = Services.DEFAULT_CLIENT;
+	private final RESTClient services = REST.DEFAULT_CLIENT;
 
 	private final LanguagesPlugin languages = Plugins.languages();
 
@@ -125,7 +125,7 @@ public class ToolsImpl implements Tools {
 	}
 
 	@Override
-	public ServicesClient services() {
+	public RESTClient services() {
 		return services;
 	}
 

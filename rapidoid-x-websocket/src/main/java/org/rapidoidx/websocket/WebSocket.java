@@ -23,8 +23,8 @@ package org.rapidoidx.websocket;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
+import org.rapidoid.http.WebServer;
 import org.rapidoidx.websocket.impl.WebSocketProtocol;
 import org.rapidoidx.websocket.impl.WebSocketUpgrade;
 
@@ -37,7 +37,7 @@ public class WebSocket {
 	}
 
 	public static HTTPServer serve(WSHandler handler) {
-		HTTPServer server = HTTP.server().build();
+		HTTPServer server = WebServer.build();
 		serve(server, handler);
 		return server;
 	}

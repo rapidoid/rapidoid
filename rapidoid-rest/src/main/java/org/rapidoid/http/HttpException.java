@@ -1,8 +1,8 @@
-package org.rapidoid.oauth;
+package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-oauth
+ * rapidoid-rest
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,25 +20,18 @@ package org.rapidoid.oauth;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HTTPServer;
-import org.rapidoid.http.WebServer;
-import org.rapidoid.log.Log;
-import org.rapidoid.log.LogLevel;
-import org.rapidoid.webapp.WebApp;
-import org.rapidoid.webapp.WebAppGroup;
+@SuppressWarnings("serial")
+public class HttpException extends RuntimeException {
 
-@Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class OAuthDemo {
+	private final int statusCode;
 
-	public static void main(String[] args) {
-		WebApp app = WebAppGroup.openRootContext();
-		Log.setLogLevel(LogLevel.DEBUG);
-		HTTPServer server = WebServer.build();
-		OAuth.register(app);
-		server.start();
+	public HttpException(int statusCode) {
+		super("HTTP " + statusCode + " error!");
+		this.statusCode = statusCode;
+	}
+
+	public int getStatusCode() {
+		return statusCode;
 	}
 
 }

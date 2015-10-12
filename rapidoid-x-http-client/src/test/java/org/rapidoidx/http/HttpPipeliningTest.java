@@ -25,10 +25,10 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.WebServer;
 import org.rapidoid.test.ContextAwareTest;
 import org.rapidoid.util.D;
 import org.rapidoid.util.U;
@@ -53,7 +53,7 @@ public class HttpPipeliningTest extends ContextAwareTest {
 	public void testHttpServerPipelining() {
 		Conf.args("workers=1");
 
-		HTTPServer server = HTTP.server().build();
+		HTTPServer server = WebServer.build();
 
 		router.get("/hello", new Handler() {
 			@Override

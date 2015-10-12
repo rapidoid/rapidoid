@@ -2,7 +2,7 @@ package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-rest
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -26,17 +26,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
-import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class HTTP {
 
 	public static final HttpClient DEFAULT_CLIENT = new HttpClient();
-
-	public static HTTPServerBuilder server() {
-		return Wire.builder(HTTPServerBuilder.class, HTTPServer.class, HTTPServerImpl.class);
-	}
 
 	public static Future<byte[]> post(String uri, Map<String, String> headers, Map<String, String> data,
 			Map<String, String> files, Callback<byte[]> callback) {

@@ -1,8 +1,8 @@
-package org.rapidoid.demo.http;
+package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-rest
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -22,25 +22,11 @@ package org.rapidoid.demo.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.http.Handlers;
-import org.rapidoid.http.WebServer;
-import org.rapidoid.webapp.WebApp;
-import org.rapidoid.webapp.WebAppGroup;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class HelloWorldMain {
+@Since("4.4.0")
+public interface MyClient {
 
-	public static void main(String[] args) {
-		Conf.args(args);
-
-		WebApp app = WebAppGroup.openRootContext();
-
-		app.getRouter().get("/", Handlers.html("Hello, world!"));
-		app.getRouter().generic(Handlers.json("else"));
-
-		WebServer.create().applications(WebAppGroup.main()).build().start();
-	}
+	byte[] abc();
 
 }

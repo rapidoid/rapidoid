@@ -28,7 +28,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.HttpClient;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.ServicesClient;
+import org.rapidoid.http.RESTClient;
 import org.rapidoid.plugins.cache.CachePlugin;
 import org.rapidoid.plugins.db.DBPlugin;
 import org.rapidoid.plugins.email.EmailPlugin;
@@ -56,7 +56,7 @@ public interface Tools {
 
 	HttpClient http();
 
-	ServicesClient services();
+	RESTClient services();
 
 	LanguagesPlugin languages();
 

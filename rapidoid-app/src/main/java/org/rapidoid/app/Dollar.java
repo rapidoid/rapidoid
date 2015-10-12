@@ -11,8 +11,8 @@ import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HttpClient;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.Services;
-import org.rapidoid.http.ServicesClient;
+import org.rapidoid.http.REST;
+import org.rapidoid.http.RESTClient;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.cache.CachePlugin;
 import org.rapidoid.plugins.db.DBPlugin;
@@ -66,7 +66,7 @@ public class Dollar {
 
 	public final HttpClient http = HTTP.DEFAULT_CLIENT;
 
-	public final ServicesClient services = Services.DEFAULT_CLIENT;
+	public final RESTClient services = REST.DEFAULT_CLIENT;
 
 	public final LanguagesPlugin languages = Plugins.languages();
 

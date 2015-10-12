@@ -30,6 +30,7 @@ import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.WebServer;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.webapp.WebApp;
@@ -72,7 +73,7 @@ public class AsyncHttpServerTest extends IntegrationTestCommons {
 
 		});
 
-		HTTPServer server = HTTP.server().applications(WebAppGroup.main()).build().start();
+		HTTPServer server = WebServer.create().applications(WebAppGroup.main()).build().start();
 
 		eq(new String(HTTP.get("http://localhost:8080/")), "OK");
 		eq(new String(HTTP.post("http://localhost:8080/")), "OK");

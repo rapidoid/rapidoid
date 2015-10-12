@@ -2,7 +2,7 @@ package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-rest
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,31 +20,20 @@ package org.rapidoid.http;
  * #L%
  */
 
+import java.lang.reflect.Method;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Callback;
-import org.rapidoid.concurrent.Future;
+import org.rapidoid.lambda.Dynamic;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public class Services {
+@Since("4.4.0")
+public class DynamicRESTClient implements Dynamic {
 
-	public static final ServicesClient DEFAULT_CLIENT = new ServicesClient();
-
-	public static <T> Future<T> get(String uri, Callback<T> callback) {
-		return DEFAULT_CLIENT.get(uri, callback);
-	}
-
-	public static <T> T get(String uri) {
-		return DEFAULT_CLIENT.get(uri);
-	}
-
-	public static <T> Future<T> post(String uri, Callback<T> callback) {
-		return DEFAULT_CLIENT.post(uri, callback);
-	}
-
-	public static <T> T post(String uri) {
-		return DEFAULT_CLIENT.post(uri);
+	@Override
+	public Object call(Method m, Object[] args) {
+		throw U.notReady();
 	}
 
 }
