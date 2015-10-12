@@ -1100,4 +1100,20 @@ public class U {
 		return s;
 	}
 
+	public static boolean isMap(Object obj) {
+		return obj instanceof Map<?, ?>;
+	}
+
+	public static boolean isList(Object obj) {
+		return obj instanceof List<?>;
+	}
+
+	public static boolean isSet(Object obj) {
+		return obj instanceof Set<?>;
+	}
+
+	public static boolean isCollection(Object obj) {
+		return obj instanceof Collection<?>;
+	}
+
 }
