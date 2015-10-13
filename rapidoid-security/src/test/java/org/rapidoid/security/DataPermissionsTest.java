@@ -33,7 +33,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Composite;
 import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.util.U;
@@ -103,21 +102,8 @@ public class DataPermissionsTest extends SecurityTestCommons {
 
 	private static final String[] USERS = { null, "", "abc", "adm1", "adm2", "mng1", "mod1", "mod2" };
 
-	private void setupRoles() {
-		List<String> admin = U.list("adm1", "adm2");
-		List<String> manager = U.list("mng1");
-		List<String> moderator = U.list("mod1", "mod2");
-		List<String> abc = U.list("abc");
-		List<String> other_role = U.list("other");
-
-		Conf.set("roles",
-				U.map("admin", admin, "manager", manager, "moderator", moderator, "abc", abc, "other_role", other_role));
-	}
-
 	@Test
 	public void testCommentPermissions() {
-		setupRoles();
-
 		checkPermissions(null, Comment.class, "content", true, false);
 		checkPermissions(null, Comment.class, "visible", false, false);
 		checkPermissions(null, Comment.class, "createdBy", true, false);
@@ -133,8 +119,6 @@ public class DataPermissionsTest extends SecurityTestCommons {
 
 	@Test
 	public void testIssuePermissions() {
-		setupRoles();
-
 		String[] fields = { "title", "year", "author", "description", "comments", "createdBy", "sharedWith" };
 
 		for (String field : fields) {
@@ -181,8 +165,6 @@ public class DataPermissionsTest extends SecurityTestCommons {
 
 	@Test
 	public void testCategoryPermissions() {
-		setupRoles();
-
 		for (String user : USERS) {
 			checkPermissions(user, Category.class, "name", true, true);
 			checkPermissions(user, Category.class, "desc", true, false);

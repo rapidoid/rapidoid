@@ -29,7 +29,6 @@ import java.util.List;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
 import org.rapidoid.util.U;
 
 class Foo {
@@ -41,18 +40,8 @@ class Foo {
 @Since("2.0.0")
 public class RoleBasedSecurityTest extends SecurityTestCommons {
 
-	private void setupRoles() {
-		List<String> admin = U.list("adm1", "adm2");
-		List<String> manager = U.list("mng1");
-		List<String> moderator = U.list("mod1", "mod2");
-		List<String> abc = U.list("abc");
-		Conf.set("roles", U.map("admin", admin, "manager", manager, "moderator", moderator, "abc", abc));
-	}
-
 	@Test
 	public void testAdminRoleCheck() {
-		setupRoles();
-
 		isFalse(Secure.isAdmin(null));
 		isFalse(Secure.isAdmin(""));
 		isFalse(Secure.isAdmin("abc"));
@@ -66,8 +55,6 @@ public class RoleBasedSecurityTest extends SecurityTestCommons {
 
 	@Test
 	public void testManagerRoleCheck() {
-		setupRoles();
-
 		isFalse(Secure.isManager(null));
 		isFalse(Secure.isManager(""));
 		isFalse(Secure.isManager("abc"));
@@ -81,8 +68,6 @@ public class RoleBasedSecurityTest extends SecurityTestCommons {
 
 	@Test
 	public void testModeratorRoleCheck() {
-		setupRoles();
-
 		isFalse(Secure.isModerator(null));
 		isFalse(Secure.isModerator(""));
 		isFalse(Secure.isModerator("abc"));
@@ -95,8 +80,6 @@ public class RoleBasedSecurityTest extends SecurityTestCommons {
 
 	@Test
 	public void testLoggedInRoleCheck() {
-		setupRoles();
-
 		isFalse(Secure.hasRole(null, LOGGED_IN));
 		isFalse(Secure.hasRole("", LOGGED_IN));
 
@@ -107,8 +90,6 @@ public class RoleBasedSecurityTest extends SecurityTestCommons {
 
 	@Test
 	public void testOwnerRoleCheck() {
-		setupRoles();
-
 		isFalse(Secure.hasRole(null, OWNER));
 		isFalse(Secure.hasRole("", OWNER));
 		isFalse(Secure.hasRole("abc", OWNER));
@@ -148,8 +129,6 @@ public class RoleBasedSecurityTest extends SecurityTestCommons {
 
 	@Test
 	public void testSharedWithRoleCheck() {
-		setupRoles();
-
 		isFalse(Secure.hasRole(null, SHARED_WITH));
 		isFalse(Secure.hasRole("", SHARED_WITH));
 		isFalse(Secure.hasRole("abc", SHARED_WITH));

@@ -20,14 +20,21 @@ package org.rapidoid.security;
  * #L%
  */
 
+import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.util.D;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public abstract class SecurityTestCommons extends TestCommons {
+
+	@Before
+	public void init() {
+		Conf.setRootPath(getClass().getSimpleName());
+	}
 
 	protected void checkPermissions(String username, Class<?> clazz, Object target, String propertyName,
 			boolean canRead, boolean canChange) {

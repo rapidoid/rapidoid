@@ -35,12 +35,16 @@ public class Conf {
 
 	private static final Config ROOT = new Config();
 
-	private static final Config USERS = refreshing("", "users.yaml");
+	private static volatile Config USERS;
 
 	private static String rootPath = rootPathDefault();
 	private static String staticPath = staticPathDefault();
 	private static String dynamicPath = dynamicPathDefault();
 	private static String configPath = configPathDefault();
+
+	static {
+		initConfig();
+	}
 
 	public static synchronized void args(String... args) {
 		init(args, (Object[]) null);
@@ -253,6 +257,7 @@ public class Conf {
 		setStaticPath(Conf.rootPath + "/static");
 		setDynamicPath(Conf.rootPath + "/dynamic");
 		setConfigPath(Conf.rootPath);
+		initConfig();
 	}
 
 	public static void setStaticPath(String staticPath) {
@@ -271,41 +276,54 @@ public class Conf {
 	}
 
 	public static Config refreshing(String path, String filename) {
-		Log.info("Initializing auto-refreshing config", "path", path, "filename", filename);
+		Log.info("Initializing auto-refreshing config", "root", Conf.rootPath(), "path", path, "filename", filename);
 		path = U.safe(path);
 
-		String firstFile = U.path(Conf.rootPath(), path, filename);
+		final String firstFile = U.path(Conf.rootPath(), path, filename);
 		String defaultFile = U.path(Conf.rootPathDefault(), path, filename);
 
-		final Config config = new Config();
+		Log.info("Calculated resource path", "primary", firstFile, "default", defaultFile);
+
 		final Res res = Res.from(filename, true, firstFile, defaultFile);
 
-		res.onChange(path + ":" + filename, new Runnable() {
+		Config config = res.attachment();
+		if (config == null) {
+			config = new Config();
+			res.attach(config);
+		}
+
+		final Config conf = config;
+
+		res.onChange("config", new Runnable() {
 			@SuppressWarnings("unchecked")
 			@Override
 			public void run() {
-				Map<String, Object> configData = U.map();
 
-				if (res.exists()) {
-					byte[] bytes = res.getBytesOrNull();
+				byte[] bytes = res.getBytesOrNull();
 
-					if (bytes != null && bytes.length > 0) {
-						configData = YAML.parse(bytes, Map.class);
-					}
+				Map<String, Object> configData;
+				if (bytes != null && bytes.length > 0) {
+					configData = YAML.parse(bytes, Map.class);
+				} else {
+					configData = U.map();
 				}
 
-				config.assign(configData);
+				conf.assign(configData);
 			}
 		});
 
 		res.trackChanges();
 		res.exists(); // trigger loading
 
-		return config;
+		return conf;
 	}
 
 	public static Config users() {
 		return USERS;
+	}
+
+	private static synchronized void initConfig() {
+		USERS = refreshing("", "users.yaml");
 	}
 
 }

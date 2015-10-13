@@ -1,0 +1,23 @@
+adm1:
+  roles: ["admin"]
+
+adm2:
+  roles: ["admin"]
+
+mng1:
+  roles: ["manager"]
+
+mod1:
+  roles: ["moderator"]
+
+mod2:
+  roles: ["moderator"]
+
+abc1:
+  roles: abc
+
+abc2:
+  roles: abc
+
+xyz1:
+  roles: xyz

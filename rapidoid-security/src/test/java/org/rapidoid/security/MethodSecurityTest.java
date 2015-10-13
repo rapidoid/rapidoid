@@ -21,7 +21,6 @@ package org.rapidoid.security;
  */
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,11 +29,10 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.security.annotation.Admin;
+import org.rapidoid.security.annotation.HasRole;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Moderator;
 import org.rapidoid.security.annotation.Role;
-import org.rapidoid.security.annotation.HasRole;
-import org.rapidoid.util.U;
 
 class MyService {
 
@@ -121,13 +119,6 @@ public class MethodSecurityTest extends SecurityTestCommons {
 		ee2 = Cls.getMethod(MyService2.class, "ee");
 
 		methods2 = new Method[] { aa2, bb2, noAnn2, dd2, ee2 };
-
-		List<String> admin = U.list("adm1", "adm2");
-		List<String> manager = U.list("mng1");
-		List<String> moderator = U.list("mod1", "mod2");
-		List<String> abc = U.list("abc1", "abc2");
-		List<String> xyz = U.list("xyz1");
-		Conf.set("roles", U.map("admin", admin, "manager", manager, "moderator", moderator, "abc", abc, "xyz", xyz));
 
 		Conf.args("mode=production");
 	}

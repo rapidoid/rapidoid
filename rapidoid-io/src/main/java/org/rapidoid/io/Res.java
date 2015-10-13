@@ -208,6 +208,7 @@ public class Res {
 
 	public Res onChange(String name, Runnable listener) {
 		changeListeners.put(name, listener);
+		listener.run();
 		return this;
 	}
 

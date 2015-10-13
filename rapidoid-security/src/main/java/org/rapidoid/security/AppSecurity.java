@@ -34,11 +34,11 @@ import org.rapidoid.beany.Metadata;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Roles;
 import org.rapidoid.security.annotation.Admin;
+import org.rapidoid.security.annotation.HasRole;
 import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Moderator;
 import org.rapidoid.security.annotation.Role;
-import org.rapidoid.security.annotation.HasRole;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.U;
 
@@ -125,19 +125,19 @@ public class AppSecurity implements Constants {
 			return !U.isEmpty(username);
 		}
 
-		return Roles.getRolesFor(username).contains(role);
+		return Roles.getRolesFor(username).contains(role.toLowerCase());
 	}
 
 	public boolean isAdmin(String username) {
-		return hasRole(username, "ADMIN", null, null);
+		return hasRole(username, Roles.ADMIN, null, null);
 	}
 
 	public boolean isManager(String username) {
-		return hasRole(username, "MANAGER", null, null);
+		return hasRole(username, Roles.MANAGER, null, null);
 	}
 
 	public boolean isModerator(String username) {
-		return hasRole(username, "MODERATOR", null, null);
+		return hasRole(username, Roles.MODERATOR, null, null);
 	}
 
 	public DataPermissions classPermissions(String username, Class<?> clazz) {
