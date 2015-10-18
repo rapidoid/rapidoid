@@ -29,7 +29,6 @@ import org.rapidoid.plugins.cache.guava.GuavaCachePlugin;
 import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
 import org.rapidoid.quick.Quick;
 import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.webapp.AppClasspathEntitiesPlugin;
 import org.rapidoid.webapp.WebApp;
@@ -43,24 +42,28 @@ import ch.qos.logback.core.util.StatusPrinter;
 @Since("4.0.0")
 public class Rapidoid {
 
-	private static boolean initialized = false;
+	private static WebApp webApp;
 
 	public static synchronized WebApp run(String[] args, Object... config) {
-		return initAndStart(null, args, config);
+		initAndStart(null, args, config);
+		return webApp;
 	}
 
 	public static synchronized WebApp run(WebApp app, String[] args, Object... config) {
-		return initAndStart(app, args, config);
+		initAndStart(app, args, config);
+		return app;
 	}
 
 	public static synchronized boolean isInitialized() {
-		return initialized;
+		return webApp != null;
 	}
 
-	private static WebApp initAndStart(WebApp app, String[] args, Object... config) {
+	private static synchronized void initAndStart(WebApp app, String[] args, Object... config) {
+		if (webApp != null) {
+			return;
+		}
+
 		Log.info("Starting Rapidoid...", "version", UTILS.version());
-		U.must(!initialized, "Already initialized!");
-		initialized = true;
 
 		MainHelp.processHelp(args);
 
@@ -86,10 +89,10 @@ public class Rapidoid {
 
 		Log.info("Rapidoid is ready.");
 
-		return app;
+		Rapidoid.webApp = app;
 	}
 
-	private static void registerDefaultPlugins() {
+	private static synchronized void registerDefaultPlugins() {
 		Plugins.register(new MustacheTemplatesPlugin());
 		Plugins.register(new AppClasspathEntitiesPlugin());
 		Plugins.register(new GuavaCachePlugin());
@@ -107,12 +110,16 @@ public class Rapidoid {
 		}
 	}
 
-	public static void register(WebApp app) {
+	public static synchronized void register(WebApp app) {
 		WebAppGroup.main().register(app);
 	}
 
-	public static void unregister(WebApp app) {
+	public static synchronized void unregister(WebApp app) {
 		WebAppGroup.main().unregister(app);
+	}
+
+	static synchronized void notifyGuiInit() {
+		initAndStart(null, new String[] { "managed=true" });
 	}
 
 }

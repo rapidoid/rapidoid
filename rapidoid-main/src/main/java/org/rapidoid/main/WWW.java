@@ -1,8 +1,8 @@
-package org.rapidoid.app;
+package org.rapidoid.main;
 
 /*
  * #%L
- * rapidoid-app
+ * rapidoid-main
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -22,6 +22,7 @@ package org.rapidoid.app;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.app.GUI;
 import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")
@@ -30,6 +31,7 @@ public abstract class WWW extends GUI {
 
 	public WWW() {
 		Wire.manage(this);
+		Rapidoid.notifyGuiInit();
 	}
 
 }
