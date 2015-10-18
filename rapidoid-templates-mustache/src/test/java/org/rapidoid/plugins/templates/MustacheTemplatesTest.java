@@ -39,14 +39,14 @@ public class MustacheTemplatesTest extends TestCommons {
 
 		ITemplate template = new MustacheFileTemplate(factory, "main.html");
 
-		eq(template.render(U.map("x", 1), U.map("y", "s")), "A-s-B-s-:1");
+		eq(template.render(U.map("x", 1), U.map("y", "s")), "A-s[s]B-s[s]:1(1)");
 	}
 
 	@Test
 	public void testStringTemplateComponent() {
 		final MustacheFactory factory = new RapidoidMustacheFactory();
 
-		ITemplate template = new MustacheStringTemplate(factory, "{{x}}-{{y}}");
+		ITemplate template = new MustacheStringTemplate(factory, "{{x}}-$$y$$");
 
 		eq(template.render(U.map("x", 1), U.map("y", "2")), "1-2");
 	}
@@ -55,14 +55,14 @@ public class MustacheTemplatesTest extends TestCommons {
 	public void testFileTemplatesAPI() {
 		Plugins.register(new MustacheTemplatesPlugin());
 
-		eq(Templates.fromFile("main.html").render(U.map("x", 1), U.map("y", "s")), "A-s-B-s-:1");
+		eq(Templates.fromFile("main.html").render(U.map("x", 1), U.map("y", "s")), "A-s[s]B-s[s]:1(1)");
 	}
 
 	@Test
 	public void testStringTemplatesAPI() {
 		Plugins.register(new MustacheTemplatesPlugin());
 
-		eq(Templates.fromString("{{x}}-{{y}}").render(U.map("x", 1), U.map("y", "2")), "1-2");
+		eq(Templates.fromString("$$x$$-{{y}}").render(U.map("x", 1), U.map("y", "2")), "1-2");
 	}
 
 }

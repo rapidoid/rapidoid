@@ -20,6 +20,8 @@ package org.rapidoid.plugins.templates;
  * #L%
  */
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.HashMap;
@@ -29,8 +31,10 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.io.Res;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
+import org.rapidoid.util.UTILS;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.DefaultMustacheVisitor;
@@ -52,6 +56,15 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 	private static final String EM = "}}";
 
 	private static final ObjectHandler CUSTOM_OBJECT_HANDLER = new CustomObjectHandler();
+
+	private static final String EXPR_REGEX = "\\$\\$([\\w\\.]+?)\\$\\$";
+
+	private static final Mapper<String[], String> EXPR_REPLACER = new Mapper<String[], String>() {
+		@Override
+		public String map(String[] groups) throws Exception {
+			return "\\{\\{" + groups[1] + "\\}\\}";
+		}
+	};
 
 	private volatile LoadingCache<String, Mustache> mustacheCache;
 
@@ -124,7 +137,9 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 		try {
 			Mustache mustache = cache.get(filename);
 			if (mustache == null) {
-				mustache = mc.compile(resource.getReader(), filename, SM, EM);
+				String template = preprocess(resource.getContent());
+				InputStreamReader reader = new InputStreamReader(new ByteArrayInputStream(template.getBytes()));
+				mustache = mc.compile(reader, filename, SM, EM);
 				cache.put(filename, mustache);
 				mustache.init();
 			}
@@ -133,6 +148,11 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 		} finally {
 			cache.remove(filename);
 		}
+	}
+
+	public static String preprocess(String template) {
+		template = UTILS.replace(template, EXPR_REGEX, EXPR_REPLACER);
+		return template;
 	}
 
 	@Override

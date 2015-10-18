@@ -42,7 +42,7 @@ public class MustacheStringTemplate extends AbstractTemplate {
 
 	public MustacheStringTemplate(MustacheFactory factory, String template) {
 		this.factory = factory;
-		this.template = template;
+		this.template = RapidoidMustacheFactory.preprocess(template);
 	}
 
 	public void render(OutputStream output, Object... scopes) {
