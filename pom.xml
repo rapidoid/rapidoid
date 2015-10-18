@@ -93,7 +93,6 @@
 		<module>rapidoid-io</module>
 		<module>rapidoid-utils</module>
 		<module>rapidoid-beany</module>
-		<module>rapidoid-watch</module>
 		<module>rapidoid-ctx</module>
 		<module>rapidoid-model</module>
 		<module>rapidoid-sql</module>
@@ -127,6 +126,7 @@
 		<module>rapidoid-quick</module>
 		<module>rapidoid-main</module>
 		<module>rapidoid-full</module>
+		<module>rapidoid-watch</module>
 		<module>rapidoid-demo</module>
 		<module>rapidoid-docs</module>
 		<module>rapidoid-integration-tests</module>

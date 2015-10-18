@@ -2,7 +2,7 @@ package org.rapidoid.config;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-config
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
