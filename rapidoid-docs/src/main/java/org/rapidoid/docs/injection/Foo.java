@@ -32,7 +32,7 @@ public class Foo {
 
 	private int count;
 
-	@GET(url = "/hi")
+	@GET(uri = "/hi")
 	public String hello() {
 		return ++count + ": " + bar.msg();
 	}

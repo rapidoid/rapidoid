@@ -27,7 +27,7 @@ import org.rapidoid.app.GUI;
 @Web
 public class Movies {
 
-	@Page(url = "/", title = "Movie details")
+	@Page(uri = "/", title = "Movie details")
 	public Object movie() {
 		Movie movie = new Movie();
 		movie.title = "Chappie";

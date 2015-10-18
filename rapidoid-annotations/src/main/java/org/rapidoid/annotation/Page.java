@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
 @Since("4.1.0")
 public @interface Page {
 
-	String url() default "";
+	String uri() default "";
 
 	boolean raw() default false;
 

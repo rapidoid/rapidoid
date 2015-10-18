@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Web;
 @Web
 public class Hello {
 
-	@Page(url = "/")
+	@Page(uri = "/")
 	public String hello() {
 		return "Hello, world!";
 	}

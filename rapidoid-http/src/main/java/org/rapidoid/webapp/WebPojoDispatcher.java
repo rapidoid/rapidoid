@@ -156,24 +156,24 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 	}
 
 	private List<DispatchReq> req(String componentPath, Annotation ann, Method method) {
-		String url;
+		String uri;
 		Map<String, Object> config = U.synchronizedMap();
 
 		if (ann instanceof GET) {
-			url = ((GET) ann).url();
+			uri = ((GET) ann).uri();
 
 		} else if (ann instanceof POST) {
-			url = ((POST) ann).url();
+			uri = ((POST) ann).uri();
 
 		} else if (ann instanceof PUT) {
-			url = ((PUT) ann).url();
+			uri = ((PUT) ann).uri();
 
 		} else if (ann instanceof DELETE) {
-			url = ((DELETE) ann).url();
+			uri = ((DELETE) ann).uri();
 
 		} else if (ann instanceof Page) {
 			Page page = (Page) ann;
-			url = page.url();
+			uri = page.uri();
 
 			config.put("raw", page.raw());
 			config.put("navbar", page.navbar());
@@ -189,7 +189,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 			return null;
 		}
 
-		String name = reqName(method, url);
+		String name = reqName(method, uri);
 		String path = U.uri(componentPath, name);
 
 		if (ann instanceof Page) {

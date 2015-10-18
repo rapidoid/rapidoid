@@ -30,7 +30,7 @@ public class Bar {
 	@Inject
 	public Foo foo;
 
-	@GET(url = "/hi")
+	@GET(uri = "/hi")
 	public String hello() {
 		return foo.msg();
 	}

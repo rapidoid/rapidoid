@@ -32,6 +32,6 @@ import java.lang.annotation.Target;
 @Since("3.0.0")
 public @interface DELETE {
 
-	String url() default "";
+	String uri() default "";
 
 }

@@ -27,7 +27,7 @@ import org.rapidoid.app.GUI;
 @Web
 public class Highlighting extends GUI {
 
-	@Page(url = "/")
+	@Page(uri = "/")
 	public Object letters() {
 		return highlight("ab-cd-efg", "\\w+");
 	}

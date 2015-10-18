@@ -29,7 +29,7 @@ import org.rapidoid.widget.FormWidget;
 @Web
 public class CustomForm extends GUI {
 
-	@Page(url = "/")
+	@Page(uri = "/")
 	public Object content() {
 		Movie movie = new Movie();
 		FormWidget f = create(movie, "year");
