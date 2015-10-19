@@ -794,6 +794,22 @@ public class U {
 		return item;
 	}
 
+	public static <T> T first(T[] values) {
+		return values != null && values.length > 0 ? values[0] : null;
+	}
+
+	public static <T> T first(List<T> values) {
+		return values != null && values.size() > 0 ? values.get(0) : null;
+	}
+
+	public static <T> T last(T[] values) {
+		return values != null && values.length > 0 ? values[values.length - 1] : null;
+	}
+
+	public static <T> T last(List<T> values) {
+		return values != null && values.size() > 0 ? values.get(values.size() - 1) : null;
+	}
+
 	@SuppressWarnings("unchecked")
 	public static <T> int compare(T val1, T val2) {
 		if (val1 == null && val2 == null) {
