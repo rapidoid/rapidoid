@@ -66,7 +66,7 @@ public class Scripting {
 	}
 
 	private static CompiledScript script(HttpExchangeImpl x) {
-		String scriptName = x.isGetReq() ? x.verbAndResourceName() : x.verb().toUpperCase() + "_" + x.resourceName();
+		String scriptName = x.isGetReq() ? x.verbAndResourceName() : x.verb().toUpperCase() + "_" + x.name();
 		String filename = scriptName + ".js";
 		String firstFile = Conf.rootPath() + "/" + filename;
 		String defaultFile = Conf.rootPathDefault() + "/" + filename;

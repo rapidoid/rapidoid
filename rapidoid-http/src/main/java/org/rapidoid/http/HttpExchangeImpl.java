@@ -947,11 +947,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized boolean serveStaticFile() {
-		if (serveStaticFile(resourceName())) {
+		if (serveStaticFile(name())) {
 			return true;
 		}
 
-		return !resourceNameHasExtension() && serveStaticFile(resourceName() + ".html");
+		return !resourceNameHasExtension() && serveStaticFile(name() + ".html");
 	}
 
 	@Override
@@ -1287,7 +1287,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public synchronized String resourceName() {
+	public synchronized String name() {
 		if (resourceName == null) {
 			resourceName = path().substring(1);
 
@@ -1307,11 +1307,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized String verbAndResourceName() {
-		return verb().toUpperCase() + "/" + resourceName();
+		return verb().toUpperCase() + "/" + name();
 	}
 
 	public synchronized boolean resourceNameHasExtension() {
-		resourceName(); // make sure it is calculated
+		name(); // make sure it is calculated
 		return resourceNameHasExtension;
 	}
 

@@ -182,7 +182,7 @@ public class AppHandler implements Handler {
 	}
 
 	public static boolean serveDynamicPage(HttpExchange x, Object result, boolean hasEvent, Map<String, Object> config) {
-		String filename = x.resourceName() + ".html";
+		String filename = x.name() + ".html";
 		String firstFile = Conf.rootPath() + "/pages/" + filename;
 		String defaultFile = Conf.rootPathDefault() + "/pages/" + filename;
 		Res res = Res.from(filename, true, firstFile, defaultFile);

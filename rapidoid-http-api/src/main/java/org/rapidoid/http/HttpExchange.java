@@ -32,7 +32,7 @@ public interface HttpExchange extends Req, Resp, Runnable {
 
 	/* REQUEST: */
 
-	String resourceName();
+	String name();
 
 	String verbAndResourceName();
 
