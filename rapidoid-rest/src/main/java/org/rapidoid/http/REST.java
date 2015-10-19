@@ -48,8 +48,30 @@ public class REST {
 		return DEFAULT_CLIENT.post(uri, resultType);
 	}
 
+	public static <T> T call(String verb, String uri, Class<T> resultType) {
+		if ("GET".equalsIgnoreCase(verb)) {
+			return get(uri, resultType);
+		} else if ("POST".equalsIgnoreCase(verb)) {
+			return post(uri, resultType);
+		} else {
+			// FIXME support PUT and DELETE
+			throw U.rte("Unsupported REST verb: '%s'", verb);
+		}
+	}
+
+	public static <T> Future<T> call(String verb, String uri, Class<T> resultType, Callback<T> callback) {
+		if ("GET".equalsIgnoreCase(verb)) {
+			return get(uri, resultType, callback);
+		} else if ("POST".equalsIgnoreCase(verb)) {
+			return post(uri, resultType, callback);
+		} else {
+			// FIXME support PUT and DELETE
+			throw U.rte("Unsupported REST verb: '%s'", verb);
+		}
+	}
+
 	public static <T> T client(Class<T> clientInterface) {
-		return U.dynamic(clientInterface, new DynamicRESTClient());
+		return U.dynamic(clientInterface, new DynamicRESTClient(clientInterface));
 	}
 
 }

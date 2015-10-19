@@ -29,9 +29,9 @@ import java.lang.annotation.Target;
 @Target({ PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("4.2.0")
-public @interface P {
+@Since("4.4.0")
+public @interface OfType {
 
-	String value();
+	Class<?> value();
 
 }

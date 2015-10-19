@@ -20,13 +20,27 @@ package org.rapidoid.http;
  * #L%
  */
 
+import java.util.List;
+
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.OfType;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")
 public interface MyClient {
 
-	byte[] abc();
+	String abc();
+
+	List<Integer> numbers();
+
+	int sizeOf(String text);
+
+	void asyncSizeOf(String text, Callback<Integer> resultCallback);
+
+	MyBean theBean(int a, String b, boolean c);
+
+	void asyncBean(int a, String b, boolean c, @OfType(MyBean.class) Callback<MyBean> resultCallback);
 
 }

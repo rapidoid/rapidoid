@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+import org.rapidoid.cls.Cls;
 import org.rapidoid.util.U;
 
 /**
@@ -157,6 +158,19 @@ public class Config {
 	@SuppressWarnings("unchecked")
 	public <T> T get(String key) {
 		return (T) properties.get(key);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T getOrFail(String key, Class<T> clazz) {
+		T val = (T) properties.get(key);
+		U.must(val != null, "Cannot find the configuration entry: %s", key);
+		U.must(Cls.instanceOf(val, clazz), "The configuration entry '%s' must be of type: %s", key,
+				clazz.getSimpleName());
+		return val;
+	}
+
+	public boolean isEmpty() {
+		return properties.isEmpty();
 	}
 
 }

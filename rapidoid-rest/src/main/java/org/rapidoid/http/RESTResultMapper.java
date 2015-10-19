@@ -33,7 +33,7 @@ public class RESTResultMapper<T> implements Mapper<byte[], T> {
 
 	@Override
 	public T map(byte[] src) throws Exception {
-		return Parse.data(src, resultType);
+		return !resultType.equals(void.class) ? Parse.data(src, resultType) : null;
 	}
 
 }

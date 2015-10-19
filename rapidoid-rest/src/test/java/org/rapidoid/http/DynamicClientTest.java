@@ -20,10 +20,17 @@ package org.rapidoid.http;
  * #L%
  */
 
+import java.util.Map;
+
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Promise;
+import org.rapidoid.concurrent.Promises;
+import org.rapidoid.http.fast.On;
+import org.rapidoid.http.fast.ParamHandler;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")
@@ -33,7 +40,45 @@ public class DynamicClientTest extends TestCommons {
 
 	@Test
 	public void testDynamic() {
-		// notNull(client.abc());
+		On.get("/test-abc").html("abc-ok");
+
+		On.get("/nums").json("[1, 2, 3]");
+
+		On.get("/size").json(new ParamHandler() {
+			@Override
+			public Object handle(Map<String, Object> params) throws Exception {
+				return params.get("s").toString().length();
+			}
+		});
+
+		On.post("/echo").json(new ParamHandler() {
+			@Override
+			public Object handle(Map<String, Object> params) throws Exception {
+				return params;
+			}
+		});
+
+		On.listen(8080);
+
+		eq(client.abc(), "abc-ok");
+		eq(client.numbers(), U.list(1, 2, 3));
+		eq(client.sizeOf("abcde"), 5);
+
+		Promise<Integer> cb = Promises.create();
+		client.asyncSizeOf("four", cb);
+		eq(cb.get().intValue(), 4);
+
+		MyBean bean = client.theBean(123, "xy", true);
+		eq(bean.aa, "123");
+		eq(bean.bb, "xy");
+		eq(bean.cc, true);
+
+		Promise<MyBean> beanCb = Promises.create();
+		client.asyncBean(456, "cool", false, beanCb);
+		MyBean bean2 = beanCb.get();
+		eq(bean2.aa, "456");
+		eq(bean2.bb, "cool");
+		eq(bean2.cc, false);
 	}
 
 }

@@ -1,8 +1,8 @@
-package org.rapidoid.annotation;
+package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-annotations
+ * rapidoid-rest
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,18 +20,17 @@ package org.rapidoid.annotation;
  * #L%
  */
 
-import static java.lang.annotation.ElementType.PARAMETER;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Target({ PARAMETER })
-@Retention(RetentionPolicy.RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("4.2.0")
-public @interface P {
+@Since("4.4.0")
+public class MyBean {
 
-	String value();
+	public String aa;
+
+	public String bb;
+
+	public boolean cc;
 
 }
