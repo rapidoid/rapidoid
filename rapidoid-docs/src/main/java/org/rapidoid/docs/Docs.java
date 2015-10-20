@@ -30,13 +30,15 @@ import org.rapidoid.app.AppHandler;
 import org.rapidoid.config.Config;
 import org.rapidoid.ctx.Classes;
 import org.rapidoid.data.JSON;
+import org.rapidoid.data.YAML;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HttpException;
 import org.rapidoid.io.IO;
 import org.rapidoid.main.Rapidoid;
+import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
 import org.rapidoid.plugins.templates.Templates;
 import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.util.D;
 import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.webapp.AppMode;
@@ -57,16 +59,22 @@ public class Docs {
 	private static String viewState;
 
 	public static void main(String[] args) {
-		// Log.setLogLevel(LogLevel.DEBUG);
-		ClasspathUtil.setIgnoreRapidoidClasses(false);
-		Rapidoid.run(args);
-
 		String path = "../../rapidoid.github.io/";
 		U.must(new File(path).exists());
+		Plugins.register(new MustacheTemplatesPlugin());
 
-		generateIndex(path);
+		// generateMain(path);
+
+		generateModules(path);
 
 		System.exit(0);
+	}
+
+	private static void generateMain(String path) {
+		// Log.setLogLevel(LogLevel.DEBUG);
+		ClasspathUtil.setIgnoreRapidoidClasses(false);
+		Rapidoid.run(new String[0]);
+		generateIndex(path);
 	}
 
 	private static void generateIndex(String path) {
@@ -86,10 +94,13 @@ public class Docs {
 		List<String> eglisth = IO.loadLines("examplesh.txt");
 		processAll(examplesh, nh, eglisth);
 
-		Map<String, ?> model = U.map("examplesh", examplesh, "examplesl", examplesl, "version", UTILS.version()
-				.replace("-SNAPSHOT", ""));
+		Map<String, ?> model = U.map("examplesh", examplesh, "examplesl", examplesl, "version", version());
 		String html = Templates.fromFile("docs.html").render(model);
 		IO.save(path + "index.html", html);
+	}
+
+	private static String version() {
+		return UTILS.version().replace("-SNAPSHOT", "");
 	}
 
 	private static List<String> processAll(List<Map<String, ?>> examples, IntWrap nn, List<String> eglist) {
@@ -242,7 +253,11 @@ public class Docs {
 			}
 		}
 
-		D.print(viewState);
+		if (result != null) {
+			result = postProcessResult(result);
+		}
+
+		// D.print(viewState);
 
 		String dataDesc = null;
 		if (data != null) {
@@ -251,6 +266,12 @@ public class Docs {
 			dataDesc = JSON.stringify(data);
 		}
 		return U.map("verb", verb, "uri", uri, "result", result, "error", error, "data", dataDesc);
+	}
+
+	private static String postProcessResult(String result) {
+		result = result.replaceAll("localhost\\:\\d+", "App");
+		result = result.replace("container", "");
+		return result;
 	}
 
 	private static String nonHttpResult(String line) {
@@ -263,6 +284,32 @@ public class Docs {
 		U.must(p > 0);
 		s = s.substring(p + comm.length()).trim();
 		return s;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static void generateModules(String path) {
+		List<Map<String, Object>> modules = YAML.parse(IO.load("modules.yaml"), List.class);
+
+		for (Map<String, Object> module : modules) {
+			String name = (String) module.get("name");
+			module.put("modules", modules);
+			module.put("version", version());
+			module.put("details", detailsOf(name));
+			module.put("dependency", name);
+			generateModule(module, path);
+		}
+	}
+
+	private static Object detailsOf(String name) {
+		return IO.load("modules/" + name + ".html");
+	}
+
+	private static void generateModule(Map<String, ?> module, String path) {
+		String html = Templates.fromFile("module.html").render(module);
+
+		String targetFile = path + module.get("name") + ".html";
+		IO.save(targetFile, html);
+		System.out.println("Saved " + targetFile);
 	}
 
 }

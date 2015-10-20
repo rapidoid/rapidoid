@@ -41,7 +41,7 @@
       </div>
       <div id="collapsable" class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-left">
-	  <li class="active"><a href="/">Getting started</a></li>
+	  <li><a href="/">Getting started</a></li>
 	  <li><a href="community.html">Community &amp; Support</a></li>
 	  <li><a href="https://github.com/rapidoid/rapidoid">Source on GitHub</a></li>
         </ul>
@@ -76,41 +76,35 @@
 			</div>
 		</div>
 
-<!-- GETTING STARTED WITH DOCKER -->
-
-<!-- 
-<div class="sep-example"></div>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="caption"><span class="option-x">OPTION A</span>Using Rapidoid with Docker</div>
-        <div><span class="docker-code">docker run -d -p 8080:8080 rapidoid/rapidoid</span></div>
-    </div>
-</div>
- -->
-
 <!-- GETTING STARTED WITH JAVA LOW-LEVEL -->
 
 <div class="sep-example"></div>
 
 <div class="row">
     <div class="col-md-12">
-        <div class="caption"><span class="option-x">OPTION A</span>Using Rapidoid's Low-level API</div>
+        <div class="caption"><span class="option-x">rapidoid-{{name}}</span>Rapidoid's {{desc}}</div>
     </div>
 </div>
 
 <div class="row">
   
-  <div class="col-md-6">
-        {{>mavenl}}
-  </div>
-
-  <div class="col-md-6">
+  <div class="col-md-8">
 <div class="low-level-desc">
-<p><b>Low-level vs. high-level API</b></p>
-<p>The low-level HTTP API provides access to the extremely fast Rapidoid HTTP server implemented from scratch on top of Java NIO.</p> 
-<p>The high-level API is built on top of Rapidoid HTTP server, provides many advanced features for building modern POJO-based web applications.</p> 
+{{{details}}}
 </div>
+  </div>
+  
+  <div class="col-md-4">
+        {{>maven}}
+ 
+<h3 class="module-title">Modules:</h3>
+{{#modules}}
+<div class="module-wrap">
+ <h4 class="module-title"><a href="{{name}}.html">rapidoid-{{name}}</a></h4>
+ <div class="module-box">Rapidoid's {{desc}}</div>
+</div>
+
+{{/modules}}
   </div>
   
 </div>
@@ -118,35 +112,6 @@
 {{#examplesl}}
 {{>example}}
 {{/examplesl}}
-
-<!-- GETTING STARTED WITH JAVA HIGH-LEVEL -->
-
-<div class="sep-example"></div>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="caption"><span class="option-x">OPTION B</span>Using Rapidoid's High-level API</div>
-    </div>
-</div>
-
-<div class="row">
-  
-  <div class="col-md-6">
-        {{>mavenh}}
-  </div>
-
-  <div class="col-md-6">
-<div class="eg_title">Add Main.java as entry point:</div>
-<pre class="eg_code">
-<span class="_code_kw">public</span> <span class="_code_kw">class</span> <span class="_code_cls">Main</span> {
-    <span class="_code_kw">public</span> <span class="_code_kw">static</span> <span class="_code_kw">void</span> main(<span class="_code_cls">String</span>[] args) {
-        <span class="_code_cls">Rapidoid</span>.run(args);
-    }
-}
-</pre>
-  </div>
-  
-</div>
 
 {{#examplesh}}
 {{>example}}
