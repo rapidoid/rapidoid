@@ -78,7 +78,7 @@ public class Dir implements FilesystemChangeListener {
 
 	@Override
 	public synchronized String toString() {
-		return U.format("Dir(%s, %d files, %d folders)", path, files.size(), folders.size());
+		return U.frmt("Dir(%s, %d files, %d folders)", path, files.size(), folders.size());
 	}
 
 	@Override

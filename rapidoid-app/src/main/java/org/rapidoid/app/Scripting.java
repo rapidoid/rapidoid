@@ -207,7 +207,7 @@ public class Scripting {
 			desc.put(prop.getName(), prop.getType());
 		}
 
-		String title = U.format("Properties of %s:", obj.getClass().getSimpleName());
+		String title = U.frmt("Properties of %s:", obj.getClass().getSimpleName());
 		return GUI.multi(GUI.h2(title), GUI.grid(desc));
 	}
 

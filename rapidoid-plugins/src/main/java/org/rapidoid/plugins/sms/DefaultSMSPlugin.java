@@ -42,7 +42,7 @@ public class DefaultSMSPlugin extends AbstractSMSPlugin {
 	@Override
 	public void send(Iterable<String> toNumbers, String content, Callback<Void> callback) {
 
-		Log.error(U.format(SMS_DESC, toNumbers, content));
+		Log.error(U.frmt(SMS_DESC, toNumbers, content));
 
 		Callbacks.error(callback, U.rte("SMS plugin implementation hasn't been registered, so cannot send SMS!"));
 	}

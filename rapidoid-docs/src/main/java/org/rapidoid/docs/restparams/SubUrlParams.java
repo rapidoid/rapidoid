@@ -30,7 +30,7 @@ public class SubUrlParams {
 
 	@GET
 	public String hey(String name, int age) {
-		return U.format("Hey %s (%s)", name, age);
+		return U.frmt("Hey %s (%s)", name, age);
 	}
 
 	@POST

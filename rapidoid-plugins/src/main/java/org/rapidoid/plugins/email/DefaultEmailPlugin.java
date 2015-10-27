@@ -43,7 +43,7 @@ public class DefaultEmailPlugin extends AbstractEmailPlugin {
 	public void send(Iterable<String> to, Iterable<String> cc, Iterable<String> bcc, String subject, String body,
 			Callback<Void> callback) {
 
-		Log.error(U.format(MAIL_DESC, to, cc, bcc, subject, body));
+		Log.error(U.frmt(MAIL_DESC, to, cc, bcc, subject, body));
 
 		Callbacks.error(callback, U.rte("Email plugin implementation hasn't been registered, so cannot send e-mail!"));
 	}

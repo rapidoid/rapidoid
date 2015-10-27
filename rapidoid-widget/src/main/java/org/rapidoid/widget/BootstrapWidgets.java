@@ -489,7 +489,7 @@ public abstract class BootstrapWidgets extends HTML {
 		Tag mbody = div(mhead, body).class_("media-body");
 
 		String divClass = targetUrl != null ? "media pointer" : "media";
-		String js = targetUrl != null ? U.format("goAt('%s');", targetUrl) : null;
+		String js = targetUrl != null ? U.frmt("goAt('%s');", targetUrl) : null;
 
 		return div(mleft, mbody).class_(divClass).onclick(js);
 	}
@@ -562,7 +562,7 @@ public abstract class BootstrapWidgets extends HTML {
 		if (id != null) {
 			String className = Cls.entityName(entity);
 			String frm = Conf.is("generate") ? "%s%s.html" : "/%s/%s";
-			return U.format(frm, U.uncapitalized(className), id);
+			return U.frmt(frm, U.uncapitalized(className), id);
 		} else {
 			return "";
 		}

@@ -49,7 +49,7 @@ public class CompilerBenchmark {
 			@Override
 			public void run() {
 				int x = n.value++;
-				Compile.compile(U.format(src1, x, x), U.format(src2, x, x, x), U.format(src3, x, x));
+				Compile.compile(U.frmt(src1, x, x), U.frmt(src2, x, x, x), U.frmt(src3, x, x));
 			}
 		});
 	}

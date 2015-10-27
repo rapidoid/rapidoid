@@ -86,7 +86,7 @@ public abstract class AbstractPlugin implements Plugin {
 		Object value = config().get(subname);
 
 		if (value == null) {
-			Log.warn(U.format("The plugin configuration '%s' was not specified for the plugin '%s', using default: %s",
+			Log.warn(U.frmt("The plugin configuration '%s' was not specified for the plugin '%s', using default: %s",
 					subname, name, defaultValue));
 			value = defaultValue;
 		}

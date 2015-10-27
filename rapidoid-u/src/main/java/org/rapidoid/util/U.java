@@ -109,18 +109,6 @@ public class U {
 		return sb.toString();
 	}
 
-	public static String format(String s, Object... args) {
-		return String.format(s, args);
-	}
-
-	public static String nice(String format, Object... args) {
-		for (int i = 0; i < args.length; i++) {
-			args[i] = str(args[i]);
-		}
-
-		return String.format(format, args);
-	}
-
 	public static String str(Iterable<Object> coll) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
@@ -158,6 +146,18 @@ public class U {
 		sb.append("]");
 
 		return sb.toString();
+	}
+
+	public static String frmt(String s, Object... args) {
+		return String.format(s, args);
+	}
+
+	public static String nice(String format, Object... args) {
+		for (int i = 0; i < args.length; i++) {
+			args[i] = str(args[i]);
+		}
+
+		return String.format(format, args);
 	}
 
 	public static String replaceText(String s, String[][] repls) {
@@ -629,7 +629,7 @@ public class U {
 	}
 
 	public static IllegalArgumentException illegalArg(String message, Object... args) {
-		return new IllegalArgumentException(format(message, args));
+		return new IllegalArgumentException(frmt(message, args));
 	}
 
 	public static void secure(boolean condition, String msg) {

@@ -76,7 +76,7 @@ public class OAuth {
 			app.getRouter().get(callbackPath,
 					new OAuthTokenHandler(provider, oauthDomain, stateCheck, clientId, clientSecret, callbackPath));
 
-			loginHtml.append(U.format(LOGIN_BTN, name, provider.getName()));
+			loginHtml.append(U.frmt(LOGIN_BTN, name, provider.getName()));
 		}
 
 		loginHtml.append("</div>");

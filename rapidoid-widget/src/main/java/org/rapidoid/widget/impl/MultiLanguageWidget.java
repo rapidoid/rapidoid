@@ -40,7 +40,7 @@ public class MultiLanguageWidget {
 	@Override
 	public String toString() {
 		// TODO implement internationalization
-		return U.format(multiLanguageText, formatArgs);
+		return U.frmt(multiLanguageText, formatArgs);
 	}
 
 }

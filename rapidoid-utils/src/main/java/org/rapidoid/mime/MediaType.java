@@ -1230,7 +1230,7 @@ public class MediaType {
 
 	@Override
 	public String toString() {
-		return U.format("MediaType[%s]", new String(bytes));
+		return U.frmt("MediaType[%s]", new String(bytes));
 	}
 
 }

@@ -624,7 +624,7 @@ public class InMem implements Serializable {
 
 	private static void occErrorIf(boolean errCond, String msg, long id) {
 		if (errCond) {
-			throw new OptimisticConcurrencyControlException(U.format(msg, id), id);
+			throw new OptimisticConcurrencyControlException(U.frmt(msg, id), id);
 		}
 	}
 

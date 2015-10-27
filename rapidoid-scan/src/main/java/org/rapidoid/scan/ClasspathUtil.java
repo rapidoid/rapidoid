@@ -76,7 +76,7 @@ public class ClasspathUtil {
 		SKIP_PACKAGES.add("static");
 
 		for (String pkg : SKIP_PKG) {
-			SKIP_SUBPACKAGES.put(pkg, U.set(IO.loadLines(U.format("scan-ignore-%s.txt", pkg))));
+			SKIP_SUBPACKAGES.put(pkg, U.set(IO.loadLines(U.frmt("scan-ignore-%s.txt", pkg))));
 		}
 
 		SKIP_SUBPACKAGES.get("org").add("xml");
