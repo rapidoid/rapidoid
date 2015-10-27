@@ -64,13 +64,13 @@ public class WebReq implements PojoRequest {
 
 	@Override
 	public Object param(String name) {
-		Object value = exchange.param(name);
+		Object value = exchange.param(name, null);
 
 		if (value == null) {
-			value = exchange.posted(name);
+			value = exchange.posted(name, null);
 
 			if (value == null) {
-				value = exchange.file(name);
+				value = exchange.file(name, null);
 			}
 		}
 
