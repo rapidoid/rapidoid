@@ -47,7 +47,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.rapidoid.Insights;
@@ -440,26 +439,6 @@ public class UTILS implements Constants {
 
 	public static short shortFrom(byte a, byte b) {
 		return (short) ((a << 8) + b);
-	}
-
-	public static String replace(String s, String regex, Mapper<String[], String> replacer) {
-		StringBuffer output = new StringBuffer();
-		Pattern p = Pattern.compile(regex);
-		Matcher matcher = p.matcher(s);
-
-		while (matcher.find()) {
-			int len = matcher.groupCount() + 1;
-			String[] gr = new String[len];
-
-			for (int i = 0; i < gr.length; i++) {
-				gr[i] = matcher.group(i);
-			}
-
-			matcher.appendReplacement(output, Lambdas.eval(replacer, gr));
-		}
-
-		matcher.appendTail(output);
-		return output.toString();
 	}
 
 	public static boolean waitInterruption(long millis) {

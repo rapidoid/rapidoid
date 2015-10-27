@@ -46,6 +46,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.script.Compilable;
@@ -163,6 +164,33 @@ public class U {
 			s = s.replaceAll(Pattern.quote(repl[0]), repl[1]);
 		}
 		return s;
+	}
+
+	public static String replace(String s, String regex, Mapper<String[], String> replacer) {
+		StringBuffer output = new StringBuffer();
+		Pattern p = Pattern.compile(regex);
+		Matcher matcher = p.matcher(s);
+
+		while (matcher.find()) {
+			int len = matcher.groupCount() + 1;
+			String[] gr = new String[len];
+
+			for (int i = 0; i < gr.length; i++) {
+				gr[i] = matcher.group(i);
+			}
+
+			Object value;
+			try {
+				value = replacer.map(gr);
+			} catch (Exception e) {
+				throw rte(e);
+			}
+
+			matcher.appendReplacement(output, str(value));
+		}
+
+		matcher.appendTail(output);
+		return output.toString();
 	}
 
 	public static void print(Object... values) {

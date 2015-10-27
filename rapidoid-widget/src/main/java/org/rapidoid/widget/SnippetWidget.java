@@ -25,7 +25,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
@@ -57,7 +56,7 @@ public class SnippetWidget extends AbstractWidget {
 		String snippet = escape ? sourceCode.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 				: sourceCode;
 
-		snippet = UTILS.replace(snippet, regex, new Mapper<String[], String>() {
+		snippet = U.replace(snippet, regex, new Mapper<String[], String>() {
 			@Override
 			public String map(String[] src) throws Exception {
 				String s = src[0];

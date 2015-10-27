@@ -34,7 +34,6 @@ import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.U;
-import org.rapidoid.util.UTILS;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.DefaultMustacheVisitor;
@@ -151,7 +150,7 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 	}
 
 	public static String preprocess(String template) {
-		template = UTILS.replace(template, EXPR_REGEX, EXPR_REPLACER);
+		template = U.replace(template, EXPR_REGEX, EXPR_REPLACER);
 		return template;
 	}
 
