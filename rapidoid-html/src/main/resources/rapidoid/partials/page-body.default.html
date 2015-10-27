@@ -23,7 +23,7 @@
 {{/dev}}
 
 <script src="/app.js"></script>
-<script src="/{{req.name}}.js"></script>
+{{#_js}}<script src="/{{req.name}}.js"></script>{{/_js}}
 
 {{>page-tail}}
 
