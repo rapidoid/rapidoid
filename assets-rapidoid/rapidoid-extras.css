@@ -257,6 +257,10 @@ span._code_num {
 	color: #077;
 }
 
+span._code_ann {
+	color: #551;
+}
+
 /***** Helpers  *****/
 .pointer {
 	cursor: pointer !important;
