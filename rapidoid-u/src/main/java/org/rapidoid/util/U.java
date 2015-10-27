@@ -67,7 +67,7 @@ public class U {
 
 	private static final Object[] EMPTY_ARRAY = {};
 
-	public static String readable(Object obj) {
+	public static String str(Object obj) {
 		if (obj == null) {
 			return "null";
 		} else if (obj instanceof byte[]) {
@@ -87,13 +87,13 @@ public class U {
 		} else if (obj instanceof char[]) {
 			return Arrays.toString((char[]) obj);
 		} else if (obj instanceof Object[]) {
-			return readable((Object[]) obj);
+			return str((Object[]) obj);
 		} else {
 			return String.valueOf(obj);
 		}
 	}
 
-	public static String readable(Object[] objs) {
+	public static String str(Object[] objs) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
 
@@ -101,7 +101,7 @@ public class U {
 			if (i > 0) {
 				sb.append(", ");
 			}
-			sb.append(readable(objs[i]));
+			sb.append(str(objs[i]));
 		}
 
 		sb.append("]");
@@ -115,13 +115,13 @@ public class U {
 
 	public static String nice(String format, Object... args) {
 		for (int i = 0; i < args.length; i++) {
-			args[i] = readable(args[i]);
+			args[i] = str(args[i]);
 		}
 
 		return String.format(format, args);
 	}
 
-	public static String readable(Iterable<Object> coll) {
+	public static String str(Iterable<Object> coll) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
 
@@ -132,7 +132,7 @@ public class U {
 				sb.append(", ");
 			}
 
-			sb.append(readable(obj));
+			sb.append(str(obj));
 			first = false;
 		}
 
@@ -140,7 +140,7 @@ public class U {
 		return sb.toString();
 	}
 
-	public static String readable(Iterator<?> it) {
+	public static String str(Iterator<?> it) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
 
@@ -152,27 +152,10 @@ public class U {
 				first = false;
 			}
 
-			sb.append(readable(it.next()));
+			sb.append(str(it.next()));
 		}
 
 		sb.append("]");
-
-		return sb.toString();
-	}
-
-	public static String readableln(Object[] objs) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("[");
-
-		for (int i = 0; i < objs.length; i++) {
-			if (i > 0) {
-				sb.append(",");
-			}
-			sb.append("\n  ");
-			sb.append(readable(objs[i]));
-		}
-
-		sb.append("\n]");
 
 		return sb.toString();
 	}
@@ -188,7 +171,7 @@ public class U {
 		String text;
 
 		if (values != null) {
-			text = values.length == 1 ? readable(values[0]) : readable(values);
+			text = values.length == 1 ? str(values[0]) : str(values);
 		} else {
 			text = "null";
 		}
@@ -626,21 +609,21 @@ public class U {
 
 	public static boolean must(boolean expectedCondition, String message, Object arg) {
 		if (!expectedCondition) {
-			throw rte(message, readable(arg));
+			throw rte(message, str(arg));
 		}
 		return true;
 	}
 
 	public static boolean must(boolean expectedCondition, String message, Object arg1, Object arg2) {
 		if (!expectedCondition) {
-			throw rte(message, readable(arg1), readable(arg2));
+			throw rte(message, str(arg1), str(arg2));
 		}
 		return true;
 	}
 
 	public static boolean must(boolean expectedCondition, String message, Object arg1, Object arg2, Object arg3) {
 		if (!expectedCondition) {
-			throw rte(message, readable(arg1), readable(arg2), readable(arg3));
+			throw rte(message, str(arg1), str(arg2), str(arg3));
 		}
 		return true;
 	}
@@ -651,7 +634,7 @@ public class U {
 
 	public static void secure(boolean condition, String msg) {
 		if (!condition) {
-			throw new SecurityException(readable(msg));
+			throw new SecurityException(str(msg));
 		}
 	}
 
@@ -765,10 +748,6 @@ public class U {
 
 	public static String insert(String target, int atIndex, String insertion) {
 		return target.substring(0, atIndex) + insertion + target.substring(atIndex);
-	}
-
-	public static String str(Object value) {
-		return String.valueOf(value);
 	}
 
 	public static int num(String s) {

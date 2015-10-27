@@ -64,7 +64,7 @@ public class Proxies {
 	}
 
 	public static <T> T implement(InvocationHandler handler, Class<?>... classes) {
-		return implement(new InterceptorProxy(U.readable(classes)), handler, classes);
+		return implement(new InterceptorProxy(U.str(classes)), handler, classes);
 	}
 
 	public static <T> T implementInterfaces(Object target, InvocationHandler handler) {

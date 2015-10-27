@@ -36,7 +36,7 @@ public class D {
 		String text;
 
 		if (values != null) {
-			text = values.length == 1 ? U.readable(values[0]) : U.readable(values);
+			text = values.length == 1 ? U.str(values[0]) : U.str(values);
 		} else {
 			text = "null";
 		}

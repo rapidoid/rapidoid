@@ -45,7 +45,7 @@ public class Val<T> {
 
 	@Override
 	public String toString() {
-		return U.readable(value);
+		return U.str(value);
 	}
 
 }

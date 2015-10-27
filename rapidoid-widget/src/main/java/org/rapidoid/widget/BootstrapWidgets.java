@@ -806,10 +806,10 @@ public abstract class BootstrapWidgets extends HTML {
 
 		for (Object value : values) {
 			if (Arr.isArray(value) && !hasGUIElements(value)) {
-				value = U.readable(value);
+				value = U.str(value);
 			}
 			if (value == null || value instanceof Iterable<?>) {
-				value = U.readable(value);
+				value = U.str(value);
 			}
 			list.add(row(value));
 		}

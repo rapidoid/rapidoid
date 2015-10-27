@@ -46,7 +46,7 @@ public class UTest extends TestCommons {
 
 	@Test
 	public void testTextCollectionOfObject() {
-		eq(U.readable(new ArrayList<Integer>()), "[]");
+		eq(U.str(new ArrayList<Integer>()), "[]");
 
 		List<String> lst = new ArrayList<String>();
 
@@ -54,47 +54,47 @@ public class UTest extends TestCommons {
 		lst.add("c");
 		lst.add("c++");
 
-		eq(U.readable(lst), "[java, c, c++]");
+		eq(U.str(lst), "[java, c, c++]");
 	}
 
 	@Test
 	public void testTextObject() {
-		eq(U.readable((Object) null), "null");
+		eq(U.str((Object) null), "null");
 
-		eq(U.readable(123), "123");
-		eq(U.readable(1.23), "1.23");
+		eq(U.str(123), "123");
+		eq(U.str(1.23), "1.23");
 
-		eq(U.readable(true), "true");
-		eq(U.readable(false), "false");
+		eq(U.str(true), "true");
+		eq(U.str(false), "false");
 
-		eq(U.readable(""), "");
-		eq(U.readable("abc"), "abc");
+		eq(U.str(""), "");
+		eq(U.str("abc"), "abc");
 
-		eq(U.readable(new byte[] { -50, 0, 9 }), "[-50, 0, 9]");
-		eq(U.readable(new short[] { -500, 0, 9 }), "[-500, 0, 9]");
-		eq(U.readable(new int[] { 300000000, 70, 100 }), "[300000000, 70, 100]");
-		eq(U.readable(new long[] { 3000000000000000000L, 1, -8900000000000000000L }),
+		eq(U.str(new byte[] { -50, 0, 9 }), "[-50, 0, 9]");
+		eq(U.str(new short[] { -500, 0, 9 }), "[-500, 0, 9]");
+		eq(U.str(new int[] { 300000000, 70, 100 }), "[300000000, 70, 100]");
+		eq(U.str(new long[] { 3000000000000000000L, 1, -8900000000000000000L }),
 				"[3000000000000000000, 1, -8900000000000000000]");
 
-		eq(U.readable(new float[] { -30.40000000f, -1.587f, 89.3f }), "[-30.4, -1.587, 89.3]");
-		eq(U.readable(new double[] { -9987.1, -1.5, 8.3 }), "[-9987.1, -1.5, 8.3]");
+		eq(U.str(new float[] { -30.40000000f, -1.587f, 89.3f }), "[-30.4, -1.587, 89.3]");
+		eq(U.str(new double[] { -9987.1, -1.5, 8.3 }), "[-9987.1, -1.5, 8.3]");
 
-		eq(U.readable(new boolean[] { true }), "[true]");
+		eq(U.str(new boolean[] { true }), "[true]");
 
-		eq(U.readable(new char[] { 'k', 'o', 'h' }), "[k, o, h]");
-		eq(U.readable(new char[] { '-', '.', '+' }), "[-, ., +]");
+		eq(U.str(new char[] { 'k', 'o', 'h' }), "[k, o, h]");
+		eq(U.str(new char[] { '-', '.', '+' }), "[-, ., +]");
 	}
 
 	@Test
 	public void testTextObjectArray() {
-		eq(U.readable(new Object[] {}), "[]");
-		eq(U.readable(new Object[] { 1, new boolean[] { true, false }, 3 }), "[1, [true, false], 3]");
-		eq(U.readable(new Object[] { new double[] { -9987.1 }, new char[] { 'a', '.' }, new int[] { 300, 70, 100 } }),
+		eq(U.str(new Object[] {}), "[]");
+		eq(U.str(new Object[] { 1, new boolean[] { true, false }, 3 }), "[1, [true, false], 3]");
+		eq(U.str(new Object[] { new double[] { -9987.1 }, new char[] { 'a', '.' }, new int[] { 300, 70, 100 } }),
 				"[[-9987.1], [a, .], [300, 70, 100]]");
 
-		eq(U.readable(new int[][] { { 1, 2 }, { 3, 4, 5 } }), "[[1, 2], [3, 4, 5]]");
+		eq(U.str(new int[][] { { 1, 2 }, { 3, 4, 5 } }), "[[1, 2], [3, 4, 5]]");
 
-		eq(U.readable(new String[][][] { { { "a" }, { "r" } }, { { "m" } } }), "[[[a], [r]], [[m]]]");
+		eq(U.str(new String[][][] { { { "a" }, { "r" } }, { { "m" } } }), "[[[a], [r]], [[m]]]");
 	}
 
 	@Test

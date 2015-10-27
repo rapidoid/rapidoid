@@ -660,7 +660,7 @@ public class Cls {
 			} else if (value instanceof char[]) {
 				return (T) new String((char[]) value);
 			} else {
-				return (T) U.readable(value);
+				return (T) U.str(value);
 			}
 
 		case OBJECT:
@@ -829,7 +829,7 @@ public class Cls {
 			}
 		}
 
-		throw U.rte("Cannot find appropriate constructor for %s with args %s!", clazz, U.readable(args));
+		throw U.rte("Cannot find appropriate constructor for %s with args %s!", clazz, U.str(args));
 	}
 
 	public static <T> T customizable(Class<T> clazz, Object... args) {
