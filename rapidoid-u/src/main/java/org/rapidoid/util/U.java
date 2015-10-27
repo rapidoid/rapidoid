@@ -158,7 +158,7 @@ public class U {
 		return String.format(format, args);
 	}
 
-	public static String replaceText(String s, String[][] repls) {
+	public static String replace(String s, String[][] repls) {
 		for (String[] repl : repls) {
 			s = s.replaceAll(Pattern.quote(repl[0]), repl[1]);
 		}
