@@ -347,7 +347,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 	}
 
 	protected static PojoDispatchException error(Throwable cause, String msg, Object... args) {
-		return new PojoDispatchException(U.nice(msg, args), cause);
+		return new PojoDispatchException(U.frmt(msg, args), cause);
 	}
 
 	protected static PojoHandlerNotFoundException notFound() {

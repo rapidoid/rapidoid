@@ -148,13 +148,11 @@ public class U {
 		return sb.toString();
 	}
 
-	public static String frmt(String s, Object... args) {
-		return String.format(s, args);
-	}
-
-	public static String nice(String format, Object... args) {
+	public static String frmt(String format, Object... args) {
 		for (int i = 0; i < args.length; i++) {
-			args[i] = str(args[i]);
+			if (!(args[i] instanceof Number)) {
+				args[i] = str(args[i]);
+			}
 		}
 
 		return String.format(format, args);
@@ -207,7 +205,7 @@ public class U {
 			if (i > 0) {
 				sb.append(sep);
 			}
-			sb.append(nice(itemFormat, items[i]));
+			sb.append(frmt(itemFormat, items[i]));
 		}
 
 		return sb.toString();
@@ -224,7 +222,7 @@ public class U {
 				sb.append(sep);
 			}
 
-			sb.append(nice(itemFormat, item));
+			sb.append(frmt(itemFormat, item));
 			i++;
 		}
 
@@ -565,7 +563,7 @@ public class U {
 	}
 
 	public static RuntimeException rte(String message, Object... args) {
-		return rte(nice(message, args));
+		return rte(frmt(message, args));
 	}
 
 	public static RuntimeException cancelled() {
@@ -590,7 +588,7 @@ public class U {
 	}
 
 	public static RuntimeException rte(String message, Throwable cause, Object... args) {
-		return rte(nice(message, args), cause);
+		return rte(frmt(message, args), cause);
 	}
 
 	public static boolean must(boolean expectedCondition) {
@@ -640,13 +638,13 @@ public class U {
 
 	public static void secure(boolean condition, String msg, Object arg) {
 		if (!condition) {
-			throw new SecurityException(nice(msg, arg));
+			throw new SecurityException(frmt(msg, arg));
 		}
 	}
 
 	public static void secure(boolean condition, String msg, Object arg1, Object arg2) {
 		if (!condition) {
-			throw new SecurityException(nice(msg, arg1, arg2));
+			throw new SecurityException(frmt(msg, arg1, arg2));
 		}
 	}
 
@@ -669,7 +667,7 @@ public class U {
 				throw rte(msgOrDesc, descArgs);
 			} else {
 				// description
-				throw rte("%s must NOT be null!", nice(msgOrDesc, descArgs));
+				throw rte("%s must NOT be null!", frmt(msgOrDesc, descArgs));
 			}
 		}
 
