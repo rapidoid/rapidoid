@@ -14,7 +14,7 @@ import org.rapidoid.entity.IEntity;
 import org.rapidoid.rql.RQL;
 import org.rapidoid.u.U;
 import org.rapidoid.util.English;
-import org.rapidoid.webapp.Scan;
+import org.rapidoid.webapp.FindClasses;
 import org.rapidoidx.db.DbDsl;
 import org.rapidoidx.db.DbSchema;
 
@@ -48,10 +48,10 @@ public class DbSchemaImpl implements DbSchema {
 	private final ConcurrentMap<String, Class<?>> entityTypesPlural = U.concurrentMap();
 
 	public DbSchemaImpl() {
-		for (Class<?> entityType : Scan.annotated(DbEntity.class)) {
+		for (Class<?> entityType : FindClasses.annotated(DbEntity.class)) {
 			putEntityType(entityType);
 		}
-		for (Class<?> entityType : Scan.annotated(Scaffold.class)) {
+		for (Class<?> entityType : FindClasses.annotated(Scaffold.class)) {
 			putEntityType(entityType);
 		}
 	}

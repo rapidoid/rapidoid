@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.scan.ClasspathUtil;
+import org.rapidoid.scan.Scan;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
@@ -44,11 +44,11 @@ public class ClasspathScanTest extends TestCommons {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testClasspathScanByName() {
-		List<Class<?>> classes = ClasspathUtil.scanClasses(null, ".*ScanTest", null, null, null);
+		List<Class<?>> classes = Scan.matching(".*ScanTest").getClasses();
 
 		eq(U.set(classes), U.set(ClasspathScanTest.class));
 
-		classes = ClasspathUtil.scanClasses(null, ".*Bar", null, null, null);
+		classes = Scan.matching(".*Bar").getClasses();
 
 		eq(U.set(classes), U.set(Bar.class));
 	}
@@ -56,7 +56,7 @@ public class ClasspathScanTest extends TestCommons {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testClasspathScanByAnnotation() {
-		List<Class<?>> classes = ClasspathUtil.scanClasses(null, null, null, MyAnnot.class, null);
+		List<Class<?>> classes = Scan.annotated(MyAnnot.class).getClasses();
 
 		eq(U.set(classes), U.set(Foo.class, Bar.class));
 	}
@@ -64,7 +64,7 @@ public class ClasspathScanTest extends TestCommons {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testScanAll() {
-		List<Class<?>> classes = ClasspathUtil.scanClasses(null, null, null, null, null);
+		List<Class<?>> classes = Scan.getClasses();
 
 		eq(U.set(classes),
 				U.set(Foo.class, Bar.class, MyAnnot.class, ClasspathScanTest.class, Aaa.class,

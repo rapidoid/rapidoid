@@ -135,26 +135,24 @@ public class ClasspathUtil {
 		}
 	}
 
-	public static List<Class<?>> scanClasses(String packageName, String nameRegex, Predicate<Class<?>> filter,
-			Class<? extends Annotation> annotated, ClassLoader classLoader) {
+	public static List<Class<?>> scanClasses(ScanParams params) {
 
-		packageName = U.or(packageName, "");
+		String packageName = U.or(params.pkg(), "");
 
 		long startingAt = U.time();
 
-		Pattern regex = nameRegex != null ? Pattern.compile(nameRegex) : null;
+		String regex = params.matching();
+		Pattern pattern = regex != null ? Pattern.compile(regex) : null;
 
-		Log.info("Retrieving classes", "annotated", annotated, "package", packageName, "name", nameRegex);
-		List<Class<?>> classes = retrieveClasses(packageName, filter, annotated, regex, classLoader);
+		Log.info("Retrieving classes", "annotated", params.annotated(), "package", packageName, "matching", regex);
+
+		List<Class<?>> classes = retrieveClasses(packageName, params.filter(), params.annotated(), pattern,
+				params.classLoader());
 
 		long timeMs = U.time() - startingAt;
 		Log.info("Finished classpath scan", "time", timeMs + "ms", "classes", classes);
 
 		return classes;
-	}
-
-	public static List<Class<?>> getAllClasses() {
-		return scanClasses(rootPackage, null, null, null, null);
 	}
 
 	private static List<Class<?>> retrieveClasses(String packageName, Predicate<Class<?>> filter,
@@ -404,6 +402,10 @@ public class ClasspathUtil {
 
 	public static void setRootPackage(String rootPackage) {
 		ClasspathUtil.rootPackage = rootPackage;
+	}
+
+	public static List<Class<?>> getClasses(ScanParams scanParams) {
+		return scanClasses(scanParams);
 	}
 
 }

@@ -37,15 +37,15 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Scan {
+public class FindClasses {
 
-	private Scan() {}
+	private FindClasses() {}
 
-	public static List<Class<?>> classes() {
-		return classes(null, null, null, null, null);
+	public static List<Class<?>> all() {
+		return find(null, null, null, null, null);
 	}
 
-	public static List<Class<?>> classes(String packageName, String nameRegex, Predicate<Class<?>> filter,
+	public static List<Class<?>> find(String packageName, String nameRegex, Predicate<Class<?>> filter,
 			Class<? extends Annotation> annotated, ClassLoader classLoader) {
 		return scanClasses(packageName, nameRegex, filter, annotated, classLoader);
 	}

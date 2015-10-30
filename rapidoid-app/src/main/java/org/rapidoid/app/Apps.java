@@ -48,7 +48,7 @@ import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
 import org.rapidoid.plugins.users.UsersPlugin;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Usage;
-import org.rapidoid.webapp.Scan;
+import org.rapidoid.webapp.FindClasses;
 import org.rapidoid.webapp.WebApp;
 
 @Authors("Nikolche Mihajlovski")
@@ -129,8 +129,8 @@ public class Apps {
 
 	public static AppClasses scanAppClasses(HttpExchange x, ClassLoader classLoader) {
 
-		Map<String, Class<?>> apps = Cls.classMap(Scan.annotated(App.class, classLoader));
-		Map<String, Class<?>> services = Cls.classMap(Scan.annotated(Web.class, classLoader));
+		Map<String, Class<?>> apps = Cls.classMap(FindClasses.annotated(App.class, classLoader));
+		Map<String, Class<?>> services = Cls.classMap(FindClasses.annotated(Web.class, classLoader));
 
 		final Class<?> appClass = !apps.isEmpty() ? apps.values().iterator().next() : null;
 

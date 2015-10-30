@@ -7,7 +7,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.ctx.Classes;
-import org.rapidoid.scan.ClasspathUtil;
+import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
 
 /*
@@ -37,8 +37,7 @@ public class RootWebApp extends WebApp {
 	@SuppressWarnings("unchecked")
 	public RootWebApp() {
 		super("root", Collections.EMPTY_SET, Collections.EMPTY_SET, U.set("/"), Conf.dev() ? AppMode.DEVELOPMENT
-				: AppMode.PRODUCTION, null, null, Classes.from(ClasspathUtil.getAllClasses()), new Config(Conf.root()
-				.toMap()));
+				: AppMode.PRODUCTION, null, null, Classes.from(Scan.getClasses()), new Config(Conf.root().toMap()));
 	}
 
 }

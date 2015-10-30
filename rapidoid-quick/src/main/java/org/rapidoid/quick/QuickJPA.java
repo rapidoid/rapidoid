@@ -37,7 +37,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.PersisterProvider;
 import org.rapidoid.io.IO;
 import org.rapidoid.u.U;
-import org.rapidoid.webapp.Scan;
+import org.rapidoid.webapp.FindClasses;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -59,7 +59,7 @@ public class QuickJPA implements PersisterProvider {
 
 			org.hibernate.cfg.AnnotationConfiguration cfg = new org.hibernate.cfg.AnnotationConfiguration();
 
-			List<Class<?>> entityTypes = Scan.annotated(Entity.class);
+			List<Class<?>> entityTypes = FindClasses.annotated(Entity.class);
 			for (Class<?> entityType : entityTypes) {
 				cfg.addAnnotatedClass(entityType);
 			}

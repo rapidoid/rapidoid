@@ -66,7 +66,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.OptimisticConcurrencyControlException;
 import org.rapidoid.util.SuccessException;
 import org.rapidoid.webapp.AppCtx;
-import org.rapidoid.webapp.Scan;
+import org.rapidoid.webapp.FindClasses;
 
 class Rec implements Serializable {
 
@@ -1079,7 +1079,7 @@ public class InMem implements Serializable {
 
 				String[] nameParts = className.split("\\.");
 				String simpleName = nameParts[nameParts.length - 1];
-				List<Class<?>> classes = Scan.byName(simpleName, null, null);
+				List<Class<?>> classes = FindClasses.byName(simpleName, null, null);
 
 				if (classes.size() == 1) {
 					Class<?> type = classes.get(0);
