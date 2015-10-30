@@ -36,7 +36,7 @@ public class ServerSetup {
 	}
 
 	public TCPServer listen(String address, int port) {
-		TCPServer server = Serve.server().protocol(fastHttp).build();
+		TCPServer server = Serve.server().protocol(fastHttp).port(port).build();
 		server.start();
 		return server;
 	}
