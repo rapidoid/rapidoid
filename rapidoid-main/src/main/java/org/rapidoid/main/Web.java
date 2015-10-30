@@ -27,9 +27,9 @@ import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")
-public abstract class WWW extends GUI {
+public abstract class Web extends GUI {
 
-	public WWW() {
+	public Web() {
 		Wire.manage(this);
 		Rapidoid.notifyGuiInit();
 	}
