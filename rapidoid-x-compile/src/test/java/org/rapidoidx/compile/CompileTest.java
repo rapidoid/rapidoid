@@ -44,6 +44,9 @@ public class CompileTest extends TestCommons {
 				"public class Book { String title; int x = 1234; } class Foo {}", "public class Bar extends Foo {}",
 				"public class Fg extends Foo {}");
 
+		System.out.println("ERRORS:" + compilation.getErrors());
+		isTrue(compilation.getErrors().isEmpty());
+
 		Set<Class<?>> classes = compilation.loadClasses();
 		eq(classes.size(), 10);
 

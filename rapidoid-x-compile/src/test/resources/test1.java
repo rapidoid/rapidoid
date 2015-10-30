@@ -31,7 +31,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.log.Log;
 
 @mixo.Mixin
@@ -87,7 +87,7 @@ class PersonService {
 		for (Entry<?, ?> entry : params.entrySet()) {
 			Object key = entry.getKey();
 			Object value = entry.getValue();
-			D.print(key, value);
+			U.print(key, value);
 		}
 		return new Date();
 	}
