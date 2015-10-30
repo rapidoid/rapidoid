@@ -24,6 +24,8 @@ import java.io.Serializable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -41,15 +43,15 @@ public class SessionVar<T extends Serializable> extends WidgetVar<T> {
 		this.defaultValue = defaultValue;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public T get() {
-		T val = ctx().session(sessionKey, defaultValue);
-		return val;
+		return (T) U.or(Ctxs.ctx().session().get(sessionKey), defaultValue);
 	}
 
 	@Override
 	public void set(T value) {
-		ctx().session().put(sessionKey, value);
+		Ctxs.ctx().session().put(sessionKey, value);
 	}
 
 }

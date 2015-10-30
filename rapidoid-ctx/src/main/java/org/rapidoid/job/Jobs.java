@@ -33,14 +33,13 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.JobStatusListener;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Constants;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class Jobs implements Constants {
+public class Jobs {
 
 	private static ScheduledExecutorService SCHEDULER;
 
@@ -107,9 +106,9 @@ public class Jobs implements Constants {
 			U.notNull(ctx.app(), "Application wasn't attached to the context!");
 
 			Object x = ctx.exchange();
-			if (x instanceof HttpExchange) {
-				HttpExchange xch = (HttpExchange) x;
-				xch.async();
+
+			if (x instanceof JobStatusListener) {
+				((JobStatusListener) x).onAsync();
 			}
 
 			// increment reference counter

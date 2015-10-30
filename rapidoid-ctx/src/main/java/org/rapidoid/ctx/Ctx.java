@@ -1,13 +1,18 @@
 package org.rapidoid.ctx;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -45,13 +50,25 @@ public class Ctx {
 
 	private volatile Object app;
 
+	private volatile String host;
+
+	private volatile String uri;
+
+	private volatile String verb;
+
 	private volatile int referenceCounter = 1;
 
 	private volatile ThreadLocal<Object> persisters = new ThreadLocal<Object>();
 
+	private volatile boolean closed = false;
+
 	private final List<Object> allPersisters = Collections.synchronizedList(new ArrayList<Object>(5));
 
-	private volatile boolean closed = false;
+	private final Map<String, Object> data = U.synchronizedMap();
+
+	private final Map<String, Serializable> session = U.synchronizedMap();
+
+	private final Map<Object, Object> extras = U.synchronizedMap();
 
 	Ctx(String tag) {
 		this.tag = tag;
@@ -87,6 +104,36 @@ public class Ctx {
 	public void setApp(Object app) {
 		ensureNotClosed();
 		this.app = app;
+	}
+
+	public String host() {
+		ensureNotClosed();
+		return host;
+	}
+
+	public void setHost(String host) {
+		ensureNotClosed();
+		this.host = host;
+	}
+
+	public String uri() {
+		ensureNotClosed();
+		return uri;
+	}
+
+	public void setUri(String uri) {
+		ensureNotClosed();
+		this.uri = uri;
+	}
+
+	public String verb() {
+		ensureNotClosed();
+		return verb;
+	}
+
+	public void setVerb(String verb) {
+		ensureNotClosed();
+		this.verb = verb;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -136,12 +183,17 @@ public class Ctx {
 		this.exchange = null;
 		this.app = null;
 		this.persisters = null;
+		this.host = null;
+		this.uri = null;
 
 		for (Object persister : allPersisters) {
 			Ctxs.closePersister(persister);
 		}
 
 		allPersisters.clear();
+		data.clear();
+		session.clear();
+		extras.clear();
 
 		closed = true;
 	}
@@ -161,6 +213,49 @@ public class Ctx {
 
 	public boolean isClosed() {
 		return closed;
+	}
+
+	public static synchronized <T> T executeInCtx(CtxData cd, Callable<T> action) {
+		Ctx ctx = Ctxs.open("call");
+
+		ctx.setApp(cd.app());
+		ctx.setExchange(null);
+		ctx.setUser(new UserInfo(cd.username(), cd.roles()));
+		ctx.setHost(cd.host());
+		ctx.setUri(cd.uri());
+		ctx.setVerb(cd.verb());
+		ctx.data().putAll(cd.data());
+		ctx.session().putAll(cd.session());
+		ctx.extras().putAll(cd.extras());
+
+		try {
+			return Lambdas.call(action);
+		} finally {
+			Ctxs.close();
+		}
+	}
+
+	public Map<String, Object> data() {
+		ensureNotClosed();
+		return data;
+	}
+
+	public Map<String, Serializable> session() {
+		ensureNotClosed();
+		return session;
+	}
+
+	public Map<Object, Object> extras() {
+		ensureNotClosed();
+		return extras;
+	}
+
+	public boolean isLoggedIn() {
+		return user() != null;
+	}
+
+	public String username() {
+		return isLoggedIn() ? user().username : null;
 	}
 
 }

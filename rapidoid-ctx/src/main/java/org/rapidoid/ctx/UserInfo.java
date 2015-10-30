@@ -59,6 +59,10 @@ public class UserInfo implements Serializable {
 		this(username, username, username);
 	}
 
+	public UserInfo(String username, Set<String> roles) {
+		this(username, username, username, null, null, roles);
+	}
+
 	public UserInfo(String username, String email, String name) {
 		this(username, email, name, null, null);
 	}

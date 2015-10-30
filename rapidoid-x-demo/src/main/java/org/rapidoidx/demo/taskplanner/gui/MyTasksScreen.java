@@ -28,11 +28,11 @@ import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
 import org.rapidoid.beany.Beany;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.html.Tag;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.u.U;
-import org.rapidoid.webapp.AppCtx;
 import org.rapidoid.widget.GridWidget;
 import org.rapidoidx.demo.taskplanner.model.Task;
 import org.rapidoidx.demo.taskplanner.model.User;
@@ -50,7 +50,7 @@ public class MyTasksScreen extends GUI {
 			@Override
 			public boolean eval(Task t) throws Exception {
 				User user = t.owner.get();
-				return user != null && U.eq(user.username, AppCtx.username());
+				return user != null && U.eq(user.username, Ctxs.ctx().username());
 			}
 		}, "-priority", 10, "id", "title", "priority");
 
@@ -59,7 +59,7 @@ public class MyTasksScreen extends GUI {
 		GridWidget grid2 = grid(Task.class, new Predicate<Task>() {
 			@Override
 			public boolean eval(Task t) throws Exception {
-				return Beany.projection(t.sharedWith, "username").contains(AppCtx.username());
+				return Beany.projection(t.sharedWith, "username").contains(Ctxs.ctx().username());
 			}
 		}, new Comparator<Task>() {
 			@Override

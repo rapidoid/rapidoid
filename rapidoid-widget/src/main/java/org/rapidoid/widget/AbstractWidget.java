@@ -22,34 +22,31 @@ package org.rapidoid.widget;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.impl.TagRenderer;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class AbstractWidget extends BootstrapWidgets implements TagWidget<HttpExchange>, Constants {
+public abstract class AbstractWidget extends BootstrapWidgets implements TagWidget<Object>, Constants {
 
 	private final int widgetNum = getWidgetNumber(this);
 
-	private HttpExchange x;
+	private Object extra;
 
-	protected HttpExchange ctx() {
-		if (x == null) {
-			x = Ctxs.ctx().exchange();
-		}
-		U.notNull(x, "HTTP exchange");
-		return x;
+	protected Ctx ctx() {
+		return Ctxs.ctx();
 	}
 
 	protected abstract Object render();
 
 	@Override
-	public final Object render(HttpExchange x) {
-		this.x = x;
+	public final Object render(Object extra) {
+		this.extra = extra;
+		// TODO ignore the exchange?
 		return render();
 	}
 
@@ -62,16 +59,16 @@ public abstract class AbstractWidget extends BootstrapWidgets implements TagWidg
 			return -1;
 		}
 
-		HttpExchange x = Ctxs.ctx().exchange();
+		Ctx ctx = Ctxs.ctx();
 		String extrName = "widget_counter_" + widget.getClass().getSimpleName();
-		Integer counter = U.or((Integer) x.tmp(extrName, null), 1);
-		x.tmps().put(extrName, counter + 1);
+		Integer counter = U.or((Integer) ctx.extras().get(extrName), 1);
+		ctx.extras().put(extrName, counter + 1);
 		return counter;
 	}
 
 	@Override
 	public String toString() {
-		return TagRenderer.get().toHTML(this, x);
+		return TagRenderer.get().toHTML(this, extra);
 	}
 
 }

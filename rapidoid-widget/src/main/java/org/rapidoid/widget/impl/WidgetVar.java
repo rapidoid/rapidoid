@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.u.U;
 import org.rapidoid.var.impl.AbstractVar;
 
@@ -43,13 +42,8 @@ public abstract class WidgetVar<T extends Serializable> extends AbstractVar<T> {
 		this.initial = initial;
 	}
 
-	protected HttpExchange ctx() {
-		HttpExchange x = Ctxs.ctx().exchange();
-		return x;
-	}
-
 	protected boolean getBool() {
-		return U.or(Cls.convert(ctx().local(name(), null), Boolean.class), false);
+		return U.or(Cls.convert(Ctxs.ctx().data().get(name()), Boolean.class), false);
 	}
 
 }

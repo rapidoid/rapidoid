@@ -34,6 +34,8 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.http.HttpProtocol;
@@ -41,7 +43,6 @@ import org.rapidoid.io.Res;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.webapp.AppCtx;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.2.0")
@@ -179,9 +180,9 @@ public class Scripting {
 		desc.put("home", x.home());
 		desc.put("dev", x.isDevMode());
 
-		boolean loggedIn = AppCtx.isLoggedIn();
-		desc.put("loggedIn", loggedIn);
-		desc.put("user", loggedIn ? AppCtx.user() : null);
+		Ctx ctx = Ctxs.ctx();
+		desc.put("loggedIn", ctx.isLoggedIn());
+		desc.put("user", ctx.user());
 
 		return GUI.multi(GUI.h2("Request details:"), GUI.grid(desc), GUI.h2("Request params:"), GUI.grid(x.data()),
 				GUI.h2("Cookies:"), GUI.grid(x.cookies()));

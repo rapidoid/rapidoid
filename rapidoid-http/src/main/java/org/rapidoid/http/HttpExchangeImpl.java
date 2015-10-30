@@ -33,6 +33,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.ctx.JobStatusListener;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.data.BinaryMultiData;
 import org.rapidoid.data.Data;
@@ -62,7 +63,7 @@ import org.rapidoid.wrap.BoolWrap;
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implements LowLevelHttpExchange,
-		HttpExchangeInternals, HttpInterception, Constants {
+		HttpExchangeInternals, HttpInterception, Constants, JobStatusListener {
 
 	public static final String SESSION_COOKIE = "JSESSIONID";
 	public static final String COOKIEPACK_COOKIE = "COOKIEPACK";
@@ -942,7 +943,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 	@Override
 	public synchronized HttpExchange authorize(Class<?> clazz) {
-		return accessDeniedIf(!Secure.canAccessClass(AppCtx.username(), clazz));
+		return accessDeniedIf(!Secure.canAccessClass(Ctxs.ctx().username(), clazz));
 	}
 
 	@Override
@@ -1287,6 +1288,11 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
+	public void onAsync() {
+		async();
+	}
+
+	@Override
 	public synchronized String name() {
 		if (resourceName == null) {
 			resourceName = path().substring(1);
@@ -1361,9 +1367,9 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			Map<String, Object> oauth = U.map("popup", true, "providers", providers);
 			model.put("oauth", oauth);
 
-			boolean loggedIn = AppCtx.isLoggedIn();
+			boolean loggedIn = Ctxs.ctx().isLoggedIn();
 			model.put("loggedIn", loggedIn);
-			model.put("user", loggedIn ? AppCtx.user() : null);
+			model.put("user", loggedIn ? Ctxs.ctx().user() : null);
 
 			model.put("version", UTILS.version());
 		}

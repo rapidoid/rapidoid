@@ -28,7 +28,6 @@ import org.rapidoid.html.tag.OptionTag;
 import org.rapidoid.html.tag.SelectTag;
 import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.html.tag.TextareaTag;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.lambda.Calc;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
@@ -522,10 +521,6 @@ public abstract class BootstrapWidgets extends HTML {
 		return var(name, null);
 	}
 
-	public static HttpExchange http() {
-		return Ctxs.ctx().exchange();
-	}
-
 	public static <T extends Serializable> Var<T> session(String name, T defaultValue) {
 		return new SessionVar<T>(name, defaultValue);
 	}
@@ -535,7 +530,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static <T extends Serializable> Var<T> local(String name, T defaultValue) {
-		return new LocalVar<T>(name, defaultValue, http().isGetReq());
+		return new LocalVar<T>(name, defaultValue, isGetReq());
 	}
 
 	public static Var<Integer> local(String name, int defaultValue, int min, int max) {
@@ -546,10 +541,6 @@ public abstract class BootstrapWidgets extends HTML {
 		var.set(pageN);
 
 		return var;
-	}
-
-	public static String viewId(HttpExchange x) {
-		return x.uri();
 	}
 
 	public static boolean isEntity(Object obj) {
@@ -744,7 +735,7 @@ public abstract class BootstrapWidgets extends HTML {
 			return display(U.iterator(arr));
 		} else if (item instanceof TagWidget) {
 			TagWidget<Object> widget = (TagWidget<Object>) item;
-			return widget.render(http());
+			return widget.render(null);
 		}
 
 		return isEntity(item) ? a(item).href(urlFor(item)) : Cls.str(item);
@@ -841,17 +832,21 @@ public abstract class BootstrapWidgets extends HTML {
 		String varName = container.name() + "[" + itemId + "]";
 
 		if (arrOrColl instanceof Collection) {
-			return new CollectionContainerVar(varName, (Var<Collection<Object>>) container, item, http().isGetReq());
+			return new CollectionContainerVar(varName, (Var<Collection<Object>>) container, item, isGetReq());
 		} else {
-			return new ArrayContainerVar(varName, (Var<Object>) container, item, http().isGetReq());
+			return new ArrayContainerVar(varName, (Var<Object>) container, item, isGetReq());
 		}
+	}
+
+	private static boolean isGetReq() {
+		return "GET".equalsIgnoreCase(Ctxs.ctx().verb());
 	}
 
 	@SuppressWarnings("unchecked")
 	public static Var<Boolean> varEq(Var<?> var, Object item) {
 		Object itemId = Beany.hasProperty(item, "id") ? Beany.getIdIfExists(item) : String.valueOf(item);
 		String varName = var.name() + "[" + itemId + "]";
-		return new EqualityVar(varName, (Var<Object>) var, item, http().isGetReq());
+		return new EqualityVar(varName, (Var<Object>) var, item, isGetReq());
 	}
 
 	public static Object i18n(String multiLanguageText, Object... formatArgs) {

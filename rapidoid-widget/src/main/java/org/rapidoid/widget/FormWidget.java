@@ -26,6 +26,7 @@ import java.util.List;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
@@ -36,7 +37,6 @@ import org.rapidoid.security.Secure;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
-import org.rapidoid.webapp.AppCtx;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -151,7 +151,7 @@ public class FormWidget extends AbstractWidget {
 
 			for (FormFieldWidget field : fields) {
 				if (field.permissions == null) {
-					field.permissions = Secure.getPropertyPermissions(AppCtx.username(), targetClass, target,
+					field.permissions = Secure.getPropertyPermissions(Ctxs.ctx().username(), targetClass, target,
 							field.name);
 				}
 			}

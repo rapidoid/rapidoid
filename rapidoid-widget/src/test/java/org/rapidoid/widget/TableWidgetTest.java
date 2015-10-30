@@ -32,9 +32,6 @@ public class TableWidgetTest extends WidgetTestCommons {
 
 	@Test
 	public void testTableWidget() {
-
-		setupMockExchange();
-
 		Person john = new Person("John", 20);
 		john.id = 1;
 

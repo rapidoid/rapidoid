@@ -14,7 +14,17 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-concurrent</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-config</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-activity</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

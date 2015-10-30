@@ -57,6 +57,7 @@ import org.rapidoid.beany.PropertyFilter;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.concurrent.Callback;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
@@ -65,7 +66,6 @@ import org.rapidoid.security.Secure;
 import org.rapidoid.u.U;
 import org.rapidoid.util.OptimisticConcurrencyControlException;
 import org.rapidoid.util.SuccessException;
-import org.rapidoid.webapp.AppCtx;
 import org.rapidoid.webapp.FindClasses;
 
 class Rec implements Serializable {
@@ -177,7 +177,7 @@ public class InMem implements Serializable {
 		if (sudo) {
 			return SUPERADMIN;
 		}
-		return asUsername != null ? asUsername : AppCtx.username();
+		return asUsername != null ? asUsername : Ctxs.ctx().username();
 	}
 
 	public void initAndLoad() {

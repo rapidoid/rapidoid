@@ -1,8 +1,11 @@
-package org.rapidoid.widget;
+package org.rapidoid.ctx;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
- * rapidoid-widget
+ * rapidoid-ctx
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,29 +23,10 @@ package org.rapidoid.widget;
  * #L%
  */
 
-import org.junit.Test;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.html.Tag;
-
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class PlaygroundWidgetTest extends WidgetTestCommons {
+@Since("4.5.0")
+public interface JobStatusListener {
 
-	private static final String ATTRS = "[^>]*?";
-
-	@Test
-	public void testPlaygroundWidget() {
-		Tag play = PlaygroundWidget.pageContent(null);
-		print(play);
-
-		hasRegex(play, "<table class=\"table" + ATTRS + ">");
-
-		hasRegex(play, "<button[^>]*?>\\-</button>");
-		hasRegex(play, "<span[^>]*?>10</span>");
-		hasRegex(play, "<button[^>]*?>\\+</button>");
-
-		hasRegex(play, "<input [^>]*?style=\"border: 1px;\">");
-	}
+	void onAsync();
 
 }

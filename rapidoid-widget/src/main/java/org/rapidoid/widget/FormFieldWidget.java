@@ -38,7 +38,6 @@ import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.TextareaTag;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
@@ -47,7 +46,6 @@ import org.rapidoid.security.DataPermissions;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
-import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -97,15 +95,14 @@ public class FormFieldWidget extends AbstractWidget {
 	}
 
 	private Var<?> initVar(Item item, Property prop) {
-		HttpExchange x = Ctxs.ctx().exchange();
 		Object target = U.or(item.value(), item);
-		String varName = Wire.propVarName(target, prop.name());
-		Object initValue = x.locals().get(varName);
+		String varName = propVarName(target, prop.name());
+		Object initValue = Ctxs.ctx().data().get(varName);
 
 		try {
 			return Models.propertyVar(varName, item, prop.name(), initValue);
 		} catch (Exception e) {
-			x.errors().put(varName, "Invalid value!");
+			// FIXME x.errors().put(varName, "Invalid value!");
 			return Models.propertyVar(varName, item, prop.name(), null);
 		}
 	}
@@ -477,6 +474,18 @@ public class FormFieldWidget extends AbstractWidget {
 
 	public void setInput(Tag input) {
 		this.input = input;
+	}
+
+	public static String propVarName(Object target, String name) {
+		return name;
+
+		// TODO consider complex names (see Wire.propVarName)
+		// (e.g. Person.name in future
+		// if (Cls.isBean(target)) {
+		// return target.getClass().getSimpleName() + "." + name;
+		// } else {
+		// return name;
+		// }
 	}
 
 }

@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HttpExchange;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.u.U;
 import org.rapidoid.util.D;
 
@@ -45,18 +45,21 @@ public abstract class AbstractCommandWidget<W extends AbstractCommandWidget<?>> 
 	public W command(String cmd, Object... cmdArgs) {
 		this.command = cmd;
 		this.cmdArgs = cmdArgs;
+
 		handleEventIfReady();
+
 		return (W) this;
 	}
 
 	protected void handleEventIfReady() {
 		if (!handled && handler != null && command != null) {
-			HttpExchange x = ctx();
-			if (ctx().isPostReq()) {
-				String event = x.data("_event", null);
+			Ctx ctx = ctx();
+
+			if ("POST".equalsIgnoreCase(ctx.verb())) {
+				String event = U.str(ctx.data().get("_event"));
 
 				if (!U.isEmpty(event) && U.eq(event, command)) {
-					List<Object> argList = x.data("_args", null);
+					List<Object> argList = U.cast(ctx.data().get("_args"));
 					Object[] args = argList != null ? U.array(argList) : new Object[0];
 					D.print(args);
 					D.print(cmdArgs);

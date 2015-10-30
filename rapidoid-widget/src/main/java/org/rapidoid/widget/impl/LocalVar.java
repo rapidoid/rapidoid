@@ -24,6 +24,8 @@ import java.io.Serializable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")
@@ -41,15 +43,16 @@ public class LocalVar<T extends Serializable> extends WidgetVar<T> {
 		this.defaultValue = defaultValue;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public T get() {
-		T val = ctx().local(localKey, defaultValue);
+		T val = (T) U.or(Ctxs.ctx().data().get(localKey), defaultValue);
 		return val;
 	}
 
 	@Override
 	public void set(T value) {
-		ctx().locals().put(localKey, value);
+		Ctxs.ctx().data().put(localKey, value);
 	}
 
 }
