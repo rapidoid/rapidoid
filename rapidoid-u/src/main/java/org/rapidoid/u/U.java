@@ -1137,4 +1137,18 @@ public class U {
 		return obj instanceof Collection<?>;
 	}
 
+	public static <T> void assign(Collection<T> destination, Collection<? extends T> source) {
+		if (destination != null && source != null) {
+			destination.clear();
+			destination.addAll(source);
+		}
+	}
+
+	public static <K, V> void assign(Map<K, V> destination, Map<? extends K, ? extends V> source) {
+		if (destination != null && source != null) {
+			destination.clear();
+			destination.putAll(source);
+		}
+	}
+
 }

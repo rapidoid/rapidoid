@@ -224,9 +224,10 @@ public class Ctx {
 		ctx.setHost(cd.host());
 		ctx.setUri(cd.uri());
 		ctx.setVerb(cd.verb());
-		ctx.data().putAll(cd.data());
-		ctx.session().putAll(cd.session());
-		ctx.extras().putAll(cd.extras());
+
+		U.assign(ctx.data(), cd.data());
+		U.assign(ctx.session(), cd.session());
+		U.assign(ctx.extras(), cd.extras());
 
 		try {
 			return Lambdas.call(action);
