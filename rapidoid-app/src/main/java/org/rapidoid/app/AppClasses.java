@@ -26,7 +26,7 @@ import java.util.Map;
 import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.Web;
+import org.rapidoid.annotation.Controller;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.u.U;
 
@@ -50,7 +50,7 @@ public class AppClasses {
 			String name = cls.getSimpleName();
 			if (Metadata.isAnnotated(cls, App.class)) {
 				main = cls;
-			} else if (Metadata.isAnnotated(cls, Web.class)) {
+			} else if (Metadata.isAnnotated(cls, Controller.class)) {
 				services.put(name, cls);
 			}
 		}

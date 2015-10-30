@@ -27,7 +27,7 @@ import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
-import org.rapidoid.annotation.Web;
+import org.rapidoid.annotation.Controller;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
@@ -130,7 +130,7 @@ public class Apps {
 	public static AppClasses scanAppClasses(HttpExchange x, ClassLoader classLoader) {
 
 		Map<String, Class<?>> apps = Cls.classMap(FindClasses.annotated(App.class, classLoader));
-		Map<String, Class<?>> services = Cls.classMap(FindClasses.annotated(Web.class, classLoader));
+		Map<String, Class<?>> services = Cls.classMap(FindClasses.annotated(Controller.class, classLoader));
 
 		final Class<?> appClass = !apps.isEmpty() ? apps.values().iterator().next() : null;
 

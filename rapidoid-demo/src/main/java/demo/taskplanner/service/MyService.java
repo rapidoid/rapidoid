@@ -27,12 +27,12 @@ import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.Web;
+import org.rapidoid.annotation.Controller;
 import org.rapidoid.http.HttpExchange;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-@Web
+@Controller
 public class MyService {
 
 	// e.g. /

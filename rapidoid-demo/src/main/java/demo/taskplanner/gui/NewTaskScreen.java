@@ -27,7 +27,7 @@ import org.rapidoid.annotation.Local;
 import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
-import org.rapidoid.annotation.Web;
+import org.rapidoid.annotation.Controller;
 import org.rapidoid.app.GUI;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.Tag;
@@ -39,7 +39,7 @@ import org.rapidoid.widget.GridWidget;
 
 import demo.taskplanner.model.Task;
 
-@Web
+@Controller
 @Order(1)
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

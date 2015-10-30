@@ -29,8 +29,8 @@ import java.lang.annotation.Target;
 @Target({ TYPE })
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public @interface Web {
+@Since("4.5.0")
+public @interface Controller {
 
 	String url() default "/";
 

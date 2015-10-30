@@ -24,12 +24,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.Web;
+import org.rapidoid.annotation.Controller;
 import org.rapidoid.main.Rapidoid;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.2.0")
-@Web
+@Controller
 public class Main {
 
 	public static void main(String[] args) {

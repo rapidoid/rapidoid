@@ -2,7 +2,7 @@ package demo.taskplanner.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.Web;
+import org.rapidoid.annotation.Controller;
 import org.rapidoid.app.GUI;
 import org.rapidoid.u.U;
 import org.rapidoid.widget.LayoutWidget;
@@ -27,7 +27,7 @@ import org.rapidoid.widget.LayoutWidget;
  * #L%
  */
 
-@Web
+@Controller
 @Authors("Nikolche Mihajlovski")
 @Since("2.4.0")
 public class ControlsScreen extends GUI {

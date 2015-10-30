@@ -22,14 +22,14 @@ package demo.taskplanner.service;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.Web;
+import org.rapidoid.annotation.Controller;
 import org.rapidoid.app.CRUD;
 
 import demo.taskplanner.model.Task;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-@Web(url = "/tasks")
+@Controller(url = "/tasks")
 public class TaskService extends CRUD<Task> {
 
 }

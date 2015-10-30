@@ -34,7 +34,7 @@ import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.PUT;
 import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.Web;
+import org.rapidoid.annotation.Controller;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.arr.Arr;
 import org.rapidoid.beany.Metadata;
@@ -99,7 +99,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 
 	@Override
 	protected List<String> getComponentNames(Class<?> component) {
-		Web web = Metadata.classAnnotation(component, Web.class);
+		Controller web = Metadata.classAnnotation(component, Controller.class);
 
 		if (web != null) {
 			return U.list(web.url());
