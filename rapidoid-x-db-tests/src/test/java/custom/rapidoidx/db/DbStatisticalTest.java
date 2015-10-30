@@ -32,7 +32,7 @@ import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoidx.db.XDB;
 
 import custom.rapidoidx.db.model.Person;

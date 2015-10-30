@@ -25,7 +25,7 @@ import org.rapidoid.plugins.templates.DefaultTemplatesPlugin;
 import org.rapidoid.plugins.templates.TemplatesPlugin;
 import org.rapidoid.plugins.users.DefaultUsersPlugin;
 import org.rapidoid.plugins.users.UsersPlugin;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /*
  * #%L

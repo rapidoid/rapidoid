@@ -27,7 +27,7 @@ import org.rapidoid.net.Protocol;
 import org.rapidoid.net.Serve;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

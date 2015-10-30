@@ -25,7 +25,7 @@ import java.util.concurrent.Callable;
 import org.rapidoid.AbstractInsightful;
 import org.rapidoid.arr.Arr;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /**
  * @author Nikolche Mihajlovski

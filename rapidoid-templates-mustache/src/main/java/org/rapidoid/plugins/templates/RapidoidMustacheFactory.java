@@ -33,7 +33,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.DefaultMustacheVisitor;

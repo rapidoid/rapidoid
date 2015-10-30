@@ -2,6 +2,7 @@ package org.rapidoid.util;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
 
 /*
  * #%L

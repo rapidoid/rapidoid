@@ -32,7 +32,7 @@ import org.rapidoid.app.GUI;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.db.DB;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.widget.FormWidget;
 import org.rapidoid.widget.GridWidget;

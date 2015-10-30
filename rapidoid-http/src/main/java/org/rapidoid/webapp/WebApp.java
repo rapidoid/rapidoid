@@ -9,7 +9,7 @@ import org.rapidoid.ctx.Classes;
 import org.rapidoid.dispatch.PojoDispatcher;
 import org.rapidoid.http.HttpRouter;
 import org.rapidoid.http.Router;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /*
  * #%L

@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.rapidoid.measure.Measure;
 import org.rapidoid.measure.StatsMeasure;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /*
  * #%L

@@ -4,7 +4,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.rapidoid.concurrent.impl.FutureImpl;
 import org.rapidoid.lambda.Mapper;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /*
  * #%L

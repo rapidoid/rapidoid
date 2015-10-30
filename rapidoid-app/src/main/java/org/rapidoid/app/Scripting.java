@@ -40,7 +40,7 @@ import org.rapidoid.http.HttpProtocol;
 import org.rapidoid.io.Res;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.webapp.AppCtx;
 
 @Authors("Nikolche Mihajlovski")

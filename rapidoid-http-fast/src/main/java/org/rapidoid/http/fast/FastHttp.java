@@ -37,7 +37,7 @@ import org.rapidoid.dates.Dates;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.wire.Wire;
 import org.rapidoid.wrap.BoolWrap;
 

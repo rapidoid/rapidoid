@@ -32,7 +32,7 @@ import org.rapidoid.io.CustomizableClassLoader;
 import org.rapidoid.io.IO;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Predicate;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

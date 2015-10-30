@@ -49,7 +49,7 @@ import org.rapidoid.concurrent.Promise;
 import org.rapidoid.concurrent.Promises;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

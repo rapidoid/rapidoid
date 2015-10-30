@@ -11,7 +11,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 import com.datastax.driver.core.Session;
 

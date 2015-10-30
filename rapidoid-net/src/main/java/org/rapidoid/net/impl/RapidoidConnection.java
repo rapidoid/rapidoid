@@ -38,9 +38,9 @@ import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.data.JSON;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Resetable;
-import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

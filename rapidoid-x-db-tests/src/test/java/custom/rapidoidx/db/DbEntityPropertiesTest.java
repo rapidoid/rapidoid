@@ -31,7 +31,7 @@ import org.rapidoid.beany.BeanProperties;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.TypeKind;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoidx.db.DbList;
 import org.rapidoidx.db.XDB;
 import org.rapidoidx.db.impl.DbProxy;

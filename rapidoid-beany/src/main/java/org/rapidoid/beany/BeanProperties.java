@@ -35,7 +35,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Mapper;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

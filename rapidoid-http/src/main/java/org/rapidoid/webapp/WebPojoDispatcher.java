@@ -49,7 +49,7 @@ import org.rapidoid.dispatch.impl.PojoDispatcherImpl;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

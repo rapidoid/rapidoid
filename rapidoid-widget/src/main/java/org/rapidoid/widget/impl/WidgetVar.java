@@ -27,7 +27,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.var.impl.AbstractVar;
 
 @Authors("Nikolche Mihajlovski")

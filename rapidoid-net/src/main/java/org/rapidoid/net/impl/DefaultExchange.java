@@ -36,9 +36,9 @@ import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.abstracts.ProtocolContext;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Resetable;
-import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

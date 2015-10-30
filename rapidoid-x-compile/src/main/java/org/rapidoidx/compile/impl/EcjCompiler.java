@@ -31,7 +31,7 @@ import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jdt.internal.compiler.problem.DefaultProblemFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoidx.compile.Compilation;
 
 @Authors("Nikolche Mihajlovski")

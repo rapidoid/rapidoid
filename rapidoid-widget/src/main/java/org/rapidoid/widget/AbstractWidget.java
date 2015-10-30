@@ -26,8 +26,8 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.impl.TagRenderer;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

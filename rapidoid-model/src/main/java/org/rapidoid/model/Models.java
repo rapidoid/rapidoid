@@ -39,7 +39,7 @@ import org.rapidoid.model.impl.CalcProperty;
 import org.rapidoid.model.impl.ItemPropertyVar;
 import org.rapidoid.model.impl.ListItems;
 import org.rapidoid.model.impl.MapItem;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 

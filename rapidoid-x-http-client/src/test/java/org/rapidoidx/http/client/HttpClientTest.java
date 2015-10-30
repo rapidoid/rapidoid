@@ -28,7 +28,7 @@ import org.rapidoid.http.HTTPServer;
 import org.rapidoid.http.WebServer;
 import org.rapidoid.lambda.ResultCounterCallback;
 import org.rapidoid.test.ContextAwareTest;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

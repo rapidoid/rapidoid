@@ -1,4 +1,4 @@
-package org.rapidoid.util;
+package org.rapidoid.u;
 
 /*
  * #%L
@@ -22,34 +22,11 @@ package org.rapidoid.util;
 
 /**
  * @author Nikolche Mihajlovski
- * @since 2.3.0
+ * @since 4.1.0
  */
-public class Is<T> {
+public interface EgInterface {
 
-	private final T value;
+	String hey();
 
-	public Is(T value) {
-		this.value = value;
-	}
-
-	public boolean in(T... candidates) {
-		return U.isIn(value, candidates);
-	}
-
-	public boolean map() {
-		return U.isMap(value);
-	}
-
-	public boolean list() {
-		return U.isList(value);
-	}
-
-	public boolean set() {
-		return U.isSet(value);
-	}
-
-	public boolean collection() {
-		return U.isCollection(value);
-	}
-
+	String abc(int x, boolean b);
 }

@@ -26,7 +26,7 @@ import org.rapidoid.data.JSON;
 import org.rapidoid.dates.Dates;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 

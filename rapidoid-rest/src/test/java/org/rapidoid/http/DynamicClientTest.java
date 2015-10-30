@@ -30,7 +30,7 @@ import org.rapidoid.concurrent.Promises;
 import org.rapidoid.http.fast.On;
 import org.rapidoid.http.fast.ParamHandler;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")

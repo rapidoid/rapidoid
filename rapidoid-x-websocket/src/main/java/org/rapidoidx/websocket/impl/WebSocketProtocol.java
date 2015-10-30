@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoidx.websocket.WSExchange;
 import org.rapidoidx.websocket.WSHandler;
 

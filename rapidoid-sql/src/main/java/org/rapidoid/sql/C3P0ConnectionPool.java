@@ -26,7 +26,7 @@ import java.sql.SQLException;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 

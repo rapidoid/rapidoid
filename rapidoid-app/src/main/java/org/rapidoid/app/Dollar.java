@@ -24,7 +24,7 @@ import org.rapidoid.plugins.templates.TemplatesPlugin;
 import org.rapidoid.plugins.users.UsersPlugin;
 import org.rapidoid.sql.SQL;
 import org.rapidoid.sql.SQLAPI;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 import redis.clients.jedis.Jedis;
 

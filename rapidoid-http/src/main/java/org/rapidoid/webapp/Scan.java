@@ -13,7 +13,7 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /*
  * #%L

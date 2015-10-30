@@ -31,7 +31,7 @@ import org.rapidoid.html.impl.UndefinedTag;
 import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.OptionTag;
 import org.rapidoid.html.tag.TextareaTag;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 

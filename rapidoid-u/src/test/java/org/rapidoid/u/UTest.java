@@ -1,4 +1,4 @@
-package org.rapidoid.util;
+package org.rapidoid.u;
 
 /*
  * #%L
@@ -36,6 +36,7 @@ import javax.script.SimpleBindings;
 import org.junit.Test;
 import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.u.U;
 
 /**
  * @author Nikolche Mihajlovski

@@ -35,7 +35,7 @@ import org.rapidoid.annotation.Programmatic;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanRead;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 @CanRead({ ANYBODY })
 @CanChange({ ANYBODY })

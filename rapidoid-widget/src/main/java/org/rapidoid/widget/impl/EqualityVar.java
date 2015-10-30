@@ -22,7 +22,7 @@ package org.rapidoid.widget.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")

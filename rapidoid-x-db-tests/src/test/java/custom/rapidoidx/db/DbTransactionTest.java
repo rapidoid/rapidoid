@@ -29,7 +29,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoidx.db.XDB;
 

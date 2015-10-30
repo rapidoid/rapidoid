@@ -34,7 +34,7 @@ import org.rapidoid.io.CustomizableClassLoader;
 import org.rapidoid.lambda.Lambdas;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoidx.compile.CodeDiagnostic;
 import org.rapidoidx.compile.Compilation;
 

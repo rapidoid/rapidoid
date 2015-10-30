@@ -35,8 +35,8 @@ import org.rapidoid.security.annotation.CanDelete;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.security.annotation.CanManage;
 import org.rapidoid.security.annotation.CanRead;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

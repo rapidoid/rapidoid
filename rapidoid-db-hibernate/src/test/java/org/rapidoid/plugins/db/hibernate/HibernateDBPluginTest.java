@@ -11,8 +11,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.u.U;
 import org.rapidoid.util.SimplePersistorProvider;
-import org.rapidoid.util.U;
 
 /*
  * #%L

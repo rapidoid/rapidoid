@@ -26,7 +26,7 @@ import java.lang.reflect.Proxy;
 import java.util.Arrays;
 
 import org.rapidoid.log.Log;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 public class Proxies {
 

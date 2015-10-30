@@ -5,8 +5,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
+import org.rapidoid.u.U;
 import org.rapidoid.util.RapidoidConf;
-import org.rapidoid.util.U;
 import org.rapidoid.webapp.WebApp;
 
 /*

@@ -62,9 +62,9 @@ import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.security.Secure;
+import org.rapidoid.u.U;
 import org.rapidoid.util.OptimisticConcurrencyControlException;
 import org.rapidoid.util.SuccessException;
-import org.rapidoid.util.U;
 import org.rapidoid.webapp.AppCtx;
 import org.rapidoid.webapp.Scan;
 

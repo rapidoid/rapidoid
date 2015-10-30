@@ -31,7 +31,7 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.plugins.db.DB;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")

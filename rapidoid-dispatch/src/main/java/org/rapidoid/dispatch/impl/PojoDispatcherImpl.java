@@ -45,8 +45,8 @@ import org.rapidoid.dispatch.PojoDispatcher;
 import org.rapidoid.dispatch.PojoHandlerNotFoundException;
 import org.rapidoid.dispatch.PojoRequest;
 import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.U;
 import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")

@@ -30,7 +30,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoidx.db.Database;
 import org.rapidoidx.db.DbList;
 import org.rapidoidx.db.DbRef;

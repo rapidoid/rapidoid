@@ -36,7 +36,7 @@ import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.cache.Cache;
 import org.rapidoid.plugins.cache.ICache;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
 /**

@@ -34,7 +34,7 @@ import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.REST;
 import org.rapidoid.http.WebServer;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.webapp.WebApp;
 import org.rapidoid.webapp.WebAppGroup;

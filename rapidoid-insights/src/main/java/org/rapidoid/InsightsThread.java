@@ -1,7 +1,7 @@
 package org.rapidoid;
 
 import org.rapidoid.log.Log;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /*
  * #%L

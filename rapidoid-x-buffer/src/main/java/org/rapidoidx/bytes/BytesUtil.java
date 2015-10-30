@@ -23,8 +23,8 @@ package org.rapidoidx.bytes;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.LongWrap;
 import org.rapidoidx.data.Range;

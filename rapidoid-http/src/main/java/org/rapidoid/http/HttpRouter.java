@@ -27,9 +27,9 @@ import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.Range;
 import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
 import org.rapidoid.util.SimpleHashTable;
 import org.rapidoid.util.SimpleList;
-import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

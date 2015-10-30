@@ -24,7 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.db.DB;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.widget.FormWidget;
 
 @Authors("Nikolche Mihajlovski")

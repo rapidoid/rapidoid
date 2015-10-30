@@ -41,7 +41,7 @@ import org.rapidoid.data.Range;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.webapp.WebApp;
 import org.rapidoid.webapp.WebAppGroup;
 

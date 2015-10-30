@@ -41,7 +41,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.io.Res;
 import org.rapidoid.plugins.templates.Templates;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.webapp.AppCtx;
 import org.rapidoid.webapp.WebApp;

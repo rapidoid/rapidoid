@@ -26,7 +26,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.security.Secure;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.webapp.AppCtx;
 import org.rapidoid.widget.ButtonWidget;
 import org.rapidoid.widget.FormWidget;

@@ -33,7 +33,7 @@ import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ExchangeProtocol;
 import org.rapidoid.net.impl.RapidoidConnection;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.util.Usage;
 import org.rapidoid.webapp.AppCtx;

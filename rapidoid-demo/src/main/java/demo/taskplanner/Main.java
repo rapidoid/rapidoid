@@ -38,7 +38,7 @@ import org.rapidoid.main.Rapidoid;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.plugins.email.Email;
 import org.rapidoid.plugins.sms.SMS;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 import demo.taskplanner.model.Task;
 

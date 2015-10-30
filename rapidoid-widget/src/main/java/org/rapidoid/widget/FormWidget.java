@@ -33,7 +33,7 @@ import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
 import org.rapidoid.security.Secure;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 import org.rapidoid.webapp.AppCtx;

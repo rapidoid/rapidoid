@@ -3,7 +3,7 @@ package org.rapidoid.lambda;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /*
  * #%L

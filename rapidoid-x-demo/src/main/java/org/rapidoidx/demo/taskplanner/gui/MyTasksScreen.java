@@ -31,7 +31,7 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.html.Tag;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.security.annotation.LoggedIn;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.webapp.AppCtx;
 import org.rapidoid.widget.GridWidget;
 import org.rapidoidx.demo.taskplanner.model.Task;

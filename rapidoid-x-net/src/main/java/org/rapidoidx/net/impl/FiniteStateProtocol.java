@@ -24,8 +24,8 @@ package org.rapidoidx.net.impl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.LogHP;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.U;
 import org.rapidoidx.net.Protocol;
 import org.rapidoidx.net.abstracts.Channel;
 

@@ -8,7 +8,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.ctx.Classes;
 import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /*
  * #%L

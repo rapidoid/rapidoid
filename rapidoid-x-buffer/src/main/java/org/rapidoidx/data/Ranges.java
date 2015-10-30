@@ -26,7 +26,7 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoidx.buffer.Buf;
 import org.rapidoidx.bytes.Bytes;
 import org.rapidoidx.bytes.BytesUtil;

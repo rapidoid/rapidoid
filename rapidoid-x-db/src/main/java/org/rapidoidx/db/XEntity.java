@@ -8,7 +8,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertyFilter;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /*
  * #%L

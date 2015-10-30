@@ -26,9 +26,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Rnd;
-import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

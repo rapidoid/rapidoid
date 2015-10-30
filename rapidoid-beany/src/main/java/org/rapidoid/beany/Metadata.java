@@ -7,7 +7,7 @@ import java.util.Map;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /*
  * #%L

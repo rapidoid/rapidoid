@@ -32,7 +32,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Proxies;
 import org.rapidoid.entity.IEntity;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoidx.db.AbstractRichEntity;
 import org.rapidoidx.db.DbColumn;
 import org.rapidoidx.db.DbList;

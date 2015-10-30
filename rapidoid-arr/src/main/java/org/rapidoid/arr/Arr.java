@@ -22,7 +22,7 @@ package org.rapidoid.arr;
 
 import java.util.Arrays;
 
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /**
  * @author Nikolche Mihajlovski

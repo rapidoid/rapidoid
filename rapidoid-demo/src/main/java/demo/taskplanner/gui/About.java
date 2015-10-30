@@ -28,7 +28,7 @@ import org.rapidoid.app.GUI;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.security.annotation.CanInsert;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.widget.ButtonWidget;
 
 import demo.taskplanner.model.Task;

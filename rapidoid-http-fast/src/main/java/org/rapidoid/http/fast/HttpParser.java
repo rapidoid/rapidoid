@@ -33,8 +33,8 @@ import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.impl.RapidoidHelper;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.U;
 import org.rapidoid.wrap.BoolWrap;
 import org.rapidoid.wrap.IntWrap;
 

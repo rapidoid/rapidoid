@@ -11,7 +11,7 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.entity.IEntity;
 import org.rapidoid.plugins.entities.AbstractEntitiesPlugin;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /*
  * #%L

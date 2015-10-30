@@ -23,7 +23,7 @@ package org.rapidoid.concurrent.impl;
 import java.util.concurrent.TimeoutException;
 
 import org.rapidoid.concurrent.Future;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /**
  * @author Nikolche Mihajlovski

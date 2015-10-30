@@ -27,8 +27,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.http.HttpUpgradeHandler;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

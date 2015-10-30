@@ -46,7 +46,7 @@ import org.rapidoid.plugins.lifecycle.Lifecycle;
 import org.rapidoid.plugins.lifecycle.LifecyclePlugin;
 import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
 import org.rapidoid.plugins.users.UsersPlugin;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Usage;
 import org.rapidoid.webapp.Scan;
 import org.rapidoid.webapp.WebApp;

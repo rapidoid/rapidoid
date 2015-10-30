@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoidx.net.Protocol;
 import org.rapidoidx.net.TCP;
 import org.rapidoidx.net.TCPClient;

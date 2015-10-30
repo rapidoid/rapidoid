@@ -28,7 +28,7 @@ import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.http.fast.HttpParser;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

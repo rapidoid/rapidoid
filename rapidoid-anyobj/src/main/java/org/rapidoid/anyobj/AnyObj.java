@@ -23,7 +23,7 @@ package org.rapidoid.anyobj;
 import java.util.Collection;
 
 import org.rapidoid.arr.Arr;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /**
  * @author Nikolche Mihajlovski

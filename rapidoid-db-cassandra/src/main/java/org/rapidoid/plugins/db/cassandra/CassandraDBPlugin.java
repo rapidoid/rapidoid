@@ -11,7 +11,7 @@ import org.rapidoid.concurrent.Callbacks;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.db.DBPluginBase;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Cluster.Builder;

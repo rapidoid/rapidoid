@@ -30,8 +30,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.io.IO;
 import org.rapidoid.test.TestCommons;
+import org.rapidoid.u.U;
 import org.rapidoid.util.D;
-import org.rapidoid.util.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

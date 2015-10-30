@@ -29,7 +29,7 @@ import org.rapidoid.config.ConfigEntry;
 import org.rapidoid.http.Handler;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.webapp.AppCtx;
 import org.rapidoid.webapp.WebApp;
 

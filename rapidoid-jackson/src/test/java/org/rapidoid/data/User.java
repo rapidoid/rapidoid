@@ -23,7 +23,7 @@ package org.rapidoid.data;
 import java.util.List;
 import java.util.Set;
 
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 @SuppressWarnings("unchecked")
 /**

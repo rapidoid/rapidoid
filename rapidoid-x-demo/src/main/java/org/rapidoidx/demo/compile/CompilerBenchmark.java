@@ -24,7 +24,7 @@ package org.rapidoidx.demo.compile;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.IntWrap;
 import org.rapidoidx.compile.Compile;

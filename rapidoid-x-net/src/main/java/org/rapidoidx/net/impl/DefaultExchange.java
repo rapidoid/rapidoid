@@ -28,9 +28,9 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Resetable;
-import org.rapidoid.util.U;
 import org.rapidoidx.buffer.Buf;
 import org.rapidoidx.buffer.BufProvider;
 import org.rapidoidx.data.BinaryMultiData;

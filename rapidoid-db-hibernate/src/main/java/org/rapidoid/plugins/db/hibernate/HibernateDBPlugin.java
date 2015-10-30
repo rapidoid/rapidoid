@@ -18,7 +18,7 @@ import org.rapidoid.concurrent.Callback;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.plugins.db.DBPluginBase;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /*
  * #%L

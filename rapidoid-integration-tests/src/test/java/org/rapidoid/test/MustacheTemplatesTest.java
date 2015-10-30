@@ -27,7 +27,7 @@ import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.templates.ITemplate;
 import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
 import org.rapidoid.plugins.templates.Templates;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

@@ -28,7 +28,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")

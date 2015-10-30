@@ -41,7 +41,7 @@ import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.rql.ParsedRQL;
 import org.rapidoid.rql.RQL;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoidx.db.Database;
 import org.rapidoidx.db.DbColumn;
 import org.rapidoidx.db.DbList;

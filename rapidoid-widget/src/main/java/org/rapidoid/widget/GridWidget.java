@@ -29,7 +29,7 @@ import org.rapidoid.html.tag.TdTag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")

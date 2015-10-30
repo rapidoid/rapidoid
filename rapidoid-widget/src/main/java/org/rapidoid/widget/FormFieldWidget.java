@@ -44,7 +44,7 @@ import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.security.DataPermissions;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 import org.rapidoid.wire.Wire;

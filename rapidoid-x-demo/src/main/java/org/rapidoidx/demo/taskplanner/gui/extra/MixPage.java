@@ -31,7 +31,7 @@ import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.widget.BootstrapWidgets;
 import org.rapidoid.widget.ButtonWidget;
 import org.rapidoid.widget.GridWidget;

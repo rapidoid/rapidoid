@@ -5,7 +5,7 @@ import java.util.Map;
 import org.rapidoid.data.YAML;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /*
  * #%L

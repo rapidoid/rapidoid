@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 
 /*
  * #%L

@@ -48,7 +48,7 @@ import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Moderator;
 import org.rapidoid.security.annotation.Role;
 import org.rapidoid.security.annotation.HasRole;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.webapp.WebApp;
 import org.rapidoid.webapp.WebAppGroup;
 

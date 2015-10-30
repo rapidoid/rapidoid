@@ -32,7 +32,7 @@ import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugin;
 import org.rapidoid.plugins.Plugins;
-import org.rapidoid.util.U;
+import org.rapidoid.u.U;
 import org.rapidoid.webapp.AppMenu;
 import org.rapidoid.webapp.RootWebApp;
 import org.rapidoid.webapp.WebApp;
