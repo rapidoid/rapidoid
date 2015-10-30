@@ -173,15 +173,15 @@ public class U {
 
 		while (matcher.find()) {
 			int len = matcher.groupCount() + 1;
-			String[] gr = new String[len];
+			String[] groups = new String[len];
 
-			for (int i = 0; i < gr.length; i++) {
-				gr[i] = matcher.group(i);
+			for (int i = 0; i < groups.length; i++) {
+				groups[i] = matcher.group(i);
 			}
 
 			Object value;
 			try {
-				value = replacer.map(gr);
+				value = replacer.map(groups);
 			} catch (Exception e) {
 				throw rte(e);
 			}

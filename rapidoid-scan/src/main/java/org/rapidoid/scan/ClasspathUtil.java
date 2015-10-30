@@ -278,7 +278,7 @@ public class ClasspathUtil {
 	}
 
 	private static String pkgToPath(String pkg) {
-		return pkg.replace('.', File.separatorChar);
+		return pkg != null ? pkg.replace('.', File.separatorChar) : null;
 	}
 
 	private static Enumeration<URL> resources(String name) {
@@ -290,7 +290,7 @@ public class ClasspathUtil {
 		}
 	}
 
-	private static List<Class<?>> getClassesFromJAR(String jarName, List<Class<?>> classes, String pkg, Pattern regex,
+	public static List<Class<?>> getClassesFromJAR(String jarName, List<Class<?>> classes, String pkg, Pattern regex,
 			Predicate<Class<?>> filter, Class<? extends Annotation> annotated, ClassLoader classLoader) {
 
 		ZipInputStream zip = null;
