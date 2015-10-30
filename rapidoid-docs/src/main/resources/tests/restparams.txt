@@ -1,3 +1,0 @@
-GET /hey/Joe/50
-GET /hey/You!/123
-POST /size/abc

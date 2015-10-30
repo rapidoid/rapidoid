@@ -1,3 +1,0 @@
-GET /foo/hi
-GET /bar/hi
-GET /foo/hi

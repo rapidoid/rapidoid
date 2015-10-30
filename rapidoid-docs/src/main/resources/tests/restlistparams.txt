@@ -1,2 +1,0 @@
-POST /echo/2015/Mart/20
-POST /echo/foo/bar/

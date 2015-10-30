@@ -1,3 +1,0 @@
-GET /
-GET /gui
-GET /frm

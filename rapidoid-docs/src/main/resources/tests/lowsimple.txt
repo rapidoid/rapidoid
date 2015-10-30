@@ -1,3 +1,0 @@
-GET / =>Hello world!
-POST /upper?s=abc =>{"src":"abc","upper":"ABC"}
-GET /other =>404
