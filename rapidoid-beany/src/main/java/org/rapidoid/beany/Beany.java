@@ -292,6 +292,16 @@ public class Beany {
 		}
 	}
 
+	public static void bind(Object destBean, Map<String, Object> src) {
+		Method bind = Cls.findMethod(destBean.getClass(), "bind", Map.class);
+
+		if (bind != null) {
+			Cls.invoke(bind, destBean, src);
+		} else {
+			update(destBean, src, false, false);
+		}
+	}
+
 	public static void update(Object destBean, Map<String, Object> src) {
 		update(destBean, src, false, false);
 	}

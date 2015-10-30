@@ -20,10 +20,12 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.beany.Beany;
 import org.rapidoid.io.Res;
 
 @Authors("Nikolche Mihajlovski")
@@ -49,6 +51,16 @@ public class OnAction {
 		for (FastHttp http : httpImpls) {
 			http.on(verb, path, new FastStaticHttpHandler(http, contentType, response));
 		}
+	}
+
+	private void register(byte[] contentType, final Object response) {
+		register(contentType, new ParamHandler() {
+			@Override
+			public Object handle(Map<String, Object> params) throws Exception {
+				Beany.bind(response, params); // data binding
+				return response;
+			}
+		});
 	}
 
 	@SuppressWarnings("unchecked")
@@ -82,6 +94,11 @@ public class OnAction {
 		return chain;
 	}
 
+	public ServerSetup plain(Object response) {
+		register(FastHttp.CONTENT_TYPE_PLAIN, response);
+		return chain;
+	}
+
 	public <T> ServerSetup plain(Callable<T> handler) {
 		register(FastHttp.CONTENT_TYPE_PLAIN, handler);
 		return chain;
@@ -105,6 +122,11 @@ public class OnAction {
 	}
 
 	public ServerSetup html(byte[] response) {
+		register(FastHttp.CONTENT_TYPE_HTML, response);
+		return chain;
+	}
+
+	public ServerSetup html(Object response) {
 		register(FastHttp.CONTENT_TYPE_HTML, response);
 		return chain;
 	}
@@ -136,6 +158,11 @@ public class OnAction {
 		return chain;
 	}
 
+	public ServerSetup json(Object response) {
+		register(FastHttp.CONTENT_TYPE_JSON, response);
+		return chain;
+	}
+
 	public <T> ServerSetup json(Callable<T> handler) {
 		register(FastHttp.CONTENT_TYPE_JSON, handler);
 		return chain;
@@ -159,6 +186,11 @@ public class OnAction {
 	}
 
 	public ServerSetup binary(byte[] response) {
+		register(FastHttp.CONTENT_TYPE_BINARY, response);
+		return chain;
+	}
+
+	public ServerSetup binary(Object response) {
 		register(FastHttp.CONTENT_TYPE_BINARY, response);
 		return chain;
 	}
