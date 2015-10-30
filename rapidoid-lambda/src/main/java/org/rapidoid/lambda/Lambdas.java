@@ -65,7 +65,7 @@ public class Lambdas {
 		}
 	}
 
-	public static Object call(Callable<Object> callable) {
+	public static <T> T call(Callable<T> callable) {
 		try {
 			return callable.call();
 		} catch (Exception e) {

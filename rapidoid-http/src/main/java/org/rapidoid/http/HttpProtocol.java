@@ -95,7 +95,7 @@ public class HttpProtocol extends ExchangeProtocol<HttpExchangeImpl> {
 			return;
 		}
 
-		Ctxs.open("reqest");
+		Ctxs.open("request");
 		Ctxs.ctx().setExchange(x);
 
 		try {
