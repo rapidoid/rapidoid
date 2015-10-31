@@ -81,14 +81,12 @@
 		<module>rapidoid-aop</module>
 		<module>rapidoid-dao</module>
 		<module>rapidoid-crypto</module>
-		<module>rapidoid-arr</module>
+		<module>rapidoid-commons</module>
 		<module>rapidoid-log</module>
 		<module>rapidoid-insights</module>
 		<module>rapidoid-var</module>
-		<module>rapidoid-anyobj</module>
 		<module>rapidoid-cls</module>
 		<module>rapidoid-scan</module>
-		<module>rapidoid-pool</module>
 		<module>rapidoid-io</module>
 		<module>rapidoid-utils</module>
 		<module>rapidoid-beany</module>

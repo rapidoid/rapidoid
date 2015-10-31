@@ -7,9 +7,9 @@
 		<version>4.5.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>rapidoid-anyobj</artifactId>
+	<artifactId>rapidoid-commons</artifactId>
 	<packaging>jar</packaging>
-	<description>Rapidoid AnyObj</description>
+	<description>Rapidoid Commons</description>
 
 	<dependencies>
 		<dependency>
@@ -19,12 +19,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-arr</artifactId>
+			<artifactId>rapidoid-log</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-dates</artifactId>
+			<artifactId>rapidoid-insights</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

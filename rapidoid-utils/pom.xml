@@ -73,7 +73,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-pool</artifactId>
+			<artifactId>rapidoid-commons</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
