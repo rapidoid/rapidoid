@@ -2,7 +2,7 @@ package org.rapidoid.anyobj;
 
 /*
  * #%L
- * rapidoid-anyobj
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
