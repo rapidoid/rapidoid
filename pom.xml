@@ -82,7 +82,6 @@
 		<module>rapidoid-dao</module>
 		<module>rapidoid-crypto</module>
 		<module>rapidoid-arr</module>
-		<module>rapidoid-dates</module>
 		<module>rapidoid-log</module>
 		<module>rapidoid-insights</module>
 		<module>rapidoid-var</module>
