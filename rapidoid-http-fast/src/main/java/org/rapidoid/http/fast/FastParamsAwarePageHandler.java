@@ -31,7 +31,7 @@ import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.5.0")
+@Since("5.0.0")
 public class FastParamsAwarePageHandler extends AbstractResultHandlingFastHttpHandler implements HttpMetadata {
 
 	private final ParamHandler handler;

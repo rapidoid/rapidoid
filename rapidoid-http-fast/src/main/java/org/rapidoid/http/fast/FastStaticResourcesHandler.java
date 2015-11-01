@@ -29,7 +29,7 @@ import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.5.0")
+@Since("5.0.0")
 public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 
 	private final FastHttp http;

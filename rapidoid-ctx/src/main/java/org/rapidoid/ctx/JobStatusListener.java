@@ -24,7 +24,7 @@ import org.rapidoid.annotation.Since;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.5.0")
+@Since("5.0.0")
 public interface JobStatusListener {
 
 	void onAsync();

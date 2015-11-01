@@ -28,7 +28,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.io.Res;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
+@Since("5.0.0")
 public class OnPage {
 
 	private final ServerSetup chain;

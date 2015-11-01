@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
-@Since("4.5.0")
+@Since("5.0.0")
 public class Redirect extends RuntimeException {
 
 	private final String url;

@@ -37,7 +37,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.5.0")
+@Since("5.0.0")
 public class PageWidget extends AbstractWidget {
 
 	private static volatile ITemplate PAGE_TEMPLATE;

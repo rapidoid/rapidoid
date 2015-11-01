@@ -24,7 +24,7 @@ import org.rapidoid.annotation.Since;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("5.0.0")
 public class HttpHeaders {
 
 	public static final HttpHeaders SET_COOKIE = new HttpHeaders("Set-Cookie");

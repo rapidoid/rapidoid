@@ -35,7 +35,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.5.0")
+@Since("5.0.0")
 public class HttpUtils implements HttpMetadata {
 
 	public static String path(Map<String, Object> state) {
