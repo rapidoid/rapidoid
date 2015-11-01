@@ -368,8 +368,22 @@ public class BufTest extends BufferTestCommons implements Constants {
 			buf4.append(U.mul(" ", dig + 3));
 			buf4.putNumAsText(dig + 1, -n, false);
 			eq(buf4.asText(), " " + (-n) + " ");
-		}
 
+			Buf buf5 = bufs.newBuf();
+			buf5.append(" ");
+			buf5.putNumAsText(1, n, true);
+			eq(buf5.asText(), " " + n);
+
+			Buf buf6 = bufs.newBuf();
+			buf6.append(U.mul(" ", 20));
+			buf6.putNumAsText(15, n, false);
+			eq(buf6.asText(), U.mul(" ", 16 - dig) + n + U.mul(" ", 4));
+
+			Buf buf7 = bufs.newBuf();
+			buf7.append(U.mul(" ", 20));
+			buf7.putNumAsText(5, n, true);
+			eq(buf7.asText(), U.mul(" ", 5) + n + U.mul(" ", 15 - dig));
+		}
 	}
 
 	@Test
