@@ -22,7 +22,7 @@ package org.rapidoid.plugins.templates;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.plugins.PlainTemplate;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -34,12 +34,12 @@ public class DefaultTemplatesPlugin extends AbstractTemplatesPlugin {
 
 	@Override
 	public ITemplate fromFile(String filename) {
-		return new PlainTemplate("");
+		throw U.rte("Template plugin implementation hasn't been registered!");
 	}
 
 	@Override
 	public ITemplate fromString(String template) {
-		return new PlainTemplate(template);
+		throw U.rte("Template plugin implementation hasn't been registered!");
 	}
 
 }
