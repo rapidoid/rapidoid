@@ -14,13 +14,51 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-app</artifactId>
+			<artifactId>rapidoid-dao</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-extras</artifactId>
+			<artifactId>rapidoid-sql</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-gui</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-templates-mustache</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-rql</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-oauth</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-rest</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.7.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-test-appctx-helper</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

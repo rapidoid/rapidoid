@@ -109,9 +109,8 @@
 		<module>rapidoid-measure</module>
 		<module>rapidoid-dispatch</module>
 		<module>rapidoid-html</module>
-		<module>rapidoid-widget</module>
+		<module>rapidoid-gui</module>
 		<module>rapidoid-oauth</module>
-		<module>rapidoid-app</module>
 		<module>rapidoid-extras</module>
 		<module>rapidoid-jpa</module>
 		<module>rapidoid-templates-mustache</module>
