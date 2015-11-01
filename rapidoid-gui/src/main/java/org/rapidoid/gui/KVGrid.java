@@ -27,6 +27,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.tag.TableTag;
+import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 
 @Authors("Nikolche Mihajlovski")
@@ -35,8 +36,9 @@ public class KVGrid extends AbstractWidget {
 
 	private final String[] headers = { "Key", "Value" };
 
-	@SuppressWarnings("rawtypes")
-	private final Mapper[] view = { null, null };
+	private Mapper<Object, Object> keyView = null;
+
+	private Mapper<Object, Object> valueView = null;
 
 	private Map<?, ?> map;
 
@@ -45,7 +47,17 @@ public class KVGrid extends AbstractWidget {
 		TableTag tbl = table_(tr(th(headers[0]), th(headers[1])));
 
 		for (Entry<?, ?> e : map.entrySet()) {
-			tbl = tbl.append(tr(td(e.getKey()), td(e.getValue())));
+			Object key = e.getKey();
+			if (keyView != null) {
+				key = Lmbd.eval(keyView, key);
+			}
+
+			Object val = e.getValue();
+			if (valueView != null) {
+				val = Lmbd.eval(valueView, val);
+			}
+
+			tbl = tbl.append(tr(td(key), td(val)));
 		}
 
 		return tbl;
@@ -67,6 +79,24 @@ public class KVGrid extends AbstractWidget {
 	public KVGrid headers(String keyHeader, String valueHeader) {
 		this.headers[0] = keyHeader;
 		this.headers[1] = valueHeader;
+		return this;
+	}
+
+	public Mapper<Object, Object> keyView() {
+		return keyView;
+	}
+
+	public Mapper<Object, Object> valueView() {
+		return valueView;
+	}
+
+	public KVGrid keyView(Mapper<Object, Object> keyView) {
+		this.keyView = keyView;
+		return this;
+	}
+
+	public KVGrid valueView(Mapper<Object, Object> valueView) {
+		this.valueView = valueView;
 		return this;
 	}
 
