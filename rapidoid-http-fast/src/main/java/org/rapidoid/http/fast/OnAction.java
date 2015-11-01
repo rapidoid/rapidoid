@@ -25,7 +25,6 @@ import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.Beany;
 import org.rapidoid.io.Res;
 
 @Authors("Nikolche Mihajlovski")
@@ -57,7 +56,6 @@ public class OnAction {
 		register(contentType, new ParamHandler() {
 			@Override
 			public Object handle(Map<String, Object> params) throws Exception {
-				Beany.bind(response, params); // data binding
 				return response;
 			}
 		});

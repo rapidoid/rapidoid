@@ -20,36 +20,20 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public class FastParamsAwareHttpHandler extends AbstractResultHandlingFastHttpHandler {
+@Since("4.5.0")
+public class PageOptions {
 
-	private final ParamHandler handler;
+	public final byte[] contentType;
 
-	public FastParamsAwareHttpHandler(FastHttp http, byte[] contentType, ParamHandler handler) {
-		super(http, contentType);
-		this.handler = handler;
-	}
+	public final boolean raw;
 
-	@Override
-	protected Object handleReq(Channel channel, Map<String, Object> params) throws Exception {
-		return handler.handle(params);
-	}
-
-	@Override
-	public boolean needsParams() {
-		return true;
-	}
-
-	@Override
-	public boolean needsHeadersAndCookies() {
-		return true;
+	public PageOptions(byte[] contentType, boolean raw) {
+		this.contentType = contentType;
+		this.raw = raw;
 	}
 
 }

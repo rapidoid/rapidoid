@@ -61,6 +61,10 @@ public class ServerSetup {
 		return new OnAction(this, httpImpls(), "OPTIONS", path);
 	}
 
+	public OnPage page(String path) {
+		return new OnPage(this, httpImpls(), path);
+	}
+
 	private FastHttp[] httpImpls() {
 		return new FastHttp[] { fastHttp };
 	}

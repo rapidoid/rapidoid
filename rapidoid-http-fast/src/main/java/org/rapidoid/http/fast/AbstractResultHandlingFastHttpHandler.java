@@ -80,7 +80,7 @@ public abstract class AbstractResultHandlingFastHttpHandler extends AbstractFast
 				http.writeSerializedJson(ctx, isKeepAlive, result);
 			}
 		} else {
-			byte[] response = objectToBytes(result);
+			byte[] response = UTILS.toBytes(result);
 			http.write200(ctx, isKeepAlive, contentType, response);
 		}
 	}
@@ -88,14 +88,6 @@ public abstract class AbstractResultHandlingFastHttpHandler extends AbstractFast
 	protected void onAsyncResult(Channel ctx, boolean isKeepAlive, Object result) {
 		writeResult(ctx, isKeepAlive, result);
 		ctx.done();
-	}
-
-	private byte[] objectToBytes(Object obj) {
-		if (obj instanceof byte[]) {
-			return (byte[]) obj;
-		} else {
-			return obj.toString().getBytes();
-		}
 	}
 
 	protected abstract Object handleReq(Channel ctx, Map<String, Object> params) throws Exception;

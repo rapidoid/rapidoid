@@ -20,7 +20,9 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -34,6 +36,7 @@ import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.dates.Dates;
+import org.rapidoid.log.Log;
 import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
@@ -44,7 +47,7 @@ import org.rapidoid.wrap.BoolWrap;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public class FastHttp implements Protocol {
+public class FastHttp implements Protocol, HttpMetadata {
 
 	private static final byte[] HTTP_200_OK = "HTTP/1.1 200 OK\r\n".getBytes();
 
@@ -52,6 +55,8 @@ public class FastHttp implements Protocol {
 
 	private static final byte[] HTTP_404_NOT_FOUND = "HTTP/1.1 404 Not Found\r\nContent-Length: 10\r\n\r\nNot found!"
 			.getBytes();
+
+	private static final byte[] HEADER_SEP = ": ".getBytes();
 
 	private static final byte[] CONN_KEEP_ALIVE = "Connection: keep-alive\r\n".getBytes();
 
@@ -100,6 +105,8 @@ public class FastHttp implements Protocol {
 	private byte[] path1, path2, path3;
 
 	private FastHttpHandler handler1, handler2, handler3;
+
+	private final FastHttpHandler staticResourcesHandler = new FastStaticResourcesHandler(this);
 
 	static {
 		for (int len = 0; len < CONTENT_LENGTHS.length; len++) {
@@ -152,7 +159,7 @@ public class FastHttp implements Protocol {
 		RapidoidHelper helper = ctx.helper();
 
 		Range[] ranges = helper.ranges1.ranges;
-		Ranges headers = helper.ranges2;
+		Ranges hdrs = helper.ranges2;
 
 		BoolWrap isGet = helper.booleans[0];
 		BoolWrap isKeepAlive = helper.booleans[1];
@@ -164,7 +171,7 @@ public class FastHttp implements Protocol {
 		Range protocol = ranges[ranges.length - 5];
 		Range body = ranges[ranges.length - 6];
 
-		HTTP_PARSER.parse(buf, isGet, isKeepAlive, body, verb, uri, path, query, protocol, headers, helper);
+		HTTP_PARSER.parse(buf, isGet, isKeepAlive, body, verb, uri, path, query, protocol, hdrs, helper);
 
 		boolean processed = false;
 
@@ -174,23 +181,59 @@ public class FastHttp implements Protocol {
 			Map<String, Object> params = null;
 
 			if (handler.needsParams()) {
-				KeyValueRanges paramsKV = helper.pairs1;
-				paramsKV.reset();
+				params = U.map();
+
+				KeyValueRanges paramsKV = helper.pairs1.reset();
+				KeyValueRanges headersKV = helper.pairs2.reset();
+
 				HTTP_PARSER.parseParams(buf, paramsKV, query);
 
-				params = U.cast(paramsKV.toMap(buf, true, true));
+				// parse URL parameters as data
+				Map<String, Object> data = U.cast(paramsKV.toMap(buf, true, true));
 
 				if (!isGet.value) {
-					KeyValueRanges headersKV = helper.pairs2;
-					KeyValueRanges posted = helper.pairs3;
-					KeyValueRanges files = helper.pairs4;
+					KeyValueRanges postedKV = helper.pairs3.reset();
+					KeyValueRanges filesKV = helper.pairs4.reset();
 
-					HTTP_PARSER.parsePosted(buf, headersKV, body, posted, files, helper, params);
+					// parse posted body as data
+					HTTP_PARSER.parsePosted(buf, headersKV, body, postedKV, filesKV, helper, data);
 				}
-			}
 
-			if (handler.needsHeadersAndCookies()) {
-				// KeyValueRanges cookies = helper.pairs5;
+				// filter special data values
+				Map<String, Object> special = findSpecialData(data);
+
+				if (special != null) {
+					data.keySet().removeAll(special.keySet());
+				} else {
+					special = U.cast(Collections.EMPTY_MAP);
+				}
+
+				// put all data directly as parameters
+				params.putAll(data);
+
+				params.put(DATA, data);
+				params.put(SPECIAL, special);
+
+				// finally, the HTTP info
+				params.put(VERB, verb.str(buf));
+				params.put(URI, uri.str(buf));
+				params.put(PATH, path.str(buf));
+
+				params.put(CLIENT_ADDRESS, ctx.address());
+
+				if (handler.needsHeadersAndCookies()) {
+					KeyValueRanges cookiesKV = helper.pairs5.reset();
+					HTTP_PARSER.parseHeadersIntoKV(buf, hdrs, headersKV, cookiesKV, helper);
+
+					Map<String, Object> headers = U.cast(headersKV.toMap(buf, true, true));
+					Map<String, Object> cookies = U.cast(cookiesKV.toMap(buf, true, true));
+
+					params.put(HEADERS, headers);
+					params.put(COOKIES, cookies);
+
+					params.put(HOST, U.get(headers, "Host", null));
+					params.put(FORWARDED_FOR, U.get(headers, "X-Forwarded-For", null));
+				}
 			}
 
 			processed = handler.handle(ctx, isKeepAlive.value, params);
@@ -201,6 +244,21 @@ public class FastHttp implements Protocol {
 		}
 
 		ctx.closeIf(!isKeepAlive.value);
+	}
+
+	private Map<String, Object> findSpecialData(Map<String, Object> data) {
+		Map<String, Object> special = null;
+
+		for (Entry<String, Object> param : data.entrySet()) {
+			String name = param.getKey();
+
+			if (name.startsWith("$")) {
+				special = U.safe(special);
+				special.put(name, param.getValue());
+			}
+		}
+
+		return special;
 	}
 
 	private FastHttpHandler findFandler(Channel ctx, Buf buf, BoolWrap isGet, Range verb, Range path) {
@@ -214,7 +272,13 @@ public class FastHttp implements Protocol {
 			} else if (path3 != null && BytesUtil.matches(bytes, path, path3, true)) {
 				return handler3;
 			} else {
-				return getHandlers.get(buf, path);
+				FastHttpHandler getHandler = getHandlers.get(buf, path);
+
+				if (getHandler == null) {
+					getHandler = staticResourcesHandler;
+				}
+
+				return getHandler;
 			}
 
 		} else if (BytesUtil.matches(bytes, verb, POST, true)) {
@@ -233,16 +297,16 @@ public class FastHttp implements Protocol {
 	public void start200(Channel ctx, boolean isKeepAlive, byte[] contentType) {
 		ctx.write(HTTP_200_OK);
 
-		addHeaders(ctx, isKeepAlive, contentType);
+		addDefaultHeaders(ctx, isKeepAlive, contentType);
 	}
 
 	private void start500(Channel ctx, boolean isKeepAlive, byte[] contentType) {
 		ctx.write(HTTP_500_ERROR);
 
-		addHeaders(ctx, isKeepAlive, contentType);
+		addDefaultHeaders(ctx, isKeepAlive, contentType);
 	}
 
-	private void addHeaders(Channel ctx, boolean isKeepAlive, byte[] contentType) {
+	private void addDefaultHeaders(Channel ctx, boolean isKeepAlive, byte[] contentType) {
 		ctx.write(isKeepAlive ? CONN_KEEP_ALIVE : CONN_CLOSE);
 
 		ctx.write(SERVER_HEADER);
@@ -254,14 +318,27 @@ public class FastHttp implements Protocol {
 		ctx.write(contentType);
 	}
 
-	public void write200(Channel ctx, boolean isKeepAlive, byte[] contentType, byte[] content) {
-		start200(ctx, isKeepAlive, contentType);
+	private void addCustomHeader(Channel ctx, byte[] name, byte[] value) {
+		ctx.write(name);
+		ctx.write(HEADER_SEP);
+		ctx.write(value);
+		ctx.write(CR_LF);
+	}
+
+	public void write200(Channel ctx, boolean isKeepAlive, byte[] contentTypeHeader, byte[] content) {
+		start200(ctx, isKeepAlive, contentTypeHeader);
 		writeContent(ctx, content);
 	}
 
-	public void write500(Channel ctx, boolean isKeepAlive, byte[] contentType, byte[] content) {
-		start500(ctx, isKeepAlive, contentType);
+	public void write500(Channel ctx, boolean isKeepAlive, byte[] contentTypeHeader, byte[] content) {
+		start500(ctx, isKeepAlive, contentTypeHeader);
 		writeContent(ctx, content);
+	}
+
+	public void error(Channel ctx, boolean isKeepAlive, Throwable error) {
+		Log.error("Error while processing request!", error);
+		start500(ctx, isKeepAlive, CONTENT_TYPE_HTML);
+		writeContent(ctx, HttpUtils.getErrorMessage(error).getBytes());
 	}
 
 	private void writeContent(Channel ctx, byte[] content) {
@@ -297,6 +374,12 @@ public class FastHttp implements Protocol {
 
 		int posAfter = out.size();
 		out.putNumAsText(posConLen, posAfter - posBefore, false);
+	}
+
+	public void addCookie(Channel ctx, String name, String value, String... extras) {
+		value = HttpUtils.cookieValueWithExtras(value, extras);
+		String cookie = name + "=" + value;
+		addCustomHeader(ctx, HttpHeaders.SET_COOKIE.getBytes(), cookie.getBytes());
 	}
 
 }

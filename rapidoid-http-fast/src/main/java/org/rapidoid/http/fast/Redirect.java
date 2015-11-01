@@ -20,36 +20,23 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.net.abstracts.Channel;
 
+@SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public class FastParamsAwareHttpHandler extends AbstractResultHandlingFastHttpHandler {
+@Since("4.5.0")
+public class Redirect extends RuntimeException {
 
-	private final ParamHandler handler;
+	private final String url;
 
-	public FastParamsAwareHttpHandler(FastHttp http, byte[] contentType, ParamHandler handler) {
-		super(http, contentType);
-		this.handler = handler;
+	public Redirect(String url) {
+		super("Redirect to URL: " + url);
+		this.url = url;
 	}
 
-	@Override
-	protected Object handleReq(Channel channel, Map<String, Object> params) throws Exception {
-		return handler.handle(params);
-	}
-
-	@Override
-	public boolean needsParams() {
-		return true;
-	}
-
-	@Override
-	public boolean needsHeadersAndCookies() {
-		return true;
+	public String getUrl() {
+		return url;
 	}
 
 }

@@ -70,6 +70,10 @@ public class On {
 		return setup().options(path);
 	}
 
+	public static synchronized OnPage page(String path) {
+		return setup().page(path);
+	}
+
 	public static synchronized TCPServer listen(int port) {
 		return DEFAULT_SERVER_SETUP.listen(port);
 	}

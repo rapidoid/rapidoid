@@ -24,22 +24,30 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public class FastParamsAwareHttpHandler extends AbstractResultHandlingFastHttpHandler {
+public class FastFullAsyncHttpHandler extends AbstractResultHandlingFastHttpHandler {
 
-	private final ParamHandler handler;
+	private final AsyncRawHandler handler;
 
-	public FastParamsAwareHttpHandler(FastHttp http, byte[] contentType, ParamHandler handler) {
+	public FastFullAsyncHttpHandler(FastHttp http, byte[] contentType, AsyncRawHandler handler) {
 		super(http, contentType);
 		this.handler = handler;
 	}
 
 	@Override
-	protected Object handleReq(Channel channel, Map<String, Object> params) throws Exception {
-		return handler.handle(params);
+	protected Object handleReq(final Channel ctx, Map<String, Object> params) throws Exception {
+		Callback<Object> ret = new Callback<Object>() {
+			@Override
+			public void onDone(Object result, Throwable error) throws Exception {
+				// FIXME handle error
+				onAsyncResult(ctx, true, result);
+			}
+		};
+		return handler.handle(params, ctx.output().asOutputStream(), ret);
 	}
 
 	@Override

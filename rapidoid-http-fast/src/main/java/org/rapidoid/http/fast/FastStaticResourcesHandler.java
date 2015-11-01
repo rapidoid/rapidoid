@@ -24,30 +24,37 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Callback;
+import org.rapidoid.io.Res;
+import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public class FastFullHttpHandler extends AbstractResultHandlingFastHttpHandler {
+@Since("4.5.0")
+public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 
-	private final AsyncRawHandler handler;
+	private final FastHttp http;
 
-	public FastFullHttpHandler(FastHttp http, byte[] contentType, AsyncRawHandler handler) {
-		super(http, contentType);
-		this.handler = handler;
+	public FastStaticResourcesHandler(FastHttp http) {
+		this.http = http;
 	}
 
 	@Override
-	protected Object handleReq(final Channel ctx, Map<String, Object> params) throws Exception {
-		Callback<Object> ret = new Callback<Object>() {
-			@Override
-			public void onDone(Object result, Throwable error) throws Exception {
-				// FIXME handle error
-				onAsyncResult(ctx, true, result);
+	public boolean handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
+		try {
+			Res res = HttpUtils.staticPage(params);
+			byte[] bytes = res.getBytesOrNull();
+
+			if (bytes != null) {
+				byte[] contentType = MediaType.getByFileName(res.getShortName()).asHttpHeader();
+				http.write200(ctx, isKeepAlive, contentType, bytes);
+				return true;
+			} else {
+				return false;
 			}
-		};
-		return handler.handle(params, ctx.output().asOutputStream(), ret);
+		} catch (Exception e) {
+			http.error(ctx, isKeepAlive, e);
+			return true;
+		}
 	}
 
 	@Override
