@@ -36,12 +36,21 @@ Rapidoid.initializer(function($scope) {
             }
         }
 
-        $.post(window.location.href, {
-            _event : eventId,
-            _args : eventArgs,
-            _inputs : JSON.stringify(inputs),
-            __state : window.__state
-        }).done(function(data) {
+        inputs._cmd = eventId;
+        inputs._state = window.__state;
+
+        for (var i = 0; i < eventArgs.length; i++) {
+            inputs['_' + i] = eventArgs[i];
+        }
+
+        $.post(window.location.href, inputs).done(function(data) {
+
+            if (typeof data === 'string' || data instanceof String) {
+                $scope.ajaxBodyContent = data;
+                $scope.$apply();
+                return;
+            }
+
             if (data._redirect_) {
                 _goAt(data._redirect_);
                 return;

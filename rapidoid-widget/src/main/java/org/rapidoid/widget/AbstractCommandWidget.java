@@ -21,13 +21,12 @@ package org.rapidoid.widget;
  */
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.u.U;
-import org.rapidoid.util.D;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.2.0")
@@ -35,7 +34,7 @@ public abstract class AbstractCommandWidget<W extends AbstractCommandWidget<?>> 
 
 	private String command;
 
-	private Object[] cmdArgs;
+	private String[] cmdArgs;
 
 	private Runnable handler;
 
@@ -44,28 +43,39 @@ public abstract class AbstractCommandWidget<W extends AbstractCommandWidget<?>> 
 	@SuppressWarnings("unchecked")
 	public W command(String cmd, Object... cmdArgs) {
 		this.command = cmd;
-		this.cmdArgs = cmdArgs;
+		this.cmdArgs = strArgs(cmdArgs);
 
 		handleEventIfReady();
 
 		return (W) this;
 	}
 
+	private String[] strArgs(Object[] args) {
+		String[] strs = new String[args.length];
+
+		for (int i = 0; i < args.length; i++) {
+			strs[i] = U.str(args[i]).replace("'", "`");
+		}
+
+		return strs;
+	}
+
 	protected void handleEventIfReady() {
 		if (!handled && handler != null && command != null) {
 			Ctx ctx = ctx();
+			Map<String, Object> data = ctx.data();
 
 			if ("POST".equalsIgnoreCase(ctx.verb())) {
-				String event = U.str(ctx.data().get("_event"));
+				String event = U.str(data.get("_cmd"));
 
 				if (!U.isEmpty(event) && U.eq(event, command)) {
-					List<Object> argList = U.cast(ctx.data().get("_args"));
-					Object[] args = argList != null ? U.array(argList) : new Object[0];
-					D.print(args);
-					D.print(cmdArgs);
+
+					Object[] args = new Object[cmdArgs.length];
+					for (int i = 0; i < args.length; i++) {
+						args[i] = U.get(data, "_" + i, "");
+					}
 
 					if (Arrays.equals(args, cmdArgs)) {
-						System.out.println("EQ");
 						handled = true;
 						handler.run();
 					}
