@@ -2,7 +2,7 @@ package org.rapidoid.widget;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-widget
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
