@@ -701,14 +701,6 @@ public class U {
 		return value;
 	}
 
-	public static RuntimeException notReady() {
-		return rte("Not yet implemented!");
-	}
-
-	public static RuntimeException notSupported() {
-		return rte("This operation is not supported by this implementation!");
-	}
-
 	public static boolean isEmpty(String value) {
 		return value == null || value.isEmpty();
 	}
@@ -1148,6 +1140,17 @@ public class U {
 			destination.clear();
 			destination.putAll(source);
 		}
+	}
+
+	public static <K> String get(Map<K, ?> map, K key, String defaultValue) {
+		Object value = map.get(key);
+		return value != null ? String.valueOf(value) : defaultValue;
+	}
+
+	public static <K, V> V get(Map<K, V> map, K key) {
+		V value = map.get(key);
+		notNull(value, "map[%s]", key);
+		return value;
 	}
 
 }
