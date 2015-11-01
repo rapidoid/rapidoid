@@ -283,7 +283,7 @@ public class HttpParser implements Constants {
 	private void parseMultiPart(Buf src, Range body, KeyValueRanges data, KeyValueRanges files,
 			Range multipartBoundary, RapidoidHelper helper, int from, int to) {
 
-		KeyValueRanges headers = helper.pairs;
+		KeyValueRanges headers = helper.pairs.reset();
 		Range partBody = helper.ranges4.ranges[0];
 		Range contType = helper.ranges4.ranges[1];
 		Range contEnc = helper.ranges4.ranges[2];
@@ -292,8 +292,6 @@ public class HttpParser implements Constants {
 		Range name = helper.ranges4.ranges[5];
 		Range filename = helper.ranges4.ranges[6];
 		Range charset = helper.ranges4.ranges[7];
-
-		headers.reset();
 
 		int bodyPos = parseHeaders(src, from, to, headers, helper);
 		partBody.setInterval(bodyPos, to);
