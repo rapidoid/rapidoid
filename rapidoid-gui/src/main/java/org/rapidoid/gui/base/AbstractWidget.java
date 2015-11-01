@@ -38,7 +38,7 @@ public abstract class AbstractWidget extends BootstrapWidgets implements TagWidg
 	private Object extra;
 
 	protected Ctx ctx() {
-		return Ctxs.ctx();
+		return Ctxs.get();
 	}
 
 	protected abstract Object render();

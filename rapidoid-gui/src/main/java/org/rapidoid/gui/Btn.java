@@ -41,13 +41,18 @@ public class Btn extends AbstractCommand<Btn> {
 
 	@Override
 	protected Tag render() {
+		handleEventIfMatching();
+
 		String cls = U.or(class_, "btn btn-" + kind);
+
+		if (linkTo != null) {
+			return a(contents).href(linkTo).class_(cls);
+		}
+
 		ButtonTag btn = button(contents).type("button").class_(cls);
 
 		if (command() != null) {
 			btn = btn.cmd(command(), cmdArgs());
-		} else if (linkTo != null) {
-			btn = btn.navigate(linkTo);
 		}
 
 		return btn;

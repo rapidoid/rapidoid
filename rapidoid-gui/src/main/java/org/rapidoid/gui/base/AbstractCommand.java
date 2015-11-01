@@ -38,14 +38,10 @@ public abstract class AbstractCommand<W extends AbstractCommand<?>> extends Abst
 
 	private Runnable handler;
 
-	private boolean handled;
-
 	@SuppressWarnings("unchecked")
 	public W command(String cmd, Object... cmdArgs) {
 		this.command = cmd;
 		this.cmdArgs = strArgs(cmdArgs);
-
-		handleEventIfReady();
 
 		return (W) this;
 	}
@@ -60,24 +56,26 @@ public abstract class AbstractCommand<W extends AbstractCommand<?>> extends Abst
 		return strs;
 	}
 
-	protected void handleEventIfReady() {
-		if (!handled && handler != null && command != null) {
+	protected void handleEventIfMatching() {
+		if (handler != null && command != null) {
 			Ctx ctx = ctx();
-			Map<String, Object> data = ctx.data();
 
-			if ("POST".equalsIgnoreCase(ctx.verb())) {
-				String event = U.str(data.get("_cmd"));
+			if (ctx != null) {
+				Map<String, Object> data = ctx.data();
 
-				if (!U.isEmpty(event) && U.eq(event, command)) {
+				if ("POST".equalsIgnoreCase(ctx.verb())) {
+					String event = U.str(data.get("_cmd"));
 
-					Object[] args = new Object[cmdArgs.length];
-					for (int i = 0; i < args.length; i++) {
-						args[i] = U.get(data, "_" + i, "");
-					}
+					if (!U.isEmpty(event) && U.eq(event, command)) {
 
-					if (Arrays.equals(args, cmdArgs)) {
-						handled = true;
-						handler.run();
+						Object[] args = new Object[cmdArgs.length];
+						for (int i = 0; i < args.length; i++) {
+							args[i] = U.get(data, "_" + i, "");
+						}
+
+						if (Arrays.equals(args, cmdArgs)) {
+							handler.run();
+						}
 					}
 				}
 			}
@@ -94,7 +92,6 @@ public abstract class AbstractCommand<W extends AbstractCommand<?>> extends Abst
 
 	protected void setHandler(Runnable handler) {
 		this.handler = handler;
-		handleEventIfReady();
 	}
 
 }
