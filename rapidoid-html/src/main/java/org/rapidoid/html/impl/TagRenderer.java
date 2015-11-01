@@ -43,10 +43,11 @@ import org.rapidoid.var.Var;
 @Since("2.0.0")
 public class TagRenderer {
 
-	private static final byte[] EMIT_CLOSE = ")".getBytes();
+	private static final byte[] COMMA_SEP = ", ".getBytes();
 	private static final byte[] INDENT = "  ".getBytes();
 	private static final byte[] EMIT = "_emit('".getBytes();
-	private static final byte[] EMIT_SEP1 = "', ".getBytes();
+	private static final byte[] EMIT_SEP = "', [".getBytes();
+	private static final byte[] EMIT_CLOSE = "])".getBytes();
 	private static final byte[] _H = " _h=\"".getBytes();
 	private static final byte[] EQ_DQUOTES = "=\"".getBytes();
 	private static final byte[] LT = "<".getBytes();
@@ -174,8 +175,25 @@ public class TagRenderer {
 			write(out, EQ_DQUOTES);
 			write(out, EMIT);
 			write(out, tag.cmd.name);
-			write(out, EMIT_SEP1);
-			JSON.stringify(tag.cmd.args, out);
+			write(out, EMIT_SEP);
+
+			for (int i = 0; i < tag.cmd.args.length; i++) {
+				if (i > 0) {
+					write(out, COMMA_SEP);
+				}
+
+				Object arg = tag.cmd.args[i];
+				String str;
+
+				if (arg instanceof String) {
+					str = "'" + U.mid(JSON.stringify(arg), 1, -1) + "'";
+				} else {
+					str = U.str(arg);
+				}
+
+				write(out, str);
+			}
+
 			write(out, EMIT_CLOSE);
 			write(out, DQUOTES);
 		}
