@@ -1097,15 +1097,15 @@ public class U {
 		}
 	}
 
-	public static <K> String get(Map<K, ?> map, K key, String defaultValue) {
-		Object value = map.get(key);
-		return value != null ? String.valueOf(value) : defaultValue;
-	}
-
 	public static <K, V> V get(Map<K, V> map, K key) {
 		V value = map.get(key);
 		notNull(value, "map[%s]", key);
 		return value;
+	}
+
+	public static <K, V> V get(Map<K, V> map, K key, V defaultValue) {
+		V value = map.get(key);
+		return value != null ? value : defaultValue;
 	}
 
 }

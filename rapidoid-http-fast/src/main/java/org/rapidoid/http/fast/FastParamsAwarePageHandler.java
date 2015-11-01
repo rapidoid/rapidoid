@@ -49,10 +49,10 @@ public class FastParamsAwarePageHandler extends AbstractResultHandlingFastHttpHa
 		// ctx.setExchange(null);
 		// ctx.setUser(user);
 
-		ctx.setHost(U.get(params, HOST, ""));
-		ctx.setVerb(U.get(params, VERB, ""));
-		ctx.setPath(U.get(params, PATH, ""));
-		ctx.setUri(U.get(params, URI, ""));
+		ctx.setHost(U.str(U.get(params, HOST, "")));
+		ctx.setVerb(U.str(U.get(params, VERB, "")));
+		ctx.setPath(U.str(U.get(params, PATH, "")));
+		ctx.setUri(U.str(U.get(params, URI, "")));
 
 		U.assign(ctx.data(), params);
 		// U.assign(ctx.session(), U.map());
