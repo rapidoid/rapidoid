@@ -203,6 +203,7 @@ public class U {
 		System.out.println(text);
 	}
 
+	@SuppressWarnings({ "varargs" })
 	public static <T> String join(String sep, T... items) {
 		return render(items, "%s", sep);
 	}
@@ -259,6 +260,7 @@ public class U {
 		return Arrays.asList(arr).iterator();
 	}
 
+	@SuppressWarnings({ "varargs" })
 	public static <T> T[] array(T... items) {
 		return items;
 	}
@@ -286,6 +288,7 @@ public class U {
 		return set;
 	}
 
+	@SuppressWarnings({ "varargs" })
 	public static <T> Set<T> set(T... values) {
 		Set<T> set = set();
 
@@ -315,6 +318,7 @@ public class U {
 		return list;
 	}
 
+	@SuppressWarnings({ "varargs" })
 	public static <T> List<T> list(T... values) {
 		List<T> list = list();
 
@@ -1026,9 +1030,10 @@ public class U {
 		return compilable.compile(js);
 	}
 
+	@SuppressWarnings({ "varargs" })
 	public static <T> boolean isIn(T value, T... candidates) {
 		for (T candidate : candidates) {
-			if (U.eq(value, candidate)) {
+			if (eq(value, candidate)) {
 				return true;
 			}
 		}

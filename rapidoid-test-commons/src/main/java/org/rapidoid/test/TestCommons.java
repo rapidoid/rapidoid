@@ -23,6 +23,7 @@ package org.rapidoid.test;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
@@ -255,6 +256,11 @@ public abstract class TestCommons {
 		eq(Long.parseLong(actual), expected);
 	}
 
+	protected <K, V> void eq(Entry<K, V> entry, K key, V value) {
+		eq(entry.getKey(), key);
+		eq(entry.getValue(), value);
+	}
+
 	protected void expectedException() {
 		try {
 			Assert.fail("Expected exception!");
@@ -343,6 +349,10 @@ public abstract class TestCommons {
 
 	protected <T> void returns(T methodCall, T result) {
 		Mockito.when(methodCall).thenReturn(result);
+	}
+
+	protected <T> T verify(T mock) {
+		return Mockito.verify(mock);
 	}
 
 	protected void multiThreaded(int threadsN, final int count, final Runnable runnable) {
