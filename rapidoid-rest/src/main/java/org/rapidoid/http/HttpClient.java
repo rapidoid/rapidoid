@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.CancellationException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
@@ -189,8 +190,8 @@ public class HttpClient {
 
 			@Override
 			public void cancelled() {
-				Callbacks.error(callback, U.cancelled());
-				Callbacks.error(promise, U.cancelled());
+				Callbacks.error(callback, new CancellationException());
+				Callbacks.error(promise, new CancellationException());
 			}
 		};
 	}
