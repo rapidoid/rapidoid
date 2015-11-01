@@ -51,12 +51,14 @@ public class KeyValueRanges {
 		}
 	}
 
-	public void reset() {
+	public KeyValueRanges reset() {
 		for (int i = 0; i < count; i++) {
 			keys[i].reset();
 			values[i].reset();
 		}
 		count = 0;
+
+		return this;
 	}
 
 	public Range get(Buf buf, byte[] key, boolean caseSensitive) {
@@ -115,7 +117,7 @@ public class KeyValueRanges {
 		return map;
 	}
 
-	public void toMap(Buf src, boolean urlDecodeKeys, boolean urlDecodeVals, Map<String, String> dest) {
+	public void toMap(Buf src, boolean urlDecodeKeys, boolean urlDecodeVals, Map<String, ? super String> dest) {
 		for (int i = 0; i < count; i++) {
 			String key = keys[i].str(src.bytes());
 			String val = values[i].str(src.bytes());

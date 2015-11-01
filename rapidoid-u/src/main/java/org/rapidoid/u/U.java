@@ -589,12 +589,16 @@ public class U {
 		return rte(frmt(message, args));
 	}
 
-	public static RuntimeException cancelled() {
-		return rte("This operation was cancelled!");
-	}
-
 	public static RuntimeException notExpected() {
 		return rte("This operation is not expected to be called!");
+	}
+
+	public static RuntimeException notReady() {
+		return rte("Not yet implemented!");
+	}
+
+	public static RuntimeException notSupported() {
+		return rte("This operation is not supported by this implementation!");
 	}
 
 	public static void rteIf(boolean failureCondition, String msg) {
