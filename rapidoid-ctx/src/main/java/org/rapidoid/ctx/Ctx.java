@@ -2,7 +2,9 @@ package org.rapidoid.ctx;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -52,9 +54,11 @@ public class Ctx {
 
 	private volatile String host;
 
+	private volatile String verb;
+
 	private volatile String uri;
 
-	private volatile String verb;
+	private volatile String path;
 
 	private volatile int referenceCounter = 1;
 
@@ -124,6 +128,16 @@ public class Ctx {
 	public void setUri(String uri) {
 		ensureNotClosed();
 		this.uri = uri;
+	}
+
+	public String path() {
+		ensureNotClosed();
+		return path;
+	}
+
+	public void setPath(String path) {
+		ensureNotClosed();
+		this.path = path;
 	}
 
 	public String verb() {
@@ -205,10 +219,34 @@ public class Ctx {
 	}
 
 	@Override
-	public synchronized String toString() {
+	public String toString() {
+		final int maxLen = 10;
+		return prefixed("[id=" + id + ", tag=" + tag + ", user=" + user + ", exchange=" + exchange + ", app=" + app
+				+ ", host=" + host + ", verb=" + verb + ", uri=" + uri + ", path=" + path + ", referenceCounter="
+				+ referenceCounter + ", persisters=" + persisters + ", closed=" + closed + ", allPersisters="
+				+ (allPersisters != null ? toString(allPersisters, maxLen) : null) + ", data="
+				+ (data != null ? toString(data.entrySet(), maxLen) : null) + ", session="
+				+ (session != null ? toString(session.entrySet(), maxLen) : null) + ", extras="
+				+ (extras != null ? toString(extras.entrySet(), maxLen) : null) + "]");
+	}
+
+	private String prefixed(String asStr) {
 		String isClosed = closed ? " <CLOSED>" : "";
-		return "Ctx#" + id + ":" + tag + isClosed + " [user=" + user + ", exchange=" + exchange + ", app=" + app
-				+ ", referenceCounter=" + referenceCounter + ", allPersisters=" + allPersisters.size() + "]";
+		String prefix = "Ctx#" + id + ":" + tag + isClosed;
+		return prefix + " " + asStr;
+	}
+
+	private String toString(Collection<?> collection, int maxLen) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("[");
+		int i = 0;
+		for (Iterator<?> iterator = collection.iterator(); iterator.hasNext() && i < maxLen; i++) {
+			if (i > 0)
+				builder.append(", ");
+			builder.append(iterator.next());
+		}
+		builder.append("]");
+		return builder.toString();
 	}
 
 	public boolean isClosed() {

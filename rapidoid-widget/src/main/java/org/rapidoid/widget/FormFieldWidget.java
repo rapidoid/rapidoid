@@ -32,12 +32,14 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.TextareaTag;
+import org.rapidoid.log.Log;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
@@ -97,12 +99,16 @@ public class FormFieldWidget extends AbstractWidget {
 	private Var<?> initVar(Item item, Property prop) {
 		Object target = U.or(item.value(), item);
 		String varName = propVarName(target, prop.name());
-		Object initValue = Ctxs.ctx().data().get(varName);
+
+		Ctx ctx = Ctxs.get();
+		Object initValue = ctx != null ? ctx.data().get(varName) : null;
 
 		try {
 			return Models.propertyVar(varName, item, prop.name(), initValue);
+
 		} catch (Exception e) {
 			// FIXME x.errors().put(varName, "Invalid value!");
+			Log.warn("Invalid value for property: " + prop.name(), e);
 			return Models.propertyVar(varName, item, prop.name(), null);
 		}
 	}
