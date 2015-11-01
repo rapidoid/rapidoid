@@ -29,13 +29,13 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.app.GUI;
+import org.rapidoid.gui.FormWidget;
+import org.rapidoid.gui.GridWidget;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
-import org.rapidoid.widget.FormWidget;
-import org.rapidoid.widget.GridWidget;
 
 import demo.taskplanner.model.Task;
 

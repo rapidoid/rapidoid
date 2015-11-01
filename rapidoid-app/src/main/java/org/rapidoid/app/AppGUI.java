@@ -5,12 +5,12 @@ import java.util.Comparator;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
+import org.rapidoid.gui.BootstrapWidgets;
+import org.rapidoid.gui.GridWidget;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.impl.DbItems;
 import org.rapidoid.plugins.entities.Entities;
-import org.rapidoid.widget.BootstrapWidgets;
-import org.rapidoid.widget.GridWidget;
 
 /*
  * #%L

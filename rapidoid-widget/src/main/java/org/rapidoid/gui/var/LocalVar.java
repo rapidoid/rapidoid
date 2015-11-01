@@ -1,8 +1,8 @@
-package org.rapidoid.app.builtin;
+package org.rapidoid.gui.var;
 
 /*
  * #%L
- * rapidoid-app
+ * rapidoid-widget
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,32 +20,39 @@ package org.rapidoid.app.builtin;
  * #L%
  */
 
+import java.io.Serializable;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.GUI;
-import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.ctx.Roles;
-import org.rapidoid.gui.FormWidget;
-import org.rapidoid.html.Tag;
-import org.rapidoid.security.annotation.DevMode;
 import org.rapidoid.u.U;
 
-@DevMode
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class DebugUserInfoScreenBuiltIn extends GUI {
+@Since("4.0.0")
+public class LocalVar<T extends Serializable> extends WidgetVar<T> {
 
-	public Object content() {
-		Tag caption = titleBox("Debug Mode - User Information");
-		Ctx ctx = Ctxs.ctx();
-		if (ctx.isLoggedIn()) {
-			Object userDetails = show(ctx.user(), "name", "username", "email");
-			FormWidget userRoles = show(U.map("roles", Roles.getRolesFor(ctx.username())));
-			return row(caption, userDetails, userRoles);
-		} else {
-			return row(caption, h4("Not logged in!"));
-		}
+	private static final long serialVersionUID = 2761159925375675659L;
+
+	private final String localKey;
+
+	private final T defaultValue;
+
+	public LocalVar(String localKey, T defaultValue, boolean initial) {
+		super(localKey, initial);
+		this.localKey = localKey;
+		this.defaultValue = defaultValue;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public T get() {
+		T val = (T) U.or(Ctxs.ctx().data().get(localKey), defaultValue);
+		return val;
+	}
+
+	@Override
+	public void set(T value) {
+		Ctxs.ctx().data().put(localKey, value);
 	}
 
 }

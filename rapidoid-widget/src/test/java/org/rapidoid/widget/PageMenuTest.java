@@ -24,6 +24,9 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.YAML;
+import org.rapidoid.gui.menu.PageMenuItem;
+import org.rapidoid.gui.menu.PageSubMenuItem;
+import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.io.Res;
 import org.rapidoid.test.TestCommons;
 
@@ -43,17 +46,17 @@ public class PageMenuTest extends TestCommons {
 
 		eq(menu.getItems().size(), 2);
 
-		AppMenuItem item1 = menu.getItems().get(0);
+		PageMenuItem item1 = menu.getItems().get(0);
 		eq(item1.getCaption(), "item1");
 		eq(item1.getTarget(), "aaa");
 
-		AppMenuItem item2 = menu.getItems().get(1);
+		PageMenuItem item2 = menu.getItems().get(1);
 		eq(item2.getCaption(), "item2");
 		isNull(item2.getTarget());
 
-		AppSubMenuItem subitem1 = item2.getSubmenu().getItems().get(0);
-		AppSubMenuItem subitem2 = item2.getSubmenu().getItems().get(1);
-		AppSubMenuItem subitem3 = item2.getSubmenu().getItems().get(2);
+		PageSubMenuItem subitem1 = item2.getSubmenu().getItems().get(0);
+		PageSubMenuItem subitem2 = item2.getSubmenu().getItems().get(1);
+		PageSubMenuItem subitem3 = item2.getSubmenu().getItems().get(2);
 
 		eq(subitem1.getCaption(), "d");
 		eq(subitem1.getTarget(), "");

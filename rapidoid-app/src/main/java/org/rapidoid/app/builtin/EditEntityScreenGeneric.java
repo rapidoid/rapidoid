@@ -22,10 +22,10 @@ package org.rapidoid.app.builtin;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.FormWidget;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.u.U;
-import org.rapidoid.widget.FormWidget;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

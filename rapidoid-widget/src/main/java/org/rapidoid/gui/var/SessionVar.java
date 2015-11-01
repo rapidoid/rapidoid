@@ -1,4 +1,4 @@
-package org.rapidoid.widget;
+package org.rapidoid.gui.var;
 
 /*
  * #%L
@@ -20,39 +20,38 @@ package org.rapidoid.widget;
  * #L%
  */
 
-import org.junit.Test;
+import java.io.Serializable;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.BootstrapWidgets;
-import org.rapidoid.gui.GridWidget;
-import org.rapidoid.model.Items;
-import org.rapidoid.model.Models;
+import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class TableWidgetTest extends WidgetTestCommons {
+public class SessionVar<T extends Serializable> extends WidgetVar<T> {
 
-	@Test
-	public void testTableWidget() {
-		Person john = new Person("John", 20);
-		john.id = 1;
+	private static final long serialVersionUID = 2761159925375675659L;
 
-		Person rambo = new Person("Rambo", 50);
-		rambo.id = 2;
+	private final String sessionKey;
 
-		Items items = Models.beanItemsInfer(john, rambo);
+	private final T defaultValue;
 
-		GridWidget table = BootstrapWidgets.grid(items, null, 10);
-		print(table);
+	public SessionVar(String sessionKey, T defaultValue) {
+		super(sessionKey, false);
+		this.sessionKey = sessionKey;
+		this.defaultValue = defaultValue;
+	}
 
-		hasRegex(table, "<th[^>]*?>Name</th>");
-		hasRegex(table, "<th[^>]*?>Age</th>");
+	@SuppressWarnings("unchecked")
+	@Override
+	public T get() {
+		return (T) U.or(Ctxs.ctx().session().get(sessionKey), defaultValue);
+	}
 
-		hasRegex(table, "<td[^>]*?>John</td>");
-		hasRegex(table, "<td[^>]*?>20</td>");
-
-		hasRegex(table, "<td[^>]*?>Rambo</td>");
-		hasRegex(table, "<td[^>]*?>50</td>");
+	@Override
+	public void set(T value) {
+		Ctxs.ctx().session().put(sessionKey, value);
 	}
 
 }

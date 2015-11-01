@@ -1,14 +1,8 @@
-package custom;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.PagerWidget;
-import org.rapidoid.html.Tag;
-import org.rapidoid.var.Var;
+package org.rapidoid.gui;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-widget
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -26,22 +20,37 @@ import org.rapidoid.var.Var;
  * #L%
  */
 
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.html.tag.TableTag;
+
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class CustomizedPagerWidget extends PagerWidget {
+@Since("2.4.0")
+public class KeyValueGridWidget extends AbstractWidget {
 
-	public CustomizedPagerWidget(int from, int to, Var<Integer> pageNumber) {
-		super(from, to, pageNumber);
-	}
+	private Map<?, ?> map;
 
 	@Override
-	protected Tag prev() {
-		return a_void("Previous");
+	protected Object render() {
+		TableTag tbl = table_(tr(th("Key"), th("Value")));
+
+		for (Entry<?, ?> e : map.entrySet()) {
+			tbl = tbl.append(tr(td(e.getKey()), td(e.getValue())));
+		}
+
+		return tbl;
 	}
 
-	@Override
-	protected Tag next() {
-		return a_void("Next");
+	public Map<?, ?> map() {
+		return map;
+	}
+
+	public KeyValueGridWidget map(Map<?, ?> map) {
+		this.map = map;
+		return this;
 	}
 
 }

@@ -1,14 +1,11 @@
-package custom;
+package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.PagerWidget;
-import org.rapidoid.html.Tag;
-import org.rapidoid.var.Var;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-widget
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -28,20 +25,8 @@ import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class CustomizedPagerWidget extends PagerWidget {
+public enum FormMode {
 
-	public CustomizedPagerWidget(int from, int to, Var<Integer> pageNumber) {
-		super(from, to, pageNumber);
-	}
-
-	@Override
-	protected Tag prev() {
-		return a_void("Previous");
-	}
-
-	@Override
-	protected Tag next() {
-		return a_void("Next");
-	}
+	CREATE, EDIT, SHOW
 
 }

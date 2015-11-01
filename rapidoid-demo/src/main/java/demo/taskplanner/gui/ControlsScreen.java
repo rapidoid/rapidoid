@@ -4,8 +4,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.app.GUI;
+import org.rapidoid.gui.LayoutWidget;
 import org.rapidoid.u.U;
-import org.rapidoid.widget.LayoutWidget;
 
 /*
  * #%L

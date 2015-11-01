@@ -25,11 +25,11 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.app.GUI;
+import org.rapidoid.gui.ButtonWidget;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.security.annotation.CanInsert;
 import org.rapidoid.u.U;
-import org.rapidoid.widget.ButtonWidget;
 
 import demo.taskplanner.model.Task;
 import demo.taskplanner.model.User;

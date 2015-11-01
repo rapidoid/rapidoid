@@ -28,6 +28,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.app.AsyncAppHandler;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.YAML;
+import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugin;
@@ -36,7 +37,6 @@ import org.rapidoid.u.U;
 import org.rapidoid.webapp.RootWebApp;
 import org.rapidoid.webapp.WebApp;
 import org.rapidoid.webapp.WebAppGroup;
-import org.rapidoid.widget.PageMenu;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

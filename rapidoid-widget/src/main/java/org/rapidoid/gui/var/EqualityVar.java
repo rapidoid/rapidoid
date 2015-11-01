@@ -1,4 +1,4 @@
-package org.rapidoid.widget;
+package org.rapidoid.gui.var;
 
 /*
  * #%L
@@ -22,47 +22,46 @@ package org.rapidoid.widget;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.BootstrapWidgets;
-import org.rapidoid.gui.PagerWidget;
+import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class PagerWidgetTest extends WidgetTestCommons {
+public class EqualityVar extends WidgetVar<Boolean> {
 
-	// @Test
-	public void testPagerWidget() {
+	private static final long serialVersionUID = 6990464844550633598L;
 
-		// FIXME: find the event numbers to be able to emit events
+	private final Var<Object> var;
 
-		Var<Integer> pageN = BootstrapWidgets.var("page", 3);
+	private final Object val;
 
-		PagerWidget pager = BootstrapWidgets.pager(1, 7, pageN);
-		print(pager);
+	public EqualityVar(String name, Var<Object> var, Object val, boolean initial) {
+		super(name, initial);
+		this.var = var;
+		this.val = val;
+		init();
+	}
 
-		eq(pageN.get().intValue(), 3);
-		has(pager, "Page 3 of 7");
+	private void init() {
+		if (!initial) {
+			set(getBool());
+		}
+	}
 
-		// ctx.getEventCmd(6); // first
+	@Override
+	public Boolean get() {
+		return U.eq(var.get(), val);
+	}
 
-		eq(pageN, 1);
-		has(pager, "Page 1 of 7");
-
-		// ctx.getEventCmd(20); // last
-
-		eq(pageN, 7);
-		has(pager, "Page 7 of 7");
-
-		// ctx.getEventCmd(10); // prev
-		// ctx.getEventCmd(10); // prev
-
-		eq(pageN, 5);
-		has(pager, "Page 5 of 7");
-
-		// ctx.getEventCmd(16); // next
-
-		eq(pageN, 6);
-		has(pager, "Page 6 of 7");
+	@Override
+	public void set(Boolean value) {
+		if (value) {
+			var.set(val);
+		} else {
+			if (U.eq(var.get(), val)) {
+				var.set(null);
+			}
+		}
 	}
 
 }

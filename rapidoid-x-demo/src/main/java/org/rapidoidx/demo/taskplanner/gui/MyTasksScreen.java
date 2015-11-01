@@ -29,11 +29,11 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.gui.GridWidget;
 import org.rapidoid.html.Tag;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.u.U;
-import org.rapidoid.widget.GridWidget;
 import org.rapidoidx.demo.taskplanner.model.Task;
 import org.rapidoidx.demo.taskplanner.model.User;
 

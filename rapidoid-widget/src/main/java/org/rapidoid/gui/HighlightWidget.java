@@ -1,8 +1,8 @@
-package org.rapidoid.app.builtin;
+package org.rapidoid.gui;
 
 /*
  * #%L
- * rapidoid-app
+ * rapidoid-widget
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -21,37 +21,51 @@ package org.rapidoid.app.builtin;
  */
 
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.GUI;
-import org.rapidoid.gui.GridWidget;
-import org.rapidoid.gui.HighlightedGridWidget;
 import org.rapidoid.html.Tag;
-import org.rapidoid.http.HttpExchange;
-import org.rapidoid.model.Items;
-import org.rapidoid.plugins.db.DB;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class SearchScreenBuiltIn extends GUI {
+public class HighlightWidget extends AbstractWidget {
 
-	public Object content(HttpExchange x) {
+	private String text;
+	private String regex;
 
-		final String query = x.param("q", "");
-		List<Object> found = U.list(DB.fullTextSearch(query));
+	public HighlightWidget(String text, String regex) {
+		this.text = text;
+		this.regex = regex;
+	}
 
-		Items items = beanItems(Object.class, found.toArray());
+	@Override
+	protected Tag render() {
+		return regex != null ? complexHighlight() : simpleHighlight();
+	}
 
-		Tag queryInfo = !U.isEmpty(query) ? span(" for ", b(highlight(query))) : null;
-		Tag title = titleBox("Total " + found.size() + " search results", queryInfo);
+	protected Tag simpleHighlight() {
+		return !U.isEmpty(text) ? span(text).class_("highlight") : span(text);
+	}
 
-		String regex = "(?i)" + Pattern.quote(query);
-		GridWidget grid = new HighlightedGridWidget(items, "", 10, "id", "_class", "_str").regex(regex);
+	protected Tag complexHighlight() {
+		List<Object> parts = U.list();
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(text);
 
-		return div(title, grid);
+		int end = 0;
+		while (m.find()) {
+			String match = m.group();
+			parts.add(text.substring(end, m.start()));
+			parts.add(highlight(match));
+			end = m.end();
+		}
+
+		parts.add(text.substring(end));
+
+		return span(parts);
 	}
 
 }

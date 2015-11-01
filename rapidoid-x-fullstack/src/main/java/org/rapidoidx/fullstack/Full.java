@@ -23,7 +23,7 @@ package org.rapidoidx.fullstack;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.widget.BootstrapWidgets;
+import org.rapidoid.gui.BootstrapWidgets;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

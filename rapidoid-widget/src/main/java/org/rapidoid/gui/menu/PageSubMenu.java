@@ -1,14 +1,8 @@
-package custom;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.PagerWidget;
-import org.rapidoid.html.Tag;
-import org.rapidoid.var.Var;
+package org.rapidoid.gui.menu;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-widget
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -26,22 +20,28 @@ import org.rapidoid.var.Var;
  * #L%
  */
 
+import java.util.List;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class CustomizedPagerWidget extends PagerWidget {
+@Since("4.1.0")
+public class PageSubMenu {
 
-	public CustomizedPagerWidget(int from, int to, Var<Integer> pageNumber) {
-		super(from, to, pageNumber);
+	private final List<PageSubMenuItem> items;
+
+	public PageSubMenu(List<PageSubMenuItem> items) {
+		this.items = items;
 	}
 
 	@Override
-	protected Tag prev() {
-		return a_void("Previous");
+	public String toString() {
+		return "AppSubMenu [items=" + items + "]";
 	}
 
-	@Override
-	protected Tag next() {
-		return a_void("Next");
+	public List<PageSubMenuItem> getItems() {
+		return items;
 	}
 
 }

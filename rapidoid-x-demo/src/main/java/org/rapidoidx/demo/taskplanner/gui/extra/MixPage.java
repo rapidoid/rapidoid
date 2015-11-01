@@ -24,6 +24,9 @@ package org.rapidoidx.demo.taskplanner.gui.extra;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.BootstrapWidgets;
+import org.rapidoid.gui.ButtonWidget;
+import org.rapidoid.gui.GridWidget;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.FormTag;
@@ -32,9 +35,6 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.u.U;
-import org.rapidoid.widget.BootstrapWidgets;
-import org.rapidoid.widget.ButtonWidget;
-import org.rapidoid.widget.GridWidget;
 import org.rapidoidx.demo.taskplanner.model.Person;
 
 @Authors("Nikolche Mihajlovski")

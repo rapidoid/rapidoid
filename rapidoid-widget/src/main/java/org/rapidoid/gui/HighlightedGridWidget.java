@@ -1,14 +1,8 @@
-package custom;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.PagerWidget;
-import org.rapidoid.html.Tag;
-import org.rapidoid.var.Var;
+package org.rapidoid.gui;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-widget
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -26,22 +20,31 @@ import org.rapidoid.var.Var;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.html.tag.TdTag;
+import org.rapidoid.model.Items;
+
+// TODO use grid decorator instead
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class CustomizedPagerWidget extends PagerWidget {
+public class HighlightedGridWidget extends GridWidget {
 
-	public CustomizedPagerWidget(int from, int to, Var<Integer> pageNumber) {
-		super(from, to, pageNumber);
+	private String regex;
+
+	public HighlightedGridWidget(Items items, String sortOrder, int pageSize, String... properties) {
+		super(items, sortOrder, pageSize, properties);
+	}
+
+	public GridWidget regex(String regex) {
+		this.regex = regex;
+		return this;
 	}
 
 	@Override
-	protected Tag prev() {
-		return a_void("Previous");
-	}
-
-	@Override
-	protected Tag next() {
-		return a_void("Next");
+	protected TdTag cell(Object value) {
+		String s = String.valueOf(value);
+		return super.cell(highlight(s, regex));
 	}
 
 }

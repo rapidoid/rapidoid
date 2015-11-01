@@ -25,8 +25,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
+import org.rapidoid.gui.GridWidget;
 import org.rapidoid.html.Tag;
-import org.rapidoid.widget.GridWidget;
 import org.rapidoidx.demo.taskplanner.model.Task;
 
 @Order(2)

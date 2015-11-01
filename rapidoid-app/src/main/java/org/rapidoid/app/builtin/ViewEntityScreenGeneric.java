@@ -25,12 +25,12 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.gui.ButtonWidget;
+import org.rapidoid.gui.FormWidget;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.security.Secure;
 import org.rapidoid.u.U;
-import org.rapidoid.widget.ButtonWidget;
-import org.rapidoid.widget.FormWidget;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

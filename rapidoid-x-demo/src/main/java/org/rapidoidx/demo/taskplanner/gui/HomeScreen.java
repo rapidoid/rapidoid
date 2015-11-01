@@ -3,10 +3,10 @@ package org.rapidoidx.demo.taskplanner.gui;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
+import org.rapidoid.gui.CardWidget;
+import org.rapidoid.gui.FA;
+import org.rapidoid.gui.StreamWidget;
 import org.rapidoid.html.Tag;
-import org.rapidoid.widget.CardWidget;
-import org.rapidoid.widget.FA;
-import org.rapidoid.widget.StreamWidget;
 
 /*
  * #%L

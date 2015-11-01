@@ -1,14 +1,8 @@
-package custom;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.PagerWidget;
-import org.rapidoid.html.Tag;
-import org.rapidoid.var.Var;
+package org.rapidoid.gui.var;
 
 /*
  * #%L
- * rapidoid-demo
+ * rapidoid-widget
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -26,22 +20,30 @@ import org.rapidoid.var.Var;
  * #L%
  */
 
+import java.io.Serializable;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.u.U;
+import org.rapidoid.var.impl.AbstractVar;
+
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class CustomizedPagerWidget extends PagerWidget {
+@Since("4.0.2")
+public abstract class WidgetVar<T extends Serializable> extends AbstractVar<T> {
 
-	public CustomizedPagerWidget(int from, int to, Var<Integer> pageNumber) {
-		super(from, to, pageNumber);
+	private static final long serialVersionUID = 2761159925375675659L;
+
+	protected boolean initial;
+
+	public WidgetVar(String name, boolean initial) {
+		super(name);
+		this.initial = initial;
 	}
 
-	@Override
-	protected Tag prev() {
-		return a_void("Previous");
-	}
-
-	@Override
-	protected Tag next() {
-		return a_void("Next");
+	protected boolean getBool() {
+		return U.or(Cls.convert(Ctxs.ctx().data().get(name()), Boolean.class), false);
 	}
 
 }
