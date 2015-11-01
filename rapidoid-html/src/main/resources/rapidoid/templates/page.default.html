@@ -38,7 +38,8 @@
 
 {{^error}}
 <script>
-window.__state = {{{req.renderState}}};
+{{#req.renderState}}window.__state = {{{req.renderState}}};{{/req.renderState}}
+{{#viewState}}window.__state = {{{req.renderState}}};{{/viewState}}
 </script>
 {{/error}}
 
