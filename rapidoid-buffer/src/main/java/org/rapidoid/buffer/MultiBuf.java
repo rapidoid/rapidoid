@@ -841,27 +841,30 @@ public class MultiBuf implements Buf, Constants {
 				space = 2;
 
 			} else {
-				int digitsN = (int) Math.ceil(Math.log10(n + 1));
+				if (appending) {
+					String nums = "" + n;
+					append(nums.getBytes());
+					space = nums.length();
+				} else {
 
-				int pos = position + digitsN - 1 + direction * digitsN;
-				if (!forward) {
-					pos++;
-				}
+					int digitsN = (int) Math.ceil(Math.log10(n + 1));
 
-				while (true) {
-					long digit = n % 10;
-					byte dig = (byte) (digit + 48);
-					if (appending) {
-						append(dig);
-					} else {
+					int pos = position + digitsN - 1 + direction * digitsN;
+					if (!forward) {
+						pos++;
+					}
+
+					while (true) {
+						long digit = n % 10;
+						byte dig = (byte) (digit + 48);
 						put(pos--, dig);
+						if (n < 10) {
+							break;
+						}
+						n = n / 10;
 					}
-					if (n < 10) {
-						break;
-					}
-					n = n / 10;
+					space = digitsN;
 				}
-				space = digitsN;
 			}
 		} else {
 			if (forward) {
