@@ -1208,7 +1208,7 @@ public class MediaType {
 			String ext = filename.substring(dotPos + 1);
 			return getByFileExtension(ext);
 		} else {
-			return null;
+			return MediaType.HTML_UTF_8;
 		}
 	}
 
