@@ -54,7 +54,7 @@ public class MainHelp {
 	}
 
 	private static void opt(String opt, String desc) {
-		show("  " + opt + U.copyNtimes(" ", 17 - opt.length()) + " - " + desc);
+		show("  " + opt + U.mul(" ", 17 - opt.length()) + " - " + desc);
 	}
 
 	private static void show(String msg) {

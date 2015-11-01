@@ -746,7 +746,7 @@ public class U {
 		return s.isEmpty() ? s : s.substring(0, 1).toLowerCase() + s.substring(1);
 	}
 
-	public static String copyNtimes(String s, int n) {
+	public static String mul(String s, int n) {
 		StringBuffer sb = new StringBuffer();
 
 		for (int i = 0; i < n; i++) {

@@ -81,7 +81,7 @@ public class CryptoTest extends TestCommons {
 	@Test
 	public void testEncrypt() {
 		for (int i = 0; i < 10000; i++) {
-			String msg1 = U.copyNtimes("x", i);
+			String msg1 = U.mul("x", i);
 			byte[] enc = Crypto.encrypt(msg1.getBytes());
 			byte[] dec = Crypto.decrypt(enc);
 			String msg2 = new String(dec);
