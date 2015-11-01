@@ -401,6 +401,10 @@ public abstract class BootstrapWidgets extends HTML {
 		return Cls.customizable(PanelWidget.class, new Object[] { UTILS.flat(contents) });
 	}
 
+	public static PageWidget page(Object... contents) {
+		return Cls.customizable(PageWidget.class, new Object[] { UTILS.flat(contents) });
+	}
+
 	public static <T> GridWidget grid(Class<T> type, Object[] items, String sortOrder, int pageSize,
 			String... properties) {
 		return grid(Models.beanItems(type, items), sortOrder, pageSize, properties);
