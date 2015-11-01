@@ -6,7 +6,7 @@ import org.rapidoid.html.Tag;
 
 /*
  * #%L
- * rapidoid-widget
+ * rapidoid-gui
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

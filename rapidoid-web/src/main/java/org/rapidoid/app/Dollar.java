@@ -30,7 +30,7 @@ import redis.clients.jedis.Jedis;
 
 /*
  * #%L
- * rapidoid-app
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

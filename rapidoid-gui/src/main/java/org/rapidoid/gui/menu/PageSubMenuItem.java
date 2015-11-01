@@ -2,7 +2,7 @@ package org.rapidoid.gui.menu;
 
 /*
  * #%L
- * rapidoid-widget
+ * rapidoid-gui
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

@@ -6,7 +6,7 @@ import org.rapidoid.app.GUI;
 
 /*
  * #%L
- * rapidoid-app
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
