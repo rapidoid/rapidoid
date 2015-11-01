@@ -22,6 +22,7 @@ package org.rapidoid.http.fast;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.net.TCPServer;
 
 @Authors("Nikolche Mihajlovski")
@@ -30,31 +31,50 @@ public class On {
 
 	private static final ServerSetup DEFAULT_SERVER_SETUP = new ServerSetup();
 
+	private static boolean initialized = false;
+
+	private static ServerSetup setup() {
+		if (!initialized) {
+			initialize();
+			initialized = true;
+		}
+
+		return DEFAULT_SERVER_SETUP;
+	}
+
+	public static ServerSetup custom() {
+		return new ServerSetup();
+	}
+
+	private static void initialize() {
+		listen(Conf.port());
+	}
+
 	public static synchronized OnAction get(String path) {
-		return DEFAULT_SERVER_SETUP.get(path);
+		return setup().get(path);
 	}
 
 	public static synchronized OnAction post(String path) {
-		return DEFAULT_SERVER_SETUP.post(path);
+		return setup().post(path);
 	}
 
 	public static synchronized OnAction put(String path) {
-		return DEFAULT_SERVER_SETUP.put(path);
+		return setup().put(path);
 	}
 
 	public static synchronized OnAction delete(String path) {
-		return DEFAULT_SERVER_SETUP.delete(path);
+		return setup().delete(path);
 	}
 
 	public static synchronized OnAction options(String path) {
-		return DEFAULT_SERVER_SETUP.options(path);
+		return setup().options(path);
 	}
 
-	public static TCPServer listen(int port) {
+	public static synchronized TCPServer listen(int port) {
 		return DEFAULT_SERVER_SETUP.listen(port);
 	}
 
-	public static TCPServer listen(String address, int port) {
+	public static synchronized TCPServer listen(String address, int port) {
 		return DEFAULT_SERVER_SETUP.listen(address, port);
 	}
 
