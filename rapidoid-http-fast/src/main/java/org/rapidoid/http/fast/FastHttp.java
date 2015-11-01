@@ -364,7 +364,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 		ctx.write(CONTENT_LENGTH_UNKNOWN);
 
-		int posConLen = out.size() - 10;
+		int posConLen = out.size();
 		ctx.write(CR_LF);
 		ctx.write(CR_LF);
 
@@ -373,7 +373,9 @@ public class FastHttp implements Protocol, HttpMetadata {
 		JSON.stringify(value, out.asOutputStream());
 
 		int posAfter = out.size();
-		out.putNumAsText(posConLen, posAfter - posBefore, false);
+		int contentLength = posAfter - posBefore;
+
+		out.putNumAsText(posConLen, contentLength, false);
 	}
 
 	public void addCookie(Channel ctx, String name, String value, String... extras) {
