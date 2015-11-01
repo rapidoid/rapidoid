@@ -34,6 +34,7 @@ import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.dates.Dates;
+import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
@@ -66,13 +67,13 @@ public class FastHttp implements Protocol {
 
 	private static final byte[] DATE_IS = "Date: ".getBytes();
 
-	public static final byte[] CONTENT_TYPE_PLAIN = "Content-Type: text/plain; charset=UTF-8\r\n".getBytes();
+	public static final byte[] CONTENT_TYPE_PLAIN = MediaType.PLAIN_TEXT_UTF_8.asHttpHeader();
 
-	public static final byte[] CONTENT_TYPE_HTML = "Content-Type: text/html; charset=UTF-8\r\n".getBytes();
+	public static final byte[] CONTENT_TYPE_HTML = MediaType.HTML_UTF_8.asHttpHeader();
 
-	public static final byte[] CONTENT_TYPE_JSON = "Content-Type: application/json; charset=UTF-8\r\n".getBytes();
+	public static final byte[] CONTENT_TYPE_JSON = MediaType.JSON_UTF_8.asHttpHeader();
 
-	public static final byte[] CONTENT_TYPE_BINARY = "Content-Type: application/octet-stream\r\n".getBytes();
+	public static final byte[] CONTENT_TYPE_BINARY = MediaType.BINARY.asHttpHeader();
 
 	private static final HttpParser HTTP_PARSER = Wire.singleton(HttpParser.class);
 

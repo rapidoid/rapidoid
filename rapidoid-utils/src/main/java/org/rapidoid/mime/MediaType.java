@@ -1214,8 +1214,11 @@ public class MediaType {
 
 	private final byte[] bytes;
 
+	private final byte[] httpHeaderBytes;
+
 	private MediaType(String name, String[] attributes) {
 		this.bytes = join(name, attributes).getBytes();
+		this.httpHeaderBytes = ("Content-Type: " + new String(bytes) + "\r\n").getBytes();
 	}
 
 	private String join(String name, String[] attributes) {
@@ -1231,6 +1234,10 @@ public class MediaType {
 	@Override
 	public String toString() {
 		return U.frmt("MediaType[%s]", new String(bytes));
+	}
+
+	public byte[] asHttpHeader() {
+		return httpHeaderBytes;
 	}
 
 }
