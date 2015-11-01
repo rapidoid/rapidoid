@@ -58,7 +58,6 @@ import javax.script.SimpleBindings;
 
 import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.lambda.Mapper;
-import org.rapidoid.lambda.Predicate;
 
 /**
  * @author Nikolche Mihajlovski
@@ -683,23 +682,9 @@ public class U {
 		must(value >= min && value <= max, "%s is not in the range [%s, %s]!", value, min, max);
 	}
 
-	public static void notNullAll(Object... items) {
-		for (int i = 0; i < items.length; i++) {
-			if (items[i] == null) {
-				throw rte("The item[%s] must NOT be null!", i);
-			}
-		}
-	}
-
 	public static <T> T notNull(T value, String msgOrDesc, Object... descArgs) {
 		if (value == null) {
-			if (msgOrDesc.endsWith("!")) {
-				// message
-				throw rte(msgOrDesc, descArgs);
-			} else {
-				// description
-				throw rte("%s must NOT be null!", frmt(msgOrDesc, descArgs));
-			}
+			throw rte("%s must NOT be null!", frmt(msgOrDesc, descArgs));
 		}
 
 		return value;
@@ -775,7 +760,7 @@ public class U {
 		return Integer.parseInt(s);
 	}
 
-	public static int limited(int min, int value, int max) {
+	public static int bounded(int min, int value, int max) {
 		return Math.min(Math.max(min, value), max);
 	}
 
@@ -827,8 +812,8 @@ public class U {
 		// TODO more efficient implementation
 		List<T> list = list(items);
 
-		fromIndex = limited(0, fromIndex, list.size());
-		toIndex = limited(fromIndex, toIndex, list.size());
+		fromIndex = bounded(0, fromIndex, list.size());
+		toIndex = bounded(fromIndex, toIndex, list.size());
 
 		return list(list.subList(fromIndex, toIndex));
 	}
@@ -851,16 +836,6 @@ public class U {
 
 	public static String triml(String s, String prefix) {
 		return s.startsWith(prefix) ? s.substring(prefix.length()) : s;
-	}
-
-	public static String bytesAsText(byte[] bytes) {
-		StringBuilder sb = new StringBuilder();
-
-		for (int i = 0; i < bytes.length; i++) {
-			sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-		}
-
-		return sb.toString();
 	}
 
 	public static void argMust(boolean expectedCondition, String message, Object... args) {
@@ -958,6 +933,9 @@ public class U {
 		});
 	}
 
+	/**
+	 * Simpler casts, less warnings.
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T cast(Object value) {
 		return (T) value;
@@ -1051,34 +1029,6 @@ public class U {
 			return false;
 		} catch (Exception e) {
 			throw U.rte(e);
-		}
-	}
-
-	public static <T> List<T> filter(List<T> items, Predicate<T> predicate) {
-		List<T> filtered = list();
-		addIf(items, filtered, predicate);
-		return filtered;
-	}
-
-	public static <T> Set<T> filter(Set<T> items, Predicate<T> predicate) {
-		Set<T> filtered = set();
-		addIf(items, filtered, predicate);
-		return filtered;
-	}
-
-	public static <T> void addIf(Collection<T> src, Collection<T> dest, Predicate<T> predicate) {
-		for (T item : src) {
-			boolean shouldAdd;
-
-			try {
-				shouldAdd = predicate.eval(item);
-			} catch (Exception e) {
-				throw rte(e);
-			}
-
-			if (shouldAdd) {
-				dest.add(item);
-			}
 		}
 	}
 

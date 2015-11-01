@@ -78,7 +78,7 @@ public class WorkerActivity<IN, OUT> extends AbstractThreadActivity<Worker<IN, O
 	@Override
 	protected void loop() {
 		IN task = input.take();
-		U.notNullAll(task);
+		U.notNull(task, "task");
 
 		OUT result = Lmbd.eval(mapper, task);
 		U.notNull(result, "worker mapper result");

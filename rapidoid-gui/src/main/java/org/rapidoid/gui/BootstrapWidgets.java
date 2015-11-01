@@ -48,7 +48,7 @@ import org.rapidoid.var.Var;
 
 /*
  * #%L
- * rapidoid-widget
+ * rapidoid-gui
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -541,7 +541,7 @@ public abstract class BootstrapWidgets extends HTML {
 		Var<Integer> var = local(name, defaultValue);
 
 		// TODO put the constraints into the variable implementation
-		Integer pageN = U.limited(min, var.get(), max);
+		Integer pageN = U.bounded(min, var.get(), max);
 		var.set(pageN);
 
 		return var;

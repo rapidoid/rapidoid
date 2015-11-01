@@ -2,7 +2,7 @@ package org.rapidoid.gui.menu;
 
 /*
  * #%L
- * rapidoid-widget
+ * rapidoid-gui
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -30,6 +30,7 @@ import org.rapidoid.data.YAML;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -61,7 +62,7 @@ public class PageMenu {
 	}
 
 	public List<PageMenuItem> leftItems() {
-		return U.filter(items, new Predicate<PageMenuItem>() {
+		return UTILS.filter(items, new Predicate<PageMenuItem>() {
 			@Override
 			public boolean eval(PageMenuItem menuItem) throws Exception {
 				return !menuItem.isRight();
@@ -70,7 +71,7 @@ public class PageMenu {
 	}
 
 	public List<PageMenuItem> rightItems() {
-		return U.filter(items, new Predicate<PageMenuItem>() {
+		return UTILS.filter(items, new Predicate<PageMenuItem>() {
 			@Override
 			public boolean eval(PageMenuItem menuItem) throws Exception {
 				return menuItem.isRight();

@@ -806,4 +806,32 @@ public class UTILS implements Constants {
 		}
 	}
 
+	public static <T> List<T> filter(List<T> items, Predicate<T> predicate) {
+		List<T> filtered = U.list();
+		addIf(items, filtered, predicate);
+		return filtered;
+	}
+
+	public static <T> Set<T> filter(Set<T> items, Predicate<T> predicate) {
+		Set<T> filtered = U.set();
+		addIf(items, filtered, predicate);
+		return filtered;
+	}
+
+	public static <T> void addIf(Collection<T> src, Collection<T> dest, Predicate<T> predicate) {
+		for (T item : src) {
+			boolean shouldAdd;
+
+			try {
+				shouldAdd = predicate.eval(item);
+			} catch (Exception e) {
+				throw U.rte(e);
+			}
+
+			if (shouldAdd) {
+				dest.add(item);
+			}
+		}
+	}
+
 }

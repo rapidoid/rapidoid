@@ -57,6 +57,16 @@ public class Crypto {
 		}
 	}
 
+	public static String bytesAsText(byte[] bytes) {
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < bytes.length; i++) {
+			sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+		}
+
+		return sb.toString();
+	}
+
 	public static byte[] md5Bytes(byte[] bytes) {
 		MessageDigest md5 = digest("MD5");
 		md5.update(bytes);
@@ -64,7 +74,7 @@ public class Crypto {
 	}
 
 	public static String md5(byte[] bytes) {
-		return U.bytesAsText(md5Bytes(bytes));
+		return bytesAsText(md5Bytes(bytes));
 	}
 
 	public static String md5(String data) {
@@ -78,7 +88,7 @@ public class Crypto {
 	}
 
 	public static String sha1(byte[] bytes) {
-		return U.bytesAsText(sha1Bytes(bytes));
+		return bytesAsText(sha1Bytes(bytes));
 	}
 
 	public static String sha1(String data) {
@@ -92,7 +102,7 @@ public class Crypto {
 	}
 
 	public static String sha512(byte[] bytes) {
-		return U.bytesAsText(sha512Bytes(bytes));
+		return bytesAsText(sha512Bytes(bytes));
 	}
 
 	public static String sha512(String data) {
