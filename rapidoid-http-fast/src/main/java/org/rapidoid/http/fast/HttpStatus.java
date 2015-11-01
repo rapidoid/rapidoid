@@ -20,39 +20,13 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.io.Res;
-import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public class FastResourceHttpHandler extends AbstractFastHttpHandler {
+@Since("5.0.0")
+public enum HttpStatus {
 
-	private final FastHttp http;
-
-	private final byte[] contentType;
-
-	private final Res resource;
-
-	public FastResourceHttpHandler(FastHttp http, byte[] contentType, Res resource) {
-		this.http = http;
-		this.contentType = contentType;
-		this.resource = resource;
-	}
-
-	@Override
-	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
-		byte[] bytes = resource.getBytesOrNull();
-
-		if (bytes != null) {
-			http.write200(ctx, isKeepAlive, contentType, bytes);
-			return HttpStatus.DONE;
-		} else {
-			return HttpStatus.NOT_FOUND;
-		}
-	}
+	DONE, NOT_FOUND, ERROR, ASYNC;
 
 }

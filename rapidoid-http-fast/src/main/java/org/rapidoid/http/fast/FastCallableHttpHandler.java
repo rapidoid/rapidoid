@@ -29,7 +29,7 @@ import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public class FastCallableHttpHandler extends AbstractResultHandlingFastHttpHandler {
+public class FastCallableHttpHandler extends AbstractAsyncHttpHandler {
 
 	private final Callable<Object> handler;
 

@@ -173,7 +173,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 		HTTP_PARSER.parse(buf, isGet, isKeepAlive, body, verb, uri, path, query, protocol, hdrs, helper);
 
-		boolean processed = false;
+		HttpStatus status = HttpStatus.NOT_FOUND;
 
 		FastHttpHandler handler = findFandler(ctx, buf, isGet, verb, path);
 
@@ -236,14 +236,16 @@ public class FastHttp implements Protocol, HttpMetadata {
 				}
 			}
 
-			processed = handler.handle(ctx, isKeepAlive.value, params);
+			status = handler.handle(ctx, isKeepAlive.value, params);
 		}
 
-		if (!processed) {
+		if (status == HttpStatus.NOT_FOUND) {
 			ctx.write(HTTP_404_NOT_FOUND);
 		}
 
-		ctx.closeIf(!isKeepAlive.value);
+		if (status != HttpStatus.ASYNC) {
+			ctx.closeIf(!isKeepAlive.value);
+		}
 	}
 
 	private Map<String, Object> findSpecialData(Map<String, Object> data) {
@@ -335,10 +337,13 @@ public class FastHttp implements Protocol, HttpMetadata {
 		writeContent(ctx, content);
 	}
 
-	public void error(Channel ctx, boolean isKeepAlive, Throwable error) {
+	public HttpStatus error(Channel ctx, boolean isKeepAlive, Throwable error) {
 		Log.error("Error while processing request!", error);
+
 		start500(ctx, isKeepAlive, CONTENT_TYPE_HTML);
 		writeContent(ctx, HttpUtils.getErrorMessage(error).getBytes());
+
+		return HttpStatus.ERROR;
 	}
 
 	private void writeContent(Channel ctx, byte[] content) {
@@ -382,6 +387,11 @@ public class FastHttp implements Protocol, HttpMetadata {
 		value = HttpUtils.cookieValueWithExtras(value, extras);
 		String cookie = name + "=" + value;
 		addCustomHeader(ctx, HttpHeaders.SET_COOKIE.getBytes(), cookie.getBytes());
+	}
+
+	public void done(Channel ctx, boolean isKeepAlive) {
+		ctx.done();
+		ctx.closeIf(!isKeepAlive);
 	}
 
 }

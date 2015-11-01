@@ -30,7 +30,7 @@ import org.rapidoid.net.abstracts.Channel;
 @Since("4.3.0")
 public interface FastHttpHandler {
 
-	boolean handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params);
+	HttpStatus handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params);
 
 	boolean needsParams();
 

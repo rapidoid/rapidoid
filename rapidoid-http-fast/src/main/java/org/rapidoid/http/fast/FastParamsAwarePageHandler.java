@@ -24,15 +24,12 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.Beany;
-import org.rapidoid.ctx.Ctx;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
-public class FastParamsAwarePageHandler extends AbstractResultHandlingFastHttpHandler implements HttpMetadata {
+public class FastParamsAwarePageHandler extends AbstractAsyncHttpHandler implements HttpMetadata {
 
 	private final ParamHandler handler;
 
@@ -43,38 +40,12 @@ public class FastParamsAwarePageHandler extends AbstractResultHandlingFastHttpHa
 
 	@Override
 	protected Object handleReq(Channel channel, Map<String, Object> params) throws Exception {
-		Ctx ctx = Ctxs.open("page");
 
-		// ctx.setApp(null);
-		// ctx.setExchange(null);
-		// ctx.setUser(user);
+		// call the handler, get the result
+		Object result = handler.handle(params);
 
-		ctx.setHost(U.str(U.get(params, HOST, "")));
-		ctx.setVerb(U.str(U.get(params, VERB, "")));
-		ctx.setPath(U.str(U.get(params, PATH, "")));
-		ctx.setUri(U.str(U.get(params, URI, "")));
-
-		U.assign(ctx.data(), params);
-		// U.assign(ctx.session(), U.map());
-		// U.assign(ctx.extras(), U.map());
-
-		String resp;
-		try {
-
-			// call the handler, get the result
-			Object result = handler.handle(params);
-
-			// do data binding
-			Beany.bind(result, params);
-
-			// render the response and process logic while still in context
-			resp = U.str(result);
-
-		} finally {
-			Ctxs.close();
-		}
-
-		return resp;
+		// render the response and process logic while still in context
+		return U.str(result);
 	}
 
 	@Override

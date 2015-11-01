@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -38,7 +39,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Ctx {
+public class Ctx implements CtxMetadata {
 
 	private static final AtomicLong ID_COUNTER = new AtomicLong();
 
@@ -269,6 +270,29 @@ public class Ctx {
 
 		try {
 			return Lmbd.call(action);
+		} finally {
+			Ctxs.close();
+		}
+	}
+
+	public static synchronized void executeInCtx(String tag, Map<String, Object> data, Runnable action) {
+		Ctx ctx = Ctxs.open(tag);
+
+		try {
+			// ctx.setApp(null);
+			// ctx.setExchange(null);
+			// ctx.setUser(user);
+
+			ctx.setHost(U.str(U.get(data, HOST, "")));
+			ctx.setVerb(U.str(U.get(data, VERB, "")));
+			ctx.setPath(U.str(U.get(data, PATH, "")));
+			ctx.setUri(U.str(U.get(data, URI, "")));
+
+			U.assign(ctx.data(), data);
+			// U.assign(ctx.session(), U.map());
+			// U.assign(ctx.extras(), U.map());
+
+			Jobs.execute(action);
 		} finally {
 			Ctxs.close();
 		}

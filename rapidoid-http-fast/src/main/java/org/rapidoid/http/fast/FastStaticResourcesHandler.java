@@ -39,7 +39,7 @@ public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 	}
 
 	@Override
-	public boolean handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
+	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
 		try {
 			Res res = HttpUtils.staticPage(params);
 			byte[] bytes = res.getBytesOrNull();
@@ -47,13 +47,12 @@ public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 			if (bytes != null) {
 				byte[] contentType = MediaType.getByFileName(res.getShortName()).asHttpHeader();
 				http.write200(ctx, isKeepAlive, contentType, bytes);
-				return true;
+				return HttpStatus.DONE;
 			} else {
-				return false;
+				return HttpStatus.NOT_FOUND;
 			}
 		} catch (Exception e) {
-			http.error(ctx, isKeepAlive, e);
-			return true;
+			return http.error(ctx, isKeepAlive, e);
 		}
 	}
 

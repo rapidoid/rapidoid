@@ -43,9 +43,9 @@ public class FastStaticHttpHandler extends AbstractFastHttpHandler {
 	}
 
 	@Override
-	public boolean handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
+	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
 		http.write200(ctx, isKeepAlive, contentType, response);
-		return true;
+		return HttpStatus.DONE;
 	}
 
 }

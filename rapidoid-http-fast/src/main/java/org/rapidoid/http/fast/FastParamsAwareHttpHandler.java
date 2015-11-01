@@ -28,7 +28,7 @@ import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public class FastParamsAwareHttpHandler extends AbstractResultHandlingFastHttpHandler {
+public class FastParamsAwareHttpHandler extends AbstractAsyncHttpHandler {
 
 	private final ParamHandler handler;
 

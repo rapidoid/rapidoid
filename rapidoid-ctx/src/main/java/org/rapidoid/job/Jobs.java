@@ -33,9 +33,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctx;
-import org.rapidoid.ctx.JobStatusListener;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.u.U;
+import org.rapidoid.ctx.JobStatusListener;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -103,7 +102,7 @@ public class Jobs {
 		Ctx ctx = Ctxs.get();
 
 		if (ctx != null) {
-			U.notNull(ctx.app(), "Application wasn't attached to the context!");
+			// U.notNull(ctx.app(), "Application wasn't attached to the context!");
 
 			Object x = ctx.exchange();
 
