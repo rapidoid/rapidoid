@@ -206,6 +206,10 @@ public class Res {
 		U.must(exists(), "The resource '%s' doesn't exist! Path: %s", shortName, filenames);
 	}
 
+	public Res onChange(Runnable listener) {
+		return onChange("", listener);
+	}
+
 	public Res onChange(String name, Runnable listener) {
 		changeListeners.put(name, listener);
 		listener.run();

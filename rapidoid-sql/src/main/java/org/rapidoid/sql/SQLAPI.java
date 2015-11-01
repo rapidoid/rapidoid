@@ -296,7 +296,7 @@ public class SQLAPI {
 		return driver;
 	}
 
-	public String bb() {
+	public String db() {
 		return db;
 	}
 
