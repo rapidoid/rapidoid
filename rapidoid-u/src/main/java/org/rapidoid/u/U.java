@@ -66,8 +66,6 @@ import org.rapidoid.lambda.Predicate;
  */
 public class U {
 
-	private static final Object[] EMPTY_ARRAY = {};
-
 	public static String str(Object obj) {
 		if (obj == null) {
 			return "null";
@@ -548,22 +546,19 @@ public class U {
 	}
 
 	public static Object[] safe(Object[] arr) {
-		return or(arr, EMPTY_ARRAY);
+		return arr != null ? arr : new Object[0];
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T> List<T> safe(List<T> list) {
-		return or(list, Collections.EMPTY_LIST);
+		return list != null ? list : U.<T> list();
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> Set<T> safe(Set<T> list) {
-		return or(list, Collections.EMPTY_SET);
+	public static <T> Set<T> safe(Set<T> set) {
+		return set != null ? set : U.<T> set();
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <K, V> Map<K, V> safe(Map<K, V> list) {
-		return or(list, Collections.EMPTY_MAP);
+	public static <K, V> Map<K, V> safe(Map<K, V> map) {
+		return map != null ? map : U.<K, V> map();
 	}
 
 	public static long time() {
