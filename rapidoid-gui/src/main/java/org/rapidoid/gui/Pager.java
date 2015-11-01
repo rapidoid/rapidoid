@@ -22,18 +22,19 @@ package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.Tag;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class PagerWidget extends AbstractWidget {
+public class Pager extends AbstractWidget {
 
 	private int from;
 	private int to;
 	private Var<Integer> pageNumber;
 
-	public PagerWidget(int from, int to, Var<Integer> pageNumber) {
+	public Pager(int from, int to, Var<Integer> pageNumber) {
 		this.from = from;
 		this.to = to;
 		this.pageNumber = pageNumber;

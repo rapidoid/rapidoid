@@ -22,8 +22,8 @@ package org.rapidoid.widget;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.BootstrapWidgets;
-import org.rapidoid.gui.PagerWidget;
+import org.rapidoid.gui.Pager;
+import org.rapidoid.gui.base.BootstrapWidgets;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
@@ -37,7 +37,7 @@ public class PagerWidgetTest extends WidgetTestCommons {
 
 		Var<Integer> pageN = BootstrapWidgets.var("page", 3);
 
-		PagerWidget pager = BootstrapWidgets.pager(1, 7, pageN);
+		Pager pager = BootstrapWidgets.pager(1, 7, pageN);
 		print(pager);
 
 		eq(pageN.get().intValue(), 3);

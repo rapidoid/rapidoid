@@ -20,45 +20,54 @@ package org.rapidoid.gui;
  * #L%
  */
 
-import java.io.Serializable;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
+import org.rapidoid.gui.base.AbstractWidget;
+import org.rapidoid.html.tag.TableTag;
+import org.rapidoid.lambda.Mapper;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.3.1")
-public class DebugWidget extends AbstractWidget {
+@Since("2.4.0")
+public class KVGrid extends AbstractWidget {
+
+	private final String[] headers = { "Key", "Value" };
+
+	@SuppressWarnings("rawtypes")
+	private final Mapper[] view = { null, null };
+
+	private Map<?, ?> map;
 
 	@Override
 	protected Object render() {
-		return multi(sessionPanel(), localPanel());
-	}
+		TableTag tbl = table_(tr(th(headers[0]), th(headers[1])));
 
-	protected PanelWidget sessionPanel() {
-		Map<String, Object> visibleAttributes = U.map();
-
-		for (Entry<String, Serializable> e : ctx().session().entrySet()) {
-			if (!e.getKey().startsWith("_")) {
-				visibleAttributes.put(e.getKey(), e.getValue());
-			}
+		for (Entry<?, ?> e : map.entrySet()) {
+			tbl = tbl.append(tr(td(e.getKey()), td(e.getValue())));
 		}
 
-		return panel(grid(visibleAttributes)).header("Session scope");
+		return tbl;
 	}
 
-	protected PanelWidget localPanel() {
-		Map<String, Object> visibleAttributes = U.map();
+	public Map<?, ?> map() {
+		return map;
+	}
 
-		for (Entry<String, Object> e : ctx().data().entrySet()) {
-			if (!e.getKey().startsWith("_")) {
-				visibleAttributes.put(e.getKey(), e.getValue());
-			}
-		}
+	public KVGrid map(Map<?, ?> map) {
+		this.map = map;
+		return this;
+	}
 
-		return panel(grid(visibleAttributes)).header("Data");
+	public String[] headers() {
+		return headers;
+	}
+
+	public KVGrid headers(String keyHeader, String valueHeader) {
+		this.headers[0] = keyHeader;
+		this.headers[1] = valueHeader;
+		return this;
 	}
 
 }

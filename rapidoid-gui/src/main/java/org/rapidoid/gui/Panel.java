@@ -22,53 +22,53 @@ package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.Tag;
-import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.4.0")
-public class CardWidget extends AbstractWidget {
-
-	private Object[] contents = {};
-
-	private Object[] controls = {};
+@Since("2.2.0")
+public class Panel extends AbstractWidget {
 
 	private Object header;
+	private Object content;
+	private Object footer;
+
+	public Panel(Object content) {
+		this.content = content;
+	}
 
 	@Override
-	protected Object render() {
-		Tag caption = h6(header).class_("rapidoid-card-caption");
-		Tag right = !U.isEmpty(controls) ? right(spaced(controls)) : null;
-		Tag header = div(right, caption).class_("rapidoid-card-header");
-
-		Tag cont = div(contents).class_("rapidoid-card-content");
-		return div(header, cont).class_("rapidoid-card");
-	}
-
-	public Object[] contents() {
-		return contents;
-	}
-
-	public CardWidget contents(Object... contents) {
-		this.contents = contents;
-		return this;
-	}
-
-	public Object[] controls() {
-		return controls;
-	}
-
-	public CardWidget controls(Object... controls) {
-		this.controls = controls;
-		return this;
+	protected Tag render() {
+		Tag pheader = header != null ? div(header).class_("panel-heading") : null;
+		Tag pbody = content != null ? div(content).class_("panel-body") : null;
+		Tag pfooter = footer != null ? div(footer).class_("panel-footer") : null;
+		return div(pheader, pbody, pfooter).class_("panel panel-default");
 	}
 
 	public Object header() {
 		return header;
 	}
 
-	public CardWidget header(Object header) {
+	public Panel header(Object header) {
 		this.header = header;
+		return this;
+	}
+
+	public Object content() {
+		return content;
+	}
+
+	public Panel content(Object content) {
+		this.content = content;
+		return this;
+	}
+
+	public Object footer() {
+		return footer;
+	}
+
+	public Panel footer(Object footer) {
+		this.footer = footer;
 		return this;
 	}
 

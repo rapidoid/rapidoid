@@ -5,8 +5,8 @@ import java.util.Comparator;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
-import org.rapidoid.gui.BootstrapWidgets;
-import org.rapidoid.gui.GridWidget;
+import org.rapidoid.gui.Grid;
+import org.rapidoid.gui.base.BootstrapWidgets;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.impl.DbItems;
@@ -61,28 +61,28 @@ public class AppGUI extends BootstrapWidgets {
 		return all(match, Beany.<T> comparator("id"));
 	}
 
-	public static <T> GridWidget grid(Class<T> type, String sortOrder, int pageSize, String... properties) {
+	public static <T> Grid grid(Class<T> type, String sortOrder, int pageSize, String... properties) {
 		return grid(all(type, sortOrder), sortOrder, pageSize, properties);
 	}
 
-	public static <T> GridWidget grid(Class<T> type) {
+	public static <T> Grid grid(Class<T> type) {
 		return grid(all(type, ""), "", 10);
 	}
 
-	public static <T> GridWidget grid(String type) {
+	public static <T> Grid grid(String type) {
 		return grid(Entities.getEntityType(type));
 	}
 
-	public static <T> GridWidget grid(Predicate<T> match) {
+	public static <T> Grid grid(Predicate<T> match) {
 		return grid(all(match), "id", 10, new String[0]);
 	}
 
-	public static <T> GridWidget grid(Class<T> type, Predicate<T> match, String sortOrder, int pageSize,
+	public static <T> Grid grid(Class<T> type, Predicate<T> match, String sortOrder, int pageSize,
 			String... properties) {
 		return grid(all(type, match, sortOrder), sortOrder, pageSize, properties);
 	}
 
-	public static <T> GridWidget grid(Class<T> type, Predicate<T> match, Comparator<T> orderBy, int pageSize,
+	public static <T> Grid grid(Class<T> type, Predicate<T> match, Comparator<T> orderBy, int pageSize,
 			String... properties) {
 		return grid(all(type, match, orderBy), null, pageSize, properties);
 	}

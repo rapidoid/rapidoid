@@ -26,8 +26,8 @@ import java.util.regex.Pattern;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
-import org.rapidoid.gui.GridWidget;
-import org.rapidoid.gui.HighlightedGridWidget;
+import org.rapidoid.gui.Grid;
+import org.rapidoid.gui.HighlightGrid;
 import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.model.Items;
@@ -49,7 +49,7 @@ public class SearchScreenBuiltIn extends GUI {
 		Tag title = titleBox("Total " + found.size() + " search results", queryInfo);
 
 		String regex = "(?i)" + Pattern.quote(query);
-		GridWidget grid = new HighlightedGridWidget(items, "", 10, "id", "_class", "_str").regex(regex);
+		Grid grid = new HighlightGrid(items, "", 10, "id", "_class", "_str").regex(regex);
 
 		return div(title, grid);
 	}

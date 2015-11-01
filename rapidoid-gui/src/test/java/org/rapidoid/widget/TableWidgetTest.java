@@ -23,8 +23,8 @@ package org.rapidoid.widget;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.BootstrapWidgets;
-import org.rapidoid.gui.GridWidget;
+import org.rapidoid.gui.Grid;
+import org.rapidoid.gui.base.BootstrapWidgets;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 
@@ -42,7 +42,7 @@ public class TableWidgetTest extends WidgetTestCommons {
 
 		Items items = Models.beanItemsInfer(john, rambo);
 
-		GridWidget table = BootstrapWidgets.grid(items, null, 10);
+		Grid table = BootstrapWidgets.grid(items, null, 10);
 		print(table);
 
 		hasRegex(table, "<th[^>]*?>Name</th>");

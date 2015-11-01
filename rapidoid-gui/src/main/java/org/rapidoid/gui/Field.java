@@ -34,6 +34,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
@@ -51,7 +52,7 @@ import org.rapidoid.var.Vars;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class FormFieldWidget extends AbstractWidget {
+public class Field extends AbstractWidget {
 
 	protected FormMode mode;
 	protected Property prop;
@@ -69,7 +70,7 @@ public class FormFieldWidget extends AbstractWidget {
 	protected Tag label;
 	protected Tag input;
 
-	public FormFieldWidget(FormMode mode, FormLayout layout, Property prop, String name, String desc, FieldType type,
+	public Field(FormMode mode, FormLayout layout, Property prop, String name, String desc, FieldType type,
 			Collection<?> options, boolean required, Var<?> var, DataPermissions permissions) {
 
 		this.mode = U.or(mode, FormMode.EDIT);
@@ -84,7 +85,7 @@ public class FormFieldWidget extends AbstractWidget {
 		this.permissions = permissions;
 	}
 
-	public FormFieldWidget(FormMode mode, FormLayout layout, Item item, Property prop) {
+	public Field(FormMode mode, FormLayout layout, Item item, Property prop) {
 		this.mode = U.or(mode, FormMode.EDIT);
 		this.layout = layout;
 		this.prop = prop;

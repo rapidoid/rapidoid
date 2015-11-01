@@ -27,6 +27,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
@@ -40,34 +41,34 @@ import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class FormWidget extends AbstractWidget {
+public class Form extends AbstractWidget {
 
 	protected final Item item;
 	protected final FormMode mode;
 
 	protected List<Property> props;
 
-	protected List<FormFieldWidget> fields = U.list();
-	protected List<ButtonWidget> buttons;
+	protected List<Field> fields = U.list();
+	protected List<Btn> buttons;
 
 	protected FormLayout layout = FormLayout.VERTICAL;
 
 	protected boolean hasFields = false;
 
-	public FormWidget(FormMode mode, Item item, String... properties) {
+	public Form(FormMode mode, Item item, String... properties) {
 		this.mode = mode;
 		this.item = item;
 		init(item, properties);
 	}
 
-	public FormWidget(FormMode mode, FormLayout layout, String[] fieldNames, String[] fieldLabels,
-			FieldType[] fieldTypes, Collection<?>[] options, Var<?>[] vars, ButtonWidget[] buttons) {
+	public Form(FormMode mode, FormLayout layout, String[] fieldNames, String[] fieldLabels,
+			FieldType[] fieldTypes, Collection<?>[] options, Var<?>[] vars, Btn[] buttons) {
 		this.mode = mode;
 		this.item = null;
 		this.layout = layout;
 
 		for (int i = 0; i < fieldNames.length; i++) {
-			fields.add(new FormFieldWidget(mode, layout, null, fieldNames[i], fieldLabels[i], fieldTypes[i],
+			fields.add(new Field(mode, layout, null, fieldNames[i], fieldLabels[i], fieldTypes[i],
 					options[i], true, vars[i], null));
 		}
 
@@ -86,37 +87,37 @@ public class FormWidget extends AbstractWidget {
 		throw U.rte("Cannot find field '%s'!", fieldName);
 	}
 
-	public FormWidget field(String fieldName, FormFieldWidget field) {
+	public Form field(String fieldName, Field field) {
 		return field(fieldIndex(fieldName), field);
 	}
 
-	public FormWidget field(int fieldIndex, FormFieldWidget field) {
+	public Form field(int fieldIndex, Field field) {
 		this.fields.set(fieldIndex, field);
 		return this;
 	}
 
-	public FormFieldWidget field(String fieldName) {
+	public Field field(String fieldName) {
 		return field(fieldIndex(fieldName));
 	}
 
-	public FormFieldWidget field(int fieldIndex) {
+	public Field field(int fieldIndex) {
 		return this.fields.get(fieldIndex);
 	}
 
 	/************************** BUTTONS ********************************/
 
-	public FormWidget buttons(ButtonWidget... buttons) {
+	public Form buttons(Btn... buttons) {
 		this.buttons = UTILS.withoutNulls(buttons);
 		return this;
 	}
 
-	public List<ButtonWidget> buttons() {
+	public List<Btn> buttons() {
 		return this.buttons;
 	}
 
 	/************************** OTHER ********************************/
 
-	public FormWidget add(FormFieldWidget field) {
+	public Form add(Field field) {
 		if (field.getMode() == null) {
 			field.setMode(mode);
 		}
@@ -135,7 +136,7 @@ public class FormWidget extends AbstractWidget {
 
 		for (int i = 0; i < propN; i++) {
 			Property prop = props.get(i);
-			FormFieldWidget field = field(mode, layout, item, prop);
+			Field field = field(mode, layout, item, prop);
 			fields.add(field);
 		}
 	}
@@ -149,7 +150,7 @@ public class FormWidget extends AbstractWidget {
 			Object target = item.value();
 			Class<?> targetClass = Cls.of(target);
 
-			for (FormFieldWidget field : fields) {
+			for (Field field : fields) {
 				if (field.permissions == null) {
 					field.permissions = Secure.getPropertyPermissions(Ctxs.ctx().username(), targetClass, target,
 							field.name);
@@ -172,7 +173,7 @@ public class FormWidget extends AbstractWidget {
 
 	protected FormTag addFormFields(FormTag form) {
 		for (int i = 0; i < fields.size(); i++) {
-			FormFieldWidget field = getField(i);
+			Field field = getField(i);
 			if (field != null) {
 				form = form.append(field);
 				hasFields = true;
@@ -190,8 +191,8 @@ public class FormWidget extends AbstractWidget {
 		return h4("Insufficient permissions!");
 	}
 
-	protected FormFieldWidget getField(int index) {
-		FormFieldWidget field = fields.get(index);
+	protected Field getField(int index) {
+		Field field = fields.get(index);
 
 		if (field != null) {
 			return field.isFieldAllowed() ? field : null;

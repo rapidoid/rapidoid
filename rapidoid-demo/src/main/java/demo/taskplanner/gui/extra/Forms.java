@@ -24,8 +24,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Controller;
-import org.rapidoid.gui.BootstrapWidgets;
-import org.rapidoid.gui.ButtonWidget;
+import org.rapidoid.gui.Btn;
+import org.rapidoid.gui.base.BootstrapWidgets;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
@@ -84,7 +84,7 @@ public class Forms extends BootstrapWidgets {
 
 		final Object[][] options = { null, null, null, opt1, opt2, opt3, opt4, null, null };
 
-		final ButtonWidget[] buttons = { btn("Save").command("saveIt", vars[0]), cmd("Cancel", vars[0]) };
+		final Btn[] buttons = { btn("Save").command("saveIt", vars[0]), cmd("Cancel", vars[0]) };
 
 		return div(form_(layout, names, desc, types, options, vars, buttons), ul_li((Object[]) vars));
 	}

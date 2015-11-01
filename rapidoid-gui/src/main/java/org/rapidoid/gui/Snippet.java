@@ -22,13 +22,14 @@ package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.Tag;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
-public class SnippetWidget extends AbstractWidget {
+public class Snippet extends AbstractWidget {
 
 	private static final String JAVA_KEYWORDS = "abstract|continue|for|new|switch|assert|default|goto|package|synchronized|boolean|do|if|private|this|break|double|implements|protected|throw|byte|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|int|short|try|char|final|interface|static|void|class|finally|long|strictfp|volatile|const|float|native|super|while";
 
@@ -44,7 +45,7 @@ public class SnippetWidget extends AbstractWidget {
 
 	protected String code;
 
-	public SnippetWidget(String code) {
+	public Snippet(String code) {
 		this.code = code;
 	}
 

@@ -22,7 +22,7 @@ package org.rapidoid.widget;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.BootstrapWidgets;
+import org.rapidoid.gui.base.BootstrapWidgets;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.html.tag.InputTag;

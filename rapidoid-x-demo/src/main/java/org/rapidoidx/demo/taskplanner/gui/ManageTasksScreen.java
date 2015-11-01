@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
-import org.rapidoid.gui.GridWidget;
+import org.rapidoid.gui.Grid;
 import org.rapidoid.html.Tag;
 import org.rapidoidx.demo.taskplanner.model.Task;
 
@@ -38,7 +38,7 @@ public class ManageTasksScreen extends GUI {
 
 	public Object content() {
 		Tag caption = titleBox("Manage tasks");
-		GridWidget grid = grid(Task.class, "-priority", 10, "id", "title", "priority");
+		Grid grid = grid(Task.class, "-priority", 10, "id", "title", "priority");
 		return row(caption, grid);
 	}
 

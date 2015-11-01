@@ -27,6 +27,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.Plugins;
@@ -38,7 +39,7 @@ import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
-public class PageWidget extends AbstractWidget {
+public class HtmlPage extends AbstractWidget {
 
 	private static volatile ITemplate PAGE_TEMPLATE;
 
@@ -68,7 +69,7 @@ public class PageWidget extends AbstractWidget {
 
 	private PageMenu menu;
 
-	public PageWidget(Object content) {
+	public HtmlPage(Object content) {
 		this.content = content;
 	}
 
@@ -120,7 +121,7 @@ public class PageWidget extends AbstractWidget {
 		return title;
 	}
 
-	public PageWidget title(String title) {
+	public HtmlPage title(String title) {
 		this.title = title;
 		return this;
 	}
@@ -129,7 +130,7 @@ public class PageWidget extends AbstractWidget {
 		return content;
 	}
 
-	public PageWidget content(Object content) {
+	public HtmlPage content(Object content) {
 		this.content = content;
 		return this;
 	}
@@ -138,7 +139,7 @@ public class PageWidget extends AbstractWidget {
 		return menu;
 	}
 
-	public PageWidget menu(PageMenu menu) {
+	public HtmlPage menu(PageMenu menu) {
 		this.menu = menu;
 		return this;
 	}

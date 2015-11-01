@@ -22,12 +22,13 @@ package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.Tag;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
-public class StreamWidget extends AbstractWidget {
+public class VStream extends AbstractWidget {
 
 	private Object template;
 
@@ -84,7 +85,7 @@ public class StreamWidget extends AbstractWidget {
 		return template;
 	}
 
-	public StreamWidget template(Object template) {
+	public VStream template(Object template) {
 		this.template = template;
 		return this;
 	}
@@ -93,7 +94,7 @@ public class StreamWidget extends AbstractWidget {
 		return dataUrl;
 	}
 
-	public StreamWidget dataUrl(String dataUrl) {
+	public VStream dataUrl(String dataUrl) {
 		this.dataUrl = dataUrl;
 		return this;
 	}
@@ -102,7 +103,7 @@ public class StreamWidget extends AbstractWidget {
 		return cols;
 	}
 
-	public StreamWidget cols(int cols) {
+	public VStream cols(int cols) {
 		this.cols = cols;
 		return this;
 	}

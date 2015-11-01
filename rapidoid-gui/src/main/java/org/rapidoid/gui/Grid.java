@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.TdTag;
 import org.rapidoid.model.Item;
@@ -34,7 +35,7 @@ import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class GridWidget extends AbstractWidget {
+public class Grid extends AbstractWidget {
 
 	private final Items items;
 
@@ -43,7 +44,7 @@ public class GridWidget extends AbstractWidget {
 	private Object[] columns = {};
 	private String rowCmd;
 
-	public GridWidget(Items items, String sortOrder, int pageSize, String... columns) {
+	public Grid(Items items, String sortOrder, int pageSize, String... columns) {
 		this.items = items;
 		this.orderBy = sortOrder;
 		this.pageSize = pageSize;
@@ -80,16 +81,16 @@ public class GridWidget extends AbstractWidget {
 
 		Tag header = tableHeader(props, order);
 		Tag body = tableBody(props, slice);
-		PagerWidget pager = paging ? pager(1, pages, pageNumber) : noPager();
+		Pager pager = paging ? pager(1, pages, pageNumber) : noPager();
 
 		return fullTable(header, body, pager);
 	}
 
-	protected PagerWidget noPager() {
+	protected Pager noPager() {
 		return null;
 	}
 
-	protected Tag fullTable(Tag header, Tag body, PagerWidget pager) {
+	protected Tag fullTable(Tag header, Tag body, Pager pager) {
 		return row(table_(thead(header), body), pager);
 	}
 
@@ -183,17 +184,17 @@ public class GridWidget extends AbstractWidget {
 		return columns;
 	}
 
-	public GridWidget orderBy(String orderBy) {
+	public Grid orderBy(String orderBy) {
 		this.orderBy = orderBy;
 		return this;
 	}
 
-	public GridWidget pageSize(int pageSize) {
+	public Grid pageSize(int pageSize) {
 		this.pageSize = pageSize;
 		return this;
 	}
 
-	public GridWidget columns(Object... columns) {
+	public Grid columns(Object... columns) {
 		this.columns = columns;
 		return this;
 	}
@@ -202,7 +203,7 @@ public class GridWidget extends AbstractWidget {
 		return rowCmd;
 	}
 
-	public GridWidget rowCmd(String rowCmd) {
+	public Grid rowCmd(String rowCmd) {
 		this.rowCmd = rowCmd;
 		return this;
 	}

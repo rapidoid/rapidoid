@@ -24,9 +24,9 @@ package org.rapidoidx.demo.taskplanner.gui.extra;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Session;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.BootstrapWidgets;
-import org.rapidoid.gui.ButtonWidget;
-import org.rapidoid.gui.GridWidget;
+import org.rapidoid.gui.Btn;
+import org.rapidoid.gui.Grid;
+import org.rapidoid.gui.base.BootstrapWidgets;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.FormTag;
@@ -54,15 +54,15 @@ public class MixPage extends BootstrapWidgets {
 
 		FormTag formR = navbarForm(false, "Login", arr("user", "pass"), arr("Username", "Password"));
 
-		ButtonWidget abc = btn("abc").primary();
+		Btn abc = btn("abc").primary();
 
-		ButtonWidget xy = btn("X Z Y").command("xyz").info();
+		Btn xy = btn("X Z Y").command("xyz").info();
 
 		Items items = Models.mockBeanItems(20, Person.class);
 
 		Tag caption = h1("Manage persons");
 
-		GridWidget table = grid(items, null, 10);
+		Grid table = grid(items, null, 10);
 
 		Object[] pageContent = arr(row(col6("Hello world!"), col3(abc, xy)), arr(caption, row(table)));
 

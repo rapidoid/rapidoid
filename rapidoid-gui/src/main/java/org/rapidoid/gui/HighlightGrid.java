@@ -28,15 +28,15 @@ import org.rapidoid.model.Items;
 // TODO use grid decorator instead
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class HighlightedGridWidget extends GridWidget {
+public class HighlightGrid extends Grid {
 
 	private String regex;
 
-	public HighlightedGridWidget(Items items, String sortOrder, int pageSize, String... properties) {
+	public HighlightGrid(Items items, String sortOrder, int pageSize, String... properties) {
 		super(items, sortOrder, pageSize, properties);
 	}
 
-	public GridWidget regex(String regex) {
+	public Grid regex(String regex) {
 		this.regex = regex;
 		return this;
 	}

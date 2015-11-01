@@ -21,62 +21,52 @@ package org.rapidoid.gui;
  */
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.Tag;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.3.0")
-public class LayoutWidget extends AbstractWidget {
+@Since("2.0.0")
+public class Highlight extends AbstractWidget {
 
-	private Object[] contents = {};
+	private String text;
+	private String regex;
 
-	private int cols = 1;
+	public Highlight(String text, String regex) {
+		this.text = text;
+		this.regex = regex;
+	}
 
 	@Override
-	protected Object render() {
-		List<Tag> rows = U.list();
+	protected Tag render() {
+		return regex != null ? complexHighlight() : simpleHighlight();
+	}
 
-		Tag row = row().class_("row row-separated");
+	protected Tag simpleHighlight() {
+		return !U.isEmpty(text) ? span(text).class_("highlight") : span(text);
+	}
 
-		int n = 0;
-		int colSize = 12 / cols;
+	protected Tag complexHighlight() {
+		List<Object> parts = U.list();
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(text);
 
-		for (Object item : contents) {
-			n++;
-			if (n == cols + 1) {
-				n = 1;
-				rows.add(row);
-				row = row().class_("row row-separated");
-			}
-			row = row.append(col_(colSize, item));
+		int end = 0;
+		while (m.find()) {
+			String match = m.group();
+			parts.add(text.substring(end, m.start()));
+			parts.add(highlight(match));
+			end = m.end();
 		}
 
-		if (!row.isEmpty()) {
-			rows.add(row);
-		}
+		parts.add(text.substring(end));
 
-		return rows.toArray(new Tag[rows.size()]);
-	}
-
-	public Object[] contents() {
-		return contents;
-	}
-
-	public LayoutWidget contents(Object... contents) {
-		this.contents = contents;
-		return this;
-	}
-
-	public int cols() {
-		return cols;
-	}
-
-	public LayoutWidget cols(int cols) {
-		this.cols = cols;
-		return this;
+		return span(parts);
 	}
 
 }

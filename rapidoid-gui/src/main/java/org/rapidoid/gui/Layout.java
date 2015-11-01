@@ -20,36 +20,63 @@ package org.rapidoid.gui;
  * #L%
  */
 
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.List;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.html.tag.TableTag;
+import org.rapidoid.gui.base.AbstractWidget;
+import org.rapidoid.html.Tag;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.4.0")
-public class KeyValueGridWidget extends AbstractWidget {
+@Since("2.3.0")
+public class Layout extends AbstractWidget {
 
-	private Map<?, ?> map;
+	private Object[] contents = {};
+
+	private int cols = 1;
 
 	@Override
 	protected Object render() {
-		TableTag tbl = table_(tr(th("Key"), th("Value")));
+		List<Tag> rows = U.list();
 
-		for (Entry<?, ?> e : map.entrySet()) {
-			tbl = tbl.append(tr(td(e.getKey()), td(e.getValue())));
+		Tag row = row().class_("row row-separated");
+
+		int n = 0;
+		int colSize = 12 / cols;
+
+		for (Object item : contents) {
+			n++;
+			if (n == cols + 1) {
+				n = 1;
+				rows.add(row);
+				row = row().class_("row row-separated");
+			}
+			row = row.append(col_(colSize, item));
 		}
 
-		return tbl;
+		if (!row.isEmpty()) {
+			rows.add(row);
+		}
+
+		return rows.toArray(new Tag[rows.size()]);
 	}
 
-	public Map<?, ?> map() {
-		return map;
+	public Object[] contents() {
+		return contents;
 	}
 
-	public KeyValueGridWidget map(Map<?, ?> map) {
-		this.map = map;
+	public Layout contents(Object... contents) {
+		this.contents = contents;
+		return this;
+	}
+
+	public int cols() {
+		return cols;
+	}
+
+	public Layout cols(int cols) {
+		this.cols = cols;
 		return this;
 	}
 

@@ -2,6 +2,7 @@ package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.base.BootstrapWidgets;
 import org.rapidoid.html.Tag;
 
 /*

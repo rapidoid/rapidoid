@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.app.GUI;
-import org.rapidoid.gui.ButtonWidget;
+import org.rapidoid.gui.Btn;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.security.annotation.CanInsert;
@@ -47,8 +47,8 @@ public class About extends GUI {
 
 	public Object content() {
 		Tag mix = h2(a("Enter the mix").href("/mix"));
-		ButtonWidget tx = btn("Transactional").command("tx");
-		ButtonWidget dlg = cmd("Dialog");
+		Btn tx = btn("Transactional").command("tx");
+		Btn dlg = cmd("Dialog");
 
 		return arr(mix, tx, dlg, ADD);
 	}

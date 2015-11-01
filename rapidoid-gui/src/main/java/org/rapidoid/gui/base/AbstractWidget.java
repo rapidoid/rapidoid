@@ -1,4 +1,4 @@
-package org.rapidoid.gui;
+package org.rapidoid.gui.base;
 
 /*
  * #%L

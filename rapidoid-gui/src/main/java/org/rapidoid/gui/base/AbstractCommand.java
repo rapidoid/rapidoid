@@ -1,4 +1,4 @@
-package org.rapidoid.gui;
+package org.rapidoid.gui.base;
 
 /*
  * #%L
@@ -30,7 +30,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.2.0")
-public abstract class AbstractCommandWidget<W extends AbstractCommandWidget<?>> extends AbstractWidget {
+public abstract class AbstractCommand<W extends AbstractCommand<?>> extends AbstractWidget {
 
 	private String command;
 

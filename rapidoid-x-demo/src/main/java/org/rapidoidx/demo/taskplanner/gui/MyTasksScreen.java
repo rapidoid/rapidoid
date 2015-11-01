@@ -29,7 +29,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.gui.GridWidget;
+import org.rapidoid.gui.Grid;
 import org.rapidoid.html.Tag;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.security.annotation.LoggedIn;
@@ -46,7 +46,7 @@ public class MyTasksScreen extends GUI {
 	public Object content() {
 		Tag c1 = titleBox("Tasks owned by me");
 
-		GridWidget grid1 = grid(Task.class, new Predicate<Task>() {
+		Grid grid1 = grid(Task.class, new Predicate<Task>() {
 			@Override
 			public boolean eval(Task t) throws Exception {
 				User user = t.owner.get();
@@ -56,7 +56,7 @@ public class MyTasksScreen extends GUI {
 
 		Tag c2 = titleBox("Tasks shared with me");
 
-		GridWidget grid2 = grid(Task.class, new Predicate<Task>() {
+		Grid grid2 = grid(Task.class, new Predicate<Task>() {
 			@Override
 			public boolean eval(Task t) throws Exception {
 				return Beany.projection(t.sharedWith, "username").contains(Ctxs.ctx().username());

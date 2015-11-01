@@ -29,8 +29,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.app.GUI;
-import org.rapidoid.gui.FormWidget;
-import org.rapidoid.gui.GridWidget;
+import org.rapidoid.gui.Form;
+import org.rapidoid.gui.Grid;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.db.DB;
@@ -56,7 +56,7 @@ public class NewTaskScreen extends GUI {
 
 	public Object content() {
 		Tag caption1 = titleBox("Add new task");
-		FormWidget frm = create(task).buttons(ADD, CANCEL);
+		Form frm = create(task).buttons(ADD, CANCEL);
 		frm.field("description").setType(FieldType.TEXTAREA);
 
 		frm.add(field(null, null, null, "abcd", null, FieldType.CHECKBOXES, U.list("AA", "b", "cDeF"), true, v2, null));
@@ -66,7 +66,7 @@ public class NewTaskScreen extends GUI {
 		// frm.field("comments").setInput(div((Object[]) radios(U.list("a", "bb", "ccc"), v)));
 
 		Tag caption2 = titleBox("Most recent tasks");
-		GridWidget grid = grid(Task.class, "-id", 7, "id", "priority", "title");
+		Grid grid = grid(Task.class, "-id", 7, "id", "priority", "title");
 
 		return row(col4(caption1, frm), col8(caption2, grid));
 	}

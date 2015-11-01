@@ -3,7 +3,7 @@ package org.rapidoidx.demo.taskplanner.gui;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.GUI;
-import org.rapidoid.gui.LayoutWidget;
+import org.rapidoid.gui.Layout;
 import org.rapidoid.u.U;
 
 /*
@@ -44,7 +44,7 @@ public class ControlsScreen extends GUI {
 		Object a8 = radios(U.list("A", "B"), "v2", "A");
 		Object a9 = checkboxes(U.list("A", "B", "C"), "v3", U.list("A", "C"));
 
-		LayoutWidget lay = layout(a1, a2, a3, a4, a5, a6, a7, a8, a9).cols(3);
+		Layout lay = layout(a1, a2, a3, a4, a5, a6, a7, a8, a9).cols(3);
 		return arr(cmd("abc").warning(), lay, debug());
 	}
 

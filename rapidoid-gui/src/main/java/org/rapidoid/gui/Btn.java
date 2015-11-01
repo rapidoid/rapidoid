@@ -22,13 +22,14 @@ package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.base.AbstractCommand;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.ButtonTag;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
-public class ButtonWidget extends AbstractCommandWidget<ButtonWidget> {
+public class Btn extends AbstractCommand<Btn> {
 
 	private Object[] contents = {};
 
@@ -56,32 +57,32 @@ public class ButtonWidget extends AbstractCommandWidget<ButtonWidget> {
 		return contents;
 	}
 
-	public ButtonWidget contents(Object... contents) {
+	public Btn contents(Object... contents) {
 		this.contents = contents;
 		return this;
 	}
 
-	public ButtonWidget primary() {
+	public Btn primary() {
 		kind = "primary";
 		return this;
 	}
 
-	public ButtonWidget success() {
+	public Btn success() {
 		kind = "success";
 		return this;
 	}
 
-	public ButtonWidget info() {
+	public Btn info() {
 		kind = "info";
 		return this;
 	}
 
-	public ButtonWidget warning() {
+	public Btn warning() {
 		kind = "warning";
 		return this;
 	}
 
-	public ButtonWidget danger() {
+	public Btn danger() {
 		kind = "danger";
 		return this;
 	}
@@ -90,7 +91,7 @@ public class ButtonWidget extends AbstractCommandWidget<ButtonWidget> {
 		return kind;
 	}
 
-	public ButtonWidget kind(String kind) {
+	public Btn kind(String kind) {
 		this.kind = kind;
 		return this;
 	}
@@ -99,7 +100,7 @@ public class ButtonWidget extends AbstractCommandWidget<ButtonWidget> {
 		return linkTo;
 	}
 
-	public ButtonWidget linkTo(String linkTo) {
+	public Btn linkTo(String linkTo) {
 		this.linkTo = linkTo;
 		return this;
 	}
@@ -108,12 +109,12 @@ public class ButtonWidget extends AbstractCommandWidget<ButtonWidget> {
 		return class_;
 	}
 
-	public ButtonWidget class_(String class_) {
+	public Btn class_(String class_) {
 		this.class_ = class_;
 		return this;
 	}
 
-	public ButtonWidget onClick(Runnable onClickHandler) {
+	public Btn onClick(Runnable onClickHandler) {
 		setHandler(onClickHandler);
 		return this;
 	}

@@ -1,4 +1,4 @@
-package org.rapidoid.gui;
+package org.rapidoid.gui.base;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -14,6 +14,21 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.gui.Btn;
+import org.rapidoid.gui.Card;
+import org.rapidoid.gui.Debug;
+import org.rapidoid.gui.Field;
+import org.rapidoid.gui.Form;
+import org.rapidoid.gui.FormMode;
+import org.rapidoid.gui.Grid;
+import org.rapidoid.gui.Highlight;
+import org.rapidoid.gui.KVGrid;
+import org.rapidoid.gui.Layout;
+import org.rapidoid.gui.HtmlPage;
+import org.rapidoid.gui.Pager;
+import org.rapidoid.gui.Panel;
+import org.rapidoid.gui.Snippet;
+import org.rapidoid.gui.VStream;
 import org.rapidoid.gui.var.ArrayContainerVar;
 import org.rapidoid.gui.var.CollectionContainerVar;
 import org.rapidoid.gui.var.EqualityVar;
@@ -74,33 +89,33 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static final Tag N_A = NOTHING;
 
-	public static final ButtonWidget SAVE = cmd("^Save");
+	public static final Btn SAVE = cmd("^Save");
 
-	public static final ButtonWidget ADD = cmd("^Add");
+	public static final Btn ADD = cmd("^Add");
 
-	public static final ButtonWidget UPDATE = cmd("^Update");
+	public static final Btn UPDATE = cmd("^Update");
 
-	public static final ButtonWidget INSERT = cmd("^Insert");
+	public static final Btn INSERT = cmd("^Insert");
 
-	public static final ButtonWidget DELETE = cmd("!Delete");
+	public static final Btn DELETE = cmd("!Delete");
 
-	public static final ButtonWidget YES_DELETE = cmd("!YesDelete").contents("Yes, delete!");
+	public static final Btn YES_DELETE = cmd("!YesDelete").contents("Yes, delete!");
 
-	public static final ButtonWidget REMOVE = cmd("!Remove");
+	public static final Btn REMOVE = cmd("!Remove");
 
-	public static final ButtonWidget DESTROY = cmd("!Destroy");
+	public static final Btn DESTROY = cmd("!Destroy");
 
-	public static final ButtonWidget YES = cmd("^Yes");
+	public static final Btn YES = cmd("^Yes");
 
-	public static final ButtonWidget NO = cmd("No");
+	public static final Btn NO = cmd("No");
 
-	public static final ButtonWidget OK = cmd("^OK");
+	public static final Btn OK = cmd("^OK");
 
-	public static final ButtonWidget CANCEL = navigate("Cancel");
+	public static final Btn CANCEL = navigate("Cancel");
 
-	public static final ButtonWidget BACK = navigate("Back");
+	public static final Btn BACK = navigate("Back");
 
-	public static final ButtonWidget EDIT = cmd("^Edit");
+	public static final Btn EDIT = cmd("^Edit");
 
 	public static TableTag table_(Object... contents) {
 		return table(contents).class_("table table-striped table-hover");
@@ -166,8 +181,8 @@ public abstract class BootstrapWidgets extends HTML {
 		return a_void(awesome(fontAwesomeIcon), NBSP, contents);
 	}
 
-	public static ButtonWidget btn(Object... contents) {
-		ButtonWidget btn = Cls.customizable(ButtonWidget.class).contents(contents);
+	public static Btn btn(Object... contents) {
+		Btn btn = Cls.customizable(Btn.class).contents(contents);
 
 		for (Object content : contents) {
 			if (content instanceof String) {
@@ -351,7 +366,7 @@ public abstract class BootstrapWidgets extends HTML {
 		return row(col1(), col10(contents), col1());
 	}
 
-	public static ButtonWidget cmd(String cmd, Object... args) {
+	public static Btn cmd(String cmd, Object... args) {
 		boolean primary = cmd.startsWith("^");
 		boolean danger = cmd.startsWith("!");
 		boolean warning = cmd.startsWith("?");
@@ -362,7 +377,7 @@ public abstract class BootstrapWidgets extends HTML {
 
 		String caption = U.capitalized(cmd);
 
-		ButtonWidget btn = btn(caption);
+		Btn btn = btn(caption);
 		if (primary) {
 			btn = btn.primary();
 		} else if (danger) {
@@ -374,13 +389,13 @@ public abstract class BootstrapWidgets extends HTML {
 		return btn.command(cmd, args);
 	}
 
-	public static ButtonWidget navigate(String cmd) {
+	public static Btn navigate(String cmd) {
 		String caption = U.capitalized(cmd);
 		return btn(caption).linkTo(cmd);
 	}
 
-	public static ButtonWidget[] cmds(String... commands) {
-		ButtonWidget[] cmds = new ButtonWidget[commands.length];
+	public static Btn[] cmds(String... commands) {
+		Btn[] cmds = new Btn[commands.length];
 
 		for (int i = 0; i < cmds.length; i++) {
 			cmds[i] = cmd(commands[i]);
@@ -397,75 +412,75 @@ public abstract class BootstrapWidgets extends HTML {
 		return span(contents).class_("pull-right");
 	}
 
-	public static PanelWidget panel(Object... contents) {
-		return Cls.customizable(PanelWidget.class, new Object[] { UTILS.flat(contents) });
+	public static Panel panel(Object... contents) {
+		return Cls.customizable(Panel.class, new Object[] { UTILS.flat(contents) });
 	}
 
-	public static PageWidget page(Object... contents) {
-		return Cls.customizable(PageWidget.class, new Object[] { UTILS.flat(contents) });
+	public static HtmlPage page(Object... contents) {
+		return Cls.customizable(HtmlPage.class, new Object[] { UTILS.flat(contents) });
 	}
 
-	public static <T> GridWidget grid(Class<T> type, Object[] items, String sortOrder, int pageSize,
+	public static <T> Grid grid(Class<T> type, Object[] items, String sortOrder, int pageSize,
 			String... properties) {
 		return grid(Models.beanItems(type, items), sortOrder, pageSize, properties);
 	}
 
-	public static <T> GridWidget grid(Class<T> type, Iterable<T> items, String sortOrder, int pageSize,
+	public static <T> Grid grid(Class<T> type, Iterable<T> items, String sortOrder, int pageSize,
 			String... properties) {
 		return grid(type, U.array(items), sortOrder, pageSize, properties);
 	}
 
-	public static GridWidget grid(Items items, String sortOrder, int pageSize, String... properties) {
-		return Cls.customizable(GridWidget.class, items, sortOrder, pageSize, properties);
+	public static Grid grid(Items items, String sortOrder, int pageSize, String... properties) {
+		return Cls.customizable(Grid.class, items, sortOrder, pageSize, properties);
 	}
 
-	public static <T> KeyValueGridWidget grid(Map<?, ?> map) {
-		return Cls.customizable(KeyValueGridWidget.class).map(map);
+	public static <T> KVGrid grid(Map<?, ?> map) {
+		return Cls.customizable(KVGrid.class).map(map);
 	}
 
-	public static PagerWidget pager(int from, int to, Var<Integer> pageNumber) {
-		return Cls.customizable(PagerWidget.class, from, to, pageNumber);
+	public static Pager pager(int from, int to, Var<Integer> pageNumber) {
+		return Cls.customizable(Pager.class, from, to, pageNumber);
 	}
 
-	public static FormWidget form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc,
-			FieldType[] fieldTypes, Object[][] options, Var<?>[] vars, ButtonWidget[] buttons) {
-		return Cls.customizable(FormWidget.class, layout, fieldsNames, fieldsDesc, fieldTypes, options, vars, buttons);
+	public static Form form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc,
+			FieldType[] fieldTypes, Object[][] options, Var<?>[] vars, Btn[] buttons) {
+		return Cls.customizable(Form.class, layout, fieldsNames, fieldsDesc, fieldTypes, options, vars, buttons);
 	}
 
-	public static FormWidget show(Object bean, String... properties) {
+	public static Form show(Object bean, String... properties) {
 		return show(Models.item(bean), properties);
 	}
 
-	public static FormWidget show(final Item item, String... properties) {
+	public static Form show(final Item item, String... properties) {
 		// FIXME make fluent and customizable!
-		return new FormWidget(FormMode.SHOW, item, properties);
+		return new Form(FormMode.SHOW, item, properties);
 	}
 
-	public static FormWidget edit(Object bean, String... properties) {
+	public static Form edit(Object bean, String... properties) {
 		return edit(Models.item(bean), properties);
 	}
 
-	public static FormWidget edit(final Item item, String... properties) {
+	public static Form edit(final Item item, String... properties) {
 		// FIXME make fluent and customizable!
-		return new FormWidget(FormMode.EDIT, item, properties);
+		return new Form(FormMode.EDIT, item, properties);
 	}
 
-	public static FormWidget create(Object bean, String... properties) {
+	public static Form create(Object bean, String... properties) {
 		return create(Models.item(bean), properties);
 	}
 
-	public static FormWidget create(final Item item, String... properties) {
+	public static Form create(final Item item, String... properties) {
 		// FIXME make fluent and customizable!
-		return new FormWidget(FormMode.CREATE, item, properties);
+		return new Form(FormMode.CREATE, item, properties);
 	}
 
-	public static FormFieldWidget field(FormMode mode, FormLayout layout, Property prop, String name, String desc,
+	public static Field field(FormMode mode, FormLayout layout, Property prop, String name, String desc,
 			FieldType type, Collection<?> options, boolean required, Var<?> var, DataPermissions permissions) {
-		return new FormFieldWidget(mode, layout, prop, name, desc, type, options, required, var, permissions);
+		return new Field(mode, layout, prop, name, desc, type, options, required, var, permissions);
 	}
 
-	public static FormFieldWidget field(FormMode mode, FormLayout layout, Item item, Property prop) {
-		return new FormFieldWidget(mode, layout, item, prop);
+	public static Field field(FormMode mode, FormLayout layout, Item item, Property prop) {
+		return new Field(mode, layout, item, prop);
 	}
 
 	public static <T> Property prop(String name, Calc<T> calc) {
@@ -480,7 +495,7 @@ public abstract class BootstrapWidgets extends HTML {
 		return Models.beanItems(beanType, beans);
 	}
 
-	public static <E> GridWidget grid(Class<E> entityType, int pageSize, String... properties) {
+	public static <E> Grid grid(Class<E> entityType, int pageSize, String... properties) {
 		Iterable<E> all = DB.getAll(entityType);
 		return grid(entityType, all, "", pageSize, properties);
 	}
@@ -568,7 +583,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Object highlight(String text, String regex) {
-		return Cls.customizable(HighlightWidget.class, text, regex);
+		return Cls.customizable(Highlight.class, text, regex);
 	}
 
 	public static InputTag email(Var<?> var) {
@@ -780,20 +795,20 @@ public abstract class BootstrapWidgets extends HTML {
 		return form(ctrls).class_("form-inline");
 	}
 
-	public static LayoutWidget layout(Object... contents) {
-		return Cls.customizable(LayoutWidget.class).contents(contents);
+	public static Layout layout(Object... contents) {
+		return Cls.customizable(Layout.class).contents(contents);
 	}
 
-	public static LayoutWidget layout(Iterable<?> contents) {
+	public static Layout layout(Iterable<?> contents) {
 		return layout(U.array(contents));
 	}
 
-	public static SnippetWidget snippet(String code) {
-		return new SnippetWidget(code);
+	public static Snippet snippet(String code) {
+		return new Snippet(code);
 	}
 
-	public static StreamWidget stream(Object ngTemplate) {
-		return Cls.customizable(StreamWidget.class).template(ngTemplate);
+	public static VStream stream(Object ngTemplate) {
+		return Cls.customizable(VStream.class).template(ngTemplate);
 	}
 
 	public static Object values(Object... values) {
@@ -824,8 +839,8 @@ public abstract class BootstrapWidgets extends HTML {
 		return false;
 	}
 
-	public static CardWidget card(Object... contents) {
-		return Cls.customizable(CardWidget.class).contents(contents);
+	public static Card card(Object... contents) {
+		return Cls.customizable(Card.class).contents(contents);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -857,14 +872,14 @@ public abstract class BootstrapWidgets extends HTML {
 		return new MultiLanguageWidget(multiLanguageText, formatArgs);
 	}
 
-	public static ButtonWidget xClose(String cmd) {
+	public static Btn xClose(String cmd) {
 		Tag sp1 = span(hardcoded("&times;")).attr("aria-hidden", "true");
 		Tag sp2 = span("Close").class_("sr-only");
 		return cmd(cmd).class_("close").contents(sp1, sp2);
 	}
 
-	public static DebugWidget debug() {
-		return Cls.customizable(DebugWidget.class);
+	public static Debug debug() {
+		return Cls.customizable(Debug.class);
 	}
 
 	public static Object box(Object... contents) {

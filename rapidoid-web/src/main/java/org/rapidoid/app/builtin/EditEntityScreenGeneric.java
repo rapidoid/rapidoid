@@ -22,7 +22,7 @@ package org.rapidoid.app.builtin;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.FormWidget;
+import org.rapidoid.gui.Form;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.u.U;
@@ -41,7 +41,7 @@ public class EditEntityScreenGeneric extends AbstractEntityScreenGeneric {
 		this.entity = getEntityById();
 
 		Tag caption = h2("Edit " + U.capitalized(ctx().pathSegment(0).substring(4)));
-		FormWidget form = edit(entity).buttons(SAVE, CANCEL);
+		Form form = edit(entity).buttons(SAVE, CANCEL);
 
 		return mid6(caption, form);
 	}

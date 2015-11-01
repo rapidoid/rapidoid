@@ -4,9 +4,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.app.GUI;
-import org.rapidoid.gui.CardWidget;
+import org.rapidoid.gui.Card;
 import org.rapidoid.gui.FA;
-import org.rapidoid.gui.StreamWidget;
+import org.rapidoid.gui.VStream;
 import org.rapidoid.html.Tag;
 
 /*
@@ -42,11 +42,11 @@ public class HomeScreen extends GUI {
 		Tag upvote = FA.THUMBS_O_UP;
 		Tag downvote = FA.THUMBS_O_DOWN;
 
-		CardWidget card = card(h3("{{it().priority}} priority"), h4("Desc: {{it().description}}"));
+		Card card = card(h3("{{it().priority}} priority"), h4("Desc: {{it().description}}"));
 		card = card.controls(upvote, "123", downvote, star);
 		card = card.header("{{it().title}}");
 
-		StreamWidget stream = stream(card).cols(3).dataUrl("/task/page/{{page}}");
+		VStream stream = stream(card).cols(3).dataUrl("/task/page/{{page}}");
 
 		int n = ctx().cookiepack("xy", 0) + 1;
 		ctx().cookiepack().put("xy", n);
