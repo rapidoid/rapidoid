@@ -107,6 +107,7 @@ public class HtmlPage extends AbstractWidget {
 		model.put("content", multi((Object[]) content));
 		model.put("result", multi((Object[]) content)); // FIXME rename result to content
 
+		model.put("home", "/");
 		model.put("title", title);
 		model.put("menu", menu);
 
