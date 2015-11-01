@@ -1178,6 +1178,8 @@ public class MediaType {
 	public static final MediaType GIF = IMAGE_GIF;
 	public static final MediaType SVG = IMAGE_SVG_XML;
 
+	public static final MediaType DEFAULT = MediaType.BINARY;
+
 	/*******************************************************/
 
 	public static synchronized MediaType create(String type, String... fileExtensisons) {
@@ -1208,7 +1210,7 @@ public class MediaType {
 			String ext = filename.substring(dotPos + 1);
 			return getByFileExtension(ext);
 		} else {
-			return MediaType.HTML_UTF_8;
+			return MediaType.DEFAULT;
 		}
 	}
 

@@ -30,15 +30,13 @@ import org.rapidoid.mime.MediaType;
 @Since("2.0.0")
 public class MediaTypeTest extends NetTestCommons {
 
-	private static final MediaType DEFAULT = MediaType.HTML_UTF_8;
-
 	@Test
 	public void testCommonMediaTypes() {
 		eq(new String(MediaType.PLAIN_TEXT_UTF_8.getBytes()), "text/plain; charset=utf-8");
 		eq(MediaType.getByFileExtension("txt"), MediaType.PLAIN_TEXT_UTF_8);
 
-		eq(new String(DEFAULT.getBytes()), "text/html; charset=utf-8");
-		eq(MediaType.getByFileExtension("html"), DEFAULT);
+		eq(new String(MediaType.HTML_UTF_8.getBytes()), "text/html; charset=utf-8");
+		eq(MediaType.getByFileExtension("html"), MediaType.HTML_UTF_8);
 
 		eq(new String(MediaType.XHTML_XML_UTF8.getBytes()), "application/xhtml+xml; charset=utf-8");
 		eq(MediaType.getByFileExtension("xhtml"), MediaType.XHTML_XML_UTF8);
@@ -87,8 +85,8 @@ public class MediaTypeTest extends NetTestCommons {
 
 		eq(MediaType.getByFileName("abc.some"), myType);
 		eq(MediaType.getByFileName(".some"), myType);
-		eq(MediaType.getByFileName("some"), DEFAULT);
-		eq(MediaType.getByFileName("someX"), DEFAULT);
+		eq(MediaType.getByFileName("some"), MediaType.DEFAULT);
+		eq(MediaType.getByFileName("someX"), MediaType.DEFAULT);
 	}
 
 	@Test

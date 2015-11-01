@@ -86,8 +86,8 @@ public class MediaTypeTest extends NetTestCommons {
 
 		eq(MediaType.getByFileName("abc.some"), myType);
 		eq(MediaType.getByFileName(".some"), myType);
-		eq(MediaType.getByFileName("some"), null);
-		eq(MediaType.getByFileName("someX"), null);
+		eq(MediaType.getByFileName("some"), MediaType.DEFAULT);
+		eq(MediaType.getByFileName("someX"), MediaType.DEFAULT);
 	}
 
 	@Test
