@@ -65,7 +65,7 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.F2;
-import org.rapidoid.lambda.Lambdas;
+import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
@@ -679,7 +679,7 @@ public class UTILS implements Constants {
 			final Integer n = i;
 			new Thread() {
 				public void run() {
-					Lambdas.eval(executable, n);
+					Lmbd.eval(executable, n);
 					latch.countDown();
 				};
 			}.start();

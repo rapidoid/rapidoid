@@ -31,7 +31,7 @@ import org.eclipse.jdt.internal.compiler.CompilationResult;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.CustomizableClassLoader;
-import org.rapidoid.lambda.Lambdas;
+import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -51,7 +51,7 @@ public class EcjCompilation implements Compilation {
 	private final CustomizableClassLoader loader;
 
 	public EcjCompilation(Predicate<String> allowed) {
-		loader = new CustomizableClassLoader(Lambdas.mapper(classes), allowed, false);
+		loader = new CustomizableClassLoader(Lmbd.mapper(classes), allowed, false);
 	}
 
 	@SuppressWarnings("unchecked")

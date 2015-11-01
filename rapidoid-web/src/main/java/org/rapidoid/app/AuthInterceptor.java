@@ -28,7 +28,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOPInterceptor;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.lambda.Lambdas;
+import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.security.Secure;
 
 @Authors("Nikolche Mihajlovski")
@@ -42,7 +42,7 @@ public class AuthInterceptor implements AOPInterceptor {
 		String username = Ctxs.ctx().username();
 
 		if (Secure.canAccessMethod(username, m)) {
-			return Lambdas.call(forward);
+			return Lmbd.call(forward);
 		} else {
 			throw new SecurityException("The user doesn't have the required roles!");
 		}

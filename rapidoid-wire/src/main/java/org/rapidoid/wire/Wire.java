@@ -42,7 +42,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.Proxies;
 import org.rapidoid.config.Conf;
 import org.rapidoid.lambda.F3;
-import org.rapidoid.lambda.Lambdas;
+import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -189,13 +189,13 @@ public class Wire {
 
 	private static <T> T provideSessionValue(Object target, Class<T> type, String name, Mapper<String, Object> session) {
 		U.notNull(session, "session");
-		Object value = Lambdas.eval(session, name);
+		Object value = Lmbd.eval(session, name);
 		return value != null ? Cls.convert(value, type) : null;
 	}
 
 	private static <T> T provideBindValue(Object target, Class<T> type, String name, Mapper<String, Object> bindings) {
 		U.notNull(bindings, "bindings");
-		Object value = Lambdas.eval(bindings, name);
+		Object value = Lmbd.eval(bindings, name);
 		return value != null ? Cls.convert(value, type) : null;
 	}
 

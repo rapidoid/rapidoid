@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentMap;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.lambda.Lambdas;
+import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
@@ -64,13 +64,13 @@ public class BeanProperties implements Iterable<Prop> {
 						for (String propName : propertyNames) {
 							Prop prop = map.get(propName);
 							U.must(prop != null, "Cannot find property '%s'!", propName);
-							if (Lambdas.eval(selector, prop)) {
+							if (Lmbd.eval(selector, prop)) {
 								selected.add(prop);
 							}
 						}
 					} else {
 						for (Entry<String, Prop> e : map.entrySet()) {
-							if (Lambdas.eval(selector, e.getValue())) {
+							if (Lmbd.eval(selector, e.getValue())) {
 								selected.add(e.getValue());
 							}
 						}

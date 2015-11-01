@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.arr.Arr;
-import org.rapidoid.lambda.Lambdas;
+import org.rapidoid.lambda.Lmbd;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -47,7 +47,7 @@ public class AOP {
 	public static <T> T invoke(Object context, Method m, Object target, Object... args) {
 		Annotation[] annotations = m.getAnnotations();
 		ForwardCall call = new ForwardCall(context, annotations, m, target, args, INTERCEPTORS, 0);
-		return (T) Lambdas.call(call);
+		return (T) Lmbd.call(call);
 	}
 
 }

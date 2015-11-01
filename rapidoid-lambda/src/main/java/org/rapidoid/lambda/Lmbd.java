@@ -29,7 +29,7 @@ import org.rapidoid.u.U;
  * @author Nikolche Mihajlovski
  * @since 2.0.0
  */
-public class Lambdas {
+public class Lmbd {
 
 	public static <FROM, TO> Mapper<FROM, TO> mapper(final Map<FROM, TO> map) {
 		return new Mapper<FROM, TO>() {

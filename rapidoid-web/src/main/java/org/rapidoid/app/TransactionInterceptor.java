@@ -30,7 +30,7 @@ import org.rapidoid.aop.AOPInterceptor;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.lambda.Lambdas;
+import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.u.U;
@@ -57,7 +57,7 @@ public class TransactionInterceptor implements AOPInterceptor {
 		DB.transaction(new Runnable() {
 			@Override
 			public void run() {
-				x.result(Lambdas.call(forward));
+				x.result(Lmbd.call(forward));
 			}
 		}, readOnly, new Callback<Void>() {
 

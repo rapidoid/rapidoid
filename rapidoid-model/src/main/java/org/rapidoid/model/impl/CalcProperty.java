@@ -26,7 +26,7 @@ import java.lang.reflect.ParameterizedType;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Calc;
-import org.rapidoid.lambda.Lambdas;
+import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
 
@@ -76,7 +76,7 @@ public class CalcProperty implements Property {
 
 	@Override
 	public Object get(Item item) {
-		return Lambdas.eval(calc, item.value());
+		return Lmbd.eval(calc, item.value());
 	}
 
 }

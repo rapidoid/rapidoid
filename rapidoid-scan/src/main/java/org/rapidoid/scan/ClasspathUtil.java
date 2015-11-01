@@ -23,7 +23,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.io.IO;
-import org.rapidoid.lambda.Lambdas;
+import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -389,7 +389,7 @@ public class ClasspathUtil {
 
 		return (annotated == null || cls.getAnnotation(annotated) != null)
 				&& (regex == null || (cls.getCanonicalName() != null && regex.matcher(cls.getCanonicalName()).matches()))
-				&& (filter == null || Lambdas.eval(filter, cls));
+				&& (filter == null || Lmbd.eval(filter, cls));
 	}
 
 	public static void setIgnoreRapidoidClasses(boolean ignoreRapidoidClasses) {

@@ -21,6 +21,7 @@ package org.rapidoid.io;
  */
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -131,12 +132,13 @@ public class IO {
 	}
 
 	public static List<String> loadLines(String filename) {
-		InputStream input = classLoader().getResourceAsStream(filename);
-		if (input == null) {
+		byte[] bytes = loadBytes(filename);
+
+		if (bytes == null) {
 			return null;
 		}
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes)));
 		List<String> lines = U.list();
 
 		try {

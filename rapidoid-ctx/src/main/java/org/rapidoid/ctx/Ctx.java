@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.lambda.Lambdas;
+import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
@@ -268,7 +268,7 @@ public class Ctx {
 		U.assign(ctx.extras(), cd.extras());
 
 		try {
-			return Lambdas.call(action);
+			return Lmbd.call(action);
 		} finally {
 			Ctxs.close();
 		}
