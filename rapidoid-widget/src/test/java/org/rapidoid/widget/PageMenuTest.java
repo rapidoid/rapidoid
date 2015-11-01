@@ -1,4 +1,4 @@
-package org.rapidoid.webapp;
+package org.rapidoid.widget;
 
 /*
  * #%L
@@ -24,12 +24,12 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.YAML;
-import org.rapidoid.http.HttpTestCommons;
 import org.rapidoid.io.Res;
+import org.rapidoid.test.TestCommons;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class AppMenuTest extends HttpTestCommons {
+public class PageMenuTest extends TestCommons {
 
 	@Test
 	public void shouldConstructAppMenu() {
@@ -38,7 +38,7 @@ public class AppMenuTest extends HttpTestCommons {
 		Object data = YAML.parse(res.getContent(), Object.class);
 		System.out.println(data);
 
-		AppMenu menu = AppMenu.from(data);
+		PageMenu menu = PageMenu.from(data);
 		System.out.println(menu);
 
 		eq(menu.getItems().size(), 2);

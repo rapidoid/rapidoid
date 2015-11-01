@@ -1,4 +1,4 @@
-package org.rapidoid.webapp;
+package org.rapidoid.widget;
 
 /*
  * #%L
@@ -26,16 +26,18 @@ import java.util.List;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.data.YAML;
+import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class AppMenu {
+public class PageMenu {
 
 	private final List<AppMenuItem> items;
 
-	public AppMenu(List<AppMenuItem> items) {
+	public PageMenu(List<AppMenuItem> items) {
 		this.items = items;
 	}
 
@@ -48,8 +50,14 @@ public class AppMenu {
 		return U.join("\n", items);
 	}
 
-	public static AppMenu from(Object data) {
-		return Cls.struct(AppMenu.class, AppMenuItem.class, data);
+	public static PageMenu parse(String filename) {
+		byte[] yaml = Res.from(filename).getBytesOrNull();
+		Object data = yaml != null ? YAML.parse(yaml, Object.class) : null;
+		return from(data);
+	}
+
+	public static PageMenu from(Object data) {
+		return Cls.struct(PageMenu.class, AppMenuItem.class, U.or(data, U.map()));
 	}
 
 	public List<AppMenuItem> leftItems() {

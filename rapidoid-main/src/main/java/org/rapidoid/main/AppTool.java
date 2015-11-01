@@ -33,10 +33,10 @@ import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugin;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.u.U;
-import org.rapidoid.webapp.AppMenu;
 import org.rapidoid.webapp.RootWebApp;
 import org.rapidoid.webapp.WebApp;
 import org.rapidoid.webapp.WebAppGroup;
+import org.rapidoid.widget.PageMenu;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -119,7 +119,7 @@ public class AppTool {
 						menuData = U.map();
 					}
 
-					AppMenu menu = AppMenu.from(menuData);
+					PageMenu menu = PageMenu.from(menuData);
 					app.setMenu(menu);
 				}
 			}

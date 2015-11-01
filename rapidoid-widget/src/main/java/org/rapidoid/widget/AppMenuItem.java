@@ -1,4 +1,4 @@
-package org.rapidoid.webapp;
+package org.rapidoid.widget;
 
 /*
  * #%L
@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.u.U;
+import org.rapidoid.webapp.AbstractMenuItem;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
