@@ -57,6 +57,7 @@ import org.rapidoid.util.Constants;
 import org.rapidoid.util.RapidoidConf;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.webapp.AppCtx;
+import org.rapidoid.webapp.WebApp;
 import org.rapidoid.wire.Wire;
 import org.rapidoid.wrap.BoolWrap;
 
@@ -1361,7 +1362,10 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			model.put("home", home());
 			model.put("host", host());
 			model.put("dev", isDevMode());
-			model.put("app", AppCtx.app());
+
+			WebApp app = AppCtx.app();
+			model.put("app", app);
+			model.put("menu", app != null ? app.getMenu() : null);
 
 			List<String> providers = U.list("google", "facebook", "linkedin", "github");
 			Map<String, Object> oauth = U.map("popup", true, "providers", providers);

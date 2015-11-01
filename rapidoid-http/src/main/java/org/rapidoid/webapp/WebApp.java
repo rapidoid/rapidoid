@@ -53,7 +53,7 @@ public class WebApp {
 
 	private final Config config;
 
-	private volatile AppMenu menu;
+	private volatile Object menu;
 
 	public WebApp(String id, Set<String> owners, Set<String> hostnames, Set<String> uriContexts, AppMode mode,
 			Router router, PojoDispatcher dispatcher, Classes classes, Config config) {
@@ -124,16 +124,16 @@ public class WebApp {
 		return getMode().equals(AppMode.DEVELOPMENT);
 	}
 
-	public AppMenu getMenu() {
-		return menu;
+	public Config getConfig() {
+		return config;
 	}
 
-	public void setMenu(AppMenu menu) {
+	public void setMenu(Object menu) {
 		this.menu = menu;
 	}
 
-	public Config getConfig() {
-		return config;
+	public Object getMenu() {
+		return menu;
 	}
 
 }

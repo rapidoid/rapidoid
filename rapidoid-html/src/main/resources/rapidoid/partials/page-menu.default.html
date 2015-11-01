@@ -1,6 +1,6 @@
         <div id="collapsable" class="collapse navbar-collapse">
 
-            {{#app.menu.leftItems}}
+            {{#menu.leftItems}}
             <ul class="nav navbar-nav navbar-left">
                 <li class="dropdown">
                     <a{{#submenu}} class="dropdown-toggle" data-toggle="dropdown"{{/submenu}} href="{{target}}">{{caption}}{{#submenu}}<span class="caret"></span>{{/submenu}}</a>
@@ -21,9 +21,9 @@
                     {{/submenu}}
                 </li>
             </ul>
-            {{/app.menu.leftItems}}
+            {{/menu.leftItems}}
 
-            {{#app.menu.rightItemsReversed}}
+            {{#menu.rightItemsReversed}}
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a{{#submenu}} class="dropdown-toggle" data-toggle="dropdown"{{/submenu}} href="{{target}}">{{caption}}{{#submenu}}<span class="caret"></span>{{/submenu}}</a>
@@ -44,7 +44,7 @@
                     {{/submenu}}
                 </li>
             </ul>
-            {{/app.menu.rightItemsReversed}}
+            {{/menu.rightItemsReversed}}
 
 {{>navbar-custom}}
 
