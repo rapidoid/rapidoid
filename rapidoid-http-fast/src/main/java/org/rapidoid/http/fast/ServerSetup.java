@@ -2,6 +2,7 @@ package org.rapidoid.http.fast;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.net.Serve;
 import org.rapidoid.net.TCPServer;
 
@@ -31,12 +32,12 @@ public class ServerSetup {
 
 	private final FastHttp fastHttp = new FastHttp();
 
-	public TCPServer listen(int port) {
-		return listen("*", port);
-	}
+	private int port = Conf.port();
 
-	public TCPServer listen(String address, int port) {
-		TCPServer server = Serve.server().protocol(fastHttp).port(port).build();
+	private String address = "0.0.0.0";
+
+	public TCPServer listen() {
+		TCPServer server = Serve.server().protocol(fastHttp).address(address).port(port).build();
 		server.start();
 		return server;
 	}
@@ -67,6 +68,16 @@ public class ServerSetup {
 
 	private FastHttp[] httpImpls() {
 		return new FastHttp[] { fastHttp };
+	}
+
+	public ServerSetup port(int port) {
+		this.port = port;
+		return this;
+	}
+
+	public ServerSetup address(String address) {
+		this.address = address;
+		return this;
 	}
 
 }

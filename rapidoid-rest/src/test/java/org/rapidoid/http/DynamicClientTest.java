@@ -40,7 +40,7 @@ public class DynamicClientTest extends TestCommons {
 
 	@Test
 	public void testDynamic() {
-		On.get("/test-abc").html("abc-ok");
+		On.address("127.0.0.1").port(8989).get("/test-abc").html("abc-ok");
 
 		On.get("/nums").json("[1, 2, 3]");
 
@@ -57,8 +57,6 @@ public class DynamicClientTest extends TestCommons {
 				return params;
 			}
 		});
-
-		On.listen(8080);
 
 		eq(client.abc(), "abc-ok");
 		eq(client.numbers(), U.list(1, 2, 3));

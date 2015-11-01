@@ -22,8 +22,6 @@ package org.rapidoid.http.fast;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.net.TCPServer;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
@@ -47,7 +45,7 @@ public class On {
 	}
 
 	private static void initialize() {
-		listen(Conf.port());
+		DEFAULT_SERVER_SETUP.listen();
 	}
 
 	public static synchronized OnAction get(String path) {
@@ -74,12 +72,12 @@ public class On {
 		return setup().page(path);
 	}
 
-	public static synchronized TCPServer listen(int port) {
-		return DEFAULT_SERVER_SETUP.listen(port);
+	public static synchronized ServerSetup port(int port) {
+		return DEFAULT_SERVER_SETUP.port(port);
 	}
 
-	public static synchronized TCPServer listen(String address, int port) {
-		return DEFAULT_SERVER_SETUP.listen(address, port);
+	public static synchronized ServerSetup address(String address) {
+		return DEFAULT_SERVER_SETUP.address(address);
 	}
 
 }

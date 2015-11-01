@@ -32,6 +32,8 @@ public interface TCPServerBuilder extends Builder<TCPServer> {
 
 	TCPServerBuilder bufSize(int bufSize);
 
+	TCPServerBuilder address(String address);
+
 	TCPServerBuilder port(int port);
 
 	TCPServerBuilder workers(int workers);

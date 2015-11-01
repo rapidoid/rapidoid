@@ -34,6 +34,8 @@ public class Main {
 	public static void main(String[] args) {
 		Conf.init(args);
 
+		On.port(8080);
+
 		On.get("/plaintext").plain("Hello world!");
 
 		On.get("/json").json(new Callable<Object>() {
@@ -42,8 +44,6 @@ public class Main {
 				return new Msg("Hello, World!");
 			}
 		});
-
-		On.listen(8080);
 	}
 
 }
