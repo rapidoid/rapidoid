@@ -57,7 +57,7 @@ public class FastHttp implements Protocol {
 
 	private static final byte[] CONN_CLOSE = "Connection: close\r\n".getBytes();
 
-	private static final byte[] SERVER_X = "Server: X\r\n".getBytes();
+	private static final byte[] SERVER_HEADER = "Server: Rapidoid\r\n".getBytes();
 
 	private static final byte[] CONTENT_LENGTH_IS = "Content-Length: ".getBytes();
 
@@ -245,7 +245,7 @@ public class FastHttp implements Protocol {
 	private void addHeaders(Channel ctx, boolean isKeepAlive, byte[] contentType) {
 		ctx.write(isKeepAlive ? CONN_KEEP_ALIVE : CONN_CLOSE);
 
-		ctx.write(SERVER_X);
+		ctx.write(SERVER_HEADER);
 
 		ctx.write(DATE_IS);
 		ctx.write(Dates.getDateTimeBytes());
