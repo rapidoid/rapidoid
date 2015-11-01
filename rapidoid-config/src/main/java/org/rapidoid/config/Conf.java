@@ -131,6 +131,10 @@ public class Conf {
 		return ROOT.contains(name, value);
 	}
 
+	public static int port() {
+		return option("port", 8888);
+	}
+
 	public static int cpus() {
 		return option("cpus", Runtime.getRuntime().availableProcessors());
 	}
