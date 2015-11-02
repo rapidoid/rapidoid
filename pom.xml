@@ -123,6 +123,7 @@
 		<module>rapidoid-main</module>
 		<module>rapidoid-full</module>
 		<module>rapidoid-watch</module>
+		<module>rapidoid-fluent</module>
 		<module>rapidoid-demo</module>
 		<module>rapidoid-integration-tests</module>
 		<module>rapidoid-module-template</module>
