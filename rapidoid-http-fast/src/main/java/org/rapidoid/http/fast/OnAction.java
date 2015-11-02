@@ -26,6 +26,9 @@ import java.util.concurrent.Callable;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.Res;
+import org.rapidoid.lambda.F2;
+import org.rapidoid.lambda.F3;
+import org.rapidoid.lambda.Mapper;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
@@ -206,6 +209,60 @@ public class OnAction {
 	public <T> ServerSetup binary(Res resource) {
 		register(FastHttp.CONTENT_TYPE_BINARY, resource);
 		return chain;
+	}
+
+	/*********************** PARAMETERIZED ***********************/
+
+	public ServerSetup plain(final String paramName, final Mapper<String, Object> handler) {
+		return plain(HttpHandlers.parameterized(paramName, handler));
+	}
+
+	public ServerSetup plain(final String paramName1, final String paramName2, final F2<String, String, Object> handler) {
+		return plain(HttpHandlers.parameterized(paramName1, paramName2, handler));
+	}
+
+	public ServerSetup plain(final String paramName1, final String paramName2, final String paramName3,
+			final F3<String, String, String, Object> handler) {
+		return plain(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
+	}
+
+	public ServerSetup html(final String paramName, final Mapper<String, Object> handler) {
+		return html(HttpHandlers.parameterized(paramName, handler));
+	}
+
+	public ServerSetup html(final String paramName1, final String paramName2, final F2<String, String, Object> handler) {
+		return html(HttpHandlers.parameterized(paramName1, paramName2, handler));
+	}
+
+	public ServerSetup html(final String paramName1, final String paramName2, final String paramName3,
+			final F3<String, String, String, Object> handler) {
+		return html(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
+	}
+
+	public ServerSetup json(final String paramName, final Mapper<String, Object> handler) {
+		return json(HttpHandlers.parameterized(paramName, handler));
+	}
+
+	public ServerSetup json(final String paramName1, final String paramName2, final F2<String, String, Object> handler) {
+		return json(HttpHandlers.parameterized(paramName1, paramName2, handler));
+	}
+
+	public ServerSetup json(final String paramName1, final String paramName2, final String paramName3,
+			final F3<String, String, String, Object> handler) {
+		return json(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
+	}
+
+	public ServerSetup binary(final String paramName, final Mapper<String, Object> handler) {
+		return binary(HttpHandlers.parameterized(paramName, handler));
+	}
+
+	public ServerSetup binary(final String paramName1, final String paramName2, final F2<String, String, Object> handler) {
+		return binary(HttpHandlers.parameterized(paramName1, paramName2, handler));
+	}
+
+	public ServerSetup binary(final String paramName1, final String paramName2, final String paramName3,
+			final F3<String, String, String, Object> handler) {
+		return binary(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
 	}
 
 }

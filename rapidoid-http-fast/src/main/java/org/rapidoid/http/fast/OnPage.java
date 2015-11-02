@@ -26,6 +26,9 @@ import java.util.concurrent.Callable;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.io.Res;
+import org.rapidoid.lambda.F2;
+import org.rapidoid.lambda.F3;
+import org.rapidoid.lambda.Mapper;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
@@ -102,6 +105,19 @@ public class OnPage {
 	public ServerSetup gui(Res resource) {
 		register(new PageOptions(FastHttp.CONTENT_TYPE_HTML, false), resource);
 		return chain;
+	}
+
+	public ServerSetup gui(final String paramName, final Mapper<String, Object> handler) {
+		return gui(HttpHandlers.parameterized(paramName, handler));
+	}
+
+	public ServerSetup gui(final String paramName1, final String paramName2, final F2<String, String, Object> handler) {
+		return gui(HttpHandlers.parameterized(paramName1, paramName2, handler));
+	}
+
+	public ServerSetup gui(final String paramName1, final String paramName2, final String paramName3,
+			final F3<String, String, String, Object> handler) {
+		return gui(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
 	}
 
 }
