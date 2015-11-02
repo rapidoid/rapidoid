@@ -20,27 +20,14 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
-import java.util.Map;
-import java.util.concurrent.Callable;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.lambda.Mapper;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public class FastCallableHttpHandler extends AbstractAsyncHttpHandler {
+@Since("5.0.0")
+public interface WrappedProcess {
 
-	private final Callable<Object> handler;
-
-	public FastCallableHttpHandler(FastHttp http, byte[] contentType, HttpWrapper[] wrappers, Callable<Object> handler) {
-		super(http, contentType, wrappers);
-		this.handler = handler;
-	}
-
-	@Override
-	protected Object handleReq(Channel ctx, Map<String, Object> params) throws Exception {
-		return handler.call();
-	}
+	Object invoke(Mapper<Object, Object> transformation) throws Exception;
 
 }

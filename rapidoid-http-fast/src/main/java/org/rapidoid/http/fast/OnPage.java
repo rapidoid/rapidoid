@@ -29,6 +29,7 @@ import org.rapidoid.io.Res;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.F3;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
@@ -40,14 +41,22 @@ public class OnPage {
 
 	private final String path;
 
+	private volatile HttpWrapper[] wrappers;
+
 	public OnPage(ServerSetup chain, FastHttp[] httpImpls, String path) {
 		this.chain = chain;
 		this.httpImpls = httpImpls;
 		this.path = path;
 	}
 
+	public OnPage wrap(HttpWrapper... wrappers) {
+		this.wrappers = wrappers;
+		return this;
+	}
+
 	private void register(PageOptions options, byte[] response) {
 		for (FastHttp http : httpImpls) {
+			U.must(wrappers == null, "Wrappers are only supported for dynamic parameterized handlers!");
 			http.on("GET", path, new FastStaticHttpHandler(http, options.contentType, response));
 			http.on("POST", path, new FastStaticHttpHandler(http, options.contentType, response));
 		}
@@ -55,13 +64,16 @@ public class OnPage {
 
 	private void register(PageOptions options, ParamHandler handler) {
 		for (FastHttp http : httpImpls) {
-			http.on("GET", path, new FastParamsAwarePageHandler(http, options.contentType, handler));
-			http.on("POST", path, new FastParamsAwarePageHandler(http, options.contentType, handler));
+			FastParamsAwarePageHandler hnd = new FastParamsAwarePageHandler(http, options.contentType, wrappers,
+					handler);
+			http.on("GET", path, hnd);
+			http.on("POST", path, hnd);
 		}
 	}
 
 	private void register(PageOptions options, Res resource) {
 		for (FastHttp http : httpImpls) {
+			U.must(wrappers == null, "Wrappers are only supported for dynamic parameterized handlers!");
 			http.on("GET", path, new FastResourceHttpHandler(http, options.contentType, resource));
 			http.on("POST", path, new FastResourceHttpHandler(http, options.contentType, resource));
 		}

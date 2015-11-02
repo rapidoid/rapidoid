@@ -80,4 +80,8 @@ public class On {
 		return DEFAULT_SERVER_SETUP.address(address);
 	}
 
+	public static synchronized ServerSetup defaultWrap(HttpWrapper... wrappers) {
+		return DEFAULT_SERVER_SETUP.defaultWrap(wrappers);
+	}
+
 }

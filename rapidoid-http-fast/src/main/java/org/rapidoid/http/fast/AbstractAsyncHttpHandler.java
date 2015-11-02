@@ -27,6 +27,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.ctx.Ctx;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
@@ -39,9 +40,12 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 	private final byte[] contentType;
 
-	public AbstractAsyncHttpHandler(FastHttp http, byte[] contentType) {
+	protected final HttpWrapper[] wrappers;
+
+	public AbstractAsyncHttpHandler(FastHttp http, byte[] contentType, HttpWrapper[] wrappers) {
 		this.http = http;
 		this.contentType = contentType;
+		this.wrappers = wrappers;
 	}
 
 	@Override
@@ -77,7 +81,13 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 				Object result;
 
 				try {
-					result = handleReq(ctx, params);
+
+					if (!U.isEmpty(wrappers)) {
+						result = wrap(ctx, params, 0);
+					} else {
+						result = handleReq(ctx, params);
+					}
+
 					result = postprocessResult(result);
 				} catch (Exception e) {
 					result = e;
@@ -86,6 +96,25 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 				done(ctx, isKeepAlive, result);
 			}
 		});
+	}
+
+	private Object wrap(final Channel ctx, final Map<String, Object> params, final int index) throws Exception {
+		HttpWrapper wrapper = wrappers[index];
+
+		WrappedProcess process = new WrappedProcess() {
+			@Override
+			public Object invoke(Mapper<Object, Object> transformation) throws Exception {
+				try {
+					int next = index + 1;
+					Object val = next < wrappers.length ? wrap(ctx, params, next) : handleReq(ctx, params);
+					return transformation.map(val);
+				} catch (Exception e) {
+					return e;
+				}
+			}
+		};
+
+		return wrapper.wrap(params, process);
 	}
 
 	protected abstract Object handleReq(Channel ctx, Map<String, Object> params) throws Exception;

@@ -33,8 +33,8 @@ public class FastParamsAwarePageHandler extends AbstractAsyncHttpHandler impleme
 
 	private final ParamHandler handler;
 
-	public FastParamsAwarePageHandler(FastHttp http, byte[] contentType, ParamHandler handler) {
-		super(http, contentType);
+	public FastParamsAwarePageHandler(FastHttp http, byte[] contentType, HttpWrapper[] wrappers, ParamHandler handler) {
+		super(http, contentType, wrappers);
 		this.handler = handler;
 	}
 

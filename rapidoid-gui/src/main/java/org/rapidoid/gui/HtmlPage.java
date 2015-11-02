@@ -63,7 +63,7 @@ public class HtmlPage extends AbstractWidget {
 		}
 	}
 
-	private String title;
+	private String title = "";
 
 	private Object content;
 

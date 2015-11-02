@@ -32,8 +32,8 @@ public class FastParamsAwareHttpHandler extends AbstractAsyncHttpHandler {
 
 	private final ParamHandler handler;
 
-	public FastParamsAwareHttpHandler(FastHttp http, byte[] contentType, ParamHandler handler) {
-		super(http, contentType);
+	public FastParamsAwareHttpHandler(FastHttp http, byte[] contentType, HttpWrapper[] wrappers, ParamHandler handler) {
+		super(http, contentType, wrappers);
 		this.handler = handler;
 	}
 

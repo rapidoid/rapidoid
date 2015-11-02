@@ -36,6 +36,8 @@ public class ServerSetup {
 
 	private String address = "0.0.0.0";
 
+	private HttpWrapper[] wrappers;
+
 	public TCPServer listen() {
 		TCPServer server = Serve.server().protocol(fastHttp).address(address).port(port).build();
 		server.start();
@@ -43,27 +45,27 @@ public class ServerSetup {
 	}
 
 	public OnAction get(String path) {
-		return new OnAction(this, httpImpls(), "GET", path);
+		return new OnAction(this, httpImpls(), "GET", path).wrap(wrappers);
 	}
 
 	public OnAction post(String path) {
-		return new OnAction(this, httpImpls(), "POST", path);
+		return new OnAction(this, httpImpls(), "POST", path).wrap(wrappers);
 	}
 
 	public OnAction put(String path) {
-		return new OnAction(this, httpImpls(), "PUT", path);
+		return new OnAction(this, httpImpls(), "PUT", path).wrap(wrappers);
 	}
 
 	public OnAction delete(String path) {
-		return new OnAction(this, httpImpls(), "DELETE", path);
+		return new OnAction(this, httpImpls(), "DELETE", path).wrap(wrappers);
 	}
 
 	public OnAction options(String path) {
-		return new OnAction(this, httpImpls(), "OPTIONS", path);
+		return new OnAction(this, httpImpls(), "OPTIONS", path).wrap(wrappers);
 	}
 
 	public OnPage page(String path) {
-		return new OnPage(this, httpImpls(), path);
+		return new OnPage(this, httpImpls(), path).wrap(wrappers);
 	}
 
 	private FastHttp[] httpImpls() {
@@ -77,6 +79,11 @@ public class ServerSetup {
 
 	public ServerSetup address(String address) {
 		this.address = address;
+		return this;
+	}
+
+	public ServerSetup defaultWrap(HttpWrapper[] wrappers) {
+		this.wrappers = wrappers;
 		return this;
 	}
 

@@ -42,11 +42,18 @@ public class OnAction {
 
 	private final String path;
 
+	private volatile HttpWrapper[] wrappers;
+
 	public OnAction(ServerSetup chain, FastHttp[] httpImpls, String verb, String path) {
 		this.chain = chain;
 		this.httpImpls = httpImpls;
 		this.verb = verb;
 		this.path = path;
+	}
+
+	public OnAction wrap(HttpWrapper... wrappers) {
+		this.wrappers = wrappers;
+		return this;
 	}
 
 	private void register(byte[] contentType, byte[] response) {
@@ -67,13 +74,13 @@ public class OnAction {
 	@SuppressWarnings("unchecked")
 	private void register(byte[] contentType, Callable<?> handler) {
 		for (FastHttp http : httpImpls) {
-			http.on(verb, path, new FastCallableHttpHandler(http, contentType, (Callable<Object>) handler));
+			http.on(verb, path, new FastCallableHttpHandler(http, contentType, wrappers, (Callable<Object>) handler));
 		}
 	}
 
 	private void register(byte[] contentType, ParamHandler handler) {
 		for (FastHttp http : httpImpls) {
-			http.on(verb, path, new FastParamsAwareHttpHandler(http, contentType, handler));
+			http.on(verb, path, new FastParamsAwareHttpHandler(http, contentType, wrappers, handler));
 		}
 	}
 
