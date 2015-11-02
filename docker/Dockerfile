@@ -22,7 +22,7 @@ VOLUME /app
 USER rapidoid
 
 WORKDIR $RAPIDOID_BASE
-EXPOSE 8080
+EXPOSE 8888
 CMD ["rapidoid"]
 
 

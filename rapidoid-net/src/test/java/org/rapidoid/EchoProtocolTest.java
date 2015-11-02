@@ -50,7 +50,7 @@ public class EchoProtocolTest extends NetTestCommons {
 		}, new Runnable() {
 			@Override
 			public void run() {
-				UTILS.connect("localhost", 8080, new F2<Void, BufferedReader, DataOutputStream>() {
+				UTILS.connect("localhost", 8888, new F2<Void, BufferedReader, DataOutputStream>() {
 					@Override
 					public Void execute(BufferedReader in, DataOutputStream out) throws IOException {
 						out.writeBytes("hello\n");
@@ -90,7 +90,7 @@ public class EchoProtocolTest extends NetTestCommons {
 		}, new Runnable() {
 			@Override
 			public void run() {
-				UTILS.connect("localhost", 8080, new F2<Void, BufferedReader, DataOutputStream>() {
+				UTILS.connect("localhost", 8888, new F2<Void, BufferedReader, DataOutputStream>() {
 					@Override
 					public Void execute(BufferedReader in, DataOutputStream out) throws IOException {
 						out.writeBytes("a\n");

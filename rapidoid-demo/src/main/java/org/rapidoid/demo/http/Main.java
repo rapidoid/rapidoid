@@ -34,7 +34,7 @@ public class Main {
 	public static void main(String[] args) {
 		Conf.init(args);
 
-		On.port(8080);
+		On.port(8888);
 
 		On.get("/plaintext").plain("Hello world!");
 

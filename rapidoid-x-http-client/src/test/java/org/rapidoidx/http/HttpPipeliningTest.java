@@ -71,7 +71,7 @@ public class HttpPipeliningTest extends ContextAwareTest {
 		final IntWrap counter = new IntWrap();
 		final BoolWrap err = new BoolWrap();
 
-		TCP.client().host("localhost").port(8080).connections(connections).protocol(new FiniteStateProtocol(2) {
+		TCP.client().host("localhost").port(8888).connections(connections).protocol(new FiniteStateProtocol(2) {
 
 			@Override
 			protected int state0(Channel ctx) {

@@ -63,12 +63,12 @@ public class TcpClientTest extends NetTestCommons {
 	public void testTCPClientWithDefaultConnections() {
 		Log.setLogLevel(LogLevel.DEBUG);
 
-		TCPClient client = TCP.client().host("localhost").port(8080).connections(5).protocol(HI_CLIENT).build().start();
+		TCPClient client = TCP.client().host("localhost").port(8888).connections(5).protocol(HI_CLIENT).build().start();
 
 		// let the clients wait
 		U.sleep(3000);
 
-		TCPServer server = TCP.server().port(8080).protocol(UPPERCASE_SERVER).build().start();
+		TCPServer server = TCP.server().port(8888).protocol(UPPERCASE_SERVER).build().start();
 
 		// let the server serve the clients
 		U.sleep(3000);
@@ -85,12 +85,12 @@ public class TcpClientTest extends NetTestCommons {
 		Log.setLogLevel(LogLevel.DEBUG);
 
 		TCPClient client = TCP.client().build().start();
-		client.connect("localhost", 8080, HI_CLIENT, 10, false, null);
+		client.connect("localhost", 8888, HI_CLIENT, 10, false, null);
 
 		// let the clients wait
 		U.sleep(3000);
 
-		TCPServer server = TCP.server().port(8080).protocol(UPPERCASE_SERVER).build().start();
+		TCPServer server = TCP.server().port(8888).protocol(UPPERCASE_SERVER).build().start();
 
 		// let the server serve the clients
 		U.sleep(3000);
@@ -106,13 +106,13 @@ public class TcpClientTest extends NetTestCommons {
 	public void testTCPClientWithDefaultAndCustomConnections() {
 		Log.setLogLevel(LogLevel.DEBUG);
 
-		TCPClient client = TCP.client().host("127.0.0.1").port(8080).connections(3).protocol(HI_CLIENT).build().start();
+		TCPClient client = TCP.client().host("127.0.0.1").port(8888).connections(3).protocol(HI_CLIENT).build().start();
 		client.connect("localhost", 9090, HI_CLIENT, 2, false, null);
 
 		// let the clients wait
 		U.sleep(3000);
 
-		TCPServer server1 = TCP.server().port(8080).protocol(UPPERCASE_SERVER).build().start();
+		TCPServer server1 = TCP.server().port(8888).protocol(UPPERCASE_SERVER).build().start();
 		TCPServer server2 = TCP.server().port(9090).protocol(UPPERCASE_SERVER).build().start();
 
 		// let the servers serve the clients

@@ -10,7 +10,7 @@
 	<script type="text/javascript">
 		function init() {
 
-			var websocket = new WebSocket("ws://localhost:8080/");
+			var websocket = new WebSocket("ws://localhost:8888/");
 
 			websocket.onopen = function(e) {
 				writeToScreen("Connected, sending 'ABC'");

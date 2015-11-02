@@ -68,7 +68,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected String localhost(String uri) {
-		return "http://localhost:8080" + uri;
+		return "http://localhost:8888" + uri;
 	}
 
 	protected void server() {

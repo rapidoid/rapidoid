@@ -50,7 +50,7 @@ public class RapidoidServerLoop extends AbstractEventLoop<TCPServer> implements 
 	private int workerIndex = 0;
 
 	@Inject(optional = true)
-	private int port = 8080;
+	private int port = 8888;
 
 	@Inject(optional = true)
 	private int workersN = Conf.cpus();

@@ -51,7 +51,7 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 	private RapidoidWorker currentWorker;
 
 	@Inject(optional = true)
-	private int port = 8080;
+	private int port = 8888;
 
 	@Inject(optional = true)
 	private String address = "0.0.0.0";

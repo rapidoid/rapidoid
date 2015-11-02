@@ -39,7 +39,7 @@ public class MainHelp {
 			show("\nAvailable options:");
 			opt("mode=(dev|production)", "configure DEV or PRODUCTION mode");
 			opt("secret=<SECRET>", "configure app-specific secret token for encryption");
-			opt("port=<P>", "listen at port P (default: 8080)");
+			opt("port=<P>", "listen at port P (default: 8888)");
 			opt("address=<ADDR>", "listen at address ADDR (default: 0.0.0.0)");
 			opt("stateless", "Run in stateless mode, session becomes cookiepack (default: false)");
 			opt("threads=<T>", "start T threads for the job executor service (default: 100)");

@@ -75,8 +75,8 @@ public class AsyncHttpServerTest extends IntegrationTestCommons {
 
 		HTTPServer server = WebServer.create().applications(WebAppGroup.main()).build().start();
 
-		eq(new String(HTTP.get("http://localhost:8080/")), "OK");
-		eq(new String(HTTP.post("http://localhost:8080/")), "OK");
+		eq(new String(HTTP.get("http://localhost:8888/")), "OK");
+		eq(new String(HTTP.post("http://localhost:8888/")), "OK");
 
 		server.shutdown();
 		Ctxs.close();

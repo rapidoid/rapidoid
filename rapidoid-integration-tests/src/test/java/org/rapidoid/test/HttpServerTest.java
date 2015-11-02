@@ -45,8 +45,8 @@ public class HttpServerTest extends IntegrationTestCommons {
 
 		HTTPServer server = WebServer.create().applications(WebAppGroup.main()).build().start();
 
-		eq(new String(HTTP.get("http://localhost:8080/")), "home");
-		eq(new String(HTTP.post("http://localhost:8080/")), "\"abc\"");
+		eq(new String(HTTP.get("http://localhost:8888/")), "home");
+		eq(new String(HTTP.post("http://localhost:8888/")), "\"abc\"");
 
 		server.shutdown();
 		Ctxs.close();

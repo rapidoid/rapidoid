@@ -55,36 +55,36 @@ public class HttpServerSubAppTest extends HttpTestCommons {
 		server = WebServer.create().applications(apps).build();
 		start();
 
-		eq(get("/my"), "my-generic: id=myapp, host=localhost:8080, uri=/my, ctx=/my, path=/, subpath=/, segments=");
-		eq(get("/my/"), "my-generic: id=myapp, host=localhost:8080, uri=/my, ctx=/my, path=/, subpath=/, segments=");
+		eq(get("/my"), "my-generic: id=myapp, host=localhost:8888, uri=/my, ctx=/my, path=/, subpath=/, segments=");
+		eq(get("/my/"), "my-generic: id=myapp, host=localhost:8888, uri=/my, ctx=/my, path=/, subpath=/, segments=");
 
 		eq(get("/my/ab"),
-				"my-special: id=myapp, host=localhost:8080, uri=/my/ab, ctx=/my, path=/ab, subpath=/, segments=ab");
+				"my-special: id=myapp, host=localhost:8888, uri=/my/ab, ctx=/my, path=/ab, subpath=/, segments=ab");
 		eq(get("/my/ab/"),
-				"my-special: id=myapp, host=localhost:8080, uri=/my/ab, ctx=/my, path=/ab, subpath=/, segments=ab");
+				"my-special: id=myapp, host=localhost:8888, uri=/my/ab, ctx=/my, path=/ab, subpath=/, segments=ab");
 
-		eq(get("/"), "def-generic: id=defapp, host=localhost:8080, uri=/, ctx=/, path=/, subpath=/, segments=");
+		eq(get("/"), "def-generic: id=defapp, host=localhost:8888, uri=/, ctx=/, path=/, subpath=/, segments=");
 		eq(get("/ab/"),
-				"def-generic: id=defapp, host=localhost:8080, uri=/ab, ctx=/, path=/ab, subpath=/ab, segments=ab");
-		eq(get("/p"), "def-generic: id=defapp, host=localhost:8080, uri=/p, ctx=/, path=/p, subpath=/p, segments=p");
+				"def-generic: id=defapp, host=localhost:8888, uri=/ab, ctx=/, path=/ab, subpath=/ab, segments=ab");
+		eq(get("/p"), "def-generic: id=defapp, host=localhost:8888, uri=/p, ctx=/, path=/p, subpath=/p, segments=p");
 
 		eq(get("/xyz"),
-				"def-generic: id=defapp, host=localhost:8080, uri=/xyz, ctx=/, path=/xyz, subpath=/xyz, segments=xyz");
+				"def-generic: id=defapp, host=localhost:8888, uri=/xyz, ctx=/, path=/xyz, subpath=/xyz, segments=xyz");
 		eq(get("/xyz/"),
-				"def-generic: id=defapp, host=localhost:8080, uri=/xyz, ctx=/, path=/xyz, subpath=/xyz, segments=xyz");
+				"def-generic: id=defapp, host=localhost:8888, uri=/xyz, ctx=/, path=/xyz, subpath=/xyz, segments=xyz");
 		eq(get("/xyz/cd"),
-				"def-generic: id=defapp, host=localhost:8080, uri=/xyz/cd, ctx=/, path=/xyz/cd, subpath=/xyz/cd, segments=xyz:cd");
+				"def-generic: id=defapp, host=localhost:8888, uri=/xyz/cd, ctx=/, path=/xyz/cd, subpath=/xyz/cd, segments=xyz:cd");
 		eq(get("/xyz/a/"),
-				"def-generic: id=defapp, host=localhost:8080, uri=/xyz/a, ctx=/, path=/xyz/a, subpath=/xyz/a, segments=xyz:a");
+				"def-generic: id=defapp, host=localhost:8888, uri=/xyz/a, ctx=/, path=/xyz/a, subpath=/xyz/a, segments=xyz:a");
 
-		eq(get("/x"), "def-special: id=defapp, host=localhost:8080, uri=/x, ctx=/, path=/x, subpath=/, segments=x");
-		eq(get("/x/"), "def-special: id=defapp, host=localhost:8080, uri=/x, ctx=/, path=/x, subpath=/, segments=x");
+		eq(get("/x"), "def-special: id=defapp, host=localhost:8888, uri=/x, ctx=/, path=/x, subpath=/, segments=x");
+		eq(get("/x/"), "def-special: id=defapp, host=localhost:8888, uri=/x, ctx=/, path=/x, subpath=/, segments=x");
 		eq(get("/x/a"),
-				"def-special: id=defapp, host=localhost:8080, uri=/x/a, ctx=/, path=/x/a, subpath=/a, segments=x:a");
+				"def-special: id=defapp, host=localhost:8888, uri=/x/a, ctx=/, path=/x/a, subpath=/a, segments=x:a");
 		eq(get("/x/a/bb/"),
-				"def-special: id=defapp, host=localhost:8080, uri=/x/a/bb, ctx=/, path=/x/a/bb, subpath=/a/bb, segments=x:a:bb");
+				"def-special: id=defapp, host=localhost:8888, uri=/x/a/bb, ctx=/, path=/x/a/bb, subpath=/a/bb, segments=x:a:bb");
 		eq(get("/x/a/bb/c"),
-				"def-special: id=defapp, host=localhost:8080, uri=/x/a/bb/c, ctx=/, path=/x/a/bb/c, subpath=/a/bb/c, segments=x:a:bb:c");
+				"def-special: id=defapp, host=localhost:8888, uri=/x/a/bb/c, ctx=/, path=/x/a/bb/c, subpath=/a/bb/c, segments=x:a:bb:c");
 
 		shutdown();
 	}
