@@ -25,6 +25,7 @@ import java.util.concurrent.Future;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.lambda.Mapper;
@@ -69,6 +70,10 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 			result = ((org.rapidoid.concurrent.Future<Object>) result).get();
 			return postprocessResult(result);
 		} else {
+			// render the response and process logic while still in context
+			if (!Cls.isSimple(result)) {
+				result = U.str(result);
+			}
 			return result;
 		}
 	}

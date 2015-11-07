@@ -25,7 +25,6 @@ import java.util.Map;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
@@ -40,12 +39,8 @@ public class FastParamsAwarePageHandler extends AbstractAsyncHttpHandler impleme
 
 	@Override
 	protected Object handleReq(Channel channel, Map<String, Object> params) throws Exception {
-
 		// call the handler, get the result
-		Object result = handler.handle(params);
-
-		// render the response and process logic while still in context
-		return U.str(result);
+		return handler.handle(params);
 	}
 
 	@Override
