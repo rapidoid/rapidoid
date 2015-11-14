@@ -155,6 +155,10 @@ public class FastHttp implements Protocol, HttpMetadata {
 		}
 	}
 
+	public void setStaticResourcesHandler(FastHttpHandler staticResourcesHandler) {
+		this.staticResourcesHandler = staticResourcesHandler;
+	}
+
 	public void process(Channel ctx) {
 		if (ctx.isInitial()) {
 			return;
@@ -410,4 +414,15 @@ public class FastHttp implements Protocol, HttpMetadata {
 	public FastHttpListener getListener() {
 		return listener;
 	}
+
+	public synchronized void clearHandlers() {
+		path1 = path2 = path3 = null;
+		handler1 = handler2 = handler3 = null;
+		getHandlers.clear();
+		postHandlers.clear();
+		putHandlers.clear();
+		deleteHandlers.clear();
+		optionsHandlers.clear();
+	}
+
 }
