@@ -253,12 +253,13 @@ public class Conf {
 		return root().sub(name);
 	}
 
-	public static void setRootPath(String rootPath) {
+	public static synchronized void setRootPath(String rootPath) {
 		Log.info("Setting 'root' application path", "path", rootPath);
 		Conf.rootPath = cleanPath(rootPath);
 		setStaticPath(Conf.rootPath + "/static");
 		setDynamicPath(Conf.rootPath + "/dynamic");
 		setConfigPath(Conf.rootPath);
+		USERS = null;
 	}
 
 	public static void setStaticPath(String staticPath) {
