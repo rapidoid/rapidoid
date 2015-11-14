@@ -40,15 +40,19 @@ public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 
 	@Override
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
+		http.getListener().state(this, params);
+
 		try {
 			Res res = HttpUtils.staticPage(params);
 			byte[] bytes = res.getBytesOrNull();
 
 			if (bytes != null) {
 				byte[] contentType = MediaType.getByFileName(res.getShortName()).asHttpHeader();
+				http.getListener().result(this, contentType, bytes);
 				http.write200(ctx, isKeepAlive, contentType, bytes);
 				return HttpStatus.DONE;
 			} else {
+				http.getListener().resultNotFound(this);
 				return HttpStatus.NOT_FOUND;
 			}
 		} catch (Exception e) {

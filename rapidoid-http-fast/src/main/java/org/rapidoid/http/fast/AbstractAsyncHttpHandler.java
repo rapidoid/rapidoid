@@ -37,9 +37,9 @@ import org.rapidoid.util.UTILS;
 @Since("4.3.0")
 public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
-	private final FastHttp http;
+	protected final FastHttp http;
 
-	private final byte[] contentType;
+	protected final byte[] contentType;
 
 	protected final HttpWrapper[] wrappers;
 
@@ -111,7 +111,14 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 			public Object invoke(Mapper<Object, Object> transformation) throws Exception {
 				try {
 					int next = index + 1;
-					Object val = next < wrappers.length ? wrap(ctx, params, next) : handleReq(ctx, params);
+
+					Object val;
+					if (next < wrappers.length) {
+						val = wrap(ctx, params, next);
+					} else {
+						val = handleReq(ctx, params);
+					}
+
 					return transformation.map(val);
 				} catch (Exception e) {
 					return e;
@@ -119,7 +126,13 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 			}
 		};
 
-		return wrapper.wrap(params, process);
+		http.getListener().entering(wrapper, params);
+
+		Object result = wrapper.wrap(params, process);
+
+		http.getListener().leaving(wrapper, contentType, result);
+
+		return result;
 	}
 
 	protected abstract Object handleReq(Channel ctx, Map<String, Object> params) throws Exception;

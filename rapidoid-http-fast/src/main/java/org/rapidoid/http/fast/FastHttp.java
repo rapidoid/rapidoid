@@ -102,11 +102,13 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	private final BufMap<FastHttpHandler> optionsHandlers = new BufMapImpl<FastHttpHandler>();
 
-	private byte[] path1, path2, path3;
+	private volatile byte[] path1, path2, path3;
 
-	private FastHttpHandler handler1, handler2, handler3;
+	private volatile FastHttpHandler handler1, handler2, handler3;
 
-	private final FastHttpHandler staticResourcesHandler = new FastStaticResourcesHandler(this);
+	private volatile FastHttpHandler staticResourcesHandler = new FastStaticResourcesHandler(this);
+
+	private final FastHttpListener listener;
 
 	static {
 		for (int len = 0; len < CONTENT_LENGTHS.length; len++) {
@@ -114,8 +116,11 @@ public class FastHttp implements Protocol, HttpMetadata {
 		}
 	}
 
-	public synchronized void on(String verb, String path, FastHttpHandler handler) {
+	public FastHttp(FastHttpListener listener) {
+		this.listener = listener;
+	}
 
+	public synchronized void on(String verb, String path, FastHttpHandler handler) {
 		if (verb.equals("GET")) {
 			if (path1 == null) {
 				path1 = path.getBytes();
@@ -172,6 +177,11 @@ public class FastHttp implements Protocol, HttpMetadata {
 		Range body = ranges[ranges.length - 6];
 
 		HTTP_PARSER.parse(buf, isGet, isKeepAlive, body, verb, uri, path, query, protocol, hdrs, helper);
+
+		// the listener may override all the request dispatching and handler execution
+		if (!listener.request(this, ctx, isGet, isKeepAlive, body, verb, uri, path, query, protocol, hdrs)) {
+			return;
+		}
 
 		HttpStatus status = HttpStatus.NOT_FOUND;
 
@@ -241,6 +251,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 		if (status == HttpStatus.NOT_FOUND) {
 			ctx.write(HTTP_404_NOT_FOUND);
+			listener.notFound(this, ctx, isGet, isKeepAlive, body, verb, uri, path, query, protocol, hdrs);
 		}
 
 		if (status != HttpStatus.ASYNC) {
@@ -330,11 +341,13 @@ public class FastHttp implements Protocol, HttpMetadata {
 	public void write200(Channel ctx, boolean isKeepAlive, byte[] contentTypeHeader, byte[] content) {
 		start200(ctx, isKeepAlive, contentTypeHeader);
 		writeContent(ctx, content);
+		listener.onOkResponse(contentTypeHeader, content);
 	}
 
 	public void write500(Channel ctx, boolean isKeepAlive, byte[] contentTypeHeader, byte[] content) {
 		start500(ctx, isKeepAlive, contentTypeHeader);
 		writeContent(ctx, content);
+		listener.onErrorResponse(500, contentTypeHeader, content);
 	}
 
 	public HttpStatus error(Channel ctx, boolean isKeepAlive, Throwable error) {
@@ -394,4 +407,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 		ctx.closeIf(!isKeepAlive);
 	}
 
+	public FastHttpListener getListener() {
+		return listener;
+	}
 }

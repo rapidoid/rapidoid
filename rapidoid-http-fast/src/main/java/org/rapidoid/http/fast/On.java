@@ -42,10 +42,6 @@ public class On {
 		return DEFAULT_SERVER_SETUP;
 	}
 
-	public static ServerSetup custom() {
-		return new ServerSetup();
-	}
-
 	private static void initialize() {
 		DEFAULT_SERVER_SETUP.listen();
 
@@ -91,6 +87,18 @@ public class On {
 
 	public static synchronized ServerSetup defaultWrap(HttpWrapper... wrappers) {
 		return DEFAULT_SERVER_SETUP.defaultWrap(wrappers);
+	}
+
+	public static synchronized ServerSetup listener(FastHttpListener listener) {
+		return DEFAULT_SERVER_SETUP.listener(listener);
+	}
+
+	public static synchronized ServerSetup getDefaultSetup() {
+		return setup();
+	}
+
+	public static ServerSetup createCustomSetup() {
+		return new ServerSetup();
 	}
 
 }

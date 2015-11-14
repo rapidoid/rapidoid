@@ -44,7 +44,11 @@ public class FastStaticHttpHandler extends AbstractFastHttpHandler {
 
 	@Override
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
+		http.getListener().state(this, params);
+
+		http.getListener().result(this, contentType, response);
 		http.write200(ctx, isKeepAlive, contentType, response);
+
 		return HttpStatus.DONE;
 	}
 

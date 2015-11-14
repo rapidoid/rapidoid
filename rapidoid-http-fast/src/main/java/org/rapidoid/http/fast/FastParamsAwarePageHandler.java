@@ -39,8 +39,13 @@ public class FastParamsAwarePageHandler extends AbstractAsyncHttpHandler impleme
 
 	@Override
 	protected Object handleReq(Channel channel, Map<String, Object> params) throws Exception {
+		http.getListener().state(this, params);
+
 		// call the handler, get the result
-		return handler.handle(params);
+		Object result = handler.handle(params);
+
+		http.getListener().result(this, contentType, result);
+		return result;
 	}
 
 	@Override

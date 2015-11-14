@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.net.Serve;
 import org.rapidoid.net.TCPServer;
+import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -30,16 +31,26 @@ import org.rapidoid.net.TCPServer;
 @Since("4.3.0")
 public class ServerSetup {
 
-	private final FastHttp fastHttp = new FastHttp();
+	private volatile int port = Conf.port();
 
-	private int port = Conf.port();
+	private volatile String address = "0.0.0.0";
 
-	private String address = "0.0.0.0";
+	private volatile FastHttpListener listener = new IgnorantHttpListener();
 
-	private HttpWrapper[] wrappers;
+	private volatile HttpWrapper[] wrappers;
+
+	private volatile FastHttp fastHttp;
+
+	public synchronized FastHttp http() {
+		if (fastHttp == null) {
+			fastHttp = new FastHttp(listener);
+		}
+
+		return fastHttp;
+	}
 
 	public TCPServer listen() {
-		TCPServer server = Serve.server().protocol(fastHttp).address(address).port(port).build();
+		TCPServer server = Serve.server().protocol(http()).address(address).port(port).build();
 		server.start();
 		return server;
 	}
@@ -69,7 +80,7 @@ public class ServerSetup {
 	}
 
 	private FastHttp[] httpImpls() {
-		return new FastHttp[] { fastHttp };
+		return new FastHttp[] { http() };
 	}
 
 	public ServerSetup port(int port) {
@@ -84,6 +95,12 @@ public class ServerSetup {
 
 	public ServerSetup defaultWrap(HttpWrapper[] wrappers) {
 		this.wrappers = wrappers;
+		return this;
+	}
+
+	public ServerSetup listener(FastHttpListener listener) {
+		U.must(this.fastHttp == null, "The HTTP server was already initialized!");
+		this.listener = listener;
 		return this;
 	}
 

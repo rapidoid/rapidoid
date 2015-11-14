@@ -39,7 +39,12 @@ public class FastParamsAwareHttpHandler extends AbstractAsyncHttpHandler {
 
 	@Override
 	protected Object handleReq(Channel channel, Map<String, Object> params) throws Exception {
-		return handler.handle(params);
+		http.getListener().state(this, params);
+
+		Object result = handler.handle(params);
+
+		http.getListener().result(this, contentType, result);
+		return result;
 	}
 
 	@Override
