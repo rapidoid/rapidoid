@@ -71,7 +71,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 			return postprocessResult(result);
 		} else {
 			// render the response and process logic while still in context
-			if (!Cls.isSimple(result)) {
+			if (!(result instanceof byte[]) && !Cls.isSimple(result) && !U.isCollection(result) && !U.isMap(result)) {
 				result = U.str(result);
 			}
 			return result;
