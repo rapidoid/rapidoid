@@ -296,7 +296,7 @@ public class Conf {
 
 		final Config conf = config;
 
-		res.onChange("config", new Runnable() {
+		Runnable reload = new Runnable() {
 			@SuppressWarnings("unchecked")
 			@Override
 			public void run() {
@@ -312,7 +312,10 @@ public class Conf {
 
 				conf.assign(configData);
 			}
-		});
+		};
+
+		reload.run();
+		res.onChange("config", reload);
 
 		res.trackChanges();
 		res.exists(); // trigger loading
