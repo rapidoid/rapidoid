@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.Base64Variants;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 
 /*
@@ -37,10 +38,20 @@ public class JSON {
 
 	public static final ObjectMapper MAPPER = mapper();
 
+	public static final ObjectMapper PRETTY_MAPPER = prettyMapper();
+
 	private static ObjectMapper mapper() {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setBase64Variant(Base64Variants.MODIFIED_FOR_URL);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.registerModule(new AfterburnerModule());
+		return mapper;
+	}
+
+	private static ObjectMapper prettyMapper() {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setBase64Variant(Base64Variants.MODIFIED_FOR_URL);
+		mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
 		mapper.registerModule(new AfterburnerModule());
 		return mapper;
 	}
@@ -56,6 +67,31 @@ public class JSON {
 	public static void stringify(Object value, OutputStream out) {
 		try {
 			MAPPER.writeValue(out, value);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static String prettify(Object value) {
+		try {
+			return PRETTY_MAPPER.writeValueAsString(value);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static void prettify(Object value, OutputStream out) {
+		try {
+			PRETTY_MAPPER.writeValue(out, value);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T parse(byte[] json) {
+		try {
+			return (T) MAPPER.readValue(json, Object.class);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
