@@ -1,13 +1,8 @@
-package org.rapidoid.bufstruct;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.Buf;
-import org.rapidoid.data.Range;
+package org.rapidoid.util;
 
 /*
  * #%L
- * rapidoid-buffer
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -25,16 +20,25 @@ import org.rapidoid.data.Range;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public interface BufMap<T> {
+@Since("5.0.2")
+public class MapEntry<K, V> {
 
-	void put(String key, T value);
+	public final K key;
 
-	void setDefaultValue(T value);
+	public final V value;
 
-	T get(Buf buf, Range key);
+	public MapEntry(K key, V value) {
+		this.key = key;
+		this.value = value;
+	}
 
-	void clear();
+	@Override
+	public String toString() {
+		return key + ":" + value;
+	}
 
 }

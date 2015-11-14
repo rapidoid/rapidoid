@@ -46,7 +46,7 @@ public class HttpRouter implements Router {
 		}
 	}
 
-	private final SimpleHashTable<Route> routes = new SimpleHashTable<Route>(10000);
+	private final SimpleHashTable<Route> routes = new SimpleHashTable<Route>(1000, 1);
 
 	private Handler genericHandler;
 

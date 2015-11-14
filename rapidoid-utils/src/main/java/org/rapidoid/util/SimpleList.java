@@ -33,6 +33,8 @@ public class SimpleList<T> {
 
 	private int size = 0;
 
+	private int position = 0;
+
 	private final int growFactor;
 
 	public SimpleList(int capacity) {
@@ -47,10 +49,15 @@ public class SimpleList<T> {
 
 	public void clear() {
 		size = 0;
+		position = 0;
 	}
 
 	public int size() {
 		return size;
+	}
+
+	public T get(int index) {
+		return array[index];
 	}
 
 	public void add(T obj) {
@@ -60,8 +67,29 @@ public class SimpleList<T> {
 		array[size++] = obj;
 	}
 
-	public T get(int index) {
-		return array[index];
+	public void addRotating(T obj) {
+		if (size < array.length) {
+			add(obj);
+		} else {
+			array[position++] = obj;
+			if (position >= array.length) {
+				position = 0;
+			}
+		}
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < size; i++) {
+			if (i > 0) {
+				sb.append(", ");
+			}
+			sb.append(get(i));
+		}
+
+		return "[" + sb.toString() + "]";
 	}
 
 }

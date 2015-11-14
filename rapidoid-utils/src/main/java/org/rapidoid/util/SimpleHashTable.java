@@ -27,29 +27,56 @@ import org.rapidoid.annotation.Since;
 @Since("2.0.0")
 public class SimpleHashTable<T> {
 
-	public final SimpleList<T>[] base;
+	protected static final int DEFAULT_BUCKET_SIZE = 5;
+
+	public final SimpleList<T>[] buckets;
+
+	public SimpleHashTable(int width) {
+		this(width, DEFAULT_BUCKET_SIZE);
+	}
 
 	@SuppressWarnings("unchecked")
-	public SimpleHashTable(int width) {
-		base = new SimpleList[width];
+	public SimpleHashTable(int width, int initialBucketSize) {
+		this.buckets = new SimpleList[width];
+		for (int i = 0; i < buckets.length; i++) {
+			buckets[i] = newList(initialBucketSize);
+		}
+	}
+
+	protected SimpleList<T> newList(int initialBucketSize) {
+		return new SimpleList<T>(initialBucketSize);
 	}
 
 	public void put(long key, T value) {
-		int hash = index(key);
-
-		if (base[hash] == null) {
-			base[hash] = new SimpleList<T>(5);
-		}
-
-		base[hash].add(value);
+		get(key).add(value);
 	}
 
 	public SimpleList<T> get(long key) {
-		return base[index(key)];
+		int index = index(key);
+		return bucket(index);
 	}
 
-	private int index(long key) {
-		return (int) (Math.abs(key) % base.length);
+	protected SimpleList<T> bucket(int index) {
+		SimpleList<T> list;
+
+		// after construction, other threads might need some time to see the new references
+		while ((list = buckets[index]) == null) {}
+
+		return list;
+	}
+
+	public int index(long key) {
+		return (int) (Math.abs(key) % buckets.length);
+	}
+
+	public void clear() {
+		for (int i = 0; i < buckets.length; i++) {
+			clearBucket(i);
+		}
+	}
+
+	protected void clearBucket(int index) {
+		bucket(index).clear();
 	}
 
 }

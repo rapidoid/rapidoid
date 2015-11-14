@@ -26,26 +26,21 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.data.Range;
-import org.rapidoid.util.SimpleHashTable;
+import org.rapidoid.util.AbstractMapImpl;
+import org.rapidoid.util.MapEntry;
 import org.rapidoid.util.SimpleList;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public class BufMapImpl<T> implements BufMap<T> {
+public class BufMapImpl<T> extends AbstractMapImpl<byte[], T> implements BufMap<T> {
 
-	private class Entry {
-		byte[] key;
-		T value;
-
-		@Override
-		public String toString() {
-			return new String(key) + ":" + value;
-		}
+	public BufMapImpl() {
+		this(100);
 	}
 
-	private final SimpleHashTable<Entry> entries = new SimpleHashTable<Entry>(10000);
-
-	private T defaultValue;
+	public BufMapImpl(int width) {
+		super(width);
+	}
 
 	private long hash(String key) {
 		Bytes bytes = BytesUtil.from(key);
@@ -60,9 +55,7 @@ public class BufMapImpl<T> implements BufMap<T> {
 	public void put(String key, T value) {
 		assert key.length() >= 1;
 
-		Entry route = new Entry();
-		route.key = key.getBytes();
-		route.value = value;
+		MapEntry<byte[], T> route = new MapEntry<byte[], T>(key.getBytes(), value);
 
 		long hash = hash(key);
 
@@ -70,19 +63,14 @@ public class BufMapImpl<T> implements BufMap<T> {
 	}
 
 	@Override
-	public void setDefaultValue(T defaultValue) {
-		this.defaultValue = defaultValue;
-	}
-
-	@Override
 	public T get(Buf buf, Range key) {
 		long hash = hash(buf.bytes(), key);
 
-		SimpleList<Entry> candidates = entries.get(hash);
+		SimpleList<MapEntry<byte[], T>> candidates = entries.get(hash);
 
 		if (candidates != null) {
 			for (int i = 0; i < candidates.size(); i++) {
-				Entry route = candidates.get(i);
+				MapEntry<byte[], T> route = candidates.get(i);
 
 				if (BytesUtil.matches(buf.bytes(), key, route.key, true)) {
 					return route.value;

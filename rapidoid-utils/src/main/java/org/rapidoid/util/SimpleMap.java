@@ -1,13 +1,11 @@
-package org.rapidoid.bufstruct;
+package org.rapidoid.util;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.Buf;
-import org.rapidoid.data.Range;
 
 /*
  * #%L
- * rapidoid-buffer
+ * rapidoid-utils
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -26,15 +24,13 @@ import org.rapidoid.data.Range;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public interface BufMap<T> {
-
-	void put(String key, T value);
-
-	void setDefaultValue(T value);
-
-	T get(Buf buf, Range key);
+@Since("5.0.2")
+public interface SimpleMap<K, V> {
 
 	void clear();
+
+	void setDefaultValue(V defaultValue);
+
+	V getDefaultValue();
 
 }
