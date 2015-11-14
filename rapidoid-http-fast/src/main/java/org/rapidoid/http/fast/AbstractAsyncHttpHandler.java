@@ -72,10 +72,16 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		} else {
 			// render the response and process logic while still in context
 			if (!(result instanceof byte[]) && !Cls.isSimple(result) && !U.isCollection(result) && !U.isMap(result)) {
-				result = U.str(result);
+				result = render(result);
 			}
 			return result;
 		}
+	}
+
+	private String render(Object result) {
+		// rendering a Widget requires double toString:
+		U.str(result); // 1. data binding and event processing
+		return U.str(result); // 2. actual rendering
 	}
 
 	private void execHandlerJob(final Channel ctx, final boolean isKeepAlive, final Map<String, Object> params) {

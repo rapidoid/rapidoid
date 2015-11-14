@@ -38,6 +38,8 @@ public abstract class AbstractCommand<W extends AbstractCommand<?>> extends Abst
 
 	private Runnable handler;
 
+	private boolean handled;
+
 	@SuppressWarnings("unchecked")
 	public W command(String cmd, Object... cmdArgs) {
 		this.command = cmd;
@@ -57,7 +59,7 @@ public abstract class AbstractCommand<W extends AbstractCommand<?>> extends Abst
 	}
 
 	protected void handleEventIfMatching() {
-		if (handler != null && command != null) {
+		if (!handled && handler != null && command != null) {
 			Ctx ctx = ctx();
 
 			if (ctx != null) {
@@ -74,6 +76,7 @@ public abstract class AbstractCommand<W extends AbstractCommand<?>> extends Abst
 						}
 
 						if (Arrays.equals(args, cmdArgs)) {
+							handled = true;
 							handler.run();
 						}
 					}
