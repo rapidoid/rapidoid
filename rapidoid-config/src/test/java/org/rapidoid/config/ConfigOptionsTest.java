@@ -1,8 +1,8 @@
-package org.rapidoid.main;
+package org.rapidoid.config;
 
 /*
  * #%L
- * rapidoid-main
+ * rapidoid-config
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -22,15 +22,13 @@ package org.rapidoid.main;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.ConfigHelp;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.0.0")
-public class Main {
+@Since("5.0.2")
+public class ConfigOptionsTest {
 
 	public static void main(String[] args) {
-		ConfigHelp.processHelp(args);
-		Rapidoid.run(args);
+		Conf.args(new String[] { "--help" });
 	}
 
 }

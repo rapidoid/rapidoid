@@ -23,6 +23,7 @@ package org.rapidoid.main;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.ConfigHelp;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.cache.guava.GuavaCachePlugin;
@@ -65,7 +66,7 @@ public class Rapidoid {
 
 		Log.info("Starting Rapidoid...", "version", UTILS.version());
 
-		MainHelp.processHelp(args);
+		ConfigHelp.processHelp(args);
 
 		// print internal state
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();

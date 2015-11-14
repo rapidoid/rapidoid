@@ -42,23 +42,21 @@ public class Conf {
 	private static String dynamicPath = dynamicPathDefault();
 	private static String configPath = configPathDefault();
 
-	static {
-		initConfig();
-	}
-
 	public static synchronized void args(String... args) {
 		init(args, (Object[]) null);
 	}
 
-	public static synchronized void init(String[] mainArgs, Object... extraArgs) {
-		if (mainArgs != null) {
-			for (String arg : mainArgs) {
+	public static synchronized void init(String[] args, Object... extraOptions) {
+		ConfigHelp.processHelp(args);
+
+		if (args != null) {
+			for (String arg : args) {
 				processArg(arg);
 			}
 		}
 
-		if (extraArgs != null) {
-			for (Object arg : extraArgs) {
+		if (extraOptions != null) {
+			for (Object arg : extraOptions) {
 				if (arg instanceof String) {
 					processArg((String) arg);
 				}
@@ -261,7 +259,6 @@ public class Conf {
 		setStaticPath(Conf.rootPath + "/static");
 		setDynamicPath(Conf.rootPath + "/dynamic");
 		setConfigPath(Conf.rootPath);
-		initConfig();
 	}
 
 	public static void setStaticPath(String staticPath) {
@@ -322,12 +319,12 @@ public class Conf {
 		return conf;
 	}
 
-	public static Config users() {
-		return USERS;
-	}
+	public static synchronized Config users() {
+		if (USERS == null) {
+			USERS = refreshing("", "users.yaml");
+		}
 
-	private static synchronized void initConfig() {
-		USERS = refreshing("", "users.yaml");
+		return USERS;
 	}
 
 }

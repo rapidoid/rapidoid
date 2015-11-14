@@ -1,8 +1,8 @@
-package org.rapidoid.main;
+package org.rapidoid.config;
 
 /*
  * #%L
- * rapidoid-main
+ * rapidoid-config
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,17 +20,34 @@ package org.rapidoid.main;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.config.ConfigHelp;
+/**
+ * @author Nikolche Mihajlovski
+ * @since 5.0.2
+ */
+public class ConfigOption {
 
-@Authors("Nikolche Mihajlovski")
-@Since("4.0.0")
-public class Main {
+	public final String name;
 
-	public static void main(String[] args) {
-		ConfigHelp.processHelp(args);
-		Rapidoid.run(args);
+	public final String desc;
+
+	public final Object defaultValue;
+
+	public ConfigOption(String name, String desc, Object defaultValue) {
+		this.name = name;
+		this.desc = desc;
+		this.defaultValue = defaultValue;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+
+	public Object getDefaultValue() {
+		return defaultValue;
 	}
 
 }
