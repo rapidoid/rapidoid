@@ -22,6 +22,8 @@ package org.rapidoid.http.fast;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.data.JSON;
+import org.rapidoid.job.Jobs;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
@@ -46,6 +48,13 @@ public class On {
 
 	private static void initialize() {
 		DEFAULT_SERVER_SETUP.listen();
+
+		Jobs.execute(new Runnable() {
+			@Override
+			public void run() {
+				JSON.warmup();
+			}
+		});
 	}
 
 	public static synchronized OnAction get(String path) {
