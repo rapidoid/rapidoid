@@ -28,6 +28,16 @@ import org.rapidoid.ctx.CtxMetadata;
 @Since("5.0.0")
 public interface HttpMetadata extends CtxMetadata {
 
+	String GET = "GET";
+
+	String POST = "POST";
+
+	String PUT = "PUT";
+
+	String DELETE = "DELETE";
+
+	String OPTIONS = "OPTIONS";
+
 	String VIEWSTATE = "__state";
 
 	String SESSION_COOKIE = "JSESSIONID";

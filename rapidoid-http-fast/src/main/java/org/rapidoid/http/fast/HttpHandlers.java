@@ -30,13 +30,17 @@ import org.rapidoid.lambda.Mapper;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
-public class HttpHandlers {
+public class HttpHandlers implements HttpMetadata {
+
+	private static String param(Map<String, Object> req, final String paramName) {
+		return (String) req.get(paramName);
+	}
 
 	public static ParamHandler parameterized(final String paramName, final Mapper<String, Object> handler) {
 		return new ParamHandler() {
 			@Override
 			public Object handle(Map<String, Object> params) throws Exception {
-				String param = (String) params.get(paramName);
+				String param = param(params, paramName);
 				return handler.map(param);
 			}
 		};
@@ -47,8 +51,8 @@ public class HttpHandlers {
 		return new ParamHandler() {
 			@Override
 			public Object handle(Map<String, Object> params) throws Exception {
-				String param1 = (String) params.get(paramName1);
-				String param2 = (String) params.get(paramName2);
+				String param1 = param(params, paramName1);
+				String param2 = param(params, paramName2);
 				return handler.execute(param1, param2);
 			}
 		};
@@ -59,9 +63,9 @@ public class HttpHandlers {
 		return new ParamHandler() {
 			@Override
 			public Object handle(Map<String, Object> params) throws Exception {
-				String param1 = (String) params.get(paramName1);
-				String param2 = (String) params.get(paramName2);
-				String param3 = (String) params.get(paramName3);
+				String param1 = param(params, paramName1);
+				String param2 = param(params, paramName2);
+				String param3 = param(params, paramName3);
 				return handler.execute(param1, param2, param3);
 			}
 		};
