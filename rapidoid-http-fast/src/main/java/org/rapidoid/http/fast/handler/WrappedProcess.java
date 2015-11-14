@@ -1,4 +1,4 @@
-package org.rapidoid.http.fast;
+package org.rapidoid.http.fast.handler;
 
 /*
  * #%L

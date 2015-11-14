@@ -1,4 +1,4 @@
-package org.rapidoid.http.fast;
+package org.rapidoid.http.fast.handler;
 
 /*
  * #%L
@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.fast.HttpStatus;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")

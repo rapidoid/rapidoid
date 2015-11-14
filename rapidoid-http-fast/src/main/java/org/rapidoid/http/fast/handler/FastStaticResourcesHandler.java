@@ -1,4 +1,4 @@
-package org.rapidoid.http.fast;
+package org.rapidoid.http.fast.handler;
 
 /*
  * #%L
@@ -24,39 +24,48 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.fast.FastHttp;
+import org.rapidoid.http.fast.HttpStatus;
+import org.rapidoid.http.fast.HttpUtils;
 import org.rapidoid.io.Res;
+import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public class FastResourceHttpHandler extends AbstractFastHttpHandler {
+@Since("5.0.0")
+public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 
 	private final FastHttp http;
 
-	private final byte[] contentType;
-
-	private final Res resource;
-
-	public FastResourceHttpHandler(FastHttp http, byte[] contentType, Res resource) {
+	public FastStaticResourcesHandler(FastHttp http) {
 		this.http = http;
-		this.contentType = contentType;
-		this.resource = resource;
 	}
 
 	@Override
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
 		http.getListener().state(this, params);
 
-		byte[] bytes = resource.getBytesOrNull();
+		try {
+			Res res = HttpUtils.staticPage(params);
+			byte[] bytes = res.getBytesOrNull();
 
-		if (bytes != null) {
-			http.getListener().result(this, contentType, bytes);
-			http.write200(ctx, isKeepAlive, contentType, bytes);
-			return HttpStatus.DONE;
-		} else {
-			http.getListener().resultNotFound(this);
-			return HttpStatus.NOT_FOUND;
+			if (bytes != null) {
+				byte[] contentType = MediaType.getByFileName(res.getShortName()).asHttpHeader();
+				http.getListener().result(this, contentType, bytes);
+				http.write200(ctx, isKeepAlive, contentType, bytes);
+				return HttpStatus.DONE;
+			} else {
+				http.getListener().resultNotFound(this);
+				return HttpStatus.NOT_FOUND;
+			}
+		} catch (Exception e) {
+			return http.error(ctx, isKeepAlive, e);
 		}
+	}
+
+	@Override
+	public boolean needsParams() {
+		return true;
 	}
 
 }

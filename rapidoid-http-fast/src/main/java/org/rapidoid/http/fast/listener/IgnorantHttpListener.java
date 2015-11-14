@@ -1,4 +1,4 @@
-package org.rapidoid.http.fast;
+package org.rapidoid.http.fast.listener;
 
 /*
  * #%L
@@ -26,6 +26,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
+import org.rapidoid.http.fast.FastHttp;
+import org.rapidoid.http.fast.HttpWrapper;
+import org.rapidoid.http.fast.handler.FastHttpHandler;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.wrap.BoolWrap;
 

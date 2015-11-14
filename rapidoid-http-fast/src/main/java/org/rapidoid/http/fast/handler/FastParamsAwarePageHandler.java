@@ -1,4 +1,4 @@
-package org.rapidoid.http.fast;
+package org.rapidoid.http.fast.handler;
 
 /*
  * #%L
@@ -24,15 +24,19 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.fast.FastHttp;
+import org.rapidoid.http.fast.HttpMetadata;
+import org.rapidoid.http.fast.HttpWrapper;
+import org.rapidoid.http.fast.ParamHandler;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public class FastParamsAwareHttpHandler extends AbstractAsyncHttpHandler {
+@Since("5.0.0")
+public class FastParamsAwarePageHandler extends AbstractAsyncHttpHandler implements HttpMetadata {
 
 	private final ParamHandler handler;
 
-	public FastParamsAwareHttpHandler(FastHttp http, byte[] contentType, HttpWrapper[] wrappers, ParamHandler handler) {
+	public FastParamsAwarePageHandler(FastHttp http, byte[] contentType, HttpWrapper[] wrappers, ParamHandler handler) {
 		super(http, contentType, wrappers);
 		this.handler = handler;
 	}
@@ -41,6 +45,7 @@ public class FastParamsAwareHttpHandler extends AbstractAsyncHttpHandler {
 	protected Object handleReq(Channel channel, Map<String, Object> params) throws Exception {
 		http.getListener().state(this, params);
 
+		// call the handler, get the result
 		Object result = handler.handle(params);
 
 		http.getListener().result(this, contentType, result);

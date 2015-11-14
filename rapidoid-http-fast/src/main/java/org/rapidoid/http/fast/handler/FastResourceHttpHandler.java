@@ -1,4 +1,4 @@
-package org.rapidoid.http.fast;
+package org.rapidoid.http.fast.handler;
 
 /*
  * #%L
@@ -24,32 +24,41 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.fast.FastHttp;
+import org.rapidoid.http.fast.HttpStatus;
+import org.rapidoid.io.Res;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public class FastStaticHttpHandler extends AbstractFastHttpHandler {
+public class FastResourceHttpHandler extends AbstractFastHttpHandler {
 
 	private final FastHttp http;
 
 	private final byte[] contentType;
 
-	private final byte[] response;
+	private final Res resource;
 
-	public FastStaticHttpHandler(FastHttp http, byte[] contentType, byte[] response) {
+	public FastResourceHttpHandler(FastHttp http, byte[] contentType, Res resource) {
 		this.http = http;
 		this.contentType = contentType;
-		this.response = response;
+		this.resource = resource;
 	}
 
 	@Override
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
 		http.getListener().state(this, params);
 
-		http.getListener().result(this, contentType, response);
-		http.write200(ctx, isKeepAlive, contentType, response);
+		byte[] bytes = resource.getBytesOrNull();
 
-		return HttpStatus.DONE;
+		if (bytes != null) {
+			http.getListener().result(this, contentType, bytes);
+			http.write200(ctx, isKeepAlive, contentType, bytes);
+			return HttpStatus.DONE;
+		} else {
+			http.getListener().resultNotFound(this);
+			return HttpStatus.NOT_FOUND;
+		}
 	}
 
 }

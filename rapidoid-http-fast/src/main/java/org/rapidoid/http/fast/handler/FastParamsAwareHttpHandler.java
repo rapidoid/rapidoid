@@ -1,4 +1,4 @@
-package org.rapidoid.http.fast;
+package org.rapidoid.http.fast.handler;
 
 /*
  * #%L
@@ -24,44 +24,39 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.io.Res;
-import org.rapidoid.mime.MediaType;
+import org.rapidoid.http.fast.FastHttp;
+import org.rapidoid.http.fast.HttpWrapper;
+import org.rapidoid.http.fast.ParamHandler;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.0.0")
-public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
+@Since("4.3.0")
+public class FastParamsAwareHttpHandler extends AbstractAsyncHttpHandler {
 
-	private final FastHttp http;
+	private final ParamHandler handler;
 
-	public FastStaticResourcesHandler(FastHttp http) {
-		this.http = http;
+	public FastParamsAwareHttpHandler(FastHttp http, byte[] contentType, HttpWrapper[] wrappers, ParamHandler handler) {
+		super(http, contentType, wrappers);
+		this.handler = handler;
 	}
 
 	@Override
-	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
+	protected Object handleReq(Channel channel, Map<String, Object> params) throws Exception {
 		http.getListener().state(this, params);
 
-		try {
-			Res res = HttpUtils.staticPage(params);
-			byte[] bytes = res.getBytesOrNull();
+		Object result = handler.handle(params);
 
-			if (bytes != null) {
-				byte[] contentType = MediaType.getByFileName(res.getShortName()).asHttpHeader();
-				http.getListener().result(this, contentType, bytes);
-				http.write200(ctx, isKeepAlive, contentType, bytes);
-				return HttpStatus.DONE;
-			} else {
-				http.getListener().resultNotFound(this);
-				return HttpStatus.NOT_FOUND;
-			}
-		} catch (Exception e) {
-			return http.error(ctx, isKeepAlive, e);
-		}
+		http.getListener().result(this, contentType, result);
+		return result;
 	}
 
 	@Override
 	public boolean needsParams() {
+		return true;
+	}
+
+	@Override
+	public boolean needsHeadersAndCookies() {
 		return true;
 	}
 

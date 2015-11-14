@@ -23,6 +23,7 @@ package org.rapidoid.http.fast;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
+import org.rapidoid.http.fast.listener.FastHttpListener;
 import org.rapidoid.job.Jobs;
 
 @Authors("Nikolche Mihajlovski")

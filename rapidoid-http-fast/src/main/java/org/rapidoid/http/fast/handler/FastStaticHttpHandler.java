@@ -1,4 +1,4 @@
-package org.rapidoid.http.fast;
+package org.rapidoid.http.fast.handler;
 
 /*
  * #%L
@@ -24,38 +24,34 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.fast.FastHttp;
+import org.rapidoid.http.fast.HttpStatus;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.0.0")
-public class FastParamsAwarePageHandler extends AbstractAsyncHttpHandler implements HttpMetadata {
+@Since("4.3.0")
+public class FastStaticHttpHandler extends AbstractFastHttpHandler {
 
-	private final ParamHandler handler;
+	private final FastHttp http;
 
-	public FastParamsAwarePageHandler(FastHttp http, byte[] contentType, HttpWrapper[] wrappers, ParamHandler handler) {
-		super(http, contentType, wrappers);
-		this.handler = handler;
+	private final byte[] contentType;
+
+	private final byte[] response;
+
+	public FastStaticHttpHandler(FastHttp http, byte[] contentType, byte[] response) {
+		this.http = http;
+		this.contentType = contentType;
+		this.response = response;
 	}
 
 	@Override
-	protected Object handleReq(Channel channel, Map<String, Object> params) throws Exception {
+	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
 		http.getListener().state(this, params);
 
-		// call the handler, get the result
-		Object result = handler.handle(params);
+		http.getListener().result(this, contentType, response);
+		http.write200(ctx, isKeepAlive, contentType, response);
 
-		http.getListener().result(this, contentType, result);
-		return result;
-	}
-
-	@Override
-	public boolean needsParams() {
-		return true;
-	}
-
-	@Override
-	public boolean needsHeadersAndCookies() {
-		return true;
+		return HttpStatus.DONE;
 	}
 
 }

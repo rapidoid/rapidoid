@@ -25,6 +25,10 @@ import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.fast.handler.FastParamsAwarePageHandler;
+import org.rapidoid.http.fast.handler.FastResourceHttpHandler;
+import org.rapidoid.http.fast.handler.FastStaticHttpHandler;
+import org.rapidoid.http.fast.handler.HttpHandlers;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.F3;

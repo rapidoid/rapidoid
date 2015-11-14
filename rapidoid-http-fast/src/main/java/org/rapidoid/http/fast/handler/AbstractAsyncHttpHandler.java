@@ -1,4 +1,4 @@
-package org.rapidoid.http.fast;
+package org.rapidoid.http.fast.handler;
 
 /*
  * #%L
@@ -28,6 +28,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.ctx.Ctx;
+import org.rapidoid.http.fast.FastHttp;
+import org.rapidoid.http.fast.HttpStatus;
+import org.rapidoid.http.fast.HttpWrapper;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;

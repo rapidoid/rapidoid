@@ -1,11 +1,4 @@
-package org.rapidoid.http.fast;
-
-import java.io.OutputStream;
-import java.util.Map;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Callback;
+package org.rapidoid.http.fast.handler;
 
 /*
  * #%L
@@ -27,10 +20,21 @@ import org.rapidoid.concurrent.Callback;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public interface AsyncRawHandler {
+public abstract class AbstractFastHttpHandler implements FastHttpHandler {
 
-	Object handle(Map<String, Object> params, OutputStream out, Callback<Object> callback) throws Exception;
+	@Override
+	public boolean needsParams() {
+		return false;
+	}
+
+	@Override
+	public boolean needsHeadersAndCookies() {
+		return false;
+	}
 
 }
