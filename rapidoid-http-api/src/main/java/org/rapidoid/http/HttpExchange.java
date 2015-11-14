@@ -25,6 +25,7 @@ import java.util.Map;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.fast.Req;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

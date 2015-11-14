@@ -47,8 +47,8 @@ import org.rapidoid.dispatch.impl.DispatchReq;
 import org.rapidoid.dispatch.impl.DispatchReqKind;
 import org.rapidoid.dispatch.impl.PojoDispatcherImpl;
 import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
+import org.rapidoid.http.fast.Req;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
