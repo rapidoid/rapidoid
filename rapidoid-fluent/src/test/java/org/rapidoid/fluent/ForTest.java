@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.junit.Test;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -34,12 +33,12 @@ public class ForTest extends TestCommons {
 
 	@Test
 	public void testListOps() {
-		List<String> items = U.list("a", "bbb", "cc");
+		List<String> items = New.list("a", "bbb", "cc");
 
-		List<String> target = U.list();
+		List<String> target = New.list();
 		For.each(items).withNonNull(String::length).where(s -> s.length() < 3).run(target::add);
 
-		eq(target, U.list("a", "cc"));
+		eq(target, New.list("a", "cc"));
 	}
 
 }

@@ -7,7 +7,6 @@ import java.util.stream.Stream;
 
 import org.junit.Test;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -37,19 +36,19 @@ public class FlowTest extends TestCommons {
 
 	@Test
 	public void testFlowOps() {
-		List<String> items = U.list("a", "bbbbb", "cc");
+		List<String> items = New.list("a", "bbbbb", "cc");
 
 		Stream<Integer> lengths1 = Flow.of(items).map(s -> s.length()).stream();
-		eq(lengths1.collect(To.list()), U.list(1, 5, 2));
+		eq(lengths1.collect(To.list()), New.list(1, 5, 2));
 
 		List<Integer> lengths2 = Flow.of(items).map(s -> s.length()).toList();
-		eq(lengths2, U.list(1, 5, 2));
+		eq(lengths2, New.list(1, 5, 2));
 
 		Set<Integer> lengths3 = Flow.of(items).map(s -> s.length()).toSet();
-		eq(lengths3, U.set(1, 5, 2));
+		eq(lengths3, New.set(1, 5, 2));
 
 		Map<Integer, List<String>> byLengths = Flow.of(items).groupBy(s -> s.length());
-		eq(byLengths, U.map(1, U.list("a"), 5, U.list("bbbbb"), 2, U.list("cc")));
+		eq(byLengths, New.map(1, New.list("a"), 5, New.list("bbbbb"), 2, New.list("cc")));
 
 		String joined = Flow.of(items).reverse().reduce((a, b) -> a + ":" + b).orElse("");
 		eq(joined, "cc:bbbbb:a");
@@ -59,7 +58,7 @@ public class FlowTest extends TestCommons {
 
 		List<String> lst = Flow.of("a", "", "bb", "ccc").filter(s -> !s.isEmpty()).map(String::toUpperCase).reverse()
 				.toList();
-		eq(lst, U.list("CCC", "BB", "A"));
+		eq(lst, New.list("CCC", "BB", "A"));
 	}
 
 }

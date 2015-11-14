@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import org.junit.Test;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -37,7 +36,7 @@ public class FindTest extends TestCommons {
 
 	@Test
 	public void testFindOps() {
-		List<String> items = U.list("a", "bbbbb", "cc");
+		List<String> items = New.list("a", "bbbbb", "cc");
 
 		Optional<String> firstSmall = Find.firstOf(items).where(s -> s.length() < 3);
 		eq(firstSmall.get(), "a");
@@ -49,7 +48,7 @@ public class FindTest extends TestCommons {
 		eq(big.get(), "bbbbb");
 
 		List<String> notSmall = Find.allOf(items).where(s -> s.length() > 1);
-		eq(notSmall, U.list("bbbbb", "cc"));
+		eq(notSmall, New.list("bbbbb", "cc"));
 
 		isTrue(Find.in(items).where(s -> s.length() < 5));
 		isFalse(Find.in(items.stream()).where(s -> s.length() > 10));
@@ -57,7 +56,7 @@ public class FindTest extends TestCommons {
 
 	@Test
 	public void testFindOpsOnMap() {
-		Map<Integer, String> nums = U.map(1, "one", 2, "two", 3, "three");
+		Map<Integer, String> nums = New.map(1, "one", 2, "two", 3, "three");
 
 		Optional<Entry<Integer, String>> first = Find.firstOf(nums).where((k, v) -> k >= 2);
 		eq(first.get(), 2, "two");
@@ -69,7 +68,7 @@ public class FindTest extends TestCommons {
 		eq(big.get(), 3, "three");
 
 		Map<Integer, String> notSmall = Find.allOf(nums).where((k, v) -> k > 1);
-		eq(notSmall, U.map(2, "two", 3, "three"));
+		eq(notSmall, New.map(2, "two", 3, "three"));
 
 		isTrue(Find.in(nums).where((k, v) -> k == 2));
 		isFalse(Find.in(nums).where((k, v) -> k > 10));

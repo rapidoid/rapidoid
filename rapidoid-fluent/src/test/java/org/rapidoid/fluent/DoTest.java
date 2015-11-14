@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.junit.Test;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -36,13 +35,13 @@ public class DoTest extends TestCommons {
 
 	@Test
 	public void testIterableOps() {
-		List<String> items = U.list("a", "bbbbb", "cc");
+		List<String> items = New.list("a", "bbbbb", "cc");
 
 		List<Integer> lengths2 = Do.map(items).to(s -> s.length());
-		eq(lengths2, U.list(1, 5, 2));
+		eq(lengths2, New.list(1, 5, 2));
 
 		Map<Integer, List<String>> byLengths = Do.group(items).by(s -> s.length());
-		eq(byLengths, U.map(1, U.list("a"), 5, U.list("bbbbb"), 2, U.list("cc")));
+		eq(byLengths, New.map(1, New.list("a"), 5, New.list("bbbbb"), 2, New.list("cc")));
 
 		String joined = Do.reduce(items).by((a, b) -> a + ":" + b).orElse("");
 		eq(joined, "a:bbbbb:cc");
@@ -53,25 +52,25 @@ public class DoTest extends TestCommons {
 
 	@Test
 	public void testMapGroupingBy() {
-		Map<Integer, String> nums = U.map(1, "one", 2, "two", 3, "three");
+		Map<Integer, String> nums = New.map(1, "one", 2, "two", 3, "three");
 
 		Map<String, Map<Integer, String>> even = Do.group(nums).by((k, v) -> k % 2 == 0 ? "even" : "odd");
 
-		eq(even, U.map("odd", U.map(1, "one", 3, "three"), "even", U.map(2, "two")));
+		eq(even, New.map("odd", New.map(1, "one", 3, "three"), "even", New.map(2, "two")));
 	}
 
 	@Test
 	public void testMapMapping() {
-		Map<Integer, String> nums = U.map(1, "one", 2, "two", 3, "three");
+		Map<Integer, String> nums = New.map(1, "one", 2, "two", 3, "three");
 
 		Map<Integer, String> bignums = Do.map(nums).to((k, v) -> k * 1000, (k, v) -> v.toUpperCase());
-		eq(bignums, U.map(1000, "ONE", 2000, "TWO", 3000, "THREE"));
+		eq(bignums, New.map(1000, "ONE", 2000, "TWO", 3000, "THREE"));
 
 		List<Integer> doubleKeys = Do.map(nums).toList((k, v) -> k * 2);
-		eq(doubleKeys, U.list(2, 4, 6));
+		eq(doubleKeys, New.list(2, 4, 6));
 
 		Set<Integer> valueLengths = Do.map(nums).toSet((k, v) -> v.length());
-		eq(valueLengths, U.set(3, 5));
+		eq(valueLengths, New.set(3, 5));
 	}
 
 }
