@@ -727,6 +727,30 @@ public class U {
 		return false;
 	}
 
+	public static boolean notEmpty(String value) {
+		return !isEmpty(value);
+	}
+
+	public static boolean notEmpty(Object[] arr) {
+		return !isEmpty(arr);
+	}
+
+	public static boolean notEmpty(Collection<?> coll) {
+		return !isEmpty(coll);
+	}
+
+	public static boolean notEmpty(Iterable<?> iter) {
+		return !isEmpty(iter);
+	}
+
+	public static boolean notEmpty(Map<?, ?> map) {
+		return !isEmpty(map);
+	}
+
+	public static boolean notEmpty(Object value) {
+		return !isEmpty(value);
+	}
+
 	public static String capitalized(String s) {
 		return s.isEmpty() ? s : s.substring(0, 1).toUpperCase() + s.substring(1);
 	}
