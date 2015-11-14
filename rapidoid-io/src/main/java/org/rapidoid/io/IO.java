@@ -105,21 +105,26 @@ public class IO {
 	}
 
 	public static byte[] loadBytes(String filename) {
-		InputStream input = classLoader().getResourceAsStream(filename);
+		InputStream input = null;
+		try {
+			input = classLoader().getResourceAsStream(filename);
 
-		if (input == null) {
-			File file = new File(filename);
+			if (input == null) {
+				File file = new File(filename);
 
-			if (file.exists()) {
-				try {
-					input = new FileInputStream(filename);
-				} catch (FileNotFoundException e) {
-					throw U.rte(e);
+				if (file.exists()) {
+					try {
+						input = new FileInputStream(filename);
+					} catch (FileNotFoundException e) {
+						throw U.rte(e);
+					}
 				}
 			}
-		}
 
-		return input != null ? loadBytes(input) : null;
+			return input != null ? loadBytes(input) : null;
+		} finally {
+			close(input, true);
+		}
 	}
 
 	public static byte[] classBytes(String fullClassName) {
@@ -223,7 +228,9 @@ public class IO {
 
 	public static void close(InputStream in, boolean quiet) {
 		try {
-			in.close();
+			if (in != null) {
+				in.close();
+			}
 		} catch (IOException e) {
 			if (!quiet) {
 				throw U.rte(e);
