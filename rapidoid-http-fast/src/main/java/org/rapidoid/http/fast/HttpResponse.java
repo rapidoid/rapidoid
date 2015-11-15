@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
 import org.rapidoid.http.Response;
 import org.rapidoid.mime.MediaType;
 import org.rapidoid.u.U;
@@ -118,8 +119,28 @@ public class HttpResponse implements Response {
 	}
 
 	@Override
-	public void done() {
-		req.done();
+	public Req done() {
+		return req.done();
+	}
+
+	@Override
+	public Response html(Object content) {
+		return contentType(MediaType.HTML_UTF_8).content(content);
+	}
+
+	@Override
+	public Response plain(Object content) {
+		return contentType(MediaType.PLAIN_TEXT_UTF_8).content(content);
+	}
+
+	@Override
+	public Response json(Object content) {
+		return contentType(MediaType.JSON_UTF_8).content(content);
+	}
+
+	@Override
+	public Response binary(Object content) {
+		return contentType(MediaType.BINARY).content(content);
 	}
 
 }

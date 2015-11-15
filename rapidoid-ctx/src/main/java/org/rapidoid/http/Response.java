@@ -46,6 +46,14 @@ public interface Response {
 
 	String redirect();
 
-	void done();
+	Req done();
+
+	Response plain(Object content);
+
+	Response html(Object content);
+
+	Response json(Object content);
+
+	Response binary(Object content);
 
 }

@@ -3,8 +3,10 @@ package org.rapidoid.http.fast;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.http.fast.handler.FastParamsAwareHttpHandler;
 import org.rapidoid.http.fast.listener.FastHttpListener;
 import org.rapidoid.http.fast.listener.IgnorantHttpListener;
+import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.Serve;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.u.U;
@@ -43,6 +45,10 @@ public class ServerSetup {
 
 	private volatile FastHttp fastHttp;
 
+	private volatile boolean listening;
+
+	private volatile TCPServer server;
+
 	public synchronized FastHttp http() {
 		if (fastHttp == null) {
 			fastHttp = new FastHttp(listener);
@@ -51,9 +57,13 @@ public class ServerSetup {
 		return fastHttp;
 	}
 
-	public TCPServer listen() {
-		TCPServer server = Serve.server().protocol(http()).address(address).port(port).build();
-		server.start();
+	public synchronized TCPServer listen() {
+		if (!listening) {
+			listening = true;
+			server = Serve.server().protocol(http()).address(address).port(port).build();
+			server.start();
+		}
+
 		return server;
 	}
 
@@ -81,6 +91,14 @@ public class ServerSetup {
 		return new OnPage(this, httpImpls(), path).wrap(wrappers);
 	}
 
+	public ServerSetup req(ReqHandler handler) {
+		for (FastHttp http : httpImpls()) {
+			http.addGenericHandler(new FastParamsAwareHttpHandler(http, MediaType.HTML_UTF_8, wrappers, handler));
+		}
+
+		return this;
+	}
+
 	private FastHttp[] httpImpls() {
 		return new FastHttp[] { http() };
 	}
@@ -104,6 +122,10 @@ public class ServerSetup {
 		U.must(this.fastHttp == null, "The HTTP server was already initialized!");
 		this.listener = listener;
 		return this;
+	}
+
+	public TCPServer server() {
+		return server;
 	}
 
 }

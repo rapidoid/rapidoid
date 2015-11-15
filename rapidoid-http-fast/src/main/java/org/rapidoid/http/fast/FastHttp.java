@@ -22,6 +22,7 @@ package org.rapidoid.http.fast;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
@@ -36,6 +37,7 @@ import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.dates.Dates;
+import org.rapidoid.http.Req;
 import org.rapidoid.http.fast.handler.FastHttpHandler;
 import org.rapidoid.http.fast.handler.FastStaticResourcesHandler;
 import org.rapidoid.http.fast.listener.FastHttpListener;
@@ -102,6 +104,8 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	private volatile FastHttpHandler handler1, handler2, handler3;
 
+	private final List<FastHttpHandler> genericHandlers = U.synchronizedList();
+
 	private volatile FastHttpHandler staticResourcesHandler = new FastStaticResourcesHandler(this);
 
 	private final FastHttpListener listener;
@@ -151,6 +155,14 @@ public class FastHttp implements Protocol, HttpMetadata {
 		}
 	}
 
+	public void addGenericHandler(FastHttpHandler handler) {
+		genericHandlers.add(handler);
+	}
+
+	public void removeGenericHandler(FastHttpHandler handler) {
+		genericHandlers.remove(handler);
+	}
+
 	public void setStaticResourcesHandler(FastHttpHandler staticResourcesHandler) {
 		this.staticResourcesHandler = staticResourcesHandler;
 	}
@@ -185,57 +197,62 @@ public class FastHttp implements Protocol, HttpMetadata {
 		}
 
 		HttpStatus status = HttpStatus.NOT_FOUND;
-
 		FastHttpHandler handler = findFandler(channel, buf, isGet, xverb, xpath);
+		boolean noReq = (handler != null && !handler.needsParams());
 
-		if (handler != null) {
-			ReqImpl req = null;
+		ReqImpl req = null;
 
-			if (handler.needsParams()) {
+		if (!noReq) {
+			KeyValueRanges paramsKV = helper.pairs1.reset();
+			KeyValueRanges headersKV = helper.pairs2.reset();
 
-				KeyValueRanges paramsKV = helper.pairs1.reset();
-				KeyValueRanges headersKV = helper.pairs2.reset();
+			HTTP_PARSER.parseParams(buf, paramsKV, xquery);
+			Map<String, String> params = U.cast(paramsKV.toMap(buf, true, true));
 
-				HTTP_PARSER.parseParams(buf, paramsKV, xquery);
-				Map<String, String> params = U.cast(paramsKV.toMap(buf, true, true));
+			byte[] body;
+			Map<String, Object> posted;
+			Map<String, byte[]> files;
 
-				byte[] body;
-				Map<String, Object> posted;
-				Map<String, byte[]> files;
+			if (!isGet.value) {
+				KeyValueRanges postedKV = helper.pairs3.reset();
+				KeyValueRanges filesKV = helper.pairs4.reset();
 
-				if (!isGet.value) {
-					KeyValueRanges postedKV = helper.pairs3.reset();
-					KeyValueRanges filesKV = helper.pairs4.reset();
+				body = xbody.bytes(buf);
 
-					body = xbody.bytes(buf);
+				// parse posted body as data
+				posted = new HashMap<String, Object>();
+				HTTP_PARSER.parsePosted(buf, headersKV, xbody, postedKV, filesKV, helper, posted);
 
-					// parse posted body as data
-					posted = new HashMap<String, Object>();
-					HTTP_PARSER.parsePosted(buf, headersKV, xbody, postedKV, filesKV, helper, posted);
+				files = filesKV.toBinaryMap(buf, true);
 
-					files = filesKV.toBinaryMap(buf, true);
-
-				} else {
-					posted = Collections.EMPTY_MAP;
-					files = Collections.EMPTY_MAP;
-					body = null;
-				}
-
-				String verb = xverb.str(buf);
-				String uri = xuri.str(buf);
-				String path = xpath.str(buf);
-
-				KeyValueRanges cookiesKV = helper.pairs5.reset();
-				HTTP_PARSER.parseHeadersIntoKV(buf, hdrs, headersKV, cookiesKV, helper);
-
-				Map<String, String> headers = U.cast(headersKV.toMap(buf, true, true));
-				Map<String, String> cookies = U.cast(cookiesKV.toMap(buf, true, true));
-
-				req = new ReqImpl(this, channel, isKeepAlive.value, verb, uri, path, body, params, headers, cookies,
-						posted, files, handler.contentType());
+			} else {
+				posted = Collections.EMPTY_MAP;
+				files = Collections.EMPTY_MAP;
+				body = null;
 			}
 
+			String verb = xverb.str(buf);
+			String uri = xuri.str(buf);
+			String path = UTILS.urlDecode(xpath.str(buf));
+
+			KeyValueRanges cookiesKV = helper.pairs5.reset();
+			HTTP_PARSER.parseHeadersIntoKV(buf, hdrs, headersKV, cookiesKV, helper);
+
+			Map<String, String> headers = U.cast(headersKV.toMap(buf, true, true));
+			Map<String, String> cookies = U.cast(cookiesKV.toMap(buf, true, true));
+
+			MediaType contentType = handler != null ? handler.contentType() : MediaType.HTML_UTF_8;
+
+			req = new ReqImpl(this, channel, isKeepAlive.value, verb, uri, path, body, params, headers, cookies,
+					posted, files, contentType);
+		}
+
+		if (handler != null) {
 			status = handler.handle(channel, isKeepAlive.value, req);
+		}
+
+		if (status == HttpStatus.NOT_FOUND) {
+			status = tryGenericHandlers(channel, isKeepAlive.value, req);
 		}
 
 		if (status == HttpStatus.NOT_FOUND) {
@@ -246,6 +263,19 @@ public class FastHttp implements Protocol, HttpMetadata {
 		if (status != HttpStatus.ASYNC) {
 			channel.closeIf(!isKeepAlive.value);
 		}
+	}
+
+	private HttpStatus tryGenericHandlers(Channel channel, boolean isKeepAlive, Req req) {
+		for (FastHttpHandler handler : genericHandlers) {
+
+			HttpStatus status = handler.handle(channel, isKeepAlive, req);
+
+			if (status != HttpStatus.NOT_FOUND) {
+				return status;
+			}
+		}
+
+		return HttpStatus.NOT_FOUND;
 	}
 
 	private FastHttpHandler findFandler(Channel ctx, Buf buf, BoolWrap isGet, Range verb, Range path) {
@@ -387,6 +417,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 		putHandlers.clear();
 		deleteHandlers.clear();
 		optionsHandlers.clear();
+		genericHandlers.clear();
 	}
 
 	public void writeResult(Channel ctx, boolean isKeepAlive, Object result, MediaType contentType) {

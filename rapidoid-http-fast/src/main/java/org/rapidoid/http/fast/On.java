@@ -78,6 +78,10 @@ public class On {
 		return setup().page(path);
 	}
 
+	public static synchronized ServerSetup req(ReqHandler handler) {
+		return setup().req(handler);
+	}
+
 	public static synchronized ServerSetup port(int port) {
 		return DEFAULT_SERVER_SETUP.port(port);
 	}
