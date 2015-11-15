@@ -58,8 +58,7 @@ public class DynamicClientTest extends TestCommons {
 				Jobs.schedule(new Runnable() {
 					@Override
 					public void run() {
-						Reqs.req().response().content(req.data());
-						req.done();
+						Reqs.req().response().content(req.data()).done();
 					}
 				}, 1000, TimeUnit.MILLISECONDS);
 
