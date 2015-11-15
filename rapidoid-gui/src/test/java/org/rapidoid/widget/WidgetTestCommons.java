@@ -31,8 +31,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.impl.TagRenderer;
-import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.HttpExchangeImpl;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.fast.ReqImpl;
+import org.rapidoid.mime.MediaType;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.var.Var;
 
@@ -46,6 +47,7 @@ public class WidgetTestCommons extends TestCommons {
 	@Before
 	public void init() {
 		Ctxs.open("test-widget"); // open context for each test
+		Req x = setupMockExchange();
 	}
 
 	@After
@@ -54,7 +56,7 @@ public class WidgetTestCommons extends TestCommons {
 	}
 
 	protected void print(Object content) {
-		HttpExchange x = setupMockExchange();
+		Req x = setupMockExchange();
 
 		content = preprocess(content, x);
 
@@ -64,9 +66,9 @@ public class WidgetTestCommons extends TestCommons {
 	}
 
 	@SuppressWarnings("unchecked")
-	private Object preprocess(Object content, HttpExchange x) {
+	private Object preprocess(Object content, Req x) {
 		if (content instanceof TagWidget<?>) {
-			TagWidget<HttpExchange> widget = (TagWidget<HttpExchange>) content;
+			TagWidget<Req> widget = (TagWidget<Req>) content;
 			content = widget.render(x);
 			if (content == null) {
 				return null;
@@ -77,7 +79,7 @@ public class WidgetTestCommons extends TestCommons {
 	}
 
 	protected void has(Object content, String... containingTexts) {
-		HttpExchange x = setupMockExchange();
+		Req x = setupMockExchange();
 
 		content = preprocess(content, x);
 
@@ -90,7 +92,7 @@ public class WidgetTestCommons extends TestCommons {
 	}
 
 	protected void hasRegex(Object content, String... containingRegexes) {
-		HttpExchange x = setupMockExchange();
+		Req x = setupMockExchange();
 
 		content = preprocess(content, x);
 
@@ -105,8 +107,13 @@ public class WidgetTestCommons extends TestCommons {
 		eq(var.get(), value);
 	}
 
-	protected static HttpExchange setupMockExchange() {
-		HttpExchange x = new HttpExchangeImpl();
+	@SuppressWarnings("unchecked")
+	protected static Req setupMockExchange() {
+
+		Req x = new ReqImpl(null, null, false, "GET", "/", "/", "".getBytes(), Collections.EMPTY_MAP,
+				Collections.EMPTY_MAP, Collections.EMPTY_MAP, Collections.EMPTY_MAP, Collections.EMPTY_MAP,
+				MediaType.HTML_UTF_8);
+
 		Ctxs.ctx().setExchange(x);
 		return x;
 	}

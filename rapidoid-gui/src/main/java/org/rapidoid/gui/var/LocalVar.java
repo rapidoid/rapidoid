@@ -25,7 +25,6 @@ import java.io.Serializable;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Reqs;
-import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")
@@ -49,8 +48,6 @@ public class LocalVar<T extends Serializable> extends WidgetVar<T> {
 	}
 
 	@Override
-	public void set(T value) {
-		throw U.notSupported();
-	}
+	public void set(T value) {}
 
 }
