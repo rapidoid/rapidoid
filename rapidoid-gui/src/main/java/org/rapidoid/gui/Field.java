@@ -107,7 +107,7 @@ public class Field extends AbstractWidget {
 
 		if (ctx != null) {
 			Req req = ctx.exchange();
-			initValue = req.data(varName);
+			initValue = req.data(varName, null);
 		}
 
 		try {
