@@ -20,15 +20,15 @@ package org.rapidoid.http.fast.listener;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.http.fast.FastHttp;
 import org.rapidoid.http.fast.HttpWrapper;
+import org.rapidoid.http.fast.Req;
 import org.rapidoid.http.fast.handler.FastHttpHandler;
+import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.wrap.BoolWrap;
 
@@ -42,18 +42,18 @@ public interface FastHttpListener {
 	void notFound(FastHttp fastHttp, Channel ctx, BoolWrap isGet, BoolWrap isKeepAlive, Range body, Range verb,
 			Range uri, Range path, Range query, Range protocol, Ranges hdrs);
 
-	void state(FastHttpHandler handler, Map<String, Object> state);
+	void state(FastHttpHandler handler, Req req);
 
-	void result(FastHttpHandler handler, byte[] contentType, Object result);
+	void result(FastHttpHandler handler, MediaType contentType, Object result);
 
-	void entering(HttpWrapper wrapper, Map<String, Object> state);
+	void entering(HttpWrapper wrapper, Req req);
 
-	void leaving(HttpWrapper wrapper, byte[] contentType, Object result);
+	void leaving(HttpWrapper wrapper, MediaType contentType, Object result);
 
 	void resultNotFound(FastHttpHandler handler);
 
-	void onOkResponse(byte[] contentType, byte[] content);
+	void onOkResponse(MediaType contentType, byte[] content);
 
-	void onErrorResponse(int code, byte[] contentType, byte[] content);
+	void onErrorResponse(int code, MediaType contentType, byte[] content);
 
 }

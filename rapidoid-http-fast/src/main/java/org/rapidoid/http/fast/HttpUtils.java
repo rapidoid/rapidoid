@@ -38,36 +38,8 @@ import org.rapidoid.util.UTILS;
 @Since("5.0.0")
 public class HttpUtils implements HttpMetadata {
 
-	public static String path(Map<String, Object> state) {
-		return (String) U.get(state, PATH);
-	}
-
-	public static String verb(Map<String, Object> state) {
-		return (String) U.get(state, VERB);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Map<String, String> headers(Map<String, Object> state) {
-		return (Map<String, String>) state.get(HEADERS);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Map<String, String> cookies(Map<String, Object> state) {
-		return (Map<String, String>) state.get(COOKIES);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Map<String, String> setHeaders(Map<String, Object> state) {
-		return (Map<String, String>) state.get(SET_HEADERS);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Map<String, String> setCookies(Map<String, Object> state) {
-		return (Map<String, String>) state.get(SET_COOKIES);
-	}
-
-	public static String getSessionId(Map<String, Object> state) {
-		return cookies(state).get(SESSION_COOKIE);
+	public static String getSessionId(Req req) {
+		return req.cookie(SESSION_COOKIE, null);
 	}
 
 	public static byte[] serializeLocals(Map<String, Serializable> locals) {
@@ -88,13 +60,12 @@ public class HttpUtils implements HttpMetadata {
 		return (Map<String, Serializable>) UTILS.deserialize(bytes);
 	}
 
-	public static String[] pathSegments(Map<String, Object> state) {
-		String path = path(state);
-		return U.triml(path, "/").split("/");
+	public static String[] pathSegments(Req req) {
+		return U.triml(req.path(), "/").split("/");
 	}
 
-	public static Map<String, Serializable> initAndDeserializeCookiePack(Map<String, Object> state) {
-		String cookiepack = U.get(cookies(state), COOKIEPACK_COOKIE, null);
+	public static Map<String, Serializable> initAndDeserializeCookiePack(Req req) {
+		String cookiepack = req.cookie(COOKIEPACK_COOKIE, null);
 
 		if (!U.isEmpty(cookiepack) && !cookiepack.equals("null")) {
 
@@ -107,18 +78,18 @@ public class HttpUtils implements HttpMetadata {
 		}
 	}
 
-	public static void saveCookipackBeforeClosingHeaders(Map<String, Object> state, Map<String, Serializable> cookiepack) {
+	public static void saveCookipackBeforeClosingHeaders(Req req, Map<String, Serializable> cookiepack) {
 		byte[] cpack = serializeCookiepack(cookiepack);
 
 		if (cpack != null) {
 			String json = U.mid(JSON.stringify(cpack), 1, -1);
-			setCookie(state, COOKIEPACK_COOKIE, json, "path=/");
+			setCookie(req, COOKIEPACK_COOKIE, json, "path=/");
 		}
 	}
 
-	public Map<String, Serializable> loadState(Map<String, Object> state) {
-		if (isPostReq(state)) {
-			String pageLocals = (String) state.get(VIEWSTATE);
+	public Map<String, Serializable> loadState(Req req) {
+		if (isPostReq(req)) {
+			String pageLocals = req.posted(VIEWSTATE, null);
 
 			if (!U.isEmpty(pageLocals) && !pageLocals.equals("null")) {
 				byte[] bytes = JSON.parseBytes('"' + pageLocals + '"');
@@ -129,16 +100,16 @@ public class HttpUtils implements HttpMetadata {
 		return null;
 	}
 
-	public static boolean isGetReq(Map<String, Object> state) {
-		return verb(state).equalsIgnoreCase("GET");
+	public static boolean isGetReq(Req req) {
+		return req.verb().equalsIgnoreCase(GET);
 	}
 
-	public static boolean isPostReq(Map<String, Object> state) {
-		return verb(state).equalsIgnoreCase("POST");
+	public static boolean isPostReq(Req req) {
+		return req.verb().equalsIgnoreCase(POST);
 	}
 
-	public static String resName(Map<String, Object> state) {
-		String resourceName = path(state).substring(1);
+	public static String resName(Req req) {
+		String resourceName = req.path().substring(1);
 
 		if (resourceName.isEmpty()) {
 			resourceName = "index";
@@ -151,8 +122,8 @@ public class HttpUtils implements HttpMetadata {
 		return resourceName;
 	}
 
-	public static String verbAndResourceName(Map<String, Object> state) {
-		return verb(state).toUpperCase() + "/" + resName(state);
+	public static String verbAndResourceName(Req req) {
+		return req.verb().toUpperCase() + "/" + resName(req);
 	}
 
 	public static boolean hasExtension(String name) {
@@ -169,32 +140,23 @@ public class HttpUtils implements HttpMetadata {
 		}
 	}
 
-	public static void redirect(Map<String, Object> state, String url) {
-		setResponseCode(state, 303);
-		setHeader(state, HttpHeaders.LOCATION.name(), url);
-	}
-
-	public static void setContentTypeForFile(Map<String, Object> state, File file) {
+	public static void setContentTypeForFile(Req req, File file) {
 		U.must(file.exists());
-		setContentType(state, MediaType.getByFileName(file.getAbsolutePath()));
+		setContentType(req, MediaType.getByFileName(file.getAbsolutePath()));
 	}
 
-	public static void setContentTypeForResource(Map<String, Object> state, Res resource) {
+	public static void setContentTypeForResource(Req req, Res resource) {
 		U.must(resource.exists());
-		setContentType(state, MediaType.getByFileName(resource.getShortName()));
+		setContentType(req, MediaType.getByFileName(resource.getShortName()));
 	}
 
-	public static void setContentType(Map<String, Object> state, MediaType mediaType) {
-		setContentType(state, mediaType.getBytes());
+	public static void setContentType(Req req, MediaType mediaType) {
+		req.response().contentType(mediaType);
 	}
 
-	public static void setHeader(Map<String, Object> state, String name, String value) {
-		setHeaders(state).put(name, value);
-	}
-
-	public static void setCookie(Map<String, Object> state, String name, String value, String... extras) {
+	public static void setCookie(Req req, String name, String value, String... extras) {
 		value = cookieValueWithExtras(value, extras);
-		setCookies(state).put(name, value);
+		req.response().cookies().put(name, value);
 	}
 
 	public static String cookieValueWithExtras(String value, String... extras) {
@@ -205,25 +167,17 @@ public class HttpUtils implements HttpMetadata {
 		return value;
 	}
 
-	public static void setResponseCode(Map<String, Object> state, int responseCode) {
-		state.put(CODE, responseCode);
-	}
-
-	public static void setContentType(Map<String, Object> state, byte[] contentType) {
-		state.put(CONTENT_TYPE, contentType);
-	}
-
 	public static Res staticResource(String filename) {
 		String firstFile = Conf.staticPath() + "/" + filename;
 		String defaultFile = Conf.staticPathDefault() + "/" + filename;
 		return Res.from(filename, true, firstFile, defaultFile);
 	}
 
-	public static Res staticPage(Map<String, Object> state) {
-		String resName = HttpUtils.resName(state);
+	public static Res staticPage(Req req) {
+		String resName = resName(req);
 
-		if (HttpUtils.hasExtension(resName)) {
-			return HttpUtils.staticResource(resName);
+		if (hasExtension(resName)) {
+			return staticResource(resName);
 		} else {
 			String resNameDotHtml = resName + ".html";
 
@@ -246,6 +200,18 @@ public class HttpUtils implements HttpMetadata {
 			return U.frmt("Access Denied: %s", details);
 		} else {
 			return U.frmt("Internal Server Error: %s", details);
+		}
+	}
+
+	public static void postProcessResponse(HttpResponse resp) {
+		postProcessRedirect(resp);
+	}
+
+	private static void postProcessRedirect(HttpResponse resp) {
+		String redirect = resp.redirect();
+		if (redirect != null) {
+			resp.code(303);
+			resp.headers().put(HttpHeaders.LOCATION.name(), redirect);
 		}
 	}
 

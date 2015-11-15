@@ -13,7 +13,6 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.config.Conf;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.gui.Btn;
 import org.rapidoid.gui.Card;
 import org.rapidoid.gui.Debug;
@@ -22,9 +21,9 @@ import org.rapidoid.gui.Form;
 import org.rapidoid.gui.FormMode;
 import org.rapidoid.gui.Grid;
 import org.rapidoid.gui.Highlight;
+import org.rapidoid.gui.HtmlPage;
 import org.rapidoid.gui.KVGrid;
 import org.rapidoid.gui.Layout;
-import org.rapidoid.gui.HtmlPage;
 import org.rapidoid.gui.Pager;
 import org.rapidoid.gui.Panel;
 import org.rapidoid.gui.Snippet;
@@ -49,6 +48,8 @@ import org.rapidoid.html.tag.OptionTag;
 import org.rapidoid.html.tag.SelectTag;
 import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.html.tag.TextareaTag;
+import org.rapidoid.http.fast.Req;
+import org.rapidoid.http.fast.Reqs;
 import org.rapidoid.lambda.Calc;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
@@ -420,13 +421,11 @@ public abstract class BootstrapWidgets extends HTML {
 		return Cls.customizable(HtmlPage.class, new Object[] { UTILS.flat(contents) });
 	}
 
-	public static <T> Grid grid(Class<T> type, Object[] items, String sortOrder, int pageSize,
-			String... properties) {
+	public static <T> Grid grid(Class<T> type, Object[] items, String sortOrder, int pageSize, String... properties) {
 		return grid(Models.beanItems(type, items), sortOrder, pageSize, properties);
 	}
 
-	public static <T> Grid grid(Class<T> type, Iterable<T> items, String sortOrder, int pageSize,
-			String... properties) {
+	public static <T> Grid grid(Class<T> type, Iterable<T> items, String sortOrder, int pageSize, String... properties) {
 		return grid(type, U.array(items), sortOrder, pageSize, properties);
 	}
 
@@ -442,8 +441,8 @@ public abstract class BootstrapWidgets extends HTML {
 		return Cls.customizable(Pager.class, from, to, pageNumber);
 	}
 
-	public static Form form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc,
-			FieldType[] fieldTypes, Object[][] options, Var<?>[] vars, Btn[] buttons) {
+	public static Form form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc, FieldType[] fieldTypes,
+			Object[][] options, Var<?>[] vars, Btn[] buttons) {
 		return Cls.customizable(Form.class, layout, fieldsNames, fieldsDesc, fieldTypes, options, vars, buttons);
 	}
 
@@ -858,7 +857,11 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	private static boolean isGetReq() {
-		return "GET".equalsIgnoreCase(Ctxs.ctx().verb());
+		return "GET".equalsIgnoreCase(req().verb());
+	}
+
+	public static Req req() {
+		return Reqs.req();
 	}
 
 	@SuppressWarnings("unchecked")

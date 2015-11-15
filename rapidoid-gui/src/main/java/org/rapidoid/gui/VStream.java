@@ -64,7 +64,7 @@ public class VStream extends AbstractWidget {
 	}
 
 	protected String defaultDataUrl() {
-		String url = ctx().uri();
+		String url = req().uri();
 
 		if (url.endsWith("/")) {
 			url = U.mid(url, 0, -1);

@@ -20,15 +20,15 @@ package org.rapidoid.http.fast.listener;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.http.fast.FastHttp;
 import org.rapidoid.http.fast.HttpWrapper;
+import org.rapidoid.http.fast.Req;
 import org.rapidoid.http.fast.handler.FastHttpHandler;
+import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.wrap.BoolWrap;
 
@@ -37,12 +37,12 @@ import org.rapidoid.wrap.BoolWrap;
 public class IgnorantHttpListener implements FastHttpListener {
 
 	@Override
-	public void onOkResponse(byte[] contentType, byte[] content) {
+	public void onOkResponse(MediaType contentType, byte[] content) {
 		// do nothing
 	}
 
 	@Override
-	public void onErrorResponse(int code, byte[] contentType, byte[] content) {
+	public void onErrorResponse(int code, MediaType contentType, byte[] content) {
 		// do nothing
 	}
 
@@ -54,7 +54,7 @@ public class IgnorantHttpListener implements FastHttpListener {
 	}
 
 	@Override
-	public void state(FastHttpHandler handler, Map<String, Object> state) {
+	public void state(FastHttpHandler handler, Req req) {
 		// do nothing
 	}
 
@@ -65,7 +65,7 @@ public class IgnorantHttpListener implements FastHttpListener {
 	}
 
 	@Override
-	public void result(FastHttpHandler handler, byte[] contentType, Object result) {
+	public void result(FastHttpHandler handler, MediaType contentType, Object result) {
 		// do nothing
 	}
 
@@ -75,12 +75,12 @@ public class IgnorantHttpListener implements FastHttpListener {
 	}
 
 	@Override
-	public void entering(HttpWrapper wrapper, Map<String, Object> state) {
+	public void entering(HttpWrapper wrapper, Req req) {
 		// do nothing
 	}
 
 	@Override
-	public void leaving(HttpWrapper wrapper, byte[] contentType, Object result) {
+	public void leaving(HttpWrapper wrapper, MediaType contentType, Object result) {
 		// do nothing
 	}
 

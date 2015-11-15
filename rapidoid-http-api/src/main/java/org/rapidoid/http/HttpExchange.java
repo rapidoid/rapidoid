@@ -20,6 +20,7 @@ package org.rapidoid.http;
  * #L%
  */
 
+import java.io.Serializable;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
@@ -55,6 +56,36 @@ public interface HttpExchange extends Req, Resp, Runnable {
 
 	HttpExchange authorize(@P("clazz") Class<?> clazz);
 
+	/* SESSION SCOPE: */
+
+	Map<String, Serializable> session();
+
+	<T extends Serializable> T session(String name);
+
+	<T extends Serializable> T session(String name, T defaultValue);
+
+	<T extends Serializable> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+
+	/* LOCAL SCOPE: */
+
+	Map<String, Serializable> locals();
+
+	<T extends Serializable> T local(String key);
+
+	<T extends Serializable> T local(String key, T defaultValue);
+
+	<T extends Serializable> T localGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+
+	/* COOKIEPACK SCOPE: */
+
+	Map<String, Serializable> cookiepack();
+
+	<T extends Serializable> T cookiepack(String name);
+
+	<T extends Serializable> T cookiepack(String name, T defaultValue);
+
+	<T extends Serializable> T cookiepackGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+
 	/* EXTRAS: */
 
 	<T> T persister();
@@ -64,5 +95,29 @@ public interface HttpExchange extends Req, Resp, Runnable {
 	Runnable asAsyncJob(Handler handler);
 
 	String dbQuery();
+
+	boolean isGetReq();
+
+	boolean isPostReq();
+
+	boolean isDevMode();
+
+	String pathSegment(int segmentIndex);
+
+	String[] pathSegments();
+
+	String realIpAddress();
+
+	String subpath();
+
+	String home();
+
+	<T> T attrGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+
+	String sessionId();
+
+	String query();
+
+	String protocol();
 
 }

@@ -20,12 +20,11 @@ package org.rapidoid.http.fast.handler;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.fast.HttpMetadata;
-import org.rapidoid.http.fast.ParamHandler;
+import org.rapidoid.http.fast.Req;
+import org.rapidoid.http.fast.ReqHandler;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.F3;
 import org.rapidoid.lambda.Mapper;
@@ -34,40 +33,40 @@ import org.rapidoid.lambda.Mapper;
 @Since("5.0.0")
 public class HttpHandlers implements HttpMetadata {
 
-	private static String param(Map<String, Object> req, final String paramName) {
-		return (String) req.get(paramName);
+	private static String param(Req req, final String paramName) {
+		return req.data(paramName);
 	}
 
-	public static ParamHandler parameterized(final String paramName, final Mapper<String, Object> handler) {
-		return new ParamHandler() {
+	public static ReqHandler parameterized(final String paramName, final Mapper<String, Object> handler) {
+		return new ReqHandler() {
 			@Override
-			public Object handle(Map<String, Object> params) throws Exception {
-				String param = param(params, paramName);
+			public Object handle(Req req) throws Exception {
+				String param = param(req, paramName);
 				return handler.map(param);
 			}
 		};
 	}
 
-	public static ParamHandler parameterized(final String paramName1, final String paramName2,
+	public static ReqHandler parameterized(final String paramName1, final String paramName2,
 			final F2<String, String, Object> handler) {
-		return new ParamHandler() {
+		return new ReqHandler() {
 			@Override
-			public Object handle(Map<String, Object> params) throws Exception {
-				String param1 = param(params, paramName1);
-				String param2 = param(params, paramName2);
+			public Object handle(Req req) throws Exception {
+				String param1 = param(req, paramName1);
+				String param2 = param(req, paramName2);
 				return handler.execute(param1, param2);
 			}
 		};
 	}
 
-	public static ParamHandler parameterized(final String paramName1, final String paramName2, final String paramName3,
+	public static ReqHandler parameterized(final String paramName1, final String paramName2, final String paramName3,
 			final F3<String, String, String, Object> handler) {
-		return new ParamHandler() {
+		return new ReqHandler() {
 			@Override
-			public Object handle(Map<String, Object> params) throws Exception {
-				String param1 = param(params, paramName1);
-				String param2 = param(params, paramName2);
-				String param3 = param(params, paramName3);
+			public Object handle(Req req) throws Exception {
+				String param1 = param(req, paramName1);
+				String param2 = param(req, paramName2);
+				String param3 = param(req, paramName3);
 				return handler.execute(param1, param2, param3);
 			}
 		};

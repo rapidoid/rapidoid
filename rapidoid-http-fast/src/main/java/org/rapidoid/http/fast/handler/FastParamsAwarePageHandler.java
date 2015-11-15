@@ -20,33 +20,33 @@ package org.rapidoid.http.fast.handler;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.fast.FastHttp;
 import org.rapidoid.http.fast.HttpMetadata;
 import org.rapidoid.http.fast.HttpWrapper;
-import org.rapidoid.http.fast.ParamHandler;
+import org.rapidoid.http.fast.Req;
+import org.rapidoid.http.fast.ReqHandler;
+import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
 public class FastParamsAwarePageHandler extends AbstractAsyncHttpHandler implements HttpMetadata {
 
-	private final ParamHandler handler;
+	private final ReqHandler handler;
 
-	public FastParamsAwarePageHandler(FastHttp http, byte[] contentType, HttpWrapper[] wrappers, ParamHandler handler) {
+	public FastParamsAwarePageHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, ReqHandler handler) {
 		super(http, contentType, wrappers);
 		this.handler = handler;
 	}
 
 	@Override
-	protected Object handleReq(Channel channel, Map<String, Object> params) throws Exception {
-		http.getListener().state(this, params);
+	protected Object handleReq(Channel channel, Req req) throws Exception {
+		http.getListener().state(this, req);
 
 		// call the handler, get the result
-		Object result = handler.handle(params);
+		Object result = handler.handle(req);
 
 		http.getListener().result(this, contentType, result);
 		return result;
@@ -54,11 +54,6 @@ public class FastParamsAwarePageHandler extends AbstractAsyncHttpHandler impleme
 
 	@Override
 	public boolean needsParams() {
-		return true;
-	}
-
-	@Override
-	public boolean needsHeadersAndCookies() {
 		return true;
 	}
 

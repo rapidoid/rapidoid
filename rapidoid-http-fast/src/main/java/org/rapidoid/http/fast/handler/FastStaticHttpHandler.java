@@ -20,33 +20,28 @@ package org.rapidoid.http.fast.handler;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.fast.FastHttp;
 import org.rapidoid.http.fast.HttpStatus;
+import org.rapidoid.http.fast.Req;
+import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
 public class FastStaticHttpHandler extends AbstractFastHttpHandler {
 
-	private final FastHttp http;
-
-	private final byte[] contentType;
-
 	private final byte[] response;
 
-	public FastStaticHttpHandler(FastHttp http, byte[] contentType, byte[] response) {
-		this.http = http;
-		this.contentType = contentType;
+	public FastStaticHttpHandler(FastHttp http, MediaType contentType, byte[] response) {
+		super(http, contentType);
 		this.response = response;
 	}
 
 	@Override
-	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
-		http.getListener().state(this, params);
+	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req) {
+		http.getListener().state(this, req);
 
 		http.getListener().result(this, contentType, response);
 		http.write200(ctx, isKeepAlive, contentType, response);

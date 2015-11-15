@@ -37,6 +37,10 @@ public class HttpHeaders {
 
 	public static final HttpHeaders LOCATION = new HttpHeaders("Location");
 
+	public static final HttpHeaders HOST = new HttpHeaders("Host");
+
+	public static final HttpHeaders X_FORWARDED_FOR = new HttpHeaders("X-Forwarded-For");
+
 	private final byte[] bytes;
 
 	private final String name;

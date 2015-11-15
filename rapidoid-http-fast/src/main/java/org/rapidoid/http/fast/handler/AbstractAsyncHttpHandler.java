@@ -20,7 +20,6 @@ package org.rapidoid.http.fast.handler;
  * #L%
  */
 
-import java.util.Map;
 import java.util.concurrent.Future;
 
 import org.rapidoid.annotation.Authors;
@@ -28,35 +27,32 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.fast.FastHttp;
 import org.rapidoid.http.fast.HttpStatus;
 import org.rapidoid.http.fast.HttpWrapper;
+import org.rapidoid.http.fast.Req;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
 public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
-	protected final FastHttp http;
-
-	protected final byte[] contentType;
-
 	protected final HttpWrapper[] wrappers;
 
-	public AbstractAsyncHttpHandler(FastHttp http, byte[] contentType, HttpWrapper[] wrappers) {
-		this.http = http;
-		this.contentType = contentType;
+	public AbstractAsyncHttpHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers) {
+		super(http, contentType);
 		this.wrappers = wrappers;
 	}
 
 	@Override
-	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
+	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req) {
 		try {
 			ctx.async();
-			execHandlerJob(ctx, isKeepAlive, params);
+			execHandlerJob(ctx, isKeepAlive, req);
 		} catch (Throwable e) {
 			return http.error(ctx, isKeepAlive, e);
 		}
@@ -66,12 +62,17 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 	@SuppressWarnings("unchecked")
 	protected Object postprocessResult(Object result) throws Exception {
-		if (result instanceof Future<?>) {
+		if (result instanceof Req) {
+			return result; // the Req object will do the rendering
+
+		} else if (result instanceof Future<?>) {
 			result = ((Future<Object>) result).get();
 			return postprocessResult(result);
+
 		} else if (result instanceof org.rapidoid.concurrent.Future<?>) {
 			result = ((org.rapidoid.concurrent.Future<Object>) result).get();
 			return postprocessResult(result);
+
 		} else {
 			// render the response and process logic while still in context
 			if (!(result instanceof byte[]) && !Cls.isSimple(result) && !U.isCollection(result) && !U.isMap(result)) {
@@ -87,19 +88,24 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		return U.str(result); // 2. actual rendering
 	}
 
-	private void execHandlerJob(final Channel ctx, final boolean isKeepAlive, final Map<String, Object> params) {
-		Ctx.executeInCtx("page", params, new Runnable() {
+	private void execHandlerJob(final Channel channel, final boolean isKeepAlive, final Req req) {
+		Ctx.executeInCtx("handler", new Runnable() {
 			@Override
 			public void run() {
+
+				Ctx ctx = Ctxs.get();
+				ctx.setApp(null);
+				ctx.setExchange(req);
+				ctx.setUser(null);
 
 				Object result;
 
 				try {
 
 					if (!U.isEmpty(wrappers)) {
-						result = wrap(ctx, params, 0);
+						result = wrap(channel, req, 0);
 					} else {
-						result = handleReq(ctx, params);
+						result = handleReq(channel, req);
 					}
 
 					result = postprocessResult(result);
@@ -107,12 +113,12 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 					result = e;
 				}
 
-				done(ctx, isKeepAlive, result);
+				done(channel, isKeepAlive, result);
 			}
 		});
 	}
 
-	private Object wrap(final Channel ctx, final Map<String, Object> params, final int index) throws Exception {
+	private Object wrap(final Channel channel, final Req req, final int index) throws Exception {
 		HttpWrapper wrapper = wrappers[index];
 
 		WrappedProcess process = new WrappedProcess() {
@@ -123,9 +129,9 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 					Object val;
 					if (next < wrappers.length) {
-						val = wrap(ctx, params, next);
+						val = wrap(channel, req, next);
 					} else {
-						val = handleReq(ctx, params);
+						val = handleReq(channel, req);
 					}
 
 					return transformation.map(val);
@@ -135,16 +141,16 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 			}
 		};
 
-		http.getListener().entering(wrapper, params);
+		http.getListener().entering(wrapper, req);
 
-		Object result = wrapper.wrap(params, process);
+		Object result = wrapper.wrap(req, process);
 
 		http.getListener().leaving(wrapper, contentType, result);
 
 		return result;
 	}
 
-	protected abstract Object handleReq(Channel ctx, Map<String, Object> params) throws Exception;
+	protected abstract Object handleReq(Channel ctx, Req req) throws Exception;
 
 	protected Callback<Object> callback(final Channel ctx, final boolean isKeepAlive) {
 		return new Callback<Object>() {
@@ -157,27 +163,18 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 	}
 
 	public void done(Channel ctx, boolean isKeepAlive, Object result) {
-		if (result instanceof Throwable) {
+		if (result instanceof Req) {
+			return; // the Req instance will render the result
+
+		} else if (result instanceof Throwable) {
 			Throwable error = (Throwable) result;
 			http.error(ctx, isKeepAlive, error);
+
 		} else {
-			writeResult(ctx, isKeepAlive, result);
+			http.writeResult(ctx, isKeepAlive, result, contentType);
 		}
 
 		http.done(ctx, isKeepAlive);
-	}
-
-	private void writeResult(Channel ctx, boolean isKeepAlive, Object result) {
-		if (contentType.equals(FastHttp.CONTENT_TYPE_JSON)) {
-			if (result instanceof byte[]) {
-				http.write200(ctx, isKeepAlive, contentType, (byte[]) result);
-			} else {
-				http.writeSerializedJson(ctx, isKeepAlive, result);
-			}
-		} else {
-			byte[] response = UTILS.toBytes(result);
-			http.write200(ctx, isKeepAlive, contentType, response);
-		}
 	}
 
 }

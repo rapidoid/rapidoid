@@ -1,8 +1,8 @@
-package org.rapidoid.http;
+package org.rapidoid.http.fast;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,20 +20,13 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.util.List;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HttpResponse;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class HttpResponses {
-
-	// DIMENSIONS:
-	// - response code [100, 101, 200, ... 505]
-	// - connection [0=close, 1=keep-alive]
+@Since("5.0.2")
+public class HttpResponseCodes {
 
 	private static final String[] RESPONSE_CODES = { "100 Continue", "101 Switching Protocols", "200 OK",
 			"201 Created", "202 Accepted", "203 Non-Authoritative Information", "204 No Content", "205 Reset Content",
@@ -46,45 +39,23 @@ public class HttpResponses {
 			"417 Expectation Failed", "500 Internal Server Error", "501 Not Implemented", "502 Bad Gateway",
 			"503 Service Unavailable", "504 Gateway Timeout", "505 HTTP Version Not Supported" };
 
-	private static final String[] CONNS = { "close", "keep-alive" };
+	private final byte[][] responses = new byte[600][];
 
-	private final HttpResponse[][] responses = new HttpResponse[600][];
-
-	public HttpResponses(boolean withServerHeader, boolean withDateHeader) {
+	public HttpResponseCodes() {
 		for (String respCode : RESPONSE_CODES) {
-			init(respCode, withServerHeader, withDateHeader);
+			init(respCode);
 		}
 	}
 
-	private void init(String responseCode, boolean withServerHeader, boolean withDateHeader) {
+	private void init(String responseCode) {
 		int code = U.num(responseCode.split(" ")[0]);
-		responses[code] = new HttpResponse[2];
-		for (int conn = 0; conn < 2; conn++) {
-			responses[code][conn] = newResponse(responseCode, withServerHeader, withDateHeader, conn);
-		}
+		String response = "HTTP/1.1 " + responseCode + "\r\n";
+		responses[code] = response.getBytes();
 	}
 
-	private HttpResponse newResponse(String responseCode, boolean withServerHeader, boolean withDateHeader, int conn) {
-		List<String> lines = U.list("HTTP/1.1 " + responseCode);
-
-		if (withServerHeader) {
-			lines.add("Server: Rapidoid");
-		}
-
-		if (withDateHeader) {
-			lines.add("Date: x                              ");
-		}
-
-		lines.add("Content-Length:          0");
-		lines.add("Connection: " + CONNS[conn]);
-
-		String cnt = U.join("\r\n", lines) + "\r\n";
-		return new HttpResponse(cnt);
-	}
-
-	public HttpResponse get(int code, boolean keepAlive) {
+	public byte[] get(int code) {
 		if (responses[code] != null) {
-			return responses[code][keepAlive ? 1 : 0];
+			return responses[code];
 		} else {
 			throw U.rte("Invalid HTTP response code: " + code);
 		}

@@ -83,6 +83,7 @@ public class RapidoidConnection implements Resetable, Channel, Constants {
 	private boolean isClient;
 
 	private Protocol protocol;
+
 	volatile long requestId;
 
 	public RapidoidConnection(RapidoidWorker worker, BufGroup bufs) {

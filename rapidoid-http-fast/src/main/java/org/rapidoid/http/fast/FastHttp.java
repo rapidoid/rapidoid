@@ -21,8 +21,8 @@ package org.rapidoid.http.fast;
  */
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -45,6 +45,7 @@ import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.wire.Wire;
 import org.rapidoid.wrap.BoolWrap;
 
@@ -53,8 +54,6 @@ import org.rapidoid.wrap.BoolWrap;
 public class FastHttp implements Protocol, HttpMetadata {
 
 	private static final byte[] HTTP_200_OK = "HTTP/1.1 200 OK\r\n".getBytes();
-
-	private static final byte[] HTTP_500_ERROR = "HTTP/1.1 500 Internal Server Error\r\n".getBytes();
 
 	private static final byte[] HTTP_404_NOT_FOUND = "HTTP/1.1 404 Not Found\r\nContent-Length: 10\r\n\r\nNot found!"
 			.getBytes();
@@ -69,19 +68,11 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	private static final byte[] CONTENT_LENGTH_IS = "Content-Length: ".getBytes();
 
-	private static final byte[] CONTENT_LENGTH_UNKNOWN = "Content-Length:           ".getBytes();
+	static final byte[] CONTENT_LENGTH_UNKNOWN = "Content-Length:           ".getBytes();
 
 	private static final int CONTENT_LENGTHS_SIZE = 5000;
 
 	private static final byte[] DATE_IS = "Date: ".getBytes();
-
-	public static final byte[] CONTENT_TYPE_PLAIN = MediaType.PLAIN_TEXT_UTF_8.asHttpHeader();
-
-	public static final byte[] CONTENT_TYPE_HTML = MediaType.HTML_UTF_8.asHttpHeader();
-
-	public static final byte[] CONTENT_TYPE_JSON = MediaType.JSON_UTF_8.asHttpHeader();
-
-	public static final byte[] CONTENT_TYPE_BINARY = MediaType.BINARY.asHttpHeader();
 
 	private static final HttpParser HTTP_PARSER = Wire.singleton(HttpParser.class);
 
@@ -94,6 +85,8 @@ public class FastHttp implements Protocol, HttpMetadata {
 	private static final byte[] OPTIONS = "OPTIONS".getBytes();
 
 	private static final byte[][] CONTENT_LENGTHS = new byte[CONTENT_LENGTHS_SIZE][];
+
+	private final HttpResponseCodes responseCodes = new HttpResponseCodes();
 
 	private final BufMap<FastHttpHandler> getHandlers = new BufMapImpl<FastHttpHandler>();
 
@@ -162,13 +155,14 @@ public class FastHttp implements Protocol, HttpMetadata {
 		this.staticResourcesHandler = staticResourcesHandler;
 	}
 
-	public void process(Channel ctx) {
-		if (ctx.isInitial()) {
+	@SuppressWarnings("unchecked")
+	public void process(Channel channel) {
+		if (channel.isInitial()) {
 			return;
 		}
 
-		Buf buf = ctx.input();
-		RapidoidHelper helper = ctx.helper();
+		Buf buf = channel.input();
+		RapidoidHelper helper = channel.helper();
 
 		Range[] ranges = helper.ranges1.ranges;
 		Ranges hdrs = helper.ranges2;
@@ -176,109 +170,82 @@ public class FastHttp implements Protocol, HttpMetadata {
 		BoolWrap isGet = helper.booleans[0];
 		BoolWrap isKeepAlive = helper.booleans[1];
 
-		Range verb = ranges[ranges.length - 1];
-		Range uri = ranges[ranges.length - 2];
-		Range path = ranges[ranges.length - 3];
-		Range query = ranges[ranges.length - 4];
-		Range protocol = ranges[ranges.length - 5];
-		Range body = ranges[ranges.length - 6];
+		Range xverb = ranges[ranges.length - 1];
+		Range xuri = ranges[ranges.length - 2];
+		Range xpath = ranges[ranges.length - 3];
+		Range xquery = ranges[ranges.length - 4];
+		Range xprotocol = ranges[ranges.length - 5];
+		Range xbody = ranges[ranges.length - 6];
 
-		HTTP_PARSER.parse(buf, isGet, isKeepAlive, body, verb, uri, path, query, protocol, hdrs, helper);
+		HTTP_PARSER.parse(buf, isGet, isKeepAlive, xbody, xverb, xuri, xpath, xquery, xprotocol, hdrs, helper);
 
 		// the listener may override all the request dispatching and handler execution
-		if (!listener.request(this, ctx, isGet, isKeepAlive, body, verb, uri, path, query, protocol, hdrs)) {
+		if (!listener.request(this, channel, isGet, isKeepAlive, xbody, xverb, xuri, xpath, xquery, xprotocol, hdrs)) {
 			return;
 		}
 
 		HttpStatus status = HttpStatus.NOT_FOUND;
 
-		FastHttpHandler handler = findFandler(ctx, buf, isGet, verb, path);
+		FastHttpHandler handler = findFandler(channel, buf, isGet, xverb, xpath);
 
 		if (handler != null) {
-			Map<String, Object> params = null;
+			ReqImpl req = null;
 
 			if (handler.needsParams()) {
-				params = U.map();
 
 				KeyValueRanges paramsKV = helper.pairs1.reset();
 				KeyValueRanges headersKV = helper.pairs2.reset();
 
-				HTTP_PARSER.parseParams(buf, paramsKV, query);
+				HTTP_PARSER.parseParams(buf, paramsKV, xquery);
+				Map<String, String> params = U.cast(paramsKV.toMap(buf, true, true));
 
-				// parse URL parameters as data
-				Map<String, Object> data = U.cast(paramsKV.toMap(buf, true, true));
+				byte[] body;
+				Map<String, Object> posted;
+				Map<String, byte[]> files;
 
 				if (!isGet.value) {
 					KeyValueRanges postedKV = helper.pairs3.reset();
 					KeyValueRanges filesKV = helper.pairs4.reset();
 
+					body = xbody.bytes(buf);
+
 					// parse posted body as data
-					HTTP_PARSER.parsePosted(buf, headersKV, body, postedKV, filesKV, helper, data);
-				}
+					posted = new HashMap<String, Object>();
+					HTTP_PARSER.parsePosted(buf, headersKV, xbody, postedKV, filesKV, helper, posted);
 
-				// filter special data values
-				Map<String, Object> special = findSpecialData(data);
+					files = filesKV.toBinaryMap(buf, true);
 
-				if (special != null) {
-					data.keySet().removeAll(special.keySet());
 				} else {
-					special = U.cast(Collections.EMPTY_MAP);
+					posted = Collections.EMPTY_MAP;
+					files = Collections.EMPTY_MAP;
+					body = null;
 				}
 
-				// put all data directly as parameters
-				params.putAll(data);
+				String verb = xverb.str(buf);
+				String uri = xuri.str(buf);
+				String path = xpath.str(buf);
 
-				params.put(DATA, data);
-				params.put(SPECIAL, special);
+				KeyValueRanges cookiesKV = helper.pairs5.reset();
+				HTTP_PARSER.parseHeadersIntoKV(buf, hdrs, headersKV, cookiesKV, helper);
 
-				// finally, the HTTP info
-				params.put(VERB, verb.str(buf));
-				params.put(URI, uri.str(buf));
-				params.put(PATH, path.str(buf));
+				Map<String, String> headers = U.cast(headersKV.toMap(buf, true, true));
+				Map<String, String> cookies = U.cast(cookiesKV.toMap(buf, true, true));
 
-				params.put(CLIENT_ADDRESS, ctx.address());
-
-				if (handler.needsHeadersAndCookies()) {
-					KeyValueRanges cookiesKV = helper.pairs5.reset();
-					HTTP_PARSER.parseHeadersIntoKV(buf, hdrs, headersKV, cookiesKV, helper);
-
-					Map<String, Object> headers = U.cast(headersKV.toMap(buf, true, true));
-					Map<String, Object> cookies = U.cast(cookiesKV.toMap(buf, true, true));
-
-					params.put(HEADERS, headers);
-					params.put(COOKIES, cookies);
-
-					params.put(HOST, U.get(headers, "Host", null));
-					params.put(FORWARDED_FOR, U.get(headers, "X-Forwarded-For", null));
-				}
+				req = new ReqImpl(this, channel, isKeepAlive.value, verb, uri, path, body, params, headers, cookies,
+						posted, files, handler.contentType());
 			}
 
-			status = handler.handle(ctx, isKeepAlive.value, params);
+			status = handler.handle(channel, isKeepAlive.value, req);
 		}
 
 		if (status == HttpStatus.NOT_FOUND) {
-			ctx.write(HTTP_404_NOT_FOUND);
-			listener.notFound(this, ctx, isGet, isKeepAlive, body, verb, uri, path, query, protocol, hdrs);
+			channel.write(HTTP_404_NOT_FOUND);
+			listener.notFound(this, channel, isGet, isKeepAlive, xbody, xverb, xuri, xpath, xquery, xprotocol, hdrs);
 		}
 
 		if (status != HttpStatus.ASYNC) {
-			ctx.closeIf(!isKeepAlive.value);
+			channel.closeIf(!isKeepAlive.value);
 		}
-	}
-
-	private Map<String, Object> findSpecialData(Map<String, Object> data) {
-		Map<String, Object> special = null;
-
-		for (Entry<String, Object> param : data.entrySet()) {
-			String name = param.getKey();
-
-			if (name.startsWith("$")) {
-				special = U.safe(special);
-				special.put(name, param.getValue());
-			}
-		}
-
-		return special;
 	}
 
 	private FastHttpHandler findFandler(Channel ctx, Buf buf, BoolWrap isGet, Range verb, Range path) {
@@ -314,19 +281,17 @@ public class FastHttp implements Protocol, HttpMetadata {
 		return null; // no handler
 	}
 
-	public void start200(Channel ctx, boolean isKeepAlive, byte[] contentType) {
+	public void start200(Channel ctx, boolean isKeepAlive, MediaType contentType) {
 		ctx.write(HTTP_200_OK);
-
 		addDefaultHeaders(ctx, isKeepAlive, contentType);
 	}
 
-	private void start500(Channel ctx, boolean isKeepAlive, byte[] contentType) {
-		ctx.write(HTTP_500_ERROR);
-
+	public void startResponse(Channel ctx, int code, boolean isKeepAlive, MediaType contentType) {
+		ctx.write(responseCodes.get(code));
 		addDefaultHeaders(ctx, isKeepAlive, contentType);
 	}
 
-	private void addDefaultHeaders(Channel ctx, boolean isKeepAlive, byte[] contentType) {
+	private void addDefaultHeaders(Channel ctx, boolean isKeepAlive, MediaType contentType) {
 		ctx.write(isKeepAlive ? CONN_KEEP_ALIVE : CONN_CLOSE);
 
 		ctx.write(SERVER_HEADER);
@@ -335,24 +300,24 @@ public class FastHttp implements Protocol, HttpMetadata {
 		ctx.write(Dates.getDateTimeBytes());
 		ctx.write(CR_LF);
 
-		ctx.write(contentType);
+		ctx.write(contentType.asHttpHeader());
 	}
 
-	private void addCustomHeader(Channel ctx, byte[] name, byte[] value) {
+	void addCustomHeader(Channel ctx, byte[] name, byte[] value) {
 		ctx.write(name);
 		ctx.write(HEADER_SEP);
 		ctx.write(value);
 		ctx.write(CR_LF);
 	}
 
-	public void write200(Channel ctx, boolean isKeepAlive, byte[] contentTypeHeader, byte[] content) {
+	public void write200(Channel ctx, boolean isKeepAlive, MediaType contentTypeHeader, byte[] content) {
 		start200(ctx, isKeepAlive, contentTypeHeader);
 		writeContent(ctx, content);
 		listener.onOkResponse(contentTypeHeader, content);
 	}
 
-	public void write500(Channel ctx, boolean isKeepAlive, byte[] contentTypeHeader, byte[] content) {
-		start500(ctx, isKeepAlive, contentTypeHeader);
+	public void write500(Channel ctx, boolean isKeepAlive, MediaType contentTypeHeader, byte[] content) {
+		startResponse(ctx, 500, isKeepAlive, contentTypeHeader);
 		writeContent(ctx, content);
 		listener.onErrorResponse(500, contentTypeHeader, content);
 	}
@@ -360,7 +325,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 	public HttpStatus error(Channel ctx, boolean isKeepAlive, Throwable error) {
 		Log.error("Error while processing request!", error);
 
-		start500(ctx, isKeepAlive, CONTENT_TYPE_HTML);
+		startResponse(ctx, 500, isKeepAlive, MediaType.HTML_UTF_8);
 		writeContent(ctx, HttpUtils.getErrorMessage(error).getBytes());
 
 		return HttpStatus.ERROR;
@@ -383,7 +348,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 	}
 
 	public void writeSerializedJson(Channel ctx, boolean isKeepAlive, Object value) {
-		start200(ctx, isKeepAlive, CONTENT_TYPE_JSON);
+		start200(ctx, isKeepAlive, MediaType.JSON_UTF_8);
 
 		Buf out = ctx.output();
 
@@ -391,6 +356,8 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 		int posConLen = out.size();
 		ctx.write(CR_LF);
+
+		// finishing the headers
 		ctx.write(CR_LF);
 
 		int posBefore = out.size();
@@ -401,12 +368,6 @@ public class FastHttp implements Protocol, HttpMetadata {
 		int contentLength = posAfter - posBefore;
 
 		out.putNumAsText(posConLen, contentLength, false);
-	}
-
-	public void addCookie(Channel ctx, String name, String value, String... extras) {
-		value = HttpUtils.cookieValueWithExtras(value, extras);
-		String cookie = name + "=" + value;
-		addCustomHeader(ctx, HttpHeaders.SET_COOKIE.getBytes(), cookie.getBytes());
 	}
 
 	public void done(Channel ctx, boolean isKeepAlive) {
@@ -426,6 +387,41 @@ public class FastHttp implements Protocol, HttpMetadata {
 		putHandlers.clear();
 		deleteHandlers.clear();
 		optionsHandlers.clear();
+	}
+
+	public void writeResult(Channel ctx, boolean isKeepAlive, Object result, MediaType contentType) {
+		if (contentType.equals(MediaType.JSON_UTF_8)) {
+			if (result instanceof byte[]) {
+				write200(ctx, isKeepAlive, contentType, (byte[]) result);
+			} else {
+				writeSerializedJson(ctx, isKeepAlive, result);
+			}
+		} else {
+			byte[] response = UTILS.toBytes(result);
+			write200(ctx, isKeepAlive, contentType, response);
+		}
+	}
+
+	public void renderBody(Channel ctx, int code, MediaType contentType, Object result) {
+		byte[] bytes;
+
+		if (U.eq(contentType, MediaType.JSON_UTF_8)) {
+			if (result instanceof byte[]) {
+				bytes = (byte[]) result;
+			} else {
+				bytes = JSON.stringify(result).getBytes();
+			}
+		} else {
+			bytes = UTILS.toBytes(result);
+		}
+
+		ctx.write(bytes);
+
+		if (code == 200) {
+			listener.onOkResponse(contentType, bytes);
+		} else {
+			listener.onErrorResponse(code, contentType, bytes);
+		}
 	}
 
 }

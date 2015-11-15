@@ -1,4 +1,4 @@
-package org.rapidoid.http.fast.handler;
+package org.rapidoid.http.fast;
 
 /*
  * #%L
@@ -22,30 +22,14 @@ package org.rapidoid.http.fast.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.fast.FastHttp;
-import org.rapidoid.mime.MediaType;
+import org.rapidoid.ctx.Ctxs;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public abstract class AbstractFastHttpHandler implements FastHttpHandler {
+@Since("5.0.2")
+public class Reqs {
 
-	protected final FastHttp http;
-
-	protected final MediaType contentType;
-
-	public AbstractFastHttpHandler(FastHttp http, MediaType contentType) {
-		this.http = http;
-		this.contentType = contentType;
-	}
-
-	@Override
-	public boolean needsParams() {
-		return false;
-	}
-
-	@Override
-	public MediaType contentType() {
-		return contentType;
+	public static Req req() {
+		return Ctxs.ctx().exchange();
 	}
 
 }

@@ -22,16 +22,17 @@ package org.rapidoid.http.fast;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.mime.MediaType;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
 public class PageOptions {
 
-	public final byte[] contentType;
+	public final MediaType contentType;
 
 	public final boolean raw;
 
-	public PageOptions(byte[] contentType, boolean raw) {
+	public PageOptions(MediaType contentType, boolean raw) {
 		this.contentType = contentType;
 		this.raw = raw;
 	}

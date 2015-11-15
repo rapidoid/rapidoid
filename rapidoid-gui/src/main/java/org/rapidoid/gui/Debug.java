@@ -20,14 +20,10 @@ package org.rapidoid.gui;
  * #L%
  */
 
-import java.io.Serializable;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.base.AbstractWidget;
-import org.rapidoid.u.U;
+import org.rapidoid.http.fast.Req;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.1")
@@ -39,27 +35,13 @@ public class Debug extends AbstractWidget {
 	}
 
 	protected Panel sessionPanel() {
-		Map<String, Object> visibleAttributes = U.map();
-
-		for (Entry<String, Serializable> e : ctx().session().entrySet()) {
-			if (!e.getKey().startsWith("_")) {
-				visibleAttributes.put(e.getKey(), e.getValue());
-			}
-		}
-
-		return panel(grid(visibleAttributes)).header("Session scope");
+		Req req = ctx().exchange();
+		return panel(grid(req.params())).header("URL parameters");
 	}
 
 	protected Panel localPanel() {
-		Map<String, Object> visibleAttributes = U.map();
-
-		for (Entry<String, Object> e : ctx().data().entrySet()) {
-			if (!e.getKey().startsWith("_")) {
-				visibleAttributes.put(e.getKey(), e.getValue());
-			}
-		}
-
-		return panel(grid(visibleAttributes)).header("Data");
+		Req req = ctx().exchange();
+		return panel(grid(req.posted())).header("Posted data");
 	}
 
 }

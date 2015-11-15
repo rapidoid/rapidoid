@@ -43,10 +43,12 @@ import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.http.fast.HttpParser;
+import org.rapidoid.http.fast.Req;
 import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.mime.MediaType;
+import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.plugins.templates.ITemplate;
@@ -427,8 +429,8 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public synchronized String body() {
-		return body_().get();
+	public synchronized byte[] body() {
+		return body_().get().getBytes();
 	}
 
 	@Override
@@ -1060,7 +1062,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public synchronized Map<String, Object> tmps() {
+	public synchronized Map<String, Object> attrs() {
 		if (tmps == null) {
 			tmps = U.synchronizedMap();
 		}
@@ -1153,18 +1155,18 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	/* TMPS SCOPE GETTERS */
 
 	@Override
-	public synchronized <T> T tmp(String name, T defaultValue) {
+	public synchronized <T> T attr(String name, T defaultValue) {
 		return Scopes.get("tmps", tmps, name, defaultValue);
 	}
 
 	@Override
-	public synchronized <T> T tmp(String name) {
+	public synchronized <T> T attr(String name) {
 		return Scopes.get("tmps", tmps, name);
 	}
 
 	@Override
-	public synchronized <T> T tmpGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs) {
-		return Scopes.getOrCreate("tmps", tmps(), name, valueClass, constructorArgs);
+	public synchronized <T> T attrGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs) {
+		return Scopes.getOrCreate("tmps", attrs(), name, valueClass, constructorArgs);
 	}
 
 	/* SESSION */
@@ -1465,6 +1467,56 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 
 		Res res = Res.from(resName, true, firstSQL, firstCQL, firstJPQL, defaultSQL, defaultCQL, defaultJPQL);
 		return res.getContent();
+	}
+
+	@Override
+	public String clientIpAddress() {
+		return address();
+	}
+
+	@Override
+	public long connectionId() {
+		return connId();
+	}
+
+	@Override
+	public org.rapidoid.http.fast.HttpResponse response() {
+		throw U.notSupported();
+	}
+
+	@Override
+	public String forwardedForAddress() {
+		throw U.notSupported();
+	}
+
+	@Override
+	public Channel channel() {
+		throw U.notSupported();
+	}
+
+	@Override
+	public Req verb(String verb) {
+		throw U.notSupported();
+	}
+
+	@Override
+	public Req uri(String uri) {
+		throw U.notSupported();
+	}
+
+	@Override
+	public Req path(String path) {
+		throw U.notSupported();
+	}
+
+	@Override
+	public Req body(byte[] body) {
+		throw U.notSupported();
+	}
+
+	@Override
+	public OutputStream out() {
+		throw U.notSupported();
 	}
 
 }

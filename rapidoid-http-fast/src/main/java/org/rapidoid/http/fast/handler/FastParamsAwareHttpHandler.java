@@ -20,31 +20,31 @@ package org.rapidoid.http.fast.handler;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.fast.FastHttp;
 import org.rapidoid.http.fast.HttpWrapper;
-import org.rapidoid.http.fast.ParamHandler;
+import org.rapidoid.http.fast.Req;
+import org.rapidoid.http.fast.ReqHandler;
+import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
 public class FastParamsAwareHttpHandler extends AbstractAsyncHttpHandler {
 
-	private final ParamHandler handler;
+	private final ReqHandler handler;
 
-	public FastParamsAwareHttpHandler(FastHttp http, byte[] contentType, HttpWrapper[] wrappers, ParamHandler handler) {
+	public FastParamsAwareHttpHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, ReqHandler handler) {
 		super(http, contentType, wrappers);
 		this.handler = handler;
 	}
 
 	@Override
-	protected Object handleReq(Channel channel, Map<String, Object> params) throws Exception {
-		http.getListener().state(this, params);
+	protected Object handleReq(Channel channel, Req req) throws Exception {
+		http.getListener().state(this, req);
 
-		Object result = handler.handle(params);
+		Object result = handler.handle(req);
 
 		http.getListener().result(this, contentType, result);
 		return result;
@@ -52,11 +52,6 @@ public class FastParamsAwareHttpHandler extends AbstractAsyncHttpHandler {
 
 	@Override
 	public boolean needsParams() {
-		return true;
-	}
-
-	@Override
-	public boolean needsHeadersAndCookies() {
 		return true;
 	}
 

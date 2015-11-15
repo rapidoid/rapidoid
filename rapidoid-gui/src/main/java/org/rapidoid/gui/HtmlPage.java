@@ -30,6 +30,7 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.html.Tag;
+import org.rapidoid.http.fast.Req;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.templates.ITemplate;
 import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
@@ -75,10 +76,9 @@ public class HtmlPage extends AbstractWidget {
 
 	@Override
 	protected Tag render() {
-		Ctx ctx = Ctxs.ctx();
-
 		String html;
-		if (ctx.verb().equals("GET")) {
+
+		if (req().verb().equals("GET")) {
 			html = fullTemplate().render(pageModel());
 		} else {
 			html = ajaxTemplate().render(pageModel());
@@ -90,13 +90,16 @@ public class HtmlPage extends AbstractWidget {
 	private Map<String, Object> pageModel() {
 		Ctx ctx = Ctxs.ctx();
 
-		Map<String, Object> model = U.map(ctx.data());
+		Req req = req();
+
+		Map<String, Object> model = U.map(req.data());
 
 		model.put("dev", Conf.dev());
 
-		model.put("verb", ctx.verb());
-		model.put("host", ctx.host());
-		model.put("uri", ctx.uri());
+		model.put("verb", req.verb());
+		model.put("host", req.host());
+		model.put("uri", req.uri());
+		model.put("path", req.path());
 
 		boolean loggedIn = ctx.isLoggedIn();
 		model.put("loggedIn", loggedIn);

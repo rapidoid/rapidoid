@@ -1,6 +1,5 @@
 package org.rapidoid.ctx;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -53,14 +52,6 @@ public class Ctx implements CtxMetadata {
 
 	private volatile Object app;
 
-	private volatile String host;
-
-	private volatile String verb;
-
-	private volatile String uri;
-
-	private volatile String path;
-
 	private volatile int referenceCounter = 1;
 
 	private volatile ThreadLocal<Object> persisters = new ThreadLocal<Object>();
@@ -68,10 +59,6 @@ public class Ctx implements CtxMetadata {
 	private volatile boolean closed = false;
 
 	private final List<Object> allPersisters = Collections.synchronizedList(new ArrayList<Object>(5));
-
-	private final Map<String, Object> data = U.synchronizedMap();
-
-	private final Map<String, Serializable> session = U.synchronizedMap();
 
 	private final Map<Object, Object> extras = U.synchronizedMap();
 
@@ -109,46 +96,6 @@ public class Ctx implements CtxMetadata {
 	public void setApp(Object app) {
 		ensureNotClosed();
 		this.app = app;
-	}
-
-	public String host() {
-		ensureNotClosed();
-		return host;
-	}
-
-	public void setHost(String host) {
-		ensureNotClosed();
-		this.host = host;
-	}
-
-	public String uri() {
-		ensureNotClosed();
-		return uri;
-	}
-
-	public void setUri(String uri) {
-		ensureNotClosed();
-		this.uri = uri;
-	}
-
-	public String path() {
-		ensureNotClosed();
-		return path;
-	}
-
-	public void setPath(String path) {
-		ensureNotClosed();
-		this.path = path;
-	}
-
-	public String verb() {
-		ensureNotClosed();
-		return verb;
-	}
-
-	public void setVerb(String verb) {
-		ensureNotClosed();
-		this.verb = verb;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -198,16 +145,12 @@ public class Ctx implements CtxMetadata {
 		this.exchange = null;
 		this.app = null;
 		this.persisters = null;
-		this.host = null;
-		this.uri = null;
 
 		for (Object persister : allPersisters) {
 			Ctxs.closePersister(persister);
 		}
 
 		allPersisters.clear();
-		data.clear();
-		session.clear();
 		extras.clear();
 
 		closed = true;
@@ -222,12 +165,9 @@ public class Ctx implements CtxMetadata {
 	@Override
 	public String toString() {
 		final int maxLen = 10;
-		return prefixed("[id=" + id + ", tag=" + tag + ", user=" + user + ", exchange=" + exchange + ", app=" + app
-				+ ", host=" + host + ", verb=" + verb + ", uri=" + uri + ", path=" + path + ", referenceCounter="
-				+ referenceCounter + ", persisters=" + persisters + ", closed=" + closed + ", allPersisters="
-				+ (allPersisters != null ? toString(allPersisters, maxLen) : null) + ", data="
-				+ (data != null ? toString(data.entrySet(), maxLen) : null) + ", session="
-				+ (session != null ? toString(session.entrySet(), maxLen) : null) + ", extras="
+		return prefixed("Ctx [id=" + id + ", tag=" + tag + ", user=" + user + ", exchange=" + exchange + ", app=" + app
+				+ ", referenceCounter=" + referenceCounter + ", persisters=" + persisters + ", closed=" + closed
+				+ ", allPersisters=" + (allPersisters != null ? toString(allPersisters, maxLen) : null) + ", extras="
 				+ (extras != null ? toString(extras.entrySet(), maxLen) : null) + "]");
 	}
 
@@ -260,12 +200,7 @@ public class Ctx implements CtxMetadata {
 		ctx.setApp(cd.app());
 		ctx.setExchange(null);
 		ctx.setUser(new UserInfo(cd.username(), cd.roles()));
-		ctx.setHost(cd.host());
-		ctx.setUri(cd.uri());
-		ctx.setVerb(cd.verb());
 
-		U.assign(ctx.data(), cd.data());
-		U.assign(ctx.session(), cd.session());
 		U.assign(ctx.extras(), cd.extras());
 
 		try {
@@ -275,37 +210,13 @@ public class Ctx implements CtxMetadata {
 		}
 	}
 
-	public static synchronized void executeInCtx(String tag, Map<String, Object> data, Runnable action) {
-		Ctx ctx = Ctxs.open(tag);
-
+	public static synchronized void executeInCtx(String tag, Runnable action) {
+		Ctxs.open(tag);
 		try {
-			// ctx.setApp(null);
-			// ctx.setExchange(null);
-			// ctx.setUser(user);
-
-			ctx.setHost(U.str(U.get(data, HOST, "")));
-			ctx.setVerb(U.str(U.get(data, VERB, "")));
-			ctx.setPath(U.str(U.get(data, PATH, "")));
-			ctx.setUri(U.str(U.get(data, URI, "")));
-
-			U.assign(ctx.data(), data);
-			// U.assign(ctx.session(), U.map());
-			// U.assign(ctx.extras(), U.map());
-
 			Jobs.execute(action);
 		} finally {
 			Ctxs.close();
 		}
-	}
-
-	public Map<String, Object> data() {
-		ensureNotClosed();
-		return data;
-	}
-
-	public Map<String, Serializable> session() {
-		ensureNotClosed();
-		return session;
 	}
 
 	public Map<Object, Object> extras() {

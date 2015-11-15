@@ -20,7 +20,6 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
@@ -34,6 +33,7 @@ import org.rapidoid.io.Res;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.F3;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.mime.MediaType;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
@@ -61,35 +61,35 @@ public class OnAction {
 		return this;
 	}
 
-	private void register(byte[] contentType, byte[] response) {
+	private void register(MediaType contentType, byte[] response) {
 		for (FastHttp http : httpImpls) {
 			http.on(verb, path, new FastStaticHttpHandler(http, contentType, response));
 		}
 	}
 
-	private void register(byte[] contentType, final Object response) {
-		register(contentType, new ParamHandler() {
+	private void register(MediaType contentType, final Object response) {
+		register(contentType, new ReqHandler() {
 			@Override
-			public Object handle(Map<String, Object> params) throws Exception {
+			public Object handle(Req req) throws Exception {
 				return response;
 			}
 		});
 	}
 
 	@SuppressWarnings("unchecked")
-	private void register(byte[] contentType, Callable<?> handler) {
+	private void register(MediaType contentType, Callable<?> handler) {
 		for (FastHttp http : httpImpls) {
 			http.on(verb, path, new FastCallableHttpHandler(http, contentType, wrappers, (Callable<Object>) handler));
 		}
 	}
 
-	private void register(byte[] contentType, ParamHandler handler) {
+	private void register(MediaType contentType, ReqHandler handler) {
 		for (FastHttp http : httpImpls) {
 			http.on(verb, path, new FastParamsAwareHttpHandler(http, contentType, wrappers, handler));
 		}
 	}
 
-	private void register(byte[] contentType, Res resource) {
+	private void register(MediaType contentType, Res resource) {
 		for (FastHttp http : httpImpls) {
 			http.on(verb, path, new FastResourceHttpHandler(http, contentType, resource));
 		}
@@ -103,27 +103,27 @@ public class OnAction {
 	}
 
 	public ServerSetup plain(byte[] response) {
-		register(FastHttp.CONTENT_TYPE_PLAIN, response);
+		register(MediaType.PLAIN_TEXT_UTF_8, response);
 		return chain;
 	}
 
 	public ServerSetup plain(Object response) {
-		register(FastHttp.CONTENT_TYPE_PLAIN, response);
+		register(MediaType.PLAIN_TEXT_UTF_8, response);
 		return chain;
 	}
 
 	public <T> ServerSetup plain(Callable<T> handler) {
-		register(FastHttp.CONTENT_TYPE_PLAIN, handler);
+		register(MediaType.PLAIN_TEXT_UTF_8, handler);
 		return chain;
 	}
 
-	public <T> ServerSetup plain(ParamHandler handler) {
-		register(FastHttp.CONTENT_TYPE_PLAIN, handler);
+	public <T> ServerSetup plain(ReqHandler handler) {
+		register(MediaType.PLAIN_TEXT_UTF_8, handler);
 		return chain;
 	}
 
 	public <T> ServerSetup plain(Res resource) {
-		register(FastHttp.CONTENT_TYPE_PLAIN, resource);
+		register(MediaType.PLAIN_TEXT_UTF_8, resource);
 		return chain;
 	}
 
@@ -135,27 +135,27 @@ public class OnAction {
 	}
 
 	public ServerSetup html(byte[] response) {
-		register(FastHttp.CONTENT_TYPE_HTML, response);
+		register(MediaType.HTML_UTF_8, response);
 		return chain;
 	}
 
 	public ServerSetup html(Object response) {
-		register(FastHttp.CONTENT_TYPE_HTML, response);
+		register(MediaType.HTML_UTF_8, response);
 		return chain;
 	}
 
 	public <T> ServerSetup html(Callable<T> handler) {
-		register(FastHttp.CONTENT_TYPE_HTML, handler);
+		register(MediaType.HTML_UTF_8, handler);
 		return chain;
 	}
 
-	public <T> ServerSetup html(ParamHandler handler) {
-		register(FastHttp.CONTENT_TYPE_HTML, handler);
+	public <T> ServerSetup html(ReqHandler handler) {
+		register(MediaType.HTML_UTF_8, handler);
 		return chain;
 	}
 
 	public <T> ServerSetup html(Res resource) {
-		register(FastHttp.CONTENT_TYPE_HTML, resource);
+		register(MediaType.HTML_UTF_8, resource);
 		return chain;
 	}
 
@@ -167,27 +167,27 @@ public class OnAction {
 	}
 
 	public ServerSetup json(byte[] response) {
-		register(FastHttp.CONTENT_TYPE_JSON, response);
+		register(MediaType.JSON_UTF_8, response);
 		return chain;
 	}
 
 	public ServerSetup json(Object response) {
-		register(FastHttp.CONTENT_TYPE_JSON, response);
+		register(MediaType.JSON_UTF_8, response);
 		return chain;
 	}
 
 	public <T> ServerSetup json(Callable<T> handler) {
-		register(FastHttp.CONTENT_TYPE_JSON, handler);
+		register(MediaType.JSON_UTF_8, handler);
 		return chain;
 	}
 
-	public <T> ServerSetup json(ParamHandler handler) {
-		register(FastHttp.CONTENT_TYPE_JSON, handler);
+	public <T> ServerSetup json(ReqHandler handler) {
+		register(MediaType.JSON_UTF_8, handler);
 		return chain;
 	}
 
 	public <T> ServerSetup json(Res resource) {
-		register(FastHttp.CONTENT_TYPE_JSON, resource);
+		register(MediaType.JSON_UTF_8, resource);
 		return chain;
 	}
 
@@ -199,27 +199,27 @@ public class OnAction {
 	}
 
 	public ServerSetup binary(byte[] response) {
-		register(FastHttp.CONTENT_TYPE_BINARY, response);
+		register(MediaType.BINARY, response);
 		return chain;
 	}
 
 	public ServerSetup binary(Object response) {
-		register(FastHttp.CONTENT_TYPE_BINARY, response);
+		register(MediaType.BINARY, response);
 		return chain;
 	}
 
 	public <T> ServerSetup binary(Callable<T> handler) {
-		register(FastHttp.CONTENT_TYPE_BINARY, handler);
+		register(MediaType.BINARY, handler);
 		return chain;
 	}
 
-	public <T> ServerSetup binary(ParamHandler handler) {
-		register(FastHttp.CONTENT_TYPE_BINARY, handler);
+	public <T> ServerSetup binary(ReqHandler handler) {
+		register(MediaType.BINARY, handler);
 		return chain;
 	}
 
 	public <T> ServerSetup binary(Res resource) {
-		register(FastHttp.CONTENT_TYPE_BINARY, resource);
+		register(MediaType.BINARY, resource);
 		return chain;
 	}
 

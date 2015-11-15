@@ -20,21 +20,21 @@ package org.rapidoid.http.fast.handler;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.fast.HttpStatus;
+import org.rapidoid.http.fast.Req;
+import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
 public interface FastHttpHandler {
 
-	HttpStatus handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params);
+	HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req);
 
 	boolean needsParams();
 
-	boolean needsHeadersAndCookies();
+	MediaType contentType();
 
 }

@@ -20,7 +20,7 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
@@ -28,7 +28,10 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Promise;
 import org.rapidoid.concurrent.Promises;
 import org.rapidoid.http.fast.On;
-import org.rapidoid.http.fast.ParamHandler;
+import org.rapidoid.http.fast.Req;
+import org.rapidoid.http.fast.ReqHandler;
+import org.rapidoid.http.fast.Reqs;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
@@ -44,17 +47,25 @@ public class DynamicClientTest extends TestCommons {
 
 		On.get("/nums").json("[1, 2, 3]");
 
-		On.get("/size").json(new ParamHandler() {
+		On.get("/size").json(new ReqHandler() {
 			@Override
-			public Object handle(Map<String, Object> params) throws Exception {
-				return params.get("s").toString().length();
+			public Object handle(Req req) throws Exception {
+				return req.param("s").length();
 			}
 		});
 
-		On.post("/echo").json(new ParamHandler() {
+		On.post("/echo").json(new ReqHandler() {
 			@Override
-			public Object handle(Map<String, Object> params) throws Exception {
-				return params;
+			public Object handle(final Req req) throws Exception {
+				Jobs.schedule(new Runnable() {
+					@Override
+					public void run() {
+						Reqs.req().response().content(req.data());
+						req.done();
+					}
+				}, 1000, TimeUnit.MILLISECONDS);
+
+				return req;
 			}
 		});
 

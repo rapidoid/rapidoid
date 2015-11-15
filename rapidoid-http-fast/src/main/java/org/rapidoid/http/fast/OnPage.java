@@ -20,7 +20,6 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
@@ -33,6 +32,7 @@ import org.rapidoid.io.Res;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.F3;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.mime.MediaType;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -66,7 +66,7 @@ public class OnPage {
 		}
 	}
 
-	private void register(PageOptions options, ParamHandler handler) {
+	private void register(PageOptions options, ReqHandler handler) {
 		for (FastHttp http : httpImpls) {
 			FastParamsAwarePageHandler hnd = new FastParamsAwarePageHandler(http, options.contentType, wrappers,
 					handler);
@@ -91,35 +91,35 @@ public class OnPage {
 	}
 
 	public ServerSetup gui(byte[] response) {
-		register(new PageOptions(FastHttp.CONTENT_TYPE_HTML, false), response);
+		register(new PageOptions(MediaType.HTML_UTF_8, false), response);
 		return chain;
 	}
 
 	public ServerSetup gui(final Object response) {
-		return gui(new ParamHandler() {
+		return gui(new ReqHandler() {
 			@Override
-			public Object handle(Map<String, Object> params) throws Exception {
+			public Object handle(Req req) throws Exception {
 				return response;
 			}
 		});
 	}
 
 	public ServerSetup gui(final Callable<?> handler) {
-		return gui(new ParamHandler() {
+		return gui(new ReqHandler() {
 			@Override
-			public Object handle(Map<String, Object> params) throws Exception {
+			public Object handle(Req req) throws Exception {
 				return handler.call();
 			}
 		});
 	}
 
-	public ServerSetup gui(ParamHandler handler) {
-		register(new PageOptions(FastHttp.CONTENT_TYPE_HTML, false), handler);
+	public ServerSetup gui(ReqHandler handler) {
+		register(new PageOptions(MediaType.HTML_UTF_8, false), handler);
 		return chain;
 	}
 
 	public ServerSetup gui(Res resource) {
-		register(new PageOptions(FastHttp.CONTENT_TYPE_HTML, false), resource);
+		register(new PageOptions(MediaType.HTML_UTF_8, false), resource);
 		return chain;
 	}
 

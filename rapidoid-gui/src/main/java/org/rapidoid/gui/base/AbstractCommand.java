@@ -21,11 +21,11 @@ package org.rapidoid.gui.base;
  */
 
 import java.util.Arrays;
-import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctx;
+import org.rapidoid.http.fast.Req;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -63,16 +63,16 @@ public abstract class AbstractCommand<W extends AbstractCommand<?>> extends Abst
 			Ctx ctx = ctx();
 
 			if (ctx != null) {
-				Map<String, Object> data = ctx.data();
+				Req req = req();
 
-				if ("POST".equalsIgnoreCase(ctx.verb())) {
-					String event = U.str(data.get("_cmd"));
+				if ("POST".equalsIgnoreCase(req.verb())) {
+					String event = req.data("_cmd", null);
 
 					if (!U.isEmpty(event) && U.eq(event, command)) {
 
 						Object[] args = new Object[cmdArgs.length];
 						for (int i = 0; i < args.length; i++) {
-							args[i] = U.get(data, "_" + i, "");
+							args[i] = req.data("_" + i, "");
 						}
 
 						if (Arrays.equals(args, cmdArgs)) {

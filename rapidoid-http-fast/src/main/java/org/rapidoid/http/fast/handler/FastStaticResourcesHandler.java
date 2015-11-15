@@ -20,13 +20,12 @@ package org.rapidoid.http.fast.handler;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.fast.FastHttp;
 import org.rapidoid.http.fast.HttpStatus;
 import org.rapidoid.http.fast.HttpUtils;
+import org.rapidoid.http.fast.Req;
 import org.rapidoid.io.Res;
 import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.abstracts.Channel;
@@ -38,19 +37,20 @@ public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 	private final FastHttp http;
 
 	public FastStaticResourcesHandler(FastHttp http) {
+		super(http, null);
 		this.http = http;
 	}
 
 	@Override
-	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Map<String, Object> params) {
-		http.getListener().state(this, params);
+	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req) {
+		http.getListener().state(this, req);
 
 		try {
-			Res res = HttpUtils.staticPage(params);
+			Res res = HttpUtils.staticPage(req);
 			byte[] bytes = res.getBytesOrNull();
 
 			if (bytes != null) {
-				byte[] contentType = MediaType.getByFileName(res.getShortName()).asHttpHeader();
+				MediaType contentType = MediaType.getByFileName(res.getShortName());
 				http.getListener().result(this, contentType, bytes);
 				http.write200(ctx, isKeepAlive, contentType, bytes);
 				return HttpStatus.DONE;

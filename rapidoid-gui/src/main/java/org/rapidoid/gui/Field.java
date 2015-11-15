@@ -40,6 +40,7 @@ import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.TextareaTag;
+import org.rapidoid.http.fast.Req;
 import org.rapidoid.log.Log;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
@@ -102,7 +103,12 @@ public class Field extends AbstractWidget {
 		String varName = propVarName(target, prop.name());
 
 		Ctx ctx = Ctxs.get();
-		Object initValue = ctx != null ? ctx.data().get(varName) : null;
+		Object initValue = null;
+
+		if (ctx != null) {
+			Req req = ctx.exchange();
+			initValue = req.data(varName);
+		}
 
 		try {
 			return Models.propertyVar(varName, item, prop.name(), initValue);

@@ -20,33 +20,59 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.2.0")
 public interface Req {
 
+	/* THE LOW-LEVEL COMMUNICATION CHANNEL: */
+
+	Channel channel();
+
 	/* REQUEST METHODS: */
 
 	String verb();
 
+	Req verb(String verb);
+
 	String uri();
+
+	Req uri(String uri);
 
 	String path();
 
-	String subpath();
+	Req path(String path);
 
-	String query();
+	byte[] body();
 
-	String protocol();
+	Req body(byte[] body);
 
-	String body();
+	/* IP ADDRESS : */
+
+	String clientIpAddress();
+
+	/* HEADERS: */
 
 	String host();
+
+	String forwardedForAddress();
+
+	/* UNIQUE CONNECTION ID: */
+
+	long connectionId();
+
+	/* UNIQUE REQUEST ID: */
+
+	long requestId();
+
+	/* URL PARAMETERS: */
 
 	Map<String, String> params();
 
@@ -54,11 +80,15 @@ public interface Req {
 
 	String param(String name, String defaultValue);
 
+	/* REQUEST HEADERS: */
+
 	Map<String, String> headers();
 
 	String header(String name);
 
 	String header(String name, String defaultValue);
+
+	/* REQUEST COOKIES: */
 
 	Map<String, String> cookies();
 
@@ -66,17 +96,23 @@ public interface Req {
 
 	String cookie(String name, String defaultValue);
 
+	/* POSTED PARAMS IN REQUEST BODY: */
+
 	Map<String, Object> posted();
 
 	<T extends Serializable> T posted(String name);
 
 	<T extends Serializable> T posted(String name, T defaultValue);
 
+	/* POSTED FILES IN REQUEST BODY: */
+
 	Map<String, byte[]> files();
 
 	byte[] file(String name);
 
 	byte[] file(String name, byte[] defaultValue);
+
+	/* REQUEST DATA (URL PARAMS + POSTED DATA): */
 
 	/**
 	 * Data includes params + posted.
@@ -93,64 +129,20 @@ public interface Req {
 	 */
 	<T> T data(String name, T defaultValue);
 
-	String home();
+	/* CUSTOM REQUEST ATTRIBUTES: */
 
-	String[] pathSegments();
+	Map<String, Object> attrs();
 
-	String pathSegment(int segmentIndex);
+	<T> T attr(String key);
 
-	String realIpAddress();
+	<T> T attr(String key, T defaultValue);
 
-	boolean isGetReq();
+	/* RESPONSE: */
 
-	boolean isPostReq();
+	HttpResponse response();
 
-	boolean isDevMode();
+	OutputStream out();
 
-	long requestId();
-
-	/* STATE: */
-
-	String sessionId();
-
-	/* SESSION SCOPE: */
-
-	Map<String, Serializable> session();
-
-	<T extends Serializable> T session(String name);
-
-	<T extends Serializable> T session(String name, T defaultValue);
-
-	<T extends Serializable> T sessionGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
-
-	/* COOKIEPACK SCOPE: */
-
-	Map<String, Serializable> cookiepack();
-
-	<T extends Serializable> T cookiepack(String name);
-
-	<T extends Serializable> T cookiepack(String name, T defaultValue);
-
-	<T extends Serializable> T cookiepackGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
-
-	/* LOCAL SCOPE: */
-
-	Map<String, Serializable> locals();
-
-	<T extends Serializable> T local(String key);
-
-	<T extends Serializable> T local(String key, T defaultValue);
-
-	<T extends Serializable> T localGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
-
-	/* TMP SCOPE: */
-
-	Map<String, Object> tmps();
-
-	<T> T tmp(String key);
-
-	<T> T tmp(String key, T defaultValue);
-
-	<T> T tmpGetOrCreate(String name, Class<T> valueClass, Object... constructorArgs);
+	Req done();
 
 }

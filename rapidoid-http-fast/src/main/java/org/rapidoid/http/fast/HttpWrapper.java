@@ -20,8 +20,6 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.fast.handler.WrappedProcess;
@@ -30,6 +28,6 @@ import org.rapidoid.http.fast.handler.WrappedProcess;
 @Since("5.0.0")
 public interface HttpWrapper {
 
-	Object wrap(Map<String, Object> data, WrappedProcess process) throws Exception;
+	Object wrap(Req req, WrappedProcess process) throws Exception;
 
 }
