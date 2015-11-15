@@ -25,7 +25,6 @@ import java.util.concurrent.Future;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.concurrent.Callback;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.Req;
@@ -41,6 +40,7 @@ import org.rapidoid.u.U;
 @Since("4.3.0")
 public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
+	private static final String CTX_TAG_HANDLER = "handler";
 	protected final HttpWrapper[] wrappers;
 
 	public AbstractAsyncHttpHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers) {
@@ -65,6 +65,9 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		if (result instanceof Req) {
 			return result; // the Req object will do the rendering
 
+		} else if (result == null) {
+			return result; // not found
+
 		} else if (result instanceof Future<?>) {
 			result = ((Future<Object>) result).get();
 			return postprocessResult(result);
@@ -78,6 +81,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 			if (!(result instanceof byte[]) && !Cls.isSimple(result) && !U.isCollection(result) && !U.isMap(result)) {
 				result = render(result);
 			}
+
 			return result;
 		}
 	}
@@ -89,11 +93,12 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 	}
 
 	private void execHandlerJob(final Channel channel, final boolean isKeepAlive, final Req req) {
-		Ctx.executeInCtx("handler", new Runnable() {
+
+		Runnable requestHandling = new Runnable() {
 			@Override
 			public void run() {
 
-				Ctx ctx = Ctxs.get();
+				Ctx ctx = Ctxs.ctx();
 				ctx.setApp(null);
 				ctx.setExchange(req);
 				ctx.setUser(null);
@@ -113,9 +118,16 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 					result = e;
 				}
 
-				done(channel, isKeepAlive, result);
+				done(channel, isKeepAlive, req, result);
 			}
-		});
+		};
+
+		Ctx ctx = Ctxs.get();
+		if (ctx != null && U.eq(ctx.tag(), CTX_TAG_HANDLER)) {
+			requestHandling.run();
+		} else {
+			Ctx.executeInCtx(CTX_TAG_HANDLER, requestHandling);
+		}
 	}
 
 	private Object wrap(final Channel channel, final Req req, final int index) throws Exception {
@@ -152,18 +164,12 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 	protected abstract Object handleReq(Channel ctx, Req req) throws Exception;
 
-	protected Callback<Object> callback(final Channel ctx, final boolean isKeepAlive) {
-		return new Callback<Object>() {
-			@Override
-			public void onDone(Object result, Throwable error) throws Exception {
-				Object resultOrError = U.or(result, error);
-				done(ctx, isKeepAlive, resultOrError);
-			}
-		};
-	}
+	public void done(Channel ctx, boolean isKeepAlive, Req req, Object result) {
+		if (result == null) {
+			http.notFound(ctx, isKeepAlive, this, req);
+			return; // not found
 
-	public void done(Channel ctx, boolean isKeepAlive, Object result) {
-		if (result instanceof Req) {
+		} else if (result instanceof Req) {
 			return; // the Req instance will render the result
 
 		} else if (result instanceof Throwable) {

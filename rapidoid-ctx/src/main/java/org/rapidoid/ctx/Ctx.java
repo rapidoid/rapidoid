@@ -232,4 +232,8 @@ public class Ctx implements CtxMetadata {
 		return isLoggedIn() ? user().username : null;
 	}
 
+	public String tag() {
+		return tag;
+	}
+
 }

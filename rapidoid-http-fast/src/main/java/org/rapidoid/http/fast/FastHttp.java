@@ -455,4 +455,26 @@ public class FastHttp implements Protocol, HttpMetadata {
 		}
 	}
 
+	public void notFound(Channel ctx, boolean isKeepAlive, FastHttpHandler fromHandler, Req req) {
+		int count = genericHandlers.size();
+
+		HttpStatus status = HttpStatus.NOT_FOUND;
+
+		for (int i = 0; i < count; i++) {
+			FastHttpHandler handler = genericHandlers.get(i);
+			if (handler == fromHandler) {
+				if (i < count - 1) {
+					FastHttpHandler nextHandler = genericHandlers.get(i + 1);
+					status = nextHandler.handle(ctx, isKeepAlive, req);
+					break;
+				}
+			}
+		}
+
+		if (status == HttpStatus.NOT_FOUND) {
+			ctx.write(HTTP_404_NOT_FOUND);
+			done(ctx, isKeepAlive);
+		}
+	}
+
 }
