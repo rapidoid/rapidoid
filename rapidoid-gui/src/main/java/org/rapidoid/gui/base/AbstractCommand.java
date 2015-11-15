@@ -25,7 +25,7 @@ import java.util.Arrays;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctx;
-import org.rapidoid.http.fast.Req;
+import org.rapidoid.http.Req;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")

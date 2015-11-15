@@ -1,8 +1,8 @@
-package org.rapidoid.http.fast;
+package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-http-fast
+ * rapidoid-ctx
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

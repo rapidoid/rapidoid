@@ -24,7 +24,7 @@ import java.io.Serializable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.fast.Reqs;
+import org.rapidoid.http.Reqs;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")

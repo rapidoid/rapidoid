@@ -30,7 +30,7 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.html.Tag;
-import org.rapidoid.http.fast.Req;
+import org.rapidoid.http.Req;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.templates.ITemplate;
 import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;

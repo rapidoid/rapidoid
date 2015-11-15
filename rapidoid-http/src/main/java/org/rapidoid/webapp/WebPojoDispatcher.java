@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.Cookie;
 import org.rapidoid.annotation.DELETE;
 import org.rapidoid.annotation.GET;
@@ -34,7 +35,6 @@ import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.PUT;
 import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.Controller;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.arr.Arr;
 import org.rapidoid.beany.Metadata;
@@ -47,8 +47,8 @@ import org.rapidoid.dispatch.impl.DispatchReq;
 import org.rapidoid.dispatch.impl.DispatchReqKind;
 import org.rapidoid.dispatch.impl.PojoDispatcherImpl;
 import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
-import org.rapidoid.http.fast.Req;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")

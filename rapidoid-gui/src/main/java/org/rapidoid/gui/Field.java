@@ -40,7 +40,7 @@ import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.TextareaTag;
-import org.rapidoid.http.fast.Req;
+import org.rapidoid.http.Req;
 import org.rapidoid.log.Log;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;

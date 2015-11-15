@@ -1,8 +1,8 @@
-package org.rapidoid.http.fast;
+package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-http-fast
+ * rapidoid-ctx
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,15 +20,32 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.fast.handler.WrappedProcess;
+import java.util.Map;
 
-@Authors("Nikolche Mihajlovski")
-@Since("5.0.0")
-public interface HttpWrapper {
+import org.rapidoid.mime.MediaType;
 
-	Object wrap(Req req, WrappedProcess process) throws Exception;
+public interface Response {
+
+	Response content(Object content);
+
+	Object content();
+
+	Response code(int code);
+
+	int code();
+
+	Map<String, String> headers();
+
+	Map<String, String> cookies();
+
+	Response contentType(MediaType contentType);
+
+	MediaType contentType();
+
+	Response redirect(String redirect);
+
+	String redirect();
+
+	void done();
 
 }

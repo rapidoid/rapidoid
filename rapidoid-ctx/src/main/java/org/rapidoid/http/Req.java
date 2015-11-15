@@ -1,8 +1,8 @@
-package org.rapidoid.http.fast;
+package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-http-fast
+ * rapidoid-ctx
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -26,15 +26,10 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.2.0")
+@Since("5.0.2")
 public interface Req {
-
-	/* THE LOW-LEVEL COMMUNICATION CHANNEL: */
-
-	Channel channel();
 
 	/* REQUEST METHODS: */
 
@@ -139,7 +134,7 @@ public interface Req {
 
 	/* RESPONSE: */
 
-	HttpResponse response();
+	Response response();
 
 	OutputStream out();
 

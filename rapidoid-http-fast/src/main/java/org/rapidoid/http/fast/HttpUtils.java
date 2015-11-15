@@ -28,6 +28,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.JSON;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.Response;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.mime.MediaType;
@@ -203,11 +205,11 @@ public class HttpUtils implements HttpMetadata {
 		}
 	}
 
-	public static void postProcessResponse(HttpResponse resp) {
+	public static void postProcessResponse(Response resp) {
 		postProcessRedirect(resp);
 	}
 
-	private static void postProcessRedirect(HttpResponse resp) {
+	private static void postProcessRedirect(Response resp) {
 		String redirect = resp.redirect();
 		if (redirect != null) {
 			resp.code(303);

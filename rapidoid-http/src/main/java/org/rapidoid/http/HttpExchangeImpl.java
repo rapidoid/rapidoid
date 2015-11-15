@@ -43,12 +43,10 @@ import org.rapidoid.data.MultiData;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.http.fast.HttpParser;
-import org.rapidoid.http.fast.Req;
 import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.mime.MediaType;
-import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.plugins.templates.ITemplate;
@@ -1480,17 +1478,12 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 	}
 
 	@Override
-	public org.rapidoid.http.fast.HttpResponse response() {
+	public Response response() {
 		throw U.notSupported();
 	}
 
 	@Override
 	public String forwardedForAddress() {
-		throw U.notSupported();
-	}
-
-	@Override
-	public Channel channel() {
 		throw U.notSupported();
 	}
 

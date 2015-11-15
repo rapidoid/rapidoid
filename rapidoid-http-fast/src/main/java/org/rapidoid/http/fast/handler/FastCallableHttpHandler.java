@@ -24,9 +24,9 @@ import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
 import org.rapidoid.http.fast.FastHttp;
 import org.rapidoid.http.fast.HttpWrapper;
-import org.rapidoid.http.fast.Req;
 import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.abstracts.Channel;
 

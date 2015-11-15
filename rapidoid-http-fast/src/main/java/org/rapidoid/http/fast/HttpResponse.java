@@ -26,12 +26,13 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Response;
 import org.rapidoid.mime.MediaType;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.2")
-public class HttpResponse {
+public class HttpResponse implements Response {
 
 	private final ReqImpl req;
 
@@ -51,52 +52,62 @@ public class HttpResponse {
 		this.req = req;
 	}
 
-	public synchronized HttpResponse content(Object content) {
+	@Override
+	public synchronized Response content(Object content) {
 		ensureCanChange();
 		this.content = content;
 		return this;
 	}
 
+	@Override
 	public synchronized Object content() {
 		return this.content;
 	}
 
-	public synchronized HttpResponse code(int code) {
+	@Override
+	public synchronized Response code(int code) {
 		ensureCanChange();
 		this.code = code;
 		return this;
 	}
 
+	@Override
 	public synchronized int code() {
 		return this.code;
 	}
 
+	@Override
 	public Map<String, String> headers() {
 		ensureCanChange();
 		return this.headers;
 	}
 
+	@Override
 	public Map<String, String> cookies() {
 		ensureCanChange();
 		return this.cookies;
 	}
 
-	public synchronized HttpResponse contentType(MediaType contentType) {
+	@Override
+	public synchronized Response contentType(MediaType contentType) {
 		ensureCanChange();
 		this.contentType = contentType;
 		return this;
 	}
 
+	@Override
 	public synchronized MediaType contentType() {
 		return this.contentType;
 	}
 
-	public synchronized HttpResponse redirect(String redirect) {
+	@Override
+	public synchronized Response redirect(String redirect) {
 		ensureCanChange();
 		this.redirect = redirect;
 		return this;
 	}
 
+	@Override
 	public synchronized String redirect() {
 		return this.redirect;
 	}
@@ -104,6 +115,11 @@ public class HttpResponse {
 	private void ensureCanChange() {
 		U.must(!req.isDone(), "The request was already processed, so the response can't be changed now!");
 		U.must(!req.isRendering(), "The response rendering has already started, so the response can't be changed now!");
+	}
+
+	@Override
+	public void done() {
+		req.done();
 	}
 
 }
