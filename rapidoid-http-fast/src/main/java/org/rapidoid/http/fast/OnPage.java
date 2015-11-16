@@ -59,9 +59,18 @@ public class OnPage {
 		return this;
 	}
 
-	private void register(PageOptions options, byte[] response) {
+	private void register(PageOptions options, final byte[] response) {
+		if (!U.isEmpty(wrappers)) {
+			register(options, new ReqHandler() {
+				@Override
+				public Object handle(Req req) throws Exception {
+					return response;
+				}
+			});
+			return;
+		}
+
 		for (FastHttp http : httpImpls) {
-			U.must(wrappers == null, "Wrappers are only supported for dynamic parameterized handlers!");
 			http.on("GET", path, new FastStaticHttpHandler(http, options.contentType, response));
 			http.on("POST", path, new FastStaticHttpHandler(http, options.contentType, response));
 		}
@@ -76,9 +85,18 @@ public class OnPage {
 		}
 	}
 
-	private void register(PageOptions options, Res resource) {
+	private void register(PageOptions options, final Res resource) {
+		if (!U.isEmpty(wrappers)) {
+			register(options, new ReqHandler() {
+				@Override
+				public Object handle(Req req) throws Exception {
+					return resource.getBytes();
+				}
+			});
+			return;
+		}
+
 		for (FastHttp http : httpImpls) {
-			U.must(wrappers == null, "Wrappers are only supported for dynamic parameterized handlers!");
 			http.on("GET", path, new FastResourceHttpHandler(http, options.contentType, resource));
 			http.on("POST", path, new FastResourceHttpHandler(http, options.contentType, resource));
 		}
