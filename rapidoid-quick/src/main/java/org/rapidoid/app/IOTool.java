@@ -1,8 +1,8 @@
-package org.rapidoid.main;
+package org.rapidoid.app;
 
 /*
  * #%L
- * rapidoid-main
+ * rapidoid-quick
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,17 +20,25 @@ package org.rapidoid.main;
  * #L%
  */
 
+import java.io.File;
+import java.util.List;
+
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.ConfigHelp;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.0.0")
-public class Main {
+@Since("4.2.0")
+public interface IOTool {
 
-	public static void main(String[] args) {
-		ConfigHelp.processHelp(args);
-		Rapidoid.run(args);
-	}
+	List<File> files(@P("dir") String dir);
+
+	List<String> filenames(@P("dir") String dir);
+
+	byte[] load(@P("filename") String filename);
+
+	void save(@P("filename") String filename, @P("data") byte[] data);
+
+	File file(@P("filename") String filename);
 
 }

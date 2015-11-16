@@ -1,8 +1,8 @@
-package org.rapidoid.app;
+package org.rapidoid.quick;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-quick
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,51 +20,32 @@ package org.rapidoid.app;
  * #L%
  */
 
-import java.io.File;
-import java.util.List;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.io.IO;
-import org.rapidoid.io.Res;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.config.Conf;
 import org.rapidoid.u.U;
+
+import redis.clients.jedis.Jedis;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.2.0")
-public class IOToolImpl implements IOTool {
+public class JedisTool {
 
-	@Override
-	public List<File> files(String dir) {
-		List<String> names = filenames(dir);
-		List<File> files = U.list();
+	private static Jedis jedis;
 
-		for (String name : names) {
-			files.add(new File(name));
+	public static Jedis get() {
+		if (jedis == null) {
+			String host = Conf.nested("redis", "host");
+			host = U.or(host, "localhost");
+
+			Object rport = Conf.nested("redis", "port");
+			int port = rport != null ? Cls.convert(rport, int.class) : 6379;
+
+			jedis = new Jedis(host, port);
 		}
 
-		return files;
-	}
-
-	@Override
-	public List<String> filenames(String dir) {
-		List<String> found = U.list();
-		IO.findAll(new File(dir), found);
-		return found;
-	}
-
-	@Override
-	public byte[] load(String filename) {
-		return Res.from(filename).getBytes();
-	}
-
-	@Override
-	public void save(String filename, byte[] data) {
-		IO.save(filename, data);
-	}
-
-	@Override
-	public File file(String filename) {
-		return IO.file(filename);
+		return jedis;
 	}
 
 }

@@ -34,11 +34,11 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
-import org.rapidoid.main.Rapidoid;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.plugins.email.Email;
 import org.rapidoid.plugins.sms.SMS;
 import org.rapidoid.u.U;
+import org.rapidoid.web.Rapidoid;
 
 import demo.taskplanner.model.Task;
 

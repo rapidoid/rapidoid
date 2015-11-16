@@ -1,8 +1,8 @@
-package org.rapidoid.app;
+package org.rapidoid.quick;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-quick
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -29,6 +29,9 @@ import javax.script.SimpleBindings;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.app.AppHandler;
+import org.rapidoid.app.DollarPage;
+import org.rapidoid.app.GUI;
 import org.rapidoid.beany.BeanProperties;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;

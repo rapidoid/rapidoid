@@ -19,22 +19,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-sql</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-gui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-templates-mustache</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-rql</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -46,12 +36,6 @@
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-rest</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>redis.clients</groupId>
-			<artifactId>jedis</artifactId>
-			<version>2.7.3</version>
 		</dependency>
 
 		<dependency>

@@ -25,10 +25,8 @@ import java.util.Set;
 
 import org.rapidoid.annotation.App;
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.Transaction;
 import org.rapidoid.annotation.Controller;
-import org.rapidoid.aop.AOP;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
@@ -44,7 +42,6 @@ import org.rapidoid.plugins.entities.EntitiesPlugin;
 import org.rapidoid.plugins.languages.LanguagesPlugin;
 import org.rapidoid.plugins.lifecycle.Lifecycle;
 import org.rapidoid.plugins.lifecycle.LifecyclePlugin;
-import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
 import org.rapidoid.plugins.users.UsersPlugin;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Usage;
@@ -62,7 +59,6 @@ public class Apps {
 		serve(app, args, config);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static void bootstrap(WebApp app, String[] args, Object... config) {
 		Set<String> configArgs = U.set(args);
 
@@ -74,8 +70,8 @@ public class Apps {
 		Conf.args(configArgsArr);
 		Log.args(configArgsArr);
 
-		Plugins.register(new MustacheTemplatesPlugin());
-		AOP.intercept(new TransactionInterceptor(), Transaction.class);
+		// Plugins.register(new MustacheTemplatesPlugin());
+		// AOP.intercept(new TransactionInterceptor(), Transaction.class);
 
 		Lifecycle.onStart(configArgsArr);
 	}

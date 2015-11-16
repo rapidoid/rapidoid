@@ -1,8 +1,8 @@
-package org.rapidoid.app;
+package org.rapidoid.quick;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-quick
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.app.IOTool;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.HttpClient;
 import org.rapidoid.http.HttpExchange;

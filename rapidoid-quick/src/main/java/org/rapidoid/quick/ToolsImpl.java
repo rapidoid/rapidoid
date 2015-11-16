@@ -1,10 +1,12 @@
-package org.rapidoid.app;
+package org.rapidoid.quick;
 
 import java.util.List;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.app.IOTool;
+import org.rapidoid.app.IOToolImpl;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HTTP;
@@ -27,7 +29,7 @@ import redis.clients.jedis.Jedis;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-quick
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

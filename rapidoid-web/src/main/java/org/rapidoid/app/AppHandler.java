@@ -121,12 +121,11 @@ public class AppHandler implements Handler {
 		}
 
 		// serve dynamic pages from a script
-
-		if (result == null) {
-			if (Scripting.runDynamicScript(x, hasEvent, config)) {
-				return x;
-			}
-		}
+		// if (result == null) {
+		// if (Scripting.runDynamicScript(x, hasEvent, config)) {
+		// return x;
+		// }
+		// }
 
 		if (result == null) {
 			// try generic app screens

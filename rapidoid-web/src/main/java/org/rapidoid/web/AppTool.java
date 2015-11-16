@@ -1,8 +1,8 @@
-package org.rapidoid.main;
+package org.rapidoid.web;
 
 /*
  * #%L
- * rapidoid-main
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

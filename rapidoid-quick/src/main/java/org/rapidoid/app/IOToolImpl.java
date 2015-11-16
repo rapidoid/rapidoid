@@ -2,7 +2,7 @@ package org.rapidoid.app;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-quick
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,24 +20,51 @@ package org.rapidoid.app;
  * #L%
  */
 
+import java.io.File;
+import java.util.List;
+
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.Metadata;
-import org.rapidoid.plugins.entities.Entities;
+import org.rapidoid.io.IO;
+import org.rapidoid.io.Res;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
-public class Scaffolding {
+@Since("4.2.0")
+public class IOToolImpl implements IOTool {
 
-	public static Class<?> getScaffoldingEntity(String type) {
-		Class<?> entityType = Entities.getEntityType(type);
+	@Override
+	public List<File> files(String dir) {
+		List<String> names = filenames(dir);
+		List<File> files = U.list();
 
-		if (entityType == null || !Metadata.isAnnotated(entityType, Scaffold.class)) {
-			return null;
+		for (String name : names) {
+			files.add(new File(name));
 		}
 
-		return entityType;
+		return files;
+	}
+
+	@Override
+	public List<String> filenames(String dir) {
+		List<String> found = U.list();
+		IO.findAll(new File(dir), found);
+		return found;
+	}
+
+	@Override
+	public byte[] load(String filename) {
+		return Res.from(filename).getBytes();
+	}
+
+	@Override
+	public void save(String filename, byte[] data) {
+		IO.save(filename, data);
+	}
+
+	@Override
+	public File file(String filename) {
+		return IO.file(filename);
 	}
 
 }
