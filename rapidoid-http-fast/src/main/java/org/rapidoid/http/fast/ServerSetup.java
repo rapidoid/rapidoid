@@ -113,7 +113,7 @@ public class ServerSetup {
 		return this;
 	}
 
-	public ServerSetup defaultWrap(HttpWrapper[] wrappers) {
+	public ServerSetup defaultWrap(HttpWrapper... wrappers) {
 		this.wrappers = wrappers;
 		return this;
 	}
