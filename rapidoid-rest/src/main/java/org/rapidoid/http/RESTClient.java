@@ -44,7 +44,7 @@ public class RESTClient {
 	public <T> Future<T> post(String uri, Class<T> resultType, Callback<T> callback) {
 		RESTResultMapper<T> mapper = new RESTResultMapper<T>(resultType);
 		Callback<byte[]> cb = Callbacks.mapping(callback, mapper);
-		return Futures.mapping(HTTP.post(uri, null, new byte[0], cb), mapper);
+		return Futures.mapping(HTTP.post(uri, null, new byte[0], null, cb), mapper);
 	}
 
 	public <T> T post(String uri, Class<T> resultType) {

@@ -205,15 +205,20 @@ public class FastHttp implements Protocol, HttpMetadata {
 		if (!noReq) {
 			KeyValueRanges paramsKV = helper.pairs1.reset();
 			KeyValueRanges headersKV = helper.pairs2.reset();
+			KeyValueRanges cookiesKV = helper.pairs5.reset();
 
 			HTTP_PARSER.parseParams(buf, paramsKV, xquery);
 			Map<String, String> params = U.cast(paramsKV.toMap(buf, true, true));
+
+			HTTP_PARSER.parseHeadersIntoKV(buf, hdrs, headersKV, cookiesKV, helper);
+			Map<String, String> headers = U.cast(headersKV.toMap(buf, true, true));
+			Map<String, String> cookies = U.cast(cookiesKV.toMap(buf, true, true));
 
 			byte[] body;
 			Map<String, Object> posted;
 			Map<String, byte[]> files;
 
-			if (!isGet.value) {
+			if (!isGet.value && !xbody.isEmpty()) {
 				KeyValueRanges postedKV = helper.pairs3.reset();
 				KeyValueRanges filesKV = helper.pairs4.reset();
 
@@ -234,12 +239,6 @@ public class FastHttp implements Protocol, HttpMetadata {
 			String verb = xverb.str(buf);
 			String uri = xuri.str(buf);
 			String path = UTILS.urlDecode(xpath.str(buf));
-
-			KeyValueRanges cookiesKV = helper.pairs5.reset();
-			HTTP_PARSER.parseHeadersIntoKV(buf, hdrs, headersKV, cookiesKV, helper);
-
-			Map<String, String> headers = U.cast(headersKV.toMap(buf, true, true));
-			Map<String, String> cookies = U.cast(cookiesKV.toMap(buf, true, true));
 
 			MediaType contentType = handler != null ? handler.contentType() : MediaType.HTML_UTF_8;
 

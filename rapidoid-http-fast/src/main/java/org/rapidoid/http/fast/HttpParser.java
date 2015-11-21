@@ -50,11 +50,15 @@ public class HttpParser implements Constants {
 
 	private static final byte[] COOKIE = "Cookie".getBytes();
 
-	private static final byte[] MULTIPART_FORM_DATA_BOUNDARY1 = "multipart/form-data; boundary=".getBytes();
+	private static final byte[] CT_MULTIPART_FORM_DATA_BOUNDARY1 = "multipart/form-data; boundary=".getBytes();
 
-	private static final byte[] MULTIPART_FORM_DATA_BOUNDARY2 = "multipart/form-data;boundary=".getBytes();
+	private static final byte[] CT_MULTIPART_FORM_DATA_BOUNDARY2 = "multipart/form-data;boundary=".getBytes();
 
-	private static final byte[] MULTIPART_FORM_DATA = "multipart/form-data;".getBytes();
+	private static final byte[] CT_MULTIPART_FORM_DATA = "multipart/form-data".getBytes();
+
+	private static final byte[] CT_FORM_URLENCODED = "application/x-www-form-urlencoded".getBytes();
+
+	private static final byte[] CT_JSON = "application/json".getBytes();
 
 	private static final byte[] CONTENT_TYPE = "Content-Type".getBytes();
 
@@ -99,10 +103,8 @@ public class HttpParser implements Constants {
 
 		BytesUtil.split(bytes, uri, ASTERISK, path, query, false);
 
-		if (BytesUtil.matches(bytes, verb, GET, true)) {
-			isGet.value = true;
-		} else {
-			isGet.value = false;
+		isGet.value = BytesUtil.matches(bytes, verb, GET, true);
+		if (!isGet.value) {
 			parseBody(buf, body, headers, helper);
 		}
 	}
@@ -136,6 +138,8 @@ public class HttpParser implements Constants {
 			U.must(len >= 0 && len <= Integer.MAX_VALUE, "Invalid body size!");
 			buf.scanN((int) len, body);
 			Log.debug("Request body complete", "range", body);
+		} else {
+			body.reset();
 		}
 	}
 
@@ -216,10 +220,17 @@ public class HttpParser implements Constants {
 	public boolean parseBody(Buf src, KeyValueRanges headers, Range body, KeyValueRanges data, KeyValueRanges files,
 			RapidoidHelper helper) {
 
+		if (body.isEmpty()) {
+			return true;
+		}
+
 		Range multipartBoundary = helper.ranges5.ranges[0];
 
-		if (isMultipartForm(src, headers, multipartBoundary)) {
+		HttpContentType contentType = getContentType(src, headers, multipartBoundary);
 
+		switch (contentType) {
+
+		case MULTIPART:
 			if (multipartBoundary.isEmpty()) {
 				detectMultipartBoundary(src, body, multipartBoundary);
 			}
@@ -232,18 +243,27 @@ public class HttpParser implements Constants {
 			U.rteIf(multipartBoundary.isEmpty(), "Invalid multi-part HTTP request!");
 
 			parseMultiParts(src, body, data, files, multipartBoundary, helper);
-		} else {
-			if (!body.isEmpty()) {
-				// if not posted as JSON data
-				if (src.get(body.start) != '{') {
-					parseURLEncodedKV(src, data, body);
-				} else {
-					return false;
-				}
-			}
-		}
+			parseURLEncodedKV(src, data, body);
 
-		return true;
+			return true;
+
+		case FORM_URLENCODED:
+			// if (src.get(body.start) != '{') {
+			parseURLEncodedKV(src, data, body);
+			return true;
+
+		case JSON:
+			return false;
+
+		case OTHER:
+			return true;
+
+		case NOT_FOUND:
+			return true;
+
+		default:
+			throw U.notExpected();
+		}
 	}
 
 	private void detectMultipartBoundary(Buf src, Range body, Range multipartBoundary) {
@@ -383,29 +403,42 @@ public class HttpParser implements Constants {
 		return false;
 	}
 
-	private boolean isMultipartForm(Buf buf, KeyValueRanges headers, Range multipartBoundary) {
+	private HttpContentType getContentType(Buf buf, KeyValueRanges headers, Range multipartBoundary) {
 		Range contType = headers.get(buf, CONTENT_TYPE, false);
 
 		if (contType != null) {
-			if (BytesUtil.startsWith(buf.bytes(), contType, MULTIPART_FORM_DATA_BOUNDARY1, false)) {
-				multipartBoundary.setInterval(contType.start + MULTIPART_FORM_DATA_BOUNDARY1.length, contType.limit());
-				return true;
-			}
 
-			if (BytesUtil.startsWith(buf.bytes(), contType, MULTIPART_FORM_DATA_BOUNDARY2, false)) {
-				multipartBoundary.setInterval(contType.start + MULTIPART_FORM_DATA_BOUNDARY2.length, contType.limit());
-				return true;
-			}
-
-			if (BytesUtil.startsWith(buf.bytes(), contType, MULTIPART_FORM_DATA, false)) {
+			if (BytesUtil.startsWith(buf.bytes(), contType, CT_FORM_URLENCODED, false)) {
 				multipartBoundary.reset();
-				return true;
+				return HttpContentType.FORM_URLENCODED;
+			}
+
+			if (BytesUtil.startsWith(buf.bytes(), contType, CT_JSON, false)) {
+				multipartBoundary.reset();
+				return HttpContentType.JSON;
+			}
+
+			if (BytesUtil.startsWith(buf.bytes(), contType, CT_MULTIPART_FORM_DATA_BOUNDARY1, false)) {
+				multipartBoundary.setInterval(contType.start + CT_MULTIPART_FORM_DATA_BOUNDARY1.length,
+						contType.limit());
+				return HttpContentType.MULTIPART;
+			}
+
+			if (BytesUtil.startsWith(buf.bytes(), contType, CT_MULTIPART_FORM_DATA_BOUNDARY2, false)) {
+				multipartBoundary.setInterval(contType.start + CT_MULTIPART_FORM_DATA_BOUNDARY2.length,
+						contType.limit());
+				return HttpContentType.MULTIPART;
+			}
+
+			if (BytesUtil.startsWith(buf.bytes(), contType, CT_MULTIPART_FORM_DATA, false)) {
+				multipartBoundary.reset();
+				return HttpContentType.MULTIPART;
 			}
 		}
 
 		multipartBoundary.reset();
 
-		return false;
+		return contType != null ? HttpContentType.OTHER : HttpContentType.NOT_FOUND;
 	}
 
 	@SuppressWarnings("unchecked")
