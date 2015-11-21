@@ -31,7 +31,25 @@ import org.rapidoid.concurrent.Future;
 @Since("2.0.0")
 public class HTTP {
 
+	public static final String CONTENT_TYPE_MULTIPART = "multipart/form-data";
+	public static final String CONTENT_TYPE_FORM_URLENCODED = "application/x-www-form-urlencoded";
+	public static final String CONTENT_TYPE_JSON = "application/json";
+	public static final String CONTENT_TYPE_XML = "application/xml";
+	public static final String CONTENT_TYPE_BINARY = "application/octet-stream";
+
 	public static final HttpClient DEFAULT_CLIENT = new HttpClient();
+
+	/********************************** GET **********************************/
+
+	public static Future<byte[]> get(String uri, Callback<byte[]> callback) {
+		return DEFAULT_CLIENT.get(uri, callback);
+	}
+
+	public static byte[] get(String uri) {
+		return get(uri, null).get();
+	}
+
+	/********************************** POST **********************************/
 
 	public static Future<byte[]> post(String uri, Map<String, String> headers, Map<String, String> data,
 			Map<String, String> files, Callback<byte[]> callback) {
@@ -43,25 +61,13 @@ public class HTTP {
 		return post(uri, headers, data, files, null).get();
 	}
 
-	public static Future<byte[]> post(String uri, Map<String, String> headers, String postData,
+	public static Future<byte[]> post(String uri, Map<String, String> headers, byte[] postData, String contentType,
 			Callback<byte[]> callback) {
-		return DEFAULT_CLIENT.post(uri, headers, postData, callback);
+		return DEFAULT_CLIENT.post(uri, headers, postData, contentType, callback);
 	}
 
-	public static byte[] post(String uri, Map<String, String> headers, String postData) {
-		return post(uri, headers, postData, null).get();
-	}
-
-	public static byte[] post(String uri) {
-		return post(uri, null, null, null, null).get();
-	}
-
-	public static Future<byte[]> get(String uri, Callback<byte[]> callback) {
-		return DEFAULT_CLIENT.get(uri, callback);
-	}
-
-	public static byte[] get(String uri) {
-		return get(uri, null).get();
+	public static byte[] post(String uri, Map<String, String> headers, byte[] postData, String contentType) {
+		return post(uri, headers, postData, contentType, null).get();
 	}
 
 }

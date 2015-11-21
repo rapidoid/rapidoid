@@ -72,13 +72,18 @@ public class HttpClient {
 		client.start();
 	}
 
-	public Future<byte[]> post(String uri, Map<String, String> headers, String postData, Callback<byte[]> callback) {
+	public Future<byte[]> post(String uri, Map<String, String> headers, byte[] postData, String contentType,
+			Callback<byte[]> callback) {
 
 		headers = U.safe(headers);
 
 		HttpPost req = new HttpPost(uri);
 
-		NByteArrayEntity entity = new NByteArrayEntity(postData.getBytes(), ContentType.APPLICATION_FORM_URLENCODED);
+		NByteArrayEntity entity = new NByteArrayEntity(postData);
+
+		if (contentType != null) {
+			entity.setContentType(contentType);
+		}
 
 		for (Entry<String, String> e : headers.entrySet()) {
 			req.addHeader(e.getKey(), e.getValue());
@@ -86,7 +91,7 @@ public class HttpClient {
 
 		req.setEntity(entity);
 
-		Log.info("Starting HTTP POST request", "request", req.getRequestLine());
+		Log.debug("Starting HTTP POST request", "request", req.getRequestLine());
 
 		return execute(client, req, callback);
 	}
@@ -128,7 +133,7 @@ public class HttpClient {
 
 		req.setEntity(entity);
 
-		Log.info("Starting HTTP POST request", "request", req.getRequestLine());
+		Log.debug("Starting HTTP POST request", "request", req.getRequestLine());
 
 		return execute(client, req, callback);
 	}
@@ -136,7 +141,7 @@ public class HttpClient {
 	public Future<byte[]> get(String uri, Callback<byte[]> callback) {
 		HttpGet req = new HttpGet(uri);
 
-		Log.info("Starting HTTP GET request", "request", req.getRequestLine());
+		Log.debug("Starting HTTP GET request", "request", req.getRequestLine());
 
 		return execute(client, req, callback);
 	}
