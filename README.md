@@ -11,10 +11,6 @@ Please visit the official site:
 
 The main distribution of the framework is released under the liberal Apache Public License v2, so it is free to use for both commercial and non-commercial projects.
 
-# Additional experimental modules (rapidoid-x-*) under AGPL
-
-There are additional experimental modules (named rapidoid-x-*) under Affero GPL.
-
 # Contributing
 
 1. Fork (and then `git clone https://github.com/<your-username-here>/rapidoid.git`).
