@@ -449,9 +449,11 @@ public class HttpParser implements Constants {
 		Map<String, String> urlEncodedParamsDest = U.cast(dest);
 		posted.toMap(input, true, true, urlEncodedParamsDest);
 
-		if (!completed) {
+		if (!completed && !rBody.isEmpty()) {
 			Map<String, Object> jsonData = JSON.parse(input.get(rBody), Map.class);
-			dest.putAll(jsonData);
+			if (jsonData != null) {
+				dest.putAll(jsonData);
+			}
 		}
 	}
 
