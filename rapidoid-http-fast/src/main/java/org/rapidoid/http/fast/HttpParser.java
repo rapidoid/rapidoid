@@ -243,7 +243,6 @@ public class HttpParser implements Constants {
 			U.rteIf(multipartBoundary.isEmpty(), "Invalid multi-part HTTP request!");
 
 			parseMultiParts(src, body, data, files, multipartBoundary, helper);
-			parseURLEncodedKV(src, data, body);
 
 			return true;
 

@@ -36,7 +36,7 @@ import org.rapidoid.test.TestCommons;
 @Since("4.1.0")
 public class JobsTest extends TestCommons {
 
-	@Test(timeout = 20000)
+	@Test(timeout = 30000)
 	public void testJobsExecution() {
 
 		int total = 100000;
