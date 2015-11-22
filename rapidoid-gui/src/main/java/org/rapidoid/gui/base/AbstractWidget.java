@@ -20,26 +20,19 @@ package org.rapidoid.gui.base;
  * #L%
  */
 
+import java.util.UUID;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctx;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.impl.TagRenderer;
-import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public abstract class AbstractWidget extends BootstrapWidgets implements TagWidget<Object>, Constants {
 
-	private final int widgetNum = getWidgetNumber(this);
-
 	private Object extra;
-
-	protected Ctx ctx() {
-		return Ctxs.get();
-	}
 
 	protected abstract Object render();
 
@@ -51,19 +44,7 @@ public abstract class AbstractWidget extends BootstrapWidgets implements TagWidg
 	}
 
 	public String widgetId() {
-		return getClass().getSimpleName() + widgetNum;
-	}
-
-	private static int getWidgetNumber(AbstractWidget widget) {
-		if (!Ctxs.hasContext()) {
-			return -1;
-		}
-
-		Ctx ctx = Ctxs.ctx();
-		String extrName = "widget_counter_" + widget.getClass().getSimpleName();
-		Integer counter = U.or((Integer) ctx.extras().get(extrName), 1);
-		ctx.extras().put(extrName, counter + 1);
-		return counter;
+		return getClass().getSimpleName() + "-" + UUID.randomUUID();
 	}
 
 	@Override

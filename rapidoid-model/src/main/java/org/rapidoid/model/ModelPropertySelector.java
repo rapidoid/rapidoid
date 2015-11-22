@@ -22,9 +22,9 @@ package org.rapidoid.model;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.arr.Arr;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertySelectorByName;
+import org.rapidoid.commons.Arr;
 
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")

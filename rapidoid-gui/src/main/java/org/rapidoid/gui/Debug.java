@@ -23,7 +23,7 @@ package org.rapidoid.gui;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.base.AbstractWidget;
-import org.rapidoid.http.Req;
+import org.rapidoid.gui.reqinfo.ReqInfo;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.1")
@@ -35,13 +35,11 @@ public class Debug extends AbstractWidget {
 	}
 
 	protected Panel sessionPanel() {
-		Req req = ctx().exchange();
-		return panel(grid(req.params())).header("URL parameters");
+		return panel(grid(ReqInfo.get().params())).header("URL parameters");
 	}
 
 	protected Panel localPanel() {
-		Req req = ctx().exchange();
-		return panel(grid(req.posted())).header("Posted data");
+		return panel(grid(ReqInfo.get().posted())).header("Posted data");
 	}
 
 }

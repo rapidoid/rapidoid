@@ -1,8 +1,8 @@
-package org.rapidoid.app.builtin;
+package org.rapidoid.gui.reqinfo;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-gui
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -22,44 +22,31 @@ package org.rapidoid.app.builtin;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HttpExchange;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.u.U;
-import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class BuiltInCmdHandler {
+@Since("5.0.4")
+public class ReqInfo {
 
-	public void on_set(Var<Object> var, Object value) {
-		var.set(value);
-	}
+	private static final String RAPIDOID_CTX = "org.rapidoid.ctx.Ctx";
 
-	public void on_inc(Var<Integer> var, Integer value) {
-		var.set(var.get() + value);
-	}
+	static volatile IReqInfo INFO;
 
-	public void on_dec(Var<Integer> var, Integer value) {
-		var.set(var.get() - value);
-	}
-
-	public void on_sort(Var<String> var, String value) {
-		String before = var.get();
-		if (!U.isEmpty(before) && !U.isEmpty(value)) {
-			if (!value.startsWith("-") && before.equals(value)) {
-				var.set("-" + value);
-				return;
-			}
+	public static IReqInfo get() {
+		if (INFO == null) {
+			INFO = createInfo();
 		}
 
-		var.set(value);
+		return INFO;
 	}
 
-	public void onCancel(HttpExchange x) {
-		x.goBack(1);
-	}
+	private static RapidoidReqInfo createInfo() {
+		if (Cls.exists(RAPIDOID_CTX)) {
+			return new RapidoidReqInfo();
+		}
 
-	public void onBack(HttpExchange x) {
-		x.goBack(1);
+		throw U.rte("Cannot find request info provider!");
 	}
 
 }

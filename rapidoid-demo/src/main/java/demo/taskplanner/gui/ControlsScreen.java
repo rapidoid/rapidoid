@@ -3,7 +3,7 @@ package demo.taskplanner.gui;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Controller;
-import org.rapidoid.app.GUI;
+import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.Layout;
 import org.rapidoid.u.U;
 

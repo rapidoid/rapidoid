@@ -31,6 +31,8 @@ import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.MediaType;
+import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.JobStatusListener;
@@ -46,7 +48,6 @@ import org.rapidoid.http.fast.HttpParser;
 import org.rapidoid.http.session.SessionStore;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
-import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.DefaultExchange;
 import org.rapidoid.plugins.templates.ITemplate;
@@ -1375,7 +1376,7 @@ public class HttpExchangeImpl extends DefaultExchange<HttpExchangeImpl> implemen
 			model.put("loggedIn", loggedIn);
 			model.put("user", loggedIn ? Ctxs.ctx().user() : null);
 
-			model.put("version", UTILS.version());
+			model.put("version", RapidoidInfo.version());
 		}
 
 		return model;

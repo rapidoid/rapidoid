@@ -1,8 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.english;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -23,6 +23,7 @@ package org.rapidoid.util;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.English;
 import org.rapidoid.test.TestCommons;
 
 @Authors("Nikolche Mihajlovski")

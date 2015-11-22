@@ -27,8 +27,8 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Rnd;
 import org.rapidoid.io.IO;
-import org.rapidoid.util.Rnd;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

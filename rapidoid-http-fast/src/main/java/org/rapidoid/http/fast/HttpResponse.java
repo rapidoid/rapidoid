@@ -26,9 +26,9 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Response;
-import org.rapidoid.mime.MediaType;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")

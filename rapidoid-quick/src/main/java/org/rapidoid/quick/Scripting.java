@@ -31,14 +31,15 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.AppHandler;
 import org.rapidoid.app.DollarPage;
-import org.rapidoid.app.GUI;
 import org.rapidoid.beany.BeanProperties;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.JS;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.gui.GUI;
 import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.HttpExchangeImpl;
 import org.rapidoid.http.HttpProtocol;
@@ -85,7 +86,7 @@ public class Scripting {
 		if (compiled == null) {
 			String js = res.getContent();
 			try {
-				compiled = U.compileJS(js);
+				compiled = JS.compile(js);
 			} catch (ScriptException e) {
 				throw U.rte("Script compilation error!", e);
 			}

@@ -3,9 +3,9 @@ package demo.taskplanner.gui;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Controller;
-import org.rapidoid.app.GUI;
 import org.rapidoid.gui.Card;
 import org.rapidoid.gui.FA;
+import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.VStream;
 import org.rapidoid.html.Tag;
 
@@ -48,10 +48,7 @@ public class HomeScreen extends GUI {
 
 		VStream stream = stream(card).cols(3).dataUrl("/task/page/{{page}}");
 
-		int n = ctx().cookiepack("xy", 0) + 1;
-		ctx().cookiepack().put("xy", n);
-
-		return arr("Req" + n, " ", cmd("Refresh ").info(), stream);
+		return arr(cmd("Refresh ").info(), stream);
 	}
 
 }

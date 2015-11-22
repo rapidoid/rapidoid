@@ -30,13 +30,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
-
 import org.junit.Test;
 import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.test.TestCommons;
-import org.rapidoid.u.U;
 
 /**
  * @author Nikolche Mihajlovski
@@ -261,34 +257,6 @@ public class UTest extends TestCommons {
 		eq(dyn.hey(), "hey:");
 		eq(dyn.abc(123, true), "abc:123,true");
 		eq(dyn2.abc(4, false), "abc:4,false");
-	}
-
-	@Test
-	public void testEvalJS() throws ScriptException {
-		eq(U.evalJS("1 + 2"), 3);
-		eq(U.evalJS("1 + 'ab'"), "1ab");
-		eq(U.evalJS("(function (x) { return x.toUpperCase(); })('abc')"), "ABC");
-		eq(U.evalJS("x + y + y.length", U.map("x", "10", "y", "abcd")), "10abcd4");
-	}
-
-	@Test
-	public void testCompileJS() throws ScriptException {
-		eq(U.compileJS("1 + 2").eval(), 3);
-		eq(U.compileJS("1 + 'ab'").eval(), "1ab");
-
-		Map<String, Object> map = U.cast(U.map("U", new U()));
-		SimpleBindings bindings = new SimpleBindings(map);
-
-		Object res1;
-		try {
-			// Rhino style
-			res1 = U.compileJS("(function (x) { return U.capitalized(x); })('hey')").eval(bindings);
-		} catch (Exception e) {
-			// Nashorn style
-			res1 = U.compileJS("(function (x) { return U.class.static.capitalized(x); })('hey')").eval(bindings);
-		}
-
-		eq(res1, "Hey");
 	}
 
 	@Test

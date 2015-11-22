@@ -1,8 +1,8 @@
-package org.rapidoid.app.builtin;
+package org.rapidoid.gui.reqinfo;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-gui
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -22,34 +22,14 @@ package org.rapidoid.app.builtin;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.GUI;
-import org.rapidoid.plugins.db.DB;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
-public abstract class AbstractEntityScreenGeneric extends GUI {
-
-	protected final Class<?> entityType;
-
-	public AbstractEntityScreenGeneric(Class<?> entityType) {
-		this.entityType = entityType;
-	}
-
-	@SuppressWarnings("unchecked")
-	protected <T> T getEntityById() {
-		String id = ctx().pathSegment(1);
-		Object entity = DB.getIfExists(entityType, id);
-
-		if (entity == null) {
-			throw ctx().notFound();
-		}
-
-		return (T) entity;
-	}
+@Since("5.0.4")
+public abstract class AbstractReqInfo implements IReqInfo {
 
 	@Override
-	public String toString() {
-		return "AbstractEntityScreenGeneric [entityType=" + entityType + "]";
+	public boolean isGetReq() {
+		return "GET".equalsIgnoreCase(verb());
 	}
 
 }

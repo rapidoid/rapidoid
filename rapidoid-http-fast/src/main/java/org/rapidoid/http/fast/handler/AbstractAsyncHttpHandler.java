@@ -25,6 +25,7 @@ import java.util.concurrent.Future;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.MediaType;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.Req;
@@ -32,7 +33,6 @@ import org.rapidoid.http.fast.FastHttp;
 import org.rapidoid.http.fast.HttpStatus;
 import org.rapidoid.http.fast.HttpWrapper;
 import org.rapidoid.lambda.Mapper;
-import org.rapidoid.mime.MediaType;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 

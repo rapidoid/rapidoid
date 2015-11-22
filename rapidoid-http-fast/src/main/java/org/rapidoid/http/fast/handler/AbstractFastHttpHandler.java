@@ -22,8 +22,8 @@ package org.rapidoid.http.fast.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.fast.FastHttp;
-import org.rapidoid.mime.MediaType;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")

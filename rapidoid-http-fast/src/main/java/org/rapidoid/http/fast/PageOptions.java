@@ -22,7 +22,7 @@ package org.rapidoid.http.fast;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.mime.MediaType;
+import org.rapidoid.commons.MediaType;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")

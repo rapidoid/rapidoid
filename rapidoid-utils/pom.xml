@@ -11,25 +11,6 @@
 	<packaging>jar</packaging>
 	<description>Rapidoid Utils</description>
 
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-				<includes>
-					<include>rapidoid.properties</include>
-				</includes>
-			</resource>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>false</filtering>
-				<includes>
-					<include>**/*</include>
-				</includes>
-			</resource>
-		</resources>
-	</build>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>

@@ -1021,33 +1021,6 @@ public class U {
 		return ((T) Proxy.newProxyInstance(targetInterface.getClassLoader(), new Class[] { targetInterface }, handler));
 	}
 
-	public static <T> T evalJS(String js) throws ScriptException {
-		return evalJS(js, null);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> T evalJS(String js, Map<String, ?> bindings) throws ScriptException {
-		ScriptEngineManager factory = new ScriptEngineManager();
-		ScriptEngine engine = factory.getEngineByName("JavaScript");
-
-		if (bindings != null) {
-			Map<String, Object> map = U.cast(bindings);
-			return (T) engine.eval(js, new SimpleBindings(map));
-		} else {
-			return (T) engine.eval(js);
-		}
-	}
-
-	public static CompiledScript compileJS(String js) throws ScriptException {
-		ScriptEngineManager factory = new ScriptEngineManager();
-		ScriptEngine engine = factory.getEngineByName("JavaScript");
-
-		must(engine instanceof Compilable, "The JavaScript engine cannot compile!");
-
-		Compilable compilable = (Compilable) engine;
-		return compilable.compile(js);
-	}
-
 	@SuppressWarnings({ "varargs" })
 	public static <T> boolean isIn(T value, T... candidates) {
 		for (T candidate : candidates) {

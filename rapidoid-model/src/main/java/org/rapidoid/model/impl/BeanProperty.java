@@ -25,9 +25,9 @@ import java.lang.reflect.ParameterizedType;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Str;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -94,7 +94,7 @@ public class BeanProperty implements Property {
 		if (prop.equals("id")) {
 			return "ID";
 		}
-		return UTILS.camelPhrase(prop);
+		return Str.camelPhrase(prop);
 	}
 
 	@Override

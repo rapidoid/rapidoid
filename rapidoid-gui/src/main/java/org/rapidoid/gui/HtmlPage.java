@@ -21,22 +21,21 @@ package org.rapidoid.gui;
  */
 
 import java.util.Map;
+import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.config.Conf;
-import org.rapidoid.ctx.Ctx;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.menu.PageMenu;
+import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.html.Tag;
-import org.rapidoid.http.Req;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.templates.ITemplate;
 import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
 import org.rapidoid.plugins.templates.Templates;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
@@ -78,7 +77,7 @@ public class HtmlPage extends AbstractWidget {
 	protected Tag render() {
 		String html;
 
-		if (req().verb().equals("GET")) {
+		if (ReqInfo.get().isGetReq()) {
 			html = fullTemplate().render(pageModel());
 		} else {
 			html = ajaxTemplate().render(pageModel());
@@ -88,24 +87,25 @@ public class HtmlPage extends AbstractWidget {
 	}
 
 	private Map<String, Object> pageModel() {
-		Ctx ctx = Ctxs.ctx();
-
-		Req req = req();
-
-		Map<String, Object> model = U.map(req.data());
+		Map<String, Object> model = U.map(ReqInfo.get().data());
 
 		model.put("dev", Conf.dev());
 
-		model.put("verb", req.verb());
-		model.put("host", req.host());
-		model.put("uri", req.uri());
-		model.put("path", req.path());
+		model.put("verb", ReqInfo.get().verb());
+		model.put("host", ReqInfo.get().host());
+		model.put("uri", ReqInfo.get().uri());
+		model.put("path", ReqInfo.get().path());
 
-		boolean loggedIn = ctx.isLoggedIn();
-		model.put("loggedIn", loggedIn);
-		model.put("user", loggedIn ? ctx.user() : null);
+		model.put("username", ReqInfo.get().username());
 
-		model.put("version", UTILS.version());
+		Set<String> roles = ReqInfo.get().roles();
+		model.put("roles", roles);
+
+		for (String role : U.safe(roles)) {
+			model.put("role_" + role, true);
+		}
+
+		model.put("version", RapidoidInfo.version());
 
 		model.put("content", multi((Object[]) content));
 		model.put("result", multi((Object[]) content)); // FIXME rename result to content
@@ -114,7 +114,7 @@ public class HtmlPage extends AbstractWidget {
 		model.put("title", title);
 		model.put("menu", menu);
 
-		// FIXME model.put("embedded", ctx.data().get("$_embedded") != null);
+		model.put("embedded", ReqInfo.get().data().get("_embedded") != null);
 
 		model.put("navbar", true);
 

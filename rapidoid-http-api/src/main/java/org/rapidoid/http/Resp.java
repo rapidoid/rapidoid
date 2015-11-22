@@ -27,8 +27,8 @@ import java.nio.ByteBuffer;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.MediaType;
 import org.rapidoid.io.Res;
-import org.rapidoid.mime.MediaType;
 import org.rapidoid.plugins.templates.ITemplate;
 
 @Authors("Nikolche Mihajlovski")

@@ -1,8 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.commons;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

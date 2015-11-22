@@ -22,7 +22,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.dates.Dates;
+import org.rapidoid.commons.Dates;
 import org.rapidoid.util.Constants;
 
 @Authors("Nikolche Mihajlovski")

@@ -43,7 +43,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Pattern;
 
-import org.rapidoid.dates.Dates;
+import org.rapidoid.commons.Dates;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
@@ -946,6 +946,10 @@ public class Cls {
 		String key = Cls.str(e.getKey());
 		T2 item = Cls.newInstance(clazz2, key, e.getValue(), extra);
 		return item;
+	}
+
+	public static boolean exists(String className) {
+		return getClassIfExists(className) != null;
 	}
 
 }

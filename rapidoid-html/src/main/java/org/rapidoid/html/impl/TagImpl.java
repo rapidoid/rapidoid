@@ -28,11 +28,11 @@ import java.util.Set;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.AnyObj;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.Tags;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
@@ -66,7 +66,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 	public TagImpl(Class<?> clazz, String name, Object[] contents) {
 		this.clazz = clazz;
 		this.name = name;
-		UTILS.flatInsertInto(this.contents, APPEND, contents);
+		AnyObj.flatInsertInto(this.contents, APPEND, contents);
 	}
 
 	@Override
@@ -138,7 +138,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 		TagImpl impl = impl(_copy);
 
 		impl.contents.clear();
-		UTILS.flatInsertInto(impl.contents, APPEND, content);
+		AnyObj.flatInsertInto(impl.contents, APPEND, content);
 
 		return _copy;
 	}
@@ -148,7 +148,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 		Tag _copy = copy();
 		TagImpl impl = impl(_copy);
 
-		UTILS.flatInsertInto(impl.contents, 0, content);
+		AnyObj.flatInsertInto(impl.contents, 0, content);
 
 		return _copy;
 	}
@@ -158,7 +158,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 		Tag _copy = copy();
 		TagImpl impl = impl(_copy);
 
-		UTILS.flatInsertInto(impl.contents, APPEND, content);
+		AnyObj.flatInsertInto(impl.contents, APPEND, content);
 
 		return _copy;
 	}

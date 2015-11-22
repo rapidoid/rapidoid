@@ -1,8 +1,8 @@
-package org.rapidoid.widget;
+package org.rapidoid.commons;
 
 /*
  * #%L
- * rapidoid-gui
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,29 +20,37 @@ package org.rapidoid.widget;
  * #L%
  */
 
-import org.junit.Test;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.html.Tag;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class PlaygroundWidgetTest extends WidgetTestCommons {
+@Since("5.0.4")
+public class RapidoidInfo {
 
-	private static final String ATTRS = "[^>]*?";
+	private static final Properties PROPS = new Properties();
 
-	@Test
-	public void testPlaygroundWidget() {
-		Tag play = PlaygroundWidget.pageContent(null);
-		print(play);
+	private static final String VERSION;
 
-		hasRegex(play, "<table class=\"table" + ATTRS + ">");
+	static {
+		try {
+			InputStream res = Thread.currentThread().getContextClassLoader().getResourceAsStream("rapidoid.properties");
+			if (res != null) {
+				PROPS.load(res);
+			}
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
 
-		hasRegex(play, "<button[^>]*?>\\-</button>");
-		hasRegex(play, "<span[^>]*?>10</span>");
-		hasRegex(play, "<button[^>]*?>\\+</button>");
+		VERSION = PROPS.getProperty("version");
+	}
 
-		hasRegex(play, "<input [^>]*?style=\"border: 1px;\">");
+	public static String version() {
+		return VERSION;
 	}
 
 }

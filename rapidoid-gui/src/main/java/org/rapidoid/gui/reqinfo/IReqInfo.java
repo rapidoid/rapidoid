@@ -1,8 +1,8 @@
-package org.rapidoid.app.builtin;
+package org.rapidoid.gui.reqinfo;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-gui
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,35 +20,40 @@ package org.rapidoid.app.builtin;
  * #L%
  */
 
+import java.util.Map;
+import java.util.Set;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.Form;
-import org.rapidoid.html.Tag;
-import org.rapidoid.plugins.db.DB;
-import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class EditEntityScreenGeneric extends AbstractEntityScreenGeneric {
+@Since("5.0.4")
+public interface IReqInfo {
 
-	private Object entity;
+	boolean isGetReq();
 
-	public EditEntityScreenGeneric(Class<?> entityType) {
-		super(entityType);
-	}
+	String verb();
 
-	public Object content() {
-		this.entity = getEntityById();
+	String path();
 
-		Tag caption = h2("Edit " + U.capitalized(ctx().pathSegment(0).substring(4)));
-		Form form = edit(entity).buttons(SAVE, CANCEL);
+	String uri();
 
-		return mid6(caption, form);
-	}
+	String host();
 
-	public void onSave() {
-		DB.update(entity);
-		ctx().goBack(1);
-	}
+	Map<String, Object> data();
+
+	Map<String, String> params();
+
+	Map<String, Object> posted();
+
+	Map<String, byte[]> files();
+
+	Map<String, String> headers();
+
+	Map<String, String> cookies();
+
+	String username();
+
+	Set<String> roles();
 
 }

@@ -28,8 +28,8 @@ import java.util.Map.Entry;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.arr.Arr;
 import org.rapidoid.beany.Metadata;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.security.annotation.DevMode;
 
 @Authors("Nikolche Mihajlovski")

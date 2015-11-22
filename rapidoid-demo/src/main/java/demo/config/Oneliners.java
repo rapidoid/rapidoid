@@ -25,11 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.rapidoid.app.GUI;
 import org.rapidoid.fluent.Do;
 import org.rapidoid.fluent.Find;
 import org.rapidoid.fluent.Flow;
 import org.rapidoid.gui.Btn;
+import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.http.REST;
 import org.rapidoid.http.fast.On;

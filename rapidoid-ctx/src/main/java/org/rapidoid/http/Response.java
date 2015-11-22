@@ -22,7 +22,7 @@ package org.rapidoid.http;
 
 import java.util.Map;
 
-import org.rapidoid.mime.MediaType;
+import org.rapidoid.commons.MediaType;
 
 public interface Response {
 

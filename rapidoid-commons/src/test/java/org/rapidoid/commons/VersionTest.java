@@ -1,8 +1,8 @@
-package org.rapidoid.app.builtin;
+package org.rapidoid.commons;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,35 +20,20 @@ package org.rapidoid.app.builtin;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.Form;
-import org.rapidoid.html.Tag;
-import org.rapidoid.plugins.db.DB;
-import org.rapidoid.plugins.entities.Entities;
-import org.rapidoid.u.U;
+import org.rapidoid.test.TestCommons;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.1.0")
-public class NewEntityScreenGeneric extends AbstractEntityScreenGeneric {
+@Since("4.3.0")
+public class VersionTest extends TestCommons {
 
-	private Object entity;
-
-	public NewEntityScreenGeneric(Class<?> entityType) {
-		super(entityType);
-		this.entity = Entities.create(entityType);
-	}
-
-	public Object content() {
-		Tag caption = h2("New " + U.capitalized(ctx().pathSegment(0).substring(3)));
-		Form form = create(entity).buttons(SAVE, CANCEL, INSERT);
-
-		return mid6(caption, form);
-	}
-
-	public void onSave() {
-		DB.insert(entity);
-		ctx().goBack(1);
+	@Test
+	public void testVersion() {
+		System.out.println(RapidoidInfo.version());
+		notNull(RapidoidInfo.version());
+		isTrue(RapidoidInfo.version().startsWith("5."));
 	}
 
 }

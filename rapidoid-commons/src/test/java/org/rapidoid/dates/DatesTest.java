@@ -23,6 +23,7 @@ package org.rapidoid.dates;
 import java.util.Calendar;
 
 import org.junit.Test;
+import org.rapidoid.commons.Dates;
 import org.rapidoid.test.TestCommons;
 
 /**

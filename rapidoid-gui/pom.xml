@@ -14,11 +14,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-security</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-html</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -29,15 +24,20 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-plugins</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-test-appctx-helper</artifactId>
+			<artifactId>rapidoid-test-commons</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!--  PROVIDED DEPENDENCIES: ANY OF THEM CAN BE ON THE CLASSPATH -->
+				
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-ctx</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
 	</dependencies>
 
 </project>

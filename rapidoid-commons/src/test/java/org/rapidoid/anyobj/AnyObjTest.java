@@ -21,6 +21,7 @@ package org.rapidoid.anyobj;
  */
 
 import org.junit.Test;
+import org.rapidoid.commons.AnyObj;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 

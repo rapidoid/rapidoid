@@ -32,21 +32,18 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
-import org.rapidoid.ctx.Ctx;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.gui.base.AbstractWidget;
+import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.TextareaTag;
-import org.rapidoid.http.Req;
 import org.rapidoid.log.Log;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.plugins.db.DB;
-import org.rapidoid.security.DataPermissions;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
@@ -64,7 +61,6 @@ public class Field extends AbstractWidget {
 	protected Collection<?> options;
 	protected boolean required;
 	protected Var<?> var;
-	protected DataPermissions permissions;
 
 	// fully customize: label OR input OR content (label+input)
 	protected Tag content;
@@ -72,7 +68,7 @@ public class Field extends AbstractWidget {
 	protected Tag input;
 
 	public Field(FormMode mode, FormLayout layout, Property prop, String name, String desc, FieldType type,
-			Collection<?> options, boolean required, Var<?> var, DataPermissions permissions) {
+			Collection<?> options, boolean required, Var<?> var) {
 
 		this.mode = U.or(mode, FormMode.EDIT);
 		this.layout = layout;
@@ -83,7 +79,6 @@ public class Field extends AbstractWidget {
 		this.options = options;
 		this.required = required;
 		this.var = var;
-		this.permissions = permissions;
 	}
 
 	public Field(FormMode mode, FormLayout layout, Item item, Property prop) {
@@ -102,13 +97,7 @@ public class Field extends AbstractWidget {
 		Object target = U.or(item.value(), item);
 		String varName = propVarName(target, prop.name());
 
-		Ctx ctx = Ctxs.get();
-		Object initValue = null;
-
-		if (ctx != null) {
-			Req req = ctx.exchange();
-			initValue = req.data(varName, null);
-		}
+		Object initValue = ReqInfo.get().data().get(varName);
 
 		try {
 			return Models.propertyVar(varName, item, prop.name(), initValue);
@@ -301,19 +290,8 @@ public class Field extends AbstractWidget {
 	}
 
 	protected boolean isFieldAllowed() {
-		switch (fieldMode()) {
-		case CREATE:
-			return permissions.insert;
-
-		case EDIT:
-			return permissions.read && permissions.change;
-
-		case SHOW:
-			return permissions.read;
-
-		default:
-			throw U.notExpected();
-		}
+		// FIXME
+		return true;
 	}
 
 	protected FormMode fieldMode() {
@@ -455,14 +433,6 @@ public class Field extends AbstractWidget {
 
 	public void setVar(Var<?> var) {
 		this.var = var;
-	}
-
-	public DataPermissions getPermissions() {
-		return permissions;
-	}
-
-	public void setPermissions(DataPermissions permissions) {
-		this.permissions = permissions;
 	}
 
 	public Tag getContent() {

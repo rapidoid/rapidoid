@@ -22,6 +22,7 @@ package org.rapidoid.html;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.AnyObj;
 import org.rapidoid.html.impl.ConstantTag;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.ButtonTag;
@@ -40,7 +41,6 @@ import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.html.tag.TdTag;
 import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.html.tag.ThTag;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -77,7 +77,7 @@ public class HTML extends Tags {
 	}
 
 	public static Tag ul_li(Object... listItems) {
-		listItems = UTILS.flat(listItems);
+		listItems = AnyObj.flat(listItems);
 
 		Tag list = ul();
 

@@ -2,7 +2,7 @@ package org.rapidoid.plugins.languages;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.util.English;
+import org.rapidoid.commons.English;
 
 /*
  * #%L

@@ -21,6 +21,7 @@ package org.rapidoid.arr;
  */
 
 import org.junit.Test;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.test.TestCommons;
 
 /**

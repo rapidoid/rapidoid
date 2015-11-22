@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Controller;
-import org.rapidoid.app.GUI;
+import org.rapidoid.gui.GUI;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.lifecycle.Lifecycle;

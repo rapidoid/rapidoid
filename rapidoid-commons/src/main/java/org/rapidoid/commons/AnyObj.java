@@ -1,4 +1,4 @@
-package org.rapidoid.anyobj;
+package org.rapidoid.commons;
 
 /*
  * #%L
@@ -21,14 +21,14 @@ package org.rapidoid.anyobj;
  */
 
 import java.util.Collection;
+import java.util.List;
 
-import org.rapidoid.arr.Arr;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 
-/**
- * @author Nikolche Mihajlovski
- * @since 4.0.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("4.0.0")
 public class AnyObj {
 
 	public static boolean contains(Object arrOrColl, Object value) {
@@ -74,6 +74,53 @@ public class AnyObj {
 		} else {
 			throw U.illegalArg("Expected array or collection!");
 		}
+	}
+
+	public static Object[] flat(Object... arr) {
+		List<Object> flat = U.list();
+		flatInsertInto(flat, 0, arr);
+		return flat.toArray();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> int flatInsertInto(List<T> dest, int index, Object item) {
+		if (index > dest.size()) {
+			index = dest.size();
+		}
+		int inserted = 0;
+
+		if (item instanceof Object[]) {
+			Object[] arr = (Object[]) item;
+			for (Object obj : arr) {
+				inserted += flatInsertInto(dest, index + inserted, obj);
+			}
+		} else if (item instanceof Collection<?>) {
+			Collection<?> coll = (Collection<?>) item;
+			for (Object obj : coll) {
+				inserted += flatInsertInto(dest, index + inserted, obj);
+			}
+		} else if (item != null) {
+			if (index >= dest.size()) {
+				dest.add((T) item);
+			} else {
+				dest.add(index + inserted, (T) item);
+			}
+			inserted++;
+		}
+
+		return inserted;
+	}
+
+	public static <T, V extends T> List<T> withoutNulls(V... values) {
+		List<T> list = U.list();
+
+		for (T val : values) {
+			if (val != null) {
+				list.add(val);
+			}
+		}
+
+		return list;
 	}
 
 }

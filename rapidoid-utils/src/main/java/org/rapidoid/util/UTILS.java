@@ -40,17 +40,12 @@ import java.net.Socket;
 import java.net.URLDecoder;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.regex.Pattern;
 
 import org.rapidoid.Insights;
 import org.rapidoid.activity.AbstractLoopThread;
@@ -67,7 +62,6 @@ import org.rapidoid.io.Res;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
-import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
@@ -75,28 +69,7 @@ import org.rapidoid.u.U;
 @Since("2.0.0")
 public class UTILS implements Constants {
 
-	private static final Properties PROPS = new Properties();
-	private static final String VERSION;
-
-	static {
-		try {
-			PROPS.load(IO.resourceAsStream("rapidoid.properties"));
-		} catch (IOException e) {
-			throw U.rte(e);
-		}
-
-		VERSION = PROPS.getProperty("version");
-	}
-
 	private static long measureStart;
-
-	private static final Set<String> SPECIAL_PROPERTIES = U.set("id", "version", "createdby", "createdon",
-			"lastupdatedby", "lastupdatedon");
-
-	// regex taken from
-	// http://stackoverflow.com/questions/2559759/how-do-i-convert-camelcase-into-human-readable-names-in-java
-	private static final Pattern CAMEL_SPLITTER_PATTERN = Pattern
-			.compile("(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
 
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(8,
 			new RapidoidThreadFactory("utils"));
@@ -407,19 +380,6 @@ public class UTILS implements Constants {
 		});
 	}
 
-	public static <T> void filter(Collection<T> coll, Predicate<T> predicate) {
-		try {
-			for (Iterator<T> iterator = coll.iterator(); iterator.hasNext();) {
-				T t = (T) iterator.next();
-				if (!predicate.eval(t)) {
-					iterator.remove();
-				}
-			}
-		} catch (Exception e) {
-			throw U.rte(e);
-		}
-	}
-
 	public static short bytesToShort(String s) {
 		ByteBuffer buf = Bufs.buf(s);
 		U.must(buf.limit() == 2);
@@ -472,41 +432,6 @@ public class UTILS implements Constants {
 		} catch (InterruptedException e) {
 			// do nothing
 		}
-	}
-
-	public static Object[] flat(Object... arr) {
-		List<Object> flat = U.list();
-		flatInsertInto(flat, 0, arr);
-		return flat.toArray();
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> int flatInsertInto(List<T> dest, int index, Object item) {
-		if (index > dest.size()) {
-			index = dest.size();
-		}
-		int inserted = 0;
-
-		if (item instanceof Object[]) {
-			Object[] arr = (Object[]) item;
-			for (Object obj : arr) {
-				inserted += flatInsertInto(dest, index + inserted, obj);
-			}
-		} else if (item instanceof Collection<?>) {
-			Collection<?> coll = (Collection<?>) item;
-			for (Object obj : coll) {
-				inserted += flatInsertInto(dest, index + inserted, obj);
-			}
-		} else if (item != null) {
-			if (index >= dest.size()) {
-				dest.add((T) item);
-			} else {
-				dest.add(index + inserted, (T) item);
-			}
-			inserted++;
-		}
-
-		return inserted;
 	}
 
 	public static void benchmark(String name, int count, Runnable runnable) {
@@ -632,30 +557,6 @@ public class UTILS implements Constants {
 		return text;
 	}
 
-	public static String camelSplit(String s) {
-		return CAMEL_SPLITTER_PATTERN.matcher(s).replaceAll(" ");
-	}
-
-	public static String camelPhrase(String s) {
-		return U.capitalized(camelSplit(s).toLowerCase());
-	}
-
-	public static <T, V extends T> List<T> withoutNulls(V... values) {
-		List<T> list = U.list();
-
-		for (T val : values) {
-			if (val != null) {
-				list.add(val);
-			}
-		}
-
-		return list;
-	}
-
-	public static boolean isSpecialProperty(String name) {
-		return SPECIAL_PROPERTIES.contains(name.toLowerCase());
-	}
-
 	@SuppressWarnings("unchecked")
 	public static <T> Map<String, T> lowercase(Map<String, T> map) {
 		Map<String, T> lower = U.map();
@@ -774,10 +675,6 @@ public class UTILS implements Constants {
 		return null;
 	}
 
-	public static String version() {
-		return VERSION;
-	}
-
 	public static byte[] toBytes(Object obj) {
 
 		if (obj instanceof byte[]) {
@@ -803,34 +700,6 @@ public class UTILS implements Constants {
 
 		} else {
 			return U.str(obj).getBytes();
-		}
-	}
-
-	public static <T> List<T> filter(List<T> items, Predicate<T> predicate) {
-		List<T> filtered = U.list();
-		addIf(items, filtered, predicate);
-		return filtered;
-	}
-
-	public static <T> Set<T> filter(Set<T> items, Predicate<T> predicate) {
-		Set<T> filtered = U.set();
-		addIf(items, filtered, predicate);
-		return filtered;
-	}
-
-	public static <T> void addIf(Collection<T> src, Collection<T> dest, Predicate<T> predicate) {
-		for (T item : src) {
-			boolean shouldAdd;
-
-			try {
-				shouldAdd = predicate.eval(item);
-			} catch (Exception e) {
-				throw U.rte(e);
-			}
-
-			if (shouldAdd) {
-				dest.add(item);
-			}
 		}
 	}
 

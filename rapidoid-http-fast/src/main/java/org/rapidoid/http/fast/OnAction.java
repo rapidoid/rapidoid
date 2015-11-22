@@ -24,6 +24,7 @@ import java.util.concurrent.Callable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.fast.handler.FastCallableHttpHandler;
 import org.rapidoid.http.fast.handler.FastParamsAwareHttpHandler;
@@ -34,7 +35,6 @@ import org.rapidoid.io.Res;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.F3;
 import org.rapidoid.lambda.Mapper;
-import org.rapidoid.mime.MediaType;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")

@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.arr.Arr;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.lambda.Lmbd;
 
 @Authors("Nikolche Mihajlovski")

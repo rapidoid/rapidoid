@@ -1,4 +1,4 @@
-package org.rapidoid.mime;
+package org.rapidoid.commons;
 
 import java.util.Arrays;
 import java.util.Map;

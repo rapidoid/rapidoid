@@ -23,6 +23,7 @@ package org.rapidoid.model;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -40,13 +41,15 @@ import org.rapidoid.model.impl.ItemPropertyVar;
 import org.rapidoid.model.impl.ListItems;
 import org.rapidoid.model.impl.MapItem;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class Models {
+
+	private static final Set<String> SPECIAL_PROPERTIES = U.set("id", "version", "createdby", "createdon",
+			"lastupdatedby", "lastupdatedon");
 
 	public static <T> Items beanItems(Class<T> beanType, Object... beans) {
 		ListItems items = new BeanListItems<T>(beanType);
@@ -137,7 +140,7 @@ public class Models {
 	public static boolean isEditable(Prop prop) {
 		String name = prop.getName();
 
-		if (UTILS.isSpecialProperty(name)) {
+		if (isSpecialProperty(name)) {
 			return false;
 		}
 
@@ -171,6 +174,10 @@ public class Models {
 
 	public static <T> Var<T> propertyVar(String name, Item item, String property, T initValue) {
 		return new ItemPropertyVar<T>(name, item, property, initValue);
+	}
+
+	public static boolean isSpecialProperty(String name) {
+		return SPECIAL_PROPERTIES.contains(name.toLowerCase());
 	}
 
 }

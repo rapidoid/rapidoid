@@ -34,13 +34,13 @@ import java.util.Set;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Rnd;
 import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.net.TCPServerInfo;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Rnd;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

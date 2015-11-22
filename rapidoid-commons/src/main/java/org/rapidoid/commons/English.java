@@ -1,8 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.commons;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,12 +20,14 @@ package org.rapidoid.util;
  * #L%
  */
 
+import java.io.IOException;
 import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.io.IO;
+import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -39,7 +41,19 @@ public class English {
 	private static final Pattern PLURAL3 = Pattern.compile(".*[bcdfghjklmnpqrstvwxz]y$");
 	private static final Pattern PLURAL3U = Pattern.compile(".*[BCDFGHJKLMNPQRSTVWXZ]Y$");
 
-	private static final Map<String, String> IRREGULAR_PLURAL = IO.loadMap("irregular-plural.txt");
+	private static final Map<String, String> IRREGULAR_PLURAL = loadIrregularPlural();
+
+	private static Map<String, String> loadIrregularPlural() {
+		Properties props = new Properties();
+
+		try {
+			props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("irregular-plural.txt"));
+		} catch (IOException e) {
+			Log.error("Couldn't load irregular plural!", e);
+		}
+
+		return U.cast(props);
+	}
 
 	public static String plural(String noun) {
 		if (U.isEmpty(noun)) {

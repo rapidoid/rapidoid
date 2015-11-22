@@ -1,8 +1,8 @@
-package org.rapidoid.app.builtin;
+package org.rapidoid.commons;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,27 +20,30 @@ package org.rapidoid.app.builtin;
  * #L%
  */
 
+import java.util.regex.Pattern;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.GUI;
-import org.rapidoid.html.Tag;
-import org.rapidoid.plugins.db.DB;
-import org.rapidoid.security.annotation.DevMode;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Constants;
 
-@DevMode
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class DeleteAllDataScreenBuiltIn extends GUI {
+@Since("5.0.4")
+public class Str implements Constants {
 
-	public Object content() {
-		Tag caption = titleBox("Debug Mode - Delete All data");
-		// TODO ask "Are you sure you want to delete all data in the database?"
-		return div(caption, div(btn("DELETE ALL DATA!").danger().command("DeleteAll"), CANCEL));
+	// regex taken from
+	// http://stackoverflow.com/questions/2559759/how-do-i-convert-camelcase-into-human-readable-names-in-java
+	private static final Pattern CAMEL_SPLITTER_PATTERN = Pattern
+			.compile("(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
+
+	private Str() {}
+
+	public static String camelSplit(String s) {
+		return CAMEL_SPLITTER_PATTERN.matcher(s).replaceAll(" ");
 	}
 
-	public void onDeleteAll() {
-		DB.deleteAllData();
-		ctx().goBack(1);
+	public static String camelPhrase(String s) {
+		return U.capitalized(camelSplit(s).toLowerCase());
 	}
 
 }

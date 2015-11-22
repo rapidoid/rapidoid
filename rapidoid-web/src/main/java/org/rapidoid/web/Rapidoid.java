@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.app.Apps;
 import org.rapidoid.app.AuthInterceptor;
+import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.ConfigHelp;
 import org.rapidoid.ctx.Ctx;
@@ -72,7 +73,7 @@ public class Rapidoid {
 			return;
 		}
 
-		Log.info("Starting Rapidoid...", "version", UTILS.version());
+		Log.info("Starting Rapidoid...", "version", RapidoidInfo.version());
 
 		ConfigHelp.processHelp(args);
 
@@ -105,7 +106,7 @@ public class Rapidoid {
 				DevMode.class, Role.class, HasRole.class);
 
 		Apps.serve(app, args, config);
-		
+
 		Jobs.execute(new Runnable() {
 			@Override
 			public void run() {

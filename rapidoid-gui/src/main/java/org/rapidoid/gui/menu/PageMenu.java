@@ -28,9 +28,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.data.YAML;
 import org.rapidoid.io.Res;
-import org.rapidoid.lambda.Predicate;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -62,21 +60,27 @@ public class PageMenu {
 	}
 
 	public List<PageMenuItem> leftItems() {
-		return UTILS.filter(items, new Predicate<PageMenuItem>() {
-			@Override
-			public boolean eval(PageMenuItem menuItem) throws Exception {
-				return !menuItem.isRight();
+		List<PageMenuItem> left = U.list();
+
+		for (PageMenuItem item : items) {
+			if (!item.isRight()) {
+				left.add(item);
 			}
-		});
+		}
+
+		return left;
 	}
 
 	public List<PageMenuItem> rightItems() {
-		return UTILS.filter(items, new Predicate<PageMenuItem>() {
-			@Override
-			public boolean eval(PageMenuItem menuItem) throws Exception {
-				return menuItem.isRight();
+		List<PageMenuItem> right = U.list();
+
+		for (PageMenuItem item : items) {
+			if (item.isRight()) {
+				right.add(item);
 			}
-		});
+		}
+
+		return right;
 	}
 
 	public List<PageMenuItem> rightItemsReversed() {

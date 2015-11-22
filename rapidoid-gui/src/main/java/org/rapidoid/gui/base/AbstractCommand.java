@@ -24,8 +24,7 @@ import java.util.Arrays;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctx;
-import org.rapidoid.http.Req;
+import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -60,25 +59,19 @@ public abstract class AbstractCommand<W extends AbstractCommand<?>> extends Abst
 
 	protected void handleEventIfMatching() {
 		if (!handled && handler != null && command != null) {
-			Ctx ctx = ctx();
+			if (!ReqInfo.get().isGetReq()) {
+				String event = (String) ReqInfo.get().data().get("_cmd");
 
-			if (ctx != null) {
-				Req req = req();
+				if (!U.isEmpty(event) && U.eq(event, command)) {
 
-				if ("POST".equalsIgnoreCase(req.verb())) {
-					String event = req.data("_cmd", null);
+					Object[] args = new Object[cmdArgs.length];
+					for (int i = 0; i < args.length; i++) {
+						args[i] = U.or(ReqInfo.get().data().get("_" + i), "");
+					}
 
-					if (!U.isEmpty(event) && U.eq(event, command)) {
-
-						Object[] args = new Object[cmdArgs.length];
-						for (int i = 0; i < args.length; i++) {
-							args[i] = req.data("_" + i, "");
-						}
-
-						if (Arrays.equals(args, cmdArgs)) {
-							handled = true;
-							handler.run();
-						}
+					if (Arrays.equals(args, cmdArgs)) {
+						handled = true;
+						handler.run();
 					}
 				}
 			}

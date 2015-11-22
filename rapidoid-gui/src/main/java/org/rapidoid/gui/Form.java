@@ -25,8 +25,7 @@ import java.util.List;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.commons.AnyObj;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
@@ -34,9 +33,7 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
-import org.rapidoid.security.Secure;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
@@ -61,18 +58,18 @@ public class Form extends AbstractWidget {
 		init(item, properties);
 	}
 
-	public Form(FormMode mode, FormLayout layout, String[] fieldNames, String[] fieldLabels,
-			FieldType[] fieldTypes, Collection<?>[] options, Var<?>[] vars, Btn[] buttons) {
+	public Form(FormMode mode, FormLayout layout, String[] fieldNames, String[] fieldLabels, FieldType[] fieldTypes,
+			Collection<?>[] options, Var<?>[] vars, Btn[] buttons) {
 		this.mode = mode;
 		this.item = null;
 		this.layout = layout;
 
 		for (int i = 0; i < fieldNames.length; i++) {
-			fields.add(new Field(mode, layout, null, fieldNames[i], fieldLabels[i], fieldTypes[i],
-					options[i], true, vars[i], null));
+			fields.add(new Field(mode, layout, null, fieldNames[i], fieldLabels[i], fieldTypes[i], options[i], true,
+					vars[i]));
 		}
 
-		this.buttons = UTILS.withoutNulls(buttons);
+		this.buttons = AnyObj.withoutNulls(buttons);
 	}
 
 	/************************** FIELD ********************************/
@@ -107,7 +104,7 @@ public class Form extends AbstractWidget {
 	/************************** BUTTONS ********************************/
 
 	public Form buttons(Btn... buttons) {
-		this.buttons = UTILS.withoutNulls(buttons);
+		this.buttons = AnyObj.withoutNulls(buttons);
 		return this;
 	}
 
@@ -146,17 +143,14 @@ public class Form extends AbstractWidget {
 	}
 
 	protected void initPermissions() {
-		if (item != null) {
-			Object target = item.value();
-			Class<?> targetClass = Cls.of(target);
-
-			for (Field field : fields) {
-				if (field.permissions == null) {
-					field.permissions = Secure.getPropertyPermissions(Ctxs.ctx().username(), targetClass, target,
-							field.name);
-				}
-			}
-		}
+		// if (item != null) {
+		// Object target = item.value();
+		// Class<?> targetClass = Cls.of(target);
+		//
+		// for (Field field : U.safe(fields)) {
+		// // FIXME permissions for target class?
+		// }
+		// }
 	}
 
 	@Override

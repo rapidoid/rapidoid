@@ -1,4 +1,4 @@
-package org.rapidoid.dates;
+package org.rapidoid.commons;
 
 /*
  * #%L
@@ -26,12 +26,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 
-/**
- * @author Nikolche Mihajlovski
- * @since 2.0.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Dates {
 
 	protected static final Calendar CALENDAR = Calendar.getInstance();

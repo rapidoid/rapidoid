@@ -8,10 +8,12 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.arr.Arr;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
+import org.rapidoid.commons.AnyObj;
+import org.rapidoid.commons.Arr;
+import org.rapidoid.commons.Rnd;
 import org.rapidoid.config.Conf;
 import org.rapidoid.gui.Btn;
 import org.rapidoid.gui.Card;
@@ -19,6 +21,7 @@ import org.rapidoid.gui.Debug;
 import org.rapidoid.gui.Field;
 import org.rapidoid.gui.Form;
 import org.rapidoid.gui.FormMode;
+import org.rapidoid.gui.I18N;
 import org.rapidoid.gui.Grid;
 import org.rapidoid.gui.Highlight;
 import org.rapidoid.gui.HtmlPage;
@@ -28,11 +31,11 @@ import org.rapidoid.gui.Pager;
 import org.rapidoid.gui.Panel;
 import org.rapidoid.gui.Snippet;
 import org.rapidoid.gui.VStream;
+import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.gui.var.ArrayContainerVar;
 import org.rapidoid.gui.var.CollectionContainerVar;
 import org.rapidoid.gui.var.EqualityVar;
 import org.rapidoid.gui.var.LocalVar;
-import org.rapidoid.gui.var.MultiLanguageWidget;
 import org.rapidoid.gui.var.SessionVar;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
@@ -48,18 +51,13 @@ import org.rapidoid.html.tag.OptionTag;
 import org.rapidoid.html.tag.SelectTag;
 import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.html.tag.TextareaTag;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.Reqs;
 import org.rapidoid.lambda.Calc;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.plugins.db.DB;
-import org.rapidoid.security.DataPermissions;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Rnd;
-import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 
 /*
@@ -414,11 +412,11 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Panel panel(Object... contents) {
-		return Cls.customizable(Panel.class, new Object[] { UTILS.flat(contents) });
+		return Cls.customizable(Panel.class, new Object[] { AnyObj.flat(contents) });
 	}
 
 	public static HtmlPage page(Object... contents) {
-		return Cls.customizable(HtmlPage.class, new Object[] { UTILS.flat(contents) });
+		return Cls.customizable(HtmlPage.class, new Object[] { AnyObj.flat(contents) });
 	}
 
 	public static <T> Grid grid(Class<T> type, Object[] items, String sortOrder, int pageSize, String... properties) {
@@ -474,8 +472,8 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Field field(FormMode mode, FormLayout layout, Property prop, String name, String desc,
-			FieldType type, Collection<?> options, boolean required, Var<?> var, DataPermissions permissions) {
-		return new Field(mode, layout, prop, name, desc, type, options, required, var, permissions);
+			FieldType type, Collection<?> options, boolean required, Var<?> var) {
+		return new Field(mode, layout, prop, name, desc, type, options, required, var);
 	}
 
 	public static Field field(FormMode mode, FormLayout layout, Item item, Property prop) {
@@ -548,7 +546,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static <T extends Serializable> Var<T> local(String name, T defaultValue) {
-		return new LocalVar<T>(name, defaultValue, isGetReq());
+		return new LocalVar<T>(name, defaultValue, ReqInfo.get().isGetReq());
 	}
 
 	public static Var<Integer> local(String name, int defaultValue, int min, int max) {
@@ -663,7 +661,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static SelectTag dropdown(Collection<?> options, String var, Object defaultValue) {
-		return dropdown(options, providedVar(var, UTILS.serializable(defaultValue)));
+		return dropdown(options, providedVar(var, serializable(defaultValue)));
 	}
 
 	public static SelectTag multiSelect(Collection<?> options, Var<?> var) {
@@ -684,7 +682,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static SelectTag multiSelect(Collection<?> options, String var, Collection<?> defaultValue) {
-		return multiSelect(options, providedVar(var, UTILS.serializable(defaultValue)));
+		return multiSelect(options, providedVar(var, serializable(defaultValue)));
 	}
 
 	public static Tag[] radios(String name, Collection<?> options, Var<?> var) {
@@ -710,7 +708,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Tag[] radios(Collection<?> options, String var, Object defaultValue) {
-		return radios(options, providedVar(var, UTILS.serializable(defaultValue)));
+		return radios(options, providedVar(var, serializable(defaultValue)));
 	}
 
 	public static Tag[] checkboxes(String name, Collection<?> options, Var<?> var) {
@@ -737,7 +735,16 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Tag[] checkboxes(Collection<?> options, String var, Collection<?> defaultValue) {
-		return checkboxes(options, providedVar(var, UTILS.serializable(defaultValue)));
+		return checkboxes(options, providedVar(var, serializable(defaultValue)));
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T extends Serializable> T serializable(Object value) {
+		if (value == null || value instanceof Serializable) {
+			return (T) value;
+		} else {
+			throw U.rte("Not serializable: " + value);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -850,29 +857,21 @@ public abstract class BootstrapWidgets extends HTML {
 		String varName = container.name() + "[" + itemId + "]";
 
 		if (arrOrColl instanceof Collection) {
-			return new CollectionContainerVar(varName, (Var<Collection<Object>>) container, item, isGetReq());
+			return new CollectionContainerVar(varName, (Var<Collection<Object>>) container, item, ReqInfo.get().isGetReq());
 		} else {
-			return new ArrayContainerVar(varName, (Var<Object>) container, item, isGetReq());
+			return new ArrayContainerVar(varName, (Var<Object>) container, item, ReqInfo.get().isGetReq());
 		}
-	}
-
-	private static boolean isGetReq() {
-		return "GET".equalsIgnoreCase(req().verb());
-	}
-
-	public static Req req() {
-		return Reqs.req();
 	}
 
 	@SuppressWarnings("unchecked")
 	public static Var<Boolean> varEq(Var<?> var, Object item) {
 		Object itemId = Beany.hasProperty(item, "id") ? Beany.getIdIfExists(item) : String.valueOf(item);
 		String varName = var.name() + "[" + itemId + "]";
-		return new EqualityVar(varName, (Var<Object>) var, item, isGetReq());
+		return new EqualityVar(varName, (Var<Object>) var, item, ReqInfo.get().isGetReq());
 	}
 
 	public static Object i18n(String multiLanguageText, Object... formatArgs) {
-		return new MultiLanguageWidget(multiLanguageText, formatArgs);
+		return new I18N(multiLanguageText, formatArgs);
 	}
 
 	public static Btn xClose(String cmd) {

@@ -23,16 +23,17 @@ package demo.taskplanner.gui;
 import java.util.List;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.Local;
 import org.rapidoid.annotation.Order;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
-import org.rapidoid.annotation.Controller;
-import org.rapidoid.app.GUI;
 import org.rapidoid.gui.Form;
+import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.Grid;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.Tag;
+import org.rapidoid.model.Models;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
@@ -59,14 +60,14 @@ public class NewTaskScreen extends GUI {
 		Form frm = create(task).buttons(ADD, CANCEL);
 		frm.field("description").setType(FieldType.TEXTAREA);
 
-		frm.add(field(null, null, null, "abcd", null, FieldType.CHECKBOXES, U.list("AA", "b", "cDeF"), true, v2, null));
+		frm.add(field(null, null, null, "abcd", null, FieldType.CHECKBOXES, U.list("AA", "b", "cDeF"), true, v2));
 
 		frm.field("description").setLabel(h3("my custom field"));
 
 		// frm.field("comments").setInput(div((Object[]) radios(U.list("a", "bb", "ccc"), v)));
 
 		Tag caption2 = titleBox("Most recent tasks");
-		Grid grid = grid(Task.class, "-id", 7, "id", "priority", "title");
+		Grid grid = grid(Models.beanItems(Task.class), "-id", 7, "id", "priority", "title");
 
 		return row(col4(caption1, frm), col8(caption2, grid));
 	}

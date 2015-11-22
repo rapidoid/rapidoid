@@ -1,8 +1,8 @@
-package org.rapidoid.util;
+package org.rapidoid.gui;
 
 /*
  * #%L
- * rapidoid-utils
+ * rapidoid-gui
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,19 +20,27 @@ package org.rapidoid.util;
  * #L%
  */
 
-import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public class VersionTest extends TestCommons {
+@Since("2.0.0")
+public class I18N {
 
-	@Test
-	public void testVersion() {
-		System.out.println(UTILS.version());
-		notNull(UTILS.version());
+	private final String multiLanguageText;
+
+	private final Object[] formatArgs;
+
+	public I18N(String multiLanguageText, Object... formatArgs) {
+		this.multiLanguageText = multiLanguageText;
+		this.formatArgs = formatArgs;
+	}
+
+	@Override
+	public String toString() {
+		// TODO implement internationalization
+		return U.frmt(multiLanguageText, formatArgs);
 	}
 
 }

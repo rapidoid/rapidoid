@@ -1,4 +1,4 @@
-package org.rapidoid.arr;
+package org.rapidoid.commons;
 
 /*
  * #%L
@@ -22,12 +22,12 @@ package org.rapidoid.arr;
 
 import java.util.Arrays;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 
-/**
- * @author Nikolche Mihajlovski
- * @since 2.0.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("2.0.0")
 public class Arr {
 
 	public static int indexOf(Object[] arr, Object value) {

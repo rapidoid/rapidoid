@@ -1,12 +1,8 @@
-package org.rapidoid.app.builtin;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.app.GUI;
+package org.rapidoid.gui;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-gui
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -24,12 +20,12 @@ import org.rapidoid.app.GUI;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.base.BootstrapWidgets;
+
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class SettingsScreenBuiltIn extends GUI {
-
-	public Object content() {
-		return h3("No settings available.");
-	}
+public abstract class GUI extends BootstrapWidgets {
 
 }

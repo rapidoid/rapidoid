@@ -24,7 +24,7 @@ import java.io.Serializable;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Reqs;
+import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.var.impl.AbstractVar;
 
 @Authors("Nikolche Mihajlovski")
@@ -41,7 +41,8 @@ public abstract class WidgetVar<T extends Serializable> extends AbstractVar<T> {
 	}
 
 	protected boolean getBool() {
-		return Reqs.req().data(name(), false);
+		Object value = ReqInfo.get().data().get(name());
+		return Boolean.TRUE.equals(value) || "true".equals(value);
 	}
 
 }
