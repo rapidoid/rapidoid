@@ -90,13 +90,15 @@ public class KVGrid extends AbstractWidget {
 		return valueView;
 	}
 
-	public KVGrid keyView(Mapper<Object, Object> keyView) {
-		this.keyView = keyView;
+	@SuppressWarnings("unchecked")
+	public <FROM, TO> KVGrid keyView(Mapper<FROM, TO> keyView) {
+		this.keyView = (Mapper<Object, Object>) keyView;
 		return this;
 	}
 
-	public KVGrid valueView(Mapper<Object, Object> valueView) {
-		this.valueView = valueView;
+	@SuppressWarnings("unchecked")
+	public <FROM, TO> KVGrid valueView(Mapper<FROM, TO> valueView) {
+		this.valueView = (Mapper<Object, Object>) valueView;
 		return this;
 	}
 
