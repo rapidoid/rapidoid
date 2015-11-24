@@ -22,6 +22,7 @@ package org.rapidoid.model.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.model.Item;
 import org.rapidoid.var.impl.AbstractVar;
 
@@ -52,7 +53,13 @@ public class ItemPropertyVar<T> extends AbstractVar<T> {
 
 	@Override
 	public void set(T value) {
-		item.set(property, value);
+		T oldValue = get();
+
+		if (oldValue != null) {
+			item.set(property, Cls.convert(value, oldValue.getClass()));
+		} else {
+			item.set(property, value);
+		}
 	}
 
 }
