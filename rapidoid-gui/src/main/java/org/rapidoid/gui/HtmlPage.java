@@ -69,6 +69,8 @@ public class HtmlPage extends AbstractWidget {
 
 	private PageMenu menu;
 
+	private boolean embedded;
+
 	public HtmlPage(Object content) {
 		this.content = content;
 	}
@@ -114,7 +116,7 @@ public class HtmlPage extends AbstractWidget {
 		model.put("title", title);
 		model.put("menu", menu);
 
-		model.put("embedded", ReqInfo.get().data().get("_embedded") != null);
+		model.put("embedded", embedded || ReqInfo.get().data().get("_embedded") != null);
 
 		model.put("navbar", true);
 
@@ -145,6 +147,15 @@ public class HtmlPage extends AbstractWidget {
 
 	public HtmlPage menu(PageMenu menu) {
 		this.menu = menu;
+		return this;
+	}
+
+	public boolean embedded() {
+		return embedded;
+	}
+
+	public HtmlPage embedded(boolean embedded) {
+		this.embedded = embedded;
 		return this;
 	}
 
