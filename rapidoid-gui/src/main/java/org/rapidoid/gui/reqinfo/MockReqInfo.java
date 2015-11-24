@@ -217,4 +217,9 @@ public class MockReqInfo extends AbstractReqInfo {
 		return builder.toString();
 	}
 
+	@Override
+	public boolean exists() {
+		return true;
+	}
+
 }

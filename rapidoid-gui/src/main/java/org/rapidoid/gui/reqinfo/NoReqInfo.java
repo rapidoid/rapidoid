@@ -36,6 +36,11 @@ public class NoReqInfo extends AbstractReqInfo {
 	private static final Map EMPTY = Collections.EMPTY_MAP;
 
 	@Override
+	public boolean exists() {
+		return false;
+	}
+
+	@Override
 	public boolean isGetReq() {
 		return true;
 	}
