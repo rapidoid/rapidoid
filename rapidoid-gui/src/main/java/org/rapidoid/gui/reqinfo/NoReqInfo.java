@@ -20,88 +20,84 @@ package org.rapidoid.gui.reqinfo;
  * #L%
  */
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.ctx.UserInfo;
-import org.rapidoid.http.Req;
-import org.rapidoid.u.U;
 
+@SuppressWarnings("unchecked")
 @Authors("Nikolche Mihajlovski")
-@Since("5.0.4")
-public class RapidoidReqInfo extends AbstractReqInfo {
+@Since("5.0.5")
+public class NoReqInfo extends AbstractReqInfo {
+
+	@SuppressWarnings({ "rawtypes" })
+	private static final Map EMPTY = Collections.EMPTY_MAP;
 
 	@Override
-	public boolean exists() {
-		return Ctxs.get() != null;
-	}
-
-	private Req req() {
-		return Ctxs.ctx().exchange();
+	public boolean isGetReq() {
+		return true;
 	}
 
 	@Override
 	public String verb() {
-		return req().verb();
+		return null;
 	}
 
 	@Override
 	public String path() {
-		return req().path();
+		return null;
 	}
 
 	@Override
 	public String uri() {
-		return req().uri();
+		return null;
 	}
 
 	@Override
 	public String host() {
-		return req().host();
+		return null;
 	}
 
 	@Override
 	public Map<String, Object> data() {
-		return req().data();
+		return EMPTY;
 	}
 
 	@Override
 	public Map<String, String> params() {
-		return req().params();
+		return EMPTY;
 	}
 
 	@Override
 	public Map<String, Object> posted() {
-		return req().posted();
+		return EMPTY;
 	}
 
 	@Override
 	public Map<String, byte[]> files() {
-		return req().files();
+		return EMPTY;
 	}
 
 	@Override
 	public Map<String, String> headers() {
-		return req().headers();
+		return EMPTY;
 	}
 
 	@Override
 	public Map<String, String> cookies() {
-		return req().cookies();
+		return EMPTY;
 	}
 
 	@Override
 	public String username() {
-		return Ctxs.ctx().username();
+		return null;
 	}
 
 	@Override
 	public Set<String> roles() {
-		UserInfo user = Ctxs.ctx().user();
-		return U.set(U.safe(user != null ? user.roles : null));
+		return Collections.EMPTY_SET;
 	}
 
 }

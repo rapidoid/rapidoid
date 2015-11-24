@@ -23,11 +23,12 @@ package org.rapidoid.gui.reqinfo;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")
 public class ReqInfo {
+
+	private static final NoReqInfo NO_REQ_INFO = new NoReqInfo();
 
 	private static final String RAPIDOID_CTX = "org.rapidoid.ctx.Ctx";
 
@@ -38,15 +39,15 @@ public class ReqInfo {
 			INFO = createInfo();
 		}
 
-		return INFO;
+		return INFO.exists() ? INFO : NO_REQ_INFO;
 	}
 
-	private static RapidoidReqInfo createInfo() {
+	private static IReqInfo createInfo() {
 		if (Cls.exists(RAPIDOID_CTX)) {
 			return new RapidoidReqInfo();
 		}
 
-		throw U.rte("Cannot find request info provider!");
+		return NO_REQ_INFO;
 	}
 
 }

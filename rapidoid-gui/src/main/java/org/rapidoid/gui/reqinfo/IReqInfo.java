@@ -30,6 +30,8 @@ import org.rapidoid.annotation.Since;
 @Since("5.0.4")
 public interface IReqInfo {
 
+	boolean exists();
+
 	boolean isGetReq();
 
 	String verb();
