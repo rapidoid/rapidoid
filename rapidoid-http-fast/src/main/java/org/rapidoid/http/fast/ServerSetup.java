@@ -83,8 +83,20 @@ public class ServerSetup {
 		return new OnAction(this, httpImpls(), "DELETE", path).wrap(wrappers);
 	}
 
+	public OnAction patch(String path) {
+		return new OnAction(this, httpImpls(), "PATCH", path).wrap(wrappers);
+	}
+
 	public OnAction options(String path) {
 		return new OnAction(this, httpImpls(), "OPTIONS", path).wrap(wrappers);
+	}
+
+	public OnAction head(String path) {
+		return new OnAction(this, httpImpls(), "HEAD", path).wrap(wrappers);
+	}
+
+	public OnAction trace(String path) {
+		return new OnAction(this, httpImpls(), "TRACE", path).wrap(wrappers);
 	}
 
 	public OnPage page(String path) {
@@ -122,6 +134,24 @@ public class ServerSetup {
 		U.must(this.fastHttp == null, "The HTTP server was already initialized!");
 		this.listener = listener;
 		return this;
+	}
+
+	public ServerSetup shutdown() {
+		reset();
+		this.server.shutdown();
+		return this;
+	}
+
+	public ServerSetup halt() {
+		reset();
+		this.server.halt();
+		return this;
+	}
+
+	private void reset() {
+		listening = false;
+		fastHttp = null;
+		wrappers = null;
 	}
 
 	public TCPServer server() {

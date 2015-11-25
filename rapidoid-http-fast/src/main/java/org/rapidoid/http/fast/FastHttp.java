@@ -78,27 +78,26 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	private static final HttpParser HTTP_PARSER = Wire.singleton(HttpParser.class);
 
-	private static final byte[] POST = "POST".getBytes();
-
-	private static final byte[] PUT = "PUT".getBytes();
-
-	private static final byte[] DELETE = "DELETE".getBytes();
-
-	private static final byte[] OPTIONS = "OPTIONS".getBytes();
+	private static final byte[] _POST = "POST".getBytes();
+	private static final byte[] _PUT = "PUT".getBytes();
+	private static final byte[] _DELETE = "DELETE".getBytes();
+	private static final byte[] _PATCH = "PATCH".getBytes();
+	private static final byte[] _OPTIONS = "OPTIONS".getBytes();
+	private static final byte[] _HEAD = "HEAD".getBytes();
+	private static final byte[] _TRACE = "TRACE".getBytes();
 
 	private static final byte[][] CONTENT_LENGTHS = new byte[CONTENT_LENGTHS_SIZE][];
 
 	private final HttpResponseCodes responseCodes = new HttpResponseCodes();
 
 	private final BufMap<FastHttpHandler> getHandlers = new BufMapImpl<FastHttpHandler>();
-
 	private final BufMap<FastHttpHandler> postHandlers = new BufMapImpl<FastHttpHandler>();
-
 	private final BufMap<FastHttpHandler> putHandlers = new BufMapImpl<FastHttpHandler>();
-
 	private final BufMap<FastHttpHandler> deleteHandlers = new BufMapImpl<FastHttpHandler>();
-
+	private final BufMap<FastHttpHandler> patchHandlers = new BufMapImpl<FastHttpHandler>();
 	private final BufMap<FastHttpHandler> optionsHandlers = new BufMapImpl<FastHttpHandler>();
+	private final BufMap<FastHttpHandler> headHandlers = new BufMapImpl<FastHttpHandler>();
+	private final BufMap<FastHttpHandler> traceHandlers = new BufMapImpl<FastHttpHandler>();
 
 	private volatile byte[] path1, path2, path3;
 
@@ -147,8 +146,17 @@ public class FastHttp implements Protocol, HttpMetadata {
 		} else if (verb.equals("DELETE")) {
 			deleteHandlers.put(path, handler);
 
+		} else if (verb.equals("PATCH")) {
+			patchHandlers.put(path, handler);
+
 		} else if (verb.equals("OPTIONS")) {
 			optionsHandlers.put(path, handler);
+
+		} else if (verb.equals("HEAD")) {
+			headHandlers.put(path, handler);
+
+		} else if (verb.equals("TRACE")) {
+			traceHandlers.put(path, handler);
 
 		} else {
 			throw U.rte("Unsupported HTTP verb: %s", verb);
@@ -297,14 +305,26 @@ public class FastHttp implements Protocol, HttpMetadata {
 				return getHandler;
 			}
 
-		} else if (BytesUtil.matches(bytes, verb, POST, true)) {
+		} else if (BytesUtil.matches(bytes, verb, _POST, true)) {
 			return postHandlers.get(buf, path);
-		} else if (BytesUtil.matches(bytes, verb, PUT, true)) {
+
+		} else if (BytesUtil.matches(bytes, verb, _PUT, true)) {
 			return putHandlers.get(buf, path);
-		} else if (BytesUtil.matches(bytes, verb, DELETE, true)) {
+
+		} else if (BytesUtil.matches(bytes, verb, _DELETE, true)) {
 			return deleteHandlers.get(buf, path);
-		} else if (BytesUtil.matches(bytes, verb, OPTIONS, true)) {
+
+		} else if (BytesUtil.matches(bytes, verb, _PATCH, true)) {
+			return patchHandlers.get(buf, path);
+
+		} else if (BytesUtil.matches(bytes, verb, _OPTIONS, true)) {
 			return optionsHandlers.get(buf, path);
+
+		} else if (BytesUtil.matches(bytes, verb, _HEAD, true)) {
+			return headHandlers.get(buf, path);
+
+		} else if (BytesUtil.matches(bytes, verb, _TRACE, true)) {
+			return traceHandlers.get(buf, path);
 		}
 
 		return null; // no handler

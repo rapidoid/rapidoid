@@ -49,6 +49,46 @@ public class HTTP {
 		return get(uri, null).get();
 	}
 
+	/********************************** DELETE **********************************/
+
+	public static Future<byte[]> delete(String uri, Callback<byte[]> callback) {
+		return DEFAULT_CLIENT.delete(uri, callback);
+	}
+
+	public static byte[] delete(String uri) {
+		return delete(uri, null).get();
+	}
+
+	/********************************** OPTIONS **********************************/
+
+	public static Future<byte[]> options(String uri, Callback<byte[]> callback) {
+		return DEFAULT_CLIENT.options(uri, callback);
+	}
+
+	public static byte[] options(String uri) {
+		return options(uri, null).get();
+	}
+
+	/********************************** HEAD **********************************/
+
+	public static Future<byte[]> head(String uri, Callback<byte[]> callback) {
+		return DEFAULT_CLIENT.head(uri, callback);
+	}
+
+	public static byte[] head(String uri) {
+		return head(uri, null).get();
+	}
+
+	/********************************** TRACE **********************************/
+
+	public static Future<byte[]> trace(String uri, Callback<byte[]> callback) {
+		return DEFAULT_CLIENT.trace(uri, callback);
+	}
+
+	public static byte[] trace(String uri) {
+		return trace(uri, null).get();
+	}
+
 	/********************************** POST **********************************/
 
 	public static Future<byte[]> post(String uri, Map<String, String> headers, Map<String, String> data,
@@ -61,13 +101,67 @@ public class HTTP {
 		return post(uri, headers, data, files, null).get();
 	}
 
-	public static Future<byte[]> post(String uri, Map<String, String> headers, byte[] postData, String contentType,
+	public static Future<byte[]> post(String uri, Map<String, String> headers, byte[] body, String contentType,
 			Callback<byte[]> callback) {
-		return DEFAULT_CLIENT.post(uri, headers, postData, contentType, callback);
+		return DEFAULT_CLIENT.post(uri, headers, body, contentType, callback);
 	}
 
-	public static byte[] post(String uri, Map<String, String> headers, byte[] postData, String contentType) {
-		return post(uri, headers, postData, contentType, null).get();
+	public static byte[] post(String uri, Map<String, String> headers, byte[] body, String contentType) {
+		return post(uri, headers, body, contentType, null).get();
+	}
+
+	public static byte[] post(String uri) {
+		return post(uri, null, (byte[]) null, null, null).get();
+	}
+
+	/********************************** PUT **********************************/
+
+	public static Future<byte[]> put(String uri, Map<String, String> headers, Map<String, String> data,
+			Map<String, String> files, Callback<byte[]> callback) {
+		return DEFAULT_CLIENT.put(uri, headers, data, files, callback);
+	}
+
+	public static byte[] put(String uri, Map<String, String> headers, Map<String, String> data,
+			Map<String, String> files) {
+		return put(uri, headers, data, files, null).get();
+	}
+
+	public static Future<byte[]> put(String uri, Map<String, String> headers, byte[] body, String contentType,
+			Callback<byte[]> callback) {
+		return DEFAULT_CLIENT.put(uri, headers, body, contentType, callback);
+	}
+
+	public static byte[] put(String uri, Map<String, String> headers, byte[] body, String contentType) {
+		return put(uri, headers, body, contentType, null).get();
+	}
+
+	public static byte[] put(String uri) {
+		return put(uri, null, (byte[]) null, null, null).get();
+	}
+
+	/********************************** PATCH **********************************/
+
+	public static Future<byte[]> patch(String uri, Map<String, String> headers, Map<String, String> data,
+			Map<String, String> files, Callback<byte[]> callback) {
+		return DEFAULT_CLIENT.patch(uri, headers, data, files, callback);
+	}
+
+	public static byte[] patch(String uri, Map<String, String> headers, Map<String, String> data,
+			Map<String, String> files) {
+		return patch(uri, headers, data, files, null).get();
+	}
+
+	public static Future<byte[]> patch(String uri, Map<String, String> headers, byte[] body, String contentType,
+			Callback<byte[]> callback) {
+		return DEFAULT_CLIENT.patch(uri, headers, body, contentType, callback);
+	}
+
+	public static byte[] patch(String uri, Map<String, String> headers, byte[] body, String contentType) {
+		return patch(uri, headers, body, contentType, null).get();
+	}
+
+	public static byte[] patch(String uri) {
+		return patch(uri, null, (byte[]) null, null, null).get();
 	}
 
 }

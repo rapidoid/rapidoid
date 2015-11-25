@@ -70,8 +70,20 @@ public class On {
 		return setup().delete(path);
 	}
 
+	public static synchronized OnAction patch(String path) {
+		return setup().patch(path);
+	}
+
 	public static synchronized OnAction options(String path) {
 		return setup().options(path);
+	}
+
+	public static synchronized OnAction head(String path) {
+		return setup().head(path);
+	}
+
+	public static synchronized OnAction trace(String path) {
+		return setup().trace(path);
 	}
 
 	public static synchronized OnPage page(String path) {
