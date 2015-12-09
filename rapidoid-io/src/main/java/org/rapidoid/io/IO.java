@@ -56,7 +56,15 @@ public class IO {
 	}
 
 	public static ClassLoader classLoader() {
-		return Thread.currentThread().getContextClassLoader();
+		Thread thread = Thread.currentThread();
+
+		ClassLoader classLoader = thread != null ? thread.getContextClassLoader() : null;
+
+		if (classLoader == null) {
+			classLoader = IO.class.getClassLoader();
+		}
+
+		return classLoader;
 	}
 
 	public static String name(String resourceName) {
