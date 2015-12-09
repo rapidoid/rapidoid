@@ -355,7 +355,9 @@ public class ReqImpl implements Req, Constants {
 	private void startResponseRendering(int code, MediaType contentType) {
 		http.startResponse(channel, code, isKeepAlive, contentType);
 
-		renderCustomHeaders();
+		if (response != null) {
+			renderCustomHeaders();
+		}
 
 		Buf out = channel.output();
 
@@ -407,11 +409,11 @@ public class ReqImpl implements Req, Constants {
 	}
 
 	private void renderCustomHeaders() {
-		for (Entry<String, String> e : headers().entrySet()) {
+		for (Entry<String, String> e : response.headers().entrySet()) {
 			http.addCustomHeader(channel, e.getKey().getBytes(), e.getValue().getBytes());
 		}
 
-		for (Entry<String, String> e : cookies().entrySet()) {
+		for (Entry<String, String> e : response.cookies().entrySet()) {
 			String cookie = e.getKey() + "=" + e.getValue();
 			http.addCustomHeader(channel, HttpHeaders.SET_COOKIE.getBytes(), cookie.getBytes());
 		}

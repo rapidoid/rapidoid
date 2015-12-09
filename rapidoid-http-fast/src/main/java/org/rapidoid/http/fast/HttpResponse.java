@@ -79,14 +79,12 @@ public class HttpResponse implements Response {
 
 	@Override
 	public Map<String, String> headers() {
-		ensureCanChange();
-		return this.headers;
+		return isReadOnly() ? Collections.unmodifiableMap(this.headers) : this.headers;
 	}
 
 	@Override
 	public Map<String, String> cookies() {
-		ensureCanChange();
-		return this.cookies;
+		return isReadOnly() ? Collections.unmodifiableMap(this.cookies) : this.cookies;
 	}
 
 	@Override
@@ -116,6 +114,10 @@ public class HttpResponse implements Response {
 	private void ensureCanChange() {
 		U.must(!req.isDone(), "The request was already processed, so the response can't be changed now!");
 		U.must(!req.isRendering(), "The response rendering has already started, so the response can't be changed now!");
+	}
+
+	private boolean isReadOnly() {
+		return req.isRendering() || req.isDone();
 	}
 
 	@Override
