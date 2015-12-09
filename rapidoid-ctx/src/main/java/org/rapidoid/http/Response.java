@@ -46,6 +46,10 @@ public interface Response {
 
 	String redirect();
 
+	Response view(String view);
+
+	String view();
+
 	Req done();
 
 	Response plain(Object content);

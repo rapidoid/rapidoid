@@ -49,6 +49,8 @@ public class HttpResponse implements Response {
 
 	private String redirect = null;
 
+	private String view = null;
+
 	public HttpResponse(ReqImpl req) {
 		this.req = req;
 	}
@@ -143,6 +145,17 @@ public class HttpResponse implements Response {
 	@Override
 	public Response binary(Object content) {
 		return contentType(MediaType.BINARY).content(content);
+	}
+
+	@Override
+	public synchronized String view() {
+		return view;
+	}
+
+	@Override
+	public synchronized Response view(String view) {
+		this.view = view;
+		return this;
 	}
 
 }
