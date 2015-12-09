@@ -23,6 +23,7 @@ package org.rapidoid.log;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,8 @@ public class Log {
 	public static final LogLevel LEVEL_ERROR = LogLevel.ERROR;
 
 	protected static LogLevel LOG_LEVEL = LEVEL_INFO;
+
+	private static volatile Callable<Logger> loggerFactory;
 
 	private Log() {}
 
@@ -222,7 +225,46 @@ public class Log {
 	}
 
 	public static Logger logger() {
-		return LoggerFactory.getLogger(getCallingClass());
+		if (loggerFactory == null) {
+			synchronized (Log.class) {
+				if (loggerFactory == null) {
+					loggerFactory = createLoggerFactory();
+				}
+			}
+		}
+
+		try {
+			return loggerFactory.call();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static Callable<Logger> createLoggerFactory() {
+		try {
+			Class.forName("org.slf4j.LoggerFactory");
+			return createSlf4jLoggerFactory();
+		} catch (ClassNotFoundException e) {
+			return createNullLoggerFactory();
+		}
+	}
+
+	private static Callable<Logger> createSlf4jLoggerFactory() {
+		return new Callable<Logger>() {
+			@Override
+			public Logger call() throws Exception {
+				return LoggerFactory.getLogger(getCallingClass());
+			}
+		};
+	}
+
+	private static Callable<Logger> createNullLoggerFactory() {
+		return new Callable<Logger>() {
+			@Override
+			public Logger call() throws Exception {
+				return null;
+			}
+		};
 	}
 
 	public static boolean isTraceEnabled() {
