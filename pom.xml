@@ -117,7 +117,6 @@
 		<module>rapidoid-cache-guava</module>
 		<module>rapidoid-cache-memcached</module>
 		<module>rapidoid-db-hibernate</module>
-		<module>rapidoid-db-cassandra</module>
 		<module>rapidoid-web</module>
 		<module>rapidoid-quick</module>
 		<module>rapidoid-main</module>
