@@ -110,7 +110,6 @@
 		<module>rapidoid-html</module>
 		<module>rapidoid-gui</module>
 		<module>rapidoid-oauth</module>
-		<module>rapidoid-extras</module>
 		<module>rapidoid-jpa</module>
 		<module>rapidoid-templates-mustache</module>
 		<module>rapidoid-cache-guava</module>
