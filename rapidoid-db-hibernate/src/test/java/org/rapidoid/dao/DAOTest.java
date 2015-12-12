@@ -2,7 +2,7 @@ package org.rapidoid.dao;
 
 /*
  * #%L
- * rapidoid-dao
+ * rapidoid-db-hibernate
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
