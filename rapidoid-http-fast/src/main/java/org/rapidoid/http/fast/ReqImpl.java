@@ -331,8 +331,8 @@ public class ReqImpl implements Req, Constants {
 		if (!isRendering()) {
 			synchronized (this) {
 				if (!isRendering()) {
-					rendering = true;
 					startResponse();
+					rendering = true;
 				}
 			}
 		}
@@ -388,8 +388,8 @@ public class ReqImpl implements Req, Constants {
 	@Override
 	public synchronized Req done() {
 		if (!done) {
-			done = true;
 			onDone();
+			done = true;
 		}
 		return this;
 	}
