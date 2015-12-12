@@ -99,7 +99,6 @@
 		<module>rapidoid-test-commons</module>
 		<module>rapidoid-buffer</module>
 		<module>rapidoid-net</module>
-		<module>rapidoid-http</module>
 		<module>rapidoid-http-fast</module>
 		<module>rapidoid-rest</module>
 		<module>rapidoid-measure</module>
