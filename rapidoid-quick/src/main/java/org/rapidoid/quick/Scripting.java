@@ -29,7 +29,6 @@ import javax.script.SimpleBindings;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.AppHandler;
 import org.rapidoid.app.DollarPage;
 import org.rapidoid.beany.BeanProperties;
 import org.rapidoid.beany.Beany;
@@ -40,20 +39,20 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.gui.GUI;
-import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.HttpExchangeImpl;
-import org.rapidoid.http.HttpProtocol;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.fast.HttpUtils;
+import org.rapidoid.http.fast.ReqImpl;
 import org.rapidoid.io.Res;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.web.AppHandler;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.2.0")
 public class Scripting {
 
-	public static boolean runDynamicScript(final HttpExchangeImpl x, final boolean hasEvent,
-			final Map<String, Object> config) {
+	public static boolean runDynamicScript(final ReqImpl x, final boolean hasEvent, final Map<String, Object> config) {
 		final CompiledScript script = script(x);
 
 		if (script != null) {
@@ -70,8 +69,10 @@ public class Scripting {
 		}
 	}
 
-	private static CompiledScript script(HttpExchangeImpl x) {
-		String scriptName = x.isGetReq() ? x.verbAndResourceName() : x.verb().toUpperCase() + "_" + x.name();
+	private static CompiledScript script(ReqImpl x) {
+		String scriptName = HttpUtils.isGetReq(x) ? HttpUtils.verbAndResourceName(x) : x.verb().toUpperCase() + "_"
+				+ HttpUtils.resName(x);
+
 		String filename = scriptName + ".js";
 		String firstFile = Conf.rootPath() + "/" + filename;
 		String defaultFile = Conf.rootPathDefault() + "/" + filename;
@@ -97,8 +98,7 @@ public class Scripting {
 		return compiled;
 	}
 
-	protected static void runScript(HttpExchangeImpl x, CompiledScript script, boolean hasEvent,
-			Map<String, Object> config) {
+	protected static void runScript(ReqImpl x, CompiledScript script, boolean hasEvent, Map<String, Object> config) {
 		Map<String, Object> bindings = U.map();
 		Dollar dollar = new Dollar(x, bindings);
 
@@ -119,7 +119,7 @@ public class Scripting {
 			result = script.eval(new SimpleBindings(bindings));
 		} catch (Throwable e) {
 			Log.error("Script error", e);
-			HttpProtocol.handleError(x, e);
+			x.response().content(e);
 			return;
 		}
 
@@ -128,17 +128,17 @@ public class Scripting {
 		}
 	}
 
-	public static void onScriptResult(HttpExchange x, Object result) {
+	public static void onScriptResult(Req x, Object result) {
 		boolean rendered = calcFinalResult(x, result);
 
 		if (!rendered) {
-			x.result(result);
+			x.response().content(result);
 		}
 
 		x.done();
 	}
 
-	private static boolean calcFinalResult(HttpExchange x, Object result) {
+	private static boolean calcFinalResult(Req x, Object result) {
 		Map<String, Object> config = U.map();
 
 		if (result == x) {
@@ -175,14 +175,13 @@ public class Scripting {
 		return true;
 	}
 
-	public static Object desc(HttpExchange x) {
+	public static Object desc(Req x) {
 		Map<String, Object> desc = U.map();
 
 		desc.put("verb", x.verb());
 		desc.put("uri", x.uri());
 		desc.put("path", x.path());
-		desc.put("home", x.home());
-		desc.put("dev", x.isDevMode());
+		desc.put("dev", HttpUtils.isDevMode(x));
 
 		Ctx ctx = Ctxs.ctx();
 		desc.put("loggedIn", ctx.isLoggedIn());

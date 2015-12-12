@@ -29,45 +29,25 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.aop.AOP;
-import org.rapidoid.app.Apps;
-import org.rapidoid.app.AuthInterceptor;
-import org.rapidoid.app.TransactionInterceptor;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.http.HTTPServer;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugins;
-import org.rapidoid.plugins.db.DBPlugin;
 import org.rapidoid.plugins.db.hibernate.HibernateDBPlugin;
-import org.rapidoid.security.annotation.Admin;
-import org.rapidoid.security.annotation.DevMode;
-import org.rapidoid.security.annotation.LoggedIn;
-import org.rapidoid.security.annotation.Manager;
-import org.rapidoid.security.annotation.Moderator;
-import org.rapidoid.security.annotation.Role;
-import org.rapidoid.security.annotation.HasRole;
 import org.rapidoid.u.U;
-import org.rapidoid.webapp.WebApp;
-import org.rapidoid.webapp.WebAppGroup;
+import org.rapidoid.web.Rapidoid;
+import org.rapidoid.web.WebApp;
+import org.rapidoid.web.WebAppGroup;
+import org.rapidoid.webapp.TransactionInterceptor;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
 public class Quick {
 
-	public static HTTPServer run(WebApp app, String[] args, Object... config) {
-		bootstrap(app, args, config);
-		return serve(app, args, config);
-	}
-
-	public static HTTPServer serve(WebApp app, String[] args, Object... config) {
-		return Apps.serve(app, args, config);
-	}
-
 	@SuppressWarnings("unchecked")
 	public static void bootstrap(WebApp app, final String[] args, Object... config) {
-		Apps.bootstrap(app, args, config);
+		app = Rapidoid.bootstrap(app, args, config);
 
 		WebAppGroup.main().setDefaultApp(app);
 		WebAppGroup.main().register(app);
@@ -76,19 +56,8 @@ public class Quick {
 		ctx.setApp(app);
 		Ctxs.setPersisterProvider(new QuickJPA(config));
 
-		// optional modules
-		Class<?> cassandraPluginCls = Cls.getClassIfExists("org.rapidoid.plugins.db.cassandra.CassandraDBPlugin");
-		if (cassandraPluginCls != null) {
-			Log.info("Detected Casandra plugin");
-			DBPlugin dbPlugin = (DBPlugin) Cls.newInstance(cassandraPluginCls);
-			Plugins.register(dbPlugin);
-		}
-
 		Plugins.register(new HibernateDBPlugin());
 
-		AOP.reset();
-		AOP.intercept(new AuthInterceptor(), Admin.class, Manager.class, Moderator.class, LoggedIn.class,
-				DevMode.class, Role.class, HasRole.class);
 		AOP.intercept(new TransactionInterceptor(), Transaction.class, Transactional.class);
 
 		Jobs.execute(new Runnable() {

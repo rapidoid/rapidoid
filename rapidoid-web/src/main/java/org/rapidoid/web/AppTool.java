@@ -25,7 +25,6 @@ import java.util.Map.Entry;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.app.AsyncAppHandler;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.YAML;
 import org.rapidoid.gui.menu.PageMenu;
@@ -34,9 +33,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugin;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.u.U;
-import org.rapidoid.webapp.RootWebApp;
-import org.rapidoid.webapp.WebApp;
-import org.rapidoid.webapp.WebAppGroup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -44,7 +40,6 @@ public class AppTool {
 
 	public static WebApp createRootApp() {
 		RootWebApp app = WebAppGroup.root();
-		app.getRouter().generic(new AsyncAppHandler());
 
 		setupMenuConfig(app);
 		setupAppConfig(app);

@@ -1,8 +1,8 @@
-package org.rapidoid.app;
+package org.rapidoid.webapp;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-quick
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -29,7 +29,8 @@ import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.aop.AOPInterceptor;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.fast.HttpUtils;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.db.DB;
@@ -41,36 +42,36 @@ public class TransactionInterceptor implements AOPInterceptor {
 	public Object intercept(final Callable<Object> forward, Annotation ann, Object ctx, final Method m,
 			final Object target, final Object[] args) {
 
-		final HttpExchange x = Ctxs.ctx().exchange();
+		final Req req = Ctxs.ctx().exchange();
 		TransactionMode txMode = getTxMode(ann);
 
 		final boolean readOnly;
 		if (txMode == TransactionMode.AUTO) {
-			U.notNull(x, "HTTP exchange");
-			readOnly = x.isGetReq();
+			U.notNull(req, "HTTP request");
+			readOnly = HttpUtils.isGetReq(req);
 		} else {
 			readOnly = txMode == TransactionMode.READ_ONLY;
 		}
 
-		x.async();
+		req.async();
 
 		DB.transaction(new Runnable() {
 			@Override
 			public void run() {
-				x.result(Lmbd.call(forward));
+				req.response().content(Lmbd.call(forward));
 			}
 		}, readOnly, new Callback<Void>() {
 
 			@Override
 			public void onDone(Void result, Throwable error) throws Exception {
 				if (error != null) {
-					x.error(error);
+					req.response().content(error);
 				}
-				x.done();
+				req.done();
 			}
 		});
 
-		return x;
+		return req;
 	}
 
 	private TransactionMode getTxMode(Annotation ann) {

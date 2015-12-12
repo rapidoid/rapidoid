@@ -29,15 +29,14 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HTTP;
-import org.rapidoid.http.HTTPServer;
-import org.rapidoid.http.Handler;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.REST;
-import org.rapidoid.http.WebServer;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.fast.On;
+import org.rapidoid.http.fast.ReqHandler;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.webapp.WebApp;
-import org.rapidoid.webapp.WebAppGroup;
+import org.rapidoid.web.WebApp;
+import org.rapidoid.web.WebAppGroup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -48,14 +47,12 @@ public class MicroServicesTest extends IntegrationTestCommons {
 		HTTP.DEFAULT_CLIENT.reset();
 		WebApp app = WebAppGroup.openRootContext();
 
-		app.getRouter().generic(new Handler() {
+		On.req(new ReqHandler() {
 			@Override
-			public Object handle(HttpExchange x) throws Exception {
-				// return x.async();
-				return U.num(x.param("n")) + 1;
+			public Object handle(Req req) throws Exception {
+				return U.num(req.param("n")) + 1;
 			}
 		});
-		HTTPServer server = WebServer.create().applications(WebAppGroup.main()).build().start();
 
 		// a blocking call
 		eq(REST.get("http://localhost:8888/?n=7", Integer.class).intValue(), 8);
@@ -99,7 +96,7 @@ public class MicroServicesTest extends IntegrationTestCommons {
 		UTILS.endMeasure(count, "calls");
 
 		loop.interrupt();
-		server.shutdown();
+		On.getDefaultSetup().shutdown();
 		Ctxs.close();
 	}
 

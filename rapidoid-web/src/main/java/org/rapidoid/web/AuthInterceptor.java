@@ -1,4 +1,4 @@
-package org.rapidoid.app;
+package org.rapidoid.web;
 
 /*
  * #%L
@@ -20,39 +20,32 @@ package org.rapidoid.app;
  * #L%
  */
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Handler;
-import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.HttpExchangeInternals;
-import org.rapidoid.io.CustomizableClassLoader;
-import org.rapidoid.job.Jobs;
+import org.rapidoid.aop.AOPInterceptor;
+import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.lambda.Lmbd;
+import org.rapidoid.security.Secure;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class AsyncAppHandler implements Handler {
-
-	private final CustomizableClassLoader classLoader;
-
-	private final Handler handler;
-
-	public AsyncAppHandler() {
-		this(null);
-	}
-
-	public AsyncAppHandler(CustomizableClassLoader classLoader) {
-		this.classLoader = classLoader;
-		this.handler = new AppHandler();
-	}
+@Since("4.1.0")
+public class AuthInterceptor implements AOPInterceptor {
 
 	@Override
-	public Object handle(final HttpExchange x) throws Exception {
-		HttpExchangeInternals xi = (HttpExchangeInternals) x;
-		xi.setClassLoader(classLoader);
+	public Object intercept(final Callable<Object> forward, Annotation ann, Object ctx, final Method m,
+			final Object target, final Object[] args) {
 
-		Jobs.execute(x.asAsyncJob(handler));
+		String username = Ctxs.ctx().username();
 
-		return x;
+		if (Secure.canAccessMethod(username, m)) {
+			return Lmbd.call(forward);
+		} else {
+			throw new SecurityException("The user doesn't have the required roles!");
+		}
 	}
 
 }

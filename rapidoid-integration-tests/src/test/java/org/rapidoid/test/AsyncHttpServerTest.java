@@ -20,21 +20,20 @@ package org.rapidoid.test;
  * #L%
  */
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HTTP;
-import org.rapidoid.http.HTTPServer;
-import org.rapidoid.http.Handler;
-import org.rapidoid.http.HttpExchange;
-import org.rapidoid.http.WebServer;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.fast.On;
+import org.rapidoid.http.fast.ReqHandler;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
-import org.rapidoid.webapp.WebApp;
-import org.rapidoid.webapp.WebAppGroup;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -44,23 +43,23 @@ public class AsyncHttpServerTest extends IntegrationTestCommons {
 	public void testAsyncHttpServer() {
 		Log.debugging();
 		HTTP.DEFAULT_CLIENT.reset();
-		WebApp app = WebAppGroup.openRootContext();
 
-		app.getRouter().generic(new Handler() {
-
+		On.req(new ReqHandler() {
 			@Override
-			public Object handle(final HttpExchange x) throws Exception {
+			public Object handle(final Req req) throws Exception {
+				req.async();
+				U.must(req.isAsync());
 				Jobs.schedule(new Runnable() {
 
 					@Override
 					public void run() {
-						x.write("O");
+						write(req.out(), "O");
 
 						Jobs.schedule(new Runnable() {
 							@Override
 							public void run() {
-								x.write("K");
-								x.done();
+								write(req.out(), "K");
+								req.done();
 							}
 						}, 1, TimeUnit.SECONDS);
 
@@ -68,18 +67,22 @@ public class AsyncHttpServerTest extends IntegrationTestCommons {
 
 				}, 1, TimeUnit.SECONDS);
 
-				return x;
+				return req;
 			}
-
 		});
-
-		HTTPServer server = WebServer.create().applications(WebAppGroup.main()).build().start();
 
 		eq(new String(HTTP.get("http://localhost:8888/")), "OK");
 		eq(new String(HTTP.post("http://localhost:8888/", null, new byte[0], null)), "OK");
 
-		server.shutdown();
-		Ctxs.close();
+		On.getDefaultSetup().shutdown();
+	}
+
+	private static void write(OutputStream out, String s) {
+		try {
+			out.write(s.getBytes());
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
 	}
 
 }

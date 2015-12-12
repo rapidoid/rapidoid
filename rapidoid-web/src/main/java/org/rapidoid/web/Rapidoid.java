@@ -20,11 +20,11 @@ package org.rapidoid.web;
  * #L%
  */
 
+import java.util.Set;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOP;
-import org.rapidoid.app.Apps;
-import org.rapidoid.app.AuthInterceptor;
 import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.ConfigHelp;
@@ -33,7 +33,12 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.db.DBPlugin;
+import org.rapidoid.plugins.entities.EntitiesPlugin;
+import org.rapidoid.plugins.languages.LanguagesPlugin;
+import org.rapidoid.plugins.lifecycle.LifecyclePlugin;
 import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
+import org.rapidoid.plugins.users.UsersPlugin;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.DevMode;
@@ -42,10 +47,8 @@ import org.rapidoid.security.annotation.LoggedIn;
 import org.rapidoid.security.annotation.Manager;
 import org.rapidoid.security.annotation.Moderator;
 import org.rapidoid.security.annotation.Role;
+import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.webapp.AppClasspathEntitiesPlugin;
-import org.rapidoid.webapp.WebApp;
-import org.rapidoid.webapp.WebAppGroup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")
@@ -67,12 +70,35 @@ public class Rapidoid {
 		return webApp != null;
 	}
 
-	@SuppressWarnings("unchecked")
 	private static synchronized void initAndStart(WebApp app, String[] args, Object... config) {
 		if (webApp != null) {
 			return;
 		}
 
+		app = bootstrap(app, args, config);
+
+		WebAppGroup.main().setDefaultApp(app);
+		WebAppGroup.main().register(app);
+
+		Ctx ctx = Ctxs.open("web");
+		ctx.setApp(app);
+
+		// Apps.serve(app, args, config);
+
+		Jobs.execute(new Runnable() {
+			@Override
+			public void run() {
+				Log.info("The executor is ready.");
+			}
+		});
+
+		Log.info("Rapidoid is ready.");
+
+		Rapidoid.webApp = app;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static WebApp bootstrap(WebApp app, String[] args, Object... config) {
 		Log.info("Starting Rapidoid...", "version", RapidoidInfo.version());
 
 		ConfigHelp.processHelp(args);
@@ -93,30 +119,40 @@ public class Rapidoid {
 
 		registerDefaultPlugins();
 
-		Apps.bootstrap(app, args, config);
+		Set<String> configArgs = U.set(args);
 
-		WebAppGroup.main().setDefaultApp(app);
-		WebAppGroup.main().register(app);
+		for (Object arg : config) {
+			processArg(configArgs, arg);
+		}
 
-		Ctx ctx = Ctxs.open("web");
-		ctx.setApp(app);
+		String[] configArgsArr = configArgs.toArray(new String[configArgs.size()]);
+		Conf.args(configArgsArr);
+		Log.args(configArgsArr);
 
 		AOP.reset();
+		
 		AOP.intercept(new AuthInterceptor(), Admin.class, Manager.class, Moderator.class, LoggedIn.class,
 				DevMode.class, Role.class, HasRole.class);
 
-		Apps.serve(app, args, config);
+		return app;
+	}
 
-		Jobs.execute(new Runnable() {
-			@Override
-			public void run() {
-				Log.info("The executor is ready.");
-			}
-		});
+	private static void processArg(Set<String> config, Object arg) {
+		Log.info("Processing start-up argument", "arg", arg);
 
-		Log.info("Rapidoid is ready.");
-
-		Rapidoid.webApp = app;
+		if (arg instanceof String) {
+			config.add((String) arg);
+		} else if (arg instanceof DBPlugin) {
+			Plugins.register((DBPlugin) arg);
+		} else if (arg instanceof EntitiesPlugin) {
+			Plugins.register((EntitiesPlugin) arg);
+		} else if (arg instanceof LanguagesPlugin) {
+			Plugins.register((LanguagesPlugin) arg);
+		} else if (arg instanceof LifecyclePlugin) {
+			Plugins.register((LifecyclePlugin) arg);
+		} else if (arg instanceof UsersPlugin) {
+			Plugins.register((UsersPlugin) arg);
+		}
 	}
 
 	private static synchronized void registerDefaultPlugins() {

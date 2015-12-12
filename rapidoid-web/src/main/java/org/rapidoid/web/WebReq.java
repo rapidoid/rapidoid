@@ -1,8 +1,8 @@
-package org.rapidoid.test;
+package org.rapidoid.web;
 
 /*
  * #%L
- * rapidoid-integration-tests
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,35 +20,56 @@ package org.rapidoid.test;
  * #L%
  */
 
-import org.junit.Test;
+import java.util.Map;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HTTP;
+import org.rapidoid.dispatch.PojoRequest;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.fast.On;
-import org.rapidoid.http.fast.ReqHandler;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public class HttpServerTest extends IntegrationTestCommons {
+@Since("2.0.0")
+public class WebReq implements PojoRequest {
 
-	@Test
-	public void testHttpServer() {
-		HTTP.DEFAULT_CLIENT.reset();
+	private final Req req;
 
-		On.get("/").html("home");
+	public WebReq(Req req) {
+		this.req = req;
+	}
 
-		On.req(new ReqHandler() {
-			@Override
-			public Object handle(Req req) throws Exception {
-				return req.response().json("abc");
-			}
-		});
+	@Override
+	public String command() {
+		return req.verb();
+	}
 
-		eq(new String(HTTP.get("http://localhost:8888/")), "home");
-		eq(new String(HTTP.post("http://localhost:8888/", null, new byte[0], null)), "\"abc\"");
+	@Override
+	public String path() {
+		return req.path();
+	}
 
-		On.getDefaultSetup().shutdown();
+	@Override
+	public Map<String, Object> params() {
+		Map<String, Object> params = U.map();
+
+		params.putAll(req.data());
+		params.putAll(req.files());
+
+		return params;
+	}
+
+	public Req getReq() {
+		return req;
+	}
+
+	@Override
+	public Object param(String name) {
+		return req.data(name, null);
+	}
+
+	@Override
+	public boolean isEvent() {
+		return false;
 	}
 
 }

@@ -13,9 +13,9 @@ import org.rapidoid.app.IOToolImpl;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HttpClient;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.REST;
 import org.rapidoid.http.RESTClient;
+import org.rapidoid.http.Req;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.cache.CachePlugin;
 import org.rapidoid.plugins.db.DBPlugin;
@@ -99,13 +99,13 @@ public class Dollar {
 
 	public final SQLAPI jdbc = SQL.defaultInstance();
 
-	public final HttpExchange req;
+	public final Req req;
 
 	public final Map<String, Object> bindings;
 
 	private volatile boolean hasResult = false;
 
-	public Dollar(HttpExchange x, Map<String, Object> bindings) {
+	public Dollar(Req x, Map<String, Object> bindings) {
 		this.req = x;
 		this.bindings = bindings;
 	}
@@ -160,10 +160,6 @@ public class Dollar {
 
 	public boolean hasResult() {
 		return hasResult;
-	}
-
-	public String query() {
-		return req.dbQuery();
 	}
 
 }

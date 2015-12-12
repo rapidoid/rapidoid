@@ -14,12 +14,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-dao</artifactId>
+			<artifactId>rapidoid-gui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-gui</artifactId>
+			<artifactId>rapidoid-security</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -27,9 +27,21 @@
 			<artifactId>rapidoid-templates-mustache</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-oauth</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		 -->
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-dispatch</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-http-fast</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

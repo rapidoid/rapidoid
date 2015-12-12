@@ -20,18 +20,55 @@ package org.rapidoid.web;
  * #L%
  */
 
+import java.util.Map;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.wire.Wire;
+import org.rapidoid.dispatch.PojoRequest;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.4.0")
-public abstract class Web extends GUI {
+@Since("4.1.0")
+public class WebEventReq implements PojoRequest {
 
-	public Web() {
-		Wire.manage(this);
-		Rapidoid.notifyGuiInit();
+	private final String path;
+
+	private final String event;
+
+	@SuppressWarnings("unused")
+	private final Object[] args;
+
+	private final Map<String, Object> state;
+
+	public WebEventReq(String path, String event, Object[] args, Map<String, Object> state) {
+		this.path = path;
+		this.event = event;
+		this.args = args;
+		this.state = state;
+	}
+
+	@Override
+	public String command() {
+		return event;
+	}
+
+	@Override
+	public String path() {
+		return path;
+	}
+
+	@Override
+	public Map<String, Object> params() {
+		return state;
+	}
+
+	@Override
+	public Object param(String name) {
+		return state.get(name);
+	}
+
+	@Override
+	public boolean isEvent() {
+		return true;
 	}
 
 }

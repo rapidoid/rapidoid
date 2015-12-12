@@ -28,8 +28,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.app.IOTool;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.HttpClient;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.RESTClient;
+import org.rapidoid.http.Req;
 import org.rapidoid.plugins.cache.CachePlugin;
 import org.rapidoid.plugins.db.DBPlugin;
 import org.rapidoid.plugins.email.EmailPlugin;
@@ -51,7 +51,7 @@ public interface Tools {
 
 	void cql(String cql, Callback<List<Map<String, Object>>> callback, Object... args);
 
-	HttpExchange req();
+	Req req();
 
 	void result(Object result);
 

@@ -11,9 +11,9 @@ import org.rapidoid.concurrent.Callback;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HTTP;
 import org.rapidoid.http.HttpClient;
-import org.rapidoid.http.HttpExchange;
 import org.rapidoid.http.REST;
 import org.rapidoid.http.RESTClient;
+import org.rapidoid.http.Req;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.cache.CachePlugin;
 import org.rapidoid.plugins.db.DBPlugin;
@@ -112,13 +112,13 @@ public class ToolsImpl implements Tools {
 	}
 
 	@Override
-	public HttpExchange req() {
+	public Req req() {
 		return Ctxs.ctx().exchange();
 	}
 
 	@Override
 	public void result(Object result) {
-		req().result(result);
+		req().response().content(result).done();
 	}
 
 	@Override

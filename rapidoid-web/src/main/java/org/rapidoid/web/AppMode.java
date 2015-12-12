@@ -1,5 +1,8 @@
 package org.rapidoid.web;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 /*
  * #%L
  * rapidoid-web
@@ -20,17 +23,10 @@ package org.rapidoid.web;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.config.ConfigHelp;
-
 @Authors("Nikolche Mihajlovski")
-@Since("4.0.0")
-public class Main {
+@Since("4.1.0")
+public enum AppMode {
 
-	public static void main(String[] args) {
-		ConfigHelp.processHelp(args);
-		Rapidoid.run(args);
-	}
+	DEVELOPMENT, TEST, PRODUCTION;
 
 }

@@ -1,4 +1,4 @@
-package org.rapidoid.app;
+package org.rapidoid.web;
 
 /*
  * #%L
@@ -20,32 +20,22 @@ package org.rapidoid.app;
  * #L%
  */
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.aop.AOPInterceptor;
-import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.lambda.Lmbd;
-import org.rapidoid.security.Secure;
+import org.rapidoid.config.Conf;
+import org.rapidoid.gui.GUI;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public class AuthInterceptor implements AOPInterceptor {
+@Since("4.4.0")
+public abstract class WebComponent extends GUI {
 
-	@Override
-	public Object intercept(final Callable<Object> forward, Annotation ann, Object ctx, final Method m,
-			final Object target, final Object[] args) {
+	public WebComponent() {
+		notifyWebInit(this);
+	}
 
-		String username = Ctxs.ctx().username();
-
-		if (Secure.canAccessMethod(username, m)) {
-			return Lmbd.call(forward);
-		} else {
-			throw new SecurityException("The user doesn't have the required roles!");
-		}
+	private synchronized void notifyWebInit(WebComponent component) {
+		Conf.set("managed", true);
+		// FIXME register the component
 	}
 
 }
