@@ -40,6 +40,8 @@ import org.rapidoid.util.UTILS;
 @Since("5.0.0")
 public class HttpUtils implements HttpMetadata {
 
+	private static final String PAGE_RELOAD = "<h2>&nbsp;Reloading...</h2><script>location.reload();</script>";
+
 	public static String getSessionId(Req req) {
 		return req.cookie(SESSION_COOKIE, null);
 	}
@@ -215,6 +217,19 @@ public class HttpUtils implements HttpMetadata {
 			resp.code(303);
 			resp.headers().put(HttpHeaders.LOCATION.name(), redirect);
 		}
+	}
+
+	public static boolean isDevMode(Req x) {
+		return Conf.dev();
+	}
+
+	public static final void reload(Req x) {
+		Map<String, String> sel = U.map("body", PAGE_RELOAD);
+		x.response().json(U.map("_sel_", sel));
+	}
+
+	public static String constructUrl(Req x, String path) {
+		return (Conf.is("https") ? "https://" : "http://") + x.host() + path;
 	}
 
 }
