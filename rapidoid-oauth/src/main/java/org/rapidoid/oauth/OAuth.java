@@ -26,12 +26,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.ConfigEntry;
-import org.rapidoid.http.Handler;
-import org.rapidoid.http.HttpExchange;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.fast.HttpUtils;
+import org.rapidoid.http.fast.ReqHandler;
+import org.rapidoid.http.fast.ServerSetup;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.webapp.AppCtx;
-import org.rapidoid.webapp.WebApp;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -41,18 +42,18 @@ public class OAuth {
 
 	private static OAuthStateCheck STATE_CHECK;
 
-	public static void register(WebApp app, OAuthProvider... providers) {
-		register(app, new DefaultOAuthStateCheck(), providers);
+	public static void register(ServerSetup setup, Config config, OAuthProvider... providers) {
+		register(setup, config, new DefaultOAuthStateCheck(), providers);
 	}
 
-	public static void register(WebApp app, OAuthStateCheck stateCheck, OAuthProvider... providers) {
-		Config appcfg = app.getConfig();
+	public static void register(ServerSetup setup, Config config, OAuthStateCheck stateCheck,
+			OAuthProvider... providers) {
 
-		if (!appcfg.has("oauth")) {
+		if (!config.has("oauth")) {
 			Log.warn("OAuth is currently not configured!");
 		}
 
-		ConfigEntry oauthDomain = appcfg.entry("domain").byDefault(null);
+		ConfigEntry oauthDomain = config.entry("domain").byDefault(null);
 
 		OAuth.STATE_CHECK = stateCheck;
 
@@ -69,31 +70,28 @@ public class OAuth {
 			String loginPath = "/_" + name + "Login";
 			String callbackPath = "/_" + name + "OauthCallback";
 
-			ConfigEntry clientId = appcfg.entry("oauth", name, "id").byDefault("NO-CLIENT-ID-CONFIGURED");
-			ConfigEntry clientSecret = appcfg.entry("oauth", name, "secret").byDefault("NO-CLIENT-SECRET-CONFIGURED");
+			ConfigEntry clientId = config.entry("oauth", name, "id").byDefault("NO-CLIENT-ID-CONFIGURED");
+			ConfigEntry clientSecret = config.entry("oauth", name, "secret").byDefault("NO-CLIENT-SECRET-CONFIGURED");
 
-			app.getRouter().get(loginPath, new OAuthLoginHandler(provider, oauthDomain));
-			app.getRouter().get(callbackPath,
+			setup.get(loginPath).html(new OAuthLoginHandler(provider, oauthDomain, config));
+			setup.get(callbackPath).html(
 					new OAuthTokenHandler(provider, oauthDomain, stateCheck, clientId, clientSecret, callbackPath));
 
 			loginHtml.append(U.frmt(LOGIN_BTN, name, provider.getName()));
 		}
 
 		loginHtml.append("</div>");
+		final String loginPage = loginHtml.toString();
 
-		app.getRouter().get("/_oauthLogin", new Handler() {
+		setup.get("/_oauth").html(new ReqHandler() {
 			@Override
-			public Object handle(HttpExchange x) throws Exception {
-				return x.renderPage(U.map("title", "Login with OAuth provider", "content", loginHtml.toString(),
-						"navbar", true));
+			public Object handle(Req x) throws Exception {
+				return GUI.page(GUI.hardcoded(loginPage)).title("Login with OAuth");
 			}
 		});
 	}
 
-	public static String getLoginURL(HttpExchange x, OAuthProvider provider, String oauthDomain) {
-
-		WebApp app = AppCtx.app();
-		Config appcfg = app.getConfig();
+	public static String getLoginURL(Req req, Config appcfg, OAuthProvider provider, String oauthDomain) {
 
 		if (!appcfg.has("oauth")) {
 			Log.warn("OAuth is currently not configured!");
@@ -106,12 +104,13 @@ public class OAuth {
 
 		String callbackPath = "/_" + name + "OauthCallback";
 
-		boolean popup = x.param("popup", null) != null;
+		boolean popup = req.param("popup", null) != null;
 
-		String redirectUrl = oauthDomain != null ? oauthDomain + callbackPath : x.constructUrl(callbackPath);
+		String redirectUrl = oauthDomain != null ? oauthDomain + callbackPath : HttpUtils.constructUrl(req,
+				callbackPath);
 
 		String statePrefix = popup ? "P" : "N";
-		String state = statePrefix + STATE_CHECK.generateState(clientSecret, x.sessionId());
+		String state = statePrefix + STATE_CHECK.generateState(clientSecret, HttpUtils.getSessionId(req));
 
 		try {
 			OAuthClientRequest request = OAuthClientRequest.authorizationLocation(provider.getAuthEndpoint())

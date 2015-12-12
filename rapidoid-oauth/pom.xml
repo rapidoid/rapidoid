@@ -14,18 +14,18 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-http</artifactId>
+			<artifactId>rapidoid-http-fast</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-html</artifactId>
+			<artifactId>rapidoid-gui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.oltu.oauth2</groupId>
 			<artifactId>org.apache.oltu.oauth2.client</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
 	</dependencies>
 

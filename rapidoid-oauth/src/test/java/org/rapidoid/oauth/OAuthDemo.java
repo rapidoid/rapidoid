@@ -22,23 +22,18 @@ package org.rapidoid.oauth;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HTTPServer;
-import org.rapidoid.http.WebServer;
-import org.rapidoid.log.Log;
-import org.rapidoid.log.LogLevel;
-import org.rapidoid.webapp.WebApp;
-import org.rapidoid.webapp.WebAppGroup;
+import org.rapidoid.config.Config;
+import org.rapidoid.http.fast.On;
+import org.rapidoid.http.fast.ServerSetup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class OAuthDemo {
 
 	public static void main(String[] args) {
-		WebApp app = WebAppGroup.openRootContext();
-		Log.setLogLevel(LogLevel.DEBUG);
-		HTTPServer server = WebServer.build();
-		OAuth.register(app);
-		server.start();
+		ServerSetup setup = On.getDefaultSetup();
+		OAuth.register(setup, new Config());
+		setup.listen();
 	}
 
 }

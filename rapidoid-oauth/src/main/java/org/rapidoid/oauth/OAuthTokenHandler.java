@@ -37,15 +37,16 @@ import org.rapidoid.config.ConfigEntry;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.data.JSON;
-import org.rapidoid.http.Handler;
-import org.rapidoid.http.HttpExchange;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.fast.HttpUtils;
+import org.rapidoid.http.fast.ReqHandler;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class OAuthTokenHandler implements Handler {
+public class OAuthTokenHandler implements ReqHandler {
 
 	private final OAuthProvider provider;
 	private final ConfigEntry oauthDomain;
@@ -65,9 +66,9 @@ public class OAuthTokenHandler implements Handler {
 	}
 
 	@Override
-	public Object handle(HttpExchange x) throws Exception {
-		String code = x.param("code");
-		String state = x.param("state");
+	public Object handle(Req req) throws Exception {
+		String code = req.param("code");
+		String state = req.param("state");
 
 		Log.debug("Received OAuth code", "code", code, "state", state);
 
@@ -80,13 +81,13 @@ public class OAuthTokenHandler implements Handler {
 			U.must(statePrefix == 'P' || statePrefix == 'N', "Invalid OAuth state prefix!");
 			state = state.substring(1);
 
-			U.must(stateCheck.isValidState(state, secret, x.sessionId()), "Invalid OAuth state!");
+			U.must(stateCheck.isValidState(state, secret, HttpUtils.getSessionId(req)), "Invalid OAuth state!");
 
 			boolean popup = statePrefix == 'P';
 			Log.debug("OAuth validated", "popup", popup);
 
 			String domain = oauthDomain.get();
-			String redirectUrl = domain != null ? domain + callbackPath : x.constructUrl(callbackPath);
+			String redirectUrl = domain != null ? domain + callbackPath : HttpUtils.constructUrl(req, callbackPath);
 
 			TokenRequestBuilder reqBuilder = OAuthClientRequest.tokenLocation(provider.getTokenEndpoint())
 					.setGrantType(GrantType.AUTHORIZATION_CODE).setClientId(id).setClientSecret(secret)
@@ -123,11 +124,12 @@ public class OAuthTokenHandler implements Handler {
 			UserInfo user = new UserInfo(username, email, name, oauthId, oauthProvider);
 
 			Ctxs.ctx().setUser(user);
-			user.saveTo(x.cookiepack());
 
-			return x.goBack(1);
+			// user.saveTo(x.cookiepack()); // FIXME use cookiepack
+
+			return req.response().redirect("/"); // FIXME use page stack
 		} else {
-			String error = x.param("error");
+			String error = req.param("error");
 			if (error != null) {
 				Log.warn("OAuth error", "error", error);
 				throw U.rte("OAuth error!");
