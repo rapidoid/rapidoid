@@ -26,7 +26,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.fast.handler.FastParamsAwarePageHandler;
+import org.rapidoid.http.fast.handler.DelegatingFastParamsAwareHttpHandler;
+import org.rapidoid.http.fast.handler.FastParamsAwareHttpHandler;
 import org.rapidoid.http.fast.handler.FastResourceHttpHandler;
 import org.rapidoid.http.fast.handler.FastStaticHttpHandler;
 import org.rapidoid.http.fast.handler.HttpHandlers;
@@ -78,8 +79,8 @@ public class OnPage {
 
 	private void register(PageOptions options, ReqHandler handler) {
 		for (FastHttp http : httpImpls) {
-			FastParamsAwarePageHandler hnd = new FastParamsAwarePageHandler(http, options.contentType, wrappers,
-					handler);
+			FastParamsAwareHttpHandler hnd = new DelegatingFastParamsAwareHttpHandler(http, options.contentType,
+					wrappers, handler);
 			http.on("GET", path, hnd);
 			http.on("POST", path, hnd);
 		}

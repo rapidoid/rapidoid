@@ -4,7 +4,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
-import org.rapidoid.http.fast.handler.FastParamsAwareHttpHandler;
+import org.rapidoid.http.fast.handler.DelegatingFastParamsAwareHttpHandler;
 import org.rapidoid.http.fast.listener.FastHttpListener;
 import org.rapidoid.http.fast.listener.IgnorantHttpListener;
 import org.rapidoid.net.Serve;
@@ -105,7 +105,8 @@ public class ServerSetup {
 
 	public ServerSetup req(ReqHandler handler) {
 		for (FastHttp http : httpImpls()) {
-			http.addGenericHandler(new FastParamsAwareHttpHandler(http, MediaType.HTML_UTF_8, wrappers, handler));
+			http.addGenericHandler(new DelegatingFastParamsAwareHttpHandler(http, MediaType.HTML_UTF_8, wrappers,
+					handler));
 		}
 
 		return this;

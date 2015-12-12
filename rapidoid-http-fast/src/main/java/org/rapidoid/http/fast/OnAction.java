@@ -26,8 +26,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.fast.handler.DelegatingFastParamsAwareHttpHandler;
 import org.rapidoid.http.fast.handler.FastCallableHttpHandler;
-import org.rapidoid.http.fast.handler.FastParamsAwareHttpHandler;
 import org.rapidoid.http.fast.handler.FastResourceHttpHandler;
 import org.rapidoid.http.fast.handler.FastStaticHttpHandler;
 import org.rapidoid.http.fast.handler.HttpHandlers;
@@ -86,7 +86,7 @@ public class OnAction {
 
 	private void register(MediaType contentType, ReqHandler handler) {
 		for (FastHttp http : httpImpls) {
-			http.on(verb, path, new FastParamsAwareHttpHandler(http, contentType, wrappers, handler));
+			http.on(verb, path, new DelegatingFastParamsAwareHttpHandler(http, contentType, wrappers, handler));
 		}
 	}
 

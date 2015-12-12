@@ -25,36 +25,25 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.fast.FastHttp;
-import org.rapidoid.http.fast.HttpMetadata;
 import org.rapidoid.http.fast.HttpWrapper;
 import org.rapidoid.http.fast.ReqHandler;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.0.0")
-public class FastParamsAwarePageHandler extends AbstractAsyncHttpHandler implements HttpMetadata {
+@Since("4.3.0")
+public class DelegatingFastParamsAwareHttpHandler extends FastParamsAwareHttpHandler {
 
 	private final ReqHandler handler;
 
-	public FastParamsAwarePageHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, ReqHandler handler) {
+	public DelegatingFastParamsAwareHttpHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers,
+			ReqHandler handler) {
 		super(http, contentType, wrappers);
 		this.handler = handler;
 	}
 
 	@Override
-	protected Object handleReq(Channel channel, Req req) throws Exception {
-		http.getListener().state(this, req);
-
-		// call the handler, get the result
-		Object result = handler.handle(req);
-
-		http.getListener().result(this, contentType, result);
-		return result;
-	}
-
-	@Override
-	public boolean needsParams() {
-		return true;
+	protected Object doHandle(Channel channel, boolean isKeepAlive, Req req) throws Exception {
+		return handler.handle(req);
 	}
 
 }
