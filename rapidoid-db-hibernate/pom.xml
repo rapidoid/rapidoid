@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-http</artifactId>
+			<artifactId>rapidoid-plugins</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -29,7 +29,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-test-appctx-helper</artifactId>
+			<artifactId>rapidoid-test-commons</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-utils</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

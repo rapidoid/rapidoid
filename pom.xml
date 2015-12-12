@@ -98,7 +98,6 @@
 		<module>rapidoid-security</module>
 		<module>rapidoid-activity</module>
 		<module>rapidoid-test-commons</module>
-		<module>rapidoid-test-appctx-helper</module>
 		<module>rapidoid-buffer</module>
 		<module>rapidoid-net</module>
 		<module>rapidoid-http</module>
