@@ -60,4 +60,6 @@ public interface Response {
 
 	Response binary(Object content);
 
+	Req request();
+
 }

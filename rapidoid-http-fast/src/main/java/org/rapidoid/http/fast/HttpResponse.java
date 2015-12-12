@@ -158,4 +158,9 @@ public class HttpResponse implements Response {
 		return this;
 	}
 
+	@Override
+	public Req request() {
+		return req;
+	}
+
 }
