@@ -29,6 +29,7 @@ import org.rapidoid.commons.MediaType;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.Response;
 import org.rapidoid.http.fast.FastHttp;
 import org.rapidoid.http.fast.HttpStatus;
 import org.rapidoid.http.fast.HttpWrapper;
@@ -61,20 +62,30 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected Object postprocessResult(Object result) throws Exception {
+	protected Object postprocessResult(Req req, Object result) throws Exception {
 		if (result instanceof Req) {
-			return result; // the Req object will do the rendering
+			U.must(req == result);
+
+			// the Req object will do the rendering
+			return req.isAsync() ? req : req.done();
+
+		} else if (result instanceof Response) {
+			Response resp = (Response) result;
+			U.must(resp.request() == result);
+
+			// the Req object will do the rendering
+			return req.isAsync() ? req : req.done();
 
 		} else if (result == null) {
 			return result; // not found
 
 		} else if (result instanceof Future<?>) {
 			result = ((Future<Object>) result).get();
-			return postprocessResult(result);
+			return postprocessResult(req, result);
 
 		} else if (result instanceof org.rapidoid.concurrent.Future<?>) {
 			result = ((org.rapidoid.concurrent.Future<Object>) result).get();
-			return postprocessResult(result);
+			return postprocessResult(req, result);
 
 		} else {
 			// render the response and process logic while still in context
@@ -108,12 +119,12 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 				try {
 
 					if (!U.isEmpty(wrappers)) {
-						result = wrap(channel, req, 0);
+						result = wrap(channel, isKeepAlive, req, 0);
 					} else {
-						result = handleReq(channel, req);
+						result = handleReq(channel, isKeepAlive, req);
 					}
 
-					result = postprocessResult(result);
+					result = postprocessResult(req, result);
 				} catch (Exception e) {
 					result = e;
 				}
@@ -130,7 +141,8 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		}
 	}
 
-	private Object wrap(final Channel channel, final Req req, final int index) throws Exception {
+	private Object wrap(final Channel channel, final boolean isKeepAlive, final Req req, final int index)
+			throws Exception {
 		HttpWrapper wrapper = wrappers[index];
 
 		WrappedProcess process = new WrappedProcess() {
@@ -141,9 +153,9 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 					Object val;
 					if (next < wrappers.length) {
-						val = wrap(channel, req, next);
+						val = wrap(channel, isKeepAlive, req, next);
 					} else {
-						val = handleReq(channel, req);
+						val = handleReq(channel, isKeepAlive, req);
 					}
 
 					return transformation.map(val);
@@ -162,14 +174,14 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		return result;
 	}
 
-	protected abstract Object handleReq(Channel ctx, Req req) throws Exception;
+	protected abstract Object handleReq(Channel ctx, boolean isKeepAlive, Req req) throws Exception;
 
 	public void done(Channel ctx, boolean isKeepAlive, Req req, Object result) {
 		if (result == null) {
 			http.notFound(ctx, isKeepAlive, this, req);
 			return; // not found
 
-		} else if (result instanceof Req) {
+		} else if (result instanceof Req || result instanceof Response) {
 			return; // the Req instance will render the result
 
 		} else if (result instanceof Throwable) {

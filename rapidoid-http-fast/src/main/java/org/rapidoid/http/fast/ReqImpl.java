@@ -76,6 +76,8 @@ public class ReqImpl implements Req, Constants {
 
 	private volatile int posBefore;
 
+	private volatile boolean async;
+
 	private volatile boolean done;
 
 	private final MediaType defaultContentType;
@@ -423,8 +425,20 @@ public class ReqImpl implements Req, Constants {
 		http.done(channel, isKeepAlive);
 	}
 
+	@Override
 	public boolean isDone() {
 		return done;
+	}
+
+	@Override
+	public Req async() {
+		this.async = true;
+		return this;
+	}
+
+	@Override
+	public boolean isAsync() {
+		return async;
 	}
 
 }

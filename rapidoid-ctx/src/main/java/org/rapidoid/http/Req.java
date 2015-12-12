@@ -140,4 +140,10 @@ public interface Req {
 
 	Req done();
 
+	boolean isDone();
+
+	Req async();
+
+	boolean isAsync();
+
 }
