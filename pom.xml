@@ -92,7 +92,6 @@
 		<module>rapidoid-ctx</module>
 		<module>rapidoid-model</module>
 		<module>rapidoid-sql</module>
-		<module>rapidoid-rql</module>
 		<module>rapidoid-wire</module>
 		<module>rapidoid-jackson</module>
 		<module>rapidoid-security</module>
