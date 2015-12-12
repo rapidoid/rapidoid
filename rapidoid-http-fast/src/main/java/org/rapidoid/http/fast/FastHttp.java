@@ -57,6 +57,9 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	private static final byte[] HTTP_200_OK = "HTTP/1.1 200 OK\r\n".getBytes();
 
+	private static final byte[] HTTP_400_BAD_REQUEST = "HTTP/1.1 404 Bad Request\r\nContent-Length: 12\r\n\r\nBad Request!"
+			.getBytes();
+
 	private static final byte[] HTTP_404_NOT_FOUND = "HTTP/1.1 404 Not Found\r\nContent-Length: 10\r\n\r\nNot found!"
 			.getBytes();
 
@@ -198,6 +201,16 @@ public class FastHttp implements Protocol, HttpMetadata {
 		Range xbody = ranges[ranges.length - 6];
 
 		HTTP_PARSER.parse(buf, isGet, isKeepAlive, xbody, xverb, xuri, xpath, xquery, xprotocol, hdrs, helper);
+
+		removeTrailingSlash(buf, xpath);
+		removeTrailingSlash(buf, xuri);
+
+		String err = validateRequest(buf, xverb, xuri);
+		if (err != null) {
+			channel.write(HTTP_400_BAD_REQUEST);
+			channel.close();
+			return;
+		}
 
 		// the listener may override all the request dispatching and handler execution
 		if (!listener.request(this, channel, isGet, isKeepAlive, xbody, xverb, xuri, xpath, xquery, xprotocol, hdrs)) {
@@ -494,6 +507,28 @@ public class FastHttp implements Protocol, HttpMetadata {
 			ctx.write(HTTP_404_NOT_FOUND);
 			done(ctx, isKeepAlive);
 		}
+	}
+
+	private static void removeTrailingSlash(Buf buf, Range range) {
+		if (range.length > 1 && buf.get(range.last()) == '/') {
+			range.length--;
+		}
+	}
+
+	private static String validateRequest(Buf input, Range verb, Range uri) {
+		if (verb.isEmpty()) {
+			return "HTTP verb cannot be empty!";
+		}
+
+		if (!BytesUtil.isValidURI(input.bytes(), uri)) {
+			return "Invalid HTTP URI!";
+		}
+
+		return null; // OK, no error
+	}
+
+	public FastHttpHandler getStaticResourcesHandler() {
+		return staticResourcesHandler;
 	}
 
 }
