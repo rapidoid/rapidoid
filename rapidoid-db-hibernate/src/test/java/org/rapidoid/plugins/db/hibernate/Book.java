@@ -21,11 +21,15 @@ package org.rapidoid.plugins.db.hibernate;
  */
 
 import javax.persistence.Entity;
-
-import org.rapidoid.jpa.JPAEntity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
-public class Book extends JPAEntity {
+public class Book {
+
+	@Id
+	@GeneratedValue
+	private Long id;
 
 	private String title;
 
@@ -33,6 +37,14 @@ public class Book extends JPAEntity {
 
 	public Book(String title) {
 		this.title = title;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getTitle() {

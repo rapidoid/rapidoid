@@ -19,7 +19,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-jpa</artifactId>
+			<artifactId>rapidoid-ctx</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
