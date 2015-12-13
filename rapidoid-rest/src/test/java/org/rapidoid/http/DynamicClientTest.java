@@ -55,10 +55,14 @@ public class DynamicClientTest extends TestCommons {
 		On.post("/echo").json(new ReqHandler() {
 			@Override
 			public Object handle(final Req req) throws Exception {
+				req.async();
+
 				Jobs.schedule(new Runnable() {
 					@Override
 					public void run() {
-						Reqs.req().response().content(req.data()).done();
+						U.must(Reqs.req() == req);
+						Response resp = req.response();
+						resp.content(req.data()).done();
 					}
 				}, 1000, TimeUnit.MILLISECONDS);
 
