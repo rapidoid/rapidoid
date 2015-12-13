@@ -15,7 +15,7 @@ import org.rapidoid.web.WebAppGroup;
 
 /*
  * #%L
- * rapidoid-http
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
