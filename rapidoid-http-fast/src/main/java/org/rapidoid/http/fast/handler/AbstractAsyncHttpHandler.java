@@ -20,6 +20,7 @@ package org.rapidoid.http.fast.handler;
  * #L%
  */
 
+import java.io.File;
 import java.util.concurrent.Future;
 
 import org.rapidoid.annotation.Authors;
@@ -33,6 +34,7 @@ import org.rapidoid.http.Response;
 import org.rapidoid.http.fast.FastHttp;
 import org.rapidoid.http.fast.HttpStatus;
 import org.rapidoid.http.fast.HttpWrapper;
+import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
@@ -63,18 +65,8 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 	@SuppressWarnings("unchecked")
 	protected Object postprocessResult(Req req, Object result) throws Exception {
-		if (result instanceof Req) {
-			U.must(req == result);
-
-			// the Req object will do the rendering
-			return req.isAsync() ? req : req.done();
-
-		} else if (result instanceof Response) {
-			Response resp = (Response) result;
-			U.must(resp.request() == result);
-
-			// the Req object will do the rendering
-			return req.isAsync() ? req : req.done();
+		if (result instanceof Req || result instanceof Response) {
+			return result;
 
 		} else if (result == null) {
 			return result; // not found
@@ -89,7 +81,8 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 		} else {
 			// render the response and process logic while still in context
-			if (!(result instanceof byte[]) && !Cls.isSimple(result) && !U.isCollection(result) && !U.isMap(result)) {
+			if (!(result instanceof byte[]) && !(result instanceof File) && !(result instanceof Res)
+					&& !Cls.isSimple(result) && !U.isCollection(result) && !U.isMap(result)) {
 				result = render(result);
 			}
 
@@ -129,7 +122,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 					result = e;
 				}
 
-				done(channel, isKeepAlive, req, result);
+				complete(channel, isKeepAlive, req, result);
 			}
 		};
 
@@ -176,13 +169,30 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 	protected abstract Object handleReq(Channel ctx, boolean isKeepAlive, Req req) throws Exception;
 
-	public void done(Channel ctx, boolean isKeepAlive, Req req, Object result) {
+	public void complete(Channel ctx, boolean isKeepAlive, Req req, Object result) {
 		if (result == null) {
 			http.notFound(ctx, isKeepAlive, this, req);
 			return; // not found
 
-		} else if (result instanceof Req || result instanceof Response) {
-			return; // the Req instance will render the result
+		} else if (result instanceof Req) {
+			U.must(req == result);
+
+			// the Req object will do the rendering
+			if (!req.isAsync()) {
+				req.done();
+			}
+
+			return;
+
+		} else if (result instanceof Response) {
+			U.must(req.response() == result);
+
+			// the Req object will do the rendering
+			if (!req.isAsync()) {
+				req.done();
+			}
+
+			return;
 
 		} else if (result instanceof Throwable) {
 			Throwable error = (Throwable) result;
@@ -194,5 +204,4 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 		http.done(ctx, isKeepAlive);
 	}
-
 }
