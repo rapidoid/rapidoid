@@ -33,7 +33,7 @@ import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class JDBCPoolC3P0Test extends IntegrationTestCommons {
+public class JDBCPoolC3P0Test extends TestCommons {
 
 	@Test(timeout = 30000)
 	public void testJDBCPoolC3P0() {

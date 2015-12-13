@@ -54,8 +54,6 @@ public class HttpServerSubAppTest extends HttpTestCommons {
 		On.get("/x").plain(info("def-special"));
 		On.req(info("def-generic"));
 
-		start();
-
 		eq(get("/my"), "my-generic: id=myapp, host=localhost:8888, uri=/my, ctx=/my, path=/, segments=");
 		eq(get("/my/"), "my-generic: id=myapp, host=localhost:8888, uri=/my, ctx=/my, path=/, segments=");
 
@@ -80,8 +78,6 @@ public class HttpServerSubAppTest extends HttpTestCommons {
 				"def-special: id=defapp, host=localhost:8888, uri=/x/a/bb, ctx=/, path=/x/a/bb, segments=x:a:bb");
 		eq(get("/x/a/bb/c"),
 				"def-special: id=defapp, host=localhost:8888, uri=/x/a/bb/c, ctx=/, path=/x/a/bb/c, segments=x:a:bb:c");
-
-		shutdown();
 	}
 
 	private ReqHandler info(final String desc) {

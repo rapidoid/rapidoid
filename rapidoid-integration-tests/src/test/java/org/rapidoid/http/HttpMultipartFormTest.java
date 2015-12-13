@@ -44,8 +44,6 @@ public class HttpMultipartFormTest extends HttpTestCommons {
 
 		eq(upload("/upload", U.map("a", "bb"), U.map("f1", "test1.txt", "f2", "test2.txt")),
 				"bar:a:bb:2:" + U.join(":", hash1, hash2, hash3));
-
-		shutdown();
 	}
 
 	@Test
@@ -58,8 +56,6 @@ public class HttpMultipartFormTest extends HttpTestCommons {
 
 		eq(upload("/upload", U.map("a", "d"), U.map("f1", "test1.txt", "f2", "test2.txt", "f3", "rabbit.jpg")),
 				"bar:a:d:3:" + U.join(":", hash1, hash2, hash3));
-
-		shutdown();
 	}
 
 }

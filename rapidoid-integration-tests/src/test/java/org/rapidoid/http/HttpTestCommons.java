@@ -46,12 +46,26 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	@Before
 	public void openContext() {
+		HTTP.DEFAULT_CLIENT.reset();
+
+		System.out.println("--- STARTING SERVER ---");
 		org.rapidoid.web.WebAppGroup.openRootContext();
+
+		On.getDefaultSetup().http().clearHandlers();
+
+		On.getDefaultSetup().listen();
+		U.sleep(300);
+		System.out.println("--- SERVER STARTED ---");
 	}
 
 	@After
 	public void closeContext() {
+		System.out.println("--- STOPPING SERVER ---");
 		Ctxs.close();
+
+		On.getDefaultSetup().shutdown();
+		U.sleep(300);
+		System.out.println("--- SERVER STOPPED ---");
 	}
 
 	protected String localhost(String uri) {
@@ -59,8 +73,6 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected void defaultServerSetup() {
-		server();
-
 		On.get("/echo").plain(new ReqHandler() {
 			@Override
 			public Object handle(Req x) throws Exception {
@@ -91,24 +103,6 @@ public abstract class HttpTestCommons extends TestCommons {
 				return x.response().html(U.join(":", x.verb(), x.path(), x.query()));
 			}
 		});
-
-		start();
-	}
-
-	protected void server() {
-		On.getDefaultSetup().http().clearHandlers();
-	}
-
-	protected void start() {
-		// On.getDefaultSetup().listen();
-		// U.sleep(300);
-		// System.out.println("----------------------------------------");
-	}
-
-	protected void shutdown() {
-		// On.getDefaultSetup().shutdown();
-		// U.sleep(300);
-		// System.out.println("--- SERVER STOPPED ---");
 	}
 
 	protected String resourceMD5(String filename) throws IOException, URISyntaxException {

@@ -150,6 +150,7 @@ public class ServerSetup {
 	}
 
 	private void reset() {
+		fastHttp.clearHandlers();
 		listening = false;
 		fastHttp = null;
 		wrappers = null;

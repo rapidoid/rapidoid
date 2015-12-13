@@ -24,18 +24,17 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HTTP;
+import org.rapidoid.http.HttpTestCommons;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.fast.On;
 import org.rapidoid.http.fast.ReqHandler;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class HttpServerTest extends IntegrationTestCommons {
+public class HttpServerTest extends HttpTestCommons {
 
 	@Test
 	public void testHttpServer() {
-		HTTP.DEFAULT_CLIENT.reset();
-
 		On.get("/").html("home");
 
 		On.req(new ReqHandler() {
@@ -47,8 +46,6 @@ public class HttpServerTest extends IntegrationTestCommons {
 
 		eq(new String(HTTP.get("http://localhost:8888/")), "home");
 		eq(new String(HTTP.post("http://localhost:8888/", null, new byte[0], null)), "\"abc\"");
-
-		On.getDefaultSetup().shutdown();
 	}
 
 }

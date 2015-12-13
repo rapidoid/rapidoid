@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HTTP;
+import org.rapidoid.http.HttpTestCommons;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.fast.On;
 import org.rapidoid.http.fast.ReqHandler;
@@ -37,12 +38,11 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class AsyncHttpServerTest extends IntegrationTestCommons {
+public class AsyncHttpServerTest extends HttpTestCommons {
 
 	@Test
 	public void testAsyncHttpServer() {
 		Log.debugging();
-		HTTP.DEFAULT_CLIENT.reset();
 
 		On.req(new ReqHandler() {
 			@Override
@@ -73,8 +73,6 @@ public class AsyncHttpServerTest extends IntegrationTestCommons {
 
 		eq(new String(HTTP.get("http://localhost:8888/")), "OK");
 		eq(new String(HTTP.post("http://localhost:8888/", null, new byte[0], null)), "OK");
-
-		On.getDefaultSetup().shutdown();
 	}
 
 	private static void write(OutputStream out, String s) {

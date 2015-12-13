@@ -27,25 +27,20 @@ import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
-import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.http.HTTP;
+import org.rapidoid.http.HttpTestCommons;
 import org.rapidoid.http.REST;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.fast.On;
 import org.rapidoid.http.fast.ReqHandler;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.web.WebAppGroup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class MicroServicesTest extends IntegrationTestCommons {
+public class MicroServicesTest extends HttpTestCommons {
 
 	@Test
 	public void testMicroserviceCommunication() {
-		HTTP.DEFAULT_CLIENT.reset();
-		WebAppGroup.openRootContext();
-
 		On.req(new ReqHandler() {
 			@Override
 			public Object handle(Req req) throws Exception {
@@ -95,8 +90,6 @@ public class MicroServicesTest extends IntegrationTestCommons {
 		UTILS.endMeasure(count, "calls");
 
 		loop.interrupt();
-		On.getDefaultSetup().shutdown();
-		Ctxs.close();
 	}
 
 }

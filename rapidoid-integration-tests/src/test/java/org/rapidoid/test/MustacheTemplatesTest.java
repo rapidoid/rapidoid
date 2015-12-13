@@ -31,7 +31,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class MustacheTemplatesTest extends IntegrationTestCommons {
+public class MustacheTemplatesTest extends TestCommons {
 
 	@Test
 	public void testTemplateLoading() {

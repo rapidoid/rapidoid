@@ -1,4 +1,4 @@
-package org.rapidoid.test;
+package org.rapidoid.http;
 
 /*
  * #%L
@@ -20,11 +20,38 @@ package org.rapidoid.test;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.fast.On;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public abstract class IntegrationTestCommons extends TestCommons {
+@Since("2.0.0")
+public class HttpServerRestartTest extends HttpTestCommons {
+
+	@Test
+	public void shouldHandleRestarts() {
+		On.get("/").html("a");
+		eq(get("/"), "a");
+
+		On.getDefaultSetup().shutdown();
+		On.getDefaultSetup().listen();
+		HTTP.DEFAULT_CLIENT.reset();
+
+		On.get("/").html("b");
+		eq(get("/"), "b");
+	}
+
+	@Test
+	public void shouldHandleRestartsX() {
+		On.get("/").html("x");
+		eq(get("/"), "x");
+	}
+
+	@Test
+	public void shouldHandleRestartsY() {
+		On.get("/").html("y");
+		eq(get("/"), "y");
+	}
 
 }

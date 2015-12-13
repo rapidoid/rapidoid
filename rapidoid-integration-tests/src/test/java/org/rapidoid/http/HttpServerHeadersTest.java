@@ -38,10 +38,10 @@ import org.rapidoid.job.Jobs;
 @Since("2.0.0")
 public class HttpServerHeadersTest extends HttpTestCommons {
 
+	private static final int N = 100;
+
 	@Test
 	public void shouldHandleVariousHttpRequests() throws IOException, URISyntaxException {
-		server();
-
 		On.get("/fileabc").html(new ReqHandler() {
 			@Override
 			public Object handle(Req x) {
@@ -111,11 +111,9 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 			}
 		});
 
-		start();
-
 		byte[] ab = FileUtils.readFileToByteArray(IO.file("ab.html"));
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < N; i++) {
 			eq(get("/"), "a<b>b</b>c");
 			eq(get("/xy"), "a<b>b</b>c");
 			eq(get("/async"), "now");
@@ -125,14 +123,10 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 			eq(get("/testfile1"), "TEST1");
 			eq(getBytes("/ab"), ab);
 		}
-
-		shutdown();
 	}
 
 	@Test
 	public void shouldRenderRabbit() throws Exception { // :)
-		server();
-
 		On.get("/rabbit.jpg").html(new ReqHandler() {
 			@Override
 			public Object handle(Req x) {
@@ -140,15 +134,11 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 			}
 		});
 
-		start();
-
 		byte[] rabbit = FileUtils.readFileToByteArray(IO.file("rabbit.jpg"));
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < N; i++) {
 			eq(getBytes("/rabbit.jpg"), rabbit);
 		}
-
-		shutdown();
 	}
 
 }

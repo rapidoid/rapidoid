@@ -49,8 +49,6 @@ public class HttpVerbsTest extends TestCommons {
 		eq(new String(HTTP.options("http://localhost:8888/testOptions")), "options:success");
 		eq(new String(HTTP.head("http://localhost:8888/testHead")), ""); // no body for the HEAD verb
 		eq(new String(HTTP.trace("http://localhost:8888/testTrace")), "trace:success");
-
-		On.getDefaultSetup().shutdown();
 	}
 
 }
