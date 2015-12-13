@@ -83,7 +83,6 @@
 		<module>rapidoid-commons</module>
 		<module>rapidoid-log</module>
 		<module>rapidoid-insights</module>
-		<module>rapidoid-var</module>
 		<module>rapidoid-cls</module>
 		<module>rapidoid-scan</module>
 		<module>rapidoid-io</module>
