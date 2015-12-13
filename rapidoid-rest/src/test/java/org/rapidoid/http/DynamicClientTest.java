@@ -61,7 +61,7 @@ public class DynamicClientTest extends TestCommons {
 					@Override
 					public void run() {
 						U.must(Reqs.req() == req);
-						Response resp = req.response();
+						Resp resp = req.response();
 						resp.content(req.data()).done();
 					}
 				}, 1000, TimeUnit.MILLISECONDS);

@@ -29,12 +29,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.Response;
+import org.rapidoid.http.Resp;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.2")
-public class HttpResponse implements Response {
+public class HttpResponse implements Resp {
 
 	private final ReqImpl req;
 
@@ -61,7 +61,7 @@ public class HttpResponse implements Response {
 	}
 
 	@Override
-	public synchronized Response content(Object content) {
+	public synchronized Resp content(Object content) {
 		ensureCanChange();
 		this.content = content;
 		return this;
@@ -73,7 +73,7 @@ public class HttpResponse implements Response {
 	}
 
 	@Override
-	public synchronized Response code(int code) {
+	public synchronized Resp code(int code) {
 		ensureCanChange();
 		this.code = code;
 		return this;
@@ -95,7 +95,7 @@ public class HttpResponse implements Response {
 	}
 
 	@Override
-	public synchronized Response contentType(MediaType contentType) {
+	public synchronized Resp contentType(MediaType contentType) {
 		ensureCanChange();
 		this.contentType = contentType;
 		return this;
@@ -107,7 +107,7 @@ public class HttpResponse implements Response {
 	}
 
 	@Override
-	public synchronized Response redirect(String redirect) {
+	public synchronized Resp redirect(String redirect) {
 		ensureCanChange();
 		this.redirect = redirect;
 		return this;
@@ -119,7 +119,7 @@ public class HttpResponse implements Response {
 	}
 
 	@Override
-	public synchronized Response filename(String filename) {
+	public synchronized Resp filename(String filename) {
 		ensureCanChange();
 		this.filename = filename;
 		return this;
@@ -131,7 +131,7 @@ public class HttpResponse implements Response {
 	}
 
 	@Override
-	public synchronized Response file(File file) {
+	public synchronized Resp file(File file) {
 		ensureCanChange();
 		this.file = file;
 		return this;
@@ -157,22 +157,22 @@ public class HttpResponse implements Response {
 	}
 
 	@Override
-	public Response html(Object content) {
+	public Resp html(Object content) {
 		return contentType(MediaType.HTML_UTF_8).content(content);
 	}
 
 	@Override
-	public Response plain(Object content) {
+	public Resp plain(Object content) {
 		return contentType(MediaType.PLAIN_TEXT_UTF_8).content(content);
 	}
 
 	@Override
-	public Response json(Object content) {
+	public Resp json(Object content) {
 		return contentType(MediaType.JSON_UTF_8).content(content);
 	}
 
 	@Override
-	public Response binary(Object content) {
+	public Resp binary(Object content) {
 		return contentType(MediaType.BINARY).content(content);
 	}
 
@@ -182,7 +182,7 @@ public class HttpResponse implements Response {
 	}
 
 	@Override
-	public synchronized Response view(String view) {
+	public synchronized Resp view(String view) {
 		this.view = view;
 		return this;
 	}

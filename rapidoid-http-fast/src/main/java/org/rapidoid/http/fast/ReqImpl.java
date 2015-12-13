@@ -33,7 +33,7 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.Response;
+import org.rapidoid.http.Resp;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
@@ -70,7 +70,7 @@ public class ReqImpl implements Req, Constants {
 
 	private final Map<String, Object> attrs = Collections.synchronizedMap(new HashMap<String, Object>());
 
-	private volatile Response response;
+	private volatile Resp response;
 
 	private volatile boolean rendering;
 
@@ -321,7 +321,7 @@ public class ReqImpl implements Req, Constants {
 	/************************** RESPONSE **************************/
 
 	@Override
-	public synchronized Response response() {
+	public synchronized Resp response() {
 		if (response == null) {
 			response = new HttpResponse(this);
 			if (defaultContentType != null) {

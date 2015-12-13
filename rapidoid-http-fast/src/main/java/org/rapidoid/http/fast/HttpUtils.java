@@ -30,7 +30,7 @@ import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.Response;
+import org.rapidoid.http.Resp;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -144,17 +144,17 @@ public class HttpUtils implements HttpMetadata {
 		}
 	}
 
-	public static void setContentTypeForFile(Response resp, File file) {
+	public static void setContentTypeForFile(Resp resp, File file) {
 		U.must(file.exists());
 		setContentType(resp, MediaType.getByFileName(file.getAbsolutePath()));
 	}
 
-	public static void setContentTypeForResource(Response resp, Res resource) {
+	public static void setContentTypeForResource(Resp resp, Res resource) {
 		U.must(resource.exists());
 		setContentType(resp, MediaType.getByFileName(resource.getShortName()));
 	}
 
-	public static void setContentType(Response resp, MediaType mediaType) {
+	public static void setContentType(Resp resp, MediaType mediaType) {
 		resp.contentType(mediaType);
 	}
 
@@ -207,13 +207,13 @@ public class HttpUtils implements HttpMetadata {
 		}
 	}
 
-	public static void postProcessResponse(Response resp) {
+	public static void postProcessResponse(Resp resp) {
 		postProcessRedirect(resp);
 		postProcessFile(resp);
 		postProcessFilename(resp);
 	}
 
-	private static void postProcessFile(Response resp) {
+	private static void postProcessFile(Resp resp) {
 		File file = resp.file();
 		if (file != null) {
 			U.must(file.exists());
@@ -228,7 +228,7 @@ public class HttpUtils implements HttpMetadata {
 		}
 	}
 
-	private static void postProcessFilename(Response resp) {
+	private static void postProcessFilename(Resp resp) {
 		String filename = resp.filename();
 		if (filename != null) {
 			resp.headers().put(HttpHeaders.CONTENT_DISPOSITION.name(), "attachment; filename=\"" + filename + "\"");
@@ -236,7 +236,7 @@ public class HttpUtils implements HttpMetadata {
 		}
 	}
 
-	private static void postProcessRedirect(Response resp) {
+	private static void postProcessRedirect(Resp resp) {
 		String redirect = resp.redirect();
 		if (redirect != null) {
 			resp.code(303);

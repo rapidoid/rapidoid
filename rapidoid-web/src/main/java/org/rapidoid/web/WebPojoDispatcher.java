@@ -47,7 +47,7 @@ import org.rapidoid.dispatch.impl.DispatchReq;
 import org.rapidoid.dispatch.impl.DispatchReqKind;
 import org.rapidoid.dispatch.impl.PojoDispatcherImpl;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.Response;
+import org.rapidoid.http.Resp;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -60,13 +60,13 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 
 	@Override
 	protected boolean isCustomType(Class<?> type) {
-		return Req.class.isAssignableFrom(type) || Response.class.isAssignableFrom(type) || type.equals(byte[].class)
+		return Req.class.isAssignableFrom(type) || Resp.class.isAssignableFrom(type) || type.equals(byte[].class)
 				|| type.equals(byte[][].class) || super.isCustomType(type);
 	}
 
 	@Override
 	protected Object getCustomArg(PojoRequest request, Class<?> type, String[] parts, int paramsFrom, int paramsSize) {
-		if (Req.class.isAssignableFrom(type) || Response.class.isAssignableFrom(type)) {
+		if (Req.class.isAssignableFrom(type) || Resp.class.isAssignableFrom(type)) {
 			return req(request);
 
 		} else if (type.equals(byte[].class)) {

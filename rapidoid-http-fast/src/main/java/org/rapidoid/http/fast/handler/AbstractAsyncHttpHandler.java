@@ -30,7 +30,7 @@ import org.rapidoid.commons.MediaType;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.Response;
+import org.rapidoid.http.Resp;
 import org.rapidoid.http.fast.FastHttp;
 import org.rapidoid.http.fast.HttpStatus;
 import org.rapidoid.http.fast.HttpWrapper;
@@ -65,7 +65,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 	@SuppressWarnings("unchecked")
 	protected Object postprocessResult(Req req, Object result) throws Exception {
-		if (result instanceof Req || result instanceof Response) {
+		if (result instanceof Req || result instanceof Resp) {
 			return result;
 
 		} else if (result == null) {
@@ -184,7 +184,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 			return;
 
-		} else if (result instanceof Response) {
+		} else if (result instanceof Resp) {
 			U.must(req.response() == result);
 
 			// the Req object will do the rendering

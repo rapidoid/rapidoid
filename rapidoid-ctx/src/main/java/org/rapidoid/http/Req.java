@@ -138,7 +138,7 @@ public interface Req {
 
 	/* RESPONSE: */
 
-	Response response();
+	Resp response();
 
 	OutputStream out();
 

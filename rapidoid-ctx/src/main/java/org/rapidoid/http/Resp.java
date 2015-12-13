@@ -25,13 +25,13 @@ import java.util.Map;
 
 import org.rapidoid.commons.MediaType;
 
-public interface Response {
+public interface Resp {
 
-	Response content(Object content);
+	Resp content(Object content);
 
 	Object content();
 
-	Response code(int code);
+	Resp code(int code);
 
 	int code();
 
@@ -39,35 +39,35 @@ public interface Response {
 
 	Map<String, String> cookies();
 
-	Response contentType(MediaType contentType);
+	Resp contentType(MediaType contentType);
 
 	MediaType contentType();
 
-	Response redirect(String redirect);
+	Resp redirect(String redirect);
 
 	String redirect();
 
-	Response filename(String filename);
+	Resp filename(String filename);
 
 	String filename();
 
-	Response file(File file);
+	Resp file(File file);
 
 	File file();
 
-	Response view(String view);
+	Resp view(String view);
 
 	String view();
 
 	Req done();
 
-	Response plain(Object content);
+	Resp plain(Object content);
 
-	Response html(Object content);
+	Resp html(Object content);
 
-	Response json(Object content);
+	Resp json(Object content);
 
-	Response binary(Object content);
+	Resp binary(Object content);
 
 	Req request();
 
