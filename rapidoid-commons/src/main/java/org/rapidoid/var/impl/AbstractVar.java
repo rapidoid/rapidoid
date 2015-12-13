@@ -2,7 +2,7 @@ package org.rapidoid.var.impl;
 
 /*
  * #%L
- * rapidoid-var
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
