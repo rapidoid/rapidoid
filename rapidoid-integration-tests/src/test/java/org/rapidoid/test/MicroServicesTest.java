@@ -35,7 +35,6 @@ import org.rapidoid.http.fast.On;
 import org.rapidoid.http.fast.ReqHandler;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.web.WebApp;
 import org.rapidoid.web.WebAppGroup;
 
 @Authors("Nikolche Mihajlovski")
@@ -45,7 +44,7 @@ public class MicroServicesTest extends IntegrationTestCommons {
 	@Test
 	public void testMicroserviceCommunication() {
 		HTTP.DEFAULT_CLIENT.reset();
-		WebApp app = WebAppGroup.openRootContext();
+		WebAppGroup.openRootContext();
 
 		On.req(new ReqHandler() {
 			@Override
