@@ -45,6 +45,10 @@ public interface Req {
 
 	Req path(String path);
 
+	String query();
+
+	Req query(String query);
+
 	byte[] body();
 
 	Req body(byte[] body);

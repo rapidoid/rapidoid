@@ -54,6 +54,8 @@ public class ReqImpl implements Req, Constants {
 
 	private volatile String path;
 
+	private volatile String query;
+
 	private volatile byte[] body;
 
 	private final Map<String, String> params;
@@ -83,8 +85,9 @@ public class ReqImpl implements Req, Constants {
 	private final MediaType defaultContentType;
 
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
-			byte[] body, Map<String, String> params, Map<String, String> headers, Map<String, String> cookies,
-			Map<String, Object> posted, Map<String, byte[]> files, MediaType defaultContentType) {
+			String query, byte[] body, Map<String, String> params, Map<String, String> headers,
+			Map<String, String> cookies, Map<String, Object> posted, Map<String, byte[]> files,
+			MediaType defaultContentType) {
 
 		this.http = http;
 		this.channel = channel;
@@ -92,6 +95,7 @@ public class ReqImpl implements Req, Constants {
 		this.verb = verb;
 		this.uri = uri;
 		this.path = path;
+		this.query = query;
 		this.body = body;
 		this.params = params;
 		this.headers = headers;
@@ -131,6 +135,17 @@ public class ReqImpl implements Req, Constants {
 	@Override
 	public Req path(String path) {
 		this.path = path;
+		return this;
+	}
+
+	@Override
+	public String query() {
+		return query;
+	}
+
+	@Override
+	public Req query(String query) {
+		this.query = query;
 		return this;
 	}
 

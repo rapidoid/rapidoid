@@ -260,10 +260,11 @@ public class FastHttp implements Protocol, HttpMetadata {
 			String verb = xverb.str(buf);
 			String uri = xuri.str(buf);
 			String path = UTILS.urlDecode(xpath.str(buf));
+			String query = UTILS.urlDecode(xquery.str(buf));
 
 			MediaType contentType = handler != null ? handler.contentType() : MediaType.HTML_UTF_8;
 
-			req = new ReqImpl(this, channel, isKeepAlive.value, verb, uri, path, body, params, headers, cookies,
+			req = new ReqImpl(this, channel, isKeepAlive.value, verb, uri, path, query, body, params, headers, cookies,
 					posted, files, contentType);
 		}
 
