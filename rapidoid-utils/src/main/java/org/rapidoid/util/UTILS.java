@@ -25,8 +25,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
@@ -57,7 +55,6 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.Lmbd;
@@ -687,15 +684,13 @@ public class UTILS implements Constants {
 			return bytes;
 
 		} else if (obj instanceof File) {
-			File file = (File) obj;
-			try {
-				return IO.loadBytes(new FileInputStream(file));
-			} catch (FileNotFoundException e) {
-				throw U.rte(e);
-			}
+			Res res = Res.from((File) obj);
+			res.mustExist();
+			return res.getBytes();
 
 		} else if (obj instanceof Res) {
 			Res res = (Res) obj;
+			res.mustExist();
 			return res.getBytes();
 
 		} else {

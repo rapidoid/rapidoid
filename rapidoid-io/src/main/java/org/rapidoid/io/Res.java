@@ -72,6 +72,10 @@ public class Res {
 		return from(filename, true, filename);
 	}
 
+	public static Res from(File file) {
+		return from(file.getAbsolutePath());
+	}
+
 	public static Res from(String shortName, boolean withDefaults, String... filenames) {
 		Set<String> fnames = U.set(filenames);
 
@@ -202,8 +206,8 @@ public class Res {
 		return new StringReader(getContent());
 	}
 
-	private void mustExist() {
-		U.must(exists(), "The resource '%s' doesn't exist! Path: %s", shortName, filenames);
+	public void mustExist() {
+		U.must(exists(), "The file '%s' doesn't exist! Path: %s", shortName, filenames);
 	}
 
 	public Res onChange(Runnable listener) {
