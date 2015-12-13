@@ -20,6 +20,7 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
+import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,19 +38,23 @@ public class HttpResponse implements Response {
 
 	private final ReqImpl req;
 
-	private Object content = null;
+	private volatile Object content = null;
 
-	private int code = 200;
+	private volatile int code = 200;
 
-	private MediaType contentType = MediaType.HTML_UTF_8;
+	private volatile MediaType contentType = MediaType.HTML_UTF_8;
 
 	private final Map<String, String> headers = Collections.synchronizedMap(new HashMap<String, String>());
 
 	private final Map<String, String> cookies = Collections.synchronizedMap(new HashMap<String, String>());
 
-	private String redirect = null;
+	private volatile String redirect = null;
 
-	private String view = null;
+	private volatile String filename = null;
+
+	private volatile File file = null;
+
+	private volatile String view = null;
 
 	public HttpResponse(ReqImpl req) {
 		this.req = req;
@@ -111,6 +116,30 @@ public class HttpResponse implements Response {
 	@Override
 	public synchronized String redirect() {
 		return this.redirect;
+	}
+
+	@Override
+	public synchronized Response filename(String filename) {
+		ensureCanChange();
+		this.filename = filename;
+		return this;
+	}
+
+	@Override
+	public synchronized String filename() {
+		return this.filename;
+	}
+
+	@Override
+	public synchronized Response file(File file) {
+		ensureCanChange();
+		this.file = file;
+		return this;
+	}
+
+	@Override
+	public synchronized File file() {
+		return this.file;
 	}
 
 	private void ensureCanChange() {

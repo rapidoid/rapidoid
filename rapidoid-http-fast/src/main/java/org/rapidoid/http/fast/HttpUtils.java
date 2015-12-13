@@ -144,18 +144,18 @@ public class HttpUtils implements HttpMetadata {
 		}
 	}
 
-	public static void setContentTypeForFile(Req req, File file) {
+	public static void setContentTypeForFile(Response resp, File file) {
 		U.must(file.exists());
-		setContentType(req, MediaType.getByFileName(file.getAbsolutePath()));
+		setContentType(resp, MediaType.getByFileName(file.getAbsolutePath()));
 	}
 
-	public static void setContentTypeForResource(Req req, Res resource) {
+	public static void setContentTypeForResource(Response resp, Res resource) {
 		U.must(resource.exists());
-		setContentType(req, MediaType.getByFileName(resource.getShortName()));
+		setContentType(resp, MediaType.getByFileName(resource.getShortName()));
 	}
 
-	public static void setContentType(Req req, MediaType mediaType) {
-		req.response().contentType(mediaType);
+	public static void setContentType(Response resp, MediaType mediaType) {
+		resp.contentType(mediaType);
 	}
 
 	public static void setCookie(Req req, String name, String value, String... extras) {
@@ -209,6 +209,31 @@ public class HttpUtils implements HttpMetadata {
 
 	public static void postProcessResponse(Response resp) {
 		postProcessRedirect(resp);
+		postProcessFile(resp);
+		postProcessFilename(resp);
+	}
+
+	private static void postProcessFile(Response resp) {
+		File file = resp.file();
+		if (file != null) {
+			U.must(file.exists());
+
+			if (resp.filename() == null) {
+				resp.filename();
+			}
+
+			setContentTypeForFile(resp, file);
+
+			resp.content(Res.from(file.getAbsolutePath()).getBytes());
+		}
+	}
+
+	private static void postProcessFilename(Response resp) {
+		String filename = resp.filename();
+		if (filename != null) {
+			resp.headers().put(HttpHeaders.CONTENT_DISPOSITION.name(), "attachment; filename=\"" + filename + "\"");
+			resp.headers().put(HttpHeaders.CACHE_CONTROL.name(), "private");
+		}
 	}
 
 	private static void postProcessRedirect(Response resp) {

@@ -20,6 +20,7 @@ package org.rapidoid.http;
  * #L%
  */
 
+import java.io.File;
 import java.util.Map;
 
 import org.rapidoid.commons.MediaType;
@@ -45,6 +46,14 @@ public interface Response {
 	Response redirect(String redirect);
 
 	String redirect();
+
+	Response filename(String filename);
+
+	String filename();
+
+	Response file(File file);
+
+	File file();
 
 	Response view(String view);
 
