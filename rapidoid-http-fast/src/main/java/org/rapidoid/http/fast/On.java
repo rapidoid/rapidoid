@@ -23,6 +23,7 @@ package org.rapidoid.http.fast;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
+import org.rapidoid.http.fast.handler.FastHttpHandler;
 import org.rapidoid.http.fast.listener.FastHttpListener;
 import org.rapidoid.job.Jobs;
 
@@ -91,6 +92,10 @@ public class On {
 	}
 
 	public static synchronized ServerSetup req(ReqHandler handler) {
+		return setup().req(handler);
+	}
+
+	public static synchronized ServerSetup req(FastHttpHandler handler) {
 		return setup().req(handler);
 	}
 
