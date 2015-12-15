@@ -75,7 +75,7 @@ public class Log {
 
 		for (int i = 2; i < trace.length; i++) {
 			String cls = trace[i].getClassName();
-			if (!cls.equals(Log.class.getCanonicalName())) {
+			if (!cls.startsWith(Log.class.getCanonicalName())) {
 				return cls;
 			}
 		}
