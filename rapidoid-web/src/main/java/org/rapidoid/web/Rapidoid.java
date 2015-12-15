@@ -30,6 +30,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.config.ConfigHelp;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.http.fast.On;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugins;
@@ -84,6 +85,7 @@ public class Rapidoid {
 		ctx.setApp(app);
 
 		// Apps.serve(app, args, config);
+		On.req(new AppHandler(On.getDefaultSetup().http(), app));
 
 		Jobs.execute(new Runnable() {
 			@Override
@@ -130,7 +132,7 @@ public class Rapidoid {
 		Log.args(configArgsArr);
 
 		AOP.reset();
-		
+
 		AOP.intercept(new AuthInterceptor(), Admin.class, Manager.class, Moderator.class, LoggedIn.class,
 				DevMode.class, Role.class, HasRole.class);
 

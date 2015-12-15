@@ -1,15 +1,5 @@
 package org.rapidoid.web;
 
-import java.util.Collections;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.config.Config;
-import org.rapidoid.ctx.Classes;
-import org.rapidoid.scan.Scan;
-import org.rapidoid.u.U;
-
 /*
  * #%L
  * rapidoid-web
@@ -30,18 +20,23 @@ import org.rapidoid.u.U;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public class RootWebApp extends WebApp {
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.fast.FastHttp;
+import org.rapidoid.http.fast.On;
+import org.rapidoid.http.fast.handler.FastHttpHandler;
 
-	public RootWebApp() {
-		this(Classes.from(Scan.getClasses()));
+@Authors("Nikolche Mihajlovski")
+@Since("5.0.8")
+public class POJO {
+
+	public static FastHttpHandler handler() {
+		return handler(new RootWebApp());
 	}
 
-	@SuppressWarnings("unchecked")
-	public RootWebApp(Classes classes) {
-		super("root", Collections.EMPTY_SET, Collections.EMPTY_SET, U.set("/"), Conf.dev() ? AppMode.DEVELOPMENT
-				: AppMode.PRODUCTION, null, classes, new Config(Conf.root().toMap()));
+	public static FastHttpHandler handler(WebApp app) {
+		FastHttp http = On.getDefaultSetup().http();
+		return new AppHandler(http, app);
 	}
 
 }

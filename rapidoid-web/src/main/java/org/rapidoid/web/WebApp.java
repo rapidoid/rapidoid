@@ -50,12 +50,10 @@ public class WebApp {
 
 	private final Config config;
 
-	private final FastHttpHandler handler;
-
 	private volatile Object menu;
 
 	public WebApp(String id, Set<String> owners, Set<String> hostnames, Set<String> uriContexts, AppMode mode,
-			PojoDispatcher dispatcher, Classes classes, Config config, FastHttpHandler handler) {
+			PojoDispatcher dispatcher, Classes classes, Config config) {
 		this.id = id;
 		this.dispatcher = U.or(dispatcher, new WebPojoDispatcher(classes));
 		this.owners = U.safe(owners);
@@ -64,11 +62,10 @@ public class WebApp {
 		this.mode = U.or(mode, AppMode.DEVELOPMENT);
 		this.classes = U.or(classes, new Classes());
 		this.config = U.or(config, new Config());
-		this.handler = handler;
 	}
 
 	public WebApp(String id, String uriPath, Classes classes, FastHttpHandler handler) {
-		this(id, null, null, uriPath != null ? U.set(uriPath) : null, AppMode.DEVELOPMENT, null, classes, null, handler);
+		this(id, null, null, uriPath != null ? U.set(uriPath) : null, AppMode.DEVELOPMENT, null, classes, null);
 	}
 
 	public WebApp(String id, FastHttpHandler handler) {
@@ -129,10 +126,6 @@ public class WebApp {
 
 	public Object getMenu() {
 		return menu;
-	}
-
-	public FastHttpHandler getHandler() {
-		return handler;
 	}
 
 }

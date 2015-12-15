@@ -41,6 +41,7 @@ import org.rapidoid.dispatch.PojoHandlerNotFoundException;
 import org.rapidoid.dispatch.PojoRequest;
 import org.rapidoid.dispatch.impl.DispatchReqKind;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.Resp;
 import org.rapidoid.http.fast.FastHttp;
 import org.rapidoid.http.fast.HttpStatus;
 import org.rapidoid.http.fast.HttpUtils;
@@ -60,10 +61,13 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 
 	private static final Pattern DIRECTIVE = Pattern.compile("\\s*<!--\\s*#\\s*(\\{.+\\})\\s*-->\\s*");
 
+	private final WebApp app;
+
 	private static volatile ITemplate PAGE_TEMPLATE;
 
-	public AppHandler(FastHttp http) {
+	public AppHandler(FastHttp http, WebApp app) {
 		super(http, null, null);
+		this.app = app;
 	}
 
 	@Override
@@ -80,9 +84,6 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 			}
 		}
 
-		WebApp app = Ctxs.ctx().app();
-		PojoDispatcher dispatcher = app.getDispatcher();
-
 		// Prepare GUI state
 
 		// x.loadState();
@@ -96,7 +97,7 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		if (hasEvent) {
 			bindInputs(req);
 
-			DispatchResult dispatchResult = doDispatch(dispatcher, new WebReq(req));
+			DispatchResult dispatchResult = doDispatch(app.getDispatcher(), new WebReq(req));
 			if (dispatchResult != null) {
 				U.must(dispatchResult.getKind() == DispatchReqKind.PAGE);
 				result = dispatchResult.getResult();
@@ -114,15 +115,14 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		// dispatch REST services or PAGES (as POJO methods)
 
 		if (result == null) {
-			DispatchResult dres = doDispatch(dispatcher, new WebReq(req));
+			DispatchResult dres = doDispatch(app.getDispatcher(), new WebReq(req));
 
 			if (dres != null) {
 				result = dres.getResult();
 				config = dres.getConfig();
 
 				if (dres.getKind() == DispatchReqKind.SERVICE) {
-					req.response().contentType(MediaType.JSON_UTF_8);
-					return result;
+					return req.response().contentType(MediaType.JSON_UTF_8).content(result);
 				}
 			}
 		}
@@ -155,16 +155,17 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		}
 	}
 
-	public static Object view(Req x, Object result, boolean hasEvent, Map<String, Object> config) {
+	public Resp view(Req x, Object result, boolean hasEvent, Map<String, Object> config) {
 		// serve dynamic pages from file templates
 
+		x.response().contentType(MediaType.HTML_UTF_8);
+
 		if (Cls.bool(config.get("raw"))) {
-			x.response().contentType(MediaType.HTML_UTF_8);
-			return result;
+			return x.response().content(result);
 		}
 
 		if (serveDynamicPage(x, result, hasEvent, config)) {
-			return x;
+			return x.response();
 		}
 
 		if (result != null) {
@@ -174,7 +175,7 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		return null;
 	}
 
-	private static DispatchResult doDispatch(PojoDispatcher dispatcher, PojoRequest req) {
+	private DispatchResult doDispatch(PojoDispatcher dispatcher, PojoRequest req) {
 		try {
 			return dispatcher.dispatch(req);
 		} catch (PojoHandlerNotFoundException e) {
@@ -185,7 +186,8 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		}
 	}
 
-	public static boolean serveDynamicPage(Req x, Object result, boolean hasEvent, Map<String, Object> config) {
+	public boolean serveDynamicPage(Req x, Object result, boolean hasEvent, Map<String, Object> config) {
+
 		String filename = HttpUtils.resName(x) + ".html";
 		String firstFile = Conf.rootPath() + "/pages/" + filename;
 		String defaultFile = Conf.rootPathDefault() + "/pages/" + filename;
@@ -201,8 +203,6 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		} else {
 			return false;
 		}
-
-		WebApp app = Ctxs.ctx().app();
 
 		String title = U.or(app.getTitle(), x.host());
 		model.put("title", title);
@@ -227,17 +227,15 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		return true;
 	}
 
-	private static void renderPage(Req x, Map<String, Object> model) {
-		// TODO Auto-generated method stub
-
+	private void renderPage(Req x, Map<String, Object> model) {
+		pageTemplate().render(x.out(), x, model);
 	}
 
-	private static String renderPageToHTML(Req x, Map<String, Object> model) {
-		// TODO Auto-generated method stub
-		return null;
+	private String renderPageToHTML(Req x, Map<String, Object> model) {
+		return pageTemplate().render(x, model);
 	}
 
-	private static void serveEventResponse(Req x, String html) {
+	private void serveEventResponse(Req x, String html) {
 		x.response().code(200);
 
 		if (x.response().redirect() != null) {
@@ -249,7 +247,7 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		}
 	}
 
-	private static Map<String, Object> generatePageContent(Req x, Object result, Res resource) {
+	private Map<String, Object> generatePageContent(Req x, Object result, Res resource) {
 		String template = U.safe(resource.getContent());
 
 		Map<String, Object> model = model(x);
@@ -273,7 +271,7 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		return model;
 	}
 
-	public static DispatchResult on(Req x, PojoDispatcher dispatcher, String event, Object[] args) {
+	public DispatchResult on(Req x, PojoDispatcher dispatcher, String event, Object[] args) {
 
 		// Map<String, Object> state = U.cast(x.locals());
 		Map<String, Object> state = null;
@@ -282,33 +280,33 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		return doDispatch(dispatcher, req);
 	}
 
-	public static final void reload(Req x) {
+	public final void reload(Req x) {
 		Map<String, String> sel = U.map("body", PAGE_RELOAD);
 		x.response().json(U.map("_sel_", sel));
 	}
 
-	public static void render(Req req, ITemplate template, Object model) {
+	public void render(Req req, ITemplate template, Object model) {
 		template.render(req.out(), model, model(req));
 	}
 
-	public static void renderPage(Req req, Object model) {
+	public void renderPage(Req req, Object model) {
 		req.response().contentType(MediaType.HTML_UTF_8);
 		pageTemplate().render(req.out(), model, model(req));
 		req.done();
 	}
 
-	public static String renderPageToHTML(Req x, Object model) {
+	public String renderPageToHTML(Req x, Object model) {
 		return pageTemplate().render(model, model(x));
 	}
 
-	private static ITemplate pageTemplate() {
+	private ITemplate pageTemplate() {
 		if (PAGE_TEMPLATE == null) {
 			PAGE_TEMPLATE = Templates.fromFile("page.html");
 		}
 		return PAGE_TEMPLATE;
 	}
 
-	public static Map<String, Object> model(Req x) {
+	public Map<String, Object> model(Req x) {
 
 		Map<String, Object> model = U.map("req", x, "data", x.data(), "files", x.files(), "cookies", x.cookies(),
 				"headers", x.headers());
@@ -319,7 +317,6 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		model.put("host", x.host());
 		model.put("dev", HttpUtils.isDevMode(x));
 
-		WebApp app = Ctxs.ctx().app();
 		model.put("app", app);
 		model.put("menu", app != null ? app.getMenu() : null);
 

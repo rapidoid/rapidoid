@@ -160,7 +160,7 @@ public class Scripting {
 			}
 		}
 
-		AppHandler.view(x, result, false, config);
+		// AppHandler.view(x, result, false, config); FIXME refactor scripting
 
 		return true;
 	}

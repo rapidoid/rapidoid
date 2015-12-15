@@ -65,7 +65,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 	@SuppressWarnings("unchecked")
 	protected Object postprocessResult(Req req, Object result) throws Exception {
-		if (result instanceof Req || result instanceof Resp) {
+		if (result instanceof Req || result instanceof Resp || result instanceof HttpStatus) {
 			return result;
 
 		} else if (result == null) {
@@ -197,6 +197,10 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		} else if (result instanceof Throwable) {
 			Throwable error = (Throwable) result;
 			http.error(ctx, isKeepAlive, error);
+
+		} else if (result instanceof HttpStatus) {
+			HttpStatus status = (HttpStatus) result;
+			throw U.notExpected();
 
 		} else {
 			http.writeResult(ctx, isKeepAlive, result, contentType);
