@@ -416,13 +416,32 @@ public class ReqImpl implements Req, Constants {
 		startRendering();
 
 		if (!wasRendering) {
-			U.must(response != null && response.content() != null, "Response content wasn't provided!");
-			U.must(response.contentType() != null, "Response content type wasn't provided!");
-			http.renderBody(channel, response.code(), response.contentType(), response.content());
+			String err = validateResponse();
+			if (err != null) {
+				http.renderBody(channel, 500, MediaType.HTML_UTF_8, err.getBytes());
+			} else {
+				http.renderBody(channel, response.code(), response.contentType(), response.content());
+			}
 		}
 
 		completeResponse();
 		finish();
+	}
+
+	private String validateResponse() {
+		if (response == null) {
+			return "Response wasn't provided!";
+		}
+
+		if (response.content() == null && response.redirect() == null) {
+			return "Response content wasn't provided!";
+		}
+
+		if (response.contentType() == null) {
+			return "Response content type wasn't provided!";
+		}
+
+		return null;
 	}
 
 	private void renderCustomHeaders() {
