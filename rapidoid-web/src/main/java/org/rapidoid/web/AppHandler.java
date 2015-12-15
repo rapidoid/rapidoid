@@ -316,6 +316,7 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		model.put("path", x.path());
 		model.put("host", x.host());
 		model.put("dev", HttpUtils.isDevMode(x));
+		model.put("home", "/");
 
 		model.put("app", app);
 		model.put("menu", app != null ? app.getMenu() : null);
