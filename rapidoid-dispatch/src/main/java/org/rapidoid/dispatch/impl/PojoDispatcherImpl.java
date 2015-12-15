@@ -65,23 +65,25 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 
 	private void init(Map<String, Class<?>> components) {
 		for (Class<?> component : components.values()) {
-			Log.debug("Processing POJO", "class", component);
+			if (component.getCanonicalName() != null && !component.getCanonicalName().startsWith("org.rapidoid.log.")) {
 
-			List<String> componentPaths = getComponentNames(component);
-			for (String componentPath : componentPaths) {
+				Log.debug("Processing POJO", "class", component);
 
-				for (Method method : component.getMethods()) {
-					if (shouldExpose(method)) {
-						List<DispatchReq> actions = getMethodActions(componentPath, method);
+				List<String> componentPaths = getComponentNames(component);
+				for (String componentPath : componentPaths) {
 
-						for (DispatchReq action : actions) {
-							mappings.put(action, new DispatchTarget(component, method, action.config));
-							Log.info("Registered web handler", "kind", action.kind, "command", action.command, "path",
-									action.path, "method", method);
+					for (Method method : component.getMethods()) {
+						if (shouldExpose(method)) {
+							List<DispatchReq> actions = getMethodActions(componentPath, method);
+
+							for (DispatchReq action : actions) {
+								mappings.put(action, new DispatchTarget(component, method, action.config));
+								Log.info("Registered web handler", "kind", action.kind, "command", action.command,
+										"path", action.path, "method", method);
+							}
 						}
 					}
 				}
-
 			}
 		}
 	}
