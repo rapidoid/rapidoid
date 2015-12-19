@@ -166,7 +166,7 @@ public class Rapidoid {
 		Class<?> callerCls = UTILS.getCallingClassOf(Rapidoid.class);
 
 		if (callerCls != null) {
-			String rootPkg = callerCls.getPackage().getName();
+			String rootPkg = callerCls.getPackage() != null ? callerCls.getPackage().getName() : "";
 			Log.info("Setting root application package: " + rootPkg);
 			ClasspathUtil.setRootPackage(rootPkg);
 		} else {
