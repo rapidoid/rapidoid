@@ -19,11 +19,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-security</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-templates-mustache</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -34,11 +29,6 @@
 			<version>${project.version}</version>
 		</dependency>
 		 -->
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-dispatch</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-http-fast</artifactId>

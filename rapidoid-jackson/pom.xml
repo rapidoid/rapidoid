@@ -35,7 +35,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-io</artifactId>
+			<artifactId>rapidoid-u</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

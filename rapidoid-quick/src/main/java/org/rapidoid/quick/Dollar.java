@@ -21,10 +21,8 @@ import org.rapidoid.plugins.cache.CachePlugin;
 import org.rapidoid.plugins.db.DBPlugin;
 import org.rapidoid.plugins.email.EmailPlugin;
 import org.rapidoid.plugins.entities.EntitiesPlugin;
-import org.rapidoid.plugins.languages.LanguagesPlugin;
 import org.rapidoid.plugins.sms.SMSPlugin;
 import org.rapidoid.plugins.templates.TemplatesPlugin;
-import org.rapidoid.plugins.users.UsersPlugin;
 import org.rapidoid.sql.SQL;
 import org.rapidoid.sql.SQLAPI;
 import org.rapidoid.u.U;
@@ -71,8 +69,6 @@ public class Dollar {
 
 	public final RESTClient services = REST.DEFAULT_CLIENT;
 
-	public final LanguagesPlugin languages = Plugins.languages();
-
 	public final DBPlugin db = Plugins.db();
 
 	public final DBPlugin hibernate = Plugins.db("hibernate");
@@ -80,8 +76,6 @@ public class Dollar {
 	public final DBPlugin cassandra = Plugins.db("cassandra");
 
 	public final EntitiesPlugin entities = Plugins.entities();
-
-	public final UsersPlugin users = Plugins.users();
 
 	public final EmailPlugin email = Plugins.email();
 

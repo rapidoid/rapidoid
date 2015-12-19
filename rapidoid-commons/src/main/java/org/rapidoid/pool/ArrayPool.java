@@ -22,8 +22,8 @@ package org.rapidoid.pool;
 
 import java.util.concurrent.Callable;
 
-import org.rapidoid.AbstractInsightful;
 import org.rapidoid.commons.Arr;
+import org.rapidoid.insight.AbstractInsightful;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 

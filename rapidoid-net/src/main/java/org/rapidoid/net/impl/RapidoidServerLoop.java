@@ -46,6 +46,8 @@ import org.rapidoid.u.U;
 @Since("2.0.0")
 public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPServer, TCPServerInfo {
 
+	private static final int MAX_PENDING_CONNECTIONS = 16 * 1024;
+
 	private volatile RapidoidWorker[] ioWorkers;
 
 	private RapidoidWorker currentWorker;
@@ -123,7 +125,7 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 
 			socket.setReceiveBufferSize(16 * 1024);
 			socket.setReuseAddress(true);
-			socket.bind(addr, 1024);
+			socket.bind(addr, MAX_PENDING_CONNECTIONS);
 
 			Log.info("Opened server socket", "address", addr);
 

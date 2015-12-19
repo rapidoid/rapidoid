@@ -19,12 +19,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-wire</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-ctx</artifactId>
+			<artifactId>rapidoid-commons</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

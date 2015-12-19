@@ -36,8 +36,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.PersisterProvider;
 import org.rapidoid.io.IO;
+import org.rapidoid.scan.FindClasses;
 import org.rapidoid.u.U;
-import org.rapidoid.web.FindClasses;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

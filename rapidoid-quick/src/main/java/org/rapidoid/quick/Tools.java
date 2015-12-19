@@ -34,7 +34,6 @@ import org.rapidoid.plugins.cache.CachePlugin;
 import org.rapidoid.plugins.db.DBPlugin;
 import org.rapidoid.plugins.email.EmailPlugin;
 import org.rapidoid.plugins.entities.EntitiesPlugin;
-import org.rapidoid.plugins.languages.LanguagesPlugin;
 import org.rapidoid.plugins.sms.SMSPlugin;
 import org.rapidoid.plugins.templates.TemplatesPlugin;
 import org.rapidoid.sql.SQLAPI;
@@ -58,8 +57,6 @@ public interface Tools {
 	HttpClient http();
 
 	RESTClient services();
-
-	LanguagesPlugin languages();
 
 	DBPlugin db();
 

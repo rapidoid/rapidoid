@@ -28,16 +28,6 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-
-		<!--  PROVIDED DEPENDENCIES: ANY OF THEM CAN BE ON THE CLASSPATH -->
-				
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-ctx</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		
 	</dependencies>
 
 </project>

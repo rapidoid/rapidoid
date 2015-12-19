@@ -30,16 +30,14 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.config.ConfigHelp;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.entity.AppClasspathEntitiesPlugin;
 import org.rapidoid.http.fast.On;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.db.DBPlugin;
 import org.rapidoid.plugins.entities.EntitiesPlugin;
-import org.rapidoid.plugins.languages.LanguagesPlugin;
-import org.rapidoid.plugins.lifecycle.LifecyclePlugin;
 import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
-import org.rapidoid.plugins.users.UsersPlugin;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.security.annotation.Admin;
 import org.rapidoid.security.annotation.DevMode;
@@ -148,12 +146,6 @@ public class Rapidoid {
 			Plugins.register((DBPlugin) arg);
 		} else if (arg instanceof EntitiesPlugin) {
 			Plugins.register((EntitiesPlugin) arg);
-		} else if (arg instanceof LanguagesPlugin) {
-			Plugins.register((LanguagesPlugin) arg);
-		} else if (arg instanceof LifecyclePlugin) {
-			Plugins.register((LifecyclePlugin) arg);
-		} else if (arg instanceof UsersPlugin) {
-			Plugins.register((UsersPlugin) arg);
 		}
 	}
 

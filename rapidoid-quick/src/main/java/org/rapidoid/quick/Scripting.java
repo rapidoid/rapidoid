@@ -46,7 +46,6 @@ import org.rapidoid.io.Res;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.web.AppHandler;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.2.0")

@@ -20,37 +20,31 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
-
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.HTTP;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.fast.On;
+import org.rapidoid.http.fast.ReqHandler;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
+@Since("4.1.0")
 public class HttpServerTest extends HttpTestCommons {
 
 	@Test
-	public void shouldHandleUTF8() {
-		defaultServerSetup();
+	public void testHttpServer() {
+		On.get("/").html("home");
 
-		System.out.println("file.encoding = " + System.getProperty("file.encoding"));
-		System.out.println("Charset.defaultCharset() = " + Charset.defaultCharset());
-		System.out.println("default writer.encoding = "
-				+ new OutputStreamWriter(new ByteArrayOutputStream()).getEncoding());
+		On.req(new ReqHandler() {
+			@Override
+			public Object handle(Req req) throws Exception {
+				return req.response().json("abc");
+			}
+		});
 
-		String message = "ažфbдšгcč";
-		System.out.println("UTF-8 message = " + message);
-		System.out.println("UTF-8 message length = " + message.length());
-
-		eq(message.length(), 9);
-
-		eq(get("/x?" + message), "GET:/x:" + message);
-		eq(get("/echo?" + message), "GET:/echo:" + message);
-		eq(get("/echo/abc?" + message), "GET:/echo/abc:" + message);
-		eq(get("/echo/abc/d" + message), "GET:/echo/abc/d" + message + ":");
+		eq(new String(HTTP.get("http://localhost:8888/")), "home");
+		eq(new String(HTTP.post("http://localhost:8888/", null, new byte[0], null)), "\"abc\"");
 	}
 
 }

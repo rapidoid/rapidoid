@@ -24,9 +24,9 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.YAML;
+import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.gui.menu.PageMenuItem;
 import org.rapidoid.gui.menu.PageSubMenuItem;
-import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.io.Res;
 import org.rapidoid.test.TestCommons;
 

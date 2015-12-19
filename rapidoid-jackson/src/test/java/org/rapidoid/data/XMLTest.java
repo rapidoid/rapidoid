@@ -21,7 +21,6 @@ package org.rapidoid.data;
  */
 
 import org.junit.Test;
-import org.rapidoid.data.XML;
 import org.rapidoid.test.TestCommons;
 
 /**

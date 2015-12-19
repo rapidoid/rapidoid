@@ -324,7 +324,7 @@ public class UTest extends TestCommons {
 		eq(U.path(""), "");
 		eq(U.path("", "a"), "a");
 		eq(U.path("b", ""), "b");
-		eq(U.path("/", "x"), "/x");
+		eq(U.path("x", "y"), "x" + File.separator + "y");
 
 		String abcd = "/ab" + File.separator + "cd";
 		eq(U.path("/ab\\", "cd\\"), abcd);

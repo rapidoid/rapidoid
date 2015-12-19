@@ -19,7 +19,6 @@ import org.rapidoid.plugins.cache.CachePlugin;
 import org.rapidoid.plugins.db.DBPlugin;
 import org.rapidoid.plugins.email.EmailPlugin;
 import org.rapidoid.plugins.entities.EntitiesPlugin;
-import org.rapidoid.plugins.languages.LanguagesPlugin;
 import org.rapidoid.plugins.sms.SMSPlugin;
 import org.rapidoid.plugins.templates.TemplatesPlugin;
 import org.rapidoid.sql.SQL;
@@ -56,8 +55,6 @@ public class ToolsImpl implements Tools {
 	private final HttpClient http = HTTP.DEFAULT_CLIENT;
 
 	private final RESTClient services = REST.DEFAULT_CLIENT;
-
-	private final LanguagesPlugin languages = Plugins.languages();
 
 	private final DBPlugin db = Plugins.db();
 
@@ -129,11 +126,6 @@ public class ToolsImpl implements Tools {
 	@Override
 	public RESTClient services() {
 		return services;
-	}
-
-	@Override
-	public LanguagesPlugin languages() {
-		return languages;
 	}
 
 	@Override

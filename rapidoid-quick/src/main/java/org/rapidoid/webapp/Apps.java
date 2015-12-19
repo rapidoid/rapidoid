@@ -24,7 +24,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.log.Log;
-import org.rapidoid.plugins.lifecycle.Lifecycle;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Usage;
 
@@ -74,7 +73,6 @@ public class Apps {
 
 	public static void terminate() {
 		Log.warn("Terminating application.");
-		Lifecycle.onShutdown();
 		System.exit(0);
 	}
 

@@ -37,6 +37,7 @@ import org.rapidoid.http.fast.On;
 import org.rapidoid.http.fast.ReqHandler;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
+import org.rapidoid.log.LogLevel;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
@@ -46,14 +47,16 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	@Before
 	public void openContext() {
+		Log.setLogLevel(LogLevel.INFO);
+
 		HTTP.DEFAULT_CLIENT.reset();
 
 		System.out.println("--- STARTING SERVER ---");
 		org.rapidoid.web.WebAppGroup.openRootContext();
 
 		On.getDefaultSetup().http().clearHandlers();
-
 		On.getDefaultSetup().listen();
+
 		U.sleep(300);
 		System.out.println("--- SERVER STARTED ---");
 	}

@@ -20,8 +20,12 @@ package org.rapidoid.test;
  * #L%
  */
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -335,8 +339,29 @@ public abstract class TestCommons {
 		return getClass().getClassLoader().getResource(filename);
 	}
 
-	protected File resourceFile(String filename) {
-		return new File(resource(filename).getFile());
+	protected byte[] readBytes(InputStream input) {
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+		byte[] buffer = new byte[16 * 1024];
+
+		try {
+			int readN = 0;
+			while ((readN = input.read(buffer)) != -1) {
+				output.write(buffer, 0, readN);
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		return output.toByteArray();
+	}
+
+	protected byte[] loadRes(String filename) {
+		try {
+			return readBytes(new FileInputStream(new File(resource(filename).getFile())));
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	protected <T> T mock(Class<T> classToMock) {

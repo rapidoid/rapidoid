@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
-import org.rapidoid.data.YAML;
-import org.rapidoid.io.IO;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
@@ -43,14 +41,14 @@ public class YAMLTest extends TestCommons {
 
 	@Test
 	public void parseMap() {
-		String yaml = IO.load("test.yaml");
+		String yaml = new String(loadRes("test.yaml"));
 		Map<String, Object> data = YAML.parseMap(yaml);
 		eq(data, U.map("aa", 1, "bb", "2am", "cc", U.map("x", true, "z", false)));
 	}
 
 	@Test
 	public void parseBeans() {
-		String yaml = IO.load("persons.yaml");
+		String yaml = new String(loadRes("persons.yaml"));
 
 		List<User> persons = YAML.parse(yaml, personList);
 		eq(persons.size(), 2);
@@ -64,5 +62,4 @@ public class YAMLTest extends TestCommons {
 		eq(p2.name, "Highlander");
 		eq(p2.age, 900);
 	}
-
 }

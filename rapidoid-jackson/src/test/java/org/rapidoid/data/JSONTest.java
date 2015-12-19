@@ -23,7 +23,6 @@ package org.rapidoid.data;
 import java.util.Map;
 
 import org.junit.Test;
-import org.rapidoid.data.JSON;
 import org.rapidoid.test.TestCommons;
 
 /**

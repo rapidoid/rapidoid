@@ -67,7 +67,7 @@ public class AppTool {
 						conf = U.map();
 					}
 
-					Conf.reset();
+					Conf.root().clear();
 					rootApp.getConfig().clear();
 
 					for (Entry<String, Object> e : conf.entrySet()) {
