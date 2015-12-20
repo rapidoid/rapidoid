@@ -137,7 +137,7 @@ public class ClasspathUtil {
 
 	public static List<Class<?>> scanClasses(ScanParams params) {
 
-		String packageName = U.or(params.pkg(), "");
+		String packageName = U.safe(U.or(params.pkg(), rootPackage));
 
 		long startingAt = U.time();
 
