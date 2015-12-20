@@ -165,7 +165,10 @@ public class ClasspathUtil {
 
 		Set<String> classpath = getClasspath();
 
-		Log.info("Scanning classpath", "classpath", classpath);
+		Log.info("Scanning classpath", "package", packageName, "annotated", annotated, "regex", regex, "filter",
+				filter, "loader", classLoader);
+
+		Log.debug("Classpath details", "classpath", classpath);
 
 		Set<String> jars = U.set();
 
