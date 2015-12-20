@@ -9,10 +9,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -22,7 +19,6 @@ import java.util.zip.ZipInputStream;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.io.IO;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
@@ -52,10 +48,6 @@ import org.rapidoid.u.U;
 @Since("2.0.0")
 public class ClasspathUtil {
 
-	private static final String[] SKIP_PKG = { "com", "org", "net", "io" };
-	private static final Set<String> SKIP_PACKAGES = new HashSet<String>();
-	private static final Map<String, Set<String>> SKIP_SUBPACKAGES = new HashMap<String, Set<String>>();
-
 	private static final Set<String> CLASSPATH = new TreeSet<String>();
 
 	private static boolean ignoreRapidoidClasses = true;
@@ -65,24 +57,6 @@ public class ClasspathUtil {
 	private static final String ORG_RAPIDOIDX_DIR = "org" + File.separatorChar + "rapidoidx" + File.separatorChar;
 
 	private ClasspathUtil() {}
-
-	static {
-		SKIP_PACKAGES.addAll(IO.loadLines("scan-ignore.txt"));
-		SKIP_PACKAGES.add("java");
-		SKIP_PACKAGES.add("javax");
-		SKIP_PACKAGES.add("META-INF");
-		SKIP_PACKAGES.add("license");
-		SKIP_PACKAGES.add("public");
-		SKIP_PACKAGES.add("static");
-
-		for (String pkg : SKIP_PKG) {
-			SKIP_SUBPACKAGES.put(pkg, U.set(IO.loadLines(U.frmt("scan-ignore-%s.txt", pkg))));
-		}
-
-		SKIP_SUBPACKAGES.get("org").add("xml");
-		SKIP_SUBPACKAGES.get("org").add("dom4j");
-		SKIP_SUBPACKAGES.get("com").add("fasterxml");
-	}
 
 	public static synchronized void reset() {
 		CLASSPATH.clear();
@@ -341,19 +315,10 @@ public class ClasspathUtil {
 		int p2 = -1;
 
 		if (p1 > 0) {
-			String part1 = pkgDirName.substring(0, p1);
-			if (SKIP_PACKAGES.contains(part1)) {
-				return true;
-			}
-
 			p2 = pkgDirName.indexOf(File.separatorChar, p1 + 1);
 			if (p2 > 0) {
 				String part2 = pkgDirName.substring(p1 + 1, p2);
 				if (U.isEmpty(part2)) {
-					return true;
-				}
-				Set<String> subpkg = SKIP_SUBPACKAGES.get(part1);
-				if (subpkg != null && subpkg.contains(part2)) {
 					return true;
 				}
 			}
