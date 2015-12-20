@@ -24,12 +24,12 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")
-public class CryptoTest extends TestCommons {
+public class CryptoTest extends AbstractCommonsTest {
 
 	@Test
 	public void testDigest() {

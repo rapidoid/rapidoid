@@ -48,7 +48,7 @@ class Baz {
 
 @Authors("Daniel Kalevski")
 @Since("4.0.1")
-public class BeanyPropertiesTest {
+public class BeanyPropertiesTest extends BeanyTestCommons {
 
 	@Test
 	public void testGetPropValue() {
@@ -56,7 +56,6 @@ public class BeanyPropertiesTest {
 		Assert.assertEquals(baz.x, Beany.getPropValue(baz, "x"));
 	}
 
-	
 	public void testGetIdValue() {
 		Baz baz = new Baz();
 		Assert.assertEquals("114", Beany.getId(baz));

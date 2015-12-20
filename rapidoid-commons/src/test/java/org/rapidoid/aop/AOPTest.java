@@ -27,11 +27,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.log.Log;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.AbstractCommonsTest;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class AOPTest extends TestCommons {
+public class AOPTest extends AbstractCommonsTest {
 
 	@SuppressWarnings("unchecked")
 	@Test

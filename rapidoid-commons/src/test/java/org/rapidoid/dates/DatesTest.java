@@ -24,13 +24,13 @@ import java.util.Calendar;
 
 import org.junit.Test;
 import org.rapidoid.commons.Dates;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.AbstractCommonsTest;
 
 /**
  * @author Nikolche Mihajlovski
  * @since 2.0.0
  */
-public class DatesTest extends TestCommons {
+public class DatesTest extends AbstractCommonsTest {
 
 	@Test
 	public void testDate() {

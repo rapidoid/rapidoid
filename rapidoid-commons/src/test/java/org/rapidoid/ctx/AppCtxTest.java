@@ -5,7 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.AbstractCommonsTest;
 
 /*
  * #%L
@@ -29,12 +29,12 @@ import org.rapidoid.test.TestCommons;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class AppCtxTest extends TestCommons {
+public class AppCtxTest extends AbstractCommonsTest {
 
 	@Test
 	public void testAppCtx() {
 		Log.setLogLevel(LogLevel.INFO);
-		
+
 		multiThreaded(1000, 1000000, new Runnable() {
 
 			@Override

@@ -7,7 +7,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.scan.Scan;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
 
 import cccccc.Ccccc;
@@ -39,7 +39,7 @@ class Foo {}
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class ClasspathScanTest extends TestCommons {
+public class ClasspathScanTest extends AbstractCommonsTest {
 
 	@SuppressWarnings("unchecked")
 	@Test

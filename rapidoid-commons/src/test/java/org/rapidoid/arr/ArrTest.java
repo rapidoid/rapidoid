@@ -22,13 +22,13 @@ package org.rapidoid.arr;
 
 import org.junit.Test;
 import org.rapidoid.commons.Arr;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.AbstractCommonsTest;
 
 /**
  * @author Nikolche Mihajlovski
  * @since 2.0.0
  */
-public class ArrTest extends TestCommons {
+public class ArrTest extends AbstractCommonsTest {
 
 	@Test
 	public void testSubarray() {

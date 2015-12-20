@@ -23,11 +23,11 @@ package org.rapidoid.io;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.AbstractCommonsTest;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class ResTest extends TestCommons {
+public class ResTest extends AbstractCommonsTest {
 
 	@Test
 	public void testWhereDefaultsDontExist() {

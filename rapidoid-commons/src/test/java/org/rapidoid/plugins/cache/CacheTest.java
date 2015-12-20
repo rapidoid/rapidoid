@@ -27,12 +27,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class CacheTest extends TestCommons {
+public class CacheTest extends AbstractCommonsTest {
 
 	/**
 	 * The default cache implementation is {@link NoCache}.

@@ -23,12 +23,12 @@ package org.rapidoid.wire.db;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class DbInjectionTest extends TestCommons {
+public class DbInjectionTest extends AbstractCommonsTest {
 
 	@Test
 	public void shouldInject() throws Exception {

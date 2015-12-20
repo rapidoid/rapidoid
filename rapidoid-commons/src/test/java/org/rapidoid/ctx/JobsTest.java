@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.AbstractCommonsTest;
 
 /*
  * #%L
@@ -32,7 +32,7 @@ import org.rapidoid.test.TestCommons;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class JobsTest extends TestCommons {
+public class JobsTest extends AbstractCommonsTest {
 
 	@Test(timeout = 30000)
 	public void testJobsExecution() {

@@ -24,11 +24,11 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.English;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.AbstractCommonsTest;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class EnglishTest extends TestCommons {
+public class EnglishTest extends AbstractCommonsTest {
 
 	@Test
 	public void testPlural() {

@@ -23,11 +23,11 @@ package org.rapidoid.ctx;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.AbstractCommonsTest;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class CtxTest extends TestCommons {
+public class CtxTest extends AbstractCommonsTest {
 
 	@Test
 	public void testCtxLifecycle() {

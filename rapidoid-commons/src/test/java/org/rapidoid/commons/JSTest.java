@@ -28,12 +28,12 @@ import javax.script.SimpleBindings;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")
-public class JSTest extends TestCommons {
+public class JSTest extends AbstractCommonsTest {
 
 	@Test
 	public void testEvalJS() throws ScriptException {

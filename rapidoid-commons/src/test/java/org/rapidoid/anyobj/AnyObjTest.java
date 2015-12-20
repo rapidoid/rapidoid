@@ -22,14 +22,14 @@ package org.rapidoid.anyobj;
 
 import org.junit.Test;
 import org.rapidoid.commons.AnyObj;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
 
 /**
  * @author Nikolche Mihajlovski
  * @since 4.0.0
  */
-public class AnyObjTest extends TestCommons {
+public class AnyObjTest extends AbstractCommonsTest {
 
 	@Test
 	public void testExclude() {

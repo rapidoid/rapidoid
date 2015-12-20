@@ -1,4 +1,4 @@
-package org.rapidoid.ctx;
+package org.rapidoid.security;
 
 /*
  * #%L
@@ -24,17 +24,15 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.security.Roles;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")
-public class RolesTest extends TestCommons {
+public class RolesTest extends AbstractCommonsTest {
 
 	@Test
 	public void testRolesConfig() {
-		Roles.resetConfig();
-
 		eq(Roles.getRolesFor("niko"), U.set("owner", "moderator", "admin"));
 		eq(Roles.getRolesFor("chuck"), U.set("moderator", "restarter"));
 		eq(Roles.getRolesFor("abc"), U.set("guest"));

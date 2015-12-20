@@ -22,10 +22,10 @@ package org.rapidoid.beany;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.TestCommons;
+import org.rapidoid.test.AbstractCommonsTest;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class BeanyTestCommons extends TestCommons {
+public abstract class BeanyTestCommons extends AbstractCommonsTest {
 
 }
