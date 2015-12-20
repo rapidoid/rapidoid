@@ -110,7 +110,7 @@ public class OAuth {
 				callbackPath);
 
 		String statePrefix = popup ? "P" : "N";
-		String state = statePrefix + STATE_CHECK.generateState(clientSecret, HttpUtils.getSessionId(req));
+		String state = statePrefix + STATE_CHECK.generateState(clientSecret, req.sessionId());
 
 		try {
 			OAuthClientRequest request = OAuthClientRequest.authorizationLocation(provider.getAuthEndpoint())

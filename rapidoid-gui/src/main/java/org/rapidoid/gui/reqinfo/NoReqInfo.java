@@ -96,6 +96,11 @@ public class NoReqInfo extends AbstractReqInfo {
 	}
 
 	@Override
+	public Map<String, Object> attrs() {
+		return EMPTY;
+	}
+
+	@Override
 	public String username() {
 		return null;
 	}

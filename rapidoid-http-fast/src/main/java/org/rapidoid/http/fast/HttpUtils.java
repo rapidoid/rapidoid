@@ -42,10 +42,6 @@ public class HttpUtils implements HttpMetadata {
 
 	private static final String PAGE_RELOAD = "<h2>&nbsp;Reloading...</h2><script>location.reload();</script>";
 
-	public static String getSessionId(Req req) {
-		return req.cookie(SESSION_COOKIE, null);
-	}
-
 	public static byte[] serializeLocals(Map<String, Serializable> locals) {
 		return locals != null ? UTILS.serialize(locals) : null;
 	}

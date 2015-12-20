@@ -53,6 +53,8 @@ public class MockReqInfo extends AbstractReqInfo {
 
 	private Map<String, String> cookies = U.map();
 
+	private Map<String, Object> attributes = U.map();
+
 	private String username;
 
 	private Set<String> roles = U.set();
@@ -172,6 +174,16 @@ public class MockReqInfo extends AbstractReqInfo {
 	}
 
 	@Override
+	public Map<String, Object> attrs() {
+		return attributes;
+	}
+
+	public MockReqInfo setAttributes(Map<String, Object> attributes) {
+		this.attributes = attributes;
+		return this;
+	}
+
+	@Override
 	public String username() {
 		return username;
 	}
@@ -200,7 +212,8 @@ public class MockReqInfo extends AbstractReqInfo {
 				+ (posted != null ? toString(posted.entrySet(), maxLen) : null) + ", files="
 				+ (files != null ? toString(files.entrySet(), maxLen) : null) + ", headers="
 				+ (headers != null ? toString(headers.entrySet(), maxLen) : null) + ", cookies="
-				+ (cookies != null ? toString(cookies.entrySet(), maxLen) : null) + ", username=" + username
+				+ (cookies != null ? toString(cookies.entrySet(), maxLen) : null) + ", attributes="
+				+ (attributes != null ? toString(attributes.entrySet(), maxLen) : null) + ", username=" + username
 				+ ", roles=" + (roles != null ? toString(roles, maxLen) : null) + "]";
 	}
 

@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -40,7 +41,7 @@ import org.rapidoid.util.Constants;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.2")
-public class ReqImpl implements Req, Constants {
+public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	private final FastHttp http;
 
@@ -69,6 +70,10 @@ public class ReqImpl implements Req, Constants {
 	private final Map<String, byte[]> files;
 
 	private final Map<String, Object> attrs = Collections.synchronizedMap(new HashMap<String, Object>());
+
+	private volatile Map<String, Object> data;
+
+	private volatile Map<String, Serializable> cookiepack;
 
 	private volatile Resp response;
 
@@ -263,13 +268,21 @@ public class ReqImpl implements Req, Constants {
 
 	@Override
 	public Map<String, Object> data() {
-		Map<String, Object> data = new HashMap<String, Object>();
+		if (data == null) {
+			synchronized (this) {
+				if (data == null) {
+					Map<String, Object> allData = U.map();
 
-		data.putAll(params);
-		data.putAll(files);
-		data.putAll(posted);
+					allData.putAll(params);
+					allData.putAll(files);
+					allData.putAll(posted);
 
-		return Collections.unmodifiableMap(data);
+					data = Collections.unmodifiableMap(allData);
+				}
+			}
+		}
+
+		return data;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -359,6 +372,10 @@ public class ReqImpl implements Req, Constants {
 		int code = 200;
 		MediaType contentType = MediaType.HTML_UTF_8;
 
+		if (cookiepack != null) {
+			HttpUtils.saveCookipackBeforeClosingHeaders(this, cookiepack);
+		}
+
 		if (response != null) {
 			HttpUtils.postProcessResponse(response);
 
@@ -372,7 +389,7 @@ public class ReqImpl implements Req, Constants {
 	private void startResponseRendering(int code, MediaType contentType) {
 		http.startResponse(channel, code, isKeepAlive, contentType);
 
-		if (response != null) {
+		if (response != null || !U.isEmpty(cookies)) {
 			renderCustomHeaders();
 		}
 
@@ -473,6 +490,76 @@ public class ReqImpl implements Req, Constants {
 	@Override
 	public boolean isAsync() {
 		return async;
+	}
+
+	/* SESSION: */
+
+	@Override
+	public String sessionId() {
+		String sessionId = cookie(SESSION_COOKIE, null);
+
+		if (U.isEmpty(sessionId)) {
+			sessionId = UUID.randomUUID().toString();
+			HttpUtils.setCookie(this, SESSION_COOKIE, sessionId, "path=/");
+		}
+
+		return sessionId;
+	}
+
+	@Override
+	public boolean hasSession() {
+		return cookie(SESSION_COOKIE, null) != null;
+	}
+
+	@Override
+	public Map<String, Serializable> session() {
+		return http.session(sessionId());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Serializable> T session(String name) {
+		Serializable value = hasSession() ? session().get(name) : null;
+		return (T) U.notNull(value, "SESSION[%s]", name);
+	}
+
+	@Override
+	public <T extends Serializable> T session(String name, T defaultValue) {
+		Serializable value = hasSession() ? session().get(name) : null;
+		return withDefault(value, defaultValue);
+	}
+
+	/* COOKIEPACK: */
+
+	@Override
+	public boolean hasCookiepack() {
+		return cookie(COOKIEPACK_COOKIE, null) != null;
+	}
+
+	@Override
+	public Map<String, Serializable> cookiepack() {
+		if (cookiepack == null) {
+			synchronized (this) {
+				if (cookiepack == null) {
+					cookiepack = Collections.synchronizedMap(U.safe(HttpUtils.initAndDeserializeCookiePack(this)));
+				}
+			}
+		}
+
+		return cookiepack;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Serializable> T cookiepack(String name) {
+		Serializable value = hasCookiepack() ? cookiepack().get(name) : null;
+		return (T) U.notNull(value, "COOKIEPACK[%s]", name);
+	}
+
+	@Override
+	public <T extends Serializable> T cookiepack(String name, T defaultValue) {
+		Serializable value = hasCookiepack() ? cookiepack().get(name) : null;
+		return withDefault(value, defaultValue);
 	}
 
 }

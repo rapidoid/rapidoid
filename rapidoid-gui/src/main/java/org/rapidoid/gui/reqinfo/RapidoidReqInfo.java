@@ -94,6 +94,11 @@ public class RapidoidReqInfo extends AbstractReqInfo {
 	}
 
 	@Override
+	public Map<String, Object> attrs() {
+		return req().attrs();
+	}
+
+	@Override
 	public String username() {
 		return Ctxs.ctx().username();
 	}

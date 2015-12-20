@@ -1,5 +1,7 @@
 package org.rapidoid.http.fast;
 
+import java.util.Map;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
@@ -167,6 +169,10 @@ public class ServerSetup {
 
 	public TCPServer server() {
 		return server;
+	}
+
+	public Map<String, Object> attributes() {
+		return http().attributes();
 	}
 
 }

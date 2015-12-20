@@ -46,6 +46,4 @@ public interface HttpMetadata extends CtxMetadata {
 
 	String COOKIPACK_SESSION = "_session_";
 
-	String EMBEDDED = "embedded";
-
 }

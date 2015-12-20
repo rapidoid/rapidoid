@@ -186,9 +186,9 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		}
 	}
 
-	public boolean serveDynamicPage(Req x, Object result, boolean hasEvent, Map<String, Object> config) {
+	public boolean serveDynamicPage(Req req, Object result, boolean hasEvent, Map<String, Object> config) {
 
-		String filename = HttpUtils.resName(x) + ".html";
+		String filename = HttpUtils.resName(req) + ".html";
 		String firstFile = Conf.rootPath() + "/pages/" + filename;
 		String defaultFile = Conf.rootPathDefault() + "/pages/" + filename;
 		Res res = Res.from(filename, true, firstFile, defaultFile);
@@ -196,7 +196,7 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		Map<String, Object> model = U.cast(U.map("login", true, "profile", true));
 
 		if (res.exists()) {
-			model.putAll(generatePageContent(x, result, res));
+			model.putAll(generatePageContent(req, result, res));
 		} else if (result != null) {
 			model.put("result", result);
 			model.put("content", result);
@@ -204,9 +204,13 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 			return false;
 		}
 
-		String title = U.or(app.getTitle(), x.host());
+		boolean embedded = req.attr("_embedded", null) != null;
+
+		String title = U.or(app.getTitle(), req.host());
+
 		model.put("title", title);
-		model.put("embedded", hasEvent || x.param("_embedded", null) != null);
+		model.put("embedded", embedded);
+		model.put("home", "/");
 
 		// the @Page configuration overrides the previous
 
@@ -218,21 +222,13 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 			model.put("navbar", !U.isEmpty(model.get("title")));
 		}
 
-		if (hasEvent && x.param("_embedded", null) == null) {
-			serveEventResponse((Req) x, renderPageToHTML(x, model));
+		if (hasEvent) {
+			serveEventResponse(req, renderPageToHTML(req, model));
 		} else {
-			renderPage(x, model);
+			renderPage(req, model);
 		}
 
 		return true;
-	}
-
-	private void renderPage(Req x, Map<String, Object> model) {
-		pageTemplate().render(x.out(), x, model);
-	}
-
-	private String renderPageToHTML(Req x, Map<String, Object> model) {
-		return pageTemplate().render(x, model);
 	}
 
 	private void serveEventResponse(Req x, String html) {
@@ -289,20 +285,19 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		template.render(req.out(), model, model(req));
 	}
 
-	public void renderPage(Req req, Object model) {
-		req.response().contentType(MediaType.HTML_UTF_8);
-		pageTemplate().render(req.out(), model, model(req));
-		req.done();
+	private void renderPage(Req x, Map<String, Object> model) {
+		pageTemplate().render(x.out(), model);
 	}
 
-	public String renderPageToHTML(Req x, Object model) {
-		return pageTemplate().render(model, model(x));
+	private String renderPageToHTML(Req x, Map<String, Object> model) {
+		return pageTemplate().render(x, model);
 	}
 
 	private ITemplate pageTemplate() {
 		if (PAGE_TEMPLATE == null) {
 			PAGE_TEMPLATE = Templates.fromFile("page.html");
 		}
+
 		return PAGE_TEMPLATE;
 	}
 

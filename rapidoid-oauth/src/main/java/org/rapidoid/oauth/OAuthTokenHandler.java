@@ -81,7 +81,7 @@ public class OAuthTokenHandler implements ReqHandler {
 			U.must(statePrefix == 'P' || statePrefix == 'N', "Invalid OAuth state prefix!");
 			state = state.substring(1);
 
-			U.must(stateCheck.isValidState(state, secret, HttpUtils.getSessionId(req)), "Invalid OAuth state!");
+			U.must(stateCheck.isValidState(state, secret, req.sessionId()), "Invalid OAuth state!");
 
 			boolean popup = statePrefix == 'P';
 			Log.debug("OAuth validated", "popup", popup);

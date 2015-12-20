@@ -170,42 +170,37 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 	protected abstract Object handleReq(Channel ctx, boolean isKeepAlive, Req req) throws Exception;
 
 	public void complete(Channel ctx, boolean isKeepAlive, Req req, Object result) {
+
 		if (result == null) {
 			http.notFound(ctx, isKeepAlive, this, req);
 			return; // not found
+		}
 
-		} else if (result instanceof Req) {
-			U.must(req == result);
-
-			// the Req object will do the rendering
-			if (!req.isAsync()) {
-				req.done();
-			}
-
+		if (result instanceof Throwable) {
+			Throwable error = (Throwable) result;
+			http.error(ctx, isKeepAlive, error);
 			return;
+		}
+
+		if (result instanceof HttpStatus) {
+			http.error(ctx, isKeepAlive, U.notExpected());
+			return;
+		}
+
+		if (result instanceof Req) {
+			U.must(req == result);
 
 		} else if (result instanceof Resp) {
 			U.must(req.response() == result);
 
-			// the Req object will do the rendering
-			if (!req.isAsync()) {
-				req.done();
-			}
-
-			return;
-
-		} else if (result instanceof Throwable) {
-			Throwable error = (Throwable) result;
-			http.error(ctx, isKeepAlive, error);
-
-		} else if (result instanceof HttpStatus) {
-			HttpStatus status = (HttpStatus) result;
-			throw U.notExpected();
-
 		} else {
-			http.writeResult(ctx, isKeepAlive, result, contentType);
+			req.response().content(result);
 		}
 
-		http.done(ctx, isKeepAlive);
+		// the Req object will do the rendering
+		if (!req.isAsync()) {
+			req.done();
+		}
 	}
+
 }

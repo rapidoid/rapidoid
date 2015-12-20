@@ -132,9 +132,31 @@ public interface Req {
 
 	Map<String, Object> attrs();
 
-	<T> T attr(String key);
+	<T> T attr(String name);
 
-	<T> T attr(String key, T defaultValue);
+	<T> T attr(String name, T defaultValue);
+
+	/* SESSION: */
+
+	boolean hasSession();
+
+	String sessionId();
+
+	Map<String, Serializable> session();
+
+	<T extends Serializable> T session(String name);
+
+	<T extends Serializable> T session(String name, T defaultValue);
+
+	/* COOKIEPACK: */
+
+	boolean hasCookiepack();
+
+	Map<String, Serializable> cookiepack();
+
+	<T extends Serializable> T cookiepack(String name);
+
+	<T extends Serializable> T cookiepack(String name, T defaultValue);
 
 	/* RESPONSE: */
 

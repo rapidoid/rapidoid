@@ -20,6 +20,7 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -111,6 +112,10 @@ public class FastHttp implements Protocol, HttpMetadata {
 	private volatile FastHttpHandler staticResourcesHandler = new FastStaticResourcesHandler(this);
 
 	private final FastHttpListener listener;
+
+	private final Map<String, Object> attributes = U.synchronizedMap();
+
+	private final Map<String, Map<String, Serializable>> sessions = U.mapOfMaps();
 
 	static {
 		for (int len = 0; len < CONTENT_LENGTHS.length; len++) {
@@ -248,8 +253,9 @@ public class FastHttp implements Protocol, HttpMetadata {
 				// parse posted body as data
 				posted = new HashMap<String, Object>();
 				HTTP_PARSER.parsePosted(buf, headersKV, xbody, postedKV, filesKV, helper, posted);
+				posted = Collections.synchronizedMap(posted);
 
-				files = filesKV.toBinaryMap(buf, true);
+				files = Collections.synchronizedMap(filesKV.toBinaryMap(buf, true));
 
 			} else {
 				posted = Collections.EMPTY_MAP;
@@ -264,8 +270,16 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 			MediaType contentType = handler != null ? handler.contentType() : MediaType.HTML_UTF_8;
 
+			params = Collections.synchronizedMap(params);
+			headers = Collections.synchronizedMap(headers);
+			cookies = Collections.synchronizedMap(cookies);
+
 			req = new ReqImpl(this, channel, isKeepAlive.value, verb, uri, path, query, body, params, headers, cookies,
 					posted, files, contentType);
+
+			if (!attributes.isEmpty()) {
+				req.attrs().putAll(attributes);
+			}
 		}
 
 		if (handler != null) {
@@ -530,6 +544,14 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	public FastHttpHandler getStaticResourcesHandler() {
 		return staticResourcesHandler;
+	}
+
+	public Map<String, Object> attributes() {
+		return attributes;
+	}
+
+	public Map<String, Serializable> session(String sessionId) {
+		return sessions.get(sessionId);
 	}
 
 }

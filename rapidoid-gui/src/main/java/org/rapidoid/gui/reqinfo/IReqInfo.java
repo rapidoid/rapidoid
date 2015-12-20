@@ -54,6 +54,8 @@ public interface IReqInfo {
 
 	Map<String, String> cookies();
 
+	Map<String, Object> attrs();
+
 	String username();
 
 	Set<String> roles();

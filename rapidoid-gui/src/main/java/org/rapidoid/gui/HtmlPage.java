@@ -29,6 +29,7 @@ import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.config.Conf;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.menu.PageMenu;
+import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.Plugins;
@@ -89,18 +90,20 @@ public class HtmlPage extends AbstractWidget {
 	}
 
 	private Map<String, Object> pageModel() {
-		Map<String, Object> model = U.map(ReqInfo.get().data());
+		IReqInfo req = ReqInfo.get();
+
+		Map<String, Object> model = U.map(req.data());
 
 		model.put("dev", Conf.dev());
 
-		model.put("verb", ReqInfo.get().verb());
-		model.put("host", ReqInfo.get().host());
-		model.put("uri", ReqInfo.get().uri());
-		model.put("path", ReqInfo.get().path());
+		model.put("verb", req.verb());
+		model.put("host", req.host());
+		model.put("uri", req.uri());
+		model.put("path", req.path());
 
-		model.put("username", ReqInfo.get().username());
+		model.put("username", req.username());
 
-		Set<String> roles = ReqInfo.get().roles();
+		Set<String> roles = req.roles();
 		model.put("roles", roles);
 
 		for (String role : U.safe(roles)) {
@@ -116,7 +119,7 @@ public class HtmlPage extends AbstractWidget {
 		model.put("title", title);
 		model.put("menu", menu);
 
-		model.put("embedded", embedded || ReqInfo.get().data().get("_embedded") != null);
+		model.put("embedded", embedded || req.attrs().get("_embedded") != null);
 
 		model.put("navbar", true);
 
