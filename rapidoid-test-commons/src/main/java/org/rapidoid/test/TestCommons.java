@@ -51,6 +51,10 @@ public abstract class TestCommons {
 
 	@Before
 	public void init() {
+		System.out.println("--------------------------------------------------------------------------------");
+		System.out.println("TEST " + getClass().getCanonicalName());
+		System.out.println("--------------------------------------------------------------------------------");
+
 		hasError = false;
 	}
 
