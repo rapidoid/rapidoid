@@ -287,7 +287,7 @@ public class Conf {
 		return refreshing(path, filename, YAML_PARSER);
 	}
 
-	public static Config refreshing(String path, String filename, final ConfigParser parser) {
+	public static Config refreshing(String path, final String filename, final ConfigParser parser) {
 		Log.info("Initializing auto-refreshing config", "root", Conf.rootPath(), "path", path, "filename", filename);
 		path = U.safe(path);
 
@@ -310,7 +310,16 @@ public class Conf {
 			@Override
 			public void run() {
 				byte[] bytes = res.getBytesOrNull();
-				Map<String, Object> configData = (bytes != null && bytes.length > 0) ? parser.parse(bytes) : null;
+
+				Map<String, Object> configData = null;
+				if (bytes != null) {
+					if (bytes.length > 0) {
+						configData = parser.parse(bytes);
+					}
+				} else {
+					Log.warn("Couldn't find configuration file", "filename", filename);
+				}
+
 				conf.assign(U.safe(configData));
 			}
 		};
@@ -323,5 +332,4 @@ public class Conf {
 
 		return conf;
 	}
-
 }
