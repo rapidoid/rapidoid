@@ -10,7 +10,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.plugins.entities.AbstractEntitiesPlugin;
-import org.rapidoid.scan.FindClasses;
+import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
 
 /*
@@ -45,13 +45,13 @@ public class AppClasspathEntitiesPlugin extends AbstractEntitiesPlugin {
 	@Override
 	public synchronized <E> Class<E> getEntityType(String simpleTypeName) {
 
-		for (Class<?> type : FindClasses.annotated(DbEntity.class)) {
+		for (Class<?> type : Scan.annotated(DbEntity.class).getClasses()) {
 			if (type.getSimpleName().equalsIgnoreCase(simpleTypeName)) {
 				return (Class<E>) type;
 			}
 		}
 
-		for (Class<?> type : FindClasses.annotated(Scaffold.class)) {
+		for (Class<?> type : Scan.annotated(Scaffold.class).getClasses()) {
 			if (type.getSimpleName().equalsIgnoreCase(simpleTypeName)) {
 				return (Class<E>) type;
 			}
