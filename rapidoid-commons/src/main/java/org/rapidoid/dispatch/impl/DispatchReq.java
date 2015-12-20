@@ -2,7 +2,7 @@ package org.rapidoid.dispatch.impl;
 
 /*
  * #%L
- * rapidoid-dispatch
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

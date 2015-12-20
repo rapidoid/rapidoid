@@ -2,7 +2,7 @@ package org.rapidoid.security.annotation;
 
 /*
  * #%L
- * rapidoid-security
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

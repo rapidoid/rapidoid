@@ -2,7 +2,7 @@ package org.rapidoid.activity;
 
 /*
  * #%L
- * rapidoid-activity
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

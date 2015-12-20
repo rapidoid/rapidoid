@@ -2,7 +2,7 @@ package org.rapidoid.cls;
 
 /*
  * #%L
- * rapidoid-cls
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

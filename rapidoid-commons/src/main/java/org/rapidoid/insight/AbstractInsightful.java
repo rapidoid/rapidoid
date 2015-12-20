@@ -4,7 +4,7 @@ import org.rapidoid.log.Log;
 
 /*
  * #%L
- * rapidoid-insights
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

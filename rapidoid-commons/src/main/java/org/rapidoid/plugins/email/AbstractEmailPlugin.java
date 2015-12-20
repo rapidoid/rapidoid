@@ -7,7 +7,7 @@ import org.rapidoid.plugins.AbstractPlugin;
 
 /*
  * #%L
- * rapidoid-plugins
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

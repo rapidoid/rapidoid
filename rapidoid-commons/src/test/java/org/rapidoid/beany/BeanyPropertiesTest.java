@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 /*
  * #%L
- * rapidoid-beany
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

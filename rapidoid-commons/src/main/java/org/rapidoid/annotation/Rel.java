@@ -2,7 +2,7 @@ package org.rapidoid.annotation;
 
 /*
  * #%L
- * rapidoid-annotations
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
