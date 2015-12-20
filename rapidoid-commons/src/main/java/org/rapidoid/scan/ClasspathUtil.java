@@ -50,11 +50,7 @@ public class ClasspathUtil {
 
 	private static final Set<String> CLASSPATH = new TreeSet<String>();
 
-	private static boolean ignoreRapidoidClasses = true;
 	private static String rootPackage = null;
-
-	private static final String ORG_RAPIDOID_DIR = "org" + File.separatorChar + "rapidoid" + File.separatorChar;
-	private static final String ORG_RAPIDOIDX_DIR = "org" + File.separatorChar + "rapidoidx" + File.separatorChar;
 
 	private ClasspathUtil() {}
 
@@ -124,7 +120,7 @@ public class ClasspathUtil {
 				params.classLoader());
 
 		long timeMs = U.time() - startingAt;
-		Log.info("Finished classpath scan", "time", timeMs + "ms", "classes", classes);
+		Log.info("Finished classpath scan", "time", timeMs + "ms", "number of classes", classes.size());
 
 		return classes;
 	}
@@ -195,9 +191,7 @@ public class ClasspathUtil {
 	}
 
 	private static boolean shouldScanJAR(String jar) {
-		File file = new File(jar);
-		String simpleName = file.getName();
-		return simpleName.startsWith("app.") || simpleName.startsWith("app-");
+		return true;
 	}
 
 	private static void getClassesFromDir(Collection<Class<?>> classes, File root, File dir, String pkg, Pattern regex,
@@ -245,6 +239,8 @@ public class ClasspathUtil {
 					if (classMatches(cls, filter, annotated, null)) {
 						classes.add(cls);
 					}
+				} catch (NoClassDefFoundError err) {
+					Log.debug("Cannot find class", "name", clsName);
 				} catch (Throwable e) {
 					Log.warn("Error while loading class", "name", clsName, "error", e);
 				}
@@ -305,12 +301,6 @@ public class ClasspathUtil {
 	private static boolean ignore(String name) {
 		String pkgDirName = U.triml(name, File.separatorChar);
 
-		if (ignoreRapidoidClasses) {
-			if (pkgDirName.startsWith(ORG_RAPIDOID_DIR) || pkgDirName.startsWith(ORG_RAPIDOIDX_DIR)) {
-				return true;
-			}
-		}
-
 		int p1 = pkgDirName.indexOf(File.separatorChar);
 		int p2 = -1;
 
@@ -358,10 +348,6 @@ public class ClasspathUtil {
 		return (annotated == null || cls.getAnnotation(annotated) != null)
 				&& (regex == null || (cls.getCanonicalName() != null && regex.matcher(cls.getCanonicalName()).matches()))
 				&& (filter == null || Lmbd.eval(filter, cls));
-	}
-
-	public static void setIgnoreRapidoidClasses(boolean ignoreRapidoidClasses) {
-		ClasspathUtil.ignoreRapidoidClasses = ignoreRapidoidClasses;
 	}
 
 	public static String getRootPackage() {

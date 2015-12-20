@@ -32,12 +32,12 @@ import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.crypto.Crypto;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.fast.On;
 import org.rapidoid.http.fast.ReqHandler;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
+import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
@@ -49,10 +49,10 @@ public abstract class HttpTestCommons extends TestCommons {
 	public void openContext() {
 		Log.setLogLevel(LogLevel.INFO);
 
+		ClasspathUtil.setRootPackage("some.nonexisting.app");
 		HTTP.DEFAULT_CLIENT.reset();
 
 		System.out.println("--- STARTING SERVER ---");
-		org.rapidoid.web.WebAppGroup.openRootContext();
 
 		On.getDefaultSetup().http().clearHandlers();
 		On.getDefaultSetup().listen();
@@ -64,7 +64,6 @@ public abstract class HttpTestCommons extends TestCommons {
 	@After
 	public void closeContext() {
 		System.out.println("--- STOPPING SERVER ---");
-		Ctxs.close();
 
 		On.getDefaultSetup().shutdown();
 		U.sleep(300);

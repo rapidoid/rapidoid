@@ -1,6 +1,7 @@
 package custom.rapidoid.scan;
 
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
@@ -48,7 +49,7 @@ public class ClasspathScanTest extends AbstractCommonsTest {
 
 		eq(U.set(classes), U.set(ClasspathScanTest.class));
 
-		classes = Scan.matching(".*Bar").getClasses();
+		classes = Scan.pkg("custom").matching(".*Bar").getClasses();
 
 		eq(U.set(classes), U.set(Bar.class));
 	}
@@ -66,9 +67,10 @@ public class ClasspathScanTest extends AbstractCommonsTest {
 	public void testScanAll() {
 		List<Class<?>> classes = Scan.getClasses();
 
-		eq(U.set(classes),
-				U.set(Foo.class, Bar.class, MyAnnot.class, ClasspathScanTest.class, Aaa.class,
-						Cls.getClassIfExists("Bbb"), Ccccc.class));
+		Set<Class<? extends Object>> expectedSubset = U.set(Foo.class, Bar.class, MyAnnot.class,
+				ClasspathScanTest.class, Aaa.class, Cls.getClassIfExists("Bbb"), Ccccc.class);
+
+		isTrue(U.set(classes).containsAll(expectedSubset));
 	}
 
 }
