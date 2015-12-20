@@ -1,7 +1,4 @@
-package org.rapidoid.measure;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+package org.rapidoid.insight;
 
 /*
  * #%L
@@ -23,12 +20,33 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface Measure {
+public class CounterMeasure implements Measure {
 
-	String get();
+	private AtomicInteger counter = new AtomicInteger();
 
-	void reset();
+	@Override
+	public void reset() {
+		counter.set(0);
+	}
+
+	@Override
+	public String get() {
+		return counter.get() + "";
+	}
+
+	public void increment() {
+		counter.incrementAndGet();
+	}
+
+	public void add(int delta) {
+		counter.addAndGet(delta);
+	}
 
 }

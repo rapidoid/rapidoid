@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.rapidoid.measure.Measure;
-import org.rapidoid.measure.StatsMeasure;
 import org.rapidoid.u.U;
 
 /*

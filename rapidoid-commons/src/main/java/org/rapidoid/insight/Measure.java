@@ -1,4 +1,7 @@
-package org.rapidoid.measure;
+package org.rapidoid.insight;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -20,37 +23,12 @@ package org.rapidoid.measure;
  * #L%
  */
 
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class PercentMeasure implements Measure {
+public interface Measure {
 
-	private final AtomicInteger total = new AtomicInteger();
+	String get();
 
-	private final AtomicInteger hits = new AtomicInteger();
-
-	public synchronized void reset() {
-		total.set(0);
-		hits.set(0);
-	}
-
-	@Override
-	public synchronized String get() {
-		int t = total.getAndSet(0);
-		int h = hits.getAndSet(0) * 100;
-		return t > 0 ? h / t + "%(" + t + ")" : null;
-	}
-
-	public void increment() {
-		total.incrementAndGet();
-	}
-
-	public void hit() {
-		hits.incrementAndGet();
-	}
+	void reset();
 
 }

@@ -1,4 +1,4 @@
-package org.rapidoid.measure;
+package org.rapidoid.insight;
 
 /*
  * #%L
@@ -27,26 +27,30 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class CounterMeasure implements Measure {
+public class PercentMeasure implements Measure {
 
-	private AtomicInteger counter = new AtomicInteger();
+	private final AtomicInteger total = new AtomicInteger();
 
-	@Override
-	public void reset() {
-		counter.set(0);
+	private final AtomicInteger hits = new AtomicInteger();
+
+	public synchronized void reset() {
+		total.set(0);
+		hits.set(0);
 	}
 
 	@Override
-	public String get() {
-		return counter.get() + "";
+	public synchronized String get() {
+		int t = total.getAndSet(0);
+		int h = hits.getAndSet(0) * 100;
+		return t > 0 ? h / t + "%(" + t + ")" : null;
 	}
 
 	public void increment() {
-		counter.incrementAndGet();
+		total.incrementAndGet();
 	}
 
-	public void add(int delta) {
-		counter.addAndGet(delta);
+	public void hit() {
+		hits.incrementAndGet();
 	}
 
 }

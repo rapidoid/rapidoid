@@ -1,4 +1,4 @@
-package org.rapidoid.measure;
+package org.rapidoid.insight;
 
 import java.util.concurrent.atomic.AtomicLong;
 
