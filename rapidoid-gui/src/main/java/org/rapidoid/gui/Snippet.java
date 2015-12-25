@@ -31,7 +31,9 @@ import org.rapidoid.u.U;
 @Since("2.3.0")
 public class Snippet extends AbstractWidget {
 
-	private static final String JAVA_KEYWORDS = "abstract|continue|for|new|switch|assert|default|goto|package|synchronized|boolean|do|if|private|this|break|double|implements|protected|throw|byte|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|int|short|try|char|final|interface|static|void|class|finally|long|strictfp|volatile|const|float|native|super|while";
+	private static final String JAVA_KEYWORDS = "abstract|continue|for|new|switch|assert|default|goto|package|synchronized|do|if|private|this|break|implements|protected|throw|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|try|final|interface|static|class|finally|strictfp|volatile|const|native|super|while";
+
+	private static final String PRIMITIVE_TYPES = "void|int|short|char|double|float|long|byte|boolean";
 
 	private static final String tab = "\\t";
 	private static final String str1 = "(\"[^\"]*?\")";
@@ -39,9 +41,9 @@ public class Snippet extends AbstractWidget {
 	private static final String num = "(\\d+)";
 	private static final String kw = "\\b(" + JAVA_KEYWORDS + ")\\b";
 	private static final String anno = "(\\@\\w+?)\\b";
-	private static final String cls = "\\b([A-Z]\\w+?)\\b";
+	private static final String types = U.frmt("\\b([A-Z]\\w+?|%s)\\b", PRIMITIVE_TYPES);
 
-	private static final String regex = "(?:" + U.join("|", str1, str2, num, tab, kw, anno, cls) + ")";
+	private static final String regex = "(?:" + U.join("|", str1, str2, num, tab, kw, anno, types) + ")";
 
 	protected String code;
 
@@ -51,7 +53,7 @@ public class Snippet extends AbstractWidget {
 
 	@Override
 	protected Tag render() {
-		return hardcoded("<pre class=\"example-code\">" + prettify() + "</pre>");
+		return hardcoded("<pre class=\"code-snippet\">" + prettify() + "</pre>");
 	}
 
 	public static String prettify(String sourceCode, boolean escape) {
@@ -59,13 +61,15 @@ public class Snippet extends AbstractWidget {
 		String snippet = escape ? sourceCode.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 				: sourceCode;
 
+		final String prim = "|" + PRIMITIVE_TYPES + "|";
+
 		snippet = U.replace(snippet, regex, new Mapper<String[], String>() {
 			@Override
 			public String map(String[] src) throws Exception {
 				String s = src[0];
 				char ch = s.charAt(0);
 
-				if (Character.isUpperCase(ch)) {
+				if (Character.isUpperCase(ch) || prim.contains("|" + s + "|")) {
 					return "<span class=\"_code_cls\">" + s + "</span>";
 				} else if (ch == '"' || ch == "'".charAt(0)) {
 					return "<span class=\"_code_str\">" + s + "</span>";
