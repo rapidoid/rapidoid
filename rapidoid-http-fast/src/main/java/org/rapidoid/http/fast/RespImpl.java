@@ -21,6 +21,7 @@ package org.rapidoid.http.fast;
  */
 
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,12 +34,14 @@ import org.rapidoid.http.Resp;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.0.2")
-public class HttpResponse implements Resp {
+@Since("5.0.x")
+public class RespImpl implements Resp {
 
 	private final ReqImpl req;
 
 	private volatile Object content = null;
+
+	private volatile Object body = null;
 
 	private volatile int code = 200;
 
@@ -56,7 +59,7 @@ public class HttpResponse implements Resp {
 
 	private volatile String view = null;
 
-	public HttpResponse(ReqImpl req) {
+	public RespImpl(ReqImpl req) {
 		this.req = req;
 	}
 
@@ -70,6 +73,25 @@ public class HttpResponse implements Resp {
 	@Override
 	public synchronized Object content() {
 		return this.content;
+	}
+
+	@Override
+	public synchronized Resp body(byte[] body) {
+		ensureCanChange();
+		this.body = body;
+		return this;
+	}
+
+	@Override
+	public synchronized Resp body(ByteBuffer body) {
+		ensureCanChange();
+		this.body = body;
+		return this;
+	}
+
+	@Override
+	public synchronized Object body() {
+		return this.body;
 	}
 
 	@Override

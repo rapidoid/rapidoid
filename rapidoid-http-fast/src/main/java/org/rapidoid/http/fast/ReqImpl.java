@@ -201,8 +201,9 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	}
 
 	@Override
-	public String forwardedForAddress() {
-		return header(HttpHeaders.X_FORWARDED_FOR.name());
+	public Req host(String host) {
+		headers().put(HttpHeaders.HOST.name(), host);
+		return this;
 	}
 
 	@Override
@@ -336,7 +337,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	@Override
 	public synchronized Resp response() {
 		if (response == null) {
-			response = new HttpResponse(this);
+			response = new RespImpl(this);
 			if (defaultContentType != null) {
 				response.contentType(defaultContentType);
 			}
