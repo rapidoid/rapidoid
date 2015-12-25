@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.base.AbstractWidget;
+import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
@@ -42,9 +43,11 @@ public class KVGrid extends AbstractWidget {
 
 	private Map<?, ?> map;
 
+	private boolean headless;
+
 	@Override
 	protected Object render() {
-		TableTag tbl = table_(tr(th(headers[0]), th(headers[1])));
+		TableTag tbl = headless ? table_() : table_(tr(th(headers[0]), th(headers[1])));
 
 		for (Entry<?, ?> e : map.entrySet()) {
 			Object key = e.getKey();
@@ -100,6 +103,15 @@ public class KVGrid extends AbstractWidget {
 	public <FROM, TO> KVGrid valueView(Mapper<FROM, TO> valueView) {
 		this.valueView = (Mapper<Object, Object>) valueView;
 		return this;
+	}
+
+	public KVGrid headless(boolean headless) {
+		this.headless = headless;
+		return this;
+	}
+
+	public boolean headless() {
+		return headless;
 	}
 
 }
