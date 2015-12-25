@@ -1,4 +1,4 @@
-package org.rapidoid.web;
+package org.rapidoid.pojo.web;
 
 /*
  * #%L
@@ -39,15 +39,15 @@ import org.rapidoid.aop.AOP;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.ctx.Classes;
-import org.rapidoid.dispatch.DispatchResult;
-import org.rapidoid.dispatch.PojoDispatchException;
-import org.rapidoid.dispatch.PojoHandlerNotFoundException;
-import org.rapidoid.dispatch.PojoRequest;
-import org.rapidoid.dispatch.impl.DispatchReq;
-import org.rapidoid.dispatch.impl.DispatchReqKind;
-import org.rapidoid.dispatch.impl.PojoDispatcherImpl;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
+import org.rapidoid.pojo.DispatchResult;
+import org.rapidoid.pojo.PojoDispatchException;
+import org.rapidoid.pojo.PojoHandlerNotFoundException;
+import org.rapidoid.pojo.PojoRequest;
+import org.rapidoid.pojo.impl.DispatchReq;
+import org.rapidoid.pojo.impl.DispatchReqKind;
+import org.rapidoid.pojo.impl.PojoDispatcherImpl;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")

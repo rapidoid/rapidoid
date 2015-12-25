@@ -1,8 +1,8 @@
-package org.rapidoid.dispatch;
+package org.rapidoid.pojo;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -25,18 +25,18 @@ import java.util.List;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.dispatch.impl.PojoDispatcherImpl;
+import org.rapidoid.pojo.impl.PojoDispatcherImpl;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
-public class Dispatch {
+@Since("5.0.8")
+public class POJO {
 
 	public static PojoDispatcher dispatcher(Class<?>... serviceClasses) {
 		return new PojoDispatcherImpl(Cls.classMap(U.list(serviceClasses)));
 	}
 
-	public static PojoDispatcher serviceDispatcher(List<Class<?>> services) {
+	public static PojoDispatcher dispatcher(List<Class<?>> services) {
 		return dispatcher(services.toArray(new Class[services.size()]));
 	}
 

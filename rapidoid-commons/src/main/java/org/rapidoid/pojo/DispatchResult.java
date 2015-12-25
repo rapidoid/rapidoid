@@ -1,8 +1,8 @@
-package org.rapidoid.web;
+package org.rapidoid.pojo;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -24,52 +24,39 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.dispatch.PojoRequest;
-import org.rapidoid.http.Req;
-import org.rapidoid.u.U;
+import org.rapidoid.pojo.impl.DispatchReqKind;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class WebReq implements PojoRequest {
+@Since("4.1.0")
+public class DispatchResult {
 
-	private final Req req;
+	private final Object result;
 
-	public WebReq(Req req) {
-		this.req = req;
+	private final DispatchReqKind kind;
+
+	private final Map<String, Object> config;
+
+	public DispatchResult(Object result, DispatchReqKind kind, Map<String, Object> config) {
+		this.result = result;
+		this.kind = kind;
+		this.config = config;
+	}
+
+	public Object getResult() {
+		return result;
+	}
+
+	public DispatchReqKind getKind() {
+		return kind;
+	}
+
+	public Map<String, Object> getConfig() {
+		return config;
 	}
 
 	@Override
-	public String command() {
-		return req.verb();
-	}
-
-	@Override
-	public String path() {
-		return req.path();
-	}
-
-	@Override
-	public Map<String, Object> params() {
-		Map<String, Object> params = U.map();
-
-		params.putAll(req.data());
-		params.putAll(req.files());
-
-		return params;
-	}
-
-	public Req getReq() {
-		return req;
-	}
-
-	@Override
-	public Object param(String name) {
-		return req.data(name, null);
-	}
-
-	@Override
-	public boolean isEvent() {
-		return false;
+	public String toString() {
+		return "DispatchResult [result=" + result + ", kind=" + kind + "]";
 	}
 
 }

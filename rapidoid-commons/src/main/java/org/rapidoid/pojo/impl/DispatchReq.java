@@ -1,4 +1,4 @@
-package org.rapidoid.dispatch.impl;
+package org.rapidoid.pojo.impl;
 
 /*
  * #%L

@@ -1,7 +1,4 @@
-package org.rapidoid.dispatch;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+package org.rapidoid.pojo;
 
 /*
  * #%L
@@ -23,9 +20,23 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
-@SuppressWarnings("serial")
+import java.util.Map;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class PojoHandlerNotFoundException extends Exception {
+public interface PojoRequest {
+
+	String command();
+
+	String path();
+
+	boolean isEvent();
+
+	Object param(String name);
+
+	Map<String, Object> params();
 
 }

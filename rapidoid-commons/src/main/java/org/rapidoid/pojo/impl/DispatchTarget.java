@@ -1,4 +1,4 @@
-package org.rapidoid.dispatch;
+package org.rapidoid.pojo.impl;
 
 /*
  * #%L
@@ -20,43 +20,31 @@ package org.rapidoid.dispatch;
  * #L%
  */
 
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.dispatch.impl.DispatchReqKind;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public class DispatchResult {
+@Since("3.0.0")
+public class DispatchTarget {
 
-	private final Object result;
+	final Class<?> clazz;
 
-	private final DispatchReqKind kind;
+	final Method method;
 
-	private final Map<String, Object> config;
+	final Map<String, Object> config;
 
-	public DispatchResult(Object result, DispatchReqKind kind, Map<String, Object> config) {
-		this.result = result;
-		this.kind = kind;
+	public DispatchTarget(Class<?> clazz, Method method, Map<String, Object> config) {
+		this.clazz = clazz;
+		this.method = method;
 		this.config = config;
-	}
-
-	public Object getResult() {
-		return result;
-	}
-
-	public DispatchReqKind getKind() {
-		return kind;
-	}
-
-	public Map<String, Object> getConfig() {
-		return config;
 	}
 
 	@Override
 	public String toString() {
-		return "DispatchResult [result=" + result + ", kind=" + kind + "]";
+		return "DispatchTarget [clazz=" + clazz + ", method=" + method + ", config=" + config + "]";
 	}
 
 }

@@ -6,8 +6,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Config;
 import org.rapidoid.ctx.Classes;
-import org.rapidoid.dispatch.PojoDispatcher;
 import org.rapidoid.http.fast.handler.FastHttpHandler;
+import org.rapidoid.pojo.PojoDispatcher;
+import org.rapidoid.pojo.web.WebPojoDispatcher;
 import org.rapidoid.u.U;
 
 /*

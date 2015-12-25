@@ -28,6 +28,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.YAML;
 import org.rapidoid.gui.menu.PageMenu;
+import org.rapidoid.http.fast.FastHttp;
+import org.rapidoid.http.fast.On;
+import org.rapidoid.http.fast.handler.FastHttpHandler;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugin;
@@ -121,6 +124,15 @@ public class AppTool {
 		});
 
 		menuRes.exists(); // trigger loading
+	}
+
+	public static FastHttpHandler handler() {
+		return handler(new RootWebApp());
+	}
+
+	public static FastHttpHandler handler(WebApp app) {
+		FastHttp http = On.getDefaultSetup().http();
+		return new AppHandler(http, app);
 	}
 
 }

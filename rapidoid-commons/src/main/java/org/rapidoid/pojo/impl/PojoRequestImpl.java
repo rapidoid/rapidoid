@@ -1,8 +1,8 @@
-package org.rapidoid.web;
+package org.rapidoid.pojo.impl;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -24,31 +24,27 @@ import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.dispatch.PojoRequest;
+import org.rapidoid.pojo.PojoRequest;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public class WebEventReq implements PojoRequest {
+@Since("2.0.0")
+public class PojoRequestImpl implements PojoRequest {
 
+	private final boolean event;
+	private final String command;
 	private final String path;
+	private final Map<String, Object> params;
 
-	private final String event;
-
-	@SuppressWarnings("unused")
-	private final Object[] args;
-
-	private final Map<String, Object> state;
-
-	public WebEventReq(String path, String event, Object[] args, Map<String, Object> state) {
-		this.path = path;
+	public PojoRequestImpl(boolean event, String command, String path, Map<String, Object> params) {
 		this.event = event;
-		this.args = args;
-		this.state = state;
+		this.command = command;
+		this.path = path;
+		this.params = params;
 	}
 
 	@Override
 	public String command() {
-		return event;
+		return command;
 	}
 
 	@Override
@@ -58,17 +54,23 @@ public class WebEventReq implements PojoRequest {
 
 	@Override
 	public Map<String, Object> params() {
-		return state;
+		return params;
 	}
 
 	@Override
 	public Object param(String name) {
-		return state.get(name);
+		return params.get(name);
+	}
+
+	@Override
+	public String toString() {
+		return "PojoRequestImpl [event=" + event + ", command=" + command + ", path=" + path + ", params=" + params
+				+ "]";
 	}
 
 	@Override
 	public boolean isEvent() {
-		return true;
+		return event;
 	}
 
 }

@@ -1,4 +1,4 @@
-package org.rapidoid.dispatch.impl;
+package org.rapidoid.pojo;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -24,7 +24,9 @@ import org.rapidoid.annotation.Since;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public enum DispatchReqKind {
-	SERVICE, PAGE, EVENT;
+@Since("2.0.0")
+public interface PojoDispatcher {
+
+	DispatchResult dispatch(PojoRequest request) throws PojoHandlerNotFoundException, PojoDispatchException;
+
 }

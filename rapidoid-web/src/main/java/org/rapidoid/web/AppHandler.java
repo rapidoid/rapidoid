@@ -34,12 +34,6 @@ import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.data.JSON;
-import org.rapidoid.dispatch.DispatchResult;
-import org.rapidoid.dispatch.PojoDispatchException;
-import org.rapidoid.dispatch.PojoDispatcher;
-import org.rapidoid.dispatch.PojoHandlerNotFoundException;
-import org.rapidoid.dispatch.PojoRequest;
-import org.rapidoid.dispatch.impl.DispatchReqKind;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.http.fast.FastHttp;
@@ -51,6 +45,14 @@ import org.rapidoid.io.Res;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.plugins.templates.ITemplate;
 import org.rapidoid.plugins.templates.Templates;
+import org.rapidoid.pojo.DispatchResult;
+import org.rapidoid.pojo.PojoDispatchException;
+import org.rapidoid.pojo.PojoDispatcher;
+import org.rapidoid.pojo.PojoHandlerNotFoundException;
+import org.rapidoid.pojo.PojoRequest;
+import org.rapidoid.pojo.impl.DispatchReqKind;
+import org.rapidoid.pojo.web.WebEventReq;
+import org.rapidoid.pojo.web.WebReq;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")

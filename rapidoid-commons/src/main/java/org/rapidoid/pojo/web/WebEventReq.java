@@ -1,8 +1,8 @@
-package org.rapidoid.dispatch.impl;
+package org.rapidoid.pojo.web;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,31 +20,55 @@ package org.rapidoid.dispatch.impl;
  * #L%
  */
 
-import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.pojo.PojoRequest;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
-public class DispatchTarget {
+@Since("4.1.0")
+public class WebEventReq implements PojoRequest {
 
-	final Class<?> clazz;
+	private final String path;
 
-	final Method method;
+	private final String event;
 
-	final Map<String, Object> config;
+	@SuppressWarnings("unused")
+	private final Object[] args;
 
-	public DispatchTarget(Class<?> clazz, Method method, Map<String, Object> config) {
-		this.clazz = clazz;
-		this.method = method;
-		this.config = config;
+	private final Map<String, Object> state;
+
+	public WebEventReq(String path, String event, Object[] args, Map<String, Object> state) {
+		this.path = path;
+		this.event = event;
+		this.args = args;
+		this.state = state;
 	}
 
 	@Override
-	public String toString() {
-		return "DispatchTarget [clazz=" + clazz + ", method=" + method + ", config=" + config + "]";
+	public String command() {
+		return event;
+	}
+
+	@Override
+	public String path() {
+		return path;
+	}
+
+	@Override
+	public Map<String, Object> params() {
+		return state;
+	}
+
+	@Override
+	public Object param(String name) {
+		return state.get(name);
+	}
+
+	@Override
+	public boolean isEvent() {
+		return true;
 	}
 
 }

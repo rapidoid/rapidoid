@@ -1,4 +1,7 @@
-package org.rapidoid.dispatch;
+package org.rapidoid.pojo;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -20,23 +23,13 @@ package org.rapidoid.dispatch;
  * #L%
  */
 
-import java.util.Map;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
+@SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public interface PojoRequest {
+public class PojoDispatchException extends Exception {
 
-	String command();
-
-	String path();
-
-	boolean isEvent();
-
-	Object param(String name);
-
-	Map<String, Object> params();
+	public PojoDispatchException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
 
 }

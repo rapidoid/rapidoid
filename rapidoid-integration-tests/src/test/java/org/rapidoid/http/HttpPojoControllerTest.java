@@ -1,8 +1,8 @@
-package org.rapidoid.web;
+package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
@@ -20,23 +20,22 @@ package org.rapidoid.web;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.fast.FastHttp;
 import org.rapidoid.http.fast.On;
-import org.rapidoid.http.fast.handler.FastHttpHandler;
+import org.rapidoid.http.fast.ReqHandler;
+import org.rapidoid.pojo.POJO;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.0.8")
-public class POJO {
+@Since("5.0.10")
+public class HttpPojoControllerTest extends HttpTestCommons {
 
-	public static FastHttpHandler handler() {
-		return handler(new RootWebApp());
-	}
+	@Test
+	public void testSimpleRedirect() {
+		//On.get("/a").html(POJO.handler(app));
 
-	public static FastHttpHandler handler(WebApp app) {
-		FastHttp http = On.getDefaultSetup().http();
-		return new AppHandler(http, app);
+		testGet("/redir");
 	}
 
 }

@@ -1,4 +1,4 @@
-package org.rapidoid.dispatch.impl;
+package org.rapidoid.pojo.impl;
 
 /*
  * #%L
@@ -39,12 +39,12 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
-import org.rapidoid.dispatch.DispatchResult;
-import org.rapidoid.dispatch.PojoDispatchException;
-import org.rapidoid.dispatch.PojoDispatcher;
-import org.rapidoid.dispatch.PojoHandlerNotFoundException;
-import org.rapidoid.dispatch.PojoRequest;
 import org.rapidoid.log.Log;
+import org.rapidoid.pojo.DispatchResult;
+import org.rapidoid.pojo.PojoDispatchException;
+import org.rapidoid.pojo.PojoDispatcher;
+import org.rapidoid.pojo.PojoHandlerNotFoundException;
+import org.rapidoid.pojo.PojoRequest;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.wire.Wire;
