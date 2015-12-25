@@ -39,6 +39,8 @@ public class HTTP {
 
 	public static final HttpClient DEFAULT_CLIENT = new HttpClient();
 
+	public static final HttpClient CLIENT_WITHOUT_REDIRECTS = new HttpClient(false, false);
+
 	/********************************** GET **********************************/
 
 	public static Future<byte[]> get(String uri, Callback<byte[]> callback) {

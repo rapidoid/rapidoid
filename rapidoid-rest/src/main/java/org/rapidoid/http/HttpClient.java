@@ -29,7 +29,11 @@ import java.util.Map.Entry;
 import java.util.concurrent.CancellationException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
+import org.apache.http.ProtocolException;
+import org.apache.http.client.RedirectStrategy;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
@@ -41,12 +45,16 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpTrace;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.nio.entity.NByteArrayEntity;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 import org.rapidoid.activity.RapidoidThreadFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -63,24 +71,64 @@ import org.rapidoid.u.U;
 @Since("4.1.0")
 public class HttpClient {
 
+	private static final RedirectStrategy NO_REDIRECTS = new RedirectStrategy() {
+		@Override
+		public boolean isRedirected(HttpRequest request, HttpResponse response, HttpContext context)
+				throws ProtocolException {
+			return false;
+		}
+
+		@Override
+		public HttpUriRequest getRedirect(HttpRequest request, HttpResponse response, HttpContext context)
+				throws ProtocolException {
+			return null;
+		}
+	};
+
 	private CloseableHttpAsyncClient client;
 
+	private boolean enableCookies;
+
+	private boolean enableRedirects;
+
 	public HttpClient() {
-		this(asyncClient());
+		this(false, true);
 	}
 
-	private static CloseableHttpAsyncClient asyncClient() {
-		return HttpAsyncClients.custom().setThreadFactory(new RapidoidThreadFactory("http-client"))
-				.disableCookieManagement().disableConnectionState().disableAuthCaching().build();
+	public HttpClient(boolean enableCookies, boolean enableRedirects) {
+		this(enableCookies, enableRedirects, asyncClient(enableCookies, enableRedirects));
 	}
 
-	public HttpClient(CloseableHttpAsyncClient client) {
+	private static CloseableHttpAsyncClient asyncClient(boolean enableCookies, boolean enableRedirects) {
+		HttpAsyncClientBuilder builder = HttpAsyncClients.custom()
+				.setThreadFactory(new RapidoidThreadFactory("http-client")).disableConnectionState()
+				.disableAuthCaching();
+
+		if (!enableCookies) {
+			builder = builder.disableCookieManagement();
+		}
+
+		if (!enableRedirects) {
+			builder = builder.setRedirectStrategy(NO_REDIRECTS);
+		}
+
+		return builder.build();
+	}
+
+	public HttpClient(boolean cookies, boolean redirects, CloseableHttpAsyncClient client) {
+		this.enableCookies = cookies;
+		this.enableRedirects = redirects;
 		this.client = client;
 		client.start();
 	}
 
 	private Future<byte[]> request(String verb, String uri, Map<String, String> headers, Map<String, String> data,
 			Map<String, String> files, byte[] body, String contentType, Callback<byte[]> callback) {
+		return request(verb, uri, headers, data, files, body, contentType, callback, false);
+	}
+
+	public Future<byte[]> request(String verb, String uri, Map<String, String> headers, Map<String, String> data,
+			Map<String, String> files, byte[] body, String contentType, Callback<byte[]> callback, boolean fullResponse) {
 
 		headers = U.safe(headers);
 		data = U.safe(data);
@@ -158,10 +206,11 @@ public class HttpClient {
 
 		Log.debug("Starting HTTP request", "request", req.getRequestLine());
 
-		return execute(client, req, callback);
+		return execute(client, req, callback, fullResponse);
 	}
 
-	private Future<byte[]> execute(CloseableHttpAsyncClient client, HttpRequestBase req, Callback<byte[]> callback) {
+	private Future<byte[]> execute(CloseableHttpAsyncClient client, HttpRequestBase req, Callback<byte[]> callback,
+			boolean fullResponse) {
 
 		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(10000).setConnectTimeout(10000)
 				.setConnectionRequestTimeout(10000).build();
@@ -169,20 +218,22 @@ public class HttpClient {
 
 		Promise<byte[]> promise = Promises.create();
 
-		FutureCallback<HttpResponse> cb = callback(callback, promise);
+		FutureCallback<HttpResponse> cb = callback(callback, promise, fullResponse);
 		client.execute(req, cb);
 
 		return promise;
 	}
 
-	private <T> FutureCallback<HttpResponse> callback(final Callback<byte[]> callback, final Callback<byte[]> promise) {
+	private <T> FutureCallback<HttpResponse> callback(final Callback<byte[]> callback, final Callback<byte[]> promise,
+			final boolean fullResponse) {
+
 		return new FutureCallback<HttpResponse>() {
 
 			@Override
 			public void completed(HttpResponse response) {
 				int statusCode = response.getStatusLine().getStatusCode();
 
-				if (statusCode != 200) {
+				if (!fullResponse && statusCode != 200) {
 					Callbacks.error(callback, new HttpException(statusCode));
 					Callbacks.error(promise, new HttpException(statusCode));
 					return;
@@ -192,8 +243,13 @@ public class HttpClient {
 
 				if (response.getEntity() != null) {
 					try {
-						InputStream resp = response.getEntity().getContent();
-						bytes = IOUtils.toByteArray(resp);
+						if (fullResponse) {
+							bytes = responseToString(response).getBytes();
+						} else {
+							InputStream resp = response.getEntity().getContent();
+							bytes = IOUtils.toByteArray(resp);
+						}
+
 					} catch (Exception e) {
 						Callbacks.error(callback, e);
 						Callbacks.error(promise, e);
@@ -221,6 +277,28 @@ public class HttpClient {
 		};
 	}
 
+	protected String responseToString(HttpResponse response) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(response.getStatusLine());
+		sb.append("\n");
+
+		for (Header hdr : response.getAllHeaders()) {
+			sb.append(hdr.getName());
+			sb.append(": ");
+			sb.append(hdr.getValue());
+			sb.append("\n");
+		}
+
+		sb.append("\n");
+		try {
+			sb.append(EntityUtils.toString(response.getEntity()));
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
+
+		return sb.toString();
+	}
+
 	public synchronized void close() {
 		try {
 			client.close();
@@ -231,7 +309,7 @@ public class HttpClient {
 
 	public synchronized void reset() {
 		close();
-		client = asyncClient();
+		client = asyncClient(enableCookies, enableRedirects);
 		client.start();
 	}
 
