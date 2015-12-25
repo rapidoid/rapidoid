@@ -45,12 +45,15 @@ import org.rapidoid.u.U;
 @Since("2.0.0")
 public abstract class HttpTestCommons extends TestCommons {
 
+	private static final boolean ADJUST_RESULTS = false;
+
 	@Before
 	public void openContext() {
 		Log.setLogLevel(LogLevel.INFO);
 
 		ClasspathUtil.setRootPackage("some.nonexisting.app");
 		HTTP.DEFAULT_CLIENT.reset();
+		HTTP.CLIENT_WITHOUT_REDIRECTS.reset();
 
 		System.out.println("--- STARTING SERVER ---");
 
@@ -123,6 +126,42 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	protected byte[] getBytes(String uri) {
 		return HTTP.get(localhost(uri));
+	}
+
+	protected String testGet(String uri) {
+		return testReq("GET", uri);
+	}
+
+	protected String testPost(String uri) {
+		return testReq("POST", uri);
+	}
+
+	private String testReq(String verb, String uri) {
+		byte[] res = HTTP.CLIENT_WITHOUT_REDIRECTS.request(verb, localhost(uri), null, null, null, null, null, null,
+				true).get();
+
+		String resp = new String(res);
+
+		resp = resp.replaceFirst("Date: .*? GMT", "Date: XXXXX GMT");
+
+		String filename = reqName(verb, uri);
+		if (ADJUST_RESULTS) {
+			File testDir = new File("src/test/resources/results/" + testName());
+
+			if (!testDir.exists()) {
+				testDir.mkdir();
+			}
+
+			IO.save("src/test/resources/" + filename, resp);
+		} else {
+			eq(resp, IO.load(filename));
+		}
+
+		return resp;
+	}
+
+	private String reqName(String verb, String uri) {
+		return "results/" + testName() + "/" + verb + uri.replace("/", "_").replace("?", ":");
 	}
 
 }

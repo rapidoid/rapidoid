@@ -399,13 +399,13 @@ public class FastHttp implements Protocol, HttpMetadata {
 		listener.onErrorResponse(500, contentTypeHeader, content);
 	}
 
-	public HttpStatus error(Channel ctx, boolean isKeepAlive, Throwable error) {
+	public void error(Channel ctx, boolean isKeepAlive, Throwable error) {
 		Log.error("Error while processing request!", error);
 
 		startResponse(ctx, 500, isKeepAlive, MediaType.HTML_UTF_8);
 		writeContent(ctx, HttpUtils.getErrorMessage(error).getBytes());
 
-		return HttpStatus.ERROR;
+		done(ctx, isKeepAlive);
 	}
 
 	private void writeContent(Channel ctx, byte[] content) {
@@ -467,38 +467,13 @@ public class FastHttp implements Protocol, HttpMetadata {
 		genericHandlers.clear();
 	}
 
-	public void writeResult(Channel ctx, boolean isKeepAlive, Object result, MediaType contentType) {
-		if (contentType.equals(MediaType.JSON_UTF_8)) {
-			if (result instanceof byte[]) {
-				write200(ctx, isKeepAlive, contentType, (byte[]) result);
-			} else {
-				writeSerializedJson(ctx, isKeepAlive, result);
-			}
-		} else {
-			byte[] response = UTILS.toBytes(result);
-			write200(ctx, isKeepAlive, contentType, response);
-		}
-	}
-
-	public void renderBody(Channel ctx, int code, MediaType contentType, Object result) {
-		byte[] bytes;
-
-		if (U.eq(contentType, MediaType.JSON_UTF_8)) {
-			if (result instanceof byte[]) {
-				bytes = (byte[]) result;
-			} else {
-				bytes = JSON.stringify(result).getBytes();
-			}
-		} else {
-			bytes = UTILS.toBytes(result);
-		}
-
-		ctx.write(bytes);
+	public void renderBody(Channel ctx, int code, MediaType contentType, byte[] body) {
+		ctx.write(body);
 
 		if (code == 200) {
-			listener.onOkResponse(contentType, bytes);
+			listener.onOkResponse(contentType, body);
 		} else {
-			listener.onErrorResponse(code, contentType, bytes);
+			listener.onErrorResponse(code, contentType, body);
 		}
 	}
 

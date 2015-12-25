@@ -59,7 +59,8 @@ public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 				return HttpStatus.NOT_FOUND;
 			}
 		} catch (Exception e) {
-			return http.error(ctx, isKeepAlive, e);
+			http.error(ctx, isKeepAlive, e);
+			return HttpStatus.ERROR;
 		}
 	}
 

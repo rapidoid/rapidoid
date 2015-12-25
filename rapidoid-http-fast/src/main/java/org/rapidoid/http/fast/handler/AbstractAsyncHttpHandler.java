@@ -57,7 +57,8 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 			ctx.async();
 			execHandlerJob(ctx, isKeepAlive, req);
 		} catch (Throwable e) {
-			return http.error(ctx, isKeepAlive, e);
+			http.error(ctx, isKeepAlive, e);
+			return HttpStatus.ERROR;
 		}
 
 		return HttpStatus.ASYNC;
@@ -118,7 +119,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 					}
 
 					result = postprocessResult(req, result);
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					result = e;
 				}
 
@@ -152,7 +153,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 					}
 
 					return transformation.map(val);
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					return e;
 				}
 			}
