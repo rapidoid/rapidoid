@@ -292,11 +292,11 @@ public class Log {
 	}
 
 	public static void warn(String msg, Throwable error) {
-		warn(msg, "error", error.getMessage());
+		warn(msg, "message", error.getMessage());
 	}
 
 	public static void error(String msg, Throwable error) {
-		error(msg, "error", error.getMessage());
+		error(msg, "message", error.getMessage());
 		error.printStackTrace();
 	}
 

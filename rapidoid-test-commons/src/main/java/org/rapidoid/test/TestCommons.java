@@ -462,4 +462,8 @@ public abstract class TestCommons {
 		return file;
 	}
 
+	protected String testName() {
+		return getClass().getSimpleName();
+	}
+
 }

@@ -678,10 +678,7 @@ public class UTILS implements Constants {
 			return (byte[]) obj;
 
 		} else if (obj instanceof ByteBuffer) {
-			ByteBuffer buf = (ByteBuffer) obj;
-			byte[] bytes = new byte[buf.remaining()];
-			buf.get(bytes);
-			return bytes;
+			return Bufs.buf2bytes((ByteBuffer) obj);
 
 		} else if (obj instanceof File) {
 			Res res = Res.from((File) obj);

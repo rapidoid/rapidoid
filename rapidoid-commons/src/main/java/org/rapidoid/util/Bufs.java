@@ -56,6 +56,10 @@ public class Bufs {
 	}
 
 	public static String buf2str(ByteBuffer buf) {
+		return new String(buf2bytes(buf));
+	}
+
+	public static byte[] buf2bytes(ByteBuffer buf) {
 		ByteBuffer buf2 = buf.duplicate();
 
 		buf2.rewind();
@@ -64,7 +68,7 @@ public class Bufs {
 		byte[] bytes = new byte[buf2.capacity()];
 		buf2.get(bytes);
 
-		return new String(bytes);
+		return bytes;
 	}
 
 	public static ByteBuffer buf(String s) {

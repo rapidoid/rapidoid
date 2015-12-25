@@ -64,6 +64,14 @@ public class JSON {
 		}
 	}
 
+	public static byte[] stringifyToBytes(Object value) {
+		try {
+			return MAPPER.writeValueAsBytes(value);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static void stringify(Object value, OutputStream out) {
 		try {
 			MAPPER.writeValue(out, value);
