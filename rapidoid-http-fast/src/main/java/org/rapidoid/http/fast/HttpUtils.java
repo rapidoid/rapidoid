@@ -42,6 +42,8 @@ public class HttpUtils implements HttpMetadata {
 
 	private static final String PAGE_RELOAD = "<h2>&nbsp;Reloading...</h2><script>location.reload();</script>";
 
+	private static final byte[] EMPTY_RESPONSE = {};
+
 	public static byte[] serializeLocals(Map<String, Serializable> locals) {
 		return locals != null ? UTILS.serialize(locals) : null;
 	}
@@ -237,6 +239,9 @@ public class HttpUtils implements HttpMetadata {
 		if (redirect != null) {
 			resp.code(303);
 			resp.headers().put(HttpHeaders.LOCATION.name(), redirect);
+			if (resp.content() == null && resp.body() == null) {
+				resp.body(EMPTY_RESPONSE);
+			}
 		}
 	}
 

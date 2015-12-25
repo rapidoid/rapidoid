@@ -33,11 +33,13 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.MediaType;
+import org.rapidoid.data.JSON;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.2")
@@ -384,10 +386,10 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 			contentType = U.or(response.contentType(), MediaType.HTML_UTF_8);
 		}
 
-		startResponseRendering(code, contentType);
+		renderResponseHeaders(code, contentType);
 	}
 
-	private void startResponseRendering(int code, MediaType contentType) {
+	private void renderResponseHeaders(int code, MediaType contentType) {
 		http.startResponse(channel, code, isKeepAlive, contentType);
 
 		if (response != null || !U.isEmpty(cookies)) {
@@ -434,16 +436,42 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		startRendering();
 
 		if (!wasRendering) {
-			String err = validateResponse();
-			if (err != null) {
-				http.renderBody(channel, 500, MediaType.HTML_UTF_8, err.getBytes());
-			} else {
-				http.renderBody(channel, response.code(), response.contentType(), response.content());
-			}
+			renderResponseBody();
 		}
 
 		completeResponse();
 		finish();
+	}
+
+	private void renderResponseBody() {
+		String err = validateResponse();
+
+		if (err != null) {
+			http.renderBody(channel, 500, MediaType.HTML_UTF_8, err.getBytes());
+
+		} else {
+			byte[] bytes;
+
+			if (response.content() != null) {
+				bytes = serializeResponse();
+			} else if (response.body() != null) {
+				bytes = UTILS.toBytes(response.body());
+			} else {
+				throw U.notExpected();
+			}
+
+			http.renderBody(channel, response.code(), response.contentType(), bytes);
+		}
+	}
+
+	private byte[] serializeResponse() {
+		Object content = response.content();
+
+		if (U.eq(response.contentType(), MediaType.JSON_UTF_8)) {
+			return JSON.stringifyToBytes(content);
+		} else {
+			return UTILS.toBytes(content);
+		}
 	}
 
 	private String validateResponse() {
@@ -451,7 +479,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 			return "Response wasn't provided!";
 		}
 
-		if (response.content() == null && response.redirect() == null) {
+		if (response.content() == null && response.body() == null && response.redirect() == null) {
 			return "Response content wasn't provided!";
 		}
 
