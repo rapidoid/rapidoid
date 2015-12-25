@@ -188,12 +188,10 @@ i.btn-close:hover {
 }
 
 /***** Code style */
-.example-code {
-	font-weight: bold;
-	background-color: #F7F7F7;
-	border: 1px dashed;
-	border-color: #AAA;
-	padding: 5px;
+.code-snippet {
+	background: none;
+	border: none;
+	padding: 0px;
 }
 
 .important-code {
@@ -237,27 +235,52 @@ i.btn-close:hover {
 	color: #333 !important;
 }
 
-span._code_kw {
+._code_linecomm {
+	color: #777;
+	font-style: italic;
+}
+
+._code_comment {
+	color: #777;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+._code_comment_icon {
+	color: #777;
+}
+
+._code_lambda {
+	color: #955;
+	font-weight: bold;
+}
+
+._code_api {
+	color: #338;
+	font-weight: bold;
+}
+
+._code_kw {
 	color: blue;
 }
 
-span._code_cls {
-	color: #400;
+._code_cls {
+	color: #727;
 }
 
-span._code_tag {
+._code_tag {
 	color: #377;
 }
 
-span._code_str {
+._code_str {
 	color: #070;
 }
 
-span._code_num {
+._code_num {
 	color: #077;
 }
 
-span._code_ann {
+._code_ann {
 	color: #551;
 }
 
