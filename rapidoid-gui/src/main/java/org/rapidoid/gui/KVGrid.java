@@ -60,7 +60,8 @@ public class KVGrid extends AbstractWidget {
 				val = Lmbd.eval(valueView, val);
 			}
 
-			tbl = tbl.append(tr(td(key), td(val)));
+			Tag tr = val != null ? tr(td(key), td(val)) : tr(td(key).colspan("2"));
+			tbl = tbl.append(tr);
 		}
 
 		return tbl;
