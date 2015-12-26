@@ -48,7 +48,7 @@ import org.rapidoid.util.D;
 @Since("2.0.0")
 public abstract class HttpTestCommons extends TestCommons {
 
-	private static final boolean ADJUST_RESULTS = true;
+	private static final boolean ADJUST_RESULTS = false;
 
 	private static final List<String> HTTP_VERBS = U.list("GET", "DELETE", "OPTIONS", "TRACE", "POST", "PUT", "PATCH"); // FIXME
 																														// HEAD

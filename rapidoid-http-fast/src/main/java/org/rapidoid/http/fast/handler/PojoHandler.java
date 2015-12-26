@@ -2,7 +2,7 @@ package org.rapidoid.http.fast.handler;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%

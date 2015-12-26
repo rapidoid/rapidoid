@@ -9,7 +9,7 @@ import org.rapidoid.annotation.Since;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-gui
  * %%
  * Copyright (C) 2014 - 2015 Nikolche Mihajlovski and contributors
  * %%
