@@ -22,20 +22,40 @@ package org.rapidoid.http;
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.fast.On;
-import org.rapidoid.http.fast.ReqHandler;
-import org.rapidoid.pojo.POJO;
+import org.rapidoid.web.Rapidoid;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.10")
 public class HttpPojoControllerTest extends HttpTestCommons {
 
 	@Test
-	public void testSimpleRedirect() {
-		//On.get("/a").html(POJO.handler(app));
+	public void testPojoHandlers() {
+		On.get("/a").pojo(new Object() {
+			@GET(uri = "/a")
+			public Object abc() {
+				return "foo";
+			}
+		});
 
-		testGet("/redir");
+		onlyGet("/a");
+
+		Rapidoid.run(new String[0]);
+
+		onlyGet("/b");
+	}
+
+}
+
+@Controller
+class Ff {
+
+	@GET(uri = "/b")
+	public Object bbb() {
+		return "bar";
 	}
 
 }

@@ -30,21 +30,21 @@ import org.rapidoid.annotation.Since;
 @Since("3.0.0")
 public class DispatchTarget {
 
-	final Class<?> clazz;
+	final Object controller;
 
 	final Method method;
 
 	final Map<String, Object> config;
 
-	public DispatchTarget(Class<?> clazz, Method method, Map<String, Object> config) {
-		this.clazz = clazz;
+	public DispatchTarget(Object controller, Method method, Map<String, Object> config) {
+		this.controller = controller;
 		this.method = method;
 		this.config = config;
 	}
 
 	@Override
 	public String toString() {
-		return "DispatchTarget [clazz=" + clazz + ", method=" + method + ", config=" + config + "]";
+		return "DispatchTarget [controller=" + controller + ", method=" + method + ", config=" + config + "]";
 	}
 
 }

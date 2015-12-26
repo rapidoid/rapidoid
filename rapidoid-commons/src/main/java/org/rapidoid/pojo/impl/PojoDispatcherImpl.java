@@ -47,7 +47,6 @@ import org.rapidoid.pojo.PojoHandlerNotFoundException;
 import org.rapidoid.pojo.PojoRequest;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
-import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -57,27 +56,27 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 
 	protected final Map<DispatchReq, DispatchTarget> mappings = U.map();
 
-	public PojoDispatcherImpl(Map<String, Class<?>> components) {
-		if (components != null) {
-			init(components);
-		}
+	public PojoDispatcherImpl(List<Object> controllers) {
+		init(controllers);
 	}
 
-	private void init(Map<String, Class<?>> components) {
-		for (Class<?> component : components.values()) {
-			if (component.getCanonicalName() != null && !component.getCanonicalName().startsWith("org.rapidoid.log.")) {
+	private void init(List<Object> controllers) {
+		for (Object controller : controllers) {
 
-				Log.debug("Processing POJO", "class", component);
+			Class<? extends Object> clazz = controller.getClass();
 
-				List<String> componentPaths = getComponentNames(component);
+			if (!clazz.getName().startsWith("org.rapidoid.log.")) {
+
+				Log.debug("Processing POJO", "class", clazz);
+				List<String> componentPaths = getComponentNames(clazz);
+
 				for (String componentPath : componentPaths) {
-
-					for (Method method : component.getMethods()) {
+					for (Method method : clazz.getMethods()) {
 						if (shouldExpose(method)) {
 							List<DispatchReq> actions = getMethodActions(componentPath, method);
 
 							for (DispatchReq action : actions) {
-								mappings.put(action, new DispatchTarget(component, method, action.config));
+								mappings.put(action, new DispatchTarget(controller, method, action.config));
 								Log.info("Registered web handler", "kind", action.kind, "command", action.command,
 										"path", action.path, "method", method);
 							}
@@ -134,8 +133,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 			DispatchReqKind kind) throws PojoHandlerNotFoundException, PojoDispatchException {
 
 		if (target.method != null) {
-			Object componentInstance = Wire.singleton(target.clazz);
-			Object callResult = doDispatch(req, target.method, componentInstance, parts, paramsFrom);
+			Object callResult = doDispatch(req, target.method, target.controller, parts, paramsFrom);
 			return new DispatchResult(callResult, kind, target.config);
 		} else {
 			throw notFound();

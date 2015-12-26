@@ -20,23 +20,20 @@ package org.rapidoid.ctx;
  * #L%
  */
 
-import java.util.Collections;
-import java.util.HashMap;
+import java.lang.annotation.Annotation;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.beany.Metadata;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.1.0")
 public class Classes extends LinkedHashMap<String, Class<?>> {
 
 	private static final long serialVersionUID = 8987037790459772014L;
-
-	private final Map<List<?>, List<Class<?>>> cache = Collections
-			.synchronizedMap(new HashMap<List<?>, List<Class<?>>>());
 
 	public static Classes from(Iterable<Class<?>> classes) {
 		Classes clss = new Classes();
@@ -48,8 +45,16 @@ public class Classes extends LinkedHashMap<String, Class<?>> {
 		return clss;
 	}
 
-	public Map<List<?>, List<Class<?>>> getCache() {
-		return cache;
+	public Classes annotated(Class<? extends Annotation> annotation) {
+		List<Class<?>> selected = U.list();
+
+		for (Class<?> cls : values()) {
+			if (Metadata.isAnnotated(cls, annotation)) {
+				selected.add(cls);
+			}
+		}
+
+		return from(selected);
 	}
 
 }

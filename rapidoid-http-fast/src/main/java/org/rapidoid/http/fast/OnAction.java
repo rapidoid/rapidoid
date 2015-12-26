@@ -31,10 +31,13 @@ import org.rapidoid.http.fast.handler.FastCallableHttpHandler;
 import org.rapidoid.http.fast.handler.FastResourceHttpHandler;
 import org.rapidoid.http.fast.handler.FastStaticHttpHandler;
 import org.rapidoid.http.fast.handler.HttpHandlers;
+import org.rapidoid.http.fast.handler.PojoHandler;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.F3;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.pojo.POJO;
+import org.rapidoid.pojo.PojoDispatcher;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
@@ -93,6 +96,12 @@ public class OnAction {
 	private void register(MediaType contentType, Res resource) {
 		for (FastHttp http : httpImpls) {
 			http.on(verb, path, new FastResourceHttpHandler(http, contentType, resource));
+		}
+	}
+
+	private void register(MediaType contentType, PojoDispatcher dispatcher) {
+		for (FastHttp http : httpImpls) {
+			http.on(verb, path, new PojoHandler(http, dispatcher));
 		}
 	}
 
@@ -276,6 +285,14 @@ public class OnAction {
 	public ServerSetup binary(final String paramName1, final String paramName2, final String paramName3,
 			final F3<String, String, String, Object> handler) {
 		return binary(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
+	}
+
+	/*********************** POJO ***********************/
+
+	public ServerSetup pojo(Object... controllers) {
+		PojoDispatcher dispatcher = POJO.dispatcher(controllers);
+		register(MediaType.HTML_UTF_8, dispatcher);
+		return chain;
 	}
 
 }

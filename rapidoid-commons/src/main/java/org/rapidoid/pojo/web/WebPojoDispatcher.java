@@ -38,7 +38,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.commons.Arr;
-import org.rapidoid.ctx.Classes;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.pojo.DispatchResult;
@@ -54,8 +53,8 @@ import org.rapidoid.u.U;
 @Since("2.0.0")
 public class WebPojoDispatcher extends PojoDispatcherImpl {
 
-	public WebPojoDispatcher(Classes components) {
-		super(components);
+	public WebPojoDispatcher(List<Object> controllers) {
+		super(controllers);
 	}
 
 	@Override

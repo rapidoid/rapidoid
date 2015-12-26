@@ -83,7 +83,7 @@ public class Rapidoid {
 		ctx.setApp(app);
 
 		// Apps.serve(app, args, config);
-		On.req(new AppHandler(On.getDefaultSetup().http(), app));
+		On.req(new AppHandler(On.getDefaultSetup().http(), app.getDispatcher()));
 
 		Jobs.execute(new Runnable() {
 			@Override

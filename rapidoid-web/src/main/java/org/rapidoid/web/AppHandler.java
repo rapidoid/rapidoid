@@ -22,7 +22,6 @@ package org.rapidoid.web;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,13 +62,13 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 
 	private static final Pattern DIRECTIVE = Pattern.compile("\\s*<!--\\s*#\\s*(\\{.+\\})\\s*-->\\s*");
 
-	private final WebApp app;
+	private final PojoDispatcher dispatcher;
 
 	private static volatile ITemplate PAGE_TEMPLATE;
 
-	public AppHandler(FastHttp http, WebApp app) {
+	public AppHandler(FastHttp http, PojoDispatcher dispatcher) {
 		super(http, null, null);
-		this.app = app;
+		this.dispatcher = dispatcher;
 	}
 
 	@Override
@@ -97,9 +96,7 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		Object result = null;
 
 		if (hasEvent) {
-			bindInputs(req);
-
-			DispatchResult dispatchResult = doDispatch(app.getDispatcher(), new WebReq(req));
+			DispatchResult dispatchResult = doDispatch(dispatcher, new WebReq(req));
 			if (dispatchResult != null) {
 				U.must(dispatchResult.getKind() == DispatchReqKind.PAGE);
 				result = dispatchResult.getResult();
@@ -117,7 +114,7 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		// dispatch REST services or PAGES (as POJO methods)
 
 		if (result == null) {
-			DispatchResult dres = doDispatch(app.getDispatcher(), new WebReq(req));
+			DispatchResult dres = doDispatch(dispatcher, new WebReq(req));
 
 			if (dres != null) {
 				result = dres.getResult();
@@ -141,20 +138,6 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		// }
 
 		return view(req, result, hasEvent, config);
-	}
-
-	private void bindInputs(Req x) {
-		Map<String, Object> inputs = x.data("_inputs", null);
-
-		if (inputs != null) {
-			// bind inputs
-			for (Entry<String, Object> e : inputs.entrySet()) {
-				String inputId = e.getKey();
-				Object value = e.getValue();
-
-				// x.locals().put(inputId, UTILS.serializable(value));
-			}
-		}
 	}
 
 	public Resp view(Req x, Object result, boolean hasEvent, Map<String, Object> config) {
@@ -206,12 +189,12 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 			return false;
 		}
 
-		boolean embedded = req.attr("_embedded", null) != null;
-
-		String title = U.or(app.getTitle(), req.host());
+		WebApp app = Ctxs.ctx().app();
+		String title = app != null ? app.getTitle() : null;
+		title = U.or(title, req.host());
 
 		model.put("title", title);
-		model.put("embedded", embedded);
+		model.put("embedded", req.attr("_embedded", null) != null);
 		model.put("home", "/");
 
 		// the @Page configuration overrides the previous
@@ -315,6 +298,8 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 		model.put("dev", HttpUtils.isDevMode(x));
 		model.put("home", "/");
 
+		model.putAll(x.attrs());
+		WebApp app = Ctxs.ctx().app();
 		model.put("app", app);
 		model.put("menu", app != null ? app.getMenu() : null);
 

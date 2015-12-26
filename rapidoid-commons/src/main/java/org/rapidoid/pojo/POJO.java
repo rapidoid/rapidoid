@@ -20,24 +20,24 @@ package org.rapidoid.pojo;
  * #L%
  */
 
-import java.util.List;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.pojo.impl.PojoDispatcherImpl;
+import org.rapidoid.pojo.web.WebPojoDispatcher;
 import org.rapidoid.u.U;
+import org.rapidoid.wire.Wire;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.8")
 public class POJO {
 
-	public static PojoDispatcher dispatcher(Class<?>... serviceClasses) {
-		return new PojoDispatcherImpl(Cls.classMap(U.list(serviceClasses)));
-	}
+	public static PojoDispatcher dispatcher(Object... controllers) {
+		for (int i = 0; i < controllers.length; i++) {
+			if (controllers[i] instanceof Class<?>) {
+				controllers[i] = Wire.singleton((Class<?>) controllers[i]);
+			}
+		}
 
-	public static PojoDispatcher dispatcher(List<Class<?>> services) {
-		return dispatcher(services.toArray(new Class[services.size()]));
+		return new WebPojoDispatcher(U.list(controllers));
 	}
 
 }

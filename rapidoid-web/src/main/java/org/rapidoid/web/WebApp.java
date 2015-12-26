@@ -3,12 +3,13 @@ package org.rapidoid.web;
 import java.util.Set;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Config;
 import org.rapidoid.ctx.Classes;
 import org.rapidoid.http.fast.handler.FastHttpHandler;
+import org.rapidoid.pojo.POJO;
 import org.rapidoid.pojo.PojoDispatcher;
-import org.rapidoid.pojo.web.WebPojoDispatcher;
 import org.rapidoid.u.U;
 
 /*
@@ -56,13 +57,22 @@ public class WebApp {
 	public WebApp(String id, Set<String> owners, Set<String> hostnames, Set<String> uriContexts, AppMode mode,
 			PojoDispatcher dispatcher, Classes classes, Config config) {
 		this.id = id;
-		this.dispatcher = U.or(dispatcher, new WebPojoDispatcher(classes));
+		this.dispatcher = provideDispatcher(dispatcher, classes);
 		this.owners = U.safe(owners);
 		this.hostnames = U.safe(hostnames);
 		this.uriContexts = U.safe(uriContexts);
 		this.mode = U.or(mode, AppMode.DEVELOPMENT);
 		this.classes = U.or(classes, new Classes());
 		this.config = U.or(config, new Config());
+	}
+
+	private PojoDispatcher provideDispatcher(PojoDispatcher dispatcher, Classes classes) {
+		if (dispatcher == null) {
+			Classes controllers = classes.annotated(Controller.class);
+			dispatcher = POJO.dispatcher(controllers.values().toArray());
+		}
+
+		return dispatcher;
 	}
 
 	public WebApp(String id, String uriPath, Classes classes, FastHttpHandler handler) {
