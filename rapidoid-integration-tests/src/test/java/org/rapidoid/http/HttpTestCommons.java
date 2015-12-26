@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -31,6 +32,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.http.fast.On;
 import org.rapidoid.http.fast.ReqHandler;
@@ -40,12 +42,16 @@ import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
+import org.rapidoid.util.D;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public abstract class HttpTestCommons extends TestCommons {
 
-	private static final boolean ADJUST_RESULTS = false;
+	private static final boolean ADJUST_RESULTS = true;
+
+	private static final List<String> HTTP_VERBS = U.list("GET", "DELETE", "OPTIONS", "TRACE", "POST", "PUT", "PATCH"); // FIXME
+																														// HEAD
 
 	@Before
 	public void openContext() {
@@ -62,6 +68,14 @@ public abstract class HttpTestCommons extends TestCommons {
 
 		U.sleep(300);
 		System.out.println("--- SERVER STARTED ---");
+
+		notFound("/");
+		notFound("/a");
+		notFound("/b?dgfg");
+		notFound("/c?x=123");
+		notFound("/else");
+		notFound("/echo");
+		notFound("/upload");
 	}
 
 	@After
@@ -128,21 +142,46 @@ public abstract class HttpTestCommons extends TestCommons {
 		return HTTP.get(localhost(uri));
 	}
 
-	protected String testGet(String uri) {
-		return testReq("GET", uri);
+	protected void onlyGet(String uri) {
+		onlyReq("GET", uri);
 	}
 
-	protected String testPost(String uri) {
-		return testReq("POST", uri);
+	protected void onlyPost(String uri) {
+		onlyReq("POST", uri);
 	}
 
-	private String testReq(String verb, String uri) {
-		byte[] res = HTTP.CLIENT_WITHOUT_REDIRECTS.request(verb, localhost(uri), null, null, null, null, null, null,
-				true).get();
+	private void onlyReq(String verb, String uri) {
+		testReq(verb, uri);
+		notFoundExcept(uri, verb);
+	}
 
-		String resp = new String(res);
+	protected void notFoundExcept(String uri, String... exceptVerbs) {
+		for (String verb : HTTP_VERBS) {
+			if (Arr.indexOf(exceptVerbs, verb) < 0) {
+				notFound(verb, uri);
+			}
+		}
+	}
 
-		resp = resp.replaceFirst("Date: .*? GMT", "Date: XXXXX GMT");
+	protected void notFound(String uri) {
+		notFoundExcept(uri);
+	}
+
+	protected void notFound(String verb, String uri) {
+		String resp = fetch(verb, uri);
+		checkResponse(verb, uri, resp, IO.load("results/404-not-found"));
+	}
+
+	private void checkResponse(String verb, String uri, String actual, String expected) {
+		if (!U.eq(actual, expected)) {
+			D.print(verb, uri);
+		}
+
+		eq(actual, expected);
+	}
+
+	private void testReq(String verb, String uri) {
+		String resp = fetch(verb, uri);
 
 		String filename = reqName(verb, uri);
 		if (ADJUST_RESULTS) {
@@ -154,9 +193,17 @@ public abstract class HttpTestCommons extends TestCommons {
 
 			IO.save("src/test/resources/" + filename, resp);
 		} else {
-			eq(resp, IO.load(filename));
+			checkResponse(verb, uri, resp, IO.load(filename));
 		}
+	}
 
+	private String fetch(String verb, String uri) {
+		byte[] res = HTTP.CLIENT_WITHOUT_REDIRECTS.request(verb, localhost(uri), null, null, null, null, null, null,
+				true).get();
+
+		String resp = new String(res);
+
+		resp = resp.replaceFirst("Date: .*? GMT", "Date: XXXXX GMT");
 		return resp;
 	}
 

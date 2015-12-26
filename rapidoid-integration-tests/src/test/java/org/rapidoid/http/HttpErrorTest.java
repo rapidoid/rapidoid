@@ -41,7 +41,7 @@ public class HttpErrorTest extends HttpTestCommons {
 			}
 		});
 
-		testGet("/err");
+		onlyGet("/err");
 	}
 
 }

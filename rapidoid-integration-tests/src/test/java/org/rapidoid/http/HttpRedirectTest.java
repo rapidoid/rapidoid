@@ -39,7 +39,7 @@ public class HttpRedirectTest extends HttpTestCommons {
 			}
 		});
 
-		testGet("/redir");
+		onlyGet("/redir");
 	}
 
 	@Test
@@ -51,7 +51,7 @@ public class HttpRedirectTest extends HttpTestCommons {
 			}
 		});
 
-		testGet("/redir2");
+		onlyGet("/redir2");
 	}
 
 }

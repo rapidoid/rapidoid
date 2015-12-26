@@ -40,7 +40,7 @@ public class HttpRawResponseTest extends HttpTestCommons {
 			}
 		});
 
-		testGet("/bytes");
+		onlyGet("/bytes");
 	}
 
 	@Test
@@ -52,7 +52,7 @@ public class HttpRawResponseTest extends HttpTestCommons {
 			}
 		});
 
-		testGet("/buf");
+		onlyGet("/buf");
 	}
 
 }
