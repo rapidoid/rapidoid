@@ -218,7 +218,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	private String reqName(String verb, String uri) {
-		return "results/" + testName() + "/" + verb + uri.replace("/", "_").replace("?", ":");
+		return "results/" + testName() + "/" + verb + uri.replace("/", "_").replace("?", "-");
 	}
 
 }
