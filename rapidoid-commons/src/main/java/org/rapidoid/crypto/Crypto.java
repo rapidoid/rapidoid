@@ -23,6 +23,7 @@ package org.rapidoid.crypto;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -33,11 +34,15 @@ import javax.crypto.spec.SecretKeySpec;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")
 public class Crypto {
+
+	private static final String RANDOM_SECRET = UUID.randomUUID().toString();
+	private static boolean warnedRandomSecret;
 
 	public static MessageDigest digest(String algorithm) {
 		try {
@@ -113,10 +118,11 @@ public class Crypto {
 		String secret = Conf.secret();
 
 		if (secret == null) {
-			if (Conf.dev()) {
-				secret = "";
-			} else {
-				throw U.rte("Application secret must be specified!");
+			secret = RANDOM_SECRET;
+
+			if (!warnedRandomSecret) {
+				Log.warn("Application secret was not specified, using random secret!");
+				warnedRandomSecret = true;
 			}
 		}
 

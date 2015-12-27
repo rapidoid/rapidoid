@@ -43,8 +43,7 @@ public class CryptoTest extends AbstractCommonsTest {
 		notNull(Crypto.secret());
 		isTrue(Crypto.secret() == Crypto.secret());
 
-		// default secret in dev mode is an empty string
-		eq(Crypto.secret(), "");
+		isTrue(U.notEmpty(Crypto.secret()));
 
 		Conf.args("secret=mysecret");
 		eq(Crypto.secret(), "mysecret");
