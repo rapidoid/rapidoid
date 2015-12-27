@@ -24,7 +24,8 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.apache.commons.codec.binary.Base64;
+import javax.xml.bind.DatatypeConverter;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
@@ -53,7 +54,7 @@ public class HttpUtils implements HttpMetadata {
 		String cookiepack = req.cookie(COOKIEPACK_COOKIE, null);
 
 		if (!U.isEmpty(cookiepack)) {
-			byte[] decoded = Base64.decodeBase64(cookiepack);
+			byte[] decoded = DatatypeConverter.parseBase64Binary(cookiepack.replace('$', '+'));
 			return (Map<String, Serializable>) UTILS.deserialize(Crypto.decrypt(decoded));
 		} else {
 			return null;
@@ -63,7 +64,7 @@ public class HttpUtils implements HttpMetadata {
 	public static void saveCookipackBeforeClosingHeaders(Req req, Map<String, Serializable> cookiepack) {
 		if (cookiepack != null) {
 			byte[] cpack = Crypto.encrypt(UTILS.serialize(cookiepack));
-			String encoded = new String(Base64.encodeBase64URLSafeString(cpack));
+			String encoded = DatatypeConverter.printBase64Binary(cpack).replace('+', '$');
 			setCookie(req, COOKIEPACK_COOKIE, encoded, "path=/");
 		}
 	}
