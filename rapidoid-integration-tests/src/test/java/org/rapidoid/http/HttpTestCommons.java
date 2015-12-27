@@ -61,8 +61,10 @@ public abstract class HttpTestCommons extends TestCommons {
 
 		System.out.println("--- STARTING SERVER ---");
 
+		HTTP.STATEFUL_CLIENT.reset();
+
 		On.getDefaultSetup().http().clearHandlers();
-//		On.getDefaultSetup().listen();
+		// On.getDefaultSetup().listen();
 
 		U.sleep(300);
 		System.out.println("--- SERVER STARTED ---");
@@ -80,7 +82,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	public void closeContext() {
 		System.out.println("--- STOPPING SERVER ---");
 
-//		On.getDefaultSetup().shutdown();
+		// On.getDefaultSetup().shutdown();
 
 		U.sleep(300);
 		System.out.println("--- SERVER STOPPED ---");
@@ -135,6 +137,10 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	protected String get(String uri) {
 		return new String(HTTP.get(localhost(uri)));
+	}
+
+	protected String statefulGet(String uri) {
+		return new String(HTTP.STATEFUL_CLIENT.get(localhost(uri), null).get());
 	}
 
 	protected byte[] getBytes(String uri) {
@@ -203,8 +209,8 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	private String fetch(String verb, String uri) {
-		byte[] res = HTTP.CLIENT_WITHOUT_REDIRECTS.request(verb, localhost(uri), null, null, null, null, null, null,
-				true).get();
+		byte[] res = HTTP.STATELESS_CLIENT.request(verb, localhost(uri), null, null, null, null, null, null, true)
+				.get();
 
 		String resp = new String(res);
 

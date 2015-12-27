@@ -104,12 +104,12 @@ public class HttpClient {
 	private static CloseableHttpAsyncClient asyncClient(boolean enableCookies, boolean enableRedirects) {
 		ConnectionReuseStrategy reuseStrategy = new NoConnectionReuseStrategy();
 
-		HttpAsyncClientBuilder builder = HttpAsyncClients.custom()
-				.setThreadFactory(new RapidoidThreadFactory("http-client")).disableConnectionState()
-				.disableAuthCaching().disableCookieManagement().setConnectionReuseStrategy(reuseStrategy);
+		HttpAsyncClientBuilder builder = HttpAsyncClients.custom().setThreadFactory(
+				new RapidoidThreadFactory("http-client"));
 
 		if (!enableCookies) {
-			builder = builder.disableCookieManagement();
+			builder = builder.disableCookieManagement().disableConnectionState().disableAuthCaching()
+					.setConnectionReuseStrategy(reuseStrategy);
 		}
 
 		if (!enableRedirects) {

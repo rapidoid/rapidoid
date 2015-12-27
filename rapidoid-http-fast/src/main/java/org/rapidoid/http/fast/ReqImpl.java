@@ -529,7 +529,12 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 		if (U.isEmpty(sessionId)) {
 			sessionId = UUID.randomUUID().toString();
-			HttpUtils.setCookie(this, SESSION_COOKIE, sessionId, "path=/");
+			synchronized (cookies) {
+				if (cookie(SESSION_COOKIE, null) == null) {
+					cookies.put(SESSION_COOKIE, sessionId);
+					HttpUtils.setCookie(this, SESSION_COOKIE, sessionId, "path=/");
+				}
+			}
 		}
 
 		return sessionId;
