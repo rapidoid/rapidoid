@@ -83,6 +83,9 @@ public abstract class HttpTestCommons extends TestCommons {
 		System.out.println("--- STOPPING SERVER ---");
 
 		On.getDefaultSetup().shutdown();
+		HTTP.DEFAULT_CLIENT.close();
+		HTTP.CLIENT_WITHOUT_REDIRECTS.close();
+
 		U.sleep(300);
 		System.out.println("--- SERVER STOPPED ---");
 	}
