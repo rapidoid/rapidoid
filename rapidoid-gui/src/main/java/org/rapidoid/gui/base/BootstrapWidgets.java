@@ -193,6 +193,10 @@ public abstract class BootstrapWidgets extends HTML {
 
 		return btn;
 	}
+	
+	public static BtnMenu btnMenu(){
+		return new BtnMenu();
+	}
 
 	public static Tag nav_(boolean fluid, boolean inverse, Tag brand, Object[] navbarContent) {
 		brand = brand.class_("navbar-brand");
