@@ -66,8 +66,12 @@ public class TagProxy implements InvocationHandler, Serializable {
 		Class<?> ret = method.getReturnType();
 		Class<?>[] paramTypes = method.getParameterTypes();
 
-		if (methodClass.equals(Object.class) || name.equals("toString")) {
-			return TagRenderer.get().toHTML(tag, null);
+		if (methodClass.equals(Object.class)) {
+			if (name.equals("toString")) {
+				return TagRenderer.get().toHTML(tag, null);
+			} else if (name.equals("equals")) {
+				return target == args[0];
+			}
 		}
 
 		if (methodClass.equals(Object.class) || methodClass.equals(TagBase.class)
