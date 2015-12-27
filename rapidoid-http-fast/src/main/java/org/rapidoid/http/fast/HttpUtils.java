@@ -24,15 +24,15 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
-import org.rapidoid.data.JSON;
+import org.rapidoid.crypto.Crypto;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.io.Res;
-import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
@@ -44,62 +44,28 @@ public class HttpUtils implements HttpMetadata {
 
 	private static final byte[] EMPTY_RESPONSE = {};
 
-	public static byte[] serializeLocals(Map<String, Serializable> locals) {
-		return locals != null ? UTILS.serialize(locals) : null;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Map<String, Serializable> deserializeLocals(byte[] bytes) {
-		return (Map<String, Serializable>) UTILS.deserialize(bytes);
-	}
-
-	public static byte[] serializeCookiepack(Map<String, Serializable> cookiepack) {
-		return cookiepack != null ? UTILS.serialize(cookiepack) : null;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Map<String, Serializable> deserializeCookiepack(byte[] bytes) {
-		return (Map<String, Serializable>) UTILS.deserialize(bytes);
-	}
-
 	public static String[] pathSegments(Req req) {
 		return U.triml(req.path(), "/").split("/");
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Map<String, Serializable> initAndDeserializeCookiePack(Req req) {
 		String cookiepack = req.cookie(COOKIEPACK_COOKIE, null);
 
-		if (!U.isEmpty(cookiepack) && !cookiepack.equals("null")) {
-
-			String cpackJsonStr = '"' + cookiepack + '"';
-			byte[] cpbytes = JSON.parseBytes(cpackJsonStr);
-			return deserializeCookiepack(cpbytes);
-
+		if (!U.isEmpty(cookiepack)) {
+			byte[] decoded = Base64.decodeBase64(cookiepack);
+			return (Map<String, Serializable>) UTILS.deserialize(Crypto.decrypt(decoded));
 		} else {
 			return null;
 		}
 	}
 
 	public static void saveCookipackBeforeClosingHeaders(Req req, Map<String, Serializable> cookiepack) {
-		byte[] cpack = serializeCookiepack(cookiepack);
-
-		if (cpack != null) {
-			String json = U.mid(JSON.stringify(cpack), 1, -1);
-			setCookie(req, COOKIEPACK_COOKIE, json, "path=/");
+		if (cookiepack != null) {
+			byte[] cpack = Crypto.encrypt(UTILS.serialize(cookiepack));
+			String encoded = new String(Base64.encodeBase64URLSafeString(cpack));
+			setCookie(req, COOKIEPACK_COOKIE, encoded, "path=/");
 		}
-	}
-
-	public Map<String, Serializable> loadState(Req req) {
-		if (isPostReq(req)) {
-			String pageLocals = req.posted(VIEWSTATE, null);
-
-			if (!U.isEmpty(pageLocals) && !pageLocals.equals("null")) {
-				byte[] bytes = JSON.parseBytes('"' + pageLocals + '"');
-				return deserializeLocals(bytes);
-			}
-		}
-
-		return null;
 	}
 
 	public static boolean isGetReq(Req req) {
@@ -131,15 +97,6 @@ public class HttpUtils implements HttpMetadata {
 	public static boolean hasExtension(String name) {
 		int pos = name.lastIndexOf('.');
 		return pos > 0 && pos < name.length() - 1;
-	}
-
-	public static String renderState(Map<String, Serializable> pageLocals) {
-		try {
-			return JSON.stringify(serializeLocals(pageLocals));
-		} catch (Exception e) {
-			Log.error("Cannot render the local page state!", e);
-			return "{}";
-		}
 	}
 
 	public static void setContentTypeForFile(Resp resp, File file) {
