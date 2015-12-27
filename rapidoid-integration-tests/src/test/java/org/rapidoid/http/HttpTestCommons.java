@@ -209,8 +209,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	private String fetch(String verb, String uri) {
-		byte[] res = HTTP.STATELESS_CLIENT.request(verb, localhost(uri), null, null, null, null, null, null, true)
-				.get();
+		byte[] res = HTTP.DEFAULT_CLIENT.request(verb, localhost(uri), null, null, null, null, null, null, true).get();
 
 		String resp = new String(res);
 

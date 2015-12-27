@@ -37,8 +37,7 @@ public class HTTP {
 	public static final String CONTENT_TYPE_XML = "application/xml";
 	public static final String CONTENT_TYPE_BINARY = "application/octet-stream";
 
-	public static final HttpClient DEFAULT_CLIENT = new HttpClient();
-	public static final HttpClient STATELESS_CLIENT = new HttpClient(false, false);
+	public static final HttpClient DEFAULT_CLIENT = new HttpClient(false, false);
 	public static final HttpClient STATEFUL_CLIENT = new HttpClient(true, true);
 
 	/********************************** GET **********************************/
