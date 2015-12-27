@@ -99,6 +99,10 @@ public class On {
 		return setup().req(handler);
 	}
 
+	public static synchronized ServerSetup controllers(Object... controllers) {
+		return setup().controllers(controllers);
+	}
+
 	public static synchronized ServerSetup port(int port) {
 		return DEFAULT_SERVER_SETUP.port(port);
 	}

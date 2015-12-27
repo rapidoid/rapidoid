@@ -150,6 +150,12 @@ public abstract class HttpTestCommons extends TestCommons {
 		onlyReq("POST", uri);
 	}
 
+	protected void getAndPost(String uri) {
+		testReq("GET", uri);
+		testReq("POST", uri);
+		notFoundExcept(uri, "GET", "POST");
+	}
+
 	private void onlyReq(String verb, String uri) {
 		testReq(verb, uri);
 		notFoundExcept(uri, verb);

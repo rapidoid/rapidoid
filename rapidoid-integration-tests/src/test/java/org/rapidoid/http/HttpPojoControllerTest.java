@@ -34,18 +34,27 @@ public class HttpPojoControllerTest extends HttpTestCommons {
 
 	@Test
 	public void testPojoHandlers() {
-		On.get("/a").pojo(new Object() {
+		On.get("/a").controllers(new Object() {
+
 			@GET(uri = "/a")
-			public Object abc() {
+			public Object theFoo() {
 				return "foo";
+			}
+
+			@GET(uri = "/x")
+			public Object x() {
+				return "x";
 			}
 		});
 
 		onlyGet("/a");
+		notFound("/x");
 
 		Rapidoid.run(new String[0]);
 
+		onlyGet("/a");
 		onlyGet("/b");
+		notFound("/x");
 	}
 
 }

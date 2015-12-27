@@ -289,7 +289,7 @@ public class OnAction {
 
 	/*********************** POJO ***********************/
 
-	public ServerSetup pojo(Object... controllers) {
+	public ServerSetup controllers(Object... controllers) {
 		PojoDispatcher dispatcher = POJO.dispatcher(controllers);
 		register(MediaType.HTML_UTF_8, dispatcher);
 		return chain;

@@ -8,10 +8,13 @@ import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.fast.handler.DelegatingFastParamsAwareHttpHandler;
 import org.rapidoid.http.fast.handler.FastHttpHandler;
+import org.rapidoid.http.fast.handler.PojoHandler;
 import org.rapidoid.http.fast.listener.FastHttpListener;
 import org.rapidoid.http.fast.listener.IgnorantHttpListener;
 import org.rapidoid.net.Serve;
 import org.rapidoid.net.TCPServer;
+import org.rapidoid.pojo.POJO;
+import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.u.U;
 
 /*
@@ -118,6 +121,16 @@ public class ServerSetup {
 	public ServerSetup req(FastHttpHandler handler) {
 		for (FastHttp http : httpImpls()) {
 			http.addGenericHandler(handler);
+		}
+
+		return this;
+	}
+
+	public ServerSetup controllers(Object... controllers) {
+		PojoDispatcher dispatcher = POJO.dispatcher(controllers);
+
+		for (FastHttp http : httpImpls()) {
+			http.addGenericHandler(new PojoHandler(http, dispatcher));
 		}
 
 		return this;
