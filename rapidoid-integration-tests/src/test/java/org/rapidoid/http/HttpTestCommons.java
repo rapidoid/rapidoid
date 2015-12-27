@@ -58,8 +58,6 @@ public abstract class HttpTestCommons extends TestCommons {
 		Log.setLogLevel(LogLevel.INFO);
 
 		ClasspathUtil.setRootPackage("some.nonexisting.app");
-		HTTP.DEFAULT_CLIENT.reset();
-		HTTP.CLIENT_WITHOUT_REDIRECTS.reset();
 
 		System.out.println("--- STARTING SERVER ---");
 
@@ -83,8 +81,6 @@ public abstract class HttpTestCommons extends TestCommons {
 		System.out.println("--- STOPPING SERVER ---");
 
 		On.getDefaultSetup().shutdown();
-		HTTP.DEFAULT_CLIENT.close();
-		HTTP.CLIENT_WITHOUT_REDIRECTS.close();
 
 		U.sleep(300);
 		System.out.println("--- SERVER STOPPED ---");

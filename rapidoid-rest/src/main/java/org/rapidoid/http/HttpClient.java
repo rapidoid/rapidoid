@@ -29,6 +29,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.CancellationException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.ConnectionReuseStrategy;
 import org.apache.http.Header;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -49,6 +50,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.NoConnectionReuseStrategy;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
@@ -100,9 +102,11 @@ public class HttpClient {
 	}
 
 	private static CloseableHttpAsyncClient asyncClient(boolean enableCookies, boolean enableRedirects) {
+		ConnectionReuseStrategy reuseStrategy = new NoConnectionReuseStrategy();
+
 		HttpAsyncClientBuilder builder = HttpAsyncClients.custom()
 				.setThreadFactory(new RapidoidThreadFactory("http-client")).disableConnectionState()
-				.disableAuthCaching();
+				.disableAuthCaching().disableCookieManagement().setConnectionReuseStrategy(reuseStrategy);
 
 		if (!enableCookies) {
 			builder = builder.disableCookieManagement();

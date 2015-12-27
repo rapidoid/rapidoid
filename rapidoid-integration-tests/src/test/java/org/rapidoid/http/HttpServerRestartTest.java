@@ -36,8 +36,6 @@ public class HttpServerRestartTest extends HttpTestCommons {
 
 		On.getDefaultSetup().shutdown();
 		On.getDefaultSetup().listen();
-		HTTP.DEFAULT_CLIENT.reset();
-		HTTP.CLIENT_WITHOUT_REDIRECTS.reset();
 
 		On.get("/").html("b");
 		eq(get("/"), "b");
