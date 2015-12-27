@@ -94,4 +94,12 @@ public class ArrayPool<T> extends AbstractInsightful implements Pool<T> {
 		return getName() + "#" + size();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public void clear() {
+		freeN = 0;
+		instancesN = 0;
+		free = (T[]) new Object[100];
+	}
+
 }

@@ -34,4 +34,6 @@ public interface Pool<T> {
 
 	int objectsCreated();
 
+	void clear();
+
 }

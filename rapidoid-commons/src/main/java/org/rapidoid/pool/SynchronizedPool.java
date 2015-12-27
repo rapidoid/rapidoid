@@ -49,4 +49,9 @@ public class SynchronizedPool<T> implements Pool<T> {
 		return pool.size();
 	}
 
+	@Override
+	public void clear() {
+		pool.clear();
+	}
+
 }

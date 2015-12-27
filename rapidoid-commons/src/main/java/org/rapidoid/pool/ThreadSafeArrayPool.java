@@ -65,4 +65,10 @@ public class ThreadSafeArrayPool<T> extends ArrayPool<T> {
 		return super.size() + synchronizedPool.size();
 	}
 
+	@Override
+	public void clear() {
+		super.clear();
+		synchronizedPool.clear();
+	}
+
 }

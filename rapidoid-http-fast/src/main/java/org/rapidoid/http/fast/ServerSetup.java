@@ -164,12 +164,14 @@ public class ServerSetup {
 	public ServerSetup shutdown() {
 		reset();
 		this.server.shutdown();
+		this.server = null;
 		return this;
 	}
 
 	public ServerSetup halt() {
 		reset();
 		this.server.halt();
+		this.server = null;
 		return this;
 	}
 

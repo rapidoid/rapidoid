@@ -84,4 +84,10 @@ public class Insights {
 		return measure;
 	}
 
+	public static void reset() {
+		RESOURCES.clear();
+		INFOS.clear();
+		RESETABLE_INFOS.clear();
+	}
+
 }

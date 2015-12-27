@@ -85,4 +85,8 @@ public class BufGroup {
 		return pool.objectsCreated();
 	}
 
+	public void clear() {
+		pool.clear();
+	}
+
 }

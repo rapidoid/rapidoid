@@ -179,7 +179,7 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 
 		if (ioWorkers != null) {
 			for (RapidoidWorker worker : ioWorkers) {
-				worker.stopLoop();
+				worker.shutdown();
 			}
 		}
 

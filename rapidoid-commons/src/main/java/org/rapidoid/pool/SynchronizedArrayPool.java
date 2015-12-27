@@ -52,4 +52,9 @@ public class SynchronizedArrayPool<T> extends ArrayPool<T> {
 		return super.size();
 	}
 
+	@Override
+	public synchronized void clear() {
+		super.clear();
+	}
+
 }
