@@ -223,7 +223,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 		}
 
 		HttpStatus status = HttpStatus.NOT_FOUND;
-		FastHttpHandler handler = findFandler(channel, buf, isGet, xverb, xpath);
+		FastHttpHandler handler = findHandler(buf, isGet, xverb, xpath);
 		boolean noReq = (handler != null && !handler.needsParams());
 
 		ReqImpl req = null;
@@ -313,7 +313,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 		return HttpStatus.NOT_FOUND;
 	}
 
-	private FastHttpHandler findFandler(Channel ctx, Buf buf, BoolWrap isGet, Range verb, Range path) {
+	private FastHttpHandler findHandler(Buf buf, BoolWrap isGet, Range verb, Range path) {
 		Bytes bytes = buf.bytes();
 
 		if (isGet.value) {
