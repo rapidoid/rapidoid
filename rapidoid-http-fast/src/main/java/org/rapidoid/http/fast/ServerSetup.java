@@ -155,8 +155,16 @@ public class ServerSetup {
 		return this;
 	}
 
+	public ServerSetup onError(ErrorHandler onError) {
+		for (FastHttp http : httpImpls()) {
+			http.setErrorHandler(new FastHttpErrorHandler(http, onError));
+		}
+
+		return this;
+	}
+
 	private FastHttp[] httpImpls() {
-		return new FastHttp[] { http() };
+		return new FastHttp[]{http()};
 	}
 
 	public ServerSetup port(int port) {

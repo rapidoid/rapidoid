@@ -40,7 +40,7 @@ public class FastStaticHttpHandler extends AbstractFastHttpHandler {
 	}
 
 	@Override
-	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req) {
+	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
 		http.getListener().state(this, req);
 
 		http.getListener().result(this, contentType, response);

@@ -42,7 +42,7 @@ public class DelegatingFastParamsAwareHttpHandler extends FastParamsAwareHttpHan
 	}
 
 	@Override
-	protected Object doHandle(Channel channel, boolean isKeepAlive, Req req) throws Exception {
+	protected Object doHandle(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
 		return handler.handle(req);
 	}
 

@@ -20,9 +20,6 @@ package org.rapidoid.http.fast.handler;
  * #L%
  */
 
-import java.io.File;
-import java.util.concurrent.Future;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -39,6 +36,9 @@ import org.rapidoid.lambda.Mapper;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 
+import java.io.File;
+import java.util.concurrent.Future;
+
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
 public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
@@ -52,12 +52,12 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 	}
 
 	@Override
-	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req) {
+	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
 		try {
 			ctx.async();
-			execHandlerJob(ctx, isKeepAlive, req);
+			execHandlerJob(ctx, isKeepAlive, req, extra);
 		} catch (Throwable e) {
-			http.error(ctx, isKeepAlive, e);
+			http.error(ctx, isKeepAlive, req, e);
 			return HttpStatus.ERROR;
 		}
 
@@ -97,7 +97,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		return U.str(result); // 2. actual rendering
 	}
 
-	private void execHandlerJob(final Channel channel, final boolean isKeepAlive, final Req req) {
+	private void execHandlerJob(final Channel channel, final boolean isKeepAlive, final Req req, final Object extra) {
 
 		Runnable requestHandling = new Runnable() {
 			@Override
@@ -113,9 +113,9 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 				try {
 
 					if (!U.isEmpty(wrappers)) {
-						result = wrap(channel, isKeepAlive, req, 0);
+						result = wrap(channel, isKeepAlive, req, 0, extra);
 					} else {
-						result = handleReq(channel, isKeepAlive, req);
+						result = handleReq(channel, isKeepAlive, req, extra);
 					}
 
 					result = postprocessResult(req, result);
@@ -135,7 +135,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		}
 	}
 
-	private Object wrap(final Channel channel, final boolean isKeepAlive, final Req req, final int index)
+	private Object wrap(final Channel channel, final boolean isKeepAlive, final Req req, final int index, final Object extra)
 			throws Exception {
 		HttpWrapper wrapper = wrappers[index];
 
@@ -147,9 +147,9 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 					Object val;
 					if (next < wrappers.length) {
-						val = wrap(channel, isKeepAlive, req, next);
+						val = wrap(channel, isKeepAlive, req, next, extra);
 					} else {
-						val = handleReq(channel, isKeepAlive, req);
+						val = handleReq(channel, isKeepAlive, req, extra);
 					}
 
 					return transformation.map(val);
@@ -168,7 +168,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		return result;
 	}
 
-	protected abstract Object handleReq(Channel ctx, boolean isKeepAlive, Req req) throws Exception;
+	protected abstract Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception;
 
 	public void complete(Channel ctx, boolean isKeepAlive, Req req, Object result) {
 
@@ -179,12 +179,12 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 		if (result instanceof Throwable) {
 			Throwable error = (Throwable) result;
-			http.error(ctx, isKeepAlive, error);
+			http.error(ctx, isKeepAlive, req, error);
 			return;
 		}
 
 		if (result instanceof HttpStatus) {
-			http.error(ctx, isKeepAlive, U.notExpected());
+			http.error(ctx, isKeepAlive, req, U.notExpected());
 			return;
 		}
 

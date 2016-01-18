@@ -91,6 +91,10 @@ public class On {
 		return setup().page(path);
 	}
 
+	public static synchronized ServerSetup error(ErrorHandler onError) {
+		return setup().onError(onError);
+	}
+
 	public static synchronized ServerSetup req(ReqHandler handler) {
 		return setup().req(handler);
 	}

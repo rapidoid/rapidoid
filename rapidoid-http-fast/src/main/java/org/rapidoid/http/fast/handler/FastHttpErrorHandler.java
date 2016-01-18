@@ -24,17 +24,25 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.fast.HttpStatus;
+import org.rapidoid.http.fast.ErrorHandler;
+import org.rapidoid.http.fast.FastHttp;
+import org.rapidoid.http.fast.HttpWrapper;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public interface FastHttpHandler {
+@Since("5.0.11")
+public class FastHttpErrorHandler extends FastParamsAwareHttpHandler {
 
-	HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra);
+	private final ErrorHandler handler;
 
-	boolean needsParams();
+	public FastHttpErrorHandler(FastHttp http, ErrorHandler handler) {
+		super(http, MediaType.HTML_UTF_8, new HttpWrapper[0]);
+		this.handler = handler;
+	}
 
-	MediaType contentType();
+	@Override
+	protected Object doHandle(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
+		return handler.onError(req, req.response(), (Throwable) extra);
+	}
 
 }

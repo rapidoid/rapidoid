@@ -23,15 +23,23 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.fast.ErrorHandler;
 import org.rapidoid.http.fast.On;
 import org.rapidoid.http.fast.ReqHandler;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.0.10")
-public class HttpErrorTest extends HttpTestCommons {
+@Since("5.0.11")
+public class HttpErrorHandlerTest extends HttpTestCommons {
 
     @Test
-    public void testWithHandlerException() {
+    public void testErrorHandler1() {
+        On.error(new ErrorHandler() {
+            @Override
+            public Object onError(Req req, Resp resp, Throwable e) {
+                return req + ":err:" + e;
+            }
+        });
+
         On.get("/err").html(new ReqHandler() {
             @SuppressWarnings("null")
             @Override
@@ -41,7 +49,28 @@ public class HttpErrorTest extends HttpTestCommons {
             }
         });
 
-        onlyGet("/err");
+        onlyGet("/err?x=1");
+    }
+
+    @Test
+    public void testErrorHandler2() {
+        On.error(new ErrorHandler() {
+            @Override
+            public Object onError(Req req, Resp resp, Throwable e) {
+                return resp.content(req + ":err2:" + e);
+            }
+        });
+
+        On.get("/err2").html(new ReqHandler() {
+            @SuppressWarnings("null")
+            @Override
+            public Object handle(Req req) throws Exception {
+                String s = null;
+                return s.toString(); // NPE
+            }
+        });
+
+        onlyGet("/err2?x=2");
     }
 
 }

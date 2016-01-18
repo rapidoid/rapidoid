@@ -37,16 +37,16 @@ public abstract class FastParamsAwareHttpHandler extends AbstractAsyncHttpHandle
 	}
 
 	@Override
-	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req) throws Exception {
+	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
 		http.getListener().state(this, req);
 
-		Object result = doHandle(channel, isKeepAlive, req);
+		Object result = doHandle(channel, isKeepAlive, req, extra);
 
 		http.getListener().result(this, contentType, result);
 		return result;
 	}
 
-	protected abstract Object doHandle(Channel channel, boolean isKeepAlive, Req req) throws Exception;
+	protected abstract Object doHandle(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception;
 
 	@Override
 	public boolean needsParams() {

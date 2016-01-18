@@ -43,7 +43,7 @@ public class FastCallableHttpHandler extends AbstractAsyncHttpHandler {
 	}
 
 	@Override
-	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req) throws Exception {
+	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
 		return handler.call();
 	}
 

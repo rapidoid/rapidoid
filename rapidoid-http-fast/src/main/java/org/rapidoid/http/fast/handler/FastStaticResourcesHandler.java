@@ -29,6 +29,7 @@ import org.rapidoid.http.fast.HttpStatus;
 import org.rapidoid.http.fast.HttpUtils;
 import org.rapidoid.io.Res;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
@@ -42,7 +43,7 @@ public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 	}
 
 	@Override
-	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req) {
+	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
 		http.getListener().state(this, req);
 
 		try {
@@ -65,7 +66,7 @@ public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 			return HttpStatus.NOT_FOUND;
 
 		} catch (Exception e) {
-			http.error(ctx, isKeepAlive, e);
+			http.error(ctx, isKeepAlive, req, e);
 			return HttpStatus.ERROR;
 		}
 	}

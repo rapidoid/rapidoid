@@ -113,6 +113,8 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	private volatile String[] staticFilesLocations = {};
 
+	private volatile FastHttpHandler errorHandler;
+
 	private final FastHttpListener listener;
 
 	private final Map<String, Object> attributes = U.synchronizedMap();
@@ -281,7 +283,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 		}
 
 		if (handler != null) {
-			status = handler.handle(channel, isKeepAlive.value, req);
+			status = handler.handle(channel, isKeepAlive.value, req, null);
 		}
 
 		if (status == HttpStatus.NOT_FOUND) {
@@ -301,7 +303,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 	private HttpStatus tryGenericHandlers(Channel channel, boolean isKeepAlive, Req req) {
 		for (FastHttpHandler handler : genericHandlers) {
 
-			HttpStatus status = handler.handle(channel, isKeepAlive, req);
+			HttpStatus status = handler.handle(channel, isKeepAlive, req, null);
 
 			if (status != HttpStatus.NOT_FOUND) {
 				return status;
@@ -391,13 +393,15 @@ public class FastHttp implements Protocol, HttpMetadata {
 		listener.onOkResponse(contentTypeHeader, content);
 	}
 
-	public void write500(Channel ctx, boolean isKeepAlive, MediaType contentTypeHeader, byte[] content) {
-		startResponse(ctx, 500, isKeepAlive, contentTypeHeader);
-		writeContent(ctx, content);
-		listener.onErrorResponse(500, contentTypeHeader, content);
+	public void error(Channel ctx, boolean isKeepAlive, Req req, Throwable error) {
+		if (errorHandler != null) {
+			errorHandler.handle(ctx, isKeepAlive, req, error);
+		} else {
+			defaultErrorHandling(ctx, isKeepAlive, error);
+		}
 	}
 
-	public void error(Channel ctx, boolean isKeepAlive, Throwable error) {
+	private void defaultErrorHandling(Channel ctx, boolean isKeepAlive, Throwable error) {
 		Log.error("Error while processing request!", error);
 
 		startResponse(ctx, 500, isKeepAlive, MediaType.HTML_UTF_8);
@@ -460,6 +464,8 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 		staticFilesLocations = new String[]{};
 		staticResourcesHandler = new FastStaticResourcesHandler(this);
+		errorHandler = null;
+
 		getHandlers.clear();
 		postHandlers.clear();
 		putHandlers.clear();
@@ -488,7 +494,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 			if (handler == fromHandler) {
 				if (i < count - 1) {
 					FastHttpHandler nextHandler = genericHandlers.get(i + 1);
-					status = nextHandler.handle(ctx, isKeepAlive, req);
+					status = nextHandler.handle(ctx, isKeepAlive, req, null);
 					break;
 				}
 			}
@@ -534,6 +540,13 @@ public class FastHttp implements Protocol, HttpMetadata {
 		return sessions.get(sessionId);
 	}
 
+	public void setErrorHandler(FastHttpHandler errorHandler) {
+		this.errorHandler = errorHandler;
+	}
+
+	public FastHttpHandler getErrorHandler() {
+		return errorHandler;
+	}
 
 	public void setStaticFilesLocations(String... staticFilesLocations) {
 		this.staticFilesLocations = staticFilesLocations;

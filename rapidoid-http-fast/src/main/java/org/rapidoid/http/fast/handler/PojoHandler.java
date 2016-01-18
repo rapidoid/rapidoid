@@ -52,7 +52,7 @@ public class PojoHandler extends FastParamsAwareHttpHandler {
 	}
 
 	@Override
-	protected Object doHandle(Channel channel, boolean isKeepAlive, Req req) throws Exception {
+	protected Object doHandle(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
 		Resp resp = req.response();
 
 		DispatchResult dispatched = doDispatch(dispatcher, new WebReq(req));
