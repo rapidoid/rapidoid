@@ -11,6 +11,15 @@ Please visit the official site:
 
 The main distribution of the framework is released under the liberal Apache Public License v2, so it is free to use for both commercial and non-commercial projects.
 
+# Roadmap
+
+* Better documentation
+* URL pattern support
+* SSL support
+* Hot reloading of changed classes
+* Management/admin app for the server
+* Refactor the configuration components
+
 # Contributing
 
 1. Fork (and then `git clone https://github.com/<your-username-here>/rapidoid.git`).
