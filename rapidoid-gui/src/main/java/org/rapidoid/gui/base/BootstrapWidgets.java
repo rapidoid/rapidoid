@@ -1,11 +1,5 @@
 package org.rapidoid.gui.base;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
@@ -15,42 +9,12 @@ import org.rapidoid.commons.AnyObj;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Rnd;
 import org.rapidoid.config.Conf;
-import org.rapidoid.gui.Btn;
-import org.rapidoid.gui.Card;
-import org.rapidoid.gui.Debug;
-import org.rapidoid.gui.Field;
-import org.rapidoid.gui.Form;
-import org.rapidoid.gui.FormMode;
-import org.rapidoid.gui.Grid;
-import org.rapidoid.gui.Highlight;
-import org.rapidoid.gui.HtmlPage;
-import org.rapidoid.gui.I18N;
-import org.rapidoid.gui.KVGrid;
-import org.rapidoid.gui.Layout;
-import org.rapidoid.gui.Pager;
-import org.rapidoid.gui.Panel;
-import org.rapidoid.gui.Snippet;
-import org.rapidoid.gui.VStream;
+import org.rapidoid.gui.*;
 import org.rapidoid.gui.reqinfo.ReqInfo;
-import org.rapidoid.gui.var.ArrayContainerVar;
-import org.rapidoid.gui.var.CollectionContainerVar;
-import org.rapidoid.gui.var.EqualityVar;
-import org.rapidoid.gui.var.LocalVar;
-import org.rapidoid.gui.var.SessionVar;
-import org.rapidoid.html.FieldType;
-import org.rapidoid.html.FormLayout;
-import org.rapidoid.html.HTML;
-import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagWidget;
+import org.rapidoid.gui.var.*;
+import org.rapidoid.html.*;
 import org.rapidoid.html.customtag.ColspanTag;
-import org.rapidoid.html.tag.ATag;
-import org.rapidoid.html.tag.ButtonTag;
-import org.rapidoid.html.tag.FormTag;
-import org.rapidoid.html.tag.InputTag;
-import org.rapidoid.html.tag.OptionTag;
-import org.rapidoid.html.tag.SelectTag;
-import org.rapidoid.html.tag.TableTag;
-import org.rapidoid.html.tag.TextareaTag;
+import org.rapidoid.html.tag.*;
 import org.rapidoid.lambda.Calc;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
@@ -59,6 +23,12 @@ import org.rapidoid.model.Property;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /*
  * #%L
