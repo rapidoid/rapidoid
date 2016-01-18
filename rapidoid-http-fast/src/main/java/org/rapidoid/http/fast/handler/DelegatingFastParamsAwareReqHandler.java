@@ -31,12 +31,12 @@ import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public class DelegatingFastParamsAwareHttpHandler extends FastParamsAwareHttpHandler {
+public class DelegatingFastParamsAwareReqHandler extends FastParamsAwareHttpHandler {
 
 	private final ReqHandler handler;
 
-	public DelegatingFastParamsAwareHttpHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers,
-			ReqHandler handler) {
+	public DelegatingFastParamsAwareReqHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers,
+	                                           ReqHandler handler) {
 		super(http, contentType, wrappers);
 		this.handler = handler;
 	}

@@ -20,24 +20,19 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
-import java.util.concurrent.Callable;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.fast.handler.DelegatingFastParamsAwareHttpHandler;
-import org.rapidoid.http.fast.handler.FastCallableHttpHandler;
-import org.rapidoid.http.fast.handler.FastResourceHttpHandler;
-import org.rapidoid.http.fast.handler.FastStaticHttpHandler;
-import org.rapidoid.http.fast.handler.HttpHandlers;
-import org.rapidoid.http.fast.handler.PojoHandler;
+import org.rapidoid.http.fast.handler.*;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.F3;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.pojo.POJO;
 import org.rapidoid.pojo.PojoDispatcher;
+
+import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
@@ -89,7 +84,13 @@ public class OnAction {
 
 	private void register(MediaType contentType, ReqHandler handler) {
 		for (FastHttp http : httpImpls) {
-			http.on(verb, path, new DelegatingFastParamsAwareHttpHandler(http, contentType, wrappers, handler));
+			http.on(verb, path, new DelegatingFastParamsAwareReqHandler(http, contentType, wrappers, handler));
+		}
+	}
+
+	private void register(MediaType contentType, ReqRespHandler handler) {
+		for (FastHttp http : httpImpls) {
+			http.on(verb, path, new DelegatingFastParamsAwareReqRespHandler(http, contentType, wrappers, handler));
 		}
 	}
 
@@ -132,6 +133,11 @@ public class OnAction {
 		return chain;
 	}
 
+	public <T> ServerSetup plain(ReqRespHandler handler) {
+		register(MediaType.PLAIN_TEXT_UTF_8, handler);
+		return chain;
+	}
+
 	public <T> ServerSetup plain(Res resource) {
 		register(MediaType.PLAIN_TEXT_UTF_8, resource);
 		return chain;
@@ -160,6 +166,11 @@ public class OnAction {
 	}
 
 	public <T> ServerSetup html(ReqHandler handler) {
+		register(MediaType.HTML_UTF_8, handler);
+		return chain;
+	}
+
+	public <T> ServerSetup html(ReqRespHandler handler) {
 		register(MediaType.HTML_UTF_8, handler);
 		return chain;
 	}
@@ -196,6 +207,11 @@ public class OnAction {
 		return chain;
 	}
 
+	public <T> ServerSetup json(ReqRespHandler handler) {
+		register(MediaType.JSON_UTF_8, handler);
+		return chain;
+	}
+
 	public <T> ServerSetup json(Res resource) {
 		register(MediaType.JSON_UTF_8, resource);
 		return chain;
@@ -228,6 +244,11 @@ public class OnAction {
 		return chain;
 	}
 
+	public <T> ServerSetup binary(ReqRespHandler handler) {
+		register(MediaType.BINARY, handler);
+		return chain;
+	}
+
 	public <T> ServerSetup binary(Res resource) {
 		register(MediaType.BINARY, resource);
 		return chain;
@@ -244,7 +265,7 @@ public class OnAction {
 	}
 
 	public ServerSetup plain(final String paramName1, final String paramName2, final String paramName3,
-			final F3<String, String, String, Object> handler) {
+	                         final F3<String, String, String, Object> handler) {
 		return plain(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
 	}
 
@@ -257,7 +278,7 @@ public class OnAction {
 	}
 
 	public ServerSetup html(final String paramName1, final String paramName2, final String paramName3,
-			final F3<String, String, String, Object> handler) {
+	                        final F3<String, String, String, Object> handler) {
 		return html(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
 	}
 
@@ -270,7 +291,7 @@ public class OnAction {
 	}
 
 	public ServerSetup json(final String paramName1, final String paramName2, final String paramName3,
-			final F3<String, String, String, Object> handler) {
+	                        final F3<String, String, String, Object> handler) {
 		return json(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
 	}
 
@@ -283,7 +304,7 @@ public class OnAction {
 	}
 
 	public ServerSetup binary(final String paramName1, final String paramName2, final String paramName3,
-			final F3<String, String, String, Object> handler) {
+	                          final F3<String, String, String, Object> handler) {
 		return binary(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
 	}
 

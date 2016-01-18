@@ -99,6 +99,10 @@ public class On {
 		return setup().req(handler);
 	}
 
+	public static synchronized ServerSetup req(ReqRespHandler handler) {
+		return setup().req(handler);
+	}
+
 	public static synchronized ServerSetup req(FastHttpHandler handler) {
 		return setup().req(handler);
 	}

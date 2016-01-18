@@ -4,10 +4,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
-import org.rapidoid.http.fast.handler.DelegatingFastParamsAwareHttpHandler;
-import org.rapidoid.http.fast.handler.FastHttpErrorHandler;
-import org.rapidoid.http.fast.handler.FastHttpHandler;
-import org.rapidoid.http.fast.handler.PojoHandler;
+import org.rapidoid.http.fast.handler.*;
 import org.rapidoid.http.fast.listener.FastHttpListener;
 import org.rapidoid.http.fast.listener.IgnorantHttpListener;
 import org.rapidoid.net.Serve;
@@ -113,7 +110,16 @@ public class ServerSetup {
 
 	public ServerSetup req(ReqHandler handler) {
 		for (FastHttp http : httpImpls()) {
-			http.addGenericHandler(new DelegatingFastParamsAwareHttpHandler(http, MediaType.HTML_UTF_8, wrappers,
+			http.addGenericHandler(new DelegatingFastParamsAwareReqHandler(http, MediaType.HTML_UTF_8, wrappers,
+					handler));
+		}
+
+		return this;
+	}
+
+	public ServerSetup req(ReqRespHandler handler) {
+		for (FastHttp http : httpImpls()) {
+			http.addGenericHandler(new DelegatingFastParamsAwareReqRespHandler(http, MediaType.HTML_UTF_8, wrappers,
 					handler));
 		}
 
@@ -135,6 +141,10 @@ public class ServerSetup {
 
 			if (controller instanceof ReqHandler) {
 				ReqHandler handler = (ReqHandler) controller;
+				req(handler);
+
+			} else if (controller instanceof ReqRespHandler) {
+				ReqRespHandler handler = (ReqRespHandler) controller;
 				req(handler);
 
 			} else if (controller instanceof FastHttpHandler) {

@@ -20,22 +20,18 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
-import java.util.concurrent.Callable;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.fast.handler.DelegatingFastParamsAwareHttpHandler;
-import org.rapidoid.http.fast.handler.FastParamsAwareHttpHandler;
-import org.rapidoid.http.fast.handler.FastResourceHttpHandler;
-import org.rapidoid.http.fast.handler.FastStaticHttpHandler;
-import org.rapidoid.http.fast.handler.HttpHandlers;
+import org.rapidoid.http.fast.handler.*;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.F3;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
+
+import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
@@ -79,7 +75,16 @@ public class OnPage {
 
 	private void register(PageOptions options, ReqHandler handler) {
 		for (FastHttp http : httpImpls) {
-			FastParamsAwareHttpHandler hnd = new DelegatingFastParamsAwareHttpHandler(http, options.contentType,
+			FastParamsAwareHttpHandler hnd = new DelegatingFastParamsAwareReqHandler(http, options.contentType,
+					wrappers, handler);
+			http.on("GET", path, hnd);
+			http.on("POST", path, hnd);
+		}
+	}
+
+	private void register(PageOptions options, ReqRespHandler handler) {
+		for (FastHttp http : httpImpls) {
+			FastParamsAwareHttpHandler hnd = new DelegatingFastParamsAwareReqRespHandler(http, options.contentType,
 					wrappers, handler);
 			http.on("GET", path, hnd);
 			http.on("POST", path, hnd);
@@ -138,6 +143,11 @@ public class OnPage {
 		return chain;
 	}
 
+	public ServerSetup gui(ReqRespHandler handler) {
+		register(new PageOptions(MediaType.HTML_UTF_8, false), handler);
+		return chain;
+	}
+
 	public ServerSetup gui(Res resource) {
 		register(new PageOptions(MediaType.HTML_UTF_8, false), resource);
 		return chain;
@@ -152,7 +162,7 @@ public class OnPage {
 	}
 
 	public ServerSetup gui(final String paramName1, final String paramName2, final String paramName3,
-			final F3<String, String, String, Object> handler) {
+	                       final F3<String, String, String, Object> handler) {
 		return gui(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
 	}
 
