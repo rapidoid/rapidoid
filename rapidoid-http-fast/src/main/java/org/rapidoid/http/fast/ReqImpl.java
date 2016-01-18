@@ -596,4 +596,9 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		return withDefault(value, defaultValue);
 	}
 
+	@Override
+	public String toString() {
+		return verb() + " " + uri();
+	}
+
 }

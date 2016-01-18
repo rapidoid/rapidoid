@@ -209,4 +209,12 @@ public class ServerSetup {
 		return http().attributes();
 	}
 
+	public ServerSetup staticFilesPath(String... staticFilesLocations) {
+		for (FastHttp http : httpImpls()) {
+			http.setStaticFilesLocations(staticFilesLocations);
+		}
+
+		return this;
+	}
+
 }

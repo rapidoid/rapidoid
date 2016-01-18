@@ -111,6 +111,8 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	private volatile FastHttpHandler staticResourcesHandler = new FastStaticResourcesHandler(this);
 
+	private volatile String[] staticFilesLocations = {};
+
 	private final FastHttpListener listener;
 
 	private final Map<String, Object> attributes = U.synchronizedMap();
@@ -177,10 +179,6 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	public void removeGenericHandler(FastHttpHandler handler) {
 		genericHandlers.remove(handler);
-	}
-
-	public void setStaticResourcesHandler(FastHttpHandler staticResourcesHandler) {
-		this.staticResourcesHandler = staticResourcesHandler;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -459,6 +457,9 @@ public class FastHttp implements Protocol, HttpMetadata {
 	public synchronized void resetConfig() {
 		path1 = path2 = path3 = null;
 		handler1 = handler2 = handler3 = null;
+
+		staticFilesLocations = new String[]{};
+		staticResourcesHandler = new FastStaticResourcesHandler(this);
 		getHandlers.clear();
 		postHandlers.clear();
 		putHandlers.clear();
@@ -517,6 +518,10 @@ public class FastHttp implements Protocol, HttpMetadata {
 		return null; // OK, no error
 	}
 
+	public void setStaticResourcesHandler(FastHttpHandler staticResourcesHandler) {
+		this.staticResourcesHandler = staticResourcesHandler;
+	}
+
 	public FastHttpHandler getStaticResourcesHandler() {
 		return staticResourcesHandler;
 	}
@@ -527,6 +532,15 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	public Map<String, Serializable> session(String sessionId) {
 		return sessions.get(sessionId);
+	}
+
+
+	public void setStaticFilesLocations(String... staticFilesLocations) {
+		this.staticFilesLocations = staticFilesLocations;
+	}
+
+	public String[] getStaticFilesLocations() {
+		return staticFilesLocations;
 	}
 
 }

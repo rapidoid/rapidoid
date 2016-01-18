@@ -127,4 +127,8 @@ public class On {
 		return new ServerSetup();
 	}
 
+	public static ServerSetup staticFilesLookIn(String... possibleLocations) {
+		return setup().staticFilesPath(possibleLocations);
+	}
+
 }

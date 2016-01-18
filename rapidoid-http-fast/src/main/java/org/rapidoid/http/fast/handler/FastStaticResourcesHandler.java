@@ -46,18 +46,24 @@ public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 		http.getListener().state(this, req);
 
 		try {
-			Res res = HttpUtils.staticPage(req);
-			byte[] bytes = res.getBytesOrNull();
+			String[] staticFilesLocations = http.getStaticFilesLocations();
 
-			if (bytes != null) {
-				MediaType contentType = MediaType.getByFileName(res.getShortName());
-				http.getListener().result(this, contentType, bytes);
-				http.write200(ctx, isKeepAlive, contentType, bytes);
-				return HttpStatus.DONE;
-			} else {
-				http.getListener().resultNotFound(this);
-				return HttpStatus.NOT_FOUND;
+			if (!U.isEmpty(staticFilesLocations)) {
+				Res res = HttpUtils.staticPage(req, staticFilesLocations);
+
+				byte[] bytes = res.getBytesOrNull();
+
+				if (bytes != null) {
+					MediaType contentType = MediaType.getByFileName(res.getName());
+					http.getListener().result(this, contentType, bytes);
+					http.write200(ctx, isKeepAlive, contentType, bytes);
+					return HttpStatus.DONE;
+				}
 			}
+
+			http.getListener().resultNotFound(this);
+			return HttpStatus.NOT_FOUND;
+
 		} catch (Exception e) {
 			http.error(ctx, isKeepAlive, e);
 			return HttpStatus.ERROR;

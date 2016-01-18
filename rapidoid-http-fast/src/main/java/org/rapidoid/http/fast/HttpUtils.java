@@ -20,12 +20,6 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
-import java.io.File;
-import java.io.Serializable;
-import java.util.Map;
-
-import javax.xml.bind.DatatypeConverter;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
@@ -36,6 +30,11 @@ import org.rapidoid.http.Resp;
 import org.rapidoid.io.Res;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
+
+import javax.xml.bind.DatatypeConverter;
+import java.io.File;
+import java.io.Serializable;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
@@ -107,7 +106,7 @@ public class HttpUtils implements HttpMetadata {
 
 	public static void setContentTypeForResource(Resp resp, Res resource) {
 		U.must(resource.exists());
-		setContentType(resp, MediaType.getByFileName(resource.getShortName()));
+		setContentType(resp, MediaType.getByFileName(resource.getName()));
 	}
 
 	public static void setContentType(Resp resp, MediaType mediaType) {
@@ -127,27 +126,23 @@ public class HttpUtils implements HttpMetadata {
 		return value;
 	}
 
-	public static Res staticResource(String filename) {
-		String firstFile = Conf.staticPath() + "/" + filename;
-		String defaultFile = Conf.staticPathDefault() + "/" + filename;
-		return Res.from(filename, true, firstFile, defaultFile);
+	public static Res staticResource(String filename, String... possibleLocations) {
+		return Res.from(filename, possibleLocations);
 	}
 
-	public static Res staticPage(Req req) {
+	public static Res staticPage(Req req, String... possibleLocations) {
 		String resName = resName(req);
 
 		if (hasExtension(resName)) {
-			return staticResource(resName);
+			return staticResource(resName, possibleLocations);
 		} else {
-			String resNameDotHtml = resName + ".html";
+			Res res = Res.from(resName, possibleLocations);
 
-			String firstFile = Conf.staticPath() + "/" + resName;
-			String defaultFile = Conf.staticPathDefault() + "/" + resName;
+			if (!res.exists()) {
+				res = Res.from(resName + ".html", possibleLocations);
+			}
 
-			String firstHtmlFile = Conf.staticPath() + "/" + resNameDotHtml;
-			String defaultHtmlFile = Conf.staticPathDefault() + "/" + resNameDotHtml;
-
-			return Res.from(resName, true, firstFile, defaultFile, firstHtmlFile, defaultHtmlFile);
+			return res;
 		}
 	}
 
@@ -180,7 +175,7 @@ public class HttpUtils implements HttpMetadata {
 
 			setContentTypeForFile(resp, file);
 
-			resp.content(Res.from(file.getAbsolutePath()).getBytes());
+			resp.content(Res.from(file).getBytes());
 		}
 	}
 
