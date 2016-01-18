@@ -20,12 +20,6 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.junit.After;
@@ -44,14 +38,20 @@ import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.D;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Map;
+
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public abstract class HttpTestCommons extends TestCommons {
 
 	private static final boolean ADJUST_RESULTS = false;
 
-	private static final List<String> HTTP_VERBS = U.list("GET", "DELETE", "OPTIONS", "TRACE", "POST", "PUT", "PATCH"); // FIXME
-																														// HEAD
+	// FIXME HEAD
+	private static final List<String> HTTP_VERBS = U.list("GET", "DELETE", "OPTIONS", "TRACE", "POST", "PUT", "PATCH");
 
 	@Before
 	public void openContext() {
@@ -63,7 +63,7 @@ public abstract class HttpTestCommons extends TestCommons {
 
 		HTTP.STATEFUL_CLIENT.reset();
 
-		On.getDefaultSetup().http().clearHandlers();
+		On.getDefaultSetup().http().resetConfig();
 		// On.getDefaultSetup().listen();
 
 		U.sleep(300);

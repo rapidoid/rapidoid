@@ -1,12 +1,11 @@
 package org.rapidoid.http.fast;
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.fast.handler.DelegatingFastParamsAwareHttpHandler;
+import org.rapidoid.http.fast.handler.FastHttpErrorHandler;
 import org.rapidoid.http.fast.handler.FastHttpHandler;
 import org.rapidoid.http.fast.handler.PojoHandler;
 import org.rapidoid.http.fast.listener.FastHttpListener;
@@ -16,6 +15,9 @@ import org.rapidoid.net.TCPServer;
 import org.rapidoid.pojo.POJO;
 import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.u.U;
+
+import java.util.List;
+import java.util.Map;
 
 /*
  * #%L
@@ -126,8 +128,25 @@ public class ServerSetup {
 		return this;
 	}
 
-	public ServerSetup controllers(Object... controllers) {
-		PojoDispatcher dispatcher = POJO.dispatcher(controllers);
+	public ServerSetup req(Object... controllers) {
+		List<Object> pojos = U.list();
+
+		for (Object controller : controllers) {
+
+			if (controller instanceof ReqHandler) {
+				ReqHandler handler = (ReqHandler) controller;
+				req(handler);
+
+			} else if (controller instanceof FastHttpHandler) {
+				FastHttpHandler handler = (FastHttpHandler) controller;
+				req(handler);
+
+			} else {
+				pojos.add(controller);
+			}
+		}
+
+		PojoDispatcher dispatcher = POJO.dispatcher(pojos.toArray());
 
 		for (FastHttp http : httpImpls()) {
 			http.addGenericHandler(new PojoHandler(http, dispatcher));
@@ -176,7 +195,7 @@ public class ServerSetup {
 	}
 
 	private void reset() {
-		fastHttp.clearHandlers();
+		fastHttp.resetConfig();
 		listening = false;
 		fastHttp = null;
 		wrappers = null;

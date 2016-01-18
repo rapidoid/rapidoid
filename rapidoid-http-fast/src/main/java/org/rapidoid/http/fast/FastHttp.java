@@ -20,12 +20,6 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
@@ -51,6 +45,12 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.wire.Wire;
 import org.rapidoid.wrap.BoolWrap;
+
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
@@ -456,7 +456,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 		return listener;
 	}
 
-	public synchronized void clearHandlers() {
+	public synchronized void resetConfig() {
 		path1 = path2 = path3 = null;
 		handler1 = handler2 = handler3 = null;
 		getHandlers.clear();
