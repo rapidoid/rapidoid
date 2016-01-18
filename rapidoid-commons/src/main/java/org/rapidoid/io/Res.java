@@ -1,19 +1,18 @@
 package org.rapidoid.io;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
 import java.io.File;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -39,13 +38,15 @@ import org.rapidoid.u.U;
 @Since("4.1.0")
 public class Res {
 
-	private static final ConcurrentMap<Set<String>, Res> FILES = U.concurrentMap();
+	private static final ConcurrentMap<ResKey, Res> FILES = U.concurrentMap();
 
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(1);
 
-	private final String shortName;
+	public static final String[] DEFAULT_LOCATIONS = {""};
 
-	private final Set<String> filenames;
+	private final String name;
+
+	private final String[] possibleLocations;
 
 	private volatile byte[] bytes;
 
@@ -63,37 +64,43 @@ public class Res {
 
 	private final Map<String, Runnable> changeListeners = U.synchronizedMap();
 
-	private Res(String shortName, Set<String> filenames) {
-		this.shortName = shortName;
-		this.filenames = filenames;
-	}
-
-	public static Res from(String filename) {
-		return from(filename, true, filename);
+	private Res(String name, String... possibleLocations) {
+		this.name = name;
+		this.possibleLocations = possibleLocations;
 	}
 
 	public static Res from(File file) {
-		return from(file.getAbsolutePath());
+		return file.isAbsolute() ? absolute(file) : from(file.getName(), "");
 	}
 
-	public static Res from(String shortName, boolean withDefaults, String... filenames) {
-		Set<String> fnames = U.set(filenames);
+	public static Res absolute(File file) {
+		U.must(file.isAbsolute(), "Expected from filename!");
 
-		if (withDefaults) {
-			for (String filename : filenames) {
-				fnames.add(IO.getDefaultFilename(filename));
-			}
+		return create(file.getAbsolutePath());
+	}
+
+	public static Res from(String filename, String... possibleLocations) {
+		if (U.isEmpty(possibleLocations)) {
+			possibleLocations = DEFAULT_LOCATIONS;
 		}
 
-		U.must(!fnames.isEmpty(), "Resource filename(s) must be specified!");
+		U.must(!U.isEmpty(filename), "Resource filename must be specified!");
+		U.must(!new File(filename).isAbsolute(), "Expected relative filename!");
 
-		Res cachedFile = FILES.get(fnames);
+		return create(filename, possibleLocations);
+	}
+
+	private static Res create(String filename, String... possibleLocations) {
+		ResKey key = new ResKey(filename, possibleLocations);
+
+		Res cachedFile = FILES.get(key);
 
 		if (cachedFile == null) {
-			cachedFile = new Res(shortName, fnames);
+			cachedFile = new Res(filename, possibleLocations);
 
 			if (FILES.size() < 1000) {
-				FILES.putIfAbsent(fnames, cachedFile);
+				// FIXME use real cache with proper expiration
+				FILES.putIfAbsent(key, cachedFile);
 			}
 		}
 
@@ -122,14 +129,29 @@ public class Res {
 				byte[] old = bytes;
 				byte[] foundRes = null;
 
-				for (String filename : filenames) {
-					Log.trace("Trying to load the resource", "name", shortName, "file", filename);
-					byte[] res = load(filename);
+				if (possibleLocations.length == 0) {
+					Log.trace("Trying to load the from resource", "name", name);
+
+					byte[] res = load(name);
 					if (res != null) {
-						Log.trace("Loaded the resource", "name", shortName, "file", filename);
+						Log.trace("Loaded the from resource", "name", name);
 						foundRes = res;
-						this.cachedFileName = filename;
-						break;
+						this.cachedFileName = name;
+					}
+
+				} else {
+					for (String location : possibleLocations) {
+						String filename = U.path(location, name);
+
+						Log.trace("Trying to load the resource", "name", name, "location", location, "filename", filename);
+
+						byte[] res = load(filename);
+						if (res != null) {
+							Log.trace("Loaded the resource", "name", name, "file", filename);
+							foundRes = res;
+							this.cachedFileName = filename;
+							break;
+						}
 					}
 				}
 
@@ -159,19 +181,19 @@ public class Res {
 		if (file.exists()) {
 
 			// a normal file on the file system
-			Log.trace("Resource file exists", "name", shortName, "file", file);
+			Log.trace("Resource file exists", "name", name, "file", file);
 
 			if (file.lastModified() > this.lastModified || !filename.equals(cachedFileName)) {
-				Log.info("Loading resource file", "name", shortName, "file", file);
+				Log.info("Loading resource file", "name", name, "file", file);
 				this.lastModified = file.lastModified();
 				return IO.loadBytes(filename);
 			} else {
-				Log.trace("Resource file not modified", "name", shortName, "file", file);
+				Log.trace("Resource file not modified", "name", name, "file", file);
 				return bytes;
 			}
 		} else {
 			// it might not exist or it might be on the classpath or compressed in a JAR
-			Log.trace("Trying to load classpath resource", "name", shortName, "file", file);
+			Log.trace("Trying to load classpath resource", "name", name, "file", file);
 			return IO.loadBytes(filename);
 		}
 	}
@@ -192,13 +214,13 @@ public class Res {
 		return bytes != null;
 	}
 
-	public String getShortName() {
-		return shortName;
+	public String getName() {
+		return name;
 	}
 
 	@Override
 	public String toString() {
-		return "Res(" + shortName + ")";
+		return "Res(" + name + ")";
 	}
 
 	public synchronized Reader getReader() {
@@ -207,7 +229,7 @@ public class Res {
 	}
 
 	public void mustExist() {
-		U.must(exists(), "The file '%s' doesn't exist! Path: %s", shortName, filenames);
+		U.must(exists(), "The file '%s' doesn't exist! Path: %s", name, possibleLocations);
 	}
 
 	public Res onChange(Runnable listener) {
@@ -221,7 +243,7 @@ public class Res {
 
 	private void notifyChangeListeners() {
 		if (!changeListeners.isEmpty()) {
-			Log.info("Resource has changed, reloading...", "name", shortName);
+			Log.info("Resource has changed, reloading...", "name", name);
 		}
 
 		for (Runnable listener : changeListeners.values()) {

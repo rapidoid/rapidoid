@@ -30,30 +30,30 @@ import org.rapidoid.test.AbstractCommonsTest;
 public class ResTest extends AbstractCommonsTest {
 
 	@Test
-	public void testWhereDefaultsDontExist() {
-		Res file = Res.from("abc", true, "abc.html", "abc.txt", "abc.doc");
+	public void testWithSingleLocation() {
+		Res file = Res.from("abc.txt", "");
 
-		eq(file.getShortName(), "abc");
+		eq(file.getName(), "abc.txt");
 		isTrue(file.exists());
 		eq(file.getBytes(), "ABC!".getBytes());
 	}
 
 	@Test
-	public void testWhereDefaultsAlsoExist() {
-		Res file = Res.from("n-m", true, "nm.txt", "abc.txt", "abc.doc");
+	public void testWithMultipleLocations1() {
+		Res file = Res.from("abc.txt", "res1", "res2");
 
-		eq(file.getShortName(), "n-m");
+		eq(file.getName(), "abc.txt");
 		isTrue(file.exists());
-		eq(file.getContent(), "ABC!");
+		eq(file.getContent(), "ABC1");
 	}
 
 	@Test
-	public void testWhereOnlyDefaultsExist() {
-		Res file = Res.from("n-m2", true, "non-existing", "nm.txt", "non-existing2");
+	public void testWithMultipleLocations2() {
+		Res file = Res.from("abc.txt", "res1", "res2");
 
+		eq(file.getName(), "abc.txt");
 		isTrue(file.exists());
-		eq(file.getShortName(), "n-m2");
-		eq(file.getContent(), "NMDEF");
+		eq(file.getContent(), "ABC1");
 	}
 
 	// typically 1M reads should take less than a second
@@ -61,14 +61,14 @@ public class ResTest extends AbstractCommonsTest {
 	public void shouldBeFast() {
 		for (int i = 0; i < 900; i++) {
 			// fill-in the cache (with non-existing resources)
-			Res.from("abc", true, "abc.txt" + i);
+			Res.from("abc", "x-location");
 		}
 
 		// should be fast
 		multiThreaded(100, 1000000, new Runnable() {
 			@Override
 			public void run() {
-				Res file = Res.from("ABC", true, "abc.txt");
+				Res file = Res.from("abc.txt", "");
 				notNull(file.getBytes());
 			}
 		});
@@ -76,8 +76,8 @@ public class ResTest extends AbstractCommonsTest {
 
 	@Test
 	public void testWithNonexistingFiles() {
-		Res file = Res.from("?", true, "some-non-existing-file");
-		eq(file.getShortName(), "?");
+		Res file = Res.from("some-non-existing-file", "res1", "", "res2");
+		eq(file.getName(), "some-non-existing-file");
 		isFalse(file.exists());
 	}
 

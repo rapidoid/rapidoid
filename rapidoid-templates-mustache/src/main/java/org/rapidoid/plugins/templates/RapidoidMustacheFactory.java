@@ -20,13 +20,9 @@ package org.rapidoid.plugins.templates;
  * #L%
  */
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.github.mustachejava.*;
+import com.github.mustachejava.codes.ValueCode;
+import com.google.common.cache.LoadingCache;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
@@ -35,16 +31,12 @@ import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
-import com.github.mustachejava.DefaultMustacheFactory;
-import com.github.mustachejava.DefaultMustacheVisitor;
-import com.github.mustachejava.FragmentKey;
-import com.github.mustachejava.Mustache;
-import com.github.mustachejava.MustacheException;
-import com.github.mustachejava.MustacheVisitor;
-import com.github.mustachejava.ObjectHandler;
-import com.github.mustachejava.TemplateContext;
-import com.github.mustachejava.codes.ValueCode;
-import com.google.common.cache.LoadingCache;
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -172,9 +164,7 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 
 	private Res getResource(String filename, boolean partial) {
 		String sub = partial ? "/partials/" : "/templates/";
-		String firstFile = Conf.rootPath() + sub + filename;
-		String defaultFile = Conf.rootPathDefault() + sub + filename;
-		return Res.from(filename, true, firstFile, defaultFile);
+		return Res.from(filename, Conf.rootPath() + sub);
 	}
 
 	@Override

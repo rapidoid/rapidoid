@@ -20,11 +20,6 @@ package org.rapidoid.web;
  * #L%
  */
 
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -44,15 +39,16 @@ import org.rapidoid.io.Res;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.plugins.templates.ITemplate;
 import org.rapidoid.plugins.templates.Templates;
-import org.rapidoid.pojo.DispatchResult;
-import org.rapidoid.pojo.PojoDispatchException;
-import org.rapidoid.pojo.PojoDispatcher;
-import org.rapidoid.pojo.PojoHandlerNotFoundException;
-import org.rapidoid.pojo.PojoRequest;
+import org.rapidoid.pojo.*;
 import org.rapidoid.pojo.impl.DispatchReqKind;
 import org.rapidoid.pojo.web.WebEventReq;
 import org.rapidoid.pojo.web.WebReq;
 import org.rapidoid.u.U;
+
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -72,14 +68,14 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 	}
 
 	@Override
-	protected Object doHandle(Channel channel, boolean isKeepAlive, Req req) throws Exception {
+	protected Object doHandle(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
 
 		// static files
 
 		FastHttpHandler staticResourcesHandler = http.getStaticResourcesHandler();
 
 		if (HttpUtils.isGetReq(req) && staticResourcesHandler != null) {
-			HttpStatus status = staticResourcesHandler.handle(channel, isKeepAlive, req);
+			HttpStatus status = staticResourcesHandler.handle(channel, isKeepAlive, req, null);
 			if (status != HttpStatus.NOT_FOUND) {
 				return status;
 			}
@@ -174,9 +170,7 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 	public boolean serveDynamicPage(Req req, Object result, boolean hasEvent, Map<String, Object> config) {
 
 		String filename = HttpUtils.resName(req) + ".html";
-		String firstFile = Conf.rootPath() + "/pages/" + filename;
-		String defaultFile = Conf.rootPathDefault() + "/pages/" + filename;
-		Res res = Res.from(filename, true, firstFile, defaultFile);
+		Res res = Res.from(filename, U.path(Conf.rootPath(), "pages"));
 
 		Map<String, Object> model = U.cast(U.map("login", true, "profile", true));
 

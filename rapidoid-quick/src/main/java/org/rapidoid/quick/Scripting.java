@@ -20,13 +20,6 @@ package org.rapidoid.quick;
  * #L%
  */
 
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.script.CompiledScript;
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.DollarPage;
@@ -46,6 +39,12 @@ import org.rapidoid.io.Res;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+
+import javax.script.CompiledScript;
+import javax.script.ScriptException;
+import javax.script.SimpleBindings;
+import java.util.Map;
+import java.util.Map.Entry;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.2.0")
@@ -73,10 +72,8 @@ public class Scripting {
 				+ HttpUtils.resName(x);
 
 		String filename = scriptName + ".js";
-		String firstFile = Conf.rootPath() + "/" + filename;
-		String defaultFile = Conf.rootPathDefault() + "/" + filename;
+		Res res = Res.from(filename, Conf.rootPath());
 
-		Res res = Res.from(filename, true, firstFile, defaultFile);
 		if (!res.exists()) {
 			return null;
 		}

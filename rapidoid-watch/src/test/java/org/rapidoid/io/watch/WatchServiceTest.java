@@ -20,12 +20,6 @@ package org.rapidoid.io.watch;
  * #L%
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -34,6 +28,12 @@ import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -72,7 +72,7 @@ public class WatchServiceTest extends TestCommons {
 
 		giveItTimeToRefresh();
 
-		Res resA = Res.from(fileA);
+		Res resA = Res.absolute(new File(fileA));
 		eq(dir.files(), U.set(resA));
 		eq(dir.folders(), U.set());
 
@@ -83,7 +83,7 @@ public class WatchServiceTest extends TestCommons {
 
 		giveItTimeToRefresh();
 
-		Res resB = Res.from(fileB);
+		Res resB = Res.absolute(new File(fileB));
 		eq(dir.files(), U.set(resA, resB));
 		eq(dir.folders(), U.set());
 
@@ -122,7 +122,7 @@ public class WatchServiceTest extends TestCommons {
 
 		giveItTimeToRefresh();
 
-		Res resX = Res.from(fileX);
+		Res resX = Res.absolute(new File(fileX));
 		eq(dir.files(), U.set(resB, resX));
 		eq(dir.folders(), U.set(dirC));
 

@@ -20,9 +20,6 @@ package org.rapidoid.web;
  * #L%
  */
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
@@ -33,6 +30,9 @@ import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugin;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.u.U;
+
+import java.util.Map;
+import java.util.Map.Entry;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -49,9 +49,7 @@ public class AppTool {
 
 	private static void setupAppConfig(final WebApp rootApp) {
 		String appfile = "app.yaml";
-		String firstAppFile = Conf.configPath() + "/" + appfile;
-		String defaultAppFile = Conf.configPathDefault() + "/" + appfile;
-		final Res confRes = Res.from(appfile, true, firstAppFile, defaultAppFile).trackChanges();
+		final Res confRes = Res.from(appfile, Conf.configPath()).trackChanges();
 
 		confRes.onChange("app tool", new Runnable() {
 			@SuppressWarnings("unchecked")
@@ -96,10 +94,7 @@ public class AppTool {
 	}
 
 	private static void setupMenuConfig(final WebApp app) {
-		String menufile = "menu.yaml";
-		String firstMenuFile = Conf.configPath() + "/" + menufile;
-		String defaultMenuFile = Conf.configPathDefault() + "/" + menufile;
-		final Res menuRes = Res.from(menufile, true, firstMenuFile, defaultMenuFile).trackChanges();
+		final Res menuRes = Res.from("menu.yaml", Conf.configPath()).trackChanges();
 
 		menuRes.onChange("app tool", new Runnable() {
 			@Override

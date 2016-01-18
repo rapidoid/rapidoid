@@ -1,11 +1,11 @@
 package org.rapidoid.config;
 
-import java.util.Map;
-
 import org.rapidoid.data.YAML;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+
+import java.util.Map;
 
 /*
  * #%L
@@ -289,14 +289,12 @@ public class Conf {
 
 	public static Config refreshing(String path, final String filename, final ConfigParser parser) {
 		Log.info("Initializing auto-refreshing config", "root", Conf.rootPath(), "path", path, "filename", filename);
-		path = U.safe(path);
 
-		final String firstFile = U.path(Conf.rootPath(), path, filename);
-		String defaultFile = U.path(Conf.rootPathDefault(), path, filename);
+		final String resPath = U.path(Conf.rootPath(), U.safe(path));
 
-		Log.info("Calculated resource path", "primary", firstFile, "default", defaultFile);
+		Log.info("Calculated resource path", "path", resPath);
 
-		final Res res = Res.from(filename, true, firstFile, defaultFile);
+		final Res res = Res.from(filename, null, resPath);
 
 		Config config = res.attachment();
 		if (config == null) {
