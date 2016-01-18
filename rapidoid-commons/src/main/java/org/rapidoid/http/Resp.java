@@ -97,10 +97,10 @@ public interface Resp {
 	/** Gets the <b>file</b> to be served when the HTTP response is rendered. */
 	File file();
 
-	/** Provides <i>read/write access</i> to the <b>headers</b> of the HTTP response. */
+	/** Provides <b>read/write access</b> to the <b>headers</b> of the HTTP response. */
 	Map<String, String> headers();
 
-	/** Provides <i>read/write access</i> to the <b>cookies</b> of the HTTP response. */
+	/** Provides <b>read/write access</b> to the <b>cookies</b> of the HTTP response. */
 	Map<String, String> cookies();
 
 	/**

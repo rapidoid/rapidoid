@@ -177,7 +177,7 @@ public interface Req {
 	/** Does the HTTP request have a server-side session attached? */
 	boolean hasSession();
 
-	/** Gets the <b>server-side session attributes</b> of the HTTP request. */
+	/** Provides <b>read/write access</b> to the <b>server-side session attributes</b> of the HTTP request. */
 	Map<String, Serializable> session();
 
 	/**
@@ -197,7 +197,7 @@ public interface Req {
 	/** Does the HTTP request have a cookie-persisted session attached? */
 	boolean hasCookiepack();
 
-	/** Gets the <b>cookie-persisted session attributes</b> of the HTTP request. */
+	/** Provides <b>read/write access</b> to the <b>cookie-persisted session attributes</b> of the HTTP request. */
 	Map<String, Serializable> cookiepack();
 
 	/**
