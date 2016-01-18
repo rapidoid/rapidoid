@@ -65,8 +65,11 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 
 	@Override
 	protected Object getCustomArg(PojoRequest request, Class<?> type, String[] parts, int paramsFrom, int paramsSize) {
-		if (Req.class.isAssignableFrom(type) || Resp.class.isAssignableFrom(type)) {
+		if (Req.class.isAssignableFrom(type)) {
 			return req(request);
+
+		} else if (Resp.class.isAssignableFrom(type)) {
+			return req(request).response();
 
 		} else if (type.equals(byte[].class)) {
 			Req x = req(request);

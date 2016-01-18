@@ -36,14 +36,14 @@ public class HttpMultiControllerTest extends HttpTestCommons {
 
 		On.req(new Object() {
 			@GET
-			public String foo() {
+			public String foo(Req req) {
 				return "FOO";
 			}
 		});
 
 		On.req(new Object() {
 			@GET
-			public String bar() {
+			public String bar(Req req, Resp resp) {
 				return "BAR";
 			}
 		});
