@@ -20,10 +20,7 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CancellationException;
@@ -68,6 +65,7 @@ import org.rapidoid.concurrent.Promises;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.D;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -127,12 +125,12 @@ public class HttpClient {
 	}
 
 	private Future<byte[]> request(String verb, String uri, Map<String, String> headers, Map<String, String> data,
-			Map<String, String> files, byte[] body, String contentType, Callback<byte[]> callback) {
+	                               Map<String, String> files, byte[] body, String contentType, Callback<byte[]> callback) {
 		return request(verb, uri, headers, data, files, body, contentType, callback, false);
 	}
 
 	public Future<byte[]> request(String verb, String uri, Map<String, String> headers, Map<String, String> data,
-			Map<String, String> files, byte[] body, String contentType, Callback<byte[]> callback, boolean fullResponse) {
+	                              Map<String, String> files, byte[] body, String contentType, Callback<byte[]> callback, boolean fullResponse) {
 
 		headers = U.safe(headers);
 		data = U.safe(data);
@@ -214,7 +212,7 @@ public class HttpClient {
 	}
 
 	private Future<byte[]> execute(CloseableHttpAsyncClient client, HttpRequestBase req, Callback<byte[]> callback,
-			boolean fullResponse) {
+	                               boolean fullResponse) {
 
 		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(10000).setConnectTimeout(10000)
 				.setConnectionRequestTimeout(10000).build();
@@ -229,7 +227,7 @@ public class HttpClient {
 	}
 
 	private <T> FutureCallback<HttpResponse> callback(final Callback<byte[]> callback, final Callback<byte[]> promise,
-			final boolean fullResponse) {
+	                                                  final boolean fullResponse) {
 
 		return new FutureCallback<HttpResponse>() {
 
@@ -248,7 +246,7 @@ public class HttpClient {
 				if (response.getEntity() != null) {
 					try {
 						if (fullResponse) {
-							bytes = responseToString(response).getBytes();
+							bytes = responseToBytes(response);
 						} else {
 							InputStream resp = response.getEntity().getContent();
 							bytes = IOUtils.toByteArray(resp);
@@ -281,26 +279,31 @@ public class HttpClient {
 		};
 	}
 
-	protected String responseToString(HttpResponse response) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(response.getStatusLine());
-		sb.append("\n");
+	protected byte[] responseToBytes(HttpResponse response) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PrintWriter printer = new PrintWriter(baos);
+
+		printer.print(response.getStatusLine() + "");
+		printer.print("\n");
 
 		for (Header hdr : response.getAllHeaders()) {
-			sb.append(hdr.getName());
-			sb.append(": ");
-			sb.append(hdr.getValue());
-			sb.append("\n");
+			printer.print(hdr.getName());
+			printer.print(": ");
+			printer.print(hdr.getValue());
+			printer.print("\n");
 		}
 
-		sb.append("\n");
+		printer.print("\n");
+
+		printer.flush();
+
 		try {
-			sb.append(EntityUtils.toString(response.getEntity()));
+			response.getEntity().writeTo(baos);
 		} catch (Exception e) {
 			throw U.rte(e);
 		}
 
-		return sb.toString();
+		return baos.toByteArray();
 	}
 
 	public synchronized void close() {
@@ -350,36 +353,36 @@ public class HttpClient {
 	/********************************** POST **********************************/
 
 	public Future<byte[]> post(String uri, Map<String, String> headers, Map<String, String> data,
-			Map<String, String> files, Callback<byte[]> callback) {
+	                           Map<String, String> files, Callback<byte[]> callback) {
 		return request("POST", uri, headers, data, files, null, null, callback);
 	}
 
 	public Future<byte[]> post(String uri, Map<String, String> headers, byte[] body, String contentType,
-			Callback<byte[]> callback) {
+	                           Callback<byte[]> callback) {
 		return request("POST", uri, headers, null, null, body, contentType, callback);
 	}
 
 	/********************************** PUT **********************************/
 
 	public Future<byte[]> put(String uri, Map<String, String> headers, Map<String, String> data,
-			Map<String, String> files, Callback<byte[]> callback) {
+	                          Map<String, String> files, Callback<byte[]> callback) {
 		return request("PUT", uri, headers, data, files, null, null, callback);
 	}
 
 	public Future<byte[]> put(String uri, Map<String, String> headers, byte[] body, String contentType,
-			Callback<byte[]> callback) {
+	                          Callback<byte[]> callback) {
 		return request("PUT", uri, headers, null, null, body, contentType, callback);
 	}
 
 	/********************************** PATCH **********************************/
 
 	public Future<byte[]> patch(String uri, Map<String, String> headers, Map<String, String> data,
-			Map<String, String> files, Callback<byte[]> callback) {
+	                            Map<String, String> files, Callback<byte[]> callback) {
 		return request("PATCH", uri, headers, data, files, null, null, callback);
 	}
 
 	public Future<byte[]> patch(String uri, Map<String, String> headers, byte[] body, String contentType,
-			Callback<byte[]> callback) {
+	                            Callback<byte[]> callback) {
 		return request("PATCH", uri, headers, null, null, body, contentType, callback);
 	}
 
