@@ -60,6 +60,21 @@ public interface Resp {
 	Object body();
 
 	/**
+	 * Sets the <b>raw HTTP response (headers and body)</b> from a <b><code>byte[]</code></b> data that is written as a HTTP response when rendered.
+	 */
+	Resp raw(byte[] raw);
+
+	/**
+	 * Sets the <b>raw HTTP response (headers and body)</b> from a <b><code>ByteBuffer</code></b> data that is written as a HTTP response when rendered.
+	 */
+	Resp raw(ByteBuffer raw);
+
+	/**
+	 * Gets the <b>raw HTTP response (headers and body)</b> data (of type byte[] or ByteBuffer) that is written as a HTTP response when rendered.
+	 */
+	Object raw();
+
+	/**
 	 * Sets the <b>status code</b> <i>(e.g. 200, 404, 500)</i> of the HTTP response.
 	 */
 	Resp code(int code);

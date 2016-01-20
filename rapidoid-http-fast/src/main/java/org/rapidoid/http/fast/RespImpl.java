@@ -44,6 +44,8 @@ public class RespImpl implements Resp {
 
 	private volatile Object body = null;
 
+	private volatile Object raw = null;
+
 	private volatile int code = 200;
 
 	private volatile MediaType contentType = MediaType.HTML_UTF_8;
@@ -95,6 +97,25 @@ public class RespImpl implements Resp {
 	@Override
 	public synchronized Object body() {
 		return this.body;
+	}
+
+	@Override
+	public synchronized Resp raw(byte[] raw) {
+		ensureCanChange();
+		this.raw = raw;
+		return this;
+	}
+
+	@Override
+	public synchronized Resp raw(ByteBuffer raw) {
+		ensureCanChange();
+		this.raw = raw;
+		return this;
+	}
+
+	@Override
+	public synchronized Object raw() {
+		return this.raw;
 	}
 
 	@Override
@@ -228,7 +249,7 @@ public class RespImpl implements Resp {
 		U.must(body() == null, "The response body has already been set, so cannot write the response through OutputStream, too!");
 		U.must(raw() == null, "The raw response has already been set, so cannot write the response through OutputStream, too!");
 
-		req.startRendering();
+		req.startRendering(code());
 
 		return req.channel().output().asOutputStream();
 	}

@@ -189,11 +189,14 @@ public class HttpUtils implements HttpMetadata {
 
 	private static void postProcessRedirect(Resp resp) {
 		String redirect = resp.redirect();
+
 		if (redirect != null) {
 			if (resp.code() < 300 || resp.code() >= 400) {
 				resp.code(303);
 			}
+
 			resp.headers().put(HttpHeaders.LOCATION.name(), redirect);
+
 			if (resp.content() == null && resp.body() == null) {
 				resp.body(EMPTY_RESPONSE);
 			}

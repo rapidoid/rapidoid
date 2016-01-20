@@ -29,7 +29,7 @@ import org.rapidoid.util.Bufs;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.10")
-public class HttpRawResponseTest extends HttpTestCommons {
+public class HttpRawBodyTest extends HttpTestCommons {
 
 	@Test
 	public void testBytesResponse() {

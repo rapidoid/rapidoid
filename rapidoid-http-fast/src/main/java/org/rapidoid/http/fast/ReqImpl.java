@@ -88,6 +88,8 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	private volatile boolean done;
 
+	private volatile boolean completed;
+
 	private final MediaType defaultContentType;
 
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
@@ -347,19 +349,18 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		return response;
 	}
 
-	void startRendering() {
+	void startRendering(int code) {
 		if (!isRendering()) {
 			synchronized (this) {
 				if (!isRendering()) {
-					startResponse();
+					startResponse(code);
 					rendering = true;
 				}
 			}
 		}
 	}
 
-	private void startResponse() {
-		int code = 200;
+	private void startResponse(int code) {
 		MediaType contentType = MediaType.HTML_UTF_8;
 
 		if (cookiepack != null) {
@@ -367,9 +368,6 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		}
 
 		if (response != null) {
-			HttpUtils.postProcessResponse(response);
-
-			code = response.code();
 			contentType = U.or(response.contentType(), MediaType.HTML_UTF_8);
 		}
 
@@ -403,6 +401,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		int contentLength = posAfter - posBefore;
 
 		out.putNumAsText(posConLen, contentLength, false);
+		completed = true;
 	}
 
 	public boolean isRendering() {
@@ -419,45 +418,60 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	}
 
 	private void onDone() {
-		boolean wasRendering = rendering;
-		startRendering();
-
-		if (!wasRendering) {
-			renderResponseBody();
+		if (!rendering) {
+			renderResponse();
 		}
 
-		completeResponse();
+		if (!completed) {
+			completeResponse();
+			completed = true;
+		}
+
 		finish();
 	}
 
-	private void renderResponseBody() {
+	private void renderResponse() {
 		String err = validateResponse();
 
+		if (response != null) {
+			HttpUtils.postProcessResponse(response);
+		}
+
 		if (err != null) {
+			startRendering(500);
 			http.renderBody(channel, 500, MediaType.HTML_UTF_8, err.getBytes());
 
+		} else if (response.raw() != null) {
+			byte[] bytes = UTILS.toBytes(response.raw());
+			channel.write(bytes);
+			completed = true;
+
 		} else {
-			byte[] bytes;
+			renderResponseBody();
+		}
+	}
 
-			try {
-				if (response.content() != null) {
-					bytes = serializeResponse();
+	private void renderResponseBody() {
+		byte[] bytes;
 
-				} else if (response.body() != null) {
-					bytes = UTILS.toBytes(response.body());
+		try {
+			if (response.content() != null) {
+				bytes = serializeResponse();
 
-				} else {
-					throw U.notExpected();
-				}
+			} else if (response.body() != null) {
+				bytes = UTILS.toBytes(response.body());
 
-			} catch (Throwable e) {
-				http.renderBody(channel, response.code(), response.contentType(), e.getMessage().getBytes());
-				// FIXME http.error(channel, isKeepAlive, this, e);
-				return;
+			} else {
+				throw U.rte("There's no HTTP response body to render!");
 			}
 
-			http.renderBody(channel, response.code(), response.contentType(), bytes);
+		} catch (Throwable e) {
+			http.error(channel, isKeepAlive, this, e);
+			return;
 		}
+
+		startRendering(response.code());
+		http.renderBody(channel, response.code(), response.contentType(), bytes);
 	}
 
 	private byte[] serializeResponse() {
@@ -475,11 +489,11 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 			return "Response wasn't provided!";
 		}
 
-		if (response.content() == null && response.body() == null && response.redirect() == null) {
+		if (response.content() == null && response.body() == null && response.redirect() == null && response.file() == null && response.raw() == null) {
 			return "Response content wasn't provided!";
 		}
 
-		if (response.contentType() == null) {
+		if (response.contentType() == null && response.raw() == null) {
 			return "Response content type wasn't provided!";
 		}
 
