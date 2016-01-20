@@ -248,14 +248,10 @@ public interface Req {
 
 	/* RESPONSE: */
 
-	/** Gets the reference to the <b>response object</b>. */
-	Resp response();
-
 	/**
-	 * Renders the response headers based on the response() object, and then returns an <i>OutputStream</i> representing
-	 * the <b>response body</b>. The response body will be constructed by rendering to the <i>OutputStream</i>.
+	 * Gets the reference to the <b>response object</b>.
 	 */
-	OutputStream out();
+	Resp response();
 
 	/* ASYNCHRONOUS REQUEST HANDLING: */
 

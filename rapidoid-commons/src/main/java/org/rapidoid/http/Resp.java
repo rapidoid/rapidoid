@@ -134,7 +134,15 @@ public interface Resp {
 	 */
 	Resp binary(Object content);
 
-	/** Gets the reference to the <b>request object</b>. */
+	/**
+	 * First renders the response headers, then returns an <i>OutputStream</i> representing
+	 * the <b>response body</b>. The response body will be constructed by writing to the <i>OutputStream</i>.
+	 */
+	OutputStream out();
+
+	/**
+	 * Gets the reference to the <b>request object</b>.
+	 */
 	Req request();
 
 }

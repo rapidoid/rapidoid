@@ -52,12 +52,12 @@ public class AsyncHttpServerTest extends HttpTestCommons {
 
 					@Override
 					public void run() {
-						write(req.out(), "O");
+						write(req.response().out(), "O");
 
 						Jobs.schedule(new Runnable() {
 							@Override
 							public void run() {
-								write(req.out(), "K");
+								write(req.response().out(), "K");
 								req.done();
 							}
 						}, 1, TimeUnit.SECONDS);

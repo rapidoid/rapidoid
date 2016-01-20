@@ -20,18 +20,19 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
-import java.io.File;
-import java.nio.ByteBuffer;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.u.U;
+
+import java.io.File;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.x")
@@ -212,6 +213,17 @@ public class RespImpl implements Resp {
 	@Override
 	public Req request() {
 		return req;
+	}
+
+	@Override
+	public OutputStream out() {
+		U.must(content() == null, "The response content has already been set, so cannot write the response through OutputStream, too!");
+		U.must(body() == null, "The response body has already been set, so cannot write the response through OutputStream, too!");
+		U.must(raw() == null, "The raw response has already been set, so cannot write the response through OutputStream, too!");
+
+		req.startRendering();
+
+		return req.channel().output().asOutputStream();
 	}
 
 }

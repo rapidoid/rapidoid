@@ -20,14 +20,6 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
@@ -40,6 +32,13 @@ import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.UTILS;
+
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.2")
@@ -92,9 +91,9 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	private final MediaType defaultContentType;
 
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
-			String query, byte[] body, Map<String, String> params, Map<String, String> headers,
-			Map<String, String> cookies, Map<String, Object> posted, Map<String, byte[]> files,
-			MediaType defaultContentType) {
+	               String query, byte[] body, Map<String, String> params, Map<String, String> headers,
+	               Map<String, String> cookies, Map<String, Object> posted, Map<String, byte[]> files,
+	               MediaType defaultContentType) {
 
 		this.http = http;
 		this.channel = channel;
@@ -348,19 +347,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		return response;
 	}
 
-	@Override
-	public OutputStream out() {
-		U.must(response == null || response.content() == null,
-				"The response content was already set, so cannot render the response in OutputStream, too!");
-
-		if (!isRendering()) {
-			startRendering();
-		}
-
-		return channel.output().asOutputStream();
-	}
-
-	private void startRendering() {
+	void startRendering() {
 		if (!isRendering()) {
 			synchronized (this) {
 				if (!isRendering()) {
@@ -452,12 +439,21 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		} else {
 			byte[] bytes;
 
-			if (response.content() != null) {
-				bytes = serializeResponse();
-			} else if (response.body() != null) {
-				bytes = UTILS.toBytes(response.body());
-			} else {
-				throw U.notExpected();
+			try {
+				if (response.content() != null) {
+					bytes = serializeResponse();
+
+				} else if (response.body() != null) {
+					bytes = UTILS.toBytes(response.body());
+
+				} else {
+					throw U.notExpected();
+				}
+
+			} catch (Throwable e) {
+				http.renderBody(channel, response.code(), response.contentType(), e.getMessage().getBytes());
+				// FIXME http.error(channel, isKeepAlive, this, e);
+				return;
 			}
 
 			http.renderBody(channel, response.code(), response.contentType(), bytes);
@@ -599,6 +595,10 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	@Override
 	public String toString() {
 		return verb() + " " + uri();
+	}
+
+	Channel channel() {
+		return channel;
 	}
 
 }

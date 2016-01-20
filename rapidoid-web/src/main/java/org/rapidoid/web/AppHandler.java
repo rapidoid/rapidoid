@@ -261,11 +261,11 @@ public class AppHandler extends FastParamsAwareHttpHandler {
 	}
 
 	public void render(Req req, ITemplate template, Object model) {
-		template.render(req.out(), model, model(req));
+		template.render(req.response().out(), model, model(req));
 	}
 
 	private void renderPage(Req x, Map<String, Object> model) {
-		pageTemplate().render(x.out(), model);
+		pageTemplate().render(x.response().out(), model);
 	}
 
 	private String renderPageToHTML(Req x, Map<String, Object> model) {
