@@ -1,0 +1,9 @@
+HTTP/1.1 303 See Other
+Connection: keep-alive
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: text/html; charset=utf-8
+Location: /abc
+Content-Length: 9
+
+RESULT 29
