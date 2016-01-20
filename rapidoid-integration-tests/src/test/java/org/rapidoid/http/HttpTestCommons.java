@@ -65,8 +65,8 @@ public abstract class HttpTestCommons extends TestCommons {
 
 		On.getDefaultSetup().http().resetConfig();
 		// On.getDefaultSetup().listen();
+//		U.sleep(300);
 
-		U.sleep(300);
 		System.out.println("--- SERVER STARTED ---");
 
 		notFound("/");
@@ -83,8 +83,8 @@ public abstract class HttpTestCommons extends TestCommons {
 		System.out.println("--- STOPPING SERVER ---");
 
 		// On.getDefaultSetup().shutdown();
+//		U.sleep(300);
 
-		U.sleep(300);
 		System.out.println("--- SERVER STOPPED ---");
 	}
 
