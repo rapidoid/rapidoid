@@ -235,4 +235,12 @@ public class ServerSetup {
 		return this;
 	}
 
+	public ServerSetup render(ViewRenderer renderer) {
+		for (FastHttp http : httpImpls()) {
+			http.setRenderer(renderer);
+		}
+
+		return this;
+	}
+
 }

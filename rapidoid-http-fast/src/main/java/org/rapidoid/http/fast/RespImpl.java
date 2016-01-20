@@ -228,8 +228,23 @@ public class RespImpl implements Resp {
 	}
 
 	@Override
+	public Resp render() {
+		ViewRenderer renderer = req.http().getRenderer();
+
+		U.must(renderer != null, "A view renderer wasn't set! Please use On.render() to configure a renderer!");
+
+		try {
+			renderer.render(req, this);
+		} catch (Throwable e) {
+			throw U.rte("Error while rendering view: " + view(), e);
+		}
+
+		return this;
+	}
+
+	@Override
 	public synchronized String view() {
-		return view;
+		return view != null ? view : HttpUtils.resName(req);
 	}
 
 	@Override

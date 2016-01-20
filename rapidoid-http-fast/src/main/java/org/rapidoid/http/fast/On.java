@@ -135,8 +135,12 @@ public class On {
 		return new ServerSetup();
 	}
 
-	public static ServerSetup staticFilesLookIn(String... possibleLocations) {
+	public static synchronized ServerSetup staticFilesLookIn(String... possibleLocations) {
 		return setup().staticFilesPath(possibleLocations);
+	}
+
+	public static synchronized ServerSetup render(ViewRenderer renderer) {
+		return setup().render(renderer);
 	}
 
 }

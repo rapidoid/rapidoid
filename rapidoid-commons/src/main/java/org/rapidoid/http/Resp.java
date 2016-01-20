@@ -116,12 +116,16 @@ public interface Resp {
 	String filename();
 
 	/**
-	 * Sets a custom <b>view name</b> of the HTTP response.
+	 * Sets a custom name of the <b>view</b> (V from MVC) of the HTTP response. <br>
+	 * The default view name equals <b>the request path without the "/" prefix</b>, except for the "/" path, where the view name is "index". <br>
+	 * E.g. "/abc" -> "abc", "/" -> index, "/my/books" -> "my/books".
 	 */
 	Resp view(String viewName);
 
 	/**
-	 * Gets a custom <b>view name</b> of the HTTP response.
+	 * Gets the (default or customized) name of the <b>view</b> (V from MVC) of the HTTP response. <br>
+	 * The default view name equals <b>the request path without the "/" prefix</b>, except for the "/" path, where the view name is "index". <br>
+	 * E.g. "/abc" -> "abc", "/" -> index, "/my/books" -> "my/books".
 	 */
 	String view();
 
@@ -180,6 +184,13 @@ public interface Resp {
 	 * <i>Alias</i> to <code>contentType(MediaType.BINARY).body(content)</code>.
 	 */
 	Resp binary(Object content);
+
+	/**
+	 * Renders the response in a MVC fashion.<br>
+	 * A custom view renderer must be configured/implemented via the <code>On#render()</code> method.<br>
+	 * A typical renderer will use <code>Resp#view</code> to get the view name, and <code>Resp#model</code> to get the model.
+	 */
+	Resp render();
 
 	/**
 	 * First renders the response headers, then returns an <i>OutputStream</i> representing

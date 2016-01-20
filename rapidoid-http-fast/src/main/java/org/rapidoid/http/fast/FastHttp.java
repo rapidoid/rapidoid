@@ -115,6 +115,8 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	private volatile FastHttpHandler errorHandler;
 
+	private volatile ViewRenderer renderer;
+
 	private final FastHttpListener listener;
 
 	private final Map<String, Object> attributes = U.synchronizedMap();
@@ -465,6 +467,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 		staticFilesLocations = new String[]{};
 		staticResourcesHandler = new FastStaticResourcesHandler(this);
 		errorHandler = null;
+		renderer = null;
 
 		getHandlers.clear();
 		postHandlers.clear();
@@ -554,6 +557,14 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	public String[] getStaticFilesLocations() {
 		return staticFilesLocations;
+	}
+
+	public void setRenderer(ViewRenderer renderer) {
+		this.renderer = renderer;
+	}
+
+	public ViewRenderer getRenderer() {
+		return renderer;
 	}
 
 }

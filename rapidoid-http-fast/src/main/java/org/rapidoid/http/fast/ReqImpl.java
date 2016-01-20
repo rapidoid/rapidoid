@@ -467,6 +467,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 		} catch (Throwable e) {
 			http.error(channel, isKeepAlive, this, e);
+			completed = true;
 			return;
 		}
 
@@ -613,6 +614,10 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	Channel channel() {
 		return channel;
+	}
+
+	FastHttp http() {
+		return http;
 	}
 
 }
