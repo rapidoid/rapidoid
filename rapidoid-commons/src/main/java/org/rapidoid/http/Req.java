@@ -20,12 +20,12 @@ package org.rapidoid.http;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Map;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
 
 /**
  * HTTP Request API.
@@ -36,54 +36,86 @@ public interface Req {
 
 	/* HTTP REQUEST DATA */
 
-	/** Gets the <b>verb</b> of the HTTP request. */
+	/**
+	 * Gets the <b>verb</b> of the HTTP request.
+	 */
 	String verb();
 
-	/** Sets the <b>verb</b> of the HTTP request. */
+	/**
+	 * Sets the <b>verb</b> of the HTTP request.
+	 */
 	Req verb(String verb);
 
-	/** Gets the <b>uri</b> of the HTTP request. */
+	/**
+	 * Gets the <b>uri</b> of the HTTP request.
+	 */
 	String uri();
 
-	/** Sets the <b>uri</b> of the HTTP request. */
+	/**
+	 * Sets the <b>uri</b> of the HTTP request.
+	 */
 	Req uri(String uri);
 
-	/** Gets the <b>path</b> of the HTTP request. */
+	/**
+	 * Gets the <b>path</b> of the HTTP request.
+	 */
 	String path();
 
-	/** Sets the <b>path</b> of the HTTP request. */
+	/**
+	 * Sets the <b>path</b> of the HTTP request.
+	 */
 	Req path(String path);
 
-	/** Gets the <b>query</b> of the HTTP request. */
+	/**
+	 * Gets the <b>query</b> of the HTTP request.
+	 */
 	String query();
 
-	/** Sets the <b>query</b> of the HTTP request. */
+	/**
+	 * Sets the <b>query</b> of the HTTP request.
+	 */
 	Req query(String query);
 
-	/** Gets the <b>raw body data</b> of the HTTP request. */
+	/**
+	 * Gets the <b>raw body data</b> of the HTTP request.
+	 */
 	byte[] body();
 
-	/** Sets the <b>raw body data</b> of the HTTP request. */
+	/**
+	 * Sets the <b>raw body data</b> of the HTTP request.
+	 */
 	Req body(byte[] body);
 
-	/** Gets the value of the <b>Host header</b> of the HTTP request. */
+	/**
+	 * Gets the value of the <b>Host header</b> of the HTTP request.
+	 */
 	String host();
 
-	/** Sets the value of the <b>Host header</b> of the HTTP request. */
+	/**
+	 * Sets the value of the <b>Host header</b> of the HTTP request.
+	 */
 	Req host(String host);
 
-	/** Gets the <b>IP address</b> of the HTTP client sending the request. */
+	/**
+	 * Gets the <b>IP address</b> of the HTTP client sending the request.
+	 */
 	String clientIpAddress();
 
-	/** Gets the <b>HTTP connection ID</b>, which is unique per HTTP server instance. */
+	/**
+	 * Gets the <b>HTTP connection ID</b>, which is unique per HTTP server instance.
+	 */
 	long connectionId();
 
-	/** Gets the <b>HTTP request ID</b>, which is unique per HTTP server instance. */
+	/**
+	 * Gets the <b>HTTP request ID</b>, which is unique per HTTP server instance.
+	 */
 	long requestId();
 
 	/* URL PARAMETERS: */
 
-	/** Gets the <b>URL parameters</b> of the HTTP request. */
+	/**
+	 * Gets the <b>URL parameters</b> of the HTTP request.
+	 */
 	Map<String, String> params();
 
 	/**
@@ -100,7 +132,9 @@ public interface Req {
 
 	/* POSTED PARAMETERS IN THE REQUEST BODY: */
 
-	/** Gets the <b>posted parameters</b> of the HTTP request body. */
+	/**
+	 * Gets the <b>posted parameters</b> of the HTTP request body.
+	 */
 	Map<String, Object> posted();
 
 	/**
@@ -117,7 +151,9 @@ public interface Req {
 
 	/* POSTED FILES IN THE REQUEST BODY: */
 
-	/** Gets the <b>posted files</b> from the HTTP request body. */
+	/**
+	 * Gets the <b>posted files</b> from the HTTP request body.
+	 */
 	Map<String, byte[]> files();
 
 	/**
@@ -134,7 +170,9 @@ public interface Req {
 
 	/* REQUEST DATA PARAMETERS (URL PARAMETERS + POSTED PARAMETERS + POSTED FILES): */
 
-	/** Gets the <b>data parameters (URL parameters + posted parameters + posted files)</b> of the HTTP request. */
+	/**
+	 * Gets the <b>data parameters (URL parameters + posted parameters + posted files)</b> of the HTTP request.
+	 */
 	Map<String, Object> data();
 
 	/**
@@ -151,7 +189,9 @@ public interface Req {
 
 	/* EXTRA ATTRIBUTES ATTACHED TO THE REQUEST: */
 
-	/** Gets the <b>extra attributes</b> of the HTTP request. */
+	/**
+	 * Gets the <b>extra attributes</b> of the HTTP request.
+	 */
 	Map<String, Object> attrs();
 
 	/**
@@ -174,10 +214,14 @@ public interface Req {
 	 */
 	String sessionId();
 
-	/** Does the HTTP request have a server-side session attached? */
+	/**
+	 * Does the HTTP request have a server-side session attached?
+	 */
 	boolean hasSession();
 
-	/** Provides <b>read/write access</b> to the <b>server-side session attributes</b> of the HTTP request. */
+	/**
+	 * Provides <b>read/write access</b> to the <b>server-side session attributes</b> of the HTTP request.
+	 */
 	Map<String, Serializable> session();
 
 	/**
@@ -194,10 +238,14 @@ public interface Req {
 
 	/* COOKIE-PERSISTED SESSION: */
 
-	/** Does the HTTP request have a cookie-persisted session attached? */
+	/**
+	 * Does the HTTP request have a cookie-persisted session attached?
+	 */
 	boolean hasCookiepack();
 
-	/** Provides <b>read/write access</b> to the <b>cookie-persisted session attributes</b> of the HTTP request. */
+	/**
+	 * Provides <b>read/write access</b> to the <b>cookie-persisted session attributes</b> of the HTTP request.
+	 */
 	Map<String, Serializable> cookiepack();
 
 	/**
@@ -214,7 +262,9 @@ public interface Req {
 
 	/* REQUEST HEADERS: */
 
-	/** Gets the <b>headers</b> of the HTTP request. */
+	/**
+	 * Gets the <b>headers</b> of the HTTP request.
+	 */
 	Map<String, String> headers();
 
 	/**
@@ -231,7 +281,9 @@ public interface Req {
 
 	/* REQUEST COOKIES: */
 
-	/** Gets the <b>cookies</b> of the HTTP request. */
+	/**
+	 * Gets the <b>cookies</b> of the HTTP request.
+	 */
 	Map<String, String> cookies();
 
 	/**
@@ -262,7 +314,9 @@ public interface Req {
 	 */
 	Req async();
 
-	/** Is/was the request being handled in asynchronous mode? */
+	/**
+	 * Is/was the request being handled in asynchronous mode?
+	 */
 	boolean isAsync();
 
 	/**
@@ -270,7 +324,9 @@ public interface Req {
 	 */
 	Req done();
 
-	/** Has the request handling and response construction finished? */
+	/**
+	 * Has the request handling and response construction finished?
+	 */
 	boolean isDone();
 
 }

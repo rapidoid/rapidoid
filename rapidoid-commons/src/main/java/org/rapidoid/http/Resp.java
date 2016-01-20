@@ -20,12 +20,13 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.io.File;
-import java.nio.ByteBuffer;
-import java.util.Map;
-
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
+
+import java.io.File;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.util.Map;
 
 /**
  * HTTP Response API.
@@ -44,30 +45,38 @@ public interface Resp {
 	Object content();
 
 	/**
-	 * Sets the <b>raw body data as <code>byte[]</code></b> that is copied into the HTTP response body when it is
-	 * rendered.
+	 * Sets the <b>HTTP response body</b> from a <b><code>byte[]</code></b> data that is written as a HTTP response body when rendered.
 	 */
 	Resp body(byte[] body);
 
 	/**
-	 * Sets the <b>raw body data as <code>ByteBuffer</code></b> that is copied into the HTTP response body when it is
-	 * rendered.
+	 * Sets the <b>HTTP response body</b> from a <b><code>ByteBuffer</code></b> data that is written as a HTTP response body when rendered.
 	 */
 	Resp body(ByteBuffer body);
 
-	/** Gets the <b>raw body data</b> that is copied into the HTTP response body when it is rendered. */
+	/**
+	 * Gets the <b>HTTP response body</b> data (of type byte[] or ByteBuffer) that is written as a HTTP response body when rendered.
+	 */
 	Object body();
 
-	/** Sets the <b>status code</b> <i>(e.g. 200, 404, 500)</i> of the HTTP response. */
+	/**
+	 * Sets the <b>status code</b> <i>(e.g. 200, 404, 500)</i> of the HTTP response.
+	 */
 	Resp code(int code);
 
-	/** Gets the <b>status code</b> <i>(e.g. 200, 404, 500)</i> of the HTTP response. */
+	/**
+	 * Gets the <b>status code</b> <i>(e.g. 200, 404, 500)</i> of the HTTP response.
+	 */
 	int code();
 
-	/** Sets the <b><code>Content-Type</code> header</b> to be rendered in the HTTP response. */
+	/**
+	 * Sets the <b><code>Content-Type</code> header</b> to be rendered in the HTTP response.
+	 */
 	Resp contentType(MediaType contentType);
 
-	/** Gets the <b><code>Content-Type</code> header</b> to be rendered in the HTTP response. */
+	/**
+	 * Gets the <b><code>Content-Type</code> header</b> to be rendered in the HTTP response.
+	 */
 	MediaType contentType();
 
 	/**
@@ -76,31 +85,49 @@ public interface Resp {
 	 */
 	Resp redirect(String redirectURI);
 
-	/** Gets the <b>redirect URI</b> of the HTTP response. */
+	/**
+	 * Gets the <b>redirect URI</b> of the HTTP response.
+	 */
 	String redirect();
 
-	/** Sets the <b>filename</b> when serving a file in the HTTP response. */
+	/**
+	 * Sets the <b>filename</b> when serving a file in the HTTP response.
+	 */
 	Resp filename(String filename);
 
-	/** Gets the <b>filename</b> when serving a file in the HTTP response. */
+	/**
+	 * Gets the <b>filename</b> when serving a file in the HTTP response.
+	 */
 	String filename();
 
-	/** Sets a custom <b>view name</b> of the HTTP response. */
+	/**
+	 * Sets a custom <b>view name</b> of the HTTP response.
+	 */
 	Resp view(String viewName);
 
-	/** Gets a custom <b>view name</b> of the HTTP response. */
+	/**
+	 * Gets a custom <b>view name</b> of the HTTP response.
+	 */
 	String view();
 
-	/** Sets the <b>file</b> to be served when the HTTP response is rendered. */
+	/**
+	 * Sets the <b>file</b> to be served when the HTTP response is rendered.
+	 */
 	Resp file(File file);
 
-	/** Gets the <b>file</b> to be served when the HTTP response is rendered. */
+	/**
+	 * Gets the <b>file</b> to be served when the HTTP response is rendered.
+	 */
 	File file();
 
-	/** Provides <b>read/write access</b> to the <b>headers</b> of the HTTP response. */
+	/**
+	 * Provides <b>read/write access</b> to the <b>headers</b> of the HTTP response.
+	 */
 	Map<String, String> headers();
 
-	/** Provides <b>read/write access</b> to the <b>cookies</b> of the HTTP response. */
+	/**
+	 * Provides <b>read/write access</b> to the <b>cookies</b> of the HTTP response.
+	 */
 	Map<String, String> cookies();
 
 	/**
