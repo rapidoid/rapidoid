@@ -131,6 +131,11 @@ public interface Resp {
 	Map<String, String> cookies();
 
 	/**
+	 * Provides <b>read/write access</b> to the <b>model</b> (M from MVC) that will be rendered by the view renderer.
+	 */
+	Map<String, Object> model();
+
+	/**
 	 * Informs the HTTP server that the asynchronous handling has finished and the response is complete.<br>
 	 * <i>Alias</i> to <code>request().done()</code>.
 	 */

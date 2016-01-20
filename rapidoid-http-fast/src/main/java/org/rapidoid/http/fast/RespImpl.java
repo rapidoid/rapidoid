@@ -52,6 +52,8 @@ public class RespImpl implements Resp {
 
 	private final Map<String, String> cookies = Collections.synchronizedMap(new HashMap<String, String>());
 
+	private final Map<String, Object> model = Collections.synchronizedMap(new HashMap<String, Object>());
+
 	private volatile String redirect = null;
 
 	private volatile String filename = null;
@@ -115,6 +117,11 @@ public class RespImpl implements Resp {
 	@Override
 	public Map<String, String> cookies() {
 		return isReadOnly() ? Collections.unmodifiableMap(this.cookies) : this.cookies;
+	}
+
+	@Override
+	public Map<String, Object> model() {
+		return isReadOnly() ? Collections.unmodifiableMap(this.model) : this.model;
 	}
 
 	@Override
