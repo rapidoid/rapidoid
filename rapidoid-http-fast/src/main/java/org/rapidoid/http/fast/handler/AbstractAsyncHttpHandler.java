@@ -37,6 +37,7 @@ import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.concurrent.Future;
 
 @Authors("Nikolche Mihajlovski")
@@ -82,7 +83,8 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 		} else {
 			// render the response and process logic while still in context
-			if (!(result instanceof byte[]) && !(result instanceof File) && !(result instanceof Res)
+			if (!(result instanceof byte[]) && !(result instanceof ByteBuffer)
+					&& !(result instanceof File) && !(result instanceof Res)
 					&& !Cls.isSimple(result) && !U.isCollection(result) && !U.isMap(result)) {
 				result = render(result);
 			}
