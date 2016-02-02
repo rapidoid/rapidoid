@@ -224,4 +224,37 @@ public class HttpPojoApiTest extends HttpTestCommons {
 		notFound("/w");
 	}
 
+	@Test
+	public void test13() {
+		class Ctrl3 {
+			@GET
+			public Object x(Req req, Resp resp) {
+				return reqResp(req, resp);
+			}
+
+			@POST
+			Object y(Req req, Resp resp) {
+				return reqResp(req, resp);
+			}
+
+			@POST
+			protected Object z(Req req, Resp resp) {
+				return reqResp(req, resp);
+			}
+
+			@POST
+			private Object w(Req req, Resp resp) {
+				return reqResp(req, resp);
+			}
+		}
+
+		On.req(new Ctrl3());
+
+		notFound("/");
+		onlyGet("/x");
+		onlyPost("/y");
+		notFound("/z");
+		notFound("/w");
+	}
+
 }
