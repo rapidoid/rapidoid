@@ -56,6 +56,8 @@ import java.util.Map;
 @Since("4.3.0")
 public class FastHttp implements Protocol, HttpMetadata {
 
+	public static final String[] DEFAULT_STATIC_FILES_LOCATIONS = {"static", "rapidoid/static"};
+
 	private static final byte[] HTTP_200_OK = "HTTP/1.1 200 OK\r\n".getBytes();
 
 	private static final byte[] HTTP_400_BAD_REQUEST = "HTTP/1.1 404 Bad Request\r\nContent-Length: 12\r\n\r\nBad Request!"
@@ -111,7 +113,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	private volatile FastHttpHandler staticResourcesHandler = new FastStaticResourcesHandler(this);
 
-	private volatile String[] staticFilesLocations = {};
+	private volatile String[] staticFilesLocations = DEFAULT_STATIC_FILES_LOCATIONS;
 
 	private volatile FastHttpHandler errorHandler;
 
@@ -464,7 +466,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 		path1 = path2 = path3 = null;
 		handler1 = handler2 = handler3 = null;
 
-		staticFilesLocations = new String[]{};
+		staticFilesLocations = DEFAULT_STATIC_FILES_LOCATIONS;
 		staticResourcesHandler = new FastStaticResourcesHandler(this);
 		errorHandler = null;
 		renderer = null;

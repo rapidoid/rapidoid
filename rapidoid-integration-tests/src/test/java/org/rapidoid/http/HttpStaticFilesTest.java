@@ -41,6 +41,17 @@ public class HttpStaticFilesTest extends HttpTestCommons {
 
 		notFound("/");
 		notFound("/xx");
+		notFound("/page1");
+		notFound("/page2");
+	}
+
+	@Test
+	public void serveStaticFilesFromDefaultLocations() {
+		onlyGet("/page1");
+		onlyGet("/page2");
+
+		notFound("/");
+		notFound("/xx");
 	}
 
 }
