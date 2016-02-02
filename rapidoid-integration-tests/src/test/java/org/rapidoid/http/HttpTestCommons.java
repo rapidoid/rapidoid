@@ -155,6 +155,14 @@ public abstract class HttpTestCommons extends TestCommons {
 		onlyReq("POST", uri);
 	}
 
+	protected void onlyPut(String uri) {
+		onlyReq("PUT", uri);
+	}
+
+	protected void onlyDelete(String uri) {
+		onlyReq("DELETE", uri);
+	}
+
 	protected void getAndPost(String uri) {
 		testReq("GET", uri);
 		testReq("POST", uri);
@@ -180,7 +188,9 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	protected void notFound(String verb, String uri) {
 		String resp = fetch(verb, uri);
-		checkResponse(verb, uri, resp, IO.load("results/404-not-found"));
+		String notFound = IO.load("results/404-not-found");
+		U.notNull(notFound, "404-not-found");
+		checkResponse(verb, uri, resp, notFound);
 	}
 
 	private void checkResponse(String verb, String uri, String actual, String expected) {
@@ -194,15 +204,16 @@ public abstract class HttpTestCommons extends TestCommons {
 	private void testReq(String verb, String uri) {
 		String resp = fetch(verb, uri);
 
-		String filename = reqName(verb, uri);
+		String filename = U.path("src", "test", "resources", reqName(verb, uri));
+
 		if (ADJUST_RESULTS) {
-			File testDir = new File("src/test/resources/results/" + testName());
+			File testDir = new File(filename).getParentFile();
 
 			if (!testDir.exists()) {
-				testDir.mkdir();
+				testDir.mkdirs();
 			}
 
-			IO.save("src/test/resources/" + filename, resp);
+			IO.save(filename, resp);
 		} else {
 			checkResponse(verb, uri, resp, IO.load(filename));
 		}
@@ -218,7 +229,24 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	private String reqName(String verb, String uri) {
-		return "results/" + testName() + "/" + verb + uri.replace("/", "_").replace("?", "-");
+		return U.path("results", testName(), getTestMethodName(), verb + uri.replace("/", "_").replace("?", "-"));
+	}
+
+	protected String getTestMethodName() {
+		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+
+		String method = null;
+
+		for (StackTraceElement trc : trace) {
+			String cls = trc.getClassName();
+			if (cls.equals(getClass().getName())) {
+				method = trc.getMethodName();
+			}
+		}
+
+		U.must(method != null, "Cannot calculate the test name!");
+
+		return method;
 	}
 
 }
