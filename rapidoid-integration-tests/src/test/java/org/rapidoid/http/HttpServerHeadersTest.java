@@ -20,7 +20,6 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -111,7 +110,7 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 			}
 		});
 
-		byte[] ab = FileUtils.readFileToByteArray(IO.file("ab.html"));
+		byte[] ab = IO.loadBytes("ab.html");
 
 		for (int i = 0; i < N; i++) {
 			eq(get("/"), "a<b>b</b>c");
@@ -134,7 +133,7 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 			}
 		});
 
-		byte[] rabbit = FileUtils.readFileToByteArray(IO.file("rabbit.jpg"));
+		byte[] rabbit = IO.loadBytes("rabbit.jpg");
 
 		for (int i = 0; i < N; i++) {
 			eq(getBytes("/rabbit.jpg"), rabbit);

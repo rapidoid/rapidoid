@@ -20,7 +20,6 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.apache.commons.io.IOUtils;
 import org.apache.http.*;
 import org.apache.http.client.RedirectStrategy;
 import org.apache.http.client.config.RequestConfig;
@@ -229,7 +228,8 @@ public class HttpClient {
 							bytes = responseToBytes(response);
 						} else {
 							InputStream resp = response.getEntity().getContent();
-							bytes = IOUtils.toByteArray(resp);
+							bytes = IO.loadBytes(resp);
+							U.must(bytes != null, "Couldn't read the HTTP response!");
 						}
 
 					} catch (Exception e) {

@@ -20,15 +20,12 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.io.IO;
 import org.rapidoid.u.U;
-
-import java.io.File;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -38,8 +35,8 @@ public class HttpMultipartFormTest extends HttpTestCommons {
 	public void shouldHandleUploads() throws Throwable {
 		defaultServerSetup();
 
-		String hash1 = Crypto.md5(FileUtils.readFileToByteArray(new File(IO.resource("test1.txt").toURI())));
-		String hash2 = Crypto.md5(FileUtils.readFileToByteArray(new File(IO.resource("test2.txt").toURI())));
+		String hash1 = Crypto.md5(IO.loadBytes("test1.txt"));
+		String hash2 = Crypto.md5(IO.loadBytes("test2.txt"));
 		String hash3 = Crypto.md5("");
 
 		eq(upload("/upload", U.map("a", "bb"), U.map("f1", "test1.txt", "f2", "test2.txt")),
@@ -50,9 +47,9 @@ public class HttpMultipartFormTest extends HttpTestCommons {
 	public void shouldHandleBigUploads() throws Throwable {
 		defaultServerSetup();
 
-		String hash1 = Crypto.md5(FileUtils.readFileToByteArray(new File(IO.resource("test1.txt").toURI())));
-		String hash2 = Crypto.md5(FileUtils.readFileToByteArray(new File(IO.resource("test2.txt").toURI())));
-		String hash3 = Crypto.md5(FileUtils.readFileToByteArray(new File(IO.resource("rabbit.jpg").toURI())));
+		String hash1 = Crypto.md5(IO.loadBytes("test1.txt"));
+		String hash2 = Crypto.md5(IO.loadBytes("test2.txt"));
+		String hash3 = Crypto.md5(IO.loadBytes("rabbit.jpg"));
 
 		eq(upload("/upload", U.map("a", "d"), U.map("f1", "test1.txt", "f2", "test2.txt", "f3", "rabbit.jpg")),
 				"bar:a:d:3:" + U.join(":", hash1, hash2, hash3));

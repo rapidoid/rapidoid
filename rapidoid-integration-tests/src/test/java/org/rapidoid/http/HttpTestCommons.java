@@ -20,7 +20,6 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.apache.commons.io.FileUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.junit.After;
 import org.junit.Before;
@@ -126,7 +125,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected String resourceMD5(String filename) throws IOException, URISyntaxException {
-		return Crypto.md5(FileUtils.readFileToByteArray(new File(IO.resource(filename).toURI())));
+		return Crypto.md5(IO.loadBytes(filename));
 	}
 
 	protected String upload(String uri, Map<String, String> params, Map<String, String> files) throws IOException,
