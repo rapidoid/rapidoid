@@ -1,9 +1,9 @@
 package org.rapidoid.var;
 
-import java.io.Serializable;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+
+import java.io.Serializable;
 
 /*
  * #%L

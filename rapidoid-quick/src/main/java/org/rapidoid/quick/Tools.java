@@ -20,9 +20,6 @@ package org.rapidoid.quick;
  * #L%
  */
 
-import java.util.List;
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.IOTool;
@@ -37,8 +34,10 @@ import org.rapidoid.plugins.entities.EntitiesPlugin;
 import org.rapidoid.plugins.sms.SMSPlugin;
 import org.rapidoid.plugins.templates.TemplatesPlugin;
 import org.rapidoid.sql.SQLAPI;
-
 import redis.clients.jedis.Jedis;
+
+import java.util.List;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.2.0")

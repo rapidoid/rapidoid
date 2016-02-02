@@ -48,7 +48,7 @@ public class IgnorantHttpListener implements FastHttpListener {
 
 	@Override
 	public boolean request(FastHttp http, Channel channel, BoolWrap isGet, BoolWrap isKeepAlive, Range body,
-			Range verb, Range uri, Range path, Range query, Range protocol, Ranges hdrs) {
+	                       Range verb, Range uri, Range path, Range query, Range protocol, Ranges hdrs) {
 		// do nothing
 		return true; // continue with normal request processing
 	}
@@ -60,7 +60,7 @@ public class IgnorantHttpListener implements FastHttpListener {
 
 	@Override
 	public void notFound(FastHttp fastHttp, Channel ctx, BoolWrap isGet, BoolWrap isKeepAlive, Range body, Range verb,
-			Range uri, Range path, Range query, Range protocol, Ranges hdrs) {
+	                     Range uri, Range path, Range query, Range protocol, Ranges hdrs) {
 		// do nothing
 	}
 

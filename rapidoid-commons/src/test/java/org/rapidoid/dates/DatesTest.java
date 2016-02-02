@@ -20,11 +20,11 @@ package org.rapidoid.dates;
  * #L%
  */
 
-import java.util.Calendar;
-
 import org.junit.Test;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.test.AbstractCommonsTest;
+
+import java.util.Calendar;
 
 /**
  * @author Nikolche Mihajlovski

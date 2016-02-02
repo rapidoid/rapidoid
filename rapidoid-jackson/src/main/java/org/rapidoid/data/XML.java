@@ -20,13 +20,12 @@ package org.rapidoid.data;
  * #L%
  */
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 /**
  * @author Nikolche Mihajlovski
@@ -34,7 +33,8 @@ import javax.xml.bind.Unmarshaller;
  */
 public class XML {
 
-	private XML() {}
+	private XML() {
+	}
 
 	public static String stringify(Object obj) {
 		try {

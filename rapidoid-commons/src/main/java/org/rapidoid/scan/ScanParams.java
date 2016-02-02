@@ -20,28 +20,28 @@ package org.rapidoid.scan;
  * #L%
  */
 
-import java.util.List;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.5.0")
 public class ScanParams {
 
-    private String pkg = null;
+	private String pkg = null;
 
-    private String matching = null;
+	private String matching = null;
 
-    private org.rapidoid.lambda.Predicate<Class<?>> filter = null;
+	private org.rapidoid.lambda.Predicate<Class<?>> filter = null;
 
-    private Class<? extends java.lang.annotation.Annotation> annotated = null;
+	private Class<? extends java.lang.annotation.Annotation> annotated = null;
 
-    private ClassLoader classLoader = null;
+	private ClassLoader classLoader = null;
 
 	public synchronized ScanParams pkg(String pkg) {
-	    this.pkg = pkg;
-	    return this;
+		this.pkg = pkg;
+		return this;
 	}
 
 	public synchronized String pkg() {
@@ -49,8 +49,8 @@ public class ScanParams {
 	}
 
 	public synchronized ScanParams matching(String matching) {
-	    this.matching = matching;
-	    return this;
+		this.matching = matching;
+		return this;
 	}
 
 	public synchronized String matching() {
@@ -58,8 +58,8 @@ public class ScanParams {
 	}
 
 	public synchronized ScanParams filter(org.rapidoid.lambda.Predicate<Class<?>> filter) {
-	    this.filter = filter;
-	    return this;
+		this.filter = filter;
+		return this;
 	}
 
 	public synchronized org.rapidoid.lambda.Predicate<Class<?>> filter() {
@@ -67,8 +67,8 @@ public class ScanParams {
 	}
 
 	public synchronized ScanParams annotated(Class<? extends java.lang.annotation.Annotation> annotated) {
-	    this.annotated = annotated;
-	    return this;
+		this.annotated = annotated;
+		return this;
 	}
 
 	public synchronized Class<? extends java.lang.annotation.Annotation> annotated() {
@@ -76,8 +76,8 @@ public class ScanParams {
 	}
 
 	public synchronized ScanParams classLoader(ClassLoader classLoader) {
-	    this.classLoader = classLoader;
-	    return this;
+		this.classLoader = classLoader;
+		return this;
 	}
 
 	public synchronized ClassLoader classLoader() {

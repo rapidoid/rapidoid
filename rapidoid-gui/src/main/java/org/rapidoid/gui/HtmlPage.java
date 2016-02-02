@@ -20,9 +20,6 @@ package org.rapidoid.gui;
  * #L%
  */
 
-import java.util.Map;
-import java.util.Set;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.RapidoidInfo;
@@ -37,6 +34,9 @@ import org.rapidoid.plugins.templates.ITemplate;
 import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
 import org.rapidoid.plugins.templates.Templates;
 import org.rapidoid.u.U;
+
+import java.util.Map;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")

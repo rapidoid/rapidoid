@@ -20,6 +20,8 @@ package org.rapidoid.fluent;
  * #L%
  */
 
+import org.rapidoid.fluent.flow.FlowImpl;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,11 +30,9 @@ import java.util.function.Function;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
-import org.rapidoid.fluent.flow.FlowImpl;
-
 /**
  * A Flow is a {@link Stream} decorator with extra operations for convenience.
- * 
+ *
  * @author Nikolche Mihajlovski
  * @since 5.0.0
  */

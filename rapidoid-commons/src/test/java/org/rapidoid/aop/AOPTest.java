@@ -20,14 +20,14 @@ package org.rapidoid.aop;
  * #L%
  */
 
-import java.lang.reflect.Method;
-
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.log.Log;
 import org.rapidoid.test.AbstractCommonsTest;
+
+import java.lang.reflect.Method;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

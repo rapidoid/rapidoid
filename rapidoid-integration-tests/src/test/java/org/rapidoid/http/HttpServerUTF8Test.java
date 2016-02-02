@@ -20,13 +20,13 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
-
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

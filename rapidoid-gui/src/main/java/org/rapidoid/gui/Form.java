@@ -20,9 +20,6 @@ package org.rapidoid.gui;
  * #L%
  */
 
-import java.util.Collection;
-import java.util.List;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.AnyObj;
@@ -35,6 +32,9 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
+
+import java.util.Collection;
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -59,7 +59,7 @@ public class Form extends AbstractWidget {
 	}
 
 	public Form(FormMode mode, FormLayout layout, String[] fieldNames, String[] fieldLabels, FieldType[] fieldTypes,
-			Collection<?>[] options, Var<?>[] vars, Btn[] buttons) {
+	            Collection<?>[] options, Var<?>[] vars, Btn[] buttons) {
 		this.mode = mode;
 		this.item = null;
 		this.layout = layout;
@@ -72,7 +72,7 @@ public class Form extends AbstractWidget {
 		this.buttons = AnyObj.withoutNulls(buttons);
 	}
 
-	/************************** FIELD ********************************/
+	/* FIELD */
 
 	public int fieldIndex(String fieldName) {
 		for (int i = 0; i < fields.size(); i++) {
@@ -101,7 +101,7 @@ public class Form extends AbstractWidget {
 		return this.fields.get(fieldIndex);
 	}
 
-	/************************** BUTTONS ********************************/
+	/* BUTTONS */
 
 	public Form buttons(Btn... buttons) {
 		this.buttons = AnyObj.withoutNulls(buttons);
@@ -112,7 +112,7 @@ public class Form extends AbstractWidget {
 		return this.buttons;
 	}
 
-	/************************** OTHER ********************************/
+	/* OTHER */
 
 	public Form add(Field field) {
 		if (field.getMode() == null) {
@@ -225,14 +225,14 @@ public class Form extends AbstractWidget {
 
 	protected String formLayoutClass(FormLayout layout) {
 		switch (layout) {
-		case VERTICAL:
-			return "";
-		case HORIZONTAL:
-			return "form-horizontal";
-		case INLINE:
-			return "form-inline";
-		default:
-			throw U.notExpected();
+			case VERTICAL:
+				return "";
+			case HORIZONTAL:
+				return "form-horizontal";
+			case INLINE:
+				return "form-inline";
+			default:
+				throw U.notExpected();
 		}
 	}
 

@@ -20,13 +20,13 @@ package org.rapidoid.cls;
  * #L%
  */
 
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
-
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
 
 public class Proxies {
 

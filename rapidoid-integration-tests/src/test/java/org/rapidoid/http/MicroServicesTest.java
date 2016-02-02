@@ -20,19 +20,17 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.util.concurrent.CountDownLatch;
-
 import org.junit.Test;
 import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
-import org.rapidoid.http.REST;
-import org.rapidoid.http.Req;
 import org.rapidoid.http.fast.On;
 import org.rapidoid.http.fast.ReqHandler;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
+
+import java.util.concurrent.CountDownLatch;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

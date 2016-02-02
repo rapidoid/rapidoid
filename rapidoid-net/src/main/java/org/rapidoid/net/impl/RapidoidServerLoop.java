@@ -20,17 +20,6 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.nio.channels.ClosedSelectorException;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
@@ -41,6 +30,13 @@ import org.rapidoid.net.Protocol;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.net.TCPServerInfo;
 import org.rapidoid.u.U;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.nio.channels.*;
+import java.util.Iterator;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -75,7 +71,7 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 	private final Selector selector;
 
 	public RapidoidServerLoop(Protocol protocol, Class<? extends DefaultExchange<?>> exchangeClass,
-			Class<? extends RapidoidHelper> helperClass) {
+	                          Class<? extends RapidoidHelper> helperClass) {
 		super("server");
 		this.protocol = protocol;
 		this.exchangeClass = exchangeClass;

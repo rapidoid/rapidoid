@@ -20,11 +20,7 @@ package org.rapidoid.wire.app;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Autocreate;
-import org.rapidoid.annotation.Init;
-import org.rapidoid.annotation.Inject;
-import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.*;
 import org.rapidoid.wire.Logger;
 
 @Autocreate

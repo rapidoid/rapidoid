@@ -32,7 +32,7 @@ public class Is<T> {
 		this.value = value;
 	}
 
-	@SuppressWarnings({ "varargs" })
+	@SuppressWarnings({"varargs"})
 	public boolean in(T... candidates) {
 		return U.isIn(value, candidates);
 	}

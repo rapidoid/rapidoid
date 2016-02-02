@@ -37,7 +37,8 @@ public class Range {
 
 	public int length = 0;
 
-	public Range() {}
+	public Range() {
+	}
 
 	public Range(int start, int length) {
 		this.start = start;

@@ -20,11 +20,11 @@ package org.rapidoid.fluent.dox;
  * #L%
  */
 
+import org.rapidoid.fluent.To;
+
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
-
-import org.rapidoid.fluent.To;
 
 /**
  * @author Nikolche Mihajlovski

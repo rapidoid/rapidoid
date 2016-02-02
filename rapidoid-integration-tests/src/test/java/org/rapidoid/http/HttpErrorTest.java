@@ -30,18 +30,18 @@ import org.rapidoid.http.fast.ReqHandler;
 @Since("5.0.10")
 public class HttpErrorTest extends HttpTestCommons {
 
-    @Test
-    public void testWithHandlerException() {
-        On.get("/err").html(new ReqHandler() {
-            @SuppressWarnings("null")
-            @Override
-            public Object handle(Req req) throws Exception {
-                String s = null;
-                return s.toString(); // NPE
-            }
-        });
+	@Test
+	public void testWithHandlerException() {
+		On.get("/err").html(new ReqHandler() {
+			@SuppressWarnings("null")
+			@Override
+			public Object handle(Req req) throws Exception {
+				String s = null;
+				return s.toString(); // NPE
+			}
+		});
 
-        onlyGet("/err");
-    }
+		onlyGet("/err");
+	}
 
 }

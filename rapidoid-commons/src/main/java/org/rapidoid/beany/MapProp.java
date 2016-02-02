@@ -20,15 +20,15 @@ package org.rapidoid.beany;
  * #L%
  */
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.ParameterizedType;
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.u.U;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

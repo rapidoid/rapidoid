@@ -20,8 +20,6 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
-import java.nio.ByteBuffer;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
@@ -34,6 +32,8 @@ import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
+
+import java.nio.ByteBuffer;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

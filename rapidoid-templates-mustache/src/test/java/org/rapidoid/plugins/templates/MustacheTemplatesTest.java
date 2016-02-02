@@ -20,14 +20,13 @@ package org.rapidoid.plugins.templates;
  * #L%
  */
 
+import com.github.mustachejava.MustacheFactory;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
-
-import com.github.mustachejava.MustacheFactory;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

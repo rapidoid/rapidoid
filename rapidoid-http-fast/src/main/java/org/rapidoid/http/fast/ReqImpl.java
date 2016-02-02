@@ -335,7 +335,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		}
 	}
 
-	/************************** RESPONSE **************************/
+	/* RESPONSE */
 
 	@Override
 	public synchronized Resp response() {

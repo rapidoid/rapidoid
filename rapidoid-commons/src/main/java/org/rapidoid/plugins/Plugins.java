@@ -1,7 +1,5 @@
 package org.rapidoid.plugins;
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -20,6 +18,8 @@ import org.rapidoid.plugins.sms.SMSPlugin;
 import org.rapidoid.plugins.templates.DefaultTemplatesPlugin;
 import org.rapidoid.plugins.templates.TemplatesPlugin;
 import org.rapidoid.u.U;
+
+import java.util.Map;
 
 /*
  * #%L

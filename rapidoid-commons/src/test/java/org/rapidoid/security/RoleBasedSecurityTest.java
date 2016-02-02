@@ -20,16 +20,14 @@ package org.rapidoid.security;
  * #L%
  */
 
-import static org.rapidoid.security.Roles.LOGGED_IN;
-import static org.rapidoid.security.Roles.OWNER;
-import static org.rapidoid.security.Roles.SHARED_WITH;
-
-import java.util.List;
-
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
+
+import java.util.List;
+
+import static org.rapidoid.security.Roles.*;
 
 class Foo {
 	public String createdBy;

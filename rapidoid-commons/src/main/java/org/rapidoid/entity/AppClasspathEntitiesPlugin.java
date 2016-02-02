@@ -1,8 +1,5 @@
 package org.rapidoid.entity;
 
-import java.lang.reflect.Proxy;
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Scaffold;
@@ -12,6 +9,9 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.plugins.entities.AbstractEntitiesPlugin;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
+
+import java.lang.reflect.Proxy;
+import java.util.Map;
 
 /*
  * #%L

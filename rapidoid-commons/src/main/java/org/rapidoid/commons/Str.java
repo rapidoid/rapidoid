@@ -20,12 +20,12 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import java.util.regex.Pattern;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
+
+import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")
@@ -36,7 +36,8 @@ public class Str implements Constants {
 	private static final Pattern CAMEL_SPLITTER_PATTERN = Pattern
 			.compile("(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
 
-	private Str() {}
+	private Str() {
+	}
 
 	public static String camelSplit(String s) {
 		return CAMEL_SPLITTER_PATTERN.matcher(s).replaceAll(" ");

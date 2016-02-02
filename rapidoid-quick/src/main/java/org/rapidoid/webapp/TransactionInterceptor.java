@@ -20,10 +20,6 @@ package org.rapidoid.webapp;
  * #L%
  */
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
-
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.aop.AOPInterceptor;
@@ -36,11 +32,15 @@ import org.rapidoid.log.Log;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.u.U;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
+
 public class TransactionInterceptor implements AOPInterceptor {
 
 	@Override
 	public Object intercept(final Callable<Object> forward, Annotation ann, Object ctx, final Method m,
-			final Object target, final Object[] args) {
+	                        final Object target, final Object[] args) {
 
 		final Req req = Ctxs.ctx().exchange();
 		TransactionMode txMode = getTxMode(ann);

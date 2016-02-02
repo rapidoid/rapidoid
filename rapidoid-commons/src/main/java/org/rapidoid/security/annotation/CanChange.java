@@ -20,18 +20,16 @@ package org.rapidoid.security.annotation;
  * #L%
  */
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target({ TYPE, FIELD, METHOD })
+@Target({TYPE, FIELD, METHOD})
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

@@ -20,8 +20,6 @@ package org.rapidoid.config;
  * #L%
  */
 
-import java.io.File;
-
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -29,6 +27,8 @@ import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
+
+import java.io.File;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")

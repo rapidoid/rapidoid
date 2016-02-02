@@ -20,10 +20,10 @@ package org.rapidoid.bytes;
  * #L%
  */
 
-import java.nio.ByteBuffer;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+
+import java.nio.ByteBuffer;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -31,7 +31,8 @@ public class ByteBufferBytes implements Bytes {
 
 	private ByteBuffer buf;
 
-	public ByteBufferBytes() {}
+	public ByteBufferBytes() {
+	}
 
 	public ByteBufferBytes(ByteBuffer buf) {
 		this.buf = buf;

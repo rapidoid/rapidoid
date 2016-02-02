@@ -1,9 +1,9 @@
 package org.rapidoid.insight;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 /*
  * #%L

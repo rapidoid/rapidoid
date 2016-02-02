@@ -20,15 +20,15 @@ package org.rapidoid.gui.reqinfo;
  * #L%
  */
 
-import java.util.Map;
-import java.util.Set;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.http.Req;
 import org.rapidoid.u.U;
+
+import java.util.Map;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")

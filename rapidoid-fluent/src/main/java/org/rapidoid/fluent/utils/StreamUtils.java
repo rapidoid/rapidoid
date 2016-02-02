@@ -54,7 +54,7 @@ public class StreamUtils {
 		}
 
 		T value = null;
-		for (Iterator<T> it = traverse(split); it.hasNext();) {
+		for (Iterator<T> it = traverse(split); it.hasNext(); ) {
 			value = it.next();
 		}
 

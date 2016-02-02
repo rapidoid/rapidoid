@@ -20,10 +20,10 @@ package org.rapidoid.util;
  * #L%
  */
 
-import java.nio.ByteBuffer;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+
+import java.nio.ByteBuffer;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

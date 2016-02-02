@@ -1,10 +1,10 @@
 package org.rapidoid.activity;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /*
  * #%L

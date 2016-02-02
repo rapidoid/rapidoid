@@ -1,9 +1,9 @@
 package org.rapidoid.util;
 
-import java.nio.charset.Charset;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+
+import java.nio.charset.Charset;
 
 /*
  * #%L
@@ -49,17 +49,17 @@ public interface Constants {
 
 	byte LF = 10;
 
-	byte[] CR_LF_CR_LF = { CR, LF, CR, LF };
+	byte[] CR_LF_CR_LF = {CR, LF, CR, LF};
 
-	byte[] CR_LF = { CR, LF };
+	byte[] CR_LF = {CR, LF};
 
-	byte[] LF_LF = { LF, LF };
+	byte[] LF_LF = {LF, LF};
 
-	byte[] SPACE_ = { SPACE };
+	byte[] SPACE_ = {SPACE};
 
-	byte[] CR_ = { CR };
+	byte[] CR_ = {CR};
 
-	byte[] LF_ = { LF };
+	byte[] LF_ = {LF};
 
 	byte ASTERISK = '?';
 

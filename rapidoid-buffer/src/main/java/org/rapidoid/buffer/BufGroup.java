@@ -20,13 +20,13 @@ package org.rapidoid.buffer;
  * #L%
  */
 
-import java.nio.ByteBuffer;
-import java.util.concurrent.Callable;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.pool.Pools;
+
+import java.nio.ByteBuffer;
+import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

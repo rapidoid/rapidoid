@@ -31,46 +31,46 @@ import org.rapidoid.http.fast.ReqHandler;
 @Since("5.0.11")
 public class HttpErrorHandlerTest extends HttpTestCommons {
 
-    @Test
-    public void testErrorHandler1() {
-        On.error(new ErrorHandler() {
-            @Override
-            public Object onError(Req req, Resp resp, Throwable e) {
-                return req + ":err:" + e;
-            }
-        });
+	@Test
+	public void testErrorHandler1() {
+		On.error(new ErrorHandler() {
+			@Override
+			public Object onError(Req req, Resp resp, Throwable e) {
+				return req + ":err:" + e;
+			}
+		});
 
-        On.get("/err").html(new ReqHandler() {
-            @SuppressWarnings("null")
-            @Override
-            public Object handle(Req req) throws Exception {
-                String s = null;
-                return s.toString(); // NPE
-            }
-        });
+		On.get("/err").html(new ReqHandler() {
+			@SuppressWarnings("null")
+			@Override
+			public Object handle(Req req) throws Exception {
+				String s = null;
+				return s.toString(); // NPE
+			}
+		});
 
-        onlyGet("/err?x=1");
-    }
+		onlyGet("/err?x=1");
+	}
 
-    @Test
-    public void testErrorHandler2() {
-        On.error(new ErrorHandler() {
-            @Override
-            public Object onError(Req req, Resp resp, Throwable e) {
-                return resp.content(req + ":err2:" + e);
-            }
-        });
+	@Test
+	public void testErrorHandler2() {
+		On.error(new ErrorHandler() {
+			@Override
+			public Object onError(Req req, Resp resp, Throwable e) {
+				return resp.content(req + ":err2:" + e);
+			}
+		});
 
-        On.get("/err2").html(new ReqHandler() {
-            @SuppressWarnings("null")
-            @Override
-            public Object handle(Req req) throws Exception {
-                String s = null;
-                return s.toString(); // NPE
-            }
-        });
+		On.get("/err2").html(new ReqHandler() {
+			@SuppressWarnings("null")
+			@Override
+			public Object handle(Req req) throws Exception {
+				String s = null;
+				return s.toString(); // NPE
+			}
+		});
 
-        onlyGet("/err2?x=2");
-    }
+		onlyGet("/err2?x=2");
+	}
 
 }

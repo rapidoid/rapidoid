@@ -20,17 +20,16 @@ package org.rapidoid.plugins.templates;
  * #L%
  */
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.StringReader;
-
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 
-import com.github.mustachejava.Mustache;
-import com.github.mustachejava.MustacheFactory;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringReader;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

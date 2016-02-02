@@ -20,14 +20,14 @@ package org.rapidoid.widget;
  * #L%
  */
 
-import java.util.regex.Pattern;
-
 import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.reqinfo.MockReqInfo;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.var.Var;
+
+import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

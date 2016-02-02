@@ -20,16 +20,6 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
-import java.io.IOException;
-import java.net.Socket;
-import java.net.SocketException;
-import java.nio.channels.ClosedChannelException;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.SocketChannel;
-import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.Callable;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufGroup;
@@ -42,6 +32,16 @@ import org.rapidoid.pool.Pool;
 import org.rapidoid.pool.Pools;
 import org.rapidoid.u.U;
 import org.rapidoid.util.SimpleList;
+
+import java.io.IOException;
+import java.net.Socket;
+import java.net.SocketException;
+import java.nio.channels.ClosedChannelException;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.SocketChannel;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -74,7 +74,7 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 	RapidoidWorker next;
 
 	public RapidoidWorker(String name, final Protocol protocol, final RapidoidHelper helper, int bufSizeKB,
-			boolean noNelay) {
+	                      boolean noNelay) {
 		super(name);
 
 		this.bufs = new BufGroup(14); // 2^14B (16 KB per buffer segment)

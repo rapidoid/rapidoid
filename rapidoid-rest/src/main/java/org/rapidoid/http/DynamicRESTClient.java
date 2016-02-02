@@ -20,10 +20,6 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.concurrent.Future;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.OfType;
 import org.rapidoid.annotation.Since;
@@ -35,11 +31,15 @@ import org.rapidoid.config.Config;
 import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.u.U;
 
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.concurrent.Future;
+
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")
 public class DynamicRESTClient implements Dynamic {
 
-	private static final String[] VERBS = { "GET", "POST", "PUT", "DELETE" };
+	private static final String[] VERBS = {"GET", "POST", "PUT", "DELETE"};
 
 	private final Class<?> clientInterface;
 

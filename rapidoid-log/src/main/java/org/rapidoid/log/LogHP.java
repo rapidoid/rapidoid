@@ -110,7 +110,8 @@ severe|Severe|SEVERE
  */
 public class LogHP {
 
-	private LogHP() {}
+	private LogHP() {
+	}
 
 	public static void trace(String msg, String key, long value) {
 		if (Log.isTraceEnabled()) {

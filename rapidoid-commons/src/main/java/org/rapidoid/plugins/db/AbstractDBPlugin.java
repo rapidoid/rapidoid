@@ -1,15 +1,15 @@
 package org.rapidoid.plugins.db;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.plugins.AbstractPlugin;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 /*
  * #%L

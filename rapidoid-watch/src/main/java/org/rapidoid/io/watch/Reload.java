@@ -20,13 +20,13 @@ package org.rapidoid.io.watch;
  * #L%
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

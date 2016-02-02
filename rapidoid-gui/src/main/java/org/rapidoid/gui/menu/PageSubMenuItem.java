@@ -20,10 +20,10 @@ package org.rapidoid.gui.menu;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

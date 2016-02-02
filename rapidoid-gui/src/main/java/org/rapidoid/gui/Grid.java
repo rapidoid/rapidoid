@@ -20,8 +20,6 @@ package org.rapidoid.gui;
  * #L%
  */
 
-import java.util.List;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.base.AbstractWidget;
@@ -32,6 +30,8 @@ import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
+
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

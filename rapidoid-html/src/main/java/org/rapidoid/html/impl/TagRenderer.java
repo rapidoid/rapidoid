@@ -20,13 +20,6 @@ package org.rapidoid.html.impl;
  * #L%
  */
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map.Entry;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -38,6 +31,13 @@ import org.rapidoid.html.TagWidget;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.var.Var;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map.Entry;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

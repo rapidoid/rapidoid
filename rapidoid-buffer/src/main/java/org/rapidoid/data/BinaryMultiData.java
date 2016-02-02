@@ -1,9 +1,9 @@
 package org.rapidoid.data;
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+
+import java.util.Map;
 
 /*
  * #%L

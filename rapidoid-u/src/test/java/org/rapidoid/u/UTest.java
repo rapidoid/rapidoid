@@ -20,19 +20,15 @@ package org.rapidoid.u;
  * #L%
  */
 
-import java.io.File;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Callable;
-
 import org.junit.Test;
 import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.test.TestCommons;
+
+import java.io.File;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.*;
+import java.util.concurrent.Callable;
 
 /**
  * @author Nikolche Mihajlovski
@@ -67,31 +63,31 @@ public class UTest extends TestCommons {
 		eq(U.str(""), "");
 		eq(U.str("abc"), "abc");
 
-		eq(U.str(new byte[] { -50, 0, 9 }), "[-50, 0, 9]");
-		eq(U.str(new short[] { -500, 0, 9 }), "[-500, 0, 9]");
-		eq(U.str(new int[] { 300000000, 70, 100 }), "[300000000, 70, 100]");
-		eq(U.str(new long[] { 3000000000000000000L, 1, -8900000000000000000L }),
+		eq(U.str(new byte[]{-50, 0, 9}), "[-50, 0, 9]");
+		eq(U.str(new short[]{-500, 0, 9}), "[-500, 0, 9]");
+		eq(U.str(new int[]{300000000, 70, 100}), "[300000000, 70, 100]");
+		eq(U.str(new long[]{3000000000000000000L, 1, -8900000000000000000L}),
 				"[3000000000000000000, 1, -8900000000000000000]");
 
-		eq(U.str(new float[] { -30.40000000f, -1.587f, 89.3f }), "[-30.4, -1.587, 89.3]");
-		eq(U.str(new double[] { -9987.1, -1.5, 8.3 }), "[-9987.1, -1.5, 8.3]");
+		eq(U.str(new float[]{-30.40000000f, -1.587f, 89.3f}), "[-30.4, -1.587, 89.3]");
+		eq(U.str(new double[]{-9987.1, -1.5, 8.3}), "[-9987.1, -1.5, 8.3]");
 
-		eq(U.str(new boolean[] { true }), "[true]");
+		eq(U.str(new boolean[]{true}), "[true]");
 
-		eq(U.str(new char[] { 'k', 'o', 'h' }), "[k, o, h]");
-		eq(U.str(new char[] { '-', '.', '+' }), "[-, ., +]");
+		eq(U.str(new char[]{'k', 'o', 'h'}), "[k, o, h]");
+		eq(U.str(new char[]{'-', '.', '+'}), "[-, ., +]");
 	}
 
 	@Test
 	public void testTextObjectArray() {
-		eq(U.str(new Object[] {}), "[]");
-		eq(U.str(new Object[] { 1, new boolean[] { true, false }, 3 }), "[1, [true, false], 3]");
-		eq(U.str(new Object[] { new double[] { -9987.1 }, new char[] { 'a', '.' }, new int[] { 300, 70, 100 } }),
+		eq(U.str(new Object[]{}), "[]");
+		eq(U.str(new Object[]{1, new boolean[]{true, false}, 3}), "[1, [true, false], 3]");
+		eq(U.str(new Object[]{new double[]{-9987.1}, new char[]{'a', '.'}, new int[]{300, 70, 100}}),
 				"[[-9987.1], [a, .], [300, 70, 100]]");
 
-		eq(U.str(new int[][] { { 1, 2 }, { 3, 4, 5 } }), "[[1, 2], [3, 4, 5]]");
+		eq(U.str(new int[][]{{1, 2}, {3, 4, 5}}), "[[1, 2], [3, 4, 5]]");
 
-		eq(U.str(new String[][][] { { { "a" }, { "r" } }, { { "m" } } }), "[[[a], [r]], [[m]]]");
+		eq(U.str(new String[][][]{{{"a"}, {"r"}}, {{"m"}}}), "[[[a], [r]], [[m]]]");
 	}
 
 	@Test

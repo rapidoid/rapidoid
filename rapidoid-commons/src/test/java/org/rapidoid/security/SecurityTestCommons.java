@@ -37,7 +37,7 @@ public abstract class SecurityTestCommons extends AbstractCommonsTest {
 	}
 
 	protected void checkPermissions(String username, Class<?> clazz, Object target, String propertyName,
-			boolean canRead, boolean canChange) {
+	                                boolean canRead, boolean canChange) {
 
 		DataPermissions perms = Secure.getPropertyPermissions(username, clazz, target, propertyName);
 
@@ -46,7 +46,7 @@ public abstract class SecurityTestCommons extends AbstractCommonsTest {
 	}
 
 	protected void checkPermissions(String username, Class<?> clazz, String propertyName, boolean canRead,
-			boolean canUpdate) {
+	                                boolean canUpdate) {
 		U.print("CHECKING PERMISSION", username, clazz, propertyName, canRead, canUpdate);
 		checkPermissions(username, clazz, null, propertyName, canRead, canUpdate);
 	}

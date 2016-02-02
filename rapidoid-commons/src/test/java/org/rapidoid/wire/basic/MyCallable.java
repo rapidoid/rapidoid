@@ -20,11 +20,11 @@ package org.rapidoid.wire.basic;
  * #L%
  */
 
-import java.util.concurrent.Callable;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
+
+import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

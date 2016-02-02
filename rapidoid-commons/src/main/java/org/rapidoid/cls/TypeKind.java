@@ -22,9 +22,9 @@ package org.rapidoid.cls;
 
 /**
  * !!! IMPORTANT !!!
- * 
+ * <p>
  * DO NOT CHANGE THE ORDER!
- * 
+ * <p>
  * ONLY APPEND NEW ELEMENTS!
  */
 

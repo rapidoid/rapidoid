@@ -1,11 +1,11 @@
 package org.rapidoid.model;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
 
 /*
  * #%L

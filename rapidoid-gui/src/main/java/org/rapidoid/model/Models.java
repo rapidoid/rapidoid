@@ -20,11 +20,6 @@ package org.rapidoid.model;
  * #L%
  */
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.BeanProperties;
@@ -32,16 +27,14 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.lambda.Calc;
-import org.rapidoid.model.impl.BeanItem;
-import org.rapidoid.model.impl.BeanListItems;
-import org.rapidoid.model.impl.BeanProperty;
-import org.rapidoid.model.impl.BuiltInProperty;
-import org.rapidoid.model.impl.CalcProperty;
-import org.rapidoid.model.impl.ItemPropertyVar;
-import org.rapidoid.model.impl.ListItems;
-import org.rapidoid.model.impl.MapItem;
+import org.rapidoid.model.impl.*;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")

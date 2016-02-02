@@ -22,4 +22,5 @@ package custom.rapidoid.scan;
  */
 
 @MyAnnot
-class Bar {}
+class Bar {
+}

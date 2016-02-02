@@ -1,11 +1,11 @@
 package org.rapidoid.plugins.entities;
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.plugins.Plugin;
+
+import java.util.Map;
 
 /*
  * #%L

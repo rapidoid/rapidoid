@@ -1,10 +1,10 @@
 package org.rapidoid.concurrent;
 
-import java.util.concurrent.TimeoutException;
-
 import org.rapidoid.concurrent.impl.FutureImpl;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
+
+import java.util.concurrent.TimeoutException;
 
 /*
  * #%L

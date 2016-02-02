@@ -20,13 +20,13 @@ package org.rapidoid.annotation;
  * #L%
  */
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-@Target({ TYPE })
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+@Target({TYPE})
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")

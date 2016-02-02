@@ -27,7 +27,8 @@ import org.rapidoid.annotation.Since;
 @Since("4.1.0")
 public class RapidoidThread extends Thread {
 
-	public RapidoidThread() {}
+	public RapidoidThread() {
+	}
 
 	public RapidoidThread(Runnable runnable) {
 		super(runnable);

@@ -20,12 +20,12 @@ package org.rapidoid.util;
  * #L%
  */
 
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.job.Jobs;
+
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Deprecated. Use {@link Jobs} instead.
@@ -35,7 +35,8 @@ import org.rapidoid.job.Jobs;
 @Deprecated
 public class Schedule implements Constants {
 
-	private Schedule() {}
+	private Schedule() {
+	}
 
 	public static synchronized ScheduledFuture<?> job(Runnable job, long delay) {
 		return UTILS.EXECUTOR.schedule(job, delay, TimeUnit.MILLISECONDS);

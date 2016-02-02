@@ -1,10 +1,10 @@
 package org.rapidoid.dao;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.u.U;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 /*
  * #%L

@@ -20,10 +20,10 @@ package org.rapidoid.concurrent.impl;
  * #L%
  */
 
-import java.util.concurrent.TimeoutException;
-
 import org.rapidoid.concurrent.Future;
 import org.rapidoid.u.U;
+
+import java.util.concurrent.TimeoutException;
 
 /**
  * @author Nikolche Mihajlovski

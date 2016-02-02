@@ -23,7 +23,8 @@ package org.rapidoid.dao;
 import org.junit.Test;
 import org.rapidoid.test.TestCommons;
 
-class PersonService extends DAO<Person> {}
+class PersonService extends DAO<Person> {
+}
 
 /**
  * @author Nikolche Mihajlovski

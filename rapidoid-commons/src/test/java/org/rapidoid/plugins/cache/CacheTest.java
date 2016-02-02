@@ -20,8 +20,6 @@ package org.rapidoid.plugins.cache;
  * #L%
  */
 
-import java.util.concurrent.TimeoutException;
-
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -29,6 +27,8 @@ import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
+
+import java.util.concurrent.TimeoutException;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -46,12 +46,14 @@ public class CacheTest extends AbstractCommonsTest {
 
 		cache.set("key2", "abc", 1500, new Callback<Void>() {
 			@Override
-			public void onDone(Void result, Throwable error) throws Exception {}
+			public void onDone(Void result, Throwable error) throws Exception {
+			}
 		});
 
 		cache.get("key1", new Callback<Object>() {
 			@Override
-			public void onDone(Object result, Throwable error) throws Exception {}
+			public void onDone(Object result, Throwable error) throws Exception {
+			}
 		});
 
 		Future<Object> s = cache.get("key2");
@@ -59,7 +61,8 @@ public class CacheTest extends AbstractCommonsTest {
 
 		try {
 			s.get(100);
-		} catch (TimeoutException e) {}
+		} catch (TimeoutException e) {
+		}
 
 		Future<Void> set = cache.set("abcd", U.map("aa", true), 5000);
 		set.get();

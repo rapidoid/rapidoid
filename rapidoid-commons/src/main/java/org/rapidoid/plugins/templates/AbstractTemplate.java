@@ -20,11 +20,11 @@ package org.rapidoid.plugins.templates;
  * #L%
  */
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

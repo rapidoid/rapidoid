@@ -20,11 +20,6 @@ package org.rapidoid.html.impl;
  * #L%
  */
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -34,6 +29,11 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.html.Tags;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

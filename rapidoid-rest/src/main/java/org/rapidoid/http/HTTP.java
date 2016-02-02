@@ -20,12 +20,12 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
+
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -40,7 +40,7 @@ public class HTTP {
 	public static final HttpClient DEFAULT_CLIENT = new HttpClient(false, false);
 	public static final HttpClient STATEFUL_CLIENT = new HttpClient(true, true);
 
-	/********************************** GET **********************************/
+	/*  GET */
 
 	public static Future<byte[]> get(String uri, Callback<byte[]> callback) {
 		return DEFAULT_CLIENT.get(uri, callback);
@@ -50,7 +50,7 @@ public class HTTP {
 		return get(uri, null).get();
 	}
 
-	/********************************** DELETE **********************************/
+	/*  DELETE */
 
 	public static Future<byte[]> delete(String uri, Callback<byte[]> callback) {
 		return DEFAULT_CLIENT.delete(uri, callback);
@@ -60,7 +60,7 @@ public class HTTP {
 		return delete(uri, null).get();
 	}
 
-	/********************************** OPTIONS **********************************/
+	/*  OPTIONS */
 
 	public static Future<byte[]> options(String uri, Callback<byte[]> callback) {
 		return DEFAULT_CLIENT.options(uri, callback);
@@ -70,7 +70,7 @@ public class HTTP {
 		return options(uri, null).get();
 	}
 
-	/********************************** HEAD **********************************/
+	/*  HEAD */
 
 	public static Future<byte[]> head(String uri, Callback<byte[]> callback) {
 		return DEFAULT_CLIENT.head(uri, callback);
@@ -80,7 +80,7 @@ public class HTTP {
 		return head(uri, null).get();
 	}
 
-	/********************************** TRACE **********************************/
+	/*  TRACE */
 
 	public static Future<byte[]> trace(String uri, Callback<byte[]> callback) {
 		return DEFAULT_CLIENT.trace(uri, callback);
@@ -90,20 +90,20 @@ public class HTTP {
 		return trace(uri, null).get();
 	}
 
-	/********************************** POST **********************************/
+	/*  POST */
 
 	public static Future<byte[]> post(String uri, Map<String, String> headers, Map<String, String> data,
-			Map<String, String> files, Callback<byte[]> callback) {
+	                                  Map<String, String> files, Callback<byte[]> callback) {
 		return DEFAULT_CLIENT.post(uri, headers, data, files, callback);
 	}
 
 	public static byte[] post(String uri, Map<String, String> headers, Map<String, String> data,
-			Map<String, String> files) {
+	                          Map<String, String> files) {
 		return post(uri, headers, data, files, null).get();
 	}
 
 	public static Future<byte[]> post(String uri, Map<String, String> headers, byte[] body, String contentType,
-			Callback<byte[]> callback) {
+	                                  Callback<byte[]> callback) {
 		return DEFAULT_CLIENT.post(uri, headers, body, contentType, callback);
 	}
 
@@ -115,20 +115,20 @@ public class HTTP {
 		return post(uri, null, (byte[]) null, null, null).get();
 	}
 
-	/********************************** PUT **********************************/
+	/*  PUT */
 
 	public static Future<byte[]> put(String uri, Map<String, String> headers, Map<String, String> data,
-			Map<String, String> files, Callback<byte[]> callback) {
+	                                 Map<String, String> files, Callback<byte[]> callback) {
 		return DEFAULT_CLIENT.put(uri, headers, data, files, callback);
 	}
 
 	public static byte[] put(String uri, Map<String, String> headers, Map<String, String> data,
-			Map<String, String> files) {
+	                         Map<String, String> files) {
 		return put(uri, headers, data, files, null).get();
 	}
 
 	public static Future<byte[]> put(String uri, Map<String, String> headers, byte[] body, String contentType,
-			Callback<byte[]> callback) {
+	                                 Callback<byte[]> callback) {
 		return DEFAULT_CLIENT.put(uri, headers, body, contentType, callback);
 	}
 
@@ -140,20 +140,20 @@ public class HTTP {
 		return put(uri, null, (byte[]) null, null, null).get();
 	}
 
-	/********************************** PATCH **********************************/
+	/*  PATCH */
 
 	public static Future<byte[]> patch(String uri, Map<String, String> headers, Map<String, String> data,
-			Map<String, String> files, Callback<byte[]> callback) {
+	                                   Map<String, String> files, Callback<byte[]> callback) {
 		return DEFAULT_CLIENT.patch(uri, headers, data, files, callback);
 	}
 
 	public static byte[] patch(String uri, Map<String, String> headers, Map<String, String> data,
-			Map<String, String> files) {
+	                           Map<String, String> files) {
 		return patch(uri, headers, data, files, null).get();
 	}
 
 	public static Future<byte[]> patch(String uri, Map<String, String> headers, byte[] body, String contentType,
-			Callback<byte[]> callback) {
+	                                   Callback<byte[]> callback) {
 		return DEFAULT_CLIENT.patch(uri, headers, body, contentType, callback);
 	}
 

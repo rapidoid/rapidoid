@@ -20,14 +20,14 @@ package org.rapidoid.model.impl;
  * #L%
  */
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.ParameterizedType;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Str;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -50,7 +50,7 @@ public class BeanProperty implements Property {
 	}
 
 	public BeanProperty(String name, Class<?> type, ParameterizedType genericType, Annotation[] annotations,
-			String caption) {
+	                    String caption) {
 		this.name = name;
 		this.type = type;
 		this.annotations = annotations;

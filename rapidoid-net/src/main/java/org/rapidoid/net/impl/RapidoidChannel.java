@@ -20,12 +20,12 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
-import java.nio.channels.SocketChannel;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.u.U;
+
+import java.nio.channels.SocketChannel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

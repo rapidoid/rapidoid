@@ -20,12 +20,12 @@ package org.rapidoid.activity;
  * #L%
  */
 
-import java.util.concurrent.CancellationException;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+
+import java.util.concurrent.CancellationException;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -33,7 +33,8 @@ public abstract class AbstractLoopThread extends RapidoidThread {
 
 	private volatile long sleepMs = 5;
 
-	public AbstractLoopThread() {}
+	public AbstractLoopThread() {
+	}
 
 	public AbstractLoopThread(long sleepMs) {
 		this.sleepMs = sleepMs;

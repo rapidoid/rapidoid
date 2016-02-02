@@ -1,9 +1,9 @@
 package org.rapidoid.concurrent;
 
-import java.util.concurrent.CountDownLatch;
-
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
+
+import java.util.concurrent.CountDownLatch;
 
 /*
  * #%L

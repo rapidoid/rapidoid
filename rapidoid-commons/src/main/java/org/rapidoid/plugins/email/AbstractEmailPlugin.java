@@ -35,7 +35,7 @@ public abstract class AbstractEmailPlugin extends AbstractPlugin implements Emai
 
 	@Override
 	public void send(Iterable<String> to, Iterable<String> cc, Iterable<String> bcc, String subject, String body,
-			Callback<Void> callback) {
+	                 Callback<Void> callback) {
 		throw new AbstractMethodError("Not implemented!");
 	}
 

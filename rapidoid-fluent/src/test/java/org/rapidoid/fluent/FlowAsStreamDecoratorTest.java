@@ -20,12 +20,12 @@ package org.rapidoid.fluent;
  * #L%
  */
 
-import java.util.stream.Stream;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.rapidoid.fluent.flow.FlowImpl;
 import org.rapidoid.test.TestCommons;
+
+import java.util.stream.Stream;
 
 /**
  * @author Nikolche Mihajlovski

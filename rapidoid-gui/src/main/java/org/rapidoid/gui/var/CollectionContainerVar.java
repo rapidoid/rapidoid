@@ -20,13 +20,13 @@ package org.rapidoid.gui.var;
  * #L%
  */
 
-import java.util.Collection;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.AnyObj;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
+
+import java.util.Collection;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

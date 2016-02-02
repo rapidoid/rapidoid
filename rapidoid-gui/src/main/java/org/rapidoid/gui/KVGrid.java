@@ -20,9 +20,6 @@ package org.rapidoid.gui;
  * #L%
  */
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.base.AbstractWidget;
@@ -31,11 +28,14 @@ import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 @Authors("Nikolche Mihajlovski")
 @Since("2.4.0")
 public class KVGrid extends AbstractWidget {
 
-	private final String[] headers = { "Key", "Value" };
+	private final String[] headers = {"Key", "Value"};
 
 	private Mapper<Object, Object> keyView = null;
 

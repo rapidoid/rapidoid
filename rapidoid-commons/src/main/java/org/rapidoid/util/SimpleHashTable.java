@@ -60,7 +60,8 @@ public class SimpleHashTable<T> {
 		SimpleList<T> list;
 
 		// after construction, other threads might need some time to see the new references
-		while ((list = buckets[index]) == null) {}
+		while ((list = buckets[index]) == null) {
+		}
 
 		return list;
 	}

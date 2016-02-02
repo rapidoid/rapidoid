@@ -1,17 +1,16 @@
 package org.rapidoid.plugins.cache.memcached;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import net.spy.memcached.AddrUtil;
 import net.spy.memcached.BinaryConnectionFactory;
 import net.spy.memcached.MemcachedClient;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.plugins.cache.AbstractCachePlugin;
 import org.rapidoid.plugins.cache.ICache;
 import org.rapidoid.u.U;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /*
  * #%L

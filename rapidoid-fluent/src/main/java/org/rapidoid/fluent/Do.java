@@ -1,15 +1,11 @@
 package org.rapidoid.fluent;
 
+import org.rapidoid.fluent.dox.*;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
-import org.rapidoid.fluent.dox.DoGroup;
-import org.rapidoid.fluent.dox.DoGroupBi;
-import org.rapidoid.fluent.dox.DoMap;
-import org.rapidoid.fluent.dox.DoMapBi;
-import org.rapidoid.fluent.dox.DoReduce;
 
 /*
  * #%L

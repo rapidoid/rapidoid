@@ -20,12 +20,12 @@ package org.rapidoid.beany;
  * #L%
  */
 
-import java.io.Serializable;
-import java.util.Comparator;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Predicate;
+
+import java.io.Serializable;
+import java.util.Comparator;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

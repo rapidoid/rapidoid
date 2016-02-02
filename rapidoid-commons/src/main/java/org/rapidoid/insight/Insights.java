@@ -1,10 +1,10 @@
 package org.rapidoid.insight;
 
+import org.rapidoid.u.U;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.rapidoid.u.U;
 
 /*
  * #%L

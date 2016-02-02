@@ -20,13 +20,13 @@ package org.rapidoid.pojo.web;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
 import org.rapidoid.pojo.PojoRequest;
 import org.rapidoid.u.U;
+
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

@@ -106,7 +106,7 @@ public class OnAction {
 		}
 	}
 
-	/*********************** PLAIN ***********************/
+	/* PLAIN */
 
 	public ServerSetup plain(String response) {
 		plain(response.getBytes());
@@ -143,7 +143,7 @@ public class OnAction {
 		return chain;
 	}
 
-	/*********************** HTML ***********************/
+	/* HTML */
 
 	public ServerSetup html(String response) {
 		html(response.getBytes());
@@ -180,7 +180,7 @@ public class OnAction {
 		return chain;
 	}
 
-	/*********************** JSON ***********************/
+	/* JSON */
 
 	public ServerSetup json(String response) {
 		json(response.getBytes());
@@ -217,7 +217,7 @@ public class OnAction {
 		return chain;
 	}
 
-	/*********************** BINARY ***********************/
+	/* BINARY */
 
 	public ServerSetup binary(String response) {
 		binary(response.getBytes());
@@ -254,7 +254,7 @@ public class OnAction {
 		return chain;
 	}
 
-	/*********************** PARAMETERIZED ***********************/
+	/* PARAMETERIZED */
 
 	public ServerSetup plain(final String paramName, final Mapper<String, Object> handler) {
 		return plain(HttpHandlers.parameterized(paramName, handler));
@@ -308,7 +308,7 @@ public class OnAction {
 		return binary(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
 	}
 
-	/*********************** POJO ***********************/
+	/* POJO */
 
 	public ServerSetup controllers(Object... controllers) {
 		PojoDispatcher dispatcher = POJO.dispatcher(controllers);

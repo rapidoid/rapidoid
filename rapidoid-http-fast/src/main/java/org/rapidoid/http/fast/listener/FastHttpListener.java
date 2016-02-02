@@ -37,10 +37,10 @@ import org.rapidoid.wrap.BoolWrap;
 public interface FastHttpListener {
 
 	boolean request(FastHttp http, Channel channel, BoolWrap isGet, BoolWrap isKeepAlive, Range body, Range verb,
-			Range uri, Range path, Range query, Range protocol, Ranges hdrs);
+	                Range uri, Range path, Range query, Range protocol, Ranges hdrs);
 
 	void notFound(FastHttp fastHttp, Channel ctx, BoolWrap isGet, BoolWrap isKeepAlive, Range body, Range verb,
-			Range uri, Range path, Range query, Range protocol, Ranges hdrs);
+	              Range uri, Range path, Range query, Range protocol, Ranges hdrs);
 
 	void state(FastHttpHandler handler, Req req);
 

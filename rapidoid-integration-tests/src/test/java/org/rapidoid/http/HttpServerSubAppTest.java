@@ -1,8 +1,5 @@
 package org.rapidoid.http;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctxs;
@@ -12,6 +9,9 @@ import org.rapidoid.http.fast.ReqHandler;
 import org.rapidoid.u.U;
 import org.rapidoid.web.WebApp;
 import org.rapidoid.web.WebAppGroup;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 /*
  * #%L

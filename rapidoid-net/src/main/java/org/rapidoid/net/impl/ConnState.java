@@ -20,11 +20,11 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
-import java.util.List;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.util.Resetable;
+
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

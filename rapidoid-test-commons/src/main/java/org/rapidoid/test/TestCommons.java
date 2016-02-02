@@ -20,22 +20,17 @@ package org.rapidoid.test;
  * #L%
  */
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.concurrent.CountDownLatch;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
+
+import java.io.*;
+import java.net.URL;
+import java.util.Map.Entry;
+import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @author Nikolche Mihajlovski
@@ -398,7 +393,9 @@ public abstract class TestCommons {
 						runnable.run();
 					}
 					latch.countDown();
-				};
+				}
+
+				;
 			}.start();
 		}
 

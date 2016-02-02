@@ -20,10 +20,6 @@ package org.rapidoid.gui;
  * #L%
  */
 
-import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.Collections;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Optional;
 import org.rapidoid.annotation.Programmatic;
@@ -48,6 +44,10 @@ import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Collections;
+
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class Field extends AbstractWidget {
@@ -68,7 +68,7 @@ public class Field extends AbstractWidget {
 	protected Tag input;
 
 	public Field(FormMode mode, FormLayout layout, Property prop, String name, String desc, FieldType type,
-			Collection<?> options, boolean required, Var<?> var) {
+	             Collection<?> options, boolean required, Var<?> var) {
 
 		this.mode = U.or(mode, FormMode.EDIT);
 		this.layout = layout;
@@ -111,14 +111,14 @@ public class Field extends AbstractWidget {
 
 	protected String formLayoutClass(FormLayout layout) {
 		switch (layout) {
-		case VERTICAL:
-			return "";
-		case HORIZONTAL:
-			return "form-horizontal";
-		case INLINE:
-			return "form-inline";
-		default:
-			throw U.notExpected();
+			case VERTICAL:
+				return "";
+			case HORIZONTAL:
+				return "form-horizontal";
+			case INLINE:
+				return "form-inline";
+			default:
+				throw U.notExpected();
 		}
 	}
 
@@ -174,38 +174,38 @@ public class Field extends AbstractWidget {
 
 		switch (type) {
 
-		case TEXT:
-			return textInput(name, desc, var);
+			case TEXT:
+				return textInput(name, desc, var);
 
-		case PASSWORD:
-			return passwordInput(name, desc, var);
+			case PASSWORD:
+				return passwordInput(name, desc, var);
 
-		case EMAIL:
-			return emailInput(name, desc, var);
+			case EMAIL:
+				return emailInput(name, desc, var);
 
-		case TEXTAREA:
-			return textareaInput(name, desc, var);
+			case TEXTAREA:
+				return textareaInput(name, desc, var);
 
-		case CHECKBOX:
-			return checkboxInput(name, var);
+			case CHECKBOX:
+				return checkboxInput(name, var);
 
-		case DROPDOWN:
-			return dropdownInput(name, options, var);
+			case DROPDOWN:
+				return dropdownInput(name, options, var);
 
-		case MULTI_SELECT:
-			return multiSelectInput(name, options, var);
+			case MULTI_SELECT:
+				return multiSelectInput(name, options, var);
 
-		case RADIOS:
-			return radiosInput(name, options, var);
+			case RADIOS:
+				return radiosInput(name, options, var);
 
-		case CHECKBOXES:
-			return checkboxesInput(name, options, var);
+			case CHECKBOXES:
+				return checkboxesInput(name, options, var);
 
-		case LABEL:
-			return readonly(var);
+			case LABEL:
+				return readonly(var);
 
-		default:
-			throw U.notExpected();
+			default:
+				throw U.notExpected();
 		}
 	}
 

@@ -25,4 +25,5 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Transactor {}
+public class Transactor {
+}

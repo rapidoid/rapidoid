@@ -45,7 +45,7 @@ public class OAuthProvider {
 			"https://github.com/login/oauth/access_token", "https://api.github.com/user", "" /* no scope */,
 			"user:email");
 
-	public static final OAuthProvider[] PROVIDERS = { GOOGLE, FACEBOOK, LINKEDIN, GITHUB };
+	public static final OAuthProvider[] PROVIDERS = {GOOGLE, FACEBOOK, LINKEDIN, GITHUB};
 
 	private final String name;
 
@@ -60,7 +60,7 @@ public class OAuthProvider {
 	private final String emailScope;
 
 	public OAuthProvider(String name, String authEndpoint, String tokenEndpoint, String profileEndpoint,
-			String profileScope, String emailScope) {
+	                     String profileScope, String emailScope) {
 		this.name = name;
 		this.authEndpoint = authEndpoint;
 		this.tokenEndpoint = tokenEndpoint;

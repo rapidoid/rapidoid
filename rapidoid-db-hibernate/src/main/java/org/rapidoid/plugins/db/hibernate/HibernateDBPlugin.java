@@ -1,16 +1,5 @@
 package org.rapidoid.plugins.db.hibernate;
 
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Callable;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Metamodel;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
@@ -19,6 +8,16 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.plugins.db.DBPluginBase;
 import org.rapidoid.u.U;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Callable;
 
 /*
  * #%L

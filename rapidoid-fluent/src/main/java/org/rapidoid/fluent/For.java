@@ -1,8 +1,8 @@
 package org.rapidoid.fluent;
 
-import java.util.stream.Stream;
-
 import org.rapidoid.fluent.forx.ForEach;
+
+import java.util.stream.Stream;
 
 /*
  * #%L

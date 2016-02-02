@@ -20,12 +20,12 @@ package org.rapidoid.aop;
  * #L%
  */
 
-import java.lang.annotation.Annotation;
-import java.util.Set;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
+
+import java.lang.annotation.Annotation;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

@@ -41,7 +41,7 @@ public class DefaultEmailPlugin extends AbstractEmailPlugin {
 
 	@Override
 	public void send(Iterable<String> to, Iterable<String> cc, Iterable<String> bcc, String subject, String body,
-			Callback<Void> callback) {
+	                 Callback<Void> callback) {
 
 		Log.error(U.frmt(MAIL_DESC, to, cc, bcc, subject, body));
 

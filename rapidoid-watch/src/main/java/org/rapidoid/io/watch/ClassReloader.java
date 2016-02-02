@@ -20,18 +20,14 @@ package org.rapidoid.io.watch;
  * #L%
  */
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.List;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
+
+import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -75,7 +71,8 @@ public class ClassReloader extends ClassLoader {
 				try {
 					try {
 						Thread.sleep(300);
-					} catch (Exception e2) {}
+					} catch (Exception e2) {
+					}
 
 					byte[] classData = readFile(new File(filename));
 					return defineClass(name, classData, 0, classData.length);
@@ -84,7 +81,8 @@ public class ClassReloader extends ClassLoader {
 					// try again 1 second later
 					try {
 						Thread.sleep(1000);
-					} catch (Exception e2) {}
+					} catch (Exception e2) {
+					}
 
 					byte[] classData = readFile(new File(filename));
 					return defineClass(name, classData, 0, classData.length);

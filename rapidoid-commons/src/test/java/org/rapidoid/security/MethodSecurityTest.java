@@ -20,39 +20,40 @@ package org.rapidoid.security;
  * #L%
  */
 
-import java.lang.reflect.Method;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
-import org.rapidoid.security.annotation.Admin;
-import org.rapidoid.security.annotation.HasRole;
-import org.rapidoid.security.annotation.Manager;
-import org.rapidoid.security.annotation.Moderator;
-import org.rapidoid.security.annotation.Role;
+import org.rapidoid.security.annotation.*;
+
+import java.lang.reflect.Method;
 
 class MyService {
 
 	@Admin
-	public void aa() {}
+	public void aa() {
+	}
 
 	@Admin
 	@Moderator
 	@Manager
-	public void bb() {}
+	public void bb() {
+	}
 
-	public void noAnn() {}
+	public void noAnn() {
+	}
 
 	@Moderator
 	@HasRole(@Role("abc"))
-	public void dd() {}
+	public void dd() {
+	}
 
 	@Manager
-	@HasRole({ @Role("abc"), @Role("xyz") })
-	public void ee() {}
+	@HasRole({@Role("abc"), @Role("xyz")})
+	public void ee() {
+	}
 
 }
 
@@ -60,26 +61,31 @@ class MyService {
  * A ROLE MUST BE ALLOWED IN BOTH THE CLASS AND METHOD ANNOTATIONS
  */
 @Manager
-@HasRole({ @Role("root"), @Role("xyz") })
+@HasRole({@Role("root"), @Role("xyz")})
 class MyService2 {
 
 	@Admin
-	public void aa() {}
+	public void aa() {
+	}
 
 	@Admin
 	@Moderator
 	@Manager
-	public void bb() {}
+	public void bb() {
+	}
 
-	public void noAnn() {}
+	public void noAnn() {
+	}
 
 	@Moderator
 	@HasRole(@Role("abc"))
-	public void dd() {}
+	public void dd() {
+	}
 
 	@Manager
-	@HasRole({ @Role("abc"), @Role("xyz") })
-	public void ee() {}
+	@HasRole({@Role("abc"), @Role("xyz")})
+	public void ee() {
+	}
 
 }
 
@@ -110,7 +116,7 @@ public class MethodSecurityTest extends SecurityTestCommons {
 		dd = Cls.getMethod(MyService.class, "dd");
 		ee = Cls.getMethod(MyService.class, "ee");
 
-		methods = new Method[] { aa, bb, noAnn, dd, ee };
+		methods = new Method[]{aa, bb, noAnn, dd, ee};
 
 		aa2 = Cls.getMethod(MyService2.class, "aa");
 		bb2 = Cls.getMethod(MyService2.class, "bb");
@@ -118,7 +124,7 @@ public class MethodSecurityTest extends SecurityTestCommons {
 		dd2 = Cls.getMethod(MyService2.class, "dd");
 		ee2 = Cls.getMethod(MyService2.class, "ee");
 
-		methods2 = new Method[] { aa2, bb2, noAnn2, dd2, ee2 };
+		methods2 = new Method[]{aa2, bb2, noAnn2, dd2, ee2};
 
 		Conf.args("mode=production");
 	}

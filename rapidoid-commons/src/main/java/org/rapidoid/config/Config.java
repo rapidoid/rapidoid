@@ -20,12 +20,12 @@ package org.rapidoid.config;
  * #L%
  */
 
+import org.rapidoid.cls.Cls;
+import org.rapidoid.u.U;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-
-import org.rapidoid.cls.Cls;
-import org.rapidoid.u.U;
 
 /**
  * @author Nikolche Mihajlovski
@@ -40,7 +40,7 @@ public class Config {
 	}
 
 	public Config() {
-		this(U.<String, Object> map());
+		this(U.<String, Object>map());
 	}
 
 	public String option(String name) {

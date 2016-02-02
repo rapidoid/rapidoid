@@ -20,8 +20,6 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.io.File;
-
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
@@ -29,6 +27,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.io.IO;
 import org.rapidoid.u.U;
+
+import java.io.File;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

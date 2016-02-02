@@ -20,12 +20,12 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.util.List;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.OfType;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
+
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")

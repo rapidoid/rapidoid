@@ -32,7 +32,8 @@ public class Ctxs {
 
 	private static volatile PersisterProvider persisterProvider = null;
 
-	private Ctxs() {}
+	private Ctxs() {
+	}
 
 	public static Ctx get() {
 		return CTXS.get();

@@ -20,16 +20,16 @@ package org.rapidoid.data;
  * #L%
  */
 
-import java.util.List;
-import java.util.Map;
-
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.Test;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import java.util.List;
+import java.util.Map;
 
-class Persons extends TypeReference<List<User>> {}
+class Persons extends TypeReference<List<User>> {
+}
 
 /**
  * @author Nikolche Mihajlovski
@@ -37,7 +37,8 @@ class Persons extends TypeReference<List<User>> {}
  */
 public class YAMLTest extends TestCommons {
 
-	private final TypeReference<List<User>> personList = new TypeReference<List<User>>() {};
+	private final TypeReference<List<User>> personList = new TypeReference<List<User>>() {
+	};
 
 	@Test
 	public void parseMap() {

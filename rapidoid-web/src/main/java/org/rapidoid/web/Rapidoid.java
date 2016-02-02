@@ -20,8 +20,6 @@ package org.rapidoid.web;
  * #L%
  */
 
-import java.util.Set;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOP;
@@ -39,15 +37,11 @@ import org.rapidoid.plugins.db.DBPlugin;
 import org.rapidoid.plugins.entities.EntitiesPlugin;
 import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
 import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.security.annotation.Admin;
-import org.rapidoid.security.annotation.DevMode;
-import org.rapidoid.security.annotation.HasRole;
-import org.rapidoid.security.annotation.LoggedIn;
-import org.rapidoid.security.annotation.Manager;
-import org.rapidoid.security.annotation.Moderator;
-import org.rapidoid.security.annotation.Role;
+import org.rapidoid.security.annotation.*;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
+
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")
@@ -175,7 +169,7 @@ public class Rapidoid {
 	}
 
 	static synchronized void notifyGuiInit() {
-		initAndStart(null, new String[] { "managed=true" });
+		initAndStart(null, new String[]{"managed=true"});
 	}
 
 }

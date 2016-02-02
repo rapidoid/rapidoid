@@ -20,13 +20,6 @@ package org.rapidoid.job;
  * #L%
  */
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
 import org.rapidoid.activity.RapidoidThreadFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -36,6 +29,8 @@ import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.JobStatusListener;
 
+import java.util.concurrent.*;
+
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class Jobs {
@@ -44,7 +39,8 @@ public class Jobs {
 
 	private static Executor EXECUTOR;
 
-	private Jobs() {}
+	private Jobs() {
+	}
 
 	public static synchronized ScheduledExecutorService scheduler() {
 		if (SCHEDULER == null) {
@@ -77,7 +73,7 @@ public class Jobs {
 	}
 
 	public static <T> ScheduledFuture<?> scheduleAtFixedRate(Callable<T> job, long initialDelay, long period,
-			TimeUnit unit, Callback<T> callback) {
+	                                                         TimeUnit unit, Callback<T> callback) {
 		return scheduleAtFixedRate(callbackJob(job, callback), initialDelay, period, unit);
 	}
 
@@ -86,7 +82,7 @@ public class Jobs {
 	}
 
 	public static <T> ScheduledFuture<?> scheduleWithFixedDelay(Callable<T> job, long initialDelay, long delay,
-			TimeUnit unit, Callback<T> callback) {
+	                                                            TimeUnit unit, Callback<T> callback) {
 		return scheduleWithFixedDelay(callbackJob(job, callback), initialDelay, delay, unit);
 	}
 

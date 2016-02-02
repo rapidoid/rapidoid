@@ -43,7 +43,7 @@ public class To {
 	}
 
 	public static <T, K, U> Collector<T, ?, Map<K, U>> map(Function<? super T, ? extends K> keyMapper,
-			Function<? super T, ? extends U> valueMapper) {
+	                                                       Function<? super T, ? extends U> valueMapper) {
 		return Collectors.toMap(keyMapper, valueMapper);
 	}
 

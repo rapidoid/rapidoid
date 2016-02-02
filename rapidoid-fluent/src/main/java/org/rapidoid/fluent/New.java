@@ -20,13 +20,7 @@ package org.rapidoid.fluent;
  * #L%
  */
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Nikolche Mihajlovski
@@ -34,7 +28,7 @@ import java.util.Set;
  */
 public class New {
 
-	@SuppressWarnings({ "varargs", "unchecked" })
+	@SuppressWarnings({"varargs", "unchecked"})
 	public static <T> T[] array(T... items) {
 		return items;
 	}
@@ -57,7 +51,7 @@ public class New {
 		return set;
 	}
 
-	@SuppressWarnings({ "varargs", "unchecked" })
+	@SuppressWarnings({"varargs", "unchecked"})
 	public static <T> Set<T> set(T... values) {
 		Set<T> set = set();
 
@@ -82,7 +76,7 @@ public class New {
 		return list;
 	}
 
-	@SuppressWarnings({ "varargs", "unchecked" })
+	@SuppressWarnings({"varargs", "unchecked"})
 	public static <T> List<T> list(T... values) {
 		List<T> list = list();
 
@@ -128,7 +122,7 @@ public class New {
 	}
 
 	public static <K, V> Map<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4, K key5,
-			V value5) {
+	                                   V value5) {
 		Map<K, V> map = map(key1, value1, key2, value2, key3, value3, key4, value4);
 		map.put(key5, value5);
 		return map;

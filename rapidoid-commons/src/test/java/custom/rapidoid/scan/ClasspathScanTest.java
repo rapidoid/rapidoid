@@ -1,8 +1,7 @@
 package custom.rapidoid.scan;
 
-import java.util.List;
-import java.util.Set;
-
+import cccccc.Ccccc;
+import com.moja.Aaa;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -11,9 +10,8 @@ import org.rapidoid.scan.Scan;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
 
-import cccccc.Ccccc;
-
-import com.moja.Aaa;
+import java.util.List;
+import java.util.Set;
 
 /*
  * #%L
@@ -36,7 +34,8 @@ import com.moja.Aaa;
  */
 
 @MyAnnot
-class Foo {}
+class Foo {
+}
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

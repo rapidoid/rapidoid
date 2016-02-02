@@ -23,7 +23,6 @@ package org.rapidoid.security;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.security.Roles;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
 

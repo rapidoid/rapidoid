@@ -1,18 +1,9 @@
 package org.rapidoid.fluent;
 
+import org.rapidoid.fluent.find.*;
+
 import java.util.Map;
 import java.util.stream.Stream;
-
-import org.rapidoid.fluent.find.FindAll;
-import org.rapidoid.fluent.find.FindAllBi;
-import org.rapidoid.fluent.find.FindAny;
-import org.rapidoid.fluent.find.FindAnyBi;
-import org.rapidoid.fluent.find.FindFirst;
-import org.rapidoid.fluent.find.FindFirstBi;
-import org.rapidoid.fluent.find.FindIn;
-import org.rapidoid.fluent.find.FindInBi;
-import org.rapidoid.fluent.find.FindLast;
-import org.rapidoid.fluent.find.FindLastBi;
 
 /*
  * #%L

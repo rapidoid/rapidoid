@@ -78,7 +78,7 @@ public class MediaTypeTest extends NetTestCommons {
 
 	@Test
 	public void testCustomMediaType() {
-		String[] attrss = { "abc=xy" };
+		String[] attrss = {"abc=xy"};
 		MediaType myType = MediaType.create("text/some", attrss, "some");
 
 		eq(new String(myType.getBytes()), "text/some; abc=xy");
@@ -91,7 +91,7 @@ public class MediaTypeTest extends NetTestCommons {
 
 	@Test
 	public void testCustomMediaType2() {
-		String[] attrss = { "a=1", "b=abc" };
+		String[] attrss = {"a=1", "b=abc"};
 		MediaType myType = MediaType.create("app/my", attrss, "my1", "my2");
 
 		eq(new String(myType.getBytes()), "app/my; a=1; b=abc");

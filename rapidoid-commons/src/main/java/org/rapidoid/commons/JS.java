@@ -20,18 +20,12 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import java.util.Map;
-
-import javax.script.Compilable;
-import javax.script.CompiledScript;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
+
+import javax.script.*;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")

@@ -20,16 +20,16 @@ package org.rapidoid.util;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -104,7 +104,9 @@ public class RapidoidProcess {
 				} catch (IOException e) {
 					Log.error("Cannot read!", e);
 				}
-			};
+			}
+
+			;
 		}.start();
 
 		new Thread() {
@@ -125,7 +127,9 @@ public class RapidoidProcess {
 				} catch (IOException e) {
 					Log.error("Cannot read!", e);
 				}
-			};
+			}
+
+			;
 		}.start();
 
 	}

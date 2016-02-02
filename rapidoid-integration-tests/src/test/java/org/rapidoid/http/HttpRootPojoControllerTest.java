@@ -21,12 +21,7 @@ package org.rapidoid.http;
  */
 
 import org.junit.Test;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.GET;
-import org.rapidoid.annotation.POST;
-import org.rapidoid.annotation.Page;
-import org.rapidoid.annotation.Param;
-import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.*;
 import org.rapidoid.http.fast.On;
 import org.rapidoid.u.U;
 
@@ -56,16 +51,16 @@ public class HttpRootPojoControllerTest extends HttpTestCommons {
 			@GET
 			@SuppressWarnings("unchecked")
 			public String num(@Param("a") byte a, @Param("b") short b, @Param("c") char c, @Param("d") int d,
-					@Param("e") long e, @Param("f") float f, @Param("g") double g, @Param("h") boolean hh,
-					@Param("i") boolean ii, @Param("j") String j) {
+			                  @Param("e") long e, @Param("f") float f, @Param("g") double g, @Param("h") boolean hh,
+			                  @Param("i") boolean ii, @Param("j") String j) {
 				return U.join(":", a, b, c, d, e, f, g, hh, ii, j);
 			}
 
 			@Page
 			@SuppressWarnings("unchecked")
 			public String num2(@Param("a") byte a, @Param("b") short b, @Param("c") char c, @Param("d") int d,
-					@Param("e") long e, @Param("f") float f, @Param("g") double g, @Param("h") boolean hh,
-					@Param("i") boolean ii, @Param("j") String j) {
+			                   @Param("e") long e, @Param("f") float f, @Param("g") double g, @Param("h") boolean hh,
+			                   @Param("i") boolean ii, @Param("j") String j) {
 				return U.join(":", a, b, c, d, e, f, g, hh, ii, j);
 			}
 

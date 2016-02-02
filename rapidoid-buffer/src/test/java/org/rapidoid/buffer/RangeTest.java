@@ -48,7 +48,7 @@ public class RangeTest extends BufferTestCommons {
 		Range rng = new Range();
 		isTrue(rng.isEmpty());
 
-		int[] borders = { Integer.MIN_VALUE, -1111, -1, 0, 1, 1111, Integer.MAX_VALUE };
+		int[] borders = {Integer.MIN_VALUE, -1111, -1, 0, 1, 1111, Integer.MAX_VALUE};
 
 		for (int i = 0; i < borders.length; i++) {
 			for (int j = 0; j < borders.length; j++) {

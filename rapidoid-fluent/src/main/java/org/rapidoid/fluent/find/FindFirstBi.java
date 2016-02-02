@@ -20,12 +20,12 @@ package org.rapidoid.fluent.find;
  * #L%
  */
 
+import org.rapidoid.fluent.utils.Lambdas;
+
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.BiPredicate;
-
-import org.rapidoid.fluent.utils.Lambdas;
 
 /**
  * @author Nikolche Mihajlovski

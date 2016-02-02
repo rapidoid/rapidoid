@@ -20,14 +20,14 @@ package org.rapidoid.beany;
  * #L%
  */
 
-import java.util.Map;
-
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
+
+import java.util.Map;
 
 enum ABC {
 	A, B, C
@@ -86,8 +86,8 @@ public class BeanySerializationTest extends BeanyTestCommons {
 	public void testArraySerialization() {
 		eq((Object[]) Beany.serialize(U.array("f", 3, true)), U.array("f", 3, true));
 
-		int[] a1 = { 1, 2, 3 };
-		int[] a2 = { 1, 2, 3 };
+		int[] a1 = {1, 2, 3};
+		int[] a2 = {1, 2, 3};
 
 		eq((int[]) Beany.serialize(a1), a2);
 	}

@@ -24,23 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.AnyObj;
 import org.rapidoid.html.impl.ConstantTag;
-import org.rapidoid.html.tag.ATag;
-import org.rapidoid.html.tag.ButtonTag;
-import org.rapidoid.html.tag.CanvasTag;
-import org.rapidoid.html.tag.EmbedTag;
-import org.rapidoid.html.tag.FormTag;
-import org.rapidoid.html.tag.IframeTag;
-import org.rapidoid.html.tag.ImgTag;
-import org.rapidoid.html.tag.InputTag;
-import org.rapidoid.html.tag.LinkTag;
-import org.rapidoid.html.tag.ObjectTag;
-import org.rapidoid.html.tag.OptionTag;
-import org.rapidoid.html.tag.ScriptTag;
-import org.rapidoid.html.tag.SelectTag;
-import org.rapidoid.html.tag.TableTag;
-import org.rapidoid.html.tag.TdTag;
-import org.rapidoid.html.tag.TextareaTag;
-import org.rapidoid.html.tag.ThTag;
+import org.rapidoid.html.tag.*;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

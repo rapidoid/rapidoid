@@ -20,13 +20,13 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")

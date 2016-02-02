@@ -20,8 +20,6 @@ package org.rapidoid.oauth;
  * #L%
  */
 
-import java.util.Map;
-
 import org.apache.oltu.oauth2.client.OAuthClient;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
 import org.apache.oltu.oauth2.client.request.OAuthBearerClientRequest;
@@ -44,6 +42,8 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
+import java.util.Map;
+
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class OAuthTokenHandler implements ReqHandler {
@@ -56,7 +56,7 @@ public class OAuthTokenHandler implements ReqHandler {
 	private final String callbackPath;
 
 	public OAuthTokenHandler(OAuthProvider provider, ConfigEntry oauthDomain, OAuthStateCheck stateCheck,
-			ConfigEntry clientId, ConfigEntry clientSecret, String callbackPath) {
+	                         ConfigEntry clientId, ConfigEntry clientSecret, String callbackPath) {
 		this.provider = provider;
 		this.oauthDomain = oauthDomain;
 		this.stateCheck = stateCheck;

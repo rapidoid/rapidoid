@@ -25,7 +25,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.u.U;
-
 import redis.clients.jedis.Jedis;
 
 @Authors("Nikolche Mihajlovski")

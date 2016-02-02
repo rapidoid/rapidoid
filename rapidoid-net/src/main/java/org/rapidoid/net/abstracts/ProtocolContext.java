@@ -1,14 +1,14 @@
 package org.rapidoid.net.abstracts;
 
-import java.io.File;
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.net.impl.ConnState;
 import org.rapidoid.net.impl.RapidoidHelper;
+
+import java.io.File;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
 
 /*
  * #%L

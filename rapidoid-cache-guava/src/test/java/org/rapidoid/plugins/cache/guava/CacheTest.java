@@ -20,8 +20,6 @@ package org.rapidoid.plugins.cache.guava;
  * #L%
  */
 
-import java.util.concurrent.TimeoutException;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
@@ -33,6 +31,8 @@ import org.rapidoid.plugins.cache.Cache;
 import org.rapidoid.plugins.cache.ICache;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
+
+import java.util.concurrent.TimeoutException;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -52,7 +52,8 @@ public class CacheTest extends TestCommons {
 
 		cache.set("key2", "abc", new Callback<Void>() {
 			@Override
-			public void onDone(Void result, Throwable error) throws Exception {}
+			public void onDone(Void result, Throwable error) throws Exception {
+			}
 		});
 
 		cache.get("key1", new Callback<Object>() {

@@ -28,7 +28,7 @@ import org.rapidoid.u.U;
 @Since("5.0.2")
 public class HttpResponseCodes {
 
-	private static final String[] RESPONSE_CODES = { "100 Continue", "101 Switching Protocols", "200 OK",
+	private static final String[] RESPONSE_CODES = {"100 Continue", "101 Switching Protocols", "200 OK",
 			"201 Created", "202 Accepted", "203 Non-Authoritative Information", "204 No Content", "205 Reset Content",
 			"206 Partial Content", "300 Multiple Choices", "301 Moved Permanently", "302 Found", "303 See Other",
 			"304 Not Modified", "305 Use Proxy", "307 Temporary Redirect", "400 Bad Request", "401 Unauthorized",
@@ -37,7 +37,7 @@ public class HttpResponseCodes {
 			"411 Length Required", "412 Precondition Failed", "413 Request Entity Too Large",
 			"414 Request-URI Too Long", "415 Unsupported Media Type", "416 Requested Range Not Satisfiable",
 			"417 Expectation Failed", "500 Internal Server Error", "501 Not Implemented", "502 Bad Gateway",
-			"503 Service Unavailable", "504 Gateway Timeout", "505 HTTP Version Not Supported" };
+			"503 Service Unavailable", "504 Gateway Timeout", "505 HTTP Version Not Supported"};
 
 	private final byte[][] responses = new byte[600][];
 

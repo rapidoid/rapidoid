@@ -20,15 +20,15 @@ package org.rapidoid.model.impl;
  * #L%
  */
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.ParameterizedType;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Calc;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.2.0")

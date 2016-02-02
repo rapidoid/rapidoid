@@ -1,11 +1,11 @@
 package org.rapidoid.beany;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.ParameterizedType;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.TypeKind;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
 
 /*
  * #%L

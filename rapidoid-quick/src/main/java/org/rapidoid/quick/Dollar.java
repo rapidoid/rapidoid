@@ -1,21 +1,12 @@
 package org.rapidoid.quick;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.DollarPage;
 import org.rapidoid.app.IOTool;
 import org.rapidoid.app.IOToolImpl;
 import org.rapidoid.concurrent.Callback;
-import org.rapidoid.http.HTTP;
-import org.rapidoid.http.HttpClient;
-import org.rapidoid.http.REST;
-import org.rapidoid.http.RESTClient;
-import org.rapidoid.http.Req;
+import org.rapidoid.http.*;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.cache.CachePlugin;
 import org.rapidoid.plugins.db.DBPlugin;
@@ -26,8 +17,12 @@ import org.rapidoid.plugins.templates.TemplatesPlugin;
 import org.rapidoid.sql.SQL;
 import org.rapidoid.sql.SQLAPI;
 import org.rapidoid.u.U;
-
 import redis.clients.jedis.Jedis;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /*
  * #%L
@@ -53,7 +48,9 @@ import redis.clients.jedis.Jedis;
 @Since("4.1.0")
 public class Dollar {
 
-	/************ DATA CONTAINERS *************/
+	/************
+	 * DATA CONTAINERS
+	 *************/
 
 	public final Map<?, ?> extra = U.map();
 
@@ -63,7 +60,9 @@ public class Dollar {
 
 	public final Map<Object, Set<Object>> sets = U.mapOfSets();
 
-	/************ SERVICES *************/
+	/************
+	 * SERVICES
+	 *************/
 
 	public final HttpClient http = HTTP.DEFAULT_CLIENT;
 

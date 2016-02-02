@@ -20,10 +20,10 @@ package org.rapidoid.data;
  * #L%
  */
 
-import java.util.Map;
-
 import org.junit.Test;
 import org.rapidoid.test.TestCommons;
+
+import java.util.Map;
 
 /**
  * @author Nikolche Mihajlovski

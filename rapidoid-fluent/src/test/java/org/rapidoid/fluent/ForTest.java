@@ -1,9 +1,9 @@
 package org.rapidoid.fluent;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.rapidoid.test.TestCommons;
+
+import java.util.List;
 
 /*
  * #%L

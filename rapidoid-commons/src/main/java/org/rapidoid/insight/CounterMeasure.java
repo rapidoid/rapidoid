@@ -20,10 +20,10 @@ package org.rapidoid.insight;
  * #L%
  */
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

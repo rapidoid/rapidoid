@@ -20,9 +20,6 @@ package org.rapidoid.model.impl;
  * #L%
  */
 
-import java.util.Comparator;
-import java.util.List;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
@@ -32,6 +29,9 @@ import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.u.U;
+
+import java.util.Comparator;
+import java.util.List;
 
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")

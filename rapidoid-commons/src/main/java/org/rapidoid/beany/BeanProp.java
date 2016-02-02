@@ -20,6 +20,13 @@ package org.rapidoid.beany;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.cls.TypeKind;
+import org.rapidoid.u.U;
+import org.rapidoid.var.Var;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -28,13 +35,6 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.cls.TypeKind;
-import org.rapidoid.u.U;
-import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -191,24 +191,24 @@ public class BeanProp implements Prop {
 		value = Cls.convert(value, getType());
 
 		switch (propKind) {
-		case NORMAL:
-			normalSet(target, value);
-			break;
+			case NORMAL:
+				normalSet(target, value);
+				break;
 
-		case COLLECTION:
-			collSet(target, value);
-			break;
+			case COLLECTION:
+				collSet(target, value);
+				break;
 
-		case MAP:
-			mapSet(target, value);
-			break;
+			case MAP:
+				mapSet(target, value);
+				break;
 
-		case VAR:
-			varSet(target, value);
-			break;
+			case VAR:
+				varSet(target, value);
+				break;
 
-		default:
-			throw U.notExpected();
+			default:
+				throw U.notExpected();
 		}
 	}
 
@@ -219,68 +219,68 @@ public class BeanProp implements Prop {
 		// FIXME when target class isn't the property declaring class
 
 		switch (propKind) {
-		case NORMAL:
-			if (type.isPrimitive()) {
-				primitiveReset(target);
-			} else {
-				normalSet(target, null);
-			}
-			break;
+			case NORMAL:
+				if (type.isPrimitive()) {
+					primitiveReset(target);
+				} else {
+					normalSet(target, null);
+				}
+				break;
 
-		case COLLECTION:
-			collSet(target, Collections.EMPTY_LIST);
-			break;
+			case COLLECTION:
+				collSet(target, Collections.EMPTY_LIST);
+				break;
 
-		case MAP:
-			mapSet(target, Collections.EMPTY_MAP);
-			break;
+			case MAP:
+				mapSet(target, Collections.EMPTY_MAP);
+				break;
 
-		case VAR:
-			varSet(target, null);
-			break;
+			case VAR:
+				varSet(target, null);
+				break;
 
-		default:
-			throw U.notExpected();
+			default:
+				throw U.notExpected();
 		}
 	}
 
 	private void primitiveReset(Object target) {
 		switch (typeKind) {
 
-		case BOOLEAN:
-			normalSet(target, false);
-			break;
+			case BOOLEAN:
+				normalSet(target, false);
+				break;
 
-		case BYTE:
-			normalSet(target, (byte) 0);
-			break;
+			case BYTE:
+				normalSet(target, (byte) 0);
+				break;
 
-		case SHORT:
-			normalSet(target, (short) 0);
-			break;
+			case SHORT:
+				normalSet(target, (short) 0);
+				break;
 
-		case CHAR:
-			normalSet(target, (char) 0);
-			break;
+			case CHAR:
+				normalSet(target, (char) 0);
+				break;
 
-		case INT:
-			normalSet(target, 0);
-			break;
+			case INT:
+				normalSet(target, 0);
+				break;
 
-		case LONG:
-			normalSet(target, 0L);
-			break;
+			case LONG:
+				normalSet(target, 0L);
+				break;
 
-		case FLOAT:
-			normalSet(target, (float) 0);
-			break;
+			case FLOAT:
+				normalSet(target, (float) 0);
+				break;
 
-		case DOUBLE:
-			normalSet(target, (double) 0);
-			break;
+			case DOUBLE:
+				normalSet(target, (double) 0);
+				break;
 
-		default:
-			throw U.notExpected();
+			default:
+				throw U.notExpected();
 		}
 
 	}

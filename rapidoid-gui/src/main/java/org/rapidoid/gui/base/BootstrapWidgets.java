@@ -163,8 +163,8 @@ public abstract class BootstrapWidgets extends HTML {
 
 		return btn;
 	}
-	
-	public static BtnMenu btnMenu(){
+
+	public static BtnMenu btnMenu() {
 		return new BtnMenu();
 	}
 
@@ -386,11 +386,11 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Panel panel(Object... contents) {
-		return Cls.customizable(Panel.class, new Object[] { AnyObj.flat(contents) });
+		return Cls.customizable(Panel.class, new Object[]{AnyObj.flat(contents)});
 	}
 
 	public static HtmlPage page(Object... contents) {
-		return Cls.customizable(HtmlPage.class, new Object[] { AnyObj.flat(contents) });
+		return Cls.customizable(HtmlPage.class, new Object[]{AnyObj.flat(contents)});
 	}
 
 	public static <T> Grid grid(Class<T> type, Object[] items, String sortOrder, int pageSize, String... properties) {
@@ -414,7 +414,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Form form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc, FieldType[] fieldTypes,
-			Object[][] options, Var<?>[] vars, Btn[] buttons) {
+	                         Object[][] options, Var<?>[] vars, Btn[] buttons) {
 		return Cls.customizable(Form.class, layout, fieldsNames, fieldsDesc, fieldTypes, options, vars, buttons);
 	}
 
@@ -446,7 +446,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Field field(FormMode mode, FormLayout layout, Property prop, String name, String desc,
-			FieldType type, Collection<?> options, boolean required, Var<?> var) {
+	                          FieldType type, Collection<?> options, boolean required, Var<?> var) {
 		return new Field(mode, layout, prop, name, desc, type, options, required, var);
 	}
 

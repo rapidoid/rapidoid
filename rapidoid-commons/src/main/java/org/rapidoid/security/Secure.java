@@ -20,23 +20,19 @@ package org.rapidoid.security;
  * #L%
  */
 
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.security.annotation.CanChange;
-import org.rapidoid.security.annotation.CanDelete;
-import org.rapidoid.security.annotation.CanInsert;
-import org.rapidoid.security.annotation.CanManage;
-import org.rapidoid.security.annotation.CanRead;
+import org.rapidoid.security.annotation.*;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
+
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -133,7 +129,7 @@ public class Secure implements Constants {
 	}
 
 	public static DataPermissions getPropertyPermissions(String username, Class<?> clazz, Object target,
-			String propertyName) {
+	                                                     String propertyName) {
 		U.notNull(clazz, "class");
 		clazz = Cls.unproxy(clazz);
 

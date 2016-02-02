@@ -1,14 +1,14 @@
 package org.rapidoid.data;
 
-import java.io.OutputStream;
-import java.util.Map;
-
 import com.fasterxml.jackson.core.Base64Variants;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
+
+import java.io.OutputStream;
+import java.util.Map;
 
 /*
  * #%L

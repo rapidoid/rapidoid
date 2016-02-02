@@ -27,7 +27,7 @@ import org.rapidoid.html.Tag;
 
 /**
  * See: http://fortawesome.github.io/Font-Awesome/cheatsheet
- * 
+ * <p>
  * <br>
  * Generated with generate.io using template:<br>
  * public static final Tag {{(x[0].toUpperCase().replace(/-/g, '_'))}} = BootstrapWidgets.awesome("{{1}}");
@@ -36,7 +36,8 @@ import org.rapidoid.html.Tag;
 @Since("2.3.0")
 public final class FA {
 
-	private FA() {}
+	private FA() {
+	}
 
 	public static final Tag ADJUST = BootstrapWidgets.awesome("adjust");
 

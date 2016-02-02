@@ -28,13 +28,15 @@ public class Parse {
 
 	enum DataFormat {
 		JSON, XML, YAML
-	};
+	}
 
-	private static final DataFormat[] XML_FIRST = { DataFormat.XML, DataFormat.JSON, DataFormat.YAML };
+	;
 
-	private static final DataFormat[] JSON_FIRST = { DataFormat.JSON, DataFormat.XML, DataFormat.YAML };
+	private static final DataFormat[] XML_FIRST = {DataFormat.XML, DataFormat.JSON, DataFormat.YAML};
 
-	private static final DataFormat[] YAML_FIRST = { DataFormat.YAML, DataFormat.JSON, DataFormat.XML };
+	private static final DataFormat[] JSON_FIRST = {DataFormat.JSON, DataFormat.XML, DataFormat.YAML};
+
+	private static final DataFormat[] YAML_FIRST = {DataFormat.YAML, DataFormat.JSON, DataFormat.XML};
 
 	public static <T> T data(String data, Class<T> targetType) {
 		return data(data.getBytes(), targetType);
@@ -62,38 +64,38 @@ public class Parse {
 
 		for (DataFormat dataFormat : formatsOrder) {
 			switch (dataFormat) {
-			case JSON:
-				try {
-					return JSON.parse(data, targetType);
-				} catch (Exception e) {
-					if (firstException == null) {
-						firstException = e;
+				case JSON:
+					try {
+						return JSON.parse(data, targetType);
+					} catch (Exception e) {
+						if (firstException == null) {
+							firstException = e;
+						}
 					}
-				}
-				break;
+					break;
 
-			case XML:
-				try {
-					return XML.parse(data, targetType);
-				} catch (Exception e) {
-					if (firstException == null) {
-						firstException = e;
+				case XML:
+					try {
+						return XML.parse(data, targetType);
+					} catch (Exception e) {
+						if (firstException == null) {
+							firstException = e;
+						}
 					}
-				}
-				break;
+					break;
 
-			case YAML:
-				try {
-					return YAML.parse(data, targetType);
-				} catch (Exception e) {
-					if (firstException == null) {
-						firstException = e;
+				case YAML:
+					try {
+						return YAML.parse(data, targetType);
+					} catch (Exception e) {
+						if (firstException == null) {
+							firstException = e;
+						}
 					}
-				}
-				break;
+					break;
 
-			default:
-				break;
+				default:
+					break;
 			}
 		}
 

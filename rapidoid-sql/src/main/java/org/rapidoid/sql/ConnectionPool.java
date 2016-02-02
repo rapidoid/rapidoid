@@ -20,12 +20,12 @@ package org.rapidoid.sql;
  * #L%
  */
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

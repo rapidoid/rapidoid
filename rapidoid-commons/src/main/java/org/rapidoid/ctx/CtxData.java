@@ -20,12 +20,12 @@ package org.rapidoid.ctx;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.5.0")

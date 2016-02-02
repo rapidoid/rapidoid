@@ -20,14 +20,15 @@ package org.rapidoid.annotation;
  * #L%
  */
 
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-@Target({ METHOD })
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+@Target({METHOD})
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public @interface Init {}
+public @interface Init {
+}

@@ -20,14 +20,14 @@ package org.rapidoid.data;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
+
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

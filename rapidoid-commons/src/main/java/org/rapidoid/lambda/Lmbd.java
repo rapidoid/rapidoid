@@ -1,9 +1,9 @@
 package org.rapidoid.lambda;
 
+import org.rapidoid.u.U;
+
 import java.util.Map;
 import java.util.concurrent.Callable;
-
-import org.rapidoid.u.U;
 
 /*
  * #%L

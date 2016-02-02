@@ -20,26 +20,21 @@ package org.rapidoid.security;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.beany.Beany;
+import org.rapidoid.beany.Metadata;
+import org.rapidoid.config.Conf;
+import org.rapidoid.security.annotation.*;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Constants;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.Beany;
-import org.rapidoid.beany.Metadata;
-import org.rapidoid.config.Conf;
-import org.rapidoid.security.annotation.Admin;
-import org.rapidoid.security.annotation.HasRole;
-import org.rapidoid.security.annotation.LoggedIn;
-import org.rapidoid.security.annotation.Manager;
-import org.rapidoid.security.annotation.Moderator;
-import org.rapidoid.security.annotation.Role;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Constants;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

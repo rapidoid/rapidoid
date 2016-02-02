@@ -20,14 +20,14 @@ package org.rapidoid.log;
  * #L%
  */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.NOPLogger;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.concurrent.Callable;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.helpers.NOPLogger;
 
 /**
  * @author Nikolche Mihajlovski
@@ -45,7 +45,8 @@ public class Log {
 
 	private static volatile Callable<Logger> loggerFactory;
 
-	private Log() {}
+	private Log() {
+	}
 
 	public static synchronized void args(String... args) {
 		for (String arg : args) {
@@ -84,48 +85,48 @@ public class Log {
 	}
 
 	private static void formatLogMsg(Appendable out, String msg, String key1, Object value1, String key2,
-			Object value2, String key3, Object value3, String key4, Object value4, String key5, Object value5,
-			int paramsN) {
+	                                 Object value2, String key3, Object value3, String key4, Object value4, String key5, Object value5,
+	                                 int paramsN) {
 
 		try {
 			out.append(msg);
 
 			switch (paramsN) {
-			case 0:
-				break;
+				case 0:
+					break;
 
-			case 1:
-				printKeyValue(out, key1, value1);
-				break;
+				case 1:
+					printKeyValue(out, key1, value1);
+					break;
 
-			case 2:
-				printKeyValue(out, key1, value1);
-				printKeyValue(out, key2, value2);
-				break;
+				case 2:
+					printKeyValue(out, key1, value1);
+					printKeyValue(out, key2, value2);
+					break;
 
-			case 3:
-				printKeyValue(out, key1, value1);
-				printKeyValue(out, key2, value2);
-				printKeyValue(out, key3, value3);
-				break;
+				case 3:
+					printKeyValue(out, key1, value1);
+					printKeyValue(out, key2, value2);
+					printKeyValue(out, key3, value3);
+					break;
 
-			case 4:
-				printKeyValue(out, key1, value1);
-				printKeyValue(out, key2, value2);
-				printKeyValue(out, key3, value3);
-				printKeyValue(out, key4, value4);
-				break;
+				case 4:
+					printKeyValue(out, key1, value1);
+					printKeyValue(out, key2, value2);
+					printKeyValue(out, key3, value3);
+					printKeyValue(out, key4, value4);
+					break;
 
-			case 5:
-				printKeyValue(out, key1, value1);
-				printKeyValue(out, key2, value2);
-				printKeyValue(out, key3, value3);
-				printKeyValue(out, key4, value4);
-				printKeyValue(out, key5, value5);
-				break;
+				case 5:
+					printKeyValue(out, key1, value1);
+					printKeyValue(out, key2, value2);
+					printKeyValue(out, key3, value3);
+					printKeyValue(out, key4, value4);
+					printKeyValue(out, key5, value5);
+					break;
 
-			default:
-				throw new IllegalStateException();
+				default:
+					throw new IllegalStateException();
 			}
 		} catch (IOException e) {
 			throw new RuntimeException("Cannot render log message!", e);
@@ -152,7 +153,7 @@ public class Log {
 	}
 
 	private static void log(LogLevel level, String msg, String key1, Object value1, String key2, Object value2,
-			String key3, Object value3, String key4, Object value4, String key5, Object value5, int paramsN) {
+	                        String key3, Object value3, String key4, Object value4, String key5, Object value5, int paramsN) {
 
 		if (!isEnabled(level)) {
 			return;
@@ -179,48 +180,48 @@ public class Log {
 		}
 
 		switch (level) {
-		case TRACE:
-			if (logger.isTraceEnabled()) {
-				StringBuilder sb = new StringBuilder();
-				formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, paramsN);
-				logger.trace(sb.toString());
-			}
-			break;
+			case TRACE:
+				if (logger.isTraceEnabled()) {
+					StringBuilder sb = new StringBuilder();
+					formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, paramsN);
+					logger.trace(sb.toString());
+				}
+				break;
 
-		case DEBUG:
-			if (logger.isDebugEnabled()) {
-				StringBuilder sb = new StringBuilder();
-				formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, paramsN);
-				logger.debug(sb.toString());
-			}
-			break;
+			case DEBUG:
+				if (logger.isDebugEnabled()) {
+					StringBuilder sb = new StringBuilder();
+					formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, paramsN);
+					logger.debug(sb.toString());
+				}
+				break;
 
-		case INFO:
-			if (logger.isInfoEnabled()) {
-				StringBuilder sb = new StringBuilder();
-				formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, paramsN);
-				logger.info(sb.toString());
-			}
-			break;
+			case INFO:
+				if (logger.isInfoEnabled()) {
+					StringBuilder sb = new StringBuilder();
+					formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, paramsN);
+					logger.info(sb.toString());
+				}
+				break;
 
-		case WARN:
-			if (logger.isWarnEnabled()) {
-				StringBuilder sb = new StringBuilder();
-				formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, paramsN);
-				logger.warn(sb.toString());
-			}
-			break;
+			case WARN:
+				if (logger.isWarnEnabled()) {
+					StringBuilder sb = new StringBuilder();
+					formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, paramsN);
+					logger.warn(sb.toString());
+				}
+				break;
 
-		case ERROR:
-			if (logger.isErrorEnabled()) {
-				StringBuilder sb = new StringBuilder();
-				formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, paramsN);
-				logger.error(sb.toString());
-			}
-			break;
+			case ERROR:
+				if (logger.isErrorEnabled()) {
+					StringBuilder sb = new StringBuilder();
+					formatLogMsg(sb, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, paramsN);
+					logger.error(sb.toString());
+				}
+				break;
 
-		default:
-			throw new IllegalStateException();
+			default:
+				throw new IllegalStateException();
 		}
 	}
 
@@ -300,7 +301,7 @@ public class Log {
 		error.printStackTrace();
 	}
 
-	/*********************************** AUTOMATICALLY GENERATED: ****************************************/
+	/* AUTOMATICALLY GENERATED: */
 
 	public static void trace(String msg) {
 		log(LEVEL_TRACE, msg, null, null, null, null, null, null, null, null, null, null, 0);
@@ -315,17 +316,17 @@ public class Log {
 	}
 
 	public static void trace(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
+	                         Object value3) {
 		log(LEVEL_TRACE, msg, key1, value1, key2, value2, key3, value3, null, null, null, null, 3);
 	}
 
 	public static void trace(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3, String key4, Object value4) {
+	                         Object value3, String key4, Object value4) {
 		log(LEVEL_TRACE, msg, key1, value1, key2, value2, key3, value3, key4, value4, null, null, 4);
 	}
 
 	public static void trace(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3, String key4, Object value4, String key5, Object value5) {
+	                         Object value3, String key4, Object value4, String key5, Object value5) {
 		log(LEVEL_TRACE, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
 	}
 
@@ -342,17 +343,17 @@ public class Log {
 	}
 
 	public static void debug(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
+	                         Object value3) {
 		log(LEVEL_DEBUG, msg, key1, value1, key2, value2, key3, value3, null, null, null, null, 3);
 	}
 
 	public static void debug(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3, String key4, Object value4) {
+	                         Object value3, String key4, Object value4) {
 		log(LEVEL_DEBUG, msg, key1, value1, key2, value2, key3, value3, key4, value4, null, null, 4);
 	}
 
 	public static void debug(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3, String key4, Object value4, String key5, Object value5) {
+	                         Object value3, String key4, Object value4, String key5, Object value5) {
 		log(LEVEL_DEBUG, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
 	}
 
@@ -369,17 +370,17 @@ public class Log {
 	}
 
 	public static void info(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
+	                        Object value3) {
 		log(LEVEL_INFO, msg, key1, value1, key2, value2, key3, value3, null, null, null, null, 3);
 	}
 
 	public static void info(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3, String key4, Object value4) {
+	                        Object value3, String key4, Object value4) {
 		log(LEVEL_INFO, msg, key1, value1, key2, value2, key3, value3, key4, value4, null, null, 4);
 	}
 
 	public static void info(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3, String key4, Object value4, String key5, Object value5) {
+	                        Object value3, String key4, Object value4, String key5, Object value5) {
 		log(LEVEL_INFO, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
 	}
 
@@ -396,17 +397,17 @@ public class Log {
 	}
 
 	public static void warn(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
+	                        Object value3) {
 		log(LEVEL_WARN, msg, key1, value1, key2, value2, key3, value3, null, null, null, null, 3);
 	}
 
 	public static void warn(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3, String key4, Object value4) {
+	                        Object value3, String key4, Object value4) {
 		log(LEVEL_WARN, msg, key1, value1, key2, value2, key3, value3, key4, value4, null, null, 4);
 	}
 
 	public static void warn(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3, String key4, Object value4, String key5, Object value5) {
+	                        Object value3, String key4, Object value4, String key5, Object value5) {
 		log(LEVEL_WARN, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
 	}
 
@@ -423,17 +424,17 @@ public class Log {
 	}
 
 	public static void error(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3) {
+	                         Object value3) {
 		log(LEVEL_ERROR, msg, key1, value1, key2, value2, key3, value3, null, null, null, null, 3);
 	}
 
 	public static void error(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3, String key4, Object value4) {
+	                         Object value3, String key4, Object value4) {
 		log(LEVEL_ERROR, msg, key1, value1, key2, value2, key3, value3, key4, value4, null, null, 4);
 	}
 
 	public static void error(String msg, String key1, Object value1, String key2, Object value2, String key3,
-			Object value3, String key4, Object value4, String key5, Object value5) {
+	                         Object value3, String key4, Object value4, String key5, Object value5) {
 		log(LEVEL_ERROR, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
 	}
 

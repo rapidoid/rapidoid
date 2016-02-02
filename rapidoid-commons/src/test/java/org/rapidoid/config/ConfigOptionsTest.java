@@ -28,7 +28,7 @@ import org.rapidoid.annotation.Since;
 public class ConfigOptionsTest {
 
 	public static void main(String[] args) {
-		Conf.args(new String[] { "--help" });
+		Conf.args(new String[]{"--help"});
 	}
 
 }

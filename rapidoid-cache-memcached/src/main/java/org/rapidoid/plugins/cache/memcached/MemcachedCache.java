@@ -25,7 +25,6 @@ import net.spy.memcached.internal.GetCompletionListener;
 import net.spy.memcached.internal.GetFuture;
 import net.spy.memcached.internal.OperationCompletionListener;
 import net.spy.memcached.internal.OperationFuture;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -41,7 +40,7 @@ public class MemcachedCache<K, V> extends AbstractCache<K, V> {
 	private final MemcachedClient client;
 
 	public MemcachedCache(MemcachedClient client, String cacheName, long timeToLiveMs,
-			boolean resetTimeToLiveWhenAccessed) {
+	                      boolean resetTimeToLiveWhenAccessed) {
 		super(cacheName, timeToLiveMs, false);
 		this.client = client;
 	}

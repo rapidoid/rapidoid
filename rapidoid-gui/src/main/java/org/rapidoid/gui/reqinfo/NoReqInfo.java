@@ -20,19 +20,19 @@ package org.rapidoid.gui.reqinfo;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
 
 @SuppressWarnings("unchecked")
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.5")
 public class NoReqInfo extends AbstractReqInfo {
 
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({"rawtypes"})
 	private static final Map EMPTY = Collections.EMPTY_MAP;
 
 	@Override

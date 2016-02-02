@@ -108,7 +108,7 @@ public class OnPage {
 		}
 	}
 
-	/*********************** GUI ***********************/
+	/* GUI */
 
 	public ServerSetup gui(String response) {
 		gui(response.getBytes());

@@ -30,7 +30,8 @@ public class Usage {
 
 	private static volatile long lastAppUsedOn = U.time();
 
-	private Usage() {}
+	private Usage() {
+	}
 
 	public static long getLastAppUsedOn() {
 		return lastAppUsedOn;

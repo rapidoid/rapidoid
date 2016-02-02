@@ -20,14 +20,6 @@ package org.rapidoid.security;
  * #L%
  */
 
-import static org.rapidoid.security.Roles.ANYBODY;
-import static org.rapidoid.security.Roles.MANAGER;
-import static org.rapidoid.security.Roles.MODERATOR;
-import static org.rapidoid.security.Roles.OWNER;
-import static org.rapidoid.security.Roles.SHARED_WITH;
-
-import java.util.List;
-
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Composite;
@@ -37,15 +29,19 @@ import org.rapidoid.security.annotation.CanChange;
 import org.rapidoid.security.annotation.CanRead;
 import org.rapidoid.u.U;
 
-@CanRead({ ANYBODY })
-@CanChange({ ANYBODY })
+import java.util.List;
+
+import static org.rapidoid.security.Roles.*;
+
+@CanRead({ANYBODY})
+@CanChange({ANYBODY})
 class AbstrEntity {
 
 	@CanChange({})
 	public long id;
 
 	@CanRead("abc")
-	@CanChange({ "OTHER_ROLE" })
+	@CanChange({"OTHER_ROLE"})
 	public String notes;
 
 }
@@ -57,14 +53,14 @@ class Category {
 	public String desc;
 }
 
-@CanRead({ ANYBODY, "OTHER_ROLE" })
+@CanRead({ANYBODY, "OTHER_ROLE"})
 class Comment {
 
-	@CanChange({ MODERATOR, OWNER })
+	@CanChange({MODERATOR, OWNER})
 	public String content;
 
-	@CanRead({ MANAGER })
-	@CanChange({ MANAGER })
+	@CanRead({MANAGER})
+	@CanChange({MANAGER})
 	public boolean visible = true;
 
 	@Programmatic
@@ -72,8 +68,8 @@ class Comment {
 
 }
 
-@CanRead({ OWNER, SHARED_WITH, "OTHER_ROLE" })
-@CanChange({ OWNER })
+@CanRead({OWNER, SHARED_WITH, "OTHER_ROLE"})
+@CanChange({OWNER})
 class Issue extends AbstrEntity {
 
 	public String title;
@@ -85,13 +81,13 @@ class Issue extends AbstrEntity {
 	public String description;
 
 	@Composite
-	@CanChange({ OWNER, SHARED_WITH })
+	@CanChange({OWNER, SHARED_WITH})
 	public List<Comment> comments;
 
 	@Programmatic
 	public String createdBy;
 
-	@CanChange({ OWNER })
+	@CanChange({OWNER})
 	public List<User> sharedWith;
 
 }
@@ -100,7 +96,7 @@ class Issue extends AbstrEntity {
 @Since("2.0.0")
 public class DataPermissionsTest extends SecurityTestCommons {
 
-	private static final String[] USERS = { null, "", "abc", "adm1", "adm2", "mng1", "mod1", "mod2" };
+	private static final String[] USERS = {null, "", "abc", "adm1", "adm2", "mng1", "mod1", "mod2"};
 
 	@Test
 	public void testCommentPermissions() {
@@ -119,7 +115,7 @@ public class DataPermissionsTest extends SecurityTestCommons {
 
 	@Test
 	public void testIssuePermissions() {
-		String[] fields = { "title", "year", "author", "description", "comments", "createdBy", "sharedWith" };
+		String[] fields = {"title", "year", "author", "description", "comments", "createdBy", "sharedWith"};
 
 		for (String field : fields) {
 			for (String user : USERS) {

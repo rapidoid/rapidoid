@@ -20,13 +20,13 @@ package org.rapidoid.plugins;
  * #L%
  */
 
-import java.util.Collections;
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+
+import java.util.Collections;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -74,7 +74,8 @@ public abstract class AbstractPlugin implements Plugin {
 		return (Map<String, Object>) config;
 	}
 
-	protected void doRestart() throws Exception {}
+	protected void doRestart() throws Exception {
+	}
 
 	@Override
 	public synchronized boolean isActive() {

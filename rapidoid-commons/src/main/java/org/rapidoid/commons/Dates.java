@@ -20,15 +20,15 @@ package org.rapidoid.commons;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -73,19 +73,19 @@ public class Dates {
 		int c = parts.length > 2 ? U.num(parts[2]) : -1;
 
 		switch (parts.length) {
-		case 3:
-			if (isDay(a) && isMonth(b) && isYear(c)) {
-				return date(a, b, c);
-			} else if (isYear(a) && isMonth(b) && isDay(c)) {
-				return date(c, b, a);
-			}
-			break;
-		case 2:
-			if (isDay(a) && isMonth(b)) {
-				return date(a, b, thisYear());
-			}
-			break;
-		default:
+			case 3:
+				if (isDay(a) && isMonth(b) && isYear(c)) {
+					return date(a, b, c);
+				} else if (isYear(a) && isMonth(b) && isDay(c)) {
+					return date(c, b, a);
+				}
+				break;
+			case 2:
+				if (isDay(a) && isMonth(b)) {
+					return date(a, b, thisYear());
+				}
+				break;
+			default:
 		}
 
 		throw U.rte("Invalid date: " + value);

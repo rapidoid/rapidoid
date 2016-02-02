@@ -20,21 +20,7 @@ package org.rapidoid.pojo.web;
  * #L%
  */
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Controller;
-import org.rapidoid.annotation.Cookie;
-import org.rapidoid.annotation.DELETE;
-import org.rapidoid.annotation.GET;
-import org.rapidoid.annotation.Header;
-import org.rapidoid.annotation.POST;
-import org.rapidoid.annotation.PUT;
-import org.rapidoid.annotation.Page;
-import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.*;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.commons.Arr;
@@ -48,6 +34,11 @@ import org.rapidoid.pojo.impl.DispatchReq;
 import org.rapidoid.pojo.impl.DispatchReqKind;
 import org.rapidoid.pojo.impl.PojoDispatcherImpl;
 import org.rapidoid.u.U;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

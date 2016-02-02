@@ -20,10 +20,9 @@ package org.rapidoid.plugins.templates;
  * #L%
  */
 
+import com.github.mustachejava.reflect.ReflectionObjectHandler;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-
-import com.github.mustachejava.reflect.ReflectionObjectHandler;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")

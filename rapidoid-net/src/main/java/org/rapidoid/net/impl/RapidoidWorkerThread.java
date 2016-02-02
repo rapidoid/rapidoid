@@ -49,7 +49,7 @@ public class RapidoidWorkerThread extends Thread {
 	private boolean noDelay = false;
 
 	public RapidoidWorkerThread(int workerIndex, Protocol protocol, Class<? extends DefaultExchange<?>> exchangeClass,
-			Class<? extends RapidoidHelper> helperClass) {
+	                            Class<? extends RapidoidHelper> helperClass) {
 		super("server" + (workerIndex + 1));
 		this.workerIndex = workerIndex;
 		this.protocol = protocol;

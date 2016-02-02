@@ -48,7 +48,7 @@ public class HttpHandlers implements HttpMetadata {
 	}
 
 	public static ReqHandler parameterized(final String paramName1, final String paramName2,
-			final F2<String, String, Object> handler) {
+	                                       final F2<String, String, Object> handler) {
 		return new ReqHandler() {
 			@Override
 			public Object handle(Req req) throws Exception {
@@ -60,7 +60,7 @@ public class HttpHandlers implements HttpMetadata {
 	}
 
 	public static ReqHandler parameterized(final String paramName1, final String paramName2, final String paramName3,
-			final F3<String, String, String, Object> handler) {
+	                                       final F3<String, String, String, Object> handler) {
 		return new ReqHandler() {
 			@Override
 			public Object handle(Req req) throws Exception {

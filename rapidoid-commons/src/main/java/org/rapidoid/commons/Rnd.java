@@ -20,10 +20,10 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import java.util.Random;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+
+import java.util.Random;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

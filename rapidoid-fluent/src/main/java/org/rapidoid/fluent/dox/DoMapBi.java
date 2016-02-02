@@ -20,13 +20,13 @@ package org.rapidoid.fluent.dox;
  * #L%
  */
 
+import org.rapidoid.fluent.To;
+import org.rapidoid.fluent.utils.Lambdas;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
-
-import org.rapidoid.fluent.To;
-import org.rapidoid.fluent.utils.Lambdas;
 
 /**
  * @author Nikolche Mihajlovski
@@ -41,7 +41,7 @@ public class DoMapBi<K, V> {
 	}
 
 	public <K2, V2> Map<K2, V2> to(BiFunction<K, V, ? extends K2> keyTransformation,
-			BiFunction<K, V, ? extends V2> valueTransformation) {
+	                               BiFunction<K, V, ? extends V2> valueTransformation) {
 		return items.entrySet().stream()
 				.collect(To.map(e -> Lambdas.apply(e, keyTransformation), e -> Lambdas.apply(e, valueTransformation)));
 	}

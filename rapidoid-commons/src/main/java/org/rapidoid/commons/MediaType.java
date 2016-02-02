@@ -1,11 +1,11 @@
 package org.rapidoid.commons;
 
-import java.util.Arrays;
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
+
+import java.util.Arrays;
+import java.util.Map;
 
 /*
  * #%L
@@ -33,7 +33,7 @@ public class MediaType {
 
 	private static final Map<String, MediaType> FILE_EXTENSISONS = U.map();
 	private static final String[] NO_ATTR = new String[0];
-	private static final String[] UTF8_ATTR = new String[] { "charset=utf-8" };
+	private static final String[] UTF8_ATTR = new String[]{"charset=utf-8"};
 
 	/*******************************************************/
 

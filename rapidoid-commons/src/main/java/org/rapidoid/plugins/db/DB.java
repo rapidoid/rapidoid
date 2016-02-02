@@ -19,10 +19,6 @@ package org.rapidoid.plugins.db;
  * limitations under the License.
  * #L%
  */
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -31,6 +27,11 @@ import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.u.U;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -142,17 +143,17 @@ public class DB {
 	}
 
 	public static <E> E entity(Class<E> entityType, String prop1, Object value1, String prop2, Object value2,
-			String prop3, Object value3) {
+	                           String prop3, Object value3) {
 		return entity(entityType, U.map(prop1, value1, prop2, value2, prop3, value3));
 	}
 
 	public static <E> E entity(Class<E> entityType, String prop1, Object value1, String prop2, Object value2,
-			String prop3, Object value3, String prop4, Object value4) {
+	                           String prop3, Object value3, String prop4, Object value4) {
 		return entity(entityType, U.map(prop1, value1, prop2, value2, prop3, value3, prop4, value4));
 	}
 
 	public static <E> E entity(Class<E> entityType, String prop1, Object value1, String prop2, Object value2,
-			String prop3, Object value3, String prop4, Object value4, String prop5, Object value5) {
+	                           String prop3, Object value3, String prop4, Object value4, String prop5, Object value5) {
 		return entity(entityType, U.map(prop1, value1, prop2, value2, prop3, value3, prop4, value4, prop5, value5));
 	}
 

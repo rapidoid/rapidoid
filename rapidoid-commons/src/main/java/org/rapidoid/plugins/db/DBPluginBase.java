@@ -1,13 +1,5 @@
 package org.rapidoid.plugins.db;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
@@ -21,6 +13,9 @@ import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.plugins.entities.Entities;
 import org.rapidoid.u.U;
+
+import java.util.*;
+import java.util.regex.Pattern;
 
 /*
  * #%L
@@ -102,7 +97,7 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 		List<E> results = new ArrayList<E>();
 
 		for (String id : ids) {
-			results.add(this.<E> get(clazz, id));
+			results.add(this.<E>get(clazz, id));
 		}
 
 		return results;

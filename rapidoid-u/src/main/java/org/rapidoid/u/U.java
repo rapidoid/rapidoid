@@ -20,37 +20,18 @@ package org.rapidoid.u;
  * #L%
  */
 
+import org.rapidoid.lambda.Dynamic;
+import org.rapidoid.lambda.Mapper;
+
 import java.io.File;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Queue;
-import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.rapidoid.lambda.Dynamic;
-import org.rapidoid.lambda.Mapper;
 
 /**
  * @author Nikolche Mihajlovski
@@ -195,7 +176,7 @@ public class U {
 		System.out.println(text);
 	}
 
-	@SuppressWarnings({ "varargs" })
+	@SuppressWarnings({"varargs"})
 	public static <T> String join(String sep, T... items) {
 		return render(items, "%s", sep);
 	}
@@ -252,7 +233,7 @@ public class U {
 		return Arrays.asList(arr).iterator();
 	}
 
-	@SuppressWarnings({ "varargs" })
+	@SuppressWarnings({"varargs"})
 	public static <T> T[] array(T... items) {
 		return items;
 	}
@@ -280,7 +261,7 @@ public class U {
 		return set;
 	}
 
-	@SuppressWarnings({ "varargs" })
+	@SuppressWarnings({"varargs"})
 	public static <T> Set<T> set(T... values) {
 		Set<T> set = set();
 
@@ -310,7 +291,7 @@ public class U {
 		return list;
 	}
 
-	@SuppressWarnings({ "varargs" })
+	@SuppressWarnings({"varargs"})
 	public static <T> List<T> list(T... values) {
 		List<T> list = list();
 
@@ -356,7 +337,7 @@ public class U {
 	}
 
 	public static <K, V> Map<K, V> map(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4, K key5,
-			V value5) {
+	                                   V value5) {
 		Map<K, V> map = map(key1, value1, key2, value2, key3, value3, key4, value4);
 		map.put(key5, value5);
 		return map;
@@ -410,14 +391,14 @@ public class U {
 	}
 
 	public static <K, V> ConcurrentMap<K, V> concurrentMap(K key1, V value1, K key2, V value2, K key3, V value3,
-			K key4, V value4) {
+	                                                       K key4, V value4) {
 		ConcurrentMap<K, V> map = concurrentMap(key1, value1, key2, value2, key3, value3);
 		map.put(key4, value4);
 		return map;
 	}
 
 	public static <K, V> ConcurrentMap<K, V> concurrentMap(K key1, V value1, K key2, V value2, K key3, V value3,
-			K key4, V value4, K key5, V value5) {
+	                                                       K key4, V value4, K key5, V value5) {
 		ConcurrentMap<K, V> map = concurrentMap(key1, value1, key2, value2, key3, value3, key4, value4);
 		map.put(key5, value5);
 		return map;
@@ -477,7 +458,7 @@ public class U {
 	}
 
 	public static <K, V> Map<K, V> orderedMap(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4,
-			K key5, V value5) {
+	                                          K key5, V value5) {
 		Map<K, V> map = orderedMap(key1, value1, key2, value2, key3, value3, key4, value4);
 		map.put(key5, value5);
 		return map;
@@ -497,7 +478,7 @@ public class U {
 	}
 
 	public static <K, V> Map<K, V> synchronizedMap() {
-		return Collections.synchronizedMap(U.<K, V> map());
+		return Collections.synchronizedMap(U.<K, V>map());
 	}
 
 	public static <T> Queue<T> queue() {
@@ -546,15 +527,15 @@ public class U {
 	}
 
 	public static <T> List<T> safe(List<T> list) {
-		return list != null ? list : U.<T> list();
+		return list != null ? list : U.<T>list();
 	}
 
 	public static <T> Set<T> safe(Set<T> set) {
-		return set != null ? set : U.<T> set();
+		return set != null ? set : U.<T>set();
 	}
 
 	public static <K, V> Map<K, V> safe(Map<K, V> map) {
-		return map != null ? map : U.<K, V> map();
+		return map != null ? map : U.<K, V>map();
 	}
 
 	public static long time() {
@@ -879,11 +860,10 @@ public class U {
 
 	/**
 	 * Sleeps (calling Thread.sleep) for the specified period.
-	 * 
+	 * <p>
 	 * If the thread is interrupted while sleeping, throws {@link CancellationException} to propagate the interruption.
-	 * 
-	 * @param millis
-	 *            the length of time to sleep in milliseconds.
+	 *
+	 * @param millis the length of time to sleep in milliseconds.
 	 */
 	public static void sleep(long millis) {
 		try {
@@ -949,7 +929,7 @@ public class U {
 
 			@Override
 			public List<V> map(K src) throws Exception {
-				return Collections.synchronizedList(U.<V> list());
+				return Collections.synchronizedList(U.<V>list());
 			}
 
 		});
@@ -960,7 +940,7 @@ public class U {
 
 			@Override
 			public Set<V> map(K src) throws Exception {
-				return Collections.synchronizedSet(U.<V> set());
+				return Collections.synchronizedSet(U.<V>set());
 			}
 
 		});
@@ -1011,10 +991,10 @@ public class U {
 
 		};
 
-		return ((T) Proxy.newProxyInstance(targetInterface.getClassLoader(), new Class[] { targetInterface }, handler));
+		return ((T) Proxy.newProxyInstance(targetInterface.getClassLoader(), new Class[]{targetInterface}, handler));
 	}
 
-	@SuppressWarnings({ "varargs" })
+	@SuppressWarnings({"varargs"})
 	public static <T> boolean isIn(T value, T... candidates) {
 		for (T candidate : candidates) {
 			if (eq(value, candidate)) {

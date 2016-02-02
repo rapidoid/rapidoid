@@ -20,12 +20,12 @@ package org.rapidoid.gui.var;
  * #L%
  */
 
-import java.io.Serializable;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.u.U;
+
+import java.io.Serializable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")
@@ -50,6 +50,7 @@ public class LocalVar<T extends Serializable> extends WidgetVar<T> {
 	}
 
 	@Override
-	public void set(T value) {}
+	public void set(T value) {
+	}
 
 }

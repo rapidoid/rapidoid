@@ -20,12 +20,12 @@ package org.rapidoid.fluent.find;
  * #L%
  */
 
+import org.rapidoid.fluent.utils.StreamUtils;
+
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import org.rapidoid.fluent.utils.StreamUtils;
 
 /**
  * @author Nikolche Mihajlovski

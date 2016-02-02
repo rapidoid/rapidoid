@@ -20,13 +20,6 @@ package org.rapidoid.quick;
  * #L%
  */
 
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-
 import org.hibernate.SessionFactory;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.jpa.boot.internal.SettingsImpl;
@@ -38,6 +31,12 @@ import org.rapidoid.ctx.PersisterProvider;
 import org.rapidoid.io.IO;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
+
+import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")

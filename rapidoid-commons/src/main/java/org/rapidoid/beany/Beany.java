@@ -1,20 +1,5 @@
 package org.rapidoid.beany;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Proxy;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.ToString;
@@ -27,6 +12,10 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
+
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.Map.Entry;
 
 /*
  * #%L
@@ -154,7 +143,7 @@ public class Beany {
 			}
 
 			// remove properties with setters, without getters
-			for (Iterator<Entry<String, BeanProp>> it = properties.entrySet().iterator(); it.hasNext();) {
+			for (Iterator<Entry<String, BeanProp>> it = properties.entrySet().iterator(); it.hasNext(); ) {
 				Entry<String, BeanProp> entry = (Entry<String, BeanProp>) it.next();
 				BeanProp minfo = entry.getValue();
 				if (minfo.getGetter() == null && minfo.getSetter() != null) {
@@ -194,7 +183,7 @@ public class Beany {
 		return BEAN_PROPERTIES.get(clazz);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public static BeanProperties propertiesOf(Object obj) {
 		if (obj == null) {
 			return BeanProperties.NONE;
@@ -310,7 +299,7 @@ public class Beany {
 
 	@SuppressWarnings("unchecked")
 	public static void update(Object destBean, Map<String, Object> src, boolean ignoreNullValues,
-			boolean ignoreReadOnlyProperties) {
+	                          boolean ignoreReadOnlyProperties) {
 
 		if (destBean instanceof Map) {
 			((Map<String, Object>) destBean).putAll(src);
@@ -577,7 +566,7 @@ public class Beany {
 	}
 
 	public static <T, B extends Builder<T>> B builder(final Class<B> builderInterface, final Class<T> builtInterface,
-			final Class<? extends T> implClass) {
+	                                                  final Class<? extends T> implClass) {
 
 		final Map<String, Object> properties = U.map();
 

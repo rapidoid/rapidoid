@@ -31,6 +31,6 @@ import org.rapidoid.plugins.Plugin;
 public interface EmailPlugin extends Plugin {
 
 	void send(@P("to") Iterable<String> to, @P("cc") Iterable<String> cc, @P("bcc") Iterable<String> bcc, @P("subject") String subject, @P("body") String body,
-			Callback<Void> callback);
+	          Callback<Void> callback);
 
 }

@@ -20,10 +20,10 @@ package org.rapidoid.data;
  * #L%
  */
 
+import org.rapidoid.u.U;
+
 import java.util.List;
 import java.util.Set;
-
-import org.rapidoid.u.U;
 
 @SuppressWarnings("unchecked")
 /**
@@ -38,13 +38,14 @@ public class User {
 
 	public int age;
 
-	public String[] tags = { "aa", "bbb" };
+	public String[] tags = {"aa", "bbb"};
 
 	public Set<?> ss = U.set(1, "bn", false);
 
 	public List<?> lst = U.list(1, "bn", false);
 
-	public User() {}
+	public User() {
+	}
 
 	public User(String name, int age) {
 		this.name = name;

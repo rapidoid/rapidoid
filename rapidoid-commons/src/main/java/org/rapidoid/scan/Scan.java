@@ -20,34 +20,34 @@ package org.rapidoid.scan;
  * #L%
  */
 
-import java.util.List;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.5.0")
 public class Scan {
 
-    public static ScanParams pkg(String pkg) {
-        return new ScanParams().pkg(pkg);
-    }
+	public static ScanParams pkg(String pkg) {
+		return new ScanParams().pkg(pkg);
+	}
 
-    public static ScanParams matching(String matching) {
-        return new ScanParams().matching(matching);
-    }
+	public static ScanParams matching(String matching) {
+		return new ScanParams().matching(matching);
+	}
 
-    public static ScanParams filter(org.rapidoid.lambda.Predicate<Class<?>> filter) {
-        return new ScanParams().filter(filter);
-    }
+	public static ScanParams filter(org.rapidoid.lambda.Predicate<Class<?>> filter) {
+		return new ScanParams().filter(filter);
+	}
 
-    public static ScanParams annotated(Class<? extends java.lang.annotation.Annotation> annotated) {
-        return new ScanParams().annotated(annotated);
-    }
+	public static ScanParams annotated(Class<? extends java.lang.annotation.Annotation> annotated) {
+		return new ScanParams().annotated(annotated);
+	}
 
-    public static ScanParams classLoader(ClassLoader classLoader) {
-        return new ScanParams().classLoader(classLoader);
-    }
+	public static ScanParams classLoader(ClassLoader classLoader) {
+		return new ScanParams().classLoader(classLoader);
+	}
 
 	public static synchronized List<Class<?>> getClasses() {
 		return ClasspathUtil.getClasses(new ScanParams());

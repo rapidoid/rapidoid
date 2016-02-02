@@ -30,7 +30,8 @@ public class Val<T> {
 
 	private volatile T value;
 
-	public Val() {}
+	public Val() {
+	}
 
 	public Val(T value) {
 		this.value = value;

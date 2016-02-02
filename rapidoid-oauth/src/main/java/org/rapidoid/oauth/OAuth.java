@@ -47,7 +47,7 @@ public class OAuth {
 	}
 
 	public static void register(ServerSetup setup, Config config, OAuthStateCheck stateCheck,
-			OAuthProvider... providers) {
+	                            OAuthProvider... providers) {
 
 		if (!config.has("oauth")) {
 			Log.warn("OAuth is currently not configured!");

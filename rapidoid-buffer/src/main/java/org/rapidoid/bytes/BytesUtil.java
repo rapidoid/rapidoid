@@ -261,7 +261,7 @@ public class BytesUtil implements Constants {
 	}
 
 	public static int find(Bytes bytes, int start, int limit, byte[] match, int offset, int length,
-			boolean caseSensitive) {
+	                       boolean caseSensitive) {
 
 		assert start >= 0;
 		assert limit >= 0;
@@ -389,7 +389,7 @@ public class BytesUtil implements Constants {
 	 * prefix match. Duplicated code for performance reasons.
 	 */
 	public static int scanUntilAndMatchPrefix(Bytes bytes, Range result, byte separator, int fromPos, int toPos,
-			int searchPrefix) {
+	                                          int searchPrefix) {
 
 		byte b0, b1, b2, b3;
 

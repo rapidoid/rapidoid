@@ -20,12 +20,6 @@ package org.rapidoid.buffer;
  * #L%
  */
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.WritableByteChannel;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.ByteBufferBytes;
@@ -39,6 +33,12 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.D;
 import org.rapidoid.wrap.IntWrap;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -199,7 +199,7 @@ public class MultiBuf implements Buf, Constants {
 
 	/**
 	 * Reads data from the channel and appends it to the buffer.
-	 * 
+	 * <p>
 	 * Precondition: received event that the channel has data to be read.
 	 */
 	@Override
@@ -444,7 +444,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	private int writeTo(int mode, int offset, int length, byte[] bytes, WritableByteChannel channel, ByteBuffer buffer,
-			int destOffset) throws IOException {
+	                    int destOffset) throws IOException {
 		if (_size() == 0) {
 			assert length == 0;
 			return 0;
@@ -469,7 +469,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	private int multiWriteTo(int mode, int fromIndex, int toIndex, int fromAddr, int toAddr, byte[] bytes,
-			WritableByteChannel channel, ByteBuffer buffer, int destOffset) throws IOException {
+	                         WritableByteChannel channel, ByteBuffer buffer, int destOffset) throws IOException {
 
 		ByteBuffer first = bufs[fromIndex];
 		int len = singleCap - fromAddr;
@@ -499,7 +499,7 @@ public class MultiBuf implements Buf, Constants {
 	}
 
 	private int writePart(ByteBuffer src, int pos, int limit, int mode, byte[] bytes, WritableByteChannel channel,
-			ByteBuffer buffer, int destOffset, int len) throws IOException {
+	                      ByteBuffer buffer, int destOffset, int len) throws IOException {
 
 		// backup buf positions
 		int posBackup = src.position();
@@ -513,34 +513,34 @@ public class MultiBuf implements Buf, Constants {
 		int count;
 
 		switch (mode) {
-		case TO_BYTES:
-			if (len >= 0) {
-				src.get(bytes, destOffset, len);
-				count = len;
-			} else {
-				count = src.remaining();
-				src.get(bytes, destOffset, count);
-			}
-			break;
-
-		case TO_CHANNEL:
-			count = 0;
-			while (src.hasRemaining()) {
-				int wrote = channel.write(src);
-				count += wrote;
-				if (wrote == 0) {
-					break;
+			case TO_BYTES:
+				if (len >= 0) {
+					src.get(bytes, destOffset, len);
+					count = len;
+				} else {
+					count = src.remaining();
+					src.get(bytes, destOffset, count);
 				}
-			}
-			break;
+				break;
 
-		case TO_BUFFER:
-			count = src.remaining();
-			buffer.put(src);
-			break;
+			case TO_CHANNEL:
+				count = 0;
+				while (src.hasRemaining()) {
+					int wrote = channel.write(src);
+					count += wrote;
+					if (wrote == 0) {
+						break;
+					}
+				}
+				break;
 
-		default:
-			throw U.notExpected();
+			case TO_BUFFER:
+				count = src.remaining();
+				buffer.put(src);
+				break;
+
+			default:
+				throw U.notExpected();
 		}
 
 		// restore buf positions

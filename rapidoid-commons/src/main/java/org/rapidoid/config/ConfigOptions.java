@@ -1,8 +1,8 @@
 package org.rapidoid.config;
 
-import java.util.List;
-
 import org.rapidoid.u.U;
+
+import java.util.List;
 
 /*
  * #%L

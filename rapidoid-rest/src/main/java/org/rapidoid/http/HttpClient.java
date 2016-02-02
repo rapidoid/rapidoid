@@ -20,30 +20,11 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.io.*;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.CancellationException;
-
 import org.apache.commons.io.IOUtils;
-import org.apache.http.ConnectionReuseStrategy;
-import org.apache.http.Header;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.ProtocolException;
+import org.apache.http.*;
 import org.apache.http.client.RedirectStrategy;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpHead;
-import org.apache.http.client.methods.HttpOptions;
-import org.apache.http.client.methods.HttpPatch;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.methods.HttpTrace;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.*;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -53,19 +34,18 @@ import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.nio.entity.NByteArrayEntity;
 import org.apache.http.protocol.HttpContext;
-import org.apache.http.util.EntityUtils;
 import org.rapidoid.activity.RapidoidThreadFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Callback;
-import org.rapidoid.concurrent.Callbacks;
-import org.rapidoid.concurrent.Future;
-import org.rapidoid.concurrent.Promise;
-import org.rapidoid.concurrent.Promises;
+import org.rapidoid.concurrent.*;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.util.D;
+
+import java.io.*;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.CancellationException;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -320,37 +300,37 @@ public class HttpClient {
 		client.start();
 	}
 
-	/********************************** GET **********************************/
+	/*  GET */
 
 	public Future<byte[]> get(String uri, Callback<byte[]> callback) {
 		return request("GET", uri, null, null, null, null, null, callback);
 	}
 
-	/********************************** DELETE **********************************/
+	/*  DELETE */
 
 	public Future<byte[]> delete(String uri, Callback<byte[]> callback) {
 		return request("DELETE", uri, null, null, null, null, null, callback);
 	}
 
-	/********************************** OPTIONS **********************************/
+	/*  OPTIONS */
 
 	public Future<byte[]> options(String uri, Callback<byte[]> callback) {
 		return request("OPTIONS", uri, null, null, null, null, null, callback);
 	}
 
-	/********************************** HEAD **********************************/
+	/*  HEAD */
 
 	public Future<byte[]> head(String uri, Callback<byte[]> callback) {
 		return request("HEAD", uri, null, null, null, null, null, callback);
 	}
 
-	/********************************** TRACE **********************************/
+	/*  TRACE */
 
 	public Future<byte[]> trace(String uri, Callback<byte[]> callback) {
 		return request("TRACE", uri, null, null, null, null, null, callback);
 	}
 
-	/********************************** POST **********************************/
+	/*  POST */
 
 	public Future<byte[]> post(String uri, Map<String, String> headers, Map<String, String> data,
 	                           Map<String, String> files, Callback<byte[]> callback) {
@@ -362,7 +342,7 @@ public class HttpClient {
 		return request("POST", uri, headers, null, null, body, contentType, callback);
 	}
 
-	/********************************** PUT **********************************/
+	/*  PUT */
 
 	public Future<byte[]> put(String uri, Map<String, String> headers, Map<String, String> data,
 	                          Map<String, String> files, Callback<byte[]> callback) {
@@ -374,7 +354,7 @@ public class HttpClient {
 		return request("PUT", uri, headers, null, null, body, contentType, callback);
 	}
 
-	/********************************** PATCH **********************************/
+	/*  PATCH */
 
 	public Future<byte[]> patch(String uri, Map<String, String> headers, Map<String, String> data,
 	                            Map<String, String> files, Callback<byte[]> callback) {

@@ -20,10 +20,6 @@ package org.rapidoid.plugins.db;
  * #L%
  */
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
@@ -31,6 +27,10 @@ import org.rapidoid.concurrent.Callback;
 import org.rapidoid.lambda.Operation;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.plugins.Plugin;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -83,7 +83,7 @@ public interface DBPlugin extends Plugin {
 	void queryAsync(@P("query") String query, Callback<List<Map<String, Object>>> callback, @P("args") Object... args);
 
 	<E> void queryAsync(@P("clazz") Class<E> clazz, @P("query") String query, Callback<List<E>> callback,
-			@P("args") Object... args);
+	                    @P("args") Object... args);
 
 	<RESULT> RESULT sql(@P("sql") String sql, @P("args") Object... args);
 

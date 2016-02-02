@@ -45,28 +45,28 @@ public class StatisticalBufTest extends BufferTestCommons {
 				int len = rnd(Math.min(17, copy.length() + 1));
 
 				switch (rnd(3)) {
-				case 0:
-					copy = copy.substring(len);
-					buf.deleteBefore(len);
-					break;
+					case 0:
+						copy = copy.substring(len);
+						buf.deleteBefore(len);
+						break;
 
-				case 1:
-					copy = copy.substring(0, copy.length() - len);
-					buf.deleteLast(len);
-					break;
+					case 1:
+						copy = copy.substring(0, copy.length() - len);
+						buf.deleteLast(len);
+						break;
 
-				case 2:
-					s = rndStr(0, len);
-					int maxPos = copy.length() - s.length();
-					assert maxPos >= 0;
-					int pos = rnd(maxPos + 1); // range [0..maxPos]
+					case 2:
+						s = rndStr(0, len);
+						int maxPos = copy.length() - s.length();
+						assert maxPos >= 0;
+						int pos = rnd(maxPos + 1); // range [0..maxPos]
 
-					copy = copy.substring(0, pos) + s + copy.substring(pos + s.length());
-					buf.put(pos, s.getBytes(), 0, s.length());
-					break;
+						copy = copy.substring(0, pos) + s + copy.substring(pos + s.length());
+						buf.put(pos, s.getBytes(), 0, s.length());
+						break;
 
-				default:
-					throw U.notExpected();
+					default:
+						throw U.notExpected();
 				}
 			}
 

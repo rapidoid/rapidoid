@@ -1,7 +1,5 @@
 package org.rapidoid.web;
 
-import java.util.Set;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.Since;
@@ -11,6 +9,8 @@ import org.rapidoid.http.fast.handler.FastHttpHandler;
 import org.rapidoid.pojo.POJO;
 import org.rapidoid.pojo.PojoDispatcher;
 import org.rapidoid.u.U;
+
+import java.util.Set;
 
 /*
  * #%L
@@ -55,7 +55,7 @@ public class WebApp {
 	private volatile Object menu;
 
 	public WebApp(String id, Set<String> owners, Set<String> hostnames, Set<String> uriContexts, AppMode mode,
-			PojoDispatcher dispatcher, Classes classes, Config config) {
+	              PojoDispatcher dispatcher, Classes classes, Config config) {
 		this.id = id;
 		this.dispatcher = provideDispatcher(dispatcher, classes);
 		this.owners = U.safe(owners);

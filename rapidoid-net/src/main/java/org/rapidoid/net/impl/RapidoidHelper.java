@@ -20,9 +20,6 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
-import java.util.Random;
-import java.util.concurrent.Callable;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -30,13 +27,10 @@ import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.pool.Pools;
-import org.rapidoid.wrap.BoolWrap;
-import org.rapidoid.wrap.CharWrap;
-import org.rapidoid.wrap.DoubleWrap;
-import org.rapidoid.wrap.FloatWrap;
-import org.rapidoid.wrap.IntWrap;
-import org.rapidoid.wrap.LongWrap;
-import org.rapidoid.wrap.ShortWrap;
+import org.rapidoid.wrap.*;
+
+import java.util.Random;
+import java.util.concurrent.Callable;
 
 /**
  * Helpers are instantiated per worker node (for thread-safe use), so they contain various data structures that can be
@@ -101,7 +95,7 @@ public class RapidoidHelper {
 		this(null);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public RapidoidHelper(final Class<?> exchangeClass) {
 
 		for (int i = 0; i < booleans.length; i++) {

@@ -20,10 +20,6 @@ package org.rapidoid.http;
  * #L%
  */
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
@@ -33,6 +29,10 @@ import org.rapidoid.http.fast.On;
 import org.rapidoid.http.fast.ReqHandler;
 import org.rapidoid.io.IO;
 import org.rapidoid.job.Jobs;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

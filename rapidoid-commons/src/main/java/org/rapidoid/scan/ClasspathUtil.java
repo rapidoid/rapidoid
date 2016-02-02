@@ -1,21 +1,5 @@
 package org.rapidoid.scan;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -23,6 +7,17 @@ import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /*
  * #%L
@@ -52,7 +47,8 @@ public class ClasspathUtil {
 
 	private static String rootPackage = null;
 
-	private ClasspathUtil() {}
+	private ClasspathUtil() {
+	}
 
 	public static synchronized void reset() {
 		CLASSPATH.clear();
@@ -126,7 +122,7 @@ public class ClasspathUtil {
 	}
 
 	private static List<Class<?>> retrieveClasses(String packageName, Predicate<Class<?>> filter,
-			Class<? extends Annotation> annotated, Pattern regex, ClassLoader classLoader) {
+	                                              Class<? extends Annotation> annotated, Pattern regex, ClassLoader classLoader) {
 
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 
@@ -195,7 +191,7 @@ public class ClasspathUtil {
 	}
 
 	private static void getClassesFromDir(Collection<Class<?>> classes, File root, File dir, String pkg, Pattern regex,
-			Predicate<Class<?>> filter, Class<? extends Annotation> annotated, ClassLoader classLoader) {
+	                                      Predicate<Class<?>> filter, Class<? extends Annotation> annotated, ClassLoader classLoader) {
 		U.must(dir.isDirectory());
 		Log.debug("Traversing directory", "root", root, "dir", dir);
 
@@ -221,7 +217,7 @@ public class ClasspathUtil {
 	}
 
 	private static void scanFile(Collection<Class<?>> classes, Pattern regex, Predicate<Class<?>> filter,
-			Class<? extends Annotation> annotated, ClassLoader classLoader, String relName) {
+	                             Class<? extends Annotation> annotated, ClassLoader classLoader, String relName) {
 		Log.debug("scanned file", "file", relName);
 
 		if (relName.endsWith(".class")) {
@@ -262,7 +258,7 @@ public class ClasspathUtil {
 	}
 
 	public static List<Class<?>> getClassesFromJAR(String jarName, List<Class<?>> classes, String pkg, Pattern regex,
-			Predicate<Class<?>> filter, Class<? extends Annotation> annotated, ClassLoader classLoader) {
+	                                               Predicate<Class<?>> filter, Class<? extends Annotation> annotated, ClassLoader classLoader) {
 
 		ZipInputStream zip = null;
 		try {
@@ -343,7 +339,7 @@ public class ClasspathUtil {
 	}
 
 	public static boolean classMatches(Class<?> cls, Predicate<Class<?>> filter, Class<? extends Annotation> annotated,
-			Pattern regex) {
+	                                   Pattern regex) {
 
 		return (annotated == null || cls.getAnnotation(annotated) != null)
 				&& (regex == null || (cls.getCanonicalName() != null && regex.matcher(cls.getCanonicalName()).matches()))

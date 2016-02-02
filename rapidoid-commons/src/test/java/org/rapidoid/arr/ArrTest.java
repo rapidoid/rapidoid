@@ -32,27 +32,27 @@ public class ArrTest extends AbstractCommonsTest {
 
 	@Test
 	public void testSubarray() {
-		String[] arr = new String[] { "aa", "bb", "c", "ddd", "e" };
+		String[] arr = new String[]{"aa", "bb", "c", "ddd", "e"};
 
 		String[] subarr = Arr.subarray(arr, 0, 2);
-		eq(subarr, new String[] { "aa", "bb", "c" });
+		eq(subarr, new String[]{"aa", "bb", "c"});
 
 		subarr = Arr.subarray(arr, 2, 4);
-		eq(subarr, new String[] { "c", "ddd", "e" });
+		eq(subarr, new String[]{"c", "ddd", "e"});
 
 		subarr = Arr.subarray(arr, 0, 4);
-		eq(subarr, new String[] { "aa", "bb", "c", "ddd", "e" });
+		eq(subarr, new String[]{"aa", "bb", "c", "ddd", "e"});
 
 		subarr = Arr.subarray(arr, 3, 3);
-		eq(subarr, new String[] { "ddd" });
+		eq(subarr, new String[]{"ddd"});
 
 		subarr = Arr.subarray(arr, 1, 3);
-		eq(subarr, new String[] { "bb", "c", "ddd" });
+		eq(subarr, new String[]{"bb", "c", "ddd"});
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void testSubarrayException() {
-		Arr.subarray(new String[] { "aa", "bb", "c" }, 2, 1);
+		Arr.subarray(new String[]{"aa", "bb", "c"}, 2, 1);
 	}
 
 }

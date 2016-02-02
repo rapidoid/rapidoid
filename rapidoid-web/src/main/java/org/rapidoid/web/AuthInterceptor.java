@@ -20,10 +20,6 @@ package org.rapidoid.web;
  * #L%
  */
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOPInterceptor;
@@ -31,13 +27,17 @@ import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.security.Secure;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
+
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class AuthInterceptor implements AOPInterceptor {
 
 	@Override
 	public Object intercept(final Callable<Object> forward, Annotation ann, Object ctx, final Method m,
-			final Object target, final Object[] args) {
+	                        final Object target, final Object[] args) {
 
 		String username = Ctxs.ctx().username();
 

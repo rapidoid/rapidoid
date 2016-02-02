@@ -20,8 +20,6 @@ package org.rapidoid.http.fast;
  * #L%
  */
 
-import java.util.Map;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
@@ -37,6 +35,8 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.wrap.BoolWrap;
 import org.rapidoid.wrap.IntWrap;
+
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -87,7 +87,7 @@ public class HttpParser implements Constants {
 	private static final byte[] GET = "GET".getBytes();
 
 	public void parse(Buf buf, BoolWrap isGet, BoolWrap isKeepAlive, Range body, Range verb, Range uri, Range path,
-			Range query, Range protocol, Ranges headers, RapidoidHelper helper) {
+	                  Range query, Range protocol, Ranges headers, RapidoidHelper helper) {
 
 		Bytes bytes = buf.bytes();
 
@@ -187,7 +187,7 @@ public class HttpParser implements Constants {
 	}
 
 	public void parseHeadersIntoKV(Buf buf, Ranges headers, KeyValueRanges headersKV, KeyValueRanges cookies,
-			RapidoidHelper helper) {
+	                               RapidoidHelper helper) {
 
 		Range cookie = helper.ranges5.ranges[0];
 
@@ -218,7 +218,7 @@ public class HttpParser implements Constants {
 	 * @return <code>false</code> if JSON data was posted, so it wasn't completely parsed.
 	 */
 	public boolean parseBody(Buf src, KeyValueRanges headers, Range body, KeyValueRanges data, KeyValueRanges files,
-			RapidoidHelper helper) {
+	                         RapidoidHelper helper) {
 
 		if (body.isEmpty()) {
 			return true;
@@ -230,38 +230,38 @@ public class HttpParser implements Constants {
 
 		switch (contentType) {
 
-		case MULTIPART:
-			if (multipartBoundary.isEmpty()) {
-				detectMultipartBoundary(src, body, multipartBoundary);
-			}
+			case MULTIPART:
+				if (multipartBoundary.isEmpty()) {
+					detectMultipartBoundary(src, body, multipartBoundary);
+				}
 
-			helper.bytes[0] = '-';
-			helper.bytes[1] = '-';
+				helper.bytes[0] = '-';
+				helper.bytes[1] = '-';
 
-			src.get(multipartBoundary, helper.bytes, 2);
+				src.get(multipartBoundary, helper.bytes, 2);
 
-			U.rteIf(multipartBoundary.isEmpty(), "Invalid multi-part HTTP request!");
+				U.rteIf(multipartBoundary.isEmpty(), "Invalid multi-part HTTP request!");
 
-			parseMultiParts(src, body, data, files, multipartBoundary, helper);
+				parseMultiParts(src, body, data, files, multipartBoundary, helper);
 
-			return true;
+				return true;
 
-		case FORM_URLENCODED:
-			// if (src.get(body.start) != '{') {
-			parseURLEncodedKV(src, data, body);
-			return true;
+			case FORM_URLENCODED:
+				// if (src.get(body.start) != '{') {
+				parseURLEncodedKV(src, data, body);
+				return true;
 
-		case JSON:
-			return false;
+			case JSON:
+				return false;
 
-		case OTHER:
-			return true;
+			case OTHER:
+				return true;
 
-		case NOT_FOUND:
-			return true;
+			case NOT_FOUND:
+				return true;
 
-		default:
-			throw U.notExpected();
+			default:
+				throw U.notExpected();
 		}
 	}
 
@@ -272,7 +272,7 @@ public class HttpParser implements Constants {
 
 	/* http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4.2 */
 	private void parseMultiParts(Buf src, Range body, KeyValueRanges data, KeyValueRanges files,
-			Range multipartBoundary, RapidoidHelper helper) {
+	                             Range multipartBoundary, RapidoidHelper helper) {
 
 		int start = body.start;
 		int limit = body.limit();
@@ -300,7 +300,7 @@ public class HttpParser implements Constants {
 	}
 
 	private void parseMultiPart(Buf src, Range body, KeyValueRanges data, KeyValueRanges files,
-			Range multipartBoundary, RapidoidHelper helper, int from, int to) {
+	                            Range multipartBoundary, RapidoidHelper helper, int from, int to) {
 
 		KeyValueRanges headers = helper.pairs.reset();
 		Range partBody = helper.ranges4.ranges[0];
@@ -442,7 +442,7 @@ public class HttpParser implements Constants {
 
 	@SuppressWarnings("unchecked")
 	public void parsePosted(Buf input, KeyValueRanges headersKV, Range rBody, KeyValueRanges posted,
-			KeyValueRanges files, RapidoidHelper helper, Map<String, Object> dest) {
+	                        KeyValueRanges files, RapidoidHelper helper, Map<String, Object> dest) {
 
 		boolean completed = parseBody(input, headersKV, rBody, posted, files, helper);
 

@@ -23,7 +23,6 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Map;
 

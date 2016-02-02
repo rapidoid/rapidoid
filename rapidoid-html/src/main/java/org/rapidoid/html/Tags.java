@@ -20,8 +20,6 @@ package org.rapidoid.html;
  * #L%
  */
 
-import java.util.Collection;
-
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -34,6 +32,8 @@ import org.rapidoid.html.tag.TextareaTag;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
+
+import java.util.Collection;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

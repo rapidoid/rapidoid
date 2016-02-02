@@ -20,15 +20,14 @@ package org.rapidoid.sql;
  * #L%
  */
 
-import java.beans.PropertyVetoException;
-import java.sql.Connection;
-import java.sql.SQLException;
-
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import java.beans.PropertyVetoException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

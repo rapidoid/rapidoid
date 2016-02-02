@@ -33,7 +33,7 @@ public class AnyObjTest extends AbstractCommonsTest {
 
 	@Test
 	public void testExclude() {
-		String[] arr = { "a", "b", "c" };
+		String[] arr = {"a", "b", "c"};
 		eq((Object[]) AnyObj.exclude(arr, "a"), U.array("b", "c"));
 		eq((Object[]) AnyObj.exclude(arr, "b"), U.array("a", "c"));
 		eq((Object[]) AnyObj.exclude(arr, "c"), U.array("a", "b"));
@@ -41,7 +41,7 @@ public class AnyObjTest extends AbstractCommonsTest {
 
 	@Test
 	public void testInclude() {
-		String[] arr = { "a", "b", "c" };
+		String[] arr = {"a", "b", "c"};
 		eq((Object[]) AnyObj.include(arr, "a"), U.array("a", "b", "c"));
 		eq((Object[]) AnyObj.include(arr, "d"), U.array("a", "b", "c", "d"));
 	}

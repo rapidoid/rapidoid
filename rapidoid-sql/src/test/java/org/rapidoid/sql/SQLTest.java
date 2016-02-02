@@ -20,15 +20,14 @@ package org.rapidoid.sql;
  * #L%
  */
 
-import java.util.List;
-import java.util.Map;
-
+import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
 import org.junit.Test;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
-import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
+import java.util.List;
+import java.util.Map;
 
 public class SQLTest extends TestCommons {
 

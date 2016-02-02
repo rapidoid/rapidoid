@@ -20,12 +20,12 @@ package org.rapidoid.gui.var;
  * #L%
  */
 
-import java.io.Serializable;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.var.impl.AbstractVar;
+
+import java.io.Serializable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.2")

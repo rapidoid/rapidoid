@@ -20,9 +20,6 @@ package org.rapidoid.plugins.cache.memcached;
  * #L%
  */
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeoutException;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -38,6 +35,9 @@ import org.rapidoid.plugins.cache.ICache;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeoutException;
 
 /**
  * This integration test must be manually enabled and executed, due to its delicate requirement: having access to a

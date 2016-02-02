@@ -1,11 +1,11 @@
 package org.rapidoid.fluent;
 
+import org.junit.Test;
+import org.rapidoid.test.TestCommons;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.junit.Test;
-import org.rapidoid.test.TestCommons;
 
 /*
  * #%L

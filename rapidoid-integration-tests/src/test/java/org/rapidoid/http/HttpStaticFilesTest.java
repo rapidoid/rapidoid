@@ -29,18 +29,18 @@ import org.rapidoid.http.fast.On;
 @Since("5.0.11")
 public class HttpStaticFilesTest extends HttpTestCommons {
 
-    @Test
-    public void serveStaticFiles() {
-        On.staticFilesLookIn("static1", "non-existing-location", "static2");
+	@Test
+	public void serveStaticFiles() {
+		On.staticFilesLookIn("static1", "non-existing-location", "static2");
 
-        On.get("/c").json("override");
+		On.get("/c").json("override");
 
-        onlyGet("/a");
-        onlyGet("/b");
-        onlyGet("/c");
+		onlyGet("/a");
+		onlyGet("/b");
+		onlyGet("/c");
 
-        notFound("/");
-        notFound("/xx");
-    }
+		notFound("/");
+		notFound("/xx");
+	}
 
 }

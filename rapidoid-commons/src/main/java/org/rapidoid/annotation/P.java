@@ -20,13 +20,13 @@ package org.rapidoid.annotation;
  * #L%
  */
 
-import static java.lang.annotation.ElementType.PARAMETER;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ PARAMETER })
+import static java.lang.annotation.ElementType.PARAMETER;
+
+@Target({PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Authors("Nikolche Mihajlovski")
 @Since("4.2.0")

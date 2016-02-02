@@ -1,11 +1,11 @@
 package org.rapidoid.util;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
+
+import java.util.Map;
+import java.util.Map.Entry;
 
 /*
  * #%L
@@ -31,7 +31,8 @@ import org.rapidoid.u.U;
 @Since("2.4.0")
 public class D {
 
-	private D() {}
+	private D() {
+	}
 
 	public static void print(Object... values) {
 		String text;

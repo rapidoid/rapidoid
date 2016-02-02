@@ -20,22 +20,7 @@ package org.rapidoid.wire;
  * #L%
  */
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Autocreate;
-import org.rapidoid.annotation.Init;
-import org.rapidoid.annotation.Inject;
-import org.rapidoid.annotation.Local;
-import org.rapidoid.annotation.Session;
-import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.*;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Builder;
 import org.rapidoid.cls.Cls;
@@ -46,6 +31,15 @@ import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")
@@ -200,7 +194,7 @@ public class Wire {
 	}
 
 	private static <T> T provideIoCInstanceOf(Object target, Class<T> type, String name,
-			Map<String, Object> properties, boolean optional) {
+	                                          Map<String, Object> properties, boolean optional) {
 		T instance = null;
 
 		if (name != null) {
@@ -308,7 +302,7 @@ public class Wire {
 
 	@SuppressWarnings("unchecked")
 	private static <T> T getInjectableByName(Class<T> type, String name, Map<String, Object> properties,
-			boolean useConfig) {
+	                                         boolean useConfig) {
 		Object instance = properties != null ? properties.get(name) : null;
 
 		if (instance == null && useConfig) {
@@ -326,7 +320,7 @@ public class Wire {
 	}
 
 	private static void autowire(Object target, Map<String, Object> properties, Mapper<String, Object> session,
-			Mapper<String, Object> locals) {
+	                             Mapper<String, Object> locals) {
 
 		Log.debug("Autowiring", "target", target, "session", session, "bindings", locals);
 
@@ -439,7 +433,7 @@ public class Wire {
 	}
 
 	public static <T, B extends Builder<T>> B builder(final Class<B> builderInterface, final Class<T> builtInterface,
-			final Class<? extends T> implClass) {
+	                                                  final Class<? extends T> implClass) {
 
 		final Map<String, Object> properties = U.map();
 

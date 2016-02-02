@@ -46,7 +46,7 @@ public class HttpParserPerfTest {
 	public static void main(String[] args) {
 
 		final HttpParser parser = new HttpParser();
-		final Buf[] reqs = { r(REQ1), r(REQ2), r(REQ3), r(REQ4) };
+		final Buf[] reqs = {r(REQ1), r(REQ2), r(REQ3), r(REQ4)};
 		final RapidoidHelper helper = new RapidoidHelper(null);
 
 		Range[] ranges = helper.ranges1.ranges;

@@ -20,11 +20,6 @@ package org.rapidoid.quick;
  * #L%
  */
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.transaction.Transactional;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
@@ -40,6 +35,11 @@ import org.rapidoid.web.Rapidoid;
 import org.rapidoid.web.WebApp;
 import org.rapidoid.web.WebAppGroup;
 import org.rapidoid.webapp.TransactionInterceptor;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.transaction.Transactional;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
