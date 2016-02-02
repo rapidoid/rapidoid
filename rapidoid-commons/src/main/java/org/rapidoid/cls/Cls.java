@@ -20,33 +20,17 @@ package org.rapidoid.cls;
  * #L%
  */
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Proxy;
-import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentMap;
-import java.util.regex.Pattern;
-
 import org.rapidoid.commons.Dates;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentMap;
+import java.util.regex.Pattern;
 
 /**
  * @author Nikolche Mihajlovski
@@ -65,7 +49,8 @@ public class Cls {
 
 	private static final Object[] EMPTY_ARRAY = {};
 
-	private Cls() {}
+	private Cls() {
+	}
 
 	protected static Map<String, TypeKind> initKinds() {
 
@@ -224,7 +209,7 @@ public class Cls {
 			}
 
 		} catch (Exception e) {
-			throw U.rte("Cannot instantiate class!", e);
+			throw U.rte("Cannot get annotations!", e);
 		}
 
 		return allAnnotations;
@@ -242,7 +227,7 @@ public class Cls {
 			}
 
 		} catch (Exception e) {
-			throw U.rte("Cannot instantiate class!", e);
+			throw U.rte("Cannot get fields!", e);
 		}
 
 		return allFields;
@@ -262,10 +247,27 @@ public class Cls {
 			}
 
 		} catch (Exception e) {
-			throw U.rte("Cannot instantiate class!", e);
+			throw U.rte("Cannot get annotated fields!", e);
 		}
 
 		return annotatedFields;
+	}
+
+	public static List<Method> getMethods(Class<?> clazz) {
+		List<Method> methods = U.list();
+
+		try {
+			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
+				for (Method method : c.getDeclaredMethods()) {
+					methods.add(method);
+				}
+			}
+
+		} catch (Exception e) {
+			throw U.rte("Cannot get methods!", e);
+		}
+
+		return methods;
 	}
 
 	public static List<Method> getMethodsAnnotated(Class<?> clazz, Class<? extends Annotation> annotation) {
@@ -273,7 +275,7 @@ public class Cls {
 
 		try {
 			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
-				Method[] methods = c.getMethods();
+				Method[] methods = c.getDeclaredMethods();
 				for (Method method : methods) {
 					if (method.isAnnotationPresent(annotation)) {
 						annotatedMethods.add(method);
@@ -499,65 +501,65 @@ public class Cls {
 
 		switch (targetKind) {
 
-		case NULL:
-			throw U.notExpected();
+			case NULL:
+				throw U.notExpected();
 
-		case BOOLEAN:
-		case BOOLEAN_OBJ:
-			if ("y".equalsIgnoreCase(value) || "t".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value)
-					|| "true".equalsIgnoreCase(value)) {
-				return (T) Boolean.TRUE;
-			}
+			case BOOLEAN:
+			case BOOLEAN_OBJ:
+				if ("y".equalsIgnoreCase(value) || "t".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value)
+						|| "true".equalsIgnoreCase(value)) {
+					return (T) Boolean.TRUE;
+				}
 
-			if ("n".equalsIgnoreCase(value) || "f".equalsIgnoreCase(value) || "no".equalsIgnoreCase(value)
-					|| "false".equalsIgnoreCase(value)) {
-				return (T) Boolean.FALSE;
-			}
+				if ("n".equalsIgnoreCase(value) || "f".equalsIgnoreCase(value) || "no".equalsIgnoreCase(value)
+						|| "false".equalsIgnoreCase(value)) {
+					return (T) Boolean.FALSE;
+				}
 
-			throw U.rte("Cannot convert the string value '%s' to boolean!", value);
+				throw U.rte("Cannot convert the string value '%s' to boolean!", value);
 
-		case BYTE:
-		case BYTE_OBJ:
-			return (T) new Byte(value);
+			case BYTE:
+			case BYTE_OBJ:
+				return (T) new Byte(value);
 
-		case SHORT:
-		case SHORT_OBJ:
-			return (T) new Short(value);
+			case SHORT:
+			case SHORT_OBJ:
+				return (T) new Short(value);
 
-		case CHAR:
-		case CHAR_OBJ:
-			return (T) new Character(value.charAt(0));
+			case CHAR:
+			case CHAR_OBJ:
+				return (T) new Character(value.charAt(0));
 
-		case INT:
-		case INT_OBJ:
-			return (T) new Integer(value);
+			case INT:
+			case INT_OBJ:
+				return (T) new Integer(value);
 
-		case LONG:
-		case LONG_OBJ:
-			return (T) new Long(value);
+			case LONG:
+			case LONG_OBJ:
+				return (T) new Long(value);
 
-		case FLOAT:
-		case FLOAT_OBJ:
-			return (T) new Float(value);
+			case FLOAT:
+			case FLOAT_OBJ:
+				return (T) new Float(value);
 
-		case DOUBLE:
-		case DOUBLE_OBJ:
-			return (T) new Double(value);
+			case DOUBLE:
+			case DOUBLE_OBJ:
+				return (T) new Double(value);
 
-		case STRING:
-			return (T) value;
+			case STRING:
+				return (T) value;
 
-		case OBJECT:
-			throw U.rte("Cannot convert string value to type '%s'!", toType);
+			case OBJECT:
+				throw U.rte("Cannot convert string value to type '%s'!", toType);
 
-		case DATE:
-			return (T) Dates.date(value);
+			case DATE:
+				return (T) Dates.date(value);
 
-		case UUID:
-			return (T) UUID.fromString(value);
+			case UUID:
+				return (T) UUID.fromString(value);
 
-		default:
-			throw U.notExpected();
+			default:
+				throw U.notExpected();
 		}
 	}
 
@@ -585,98 +587,98 @@ public class Cls {
 
 		switch (targetKind) {
 
-		case NULL:
-			throw U.notExpected();
+			case NULL:
+				throw U.notExpected();
 
-		case BOOLEAN:
-		case BOOLEAN_OBJ:
-			if (value instanceof Boolean) {
-				return (T) value;
-			} else {
-				throw U.rte("Cannot convert the value '%s' to boolean!", value);
-			}
+			case BOOLEAN:
+			case BOOLEAN_OBJ:
+				if (value instanceof Boolean) {
+					return (T) value;
+				} else {
+					throw U.rte("Cannot convert the value '%s' to boolean!", value);
+				}
 
-		case BYTE:
-		case BYTE_OBJ:
-			if (isNum) {
-				return (T) new Byte(((Number) value).byteValue());
-			} else {
-				throw U.rte("Cannot convert the value '%s' to byte!", value);
-			}
+			case BYTE:
+			case BYTE_OBJ:
+				if (isNum) {
+					return (T) new Byte(((Number) value).byteValue());
+				} else {
+					throw U.rte("Cannot convert the value '%s' to byte!", value);
+				}
 
-		case SHORT:
-		case SHORT_OBJ:
-			if (isNum) {
-				return (T) new Short(((Number) value).shortValue());
-			} else {
-				throw U.rte("Cannot convert the value '%s' to short!", value);
-			}
+			case SHORT:
+			case SHORT_OBJ:
+				if (isNum) {
+					return (T) new Short(((Number) value).shortValue());
+				} else {
+					throw U.rte("Cannot convert the value '%s' to short!", value);
+				}
 
-		case CHAR:
-		case CHAR_OBJ:
-			if (isNum) {
-				return (T) new Character((char) ((Number) value).intValue());
-			} else {
-				throw U.rte("Cannot convert the value '%s' to char!", value);
-			}
+			case CHAR:
+			case CHAR_OBJ:
+				if (isNum) {
+					return (T) new Character((char) ((Number) value).intValue());
+				} else {
+					throw U.rte("Cannot convert the value '%s' to char!", value);
+				}
 
-		case INT:
-		case INT_OBJ:
-			if (isNum) {
-				return (T) new Integer(((Number) value).intValue());
-			} else {
-				throw U.rte("Cannot convert the value '%s' to int!", value);
-			}
+			case INT:
+			case INT_OBJ:
+				if (isNum) {
+					return (T) new Integer(((Number) value).intValue());
+				} else {
+					throw U.rte("Cannot convert the value '%s' to int!", value);
+				}
 
-		case LONG:
-		case LONG_OBJ:
-			if (isNum) {
-				return (T) new Long(((Number) value).longValue());
-			} else {
-				throw U.rte("Cannot convert the value '%s' to long!", value);
-			}
+			case LONG:
+			case LONG_OBJ:
+				if (isNum) {
+					return (T) new Long(((Number) value).longValue());
+				} else {
+					throw U.rte("Cannot convert the value '%s' to long!", value);
+				}
 
-		case FLOAT:
-		case FLOAT_OBJ:
-			if (isNum) {
-				return (T) new Float(((Number) value).floatValue());
-			} else {
-				throw U.rte("Cannot convert the value '%s' to float!", value);
-			}
+			case FLOAT:
+			case FLOAT_OBJ:
+				if (isNum) {
+					return (T) new Float(((Number) value).floatValue());
+				} else {
+					throw U.rte("Cannot convert the value '%s' to float!", value);
+				}
 
-		case DOUBLE:
-		case DOUBLE_OBJ:
-			if (isNum) {
-				return (T) new Double(((Number) value).doubleValue());
-			} else {
-				throw U.rte("Cannot convert the value '%s' to double!", value);
-			}
+			case DOUBLE:
+			case DOUBLE_OBJ:
+				if (isNum) {
+					return (T) new Double(((Number) value).doubleValue());
+				} else {
+					throw U.rte("Cannot convert the value '%s' to double!", value);
+				}
 
-		case STRING:
-			if (value instanceof Date) {
-				return (T) Dates.str((Date) value);
-			} else if (value instanceof byte[]) {
-				return (T) new String((byte[]) value);
-			} else if (value instanceof char[]) {
-				return (T) new String((char[]) value);
-			} else {
-				return (T) U.str(value);
-			}
+			case STRING:
+				if (value instanceof Date) {
+					return (T) Dates.str((Date) value);
+				} else if (value instanceof byte[]) {
+					return (T) new String((byte[]) value);
+				} else if (value instanceof char[]) {
+					return (T) new String((char[]) value);
+				} else {
+					return (T) U.str(value);
+				}
 
-		case OBJECT:
-			throw U.rte("Cannot convert the value to type '%s'!", toType);
+			case OBJECT:
+				throw U.rte("Cannot convert the value to type '%s'!", toType);
 
-		case DATE:
-			if (value instanceof Date) {
-				return (T) value;
-			} else if (value instanceof Number) {
-				return (T) new Date(((Number) value).longValue());
-			} else {
-				throw U.rte("Cannot convert the value '%s' to date!", value);
-			}
+			case DATE:
+				if (value instanceof Date) {
+					return (T) value;
+				} else if (value instanceof Number) {
+					return (T) new Date(((Number) value).longValue());
+				} else {
+					throw U.rte("Cannot convert the value '%s' to date!", value);
+				}
 
-		default:
-			throw U.notExpected();
+			default:
+				throw U.notExpected();
 		}
 	}
 
