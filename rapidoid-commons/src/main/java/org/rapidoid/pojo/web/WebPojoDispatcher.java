@@ -105,7 +105,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 		if (web != null) {
 			return U.list(web.url());
 		} else {
-			return super.getComponentNames(component);
+			return U.list("/");
 		}
 	}
 
@@ -207,7 +207,8 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 	}
 
 	@Override
-	protected void preprocess(PojoRequest req, Method method, Object component, Object[] args) {}
+	protected void preprocess(PojoRequest req, Method method, Object component, Object[] args) {
+	}
 
 	@Override
 	protected Object invoke(PojoRequest req, Method method, Object component, Object[] args) {

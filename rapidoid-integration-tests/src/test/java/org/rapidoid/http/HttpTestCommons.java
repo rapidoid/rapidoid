@@ -249,4 +249,8 @@ public abstract class HttpTestCommons extends TestCommons {
 		return method;
 	}
 
+	protected static Map<String, Object> reqResp(Req req, Resp resp) {
+		return U.map("verb", req.verb(), "uri", req.uri(), "data", req.data(), "code", resp.code());
+	}
+
 }

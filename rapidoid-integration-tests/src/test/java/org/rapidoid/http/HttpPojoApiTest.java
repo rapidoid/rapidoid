@@ -147,4 +147,81 @@ public class HttpPojoApiTest extends HttpTestCommons {
 		onlyDelete("/test9");
 	}
 
+	static class Ctrl1 {
+		@GET
+		public Object x(Req req, Resp resp) {
+			return reqResp(req, resp);
+		}
+
+		@POST
+		Object y(Req req, Resp resp) {
+			return reqResp(req, resp);
+		}
+
+		@POST
+		protected Object z(Req req, Resp resp) {
+			return reqResp(req, resp);
+		}
+
+		@POST
+		private Object w(Req req, Resp resp) {
+			return reqResp(req, resp);
+		}
+	}
+
+	@Test
+	public void test10() {
+		On.req(new Ctrl1());
+
+		notFound("/");
+		onlyGet("/x");
+		onlyPost("/y");
+		notFound("/z");
+		notFound("/w");
+	}
+
+	@Test
+	public void test11() {
+		On.req(Ctrl1.class);
+
+		notFound("/");
+		onlyGet("/x");
+		onlyPost("/y");
+		notFound("/z");
+		notFound("/w");
+	}
+
+	class Ctrl2 {
+		@GET
+		public Object x(Req req, Resp resp) {
+			return reqResp(req, resp);
+		}
+
+		@POST
+		Object y(Req req, Resp resp) {
+			return reqResp(req, resp);
+		}
+
+		@POST
+		protected Object z(Req req, Resp resp) {
+			return reqResp(req, resp);
+		}
+
+		@POST
+		private Object w(Req req, Resp resp) {
+			return reqResp(req, resp);
+		}
+	}
+
+	@Test
+	public void test12() {
+		On.req(new Ctrl2());
+
+		notFound("/");
+		onlyGet("/x");
+		onlyPost("/y");
+		notFound("/z");
+		notFound("/w");
+	}
+
 }

@@ -20,17 +20,6 @@ package org.rapidoid.pojo.impl;
  * #L%
  */
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Param;
 import org.rapidoid.annotation.Since;
@@ -40,13 +29,15 @@ import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.log.Log;
-import org.rapidoid.pojo.DispatchResult;
-import org.rapidoid.pojo.PojoDispatchException;
-import org.rapidoid.pojo.PojoDispatcher;
-import org.rapidoid.pojo.PojoHandlerNotFoundException;
-import org.rapidoid.pojo.PojoRequest;
+import org.rapidoid.pojo.*;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -71,7 +62,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 				List<String> componentPaths = getComponentNames(clazz);
 
 				for (String componentPath : componentPaths) {
-					for (Method method : clazz.getMethods()) {
+					for (Method method : Cls.getMethods(clazz)) {
 						if (shouldExpose(method)) {
 							List<DispatchReq> actions = getMethodActions(componentPath, method);
 
@@ -130,7 +121,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 	}
 
 	private DispatchResult call(PojoRequest req, String[] parts, int paramsFrom, DispatchTarget target,
-			DispatchReqKind kind) throws PojoHandlerNotFoundException, PojoDispatchException {
+	                            DispatchReqKind kind) throws PojoHandlerNotFoundException, PojoDispatchException {
 
 		if (target.method != null) {
 			Object callResult = doDispatch(req, target.method, target.controller, parts, paramsFrom);
@@ -221,7 +212,8 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		return null;
 	}
 
-	protected void preprocess(PojoRequest request, Method method, Object component, Object[] args) {}
+	protected void preprocess(PojoRequest request, Method method, Object component, Object[] args) {
+	}
 
 	protected Object postprocess(PojoRequest request, Method method, Object component, Object[] args, Object result) {
 		if (result == null && method.getReturnType().equals(void.class)) {
@@ -231,7 +223,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 	}
 
 	protected Object complexArg(int i, Class<?> type, PojoRequest request, String[] parts, int paramsFrom,
-			int paramsSize) throws PojoDispatchException {
+	                            int paramsSize) throws PojoDispatchException {
 
 		if (type.equals(Map.class)) {
 			return mapArg(request, parts, paramsFrom);
@@ -341,9 +333,13 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 		boolean isUserDefined = !method.getDeclaringClass().equals(Object.class);
 
 		int modifiers = method.getModifiers();
-		boolean isPublic = !Modifier.isAbstract(modifiers) && Modifier.isPublic(modifiers);
 
-		return isUserDefined && isPublic;
+		boolean isAbstract = Modifier.isAbstract(modifiers);
+		boolean isStatic = Modifier.isStatic(modifiers);
+		boolean isPrivate = Modifier.isPrivate(modifiers);
+		boolean isProtected = Modifier.isProtected(modifiers);
+
+		return isUserDefined && !isAbstract && !isStatic && !isPrivate && !isProtected;
 	}
 
 	protected static PojoDispatchException error(Throwable cause, String msg, Object... args) {
