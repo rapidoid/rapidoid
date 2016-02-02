@@ -158,6 +158,11 @@ public class HttpPojoApiTest extends HttpTestCommons {
 			return reqResp(req, resp);
 		}
 
+		@Page
+		Object p(Req req, Resp resp) {
+			return reqResp(req, resp);
+		}
+
 		@POST
 		protected Object z(Req req, Resp resp) {
 			return reqResp(req, resp);
@@ -174,8 +179,11 @@ public class HttpPojoApiTest extends HttpTestCommons {
 		On.req(new Ctrl1());
 
 		notFound("/");
+
 		onlyGet("/x");
 		onlyPost("/y");
+		getAndPost("/p");
+
 		notFound("/z");
 		notFound("/w");
 	}
@@ -185,8 +193,11 @@ public class HttpPojoApiTest extends HttpTestCommons {
 		On.req(Ctrl1.class);
 
 		notFound("/");
+
 		onlyGet("/x");
 		onlyPost("/y");
+		getAndPost("/p");
+
 		notFound("/z");
 		notFound("/w");
 	}
@@ -199,6 +210,11 @@ public class HttpPojoApiTest extends HttpTestCommons {
 
 		@POST
 		Object y(Req req, Resp resp) {
+			return reqResp(req, resp);
+		}
+
+		@Page
+		Object p(Req req, Resp resp) {
 			return reqResp(req, resp);
 		}
 
@@ -218,8 +234,11 @@ public class HttpPojoApiTest extends HttpTestCommons {
 		On.req(new Ctrl2());
 
 		notFound("/");
+
 		onlyGet("/x");
 		onlyPost("/y");
+		getAndPost("/p");
+
 		notFound("/z");
 		notFound("/w");
 	}
@@ -237,6 +256,11 @@ public class HttpPojoApiTest extends HttpTestCommons {
 				return reqResp(req, resp);
 			}
 
+			@Page
+			Object p(Req req, Resp resp) {
+				return reqResp(req, resp);
+			}
+
 			@POST
 			protected Object z(Req req, Resp resp) {
 				return reqResp(req, resp);
@@ -251,8 +275,11 @@ public class HttpPojoApiTest extends HttpTestCommons {
 		On.req(new Ctrl3());
 
 		notFound("/");
+
 		onlyGet("/x");
 		onlyPost("/y");
+		getAndPost("/p");
+
 		notFound("/z");
 		notFound("/w");
 	}
