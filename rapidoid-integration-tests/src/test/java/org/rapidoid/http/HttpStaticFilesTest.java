@@ -35,11 +35,16 @@ public class HttpStaticFilesTest extends HttpTestCommons {
 
 		On.get("/c").json("override");
 
+		onlyGet("/"); // home page
+		onlyGet("/index"); // home page
+		onlyGet("/index.html"); // home page
+
 		onlyGet("/a");
+		onlyGet("/a.html");
+
 		onlyGet("/b");
 		onlyGet("/c");
 
-		notFound("/");
 		notFound("/xx");
 		notFound("/page1");
 		notFound("/page2");
@@ -48,6 +53,8 @@ public class HttpStaticFilesTest extends HttpTestCommons {
 	@Test
 	public void serveStaticFilesFromDefaultLocations() {
 		onlyGet("/page1");
+		onlyGet("/page1.html");
+
 		onlyGet("/page2");
 
 		notFound("/");
