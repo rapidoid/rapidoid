@@ -132,8 +132,10 @@ public class U {
 
 	public static String replace(String s, String[][] repls) {
 		for (String[] repl : repls) {
+			U.must(repl.length == 2, "Expected pairs of [search, replacement] strings!");
 			s = s.replaceAll(Pattern.quote(repl[0]), repl[1]);
 		}
+
 		return s;
 	}
 

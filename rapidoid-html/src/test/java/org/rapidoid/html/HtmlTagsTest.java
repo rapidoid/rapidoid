@@ -49,4 +49,10 @@ public class HtmlTagsTest extends TestCommons {
 		eq(U.map(div, "y"), U.map(div, "y"));
 	}
 
+	@Test
+	public void testHTMLEscape() {
+		String esc = HTML.escape("<aa> b=\"123\" c->d; a & b && c &nbsp;");
+		eq(esc, "&lt;aa&gt; b=&quot;123&quot; c-&gt;d; a &amp; b &amp;&amp; c &amp;nbsp;");
+	}
+
 }

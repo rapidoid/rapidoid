@@ -20,7 +20,6 @@ package org.rapidoid.html;
  * #L%
  */
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.impl.ConstantTag;
@@ -39,6 +38,13 @@ import java.util.Collection;
 @Since("2.0.0")
 public class Tags extends BasicUtils {
 
+	private static final String[][] XML_ESCAPE = {
+			{"&", "&amp;"},
+			{"\"", "&quot;"},
+			{"<", "&lt;"},
+			{">", "&gt;"},
+	};
+
 	public static <T> Var<T> var(String name, T value) {
 		return Vars.var(name, value);
 	}
@@ -52,7 +58,7 @@ public class Tags extends BasicUtils {
 	}
 
 	public static String escape(String s) {
-		return StringEscapeUtils.escapeHtml4(s);
+		return U.replace(s, XML_ESCAPE);
 	}
 
 	public static void traverse(Object contents, TagProcessor<Tag> processor) {
