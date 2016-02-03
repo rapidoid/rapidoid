@@ -1,5 +1,5 @@
 HTTP/1.1 404 Not Found
-Connection: keep-alive
+Connection: close
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8

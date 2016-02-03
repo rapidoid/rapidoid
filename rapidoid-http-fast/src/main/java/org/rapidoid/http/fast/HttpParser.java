@@ -99,7 +99,7 @@ public class HttpParser implements Constants {
 		buf.scanLnLn(headers.reset(), result, (byte) 's', (byte) 'e');
 
 		int possibleClosePos = result.value;
-		isKeepAlive.value = possibleClosePos < 0 ? true : isKeepAlive(bytes, headers, helper);
+		isKeepAlive.value = possibleClosePos < 0 ? false : isKeepAlive(bytes, headers, helper);
 
 		BytesUtil.split(bytes, uri, ASTERISK, path, query, false);
 

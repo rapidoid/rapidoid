@@ -1,5 +1,5 @@
 HTTP/1.1 200 OK
-Connection: keep-alive
+Connection: close
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: application/octet-stream
