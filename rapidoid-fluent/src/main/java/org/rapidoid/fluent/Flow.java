@@ -39,27 +39,27 @@ import java.util.stream.Stream;
 public interface Flow<T> extends Stream<T> {
 
 	@SafeVarargs
-	public static <T> FlowImpl<T> of(T... values) {
+	static <T> FlowImpl<T> of(T... values) {
 		return new FlowImpl<T>(Do.streamOf(values));
 	}
 
-	public static <T> FlowImpl<T> of(Iterable<T> values) {
+	static <T> FlowImpl<T> of(Iterable<T> values) {
 		return new FlowImpl<T>(Do.stream(values));
 	}
 
-	public static <T> FlowImpl<T> of(Stream<T> values) {
+	static <T> FlowImpl<T> of(Stream<T> values) {
 		return new FlowImpl<T>(Do.stream(values));
 	}
 
-	public static FlowImpl<Long> range(long startInclusive, long endExclusive) {
+	static FlowImpl<Long> range(long startInclusive, long endExclusive) {
 		return new FlowImpl<Long>(LongStream.range(startInclusive, endExclusive).boxed());
 	}
 
-	public static FlowImpl<Long> count(long startInclusive, long endInclusive) {
+	static FlowImpl<Long> count(long startInclusive, long endInclusive) {
 		return new FlowImpl<Long>(LongStream.rangeClosed(startInclusive, endInclusive).boxed());
 	}
 
-	public static FlowImpl<Character> chars(char startInclusive, char endInclusive) {
+	static FlowImpl<Character> chars(char startInclusive, char endInclusive) {
 		return count(startInclusive, endInclusive).map(n -> (char) n.intValue());
 	}
 
