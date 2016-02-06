@@ -22,6 +22,7 @@ package org.rapidoid.http.fast;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.fast.handler.FastHttpHandler;
 import org.rapidoid.http.fast.listener.FastHttpListener;
@@ -141,6 +142,10 @@ public class On {
 
 	public static synchronized ServerSetup render(ViewRenderer renderer) {
 		return setup().render(renderer);
+	}
+
+	public static void args(String... args) {
+		Conf.args(args);
 	}
 
 }
