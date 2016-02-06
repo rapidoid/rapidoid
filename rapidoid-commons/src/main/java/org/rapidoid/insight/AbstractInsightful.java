@@ -39,7 +39,7 @@ public abstract class AbstractInsightful implements Insightful {
 		this.kind = kind;
 		this.name = name;
 
-		Log.info("Creating object", "kind", kind, "name", name, "creatorThread", creatorThread.getName(), "class",
+		Log.debug("Creating object", "kind", kind, "name", name, "creatorThread", creatorThread.getName(), "class",
 				getClass().getSimpleName());
 
 		Insights.register(this);

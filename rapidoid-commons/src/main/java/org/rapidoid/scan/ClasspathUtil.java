@@ -131,7 +131,7 @@ public class ClasspathUtil {
 
 		Set<String> classpath = getClasspath();
 
-		Log.info("Scanning classpath", "package", packageName, "annotated", annotated, "regex", regex, "filter",
+		Log.debug("Starting classpath scan", "package", packageName, "annotated", annotated, "regex", regex, "filter",
 				filter, "loader", classLoader);
 
 		Log.debug("Classpath details", "classpath", classpath);

@@ -115,7 +115,7 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 
 			ServerSocket socket = serverSocketChannel.socket();
 
-			Log.info("Opening port to listen", "port", port);
+			Log.debug("Opening port to listen", "port", port);
 
 			InetSocketAddress addr = new InetSocketAddress(address, port);
 
@@ -123,10 +123,10 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 			socket.setReuseAddress(true);
 			socket.bind(addr, MAX_PENDING_CONNECTIONS);
 
-			Log.info("Opened server socket", "address", addr);
+			Log.debug("Opened server socket", "address", addr);
 
 			if (!blockingAccept) {
-				Log.info("Registering accept selector");
+				Log.debug("Registering accept selector");
 				serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 			}
 
