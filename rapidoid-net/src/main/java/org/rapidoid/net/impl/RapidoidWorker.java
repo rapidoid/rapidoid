@@ -258,23 +258,24 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	private void close(SelectionKey key) {
 		try {
-			Object attachment = key.attachment();
+			if (key != null) {
+				Object attachment = key.attachment();
 
-			clearKey(key);
+				clearKey(key);
 
-			if (attachment instanceof RapidoidConnection) {
-				RapidoidConnection conn = (RapidoidConnection) attachment;
+				if (attachment instanceof RapidoidConnection) {
+					RapidoidConnection conn = (RapidoidConnection) attachment;
 
-				if (conn != null) {
-					if (!conn.closed) {
-						Log.trace("Closing connection", "connection", conn);
-						assert conn.key == key;
-						conn.reset();
-						connections.release(conn);
+					if (conn != null) {
+						if (!conn.closed) {
+							Log.trace("Closing connection", "connection", conn);
+							assert conn.key == key;
+							conn.reset();
+							connections.release(conn);
+						}
 					}
 				}
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
