@@ -27,6 +27,9 @@ import org.rapidoid.data.JSON;
 import org.rapidoid.http.fast.handler.FastHttpHandler;
 import org.rapidoid.http.fast.listener.FastHttpListener;
 import org.rapidoid.job.Jobs;
+import org.rapidoid.util.UTILS;
+
+import java.lang.annotation.Annotation;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
@@ -146,6 +149,13 @@ public class On {
 
 	public static void args(String... args) {
 		Conf.args(args);
+	}
+
+	@SafeVarargs
+	@SuppressWarnings({"varargs"})
+	public static OnAnnotated annotated(Class<? extends Annotation>... annotated) {
+		String pkg = UTILS.getCallingPackageOf(On.class);
+		return new OnAnnotated(annotated, pkg);
 	}
 
 }

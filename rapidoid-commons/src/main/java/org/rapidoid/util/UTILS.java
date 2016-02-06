@@ -649,11 +649,11 @@ public class UTILS implements Constants {
 
 		// skip the first 2 elements:
 		// [0] java.lang.Thread.getStackTrace
-		// [1] org.rapidoid.util.UTILS.getCallingClassOf
+		// [1] THIS METHOD
 
 		for (int i = 2; i < trace.length; i++) {
 			String cls = trace[i].getClassName();
-			if (!cls.equals(calledClass.getCanonicalName())) {
+			if (!cls.equals(calledClass.getCanonicalName()) && !cls.equals(UTILS.class.getCanonicalName())) {
 				try {
 					return Class.forName(cls);
 				} catch (ClassNotFoundException e) {
@@ -664,6 +664,16 @@ public class UTILS implements Constants {
 		}
 
 		return null;
+	}
+
+	public static String getCallingPackageOf(Class<?> calledClass) {
+		Class<?> callerCls = getCallingClassOf(calledClass);
+
+		if (callerCls != null) {
+			return callerCls.getPackage() != null ? callerCls.getPackage().getName() : "";
+		} else {
+			throw U.rte("Couldn't infer the caller class of: {}", calledClass.getName());
+		}
 	}
 
 	public static byte[] toBytes(Object obj) {
