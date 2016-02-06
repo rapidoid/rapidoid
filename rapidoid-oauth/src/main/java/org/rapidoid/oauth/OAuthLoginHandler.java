@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.ConfigEntry;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.fast.ReqHandler;
+import org.rapidoid.http.ReqHandler;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

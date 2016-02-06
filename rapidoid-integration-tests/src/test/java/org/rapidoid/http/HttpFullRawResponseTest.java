@@ -23,8 +23,6 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.fast.On;
-import org.rapidoid.http.fast.ReqHandler;
 import org.rapidoid.util.Bufs;
 
 @Authors("Nikolche Mihajlovski")

@@ -25,8 +25,6 @@ import org.rapidoid.activity.RapidoidThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
-import org.rapidoid.http.fast.On;
-import org.rapidoid.http.fast.ReqHandler;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 

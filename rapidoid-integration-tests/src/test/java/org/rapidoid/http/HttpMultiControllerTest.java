@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.fast.On;
-import org.rapidoid.http.fast.ReqHandler;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")

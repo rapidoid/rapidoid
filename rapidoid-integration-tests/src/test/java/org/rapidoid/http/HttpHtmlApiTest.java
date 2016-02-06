@@ -24,8 +24,6 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.fast.On;
-import org.rapidoid.http.fast.ReqRespHandler;
 import org.rapidoid.io.Res;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Bufs;

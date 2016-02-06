@@ -27,8 +27,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.crypto.Crypto;
-import org.rapidoid.http.fast.On;
-import org.rapidoid.http.fast.ReqHandler;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;

@@ -22,7 +22,6 @@ package org.rapidoid.http;
 
 import org.junit.Test;
 import org.rapidoid.annotation.*;
-import org.rapidoid.http.fast.On;
 import org.rapidoid.u.U;
 
 import java.util.Date;

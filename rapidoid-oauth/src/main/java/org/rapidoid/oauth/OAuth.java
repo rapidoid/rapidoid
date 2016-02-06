@@ -27,10 +27,10 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.ConfigEntry;
 import org.rapidoid.gui.GUI;
+import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.fast.HttpUtils;
-import org.rapidoid.http.fast.ReqHandler;
-import org.rapidoid.http.fast.ServerSetup;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.ServerSetup;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 

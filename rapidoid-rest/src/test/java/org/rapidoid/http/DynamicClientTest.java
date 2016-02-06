@@ -25,8 +25,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Promise;
 import org.rapidoid.concurrent.Promises;
-import org.rapidoid.http.fast.On;
-import org.rapidoid.http.fast.ReqHandler;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
