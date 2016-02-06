@@ -23,28 +23,29 @@ package org.rapidoid.scan;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.5.0")
 public class ScanParams {
 
-	private String pkg = null;
+	private String[] pkg = null;
 
 	private String matching = null;
 
 	private org.rapidoid.lambda.Predicate<Class<?>> filter = null;
 
-	private Class<? extends java.lang.annotation.Annotation> annotated = null;
+	private Class<? extends java.lang.annotation.Annotation>[] annotated = null;
 
 	private ClassLoader classLoader = null;
 
-	public synchronized ScanParams pkg(String pkg) {
+	public synchronized ScanParams pkg(String... pkg) {
 		this.pkg = pkg;
 		return this;
 	}
 
-	public synchronized String pkg() {
+	public synchronized String[] pkg() {
 		return this.pkg;
 	}
 
@@ -66,12 +67,12 @@ public class ScanParams {
 		return this.filter;
 	}
 
-	public synchronized ScanParams annotated(Class<? extends java.lang.annotation.Annotation> annotated) {
+	public synchronized ScanParams annotated(Class<? extends Annotation>... annotated) {
 		this.annotated = annotated;
 		return this;
 	}
 
-	public synchronized Class<? extends java.lang.annotation.Annotation> annotated() {
+	public synchronized Class<? extends Annotation>[] annotated() {
 		return this.annotated;
 	}
 

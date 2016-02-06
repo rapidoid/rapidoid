@@ -23,6 +23,7 @@ package org.rapidoid.scan;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
@@ -41,7 +42,7 @@ public class Scan {
 		return new ScanParams().filter(filter);
 	}
 
-	public static ScanParams annotated(Class<? extends java.lang.annotation.Annotation> annotated) {
+	public static ScanParams annotated(Class<? extends Annotation>... annotated) {
 		return new ScanParams().annotated(annotated);
 	}
 

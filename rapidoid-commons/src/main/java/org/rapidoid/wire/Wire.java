@@ -155,7 +155,7 @@ public class Wire {
 	}
 
 	public static synchronized <T> T singleton(Class<T> type) {
-		Log.debug("Inject", "type", type);
+		Log.debug("Singleton", "type", type);
 		return provideIoCInstanceOf(null, type, null, null, false);
 	}
 
