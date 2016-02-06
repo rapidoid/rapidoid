@@ -1,4 +1,4 @@
-package org.rapidoid.web;
+package org.rapidoid.web.web;
 
 /*
  * #%L
@@ -22,30 +22,27 @@ package org.rapidoid.web;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.aop.AOPInterceptor;
-import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.lambda.Lmbd;
-import org.rapidoid.security.Secure;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
+import org.rapidoid.aop.AOP;
+import org.rapidoid.entity.AppClasspathEntitiesPlugin;
+import org.rapidoid.log.Log;
+import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
+import org.rapidoid.security.annotation.*;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public class AuthInterceptor implements AOPInterceptor {
+@Since("5.1.0")
+public class RapidoidWebModule {
 
-	@Override
-	public Object intercept(final Callable<Object> forward, Annotation ann, Object ctx, final Method m,
-	                        final Object target, final Object[] args) {
+	static {
+		Log.info("Initializing the Rapidoid Web module");
 
-		String username = Ctxs.ctx().username();
+		Plugins.register(new MustacheTemplatesPlugin());
+		Plugins.register(new AppClasspathEntitiesPlugin());
 
-		if (Secure.canAccessMethod(username, m)) {
-			return Lmbd.call(forward);
-		} else {
-			throw new SecurityException("The user doesn't have the required roles!");
-		}
+		AOP.reset();
+
+		AOP.intercept(new AuthInterceptor(), Admin.class, Manager.class, Moderator.class, LoggedIn.class,
+				DevMode.class, Role.class, HasRole.class);
 	}
 
 }

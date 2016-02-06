@@ -31,9 +31,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.db.hibernate.HibernateDBPlugin;
 import org.rapidoid.u.U;
-import org.rapidoid.web.Rapidoid;
-import org.rapidoid.web.WebApp;
-import org.rapidoid.web.WebAppGroup;
 import org.rapidoid.webapp.TransactionInterceptor;
 
 import javax.persistence.EntityManager;
@@ -46,14 +43,8 @@ import javax.transaction.Transactional;
 public class Quick {
 
 	@SuppressWarnings("unchecked")
-	public static void bootstrap(WebApp app, final String[] args, Object... config) {
-		app = Rapidoid.bootstrap(app, args, config);
-
-		WebAppGroup.main().setDefaultApp(app);
-		WebAppGroup.main().register(app);
-
+	public static void bootstrap(final String[] args, Object... config) {
 		Ctx ctx = Ctxs.open("quick");
-		ctx.setApp(app);
 		Ctxs.setPersisterProvider(new QuickJPA(config));
 
 		Plugins.register(new HibernateDBPlugin());

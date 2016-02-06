@@ -22,11 +22,14 @@ package org.rapidoid.http.fast;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.fast.handler.FastHttpHandler;
 import org.rapidoid.http.fast.listener.FastHttpListener;
 import org.rapidoid.job.Jobs;
+import org.rapidoid.log.Log;
 import org.rapidoid.util.UTILS;
 
 import java.lang.annotation.Annotation;
@@ -49,7 +52,16 @@ public class On {
 	}
 
 	private static void initialize() {
+		Log.info("Starting Rapidoid...", "version", RapidoidInfo.version());
+
+		// print internal state
+		// LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+
+		Log.info("Working directory is: " + System.getProperty("user.dir"));
+
 		DEFAULT_SERVER_SETUP.listen();
+
+		//Ctx ctx = Ctxs.open("web");
 
 		Jobs.execute(new Runnable() {
 			@Override
@@ -57,6 +69,10 @@ public class On {
 				JSON.warmup();
 			}
 		});
+
+		Cls.getClassIfExists("org.rapidoid.web.RapidoidWebModule");
+
+		Log.info("Rapidoid is ready.");
 	}
 
 	public static synchronized OnAction get(String path) {
