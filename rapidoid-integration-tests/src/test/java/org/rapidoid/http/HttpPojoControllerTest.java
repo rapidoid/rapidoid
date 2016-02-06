@@ -28,10 +28,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.wire.Wire;
 
 import javax.annotation.Generated;
-import java.lang.annotation.Retention;
 import java.util.List;
-
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.10")
@@ -56,15 +53,14 @@ public class HttpPojoControllerTest extends HttpTestCommons {
 		notFound("/b");
 		notFound("/x");
 
-		List<Class<?>> ctrls = On.annotated(MyController.class).in("pkg1", "pkg2").getAll();
+		List<Class<?>> ctrls = On.annotated(MyTestController.class).in("pkg1", "pkg2").getAll();
 		isTrue(ctrls.isEmpty());
 
-		List<Class<?>> ctrls2 = On.annotated(MyController.class).getAll();
+		List<Class<?>> ctrls2 = On.annotated(MyTestController.class).in("non-existing-pkg", "").getAll();
 		eq(ctrls2, U.list(Ff.class));
 
-		On.annotated(MyController.class, MyController.class).forEach(On::req);
+		On.annotated(MyTestController.class, MyTestController.class).forEach(On::req);
 
-		// cls -> On.req(Wire.singleton(cls))
 		onlyGet("/a");
 		onlyGet("/b");
 		notFound("/x");
@@ -74,13 +70,13 @@ public class HttpPojoControllerTest extends HttpTestCommons {
 	public void testPojoHandlersWithIoC() {
 		notFound("/b");
 
-		List<Class<?>> ctrls = On.annotated(MyController.class).in("pkg1", "pkg2").getAll();
+		List<Class<?>> ctrls = On.annotated(MyTestController.class).in("pkg1", "pkg2").getAll();
 		isTrue(ctrls.isEmpty());
 
-		List<Class<?>> ctrls2 = On.annotated(MyController.class, Generated.class).getAll();
+		List<Class<?>> ctrls2 = On.annotated(MyTestController.class, Generated.class).getAll();
 		eq(ctrls2, U.list(Ff.class));
 
-		On.annotated(MyController.class, MyController.class).forEach(cls -> On.req(Wire.singleton(cls)));
+		On.annotated(MyTestController.class, MyTestController.class).forEach(cls -> On.req(Wire.singleton(cls)));
 
 		onlyGet("/b");
 		notFound("/x");
@@ -88,11 +84,10 @@ public class HttpPojoControllerTest extends HttpTestCommons {
 
 }
 
-@Retention(RUNTIME)
-@interface MyController {
+@interface MyTestController {
 }
 
-@MyController
+@MyTestController
 class Ff {
 
 	@GET(uri = "/b")
