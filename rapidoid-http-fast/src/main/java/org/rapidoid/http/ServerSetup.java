@@ -219,11 +219,15 @@ public class ServerSetup {
 		return this;
 	}
 
-	private void reset() {
+	public void reset() {
 		fastHttp.resetConfig();
 		listening = false;
 		fastHttp = null;
 		wrappers = null;
+		listener = new IgnorantHttpListener();
+		port = Conf.port();
+		address = "0.0.0.0";
+		path = null;
 	}
 
 	public TCPServer server() {
