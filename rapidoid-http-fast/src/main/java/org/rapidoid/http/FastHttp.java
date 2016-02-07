@@ -35,6 +35,8 @@ import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.handler.FastStaticResourcesHandler;
+import org.rapidoid.http.impl.HandlerMatch;
+import org.rapidoid.http.impl.HandlerMatchWithParams;
 import org.rapidoid.http.listener.FastHttpListener;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
@@ -46,10 +48,7 @@ import org.rapidoid.wire.Wire;
 import org.rapidoid.wrap.BoolWrap;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
@@ -104,6 +103,15 @@ public class FastHttp implements Protocol, HttpMetadata {
 	private final BufMap<FastHttpHandler> headHandlers = new BufMapImpl<FastHttpHandler>();
 	private final BufMap<FastHttpHandler> traceHandlers = new BufMapImpl<FastHttpHandler>();
 
+	private final Map<PathPattern, FastHttpHandler> paternGetHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
+	private final Map<PathPattern, FastHttpHandler> paternPostHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
+	private final Map<PathPattern, FastHttpHandler> paternPutHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
+	private final Map<PathPattern, FastHttpHandler> paternDeleteHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
+	private final Map<PathPattern, FastHttpHandler> paternPatchHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
+	private final Map<PathPattern, FastHttpHandler> paternOptionsHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
+	private final Map<PathPattern, FastHttpHandler> paternHeadHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
+	private final Map<PathPattern, FastHttpHandler> paternTraceHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
+
 	private volatile byte[] path1, path2, path3;
 
 	private volatile FastHttpHandler handler1, handler2, handler3;
@@ -135,43 +143,83 @@ public class FastHttp implements Protocol, HttpMetadata {
 	}
 
 	public synchronized void on(String verb, String path, FastHttpHandler handler) {
+		if (path.length() > 1) {
+			path = U.trimr(path, "/");
+		}
+
+		boolean withPathPattern = path.contains("{") || path.contains("}");
+
+		PathPattern pathPattern = withPathPattern ? PathPattern.from(path) : null;
+
 		if (verb.equals("GET")) {
-			if (path1 == null) {
-				path1 = path.getBytes();
-				handler1 = handler;
+			if (!withPathPattern) {
+				if (path1 == null) {
+					path1 = path.getBytes();
+					handler1 = handler;
 
-			} else if (path2 == null) {
-				path2 = path.getBytes();
-				handler2 = handler;
+				} else if (path2 == null) {
+					path2 = path.getBytes();
+					handler2 = handler;
 
-			} else if (path3 == null) {
-				path3 = path.getBytes();
-				handler3 = handler;
+				} else if (path3 == null) {
+					path3 = path.getBytes();
+					handler3 = handler;
 
+				} else {
+					getHandlers.put(path, handler);
+				}
 			} else {
-				getHandlers.put(path, handler);
+				paternGetHandlers.put(pathPattern, handler);
 			}
 
 		} else if (verb.equals("POST")) {
-			postHandlers.put(path, handler);
+			if (!withPathPattern) {
+				postHandlers.put(path, handler);
+			} else {
+				paternPostHandlers.put(pathPattern, handler);
+			}
 
 		} else if (verb.equals("PUT")) {
-			putHandlers.put(path, handler);
+			if (!withPathPattern) {
+				putHandlers.put(path, handler);
+			} else {
+				paternPutHandlers.put(pathPattern, handler);
+			}
 
 		} else if (verb.equals("DELETE")) {
-			deleteHandlers.put(path, handler);
+			if (!withPathPattern) {
+				deleteHandlers.put(path, handler);
+			} else {
+				paternDeleteHandlers.put(pathPattern, handler);
+			}
 
 		} else if (verb.equals("PATCH")) {
-			patchHandlers.put(path, handler);
+			if (!withPathPattern) {
+				patchHandlers.put(path, handler);
+			} else {
+				paternPatchHandlers.put(pathPattern, handler);
+			}
 
 		} else if (verb.equals("OPTIONS")) {
-			optionsHandlers.put(path, handler);
+			if (!withPathPattern) {
+				optionsHandlers.put(path, handler);
+			} else {
+				paternOptionsHandlers.put(pathPattern, handler);
+			}
 
 		} else if (verb.equals("HEAD")) {
-			headHandlers.put(path, handler);
+			if (!withPathPattern) {
+				headHandlers.put(path, handler);
+			} else {
+				paternHeadHandlers.put(pathPattern, handler);
+			}
 
 		} else if (verb.equals("TRACE")) {
-			traceHandlers.put(path, handler);
+			if (!withPathPattern) {
+				traceHandlers.put(path, handler);
+			} else {
+				paternTraceHandlers.put(pathPattern, handler);
+			}
 
 		} else {
 			throw U.rte("Unsupported HTTP verb: %s", verb);
@@ -226,7 +274,9 @@ public class FastHttp implements Protocol, HttpMetadata {
 		}
 
 		HttpStatus status = HttpStatus.NOT_FOUND;
-		FastHttpHandler handler = findHandler(buf, isGet, xverb, xpath);
+		HandlerMatch match = findHandler(buf, isGet, xverb, xpath);
+
+		FastHttpHandler handler = match != null ? match.getHandler() : null;
 		boolean noReq = (handler != null && !handler.needsParams());
 
 		ReqImpl req = null;
@@ -238,6 +288,10 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 			HTTP_PARSER.parseParams(buf, paramsKV, xquery);
 			Map<String, String> params = U.cast(paramsKV.toMap(buf, true, true));
+
+			if (match != null && match.getParams() != null) {
+				params.putAll(match.getParams());
+			}
 
 			HTTP_PARSER.parseHeadersIntoKV(buf, hdrs, headersKV, cookiesKV, helper);
 			Map<String, String> headers = U.cast(headersKV.toMap(buf, true, true));
@@ -316,7 +370,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 		return HttpStatus.NOT_FOUND;
 	}
 
-	private FastHttpHandler findHandler(Buf buf, BoolWrap isGet, Range verb, Range path) {
+	private HandlerMatch findHandler(Buf buf, BoolWrap isGet, Range verb, Range path) {
 		Bytes bytes = buf.bytes();
 
 		if (isGet.value) {
@@ -327,38 +381,98 @@ public class FastHttp implements Protocol, HttpMetadata {
 			} else if (path3 != null && BytesUtil.matches(bytes, path, path3, true)) {
 				return handler3;
 			} else {
-				FastHttpHandler getHandler = getHandlers.get(buf, path);
+				HandlerMatch handler = getHandlers.get(buf, path);
 
-				if (getHandler == null) {
-					getHandler = staticResourcesHandler;
+				if (handler == null && !paternGetHandlers.isEmpty()) {
+					handler = matchByPattern(paternGetHandlers, buf.get(path));
 				}
 
-				return getHandler;
+				if (handler == null) {
+					handler = staticResourcesHandler;
+				}
+
+				return handler;
 			}
 
 		} else if (BytesUtil.matches(bytes, verb, _POST, true)) {
-			return postHandlers.get(buf, path);
+			HandlerMatch handler = postHandlers.get(buf, path);
+
+			if (handler == null && !paternPostHandlers.isEmpty()) {
+				handler = matchByPattern(paternPostHandlers, buf.get(path));
+			}
+
+			return handler;
 
 		} else if (BytesUtil.matches(bytes, verb, _PUT, true)) {
-			return putHandlers.get(buf, path);
+			HandlerMatch handler = putHandlers.get(buf, path);
+
+			if (handler == null && !paternPutHandlers.isEmpty()) {
+				handler = matchByPattern(paternPutHandlers, buf.get(path));
+			}
+
+			return handler;
 
 		} else if (BytesUtil.matches(bytes, verb, _DELETE, true)) {
-			return deleteHandlers.get(buf, path);
+			HandlerMatch handler = deleteHandlers.get(buf, path);
+
+			if (handler == null && !paternDeleteHandlers.isEmpty()) {
+				handler = matchByPattern(paternDeleteHandlers, buf.get(path));
+			}
+
+			return handler;
 
 		} else if (BytesUtil.matches(bytes, verb, _PATCH, true)) {
-			return patchHandlers.get(buf, path);
+			HandlerMatch handler = patchHandlers.get(buf, path);
+
+			if (handler == null && !paternPatchHandlers.isEmpty()) {
+				handler = matchByPattern(paternPatchHandlers, buf.get(path));
+			}
+
+			return handler;
 
 		} else if (BytesUtil.matches(bytes, verb, _OPTIONS, true)) {
-			return optionsHandlers.get(buf, path);
+			HandlerMatch handler = optionsHandlers.get(buf, path);
+
+			if (handler == null && !paternOptionsHandlers.isEmpty()) {
+				handler = matchByPattern(paternOptionsHandlers, buf.get(path));
+			}
+
+			return handler;
 
 		} else if (BytesUtil.matches(bytes, verb, _HEAD, true)) {
-			return headHandlers.get(buf, path);
+			HandlerMatch handler = headHandlers.get(buf, path);
+
+			if (handler == null && !paternHeadHandlers.isEmpty()) {
+				handler = matchByPattern(paternHeadHandlers, buf.get(path));
+			}
+
+			return handler;
 
 		} else if (BytesUtil.matches(bytes, verb, _TRACE, true)) {
-			return traceHandlers.get(buf, path);
+			HandlerMatch handler = traceHandlers.get(buf, path);
+
+			if (handler == null && !paternTraceHandlers.isEmpty()) {
+				handler = matchByPattern(paternTraceHandlers, buf.get(path));
+			}
+
+			return handler;
 		}
 
 		return null; // no handler
+	}
+
+	private HandlerMatch matchByPattern(Map<PathPattern, FastHttpHandler> handlers, String path) {
+		for (Map.Entry<PathPattern, FastHttpHandler> e : handlers.entrySet()) {
+
+			PathPattern pattern = e.getKey();
+			Map<String, String> params = pattern.match(path);
+
+			if (params != null) {
+				return new HandlerMatchWithParams(e.getValue(), params);
+			}
+		}
+
+		return null;
 	}
 
 	public void start200(Channel ctx, boolean isKeepAlive, MediaType contentType) {
@@ -476,6 +590,15 @@ public class FastHttp implements Protocol, HttpMetadata {
 		deleteHandlers.clear();
 		optionsHandlers.clear();
 		genericHandlers.clear();
+
+		paternGetHandlers.clear();
+		paternPostHandlers.clear();
+		paternPutHandlers.clear();
+		paternDeleteHandlers.clear();
+		paternPatchHandlers.clear();
+		paternOptionsHandlers.clear();
+		paternHeadHandlers.clear();
+		paternTraceHandlers.clear();
 	}
 
 	public void renderBody(Channel ctx, int code, MediaType contentType, byte[] body) {

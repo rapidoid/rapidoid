@@ -1,8 +1,8 @@
-package org.rapidoid.http.handler;
+package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-http-fast
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,22 +20,32 @@ package org.rapidoid.http.handler;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.HttpStatus;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.impl.HandlerMatch;
-import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public interface FastHttpHandler extends HandlerMatch {
+@Since("5.1.0")
+public class HttpPathMatchingTest extends HttpTestCommons {
 
-	HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra);
+	@Test
+	public void testHttpPathMatching() {
+		On.get("/movies/{id}").json(Req::params);
+		On.post("/users/{x}/").json(Req::params);
+		On.put("/books/{__}/abc").json(Req::params);
+		On.delete("/tags/{_f}/ref{n:\\d+}/").json(Req::params);
 
-	boolean needsParams();
+		onlyGet("/movies/123");
+		onlyGet("/movies/1/");
 
-	MediaType contentType();
+		onlyPost("/users/abc-def");
+		onlyPost("/users/a/");
+
+		onlyPut("/books/12df/abc");
+		onlyPut("/books/x-y-z/abc/");
+
+		onlyDelete("/tags/comedy/ref45");
+		onlyDelete("/tags/drama/ref3/");
+	}
 
 }

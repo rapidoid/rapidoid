@@ -25,6 +25,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.FastHttp;
 
+import java.util.Map;
+
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
 public abstract class AbstractFastHttpHandler implements FastHttpHandler {
@@ -46,6 +48,16 @@ public abstract class AbstractFastHttpHandler implements FastHttpHandler {
 	@Override
 	public MediaType contentType() {
 		return contentType;
+	}
+
+	@Override
+	public Map<String, String> getParams() {
+		return null;
+	}
+
+	@Override
+	public FastHttpHandler getHandler() {
+		return this;
 	}
 
 }
