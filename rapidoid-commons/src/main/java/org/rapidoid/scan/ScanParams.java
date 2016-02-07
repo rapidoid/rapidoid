@@ -30,7 +30,7 @@ import java.util.List;
 @Since("2.5.0")
 public class ScanParams {
 
-	private String[] pkg = null;
+	private String[] packages = null;
 
 	private String matching = null;
 
@@ -40,13 +40,13 @@ public class ScanParams {
 
 	private ClassLoader classLoader = null;
 
-	public synchronized ScanParams pkg(String... pkg) {
-		this.pkg = pkg;
+	public synchronized ScanParams in(String... packages) {
+		this.packages = packages;
 		return this;
 	}
 
-	public synchronized String[] pkg() {
-		return this.pkg;
+	public synchronized String[] in() {
+		return this.packages;
 	}
 
 	public synchronized ScanParams matching(String matching) {

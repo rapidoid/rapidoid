@@ -103,7 +103,7 @@ public class ClasspathUtil {
 	}
 
 	public static List<Class<?>> scanClasses(ScanParams params) {
-		String[] pkgs = params.pkg();
+		String[] pkgs = params.in();
 
 		if (U.isEmpty(pkgs)) {
 			pkgs = new String[]{rootPackage};

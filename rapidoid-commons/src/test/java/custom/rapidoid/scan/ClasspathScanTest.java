@@ -48,7 +48,7 @@ public class ClasspathScanTest extends AbstractCommonsTest {
 
 		eq(U.set(classes), U.set(ClasspathScanTest.class));
 
-		classes = Scan.pkg("custom").matching(".*Bar").getClasses();
+		classes = Scan.in("custom").matching(".*Bar").getClasses();
 
 		eq(U.set(classes), U.set(Bar.class));
 	}

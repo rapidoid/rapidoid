@@ -35,11 +35,11 @@ public class OnAnnotated {
 
 	private final Class<? extends Annotation>[] annotated;
 
-	private volatile String[] packages;
+	private volatile String[] path;
 
-	OnAnnotated(Class<? extends Annotation>[] annotated, String pkg) {
+	OnAnnotated(Class<? extends Annotation>[] annotated, String[] path) {
 		this.annotated = annotated;
-		this.packages = new String[]{pkg};
+		this.path = path;
 	}
 
 	public synchronized void forEach(Operation<Class<?>> classOperation) {
@@ -53,13 +53,13 @@ public class OnAnnotated {
 	}
 
 	public synchronized OnAnnotated in(String... packages) {
-		this.packages = packages;
+		this.path = packages;
 		return this;
 	}
 
 	@SuppressWarnings("unchecked")
 	public synchronized List<Class<?>> getAll() {
-		return Scan.annotated(annotated).pkg(packages).getClasses();
+		return Scan.annotated(annotated).in(path).getClasses();
 	}
 
 }

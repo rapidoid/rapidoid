@@ -30,8 +30,8 @@ import java.util.List;
 @Since("2.5.0")
 public class Scan {
 
-	public static ScanParams pkg(String pkg) {
-		return new ScanParams().pkg(pkg);
+	public static ScanParams in(String... packages) {
+		return new ScanParams().in(packages);
 	}
 
 	public static ScanParams matching(String matching) {
