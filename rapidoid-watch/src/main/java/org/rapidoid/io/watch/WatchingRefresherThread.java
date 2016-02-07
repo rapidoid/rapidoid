@@ -27,26 +27,32 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class WatchingRefresherThread extends AbstractLoopThread {
 
+	private static final AtomicInteger idGen = new AtomicInteger();
+
 	private final ClassRefresher refresher;
 
 	private final Set<String> filenames = U.set();
 
-	private final String dir;
+	private final Collection<String> folders;
 
 	private final Queue<String> queue;
 
-	public WatchingRefresherThread(String dir, Queue<String> queue, ClassRefresher refresher) {
-		this.dir = dir;
+	public WatchingRefresherThread(Collection<String> folders, Queue<String> queue, ClassRefresher refresher) {
+		this.folders = folders;
 		this.queue = queue;
 		this.refresher = refresher;
+
+		setName("reloader" + idGen.incrementAndGet());
 	}
 
 	@Override
@@ -71,32 +77,34 @@ public class WatchingRefresherThread extends AbstractLoopThread {
 		Log.info("Reloading classes", "classes", filenames);
 
 		try {
-			List<String> classnames = filenamesToClassnames(dir, filenames);
-			List<Class<?>> classes = Reload.reloadClasses(dir, classnames);
-
+			List<String> classnames = filenamesToClassnames(filenames);
+			List<Class<?>> classes = Reload.reloadClasses(folders, classnames);
 			refresher.refresh(classes);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private static String filenameToClassname(String dir, String filename) {
-		if (filename.endsWith(".class") && filename.startsWith(dir + File.separatorChar)) {
-			return filename.substring(dir.length() + 1, filename.length() - 6).replace(File.separatorChar, '.');
-		}
+	private String filenameToClassname(String filename) {
+		for (String dir : folders) {
+			if (filename.endsWith(".class") && filename.startsWith(dir + File.separatorChar)) {
+				return filename.substring(dir.length() + 1, filename.length() - 6).replace(File.separatorChar, '.');
+			}
 
-		if (filename.endsWith(".class") && filename.startsWith(dir + "/")) {
-			return filename.substring(dir.length() + 1, filename.length() - 6).replace('/', '.');
+			if (filename.endsWith(".class") && filename.startsWith(dir + "/")) {
+				return filename.substring(dir.length() + 1, filename.length() - 6).replace('/', '.');
+			}
 		}
 
 		return null;
 	}
 
-	private static List<String> filenamesToClassnames(String dir, Set<String> filenames) {
+	private List<String> filenamesToClassnames(Set<String> filenames) {
 		List<String> list = U.list();
 
 		for (String filename : filenames) {
-			String classname = filenameToClassname(dir, filename);
+			String classname = filenameToClassname(filename);
+
 			if (classname != null) {
 				list.add(classname);
 			}

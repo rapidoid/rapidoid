@@ -30,8 +30,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CancellationException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.StandardWatchEventKinds.*;
@@ -40,42 +44,65 @@ import static java.nio.file.StandardWatchEventKinds.*;
 @Since("4.1.0")
 public class WatcherThread extends AbstractLoopThread {
 
+	private static final AtomicInteger idGen = new AtomicInteger();
+
 	private final Map<WatchKey, Path> keys = U.map();
 
 	private final FilesystemChangeListener onChange;
-	private final String path;
-	private final File file;
+
 	private final boolean recursive;
 
-	private volatile WatchService watcher;
+	private final WatchService watcher;
 
-	public WatcherThread(FilesystemChangeListener change, String path, boolean recursive) {
+	private final List<String> folders = U.synchronizedList();
+
+	private final Set<String> watching = U.synchronizedSet();
+
+	public WatcherThread(FilesystemChangeListener change, Collection<String> targetFolders, boolean recursive) {
 		this.onChange = change;
-		this.path = path;
 		this.recursive = recursive;
-		this.file = new File(path);
 
-		setName("watcher");
-	}
+		for (String folder : targetFolders) {
+			this.folders.add(new File(folder).getAbsolutePath());
+		}
 
-	private void startWatching() {
-		Path dir = Paths.get(path);
-		if (recursive) {
-			startWatchingTree(dir);
-		} else {
-			startWatching(dir);
+		setName("watcher" + idGen.incrementAndGet());
+
+		try {
+			watcher = FileSystems.getDefault().newWatchService();
+		} catch (IOException e) {
+			throw U.rte("Couldn't create a file system watch service!", e);
 		}
 	}
 
-	private void startWatching(Path dir) {
-		Log.info("Watching directory for changes", "dir", path, "recursive", recursive);
+	private void init() {
+		for (String folder : folders) {
+			init(folder);
+		}
+	}
 
-		try {
-			if (watcher == null) {
-				watcher = FileSystems.getDefault().newWatchService();
+	private void init(String folder) {
+		if (!watching.contains(folder) && new File(folder).exists()) {
+			Log.info("Watching folder for changes", "folder", folder, "recursive", recursive);
+
+			Path dir = Paths.get(folder);
+			if (recursive) {
+				startWatchingTree(dir);
+			} else {
+				init(dir);
 			}
 
+			watching.add(folder);
+		}
+	}
+
+	private void init(Path dir) {
+		Log.debug("Registering directory watch", "dir", dir);
+
+		try {
 			WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+			U.notNull(key, "watch key");
+
 			keys.put(key, dir);
 		} catch (IOException e) {
 			Log.error("Couldn't register to watch for changes on: " + dir, e);
@@ -87,7 +114,7 @@ public class WatcherThread extends AbstractLoopThread {
 			Dir.traverse(root, new SimpleFileVisitor<Path>() {
 				@Override
 				public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-					startWatching(dir);
+					init(dir);
 					return FileVisitResult.CONTINUE;
 				}
 			});
@@ -98,14 +125,7 @@ public class WatcherThread extends AbstractLoopThread {
 
 	@Override
 	protected void loop() {
-		if (watcher == null) {
-			if (file.exists()) {
-				startWatching();
-			} else {
-				U.sleep(1000);
-				return;
-			}
-		}
+		init();
 
 		WatchKey key;
 		try {
@@ -155,13 +175,14 @@ public class WatcherThread extends AbstractLoopThread {
 			keys.remove(key);
 
 			if (keys.isEmpty()) {
-				if (!file.exists()) {
+				if (!dir.toFile().exists()) {
 					Log.warn("Cannot watch directory because it doesn't exist anymore", "dir", dir);
 				} else {
 					Log.error("Cannot watch directory due to unknown reason!", "dir", dir);
 				}
-				watcher = null;
 			}
+
+			watching.remove(dir.toFile().getAbsolutePath());
 		}
 	}
 

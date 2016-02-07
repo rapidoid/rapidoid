@@ -22,11 +22,14 @@ package org.rapidoid.io.watch;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
 
-import java.io.*;
+import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
@@ -34,13 +37,13 @@ import java.util.List;
 public class ClassReloader extends ClassLoader {
 
 	private final List<String> names;
+	private final Collection<String> classpath;
 	private final ClassLoader parent;
-	private final String dir;
 	private final long createdOn = System.currentTimeMillis();
 
-	public ClassReloader(String dir, ClassLoader parent, List<String> names) {
+	public ClassReloader(Collection<String> classpath, ClassLoader parent, List<String> names) {
 		super(parent);
-		this.dir = dir;
+		this.classpath = classpath;
 		this.parent = parent;
 		this.names = names;
 	}
@@ -48,25 +51,11 @@ public class ClassReloader extends ClassLoader {
 	@Override
 	protected Class<?> findClass(String name) throws ClassNotFoundException {
 
-		String filename = null;
-		File ff = new File(dir, getClassRelativePath(name));
-
-		if (ff.exists()) {
-			filename = ff.getAbsolutePath();
-		} else {
-			URL res = parent.getResource(getClassRelativePath(name));
-			if (res != null) {
-				try {
-					filename = res.toURI().getPath();
-				} catch (URISyntaxException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		String filename = getClassFilename(name);
 
 		if (filename != null) {
 			try {
-				Log.info("Hot swap", "file", filename);
+				Log.debug("Hot swap", "file", filename);
 
 				try {
 					try {
@@ -74,7 +63,7 @@ public class ClassReloader extends ClassLoader {
 					} catch (Exception e2) {
 					}
 
-					byte[] classData = readFile(new File(filename));
+					byte[] classData = IO.loadBytes(filename);
 					return defineClass(name, classData, 0, classData.length);
 
 				} catch (ClassFormatError e) {
@@ -84,7 +73,7 @@ public class ClassReloader extends ClassLoader {
 					} catch (Exception e2) {
 					}
 
-					byte[] classData = readFile(new File(filename));
+					byte[] classData = IO.loadBytes(filename);
 					return defineClass(name, classData, 0, classData.length);
 				}
 
@@ -96,52 +85,47 @@ public class ClassReloader extends ClassLoader {
 		}
 	}
 
-	private byte[] readFile(File file) {
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
+	private String getClassFilename(String name) {
+		String filename = findOnClasspath(name);
+		if (filename != null) return filename;
 
-		BufferedInputStream stream = null;
+		URL res = parent.getResource(getClassRelativePath(name));
+		return res != null ? getFilename(res) : null;
+	}
+
+	private String findOnClasspath(String name) {
+		for (String dir : classpath) {
+			File ff = new File(dir, getClassRelativePath(name));
+
+			if (ff.exists()) {
+				return ff.getAbsolutePath();
+			}
+		}
+		return null;
+	}
+
+	private String getFilename(URL res) {
 		try {
-			stream = new BufferedInputStream(new FileInputStream(file));
-
-			byte[] bytes = new byte[16 * 1024];
-
-			int read = -1;
-			while ((read = stream.read(bytes)) != -1) {
-				output.write(bytes, 0, read);
-			}
-
-			return output.toByteArray();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} finally {
-			if (stream != null) {
-				try {
-					stream.close();
-				} catch (IOException e) {
-					// ignore
-				}
-			}
+			return res.toURI().getPath();
+		} catch (URISyntaxException e) {
+			throw U.rte(e);
 		}
 	}
 
 	public Class<?> loadClass(String classname) throws ClassNotFoundException {
-		Log.info("Loading class", "name", classname);
+		Log.debug("Loading class", "name", classname);
 
-		if (inDir(classname) || names.contains(classname)) {
+		if (findOnClasspath(classname) != null || names.contains(classname)) {
 			try {
 				return findClass(classname);
 			} catch (ClassNotFoundException e) {
 				Class<?> fallbackClass = super.loadClass(classname);
-				Log.info("Couldn't reload class, fallback load", "name", classname);
+				Log.debug("Couldn't reload class, fallback load", "name", classname);
 				return fallbackClass;
 			}
 		} else {
 			return super.loadClass(classname);
 		}
-	}
-
-	private boolean inDir(String classname) {
-		return new File(dir, getClassRelativePath(classname)).exists();
 	}
 
 	private static String getClassRelativePath(String classname) {

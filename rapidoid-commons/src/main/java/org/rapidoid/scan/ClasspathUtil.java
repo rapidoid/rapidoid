@@ -378,6 +378,34 @@ public class ClasspathUtil {
 		return CLASSPATH;
 	}
 
+	public static synchronized Set<String> getClasspathFolders() {
+		Set<String> folders = U.set();
+
+		Set<String> cps = ClasspathUtil.getClasspath();
+
+		for (String cp : cps) {
+			if (new File(cp).isDirectory()) {
+				folders.add(cp);
+			}
+		}
+
+		return folders;
+	}
+
+	public static synchronized Set<String> getClasspathJars() {
+		Set<String> jars = U.set();
+
+		Set<String> cps = ClasspathUtil.getClasspath();
+
+		for (String cp : cps) {
+			if (new File(cp).isFile() && cp.substring(cp.length() - 4).equalsIgnoreCase(".JAR")) {
+				jars.add(cp);
+			}
+		}
+
+		return jars;
+	}
+
 	public static String getRootPackage() {
 		return rootPackage;
 	}

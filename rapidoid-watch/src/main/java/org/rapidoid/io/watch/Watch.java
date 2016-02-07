@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
+import java.util.Collection;
 import java.util.Queue;
 
 @Authors("Nikolche Mihajlovski")
@@ -33,14 +34,14 @@ public class Watch {
 
 	private final WatcherThread watcher;
 
-	public Watch(String dir, FilesystemChangeListener changes) {
-		this.watcher = new WatcherThread(changes, dir, true);
+	public Watch(Collection<String> folders, FilesystemChangeListener changes) {
+		this.watcher = new WatcherThread(changes, folders, true);
 		watcher.start();
 	}
 
-	public static Watch dir(final String dir, final FilesystemChangeListener changes) {
+	public static Watch dirs(Collection<String> folders, final FilesystemChangeListener changes) {
 		try {
-			return new Watch(dir, changes);
+			return new Watch(folders, changes);
 
 		} catch (Throwable e) {
 			Log.error("Couldn't watch for changes!", e);
@@ -48,17 +49,25 @@ public class Watch {
 		}
 	}
 
-	public static Watch dir(final String dir, final ClassRefresher refresher) {
+	public static Watch dir(String folder, FilesystemChangeListener changes) {
+		return dirs(U.list(folder), changes);
+	}
+
+	public static Watch dirs(Collection<String> folders, final ClassRefresher refresher) {
 		try {
 			Queue<String> queue = U.queue();
 			FilesystemChangeQueueListener changes = new FilesystemChangeQueueListener(queue);
-			new WatchingRefresherThread(dir, queue, refresher).start();
-			return dir(dir, changes);
+			new WatchingRefresherThread(folders, queue, refresher).start();
+			return dirs(folders, changes);
 
 		} catch (Throwable e) {
 			Log.error("Couldn't watch for changes!", e);
 			return null;
 		}
+	}
+
+	public static Watch dir(String folder, ClassRefresher changes) {
+		return dirs(U.list(folder), changes);
 	}
 
 	public void stop() {

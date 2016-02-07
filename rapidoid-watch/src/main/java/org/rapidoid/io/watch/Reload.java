@@ -25,27 +25,27 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class Reload {
 
-	public static ClassReloader createClassLoader(String dir) {
-		Log.info("Creating class loader", "dir", dir);
+	public static ClassReloader createClassLoader(Collection<String> classpath) {
+		Log.debug("Creating class loader", "classpath", classpath);
 		ClassLoader parentClassLoader = ClassReloader.class.getClassLoader();
-		return new ClassReloader(dir, parentClassLoader, new ArrayList<String>());
+		return new ClassReloader(classpath, parentClassLoader, U.<String>list());
 	}
 
-	public static synchronized List<Class<?>> reloadClasses(String dir, List<String> classnames) {
-		ClassReloader classLoader = Reload.createClassLoader(dir);
+	public static synchronized List<Class<?>> reloadClasses(Collection<String> classpath, List<String> classnames) {
+		ClassReloader classLoader = Reload.createClassLoader(classpath);
 
 		List<Class<?>> classes = U.list();
 
-		for (String classname : classnames) {
+		for (String className : classnames) {
 			try {
-				classes.add(classLoader.loadClass(classname));
+				classes.add(classLoader.loadClass(className));
 			} catch (Throwable e) {
 				Log.warn("Couldn't reload class!", e);
 			}
