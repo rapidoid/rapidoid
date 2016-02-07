@@ -257,7 +257,7 @@ public class ServerSetup {
 
 	public synchronized String[] path() {
 		if (U.isEmpty(this.path)) {
-			String pkg = UTILS.getCallingPackageOf(ServerSetup.class);
+			String pkg = UTILS.getCallingPackageOf(ServerSetup.class, On.class, ServerSetup.class);
 			this.path = new String[]{pkg};
 			Log.info("Inferring application package (path) to be: " + pkg);
 		}

@@ -644,16 +644,31 @@ public class UTILS implements Constants {
 		return false;
 	}
 
-	public static Class<?> getCallingClassOf(Class<?> calledClass) {
+	public static Class<?> getCallingClassOf(Class<?>... ignoreClasses) {
+		return inferCaller(ignoreClasses);
+	}
+
+	public static String getCallingPackageOf(Class<?>... ignoreClasses) {
+		Class<?> callerCls = inferCaller(ignoreClasses);
+
+		if (callerCls != null) {
+			return callerCls.getPackage() != null ? callerCls.getPackage().getName() : "";
+		} else {
+			throw U.rte("Couldn't infer the caller!");
+		}
+	}
+
+	private static Class<?> inferCaller(Class<?>... ignoreClasses) {
 		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
 
-		// skip the first 2 elements:
+		// skip the first 3 elements:
 		// [0] java.lang.Thread.getStackTrace
 		// [1] THIS METHOD
+		// [2] UTILS#getCallingPackageOf or UTILS#getCallingClassOf
 
-		for (int i = 2; i < trace.length; i++) {
+		for (int i = 3; i < trace.length; i++) {
 			String cls = trace[i].getClassName();
-			if (!cls.equals(calledClass.getCanonicalName()) && !cls.equals(UTILS.class.getCanonicalName())) {
+			if (!shouldIgnore(cls, ignoreClasses)) {
 				try {
 					return Class.forName(cls);
 				} catch (ClassNotFoundException e) {
@@ -666,14 +681,14 @@ public class UTILS implements Constants {
 		return null;
 	}
 
-	public static String getCallingPackageOf(Class<?> calledClass) {
-		Class<?> callerCls = getCallingClassOf(calledClass);
-
-		if (callerCls != null) {
-			return callerCls.getPackage() != null ? callerCls.getPackage().getName() : "";
-		} else {
-			throw U.rte("Couldn't infer the caller class of: {}", calledClass.getName());
+	private static boolean shouldIgnore(String cls, Class<?>[] ignoreClasses) {
+		for (Class<?> ignoreClass : ignoreClasses) {
+			if (cls.equals(ignoreClass.getCanonicalName())) {
+				return true;
+			}
 		}
+
+		return false;
 	}
 
 	public static byte[] toBytes(Object obj) {
