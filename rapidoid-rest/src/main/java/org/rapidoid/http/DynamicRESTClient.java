@@ -80,7 +80,7 @@ public class DynamicRESTClient implements Dynamic {
 			Callback<Object> callback = (Callback<Object>) U.last(args);
 			U.notNull(callback, "callback");
 
-			args = Arr.subarray(args, 0, -2);
+			args = Arr.sub(args, 0, -1);
 			String realUrl = String.format(url, args);
 
 			OfType ofType = Metadata.get(U.last(m.getParameterAnnotations()), OfType.class);

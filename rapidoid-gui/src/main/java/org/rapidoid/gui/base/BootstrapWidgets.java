@@ -22,6 +22,7 @@ import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.plugins.db.DB;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 
 import java.io.Serializable;
@@ -795,7 +796,7 @@ public abstract class BootstrapWidgets extends HTML {
 		List<Object> list = U.list();
 
 		for (Object value : values) {
-			if (Arr.isArray(value) && !hasGUIElements(value)) {
+			if (UTILS.isArray(value) && !hasGUIElements(value)) {
 				value = U.str(value);
 			}
 			if (value == null || value instanceof Iterable<?>) {

@@ -22,8 +22,8 @@ package org.rapidoid.aop;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Arr;
 import org.rapidoid.lambda.Lmbd;
+import org.rapidoid.util.UTILS;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -40,7 +40,7 @@ public class AOP {
 
 	public static synchronized void intercept(AOPInterceptor interceptor, Class<? extends Annotation>... annotated) {
 		InterceptorConfig config = new InterceptorConfig(interceptor, annotated);
-		INTERCEPTORS = Arr.expand(INTERCEPTORS, config);
+		INTERCEPTORS = UTILS.expand(INTERCEPTORS, config);
 	}
 
 	@SuppressWarnings("unchecked")

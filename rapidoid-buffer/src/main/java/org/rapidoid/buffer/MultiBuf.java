@@ -25,13 +25,13 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.ByteBufferBytes;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
-import org.rapidoid.commons.Arr;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.D;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.IntWrap;
 
 import java.io.IOException;
@@ -177,7 +177,7 @@ public class MultiBuf implements Buf, Constants {
 
 	private void expandUnit() {
 		if (bufN == bufs.length) {
-			bufs = Arr.expand(bufs, 2);
+			bufs = UTILS.expand(bufs, 2);
 		}
 
 		bufs[bufN] = bufPool.get();

@@ -115,7 +115,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 
 		for (int i = 0; i < parts.length; i++) {
 			try {
-				String path = U.join("/", Arr.subarray(parts, 0, i));
+				String path = U.join("/", Arr.sub(parts, 0, i + 1));
 				return process(req, req.command(), path, parts, i + 1);
 			} catch (PojoHandlerNotFoundException e) {
 				// ignore, continue trying...

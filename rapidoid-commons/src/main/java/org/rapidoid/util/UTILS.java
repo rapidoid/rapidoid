@@ -43,10 +43,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -712,6 +709,42 @@ public class UTILS implements Constants {
 		} else {
 			return U.str(obj).getBytes();
 		}
+	}
+
+	public static boolean isArray(Object value) {
+		return value != null && value.getClass().isArray();
+	}
+
+	public static Object[] deleteAt(Object[] arr, int index) {
+
+		Object[] res = new Object[arr.length - 1];
+
+		if (index > 0) {
+			System.arraycopy(arr, 0, res, 0, index);
+		}
+
+		if (index < arr.length - 1) {
+			System.arraycopy(arr, index + 1, res, index, res.length - index);
+		}
+
+		return res;
+	}
+
+	public static <T> T[] expand(T[] arr, int factor) {
+		int len = arr.length;
+
+		arr = Arrays.copyOf(arr, len * factor);
+
+		return arr;
+	}
+
+	public static <T> T[] expand(T[] arr, T item) {
+		int len = arr.length;
+
+		arr = Arrays.copyOf(arr, len + 1);
+		arr[len] = item;
+
+		return arr;
 	}
 
 }

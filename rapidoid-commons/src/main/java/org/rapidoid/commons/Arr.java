@@ -30,6 +30,8 @@ import java.util.Arrays;
 @Since("2.0.0")
 public class Arr {
 
+	/* indexOf */
+
 	public static int indexOf(Object[] arr, Object value) {
 		for (int i = 0; i < arr.length; i++) {
 			if (U.eq(arr[i], value)) {
@@ -39,63 +41,151 @@ public class Arr {
 		return -1;
 	}
 
-	public static Object[] deleteAt(Object[] arr, int index) {
-
-		Object[] res = new Object[arr.length - 1];
-
-		if (index > 0) {
-			System.arraycopy(arr, 0, res, 0, index);
+	public static int indexOf(boolean[] arr, boolean value) {
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] == value) {
+				return i;
+			}
 		}
+		return -1;
+	}
 
-		if (index < arr.length - 1) {
-			System.arraycopy(arr, index + 1, res, index, res.length - index);
+	public static int indexOf(byte[] arr, byte value) {
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] == value) {
+				return i;
+			}
 		}
-
-		return res;
+		return -1;
 	}
 
-	public static <T> T[] expand(T[] arr, int factor) {
-		int len = arr.length;
-
-		arr = Arrays.copyOf(arr, len * factor);
-
-		return arr;
+	public static int indexOf(char[] arr, char value) {
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] == value) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
-	public static <T> T[] expand(T[] arr, T item) {
-		int len = arr.length;
-
-		arr = Arrays.copyOf(arr, len + 1);
-		arr[len] = item;
-
-		return arr;
+	public static int indexOf(int[] arr, int value) {
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] == value) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
-	public static <T> T[] subarray(T[] arr, int from, int to) {
+	public static int indexOf(long[] arr, long value) {
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] == value) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public static int indexOf(float[] arr, float value) {
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] == value) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public static int indexOf(double[] arr, double value) {
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] == value) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	/* contains */
+
+	public static <T> boolean contains(T[] arr, T value) {
+		return indexOf(arr, value) >= 0;
+	}
+
+	public static boolean contains(boolean[] arr, boolean value) {
+		return indexOf(arr, value) >= 0;
+	}
+
+	public static boolean contains(byte[] arr, byte value) {
+		return indexOf(arr, value) >= 0;
+	}
+
+	public static boolean contains(char[] arr, char value) {
+		return indexOf(arr, value) >= 0;
+	}
+
+	public static boolean contains(int[] arr, int value) {
+		return indexOf(arr, value) >= 0;
+	}
+
+	public static boolean contains(long[] arr, long value) {
+		return indexOf(arr, value) >= 0;
+	}
+
+	public static boolean contains(float[] arr, float value) {
+		return indexOf(arr, value) >= 0;
+	}
+
+	public static boolean contains(double[] arr, double value) {
+		return indexOf(arr, value) >= 0;
+	}
+
+	/* sub */
+
+	public static <T> T[] sub(T[] arr, int from, int to) {
 		int start = from >= 0 ? from : arr.length + from;
 		int end = to >= 0 ? to : arr.length + to;
-
-		if (start < 0) {
-			start = 0;
-		}
-
-		if (end > arr.length - 1) {
-			end = arr.length - 1;
-		}
-
-		U.must(start <= end, "Invalid range: expected form <= to!");
-
-		int size = end - start + 1;
-
-		T[] part = Arrays.copyOf(arr, size);
-
-		System.arraycopy(arr, start, part, 0, size);
-
-		return part;
+		return Arrays.copyOfRange(arr, start, end);
 	}
 
-	public static boolean isArray(Object value) {
-		return value != null && value.getClass().isArray();
+	public static boolean[] sub(boolean[] arr, int from, int to) {
+		int start = from >= 0 ? from : arr.length + from;
+		int end = to >= 0 ? to : arr.length + to;
+		return Arrays.copyOfRange(arr, start, end);
+	}
+
+	public static byte[] sub(byte[] arr, int from, int to) {
+		int start = from >= 0 ? from : arr.length + from;
+		int end = to >= 0 ? to : arr.length + to;
+		return Arrays.copyOfRange(arr, start, end);
+	}
+
+	public static char[] sub(char[] arr, int from, int to) {
+		int start = from >= 0 ? from : arr.length + from;
+		int end = to >= 0 ? to : arr.length + to;
+		return Arrays.copyOfRange(arr, start, end);
+	}
+
+	public static int[] sub(int[] arr, int from, int to) {
+		int start = from >= 0 ? from : arr.length + from;
+		int end = to >= 0 ? to : arr.length + to;
+		return Arrays.copyOfRange(arr, start, end);
+	}
+
+	public static long[] sub(long[] arr, int from, int to) {
+		int start = from >= 0 ? from : arr.length + from;
+		int end = to >= 0 ? to : arr.length + to;
+		return Arrays.copyOfRange(arr, start, end);
+	}
+
+	public static float[] sub(float[] arr, int from, int to) {
+		int start = from >= 0 ? from : arr.length + from;
+		int end = to >= 0 ? to : arr.length + to;
+		return Arrays.copyOfRange(arr, start, end);
+	}
+
+	public static double[] sub(double[] arr, int from, int to) {
+		int start = from >= 0 ? from : arr.length + from;
+		int end = to >= 0 ? to : arr.length + to;
+		return Arrays.copyOfRange(arr, start, end);
 	}
 
 }

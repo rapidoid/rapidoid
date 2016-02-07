@@ -34,25 +34,25 @@ public class ArrTest extends AbstractCommonsTest {
 	public void testSubarray() {
 		String[] arr = new String[]{"aa", "bb", "c", "ddd", "e"};
 
-		String[] subarr = Arr.subarray(arr, 0, 2);
+		String[] subarr = Arr.sub(arr, 0, 3);
 		eq(subarr, new String[]{"aa", "bb", "c"});
 
-		subarr = Arr.subarray(arr, 2, 4);
+		subarr = Arr.sub(arr, 2, 5);
 		eq(subarr, new String[]{"c", "ddd", "e"});
 
-		subarr = Arr.subarray(arr, 0, 4);
+		subarr = Arr.sub(arr, 0, 5);
 		eq(subarr, new String[]{"aa", "bb", "c", "ddd", "e"});
 
-		subarr = Arr.subarray(arr, 3, 3);
+		subarr = Arr.sub(arr, 3, 4);
 		eq(subarr, new String[]{"ddd"});
 
-		subarr = Arr.subarray(arr, 1, 3);
+		subarr = Arr.sub(arr, 1, 4);
 		eq(subarr, new String[]{"bb", "c", "ddd"});
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void testSubarrayException() {
-		Arr.subarray(new String[]{"aa", "bb", "c"}, 2, 1);
+		Arr.sub(new String[]{"aa", "bb", "c"}, 2, 1);
 	}
 
 }
