@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
+import org.rapidoid.commons.Err;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 
@@ -208,7 +209,7 @@ public class BeanProp implements Prop {
 				break;
 
 			default:
-				throw U.notExpected();
+				throw Err.notExpected();
 		}
 	}
 
@@ -240,7 +241,7 @@ public class BeanProp implements Prop {
 				break;
 
 			default:
-				throw U.notExpected();
+				throw Err.notExpected();
 		}
 	}
 
@@ -280,7 +281,7 @@ public class BeanProp implements Prop {
 				break;
 
 			default:
-				throw U.notExpected();
+				throw Err.notExpected();
 		}
 
 	}
@@ -325,7 +326,7 @@ public class BeanProp implements Prop {
 				setter.setAccessible(true);
 				setter.invoke(target, Cls.convert(value, setter.getParameterTypes()[0]));
 			} else if (getter != null) {
-				throw U.notExpected();
+				throw Err.notExpected();
 			}
 		} catch (Exception e) {
 			throw U.rte("Cannot set %s %s.%s = %s (%s)", e, getType(), getDeclaringType(), getName(), value,
@@ -373,7 +374,7 @@ public class BeanProp implements Prop {
 
 	@Override
 	public Class<?> getTypeArg(int index) {
-		U.bounds(index, 0, getTypeArgsCount() - 1);
+		Err.bounds(index, 0, getTypeArgsCount() - 1);
 		return Cls.clazz(genericType.getActualTypeArguments()[index]);
 	}
 
@@ -409,7 +410,7 @@ public class BeanProp implements Prop {
 
 	@Override
 	public Class<?> getRawTypeArg(int index) {
-		U.bounds(index, 0, getRawTypeArgsCount() - 1);
+		Err.bounds(index, 0, getRawTypeArgsCount() - 1);
 		return Cls.clazz(rawGenericType.getActualTypeArguments()[index]);
 	}
 

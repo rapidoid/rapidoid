@@ -2,6 +2,7 @@ package org.rapidoid.io.watch;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
@@ -43,7 +44,7 @@ public class Dir implements FilesystemChangeListener {
 
 	private static final ScheduledExecutorService EXECUTORS = Executors.newScheduledThreadPool(8);
 
-	private static final Map<String, Dir> DIRS = U.autoExpandingMap(new Mapper<String, Dir>() {
+	private static final Map<String, Dir> DIRS = Coll.autoExpandingMap(new Mapper<String, Dir>() {
 		@Override
 		public Dir map(String path) throws Exception {
 			return new Dir(path);

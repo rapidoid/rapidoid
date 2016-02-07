@@ -23,10 +23,10 @@ package org.rapidoid.io;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Err;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.Predicate;
-import org.rapidoid.u.U;
 
 import java.security.SecureClassLoader;
 
@@ -48,7 +48,7 @@ public class CustomizableClassLoader extends SecureClassLoader {
 
 	@Override
 	public Class<?> loadClass(String name) throws ClassNotFoundException {
-		U.secure(Lmbd.eval(allowed, name), "Class not allowed: %s", name);
+		Err.secure(Lmbd.eval(allowed, name), "Class not allowed: %s", name);
 
 		if (forceReload && !Cls.isJREClass(name)) {
 			try {
@@ -70,7 +70,7 @@ public class CustomizableClassLoader extends SecureClassLoader {
 
 	@Override
 	protected Class<?> findClass(String name) throws ClassNotFoundException {
-		U.secure(Lmbd.eval(allowed, name), "Class not allowed: %s", name);
+		Err.secure(Lmbd.eval(allowed, name), "Class not allowed: %s", name);
 
 		byte[] bytes = Lmbd.eval(classes, name);
 

@@ -24,11 +24,9 @@ import org.junit.Test;
 import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.test.TestCommons;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.*;
-import java.util.concurrent.Callable;
 
 /**
  * @author Nikolche Mihajlovski
@@ -200,32 +198,6 @@ public class UTest extends TestCommons {
 	}
 
 	@Test
-	public void testInsert() {
-		eq(U.insert("", 0, "ab"), "ab");
-		eq(U.insert("a", 0, "b"), "ba");
-		eq(U.insert("a", 1, "b"), "ab");
-		eq(U.insert("abc", 2, "123"), "ab123c");
-	}
-
-	@Test
-	public void testTriml() {
-		eq(U.triml("/abc/", "/"), "abc/");
-		eq(U.triml("/abc/", "/a"), "bc/");
-		eq(U.triml("/abc/", "/abc/"), "");
-		eq(U.triml(".abc.", '.'), "abc.");
-		eq(U.triml("/abc/", '.'), "/abc/");
-	}
-
-	@Test
-	public void testTrimr() {
-		eq(U.trimr("/abc/", "/"), "/abc");
-		eq(U.trimr("/abc/", "c/"), "/ab");
-		eq(U.trimr("/abc/", "/abc/"), "");
-		eq(U.trimr(".abc.", '.'), ".abc");
-		eq(U.trimr("/abc/", '.'), "/abc/");
-	}
-
-	@Test
 	public void testDynamic() {
 		Dynamic dynamic = new Dynamic() {
 			@Override
@@ -256,75 +228,10 @@ public class UTest extends TestCommons {
 	}
 
 	@Test
-	public void testIsIn() {
-		isTrue(U.is(null).in(null, ""));
-		isTrue(U.is(null).in("x", null));
-		isFalse(U.is(null).in("x", 123));
-
-		isFalse(U.is("a").in("x", "sd"));
-		isTrue(U.is("a").in("a", "b"));
-		isTrue(U.is("a").in("x", "a"));
-	}
-
-	@Test
 	public void testSafe() {
 		eq(U.safe(3), 3);
 
 		eq(U.safe((Long) null), 0L);
-	}
-
-	@Test
-	public void testExists() {
-		isFalse(U.exists(null));
-
-		isFalse(U.exists(new Callable<Object>() {
-			@Override
-			public Object call() throws Exception {
-				return null;
-			}
-		}));
-
-		isFalse(U.exists(new Callable<Object>() {
-			@SuppressWarnings("null")
-			@Override
-			public Object call() throws Exception {
-				String s = null;
-				return s.length(); // throws NPE!
-			}
-		}));
-
-		isTrue(U.exists(new Callable<Object>() {
-			@Override
-			public Object call() throws Exception {
-				String s = "abc";
-				return s.length();
-			}
-		}));
-	}
-
-	@Test
-	public void testUri() {
-		eq(U.uri(""), "/");
-		eq(U.uri("", "a"), "/a");
-		eq(U.uri("b", ""), "/b");
-		eq(U.uri("/", "x"), "/x");
-		eq(U.uri("/", "/x"), "/x");
-		eq(U.uri("/ab\\", "cd\\"), "/ab/cd");
-		eq(U.uri("/ab", "/cd/"), "/ab/cd");
-		eq(U.uri("/ab/", "/cd/"), "/ab/cd");
-		eq(U.uri("x", "123", "w"), "/x/123/w");
-	}
-
-	@Test
-	public void testPath() {
-		eq(U.path(""), "");
-		eq(U.path("", "a"), "a");
-		eq(U.path("b", ""), "b");
-		eq(U.path("x", "y"), "x" + File.separator + "y");
-
-		String abcd = "/ab" + File.separator + "cd";
-		eq(U.path("/ab\\", "cd\\"), abcd);
-		eq(U.path("/ab/", "cd"), abcd);
 	}
 
 }

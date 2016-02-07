@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Special;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.Proxies;
+import org.rapidoid.commons.Str;
 import org.rapidoid.html.SpecificTag;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagBase;
@@ -123,7 +124,7 @@ public class TagProxy implements InvocationHandler, Serializable {
 	}
 
 	private static String attr(String name) {
-		return name.endsWith("_") ? U.sub(name, 0, -1) : name;
+		return name.endsWith("_") ? Str.sub(name, 0, -1) : name;
 	}
 
 }

@@ -2,6 +2,7 @@ package org.rapidoid.security;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.u.U;
@@ -76,7 +77,7 @@ public class Roles {
 
 		Object roles = U.cast(user.get("roles"));
 
-		if (U.isCollection(roles)) {
+		if (Coll.isCollection(roles)) {
 			Set<String> roleSet = U.set();
 			for (String role : (Collection<String>) roles) {
 				roleSet.add(role.toLowerCase());

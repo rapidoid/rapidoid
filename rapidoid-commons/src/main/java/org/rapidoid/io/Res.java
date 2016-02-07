@@ -2,8 +2,10 @@ package org.rapidoid.io;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 
 import java.io.File;
 import java.io.Reader;
@@ -38,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 @Since("4.1.0")
 public class Res {
 
-	private static final ConcurrentMap<ResKey, Res> FILES = U.concurrentMap();
+	private static final ConcurrentMap<ResKey, Res> FILES = Coll.concurrentMap();
 
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(1);
 
@@ -62,7 +64,7 @@ public class Res {
 
 	private volatile Object attachment;
 
-	private final Map<String, Runnable> changeListeners = U.synchronizedMap();
+	private final Map<String, Runnable> changeListeners = Coll.synchronizedMap();
 
 	private Res(String name, String... possibleLocations) {
 		this.name = name;
@@ -141,7 +143,7 @@ public class Res {
 
 				} else {
 					for (String location : possibleLocations) {
-						String filename = U.path(location, name);
+						String filename = UTILS.path(location, name);
 
 						Log.trace("Trying to load the resource", "name", name, "location", location, "filename", filename);
 

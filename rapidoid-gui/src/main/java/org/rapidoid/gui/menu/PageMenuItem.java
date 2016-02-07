@@ -23,7 +23,7 @@ package org.rapidoid.gui.menu;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.u.U;
+import org.rapidoid.commons.Str;
 
 import java.util.Map;
 
@@ -41,7 +41,7 @@ public class PageMenuItem extends AbstractPageMenuItem {
 		super(caption, target, extra);
 
 		if (this.caption.endsWith(CONFIG_RIGHT)) {
-			this.caption = U.trimr(this.caption, CONFIG_RIGHT).trim();
+			this.caption = Str.trimr(this.caption, CONFIG_RIGHT).trim();
 			this.right = true;
 		}
 

@@ -23,7 +23,7 @@ package org.rapidoid.buffer;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
+import org.rapidoid.commons.Err;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -66,7 +66,7 @@ public class StatisticalBufTest extends BufferTestCommons {
 						break;
 
 					default:
-						throw U.notExpected();
+						throw Err.notExpected();
 				}
 			}
 

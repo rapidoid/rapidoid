@@ -22,6 +22,7 @@ package org.rapidoid.io;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Str;
 import org.rapidoid.u.U;
 
 import java.io.*;
@@ -260,7 +261,7 @@ public class IO {
 		int lastDotPos = filename.lastIndexOf('.');
 
 		if (lastDotPos > 0) {
-			return U.insert(filename, lastDotPos, ".default");
+			return Str.insert(filename, lastDotPos, ".default");
 		} else {
 			return filename + ".default";
 		}

@@ -22,6 +22,7 @@ package org.rapidoid.io.watch;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
@@ -55,7 +56,7 @@ public class Watch {
 
 	public static Watch dirs(Collection<String> folders, final ClassRefresher refresher) {
 		try {
-			Queue<String> queue = U.queue();
+			Queue<String> queue = Coll.queue();
 			FilesystemChangeQueueListener changes = new FilesystemChangeQueueListener(queue);
 			new WatchingRefresherThread(folders, queue, refresher).start();
 			return dirs(folders, changes);

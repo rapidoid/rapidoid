@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Rnd;
+import org.rapidoid.commons.Str;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.u.U;
@@ -281,7 +282,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 		eq(range, 0, 2);
 
 		for (int i = 0; i < 10; i++) {
-			String s = U.mul("a", i);
+			String s = Str.mul("a", i);
 
 			eq(BytesUtil.scanUntilAndMatchPrefix(BytesUtil.from(s + ":"), range, COL, 0, i, NO_PREFIX), i + 1);
 			eq(range, 0, i);
@@ -350,22 +351,22 @@ public class BufTest extends BufferTestCommons implements Constants {
 			int n = U.num(num.substring(0, dig));
 
 			Buf buf = bufs.newBuf();
-			buf.append(U.mul(" ", dig + 2));
+			buf.append(Str.mul(" ", dig + 2));
 			buf.putNumAsText(1, n, true);
 			eq(buf.asText(), " " + n + " ");
 
 			Buf buf2 = bufs.newBuf();
-			buf2.append(U.mul(" ", dig + 3));
+			buf2.append(Str.mul(" ", dig + 3));
 			buf2.putNumAsText(1, -n, true);
 			eq(buf2.asText(), " " + (-n) + " ");
 
 			Buf buf3 = bufs.newBuf();
-			buf3.append(U.mul(" ", dig + 2));
+			buf3.append(Str.mul(" ", dig + 2));
 			buf3.putNumAsText(dig, n, false);
 			eq(buf3.asText(), " " + n + " ");
 
 			Buf buf4 = bufs.newBuf();
-			buf4.append(U.mul(" ", dig + 3));
+			buf4.append(Str.mul(" ", dig + 3));
 			buf4.putNumAsText(dig + 1, -n, false);
 			eq(buf4.asText(), " " + (-n) + " ");
 
@@ -375,14 +376,14 @@ public class BufTest extends BufferTestCommons implements Constants {
 			eq(buf5.asText(), " " + n);
 
 			Buf buf6 = bufs.newBuf();
-			buf6.append(U.mul(" ", 20));
+			buf6.append(Str.mul(" ", 20));
 			buf6.putNumAsText(15, n, false);
-			eq(buf6.asText(), U.mul(" ", 16 - dig) + n + U.mul(" ", 4));
+			eq(buf6.asText(), Str.mul(" ", 16 - dig) + n + Str.mul(" ", 4));
 
 			Buf buf7 = bufs.newBuf();
-			buf7.append(U.mul(" ", 20));
+			buf7.append(Str.mul(" ", 20));
 			buf7.putNumAsText(5, n, true);
-			eq(buf7.asText(), U.mul(" ", 5) + n + U.mul(" ", 15 - dig));
+			eq(buf7.asText(), Str.mul(" ", 5) + n + Str.mul(" ", 15 - dig));
 		}
 	}
 
@@ -397,7 +398,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 
 			for (int j = 0; j < 5; j++) {
 				size += add;
-				buf.append(U.mul(" ", add));
+				buf.append(Str.mul(" ", add));
 				eq(buf.size(), size);
 			}
 

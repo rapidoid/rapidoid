@@ -22,7 +22,7 @@ package org.rapidoid.gui.var;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
+import org.rapidoid.commons.Err;
 
 import java.io.Serializable;
 
@@ -46,12 +46,12 @@ public class SessionVar<T extends Serializable> extends WidgetVar<T> {
 
 	@Override
 	public T get() {
-		throw U.notSupported();
+		throw Err.notSupported();
 	}
 
 	@Override
 	public void set(T value) {
-		throw U.notSupported();
+		throw Err.notSupported();
 	}
 
 }

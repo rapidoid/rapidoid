@@ -23,6 +23,7 @@ package org.rapidoid.crypto;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
@@ -80,7 +81,7 @@ public class CryptoTest extends AbstractCommonsTest {
 	@Test
 	public void testEncrypt() {
 		for (int i = 0; i < 10000; i++) {
-			String msg1 = U.mul("x", i);
+			String msg1 = Str.mul("x", i);
 			byte[] enc = Crypto.encrypt(msg1.getBytes());
 			byte[] dec = Crypto.decrypt(enc);
 			String msg2 = new String(dec);

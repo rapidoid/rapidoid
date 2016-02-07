@@ -27,6 +27,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
+import org.rapidoid.commons.Err;
+import org.rapidoid.commons.Str;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.insight.Insights;
@@ -45,8 +47,7 @@ import java.net.URLDecoder;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.*;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -126,7 +127,7 @@ public class UTILS implements Constants {
 			case LONG:
 			case FLOAT:
 			case DOUBLE:
-				throw U.notExpected();
+				throw Err.notExpected();
 
 			case STRING:
 				String str = (String) value;
@@ -184,7 +185,7 @@ public class UTILS implements Constants {
 				break;
 
 			default:
-				throw U.notExpected();
+				throw Err.notExpected();
 		}
 	}
 
@@ -256,7 +257,7 @@ public class UTILS implements Constants {
 				return new Date(buf.getLong());
 
 			default:
-				throw U.notExpected();
+				throw Err.notExpected();
 		}
 	}
 
@@ -747,4 +748,64 @@ public class UTILS implements Constants {
 		return arr;
 	}
 
+	public static void wait(CountDownLatch latch) {
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			throw new CancellationException();
+		}
+	}
+
+	public static void wait(CountDownLatch latch, long timeout, TimeUnit unit) {
+		try {
+			latch.await(timeout, unit);
+		} catch (InterruptedException e) {
+			throw new CancellationException();
+		}
+	}
+
+	public static boolean exists(Callable<?> accessChain) {
+		try {
+			return accessChain != null && accessChain.call() != null;
+		} catch (NullPointerException e) {
+			return false;
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
+	}
+
+	public static String uri(String... parts) {
+		return "/" + constructPath("/", false, parts);
+	}
+
+	public static String path(String... parts) {
+		return constructPath(File.separator, true, parts);
+	}
+
+	private static String constructPath(String separator, boolean preserveFirstSegment, String... parts) {
+		String s = "";
+
+		for (int i = 0; i < parts.length; i++) {
+			String part = U.safe(parts[i]);
+
+			// trim '/'s and '\'s
+			if (!preserveFirstSegment || i > 0) {
+				part = Str.triml(part, "/");
+			}
+
+			if (!preserveFirstSegment || part.length() > 1 || i > 0) {
+				part = Str.trimr(part, "/");
+				part = Str.trimr(part, "\\");
+			}
+
+			if (!U.isEmpty(part)) {
+				if (!s.isEmpty() && !s.endsWith(separator)) {
+					s += separator;
+				}
+				s += part;
+			}
+		}
+
+		return s;
+	}
 }

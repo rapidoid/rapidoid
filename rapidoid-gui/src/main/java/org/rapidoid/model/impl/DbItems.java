@@ -23,6 +23,7 @@ package org.rapidoid.model.impl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
+import org.rapidoid.commons.Err;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
@@ -55,7 +56,7 @@ public class DbItems<T> extends BeanListItems<T> {
 
 	@Override
 	public void insert(int index, Item item) {
-		throw U.notSupported();
+		throw Err.notSupported();
 	}
 
 	@Override

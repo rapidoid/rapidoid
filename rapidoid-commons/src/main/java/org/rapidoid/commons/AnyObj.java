@@ -40,7 +40,7 @@ public class AnyObj {
 			Collection<?> coll = (Collection<?>) arrOrColl;
 			return coll.contains(value);
 		} else {
-			throw U.illegalArg("Expected array or collection, but found: %s", U.str(arrOrColl));
+			throw Err.illegalArg("Expected array or collection, but found: %s", U.str(arrOrColl));
 		}
 	}
 
@@ -56,7 +56,7 @@ public class AnyObj {
 			}
 			return coll;
 		} else {
-			throw U.illegalArg("Expected array or collection!");
+			throw Err.illegalArg("Expected array or collection!");
 		}
 	}
 
@@ -73,7 +73,7 @@ public class AnyObj {
 			}
 			return coll;
 		} else {
-			throw U.illegalArg("Expected array or collection!");
+			throw Err.illegalArg("Expected array or collection!");
 		}
 	}
 

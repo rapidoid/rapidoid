@@ -22,9 +22,9 @@ package org.rapidoid.bytes;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
-import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.wrap.IntWrap;
@@ -279,7 +279,7 @@ public class BytesUtil implements Constants {
 	}
 
 	private static int findNoCase(Bytes bytes, int start, int limit, byte[] match, int offset, int length) {
-		throw U.notReady();
+		throw Err.notReady();
 	}
 
 	private static int findSensitive(Bytes bytes, int start, int limit, byte[] match, int offset, int length) {

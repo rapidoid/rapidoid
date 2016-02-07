@@ -22,9 +22,9 @@ package org.rapidoid.html.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagProcessor;
-import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
@@ -33,161 +33,161 @@ public class UndefinedTag implements Tag {
 
 	@Override
 	public Object contents() {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Tag contents(Object... content) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Tag append(Object... content) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Tag prepend(Object... content) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public String id() {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Tag id(String id) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public String role() {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Tag role(String role) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public String style() {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Tag style(String css) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public boolean hidden() {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Tag hidden(boolean hidden) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public boolean disabled() {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Tag disabled(boolean value) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Tag attr(String attr, String value) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public String attr(String attr) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Tag class_(String classs) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public String class_() {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public int size() {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public boolean isEmpty() {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Object child(int index) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Tag withChild(int index, Object replace) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Tag copy() {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public boolean is(String attr) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Tag is(String attr, boolean value) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	public void traverse(TagProcessor<Tag> processor) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public String tagKind() {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public String onclick() {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Tag onclick(String onclick) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public <T> Tag var(Var<T> var) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Tag cmd(String cmd, Object... args) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	@Override
 	public Tag extra(String attr, Object value) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 }

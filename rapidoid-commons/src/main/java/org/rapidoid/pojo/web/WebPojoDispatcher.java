@@ -24,6 +24,7 @@ import org.rapidoid.annotation.*;
 import org.rapidoid.aop.AOP;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.commons.Arr;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.pojo.DispatchResult;
@@ -34,6 +35,7 @@ import org.rapidoid.pojo.impl.DispatchReq;
 import org.rapidoid.pojo.impl.DispatchReqKind;
 import org.rapidoid.pojo.impl.PojoDispatcherImpl;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -149,7 +151,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 
 	private List<DispatchReq> req(String componentPath, Annotation ann, Method method) {
 		String uri;
-		Map<String, Object> config = U.synchronizedMap();
+		Map<String, Object> config = Coll.synchronizedMap();
 
 		if (ann instanceof GET) {
 			uri = ((GET) ann).uri();
@@ -182,7 +184,7 @@ public class WebPojoDispatcher extends PojoDispatcherImpl {
 		}
 
 		String name = reqName(method, uri);
-		String path = U.uri(componentPath, name);
+		String path = UTILS.uri(componentPath, name);
 
 		if (ann instanceof Page) {
 			return U.list(new DispatchReq("GET", path, DispatchReqKind.PAGE, config), new DispatchReq("POST", path,

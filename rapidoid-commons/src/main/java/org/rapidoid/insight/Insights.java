@@ -1,6 +1,6 @@
 package org.rapidoid.insight;
 
-import org.rapidoid.u.U;
+import org.rapidoid.commons.Coll;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +32,11 @@ import java.util.Map;
  */
 public class Insights {
 
-	private static final Map<String, List<Insightful>> RESOURCES = U.autoExpandingMap(ArrayList.class);
+	private static final Map<String, List<Insightful>> RESOURCES = Coll.autoExpandingMap(ArrayList.class);
 
-	private static final Map<String, List<Object>> INFOS = U.autoExpandingMap(ArrayList.class);
+	private static final Map<String, List<Object>> INFOS = Coll.autoExpandingMap(ArrayList.class);
 
-	private static final Map<String, List<Object>> RESETABLE_INFOS = U.autoExpandingMap(ArrayList.class);
+	private static final Map<String, List<Object>> RESETABLE_INFOS = Coll.autoExpandingMap(ArrayList.class);
 
 	public static void register(Insightful resource) {
 		RESOURCES.get(resource.getKind()).add(resource);

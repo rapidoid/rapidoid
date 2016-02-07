@@ -20,7 +20,9 @@ package org.rapidoid.cls;
  * #L%
  */
 
+import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Dates;
+import org.rapidoid.commons.Err;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
@@ -502,7 +504,7 @@ public class Cls {
 		switch (targetKind) {
 
 			case NULL:
-				throw U.notExpected();
+				throw Err.notExpected();
 
 			case BOOLEAN:
 			case BOOLEAN_OBJ:
@@ -559,7 +561,7 @@ public class Cls {
 				return (T) UUID.fromString(value);
 
 			default:
-				throw U.notExpected();
+				throw Err.notExpected();
 		}
 	}
 
@@ -588,7 +590,7 @@ public class Cls {
 		switch (targetKind) {
 
 			case NULL:
-				throw U.notExpected();
+				throw Err.notExpected();
 
 			case BOOLEAN:
 			case BOOLEAN_OBJ:
@@ -678,7 +680,7 @@ public class Cls {
 				}
 
 			default:
-				throw U.notExpected();
+				throw Err.notExpected();
 		}
 	}
 
@@ -791,7 +793,7 @@ public class Cls {
 		} else if (clazz == Map.class) {
 			return (T) U.map();
 		} else if (clazz == ConcurrentMap.class) {
-			return (T) U.concurrentMap();
+			return (T) Coll.concurrentMap();
 		} else if (clazz == Var.class) {
 			return (T) Vars.var("<new>", null);
 		} else if (clazz == Object.class) {

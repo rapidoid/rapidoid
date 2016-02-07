@@ -25,6 +25,7 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Builder;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.Proxies;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.config.Conf;
 import org.rapidoid.lambda.F3;
 import org.rapidoid.lambda.Lmbd;
@@ -50,7 +51,7 @@ public class Wire {
 	private static final Set<Object> MANAGED_INSTANCES = U.set();
 	private static final Map<Object, Object> IOC_INSTANCES = U.map();
 
-	private static final Map<Class<?>, List<Field>> INJECTABLE_FIELDS = U
+	private static final Map<Class<?>, List<Field>> INJECTABLE_FIELDS = Coll
 			.autoExpandingMap(new Mapper<Class<?>, List<Field>>() {
 				@Override
 				public List<Field> map(Class<?> clazz) throws Exception {
@@ -60,7 +61,7 @@ public class Wire {
 				}
 			});
 
-	private static final Map<Class<?>, List<Field>> SESSION_FIELDS = U
+	private static final Map<Class<?>, List<Field>> SESSION_FIELDS = Coll
 			.autoExpandingMap(new Mapper<Class<?>, List<Field>>() {
 				@Override
 				public List<Field> map(Class<?> clazz) throws Exception {
@@ -70,7 +71,7 @@ public class Wire {
 				}
 			});
 
-	private static final Map<Class<?>, List<Field>> LOCAL_FIELDS = U
+	private static final Map<Class<?>, List<Field>> LOCAL_FIELDS = Coll
 			.autoExpandingMap(new Mapper<Class<?>, List<Field>>() {
 				@Override
 				public List<Field> map(Class<?> clazz) throws Exception {
@@ -101,7 +102,7 @@ public class Wire {
 	}
 
 	public static <K, V> Map<K, V> autoExpandingInjectingMap(final Class<V> clazz) {
-		return U.autoExpandingMap(new Mapper<K, V>() {
+		return Coll.autoExpandingMap(new Mapper<K, V>() {
 			@Override
 			public V map(K src) throws Exception {
 				return inject(Cls.newInstance(clazz));

@@ -25,11 +25,12 @@ import com.github.mustachejava.codes.ValueCode;
 import com.google.common.cache.LoadingCache;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
+import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
@@ -120,7 +121,7 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 
 	@Override
 	public Mustache compile(Reader reader, String file, String sm, String em) {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	private Mustache customCompile(String filename, Res resource) {
@@ -142,7 +143,7 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 	}
 
 	public static String preprocess(String template) {
-		template = U.replace(template, EXPR_REGEX, EXPR_REPLACER);
+		template = Str.replace(template, EXPR_REGEX, EXPR_REPLACER);
 		return template;
 	}
 

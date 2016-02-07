@@ -53,13 +53,13 @@ public class JSTest extends AbstractCommonsTest {
 		Object res1;
 		try {
 			// Rhino style
-			res1 = JS.compile("(function (x) { return U.capitalized(x); })('hey')").eval(bindings);
+			res1 = JS.compile("(function (x) { return U.str(x); })('hey')").eval(bindings);
 		} catch (Exception e) {
 			// Nashorn style
-			res1 = JS.compile("(function (x) { return U.class.static.capitalized(x); })('hey')").eval(bindings);
+			res1 = JS.compile("(function (x) { return U.class.static.str(x); })('hey')").eval(bindings);
 		}
 
-		eq(res1, "Hey");
+		eq(res1, "hey");
 	}
 
 }

@@ -22,6 +22,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Str;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
@@ -56,7 +57,7 @@ public class PathPattern {
 		final Map<String, String> groups = U.map();
 		final AtomicInteger counter = new AtomicInteger();
 
-		String regex = U.replace(path, PATH_PARAM_REGEX, new Mapper<String[], String>() {
+		String regex = Str.replace(path, PATH_PARAM_REGEX, new Mapper<String[], String>() {
 			@Override
 			public String map(String[] gr) throws Exception {
 				String group = gr[1];
@@ -77,7 +78,7 @@ public class PathPattern {
 		});
 
 		if (regex.endsWith("/*")) {
-			regex = U.sub(regex, 0, -1) + ".*";
+			regex = Str.sub(regex, 0, -1) + ".*";
 		}
 
 		Pattern pattern = Pattern.compile(regex);

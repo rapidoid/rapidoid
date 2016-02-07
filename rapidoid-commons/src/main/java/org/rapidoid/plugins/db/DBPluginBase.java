@@ -6,6 +6,7 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.beany.PropertyFilter;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Err;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Promise;
 import org.rapidoid.concurrent.Promises;
@@ -89,7 +90,7 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 
 	@Override
 	public <E> List<E> getAll() {
-		throw U.notSupported();
+		throw Err.notSupported();
 	}
 
 	@Override
@@ -207,7 +208,7 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 
 	@Override
 	public void transaction(final Runnable tx, final boolean readonly, final Callback<Void> callback) {
-		throw U.notSupported();
+		throw Err.notSupported();
 	}
 
 	@Override
@@ -259,7 +260,7 @@ public abstract class DBPluginBase extends AbstractDBPlugin {
 
 	@Override
 	public <RESULT> RESULT sql(String sql, Object... args) {
-		throw U.notSupported();
+		throw Err.notSupported();
 	}
 
 	@Override

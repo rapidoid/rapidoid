@@ -6,6 +6,7 @@ import org.rapidoid.annotation.ToString;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.Proxies;
 import org.rapidoid.cls.TypeKind;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
@@ -45,7 +46,7 @@ public class Beany {
 
 	private static final String SETTER = "^set[A-Z].*";
 
-	protected static final Map<Class<?>, BeanProperties> BEAN_PROPERTIES = U
+	protected static final Map<Class<?>, BeanProperties> BEAN_PROPERTIES = Coll
 			.autoExpandingMap(new Mapper<Class<?>, BeanProperties>() {
 
 				@Override

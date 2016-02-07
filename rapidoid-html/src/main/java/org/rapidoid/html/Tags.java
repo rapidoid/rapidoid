@@ -22,6 +22,7 @@ package org.rapidoid.html;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Str;
 import org.rapidoid.html.impl.ConstantTag;
 import org.rapidoid.html.impl.TagProxy;
 import org.rapidoid.html.impl.UndefinedTag;
@@ -58,7 +59,7 @@ public class Tags extends BasicUtils {
 	}
 
 	public static String escape(String s) {
-		return U.replace(s, XML_ESCAPE);
+		return Str.replace(s, XML_ESCAPE);
 	}
 
 	public static void traverse(Object contents, TagProcessor<Tag> processor) {

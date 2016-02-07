@@ -22,11 +22,11 @@ package org.rapidoid.plugins.cache;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
 import org.rapidoid.concurrent.Promise;
 import org.rapidoid.concurrent.Promises;
-import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -81,7 +81,7 @@ public abstract class AbstractCache<K, V> implements ICache<K, V> {
 	}
 
 	private void validateTTL(long ttl) {
-		U.argMust(
+		Err.argMust(
 				this.allowsDifferentTTLThanInitialized || ttl == this.timeToLiveMs,
 				"The cache implementation doesn't support different timeToLiveMs value than the initially specified: %s",
 				this.allowsDifferentTTLThanInitialized);

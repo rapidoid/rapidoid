@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
+import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.io.Res;
@@ -43,7 +44,7 @@ public class HttpUtils implements HttpMetadata {
 	private static final byte[] EMPTY_RESPONSE = {};
 
 	public static String[] pathSegments(Req req) {
-		return U.triml(req.path(), "/").split("/");
+		return Str.triml(req.path(), "/").split("/");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -81,7 +82,7 @@ public class HttpUtils implements HttpMetadata {
 			resourceName = "index";
 		} else {
 			if (resourceName.endsWith(".html")) {
-				resourceName = U.sub(resourceName, 0, -5);
+				resourceName = Str.sub(resourceName, 0, -5);
 			}
 		}
 

@@ -23,6 +23,7 @@ package org.rapidoid.gui;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.AnyObj;
+import org.rapidoid.commons.Err;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
@@ -232,7 +233,7 @@ public class Form extends AbstractWidget {
 			case INLINE:
 				return "form-inline";
 			default:
-				throw U.notExpected();
+				throw Err.notExpected();
 		}
 	}
 

@@ -23,6 +23,7 @@ package org.rapidoid.html.impl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Str;
 import org.rapidoid.data.JSON;
 import org.rapidoid.html.CustomTag;
 import org.rapidoid.html.HTML;
@@ -186,7 +187,7 @@ public class TagRenderer {
 				String str;
 
 				if (arg instanceof String) {
-					str = "'" + U.sub(JSON.stringify(arg), 1, -1) + "'";
+					str = "'" + Str.sub(JSON.stringify(arg), 1, -1) + "'";
 				} else {
 					str = U.str(arg);
 				}

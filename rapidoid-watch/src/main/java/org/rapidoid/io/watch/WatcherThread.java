@@ -23,6 +23,8 @@ package org.rapidoid.io.watch;
 import org.rapidoid.activity.AbstractLoopThread;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Coll;
+import org.rapidoid.commons.Err;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
@@ -54,9 +56,9 @@ public class WatcherThread extends AbstractLoopThread {
 
 	private final WatchService watcher;
 
-	private final List<String> folders = U.synchronizedList();
+	private final List<String> folders = Coll.synchronizedList();
 
-	private final Set<String> watching = U.synchronizedSet();
+	private final Set<String> watching = Coll.synchronizedSet();
 
 	public WatcherThread(FilesystemChangeListener change, Collection<String> targetFolders, boolean recursive) {
 		this.onChange = change;
@@ -166,7 +168,7 @@ public class WatcherThread extends AbstractLoopThread {
 				Log.warn("Received OVERFLOW event from the Watch service!");
 
 			} else {
-				throw U.notExpected();
+				throw Err.notExpected();
 			}
 		}
 

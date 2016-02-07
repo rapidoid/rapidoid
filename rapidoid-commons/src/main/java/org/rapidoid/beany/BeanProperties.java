@@ -23,6 +23,7 @@ package org.rapidoid.beany;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
@@ -45,9 +46,9 @@ public class BeanProperties implements Iterable<Prop> {
 
 	public final List<String> names;
 
-	public final ConcurrentMap<String, Object> extras = U.concurrentMap();
+	public final ConcurrentMap<String, Object> extras = Coll.concurrentMap();
 
-	public final Map<PropertySelector, BeanProperties> selections = U
+	public final Map<PropertySelector, BeanProperties> selections = Coll
 			.autoExpandingMap(new Mapper<PropertySelector, BeanProperties>() {
 				@Override
 				public BeanProperties map(PropertySelector selector) throws Exception {

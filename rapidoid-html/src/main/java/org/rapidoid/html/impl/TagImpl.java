@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.AnyObj;
+import org.rapidoid.commons.Err;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.Tags;
@@ -76,7 +77,7 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 
 	@Override
 	public String toString() {
-		throw U.notExpected();
+		throw Err.notExpected();
 	}
 
 	public void setProxy(Tag proxy) {

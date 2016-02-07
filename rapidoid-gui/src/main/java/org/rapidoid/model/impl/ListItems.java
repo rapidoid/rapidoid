@@ -22,6 +22,7 @@ package org.rapidoid.model.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
@@ -132,7 +133,7 @@ public class ListItems extends AbstractModel implements Items {
 
 	@Override
 	public Items orderedBy(String sortOrder) {
-		throw U.notSupported();
+		throw Err.notSupported();
 	}
 
 }

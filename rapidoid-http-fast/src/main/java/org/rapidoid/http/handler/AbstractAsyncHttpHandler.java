@@ -23,6 +23,8 @@ package org.rapidoid.http.handler;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Coll;
+import org.rapidoid.commons.Err;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
@@ -81,7 +83,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 			// render the response and process logic while still in context
 			if (!(result instanceof byte[]) && !(result instanceof ByteBuffer)
 					&& !(result instanceof File) && !(result instanceof Res)
-					&& !Cls.isSimple(result) && !U.isCollection(result) && !U.isMap(result)) {
+					&& !Cls.isSimple(result) && !Coll.isCollection(result) && !Coll.isMap(result)) {
 				result = render(result);
 			}
 
@@ -182,7 +184,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		}
 
 		if (result instanceof HttpStatus) {
-			http.error(ctx, isKeepAlive, req, U.notExpected());
+			http.error(ctx, isKeepAlive, req, Err.notExpected());
 			return;
 		}
 

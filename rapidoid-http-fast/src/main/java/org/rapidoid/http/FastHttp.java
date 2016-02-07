@@ -27,8 +27,10 @@ import org.rapidoid.bufstruct.BufMap;
 import org.rapidoid.bufstruct.BufMapImpl;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.commons.MediaType;
+import org.rapidoid.commons.Str;
 import org.rapidoid.data.JSON;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
@@ -116,7 +118,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	private volatile FastHttpHandler handler1, handler2, handler3;
 
-	private final List<FastHttpHandler> genericHandlers = U.synchronizedList();
+	private final List<FastHttpHandler> genericHandlers = Coll.synchronizedList();
 
 	private volatile FastHttpHandler staticResourcesHandler = new FastStaticResourcesHandler(this);
 
@@ -128,9 +130,9 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	private final FastHttpListener listener;
 
-	private final Map<String, Object> attributes = U.synchronizedMap();
+	private final Map<String, Object> attributes = Coll.synchronizedMap();
 
-	private final Map<String, Map<String, Serializable>> sessions = U.mapOfMaps();
+	private final Map<String, Map<String, Serializable>> sessions = Coll.mapOfMaps();
 
 	static {
 		for (int len = 0; len < CONTENT_LENGTHS.length; len++) {
@@ -144,7 +146,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	public synchronized void on(String verb, String path, FastHttpHandler handler) {
 		if (path.length() > 1) {
-			path = U.trimr(path, "/");
+			path = Str.trimr(path, "/");
 		}
 
 		boolean withPathPattern = path.contains("{") || path.contains("}");

@@ -5,6 +5,7 @@ import javassist.bytecode.ClassFile;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Str;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
@@ -217,7 +218,7 @@ public class ClasspathUtil {
 			if (file.isDirectory()) {
 				getClassesFromDir(classes, root, file, pkg, regex, filter, annotated, classLoader, searched);
 			} else {
-				String rootPath = U.trimr(root.getAbsolutePath(), File.separatorChar);
+				String rootPath = Str.trimr(root.getAbsolutePath(), File.separatorChar);
 				int from = rootPath.length() + 1;
 				String relName = file.getAbsolutePath().substring(from);
 
@@ -237,7 +238,7 @@ public class ClasspathUtil {
 		if (relName.endsWith(".class")) {
 			searched.incrementAndGet();
 
-			String clsName = U.sub(relName, 0, -6).replace('/', '.').replace('\\', '.');
+			String clsName = Str.sub(relName, 0, -6).replace('/', '.').replace('\\', '.');
 
 			if (U.isEmpty(regex) || regex.matcher(clsName).matches()) {
 				try {
@@ -335,7 +336,7 @@ public class ClasspathUtil {
 	}
 
 	private static boolean ignore(String name) {
-		String pkgDirName = U.triml(name, File.separatorChar);
+		String pkgDirName = Str.triml(name, File.separatorChar);
 
 		int p1 = pkgDirName.indexOf(File.separatorChar);
 		int p2 = -1;
@@ -360,7 +361,7 @@ public class ClasspathUtil {
 			if (classpathProp != null) {
 				String[] classpathEntries = classpathProp.split(File.pathSeparator);
 				for (String cpe : classpathEntries) {
-					cpe = U.trimr(cpe, '/');
+					cpe = Str.trimr(cpe, '/');
 					CLASSPATH.add(new File(cpe).getAbsolutePath());
 				}
 			}
@@ -370,7 +371,7 @@ public class ClasspathUtil {
 			URL[] urls = ((URLClassLoader) cl).getURLs();
 
 			for (URL url : urls) {
-				String path = U.trimr(url.getPath(), '/');
+				String path = Str.trimr(url.getPath(), '/');
 				CLASSPATH.add(new File(path).getAbsolutePath());
 			}
 		}

@@ -1,5 +1,6 @@
 package org.rapidoid.config;
 
+import org.rapidoid.commons.Str;
 import org.rapidoid.u.U;
 
 /*
@@ -48,7 +49,7 @@ public class ConfigHelp {
 	}
 
 	private static void opt(String opt, String desc) {
-		show("  " + opt + U.mul(" ", 21 - opt.length()) + " - " + desc);
+		show("  " + opt + Str.mul(" ", 21 - opt.length()) + " - " + desc);
 	}
 
 	private static void show(String msg) {

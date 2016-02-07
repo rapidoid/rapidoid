@@ -28,6 +28,7 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
+import org.rapidoid.commons.Err;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.html.FieldType;
@@ -118,7 +119,7 @@ public class Field extends AbstractWidget {
 			case INLINE:
 				return "form-inline";
 			default:
-				throw U.notExpected();
+				throw Err.notExpected();
 		}
 	}
 
@@ -205,7 +206,7 @@ public class Field extends AbstractWidget {
 				return readonly(var);
 
 			default:
-				throw U.notExpected();
+				throw Err.notExpected();
 		}
 	}
 

@@ -22,6 +22,7 @@ package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Str;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.html.Tag;
@@ -65,7 +66,7 @@ public class VStream extends AbstractWidget {
 	}
 
 	protected String defaultDataUrl() {
-		String url = U.trimr(U.trimr(ReqInfo.get().path(), "/"), ".html");
+		String url = Str.trimr(Str.trimr(ReqInfo.get().path(), "/"), ".html");
 
 		if (U.isEmpty(url)) {
 			url = "/index";

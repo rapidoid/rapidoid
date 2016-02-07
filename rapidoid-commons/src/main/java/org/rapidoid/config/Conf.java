@@ -4,6 +4,7 @@ import org.rapidoid.data.YAML;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 
 import java.util.Map;
 
@@ -290,7 +291,7 @@ public class Conf {
 	public static Config refreshing(String path, final String filename, final ConfigParser parser) {
 		Log.info("Initializing auto-refreshing config", "root", Conf.rootPath(), "path", path, "filename", filename);
 
-		final String resPath = U.path(Conf.rootPath(), U.safe(path));
+		final String resPath = UTILS.path(Conf.rootPath(), U.safe(path));
 
 		Log.info("Calculated resource path", "path", resPath);
 

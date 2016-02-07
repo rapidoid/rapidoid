@@ -81,7 +81,7 @@ public class MicroServicesTest extends HttpTestCommons {
 			}
 		}
 
-		U.wait(latch);
+		UTILS.wait(latch);
 		UTILS.endMeasure(count, "calls");
 
 		loop.interrupt();

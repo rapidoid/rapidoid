@@ -127,7 +127,7 @@ public class MemcachedCacheTest extends TestCommons {
 			cache.set(key + i, i, 10000, callback);
 		}
 
-		U.wait(latch);
+		UTILS.wait(latch);
 		UTILS.endMeasure(total, "SET ops");
 
 		total = 10000;
@@ -144,7 +144,7 @@ public class MemcachedCacheTest extends TestCommons {
 			cache.get(key + i, callback);
 		}
 
-		U.wait(rlatch);
+		UTILS.wait(rlatch);
 		UTILS.endMeasure(total, "GET ops");
 	}
 

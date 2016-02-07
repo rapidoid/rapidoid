@@ -22,6 +22,7 @@ package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Str;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.Tag;
 import org.rapidoid.lambda.Mapper;
@@ -63,7 +64,7 @@ public class Snippet extends AbstractWidget {
 
 		final String prim = "|" + PRIMITIVE_TYPES + "|";
 
-		snippet = U.replace(snippet, regex, new Mapper<String[], String>() {
+		snippet = Str.replace(snippet, regex, new Mapper<String[], String>() {
 			@Override
 			public String map(String[] src) throws Exception {
 				String s = src[0];

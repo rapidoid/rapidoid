@@ -20,6 +20,7 @@ package org.rapidoid.concurrent.impl;
  * #L%
  */
 
+import org.rapidoid.commons.Err;
 import org.rapidoid.concurrent.Future;
 import org.rapidoid.u.U;
 
@@ -51,7 +52,7 @@ public class FutureImpl<T> implements Future<T> {
 		try {
 			return get(Long.MAX_VALUE);
 		} catch (TimeoutException e) {
-			throw U.notExpected();
+			throw Err.notExpected();
 		}
 	}
 

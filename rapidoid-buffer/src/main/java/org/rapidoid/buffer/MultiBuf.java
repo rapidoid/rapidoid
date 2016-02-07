@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.ByteBufferBytes;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
+import org.rapidoid.commons.Err;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.pool.Pool;
@@ -540,7 +541,7 @@ public class MultiBuf implements Buf, Constants {
 				break;
 
 			default:
-				throw U.notExpected();
+				throw Err.notExpected();
 		}
 
 		// restore buf positions

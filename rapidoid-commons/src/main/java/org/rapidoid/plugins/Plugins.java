@@ -3,6 +3,8 @@ package org.rapidoid.plugins;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Coll;
+import org.rapidoid.commons.Err;
 import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
 import org.rapidoid.plugins.cache.CachePlugin;
@@ -17,7 +19,6 @@ import org.rapidoid.plugins.sms.DefaultSMSPlugin;
 import org.rapidoid.plugins.sms.SMSPlugin;
 import org.rapidoid.plugins.templates.DefaultTemplatesPlugin;
 import org.rapidoid.plugins.templates.TemplatesPlugin;
-import org.rapidoid.u.U;
 
 import java.util.Map;
 
@@ -59,9 +60,9 @@ import java.util.Map;
 @Since("3.0.0")
 public final class Plugins {
 
-	private static final Map<String, Map<String, Plugin>> PLUGINS = U.mapOfMaps();
+	private static final Map<String, Map<String, Plugin>> PLUGINS = Coll.mapOfMaps();
 
-	private static final Map<String, Plugin> PLUGINS_BY_NAME = U.synchronizedMap();
+	private static final Map<String, Plugin> PLUGINS_BY_NAME = Coll.synchronizedMap();
 
 	private static volatile DBPlugin dbPlugin = new DefaultDBPlugin();
 	private static volatile EntitiesPlugin entitiesPlugin = new DefaultEntitiesPlugin();
@@ -124,7 +125,7 @@ public final class Plugins {
 		} else if (plugin instanceof TemplatesPlugin) {
 			templatesPlugin = (TemplatesPlugin) plugin;
 		} else {
-			throw U.notExpected();
+			throw Err.notExpected();
 		}
 	}
 

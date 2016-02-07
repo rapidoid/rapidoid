@@ -32,6 +32,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.pojo.*;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
+import org.rapidoid.util.UTILS;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -91,7 +92,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 			throws PojoHandlerNotFoundException, PojoDispatchException {
 
 		// normalize the path
-		path = U.uri(path);
+		path = UTILS.uri(path);
 
 		if (req.isEvent()) {
 			// find the event handler
@@ -325,7 +326,7 @@ public class PojoDispatcherImpl implements PojoDispatcher, Constants {
 
 	@SuppressWarnings("unchecked")
 	protected List<DispatchReq> getMethodActions(String componentPath, Method method) {
-		String path = U.uri(componentPath, method.getName());
+		String path = UTILS.uri(componentPath, method.getName());
 		return U.list(new DispatchReq("", path, DispatchReqKind.SERVICE, Collections.EMPTY_MAP));
 	}
 

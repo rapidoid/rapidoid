@@ -2,10 +2,10 @@ package org.rapidoid.ctx;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
 
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -55,7 +55,7 @@ public class Ctx implements CtxMetadata {
 
 	private final List<Object> allPersisters = Collections.synchronizedList(new ArrayList<Object>(5));
 
-	private final Map<Object, Object> extras = U.synchronizedMap();
+	private final Map<Object, Object> extras = Coll.synchronizedMap();
 
 	Ctx(String tag) {
 		this.tag = tag;
@@ -196,7 +196,7 @@ public class Ctx implements CtxMetadata {
 		ctx.setExchange(null);
 		ctx.setUser(new UserInfo(cd.username(), cd.roles()));
 
-		U.assign(ctx.extras(), cd.extras());
+		Coll.assign(ctx.extras(), cd.extras());
 
 		try {
 			return Lmbd.call(action);

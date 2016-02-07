@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
+import org.rapidoid.commons.Err;
 import org.rapidoid.data.JSON;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
@@ -240,7 +241,7 @@ public class HttpParser implements Constants {
 
 				src.get(multipartBoundary, helper.bytes, 2);
 
-				U.rteIf(multipartBoundary.isEmpty(), "Invalid multi-part HTTP request!");
+				Err.rteIf(multipartBoundary.isEmpty(), "Invalid multi-part HTTP request!");
 
 				parseMultiParts(src, body, data, files, multipartBoundary, helper);
 
@@ -261,7 +262,7 @@ public class HttpParser implements Constants {
 				return true;
 
 			default:
-				throw U.notExpected();
+				throw Err.notExpected();
 		}
 	}
 
@@ -365,7 +366,7 @@ public class HttpParser implements Constants {
 			boolean validEncoding = BytesUtil.matches(src.bytes(), encoding, _7BIT, false)
 					|| BytesUtil.matches(src.bytes(), encoding, _8BIT, false)
 					|| BytesUtil.matches(src.bytes(), encoding, BINARY, false);
-			U.rteIf(!validEncoding, "Invalid Content-transfer-encoding header value!");
+			Err.rteIf(!validEncoding, "Invalid Content-transfer-encoding header value!");
 		}
 
 		if (filename.isEmpty()) {

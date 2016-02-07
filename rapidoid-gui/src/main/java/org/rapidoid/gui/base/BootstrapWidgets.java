@@ -6,8 +6,8 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.commons.AnyObj;
-import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Rnd;
+import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
 import org.rapidoid.gui.*;
 import org.rapidoid.gui.reqinfo.ReqInfo;
@@ -349,7 +349,7 @@ public abstract class BootstrapWidgets extends HTML {
 			cmd = cmd.substring(1);
 		}
 
-		String caption = U.capitalized(cmd);
+		String caption = Str.capitalized(cmd);
 
 		Btn btn = btn(caption);
 		if (primary) {
@@ -364,7 +364,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Btn navigate(String cmd) {
-		String caption = U.capitalized(cmd);
+		String caption = Str.capitalized(cmd);
 		return btn(caption).linkTo(cmd);
 	}
 
@@ -544,7 +544,7 @@ public abstract class BootstrapWidgets extends HTML {
 		if (id != null) {
 			String className = Cls.entityName(entity);
 			String frm = Conf.is("generate") ? "%s%s.html" : "/%s/%s";
-			return U.frmt(frm, U.uncapitalized(className), id);
+			return U.frmt(frm, Str.uncapitalized(className), id);
 		} else {
 			return "";
 		}

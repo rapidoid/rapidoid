@@ -36,6 +36,7 @@ import org.apache.http.protocol.HttpContext;
 import org.rapidoid.activity.RapidoidThreadFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
 import org.rapidoid.concurrent.*;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
@@ -138,7 +139,7 @@ public class HttpClient {
 			req = new HttpPatch(uri);
 			canHaveBody = true;
 		} else {
-			throw U.illegalArg("Illegal HTTP verb: " + verb);
+			throw Err.illegalArg("Illegal HTTP verb: " + verb);
 		}
 
 		for (Entry<String, String> e : headers.entrySet()) {

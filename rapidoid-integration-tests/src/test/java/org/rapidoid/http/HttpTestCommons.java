@@ -34,6 +34,7 @@ import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.D;
+import org.rapidoid.util.UTILS;
 
 import java.io.File;
 import java.io.IOException;
@@ -201,7 +202,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	private void testReq(String verb, String uri) {
 		String resp = fetch(verb, uri);
 
-		String filename = U.path("src", "test", "resources", reqName(verb, uri));
+		String filename = UTILS.path("src", "test", "resources", reqName(verb, uri));
 
 		if (ADJUST_RESULTS) {
 			File testDir = new File(filename).getParentFile();
@@ -226,7 +227,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	private String reqName(String verb, String uri) {
-		return U.path("results", testName(), getTestMethodName(), verb + uri.replace("/", "_").replace("?", "-"));
+		return UTILS.path("results", testName(), getTestMethodName(), verb + uri.replace("/", "_").replace("?", "-"));
 	}
 
 	protected String getTestMethodName() {

@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.app.DollarPage;
 import org.rapidoid.app.IOTool;
 import org.rapidoid.app.IOToolImpl;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.http.*;
 import org.rapidoid.plugins.Plugins;
@@ -54,11 +55,11 @@ public class Dollar {
 
 	public final Map<?, ?> extra = U.map();
 
-	public final Map<Object, Map<Object, Object>> maps = U.mapOfMaps();
+	public final Map<Object, Map<Object, Object>> maps = Coll.mapOfMaps();
 
-	public final Map<Object, List<Object>> lists = U.mapOfLists();
+	public final Map<Object, List<Object>> lists = Coll.mapOfLists();
 
-	public final Map<Object, Set<Object>> sets = U.mapOfSets();
+	public final Map<Object, Set<Object>> sets = Coll.mapOfSets();
 
 	/************
 	 * SERVICES
