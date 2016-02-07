@@ -237,7 +237,7 @@ public class ClasspathUtil {
 		if (relName.endsWith(".class")) {
 			searched.incrementAndGet();
 
-			String clsName = U.mid(relName, 0, -6).replace('/', '.').replace('\\', '.');
+			String clsName = U.sub(relName, 0, -6).replace('/', '.').replace('\\', '.');
 
 			if (U.isEmpty(regex) || regex.matcher(clsName).matches()) {
 				try {

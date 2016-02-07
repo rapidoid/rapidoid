@@ -761,7 +761,7 @@ public class U {
 		return sb.toString();
 	}
 
-	public static String mid(String s, int beginIndex, int endIndex) {
+	public static String sub(String s, int beginIndex, int endIndex) {
 		if (endIndex < 0) {
 			endIndex = s.length() + endIndex;
 		}
@@ -839,11 +839,11 @@ public class U {
 	}
 
 	public static String trimr(String s, char suffix) {
-		return (!s.isEmpty() && s.charAt(s.length() - 1) == suffix) ? mid(s, 0, -1) : s;
+		return (!s.isEmpty() && s.charAt(s.length() - 1) == suffix) ? sub(s, 0, -1) : s;
 	}
 
 	public static String trimr(String s, String suffix) {
-		return s.endsWith(suffix) ? mid(s, 0, -suffix.length()) : s;
+		return s.endsWith(suffix) ? sub(s, 0, -suffix.length()) : s;
 	}
 
 	public static String triml(String s, char prefix) {

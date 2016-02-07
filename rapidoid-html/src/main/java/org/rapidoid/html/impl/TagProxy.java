@@ -123,7 +123,7 @@ public class TagProxy implements InvocationHandler, Serializable {
 	}
 
 	private static String attr(String name) {
-		return name.endsWith("_") ? U.mid(name, 0, -1) : name;
+		return name.endsWith("_") ? U.sub(name, 0, -1) : name;
 	}
 
 }

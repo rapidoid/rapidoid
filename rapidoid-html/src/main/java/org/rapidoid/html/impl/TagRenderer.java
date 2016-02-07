@@ -186,7 +186,7 @@ public class TagRenderer {
 				String str;
 
 				if (arg instanceof String) {
-					str = "'" + U.mid(JSON.stringify(arg), 1, -1) + "'";
+					str = "'" + U.sub(JSON.stringify(arg), 1, -1) + "'";
 				} else {
 					str = U.str(arg);
 				}

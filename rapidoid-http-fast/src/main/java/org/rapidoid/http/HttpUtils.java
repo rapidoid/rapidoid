@@ -81,7 +81,7 @@ public class HttpUtils implements HttpMetadata {
 			resourceName = "index";
 		} else {
 			if (resourceName.endsWith(".html")) {
-				resourceName = U.mid(resourceName, 0, -5);
+				resourceName = U.sub(resourceName, 0, -5);
 			}
 		}
 

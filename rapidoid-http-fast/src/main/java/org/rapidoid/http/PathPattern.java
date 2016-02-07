@@ -77,7 +77,7 @@ public class PathPattern {
 		});
 
 		if (regex.endsWith("/*")) {
-			regex = U.mid(regex, 0, -1) + ".*";
+			regex = U.sub(regex, 0, -1) + ".*";
 		}
 
 		Pattern pattern = Pattern.compile(regex);

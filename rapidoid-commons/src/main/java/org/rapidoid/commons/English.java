@@ -76,13 +76,13 @@ public class English {
 		} else if (PLURAL2.matcher(noun).matches()) {
 			return noun + "es";
 		} else if (PLURAL3.matcher(noun).matches()) {
-			return U.mid(noun, 0, -1) + "ies";
+			return U.sub(noun, 0, -1) + "ies";
 		} else if (PLURAL1U.matcher(noun).matches()) {
 			return noun + "ES";
 		} else if (PLURAL2U.matcher(noun).matches()) {
 			return noun + "ES";
 		} else if (PLURAL3U.matcher(noun).matches()) {
-			return U.mid(noun, 0, -1) + "IES";
+			return U.sub(noun, 0, -1) + "IES";
 		} else {
 			boolean upper = Character.isUpperCase(noun.charAt(noun.length() - 1));
 			return noun + (upper ? "S" : "s");
@@ -95,21 +95,21 @@ public class English {
 		}
 
 		if (noun.toLowerCase().endsWith("s")) {
-			String singular = U.mid(noun, 0, -1);
+			String singular = U.sub(noun, 0, -1);
 			if (plural(singular).equals(noun)) {
 				return singular;
 			}
 		}
 
 		if (noun.toLowerCase().endsWith("es")) {
-			String singular = U.mid(noun, 0, -2);
+			String singular = U.sub(noun, 0, -2);
 			if (plural(singular).equals(noun)) {
 				return singular;
 			}
 		}
 
 		if (noun.toLowerCase().endsWith("ies")) {
-			String singular = U.mid(noun, 0, -1);
+			String singular = U.sub(noun, 0, -1);
 			if (!singular.isEmpty()) {
 				boolean upper = Character.isUpperCase(singular.charAt(singular.length() - 1));
 				singular += upper ? 'Y' : 'y';
