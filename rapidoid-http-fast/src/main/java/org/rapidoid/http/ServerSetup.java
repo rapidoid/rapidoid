@@ -1,18 +1,23 @@
 package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.handler.*;
 import org.rapidoid.http.listener.FastHttpListener;
 import org.rapidoid.http.listener.IgnorantHttpListener;
+import org.rapidoid.log.Log;
 import org.rapidoid.net.Serve;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.pojo.POJO;
 import org.rapidoid.pojo.PojoDispatcher;
+import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Map;
 
@@ -40,11 +45,13 @@ import java.util.Map;
 @Since("4.3.0")
 public class ServerSetup {
 
+	private volatile FastHttpListener listener = new IgnorantHttpListener();
+
 	private volatile int port = Conf.port();
 
 	private volatile String address = "0.0.0.0";
 
-	private volatile FastHttpListener listener = new IgnorantHttpListener();
+	private volatile String[] path;
 
 	private volatile HttpWrapper[] wrappers;
 
@@ -241,6 +248,29 @@ public class ServerSetup {
 		}
 
 		return this;
+	}
+
+	public ServerSetup path(String... path) {
+		this.path = path;
+		return this;
+	}
+
+	public synchronized String[] path() {
+		if (U.isEmpty(this.path)) {
+			String pkg = UTILS.getCallingPackageOf(ServerSetup.class);
+			this.path = new String[]{pkg};
+			Log.info("Inferring application package (path) to be: " + pkg);
+		}
+
+		return path;
+	}
+
+	public ServerSetup bootstrap() {
+		return req(Scan.annotated(Controller.class).in(path()).getClasses().toArray());
+	}
+
+	public OnAnnotated annotated(Class<? extends Annotation>[] annotated) {
+		return new OnAnnotated(annotated, path());
 	}
 
 }

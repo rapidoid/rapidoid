@@ -30,7 +30,6 @@ import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.listener.FastHttpListener;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.UTILS;
 
 import java.lang.annotation.Annotation;
 
@@ -139,6 +138,14 @@ public class On {
 		return DEFAULT_SERVER_SETUP.address(address);
 	}
 
+	public static ServerSetup path(String... path) {
+		return DEFAULT_SERVER_SETUP.path(path);
+	}
+
+	public static String[] path() {
+		return DEFAULT_SERVER_SETUP.path();
+	}
+
 	public static synchronized ServerSetup defaultWrap(HttpWrapper... wrappers) {
 		return DEFAULT_SERVER_SETUP.defaultWrap(wrappers);
 	}
@@ -163,15 +170,19 @@ public class On {
 		return setup().render(renderer);
 	}
 
-	public static void args(String... args) {
+	public static ServerSetup args(String... args) {
 		Conf.args(args);
+		return DEFAULT_SERVER_SETUP;
+	}
+
+	public static ServerSetup bootstrap() {
+		return DEFAULT_SERVER_SETUP.bootstrap();
 	}
 
 	@SafeVarargs
 	@SuppressWarnings({"varargs"})
 	public static OnAnnotated annotated(Class<? extends Annotation>... annotated) {
-		String pkg = UTILS.getCallingPackageOf(On.class);
-		return new OnAnnotated(annotated, pkg);
+		return DEFAULT_SERVER_SETUP.annotated(annotated);
 	}
 
 }
