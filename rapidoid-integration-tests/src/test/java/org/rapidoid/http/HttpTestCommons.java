@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
+import org.rapidoid.config.Conf;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
@@ -59,11 +60,11 @@ public abstract class HttpTestCommons extends TestCommons {
 
 		System.out.println("--- STARTING SERVER ---");
 
+		Conf.reset();
 		HTTP.STATEFUL_CLIENT.reset();
 
 		On.getDefaultSetup().http().resetConfig();
-		// On.getDefaultSetup().listen();
-//		U.sleep(300);
+		On.getDefaultSetup().listen();
 
 		System.out.println("--- SERVER STARTED ---");
 
@@ -80,14 +81,18 @@ public abstract class HttpTestCommons extends TestCommons {
 	public void closeContext() {
 		System.out.println("--- STOPPING SERVER ---");
 
-		// On.getDefaultSetup().shutdown();
-//		U.sleep(300);
+		On.admin().shutdown();
+		On.dev().shutdown();
 
 		System.out.println("--- SERVER STOPPED ---");
 	}
 
 	protected String localhost(String uri) {
-		return "http://localhost:8888" + uri;
+		return localhost(8888, uri);
+	}
+
+	protected String localhost(int port, String uri) {
+		return "http://localhost:" + port + uri;
 	}
 
 	protected void defaultServerSetup() {
@@ -130,7 +135,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	protected String upload(String uri, Map<String, String> params, Map<String, String> files) throws IOException,
 			ClientProtocolException {
 		Map<String, String> headers = U.map("Cookie", "COOKIE1=a", "COOKIE", "foo=bar");
-		return new String(HTTP.post(localhost(uri), headers, params, files));
+		return new String(HTTP.post(localhost(8888, uri), headers, params, files));
 	}
 
 	protected String get(String uri) {
@@ -146,46 +151,74 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected void onlyGet(String uri) {
-		onlyReq("GET", uri);
+		onlyGet(8888, uri);
+	}
+
+	protected void onlyGet(int port, String uri) {
+		onlyReq(port, "GET", uri);
 	}
 
 	protected void onlyPost(String uri) {
-		onlyReq("POST", uri);
+		onlyPost(8888, uri);
+	}
+
+	protected void onlyPost(int port, String uri) {
+		onlyReq(port, "POST", uri);
 	}
 
 	protected void onlyPut(String uri) {
-		onlyReq("PUT", uri);
+		onlyPut(8888, uri);
+	}
+
+	protected void onlyPut(int port, String uri) {
+		onlyReq(port, "PUT", uri);
 	}
 
 	protected void onlyDelete(String uri) {
-		onlyReq("DELETE", uri);
+		onlyDelete(8888, uri);
+	}
+
+	protected void onlyDelete(int port, String uri) {
+		onlyReq(port, "DELETE", uri);
 	}
 
 	protected void getAndPost(String uri) {
-		testReq("GET", uri);
-		testReq("POST", uri);
-		notFoundExcept(uri, "GET", "POST");
+		getAndPost(8888, uri);
 	}
 
-	private void onlyReq(String verb, String uri) {
-		testReq(verb, uri);
-		notFoundExcept(uri, verb);
+	protected void getAndPost(int port, String uri) {
+		testReq(port, "GET", uri);
+		testReq(port, "POST", uri);
+		notFoundExcept(port, uri, "GET", "POST");
+	}
+
+	private void onlyReq(int port, String verb, String uri) {
+		testReq(port, verb, uri);
+		notFoundExcept(port, uri, verb);
 	}
 
 	protected void notFoundExcept(String uri, String... exceptVerbs) {
+		notFoundExcept(8888, uri, exceptVerbs);
+	}
+
+	protected void notFoundExcept(int port, String uri, String... exceptVerbs) {
 		for (String verb : HTTP_VERBS) {
 			if (Arr.indexOf(exceptVerbs, verb) < 0) {
-				notFound(verb, uri);
+				notFound(port, verb, uri);
 			}
 		}
 	}
 
 	protected void notFound(String uri) {
-		notFoundExcept(uri);
+		notFound(8888, uri);
 	}
 
-	protected void notFound(String verb, String uri) {
-		String resp = fetch(verb, uri);
+	protected void notFound(int port, String uri) {
+		notFoundExcept(port, uri);
+	}
+
+	protected void notFound(int port, String verb, String uri) {
+		String resp = fetch(port, verb, uri);
 		String notFound = IO.load("results/404-not-found");
 		U.notNull(notFound, "404-not-found");
 		checkResponse(verb, uri, resp, notFound);
@@ -199,10 +232,10 @@ public abstract class HttpTestCommons extends TestCommons {
 		eq(actual, expected);
 	}
 
-	private void testReq(String verb, String uri) {
-		String resp = fetch(verb, uri);
+	private void testReq(int port, String verb, String uri) {
+		String resp = fetch(port, verb, uri);
 
-		String filename = UTILS.path("src", "test", "resources", reqName(verb, uri));
+		String filename = UTILS.path("src", "test", "resources", reqName(port, verb, uri));
 
 		if (ADJUST_RESULTS) {
 			File testDir = new File(filename).getParentFile();
@@ -217,8 +250,8 @@ public abstract class HttpTestCommons extends TestCommons {
 		}
 	}
 
-	private String fetch(String verb, String uri) {
-		byte[] res = HTTP.DEFAULT_CLIENT.request(verb, localhost(uri), null, null, null, null, null, null, true).get();
+	private String fetch(int port, String verb, String uri) {
+		byte[] res = HTTP.DEFAULT_CLIENT.request(verb, localhost(port, uri), null, null, null, null, null, null, true).get();
 
 		String resp = new String(res);
 
@@ -226,8 +259,12 @@ public abstract class HttpTestCommons extends TestCommons {
 		return resp;
 	}
 
-	private String reqName(String verb, String uri) {
-		return UTILS.path("results", testName(), getTestMethodName(), verb + uri.replace("/", "_").replace("?", "-"));
+	private String reqName(int port, String verb, String uri) {
+		String req = verb + uri.replace("/", "_").replace("?", "-");
+		if (port != 8888) {
+			req = port + "__" + req;
+		}
+		return UTILS.path("results", testName(), getTestMethodName(), req);
 	}
 
 	protected String getTestMethodName() {

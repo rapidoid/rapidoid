@@ -37,30 +37,16 @@ import java.lang.annotation.Annotation;
 @Since("4.3.0")
 public class On {
 
-	private static final ServerSetup DEFAULT_SERVER_SETUP = new ServerSetup();
+	private static final ServerSetup DEFAULT_SERVER = new ServerSetup("default", "0.0.0.0", 8888);
 
-	private static boolean initialized = false;
+	private static final ServerSetup ADMIN_SERVER = new ServerSetup("admin", "0.0.0.0", 8889);
 
-	private static ServerSetup setup() {
-		if (!initialized) {
-			initialize();
-			initialized = true;
-		}
+	private static final ServerSetup DEV_SERVER = new ServerSetup("dev", "127.0.0.1", 8887);
 
-		return DEFAULT_SERVER_SETUP;
-	}
-
-	private static void initialize() {
-		Log.info("Starting Rapidoid...", "version", RapidoidInfo.version());
-
-		// print internal state
-		// LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+	static {
+		Log.info("Initializing Rapidoid...", "version", RapidoidInfo.version());
 
 		Log.info("Working directory is: " + System.getProperty("user.dir"));
-
-		DEFAULT_SERVER_SETUP.listen();
-
-		//Ctx ctx = Ctxs.open("web");
 
 		Jobs.execute(new Runnable() {
 			@Override
@@ -75,114 +61,122 @@ public class On {
 	}
 
 	public static synchronized OnAction get(String path) {
-		return setup().get(path);
+		return DEFAULT_SERVER.get(path);
 	}
 
 	public static synchronized OnAction post(String path) {
-		return setup().post(path);
+		return DEFAULT_SERVER.post(path);
 	}
 
 	public static synchronized OnAction put(String path) {
-		return setup().put(path);
+		return DEFAULT_SERVER.put(path);
 	}
 
 	public static synchronized OnAction delete(String path) {
-		return setup().delete(path);
+		return DEFAULT_SERVER.delete(path);
 	}
 
 	public static synchronized OnAction patch(String path) {
-		return setup().patch(path);
+		return DEFAULT_SERVER.patch(path);
 	}
 
 	public static synchronized OnAction options(String path) {
-		return setup().options(path);
+		return DEFAULT_SERVER.options(path);
 	}
 
 	public static synchronized OnAction head(String path) {
-		return setup().head(path);
+		return DEFAULT_SERVER.head(path);
 	}
 
 	public static synchronized OnAction trace(String path) {
-		return setup().trace(path);
+		return DEFAULT_SERVER.trace(path);
 	}
 
 	public static synchronized OnPage page(String path) {
-		return setup().page(path);
+		return DEFAULT_SERVER.page(path);
 	}
 
 	public static synchronized ServerSetup error(ErrorHandler onError) {
-		return setup().onError(onError);
+		return DEFAULT_SERVER.onError(onError);
 	}
 
 	public static synchronized ServerSetup req(ReqHandler handler) {
-		return setup().req(handler);
+		return DEFAULT_SERVER.req(handler);
 	}
 
 	public static synchronized ServerSetup req(ReqRespHandler handler) {
-		return setup().req(handler);
+		return DEFAULT_SERVER.req(handler);
 	}
 
 	public static synchronized ServerSetup req(FastHttpHandler handler) {
-		return setup().req(handler);
+		return DEFAULT_SERVER.req(handler);
 	}
 
 	public static synchronized ServerSetup req(Object... controllers) {
-		return setup().req(controllers);
+		return DEFAULT_SERVER.req(controllers);
 	}
 
 	public static synchronized ServerSetup port(int port) {
-		return DEFAULT_SERVER_SETUP.port(port);
+		return DEFAULT_SERVER.port(port);
 	}
 
 	public static synchronized ServerSetup address(String address) {
-		return DEFAULT_SERVER_SETUP.address(address);
+		return DEFAULT_SERVER.address(address);
 	}
 
 	public static ServerSetup path(String... path) {
-		return DEFAULT_SERVER_SETUP.path(path);
+		return DEFAULT_SERVER.path(path);
 	}
 
 	public static String[] path() {
-		return DEFAULT_SERVER_SETUP.path();
+		return DEFAULT_SERVER.path();
 	}
 
 	public static synchronized ServerSetup defaultWrap(HttpWrapper... wrappers) {
-		return DEFAULT_SERVER_SETUP.defaultWrap(wrappers);
+		return DEFAULT_SERVER.defaultWrap(wrappers);
 	}
 
 	public static synchronized ServerSetup listener(FastHttpListener listener) {
-		return DEFAULT_SERVER_SETUP.listener(listener);
+		return DEFAULT_SERVER.listener(listener);
 	}
 
 	public static synchronized ServerSetup getDefaultSetup() {
-		return setup();
+		return DEFAULT_SERVER;
 	}
 
-	public static ServerSetup createCustomSetup() {
-		return new ServerSetup();
+	public static ServerSetup createServer(String name) {
+		return new ServerSetup(name, "0.0.0.0", 8888);
 	}
 
 	public static synchronized ServerSetup staticFilesLookIn(String... possibleLocations) {
-		return setup().staticFilesPath(possibleLocations);
+		return DEFAULT_SERVER.staticFilesPath(possibleLocations);
 	}
 
 	public static synchronized ServerSetup render(ViewRenderer renderer) {
-		return setup().render(renderer);
+		return DEFAULT_SERVER.render(renderer);
 	}
 
 	public static ServerSetup args(String... args) {
 		Conf.args(args);
-		return DEFAULT_SERVER_SETUP;
+		return DEFAULT_SERVER;
 	}
 
 	public static ServerSetup bootstrap() {
-		return DEFAULT_SERVER_SETUP.bootstrap();
+		return DEFAULT_SERVER.bootstrap();
 	}
 
 	@SafeVarargs
 	@SuppressWarnings({"varargs"})
 	public static OnAnnotated annotated(Class<? extends Annotation>... annotated) {
-		return DEFAULT_SERVER_SETUP.annotated(annotated);
+		return DEFAULT_SERVER.annotated(annotated);
+	}
+
+	public static ServerSetup admin() {
+		return ADMIN_SERVER;
+	}
+
+	public static ServerSetup dev() {
+		return DEV_SERVER;
 	}
 
 }

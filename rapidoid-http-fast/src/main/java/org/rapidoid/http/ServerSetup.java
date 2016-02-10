@@ -45,9 +45,15 @@ import java.util.Map;
 @Since("4.3.0")
 public class ServerSetup {
 
+	public static final int UNDEFINED = -1;
+
+	private final String name;
+	private final String defaultAddress;
+	private final int defaultPort;
+
 	private volatile FastHttpListener listener = new IgnorantHttpListener();
 
-	private volatile int port = Conf.port();
+	private volatile int port;
 
 	private volatile String address = "0.0.0.0";
 
@@ -60,6 +66,15 @@ public class ServerSetup {
 	private volatile boolean listening;
 
 	private volatile TCPServer server;
+
+	public ServerSetup(String name, String defaultAddress, int defaultPort) {
+		this.name = name;
+		this.defaultAddress = defaultAddress;
+		this.defaultPort = defaultPort;
+
+		this.port = defaultPort;
+		this.address = defaultAddress;
+	}
 
 	public synchronized FastHttp http() {
 		if (fastHttp == null) {
@@ -79,43 +94,64 @@ public class ServerSetup {
 		return server;
 	}
 
+	private void activate() {
+		if (port == defaultPort) {
+			int customPort = Conf.option(name + ".port", UNDEFINED);
+			if (customPort != UNDEFINED) {
+				port(customPort);
+			}
+		}
+
+		listen();
+	}
+
 	public OnAction get(String path) {
+		activate();
 		return new OnAction(this, httpImpls(), "GET", path).wrap(wrappers);
 	}
 
 	public OnAction post(String path) {
+		activate();
 		return new OnAction(this, httpImpls(), "POST", path).wrap(wrappers);
 	}
 
 	public OnAction put(String path) {
+		activate();
 		return new OnAction(this, httpImpls(), "PUT", path).wrap(wrappers);
 	}
 
 	public OnAction delete(String path) {
+		activate();
 		return new OnAction(this, httpImpls(), "DELETE", path).wrap(wrappers);
 	}
 
 	public OnAction patch(String path) {
+		activate();
 		return new OnAction(this, httpImpls(), "PATCH", path).wrap(wrappers);
 	}
 
 	public OnAction options(String path) {
+		activate();
 		return new OnAction(this, httpImpls(), "OPTIONS", path).wrap(wrappers);
 	}
 
 	public OnAction head(String path) {
+		activate();
 		return new OnAction(this, httpImpls(), "HEAD", path).wrap(wrappers);
 	}
 
 	public OnAction trace(String path) {
+		activate();
 		return new OnAction(this, httpImpls(), "TRACE", path).wrap(wrappers);
 	}
 
 	public OnPage page(String path) {
+		activate();
 		return new OnPage(this, httpImpls(), path).wrap(wrappers);
 	}
 
 	public ServerSetup req(ReqHandler handler) {
+		activate();
 		for (FastHttp http : httpImpls()) {
 			http.addGenericHandler(new DelegatingFastParamsAwareReqHandler(http, MediaType.HTML_UTF_8, wrappers,
 					handler));
@@ -125,6 +161,7 @@ public class ServerSetup {
 	}
 
 	public ServerSetup req(ReqRespHandler handler) {
+		activate();
 		for (FastHttp http : httpImpls()) {
 			http.addGenericHandler(new DelegatingFastParamsAwareReqRespHandler(http, MediaType.HTML_UTF_8, wrappers,
 					handler));
@@ -134,6 +171,7 @@ public class ServerSetup {
 	}
 
 	public ServerSetup req(FastHttpHandler handler) {
+		activate();
 		for (FastHttp http : httpImpls()) {
 			http.addGenericHandler(handler);
 		}
@@ -142,6 +180,7 @@ public class ServerSetup {
 	}
 
 	public ServerSetup req(Object... controllers) {
+		activate();
 		List<Object> pojos = U.list();
 
 		for (Object controller : controllers) {
@@ -207,26 +246,33 @@ public class ServerSetup {
 
 	public ServerSetup shutdown() {
 		reset();
-		this.server.shutdown();
-		this.server = null;
+		if (this.server != null) {
+			this.server.shutdown();
+			this.server = null;
+		}
 		return this;
 	}
 
 	public ServerSetup halt() {
 		reset();
-		this.server.halt();
-		this.server = null;
+		if (this.server != null) {
+			this.server.halt();
+			this.server = null;
+		}
 		return this;
 	}
 
 	public void reset() {
-		fastHttp.resetConfig();
+		if (fastHttp != null) {
+			fastHttp.resetConfig();
+		}
+
 		listening = false;
 		fastHttp = null;
 		wrappers = null;
 		listener = new IgnorantHttpListener();
-		port = Conf.port();
-		address = "0.0.0.0";
+		port = defaultPort;
+		address = defaultAddress;
 		path = null;
 	}
 

@@ -100,7 +100,7 @@ public class Conf {
 		}
 	}
 
-	public static void unconfigure(String name) {
+	public static void remove(String name) {
 		ROOT.remove(name);
 	}
 
@@ -138,6 +138,14 @@ public class Conf {
 
 	public static int port() {
 		return option("port", 8888);
+	}
+
+	public static int adminPort() {
+		return option("admin.port", 8889);
+	}
+
+	public static int devPort() {
+		return option("dev.port", 8887);
 	}
 
 	public static int cpus() {
@@ -331,4 +339,5 @@ public class Conf {
 
 		return conf;
 	}
+
 }

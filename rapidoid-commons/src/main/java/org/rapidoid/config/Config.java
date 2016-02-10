@@ -44,12 +44,20 @@ public class Config {
 	}
 
 	public String option(String name) {
-		Object opt = properties.get(name);
+		Object opt = getValue(name);
 		return opt != null ? U.str(opt) : null;
 	}
 
+	private Object getValue(String name) {
+		if (name.contains(".")) {
+			return nested(name.split("\\."));
+		} else {
+			return properties.get(name);
+		}
+	}
+
 	public String option(String name, String defaultValue) {
-		Object obj = properties.get(name);
+		Object obj = getValue(name);
 		return obj != null ? U.str(obj) : defaultValue;
 	}
 
@@ -69,7 +77,7 @@ public class Config {
 	}
 
 	public boolean has(String name, Object value) {
-		Object val = properties.get(name);
+		Object val = getValue(name);
 		return U.eq(val, value);
 	}
 
@@ -82,7 +90,7 @@ public class Config {
 	}
 
 	public boolean contains(String name, Object value) {
-		Object opt = properties.get(name);
+		Object opt = getValue(name);
 
 		if (opt != null) {
 			if (opt instanceof Collection) {
@@ -97,7 +105,7 @@ public class Config {
 
 	@SuppressWarnings("unchecked")
 	public synchronized Config sub(String name) {
-		Map<String, Object> submap = (Map<String, Object>) properties.get(name);
+		Map<String, Object> submap = (Map<String, Object>) getValue(name);
 
 		if (submap == null) {
 			submap = U.map();
@@ -157,12 +165,12 @@ public class Config {
 
 	@SuppressWarnings("unchecked")
 	public <T> T get(String key) {
-		return (T) properties.get(key);
+		return (T) getValue(key);
 	}
 
 	@SuppressWarnings("unchecked")
 	public <T> T getOrFail(String key, Class<T> clazz) {
-		T val = (T) properties.get(key);
+		T val = (T) getValue(key);
 		U.must(val != null, "Cannot find the configuration entry: %s", key);
 		U.must(Cls.instanceOf(val, clazz), "The configuration entry '%s' must be of type: %s", key,
 				clazz.getSimpleName());
