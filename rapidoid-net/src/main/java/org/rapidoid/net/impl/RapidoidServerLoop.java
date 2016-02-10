@@ -105,7 +105,7 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 		U.notNull(protocol, "protocol");
 		U.notNull(helperClass, "helperClass");
 
-		Log.info("Initializing server", "port", port, "accept", blockingAccept ? "blocking" : "non-blocking");
+		Log.info("Initializing server", "address", address, "port", port, "accept", blockingAccept ? "blocking" : "non-blocking");
 
 		serverSocketChannel = ServerSocketChannel.open();
 
@@ -130,7 +130,7 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 				serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 			}
 
-			Log.info("Waiting for connections...");
+			Log.info("Waiting for connections...", "address", address, "port", port);
 
 			initWorkers();
 

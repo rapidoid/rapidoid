@@ -42,7 +42,7 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 	public void run() {
 		this.ownerThread = Thread.currentThread();
 
-		Log.info("Starting event loop", "name", name);
+		Log.debug("Starting event loop", "name", name);
 
 		setStatus(LoopStatus.BEFORE_LOOP);
 
