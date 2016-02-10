@@ -3,6 +3,7 @@ package org.rapidoid.config;
 import org.rapidoid.data.YAML;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
+import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 
 import java.util.Map;
@@ -128,7 +129,7 @@ public class Conf {
 	}
 
 	public static boolean dev() {
-		return true; // FIXME
+		return !production() && !ClasspathUtil.getClasspathFolders().isEmpty();
 	}
 
 	public static String secret() {
