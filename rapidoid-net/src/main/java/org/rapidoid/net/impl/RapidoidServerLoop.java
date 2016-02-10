@@ -171,6 +171,7 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 
 	@Override
 	public synchronized TCPServer shutdown() {
+		Log.info("Shutting down the server...");
 		stopLoop();
 
 		if (ioWorkers != null) {
@@ -188,7 +189,9 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 			}
 		}
 
-		return super.shutdown();
+		super.shutdown();
+		Log.info("The server is down.");
+		return this;
 	}
 
 	public synchronized RapidoidConnection newConnection() {

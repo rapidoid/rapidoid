@@ -74,7 +74,7 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 
 		setStatus(LoopStatus.STOPPED);
 
-		Log.info("Stopped event loop", "name", name);
+		Log.debug("Stopped event loop", "name", name);
 	}
 
 	private void setStatus(LoopStatus status) {
@@ -82,12 +82,12 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 	}
 
 	protected synchronized void stopLoop() {
-		Log.info("Stopping event loop", "name", name);
+		Log.debug("Stopping event loop", "name", name);
 
 		while (status == LoopStatus.INIT || status == LoopStatus.BEFORE_LOOP) {
 			try {
 				Thread.sleep(100);
-				Log.info("Waiting for event loop to initialize...", "name", name);
+				Log.debug("Waiting for event loop to initialize...", "name", name);
 			} catch (InterruptedException e) {
 				// ignore it, stopping anyway
 			}
@@ -97,7 +97,7 @@ public abstract class AbstractLoop<T> extends LifecycleActivity<T> implements Ru
 			status = LoopStatus.STOPPED;
 		}
 
-		Log.info("Stopped event loop", "name", name);
+		Log.debug("Stopped event loop", "name", name);
 	}
 
 	protected void beforeLoop() {
