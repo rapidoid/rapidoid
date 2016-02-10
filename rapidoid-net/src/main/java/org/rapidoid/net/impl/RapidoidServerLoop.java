@@ -55,7 +55,7 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 	private String address = "0.0.0.0";
 
 	@Inject(optional = true)
-	private int workers = Conf.cpus();
+	private int workers = Conf.option("cpus", Runtime.getRuntime().availableProcessors());
 
 	@Inject(optional = true)
 	private boolean blockingAccept = false;

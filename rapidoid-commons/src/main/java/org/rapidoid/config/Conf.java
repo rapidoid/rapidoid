@@ -53,18 +53,14 @@ public class Conf {
 
 		if (args != null) {
 			for (String arg : args) {
-				processArg(arg);
+				String[] parts = arg.split("=", 2);
+
+				if (parts.length > 1) {
+					ROOT.put(parts[0], parts[1]);
+				} else {
+					ROOT.put(parts[0], true);
+				}
 			}
-		}
-	}
-
-	private static void processArg(String arg) {
-		String[] parts = arg.split("=", 2);
-
-		if (parts.length > 1) {
-			ROOT.put(parts[0], parts[1]);
-		} else {
-			ROOT.put(parts[0], true);
 		}
 	}
 
@@ -102,22 +98,6 @@ public class Conf {
 
 	public static boolean contains(String name, Object value) {
 		return ROOT.contains(name, value);
-	}
-
-	public static int port() {
-		return option("port", 8888);
-	}
-
-	public static int adminPort() {
-		return option("admin.port", 8889);
-	}
-
-	public static int devPort() {
-		return option("dev.port", 8887);
-	}
-
-	public static int cpus() {
-		return option("cpus", Runtime.getRuntime().availableProcessors());
 	}
 
 	public static boolean micro() {

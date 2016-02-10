@@ -43,10 +43,8 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 	@Test
 	public void testAdminServerConfig() {
 		int port = 19999;
-		eq(Conf.adminPort(), 8889);
 
 		Conf.set("admin", "port", port);
-		eq(Conf.adminPort(), port);
 
 		On.admin().get("/myadmin").html(x -> "admin " + x.uri());
 
@@ -56,10 +54,8 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 	@Test
 	public void testDevServerConfig() {
 		int port = 17777;
-		eq(Conf.devPort(), 8887);
 
 		Conf.set("dev", "port", port);
-		eq(Conf.devPort(), port);
 
 		On.dev().get("/mydev").html(x -> "dev " + x.uri());
 
