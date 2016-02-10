@@ -43,17 +43,28 @@ public class Config {
 		this(U.<String, Object>map());
 	}
 
-	public String option(String name) {
-		Object opt = getValue(name);
-		return opt != null ? U.str(opt) : null;
-	}
-
 	private Object getValue(String name) {
 		if (name.contains(".")) {
 			return nested(name.split("\\."));
+
 		} else {
-			return properties.get(name);
+			Object value = properties.get(name);
+
+			if (value == null) {
+				value = System.getProperty(name);
+			}
+
+			if (value == null) {
+				value = System.getenv(name);
+			}
+
+			return value;
 		}
+	}
+
+	public String option(String name) {
+		Object opt = getValue(name);
+		return opt != null ? U.str(opt) : null;
 	}
 
 	public String option(String name, String defaultValue) {
@@ -179,6 +190,10 @@ public class Config {
 
 	public boolean isEmpty() {
 		return properties.isEmpty();
+	}
+
+	public void putAll(Map<String, ?> entries) {
+		properties.putAll((Map<String, Object>) entries);
 	}
 
 }

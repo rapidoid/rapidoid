@@ -24,11 +24,16 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
+import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class REST {
+
+	static {
+		RapidoidInitializer.initialize();
+	}
 
 	public static final RESTClient DEFAULT_CLIENT = new RESTClient();
 

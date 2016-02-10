@@ -23,6 +23,7 @@ package org.rapidoid.io.watch;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Coll;
+import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
@@ -32,6 +33,10 @@ import java.util.Queue;
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class Watch {
+
+	static {
+		RapidoidInitializer.initialize();
+	}
 
 	private final WatcherThread watcher;
 

@@ -4,7 +4,6 @@ import org.rapidoid.data.YAML;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
 
 import java.util.Map;
 
@@ -34,6 +33,12 @@ import java.util.Map;
  */
 public class Conf {
 
+	private static final Config ROOT = new Config();
+
+	static {
+		RapidoidInitializer.initialize();
+	}
+
 	public static final ConfigParser YAML_PARSER = new ConfigParser() {
 		@SuppressWarnings("unchecked")
 		@Override
@@ -42,18 +47,7 @@ public class Conf {
 		}
 	};
 
-	private static final Config ROOT = new Config();
-
-	private static String rootPath = rootPathDefault();
-	private static String staticPath = staticPathDefault();
-	private static String dynamicPath = dynamicPathDefault();
-	private static String configPath = configPathDefault();
-
 	public static synchronized void args(String... args) {
-		init(args, (Object[]) null);
-	}
-
-	public static synchronized void init(String[] args, Object... extraOptions) {
 		ConfigHelp.processHelp(args);
 
 		if (args != null) {
@@ -61,42 +55,15 @@ public class Conf {
 				processArg(arg);
 			}
 		}
-
-		if (extraOptions != null) {
-			for (Object arg : extraOptions) {
-				if (arg instanceof String) {
-					processArg((String) arg);
-				}
-			}
-		}
 	}
 
 	private static void processArg(String arg) {
-		String name;
-		Object value;
+		String[] parts = arg.split("=", 2);
 
-		int pos = arg.indexOf('=');
-		if (pos > 0) {
-			name = arg.substring(0, pos);
-			value = arg.substring(pos + 1);
+		if (parts.length > 1) {
+			ROOT.put(parts[0], parts[1]);
 		} else {
-			name = arg;
-			value = true;
-		}
-
-		ROOT.put(name, value);
-		processArgIfSpecial(name, value);
-	}
-
-	private static void processArgIfSpecial(String name, Object value) {
-		if (name.equals("path")) {
-			setRootPath(value.toString());
-		} else if (name.equals("static")) {
-			setStaticPath(value.toString());
-		} else if (name.equals("dynamic")) {
-			setDynamicPath(value.toString());
-		} else if (name.equals("config")) {
-			setConfigPath(value.toString());
+			ROOT.put(parts[0], true);
 		}
 	}
 
@@ -153,56 +120,19 @@ public class Conf {
 	}
 
 	public static boolean micro() {
-		return has("size", "micro");
+		return is("micro");
 	}
 
 	public static boolean production() {
-		return has("mode", "production");
+		return is("production");
 	}
 
 	public static boolean dev() {
-		if (production()) {
-			return false;
-		}
-
-		assert configureDevMode(); // in debug mode
-
-		return has("mode", "dev") || !production();
-	}
-
-	private static boolean configureDevMode() {
-		ROOT.put("mode", "dev");
-		return true;
+		return true; // FIXME
 	}
 
 	public static String secret() {
 		return option("secret", null);
-	}
-
-	public static String system(String key) {
-		String value = option(key, null);
-
-		if (value == null) {
-			value = System.getProperty(key);
-		}
-
-		if (value == null) {
-			value = System.getenv(key);
-		}
-
-		return value;
-	}
-
-	public static String JAVA_HOME() {
-		return system("JAVA_HOME");
-	}
-
-	public static String HOSTNAME() {
-		return system("HOSTNAME");
-	}
-
-	public static String IP_ADDRESS() {
-		return system("IP_ADDRESS");
 	}
 
 	public static void reset() {
@@ -225,85 +155,18 @@ public class Conf {
 		return ROOT.nested(name);
 	}
 
-	public static String rootPathDefault() {
-		return "rapidoid";
-	}
-
-	public static String rootPath() {
-		return rootPath;
-	}
-
-	public static String configPathDefault() {
-		return rootPathDefault();
-	}
-
-	public static String configPath() {
-		return configPath;
-	}
-
-	public static String staticPathDefault() {
-		return rootPathDefault() + "/static";
-	}
-
-	public static String staticPath() {
-		return staticPath;
-	}
-
-	public static String dynamicPathDefault() {
-		return rootPathDefault() + "/dynamic";
-	}
-
-	public static String dynamicPath() {
-		return dynamicPath;
-	}
-
-	private static String cleanPath(String path) {
-		if (path.endsWith("/") || path.endsWith("\\")) {
-			path = path.substring(0, path.length() - 1);
-		}
-		return path;
-	}
-
 	public static Config sub(String name) {
 		return root().sub(name);
 	}
 
-	public static synchronized void setRootPath(String rootPath) {
-		Log.info("Setting 'root' application path", "path", rootPath);
-		Conf.rootPath = cleanPath(rootPath);
-		setStaticPath(Conf.rootPath + "/static");
-		setDynamicPath(Conf.rootPath + "/dynamic");
-		setConfigPath(Conf.rootPath);
-		reset();
+	public static Config refreshing(String filename) {
+		return refreshing(filename, YAML_PARSER);
 	}
 
-	public static void setStaticPath(String staticPath) {
-		Log.info("Setting 'static' application path", "path", staticPath);
-		Conf.staticPath = cleanPath(staticPath);
-	}
+	public static Config refreshing(final String filename, final ConfigParser parser) {
+		Log.info("Initializing auto-refreshing config", "filename", filename);
 
-	public static void setDynamicPath(String dynamicPath) {
-		Log.info("Setting 'dynamic' application path", "path", dynamicPath);
-		Conf.dynamicPath = cleanPath(dynamicPath);
-	}
-
-	public static void setConfigPath(String configPath) {
-		Log.info("Setting 'config' application path", "path", configPath);
-		Conf.configPath = cleanPath(configPath);
-	}
-
-	public static Config refreshing(String path, String filename) {
-		return refreshing(path, filename, YAML_PARSER);
-	}
-
-	public static Config refreshing(String path, final String filename, final ConfigParser parser) {
-		Log.info("Initializing auto-refreshing config", "root", Conf.rootPath(), "path", path, "filename", filename);
-
-		final String resPath = UTILS.path(Conf.rootPath(), U.safe(path));
-
-		Log.info("Calculated resource path", "path", resPath);
-
-		final Res res = Res.from(filename, null, resPath);
+		final Res res = Res.from(filename);
 
 		Config config = res.attachment();
 		if (config == null) {

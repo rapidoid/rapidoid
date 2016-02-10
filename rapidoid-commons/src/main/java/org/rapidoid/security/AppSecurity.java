@@ -24,7 +24,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
-import org.rapidoid.config.Conf;
 import org.rapidoid.security.annotation.*;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
@@ -106,12 +105,12 @@ public class AppSecurity implements Constants {
 		return hasRole(username, role);
 	}
 
-	protected boolean hasRoleInDevMode(String username, String role) {
-		return Conf.dev() && (role.toLowerCase() + "@debug").equals(username);
+	protected boolean hasSpecialRoleInDevMode(String username, String role) {
+		return false;
 	}
 
 	protected boolean hasRole(String username, String role) {
-		if (hasRoleInDevMode(username, role)) {
+		if (hasSpecialRoleInDevMode(username, role)) {
 			return true;
 		}
 

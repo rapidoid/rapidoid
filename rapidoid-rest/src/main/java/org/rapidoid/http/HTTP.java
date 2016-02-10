@@ -24,12 +24,17 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
+import org.rapidoid.config.RapidoidInitializer;
 
 import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class HTTP {
+
+	static {
+		RapidoidInitializer.initialize();
+	}
 
 	public static final String CONTENT_TYPE_MULTIPART = "multipart/form-data";
 	public static final String CONTENT_TYPE_FORM_URLENCODED = "application/x-www-form-urlencoded";

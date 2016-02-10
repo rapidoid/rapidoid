@@ -50,13 +50,13 @@ public abstract class AbstractPlugin implements Plugin {
 	@Override
 	public synchronized void configure(Map<String, ?> config) {
 		this.config = config;
-		Log.info("Configuring plugin", "name", name, "config", config, "plugin", this, "active", active);
+		Log.debug("Configuring plugin", "name", name, "config", config, "plugin", this, "active", active);
 		restart();
 	}
 
 	@Override
 	public synchronized void restart() {
-		Log.info("Restarting plugin", "name", name, "config", config, "plugin", this, "active", active);
+		Log.debug("Restarting plugin", "name", name, "config", config, "plugin", this, "active", active);
 
 		try {
 			doRestart();
@@ -65,7 +65,7 @@ public abstract class AbstractPlugin implements Plugin {
 			Log.error("Cannot initialize/restart the plugin: " + name, e);
 		}
 
-		Log.info("Plugin is ready", "name", name, "config", config, "plugin", this, "active", active);
+		Log.debug("Plugin is ready", "name", name, "config", config, "plugin", this, "active", active);
 		active = true;
 	}
 

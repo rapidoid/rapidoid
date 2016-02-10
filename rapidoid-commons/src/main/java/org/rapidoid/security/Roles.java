@@ -62,6 +62,8 @@ public class Roles {
 
 	private static Config USERS;
 
+	private static String configFilename = "users.yaml";
+
 	@SuppressWarnings("unchecked")
 	public static Set<String> getRolesFor(String username) {
 		if (U.isEmpty(username)) {
@@ -95,14 +97,23 @@ public class Roles {
 
 	public static synchronized Config usersConfig() {
 		if (USERS == null) {
-			USERS = Conf.refreshing("", "users.yaml");
+			USERS = Conf.refreshing(configFilename);
 		}
 
 		return USERS;
 	}
 
 	public static synchronized void resetConfig() {
+		configFilename = "users.yaml";
 		USERS = null;
+	}
+
+	public static String getConfigFilename() {
+		return configFilename;
+	}
+
+	public static void setConfigFilename(String configFilename) {
+		Roles.configFilename = configFilename;
 	}
 
 }

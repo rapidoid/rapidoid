@@ -3,6 +3,7 @@ package org.rapidoid.io.watch;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Coll;
+import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
@@ -41,6 +42,10 @@ import java.util.concurrent.TimeUnit;
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class Dir implements FilesystemChangeListener {
+
+	static {
+		RapidoidInitializer.initialize();
+	}
 
 	private static final ScheduledExecutorService EXECUTORS = Executors.newScheduledThreadPool(8);
 
@@ -105,7 +110,7 @@ public class Dir implements FilesystemChangeListener {
 
 			@Override
 			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-				files.add(Res.absolute(file.toFile()));
+				files.add(Res.from(file.toFile()));
 				return super.visitFile(file, attrs);
 			}
 

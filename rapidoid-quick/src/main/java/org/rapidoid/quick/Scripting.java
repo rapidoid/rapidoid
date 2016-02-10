@@ -28,7 +28,6 @@ import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.JS;
-import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.gui.GUI;
@@ -72,7 +71,7 @@ public class Scripting {
 				+ HttpUtils.resName(x);
 
 		String filename = scriptName + ".js";
-		Res res = Res.from(filename, Conf.rootPath());
+		Res res = Res.from(filename, "scripts");
 
 		if (!res.exists()) {
 			return null;

@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.JobStatusListener;
@@ -34,6 +35,10 @@ import java.util.concurrent.*;
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class Jobs {
+
+	static {
+		RapidoidInitializer.initialize();
+	}
 
 	private static ScheduledExecutorService SCHEDULER;
 

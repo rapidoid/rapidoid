@@ -71,23 +71,32 @@ public class Res {
 		this.possibleLocations = possibleLocations;
 	}
 
-	public static Res from(File file) {
-		return file.isAbsolute() ? absolute(file) : from(file.getName(), "");
-	}
-
-	public static Res absolute(File file) {
-		U.must(file.isAbsolute(), "Expected from filename!");
-
-		return create(file.getAbsolutePath());
+	public static Res from(File file, String... possibleLocations) {
+		U.must(!file.isAbsolute() || U.isEmpty(possibleLocations), "Cannot specify locations for an absolute filename!");
+		return file.isAbsolute() ? absolute(file) : relative(file.getPath(), possibleLocations);
 	}
 
 	public static Res from(String filename, String... possibleLocations) {
+		return from(new File(filename), possibleLocations);
+	}
+
+	private static Res absolute(File file) {
+		return create(file.getAbsolutePath());
+	}
+
+	private static Res relative(String filename, String... possibleLocations) {
+		File file = new File(filename);
+
+		if (file.isAbsolute()) {
+			return absolute(file);
+		}
+
 		if (U.isEmpty(possibleLocations)) {
 			possibleLocations = DEFAULT_LOCATIONS;
 		}
 
 		U.must(!U.isEmpty(filename), "Resource filename must be specified!");
-		U.must(!new File(filename).isAbsolute(), "Expected relative filename!");
+		U.must(!file.isAbsolute(), "Expected relative filename!");
 
 		return create(filename, possibleLocations);
 	}
@@ -186,7 +195,7 @@ public class Res {
 			Log.trace("Resource file exists", "name", name, "file", file);
 
 			if (file.lastModified() > this.lastModified || !filename.equals(cachedFileName)) {
-				Log.info("Loading resource file", "name", name, "file", file);
+				Log.debug("Loading resource file", "name", name, "file", file);
 				this.lastModified = file.lastModified();
 				return IO.loadBytes(filename);
 			} else {

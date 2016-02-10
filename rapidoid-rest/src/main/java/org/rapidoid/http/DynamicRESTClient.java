@@ -50,7 +50,7 @@ public class DynamicRESTClient implements Dynamic {
 	public DynamicRESTClient(Class<?> clientInterface) {
 		this.clientInterface = clientInterface;
 		this.configFile = "endpoints/" + clientInterface.getSimpleName() + ".yaml";
-		this.config = Conf.refreshing("", configFile);
+		this.config = Conf.refreshing(configFile);
 	}
 
 	@SuppressWarnings("unchecked")

@@ -22,14 +22,12 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.listener.FastHttpListener;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.log.Log;
 
 import java.lang.annotation.Annotation;
 
@@ -37,16 +35,8 @@ import java.lang.annotation.Annotation;
 @Since("4.3.0")
 public class On {
 
-	private static final ServerSetup DEFAULT_SERVER = new ServerSetup("default", "0.0.0.0", 8888);
-
-	private static final ServerSetup ADMIN_SERVER = new ServerSetup("admin", "0.0.0.0", 8889);
-
-	private static final ServerSetup DEV_SERVER = new ServerSetup("dev", "127.0.0.1", 8887);
-
 	static {
-		Log.info("Initializing Rapidoid...", "version", RapidoidInfo.version());
-
-		Log.info("Working directory is: " + System.getProperty("user.dir"));
+		RapidoidInitializer.initialize();
 
 		Jobs.execute(new Runnable() {
 			@Override
@@ -54,11 +44,13 @@ public class On {
 				JSON.warmup();
 			}
 		});
-
-		Cls.getClassIfExists("org.rapidoid.web.RapidoidWebModule");
-
-		Log.info("Rapidoid is ready.");
 	}
+
+	private static final ServerSetup DEFAULT_SERVER = new ServerSetup("http", "0.0.0.0", 8888);
+
+	private static final ServerSetup ADMIN_SERVER = new ServerSetup("admin", "0.0.0.0", 8889);
+
+	private static final ServerSetup DEV_SERVER = new ServerSetup("dev", "127.0.0.1", 8887);
 
 	public static synchronized OnAction get(String path) {
 		return DEFAULT_SERVER.get(path);

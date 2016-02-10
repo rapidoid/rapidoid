@@ -27,7 +27,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Str;
-import org.rapidoid.config.Conf;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
@@ -96,7 +95,7 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 		if (template == null) {
 
 			String desc = partial ? "partial" : "template";
-			Log.info("Compiling Mustache " + desc, "name", filename);
+			Log.debug("Compiling Mustache " + desc, "name", filename);
 
 			Res res = getResource(filename, partial);
 			template = customCompile(filename, res);
@@ -153,7 +152,7 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 	}
 
 	public void invalidateCache() {
-		Log.info("Invalidating Mustache cache");
+		Log.debug("Invalidating Mustache cache");
 		mustacheCache.invalidateAll();
 		lambdaCache.invalidateAll();
 	}
@@ -165,7 +164,7 @@ public class RapidoidMustacheFactory extends DefaultMustacheFactory {
 
 	private Res getResource(String filename, boolean partial) {
 		String sub = partial ? "/partials/" : "/templates/";
-		return Res.from(filename, Conf.rootPath() + sub);
+		return Res.from(filename, "rapidoid" + sub);
 	}
 
 	@Override

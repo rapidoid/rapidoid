@@ -23,7 +23,6 @@ package org.rapidoid.security;
 import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
 
@@ -33,7 +32,8 @@ public abstract class SecurityTestCommons extends AbstractCommonsTest {
 
 	@Before
 	public void init() {
-		Conf.setRootPath(getClass().getSimpleName());
+		Roles.resetConfig();
+		Roles.setConfigFilename(getClass().getSimpleName() + "-users.yaml");
 	}
 
 	protected void checkPermissions(String username, Class<?> clazz, Object target, String propertyName,

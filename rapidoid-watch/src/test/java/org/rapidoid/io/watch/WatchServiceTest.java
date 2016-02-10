@@ -72,7 +72,7 @@ public class WatchServiceTest extends TestCommons {
 
 		giveItTimeToRefresh();
 
-		Res resA = Res.absolute(new File(fileA));
+		Res resA = Res.from(new File(fileA));
 		eq(dir.files(), U.set(resA));
 		eq(dir.folders(), U.set());
 
@@ -83,7 +83,7 @@ public class WatchServiceTest extends TestCommons {
 
 		giveItTimeToRefresh();
 
-		Res resB = Res.absolute(new File(fileB));
+		Res resB = Res.from(new File(fileB));
 		eq(dir.files(), U.set(resA, resB));
 		eq(dir.folders(), U.set());
 
@@ -122,7 +122,7 @@ public class WatchServiceTest extends TestCommons {
 
 		giveItTimeToRefresh();
 
-		Res resX = Res.absolute(new File(fileX));
+		Res resX = Res.from(new File(fileX));
 		eq(dir.files(), U.set(resB, resX));
 		eq(dir.folders(), U.set(dirC));
 
