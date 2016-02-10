@@ -24,6 +24,9 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.util.UTILS;
+
+import java.net.ConnectException;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -60,6 +63,22 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 		On.dev().get("/mydev").html(x -> "dev " + x.uri());
 
 		onlyGet(port, "/mydev");
+	}
+
+	@Test
+	public void testDevServerInProduction() {
+		Conf.set("production", true);
+
+		On.dev().get("/nodev").json(x -> "This should be disabled!");
+
+		try {
+			notFound(8887, "/nodev");
+
+			fail("Expected exception!");
+		} catch (Exception e) {
+			Throwable cause = UTILS.rootCause(e);
+			isTrue(cause instanceof ConnectException);
+		}
 	}
 
 }

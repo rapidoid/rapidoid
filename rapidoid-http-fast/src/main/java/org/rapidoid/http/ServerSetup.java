@@ -50,11 +50,11 @@ public class ServerSetup {
 	private final String name;
 	private final String defaultAddress;
 	private final int defaultPort;
+	private final ServerSetupType setupType;
 
 	private volatile FastHttpListener listener = new IgnorantHttpListener();
 
 	private volatile int port;
-
 	private volatile String address = "0.0.0.0";
 
 	private volatile String[] path;
@@ -67,13 +67,14 @@ public class ServerSetup {
 
 	private volatile TCPServer server;
 
-	public ServerSetup(String name, String defaultAddress, int defaultPort) {
+	public ServerSetup(String name, String defaultAddress, int defaultPort, ServerSetupType setupType) {
 		this.name = name;
 		this.defaultAddress = defaultAddress;
 		this.defaultPort = defaultPort;
 
 		this.port = defaultPort;
 		this.address = defaultAddress;
+		this.setupType = setupType;
 	}
 
 	public synchronized FastHttp http() {
@@ -86,9 +87,13 @@ public class ServerSetup {
 
 	public synchronized TCPServer listen() {
 		if (!listening) {
-			listening = true;
-			server = Serve.server().protocol(http()).address(address).port(port).build();
-			server.start();
+			if (setupType != ServerSetupType.DEV || Conf.dev()) {
+				listening = true;
+				server = Serve.server().protocol(http()).address(address).port(port).build();
+				server.start();
+			} else {
+				Log.warn("The application is NOT running in dev mode, so the DEV server is automatically disabled.");
+			}
 		}
 
 		return server;

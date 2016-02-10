@@ -46,11 +46,11 @@ public class On {
 		});
 	}
 
-	private static final ServerSetup DEFAULT_SERVER = new ServerSetup("http", "0.0.0.0", 8888);
+	private static final ServerSetup DEFAULT_SERVER = new ServerSetup("http", "0.0.0.0", 8888, ServerSetupType.DEFAULT);
 
-	private static final ServerSetup ADMIN_SERVER = new ServerSetup("admin", "0.0.0.0", 8889);
+	private static final ServerSetup ADMIN_SERVER = new ServerSetup("admin", "0.0.0.0", 8889, ServerSetupType.ADMIN);
 
-	private static final ServerSetup DEV_SERVER = new ServerSetup("dev", "127.0.0.1", 8887);
+	private static final ServerSetup DEV_SERVER = new ServerSetup("dev", "127.0.0.1", 8887, ServerSetupType.DEV);
 
 	public static synchronized OnAction get(String path) {
 		return DEFAULT_SERVER.get(path);
@@ -137,7 +137,7 @@ public class On {
 	}
 
 	public static ServerSetup createServer(String name) {
-		return new ServerSetup(name, "0.0.0.0", 8888);
+		return new ServerSetup(name, "0.0.0.0", 8888, ServerSetupType.CUSTOM);
 	}
 
 	public static synchronized ServerSetup staticFilesLookIn(String... possibleLocations) {
