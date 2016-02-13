@@ -21,7 +21,6 @@ package org.rapidoid.plugins.templates;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 
 import java.io.OutputStream;
@@ -30,8 +29,8 @@ import java.io.OutputStream;
 @Since("4.1.0")
 public interface ITemplate {
 
-	void render(@P("output") OutputStream output, @P("scopes") Object... scopes);
+	void render(OutputStream output, Object... scopes);
 
-	String render(@P("scopes") Object... scopes);
+	String render(Object... scopes);
 
 }

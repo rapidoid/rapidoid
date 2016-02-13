@@ -21,7 +21,6 @@ package org.rapidoid.plugins;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 
 import java.util.Map;
@@ -32,7 +31,7 @@ public interface Plugin {
 
 	String name();
 
-	void configure(@P("config") Map<String, ?> config);
+	void configure(Map<String, ?> config);
 
 	boolean isActive();
 

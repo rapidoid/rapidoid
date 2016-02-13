@@ -1,7 +1,6 @@
 package org.rapidoid.plugins.entities;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.plugins.Plugin;
 
@@ -31,12 +30,12 @@ import java.util.Map;
 @Since("3.0.0")
 public interface EntitiesPlugin extends Plugin {
 
-	<E> Class<E> getEntityType(@P("simpleTypeName") String simpleTypeName);
+	<E> Class<E> getEntityType(String simpleTypeName);
 
-	<E> Class<E> getEntityTypeFor(@P("clazz") Class<E> clazz);
+	<E> Class<E> getEntityTypeFor(Class<E> clazz);
 
-	<E> E create(@P("entityType") Class<E> entityType);
+	<E> E create(Class<E> entityType);
 
-	<E> E create(@P("entityType") Class<E> entityType, @P("properties") Map<String, ?> properties);
+	<E> E create(Class<E> entityType, Map<String, ?> properties);
 
 }

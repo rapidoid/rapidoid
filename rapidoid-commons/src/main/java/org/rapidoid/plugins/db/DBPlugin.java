@@ -21,7 +21,6 @@ package org.rapidoid.plugins.db;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.lambda.Operation;
@@ -36,60 +35,60 @@ import java.util.Map;
 @Since("3.0.0")
 public interface DBPlugin extends Plugin {
 
-	String insert(@P("entity") Object entity);
+	String insert(Object entity);
 
-	void update(@P("entity") Object entity);
+	void update(Object entity);
 
-	void update(@P("id") String id, @P("entity") Object entity);
+	void update(String id, Object entity);
 
-	String persist(@P("record") Object record);
+	String persist(Object record);
 
-	String insertOrGetId(@P("record") Object record);
+	String insertOrGetId(Object record);
 
-	<T> T get(@P("clazz") Class<T> clazz, @P("id") String id);
+	<T> T get(Class<T> clazz, String id);
 
-	<T> T getIfExists(@P("clazz") Class<T> clazz, @P("id") String id);
+	<T> T getIfExists(Class<T> clazz, String id);
 
 	<E> List<E> getAll();
 
-	<T> List<T> getAll(@P("clazz") Class<T> clazz);
+	<T> List<T> getAll(Class<T> clazz);
 
-	<E> List<E> getAll(@P("clazz") Class<E> clazz, @P("pageNumber") int pageNumber, @P("pageSize") int pageSize);
+	<E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize);
 
-	<E> List<E> getAll(@P("clazz") Class<E> clazz, @P("ids") List<String> ids);
+	<E> List<E> getAll(Class<E> clazz, List<String> ids);
 
-	void refresh(@P("entity") Object entity);
+	void refresh(Object entity);
 
-	<E> void delete(@P("clazz") Class<E> clazz, @P("id") String id);
+	<E> void delete(Class<E> clazz, String id);
 
-	void delete(@P("entity") Object entity);
+	void delete(Object entity);
 
-	<E> void each(@P("lambda") final Operation<E> lambda);
+	<E> void each(final Operation<E> lambda);
 
 	long size();
 
-	<T> List<T> fullTextSearch(@P("query") String query);
+	<T> List<T> fullTextSearch(String query);
 
-	<T> List<T> find(@P("clazz") Class<T> clazz, @P("match") Predicate<T> match, @P("orderBy") Comparator<T> orderBy);
+	<T> List<T> find(Class<T> clazz, Predicate<T> match, Comparator<T> orderBy);
 
-	<E> List<E> find(@P("match") Predicate<E> match);
+	<E> List<E> find(Predicate<E> match);
 
-	<E> E entity(@P("entityType") Class<E> entityType, @P("properties") Map<String, ?> properties);
+	<E> E entity(Class<E> entityType, Map<String, ?> properties);
 
-	List<Map<String, Object>> query(@P("query") String query, @P("args") Object... args);
+	List<Map<String, Object>> query(String query, Object... args);
 
-	<E> List<E> query(@P("clazz") Class<E> clazz, @P("query") String query, @P("args") Object... args);
+	<E> List<E> query(Class<E> clazz, String query, Object... args);
 
-	void queryAsync(@P("query") String query, Callback<List<Map<String, Object>>> callback, @P("args") Object... args);
+	void queryAsync(String query, Callback<List<Map<String, Object>>> callback, Object... args);
 
-	<E> void queryAsync(@P("clazz") Class<E> clazz, @P("query") String query, Callback<List<E>> callback,
-	                    @P("args") Object... args);
+	<E> void queryAsync(Class<E> clazz, String query, Callback<List<E>> callback,
+	                    Object... args);
 
-	<RESULT> RESULT sql(@P("sql") String sql, @P("args") Object... args);
+	<RESULT> RESULT sql(String sql, Object... args);
 
-	void transaction(@P("transaction") Runnable transaction, @P("readOnly") boolean readOnly);
+	void transaction(Runnable transaction, boolean readOnly);
 
-	void transaction(@P("tx") Runnable tx, @P("readonly") boolean readonly, @P("callback") Callback<Void> callback);
+	void transaction(Runnable tx, boolean readonly, Callback<Void> callback);
 
 	/**
 	 * WARNING: Deletes ALL data in the database! Use with care!

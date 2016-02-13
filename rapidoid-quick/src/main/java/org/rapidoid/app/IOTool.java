@@ -21,7 +21,6 @@ package org.rapidoid.app;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 
 import java.io.File;
@@ -31,14 +30,14 @@ import java.util.List;
 @Since("4.2.0")
 public interface IOTool {
 
-	List<File> files(@P("dir") String dir);
+	List<File> files(String dir);
 
-	List<String> filenames(@P("dir") String dir);
+	List<String> filenames(String dir);
 
-	byte[] load(@P("filename") String filename);
+	byte[] load(String filename);
 
-	void save(@P("filename") String filename, @P("data") byte[] data);
+	void save(String filename, byte[] data);
 
-	File file(@P("filename") String filename);
+	File file(String filename);
 
 }

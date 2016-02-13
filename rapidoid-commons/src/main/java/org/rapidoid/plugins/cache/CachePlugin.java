@@ -1,7 +1,6 @@
 package org.rapidoid.plugins.cache;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.P;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.plugins.Plugin;
 
@@ -29,6 +28,6 @@ import org.rapidoid.plugins.Plugin;
 @Since("4.1.0")
 public interface CachePlugin extends Plugin {
 
-	<K, V> ICache<K, V> create(@P("cacheName") String cacheName, @P("timeToLiveMs") long timeToLiveMs, @P("resetTimeToLiveWhenAccessed") boolean resetTimeToLiveWhenAccessed);
+	<K, V> ICache<K, V> create(String cacheName, long timeToLiveMs, boolean resetTimeToLiveWhenAccessed);
 
 }
