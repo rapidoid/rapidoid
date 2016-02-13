@@ -47,6 +47,14 @@ public class PojoHandlersSetup implements Constants {
 	}
 
 	public void register() {
+		process(true);
+	}
+
+	public void unregister() {
+		process(false);
+	}
+
+	private void process(boolean register) {
 		for (Object controller : controllers) {
 
 			Class<? extends Object> clazz = controller.getClass();
@@ -58,7 +66,7 @@ public class PojoHandlersSetup implements Constants {
 				for (String ctxPath : componentPaths) {
 					for (Method method : Cls.getMethods(clazz)) {
 						if (shouldExpose(method)) {
-							register(controller, ctxPath, method);
+							registerOrUnregister(register, controller, ctxPath, method);
 						}
 					}
 				}
@@ -89,30 +97,100 @@ public class PojoHandlersSetup implements Constants {
 		}
 	}
 
-	private void register(Object controller, String ctxPath, Method method) {
+	private void registerOrUnregister(boolean register, Object controller, String ctxPath, Method method) {
 		Log.info("Registering POJO handler", "controller", controller, "ctxPath", ctxPath, "method", method);
 
 		for (Annotation ann : method.getAnnotations()) {
-
 			if (ann instanceof GET) {
 				GET get = (GET) ann;
-				server.get(pathOf(method, ctxPath, get.value())).json(method, controller);
+				String path = pathOf(method, ctxPath, get.value());
+
+				if (register) {
+					server.get(path).json(method, controller);
+				} else {
+					server.unregister(_GET, path);
+				}
 
 			} else if (ann instanceof POST) {
 				POST post = (POST) ann;
-				server.post(pathOf(method, ctxPath, post.value())).json(method, controller);
+				String path = pathOf(method, ctxPath, post.value());
+
+				if (register) {
+					server.post(path).json(method, controller);
+				} else {
+					server.unregister(_POST, path);
+				}
 
 			} else if (ann instanceof PUT) {
 				PUT put = (PUT) ann;
-				server.put(pathOf(method, ctxPath, put.value())).json(method, controller);
+				String path = pathOf(method, ctxPath, put.value());
+
+				if (register) {
+					server.put(path).json(method, controller);
+				} else {
+					server.unregister(_PUT, path);
+				}
 
 			} else if (ann instanceof DELETE) {
 				DELETE delete = (DELETE) ann;
-				server.delete(pathOf(method, ctxPath, delete.value())).json(method, controller);
+				String path = pathOf(method, ctxPath, delete.value());
+
+				if (register) {
+					server.delete(path).json(method, controller);
+				} else {
+					server.unregister(_DELETE, path);
+				}
+
+			} else if (ann instanceof PATCH) {
+				PATCH patch = (PATCH) ann;
+				String path = pathOf(method, ctxPath, patch.value());
+
+				if (register) {
+					server.patch(path).json(method, controller);
+				} else {
+					server.unregister(_PATCH, path);
+				}
+
+			} else if (ann instanceof OPTIONS) {
+				OPTIONS options = (OPTIONS) ann;
+				String path = pathOf(method, ctxPath, options.value());
+
+				if (register) {
+					server.options(path).json(method, controller);
+				} else {
+					server.unregister(_OPTIONS, path);
+				}
+
+			} else if (ann instanceof HEAD) {
+				HEAD head = (HEAD) ann;
+				String path = pathOf(method, ctxPath, head.value());
+
+				if (register) {
+					server.head(path).json(method, controller);
+				} else {
+					server.unregister(_HEAD, path);
+				}
+
+			} else if (ann instanceof TRACE) {
+				TRACE trace = (TRACE) ann;
+				String path = pathOf(method, ctxPath, trace.value());
+
+				if (register) {
+					server.trace(path).json(method, controller);
+				} else {
+					server.unregister(_TRACE, path);
+				}
 
 			} else if (ann instanceof Page) {
 				Page page = (Page) ann;
-				server.page(pathOf(method, ctxPath, page.value())).gui(method, controller);
+				String path = pathOf(method, ctxPath, page.value());
+
+				if (register) {
+					server.page(path).gui(method, controller);
+				} else {
+					server.unregister(_GET, path);
+					server.unregister(_POST, path);
+				}
 			}
 		}
 	}
