@@ -38,7 +38,7 @@ public class MicroServicesTest extends HttpTestCommons {
 	public void testMicroserviceCommunication() {
 		On.req(new ReqHandler() {
 			@Override
-			public Object handle(Req req) throws Exception {
+			public Object execute(Req req) throws Exception {
 				return U.num(req.param("n")) + 1;
 			}
 		});

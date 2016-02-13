@@ -23,13 +23,14 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.handler.*;
-import org.rapidoid.io.Res;
-import org.rapidoid.lambda.F2;
-import org.rapidoid.lambda.F3;
-import org.rapidoid.lambda.Mapper;
+import org.rapidoid.http.handler.FastParamsAwareHttpHandler;
+import org.rapidoid.http.handler.FastStaticHttpHandler;
+import org.rapidoid.http.handler.HttpHandlers;
+import org.rapidoid.http.handler.optimized.FastCallableHttpHandler;
+import org.rapidoid.lambda.*;
 import org.rapidoid.u.U;
 
+import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
@@ -59,7 +60,7 @@ public class OnPage {
 		if (!U.isEmpty(wrappers)) {
 			register(options, new ReqHandler() {
 				@Override
-				public Object handle(Req req) throws Exception {
+				public Object execute(Req req) throws Exception {
 					return response;
 				}
 			});
@@ -72,38 +73,19 @@ public class OnPage {
 		}
 	}
 
-	private void register(PageOptions options, ReqHandler handler) {
+	private void register(PageOptions options, NParamLambda lambda) {
 		for (FastHttp http : httpImpls) {
-			FastParamsAwareHttpHandler hnd = new DelegatingFastParamsAwareReqHandler(http, options.contentType,
-					wrappers, handler);
-			http.on("GET", path, hnd);
-			http.on("POST", path, hnd);
+			FastParamsAwareHttpHandler handler = HttpHandlers.from(http, lambda, options.contentType, wrappers);
+			http.on("GET", path, handler);
+			http.on("POST", path, handler);
 		}
 	}
 
-	private void register(PageOptions options, ReqRespHandler handler) {
+	private void register(PageOptions options, Callable<?> handler) {
 		for (FastHttp http : httpImpls) {
-			FastParamsAwareHttpHandler hnd = new DelegatingFastParamsAwareReqRespHandler(http, options.contentType,
-					wrappers, handler);
+			FastCallableHttpHandler hnd = new FastCallableHttpHandler(http, options.contentType, wrappers, (Callable<Object>) handler);
 			http.on("GET", path, hnd);
 			http.on("POST", path, hnd);
-		}
-	}
-
-	private void register(PageOptions options, final Res resource) {
-		if (!U.isEmpty(wrappers)) {
-			register(options, new ReqHandler() {
-				@Override
-				public Object handle(Req req) throws Exception {
-					return resource.getBytes();
-				}
-			});
-			return;
-		}
-
-		for (FastHttp http : httpImpls) {
-			http.on("GET", path, new FastResourceHttpHandler(http, options.contentType, resource));
-			http.on("POST", path, new FastResourceHttpHandler(http, options.contentType, resource));
 		}
 	}
 
@@ -115,54 +97,53 @@ public class OnPage {
 	}
 
 	public ServerSetup gui(byte[] response) {
-		register(new PageOptions(MediaType.HTML_UTF_8, false), response);
+		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, response);
 		return chain;
 	}
 
-	public ServerSetup gui(final Object response) {
-		return gui(new ReqHandler() {
-			@Override
-			public Object handle(Req req) throws Exception {
-				return response;
-			}
-		});
-	}
-
-	public ServerSetup gui(final Callable<?> handler) {
-		return gui(new ReqHandler() {
-			@Override
-			public Object handle(Req req) throws Exception {
-				return handler.call();
-			}
-		});
-	}
-
-	public ServerSetup gui(ReqHandler handler) {
-		register(new PageOptions(MediaType.HTML_UTF_8, false), handler);
+	public <T> ServerSetup gui(Callable<T> handler) {
+		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup gui(ReqRespHandler handler) {
-		register(new PageOptions(MediaType.HTML_UTF_8, false), handler);
+	public ServerSetup gui(Method method, Object instance) {
+		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, method, instance);
 		return chain;
 	}
 
-	public ServerSetup gui(Res resource) {
-		register(new PageOptions(MediaType.HTML_UTF_8, false), resource);
+	public ServerSetup gui(OneParamLambda<?, ?> handler) {
+		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup gui(final String paramName, final Mapper<String, Object> handler) {
-		return gui(HttpHandlers.parameterized(paramName, handler));
+	public ServerSetup gui(TwoParamLambda<?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, handler);
+		return chain;
 	}
 
-	public ServerSetup gui(final String paramName1, final String paramName2, final F2<String, String, Object> handler) {
-		return gui(HttpHandlers.parameterized(paramName1, paramName2, handler));
+	public ServerSetup gui(ThreeParamLambda<?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, handler);
+		return chain;
 	}
 
-	public ServerSetup gui(final String paramName1, final String paramName2, final String paramName3,
-	                       final F3<String, String, String, Object> handler) {
-		return gui(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
+	public ServerSetup gui(FourParamLambda<?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup gui(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup gui(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup gui(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, handler);
+		return chain;
 	}
 
 }

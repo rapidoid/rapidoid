@@ -37,7 +37,7 @@ public class HttpFullRawResponseTest extends HttpTestCommons {
 	public void testBytesRawResponse() {
 		On.get("/bytes").html(new ReqHandler() {
 			@Override
-			public Object handle(Req req) throws Exception {
+			public Object execute(Req req) throws Exception {
 				return req.response().raw(BYTES_RESPONSE.getBytes());
 			}
 		});
@@ -47,7 +47,7 @@ public class HttpFullRawResponseTest extends HttpTestCommons {
 
 	@Test
 	public void testByteBufferRawResponse() {
-		On.get("/buf").html((req, resp) -> resp.raw(Bufs.buf(BUF_RESPONSE)));
+		On.get("/buf").html((Req req, Resp resp) ->  resp.raw(Bufs.buf(BUF_RESPONSE)));
 
 		onlyGet("/buf");
 	}

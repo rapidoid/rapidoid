@@ -215,4 +215,8 @@ public class HttpUtils implements HttpMetadata {
 		return (Conf.is("https") ? "https://" : "http://") + x.host() + path;
 	}
 
+	public static boolean hasEvent(Req req) {
+		return false; // FIXME
+	}
+
 }

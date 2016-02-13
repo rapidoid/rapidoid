@@ -32,18 +32,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Since("4.1.0")
 public @interface Page {
 
-	String uri() default "";
-
-	boolean raw() default false;
-
-	boolean navbar() default false;
-
-	boolean search() default false;
-
-	boolean profile() default true;
-
-	boolean login() default true;
-
-	String title() default "";
+	String value() default "";
 
 }

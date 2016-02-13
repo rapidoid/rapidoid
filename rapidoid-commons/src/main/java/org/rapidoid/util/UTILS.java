@@ -808,4 +808,17 @@ public class UTILS implements Constants {
 
 		return s;
 	}
+
+	public static int countNonNull(Object... values) {
+		int n = 0;
+
+		for (Object value : values) {
+			if (value != null) {
+				n++;
+			}
+		}
+
+		return n;
+	}
+
 }

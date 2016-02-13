@@ -33,7 +33,7 @@ public class HttpSessionTest extends HttpTestCommons {
 	public void testHttpSession() {
 		On.req(new ReqHandler() {
 			@Override
-			public Object handle(Req req) throws Exception {
+			public Object execute(Req req) throws Exception {
 				Log.info("Session", "ID", req.sessionId(), "data", req.session());
 
 				int n = req.session("n", 0) + 1;

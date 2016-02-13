@@ -38,7 +38,7 @@ public class HttpRenderTest extends HttpTestCommons {
 
 		MustacheFactory mf = new DefaultMustacheFactory();
 
-		On.render((req, resp) -> resp.content("this will be overwritten"));
+		On.render((Req req, Resp resp) ->  resp.content("this will be overwritten"));
 
 		On.render(new ViewRenderer() {
 			@Override
@@ -48,26 +48,26 @@ public class HttpRenderTest extends HttpTestCommons {
 			}
 		});
 
-		On.get("/view1").html((req, resp) -> {
+		On.get("/view1").html((Req req, Resp resp) -> {
 			return resp.render();
 		});
 
-		On.get("/view2").html((req, resp) -> {
+		On.get("/view2").html((Req req, Resp resp) ->  {
 			resp.model().put("x", 12345);
 			return resp.render();
 		});
 
-		On.get("/view3").html((req, resp) -> {
+		On.get("/view3").html((Req req, Resp resp) ->  {
 			resp.model().put("msg", "custom view: 1");
 			return resp.view("view1").render();
 		});
 
-		On.get("/views/sub").html((req, resp) -> {
+		On.get("/views/sub").html((Req req, Resp resp) ->  {
 			resp.model().put("msg", "sub-view!");
 			return resp.render();
 		});
 
-		On.get("/abc").html((req, resp) -> {
+		On.get("/abc").html((Req req, Resp resp) ->  {
 			resp.model().put("a", 123);
 			resp.model().put("b", "BBB");
 			resp.model().put("req", req);

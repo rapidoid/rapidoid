@@ -45,14 +45,14 @@ public class DynamicClientTest extends TestCommons {
 
 		On.get("/size").json(new ReqHandler() {
 			@Override
-			public Object handle(Req req) throws Exception {
+			public Object execute(Req req) throws Exception {
 				return req.param("s").length();
 			}
 		});
 
 		On.post("/echo").json(new ReqHandler() {
 			@Override
-			public Object handle(final Req req) throws Exception {
+			public Object execute(final Req req) throws Exception {
 				req.async();
 
 				Jobs.schedule(new Runnable() {

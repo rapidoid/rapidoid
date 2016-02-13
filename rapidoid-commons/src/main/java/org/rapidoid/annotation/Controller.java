@@ -32,6 +32,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Since("5.0.0")
 public @interface Controller {
 
-	String url() default "/";
+	String value() default "/";
 
 }

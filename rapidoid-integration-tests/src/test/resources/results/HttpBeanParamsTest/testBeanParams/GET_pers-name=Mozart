@@ -1,0 +1,8 @@
+HTTP/1.1 500 Internal Server Error
+Connection: close
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 68
+
+Internal Server Error: RuntimeException (DATA[id] must NOT be null!)

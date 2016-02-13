@@ -5,17 +5,20 @@ import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
-import org.rapidoid.http.handler.*;
+import org.rapidoid.http.handler.FastHttpErrorHandler;
+import org.rapidoid.http.handler.FastHttpHandler;
+import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqHandler;
+import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqRespHandler;
 import org.rapidoid.http.listener.FastHttpListener;
 import org.rapidoid.http.listener.IgnorantHttpListener;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Serve;
 import org.rapidoid.net.TCPServer;
-import org.rapidoid.pojo.POJO;
-import org.rapidoid.pojo.PojoDispatcher;
+import org.rapidoid.pojo.PojoHandlersSetup;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.wire.Wire;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -207,13 +210,20 @@ public class ServerSetup {
 			}
 		}
 
-		PojoDispatcher dispatcher = POJO.dispatcher(pojos.toArray());
 
-		for (FastHttp http : httpImpls()) {
-			http.addGenericHandler(new PojoHandler(http, dispatcher));
-		}
+		registerPojoControllers(pojos.toArray());
 
 		return this;
+	}
+
+	private void registerPojoControllers(Object[] controllers) {
+		for (int i = 0; i < controllers.length; i++) {
+			if (controllers[i] instanceof Class<?>) {
+				controllers[i] = Wire.singleton((Class<?>) controllers[i]);
+			}
+		}
+
+		new PojoHandlersSetup(this, U.list(controllers)).register();
 	}
 
 	public ServerSetup onError(ErrorHandler onError) {
@@ -327,5 +337,6 @@ public class ServerSetup {
 	public OnAnnotated annotated(Class<? extends Annotation>[] annotated) {
 		return new OnAnnotated(annotated, path());
 	}
+
 
 }

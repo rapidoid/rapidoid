@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 import org.rapidoid.wire.Wire;
@@ -36,22 +37,22 @@ public class HttpPojoControllerTest extends HttpTestCommons {
 
 	@Test
 	public void testPojoHandlers() {
-		On.get("/a").controllers(new Object() {
+		On.req(new Object() {
 
-			@GET(uri = "/a")
+			@GET("/a")
 			public Object theFoo() {
 				return "foo";
 			}
 
-			@GET(uri = "/x")
-			public Object x() {
+			@POST("/x")
+			public Object x(Req req, Resp resp) {
 				return "x";
 			}
 		});
 
 		onlyGet("/a");
+		onlyPost("/x");
 		notFound("/b");
-		notFound("/x");
 
 		List<Class<?>> ctrls = On.annotated(MyTestController.class).in("pkg1", "pkg2").getAll();
 		isTrue(ctrls.isEmpty());
@@ -63,7 +64,7 @@ public class HttpPojoControllerTest extends HttpTestCommons {
 
 		onlyGet("/a");
 		onlyGet("/b");
-		notFound("/x");
+		onlyPost("/x");
 	}
 
 	@Test
@@ -79,6 +80,7 @@ public class HttpPojoControllerTest extends HttpTestCommons {
 		On.annotated(MyTestController.class, MyTestController.class).forEach(cls -> On.req(Wire.singleton(cls)));
 
 		onlyGet("/b");
+		onlyGet("/x");
 		notFound("/x");
 	}
 
@@ -90,7 +92,7 @@ public class HttpPojoControllerTest extends HttpTestCommons {
 @MyTestController
 class Ff {
 
-	@GET(uri = "/b")
+	@GET("/b")
 	public Object bbb() {
 		return "bar";
 	}

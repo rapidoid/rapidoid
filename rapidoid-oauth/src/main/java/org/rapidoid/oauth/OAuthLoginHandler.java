@@ -42,7 +42,7 @@ public class OAuthLoginHandler implements ReqHandler {
 	}
 
 	@Override
-	public Object handle(Req x) throws Exception {
+	public Object execute(Req x) throws Exception {
 		String domain = oauthDomain.get();
 		return x.response().redirect(OAuth.getLoginURL(x, config, provider, domain));
 	}

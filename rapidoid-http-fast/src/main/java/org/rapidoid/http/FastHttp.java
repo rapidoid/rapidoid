@@ -149,6 +149,13 @@ public class FastHttp implements Protocol, HttpMetadata {
 			path = Str.trimr(path, "/");
 		}
 
+		String[] verbs = verb.split(",");
+		for (String v : verbs) {
+			register(v, path, handler);
+		}
+	}
+
+	private void register(String verb, String path, FastHttpHandler handler) {
 		boolean withPathPattern = path.contains("{") || path.contains("}");
 
 		PathPattern pathPattern = withPathPattern ? PathPattern.from(path) : null;

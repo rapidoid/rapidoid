@@ -32,17 +32,17 @@ public class HttpRootPojoControllerTest extends HttpTestCommons {
 	public void testRootPojoHandler() {
 		On.req(new Object() {
 
-			@GET(uri = "/a")
+			@GET("/a")
 			public Object theFoo() {
 				return "foo";
 			}
 
-			@POST(uri = "/b")
+			@POST("/b")
 			public Object theBar() {
 				return "bar";
 			}
 
-			@Page(uri = "/the/page")
+			@Page("/the/page")
 			public Object thePage() {
 				return "the page";
 			}

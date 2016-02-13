@@ -23,14 +23,10 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.handler.*;
-import org.rapidoid.io.Res;
-import org.rapidoid.lambda.F2;
-import org.rapidoid.lambda.F3;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.pojo.POJO;
-import org.rapidoid.pojo.PojoDispatcher;
+import org.rapidoid.http.handler.HttpHandlers;
+import org.rapidoid.lambda.*;
 
+import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
@@ -59,52 +55,6 @@ public class OnAction {
 		return this;
 	}
 
-	private void register(MediaType contentType, byte[] response) {
-		for (FastHttp http : httpImpls) {
-			http.on(verb, path, new FastStaticHttpHandler(http, contentType, response));
-		}
-	}
-
-	private void register(MediaType contentType, final Object response) {
-		register(contentType, new ReqHandler() {
-			@Override
-			public Object handle(Req req) throws Exception {
-				return response;
-			}
-		});
-	}
-
-	@SuppressWarnings("unchecked")
-	private void register(MediaType contentType, Callable<?> handler) {
-		for (FastHttp http : httpImpls) {
-			http.on(verb, path, new FastCallableHttpHandler(http, contentType, wrappers, (Callable<Object>) handler));
-		}
-	}
-
-	private void register(MediaType contentType, ReqHandler handler) {
-		for (FastHttp http : httpImpls) {
-			http.on(verb, path, new DelegatingFastParamsAwareReqHandler(http, contentType, wrappers, handler));
-		}
-	}
-
-	private void register(MediaType contentType, ReqRespHandler handler) {
-		for (FastHttp http : httpImpls) {
-			http.on(verb, path, new DelegatingFastParamsAwareReqRespHandler(http, contentType, wrappers, handler));
-		}
-	}
-
-	private void register(MediaType contentType, Res resource) {
-		for (FastHttp http : httpImpls) {
-			http.on(verb, path, new FastResourceHttpHandler(http, contentType, resource));
-		}
-	}
-
-	private void register(MediaType contentType, PojoDispatcher dispatcher) {
-		for (FastHttp http : httpImpls) {
-			http.on(verb, path, new PojoHandler(http, dispatcher));
-		}
-	}
-
 	/* PLAIN */
 
 	public ServerSetup plain(String response) {
@@ -113,32 +63,52 @@ public class OnAction {
 	}
 
 	public ServerSetup plain(byte[] response) {
-		register(MediaType.PLAIN_TEXT_UTF_8, response);
-		return chain;
-	}
-
-	public ServerSetup plain(Object response) {
-		register(MediaType.PLAIN_TEXT_UTF_8, response);
+		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, response);
 		return chain;
 	}
 
 	public <T> ServerSetup plain(Callable<T> handler) {
-		register(MediaType.PLAIN_TEXT_UTF_8, handler);
+		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public <T> ServerSetup plain(ReqHandler handler) {
-		register(MediaType.PLAIN_TEXT_UTF_8, handler);
+	public ServerSetup plain(Method method, Object instance) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, method, instance);
 		return chain;
 	}
 
-	public <T> ServerSetup plain(ReqRespHandler handler) {
-		register(MediaType.PLAIN_TEXT_UTF_8, handler);
+	public ServerSetup plain(OneParamLambda<?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public <T> ServerSetup plain(Res resource) {
-		register(MediaType.PLAIN_TEXT_UTF_8, resource);
+	public ServerSetup plain(TwoParamLambda<?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup plain(ThreeParamLambda<?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup plain(FourParamLambda<?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup plain(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup plain(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup plain(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
@@ -150,32 +120,52 @@ public class OnAction {
 	}
 
 	public ServerSetup html(byte[] response) {
-		register(MediaType.HTML_UTF_8, response);
-		return chain;
-	}
-
-	public ServerSetup html(Object response) {
-		register(MediaType.HTML_UTF_8, response);
+		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, response);
 		return chain;
 	}
 
 	public <T> ServerSetup html(Callable<T> handler) {
-		register(MediaType.HTML_UTF_8, handler);
+		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public <T> ServerSetup html(ReqHandler handler) {
-		register(MediaType.HTML_UTF_8, handler);
+	public ServerSetup html(Method method, Object instance) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, method, instance);
 		return chain;
 	}
 
-	public <T> ServerSetup html(ReqRespHandler handler) {
-		register(MediaType.HTML_UTF_8, handler);
+	public ServerSetup html(OneParamLambda<?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public <T> ServerSetup html(Res resource) {
-		register(MediaType.HTML_UTF_8, resource);
+	public ServerSetup html(TwoParamLambda<?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup html(ThreeParamLambda<?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup html(FourParamLambda<?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup html(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup html(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup html(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
@@ -187,32 +177,52 @@ public class OnAction {
 	}
 
 	public ServerSetup json(byte[] response) {
-		register(MediaType.JSON_UTF_8, response);
-		return chain;
-	}
-
-	public ServerSetup json(Object response) {
-		register(MediaType.JSON_UTF_8, response);
+		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, response);
 		return chain;
 	}
 
 	public <T> ServerSetup json(Callable<T> handler) {
-		register(MediaType.JSON_UTF_8, handler);
+		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public <T> ServerSetup json(ReqHandler handler) {
-		register(MediaType.JSON_UTF_8, handler);
+	public ServerSetup json(Method method, Object instance) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, method, instance);
 		return chain;
 	}
 
-	public <T> ServerSetup json(ReqRespHandler handler) {
-		register(MediaType.JSON_UTF_8, handler);
+	public ServerSetup json(OneParamLambda<?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public <T> ServerSetup json(Res resource) {
-		register(MediaType.JSON_UTF_8, resource);
+	public ServerSetup json(TwoParamLambda<?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup json(ThreeParamLambda<?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup json(FourParamLambda<?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup json(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup json(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
+		return chain;
+	}
+
+	public ServerSetup json(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
@@ -224,94 +234,52 @@ public class OnAction {
 	}
 
 	public ServerSetup binary(byte[] response) {
-		register(MediaType.BINARY, response);
-		return chain;
-	}
-
-	public ServerSetup binary(Object response) {
-		register(MediaType.BINARY, response);
+		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, response);
 		return chain;
 	}
 
 	public <T> ServerSetup binary(Callable<T> handler) {
-		register(MediaType.BINARY, handler);
+		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
-	public <T> ServerSetup binary(ReqHandler handler) {
-		register(MediaType.BINARY, handler);
+	public ServerSetup binary(Method method, Object instance) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, method, instance);
 		return chain;
 	}
 
-	public <T> ServerSetup binary(ReqRespHandler handler) {
-		register(MediaType.BINARY, handler);
+	public ServerSetup binary(OneParamLambda<?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
-	public <T> ServerSetup binary(Res resource) {
-		register(MediaType.BINARY, resource);
+	public ServerSetup binary(TwoParamLambda<?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
-	/* PARAMETERIZED */
-
-	public ServerSetup plain(final String paramName, final Mapper<String, Object> handler) {
-		return plain(HttpHandlers.parameterized(paramName, handler));
+	public ServerSetup binary(ThreeParamLambda<?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
+		return chain;
 	}
 
-	public ServerSetup plain(final String paramName1, final String paramName2, final F2<String, String, Object> handler) {
-		return plain(HttpHandlers.parameterized(paramName1, paramName2, handler));
+	public ServerSetup binary(FourParamLambda<?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
+		return chain;
 	}
 
-	public ServerSetup plain(final String paramName1, final String paramName2, final String paramName3,
-	                         final F3<String, String, String, Object> handler) {
-		return plain(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
+	public ServerSetup binary(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
+		return chain;
 	}
 
-	public ServerSetup html(final String paramName, final Mapper<String, Object> handler) {
-		return html(HttpHandlers.parameterized(paramName, handler));
+	public ServerSetup binary(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
+		return chain;
 	}
 
-	public ServerSetup html(final String paramName1, final String paramName2, final F2<String, String, Object> handler) {
-		return html(HttpHandlers.parameterized(paramName1, paramName2, handler));
-	}
-
-	public ServerSetup html(final String paramName1, final String paramName2, final String paramName3,
-	                        final F3<String, String, String, Object> handler) {
-		return html(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
-	}
-
-	public ServerSetup json(final String paramName, final Mapper<String, Object> handler) {
-		return json(HttpHandlers.parameterized(paramName, handler));
-	}
-
-	public ServerSetup json(final String paramName1, final String paramName2, final F2<String, String, Object> handler) {
-		return json(HttpHandlers.parameterized(paramName1, paramName2, handler));
-	}
-
-	public ServerSetup json(final String paramName1, final String paramName2, final String paramName3,
-	                        final F3<String, String, String, Object> handler) {
-		return json(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
-	}
-
-	public ServerSetup binary(final String paramName, final Mapper<String, Object> handler) {
-		return binary(HttpHandlers.parameterized(paramName, handler));
-	}
-
-	public ServerSetup binary(final String paramName1, final String paramName2, final F2<String, String, Object> handler) {
-		return binary(HttpHandlers.parameterized(paramName1, paramName2, handler));
-	}
-
-	public ServerSetup binary(final String paramName1, final String paramName2, final String paramName3,
-	                          final F3<String, String, String, Object> handler) {
-		return binary(HttpHandlers.parameterized(paramName1, paramName2, paramName3, handler));
-	}
-
-	/* POJO */
-
-	public ServerSetup controllers(Object... controllers) {
-		PojoDispatcher dispatcher = POJO.dispatcher(controllers);
-		register(MediaType.HTML_UTF_8, dispatcher);
+	public ServerSetup binary(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 

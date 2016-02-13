@@ -41,7 +41,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test01() {
 		On.get("/test01").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return req.getClass().getSimpleName() + ":" + resp.getClass().getSimpleName();
 			}
 		});
@@ -53,7 +53,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test02() {
 		On.get("/test02").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return resp.plain("RESULT 2");
 			}
 		});
@@ -65,7 +65,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test03() {
 		On.get("/test03").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return resp.binary("RESULT 3");
 			}
 		});
@@ -77,7 +77,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test04() {
 		On.get("/test04").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return resp.html("RESULT 4");
 			}
 		});
@@ -89,7 +89,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test05() {
 		On.get("/test05").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return resp.json("RESULT 5");
 			}
 		});
@@ -101,7 +101,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test06() {
 		On.get("/test06").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				resp.contentType(MediaType.APPLICATION_X_FONT);
 				return "RESULT 6";
 			}
@@ -114,7 +114,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test07() {
 		On.get("/test07").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return new Date(1234567890);
 			}
 		});
@@ -126,7 +126,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test08() {
 		On.get("/test08").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return U.map("x", 123.456, "f", false, "msg", "RESULT 8");
 			}
 		});
@@ -138,7 +138,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test09() {
 		On.get("/test09").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return U.list(1, "asd", true, U.set("1", "2"));
 			}
 		});
@@ -150,7 +150,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test10() {
 		On.get("/test10").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return null;
 			}
 		});
@@ -162,7 +162,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test11() {
 		On.get("/test11").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return false;
 			}
 		});
@@ -174,7 +174,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test12() {
 		On.get("/test12").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return true;
 			}
 		});
@@ -186,7 +186,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test13() {
 		On.get("/test13").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return req;
 			}
 		});
@@ -198,7 +198,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test14() {
 		On.get("/test14").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return resp;
 			}
 		});
@@ -210,7 +210,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test15() {
 		On.get("/test15").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return "some bytes".getBytes();
 			}
 		});
@@ -222,7 +222,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test16() {
 		On.get("/test16").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return Bufs.buf("some buffer");
 			}
 		});
@@ -234,7 +234,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test17() {
 		On.get("/test17").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return new File("non-existing-file");
 			}
 		});
@@ -246,7 +246,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test18() {
 		On.get("/test18").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return Res.from("non-existing-res", "abc");
 			}
 		});
@@ -258,7 +258,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test19() {
 		On.get("/test19").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return new BigDecimal("123456789.0123456789");
 			}
 		});
@@ -270,7 +270,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test20() {
 		On.get("/test20").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return new BigInteger("12345678901234567890");
 			}
 		});
@@ -282,7 +282,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test21() {
 		On.get("/test21").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return resp.content("RESULT 21");
 			}
 		});
@@ -294,7 +294,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test22() {
 		On.get("/test22").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return resp.content("RESULT 22").code(301);
 			}
 		});
@@ -306,7 +306,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test23() {
 		On.get("/test23").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return resp.content("RESULT 23").code(404);
 			}
 		});
@@ -318,7 +318,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test24() {
 		On.get("/test24").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return resp.content("RESULT 24").code(500);
 			}
 		});
@@ -330,7 +330,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test25() {
 		On.get("/test25").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return resp.content("RESULT 25").binary("B25");
 			}
 		});
@@ -342,7 +342,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test26() {
 		On.get("/test26").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return resp.content("RESULT 26").contentType(MediaType.APPLICATION_MSWORD);
 			}
 		});
@@ -354,7 +354,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test27() {
 		On.get("/test27").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				resp.cookies().put("cookie1", "abc");
 				resp.cookies().put("cookie2", "xyz");
 				return resp.content("RESULT 27");
@@ -368,7 +368,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test28() {
 		On.get("/test28").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				resp.headers().put("hdr1", "HDRX");
 				resp.headers().put("hdr2", "hdry");
 				return resp.content("RESULT 28");
@@ -382,7 +382,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test29() {
 		On.get("/test29").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return resp.content("RESULT 29").redirect("/abc");
 			}
 		});
@@ -394,7 +394,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test30() {
 		On.get("/test30").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return resp.content("RESULT 30").redirect("/xyzz").code(302);
 			}
 		});
@@ -406,7 +406,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test31() {
 		On.get("/test31").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return new File("test1.txt");
 			}
 		});
@@ -418,7 +418,7 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 	public void test32() {
 		On.get("/test32").html(new ReqRespHandler() {
 			@Override
-			public Object handle(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				return Res.from("test2.txt");
 			}
 		});
@@ -428,14 +428,14 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 
 	@Test
 	public void test33() {
-		On.get("/test33").html(req -> "req");
+		On.get("/test33").html((Req req) -> "req");
 
 		onlyGet("/test33");
 	}
 
 	@Test
 	public void test34() {
-		On.get("/test34").html((req, resp) -> "req+resp");
+		On.get("/test34").html((Req req, Resp resp) -> "req+resp");
 
 		onlyGet("/test34");
 	}

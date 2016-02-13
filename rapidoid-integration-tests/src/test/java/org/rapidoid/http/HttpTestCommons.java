@@ -98,21 +98,21 @@ public abstract class HttpTestCommons extends TestCommons {
 	protected void defaultServerSetup() {
 		On.get("/echo").plain(new ReqHandler() {
 			@Override
-			public Object handle(Req x) throws Exception {
+			public Object execute(Req x) throws Exception {
 				return x.verb() + ":" + x.path() + ":" + x.query();
 			}
 		});
 
 		On.get("/hello").html(new ReqHandler() {
 			@Override
-			public Object handle(Req x) {
+			public Object execute(Req x) {
 				return "Hello";
 			}
 		});
 
 		On.post("/upload").plain(new ReqHandler() {
 			@Override
-			public Object handle(Req x) {
+			public Object execute(Req x) {
 				Log.info("Uploaded files", "files", x.files().keySet());
 				return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.posted().get("a"), x.files()
 						.size(), Crypto.md5(x.files().get("f1")), Crypto.md5(x.files().get("f2")), Crypto.md5(U.or(x
@@ -122,7 +122,7 @@ public abstract class HttpTestCommons extends TestCommons {
 
 		On.req(new ReqHandler() {
 			@Override
-			public Object handle(Req x) {
+			public Object execute(Req x) {
 				return x.response().html(U.join(":", x.verb(), x.path(), x.query()));
 			}
 		});

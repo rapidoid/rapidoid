@@ -33,7 +33,7 @@ public class HttpCookiepackTest extends HttpTestCommons {
 	public void testHttpCookiepack() {
 		On.req(new ReqHandler() {
 			@Override
-			public Object handle(Req req) throws Exception {
+			public Object execute(Req req) throws Exception {
 				Log.info("Cookiepack", "data", req.cookiepack());
 
 				int n = req.cookiepack("n", 0) + 1;

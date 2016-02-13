@@ -85,7 +85,7 @@ public class OAuth {
 
 		setup.get("/_oauth").html(new ReqHandler() {
 			@Override
-			public Object handle(Req x) throws Exception {
+			public Object execute(Req x) throws Exception {
 				return GUI.page(GUI.hardcoded(loginPage)).title("Login with OAuth");
 			}
 		});

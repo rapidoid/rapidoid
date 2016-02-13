@@ -32,6 +32,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Since("3.0.0")
 public @interface PUT {
 
-	String uri() default "";
+	String value() default "";
 
 }

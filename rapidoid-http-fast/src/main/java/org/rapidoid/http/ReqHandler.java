@@ -2,6 +2,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.OneParamLambda;
 
 /*
  * #%L
@@ -25,8 +26,6 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.2")
-public interface ReqHandler {
-
-	Object handle(Req req) throws Exception;
+public interface ReqHandler extends OneParamLambda<Object, Req> {
 
 }

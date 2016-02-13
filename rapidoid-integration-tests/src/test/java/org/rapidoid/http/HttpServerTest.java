@@ -34,7 +34,7 @@ public class HttpServerTest extends HttpTestCommons {
 
 		On.req(new ReqHandler() {
 			@Override
-			public Object handle(Req req) throws Exception {
+			public Object execute(Req req) throws Exception {
 				return req.response().json("abc");
 			}
 		});

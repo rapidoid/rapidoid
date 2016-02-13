@@ -53,12 +53,9 @@ public class HttpMultiControllerTest extends HttpTestCommons {
 			}
 		});
 
-		On.req(new ReqHandler() {
-			@Override
-			public Object handle(Req req) throws Exception {
-				return req.verb().equals("GET") ? "generic:" + req.uri() : null;
-			}
-		});
+		On.req((ReqHandler) req -> req.verb().equals("GET") ? "generic:" + req.uri() : null);
+
+		onlyGet("/baz?x=123");
 
 		On.req(new Object() {
 			@GET

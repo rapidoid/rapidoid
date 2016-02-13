@@ -66,7 +66,7 @@ public class OAuthTokenHandler implements ReqHandler {
 	}
 
 	@Override
-	public Object handle(Req req) throws Exception {
+	public Object execute(Req req) throws Exception {
 		String code = req.param("code");
 		String state = req.param("state");
 

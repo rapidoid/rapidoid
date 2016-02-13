@@ -20,6 +20,13 @@ package org.rapidoid.cls;
  * #L%
  */
 
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.NotFoundException;
+import javassist.bytecode.CodeAttribute;
+import javassist.bytecode.LocalVariableAttribute;
+import javassist.bytecode.MethodInfo;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.commons.Err;
@@ -27,7 +34,9 @@ import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.Map.Entry;
@@ -292,11 +301,35 @@ public class Cls {
 		return annotatedMethods;
 	}
 
+	public static List<Method> getMethodsNamed(Class<?> clazz, String name) {
+		List<Method> annotatedMethods = U.list();
+
+		try {
+			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
+				Method[] methods = c.getDeclaredMethods();
+				for (Method method : methods) {
+					if (method.getName().equals(name)) {
+						annotatedMethods.add(method);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			throw U.rte("Cannot instantiate class!", e);
+		}
+
+		return annotatedMethods;
+	}
+
 	public static Method getMethod(Class<?> clazz, String name, Class<?>... parameterTypes) {
 		try {
 			return clazz.getMethod(name, parameterTypes);
 		} catch (NoSuchMethodException e) {
-			throw U.rte("Cannot find method: %s", e, name);
+			try {
+				return clazz.getDeclaredMethod(name, parameterTypes);
+			} catch (NoSuchMethodException e1) {
+				throw U.rte("Cannot find method: %s", e, name);
+			}
 		} catch (SecurityException e) {
 			throw U.rte("Cannot access method: %s", e, name);
 		}
@@ -306,7 +339,11 @@ public class Cls {
 		try {
 			return clazz.getMethod(name, parameterTypes);
 		} catch (NoSuchMethodException e) {
-			return null;
+			try {
+				return clazz.getDeclaredMethod(name, parameterTypes);
+			} catch (NoSuchMethodException e1) {
+				return null;
+			}
 		} catch (SecurityException e) {
 			return null;
 		}
@@ -800,6 +837,10 @@ public class Cls {
 			return (T) new Object();
 		}
 
+		return newBeanInstance(clazz);
+	}
+
+	public static <T> T newBeanInstance(Class<T> clazz) {
 		try {
 			Constructor<T> constr = clazz.getDeclaredConstructor();
 			boolean accessible = constr.isAccessible();
@@ -813,6 +854,7 @@ public class Cls {
 			throw U.rte(e);
 		}
 	}
+
 
 	@SuppressWarnings("unchecked")
 	public static <T> T newInstance(Class<T> clazz, Object... args) {
@@ -891,11 +933,20 @@ public class Cls {
 		return kindOf(target).isNumber();
 	}
 
+	public static boolean isDataStructure(Class<?> clazz) {
+		return (Collection.class.isAssignableFrom(clazz)) || (Map.class.isAssignableFrom(clazz))
+				|| (Object[].class.isAssignableFrom(clazz));
+	}
+
+	public static boolean isBeanType(Class<?> clazz) {
+		return kindOf(clazz) == TypeKind.OBJECT && !(Collection.class.isAssignableFrom(clazz))
+				&& !(Map.class.isAssignableFrom(clazz)) && !(Object[].class.isAssignableFrom(clazz))
+				&& !clazz.getPackage().getName().startsWith("java.")
+				&& !clazz.getPackage().getName().startsWith("javax.");
+	}
+
 	public static boolean isBean(Object target) {
-		return kindOf(target) == TypeKind.OBJECT && !(target instanceof Collection<?>)
-				&& !(target instanceof Map<?, ?>) && !(target instanceof Object[])
-				&& !target.getClass().getPackage().getName().startsWith("java.")
-				&& !target.getClass().getPackage().getName().startsWith("javax.");
+		return target != null && isBeanType(target.getClass());
 	}
 
 	public static <T, T2> T struct(Class<T> clazz1, Class<T2> clazz2, Object obj) {
@@ -954,6 +1005,73 @@ public class Cls {
 
 	public static boolean exists(String className) {
 		return getClassIfExists(className) != null;
+	}
+
+	public static Method getLambdaMethod(Serializable lambda) {
+		Method writeReplace = getMethod(lambda.getClass(), "writeReplace");
+		SerializedLambda serializedLambda = invoke(writeReplace, lambda);
+
+		String className = serializedLambda.getImplClass().replaceAll("/", ".");
+
+		Class<?> cls = getClassIfExists(className);
+		U.must(cls != null, "Cannot find or load the lambda class: %s", cls);
+
+		String lambdaMethodName = serializedLambda.getImplMethodName();
+
+		for (Method method : cls.getDeclaredMethods()) {
+			if (method.getName().equals(lambdaMethodName)) {
+				return method;
+			}
+		}
+
+		throw U.rte("Cannot find the lambda method!");
+	}
+
+	public static String[] getMethodParameterNames(Method method) {
+		String[] names = new String[method.getParameterCount()];
+
+		boolean defaultNames = true;
+		Parameter[] parameters = method.getParameters();
+		for (int i = 0; i < parameters.length; i++) {
+			names[i] = parameters[i].getName();
+			U.notNull(names[i], "parameter name");
+			if (!names[i].equals("arg" + i)) {
+				defaultNames = false;
+			}
+		}
+
+		if (defaultNames) {
+			CtMethod cm;
+			try {
+				ClassPool cp = ClassPool.getDefault();
+				CtClass cc = cp.get(method.getDeclaringClass().getName());
+
+				CtClass[] params = new CtClass[method.getParameterCount()];
+				for (int i = 0; i < params.length; i++) {
+					params[i] = cp.get(method.getParameterTypes()[i].getName());
+				}
+				cm = cc.getDeclaredMethod(method.getName(), params);
+			} catch (NotFoundException e) {
+				throw U.rte("Cannot find the target method!", e);
+			}
+
+			MethodInfo methodInfo = cm.getMethodInfo();
+			CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
+			LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute.tag);
+
+			int offset = javassist.Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
+
+			for (int i = 0; i < attr.tableLength(); i++) {
+				int index = i - offset;
+				String var = attr.variableName(i);
+
+				if (index >= 0 && index < names.length) {
+					names[index] = var;
+				}
+			}
+		}
+
+		return names;
 	}
 
 }

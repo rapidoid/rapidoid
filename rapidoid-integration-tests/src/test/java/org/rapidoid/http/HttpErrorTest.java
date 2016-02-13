@@ -33,7 +33,7 @@ public class HttpErrorTest extends HttpTestCommons {
 		On.get("/err").html(new ReqHandler() {
 			@SuppressWarnings("null")
 			@Override
-			public Object handle(Req req) throws Exception {
+			public Object execute(Req req) throws Exception {
 				String s = null;
 				return s.toString(); // NPE
 			}

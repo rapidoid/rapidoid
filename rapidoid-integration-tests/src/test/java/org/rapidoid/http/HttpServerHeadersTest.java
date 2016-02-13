@@ -41,21 +41,21 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 	public void shouldHandleVariousHttpRequests() throws IOException, URISyntaxException {
 		On.get("/fileabc").html(new ReqHandler() {
 			@Override
-			public Object handle(Req x) {
+			public Object execute(Req x) {
 				return x.response().filename("abc.txt").content("abcde");
 			}
 		});
 
 		On.get("/bin").binary(new ReqHandler() {
 			@Override
-			public Object handle(Req x) {
+			public Object execute(Req x) {
 				return "bin";
 			}
 		});
 
 		On.get("/session").html(new ReqHandler() {
 			@Override
-			public Object handle(Req x) {
+			public Object execute(Req x) {
 				if (x.cookie("ses", null) == null) {
 					x.cookies().put("ses", "023B");
 				}
@@ -67,7 +67,7 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 
 		On.get("/async").html(new ReqHandler() {
 			@Override
-			public Object handle(final Req x) {
+			public Object execute(final Req x) {
 				x.async();
 				Jobs.schedule(new Runnable() {
 					@Override
@@ -81,28 +81,28 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 
 		On.get("/testfile1").html(new ReqHandler() {
 			@Override
-			public Object handle(Req x) {
+			public Object execute(Req x) {
 				return IO.file("test1.txt");
 			}
 		});
 
 		On.get("/rabbit.jpg").html(new ReqHandler() {
 			@Override
-			public Object handle(Req x) {
+			public Object execute(Req x) {
 				return x.response().file(IO.file("rabbit.jpg"));
 			}
 		});
 
 		On.get("/ab").html(new ReqHandler() {
 			@Override
-			public Object handle(Req x) {
+			public Object execute(Req x) {
 				return x.response().file(IO.file("ab.html"));
 			}
 		});
 
 		On.req(new ReqHandler() {
 			@Override
-			public Object handle(Req x) {
+			public Object execute(Req x) {
 				x.cookies().put("asd", "f");
 				return x.response().html("a<b>b</b>c");
 			}
@@ -126,7 +126,7 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 	public void shouldRenderRabbit() throws Exception { // :)
 		On.get("/rabbit.jpg").html(new ReqHandler() {
 			@Override
-			public Object handle(Req x) {
+			public Object execute(Req x) {
 				return x.response().file(IO.file("rabbit.jpg"));
 			}
 		});

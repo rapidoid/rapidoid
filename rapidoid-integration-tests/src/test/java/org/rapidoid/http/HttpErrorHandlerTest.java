@@ -40,7 +40,7 @@ public class HttpErrorHandlerTest extends HttpTestCommons {
 		On.get("/err").html(new ReqHandler() {
 			@SuppressWarnings("null")
 			@Override
-			public Object handle(Req req) throws Exception {
+			public Object execute(Req req) throws Exception {
 				String s = null;
 				return s.toString(); // NPE
 			}
@@ -61,7 +61,7 @@ public class HttpErrorHandlerTest extends HttpTestCommons {
 		On.get("/err2").html(new ReqHandler() {
 			@SuppressWarnings("null")
 			@Override
-			public Object handle(Req req) throws Exception {
+			public Object execute(Req req) throws Exception {
 				String s = null;
 				return s.toString(); // NPE
 			}

@@ -41,7 +41,7 @@ public class AsyncHttpServerTest extends HttpTestCommons {
 
 		On.req(new ReqHandler() {
 			@Override
-			public Object handle(final Req req) throws Exception {
+			public Object execute(final Req req) throws Exception {
 				req.async();
 				U.must(req.isAsync());
 				Jobs.schedule(new Runnable() {
