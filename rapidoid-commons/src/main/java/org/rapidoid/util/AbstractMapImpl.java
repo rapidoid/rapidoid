@@ -56,7 +56,7 @@ public abstract class AbstractMapImpl<K, V> implements SimpleMap<K, V> {
 	}
 
 	protected MapEntry<K, V> findEntry(K key) {
-		SimpleList<MapEntry<K, V>> bucket = entries.get(key.hashCode());
+		SimpleList<MapEntry<K, V>> bucket = entries.bucket(key.hashCode());
 		return findEntry(key, bucket);
 	}
 

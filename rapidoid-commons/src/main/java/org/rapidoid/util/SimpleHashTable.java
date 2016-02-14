@@ -48,15 +48,15 @@ public class SimpleHashTable<T> {
 	}
 
 	public void put(long key, T value) {
-		get(key).add(value);
+		bucket(key).add(value);
 	}
 
-	public SimpleList<T> get(long key) {
+	public SimpleList<T> bucket(long key) {
 		int index = index(key);
-		return bucket(index);
+		return getBucket(index);
 	}
 
-	protected SimpleList<T> bucket(int index) {
+	protected SimpleList<T> getBucket(int index) {
 		SimpleList<T> list;
 
 		// after construction, other threads might need some time to see the new references
@@ -77,7 +77,7 @@ public class SimpleHashTable<T> {
 	}
 
 	protected void clearBucket(int index) {
-		bucket(index).clear();
+		getBucket(index).clear();
 	}
 
 }

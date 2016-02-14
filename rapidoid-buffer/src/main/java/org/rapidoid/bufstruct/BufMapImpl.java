@@ -66,7 +66,7 @@ public class BufMapImpl<T> extends AbstractMapImpl<byte[], T> implements BufMap<
 	public T get(Buf buf, Range key) {
 		long hash = hash(buf.bytes(), key);
 
-		SimpleList<MapEntry<byte[], T>> candidates = entries.get(hash);
+		SimpleList<MapEntry<byte[], T>> candidates = entries.bucket(hash);
 
 		if (candidates != null) {
 			for (int i = 0; i < candidates.size(); i++) {
@@ -79,6 +79,30 @@ public class BufMapImpl<T> extends AbstractMapImpl<byte[], T> implements BufMap<
 		}
 
 		return defaultValue;
+	}
+
+	@Override
+	public boolean remove(String key) {
+		assert key.length() >= 1;
+
+		long hash = hash(key);
+
+		SimpleList<MapEntry<byte[], T>> bucket = this.entries.bucket(hash);
+
+		if (bucket == null) {
+			return false;
+		}
+
+		for (int i = 0; i < bucket.size(); i++) {
+			MapEntry<byte[], T> route = bucket.get(i);
+
+			if (new String(route.key).equals(key)) {
+				bucket.delete(i);
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }

@@ -22,6 +22,7 @@ package org.rapidoid.util;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
 
 import java.util.Arrays;
 
@@ -78,6 +79,14 @@ public class SimpleList<T> {
 		}
 	}
 
+	public void delete(int index) {
+		Err.bounds(index, 0, size - 1);
+
+		System.arraycopy(array, index + 1, array, index, size - index - 1);
+
+		size--;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -91,5 +100,4 @@ public class SimpleList<T> {
 
 		return "[" + sb.toString() + "]";
 	}
-
 }

@@ -27,10 +27,7 @@ import org.rapidoid.bufstruct.BufMap;
 import org.rapidoid.bufstruct.BufMapImpl;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
-import org.rapidoid.commons.Coll;
-import org.rapidoid.commons.Dates;
-import org.rapidoid.commons.MediaType;
-import org.rapidoid.commons.Str;
+import org.rapidoid.commons.*;
 import org.rapidoid.data.JSON;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
@@ -45,6 +42,7 @@ import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Constants;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.wire.Wire;
 import org.rapidoid.wrap.BoolWrap;
@@ -84,13 +82,13 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	private static final HttpParser HTTP_PARSER = Wire.singleton(HttpParser.class);
 
-	private static final byte[] _POST = "POST".getBytes();
-	private static final byte[] _PUT = "PUT".getBytes();
-	private static final byte[] _DELETE = "DELETE".getBytes();
-	private static final byte[] _PATCH = "PATCH".getBytes();
-	private static final byte[] _OPTIONS = "OPTIONS".getBytes();
-	private static final byte[] _HEAD = "HEAD".getBytes();
-	private static final byte[] _TRACE = "TRACE".getBytes();
+	private static final byte[] _POST = Constants.POST.getBytes();
+	private static final byte[] _PUT = Constants.PUT.getBytes();
+	private static final byte[] _DELETE = Constants.DELETE.getBytes();
+	private static final byte[] _PATCH = Constants.PATCH.getBytes();
+	private static final byte[] _OPTIONS = Constants.OPTIONS.getBytes();
+	private static final byte[] _HEAD = Constants.HEAD.getBytes();
+	private static final byte[] _TRACE = Constants.TRACE.getBytes();
 
 	private static final byte[][] CONTENT_LENGTHS = new byte[CONTENT_LENGTHS_SIZE][];
 
@@ -145,94 +143,219 @@ public class FastHttp implements Protocol, HttpMetadata {
 	}
 
 	public synchronized void on(String verb, String path, FastHttpHandler handler) {
+		addOrRemove(true, verb, path, handler);
+	}
+
+	public synchronized void remove(String verb, String path) {
+		addOrRemove(false, verb, path, null);
+	}
+
+	private void addOrRemove(boolean add, String verbs, String path, FastHttpHandler handler) {
+		U.notNull(verbs, "HTTP verbs");
+		U.notNull(path, "HTTP path");
+
+		if (add) {
+			U.notNull(handler, "HTTP handler");
+		}
+
+		verbs = verbs.toUpperCase();
 		if (path.length() > 1) {
 			path = Str.trimr(path, "/");
 		}
 
-		String[] verbs = verb.split(",");
-		for (String v : verbs) {
-			register(v, path, handler);
+		if (add) {
+			Log.info("Registering handler", "verbs", verbs, "path", path, "handler", handler);
+		} else {
+			Log.info("Deregistering handler", "verbs", verbs, "path", path);
+		}
+
+		for (String verb : verbs.split(",")) {
+			if (add) {
+				deregister(HttpVerb.from(verb), path);
+				register(HttpVerb.from(verb), path, handler);
+			} else {
+				deregister(HttpVerb.from(verb), path);
+			}
 		}
 	}
 
-	private void register(String verb, String path, FastHttpHandler handler) {
-		boolean withPathPattern = path.contains("{") || path.contains("}");
+	private void register(HttpVerb verb, String path, FastHttpHandler handler) {
+		boolean isPattern = isPattern(path);
+		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
 
-		PathPattern pathPattern = withPathPattern ? PathPattern.from(path) : null;
+		switch (verb) {
+			case GET:
+				if (!isPattern) {
+					if (path1 == null) {
+						path1 = path.getBytes();
+						handler1 = handler;
 
-		if (verb.equals("GET")) {
-			if (!withPathPattern) {
-				if (path1 == null) {
-					path1 = path.getBytes();
-					handler1 = handler;
+					} else if (path2 == null) {
+						path2 = path.getBytes();
+						handler2 = handler;
 
-				} else if (path2 == null) {
-					path2 = path.getBytes();
-					handler2 = handler;
+					} else if (path3 == null) {
+						path3 = path.getBytes();
+						handler3 = handler;
 
-				} else if (path3 == null) {
-					path3 = path.getBytes();
-					handler3 = handler;
-
+					} else {
+						getHandlers.put(path, handler);
+					}
 				} else {
-					getHandlers.put(path, handler);
+					paternGetHandlers.put(pathPattern, handler);
 				}
-			} else {
-				paternGetHandlers.put(pathPattern, handler);
-			}
+				break;
 
-		} else if (verb.equals("POST")) {
-			if (!withPathPattern) {
-				postHandlers.put(path, handler);
-			} else {
-				paternPostHandlers.put(pathPattern, handler);
-			}
+			case POST:
+				if (!isPattern) {
+					postHandlers.put(path, handler);
+				} else {
+					paternPostHandlers.put(pathPattern, handler);
+				}
+				break;
 
-		} else if (verb.equals("PUT")) {
-			if (!withPathPattern) {
-				putHandlers.put(path, handler);
-			} else {
-				paternPutHandlers.put(pathPattern, handler);
-			}
+			case PUT:
+				if (!isPattern) {
+					putHandlers.put(path, handler);
+				} else {
+					paternPutHandlers.put(pathPattern, handler);
+				}
+				break;
 
-		} else if (verb.equals("DELETE")) {
-			if (!withPathPattern) {
-				deleteHandlers.put(path, handler);
-			} else {
-				paternDeleteHandlers.put(pathPattern, handler);
-			}
+			case DELETE:
+				if (!isPattern) {
+					deleteHandlers.put(path, handler);
+				} else {
+					paternDeleteHandlers.put(pathPattern, handler);
+				}
+				break;
 
-		} else if (verb.equals("PATCH")) {
-			if (!withPathPattern) {
-				patchHandlers.put(path, handler);
-			} else {
-				paternPatchHandlers.put(pathPattern, handler);
-			}
+			case PATCH:
+				if (!isPattern) {
+					patchHandlers.put(path, handler);
+				} else {
+					paternPatchHandlers.put(pathPattern, handler);
+				}
+				break;
 
-		} else if (verb.equals("OPTIONS")) {
-			if (!withPathPattern) {
-				optionsHandlers.put(path, handler);
-			} else {
-				paternOptionsHandlers.put(pathPattern, handler);
-			}
+			case OPTIONS:
+				if (!isPattern) {
+					optionsHandlers.put(path, handler);
+				} else {
+					paternOptionsHandlers.put(pathPattern, handler);
+				}
+				break;
 
-		} else if (verb.equals("HEAD")) {
-			if (!withPathPattern) {
-				headHandlers.put(path, handler);
-			} else {
-				paternHeadHandlers.put(pathPattern, handler);
-			}
+			case HEAD:
+				if (!isPattern) {
+					headHandlers.put(path, handler);
+				} else {
+					paternHeadHandlers.put(pathPattern, handler);
+				}
+				break;
 
-		} else if (verb.equals("TRACE")) {
-			if (!withPathPattern) {
-				traceHandlers.put(path, handler);
-			} else {
-				paternTraceHandlers.put(pathPattern, handler);
-			}
+			case TRACE:
+				if (!isPattern) {
+					traceHandlers.put(path, handler);
+				} else {
+					paternTraceHandlers.put(pathPattern, handler);
+				}
+				break;
 
-		} else {
-			throw U.rte("Unsupported HTTP verb: %s", verb);
+			default:
+				throw Err.notExpected();
 		}
+	}
+
+	private void deregister(HttpVerb verb, String path) {
+		boolean isPattern = isPattern(path);
+		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
+
+		switch (verb) {
+			case GET:
+				if (!isPattern) {
+					if (path1 != null && new String(path1).equals(path)) {
+						path1 = null;
+					}
+
+					if (path2 != null && new String(path2).equals(path)) {
+						path2 = null;
+					}
+
+					if (path3 != null && new String(path3).equals(path)) {
+						path3 = null;
+					}
+
+					getHandlers.remove(path);
+				} else {
+					paternGetHandlers.remove(pathPattern);
+				}
+				break;
+
+			case POST:
+				if (!isPattern) {
+					postHandlers.remove(path);
+				} else {
+					paternPostHandlers.remove(pathPattern);
+				}
+				break;
+
+			case PUT:
+				if (!isPattern) {
+					putHandlers.remove(path);
+				} else {
+					paternPutHandlers.remove(pathPattern);
+				}
+				break;
+
+			case DELETE:
+				if (!isPattern) {
+					deleteHandlers.remove(path);
+				} else {
+					paternDeleteHandlers.remove(pathPattern);
+				}
+				break;
+
+			case PATCH:
+				if (!isPattern) {
+					patchHandlers.remove(path);
+				} else {
+					paternPatchHandlers.remove(pathPattern);
+				}
+				break;
+
+			case OPTIONS:
+				if (!isPattern) {
+					optionsHandlers.remove(path);
+				} else {
+					paternOptionsHandlers.remove(pathPattern);
+				}
+				break;
+
+			case HEAD:
+				if (!isPattern) {
+					headHandlers.remove(path);
+				} else {
+					paternHeadHandlers.remove(pathPattern);
+				}
+				break;
+
+			case TRACE:
+				if (!isPattern) {
+					traceHandlers.remove(path);
+				} else {
+					paternTraceHandlers.remove(pathPattern);
+				}
+				break;
+
+			default:
+				throw Err.notExpected();
+		}
+
+	}
+
+	private boolean isPattern(String path) {
+		return path.contains("{") || path.contains("}");
 	}
 
 	public void addGenericHandler(FastHttpHandler handler) {

@@ -36,4 +36,9 @@ public abstract class NParamLambdaHandler extends NParamMethodHandler {
 		super(http, contentType, wrappers, Cls.getLambdaMethod(lambda));
 	}
 
+	@Override
+	public String toString() {
+		return paramsToString() + " -> ...";
+	}
+
 }

@@ -48,4 +48,9 @@ public class MethodReqHandler extends NParamMethodHandler {
 		return AOP.invoke(null, method, instance, args(req));
 	}
 
+	@Override
+	public String toString() {
+		return method.getDeclaringClass().getSimpleName() + "#" + method.getName() + paramsToString();
+	}
+
 }

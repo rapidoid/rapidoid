@@ -38,6 +38,8 @@ public abstract class NParamMethodHandler extends FastParamsAwareHttpHandler {
 
 	protected final Method method;
 
+	private final String paramsAsStr;
+
 	public NParamMethodHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, Method method) {
 		super(http, contentType, wrappers);
 		this.method = method;
@@ -48,9 +50,15 @@ public abstract class NParamMethodHandler extends FastParamsAwareHttpHandler {
 
 		this.paramRetrievers = new ParamRetriever[paramTypes.length];
 
+		String par = "";
 		for (int i = 0; i < paramRetrievers.length; i++) {
 			paramRetrievers[i] = ParamRetrievers.createParamRetriever(paramTypes[i], paramNames[i], annotations[i]);
+			if (i > 0) {
+				par += ", ";
+			}
+			par += paramTypes[i].getSimpleName() + " " + paramNames[i];
 		}
+		paramsAsStr = "(" + par + ")";
 	}
 
 	protected Object arg(Req req, int index) {
@@ -65,6 +73,10 @@ public abstract class NParamMethodHandler extends FastParamsAwareHttpHandler {
 		}
 
 		return args;
+	}
+
+	protected String paramsToString() {
+		return paramsAsStr;
 	}
 
 }

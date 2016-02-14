@@ -171,4 +171,12 @@ public class On {
 		return DEV_SERVER;
 	}
 
+	public static ServerSetup deregister(String verb, String path) {
+		return DEFAULT_SERVER.deregister(verb, path);
+	}
+
+	public static ServerSetup deregister(Object... controllers) {
+		return DEFAULT_SERVER.deregister(controllers);
+	}
+
 }

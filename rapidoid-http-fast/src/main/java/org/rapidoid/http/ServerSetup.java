@@ -18,7 +18,6 @@ import org.rapidoid.pojo.PojoHandlersSetup;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.wire.Wire;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -210,20 +209,9 @@ public class ServerSetup {
 			}
 		}
 
-
-		registerPojoControllers(pojos.toArray());
+		PojoHandlersSetup.from(this, pojos.toArray()).register();
 
 		return this;
-	}
-
-	private void registerPojoControllers(Object[] controllers) {
-		for (int i = 0; i < controllers.length; i++) {
-			if (controllers[i] instanceof Class<?>) {
-				controllers[i] = Wire.singleton((Class<?>) controllers[i]);
-			}
-		}
-
-		new PojoHandlersSetup(this, U.list(controllers)).register();
 	}
 
 	public ServerSetup onError(ErrorHandler onError) {
@@ -338,5 +326,17 @@ public class ServerSetup {
 		return new OnAnnotated(annotated, path());
 	}
 
+	public ServerSetup deregister(String verb, String path) {
+		for (FastHttp http : httpImpls()) {
+			http.remove(verb, path);
+		}
+
+		return this;
+	}
+
+	public ServerSetup deregister(Object... controllers) {
+		PojoHandlersSetup.from(this, controllers).deregister();
+		return this;
+	}
 
 }

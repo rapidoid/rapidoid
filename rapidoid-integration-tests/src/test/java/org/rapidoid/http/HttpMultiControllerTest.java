@@ -32,6 +32,7 @@ public class HttpMultiControllerTest extends HttpTestCommons {
 	@Test
 	public void testSequentialControllerRegistration() {
 
+		// this will be overwritten by the third
 		On.req(new Object() {
 			@GET
 			public String foo(Req req) {
@@ -46,6 +47,7 @@ public class HttpMultiControllerTest extends HttpTestCommons {
 			}
 		});
 
+		// this will overwrite the first
 		On.req(new Object() {
 			@GET
 			public String foo() {

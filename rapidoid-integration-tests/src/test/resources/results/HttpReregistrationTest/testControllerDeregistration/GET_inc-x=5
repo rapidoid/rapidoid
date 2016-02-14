@@ -3,6 +3,6 @@ Connection: close
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: application/json; charset=utf-8
-Content-Length: 6
+Content-Length: 7
 
-"FOO2"
+"next6"

@@ -73,20 +73,20 @@ public interface Constants {
 
 	String SEPARATOR_LINE = "\n--------------------------------------------------------------\n";
 
-	String _GET = "GET";
+	String GET = "GET";
 
-	String _POST = "POST";
+	String POST = "POST";
 
-	String _PUT = "PUT";
+	String PUT = "PUT";
 
-	String _DELETE = "DELETE";
+	String DELETE = "DELETE";
 
-	String _PATCH = "PATCH";
+	String PATCH = "PATCH";
 
-	String _OPTIONS = "OPTIONS";
+	String OPTIONS = "OPTIONS";
 
-	String _HEAD = "HEAD";
+	String HEAD = "HEAD";
 
-	String _TRACE = "TRACE";
+	String TRACE = "TRACE";
 
 }

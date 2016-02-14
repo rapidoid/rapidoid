@@ -28,6 +28,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.wire.Wire;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -39,34 +40,50 @@ import java.util.List;
 public class PojoHandlersSetup implements Constants {
 
 	private final ServerSetup server;
-	private final List<Object> controllers;
+	private final Object[] controllers;
 
-	public PojoHandlersSetup(ServerSetup server, List<Object> controllers) {
+	private PojoHandlersSetup(ServerSetup server, Object[] controllers) {
 		this.server = server;
 		this.controllers = controllers;
+	}
+
+	public static PojoHandlersSetup from(ServerSetup server, Object[] controllers) {
+		return new PojoHandlersSetup(server, controllers);
 	}
 
 	public void register() {
 		process(true);
 	}
 
-	public void unregister() {
+	public void deregister() {
 		process(false);
 	}
 
 	private void process(boolean register) {
 		for (Object controller : controllers) {
 
-			Class<? extends Object> clazz = controller.getClass();
+			U.notNull(controller, "controller");
+
+			Class<?> clazz = (controller instanceof Class<?>) ? (Class<?>) controller : controller.getClass();
+
+			if (!Cls.isBeanType(clazz)) {
+				throw new RuntimeException("Expected a controller instance, but found value of type: " + clazz.getName());
+			}
+
+			if (controller instanceof Class<?>) {
+				controller = register ? Wire.singleton(clazz) : null;
+			}
+
 			if (!clazz.getName().startsWith("org.rapidoid.log.")) { // FIXME clean-up
 
 				Log.debug("Processing POJO", "class", clazz);
+
 				List<String> componentPaths = getComponentNames(clazz);
 
 				for (String ctxPath : componentPaths) {
 					for (Method method : Cls.getMethods(clazz)) {
 						if (shouldExpose(method)) {
-							registerOrUnregister(register, controller, ctxPath, method);
+							registerOrDeregister(register, controller, ctxPath, method);
 						}
 					}
 				}
@@ -84,7 +101,7 @@ public class PojoHandlersSetup implements Constants {
 		boolean isPrivate = Modifier.isPrivate(modifiers);
 		boolean isProtected = Modifier.isProtected(modifiers);
 
-		return isUserDefined && !isAbstract && !isStatic && !isPrivate && !isProtected;
+		return isUserDefined && !isAbstract && !isStatic && !isPrivate && !isProtected && method.getAnnotations().length > 0;
 	}
 
 	protected List<String> getComponentNames(Class<?> component) {
@@ -97,10 +114,9 @@ public class PojoHandlersSetup implements Constants {
 		}
 	}
 
-	private void registerOrUnregister(boolean register, Object controller, String ctxPath, Method method) {
-		Log.info("Registering POJO handler", "controller", controller, "ctxPath", ctxPath, "method", method);
-
+	private void registerOrDeregister(boolean register, Object controller, String ctxPath, Method method) {
 		for (Annotation ann : method.getAnnotations()) {
+
 			if (ann instanceof GET) {
 				GET get = (GET) ann;
 				String path = pathOf(method, ctxPath, get.value());
@@ -108,7 +124,7 @@ public class PojoHandlersSetup implements Constants {
 				if (register) {
 					server.get(path).json(method, controller);
 				} else {
-					server.unregister(_GET, path);
+					server.deregister(GET, path);
 				}
 
 			} else if (ann instanceof POST) {
@@ -118,7 +134,7 @@ public class PojoHandlersSetup implements Constants {
 				if (register) {
 					server.post(path).json(method, controller);
 				} else {
-					server.unregister(_POST, path);
+					server.deregister(POST, path);
 				}
 
 			} else if (ann instanceof PUT) {
@@ -128,7 +144,7 @@ public class PojoHandlersSetup implements Constants {
 				if (register) {
 					server.put(path).json(method, controller);
 				} else {
-					server.unregister(_PUT, path);
+					server.deregister(PUT, path);
 				}
 
 			} else if (ann instanceof DELETE) {
@@ -138,7 +154,7 @@ public class PojoHandlersSetup implements Constants {
 				if (register) {
 					server.delete(path).json(method, controller);
 				} else {
-					server.unregister(_DELETE, path);
+					server.deregister(DELETE, path);
 				}
 
 			} else if (ann instanceof PATCH) {
@@ -148,7 +164,7 @@ public class PojoHandlersSetup implements Constants {
 				if (register) {
 					server.patch(path).json(method, controller);
 				} else {
-					server.unregister(_PATCH, path);
+					server.deregister(PATCH, path);
 				}
 
 			} else if (ann instanceof OPTIONS) {
@@ -158,7 +174,7 @@ public class PojoHandlersSetup implements Constants {
 				if (register) {
 					server.options(path).json(method, controller);
 				} else {
-					server.unregister(_OPTIONS, path);
+					server.deregister(OPTIONS, path);
 				}
 
 			} else if (ann instanceof HEAD) {
@@ -168,7 +184,7 @@ public class PojoHandlersSetup implements Constants {
 				if (register) {
 					server.head(path).json(method, controller);
 				} else {
-					server.unregister(_HEAD, path);
+					server.deregister(HEAD, path);
 				}
 
 			} else if (ann instanceof TRACE) {
@@ -178,7 +194,7 @@ public class PojoHandlersSetup implements Constants {
 				if (register) {
 					server.trace(path).json(method, controller);
 				} else {
-					server.unregister(_TRACE, path);
+					server.deregister(TRACE, path);
 				}
 
 			} else if (ann instanceof Page) {
@@ -188,8 +204,8 @@ public class PojoHandlersSetup implements Constants {
 				if (register) {
 					server.page(path).gui(method, controller);
 				} else {
-					server.unregister(_GET, path);
-					server.unregister(_POST, path);
+					server.deregister(GET, path);
+					server.deregister(POST, path);
 				}
 			}
 		}

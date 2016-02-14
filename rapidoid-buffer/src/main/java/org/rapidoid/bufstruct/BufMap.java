@@ -35,6 +35,8 @@ public interface BufMap<T> {
 
 	T get(Buf buf, Range key);
 
+	boolean remove(String key);
+
 	void clear();
 
 }
