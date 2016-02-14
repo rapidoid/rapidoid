@@ -338,4 +338,8 @@ public class ServerSetup {
 		return this;
 	}
 
+	public OnChanges changes() {
+		return new OnChanges(this, httpImpls());
+	}
+
 }

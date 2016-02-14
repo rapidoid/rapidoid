@@ -20,15 +20,8 @@ package org.rapidoid.reload;
  * #L%
  */
 
-import org.rapidoid.io.watch.ClassRefresher;
-import org.rapidoid.io.watch.Watch;
-import org.rapidoid.log.Log;
-import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.util.D;
-import org.rapidoid.wire.Wire;
-
-import java.util.List;
-import java.util.Set;
+import org.rapidoid.http.On;
+import org.rapidoid.http.Req;
 
 /**
  * Demo for class reloading. E.g. try changing the Abc class...
@@ -36,23 +29,12 @@ import java.util.Set;
 public class ReloadDemo {
 
 	public static void main(String[] args) {
+		On.bootstrap();
 
-		Set<String> cps = ClasspathUtil.getClasspathFolders();
+		On.changes().reload();
+//		On.changes().restart();
 
-		Watch watch = Watch.dirs(cps, new ClassRefresher() {
-			@Override
-			public void refresh(List<Class<?>> classes) {
-				Log.info("Refreshed classes", "classes", classes);
-				for (Class<?> cls : classes) {
-					refreshf(cls);
-				}
-			}
-		});
-	}
-
-	private static void refreshf(Class<?> cls) {
-		Object ins = Wire.singleton(cls);
-		D.print(ins);
+		On.get("/aa").json((Req req, String x) -> x + ":" + req);
 	}
 
 }

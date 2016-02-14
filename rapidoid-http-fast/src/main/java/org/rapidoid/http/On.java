@@ -179,4 +179,8 @@ public class On {
 		return DEFAULT_SERVER.deregister(controllers);
 	}
 
+	public static OnChanges changes() {
+		return DEFAULT_SERVER.changes();
+	}
+
 }

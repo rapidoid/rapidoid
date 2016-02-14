@@ -20,9 +20,20 @@ package org.rapidoid.reload;
  * #L%
  */
 
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.GET;
+
+@Controller
 public class Abc {
-	@Override
-	public String toString() {
-		return "ABC";
+
+	@GET
+	public String index() {
+		return "bb22";
 	}
+
+	@GET
+	public String index2() {
+		return "b2";
+	}
+
 }
