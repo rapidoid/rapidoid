@@ -42,8 +42,8 @@ public class WatchServiceTest extends TestCommons {
 	public void justDemo() {
 		Watch watch = Watch.dir("/tmp/classes", new ClassRefresher() {
 			@Override
-			public void refresh(List<Class<?>> classes) {
-				Log.info("Refreshed classes", "classes", classes);
+			public void refresh(List<Class<?>> reloaded, List<String> deleted) {
+				Log.info("Refreshed classes", "classes", reloaded);
 			}
 		});
 

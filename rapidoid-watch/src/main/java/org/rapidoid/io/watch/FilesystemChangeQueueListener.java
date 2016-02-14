@@ -30,28 +30,32 @@ import java.util.Queue;
 @Since("4.1.0")
 public class FilesystemChangeQueueListener implements FilesystemChangeListener {
 
-	private final Queue<String> queue;
+	private final Queue<String> created;
+	private final Queue<String> modified;
+	private final Queue<String> deleted;
 
-	public FilesystemChangeQueueListener(Queue<String> queue) {
-		this.queue = queue;
+	public FilesystemChangeQueueListener(Queue<String> created, Queue<String> modified, Queue<String> deleted) {
+		this.created = created;
+		this.modified = modified;
+		this.deleted = deleted;
 	}
 
 	@Override
 	public void modified(String filename) {
-		Log.info("A file was modified", "file", filename);
-		queue.add(filename);
+		Log.debug("A file was modified", "file", filename);
+		modified.add(filename);
 	}
 
 	@Override
 	public void deleted(String filename) {
-		queue.add(filename);
-		Log.info("A file was deleted", "file", filename);
+		Log.debug("A file was deleted", "file", filename);
+		deleted.add(filename);
 	}
 
 	@Override
 	public void created(String filename) {
-		Log.info("A file was created", "file", filename);
-		queue.add(filename);
+		Log.debug("A file was created", "file", filename);
+		created.add(filename);
 	}
 
 }

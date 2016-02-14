@@ -61,9 +61,13 @@ public class Watch {
 
 	public static Watch dirs(Collection<String> folders, final ClassRefresher refresher) {
 		try {
-			Queue<String> queue = Coll.queue();
-			FilesystemChangeQueueListener changes = new FilesystemChangeQueueListener(queue);
-			new WatchingRefresherThread(folders, queue, refresher).start();
+			Queue<String> created = Coll.queue();
+			Queue<String> modified = Coll.queue();
+			Queue<String> deleted = Coll.queue();
+
+			FilesystemChangeQueueListener changes = new FilesystemChangeQueueListener(created, modified, deleted);
+			new WatchingRefresherThread(folders, created, modified, deleted, refresher).start();
+
 			return dirs(folders, changes);
 
 		} catch (Throwable e) {

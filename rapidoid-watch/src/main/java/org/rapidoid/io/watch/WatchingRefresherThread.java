@@ -41,15 +41,21 @@ public class WatchingRefresherThread extends AbstractLoopThread {
 
 	private final ClassRefresher refresher;
 
-	private final Set<String> filenames = U.set();
+	private final Set<String> createdFilenames = U.set();
+	private final Set<String> modifiedFilenames = U.set();
+	private final Set<String> deletedFilenames = U.set();
 
 	private final Collection<String> folders;
 
-	private final Queue<String> queue;
+	private final Queue<String> created;
+	private final Queue<String> modified;
+	private final Queue<String> deleted;
 
-	public WatchingRefresherThread(Collection<String> folders, Queue<String> queue, ClassRefresher refresher) {
+	public WatchingRefresherThread(Collection<String> folders, Queue<String> created, Queue<String> modified, Queue<String> deleted, ClassRefresher refresher) {
 		this.folders = folders;
-		this.queue = queue;
+		this.created = created;
+		this.modified = modified;
+		this.deleted = deleted;
 		this.refresher = refresher;
 
 		setName("reloader" + idGen.incrementAndGet());
@@ -60,26 +66,41 @@ public class WatchingRefresherThread extends AbstractLoopThread {
 		boolean found = false;
 		String filename;
 
-		while ((filename = queue.poll()) != null) {
-			filenames.add(filename);
+		while ((filename = created.poll()) != null) {
+			createdFilenames.add(filename);
+			found = true;
+		}
+		while ((filename = modified.poll()) != null) {
+			modifiedFilenames.add(filename);
+			found = true;
+		}
+		while ((filename = deleted.poll()) != null) {
+			deletedFilenames.add(filename);
 			found = true;
 		}
 
-		if (!found && !filenames.isEmpty()) {
-			reload(filenames);
-			filenames.clear();
+		// when the changes are complete
+		if (!found && (!createdFilenames.isEmpty() || !modifiedFilenames.isEmpty() || !deletedFilenames.isEmpty())) {
+			reload();
+			createdFilenames.clear();
+			modifiedFilenames.clear();
+			deletedFilenames.clear();
 		}
 
 		U.sleep(100);
 	}
 
-	protected void reload(Set<String> filenames) {
-		Log.info("Reloading classes", "classes", filenames);
+	protected void reload() {
+		Set<String> filenames = U.set();
+		filenames.addAll(createdFilenames);
+		filenames.addAll(modifiedFilenames);
+
+		Log.info("Detected changes in classes", "created", createdFilenames, "modified", modifiedFilenames, "deleted", deletedFilenames);
 
 		try {
 			List<String> classnames = filenamesToClassnames(filenames);
 			List<Class<?>> classes = Reload.reloadClasses(folders, classnames);
-			refresher.refresh(classes);
+			refresher.refresh(classes, filenamesToClassnames(deletedFilenames));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

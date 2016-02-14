@@ -54,35 +54,25 @@ public class ClassReloader extends ClassLoader {
 		String filename = getClassFilename(name);
 
 		if (filename != null) {
-			try {
-				Log.debug("Hot swap", "file", filename);
-
-				try {
-					try {
-						Thread.sleep(300);
-					} catch (Exception e2) {
-					}
-
-					byte[] classData = IO.loadBytes(filename);
-					return defineClass(name, classData, 0, classData.length);
-
-				} catch (ClassFormatError e) {
-					// try again 1 second later
-					try {
-						Thread.sleep(1000);
-					} catch (Exception e2) {
-					}
-
-					byte[] classData = IO.loadBytes(filename);
-					return defineClass(name, classData, 0, classData.length);
-				}
-
-			} catch (Exception e) {
-				throw new ClassNotFoundException("Couldn't find class: " + name);
-			}
+			Log.debug("Hot swap", "file", filename);
+			return reload(name, filename);
 		} else {
 			return super.findClass(name);
 		}
+	}
+
+	private Class<?> reload(String name, String filename) throws ClassNotFoundException {
+		for (int i = 0; i < 100; i++) {
+			try {
+				byte[] classData = IO.loadBytes(filename);
+				return defineClass(name, classData, 0, classData.length);
+			} catch (ClassFormatError e) {
+				// wait some time and retry again...
+				U.sleep(50);
+			}
+		}
+
+		throw new ClassNotFoundException("Couldn't find class: " + name);
 	}
 
 	private String getClassFilename(String name) {

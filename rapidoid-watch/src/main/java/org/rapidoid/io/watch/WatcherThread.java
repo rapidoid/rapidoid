@@ -85,7 +85,7 @@ public class WatcherThread extends AbstractLoopThread {
 
 	private void init(String folder) {
 		if (!watching.contains(folder) && new File(folder).exists()) {
-			Log.info("Watching folder for changes", "folder", folder, "recursive", recursive);
+			Log.debug("Watching folder for changes", "folder", folder, "recursive", recursive);
 
 			Path dir = Paths.get(folder);
 			if (recursive) {

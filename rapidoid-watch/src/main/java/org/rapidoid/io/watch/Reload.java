@@ -47,7 +47,7 @@ public class Reload {
 			try {
 				classes.add(classLoader.loadClass(className));
 			} catch (Throwable e) {
-				Log.warn("Couldn't reload class!", e);
+				Log.debug("Couldn't reload class!", "error", e);
 			}
 		}
 

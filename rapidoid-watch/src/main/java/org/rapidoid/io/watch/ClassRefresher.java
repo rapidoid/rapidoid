@@ -29,6 +29,6 @@ import java.util.List;
 @Since("4.1.0")
 public interface ClassRefresher {
 
-	void refresh(List<Class<?>> classes);
+	void refresh(List<Class<?>> reloaded, List<String> deleted);
 
 }
