@@ -15,7 +15,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.net.Serve;
 import org.rapidoid.net.TCPServer;
 import org.rapidoid.pojo.PojoHandlersSetup;
-import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
@@ -191,7 +190,6 @@ public class ServerSetup {
 		List<Object> pojos = U.list();
 
 		for (Object controller : controllers) {
-
 			if (controller instanceof ReqHandler) {
 				ReqHandler handler = (ReqHandler) controller;
 				req(handler);
@@ -319,10 +317,11 @@ public class ServerSetup {
 	}
 
 	public ServerSetup bootstrap() {
-		return req(Scan.annotated(Controller.class).in(path()).getClasses().toArray());
+		req(annotated(Controller.class).in(path()).getAll().toArray());
+		return this;
 	}
 
-	public OnAnnotated annotated(Class<? extends Annotation>[] annotated) {
+	public OnAnnotated annotated(Class<? extends Annotation>... annotated) {
 		return new OnAnnotated(annotated, path());
 	}
 

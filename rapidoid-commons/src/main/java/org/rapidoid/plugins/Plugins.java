@@ -99,7 +99,7 @@ public final class Plugins {
 		for (Class<?> interf : Cls.getImplementedInterfaces(plugin.getClass())) {
 			if (Plugin.class.isAssignableFrom(interf) && !Plugin.class.equals(interf)) {
 				String name = plugin.name();
-				Log.info("Registering plugin", "plugin", plugin, "name", name, "type", interf);
+				Log.debug("Registering plugin", "plugin", plugin, "name", name, "type", interf);
 				PLUGINS.get(interf).put(name, plugin);
 				PLUGINS_BY_NAME.put(name, plugin);
 			}

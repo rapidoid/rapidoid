@@ -31,6 +31,8 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 	@Test
 	public void testBasicConfig() {
+		isTrue(Conf.dev());
+
 		Conf.set("abc", "123");
 		Conf.set("cool", true);
 		Conf.set("production", true);
