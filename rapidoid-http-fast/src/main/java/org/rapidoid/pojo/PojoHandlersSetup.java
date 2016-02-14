@@ -34,10 +34,17 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class PojoHandlersSetup implements Constants {
+public class PojoHandlersSetup {
+
+	private static final Set<String> SUPPORTED_METHOD_ANNOTATIONS = U.set(
+			Page.class.getName(), GET.class.getName(), POST.class.getName(),
+			PUT.class.getName(), DELETE.class.getName(), PATCH.class.getName(),
+			OPTIONS.class.getName(), HEAD.class.getName(), TRACE.class.getName()
+	);
 
 	private final ServerSetup server;
 	private final Object[] controllers;
@@ -70,10 +77,6 @@ public class PojoHandlersSetup implements Constants {
 				throw new RuntimeException("Expected a controller instance, but found value of type: " + clazz.getName());
 			}
 
-			if (controller instanceof Class<?>) {
-				controller = register ? Wire.singleton(clazz) : null;
-			}
-
 			if (!clazz.getName().startsWith("org.rapidoid.log.")) { // FIXME clean-up
 
 				Log.debug("Processing POJO", "class", clazz);
@@ -83,6 +86,11 @@ public class PojoHandlersSetup implements Constants {
 				for (String ctxPath : componentPaths) {
 					for (Method method : Cls.getMethods(clazz)) {
 						if (shouldExpose(method)) {
+
+							if (controller instanceof Class<?>) {
+								controller = register ? Wire.singleton(clazz) : null;
+							}
+
 							registerOrDeregister(register, controller, ctxPath, method);
 						}
 					}
@@ -101,7 +109,16 @@ public class PojoHandlersSetup implements Constants {
 		boolean isPrivate = Modifier.isPrivate(modifiers);
 		boolean isProtected = Modifier.isProtected(modifiers);
 
-		return isUserDefined && !isAbstract && !isStatic && !isPrivate && !isProtected && method.getAnnotations().length > 0;
+		if (isUserDefined && !isAbstract && !isStatic && !isPrivate && !isProtected && method.getAnnotations().length > 0) {
+			for (Annotation ann : method.getAnnotations()) {
+				String annoName = ann.annotationType().getName();
+				if (SUPPORTED_METHOD_ANNOTATIONS.contains(annoName)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	protected List<String> getComponentNames(Class<?> component) {
@@ -117,98 +134,96 @@ public class PojoHandlersSetup implements Constants {
 	private void registerOrDeregister(boolean register, Object controller, String ctxPath, Method method) {
 		for (Annotation ann : method.getAnnotations()) {
 
-			if (ann instanceof GET) {
-				GET get = (GET) ann;
-				String path = pathOf(method, ctxPath, get.value());
+			String annoName = ann.annotationType().getName();
 
-				if (register) {
-					server.get(path).json(method, controller);
-				} else {
-					server.deregister(GET, path);
-				}
-
-			} else if (ann instanceof POST) {
-				POST post = (POST) ann;
-				String path = pathOf(method, ctxPath, post.value());
-
-				if (register) {
-					server.post(path).json(method, controller);
-				} else {
-					server.deregister(POST, path);
-				}
-
-			} else if (ann instanceof PUT) {
-				PUT put = (PUT) ann;
-				String path = pathOf(method, ctxPath, put.value());
-
-				if (register) {
-					server.put(path).json(method, controller);
-				} else {
-					server.deregister(PUT, path);
-				}
-
-			} else if (ann instanceof DELETE) {
-				DELETE delete = (DELETE) ann;
-				String path = pathOf(method, ctxPath, delete.value());
-
-				if (register) {
-					server.delete(path).json(method, controller);
-				} else {
-					server.deregister(DELETE, path);
-				}
-
-			} else if (ann instanceof PATCH) {
-				PATCH patch = (PATCH) ann;
-				String path = pathOf(method, ctxPath, patch.value());
-
-				if (register) {
-					server.patch(path).json(method, controller);
-				} else {
-					server.deregister(PATCH, path);
-				}
-
-			} else if (ann instanceof OPTIONS) {
-				OPTIONS options = (OPTIONS) ann;
-				String path = pathOf(method, ctxPath, options.value());
-
-				if (register) {
-					server.options(path).json(method, controller);
-				} else {
-					server.deregister(OPTIONS, path);
-				}
-
-			} else if (ann instanceof HEAD) {
-				HEAD head = (HEAD) ann;
-				String path = pathOf(method, ctxPath, head.value());
-
-				if (register) {
-					server.head(path).json(method, controller);
-				} else {
-					server.deregister(HEAD, path);
-				}
-
-			} else if (ann instanceof TRACE) {
-				TRACE trace = (TRACE) ann;
-				String path = pathOf(method, ctxPath, trace.value());
-
-				if (register) {
-					server.trace(path).json(method, controller);
-				} else {
-					server.deregister(TRACE, path);
-				}
-
-			} else if (ann instanceof Page) {
-				Page page = (Page) ann;
-				String path = pathOf(method, ctxPath, page.value());
+			if (annoName.equals(Page.class.getName())) {
+				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
 					server.page(path).gui(method, controller);
 				} else {
-					server.deregister(GET, path);
-					server.deregister(POST, path);
+					server.deregister(Constants.GET, path);
+					server.deregister(Constants.POST, path);
+				}
+
+			} else if (annoName.equals(GET.class.getName())) {
+				String path = pathOf(method, ctxPath, valueOf(ann));
+
+				if (register) {
+					server.get(path).json(method, controller);
+				} else {
+					server.deregister(Constants.GET, path);
+				}
+
+			} else if (annoName.equals(POST.class.getName())) {
+				String path = pathOf(method, ctxPath, valueOf(ann));
+
+				if (register) {
+					server.post(path).json(method, controller);
+				} else {
+					server.deregister(Constants.POST, path);
+				}
+
+			} else if (annoName.equals(PUT.class.getName())) {
+				String path = pathOf(method, ctxPath, valueOf(ann));
+
+				if (register) {
+					server.put(path).json(method, controller);
+				} else {
+					server.deregister(Constants.PUT, path);
+				}
+
+			} else if (annoName.equals(DELETE.class.getName())) {
+				String path = pathOf(method, ctxPath, valueOf(ann));
+
+				if (register) {
+					server.delete(path).json(method, controller);
+				} else {
+					server.deregister(Constants.DELETE, path);
+				}
+
+			} else if (annoName.equals(PATCH.class.getName())) {
+				String path = pathOf(method, ctxPath, valueOf(ann));
+
+				if (register) {
+					server.patch(path).json(method, controller);
+				} else {
+					server.deregister(Constants.PATCH, path);
+				}
+
+			} else if (annoName.equals(OPTIONS.class.getName())) {
+				String path = pathOf(method, ctxPath, valueOf(ann));
+
+				if (register) {
+					server.options(path).json(method, controller);
+				} else {
+					server.deregister(Constants.OPTIONS, path);
+				}
+
+			} else if (annoName.equals(HEAD.class.getName())) {
+				String path = pathOf(method, ctxPath, valueOf(ann));
+
+				if (register) {
+					server.head(path).json(method, controller);
+				} else {
+					server.deregister(Constants.HEAD, path);
+				}
+
+			} else if (annoName.equals(TRACE.class.getName())) {
+				String path = pathOf(method, ctxPath, valueOf(ann));
+
+				if (register) {
+					server.trace(path).json(method, controller);
+				} else {
+					server.deregister(Constants.TRACE, path);
 				}
 			}
 		}
+	}
+
+	private String valueOf(Annotation ann) {
+		Method valueMethod = Cls.getMethod(ann.getClass(), "value");
+		return Cls.invoke(valueMethod, ann);
 	}
 
 	private String pathOf(Method method, String ctxPath, String uri) {
