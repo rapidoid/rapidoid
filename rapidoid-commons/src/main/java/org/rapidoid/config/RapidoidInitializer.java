@@ -26,17 +26,15 @@ import org.rapidoid.log.Log;
 
 public class RapidoidInitializer {
 
-	private static boolean initialized;
+	private static volatile boolean initialized;
 
 	public static synchronized void initialize() {
 		if (!initialized) {
-			Log.info("Starting Rapidoid...", "version", RapidoidInfo.version());
+			initialized = true;
 
-			Log.info("Working directory is: " + System.getProperty("user.dir"));
+			Log.info("Starting Rapidoid...", "version", RapidoidInfo.version(), "working dir", System.getProperty("user.dir"));
 
 			Cls.getClassIfExists("org.rapidoid.web.RapidoidWebModule");
-
-			initialized = true;
 		}
 	}
 
