@@ -36,8 +36,6 @@ public class RapidoidInitializer {
 
 			Cls.getClassIfExists("org.rapidoid.web.RapidoidWebModule");
 
-			Log.info("Rapidoid is ready.");
-
 			initialized = true;
 		}
 	}

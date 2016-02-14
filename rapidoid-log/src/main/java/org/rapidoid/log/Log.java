@@ -59,7 +59,9 @@ public class Log {
 	}
 
 	public static synchronized void setLogLevel(LogLevel logLevel) {
-		info("Setting log level", "from", LOG_LEVEL, "to", logLevel);
+		if (LOG_LEVEL != logLevel) {
+			info("Setting log level", "from", LOG_LEVEL, "to", logLevel);
+		}
 		LOG_LEVEL = logLevel;
 	}
 
