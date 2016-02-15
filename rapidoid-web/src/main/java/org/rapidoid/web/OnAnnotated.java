@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.web;
 
 /*
  * #%L

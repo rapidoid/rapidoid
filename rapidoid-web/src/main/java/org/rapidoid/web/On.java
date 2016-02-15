@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.web;
 
 /*
  * #%L
@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.data.JSON;
+import org.rapidoid.http.*;
 import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.listener.FastHttpListener;
 import org.rapidoid.job.Jobs;

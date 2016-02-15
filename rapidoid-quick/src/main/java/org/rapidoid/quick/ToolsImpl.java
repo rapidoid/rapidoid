@@ -1,12 +1,19 @@
 package org.rapidoid.quick;
 
+import java.util.List;
+import java.util.Map;
+
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.app.IOTool;
 import org.rapidoid.app.IOToolImpl;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.http.*;
+import org.rapidoid.http.HTTP;
+import org.rapidoid.http.HttpClient;
+import org.rapidoid.http.REST;
+import org.rapidoid.http.RESTClient;
+import org.rapidoid.http.Req;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.cache.CachePlugin;
 import org.rapidoid.plugins.db.DBPlugin;
@@ -16,10 +23,8 @@ import org.rapidoid.plugins.sms.SMSPlugin;
 import org.rapidoid.plugins.templates.TemplatesPlugin;
 import org.rapidoid.sql.SQL;
 import org.rapidoid.sql.SQLAPI;
-import redis.clients.jedis.Jedis;
 
-import java.util.List;
-import java.util.Map;
+import redis.clients.jedis.Jedis;
 
 /*
  * #%L

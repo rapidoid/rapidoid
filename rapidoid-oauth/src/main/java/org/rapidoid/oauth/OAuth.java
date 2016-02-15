@@ -30,9 +30,9 @@ import org.rapidoid.gui.GUI;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
-import org.rapidoid.http.ServerSetup;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.web.ServerSetup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

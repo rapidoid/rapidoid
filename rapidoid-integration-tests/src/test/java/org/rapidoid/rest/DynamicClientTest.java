@@ -1,4 +1,6 @@
-package org.rapidoid.http;
+package org.rapidoid.rest;
+
+import java.util.concurrent.TimeUnit;
 
 /*
  * #%L
@@ -25,21 +27,25 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Promise;
 import org.rapidoid.concurrent.Promises;
+import org.rapidoid.http.HttpTestCommons;
+import org.rapidoid.http.REST;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.Reqs;
+import org.rapidoid.http.Resp;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
-
-import java.util.concurrent.TimeUnit;
+import org.rapidoid.web.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")
-public class DynamicClientTest extends TestCommons {
+public class DynamicClientTest extends HttpTestCommons {
 
 	private final MyClient client = REST.client(MyClient.class);
 
 	@Test
 	public void testDynamic() {
-		On.address("127.0.0.1").port(8989).get("/test-abc").html("abc-ok");
+		On.get("/test-abc").html("abc-ok");
 
 		On.get("/nums").json("[1, 2, 3]");
 

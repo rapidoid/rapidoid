@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.http.handler;
 
 /*
  * #%L
@@ -22,30 +22,27 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.log.Log;
-import org.rapidoid.scan.ClasspathUtil;
-
-import java.util.Set;
+import org.rapidoid.commons.MediaType;
+import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpWrapper;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class OnChanges {
+public class FastParamsAwareReqHandler extends FastParamsAwareHttpHandler {
 
-	private final ServerSetup serverSetup;
-	private final FastHttp[] fastHttps;
+	private final ReqHandler handler;
 
-	public OnChanges(ServerSetup serverSetup, FastHttp[] fastHttps) {
-		this.serverSetup = serverSetup;
-		this.fastHttps = fastHttps;
+	public FastParamsAwareReqHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, ReqHandler handler) {
+		super(http, contentType, wrappers);
+		this.handler = handler;
 	}
 
-	public void reload() {
-		if (Conf.dev()) {
-			Set<String> classpathFolders = ClasspathUtil.getClasspathFolders();
-			Log.info("Watching classpath for changes...", "classpath", classpathFolders);
-			// FIXME complete this
-		}
+	@Override
+	protected Object doHandle(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
+		return handler.execute(req);
 	}
 
 }

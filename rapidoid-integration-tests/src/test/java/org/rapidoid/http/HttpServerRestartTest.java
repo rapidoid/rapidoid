@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.web.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

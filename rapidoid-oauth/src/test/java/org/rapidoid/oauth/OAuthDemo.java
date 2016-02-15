@@ -23,8 +23,8 @@ package org.rapidoid.oauth;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Config;
-import org.rapidoid.http.On;
-import org.rapidoid.http.ServerSetup;
+import org.rapidoid.web.On;
+import org.rapidoid.web.ServerSetup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

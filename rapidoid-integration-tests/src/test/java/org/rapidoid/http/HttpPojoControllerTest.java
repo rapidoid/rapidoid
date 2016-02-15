@@ -26,6 +26,7 @@ import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
+import org.rapidoid.web.On;
 import org.rapidoid.wire.Wire;
 
 import javax.annotation.Generated;

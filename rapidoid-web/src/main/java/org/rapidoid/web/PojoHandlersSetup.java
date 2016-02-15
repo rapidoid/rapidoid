@@ -1,4 +1,4 @@
-package org.rapidoid.pojo;
+package org.rapidoid.web;
 
 /*
  * #%L
@@ -23,7 +23,6 @@ package org.rapidoid.pojo;
 import org.rapidoid.annotation.*;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.http.ServerSetup;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;

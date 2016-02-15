@@ -1,8 +1,8 @@
-package org.rapidoid.http;
+package org.rapidoid.web;
 
 /*
  * #%L
- * rapidoid-integration-tests
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,40 +20,33 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.junit.Test;
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-import org.rapidoid.web.On;
+import org.rapidoid.config.Conf;
+import org.rapidoid.http.FastHttp;
+import org.rapidoid.log.Log;
+import org.rapidoid.scan.ClasspathUtil;
 
-import java.util.List;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HttpBeanParamsTest extends HttpTestCommons {
+public class OnChanges {
 
-	private static class Person {
-		public int id;
-		public String name;
+	private final ServerSetup serverSetup;
+	private final FastHttp[] fastHttps;
+
+	public OnChanges(ServerSetup serverSetup, FastHttp[] fastHttps) {
+		this.serverSetup = serverSetup;
+		this.fastHttps = fastHttps;
 	}
 
-	@Test
-	public void testBeanParams() {
-		On.req(new Object() {
-
-			@GET
-			@SuppressWarnings("unchecked")
-			public List<Object> pers(String name, Person person, int id, Integer xx) {
-				return U.list(id, name, person, xx);
-			}
-
-		});
-
-		onlyGet("/pers?name=Einstein&id=1000");
-		onlyGet("/pers?name=Mozart");
-		onlyGet("/pers?id=200");
+	public void reload() {
+		if (Conf.dev()) {
+			Set<String> classpathFolders = ClasspathUtil.getClasspathFolders();
+			Log.info("Watching classpath for changes...", "classpath", classpathFolders);
+			// FIXME complete this
+		}
 	}
 
 }
-

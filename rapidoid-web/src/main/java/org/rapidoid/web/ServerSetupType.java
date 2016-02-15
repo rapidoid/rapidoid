@@ -1,8 +1,8 @@
-package org.rapidoid.net;
+package org.rapidoid.web;
 
 /*
  * #%L
- * rapidoid-net
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,24 +20,6 @@ package org.rapidoid.net;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.net.impl.RapidoidServerLoop;
-import org.rapidoid.net.impl.TCPServerBuilder;
-import org.rapidoid.wire.Wire;
-
-@Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
-public class Serve {
-
-	public static TCPServerBuilder server() {
-		return Wire.builder(TCPServerBuilder.class, TCPServer.class, RapidoidServerLoop.class);
-	}
-
-	public static TCPServer listen(Protocol protocol) {
-		TCPServer server = Serve.server().protocol(protocol).build();
-		server.start();
-		return server;
-	}
-
+public enum ServerSetupType {
+	DEFAULT, ADMIN, DEV, CUSTOM;
 }

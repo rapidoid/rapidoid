@@ -32,7 +32,6 @@ import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqRespHandl
 import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareRespHandler;
 import org.rapidoid.http.handler.optimized.FastCallableHttpHandler;
 import org.rapidoid.lambda.*;
-import org.rapidoid.pojo.MethodReqHandler;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;

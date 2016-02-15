@@ -1,10 +1,16 @@
-package org.rapidoid.http;
+package org.rapidoid.web;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
+import org.rapidoid.http.ErrorHandler;
+import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpWrapper;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.ViewRenderer;
 import org.rapidoid.http.handler.FastHttpErrorHandler;
 import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqHandler;
@@ -14,7 +20,6 @@ import org.rapidoid.http.listener.IgnorantHttpListener;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Serve;
 import org.rapidoid.net.TCPServer;
-import org.rapidoid.pojo.PojoHandlersSetup;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 

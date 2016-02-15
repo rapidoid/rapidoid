@@ -1,4 +1,4 @@
-package org.rapidoid.pojo;
+package org.rapidoid.http.handler;
 
 /*
  * #%L

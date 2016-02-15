@@ -39,7 +39,7 @@ import java.util.concurrent.Future;
 @Since("4.4.0")
 public class DynamicRESTClient implements Dynamic {
 
-	private static final String[] VERBS = {"GET", "POST", "PUT", "DELETE"};
+	private static final String[] VERBS = { "GET", "POST", "PUT", "DELETE" };
 
 	private final Class<?> clientInterface;
 

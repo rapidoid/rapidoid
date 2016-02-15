@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.util.Bufs;
+import org.rapidoid.web.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.10")
