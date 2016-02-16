@@ -1,8 +1,8 @@
-package org.rapidoid.http;
+package org.rapidoid.io;
 
 /*
  * #%L
- * rapidoid-integration-tests
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,28 +20,32 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.web.On;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public class HttpServerTest extends HttpTestCommons {
+@Since("5.1.0")
+public class FileContent {
 
-	@Test
-	public void testHttpServer() {
-		On.get("/").html("home");
+	private final String filename;
 
-		On.req(new ReqHandler() {
-			@Override
-			public Object execute(Req req) throws Exception {
-				return req.response().json("abc");
-			}
-		});
+	private final byte[] content;
 
-		eq(HTTP.get("http://localhost:8888/").fetch(), "home");
-		eq(HTTP.post("http://localhost:8888/").fetch(), "\"abc\"");
+	public FileContent(String filename, byte[] content) {
+		this.filename = filename;
+		this.content = content;
+	}
+
+	public String filename() {
+		return filename;
+	}
+
+	public byte[] content() {
+		return content;
+	}
+
+	public static FileContent from(String filename) {
+		return new FileContent(filename, IO.loadBytes(filename));
 	}
 
 }

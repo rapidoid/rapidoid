@@ -47,15 +47,21 @@ public class HttpCookiepackTest extends HttpTestCommons {
 			}
 		});
 
-		eq(statefulGet("/a"), "1:11");
-		eq(statefulGet("/b"), "2:12");
-		eq(statefulGet("/c"), "3:13");
+		HttpClient client = HTTP.keepCookies(true).dontClose();
 
-		HTTP.STATEFUL_CLIENT.reset();
+		eq(client.get(localhost("/a")).fetch(), "1:11");
+		eq(client.get(localhost("/b")).fetch(), "2:12");
+		eq(client.get(localhost("/c")).fetch(), "3:13");
 
-		eq(statefulGet("/a"), "1:11");
-		eq(statefulGet("/b"), "2:12");
-		eq(statefulGet("/c"), "3:13");
+		client.close();
+
+		client = HTTP.dontClose().keepCookies(true); // do it again
+
+		eq(client.get(localhost("/a")).fetch(), "1:11");
+		eq(client.get(localhost("/b")).fetch(), "2:12");
+		eq(client.get(localhost("/c")).fetch(), "3:13");
+
+		client.close();
 	}
 
 }

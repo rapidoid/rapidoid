@@ -22,10 +22,10 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Callback;
-import org.rapidoid.concurrent.Future;
 import org.rapidoid.config.RapidoidInitializer;
+import org.rapidoid.io.FileContent;
 
+import java.util.List;
 import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
@@ -42,132 +42,124 @@ public class HTTP {
 	public static final String CONTENT_TYPE_XML = "application/xml";
 	public static final String CONTENT_TYPE_BINARY = "application/octet-stream";
 
-	public static final HttpClient DEFAULT_CLIENT = new HttpClient(false, false);
-	public static final HttpClient STATEFUL_CLIENT = new HttpClient(true, true);
-
-	/*  GET */
-
-	public static Future<byte[]> get(String uri, Callback<byte[]> callback) {
-		return DEFAULT_CLIENT.get(uri, callback);
+	public static HttpClient get(String url) {
+		return new HttpClient().verb(HttpVerb.GET).url(url);
 	}
 
-	public static byte[] get(String uri) {
-		return get(uri, null).get();
+	public static HttpClient post(String url) {
+		return new HttpClient().verb(HttpVerb.POST).url(url);
 	}
 
-	/*  DELETE */
-
-	public static Future<byte[]> delete(String uri, Callback<byte[]> callback) {
-		return DEFAULT_CLIENT.delete(uri, callback);
+	public static HttpClient put(String url) {
+		return new HttpClient().verb(HttpVerb.PUT).url(url);
 	}
 
-	public static byte[] delete(String uri) {
-		return delete(uri, null).get();
+	public static HttpClient delete(String url) {
+		return new HttpClient().verb(HttpVerb.DELETE).url(url);
 	}
 
-	/*  OPTIONS */
-
-	public static Future<byte[]> options(String uri, Callback<byte[]> callback) {
-		return DEFAULT_CLIENT.options(uri, callback);
+	public static HttpClient patch(String url) {
+		return new HttpClient().verb(HttpVerb.PATCH).url(url);
 	}
 
-	public static byte[] options(String uri) {
-		return options(uri, null).get();
+	public static HttpClient options(String url) {
+		return new HttpClient().verb(HttpVerb.OPTIONS).url(url);
 	}
 
-	/*  HEAD */
-
-	public static Future<byte[]> head(String uri, Callback<byte[]> callback) {
-		return DEFAULT_CLIENT.head(uri, callback);
+	public static HttpClient head(String url) {
+		return new HttpClient().verb(HttpVerb.HEAD).url(url);
 	}
 
-	public static byte[] head(String uri) {
-		return head(uri, null).get();
+	public static HttpClient trace(String url) {
+		return new HttpClient().verb(HttpVerb.TRACE).url(url);
 	}
 
-	/*  TRACE */
-
-	public static Future<byte[]> trace(String uri, Callback<byte[]> callback) {
-		return DEFAULT_CLIENT.trace(uri, callback);
+	public static HttpClient verb(org.rapidoid.http.HttpVerb verb) {
+		return new HttpClient().verb(verb);
 	}
 
-	public static byte[] trace(String uri) {
-		return trace(uri, null).get();
+	public static HttpClient url(String url) {
+		return new HttpClient().url(url);
 	}
 
-	/*  POST */
-
-	public static Future<byte[]> post(String uri, Map<String, String> headers, Map<String, String> data,
-	                                  Map<String, String> files, Callback<byte[]> callback) {
-		return DEFAULT_CLIENT.post(uri, headers, data, files, callback);
+	public static HttpClient body(byte[] body) {
+		return new HttpClient().body(body);
 	}
 
-	public static byte[] post(String uri, Map<String, String> headers, Map<String, String> data,
-	                          Map<String, String> files) {
-		return post(uri, headers, data, files, null).get();
+	public static HttpClient cookies(Map<String, String> cookies) {
+		return new HttpClient().cookies(cookies);
 	}
 
-	public static Future<byte[]> post(String uri, Map<String, String> headers, byte[] body, String contentType,
-	                                  Callback<byte[]> callback) {
-		return DEFAULT_CLIENT.post(uri, headers, body, contentType, callback);
+	public static HttpClient headers(Map<String, String> headers) {
+		return new HttpClient().headers(headers);
 	}
 
-	public static byte[] post(String uri, Map<String, String> headers, byte[] body, String contentType) {
-		return post(uri, headers, body, contentType, null).get();
+	public static HttpClient data(Map<String, String> data) {
+		return new HttpClient().data(data);
 	}
 
-	public static byte[] post(String uri) {
-		return post(uri, null, (byte[]) null, null, null).get();
+	public static HttpClient files(Map<String, List<FileContent>> files) {
+		return new HttpClient().files(files);
 	}
 
-	/*  PUT */
-
-	public static Future<byte[]> put(String uri, Map<String, String> headers, Map<String, String> data,
-	                                 Map<String, String> files, Callback<byte[]> callback) {
-		return DEFAULT_CLIENT.put(uri, headers, data, files, callback);
+	public static HttpClient contentType(String contentType) {
+		return new HttpClient().contentType(contentType);
 	}
 
-	public static byte[] put(String uri, Map<String, String> headers, Map<String, String> data,
-	                         Map<String, String> files) {
-		return put(uri, headers, data, files, null).get();
+	public static HttpClient userAgent(String userAgent) {
+		return new HttpClient().userAgent(userAgent);
 	}
 
-	public static Future<byte[]> put(String uri, Map<String, String> headers, byte[] body, String contentType,
-	                                 Callback<byte[]> callback) {
-		return DEFAULT_CLIENT.put(uri, headers, body, contentType, callback);
+	public static HttpClient followRedirects(boolean followRedirects) {
+		return new HttpClient().followRedirects(followRedirects);
 	}
 
-	public static byte[] put(String uri, Map<String, String> headers, byte[] body, String contentType) {
-		return put(uri, headers, body, contentType, null).get();
+	public static HttpClient keepAlive(boolean keepAlive) {
+		return new HttpClient().keepAlive(keepAlive);
 	}
 
-	public static byte[] put(String uri) {
-		return put(uri, null, (byte[]) null, null, null).get();
+	public static HttpClient keepCookies(boolean keepCookies) {
+		return new HttpClient().keepCookies(keepCookies);
 	}
 
-	/*  PATCH */
-
-	public static Future<byte[]> patch(String uri, Map<String, String> headers, Map<String, String> data,
-	                                   Map<String, String> files, Callback<byte[]> callback) {
-		return DEFAULT_CLIENT.patch(uri, headers, data, files, callback);
+	public static HttpClient reuseConnections(boolean reuseConnections) {
+		return new HttpClient().reuseConnections(reuseConnections);
 	}
 
-	public static byte[] patch(String uri, Map<String, String> headers, Map<String, String> data,
-	                           Map<String, String> files) {
-		return patch(uri, headers, data, files, null).get();
+	public static HttpClient decompress(boolean decompress) {
+		return new HttpClient().decompress(decompress);
 	}
 
-	public static Future<byte[]> patch(String uri, Map<String, String> headers, byte[] body, String contentType,
-	                                   Callback<byte[]> callback) {
-		return DEFAULT_CLIENT.patch(uri, headers, body, contentType, callback);
+	public static HttpClient maxConnPerRoute(int maxConnPerRoute) {
+		return new HttpClient().maxConnPerRoute(maxConnPerRoute);
 	}
 
-	public static byte[] patch(String uri, Map<String, String> headers, byte[] body, String contentType) {
-		return patch(uri, headers, body, contentType, null).get();
+	public static HttpClient maxConnTotal(int maxConnTotal) {
+		return new HttpClient().maxConnTotal(maxConnTotal);
 	}
 
-	public static byte[] patch(String uri) {
-		return patch(uri, null, (byte[]) null, null, null).get();
+	public static HttpClient socketTimeout(int socketTimeout) {
+		return new HttpClient().socketTimeout(socketTimeout);
+	}
+
+	public static HttpClient connectTimeout(int connectTimeout) {
+		return new HttpClient().connectTimeout(connectTimeout);
+	}
+
+	public static HttpClient connectionRequestTimeout(int connectionRequestTimeout) {
+		return new HttpClient().connectionRequestTimeout(connectionRequestTimeout);
+	}
+
+	public static HttpClient maxRedirects(int maxRedirects) {
+		return new HttpClient().maxRedirects(maxRedirects);
+	}
+
+	public static HttpClient raw(boolean raw) {
+		return new HttpClient().raw(raw);
+	}
+
+	public static HttpClient dontClose() {
+		return new HttpClient().dontClose();
 	}
 
 }

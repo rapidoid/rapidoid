@@ -24,8 +24,12 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.crypto.Crypto;
+import org.rapidoid.io.FileContent;
 import org.rapidoid.io.IO;
 import org.rapidoid.u.U;
+
+import java.util.List;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -39,20 +43,44 @@ public class HttpMultipartFormTest extends HttpTestCommons {
 		String hash2 = Crypto.md5(IO.loadBytes("test2.txt"));
 		String hash3 = Crypto.md5("");
 
-		eq(upload("/upload", U.map("a", "bb"), U.map("f1", "test1.txt", "f2", "test2.txt")),
-				"bar:a:bb:2:" + U.join(":", hash1, hash2, hash3));
+		FileContent file1 = FileContent.from("test1.txt");
+		FileContent file2 = FileContent.from("test2.txt");
+
+		Map<String, List<FileContent>> files = U.map("f1", U.list(file1), "f2", U.list(file2));
+
+		String res = HTTP.post(localhost("/upload"))
+				.header("Cookie", "COOKIE1=a")
+				.cookie("foo", "bar")
+				.data("a", "bb")
+				.files(files)
+				.fetch();
+
+		eq(res, "bar:a:bb:2:" + U.join(":", hash1, hash2, hash3));
 	}
 
 	@Test
 	public void shouldHandleBigUploads() throws Throwable {
 		defaultServerSetup();
 
+		Map<String, String> cookies = U.map("foo", "bar", "COOKIE1", "a");
+
 		String hash1 = Crypto.md5(IO.loadBytes("test1.txt"));
 		String hash2 = Crypto.md5(IO.loadBytes("test2.txt"));
 		String hash3 = Crypto.md5(IO.loadBytes("rabbit.jpg"));
 
-		eq(upload("/upload", U.map("a", "d"), U.map("f1", "test1.txt", "f2", "test2.txt", "f3", "rabbit.jpg")),
-				"bar:a:d:3:" + U.join(":", hash1, hash2, hash3));
+		FileContent file1 = FileContent.from("test1.txt");
+		FileContent file2 = FileContent.from("test2.txt");
+		FileContent file3 = FileContent.from("rabbit.jpg");
+
+		Map<String, List<FileContent>> files = U.map("f1", U.list(file1), "f2", U.list(file2), "f3", U.list(file3));
+
+		String res = HTTP.post(localhost("/upload"))
+				.cookies(cookies)
+				.data("a", "d")
+				.files(files)
+				.fetch();
+
+		eq(res, "bar:a:d:3:" + U.join(":", hash1, hash2, hash3));
 	}
 
 }

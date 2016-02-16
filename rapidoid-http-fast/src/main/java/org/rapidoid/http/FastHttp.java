@@ -33,12 +33,16 @@ import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.http.handler.FastHttpHandler;
+import org.rapidoid.http.handler.FastParamsAwareReqHandler;
 import org.rapidoid.http.handler.FastStaticResourcesHandler;
 import org.rapidoid.http.impl.HandlerMatch;
 import org.rapidoid.http.impl.HandlerMatchWithParams;
 import org.rapidoid.http.listener.FastHttpListener;
+import org.rapidoid.http.listener.IgnorantHttpListener;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
+import org.rapidoid.net.Server;
+import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.u.U;
@@ -138,12 +142,20 @@ public class FastHttp implements Protocol, HttpMetadata {
 		}
 	}
 
+	public FastHttp() {
+		this(new IgnorantHttpListener());
+	}
+
 	public FastHttp(FastHttpListener listener) {
 		this.listener = listener;
 	}
 
 	public synchronized void on(String verb, String path, FastHttpHandler handler) {
 		addOrRemove(true, verb, path, handler);
+	}
+
+	public synchronized void on(String verb, String path, ReqHandler handler) {
+		addOrRemove(true, verb, path, handler(handler));
 	}
 
 	public synchronized void remove(String verb, String path) {
@@ -803,6 +815,10 @@ public class FastHttp implements Protocol, HttpMetadata {
 		this.errorHandler = errorHandler;
 	}
 
+	public void setErrorHandler(ReqHandler errorHandler) {
+		this.errorHandler = handler(errorHandler);
+	}
+
 	public FastHttpHandler getErrorHandler() {
 		return errorHandler;
 	}
@@ -821,6 +837,18 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	public ViewRenderer getRenderer() {
 		return renderer;
+	}
+
+	public FastHttpHandler handler(ReqHandler reqHandler, HttpWrapper... wrappers) {
+		return new FastParamsAwareReqHandler(this, MediaType.HTML_UTF_8, wrappers, reqHandler);
+	}
+
+	public Server listen(String address, int port) {
+		return TCP.server().protocol(this).address(address).port(port).build().start();
+	}
+
+	public Server listen(int port) {
+		return listen("0.0.0.0", port);
 	}
 
 }

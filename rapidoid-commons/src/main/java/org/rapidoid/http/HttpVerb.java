@@ -2,7 +2,7 @@ package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-http-fast
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,8 +20,12 @@ package org.rapidoid.http;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 
+@Authors("Nikolche Mihajlovski")
+@Since("5.1.0")
 public enum HttpVerb {
 
 	GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD, TRACE;

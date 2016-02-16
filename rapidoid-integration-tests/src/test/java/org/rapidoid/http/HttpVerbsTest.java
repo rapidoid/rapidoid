@@ -40,14 +40,14 @@ public class HttpVerbsTest extends HttpTestCommons {
 		On.head("/testHead").plain(""); // no body for the HEAD verb
 		On.trace("/testTrace").plain("trace:success");
 
-		eq(new String(HTTP.get("http://localhost:8888/testGet")), "get:success");
-		eq(new String(HTTP.post("http://localhost:8888/testPost")), "post:success");
-		eq(new String(HTTP.put("http://localhost:8888/testPut")), "put:success");
-		eq(new String(HTTP.delete("http://localhost:8888/testDelete")), "delete:success");
-		eq(new String(HTTP.patch("http://localhost:8888/testPatch")), "patch:success");
-		eq(new String(HTTP.options("http://localhost:8888/testOptions")), "options:success");
-		eq(new String(HTTP.head("http://localhost:8888/testHead")), ""); // no body for the HEAD verb
-		eq(new String(HTTP.trace("http://localhost:8888/testTrace")), "trace:success");
+		eq(HTTP.get("http://localhost:8888/testGet").fetch(), "get:success");
+		eq(HTTP.post("http://localhost:8888/testPost").fetch(), "post:success");
+		eq(HTTP.put("http://localhost:8888/testPut").fetch(), "put:success");
+		eq(HTTP.delete("http://localhost:8888/testDelete").fetch(), "delete:success");
+		eq(HTTP.patch("http://localhost:8888/testPatch").fetch(), "patch:success");
+		eq(HTTP.options("http://localhost:8888/testOptions").fetch(), "options:success");
+		eq(HTTP.head("http://localhost:8888/testHead").fetch(), ""); // no body for the HEAD verb
+		eq(HTTP.trace("http://localhost:8888/testTrace").fetch(), "trace:success");
 	}
 
 }

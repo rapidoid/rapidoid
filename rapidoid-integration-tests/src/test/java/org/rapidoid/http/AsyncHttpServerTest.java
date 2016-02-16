@@ -67,8 +67,8 @@ public class AsyncHttpServerTest extends HttpTestCommons {
 			}
 		});
 
-		eq(new String(HTTP.get("http://localhost:8888/")), "OK");
-		eq(new String(HTTP.post("http://localhost:8888/", null, new byte[0], null)), "OK");
+		eq(HTTP.get("http://localhost:8888/").fetch(), "OK");
+		eq(HTTP.post("http://localhost:8888/").fetch(), "OK");
 	}
 
 	private static void write(OutputStream out, String s) {

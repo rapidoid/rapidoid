@@ -20,7 +20,6 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.apache.http.client.ClientProtocolException;
 import org.junit.After;
 import org.junit.Before;
 import org.rapidoid.annotation.Authors;
@@ -36,6 +35,7 @@ import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.D;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.web.On;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,7 +61,6 @@ public abstract class HttpTestCommons extends TestCommons {
 		System.out.println("--- STARTING SERVER ---");
 
 		Conf.reset();
-		HTTP.STATEFUL_CLIENT.reset();
 
 		On.getDefaultSetup().http().resetConfig();
 		On.getDefaultSetup().listen();
@@ -96,58 +95,33 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected void defaultServerSetup() {
-		On.get("/echo").plain(new ReqHandler() {
-			@Override
-			public Object execute(Req x) throws Exception {
-				return x.verb() + ":" + x.path() + ":" + x.query();
-			}
+		On.get("/echo").plain((Req x) -> {
+			return x.verb() + ":" + x.path() + ":" + x.query();
 		});
 
-		On.get("/hello").html(new ReqHandler() {
-			@Override
-			public Object execute(Req x) {
-				return "Hello";
-			}
+		On.get("/hello").html("Hello");
+
+		On.post("/upload").plain((Req x) -> {
+			Log.info("Uploaded files", "files", x.files().keySet());
+
+			return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.posted().get("a"), x.files()
+					.size(), Crypto.md5(x.files().get("f1")), Crypto.md5(x.files().get("f2")), Crypto.md5(U.or(x
+					.files().get("f3"), new byte[0])));
 		});
 
-		On.post("/upload").plain(new ReqHandler() {
-			@Override
-			public Object execute(Req x) {
-				Log.info("Uploaded files", "files", x.files().keySet());
-				return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.posted().get("a"), x.files()
-						.size(), Crypto.md5(x.files().get("f1")), Crypto.md5(x.files().get("f2")), Crypto.md5(U.or(x
-						.files().get("f3"), new byte[0])));
-			}
-		});
-
-		On.req(new ReqHandler() {
-			@Override
-			public Object execute(Req x) {
-				return x.response().html(U.join(":", x.verb(), x.path(), x.query()));
-			}
-		});
+		On.req((Req x) -> x.response().html(U.join(":", x.verb(), x.path(), x.query())));
 	}
 
 	protected String resourceMD5(String filename) throws IOException, URISyntaxException {
 		return Crypto.md5(IO.loadBytes(filename));
 	}
 
-	protected String upload(String uri, Map<String, String> params, Map<String, String> files) throws IOException,
-			ClientProtocolException {
-		Map<String, String> headers = U.map("Cookie", "COOKIE1=a", "COOKIE", "foo=bar");
-		return new String(HTTP.post(localhost(8888, uri), headers, params, files));
-	}
-
 	protected String get(String uri) {
-		return new String(HTTP.get(localhost(uri)));
-	}
-
-	protected String statefulGet(String uri) {
-		return new String(HTTP.STATEFUL_CLIENT.get(localhost(uri), null).get());
+		return HTTP.get(localhost(uri)).fetch();
 	}
 
 	protected byte[] getBytes(String uri) {
-		return HTTP.get(localhost(uri));
+		return HTTP.get(localhost(uri)).execute();
 	}
 
 	protected void onlyGet(String uri) {
@@ -219,7 +193,7 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	protected void notFound(int port, String verb, String uri) {
 		String resp = fetch(port, verb, uri);
-		String notFound = IO.load("results/404-not-found");
+		String notFound = IO.load("404-not-found.txt");
 		U.notNull(notFound, "404-not-found");
 		checkResponse(verb, uri, resp, notFound);
 	}
@@ -246,16 +220,16 @@ public abstract class HttpTestCommons extends TestCommons {
 
 			IO.save(filename, resp);
 		} else {
-			checkResponse(verb, uri, resp, IO.load(filename));
+			String expected = U.safe(IO.load(filename));
+			checkResponse(verb, uri, resp, expected);
 		}
 	}
 
 	private String fetch(int port, String verb, String uri) {
-		byte[] res = HTTP.DEFAULT_CLIENT.request(verb, localhost(port, uri), null, null, null, null, null, null, true).get();
-
+		byte[] res = HTTP.verb(HttpVerb.from(verb)).url(localhost(port, uri)).raw(true).execute();
 		String resp = new String(res);
-
 		resp = resp.replaceFirst("Date: .*? GMT", "Date: XXXXX GMT");
+
 		return resp;
 	}
 
