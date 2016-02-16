@@ -21,13 +21,12 @@ package org.rapidoid.net.impl;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Rnd;
 import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Protocol;
-import org.rapidoid.net.TCPServer;
+import org.rapidoid.net.Server;
 import org.rapidoid.net.TCPServerInfo;
 import org.rapidoid.u.U;
 
@@ -40,7 +39,7 @@ import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPServer, TCPServerInfo {
+public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, TCPServerInfo {
 
 	private static final int MAX_PENDING_CONNECTIONS = 16 * 1024;
 
@@ -48,16 +47,12 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 
 	private RapidoidWorker currentWorker;
 
-	@Inject(optional = true)
-	private int port = 8888;
+	private final String address;
 
-	@Inject(optional = true)
-	private String address = "0.0.0.0";
+	private final int port;
 
-	@Inject(optional = true)
 	private int workers = Conf.option("cpus", Runtime.getRuntime().availableProcessors());
 
-	@Inject(optional = true)
 	private boolean blockingAccept = false;
 
 	protected final Protocol protocol;
@@ -71,11 +66,14 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 	private final Selector selector;
 
 	public RapidoidServerLoop(Protocol protocol, Class<? extends DefaultExchange<?>> exchangeClass,
-	                          Class<? extends RapidoidHelper> helperClass) {
+	                          Class<? extends RapidoidHelper> helperClass, String address, int port, int workers) {
 		super("server");
 
 		this.protocol = protocol;
 		this.exchangeClass = exchangeClass;
+		this.address = address;
+		this.port = port;
+		this.workers = workers;
 		this.helperClass = U.or(helperClass, RapidoidHelper.class);
 
 		try {
@@ -165,14 +163,14 @@ public class RapidoidServerLoop extends AbstractLoop<TCPServer> implements TCPSe
 	}
 
 	@Override
-	public synchronized TCPServer start() {
+	public synchronized Server start() {
 		new Thread(this, "server").start();
 
 		return super.start();
 	}
 
 	@Override
-	public synchronized TCPServer shutdown() {
+	public synchronized Server shutdown() {
 		Log.info("Shutting down the server...");
 		stopLoop();
 

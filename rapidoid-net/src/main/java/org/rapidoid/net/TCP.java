@@ -1,4 +1,4 @@
-package org.rapidoid.net.impl;
+package org.rapidoid.net;
 
 /*
  * #%L
@@ -22,32 +22,13 @@ package org.rapidoid.net.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.Builder;
-import org.rapidoid.net.Protocol;
-import org.rapidoid.net.TCPServer;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public interface TCPServerBuilder extends Builder<TCPServer> {
+@Since("5.1.0")
+public class TCP {
 
-	TCPServerBuilder bufSize(int bufSize);
-
-	TCPServerBuilder address(String address);
-
-	TCPServerBuilder port(int port);
-
-	TCPServerBuilder workers(int workers);
-
-	TCPServerBuilder nagle();
-
-	TCPServerBuilder stats();
-
-	TCPServerBuilder micro();
-
-	TCPServerBuilder protocol(Protocol protocol);
-
-	TCPServerBuilder exchange(Class<? extends DefaultExchange<?>> exchangeClass);
-
-	TCPServerBuilder helper(Class<? extends RapidoidHelper> helperClass);
+	public static ServerBuilder server() {
+		return new ServerBuilder();
+	}
 
 }

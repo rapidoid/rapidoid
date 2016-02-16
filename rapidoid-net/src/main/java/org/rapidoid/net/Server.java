@@ -25,8 +25,8 @@ import org.rapidoid.annotation.Since;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public interface TCPServer extends Activity<TCPServer> {
+@Since("5.1.0")
+public interface Server extends Activity<Server> {
 
 	String process(String input);
 

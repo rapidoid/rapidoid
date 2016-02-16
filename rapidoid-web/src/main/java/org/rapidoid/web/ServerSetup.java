@@ -5,12 +5,7 @@ import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
-import org.rapidoid.http.ErrorHandler;
-import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpWrapper;
-import org.rapidoid.http.ReqHandler;
-import org.rapidoid.http.ReqRespHandler;
-import org.rapidoid.http.ViewRenderer;
+import org.rapidoid.http.*;
 import org.rapidoid.http.handler.FastHttpErrorHandler;
 import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqHandler;
@@ -18,8 +13,7 @@ import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqRespHandl
 import org.rapidoid.http.listener.FastHttpListener;
 import org.rapidoid.http.listener.IgnorantHttpListener;
 import org.rapidoid.log.Log;
-import org.rapidoid.net.Serve;
-import org.rapidoid.net.TCPServer;
+import org.rapidoid.net.Server;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
@@ -71,7 +65,7 @@ public class ServerSetup {
 
 	private volatile boolean listening;
 
-	private volatile TCPServer server;
+	private volatile Server server;
 
 	public ServerSetup(String name, String defaultAddress, int defaultPort, ServerSetupType setupType) {
 		this.name = name;
@@ -91,12 +85,11 @@ public class ServerSetup {
 		return fastHttp;
 	}
 
-	public synchronized TCPServer listen() {
+	public synchronized Server listen() {
 		if (!listening) {
 			if (setupType != ServerSetupType.DEV || Conf.dev()) {
 				listening = true;
-				server = Serve.server().protocol(http()).address(address).port(port).build();
-				server.start();
+				server = http().listen(address, port);
 			} else {
 				Log.warn("The application is NOT running in dev mode, so the DEV server is automatically disabled.");
 			}
@@ -282,7 +275,7 @@ public class ServerSetup {
 		path = null;
 	}
 
-	public TCPServer server() {
+	public Server server() {
 		return server;
 	}
 

@@ -29,7 +29,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.net.Protocol;
-import org.rapidoid.net.Serve;
+import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.UTILS;
@@ -81,7 +81,7 @@ public class MaxHttpPerfTest {
 			});
 		}
 
-		Serve.listen(new Protocol() {
+		TCP.server().protocol(new Protocol() {
 			@Override
 			public void process(Channel ctx) {
 				if (ctx.isInitial()) {
@@ -102,7 +102,7 @@ public class MaxHttpPerfTest {
 
 				ctx.write(RESP);
 			}
-		});
+		}).build().start();
 	}
 
 }
