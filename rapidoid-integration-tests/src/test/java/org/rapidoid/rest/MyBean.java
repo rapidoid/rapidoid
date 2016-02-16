@@ -2,7 +2,7 @@ package org.rapidoid.rest;
 
 /*
  * #%L
- * rapidoid-rest
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%

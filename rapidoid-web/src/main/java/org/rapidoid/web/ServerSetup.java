@@ -23,7 +23,7 @@ import java.util.Map;
 
 /*
  * #%L
- * rapidoid-http-fast
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
