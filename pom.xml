@@ -88,8 +88,6 @@
 		<module>rapidoid-gui</module>
 		<module>rapidoid-oauth</module>
 		<module>rapidoid-templates-mustache</module>
-		<module>rapidoid-cache-guava</module>
-		<module>rapidoid-cache-memcached</module>
 		<module>rapidoid-db-hibernate</module>
 		<module>rapidoid-web</module>
 		<module>rapidoid-quick</module>
