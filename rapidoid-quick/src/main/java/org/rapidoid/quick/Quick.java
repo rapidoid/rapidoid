@@ -28,8 +28,6 @@ import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
-import org.rapidoid.plugins.Plugins;
-import org.rapidoid.plugins.db.hibernate.HibernateDBPlugin;
 import org.rapidoid.u.U;
 import org.rapidoid.webapp.TransactionInterceptor;
 
@@ -46,8 +44,6 @@ public class Quick {
 	public static void bootstrap(final String[] args, Object... config) {
 		Ctx ctx = Ctxs.open("quick");
 		Ctxs.setPersisterProvider(new QuickJPA(config));
-
-		Plugins.register(new HibernateDBPlugin());
 
 		AOP.intercept(new TransactionInterceptor(), Transaction.class, Transactional.class);
 

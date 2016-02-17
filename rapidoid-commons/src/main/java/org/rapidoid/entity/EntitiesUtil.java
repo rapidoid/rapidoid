@@ -6,7 +6,6 @@ import org.rapidoid.annotation.Scaffold;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.plugins.entities.AbstractEntitiesPlugin;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
 
@@ -35,15 +34,10 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class AppClasspathEntitiesPlugin extends AbstractEntitiesPlugin {
-
-	public AppClasspathEntitiesPlugin() {
-		super("classpath");
-	}
+public class EntitiesUtil {
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public synchronized <E> Class<E> getEntityType(String simpleTypeName) {
+	public static synchronized <E> Class<E> getEntityType(String simpleTypeName) {
 
 		for (Class<?> type : Scan.annotated(DbEntity.class).getAll()) {
 			if (type.getSimpleName().equalsIgnoreCase(simpleTypeName)) {
@@ -61,8 +55,7 @@ public class AppClasspathEntitiesPlugin extends AbstractEntitiesPlugin {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public <E> Class<E> getEntityTypeFor(Class<E> clazz) {
+	public static <E> Class<E> getEntityTypeFor(Class<E> clazz) {
 		if (IEntity.class.isAssignableFrom(clazz)) {
 			if (Proxy.class.isAssignableFrom(clazz)) {
 				for (Class<?> interf : clazz.getInterfaces()) {
@@ -77,14 +70,12 @@ public class AppClasspathEntitiesPlugin extends AbstractEntitiesPlugin {
 		return clazz;
 	}
 
-	@Override
-	public <E> E create(Class<E> clazz) {
+	public static <E> E create(Class<E> clazz) {
 		return create(clazz, null);
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public <E> E create(Class<E> clazz, Map<String, ?> properties) {
+	public static <E> E create(Class<E> clazz, Map<String, ?> properties) {
 		U.notNull(clazz, "entity class");
 		Class<E> entityType = getEntityTypeFor(clazz);
 		U.notNull(entityType, "entity type");

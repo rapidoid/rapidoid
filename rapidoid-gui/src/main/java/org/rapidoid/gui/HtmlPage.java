@@ -29,10 +29,8 @@ import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.html.Tag;
-import org.rapidoid.plugins.Plugins;
-import org.rapidoid.plugins.templates.ITemplate;
-import org.rapidoid.plugins.templates.Templates;
-import org.rapidoid.templates.MustacheTemplatesPlugin;
+import org.rapidoid.templates.ITemplate;
+import org.rapidoid.templates.Templates;
 import org.rapidoid.u.U;
 
 import java.util.Map;
@@ -58,7 +56,6 @@ public class HtmlPage extends AbstractWidget {
 
 	private static void initTemplates() {
 		if (PAGE_TEMPLATE == null || PAGE_CONTENT_TEMPLATE == null) {
-			Plugins.register(new MustacheTemplatesPlugin());
 			PAGE_TEMPLATE = Templates.fromFile("page.html");
 			PAGE_CONTENT_TEMPLATE = Templates.fromFile("page-ajax.html");
 		}

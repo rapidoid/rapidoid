@@ -23,10 +23,8 @@ package org.rapidoid.test;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.plugins.Plugins;
-import org.rapidoid.plugins.templates.ITemplate;
-import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
-import org.rapidoid.plugins.templates.Templates;
+import org.rapidoid.templates.ITemplate;
+import org.rapidoid.templates.Templates;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
@@ -35,8 +33,6 @@ public class MustacheTemplatesTest extends TestCommons {
 
 	@Test
 	public void testTemplateLoading() {
-		Plugins.register(new MustacheTemplatesPlugin());
-
 		ITemplate templ = Templates.fromFile("templ1.html");
 
 		eq(templ.render(U.map("x", "123")), "A:123:B:OK:C");

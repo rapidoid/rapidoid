@@ -24,13 +24,7 @@ import com.github.mustachejava.MustacheFactory;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.plugins.Plugins;
-import org.rapidoid.plugins.templates.ITemplate;
-import org.rapidoid.plugins.templates.Templates;
-import org.rapidoid.templates.MustacheFileTemplate;
-import org.rapidoid.templates.MustacheStringTemplate;
-import org.rapidoid.templates.MustacheTemplatesPlugin;
-import org.rapidoid.templates.RapidoidMustacheFactory;
+import org.rapidoid.templates.*;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
@@ -58,15 +52,11 @@ public class MustacheTemplatesTest extends TestCommons {
 
 	@Test
 	public void testFileTemplatesAPI() {
-		Plugins.register(new MustacheTemplatesPlugin());
-
 		eq(Templates.fromFile("main.html").render(U.map("x", 1), U.map("y", "s")), "A-s[s]B-s[s]:1(1)");
 	}
 
 	@Test
 	public void testStringTemplatesAPI() {
-		Plugins.register(new MustacheTemplatesPlugin());
-
 		eq(Templates.fromString("$$x$$-{{y}}").render(U.map("x", 1), U.map("y", "2")), "1-2");
 	}
 

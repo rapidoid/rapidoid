@@ -1,0 +1,159 @@
+package org.rapidoid.plugins.db.hibernate;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
+import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.lambda.Operation;
+import org.rapidoid.lambda.Predicate;
+
+import javax.persistence.EntityManager;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+
+/*
+ * #%L
+ * rapidoid-db-hibernate
+ * %%
+ * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
+@Authors("Nikolche Mihajlovski")
+@Since("5.1.0")
+public class JPA {
+
+	public static EntityManager em() {
+		return Ctxs.ctx().persister();
+	}
+
+	public static JPAUtil with(EntityManager em) {
+		return JPAUtil.with(em);
+	}
+
+	public static String persist(Object record) {
+		return with(em()).persist(record);
+	}
+
+	public static <E> List<E> find(Class<E> clazz, Predicate<E> match, Comparator<E> orderBy) {
+		return with(em()).find(clazz, match, orderBy);
+	}
+
+	public static <E> List<E> sorted(List<E> records, Comparator<E> orderBy) {
+		return with(em()).sorted(records, orderBy);
+	}
+
+	public static <E> List<E> getAll() {
+		return with(em()).getAll();
+	}
+
+	public static void update(String id, Object entity) {
+		with(em()).update(id, entity);
+	}
+
+	public static void update(Object record) {
+		with(em()).update(record);
+	}
+
+	public static long size() {
+		return with(em()).size();
+	}
+
+	public static <T> T getIfExists(Class<T> clazz, String id) {
+		return with(em()).getIfExists(clazz, id);
+	}
+
+	public static <E> void each(Operation<E> lambda) {
+		with(em()).each(lambda);
+	}
+
+	public static void transaction(Runnable action, boolean readonly) {
+		with(em()).transaction(action, readonly);
+	}
+
+	public static <E> List<E> getAll(Class<E> clazz, List<String> ids) {
+		return with(em()).getAll(clazz, ids);
+	}
+
+	public static boolean matches(Object record, String query, Object... args) {
+		return with(em()).matches(record, query, args);
+	}
+
+	public static <T> List<T> getAll(Class<T> clazz) {
+		return with(em()).getAll(clazz);
+	}
+
+	public static void refresh(Object entity) {
+		with(em()).refresh(entity);
+	}
+
+	public static String insertOrGetId(Object record) {
+		return with(em()).insertOrGetId(record);
+	}
+
+	public static <E> List<E> fullTextSearch(String searchPhrase) {
+		return with(em()).fullTextSearch(searchPhrase);
+	}
+
+	public static void deleteAllData() {
+		with(em()).deleteAllData();
+	}
+
+	public static <RESULT> RESULT sql(String sql, Object... args) {
+		return with(em()).sql(sql, args);
+	}
+
+	public static void delete(Object record) {
+		with(em()).delete(record);
+	}
+
+	public static <E> E entity(Class<E> entityType, Map<String, ?> properties) {
+		return with(em()).entity(entityType, properties);
+	}
+
+	public static <E> List<E> query(Class<E> clazz, String query, Object... args) {
+		return with(em()).query(clazz, query, args);
+	}
+
+	public static String insert(Object entity) {
+		return with(em()).insert(entity);
+	}
+
+	public static Object castId(Class<?> clazz, String id) {
+		return with(em()).castId(clazz, id);
+	}
+
+	public static void transaction(Runnable tx, boolean readonly, Callback<Void> callback) {
+		with(em()).transaction(tx, readonly, callback);
+	}
+
+	public static <E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
+		return with(em()).getAll(clazz, pageNumber, pageSize);
+	}
+
+	public static <E> void delete(Class<E> clazz, String id) {
+		with(em()).delete(clazz, id);
+	}
+
+	public static <E> E get(Class<E> clazz, String id) {
+		return with(em()).get(clazz, id);
+	}
+
+	public static <E> List<E> find(Predicate<E> match) {
+		return with(em()).find(match);
+	}
+
+}

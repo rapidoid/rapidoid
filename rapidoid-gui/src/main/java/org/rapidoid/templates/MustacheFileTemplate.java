@@ -24,16 +24,16 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.plugins.templates.AbstractTemplate;
 import org.rapidoid.u.U;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class MustacheFileTemplate extends AbstractTemplate {
+public class MustacheFileTemplate implements ITemplate {
 
 	private final MustacheFactory factory;
 
@@ -44,6 +44,7 @@ public class MustacheFileTemplate extends AbstractTemplate {
 		this.filename = filename;
 	}
 
+	@Override
 	public void render(OutputStream output, Object... scopes) {
 		Mustache mustache = factory.compile(filename);
 
@@ -52,6 +53,13 @@ public class MustacheFileTemplate extends AbstractTemplate {
 		} catch (IOException e) {
 			throw U.rte("Cannot render the template: " + filename, e);
 		}
+	}
+
+	@Override
+	public String render(Object... scopes) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		render(out, scopes);
+		return out.toString();
 	}
 
 }

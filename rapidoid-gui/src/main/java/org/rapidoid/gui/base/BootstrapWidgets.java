@@ -20,7 +20,6 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
-import org.rapidoid.plugins.db.DB;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
@@ -465,11 +464,6 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static <T> Items beanItems(Class<T> beanType, T... beans) {
 		return Models.beanItems(beanType, beans);
-	}
-
-	public static <E> Grid grid(Class<E> entityType, int pageSize, String... properties) {
-		Iterable<E> all = DB.getAll(entityType);
-		return grid(entityType, all, "", pageSize, properties);
 	}
 
 	public static Tag media(Object left, Object title, Object body, String targetUrl) {

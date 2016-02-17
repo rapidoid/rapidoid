@@ -40,7 +40,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
-import org.rapidoid.plugins.db.DB;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
@@ -358,7 +357,7 @@ public class Field extends AbstractWidget {
 
 	protected Collection<?> getOptionsOfType(Class<?> clazz) {
 		if (Cls.kindOf(clazz) == TypeKind.OBJECT && Beany.hasProperty(clazz, "id")) {
-			return U.list(DB.getAll(clazz));
+			return Collections.EMPTY_LIST; // FIXME use magic?
 		} else {
 			return Collections.EMPTY_LIST;
 		}

@@ -1,13 +1,8 @@
-package org.rapidoid.plugins.email;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Callback;
-import org.rapidoid.plugins.AbstractPlugin;
+package org.rapidoid.templates;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-templates-mustache
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -25,18 +20,22 @@ import org.rapidoid.plugins.AbstractPlugin;
  * #L%
  */
 
+import com.github.mustachejava.MustacheFactory;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public abstract class AbstractEmailPlugin extends AbstractPlugin implements EmailPlugin {
+public class Templates {
 
-	public AbstractEmailPlugin(String name) {
-		super(name);
+	private static final MustacheFactory factory = new RapidoidMustacheFactory();
+
+	public static ITemplate fromFile(String filename) {
+		return new MustacheFileTemplate(factory, filename);
 	}
 
-	@Override
-	public void send(Iterable<String> to, Iterable<String> cc, Iterable<String> bcc, String subject, String body,
-	                 Callback<Void> callback) {
-		throw new AbstractMethodError("Not implemented!");
+	public static ITemplate fromString(String template) {
+		return new MustacheStringTemplate(factory, template);
 	}
 
 }

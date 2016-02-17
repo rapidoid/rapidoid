@@ -24,17 +24,13 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.plugins.templates.AbstractTemplate;
 import org.rapidoid.u.U;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.StringReader;
+import java.io.*;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class MustacheStringTemplate extends AbstractTemplate {
+public class MustacheStringTemplate implements ITemplate {
 
 	private final MustacheFactory factory;
 
@@ -53,6 +49,13 @@ public class MustacheStringTemplate extends AbstractTemplate {
 		} catch (IOException e) {
 			throw U.rte("Cannot render the string template!", e);
 		}
+	}
+
+	@Override
+	public String render(Object... scopes) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		render(out, scopes);
+		return out.toString();
 	}
 
 }

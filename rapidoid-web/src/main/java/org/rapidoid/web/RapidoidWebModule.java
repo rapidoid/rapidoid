@@ -3,10 +3,7 @@ package org.rapidoid.web;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOP;
-import org.rapidoid.entity.AppClasspathEntitiesPlugin;
 import org.rapidoid.log.Log;
-import org.rapidoid.plugins.Plugins;
-import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
 import org.rapidoid.security.annotation.*;
 
 /*
@@ -35,9 +32,6 @@ public class RapidoidWebModule {
 
 	static {
 		Log.info("Initializing the Rapidoid Web module");
-
-		Plugins.register(new MustacheTemplatesPlugin());
-		Plugins.register(new AppClasspathEntitiesPlugin());
 
 		AOP.reset();
 

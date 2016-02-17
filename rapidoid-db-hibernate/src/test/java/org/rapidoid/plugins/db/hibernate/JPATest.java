@@ -35,7 +35,7 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class HibernateDBPluginTest extends TestCommons {
+public class JPATest extends TestCommons {
 
 	@Test
 	public void testBasicCRUD() {
@@ -46,7 +46,7 @@ public class HibernateDBPluginTest extends TestCommons {
 		Ctxs.setPersisterProvider(new SimplePersistorProvider(em));
 		Ctxs.open("test");
 
-		final HibernateDBPlugin db = new HibernateDBPlugin();
+		final JPA db = new JPA();
 
 		final Book b1 = new Book("book 1");
 		final Book b2 = new Book("book 2");

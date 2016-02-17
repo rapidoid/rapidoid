@@ -1,6 +1,6 @@
 package org.rapidoid.dao;
 
-import org.rapidoid.plugins.db.DB;
+import org.rapidoid.plugins.db.hibernate.JPA;
 import org.rapidoid.u.U;
 
 import java.lang.reflect.ParameterizedType;
@@ -67,31 +67,31 @@ public abstract class DAO<E> {
 	}
 
 	public String insert(E record) {
-		return DB.insert(record);
+		return JPA.insert(record);
 	}
 
 	public void update(String id, E record) {
-		DB.update(id, record);
+		JPA.update(id, record);
 	}
 
 	public void delete(String id) {
-		DB.delete(clazz, id);
+		JPA.delete(clazz, id);
 	}
 
 	public void delete(E record) {
-		DB.delete(record);
+		JPA.delete(record);
 	}
 
 	public E get(String id) {
-		return DB.get(clazz, id);
+		return JPA.get(clazz, id);
 	}
 
 	public Iterable<E> all() {
-		return DB.getAll(clazz);
+		return JPA.getAll(clazz);
 	}
 
 	public Iterable<E> page(int page) {
-		return DB.getAll(clazz, page, 20);
+		return JPA.getAll(clazz, page, 20);
 	}
 
 }

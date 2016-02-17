@@ -29,7 +29,7 @@ import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.log.Log;
-import org.rapidoid.plugins.db.DB;
+import org.rapidoid.plugins.db.hibernate.JPA;
 import org.rapidoid.u.U;
 
 import java.lang.annotation.Annotation;
@@ -55,7 +55,7 @@ public class TransactionInterceptor implements AOPInterceptor {
 
 		req.async();
 
-		DB.transaction(new Runnable() {
+		JPA.transaction(new Runnable() {
 			@Override
 			public void run() {
 				req.response().content(Lmbd.call(forward));

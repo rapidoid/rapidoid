@@ -125,7 +125,7 @@ public class On {
 		return DEFAULT_SETUP.path();
 	}
 
-	public static synchronized Setup defaultWrap(HttpWrapper... wrappers) {
+	public static synchronized Setup wrap(HttpWrapper... wrappers) {
 		return DEFAULT_SETUP.wrap(wrappers);
 	}
 
