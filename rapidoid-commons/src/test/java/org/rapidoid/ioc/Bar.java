@@ -1,4 +1,4 @@
-package org.rapidoid.wire.db;
+package org.rapidoid.ioc;
 
 /*
  * #%L
@@ -24,9 +24,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
 
+import java.util.concurrent.Callable;
+
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Relat {
+public class Bar {
+
 	@Inject
-	Database db;
+	Callable<String> callable;
+
 }

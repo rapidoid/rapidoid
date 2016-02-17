@@ -142,7 +142,7 @@ public class Cls {
 
 	public static void setFieldValue(Object instance, String fieldName, Object value) {
 		try {
-			for (Class<?> c = instance.getClass(); c != Object.class; c = c.getSuperclass()) {
+			for (Class<?> c = instance.getClass(); c.getSuperclass() != null; c = c.getSuperclass()) {
 				try {
 					Field field = c.getDeclaredField(fieldName);
 					field.setAccessible(true);
@@ -181,7 +181,7 @@ public class Cls {
 
 	public static Object getFieldValue(Object instance, String fieldName) {
 		try {
-			for (Class<?> c = instance.getClass(); c != Object.class; c = c.getSuperclass()) {
+			for (Class<?> c = instance.getClass(); c.getSuperclass() != null; c = c.getSuperclass()) {
 				try {
 					Field field = c.getDeclaredField(fieldName);
 					return getFieldValue(field, instance);
@@ -212,7 +212,7 @@ public class Cls {
 		List<Annotation> allAnnotations = U.list();
 
 		try {
-			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
+			for (Class<?> c = clazz; c.getSuperclass() != null; c = c.getSuperclass()) {
 				Annotation[] annotations = c.getDeclaredAnnotations();
 				for (Annotation an : annotations) {
 					allAnnotations.add(an);
@@ -230,7 +230,7 @@ public class Cls {
 		List<Field> allFields = U.list();
 
 		try {
-			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
+			for (Class<?> c = clazz; c.getSuperclass() != null; c = c.getSuperclass()) {
 				Field[] fields = c.getDeclaredFields();
 				for (Field field : fields) {
 					allFields.add(field);
@@ -248,7 +248,7 @@ public class Cls {
 		List<Field> annotatedFields = U.list();
 
 		try {
-			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
+			for (Class<?> c = clazz; c.getSuperclass() != null; c = c.getSuperclass()) {
 				Field[] fields = c.getDeclaredFields();
 				for (Field field : fields) {
 					if (field.isAnnotationPresent(annotation)) {
@@ -268,7 +268,7 @@ public class Cls {
 		List<Method> methods = U.list();
 
 		try {
-			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
+			for (Class<?> c = clazz; c.getSuperclass() != null; c = c.getSuperclass()) {
 				for (Method method : c.getDeclaredMethods()) {
 					methods.add(method);
 				}
@@ -285,7 +285,7 @@ public class Cls {
 		List<Method> annotatedMethods = U.list();
 
 		try {
-			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
+			for (Class<?> c = clazz; c.getSuperclass() != null; c = c.getSuperclass()) {
 				Method[] methods = c.getDeclaredMethods();
 				for (Method method : methods) {
 					if (method.isAnnotationPresent(annotation)) {
@@ -305,7 +305,7 @@ public class Cls {
 		List<Method> annotatedMethods = U.list();
 
 		try {
-			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
+			for (Class<?> c = clazz; c.getSuperclass() != null; c = c.getSuperclass()) {
 				Method[] methods = c.getDeclaredMethods();
 				for (Method method : methods) {
 					if (method.getName().equals(name)) {
@@ -403,7 +403,7 @@ public class Cls {
 		try {
 			List<Class<?>> interfaces = new LinkedList<Class<?>>();
 
-			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
+			for (Class<?> c = clazz; c.getSuperclass() != null; c = c.getSuperclass()) {
 				for (Class<?> interf : c.getInterfaces()) {
 					interfaces.add(interf);
 				}

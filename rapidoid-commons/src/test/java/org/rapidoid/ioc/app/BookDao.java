@@ -1,4 +1,4 @@
-package org.rapidoid.wire.db;
+package org.rapidoid.ioc.app;
 
 /*
  * #%L
@@ -23,14 +23,11 @@ package org.rapidoid.wire.db;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ioc.Logger;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Table {
-
+public class BookDao {
 	@Inject
-	Database db;
-
-	@Inject
-	Transactor transactor;
+	Logger logger;
 }

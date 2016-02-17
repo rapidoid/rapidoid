@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.u.U;
-import org.rapidoid.wire.Wire;
+import org.rapidoid.ioc.IoC;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -59,7 +59,7 @@ public class RapidoidWorkerThread extends Thread {
 
 	@Override
 	public void run() {
-		Wire.autowire(this);
+		IoC.autowire(this);
 
 		RapidoidHelper helper = Cls.newInstance(helperClass, exchangeClass);
 		helper.requestIdGen = workerIndex; // to generate UNIQUE request ID (+= MAX_IO_WORKERS)

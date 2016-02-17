@@ -1,4 +1,4 @@
-package org.rapidoid.wire.basic;
+package org.rapidoid.ioc;
 
 /*
  * #%L
@@ -20,31 +20,39 @@ package org.rapidoid.wire.basic;
  * #L%
  */
 
-import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.AbstractCommonsTest;
-import org.rapidoid.wire.Wire;
+
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class CallableInjectionTest extends AbstractCommonsTest {
+@Since("5.1.0")
+public class IoC {
 
-	@Test
-	public void shouldInject() throws Exception {
-		Wire.manage(MyCallable.class);
+	private static final IoCContext DEFAULT_CONTEXT = new IoCContext();
 
-		Foo foo = Wire.singleton(Foo.class);
+	public static synchronized IoCContext getDefault() {
+		return DEFAULT_CONTEXT;
+	}
 
-		notNullAll(foo, foo.callable);
-		hasType(foo.callable, MyCallable.class);
+	public static synchronized void manage(Object... classesOrInstances) {
+		DEFAULT_CONTEXT.manage(classesOrInstances);
+	}
 
-		MyCallable myCallable = (MyCallable) foo.callable;
-		notNull(myCallable.foo);
+	public static synchronized <T> T singleton(Class<T> type) {
+		return DEFAULT_CONTEXT.singleton(type);
+	}
 
-		eq(myCallable.foo, foo);
+	public static synchronized <T> T autowire(T target) {
+		return DEFAULT_CONTEXT.autowire(target);
+	}
 
-		eq(foo.callable.call(), "abc");
+	public static synchronized <T> T inject(T target) {
+		return DEFAULT_CONTEXT.inject(target);
+	}
+
+	public static synchronized <T> T inject(T target, Map<String, Object> properties) {
+		return DEFAULT_CONTEXT.inject(target, properties);
 	}
 
 }

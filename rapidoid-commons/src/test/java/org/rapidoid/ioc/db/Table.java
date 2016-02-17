@@ -1,7 +1,4 @@
-package org.rapidoid.wire;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+package org.rapidoid.ioc.db;
 
 /*
  * #%L
@@ -23,7 +20,17 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.Since;
+
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Logger {
+public class Table {
+
+	@Inject
+	Database db;
+
+	@Inject
+	Transactor transactor;
 }

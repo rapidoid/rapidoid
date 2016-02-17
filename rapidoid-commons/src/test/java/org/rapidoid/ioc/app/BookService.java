@@ -1,4 +1,4 @@
-package org.rapidoid.wire.app;
+package org.rapidoid.ioc.app;
 
 /*
  * #%L
@@ -23,11 +23,14 @@ package org.rapidoid.wire.app;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.wire.Logger;
+import org.rapidoid.ioc.Logger;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class PersonServiceImpl implements PersonService {
+public class BookService {
+	@Inject
+	BookDao dao;
+
 	@Inject
 	Logger logger;
 }

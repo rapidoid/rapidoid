@@ -463,7 +463,7 @@ public class Field extends AbstractWidget {
 	public static String propVarName(Object target, String name) {
 		return name;
 
-		// TODO consider complex names (see Wire.propVarName)
+		// TODO consider complex names (see IoC.propVarName)
 		// (e.g. Person.name in future
 		// if (Cls.isBean(target)) {
 		// return target.getClass().getSimpleName() + "." + name;

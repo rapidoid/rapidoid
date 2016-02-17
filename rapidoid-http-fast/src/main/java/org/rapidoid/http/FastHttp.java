@@ -48,7 +48,7 @@ import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.wire.Wire;
+import org.rapidoid.ioc.IoC;
 import org.rapidoid.wrap.BoolWrap;
 
 import java.io.Serializable;
@@ -84,7 +84,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	private static final byte[] DATE_IS = "Date: ".getBytes();
 
-	private static final HttpParser HTTP_PARSER = Wire.singleton(HttpParser.class);
+	private static final HttpParser HTTP_PARSER = IoC.singleton(HttpParser.class);
 
 	private static final byte[] _POST = Constants.POST.getBytes();
 	private static final byte[] _PUT = Constants.PUT.getBytes();

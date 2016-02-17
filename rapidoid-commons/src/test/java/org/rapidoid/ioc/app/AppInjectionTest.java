@@ -1,4 +1,4 @@
-package org.rapidoid.wire.app;
+package org.rapidoid.ioc.app;
 
 /*
  * #%L
@@ -20,17 +20,31 @@ package org.rapidoid.wire.app;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.wire.Logger;
+import org.rapidoid.test.AbstractCommonsTest;
+import org.rapidoid.ioc.IoC;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class BookService {
-	@Inject
-	BookDao dao;
+public class AppInjectionTest extends AbstractCommonsTest {
 
-	@Inject
-	Logger logger;
+	@Test
+	public void shouldInjectAndCallPostConstruct() {
+		IoC.manage(App.class, PersonServiceImpl.class);
+		isTrue(App.READY);
+
+		App app = IoC.singleton(App.class);
+		same(app, IoC.singleton(App.class), IoC.singleton(App.class));
+
+		notNull(app.personService);
+		notNull(app.bookService);
+		notNull(app.bookService.dao);
+
+		same(app.personService, app.personService2);
+
+		same(app.logger, app.personService2.logger, app.bookService.logger, app.bookService.dao.logger);
+	}
+
 }

@@ -27,7 +27,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.wire.Wire;
+import org.rapidoid.ioc.IoC;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -87,7 +87,7 @@ public class PojoHandlersSetup {
 						if (shouldExpose(method)) {
 
 							if (controller instanceof Class<?>) {
-								controller = register ? Wire.singleton(clazz) : null;
+								controller = register ? IoC.singleton(clazz) : null;
 							}
 
 							registerOrDeregister(register, controller, ctxPath, method);

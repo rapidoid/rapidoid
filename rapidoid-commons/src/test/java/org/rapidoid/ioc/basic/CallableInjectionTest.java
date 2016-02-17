@@ -1,4 +1,4 @@
-package org.rapidoid.wire.basic;
+package org.rapidoid.ioc.basic;
 
 /*
  * #%L
@@ -20,17 +20,31 @@ package org.rapidoid.wire.basic;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
-
-import java.util.concurrent.Callable;
+import org.rapidoid.test.AbstractCommonsTest;
+import org.rapidoid.ioc.IoC;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Foo {
+public class CallableInjectionTest extends AbstractCommonsTest {
 
-	@Inject
-	Callable<String> callable;
+	@Test
+	public void shouldInject() throws Exception {
+		IoC.manage(MyCallable.class);
+
+		Foo foo = IoC.singleton(Foo.class);
+
+		notNullAll(foo, foo.callable);
+		hasType(foo.callable, MyCallable.class);
+
+		MyCallable myCallable = (MyCallable) foo.callable;
+		notNull(myCallable.foo);
+
+		eq(myCallable.foo, foo);
+
+		eq(foo.callable.call(), "abc");
+	}
 
 }

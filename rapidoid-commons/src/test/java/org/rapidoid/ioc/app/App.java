@@ -1,4 +1,4 @@
-package org.rapidoid.wire.app;
+package org.rapidoid.ioc.app;
 
 /*
  * #%L
@@ -20,14 +20,31 @@ package org.rapidoid.wire.app;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Inject;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.wire.Logger;
+import org.rapidoid.annotation.*;
+import org.rapidoid.ioc.Logger;
 
+@Autocreate
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class BookDao {
+public class App {
+
+	static boolean READY = false;
+
 	@Inject
 	Logger logger;
+
+	@Inject
+	PersonService personService;
+
+	@Inject
+	PersonServiceImpl personService2;
+
+	@Inject
+	BookService bookService;
+
+	@Init
+	public void callThisWhenReady() {
+		READY = true;
+	}
+
 }

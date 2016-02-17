@@ -27,7 +27,7 @@ import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 import org.rapidoid.web.On;
-import org.rapidoid.wire.Wire;
+import org.rapidoid.ioc.IoC;
 
 import javax.annotation.Generated;
 import java.util.List;
@@ -78,7 +78,7 @@ public class HttpPojoControllerTest extends HttpTestCommons {
 		List<Class<?>> ctrls2 = On.annotated(MyTestController.class, Generated.class).getAll();
 		eq(ctrls2, U.list(Ff.class));
 
-		On.annotated(MyTestController.class, MyTestController.class).forEach(cls -> On.beans(Wire.singleton(cls)));
+		On.annotated(MyTestController.class, MyTestController.class).forEach(cls -> On.beans(IoC.singleton(cls)));
 
 		onlyGet("/b");
 		onlyGet("/x");

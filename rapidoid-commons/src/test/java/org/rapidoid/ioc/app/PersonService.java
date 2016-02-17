@@ -1,4 +1,7 @@
-package org.rapidoid.wire.basic;
+package org.rapidoid.ioc.app;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -20,22 +23,7 @@ package org.rapidoid.wire.basic;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Inject;
-import org.rapidoid.annotation.Since;
-
-import java.util.concurrent.Callable;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class MyCallable implements Callable<String> {
-
-	@Inject
-	Foo foo;
-
-	@Override
-	public String call() throws Exception {
-		return "abc";
-	}
-
+public interface PersonService {
 }

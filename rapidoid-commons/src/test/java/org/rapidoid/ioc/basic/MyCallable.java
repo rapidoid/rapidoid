@@ -1,4 +1,4 @@
-package org.rapidoid.wire.db;
+package org.rapidoid.ioc.basic;
 
 /*
  * #%L
@@ -23,19 +23,19 @@ package org.rapidoid.wire.db;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.wire.Wire;
 
-import java.util.Map;
+import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Database {
+public class MyCallable implements Callable<String> {
 
 	@Inject
-	Transactor transactor;
+	Foo foo;
 
-	final Map<String, Table> tables = Wire.autoExpandingInjectingMap(Table.class);
-
-	final Map<String, Relat> relations = Wire.autoExpandingInjectingMap(Relat.class);
+	@Override
+	public String call() throws Exception {
+		return "abc";
+	}
 
 }

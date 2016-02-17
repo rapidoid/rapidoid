@@ -1,4 +1,4 @@
-package org.rapidoid.wire.db;
+package org.rapidoid.ioc.basic;
 
 /*
  * #%L
@@ -20,33 +20,17 @@ package org.rapidoid.wire.db;
  * #L%
  */
 
-import org.junit.Test;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.AbstractCommonsTest;
-import org.rapidoid.wire.Wire;
+
+import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class DbInjectionTest extends AbstractCommonsTest {
+public class Foo {
 
-	@Test
-	public void shouldInject() throws Exception {
-		Database db = Wire.singleton(Database.class);
-		isTrue(db == Wire.singleton(Database.class));
-		isTrue(db == Wire.singleton(Database.class));
-
-		notNull(db.tables);
-
-		Table persons = db.tables.get("person");
-		Table books = db.tables.get("book");
-
-		notNullAll(persons, books);
-
-		isTrue(persons != books);
-
-		isTrue(persons.transactor == books.transactor);
-		isTrue(persons.transactor == db.transactor);
-	}
+	@Inject
+	Callable<String> callable;
 
 }

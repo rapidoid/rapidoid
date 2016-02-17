@@ -1,4 +1,4 @@
-package org.rapidoid.wire.db;
+package org.rapidoid.ioc;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -25,5 +25,5 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Transactor {
+public class Logger {
 }

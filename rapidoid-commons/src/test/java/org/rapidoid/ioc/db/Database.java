@@ -1,4 +1,4 @@
-package org.rapidoid.wire.app;
+package org.rapidoid.ioc.db;
 
 /*
  * #%L
@@ -20,31 +20,22 @@ package org.rapidoid.wire.app;
  * #L%
  */
 
-import org.junit.Test;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.AbstractCommonsTest;
-import org.rapidoid.wire.Wire;
+import org.rapidoid.ioc.IoC;
+
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class AppInjectionTest extends AbstractCommonsTest {
+public class Database {
 
-	@Test
-	public void shouldInjectAndCallPostConstruct() {
-		Wire.manage(App.class, PersonServiceImpl.class);
-		isTrue(App.READY);
+	@Inject
+	Transactor transactor;
 
-		App app = Wire.singleton(App.class);
-		same(app, Wire.singleton(App.class), Wire.singleton(App.class));
+	final Map<String, Table> tables = IoC.getDefault().autoExpandingInjectingMap(Table.class);
 
-		notNull(app.personService);
-		notNull(app.bookService);
-		notNull(app.bookService.dao);
-
-		same(app.personService, app.personService2);
-
-		same(app.logger, app.personService2.logger, app.bookService.logger, app.bookService.dao.logger);
-	}
+	final Map<String, Relat> relations = IoC.getDefault().autoExpandingInjectingMap(Relat.class);
 
 }
