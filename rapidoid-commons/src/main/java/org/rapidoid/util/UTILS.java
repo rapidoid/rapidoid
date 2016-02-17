@@ -849,4 +849,15 @@ public class UTILS implements Constants {
 		return ((T) Proxy.newProxyInstance(targetInterface.getClassLoader(), new Class[]{targetInterface}, handler));
 	}
 
+	public static String classNames(Collection<?> classesOrInstances) {
+		List<Object> names = U.list();
+
+		for (Object o : classesOrInstances) {
+			Class<?> clazz = (o instanceof Class<?>) ? ((Class) o) : o.getClass();
+			names.add(clazz.getSimpleName());
+		}
+
+		return "[" + U.join(", ", names) + "]";
+	}
+
 }

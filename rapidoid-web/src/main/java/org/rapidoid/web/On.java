@@ -28,6 +28,7 @@ import org.rapidoid.data.JSON;
 import org.rapidoid.http.*;
 import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.listener.FastHttpListener;
+import org.rapidoid.ioc.IoC;
 import org.rapidoid.job.Jobs;
 
 import java.lang.annotation.Annotation;
@@ -47,11 +48,11 @@ public class On {
 		});
 	}
 
-	private static final Setup DEFAULT_SETUP = new Setup("http", "0.0.0.0", 8888, ServerSetupType.DEFAULT);
+	private static final Setup DEFAULT_SETUP = new Setup("http", "0.0.0.0", 8888, ServerSetupType.DEFAULT, IoC.defaultContext());
 
-	private static final Setup ADMIN_SETUP = new Setup("admin", "0.0.0.0", 8889, ServerSetupType.ADMIN);
+	private static final Setup ADMIN_SETUP = new Setup("admin", "0.0.0.0", 8889, ServerSetupType.ADMIN, IoC.defaultContext());
 
-	private static final Setup DEV_SETUP = new Setup("dev", "127.0.0.1", 8887, ServerSetupType.DEV);
+	private static final Setup DEV_SETUP = new Setup("dev", "127.0.0.1", 8887, ServerSetupType.DEV, IoC.defaultContext());
 
 	public static synchronized OnAction get(String path) {
 		return DEFAULT_SETUP.get(path);
@@ -138,7 +139,7 @@ public class On {
 	}
 
 	public static Setup createSetup(String name) {
-		return new Setup(name, "0.0.0.0", 8888, ServerSetupType.CUSTOM);
+		return new Setup(name, "0.0.0.0", 8888, ServerSetupType.CUSTOM, IoC.createContext());
 	}
 
 	public static synchronized Setup staticFilesLookIn(String... possibleLocations) {

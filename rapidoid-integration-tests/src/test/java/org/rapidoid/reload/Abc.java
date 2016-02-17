@@ -22,18 +22,17 @@ package org.rapidoid.reload;
 
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.Inject;
 
 @Controller
 public class Abc {
 
-	@GET
-	public String index() {
-		return "bb22";
-	}
+	@Inject
+	private Foo foo;
 
-	@GET
-	public String index2() {
-		return "b2";
+	@GET("/")
+	public String index() {
+		return "hey:" + foo.foo();
 	}
 
 }

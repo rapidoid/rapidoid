@@ -23,8 +23,8 @@ package org.rapidoid.ioc.basic;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.ioc.IoC;
+import org.rapidoid.test.AbstractCommonsTest;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

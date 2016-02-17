@@ -95,7 +95,7 @@ public class WatchingRefresherThread extends AbstractLoopThread {
 		filenames.addAll(createdFilenames);
 		filenames.addAll(modifiedFilenames);
 
-		Log.info("Detected changes in classes", "created", createdFilenames, "modified", modifiedFilenames, "deleted", deletedFilenames);
+		Log.debug("Detected changes in classes", "created", createdFilenames, "modified", modifiedFilenames, "deleted", deletedFilenames);
 
 		try {
 			List<String> classnames = filenamesToClassnames(filenames);

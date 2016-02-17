@@ -30,6 +30,7 @@ import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
@@ -43,13 +44,14 @@ import java.util.Set;
 @Since("5.1.0")
 public class IoCContext {
 
-	private final Map<Class<?>, Object> singletons = U.map();
+	IoCContext() {
+	}
 
-	private final Set<Class<?>> managedClasses = U.set();
+	private final Set<Class<?>> providedClasses = U.set();
 
-	private final Set<Object> managedInstances = U.set();
+	private final Set<Object> providedInstances = U.set();
 
-	private final Map<Object, Object> iocInstances = U.map();
+	private final Map<Object, Object> proxies = U.map();
 
 	private final Map<Class<?>, ClassMetadata> metadata = Coll
 			.autoExpandingMap(new Mapper<Class<?>, ClassMetadata>() {
@@ -62,10 +64,9 @@ public class IoCContext {
 	public synchronized void reset() {
 		Log.info("Resetting IoC context", "context", this);
 
-		singletons.clear();
-		managedClasses.clear();
-		managedInstances.clear();
-		iocInstances.clear();
+		providedClasses.clear();
+		providedInstances.clear();
+		proxies.clear();
 		metadata.clear();
 	}
 
@@ -74,7 +75,7 @@ public class IoCContext {
 	}
 
 	public synchronized void manage(Object... classesOrInstances) {
-		List<Class<?>> autocreate = new ArrayList<Class<?>>();
+		List<Class<?>> autoCreate = new ArrayList<Class<?>>();
 
 		for (Object classOrInstance : classesOrInstances) {
 
@@ -82,33 +83,34 @@ public class IoCContext {
 			Class<?> clazz = isClass ? (Class<?>) classOrInstance : classOrInstance.getClass();
 
 			for (Class<?> interfacee : Cls.getImplementedInterfaces(clazz)) {
-				addInjectionProvider(interfacee, classOrInstance);
+				addProvider(interfacee, classOrInstance);
 			}
 
 			if (isClass) {
 				Log.debug("configuring managed class", "class", classOrInstance);
-				managedClasses.add(clazz);
+				providedClasses.add(clazz);
 
 				if (!clazz.isInterface() && !clazz.isEnum() && !clazz.isAnnotation()) {
 					// if the class is annotated, auto-create an instance
 					if (clazz.getAnnotation(Autocreate.class) != null) {
-						autocreate.add(clazz);
+						autoCreate.add(clazz);
 					}
 				}
 			} else {
-				Log.debug("configuring managed instance", "instance", classOrInstance);
-				addInjectionProvider(clazz, classOrInstance);
-				managedInstances.add(classOrInstance);
+				Object instance = classOrInstance;
+				Log.debug("configuring provided instance", "instance", instance);
+				addProvider(clazz, instance);
+				providedInstances.add(instance);
 			}
 		}
 
-		for (Class<?> clazz : autocreate) {
+		for (Class<?> clazz : autoCreate) {
 			singleton(clazz);
 		}
 	}
 
-	private void addInjectionProvider(Class<?> type, Object provider) {
-		meta(type).injectors.add(provider);
+	private void addProvider(Class<?> type, Object provider) {
+		meta(type).providers.add(provider);
 	}
 
 	public synchronized <T> T singleton(Class<T> type) {
@@ -159,11 +161,11 @@ public class IoCContext {
 		}
 
 		if (instance == null) {
-			instance = provideIoCInstanceByType(type, properties);
+			instance = provideInstanceByType(type, properties);
 		}
 
-		if (instance == null && canInjectNew(type)) {
-			instance = provideNewIoCInstanceOf(type, properties);
+		if (instance == null && Cls.isBeanType(type)) {
+			instance = provideNewInstanceOf(type, properties);
 		}
 
 		if (!optional) {
@@ -179,62 +181,47 @@ public class IoCContext {
 		return instance != null ? ioc(instance, properties) : null;
 	}
 
-	private boolean canInjectNew(Class<?> type) {
-		return !type.isAnnotation() && !type.isEnum() && !type.isInterface() && !type.isPrimitive()
-				&& !type.equals(String.class) && !type.equals(Object.class) && !type.equals(Boolean.class)
-				&& !Number.class.isAssignableFrom(type);
-	}
-
 	@SuppressWarnings("unchecked")
-	private <T> T provideNewIoCInstanceOf(Class<T> type, Map<String, Object> properties) {
+	private <T> T provideNewInstanceOf(Class<T> type, Map<String, Object> properties) {
 		// instantiation if it's real class
 		if (!type.isInterface() && !type.isEnum() && !type.isAnnotation()) {
-			T instance = (T) singletons.get(type);
-
-			if (instance == null) {
-				instance = ioc(Cls.newInstance(type, properties), properties);
-			}
-
-			return instance;
+			return ioc(Cls.newInstance(type, properties), properties);
 		} else {
 			return null;
 		}
 	}
 
-	private <T> T provideIoCInstanceByType(Class<T> type, Map<String, Object> properties) {
-		Set<Object> providers = meta(type).injectors;
+	private <T> T provideInstanceByType(Class<T> type, Map<String, Object> properties) {
 
-		if (providers != null && !providers.isEmpty()) {
+		Set<Object> providers = meta(type).providers;
+		Object provider = null;
 
-			Object provider = null;
-
-			for (Object pr : providers) {
-				if (provider == null) {
-					provider = pr;
-				} else {
-					if (isClass(provider) && !isClass(pr)) {
-						provider = pr;
-					} else if (isClass(provider) || !isClass(pr)) {
-						throw U.rte("Found more than 1 injection candidates for type '%s': %s", type, providers);
-					}
+		for (Object candidate : providers) {
+			if (provider == null) {
+				provider = candidate;
+			} else {
+				if (isClass(provider) && !isClass(candidate)) {
+					provider = candidate;
+				} else if (isClass(provider) || !isClass(candidate)) {
+					throw U.rte("Found more than 1 candidates for type '%s': %s", type, providers);
 				}
 			}
+		}
 
-			if (provider != null) {
-				return provideFrom(provider, properties);
-			}
+		if (provider != null) {
+			return provideFrom(provider, properties);
 		}
 
 		return null;
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> T provideFrom(Object classOrInstance, Map<String, Object> properties) {
+	private <T> T provideFrom(Object provider, Map<String, Object> properties) {
 		T instance;
-		if (isClass(classOrInstance)) {
-			instance = provideNewIoCInstanceOf((Class<T>) classOrInstance, properties);
+		if (isClass(provider)) {
+			instance = provideNewInstanceOf((Class<T>) provider, properties);
 		} else {
-			instance = (T) classOrInstance;
+			instance = (T) provider;
 		}
 		return instance;
 	}
@@ -328,8 +315,8 @@ public class IoCContext {
 	}
 
 	private <T> T ioc(T target, Map<String, Object> properties) {
-		if (!isIocProcessed(target)) {
-			iocInstances.put(target, null);
+		if (!isProxyOrHasProxy(target)) {
+			proxies.put(target, null);
 
 			manage(target);
 
@@ -339,7 +326,7 @@ public class IoCContext {
 
 			T proxy = proxyWrap(target);
 
-			iocInstances.put(target, proxy);
+			proxies.put(target, proxy);
 
 			manage(proxy);
 
@@ -349,8 +336,8 @@ public class IoCContext {
 		return target;
 	}
 
-	private boolean isIocProcessed(Object target) {
-		for (Map.Entry<Object, Object> e : iocInstances.entrySet()) {
+	private boolean isProxyOrHasProxy(Object target) {
+		for (Map.Entry<Object, Object> e : proxies.entrySet()) {
 			if (e.getKey() == target || e.getValue() == target) {
 				return true;
 			}
@@ -396,6 +383,37 @@ public class IoCContext {
 				return inject(Cls.newInstance(clazz));
 			}
 		});
+	}
+
+	public synchronized Object findInstanceOf(String className) {
+		for (Object instance : providedInstances) {
+			if (instance.getClass().getName().equals(className)) {
+				return instance;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public synchronized String toString() {
+		return UTILS.classNames(providedInstances);
+	}
+
+	public synchronized boolean remove(Object bean) {
+		boolean removed = providedInstances.remove(bean);
+		removed |= (proxies.remove(bean) != null);
+
+		if (removed) {
+			Class<?> clazz = bean.getClass();
+			providedClasses.remove(clazz);
+			metadata.remove(clazz);
+		}
+
+		return removed;
+	}
+
+	public synchronized void reload(ClassLoader classLoader) {
+		// FIXME implement
 	}
 
 }

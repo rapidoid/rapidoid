@@ -435,7 +435,7 @@ public class Cls {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T newInstance(Class<T> clazz, Map<String, Object> properties) {
-		if (properties == null) {
+		if (U.isEmpty(properties)) {
 			return newInstance(clazz);
 		}
 
@@ -444,6 +444,7 @@ public class Cls {
 		for (Constructor<?> constr : clazz.getConstructors()) {
 			Class<?>[] paramTypes = constr.getParameterTypes();
 			Object[] args = getAssignableArgs(paramTypes, values);
+
 			if (args != null) {
 				try {
 					return (T) constr.newInstance(args);
@@ -939,8 +940,13 @@ public class Cls {
 	}
 
 	public static boolean isBeanType(Class<?> clazz) {
-		return kindOf(clazz) == TypeKind.OBJECT && !(Collection.class.isAssignableFrom(clazz))
-				&& !(Map.class.isAssignableFrom(clazz)) && !(Object[].class.isAssignableFrom(clazz))
+		return kindOf(clazz) == TypeKind.OBJECT
+				&& !clazz.isAnnotation()
+				&& !clazz.isEnum()
+				&& !clazz.isInterface()
+				&& !(Collection.class.isAssignableFrom(clazz))
+				&& !(Map.class.isAssignableFrom(clazz))
+				&& !(Object[].class.isAssignableFrom(clazz))
 				&& !clazz.getPackage().getName().startsWith("java.")
 				&& !clazz.getPackage().getName().startsWith("javax.");
 	}

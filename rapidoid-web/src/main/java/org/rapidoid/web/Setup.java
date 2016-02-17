@@ -12,6 +12,7 @@ import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqHandler;
 import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqRespHandler;
 import org.rapidoid.http.listener.FastHttpListener;
 import org.rapidoid.http.listener.IgnorantHttpListener;
+import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
@@ -50,6 +51,7 @@ public class Setup implements Constants {
 	private final String defaultAddress;
 	private final int defaultPort;
 	private final ServerSetupType setupType;
+	private final IoCContext ioCContext;
 
 	private volatile FastHttpListener listener = new IgnorantHttpListener();
 
@@ -66,7 +68,7 @@ public class Setup implements Constants {
 
 	private volatile Server server;
 
-	public Setup(String name, String defaultAddress, int defaultPort, ServerSetupType setupType) {
+	public Setup(String name, String defaultAddress, int defaultPort, ServerSetupType setupType, IoCContext ioCContext) {
 		this.name = name;
 		this.defaultAddress = defaultAddress;
 		this.defaultPort = defaultPort;
@@ -74,6 +76,7 @@ public class Setup implements Constants {
 		this.port = defaultPort;
 		this.address = defaultAddress;
 		this.setupType = setupType;
+		this.ioCContext = ioCContext;
 	}
 
 	public synchronized FastHttp http() {
@@ -303,6 +306,7 @@ public class Setup implements Constants {
 
 	public Setup bootstrap() {
 		beans(annotated(Controller.class).in(path()).getAll().toArray());
+		Log.info("Completed bootstrap", "context", getIoCContext());
 		return this;
 	}
 
@@ -324,7 +328,11 @@ public class Setup implements Constants {
 	}
 
 	public OnChanges changes() {
-		return new OnChanges(this, httpImpls());
+		return new OnChanges(this);
+	}
+
+	public IoCContext getIoCContext() {
+		return ioCContext;
 	}
 
 }

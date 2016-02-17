@@ -23,11 +23,11 @@ package org.rapidoid.web;
 import org.rapidoid.annotation.*;
 import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.ioc.IoC;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -39,22 +39,22 @@ import java.util.Set;
 @Since("5.1.0")
 public class PojoHandlersSetup {
 
-	private static final Set<String> SUPPORTED_METHOD_ANNOTATIONS = U.set(
+	private static final Set<String> CONTROLLER_ANNOTATIONS = U.set(
 			Page.class.getName(), GET.class.getName(), POST.class.getName(),
 			PUT.class.getName(), DELETE.class.getName(), PATCH.class.getName(),
 			OPTIONS.class.getName(), HEAD.class.getName(), TRACE.class.getName()
 	);
 
 	private final Setup setup;
-	private final Object[] controllers;
+	private final Object[] beans;
 
-	private PojoHandlersSetup(Setup setup, Object[] controllers) {
+	private PojoHandlersSetup(Setup setup, Object[] beans) {
 		this.setup = setup;
-		this.controllers = controllers;
+		this.beans = beans;
 	}
 
-	public static PojoHandlersSetup from(Setup setup, Object[] controllers) {
-		return new PojoHandlersSetup(setup, controllers);
+	public static PojoHandlersSetup from(Setup setup, Object[] beans) {
+		return new PojoHandlersSetup(setup, beans);
 	}
 
 	public void register() {
@@ -66,35 +66,64 @@ public class PojoHandlersSetup {
 	}
 
 	private void process(boolean register) {
-		for (Object controller : controllers) {
+		for (Object bean : beans) {
+			processBean(register, bean);
+		}
+	}
 
-			U.notNull(controller, "controller");
+	private void processBean(boolean register, Object bean) {
+		Class<?> clazz;
+		U.notNull(bean, "bean");
+		IoCContext context = setup.getIoCContext();
 
-			Class<?> clazz = (controller instanceof Class<?>) ? (Class<?>) controller : controller.getClass();
+		if (bean instanceof Class<?>) {
+			clazz = (Class<?>) bean;
+			bean = null;
 
-			if (!Cls.isBeanType(clazz)) {
-				throw new RuntimeException("Expected a bean, but found value of type: " + clazz.getName());
-			}
+		} else if (bean instanceof String) {
+			String className = (String) bean;
 
-			if (!clazz.getName().startsWith("org.rapidoid.log.")) { // FIXME clean-up
+			if (register) {
+				clazz = Cls.getClassIfExists(className);
+				U.must(clazz != null, "Cannot find class: %s", className);
+			} else {
+				bean = context.findInstanceOf(className);
 
-				Log.debug("Processing POJO", "class", clazz);
-
-				List<String> componentPaths = getComponentNames(clazz);
-
-				for (String ctxPath : componentPaths) {
-					for (Method method : Cls.getMethods(clazz)) {
-						if (shouldExpose(method)) {
-
-							if (controller instanceof Class<?>) {
-								controller = register ? IoC.singleton(clazz) : null;
-							}
-
-							registerOrDeregister(register, controller, ctxPath, method);
-						}
-					}
+				if (bean != null) {
+					clazz = bean.getClass();
+				} else {
+					Log.warn("Couldn't find the target class to deregister!", "class", className, "context", context);
+					return;
 				}
 			}
+
+		} else {
+			clazz = bean.getClass();
+		}
+
+		if (!Cls.isBeanType(clazz)) {
+			throw new RuntimeException("Expected a bean, but found value of type: " + clazz.getName());
+		}
+
+		Log.debug("Processing bean", "class", clazz, "instance", bean);
+
+		List<String> componentPaths = getComponentNames(clazz);
+
+		for (String ctxPath : componentPaths) {
+			for (Method method : Cls.getMethods(clazz)) {
+				if (shouldExpose(method)) {
+
+					if (bean == null) {
+						bean = register ? context.singleton(clazz) : null;
+					}
+
+					registerOrDeregister(register, bean, ctxPath, method);
+				}
+			}
+		}
+
+		if (!register) {
+			context.remove(bean);
 		}
 	}
 
@@ -111,7 +140,7 @@ public class PojoHandlersSetup {
 		if (isUserDefined && !isAbstract && !isStatic && !isPrivate && !isProtected && method.getAnnotations().length > 0) {
 			for (Annotation ann : method.getAnnotations()) {
 				String annoName = ann.annotationType().getName();
-				if (SUPPORTED_METHOD_ANNOTATIONS.contains(annoName)) {
+				if (CONTROLLER_ANNOTATIONS.contains(annoName)) {
 					return true;
 				}
 			}
@@ -130,7 +159,7 @@ public class PojoHandlersSetup {
 		}
 	}
 
-	private void registerOrDeregister(boolean register, Object controller, String ctxPath, Method method) {
+	private void registerOrDeregister(boolean register, Object bean, String ctxPath, Method method) {
 		for (Annotation ann : method.getAnnotations()) {
 
 			String annoName = ann.annotationType().getName();
@@ -139,7 +168,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					setup.page(path).gui(method, controller);
+					setup.page(path).gui(method, bean);
 				} else {
 					setup.deregister(Constants.GET, path);
 					setup.deregister(Constants.POST, path);
@@ -149,7 +178,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					setup.get(path).json(method, controller);
+					setup.get(path).json(method, bean);
 				} else {
 					setup.deregister(Constants.GET, path);
 				}
@@ -158,7 +187,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					setup.post(path).json(method, controller);
+					setup.post(path).json(method, bean);
 				} else {
 					setup.deregister(Constants.POST, path);
 				}
@@ -167,7 +196,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					setup.put(path).json(method, controller);
+					setup.put(path).json(method, bean);
 				} else {
 					setup.deregister(Constants.PUT, path);
 				}
@@ -176,7 +205,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					setup.delete(path).json(method, controller);
+					setup.delete(path).json(method, bean);
 				} else {
 					setup.deregister(Constants.DELETE, path);
 				}
@@ -185,7 +214,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					setup.patch(path).json(method, controller);
+					setup.patch(path).json(method, bean);
 				} else {
 					setup.deregister(Constants.PATCH, path);
 				}
@@ -194,7 +223,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					setup.options(path).json(method, controller);
+					setup.options(path).json(method, bean);
 				} else {
 					setup.deregister(Constants.OPTIONS, path);
 				}
@@ -203,7 +232,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					setup.head(path).json(method, controller);
+					setup.head(path).json(method, bean);
 				} else {
 					setup.deregister(Constants.HEAD, path);
 				}
@@ -212,7 +241,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					setup.trace(path).json(method, controller);
+					setup.trace(path).json(method, bean);
 				} else {
 					setup.deregister(Constants.TRACE, path);
 				}

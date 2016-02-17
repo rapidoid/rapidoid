@@ -20,21 +20,10 @@ package org.rapidoid.reload;
  * #L%
  */
 
-import org.rapidoid.http.Req;
-import org.rapidoid.web.On;
+public class Foo {
 
-/**
- * Demo for class reloading. E.g. try changing the Abc class...
- */
-public class ReloadDemo {
-
-	public static void main(String[] args) {
-		On.bootstrap();
-
-		On.changes().republish();
-//		On.changes().restart();
-
-		On.get("/aa").json((Req req, String x) -> x + ":" + req);
+	public String foo() {
+		return "FOO!";
 	}
 
 }

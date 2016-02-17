@@ -42,7 +42,7 @@ public class ClassMetadata {
 
 	final List<Field> localFields;
 
-	final Set<Object> injectors = Coll.synchronizedSet();
+	final Set<Object> providers = Coll.synchronizedSet();
 
 	final List<F3<Object, Object, Method, Object[]>> interceptors = Coll.synchronizedList();
 

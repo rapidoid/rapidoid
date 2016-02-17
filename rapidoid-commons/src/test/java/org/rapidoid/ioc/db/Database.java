@@ -34,8 +34,8 @@ public class Database {
 	@Inject
 	Transactor transactor;
 
-	final Map<String, Table> tables = IoC.getDefault().autoExpandingInjectingMap(Table.class);
+	final Map<String, Table> tables = IoC.defaultContext().autoExpandingInjectingMap(Table.class);
 
-	final Map<String, Relat> relations = IoC.getDefault().autoExpandingInjectingMap(Relat.class);
+	final Map<String, Relat> relations = IoC.defaultContext().autoExpandingInjectingMap(Relat.class);
 
 }

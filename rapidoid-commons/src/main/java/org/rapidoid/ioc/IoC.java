@@ -31,28 +31,36 @@ public class IoC {
 
 	private static final IoCContext DEFAULT_CONTEXT = new IoCContext();
 
-	public static synchronized IoCContext getDefault() {
+	public static IoCContext defaultContext() {
 		return DEFAULT_CONTEXT;
 	}
 
-	public static synchronized void manage(Object... classesOrInstances) {
+	public static void manage(Object... classesOrInstances) {
 		DEFAULT_CONTEXT.manage(classesOrInstances);
 	}
 
-	public static synchronized <T> T singleton(Class<T> type) {
+	public static <T> T singleton(Class<T> type) {
 		return DEFAULT_CONTEXT.singleton(type);
 	}
 
-	public static synchronized <T> T autowire(T target) {
+	public static <T> T autowire(T target) {
 		return DEFAULT_CONTEXT.autowire(target);
 	}
 
-	public static synchronized <T> T inject(T target) {
+	public static <T> T inject(T target) {
 		return DEFAULT_CONTEXT.inject(target);
 	}
 
-	public static synchronized <T> T inject(T target, Map<String, Object> properties) {
+	public static <T> T inject(T target, Map<String, Object> properties) {
 		return DEFAULT_CONTEXT.inject(target, properties);
+	}
+
+	public boolean remove(Object bean) {
+		return DEFAULT_CONTEXT.remove(bean);
+	}
+
+	public static IoCContext createContext() {
+		return new IoCContext();
 	}
 
 }

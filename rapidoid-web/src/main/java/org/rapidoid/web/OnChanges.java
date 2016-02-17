@@ -23,7 +23,7 @@ package org.rapidoid.web;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.http.FastHttp;
+import org.rapidoid.io.watch.Watch;
 import org.rapidoid.log.Log;
 import org.rapidoid.scan.ClasspathUtil;
 
@@ -34,18 +34,20 @@ import java.util.Set;
 public class OnChanges {
 
 	private final Setup setup;
-	private final FastHttp[] fastHttps;
 
-	public OnChanges(Setup setup, FastHttp[] fastHttps) {
+	public OnChanges(Setup setup) {
 		this.setup = setup;
-		this.fastHttps = fastHttps;
 	}
 
-	public void reload() {
+	public void republish() {
 		if (Conf.dev()) {
 			Set<String> classpathFolders = ClasspathUtil.getClasspathFolders();
 			Log.info("Watching classpath for changes...", "classpath", classpathFolders);
-			// FIXME complete this
+
+			Watch.dirs(classpathFolders, new ClassRepublisher(setup));
+
+		} else {
+			Log.warn("Not running in dev mode, hot class reloading is disabled!");
 		}
 	}
 
