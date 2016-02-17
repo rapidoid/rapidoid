@@ -33,11 +33,11 @@ import java.util.Set;
 @Since("5.1.0")
 public class OnChanges {
 
-	private final ServerSetup serverSetup;
+	private final Setup setup;
 	private final FastHttp[] fastHttps;
 
-	public OnChanges(ServerSetup serverSetup, FastHttp[] fastHttps) {
-		this.serverSetup = serverSetup;
+	public OnChanges(Setup setup, FastHttp[] fastHttps) {
+		this.setup = setup;
 		this.fastHttps = fastHttps;
 	}
 

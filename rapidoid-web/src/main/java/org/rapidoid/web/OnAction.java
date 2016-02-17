@@ -35,7 +35,7 @@ import java.util.concurrent.Callable;
 @Since("4.3.0")
 public class OnAction {
 
-	private final ServerSetup chain;
+	private final Setup chain;
 
 	private final FastHttp[] httpImpls;
 
@@ -45,7 +45,7 @@ public class OnAction {
 
 	private volatile HttpWrapper[] wrappers;
 
-	public OnAction(ServerSetup chain, FastHttp[] httpImpls, String verb, String path) {
+	public OnAction(Setup chain, FastHttp[] httpImpls, String verb, String path) {
 		this.chain = chain;
 		this.httpImpls = httpImpls;
 		this.verb = verb;
@@ -59,228 +59,228 @@ public class OnAction {
 
 	/* PLAIN */
 
-	public ServerSetup plain(String response) {
+	public Setup plain(String response) {
 		plain(response.getBytes());
 		return chain;
 	}
 
-	public ServerSetup plain(byte[] response) {
+	public Setup plain(byte[] response) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, response);
 		return chain;
 	}
 
-	public <T> ServerSetup plain(Callable<T> handler) {
+	public <T> Setup plain(Callable<T> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup plain(Method method, Object instance) {
+	public Setup plain(Method method, Object instance) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, method, instance);
 		return chain;
 	}
 
-	public ServerSetup plain(OneParamLambda<?, ?> handler) {
+	public Setup plain(OneParamLambda<?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup plain(TwoParamLambda<?, ?, ?> handler) {
+	public Setup plain(TwoParamLambda<?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup plain(ThreeParamLambda<?, ?, ?, ?> handler) {
+	public Setup plain(ThreeParamLambda<?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup plain(FourParamLambda<?, ?, ?, ?, ?> handler) {
+	public Setup plain(FourParamLambda<?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup plain(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+	public Setup plain(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup plain(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+	public Setup plain(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup plain(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+	public Setup plain(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	/* HTML */
 
-	public ServerSetup html(String response) {
+	public Setup html(String response) {
 		html(response.getBytes());
 		return chain;
 	}
 
-	public ServerSetup html(byte[] response) {
+	public Setup html(byte[] response) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, response);
 		return chain;
 	}
 
-	public <T> ServerSetup html(Callable<T> handler) {
+	public <T> Setup html(Callable<T> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup html(Method method, Object instance) {
+	public Setup html(Method method, Object instance) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, method, instance);
 		return chain;
 	}
 
-	public ServerSetup html(OneParamLambda<?, ?> handler) {
+	public Setup html(OneParamLambda<?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup html(TwoParamLambda<?, ?, ?> handler) {
+	public Setup html(TwoParamLambda<?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup html(ThreeParamLambda<?, ?, ?, ?> handler) {
+	public Setup html(ThreeParamLambda<?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup html(FourParamLambda<?, ?, ?, ?, ?> handler) {
+	public Setup html(FourParamLambda<?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup html(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+	public Setup html(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup html(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+	public Setup html(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup html(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+	public Setup html(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	/* JSON */
 
-	public ServerSetup json(String response) {
+	public Setup json(String response) {
 		json(response.getBytes());
 		return chain;
 	}
 
-	public ServerSetup json(byte[] response) {
+	public Setup json(byte[] response) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, response);
 		return chain;
 	}
 
-	public <T> ServerSetup json(Callable<T> handler) {
+	public <T> Setup json(Callable<T> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup json(Method method, Object instance) {
+	public Setup json(Method method, Object instance) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, method, instance);
 		return chain;
 	}
 
-	public ServerSetup json(OneParamLambda<?, ?> handler) {
+	public Setup json(OneParamLambda<?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup json(TwoParamLambda<?, ?, ?> handler) {
+	public Setup json(TwoParamLambda<?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup json(ThreeParamLambda<?, ?, ?, ?> handler) {
+	public Setup json(ThreeParamLambda<?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup json(FourParamLambda<?, ?, ?, ?, ?> handler) {
+	public Setup json(FourParamLambda<?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup json(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+	public Setup json(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup json(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+	public Setup json(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup json(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+	public Setup json(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	/* BINARY */
 
-	public ServerSetup binary(String response) {
+	public Setup binary(String response) {
 		binary(response.getBytes());
 		return chain;
 	}
 
-	public ServerSetup binary(byte[] response) {
+	public Setup binary(byte[] response) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, response);
 		return chain;
 	}
 
-	public <T> ServerSetup binary(Callable<T> handler) {
+	public <T> Setup binary(Callable<T> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup binary(Method method, Object instance) {
+	public Setup binary(Method method, Object instance) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, method, instance);
 		return chain;
 	}
 
-	public ServerSetup binary(OneParamLambda<?, ?> handler) {
+	public Setup binary(OneParamLambda<?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup binary(TwoParamLambda<?, ?, ?> handler) {
+	public Setup binary(TwoParamLambda<?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup binary(ThreeParamLambda<?, ?, ?, ?> handler) {
+	public Setup binary(ThreeParamLambda<?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup binary(FourParamLambda<?, ?, ?, ?, ?> handler) {
+	public Setup binary(FourParamLambda<?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup binary(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+	public Setup binary(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup binary(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+	public Setup binary(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
-	public ServerSetup binary(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+	public Setup binary(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}

@@ -45,15 +45,15 @@ public class PojoHandlersSetup {
 			OPTIONS.class.getName(), HEAD.class.getName(), TRACE.class.getName()
 	);
 
-	private final ServerSetup server;
+	private final Setup server;
 	private final Object[] controllers;
 
-	private PojoHandlersSetup(ServerSetup server, Object[] controllers) {
+	private PojoHandlersSetup(Setup server, Object[] controllers) {
 		this.server = server;
 		this.controllers = controllers;
 	}
 
-	public static PojoHandlersSetup from(ServerSetup server, Object[] controllers) {
+	public static PojoHandlersSetup from(Setup server, Object[] controllers) {
 		return new PojoHandlersSetup(server, controllers);
 	}
 

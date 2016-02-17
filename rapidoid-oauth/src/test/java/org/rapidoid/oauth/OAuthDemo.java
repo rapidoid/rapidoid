@@ -24,14 +24,14 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Config;
 import org.rapidoid.web.On;
-import org.rapidoid.web.ServerSetup;
+import org.rapidoid.web.Setup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class OAuthDemo {
 
 	public static void main(String[] args) {
-		ServerSetup setup = On.getDefaultSetup();
+		Setup setup = On.getDefaultSetup();
 		OAuth.register(setup, new Config());
 		setup.listen();
 	}

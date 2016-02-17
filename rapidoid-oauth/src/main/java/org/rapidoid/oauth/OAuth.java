@@ -32,7 +32,7 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.web.ServerSetup;
+import org.rapidoid.web.Setup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -42,11 +42,11 @@ public class OAuth {
 
 	private static OAuthStateCheck STATE_CHECK;
 
-	public static void register(ServerSetup setup, Config config, OAuthProvider... providers) {
+	public static void register(Setup setup, Config config, OAuthProvider... providers) {
 		register(setup, config, new DefaultOAuthStateCheck(), providers);
 	}
 
-	public static void register(ServerSetup setup, Config config, OAuthStateCheck stateCheck,
+	public static void register(Setup setup, Config config, OAuthStateCheck stateCheck,
 	                            OAuthProvider... providers) {
 
 		if (!config.has("oauth")) {

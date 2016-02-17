@@ -47,11 +47,11 @@ public class On {
 		});
 	}
 
-	private static final ServerSetup DEFAULT_SERVER = new ServerSetup("http", "0.0.0.0", 8888, ServerSetupType.DEFAULT);
+	private static final Setup DEFAULT_SERVER = new Setup("http", "0.0.0.0", 8888, ServerSetupType.DEFAULT);
 
-	private static final ServerSetup ADMIN_SERVER = new ServerSetup("admin", "0.0.0.0", 8889, ServerSetupType.ADMIN);
+	private static final Setup ADMIN_SERVER = new Setup("admin", "0.0.0.0", 8889, ServerSetupType.ADMIN);
 
-	private static final ServerSetup DEV_SERVER = new ServerSetup("dev", "127.0.0.1", 8887, ServerSetupType.DEV);
+	private static final Setup DEV_SERVER = new Setup("dev", "127.0.0.1", 8887, ServerSetupType.DEV);
 
 	public static synchronized OnAction get(String path) {
 		return DEFAULT_SERVER.get(path);
@@ -89,35 +89,35 @@ public class On {
 		return DEFAULT_SERVER.page(path);
 	}
 
-	public static synchronized ServerSetup error(ErrorHandler onError) {
+	public static synchronized Setup error(ErrorHandler onError) {
 		return DEFAULT_SERVER.onError(onError);
 	}
 
-	public static synchronized ServerSetup req(ReqHandler handler) {
+	public static synchronized Setup req(ReqHandler handler) {
 		return DEFAULT_SERVER.req(handler);
 	}
 
-	public static synchronized ServerSetup req(ReqRespHandler handler) {
+	public static synchronized Setup req(ReqRespHandler handler) {
 		return DEFAULT_SERVER.req(handler);
 	}
 
-	public static synchronized ServerSetup req(FastHttpHandler handler) {
+	public static synchronized Setup req(FastHttpHandler handler) {
 		return DEFAULT_SERVER.req(handler);
 	}
 
-	public static synchronized ServerSetup req(Object... controllers) {
+	public static synchronized Setup req(Object... controllers) {
 		return DEFAULT_SERVER.req(controllers);
 	}
 
-	public static synchronized ServerSetup port(int port) {
+	public static synchronized Setup port(int port) {
 		return DEFAULT_SERVER.port(port);
 	}
 
-	public static synchronized ServerSetup address(String address) {
+	public static synchronized Setup address(String address) {
 		return DEFAULT_SERVER.address(address);
 	}
 
-	public static ServerSetup path(String... path) {
+	public static Setup path(String... path) {
 		return DEFAULT_SERVER.path(path);
 	}
 
@@ -125,36 +125,36 @@ public class On {
 		return DEFAULT_SERVER.path();
 	}
 
-	public static synchronized ServerSetup defaultWrap(HttpWrapper... wrappers) {
+	public static synchronized Setup defaultWrap(HttpWrapper... wrappers) {
 		return DEFAULT_SERVER.defaultWrap(wrappers);
 	}
 
-	public static synchronized ServerSetup listener(FastHttpListener listener) {
+	public static synchronized Setup listener(FastHttpListener listener) {
 		return DEFAULT_SERVER.listener(listener);
 	}
 
-	public static synchronized ServerSetup getDefaultSetup() {
+	public static synchronized Setup getDefaultSetup() {
 		return DEFAULT_SERVER;
 	}
 
-	public static ServerSetup createServer(String name) {
-		return new ServerSetup(name, "0.0.0.0", 8888, ServerSetupType.CUSTOM);
+	public static Setup createServer(String name) {
+		return new Setup(name, "0.0.0.0", 8888, ServerSetupType.CUSTOM);
 	}
 
-	public static synchronized ServerSetup staticFilesLookIn(String... possibleLocations) {
+	public static synchronized Setup staticFilesLookIn(String... possibleLocations) {
 		return DEFAULT_SERVER.staticFilesPath(possibleLocations);
 	}
 
-	public static synchronized ServerSetup render(ViewRenderer renderer) {
+	public static synchronized Setup render(ViewRenderer renderer) {
 		return DEFAULT_SERVER.render(renderer);
 	}
 
-	public static ServerSetup args(String... args) {
+	public static Setup args(String... args) {
 		Conf.args(args);
 		return DEFAULT_SERVER;
 	}
 
-	public static ServerSetup bootstrap() {
+	public static Setup bootstrap() {
 		return DEFAULT_SERVER.bootstrap();
 	}
 
@@ -164,19 +164,19 @@ public class On {
 		return DEFAULT_SERVER.annotated(annotated);
 	}
 
-	public static ServerSetup admin() {
+	public static Setup admin() {
 		return ADMIN_SERVER;
 	}
 
-	public static ServerSetup dev() {
+	public static Setup dev() {
 		return DEV_SERVER;
 	}
 
-	public static ServerSetup deregister(String verb, String path) {
+	public static Setup deregister(String verb, String path) {
 		return DEFAULT_SERVER.deregister(verb, path);
 	}
 
-	public static ServerSetup deregister(Object... controllers) {
+	public static Setup deregister(Object... controllers) {
 		return DEFAULT_SERVER.deregister(controllers);
 	}
 

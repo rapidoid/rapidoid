@@ -42,8 +42,8 @@ import java.util.Map;
  */
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public class ServerSetup {
+@Since("5.1.0")
+public class Setup {
 
 	public static final int UNDEFINED = -1;
 
@@ -67,7 +67,7 @@ public class ServerSetup {
 
 	private volatile Server server;
 
-	public ServerSetup(String name, String defaultAddress, int defaultPort, ServerSetupType setupType) {
+	public Setup(String name, String defaultAddress, int defaultPort, ServerSetupType setupType) {
 		this.name = name;
 		this.defaultAddress = defaultAddress;
 		this.defaultPort = defaultPort;
@@ -154,7 +154,7 @@ public class ServerSetup {
 		return new OnPage(this, httpImpls(), path).wrap(wrappers);
 	}
 
-	public ServerSetup req(ReqHandler handler) {
+	public Setup req(ReqHandler handler) {
 		activate();
 		for (FastHttp http : httpImpls()) {
 			http.addGenericHandler(new DelegatingFastParamsAwareReqHandler(http, MediaType.HTML_UTF_8, wrappers,
@@ -164,7 +164,7 @@ public class ServerSetup {
 		return this;
 	}
 
-	public ServerSetup req(ReqRespHandler handler) {
+	public Setup req(ReqRespHandler handler) {
 		activate();
 		for (FastHttp http : httpImpls()) {
 			http.addGenericHandler(new DelegatingFastParamsAwareReqRespHandler(http, MediaType.HTML_UTF_8, wrappers,
@@ -174,7 +174,7 @@ public class ServerSetup {
 		return this;
 	}
 
-	public ServerSetup req(FastHttpHandler handler) {
+	public Setup req(FastHttpHandler handler) {
 		activate();
 		for (FastHttp http : httpImpls()) {
 			http.addGenericHandler(handler);
@@ -183,7 +183,7 @@ public class ServerSetup {
 		return this;
 	}
 
-	public ServerSetup req(Object... controllers) {
+	public Setup req(Object... controllers) {
 		activate();
 		List<Object> pojos = U.list();
 
@@ -210,7 +210,7 @@ public class ServerSetup {
 		return this;
 	}
 
-	public ServerSetup onError(ErrorHandler onError) {
+	public Setup onError(ErrorHandler onError) {
 		for (FastHttp http : httpImpls()) {
 			http.setErrorHandler(new FastHttpErrorHandler(http, onError));
 		}
@@ -222,28 +222,28 @@ public class ServerSetup {
 		return new FastHttp[]{http()};
 	}
 
-	public ServerSetup port(int port) {
+	public Setup port(int port) {
 		this.port = port;
 		return this;
 	}
 
-	public ServerSetup address(String address) {
+	public Setup address(String address) {
 		this.address = address;
 		return this;
 	}
 
-	public ServerSetup defaultWrap(HttpWrapper... wrappers) {
+	public Setup defaultWrap(HttpWrapper... wrappers) {
 		this.wrappers = wrappers;
 		return this;
 	}
 
-	public ServerSetup listener(FastHttpListener listener) {
+	public Setup listener(FastHttpListener listener) {
 		U.must(this.fastHttp == null, "The HTTP server was already initialized!");
 		this.listener = listener;
 		return this;
 	}
 
-	public ServerSetup shutdown() {
+	public Setup shutdown() {
 		reset();
 		if (this.server != null) {
 			this.server.shutdown();
@@ -252,7 +252,7 @@ public class ServerSetup {
 		return this;
 	}
 
-	public ServerSetup halt() {
+	public Setup halt() {
 		reset();
 		if (this.server != null) {
 			this.server.halt();
@@ -283,7 +283,7 @@ public class ServerSetup {
 		return http().attributes();
 	}
 
-	public ServerSetup staticFilesPath(String... staticFilesLocations) {
+	public Setup staticFilesPath(String... staticFilesLocations) {
 		for (FastHttp http : httpImpls()) {
 			http.setStaticFilesLocations(staticFilesLocations);
 		}
@@ -291,7 +291,7 @@ public class ServerSetup {
 		return this;
 	}
 
-	public ServerSetup render(ViewRenderer renderer) {
+	public Setup render(ViewRenderer renderer) {
 		for (FastHttp http : httpImpls()) {
 			http.setRenderer(renderer);
 		}
@@ -299,14 +299,14 @@ public class ServerSetup {
 		return this;
 	}
 
-	public ServerSetup path(String... path) {
+	public Setup path(String... path) {
 		this.path = path;
 		return this;
 	}
 
 	public synchronized String[] path() {
 		if (U.isEmpty(this.path)) {
-			String pkg = UTILS.getCallingPackageOf(ServerSetup.class, On.class, ServerSetup.class);
+			String pkg = UTILS.getCallingPackageOf(Setup.class, On.class, Setup.class);
 			this.path = new String[]{pkg};
 			Log.info("Inferring application package (path) to be: " + pkg);
 		}
@@ -314,7 +314,7 @@ public class ServerSetup {
 		return path;
 	}
 
-	public ServerSetup bootstrap() {
+	public Setup bootstrap() {
 		req(annotated(Controller.class).in(path()).getAll().toArray());
 		return this;
 	}
@@ -323,7 +323,7 @@ public class ServerSetup {
 		return new OnAnnotated(annotated, path());
 	}
 
-	public ServerSetup deregister(String verb, String path) {
+	public Setup deregister(String verb, String path) {
 		for (FastHttp http : httpImpls()) {
 			http.remove(verb, path);
 		}
@@ -331,7 +331,7 @@ public class ServerSetup {
 		return this;
 	}
 
-	public ServerSetup deregister(Object... controllers) {
+	public Setup deregister(Object... controllers) {
 		PojoHandlersSetup.from(this, controllers).deregister();
 		return this;
 	}
