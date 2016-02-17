@@ -26,8 +26,10 @@ import org.rapidoid.lambda.Mapper;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
-public interface WrappedProcess {
+public interface HandlerInvocation {
 
-	Object invoke(Mapper<Object, Object> transformation) throws Exception;
+	Object invoke() throws Exception;
+
+	Object invokeAndTransformResult(Mapper<Object, Object> transformation) throws Exception;
 
 }

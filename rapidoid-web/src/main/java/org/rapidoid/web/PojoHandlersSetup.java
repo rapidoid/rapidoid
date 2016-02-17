@@ -73,7 +73,7 @@ public class PojoHandlersSetup {
 			Class<?> clazz = (controller instanceof Class<?>) ? (Class<?>) controller : controller.getClass();
 
 			if (!Cls.isBeanType(clazz)) {
-				throw new RuntimeException("Expected a controller instance, but found value of type: " + clazz.getName());
+				throw new RuntimeException("Expected a bean, but found value of type: " + clazz.getName());
 			}
 
 			if (!clazz.getName().startsWith("org.rapidoid.log.")) { // FIXME clean-up

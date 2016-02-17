@@ -126,7 +126,7 @@ public class On {
 	}
 
 	public static synchronized Setup defaultWrap(HttpWrapper... wrappers) {
-		return DEFAULT_SETUP.defaultWrap(wrappers);
+		return DEFAULT_SETUP.wrap(wrappers);
 	}
 
 	public static synchronized Setup listener(FastHttpListener listener) {

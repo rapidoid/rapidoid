@@ -22,12 +22,12 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.handler.WrappedProcess;
+import org.rapidoid.http.handler.HandlerInvocation;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
 public interface HttpWrapper {
 
-	Object wrap(Req req, WrappedProcess process) throws Exception;
+	Object wrap(Req req, HandlerInvocation invocation) throws Exception;
 
 }

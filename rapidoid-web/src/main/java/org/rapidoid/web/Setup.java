@@ -12,13 +12,14 @@ import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqHandler;
 import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqRespHandler;
 import org.rapidoid.http.listener.FastHttpListener;
 import org.rapidoid.http.listener.IgnorantHttpListener;
+import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Constants;
 import org.rapidoid.util.UTILS;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
 import java.util.Map;
 
 /*
@@ -43,9 +44,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Setup {
-
-	public static final int UNDEFINED = -1;
+public class Setup implements Constants {
 
 	private final String name;
 	private final String defaultAddress;
@@ -100,8 +99,8 @@ public class Setup {
 
 	private void activate() {
 		if (port == defaultPort) {
-			int customPort = Conf.option(name + ".port", UNDEFINED);
-			if (customPort != UNDEFINED) {
+			int customPort = Conf.option(name + ".port", NOT_FOUND);
+			if (customPort != NOT_FOUND) {
 				port(customPort);
 			}
 		}
@@ -111,42 +110,42 @@ public class Setup {
 
 	public OnAction get(String path) {
 		activate();
-		return new OnAction(this, httpImpls(), "GET", path).wrap(wrappers);
+		return new OnAction(this, httpImpls(), GET, path).wrap(wrappers);
 	}
 
 	public OnAction post(String path) {
 		activate();
-		return new OnAction(this, httpImpls(), "POST", path).wrap(wrappers);
+		return new OnAction(this, httpImpls(), POST, path).wrap(wrappers);
 	}
 
 	public OnAction put(String path) {
 		activate();
-		return new OnAction(this, httpImpls(), "PUT", path).wrap(wrappers);
+		return new OnAction(this, httpImpls(), PUT, path).wrap(wrappers);
 	}
 
 	public OnAction delete(String path) {
 		activate();
-		return new OnAction(this, httpImpls(), "DELETE", path).wrap(wrappers);
+		return new OnAction(this, httpImpls(), DELETE, path).wrap(wrappers);
 	}
 
 	public OnAction patch(String path) {
 		activate();
-		return new OnAction(this, httpImpls(), "PATCH", path).wrap(wrappers);
+		return new OnAction(this, httpImpls(), PATCH, path).wrap(wrappers);
 	}
 
 	public OnAction options(String path) {
 		activate();
-		return new OnAction(this, httpImpls(), "OPTIONS", path).wrap(wrappers);
+		return new OnAction(this, httpImpls(), OPTIONS, path).wrap(wrappers);
 	}
 
 	public OnAction head(String path) {
 		activate();
-		return new OnAction(this, httpImpls(), "HEAD", path).wrap(wrappers);
+		return new OnAction(this, httpImpls(), HEAD, path).wrap(wrappers);
 	}
 
 	public OnAction trace(String path) {
 		activate();
-		return new OnAction(this, httpImpls(), "TRACE", path).wrap(wrappers);
+		return new OnAction(this, httpImpls(), TRACE, path).wrap(wrappers);
 	}
 
 	public OnPage page(String path) {
@@ -176,6 +175,7 @@ public class Setup {
 
 	public Setup req(FastHttpHandler handler) {
 		activate();
+
 		for (FastHttp http : httpImpls()) {
 			http.addGenericHandler(handler);
 		}
@@ -183,29 +183,16 @@ public class Setup {
 		return this;
 	}
 
-	public Setup beans(Object... controllers) {
-		activate();
-		List<Object> pojos = U.list();
-
-		for (Object controller : controllers) {
-			if (controller instanceof ReqHandler) {
-				ReqHandler handler = (ReqHandler) controller;
-				req(handler);
-
-			} else if (controller instanceof ReqRespHandler) {
-				ReqRespHandler handler = (ReqRespHandler) controller;
-				req(handler);
-
-			} else if (controller instanceof FastHttpHandler) {
-				FastHttpHandler handler = (FastHttpHandler) controller;
-				req(handler);
-
-			} else {
-				pojos.add(controller);
+	public Setup beans(Object... beans) {
+		for (Object bean : beans) {
+			if (bean instanceof NParamLambda) {
+				throw U.rte("Expected a bean, but found lambda: " + bean);
 			}
 		}
 
-		PojoHandlersSetup.from(this, pojos.toArray()).register();
+		activate();
+
+		PojoHandlersSetup.from(this, beans).register();
 
 		return this;
 	}
@@ -232,7 +219,7 @@ public class Setup {
 		return this;
 	}
 
-	public Setup defaultWrap(HttpWrapper... wrappers) {
+	public Setup wrap(HttpWrapper... wrappers) {
 		this.wrappers = wrappers;
 		return this;
 	}

@@ -139,9 +139,15 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 			throws Exception {
 		HttpWrapper wrapper = wrappers[index];
 
-		WrappedProcess process = new WrappedProcess() {
+		HandlerInvocation invocation = new HandlerInvocation() {
+
 			@Override
-			public Object invoke(Mapper<Object, Object> transformation) throws Exception {
+			public Object invoke() throws Exception {
+				return invokeAndTransformResult(null);
+			}
+
+			@Override
+			public Object invokeAndTransformResult(Mapper<Object, Object> transformation) throws Exception {
 				try {
 					int next = index + 1;
 
@@ -152,7 +158,8 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 						val = handleReq(channel, isKeepAlive, req, extra);
 					}
 
-					return transformation.map(val);
+					return transformation != null ? transformation.map(val) : val;
+
 				} catch (Throwable e) {
 					return e;
 				}
@@ -161,7 +168,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 		http.getListener().entering(wrapper, req);
 
-		Object result = wrapper.wrap(req, process);
+		Object result = wrapper.wrap(req, invocation);
 
 		http.getListener().leaving(wrapper, contentType, result);
 
