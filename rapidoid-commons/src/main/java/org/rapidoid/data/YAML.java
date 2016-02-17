@@ -12,7 +12,7 @@ import java.util.Map;
 
 /*
  * #%L
- * rapidoid-jackson
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
