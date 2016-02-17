@@ -1,8 +1,8 @@
-package org.rapidoid.quick;
+package org.rapidoid.sql;
 
 /*
  * #%L
- * rapidoid-quick
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -22,29 +22,45 @@ package org.rapidoid.quick;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
 import org.rapidoid.u.U;
-import redis.clients.jedis.Jedis;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.2.0")
-public class JedisTool {
+@Since("4.1.0")
+public class JDBCConfig {
 
-	private static Jedis jedis;
+	public static String url() {
+		return Conf.nested("jdbc", "url");
+	}
 
-	public static Jedis get() {
-		if (jedis == null) {
-			String host = Conf.nested("redis", "host");
-			host = U.or(host, "localhost");
+	public static String driver() {
+		String driver = Conf.nested("jdbc", "driver");
 
-			Object rport = Conf.nested("redis", "port");
-			int port = rport != null ? Cls.convert(rport, int.class) : 6379;
-
-			jedis = new Jedis(host, port);
+		if (driver == null && !U.isEmpty(url())) {
+			driver = inferDriverFromUrl(url());
 		}
 
-		return jedis;
+		return driver;
+	}
+
+	public static String username() {
+		return Conf.nested("jdbc", "username");
+	}
+
+	public static String password() {
+		return Conf.nested("jdbc", "password");
+	}
+
+	public static String inferDriverFromUrl(String url) {
+		if (url.startsWith("jdbc:mysql:")) {
+			return "com.mysql.jdbc.Driver";
+		} else if (url.startsWith("jdbc:h2:")) {
+			return "org.hibernate.dialect.H2Dialect";
+		} else if (url.startsWith("jdbc:hsqldb:")) {
+			return "org.hsqldb.jdbc.JDBCDriver";
+		}
+
+		return null;
 	}
 
 }

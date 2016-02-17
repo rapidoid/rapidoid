@@ -2,7 +2,7 @@ package org.rapidoid.sql;
 
 /*
  * #%L
- * rapidoid-sql
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -28,12 +28,21 @@ import java.sql.SQLException;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public interface ConnectionPool {
+public class NoConnectionPool implements ConnectionPool {
 
-	Connection getConnection(String jdbcUrl) throws SQLException;
+	@Override
+	public Connection getConnection(String jdbcUrl) throws SQLException {
+		return null;
+	}
 
-	Connection getConnection(String jdbcUrl, String username, String password) throws SQLException;
+	@Override
+	public Connection getConnection(String jdbcUrl, String username, String password) throws SQLException {
+		return null;
+	}
 
-	void releaseConnection(Connection connection) throws SQLException;
+	@Override
+	public void releaseConnection(Connection connection) throws SQLException {
+		connection.close();
+	}
 
 }

@@ -77,7 +77,6 @@
 		<module>rapidoid-u</module>
 		<module>rapidoid-commons</module>
 		<module>rapidoid-log</module>
-		<module>rapidoid-sql</module>
 		<module>rapidoid-test-commons</module>
 		<module>rapidoid-buffer</module>
 		<module>rapidoid-net</module>

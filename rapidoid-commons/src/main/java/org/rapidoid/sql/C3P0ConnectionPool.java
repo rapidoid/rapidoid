@@ -2,7 +2,7 @@ package org.rapidoid.sql;
 
 /*
  * #%L
- * rapidoid-sql
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
