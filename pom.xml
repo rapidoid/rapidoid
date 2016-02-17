@@ -87,7 +87,6 @@
 		<module>rapidoid-html</module>
 		<module>rapidoid-gui</module>
 		<module>rapidoid-oauth</module>
-		<module>rapidoid-templates-mustache</module>
 		<module>rapidoid-db-hibernate</module>
 		<module>rapidoid-web</module>
 		<module>rapidoid-quick</module>

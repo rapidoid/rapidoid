@@ -18,9 +18,9 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-templates-mustache</artifactId>
-			<version>${project.version}</version>
+			<groupId>com.github.spullara.mustache.java</groupId>
+			<artifactId>compiler</artifactId>
+			<version>0.8.17</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>

@@ -31,8 +31,8 @@ import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.html.Tag;
 import org.rapidoid.plugins.Plugins;
 import org.rapidoid.plugins.templates.ITemplate;
-import org.rapidoid.plugins.templates.MustacheTemplatesPlugin;
 import org.rapidoid.plugins.templates.Templates;
+import org.rapidoid.templates.MustacheTemplatesPlugin;
 import org.rapidoid.u.U;
 
 import java.util.Map;

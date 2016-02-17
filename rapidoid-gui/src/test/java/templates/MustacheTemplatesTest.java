@@ -1,4 +1,4 @@
-package org.rapidoid.plugins.templates;
+package templates;
 
 /*
  * #%L
@@ -25,6 +25,12 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.plugins.Plugins;
+import org.rapidoid.plugins.templates.ITemplate;
+import org.rapidoid.plugins.templates.Templates;
+import org.rapidoid.templates.MustacheFileTemplate;
+import org.rapidoid.templates.MustacheStringTemplate;
+import org.rapidoid.templates.MustacheTemplatesPlugin;
+import org.rapidoid.templates.RapidoidMustacheFactory;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 

@@ -1,4 +1,4 @@
-package org.rapidoid.plugins.templates;
+package org.rapidoid.templates;
 
 /*
  * #%L
@@ -23,6 +23,8 @@ package org.rapidoid.plugins.templates;
 import com.github.mustachejava.MustacheFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.plugins.templates.AbstractTemplatesPlugin;
+import org.rapidoid.plugins.templates.ITemplate;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

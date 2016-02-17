@@ -1,4 +1,4 @@
-package org.rapidoid.plugins.templates;
+package org.rapidoid.templates;
 
 /*
  * #%L
@@ -24,6 +24,7 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.plugins.templates.AbstractTemplate;
 import org.rapidoid.u.U;
 
 import java.io.IOException;

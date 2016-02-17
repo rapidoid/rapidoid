@@ -1,4 +1,4 @@
-package org.rapidoid.plugins.templates;
+package org.rapidoid.templates;
 
 /*
  * #%L

@@ -1,4 +1,4 @@
-package org.rapidoid.plugins.templates;
+package org.rapidoid.templates;
 
 /*
  * #%L
@@ -20,37 +20,12 @@ package org.rapidoid.plugins.templates;
  * #L%
  */
 
-import com.github.mustachejava.Mustache;
-import com.github.mustachejava.MustacheFactory;
+import com.github.mustachejava.reflect.ReflectionObjectHandler;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public class MustacheFileTemplate extends AbstractTemplate {
-
-	private final MustacheFactory factory;
-
-	private final String filename;
-
-	public MustacheFileTemplate(MustacheFactory factory, String filename) {
-		this.factory = factory;
-		this.filename = filename;
-	}
-
-	public void render(OutputStream output, Object... scopes) {
-		Mustache mustache = factory.compile(filename);
-
-		try {
-			mustache.execute(new PrintWriter(output), scopes).flush();
-		} catch (IOException e) {
-			throw U.rte("Cannot render the template: " + filename, e);
-		}
-	}
+@Since("4.3.0")
+public class CustomObjectHandler extends ReflectionObjectHandler {
 
 }
