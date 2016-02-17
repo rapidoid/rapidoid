@@ -14,12 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-u</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-log</artifactId>
+			<artifactId>rapidoid-essentials</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

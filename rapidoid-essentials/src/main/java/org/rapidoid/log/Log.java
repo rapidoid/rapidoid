@@ -2,7 +2,7 @@ package org.rapidoid.log;
 
 /*
  * #%L
- * rapidoid-log
+ * rapidoid-essentials
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%

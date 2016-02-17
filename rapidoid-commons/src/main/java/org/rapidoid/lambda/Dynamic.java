@@ -1,8 +1,10 @@
 package org.rapidoid.lambda;
 
+import java.lang.reflect.Method;
+
 /*
  * #%L
- * rapidoid-u
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -22,26 +24,10 @@ package org.rapidoid.lambda;
 
 /**
  * @author Nikolche Mihajlovski
- * @since 2.0.0
+ * @since 4.1.0
  */
-public interface Predicate<T> {
+public interface Dynamic {
 
-	@SuppressWarnings("rawtypes")
-	public static final Predicate<?> ALWAYS_TRUE = new Predicate() {
-		@Override
-		public boolean eval(Object param) throws Exception {
-			return true;
-		}
-	};
-
-	@SuppressWarnings("rawtypes")
-	public static final Predicate<?> ALWAYS_FALSE = new Predicate() {
-		@Override
-		public boolean eval(Object param) throws Exception {
-			return false;
-		}
-	};
-
-	boolean eval(T param) throws Exception;
+	Object call(Method m, Object[] args);
 
 }

@@ -1,10 +1,8 @@
 package org.rapidoid.lambda;
 
-import java.lang.reflect.Method;
-
 /*
  * #%L
- * rapidoid-u
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -24,10 +22,10 @@ import java.lang.reflect.Method;
 
 /**
  * @author Nikolche Mihajlovski
- * @since 4.1.0
+ * @since 2.0.0
  */
-public interface Dynamic {
+public interface Mapper<FROM, TO> {
 
-	Object call(Method m, Object[] args);
+	TO map(FROM src) throws Exception;
 
 }

@@ -33,6 +33,7 @@ import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.insight.Insights;
 import org.rapidoid.io.Res;
+import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
@@ -40,6 +41,9 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import java.io.*;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -819,6 +823,30 @@ public class UTILS implements Constants {
 		}
 
 		return n;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T dynamic(final Class<T> targetInterface, final Dynamic dynamic) {
+		final Object obj = new Object();
+
+		InvocationHandler handler = new InvocationHandler() {
+
+			@Override
+			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
+				if (method.getDeclaringClass().equals(Object.class)) {
+					if (method.getName().equals("toString")) {
+						return targetInterface.getSimpleName() + "@" + Integer.toHexString(obj.hashCode());
+					}
+					return method.invoke(obj, args);
+				}
+
+				return dynamic.call(method, U.safe(args));
+			}
+
+		};
+
+		return ((T) Proxy.newProxyInstance(targetInterface.getClassLoader(), new Class[]{targetInterface}, handler));
 	}
 
 }

@@ -1,8 +1,8 @@
-package org.rapidoid.log;
+package org.rapidoid.util;
 
 /*
  * #%L
- * rapidoid-log
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -22,10 +22,11 @@ package org.rapidoid.log;
 
 /**
  * @author Nikolche Mihajlovski
- * @since 2.0.0
+ * @since 4.1.0
  */
-public enum LogLevel {
+public interface EgInterface {
 
-	TRACE, DEBUG, INFO, WARN, ERROR;
+	String hey();
 
+	String abc(int x, boolean b);
 }

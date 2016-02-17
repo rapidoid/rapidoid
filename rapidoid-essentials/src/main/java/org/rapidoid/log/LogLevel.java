@@ -1,8 +1,8 @@
-package org.rapidoid.lambda;
+package org.rapidoid.log;
 
 /*
  * #%L
- * rapidoid-u
+ * rapidoid-essentials
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -24,8 +24,8 @@ package org.rapidoid.lambda;
  * @author Nikolche Mihajlovski
  * @since 2.0.0
  */
-public interface Mapper<FROM, TO> {
+public enum LogLevel {
 
-	TO map(FROM src) throws Exception;
+	TRACE, DEBUG, INFO, WARN, ERROR;
 
 }

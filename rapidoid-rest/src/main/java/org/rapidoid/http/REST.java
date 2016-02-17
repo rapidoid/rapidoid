@@ -26,6 +26,7 @@ import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -76,7 +77,7 @@ public class REST {
 	}
 
 	public static <T> T client(Class<T> clientInterface) {
-		return U.dynamic(clientInterface, new DynamicRESTClient(clientInterface));
+		return UTILS.dynamic(clientInterface, new DynamicRESTClient(clientInterface));
 	}
 
 }

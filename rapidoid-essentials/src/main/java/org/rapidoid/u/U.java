@@ -2,7 +2,7 @@ package org.rapidoid.u;
 
 /*
  * #%L
- * rapidoid-u
+ * rapidoid-essentials
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,11 +20,6 @@ package org.rapidoid.u;
  * #L%
  */
 
-import org.rapidoid.lambda.Dynamic;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.util.*;
 import java.util.concurrent.CancellationException;
 
@@ -593,30 +588,6 @@ public class U {
 	@SuppressWarnings("unchecked")
 	public static <T> T cast(Object value) {
 		return (T) value;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> T dynamic(final Class<T> targetInterface, final Dynamic dynamic) {
-		final Object obj = new Object();
-
-		InvocationHandler handler = new InvocationHandler() {
-
-			@Override
-			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
-				if (method.getDeclaringClass().equals(Object.class)) {
-					if (method.getName().equals("toString")) {
-						return targetInterface.getSimpleName() + "@" + Integer.toHexString(obj.hashCode());
-					}
-					return method.invoke(obj, args);
-				}
-
-				return dynamic.call(method, safe(args));
-			}
-
-		};
-
-		return ((T) Proxy.newProxyInstance(targetInterface.getClassLoader(), new Class[]{targetInterface}, handler));
 	}
 
 }
