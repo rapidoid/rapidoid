@@ -14,7 +14,7 @@ import java.util.Map;
 
 /*
  * #%L
- * rapidoid-db-hibernate
+ * rapidoid-hibernate
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%

@@ -2,7 +2,7 @@ package org.rapidoid.templates;
 
 /*
  * #%L
- * rapidoid-templates-mustache
+ * rapidoid-gui
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
