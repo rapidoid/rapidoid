@@ -45,13 +45,13 @@ public class AppClasspathEntitiesPlugin extends AbstractEntitiesPlugin {
 	@Override
 	public synchronized <E> Class<E> getEntityType(String simpleTypeName) {
 
-		for (Class<?> type : Scan.annotated(DbEntity.class).getClasses()) {
+		for (Class<?> type : Scan.annotated(DbEntity.class).getAll()) {
 			if (type.getSimpleName().equalsIgnoreCase(simpleTypeName)) {
 				return (Class<E>) type;
 			}
 		}
 
-		for (Class<?> type : Scan.annotated(Scaffold.class).getClasses()) {
+		for (Class<?> type : Scan.annotated(Scaffold.class).getAll()) {
 			if (type.getSimpleName().equalsIgnoreCase(simpleTypeName)) {
 				return (Class<E>) type;
 			}

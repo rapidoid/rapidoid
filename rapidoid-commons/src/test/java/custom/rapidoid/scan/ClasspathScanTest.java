@@ -44,11 +44,11 @@ public class ClasspathScanTest extends AbstractCommonsTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testClasspathScanByName() {
-		List<Class<?>> classes = Scan.matching(".*ScanTest").getClasses();
+		List<Class<?>> classes = Scan.matching(".*ScanTest").getAll();
 
 		eq(U.set(classes), U.set(ClasspathScanTest.class));
 
-		classes = Scan.in("custom").matching(".*Bar").getClasses();
+		classes = Scan.in("custom").matching(".*Bar").getAll();
 
 		eq(U.set(classes), U.set(Bar.class));
 	}
@@ -56,7 +56,7 @@ public class ClasspathScanTest extends AbstractCommonsTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testClasspathScanByAnnotation() {
-		List<Class<?>> classes = Scan.annotated(MyAnnot.class).getClasses();
+		List<Class<?>> classes = Scan.annotated(MyAnnot.class).getAll();
 
 		eq(U.set(classes), U.set(Foo.class, Bar.class));
 	}
@@ -64,7 +64,7 @@ public class ClasspathScanTest extends AbstractCommonsTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testScanAll() {
-		List<Class<?>> classes = Scan.getClasses();
+		List<Class<?>> classes = Scan.getAll();
 
 		Set<Class<? extends Object>> expectedSubset = U.set(Foo.class, Bar.class, MyAnnot.class,
 				ClasspathScanTest.class, Aaa.class, Cls.getClassIfExists("Bbb"), Ccccc.class);

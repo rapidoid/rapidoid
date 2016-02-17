@@ -85,7 +85,7 @@ public class ScanParams {
 		return this.classLoader;
 	}
 
-	public synchronized List<Class<?>> getClasses() {
+	public synchronized List<Class<?>> getAll() {
 		return ClasspathUtil.getClasses(this);
 	}
 

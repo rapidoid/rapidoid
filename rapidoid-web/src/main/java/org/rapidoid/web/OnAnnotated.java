@@ -59,7 +59,7 @@ public class OnAnnotated {
 
 	@SuppressWarnings("unchecked")
 	public synchronized List<Class<?>> getAll() {
-		return Scan.annotated(annotated).in(path).getClasses();
+		return Scan.annotated(annotated).in(path).getAll();
 	}
 
 }

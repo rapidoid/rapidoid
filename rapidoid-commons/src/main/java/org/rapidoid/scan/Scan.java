@@ -50,7 +50,7 @@ public class Scan {
 		return new ScanParams().classLoader(classLoader);
 	}
 
-	public static synchronized List<Class<?>> getClasses() {
+	public static synchronized List<Class<?>> getAll() {
 		return ClasspathUtil.getClasses(new ScanParams());
 	}
 
