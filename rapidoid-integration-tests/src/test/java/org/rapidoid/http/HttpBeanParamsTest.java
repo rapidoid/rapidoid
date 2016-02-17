@@ -40,7 +40,7 @@ public class HttpBeanParamsTest extends HttpTestCommons {
 
 	@Test
 	public void testBeanParams() {
-		On.req(new Object() {
+		On.beans(new Object() {
 
 			@GET
 			@SuppressWarnings("unchecked")

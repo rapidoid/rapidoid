@@ -34,14 +34,14 @@ public class HttpMultiControllerTest extends HttpTestCommons {
 	public void testSequentialControllerRegistration() {
 
 		// this will be overwritten by the third
-		On.req(new Object() {
+		On.beans(new Object() {
 			@GET
 			public String foo(Req req) {
 				return "FOO";
 			}
 		});
 
-		On.req(new Object() {
+		On.beans(new Object() {
 			@GET
 			public String bar(Req req, Resp resp) {
 				return "BAR";
@@ -49,7 +49,7 @@ public class HttpMultiControllerTest extends HttpTestCommons {
 		});
 
 		// this will overwrite the first
-		On.req(new Object() {
+		On.beans(new Object() {
 			@GET
 			public String foo() {
 				return "FOO2";
@@ -60,7 +60,7 @@ public class HttpMultiControllerTest extends HttpTestCommons {
 
 		onlyGet("/baz?x=123");
 
-		On.req(new Object() {
+		On.beans(new Object() {
 			@GET
 			public String baz() {
 				return "BAZZZZZZ";

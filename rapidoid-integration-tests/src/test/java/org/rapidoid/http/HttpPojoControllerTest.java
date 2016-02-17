@@ -38,7 +38,7 @@ public class HttpPojoControllerTest extends HttpTestCommons {
 
 	@Test
 	public void testPojoHandlers() {
-		On.req(new Object() {
+		On.beans(new Object() {
 
 			@GET("/a")
 			public Object theFoo() {
@@ -61,7 +61,7 @@ public class HttpPojoControllerTest extends HttpTestCommons {
 		List<Class<?>> ctrls2 = On.annotated(MyTestController.class).in("non-existing-pkg", "").getAll();
 		eq(ctrls2, U.list(Ff.class));
 
-		On.annotated(MyTestController.class, MyTestController.class).forEach(On::req);
+		On.annotated(MyTestController.class, MyTestController.class).forEach(On::beans);
 
 		onlyGet("/a");
 		onlyGet("/b");
@@ -78,7 +78,7 @@ public class HttpPojoControllerTest extends HttpTestCommons {
 		List<Class<?>> ctrls2 = On.annotated(MyTestController.class, Generated.class).getAll();
 		eq(ctrls2, U.list(Ff.class));
 
-		On.annotated(MyTestController.class, MyTestController.class).forEach(cls -> On.req(Wire.singleton(cls)));
+		On.annotated(MyTestController.class, MyTestController.class).forEach(cls -> On.beans(Wire.singleton(cls)));
 
 		onlyGet("/b");
 		onlyGet("/x");

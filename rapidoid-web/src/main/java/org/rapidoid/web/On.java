@@ -105,8 +105,8 @@ public class On {
 		return DEFAULT_SERVER.req(handler);
 	}
 
-	public static synchronized Setup req(Object... controllers) {
-		return DEFAULT_SERVER.req(controllers);
+	public static synchronized Setup beans(Object... controllers) {
+		return DEFAULT_SERVER.beans(controllers);
 	}
 
 	public static synchronized Setup port(int port) {

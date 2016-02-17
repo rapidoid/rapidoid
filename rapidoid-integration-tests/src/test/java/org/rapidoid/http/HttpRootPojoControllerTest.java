@@ -31,7 +31,7 @@ public class HttpRootPojoControllerTest extends HttpTestCommons {
 
 	@Test
 	public void testRootPojoHandler() {
-		On.req(new Object() {
+		On.beans(new Object() {
 
 			@GET("/a")
 			public Object theFoo() {

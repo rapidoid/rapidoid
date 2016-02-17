@@ -33,7 +33,7 @@ public class HttpPojoApiTest extends HttpTestCommons {
 
 	@Test
 	public void test1() {
-		On.req(new Object() {
+		On.beans(new Object() {
 			public String test1() {
 				return "not annotated";
 			}
@@ -45,7 +45,7 @@ public class HttpPojoApiTest extends HttpTestCommons {
 
 	@Test
 	public void test2() {
-		On.req(new Object() {
+		On.beans(new Object() {
 			@GET
 			public Object test2() {
 				return 123.456;
@@ -58,7 +58,7 @@ public class HttpPojoApiTest extends HttpTestCommons {
 
 	@Test
 	public void test3() {
-		On.req(new Object() {
+		On.beans(new Object() {
 			@POST
 			public Object test3() {
 				return "ABC DE";
@@ -71,7 +71,7 @@ public class HttpPojoApiTest extends HttpTestCommons {
 
 	@Test
 	public void test4() {
-		On.req(new Object() {
+		On.beans(new Object() {
 			@PUT
 			public int test4() {
 				return 12345;
@@ -84,7 +84,7 @@ public class HttpPojoApiTest extends HttpTestCommons {
 
 	@Test
 	public void test5() {
-		On.req(new Object() {
+		On.beans(new Object() {
 			@DELETE
 			public boolean test5() {
 				return true;
@@ -97,7 +97,7 @@ public class HttpPojoApiTest extends HttpTestCommons {
 
 	@Test
 	public void test6() {
-		On.req(new Object() {
+		On.beans(new Object() {
 			@GET
 			public Object test6(Req req, Resp resp) {
 				return U.map("a", 1, "b", 2);
@@ -110,7 +110,7 @@ public class HttpPojoApiTest extends HttpTestCommons {
 
 	@Test
 	public void test7() {
-		On.req(new Object() {
+		On.beans(new Object() {
 			@POST
 			public Object test7(Req req, Resp resp) {
 				return U.list("a", 123, true);
@@ -123,7 +123,7 @@ public class HttpPojoApiTest extends HttpTestCommons {
 
 	@Test
 	public void test8() {
-		On.req(new Object() {
+		On.beans(new Object() {
 			@PUT
 			public Object test8(Req req, Resp resp) {
 				return U.set("b", 0, false);
@@ -136,7 +136,7 @@ public class HttpPojoApiTest extends HttpTestCommons {
 
 	@Test
 	public void test9() {
-		On.req(new Object() {
+		On.beans(new Object() {
 			@DELETE
 			public Date test9(Req req, Resp resp) {
 				return new Date(50505050);
@@ -176,7 +176,7 @@ public class HttpPojoApiTest extends HttpTestCommons {
 
 	@Test
 	public void test10() {
-		On.req(new Ctrl1());
+		On.beans(new Ctrl1());
 
 		notFound("/");
 
@@ -190,7 +190,7 @@ public class HttpPojoApiTest extends HttpTestCommons {
 
 	@Test
 	public void test11() {
-		On.req(Ctrl1.class);
+		On.beans(Ctrl1.class);
 
 		notFound("/");
 
@@ -231,7 +231,7 @@ public class HttpPojoApiTest extends HttpTestCommons {
 
 	@Test
 	public void test12() {
-		On.req(new Ctrl2());
+		On.beans(new Ctrl2());
 
 		notFound("/");
 
@@ -272,7 +272,7 @@ public class HttpPojoApiTest extends HttpTestCommons {
 			}
 		}
 
-		On.req(new Ctrl3());
+		On.beans(new Ctrl3());
 
 		notFound("/");
 

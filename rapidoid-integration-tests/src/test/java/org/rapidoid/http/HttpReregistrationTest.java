@@ -39,13 +39,13 @@ public class HttpReregistrationTest extends HttpTestCommons {
 		notFound("/inc");
 		notFound("/dec");
 
-		On.req(ctrl1);
+		On.beans(ctrl1);
 
 		onlyGet("/inc?x=5");
 		notFound("/dec");
 
 		On.deregister(ctrl1);
-		On.req(ctrl2);
+		On.beans(ctrl2);
 
 		onlyPost("/dec?x=12");
 		notFound("/inc");
@@ -61,13 +61,13 @@ public class HttpReregistrationTest extends HttpTestCommons {
 		notFound("/inc");
 		notFound("/dec");
 
-		On.req(ctrl1("nextA"));
+		On.beans(ctrl1("nextA"));
 		onlyGet("/inc?x=100");
 
-		On.req(ctrl1("nextB"));
+		On.beans(ctrl1("nextB"));
 		onlyGet("/inc?x=200");
 
-		On.req(ctrl1("nextC"));
+		On.beans(ctrl1("nextC"));
 		onlyGet("/inc?x=300");
 
 		// can deregister with other instance, only the class matters for deregistration, not the instance

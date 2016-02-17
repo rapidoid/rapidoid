@@ -183,7 +183,7 @@ public class Setup {
 		return this;
 	}
 
-	public Setup req(Object... controllers) {
+	public Setup beans(Object... controllers) {
 		activate();
 		List<Object> pojos = U.list();
 
@@ -315,7 +315,7 @@ public class Setup {
 	}
 
 	public Setup bootstrap() {
-		req(annotated(Controller.class).in(path()).getAll().toArray());
+		beans(annotated(Controller.class).in(path()).getAll().toArray());
 		return this;
 	}
 
