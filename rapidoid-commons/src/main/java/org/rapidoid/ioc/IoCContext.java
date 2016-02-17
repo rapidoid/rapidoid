@@ -1,8 +1,6 @@
 package org.rapidoid.ioc;
 
 import org.rapidoid.annotation.*;
-import org.rapidoid.beany.Beany;
-import org.rapidoid.beany.Builder;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.Proxies;
 import org.rapidoid.commons.Coll;
@@ -369,30 +367,6 @@ public class IoCContext {
 		}
 
 		return instance;
-	}
-
-	public <T, B extends Builder<T>> B builder(final Class<B> builderInterface, final Class<T> builtInterface,
-	                                           final Class<? extends T> implClass) {
-
-		final Map<String, Object> properties = U.map();
-
-		InvocationHandler handler = new InvocationHandler() {
-			@Override
-			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-				if (method.getDeclaringClass().equals(Builder.class)) {
-					T instance = inject(Cls.newInstance(implClass, properties), properties);
-					Beany.update(instance, properties, false, true);
-					return instance;
-				} else {
-					U.must(args.length == 1, "expected 1 argument!");
-					properties.put(method.getName(), args[0]);
-					return proxy;
-				}
-			}
-		};
-
-		B builder = Proxies.implement(handler, builderInterface);
-		return builder;
 	}
 
 	public <K, V> Map<K, V> autoExpandingInjectingMap(final Class<V> clazz) {

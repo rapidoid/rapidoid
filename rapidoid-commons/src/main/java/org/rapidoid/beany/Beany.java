@@ -4,7 +4,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.ToString;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.cls.Proxies;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Dates;
@@ -14,7 +13,10 @@ import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -564,30 +566,6 @@ public class Beany {
 
 	public static Object unwrap(Object value) {
 		return Vars.unwrap(value);
-	}
-
-	public static <T, B extends Builder<T>> B builder(final Class<B> builderInterface, final Class<T> builtInterface,
-	                                                  final Class<? extends T> implClass) {
-
-		final Map<String, Object> properties = U.map();
-
-		InvocationHandler handler = new InvocationHandler() {
-			@Override
-			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-				if (method.getDeclaringClass().equals(Builder.class)) {
-					T instance = Cls.newInstance(implClass, properties);
-					update(instance, properties, false, true);
-					return instance;
-				} else {
-					U.must(args.length == 1, "expected 1 argument!");
-					properties.put(method.getName(), args[0]);
-					return proxy;
-				}
-			}
-		};
-
-		B builder = Proxies.implement(handler, builderInterface);
-		return builder;
 	}
 
 }
