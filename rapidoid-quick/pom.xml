@@ -24,12 +24,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-cache-guava</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-db-hibernate</artifactId>
+			<artifactId>rapidoid-hibernate</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
