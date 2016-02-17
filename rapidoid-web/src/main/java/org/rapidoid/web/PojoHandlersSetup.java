@@ -45,16 +45,16 @@ public class PojoHandlersSetup {
 			OPTIONS.class.getName(), HEAD.class.getName(), TRACE.class.getName()
 	);
 
-	private final Setup server;
+	private final Setup setup;
 	private final Object[] controllers;
 
-	private PojoHandlersSetup(Setup server, Object[] controllers) {
-		this.server = server;
+	private PojoHandlersSetup(Setup setup, Object[] controllers) {
+		this.setup = setup;
 		this.controllers = controllers;
 	}
 
-	public static PojoHandlersSetup from(Setup server, Object[] controllers) {
-		return new PojoHandlersSetup(server, controllers);
+	public static PojoHandlersSetup from(Setup setup, Object[] controllers) {
+		return new PojoHandlersSetup(setup, controllers);
 	}
 
 	public void register() {
@@ -139,82 +139,82 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					server.page(path).gui(method, controller);
+					setup.page(path).gui(method, controller);
 				} else {
-					server.deregister(Constants.GET, path);
-					server.deregister(Constants.POST, path);
+					setup.deregister(Constants.GET, path);
+					setup.deregister(Constants.POST, path);
 				}
 
 			} else if (annoName.equals(GET.class.getName())) {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					server.get(path).json(method, controller);
+					setup.get(path).json(method, controller);
 				} else {
-					server.deregister(Constants.GET, path);
+					setup.deregister(Constants.GET, path);
 				}
 
 			} else if (annoName.equals(POST.class.getName())) {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					server.post(path).json(method, controller);
+					setup.post(path).json(method, controller);
 				} else {
-					server.deregister(Constants.POST, path);
+					setup.deregister(Constants.POST, path);
 				}
 
 			} else if (annoName.equals(PUT.class.getName())) {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					server.put(path).json(method, controller);
+					setup.put(path).json(method, controller);
 				} else {
-					server.deregister(Constants.PUT, path);
+					setup.deregister(Constants.PUT, path);
 				}
 
 			} else if (annoName.equals(DELETE.class.getName())) {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					server.delete(path).json(method, controller);
+					setup.delete(path).json(method, controller);
 				} else {
-					server.deregister(Constants.DELETE, path);
+					setup.deregister(Constants.DELETE, path);
 				}
 
 			} else if (annoName.equals(PATCH.class.getName())) {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					server.patch(path).json(method, controller);
+					setup.patch(path).json(method, controller);
 				} else {
-					server.deregister(Constants.PATCH, path);
+					setup.deregister(Constants.PATCH, path);
 				}
 
 			} else if (annoName.equals(OPTIONS.class.getName())) {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					server.options(path).json(method, controller);
+					setup.options(path).json(method, controller);
 				} else {
-					server.deregister(Constants.OPTIONS, path);
+					setup.deregister(Constants.OPTIONS, path);
 				}
 
 			} else if (annoName.equals(HEAD.class.getName())) {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					server.head(path).json(method, controller);
+					setup.head(path).json(method, controller);
 				} else {
-					server.deregister(Constants.HEAD, path);
+					setup.deregister(Constants.HEAD, path);
 				}
 
 			} else if (annoName.equals(TRACE.class.getName())) {
 				String path = pathOf(method, ctxPath, valueOf(ann));
 
 				if (register) {
-					server.trace(path).json(method, controller);
+					setup.trace(path).json(method, controller);
 				} else {
-					server.deregister(Constants.TRACE, path);
+					setup.deregister(Constants.TRACE, path);
 				}
 			}
 		}

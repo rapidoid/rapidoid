@@ -47,141 +47,141 @@ public class On {
 		});
 	}
 
-	private static final Setup DEFAULT_SERVER = new Setup("http", "0.0.0.0", 8888, ServerSetupType.DEFAULT);
+	private static final Setup DEFAULT_SETUP = new Setup("http", "0.0.0.0", 8888, ServerSetupType.DEFAULT);
 
-	private static final Setup ADMIN_SERVER = new Setup("admin", "0.0.0.0", 8889, ServerSetupType.ADMIN);
+	private static final Setup ADMIN_SETUP = new Setup("admin", "0.0.0.0", 8889, ServerSetupType.ADMIN);
 
-	private static final Setup DEV_SERVER = new Setup("dev", "127.0.0.1", 8887, ServerSetupType.DEV);
+	private static final Setup DEV_SETUP = new Setup("dev", "127.0.0.1", 8887, ServerSetupType.DEV);
 
 	public static synchronized OnAction get(String path) {
-		return DEFAULT_SERVER.get(path);
+		return DEFAULT_SETUP.get(path);
 	}
 
 	public static synchronized OnAction post(String path) {
-		return DEFAULT_SERVER.post(path);
+		return DEFAULT_SETUP.post(path);
 	}
 
 	public static synchronized OnAction put(String path) {
-		return DEFAULT_SERVER.put(path);
+		return DEFAULT_SETUP.put(path);
 	}
 
 	public static synchronized OnAction delete(String path) {
-		return DEFAULT_SERVER.delete(path);
+		return DEFAULT_SETUP.delete(path);
 	}
 
 	public static synchronized OnAction patch(String path) {
-		return DEFAULT_SERVER.patch(path);
+		return DEFAULT_SETUP.patch(path);
 	}
 
 	public static synchronized OnAction options(String path) {
-		return DEFAULT_SERVER.options(path);
+		return DEFAULT_SETUP.options(path);
 	}
 
 	public static synchronized OnAction head(String path) {
-		return DEFAULT_SERVER.head(path);
+		return DEFAULT_SETUP.head(path);
 	}
 
 	public static synchronized OnAction trace(String path) {
-		return DEFAULT_SERVER.trace(path);
+		return DEFAULT_SETUP.trace(path);
 	}
 
 	public static synchronized OnPage page(String path) {
-		return DEFAULT_SERVER.page(path);
+		return DEFAULT_SETUP.page(path);
 	}
 
 	public static synchronized Setup error(ErrorHandler onError) {
-		return DEFAULT_SERVER.onError(onError);
+		return DEFAULT_SETUP.onError(onError);
 	}
 
 	public static synchronized Setup req(ReqHandler handler) {
-		return DEFAULT_SERVER.req(handler);
+		return DEFAULT_SETUP.req(handler);
 	}
 
 	public static synchronized Setup req(ReqRespHandler handler) {
-		return DEFAULT_SERVER.req(handler);
+		return DEFAULT_SETUP.req(handler);
 	}
 
 	public static synchronized Setup req(FastHttpHandler handler) {
-		return DEFAULT_SERVER.req(handler);
+		return DEFAULT_SETUP.req(handler);
 	}
 
 	public static synchronized Setup beans(Object... controllers) {
-		return DEFAULT_SERVER.beans(controllers);
+		return DEFAULT_SETUP.beans(controllers);
 	}
 
 	public static synchronized Setup port(int port) {
-		return DEFAULT_SERVER.port(port);
+		return DEFAULT_SETUP.port(port);
 	}
 
 	public static synchronized Setup address(String address) {
-		return DEFAULT_SERVER.address(address);
+		return DEFAULT_SETUP.address(address);
 	}
 
 	public static Setup path(String... path) {
-		return DEFAULT_SERVER.path(path);
+		return DEFAULT_SETUP.path(path);
 	}
 
 	public static String[] path() {
-		return DEFAULT_SERVER.path();
+		return DEFAULT_SETUP.path();
 	}
 
 	public static synchronized Setup defaultWrap(HttpWrapper... wrappers) {
-		return DEFAULT_SERVER.defaultWrap(wrappers);
+		return DEFAULT_SETUP.defaultWrap(wrappers);
 	}
 
 	public static synchronized Setup listener(FastHttpListener listener) {
-		return DEFAULT_SERVER.listener(listener);
+		return DEFAULT_SETUP.listener(listener);
 	}
 
 	public static synchronized Setup getDefaultSetup() {
-		return DEFAULT_SERVER;
+		return DEFAULT_SETUP;
 	}
 
-	public static Setup createServer(String name) {
+	public static Setup createSetup(String name) {
 		return new Setup(name, "0.0.0.0", 8888, ServerSetupType.CUSTOM);
 	}
 
 	public static synchronized Setup staticFilesLookIn(String... possibleLocations) {
-		return DEFAULT_SERVER.staticFilesPath(possibleLocations);
+		return DEFAULT_SETUP.staticFilesPath(possibleLocations);
 	}
 
 	public static synchronized Setup render(ViewRenderer renderer) {
-		return DEFAULT_SERVER.render(renderer);
+		return DEFAULT_SETUP.render(renderer);
 	}
 
 	public static Setup args(String... args) {
 		Conf.args(args);
-		return DEFAULT_SERVER;
+		return DEFAULT_SETUP;
 	}
 
 	public static Setup bootstrap() {
-		return DEFAULT_SERVER.bootstrap();
+		return DEFAULT_SETUP.bootstrap();
 	}
 
 	@SafeVarargs
 	@SuppressWarnings({"varargs"})
 	public static OnAnnotated annotated(Class<? extends Annotation>... annotated) {
-		return DEFAULT_SERVER.annotated(annotated);
+		return DEFAULT_SETUP.annotated(annotated);
 	}
 
 	public static Setup admin() {
-		return ADMIN_SERVER;
+		return ADMIN_SETUP;
 	}
 
 	public static Setup dev() {
-		return DEV_SERVER;
+		return DEV_SETUP;
 	}
 
 	public static Setup deregister(String verb, String path) {
-		return DEFAULT_SERVER.deregister(verb, path);
+		return DEFAULT_SETUP.deregister(verb, path);
 	}
 
 	public static Setup deregister(Object... controllers) {
-		return DEFAULT_SERVER.deregister(controllers);
+		return DEFAULT_SETUP.deregister(controllers);
 	}
 
 	public static OnChanges changes() {
-		return DEFAULT_SERVER.changes();
+		return DEFAULT_SETUP.changes();
 	}
 
 }
