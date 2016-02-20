@@ -12,6 +12,8 @@ import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqHandler;
 import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqRespHandler;
 import org.rapidoid.http.processor.HttpProcessor;
+import org.rapidoid.io.watch.ClassReloader;
+import org.rapidoid.io.watch.Reload;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
@@ -48,6 +50,7 @@ import java.util.Map;
 @Since("5.1.0")
 public class Setup implements Constants {
 
+	private static volatile String mainClassName;
 	private static volatile String appPkgName;
 
 	static boolean restarted = false;
@@ -316,6 +319,12 @@ public class Setup implements Constants {
 
 			appPkgName = pkg;
 
+			if (mainClassName == null) {
+				Class<?> mainClass = UTILS.getCallingMainClass();
+				mainClassName = mainClass != null ? mainClass.getName() : null;
+			}
+
+			Log.info("Inferring application root", "entry", mainClassName, "package", pkg);
 		}
 	}
 
@@ -344,6 +353,39 @@ public class Setup implements Constants {
 
 	public IoCContext getIoCContext() {
 		return ioCContext;
+	}
+
+	public void restart() {
+		synchronized (Setup.class) {
+			U.notNull(mainClassName, "Cannot restart, the main class is unknown!");
+
+			restarted = true;
+
+			if (fastHttp != null) {
+				fastHttp.resetConfig();
+			}
+			wrappers = null;
+
+			ClassReloader reloader = Reload.createClassLoader();
+
+			Class<?> entry;
+			try {
+				entry = reloader.loadClass(mainClassName);
+			} catch (ClassNotFoundException e) {
+				Log.error("Cannot restart the application, the main class (app entry point) is missing!");
+				return;
+			}
+
+			Method main = Cls.getMethod(entry, "main", String[].class);
+			U.must(main.getReturnType() == void.class);
+
+			String[] args = new String[0]; // FIXME args
+			Cls.invoke(main, null, new Object[]{args});
+
+			Log.error("Successfully restarted the application!");
+
+			dirty = false;
+		}
 	}
 
 	static OnChanges onChanges() {

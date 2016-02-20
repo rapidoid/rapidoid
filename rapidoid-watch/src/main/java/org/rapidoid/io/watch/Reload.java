@@ -23,6 +23,7 @@ package org.rapidoid.io.watch;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
+import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 
 import java.util.Collection;
@@ -31,6 +32,10 @@ import java.util.List;
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class Reload {
+
+	public static ClassReloader createClassLoader() {
+		return createClassLoader(ClasspathUtil.getClasspathFolders());
+	}
 
 	public static ClassReloader createClassLoader(Collection<String> classpath) {
 		Log.debug("Creating class loader", "classpath", classpath);

@@ -43,6 +43,7 @@ import org.rapidoid.u.U;
 import java.io.*;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -680,6 +681,34 @@ public class UTILS implements Constants {
 		} else {
 			throw U.rte("Couldn't infer the caller!");
 		}
+	}
+
+	public static Class<?> getCallingMainClass() {
+		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+
+		// skip the first 2 elements:
+		// [0] java.lang.Thread.getStackTrace
+		// [1] THIS METHOD
+
+		for (int i = 2; i < trace.length; i++) {
+			String cls = trace[i].getClassName();
+
+			if (U.eq(trace[i].getMethodName(), "main")) {
+				Class<?> clazz = Cls.getClassIfExists(cls);
+				if (clazz != null) {
+					Method main = Cls.findMethod(clazz, "main", String[].class);
+					if (main != null && main.getReturnType() == void.class
+							&& !main.isVarArgs() && main.getDeclaringClass().equals(clazz)) {
+						int modif = main.getModifiers();
+						if (Modifier.isStatic(modif) && Modifier.isPublic(modif)) {
+							return clazz;
+						}
+					}
+				}
+			}
+		}
+
+		return null;
 	}
 
 	private static Class<?> inferCaller(Class<?>... ignoreClasses) {
