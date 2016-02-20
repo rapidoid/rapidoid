@@ -22,6 +22,7 @@ package org.rapidoid.io.watch;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -39,7 +40,6 @@ public class ClassReloader extends ClassLoader {
 	private final List<String> names;
 	private final Collection<String> classpath;
 	private final ClassLoader parent;
-	private final long createdOn = System.currentTimeMillis();
 
 	public ClassReloader(Collection<String> classpath, ClassLoader parent, List<String> names) {
 		super(parent);
@@ -105,7 +105,9 @@ public class ClassReloader extends ClassLoader {
 	public Class<?> loadClass(String classname) throws ClassNotFoundException {
 		Log.debug("Loading class", "name", classname);
 
-		if (findOnClasspath(classname) != null || names.contains(classname)) {
+		if (names.contains(classname) || (!classname.startsWith("org.rapidoid.") && !Cls.isJREClass(classname)
+				&& findOnClasspath(classname) != null)) {
+
 			try {
 				return findClass(classname);
 			} catch (ClassNotFoundException e) {
@@ -124,10 +126,6 @@ public class ClassReloader extends ClassLoader {
 
 	public void add(List<String> classnames) {
 		names.addAll(classnames);
-	}
-
-	public long getCreatedOn() {
-		return createdOn;
 	}
 
 }

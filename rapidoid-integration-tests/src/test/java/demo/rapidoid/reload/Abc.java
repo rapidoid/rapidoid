@@ -1,4 +1,4 @@
-package org.rapidoid.reload;
+package demo.rapidoid.reload;
 
 /*
  * #%L
@@ -20,10 +20,19 @@ package org.rapidoid.reload;
  * #L%
  */
 
-public class Foo {
+import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.GET;
+import org.rapidoid.annotation.Inject;
 
-	public String foo() {
-		return "FOO!";
+@Controller
+public class Abc {
+
+	@Inject
+	private Foo foo;
+
+	@GET("/")
+	public String index() {
+		return "hey:" + foo.foo();
 	}
 
 }

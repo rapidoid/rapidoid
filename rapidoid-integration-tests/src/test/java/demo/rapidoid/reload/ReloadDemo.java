@@ -1,4 +1,4 @@
-package org.rapidoid.reload;
+package demo.rapidoid.reload;
 
 /*
  * #%L
@@ -31,8 +31,7 @@ public class ReloadDemo {
 	public static void main(String[] args) {
 		On.bootstrap();
 
-		On.changes().republish();
-//		On.changes().restart();
+		On.changes().restart();
 
 		On.get("/aa").json((Req req, String x) -> x + ":" + req);
 	}
