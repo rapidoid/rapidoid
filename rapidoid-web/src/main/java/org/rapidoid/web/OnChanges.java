@@ -23,6 +23,7 @@ package org.rapidoid.web;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.io.watch.FilesystemChangeListener;
 import org.rapidoid.io.watch.Watch;
 import org.rapidoid.log.Log;
 import org.rapidoid.scan.ClasspathUtil;
@@ -33,22 +34,45 @@ import java.util.Set;
 @Since("5.1.0")
 public class OnChanges {
 
-	private final Setup setup;
+	static final OnChanges INSTANCE = new OnChanges();
 
-	public OnChanges(Setup setup) {
-		this.setup = setup;
+	static volatile boolean initialized;
+
+	private OnChanges() {
 	}
 
-	public void republish() {
-		if (Conf.dev()) {
-			Set<String> classpathFolders = ClasspathUtil.getClasspathFolders();
-			Log.info("Watching classpath for changes...", "classpath", classpathFolders);
+	public synchronized void restart() {
+		if (!initialized) {
+			initialized = true;
+			if (Conf.dev()) {
+				Set<String> classpathFolders = ClasspathUtil.getClasspathFolders();
+				Log.info("Watching classpath for changes...", "classpath", classpathFolders);
 
-			Watch.dirs(classpathFolders, new ClassRepublisher(setup));
+				Watch.dirs(classpathFolders, new FilesystemChangeListener() {
+					@Override
+					public void created(String filename) {
+						markAsDirty();
+					}
 
-		} else {
-			Log.warn("Not running in dev mode, hot class reloading is disabled!");
+					@Override
+					public void modified(String filename) {
+						markAsDirty();
+					}
+
+					@Override
+					public void deleted(String filename) {
+						markAsDirty();
+					}
+				});
+
+			} else {
+				Log.warn("Not running in dev mode, hot class reloading is disabled!");
+			}
 		}
+	}
+
+	private void markAsDirty() {
+		Setup.notifyChanges();
 	}
 
 }

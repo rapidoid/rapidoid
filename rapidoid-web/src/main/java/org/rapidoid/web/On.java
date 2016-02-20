@@ -182,7 +182,7 @@ public class On {
 	}
 
 	public static OnChanges changes() {
-		return DEFAULT_SETUP.changes();
+		return Setup.onChanges();
 	}
 
 }

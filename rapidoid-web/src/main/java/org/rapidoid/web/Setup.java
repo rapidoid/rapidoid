@@ -3,6 +3,7 @@ package org.rapidoid.web;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
 import org.rapidoid.http.*;
@@ -20,6 +21,7 @@ import org.rapidoid.util.Constants;
 import org.rapidoid.util.UTILS;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 /*
@@ -46,13 +48,20 @@ import java.util.Map;
 @Since("5.1.0")
 public class Setup implements Constants {
 
+	private static volatile String appPkgName;
+
+	static boolean restarted = false;
+	static boolean dirty = false;
+
 	private final String name;
 	private final String defaultAddress;
 	private final int defaultPort;
 	private final ServerSetupType setupType;
+
 	private final IoCContext ioCContext;
 
 	private volatile int port;
+
 	private volatile String address = "0.0.0.0";
 
 	private volatile String[] path;
@@ -85,7 +94,7 @@ public class Setup implements Constants {
 	}
 
 	public synchronized Server listen() {
-		if (!listening) {
+		if (!listening && !restarted) {
 			if (setupType != ServerSetupType.DEV || Conf.dev()) {
 				listening = true;
 				server = http().listen(address, port);
@@ -228,6 +237,7 @@ public class Setup implements Constants {
 		U.must(this.fastHttp == null, "The HTTP server was already initialized!");
 //		this.listener = interceptor;
 		return this;
+
 	}
 
 	public Setup shutdown() {
@@ -291,13 +301,22 @@ public class Setup implements Constants {
 	}
 
 	public synchronized String[] path() {
+		inferCallers();
+
 		if (U.isEmpty(this.path)) {
-			String pkg = UTILS.getCallingPackageOf(Setup.class, On.class, Setup.class);
-			this.path = new String[]{pkg};
-			Log.info("Inferring application package (path) to be: " + pkg);
+			this.path = new String[]{appPkgName};
 		}
 
 		return path;
+	}
+
+	private static void inferCallers() {
+		if (!restarted && appPkgName == null && mainClassName == null) {
+			String pkg = UTILS.getCallingPackageOf(Setup.class, On.class, Setup.class);
+
+			appPkgName = pkg;
+
+		}
 	}
 
 	public Setup bootstrap() {
@@ -323,12 +342,20 @@ public class Setup implements Constants {
 		return this;
 	}
 
-	public OnChanges changes() {
-		return new OnChanges(this);
-	}
-
 	public IoCContext getIoCContext() {
 		return ioCContext;
 	}
 
+	static OnChanges onChanges() {
+		inferCallers();
+		return OnChanges.INSTANCE;
+	}
+
+	static void notifyChanges() {
+		if (!dirty) {
+			dirty = true;
+			Log.info("Detected class or resource changes");
+		}
+	}
 }
+
