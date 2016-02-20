@@ -27,6 +27,7 @@ import javassist.NotFoundException;
 import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
+import org.rapidoid.commons.AutoExpandingMap;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.commons.Err;
@@ -824,6 +825,8 @@ public class Cls {
 	@SuppressWarnings("unchecked")
 	public static <T> T newInstance(Class<T> clazz) {
 
+		Err.argMust(clazz != AutoExpandingMap.class, "Cannot instantiate AutoExpandingMap!");
+
 		if (clazz == List.class) {
 			return (T) U.list();
 		} else if (clazz == Set.class) {
@@ -832,6 +835,12 @@ public class Cls {
 			return (T) U.map();
 		} else if (clazz == ConcurrentMap.class) {
 			return (T) Coll.concurrentMap();
+		} else if (clazz.getName().equals("java.util.Collections$SynchronizedSet")) {
+			return (T) Coll.synchronizedSet();
+		} else if (clazz.getName().equals("java.util.Collections$SynchronizedList")) {
+			return (T) Coll.synchronizedList();
+		} else if (clazz.getName().equals("java.util.Collections$SynchronizedMap")) {
+			return (T) Coll.synchronizedMap();
 		} else if (clazz == Var.class) {
 			return (T) Vars.var("<new>", null);
 		} else if (clazz == Object.class) {
@@ -1078,6 +1087,10 @@ public class Cls {
 		}
 
 		return names;
+	}
+
+	public static Class<?> toClass(Object classOrInstance) {
+		return (classOrInstance instanceof Class<?>) ? ((Class<?>) classOrInstance) : classOrInstance.getClass();
 	}
 
 }

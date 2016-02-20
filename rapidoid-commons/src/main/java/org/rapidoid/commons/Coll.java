@@ -20,12 +20,16 @@ package org.rapidoid.commons;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
 import java.util.*;
 import java.util.concurrent.*;
 
+@Authors("Nikolche Mihajlovski")
+@Since("5.1.0")
 public class Coll {
 	@SuppressWarnings("unchecked")
 	public static <T> Set<T> synchronizedSet() {
@@ -54,17 +58,19 @@ public class Coll {
 	}
 
 	public static <T> void assign(Collection<T> destination, Collection<? extends T> source) {
-		if (destination != null && source != null) {
-			destination.clear();
-			destination.addAll(source);
-		}
+		Err.argMust(destination != null, "destination cannot be null!");
+		Err.argMust(source != null, "source cannot be null!");
+
+		destination.clear();
+		destination.addAll(source);
 	}
 
 	public static <K, V> void assign(Map<K, V> destination, Map<? extends K, ? extends V> source) {
-		if (destination != null && source != null) {
-			destination.clear();
-			destination.putAll(source);
-		}
+		Err.argMust(destination != null, "destination cannot be null!");
+		Err.argMust(source != null, "source cannot be null!");
+
+		destination.clear();
+		destination.putAll(source);
 	}
 
 	public static <K, V> V get(Map<K, V> map, K key) {
@@ -228,28 +234,8 @@ public class Coll {
 	}
 
 	@SuppressWarnings("serial")
-	public static <K, V> Map<K, V> autoExpandingMap(final Mapper<K, V> valueFactory) {
-		return Collections.synchronizedMap(new HashMap<K, V>() {
-
-			@SuppressWarnings("unchecked")
-			@Override
-			public synchronized V get(Object key) {
-				V val = super.get(key);
-
-				if (val == null) {
-					try {
-						val = valueFactory.map((K) key);
-					} catch (Exception e) {
-						throw U.rte(e);
-					}
-
-					put((K) key, val);
-				}
-
-				return val;
-			}
-
-		});
+	public static <K, V> Map<K, V> autoExpandingMap(Mapper<K, V> valueFactory) {
+		return new AutoExpandingMap<K, V>(valueFactory);
 	}
 
 	public static <K1, K2, V> Map<K1, Map<K2, V>> mapOfMaps() {
@@ -268,7 +254,7 @@ public class Coll {
 
 			@Override
 			public List<V> map(K src) throws Exception {
-				return Collections.synchronizedList(U.<V>list());
+				return synchronizedList();
 			}
 
 		});
@@ -279,7 +265,7 @@ public class Coll {
 
 			@Override
 			public Set<V> map(K src) throws Exception {
-				return Collections.synchronizedSet(U.<V>set());
+				return synchronizedSet();
 			}
 
 		});
