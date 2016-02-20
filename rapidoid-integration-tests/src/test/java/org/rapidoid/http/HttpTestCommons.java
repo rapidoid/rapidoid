@@ -33,11 +33,8 @@ import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
-import org.rapidoid.util.D;
-import org.rapidoid.util.UTILS;
 import org.rapidoid.web.On;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -46,8 +43,6 @@ import java.util.Map;
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public abstract class HttpTestCommons extends TestCommons {
-
-	private static final boolean ADJUST_RESULTS = false;
 
 	// FIXME HEAD
 	private static final List<String> HTTP_VERBS = U.list("GET", "DELETE", "OPTIONS", "TRACE", "POST", "PUT", "PATCH");
@@ -195,34 +190,14 @@ public abstract class HttpTestCommons extends TestCommons {
 		String resp = fetch(port, verb, uri);
 		String notFound = IO.load("404-not-found.txt");
 		U.notNull(notFound, "404-not-found");
-		checkResponse(verb, uri, resp, notFound);
-	}
-
-	private void checkResponse(String verb, String uri, String actual, String expected) {
-		if (!U.eq(actual, expected)) {
-			D.print(verb, uri);
-		}
-
-		eq(actual, expected);
+		check(verb + " " + uri, resp, notFound);
 	}
 
 	private void testReq(int port, String verb, String uri) {
 		String resp = fetch(port, verb, uri);
+		String reqName = reqName(port, verb, uri);
 
-		String filename = UTILS.path("src", "test", "resources", reqName(port, verb, uri));
-
-		if (ADJUST_RESULTS) {
-			File testDir = new File(filename).getParentFile();
-
-			if (!testDir.exists()) {
-				testDir.mkdirs();
-			}
-
-			IO.save(filename, resp);
-		} else {
-			String expected = U.safe(IO.load(filename));
-			checkResponse(verb, uri, resp, expected);
-		}
+		verifyCase(verb + " " + uri, resp, reqName);
 	}
 
 	private String fetch(int port, String verb, String uri) {
@@ -238,24 +213,8 @@ public abstract class HttpTestCommons extends TestCommons {
 		if (port != 8888) {
 			req = port + "__" + req;
 		}
-		return UTILS.path("results", testName(), getTestMethodName(), req);
-	}
 
-	protected String getTestMethodName() {
-		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
-
-		String method = null;
-
-		for (StackTraceElement trc : trace) {
-			String cls = trc.getClassName();
-			if (cls.equals(getClass().getName())) {
-				method = trc.getMethodName();
-			}
-		}
-
-		U.must(method != null, "Cannot calculate the test name!");
-
-		return method;
+		return req;
 	}
 
 	protected static Map<String, Object> reqResp(Req req, Resp resp) {

@@ -1,0 +1,13 @@
+{
+  "Provided classes" : [ "App", "PersonServiceImpl" ],
+  "Provided instances" : [ ],
+  "Managed instances" : [ "App@", "Logger@", "PersonServiceImpl@", "BookService@", "BookDao@" ],
+  "By type" : {
+    "PersonService" : [ "PersonServiceImpl", "PersonServiceImpl@" ],
+    "App" : [ "App@" ],
+    "Logger" : [ "Logger@" ],
+    "PersonServiceImpl" : [ "PersonServiceImpl@" ],
+    "BookService" : [ "BookService@" ],
+    "BookDao" : [ "BookDao@" ]
+  }
+}

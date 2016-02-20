@@ -23,6 +23,7 @@ package org.rapidoid.test;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -38,11 +39,20 @@ import java.util.concurrent.CountDownLatch;
  */
 public abstract class TestCommons {
 
+	protected static final boolean ADJUST_RESULTS = true;
+
 	protected static final Random RND = new Random();
 
 	private volatile boolean hasError = false;
 
 	private long waitingFrom;
+
+	private static boolean initialized = false;
+
+	@BeforeClass
+	public static void beforeTests() {
+		initialized = false;
+	}
 
 	@Before
 	public void init() {
@@ -51,6 +61,20 @@ public abstract class TestCommons {
 		System.out.println("--------------------------------------------------------------------------------");
 
 		hasError = false;
+
+		if (!initialized && ADJUST_RESULTS) {
+			String s = File.separator;
+			String resultsDir = "src" + s + "test" + s + "resources" + s + "results" + s + testName();
+			File dir = new File(resultsDir);
+			if (dir.isDirectory()) {
+				System.out.println("DELETING: " + resultsDir);
+				dir.delete();
+			} else {
+				System.out.println("NOT FOUND: " + resultsDir);
+			}
+		}
+
+		initialized = true;
 	}
 
 	@After
@@ -357,7 +381,8 @@ public abstract class TestCommons {
 
 	protected byte[] loadRes(String filename) {
 		try {
-			return readBytes(new FileInputStream(new File(resource(filename).getFile())));
+			URL res = resource(filename);
+			return res != null ? readBytes(new FileInputStream(new File(res.getFile()))) : null;
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		}
@@ -461,6 +486,69 @@ public abstract class TestCommons {
 
 	protected String testName() {
 		return getClass().getSimpleName();
+	}
+
+	protected String getTestMethodName() {
+		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+
+		String method = null;
+
+		for (StackTraceElement trc : trace) {
+			String cls = trc.getClassName();
+			if (cls.equals(getClass().getName())) {
+				method = trc.getMethodName();
+			}
+		}
+
+		if (method == null) {
+			throw new RuntimeException("Cannot calculate the test name!");
+		}
+
+		return method;
+	}
+
+	protected boolean isEq(Object a, Object b) {
+		return a == null ? b == null : a.equals(b);
+	}
+
+	protected void check(String desc, String actual, String expected) {
+		if (!isEq(actual, expected)) {
+			System.out.println("FAILURE: " + desc);
+		}
+
+		eq(actual, expected);
+	}
+
+	protected void verifyCase(String info, String actual, String testCaseName) {
+		String s = File.separator;
+		String resname = "results" + s + testName() + s + getTestMethodName() + s + testCaseName;
+		String filename = "src" + s + "test" + s + "resources" + s + resname;
+
+		if (ADJUST_RESULTS) {
+			File testDir = new File(filename).getParentFile();
+
+			if (!testDir.exists()) {
+				testDir.mkdirs();
+			}
+
+			FileOutputStream out = null;
+			try {
+				out = new FileOutputStream(filename);
+				out.write(actual.getBytes());
+				out.close();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+
+		} else {
+			byte[] bytes = loadRes(resname);
+			String expected = bytes != null ? new String(bytes) : "";
+			check(info, actual, expected);
+		}
+	}
+
+	protected void verify(String actual) {
+		verifyCase(null, actual, "result");
 	}
 
 }

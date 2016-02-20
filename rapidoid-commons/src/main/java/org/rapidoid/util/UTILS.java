@@ -57,6 +57,28 @@ import java.util.concurrent.*;
 @Since("2.0.0")
 public class UTILS implements Constants {
 
+	public static final Mapper<Object, Object> TRANSFORM_TO_STRING = new Mapper<Object, Object>() {
+		@Override
+		public Object map(Object src) throws Exception {
+			return src != null ? src.toString() : null;
+		}
+	};
+
+	public static final Mapper<Object, Object> TRANSFORM_TO_SIMPLE_CLASS_NAME = new Mapper<Object, Object>() {
+		@Override
+		public Object map(Object src) throws Exception {
+			if (src == null) {
+				return null;
+			}
+
+			if (src instanceof Class<?>) {
+				return ((Class<?>) src).getSimpleName();
+			} else {
+				return src.getClass().getSimpleName() + "@";
+			}
+		}
+	};
+
 	private static long measureStart;
 
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(8,
@@ -847,17 +869,6 @@ public class UTILS implements Constants {
 		};
 
 		return ((T) Proxy.newProxyInstance(targetInterface.getClassLoader(), new Class[]{targetInterface}, handler));
-	}
-
-	public static String classNames(Collection<?> classesOrInstances) {
-		List<Object> names = U.list();
-
-		for (Object o : classesOrInstances) {
-			Class<?> clazz = (o instanceof Class<?>) ? ((Class) o) : o.getClass();
-			names.add(clazz.getSimpleName());
-		}
-
-		return "[" + U.join(", ", names) + "]";
 	}
 
 }

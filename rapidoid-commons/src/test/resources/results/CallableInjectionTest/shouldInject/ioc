@@ -1,0 +1,10 @@
+{
+  "Provided classes" : [ "MyCallable" ],
+  "Provided instances" : [ ],
+  "Managed instances" : [ "Foo@", "MyCallable@" ],
+  "By type" : {
+    "Callable" : [ "MyCallable", "MyCallable@" ],
+    "Foo" : [ "Foo@" ],
+    "MyCallable" : [ "MyCallable@" ]
+  }
+}

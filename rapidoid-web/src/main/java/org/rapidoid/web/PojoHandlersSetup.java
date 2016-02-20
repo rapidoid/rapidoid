@@ -79,24 +79,6 @@ public class PojoHandlersSetup {
 		if (bean instanceof Class<?>) {
 			clazz = (Class<?>) bean;
 			bean = null;
-
-		} else if (bean instanceof String) {
-			String className = (String) bean;
-
-			if (register) {
-				clazz = Cls.getClassIfExists(className);
-				U.must(clazz != null, "Cannot find class: %s", className);
-			} else {
-				bean = context.findInstanceOf(className);
-
-				if (bean != null) {
-					clazz = bean.getClass();
-				} else {
-					Log.warn("Couldn't find the target class to deregister!", "class", className, "context", context);
-					return;
-				}
-			}
-
 		} else {
 			clazz = bean.getClass();
 		}
@@ -120,10 +102,6 @@ public class PojoHandlersSetup {
 					registerOrDeregister(register, bean, ctxPath, method);
 				}
 			}
-		}
-
-		if (!register) {
-			context.remove(bean);
 		}
 	}
 

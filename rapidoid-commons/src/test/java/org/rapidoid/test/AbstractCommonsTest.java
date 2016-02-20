@@ -21,6 +21,8 @@ package org.rapidoid.test;
  */
 
 import org.junit.Before;
+import org.rapidoid.data.JSON;
+import org.rapidoid.ioc.IoC;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.security.Roles;
@@ -30,7 +32,20 @@ public abstract class AbstractCommonsTest extends TestCommons {
 	@Before
 	public void openContext() {
 		Roles.resetConfig();
+		IoC.defaultContext().reset();
 		Log.setLogLevel(LogLevel.INFO);
+	}
+
+	protected void verify(String name, Object actual) {
+		super.verifyCase(name, JSON.prettify(actual), name);
+	}
+
+	protected void verifyIoC() {
+		verify("ioc", IoC.defaultContext().info());
+	}
+
+	protected void verifyIoC(String name) {
+		verify(name, IoC.defaultContext().info());
 	}
 
 }

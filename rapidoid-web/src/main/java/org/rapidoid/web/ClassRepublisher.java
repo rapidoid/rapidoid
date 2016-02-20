@@ -22,12 +22,15 @@ package org.rapidoid.web;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Deep;
 import org.rapidoid.io.watch.ClassRefresher;
 import org.rapidoid.ioc.IoCContext;
+import org.rapidoid.ioc.IoCContextChanges;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
+import java.util.Collection;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
@@ -42,19 +45,13 @@ public class ClassRepublisher implements ClassRefresher {
 
 	@Override
 	public void refresh(List<Class<?>> reloaded, List<String> deleted) {
-		Log.info("Refreshed classes", "reloaded", UTILS.classNames(reloaded), "deleted", "[" + U.join(", ", simpleNames(deleted)) + "]");
+		Log.info("-------------------------------------------------------------------");
+		Collection<Class<?>> reloadedInfo = Deep.copyOf(reloaded, UTILS.TRANSFORM_TO_SIMPLE_CLASS_NAME);
+		Log.info("Refreshed classes", "reloaded", reloadedInfo, "deleted", "[" + U.join(", ", simpleNames(deleted)) + "]");
 
-		for (Class<?> cls : reloaded) {
-			setup.beans(cls);
+
 		}
 
-		for (String cls : deleted) {
-			setup.deregister(cls);
-		}
-
-		IoCContext context = setup.getIoCContext();
-		ClassLoader classLoader = !U.isEmpty(reloaded) ? U.last(reloaded).getClassLoader() : null;
-		context.reload(classLoader);
 
 		Log.info("Completed class republishing", "context", context);
 	}

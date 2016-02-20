@@ -29,7 +29,7 @@ import java.util.Map;
 @Since("5.1.0")
 public class IoC {
 
-	private static final IoCContext DEFAULT_CONTEXT = new IoCContext();
+	private static final IoCContext DEFAULT_CONTEXT = createContext();
 
 	public static IoCContext defaultContext() {
 		return DEFAULT_CONTEXT;
@@ -60,7 +60,7 @@ public class IoC {
 	}
 
 	public static IoCContext createContext() {
-		return new IoCContext();
+		return new IoCContextWrapper(new IoCContextImpl());
 	}
 
 }

@@ -45,6 +45,8 @@ public class CallableInjectionTest extends AbstractCommonsTest {
 		eq(myCallable.foo, foo);
 
 		eq(foo.callable.call(), "abc");
+
+		verifyIoC();
 	}
 
 }
