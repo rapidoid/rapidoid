@@ -166,11 +166,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 			}
 		};
 
-		http.getListener().entering(wrapper, req);
-
 		Object result = wrapper.wrap(req, invocation);
-
-		http.getListener().leaving(wrapper, contentType, result);
 
 		return result;
 	}

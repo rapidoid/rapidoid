@@ -37,31 +37,28 @@ import org.rapidoid.http.handler.FastParamsAwareReqHandler;
 import org.rapidoid.http.handler.FastStaticResourcesHandler;
 import org.rapidoid.http.impl.HandlerMatch;
 import org.rapidoid.http.impl.HandlerMatchWithParams;
-import org.rapidoid.http.listener.FastHttpListener;
-import org.rapidoid.http.listener.IgnorantHttpListener;
+import org.rapidoid.http.processor.AbstractHttpProcessor;
 import org.rapidoid.log.Log;
-import org.rapidoid.net.Protocol;
-import org.rapidoid.net.Server;
-import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.wrap.BoolWrap;
 
 import java.io.Serializable;
 import java.util.*;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public class FastHttp implements Protocol, HttpMetadata {
+public class FastHttp extends AbstractHttpProcessor {
+
+	private static final HttpParser HTTP_PARSER = new HttpParser();
 
 	public static final String[] DEFAULT_STATIC_FILES_LOCATIONS = {"static", "rapidoid/static"};
 
 	private static final byte[] HTTP_200_OK = "HTTP/1.1 200 OK\r\n".getBytes();
 
-	private static final byte[] HTTP_400_BAD_REQUEST = "HTTP/1.1 404 Bad Request\r\nContent-Length: 12\r\n\r\nBad Request!"
+	private static final byte[] HTTP_400_BAD_REQUEST = "HTTP/1.1 400 Bad Request\r\nContent-Length: 12\r\n\r\nBad Request!"
 			.getBytes();
 
 	private static final byte[] HTTP_404_NOT_FOUND = "HTTP/1.1 404 Not Found\r\nContent-Length: 10\r\n\r\nNot found!"
@@ -82,8 +79,6 @@ public class FastHttp implements Protocol, HttpMetadata {
 	private static final int CONTENT_LENGTHS_SIZE = 5000;
 
 	private static final byte[] DATE_IS = "Date: ".getBytes();
-
-	private static final HttpParser HTTP_PARSER = new HttpParser();
 
 	private static final byte[] _POST = Constants.POST.getBytes();
 	private static final byte[] _PUT = Constants.PUT.getBytes();
@@ -129,8 +124,6 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	private volatile ViewRenderer renderer;
 
-	private final FastHttpListener listener;
-
 	private final Map<String, Object> attributes = Coll.synchronizedMap();
 
 	private final Map<String, Map<String, Serializable>> sessions = Coll.mapOfMaps();
@@ -142,11 +135,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 	}
 
 	public FastHttp() {
-		this(new IgnorantHttpListener());
-	}
-
-	public FastHttp(FastHttpListener listener) {
-		this.listener = listener;
+		super(null);
 	}
 
 	public synchronized void on(String verb, String path, FastHttpHandler handler) {
@@ -378,28 +367,11 @@ public class FastHttp implements Protocol, HttpMetadata {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void process(Channel channel) {
-		if (channel.isInitial()) {
-			return;
-		}
+	@Override
+	public void request(Channel channel, boolean isGet, boolean isKeepAlive, Range xbody, Range xverb, Range xuri, Range xpath, Range xquery, Range xprotocol, Ranges hdrs) {
 
-		Buf buf = channel.input();
 		RapidoidHelper helper = channel.helper();
-
-		Range[] ranges = helper.ranges1.ranges;
-		Ranges hdrs = helper.ranges2;
-
-		BoolWrap isGet = helper.booleans[0];
-		BoolWrap isKeepAlive = helper.booleans[1];
-
-		Range xverb = ranges[ranges.length - 1];
-		Range xuri = ranges[ranges.length - 2];
-		Range xpath = ranges[ranges.length - 3];
-		Range xquery = ranges[ranges.length - 4];
-		Range xprotocol = ranges[ranges.length - 5];
-		Range xbody = ranges[ranges.length - 6];
-
-		HTTP_PARSER.parse(buf, isGet, isKeepAlive, xbody, xverb, xuri, xpath, xquery, xprotocol, hdrs, helper);
+		Buf buf = channel.input();
 
 		removeTrailingSlash(buf, xpath);
 		removeTrailingSlash(buf, xuri);
@@ -408,11 +380,6 @@ public class FastHttp implements Protocol, HttpMetadata {
 		if (err != null) {
 			channel.write(HTTP_400_BAD_REQUEST);
 			channel.close();
-			return;
-		}
-
-		// the listener may override all the request dispatching and handler execution
-		if (!listener.request(this, channel, isGet, isKeepAlive, xbody, xverb, xuri, xpath, xquery, xprotocol, hdrs)) {
 			return;
 		}
 
@@ -444,7 +411,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 			Map<String, Object> posted;
 			Map<String, byte[]> files;
 
-			if (!isGet.value && !xbody.isEmpty()) {
+			if (!isGet && !xbody.isEmpty()) {
 				KeyValueRanges postedKV = helper.pairs3.reset();
 				KeyValueRanges filesKV = helper.pairs4.reset();
 
@@ -474,7 +441,7 @@ public class FastHttp implements Protocol, HttpMetadata {
 			headers = Collections.synchronizedMap(headers);
 			cookies = Collections.synchronizedMap(cookies);
 
-			req = new ReqImpl(this, channel, isKeepAlive.value, verb, uri, path, query, body, params, headers, cookies,
+			req = new ReqImpl(this, channel, isKeepAlive, verb, uri, path, query, body, params, headers, cookies,
 					posted, files, contentType);
 
 			if (!attributes.isEmpty()) {
@@ -483,21 +450,38 @@ public class FastHttp implements Protocol, HttpMetadata {
 		}
 
 		if (handler != null) {
-			status = handler.handle(channel, isKeepAlive.value, req, null);
+			status = handler.handle(channel, isKeepAlive, req, null);
 		}
 
 		if (status == HttpStatus.NOT_FOUND) {
-			status = tryGenericHandlers(channel, isKeepAlive.value, req);
+			status = tryGenericHandlers(channel, isKeepAlive, req);
 		}
 
 		if (status == HttpStatus.NOT_FOUND) {
 			channel.write(HTTP_404_NOT_FOUND);
-			listener.notFound(this, channel, isGet, isKeepAlive, xbody, xverb, xuri, xpath, xquery, xprotocol, hdrs);
 		}
 
 		if (status != HttpStatus.ASYNC) {
-			channel.closeIf(!isKeepAlive.value);
+			channel.closeIf(!isKeepAlive);
 		}
+	}
+
+	private static void removeTrailingSlash(Buf buf, Range range) {
+		if (range.length > 1 && buf.get(range.last()) == '/') {
+			range.length--;
+		}
+	}
+
+	private static String validateRequest(Buf input, Range verb, Range uri) {
+		if (verb.isEmpty()) {
+			return "HTTP verb cannot be empty!";
+		}
+
+		if (!BytesUtil.isValidURI(input.bytes(), uri)) {
+			return "Invalid HTTP URI!";
+		}
+
+		return null; // OK, no error
 	}
 
 	private HttpStatus tryGenericHandlers(Channel channel, boolean isKeepAlive, Req req) {
@@ -513,10 +497,10 @@ public class FastHttp implements Protocol, HttpMetadata {
 		return HttpStatus.NOT_FOUND;
 	}
 
-	private HandlerMatch findHandler(Buf buf, BoolWrap isGet, Range verb, Range path) {
+	private HandlerMatch findHandler(Buf buf, boolean isGet, Range verb, Range path) {
 		Bytes bytes = buf.bytes();
 
-		if (isGet.value) {
+		if (isGet) {
 			if (path1 != null && BytesUtil.matches(bytes, path, path1, true)) {
 				return handler1;
 			} else if (path2 != null && BytesUtil.matches(bytes, path, path2, true)) {
@@ -650,7 +634,6 @@ public class FastHttp implements Protocol, HttpMetadata {
 	public void write200(Channel ctx, boolean isKeepAlive, MediaType contentTypeHeader, byte[] content) {
 		start200(ctx, isKeepAlive, contentTypeHeader);
 		writeContent(ctx, content);
-		listener.onOkResponse(contentTypeHeader, content);
 	}
 
 	public void error(Channel ctx, boolean isKeepAlive, Req req, Throwable error) {
@@ -714,10 +697,6 @@ public class FastHttp implements Protocol, HttpMetadata {
 		ctx.closeIf(!isKeepAlive);
 	}
 
-	public FastHttpListener getListener() {
-		return listener;
-	}
-
 	public synchronized void resetConfig() {
 		path1 = path2 = path3 = null;
 		handler1 = handler2 = handler3 = null;
@@ -746,12 +725,6 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	public void renderBody(Channel ctx, int code, MediaType contentType, byte[] body) {
 		ctx.write(body);
-
-		if (code == 200) {
-			listener.onOkResponse(contentType, body);
-		} else {
-			listener.onErrorResponse(code, contentType, body);
-		}
 	}
 
 	public void notFound(Channel ctx, boolean isKeepAlive, FastHttpHandler fromHandler, Req req) {
@@ -774,24 +747,6 @@ public class FastHttp implements Protocol, HttpMetadata {
 			ctx.write(HTTP_404_NOT_FOUND);
 			done(ctx, isKeepAlive);
 		}
-	}
-
-	private static void removeTrailingSlash(Buf buf, Range range) {
-		if (range.length > 1 && buf.get(range.last()) == '/') {
-			range.length--;
-		}
-	}
-
-	private static String validateRequest(Buf input, Range verb, Range uri) {
-		if (verb.isEmpty()) {
-			return "HTTP verb cannot be empty!";
-		}
-
-		if (!BytesUtil.isValidURI(input.bytes(), uri)) {
-			return "Invalid HTTP URI!";
-		}
-
-		return null; // OK, no error
 	}
 
 	public void setStaticResourcesHandler(FastHttpHandler staticResourcesHandler) {
@@ -840,14 +795,6 @@ public class FastHttp implements Protocol, HttpMetadata {
 
 	public FastHttpHandler handler(ReqHandler reqHandler, HttpWrapper... wrappers) {
 		return new FastParamsAwareReqHandler(this, MediaType.HTML_UTF_8, wrappers, reqHandler);
-	}
-
-	public Server listen(String address, int port) {
-		return TCP.server().protocol(this).address(address).port(port).build().start();
-	}
-
-	public Server listen(int port) {
-		return listen("0.0.0.0", port);
 	}
 
 }

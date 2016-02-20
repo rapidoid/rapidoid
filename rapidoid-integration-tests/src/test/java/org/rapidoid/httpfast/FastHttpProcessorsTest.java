@@ -1,8 +1,8 @@
-package org.rapidoid.http.handler;
+package org.rapidoid.httpfast;
 
 /*
  * #%L
- * rapidoid-http-fast
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,29 +20,28 @@ package org.rapidoid.http.handler;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpStatus;
-import org.rapidoid.http.Req;
-import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.http.HttpTestCommons;
+import org.rapidoid.http.processor.HttpProcessor;
+import org.rapidoid.http.processor.LoggingHttpProcessor;
+import org.rapidoid.http.processor.NotFoundHttpProcessor;
+import org.rapidoid.net.Server;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public class FastStaticHttpHandler extends AbstractFastHttpHandler {
+@Since("5.1.0")
+public class FastHttpProcessorsTest extends HttpTestCommons {
 
-	private final byte[] response;
+	@Test
+	public void testChainOfHttpProcessors() {
+		HttpProcessor http = new LoggingHttpProcessor(new NotFoundHttpProcessor());
+		Server server = http.listen(12345);
 
-	public FastStaticHttpHandler(FastHttp http, MediaType contentType, byte[] response) {
-		super(http, contentType);
-		this.response = response;
-	}
+		notFound(12345, "/");
+		notFound(12345, "/abc");
 
-	@Override
-	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
-		http.write200(ctx, isKeepAlive, contentType, response);
-		return HttpStatus.DONE;
+		server.shutdown();
 	}
 
 }

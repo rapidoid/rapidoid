@@ -44,8 +44,6 @@ public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 
 	@Override
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
-		http.getListener().state(this, req);
-
 		try {
 			String[] staticFilesLocations = http.getStaticFilesLocations();
 
@@ -56,13 +54,11 @@ public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 
 				if (bytes != null) {
 					MediaType contentType = MediaType.getByFileName(res.getName());
-					http.getListener().result(this, contentType, bytes);
 					http.write200(ctx, isKeepAlive, contentType, bytes);
 					return HttpStatus.DONE;
 				}
 			}
 
-			http.getListener().resultNotFound(this);
 			return HttpStatus.NOT_FOUND;
 
 		} catch (Exception e) {

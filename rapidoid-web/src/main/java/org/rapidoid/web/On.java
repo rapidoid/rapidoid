@@ -27,7 +27,7 @@ import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.*;
 import org.rapidoid.http.handler.FastHttpHandler;
-import org.rapidoid.http.listener.FastHttpListener;
+import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.job.Jobs;
 
@@ -130,8 +130,8 @@ public class On {
 		return DEFAULT_SETUP.wrap(wrappers);
 	}
 
-	public static synchronized Setup listener(FastHttpListener listener) {
-		return DEFAULT_SETUP.listener(listener);
+	public static synchronized Setup preprocess(HttpProcessor listener) {
+		return DEFAULT_SETUP.preprocess(listener);
 	}
 
 	public static synchronized Setup getDefaultSetup() {

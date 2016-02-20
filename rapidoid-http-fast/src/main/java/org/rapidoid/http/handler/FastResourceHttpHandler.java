@@ -42,16 +42,12 @@ public class FastResourceHttpHandler extends AbstractFastHttpHandler {
 
 	@Override
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
-		http.getListener().state(this, req);
-
 		byte[] bytes = resource.getBytesOrNull();
 
 		if (bytes != null) {
-			http.getListener().result(this, contentType, bytes);
 			http.write200(ctx, isKeepAlive, contentType, bytes);
 			return HttpStatus.DONE;
 		} else {
-			http.getListener().resultNotFound(this);
 			return HttpStatus.NOT_FOUND;
 		}
 	}

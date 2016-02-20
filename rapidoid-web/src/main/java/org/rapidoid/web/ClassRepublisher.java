@@ -24,8 +24,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Deep;
 import org.rapidoid.io.watch.ClassRefresher;
-import org.rapidoid.ioc.IoCContext;
-import org.rapidoid.ioc.IoCContextChanges;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
@@ -48,12 +46,7 @@ public class ClassRepublisher implements ClassRefresher {
 		Log.info("-------------------------------------------------------------------");
 		Collection<Class<?>> reloadedInfo = Deep.copyOf(reloaded, UTILS.TRANSFORM_TO_SIMPLE_CLASS_NAME);
 		Log.info("Refreshed classes", "reloaded", reloadedInfo, "deleted", "[" + U.join(", ", simpleNames(deleted)) + "]");
-
-
-		}
-
-
-		Log.info("Completed class republishing", "context", context);
+		Log.info("Completed class republishing");
 	}
 
 	private List<String> simpleNames(List<String> classNames) {

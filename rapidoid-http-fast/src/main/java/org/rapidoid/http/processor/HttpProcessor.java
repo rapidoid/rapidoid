@@ -1,4 +1,4 @@
-package org.rapidoid.http.handler;
+package org.rapidoid.http.processor;
 
 /*
  * #%L
@@ -22,30 +22,21 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpWrapper;
-import org.rapidoid.http.Req;
+import org.rapidoid.data.Range;
+import org.rapidoid.data.Ranges;
+import org.rapidoid.net.Server;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.util.Constants;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public abstract class FastParamsAwareHttpHandler extends AbstractAsyncHttpHandler {
+@Since("5.1.0")
+public interface HttpProcessor extends Constants {
 
-	public FastParamsAwareHttpHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers) {
-		super(http, contentType, wrappers);
-	}
+	void request(Channel channel, boolean isGet, boolean isKeepAlive, Range body,
+	             Range verb, Range uri, Range path, Range query, Range protocol, Ranges headers);
 
-	@Override
-	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
-		return doHandle(channel, isKeepAlive, req, extra);
-	}
+	Server listen(String address, int port);
 
-	protected abstract Object doHandle(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception;
-
-	@Override
-	public boolean needsParams() {
-		return true;
-	}
+	Server listen(int port);
 
 }

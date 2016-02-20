@@ -10,8 +10,7 @@ import org.rapidoid.http.handler.FastHttpErrorHandler;
 import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqHandler;
 import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqRespHandler;
-import org.rapidoid.http.listener.FastHttpListener;
-import org.rapidoid.http.listener.IgnorantHttpListener;
+import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
@@ -53,8 +52,6 @@ public class Setup implements Constants {
 	private final ServerSetupType setupType;
 	private final IoCContext ioCContext;
 
-	private volatile FastHttpListener listener = new IgnorantHttpListener();
-
 	private volatile int port;
 	private volatile String address = "0.0.0.0";
 
@@ -81,7 +78,7 @@ public class Setup implements Constants {
 
 	public synchronized FastHttp http() {
 		if (fastHttp == null) {
-			fastHttp = new FastHttp(listener);
+			fastHttp = new FastHttp();
 		}
 
 		return fastHttp;
@@ -227,9 +224,9 @@ public class Setup implements Constants {
 		return this;
 	}
 
-	public Setup listener(FastHttpListener listener) {
+	public Setup preprocess(HttpProcessor processor) {
 		U.must(this.fastHttp == null, "The HTTP server was already initialized!");
-		this.listener = listener;
+//		this.listener = interceptor;
 		return this;
 	}
 
@@ -259,7 +256,6 @@ public class Setup implements Constants {
 		listening = false;
 		fastHttp = null;
 		wrappers = null;
-		listener = new IgnorantHttpListener();
 		port = defaultPort;
 		address = defaultAddress;
 		path = null;
