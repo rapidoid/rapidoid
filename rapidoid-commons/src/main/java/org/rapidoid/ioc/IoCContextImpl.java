@@ -23,11 +23,13 @@ package org.rapidoid.ioc;
 import org.rapidoid.annotation.*;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Coll;
+import org.rapidoid.commons.Deep;
 import org.rapidoid.config.Conf;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -452,4 +454,8 @@ public class IoCContextImpl implements IoCContext {
 		this.state = backup;
 	}
 
+	@Override
+	public String toString() {
+		return Deep.copyOf(state.instances, UTILS.TRANSFORM_TO_SIMPLE_CLASS_NAME).toString();
+	}
 }

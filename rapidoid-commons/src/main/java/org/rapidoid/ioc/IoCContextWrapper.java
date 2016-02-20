@@ -181,4 +181,9 @@ public class IoCContextWrapper implements IoCContext {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return context.toString();
+	}
+
 }
