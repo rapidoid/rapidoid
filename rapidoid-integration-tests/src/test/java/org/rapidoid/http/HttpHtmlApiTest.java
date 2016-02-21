@@ -27,7 +27,6 @@ import org.rapidoid.commons.MediaType;
 import org.rapidoid.io.Res;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Bufs;
-import org.rapidoid.web.On;
 
 import java.io.File;
 import java.math.BigDecimal;

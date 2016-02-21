@@ -900,4 +900,8 @@ public class UTILS implements Constants {
 		return ((T) Proxy.newProxyInstance(targetInterface.getClassLoader(), new Class[]{targetInterface}, handler));
 	}
 
+	public static boolean withWatchModule() {
+		return Cls.getClassIfExists("org.rapidoid.io.watch.Watch") != null;
+	}
+
 }

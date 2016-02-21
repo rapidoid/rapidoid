@@ -25,7 +25,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.web.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

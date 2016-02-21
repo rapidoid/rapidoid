@@ -27,7 +27,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
-import org.rapidoid.web.On;
 
 import java.util.concurrent.CountDownLatch;
 

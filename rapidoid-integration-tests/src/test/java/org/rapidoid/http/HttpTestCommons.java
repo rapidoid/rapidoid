@@ -34,8 +34,6 @@ import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
-import org.rapidoid.web.On;
-import org.rapidoid.web.Setup;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

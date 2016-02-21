@@ -32,7 +32,7 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.web.Setup;
+import org.rapidoid.http.Setup;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
