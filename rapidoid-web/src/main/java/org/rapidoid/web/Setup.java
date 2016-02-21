@@ -12,12 +12,13 @@ import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqHandler;
 import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqRespHandler;
 import org.rapidoid.http.processor.HttpProcessor;
-import org.rapidoid.io.watch.ClassReloader;
 import org.rapidoid.io.watch.Reload;
+import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
+import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.UTILS;
@@ -50,11 +51,16 @@ import java.util.Map;
 @Since("5.1.0")
 public class Setup implements Constants {
 
+	static final Setup DEFAULT = new Setup("http", "0.0.0.0", 8888, ServerSetupType.DEFAULT, IoC.defaultContext());
+	static final Setup ADMIN = new Setup("admin", "0.0.0.0", 8889, ServerSetupType.ADMIN, IoC.defaultContext());
+	static final Setup DEV = new Setup("dev", "127.0.0.1", 8887, ServerSetupType.DEV, IoC.defaultContext());
+
 	private static volatile String mainClassName;
 	private static volatile String appPkgName;
 
-	static boolean restarted = false;
-	static boolean dirty = false;
+	static volatile boolean restarted = false;
+	static volatile ClassLoader loader = Setup.class.getClassLoader();
+	private static volatile boolean dirty = false;
 
 	private final String name;
 	private final String defaultAddress;
@@ -62,6 +68,8 @@ public class Setup implements Constants {
 	private final ServerSetupType setupType;
 
 	private final IoCContext ioCContext;
+
+	private final FastHttp fastHttp = new FastHttp();
 
 	private volatile int port;
 
@@ -71,13 +79,13 @@ public class Setup implements Constants {
 
 	private volatile HttpWrapper[] wrappers;
 
-	private final FastHttp fastHttp = new FastHttp();
-
 	private volatile HttpProcessor processor;
 
 	private volatile boolean listening;
 
 	private volatile Server server;
+
+	private volatile boolean activated;
 
 	public Setup(String name, String defaultAddress, int defaultPort, ServerSetupType setupType, IoCContext ioCContext) {
 		this.name = name;
@@ -99,6 +107,9 @@ public class Setup implements Constants {
 			if (setupType != ServerSetupType.DEV || Conf.dev()) {
 				listening = true;
 				HttpProcessor proc = processor != null ? processor : fastHttp;
+				if (Conf.dev()) {
+					proc = new AppRestartProcessor(this, proc);
+				}
 				server = proc.listen(address, port);
 			} else {
 				Log.warn("The application is NOT running in dev mode, so the DEV server is automatically disabled.");
@@ -108,15 +119,23 @@ public class Setup implements Constants {
 		return server;
 	}
 
-	private void activate() {
-		if (port == defaultPort) {
-			int customPort = Conf.option(name + ".port", NOT_FOUND);
-			if (customPort != NOT_FOUND) {
-				port(customPort);
+	private synchronized void activate() {
+		if (!activated && !restarted) {
+			activated = true;
+
+			if (port == defaultPort) {
+				int customPort = Conf.option(name + ".port", NOT_FOUND);
+				if (customPort != NOT_FOUND) {
+					port(customPort);
+				}
+			}
+
+			listen();
+
+			if (Conf.dev()) {
+				On.changes().restart();
 			}
 		}
-
-		listen();
 	}
 
 	public OnAction get(String path) {
@@ -319,7 +338,7 @@ public class Setup implements Constants {
 				mainClassName = mainClass != null ? mainClass.getName() : null;
 			}
 
-			Log.info("Inferring application root", "entry", mainClassName, "package", pkg);
+			Log.info("Inferring application root", "main class", mainClassName, "app package", pkg);
 		}
 	}
 
@@ -350,39 +369,6 @@ public class Setup implements Constants {
 		return ioCContext;
 	}
 
-	public void restart() {
-		synchronized (Setup.class) {
-			U.notNull(mainClassName, "Cannot restart, the main class is unknown!");
-
-			restarted = true;
-
-			if (fastHttp != null) {
-				fastHttp.resetConfig();
-			}
-			wrappers = null;
-
-			ClassReloader reloader = Reload.createClassLoader();
-
-			Class<?> entry;
-			try {
-				entry = reloader.loadClass(mainClassName);
-			} catch (ClassNotFoundException e) {
-				Log.error("Cannot restart the application, the main class (app entry point) is missing!");
-				return;
-			}
-
-			Method main = Cls.getMethod(entry, "main", String[].class);
-			U.must(main.getReturnType() == void.class);
-
-			String[] args = new String[0]; // FIXME args
-			Cls.invoke(main, null, new Object[]{args});
-
-			Log.error("Successfully restarted the application!");
-
-			dirty = false;
-		}
-	}
-
 	static OnChanges onChanges() {
 		inferCallers();
 		return OnChanges.INSTANCE;
@@ -394,5 +380,51 @@ public class Setup implements Constants {
 			Log.info("Detected class or resource changes");
 		}
 	}
+
+	static void restartIfDirty() {
+		if (dirty) {
+			synchronized (Setup.class) {
+				if (dirty) {
+					U.notNull(mainClassName, "Cannot restart, the main class is unknown!");
+
+					Log.info("---------------------------------");
+					Log.info("Restarting the web application...");
+					Log.info("---------------------------------");
+
+					restarted = true;
+
+					for (Setup setup : setups()) {
+						setup.fastHttp.resetConfig();
+						setup.wrappers = null;
+					}
+
+					loader = Reload.createClassLoader();
+
+					Class<?> entry;
+					try {
+						entry = loader.loadClass(mainClassName);
+					} catch (ClassNotFoundException e) {
+						Log.error("Cannot restart the application, the main class (app entry point) is missing!");
+						return;
+					}
+
+					Method main = Cls.getMethod(entry, "main", String[].class);
+					U.must(main.getReturnType() == void.class);
+
+					String[] args = Conf.getArgs();
+					Cls.invoke(main, null, new Object[]{args});
+
+					Log.info("Successfully restarted the application!");
+
+					dirty = false;
+				}
+			}
+		}
+	}
+
+	private static Setup[] setups() {
+		return new Setup[]{DEFAULT, ADMIN, DEV};
+	}
+
 }
 

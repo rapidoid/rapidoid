@@ -48,94 +48,88 @@ public class On {
 		});
 	}
 
-	private static final Setup DEFAULT_SETUP = new Setup("http", "0.0.0.0", 8888, ServerSetupType.DEFAULT, IoC.defaultContext());
-
-	private static final Setup ADMIN_SETUP = new Setup("admin", "0.0.0.0", 8889, ServerSetupType.ADMIN, IoC.defaultContext());
-
-	private static final Setup DEV_SETUP = new Setup("dev", "127.0.0.1", 8887, ServerSetupType.DEV, IoC.defaultContext());
-
 	public static synchronized OnAction get(String path) {
-		return DEFAULT_SETUP.get(path);
+		return Setup.DEFAULT.get(path);
 	}
 
 	public static synchronized OnAction post(String path) {
-		return DEFAULT_SETUP.post(path);
+		return Setup.DEFAULT.post(path);
 	}
 
 	public static synchronized OnAction put(String path) {
-		return DEFAULT_SETUP.put(path);
+		return Setup.DEFAULT.put(path);
 	}
 
 	public static synchronized OnAction delete(String path) {
-		return DEFAULT_SETUP.delete(path);
+		return Setup.DEFAULT.delete(path);
 	}
 
 	public static synchronized OnAction patch(String path) {
-		return DEFAULT_SETUP.patch(path);
+		return Setup.DEFAULT.patch(path);
 	}
 
 	public static synchronized OnAction options(String path) {
-		return DEFAULT_SETUP.options(path);
+		return Setup.DEFAULT.options(path);
 	}
 
 	public static synchronized OnAction head(String path) {
-		return DEFAULT_SETUP.head(path);
+		return Setup.DEFAULT.head(path);
 	}
 
 	public static synchronized OnAction trace(String path) {
-		return DEFAULT_SETUP.trace(path);
+		return Setup.DEFAULT.trace(path);
 	}
 
 	public static synchronized OnPage page(String path) {
-		return DEFAULT_SETUP.page(path);
+		return Setup.DEFAULT.page(path);
 	}
 
 	public static synchronized Setup error(ErrorHandler onError) {
-		return DEFAULT_SETUP.onError(onError);
+		return Setup.DEFAULT.onError(onError);
 	}
 
 	public static synchronized Setup req(ReqHandler handler) {
-		return DEFAULT_SETUP.req(handler);
+		return Setup.DEFAULT.req(handler);
 	}
 
 	public static synchronized Setup req(ReqRespHandler handler) {
-		return DEFAULT_SETUP.req(handler);
+		return Setup.DEFAULT.req(handler);
 	}
 
 	public static synchronized Setup req(FastHttpHandler handler) {
-		return DEFAULT_SETUP.req(handler);
+		return Setup.DEFAULT.req(handler);
 	}
 
 	public static synchronized Setup beans(Object... controllers) {
-		return DEFAULT_SETUP.beans(controllers);
+		return Setup.DEFAULT.beans(controllers);
 	}
 
 	public static synchronized Setup port(int port) {
-		return DEFAULT_SETUP.port(port);
+		return Setup.DEFAULT.port(port);
 	}
 
 	public static synchronized Setup address(String address) {
-		return DEFAULT_SETUP.address(address);
+		return Setup.DEFAULT.address(address);
 	}
 
 	public static Setup path(String... path) {
-		return DEFAULT_SETUP.path(path);
+		return Setup.DEFAULT.path(path);
 	}
 
 	public static String[] path() {
-		return DEFAULT_SETUP.path();
+		return Setup.DEFAULT.path();
 	}
 
 	public static synchronized Setup wrap(HttpWrapper... wrappers) {
-		return DEFAULT_SETUP.wrap(wrappers);
+		return Setup.DEFAULT.wrap(wrappers);
 	}
 
 	public static synchronized Setup processor(HttpProcessor listener) {
-		return DEFAULT_SETUP.processor(listener);
+		return Setup.DEFAULT.processor(listener);
 	}
 
 	public static synchronized Setup getDefaultSetup() {
-		return DEFAULT_SETUP;
+		return Setup.DEFAULT;
 	}
 
 	public static Setup createSetup(String name) {
@@ -143,42 +137,42 @@ public class On {
 	}
 
 	public static synchronized Setup staticFilesLookIn(String... possibleLocations) {
-		return DEFAULT_SETUP.staticFilesPath(possibleLocations);
+		return Setup.DEFAULT.staticFilesPath(possibleLocations);
 	}
 
 	public static synchronized Setup render(ViewRenderer renderer) {
-		return DEFAULT_SETUP.render(renderer);
+		return Setup.DEFAULT.render(renderer);
 	}
 
 	public static Setup args(String... args) {
 		Conf.args(args);
-		return DEFAULT_SETUP;
+		return Setup.DEFAULT;
 	}
 
 	public static Setup bootstrap() {
-		return DEFAULT_SETUP.bootstrap();
+		return Setup.DEFAULT.bootstrap();
 	}
 
 	@SafeVarargs
 	@SuppressWarnings({"varargs"})
 	public static OnAnnotated annotated(Class<? extends Annotation>... annotated) {
-		return DEFAULT_SETUP.annotated(annotated);
+		return Setup.DEFAULT.annotated(annotated);
 	}
 
 	public static Setup admin() {
-		return ADMIN_SETUP;
+		return Setup.ADMIN;
 	}
 
 	public static Setup dev() {
-		return DEV_SETUP;
+		return Setup.DEV;
 	}
 
 	public static Setup deregister(String verb, String path) {
-		return DEFAULT_SETUP.deregister(verb, path);
+		return Setup.DEFAULT.deregister(verb, path);
 	}
 
 	public static Setup deregister(Object... controllers) {
-		return DEFAULT_SETUP.deregister(controllers);
+		return Setup.DEFAULT.deregister(controllers);
 	}
 
 	public static OnChanges changes() {

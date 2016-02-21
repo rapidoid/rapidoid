@@ -54,7 +54,6 @@ public class ClsTest extends AbstractCommonsTest {
 		Method m2 = U.single(Cls.getMethodsNamed(Foo.class, "xyz"));
 		String[] names2 = Cls.getMethodParameterNames(m2);
 		eq(names2, U.array("a", "b", "c", "d", "e", "f", "g", "hh", "ii", "j"));
-
 	}
 
 }
@@ -84,6 +83,5 @@ class Foo {
 	                  @Param("i") boolean ii, @Param("j") String j) {
 		return U.join(":", a, b, c, d, e, f, g, hh, ii, j);
 	}
-
 
 }

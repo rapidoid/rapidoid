@@ -20,10 +20,7 @@ package org.rapidoid.cls;
  * #L%
  */
 
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtMethod;
-import javassist.NotFoundException;
+import javassist.*;
 import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
@@ -1028,8 +1025,12 @@ public class Cls {
 
 		String className = serializedLambda.getImplClass().replaceAll("/", ".");
 
-		Class<?> cls = getClassIfExists(className);
-		U.must(cls != null, "Cannot find or load the lambda class: %s", cls);
+		Class<?> cls;
+		try {
+			cls = Class.forName(className, true, lambda.getClass().getClassLoader());
+		} catch (ClassNotFoundException e) {
+			throw U.rte("Cannot find or load the lambda class: %s", className);
+		}
 
 		String lambdaMethodName = serializedLambda.getImplMethodName();
 
@@ -1039,7 +1040,7 @@ public class Cls {
 			}
 		}
 
-		throw U.rte("Cannot find the lambda method!");
+		throw U.rte("Cannot find the lambda method: %s#%s", cls.getName(), lambdaMethodName);
 	}
 
 	public static String[] getMethodParameterNames(Method method) {
@@ -1058,14 +1059,17 @@ public class Cls {
 		if (defaultNames) {
 			CtMethod cm;
 			try {
-				ClassPool cp = ClassPool.getDefault();
+				ClassPool cp = new ClassPool();
+				cp.insertClassPath(new ClassClassPath(method.getDeclaringClass()));
 				CtClass cc = cp.get(method.getDeclaringClass().getName());
 
 				CtClass[] params = new CtClass[method.getParameterCount()];
 				for (int i = 0; i < params.length; i++) {
 					params[i] = cp.get(method.getParameterTypes()[i].getName());
 				}
+
 				cm = cc.getDeclaredMethod(method.getName(), params);
+
 			} catch (NotFoundException e) {
 				throw U.rte("Cannot find the target method!", e);
 			}

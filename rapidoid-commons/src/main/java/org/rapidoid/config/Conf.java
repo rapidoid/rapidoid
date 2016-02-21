@@ -36,6 +36,8 @@ public class Conf {
 
 	private static final Config ROOT = new Config();
 
+	private static volatile String[] args;
+
 	static {
 		RapidoidInitializer.initialize();
 	}
@@ -49,6 +51,7 @@ public class Conf {
 	};
 
 	public static synchronized void args(String... args) {
+		Conf.args = args;
 		ConfigHelp.processHelp(args);
 
 		if (args != null) {
@@ -62,6 +65,10 @@ public class Conf {
 				}
 			}
 		}
+	}
+
+	public static String[] getArgs() {
+		return args;
 	}
 
 	public static void remove(String name) {
