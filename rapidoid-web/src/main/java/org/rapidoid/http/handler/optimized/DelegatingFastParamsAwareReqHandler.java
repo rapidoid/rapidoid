@@ -50,6 +50,6 @@ public class DelegatingFastParamsAwareReqHandler extends FastParamsAwareHttpHand
 
 	@Override
 	public String toString() {
-		return "(Req req) -> ...";
+		return "(Req) -> ...";
 	}
 }

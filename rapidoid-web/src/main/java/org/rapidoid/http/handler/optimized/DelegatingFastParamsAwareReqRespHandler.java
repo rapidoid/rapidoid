@@ -49,4 +49,9 @@ public class DelegatingFastParamsAwareReqRespHandler extends FastParamsAwareHttp
 		return handler.execute(req, req.response());
 	}
 
+	@Override
+	public String toString() {
+		return "(Req, Resp) -> ...";
+	}
+
 }
