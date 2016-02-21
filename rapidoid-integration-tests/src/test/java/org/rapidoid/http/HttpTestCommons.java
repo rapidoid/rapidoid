@@ -28,12 +28,14 @@ import org.rapidoid.commons.Arr;
 import org.rapidoid.config.Conf;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.io.IO;
+import org.rapidoid.ioc.IoC;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.web.On;
+import org.rapidoid.web.Setup;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -55,7 +57,10 @@ public abstract class HttpTestCommons extends TestCommons {
 
 		System.out.println("--- STARTING SERVER ---");
 
+		Setup.resetGlobalState();
+
 		Conf.reset();
+		IoC.defaultContext().reset();
 
 		On.getDefaultSetup().http().resetConfig();
 		On.getDefaultSetup().listen();

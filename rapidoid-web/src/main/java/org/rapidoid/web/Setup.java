@@ -57,10 +57,13 @@ public class Setup implements Constants {
 
 	private static volatile String mainClassName;
 	private static volatile String appPkgName;
+	static volatile boolean restarted;
+	static volatile ClassLoader loader;
+	private static volatile boolean dirty;
 
-	static volatile boolean restarted = false;
-	static volatile ClassLoader loader = Setup.class.getClassLoader();
-	private static volatile boolean dirty = false;
+	static {
+		resetGlobalState();
+	}
 
 	private final String name;
 	private final String defaultAddress;
@@ -96,6 +99,14 @@ public class Setup implements Constants {
 		this.address = defaultAddress;
 		this.setupType = setupType;
 		this.ioCContext = ioCContext;
+	}
+
+	public static void resetGlobalState() {
+		mainClassName = null;
+		appPkgName = null;
+		restarted = false;
+		loader = Setup.class.getClassLoader();
+		dirty = false;
 	}
 
 	public FastHttp http() {
@@ -432,4 +443,3 @@ public class Setup implements Constants {
 	}
 
 }
-
