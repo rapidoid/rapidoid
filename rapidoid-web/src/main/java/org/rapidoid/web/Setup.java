@@ -71,7 +71,9 @@ public class Setup implements Constants {
 
 	private volatile HttpWrapper[] wrappers;
 
-	private volatile FastHttp fastHttp;
+	private final FastHttp fastHttp = new FastHttp();
+
+	private volatile HttpProcessor processor;
 
 	private volatile boolean listening;
 
@@ -88,11 +90,7 @@ public class Setup implements Constants {
 		this.ioCContext = ioCContext;
 	}
 
-	public synchronized FastHttp http() {
-		if (fastHttp == null) {
-			fastHttp = new FastHttp();
-		}
-
+	public FastHttp http() {
 		return fastHttp;
 	}
 
@@ -100,7 +98,8 @@ public class Setup implements Constants {
 		if (!listening && !restarted) {
 			if (setupType != ServerSetupType.DEV || Conf.dev()) {
 				listening = true;
-				server = http().listen(address, port);
+				HttpProcessor proc = processor != null ? processor : fastHttp;
+				server = proc.listen(address, port);
 			} else {
 				Log.warn("The application is NOT running in dev mode, so the DEV server is automatically disabled.");
 			}
@@ -236,11 +235,10 @@ public class Setup implements Constants {
 		return this;
 	}
 
-	public Setup preprocess(HttpProcessor processor) {
-		U.must(this.fastHttp == null, "The HTTP server was already initialized!");
-//		this.listener = interceptor;
+	public Setup processor(HttpProcessor processor) {
+		U.must(!listening, "The server was already initialized!");
+		this.processor = processor;
 		return this;
-
 	}
 
 	public Setup shutdown() {
@@ -262,16 +260,13 @@ public class Setup implements Constants {
 	}
 
 	public void reset() {
-		if (fastHttp != null) {
-			fastHttp.resetConfig();
-		}
-
+		fastHttp.resetConfig();
 		listening = false;
-		fastHttp = null;
 		wrappers = null;
 		port = defaultPort;
 		address = defaultAddress;
 		path = null;
+		processor = null;
 	}
 
 	public Server server() {

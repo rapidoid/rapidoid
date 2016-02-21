@@ -130,8 +130,8 @@ public class On {
 		return DEFAULT_SETUP.wrap(wrappers);
 	}
 
-	public static synchronized Setup preprocess(HttpProcessor listener) {
-		return DEFAULT_SETUP.preprocess(listener);
+	public static synchronized Setup processor(HttpProcessor listener) {
+		return DEFAULT_SETUP.processor(listener);
 	}
 
 	public static synchronized Setup getDefaultSetup() {

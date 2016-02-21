@@ -21,7 +21,7 @@ public class LoggingHttpProcessor extends AbstractHttpProcessor {
 	                    Range verb, Range uri, Range path, Range query, Range protocol, Ranges headers) {
 
 		Buf buf = channel.input();
-		Log.info("HTTP request", "verb", buf.get(verb), "uri", buf.get(uri), "protocol", buf.get(protocol));
+		Log.debug("HTTP request", "verb", buf.get(verb), "uri", buf.get(uri), "protocol", buf.get(protocol));
 
 		next.request(channel, isGet, isKeepAlive, body, verb, uri, path, query, protocol, headers);
 	}
