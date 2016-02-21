@@ -375,7 +375,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	private void renderResponseHeaders(int code, MediaType contentType) {
 		http.startResponse(channel, code, isKeepAlive, contentType);
 
-		if (response != null || !U.isEmpty(cookies)) {
+		if (response != null) {
 			renderCustomHeaders();
 		}
 
