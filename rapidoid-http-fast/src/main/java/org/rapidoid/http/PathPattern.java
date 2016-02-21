@@ -1,5 +1,11 @@
 package org.rapidoid.http;
 
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -22,14 +28,10 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Str;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
-
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -40,6 +42,12 @@ public class PathPattern {
 	private static final Pattern PATH_PARAM_PARTS = Pattern.compile("(\\w+)(?::(.+))?");
 
 	private static final String DEFAULT_GROUP_REGEX = "[^/]+";
+
+	private static final Method MATCHER_GROUP;
+
+	static {
+		MATCHER_GROUP = Cls.findMethod(Matcher.class, "group", String.class);
+	}
 
 	private final String path;
 
@@ -70,8 +78,13 @@ public class PathPattern {
 
 				String groupId = "g" + counter.incrementAndGet();
 
-				U.must(!groups.containsKey(name), "Cannot have multiple path parameters with the same name: '%s'", name);
+				U.must(!groups.containsKey(name), "Cannot have multiple path parameters with the same name: '%s'",
+						name);
 				groups.put(name, groupId);
+
+				if (!groups.isEmpty()) {
+					U.must(MATCHER_GROUP != null, "Named Regex groups are supported starting from JDK 7!");
+				}
 
 				return "(?<" + groupId + ">" + regex.replaceAll("\\\\", "\\\\\\\\") + ")";
 			}
@@ -87,8 +100,10 @@ public class PathPattern {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 
 		PathPattern that = (PathPattern) o;
 
@@ -117,7 +132,9 @@ public class PathPattern {
 			params = U.map();
 
 			for (Map.Entry<String, String> e : groups.entrySet()) {
-				params.put(e.getKey(), matcher.group(e.getValue()));
+				U.notNull(MATCHER_GROUP != null, "Regex matcher");
+				String val = Cls.invoke(MATCHER_GROUP, matcher, e.getValue());
+				params.put(e.getKey(), val);
 			}
 		}
 
@@ -126,10 +143,6 @@ public class PathPattern {
 
 	@Override
 	public String toString() {
-		return "PathPattern{" +
-				"path='" + path + '\'' +
-				", pattern=" + pattern +
-				", groups=" + groups +
-				'}';
+		return "PathPattern{" + "path='" + path + '\'' + ", pattern=" + pattern + ", groups=" + groups + '}';
 	}
 }

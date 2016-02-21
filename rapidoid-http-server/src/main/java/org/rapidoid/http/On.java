@@ -152,8 +152,7 @@ public class On {
 		return Setup.DEFAULT.bootstrap();
 	}
 
-	@SafeVarargs
-	@SuppressWarnings({"varargs"})
+	@SuppressWarnings({ "varargs" })
 	public static OnAnnotated annotated(Class<? extends Annotation>... annotated) {
 		return Setup.DEFAULT.annotated(annotated);
 	}

@@ -27,7 +27,7 @@ import org.rapidoid.u.U;
 
 import java.util.*;
 
-@Authors({"Marjan Ilievski", "Nikolche Mihajlovski"})
+@Authors({ "Marjan Ilievski", "Nikolche Mihajlovski" })
 @Since("5.0.11")
 public class BtnMenu {
 
@@ -50,19 +50,15 @@ public class BtnMenu {
 
 	private Tag generateButtonHtmlContent() {
 		Tag span = GUI.span().class_("caret");
-		return GUI.button().type("button").class_("btn btn-default dropdown-toggle")
-				.attr("data-toggle", "dropdown")
-				.attr("aria-haspopup", "true")
-				.attr("aria-expanded", "false").contents(title + " ", span);
+		return GUI.button().type("button").class_("btn btn-default dropdown-toggle").attr("data-toggle", "dropdown")
+				.attr("aria-haspopup", "true").attr("aria-expanded", "false").contents(title + " ", span);
 	}
 
-
-	private Optional<Tag> generateMenuHtmlContent() {
-
+	private Tag generateMenuHtmlContent() {
 		if (!menuItems.get(0).isEmpty()) {
 			List<Tag> content = U.list();
 
-			for (Iterator<Map<Object, String>> iterator = menuItems.iterator(); iterator.hasNext(); ) {
+			for (Iterator<Map<Object, String>> iterator = menuItems.iterator(); iterator.hasNext();) {
 
 				generateMenuItems(content, iterator);
 
@@ -71,9 +67,10 @@ public class BtnMenu {
 				}
 			}
 
-			return Optional.of(GUI.ul().class_("dropdown-menu").contents(content));
+			return GUI.ul().class_("dropdown-menu").contents(content);
+		} else {
+			return GUI.ul().class_("dropdown-menu");
 		}
-		return Optional.empty();
 	}
 
 	private void generateMenuItems(List<Tag> content, Iterator<Map<Object, String>> subMenuIterator) {
@@ -92,10 +89,8 @@ public class BtnMenu {
 	public String render() {
 		List<Tag> content = U.list();
 		content.add(generateButtonHtmlContent());
-		Optional<Tag> menuContent = generateMenuHtmlContent();
-		if (menuContent.isPresent()) {
-			content.add(menuContent.get());
-		}
+		Tag menuContent = generateMenuHtmlContent();
+		content.add(menuContent);
 		return GUI.div().class_("btn-group").contents(content).toString();
 	}
 

@@ -1,29 +1,10 @@
 package org.rapidoid.cls;
 
-/*
- * #%L
- * rapidoid-commons
- * %%
- * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
- * %%
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * #L%
- */
-
 import javassist.*;
 import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
+import org.rapidoid.beany.Beany;
 import org.rapidoid.commons.AutoExpandingMap;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Dates;
@@ -34,12 +15,31 @@ import org.rapidoid.var.Vars;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
-import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Pattern;
+
+/*
+ * #%L
+ * rapidoid-commons
+ * %%
+ * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
 
 /**
  * @author Nikolche Mihajlovski
@@ -862,7 +862,6 @@ public class Cls {
 		}
 	}
 
-
 	@SuppressWarnings("unchecked")
 	public static <T> T newInstance(Class<T> clazz, Object... args) {
 		for (Constructor<?> constr : clazz.getConstructors()) {
@@ -946,14 +945,9 @@ public class Cls {
 	}
 
 	public static boolean isBeanType(Class<?> clazz) {
-		return kindOf(clazz) == TypeKind.OBJECT
-				&& !clazz.isAnnotation()
-				&& !clazz.isEnum()
-				&& !clazz.isInterface()
-				&& !(Collection.class.isAssignableFrom(clazz))
-				&& !(Map.class.isAssignableFrom(clazz))
-				&& !(Object[].class.isAssignableFrom(clazz))
-				&& !clazz.getPackage().getName().startsWith("java.")
+		return kindOf(clazz) == TypeKind.OBJECT && !clazz.isAnnotation() && !clazz.isEnum() && !clazz.isInterface()
+				&& !(Collection.class.isAssignableFrom(clazz)) && !(Map.class.isAssignableFrom(clazz))
+				&& !(Object[].class.isAssignableFrom(clazz)) && !clazz.getPackage().getName().startsWith("java.")
 				&& !clazz.getPackage().getName().startsWith("javax.");
 	}
 
@@ -1021,38 +1015,52 @@ public class Cls {
 
 	public static Method getLambdaMethod(Serializable lambda) {
 		Method writeReplace = getMethod(lambda.getClass(), "writeReplace");
-		SerializedLambda serializedLambda = invoke(writeReplace, lambda);
+		Object serializedLambda = invoke(writeReplace, lambda);
 
-		String className = serializedLambda.getImplClass().replaceAll("/", ".");
+		Method getImplClass = Cls.findMethod(serializedLambda.getClass(), "getImplClass");
 
-		Class<?> cls;
-		try {
-			cls = Class.forName(className, true, lambda.getClass().getClassLoader());
-		} catch (ClassNotFoundException e) {
-			throw U.rte("Cannot find or load the lambda class: %s", className);
-		}
+		if (getImplClass != null) {
+			String implClass = Cls.invoke(getImplClass, serializedLambda);
+			String className = implClass.replaceAll("/", ".");
 
-		String lambdaMethodName = serializedLambda.getImplMethodName();
-
-		for (Method method : cls.getDeclaredMethods()) {
-			if (method.getName().equals(lambdaMethodName)) {
-				return method;
+			Class<?> cls;
+			try {
+				cls = Class.forName(className, true, lambda.getClass().getClassLoader());
+			} catch (ClassNotFoundException e) {
+				throw U.rte("Cannot find or load the lambda class: %s", className);
 			}
-		}
 
-		throw U.rte("Cannot find the lambda method: %s#%s", cls.getName(), lambdaMethodName);
+			Method getImplMethodName = Cls.findMethod(serializedLambda.getClass(), "getImplMethodName");
+			String lambdaMethodName = Cls.invoke(getImplMethodName, serializedLambda);
+
+			for (Method method : cls.getDeclaredMethods()) {
+				if (method.getName().equals(lambdaMethodName)) {
+					return method;
+				}
+			}
+
+			throw U.rte("Cannot find the lambda method: %s#%s", cls.getName(), lambdaMethodName);
+		} else {
+			throw U.rte("Cannot find the 'getImplClass' method of the serialized lambda!");
+		}
 	}
 
 	public static String[] getMethodParameterNames(Method method) {
-		String[] names = new String[method.getParameterCount()];
+		Class<?>[] paramTypes = method.getParameterTypes();
+		String[] names = new String[paramTypes.length];
 
 		boolean defaultNames = true;
-		Parameter[] parameters = method.getParameters();
-		for (int i = 0; i < parameters.length; i++) {
-			names[i] = parameters[i].getName();
-			U.notNull(names[i], "parameter name");
-			if (!names[i].equals("arg" + i)) {
-				defaultNames = false;
+		Method getParameters = Cls.findMethod(method.getClass(), "getParameters");
+
+		if (getParameters != null) {
+			Object[] parameters = Cls.invoke(getParameters, method);
+
+			for (int i = 0; i < parameters.length; i++) {
+				names[i] = Beany.getPropValue(parameters[i], "name");
+				U.notNull(names[i], "parameter name");
+				if (!names[i].equals("arg" + i)) {
+					defaultNames = false;
+				}
 			}
 		}
 
@@ -1063,7 +1071,7 @@ public class Cls {
 				cp.insertClassPath(new ClassClassPath(method.getDeclaringClass()));
 				CtClass cc = cp.get(method.getDeclaringClass().getName());
 
-				CtClass[] params = new CtClass[method.getParameterCount()];
+				CtClass[] params = new CtClass[paramTypes.length];
 				for (int i = 0; i < params.length; i++) {
 					params[i] = cp.get(method.getParameterTypes()[i].getName());
 				}
@@ -1076,7 +1084,8 @@ public class Cls {
 
 			MethodInfo methodInfo = cm.getMethodInfo();
 			CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
-			LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute.tag);
+			LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute
+					.getAttribute(LocalVariableAttribute.tag);
 
 			int offset = javassist.Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
 
