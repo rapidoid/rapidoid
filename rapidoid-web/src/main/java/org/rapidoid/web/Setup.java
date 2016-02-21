@@ -399,6 +399,7 @@ public class Setup implements Constants {
 					}
 
 					loader = Reload.createClassLoader();
+					ClasspathUtil.setDefaultClassLoader(loader);
 
 					Class<?> entry;
 					try {

@@ -47,7 +47,9 @@ public class ClasspathUtil {
 
 	private static final Set<String> CLASSPATH = new TreeSet<String>();
 
-	private static String rootPackage = null;
+	private static volatile String rootPackage = null;
+
+	private static volatile ClassLoader defaultClassLoader = ClasspathUtil.class.getClassLoader();
 
 	private ClasspathUtil() {
 	}
@@ -139,6 +141,8 @@ public class ClasspathUtil {
 
 		String pkgName = U.safe(packageName);
 		String pkgPath = pkgName.replace('.', File.separatorChar);
+
+		classLoader = U.or(classLoader, defaultClassLoader);
 
 		Set<String> classpath = getClasspath();
 
@@ -419,4 +423,11 @@ public class ClasspathUtil {
 		return scanClasses(scanParams);
 	}
 
+	public static ClassLoader getDefaultClassLoader() {
+		return defaultClassLoader;
+	}
+
+	public static void setDefaultClassLoader(ClassLoader defaultClassLoader) {
+		ClasspathUtil.defaultClassLoader = defaultClassLoader;
+	}
 }
