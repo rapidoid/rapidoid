@@ -286,6 +286,7 @@ public class Setup implements Constants {
 		address = defaultAddress;
 		path = null;
 		processor = null;
+		activated = false;
 	}
 
 	public Server server() {
@@ -385,42 +386,45 @@ public class Setup implements Constants {
 		if (dirty) {
 			synchronized (Setup.class) {
 				if (dirty) {
-					U.notNull(mainClassName, "Cannot restart, the main class is unknown!");
-
-					Log.info("---------------------------------");
-					Log.info("Restarting the web application...");
-					Log.info("---------------------------------");
-
-					restarted = true;
-
-					for (Setup setup : setups()) {
-						setup.fastHttp.resetConfig();
-						setup.wrappers = null;
-					}
-
-					loader = Reload.createClassLoader();
-					ClasspathUtil.setDefaultClassLoader(loader);
-
-					Class<?> entry;
-					try {
-						entry = loader.loadClass(mainClassName);
-					} catch (ClassNotFoundException e) {
-						Log.error("Cannot restart the application, the main class (app entry point) is missing!");
-						return;
-					}
-
-					Method main = Cls.getMethod(entry, "main", String[].class);
-					U.must(main.getReturnType() == void.class);
-
-					String[] args = Conf.getArgs();
-					Cls.invoke(main, null, new Object[]{args});
-
-					Log.info("Successfully restarted the application!");
-
+					restartApp();
 					dirty = false;
 				}
 			}
 		}
+	}
+
+	private static void restartApp() {
+		U.notNull(mainClassName, "Cannot restart, the main class is unknown!");
+
+		Log.info("---------------------------------");
+		Log.info("Restarting the web application...");
+		Log.info("---------------------------------");
+
+		restarted = true;
+
+		for (Setup setup : setups()) {
+			setup.fastHttp.resetConfig();
+			setup.wrappers = null;
+		}
+
+		loader = Reload.createClassLoader();
+		ClasspathUtil.setDefaultClassLoader(loader);
+
+		Class<?> entry;
+		try {
+			entry = loader.loadClass(mainClassName);
+		} catch (ClassNotFoundException e) {
+			Log.error("Cannot restart the application, the main class (app entry point) is missing!");
+			return;
+		}
+
+		Method main = Cls.getMethod(entry, "main", String[].class);
+		U.must(main.getReturnType() == void.class);
+
+		String[] args = Conf.getArgs();
+		Cls.invoke(main, null, new Object[]{args});
+
+		Log.info("Successfully restarted the application!");
 	}
 
 	private static Setup[] setups() {
