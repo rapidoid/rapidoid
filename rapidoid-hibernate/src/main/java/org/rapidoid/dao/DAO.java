@@ -66,15 +66,15 @@ public abstract class DAO<E> {
 		return clazz;
 	}
 
-	public String insert(E record) {
+	public Object insert(E record) {
 		return JPA.insert(record);
 	}
 
-	public void update(String id, E record) {
+	public void update(Object id, E record) {
 		JPA.update(id, record);
 	}
 
-	public void delete(String id) {
+	public void deleteById(Object id) {
 		JPA.delete(clazz, id);
 	}
 
@@ -82,7 +82,7 @@ public abstract class DAO<E> {
 		JPA.delete(record);
 	}
 
-	public E get(String id) {
+	public E get(Object id) {
 		return JPA.get(clazz, id);
 	}
 

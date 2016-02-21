@@ -4,13 +4,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.lambda.Operation;
-import org.rapidoid.lambda.Predicate;
 
 import javax.persistence.EntityManager;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 /*
  * #%L
@@ -44,23 +40,15 @@ public class JPA {
 		return JPAUtil.with(em);
 	}
 
-	public static String persist(Object record) {
+	public static Object persist(Object record) {
 		return with(em()).persist(record);
-	}
-
-	public static <E> List<E> find(Class<E> clazz, Predicate<E> match, Comparator<E> orderBy) {
-		return with(em()).find(clazz, match, orderBy);
-	}
-
-	public static <E> List<E> sorted(List<E> records, Comparator<E> orderBy) {
-		return with(em()).sorted(records, orderBy);
 	}
 
 	public static <E> List<E> getAll() {
 		return with(em()).getAll();
 	}
 
-	public static void update(String id, Object entity) {
+	public static void update(Object id, Object entity) {
 		with(em()).update(id, entity);
 	}
 
@@ -68,16 +56,8 @@ public class JPA {
 		with(em()).update(record);
 	}
 
-	public static long size() {
-		return with(em()).size();
-	}
-
-	public static <T> T getIfExists(Class<T> clazz, String id) {
+	public static <T> T getIfExists(Class<T> clazz, Object id) {
 		return with(em()).getIfExists(clazz, id);
-	}
-
-	public static <E> void each(Operation<E> lambda) {
-		with(em()).each(lambda);
 	}
 
 	public static void transaction(Runnable action, boolean readonly) {
@@ -88,28 +68,12 @@ public class JPA {
 		return with(em()).getAll(clazz, ids);
 	}
 
-	public static boolean matches(Object record, String query, Object... args) {
-		return with(em()).matches(record, query, args);
-	}
-
 	public static <T> List<T> getAll(Class<T> clazz) {
 		return with(em()).getAll(clazz);
 	}
 
 	public static void refresh(Object entity) {
 		with(em()).refresh(entity);
-	}
-
-	public static String insertOrGetId(Object record) {
-		return with(em()).insertOrGetId(record);
-	}
-
-	public static <E> List<E> fullTextSearch(String searchPhrase) {
-		return with(em()).fullTextSearch(searchPhrase);
-	}
-
-	public static void deleteAllData() {
-		with(em()).deleteAllData();
 	}
 
 	public static <RESULT> RESULT sql(String sql, Object... args) {
@@ -120,20 +84,8 @@ public class JPA {
 		with(em()).delete(record);
 	}
 
-	public static <E> E entity(Class<E> entityType, Map<String, ?> properties) {
-		return with(em()).entity(entityType, properties);
-	}
-
-	public static <E> List<E> query(Class<E> clazz, String query, Object... args) {
-		return with(em()).query(clazz, query, args);
-	}
-
-	public static String insert(Object entity) {
+	public static Object insert(Object entity) {
 		return with(em()).insert(entity);
-	}
-
-	public static Object castId(Class<?> clazz, String id) {
-		return with(em()).castId(clazz, id);
 	}
 
 	public static void transaction(Runnable tx, boolean readonly, Callback<Void> callback) {
@@ -144,16 +96,12 @@ public class JPA {
 		return with(em()).getAll(clazz, pageNumber, pageSize);
 	}
 
-	public static <E> void delete(Class<E> clazz, String id) {
+	public static <E> void delete(Class<E> clazz, Object id) {
 		with(em()).delete(clazz, id);
 	}
 
-	public static <E> E get(Class<E> clazz, String id) {
+	public static <E> E get(Class<E> clazz, Object id) {
 		return with(em()).get(clazz, id);
-	}
-
-	public static <E> List<E> find(Predicate<E> match) {
-		return with(em()).find(match);
 	}
 
 }

@@ -397,7 +397,7 @@ public class Beany {
 		return id != null ? Cls.convert(id, returnType) : defaultValue;
 	}
 
-	public static void setId(Object obj, String id) {
+	public static void setId(Object obj, Object id) {
 		setPropValue(obj, "id", id);
 	}
 

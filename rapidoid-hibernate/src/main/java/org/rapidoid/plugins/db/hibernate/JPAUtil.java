@@ -8,10 +8,7 @@ import org.rapidoid.beany.PropertyFilter;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Err;
 import org.rapidoid.concurrent.Callback;
-import org.rapidoid.entity.EntitiesUtil;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.lambda.Operation;
-import org.rapidoid.lambda.Predicate;
 import org.rapidoid.u.U;
 
 import javax.persistence.EntityManager;
@@ -20,7 +17,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 
@@ -64,8 +64,8 @@ public class JPAUtil {
 		this.em = em;
 	}
 
-	public String persist(Object record) {
-		String id = Beany.getIdIfExists(record);
+	public Object persist(Object record) {
+		Object id = Beany.getIdIfExists(record);
 		if (id == null) {
 			return insert(record);
 		} else {
@@ -78,33 +78,21 @@ public class JPAUtil {
 		update(Beany.getId(record), record);
 	}
 
-
-	public String insertOrGetId(Object record) {
-		String id = Beany.getIdIfExists(record);
-		if (id == null) {
-			return insert(record);
-		} else {
-			return id;
-		}
-	}
-
 	public <E> List<E> getAll(Class<E> clazz, List<String> ids) {
 		List<E> results = new ArrayList<E>();
 
-		for (String id : ids) {
+		for (Object id : ids) {
 			results.add(this.<E>get(clazz, id));
 		}
 
 		return results;
 	}
 
-
 	public <E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
 		return U.page(getAll(clazz), pageNumber, pageSize);
 	}
 
-
-	public <E> E get(Class<E> clazz, String id) {
+	public <E> E get(Class<E> clazz, Object id) {
 		E entity = getIfExists(clazz, id);
 
 		if (entity == null) {
@@ -114,140 +102,11 @@ public class JPAUtil {
 		return entity;
 	}
 
-
-	public <E> E entity(Class<E> entityType, Map<String, ?> properties) {
-		return EntitiesUtil.create(entityType, properties);
-	}
-
-
-	public <E> List<E> find(final Class<E> clazz, final Predicate<E> match, final Comparator<E> orderBy) {
-
-		Predicate<E> match2 = new Predicate<E>() {
-
-			public boolean eval(E record) throws Exception {
-				return (clazz == null || clazz.isAssignableFrom(record.getClass()))
-						&& (match == null || match.eval(record));
-			}
-		};
-
-		return sorted(find(match2), orderBy);
-	}
-
-	public <E> List<E> sorted(List<E> records, Comparator<E> orderBy) {
-		if (orderBy != null) {
-			Collections.sort(U.list(records), orderBy);
-		}
-		return records;
-	}
-
-
-	public <E> List<E> fullTextSearch(String searchPhrase) {
-		final String search = searchPhrase.toLowerCase();
-
-		Predicate<E> match = new Predicate<E>() {
-
-			public boolean eval(E record) throws Exception {
-
-				if (record.getClass().getSimpleName().toLowerCase().contains(search)) {
-					return true;
-				}
-
-				for (Prop prop : Beany.propertiesOf(record).select(SEARCHABLE_PROPS)) {
-					String s = String.valueOf(prop.get(record)).toLowerCase();
-					if (s.contains(search)) {
-						return true;
-					}
-				}
-				return false;
-			}
-		};
-
-		return find(match);
-	}
-
-
-	public <E> List<E> query(final Class<E> clazz, final String query, final Object... args) {
-
-		Predicate<E> match = new Predicate<E>() {
-
-			public boolean eval(E record) throws Exception {
-				return clazz.isAssignableFrom(record.getClass()) && matches(record, query, args);
-			}
-		};
-
-		return find(match);
-	}
-
-	public boolean matches(Object record, String query, Object... args) {
-
-		if (query == null || query.isEmpty()) {
-			return true;
-		}
-
-		if (P_WORD.matcher(query).matches() && args.length == 1) {
-			Object val = Beany.getPropValue(record, query, null);
-			Object arg = args[0];
-			return val == arg || (val != null && val.equals(arg));
-		}
-
-		throw new RuntimeException("Query not supported: " + query);
-	}
-
-	public void deleteAllData() {
-		List<Object> all = getAll();
-		for (Object entity : all) {
-			delete(entity);
-		}
-	}
-
-
-	public <E> List<E> find(final Predicate<E> match) {
-		final List<E> results = new ArrayList<E>();
-
-		each(new Operation<E>() {
-
-			public void execute(E record) throws Exception {
-				if (match.eval(record)) {
-					results.add(record);
-				}
-			}
-
-		});
-
-		return results;
-	}
-
-	@SuppressWarnings("unchecked")
-
-	public <E> void each(final Operation<E> lambda) {
-		for (Object record : getAll()) {
-
-			try {
-				lambda.execute((E) record);
-			} catch (ClassCastException e) {
-				// ignore, cast exceptions are expected
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		}
-	}
-
-
 	public <RESULT> RESULT sql(String sql, Object... args) {
 		throw Err.notSupported();
 	}
 
-
-	public long size() {
-		return U.list(getAll()).size();
-	}
-
-	public Object castId(Class<?> clazz, String id) {
-		return Cls.convert(id, Beany.property(clazz, "id", true).getType());
-	}
-
-
-	public String insert(Object entity) {
+	public Object insert(Object entity) {
 		ensureNotInReadOnlyTransation();
 
 		EntityTransaction tx = em.getTransaction();
@@ -262,7 +121,7 @@ public class JPAUtil {
 			em.persist(entity);
 			em.flush();
 
-			String id = Beany.getId(entity);
+			Object id = Beany.getId(entity);
 
 			if (!txWasActive) {
 				tx.commit();
@@ -280,20 +139,17 @@ public class JPAUtil {
 		}
 	}
 
-
-	public void update(String id, Object entity) {
+	public void update(Object id, Object entity) {
 		ensureNotInReadOnlyTransation();
 		Beany.setId(entity, id);
 		em.persist(entity);
 	}
 
-
-	public <T> T getIfExists(Class<T> clazz, String id) {
-		return em.find(clazz, castId(clazz, id));
+	public <T> T getIfExists(Class<T> clazz, Object id) {
+		return em.find(clazz, id);
 	}
 
 	@SuppressWarnings("unchecked")
-
 	public <E> List<E> getAll() {
 		List<E> all = U.list();
 
@@ -308,7 +164,6 @@ public class JPAUtil {
 		return all;
 	}
 
-
 	public <T> List<T> getAll(Class<T> clazz) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<T> query = cb.createQuery(clazz);
@@ -316,23 +171,19 @@ public class JPAUtil {
 		return em.createQuery(all).getResultList();
 	}
 
-
 	public void refresh(Object entity) {
 		em.refresh(entity);
 	}
 
-
-	public <E> void delete(Class<E> clazz, String id) {
+	public <E> void delete(Class<E> clazz, Object id) {
 		ensureNotInReadOnlyTransation();
 		em.remove(get(clazz, id));
 	}
-
 
 	public void delete(Object record) {
 		ensureNotInReadOnlyTransation();
 		em.remove(record);
 	}
-
 
 	public void transaction(final Runnable action, boolean readonly) {
 		final EntityTransaction tx = em.getTransaction();
@@ -383,7 +234,6 @@ public class JPAUtil {
 			tx.commit();
 		}
 	}
-
 
 	public void transaction(final Runnable tx, final boolean readonly, final Callback<Void> callback) {
 		Jobs.execute(new Callable<Void>() {

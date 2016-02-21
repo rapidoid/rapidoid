@@ -1,9 +1,12 @@
-package org.rapidoid.plugins.db.hibernate;
+package org.rapidoid.plugins.JPA.hibernate;
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.plugins.db.hibernate.Book;
+import org.rapidoid.plugins.db.hibernate.JPA;
+import org.rapidoid.plugins.db.hibernate.Movie;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.SimplePersistorProvider;
@@ -46,24 +49,22 @@ public class JPATest extends TestCommons {
 		Ctxs.setPersisterProvider(new SimplePersistorProvider(em));
 		Ctxs.open("test");
 
-		final JPA db = new JPA();
-
 		final Book b1 = new Book("book 1");
 		final Book b2 = new Book("book 2");
 		final Movie m1 = new Movie("movie 1");
 
-		db.transaction(new Runnable() {
+		JPA.transaction(new Runnable() {
 			@Override
 			public void run() {
-				db.insert(b1);
-				db.insert(b2);
-				db.insert(m1);
+				JPA.insert(b1);
+				JPA.insert(b2);
+				JPA.insert(m1);
 			}
 		}, false);
 
-		eq(db.size(), 3);
+		eq(JPA.getAll().size(), 3);
 
-		List<Object> all = db.getAll();
+		List<Object> all = JPA.getAll();
 		System.out.println(all);
 
 		eq(all.size(), 3);
