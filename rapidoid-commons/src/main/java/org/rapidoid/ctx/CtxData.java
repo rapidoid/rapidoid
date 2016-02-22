@@ -35,8 +35,6 @@ public class CtxData {
 
 	private Set<String> roles = null;
 
-	private Object app = null;
-
 	private org.rapidoid.ctx.JobStatusListener listener = null;
 
 	private Object persister = null;
@@ -69,15 +67,6 @@ public class CtxData {
 
 	public synchronized Set<String> roles() {
 		return this.roles;
-	}
-
-	public synchronized CtxData app(Object app) {
-		this.app = app;
-		return this;
-	}
-
-	public synchronized Object app() {
-		return this.app;
 	}
 
 	public synchronized CtxData listener(org.rapidoid.ctx.JobStatusListener listener) {

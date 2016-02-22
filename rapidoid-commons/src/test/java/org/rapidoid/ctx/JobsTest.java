@@ -46,17 +46,15 @@ public class JobsTest extends AbstractCommonsTest {
 			public void run() {
 				Ctxs.open("test-job");
 
-				final Object app = new Object();
 				final UserInfo user = new UserInfo(rndStr(50));
 
 				Ctxs.ctx().setUser(user);
-				Ctxs.ctx().setApp(app);
-				ensureProperContext(user, app);
+				ensureProperContext(user);
 
 				ScheduledFuture<?> future = Jobs.schedule(new Runnable() {
 					@Override
 					public void run() {
-						ensureProperContext(user, app);
+						ensureProperContext(user);
 						counter.incrementAndGet();
 					}
 				}, 100, TimeUnit.MILLISECONDS);
@@ -76,9 +74,8 @@ public class JobsTest extends AbstractCommonsTest {
 		eq(counter.get(), total);
 	}
 
-	private void ensureProperContext(UserInfo user, Object app) {
+	private void ensureProperContext(UserInfo user) {
 		eq(Ctxs.ctx().user(), user);
-		eq(Ctxs.ctx().app(), app);
 	}
 
 }

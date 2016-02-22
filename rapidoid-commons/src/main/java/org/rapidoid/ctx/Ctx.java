@@ -45,8 +45,6 @@ public class Ctx implements CtxMetadata {
 
 	private volatile Object exchange;
 
-	private volatile Object app;
-
 	private volatile int referenceCounter = 1;
 
 	private volatile ThreadLocal<Object> persisters = new ThreadLocal<Object>();
@@ -80,17 +78,6 @@ public class Ctx implements CtxMetadata {
 	public void setExchange(Object exchange) {
 		ensureNotClosed();
 		this.exchange = exchange;
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T> T app() {
-		ensureNotClosed();
-		return (T) app;
-	}
-
-	public void setApp(Object app) {
-		ensureNotClosed();
-		this.app = app;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -138,7 +125,6 @@ public class Ctx implements CtxMetadata {
 		this.referenceCounter = 0;
 		this.user = null;
 		this.exchange = null;
-		this.app = null;
 		this.persisters = null;
 
 		for (Object persister : allPersisters) {
@@ -160,7 +146,7 @@ public class Ctx implements CtxMetadata {
 	@Override
 	public String toString() {
 		final int maxLen = 10;
-		return prefixed("Ctx [id=" + id + ", tag=" + tag + ", user=" + user + ", exchange=" + exchange + ", app=" + app
+		return prefixed("Ctx [id=" + id + ", tag=" + tag + ", user=" + user + ", exchange=" + exchange
 				+ ", referenceCounter=" + referenceCounter + ", persisters=" + persisters + ", closed=" + closed
 				+ ", allPersisters=" + (allPersisters != null ? toString(allPersisters, maxLen) : null) + ", extras="
 				+ (extras != null ? toString(extras.entrySet(), maxLen) : null) + "]");
@@ -192,7 +178,6 @@ public class Ctx implements CtxMetadata {
 	public static synchronized <T> T executeInCtx(CtxData cd, Callable<T> action) {
 		Ctx ctx = Ctxs.open("call");
 
-		ctx.setApp(cd.app());
 		ctx.setExchange(null);
 		ctx.setUser(new UserInfo(cd.username(), cd.roles()));
 

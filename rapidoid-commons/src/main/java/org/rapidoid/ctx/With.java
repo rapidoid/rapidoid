@@ -38,10 +38,6 @@ public class With {
 		return new CtxData().roles(roles);
 	}
 
-	public static CtxData app(Object app) {
-		return new CtxData().app(app);
-	}
-
 	public static CtxData listener(org.rapidoid.ctx.JobStatusListener listener) {
 		return new CtxData().listener(listener);
 	}

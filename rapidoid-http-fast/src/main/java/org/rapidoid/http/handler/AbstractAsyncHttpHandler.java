@@ -104,7 +104,6 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 			public void run() {
 
 				Ctx ctx = Ctxs.ctx();
-				ctx.setApp(null);
 				ctx.setExchange(req);
 				ctx.setUser(null);
 
