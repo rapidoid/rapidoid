@@ -62,6 +62,14 @@ public class YAML {
 		}
 	}
 
+	public static <T> T parse(String yaml) {
+		try {
+			return (T) MAPPER.readValue(yaml, Object.class);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static <T> T parse(String yaml, Class<T> valueType) {
 		try {
 			return MAPPER.readValue(yaml, valueType);

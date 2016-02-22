@@ -105,6 +105,15 @@ public class JSON {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> T parse(String json) {
+		try {
+			return (T) MAPPER.readValue(json, Object.class);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static <T> T parse(String json, Class<T> valueType) {
 		try {
 			return MAPPER.readValue(json, valueType);

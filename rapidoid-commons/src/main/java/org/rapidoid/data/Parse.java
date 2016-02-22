@@ -30,8 +30,6 @@ public class Parse {
 		JSON, XML, YAML
 	}
 
-	;
-
 	private static final DataFormat[] XML_FIRST = {DataFormat.XML, DataFormat.JSON, DataFormat.YAML};
 
 	private static final DataFormat[] JSON_FIRST = {DataFormat.JSON, DataFormat.XML, DataFormat.YAML};

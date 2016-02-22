@@ -29,12 +29,15 @@ import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.job.Jobs;
+import org.rapidoid.lambda.Mapper;
 
 import java.lang.annotation.Annotation;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
 public class On {
+
+	private static Mapper<Object, String> jsonRenderer;
 
 	static {
 		RapidoidInitializer.initialize();
@@ -152,7 +155,7 @@ public class On {
 		return Setup.DEFAULT.bootstrap();
 	}
 
-	@SuppressWarnings({ "varargs" })
+	@SuppressWarnings({"varargs"})
 	public static OnAnnotated annotated(Class<? extends Annotation>... annotated) {
 		return Setup.DEFAULT.annotated(annotated);
 	}
@@ -175,6 +178,30 @@ public class On {
 
 	public static OnChanges changes() {
 		return Setup.onChanges();
+	}
+
+	public static Setup renderJson(Mapper<Object, String> jsonRenderer) {
+		return Setup.DEFAULT.renderJson(jsonRenderer);
+	}
+
+	public static Setup parseJson(Mapper<String, Object> jsonParser) {
+		return Setup.DEFAULT.parseJson(jsonParser);
+	}
+
+	public static Setup renderYaml(Mapper<Object, String> yamlRenderer) {
+		return Setup.DEFAULT.renderYaml(yamlRenderer);
+	}
+
+	public static Setup parseYaml(Mapper<String, Object> yamlParser) {
+		return Setup.DEFAULT.parseYaml(yamlParser);
+	}
+
+	public static Setup login(LoginProcessor loginProcessor) {
+		return Setup.DEFAULT.login(loginProcessor);
+	}
+
+	public static Setup rolesOf(RolesProvider rolesProvider) {
+		return Setup.DEFAULT.rolesOf(rolesProvider);
 	}
 
 }

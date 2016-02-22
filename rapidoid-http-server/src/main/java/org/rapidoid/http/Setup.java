@@ -13,6 +13,7 @@ import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqRespHandl
 import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
@@ -70,24 +71,25 @@ public class Setup implements Constants {
 	private final ServerSetupType setupType;
 
 	private final IoCContext ioCContext;
-
 	private final FastHttp fastHttp = new FastHttp();
 
 	private volatile int port;
-
 	private volatile String address = "0.0.0.0";
-
 	private volatile String[] path;
 
 	private volatile HttpWrapper[] wrappers;
-
 	private volatile HttpProcessor processor;
 
 	private volatile boolean listening;
-
 	private volatile Server server;
-
 	private volatile boolean activated;
+
+	private volatile Mapper<Object, String> jsonRenderer;
+	private volatile Mapper<String, Object> jsonParser;
+	private volatile Mapper<Object, String> yamlRenderer;
+	private volatile Mapper<String, Object> yamlParser;
+	private volatile LoginProcessor loginProcessor;
+	private volatile RolesProvider rolesProvider;
 
 	public Setup(String name, String defaultAddress, int defaultPort, ServerSetupType setupType, IoCContext ioCContext) {
 		this.name = name;
@@ -439,6 +441,60 @@ public class Setup implements Constants {
 
 	private static Setup[] setups() {
 		return new Setup[]{DEFAULT, ADMIN, DEV};
+	}
+
+	public Setup renderJson(Mapper<Object, String> jsonRenderer) {
+		this.jsonRenderer = jsonRenderer;
+		return this;
+	}
+
+	public Setup parseJson(Mapper<String, Object> jsonParser) {
+		this.jsonParser = jsonParser;
+		return this;
+	}
+
+	public Setup renderYaml(Mapper<Object, String> yamlRenderer) {
+		this.yamlRenderer = yamlRenderer;
+		return this;
+	}
+
+	public Setup parseYaml(Mapper<String, Object> yamlParser) {
+		this.yamlParser = yamlParser;
+		return this;
+	}
+
+	public Setup login(LoginProcessor loginProcessor) {
+		this.loginProcessor = loginProcessor;
+		return this;
+	}
+
+	public Setup rolesOf(RolesProvider rolesProvider) {
+		this.rolesProvider = rolesProvider;
+		return this;
+	}
+
+	public Mapper<Object, String> getJsonRenderer() {
+		return jsonRenderer;
+	}
+
+	public Mapper<String, Object> getJsonParser() {
+		return jsonParser;
+	}
+
+	public Mapper<Object, String> getYamlRenderer() {
+		return yamlRenderer;
+	}
+
+	public Mapper<String, Object> getYamlParser() {
+		return yamlParser;
+	}
+
+	public LoginProcessor getLoginProcessor() {
+		return loginProcessor;
+	}
+
+	public RolesProvider getRolesProvider() {
+		return rolesProvider;
 	}
 
 }
