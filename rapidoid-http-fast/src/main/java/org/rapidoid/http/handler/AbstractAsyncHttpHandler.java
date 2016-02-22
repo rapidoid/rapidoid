@@ -105,10 +105,9 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 				Ctx ctx = Ctxs.ctx();
 				ctx.setExchange(req);
-				ctx.setUser(null);
+				ctx.setUser(null); // FIXME set user
 
 				Object result;
-
 				try {
 
 					if (!U.isEmpty(wrappers)) {

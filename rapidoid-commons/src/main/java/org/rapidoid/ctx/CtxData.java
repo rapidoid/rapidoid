@@ -35,19 +35,9 @@ public class CtxData {
 
 	private Set<String> roles = null;
 
-	private org.rapidoid.ctx.JobStatusListener listener = null;
-
 	private Object persister = null;
 
-	private String host = null;
-
-	private String uri = null;
-
-	private String verb = null;
-
-	private Map<String, Object> data = null;
-
-	private Map<String, java.io.Serializable> session = null;
+	private Object exchange = null;
 
 	private Map<String, Object> extras = null;
 
@@ -69,15 +59,6 @@ public class CtxData {
 		return this.roles;
 	}
 
-	public synchronized CtxData listener(org.rapidoid.ctx.JobStatusListener listener) {
-		this.listener = listener;
-		return this;
-	}
-
-	public synchronized org.rapidoid.ctx.JobStatusListener listener() {
-		return this.listener;
-	}
-
 	public synchronized CtxData persister(Object persister) {
 		this.persister = persister;
 		return this;
@@ -87,49 +68,13 @@ public class CtxData {
 		return this.persister;
 	}
 
-	public synchronized CtxData host(String host) {
-		this.host = host;
+	public synchronized CtxData exchange(Object exchange) {
+		this.exchange = exchange;
 		return this;
 	}
 
-	public synchronized String host() {
-		return this.host;
-	}
-
-	public synchronized CtxData uri(String uri) {
-		this.uri = uri;
-		return this;
-	}
-
-	public synchronized String uri() {
-		return this.uri;
-	}
-
-	public synchronized CtxData verb(String verb) {
-		this.verb = verb;
-		return this;
-	}
-
-	public synchronized String verb() {
-		return this.verb;
-	}
-
-	public synchronized CtxData data(Map<String, Object> data) {
-		this.data = data;
-		return this;
-	}
-
-	public synchronized Map<String, Object> data() {
-		return this.data;
-	}
-
-	public synchronized CtxData session(Map<String, java.io.Serializable> session) {
-		this.session = session;
-		return this;
-	}
-
-	public synchronized Map<String, java.io.Serializable> session() {
-		return this.session;
+	public synchronized Object exchange() {
+		return this.exchange;
 	}
 
 	public synchronized CtxData extras(Map<String, Object> extras) {
@@ -138,7 +83,7 @@ public class CtxData {
 	}
 
 	public synchronized Map<String, Object> extras() {
-		return this.extras;
+		return extras;
 	}
 
 	public synchronized <T> T call(Callable<T> action) {

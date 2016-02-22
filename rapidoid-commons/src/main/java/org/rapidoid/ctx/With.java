@@ -38,32 +38,12 @@ public class With {
 		return new CtxData().roles(roles);
 	}
 
-	public static CtxData listener(org.rapidoid.ctx.JobStatusListener listener) {
-		return new CtxData().listener(listener);
-	}
-
 	public static CtxData persister(Object persister) {
 		return new CtxData().persister(persister);
 	}
 
-	public static CtxData host(String host) {
-		return new CtxData().host(host);
-	}
-
-	public static CtxData uri(String uri) {
-		return new CtxData().uri(uri);
-	}
-
-	public static CtxData verb(String verb) {
-		return new CtxData().verb(verb);
-	}
-
-	public static CtxData data(Map<String, Object> data) {
-		return new CtxData().data(data);
-	}
-
-	public static CtxData session(Map<String, java.io.Serializable> session) {
-		return new CtxData().session(session);
+	public static CtxData exchange(Object exchange) {
+		return new CtxData().exchange(exchange);
 	}
 
 	public static CtxData extras(Map<String, Object> extras) {

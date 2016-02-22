@@ -41,15 +41,15 @@ public class Ctx implements CtxMetadata {
 
 	private final String tag;
 
+	private volatile int referenceCounter = 1;
+
 	private volatile UserInfo user;
 
 	private volatile Object exchange;
 
-	private volatile int referenceCounter = 1;
+	private volatile boolean closed = false;
 
 	private volatile ThreadLocal<Object> persisters = new ThreadLocal<Object>();
-
-	private volatile boolean closed = false;
 
 	private final List<Object> allPersisters = Collections.synchronizedList(new ArrayList<Object>(5));
 
@@ -93,6 +93,13 @@ public class Ctx implements CtxMetadata {
 		}
 
 		return (P) persister;
+	}
+
+	public synchronized void setPersister(Object persister) {
+		this.persisters.set(persister);
+		if (!allPersisters.contains(persister)) {
+			allPersisters.add(persister);
+		}
 	}
 
 	public synchronized Ctx span() {
@@ -178,10 +185,13 @@ public class Ctx implements CtxMetadata {
 	public static synchronized <T> T executeInCtx(CtxData cd, Callable<T> action) {
 		Ctx ctx = Ctxs.open("call");
 
-		ctx.setExchange(null);
+		ctx.setExchange(cd.exchange());
 		ctx.setUser(new UserInfo(cd.username(), cd.roles()));
-
 		Coll.assign(ctx.extras(), cd.extras());
+
+		if (cd.persister() != null) {
+			ctx.setPersister(cd.persister());
+		}
 
 		try {
 			return Lmbd.call(action);
