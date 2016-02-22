@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.setup;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;

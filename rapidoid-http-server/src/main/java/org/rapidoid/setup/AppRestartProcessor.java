@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.setup;
 
 /*
  * #%L
@@ -22,35 +22,27 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.log.Log;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.data.Range;
+import org.rapidoid.data.Ranges;
+import org.rapidoid.http.processor.AbstractHttpProcessor;
+import org.rapidoid.http.processor.HttpProcessor;
+import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class OnChanges {
+public class AppRestartProcessor extends AbstractHttpProcessor {
 
-	static final OnChanges INSTANCE = new OnChanges();
-
-	static volatile boolean initialized;
-
-	private OnChanges() {
+	public AppRestartProcessor(Setup setup, HttpProcessor next) {
+		super(next);
 	}
 
-	public synchronized void restart() {
-		if (!initialized) {
-			initialized = true;
+	@Override
+	public void request(Channel channel, boolean isGet, boolean isKeepAlive, Range body,
+	                    Range verb, Range uri, Range path, Range query, Range protocol, Ranges headers) {
 
-			if (Conf.dev()) {
-				if (UTILS.withWatchModule()) {
-					WatchForChanges.activate();
-				} else {
-					Log.warn("Cannot watch for class changes, the rapidoid-watch module is missing!");
-				}
-			} else {
-				Log.warn("Not running in dev mode, hot class reloading is disabled!");
-			}
-		}
+		Setup.restartIfDirty();
+
+		next.request(channel, isGet, isKeepAlive, body, verb, uri, path, query, protocol, headers);
 	}
 
 }

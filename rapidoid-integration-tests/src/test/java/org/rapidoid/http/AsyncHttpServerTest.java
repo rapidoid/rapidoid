@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
+import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
 import java.io.IOException;

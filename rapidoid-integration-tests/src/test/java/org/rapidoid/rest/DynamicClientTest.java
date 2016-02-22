@@ -7,6 +7,7 @@ import org.rapidoid.concurrent.Promise;
 import org.rapidoid.concurrent.Promises;
 import org.rapidoid.http.*;
 import org.rapidoid.job.Jobs;
+import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
 import java.util.concurrent.TimeUnit;

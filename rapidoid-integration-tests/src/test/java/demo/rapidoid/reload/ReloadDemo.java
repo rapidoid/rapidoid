@@ -21,7 +21,7 @@ package demo.rapidoid.reload;
  */
 
 import org.rapidoid.http.Req;
-import org.rapidoid.http.On;
+import org.rapidoid.setup.On;
 
 /**
  * Demo for class reloading. Try changing the classes

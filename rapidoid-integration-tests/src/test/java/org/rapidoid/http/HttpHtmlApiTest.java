@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.io.Res;
+import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Bufs;
 

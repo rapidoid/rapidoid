@@ -32,6 +32,8 @@ import org.rapidoid.ioc.IoC;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
+import org.rapidoid.setup.On;
+import org.rapidoid.setup.Setup;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 

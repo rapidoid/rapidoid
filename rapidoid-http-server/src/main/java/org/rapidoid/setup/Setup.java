@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.setup;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Controller;
@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
+import org.rapidoid.http.*;
 import org.rapidoid.http.handler.FastHttpErrorHandler;
 import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqHandler;

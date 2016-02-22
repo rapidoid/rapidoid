@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Rnd;
 import org.rapidoid.io.IO;
 import org.rapidoid.job.Jobs;
+import org.rapidoid.setup.On;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

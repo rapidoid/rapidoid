@@ -26,6 +26,7 @@ import com.github.mustachejava.MustacheFactory;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.setup.On;
 
 import java.io.PrintWriter;
 

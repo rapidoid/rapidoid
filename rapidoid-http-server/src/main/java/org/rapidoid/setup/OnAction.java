@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.setup;
 
 /*
  * #%L
@@ -23,6 +23,8 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
+import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.handler.HttpHandlers;
 import org.rapidoid.lambda.*;
 
