@@ -39,13 +39,9 @@ public class C3P0ConnectionPool implements ConnectionPool {
 		init(jdbcUrl, driverClass, username, password);
 	}
 
-	public C3P0ConnectionPool(String jdbcUrl, String driverClass) {
-		this(jdbcUrl, driverClass, null, null);
-	}
-
-	public C3P0ConnectionPool(SQLAPI sqlapi) {
-		this(sqlapi.url(), sqlapi.driver(), sqlapi.user(), sqlapi.password());
-		sqlapi.connectionPool(this);
+	public C3P0ConnectionPool(JdbcClient jdbc) {
+		this(jdbc.url(), jdbc.driver(), jdbc.username(), jdbc.password());
+		jdbc.pool(this);
 	}
 
 	private void init(String jdbcUrl, String driverClass, String username, String password) {

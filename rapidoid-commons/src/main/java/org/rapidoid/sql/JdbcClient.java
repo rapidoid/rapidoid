@@ -31,81 +31,57 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class SQLAPI {
+public class JdbcClient {
 
 	private boolean initialized;
-	private String user;
+
+	private String username;
 	private String password;
 	private String driver;
-	private String db = "";
 	private String url;
-	private String completeUrl;
-	private String host = "localhost";
-	private int port;
-	private ConnectionPool connectionPool = new NoConnectionPool();
 
-	public synchronized SQLAPI user(String user) {
-		this.user = user;
+	private volatile ConnectionPool pool = new NoConnectionPool();
+
+	public synchronized JdbcClient username(String username) {
+		this.username = username;
 		this.initialized = false;
 		return this;
 	}
 
-	public synchronized SQLAPI password(String password) {
+	public synchronized JdbcClient password(String password) {
 		this.password = password;
 		this.initialized = false;
 		return this;
 	}
 
-	public synchronized SQLAPI driver(String driver) {
+	public synchronized JdbcClient driver(String driver) {
 		this.driver = driver;
 		this.initialized = false;
 		return this;
 	}
 
-	public synchronized SQLAPI connectionPool(ConnectionPool connectionPool) {
-		this.connectionPool = connectionPool;
+	public synchronized JdbcClient pool(ConnectionPool connectionPool) {
+		this.pool = connectionPool;
 		this.initialized = false;
 		return this;
 	}
 
-	public synchronized SQLAPI host(String host) {
-		this.host = host;
-		this.initialized = false;
-		return this;
-	}
-
-	public synchronized SQLAPI port(int port) {
-		this.port = port;
-		this.initialized = false;
-		return this;
-	}
-
-	public synchronized SQLAPI db(String databaseName) {
-		this.db = databaseName;
-		this.initialized = false;
-		return this;
-	}
-
-	public synchronized SQLAPI url(String url) {
+	public synchronized JdbcClient url(String url) {
 		this.url = url;
 		this.initialized = false;
 		return this;
 	}
 
-	public SQLAPI mysql() {
-		return driver("com.mysql.jdbc.Driver").url("jdbc:mysql://<host>:<port>/<db>");
+	public JdbcClient mysql(String host, int port, String databaseName) {
+		return driver("com.mysql.jdbc.Driver").url(U.frmt("jdbc:mysql://%s:%s/%s", host, port, databaseName));
 	}
 
-	public SQLAPI h2() {
-		return driver("org.h2.Driver").url("jdbc:h2:mem:<db>;DB_CLOSE_DELAY=-1").user("sa").password("");
+	public JdbcClient h2(String databaseName) {
+		return driver("org.h2.Driver").url("jdbc:h2:mem:" + databaseName + ";DB_CLOSE_DELAY=-1").username("sa").password("");
 	}
 
-	public SQLAPI hsql() {
-		return driver("org.hsqldb.jdbc.JDBCDriver").url("jdbc:hsqldb:mem:<db>").user("sa").password("");
-	}
-
-	private String jdbcUrl() {
-		return completeUrl;
+	public JdbcClient hsql(String databaseName) {
+		return driver("org.hsqldb.jdbc.JDBCDriver").url("jdbc:hsqldb:mem:" + databaseName).username("sa").password("");
 	}
 
 	private void registerJDBCDriver() {
@@ -130,27 +106,27 @@ public class SQLAPI {
 
 	private synchronized void ensureIsInitialized() {
 		if (!initialized) {
+			validate();
 			registerJDBCDriver();
-			setupCompleteUrl();
+
+			String maskedPassword = U.isEmpty(password) ? "<empty>" : "<specified>";
+			Log.info("Initialized the default JDBC API", "url", url, "driver", driver, "username", username,
+					"password", maskedPassword);
+
 			initialized = true;
 		}
 	}
 
-	private void setupCompleteUrl() {
-		U.notNull(url, "JDBC URL");
-
-		completeUrl = url.replace("<db>", U.safe(db)).replace("<user>", U.safe(user))
-				.replace("<password>", U.safe(password)).replace("<host>", U.safe(host));
-
-		if (port > 0) {
-			completeUrl = completeUrl.replace("<port>", "" + port);
-		} else {
-			completeUrl = completeUrl.replace(":<port>", "").replace("<port>", "");
-		}
+	private void validate() {
+		U.must(U.notEmpty(username != null), "The database username must be specified!");
+		U.must(U.notEmpty(password != null), "The database password must be specified!");
+		U.must(U.notEmpty(url != null), "The database connection URL must be specified!");
+		U.must(U.notEmpty(driver != null), "The database driver must be specified!");
 	}
 
 	public Connection getConnection() {
 		ensureIsInitialized();
+
 		return provideConnection();
 	}
 
@@ -181,28 +157,14 @@ public class SQLAPI {
 		}
 	}
 
-	static PreparedStatement createStatement(Connection conn, String sql, Object[] args) {
-		try {
-			PreparedStatement stmt = conn.prepareStatement(sql);
-
-			for (int i = 0; i < args.length; i++) {
-				Object arg = args[i];
-				stmt.setObject(i + 1, arg);
-			}
-
-			return stmt;
-		} catch (SQLException e) {
-			throw new RuntimeException("Cannot create prepared statement!", e);
-		}
-	}
-
 	public void execute(String sql, Object... args) {
 		ensureIsInitialized();
+
 		Connection conn = provideConnection();
 		PreparedStatement stmt = null;
 
 		try {
-			stmt = createStatement(conn, sql, args);
+			stmt = JDBC.prepare(conn, sql, args);
 			stmt.execute();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -223,14 +185,15 @@ public class SQLAPI {
 
 	public <T> List<Map<String, Object>> query(String sql, Object... args) {
 		ensureIsInitialized();
+
 		Connection conn = provideConnection();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 
 		try {
-			stmt = createStatement(conn, sql, args);
+			stmt = JDBC.prepare(conn, sql, args);
 			rs = stmt.executeQuery();
-			return SQL.rows(rs);
+			return JDBC.rows(rs);
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -246,18 +209,18 @@ public class SQLAPI {
 		try {
 			Connection conn;
 
-			if (user != null) {
+			if (username != null) {
 				String pass = U.safe(password);
-				conn = connectionPool.getConnection(jdbcUrl(), user, pass);
+				conn = pool.getConnection(url, username, pass);
 
 				if (conn == null) {
-					conn = DriverManager.getConnection(jdbcUrl(), user, pass);
+					conn = DriverManager.getConnection(url, username, pass);
 				}
 			} else {
-				conn = connectionPool.getConnection(jdbcUrl());
+				conn = pool.getConnection(url);
 
 				if (conn == null) {
-					conn = DriverManager.getConnection(jdbcUrl());
+					conn = DriverManager.getConnection(url);
 				}
 			}
 
@@ -270,18 +233,14 @@ public class SQLAPI {
 
 	public void release(Connection connection) {
 		try {
-			connectionPool.releaseConnection(connection);
+			pool.releaseConnection(connection);
 		} catch (SQLException e) {
 			Log.error("Error while releasing a JDBC connection!", e);
 		}
 	}
 
-	public boolean isInitialized() {
-		return initialized;
-	}
-
-	public String user() {
-		return user;
+	public String username() {
+		return username;
 	}
 
 	public String password() {
@@ -292,32 +251,18 @@ public class SQLAPI {
 		return driver;
 	}
 
-	public String db() {
-		return db;
-	}
-
 	public String url() {
 		return url;
 	}
 
-	public String getCompleteUrl() {
-		return completeUrl;
+	public ConnectionPool pool() {
+		return pool;
 	}
 
-	public String host() {
-		return host;
-	}
+	public JdbcClient pooled() {
+		ensureIsInitialized();
 
-	public int port() {
-		return port;
-	}
-
-	public ConnectionPool getConnectionPool() {
-		return connectionPool;
-	}
-
-	public SQLAPI pooled() {
-		new C3P0ConnectionPool(this);
+		this.pool = new C3P0ConnectionPool(this);
 		return this;
 	}
 

@@ -24,8 +24,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
-import org.rapidoid.sql.C3P0ConnectionPool;
-import org.rapidoid.sql.SQL;
+import org.rapidoid.sql.JDBC;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
@@ -38,17 +37,17 @@ public class JDBCPoolC3P0Test extends TestCommons {
 	@Test(timeout = 30000)
 	public void testJDBCPoolC3P0() {
 
-		new C3P0ConnectionPool(SQL.h2());
+		JDBC.h2("test1").pooled();
 
-		SQL.execute("create table abc (id int, name varchar)");
-		SQL.execute("insert into abc values (?, ?)", 123, "xyz");
+		JDBC.execute("create table abc (id int, name varchar)");
+		JDBC.execute("insert into abc values (?, ?)", 123, "xyz");
 
 		final Map<String, ?> expected = U.map("id", 123, "name", "xyz");
 
 		UTILS.benchmarkMT(100, "select", 100000, new Runnable() {
 			@Override
 			public void run() {
-				Map<String, Object> record = U.single(SQL.get("select id, name from abc"));
+				Map<String, Object> record = U.single(JDBC.query("select id, name from abc"));
 				record = UTILS.lowercase(record);
 				eq(record, expected);
 			}
@@ -61,17 +60,17 @@ public class JDBCPoolC3P0Test extends TestCommons {
 		Conf.set("jdbc", "url", "jdbc:h2:mem:mydb");
 		Conf.set("jdbc", "username", "sa");
 
-		new C3P0ConnectionPool(SQL.defaultInstance());
+		JDBC.defaultApi().pooled();
 
-		SQL.execute("create table abc (id int, name varchar)");
-		SQL.execute("insert into abc values (?, ?)", 123, "xyz");
+		JDBC.execute("create table abc (id int, name varchar)");
+		JDBC.execute("insert into abc values (?, ?)", 123, "xyz");
 
 		final Map<String, ?> expected = U.map("id", 123, "name", "xyz");
 
 		UTILS.benchmarkMT(100, "select", 100000, new Runnable() {
 			@Override
 			public void run() {
-				Map<String, Object> record = U.single(SQL.get("select id, name from abc"));
+				Map<String, Object> record = U.single(JDBC.query("select id, name from abc"));
 				record = UTILS.lowercase(record);
 				eq(record, expected);
 			}

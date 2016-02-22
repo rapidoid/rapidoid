@@ -29,15 +29,15 @@ import org.rapidoid.util.UTILS;
 import java.util.List;
 import java.util.Map;
 
-public class SQLTest extends TestCommons {
+public class JDBCTest extends TestCommons {
 
 	@Test
 	public void testWithMySQL() {
-		SQL.mysql().db("test").host("non-existing.non-existing--host").port(12345);
+		JDBC.mysql("non-existing.non-existing--host", 12345, "testdb");
 
 		// only testing if the driver is properly loaded and trying to connect
 		try {
-			SQL.execute("create table abc (id int)");
+			JDBC.execute("create table abc (id int)");
 		} catch (Exception e) {
 			eq(e.getCause().getClass(), CommunicationsException.class);
 		}
@@ -45,40 +45,49 @@ public class SQLTest extends TestCommons {
 
 	@Test
 	public void testWithH2() {
-		SQL.h2().db("test");
-		insertAndCheckData();
+		JDBC.h2("test");
+		insertAndCheckData(JDBC.defaultApi());
 	}
 
 	@Test
 	public void testWithH2AndC3P0() {
-		new C3P0ConnectionPool(SQL.h2().db("test"));
-		insertAndCheckData();
+		new C3P0ConnectionPool(JDBC.h2("test"));
+		insertAndCheckData(JDBC.defaultApi());
 	}
 
 	@Test
 	public void testWithHSQLDB() {
-		SQL.hsql().db("test");
-		insertAndCheckData();
+		JDBC.hsql("test");
+		insertAndCheckData(JDBC.defaultApi());
 	}
 
 	@Test
 	public void testWithHSQLDBAndC3P0() {
-		new C3P0ConnectionPool(SQL.hsql().db("test"));
-		insertAndCheckData();
+		new C3P0ConnectionPool(JDBC.hsql("test"));
+		insertAndCheckData(JDBC.defaultApi());
 	}
 
-	private void insertAndCheckData() {
-		SQL.tryToExecute("DROP TABLE movie");
-		SQL.execute("CREATE TABLE movie (id int, title varchar(99))");
+	@Test
+	public void testMultiAPI() {
+		JdbcClient client1 = JDBC.newApi().hsql("test");
+		JdbcClient client2 = JDBC.newApi().h2("test");
 
-		SQL.execute("INSERT INTO movie VALUES (?, ?)", 10, "Rambo");
-		SQL.execute("INSERT INTO movie VALUES (?, ?)", 20, "Hackers");
+		insertAndCheckData(client1);
+		insertAndCheckData(client2);
+	}
+
+	private void insertAndCheckData(JdbcClient client) {
+		client.tryToExecute("DROP TABLE movie");
+		client.execute("CREATE TABLE movie (id int, title varchar(99))");
+
+		client.execute("INSERT INTO movie VALUES (?, ?)", 10, "Rambo");
+		client.execute("INSERT INTO movie VALUES (?, ?)", 20, "Hackers");
 
 		for (int i = 0; i < 1000; i++) {
-			SQL.execute("INSERT INTO movie VALUES (?, ?)", 100 + i, "movie" + i);
+			client.execute("INSERT INTO movie VALUES (?, ?)", 100 + i, "movie" + i);
 		}
 
-		List<Map<String, Object>> rows = SQL.get("SELECT * FROM movie WHERE id < ?", 25);
+		List<Map<String, Object>> rows = client.query("SELECT * FROM movie WHERE id < ?", 25);
 		System.out.println(rows);
 
 		eq(rows.size(), 2);
