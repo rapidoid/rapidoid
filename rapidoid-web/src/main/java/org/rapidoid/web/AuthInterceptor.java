@@ -23,7 +23,7 @@ package org.rapidoid.web;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOPInterceptor;
-import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.ctx.Auth;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.security.Secure;
 
@@ -39,7 +39,7 @@ public class AuthInterceptor implements AOPInterceptor {
 	public Object intercept(final Callable<Object> forward, Annotation ann, Object ctx, final Method m,
 	                        final Object target, final Object[] args) {
 
-		String username = Ctxs.ctx().username();
+		String username = Auth.username();
 
 		if (Secure.canAccessMethod(username, m)) {
 			return Lmbd.call(forward);

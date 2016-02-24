@@ -30,24 +30,28 @@ import java.util.Set;
 @Since("2.5.0")
 public class With {
 
-	public static CtxData username(String username) {
-		return new CtxData().username(username);
+	public static WithContext tag(String tag) {
+		return new WithContext().tag(tag);
 	}
 
-	public static CtxData roles(Set<String> roles) {
-		return new CtxData().roles(roles);
+	public static WithContext username(String username) {
+		return new WithContext().username(username);
 	}
 
-	public static CtxData persister(Object persister) {
-		return new CtxData().persister(persister);
+	public static WithContext roles(Set<String> roles) {
+		return new WithContext().roles(roles);
 	}
 
-	public static CtxData exchange(Object exchange) {
-		return new CtxData().exchange(exchange);
+	public static WithContext persister(Object persister) {
+		return new WithContext().persister(persister);
 	}
 
-	public static CtxData extras(Map<String, Object> extras) {
-		return new CtxData().extras(extras);
+	public static WithContext exchange(Object exchange) {
+		return new WithContext().exchange(exchange);
+	}
+
+	public static WithContext extras(Map<String, Object> extras) {
+		return new WithContext().extras(extras);
 	}
 
 }

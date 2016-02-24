@@ -1,7 +1,7 @@
-package org.rapidoid.ctx;
+package org.rapidoid.util;
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.PersisterProvider;
+import org.rapidoid.log.Log;
 
 /*
  * #%L
@@ -23,10 +23,23 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("5.0.0")
-public interface JobStatusListener {
+public class SimplePersisterProvider implements PersisterProvider {
 
-	void onAsync();
+	private final Object persistor;
+
+	public SimplePersisterProvider(Object persistor) {
+		this.persistor = persistor;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <P> P openPersister() {
+		return (P) persistor;
+	}
+
+	@Override
+	public void closePersister(Object persister) {
+		Log.info("Closing persister", "persister", persister);
+	}
 
 }

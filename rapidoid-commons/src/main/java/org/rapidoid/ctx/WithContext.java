@@ -22,72 +22,83 @@ package org.rapidoid.ctx;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.job.Jobs;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.5.0")
-public class CtxData {
+public class WithContext {
 
-	private String username = null;
+	private volatile String tag;
 
-	private Set<String> roles = null;
+	private volatile String username;
 
-	private Object persister = null;
+	private volatile Set<String> roles;
 
-	private Object exchange = null;
+	private volatile Object persister;
 
-	private Map<String, Object> extras = null;
+	private volatile Object exchange;
 
-	public synchronized CtxData username(String username) {
+	private volatile Map<String, Object> extras;
+
+	public String tag() {
+		return tag;
+	}
+
+	public WithContext tag(String tag) {
+		this.tag = tag;
+		return this;
+	}
+
+	public WithContext username(String username) {
 		this.username = username;
 		return this;
 	}
 
-	public synchronized String username() {
+	public String username() {
 		return this.username;
 	}
 
-	public synchronized CtxData roles(Set<String> roles) {
+	public WithContext roles(Set<String> roles) {
 		this.roles = roles;
 		return this;
 	}
 
-	public synchronized Set<String> roles() {
+	public Set<String> roles() {
 		return this.roles;
 	}
 
-	public synchronized CtxData persister(Object persister) {
+	public WithContext persister(Object persister) {
 		this.persister = persister;
 		return this;
 	}
 
-	public synchronized Object persister() {
+	public Object persister() {
 		return this.persister;
 	}
 
-	public synchronized CtxData exchange(Object exchange) {
+	public WithContext exchange(Object exchange) {
 		this.exchange = exchange;
 		return this;
 	}
 
-	public synchronized Object exchange() {
+	public Object exchange() {
 		return this.exchange;
 	}
 
-	public synchronized CtxData extras(Map<String, Object> extras) {
+	public WithContext extras(Map<String, Object> extras) {
 		this.extras = extras;
 		return this;
 	}
 
-	public synchronized Map<String, Object> extras() {
+	public Map<String, Object> extras() {
 		return extras;
 	}
 
-	public synchronized <T> T call(Callable<T> action) {
-		return Ctx.executeInCtx(this, action);
+	public void run(Runnable action) {
+		Jobs.executeInContext(this, action);
 	}
 
 }

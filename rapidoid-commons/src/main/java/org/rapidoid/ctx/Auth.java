@@ -1,6 +1,4 @@
-package org.rapidoid.util;
-
-import org.rapidoid.ctx.PersisterProvider;
+package org.rapidoid.ctx;
 
 /*
  * #%L
@@ -22,23 +20,33 @@ import org.rapidoid.ctx.PersisterProvider;
  * #L%
  */
 
-public class SimplePersistorProvider implements PersisterProvider {
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
 
-	private final Object persistor;
+import java.util.Set;
 
-	public SimplePersistorProvider(Object persistor) {
-		this.persistor = persistor;
+@Authors("Nikolche Mihajlovski")
+@Since("5.1.0")
+public class Auth {
+
+	public static UserInfo user() {
+		Ctx ctx = Ctxs.get();
+		return ctx != null ? ctx.user() : null;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <P> P openPersister() {
-		return (P) persistor;
+	public static boolean isLoggedIn() {
+		return user() != null;
 	}
 
-	@Override
-	public void closePersister(Object persister) {
-		// do nothing
+	public static String username() {
+		UserInfo user = user();
+		return user != null ? user.username : null;
+	}
+
+	public static Set<String> roles() {
+		UserInfo user = user();
+		return U.safe(user != null ? U.set(user.roles) : U.<String>set());
 	}
 
 }

@@ -3,12 +3,9 @@ package org.rapidoid.ctx;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Coll;
-import org.rapidoid.job.Jobs;
-import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.log.Log;
 
 import java.util.*;
-import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicLong;
 
 /*
@@ -51,7 +48,7 @@ public class Ctx implements CtxMetadata {
 
 	private volatile ThreadLocal<Object> persisters = new ThreadLocal<Object>();
 
-	private final List<Object> allPersisters = Collections.synchronizedList(new ArrayList<Object>(5));
+	private final List<Object> persistersToClose = Collections.synchronizedList(new LinkedList<Object>());
 
 	private final Map<Object, Object> extras = Coll.synchronizedMap();
 
@@ -89,7 +86,7 @@ public class Ctx implements CtxMetadata {
 		if (persister == null) {
 			persister = Ctxs.createPersister();
 			this.persisters.set(persister);
-			allPersisters.add(persister);
+			persistersToClose.add(persister);
 		}
 
 		return (P) persister;
@@ -97,9 +94,6 @@ public class Ctx implements CtxMetadata {
 
 	public synchronized void setPersister(Object persister) {
 		this.persisters.set(persister);
-		if (!allPersisters.contains(persister)) {
-			allPersisters.add(persister);
-		}
 	}
 
 	public synchronized Ctx span() {
@@ -134,11 +128,11 @@ public class Ctx implements CtxMetadata {
 		this.exchange = null;
 		this.persisters = null;
 
-		for (Object persister : allPersisters) {
+		for (Object persister : persistersToClose) {
 			Ctxs.closePersister(persister);
 		}
 
-		allPersisters.clear();
+		persistersToClose.clear();
 		extras.clear();
 
 		closed = true;
@@ -154,9 +148,9 @@ public class Ctx implements CtxMetadata {
 	public String toString() {
 		final int maxLen = 10;
 		return prefixed("Ctx [id=" + id + ", tag=" + tag + ", user=" + user + ", exchange=" + exchange
-				+ ", referenceCounter=" + referenceCounter + ", persisters=" + persisters + ", closed=" + closed
-				+ ", allPersisters=" + (allPersisters != null ? toString(allPersisters, maxLen) : null) + ", extras="
-				+ (extras != null ? toString(extras.entrySet(), maxLen) : null) + "]");
+				+ ", referenceCounter=" + referenceCounter + ", closed=" + closed
+				+ ", persistersToClose=" + toString(persistersToClose, maxLen) + ", extras="
+				+ toString(extras.entrySet(), maxLen) + "]");
 	}
 
 	private String prefixed(String asStr) {
@@ -182,44 +176,9 @@ public class Ctx implements CtxMetadata {
 		return closed;
 	}
 
-	public static synchronized <T> T executeInCtx(CtxData cd, Callable<T> action) {
-		Ctx ctx = Ctxs.open("call");
-
-		ctx.setExchange(cd.exchange());
-		ctx.setUser(new UserInfo(cd.username(), cd.roles()));
-		Coll.assign(ctx.extras(), cd.extras());
-
-		if (cd.persister() != null) {
-			ctx.setPersister(cd.persister());
-		}
-
-		try {
-			return Lmbd.call(action);
-		} finally {
-			Ctxs.close();
-		}
-	}
-
-	public static synchronized void executeInCtx(String tag, Runnable action) {
-		Ctxs.open(tag);
-		try {
-			Jobs.execute(action);
-		} finally {
-			Ctxs.close();
-		}
-	}
-
 	public Map<Object, Object> extras() {
 		ensureNotClosed();
 		return extras;
-	}
-
-	public boolean isLoggedIn() {
-		return user() != null;
-	}
-
-	public String username() {
-		return isLoggedIn() ? user().username : null;
 	}
 
 	public String tag() {

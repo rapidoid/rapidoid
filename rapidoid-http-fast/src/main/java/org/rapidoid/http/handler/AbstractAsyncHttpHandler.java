@@ -22,20 +22,16 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.ctx.With;
 import org.rapidoid.http.*;
-import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 
-import java.io.File;
-import java.nio.ByteBuffer;
 import java.util.concurrent.Future;
 
 @Authors("Nikolche Mihajlovski")
@@ -43,6 +39,7 @@ import java.util.concurrent.Future;
 public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 	private static final String CTX_TAG_HANDLER = "handler";
+
 	protected final HttpWrapper[] wrappers;
 
 	public AbstractAsyncHttpHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers) {
@@ -55,7 +52,9 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		try {
 			ctx.async();
 			execHandlerJob(ctx, isKeepAlive, req, extra);
+
 		} catch (Throwable e) {
+			// if there was an error in the job scheduling:
 			http.error(ctx, isKeepAlive, req, e);
 			return HttpStatus.ERROR;
 		}
@@ -98,11 +97,10 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 	}
 
 	private void execHandlerJob(final Channel channel, final boolean isKeepAlive, final Req req, final Object extra) {
+		With.tag(CTX_TAG_HANDLER).run(new Runnable() {
 
-		Runnable requestHandling = new Runnable() {
 			@Override
 			public void run() {
-
 				Ctx ctx = Ctxs.ctx();
 				ctx.setExchange(req);
 				ctx.setUser(null); // FIXME set user
@@ -123,14 +121,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 				complete(channel, isKeepAlive, req, result);
 			}
-		};
-
-		Ctx ctx = Ctxs.get();
-		if (ctx != null && U.eq(ctx.tag(), CTX_TAG_HANDLER)) {
-			requestHandling.run();
-		} else {
-			Ctx.executeInCtx(CTX_TAG_HANDLER, requestHandling);
-		}
+		});
 	}
 
 	private Object wrap(final Channel channel, final boolean isKeepAlive, final Req req, final int index, final Object extra)

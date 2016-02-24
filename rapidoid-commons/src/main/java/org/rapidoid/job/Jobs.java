@@ -28,7 +28,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.ctx.JobStatusListener;
+import org.rapidoid.ctx.WithContext;
 
 import java.util.concurrent.*;
 
@@ -103,25 +103,11 @@ public class Jobs {
 		Ctx ctx = Ctxs.get();
 
 		if (ctx != null) {
-			// U.notNull(ctx.app(), "Application wasn't attached to the context!");
-
-			Object x = ctx.exchange();
-
-			if (x instanceof JobStatusListener) {
-				((JobStatusListener) x).onAsync();
-			}
-
 			// increment reference counter
 			ctx = ctx.span(); // currently the same ctx is returned
 		}
 
 		return new ContextPreservingJobWrapper(job, ctx);
-	}
-
-	public static <T> void callIfNotNull(Callback<T> callback, T result, Throwable error) {
-		if (callback != null) {
-			Jobs.execute(new CallbackExecutorJob<T>(callback, result, error));
-		}
 	}
 
 	public static <T> void call(Callback<T> callback, T result, Throwable error) {
@@ -144,6 +130,10 @@ public class Jobs {
 				call(callback, result, null);
 			}
 		};
+	}
+
+	public static void executeInContext(WithContext context, Runnable action) {
+		executor().execute(new PredefinedContextJobWrapper(context, action));
 	}
 
 }

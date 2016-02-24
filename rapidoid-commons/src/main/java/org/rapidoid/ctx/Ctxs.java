@@ -2,7 +2,9 @@ package org.rapidoid.ctx;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
 
 /*
  * #%L
@@ -63,6 +65,20 @@ public class Ctxs {
 		}
 	}
 
+	public static Ctx open(WithContext context) {
+		Ctx ctx = Ctxs.open(context.tag());
+
+		ctx.setExchange(context.exchange());
+		ctx.setUser(new UserInfo(context.username(), context.roles()));
+		Coll.assign(ctx.extras(), U.safe(context.extras()));
+
+		if (context.persister() != null) {
+			ctx.setPersister(context.persister());
+		}
+
+		return ctx;
+	}
+
 	public static Ctx open(String tag) {
 		Ctx ctx = new Ctx(tag);
 		Log.debug("Opening context", "ctx", ctx);
@@ -97,7 +113,9 @@ public class Ctxs {
 	}
 
 	public static void closePersister(Object persister) {
+		U.notNull(persisterProvider, "Ctxs.persisterProvider");
 		persisterProvider.closePersister(persister);
 	}
+
 
 }

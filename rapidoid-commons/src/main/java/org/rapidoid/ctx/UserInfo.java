@@ -33,10 +33,6 @@ import java.util.Set;
 @Since("2.0.0")
 public class UserInfo implements Serializable {
 
-	private static final String USERNAME = "_USER.USERNAME";
-	private static final String EMAIL = "_USER.EMAIL";
-	private static final String NAME = "_USER.NAME";
-
 	private static final long serialVersionUID = 7062732348562440194L;
 
 	private static final UserInfo ANONYMOUS = new UserInfo("anonymous", null, "Anonymous", null, null,
@@ -52,9 +48,9 @@ public class UserInfo implements Serializable {
 
 	public final String oauthProvider;
 
-	public volatile Set<String> roles;
+	public final Set<String> roles;
 
-	public volatile Map<String, Boolean> is;
+	public final Map<String, Boolean> is;
 
 	public UserInfo(String username) {
 		this(username, username, username);
@@ -90,20 +86,6 @@ public class UserInfo implements Serializable {
 		}
 
 		return rolesMap;
-	}
-
-	public static UserInfo from(Map<String, ?> scope) {
-		String username = (String) scope.get(USERNAME);
-		String email = (String) scope.get(EMAIL);
-		String name = (String) scope.get(NAME);
-
-		return username != null ? new UserInfo(username, email, name) : ANONYMOUS;
-	}
-
-	public void saveTo(Map<String, Serializable> scope) {
-		scope.put(USERNAME, this.username);
-		scope.put(EMAIL, this.email);
-		scope.put(NAME, this.name);
 	}
 
 	@Override

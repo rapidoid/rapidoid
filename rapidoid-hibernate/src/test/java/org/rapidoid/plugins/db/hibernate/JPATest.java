@@ -9,7 +9,7 @@ import org.rapidoid.plugins.db.hibernate.JPA;
 import org.rapidoid.plugins.db.hibernate.Movie;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
-import org.rapidoid.util.SimplePersistorProvider;
+import org.rapidoid.util.SimplePersisterProvider;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -46,7 +46,7 @@ public class JPATest extends TestCommons {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("test-pu");
 		EntityManager em = emf.createEntityManager();
 
-		Ctxs.setPersisterProvider(new SimplePersistorProvider(em));
+		Ctxs.setPersisterProvider(new SimplePersisterProvider(em));
 		Ctxs.open("test");
 
 		final Book b1 = new Book("book 1");

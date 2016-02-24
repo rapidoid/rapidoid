@@ -22,10 +22,9 @@ package org.rapidoid.gui.reqinfo;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Auth;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.http.Req;
-import org.rapidoid.u.U;
 
 import java.util.Map;
 import java.util.Set;
@@ -100,13 +99,12 @@ public class RapidoidReqInfo extends AbstractReqInfo {
 
 	@Override
 	public String username() {
-		return Ctxs.ctx().username();
+		return Auth.username();
 	}
 
 	@Override
 	public Set<String> roles() {
-		UserInfo user = Ctxs.ctx().user();
-		return U.set(U.safe(user != null ? user.roles : null));
+		return Auth.roles();
 	}
 
 }

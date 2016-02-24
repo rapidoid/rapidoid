@@ -73,4 +73,13 @@ public class Lmbd {
 		}
 	}
 
+	public static <T> Callable<T> callable(final Runnable action) {
+		return new Callable<T>() {
+			@Override
+			public T call() throws Exception {
+				action.run();
+				return null;
+			}
+		};
+	}
 }
