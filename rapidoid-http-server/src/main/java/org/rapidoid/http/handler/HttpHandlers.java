@@ -40,7 +40,7 @@ import java.util.concurrent.Callable;
 @Since("5.1.0")
 public class HttpHandlers {
 
-	public static FastParamsAwareHttpHandler from(FastHttp http, NParamLambda handler, MediaType contentType, HttpWrapper[] wrappers) {
+	public static FastHttpHandler from(FastHttp http, NParamLambda handler, MediaType contentType, HttpWrapper[] wrappers) {
 		if (handler instanceof ReqHandler) {
 			return new DelegatingFastParamsAwareReqHandler(http, contentType, wrappers, (ReqHandler) handler);
 
@@ -109,7 +109,7 @@ public class HttpHandlers {
 
 	public static void register(FastHttp[] httpImpls, String verb, String path, MediaType contentType, HttpWrapper[] wrappers, NParamLambda lambda) {
 		for (FastHttp http : httpImpls) {
-			FastParamsAwareHttpHandler handler = HttpHandlers.from(http, lambda, contentType, wrappers);
+			FastHttpHandler handler = HttpHandlers.from(http, lambda, contentType, wrappers);
 			http.on(verb, path, handler);
 		}
 	}

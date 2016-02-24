@@ -42,7 +42,7 @@ public class SixParamLambdaHandler extends NParamLambdaHandler {
 	}
 
 	@Override
-	protected Object doHandle(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
+	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
 		return lambda.execute(arg(req, 0), arg(req, 1), arg(req, 2), arg(req, 3), arg(req, 4), arg(req, 5));
 	}
 

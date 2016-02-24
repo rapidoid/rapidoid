@@ -44,7 +44,7 @@ public class MethodReqHandler extends NParamMethodHandler {
 	}
 
 	@Override
-	protected Object doHandle(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
+	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
 		return AOP.invoke(null, method, instance, args(req));
 	}
 

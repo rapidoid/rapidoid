@@ -25,14 +25,14 @@ import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.handler.FastParamsAwareHttpHandler;
+import org.rapidoid.http.handler.AbstractAsyncHttpHandler;
 import org.rapidoid.http.handler.param.ParamRetriever;
 import org.rapidoid.http.handler.param.ParamRetrievers;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-public abstract class NParamMethodHandler extends FastParamsAwareHttpHandler {
+public abstract class NParamMethodHandler extends AbstractAsyncHttpHandler {
 
 	private final ParamRetriever[] paramRetrievers;
 

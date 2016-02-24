@@ -31,7 +31,7 @@ import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class FastParamsAwareReqHandler extends FastParamsAwareHttpHandler {
+public class FastParamsAwareReqHandler extends AbstractAsyncHttpHandler {
 
 	private final ReqHandler handler;
 
@@ -41,7 +41,7 @@ public class FastParamsAwareReqHandler extends FastParamsAwareHttpHandler {
 	}
 
 	@Override
-	protected Object doHandle(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
+	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
 		return handler.execute(req);
 	}
 

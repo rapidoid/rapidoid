@@ -27,14 +27,14 @@ import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
-import org.rapidoid.http.handler.FastParamsAwareHttpHandler;
+import org.rapidoid.http.handler.AbstractAsyncHttpHandler;
 import org.rapidoid.lambda.TwoParamLambda;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DelegatingFastParamsAwareReqRespHandler extends FastParamsAwareHttpHandler {
+public class DelegatingFastParamsAwareReqRespHandler extends AbstractAsyncHttpHandler {
 
 	private final TwoParamLambda<Object, Req, Resp> handler;
 
@@ -45,7 +45,7 @@ public class DelegatingFastParamsAwareReqRespHandler extends FastParamsAwareHttp
 	}
 
 	@Override
-	protected Object doHandle(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
+	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
 		return handler.execute(req, req.response());
 	}
 

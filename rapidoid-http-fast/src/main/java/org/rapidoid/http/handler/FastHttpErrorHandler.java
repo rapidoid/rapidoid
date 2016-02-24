@@ -31,7 +31,7 @@ import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")
-public class FastHttpErrorHandler extends FastParamsAwareHttpHandler {
+public class FastHttpErrorHandler extends AbstractAsyncHttpHandler {
 
 	private final ErrorHandler handler;
 
@@ -41,8 +41,7 @@ public class FastHttpErrorHandler extends FastParamsAwareHttpHandler {
 	}
 
 	@Override
-	protected Object doHandle(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
+	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
 		return handler.onError(req, req.response(), (Throwable) extra);
 	}
-
 }
