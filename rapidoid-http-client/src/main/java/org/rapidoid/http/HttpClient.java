@@ -46,7 +46,7 @@ public class HttpClient {
 
 	private final Map<String, String> headers = Coll.synchronizedMap();
 
-	private final Map<String, String> data = Coll.synchronizedMap();
+	private final Map<String, Object> data = Coll.synchronizedMap();
 
 	private final Map<String, List<FileContent>> files = Coll.synchronizedMap();
 
@@ -127,12 +127,12 @@ public class HttpClient {
 		return this.headers;
 	}
 
-	public HttpClient data(Map<String, String> data) {
+	public HttpClient data(Map<String, ?> data) {
 		Coll.assign(this.data, data);
 		return this;
 	}
 
-	public Map<String, String> data() {
+	public Map<String, Object> data() {
 		return this.data;
 	}
 
@@ -281,7 +281,7 @@ public class HttpClient {
 		return this;
 	}
 
-	public HttpClient data(String name, String value) {
+	public HttpClient data(String name, Object value) {
 		data().put(name, value);
 		return this;
 	}

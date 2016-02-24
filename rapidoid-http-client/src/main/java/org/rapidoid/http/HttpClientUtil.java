@@ -125,7 +125,7 @@ public class HttpClientUtil {
 	static HttpRequestBase createRequest(HttpClient config) {
 
 		Map<String, String> headers = U.safe(config.headers());
-		Map<String, String> data = U.safe(config.data());
+		Map<String, Object> data = U.safe(config.data());
 		Map<String, List<FileContent>> files = U.safe(config.files());
 
 		String url = config.url();
@@ -199,8 +199,10 @@ public class HttpClientUtil {
 					}
 				}
 
-				for (Map.Entry<String, String> entry : data.entrySet()) {
-					builder = builder.addTextBody(entry.getKey(), entry.getValue(), ContentType.DEFAULT_TEXT);
+				for (Map.Entry<String, Object> entry : data.entrySet()) {
+					String name = entry.getKey();
+					String value = String.valueOf(entry.getValue());
+					builder = builder.addTextBody(name, value, ContentType.DEFAULT_TEXT);
 				}
 
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
