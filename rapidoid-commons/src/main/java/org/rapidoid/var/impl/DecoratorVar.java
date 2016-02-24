@@ -22,58 +22,55 @@ package org.rapidoid.var.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Coll;
-import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 
 import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public abstract class AbstractVar<T> implements Var<T> {
+@Since("5.1.0")
+public abstract class DecoratorVar<T> implements Var<T> {
 
-	private static final long serialVersionUID = 6006051524799076017L;
+	protected final Var<T> var;
 
-	private final String name;
-
-	private final Set<String> errors = Coll.synchronizedSet();
-
-	public AbstractVar(String name) {
-		this.name = name;
+	public DecoratorVar(Var<T> var) {
+		this.var = var;
 	}
 
 	@Override
 	public String toString() {
-		return U.str(get());
+		return var.toString();
 	}
 
 	@Override
 	public String name() {
-		return name;
+		return var.name();
 	}
 
 	@Override
 	public Set<String> errors() {
-		return errors;
+		return var.errors();
 	}
 
 	@Override
-	public void set(T value) {
+	public T get() {
+		return var.get();
+	}
+
+	protected void doSet(T value) {
+		var.set(value);
+	}
+
+	@Override
+	public void error(Exception e) {
+		var.error(e);
+	}
+
+	@Override
+	public final void set(T value) {
 		try {
 			doSet(value);
 		} catch (Exception e) {
 			error(e);
-		}
-	}
-
-	protected abstract void doSet(T value);
-
-	@Override
-	public void error(Exception e) {
-		if (e instanceof NumberFormatException) {
-			errors().add("Invalid number!");
-		} else {
-			errors().add(U.or(e.getMessage(), "Invalid value!"));
 		}
 	}
 

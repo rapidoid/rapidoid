@@ -3,18 +3,18 @@ Connection: close
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 439
+Content-Length: 485
 
 <form class="" role="form">
   <div class="form-group">
     <label>Name: </label>
-    <input _h="name" type="text" class="form-control" value="unknown" name="name">
-    <span class="field-error"></span>
+    <input _h="name" type="text" class="form-control" value="" name="name">
+    <span class="field-error">Non-empty value is required!</span>
   </div>
   <div class="form-group">
     <label>Age: </label>
-    <input _h="age" type="text" class="form-control" value="100" name="age">
-    <span class="field-error"></span>
+    <input _h="age" type="text" class="form-control" value="" name="age">
+    <span class="field-error">Non-empty value is required!</span>
   </div>
   <div class="form-group"></div>
 </form>

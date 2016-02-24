@@ -45,7 +45,7 @@ public class Vars {
 	}
 
 	public static <T> Var<T> mandatory(Var<T> var) {
-		return new MandatoryVar<T>(var.name(), var);
+		return new MandatoryVar<T>(var);
 	}
 
 	@SuppressWarnings("unchecked")

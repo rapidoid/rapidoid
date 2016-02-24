@@ -4,6 +4,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /*
  * #%L
@@ -35,4 +36,7 @@ public interface Var<T> extends Serializable {
 
 	void set(T value);
 
+	Set<String> errors();
+
+	void error(Exception e);
 }

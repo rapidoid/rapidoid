@@ -52,7 +52,7 @@ public class ItemPropertyVar<T> extends AbstractVar<T> {
 	}
 
 	@Override
-	public void set(T value) {
+	public void doSet(T value) {
 		T oldValue = get();
 
 		if (oldValue != null) {

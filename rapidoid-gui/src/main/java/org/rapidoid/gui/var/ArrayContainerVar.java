@@ -57,7 +57,7 @@ public class ArrayContainerVar extends WidgetVar<Boolean> {
 	}
 
 	@Override
-	public void set(Boolean value) {
+	public void doSet(Boolean value) {
 		if (value) {
 			container.set(AnyObj.include(container.get(), item));
 		} else {

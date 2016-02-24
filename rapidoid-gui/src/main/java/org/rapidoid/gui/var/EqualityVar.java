@@ -54,7 +54,7 @@ public class EqualityVar extends WidgetVar<Boolean> {
 	}
 
 	@Override
-	public void set(Boolean value) {
+	public void doSet(Boolean value) {
 		if (value) {
 			var.set(val);
 		} else {

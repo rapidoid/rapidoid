@@ -3,7 +3,7 @@ Connection: close
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 438
+Content-Length: 454
 
 <form class="" role="form">
   <div class="form-group">
@@ -13,8 +13,8 @@ Content-Length: 438
   </div>
   <div class="form-group">
     <label>Age: </label>
-    <input _h="age" type="text" class="form-control" value="123" name="age">
-    <span class="field-error"></span>
+    <input _h="age" type="text" class="form-control" value="123f" name="age">
+    <span class="field-error">Invalid number!</span>
   </div>
   <div class="form-group"></div>
 </form>

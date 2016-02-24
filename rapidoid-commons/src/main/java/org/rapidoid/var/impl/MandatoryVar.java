@@ -27,24 +27,14 @@ import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class MandatoryVar<T> extends AbstractVar<T> {
+public class MandatoryVar<T> extends DecoratorVar<T> {
 
-	private static final long serialVersionUID = 7970150705828178233L;
-
-	private final Var<T> var;
-
-	public MandatoryVar(String name, Var<T> var) {
-		super(name);
-		this.var = var;
+	public MandatoryVar(Var<T> var) {
+		super(var);
 	}
 
 	@Override
-	public T get() {
-		return var.get();
-	}
-
-	@Override
-	public void set(T value) {
+	protected void doSet(T value) {
 		U.must(!U.isEmpty(value), "Non-empty value is required!");
 		var.set(value);
 	}

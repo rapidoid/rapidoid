@@ -98,15 +98,21 @@ public class Field extends AbstractWidget {
 		Object target = U.or(item.value(), item);
 		String varName = propVarName(target, prop.name());
 
-		Object initValue = ReqInfo.get().posted().get(varName);
+		Var<Object> var = Models.propertyVar(varName, item, prop.name(), null);
 
-		try {
-			return Models.propertyVar(varName, item, prop.name(), initValue);
-
-		} catch (Exception e) {
-			prop.errors().add("Invalid value!");
-			return Models.propertyVar(varName, item, prop.name(), null);
+		if (mode != FormMode.SHOW) {
+			if (required) {
+				var = Vars.mandatory(var);
+			}
 		}
+
+		IReqInfo req = ReqInfo.get();
+		if (!req.isGetReq()) {
+			var = new PostedDataVar<Object>(var);
+			var.set(req.posted().get(varName));
+		}
+
+		return var;
 	}
 
 	protected String formLayoutClass(FormLayout layout) {
@@ -164,7 +170,7 @@ public class Field extends AbstractWidget {
 			inputWrap = layout == FormLayout.HORIZONTAL ? div(inp).class_("col-sm-8") : inp;
 		}
 
-		Tag err = span(U.join(", ", prop.errors())).class_("field-error");
+		Tag err = span(U.join(", ", var.errors())).class_("field-error");
 		Tag group = lbl != null ? div(lbl, inputWrap, err) : div(inputWrap, err);
 		group = group.class_("form-group");
 		return group;
@@ -274,17 +280,6 @@ public class Field extends AbstractWidget {
 
 		if (isFieldProgrammatic() && mode != FormMode.SHOW) {
 			return null;
-		}
-
-		if (mode != FormMode.SHOW) {
-			if (required) {
-				var = Vars.mandatory(var);
-			}
-
-			IReqInfo req = ReqInfo.get();
-			if (!req.isGetReq()) {
-				var = new PostedDataVar<Object>(var);
-			}
 		}
 
 		return field(name, desc, type, options, var);

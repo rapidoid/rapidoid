@@ -60,7 +60,7 @@ public class CollectionContainerVar extends WidgetVar<Boolean> {
 	}
 
 	@Override
-	public void set(Boolean value) {
+	public void doSet(Boolean value) {
 		Collection<Object> coll = container.get();
 
 		if (value) {

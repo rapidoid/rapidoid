@@ -4,7 +4,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.var.Var;
-import org.rapidoid.var.impl.AbstractVar;
+import org.rapidoid.var.impl.DecoratorVar;
 
 /*
  * #%L
@@ -28,26 +28,15 @@ import org.rapidoid.var.impl.AbstractVar;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class PostedDataVar<T> extends AbstractVar<T> {
-
-	private static final long serialVersionUID = 7970150705828178233L;
-
-	private final Var<T> var;
+public class PostedDataVar<T> extends DecoratorVar<T> {
 
 	public PostedDataVar(Var<T> var) {
-		super(var.name());
-		this.var = var;
+		super(var);
 	}
 
 	@Override
 	public T get() {
-		Object value = ReqInfo.get().posted().get(name());
-		return value != null ? (T) value : var.get();
-	}
-
-	@Override
-	public void set(T value) {
-		var.set(value);
+		return (T) ReqInfo.get().posted().get(name());
 	}
 
 }

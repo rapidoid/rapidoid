@@ -50,7 +50,7 @@ public class LocalVar<T extends Serializable> extends WidgetVar<T> {
 	}
 
 	@Override
-	public void set(T value) {
+	public void doSet(T value) {
 	}
 
 }

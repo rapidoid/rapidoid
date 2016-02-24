@@ -42,7 +42,7 @@ public class SimpleVar<T> extends AbstractVar<T> {
 	}
 
 	@Override
-	public void set(T value) {
+	public void doSet(T value) {
 		this.value = value;
 	}
 

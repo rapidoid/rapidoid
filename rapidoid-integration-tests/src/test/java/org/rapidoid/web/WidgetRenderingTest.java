@@ -39,7 +39,7 @@ public class WidgetRenderingTest extends HttpTestCommons {
 		getAndPost("/");
 		getAndPost("/?name=foo&age=12345"); // URL params are ignored
 
-		postData("/?age=1", U.map("name", "Mozart", "age", 123));
+		postData("/?age=1", U.map("name", "Mozart", "age", "123f"));
 		postData("/?name=hey&age=77", U.map("name", "Bach"));
 	}
 
