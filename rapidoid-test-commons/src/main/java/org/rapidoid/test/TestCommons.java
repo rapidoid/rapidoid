@@ -39,7 +39,7 @@ import java.util.concurrent.CountDownLatch;
  */
 public abstract class TestCommons {
 
-	protected static final boolean ADJUST_RESULTS = true;
+	protected static final boolean ADJUST_RESULTS = false;
 
 	protected static final Random RND = new Random();
 
@@ -380,12 +380,8 @@ public abstract class TestCommons {
 	}
 
 	protected byte[] loadRes(String filename) {
-		try {
-			URL res = resource(filename);
-			return res != null ? readBytes(new FileInputStream(new File(res.getFile()))) : null;
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
-		}
+		InputStream input = TestCommons.class.getClassLoader().getResourceAsStream(filename);
+		return input != null ? readBytes(input) : null;
 	}
 
 	protected <T> T mock(Class<T> classToMock) {
@@ -447,7 +443,18 @@ public abstract class TestCommons {
 		fail("Expected SecurityException to be thrown!");
 	}
 
-	protected void throwsRuntimeException(Runnable code, String errMsgPart) {
+	protected void throwsRTE(String errMsg, Runnable code) {
+		try {
+			code.run();
+		} catch (RuntimeException e) {
+			Throwable err = rootCause(e);
+			isTrue(err.getMessage().equals(errMsg));
+			return;
+		}
+		fail(String.format("Expected RuntimeException(%s) to be thrown!", errMsg));
+	}
+
+	protected void throwsRuntimeExceptionContaining(String errMsgPart, Runnable code) {
 		try {
 			code.run();
 		} catch (RuntimeException e) {
@@ -455,7 +462,7 @@ public abstract class TestCommons {
 			isTrue(err.getMessage().contains(errMsgPart));
 			return;
 		}
-		fail("Expected RuntimeException to be thrown!");
+		fail(String.format("Expected RuntimeException(...%s...) to be thrown!", errMsgPart));
 	}
 
 	protected void waiting() {
@@ -528,10 +535,12 @@ public abstract class TestCommons {
 			File testDir = new File(filename).getParentFile();
 
 			if (!testDir.exists()) {
-				testDir.mkdirs();
+				if (!testDir.mkdirs()) {
+					throw new RuntimeException("Couldn't create the test result folder: " + testDir.getAbsolutePath());
+				}
 			}
 
-			FileOutputStream out = null;
+			FileOutputStream out;
 			try {
 				out = new FileOutputStream(filename);
 				out.write(actual.getBytes());
