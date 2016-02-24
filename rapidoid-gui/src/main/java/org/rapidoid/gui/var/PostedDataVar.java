@@ -8,7 +8,7 @@ import org.rapidoid.var.impl.DecoratorVar;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-gui
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
