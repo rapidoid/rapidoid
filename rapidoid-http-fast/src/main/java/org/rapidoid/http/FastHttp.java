@@ -449,12 +449,17 @@ public class FastHttp extends AbstractHttpProcessor {
 			}
 		}
 
-		if (handler != null) {
-			status = handler.handle(channel, isKeepAlive, req, null);
-		}
+		try {
+			if (handler != null) {
+				status = handler.handle(channel, isKeepAlive, req, null);
+			}
 
-		if (status == HttpStatus.NOT_FOUND) {
-			status = tryGenericHandlers(channel, isKeepAlive, req);
+			if (status == HttpStatus.NOT_FOUND) {
+				status = tryGenericHandlers(channel, isKeepAlive, req);
+			}
+
+		} catch (Throwable e) {
+			error(channel, isKeepAlive, req, e);
 		}
 
 		if (status == HttpStatus.NOT_FOUND) {
