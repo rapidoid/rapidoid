@@ -103,8 +103,7 @@ public class Field extends AbstractWidget {
 			return Models.propertyVar(varName, item, prop.name(), initValue);
 
 		} catch (Exception e) {
-			// FIXME x.errors().put(varName, "Invalid value!");
-			Log.warn("Invalid value for property: " + prop.name(), e);
+			prop.errors().add("Invalid value!");
 			return Models.propertyVar(varName, item, prop.name(), null);
 		}
 	}
@@ -164,7 +163,7 @@ public class Field extends AbstractWidget {
 			inputWrap = layout == FormLayout.HORIZONTAL ? div(inp).class_("col-sm-8") : inp;
 		}
 
-		Tag err = span("").class_("field-error");
+		Tag err = span(U.join(", ", prop.errors())).class_("field-error");
 		Tag group = lbl != null ? div(lbl, inputWrap, err) : div(inputWrap, err);
 		group = group.class_("form-group");
 		return group;

@@ -25,14 +25,13 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Calc;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.model.Item;
-import org.rapidoid.model.Property;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.2.0")
-public class CalcProperty implements Property {
+public class CalcProperty extends AbstractProperty {
 
 	private static final long serialVersionUID = -2697490242616488024L;
 

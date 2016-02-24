@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Since;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
+import java.util.Set;
 
 /*
  * #%L
@@ -42,5 +43,7 @@ public interface Property extends Serializable {
 	Annotation[] annotations();
 
 	Object get(Item item);
+
+	Set<String> errors();
 
 }

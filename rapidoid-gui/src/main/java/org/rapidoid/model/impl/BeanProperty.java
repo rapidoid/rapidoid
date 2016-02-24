@@ -24,14 +24,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Str;
 import org.rapidoid.model.Item;
-import org.rapidoid.model.Property;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class BeanProperty implements Property {
+public class BeanProperty extends AbstractProperty {
 
 	private static final long serialVersionUID = 7627370931428864929L;
 

@@ -202,11 +202,7 @@ public class HttpUtils implements HttpMetadata {
 		}
 	}
 
-	public static boolean isDevMode(Req x) {
-		return Conf.dev();
-	}
-
-	public static final void reload(Req x) {
+	public static void reload(Req x) {
 		Map<String, String> sel = U.map("body", PAGE_RELOAD);
 		x.response().json(U.map("_sel_", sel));
 	}
@@ -215,8 +211,8 @@ public class HttpUtils implements HttpMetadata {
 		return (Conf.is("https") ? "https://" : "http://") + x.host() + path;
 	}
 
-	public static boolean hasEvent(Req req) {
-		return false; // FIXME
+	public static String getCommand(Req req) {
+		return isPostReq(req) ? (String) req.data("_cmd", null) : null;
 	}
 
 }
