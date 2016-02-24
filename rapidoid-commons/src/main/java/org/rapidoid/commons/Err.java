@@ -28,6 +28,8 @@ import org.rapidoid.u.U;
 @Since("5.1.0")
 public class Err {
 
+	public static final String MSG_INTENTIONAL = "Intentional error!";
+
 	public static RuntimeException notExpected() {
 		return U.rte("This operation is not expected to be called!");
 	}
@@ -76,6 +78,10 @@ public class Err {
 
 	public static void bounds(int value, int min, int max) {
 		U.must(value >= min && value <= max, "%s is not in the range [%s, %s]!", value, min, max);
+	}
+
+	public static RuntimeException intentional() {
+		return new RuntimeException(MSG_INTENTIONAL);
 	}
 
 }

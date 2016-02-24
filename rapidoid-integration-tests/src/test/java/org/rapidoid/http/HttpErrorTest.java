@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
 import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
@@ -31,16 +32,18 @@ public class HttpErrorTest extends HttpTestCommons {
 
 	@Test
 	public void testWithHandlerException() {
-		On.get("/err").html(new ReqHandler() {
-			@SuppressWarnings("null")
-			@Override
-			public Object execute(Req req) throws Exception {
-				String s = null;
-				return s.toString(); // NPE
-			}
+		On.get("/err").html(() -> {
+			throw Err.intentional();
 		});
 
 		onlyGet("/err");
+
+		On.get("/err2").html(() -> {
+			throw new NullPointerException("intentional!");
+		});
+
+		onlyGet("/err2");
+
 	}
 
 }
