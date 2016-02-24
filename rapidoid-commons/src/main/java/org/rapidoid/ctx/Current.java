@@ -22,13 +22,18 @@ package org.rapidoid.ctx;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
 import org.rapidoid.u.U;
 
 import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Auth {
+public class Current {
+
+	public static boolean hasContext() {
+		return Ctxs.get() != null;
+	}
 
 	public static UserInfo user() {
 		Ctx ctx = Ctxs.get();
@@ -46,7 +51,12 @@ public class Auth {
 
 	public static Set<String> roles() {
 		UserInfo user = user();
-		return U.safe(user != null ? U.set(user.roles) : U.<String>set());
+		return U.safe(user != null && user.roles != null ? U.set(user.roles) : U.<String>set());
+	}
+
+	public static Req request() {
+		Ctx ctx = Ctxs.get();
+		return ctx != null ? (Req) ctx.exchange() : null;
 	}
 
 }

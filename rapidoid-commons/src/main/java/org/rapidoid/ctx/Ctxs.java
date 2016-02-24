@@ -69,12 +69,9 @@ public class Ctxs {
 		Ctx ctx = Ctxs.open(context.tag());
 
 		ctx.setExchange(context.exchange());
+		ctx.setPersister(context.persister());
 		ctx.setUser(new UserInfo(context.username(), context.roles()));
 		Coll.assign(ctx.extras(), U.safe(context.extras()));
-
-		if (context.persister() != null) {
-			ctx.setPersister(context.persister());
-		}
 
 		return ctx;
 	}

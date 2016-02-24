@@ -22,8 +22,7 @@ package org.rapidoid.gui.reqinfo;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Auth;
-import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.ctx.Current;
 import org.rapidoid.http.Req;
 
 import java.util.Map;
@@ -32,15 +31,6 @@ import java.util.Set;
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")
 public class RapidoidReqInfo extends AbstractReqInfo {
-
-	@Override
-	public boolean exists() {
-		return Ctxs.get() != null;
-	}
-
-	private Req req() {
-		return Ctxs.ctx().exchange();
-	}
 
 	@Override
 	public String verb() {
@@ -98,13 +88,22 @@ public class RapidoidReqInfo extends AbstractReqInfo {
 	}
 
 	@Override
+	public boolean exists() {
+		return Current.hasContext();
+	}
+
+	private Req req() {
+		return Current.request();
+	}
+
+	@Override
 	public String username() {
-		return Auth.username();
+		return Current.username();
 	}
 
 	@Override
 	public Set<String> roles() {
-		return Auth.roles();
+		return Current.roles();
 	}
 
 }
