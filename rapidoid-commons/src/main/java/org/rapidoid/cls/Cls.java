@@ -5,10 +5,7 @@ import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
 import org.rapidoid.beany.Beany;
-import org.rapidoid.commons.AutoExpandingMap;
-import org.rapidoid.commons.Coll;
-import org.rapidoid.commons.Dates;
-import org.rapidoid.commons.Err;
+import org.rapidoid.commons.*;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
@@ -1083,6 +1080,7 @@ public class Cls {
 			}
 
 			MethodInfo methodInfo = cm.getMethodInfo();
+
 			CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
 			LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute
 					.getAttribute(LocalVariableAttribute.tag);
@@ -1100,6 +1098,40 @@ public class Cls {
 		}
 
 		return names;
+	}
+
+	public static String[] getLambdaParameterNames(Serializable lambda) {
+		Method lambdaMethod = Cls.getLambdaMethod(lambda);
+		Class<?>[] lambdaTypes = lambdaMethod.getParameterTypes();
+		String[] names = Cls.getMethodParameterNames(lambdaMethod);
+
+		List<Method> methods = U.list();
+
+		for (Class<?> interf : lambda.getClass().getInterfaces()) {
+			for (Method m : interf.getMethods()) {
+				Class<?>[] types = m.getParameterTypes();
+
+				if (types.length <= names.length) {
+					int diff = names.length - types.length;
+					boolean matching = true;
+
+					for (int i = 0; i < types.length; i++) {
+						if (!types[i].isAssignableFrom(lambdaTypes[i + diff])) {
+							matching = false;
+						}
+					}
+
+					if (matching) {
+						methods.add(m);
+					}
+				}
+			}
+		}
+
+		U.must(methods.size() > 0, "Cannot find the lambda target method of the functional interface!");
+		U.must(methods.size() == 1, "Found more than one lambda target method of the functional interface: " + methods);
+
+		return Arr.sub(names, names.length - methods.get(0).getParameterTypes().length, names.length);
 	}
 
 	public static Class<?> toClass(Object classOrInstance) {

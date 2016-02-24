@@ -39,7 +39,7 @@ public class MethodReqHandler extends NParamMethodHandler {
 	private final Object instance;
 
 	public MethodReqHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, Method method, Object instance) {
-		super(http, contentType, wrappers, method);
+		super(http, contentType, wrappers, method, null);
 		this.instance = instance;
 	}
 

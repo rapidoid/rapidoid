@@ -33,7 +33,7 @@ import org.rapidoid.lambda.NParamLambda;
 public abstract class NParamLambdaHandler extends NParamMethodHandler {
 
 	public NParamLambdaHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, NParamLambda lambda) {
-		super(http, contentType, wrappers, Cls.getLambdaMethod(lambda));
+		super(http, contentType, wrappers, Cls.getLambdaMethod(lambda), lambda);
 	}
 
 	@Override

@@ -21,6 +21,7 @@ package org.rapidoid.http.handler.lambda;
  */
 
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpWrapper;
@@ -28,6 +29,7 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.handler.AbstractAsyncHttpHandler;
 import org.rapidoid.http.handler.param.ParamRetriever;
 import org.rapidoid.http.handler.param.ParamRetrievers;
+import org.rapidoid.lambda.NParamLambda;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -40,12 +42,20 @@ public abstract class NParamMethodHandler extends AbstractAsyncHttpHandler {
 
 	private final String paramsAsStr;
 
-	public NParamMethodHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, Method method) {
+	public NParamMethodHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, Method method, NParamLambda lambda) {
 		super(http, contentType, wrappers);
 		this.method = method;
 
 		Class<?>[] paramTypes = method.getParameterTypes();
-		String[] paramNames = Cls.getMethodParameterNames(method);
+		String[] paramNames;
+
+		if (lambda != null) {
+			paramNames = Cls.getLambdaParameterNames(lambda);
+			paramTypes = Arr.sub(paramTypes, paramTypes.length - paramNames.length, paramTypes.length);
+		} else {
+			paramNames = Cls.getMethodParameterNames(method);
+		}
+
 		Annotation[][] annotations = method.getParameterAnnotations();
 
 		this.paramRetrievers = new ParamRetriever[paramTypes.length];
