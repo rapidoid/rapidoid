@@ -24,8 +24,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.MediaType;
-import org.rapidoid.ctx.Ctx;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.With;
 import org.rapidoid.http.*;
 import org.rapidoid.lambda.Mapper;
@@ -48,7 +46,14 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 	}
 
 	@Override
+	public boolean needsParams() {
+		return true;
+	}
+
+	@Override
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
+		U.notNull(req, "HTTP request");
+
 		try {
 			ctx.async();
 			execHandlerJob(ctx, isKeepAlive, req, extra);
@@ -68,7 +73,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 			return result;
 
 		} else if (result == null) {
-			return result; // not found
+			return null; // not found
 
 		} else if (result instanceof Future<?>) {
 			result = ((Future<Object>) result).get();
@@ -79,32 +84,15 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 			return postprocessResult(req, result);
 
 		} else {
-			// render the response and process logic while still in context
-			if (!(result instanceof byte[]) && !(result instanceof ByteBuffer)
-					&& !(result instanceof File) && !(result instanceof Res)
-					&& !Cls.isSimple(result) && !Coll.isCollection(result) && !Coll.isMap(result)) {
-				result = render(result);
-			}
-
 			return result;
 		}
 	}
 
-	private String render(Object result) {
-		// rendering a Widget requires double toString:
-		U.str(result); // 1. data binding and event processing
-		return U.str(result); // 2. actual rendering
-	}
-
 	private void execHandlerJob(final Channel channel, final boolean isKeepAlive, final Req req, final Object extra) {
-		With.tag(CTX_TAG_HANDLER).run(new Runnable() {
+		With.tag(CTX_TAG_HANDLER).exchange(req).run(new Runnable() {
 
 			@Override
 			public void run() {
-				Ctx ctx = Ctxs.ctx();
-				ctx.setExchange(req);
-				ctx.setUser(null); // FIXME set user
-
 				Object result;
 				try {
 

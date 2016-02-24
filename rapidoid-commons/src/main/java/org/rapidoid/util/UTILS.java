@@ -763,7 +763,10 @@ public class UTILS implements Constants {
 			return res.getBytes();
 
 		} else {
-			return U.str(obj).getBytes();
+
+			// this might be a Widget, so rendering it requires double toString:
+			U.str(obj); // 1. data binding and event processing
+			return U.str(obj).getBytes(); // 2. actual rendering
 		}
 	}
 

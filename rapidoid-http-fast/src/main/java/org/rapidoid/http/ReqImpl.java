@@ -417,7 +417,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	private void onDone() {
 		if (!rendering) {
-			renderResponse();
+			renderResponseOrError();
 		}
 
 		if (!completed) {
@@ -428,18 +428,21 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		finish();
 	}
 
-	private void renderResponse() {
+	private void renderResponseOrError() {
 		String err = validateResponse();
-
-		if (response != null) {
-			HttpUtils.postProcessResponse(response);
-		}
 
 		if (err != null) {
 			startRendering(500);
 			http.renderBody(channel, 500, MediaType.HTML_UTF_8, err.getBytes());
+		} else {
+			renderResponse();
+		}
+	}
 
-		} else if (response.raw() != null) {
+	private void renderResponse() {
+		HttpUtils.postProcessResponse(response);
+
+		if (response.raw() != null) {
 			byte[] bytes = UTILS.toBytes(response.raw());
 			channel.write(bytes);
 			completed = true;
@@ -454,7 +457,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 		try {
 			if (response.content() != null) {
-				bytes = serializeResponse();
+				bytes = serializeResponseContent();
 
 			} else if (response.body() != null) {
 				bytes = UTILS.toBytes(response.body());
@@ -473,7 +476,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		http.renderBody(channel, response.code(), response.contentType(), bytes);
 	}
 
-	private byte[] serializeResponse() {
+	private byte[] serializeResponseContent() {
 		Object content = response.content();
 
 		if (U.eq(response.contentType(), MediaType.JSON_UTF_8)) {
