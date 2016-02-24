@@ -290,4 +290,12 @@ public class IO {
 		}
 	}
 
+	public static void write(OutputStream out, byte[] content) {
+		try {
+			out.write(content);
+		} catch (IOException e) {
+			throw U.rte(e);
+		}
+	}
+
 }

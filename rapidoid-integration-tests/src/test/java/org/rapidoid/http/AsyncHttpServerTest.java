@@ -23,13 +23,12 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.io.IO;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
@@ -40,43 +39,26 @@ public class AsyncHttpServerTest extends HttpTestCommons {
 	public void testAsyncHttpServer() {
 		Log.debugging();
 
-		On.req(new ReqHandler() {
-			@Override
-			public Object execute(final Req req) throws Exception {
-				req.async();
-				U.must(req.isAsync());
-				Jobs.schedule(new Runnable() {
+		On.req(req -> {
+			U.must(!req.isAsync());
+			req.async();
+			U.must(req.isAsync());
 
-					@Override
-					public void run() {
-						write(req.response().out(), "O");
+			Jobs.schedule(() -> {
+				IO.write(req.response().out(), "O".getBytes());
 
-						Jobs.schedule(new Runnable() {
-							@Override
-							public void run() {
-								write(req.response().out(), "K");
-								req.done();
-							}
-						}, 1, TimeUnit.SECONDS);
-
-					}
-
+				Jobs.schedule(() -> {
+					IO.write(req.response().out(), "K".getBytes());
+					req.done();
 				}, 1, TimeUnit.SECONDS);
 
-				return req;
-			}
+			}, 1, TimeUnit.SECONDS);
+
+			return req;
 		});
 
 		eq(HTTP.get("http://localhost:8888/").fetch(), "OK");
 		eq(HTTP.post("http://localhost:8888/").fetch(), "OK");
-	}
-
-	private static void write(OutputStream out, String s) {
-		try {
-			out.write(s.getBytes());
-		} catch (IOException e) {
-			throw U.rte(e);
-		}
 	}
 
 }
