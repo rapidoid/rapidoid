@@ -61,6 +61,7 @@ public abstract class AbstractVar<T> implements Var<T> {
 	public void set(T value) {
 		try {
 			doSet(value);
+			errors().clear();
 		} catch (Exception e) {
 			error(e);
 		}
