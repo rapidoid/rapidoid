@@ -30,13 +30,14 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.commons.Err;
 import org.rapidoid.gui.base.AbstractWidget;
+import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
+import org.rapidoid.gui.var.PostedDataVar;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.InputTag;
 import org.rapidoid.html.tag.TextareaTag;
-import org.rapidoid.log.Log;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
@@ -60,7 +61,7 @@ public class Field extends AbstractWidget {
 	protected FieldType type;
 	protected Collection<?> options;
 	protected boolean required;
-	protected Var<?> var;
+	protected Var<Object> var;
 
 	// fully customize: label OR input OR content (label+input)
 	protected Tag content;
@@ -78,7 +79,7 @@ public class Field extends AbstractWidget {
 		this.type = type;
 		this.options = options;
 		this.required = required;
-		this.var = var;
+		this.var = (Var<Object>) var;
 	}
 
 	public Field(FormMode mode, FormLayout layout, Item item, Property prop) {
@@ -93,7 +94,7 @@ public class Field extends AbstractWidget {
 		this.var = initVar(item, prop);
 	}
 
-	private Var<?> initVar(Item item, Property prop) {
+	private Var<Object> initVar(Item item, Property prop) {
 		Object target = U.or(item.value(), item);
 		String varName = propVarName(target, prop.name());
 
@@ -156,7 +157,7 @@ public class Field extends AbstractWidget {
 				}
 			}
 
-			if (layout == FormLayout.HORIZONTAL) {
+			if (layout == FormLayout.HORIZONTAL && lbl != null) {
 				lbl = lbl.class_("col-sm-4 control-label");
 			}
 
@@ -278,6 +279,11 @@ public class Field extends AbstractWidget {
 		if (mode != FormMode.SHOW) {
 			if (required) {
 				var = Vars.mandatory(var);
+			}
+
+			IReqInfo req = ReqInfo.get();
+			if (!req.isGetReq()) {
+				var = new PostedDataVar<Object>(var);
 			}
 		}
 
@@ -426,12 +432,12 @@ public class Field extends AbstractWidget {
 		this.required = required;
 	}
 
-	public Var<?> getVar() {
+	public Var<Object> getVar() {
 		return var;
 	}
 
 	public void setVar(Var<?> var) {
-		this.var = var;
+		this.var = (Var<Object>) var;
 	}
 
 	public Tag getContent() {
@@ -459,15 +465,8 @@ public class Field extends AbstractWidget {
 	}
 
 	public static String propVarName(Object target, String name) {
+		// TODO in future complex names might be constructed
 		return name;
-
-		// TODO consider complex names (see IoC.propVarName)
-		// (e.g. Person.name in future
-		// if (Cls.isBean(target)) {
-		// return target.getClass().getSimpleName() + "." + name;
-		// } else {
-		// return name;
-		// }
 	}
 
 }

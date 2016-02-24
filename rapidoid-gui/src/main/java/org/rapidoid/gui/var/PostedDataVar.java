@@ -1,8 +1,14 @@
 package org.rapidoid.gui.var;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.reqinfo.ReqInfo;
+import org.rapidoid.var.Var;
+import org.rapidoid.var.impl.AbstractVar;
+
 /*
  * #%L
- * rapidoid-gui
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,38 +26,28 @@ package org.rapidoid.gui.var;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Err;
-
-import java.io.Serializable;
-
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class SessionVar<T extends Serializable> extends WidgetVar<T> {
+@Since("5.1.0")
+public class PostedDataVar<T> extends AbstractVar<T> {
 
-	private static final long serialVersionUID = 2761159925375675659L;
+	private static final long serialVersionUID = 7970150705828178233L;
 
-	@SuppressWarnings("unused")
-	private final String sessionKey;
+	private final Var<T> var;
 
-	@SuppressWarnings("unused")
-	private final T defaultValue;
-
-	public SessionVar(String sessionKey, T defaultValue) {
-		super(sessionKey, false);
-		this.sessionKey = sessionKey;
-		this.defaultValue = defaultValue;
+	public PostedDataVar(Var<T> var) {
+		super(var.name());
+		this.var = var;
 	}
 
 	@Override
 	public T get() {
-		throw Err.notSupported();
+		Object value = ReqInfo.get().posted().get(name());
+		return value != null ? (T) value : var.get();
 	}
 
 	@Override
 	public void set(T value) {
-		throw Err.notSupported();
+		var.set(value);
 	}
 
 }

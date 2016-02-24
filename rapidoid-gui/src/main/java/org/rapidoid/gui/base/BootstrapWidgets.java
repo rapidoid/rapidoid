@@ -11,7 +11,10 @@ import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
 import org.rapidoid.gui.*;
 import org.rapidoid.gui.reqinfo.ReqInfo;
-import org.rapidoid.gui.var.*;
+import org.rapidoid.gui.var.ArrayContainerVar;
+import org.rapidoid.gui.var.CollectionContainerVar;
+import org.rapidoid.gui.var.EqualityVar;
+import org.rapidoid.gui.var.LocalVar;
 import org.rapidoid.html.*;
 import org.rapidoid.html.customtag.ColspanTag;
 import org.rapidoid.html.tag.*;
@@ -504,14 +507,6 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static <T extends Serializable> Var<T> var(String name) {
 		return var(name, null);
-	}
-
-	public static <T extends Serializable> Var<T> session(String name, T defaultValue) {
-		return new SessionVar<T>(name, defaultValue);
-	}
-
-	public static <T extends Serializable> Var<T> session(String name) {
-		return session(name, null);
 	}
 
 	public static <T extends Serializable> Var<T> local(String name, T defaultValue) {
