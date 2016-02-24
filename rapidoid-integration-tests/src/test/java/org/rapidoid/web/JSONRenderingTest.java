@@ -32,7 +32,7 @@ import org.rapidoid.setup.On;
 public class JSONRenderingTest extends HttpTestCommons {
 
 	@Test
-	public void testWithHandlerException() {
+	public void testJSONRendering() {
 		On.get("/").json(() -> new Movie("Rambo", 1990));
 
 		onlyGet("/");
