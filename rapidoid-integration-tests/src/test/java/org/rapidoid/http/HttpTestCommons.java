@@ -49,6 +49,8 @@ public abstract class HttpTestCommons extends TestCommons {
 	// FIXME HEAD
 	private static final List<String> HTTP_VERBS = U.list("GET", "DELETE", "OPTIONS", "TRACE", "POST", "PUT", "PATCH");
 
+	public static final int DEFAULT_PORT = 8888;
+
 	@Before
 	public void openContext() {
 		Log.setLogLevel(LogLevel.INFO);
@@ -87,7 +89,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected String localhost(String uri) {
-		return localhost(8888, uri);
+		return localhost(DEFAULT_PORT, uri);
 	}
 
 	protected String localhost(int port, String uri) {
@@ -125,7 +127,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected void onlyGet(String uri) {
-		onlyGet(8888, uri);
+		onlyGet(DEFAULT_PORT, uri);
 	}
 
 	protected void onlyGet(int port, String uri) {
@@ -133,7 +135,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected void onlyPost(String uri) {
-		onlyPost(8888, uri);
+		onlyPost(DEFAULT_PORT, uri);
 	}
 
 	protected void onlyPost(int port, String uri) {
@@ -141,7 +143,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected void onlyPut(String uri) {
-		onlyPut(8888, uri);
+		onlyPut(DEFAULT_PORT, uri);
 	}
 
 	protected void onlyPut(int port, String uri) {
@@ -149,7 +151,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected void onlyDelete(String uri) {
-		onlyDelete(8888, uri);
+		onlyDelete(DEFAULT_PORT, uri);
 	}
 
 	protected void onlyDelete(int port, String uri) {
@@ -157,22 +159,46 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected void getAndPost(String uri) {
-		getAndPost(8888, uri);
+		getAndPost(DEFAULT_PORT, uri);
 	}
 
 	protected void getAndPost(int port, String uri) {
-		testReq(port, "GET", uri);
-		testReq(port, "POST", uri);
+		testReq(port, "GET", uri, null);
+		testReq(port, "POST", uri, null);
 		notFoundExcept(port, uri, "GET", "POST");
 	}
 
+	protected void postData(String uri, Map<String, ?> data) {
+		testReq(DEFAULT_PORT, "POST", uri, data);
+	}
+
+	protected void postData(int port, String uri, Map<String, ?> data) {
+		testReq(port, "POST", uri, data);
+	}
+
+	protected void putData(String uri, Map<String, ?> data) {
+		testReq(DEFAULT_PORT, "PUT", uri, data);
+	}
+
+	protected void putData(int port, String uri, Map<String, ?> data) {
+		testReq(port, "PUT", uri, data);
+	}
+
+	protected void patchData(String uri, Map<String, ?> data) {
+		testReq(DEFAULT_PORT, "PATCH", uri, data);
+	}
+
+	protected void patchData(int port, String uri, Map<String, ?> data) {
+		testReq(port, "PATCH", uri, data);
+	}
+
 	private void onlyReq(int port, String verb, String uri) {
-		testReq(port, verb, uri);
+		testReq(port, verb, uri, null);
 		notFoundExcept(port, uri, verb);
 	}
 
 	protected void notFoundExcept(String uri, String... exceptVerbs) {
-		notFoundExcept(8888, uri, exceptVerbs);
+		notFoundExcept(DEFAULT_PORT, uri, exceptVerbs);
 	}
 
 	protected void notFoundExcept(int port, String uri, String... exceptVerbs) {
@@ -184,7 +210,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected void notFound(String uri) {
-		notFound(8888, uri);
+		notFound(DEFAULT_PORT, uri);
 	}
 
 	protected void notFound(int port, String uri) {
@@ -192,21 +218,27 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected void notFound(int port, String verb, String uri) {
-		String resp = fetch(port, verb, uri);
+		String resp = fetch(port, verb, uri, null);
 		String notFound = IO.load("404-not-found.txt");
 		U.notNull(notFound, "404-not-found");
 		check(verb + " " + uri, resp, notFound);
 	}
 
-	private void testReq(int port, String verb, String uri) {
-		String resp = fetch(port, verb, uri);
+	private void testReq(int port, String verb, String uri, Map<String, ?> data) {
+		String resp = fetch(port, verb, uri, data);
 		String reqName = reqName(port, verb, uri);
 
 		verifyCase(verb + " " + uri, resp, reqName);
 	}
 
-	private String fetch(int port, String verb, String uri) {
-		byte[] res = HTTP.verb(HttpVerb.from(verb)).url(localhost(port, uri)).raw(true).execute();
+	private String fetch(int port, String verb, String uri, Map<String, ?> data) {
+		HttpClient client = HTTP.verb(HttpVerb.from(verb)).url(localhost(port, uri)).raw(true);
+
+		if (data != null) {
+			client = client.data(data);
+		}
+
+		byte[] res = client.execute();
 		String resp = new String(res);
 		resp = resp.replaceFirst("Date: .*? GMT", "Date: XXXXX GMT");
 
@@ -215,7 +247,7 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	private String reqName(int port, String verb, String uri) {
 		String req = verb + uri.replace("/", "_").replace("?", "-");
-		if (port != 8888) {
+		if (port != DEFAULT_PORT) {
 			req = port + "__" + req;
 		}
 

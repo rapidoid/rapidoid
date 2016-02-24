@@ -1,8 +1,8 @@
-package org.rapidoid.gui.var;
+package org.rapidoid.web;
 
 /*
  * #%L
- * rapidoid-gui
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,37 +20,27 @@ package org.rapidoid.gui.var;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.reqinfo.ReqInfo;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.http.HttpTestCommons;
+import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
-import java.io.Serializable;
-
 @Authors("Nikolche Mihajlovski")
-@Since("4.0.0")
-public class LocalVar<T extends Serializable> extends WidgetVar<T> {
+@Since("5.1.0")
+public class WidgetRenderingTest extends HttpTestCommons {
 
-	private static final long serialVersionUID = 2761159925375675659L;
+	@Test
+	public void testFormBindingAndRendering() {
+		On.page("/").gui(() -> GUI.edit(U.map("name", "unknown", "age", 100)));
 
-	private final String localKey;
+		getAndPost("/");
+		getAndPost("/?name=foo&age=12345"); // URL params are ignored
 
-	private final T defaultValue;
-
-	public LocalVar(String localKey, T defaultValue, boolean initial) {
-		super(localKey, initial);
-		this.localKey = localKey;
-		this.defaultValue = defaultValue;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public T get() {
-		return (T) U.or(ReqInfo.get().posted().get(localKey), defaultValue);
-	}
-
-	@Override
-	public void set(T value) {
+		postData("/?age=1", U.map("name", "Mozart", "age", 123));
+		postData("/?name=hey&age=77", U.map("name", "Bach"));
 	}
 
 }

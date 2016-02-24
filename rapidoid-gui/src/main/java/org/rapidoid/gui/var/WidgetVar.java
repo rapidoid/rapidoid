@@ -41,7 +41,7 @@ public abstract class WidgetVar<T extends Serializable> extends AbstractVar<T> {
 	}
 
 	protected boolean getBool() {
-		Object value = ReqInfo.get().data().get(name());
+		Object value = ReqInfo.get().posted().get(name());
 		return Boolean.TRUE.equals(value) || "true".equals(value);
 	}
 

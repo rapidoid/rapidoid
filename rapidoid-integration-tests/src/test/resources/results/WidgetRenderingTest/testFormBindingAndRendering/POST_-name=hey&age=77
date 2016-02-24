@@ -1,0 +1,20 @@
+HTTP/1.1 200 OK
+Connection: close
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 436
+
+<form class="" role="form">
+  <div class="form-group">
+    <label>Name: </label>
+    <input _h="name" type="text" class="form-control" value="Bach" name="name">
+    <span class="field-error"></span>
+  </div>
+  <div class="form-group">
+    <label>Age: </label>
+    <input _h="age" type="text" class="form-control" value="100" name="age">
+    <span class="field-error"></span>
+  </div>
+  <div class="form-group"></div>
+</form>

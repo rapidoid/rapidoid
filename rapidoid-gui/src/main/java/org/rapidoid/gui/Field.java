@@ -97,7 +97,7 @@ public class Field extends AbstractWidget {
 		Object target = U.or(item.value(), item);
 		String varName = propVarName(target, prop.name());
 
-		Object initValue = ReqInfo.get().data().get(varName);
+		Object initValue = ReqInfo.get().posted().get(varName);
 
 		try {
 			return Models.propertyVar(varName, item, prop.name(), initValue);

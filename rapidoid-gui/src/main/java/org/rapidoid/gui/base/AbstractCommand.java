@@ -60,13 +60,13 @@ public abstract class AbstractCommand<W extends AbstractCommand<?>> extends Abst
 	protected void handleEventIfMatching() {
 		if (!handled && handler != null && command != null) {
 			if (!ReqInfo.get().isGetReq()) {
-				String event = (String) ReqInfo.get().data().get("_cmd");
+				String event = (String) ReqInfo.get().posted().get("_cmd");
 
 				if (!U.isEmpty(event) && U.eq(event, command)) {
 
 					Object[] args = new Object[cmdArgs.length];
 					for (int i = 0; i < args.length; i++) {
-						args[i] = U.or(ReqInfo.get().data().get("_" + i), "");
+						args[i] = U.or(ReqInfo.get().posted().get("_" + i), "");
 					}
 
 					if (Arrays.equals(args, cmdArgs)) {
