@@ -38,6 +38,16 @@ public class IoCContextWrapper implements IoCContext {
 	}
 
 	@Override
+	public IoCContext name(String name) {
+		return context.name(name);
+	}
+
+	@Override
+	public String name() {
+		return context.name();
+	}
+
+	@Override
 	public synchronized void reset() {
 		IoCState backup = context.backup();
 

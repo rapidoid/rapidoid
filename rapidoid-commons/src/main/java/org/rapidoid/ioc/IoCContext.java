@@ -31,6 +31,10 @@ import java.util.Map;
 @Since("5.1.0")
 public interface IoCContext {
 
+	IoCContext name(String name);
+
+	String name();
+
 	void reset();
 
 	void manage(Object... classesOrInstances);

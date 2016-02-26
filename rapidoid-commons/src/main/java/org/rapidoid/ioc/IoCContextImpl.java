@@ -42,6 +42,8 @@ public class IoCContextImpl implements IoCContext {
 	IoCContextImpl() {
 	}
 
+	private volatile String name;
+
 	private volatile IoCState state = new IoCState();
 
 	private final Map<Class<?>, ClassMetadata> metadata = Coll
@@ -51,6 +53,17 @@ public class IoCContextImpl implements IoCContext {
 					return new ClassMetadata(clazz);
 				}
 			});
+
+	@Override
+	public IoCContext name(String name) {
+		this.name = name;
+		return this;
+	}
+
+	@Override
+	public String name() {
+		return name;
+	}
 
 	@Override
 	public synchronized void reset() {
