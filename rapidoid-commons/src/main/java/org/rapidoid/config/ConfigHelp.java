@@ -30,7 +30,7 @@ import org.rapidoid.u.U;
 public class ConfigHelp {
 
 	public static void processHelp(Object[] args) {
-		if (args.length == 1 && args[0].equals("--help")) {
+		if (args != null && args.length == 1 && args[0].equals("--help")) {
 			show("Usage:");
 			show("  java -cp <yourapp>.jar com.yourapp.Main [option1 option2 ...]");
 

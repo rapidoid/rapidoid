@@ -35,6 +35,8 @@ public class Config {
 
 	private final Map<String, Object> properties;
 
+	private volatile String[] args;
+
 	public Config(Map<String, Object> configProperties) {
 		this.properties = Collections.synchronizedMap(configProperties);
 	}
@@ -194,6 +196,26 @@ public class Config {
 
 	public void putAll(Map<String, ?> entries) {
 		properties.putAll((Map<String, Object>) entries);
+	}
+
+	public void args(String... args) {
+		this.args = args;
+
+		if (args != null) {
+			for (String arg : args) {
+				String[] parts = arg.split("=", 2);
+
+				if (parts.length > 1) {
+					put(parts[0], parts[1]);
+				} else {
+					put(parts[0], true);
+				}
+			}
+		}
+	}
+
+	public String[] getArgs() {
+		return args;
 	}
 
 }
