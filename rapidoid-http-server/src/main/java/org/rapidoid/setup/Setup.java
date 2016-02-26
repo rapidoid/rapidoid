@@ -4,8 +4,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
+import org.rapidoid.config.RapidoidInitializer;
+import org.rapidoid.data.JSON;
 import org.rapidoid.http.*;
 import org.rapidoid.http.handler.FastHttpErrorHandler;
 import org.rapidoid.http.handler.FastHttpHandler;
@@ -14,6 +18,7 @@ import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqRespHandl
 import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
@@ -26,6 +31,7 @@ import org.rapidoid.util.UTILS;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -52,21 +58,37 @@ import java.util.Map;
 @Since("5.1.0")
 public class Setup implements Constants {
 
-	static final Setup DEFAULT = new Setup("http", "0.0.0.0", 8888, ServerSetupType.DEFAULT, IoC.defaultContext());
-	static final Setup ADMIN = new Setup("admin", "0.0.0.0", 8889, ServerSetupType.ADMIN, IoC.defaultContext());
-	static final Setup DEV = new Setup("dev", "127.0.0.1", 8887, ServerSetupType.DEV, IoC.defaultContext());
+	static final Setup ON = new Setup("on", "0.0.0.0", 8888, ServerSetupType.DEFAULT, IoC.defaultContext());
+	static final Setup ADMIN = new Setup("admin", "0.0.0.0", 8889, ServerSetupType.ADMIN, IoC.createContext().name("admin"));
+	static final Setup DEV = new Setup("dev", "127.0.0.1", 8887, ServerSetupType.DEV, IoC.createContext().name("dev"));
+
+	private static final List<Setup> instances = Coll.synchronizedList(ON, ADMIN, DEV);
+
+	static {
+		RapidoidInitializer.initialize();
+
+		Jobs.execute(new Runnable() {
+			@Override
+			public void run() {
+				JSON.warmup();
+			}
+		});
+	}
 
 	private static volatile String mainClassName;
 	private static volatile String appPkgName;
+	private static volatile boolean dirty;
+
 	static volatile boolean restarted;
 	static volatile ClassLoader loader;
-	private static volatile boolean dirty;
 
 	static {
 		resetGlobalState();
 	}
 
 	private final String name;
+	private final Config config;
+
 	private final String defaultAddress;
 	private final int defaultPort;
 	private final ServerSetupType setupType;
@@ -90,8 +112,19 @@ public class Setup implements Constants {
 	private volatile LoginProcessor loginProcessor;
 	private volatile RolesProvider rolesProvider;
 
+	public static Setup create(String name) {
+		Setup setup = new Setup(name, "0.0.0.0", 8888, ServerSetupType.CUSTOM, IoC.createContext().name(name));
+		instances.add(setup);
+		return setup;
+	}
+
+	public void destroy() {
+		instances.remove(this);
+	}
+
 	public Setup(String name, String defaultAddress, int defaultPort, ServerSetupType setupType, IoCContext ioCContext) {
 		this.name = name;
+
 		this.defaultAddress = defaultAddress;
 		this.defaultPort = defaultPort;
 
@@ -99,6 +132,8 @@ public class Setup implements Constants {
 		this.address = defaultAddress;
 		this.setupType = setupType;
 		this.ioCContext = ioCContext;
+
+		this.config = Conf.sub(name);
 	}
 
 	public static void resetGlobalState() {
@@ -144,49 +179,54 @@ public class Setup implements Constants {
 			listen();
 
 			if (Conf.dev()) {
-				On.changes().restart();
+				OnChanges.INSTANCE.restart();
 			}
 		}
 	}
 
-	public OnAction get(String path) {
+	public OnRoute route(String verb, String path) {
 		activate();
-		return new OnAction(this, httpImpls(), GET, path).wrap(wrappers);
+		return new OnRoute(this, httpImpls(), verb.toUpperCase(), path).wrap(wrappers);
 	}
 
-	public OnAction post(String path) {
+	public OnRoute get(String path) {
 		activate();
-		return new OnAction(this, httpImpls(), POST, path).wrap(wrappers);
+		return new OnRoute(this, httpImpls(), GET, path).wrap(wrappers);
 	}
 
-	public OnAction put(String path) {
+	public OnRoute post(String path) {
 		activate();
-		return new OnAction(this, httpImpls(), PUT, path).wrap(wrappers);
+		return new OnRoute(this, httpImpls(), POST, path).wrap(wrappers);
 	}
 
-	public OnAction delete(String path) {
+	public OnRoute put(String path) {
 		activate();
-		return new OnAction(this, httpImpls(), DELETE, path).wrap(wrappers);
+		return new OnRoute(this, httpImpls(), PUT, path).wrap(wrappers);
 	}
 
-	public OnAction patch(String path) {
+	public OnRoute delete(String path) {
 		activate();
-		return new OnAction(this, httpImpls(), PATCH, path).wrap(wrappers);
+		return new OnRoute(this, httpImpls(), DELETE, path).wrap(wrappers);
 	}
 
-	public OnAction options(String path) {
+	public OnRoute patch(String path) {
 		activate();
-		return new OnAction(this, httpImpls(), OPTIONS, path).wrap(wrappers);
+		return new OnRoute(this, httpImpls(), PATCH, path).wrap(wrappers);
 	}
 
-	public OnAction head(String path) {
+	public OnRoute options(String path) {
 		activate();
-		return new OnAction(this, httpImpls(), HEAD, path).wrap(wrappers);
+		return new OnRoute(this, httpImpls(), OPTIONS, path).wrap(wrappers);
 	}
 
-	public OnAction trace(String path) {
+	public OnRoute head(String path) {
 		activate();
-		return new OnAction(this, httpImpls(), TRACE, path).wrap(wrappers);
+		return new OnRoute(this, httpImpls(), HEAD, path).wrap(wrappers);
+	}
+
+	public OnRoute trace(String path) {
+		activate();
+		return new OnRoute(this, httpImpls(), TRACE, path).wrap(wrappers);
 	}
 
 	public OnPage page(String path) {
@@ -354,7 +394,13 @@ public class Setup implements Constants {
 		}
 	}
 
-	public Setup bootstrap() {
+	public Setup args(String... args) {
+		config.args(args);
+		return this;
+	}
+
+	public Setup bootstrap(String... args) {
+		this.args(args);
 		beans(annotated(Controller.class).in(path()).getAll().toArray());
 		Log.info("Completed bootstrap", "context", getIoCContext());
 		return this;
@@ -413,7 +459,7 @@ public class Setup implements Constants {
 
 		restarted = true;
 
-		for (Setup setup : setups()) {
+		for (Setup setup : instances()) {
 			setup.fastHttp.resetConfig();
 			setup.wrappers = null;
 		}
@@ -432,14 +478,14 @@ public class Setup implements Constants {
 		Method main = Cls.getMethod(entry, "main", String[].class);
 		U.must(main.getReturnType() == void.class);
 
-		String[] args = Conf.getArgs();
+		String[] args = Conf.root().getArgs();
 		Cls.invoke(main, null, new Object[]{args});
 
 		Log.info("Successfully restarted the application!");
 	}
 
-	private static Setup[] setups() {
-		return new Setup[]{DEFAULT, ADMIN, DEV};
+	public static List<Setup> instances() {
+		return instances;
 	}
 
 	public Setup renderJson(Mapper<Object, String> jsonRenderer) {

@@ -32,6 +32,8 @@ import org.rapidoid.ioc.IoC;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
+import org.rapidoid.setup.Admin;
+import org.rapidoid.setup.Dev;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.test.TestCommons;
@@ -64,8 +66,8 @@ public abstract class HttpTestCommons extends TestCommons {
 		Conf.reset();
 		IoC.defaultContext().reset();
 
-		On.getDefaultSetup().http().resetConfig();
-		On.getDefaultSetup().listen();
+		On.instance().http().resetConfig();
+		On.instance().listen();
 
 		System.out.println("--- SERVER STARTED ---");
 
@@ -82,8 +84,8 @@ public abstract class HttpTestCommons extends TestCommons {
 	public void closeContext() {
 		System.out.println("--- STOPPING SERVER ---");
 
-		On.admin().shutdown();
-		On.dev().shutdown();
+		Admin.instance().shutdown();
+		Dev.instance().shutdown();
 
 		System.out.println("--- SERVER STOPPED ---");
 	}

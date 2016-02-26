@@ -429,14 +429,14 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 
 	@Test
 	public void test33() {
-		On.get("/test33").html((Req req) -> "req");
+		On.route("get", "/test33").html((Req req) -> "req");
 
 		onlyGet("/test33");
 	}
 
 	@Test
 	public void test34() {
-		On.get("/test34").html((Req req, Resp resp) -> "req+resp");
+		On.route("GET", "/test34").html((Req req, Resp resp) -> "req+resp");
 
 		onlyGet("/test34");
 	}

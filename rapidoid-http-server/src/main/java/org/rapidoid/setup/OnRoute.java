@@ -33,7 +33,7 @@ import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public class OnAction {
+public class OnRoute {
 
 	private final Setup chain;
 
@@ -45,14 +45,14 @@ public class OnAction {
 
 	private volatile HttpWrapper[] wrappers;
 
-	public OnAction(Setup chain, FastHttp[] httpImpls, String verb, String path) {
+	public OnRoute(Setup chain, FastHttp[] httpImpls, String verb, String path) {
 		this.chain = chain;
 		this.httpImpls = httpImpls;
 		this.verb = verb;
 		this.path = path;
 	}
 
-	public OnAction wrap(HttpWrapper... wrappers) {
+	public OnRoute wrap(HttpWrapper... wrappers) {
 		this.wrappers = wrappers;
 		return this;
 	}

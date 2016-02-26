@@ -1,8 +1,8 @@
-package org.rapidoid.http;
+package org.rapidoid.web;
 
 /*
  * #%L
- * rapidoid-integration-tests
+ * rapidoid-http-server
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,36 +20,19 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class HttpServerRestartTest extends HttpTestCommons {
+@Since("4.0.0")
+public class Rapidoid {
 
-	@Test
-	public void shouldHandleRestarts() {
-		On.get("/").html("a");
-		eq(get("/"), "a");
-
-		On.instance().http().resetConfig();
-
-		On.get("/").html("b");
-		eq(get("/"), "b");
+	private Rapidoid() {
 	}
 
-	@Test
-	public void shouldHandleRestartsX() {
-		On.get("/").html("x");
-		eq(get("/"), "x");
-	}
-
-	@Test
-	public void shouldHandleRestartsY() {
-		On.get("/").html("y");
-		eq(get("/"), "y");
+	public static void run(String... args) {
+		On.bootstrap(args);
 	}
 
 }

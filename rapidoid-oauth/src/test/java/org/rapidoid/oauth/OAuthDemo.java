@@ -31,7 +31,7 @@ import org.rapidoid.setup.Setup;
 public class OAuthDemo {
 
 	public static void main(String[] args) {
-		Setup setup = On.getDefaultSetup();
+		Setup setup = On.instance();
 		OAuth.register(setup, new Config());
 		setup.listen();
 	}

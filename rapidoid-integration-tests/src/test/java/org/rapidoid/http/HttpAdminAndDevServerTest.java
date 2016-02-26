@@ -24,6 +24,8 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.setup.Admin;
+import org.rapidoid.setup.Dev;
 import org.rapidoid.setup.On;
 import org.rapidoid.util.UTILS;
 
@@ -36,8 +38,8 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 	@Test
 	public void testAdminAndDevServer() {
 		On.get("/a").html((Req x) -> "default " + x.uri());
-		On.admin().get("/a").html((Req x) -> "admin " + x.uri());
-		On.dev().get("/a").json((Req req, Resp resp) ->  "dev " + req.uri());
+		Admin.get("/a").html((Req x) -> "admin " + x.uri());
+		Dev.get("/a").json((Req req, Resp resp) -> "dev " + req.uri());
 
 		onlyGet("/a"); // default server
 		onlyGet(8889, "/a"); // admin server
@@ -50,7 +52,7 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 
 		Conf.set("admin", "port", port);
 
-		On.admin().get("/myadmin").html((Req x) -> "admin " + x.uri());
+		Admin.get("/myadmin").html((Req x) -> "admin " + x.uri());
 
 		onlyGet(port, "/myadmin");
 	}
@@ -61,7 +63,7 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 
 		Conf.set("dev", "port", port);
 
-		On.dev().get("/mydev").html((Req x) -> "dev " + x.uri());
+		Dev.get("/mydev").html((Req x) -> "dev " + x.uri());
 
 		onlyGet(port, "/mydev");
 	}
@@ -70,7 +72,7 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 	public void testDevServerInProduction() {
 		Conf.set("production", true);
 
-		On.dev().get("/nodev").json((Req x) -> "This should be disabled!");
+		Dev.get("/nodev").json((Req x) -> "This should be disabled!");
 
 		try {
 			notFound(8887, "/nodev");

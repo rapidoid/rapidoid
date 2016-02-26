@@ -30,10 +30,10 @@ import org.rapidoid.lambda.Mapper;
 import java.lang.annotation.Annotation;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.3.0")
-public class On {
+@Since("5.1.0")
+public class Admin {
 
-	private static final Setup SETUP = Setup.ON;
+	private static final Setup SETUP = Setup.ADMIN;
 
 	public static synchronized OnRoute route(String verb, String path) {
 		return SETUP.route(verb, path);

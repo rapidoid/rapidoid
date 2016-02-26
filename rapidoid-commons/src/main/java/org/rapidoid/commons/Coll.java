@@ -32,13 +32,13 @@ import java.util.concurrent.*;
 @Since("5.1.0")
 public class Coll {
 	@SuppressWarnings("unchecked")
-	public static <T> Set<T> synchronizedSet() {
-		return (Set<T>) Collections.synchronizedSet(U.set());
+	public static <T> Set<T> synchronizedSet(T... values) {
+		return (Set<T>) Collections.synchronizedSet(U.set(values));
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> List<T> synchronizedList() {
-		return (List<T>) Collections.synchronizedList(U.list());
+	public static <T> List<T> synchronizedList(T... values) {
+		return (List<T>) Collections.synchronizedList(U.list(values));
 	}
 
 	public static boolean isMap(Object obj) {
