@@ -32,6 +32,7 @@ import org.rapidoid.commons.Str;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.insight.Insights;
+import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.lambda.F2;
@@ -751,6 +752,9 @@ public class UTILS implements Constants {
 
 		} else if (obj instanceof ByteBuffer) {
 			return Bufs.buf2bytes((ByteBuffer) obj);
+
+		} else if (obj instanceof InputStream) {
+			return IO.loadBytes((InputStream) obj);
 
 		} else if (obj instanceof File) {
 			Res res = Res.from((File) obj);
