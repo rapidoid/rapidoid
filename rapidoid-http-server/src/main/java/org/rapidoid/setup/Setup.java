@@ -87,8 +87,6 @@ public class Setup implements Constants {
 
 	private volatile Mapper<Object, String> jsonRenderer;
 	private volatile Mapper<String, Object> jsonParser;
-	private volatile Mapper<Object, String> yamlRenderer;
-	private volatile Mapper<String, Object> yamlParser;
 	private volatile LoginProcessor loginProcessor;
 	private volatile RolesProvider rolesProvider;
 
@@ -454,16 +452,6 @@ public class Setup implements Constants {
 		return this;
 	}
 
-	public Setup renderYaml(Mapper<Object, String> yamlRenderer) {
-		this.yamlRenderer = yamlRenderer;
-		return this;
-	}
-
-	public Setup parseYaml(Mapper<String, Object> yamlParser) {
-		this.yamlParser = yamlParser;
-		return this;
-	}
-
 	public Setup login(LoginProcessor loginProcessor) {
 		this.loginProcessor = loginProcessor;
 		return this;
@@ -480,14 +468,6 @@ public class Setup implements Constants {
 
 	public Mapper<String, Object> getJsonParser() {
 		return jsonParser;
-	}
-
-	public Mapper<Object, String> getYamlRenderer() {
-		return yamlRenderer;
-	}
-
-	public Mapper<String, Object> getYamlParser() {
-		return yamlParser;
 	}
 
 	public LoginProcessor getLoginProcessor() {

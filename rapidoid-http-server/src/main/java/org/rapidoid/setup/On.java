@@ -189,14 +189,6 @@ public class On {
 		return Setup.DEFAULT.parseJson(jsonParser);
 	}
 
-	public static Setup renderYaml(Mapper<Object, String> yamlRenderer) {
-		return Setup.DEFAULT.renderYaml(yamlRenderer);
-	}
-
-	public static Setup parseYaml(Mapper<String, Object> yamlParser) {
-		return Setup.DEFAULT.parseYaml(yamlParser);
-	}
-
 	public static Setup login(LoginProcessor loginProcessor) {
 		return Setup.DEFAULT.login(loginProcessor);
 	}
