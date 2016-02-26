@@ -47,7 +47,7 @@ public class AppSecurity implements Constants {
 			Annotation ann = e.getValue();
 			Class<? extends Annotation> type = ann.annotationType();
 
-			if (type.equals(Admin.class)) {
+			if (type.equals(Administrator.class)) {
 				roles.add(Roles.ADMIN);
 			} else if (type.equals(Manager.class)) {
 				roles.add(Roles.MANAGER);

@@ -33,6 +33,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public @interface Admin {
+public @interface Administrator {
 
 }

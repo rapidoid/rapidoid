@@ -35,7 +35,7 @@ public class RapidoidWebModule {
 
 		AOP.reset();
 
-		AOP.intercept(new AuthInterceptor(), Admin.class, Manager.class, Moderator.class, LoggedIn.class, DevMode.class,
+		AOP.intercept(new AuthInterceptor(), Administrator.class, Manager.class, Moderator.class, LoggedIn.class, DevMode.class,
 				Role.class, HasRole.class);
 	}
 

@@ -32,11 +32,11 @@ import java.lang.reflect.Method;
 
 class MyService {
 
-	@Admin
+	@Administrator
 	public void aa() {
 	}
 
-	@Admin
+	@Administrator
 	@Moderator
 	@Manager
 	public void bb() {
@@ -64,11 +64,11 @@ class MyService {
 @HasRole({@Role("root"), @Role("xyz")})
 class MyService2 {
 
-	@Admin
+	@Administrator
 	public void aa() {
 	}
 
-	@Admin
+	@Administrator
 	@Moderator
 	@Manager
 	public void bb() {
