@@ -107,7 +107,7 @@ public class Field extends AbstractWidget {
 		}
 
 		IReqInfo req = ReqInfo.get();
-		if (!req.isGetReq()) {
+		if (!req.isGetReq() && !REFRESH.command().equals(getCommand())) {
 			var = new PostedDataVar<Object>(var);
 			var.set(req.posted().get(varName));
 		}

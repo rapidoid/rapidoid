@@ -10,6 +10,7 @@ import org.rapidoid.commons.Rnd;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
 import org.rapidoid.gui.*;
+import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.gui.var.ArrayContainerVar;
 import org.rapidoid.gui.var.CollectionContainerVar;
@@ -82,6 +83,8 @@ public abstract class BootstrapWidgets extends HTML {
 	public static final Btn NO = cmd("No");
 
 	public static final Btn OK = cmd("^OK");
+
+	public static final Btn REFRESH = cmd("refresh");
 
 	public static final Btn CANCEL = navigate("Cancel");
 
@@ -852,4 +855,8 @@ public abstract class BootstrapWidgets extends HTML {
 		return span(contents).class_("box");
 	}
 
+	public static String getCommand() {
+		IReqInfo req = ReqInfo.get();
+		return !req.isGetReq() ? (String) req.posted().get("_cmd") : null;
+	}
 }

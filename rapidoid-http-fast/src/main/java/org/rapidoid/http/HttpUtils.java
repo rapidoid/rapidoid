@@ -211,8 +211,4 @@ public class HttpUtils implements HttpMetadata {
 		return (Conf.is("https") ? "https://" : "http://") + x.host() + path;
 	}
 
-	public static String getCommand(Req req) {
-		return isPostReq(req) ? (String) req.data("_cmd", null) : null;
-	}
-
 }
