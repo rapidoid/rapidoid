@@ -47,14 +47,17 @@ import org.rapidoid.util.UTILS;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
 public class FastHttp extends AbstractHttpProcessor {
 
+	public static final String[] DEFAULT_STATIC_FILES_LOCATIONS = {"static", "rapidoid/static"};
+
 	private static final HttpParser HTTP_PARSER = new HttpParser();
 
-	public static final String[] DEFAULT_STATIC_FILES_LOCATIONS = {"static", "rapidoid/static"};
+	private static final Pattern PATTERN_PATTERN = Pattern.compile("[^\\w/-]");
 
 	private static final byte[] HTTP_200_OK = "HTTP/1.1 200 OK\r\n".getBytes();
 
@@ -355,7 +358,7 @@ public class FastHttp extends AbstractHttpProcessor {
 	}
 
 	private boolean isPattern(String path) {
-		return path.contains("{") || path.contains("}");
+		return PATTERN_PATTERN.matcher(path).find();
 	}
 
 	public void addGenericHandler(FastHttpHandler handler) {
