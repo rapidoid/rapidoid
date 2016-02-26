@@ -297,14 +297,13 @@ public class Cls {
 	}
 
 	public static List<Method> getMethodsNamed(Class<?> clazz, String name) {
-		List<Method> annotatedMethods = U.list();
+		List<Method> methods = U.list();
 
 		try {
 			for (Class<?> c = clazz; c.getSuperclass() != null; c = c.getSuperclass()) {
-				Method[] methods = c.getDeclaredMethods();
-				for (Method method : methods) {
+				for (Method method : c.getDeclaredMethods()) {
 					if (method.getName().equals(name)) {
-						annotatedMethods.add(method);
+						methods.add(method);
 					}
 				}
 			}
@@ -313,7 +312,7 @@ public class Cls {
 			throw U.rte("Cannot instantiate class!", e);
 		}
 
-		return annotatedMethods;
+		return methods;
 	}
 
 	public static Method getMethod(Class<?> clazz, String name, Class<?>... parameterTypes) {
@@ -1011,7 +1010,31 @@ public class Cls {
 	}
 
 	public static Method getLambdaMethod(Serializable lambda) {
-		Method writeReplace = getMethod(lambda.getClass(), "writeReplace");
+		return getLambdaMethod(lambda, "execute");
+	}
+
+	public static Method getLambdaMethod(Serializable lambda, String functionalMethodName) {
+		Method writeReplace = findMethod(lambda.getClass(), "writeReplace");
+
+		if (writeReplace == null) {
+			List<Method> methods = getMethodsNamed(lambda.getClass(), functionalMethodName);
+
+			U.must(U.notEmpty(methods), "Cannot find the lambda method named: %s", functionalMethodName);
+
+			for (Method method : methods) {
+				Class<?>[] paramTypes = method.getParameterTypes();
+				for (Class<?> paramType : paramTypes) {
+					if (!paramType.getName().equals("java.lang.Object")) {
+						return method;
+					}
+				}
+			}
+
+			U.must(methods.size() == 1, "Expected one, but found %s lambda methods named: %s", methods.size(), functionalMethodName);
+
+			return methods.get(0);
+		}
+
 		Object serializedLambda = invoke(writeReplace, lambda);
 
 		Method getImplClass = Cls.findMethod(serializedLambda.getClass(), "getImplClass");
@@ -1101,9 +1124,9 @@ public class Cls {
 	}
 
 	public static String[] getLambdaParameterNames(Serializable lambda) {
-		Method lambdaMethod = Cls.getLambdaMethod(lambda);
+		Method lambdaMethod = getLambdaMethod(lambda);
 		Class<?>[] lambdaTypes = lambdaMethod.getParameterTypes();
-		String[] names = Cls.getMethodParameterNames(lambdaMethod);
+		String[] names = getMethodParameterNames(lambdaMethod);
 
 		List<Method> methods = U.list();
 

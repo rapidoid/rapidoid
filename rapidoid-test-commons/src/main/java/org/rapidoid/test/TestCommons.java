@@ -62,19 +62,18 @@ public abstract class TestCommons {
 
 		hasError = false;
 
-		if (!initialized && ADJUST_RESULTS) {
-			String s = File.separator;
-			String resultsDir = "src" + s + "test" + s + "resources" + s + "results" + s + testName();
-			File dir = new File(resultsDir);
-			if (dir.isDirectory()) {
-				System.out.println("DELETING: " + resultsDir);
-				dir.delete();
-			} else {
-				System.out.println("NOT FOUND: " + resultsDir);
-			}
-		}
+		String s = File.separator;
+		String resultsDir = "src" + s + "test" + s + "resources" + s + "results" + s + testName();
 
-		initialized = true;
+		if (!initialized && ADJUST_RESULTS) {
+			File testDir = new File(resultsDir);
+
+			if (testDir.isDirectory()) {
+				delete(testDir);
+			}
+
+			initialized = true;
+		}
 	}
 
 	@After
@@ -526,6 +525,21 @@ public abstract class TestCommons {
 		eq(actual, expected);
 	}
 
+	protected void delete(File file) {
+		if (file.isDirectory()) {
+			File[] files = file.listFiles();
+			if (files != null) {
+				for (File f : files) {
+					delete(f);
+				}
+			}
+		}
+
+		if (!file.delete()) {
+			throw new RuntimeException("Couldn't delete: " + file);
+		}
+	}
+
 	protected void verifyCase(String info, String actual, String testCaseName) {
 		String s = File.separator;
 		String resname = "results" + s + testName() + s + getTestMethodName() + s + testCaseName;
@@ -533,6 +547,10 @@ public abstract class TestCommons {
 
 		if (ADJUST_RESULTS) {
 			File testDir = new File(filename).getParentFile();
+
+			if (testDir.isDirectory()) {
+				delete(testDir);
+			}
 
 			if (!testDir.exists()) {
 				if (!testDir.mkdirs()) {
