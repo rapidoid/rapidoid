@@ -51,13 +51,13 @@ public class JobsTest extends AbstractCommonsTest {
 				Ctxs.ctx().setUser(user);
 				ensureProperContext(user);
 
-				ScheduledFuture<?> future = Jobs.schedule(new Runnable() {
+				ScheduledFuture<?> future = Jobs.after(100, TimeUnit.MILLISECONDS).run(new Runnable() {
 					@Override
 					public void run() {
 						ensureProperContext(user);
 						counter.incrementAndGet();
 					}
-				}, 100, TimeUnit.MILLISECONDS);
+				});
 
 				try {
 					future.get();

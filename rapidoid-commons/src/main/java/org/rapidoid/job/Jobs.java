@@ -139,4 +139,12 @@ public class Jobs {
 		executor().execute(new PredefinedContextJobWrapper(context, action));
 	}
 
+	public static JobsDSL after(long delay, TimeUnit unit) {
+		return new JobsDSL(delay, -1, unit);
+	}
+
+	public static JobsDSL every(long period, TimeUnit unit) {
+		return new JobsDSL(-1, period, unit);
+	}
+
 }
