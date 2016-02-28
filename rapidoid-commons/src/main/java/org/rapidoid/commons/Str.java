@@ -24,7 +24,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Constants;
 
 import java.util.Iterator;
 import java.util.regex.Matcher;
@@ -32,7 +31,7 @@ import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")
-public class Str implements Constants {
+public class Str {
 
 	// regex taken from
 	// http://stackoverflow.com/questions/2559759/how-do-i-convert-camelcase-into-human-readable-names-in-java
@@ -160,6 +159,26 @@ public class Str implements Constants {
 
 	public static String insert(String target, int atIndex, String insertion) {
 		return target.substring(0, atIndex) + insertion + target.substring(atIndex);
+	}
+
+	public static String cutToFirst(String s, String delimiter) {
+		int pos = s.indexOf(delimiter);
+		return pos >= 0 ? s.substring(0, pos) : s;
+	}
+
+	public static String cutToLast(String s, String delimiter) {
+		int pos = s.lastIndexOf(delimiter);
+		return pos >= 0 ? s.substring(0, pos) : s;
+	}
+
+	public static String cutFromFirst(String s, String delimiter) {
+		int pos = s.indexOf(delimiter);
+		return pos >= 0 ? s.substring(pos + delimiter.length()) : s;
+	}
+
+	public static String cutFromLast(String s, String delimiter) {
+		int pos = s.lastIndexOf(delimiter);
+		return pos >= 0 ? s.substring(pos + delimiter.length()) : s;
 	}
 
 }

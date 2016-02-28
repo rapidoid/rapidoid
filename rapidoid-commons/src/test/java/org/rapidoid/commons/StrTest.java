@@ -55,4 +55,19 @@ public class StrTest extends AbstractCommonsTest {
 		eq(Str.insert("abc", 2, "123"), "ab123c");
 	}
 
+	@Test
+	public void testCut() throws Exception {
+		eq(Str.cutToFirst("a.b.c", "."), "a");
+		eq(Str.cutToFirst("a.b.c", "-"), "a.b.c");
+
+		eq(Str.cutToLast("a.b.c", "."), "a.b");
+		eq(Str.cutToLast("a.b.c", "-"), "a.b.c");
+
+		eq(Str.cutFromFirst("a.b.c", "."), "b.c");
+		eq(Str.cutFromFirst("a.b.c", "-"), "a.b.c");
+
+		eq(Str.cutFromLast("a.b.c", "."), "c");
+		eq(Str.cutFromLast("a.b.c", "-"), "a.b.c");
+	}
+
 }
