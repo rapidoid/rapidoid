@@ -5,6 +5,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
 import java.util.List;
+import java.util.Set;
 
 /*
  * #%L
@@ -31,6 +32,8 @@ import java.util.List;
  * @since 2.0.0
  */
 public class Conf {
+
+	private static final Set<String> SECTIONS = U.set();
 
 	public static final Config ROOT = new Config();
 
@@ -79,8 +82,9 @@ public class Conf {
 	}
 
 	public static Config section(String name) {
+		SECTIONS.add(name);
 		Config config = ROOT.sub(name);
-		autoRefresh(config);
+		ConfigUtil.load(filename(config.keys()), config);
 		return config;
 	}
 
@@ -94,8 +98,18 @@ public class Conf {
 
 	public static void setPath(String path) {
 		Conf.path = path;
-		List<List<String>> detached = AutoRefreshingConfig.untrack();
+		reload();
+	}
+
+	public static void reload() {
+		List<List<String>> detached = ConfigUtil.untrack();
+
 		reset();
+
+		for (String name : SECTIONS) {
+			Config sub = section(name);
+			ConfigUtil.load(filename(sub.keys()), sub);
+		}
 
 		for (List<String> keys : detached) {
 			autoRefresh(keys.isEmpty() ? ROOT : ROOT.sub(keys));
@@ -105,13 +119,14 @@ public class Conf {
 	private static void autoRefresh(Config... configs) {
 		for (Config config : configs) {
 			List<String> keys = config.keys();
-			U.must(keys.size() < 2);
-
-			String configName = keys.isEmpty() ? "config" : keys.get(0);
-			String filename = UTILS.path(path, configName + ".yaml");
-
-			AutoRefreshingConfig.attach(config, filename);
+			ConfigUtil.autoRefresh(config, filename(keys));
 		}
+	}
+
+	private static String filename(List<String> keys) {
+		U.must(keys.size() < 2);
+		String configName = keys.isEmpty() ? "config" : keys.get(0);
+		return UTILS.path(path, configName + ".yaml");
 	}
 
 }

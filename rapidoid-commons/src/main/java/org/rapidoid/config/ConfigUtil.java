@@ -32,7 +32,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class AutoRefreshingConfig {
+public class ConfigUtil {
 
 	private static final ConfigParser YAML_PARSER = new ConfigParser() {
 		@SuppressWarnings("unchecked")
@@ -44,11 +44,11 @@ public class AutoRefreshingConfig {
 
 	private static final Map<List<String>, Res> tracking = U.map();
 
-	public static synchronized void attach(final Config config, final String yamlFilename) {
-		attach(config, yamlFilename, YAML_PARSER);
+	public static synchronized void autoRefresh(final Config config, final String yamlFilename) {
+		autoRefresh(config, yamlFilename, YAML_PARSER);
 	}
 
-	public static synchronized void attach(final Config config, final String filename, final ConfigParser parser) {
+	public static synchronized void autoRefresh(final Config config, final String filename, final ConfigParser parser) {
 		Log.debug("Initializing auto-refreshing config", "filename", filename);
 
 		final Res res = Res.from(filename);
@@ -90,6 +90,20 @@ public class AutoRefreshingConfig {
 
 		tracking.clear();
 		return keys;
+	}
+
+	public static synchronized void load(String filename, Config config) {
+		byte[] bytes = Res.from(filename).getBytesOrNull();
+
+		if (bytes != null) {
+			if (bytes.length > 0) {
+				Map<String, Object> configData = YAML_PARSER.parse(bytes);
+				Log.info("Loading configuration file", "filename", filename);
+				config.assign(U.safe(configData));
+			}
+		} else {
+			Log.debug("Couldn't find configuration file", "filename", filename);
+		}
 	}
 
 }
