@@ -415,6 +415,17 @@ public abstract class BootstrapWidgets extends HTML {
 		return Cls.customizable(KVGrid.class).map(map);
 	}
 
+	public static <T> List<Object> grids(Map<String, Map<?, ?>> maps) {
+		List<Object> grids = U.list();
+
+		for (Map.Entry<String, Map<?, ?>> entry : maps.entrySet()) {
+			grids.add(h4(b(entry.getKey(), ":")));
+			grids.add(grid(entry.getValue()));
+		}
+
+		return grids;
+	}
+
 	public static Pager pager(int from, int to, Var<Integer> pageNumber) {
 		return Cls.customizable(Pager.class, from, to, pageNumber);
 	}
