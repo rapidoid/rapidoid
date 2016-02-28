@@ -22,11 +22,11 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.RapidoidInitializer;
-import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
 @Authors("Nikolche Mihajlovski")
@@ -55,25 +55,113 @@ public class REST {
 		return DEFAULT_CLIENT.post(uri, resultType);
 	}
 
+	public static <T> Future<T> put(String uri, Class<T> resultType, Callback<T> callback) {
+		return DEFAULT_CLIENT.put(uri, resultType, callback);
+	}
+
+	public static <T> T put(String uri, Class<T> resultType) {
+		return DEFAULT_CLIENT.put(uri, resultType);
+	}
+
+	public static <T> Future<T> delete(String uri, Class<T> resultType, Callback<T> callback) {
+		return DEFAULT_CLIENT.delete(uri, resultType, callback);
+	}
+
+	public static <T> T delete(String uri, Class<T> resultType) {
+		return DEFAULT_CLIENT.delete(uri, resultType);
+	}
+
+	public static <T> Future<T> patch(String uri, Class<T> resultType, Callback<T> callback) {
+		return DEFAULT_CLIENT.patch(uri, resultType, callback);
+	}
+
+	public static <T> T patch(String uri, Class<T> resultType) {
+		return DEFAULT_CLIENT.patch(uri, resultType);
+	}
+
+	public static <T> Future<T> options(String uri, Class<T> resultType, Callback<T> callback) {
+		return DEFAULT_CLIENT.options(uri, resultType, callback);
+	}
+
+	public static <T> T options(String uri, Class<T> resultType) {
+		return DEFAULT_CLIENT.options(uri, resultType);
+	}
+
+	public static <T> Future<T> head(String uri, Class<T> resultType, Callback<T> callback) {
+		return DEFAULT_CLIENT.head(uri, resultType, callback);
+	}
+
+	public static <T> T head(String uri, Class<T> resultType) {
+		return DEFAULT_CLIENT.head(uri, resultType);
+	}
+
+	public static <T> Future<T> trace(String uri, Class<T> resultType, Callback<T> callback) {
+		return DEFAULT_CLIENT.trace(uri, resultType, callback);
+	}
+
+	public static <T> T trace(String uri, Class<T> resultType) {
+		return DEFAULT_CLIENT.trace(uri, resultType);
+	}
+
 	public static <T> T call(String verb, String uri, Class<T> resultType) {
-		if ("GET".equalsIgnoreCase(verb)) {
-			return get(uri, resultType);
-		} else if ("POST".equalsIgnoreCase(verb)) {
-			return post(uri, resultType);
-		} else {
-			// FIXME support PUT and DELETE
-			throw U.rte("Unsupported REST verb: '%s'", verb);
+		switch (HttpVerb.from(verb)) {
+			case GET:
+				return get(uri, resultType);
+
+			case POST:
+				return post(uri, resultType);
+
+			case PUT:
+				return put(uri, resultType);
+
+			case DELETE:
+				return delete(uri, resultType);
+
+			case PATCH:
+				return patch(uri, resultType);
+
+			case OPTIONS:
+				return options(uri, resultType);
+
+			case HEAD:
+				return head(uri, resultType);
+
+			case TRACE:
+				return trace(uri, resultType);
+
+			default:
+				throw Err.notExpected();
 		}
 	}
 
 	public static <T> Future<T> call(String verb, String uri, Class<T> resultType, Callback<T> callback) {
-		if ("GET".equalsIgnoreCase(verb)) {
-			return get(uri, resultType, callback);
-		} else if ("POST".equalsIgnoreCase(verb)) {
-			return post(uri, resultType, callback);
-		} else {
-			// FIXME support PUT and DELETE
-			throw U.rte("Unsupported REST verb: '%s'", verb);
+		switch (HttpVerb.from(verb)) {
+			case GET:
+				return get(uri, resultType, callback);
+
+			case POST:
+				return post(uri, resultType, callback);
+
+			case PUT:
+				return put(uri, resultType, callback);
+
+			case DELETE:
+				return delete(uri, resultType, callback);
+
+			case PATCH:
+				return patch(uri, resultType, callback);
+
+			case OPTIONS:
+				return options(uri, resultType, callback);
+
+			case HEAD:
+				return head(uri, resultType, callback);
+
+			case TRACE:
+				return trace(uri, resultType, callback);
+
+			default:
+				throw Err.notExpected();
 		}
 	}
 
