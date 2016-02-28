@@ -43,7 +43,7 @@ public class OnAnnotated {
 	}
 
 	public synchronized void forEach(Operation<Class<?>> classOperation) {
-		for (Class<?> cls : getAll()) {
+		for (Class<?> cls : loadAll()) {
 			try {
 				classOperation.execute(cls);
 			} catch (Exception e) {
@@ -58,8 +58,13 @@ public class OnAnnotated {
 	}
 
 	@SuppressWarnings("unchecked")
-	public synchronized List<Class<?>> getAll() {
+	public synchronized List<String> getAll() {
 		return Scan.annotated(annotated).in(path).getAll();
+	}
+
+	@SuppressWarnings("unchecked")
+	public synchronized List<Class<?>> loadAll() {
+		return Scan.annotated(annotated).in(path).loadAll();
 	}
 
 }

@@ -6,7 +6,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Str;
-import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -105,7 +104,7 @@ public class ClasspathUtil {
 		}
 	}
 
-	public static List<Class<?>> scanClasses(ScanParams params) {
+	public static List<String> scanClasses(ScanParams params) {
 		String[] pkgs = params.in();
 
 		if (U.isEmpty(pkgs)) {
@@ -120,11 +119,11 @@ public class ClasspathUtil {
 		Log.info("Scanning classpath", "annotated", Arrays.toString(params.annotated()), "packages", Arrays.toString(pkgs), "matching", regex);
 
 		AtomicInteger searched = new AtomicInteger();
-		List<Class<?>> classes = U.list();
+		List<String> classes = U.list();
 
 		for (int i = 0; i < pkgs.length; i++) {
 			String pkg = pkgs[i];
-			classes.addAll(retrieveClasses(pkg, params.filter(), params.annotated(), pattern, params.classLoader(), searched));
+			classes.addAll(retrieveClasses(pkg, params.annotated(), pattern, params.classLoader(), searched));
 		}
 
 		long timeMs = U.time() - startingAt;
@@ -133,21 +132,17 @@ public class ClasspathUtil {
 		return classes;
 	}
 
-	private static List<Class<?>> retrieveClasses(String packageName, Predicate<Class<?>> filter,
-	                                              Class<? extends Annotation>[] annotated, Pattern regex,
-	                                              ClassLoader classLoader, AtomicInteger searched) {
+	private static List<String> retrieveClasses(String packageName, Class<? extends Annotation>[] annotated,
+	                                            Pattern regex, ClassLoader classLoader, AtomicInteger searched) {
 
-		List<Class<?>> classes = new ArrayList<Class<?>>();
+		List<String> classes = U.list();
 
 		String pkgName = U.safe(packageName);
 		String pkgPath = pkgName.replace('.', File.separatorChar);
 
-		classLoader = U.or(classLoader, defaultClassLoader);
-
 		Set<String> classpath = getClasspath();
 
-		Log.debug("Starting classpath scan", "package", packageName, "annotated", annotated, "regex", regex, "filter",
-				filter, "loader", classLoader);
+		Log.debug("Starting classpath scan", "package", packageName, "annotated", annotated, "regex", regex, "loader", classLoader);
 
 		Log.debug("Classpath details", "classpath", classpath);
 
@@ -169,7 +164,7 @@ public class ClasspathUtil {
 						}
 
 						if (startingDir.exists()) {
-							getClassesFromDir(classes, cpEntry, startingDir, pkgName, regex, filter, annotated,
+							getClassesFromDir(classes, cpEntry, startingDir, pkgName, regex, annotated,
 									classLoader, searched);
 						}
 					} else {
@@ -188,7 +183,7 @@ public class ClasspathUtil {
 		for (String jarName : jars) {
 			if (shouldScanJAR(jarName)) {
 				Log.debug("Scanning JAR", "name", jarName);
-				getClassesFromJAR(jarName, classes, packageName, regex, filter, annotated, classLoader, searched);
+				getClassesFromJAR(jarName, classes, packageName, regex, annotated, classLoader, searched);
 			} else {
 				Log.debug("Skipping JAR", "name", jarName);
 			}
@@ -205,9 +200,8 @@ public class ClasspathUtil {
 		return true;
 	}
 
-	private static void getClassesFromDir(Collection<Class<?>> classes, File root, File dir, String pkg, Pattern regex,
-	                                      Predicate<Class<?>> filter, Class<? extends Annotation>[] annotated,
-	                                      ClassLoader classLoader, AtomicInteger searched) {
+	private static void getClassesFromDir(Collection<String> classes, File root, File dir, String pkg, Pattern regex,
+	                                      Class<? extends Annotation>[] annotated, ClassLoader classLoader, AtomicInteger searched) {
 
 		U.must(dir.isDirectory());
 		Log.debug("Traversing directory", "root", root, "dir", dir);
@@ -220,20 +214,20 @@ public class ClasspathUtil {
 
 		for (File file : files) {
 			if (file.isDirectory()) {
-				getClassesFromDir(classes, root, file, pkg, regex, filter, annotated, classLoader, searched);
+				getClassesFromDir(classes, root, file, pkg, regex, annotated, classLoader, searched);
 			} else {
 				String rootPath = Str.trimr(root.getAbsolutePath(), File.separatorChar);
 				int from = rootPath.length() + 1;
 				String relName = file.getAbsolutePath().substring(from);
 
 				if (!ignore(relName)) {
-					scanFile(classes, regex, filter, annotated, classLoader, relName, file, null, null, searched);
+					scanFile(classes, regex, annotated, classLoader, relName, file, null, null, searched);
 				}
 			}
 		}
 	}
 
-	private static void scanFile(Collection<Class<?>> classes, Pattern regex, Predicate<Class<?>> filter,
+	private static void scanFile(Collection<String> classes, Pattern regex,
 	                             Class<? extends Annotation>[] annotated, ClassLoader classLoader, String relName,
 	                             File file, ZipFile zip, ZipEntry entry, AtomicInteger searched) {
 
@@ -251,15 +245,7 @@ public class ClasspathUtil {
 					ClassFile classFile = new ClassFile(new DataInputStream(input));
 
 					if (U.isEmpty(annotated) || isAnnotated(classFile, annotated)) {
-
-						Log.debug("loading class", "name", clsName);
-
-						Class<?> cls = classLoader != null ? Class.forName(clsName, true, classLoader) : Class
-								.forName(clsName);
-
-						if ((filter == null || Lmbd.eval(filter, cls))) {
-							classes.add(cls);
-						}
+						classes.add(clsName);
 					}
 
 				} catch (Throwable e) {
@@ -300,9 +286,9 @@ public class ClasspathUtil {
 		}
 	}
 
-	public static List<Class<?>> getClassesFromJAR(String jarName, List<Class<?>> classes, String pkg, Pattern regex,
-	                                               Predicate<Class<?>> filter, Class<? extends Annotation>[] annotated,
-	                                               ClassLoader classLoader, AtomicInteger searched) {
+	public static List<String> getClassesFromJAR(String jarName, List<String> classes, String pkg, Pattern regex,
+	                                             Class<? extends Annotation>[] annotated, ClassLoader classLoader,
+	                                             AtomicInteger searched) {
 
 		// ZipInputStream zip = null;
 		ZipFile zip = null;
@@ -319,7 +305,7 @@ public class ClasspathUtil {
 
 					if (!ignore(name)) {
 						if (U.isEmpty(pkg) || name.startsWith(pkgPath)) {
-							scanFile(classes, regex, filter, annotated, classLoader, name, null, zip, zipEntry, searched);
+							scanFile(classes, regex, annotated, classLoader, name, null, zip, zipEntry, searched);
 						}
 					}
 				}
@@ -419,10 +405,6 @@ public class ClasspathUtil {
 		ClasspathUtil.rootPackage = rootPackage;
 	}
 
-	public static List<Class<?>> getClasses(ScanParams scanParams) {
-		return scanClasses(scanParams);
-	}
-
 	public static ClassLoader getDefaultClassLoader() {
 		return defaultClassLoader;
 	}
@@ -430,4 +412,27 @@ public class ClasspathUtil {
 	public static void setDefaultClassLoader(ClassLoader defaultClassLoader) {
 		ClasspathUtil.defaultClassLoader = defaultClassLoader;
 	}
+
+	public static List<String> getClasses(ScanParams scanParams) {
+		return scanClasses(scanParams);
+	}
+
+	public static List<Class<?>> loadClasses(ScanParams scanParams) {
+		List<String> classNames = scanClasses(scanParams);
+		List<Class<?>> classes = U.list();
+
+		ClassLoader classLoader = U.or(scanParams.classLoader(), defaultClassLoader);
+
+		for (String clsName : classNames) {
+			try {
+				Log.debug("Loading class", "name", clsName);
+				classes.add(classLoader != null ? Class.forName(clsName, true, classLoader) : Class.forName(clsName));
+			} catch (Throwable e) {
+				Log.debug("Error while loading class", "name", clsName, "error", e);
+			}
+		}
+
+		return classes;
+	}
+
 }

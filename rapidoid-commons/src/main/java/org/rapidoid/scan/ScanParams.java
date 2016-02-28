@@ -34,8 +34,6 @@ public class ScanParams {
 
 	private String matching = null;
 
-	private org.rapidoid.lambda.Predicate<Class<?>> filter = null;
-
 	private Class<? extends java.lang.annotation.Annotation>[] annotated = null;
 
 	private ClassLoader classLoader = null;
@@ -58,15 +56,6 @@ public class ScanParams {
 		return this.matching;
 	}
 
-	public synchronized ScanParams filter(org.rapidoid.lambda.Predicate<Class<?>> filter) {
-		this.filter = filter;
-		return this;
-	}
-
-	public synchronized org.rapidoid.lambda.Predicate<Class<?>> filter() {
-		return this.filter;
-	}
-
 	public synchronized ScanParams annotated(Class<? extends Annotation>... annotated) {
 		this.annotated = annotated;
 		return this;
@@ -85,8 +74,12 @@ public class ScanParams {
 		return this.classLoader;
 	}
 
-	public synchronized List<Class<?>> getAll() {
+	public synchronized List<String> getAll() {
 		return ClasspathUtil.getClasses(this);
+	}
+
+	public synchronized List<Class<?>> loadAll() {
+		return ClasspathUtil.loadClasses(this);
 	}
 
 }

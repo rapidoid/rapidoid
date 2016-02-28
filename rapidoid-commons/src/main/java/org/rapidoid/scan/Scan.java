@@ -38,10 +38,6 @@ public class Scan {
 		return new ScanParams().matching(matching);
 	}
 
-	public static ScanParams filter(org.rapidoid.lambda.Predicate<Class<?>> filter) {
-		return new ScanParams().filter(filter);
-	}
-
 	public static ScanParams annotated(Class<? extends Annotation>... annotated) {
 		return new ScanParams().annotated(annotated);
 	}
@@ -50,8 +46,12 @@ public class Scan {
 		return new ScanParams().classLoader(classLoader);
 	}
 
-	public static synchronized List<Class<?>> getAll() {
+	public static synchronized List<String> getAll() {
 		return ClasspathUtil.getClasses(new ScanParams());
+	}
+
+	public static synchronized List<Class<?>> loadAll() {
+		return ClasspathUtil.loadClasses(new ScanParams());
 	}
 
 }

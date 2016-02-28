@@ -39,13 +39,13 @@ public class EntitiesUtil {
 	@SuppressWarnings("unchecked")
 	public static synchronized <E> Class<E> getEntityType(String simpleTypeName) {
 
-		for (Class<?> type : Scan.annotated(DbEntity.class).getAll()) {
+		for (Class<?> type : Scan.annotated(DbEntity.class).loadAll()) {
 			if (type.getSimpleName().equalsIgnoreCase(simpleTypeName)) {
 				return (Class<E>) type;
 			}
 		}
 
-		for (Class<?> type : Scan.annotated(Scaffold.class).getAll()) {
+		for (Class<?> type : Scan.annotated(Scaffold.class).loadAll()) {
 			if (type.getSimpleName().equalsIgnoreCase(simpleTypeName)) {
 				return (Class<E>) type;
 			}

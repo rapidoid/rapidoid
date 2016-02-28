@@ -58,7 +58,7 @@ public class QuickJPA implements PersisterProvider {
 
 			org.hibernate.cfg.AnnotationConfiguration cfg = new org.hibernate.cfg.AnnotationConfiguration();
 
-			List<Class<?>> entityTypes = Scan.annotated(Entity.class).getAll();
+			List<Class<?>> entityTypes = Scan.annotated(Entity.class).loadAll();
 			for (Class<?> entityType : entityTypes) {
 				cfg.addAnnotatedClass(entityType);
 			}
