@@ -63,7 +63,7 @@ public abstract class TestCommons {
 		hasError = false;
 
 		String s = File.separator;
-		String resultsDir = "src" + s + "test" + s + "resources" + s + "results" + s + testName();
+		String resultsDir = "src" + s + "test" + s + "resources" + s + "results" + s + getTestName();
 
 		if (!initialized && ADJUST_RESULTS) {
 			File testDir = new File(resultsDir);
@@ -490,7 +490,7 @@ public abstract class TestCommons {
 		return file;
 	}
 
-	protected String testName() {
+	protected String getTestName() {
 		return getClass().getSimpleName();
 	}
 
@@ -542,7 +542,7 @@ public abstract class TestCommons {
 
 	protected void verifyCase(String info, String actual, String testCaseName) {
 		String s = File.separator;
-		String resname = "results" + s + testName() + s + getTestMethodName() + s + testCaseName;
+		String resname = "results" + s + getTestName() + s + getTestMethodName() + s + testCaseName;
 		String filename = "src" + s + "test" + s + "resources" + s + resname;
 
 		if (ADJUST_RESULTS) {

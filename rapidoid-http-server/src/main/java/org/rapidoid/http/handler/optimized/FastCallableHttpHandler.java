@@ -48,4 +48,9 @@ public class FastCallableHttpHandler extends AbstractAsyncHttpHandler {
 		return handler.call();
 	}
 
+	@Override
+	public String toString() {
+		return "() -> ...";
+	}
+
 }

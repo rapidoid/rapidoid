@@ -3,8 +3,6 @@ package org.rapidoid.util;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
-import java.nio.charset.Charset;
-
 /*
  * #%L
  * rapidoid-commons
@@ -32,8 +30,6 @@ public interface Constants {
 	Object[] EMPTY_ARRAY = {};
 
 	String[] EMPTY_STRING_ARRAY = {};
-
-	Charset UTF_8 = Charset.forName("UTF-8");
 
 	int NOT_FOUND = Integer.MIN_VALUE;
 

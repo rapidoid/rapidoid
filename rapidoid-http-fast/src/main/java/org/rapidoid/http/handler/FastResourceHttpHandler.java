@@ -28,6 +28,7 @@ import org.rapidoid.http.HttpStatus;
 import org.rapidoid.http.Req;
 import org.rapidoid.io.Res;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
@@ -50,6 +51,11 @@ public class FastResourceHttpHandler extends AbstractFastHttpHandler {
 		} else {
 			return HttpStatus.NOT_FOUND;
 		}
+	}
+
+	@Override
+	public String toString() {
+		return U.frmt("() -> (resource %s)", resource.getName());
 	}
 
 }

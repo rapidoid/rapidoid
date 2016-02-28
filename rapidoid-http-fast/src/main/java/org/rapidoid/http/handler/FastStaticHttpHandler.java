@@ -27,6 +27,7 @@ import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpStatus;
 import org.rapidoid.http.Req;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
@@ -43,6 +44,11 @@ public class FastStaticHttpHandler extends AbstractFastHttpHandler {
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
 		http.write200(ctx, isKeepAlive, contentType, response);
 		return HttpStatus.DONE;
+	}
+
+	@Override
+	public String toString() {
+		return U.frmt("() -> (static response of %s bytes)", response.length);
 	}
 
 }
