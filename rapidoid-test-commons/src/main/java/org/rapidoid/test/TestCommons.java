@@ -548,10 +548,6 @@ public abstract class TestCommons {
 		if (ADJUST_RESULTS) {
 			File testDir = new File(filename).getParentFile();
 
-			if (testDir.isDirectory()) {
-				delete(testDir);
-			}
-
 			if (!testDir.exists()) {
 				if (!testDir.mkdirs()) {
 					throw new RuntimeException("Couldn't create the test result folder: " + testDir.getAbsolutePath());

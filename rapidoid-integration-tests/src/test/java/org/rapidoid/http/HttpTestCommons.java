@@ -231,7 +231,7 @@ public abstract class HttpTestCommons extends TestCommons {
 		String resp = fetch(port, verb, uri, data);
 		String reqName = reqName(port, verb, uri);
 
-		verifyCase(verb + " " + uri, resp, reqName);
+		verifyCase(port + " " + verb + " " + uri, resp, reqName);
 	}
 
 	private String fetch(int port, String verb, String uri, Map<String, ?> data) {
