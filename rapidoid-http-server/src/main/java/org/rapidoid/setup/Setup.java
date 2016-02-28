@@ -58,9 +58,9 @@ import java.util.Map;
 @Since("5.1.0")
 public class Setup implements Constants {
 
-	static final Setup ON = new Setup("on", "0.0.0.0", 8888, ServerSetupType.DEFAULT, IoC.defaultContext());
-	static final Setup ADMIN = new Setup("admin", "0.0.0.0", 8889, ServerSetupType.ADMIN, IoC.createContext().name("admin"));
-	static final Setup DEV = new Setup("dev", "127.0.0.1", 8887, ServerSetupType.DEV, IoC.createContext().name("dev"));
+	static final Setup ON = new Setup("on", "0.0.0.0", 8888, ServerSetupType.DEFAULT, IoC.defaultContext(), Conf.ON);
+	static final Setup ADMIN = new Setup("admin", "0.0.0.0", 9999, ServerSetupType.ADMIN, IoC.createContext().name("admin"), Conf.ADMIN);
+	static final Setup DEV = new Setup("dev", "127.0.0.1", 7777, ServerSetupType.DEV, IoC.createContext().name("dev"), Conf.DEV);
 
 	private static final List<Setup> instances = Coll.synchronizedList(ON, ADMIN, DEV);
 
@@ -113,7 +113,9 @@ public class Setup implements Constants {
 	private volatile RolesProvider rolesProvider;
 
 	public static Setup create(String name) {
-		Setup setup = new Setup(name, "0.0.0.0", 8888, ServerSetupType.CUSTOM, IoC.createContext().name(name));
+		IoCContext ioc = IoC.createContext().name(name);
+		Config config = Conf.section(name);
+		Setup setup = new Setup(name, "0.0.0.0", 8888, ServerSetupType.CUSTOM, ioc, config);
 		instances.add(setup);
 		return setup;
 	}
@@ -122,18 +124,16 @@ public class Setup implements Constants {
 		instances.remove(this);
 	}
 
-	public Setup(String name, String defaultAddress, int defaultPort, ServerSetupType setupType, IoCContext ioCContext) {
+	public Setup(String name, String defaultAddress, int defaultPort, ServerSetupType setupType, IoCContext ioCContext, Config config) {
 		this.name = name;
 
 		this.defaultAddress = defaultAddress;
 		this.defaultPort = defaultPort;
 
-		this.port = defaultPort;
-		this.address = defaultAddress;
 		this.setupType = setupType;
 		this.ioCContext = ioCContext;
 
-		this.config = Conf.section(name);
+		this.config = config;
 	}
 
 	public static void resetGlobalState() {
@@ -152,6 +152,10 @@ public class Setup implements Constants {
 		if (!listening && !restarted) {
 			if (setupType != ServerSetupType.DEV || Conf.dev()) {
 				listening = true;
+
+				this.address = U.or(this.address, config.entry("address").or(defaultAddress));
+				this.port = U.or(this.port, config.entry("port").or(defaultPort));
+
 				HttpProcessor proc = processor != null ? processor : fastHttp;
 				if (Conf.dev()) {
 					proc = new AppRestartProcessor(this, proc);
@@ -168,9 +172,6 @@ public class Setup implements Constants {
 	private synchronized void activate() {
 		if (!activated && !restarted) {
 			activated = true;
-
-			this.address = U.or(this.address, config.entry("address").or(defaultAddress));
-			this.port = U.or(this.port, config.entry("port").or(defaultPort));
 
 			listen();
 

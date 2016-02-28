@@ -41,6 +41,10 @@ public class Conf {
 	public static final Config JOBS = section("jobs");
 	public static final Config MENU = section("menu");
 
+	public static final Config ON = section("on");
+	public static final Config ADMIN = section("admin");
+	public static final Config DEV = section("dev");
+
 	static {
 		RapidoidInitializer.initialize();
 		setPath("");

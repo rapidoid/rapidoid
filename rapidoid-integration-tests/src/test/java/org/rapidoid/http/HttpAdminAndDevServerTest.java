@@ -42,13 +42,13 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 		Dev.get("/a").json((Req req, Resp resp) -> "dev " + req.uri());
 
 		onlyGet("/a"); // default server
-		onlyGet(8889, "/a"); // admin server
-		onlyGet(8887, "/a"); // dev server
+		onlyGet(9999, "/a"); // admin server
+		onlyGet(7777, "/a"); // dev server
 	}
 
 	@Test
 	public void testAdminServerConfig() {
-		int port = 19999;
+		int port = 20000;
 
 		Conf.section("admin").set("port", port);
 
@@ -59,7 +59,7 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 
 	@Test
 	public void testDevServerConfig() {
-		int port = 17777;
+		int port = 30000;
 
 		Conf.section("dev").set("port", port);
 
@@ -75,7 +75,7 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 		Dev.get("/nodev").json((Req x) -> "This should be disabled!");
 
 		try {
-			notFound(8887, "/nodev");
+			notFound(7777, "/nodev");
 
 			fail("Expected exception!");
 		} catch (Exception e) {
