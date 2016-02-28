@@ -39,7 +39,8 @@ public class RefreshingConfigTest extends AbstractCommonsTest {
 		File tmp = createTempFile();
 		Log.info("Created temporary file", "file", tmp);
 
-		Config config = Conf.refreshing(tmp.getAbsolutePath());
+		Config config = new Config();
+		AutoRefreshingConfig.attach(config, tmp.getAbsolutePath());
 
 		eq(config.toMap(), U.map());
 

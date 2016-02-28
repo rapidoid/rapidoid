@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
@@ -35,6 +36,8 @@ import java.util.concurrent.*;
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class Jobs {
+
+	public static final Config JOBS = Conf.JOBS;
 
 	static {
 		RapidoidInitializer.initialize();
@@ -49,8 +52,8 @@ public class Jobs {
 
 	public static synchronized ScheduledExecutorService scheduler() {
 		if (SCHEDULER == null) {
-			int threads = Conf.option("threads", 100);
-			SCHEDULER = Executors.newScheduledThreadPool(threads / 2, new RapidoidThreadFactory("jobs"));
+			int threads = JOBS.sub("scheduler").entry("threads").or(64);
+			SCHEDULER = Executors.newScheduledThreadPool(threads, new RapidoidThreadFactory("scheduler"));
 		}
 
 		return SCHEDULER;
@@ -58,8 +61,8 @@ public class Jobs {
 
 	public static synchronized Executor executor() {
 		if (EXECUTOR == null) {
-			int threads = Conf.option("threads", 100);
-			EXECUTOR = Executors.newFixedThreadPool(threads);
+			int threads = JOBS.sub("executor").entry("threads").or(64);
+			EXECUTOR = Executors.newFixedThreadPool(threads, new RapidoidThreadFactory("executor"));
 		}
 
 		return EXECUTOR;

@@ -50,7 +50,7 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 	public void testAdminServerConfig() {
 		int port = 19999;
 
-		Conf.set("admin", "port", port);
+		Conf.section("admin").set("port", port);
 
 		Admin.get("/myadmin").html((Req x) -> "admin " + x.uri());
 
@@ -61,7 +61,7 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 	public void testDevServerConfig() {
 		int port = 17777;
 
-		Conf.set("dev", "port", port);
+		Conf.section("dev").set("port", port);
 
 		Dev.get("/mydev").html((Req x) -> "dev " + x.uri());
 
@@ -70,7 +70,7 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 
 	@Test
 	public void testDevServerInProduction() {
-		Conf.set("production", true);
+		Conf.ROOT.set("production", true);
 
 		Dev.get("/nodev").json((Req x) -> "This should be disabled!");
 

@@ -22,7 +22,6 @@ package org.rapidoid.oauth;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Config;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
 
@@ -32,7 +31,7 @@ public class OAuthDemo {
 
 	public static void main(String[] args) {
 		Setup setup = On.instance();
-		OAuth.register(setup, new Config());
+		OAuth.register(setup);
 		setup.listen();
 	}
 

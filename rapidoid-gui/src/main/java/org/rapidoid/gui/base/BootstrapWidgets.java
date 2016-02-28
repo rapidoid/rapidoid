@@ -531,11 +531,10 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static String urlFor(Object entity) {
-
 		String id = Beany.getIdIfExists(entity);
 		if (id != null) {
 			String className = Cls.entityName(entity);
-			String frm = Conf.is("generate") ? "%s%s.html" : "/%s/%s";
+			String frm = Conf.ROOT.is("generate") ? "%s%s.html" : "/%s/%s";
 			return U.frmt(frm, Str.uncapitalized(className), id);
 		} else {
 			return "";

@@ -208,7 +208,7 @@ public class HttpUtils implements HttpMetadata {
 	}
 
 	public static String constructUrl(Req x, String path) {
-		return (Conf.is("https") ? "https://" : "http://") + x.host() + path;
+		return (Conf.ROOT.is("https") ? "https://" : "http://") + x.host() + path;
 	}
 
 }

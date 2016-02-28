@@ -85,4 +85,6 @@ public interface Constants {
 
 	String TRACE = "TRACE";
 
+	String[] HTTP_VERBS = {GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD, TRACE};
+
 }

@@ -55,11 +55,11 @@ public class HttpPojoControllerTest extends HttpTestCommons {
 		onlyPost("/x");
 		notFound("/b");
 
-		List<Class<?>> ctrls = On.annotated(MyTestController.class).in("pkg1", "pkg2").getAll();
+		List<String> ctrls = On.annotated(MyTestController.class).in("pkg1", "pkg2").getAll();
 		isTrue(ctrls.isEmpty());
 
-		List<Class<?>> ctrls2 = On.annotated(MyTestController.class).in("non-existing-pkg", "").getAll();
-		eq(ctrls2, U.list(Ff.class));
+		List<String> ctrls2 = On.annotated(MyTestController.class).in("non-existing-pkg", "").getAll();
+		eq(ctrls2, U.list(Ff.class.getName()));
 
 		On.annotated(MyTestController.class, MyTestController.class).forEach(On::beans);
 
@@ -72,11 +72,11 @@ public class HttpPojoControllerTest extends HttpTestCommons {
 	public void testPojoHandlersWithIoC() {
 		notFound("/b");
 
-		List<Class<?>> ctrls = On.annotated(MyTestController.class).in("pkg1", "pkg2").getAll();
+		List<String> ctrls = On.annotated(MyTestController.class).in("pkg1", "pkg2").getAll();
 		isTrue(ctrls.isEmpty());
 
-		List<Class<?>> ctrls2 = On.annotated(MyTestController.class, Generated.class).getAll();
-		eq(ctrls2, U.list(Ff.class));
+		List<String> ctrls2 = On.annotated(MyTestController.class, Generated.class).getAll();
+		eq(ctrls2, U.list(Ff.class.getName()));
 
 		On.annotated(MyTestController.class, MyTestController.class).forEach(cls -> On.beans(IoC.singleton(cls)));
 

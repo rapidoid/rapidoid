@@ -22,29 +22,26 @@ package org.rapidoid.oauth;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Config;
-import org.rapidoid.config.ConfigEntry;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
+import org.rapidoid.value.Value;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class OAuthLoginHandler implements ReqHandler {
 
 	private final OAuthProvider provider;
-	private final ConfigEntry oauthDomain;
-	private final Config config;
+	private final Value<String> domain;
 
-	public OAuthLoginHandler(OAuthProvider provider, ConfigEntry oauthDomain, Config config) {
+	public OAuthLoginHandler(OAuthProvider provider, Value<String> domain) {
 		this.provider = provider;
-		this.oauthDomain = oauthDomain;
-		this.config = config;
+		this.domain = domain;
 	}
 
 	@Override
 	public Object execute(Req x) throws Exception {
-		String domain = oauthDomain.get();
-		return x.response().redirect(OAuth.getLoginURL(x, config, provider, domain));
+		String domain = this.domain.get();
+		return x.response().redirect(OAuth.getLoginURL(x, provider, domain));
 	}
 
 }

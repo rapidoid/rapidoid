@@ -2,6 +2,7 @@ package org.rapidoid.oauth;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.value.Value;
 
 /*
  * #%L
@@ -27,7 +28,7 @@ import org.rapidoid.annotation.Since;
 @Since("2.0.0")
 public interface OAuthStateCheck {
 
-	String generateState(String clientSecret, String sessionId);
+	String generateState(Value<String> clientSecret, String sessionId);
 
 	boolean isValidState(String state, String clientSecret, String sessionId);
 

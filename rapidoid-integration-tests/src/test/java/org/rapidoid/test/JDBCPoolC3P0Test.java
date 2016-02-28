@@ -57,8 +57,8 @@ public class JDBCPoolC3P0Test extends TestCommons {
 	@Test(timeout = 30000)
 	public void testJDBCWithTextconfig() {
 
-		Conf.set("jdbc", "url", "jdbc:h2:mem:mydb");
-		Conf.set("jdbc", "username", "sa");
+		Conf.JDBC.set("url", "jdbc:h2:mem:mydb");
+		Conf.JDBC.set("username", "sa");
 
 		JDBC.defaultApi().pooled();
 

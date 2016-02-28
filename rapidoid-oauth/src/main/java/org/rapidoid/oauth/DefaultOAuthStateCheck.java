@@ -4,7 +4,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Rnd;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
 import org.rapidoid.crypto.Crypto;
+import org.rapidoid.value.Value;
 
 /*
  * #%L
@@ -30,20 +32,22 @@ import org.rapidoid.crypto.Crypto;
 @Since("2.0.0")
 public class DefaultOAuthStateCheck implements OAuthStateCheck {
 
+	private static final Config OAUTH = Conf.OAUTH;
+
 	@Override
-	public String generateState(String clientSecret, String sessionId) {
-		if (Boolean.TRUE.equals(Conf.nested("oauth", "stateless"))) {
+	public String generateState(Value<String> clientSecret, String sessionId) {
+		if (OAUTH.is("stateless")) {
 			return "OK";
 		}
 
 		String rnd = Rnd.rndStr(10);
-		String hash = Crypto.sha512(clientSecret + rnd);
+		String hash = Crypto.sha512(clientSecret.get() + rnd);
 		return rnd + "_" + hash;
 	}
 
 	@Override
 	public boolean isValidState(String state, String clientSecret, String sessionId) {
-		if (Boolean.TRUE.equals(Conf.nested("oauth", "stateless"))) {
+		if (OAUTH.is("stateless")) {
 			return state.equals("OK");
 		}
 

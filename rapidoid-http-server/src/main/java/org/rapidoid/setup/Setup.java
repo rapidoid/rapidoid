@@ -96,7 +96,7 @@ public class Setup implements Constants {
 	private final IoCContext ioCContext;
 	private final FastHttp fastHttp = new FastHttp();
 
-	private volatile int port;
+	private volatile Integer port;
 	private volatile String address = "0.0.0.0";
 	private volatile String[] path;
 
@@ -133,7 +133,7 @@ public class Setup implements Constants {
 		this.setupType = setupType;
 		this.ioCContext = ioCContext;
 
-		this.config = Conf.sub(name);
+		this.config = Conf.section(name);
 	}
 
 	public static void resetGlobalState() {
@@ -169,12 +169,8 @@ public class Setup implements Constants {
 		if (!activated && !restarted) {
 			activated = true;
 
-			if (port == defaultPort) {
-				int customPort = Conf.option(name + ".port", NOT_FOUND);
-				if (customPort != NOT_FOUND) {
-					port(customPort);
-				}
-			}
+			this.address = U.or(this.address, config.entry("address").or(defaultAddress));
+			this.port = U.or(this.port, config.entry("port").or(defaultPort));
 
 			listen();
 
@@ -333,11 +329,12 @@ public class Setup implements Constants {
 		fastHttp.resetConfig();
 		listening = false;
 		wrappers = null;
-		port = defaultPort;
-		address = defaultAddress;
+		port = null;
+		address = null;
 		path = null;
 		processor = null;
 		activated = false;
+		ioCContext.reset();
 	}
 
 	public Server server() {
@@ -478,7 +475,7 @@ public class Setup implements Constants {
 		Method main = Cls.getMethod(entry, "main", String[].class);
 		U.must(main.getReturnType() == void.class);
 
-		String[] args = Conf.root().getArgs();
+		String[] args = Conf.ROOT.getArgs();
 		Cls.invoke(main, null, new Object[]{args});
 
 		Log.info("Successfully restarted the application!");
@@ -522,6 +519,10 @@ public class Setup implements Constants {
 
 	public RolesProvider getRolesProvider() {
 		return rolesProvider;
+	}
+
+	public Config config() {
+		return config;
 	}
 
 }

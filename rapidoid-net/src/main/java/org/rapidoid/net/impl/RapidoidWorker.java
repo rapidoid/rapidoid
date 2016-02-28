@@ -73,15 +73,16 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 
 	RapidoidWorker next;
 
-	public RapidoidWorker(String name, final Protocol protocol, final RapidoidHelper helper, int bufSizeKB,
-	                      boolean noNelay) {
+	public RapidoidWorker(String name, final Protocol protocol, final RapidoidHelper helper,
+	                      int bufSizeKB, boolean noNelay) {
+
 		super(name);
 
 		this.bufs = new BufGroup(14); // 2^14B (16 KB per buffer segment)
 		this.serverProtocol = protocol;
 		this.helper = helper;
 
-		this.maxPipelineSize = Conf.option("pipeline-max", 10);
+		this.maxPipelineSize = Conf.ROOT.entry("pipeline-max").or(10);
 
 		final int queueSize = Conf.micro() ? 1000 : 1000000;
 		final int growFactor = Conf.micro() ? 2 : 10;

@@ -1,4 +1,7 @@
-package org.rapidoid.config;
+package org.rapidoid.value;
+
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 
 /*
  * #%L
@@ -20,32 +23,26 @@ package org.rapidoid.config;
  * #L%
  */
 
-/**
- * @author Nikolche Mihajlovski
- * @since 4.1.0
- */
-public class ConfigEntry {
+@Authors("Nikolche Mihajlovski")
+@Since("5.1.0")
+public interface Value<T> {
 
-	private final Config config;
+	T get();
 
-	private final String[] nameParts;
+	<K> K or(K alternative);
 
-	private volatile Object defaultValue;
+	<K> Value<K> to(Class<K> type);
 
-	public ConfigEntry(Config config, String[] nameParts) {
-		this.config = config;
-		this.nameParts = nameParts;
-	}
+	void set(T value);
 
-	@SuppressWarnings("unchecked")
-	public <T> T get() {
-		Object val = config.nested(nameParts);
-		return (T) (val != null ? val : defaultValue);
-	}
+	boolean exists();
 
-	public ConfigEntry byDefault(Object defeultValue) {
-		this.defaultValue = defeultValue;
-		return this;
-	}
+	Value<String> str();
+
+	Value<Long> num();
+
+	Value<Boolean> bool();
+
+	T getOrNull();
 
 }

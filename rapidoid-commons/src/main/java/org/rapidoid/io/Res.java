@@ -243,12 +243,13 @@ public class Res {
 		U.must(exists(), "The file '%s' doesn't exist! Path: %s", name, possibleLocations);
 	}
 
-	public Res onChange(Runnable listener) {
-		return onChange("", listener);
-	}
-
 	public Res onChange(String name, Runnable listener) {
 		changeListeners.put(name, listener);
+		return this;
+	}
+
+	public Res removeChangeListener(String name) {
+		changeListeners.remove(name);
 		return this;
 	}
 

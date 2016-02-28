@@ -51,7 +51,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 	private final int port;
 
-	private int workers = Conf.option("cpus", Runtime.getRuntime().availableProcessors());
+	private int workers = Conf.cpus();
 
 	private boolean blockingAccept = false;
 

@@ -1,12 +1,10 @@
 package org.rapidoid.config;
 
-import org.rapidoid.data.YAML;
-import org.rapidoid.io.Res;
-import org.rapidoid.log.Log;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 
-import java.util.Map;
+import java.util.List;
 
 /*
  * #%L
@@ -34,67 +32,34 @@ import java.util.Map;
  */
 public class Conf {
 
-	private static final Config ROOT = new Config();
+	public static final Config ROOT = new Config();
+
+	public static final Config OAUTH = section("oauth");
+	public static final Config USERS = section("users");
+	public static final Config JDBC = section("jdbc");
+	public static final Config APP = section("app");
+	public static final Config JOBS = section("jobs");
+	public static final Config MENU = section("menu");
 
 	static {
 		RapidoidInitializer.initialize();
+		setPath("");
+		autoRefresh(ROOT);
 	}
 
-	public static final ConfigParser YAML_PARSER = new ConfigParser() {
-		@SuppressWarnings("unchecked")
-		@Override
-		public Map<String, Object> parse(byte[] bytes) {
-			return YAML.parse(bytes, Map.class);
-		}
-	};
+	private static volatile String path = "";
 
 	public static synchronized void args(String... args) {
 		ConfigHelp.processHelp(args);
 		ROOT.args(args);
 	}
 
-	public static void remove(String name) {
-		ROOT.remove(name);
-	}
-
-	public static Object option(String name) {
-		return ROOT.option(name);
-	}
-
-	public static String option(String name, String defaultValue) {
-		return ROOT.option(name, defaultValue);
-	}
-
-	public static int option(String name, int defaultValue) {
-		return ROOT.option(name, defaultValue);
-	}
-
-	public static long option(String name, long defaultValue) {
-		return ROOT.option(name, defaultValue);
-	}
-
-	public static double option(String name, double defaultValue) {
-		return ROOT.option(name, defaultValue);
-	}
-
-	public static boolean has(String name, Object value) {
-		return ROOT.has(name, value);
-	}
-
-	public static boolean is(String name) {
-		return ROOT.is(name);
-	}
-
-	public static boolean contains(String name, Object value) {
-		return ROOT.contains(name, value);
-	}
-
 	public static boolean micro() {
-		return is("micro");
+		return ROOT.is("micro");
 	}
 
 	public static boolean production() {
-		return is("production");
+		return ROOT.is("production");
 	}
 
 	public static boolean dev() {
@@ -102,75 +67,47 @@ public class Conf {
 	}
 
 	public static String secret() {
-		return option("secret", null);
+		return ROOT.entry("secret").str().getOrNull();
 	}
 
 	public static void reset() {
 		ROOT.clear();
 	}
 
-	public static Config root() {
-		return ROOT;
+	public static Config section(String name) {
+		Config config = ROOT.sub(name);
+		autoRefresh(config);
+		return config;
 	}
 
-	public static void set(String key, Object value) {
-		ROOT.put(key, value);
+	public static Config section(Class<?> clazz) {
+		return section(clazz.getSimpleName());
 	}
 
-	public static void set(String key, String subkey, Object value) {
-		ROOT.sub(key).put(subkey, value);
+	public static int cpus() {
+		return ROOT.entry("cpus").or(Runtime.getRuntime().availableProcessors());
 	}
 
-	public static <T> T nested(String... name) {
-		return ROOT.nested(name);
-	}
+	public static void setPath(String path) {
+		Conf.path = path;
+		List<List<String>> detached = AutoRefreshingConfig.untrack();
+		reset();
 
-	public static Config sub(String name) {
-		return root().sub(name);
-	}
-
-	public static Config refreshing(String filename) {
-		return refreshing(filename, YAML_PARSER);
-	}
-
-	public static Config refreshing(final String filename, final ConfigParser parser) {
-		Log.info("Initializing auto-refreshing config", "filename", filename);
-
-		final Res res = Res.from(filename);
-
-		Config config = res.attachment();
-		if (config == null) {
-			config = new Config();
-			res.attach(config);
+		for (List<String> keys : detached) {
+			autoRefresh(keys.isEmpty() ? ROOT : ROOT.sub(keys));
 		}
+	}
 
-		final Config conf = config;
+	private static void autoRefresh(Config... configs) {
+		for (Config config : configs) {
+			List<String> keys = config.keys();
+			U.must(keys.size() < 2);
 
-		Runnable reload = new Runnable() {
-			@Override
-			public void run() {
-				byte[] bytes = res.getBytesOrNull();
+			String configName = keys.isEmpty() ? "config" : keys.get(0);
+			String filename = UTILS.path(path, configName + ".yaml");
 
-				Map<String, Object> configData = null;
-				if (bytes != null) {
-					if (bytes.length > 0) {
-						configData = parser.parse(bytes);
-					}
-				} else {
-					Log.warn("Couldn't find configuration file", "filename", filename);
-				}
-
-				conf.assign(U.safe(configData));
-			}
-		};
-
-		reload.run();
-		res.onChange("config", reload);
-
-		res.trackChanges();
-		res.exists(); // trigger loading
-
-		return conf;
+			AutoRefreshingConfig.attach(config, filename);
+		}
 	}
 
 }

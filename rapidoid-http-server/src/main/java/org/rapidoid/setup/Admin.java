@@ -22,6 +22,7 @@ package org.rapidoid.setup;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Config;
 import org.rapidoid.http.*;
 import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.processor.HttpProcessor;
@@ -166,6 +167,10 @@ public class Admin {
 
 	public static Setup rolesOf(RolesProvider rolesProvider) {
 		return SETUP.rolesOf(rolesProvider);
+	}
+
+	public static Config config() {
+		return SETUP.config();
 	}
 
 }

@@ -20,7 +20,6 @@ package org.rapidoid.security;
  * #L%
  */
 
-import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.test.AbstractCommonsTest;
@@ -29,12 +28,6 @@ import org.rapidoid.u.U;
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public abstract class SecurityTestCommons extends AbstractCommonsTest {
-
-	@Before
-	public void init() {
-		Roles.resetConfig();
-		Roles.setConfigFilename(getClass().getSimpleName() + "-users.yaml");
-	}
 
 	protected void checkPermissions(String username, Class<?> clazz, Object target, String propertyName,
 	                                boolean canRead, boolean canChange) {

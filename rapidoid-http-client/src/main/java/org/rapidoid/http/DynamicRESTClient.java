@@ -30,39 +30,37 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Constants;
 
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.concurrent.Future;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")
-public class DynamicRESTClient implements Dynamic {
-
-	private static final String[] VERBS = { "GET", "POST", "PUT", "DELETE" };
+public class DynamicRESTClient implements Dynamic, Constants {
 
 	private final Class<?> clientInterface;
-
-	private final String configFile;
 
 	private final Config config;
 
 	public DynamicRESTClient(Class<?> clientInterface) {
+		this(clientInterface, Conf.section(clientInterface));
+	}
+
+	public DynamicRESTClient(Class<?> clientInterface, Config config) {
 		this.clientInterface = clientInterface;
-		this.configFile = "endpoints/" + clientInterface.getSimpleName() + ".yaml";
-		this.config = Conf.refreshing(configFile);
+		this.config = config;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object call(Method m, Object[] args) {
-		U.must(!config.isEmpty(), "Cannot find the endpoint configuration (file '%s') for the interface: %s",
-				configFile, clientInterface.getSimpleName());
+		U.must(!config.isEmpty(), "Cannot find configuration for the REST client interface: %s", clientInterface.getSimpleName());
 
-		Map<String, Object> cfg = config.getOrFail(m.getName(), Map.class);
+		Config cfg = config.sub(m.getName());
 
 		String verb = verbOf(cfg);
-		String url = (String) cfg.get(verb);
+		String url = cfg.entry(verb).str().get();
 
 		U.must(!U.isEmpty(verb), "The [verb: url] entry is not configured for the method: %s", m);
 		U.must(!U.isEmpty(url), "Cannot find 'url' configuration for the method: %s", m);
@@ -94,13 +92,10 @@ public class DynamicRESTClient implements Dynamic {
 		}
 	}
 
-	private String verbOf(Map<String, Object> cfg) {
-		for (String verb : VERBS) {
-			if (cfg.containsKey(verb)) {
+	private String verbOf(Config cfg) {
+		for (String verb : HTTP_VERBS) {
+			if (cfg.has(verb)) {
 				return verb;
-			}
-			if (cfg.containsKey(verb.toLowerCase())) {
-				return verb.toLowerCase();
 			}
 		}
 

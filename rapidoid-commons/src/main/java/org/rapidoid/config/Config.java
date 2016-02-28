@@ -21,10 +21,14 @@ package org.rapidoid.config;
  */
 
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.u.U;
+import org.rapidoid.value.Value;
+import org.rapidoid.value.Values;
 
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,167 +39,215 @@ public class Config {
 
 	private final Map<String, Object> properties;
 
+	private final List<String> baseKeys;
+
+	private final Config root;
+
+	private final boolean isRoot;
+
 	private volatile String[] args;
 
-	public Config(Map<String, Object> configProperties) {
-		this.properties = Collections.synchronizedMap(configProperties);
+	private Config(Map<String, Object> properties, List<String> baseKeys, Config root) {
+		this.properties = properties;
+		this.root = root;
+		this.baseKeys = Collections.unmodifiableList(U.list(baseKeys));
+		this.isRoot = false;
 	}
 
 	public Config() {
-		this(U.<String, Object>map());
+		this.properties = Coll.synchronizedMap();
+		this.root = this;
+		this.baseKeys = U.list();
+		this.isRoot = true;
 	}
 
-	private Object getValue(String name) {
-		if (name.contains(".")) {
-			return nested(name.split("\\."));
-
-		} else {
-			Object value = properties.get(name);
-
-			if (value == null) {
-				value = System.getProperty(name);
-			}
-
-			if (value == null) {
-				value = System.getenv(name);
-			}
-
-			return value;
-		}
+	public Value<Object> entry(String key) {
+		return Values.wrap(new ConfigValueStore<Object>(this, key));
 	}
 
-	public String option(String name) {
-		Object opt = getValue(name);
-		return opt != null ? U.str(opt) : null;
-	}
+	private List<String> keyChain(Iterator<String> keys) {
+		List<String> keyChain = U.list(this.baseKeys);
 
-	public String option(String name, String defaultValue) {
-		Object obj = getValue(name);
-		return obj != null ? U.str(obj) : defaultValue;
-	}
-
-	public int option(String name, int defaultValue) {
-		String n = option(name);
-		return n != null ? U.num(n) : defaultValue;
-	}
-
-	public long option(String name, long defaultValue) {
-		String n = option(name);
-		return n != null ? Long.parseLong(n) : defaultValue;
-	}
-
-	public double option(String name, double defaultValue) {
-		String n = option(name);
-		return n != null ? Double.parseDouble(n) : defaultValue;
-	}
-
-	public boolean has(String name, Object value) {
-		Object val = getValue(name);
-		return U.eq(val, value);
-	}
-
-	public boolean has(String name) {
-		return properties.containsKey(name);
-	}
-
-	public boolean is(String name) {
-		return has(name, true);
-	}
-
-	public boolean contains(String name, Object value) {
-		Object opt = getValue(name);
-
-		if (opt != null) {
-			if (opt instanceof Collection) {
-				return ((Collection<?>) opt).contains(value);
-			} else {
-				throw new RuntimeException("Expected collection for config entry: " + name);
-			}
+		while (keys.hasNext()) {
+			String key = keys.next();
+			Collections.addAll(keyChain, key.split("\\."));
 		}
 
-		return false;
+		return keyChain;
 	}
 
 	@SuppressWarnings("unchecked")
-	public synchronized Config sub(String name) {
-		Map<String, Object> submap = (Map<String, Object>) getValue(name);
-
-		if (submap == null) {
-			submap = U.map();
-			put(name, submap);
-		} else if (!(submap instanceof Map)) {
-			throw new RuntimeException("Invalid submap type: " + submap.getClass());
-		}
-
-		return new Config(submap);
+	public Config sub(String... keys) {
+		U.must(U.notEmpty(keys), "Keys must be specified!");
+		return new Config(properties, keyChain(U.iterator(keys)), root());
 	}
 
-	public ConfigEntry entry(String... name) {
-		return new ConfigEntry(this, name);
+	public Config sub(List<String> keys) {
+		U.must(U.notEmpty(keys), "Keys must be specified!");
+		return new Config(properties, keyChain(keys.iterator()), root());
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T> T nested(String... name) {
-		Config cfg = this;
-		for (int i = 0; i < name.length - 1; i++) {
-			cfg = cfg.sub(name[i]);
+	public Object get(String key) {
+		Object value;
 
-			if (cfg == null) {
-				return null;
-			}
+		synchronized (properties) {
+			value = asMap().get(key);
 		}
 
-		return (T) cfg.option(name[name.length - 1]);
+		return value != null ? value : global(key);
+	}
+
+	private String global(String key) {
+		String fullKey = fullKey(key, ".");
+
+		String value = System.getProperty(fullKey);
+
+		if (value == null) {
+			value = System.getenv(fullKey);
+		}
+
+		if (value == null) {
+			value = System.getenv(fullKey(key, "_").toUpperCase());
+		}
+
+		if (value == null) {
+			value = System.getenv(fullKey(key, "_").toLowerCase());
+		}
+
+		return value;
+	}
+
+	private String fullKey(String key, String separator) {
+		return U.join(separator, baseKeys) + separator + key;
+	}
+
+	public boolean has(String key) {
+		synchronized (properties) {
+			return asMap().containsKey(key);
+		}
+	}
+
+	public boolean is(String key) {
+		Object value;
+
+		synchronized (properties) {
+			value = asMap().get(key);
+		}
+
+		return Boolean.TRUE.equals(Cls.convert(value, Boolean.class));
 	}
 
 	public Map<String, Object> toMap() {
-		return U.map(properties);
+		return Collections.unmodifiableMap(asMap());
+	}
+
+	private Map<String, Object> asMap() {
+		if (isRoot) {
+			return properties;
+
+		} else {
+			synchronized (properties) {
+				Map<String, Object> props = properties;
+
+				for (String key : baseKeys) {
+					Object value = props.get(key);
+
+					if (value == null) {
+						value = Coll.synchronizedMap();
+						props.put(key, value);
+					}
+
+					if (value instanceof Map<?, ?>) {
+						props = (Map<String, Object>) value;
+					} else {
+						throw U.rte("Expected a Map for configuration section '%s', but found value of type: %s",
+								sectionTo(key), value.getClass().getSimpleName());
+					}
+				}
+
+				return props;
+			}
+		}
+	}
+
+	private String sectionTo(String toKey) {
+		String section = "";
+
+		for (String key : baseKeys) {
+			if (!section.isEmpty()) {
+				section += ".";
+			}
+
+			section += key;
+
+			if (key.equals(toKey)) {
+				break;
+			}
+		}
+
+		return section;
 	}
 
 	public void clear() {
-		properties.clear();
-	}
-
-	public void put(String key, Object value) {
-		properties.put(key, value);
-	}
-
-	public void remove(String name) {
-		properties.remove(name);
-	}
-
-	public void assign(Map<String, Object> newProperties) {
-		synchronized (properties) {
+		if (isRoot) {
 			properties.clear();
-			properties.putAll(newProperties);
+		} else {
+			synchronized (properties) {
+				asMap().clear();
+			}
+		}
+	}
+
+	public void delete() {
+		if (isRoot) {
+			properties.clear();
+		} else {
+			synchronized (properties) {
+				parent().remove(lastBaseKey());
+			}
+		}
+	}
+
+	private String lastBaseKey() {
+		return baseKeys.get(baseKeys.size() - 1);
+	}
+
+	public void set(String key, Object value) {
+		synchronized (properties) {
+			asMap().put(key, value);
+		}
+	}
+
+	public void remove(String key) {
+		synchronized (properties) {
+			asMap().remove(key);
+		}
+	}
+
+	public void assign(Map<String, Object> entries) {
+		synchronized (properties) {
+			clear();
+			putAll(entries);
+		}
+	}
+
+	public boolean isEmpty() {
+		synchronized (properties) {
+			return asMap().isEmpty();
+		}
+	}
+
+	public void putAll(Map<String, ?> entries) {
+		synchronized (properties) {
+			asMap().putAll(entries);
 		}
 	}
 
 	@Override
 	public String toString() {
-		return properties.toString();
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T> T get(String key) {
-		return (T) getValue(key);
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T> T getOrFail(String key, Class<T> clazz) {
-		T val = (T) getValue(key);
-		U.must(val != null, "Cannot find the configuration entry: %s", key);
-		U.must(Cls.instanceOf(val, clazz), "The configuration entry '%s' must be of type: %s", key,
-				clazz.getSimpleName());
-		return val;
-	}
-
-	public boolean isEmpty() {
-		return properties.isEmpty();
-	}
-
-	public void putAll(Map<String, ?> entries) {
-		properties.putAll((Map<String, Object>) entries);
+		synchronized (properties) {
+			return asMap().toString();
+		}
 	}
 
 	public void args(String... args) {
@@ -206,9 +258,9 @@ public class Config {
 				String[] parts = arg.split("=", 2);
 
 				if (parts.length > 1) {
-					put(parts[0], parts[1]);
+					set(parts[0], parts[1]);
 				} else {
-					put(parts[0], true);
+					set(parts[0], true);
 				}
 			}
 		}
@@ -216,6 +268,18 @@ public class Config {
 
 	public String[] getArgs() {
 		return args;
+	}
+
+	public Config root() {
+		return root;
+	}
+
+	public Config parent() {
+		return isRoot ? null : root.sub(baseKeys.subList(0, baseKeys.size() - 1));
+	}
+
+	public List<String> keys() {
+		return baseKeys;
 	}
 
 }

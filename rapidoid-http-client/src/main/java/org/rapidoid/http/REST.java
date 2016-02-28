@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
+import org.rapidoid.config.Config;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
@@ -78,6 +79,10 @@ public class REST {
 
 	public static <T> T client(Class<T> clientInterface) {
 		return UTILS.dynamic(clientInterface, new DynamicRESTClient(clientInterface));
+	}
+
+	public static <T> T client(Class<T> clientInterface, Config config) {
+		return UTILS.dynamic(clientInterface, new DynamicRESTClient(clientInterface, config));
 	}
 
 }

@@ -21,19 +21,20 @@ package org.rapidoid.test;
  */
 
 import org.junit.Before;
+import org.rapidoid.config.Conf;
 import org.rapidoid.data.JSON;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
-import org.rapidoid.security.Roles;
 
 public abstract class AbstractCommonsTest extends TestCommons {
 
 	@Before
 	public void openContext() {
-		Roles.resetConfig();
-		IoC.defaultContext().reset();
+		Conf.reset();
+		Conf.setPath(getTestName());
 		Log.setLogLevel(LogLevel.INFO);
+		IoC.defaultContext().reset();
 	}
 
 	protected void verify(String name, Object actual) {

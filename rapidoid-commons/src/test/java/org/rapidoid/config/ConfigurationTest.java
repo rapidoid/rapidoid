@@ -33,12 +33,12 @@ public class ConfigurationTest extends AbstractCommonsTest {
 	public void testBasicConfig() {
 		isTrue(Conf.dev());
 
-		Conf.set("abc", "123");
-		Conf.set("cool", true);
-		Conf.set("production", true);
+		Conf.ROOT.set("abc", "123");
+		Conf.ROOT.set("cool", true);
+		Conf.ROOT.set("production", true);
 
-		eq(Conf.option("abc", 0), 123);
-		isTrue(Conf.is("cool"));
+		eq(Conf.ROOT.entry("abc").or(0).longValue(), 123);
+		isTrue(Conf.ROOT.is("cool"));
 		isTrue(Conf.production());
 		isFalse(Conf.dev());
 	}

@@ -25,6 +25,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Deep;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
@@ -240,29 +241,32 @@ public class IoCContextImpl implements IoCContext {
 	}
 
 	private <T> T provideInstanceByName(Object target, Class<T> type, String name, Map<String, Object> properties) {
-		T instance = getInjectableByName(type, name, properties, false);
+		T instance = getInjectableByName(target, type, name, properties, false);
 
 		if (target != null) {
-			instance = getInjectableByName(type, name, properties, true);
+			instance = getInjectableByName(target, type, name, properties, true);
 		}
 
 		if (instance == null) {
-			instance = getInjectableByName(type, name, properties, true);
+			instance = getInjectableByName(target, type, name, properties, true);
 		}
 
 		return (T) instance;
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> T getInjectableByName(Class<T> type, String name, Map<String, Object> properties,
-	                                  boolean useConfig) {
+	private <T> T getInjectableByName(Object target, Class<T> type, String name,
+	                                  Map<String, Object> properties, boolean useConfig) {
+
 		Object instance = properties != null ? properties.get(name) : null;
 
-		if (instance == null && useConfig) {
+		if (instance == null && target != null && useConfig) {
+			Config config = Conf.section(target.getClass());
+
 			if (type.equals(Boolean.class) || type.equals(boolean.class)) {
-				instance = Conf.is(name);
+				instance = config.is(name);
 			} else {
-				String opt = Conf.option(name, (String) null);
+				String opt = config.entry(name).str().getOrNull();
 				if (opt != null) {
 					instance = Cls.convert(opt, type);
 				}

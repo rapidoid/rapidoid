@@ -23,18 +23,27 @@ package org.rapidoid.sql;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
 import org.rapidoid.u.U;
+import org.rapidoid.value.Value;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class JDBCConfig {
 
+	private static final Config JDBC = Conf.JDBC;
+
+	private static final Value<String> URL = JDBC.entry("url").str();
+	private static final Value<String> DRIVER = JDBC.entry("driver").str();
+	private static final Value<String> USERNAME = JDBC.entry("username").str();
+	private static final Value<String> PASSWORD = JDBC.entry("password").str();
+
 	public static String url() {
-		return Conf.nested("jdbc", "url");
+		return URL.getOrNull();
 	}
 
 	public static String driver() {
-		String driver = Conf.nested("jdbc", "driver");
+		String driver = DRIVER.getOrNull();
 
 		if (driver == null && !U.isEmpty(url())) {
 			driver = inferDriverFromUrl(url());
@@ -44,11 +53,11 @@ public class JDBCConfig {
 	}
 
 	public static String username() {
-		return Conf.nested("jdbc", "username");
+		return USERNAME.getOrNull();
 	}
 
 	public static String password() {
-		return Conf.nested("jdbc", "password");
+		return PASSWORD.getOrNull();
 	}
 
 	public static String inferDriverFromUrl(String url) {

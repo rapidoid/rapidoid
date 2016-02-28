@@ -31,7 +31,6 @@ import org.apache.oltu.oauth2.client.response.OAuthResourceResponse;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.ConfigEntry;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.data.JSON;
@@ -41,6 +40,7 @@ import org.rapidoid.http.ReqHandler;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.value.Value;
 
 import java.util.Map;
 
@@ -49,14 +49,14 @@ import java.util.Map;
 public class OAuthTokenHandler implements ReqHandler {
 
 	private final OAuthProvider provider;
-	private final ConfigEntry oauthDomain;
+	private final Value<String> oauthDomain;
 	private final OAuthStateCheck stateCheck;
-	private final ConfigEntry clientId;
-	private final ConfigEntry clientSecret;
+	private final Value<String> clientId;
+	private final Value<String> clientSecret;
 	private final String callbackPath;
 
-	public OAuthTokenHandler(OAuthProvider provider, ConfigEntry oauthDomain, OAuthStateCheck stateCheck,
-	                         ConfigEntry clientId, ConfigEntry clientSecret, String callbackPath) {
+	public OAuthTokenHandler(OAuthProvider provider, Value<String> oauthDomain, OAuthStateCheck stateCheck,
+	                         Value<String> clientId, Value<String> clientSecret, String callbackPath) {
 		this.provider = provider;
 		this.oauthDomain = oauthDomain;
 		this.stateCheck = stateCheck;
@@ -74,8 +74,8 @@ public class OAuthTokenHandler implements ReqHandler {
 
 		if (code != null && !U.isEmpty(state)) {
 
-			String id = clientId.get();
-			String secret = clientSecret.get();
+			String id = clientId.or(OAuth.NO_ID);
+			String secret = clientSecret.or(OAuth.NO_SECRET);
 
 			char statePrefix = state.charAt(0);
 			U.must(statePrefix == 'P' || statePrefix == 'N', "Invalid OAuth state prefix!");
@@ -86,7 +86,7 @@ public class OAuthTokenHandler implements ReqHandler {
 			boolean popup = statePrefix == 'P';
 			Log.debug("OAuth validated", "popup", popup);
 
-			String domain = oauthDomain.get();
+			String domain = oauthDomain.getOrNull();
 			String redirectUrl = domain != null ? domain + callbackPath : HttpUtils.constructUrl(req, callbackPath);
 
 			TokenRequestBuilder reqBuilder = OAuthClientRequest.tokenLocation(provider.getTokenEndpoint())

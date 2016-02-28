@@ -61,11 +61,12 @@ public abstract class HttpTestCommons extends TestCommons {
 
 		System.out.println("--- STARTING SERVER ---");
 
-		Setup.resetGlobalState();
-
 		Conf.reset();
+		Conf.setPath(getTestName());
+		Log.setLogLevel(LogLevel.INFO);
 		IoC.defaultContext().reset();
 
+		Setup.resetGlobalState();
 		On.instance().http().resetConfig();
 		On.instance().listen();
 

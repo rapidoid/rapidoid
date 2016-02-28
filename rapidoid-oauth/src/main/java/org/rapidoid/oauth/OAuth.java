@@ -24,36 +24,43 @@ import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
-import org.rapidoid.config.ConfigEntry;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
 import org.rapidoid.setup.Setup;
+import org.rapidoid.u.U;
+import org.rapidoid.value.Value;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class OAuth {
 
+	static final String NO_ID = "NO-CLIENT-ID-CONFIGURED";
+	static final String NO_SECRET = "NO-CLIENT-SECRET-CONFIGURED";
+
 	private static final String LOGIN_BTN = "<div class=\"row-fluid\"><div class=\"col-md-3\"><a href=\"/_%sLogin\" class=\"btn btn-default btn-block\">Login with %s</a></div></div>";
 
 	private static OAuthStateCheck STATE_CHECK;
 
-	public static void register(Setup setup, Config config, OAuthProvider... providers) {
-		register(setup, config, new DefaultOAuthStateCheck(), providers);
+	private static final Config APP = Conf.APP;
+
+	private static final Config OAUTH = Conf.OAUTH;
+
+	private static final Value<String> DOMAIN = APP.entry("domain").str();
+
+	public static void register(Setup setup, OAuthProvider... providers) {
+		register(setup, new DefaultOAuthStateCheck(), providers);
 	}
 
-	public static void register(Setup setup, Config config, OAuthStateCheck stateCheck,
-	                            OAuthProvider... providers) {
+	public static void register(Setup setup, OAuthStateCheck stateCheck, OAuthProvider... providers) {
 
-		if (!config.has("oauth")) {
-			Log.warn("OAuth is currently not configured!");
+		if (OAUTH.isEmpty()) {
+			Log.warn("OAuth is not configured!");
 		}
-
-		ConfigEntry oauthDomain = config.entry("domain").byDefault(null);
 
 		OAuth.STATE_CHECK = stateCheck;
 
@@ -70,12 +77,12 @@ public class OAuth {
 			String loginPath = "/_" + name + "Login";
 			String callbackPath = "/_" + name + "OauthCallback";
 
-			ConfigEntry clientId = config.entry("oauth", name, "id").byDefault("NO-CLIENT-ID-CONFIGURED");
-			ConfigEntry clientSecret = config.entry("oauth", name, "secret").byDefault("NO-CLIENT-SECRET-CONFIGURED");
+			Config providerConfig = OAUTH.sub(name);
+			Value<String> clientId = providerConfig.entry("id").str();
+			Value<String> clientSecret = providerConfig.entry("secret").str();
 
-			setup.get(loginPath).html(new OAuthLoginHandler(provider, oauthDomain, config));
-			setup.get(callbackPath).html(
-					new OAuthTokenHandler(provider, oauthDomain, stateCheck, clientId, clientSecret, callbackPath));
+			setup.get(loginPath).html(new OAuthLoginHandler(provider, DOMAIN));
+			setup.get(callbackPath).html(new OAuthTokenHandler(provider, DOMAIN, stateCheck, clientId, clientSecret, callbackPath));
 
 			loginHtml.append(U.frmt(LOGIN_BTN, name, provider.getName()));
 		}
@@ -91,16 +98,17 @@ public class OAuth {
 		});
 	}
 
-	public static String getLoginURL(Req req, Config appcfg, OAuthProvider provider, String oauthDomain) {
+	public static String getLoginURL(Req req, OAuthProvider provider, String oauthDomain) {
 
-		if (!appcfg.has("oauth")) {
-			Log.warn("OAuth is currently not configured!");
+		if (OAUTH.isEmpty()) {
+			Log.warn("OAuth is not configured!");
 		}
 
 		String name = provider.getName().toLowerCase();
 
-		String clientId = appcfg.entry("oauth", name, "id").byDefault("NO-CLIENT-ID-CONFIGURED").get();
-		String clientSecret = appcfg.entry("oauth", name, "secret").byDefault("NO-CLIENT-SECRET-CONFIGURED").get();
+		Config providerConfig = OAUTH.sub(name);
+		Value<String> clientId = providerConfig.entry("id").str();
+		Value<String> clientSecret = providerConfig.entry("secret").str();
 
 		String callbackPath = "/_" + name + "OauthCallback";
 
@@ -114,7 +122,7 @@ public class OAuth {
 
 		try {
 			OAuthClientRequest request = OAuthClientRequest.authorizationLocation(provider.getAuthEndpoint())
-					.setClientId(clientId).setRedirectURI(redirectUrl).setScope(provider.getEmailScope())
+					.setClientId(clientId.or(NO_ID)).setRedirectURI(redirectUrl).setScope(provider.getEmailScope())
 					.setState(state).setResponseType("code").buildQueryMessage();
 			return request.getLocationUri();
 		} catch (OAuthSystemException e) {

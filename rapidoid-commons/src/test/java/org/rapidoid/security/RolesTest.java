@@ -23,6 +23,7 @@ package org.rapidoid.security;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
 
@@ -32,14 +33,23 @@ public class RolesTest extends AbstractCommonsTest {
 
 	@Test
 	public void testRolesConfig() {
+		isFalse(Conf.USERS.toMap().isEmpty());
+		isTrue(Conf.USERS.toMap().containsKey("niko"));
+		isTrue(Conf.USERS.has("niko"));
+
+		isFalse(Conf.USERS.sub("niko").isEmpty());
+		isTrue(Conf.USERS.sub("niko").has("email"));
+		eq(Conf.USERS.sub("niko").get("email"), "niko@rapidoid.org.abcde");
+		eq(Conf.USERS.sub("niko").entry("password").str().or("none"), "easy");
+
 		eq(Roles.getRolesFor("niko"), U.set("owner", "moderator", "admin"));
 		eq(Roles.getRolesFor("chuck"), U.set("moderator", "restarter"));
 		eq(Roles.getRolesFor("abc"), U.set("guest"));
 
-		eq(Roles.getRolesFor("zzz"), U.set("logged_in"));
+		eq(Roles.getRolesFor("zzz"), U.set());
 
-		eq(Roles.getRolesFor(""), U.set("anonymous"));
-		eq(Roles.getRolesFor(null), U.set("anonymous"));
+		eq(Roles.getRolesFor(""), U.set());
+		eq(Roles.getRolesFor(null), U.set());
 	}
 
 }

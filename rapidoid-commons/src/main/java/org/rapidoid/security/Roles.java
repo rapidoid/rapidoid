@@ -51,33 +51,24 @@ public class Roles {
 
 	public static final String RESTARTER = "restarter";
 
-	public static final String ANONYMOUS = "anonymous";
-
 	public static final List<String> COMMON_ROLES = Collections.unmodifiableList(Arrays.asList(ADMIN, MANAGER,
 			MODERATOR, LOGGED_IN, OWNER, RESTARTER));
 
-	public static final Set<String> ROLES_ANONYMOUS = U.set(ANONYMOUS);
-
 	public static final Set<String> ROLES_LOGGED_IN = U.set(LOGGED_IN);
-
-	private static Config USERS;
-
-	private static String configFilename = "users.yaml";
 
 	@SuppressWarnings("unchecked")
 	public static Set<String> getRolesFor(String username) {
 		if (U.isEmpty(username)) {
-			return ROLES_ANONYMOUS;
+			return U.set();
 		}
 
-		Config users = usersConfig();
+		Config user = Conf.USERS.sub(username);
 
-		Map<String, Object> user = users.get(username);
-		if (user == null) {
-			return ROLES_LOGGED_IN;
+		if (user.isEmpty()) {
+			return U.set();
 		}
 
-		Object roles = U.cast(user.get("roles"));
+		Object roles = user.entry("roles").getOrNull();
 
 		if (Coll.isCollection(roles)) {
 			Set<String> roleSet = U.set();
@@ -88,32 +79,11 @@ public class Roles {
 
 		} else if (roles instanceof String) {
 			String role = (String) roles;
-			return U.set(role.toLowerCase());
+			return U.set(role.toLowerCase().split("\\s*\\,\\s*"));
 
 		} else {
 			return ROLES_LOGGED_IN;
 		}
-	}
-
-	public static synchronized Config usersConfig() {
-		if (USERS == null) {
-			USERS = Conf.refreshing(configFilename);
-		}
-
-		return USERS;
-	}
-
-	public static synchronized void resetConfig() {
-		configFilename = "users.yaml";
-		USERS = null;
-	}
-
-	public static String getConfigFilename() {
-		return configFilename;
-	}
-
-	public static void setConfigFilename(String configFilename) {
-		Roles.configFilename = configFilename;
 	}
 
 }
