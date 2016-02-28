@@ -97,10 +97,10 @@ public class HttpParser implements Constants {
 		buf.scanLn(protocol);
 
 		IntWrap result = helper.integers[0];
-		buf.scanLnLn(headers.reset(), result, (byte) 's', (byte) 'e');
+		buf.scanLnLn(headers.reset(), result, (byte) 'v', (byte) 'e');
 
-		int possibleClosePos = result.value;
-		isKeepAlive.value = possibleClosePos < 0 ? false : isKeepAlive(bytes, headers, helper);
+		int possibleKeepAliveHeaderPos = result.value;
+		isKeepAlive.value = possibleKeepAliveHeaderPos >= 0 && isKeepAlive(bytes, headers, helper, possibleKeepAliveHeaderPos);
 
 		BytesUtil.split(bytes, uri, ASTERISK, path, query, false);
 
@@ -110,13 +110,18 @@ public class HttpParser implements Constants {
 		}
 	}
 
-	private boolean isKeepAlive(Bytes bytes, Ranges headers, RapidoidHelper helper) {
+	private boolean isKeepAlive(Bytes bytes, Ranges headers, RapidoidHelper helper, int possibleKeepAliveHeaderPos) {
+		Range maybeConnHdr = headers.get(possibleKeepAliveHeaderPos);
+
+		if (BytesUtil.startsWith(bytes, maybeConnHdr, CONNECTION, true)) {
+			return true;
+		}
+
 		Range connHdr = headers.getByPrefix(bytes, CONNECTION, false);
-		return connHdr != null ? getKeepAliveValue(bytes, connHdr, helper) : true;
+		return connHdr == null || getKeepAliveValue(bytes, connHdr, helper);
 	}
 
 	private boolean getKeepAliveValue(Bytes bytes, Range connHdr, RapidoidHelper helper) {
-
 		assert bytes != null;
 		assert connHdr != null;
 
