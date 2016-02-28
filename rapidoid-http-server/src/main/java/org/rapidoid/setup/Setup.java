@@ -109,6 +109,7 @@ public class Setup implements Constants {
 
 	private volatile Mapper<Object, String> jsonRenderer;
 	private volatile Mapper<String, Object> jsonParser;
+
 	private volatile LoginProcessor loginProcessor;
 	private volatile RolesProvider rolesProvider;
 
@@ -150,6 +151,9 @@ public class Setup implements Constants {
 
 	public synchronized Server listen() {
 		if (!listening && !restarted) {
+
+			onChanges().restart();
+
 			if (setupType != ServerSetupType.DEV || Conf.dev()) {
 				listening = true;
 
@@ -456,6 +460,8 @@ public class Setup implements Constants {
 		Log.info("---------------------------------");
 
 		restarted = true;
+
+		Conf.reload();
 
 		for (Setup setup : instances()) {
 			setup.fastHttp.resetConfig();
