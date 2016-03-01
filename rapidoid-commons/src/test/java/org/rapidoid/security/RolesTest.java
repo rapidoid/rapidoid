@@ -42,14 +42,14 @@ public class RolesTest extends AbstractCommonsTest {
 		eq(Conf.USERS.sub("niko").get("email"), "niko@rapidoid.org.abcde");
 		eq(Conf.USERS.sub("niko").entry("password").str().or("none"), "easy");
 
-		eq(Roles.getRolesFor("niko"), U.set("owner", "moderator", "admin"));
-		eq(Roles.getRolesFor("chuck"), U.set("moderator", "restarter"));
-		eq(Roles.getRolesFor("abc"), U.set("guest"));
+		eq(Auth.getRolesFor("niko"), U.set("owner", "moderator", "admin"));
+		eq(Auth.getRolesFor("chuck"), U.set("moderator", "restarter"));
+		eq(Auth.getRolesFor("abc"), U.set("guest", "foo", "bar"));
 
-		eq(Roles.getRolesFor("zzz"), U.set());
+		eq(Auth.getRolesFor("zzz"), U.set());
 
-		eq(Roles.getRolesFor(""), U.set());
-		eq(Roles.getRolesFor(null), U.set());
+		eq(Auth.getRolesFor(""), U.set());
+		eq(Auth.getRolesFor(null), U.set());
 	}
 
 }

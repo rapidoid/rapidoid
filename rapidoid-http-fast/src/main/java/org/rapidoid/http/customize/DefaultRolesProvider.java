@@ -22,6 +22,7 @@ package org.rapidoid.http.customize;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.security.Auth;
 
 import java.util.Set;
 
@@ -30,8 +31,8 @@ import java.util.Set;
 public class DefaultRolesProvider implements RolesProvider {
 
 	@Override
-	public Set<String> getRolesForUser(String username) throws Exception {
-		return null; // FIXME
+	public Set<String> getRolesForUser(String username) {
+		return Auth.getRolesFor(username);
 	}
 
 }

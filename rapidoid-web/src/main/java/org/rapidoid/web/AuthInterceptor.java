@@ -29,6 +29,7 @@ import org.rapidoid.security.Secure;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
@@ -40,8 +41,9 @@ public class AuthInterceptor implements AOPInterceptor {
 	                        final Object target, final Object[] args) {
 
 		String username = Current.username();
+		Set<String> roles = Current.roles();
 
-		if (Secure.canAccessMethod(username, m)) {
+		if (Secure.canAccessMethod(username, roles, m)) {
 			return Lmbd.call(forward);
 		} else {
 			throw new SecurityException("The user doesn't have the required roles!");

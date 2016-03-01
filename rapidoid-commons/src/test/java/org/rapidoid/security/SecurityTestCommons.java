@@ -25,6 +25,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
 
+import java.util.Set;
+
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public abstract class SecurityTestCommons extends AbstractCommonsTest {
@@ -32,10 +34,16 @@ public abstract class SecurityTestCommons extends AbstractCommonsTest {
 	protected void checkPermissions(String username, Class<?> clazz, Object target, String propertyName,
 	                                boolean canRead, boolean canChange) {
 
-		DataPermissions perms = Secure.getPropertyPermissions(username, clazz, target, propertyName);
+		Set<String> roles = roles(username);
+
+		DataPermissions perms = Secure.getPropertyPermissions(username, roles, clazz, target, propertyName);
 
 		eq(perms.read, canRead);
 		eq(perms.change, canChange);
+	}
+
+	protected Set<String> roles(String username) {
+		return Auth.getRolesFor(username);
 	}
 
 	protected void checkPermissions(String username, Class<?> clazz, String propertyName, boolean canRead,

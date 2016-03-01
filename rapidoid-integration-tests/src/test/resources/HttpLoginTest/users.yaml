@@ -3,7 +3,7 @@ niko:
   password: easy
   roles:
     - owner
-    - admin
+    - administrator
     - moderator
 
 chuck:
@@ -12,4 +12,7 @@ chuck:
 
 abc:
   password: abc
-  roles:    guest   , foo , bar
+  roles: guest
+
+foo:
+  password: bar

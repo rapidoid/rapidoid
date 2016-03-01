@@ -29,6 +29,8 @@ import org.rapidoid.lambda.Mapper;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.concurrent.Future;
 
 @Authors("Nikolche Mihajlovski")
@@ -91,7 +93,21 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 	}
 
 	private void execHandlerJob(final Channel channel, final boolean isKeepAlive, final Req req, final Object extra) {
-		With.tag(CTX_TAG_HANDLER).exchange(req).run(new Runnable() {
+
+		String username = req.cookiepack(HttpUtils._USER, null);
+		Set<String> roles;
+
+		if (username != null) {
+			try {
+				roles = http.custom().rolesProvider().getRolesForUser(username);
+			} catch (Exception e) {
+				throw U.rte(e);
+			}
+		} else {
+			roles = Collections.emptySet();
+		}
+
+		With.tag(CTX_TAG_HANDLER).exchange(req).username(username).roles(roles).run(new Runnable() {
 
 			@Override
 			public void run() {

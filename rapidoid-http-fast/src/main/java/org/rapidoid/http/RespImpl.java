@@ -23,6 +23,10 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
+import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.ctx.UserInfo;
+import org.rapidoid.http.customize.LoginProvider;
+import org.rapidoid.http.customize.RolesProvider;
 import org.rapidoid.http.customize.ViewRenderer;
 import org.rapidoid.u.U;
 
@@ -32,6 +36,7 @@ import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.x")
@@ -227,21 +232,6 @@ public class RespImpl implements Resp {
 	}
 
 	@Override
-	public Resp render() {
-		ViewRenderer renderer = req.http().custom().viewRenderer();
-
-		U.must(renderer != null, "A view renderer wasn't set! Please use On.render() to configure a renderer!");
-
-		try {
-			renderer.render(req, this);
-		} catch (Throwable e) {
-			throw U.rte("Error while rendering view: " + view(), e);
-		}
-
-		return this;
-	}
-
-	@Override
 	public synchronized String view() {
 		return view != null ? view : HttpUtils.resName(req);
 	}
@@ -255,6 +245,51 @@ public class RespImpl implements Resp {
 	@Override
 	public Req request() {
 		return req;
+	}
+
+	@Override
+	public Resp render() {
+		ViewRenderer renderer = req.http().custom().viewRenderer();
+		U.must(renderer != null, "A view renderer wasn't set!");
+
+		try {
+			renderer.render(req, this);
+		} catch (Throwable e) {
+			throw U.rte("Error while rendering view: " + view(), e);
+		}
+
+		return this;
+	}
+
+	@Override
+	public boolean login(String username, String password) {
+		LoginProvider loginProvider = req.http().custom().loginProvider();
+		U.must(loginProvider != null, "A login provider wasn't set!");
+
+		RolesProvider rolesProvider = req.http().custom().rolesProvider();
+		U.must(rolesProvider != null, "A roles provider wasn't set!");
+
+		boolean success;
+		Set<String> roles;
+
+		try {
+			success = loginProvider.login(username, password);
+			if (success) {
+				roles = rolesProvider.getRolesForUser(username);
+				Ctxs.ctx().setUser(new UserInfo(username, roles));
+				request().cookiepack().put(HttpUtils._USER, username);
+			}
+		} catch (Throwable e) {
+			throw U.rte("Login error!", e);
+		}
+
+		return success;
+	}
+
+	@Override
+	public void logout() {
+		Ctxs.ctx().setUser(UserInfo.ANONYMOUS);
+		request().cookiepack().remove(HttpUtils._USER);
 	}
 
 	@Override

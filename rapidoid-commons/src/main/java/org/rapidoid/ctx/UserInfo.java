@@ -2,10 +2,10 @@ package org.rapidoid.ctx;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.security.Roles;
 import org.rapidoid.u.U;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,45 +35,25 @@ public class UserInfo implements Serializable {
 
 	private static final long serialVersionUID = 7062732348562440194L;
 
-	private static final UserInfo ANONYMOUS = new UserInfo("anonymous", null, "Anonymous", null, null, U.<String>set());
+	public static final UserInfo ANONYMOUS = new UserInfo(null, U.<String>set());
 
 	public final String username;
-
-	public final String email;
-
-	public final String name;
-
-	public final String oauthId;
-
-	public final String oauthProvider;
 
 	public final Set<String> roles;
 
 	public final Map<String, Boolean> is;
 
-	public UserInfo(String username) {
-		this(username, username, username);
-	}
+	public volatile String email;
+
+	public volatile String name;
+
+	public volatile String oauthId;
+
+	public volatile String oauthProvider;
 
 	public UserInfo(String username, Set<String> roles) {
-		this(username, username, username, null, null, roles);
-	}
-
-	public UserInfo(String username, String email, String name) {
-		this(username, email, name, null, null);
-	}
-
-	public UserInfo(String username, String email, String name, String oauthId, String oauthProvider) {
-		this(username, email, name, oauthId, oauthProvider, Roles.getRolesFor(username));
-	}
-
-	public UserInfo(String username, String email, String name, String oauthId, String oauthProvider, Set<String> roles) {
 		this.username = username;
-		this.email = email;
-		this.name = name;
-		this.oauthId = oauthId;
-		this.oauthProvider = oauthProvider;
-		this.roles = roles;
+		this.roles = Collections.unmodifiableSet(U.safe(roles));
 		this.is = rolesMap(roles);
 	}
 
@@ -84,13 +64,20 @@ public class UserInfo implements Serializable {
 			rolesMap.put(role, true);
 		}
 
-		return rolesMap;
+		return Collections.unmodifiableMap(rolesMap);
 	}
 
 	@Override
 	public String toString() {
-		return "UserInfo [username=" + username + ", email=" + email + ", name=" + name + ", oauthId=" + oauthId
-				+ ", oauthProvider=" + oauthProvider + "]";
+		return "UserInfo{" +
+				"username='" + username + '\'' +
+				", roles=" + roles +
+				", is=" + is +
+				", email='" + email + '\'' +
+				", name='" + name + '\'' +
+				", oauthId='" + oauthId + '\'' +
+				", oauthProvider='" + oauthProvider + '\'' +
+				'}';
 	}
 
 	@Override

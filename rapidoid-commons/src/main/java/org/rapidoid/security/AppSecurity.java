@@ -81,7 +81,7 @@ public class AppSecurity implements Constants {
 		return true;
 	}
 
-	public boolean hasRole(String username, String role, Class<?> clazz, Object record) {
+	public boolean hasRole(String username, Set<String> roles, String role, Class<?> clazz, Object record) {
 
 		if (Roles.ANYBODY.equalsIgnoreCase(role)) {
 			return true;
@@ -102,14 +102,14 @@ public class AppSecurity implements Constants {
 			}
 		}
 
-		return hasRole(username, role);
+		return hasRole(username, roles, role);
 	}
 
 	protected boolean hasSpecialRoleInDevMode(String username, String role) {
 		return false;
 	}
 
-	protected boolean hasRole(String username, String role) {
+	protected boolean hasRole(String username, Set<String> roles, String role) {
 		if (hasSpecialRoleInDevMode(username, role)) {
 			return true;
 		}
@@ -118,19 +118,25 @@ public class AppSecurity implements Constants {
 			return !U.isEmpty(username);
 		}
 
-		return Roles.getRolesFor(username).contains(role.toLowerCase());
+		for (String r : roles) {
+			if (r.equalsIgnoreCase(role)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
-	public boolean isAdmin(String username) {
-		return hasRole(username, Roles.ADMIN, null, null);
+	public boolean isAdmin(String username, Set<String> roles) {
+		return hasRole(username, roles, Roles.ADMIN, null, null);
 	}
 
-	public boolean isManager(String username) {
-		return hasRole(username, Roles.MANAGER, null, null);
+	public boolean isManager(String username, Set<String> roles) {
+		return hasRole(username, roles, Roles.MANAGER, null, null);
 	}
 
-	public boolean isModerator(String username) {
-		return hasRole(username, Roles.MODERATOR, null, null);
+	public boolean isModerator(String username, Set<String> roles) {
+		return hasRole(username, roles, Roles.MODERATOR, null, null);
 	}
 
 	public DataPermissions classPermissions(String username, Class<?> clazz) {

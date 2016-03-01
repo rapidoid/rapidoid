@@ -82,7 +82,7 @@ public class OAuth {
 			Value<String> clientSecret = providerConfig.entry("secret").str();
 
 			setup.get(loginPath).html(new OAuthLoginHandler(provider, DOMAIN));
-			setup.get(callbackPath).html(new OAuthTokenHandler(provider, DOMAIN, stateCheck, clientId, clientSecret, callbackPath));
+			setup.get(callbackPath).html(new OAuthTokenHandler(provider, setup.custom(), DOMAIN, stateCheck, clientId, clientSecret, callbackPath));
 
 			loginHtml.append(U.frmt(LOGIN_BTN, name, provider.getName()));
 		}

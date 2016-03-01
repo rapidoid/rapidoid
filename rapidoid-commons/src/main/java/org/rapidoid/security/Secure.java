@@ -33,6 +33,7 @@ import org.rapidoid.util.Constants;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -40,77 +41,77 @@ public class Secure implements Constants {
 
 	private static AppSecurity security = Cls.customizable(AppSecurity.class);
 
-	public static boolean hasRole(String username, String role) {
-		return security.hasRole(username, role, null, null);
+	public static boolean hasRole(String username, Set<String> roles, String role) {
+		return security.hasRole(username, roles, role, null, null);
 	}
 
-	public static boolean hasRoleForClass(String username, String role, Class<?> clazz) {
-		return security.hasRole(username, role, Cls.unproxy(clazz), null);
+	public static boolean hasRoleForClass(String username, Set<String> roles, String role, Class<?> clazz) {
+		return security.hasRole(username, roles, role, Cls.unproxy(clazz), null);
 	}
 
-	public static boolean hasRoleForRecord(String username, String role, Object record) {
-		return security.hasRole(username, role, Cls.unproxy(record.getClass()), record);
+	public static boolean hasRoleForRecord(String username, Set<String> roles, String role, Object record) {
+		return security.hasRole(username, roles, role, Cls.unproxy(record.getClass()), record);
 	}
 
-	public static boolean isAdmin(String username) {
-		return security.isAdmin(username);
+	public static boolean isAdmin(String username, Set<String> roles) {
+		return security.isAdmin(username, roles);
 	}
 
-	public static boolean isManager(String username) {
-		return security.isManager(username);
+	public static boolean isManager(String username, Set<String> roles) {
+		return security.isManager(username, roles);
 	}
 
-	public static boolean isModerator(String username) {
-		return security.isModerator(username);
+	public static boolean isModerator(String username, Set<String> roles) {
+		return security.isModerator(username, roles);
 	}
 
-	public static boolean isOwnerOf(String username, Object record) {
+	public static boolean isOwnerOf(String username, Set<String> roles, Object record) {
 		return security.isOwnerOf(username, record);
 	}
 
-	public static boolean isSharedWith(String username, Object record) {
+	public static boolean isSharedWith(String username, Set<String> roles, Object record) {
 		return security.isSharedWith(username, record);
 	}
 
-	public static boolean canAccessClass(String username, Class<?> clazz) {
+	public static boolean canAccessClass(String username, Set<String> roles, Class<?> clazz) {
 		U.notNull(clazz, "class");
 		clazz = Cls.unproxy(clazz);
-		return hasRoleBasedClassAccess(username, clazz) && security.canAccessClass(username, clazz);
+		return hasRoleBasedClassAccess(username, roles, clazz) && security.canAccessClass(username, clazz);
 	}
 
-	public static boolean canAccessMethod(String username, Method method) {
+	public static boolean canAccessMethod(String username, Set<String> roles, Method method) {
 		U.notNull(method, "method");
 		Class<?> clazz = method.getDeclaringClass();
-		return canAccessClass(username, clazz) && hasRoleBasedMethodAccess(username, method);
+		return canAccessClass(username, roles, clazz) && hasRoleBasedMethodAccess(username, roles, method);
 	}
 
-	public static boolean hasRoleBasedClassAccess(String username, Class<?> clazz) {
+	public static boolean hasRoleBasedClassAccess(String username, Set<String> roles, Class<?> clazz) {
 		U.notNull(clazz, "class");
 		clazz = Cls.unproxy(clazz);
-		return hasRoleBasedAccess(username, clazz, null);
+		return hasRoleBasedAccess(username, roles, clazz, null);
 	}
 
-	public static boolean hasRoleBasedObjectAccess(String username, Object target) {
+	public static boolean hasRoleBasedObjectAccess(String username, Set<String> roles, Object target) {
 		U.notNull(target, "target");
-		return hasRoleBasedAccess(username, Cls.unproxy(target.getClass()), target);
+		return hasRoleBasedAccess(username, roles, Cls.unproxy(target.getClass()), target);
 	}
 
-	private static boolean hasRoleBasedAccess(String username, Class<?> clazz, Object target) {
+	private static boolean hasRoleBasedAccess(String username, Set<String> roles, Class<?> clazz, Object target) {
 		clazz = Cls.unproxy(clazz);
-		String[] roles = security.getRolesAllowed(clazz);
-		return roles.length == 0 || hasAnyRole(username, roles, clazz, target);
+		String[] rolesAllowed = security.getRolesAllowed(clazz);
+		return rolesAllowed.length == 0 || hasAnyRole(username, roles, rolesAllowed, clazz, target);
 	}
 
-	public static boolean hasRoleBasedMethodAccess(String username, Method method) {
+	public static boolean hasRoleBasedMethodAccess(String username, Set<String> roles, Method method) {
 		U.notNull(method, "method");
-		String[] roles = security.getRolesAllowed(method);
-		return roles.length == 0 || hasAnyRole(username, roles);
+		String[] rolesAllowed = security.getRolesAllowed(method);
+		return rolesAllowed.length == 0 || hasAnyRole(username, roles, rolesAllowed);
 	}
 
-	public static boolean hasAnyRole(String username, String[] roles, Class<?> clazz, Object target) {
+	public static boolean hasAnyRole(String username, Set<String> roles, String[] targetRoles, Class<?> clazz, Object target) {
 		clazz = Cls.unproxy(clazz);
-		for (String role : roles) {
-			if (security.hasRole(username, role, clazz, target)) {
+		for (String role : targetRoles) {
+			if (security.hasRole(username, roles, role, clazz, target)) {
 				return true;
 			}
 		}
@@ -118,9 +119,9 @@ public class Secure implements Constants {
 		return false;
 	}
 
-	public static boolean hasAnyRole(String username, String[] roles) {
-		for (String role : roles) {
-			if (security.hasRole(username, role)) {
+	public static boolean hasAnyRole(String username, Set<String> roles, String[] targetRoles) {
+		for (String role : targetRoles) {
+			if (security.hasRole(username, roles, role)) {
 				return true;
 			}
 		}
@@ -128,7 +129,7 @@ public class Secure implements Constants {
 		return false;
 	}
 
-	public static DataPermissions getPropertyPermissions(String username, Class<?> clazz, Object target,
+	public static DataPermissions getPropertyPermissions(String username, Set<String> roles, Class<?> clazz, Object target,
 	                                                     String propertyName) {
 		U.notNull(clazz, "class");
 		clazz = Cls.unproxy(clazz);
@@ -138,7 +139,7 @@ public class Secure implements Constants {
 			return DataPermissions.ALL;
 		}
 
-		if (!hasRoleBasedAccess(username, clazz, target)) {
+		if (!hasRoleBasedAccess(username, roles, clazz, target)) {
 			return DataPermissions.NONE;
 		}
 
@@ -152,13 +153,13 @@ public class Secure implements Constants {
 			return DataPermissions.ALL;
 		}
 
-		boolean read = canRead == null || hasAnyRole(username, canRead.value(), clazz, target);
+		boolean read = canRead == null || hasAnyRole(username, roles, canRead.value(), clazz, target);
 
-		boolean insert = canInsert != null && hasAnyRole(username, canInsert.value(), clazz, target);
-		boolean change = canChange != null && hasAnyRole(username, canChange.value(), clazz, target);
-		boolean delete = canDelete != null && hasAnyRole(username, canDelete.value(), clazz, target);
+		boolean insert = canInsert != null && hasAnyRole(username, roles, canInsert.value(), clazz, target);
+		boolean change = canChange != null && hasAnyRole(username, roles, canChange.value(), clazz, target);
+		boolean delete = canDelete != null && hasAnyRole(username, roles, canDelete.value(), clazz, target);
 
-		boolean manage = canManage != null && hasAnyRole(username, canManage.value(), clazz, target);
+		boolean manage = canManage != null && hasAnyRole(username, roles, canManage.value(), clazz, target);
 		insert |= manage;
 		change |= manage;
 		delete |= manage;
@@ -166,7 +167,7 @@ public class Secure implements Constants {
 		return DataPermissions.from(read, insert, change, delete);
 	}
 
-	public static DataPermissions getClassPermissions(String username, Class<?> clazz) {
+	public static DataPermissions getClassPermissions(String username, Set<String> roles, Class<?> clazz) {
 		U.notNull(clazz, "class");
 		clazz = Cls.unproxy(clazz);
 
@@ -175,7 +176,7 @@ public class Secure implements Constants {
 			return DataPermissions.ALL;
 		}
 
-		if (!hasRoleBasedAccess(username, clazz, null)) {
+		if (!hasRoleBasedAccess(username, roles, clazz, null)) {
 			return DataPermissions.NONE;
 		}
 
@@ -189,13 +190,13 @@ public class Secure implements Constants {
 			return DataPermissions.ALL;
 		}
 
-		boolean read = canRead == null || hasAnyRole(username, canRead.value(), clazz, null);
+		boolean read = canRead == null || hasAnyRole(username, roles, canRead.value(), clazz, null);
 
-		boolean insert = canInsert != null && hasAnyRole(username, canInsert.value(), clazz, null);
-		boolean change = canChange != null && hasAnyRole(username, canChange.value(), clazz, null);
-		boolean delete = canDelete != null && hasAnyRole(username, canDelete.value(), clazz, null);
+		boolean insert = canInsert != null && hasAnyRole(username, roles, canInsert.value(), clazz, null);
+		boolean change = canChange != null && hasAnyRole(username, roles, canChange.value(), clazz, null);
+		boolean delete = canDelete != null && hasAnyRole(username, roles, canDelete.value(), clazz, null);
 
-		boolean manage = canManage != null && hasAnyRole(username, canManage.value(), clazz, null);
+		boolean manage = canManage != null && hasAnyRole(username, roles, canManage.value(), clazz, null);
 		insert |= manage;
 		change |= manage;
 		delete |= manage;
@@ -203,7 +204,7 @@ public class Secure implements Constants {
 		return DataPermissions.from(read, insert, change, delete);
 	}
 
-	public static DataPermissions getObjectPermissions(String username, Object target) {
+	public static DataPermissions getObjectPermissions(String username, Set<String> roles, Object target) {
 		U.notNull(target, "target");
 		Class<?> clazz = target.getClass();
 		clazz = Cls.unproxy(clazz);
@@ -213,7 +214,7 @@ public class Secure implements Constants {
 			return DataPermissions.ALL;
 		}
 
-		if (!hasRoleBasedAccess(username, clazz, null)) {
+		if (!hasRoleBasedAccess(username, roles, clazz, null)) {
 			return DataPermissions.NONE;
 		}
 
@@ -227,13 +228,13 @@ public class Secure implements Constants {
 			return DataPermissions.ALL;
 		}
 
-		boolean read = canRead == null || hasAnyRole(username, canRead.value(), clazz, target);
+		boolean read = canRead == null || hasAnyRole(username, roles, canRead.value(), clazz, target);
 
-		boolean insert = canInsert != null && hasAnyRole(username, canInsert.value(), clazz, target);
-		boolean change = canChange != null && hasAnyRole(username, canChange.value(), clazz, target);
-		boolean delete = canDelete != null && hasAnyRole(username, canDelete.value(), clazz, target);
+		boolean insert = canInsert != null && hasAnyRole(username, roles, canInsert.value(), clazz, target);
+		boolean change = canChange != null && hasAnyRole(username, roles, canChange.value(), clazz, target);
+		boolean delete = canDelete != null && hasAnyRole(username, roles, canDelete.value(), clazz, target);
 
-		boolean manage = canManage != null && hasAnyRole(username, canManage.value(), clazz, target);
+		boolean manage = canManage != null && hasAnyRole(username, roles, canManage.value(), clazz, target);
 		insert |= manage;
 		change |= manage;
 		delete |= manage;
@@ -241,35 +242,35 @@ public class Secure implements Constants {
 		return DataPermissions.from(read, insert, change, delete);
 	}
 
-	public static boolean canRead(String username, Object record) {
-		return hasRoleBasedObjectAccess(username, record) && getObjectPermissions(username, record).read;
+	public static boolean canRead(String username, Set<String> roles, Object record) {
+		return hasRoleBasedObjectAccess(username, roles, record) && getObjectPermissions(username, roles, record).read;
 	}
 
-	public static boolean canInsert(String username, Object record) {
-		return hasRoleBasedObjectAccess(username, record) && getObjectPermissions(username, record).insert;
+	public static boolean canInsert(String username, Set<String> roles, Object record) {
+		return hasRoleBasedObjectAccess(username, roles, record) && getObjectPermissions(username, roles, record).insert;
 	}
 
-	public static boolean canUpdate(String username, Object record) {
-		return hasRoleBasedObjectAccess(username, record) && getObjectPermissions(username, record).change;
+	public static boolean canUpdate(String username, Set<String> roles, Object record) {
+		return hasRoleBasedObjectAccess(username, roles, record) && getObjectPermissions(username, roles, record).change;
 	}
 
-	public static boolean canDelete(String username, Object record) {
-		return hasRoleBasedObjectAccess(username, record) && getObjectPermissions(username, record).delete;
+	public static boolean canDelete(String username, Set<String> roles, Object record) {
+		return hasRoleBasedObjectAccess(username, roles, record) && getObjectPermissions(username, roles, record).delete;
 	}
 
-	public static boolean canReadProperty(String username, Object record, String property) {
-		return hasRoleBasedObjectAccess(username, record) && getObjectPermissions(username, record).read
-				&& getPropertyPermissions(username, record.getClass(), record, property).read;
+	public static boolean canReadProperty(String username, Set<String> roles, Object record, String property) {
+		return hasRoleBasedObjectAccess(username, roles, record) && getObjectPermissions(username, roles, record).read
+				&& getPropertyPermissions(username, roles, record.getClass(), record, property).read;
 	}
 
-	public static boolean canUpdateProperty(String username, Object record, String property) {
-		return hasRoleBasedObjectAccess(username, record) && getObjectPermissions(username, record).change
-				&& getPropertyPermissions(username, record.getClass(), record, property).change;
+	public static boolean canUpdateProperty(String username, Set<String> roles, Object record, String property) {
+		return hasRoleBasedObjectAccess(username, roles, record) && getObjectPermissions(username, roles, record).change
+				&& getPropertyPermissions(username, roles, record.getClass(), record, property).change;
 	}
 
-	public static void resetInvisibleProperties(String username, Object record) {
+	public static void resetInvisibleProperties(String username, Set<String> roles, Object record) {
 		for (Prop prop : Beany.propertiesOf(record)) {
-			if (!getPropertyPermissions(username, record.getClass(), record, prop.getName()).read) {
+			if (!getPropertyPermissions(username, roles, record.getClass(), record, prop.getName()).read) {
 				prop.reset(record);
 			}
 		}

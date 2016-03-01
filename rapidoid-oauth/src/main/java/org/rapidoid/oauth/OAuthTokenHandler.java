@@ -37,27 +37,32 @@ import org.rapidoid.data.JSON;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.value.Value;
 
 import java.util.Map;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class OAuthTokenHandler implements ReqHandler {
 
 	private final OAuthProvider provider;
+	private final Customization customization;
 	private final Value<String> oauthDomain;
 	private final OAuthStateCheck stateCheck;
 	private final Value<String> clientId;
 	private final Value<String> clientSecret;
 	private final String callbackPath;
 
-	public OAuthTokenHandler(OAuthProvider provider, Value<String> oauthDomain, OAuthStateCheck stateCheck,
-	                         Value<String> clientId, Value<String> clientSecret, String callbackPath) {
+	public OAuthTokenHandler(OAuthProvider provider, Customization customization, Value<String> oauthDomain,
+	                         OAuthStateCheck stateCheck, Value<String> clientId, Value<String> clientSecret, String callbackPath) {
+
 		this.provider = provider;
+		this.customization = customization;
 		this.oauthDomain = oauthDomain;
 		this.stateCheck = stateCheck;
 		this.clientId = clientId;
@@ -111,17 +116,21 @@ public class OAuthTokenHandler implements ReqHandler {
 
 			Map<String, Object> auth = JSON.parseMap(res.getBody());
 
+			String email = (String) U.or(auth.get("email"), auth.get("emailAddress"));
+
+			String username = email;
+			Set<String> roles = customization.rolesProvider().getRolesForUser(username);
+
+			UserInfo user = new UserInfo(username, roles);
+
 			String firstName = (String) U.or(auth.get("firstName"),
 					U.or(auth.get("first_name"), auth.get("given_name")));
 			String lastName = (String) U.or(auth.get("lastName"), U.or(auth.get("last_name"), auth.get("family_name")));
+			user.name = U.or((String) auth.get("name"), firstName + " " + lastName);
 
-			String name = U.or((String) auth.get("name"), firstName + " " + lastName);
-			String oauthProvider = provider.getName();
-			String email = (String) U.or(auth.get("email"), auth.get("emailAddress"));
-			String username = email;
-			String oauthId = String.valueOf(auth.get("id"));
-
-			UserInfo user = new UserInfo(username, email, name, oauthId, oauthProvider);
+			user.email = email;
+			user.oauthProvider = provider.getName();
+			user.oauthId = String.valueOf(auth.get("id"));
 
 			Ctxs.ctx().setUser(user);
 

@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
+import org.rapidoid.data.JSON;
 import org.rapidoid.io.FileContent;
 import org.rapidoid.u.U;
 
@@ -298,6 +299,10 @@ public class HttpClient {
 
 	public String fetch() {
 		return new String(execute(null).get());
+	}
+
+	public <T> T parse() {
+		return JSON.parse(fetch());
 	}
 
 	public byte[] execute() {

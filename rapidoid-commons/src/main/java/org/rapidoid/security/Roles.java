@@ -2,12 +2,6 @@ package org.rapidoid.security;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Coll;
-import org.rapidoid.config.Conf;
-import org.rapidoid.config.Config;
-import org.rapidoid.u.U;
-
-import java.util.*;
 
 /*
  * #%L
@@ -50,40 +44,5 @@ public class Roles {
 	public static final String SHARED_WITH = "shared_with";
 
 	public static final String RESTARTER = "restarter";
-
-	public static final List<String> COMMON_ROLES = Collections.unmodifiableList(Arrays.asList(ADMIN, MANAGER,
-			MODERATOR, LOGGED_IN, OWNER, RESTARTER));
-
-	public static final Set<String> ROLES_LOGGED_IN = U.set(LOGGED_IN);
-
-	@SuppressWarnings("unchecked")
-	public static Set<String> getRolesFor(String username) {
-		if (U.isEmpty(username)) {
-			return U.set();
-		}
-
-		Config user = Conf.USERS.sub(username);
-
-		if (user.isEmpty()) {
-			return U.set();
-		}
-
-		Object roles = user.entry("roles").getOrNull();
-
-		if (Coll.isCollection(roles)) {
-			Set<String> roleSet = U.set();
-			for (String role : (Collection<String>) roles) {
-				roleSet.add(role.toLowerCase());
-			}
-			return roleSet;
-
-		} else if (roles instanceof String) {
-			String role = (String) roles;
-			return U.set(role.toLowerCase().split("\\s*\\,\\s*"));
-
-		} else {
-			return ROLES_LOGGED_IN;
-		}
-	}
 
 }

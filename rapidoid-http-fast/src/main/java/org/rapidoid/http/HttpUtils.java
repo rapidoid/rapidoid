@@ -44,6 +44,8 @@ public class HttpUtils implements HttpMetadata {
 
 	private static final byte[] EMPTY_RESPONSE = {};
 
+	public static final String _USER = "_USER";
+
 	public static String[] pathSegments(Req req) {
 		return Str.triml(req.path(), "/").split("/");
 	}

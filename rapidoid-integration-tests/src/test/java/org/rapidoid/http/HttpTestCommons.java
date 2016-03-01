@@ -247,6 +247,14 @@ public abstract class HttpTestCommons extends TestCommons {
 		return resp;
 	}
 
+	protected String fetch(String verb, String uri) {
+		return fetch(DEFAULT_PORT, verb, uri, null);
+	}
+
+	protected String fetch(String verb, String uri, Map<String, ?> data) {
+		return fetch(DEFAULT_PORT, verb, uri, data);
+	}
+
 	private String reqName(int port, String verb, String uri) {
 		String req = verb + uri.replace("/", "_").replace("?", "-");
 		if (port != DEFAULT_PORT) {

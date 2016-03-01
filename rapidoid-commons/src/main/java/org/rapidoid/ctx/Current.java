@@ -37,21 +37,20 @@ public class Current {
 
 	public static UserInfo user() {
 		Ctx ctx = Ctxs.get();
-		return ctx != null ? ctx.user() : null;
+		UserInfo user = ctx != null ? ctx.user() : null;
+		return U.or(user, UserInfo.ANONYMOUS);
 	}
 
 	public static boolean isLoggedIn() {
-		return user() != null;
+		return user().username != null;
 	}
 
 	public static String username() {
-		UserInfo user = user();
-		return user != null ? user.username : null;
+		return user().username;
 	}
 
 	public static Set<String> roles() {
-		UserInfo user = user();
-		return U.safe(user != null && user.roles != null ? U.set(user.roles) : U.<String>set());
+		return user().roles;
 	}
 
 	public static Req request() {

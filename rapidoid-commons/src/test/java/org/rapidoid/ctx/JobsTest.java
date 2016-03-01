@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.test.AbstractCommonsTest;
+import org.rapidoid.u.U;
 
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -46,7 +47,7 @@ public class JobsTest extends AbstractCommonsTest {
 			public void run() {
 				Ctxs.open("test-job");
 
-				final UserInfo user = new UserInfo(rndStr(50));
+				final UserInfo user = new UserInfo(rndStr(50), U.set("role1"));
 
 				Ctxs.ctx().setUser(user);
 				ensureProperContext(user);

@@ -203,4 +203,16 @@ public interface Resp {
 	 */
 	Req request();
 
+	/**
+	 * Initiates a user login process with the specified <b>username</b> and <b>password</b>.<br>
+	 * Returns information whether the login was successful. After a successful login, the username will be persisted
+	 * in the cookie-pack.
+	 */
+	boolean login(String username, String password);
+
+	/**
+	 * Initiates a user logout process, clearing the login information (username) from the cookie-pack.
+	 */
+	void logout();
+
 }
