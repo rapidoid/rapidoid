@@ -1,8 +1,8 @@
-package org.rapidoid.oauth;
+package org.rapidoid.http.customize;
 
 /*
  * #%L
- * rapidoid-oauth
+ * rapidoid-http-server
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -22,17 +22,13 @@ package org.rapidoid.oauth;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.On;
-import org.rapidoid.setup.Setup;
+
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class OAuthDemo {
+@Since("5.1.0")
+public interface RolesProvider {
 
-	public static void main(String[] args) {
-		Setup setup = On.setup();
-		OAuth.register(setup);
-		setup.listen();
-	}
+	Set<String> getRolesForUser(String username) throws Exception;
 
 }

@@ -22,7 +22,6 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Err;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.ctx.With;
 import org.rapidoid.http.*;
@@ -60,8 +59,8 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 		} catch (Throwable e) {
 			// if there was an error in the job scheduling:
-			http.error(ctx, isKeepAlive, req, e);
-			return HttpStatus.ERROR;
+			http.errorAndDone(req, e);
+			return HttpStatus.DONE;
 		}
 
 		return HttpStatus.ASYNC;
@@ -157,25 +156,15 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 			return; // not found
 		}
 
-		if (result instanceof Throwable) {
-			Throwable error = (Throwable) result;
-			http.error(ctx, isKeepAlive, req, error);
-			return;
-		}
-
 		if (result instanceof HttpStatus) {
-			http.error(ctx, isKeepAlive, req, Err.notExpected());
+			complete(ctx, isKeepAlive, req, U.rte("HttpStatus result is not supported!"));
 			return;
 		}
 
-		if (result instanceof Req) {
-			U.must(req == result);
-
-		} else if (result instanceof Resp) {
-			U.must(req.response() == result);
-
+		if (result instanceof Throwable) {
+			http.error(req, (Throwable) result);
 		} else {
-			req.response().content(result);
+			HttpUtils.resultToResponse(req, result);
 		}
 
 		// the Req object will do the rendering

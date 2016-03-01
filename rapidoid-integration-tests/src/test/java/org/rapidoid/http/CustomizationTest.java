@@ -29,15 +29,15 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class OnSetupTest extends HttpTestCommons {
+public class CustomizationTest extends HttpTestCommons {
 
 	@Test
 	public void testSerializationConfig() {
-		On.renderJson(JSON::stringify);
-		On.parseJson(JSON::parse);
+		On.custom().jsonResponseRenderer(JSON::stringify);
+		On.custom().jsonBodyParser(JSON::parse);
 
-		On.login((username, password) -> password.equals(username + "!"));
-		On.rolesOf(username -> username.equals("root") ? U.set("admin") : U.set());
+		On.custom().loginProvider((username, password) -> password.equals(username + "!"));
+		On.custom().rolesProvider(username -> username.equals("root") ? U.set("admin") : U.set());
 	}
 
 }

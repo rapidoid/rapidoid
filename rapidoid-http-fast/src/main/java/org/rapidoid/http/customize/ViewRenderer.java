@@ -1,8 +1,8 @@
-package org.rapidoid.setup;
+package org.rapidoid.http.customize;
 
 /*
  * #%L
- * rapidoid-http-server
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -22,11 +22,13 @@ package org.rapidoid.setup;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.Resp;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public interface LoginProcessor {
+@Since("5.0.11")
+public interface ViewRenderer {
 
-	boolean login(String username, String password);
+	void render(Req req, Resp resp) throws Exception;
 
 }

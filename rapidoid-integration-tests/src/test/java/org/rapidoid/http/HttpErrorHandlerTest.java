@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.customize.ErrorHandler;
 import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
@@ -31,9 +32,9 @@ public class HttpErrorHandlerTest extends HttpTestCommons {
 
 	@Test
 	public void testErrorHandler1() {
-		On.error(new ErrorHandler() {
+		On.custom().errorHandler(new ErrorHandler() {
 			@Override
-			public Object onError(Req req, Resp resp, Throwable e) {
+			public Object handleError(Req req, Resp resp, Throwable e) {
 				return req + ":err:" + e;
 			}
 		});
@@ -52,10 +53,10 @@ public class HttpErrorHandlerTest extends HttpTestCommons {
 
 	@Test
 	public void testErrorHandler2() {
-		On.error(new ErrorHandler() {
+		On.custom().errorHandler(new ErrorHandler() {
 			@Override
-			public Object onError(Req req, Resp resp, Throwable e) {
-				return resp.content(req + ":err2:" + e);
+			public Object handleError(Req req, Resp resp, Throwable e) {
+				return resp.code(200).content(req + ":err2:" + e);
 			}
 		});
 

@@ -26,6 +26,7 @@ import com.github.mustachejava.MustacheFactory;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.customize.ViewRenderer;
 import org.rapidoid.setup.On;
 
 import java.io.PrintWriter;
@@ -39,9 +40,9 @@ public class HttpRenderTest extends HttpTestCommons {
 
 		MustacheFactory mf = new DefaultMustacheFactory();
 
-		On.render((Req req, Resp resp) ->  resp.content("this will be overwritten"));
+		On.custom().viewRenderer((Req req, Resp resp) ->  resp.content("this will be overwritten"));
 
-		On.render(new ViewRenderer() {
+		On.custom().viewRenderer(new ViewRenderer() {
 			@Override
 			public void render(Req req, Resp resp) throws Exception {
 				Mustache mustache = mf.compile(resp.view() + ".html");

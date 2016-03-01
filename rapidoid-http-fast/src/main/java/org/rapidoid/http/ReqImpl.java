@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.MediaType;
-import org.rapidoid.data.JSON;
+import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
@@ -352,7 +352,6 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 			synchronized (this) {
 				if (!isRendering()) {
 					startResponse(code);
-					rendering = true;
 				}
 			}
 		}
@@ -373,6 +372,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	}
 
 	private void renderResponseHeaders(int code, MediaType contentType) {
+		rendering = true;
 		http.startResponse(channel, code, isKeepAlive, contentType);
 
 		if (response != null) {
@@ -433,7 +433,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 		if (err != null) {
 			startRendering(500);
-			http.renderBody(channel, 500, MediaType.HTML_UTF_8, err.getBytes());
+			http.renderBody(channel, isKeepAlive, err.getBytes());
 		} else {
 			renderResponse();
 		}
@@ -453,37 +453,35 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	}
 
 	private void renderResponseBody() {
-		byte[] bytes;
+		// first serialize the response to bytes (with error handling)
+		byte[] bytes = responseToBytes(response());
 
+		// then start rendering
+		startRendering(response.code());
+		http.renderBody(channel, isKeepAlive, bytes);
+	}
+
+	private byte[] responseToBytes(Resp resp) {
 		try {
-			if (response.content() != null) {
-				bytes = serializeResponseContent();
+			if (resp.content() != null) {
+				return serializeResponseContent();
 
-			} else if (response.body() != null) {
-				bytes = UTILS.toBytes(response.body());
+			} else if (resp.body() != null) {
+				return UTILS.toBytes(resp.body());
 
 			} else {
-				throw U.rte("There's no HTTP response body to render!");
+				Log.error("There's no HTTP response body to render!");
+				return "There's no HTTP response body to render!".getBytes();
 			}
 
 		} catch (Throwable e) {
-			http.error(channel, isKeepAlive, this, e);
-			completed = true;
-			return;
+			http.error(this, e);
+			return responseToBytes(response());
 		}
-
-		startRendering(response.code());
-		http.renderBody(channel, response.code(), response.contentType(), bytes);
 	}
 
 	private byte[] serializeResponseContent() {
-		Object content = response.content();
-
-		if (U.eq(response.contentType(), MediaType.JSON_UTF_8)) {
-			return JSON.stringifyToBytes(content);
-		} else {
-			return UTILS.toBytes(content);
-		}
+		return HttpUtils.responseToBytes(response.content(), response.contentType());
 	}
 
 	private String validateResponse() {

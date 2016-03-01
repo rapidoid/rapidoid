@@ -23,10 +23,12 @@ package org.rapidoid.setup;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Config;
-import org.rapidoid.http.*;
+import org.rapidoid.http.HttpWrapper;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.processor.HttpProcessor;
-import org.rapidoid.lambda.Mapper;
 
 import java.lang.annotation.Annotation;
 
@@ -76,10 +78,6 @@ public class On {
 		return SETUP.page(path);
 	}
 
-	public static synchronized Setup error(ErrorHandler onError) {
-		return SETUP.onError(onError);
-	}
-
 	public static synchronized Setup req(ReqHandler handler) {
 		return SETUP.req(handler);
 	}
@@ -120,18 +118,6 @@ public class On {
 		return SETUP.processor(listener);
 	}
 
-	public static synchronized Setup instance() {
-		return SETUP;
-	}
-
-	public static synchronized Setup staticFilesLookIn(String... possibleLocations) {
-		return SETUP.staticFilesPath(possibleLocations);
-	}
-
-	public static synchronized Setup render(ViewRenderer renderer) {
-		return SETUP.render(renderer);
-	}
-
 	public static Setup args(String... args) {
 		return SETUP.args(args);
 	}
@@ -153,24 +139,16 @@ public class On {
 		return SETUP.deregister(controllers);
 	}
 
-	public static Setup renderJson(Mapper<Object, String> jsonRenderer) {
-		return SETUP.renderJson(jsonRenderer);
-	}
-
-	public static Setup parseJson(Mapper<String, Object> jsonParser) {
-		return SETUP.parseJson(jsonParser);
-	}
-
-	public static Setup login(LoginProcessor loginProcessor) {
-		return SETUP.login(loginProcessor);
-	}
-
-	public static Setup rolesOf(RolesProvider rolesProvider) {
-		return SETUP.rolesOf(rolesProvider);
+	public static synchronized Setup setup() {
+		return SETUP;
 	}
 
 	public static Config config() {
 		return SETUP.config();
+	}
+
+	public static Customization custom() {
+		return SETUP.custom();
 	}
 
 }

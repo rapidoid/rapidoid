@@ -45,7 +45,7 @@ public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 	@Override
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
 		try {
-			String[] staticFilesLocations = http.getStaticFilesLocations();
+			String[] staticFilesLocations = http.custom().staticFilesPath();
 
 			if (!U.isEmpty(staticFilesLocations)) {
 				Res res = HttpUtils.staticPage(req, staticFilesLocations);
@@ -62,8 +62,8 @@ public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 			return HttpStatus.NOT_FOUND;
 
 		} catch (Exception e) {
-			http.error(ctx, isKeepAlive, req, e);
-			return HttpStatus.ERROR;
+			http.errorAndDone(req, e);
+			return HttpStatus.DONE;
 		}
 	}
 

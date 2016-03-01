@@ -10,8 +10,11 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.data.JSON;
-import org.rapidoid.http.*;
-import org.rapidoid.http.handler.FastHttpErrorHandler;
+import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpWrapper;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqHandler;
 import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqRespHandler;
@@ -19,7 +22,6 @@ import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
@@ -94,7 +96,9 @@ public class Setup implements Constants {
 	private final ServerSetupType setupType;
 
 	private final IoCContext ioCContext;
-	private final FastHttp fastHttp = new FastHttp();
+
+	private final Customization customization = new Customization();
+	private final FastHttp fastHttp = new FastHttp(customization);
 
 	private volatile Integer port;
 	private volatile String address = "0.0.0.0";
@@ -106,12 +110,6 @@ public class Setup implements Constants {
 	private volatile boolean listening;
 	private volatile Server server;
 	private volatile boolean activated;
-
-	private volatile Mapper<Object, String> jsonRenderer;
-	private volatile Mapper<String, Object> jsonParser;
-
-	private volatile LoginProcessor loginProcessor;
-	private volatile RolesProvider rolesProvider;
 
 	public static Setup create(String name) {
 		IoCContext ioc = IoC.createContext().name(name);
@@ -152,7 +150,7 @@ public class Setup implements Constants {
 	public synchronized Server listen() {
 		if (!listening && !restarted) {
 
-			onChanges().restart();
+			inferCallers();
 
 			if (setupType != ServerSetupType.DEV || Conf.dev()) {
 				listening = true;
@@ -161,9 +159,12 @@ public class Setup implements Constants {
 				this.port = U.or(this.port, config.entry("port").or(defaultPort));
 
 				HttpProcessor proc = processor != null ? processor : fastHttp;
-				if (Conf.dev()) {
+
+				if (Conf.dev() && !OnChanges.isIgnored()) {
 					proc = new AppRestartProcessor(this, proc);
+					OnChanges.byDefaultRestart();
 				}
+
 				server = proc.listen(address, port);
 			} else {
 				Log.warn("The application is NOT running in dev mode, so the DEV server is automatically disabled.");
@@ -176,12 +177,7 @@ public class Setup implements Constants {
 	private synchronized void activate() {
 		if (!activated && !restarted) {
 			activated = true;
-
 			listen();
-
-			if (Conf.dev()) {
-				OnChanges.INSTANCE.restart();
-			}
 		}
 	}
 
@@ -279,14 +275,6 @@ public class Setup implements Constants {
 		return this;
 	}
 
-	public Setup onError(ErrorHandler onError) {
-		for (FastHttp http : httpImpls()) {
-			http.setErrorHandler(new FastHttpErrorHandler(http, onError));
-		}
-
-		return this;
-	}
-
 	private FastHttp[] httpImpls() {
 		return new FastHttp[]{http()};
 	}
@@ -348,22 +336,6 @@ public class Setup implements Constants {
 
 	public Map<String, Object> attributes() {
 		return http().attributes();
-	}
-
-	public Setup staticFilesPath(String... staticFilesLocations) {
-		for (FastHttp http : httpImpls()) {
-			http.setStaticFilesLocations(staticFilesLocations);
-		}
-
-		return this;
-	}
-
-	public Setup render(ViewRenderer renderer) {
-		for (FastHttp http : httpImpls()) {
-			http.setRenderer(renderer);
-		}
-
-		return this;
 	}
 
 	public Setup path(String... path) {
@@ -429,11 +401,6 @@ public class Setup implements Constants {
 		return ioCContext;
 	}
 
-	static OnChanges onChanges() {
-		inferCallers();
-		return OnChanges.INSTANCE;
-	}
-
 	static void notifyChanges() {
 		if (!dirty) {
 			dirty = true;
@@ -492,44 +459,12 @@ public class Setup implements Constants {
 		return instances;
 	}
 
-	public Setup renderJson(Mapper<Object, String> jsonRenderer) {
-		this.jsonRenderer = jsonRenderer;
-		return this;
-	}
-
-	public Setup parseJson(Mapper<String, Object> jsonParser) {
-		this.jsonParser = jsonParser;
-		return this;
-	}
-
-	public Setup login(LoginProcessor loginProcessor) {
-		this.loginProcessor = loginProcessor;
-		return this;
-	}
-
-	public Setup rolesOf(RolesProvider rolesProvider) {
-		this.rolesProvider = rolesProvider;
-		return this;
-	}
-
-	public Mapper<Object, String> getJsonRenderer() {
-		return jsonRenderer;
-	}
-
-	public Mapper<String, Object> getJsonParser() {
-		return jsonParser;
-	}
-
-	public LoginProcessor getLoginProcessor() {
-		return loginProcessor;
-	}
-
-	public RolesProvider getRolesProvider() {
-		return rolesProvider;
-	}
-
 	public Config config() {
 		return config;
+	}
+
+	public Customization custom() {
+		return customization;
 	}
 
 }

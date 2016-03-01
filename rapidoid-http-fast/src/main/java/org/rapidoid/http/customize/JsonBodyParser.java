@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.http.customize;
 
 /*
  * #%L
@@ -23,10 +23,12 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
-@Authors("Nikolche Mihajlovski")
-@Since("5.0.11")
-public interface ViewRenderer {
+import java.util.Map;
 
-	void render(Req req, Resp resp) throws Exception;
+@Authors("Nikolche Mihajlovski")
+@Since("5.1.0")
+public interface JsonBodyParser {
+
+	Map<String, Object> parseJsonBody(byte[] jsonBody) throws Exception;
 
 }

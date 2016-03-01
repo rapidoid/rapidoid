@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
+import org.rapidoid.http.customize.ViewRenderer;
 import org.rapidoid.u.U;
 
 import java.io.File;
@@ -227,7 +228,7 @@ public class RespImpl implements Resp {
 
 	@Override
 	public Resp render() {
-		ViewRenderer renderer = req.http().getRenderer();
+		ViewRenderer renderer = req.http().custom().viewRenderer();
 
 		U.must(renderer != null, "A view renderer wasn't set! Please use On.render() to configure a renderer!");
 
@@ -265,6 +266,24 @@ public class RespImpl implements Resp {
 		req.startRendering(code());
 
 		return req.channel().output().asOutputStream();
+	}
+
+	@Override
+	public String toString() {
+		return "RespImpl{" +
+				(content != null ? "content=" + content : "") +
+				(body != null ? ", body=" + body : "") +
+				(raw != null ? ", raw=" + raw : "") +
+				", code=" + code +
+				(contentType != null ? ", contentType=" + contentType : "") +
+				", headers=" + headers +
+				", cookies=" + cookies +
+				", model=" + model +
+				(redirect != null ? ", redirect='" + redirect + '\'' : "") +
+				(filename != null ? ", filename='" + filename + '\'' : "") +
+				(file != null ? ", file=" + file : "") +
+				(view != null ? ", view='" + view + '\'' : "") +
+				'}';
 	}
 
 }

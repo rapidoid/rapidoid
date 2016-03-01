@@ -32,6 +32,7 @@ import org.rapidoid.data.JSON;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.handler.FastParamsAwareReqHandler;
 import org.rapidoid.http.handler.FastStaticResourcesHandler;
@@ -52,8 +53,6 @@ import java.util.regex.Pattern;
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
 public class FastHttp extends AbstractHttpProcessor {
-
-	public static final String[] DEFAULT_STATIC_FILES_LOCATIONS = {"static", "rapidoid/static"};
 
 	private static final HttpParser HTTP_PARSER = new HttpParser();
 
@@ -113,22 +112,15 @@ public class FastHttp extends AbstractHttpProcessor {
 	private final Map<PathPattern, FastHttpHandler> paternHeadHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
 	private final Map<PathPattern, FastHttpHandler> paternTraceHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
 
+	private final Customization customization;
+
 	private volatile byte[] path1, path2, path3;
-
 	private volatile FastHttpHandler handler1, handler2, handler3;
-
 	private final List<FastHttpHandler> genericHandlers = Coll.synchronizedList();
 
 	private volatile FastHttpHandler staticResourcesHandler = new FastStaticResourcesHandler(this);
 
-	private volatile String[] staticFilesLocations = DEFAULT_STATIC_FILES_LOCATIONS;
-
-	private volatile FastHttpHandler errorHandler;
-
-	private volatile ViewRenderer renderer;
-
 	private final Map<String, Object> attributes = Coll.synchronizedMap();
-
 	private final Map<String, Map<String, Serializable>> sessions = Coll.mapOfMaps();
 
 	static {
@@ -137,8 +129,13 @@ public class FastHttp extends AbstractHttpProcessor {
 		}
 	}
 
-	public FastHttp() {
+	public FastHttp(Customization customization) {
 		super(null);
+		this.customization = customization;
+	}
+
+	public FastHttp() {
+		this(new Customization());
 	}
 
 	public synchronized void on(String verb, String path, FastHttpHandler handler) {
@@ -371,7 +368,8 @@ public class FastHttp extends AbstractHttpProcessor {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void request(Channel channel, boolean isGet, boolean isKeepAlive, Range xbody, Range xverb, Range xuri, Range xpath, Range xquery, Range xprotocol, Ranges hdrs) {
+	public void request(Channel channel, boolean isGet, boolean isKeepAlive, Range xbody, Range xverb, Range xuri,
+	                    Range xpath, Range xquery, Range xprotocol, Ranges hdrs) {
 
 		RapidoidHelper helper = channel.helper();
 		Buf buf = channel.input();
@@ -393,6 +391,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		boolean noReq = (handler != null && !handler.needsParams());
 
 		ReqImpl req = null;
+		MediaType contentType = MediaType.HTML_UTF_8;
 
 		if (!noReq) {
 			KeyValueRanges paramsKV = helper.pairs1.reset();
@@ -438,7 +437,9 @@ public class FastHttp extends AbstractHttpProcessor {
 			String path = UTILS.urlDecode(xpath.str(buf));
 			String query = UTILS.urlDecode(xquery.str(buf));
 
-			MediaType contentType = handler != null ? handler.contentType() : MediaType.HTML_UTF_8;
+			if (handler != null) {
+				contentType = handler.contentType();
+			}
 
 			params = Collections.synchronizedMap(params);
 			headers = Collections.synchronizedMap(headers);
@@ -462,7 +463,15 @@ public class FastHttp extends AbstractHttpProcessor {
 			}
 
 		} catch (Throwable e) {
-			error(channel, isKeepAlive, req, e);
+			if (req != null) {
+				errorAndDone(req, e);
+				return;
+			} else {
+				Log.error("Low-level HTTP handler error!", e);
+				startResponse(channel, 500, isKeepAlive, contentType);
+				writeContent(channel, HttpUtils.responseToBytes("Internal Server Error!", contentType));
+				done(channel, isKeepAlive);
+			}
 		}
 
 		if (status == HttpStatus.NOT_FOUND) {
@@ -644,21 +653,25 @@ public class FastHttp extends AbstractHttpProcessor {
 		writeContent(ctx, content);
 	}
 
-	public void error(Channel ctx, boolean isKeepAlive, Req req, Throwable error) {
-		if (errorHandler != null) {
-			errorHandler.handle(ctx, isKeepAlive, req, error);
-		} else {
-			defaultErrorHandling(ctx, isKeepAlive, error);
+	public void error(Req req, Throwable error) {
+		Log.error("HTTP handler error!", error);
+
+		try {
+			Resp resp = req.response().code(500);
+			Object result = customization.errorHandler().handleError(req, resp, error);
+			HttpUtils.resultToResponse(req, result);
+
+		} catch (Exception e) {
+			Log.error("The error handler had error!", e);
 		}
 	}
 
-	private void defaultErrorHandling(Channel ctx, boolean isKeepAlive, Throwable error) {
-		Log.error("Error while processing request!", error);
-
-		startResponse(ctx, 500, isKeepAlive, MediaType.HTML_UTF_8);
-		writeContent(ctx, HttpUtils.getErrorMessage(error).getBytes());
-
-		done(ctx, isKeepAlive);
+	public void errorAndDone(Req req, Throwable error) {
+		error(req, error);
+		// the Req object will do the rendering
+		if (!req.isAsync()) {
+			req.done();
+		}
 	}
 
 	private void writeContent(Channel ctx, byte[] content) {
@@ -677,7 +690,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		ctx.write(content);
 	}
 
-	public void writeSerializedJson(Channel ctx, boolean isKeepAlive, Object value) {
+	public void writeAsJson(Channel ctx, boolean isKeepAlive, Object value) {
 		start200(ctx, isKeepAlive, MediaType.JSON_UTF_8);
 
 		Buf out = ctx.output();
@@ -709,10 +722,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		path1 = path2 = path3 = null;
 		handler1 = handler2 = handler3 = null;
 
-		staticFilesLocations = DEFAULT_STATIC_FILES_LOCATIONS;
 		staticResourcesHandler = new FastStaticResourcesHandler(this);
-		errorHandler = null;
-		renderer = null;
 
 		getHandlers.clear();
 		postHandlers.clear();
@@ -729,9 +739,11 @@ public class FastHttp extends AbstractHttpProcessor {
 		paternOptionsHandlers.clear();
 		paternHeadHandlers.clear();
 		paternTraceHandlers.clear();
+
+		customization.reset();
 	}
 
-	public void renderBody(Channel ctx, int code, MediaType contentType, byte[] body) {
+	public void renderBody(Channel ctx, boolean isKeepAlive, byte[] body) {
 		ctx.write(body);
 	}
 
@@ -757,14 +769,6 @@ public class FastHttp extends AbstractHttpProcessor {
 		}
 	}
 
-	public void setStaticResourcesHandler(FastHttpHandler staticResourcesHandler) {
-		this.staticResourcesHandler = staticResourcesHandler;
-	}
-
-	public FastHttpHandler getStaticResourcesHandler() {
-		return staticResourcesHandler;
-	}
-
 	public Map<String, Object> attributes() {
 		return attributes;
 	}
@@ -773,36 +777,12 @@ public class FastHttp extends AbstractHttpProcessor {
 		return sessions.get(sessionId);
 	}
 
-	public void setErrorHandler(FastHttpHandler errorHandler) {
-		this.errorHandler = errorHandler;
-	}
-
-	public void setErrorHandler(ReqHandler errorHandler) {
-		this.errorHandler = handler(errorHandler);
-	}
-
-	public FastHttpHandler getErrorHandler() {
-		return errorHandler;
-	}
-
-	public void setStaticFilesLocations(String... staticFilesLocations) {
-		this.staticFilesLocations = staticFilesLocations;
-	}
-
-	public String[] getStaticFilesLocations() {
-		return staticFilesLocations;
-	}
-
-	public void setRenderer(ViewRenderer renderer) {
-		this.renderer = renderer;
-	}
-
-	public ViewRenderer getRenderer() {
-		return renderer;
-	}
-
 	public FastHttpHandler handler(ReqHandler reqHandler, HttpWrapper... wrappers) {
 		return new FastParamsAwareReqHandler(this, MediaType.HTML_UTF_8, wrappers, reqHandler);
+	}
+
+	public Customization custom() {
+		return customization;
 	}
 
 }

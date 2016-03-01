@@ -30,16 +30,16 @@ import org.rapidoid.util.UTILS;
 @Since("5.1.0")
 public class OnChanges {
 
-	static final OnChanges INSTANCE = new OnChanges();
-
 	static volatile boolean initialized;
+	static volatile boolean ignore;
 
 	private OnChanges() {
 	}
 
-	public synchronized void restart() {
+	public static synchronized void restart() {
 		if (!initialized) {
 			initialized = true;
+			ignore = false;
 
 			if (Conf.dev()) {
 				if (UTILS.withWatchModule()) {
@@ -51,6 +51,24 @@ public class OnChanges {
 				Log.warn("Not running in dev mode, hot class reloading is disabled!");
 			}
 		}
+	}
+
+	public static synchronized void byDefaultRestart() {
+		if (!ignore) {
+			restart();
+		}
+	}
+
+	public static synchronized void ignore() {
+		ignore = true;
+	}
+
+	public static boolean isIgnored() {
+		return ignore;
+	}
+
+	public static boolean isInitialized() {
+		return initialized;
 	}
 
 }

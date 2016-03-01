@@ -1,4 +1,4 @@
-package org.rapidoid.http.handler;
+package org.rapidoid.http.customize;
 
 /*
  * #%L
@@ -22,26 +22,13 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.ErrorHandler;
-import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Req;
-import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.http.Resp;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")
-public class FastHttpErrorHandler extends AbstractAsyncHttpHandler {
+public interface ErrorHandler {
 
-	private final ErrorHandler handler;
+	Object handleError(Req req, Resp resp, Throwable error);
 
-	public FastHttpErrorHandler(FastHttp http, ErrorHandler handler) {
-		super(http, MediaType.HTML_UTF_8, new HttpWrapper[0]);
-		this.handler = handler;
-	}
-
-	@Override
-	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
-		return handler.onError(req, req.response(), (Throwable) extra);
-	}
 }

@@ -34,7 +34,7 @@ public class HttpServerRestartTest extends HttpTestCommons {
 		On.get("/").html("a");
 		eq(get("/"), "a");
 
-		On.instance().http().resetConfig();
+		On.setup().http().resetConfig();
 
 		On.get("/").html("b");
 		eq(get("/"), "b");

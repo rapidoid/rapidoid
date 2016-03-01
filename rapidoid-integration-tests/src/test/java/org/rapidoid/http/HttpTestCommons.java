@@ -32,10 +32,7 @@ import org.rapidoid.ioc.IoC;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.setup.Admin;
-import org.rapidoid.setup.Dev;
-import org.rapidoid.setup.On;
-import org.rapidoid.setup.Setup;
+import org.rapidoid.setup.*;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
@@ -67,8 +64,10 @@ public abstract class HttpTestCommons extends TestCommons {
 		IoC.defaultContext().reset();
 
 		Setup.resetGlobalState();
-		On.instance().http().resetConfig();
-		On.instance().listen();
+		OnChanges.ignore();
+
+		On.setup().http().resetConfig();
+		On.setup().listen();
 
 		System.out.println("--- SERVER STARTED ---");
 

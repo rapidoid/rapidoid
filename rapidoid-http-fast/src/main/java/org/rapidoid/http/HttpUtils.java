@@ -26,6 +26,7 @@ import org.rapidoid.commons.MediaType;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
 import org.rapidoid.crypto.Crypto;
+import org.rapidoid.data.JSON;
 import org.rapidoid.io.Res;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
@@ -209,6 +210,30 @@ public class HttpUtils implements HttpMetadata {
 
 	public static String constructUrl(Req x, String path) {
 		return (Conf.ROOT.is("https") ? "https://" : "http://") + x.host() + path;
+	}
+
+	public static byte[] responseToBytes(Object result, MediaType contentType) {
+		if (U.eq(contentType, MediaType.JSON_UTF_8)) {
+			return JSON.stringifyToBytes(result);
+		} else {
+			return UTILS.toBytes(result);
+		}
+	}
+
+	public static void resultToResponse(Req req, Object result) {
+		if (result instanceof Req) {
+			if (req != result) {
+				req.response().content("Unknown request instance was received as result!");
+			}
+
+		} else if (result instanceof Resp) {
+			if (req.response() != result) {
+				req.response().content("Unknown response instance was received as result!");
+			}
+
+		} else {
+			req.response().content(result);
+		}
 	}
 
 }

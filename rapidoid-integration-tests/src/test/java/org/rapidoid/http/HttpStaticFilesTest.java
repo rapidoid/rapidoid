@@ -31,7 +31,7 @@ public class HttpStaticFilesTest extends HttpTestCommons {
 
 	@Test
 	public void serveStaticFiles() {
-		On.staticFilesLookIn("static1", "non-existing-location", "static2");
+		On.custom().staticFilesPath("static1", "non-existing-location", "static2");
 
 		On.get("/c").json("override");
 
