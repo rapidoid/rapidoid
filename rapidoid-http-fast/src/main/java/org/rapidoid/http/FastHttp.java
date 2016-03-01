@@ -81,8 +81,8 @@ public class FastHttp extends AbstractHttpProcessor {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void request(Channel channel, boolean isGet, boolean isKeepAlive, Range xbody, Range xverb, Range xuri,
-	                    Range xpath, Range xquery, Range xprotocol, Ranges hdrs) {
+	public void onRequest(Channel channel, boolean isGet, boolean isKeepAlive, Range xbody, Range xverb, Range xuri,
+	                      Range xpath, Range xquery, Range xprotocol, Ranges hdrs) {
 
 		RapidoidHelper helper = channel.helper();
 		Buf buf = channel.input();

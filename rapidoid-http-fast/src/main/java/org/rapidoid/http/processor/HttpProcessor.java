@@ -32,8 +32,8 @@ import org.rapidoid.util.Constants;
 @Since("5.1.0")
 public interface HttpProcessor extends Constants {
 
-	void request(Channel channel, boolean isGet, boolean isKeepAlive, Range body,
-	             Range verb, Range uri, Range path, Range query, Range protocol, Ranges headers);
+	void onRequest(Channel channel, boolean isGet, boolean isKeepAlive, Range body,
+	               Range verb, Range uri, Range path, Range query, Range protocol, Ranges headers);
 
 	Server listen(String address, int port);
 

@@ -67,7 +67,7 @@ public class FastHttpProtocol implements Protocol {
 
 		HTTP_PARSER.parse(buf, isGet, isKeepAlive, body, verb, uri, path, query, protocol, headers, helper);
 
-		processor.request(channel, isGet.value, isKeepAlive.value, body, verb, uri, path, query, protocol, headers);
+		processor.onRequest(channel, isGet.value, isKeepAlive.value, body, verb, uri, path, query, protocol, headers);
 	}
 
 }
