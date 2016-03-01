@@ -1,12 +1,9 @@
-package org.rapidoid.plugins.JPA.hibernate;
+package org.rapidoid.plugins.db.hibernate;
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.plugins.db.hibernate.Book;
-import org.rapidoid.plugins.db.hibernate.JPA;
-import org.rapidoid.plugins.db.hibernate.Movie;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 import org.rapidoid.util.SimplePersisterProvider;

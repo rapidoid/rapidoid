@@ -208,9 +208,7 @@ public class U {
 	public static <T> Set<T> set(T... values) {
 		Set<T> set = set();
 
-		for (T val : values) {
-			set.add(val);
-		}
+		Collections.addAll(set, values);
 
 		return set;
 	}
@@ -233,9 +231,7 @@ public class U {
 	public static <T> List<T> list(T... values) {
 		List<T> list = list();
 
-		for (T item : values) {
-			list.add(item);
-		}
+		Collections.addAll(list, values);
 
 		return list;
 	}

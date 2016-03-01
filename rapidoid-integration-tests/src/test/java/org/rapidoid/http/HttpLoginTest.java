@@ -37,8 +37,6 @@ public class HttpLoginTest extends HttpTestCommons {
 
 	@Test
 	public void testLogin() {
-		On.custom().loginProvider((u, p) -> u.equals(p));
-
 		On.get("/user").json(() -> U.list(Current.username(), Current.roles()));
 
 		On.post("/mylogin").json((Resp resp, String user, String pass) -> {
