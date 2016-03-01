@@ -118,10 +118,6 @@ public class Admin {
 		return SETUP.processor(listener);
 	}
 
-	public static synchronized Setup instance() {
-		return SETUP;
-	}
-
 	public static Setup args(String... args) {
 		return SETUP.args(args);
 	}
@@ -141,6 +137,10 @@ public class Admin {
 
 	public static Setup deregister(Object... controllers) {
 		return SETUP.deregister(controllers);
+	}
+
+	public static synchronized Setup setup() {
+		return SETUP;
 	}
 
 	public static Config config() {

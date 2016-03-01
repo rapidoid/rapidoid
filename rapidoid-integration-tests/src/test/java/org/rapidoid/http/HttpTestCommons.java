@@ -84,8 +84,8 @@ public abstract class HttpTestCommons extends TestCommons {
 	public void closeContext() {
 		System.out.println("--- STOPPING SERVER ---");
 
-		Admin.instance().shutdown();
-		Dev.instance().shutdown();
+		Admin.setup().shutdown();
+		Dev.setup().shutdown();
 
 		System.out.println("--- SERVER STOPPED ---");
 	}
