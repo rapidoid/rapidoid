@@ -469,7 +469,7 @@ public class FastHttp extends AbstractHttpProcessor {
 			} else {
 				Log.error("Low-level HTTP handler error!", e);
 				startResponse(channel, 500, isKeepAlive, contentType);
-				writeContent(channel, HttpUtils.responseToBytes("Internal Server Error!", contentType));
+				writeContentLengthAndBody(channel, HttpUtils.responseToBytes("Internal Server Error!", contentType));
 				done(channel, isKeepAlive);
 			}
 		}
@@ -619,13 +619,8 @@ public class FastHttp extends AbstractHttpProcessor {
 		return null;
 	}
 
-	public void start200(Channel ctx, boolean isKeepAlive, MediaType contentType) {
-		ctx.write(HTTP_200_OK);
-		addDefaultHeaders(ctx, isKeepAlive, contentType);
-	}
-
 	public void startResponse(Channel ctx, int code, boolean isKeepAlive, MediaType contentType) {
-		ctx.write(responseCodes.get(code));
+		ctx.write(code == 200 ? HTTP_200_OK : responseCodes.get(code));
 		addDefaultHeaders(ctx, isKeepAlive, contentType);
 	}
 
@@ -649,8 +644,8 @@ public class FastHttp extends AbstractHttpProcessor {
 	}
 
 	public void write200(Channel ctx, boolean isKeepAlive, MediaType contentTypeHeader, byte[] content) {
-		start200(ctx, isKeepAlive, contentTypeHeader);
-		writeContent(ctx, content);
+		startResponse(ctx, 200, isKeepAlive, contentTypeHeader);
+		writeContentLengthAndBody(ctx, content);
 	}
 
 	public void error(Req req, Throwable error) {
@@ -674,7 +669,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		}
 	}
 
-	private void writeContent(Channel ctx, byte[] content) {
+	public void writeContentLengthAndBody(Channel ctx, byte[] content) {
 		int len = content.length;
 
 		if (len < CONTENT_LENGTHS_SIZE) {
@@ -690,8 +685,8 @@ public class FastHttp extends AbstractHttpProcessor {
 		ctx.write(content);
 	}
 
-	public void writeAsJson(Channel ctx, boolean isKeepAlive, Object value) {
-		start200(ctx, isKeepAlive, MediaType.JSON_UTF_8);
+	public void writeAsJson(Channel ctx, int code, boolean isKeepAlive, Object value) {
+		startResponse(ctx, code, isKeepAlive, MediaType.JSON_UTF_8);
 
 		Buf out = ctx.output();
 
@@ -741,10 +736,6 @@ public class FastHttp extends AbstractHttpProcessor {
 		paternTraceHandlers.clear();
 
 		customization.reset();
-	}
-
-	public void renderBody(Channel ctx, boolean isKeepAlive, byte[] body) {
-		ctx.write(body);
 	}
 
 	public void notFound(Channel ctx, boolean isKeepAlive, FastHttpHandler fromHandler, Req req) {

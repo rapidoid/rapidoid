@@ -347,31 +347,31 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		return response;
 	}
 
-	void startRendering(int code) {
+	void startRendering(int code, boolean unknownContentLength) {
 		if (!isRendering()) {
 			synchronized (this) {
 				if (!isRendering()) {
-					startResponse(code);
+					startResponse(code, unknownContentLength);
 				}
 			}
 		}
 	}
 
-	private void startResponse(int code) {
+	private void startResponse(int code, boolean unknownContentLength) {
 		MediaType contentType = MediaType.HTML_UTF_8;
 
 		if (cookiepack != null) {
-			HttpUtils.saveCookipackBeforeClosingHeaders(this, cookiepack);
+			HttpUtils.saveCookipackBeforeRenderingHeaders(this, cookiepack);
 		}
 
 		if (response != null) {
 			contentType = U.or(response.contentType(), MediaType.HTML_UTF_8);
 		}
 
-		renderResponseHeaders(code, contentType);
+		renderResponseHeaders(code, contentType, unknownContentLength);
 	}
 
-	private void renderResponseHeaders(int code, MediaType contentType) {
+	private void renderResponseHeaders(int code, MediaType contentType, boolean unknownContentLength) {
 		rendering = true;
 		http.startResponse(channel, code, isKeepAlive, contentType);
 
@@ -379,20 +379,21 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 			renderCustomHeaders();
 		}
 
-		Buf out = channel.output();
+		if (unknownContentLength) {
+			Buf out = channel.output();
+			channel.write(FastHttp.CONTENT_LENGTH_UNKNOWN);
 
-		channel.write(FastHttp.CONTENT_LENGTH_UNKNOWN);
+			posConLen = out.size();
+			channel.write(CR_LF);
 
-		posConLen = out.size();
-		channel.write(CR_LF);
+			// finishing the headers
+			channel.write(CR_LF);
 
-		// finishing the headers
-		channel.write(CR_LF);
-
-		posBefore = out.size();
+			posBefore = out.size();
+		}
 	}
 
-	private void completeResponse() {
+	private void writeResponseLength() {
 		Buf out = channel.output();
 
 		int posAfter = out.size();
@@ -421,7 +422,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		}
 
 		if (!completed) {
-			completeResponse();
+			writeResponseLength();
 			completed = true;
 		}
 
@@ -432,8 +433,9 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		String err = validateResponse();
 
 		if (err != null) {
-			startRendering(500);
-			http.renderBody(channel, isKeepAlive, err.getBytes());
+			startRendering(500, false);
+			writeContentLengthAndBody(err.getBytes());
+
 		} else {
 			renderResponse();
 		}
@@ -448,17 +450,18 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 			completed = true;
 
 		} else {
-			renderResponseBody();
+			// first serialize the response to bytes (with error handling)
+			byte[] bytes = responseToBytes(response());
+
+			// then start rendering
+			startRendering(response.code(), false);
+			writeContentLengthAndBody(bytes);
 		}
 	}
 
-	private void renderResponseBody() {
-		// first serialize the response to bytes (with error handling)
-		byte[] bytes = responseToBytes(response());
-
-		// then start rendering
-		startRendering(response.code());
-		http.renderBody(channel, isKeepAlive, bytes);
+	private void writeContentLengthAndBody(byte[] bytes) {
+		http.writeContentLengthAndBody(channel, bytes);
+		completed = true;
 	}
 
 	private byte[] responseToBytes(Resp resp) {

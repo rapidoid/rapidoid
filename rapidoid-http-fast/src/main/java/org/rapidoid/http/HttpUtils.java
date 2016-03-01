@@ -60,7 +60,7 @@ public class HttpUtils implements HttpMetadata {
 		}
 	}
 
-	public static void saveCookipackBeforeClosingHeaders(Req req, Map<String, Serializable> cookiepack) {
+	public static void saveCookipackBeforeRenderingHeaders(Req req, Map<String, Serializable> cookiepack) {
 		if (cookiepack != null) {
 			byte[] cpack = Crypto.encrypt(UTILS.serialize(cookiepack));
 			String encoded = DatatypeConverter.printBase64Binary(cpack).replace('+', '$');

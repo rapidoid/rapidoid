@@ -263,7 +263,7 @@ public class RespImpl implements Resp {
 		U.must(body() == null, "The response body has already been set, so cannot write the response through OutputStream, too!");
 		U.must(raw() == null, "The raw response has already been set, so cannot write the response through OutputStream, too!");
 
-		req.startRendering(code());
+		req.startRendering(code(), true);
 
 		return req.channel().output().asOutputStream();
 	}
