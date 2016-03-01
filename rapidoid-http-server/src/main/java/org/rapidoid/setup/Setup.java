@@ -10,10 +10,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.data.JSON;
-import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpWrapper;
-import org.rapidoid.http.ReqHandler;
-import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqHandler;
@@ -98,7 +95,8 @@ public class Setup implements Constants {
 	private final IoCContext ioCContext;
 
 	private final Customization customization = new Customization();
-	private final FastHttp fastHttp = new FastHttp(customization);
+	private final HttpRoutes routes = new HttpRoutes(customization);
+	private final FastHttp fastHttp = new FastHttp(routes, customization);
 
 	private volatile Integer port;
 	private volatile String address = "0.0.0.0";
@@ -184,81 +182,69 @@ public class Setup implements Constants {
 
 	public OnRoute route(String verb, String path) {
 		activate();
-		return new OnRoute(this, httpImpls(), verb.toUpperCase(), path).wrap(wrappers);
+		return new OnRoute(this, http(), verb.toUpperCase(), path).wrap(wrappers);
 	}
 
 	public OnRoute get(String path) {
 		activate();
-		return new OnRoute(this, httpImpls(), GET, path).wrap(wrappers);
+		return new OnRoute(this, http(), GET, path).wrap(wrappers);
 	}
 
 	public OnRoute post(String path) {
 		activate();
-		return new OnRoute(this, httpImpls(), POST, path).wrap(wrappers);
+		return new OnRoute(this, http(), POST, path).wrap(wrappers);
 	}
 
 	public OnRoute put(String path) {
 		activate();
-		return new OnRoute(this, httpImpls(), PUT, path).wrap(wrappers);
+		return new OnRoute(this, http(), PUT, path).wrap(wrappers);
 	}
 
 	public OnRoute delete(String path) {
 		activate();
-		return new OnRoute(this, httpImpls(), DELETE, path).wrap(wrappers);
+		return new OnRoute(this, http(), DELETE, path).wrap(wrappers);
 	}
 
 	public OnRoute patch(String path) {
 		activate();
-		return new OnRoute(this, httpImpls(), PATCH, path).wrap(wrappers);
+		return new OnRoute(this, http(), PATCH, path).wrap(wrappers);
 	}
 
 	public OnRoute options(String path) {
 		activate();
-		return new OnRoute(this, httpImpls(), OPTIONS, path).wrap(wrappers);
+		return new OnRoute(this, http(), OPTIONS, path).wrap(wrappers);
 	}
 
 	public OnRoute head(String path) {
 		activate();
-		return new OnRoute(this, httpImpls(), HEAD, path).wrap(wrappers);
+		return new OnRoute(this, http(), HEAD, path).wrap(wrappers);
 	}
 
 	public OnRoute trace(String path) {
 		activate();
-		return new OnRoute(this, httpImpls(), TRACE, path).wrap(wrappers);
+		return new OnRoute(this, http(), TRACE, path).wrap(wrappers);
 	}
 
 	public OnPage page(String path) {
 		activate();
-		return new OnPage(this, httpImpls(), path).wrap(wrappers);
+		return new OnPage(this, http(), path).wrap(wrappers);
 	}
 
 	public Setup req(ReqHandler handler) {
 		activate();
-		for (FastHttp http : httpImpls()) {
-			http.addGenericHandler(new DelegatingFastParamsAwareReqHandler(http, MediaType.HTML_UTF_8, wrappers,
-					handler));
-		}
-
+		routes.addGenericHandler(new DelegatingFastParamsAwareReqHandler(http(), MediaType.HTML_UTF_8, wrappers, handler));
 		return this;
 	}
 
 	public Setup req(ReqRespHandler handler) {
 		activate();
-		for (FastHttp http : httpImpls()) {
-			http.addGenericHandler(new DelegatingFastParamsAwareReqRespHandler(http, MediaType.HTML_UTF_8, wrappers,
-					handler));
-		}
-
+		routes.addGenericHandler(new DelegatingFastParamsAwareReqRespHandler(http(), MediaType.HTML_UTF_8, wrappers, handler));
 		return this;
 	}
 
 	public Setup req(FastHttpHandler handler) {
 		activate();
-
-		for (FastHttp http : httpImpls()) {
-			http.addGenericHandler(handler);
-		}
-
+		routes.addGenericHandler(handler);
 		return this;
 	}
 
@@ -274,10 +260,6 @@ public class Setup implements Constants {
 		PojoHandlersSetup.from(this, beans).register();
 
 		return this;
-	}
-
-	private FastHttp[] httpImpls() {
-		return new FastHttp[]{http()};
 	}
 
 	public Setup port(int port) {
@@ -386,10 +368,7 @@ public class Setup implements Constants {
 	}
 
 	public Setup deregister(String verb, String path) {
-		for (FastHttp http : httpImpls()) {
-			http.remove(verb, path);
-		}
-
+		routes.remove(verb, path);
 		return this;
 	}
 
@@ -466,6 +445,10 @@ public class Setup implements Constants {
 
 	public Customization custom() {
 		return customization;
+	}
+
+	public HttpRoutes getRoutes() {
+		return routes;
 	}
 
 }

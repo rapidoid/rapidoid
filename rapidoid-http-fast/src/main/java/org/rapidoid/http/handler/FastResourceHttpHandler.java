@@ -23,7 +23,7 @@ package org.rapidoid.http.handler;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpIO;
 import org.rapidoid.http.HttpStatus;
 import org.rapidoid.http.Req;
 import org.rapidoid.io.Res;
@@ -36,8 +36,8 @@ public class FastResourceHttpHandler extends AbstractFastHttpHandler {
 
 	private final Res resource;
 
-	public FastResourceHttpHandler(FastHttp http, MediaType contentType, Res resource) {
-		super(http, contentType);
+	public FastResourceHttpHandler(MediaType contentType, Res resource) {
+		super(contentType);
 		this.resource = resource;
 	}
 
@@ -46,7 +46,7 @@ public class FastResourceHttpHandler extends AbstractFastHttpHandler {
 		byte[] bytes = resource.getBytesOrNull();
 
 		if (bytes != null) {
-			http.write200(ctx, isKeepAlive, contentType, bytes);
+			HttpIO.write200(ctx, isKeepAlive, contentType, bytes);
 			return HttpStatus.DONE;
 		} else {
 			return HttpStatus.NOT_FOUND;

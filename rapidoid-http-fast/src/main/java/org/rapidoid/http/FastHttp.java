@@ -23,32 +23,27 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
-import org.rapidoid.bufstruct.BufMap;
-import org.rapidoid.bufstruct.BufMapImpl;
-import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
-import org.rapidoid.commons.*;
-import org.rapidoid.data.JSON;
+import org.rapidoid.commons.Coll;
+import org.rapidoid.commons.MediaType;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.FastHttpHandler;
-import org.rapidoid.http.handler.FastParamsAwareReqHandler;
-import org.rapidoid.http.handler.FastStaticResourcesHandler;
 import org.rapidoid.http.impl.HandlerMatch;
-import org.rapidoid.http.impl.HandlerMatchWithParams;
 import org.rapidoid.http.processor.AbstractHttpProcessor;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Constants;
 import org.rapidoid.util.UTILS;
 
 import java.io.Serializable;
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
@@ -56,82 +51,20 @@ public class FastHttp extends AbstractHttpProcessor {
 
 	private static final HttpParser HTTP_PARSER = new HttpParser();
 
-	private static final Pattern PATTERN_PATTERN = Pattern.compile("[^\\w/-]");
-
-	private static final byte[] HTTP_200_OK = "HTTP/1.1 200 OK\r\n".getBytes();
-
-	private static final byte[] HTTP_400_BAD_REQUEST = "HTTP/1.1 400 Bad Request\r\nContent-Length: 12\r\n\r\nBad Request!"
-			.getBytes();
-
-	private static final byte[] HTTP_404_NOT_FOUND = "HTTP/1.1 404 Not Found\r\nContent-Length: 10\r\n\r\nNot found!"
-			.getBytes();
-
-	private static final byte[] HEADER_SEP = ": ".getBytes();
-
-	private static final byte[] CONN_KEEP_ALIVE = "Connection: keep-alive\r\n".getBytes();
-
-	private static final byte[] CONN_CLOSE = "Connection: close\r\n".getBytes();
-
-	private static final byte[] SERVER_HEADER = "Server: Rapidoid\r\n".getBytes();
-
-	private static final byte[] CONTENT_LENGTH_IS = "Content-Length: ".getBytes();
-
-	static final byte[] CONTENT_LENGTH_UNKNOWN = "Content-Length:           ".getBytes();
-
-	private static final int CONTENT_LENGTHS_SIZE = 5000;
-
-	private static final byte[] DATE_IS = "Date: ".getBytes();
-
-	private static final byte[] _POST = Constants.POST.getBytes();
-	private static final byte[] _PUT = Constants.PUT.getBytes();
-	private static final byte[] _DELETE = Constants.DELETE.getBytes();
-	private static final byte[] _PATCH = Constants.PATCH.getBytes();
-	private static final byte[] _OPTIONS = Constants.OPTIONS.getBytes();
-	private static final byte[] _HEAD = Constants.HEAD.getBytes();
-	private static final byte[] _TRACE = Constants.TRACE.getBytes();
-
-	private static final byte[][] CONTENT_LENGTHS = new byte[CONTENT_LENGTHS_SIZE][];
-
-	private final HttpResponseCodes responseCodes = new HttpResponseCodes();
-
-	private final BufMap<FastHttpHandler> getHandlers = new BufMapImpl<FastHttpHandler>();
-	private final BufMap<FastHttpHandler> postHandlers = new BufMapImpl<FastHttpHandler>();
-	private final BufMap<FastHttpHandler> putHandlers = new BufMapImpl<FastHttpHandler>();
-	private final BufMap<FastHttpHandler> deleteHandlers = new BufMapImpl<FastHttpHandler>();
-	private final BufMap<FastHttpHandler> patchHandlers = new BufMapImpl<FastHttpHandler>();
-	private final BufMap<FastHttpHandler> optionsHandlers = new BufMapImpl<FastHttpHandler>();
-	private final BufMap<FastHttpHandler> headHandlers = new BufMapImpl<FastHttpHandler>();
-	private final BufMap<FastHttpHandler> traceHandlers = new BufMapImpl<FastHttpHandler>();
-
-	private final Map<PathPattern, FastHttpHandler> paternGetHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
-	private final Map<PathPattern, FastHttpHandler> paternPostHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
-	private final Map<PathPattern, FastHttpHandler> paternPutHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
-	private final Map<PathPattern, FastHttpHandler> paternDeleteHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
-	private final Map<PathPattern, FastHttpHandler> paternPatchHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
-	private final Map<PathPattern, FastHttpHandler> paternOptionsHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
-	private final Map<PathPattern, FastHttpHandler> paternHeadHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
-	private final Map<PathPattern, FastHttpHandler> paternTraceHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
-
+	private final HttpRoutes routes;
 	private final Customization customization;
-
-	private volatile byte[] path1, path2, path3;
-	private volatile FastHttpHandler handler1, handler2, handler3;
-	private final List<FastHttpHandler> genericHandlers = Coll.synchronizedList();
-
-	private volatile FastHttpHandler staticResourcesHandler = new FastStaticResourcesHandler(this);
 
 	private final Map<String, Object> attributes = Coll.synchronizedMap();
 	private final Map<String, Map<String, Serializable>> sessions = Coll.mapOfMaps();
 
-	static {
-		for (int len = 0; len < CONTENT_LENGTHS.length; len++) {
-			CONTENT_LENGTHS[len] = (new String(CONTENT_LENGTH_IS) + len + new String(CR_LF)).getBytes();
-		}
+	public FastHttp(HttpRoutes routes, Customization customization) {
+		super(null);
+		this.routes = routes;
+		this.customization = customization;
 	}
 
 	public FastHttp(Customization customization) {
-		super(null);
-		this.customization = customization;
+		this(new HttpRoutes(customization), customization);
 	}
 
 	public FastHttp() {
@@ -139,231 +72,11 @@ public class FastHttp extends AbstractHttpProcessor {
 	}
 
 	public synchronized void on(String verb, String path, FastHttpHandler handler) {
-		addOrRemove(true, verb, path, handler);
+		routes.on(verb, path, handler);
 	}
 
 	public synchronized void on(String verb, String path, ReqHandler handler) {
-		addOrRemove(true, verb, path, handler(handler));
-	}
-
-	public synchronized void remove(String verb, String path) {
-		addOrRemove(false, verb, path, null);
-	}
-
-	private void addOrRemove(boolean add, String verbs, String path, FastHttpHandler handler) {
-		U.notNull(verbs, "HTTP verbs");
-		U.notNull(path, "HTTP path");
-
-		if (add) {
-			U.notNull(handler, "HTTP handler");
-		}
-
-		verbs = verbs.toUpperCase();
-		if (path.length() > 1) {
-			path = Str.trimr(path, "/");
-		}
-
-		if (add) {
-			Log.info("Registering handler", "verbs", verbs, "path", path, "handler", handler);
-		} else {
-			Log.info("Deregistering handler", "verbs", verbs, "path", path);
-		}
-
-		for (String verb : verbs.split(",")) {
-			if (add) {
-				deregister(HttpVerb.from(verb), path);
-				register(HttpVerb.from(verb), path, handler);
-			} else {
-				deregister(HttpVerb.from(verb), path);
-			}
-		}
-	}
-
-	private void register(HttpVerb verb, String path, FastHttpHandler handler) {
-		boolean isPattern = isPattern(path);
-		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
-
-		switch (verb) {
-			case GET:
-				if (!isPattern) {
-					if (path1 == null) {
-						path1 = path.getBytes();
-						handler1 = handler;
-
-					} else if (path2 == null) {
-						path2 = path.getBytes();
-						handler2 = handler;
-
-					} else if (path3 == null) {
-						path3 = path.getBytes();
-						handler3 = handler;
-
-					} else {
-						getHandlers.put(path, handler);
-					}
-				} else {
-					paternGetHandlers.put(pathPattern, handler);
-				}
-				break;
-
-			case POST:
-				if (!isPattern) {
-					postHandlers.put(path, handler);
-				} else {
-					paternPostHandlers.put(pathPattern, handler);
-				}
-				break;
-
-			case PUT:
-				if (!isPattern) {
-					putHandlers.put(path, handler);
-				} else {
-					paternPutHandlers.put(pathPattern, handler);
-				}
-				break;
-
-			case DELETE:
-				if (!isPattern) {
-					deleteHandlers.put(path, handler);
-				} else {
-					paternDeleteHandlers.put(pathPattern, handler);
-				}
-				break;
-
-			case PATCH:
-				if (!isPattern) {
-					patchHandlers.put(path, handler);
-				} else {
-					paternPatchHandlers.put(pathPattern, handler);
-				}
-				break;
-
-			case OPTIONS:
-				if (!isPattern) {
-					optionsHandlers.put(path, handler);
-				} else {
-					paternOptionsHandlers.put(pathPattern, handler);
-				}
-				break;
-
-			case HEAD:
-				if (!isPattern) {
-					headHandlers.put(path, handler);
-				} else {
-					paternHeadHandlers.put(pathPattern, handler);
-				}
-				break;
-
-			case TRACE:
-				if (!isPattern) {
-					traceHandlers.put(path, handler);
-				} else {
-					paternTraceHandlers.put(pathPattern, handler);
-				}
-				break;
-
-			default:
-				throw Err.notExpected();
-		}
-	}
-
-	private void deregister(HttpVerb verb, String path) {
-		boolean isPattern = isPattern(path);
-		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
-
-		switch (verb) {
-			case GET:
-				if (!isPattern) {
-					if (path1 != null && new String(path1).equals(path)) {
-						path1 = null;
-					}
-
-					if (path2 != null && new String(path2).equals(path)) {
-						path2 = null;
-					}
-
-					if (path3 != null && new String(path3).equals(path)) {
-						path3 = null;
-					}
-
-					getHandlers.remove(path);
-				} else {
-					paternGetHandlers.remove(pathPattern);
-				}
-				break;
-
-			case POST:
-				if (!isPattern) {
-					postHandlers.remove(path);
-				} else {
-					paternPostHandlers.remove(pathPattern);
-				}
-				break;
-
-			case PUT:
-				if (!isPattern) {
-					putHandlers.remove(path);
-				} else {
-					paternPutHandlers.remove(pathPattern);
-				}
-				break;
-
-			case DELETE:
-				if (!isPattern) {
-					deleteHandlers.remove(path);
-				} else {
-					paternDeleteHandlers.remove(pathPattern);
-				}
-				break;
-
-			case PATCH:
-				if (!isPattern) {
-					patchHandlers.remove(path);
-				} else {
-					paternPatchHandlers.remove(pathPattern);
-				}
-				break;
-
-			case OPTIONS:
-				if (!isPattern) {
-					optionsHandlers.remove(path);
-				} else {
-					paternOptionsHandlers.remove(pathPattern);
-				}
-				break;
-
-			case HEAD:
-				if (!isPattern) {
-					headHandlers.remove(path);
-				} else {
-					paternHeadHandlers.remove(pathPattern);
-				}
-				break;
-
-			case TRACE:
-				if (!isPattern) {
-					traceHandlers.remove(path);
-				} else {
-					paternTraceHandlers.remove(pathPattern);
-				}
-				break;
-
-			default:
-				throw Err.notExpected();
-		}
-
-	}
-
-	private boolean isPattern(String path) {
-		return PATTERN_PATTERN.matcher(path).find();
-	}
-
-	public void addGenericHandler(FastHttpHandler handler) {
-		genericHandlers.add(handler);
-	}
-
-	public void removeGenericHandler(FastHttpHandler handler) {
-		genericHandlers.remove(handler);
+		routes.on(verb, path, handler);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -374,18 +87,18 @@ public class FastHttp extends AbstractHttpProcessor {
 		RapidoidHelper helper = channel.helper();
 		Buf buf = channel.input();
 
-		removeTrailingSlash(buf, xpath);
-		removeTrailingSlash(buf, xuri);
+		HttpIO.removeTrailingSlash(buf, xpath);
+		HttpIO.removeTrailingSlash(buf, xuri);
 
 		String err = validateRequest(buf, xverb, xuri);
 		if (err != null) {
-			channel.write(HTTP_400_BAD_REQUEST);
+			channel.write(HttpIO.HTTP_400_BAD_REQUEST);
 			channel.close();
 			return;
 		}
 
 		HttpStatus status = HttpStatus.NOT_FOUND;
-		HandlerMatch match = findHandler(buf, isGet, xverb, xpath);
+		HandlerMatch match = routes.findHandler(buf, isGet, xverb, xpath);
 
 		FastHttpHandler handler = match != null ? match.getHandler() : null;
 		boolean noReq = (handler != null && !handler.needsParams());
@@ -464,28 +177,22 @@ public class FastHttp extends AbstractHttpProcessor {
 
 		} catch (Throwable e) {
 			if (req != null) {
-				errorAndDone(req, e);
+				HttpIO.errorAndDone(req, e, customization.errorHandler());
 				return;
 			} else {
 				Log.error("Low-level HTTP handler error!", e);
-				startResponse(channel, 500, isKeepAlive, contentType);
-				writeContentLengthAndBody(channel, HttpUtils.responseToBytes("Internal Server Error!", contentType));
-				done(channel, isKeepAlive);
+				HttpIO.startResponse(channel, 500, isKeepAlive, contentType);
+				HttpIO.writeContentLengthAndBody(channel, HttpUtils.responseToBytes("Internal Server Error!", contentType));
+				HttpIO.done(channel, isKeepAlive);
 			}
 		}
 
 		if (status == HttpStatus.NOT_FOUND) {
-			channel.write(HTTP_404_NOT_FOUND);
+			channel.write(HttpIO.HTTP_404_NOT_FOUND);
 		}
 
 		if (status != HttpStatus.ASYNC) {
 			channel.closeIf(!isKeepAlive);
-		}
-	}
-
-	private static void removeTrailingSlash(Buf buf, Range range) {
-		if (range.length > 1 && buf.get(range.last()) == '/') {
-			range.length--;
 		}
 	}
 
@@ -502,7 +209,7 @@ public class FastHttp extends AbstractHttpProcessor {
 	}
 
 	private HttpStatus tryGenericHandlers(Channel channel, boolean isKeepAlive, Req req) {
-		for (FastHttpHandler handler : genericHandlers) {
+		for (FastHttpHandler handler : routes.genericHandlers) {
 
 			HttpStatus status = handler.handle(channel, isKeepAlive, req, null);
 
@@ -514,231 +221,13 @@ public class FastHttp extends AbstractHttpProcessor {
 		return HttpStatus.NOT_FOUND;
 	}
 
-	private HandlerMatch findHandler(Buf buf, boolean isGet, Range verb, Range path) {
-		Bytes bytes = buf.bytes();
-
-		if (isGet) {
-			if (path1 != null && BytesUtil.matches(bytes, path, path1, true)) {
-				return handler1;
-			} else if (path2 != null && BytesUtil.matches(bytes, path, path2, true)) {
-				return handler2;
-			} else if (path3 != null && BytesUtil.matches(bytes, path, path3, true)) {
-				return handler3;
-			} else {
-				HandlerMatch handler = getHandlers.get(buf, path);
-
-				if (handler == null && !paternGetHandlers.isEmpty()) {
-					handler = matchByPattern(paternGetHandlers, buf.get(path));
-				}
-
-				if (handler == null) {
-					handler = staticResourcesHandler;
-				}
-
-				return handler;
-			}
-
-		} else if (BytesUtil.matches(bytes, verb, _POST, true)) {
-			HandlerMatch handler = postHandlers.get(buf, path);
-
-			if (handler == null && !paternPostHandlers.isEmpty()) {
-				handler = matchByPattern(paternPostHandlers, buf.get(path));
-			}
-
-			return handler;
-
-		} else if (BytesUtil.matches(bytes, verb, _PUT, true)) {
-			HandlerMatch handler = putHandlers.get(buf, path);
-
-			if (handler == null && !paternPutHandlers.isEmpty()) {
-				handler = matchByPattern(paternPutHandlers, buf.get(path));
-			}
-
-			return handler;
-
-		} else if (BytesUtil.matches(bytes, verb, _DELETE, true)) {
-			HandlerMatch handler = deleteHandlers.get(buf, path);
-
-			if (handler == null && !paternDeleteHandlers.isEmpty()) {
-				handler = matchByPattern(paternDeleteHandlers, buf.get(path));
-			}
-
-			return handler;
-
-		} else if (BytesUtil.matches(bytes, verb, _PATCH, true)) {
-			HandlerMatch handler = patchHandlers.get(buf, path);
-
-			if (handler == null && !paternPatchHandlers.isEmpty()) {
-				handler = matchByPattern(paternPatchHandlers, buf.get(path));
-			}
-
-			return handler;
-
-		} else if (BytesUtil.matches(bytes, verb, _OPTIONS, true)) {
-			HandlerMatch handler = optionsHandlers.get(buf, path);
-
-			if (handler == null && !paternOptionsHandlers.isEmpty()) {
-				handler = matchByPattern(paternOptionsHandlers, buf.get(path));
-			}
-
-			return handler;
-
-		} else if (BytesUtil.matches(bytes, verb, _HEAD, true)) {
-			HandlerMatch handler = headHandlers.get(buf, path);
-
-			if (handler == null && !paternHeadHandlers.isEmpty()) {
-				handler = matchByPattern(paternHeadHandlers, buf.get(path));
-			}
-
-			return handler;
-
-		} else if (BytesUtil.matches(bytes, verb, _TRACE, true)) {
-			HandlerMatch handler = traceHandlers.get(buf, path);
-
-			if (handler == null && !paternTraceHandlers.isEmpty()) {
-				handler = matchByPattern(paternTraceHandlers, buf.get(path));
-			}
-
-			return handler;
-		}
-
-		return null; // no handler
-	}
-
-	private HandlerMatch matchByPattern(Map<PathPattern, FastHttpHandler> handlers, String path) {
-		for (Map.Entry<PathPattern, FastHttpHandler> e : handlers.entrySet()) {
-
-			PathPattern pattern = e.getKey();
-			Map<String, String> params = pattern.match(path);
-
-			if (params != null) {
-				return new HandlerMatchWithParams(e.getValue(), params);
-			}
-		}
-
-		return null;
-	}
-
-	public void startResponse(Channel ctx, int code, boolean isKeepAlive, MediaType contentType) {
-		ctx.write(code == 200 ? HTTP_200_OK : responseCodes.get(code));
-		addDefaultHeaders(ctx, isKeepAlive, contentType);
-	}
-
-	private void addDefaultHeaders(Channel ctx, boolean isKeepAlive, MediaType contentType) {
-		ctx.write(isKeepAlive ? CONN_KEEP_ALIVE : CONN_CLOSE);
-
-		ctx.write(SERVER_HEADER);
-
-		ctx.write(DATE_IS);
-		ctx.write(Dates.getDateTimeBytes());
-		ctx.write(CR_LF);
-
-		ctx.write(contentType.asHttpHeader());
-	}
-
-	void addCustomHeader(Channel ctx, byte[] name, byte[] value) {
-		ctx.write(name);
-		ctx.write(HEADER_SEP);
-		ctx.write(value);
-		ctx.write(CR_LF);
-	}
-
-	public void write200(Channel ctx, boolean isKeepAlive, MediaType contentTypeHeader, byte[] content) {
-		startResponse(ctx, 200, isKeepAlive, contentTypeHeader);
-		writeContentLengthAndBody(ctx, content);
-	}
-
-	public void error(Req req, Throwable error) {
-		Log.error("HTTP handler error!", error);
-
-		try {
-			Resp resp = req.response().code(500);
-			Object result = customization.errorHandler().handleError(req, resp, error);
-			HttpUtils.resultToResponse(req, result);
-
-		} catch (Exception e) {
-			Log.error("The error handler had error!", e);
-		}
-	}
-
-	public void errorAndDone(Req req, Throwable error) {
-		error(req, error);
-		// the Req object will do the rendering
-		if (!req.isAsync()) {
-			req.done();
-		}
-	}
-
-	public void writeContentLengthAndBody(Channel ctx, byte[] content) {
-		int len = content.length;
-
-		if (len < CONTENT_LENGTHS_SIZE) {
-			ctx.write(CONTENT_LENGTHS[len]);
-		} else {
-			ctx.write(CONTENT_LENGTH_IS);
-			Buf out = ctx.output();
-			out.putNumAsText(out.size(), len, true);
-			ctx.write(CR_LF);
-		}
-
-		ctx.write(CR_LF);
-		ctx.write(content);
-	}
-
-	public void writeAsJson(Channel ctx, int code, boolean isKeepAlive, Object value) {
-		startResponse(ctx, code, isKeepAlive, MediaType.JSON_UTF_8);
-
-		Buf out = ctx.output();
-
-		ctx.write(CONTENT_LENGTH_UNKNOWN);
-
-		int posConLen = out.size();
-		ctx.write(CR_LF);
-
-		// finishing the headers
-		ctx.write(CR_LF);
-
-		int posBefore = out.size();
-
-		JSON.stringify(value, out.asOutputStream());
-
-		int posAfter = out.size();
-		int contentLength = posAfter - posBefore;
-
-		out.putNumAsText(posConLen, contentLength, false);
-	}
-
-	public void done(Channel ctx, boolean isKeepAlive) {
-		ctx.done();
-		ctx.closeIf(!isKeepAlive);
-	}
-
 	public synchronized void resetConfig() {
-		path1 = path2 = path3 = null;
-		handler1 = handler2 = handler3 = null;
-
-		staticResourcesHandler = new FastStaticResourcesHandler(this);
-
-		getHandlers.clear();
-		postHandlers.clear();
-		putHandlers.clear();
-		deleteHandlers.clear();
-		optionsHandlers.clear();
-		genericHandlers.clear();
-
-		paternGetHandlers.clear();
-		paternPostHandlers.clear();
-		paternPutHandlers.clear();
-		paternDeleteHandlers.clear();
-		paternPatchHandlers.clear();
-		paternOptionsHandlers.clear();
-		paternHeadHandlers.clear();
-		paternTraceHandlers.clear();
-
+		routes.reset();
 		customization.reset();
 	}
 
 	public void notFound(Channel ctx, boolean isKeepAlive, FastHttpHandler fromHandler, Req req) {
+		List<FastHttpHandler> genericHandlers = routes.genericHandlers;
 		int count = genericHandlers.size();
 
 		HttpStatus status = HttpStatus.NOT_FOUND;
@@ -755,8 +244,8 @@ public class FastHttp extends AbstractHttpProcessor {
 		}
 
 		if (status == HttpStatus.NOT_FOUND) {
-			ctx.write(HTTP_404_NOT_FOUND);
-			done(ctx, isKeepAlive);
+			ctx.write(HttpIO.HTTP_404_NOT_FOUND);
+			HttpIO.done(ctx, isKeepAlive);
 		}
 	}
 
@@ -768,12 +257,12 @@ public class FastHttp extends AbstractHttpProcessor {
 		return sessions.get(sessionId);
 	}
 
-	public FastHttpHandler handler(ReqHandler reqHandler, HttpWrapper... wrappers) {
-		return new FastParamsAwareReqHandler(this, MediaType.HTML_UTF_8, wrappers, reqHandler);
-	}
-
 	public Customization custom() {
 		return customization;
+	}
+
+	public HttpRoutes getRoutes() {
+		return routes;
 	}
 
 }

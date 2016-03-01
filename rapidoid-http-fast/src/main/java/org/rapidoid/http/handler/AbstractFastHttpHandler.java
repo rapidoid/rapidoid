@@ -23,7 +23,6 @@ package org.rapidoid.http.handler;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.FastHttp;
 
 import java.util.Map;
 
@@ -31,12 +30,9 @@ import java.util.Map;
 @Since("4.3.0")
 public abstract class AbstractFastHttpHandler implements FastHttpHandler {
 
-	protected final FastHttp http;
-
 	protected final MediaType contentType;
 
-	public AbstractFastHttpHandler(FastHttp http, MediaType contentType) {
-		this.http = http;
+	public AbstractFastHttpHandler(MediaType contentType) {
 		this.contentType = contentType;
 	}
 

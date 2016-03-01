@@ -23,7 +23,7 @@ package org.rapidoid.http.handler;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpIO;
 import org.rapidoid.http.HttpStatus;
 import org.rapidoid.http.Req;
 import org.rapidoid.net.abstracts.Channel;
@@ -35,14 +35,14 @@ public class FastStaticHttpHandler extends AbstractFastHttpHandler {
 
 	private final byte[] response;
 
-	public FastStaticHttpHandler(FastHttp http, MediaType contentType, byte[] response) {
-		super(http, contentType);
+	public FastStaticHttpHandler(MediaType contentType, byte[] response) {
+		super(contentType);
 		this.response = response;
 	}
 
 	@Override
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
-		http.write200(ctx, isKeepAlive, contentType, response);
+		HttpIO.write200(ctx, isKeepAlive, contentType, response);
 		return HttpStatus.DONE;
 	}
 

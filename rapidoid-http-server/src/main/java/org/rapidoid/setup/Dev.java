@@ -23,6 +23,7 @@ package org.rapidoid.setup;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Config;
+import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.ReqRespHandler;
@@ -154,6 +155,10 @@ public class Dev {
 
 	public static IoCContext context() {
 		return SETUP.getIoCContext();
+	}
+
+	public static HttpRoutes routes() {
+		return SETUP.getRoutes();
 	}
 
 }

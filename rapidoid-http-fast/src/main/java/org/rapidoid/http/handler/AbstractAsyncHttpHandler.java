@@ -37,10 +37,13 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 	private static final String CTX_TAG_HANDLER = "handler";
 
+	private final FastHttp http;
+
 	protected final HttpWrapper[] wrappers;
 
 	public AbstractAsyncHttpHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers) {
-		super(http, contentType);
+		super(contentType);
+		this.http = http;
 		this.wrappers = wrappers;
 	}
 
@@ -59,7 +62,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 		} catch (Throwable e) {
 			// if there was an error in the job scheduling:
-			http.errorAndDone(req, e);
+			HttpIO.errorAndDone(req, e, http.custom().errorHandler());
 			return HttpStatus.DONE;
 		}
 
@@ -162,7 +165,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		}
 
 		if (result instanceof Throwable) {
-			http.error(req, (Throwable) result);
+			HttpIO.error(req, (Throwable) result, http.custom().errorHandler());
 		} else {
 			HttpUtils.resultToResponse(req, result);
 		}

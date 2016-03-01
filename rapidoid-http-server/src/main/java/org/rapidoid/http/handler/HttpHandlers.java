@@ -94,30 +94,22 @@ public class HttpHandlers {
 		}
 	}
 
-	public static void register(FastHttp[] httpImpls, String verb, String path, MediaType contentType, HttpWrapper[] wrappers, byte[] response) {
-		for (FastHttp http : httpImpls) {
-			http.on(verb, path, new FastStaticHttpHandler(http, contentType, response));
-		}
+	public static void register(FastHttp http, String verb, String path, MediaType contentType, HttpWrapper[] wrappers, byte[] response) {
+		http.on(verb, path, new FastStaticHttpHandler(contentType, response));
 	}
 
 	@SuppressWarnings("unchecked")
-	public static void register(FastHttp[] httpImpls, String verb, String path, MediaType contentType, HttpWrapper[] wrappers, Callable<?> handler) {
-		for (FastHttp http : httpImpls) {
-			http.on(verb, path, new FastCallableHttpHandler(http, contentType, wrappers, (Callable<Object>) handler));
-		}
+	public static void register(FastHttp http, String verb, String path, MediaType contentType, HttpWrapper[] wrappers, Callable<?> handler) {
+		http.on(verb, path, new FastCallableHttpHandler(http, contentType, wrappers, (Callable<Object>) handler));
 	}
 
-	public static void register(FastHttp[] httpImpls, String verb, String path, MediaType contentType, HttpWrapper[] wrappers, NParamLambda lambda) {
-		for (FastHttp http : httpImpls) {
-			FastHttpHandler handler = HttpHandlers.from(http, lambda, contentType, wrappers);
-			http.on(verb, path, handler);
-		}
+	public static void register(FastHttp http, String verb, String path, MediaType contentType, HttpWrapper[] wrappers, NParamLambda lambda) {
+		FastHttpHandler handler = HttpHandlers.from(http, lambda, contentType, wrappers);
+		http.on(verb, path, handler);
 	}
 
-	public static void register(FastHttp[] httpImpls, String verb, String path, MediaType contentType, HttpWrapper[] wrappers, Method method, Object instance) {
-		for (FastHttp http : httpImpls) {
-			http.on(verb, path, new MethodReqHandler(http, contentType, wrappers, method, instance));
-		}
+	public static void register(FastHttp http, String verb, String path, MediaType contentType, HttpWrapper[] wrappers, Method method, Object instance) {
+		http.on(verb, path, new MethodReqHandler(http, contentType, wrappers, method, instance));
 	}
 
 }

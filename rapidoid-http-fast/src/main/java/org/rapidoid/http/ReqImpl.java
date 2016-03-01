@@ -373,7 +373,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	private void renderResponseHeaders(int code, MediaType contentType, boolean unknownContentLength) {
 		rendering = true;
-		http.startResponse(channel, code, isKeepAlive, contentType);
+		HttpIO.startResponse(channel, code, isKeepAlive, contentType);
 
 		if (response != null) {
 			renderCustomHeaders();
@@ -381,7 +381,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 		if (unknownContentLength) {
 			Buf out = channel.output();
-			channel.write(FastHttp.CONTENT_LENGTH_UNKNOWN);
+			channel.write(HttpIO.CONTENT_LENGTH_UNKNOWN);
 
 			posConLen = out.size();
 			channel.write(CR_LF);
@@ -460,7 +460,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	}
 
 	private void writeContentLengthAndBody(byte[] bytes) {
-		http.writeContentLengthAndBody(channel, bytes);
+		HttpIO.writeContentLengthAndBody(channel, bytes);
 		completed = true;
 	}
 
@@ -478,7 +478,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 			}
 
 		} catch (Throwable e) {
-			http.error(this, e);
+			HttpIO.error(this, e, http.custom().errorHandler());
 			return responseToBytes(response());
 		}
 	}
@@ -505,17 +505,17 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	private void renderCustomHeaders() {
 		for (Entry<String, String> e : response.headers().entrySet()) {
-			http.addCustomHeader(channel, e.getKey().getBytes(), e.getValue().getBytes());
+			HttpIO.addCustomHeader(channel, e.getKey().getBytes(), e.getValue().getBytes());
 		}
 
 		for (Entry<String, String> e : response.cookies().entrySet()) {
 			String cookie = e.getKey() + "=" + e.getValue();
-			http.addCustomHeader(channel, HttpHeaders.SET_COOKIE.getBytes(), cookie.getBytes());
+			HttpIO.addCustomHeader(channel, HttpHeaders.SET_COOKIE.getBytes(), cookie.getBytes());
 		}
 	}
 
 	private void finish() {
-		http.done(channel, isKeepAlive);
+		HttpIO.done(channel, isKeepAlive);
 	}
 
 	@Override

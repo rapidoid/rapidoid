@@ -37,7 +37,7 @@ public class OnRoute {
 
 	private final Setup chain;
 
-	private final FastHttp[] httpImpls;
+	private final FastHttp http;
 
 	private final String verb;
 
@@ -45,9 +45,9 @@ public class OnRoute {
 
 	private volatile HttpWrapper[] wrappers;
 
-	public OnRoute(Setup chain, FastHttp[] httpImpls, String verb, String path) {
+	public OnRoute(Setup chain, FastHttp http, String verb, String path) {
 		this.chain = chain;
-		this.httpImpls = httpImpls;
+		this.http = http;
 		this.verb = verb;
 		this.path = path;
 	}
@@ -65,52 +65,52 @@ public class OnRoute {
 	}
 
 	public Setup plain(byte[] response) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, response);
+		HttpHandlers.register(http, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, response);
 		return chain;
 	}
 
 	public <T> Setup plain(Callable<T> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup plain(Method method, Object instance) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, method, instance);
+		HttpHandlers.register(http, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, method, instance);
 		return chain;
 	}
 
 	public Setup plain(OneParamLambda<?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup plain(TwoParamLambda<?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup plain(ThreeParamLambda<?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup plain(FourParamLambda<?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup plain(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup plain(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup plain(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.PLAIN_TEXT_UTF_8, wrappers, handler);
 		return chain;
 	}
 
@@ -122,52 +122,52 @@ public class OnRoute {
 	}
 
 	public Setup html(byte[] response) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, response);
+		HttpHandlers.register(http, verb, path, MediaType.HTML_UTF_8, wrappers, response);
 		return chain;
 	}
 
 	public <T> Setup html(Callable<T> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup html(Method method, Object instance) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, method, instance);
+		HttpHandlers.register(http, verb, path, MediaType.HTML_UTF_8, wrappers, method, instance);
 		return chain;
 	}
 
 	public Setup html(OneParamLambda<?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup html(TwoParamLambda<?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup html(ThreeParamLambda<?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup html(FourParamLambda<?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup html(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup html(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup html(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
@@ -179,52 +179,52 @@ public class OnRoute {
 	}
 
 	public Setup json(byte[] response) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, response);
+		HttpHandlers.register(http, verb, path, MediaType.JSON_UTF_8, wrappers, response);
 		return chain;
 	}
 
 	public <T> Setup json(Callable<T> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup json(Method method, Object instance) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, method, instance);
+		HttpHandlers.register(http, verb, path, MediaType.JSON_UTF_8, wrappers, method, instance);
 		return chain;
 	}
 
 	public Setup json(OneParamLambda<?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup json(TwoParamLambda<?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup json(ThreeParamLambda<?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup json(FourParamLambda<?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup json(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup json(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup json(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.JSON_UTF_8, wrappers, handler);
 		return chain;
 	}
 
@@ -236,52 +236,52 @@ public class OnRoute {
 	}
 
 	public Setup binary(byte[] response) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, response);
+		HttpHandlers.register(http, verb, path, MediaType.BINARY, wrappers, response);
 		return chain;
 	}
 
 	public <T> Setup binary(Callable<T> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
 	public Setup binary(Method method, Object instance) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, method, instance);
+		HttpHandlers.register(http, verb, path, MediaType.BINARY, wrappers, method, instance);
 		return chain;
 	}
 
 	public Setup binary(OneParamLambda<?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
 	public Setup binary(TwoParamLambda<?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
 	public Setup binary(ThreeParamLambda<?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
 	public Setup binary(FourParamLambda<?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
 	public Setup binary(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
 	public Setup binary(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 
 	public Setup binary(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, verb, path, MediaType.BINARY, wrappers, handler);
+		HttpHandlers.register(http, verb, path, MediaType.BINARY, wrappers, handler);
 		return chain;
 	}
 

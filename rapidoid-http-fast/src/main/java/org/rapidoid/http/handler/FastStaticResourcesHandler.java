@@ -23,10 +23,8 @@ package org.rapidoid.http.handler;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpStatus;
-import org.rapidoid.http.HttpUtils;
-import org.rapidoid.http.Req;
+import org.rapidoid.http.*;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.io.Res;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
@@ -35,17 +33,17 @@ import org.rapidoid.u.U;
 @Since("5.0.0")
 public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 
-	private final FastHttp http;
+	private final Customization customization;
 
-	public FastStaticResourcesHandler(FastHttp http) {
-		super(http, null);
-		this.http = http;
+	public FastStaticResourcesHandler(Customization customization) {
+		super(null);
+		this.customization = customization;
 	}
 
 	@Override
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
 		try {
-			String[] staticFilesLocations = http.custom().staticFilesPath();
+			String[] staticFilesLocations = customization.staticFilesPath();
 
 			if (!U.isEmpty(staticFilesLocations)) {
 				Res res = HttpUtils.staticPage(req, staticFilesLocations);
@@ -54,7 +52,7 @@ public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 
 				if (bytes != null) {
 					MediaType contentType = MediaType.getByFileName(res.getName());
-					http.write200(ctx, isKeepAlive, contentType, bytes);
+					HttpIO.write200(ctx, isKeepAlive, contentType, bytes);
 					return HttpStatus.DONE;
 				}
 			}
@@ -62,7 +60,7 @@ public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 			return HttpStatus.NOT_FOUND;
 
 		} catch (Exception e) {
-			http.errorAndDone(req, e);
+			HttpIO.errorAndDone(req, e, customization.errorHandler());
 			return HttpStatus.DONE;
 		}
 	}

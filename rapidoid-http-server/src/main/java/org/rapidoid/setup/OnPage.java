@@ -38,17 +38,19 @@ import java.util.concurrent.Callable;
 @Since("5.0.0")
 public class OnPage {
 
+	private static final String GET_POST = "GET,POST";
+
 	private final Setup chain;
 
-	private final FastHttp[] httpImpls;
+	private final FastHttp http;
 
 	private final String path;
 
 	private volatile HttpWrapper[] wrappers;
 
-	public OnPage(Setup chain, FastHttp[] httpImpls, String path) {
+	public OnPage(Setup chain, FastHttp http, String path) {
 		this.chain = chain;
-		this.httpImpls = httpImpls;
+		this.http = http;
 		this.path = path;
 	}
 
@@ -68,26 +70,17 @@ public class OnPage {
 			return;
 		}
 
-		for (FastHttp http : httpImpls) {
-			http.on("GET", path, new FastStaticHttpHandler(http, options.contentType, response));
-			http.on("POST", path, new FastStaticHttpHandler(http, options.contentType, response));
-		}
+		http.on(GET_POST, path, new FastStaticHttpHandler(options.contentType, response));
 	}
 
 	private void register(PageOptions options, NParamLambda lambda) {
-		for (FastHttp http : httpImpls) {
-			FastHttpHandler handler = HttpHandlers.from(http, lambda, options.contentType, wrappers);
-			http.on("GET", path, handler);
-			http.on("POST", path, handler);
-		}
+		FastHttpHandler handler = HttpHandlers.from(http, lambda, options.contentType, wrappers);
+		http.on(GET_POST, path, handler);
 	}
 
 	private void register(PageOptions options, Callable<?> handler) {
-		for (FastHttp http : httpImpls) {
-			FastCallableHttpHandler hnd = new FastCallableHttpHandler(http, options.contentType, wrappers, (Callable<Object>) handler);
-			http.on("GET", path, hnd);
-			http.on("POST", path, hnd);
-		}
+		FastCallableHttpHandler hnd = new FastCallableHttpHandler(http, options.contentType, wrappers, (Callable<Object>) handler);
+		http.on(GET_POST, path, hnd);
 	}
 
 	/* GUI */
@@ -98,52 +91,52 @@ public class OnPage {
 	}
 
 	public Setup gui(byte[] response) {
-		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, response);
+		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, response);
 		return chain;
 	}
 
 	public <T> Setup gui(Callable<T> handler) {
-		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup gui(Method method, Object instance) {
-		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, method, instance);
+		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, method, instance);
 		return chain;
 	}
 
 	public Setup gui(OneParamLambda<?, ?> handler) {
-		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup gui(TwoParamLambda<?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup gui(ThreeParamLambda<?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup gui(FourParamLambda<?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup gui(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup gui(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
 	public Setup gui(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(httpImpls, "GET,POST", path, MediaType.HTML_UTF_8, wrappers, handler);
+		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, handler);
 		return chain;
 	}
 
