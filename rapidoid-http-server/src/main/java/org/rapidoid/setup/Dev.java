@@ -29,6 +29,7 @@ import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.processor.HttpProcessor;
+import org.rapidoid.ioc.IoCContext;
 
 import java.lang.annotation.Annotation;
 
@@ -149,6 +150,10 @@ public class Dev {
 
 	public static Customization custom() {
 		return SETUP.custom();
+	}
+
+	public static IoCContext context() {
+		return SETUP.getIoCContext();
 	}
 
 }

@@ -120,6 +120,7 @@ public class Setup implements Constants {
 	}
 
 	public void destroy() {
+		halt();
 		instances.remove(this);
 	}
 

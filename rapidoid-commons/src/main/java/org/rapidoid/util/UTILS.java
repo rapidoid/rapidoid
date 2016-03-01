@@ -39,7 +39,6 @@ import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
-import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import java.io.*;
@@ -47,12 +46,12 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.*;
 
@@ -319,81 +318,6 @@ public class UTILS implements Constants {
 			}
 		}
 	}
-
-	public static void listen(int port, F2<Void, BufferedReader, DataOutputStream> protocol) {
-		listen(null, port, protocol);
-	}
-
-	public static void listen(String hostname, int port, F2<Void, BufferedReader, DataOutputStream> protocol) {
-		ServerSocket socket = null;
-		try {
-			socket = new ServerSocket();
-			socket.bind(U.isEmpty(hostname) ? new InetSocketAddress(port) : new InetSocketAddress(hostname, port));
-
-			Log.info("Starting TCP/IP server", "host", hostname, "port", port);
-
-			while (true) {
-				final Socket conn = socket.accept();
-
-				BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-				DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-
-				try {
-					protocol.execute(in, out);
-				} catch (Exception e) {
-					throw U.rte(e);
-				} finally {
-					conn.close();
-				}
-			}
-		} catch (Exception e) {
-			throw U.rte(e);
-		} finally {
-			if (socket != null) {
-				try {
-					socket.close();
-				} catch (IOException e) {
-					throw U.rte(e);
-				}
-			}
-		}
-	}
-
-	public static void microHttpServer(String hostname, int port, final F2<String, String, List<String>> handler) {
-		listen(hostname, port, new F2<Void, BufferedReader, DataOutputStream>() {
-
-			@Override
-			public Void execute(BufferedReader in, DataOutputStream out) throws Exception {
-				List<String> lines = new ArrayList<String>();
-
-				String line;
-				while ((line = in.readLine()) != null) {
-					if (line.isEmpty()) {
-						break;
-					}
-					lines.add(line);
-				}
-
-				if (!lines.isEmpty()) {
-					String req = lines.get(0);
-					if (req.startsWith("GET /")) {
-						int pos = req.indexOf(' ', 4);
-						String path = urlDecode(req.substring(4, pos));
-						String response = handler.execute(path, lines);
-						out.writeBytes(response);
-					} else {
-						out.writeBytes("Only GET requests are supported!");
-					}
-				} else {
-					out.writeBytes("Invalid HTTP request!");
-				}
-
-				return null;
-			}
-
-		});
-	}
-
 	public static short bytesToShort(String s) {
 		ByteBuffer buf = Bufs.buf(s);
 		U.must(buf.limit() == 2);
@@ -472,7 +396,7 @@ public class UTILS implements Constants {
 
 		String data = String.format("%s: %s in %s ms (%s/sec)", name, count, ms, avgs);
 
-		System.out.println(data + " | " + Insights.getCpuMemStats());
+		U.print(data + " | " + Insights.getCpuMemStats());
 	}
 
 	public static void benchmarkMT(int threadsN, final String name, final int count, final CountDownLatch outsideLatch,

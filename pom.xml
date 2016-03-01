@@ -32,30 +32,10 @@
 		</developer>
 	</developers>
 
-	<contributors>
-		<!-- Chronologically ordered: -->
-		<contributor>
-			<name>Marina Mihajlovska</name>
-		</contributor>
-		<contributor>
-			<name>Kristina Spirovska</name>
-		</contributor>
-		<contributor>
-			<name>Daniel Kalevski</name>
-		</contributor>
-		<contributor>
-			<name>Marjan Ilievski</name>
-		</contributor>
-	</contributors>
-
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		</license>
-		<license>
-			<name>GNU Affero General Public License, Version 3</name>
-			<url>http://www.gnu.org/licenses/agpl.txt</url>
 		</license>
 	</licenses>
 
@@ -279,7 +259,7 @@
 									</descriptorRefs>
 									<archive>
 										<manifest>
-											<mainClass>org.rapidoid.main.Main</mainClass>
+											<mainClass>org.rapidoid.web.StandAlone</mainClass>
 										</manifest>
 									</archive>
 								</configuration>
