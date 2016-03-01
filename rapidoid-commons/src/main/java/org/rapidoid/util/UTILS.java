@@ -27,6 +27,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Str;
 import org.rapidoid.ctx.Ctx;
@@ -548,8 +549,11 @@ public class UTILS implements Constants {
 		D.print(U.frmt("%s %s in %s ms (%s/sec)", count, info, delta, freq));
 	}
 
-	public static Throwable rootCause(Throwable e) {
+	public static Throwable rootCause(Throwable e, Class<?>... interestingErrorTypes) {
 		while (e.getCause() != null) {
+			if (U.notEmpty(interestingErrorTypes) && Arr.contains(interestingErrorTypes, e.getClass())) {
+				return e;
+			}
 			e = e.getCause();
 		}
 		return e;

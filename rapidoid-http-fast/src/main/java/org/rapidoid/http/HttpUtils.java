@@ -146,16 +146,27 @@ public class HttpUtils implements HttpMetadata {
 		}
 	}
 
-	public static String getErrorMessage(Throwable err) {
-		Throwable cause = UTILS.rootCause(err);
+	public static String getErrorMessage(Resp resp, Throwable err) {
+		Throwable cause = UTILS.rootCause(err, SecurityException.class);
 
-		String details = err.getClass().getSimpleName() + " (" + U.safe(err.getMessage()) + ")";
+		int code;
+		String msg;
 
 		if (cause instanceof SecurityException) {
-			return U.frmt("Access Denied: %s", details);
+			code = 403;
+			msg = "Access Denied!";
 		} else {
-			return U.frmt("Internal Server Error: %s", details);
+			code = 500;
+			msg = "Internal Server Error!";
 		}
+
+		resp.code(code);
+		return U.or(err.getMessage(), msg);
+	}
+
+	public static Map<String, ?> jsonError(Resp resp, Throwable error) {
+		String errorMessage = getErrorMessage(resp, error);
+		return U.map("error", errorMessage, "code", resp.code());
 	}
 
 	public static void postProcessResponse(Resp resp) {

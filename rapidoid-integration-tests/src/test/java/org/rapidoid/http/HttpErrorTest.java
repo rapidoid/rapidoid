@@ -32,14 +32,15 @@ public class HttpErrorTest extends HttpTestCommons {
 
 	@Test
 	public void testWithHandlerException() {
-		On.get("/err").html(() -> {
-			throw Err.intentional();
+		On.get("/err").json(() -> {
+			Err.secure(false, "Not secure!");
+			return 123;
 		});
 
 		onlyGet("/err");
 
 		On.get("/err2").html(() -> {
-			throw new NullPointerException("intentional!");
+			throw new NullPointerException();
 		});
 
 		onlyGet("/err2");

@@ -32,7 +32,7 @@ public class DefaultErrorHandler implements ErrorHandler {
 
 	@Override
 	public Object handleError(Req req, Resp resp, Throwable error) {
-		return HttpUtils.getErrorMessage(error);
+		return HttpUtils.jsonError(resp, error);
 	}
 
 }

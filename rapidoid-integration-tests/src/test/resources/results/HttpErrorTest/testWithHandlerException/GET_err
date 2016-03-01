@@ -1,8 +1,8 @@
-HTTP/1.1 500 Internal Server Error
+HTTP/1.1 403 Forbidden
 Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
-Content-Type: text/html; charset=utf-8
-Content-Length: 60
+Content-Type: application/json; charset=utf-8
+Content-Length: 34
 
-Internal Server Error: RuntimeException (Intentional error!)
+{"error":"Not secure!","code":403}
