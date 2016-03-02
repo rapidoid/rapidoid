@@ -1265,4 +1265,24 @@ public class MediaType {
 		return true;
 	}
 
+	public String info() {
+		if (this == HTML_UTF_8) {
+			return "html";
+		}
+
+		if (this == JSON_UTF_8) {
+			return "json";
+		}
+
+		if (this == PLAIN_TEXT_UTF_8) {
+			return "plain";
+		}
+
+		if (this == BINARY) {
+			return "binary";
+		}
+
+		return toString();
+	}
+
 }

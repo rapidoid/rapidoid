@@ -59,4 +59,16 @@ public class RouteOptions {
 
 		return this;
 	}
+
+	@Override
+	public String toString() {
+		return "{" +
+				(contentType != null ? "contentType=" + contentType.info() : "") +
+				(view != null ? ", view='" + view + '\'' : "") +
+				(title != null ? ", title='" + title + '\'' : "") +
+				(U.notEmpty(roles) ? ", roles=" + roles : "") +
+				(U.notEmpty(wrappers) ? ", wrappers=" + wrappers : "") +
+				'}';
+	}
+
 }

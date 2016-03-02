@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.HttpStatus;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.RouteOptions;
 import org.rapidoid.http.impl.HandlerMatch;
 import org.rapidoid.net.abstracts.Channel;
 
@@ -37,5 +38,7 @@ public interface FastHttpHandler extends HandlerMatch {
 	boolean needsParams();
 
 	MediaType contentType();
+
+	RouteOptions options();
 
 }

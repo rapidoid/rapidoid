@@ -64,4 +64,9 @@ public abstract class AbstractFastHttpHandler implements FastHttpHandler {
 		return this;
 	}
 
+	@Override
+	public RouteOptions options() {
+		return options;
+	}
+
 }

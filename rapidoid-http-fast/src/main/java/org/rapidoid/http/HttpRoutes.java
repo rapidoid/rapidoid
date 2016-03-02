@@ -414,7 +414,7 @@ public class HttpRoutes {
 		}
 
 		if (add) {
-			Log.info("Registering handler", "verbs", verbs, "path", path, "handler", handler);
+			Log.info("Registering handler", "verbs", verbs, "path", path, "options", handler.options(), "handler", handler);
 		} else {
 			Log.info("Deregistering handler", "verbs", verbs, "path", path);
 		}
