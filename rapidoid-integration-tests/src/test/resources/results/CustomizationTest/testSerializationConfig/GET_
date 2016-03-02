@@ -1,0 +1,11 @@
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 31
+
+{
+  "foo" : 12,
+  "bar" : 345
+}

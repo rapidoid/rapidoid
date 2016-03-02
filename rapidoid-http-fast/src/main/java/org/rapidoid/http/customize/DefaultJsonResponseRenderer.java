@@ -22,6 +22,7 @@ package org.rapidoid.http.customize;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.data.JSON;
 
 import java.io.OutputStream;
 
@@ -31,7 +32,7 @@ public class DefaultJsonResponseRenderer implements JsonResponseRenderer {
 
 	@Override
 	public void renderJson(Object value, OutputStream out) throws Exception {
-		// FIXME
+		JSON.stringify(value, out);
 	}
 
 }

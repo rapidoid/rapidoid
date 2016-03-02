@@ -26,12 +26,13 @@ import org.rapidoid.commons.MediaType;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
 import org.rapidoid.crypto.Crypto;
-import org.rapidoid.data.JSON;
+import org.rapidoid.http.customize.JsonResponseRenderer;
 import org.rapidoid.io.Res;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
 import javax.xml.bind.DatatypeConverter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Map;
@@ -225,9 +226,17 @@ public class HttpUtils implements HttpMetadata {
 		return (Conf.ROOT.is("https") ? "https://" : "http://") + x.host() + path;
 	}
 
-	public static byte[] responseToBytes(Object result, MediaType contentType) {
+	public static byte[] responseToBytes(Object result, MediaType contentType, JsonResponseRenderer jsonRenderer) {
 		if (U.eq(contentType, MediaType.JSON_UTF_8)) {
-			return JSON.stringifyToBytes(result);
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+			try {
+				jsonRenderer.renderJson(result, out);
+			} catch (Exception e) {
+				throw U.rte(e);
+			}
+
+			return out.toByteArray();
 		} else {
 			return UTILS.toBytes(result);
 		}

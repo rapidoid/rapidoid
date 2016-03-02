@@ -182,7 +182,8 @@ public class FastHttp extends AbstractHttpProcessor {
 			} else {
 				Log.error("Low-level HTTP handler error!", e);
 				HttpIO.startResponse(channel, 500, isKeepAlive, contentType);
-				HttpIO.writeContentLengthAndBody(channel, HttpUtils.responseToBytes("Internal Server Error!", contentType));
+				byte[] bytes = HttpUtils.responseToBytes("Internal Server Error!", contentType, custom().jsonResponseRenderer());
+				HttpIO.writeContentLengthAndBody(channel, bytes);
 				HttpIO.done(channel, isKeepAlive);
 			}
 		}

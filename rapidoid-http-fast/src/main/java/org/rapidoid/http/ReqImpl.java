@@ -484,7 +484,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	}
 
 	private byte[] serializeResponseContent() {
-		return HttpUtils.responseToBytes(response.content(), response.contentType());
+		return HttpUtils.responseToBytes(response.content(), response.contentType(), http().custom().jsonResponseRenderer());
 	}
 
 	private String validateResponse() {

@@ -33,11 +33,23 @@ public class CustomizationTest extends HttpTestCommons {
 
 	@Test
 	public void testSerializationConfig() {
-		On.custom().jsonResponseRenderer(JSON::stringify);
-		On.custom().jsonBodyParser(JSON::parse);
+		On.custom().jsonResponseRenderer(JSON::prettify);
 
+		On.get("/").json(() -> U.map("foo", 12, "bar", 345));
+		On.get("/a").json(() -> U.map("foo", 12, "bar", 345));
+
+		onlyGet("/");
+
+		On.custom().jsonResponseRenderer(JSON::stringify);
+
+		onlyGet("/a");
+	}
+
+	@Test
+	public void testAuthConfig() {
 		On.custom().loginProvider((username, password) -> password.equals(username + "!"));
 		On.custom().rolesProvider(username -> username.equals("root") ? U.set("admin") : U.set());
+		// FIXME complete the test
 	}
 
 }
