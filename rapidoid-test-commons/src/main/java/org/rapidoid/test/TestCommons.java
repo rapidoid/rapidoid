@@ -43,6 +43,8 @@ public abstract class TestCommons {
 
 	protected static final Random RND = new Random();
 
+	public static final String TEST_RESULTS_FOLDER = "test-results";
+
 	private volatile boolean hasError = false;
 
 	private long waitingFrom;
@@ -63,7 +65,7 @@ public abstract class TestCommons {
 		hasError = false;
 
 		String s = File.separator;
-		String resultsDir = "src" + s + "test" + s + "resources" + s + "results" + s + getTestName();
+		String resultsDir = "src" + s + "test" + s + "resources" + s + TEST_RESULTS_FOLDER + s + getTestName();
 
 		if (!initialized && ADJUST_RESULTS) {
 			File testDir = new File(resultsDir);
@@ -542,7 +544,7 @@ public abstract class TestCommons {
 
 	protected void verifyCase(String info, String actual, String testCaseName) {
 		String s = File.separator;
-		String resname = "results" + s + getTestName() + s + getTestMethodName() + s + testCaseName;
+		String resname = TEST_RESULTS_FOLDER + s + getTestName() + s + getTestMethodName() + s + testCaseName;
 		String filename = "src" + s + "test" + s + "resources" + s + resname;
 
 		if (ADJUST_RESULTS) {
