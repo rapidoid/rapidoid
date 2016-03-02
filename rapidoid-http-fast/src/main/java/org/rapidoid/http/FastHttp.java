@@ -67,10 +67,6 @@ public class FastHttp extends AbstractHttpProcessor {
 		this(new HttpRoutes(customization), customization);
 	}
 
-	public FastHttp() {
-		this(new Customization());
-	}
-
 	public synchronized void on(String verb, String path, FastHttpHandler handler) {
 		routes.on(verb, path, handler);
 	}

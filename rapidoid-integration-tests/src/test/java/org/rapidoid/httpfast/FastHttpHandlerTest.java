@@ -23,10 +23,12 @@ package org.rapidoid.httpfast;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Config;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpTestCommons;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.net.Server;
 import org.rapidoid.u.U;
 
@@ -36,7 +38,7 @@ public class FastHttpHandlerTest extends HttpTestCommons {
 
 	@Test
 	public void testFastHttpHandler() {
-		FastHttp http = new FastHttp();
+		FastHttp http = new FastHttp(new Customization("example", new Config()));
 
 		http.on("get", "/abc", new ReqHandler() {
 			@Override

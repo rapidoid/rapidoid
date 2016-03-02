@@ -22,12 +22,17 @@ package org.rapidoid.http.customize;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Config;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class Customization {
 
 	public static final String[] DEFAULT_STATIC_FILES_LOCATIONS = {"static", "rapidoid/static"};
+
+	private final String name;
+
+	private final Config config;
 
 	private volatile String[] staticFilesPath;
 
@@ -43,7 +48,9 @@ public class Customization {
 
 	private volatile RolesProvider rolesProvider;
 
-	public Customization() {
+	public Customization(String name, Config config) {
+		this.name = name;
+		this.config = config;
 		reset();
 	}
 

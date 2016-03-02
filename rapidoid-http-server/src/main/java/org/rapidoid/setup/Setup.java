@@ -94,9 +94,9 @@ public class Setup implements Constants {
 
 	private final IoCContext ioCContext;
 
-	private final Customization customization = new Customization();
-	private final HttpRoutes routes = new HttpRoutes(customization);
-	private final FastHttp fastHttp = new FastHttp(routes, customization);
+	private final Customization customization;
+	private final HttpRoutes routes;
+	private final FastHttp fastHttp;
 
 	private volatile Integer port;
 	private volatile String address = "0.0.0.0";
@@ -132,6 +132,9 @@ public class Setup implements Constants {
 		this.ioCContext = ioCContext;
 
 		this.config = config;
+		this.customization = new Customization(name, config);
+		this.routes = new HttpRoutes(customization);
+		this.fastHttp = new FastHttp(routes, customization);
 	}
 
 	public static void resetGlobalState() {
