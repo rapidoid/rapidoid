@@ -65,7 +65,7 @@ public class ConfigUtil {
 						configData = parser.parse(bytes);
 					}
 
-					Log.info("Loading configuration file", "filename", filename);
+					Log.info("Loading (refreshing) configuration file", "filename", filename);
 					config.assign(U.safe(configData));
 				} else {
 					Log.debug("Couldn't find configuration file", "filename", filename);
@@ -98,7 +98,7 @@ public class ConfigUtil {
 		if (bytes != null) {
 			if (bytes.length > 0) {
 				Map<String, Object> configData = YAML_PARSER.parse(bytes);
-				Log.info("Loading configuration file", "filename", filename);
+				Log.debug("Loading configuration file", "filename", filename);
 				config.assign(U.safe(configData));
 			}
 		} else {

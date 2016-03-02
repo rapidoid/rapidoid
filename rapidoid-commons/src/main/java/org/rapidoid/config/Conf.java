@@ -1,11 +1,13 @@
 package org.rapidoid.config;
 
+import org.rapidoid.commons.Coll;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 /*
  * #%L
@@ -33,7 +35,12 @@ import java.util.Set;
  */
 public class Conf {
 
-	private static final Set<String> SECTIONS = U.set();
+	private static final Map<String, Config> SECTIONS = Coll.autoExpandingMap(new Mapper<String, Config>() {
+		@Override
+		public Config map(String name) throws Exception {
+			return createSection(name);
+		}
+	});
 
 	public static final Config ROOT = new Config();
 
@@ -50,7 +57,6 @@ public class Conf {
 
 	static {
 		RapidoidInitializer.initialize();
-		setPath("");
 		autoRefresh(ROOT);
 	}
 
@@ -82,7 +88,10 @@ public class Conf {
 	}
 
 	public static Config section(String name) {
-		SECTIONS.add(name);
+		return SECTIONS.get(name);
+	}
+
+	private static Config createSection(String name) {
 		Config config = ROOT.sub(name);
 		ConfigUtil.load(filename(config.keys()), config);
 		return config;
@@ -106,8 +115,7 @@ public class Conf {
 
 		reset();
 
-		for (String name : SECTIONS) {
-			Config sub = section(name);
+		for (Config sub : SECTIONS.values()) {
 			ConfigUtil.load(filename(sub.keys()), sub);
 		}
 
