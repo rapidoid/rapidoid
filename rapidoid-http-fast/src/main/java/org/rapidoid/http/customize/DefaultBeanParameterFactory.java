@@ -22,16 +22,16 @@ package org.rapidoid.http.customize;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-
-import java.util.Map;
+import org.rapidoid.data.JSON;
+import org.rapidoid.http.Req;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DefaultJsonBodyParser implements JsonBodyParser {
+public class DefaultBeanParameterFactory implements BeanParameterFactory {
 
 	@Override
-	public Map<String, Object> parseJsonBody(byte[] jsonBody) throws Exception {
-		return null; // FIXME
+	public Object getParamValue(Req req, Class<?> paramType, String paramName) throws Exception {
+		return JSON.MAPPER.convertValue(req.data(), paramType);
 	}
 
 }

@@ -20,8 +20,11 @@ package org.rapidoid.http;
  * #L%
  */
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
 import org.rapidoid.setup.On;
@@ -50,6 +53,37 @@ public class CustomizationTest extends HttpTestCommons {
 		On.custom().loginProvider((username, password) -> password.equals(username + "!"));
 		On.custom().rolesProvider(username -> username.equals("root") ? U.set("admin") : U.set());
 		// FIXME complete the test
+	}
+
+	@Test
+	public void testBeanParamFactoryConfig() {
+		On.beans(new Object() {
+			@POST
+			Object aa(Num num) {
+				return num;
+			}
+		});
+
+		On.put("/bb").json((Num f) -> f);
+
+		// before customization
+		onlyPost("/aa?id=1", U.map("the-name", "one"));
+		onlyPut("/bb?id=2", U.map("the-name", "two"));
+
+		// customization
+		ObjectMapper mapper = new ObjectMapper();
+		On.custom().beanParameterFactory((req, type, name) -> mapper.convertValue(req.posted(), type));
+
+		// after customization
+		onlyPost("/aa?id=3", U.map("the-name", "three"));
+		onlyPut("/bb?id=4", U.map("the-name", "four"));
+	}
+
+	static class Num {
+		public long id = -1;
+
+		@JsonProperty("the-name")
+		public String name;
 	}
 
 }

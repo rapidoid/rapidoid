@@ -133,23 +133,31 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected void onlyGet(int port, String uri) {
-		onlyReq(port, "GET", uri);
+		onlyReq(port, "GET", uri, null);
 	}
 
 	protected void onlyPost(String uri) {
-		onlyPost(DEFAULT_PORT, uri);
+		onlyPost(DEFAULT_PORT, uri, null);
 	}
 
-	protected void onlyPost(int port, String uri) {
-		onlyReq(port, "POST", uri);
+	protected void onlyPost(String uri, Map<String, ?> data) {
+		onlyPost(DEFAULT_PORT, uri, data);
+	}
+
+	protected void onlyPost(int port, String uri, Map<String, ?> data) {
+		onlyReq(port, "POST", uri, data);
 	}
 
 	protected void onlyPut(String uri) {
-		onlyPut(DEFAULT_PORT, uri);
+		onlyPut(DEFAULT_PORT, uri, null);
 	}
 
-	protected void onlyPut(int port, String uri) {
-		onlyReq(port, "PUT", uri);
+	protected void onlyPut(int port, String uri, Map<String, ?> data) {
+		onlyReq(port, "PUT", uri, data);
+	}
+
+	protected void onlyPut(String uri, Map<String, ?> data) {
+		onlyPut(DEFAULT_PORT, uri, data);
 	}
 
 	protected void onlyDelete(String uri) {
@@ -157,7 +165,7 @@ public abstract class HttpTestCommons extends TestCommons {
 	}
 
 	protected void onlyDelete(int port, String uri) {
-		onlyReq(port, "DELETE", uri);
+		onlyReq(port, "DELETE", uri, null);
 	}
 
 	protected void getAndPost(String uri) {
@@ -194,8 +202,8 @@ public abstract class HttpTestCommons extends TestCommons {
 		testReq(port, "PATCH", uri, data);
 	}
 
-	private void onlyReq(int port, String verb, String uri) {
-		testReq(port, verb, uri, null);
+	private void onlyReq(int port, String verb, String uri, Map<String, ?> data) {
+		testReq(port, verb, uri, data);
 		notFoundExcept(port, uri, verb);
 	}
 

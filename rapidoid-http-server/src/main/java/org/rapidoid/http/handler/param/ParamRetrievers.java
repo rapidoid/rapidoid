@@ -26,6 +26,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Err;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
@@ -36,7 +37,7 @@ import java.lang.annotation.Annotation;
 @Since("5.1.0")
 public class ParamRetrievers {
 
-	public static ParamRetriever createParamRetriever(Class<?> type, String name, Annotation[] annotations) {
+	public static ParamRetriever createParamRetriever(Customization customization, Class<?> type, String name, Annotation[] annotations) {
 
 		Cookie cookie = Metadata.get(annotations, Cookie.class);
 		Header header = Metadata.get(annotations, Header.class);
@@ -80,7 +81,7 @@ public class ParamRetrievers {
 
 		} else {
 			if (Cls.isBeanType(type)) {
-				return new BeanParamRetriever(type, name);
+				return new BeanParamRetriever(customization, type, name);
 
 			} else if (Cls.kindOf(type).isSimple()) {
 				return new DataParamRetriever(type, name);

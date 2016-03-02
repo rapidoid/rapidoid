@@ -20,6 +20,8 @@ package org.rapidoid.http.handler.lambda;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.MediaType;
@@ -34,6 +36,8 @@ import org.rapidoid.lambda.NParamLambda;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+@Authors("Nikolche Mihajlovski")
+@Since("5.1.0")
 public abstract class NParamMethodHandler extends AbstractAsyncHttpHandler {
 
 	private final ParamRetriever[] paramRetrievers;
@@ -62,7 +66,7 @@ public abstract class NParamMethodHandler extends AbstractAsyncHttpHandler {
 
 		String par = "";
 		for (int i = 0; i < paramRetrievers.length; i++) {
-			paramRetrievers[i] = ParamRetrievers.createParamRetriever(paramTypes[i], paramNames[i], annotations[i]);
+			paramRetrievers[i] = ParamRetrievers.createParamRetriever(http.custom(), paramTypes[i], paramNames[i], annotations[i]);
 			if (i > 0) {
 				par += ", ";
 			}

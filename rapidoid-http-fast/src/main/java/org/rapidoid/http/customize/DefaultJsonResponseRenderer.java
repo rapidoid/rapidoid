@@ -31,7 +31,7 @@ import java.io.OutputStream;
 public class DefaultJsonResponseRenderer implements JsonResponseRenderer {
 
 	@Override
-	public void renderJson(Object value, OutputStream out) throws Exception {
+	public void renderJson(Object value, OutputStream out) {
 		JSON.stringify(value, out);
 	}
 

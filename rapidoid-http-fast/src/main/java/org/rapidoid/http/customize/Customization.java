@@ -42,7 +42,7 @@ public class Customization {
 
 	private volatile JsonResponseRenderer jsonResponseRenderer;
 
-	private volatile JsonBodyParser jsonBodyParser;
+	private volatile BeanParameterFactory beanParameterFactory;
 
 	private volatile LoginProvider loginProvider;
 
@@ -59,7 +59,7 @@ public class Customization {
 		errorHandler = new DefaultErrorHandler();
 		viewRenderer = new DefaultViewRenderer();
 		jsonResponseRenderer = new DefaultJsonResponseRenderer();
-		jsonBodyParser = new DefaultJsonBodyParser();
+		beanParameterFactory = new DefaultBeanParameterFactory();
 		loginProvider = new DefaultLoginProvider();
 		rolesProvider = new DefaultRolesProvider();
 	}
@@ -96,12 +96,12 @@ public class Customization {
 		this.jsonResponseRenderer = jsonResponseRenderer;
 	}
 
-	public JsonBodyParser jsonBodyParser() {
-		return jsonBodyParser;
+	public BeanParameterFactory beanParameterFactory() {
+		return beanParameterFactory;
 	}
 
-	public void jsonBodyParser(JsonBodyParser jsonBodyParser) {
-		this.jsonBodyParser = jsonBodyParser;
+	public void beanParameterFactory(BeanParameterFactory beanParameterFactory) {
+		this.beanParameterFactory = beanParameterFactory;
 	}
 
 	public LoginProvider loginProvider() {

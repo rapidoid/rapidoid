@@ -164,7 +164,7 @@ public class HttpUtils implements HttpMetadata {
 		}
 
 		resp.code(code);
-		return U.or(err.getMessage(), msg);
+		return U.or(cause.getMessage(), msg);
 	}
 
 	public static Map<String, ?> jsonError(Resp resp, Throwable error) {

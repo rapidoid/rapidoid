@@ -22,27 +22,31 @@ package org.rapidoid.http.handler.param;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.Beany;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class BeanParamRetriever implements ParamRetriever {
 
+	private final Customization customization;
 	private final Class<?> type;
 	private final String name;
 
-	public BeanParamRetriever(Class<?> type, String name) {
+	public BeanParamRetriever(Customization customization, Class<?> type, String name) {
+		this.customization = customization;
 		this.type = type;
 		this.name = name;
 	}
 
 	@Override
 	public Object getParamValue(Req req) {
-		Object instance = Cls.newBeanInstance(type);
-		Beany.update(instance, req.data());
-		return instance;
+		try {
+			return customization.beanParameterFactory().getParamValue(req, type, name);
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
 	}
 
 }
