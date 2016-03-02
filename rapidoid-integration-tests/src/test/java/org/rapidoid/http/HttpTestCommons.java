@@ -69,6 +69,8 @@ public abstract class HttpTestCommons extends TestCommons {
 		On.setup().http().resetConfig();
 		On.setup().listen();
 
+		Setup.resetGlobalState();
+
 		System.out.println("--- SERVER STARTED ---");
 
 		notFound("/");

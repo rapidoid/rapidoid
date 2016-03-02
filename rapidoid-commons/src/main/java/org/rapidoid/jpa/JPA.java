@@ -2,8 +2,10 @@ package org.rapidoid.jpa;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.log.Log;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -102,6 +104,13 @@ public class JPA {
 
 	public static <E> E get(Class<E> clazz, Object id) {
 		return with(em()).get(clazz, id);
+	}
+
+	public static void bootstrap(String[] path, Class<?>... entities) {
+		if (Cls.exists("org.hibernate.cfg.Configuration")) {
+			Log.info("Bootstrapping JPA (Hibernate)");
+			Ctxs.setPersisterProvider(new QuickJPA(QuickJPA.emf(path, entities)));
+		}
 	}
 
 }

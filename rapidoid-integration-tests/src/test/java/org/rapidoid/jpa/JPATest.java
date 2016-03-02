@@ -6,7 +6,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.fluent.Do;
 import org.rapidoid.http.HttpTestCommons;
 import org.rapidoid.job.Jobs;
-import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
@@ -39,7 +38,8 @@ public class JPATest extends HttpTestCommons {
 
 	@Test
 	public void testBasicCRUD() {
-		QuickJPA.bootstrap(On.path());
+		String[] path = {JPATest.class.getPackage().getName()};
+		JPA.bootstrap(path);
 
 		Book b1 = new Book("book 1");
 		Book b2 = new Book("book 2");

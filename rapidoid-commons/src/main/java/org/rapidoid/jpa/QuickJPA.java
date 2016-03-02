@@ -27,9 +27,7 @@ import org.hibernate.jpa.boot.internal.SettingsImpl;
 import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
-import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.PersisterProvider;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
@@ -53,7 +51,7 @@ public class QuickJPA implements PersisterProvider {
 		this.emf = emf;
 	}
 
-	private static synchronized org.hibernate.ejb.HibernateEntityManagerFactory emFactory(String path[], Class<?>... entities) {
+	public static synchronized org.hibernate.ejb.HibernateEntityManagerFactory emf(String path[], Class<?>... entities) {
 
 		org.hibernate.cfg.AnnotationConfiguration cfg = new org.hibernate.cfg.AnnotationConfiguration();
 
@@ -114,13 +112,6 @@ public class QuickJPA implements PersisterProvider {
 	public void closePersister(Object persister) {
 		EntityManager em = (EntityManager) persister;
 		em.close();
-	}
-
-	public static void bootstrap(String[] path, Class<?>... entities) {
-		if (Cls.exists("org.hibernate.cfg.Configuration")) {
-			Log.info("Bootstrapping JPA (Hibernate)");
-			Ctxs.setPersisterProvider(new QuickJPA(emFactory(path, entities)));
-		}
 	}
 
 }
