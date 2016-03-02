@@ -79,13 +79,8 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		} else if (result == null) {
 			return null; // not found
 
-		} else if (result instanceof Future<?>) {
-			result = ((Future<Object>) result).get();
-			return postprocessResult(req, result);
-
-		} else if (result instanceof org.rapidoid.concurrent.Future<?>) {
-			result = ((org.rapidoid.concurrent.Future<Object>) result).get();
-			return postprocessResult(req, result);
+		} else if ((result instanceof Future<?>) || (result instanceof org.rapidoid.concurrent.Future<?>)) {
+			return req.async();
 
 		} else {
 			return result;

@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.io.Res;
+import org.rapidoid.job.Jobs;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Bufs;
@@ -33,6 +34,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")
@@ -405,9 +407,9 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 
 	@Test
 	public void test31() {
-		On.get("/test31").html(new ReqRespHandler() {
+		On.get("/test31").html(new ReqHandler() {
 			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
+			public Object execute(Req req) throws Exception {
 				return new File("test1.txt");
 			}
 		});
@@ -439,6 +441,15 @@ public class HttpHtmlApiTest extends HttpTestCommons {
 		On.route("GET", "/test34").html((Req req, Resp resp) -> "req+resp");
 
 		onlyGet("/test34");
+	}
+
+	@Test
+	public void test35() {
+		On.get("/future").html((Req req, Resp resp) -> Jobs.after(1, TimeUnit.SECONDS).run(() -> {
+			resp.content("finished!").done();
+		}));
+
+		onlyGet("/future");
 	}
 
 }
