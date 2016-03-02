@@ -22,10 +22,9 @@ package org.rapidoid.http.handler.lambda;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.RouteOptions;
 import org.rapidoid.lambda.SevenParamLambda;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
@@ -36,8 +35,8 @@ public class SevenParamLambdaHandler extends NParamLambdaHandler {
 
 	private final SevenParamLambda<Object, Object, Object, Object, Object, Object, Object, Object> lambda;
 
-	public SevenParamLambdaHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> lambda) {
-		super(http, contentType, wrappers, lambda);
+	public SevenParamLambdaHandler(FastHttp http, RouteOptions options, SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> lambda) {
+		super(http, options, lambda);
 		this.lambda = U.cast(lambda);
 	}
 

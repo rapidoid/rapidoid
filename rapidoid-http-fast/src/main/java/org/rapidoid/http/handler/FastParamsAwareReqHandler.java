@@ -22,11 +22,10 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.RouteOptions;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
@@ -35,8 +34,8 @@ public class FastParamsAwareReqHandler extends AbstractAsyncHttpHandler {
 
 	private final ReqHandler handler;
 
-	public FastParamsAwareReqHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, ReqHandler handler) {
-		super(http, contentType, wrappers);
+	public FastParamsAwareReqHandler(FastHttp http, RouteOptions options, ReqHandler handler) {
+		super(http, options);
 		this.handler = handler;
 	}
 

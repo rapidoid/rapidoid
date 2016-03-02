@@ -5,7 +5,6 @@ import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Coll;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.RapidoidInitializer;
@@ -96,7 +95,7 @@ public class Setup implements Constants {
 
 	private final Customization customization;
 	private final HttpRoutes routes;
-	private final FastHttp fastHttp;
+	private final FastHttp http;
 
 	private volatile Integer port;
 	private volatile String address = "0.0.0.0";
@@ -134,7 +133,7 @@ public class Setup implements Constants {
 		this.config = config;
 		this.customization = new Customization(name, config);
 		this.routes = new HttpRoutes(customization);
-		this.fastHttp = new FastHttp(routes, customization);
+		this.http = new FastHttp(routes, customization);
 	}
 
 	public static void resetGlobalState() {
@@ -146,7 +145,7 @@ public class Setup implements Constants {
 	}
 
 	public FastHttp http() {
-		return fastHttp;
+		return http;
 	}
 
 	public synchronized Server listen() {
@@ -160,7 +159,7 @@ public class Setup implements Constants {
 				this.address = U.or(this.address, config.entry("address").or(defaultAddress));
 				this.port = U.or(this.port, config.entry("port").or(defaultPort));
 
-				HttpProcessor proc = processor != null ? processor : fastHttp;
+				HttpProcessor proc = processor != null ? processor : http;
 
 				if (Conf.dev() && !OnChanges.isIgnored()) {
 					proc = new AppRestartProcessor(this, proc);
@@ -185,68 +184,68 @@ public class Setup implements Constants {
 
 	public OnRoute route(String verb, String path) {
 		activate();
-		return new OnRoute(this, http(), verb.toUpperCase(), path).wrap(wrappers);
+		return new OnRoute(http, verb.toUpperCase(), path).wrap(wrappers);
 	}
 
 	public OnRoute get(String path) {
 		activate();
-		return new OnRoute(this, http(), GET, path).wrap(wrappers);
+		return new OnRoute(http, GET, path).wrap(wrappers);
 	}
 
 	public OnRoute post(String path) {
 		activate();
-		return new OnRoute(this, http(), POST, path).wrap(wrappers);
+		return new OnRoute(http, POST, path).wrap(wrappers);
 	}
 
 	public OnRoute put(String path) {
 		activate();
-		return new OnRoute(this, http(), PUT, path).wrap(wrappers);
+		return new OnRoute(http, PUT, path).wrap(wrappers);
 	}
 
 	public OnRoute delete(String path) {
 		activate();
-		return new OnRoute(this, http(), DELETE, path).wrap(wrappers);
+		return new OnRoute(http, DELETE, path).wrap(wrappers);
 	}
 
 	public OnRoute patch(String path) {
 		activate();
-		return new OnRoute(this, http(), PATCH, path).wrap(wrappers);
+		return new OnRoute(http, PATCH, path).wrap(wrappers);
 	}
 
 	public OnRoute options(String path) {
 		activate();
-		return new OnRoute(this, http(), OPTIONS, path).wrap(wrappers);
+		return new OnRoute(http, OPTIONS, path).wrap(wrappers);
 	}
 
 	public OnRoute head(String path) {
 		activate();
-		return new OnRoute(this, http(), HEAD, path).wrap(wrappers);
+		return new OnRoute(http, HEAD, path).wrap(wrappers);
 	}
 
 	public OnRoute trace(String path) {
 		activate();
-		return new OnRoute(this, http(), TRACE, path).wrap(wrappers);
+		return new OnRoute(http, TRACE, path).wrap(wrappers);
 	}
 
 	public OnRoute getOrPost(String path) {
 		activate();
-		return new OnRoute(this, http(), GET_OR_POST, path).wrap(wrappers);
+		return new OnRoute(http, GET_OR_POST, path).wrap(wrappers);
 	}
 
 	public OnPage page(String path) {
 		activate();
-		return new OnPage(this, http(), path).wrap(wrappers);
+		return new OnPage(http, path).wrap(wrappers);
 	}
 
 	public Setup req(ReqHandler handler) {
 		activate();
-		routes.addGenericHandler(new DelegatingFastParamsAwareReqHandler(http(), MediaType.HTML_UTF_8, wrappers, handler));
+		routes.addGenericHandler(new DelegatingFastParamsAwareReqHandler(http, opts(), handler));
 		return this;
 	}
 
 	public Setup req(ReqRespHandler handler) {
 		activate();
-		routes.addGenericHandler(new DelegatingFastParamsAwareReqRespHandler(http(), MediaType.HTML_UTF_8, wrappers, handler));
+		routes.addGenericHandler(new DelegatingFastParamsAwareReqRespHandler(http, opts(), handler));
 		return this;
 	}
 
@@ -310,7 +309,7 @@ public class Setup implements Constants {
 	}
 
 	public void reset() {
-		fastHttp.resetConfig();
+		http.resetConfig();
 		listening = false;
 		wrappers = null;
 		port = null;
@@ -326,7 +325,7 @@ public class Setup implements Constants {
 	}
 
 	public Map<String, Object> attributes() {
-		return http().attributes();
+		return http.attributes();
 	}
 
 	public Setup path(String... path) {
@@ -419,7 +418,7 @@ public class Setup implements Constants {
 		Conf.reload();
 
 		for (Setup setup : instances()) {
-			setup.fastHttp.resetConfig();
+			setup.http.resetConfig();
 			setup.wrappers = null;
 		}
 
@@ -457,6 +456,10 @@ public class Setup implements Constants {
 
 	public HttpRoutes getRoutes() {
 		return routes;
+	}
+
+	private RouteOptions opts() {
+		return new RouteOptions().wrap(wrappers);
 	}
 
 }

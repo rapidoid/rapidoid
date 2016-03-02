@@ -36,7 +36,7 @@ public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 	private final Customization customization;
 
 	public FastStaticResourcesHandler(Customization customization) {
-		super(null);
+		super(new RouteOptions());
 		this.customization = customization;
 	}
 

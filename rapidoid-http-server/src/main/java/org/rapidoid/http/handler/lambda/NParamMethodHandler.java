@@ -24,10 +24,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Arr;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.RouteOptions;
 import org.rapidoid.http.handler.AbstractAsyncHttpHandler;
 import org.rapidoid.http.handler.param.ParamRetriever;
 import org.rapidoid.http.handler.param.ParamRetrievers;
@@ -46,8 +45,8 @@ public abstract class NParamMethodHandler extends AbstractAsyncHttpHandler {
 
 	private final String paramsAsStr;
 
-	public NParamMethodHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, Method method, NParamLambda lambda) {
-		super(http, contentType, wrappers);
+	public NParamMethodHandler(FastHttp http, RouteOptions options, Method method, NParamLambda lambda) {
+		super(http, options);
 		this.method = method;
 
 		Class<?>[] paramTypes = method.getParameterTypes();

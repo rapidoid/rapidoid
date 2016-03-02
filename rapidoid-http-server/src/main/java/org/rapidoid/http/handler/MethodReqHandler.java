@@ -23,10 +23,9 @@ package org.rapidoid.http.handler;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.aop.AOP;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.RouteOptions;
 import org.rapidoid.http.handler.lambda.NParamMethodHandler;
 import org.rapidoid.net.abstracts.Channel;
 
@@ -38,8 +37,8 @@ public class MethodReqHandler extends NParamMethodHandler {
 
 	private final Object instance;
 
-	public MethodReqHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, Method method, Object instance) {
-		super(http, contentType, wrappers, method, null);
+	public MethodReqHandler(FastHttp http, RouteOptions options, Method method, Object instance) {
+		super(http, options, method, null);
 		this.instance = instance;
 	}
 

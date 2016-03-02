@@ -22,10 +22,9 @@ package org.rapidoid.http.handler.lambda;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.RouteOptions;
 import org.rapidoid.lambda.TwoParamLambda;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
@@ -36,8 +35,8 @@ public class TwoParamLambdaHandler extends NParamLambdaHandler {
 
 	private final TwoParamLambda<Object, Object, Object> lambda;
 
-	public TwoParamLambdaHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, TwoParamLambda<?, ?, ?> lambda) {
-		super(http, contentType, wrappers, lambda);
+	public TwoParamLambdaHandler(FastHttp http, RouteOptions options, TwoParamLambda<?, ?, ?> lambda) {
+		super(http, options, lambda);
 		this.lambda = U.cast(lambda);
 	}
 

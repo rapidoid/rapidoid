@@ -22,10 +22,9 @@ package org.rapidoid.http.handler.lambda;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.RouteOptions;
 import org.rapidoid.lambda.FiveParamLambda;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
@@ -36,8 +35,8 @@ public class FiveParamLambdaHandler extends NParamLambdaHandler {
 
 	private final FiveParamLambda<Object, Object, Object, Object, Object, Object> lambda;
 
-	public FiveParamLambdaHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, FiveParamLambda<?, ?, ?, ?, ?, ?> lambda) {
-		super(http, contentType, wrappers, lambda);
+	public FiveParamLambdaHandler(FastHttp http, RouteOptions options, FiveParamLambda<?, ?, ?, ?, ?, ?> lambda) {
+		super(http, options, lambda);
 		this.lambda = U.cast(lambda);
 	}
 

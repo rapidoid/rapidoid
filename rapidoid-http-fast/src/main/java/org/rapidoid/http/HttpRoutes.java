@@ -29,7 +29,6 @@ import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Err;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.commons.Str;
 import org.rapidoid.data.Range;
 import org.rapidoid.http.customize.Customization;
@@ -390,11 +389,11 @@ public class HttpRoutes {
 	}
 
 	public synchronized void on(String verb, String path, ReqHandler handler) {
-		addOrRemove(true, verb, path, handler(handler));
+		addOrRemove(true, verb, path, handler(handler, new RouteOptions()));
 	}
 
-	public FastHttpHandler handler(ReqHandler reqHandler, HttpWrapper... wrappers) {
-		return new FastParamsAwareReqHandler(null, MediaType.HTML_UTF_8, wrappers, reqHandler);
+	public FastHttpHandler handler(ReqHandler reqHandler, RouteOptions options) {
+		return new FastParamsAwareReqHandler(null, options, reqHandler);
 	}
 
 	public synchronized void remove(String verb, String path) {

@@ -22,19 +22,41 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.MediaType;
+import org.rapidoid.u.U;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.0.0")
-public class PageOptions {
+@Since("5.1.0")
+public class RouteOptions {
 
-	public final MediaType contentType;
+	public volatile MediaType contentType = MediaType.HTML_UTF_8;
 
-	public final boolean raw;
+	public volatile String view;
 
-	public PageOptions(MediaType contentType, boolean raw) {
-		this.contentType = contentType;
-		this.raw = raw;
+	public volatile String title;
+
+	public final Set<String> roles = Coll.synchronizedSet();
+
+	public final List<HttpWrapper> wrappers = Coll.synchronizedList();
+
+	public RouteOptions wrap(HttpWrapper[] wrappers) {
+		if (U.notEmpty(wrappers)) {
+			Collections.addAll(this.wrappers, wrappers);
+		}
+
+		return this;
 	}
 
+	public RouteOptions roles(String[] roles) {
+		if (U.notEmpty(roles)) {
+			Collections.addAll(this.roles, roles);
+		}
+
+		return this;
+	}
 }

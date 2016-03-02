@@ -22,10 +22,9 @@ package org.rapidoid.http.handler.optimized;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.RouteOptions;
 import org.rapidoid.http.handler.AbstractAsyncHttpHandler;
 import org.rapidoid.net.abstracts.Channel;
 
@@ -37,9 +36,8 @@ public class FastCallableHttpHandler extends AbstractAsyncHttpHandler {
 
 	private final Callable<Object> handler;
 
-	public FastCallableHttpHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers,
-	                               Callable<Object> handler) {
-		super(http, contentType, wrappers);
+	public FastCallableHttpHandler(FastHttp http, RouteOptions options, Callable<Object> handler) {
+		super(http, options);
 		this.handler = handler;
 	}
 

@@ -22,7 +22,6 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.ctx.With;
 import org.rapidoid.http.*;
 import org.rapidoid.lambda.Mapper;
@@ -41,12 +40,9 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 	private final FastHttp http;
 
-	protected final HttpWrapper[] wrappers;
-
-	public AbstractAsyncHttpHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers) {
-		super(contentType);
+	public AbstractAsyncHttpHandler(FastHttp http, RouteOptions options) {
+		super(options);
 		this.http = http;
-		this.wrappers = wrappers;
 	}
 
 	@Override

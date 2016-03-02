@@ -24,7 +24,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Err;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.*;
 import org.rapidoid.http.handler.lambda.*;
 import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqHandler;
@@ -40,12 +39,12 @@ import java.util.concurrent.Callable;
 @Since("5.1.0")
 public class HttpHandlers {
 
-	public static FastHttpHandler from(FastHttp http, NParamLambda handler, MediaType contentType, HttpWrapper[] wrappers) {
+	public static FastHttpHandler from(FastHttp http, NParamLambda handler, RouteOptions options) {
 		if (handler instanceof ReqHandler) {
-			return new DelegatingFastParamsAwareReqHandler(http, contentType, wrappers, (ReqHandler) handler);
+			return new DelegatingFastParamsAwareReqHandler(http, options, (ReqHandler) handler);
 
 		} else if (handler instanceof ReqRespHandler) {
-			return new DelegatingFastParamsAwareReqRespHandler(http, contentType, wrappers, (ReqRespHandler) handler);
+			return new DelegatingFastParamsAwareReqRespHandler(http, options, (ReqRespHandler) handler);
 
 		} else if (handler instanceof OneParamLambda) {
 
@@ -54,11 +53,11 @@ public class HttpHandlers {
 			Class<?> paramType = method.getParameterTypes()[0];
 
 			if (paramType.equals(Req.class)) {
-				return new DelegatingFastParamsAwareReqHandler(http, contentType, wrappers, lambda);
+				return new DelegatingFastParamsAwareReqHandler(http, options, lambda);
 			} else if (paramType.equals(Resp.class)) {
-				return new DelegatingFastParamsAwareRespHandler(http, contentType, wrappers, lambda);
+				return new DelegatingFastParamsAwareRespHandler(http, options, lambda);
 			} else {
-				return new OneParamLambdaHandler(http, contentType, wrappers, lambda);
+				return new OneParamLambdaHandler(http, options, lambda);
 			}
 
 		} else if (handler instanceof TwoParamLambda) {
@@ -69,47 +68,47 @@ public class HttpHandlers {
 			Class<?> param2Type = method.getParameterTypes()[1];
 
 			if (param1Type.equals(Req.class) && param2Type.equals(Resp.class)) {
-				return new DelegatingFastParamsAwareReqRespHandler(http, contentType, wrappers, lambda);
+				return new DelegatingFastParamsAwareReqRespHandler(http, options, lambda);
 			} else {
-				return new TwoParamLambdaHandler(http, contentType, wrappers, (TwoParamLambda) handler);
+				return new TwoParamLambdaHandler(http, options, (TwoParamLambda) handler);
 			}
 
 		} else if (handler instanceof ThreeParamLambda) {
-			return new ThreeParamLambdaHandler(http, contentType, wrappers, (ThreeParamLambda) handler);
+			return new ThreeParamLambdaHandler(http, options, (ThreeParamLambda) handler);
 
 		} else if (handler instanceof FourParamLambda) {
-			return new FourParamLambdaHandler(http, contentType, wrappers, (FourParamLambda) handler);
+			return new FourParamLambdaHandler(http, options, (FourParamLambda) handler);
 
 		} else if (handler instanceof FiveParamLambda) {
-			return new FiveParamLambdaHandler(http, contentType, wrappers, (FiveParamLambda) handler);
+			return new FiveParamLambdaHandler(http, options, (FiveParamLambda) handler);
 
 		} else if (handler instanceof SixParamLambda) {
-			return new SixParamLambdaHandler(http, contentType, wrappers, (SixParamLambda) handler);
+			return new SixParamLambdaHandler(http, options, (SixParamLambda) handler);
 
 		} else if (handler instanceof SevenParamLambda) {
-			return new SevenParamLambdaHandler(http, contentType, wrappers, (SevenParamLambda) handler);
+			return new SevenParamLambdaHandler(http, options, (SevenParamLambda) handler);
 
 		} else {
 			throw Err.notExpected();
 		}
 	}
 
-	public static void register(FastHttp http, String verb, String path, MediaType contentType, HttpWrapper[] wrappers, byte[] response) {
-		http.on(verb, path, new FastStaticHttpHandler(contentType, response));
+	public static void register(FastHttp http, String verb, String path, RouteOptions options, byte[] response) {
+		http.on(verb, path, new FastStaticHttpHandler(options, response));
 	}
 
 	@SuppressWarnings("unchecked")
-	public static void register(FastHttp http, String verb, String path, MediaType contentType, HttpWrapper[] wrappers, Callable<?> handler) {
-		http.on(verb, path, new FastCallableHttpHandler(http, contentType, wrappers, (Callable<Object>) handler));
+	public static void register(FastHttp http, String verb, String path, RouteOptions options, Callable<?> handler) {
+		http.on(verb, path, new FastCallableHttpHandler(http, options, (Callable<Object>) handler));
 	}
 
-	public static void register(FastHttp http, String verb, String path, MediaType contentType, HttpWrapper[] wrappers, NParamLambda lambda) {
-		FastHttpHandler handler = HttpHandlers.from(http, lambda, contentType, wrappers);
+	public static void register(FastHttp http, String verb, String path, RouteOptions options, NParamLambda lambda) {
+		FastHttpHandler handler = HttpHandlers.from(http, lambda, options);
 		http.on(verb, path, handler);
 	}
 
-	public static void register(FastHttp http, String verb, String path, MediaType contentType, HttpWrapper[] wrappers, Method method, Object instance) {
-		http.on(verb, path, new MethodReqHandler(http, contentType, wrappers, method, instance));
+	public static void register(FastHttp http, String verb, String path, RouteOptions options, Method method, Object instance) {
+		http.on(verb, path, new MethodReqHandler(http, options, method, instance));
 	}
 
 }

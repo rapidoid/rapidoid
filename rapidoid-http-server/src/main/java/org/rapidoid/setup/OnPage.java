@@ -22,14 +22,12 @@ package org.rapidoid.setup;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.*;
-import org.rapidoid.http.handler.FastHttpHandler;
-import org.rapidoid.http.handler.FastStaticHttpHandler;
+import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpWrapper;
+import org.rapidoid.http.RouteOptions;
 import org.rapidoid.http.handler.HttpHandlers;
-import org.rapidoid.http.handler.optimized.FastCallableHttpHandler;
 import org.rapidoid.lambda.*;
-import org.rapidoid.u.U;
+import org.rapidoid.util.Constants;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
@@ -38,106 +36,87 @@ import java.util.concurrent.Callable;
 @Since("5.0.0")
 public class OnPage {
 
-	private static final String GET_POST = "GET,POST";
-
-	private final Setup chain;
-
 	private final FastHttp http;
 
 	private final String path;
 
-	private volatile HttpWrapper[] wrappers;
+	private final RouteOptions options = new RouteOptions();
 
-	public OnPage(Setup chain, FastHttp http, String path) {
-		this.chain = chain;
+	public OnPage(FastHttp http, String path) {
 		this.http = http;
 		this.path = path;
 	}
 
+	/* GUI */
+
+	public void render(String response) {
+		render(response.getBytes());
+	}
+
+	public void render(byte[] response) {
+		HttpHandlers.register(http, Constants.GET_OR_POST, path, opts(), response);
+	}
+
+	public <T> void render(Callable<T> handler) {
+		HttpHandlers.register(http, Constants.GET_OR_POST, path, opts(), handler);
+	}
+
+	public void render(Method method, Object instance) {
+		HttpHandlers.register(http, Constants.GET_OR_POST, path, opts(), method, instance);
+	}
+
+	public void render(OneParamLambda<?, ?> handler) {
+		HttpHandlers.register(http, Constants.GET_OR_POST, path, opts(), handler);
+	}
+
+	public void render(TwoParamLambda<?, ?, ?> handler) {
+		HttpHandlers.register(http, Constants.GET_OR_POST, path, opts(), handler);
+	}
+
+	public void render(ThreeParamLambda<?, ?, ?, ?> handler) {
+		HttpHandlers.register(http, Constants.GET_OR_POST, path, opts(), handler);
+	}
+
+	public void render(FourParamLambda<?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(http, Constants.GET_OR_POST, path, opts(), handler);
+	}
+
+	public void render(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(http, Constants.GET_OR_POST, path, opts(), handler);
+	}
+
+	public void render(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(http, Constants.GET_OR_POST, path, opts(), handler);
+	}
+
+	public void render(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(http, Constants.GET_OR_POST, path, opts(), handler);
+	}
+
+	/* CUSTOM ROUTE OPTIONS */
+
+	private RouteOptions opts() {
+		return options;
+	}
+
 	public OnPage wrap(HttpWrapper... wrappers) {
-		this.wrappers = wrappers;
+		options.wrap(wrappers);
 		return this;
 	}
 
-	private void register(PageOptions options, final byte[] response) {
-		if (!U.isEmpty(wrappers)) {
-			register(options, new ReqHandler() {
-				@Override
-				public Object execute(Req req) throws Exception {
-					return response;
-				}
-			});
-			return;
-		}
-
-		http.on(GET_POST, path, new FastStaticHttpHandler(options.contentType, response));
+	public OnPage roles(String... roles) {
+		options.roles(roles);
+		return this;
 	}
 
-	private void register(PageOptions options, NParamLambda lambda) {
-		FastHttpHandler handler = HttpHandlers.from(http, lambda, options.contentType, wrappers);
-		http.on(GET_POST, path, handler);
+	public OnPage title(String title) {
+		options.title = title;
+		return this;
 	}
 
-	private void register(PageOptions options, Callable<?> handler) {
-		FastCallableHttpHandler hnd = new FastCallableHttpHandler(http, options.contentType, wrappers, (Callable<Object>) handler);
-		http.on(GET_POST, path, hnd);
-	}
-
-	/* GUI */
-
-	public Setup gui(String response) {
-		gui(response.getBytes());
-		return chain;
-	}
-
-	public Setup gui(byte[] response) {
-		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, response);
-		return chain;
-	}
-
-	public <T> Setup gui(Callable<T> handler) {
-		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, handler);
-		return chain;
-	}
-
-	public Setup gui(Method method, Object instance) {
-		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, method, instance);
-		return chain;
-	}
-
-	public Setup gui(OneParamLambda<?, ?> handler) {
-		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, handler);
-		return chain;
-	}
-
-	public Setup gui(TwoParamLambda<?, ?, ?> handler) {
-		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, handler);
-		return chain;
-	}
-
-	public Setup gui(ThreeParamLambda<?, ?, ?, ?> handler) {
-		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, handler);
-		return chain;
-	}
-
-	public Setup gui(FourParamLambda<?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, handler);
-		return chain;
-	}
-
-	public Setup gui(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, handler);
-		return chain;
-	}
-
-	public Setup gui(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, handler);
-		return chain;
-	}
-
-	public Setup gui(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
-		HttpHandlers.register(http, GET_POST, path, MediaType.HTML_UTF_8, wrappers, handler);
-		return chain;
+	public OnPage view(String viewName) {
+		options.view = viewName;
+		return this;
 	}
 
 }

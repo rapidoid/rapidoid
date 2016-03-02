@@ -22,10 +22,9 @@ package org.rapidoid.http.handler.lambda;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.RouteOptions;
 import org.rapidoid.lambda.ThreeParamLambda;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
@@ -36,8 +35,8 @@ public class ThreeParamLambdaHandler extends NParamLambdaHandler {
 
 	private final ThreeParamLambda<Object, Object, Object, Object> lambda;
 
-	public ThreeParamLambdaHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, ThreeParamLambda<?, ?, ?, ?> lambda) {
-		super(http, contentType, wrappers, lambda);
+	public ThreeParamLambdaHandler(FastHttp http, RouteOptions options, ThreeParamLambda<?, ?, ?, ?> lambda) {
+		super(http, options, lambda);
 		this.lambda = U.cast(lambda);
 	}
 

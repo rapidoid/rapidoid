@@ -23,17 +23,16 @@ package org.rapidoid.http.handler.lambda;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpWrapper;
+import org.rapidoid.http.RouteOptions;
 import org.rapidoid.lambda.NParamLambda;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public abstract class NParamLambdaHandler extends NParamMethodHandler {
 
-	public NParamLambdaHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, NParamLambda lambda) {
-		super(http, contentType, wrappers, Cls.getLambdaMethod(lambda), lambda);
+	public NParamLambdaHandler(FastHttp http, RouteOptions options, NParamLambda lambda) {
+		super(http, options, Cls.getLambdaMethod(lambda), lambda);
 	}
 
 	@Override

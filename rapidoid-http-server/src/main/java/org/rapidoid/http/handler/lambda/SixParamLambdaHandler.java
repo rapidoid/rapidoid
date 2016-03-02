@@ -22,10 +22,9 @@ package org.rapidoid.http.handler.lambda;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.RouteOptions;
 import org.rapidoid.lambda.SixParamLambda;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
@@ -36,8 +35,8 @@ public class SixParamLambdaHandler extends NParamLambdaHandler {
 
 	private final SixParamLambda<Object, Object, Object, Object, Object, Object, Object> lambda;
 
-	public SixParamLambdaHandler(FastHttp http, MediaType contentType, HttpWrapper[] wrappers, SixParamLambda<?, ?, ?, ?, ?, ?, ?> lambda) {
-		super(http, contentType, wrappers, lambda);
+	public SixParamLambdaHandler(FastHttp http, RouteOptions options, SixParamLambda<?, ?, ?, ?, ?, ?, ?> lambda) {
+		super(http, options, lambda);
 		this.lambda = U.cast(lambda);
 	}
 

@@ -146,7 +146,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					setup.page(path).gui(method, bean);
+					setup.page(path).render(method, bean);
 				} else {
 					setup.deregister(Constants.GET, path);
 					setup.deregister(Constants.POST, path);

@@ -22,10 +22,10 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.HttpIO;
 import org.rapidoid.http.HttpStatus;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.RouteOptions;
 import org.rapidoid.io.Res;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
@@ -36,8 +36,8 @@ public class FastResourceHttpHandler extends AbstractFastHttpHandler {
 
 	private final Res resource;
 
-	public FastResourceHttpHandler(MediaType contentType, Res resource) {
-		super(contentType);
+	public FastResourceHttpHandler(RouteOptions options, Res resource) {
+		super(options);
 		this.resource = resource;
 	}
 
