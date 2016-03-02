@@ -1,8 +1,8 @@
-package org.rapidoid.jpa;
+package org.rapidoid.dao;
 
 /*
  * #%L
- * rapidoid-quick
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,40 +20,26 @@ package org.rapidoid.jpa;
  * #L%
  */
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+/**
+ * @author Nikolche Mihajlovski
+ * @since 3.0.0
+ */
+public class Person {
 
-@Entity
-public class Book {
+	public String name;
+	public int age;
 
-	@Id
-	@GeneratedValue
-	private Long id;
-
-	private String title;
-
-	public Book() {
+	public Person() {
 	}
 
-	public Book(String title) {
-		this.title = title;
+	public Person(String name, int age) {
+		this.name = name;
+		this.age = age;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
+	@Override
+	public String toString() {
+		return "Person [name=" + name + ", age=" + age + "]";
 	}
 
 }

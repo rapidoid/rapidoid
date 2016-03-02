@@ -140,6 +140,9 @@ public class PojoHandlersSetup {
 
 	private void registerOrDeregister(boolean register, Object bean, String ctxPath, Method method) {
 
+		Transaction transaction = method.getAnnotation(Transaction.class);
+		TransactionMode txMode = transaction != null ? transaction.value() : null;
+
 		Set<String> rolesAllowed = Secure.getRolesAllowed(method);
 		String[] roles = rolesAllowed.toArray(new String[rolesAllowed.size()]);
 
@@ -151,6 +154,10 @@ public class PojoHandlersSetup {
 
 				if (register) {
 					OnRoute route = setup.page(path).roles(roles);
+
+					if (txMode != null) {
+						route.tx(txMode);
+					}
 
 					if (U.notEmpty(page.view())) {
 						route.view(page.view());

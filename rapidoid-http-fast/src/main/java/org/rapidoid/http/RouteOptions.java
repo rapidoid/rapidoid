@@ -22,6 +22,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.u.U;
@@ -41,6 +42,8 @@ public class RouteOptions {
 	public volatile String title;
 
 	public volatile boolean mvc;
+
+	public volatile TransactionMode tx;
 
 	public final Set<String> roles = Coll.synchronizedSet();
 
@@ -67,6 +70,7 @@ public class RouteOptions {
 				(contentType != null ? "contentType=" + contentType.info() : "") +
 				(view != null ? ", view='" + view + '\'' : "") +
 				(title != null ? ", title='" + title + '\'' : "") +
+				(tx != null ? ", tx='" + tx + '\'' : "") +
 				(U.notEmpty(roles) ? ", roles=" + roles : "") +
 				(U.notEmpty(wrappers) ? ", wrappers=" + wrappers : "") +
 				'}';

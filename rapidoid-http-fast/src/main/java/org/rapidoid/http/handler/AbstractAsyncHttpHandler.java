@@ -22,9 +22,11 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.ctx.Current;
 import org.rapidoid.ctx.With;
 import org.rapidoid.http.*;
+import org.rapidoid.jpa.JPA;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.security.Secure;
@@ -56,8 +58,9 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
 		U.notNull(req, "HTTP request");
 
+		TransactionMode txMode;
 		try {
-			before(req);
+			txMode = before(req);
 
 		} catch (Throwable e) {
 			HttpIO.errorAndDone(req, e, http.custom().errorHandler());
@@ -66,7 +69,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 		try {
 			ctx.async();
-			execHandlerJob(ctx, isKeepAlive, req, extra);
+			execHandlerJob(ctx, isKeepAlive, req, extra, txMode);
 
 		} catch (Throwable e) {
 			// if there was an error in the job scheduling:
@@ -77,7 +80,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		return HttpStatus.ASYNC;
 	}
 
-	private void before(Req req) {
+	private TransactionMode before(final Req req) {
 		String username = Current.username();
 		Set<String> roles = Current.roles();
 
@@ -90,6 +93,14 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		if (options.title != null) {
 			req.response().model().put("title", options.title);
 		}
+
+		TransactionMode txMode = options.tx; // null means no TX
+
+		if (txMode == TransactionMode.AUTO) {
+			txMode = HttpUtils.isGetReq(req) ? TransactionMode.READ_ONLY : TransactionMode.READ_WRITE;
+		}
+
+		return txMode;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -108,7 +119,8 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		}
 	}
 
-	private void execHandlerJob(final Channel channel, final boolean isKeepAlive, final Req req, final Object extra) {
+	private void execHandlerJob(final Channel channel, final boolean isKeepAlive, final Req req,
+	                            final Object extra, final TransactionMode txMode) {
 
 		String username = req.cookiepack(HttpUtils._USER, null);
 		Set<String> roles;
@@ -123,7 +135,14 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 			roles = Collections.emptySet();
 		}
 
-		With.tag(CTX_TAG_HANDLER).exchange(req).username(username).roles(roles).run(new Runnable() {
+		Runnable handleRequest = handlerWithWrappers(channel, isKeepAlive, req, extra);
+		Runnable handleRequestMaybeInTx = txWrap(txMode, handleRequest);
+
+		With.tag(CTX_TAG_HANDLER).exchange(req).username(username).roles(roles).run(handleRequestMaybeInTx);
+	}
+
+	private Runnable handlerWithWrappers(final Channel channel, final boolean isKeepAlive, final Req req, final Object extra) {
+		return new Runnable() {
 
 			@Override
 			public void run() {
@@ -143,7 +162,22 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 				complete(channel, isKeepAlive, req, result);
 			}
-		});
+		};
+	}
+
+	private Runnable txWrap(final TransactionMode txMode, final Runnable handleRequest) {
+		if (txMode != null) {
+
+			return new Runnable() {
+				@Override
+				public void run() {
+					JPA.transaction(handleRequest, txMode == TransactionMode.READ_ONLY);
+				}
+			};
+
+		} else {
+			return handleRequest;
+		}
 	}
 
 	private Object wrap(final Channel channel, final boolean isKeepAlive, final Req req, final int index, final Object extra)

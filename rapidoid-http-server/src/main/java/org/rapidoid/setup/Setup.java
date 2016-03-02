@@ -18,6 +18,7 @@ import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.job.Jobs;
+import org.rapidoid.jpa.QuickJPA;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
@@ -361,6 +362,9 @@ public class Setup implements Constants {
 	public Setup bootstrap(String... args) {
 		this.args(args);
 		beans(annotated(Controller.class).in(path()).loadAll().toArray());
+
+		QuickJPA.bootstrap(path());
+
 		Log.info("Completed bootstrap", "context", getIoCContext());
 		return this;
 	}

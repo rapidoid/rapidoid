@@ -22,6 +22,7 @@ package org.rapidoid.setup;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpWrapper;
@@ -336,4 +337,8 @@ public class OnRoute {
 		return this;
 	}
 
+	public OnRoute tx(TransactionMode txMode) {
+		options.tx = txMode;
+		return this;
+	}
 }

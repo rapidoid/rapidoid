@@ -21,16 +21,18 @@ package org.rapidoid.jpa;
  */
 
 import org.hibernate.SessionFactory;
+import org.hibernate.ejb.HibernateEntityManagerFactory;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.jpa.boot.internal.SettingsImpl;
 import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Conf;
-import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.PersisterProvider;
 import org.rapidoid.io.IO;
+import org.rapidoid.log.Log;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
 
@@ -42,49 +44,40 @@ import java.util.Properties;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
+@SuppressWarnings("deprecation")
 public class QuickJPA implements PersisterProvider {
 
-	private final String path;
+	private final org.hibernate.ejb.HibernateEntityManagerFactory emf;
 
-	private final Class<?>[] entities;
-
-	public QuickJPA(String path, Class<?>... entities) {
-		this.path = path;
-		this.entities = entities;
+	public QuickJPA(HibernateEntityManagerFactory emf) {
+		this.emf = emf;
 	}
 
-	@SuppressWarnings("deprecation")
-	private org.hibernate.ejb.HibernateEntityManagerFactory emFactory;
+	private static synchronized org.hibernate.ejb.HibernateEntityManagerFactory emFactory(String path[], Class<?>... entities) {
 
-	@SuppressWarnings("deprecation")
-	private synchronized org.hibernate.ejb.HibernateEntityManagerFactory emFactory() {
+		org.hibernate.cfg.AnnotationConfiguration cfg = new org.hibernate.cfg.AnnotationConfiguration();
 
-		if (emFactory == null) {
-
-			org.hibernate.cfg.AnnotationConfiguration cfg = new org.hibernate.cfg.AnnotationConfiguration();
-
-			List<Class<?>> entityTypes = Scan.annotated(Entity.class).in(path).loadAll();
-			for (Class<?> entityType : entityTypes) {
-				cfg.addAnnotatedClass(entityType);
-			}
-
-			for (Class<?> entityType : entities) {
-				if (!entityTypes.contains(entityType)) {
-					cfg.addAnnotatedClass(entityType);
-				}
-			}
-
-			cfg.addProperties(hibernateProperties());
-			SessionFactory sf = cfg.buildSessionFactory();
-
-			SessionFactoryImplementor sfi = (SessionFactoryImplementor) sf;
-
-			SettingsImpl settings = new SettingsImpl();
-
-			emFactory = new EntityManagerFactoryImpl("pu", sfi, settings, U.map(), cfg);
+		List<Class<?>> entityTypes = Scan.annotated(Entity.class).in(path).loadAll();
+		for (Class<?> entityType : entityTypes) {
+			cfg.addAnnotatedClass(entityType);
 		}
 
-		return emFactory;
+		for (Class<?> entityType : entities) {
+			if (!entityTypes.contains(entityType)) {
+				cfg.addAnnotatedClass(entityType);
+			}
+		}
+
+		Log.info("Found JPA Entities", "entities", entityTypes);
+
+		cfg.addProperties(hibernateProperties());
+		SessionFactory sf = cfg.buildSessionFactory();
+
+		SessionFactoryImplementor sfi = (SessionFactoryImplementor) sf;
+
+		SettingsImpl settings = new SettingsImpl();
+
+		return new EntityManagerFactoryImpl("pu", sfi, settings, U.map(), cfg);
 	}
 
 	public static Properties hibernateProperties() {
@@ -114,7 +107,7 @@ public class QuickJPA implements PersisterProvider {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <P> P openPersister() {
-		return (P) emFactory().createEntityManager();
+		return (P) emf.createEntityManager();
 	}
 
 	@Override
@@ -123,9 +116,11 @@ public class QuickJPA implements PersisterProvider {
 		em.close();
 	}
 
-	public static void bootstrap(String path, Class<?>... entities) {
-		Ctx ctx = Ctxs.open("jpa");
-		Ctxs.setPersisterProvider(new QuickJPA(path, entities));
+	public static void bootstrap(String[] path, Class<?>... entities) {
+		if (Cls.exists("org.hibernate.cfg.Configuration")) {
+			Log.info("Bootstrapping JPA (Hibernate)");
+			Ctxs.setPersisterProvider(new QuickJPA(emFactory(path, entities)));
+		}
 	}
 
 }
