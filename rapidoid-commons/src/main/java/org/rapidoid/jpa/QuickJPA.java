@@ -1,8 +1,8 @@
-package org.rapidoid.quick;
+package org.rapidoid.jpa;
 
 /*
  * #%L
- * rapidoid-quick
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -27,6 +27,8 @@ import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.PersisterProvider;
 import org.rapidoid.io.IO;
 import org.rapidoid.scan.Scan;
@@ -42,33 +44,33 @@ import java.util.Properties;
 @Since("3.0.0")
 public class QuickJPA implements PersisterProvider {
 
-	private final Object[] args;
+	private final String path;
 
-	@SuppressWarnings("deprecation")
-	private static org.hibernate.ejb.HibernateEntityManagerFactory emFactory;
+	private final Class<?>[] entities;
 
-	public QuickJPA(Object... args) {
-		this.args = args;
+	public QuickJPA(String path, Class<?>... entities) {
+		this.path = path;
+		this.entities = entities;
 	}
 
 	@SuppressWarnings("deprecation")
-	private static synchronized org.hibernate.ejb.HibernateEntityManagerFactory emFactory(Object[] args) {
+	private org.hibernate.ejb.HibernateEntityManagerFactory emFactory;
+
+	@SuppressWarnings("deprecation")
+	private synchronized org.hibernate.ejb.HibernateEntityManagerFactory emFactory() {
 
 		if (emFactory == null) {
 
 			org.hibernate.cfg.AnnotationConfiguration cfg = new org.hibernate.cfg.AnnotationConfiguration();
 
-			List<Class<?>> entityTypes = Scan.annotated(Entity.class).loadAll();
+			List<Class<?>> entityTypes = Scan.annotated(Entity.class).in(path).loadAll();
 			for (Class<?> entityType : entityTypes) {
 				cfg.addAnnotatedClass(entityType);
 			}
 
-			for (Object arg : args) {
-				if (arg instanceof Class<?>) {
-					Class<?> entityType = (Class<?>) arg;
-					if (!entityTypes.contains(entityType)) {
-						cfg.addAnnotatedClass(entityType);
-					}
+			for (Class<?> entityType : entities) {
+				if (!entityTypes.contains(entityType)) {
+					cfg.addAnnotatedClass(entityType);
 				}
 			}
 
@@ -112,13 +114,18 @@ public class QuickJPA implements PersisterProvider {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <P> P openPersister() {
-		return (P) emFactory(args).createEntityManager();
+		return (P) emFactory().createEntityManager();
 	}
 
 	@Override
 	public void closePersister(Object persister) {
 		EntityManager em = (EntityManager) persister;
 		em.close();
+	}
+
+	public static void bootstrap(String path, Class<?>... entities) {
+		Ctx ctx = Ctxs.open("jpa");
+		Ctxs.setPersisterProvider(new QuickJPA(path, entities));
 	}
 
 }

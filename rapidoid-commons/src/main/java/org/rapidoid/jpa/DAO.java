@@ -1,6 +1,5 @@
-package org.rapidoid.dao;
+package org.rapidoid.jpa;
 
-import org.rapidoid.plugins.db.hibernate.JPA;
 import org.rapidoid.u.U;
 
 import java.lang.reflect.ParameterizedType;
@@ -8,7 +7,7 @@ import java.lang.reflect.Type;
 
 /*
  * #%L
- * rapidoid-hibernate
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%

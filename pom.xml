@@ -65,7 +65,6 @@
 		<module>rapidoid-html</module>
 		<module>rapidoid-gui</module>
 		<module>rapidoid-oauth</module>
-		<module>rapidoid-hibernate</module>
 		<module>rapidoid-web</module>
 		<module>rapidoid-quick</module>
 		<module>rapidoid-watch</module>

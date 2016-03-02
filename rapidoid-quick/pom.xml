@@ -18,11 +18,6 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rapidoid</groupId>
-			<artifactId>rapidoid-hibernate</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>1.1.3</version>
@@ -51,12 +46,6 @@
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-test-commons</artifactId>
 			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.4.187</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

@@ -39,6 +39,7 @@ import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
 import java.io.*;
@@ -318,6 +319,7 @@ public class UTILS implements Constants {
 			}
 		}
 	}
+
 	public static short bytesToShort(String s) {
 		ByteBuffer buf = Bufs.buf(s);
 		U.must(buf.limit() == 2);
@@ -837,6 +839,41 @@ public class UTILS implements Constants {
 
 	public static boolean withWatchModule() {
 		return Cls.getClassIfExists("org.rapidoid.io.watch.Watch") != null;
+	}
+
+	public static void terminate(final int afterSeconds) {
+		Log.warn("Terminating application in " + afterSeconds + " seconds...");
+		new Thread() {
+			@Override
+			public void run() {
+				U.sleep(afterSeconds * 1000);
+				terminate();
+			}
+		}.start();
+	}
+
+	public static void terminateIfIdleFor(final int idleSeconds) {
+		Log.warn("Will terminate if idle for " + idleSeconds + " seconds...");
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (!Thread.interrupted()) {
+					U.sleep(500);
+					long lastUsed = Usage.getLastAppUsedOn();
+					long idleSec = (U.time() - lastUsed) / 1000;
+					if (idleSec >= idleSeconds) {
+						Usage.touchLastAppUsedOn();
+						terminate();
+					}
+				}
+			}
+		}).start();
+	}
+
+	public static void terminate() {
+		Log.warn("Terminating application.");
+		System.exit(0);
 	}
 
 }

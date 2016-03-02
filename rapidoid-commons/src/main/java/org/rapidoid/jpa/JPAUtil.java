@@ -1,4 +1,4 @@
-package org.rapidoid.plugins.db.hibernate;
+package org.rapidoid.jpa;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 /*
  * #%L
- * rapidoid-hibernate
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%

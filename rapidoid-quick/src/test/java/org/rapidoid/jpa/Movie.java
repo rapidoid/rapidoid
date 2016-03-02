@@ -1,8 +1,8 @@
-package org.rapidoid.plugins.db.hibernate;
+package org.rapidoid.jpa;
 
 /*
  * #%L
- * rapidoid-hibernate
+ * rapidoid-quick
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%

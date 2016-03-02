@@ -1,8 +1,8 @@
-package org.rapidoid.dao;
+package org.rapidoid.jpa;
 
 /*
  * #%L
- * rapidoid-hibernate
+ * rapidoid-quick
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,24 +20,40 @@ package org.rapidoid.dao;
  * #L%
  */
 
-import org.junit.Test;
-import org.rapidoid.test.TestCommons;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
-class PersonService extends DAO<Person> {
-}
+@Entity
+public class Book {
 
-/**
- * @author Nikolche Mihajlovski
- * @since 3.0.0
- */
-public class DAOTest extends TestCommons {
+	@Id
+	@GeneratedValue
+	private Long id;
 
-	@Test
-	public void testEntityTypeInference() {
-		PersonService service = new PersonService();
+	private String title;
 
-		// exercise the entity type inference
-		eq(service.getEntityType(), Person.class);
+	public Book() {
+	}
+
+	public Book(String title) {
+		this.title = title;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 }

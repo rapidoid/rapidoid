@@ -2,7 +2,7 @@ package org.rapidoid.dao;
 
 /*
  * #%L
- * rapidoid-hibernate
+ * rapidoid-quick
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,26 +20,25 @@ package org.rapidoid.dao;
  * #L%
  */
 
+import org.junit.Test;
+import org.rapidoid.jpa.DAO;
+import org.rapidoid.test.TestCommons;
+
+class PersonService extends DAO<Person> {
+}
+
 /**
  * @author Nikolche Mihajlovski
  * @since 3.0.0
  */
-public class Person {
+public class DAOTest extends TestCommons {
 
-	public String name;
-	public int age;
+	@Test
+	public void testEntityTypeInference() {
+		PersonService service = new PersonService();
 
-	public Person() {
-	}
-
-	public Person(String name, int age) {
-		this.name = name;
-		this.age = age;
-	}
-
-	@Override
-	public String toString() {
-		return "Person [name=" + name + ", age=" + age + "]";
+		// exercise the entity type inference
+		eq(service.getEntityType(), Person.class);
 	}
 
 }

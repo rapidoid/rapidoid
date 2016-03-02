@@ -1,4 +1,4 @@
-package org.rapidoid.plugins.db.hibernate;
+package org.rapidoid.jpa;
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
@@ -6,16 +6,12 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
-import org.rapidoid.util.SimplePersisterProvider;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.util.List;
 
 /*
  * #%L
- * rapidoid-hibernate
+ * rapidoid-quick
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -40,11 +36,7 @@ public class JPATest extends TestCommons {
 	@Test
 	public void testBasicCRUD() {
 
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("test-pu");
-		EntityManager em = emf.createEntityManager();
-
-		Ctxs.setPersisterProvider(new SimplePersisterProvider(em));
-		Ctxs.open("test");
+		QuickJPA.bootstrap(JPATest.class.getPackage().getName());
 
 		final Book b1 = new Book("book 1");
 		final Book b2 = new Book("book 2");
@@ -67,8 +59,6 @@ public class JPATest extends TestCommons {
 		eq(all.size(), 3);
 		eq(U.set(all), U.set(b1, b2, m1));
 
-		em.close();
-		emf.close();
 		Ctxs.close();
 	}
 

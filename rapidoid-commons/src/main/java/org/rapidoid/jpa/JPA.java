@@ -1,4 +1,4 @@
-package org.rapidoid.plugins.db.hibernate;
+package org.rapidoid.jpa;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
@@ -10,7 +10,7 @@ import java.util.List;
 
 /*
  * #%L
- * rapidoid-hibernate
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -64,6 +64,10 @@ public class JPA {
 		with(em()).transaction(action, readonly);
 	}
 
+	public static void transaction(Runnable tx, boolean readonly, Callback<Void> callback) {
+		with(em()).transaction(tx, readonly, callback);
+	}
+
 	public static <E> List<E> getAll(Class<E> clazz, List<String> ids) {
 		return with(em()).getAll(clazz, ids);
 	}
@@ -86,10 +90,6 @@ public class JPA {
 
 	public static Object insert(Object entity) {
 		return with(em()).insert(entity);
-	}
-
-	public static void transaction(Runnable tx, boolean readonly, Callback<Void> callback) {
-		with(em()).transaction(tx, readonly, callback);
 	}
 
 	public static <E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {

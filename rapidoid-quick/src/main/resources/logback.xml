@@ -8,7 +8,7 @@
 
 	<logger name="org.rapidoid" level="TRACE" />
 
-	<root level="DEBUG">
+	<root level="INFO">
 		<appender-ref ref="STDOUT" />
 	</root>
 
