@@ -34,7 +34,7 @@ public class HttpContextTest extends HttpTestCommons {
 
 	@Test
 	public void testContextIsInitialized() {
-		On.page("/a").gui((Req req) -> {
+		On.getOrPost("/a").html((Req req) -> {
 			isTrue(Current.hasContext());
 			isTrue(Current.request() == req);
 			return Current.request().toString();

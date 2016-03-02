@@ -76,6 +76,10 @@ public class On {
 		return SETUP.trace(path);
 	}
 
+	public static synchronized OnRoute getOrPost(String path) {
+		return SETUP.getOrPost(path);
+	}
+
 	public static synchronized OnPage page(String path) {
 		return SETUP.page(path);
 	}

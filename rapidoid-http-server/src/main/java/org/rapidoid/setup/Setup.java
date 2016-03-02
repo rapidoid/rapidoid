@@ -225,6 +225,11 @@ public class Setup implements Constants {
 		return new OnRoute(this, http(), TRACE, path).wrap(wrappers);
 	}
 
+	public OnRoute getOrPost(String path) {
+		activate();
+		return new OnRoute(this, http(), GET_OR_POST, path).wrap(wrappers);
+	}
+
 	public OnPage page(String path) {
 		activate();
 		return new OnPage(this, http(), path).wrap(wrappers);
