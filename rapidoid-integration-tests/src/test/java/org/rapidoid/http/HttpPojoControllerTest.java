@@ -25,9 +25,9 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.POST;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ioc.IoC;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
-import org.rapidoid.ioc.IoC;
 
 import javax.annotation.Generated;
 import java.util.List;
@@ -40,12 +40,12 @@ public class HttpPojoControllerTest extends HttpTestCommons {
 	public void testPojoHandlers() {
 		On.beans(new Object() {
 
-			@GET("/a")
+			@GET(uri = "/a")
 			public Object theFoo() {
 				return "foo";
 			}
 
-			@POST("/x")
+			@POST(uri = "/x")
 			public Object x(Req req, Resp resp) {
 				return "x";
 			}

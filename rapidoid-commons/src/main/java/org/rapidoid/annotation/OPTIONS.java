@@ -32,6 +32,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Since("5.1.0")
 public @interface OPTIONS {
 
+	/**
+	 * Alias of the uri() attribute.
+	 */
 	String value() default "";
+
+	/**
+	 * Alias of the value() attribute.
+	 */
+	String uri() default "";
 
 }

@@ -32,6 +32,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Since("3.0.0")
 public @interface DELETE {
 
+	/**
+	 * Alias of the uri() attribute.
+	 */
 	String value() default "";
+
+	/**
+	 * Alias of the value() attribute.
+	 */
+	String uri() default "";
 
 }

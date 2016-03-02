@@ -143,7 +143,7 @@ public class PojoHandlersSetup {
 			String annoName = ann.annotationType().getName();
 
 			if (annoName.equals(Page.class.getName())) {
-				String path = pathOf(method, ctxPath, valueOf(ann));
+				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
 					setup.page(path).gui(method, bean);
@@ -153,7 +153,7 @@ public class PojoHandlersSetup {
 				}
 
 			} else if (annoName.equals(GET.class.getName())) {
-				String path = pathOf(method, ctxPath, valueOf(ann));
+				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
 					setup.get(path).json(method, bean);
@@ -162,7 +162,7 @@ public class PojoHandlersSetup {
 				}
 
 			} else if (annoName.equals(POST.class.getName())) {
-				String path = pathOf(method, ctxPath, valueOf(ann));
+				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
 					setup.post(path).json(method, bean);
@@ -171,7 +171,7 @@ public class PojoHandlersSetup {
 				}
 
 			} else if (annoName.equals(PUT.class.getName())) {
-				String path = pathOf(method, ctxPath, valueOf(ann));
+				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
 					setup.put(path).json(method, bean);
@@ -180,7 +180,7 @@ public class PojoHandlersSetup {
 				}
 
 			} else if (annoName.equals(DELETE.class.getName())) {
-				String path = pathOf(method, ctxPath, valueOf(ann));
+				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
 					setup.delete(path).json(method, bean);
@@ -189,7 +189,7 @@ public class PojoHandlersSetup {
 				}
 
 			} else if (annoName.equals(PATCH.class.getName())) {
-				String path = pathOf(method, ctxPath, valueOf(ann));
+				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
 					setup.patch(path).json(method, bean);
@@ -198,7 +198,7 @@ public class PojoHandlersSetup {
 				}
 
 			} else if (annoName.equals(OPTIONS.class.getName())) {
-				String path = pathOf(method, ctxPath, valueOf(ann));
+				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
 					setup.options(path).json(method, bean);
@@ -207,7 +207,7 @@ public class PojoHandlersSetup {
 				}
 
 			} else if (annoName.equals(HEAD.class.getName())) {
-				String path = pathOf(method, ctxPath, valueOf(ann));
+				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
 					setup.head(path).json(method, bean);
@@ -216,7 +216,7 @@ public class PojoHandlersSetup {
 				}
 
 			} else if (annoName.equals(TRACE.class.getName())) {
-				String path = pathOf(method, ctxPath, valueOf(ann));
+				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
 					setup.trace(path).json(method, bean);
@@ -227,9 +227,16 @@ public class PojoHandlersSetup {
 		}
 	}
 
-	private String valueOf(Annotation ann) {
+	private String uriOf(Annotation ann) {
 		Method valueMethod = Cls.getMethod(ann.getClass(), "value");
-		return Cls.invoke(valueMethod, ann);
+		String uri = Cls.invoke(valueMethod, ann);
+
+		if (U.isEmpty(uri)) {
+			Method uriMethod = Cls.getMethod(ann.getClass(), "uri");
+			uri = Cls.invoke(uriMethod, ann);
+		}
+
+		return uri;
 	}
 
 	private String pathOf(Method method, String ctxPath, String uri) {

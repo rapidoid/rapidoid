@@ -43,7 +43,7 @@ public class HttpRootPojoControllerTest extends HttpTestCommons {
 				return "bar";
 			}
 
-			@Page("/the/page")
+			@Page(uri = "/the/page")
 			public Object thePage() {
 				return "the page";
 			}
