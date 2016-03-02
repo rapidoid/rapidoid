@@ -227,14 +227,9 @@ public class Setup implements Constants {
 		return new OnRoute(http, TRACE, path).wrap(wrappers);
 	}
 
-	public OnRoute getOrPost(String path) {
+	public OnRoute page(String path) {
 		activate();
 		return new OnRoute(http, GET_OR_POST, path).wrap(wrappers);
-	}
-
-	public OnPage page(String path) {
-		activate();
-		return new OnPage(http, path).wrap(wrappers);
 	}
 
 	public Setup req(ReqHandler handler) {
@@ -365,7 +360,7 @@ public class Setup implements Constants {
 
 	public Setup bootstrap(String... args) {
 		this.args(args);
-		beans(annotated(Controller.class).in(path()).getAll().toArray());
+		beans(annotated(Controller.class).in(path()).loadAll().toArray());
 		Log.info("Completed bootstrap", "context", getIoCContext());
 		return this;
 	}

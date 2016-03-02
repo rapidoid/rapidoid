@@ -28,8 +28,11 @@ import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.RouteOptions;
 import org.rapidoid.http.handler.HttpHandlers;
 import org.rapidoid.lambda.*;
+import org.rapidoid.u.U;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
@@ -234,6 +237,56 @@ public class OnRoute {
 		HttpHandlers.register(http, verb, path, binaryOpts(), handler);
 	}
 
+	/* GUI */
+
+	public void render(String response) {
+		HttpHandlers.registerPredefined(http, verb, path, renderOpts(), response);
+	}
+
+	public void render(Collection<?> response) {
+		HttpHandlers.registerPredefined(http, verb, path, renderOpts(), response);
+	}
+
+	public void render(Map<?, ?> response) {
+		HttpHandlers.registerPredefined(http, verb, path, renderOpts(), response);
+	}
+
+	public <T> void render(Callable<T> handler) {
+		HttpHandlers.register(http, verb, path, renderOpts(), handler);
+	}
+
+	public void render(Method method, Object instance) {
+		HttpHandlers.register(http, verb, path, renderOpts(), method, instance);
+	}
+
+	public void render(OneParamLambda<?, ?> handler) {
+		HttpHandlers.register(http, verb, path, renderOpts(), handler);
+	}
+
+	public void render(TwoParamLambda<?, ?, ?> handler) {
+		HttpHandlers.register(http, verb, path, renderOpts(), handler);
+	}
+
+	public void render(ThreeParamLambda<?, ?, ?, ?> handler) {
+		HttpHandlers.register(http, verb, path, renderOpts(), handler);
+	}
+
+	public void render(FourParamLambda<?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(http, verb, path, renderOpts(), handler);
+	}
+
+	public void render(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(http, verb, path, renderOpts(), handler);
+	}
+
+	public void render(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(http, verb, path, renderOpts(), handler);
+	}
+
+	public void render(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(http, verb, path, renderOpts(), handler);
+	}
+	
 	/* CONTENT TYPE */
 
 	private RouteOptions plainOpts() {
@@ -252,6 +305,10 @@ public class OnRoute {
 		return opts(MediaType.BINARY);
 	}
 
+	private RouteOptions renderOpts() {
+		return opts(MediaType.HTML_UTF_8).render();
+	}
+
 	private RouteOptions opts(MediaType contentType) {
 		options.contentType = contentType;
 		return options;
@@ -265,7 +322,17 @@ public class OnRoute {
 	}
 
 	public OnRoute roles(String... roles) {
-		options.roles(roles);
+		options.roles(U.set(roles));
+		return this;
+	}
+
+	public OnRoute title(String title) {
+		options.title = title;
+		return this;
+	}
+
+	public OnRoute view(String viewName) {
+		options.view = viewName;
 		return this;
 	}
 

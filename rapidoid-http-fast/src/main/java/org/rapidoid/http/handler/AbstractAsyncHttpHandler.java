@@ -22,10 +22,12 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Current;
 import org.rapidoid.ctx.With;
 import org.rapidoid.http.*;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.security.Secure;
 import org.rapidoid.u.U;
 
 import java.util.Collections;
@@ -55,6 +57,14 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		U.notNull(req, "HTTP request");
 
 		try {
+			before(req);
+
+		} catch (Throwable e) {
+			HttpIO.errorAndDone(req, e, http.custom().errorHandler());
+			return HttpStatus.DONE;
+		}
+
+		try {
 			ctx.async();
 			execHandlerJob(ctx, isKeepAlive, req, extra);
 
@@ -65,6 +75,21 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		}
 
 		return HttpStatus.ASYNC;
+	}
+
+	private void before(Req req) {
+		String username = Current.username();
+		Set<String> roles = Current.roles();
+
+		if (U.notEmpty(options.roles) && !Secure.hasAnyRole(username, roles, options.roles)) {
+			throw new SecurityException("The user doesn't have the required roles!");
+		}
+
+		req.response().view(options.view).contentType(options.contentType).mvc(options.mvc);
+
+		if (options.title != null) {
+			req.response().model().put("title", options.title);
+		}
 	}
 
 	@SuppressWarnings("unchecked")

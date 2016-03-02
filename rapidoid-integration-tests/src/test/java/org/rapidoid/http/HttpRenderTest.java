@@ -20,16 +20,11 @@ package org.rapidoid.http;
  * #L%
  */
 
-import com.github.mustachejava.DefaultMustacheFactory;
-import com.github.mustachejava.Mustache;
-import com.github.mustachejava.MustacheFactory;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.customize.ViewRenderer;
 import org.rapidoid.setup.On;
-
-import java.io.PrintWriter;
+import org.rapidoid.web.MustacheViewRenderer;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")
@@ -38,47 +33,39 @@ public class HttpRenderTest extends HttpTestCommons {
 	@Test
 	public void testRender() {
 
-		MustacheFactory mf = new DefaultMustacheFactory();
+		On.custom().viewRenderer((req, resp, out) -> resp.content("this will be overwritten"));
 
-		On.custom().viewRenderer((Req req, Resp resp) ->  resp.content("this will be overwritten"));
-
-		On.custom().viewRenderer(new ViewRenderer() {
-			@Override
-			public void render(Req req, Resp resp) throws Exception {
-				Mustache mustache = mf.compile(resp.view() + ".html");
-				mustache.execute(new PrintWriter(resp.out()), resp.model()).flush();
-			}
-		});
+		On.custom().viewRenderer(new MustacheViewRenderer());
 
 		On.get("/view1").html((Req req, Resp resp) -> {
-			return resp.render();
+			return resp.mvc(true);
 		});
 
-		On.get("/view2").html((Req req, Resp resp) ->  {
+		On.page("/view2").render((Req req, Resp resp) -> {
 			resp.model().put("x", 12345);
-			return resp.render();
+			return req;
 		});
 
-		On.get("/view3").html((Req req, Resp resp) ->  {
+		On.get("/view3").view("view1").render((Req req, Resp resp) -> {
 			resp.model().put("msg", "custom view: 1");
-			return resp.view("view1").render();
+			return req;
 		});
 
-		On.get("/views/sub").html((Req req, Resp resp) ->  {
+		On.get("/views/sub").html((Req req, Resp resp) -> {
 			resp.model().put("msg", "sub-view!");
-			return resp.render();
+			return resp.mvc(true);
 		});
 
-		On.get("/abc").html((Req req, Resp resp) ->  {
+		On.get("/abc").html((Req req, Resp resp) -> {
 			resp.model().put("a", 123);
 			resp.model().put("b", "BBB");
 			resp.model().put("req", req);
 
-			return resp.view("view1").render();
+			return resp.view("view1").mvc(true);
 		});
 
 		onlyGet("/view1");
-		onlyGet("/view2");
+		getAndPost("/view2");
 		onlyGet("/view3");
 		onlyGet("/abc");
 		onlyGet("/views/sub");

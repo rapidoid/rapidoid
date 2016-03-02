@@ -43,7 +43,7 @@ public class HttpRootPojoControllerTest extends HttpTestCommons {
 				return "bar";
 			}
 
-			@Page(uri = "/the/page")
+			@Page(uri = "/the/page", raw = true)
 			public Object thePage() {
 				return "the page";
 			}
@@ -56,7 +56,7 @@ public class HttpRootPojoControllerTest extends HttpTestCommons {
 				return U.join(":", a, b, c, d, e, f, g, hh, ii, j);
 			}
 
-			@Page
+			@Page(raw = true)
 			@SuppressWarnings("unchecked")
 			public String num2(@Param("a") byte a, @Param("b") short b, @Param("c") char c, @Param("d") int d,
 			                   @Param("e") long e, @Param("f") float f, @Param("g") double g, @Param("h") boolean hh,

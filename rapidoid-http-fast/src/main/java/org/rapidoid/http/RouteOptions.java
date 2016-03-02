@@ -40,6 +40,8 @@ public class RouteOptions {
 
 	public volatile String title;
 
+	public volatile boolean mvc;
+
 	public final Set<String> roles = Coll.synchronizedSet();
 
 	public final List<HttpWrapper> wrappers = Coll.synchronizedList();
@@ -52,17 +54,16 @@ public class RouteOptions {
 		return this;
 	}
 
-	public RouteOptions roles(String[] roles) {
-		if (U.notEmpty(roles)) {
-			Collections.addAll(this.roles, roles);
-		}
+	public RouteOptions roles(Set<String> roles) {
+		this.roles.addAll(roles);
 
 		return this;
 	}
 
 	@Override
 	public String toString() {
-		return "{" +
+		String prefix = mvc ? "MVC" : "";
+		return prefix + "{" +
 				(contentType != null ? "contentType=" + contentType.info() : "") +
 				(view != null ? ", view='" + view + '\'' : "") +
 				(title != null ? ", title='" + title + '\'' : "") +
@@ -71,4 +72,8 @@ public class RouteOptions {
 				'}';
 	}
 
+	public RouteOptions render() {
+		this.mvc = true;
+		return this;
+	}
 }

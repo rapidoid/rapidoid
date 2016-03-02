@@ -46,4 +46,6 @@ public @interface Page {
 
 	String view() default "";
 
+	boolean raw() default false;
+
 }

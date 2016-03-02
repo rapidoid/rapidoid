@@ -20,9 +20,10 @@ package org.rapidoid.webapp;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Transaction;
 import org.rapidoid.annotation.TransactionMode;
-import org.rapidoid.aop.AOPInterceptor;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.http.HttpUtils;
@@ -33,14 +34,13 @@ import org.rapidoid.plugins.db.hibernate.JPA;
 import org.rapidoid.u.U;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
-public class TransactionInterceptor implements AOPInterceptor {
+@Authors("Nikolche Mihajlovski")
+@Since("5.1.0")
+public class TxUtil {
 
-	@Override
-	public Object intercept(final Callable<Object> forward, Annotation ann, Object ctx, final Method m,
-	                        final Object target, final Object[] args) {
+	public static Object intercept(final Callable<Object> forward, Annotation ann) {
 
 		final Req req = Ctxs.ctx().exchange();
 		TransactionMode txMode = getTxMode(ann);
@@ -74,7 +74,7 @@ public class TransactionInterceptor implements AOPInterceptor {
 		return req;
 	}
 
-	private TransactionMode getTxMode(Annotation ann) {
+	private static TransactionMode getTxMode(Annotation ann) {
 		if (ann instanceof Transaction) {
 			Transaction tx = (Transaction) ann;
 			TransactionMode txMode = tx.value();

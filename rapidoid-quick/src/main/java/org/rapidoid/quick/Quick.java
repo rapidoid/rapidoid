@@ -22,19 +22,15 @@ package org.rapidoid.quick;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.Transaction;
-import org.rapidoid.aop.AOP;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.webapp.TransactionInterceptor;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.transaction.Transactional;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
@@ -44,8 +40,6 @@ public class Quick {
 	public static void bootstrap(final String[] args, Object... config) {
 		Ctx ctx = Ctxs.open("quick");
 		Ctxs.setPersisterProvider(new QuickJPA(config));
-
-		AOP.intercept(new TransactionInterceptor(), Transaction.class, Transactional.class);
 
 		Jobs.execute(new Runnable() {
 			@Override

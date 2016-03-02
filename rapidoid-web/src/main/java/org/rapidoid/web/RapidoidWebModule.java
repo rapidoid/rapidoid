@@ -2,9 +2,7 @@ package org.rapidoid.web;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.aop.AOP;
 import org.rapidoid.log.Log;
-import org.rapidoid.security.annotation.*;
 
 /*
  * #%L
@@ -32,11 +30,6 @@ public class RapidoidWebModule {
 
 	static {
 		Log.info("Initializing the Rapidoid Web module");
-
-		AOP.reset();
-
-		AOP.intercept(new AuthInterceptor(), Administrator.class, Manager.class, Moderator.class, LoggedIn.class, DevMode.class,
-				Role.class, HasRole.class);
 	}
 
 }

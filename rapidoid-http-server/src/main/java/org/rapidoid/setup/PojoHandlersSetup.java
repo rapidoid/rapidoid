@@ -25,6 +25,7 @@ import org.rapidoid.beany.Metadata;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.log.Log;
+import org.rapidoid.security.Secure;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.UTILS;
@@ -138,21 +139,38 @@ public class PojoHandlersSetup {
 	}
 
 	private void registerOrDeregister(boolean register, Object bean, String ctxPath, Method method) {
+
+		Set<String> rolesAllowed = Secure.getRolesAllowed(method);
+		String[] roles = rolesAllowed.toArray(new String[rolesAllowed.size()]);
+
 		for (Annotation ann : method.getAnnotations()) {
+			if (ann instanceof Page) {
+				Page page = (Page) ann;
 
-			String annoName = ann.annotationType().getName();
-
-			if (annoName.equals(Page.class.getName())) {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					setup.page(path).render(method, bean);
+					OnRoute route = setup.page(path).roles(roles);
+
+					if (U.notEmpty(page.view())) {
+						route.view(page.view());
+					}
+
+					if (U.notEmpty(page.title())) {
+						route.title(page.title());
+					}
+
+					if (page.raw()) {
+						route.html(method, bean);
+					} else {
+						route.render(method, bean);
+					}
+
 				} else {
-					setup.deregister(Constants.GET, path);
-					setup.deregister(Constants.POST, path);
+					setup.deregister(Constants.GET_OR_POST, path);
 				}
 
-			} else if (annoName.equals(GET.class.getName())) {
+			} else if (ann instanceof GET) {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
@@ -161,7 +179,7 @@ public class PojoHandlersSetup {
 					setup.deregister(Constants.GET, path);
 				}
 
-			} else if (annoName.equals(POST.class.getName())) {
+			} else if (ann instanceof POST) {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
@@ -170,7 +188,7 @@ public class PojoHandlersSetup {
 					setup.deregister(Constants.POST, path);
 				}
 
-			} else if (annoName.equals(PUT.class.getName())) {
+			} else if (ann instanceof PUT) {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
@@ -179,7 +197,7 @@ public class PojoHandlersSetup {
 					setup.deregister(Constants.PUT, path);
 				}
 
-			} else if (annoName.equals(DELETE.class.getName())) {
+			} else if (ann instanceof DELETE) {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
@@ -188,7 +206,7 @@ public class PojoHandlersSetup {
 					setup.deregister(Constants.DELETE, path);
 				}
 
-			} else if (annoName.equals(PATCH.class.getName())) {
+			} else if (ann instanceof PATCH) {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
@@ -197,7 +215,7 @@ public class PojoHandlersSetup {
 					setup.deregister(Constants.PATCH, path);
 				}
 
-			} else if (annoName.equals(OPTIONS.class.getName())) {
+			} else if (ann instanceof OPTIONS) {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
@@ -206,7 +224,7 @@ public class PojoHandlersSetup {
 					setup.deregister(Constants.OPTIONS, path);
 				}
 
-			} else if (annoName.equals(HEAD.class.getName())) {
+			} else if (ann instanceof HEAD) {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
@@ -215,7 +233,7 @@ public class PojoHandlersSetup {
 					setup.deregister(Constants.HEAD, path);
 				}
 
-			} else if (annoName.equals(TRACE.class.getName())) {
+			} else if (ann instanceof TRACE) {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {

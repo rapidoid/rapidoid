@@ -20,34 +20,29 @@ package org.rapidoid.web;
  * #L%
  */
 
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.aop.AOPInterceptor;
-import org.rapidoid.ctx.Current;
-import org.rapidoid.lambda.Lmbd;
-import org.rapidoid.security.Secure;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.Resp;
+import org.rapidoid.http.customize.ViewRenderer;
+import org.rapidoid.util.UTILS;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Set;
-import java.util.concurrent.Callable;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public class AuthInterceptor implements AOPInterceptor {
+@Since("5.1.0")
+public class MustacheViewRenderer implements ViewRenderer {
+
+	private final MustacheFactory mf = new DefaultMustacheFactory();
 
 	@Override
-	public Object intercept(final Callable<Object> forward, Annotation ann, Object ctx, final Method m,
-	                        final Object target, final Object[] args) {
-
-		String username = Current.username();
-		Set<String> roles = Current.roles();
-
-		if (Secure.canAccessMethod(username, roles, m)) {
-			return Lmbd.call(forward);
-		} else {
-			throw new SecurityException("The user doesn't have the required roles!");
-		}
+	public void render(Req req, Resp resp, OutputStream out) throws Exception {
+		Mustache mustache = mf.compile(UTILS.path("pages", resp.view() + ".html"));
+		mustache.execute(new PrintWriter(out), resp.model()).flush();
 	}
 
 }

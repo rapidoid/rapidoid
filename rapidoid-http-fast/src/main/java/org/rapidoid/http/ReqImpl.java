@@ -74,7 +74,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	private volatile Map<String, Serializable> cookiepack;
 
-	private volatile Resp response;
+	private volatile RespImpl response;
 
 	private volatile boolean rendering;
 
@@ -451,7 +451,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 		} else {
 			// first serialize the response to bytes (with error handling)
-			byte[] bytes = responseToBytes(response());
+			byte[] bytes = responseToBytes();
 
 			// then start rendering
 			startRendering(response.code(), false);
@@ -464,27 +464,21 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		completed = true;
 	}
 
-	private byte[] responseToBytes(Resp resp) {
+	private byte[] responseToBytes() {
 		try {
-			if (resp.content() != null) {
-				return serializeResponseContent();
-
-			} else if (resp.body() != null) {
-				return UTILS.toBytes(resp.body());
-
-			} else {
-				Log.error("There's no HTTP response body to render!");
-				return "There's no HTTP response body to render!".getBytes();
-			}
+			return response.renderToBytes();
 
 		} catch (Throwable e) {
 			HttpIO.error(this, e, http.custom().errorHandler());
-			return responseToBytes(response());
-		}
-	}
 
-	private byte[] serializeResponseContent() {
-		return HttpUtils.responseToBytes(response.content(), response.contentType(), http().custom().jsonResponseRenderer());
+			try {
+				return response.renderToBytes();
+
+			} catch (Exception e1) {
+				Log.error("Internal rendering error!", e1);
+				return HttpUtils.getErrorMessage(response, e1).getBytes();
+			}
+		}
 	}
 
 	private String validateResponse() {
@@ -492,7 +486,8 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 			return "Response wasn't provided!";
 		}
 
-		if (response.content() == null && response.body() == null && response.redirect() == null && response.file() == null && response.raw() == null) {
+		if (response.content() == null && response.body() == null && response.redirect() == null
+				&& response.file() == null && response.raw() == null && !response().mvc()) {
 			return "Response content wasn't provided!";
 		}
 

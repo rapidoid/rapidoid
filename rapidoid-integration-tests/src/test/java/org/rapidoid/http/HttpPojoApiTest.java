@@ -158,7 +158,7 @@ public class HttpPojoApiTest extends HttpTestCommons {
 			return reqResp(req, resp);
 		}
 
-		@Page
+		@Page(raw = true)
 		Object p(Req req, Resp resp) {
 			return reqResp(req, resp);
 		}
@@ -213,7 +213,7 @@ public class HttpPojoApiTest extends HttpTestCommons {
 			return reqResp(req, resp);
 		}
 
-		@Page
+		@Page(raw = true)
 		Object p(Req req, Resp resp) {
 			return reqResp(req, resp);
 		}
@@ -256,7 +256,7 @@ public class HttpPojoApiTest extends HttpTestCommons {
 				return reqResp(req, resp);
 			}
 
-			@Page
+			@Page(raw = true)
 			Object p(Req req, Resp resp) {
 				return reqResp(req, resp);
 			}

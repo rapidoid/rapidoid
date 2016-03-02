@@ -81,7 +81,7 @@ public class HttpReregistrationTest extends HttpTestCommons {
 	public void testLambdaDeregistration() {
 		notFound("/foo");
 
-		On.getOrPost("/foo").html((Req req, Integer x) -> req.data() + ":" + x);
+		On.page("/foo").html((Req req, Integer x) -> req.data() + ":" + x);
 
 		getAndPost("/foo?a=12&x=3");
 

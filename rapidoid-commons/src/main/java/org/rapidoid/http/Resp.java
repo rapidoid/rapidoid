@@ -186,11 +186,18 @@ public interface Resp {
 	Resp binary(Object content);
 
 	/**
-	 * Renders the response in a MVC fashion.<br>
-	 * A custom view renderer must be configured/implemented via the <code>On#render()</code> method.<br>
-	 * A typical renderer will use <code>Resp#view</code> to get the view name, and <code>Resp#model</code> to get the model.
+	 * Checks whether the response model and view will be rendered in a MVC fashion.<br>
+	 * A typical renderer would use <code>Resp#view</code> to get the view name, and <code>Resp#model</code> to get the model.
+	 * A custom view renderer can be configured/implemented via the <code>On.custom().viewRenderer(...)</code> method.<br>
 	 */
-	Resp render();
+	boolean mvc();
+
+	/**
+	 * Sets whether the response model and view will be rendered in a MVC fashion.<br>
+	 * A typical renderer would use <code>Resp#view</code> to get the view name, and <code>Resp#model</code> to get the model.
+	 * A custom view renderer can be configured/implemented via the <code>On.custom().viewRenderer(...)</code> method.<br>
+	 */
+	Resp mvc(boolean mvc);
 
 	/**
 	 * First renders the response headers, then returns an <i>OutputStream</i> representing

@@ -1,8 +1,8 @@
-package org.rapidoid.aop;
+package org.rapidoid.http.handler;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -22,22 +22,30 @@ package org.rapidoid.aop;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
-import java.lang.annotation.Annotation;
-import java.util.Set;
+import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.RouteOptions;
+import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
-@Since("4.1.0")
-public class InterceptorConfig {
+@Since("5.1.0")
+public class PredefinedResponseHandler extends AbstractAsyncHttpHandler {
 
-	public final Set<Class<? extends Annotation>> annotated;
+	private final Object response;
 
-	public final AOPInterceptor interceptor;
+	public PredefinedResponseHandler(FastHttp http, RouteOptions options, Object response) {
+		super(http, options);
+		this.response = response;
+	}
 
-	public InterceptorConfig(AOPInterceptor interceptor, Class<? extends Annotation>[] annotated) {
-		this.annotated = U.set(annotated);
-		this.interceptor = interceptor;
+	@Override
+	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
+		return response;
+	}
+
+	@Override
+	public String toString() {
+		return "() -> (predefined response)";
 	}
 
 }

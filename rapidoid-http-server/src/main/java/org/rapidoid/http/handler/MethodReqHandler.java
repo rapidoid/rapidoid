@@ -22,12 +22,13 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.aop.AOP;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.RouteOptions;
 import org.rapidoid.http.handler.lambda.NParamMethodHandler;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.u.U;
 
 import java.lang.reflect.Method;
 
@@ -44,7 +45,14 @@ public class MethodReqHandler extends NParamMethodHandler {
 
 	@Override
 	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
-		return AOP.invoke(null, method, instance, args(req));
+		Object result = Cls.invoke(method, instance, args(req));
+
+		if (method.getReturnType() == void.class) {
+			U.must(result == null);
+			result = req;
+		}
+
+		return result;
 	}
 
 	@Override

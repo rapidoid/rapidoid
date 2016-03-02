@@ -29,7 +29,9 @@ import org.rapidoid.http.customize.LoginProvider;
 import org.rapidoid.http.customize.RolesProvider;
 import org.rapidoid.http.customize.ViewRenderer;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -67,6 +69,8 @@ public class RespImpl implements Resp {
 	private volatile File file = null;
 
 	private volatile String view = null;
+
+	private volatile boolean mvc = false;
 
 	public RespImpl(ReqImpl req) {
 		this.req = req;
@@ -243,22 +247,19 @@ public class RespImpl implements Resp {
 	}
 
 	@Override
-	public Req request() {
-		return req;
+	public synchronized boolean mvc() {
+		return mvc;
 	}
 
 	@Override
-	public Resp render() {
-		ViewRenderer renderer = req.http().custom().viewRenderer();
-		U.must(renderer != null, "A view renderer wasn't set!");
-
-		try {
-			renderer.render(req, this);
-		} catch (Throwable e) {
-			throw U.rte("Error while rendering view: " + view(), e);
-		}
-
+	public synchronized Resp mvc(boolean mvc) {
+		this.mvc = mvc;
 		return this;
+	}
+
+	@Override
+	public Req request() {
+		return req;
 	}
 
 	@Override
@@ -318,7 +319,41 @@ public class RespImpl implements Resp {
 				(filename != null ? ", filename='" + filename + '\'' : "") +
 				(file != null ? ", file=" + file : "") +
 				(view != null ? ", view='" + view + '\'' : "") +
+				", mvc=" + mvc +
 				'}';
+	}
+
+	public byte[] renderToBytes() {
+		if (mvc()) {
+			return render();
+
+		} else if (content() != null) {
+			return serializeResponseContent();
+
+		} else if (body() != null) {
+			return UTILS.toBytes(body());
+
+		} else {
+			throw U.rte("There's nothing to render!");
+		}
+	}
+
+	private byte[] serializeResponseContent() {
+		return HttpUtils.responseToBytes(content(), contentType(), req.http().custom().jsonResponseRenderer());
+	}
+
+	private byte[] render() {
+		ViewRenderer renderer = req.http().custom().viewRenderer();
+		U.must(renderer != null, "A view renderer wasn't configured!");
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		try {
+			renderer.render(req, this, out);
+		} catch (Throwable e) {
+			throw U.rte("Error while rendering view: " + view(), e);
+		}
+
+		return out.toByteArray();
 	}
 
 }

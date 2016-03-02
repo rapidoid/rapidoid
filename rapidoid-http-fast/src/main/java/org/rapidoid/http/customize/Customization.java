@@ -22,6 +22,7 @@ package org.rapidoid.http.customize;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Config;
 
 @Authors("Nikolche Mihajlovski")
@@ -29,6 +30,8 @@ import org.rapidoid.config.Config;
 public class Customization {
 
 	public static final String[] DEFAULT_STATIC_FILES_LOCATIONS = {"static", "rapidoid/static"};
+
+	private static final String MUSTACHE_RENDERER = "org.rapidoid.web.MustacheViewRenderer";
 
 	private final String name;
 
@@ -57,11 +60,17 @@ public class Customization {
 	public void reset() {
 		staticFilesPath = DEFAULT_STATIC_FILES_LOCATIONS;
 		errorHandler = new DefaultErrorHandler();
-		viewRenderer = new DefaultViewRenderer();
+		viewRenderer = optionalViewRenderer();
 		jsonResponseRenderer = new DefaultJsonResponseRenderer();
 		beanParameterFactory = new DefaultBeanParameterFactory();
 		loginProvider = new DefaultLoginProvider();
 		rolesProvider = new DefaultRolesProvider();
+	}
+
+	protected ViewRenderer optionalViewRenderer() {
+		Class<?> rendererCls = Cls.getClassIfExists(MUSTACHE_RENDERER);
+
+		return rendererCls != null ? (ViewRenderer) Cls.newInstance(rendererCls) : null;
 	}
 
 	public void staticFilesPath(String... staticFilesPath) {

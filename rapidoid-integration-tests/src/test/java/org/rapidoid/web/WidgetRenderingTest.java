@@ -34,7 +34,7 @@ public class WidgetRenderingTest extends HttpTestCommons {
 
 	@Test
 	public void testFormBindingAndRendering() {
-		On.getOrPost("/").html(() -> GUI.edit(U.map("name", "unknown", "age", 100)));
+		On.page("/").html(() -> GUI.edit(U.map("name", "unknown", "age", 100)));
 
 		getAndPost("/");
 		getAndPost("/?name=foo&age=12345"); // URL params are ignored

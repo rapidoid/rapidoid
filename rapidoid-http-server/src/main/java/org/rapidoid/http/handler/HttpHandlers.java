@@ -97,6 +97,10 @@ public class HttpHandlers {
 		http.on(verb, path, new FastStaticHttpHandler(options, response));
 	}
 
+	public static void registerPredefined(FastHttp http, String verb, String path, RouteOptions options, Object response) {
+		http.on(verb, path, new PredefinedResponseHandler(http, options, response));
+	}
+
 	@SuppressWarnings("unchecked")
 	public static void register(FastHttp http, String verb, String path, RouteOptions options, Callable<?> handler) {
 		http.on(verb, path, new FastCallableHttpHandler(http, options, (Callable<Object>) handler));
