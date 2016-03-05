@@ -22,8 +22,8 @@ package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Env;
 import org.rapidoid.commons.RapidoidInfo;
-import org.rapidoid.config.Conf;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.gui.reqinfo.IReqInfo;
@@ -91,7 +91,7 @@ public class HtmlPage extends AbstractWidget {
 
 		Map<String, Object> model = U.map(req.data());
 
-		model.put("dev", Conf.dev());
+		model.put("dev", Env.dev());
 
 		model.put("verb", req.verb());
 		model.put("host", req.host());

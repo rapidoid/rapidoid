@@ -27,7 +27,7 @@ import org.hibernate.jpa.boot.internal.SettingsImpl;
 import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
+import org.rapidoid.commons.Env;
 import org.rapidoid.ctx.PersisterProvider;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
@@ -83,7 +83,7 @@ public class QuickJPA implements PersisterProvider {
 		Properties properties = new Properties();
 		Map<String, String> props;
 
-		if (Conf.production()) {
+		if (Env.production()) {
 			props = IO.loadMap("hibernate-prod.properties");
 			if (props == null) {
 				props = IO.loadMap("hibernate-prod.default.properties");

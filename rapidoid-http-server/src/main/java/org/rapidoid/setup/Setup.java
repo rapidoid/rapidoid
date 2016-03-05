@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Coll;
+import org.rapidoid.commons.Env;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.RapidoidInitializer;
@@ -154,7 +155,7 @@ public class Setup implements Constants {
 
 			inferCallers();
 
-			if (setupType != ServerSetupType.DEV || Conf.dev()) {
+			if (setupType != ServerSetupType.DEV || Env.dev()) {
 				listening = true;
 
 				this.address = U.or(this.address, config.entry("address").or(defaultAddress));
@@ -162,7 +163,7 @@ public class Setup implements Constants {
 
 				HttpProcessor proc = processor != null ? processor : http;
 
-				if (Conf.dev() && !OnChanges.isIgnored()) {
+				if (Env.dev() && !OnChanges.isIgnored()) {
 					proc = new AppRestartProcessor(this, proc);
 					OnChanges.byDefaultRestart();
 				}

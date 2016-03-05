@@ -23,6 +23,7 @@ package org.rapidoid.config;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Env;
 import org.rapidoid.test.AbstractCommonsTest;
 
 @Authors("Nikolche Mihajlovski")
@@ -31,7 +32,7 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 	@Test
 	public void testBasicConfig() {
-		isTrue(Conf.dev());
+		isTrue(Env.dev());
 
 		Conf.ROOT.set("abc", "123");
 		Conf.ROOT.set("cool", true);
@@ -39,8 +40,8 @@ public class ConfigurationTest extends AbstractCommonsTest {
 
 		eq(Conf.ROOT.entry("abc").or(0).longValue(), 123);
 		isTrue(Conf.ROOT.is("cool"));
-		isTrue(Conf.production());
-		isFalse(Conf.dev());
+		isTrue(Env.production());
+		isFalse(Env.dev());
 	}
 
 }

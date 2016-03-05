@@ -22,7 +22,7 @@ package org.rapidoid.setup;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
+import org.rapidoid.commons.Env;
 import org.rapidoid.log.Log;
 import org.rapidoid.util.UTILS;
 
@@ -41,7 +41,7 @@ public class OnChanges {
 			initialized = true;
 			ignore = false;
 
-			if (Conf.dev()) {
+			if (Env.dev()) {
 				if (UTILS.withWatchModule()) {
 					WatchForChanges.activate();
 				} else {

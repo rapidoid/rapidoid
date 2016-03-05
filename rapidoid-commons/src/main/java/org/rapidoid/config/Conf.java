@@ -2,7 +2,6 @@ package org.rapidoid.config;
 
 import org.rapidoid.commons.Coll;
 import org.rapidoid.lambda.Mapper;
-import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
@@ -69,14 +68,6 @@ public class Conf {
 
 	public static boolean micro() {
 		return ROOT.is("micro");
-	}
-
-	public static boolean production() {
-		return ROOT.is("production");
-	}
-
-	public static boolean dev() {
-		return !production() && !ClasspathUtil.getClasspathFolders().isEmpty();
 	}
 
 	public static String secret() {
