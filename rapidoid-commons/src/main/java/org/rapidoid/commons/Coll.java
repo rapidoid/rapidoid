@@ -59,18 +59,22 @@ public class Coll {
 
 	public static <T> void assign(Collection<T> destination, Collection<? extends T> source) {
 		Err.argMust(destination != null, "destination cannot be null!");
-		Err.argMust(source != null, "source cannot be null!");
 
 		destination.clear();
-		destination.addAll(source);
+
+		if (source != null) {
+			destination.addAll(source);
+		}
 	}
 
 	public static <K, V> void assign(Map<K, V> destination, Map<? extends K, ? extends V> source) {
 		Err.argMust(destination != null, "destination cannot be null!");
-		Err.argMust(source != null, "source cannot be null!");
 
 		destination.clear();
-		destination.putAll(source);
+
+		if (source != null) {
+			destination.putAll(source);
+		}
 	}
 
 	public static <K, V> V get(Map<K, V> map, K key) {

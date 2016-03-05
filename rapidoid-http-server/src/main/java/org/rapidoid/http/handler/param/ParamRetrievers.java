@@ -83,7 +83,7 @@ public class ParamRetrievers {
 			if (Cls.isBeanType(type)) {
 				return new BeanParamRetriever(customization, type, name);
 
-			} else if (Cls.kindOf(type).isSimple()) {
+			} else if (Cls.kindOf(type).isConcrete()) {
 				return new DataParamRetriever(type, name);
 
 			} else if (Cls.isDataStructure(type) || Cls.isJREClass(type.getCanonicalName())) {

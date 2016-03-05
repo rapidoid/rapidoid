@@ -211,7 +211,7 @@ public class Beany {
 
 	public static Object serialize(Object value) {
 
-		if (Cls.kindOf(value) != TypeKind.OBJECT || value instanceof Enum) {
+		if (Cls.kindOf(value) != TypeKind.UNKNOWN || value instanceof Enum) {
 			return value;
 
 		} else if (value instanceof Var<?>) {
@@ -266,7 +266,7 @@ public class Beany {
 		U.must(!(bean instanceof Collection));
 		U.must(!bean.getClass().isArray());
 		U.must(!bean.getClass().isEnum());
-		U.must(Cls.kindOf(bean) == TypeKind.OBJECT);
+		U.must(Cls.kindOf(bean) == TypeKind.UNKNOWN);
 
 		for (Prop prop : propertiesOf(bean)) {
 			Object value = prop.getRaw(bean);
@@ -462,7 +462,7 @@ public class Beany {
 				sb.append(", ");
 			}
 
-			if (prop.getTypeKind() == TypeKind.OBJECT) {
+			if (prop.getTypeKind() == TypeKind.UNKNOWN) {
 				value = value == bean ? "[this]" : "[obj]";
 			}
 
@@ -508,7 +508,7 @@ public class Beany {
 			String name = prop.getName();
 			Object value = prop.get(bean);
 
-			if (value != null && prop.getTypeKind() != TypeKind.OBJECT && prop.getTypeKind() != TypeKind.DATE) {
+			if (value != null && prop.getTypeKind() != TypeKind.UNKNOWN && prop.getTypeKind() != TypeKind.DATE) {
 
 				if (sb.length() > 0) {
 					sb.append(", ");

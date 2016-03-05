@@ -51,88 +51,17 @@ public class Cls {
 			Byte.class, char.class, Character.class, double.class, Double.class, float.class, Float.class, int.class,
 			Integer.class, long.class, Long.class, short.class, Short.class, void.class, Void.class);
 
-	private static final Map<String, TypeKind> KINDS = initKinds();
-
 	private static final Object[] EMPTY_ARRAY = {};
 
 	private Cls() {
 	}
 
-	protected static Map<String, TypeKind> initKinds() {
-
-		Map<String, TypeKind> kinds = new HashMap<String, TypeKind>();
-
-		kinds.put("boolean", TypeKind.BOOLEAN);
-
-		kinds.put("byte", TypeKind.BYTE);
-
-		kinds.put("char", TypeKind.CHAR);
-
-		kinds.put("short", TypeKind.SHORT);
-
-		kinds.put("int", TypeKind.INT);
-
-		kinds.put("long", TypeKind.LONG);
-
-		kinds.put("float", TypeKind.FLOAT);
-
-		kinds.put("double", TypeKind.DOUBLE);
-
-		kinds.put("java.lang.String", TypeKind.STRING);
-
-		kinds.put("java.lang.Boolean", TypeKind.BOOLEAN_OBJ);
-
-		kinds.put("java.lang.Byte", TypeKind.BYTE_OBJ);
-
-		kinds.put("java.lang.Character", TypeKind.CHAR_OBJ);
-
-		kinds.put("java.lang.Short", TypeKind.SHORT_OBJ);
-
-		kinds.put("java.lang.Integer", TypeKind.INT_OBJ);
-
-		kinds.put("java.lang.Long", TypeKind.LONG_OBJ);
-
-		kinds.put("java.lang.Float", TypeKind.FLOAT_OBJ);
-
-		kinds.put("java.lang.Double", TypeKind.DOUBLE_OBJ);
-
-		kinds.put("java.util.Date", TypeKind.DATE);
-
-		kinds.put("java.util.UUID", TypeKind.UUID);
-
-		return kinds;
-	}
-
-	/**
-	 * @return Any kind, except NULL
-	 */
 	public static TypeKind kindOf(Class<?> type) {
-		String typeName = type.getName();
-		TypeKind kind = KINDS.get(typeName);
-
-		if (kind == null) {
-			kind = TypeKind.OBJECT;
-		}
-
-		return kind;
+		return TypeKind.ofType(type);
 	}
 
-	/**
-	 * @return Any kind, including NULL
-	 */
 	public static TypeKind kindOf(Object value) {
-		if (value == null) {
-			return TypeKind.NULL;
-		}
-
-		String typeName = value.getClass().getName();
-		TypeKind kind = KINDS.get(typeName);
-
-		if (kind == null) {
-			kind = TypeKind.OBJECT;
-		}
-
-		return kind;
+		return TypeKind.of(value);
 	}
 
 	public static void setFieldValue(Object instance, String fieldName, Object value) {
@@ -583,7 +512,7 @@ public class Cls {
 			case STRING:
 				return (T) value;
 
-			case OBJECT:
+			case UNKNOWN:
 				throw U.rte("Cannot convert string value to type '%s'!", toType);
 
 			case DATE:
@@ -699,7 +628,7 @@ public class Cls {
 					return (T) U.str(value);
 				}
 
-			case OBJECT:
+			case UNKNOWN:
 				throw U.rte("Cannot convert the value to type '%s'!", toType);
 
 			case DATE:
@@ -928,7 +857,7 @@ public class Cls {
 	}
 
 	public static boolean isSimple(Object target) {
-		return kindOf(target).isSimple();
+		return kindOf(target).isConcrete();
 	}
 
 	public static boolean isNumber(Object target) {
@@ -941,7 +870,7 @@ public class Cls {
 	}
 
 	public static boolean isBeanType(Class<?> clazz) {
-		return kindOf(clazz) == TypeKind.OBJECT && !clazz.isAnnotation() && !clazz.isEnum() && !clazz.isInterface()
+		return kindOf(clazz) == TypeKind.UNKNOWN && !clazz.isAnnotation() && !clazz.isEnum() && !clazz.isInterface()
 				&& !(Collection.class.isAssignableFrom(clazz)) && !(Map.class.isAssignableFrom(clazz))
 				&& !(Object[].class.isAssignableFrom(clazz)) && !clazz.getPackage().getName().startsWith("java.")
 				&& !clazz.getPackage().getName().startsWith("javax.");

@@ -71,6 +71,17 @@ public class Bufs {
 		return bytes;
 	}
 
+	public static int[] buf2ubytes(ByteBuffer buf) {
+		byte[] bytes = buf2bytes(buf);
+		int[] ubytes = new int[bytes.length];
+
+		for (int i = 0; i < bytes.length; i++) {
+			ubytes[i] = UTILS.ubyte(bytes[i]);
+		}
+
+		return ubytes;
+	}
+
 	public static ByteBuffer buf(String s) {
 		byte[] bytes = s.getBytes();
 

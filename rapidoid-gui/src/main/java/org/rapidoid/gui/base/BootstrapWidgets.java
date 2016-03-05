@@ -538,7 +538,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static boolean isEntity(Object obj) {
-		return Cls.kindOf(obj) == TypeKind.OBJECT && !obj.getClass().isEnum() && Beany.hasProperty(obj, "id");
+		return Cls.kindOf(obj) == TypeKind.UNKNOWN && !obj.getClass().isEnum() && Beany.hasProperty(obj, "id");
 	}
 
 	public static String urlFor(Object entity) {

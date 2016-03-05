@@ -317,7 +317,7 @@ public class Field extends AbstractWidget {
 			return FieldType.MULTI_SELECT;
 		}
 
-		if (Cls.kindOf(type) == TypeKind.OBJECT) {
+		if (Cls.kindOf(type) == TypeKind.UNKNOWN) {
 			return FieldType.DROPDOWN;
 		}
 
@@ -335,7 +335,7 @@ public class Field extends AbstractWidget {
 			return getCollectionPropertyOptions(prop);
 		}
 
-		if (Cls.kindOf(type) == TypeKind.OBJECT) {
+		if (Cls.kindOf(type) == TypeKind.UNKNOWN) {
 			return Collections.EMPTY_LIST;
 		}
 
@@ -356,7 +356,7 @@ public class Field extends AbstractWidget {
 	}
 
 	protected Collection<?> getOptionsOfType(Class<?> clazz) {
-		if (Cls.kindOf(clazz) == TypeKind.OBJECT && Beany.hasProperty(clazz, "id")) {
+		if (Cls.kindOf(clazz) == TypeKind.UNKNOWN && Beany.hasProperty(clazz, "id")) {
 			return Collections.EMPTY_LIST; // FIXME use magic?
 		} else {
 			return Collections.EMPTY_LIST;

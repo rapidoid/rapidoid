@@ -20,37 +20,142 @@ package org.rapidoid.cls;
  * #L%
  */
 
+import org.rapidoid.u.U;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+interface TypeConstants {
+
+	boolean PRIM = true;
+	boolean OBJ = false;
+
+	boolean NUM = true;
+	boolean NAN = false;
+
+	boolean CONCRETE = true;
+	boolean UNCLEAR = false;
+
+	boolean ARR = true;
+	boolean NOT_ARR = false;
+}
+
 /**
  * !!! IMPORTANT !!!
  * <p>
  * DO NOT CHANGE THE ORDER!
  * <p>
  * ONLY APPEND NEW ELEMENTS!
- */
-
-/**
+ *
  * @author Nikolche Mihajlovski
  * @since 2.0.0
  */
-public enum TypeKind {
+public enum TypeKind implements TypeConstants {
 
-	NULL(false, false, true), BOOLEAN(true, false, true), BYTE(true, true, true), SHORT(true, true, true), CHAR(true,
-			true, true), INT(true, true, true), LONG(true, true, true), FLOAT(true, true, true), DOUBLE(true, true,
-			true), STRING(false, false, true), BOOLEAN_OBJ(false, false, true), BYTE_OBJ(false, true, true), SHORT_OBJ(
-			false, true, true), CHAR_OBJ(false, true, true), INT_OBJ(false, true, true), LONG_OBJ(false, true, true), FLOAT_OBJ(
-			false, true, true), DOUBLE_OBJ(false, true, true), OBJECT(false, false, false), DATE(false, false, true), UUID(
-			false, false, true);
+	NULL(null, OBJ, NAN, CONCRETE, NOT_ARR),
 
+	BOOLEAN(boolean.class, PRIM, NAN, CONCRETE, NOT_ARR),
+	BYTE(byte.class, PRIM, NUM, CONCRETE, NOT_ARR),
+	SHORT(short.class, PRIM, NUM, CONCRETE, NOT_ARR),
+	CHAR(char.class, PRIM, NUM, CONCRETE, NOT_ARR),
+	INT(int.class, PRIM, NUM, CONCRETE, NOT_ARR),
+	LONG(long.class, PRIM, NUM, CONCRETE, NOT_ARR),
+	FLOAT(float.class, PRIM, NUM, CONCRETE, NOT_ARR),
+	DOUBLE(double.class, PRIM, NUM, CONCRETE, NOT_ARR),
+
+	STRING(String.class, OBJ, NAN, CONCRETE, NOT_ARR),
+
+	BOOLEAN_OBJ(Boolean.class, OBJ, NAN, CONCRETE, NOT_ARR),
+	BYTE_OBJ(Byte.class, OBJ, NUM, CONCRETE, NOT_ARR),
+	SHORT_OBJ(Short.class, OBJ, NUM, CONCRETE, NOT_ARR),
+	CHAR_OBJ(Character.class, OBJ, NUM, CONCRETE, NOT_ARR),
+	INT_OBJ(Integer.class, OBJ, NUM, CONCRETE, NOT_ARR),
+	LONG_OBJ(Long.class, OBJ, NUM, CONCRETE, NOT_ARR),
+	FLOAT_OBJ(Float.class, OBJ, NUM, CONCRETE, NOT_ARR),
+	DOUBLE_OBJ(Double.class, OBJ, NUM, CONCRETE, NOT_ARR),
+
+	UNKNOWN(Object.class, OBJ, NAN, UNCLEAR, NOT_ARR),
+	DATE(Date.class, OBJ, NAN, CONCRETE, NOT_ARR),
+	UUID(java.util.UUID.class, OBJ, NAN, CONCRETE, NOT_ARR),
+
+	BOOLEAN_ARR(boolean[].class, OBJ, NAN, CONCRETE, ARR),
+	BYTE_ARR(byte[].class, OBJ, NUM, CONCRETE, ARR),
+	SHORT_ARR(short[].class, OBJ, NUM, CONCRETE, ARR),
+	CHAR_ARR(char[].class, OBJ, NUM, CONCRETE, ARR),
+	INT_ARR(int[].class, OBJ, NUM, CONCRETE, ARR),
+	LONG_ARR(long[].class, OBJ, NUM, CONCRETE, ARR),
+	FLOAT_ARR(float[].class, OBJ, NUM, CONCRETE, ARR),
+	DOUBLE_ARR(double[].class, OBJ, NUM, CONCRETE, ARR),
+
+	OBJECT_ARR(Object[].class, OBJ, NAN, UNCLEAR, ARR),
+	LIST(List.class, OBJ, NAN, UNCLEAR, NOT_ARR),
+	SET(Set.class, OBJ, NAN, UNCLEAR, NOT_ARR),
+	MAP(Map.class, OBJ, NAN, UNCLEAR, NOT_ARR);
+
+	private static final Map<Class<?>, TypeKind> KINDS = initKinds();
+
+	private static Map<Class<?>, TypeKind> initKinds() {
+		Map<Class<?>, TypeKind> kinds = U.map();
+
+		for (TypeKind kind : TypeKind.values()) {
+			if (kind != NULL) {
+				kinds.put(kind.getType(), kind);
+			}
+		}
+
+		return kinds;
+	}
+
+	/**
+	 * @return Any kind, except NULL
+	 */
+	public static TypeKind ofType(Class<?> type) {
+
+		if (List.class.isAssignableFrom(type)) {
+			return LIST;
+
+		} else if (Set.class.isAssignableFrom(type)) {
+			return SET;
+
+		} else if (Map.class.isAssignableFrom(type)) {
+			return MAP;
+
+		} else {
+			TypeKind kind = KINDS.get(type);
+
+			if (kind == null) {
+				kind = type.isArray() ? TypeKind.OBJECT_ARR : TypeKind.UNKNOWN;
+			}
+
+			return kind;
+		}
+	}
+
+	/**
+	 * @return Any kind, including NULL
+	 */
+	public static TypeKind of(Object value) {
+		return value != null ? ofType(value.getClass()) : TypeKind.NULL;
+	}
+
+	private final Class<?> type;
 	private final boolean primitive;
-
 	private final boolean number;
+	private final boolean concrete;
+	private final boolean array;
 
-	private final boolean simple;
-
-	private TypeKind(boolean primitive, boolean number, boolean simple) {
+	TypeKind(Class<?> type, boolean primitive, boolean number, boolean concrete, boolean array) {
+		this.type = type;
 		this.primitive = primitive;
 		this.number = number;
-		this.simple = simple;
+		this.concrete = concrete;
+		this.array = array;
+	}
+
+	public Class<?> getType() {
+		return type;
 	}
 
 	public boolean isPrimitive() {
@@ -61,8 +166,12 @@ public enum TypeKind {
 		return number;
 	}
 
-	public boolean isSimple() {
-		return simple;
+	public boolean isConcrete() {
+		return concrete;
+	}
+
+	public boolean isArray() {
+		return array;
 	}
 
 }

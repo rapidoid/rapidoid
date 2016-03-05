@@ -28,6 +28,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.http.customize.JsonResponseRenderer;
 import org.rapidoid.io.Res;
+import org.rapidoid.serialize.Serialize;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
@@ -35,6 +36,8 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.Serializable;
+import java.nio.BufferOverflowException;
+import java.util.Arrays;
 import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
@@ -57,7 +60,8 @@ public class HttpUtils implements HttpMetadata {
 
 		if (!U.isEmpty(cookiepack)) {
 			byte[] decoded = DatatypeConverter.parseBase64Binary(cookiepack.replace('$', '+'));
-			return (Map<String, Serializable>) UTILS.deserialize(Crypto.decrypt(decoded));
+			byte[] cookiepackDecrypted = Crypto.decrypt(decoded);
+			return (Map<String, Serializable>) Serialize.deserialize(cookiepackDecrypted);
 		} else {
 			return null;
 		}
@@ -65,10 +69,29 @@ public class HttpUtils implements HttpMetadata {
 
 	public static void saveCookipackBeforeRenderingHeaders(Req req, Map<String, Serializable> cookiepack) {
 		if (cookiepack != null) {
-			byte[] cpack = Crypto.encrypt(UTILS.serialize(cookiepack));
-			String encoded = DatatypeConverter.printBase64Binary(cpack).replace('+', '$');
-			setCookie(req, COOKIEPACK_COOKIE, encoded, "path=/");
+			String cookie;
+			if (!cookiepack.isEmpty()) {
+				byte[] cookiepackBytes = serializeCookiepack(cookiepack);
+				byte[] cookiepackEncrypted = Crypto.encrypt(cookiepackBytes);
+				cookie = DatatypeConverter.printBase64Binary(cookiepackEncrypted).replace('+', '$');
+			} else {
+				cookie = "";
+			}
+
+			setCookie(req, COOKIEPACK_COOKIE, cookie, "path=/");
 		}
+	}
+
+	private static byte[] serializeCookiepack(Map<String, Serializable> cookiepack) {
+		byte[] dest = new byte[2500];
+
+		try {
+			int size = Serialize.serialize(dest, cookiepack);
+			dest = Arrays.copyOf(dest, size);
+		} catch (BufferOverflowException e) {
+			throw U.rte("The cookie-pack is too big!");
+		}
+		return dest;
 	}
 
 	public static boolean isGetReq(Req req) {
