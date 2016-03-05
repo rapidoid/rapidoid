@@ -109,7 +109,7 @@ public class HttpIO {
 	}
 
 	public static void error(Req req, Throwable error, ErrorHandler errorHandler) {
-		Log.error("HTTP handler error!", error);
+		Log.debug("HTTP handler error!", "error", error);
 
 		try {
 			Resp resp = req.response().code(500);

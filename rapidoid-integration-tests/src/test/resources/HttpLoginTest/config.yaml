@@ -1,0 +1,21 @@
+secret: hard-to-guess
+
+users:
+    niko:
+      email: niko@rapidoid.org.abcde
+      password: easy
+      roles:
+        - owner
+        - administrator
+        - moderator
+
+    chuck:
+      password: chuck
+      roles: ["moderator", "restarter"]
+
+    abc:
+      password: abc
+      roles: guest
+
+    foo:
+      password: bar

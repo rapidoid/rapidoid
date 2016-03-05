@@ -23,7 +23,6 @@ package org.rapidoid.http.handler;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
-import org.rapidoid.ctx.Current;
 import org.rapidoid.ctx.With;
 import org.rapidoid.http.*;
 import org.rapidoid.jpa.JPA;
@@ -58,9 +57,12 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
 		U.notNull(req, "HTTP request");
 
+		String username = req.cookiepack(HttpUtils._USER, null);
+		Set<String> roles = userRoles(username);
+
 		TransactionMode txMode;
 		try {
-			txMode = before(req);
+			txMode = before(req, username, roles);
 
 		} catch (Throwable e) {
 			HttpIO.errorAndDone(req, e, http.custom().errorHandler());
@@ -69,7 +71,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 
 		try {
 			ctx.async();
-			execHandlerJob(ctx, isKeepAlive, req, extra, txMode);
+			execHandlerJob(ctx, isKeepAlive, req, extra, txMode, username, roles);
 
 		} catch (Throwable e) {
 			// if there was an error in the job scheduling:
@@ -80,9 +82,19 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		return HttpStatus.ASYNC;
 	}
 
-	private TransactionMode before(final Req req) {
-		String username = Current.username();
-		Set<String> roles = Current.roles();
+	private Set<String> userRoles(String username) {
+		if (username != null) {
+			try {
+				return http.custom().rolesProvider().getRolesForUser(username);
+			} catch (Exception e) {
+				throw U.rte(e);
+			}
+		} else {
+			return Collections.emptySet();
+		}
+	}
+
+	private TransactionMode before(final Req req, String username, Set<String> roles) {
 
 		if (U.notEmpty(options.roles) && !Secure.hasAnyRole(username, roles, options.roles)) {
 			throw new SecurityException("The user doesn't have the required roles!");
@@ -120,20 +132,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 	}
 
 	private void execHandlerJob(final Channel channel, final boolean isKeepAlive, final Req req,
-	                            final Object extra, final TransactionMode txMode) {
-
-		String username = req.cookiepack(HttpUtils._USER, null);
-		Set<String> roles;
-
-		if (username != null) {
-			try {
-				roles = http.custom().rolesProvider().getRolesForUser(username);
-			} catch (Exception e) {
-				throw U.rte(e);
-			}
-		} else {
-			roles = Collections.emptySet();
-		}
+	                            final Object extra, final TransactionMode txMode, String username, Set<String> roles) {
 
 		Runnable handleRequest = handlerWithWrappers(channel, isKeepAlive, req, extra);
 		Runnable handleRequestMaybeInTx = txWrap(txMode, handleRequest);

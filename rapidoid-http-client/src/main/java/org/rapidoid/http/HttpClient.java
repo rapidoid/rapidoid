@@ -298,7 +298,16 @@ public class HttpClient {
 	}
 
 	public String fetch() {
-		return new String(execute(null).get());
+		return new String(execute());
+	}
+
+	public String fetchRaw() {
+		raw(true);
+		try {
+			return new String(execute());
+		} finally {
+			raw(false);
+		}
 	}
 
 	public <T> T parse() {

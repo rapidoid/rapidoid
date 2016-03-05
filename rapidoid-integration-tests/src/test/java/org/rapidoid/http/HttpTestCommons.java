@@ -243,18 +243,35 @@ public abstract class HttpTestCommons extends TestCommons {
 		verifyCase(port + " " + verb + " " + uri, resp, reqName);
 	}
 
-	private String fetch(int port, String verb, String uri, Map<String, ?> data) {
-		HttpClient client = HTTP.verb(HttpVerb.from(verb)).url(localhost(port, uri)).raw(true);
+	protected String fetch(int port, String verb, String uri, Map<String, ?> data) {
+		HttpClient client = HTTP.verb(HttpVerb.from(verb)).url(localhost(port, uri)).data(data);
+		String result = exec(client);
+		client.close();
+		return result;
+	}
 
-		if (data != null) {
-			client = client.data(data);
-		}
+	protected String fetch(HttpClient client, int port, String verb, String uri, Map<String, ?> data) {
+		client.verb(HttpVerb.from(verb)).url(localhost(port, uri)).data(data);
+		return exec(client);
+	}
+
+	private String exec(HttpClient client) {
+		client.raw(true);
 
 		byte[] res = client.execute();
 		String resp = new String(res);
 		resp = resp.replaceFirst("Date: .*? GMT", "Date: XXXXX GMT");
 
+		client.raw(false);
 		return resp;
+	}
+
+	protected String fetch(HttpClient client, String verb, String uri, Map<String, ?> data) {
+		return fetch(client, DEFAULT_PORT, verb, uri, data);
+	}
+
+	protected String fetch(HttpClient client, String verb, String uri) {
+		return fetch(client, DEFAULT_PORT, verb, uri, null);
 	}
 
 	protected String fetch(String verb, String uri) {

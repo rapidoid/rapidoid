@@ -573,7 +573,11 @@ public abstract class TestCommons {
 	}
 
 	protected void verify(String actual) {
-		verifyCase(null, actual, "result");
+		verify("result", actual);
+	}
+
+	protected void verify(String name, String actual) {
+		verifyCase(name, actual, name);
 	}
 
 }

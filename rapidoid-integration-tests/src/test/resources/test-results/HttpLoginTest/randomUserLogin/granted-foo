@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: application/json; charset=utf-8
+Set-Cookie: COOKIEPACK=bhsWehWUPJf1$fqy3ykdFg==; path=/
+Content-Length: 5
+
+"foo"

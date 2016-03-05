@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Rnd;
 import org.rapidoid.ctx.Current;
+import org.rapidoid.security.Roles;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
@@ -39,6 +40,8 @@ public class HttpLoginTest extends HttpTestCommons {
 	public void testLogin() {
 		On.get("/user").json(() -> U.list(Current.username(), Current.roles()));
 
+		On.get("/profile").roles(Roles.LOGGED_IN).json(Current::username);
+
 		On.post("/mylogin").json((Resp resp, String user, String pass) -> {
 			boolean success = resp.login(user, pass);
 			return U.list(success, Current.username(), Current.roles());
@@ -49,51 +52,86 @@ public class HttpLoginTest extends HttpTestCommons {
 			return U.list(Current.username(), Current.roles());
 		});
 
-		multiThreaded(100, 1000, () -> {
-			switch (Rnd.rnd(4)) {
-				case 0:
-					loginFlow("foo", "bar", U.list());
-					break;
-				case 1:
-					loginFlow("abc", "abc", U.list("guest"));
-					break;
-				case 2:
-					loginFlow("chuck", "chuck", U.list("moderator", "restarter"));
-					break;
-				case 3:
-					loginFlow("niko", "easy", U.list("owner", "administrator", "moderator"));
-					break;
-				default:
-					throw Err.notExpected();
-			}
-		});
+		multiThreaded(200, 1000, this::randomUserLogin);
 	}
 
-	private void loginFlow(String user, String pass, List<String> roles) {
-		HttpClient client = HTTP.keepCookies(true).dontClose();
+	private void randomUserLogin() {
+		switch (Rnd.rnd(4)) {
+			case 0:
+				loginFlow("foo", "bar", U.list());
+				break;
+			case 1:
+				loginFlow("abc", "abc", U.list("guest"));
+				break;
+			case 2:
+				loginFlow("chuck", "chuck", U.list("moderator", "restarter"));
+				break;
+			case 3:
+				loginFlow("niko", "easy", U.list("owner", "administrator", "moderator"));
+				break;
+			default:
+				throw Err.notExpected();
+		}
+	}
+
+	private void loginFlow(String user, String pass, List<String> expectedRoles) {
+		HttpClient client = HTTP.keepCookies(true).reuseConnections(true).dontClose();
 
 		List<Object> notLoggedIn = U.list(false, null, U.list());
-		List<Object> loggedIn = U.list(true, user, roles);
+		List<Object> loggedIn = U.list(true, user, expectedRoles);
 
 		eq(client.get(localhost("/user")).parse(), U.list(null, U.list()));
+
+		verifyAccessDenied(client);
 
 		eq(client.post(localhost("/mylogin?user=a1&pass=b")).parse(), notLoggedIn);
 		eq(client.post(localhost("/mylogin?user=a2&pass=b")).parse(), notLoggedIn);
 
+		verifyAccessDenied(client);
+
 		eq(client.post(localhost(U.frmt("/mylogin?user=%s&pass=%s", user, pass))).parse(), loggedIn);
 
-		eq(client.get(localhost("/user")).parse(), U.list(user, roles));
+		verifyAnonymousAccessDenied();
+		verifyAccessGranted(user, client);
 
-		eq(client.post(localhost("/mylogin?user=a3&pass=b")).parse(), U.list(false, user, roles));
+		eq(client.get(localhost("/user")).parse(), U.list(user, expectedRoles));
 
-		eq(client.get(localhost("/user")).parse(), U.list(user, roles));
+		verifyAnonymousAccessDenied();
+		verifyAccessGranted(user, client);
 
+		eq(client.post(localhost("/mylogin?user=a3&pass=b")).parse(), U.list(false, user, expectedRoles));
+
+		verifyAnonymousAccessDenied();
+		verifyAccessGranted(user, client);
+
+		eq(client.get(localhost("/user")).parse(), U.list(user, expectedRoles));
 		eq(client.post(localhost("/mylogout")).parse(), U.list(null, U.list()));
 
+		verifyAnonymousAccessDenied();
+		verifyLoggedOut(client);
+
 		eq(client.get(localhost("/user")).parse(), U.list(null, U.list()));
 		eq(client.get(localhost("/user")).parse(), U.list(null, U.list()));
 
+		verifyLoggedOut(client);
+
 		client.close();
+	}
+
+	private void verifyAnonymousAccessDenied() {
+		onlyGet("/profile");
+	}
+
+	private void verifyAccessGranted(String user, HttpClient client) {
+		verify("granted-" + user, fetch(client, "get", "/profile"));
+	}
+
+	private void verifyAccessDenied(HttpClient client) {
+		verify("denied", fetch(client, "get", "/profile"));
+	}
+
+	private void verifyLoggedOut(HttpClient client) {
+		verify("logout", fetch(client, "get", "/profile"));
 	}
 
 }
