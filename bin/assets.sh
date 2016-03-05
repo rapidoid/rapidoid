@@ -12,15 +12,15 @@ curl 'cdn.jsdelivr.net/g/underscorejs,jquery.cookie,jquery.easing,jquery.easy-pi
 cat assets/*.js >> $DISTRO_JS
 echo >> $DISTRO_JS
 echo >> $DISTRO_JS
-cat assets-rapidoid/rapidoid-extras.js | uglifyjs >> $DISTRO_JS
+cat assets/rapidoid/rapidoid-extras.js | uglifyjs >> $DISTRO_JS
 echo >> $DISTRO_JS
 echo >> $DISTRO_JS
-cat assets-ng/*.js >> $DISTRO_JS
+cat assets/angular/*.js >> $DISTRO_JS
 
 # CSS
 curl 'cdn.jsdelivr.net/g/sweetalert(sweetalert.css),select2(css/select2.min.css),medium-editor(css/medium-editor.min.css+css/themes/default.min.css),dropzone(dropzone.min.css),highlight.js(styles/default.min.css)' > $DISTRO_CSS
 cat assets/*.css >> $DISTRO_CSS
-cat assets-rapidoid/rapidoid-extras.css >> $DISTRO_CSS
+cat assets/rapidoid/rapidoid-extras.css >> $DISTRO_CSS
 
 echo
 
