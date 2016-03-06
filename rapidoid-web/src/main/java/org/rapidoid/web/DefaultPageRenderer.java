@@ -27,6 +27,7 @@ import org.rapidoid.gui.HtmlPage;
 import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
+import org.rapidoid.http.Screen;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.PageRenderer;
 import org.rapidoid.u.U;
@@ -52,11 +53,24 @@ public class DefaultPageRenderer implements PageRenderer {
 
 		if (isFullPage(content)) return content;
 
+		Screen screen = resp.screen();
 		HtmlPage page = GUI.page(GUI.multi(GUI.hardcoded(content)));
 
-		String title = (String) resp.model().get("title");
-		String defaultTitle = "App"; // FIXME
-		page = page.title(U.or(title, defaultTitle));
+		if (screen.title() != null) {
+			page.title(screen.title());
+		}
+
+		if (screen.brand() != null) {
+			page.brand(screen.brand());
+		}
+
+		if (screen.search() != null) {
+			page.search(screen.search());
+		}
+
+		if (screen.cdn() != null) {
+			page.cdn(screen.cdn());
+		}
 
 		Map<String, Object> menu = customization.config().sub("menu").toMap();
 		page = page.menu(PageMenu.from(menu));

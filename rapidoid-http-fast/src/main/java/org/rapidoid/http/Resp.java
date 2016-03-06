@@ -222,4 +222,9 @@ public interface Resp {
 	 */
 	void logout();
 
+	/**
+	 * Provides a convenient access to some common GUI screen attributes of the underlying MVC model: <code>Resp#model()</code>.
+	 */
+	Screen screen();
+
 }

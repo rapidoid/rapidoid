@@ -23,6 +23,7 @@ package org.rapidoid.http;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.GUI;
 import org.rapidoid.setup.On;
 import org.rapidoid.web.MustacheViewRenderer;
 
@@ -65,6 +66,7 @@ public class HttpRenderTest extends HttpTestCommons {
 		});
 
 		On.get("/piece").title("my-title").render((Resp resp) -> {
+			resp.screen().brand(GUI.span(GUI.awesome("cog"), "The Brand!"));
 			resp.model().put("x", 12345);
 			return resp;
 		});

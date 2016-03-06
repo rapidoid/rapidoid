@@ -43,7 +43,7 @@ import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.x")
-public class RespImpl implements Resp {
+public class RespImpl implements Resp, Screen {
 
 	private final ReqImpl req;
 
@@ -295,6 +295,11 @@ public class RespImpl implements Resp {
 	}
 
 	@Override
+	public Screen screen() {
+		return this;
+	}
+
+	@Override
 	public OutputStream out() {
 		U.must(content() == null, "The response content has already been set, so cannot write the response through OutputStream, too!");
 		U.must(body() == null, "The response body has already been set, so cannot write the response through OutputStream, too!");
@@ -373,6 +378,61 @@ public class RespImpl implements Resp {
 		} catch (Exception e) {
 			throw U.rte("Error while rendering page!", e);
 		}
+	}
+
+	@Override
+	public Screen title(String title) {
+		model().put("title", title);
+		return this;
+	}
+
+	@Override
+	public String title() {
+		return (String) model().get("title");
+	}
+
+	@Override
+	public Screen brand(Object brand) {
+		model().put("brand", brand);
+		return this;
+	}
+
+	@Override
+	public Object brand() {
+		return model().get("brand");
+	}
+
+	@Override
+	public Screen menu(Object menu) {
+		model().put("menu", menu);
+		return this;
+	}
+
+	@Override
+	public Object menu() {
+		return model().get("menu");
+	}
+
+	@Override
+	public Screen search(boolean search) {
+		model().put("search", search);
+		return this;
+	}
+
+	@Override
+	public Boolean search() {
+		return (Boolean) model().get("search");
+	}
+
+	@Override
+	public Screen cdn(boolean cdn) {
+		model().put("cdn", cdn);
+		return this;
+	}
+
+	@Override
+	public Boolean cdn() {
+		return (Boolean) model().get("cdn");
 	}
 
 }

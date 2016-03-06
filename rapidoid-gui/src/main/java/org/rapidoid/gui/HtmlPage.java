@@ -61,13 +61,19 @@ public class HtmlPage extends AbstractWidget {
 		}
 	}
 
-	private String title = "";
+	private Object brand;
+
+	private String title;
 
 	private Object content;
 
 	private PageMenu menu;
 
 	private boolean embedded;
+
+	private boolean search;
+
+	private boolean cdn = !Env.dev();
 
 	public HtmlPage(Object content) {
 		this.content = content;
@@ -113,14 +119,25 @@ public class HtmlPage extends AbstractWidget {
 		model.put("result", multi((Object[]) content)); // FIXME rename result to content
 
 		model.put("home", "/");
+		model.put("brand", brand);
 		model.put("title", title);
 		model.put("menu", menu);
+		model.put("search", search);
 
 		model.put("embedded", embedded || req.attrs().get("_embedded") != null);
 
 		model.put("navbar", true);
 
 		return model;
+	}
+
+	public Object brand() {
+		return brand;
+	}
+
+	public HtmlPage brand(Object brand) {
+		this.brand = brand;
+		return this;
 	}
 
 	public String title() {
@@ -159,4 +176,19 @@ public class HtmlPage extends AbstractWidget {
 		return this;
 	}
 
+	public boolean search() {
+		return search;
+	}
+
+	public void search(boolean search) {
+		this.search = search;
+	}
+
+	public boolean cdn() {
+		return cdn;
+	}
+
+	public void cdn(boolean cdn) {
+		this.cdn = cdn;
+	}
 }

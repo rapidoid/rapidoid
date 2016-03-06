@@ -103,7 +103,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
 		req.response().view(options.view).contentType(options.contentType).mvc(options.mvc);
 
 		if (options.title != null) {
-			req.response().model().put("title", options.title);
+			req.response().screen().title(options.title);
 		}
 
 		TransactionMode txMode = options.tx; // null means no TX
