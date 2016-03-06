@@ -227,7 +227,7 @@ public class Config {
 	public void assign(Map<String, Object> entries) {
 		synchronized (properties) {
 			clear();
-			putAll(entries);
+			update(entries);
 		}
 	}
 
@@ -237,9 +237,20 @@ public class Config {
 		}
 	}
 
-	public void putAll(Map<String, ?> entries) {
+	public void update(Map<String, ?> entries) {
 		synchronized (properties) {
-			asMap().putAll(entries);
+			Map<String, Object> conf = asMap();
+
+			for (Map.Entry<String, ?> e : entries.entrySet()) {
+				String name = e.getKey();
+				Object value = e.getValue();
+
+				if (value instanceof Map<?, ?>) {
+					sub(name).update((Map<String, ?>) value);
+				} else {
+					conf.put(name, value);
+				}
+			}
 		}
 	}
 

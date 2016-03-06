@@ -55,7 +55,7 @@ public class RefreshingConfigTest extends AbstractCommonsTest {
 		IO.save(tmp.getAbsolutePath(), "a: xyz\nccc: 2\n");
 		U.sleep(2000); // wait for the config to auto-refresh
 
-		eq(config.toMap(), U.map("a", "xyz", "ccc", 2));
+		eq(config.toMap(), U.map("a", "xyz", "bb", "cd", "ccc", 2));
 	}
 
 }
