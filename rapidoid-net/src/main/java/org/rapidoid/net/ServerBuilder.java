@@ -29,74 +29,94 @@ import org.rapidoid.net.impl.RapidoidServerLoop;
 @Since("5.1.0")
 public class ServerBuilder {
 
-	private String address = "0.0.0.0";
+	private volatile String address = "0.0.0.0";
 
-	private int port = 8888;
+	private volatile int port = 8888;
 
-	private int workers = Runtime.getRuntime().availableProcessors();
+	private volatile int workers = Runtime.getRuntime().availableProcessors();
 
-	private org.rapidoid.net.Protocol protocol = null;
+	private volatile org.rapidoid.net.Protocol protocol = null;
 
-	private Class<? extends org.rapidoid.net.impl.DefaultExchange<?>> exchangeClass = null;
+	private volatile Class<? extends org.rapidoid.net.impl.DefaultExchange<?>> exchangeClass = null;
 
-	private Class<? extends org.rapidoid.net.impl.RapidoidHelper> helperClass = RapidoidHelper.class;
+	private volatile Class<? extends org.rapidoid.net.impl.RapidoidHelper> helperClass = RapidoidHelper.class;
 
-	public synchronized ServerBuilder address(String address) {
+	private volatile int bufSizeKB = 16;
+
+	private volatile boolean noNelay = false;
+
+	public ServerBuilder address(String address) {
 		this.address = address;
 		return this;
 	}
 
-	public synchronized String address() {
+	public String address() {
 		return this.address;
 	}
 
-	public synchronized ServerBuilder port(int port) {
+	public ServerBuilder port(int port) {
 		this.port = port;
 		return this;
 	}
 
-	public synchronized int port() {
+	public int port() {
 		return this.port;
 	}
 
-	public synchronized ServerBuilder workers(int workers) {
+	public ServerBuilder workers(int workers) {
 		this.workers = workers;
 		return this;
 	}
 
-	public synchronized int workers() {
+	public int workers() {
 		return this.workers;
 	}
 
-	public synchronized ServerBuilder protocol(org.rapidoid.net.Protocol protocol) {
+	public ServerBuilder protocol(org.rapidoid.net.Protocol protocol) {
 		this.protocol = protocol;
 		return this;
 	}
 
-	public synchronized org.rapidoid.net.Protocol protocol() {
+	public org.rapidoid.net.Protocol protocol() {
 		return this.protocol;
 	}
 
-	public synchronized ServerBuilder exchangeClass(Class<? extends org.rapidoid.net.impl.DefaultExchange<?>> exchangeClass) {
+	public ServerBuilder exchangeClass(Class<? extends org.rapidoid.net.impl.DefaultExchange<?>> exchangeClass) {
 		this.exchangeClass = exchangeClass;
 		return this;
 	}
 
-	public synchronized Class<? extends org.rapidoid.net.impl.DefaultExchange<?>> exchangeClass() {
+	public Class<? extends org.rapidoid.net.impl.DefaultExchange<?>> exchangeClass() {
 		return this.exchangeClass;
 	}
 
-	public synchronized ServerBuilder helperClass(Class<? extends org.rapidoid.net.impl.RapidoidHelper> helperClass) {
+	public ServerBuilder helperClass(Class<? extends org.rapidoid.net.impl.RapidoidHelper> helperClass) {
 		this.helperClass = helperClass;
 		return this;
 	}
 
-	public synchronized Class<? extends org.rapidoid.net.impl.RapidoidHelper> helperClass() {
+	public Class<? extends org.rapidoid.net.impl.RapidoidHelper> helperClass() {
 		return this.helperClass;
 	}
 
-	public synchronized Server build() {
-		return new RapidoidServerLoop(protocol, exchangeClass, helperClass, address, port, workers);
+	public int bufSizeKB() {
+		return bufSizeKB;
+	}
+
+	public void bufSizeKB(int bufSizeKB) {
+		this.bufSizeKB = bufSizeKB;
+	}
+
+	public boolean noNelay() {
+		return noNelay;
+	}
+
+	public void noNelay(boolean noNelay) {
+		this.noNelay = noNelay;
+	}
+
+	public Server build() {
+		return new RapidoidServerLoop(protocol, exchangeClass, helperClass, address, port, workers, bufSizeKB, noNelay);
 	}
 
 }

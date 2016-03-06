@@ -65,8 +65,13 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 	private final Selector selector;
 
+	private final int bufSizeKB;
+
+	private final boolean noNelay;
+
 	public RapidoidServerLoop(Protocol protocol, Class<? extends DefaultExchange<?>> exchangeClass,
-	                          Class<? extends RapidoidHelper> helperClass, String address, int port, int workers) {
+	                          Class<? extends RapidoidHelper> helperClass, String address, int port,
+	                          int workers, int bufSizeKB, boolean noNelay) {
 		super("server");
 
 		this.protocol = protocol;
@@ -74,6 +79,8 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 		this.address = address;
 		this.port = port;
 		this.workers = workers;
+		this.bufSizeKB = bufSizeKB;
+		this.noNelay = noNelay;
 		this.helperClass = U.or(helperClass, RapidoidHelper.class);
 
 		try {
@@ -144,7 +151,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 
 		for (int i = 0; i < ioWorkers.length; i++) {
 
-			RapidoidWorkerThread workerThread = new RapidoidWorkerThread(i, protocol, exchangeClass, helperClass);
+			RapidoidWorkerThread workerThread = new RapidoidWorkerThread(i, protocol, exchangeClass, helperClass, bufSizeKB, noNelay);
 			workerThread.start();
 
 			ioWorkers[i] = workerThread.getWorker();

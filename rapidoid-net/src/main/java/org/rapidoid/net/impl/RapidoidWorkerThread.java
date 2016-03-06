@@ -21,12 +21,10 @@ package org.rapidoid.net.impl;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Inject;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.u.U;
-import org.rapidoid.ioc.IoC;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -42,25 +40,23 @@ public class RapidoidWorkerThread extends Thread {
 
 	private volatile RapidoidWorker worker;
 
-	@Inject(optional = true)
-	private int bufSizeKB = 16;
+	private final int bufSizeKB;
 
-	@Inject(optional = true)
-	private boolean noDelay = false;
+	private final boolean noDelay;
 
 	public RapidoidWorkerThread(int workerIndex, Protocol protocol, Class<? extends DefaultExchange<?>> exchangeClass,
-	                            Class<? extends RapidoidHelper> helperClass) {
+	                            Class<? extends RapidoidHelper> helperClass, int bufSizeKB, boolean noNelay) {
 		super("server" + (workerIndex + 1));
 		this.workerIndex = workerIndex;
 		this.protocol = protocol;
 		this.exchangeClass = exchangeClass;
 		this.helperClass = helperClass;
+		this.bufSizeKB = bufSizeKB;
+		this.noDelay = noNelay;
 	}
 
 	@Override
 	public void run() {
-		IoC.autowire(this);
-
 		RapidoidHelper helper = Cls.newInstance(helperClass, exchangeClass);
 		helper.requestIdGen = workerIndex; // to generate UNIQUE request ID (+= MAX_IO_WORKERS)
 
