@@ -76,6 +76,10 @@ public class Auth {
 	}
 
 	public static boolean login(String username, String password) {
+		if (U.isEmpty(username) || password == null) {
+			return false;
+		}
+
 		Config user = Conf.USERS.sub(username);
 
 		return !user.isEmpty() && U.eq(password, user.entry("password").str().getOrNull());

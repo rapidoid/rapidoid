@@ -70,6 +70,7 @@ public class Config {
 
 		while (keys.hasNext()) {
 			String key = keys.next();
+			U.notNull(key, "config key");
 			Collections.addAll(keyChain, key.split("\\."));
 		}
 

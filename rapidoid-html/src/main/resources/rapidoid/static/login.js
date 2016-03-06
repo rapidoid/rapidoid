@@ -1,0 +1,94 @@
+// Derived from: http://bootsnipp.com/snippets/featured/custom-login-registration-amp-forgot-password (Copyright (c) 2013 Bootsnipp.com, MIT license, see http://bootsnipp.com/license)
+
+// Options for Message
+// ----------------------------------------------
+var options = {
+	'btn-loading' : '<i class="fa fa-spinner fa-spin"></i>',
+	'btn-success' : '<i class="fa fa-check"></i>',
+	'btn-error' : '<i class="fa fa-remove"></i>',
+	'msg-success' : 'All Good! Redirecting...',
+	'msg-error' : 'Wrong login credentials!',
+	'useAJAX' : true,
+};
+
+$.get('https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.13.1/jquery.validate.min.js',function(){
+// ----------------------------------------------
+// Validation
+	
+  $("#login-form").validate({
+  	rules: {
+      lg_username: "required",
+  	  lg_password: "required",
+    },
+  	errorClass: "form-invalid"
+  });
+  
+	// Form Submission
+  $("#login-form").submit(function() {
+      try {
+            remove_loading($(this));
+      } catch(e) {
+            console.log(e);
+      }
+
+      try {
+            login($(this));
+      } catch(e) {
+            console.log(e);
+      }
+
+      return false;
+  });
+	
+});
+
+// Loading
+// ----------------------------------------------
+function remove_loading($form) {
+	$form.find('[type=submit]').removeClass('error success');
+	$form.find('.login-form-main-message').removeClass('show error success')
+			.html('');
+}
+
+function form_loading($form) {
+	$form.find('[type=submit]').addClass('clicked')
+			.html(options['btn-loading']);
+}
+
+function form_success($form) {
+	$form.find('[type=submit]').addClass('success')
+			.html(options['btn-success']);
+	$form.find('.login-form-main-message').addClass('show success').html(
+			options['msg-success']);
+}
+
+function form_failed($form) {
+	$form.find('[type=submit]').addClass('error').html(options['btn-error']);
+	$form.find('.login-form-main-message').addClass('show error').html(options['msg-error']);
+}
+
+function login($form) {
+	if ($form.valid()) {
+		form_loading($form);
+
+        var user = $form.find('[name=lg_username]').val();
+        var pass = $form.find('[name=lg_password]').val();
+
+        $.post('/_login', {username: user, password: pass}).done(function(data) {
+
+        if(data) {
+            form_success($form);
+
+            setTimeout(function() {
+                location.reload();
+            }, 300);
+        } else {
+            form_failed($form);
+        }
+
+        }).fail(function(data) {
+            swal("Communication error!", "Couldn't connect to the server!", "error");
+            console.log(data);
+        });
+	}
+}
