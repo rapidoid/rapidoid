@@ -22,6 +22,7 @@ package org.rapidoid.config;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Str;
 import org.rapidoid.data.YAML;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
@@ -93,7 +94,7 @@ public class ConfigUtil {
 	}
 
 	public static synchronized void load(String filename, Config config) {
-		byte[] bytes = Res.from(filename).getBytesOrNull();
+		byte[] bytes = tryToLoad(filename, config);
 
 		if (bytes != null) {
 			if (bytes.length > 0) {
@@ -103,6 +104,25 @@ public class ConfigUtil {
 			}
 		} else {
 			Log.debug("Couldn't find configuration file", "filename", filename);
+		}
+
+	}
+
+	private static byte[] tryToLoad(String filename, Config config) {
+		if (filename.endsWith(".y?ml")) {
+			// flexible extension: YML or YAML
+			String basename = Str.trimr(filename, ".y?ml");
+
+			byte[] bytes = Res.from(basename + ".yaml").getBytesOrNull();
+
+			if (bytes != null) {
+				return bytes;
+			} else {
+				return Res.from(basename + ".yml").getBytesOrNull();
+			}
+
+		} else {
+			return Res.from(filename).getBytesOrNull();
 		}
 	}
 

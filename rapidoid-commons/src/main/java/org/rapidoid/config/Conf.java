@@ -104,8 +104,8 @@ public class Conf {
 		List<List<String>> detached = ConfigUtil.untrack();
 
 		reset();
-		ConfigUtil.load(UTILS.path("default", "config.yml"), ROOT);
-		ConfigUtil.load(UTILS.path(path, "config.yml"), ROOT);
+		ConfigUtil.load(UTILS.path("default", "config.y?ml"), ROOT);
+		ConfigUtil.load(UTILS.path(path, "config.y?ml"), ROOT);
 
 		for (Config sub : SECTIONS.values()) {
 			ConfigUtil.load(filename(sub.keys()), sub);
@@ -126,7 +126,7 @@ public class Conf {
 	private static String filename(List<String> keys) {
 		U.must(keys.size() < 2);
 		String configName = keys.isEmpty() ? "config" : keys.get(0);
-		return UTILS.path(path, configName + ".yml");
+		return UTILS.path(path, configName + ".y?ml");
 	}
 
 }
