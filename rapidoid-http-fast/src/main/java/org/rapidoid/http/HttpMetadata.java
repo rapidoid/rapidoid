@@ -38,8 +38,6 @@ public interface HttpMetadata extends CtxMetadata {
 
 	String OPTIONS = "OPTIONS";
 
-	String VIEWSTATE = "__state";
-
 	String SESSION_COOKIE = "JSESSIONID";
 
 	String COOKIEPACK_COOKIE = "COOKIEPACK";
