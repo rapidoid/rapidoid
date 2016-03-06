@@ -419,8 +419,11 @@ public abstract class BootstrapWidgets extends HTML {
 		List<Object> grids = U.list();
 
 		for (Map.Entry<String, Map<?, ?>> entry : maps.entrySet()) {
-			grids.add(h4(b(entry.getKey(), ":")));
-			grids.add(grid(entry.getValue()));
+			String key = entry.getKey();
+			Map<?, ?> map = entry.getValue();
+
+			grids.add(h4(b(key, ":")));
+			grids.add(grid(map));
 		}
 
 		return grids;
