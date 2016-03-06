@@ -127,6 +127,7 @@ public class HtmlPage extends AbstractWidget {
 		model.put("embedded", embedded || req.attrs().get("_embedded") != null);
 
 		model.put("navbar", true);
+		model.put("cdn", cdn);
 
 		return model;
 	}
