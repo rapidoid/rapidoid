@@ -65,8 +65,9 @@ public class HttpRenderTest extends HttpTestCommons {
 			return resp.view("view1").mvc(true);
 		});
 
-		On.get("/piece").render((Resp resp) -> {
-			resp.screen().title("my-title").brand(GUI.span(GUI.fa("cog"), "The Brand!"));
+		On.get("/piece").render((Resp resp, Screen screen) -> {
+			resp.screen().title("my-title");
+			screen.brand(GUI.span(GUI.fa("cog"), "The Brand!"));
 			resp.model().put("x", 12345);
 			return resp;
 		});

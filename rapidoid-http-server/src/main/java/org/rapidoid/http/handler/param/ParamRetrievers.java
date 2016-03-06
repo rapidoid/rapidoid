@@ -26,6 +26,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Err;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
+import org.rapidoid.http.Screen;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
@@ -66,6 +67,9 @@ public class ParamRetrievers {
 
 		} else if (Resp.class.isAssignableFrom(type)) {
 			return new RespParamRetriever();
+
+		} else if (Screen.class.isAssignableFrom(type)) {
+			return new ScreenParamRetriever();
 
 		} else if (type.equals(byte[].class)) {
 			return new ByteArrayParamRetriever(type, name);
