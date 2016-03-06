@@ -58,7 +58,7 @@ import java.util.Map;
 @Since("2.0.0")
 public abstract class BootstrapWidgets extends HTML {
 
-	public static final Tag NOTHING = span(awesome("ban"), " N/A").class_("nothing");
+	public static final Tag NOTHING = span(fa("ban"), " N/A").class_("nothing");
 
 	public static final Tag N_A = NOTHING;
 
@@ -140,7 +140,7 @@ public abstract class BootstrapWidgets extends HTML {
 		return span().class_("glyphicon glyphicon-" + glyphicon);
 	}
 
-	public static Tag awesome(String fontAwesomeIcon) {
+	public static Tag fa(String fontAwesomeIcon) {
 		return i().class_("fa fa-" + fontAwesomeIcon);
 	}
 
@@ -153,7 +153,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static ATag a_awesome(String fontAwesomeIcon, Object... contents) {
-		return a_void(awesome(fontAwesomeIcon), NBSP, contents);
+		return a_void(fa(fontAwesomeIcon), NBSP, contents);
 	}
 
 	public static Btn btn(Object... contents) {
@@ -243,7 +243,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static FormTag navbarSearchForm(String action) {
-		return navbarForm(false, awesome("search"), arr("q"), arr("Search")).attr("action", action).attr("method",
+		return navbarForm(false, fa("search"), arr("q"), arr("Search")).attr("action", action).attr("method",
 				"GET");
 	}
 
@@ -744,7 +744,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	private static Object display(Iterator<?> it) {
-		Tag icon = awesome("circle-o");
+		Tag icon = fa("circle-o");
 		Tag wrap = div();
 
 		while (it.hasNext()) {

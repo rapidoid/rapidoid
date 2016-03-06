@@ -125,11 +125,11 @@ public class Grid extends AbstractWidget {
 				String currentOrder = order.get();
 
 				if (currentOrder.equals(prop.name())) {
-					sortIcon = awesome("sort-amount-asc");
+					sortIcon = fa("sort-amount-asc");
 				}
 
 				if (order != null && currentOrder.equals("-" + prop.name())) {
-					sortIcon = awesome("sort-amount-desc");
+					sortIcon = fa("sort-amount-desc");
 				}
 
 				sort = a_void(prop.caption(), " ", sortIcon).cmd("_sort", order, prop.name());
