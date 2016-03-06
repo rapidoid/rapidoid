@@ -58,7 +58,7 @@ import java.util.Map;
 @Since("5.1.0")
 public class Setup implements Constants {
 
-	static final Setup ON = new Setup("on", "0.0.0.0", 8888, ServerSetupType.DEFAULT, IoC.defaultContext(), Conf.ON);
+	static final Setup ON = new Setup("app", "0.0.0.0", 8888, ServerSetupType.DEFAULT, IoC.defaultContext(), Conf.ON);
 	static final Setup ADMIN = new Setup("admin", "0.0.0.0", 9999, ServerSetupType.ADMIN, IoC.createContext().name("admin"), Conf.ADMIN);
 	static final Setup DEV = new Setup("dev", "127.0.0.1", 7777, ServerSetupType.DEV, IoC.createContext().name("dev"), Conf.DEV);
 
