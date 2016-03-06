@@ -39,8 +39,6 @@ public class RouteOptions {
 
 	public volatile String view;
 
-	public volatile String title;
-
 	public volatile boolean mvc;
 
 	public volatile TransactionMode tx;
@@ -69,7 +67,6 @@ public class RouteOptions {
 		return prefix + "{" +
 				(contentType != null ? "contentType=" + contentType.info() : "") +
 				(view != null ? ", view='" + view + '\'' : "") +
-				(title != null ? ", title='" + title + '\'' : "") +
 				(tx != null ? ", tx='" + tx + '\'' : "") +
 				(U.notEmpty(roles) ? ", roles=" + roles : "") +
 				(U.notEmpty(wrappers) ? ", wrappers=" + wrappers : "") +

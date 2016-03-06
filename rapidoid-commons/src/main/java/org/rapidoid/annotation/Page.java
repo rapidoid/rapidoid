@@ -42,8 +42,6 @@ public @interface Page {
 	 */
 	String uri() default "";
 
-	String title() default "";
-
 	String view() default "";
 
 	boolean raw() default false;

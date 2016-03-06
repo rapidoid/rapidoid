@@ -327,11 +327,6 @@ public class OnRoute {
 		return this;
 	}
 
-	public OnRoute title(String title) {
-		options.title = title;
-		return this;
-	}
-
 	public OnRoute view(String viewName) {
 		options.view = viewName;
 		return this;

@@ -163,10 +163,6 @@ public class PojoHandlersSetup {
 						route.view(page.view());
 					}
 
-					if (U.notEmpty(page.title())) {
-						route.title(page.title());
-					}
-
 					if (page.raw()) {
 						route.html(method, bean);
 					} else {
