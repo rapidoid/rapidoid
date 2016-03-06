@@ -38,7 +38,7 @@ public class ByteArrayParamRetriever implements ParamRetriever {
 
 	@Override
 	public byte[] getParamValue(Req req) {
-		return req.file(name);
+		return req.file(name).content();
 	}
 
 }

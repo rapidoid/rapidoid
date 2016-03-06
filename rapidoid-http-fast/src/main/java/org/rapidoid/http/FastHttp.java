@@ -33,6 +33,7 @@ import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.FastHttpHandler;
 import org.rapidoid.http.impl.HandlerMatch;
 import org.rapidoid.http.processor.AbstractHttpProcessor;
+import org.rapidoid.io.FileContent;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
@@ -41,7 +42,6 @@ import org.rapidoid.util.UTILS;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -120,20 +120,21 @@ public class FastHttp extends AbstractHttpProcessor {
 
 			byte[] body;
 			Map<String, Object> posted;
-			Map<String, byte[]> files;
+			Map<String, List<FileContent>> files;
 
 			if (!isGet && !xbody.isEmpty()) {
 				KeyValueRanges postedKV = helper.pairs3.reset();
-				KeyValueRanges filesKV = helper.pairs4.reset();
 
 				body = xbody.bytes(buf);
 
 				// parse posted body as data
-				posted = new HashMap<String, Object>();
-				HTTP_PARSER.parsePosted(buf, headersKV, xbody, postedKV, filesKV, helper, posted);
-				posted = Collections.synchronizedMap(posted);
+				posted = U.map();
+				files = U.map();
 
-				files = Collections.synchronizedMap(filesKV.toBinaryMap(buf, true));
+				HTTP_PARSER.parsePosted(buf, headersKV, xbody, postedKV, files, helper, posted);
+
+				posted = Collections.synchronizedMap(posted);
+				files = Collections.synchronizedMap(files);
 
 			} else {
 				posted = Collections.EMPTY_MAP;

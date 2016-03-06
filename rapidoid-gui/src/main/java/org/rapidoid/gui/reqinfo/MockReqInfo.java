@@ -22,12 +22,10 @@ package org.rapidoid.gui.reqinfo;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.io.FileContent;
 import org.rapidoid.u.U;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")
@@ -47,7 +45,7 @@ public class MockReqInfo extends AbstractReqInfo {
 
 	private Map<String, Object> posted = U.map();
 
-	private Map<String, byte[]> files = U.map();
+	private Map<String, List<FileContent>> files = U.map();
 
 	private Map<String, String> headers = U.map();
 
@@ -144,11 +142,11 @@ public class MockReqInfo extends AbstractReqInfo {
 	}
 
 	@Override
-	public Map<String, byte[]> files() {
+	public Map<String, List<FileContent>> files() {
 		return files;
 	}
 
-	public MockReqInfo setFiles(Map<String, byte[]> files) {
+	public MockReqInfo setFiles(Map<String, List<FileContent>> files) {
 		this.files = files;
 		return this;
 	}

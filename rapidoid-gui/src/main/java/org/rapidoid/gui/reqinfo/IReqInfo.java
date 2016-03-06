@@ -22,7 +22,9 @@ package org.rapidoid.gui.reqinfo;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.io.FileContent;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,7 +50,7 @@ public interface IReqInfo {
 
 	Map<String, Object> posted();
 
-	Map<String, byte[]> files();
+	Map<String, List<FileContent>> files();
 
 	Map<String, String> headers();
 

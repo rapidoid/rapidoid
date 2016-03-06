@@ -382,7 +382,12 @@ public abstract class TestCommons {
 
 	protected byte[] loadRes(String filename) {
 		InputStream input = TestCommons.class.getClassLoader().getResourceAsStream(filename);
-		return input != null ? readBytes(input) : null;
+
+		if (input == null) {
+			throw new RuntimeException("Cannot find resource: " + filename);
+		}
+
+		return readBytes(input);
 	}
 
 	protected <T> T mock(Class<T> classToMock) {

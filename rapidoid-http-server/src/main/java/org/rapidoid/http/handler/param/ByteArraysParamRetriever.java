@@ -23,6 +23,9 @@ package org.rapidoid.http.handler.param;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
+import org.rapidoid.io.FileContent;
+
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -38,11 +41,11 @@ public class ByteArraysParamRetriever implements ParamRetriever {
 
 	@Override
 	public byte[][] getParamValue(Req req) {
-		byte[][] files = new byte[req.files().size()][];
+		List<FileContent> uploads = req.files(name);
+		byte[][] files = new byte[uploads.size()][];
 
-		int ind = 0;
-		for (byte[] file : req.files().values()) {
-			files[ind++] = file;
+		for (int i = 0; i < files.length; i++) {
+			files[i] = uploads.get(i).content();
 		}
 
 		return files;

@@ -25,11 +25,13 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Err;
 import org.rapidoid.data.JSON;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
+import org.rapidoid.io.FileContent;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.u.U;
@@ -37,6 +39,7 @@ import org.rapidoid.util.Constants;
 import org.rapidoid.wrap.BoolWrap;
 import org.rapidoid.wrap.IntWrap;
 
+import java.util.List;
 import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
@@ -231,8 +234,8 @@ public class HttpParser implements Constants {
 	/**
 	 * @return <code>false</code> if JSON data was posted, so it wasn't completely parsed.
 	 */
-	public boolean parseBody(Buf src, KeyValueRanges headers, Range body, KeyValueRanges data, KeyValueRanges files,
-	                         RapidoidHelper helper) {
+	public boolean parseBody(Buf src, KeyValueRanges headers, Range body, KeyValueRanges data,
+	                         Map<String, List<FileContent>> files, RapidoidHelper helper) {
 
 		if (body.isEmpty()) {
 			return true;
@@ -256,7 +259,9 @@ public class HttpParser implements Constants {
 
 				Err.rteIf(multipartBoundary.isEmpty(), "Invalid multi-part HTTP request!");
 
-				parseMultiParts(src, body, data, files, multipartBoundary, helper);
+				Map<String, List<FileContent>> autoFiles = Coll.mapOfLists();
+				parseMultiParts(src, body, data, autoFiles, multipartBoundary, helper);
+				files.putAll(autoFiles);
 
 				return true;
 
@@ -285,7 +290,7 @@ public class HttpParser implements Constants {
 	}
 
 	/* http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4.2 */
-	private void parseMultiParts(Buf src, Range body, KeyValueRanges data, KeyValueRanges files,
+	private void parseMultiParts(Buf src, Range body, KeyValueRanges data, Map<String, List<FileContent>> files,
 	                             Range multipartBoundary, RapidoidHelper helper) {
 
 		int start = body.start;
@@ -313,7 +318,7 @@ public class HttpParser implements Constants {
 		}
 	}
 
-	private void parseMultiPart(Buf src, Range body, KeyValueRanges data, KeyValueRanges files,
+	private void parseMultiPart(Buf src, Range body, KeyValueRanges data, Map<String, List<FileContent>> files,
 	                            Range multipartBoundary, RapidoidHelper helper, int from, int to) {
 
 		KeyValueRanges headers = helper.pairs.reset();
@@ -387,9 +392,10 @@ public class HttpParser implements Constants {
 			data.keys[ind].assign(name);
 			data.values[ind].assign(partBody);
 		} else {
-			int ind = files.add();
-			files.keys[ind].assign(name);
-			files.values[ind].assign(partBody);
+			String uploadParamName = src.get(name);
+			String uploadFilename = src.get(filename);
+			byte[] uploadContent = partBody.bytes(src);
+			files.get(uploadParamName).add(new FileContent(uploadFilename, uploadContent));
 		}
 	}
 
@@ -456,7 +462,7 @@ public class HttpParser implements Constants {
 
 	@SuppressWarnings("unchecked")
 	public void parsePosted(Buf input, KeyValueRanges headersKV, Range rBody, KeyValueRanges posted,
-	                        KeyValueRanges files, RapidoidHelper helper, Map<String, Object> dest) {
+	                        Map<String, List<FileContent>> files, RapidoidHelper helper, Map<String, Object> dest) {
 
 		boolean completed = parseBody(input, headersKV, rBody, posted, files, helper);
 

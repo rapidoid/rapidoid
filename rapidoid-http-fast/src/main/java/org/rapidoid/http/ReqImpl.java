@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.MediaType;
+import org.rapidoid.io.FileContent;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
@@ -32,11 +33,8 @@ import org.rapidoid.util.Constants;
 import org.rapidoid.util.UTILS;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.UUID;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.2")
@@ -66,7 +64,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	private final Map<String, Object> posted;
 
-	private final Map<String, byte[]> files;
+	private final Map<String, List<FileContent>> files;
 
 	private final Map<String, Object> attrs = Collections.synchronizedMap(new HashMap<String, Object>());
 
@@ -92,7 +90,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
 	               String query, byte[] body, Map<String, String> params, Map<String, String> headers,
-	               Map<String, String> cookies, Map<String, Object> posted, Map<String, byte[]> files,
+	               Map<String, String> cookies, Map<String, Object> posted, Map<String, List<FileContent>> files,
 	               MediaType defaultContentType) {
 
 		this.http = http;
@@ -187,7 +185,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	}
 
 	@Override
-	public Map<String, byte[]> files() {
+	public Map<String, List<FileContent>> files() {
 		return files;
 	}
 
@@ -259,13 +257,17 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	}
 
 	@Override
-	public byte[] file(String name) {
+	public List<FileContent> files(String name) {
 		return U.notNull(files().get(name), "FILES[%s]", name);
 	}
 
 	@Override
-	public byte[] file(String name, byte[] defaultValue) {
-		return U.or(files().get(name), defaultValue);
+	public FileContent file(String name) {
+		List<FileContent> uploads = files(name);
+
+		U.must(uploads.size() == 1, "Expected exactly 1 uploaded file for parameter '%s', but found %s!", name, uploads.size());
+
+		return uploads.get(0);
 	}
 
 	@Override
@@ -298,7 +300,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		Object value = posted(name, null);
 
 		if (value == null) {
-			value = file(name, null);
+			value = files().get(name);
 
 			if (value == null) {
 				value = param(name, null);

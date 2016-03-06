@@ -110,9 +110,12 @@ public abstract class HttpTestCommons extends TestCommons {
 		On.post("/upload").plain((Req x) -> {
 			Log.info("Uploaded files", "files", x.files().keySet());
 
-			return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.posted().get("a"), x.files()
-					.size(), Crypto.md5(x.files().get("f1")), Crypto.md5(x.files().get("f2")), Crypto.md5(U.or(x
-					.files().get("f3"), new byte[0])));
+			boolean hasF3 = x.files().containsKey("f3");
+
+			return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.posted().get("a"), x.files().size(),
+					Crypto.md5(x.file("f1").content()),
+					Crypto.md5(x.files().get("f2").get(0).content()),
+					Crypto.md5(hasF3 ? x.file("f3").content() : new byte[0]));
 		});
 
 		On.req((Req x) -> x.response().html(U.join(":", x.verb(), x.path(), x.query())));

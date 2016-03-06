@@ -22,8 +22,10 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.io.FileContent;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -153,19 +155,19 @@ public interface Req {
 	/**
 	 * Gets the <b>posted files</b> from the HTTP request body.
 	 */
-	Map<String, byte[]> files();
+	Map<String, List<FileContent>> files();
 
 	/**
-	 * Returns the content of the <b>posted file</b> from the HTTP request body, or throws a runtime exception if it is
-	 * not found.
+	 * Returns the <b>posted files</b> with the specified form parameter name (not filename) from the HTTP request body,
+	 * or throws a runtime exception if not found.
 	 */
-	byte[] file(String name);
+	List<FileContent> files(String name);
 
 	/**
-	 * Returns the content of the <b>posted file</b> from the HTTP request body, or the specified default value, if it
-	 * is not found.
+	 * Returns exactly one <b>posted file</b> with the specified form parameter name (not filename) from the HTTP request body,
+	 * or throws a runtime exception if not found.
 	 */
-	byte[] file(String name, byte[] defaultValue);
+	FileContent file(String name);
 
 	/* REQUEST DATA PARAMETERS (URL PARAMETERS + POSTED PARAMETERS + POSTED FILES): */
 
