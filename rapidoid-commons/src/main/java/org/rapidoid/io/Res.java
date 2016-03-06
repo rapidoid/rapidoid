@@ -239,8 +239,9 @@ public class Res {
 		return new StringReader(getContent());
 	}
 
-	public void mustExist() {
+	public Res mustExist() {
 		U.must(exists(), "The file '%s' doesn't exist! Path: %s", name, possibleLocations);
+		return this;
 	}
 
 	public Res onChange(String name, Runnable listener) {
@@ -291,4 +292,7 @@ public class Res {
 		this.attachment = attachment;
 	}
 
+	public String getFileName() {
+		return cachedFileName;
+	}
 }

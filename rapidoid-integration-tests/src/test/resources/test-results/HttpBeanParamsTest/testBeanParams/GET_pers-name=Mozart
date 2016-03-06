@@ -3,6 +3,6 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: application/json; charset=utf-8
-Content-Length: 49
+Content-Length: 82
 
-{"error":"DATA[id] must NOT be null!","code":500}
+{"error":"DATA[id] must NOT be null!","code":500,"status":"Internal Server Error"}

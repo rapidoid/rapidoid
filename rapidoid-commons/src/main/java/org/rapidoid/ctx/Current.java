@@ -22,7 +22,6 @@ package org.rapidoid.ctx;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
 import org.rapidoid.u.U;
 
 import java.util.Set;
@@ -53,9 +52,9 @@ public class Current {
 		return user().roles;
 	}
 
-	public static Req request() {
+	public static <T> T request() {
 		Ctx ctx = Ctxs.get();
-		return ctx != null ? (Req) ctx.exchange() : null;
+		return ctx != null ? (T) ctx.exchange() : null;
 	}
 
 }

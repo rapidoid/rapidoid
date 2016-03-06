@@ -172,25 +172,32 @@ public class FastHttp extends AbstractHttpProcessor {
 			}
 
 		} catch (Throwable e) {
-			if (req != null) {
-				HttpIO.errorAndDone(req, e, customization.errorHandler());
-				return;
-			} else {
-				Log.error("Low-level HTTP handler error!", e);
-				HttpIO.startResponse(channel, 500, isKeepAlive, contentType);
-				byte[] bytes = HttpUtils.responseToBytes("Internal Server Error!", contentType, custom().jsonResponseRenderer());
-				HttpIO.writeContentLengthAndBody(channel, bytes);
-				HttpIO.done(channel, isKeepAlive);
-			}
+			if (handleError(channel, isKeepAlive, req, contentType, e)) return;
 		}
 
 		if (status == HttpStatus.NOT_FOUND) {
-			channel.write(HttpIO.HTTP_404_NOT_FOUND);
+			HttpIO.write404(channel, isKeepAlive);
 		}
 
 		if (status != HttpStatus.ASYNC) {
 			channel.closeIf(!isKeepAlive);
 		}
+	}
+
+	private boolean handleError(Channel channel, boolean isKeepAlive, ReqImpl req, MediaType contentType, Throwable e) {
+		if (req != null) {
+			HttpIO.errorAndDone(req, e, customization.errorHandler());
+			return true;
+
+		} else {
+			Log.error("Low-level HTTP handler error!", e);
+			HttpIO.startResponse(channel, 500, isKeepAlive, contentType);
+			byte[] bytes = HttpUtils.responseToBytes("Internal Server Error!", contentType, custom().jsonResponseRenderer());
+			HttpIO.writeContentLengthAndBody(channel, bytes);
+			HttpIO.done(channel, isKeepAlive);
+		}
+
+		return false;
 	}
 
 	private static String validateRequest(Buf input, Range verb, Range uri) {
@@ -241,7 +248,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		}
 
 		if (status == HttpStatus.NOT_FOUND) {
-			ctx.write(HttpIO.HTTP_404_NOT_FOUND);
+			HttpIO.write404(ctx, isKeepAlive);
 			HttpIO.done(ctx, isKeepAlive);
 		}
 	}

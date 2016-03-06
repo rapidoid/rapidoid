@@ -41,9 +41,6 @@ public class HttpIO {
 	public static final byte[] HTTP_400_BAD_REQUEST = "HTTP/1.1 400 Bad Request\r\nContent-Length: 12\r\n\r\nBad Request!"
 			.getBytes();
 
-	public static final byte[] HTTP_404_NOT_FOUND = "HTTP/1.1 404 Not Found\r\nContent-Length: 10\r\n\r\nNot found!"
-			.getBytes();
-
 	private static final byte[] HEADER_SEP = ": ".getBytes();
 
 	private static final byte[] CONN_KEEP_ALIVE = "Connection: keep-alive\r\n".getBytes();
@@ -62,12 +59,12 @@ public class HttpIO {
 
 	private static final byte[][] CONTENT_LENGTHS = new byte[CONTENT_LENGTHS_SIZE][];
 
-	private static final HttpResponseCodes responseCodes = new HttpResponseCodes();
-
 	static {
 		for (int len = 0; len < CONTENT_LENGTHS.length; len++) {
 			CONTENT_LENGTHS[len] = (new String(CONTENT_LENGTH_IS) + len + new String(Constants.CR_LF)).getBytes();
 		}
+
+		HttpResponseCodes.init();
 	}
 
 	private HttpIO() {
@@ -80,7 +77,7 @@ public class HttpIO {
 	}
 
 	public static void startResponse(Channel ctx, int code, boolean isKeepAlive, MediaType contentType) {
-		ctx.write(code == 200 ? HTTP_200_OK : responseCodes.get(code));
+		ctx.write(code == 200 ? HTTP_200_OK : HttpResponseCodes.get(code));
 		addDefaultHeaders(ctx, isKeepAlive, contentType);
 	}
 
@@ -118,6 +115,7 @@ public class HttpIO {
 
 		} catch (Exception e) {
 			Log.error("The error handler had error!", e);
+			HttpUtils.resultToResponse(req, HttpUtils.getErrorInfo(req.response(), e));
 		}
 	}
 
@@ -171,6 +169,11 @@ public class HttpIO {
 	public static void done(Channel ctx, boolean isKeepAlive) {
 		ctx.done();
 		ctx.closeIf(!isKeepAlive);
+	}
+
+	public static void write404(Channel ctx, boolean isKeepAlive) {
+		startResponse(ctx, 404, isKeepAlive, MediaType.HTML_UTF_8);
+		writeContentLengthAndBody(ctx, HttpUtils.page("404").getBytes());
 	}
 
 }

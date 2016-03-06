@@ -190,9 +190,9 @@ public class HttpUtils implements HttpMetadata {
 		return U.or(cause.getMessage(), msg);
 	}
 
-	public static Map<String, ?> jsonError(Resp resp, Throwable error) {
+	public static Map<String, ?> getErrorInfo(Resp resp, Throwable error) {
 		String errorMessage = getErrorMessage(resp, error);
-		return U.map("error", errorMessage, "code", resp.code());
+		return U.map("error", errorMessage, "code", resp.code(), "status", HttpResponseCodes.status(resp.code()));
 	}
 
 	public static void postProcessResponse(Resp resp) {
@@ -279,6 +279,10 @@ public class HttpUtils implements HttpMetadata {
 		} else {
 			req.response().content(result);
 		}
+	}
+
+	public static Res page(String page) {
+		return Res.from(page + ".html", "pages", "default/pages");
 	}
 
 }

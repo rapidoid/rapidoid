@@ -1,15 +1,9 @@
-HTTP/1.1 404 Not Found
-Connection: keep-alive
-Server: Rapidoid
-Date: XXXXX GMT
-Content-Type: text/html; charset=utf-8
-Content-Length: 1546
-
 <!DOCTYPE html>
 <html lang="en">
 <!-- Derived from: http://bootsnipp.com/snippets/featured/simple-404-not-found-page (Copyright (c) 2013 Bootsnipp.com, MIT license, see http://bootsnipp.com/license) -->
 
 <head>
+
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +11,7 @@ Content-Length: 1546
     <link href="/bootstrap/css/bootstrap-3.3.5.min.css" rel="stylesheet">
     <link href="/font-awesome/css/font-awesome-4.4.0.min.css" rel="stylesheet">
     <link href="/rapidoid.min.css" rel="stylesheet">
+
 </head>
 
 <body class="bg-squares container">
@@ -27,10 +22,10 @@ Content-Length: 1546
         <div class="server-error-holder" style="padding: 30px 0px; text-align: center;">
             <br>
             <div style="border: solid 2px #aaa; border-radius: 15px; padding: 10px; background-color:rgba(0, 0, 0, 0.05);">
-                <h2><i class="fa fa-warning" style="color: #700; padding-bottom: 13px;"></i> Page not found!</h2>
-                <h3><span class="label label-default">404</span></h3>
+                <h2><i class="fa fa-warning" style="color: #700;"></i> {{error.status}}!</h2>
                 <br>
-                <h4>The requested page was not found!</h4>
+                <h4>{{error.error}}</h4>
+                <div class="server-error-code">ERROR CODE: {{error.code}}</div>
                 <div class="server-error-actions" style="margin-top: 35px; margin-bottom: 15px;">
                     <a href="/" class="btn btn-primary"><span class="fa fa-home"></span> Go to the home page</a>
                 </div>

@@ -26,6 +26,7 @@ import org.rapidoid.commons.MediaType;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.http.customize.LoginProvider;
+import org.rapidoid.http.customize.PageRenderer;
 import org.rapidoid.http.customize.RolesProvider;
 import org.rapidoid.http.customize.ViewRenderer;
 import org.rapidoid.u.U;
@@ -343,17 +344,35 @@ public class RespImpl implements Resp {
 	}
 
 	private byte[] render() {
-		ViewRenderer renderer = req.http().custom().viewRenderer();
-		U.must(renderer != null, "A view renderer wasn't configured!");
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ViewRenderer viewRenderer = req.http().custom().viewRenderer();
+//		U.must(viewRenderer != null, "A view renderer wasn't configured!");
 
-		try {
-			renderer.render(req, this, out);
-		} catch (Throwable e) {
-			throw U.rte("Error while rendering view: " + view(), e);
+		PageRenderer pageRenderer = req.http().custom().pageRenderer();
+		U.must(pageRenderer != null, "A page renderer wasn't configured!");
+
+		String content;
+
+		if (viewRenderer != null && HttpUtils.page(view()).exists()) {
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+			try {
+				viewRenderer.render(req, this, out);
+			} catch (Throwable e) {
+				throw U.rte("Error while rendering view: " + view(), e);
+			}
+
+			content = new String(out.toByteArray());
+		} else {
+			content = new String(HttpUtils.responseToBytes(content(), MediaType.HTML_UTF_8, null));
 		}
 
-		return out.toByteArray();
+		try {
+			Object result = pageRenderer.renderPage(req, this, content);
+			return HttpUtils.responseToBytes(result, MediaType.HTML_UTF_8, null);
+
+		} catch (Exception e) {
+			throw U.rte("Error while rendering page!", e);
+		}
 	}
 
 }

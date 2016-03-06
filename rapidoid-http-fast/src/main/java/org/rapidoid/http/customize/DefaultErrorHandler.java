@@ -22,9 +22,12 @@ package org.rapidoid.http.customize;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
+
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -32,7 +35,15 @@ public class DefaultErrorHandler implements ErrorHandler {
 
 	@Override
 	public Object handleError(Req req, Resp resp, Throwable error) {
-		return HttpUtils.jsonError(resp, error);
+		if (resp.contentType() == MediaType.JSON_UTF_8) {
+			return HttpUtils.getErrorInfo(resp, error);
+		} else if (resp.contentType() == MediaType.PLAIN_TEXT_UTF_8) {
+			return HttpUtils.getErrorMessage(resp, error);
+		} else {
+			Map<String, ?> errorInfo = HttpUtils.getErrorInfo(resp, error);
+			resp.model().put("error", errorInfo);
+			return resp.mvc(true).view("error");
+		}
 	}
 
 }

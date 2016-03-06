@@ -39,25 +39,42 @@ public class HttpResponseCodes {
 			"417 Expectation Failed", "500 Internal Server Error", "501 Not Implemented", "502 Bad Gateway",
 			"503 Service Unavailable", "504 Gateway Timeout", "505 HTTP Version Not Supported"};
 
-	private final byte[][] responses = new byte[600][];
+	private static final byte[][] RESPONSES = new byte[600][];
 
-	public HttpResponseCodes() {
+	private static final String[] STATUSES = new String[600];
+
+	static volatile boolean ready;
+
+	static {
 		for (String respCode : RESPONSE_CODES) {
 			init(respCode);
 		}
+		ready = true;
 	}
 
-	private void init(String responseCode) {
-		int code = U.num(responseCode.split(" ")[0]);
+	private static void init(String responseCode) {
+		String[] parts = responseCode.split(" ", 2);
+		int code = U.num(parts[0]);
 		String response = "HTTP/1.1 " + responseCode + "\r\n";
-		responses[code] = response.getBytes();
+		RESPONSES[code] = response.getBytes();
+		STATUSES[code] = parts[1];
 	}
 
-	public byte[] get(int code) {
-		if (responses[code] != null) {
-			return responses[code];
+	public static byte[] get(int code) {
+		if (RESPONSES[code] != null) {
+			return RESPONSES[code];
 		} else {
 			throw U.rte("Invalid HTTP response code: " + code);
+		}
+	}
+
+	public static String status(int code) {
+		return STATUSES[code];
+	}
+
+	public static void init() {
+		while (!ready) {
+			U.sleep(1);
 		}
 	}
 
