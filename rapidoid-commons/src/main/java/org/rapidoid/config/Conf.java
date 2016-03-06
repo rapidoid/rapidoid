@@ -104,7 +104,8 @@ public class Conf {
 		List<List<String>> detached = ConfigUtil.untrack();
 
 		reset();
-		ConfigUtil.load("default/config.yml", ROOT);
+		ConfigUtil.load(UTILS.path("default", "config.yml"), ROOT);
+		ConfigUtil.load(UTILS.path(path, "config.yml"), ROOT);
 
 		for (Config sub : SECTIONS.values()) {
 			ConfigUtil.load(filename(sub.keys()), sub);
