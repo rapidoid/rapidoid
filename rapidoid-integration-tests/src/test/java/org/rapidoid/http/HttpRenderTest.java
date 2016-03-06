@@ -35,7 +35,7 @@ public class HttpRenderTest extends HttpTestCommons {
 
 		On.custom().viewRenderer((req, resp, out) -> resp.content("this will be overwritten"));
 
-		On.custom().viewRenderer(new MustacheViewRenderer());
+		On.custom().viewRenderer(new MustacheViewRenderer(On.custom()));
 
 		On.get("/view1").html((Req req, Resp resp) -> {
 			return resp.mvc(true);
@@ -64,11 +64,18 @@ public class HttpRenderTest extends HttpTestCommons {
 			return resp.view("view1").mvc(true);
 		});
 
+		On.get("/piece").title("my-title").render((Resp resp) -> {
+			resp.model().put("x", 12345);
+			return resp;
+		});
+
 		onlyGet("/view1");
 		getAndPost("/view2");
 		onlyGet("/view3");
 		onlyGet("/abc");
 		onlyGet("/views/sub");
+		onlyGet("/views/sub");
+		onlyGet("/piece");
 	}
 
 }

@@ -25,10 +25,12 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.ViewRenderer;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.io.Res;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -39,9 +41,17 @@ public class MustacheViewRenderer implements ViewRenderer {
 
 	private final MustacheFactory mf = new DefaultMustacheFactory();
 
+	private final Customization customization;
+
+	public MustacheViewRenderer(Customization customization) {
+		this.customization = customization;
+	}
+
 	@Override
 	public void render(Req req, Resp resp, OutputStream out) throws Exception {
-		Mustache mustache = mf.compile(UTILS.path("pages", resp.view() + ".html"));
+		Res page = HttpUtils.page(resp.view()).mustExist();
+
+		Mustache mustache = mf.compile(page.getFileName());
 		mustache.execute(new PrintWriter(out), resp.model()).flush();
 	}
 

@@ -33,6 +33,8 @@ public class Customization {
 
 	private static final String MUSTACHE_RENDERER = "org.rapidoid.web.MustacheViewRenderer";
 
+	private static final String PAGE_RENDERER = "org.rapidoid.web.DefaultPageRenderer";
+
 	private final String name;
 
 	private final Config config;
@@ -42,6 +44,8 @@ public class Customization {
 	private volatile ErrorHandler errorHandler;
 
 	private volatile ViewRenderer viewRenderer;
+
+	private volatile PageRenderer pageRenderer;
 
 	private volatile JsonResponseRenderer jsonResponseRenderer;
 
@@ -61,6 +65,7 @@ public class Customization {
 		staticFilesPath = DEFAULT_STATIC_FILES_LOCATIONS;
 		errorHandler = new DefaultErrorHandler();
 		viewRenderer = optionalViewRenderer();
+		pageRenderer = optionalPageRenderer();
 		jsonResponseRenderer = new DefaultJsonResponseRenderer();
 		beanParameterFactory = new DefaultBeanParameterFactory();
 		loginProvider = new DefaultLoginProvider();
@@ -70,7 +75,13 @@ public class Customization {
 	protected ViewRenderer optionalViewRenderer() {
 		Class<?> rendererCls = Cls.getClassIfExists(MUSTACHE_RENDERER);
 
-		return rendererCls != null ? (ViewRenderer) Cls.newInstance(rendererCls) : null;
+		return rendererCls != null ? (ViewRenderer) Cls.newInstance(rendererCls, this) : null;
+	}
+
+	protected PageRenderer optionalPageRenderer() {
+		Class<?> rendererCls = Cls.getClassIfExists(PAGE_RENDERER);
+
+		return rendererCls != null ? (PageRenderer) Cls.newInstance(rendererCls, this) : null;
 	}
 
 	public void staticFilesPath(String... staticFilesPath) {
@@ -127,6 +138,22 @@ public class Customization {
 
 	public void rolesProvider(RolesProvider rolesProvider) {
 		this.rolesProvider = rolesProvider;
+	}
+
+	public PageRenderer pageRenderer() {
+		return pageRenderer;
+	}
+
+	public void pageRenderer(PageRenderer pageRenderer) {
+		this.pageRenderer = pageRenderer;
+	}
+
+	public String name() {
+		return name;
+	}
+
+	public Config config() {
+		return config;
 	}
 
 }
