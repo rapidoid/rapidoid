@@ -22,6 +22,8 @@ package org.rapidoid.web;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.config.Config;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.HtmlPage;
 import org.rapidoid.gui.menu.PageMenu;
@@ -31,6 +33,7 @@ import org.rapidoid.http.Screen;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.PageRenderer;
 import org.rapidoid.u.U;
+import org.rapidoid.value.Value;
 
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -43,8 +46,18 @@ public class DefaultPageRenderer implements PageRenderer {
 
 	private final Customization customization;
 
+	private final Value<String> title;
+	private final Value<String> brand;
+	private final Value<Boolean> search;
+	private final Value<String> cdn;
+
 	public DefaultPageRenderer(Customization customization) {
 		this.customization = customization;
+		Config config = customization.config();
+		title = config.entry("title").str();
+		brand = config.entry("brand").str();
+		search = config.entry("search").bool();
+		cdn = config.entry("cdn").str();
 	}
 
 	@Override
@@ -58,18 +71,29 @@ public class DefaultPageRenderer implements PageRenderer {
 
 		if (screen.title() != null) {
 			page.title(screen.title());
+		} else {
+			page.title(title.get());
 		}
 
 		if (screen.brand() != null) {
 			page.brand(screen.brand());
+		} else {
+			page.brand(GUI.hardcoded(brand.get()));
 		}
 
 		if (screen.search() != null) {
 			page.search(screen.search());
+		} else {
+			page.search(search.get());
 		}
 
 		if (screen.cdn() != null) {
 			page.cdn(screen.cdn());
+		} else {
+			String cdnS = cdn.get();
+			if (!"auto".equalsIgnoreCase(cdnS)) {
+				page.search(Cls.bool(cdnS));
+			}
 		}
 
 		Map<String, Object> menu = customization.config().sub("menu").toMap();

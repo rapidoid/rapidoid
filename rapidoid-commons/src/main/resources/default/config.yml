@@ -1,0 +1,64 @@
+app:
+  port: 8888
+  address: 0.0.0.0
+  brand: 'App'
+  title: 'App'
+  search: false
+  cdn: auto
+  menu: {}
+
+dev:
+  port: 7777
+  address: 127.0.0.1
+  brand: '<i class="fa fa-code"></i> Dev Center'
+  title: 'Dev Center'
+  search: false
+  cdn: auto
+  menu:
+    Home: /
+    Config: /config
+
+admin:
+  port: 9999
+  address: 0.0.0.0
+  brand: '<i class="fa fa-edit"></i> Admin Center'
+  title: 'Admin Center'
+  search: false
+  cdn: auto
+  menu:
+    Home: /
+
+jdbc:
+  driver: org.hsqldb.jdbc.JDBCDriver
+  url: jdbc:hsqldb:mem:db
+  username: sa
+  password: ''
+
+jpa: {}
+
+hibernate: {}
+
+oauth:
+  google:
+    clientId: YOUR_GOOGLE_CLIENT_ID_HERE
+    clientSecret: YOUR_GOOGLE_CLIENT_SECRET_HERE
+
+  github:
+    clientId: YOUR_GITHUB_CLIENT_ID_HERE
+    clientSecret: YOUR_GITHUB_CLIENT_SECRET_HERE
+
+  facebook:
+    clientId: YOUR_FACEBOOK_CLIENT_ID_HERE
+    clientSecret: YOUR_FACEBOOK_CLIENT_SECRET_HERE
+
+  linkedin:
+    clientId: YOUR_LINKEDIN_CLIENT_ID_HERE
+    clientSecret: YOUR_LINKEDIN_CLIENT_SECRET_HERE
+
+users: {}
+
+jobs:
+  executor:
+    threads: 64
+  scheduler:
+    threads: 64

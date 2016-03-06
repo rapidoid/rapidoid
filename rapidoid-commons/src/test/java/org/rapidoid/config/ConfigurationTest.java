@@ -42,6 +42,20 @@ public class ConfigurationTest extends AbstractCommonsTest {
 		isTrue(Conf.ROOT.is("cool"));
 		isTrue(Env.production());
 		isFalse(Env.dev());
+
+		checkDefaults();
+	}
+
+	@Test
+	public void testDefaultConfig() {
+		isTrue(Env.dev());
+
+		checkDefaults();
+	}
+
+	private void checkDefaults() {
+		eq(Conf.APP.entry("port").or(0).longValue(), 8888);
+		eq(Conf.APP.entry("address").str().getOrNull(), "0.0.0.0");
 	}
 
 }

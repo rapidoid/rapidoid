@@ -99,7 +99,7 @@ public class ConfigUtil {
 			if (bytes.length > 0) {
 				Map<String, Object> configData = YAML_PARSER.parse(bytes);
 				Log.debug("Loading configuration file", "filename", filename);
-				config.assign(U.safe(configData));
+				config.putAll(U.safe(configData));
 			}
 		} else {
 			Log.debug("Couldn't find configuration file", "filename", filename);

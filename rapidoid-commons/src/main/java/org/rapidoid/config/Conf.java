@@ -46,17 +46,16 @@ public class Conf {
 	public static final Config OAUTH = section("oauth");
 	public static final Config USERS = section("users");
 	public static final Config JDBC = section("jdbc");
-	public static final Config APP = section("app");
 	public static final Config JOBS = section("jobs");
 	public static final Config MENU = section("menu");
 
-	public static final Config ON = section("on");
+	public static final Config APP = section("app");
 	public static final Config ADMIN = section("admin");
 	public static final Config DEV = section("dev");
 
 	static {
 		RapidoidInitializer.initialize();
-		autoRefresh(ROOT);
+		reload();
 	}
 
 	private static volatile String path = "";
@@ -105,6 +104,7 @@ public class Conf {
 		List<List<String>> detached = ConfigUtil.untrack();
 
 		reset();
+		ConfigUtil.load("default/config.yml", ROOT);
 
 		for (Config sub : SECTIONS.values()) {
 			ConfigUtil.load(filename(sub.keys()), sub);
