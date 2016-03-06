@@ -67,7 +67,7 @@ public class DefaultPageRenderer implements PageRenderer {
 		if (isFullPage(content)) return content;
 
 		Screen screen = resp.screen();
-		HtmlPage page = GUI.page(GUI.multi(GUI.hardcoded(content)));
+		HtmlPage page = GUI.page(GUI.hardcoded(content));
 
 		if (screen.title() != null) {
 			page.title(screen.title());
