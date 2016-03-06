@@ -368,11 +368,12 @@ public class RespImpl implements Resp, Screen {
 
 			content = new String(out.toByteArray());
 		} else {
-			content = new String(HttpUtils.responseToBytes(content(), MediaType.HTML_UTF_8, null));
+			Object cnt = U.or(content(), "");
+			content = new String(HttpUtils.responseToBytes(cnt, MediaType.HTML_UTF_8, null));
 		}
 
 		try {
-			Object result = pageRenderer.renderPage(req, this, content);
+			Object result = U.or(pageRenderer.renderPage(req, this, content), "");
 			return HttpUtils.responseToBytes(result, MediaType.HTML_UTF_8, null);
 
 		} catch (Exception e) {

@@ -1,0 +1,120 @@
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 3737
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{{title}}</title>
+
+
+
+<link href="/bootstrap/css/bootstrap-3.3.5.min.css" rel="stylesheet">
+<link href="/font-awesome/css/font-awesome-4.4.0.min.css" rel="stylesheet">
+<link href="/rapidoid.min.css" rel="stylesheet">
+
+<link href="/app.css" rel="stylesheet">
+
+<link href="/img/favicon.png" rel="shortcut icon">
+<link href="bootstrap/css/theme-default.css" type="text/css" rel="stylesheet" />
+
+<!-- CREATE A RESOURCE FILE "partials/page-head.html" TO REPLACE THIS LINE -->
+</head>
+
+<body class="rapidoid" ng-controller="Main" ng-app="app">
+
+<div ng-if="!ajaxBodyContent">
+<nav role="navigation" class="navbar navbar-default">
+    <div class="container">
+
+        <div class="navbar-header">
+            <button data-target="#collapsable" class="navbar-toggle collapsed" data-toggle="collapse" type="button">
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">{{{brand}}}</a>
+        </div>
+
+<div id="collapsable" class="collapse navbar-collapse">
+
+    <ul class="nav navbar-nav navbar-left">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i></a>
+            <ul role="menu" class="dropdown-menu">
+                <li><a onclick="swal({ title: 'Dev-mode menu!', text: 'This menu is visible only in DEV mode.', type: 'info'});" href="javascript:void(0);" style="color: #777;">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-info fa-stack-1x fa-inverse"></i>
+                    </span>
+                    &nbsp; Running in Dev mode!</a>
+                </li>
+                <li><a href="http://localhost:8888">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-home fa-stack-1x fa-inverse"></i>
+                    </span>
+                    &nbsp; Application Home</a>
+                </li>
+                <li><a href="http://localhost:7777">
+                    <span class="fa-stack fa-lg" style="color: #7a7;">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-code fa-stack-1x fa-inverse"></i>
+                    </span>
+                    &nbsp; Dev Center</a>
+                </li>
+                <li><a href="http://localhost:9999">
+                    <span class="fa-stack fa-lg" style="color: #a77;">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-edit fa-stack-1x fa-inverse"></i>
+                    </span>
+                    &nbsp; Admin Center</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+
+
+    <!-- CREATE A RESOURCE FILE "partials/navbar-custom.html" TO REPLACE THIS LINE -->
+
+    
+
+</div>
+
+
+    </div>
+</nav>
+
+<div class="container">
+
+  
+
+</div>
+
+
+</div>
+
+<div compile="ajaxBodyContent" ng-if="ajaxBodyContent"></div>
+
+<script src="/jquery-2.1.4.min.js"></script>
+<script src="/bootstrap/js/bootstrap-3.3.5.min.js"></script>
+<script src="/angular-1.4.3.min.js"></script>
+<script src="/rapidoid.min.js"></script>
+
+<script src="/app.js"></script>
+
+
+<!-- CREATE A RESOURCE FILE "partials/page-tail.html" TO REPLACE THIS LINE -->
+
+</body>
+
+
+</html>
+

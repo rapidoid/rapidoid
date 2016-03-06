@@ -72,6 +72,8 @@ public class HttpRenderTest extends HttpTestCommons {
 			return resp;
 		});
 
+		On.get("/defaults").render((Req req) -> req);
+
 		onlyGet("/view1");
 		getAndPost("/view2");
 		onlyGet("/view3");
@@ -79,6 +81,7 @@ public class HttpRenderTest extends HttpTestCommons {
 		onlyGet("/views/sub");
 		onlyGet("/views/sub");
 		onlyGet("/piece");
+		onlyGet("/defaults");
 	}
 
 }
