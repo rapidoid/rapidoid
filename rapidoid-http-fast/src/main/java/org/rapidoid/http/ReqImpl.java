@@ -585,7 +585,15 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		if (cookiepack == null) {
 			synchronized (this) {
 				if (cookiepack == null) {
-					cookiepack = Collections.synchronizedMap(U.safe(HttpUtils.initAndDeserializeCookiePack(this)));
+					Map<String, Serializable> cpack = null;
+
+					try {
+						cpack = HttpUtils.initAndDeserializeCookiePack(this);
+					} catch (Exception e) {
+						Log.warn("Cookie-pack deserialization error! Maybe the secret was changed?", e);
+					}
+
+					cookiepack = Collections.synchronizedMap(U.safe(cpack));
 				}
 			}
 		}
