@@ -56,7 +56,7 @@ public class DefaultErrorHandler implements ErrorHandler {
 
 	private Object page(Resp resp, Throwable error) {
 		if (error instanceof SecurityException) {
-			return resp.view("login").mvc(true);
+			return resp.code(403).view("login").mvc(true);
 		} else {
 			Map<String, ?> errorInfo = HttpUtils.getErrorInfo(resp, error);
 			resp.model().put("error", errorInfo);
