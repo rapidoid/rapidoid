@@ -125,7 +125,7 @@ public class Conf {
 	private static String filename(List<String> keys) {
 		U.must(keys.size() < 2);
 		String configName = keys.isEmpty() ? "config" : keys.get(0);
-		return UTILS.path(path, configName + ".yaml");
+		return UTILS.path(path, configName + ".yml");
 	}
 
 }
