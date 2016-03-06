@@ -26,6 +26,7 @@ import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
+import org.rapidoid.log.Log;
 
 import java.util.Map;
 
@@ -35,10 +36,20 @@ public class DefaultErrorHandler implements ErrorHandler {
 
 	@Override
 	public Object handleError(Req req, Resp resp, Throwable error) {
+
+		if (error instanceof SecurityException) {
+			Log.warn("Access denied for request: " + req, "client", req.clientIpAddress());
+			return resp.view("login").mvc(true);
+		}
+
+		Log.error("Error occurred when handling request: " + req, error);
+
 		if (resp.contentType() == MediaType.JSON_UTF_8) {
 			return HttpUtils.getErrorInfo(resp, error);
+
 		} else if (resp.contentType() == MediaType.PLAIN_TEXT_UTF_8) {
 			return HttpUtils.getErrorMessage(resp, error);
+
 		} else {
 			Map<String, ?> errorInfo = HttpUtils.getErrorInfo(resp, error);
 			resp.model().put("error", errorInfo);
