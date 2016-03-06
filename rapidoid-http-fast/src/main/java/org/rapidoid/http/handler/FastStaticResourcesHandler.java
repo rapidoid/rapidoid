@@ -51,7 +51,7 @@ public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
 				byte[] bytes = res.getBytesOrNull();
 
 				if (bytes != null) {
-					MediaType contentType = MediaType.getByFileName(res.getName());
+					MediaType contentType = U.or(MediaType.getByFileName(res.getName()), MediaType.BINARY);
 					HttpIO.write200(ctx, isKeepAlive, contentType, bytes);
 					return HttpStatus.DONE;
 				}

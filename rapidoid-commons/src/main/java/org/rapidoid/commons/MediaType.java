@@ -719,7 +719,7 @@ public class MediaType {
 	public static final MediaType APPLICATION_X_FONT_TTF = create("application/x-font-ttf", "ttf", "ttc");
 	public static final MediaType APPLICATION_X_FONT_TYPE1 = create("application/x-font-type1", "pfa", "pfb", "pfm",
 			"afm");
-	public static final MediaType APPLICATION_X_FONT_WOFF = create("application/x-font-woff", "woff");
+	public static final MediaType APPLICATION_X_FONT_WOFF = create("application/x-font-woff", "woff", "woff2");
 	public static final MediaType APPLICATION_X_FREEARC = create("application/x-freearc", "arc");
 	public static final MediaType APPLICATION_X_FREEMIND = create("application/x-freemind", "mm");
 	public static final MediaType APPLICATION_X_FUTURESPLASH = create("application/x-futuresplash", "spl");
