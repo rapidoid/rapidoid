@@ -141,7 +141,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Tag awesome(String fontAwesomeIcon) {
-		return span().class_("fa fa-" + fontAwesomeIcon);
+		return i().class_("fa fa-" + fontAwesomeIcon);
 	}
 
 	public static Tag awesomeFw(String fontAwesomeIcon) {
