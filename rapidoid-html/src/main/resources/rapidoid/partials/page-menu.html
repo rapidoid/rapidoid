@@ -1,53 +1,95 @@
-        <div id="collapsable" class="collapse navbar-collapse">
+<div id="collapsable" class="collapse navbar-collapse">
 
-            {{#menu.leftItems}}
-            <ul class="nav navbar-nav navbar-left">
-                <li class="dropdown">
-                    <a{{#submenu}} class="dropdown-toggle" data-toggle="dropdown"{{/submenu}} href="{{target}}">{{caption}}{{#submenu}}<span class="caret"></span>{{/submenu}}</a>
-                    {{#submenu}}
-                    <ul role="menu" class="dropdown-menu">
-                        {{#items}}
-                        {{#javascript}}
-                        <li><a onclick="{{javascript}}" href="javascript:void(0);">{{#icon}}<span class="{{icon}}"></span>&nbsp; {{/icon}}{{caption}}</a></li>
-                        {{/javascript}}
-                        {{#target}}
-                        <li><a href="{{target}}">{{#icon}}<span class="{{icon}}"></span>&nbsp; {{/icon}}{{caption}}</a></li>
-                        {{/target}}
-                        {{#divider}}
-                        <li class="divider"></li>
-                        {{/divider}}
-                        {{/items}}
-                    </ul>
-                    {{/submenu}}
+    {{#dev}}
+    <ul class="nav navbar-nav navbar-left">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i></a>
+            <ul role="menu" class="dropdown-menu">
+                <li><a onclick="swal({ title: 'Dev-mode menu!', text: 'This menu is visible only in DEV mode.', type: 'info'});" href="javascript:void(0);" style="color: #777;">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-info fa-stack-1x fa-inverse"></i>
+                    </span>
+                    &nbsp; Running in Dev mode!</a>
+                </li>
+                <li><a href="http://localhost:8888">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-home fa-stack-1x fa-inverse"></i>
+                    </span>
+                    &nbsp; Application Home</a>
+                </li>
+                <li><a href="http://localhost:7777">
+                    <span class="fa-stack fa-lg" style="color: #7a7;">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-code fa-stack-1x fa-inverse"></i>
+                    </span>
+                    &nbsp; Dev Center</a>
+                </li>
+                <li><a href="http://localhost:9999">
+                    <span class="fa-stack fa-lg" style="color: #a77;">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-edit fa-stack-1x fa-inverse"></i>
+                    </span>
+                    &nbsp; Admin Center</a>
                 </li>
             </ul>
-            {{/menu.leftItems}}
+        </li>
+    </ul>
+    {{/dev}}
 
-            {{#menu.rightItemsReversed}}
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a{{#submenu}} class="dropdown-toggle" data-toggle="dropdown"{{/submenu}} href="{{target}}">{{caption}}{{#submenu}}<span class="caret"></span>{{/submenu}}</a>
-                    {{#submenu}}
-                    <ul role="menu" class="dropdown-menu">
-                        {{#items}}
-                        {{#javascript}}
-                        <li><a onclick="{{javascript}}" href="javascript:void(0);">{{#icon}}<span class="{{icon}}"></span>&nbsp; {{/icon}}{{caption}}</a></li>
-                        {{/javascript}}
-                        {{#target}}
-                        <li><a href="{{target}}">{{#icon}}<span class="{{icon}}"></span>&nbsp; {{/icon}}{{caption}}</a></li>
-                        {{/target}}
-                        {{#divider}}
-                        <li class="divider"></li>
-                        {{/divider}}
-                        {{/items}}
-                    </ul>
-                    {{/submenu}}
-                </li>
+    {{#menu.leftItems}}
+    <ul class="nav navbar-nav navbar-left">
+        <li class="dropdown">
+            <a{{#submenu}} class="dropdown-toggle" data-toggle="dropdown"{{/submenu}}
+            href="{{target}}">{{caption}}{{#submenu}}<span class="caret"></span>{{/submenu}}</a>
+            {{#submenu}}
+            <ul role="menu" class="dropdown-menu">
+                {{#items}}
+                {{#javascript}}
+                <li><a onclick="{{javascript}}" href="javascript:void(0);">{{#icon}}<span class="{{icon}}"></span>&nbsp;
+                    {{/icon}}{{caption}}</a></li>
+                {{/javascript}}
+                {{#target}}
+                <li><a href="{{target}}">{{#icon}}<span class="{{icon}}"></span>&nbsp; {{/icon}}{{caption}}</a></li>
+                {{/target}}
+                {{#divider}}
+                <li class="divider"></li>
+                {{/divider}}
+                {{/items}}
             </ul>
-            {{/menu.rightItemsReversed}}
+            {{/submenu}}
+        </li>
+    </ul>
+    {{/menu.leftItems}}
 
-{{>navbar-custom}}
+    {{#menu.rightItemsReversed}}
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+            <a{{#submenu}} class="dropdown-toggle" data-toggle="dropdown"{{/submenu}}
+            href="{{target}}">{{caption}}{{#submenu}}<span class="caret"></span>{{/submenu}}</a>
+            {{#submenu}}
+            <ul role="menu" class="dropdown-menu">
+                {{#items}}
+                {{#javascript}}
+                <li><a onclick="{{javascript}}" href="javascript:void(0);">{{#icon}}<span class="{{icon}}"></span>&nbsp;
+                    {{/icon}}{{caption}}</a></li>
+                {{/javascript}}
+                {{#target}}
+                <li><a href="{{target}}">{{#icon}}<span class="{{icon}}"></span>&nbsp; {{/icon}}{{caption}}</a></li>
+                {{/target}}
+                {{#divider}}
+                <li class="divider"></li>
+                {{/divider}}
+                {{/items}}
+            </ul>
+            {{/submenu}}
+        </li>
+    </ul>
+    {{/menu.rightItemsReversed}}
 
-{{#search}}{{>page-search}}{{/search}}
+    {{>navbar-custom}}
 
-        </div>
+    {{#search}}{{>page-search}}{{/search}}
+
+</div>
