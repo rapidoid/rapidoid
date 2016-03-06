@@ -39,10 +39,9 @@ public class DefaultErrorHandler implements ErrorHandler {
 
 		if (error instanceof SecurityException) {
 			Log.warn("Access denied for request: " + req, "client", req.clientIpAddress());
-			return resp.view("login").mvc(true);
+		} else {
+			Log.error("Error occurred when handling request: " + req, error);
 		}
-
-		Log.error("Error occurred when handling request: " + req, error);
 
 		if (resp.contentType() == MediaType.JSON_UTF_8) {
 			return HttpUtils.getErrorInfo(resp, error);
@@ -50,6 +49,14 @@ public class DefaultErrorHandler implements ErrorHandler {
 		} else if (resp.contentType() == MediaType.PLAIN_TEXT_UTF_8) {
 			return HttpUtils.getErrorMessage(resp, error);
 
+		} else {
+			return page(resp, error);
+		}
+	}
+
+	private Object page(Resp resp, Throwable error) {
+		if (error instanceof SecurityException) {
+			return resp.view("login").mvc(true);
 		} else {
 			Map<String, ?> errorInfo = HttpUtils.getErrorInfo(resp, error);
 			resp.model().put("error", errorInfo);
