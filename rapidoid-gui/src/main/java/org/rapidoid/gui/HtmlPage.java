@@ -61,19 +61,23 @@ public class HtmlPage extends AbstractWidget {
 		}
 	}
 
-	private Object brand;
+	private volatile Object brand;
 
-	private String title;
+	private volatile String title;
 
-	private Object content;
+	private volatile Object content;
 
-	private PageMenu menu;
+	private volatile PageMenu menu;
 
-	private boolean embedded;
+	private volatile boolean embedded;
 
-	private boolean search;
+	private volatile boolean search;
 
-	private boolean cdn = !Env.dev();
+	private volatile boolean navbar = true;
+
+	private volatile boolean fluid;
+
+	private volatile boolean cdn = !Env.dev();
 
 	public HtmlPage(Object content) {
 		this.content = content;
@@ -113,20 +117,18 @@ public class HtmlPage extends AbstractWidget {
 			model.put("role_" + role, true);
 		}
 
-		model.put("version", RapidoidInfo.version());
-
 		model.put("content", multi((Object[]) content));
-		model.put("result", multi((Object[]) content)); // FIXME rename result to content
-
 		model.put("home", "/");
 		model.put("brand", brand);
 		model.put("title", title);
 		model.put("menu", menu);
-		model.put("search", search);
 
+		model.put("version", RapidoidInfo.version());
 		model.put("embedded", embedded || req.attrs().get("_embedded") != null);
 
-		model.put("navbar", true);
+		model.put("search", search);
+		model.put("navbar", navbar);
+		model.put("fluid", fluid);
 		model.put("cdn", cdn);
 
 		return model;
@@ -191,5 +193,23 @@ public class HtmlPage extends AbstractWidget {
 
 	public void cdn(boolean cdn) {
 		this.cdn = cdn;
+	}
+
+	public boolean navbar() {
+		return navbar;
+	}
+
+	public HtmlPage navbar(boolean navbar) {
+		this.navbar = navbar;
+		return this;
+	}
+
+	public boolean fluid() {
+		return fluid;
+	}
+
+	public HtmlPage fluid(boolean fluid) {
+		this.fluid = fluid;
+		return this;
 	}
 }
