@@ -42,11 +42,7 @@ public class Dates {
 	private static byte[] CURR_DATE_BYTES;
 	private static long updateCurrDateAfter = 0;
 
-	private static final DateFormat DAY_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-
-	static {
-		DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
-	}
+	private static TimeZone utc = TimeZone.getTimeZone("UTC");
 
 	public static byte[] getDateTimeBytes() {
 		long time = System.currentTimeMillis();
@@ -114,7 +110,15 @@ public class Dates {
 	}
 
 	public static String str(Date date) {
-		return DAY_FORMAT.format(date);
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		df.setTimeZone(utc);
+		return df.format(date);
+	}
+
+	public static String iso(Date date) {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+		df.setTimeZone(utc);
+		return df.format(date);
 	}
 
 }

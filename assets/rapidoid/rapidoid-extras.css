@@ -384,3 +384,23 @@ div.rapidoid-card h6.rapidoid-card-caption {
 	margin-top: 25px;
 	margin-bottom: 25px;
 }
+
+/***** Dygraphs *****/
+
+.rapidoid-dygraph {
+    width: 100% !important;
+    margin: 0px !important;
+}
+
+.dygraph-axis-label.dygraph-axis-label-x, .dygraph-axis-label.dygraph-axis-label-y {
+   font-size:10px !important;
+}
+
+.dygraph-label.dygraph-xlabel, .dygraph-label.dygraph-ylabel, .dygraph-label.dygraph-y2label {
+    font-size:10px !important;
+}
+
+.dygraph-legend {
+width: 100% !important;
+    font-size:12px !important;
+}

@@ -5,9 +5,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
-import org.rapidoid.commons.AnyObj;
-import org.rapidoid.commons.Rnd;
-import org.rapidoid.commons.Str;
+import org.rapidoid.commons.*;
 import org.rapidoid.config.Conf;
 import org.rapidoid.gui.*;
 import org.rapidoid.gui.reqinfo.IReqInfo;
@@ -25,15 +23,14 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
+import org.rapidoid.templates.Templates;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /*
  * #%L
@@ -92,6 +89,8 @@ public abstract class BootstrapWidgets extends HTML {
 	public static final Btn BACK = navigate("Back");
 
 	public static final Btn EDIT = cmd("^Edit");
+
+	public static final AtomicInteger ID_GEN = new AtomicInteger();
 
 	public static TableTag table_(Object... contents) {
 		return table(contents).class_("table table-striped table-hover");
@@ -890,4 +889,32 @@ public abstract class BootstrapWidgets extends HTML {
 		IReqInfo req = ReqInfo.get();
 		return !req.isGetReq() ? (String) req.posted().get("_cmd") : null;
 	}
+
+	public static Tag tableRow(Object... cellContents) {
+		Tag row = tr();
+
+		for (Object content : cellContents) {
+			row = row.append(td(content));
+		}
+
+		return row;
+	}
+
+	public static Object dygraph(String title, TimeSeries ts) {
+		List<Object> points = U.list();
+
+		NavigableMap<Long, Double> values = ts.values();
+
+		for (Map.Entry<Long, Double> e : values.entrySet()) {
+			Date date = new Date(e.getKey());
+			Map<String, ?> point = U.map("date", Dates.iso(date), "values", e.getValue());
+			points.add(point);
+		}
+
+		Map<String, ?> model = U.map("points", points, "names", U.list(title), "title", title, "id", ID_GEN.incrementAndGet());
+		Tag graph = hardcoded(Templates.fromFile("dygraphs.html").render(model));
+
+		return div(graph);
+	}
+
 }
