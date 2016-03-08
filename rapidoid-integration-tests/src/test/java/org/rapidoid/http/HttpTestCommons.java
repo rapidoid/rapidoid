@@ -73,6 +73,8 @@ public abstract class HttpTestCommons extends TestCommons {
 
 		System.out.println("--- SERVER STARTED ---");
 
+		verifyNoRoutes();
+
 		notFound("/");
 		notFound("/a");
 		notFound("/b?dgfg");
@@ -296,6 +298,22 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	protected static Map<String, Object> reqResp(Req req, Resp resp) {
 		return U.map("verb", req.verb(), "uri", req.uri(), "data", req.data(), "code", resp.code());
+	}
+
+	protected String appRoutes() {
+		return U.join("\n", On.routes().all());
+	}
+
+	protected void verifyRoutes() {
+		verify("routes", appRoutes());
+	}
+
+	protected void verifyRoutes(String name) {
+		verify("routes-" + name, appRoutes());
+	}
+
+	protected void verifyNoRoutes() {
+		isTrue(On.routes().all().isEmpty());
 	}
 
 }

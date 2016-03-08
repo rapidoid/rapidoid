@@ -1,0 +1,1 @@
+Route POST /dec : json(AbcCtrl#dec(Integer x))

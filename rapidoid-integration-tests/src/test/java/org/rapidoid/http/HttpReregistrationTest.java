@@ -40,17 +40,22 @@ public class HttpReregistrationTest extends HttpTestCommons {
 		notFound("/dec");
 
 		On.beans(ctrl1);
+		verifyRoutes("ctrl1");
 
 		onlyGet("/inc?x=5");
 		notFound("/dec");
 
 		On.deregister(ctrl1);
+		verifyNoRoutes();
+
 		On.beans(ctrl2);
+		verifyRoutes("ctrl2");
 
 		onlyPost("/dec?x=12");
 		notFound("/inc");
 
 		On.deregister(ctrl2.getClass());
+		verifyNoRoutes();
 
 		notFound("/inc");
 		notFound("/dec");
@@ -62,16 +67,23 @@ public class HttpReregistrationTest extends HttpTestCommons {
 		notFound("/dec");
 
 		On.beans(ctrl1("nextA"));
+		verifyRoutes("ctrl1");
+
 		onlyGet("/inc?x=100");
 
 		On.beans(ctrl1("nextB"));
+		verifyRoutes("ctrl1");
+
 		onlyGet("/inc?x=200");
 
 		On.beans(ctrl1("nextC"));
+		verifyRoutes("ctrl1");
+
 		onlyGet("/inc?x=300");
 
 		// can deregister with other instance, only the class matters for deregistration, not the instance
 		On.deregister(ctrl1("invisible"));
+		verifyNoRoutes();
 
 		notFound("/inc");
 		notFound("/dec");
@@ -82,10 +94,12 @@ public class HttpReregistrationTest extends HttpTestCommons {
 		notFound("/foo");
 
 		On.page("/foo").html((Req req, Integer x) -> req.data() + ":" + x);
+		verifyRoutes("foo");
 
 		getAndPost("/foo?a=12&x=3");
 
 		On.deregister("GET,POST", "/foo");
+		verifyNoRoutes();
 
 		notFound("/foo");
 	}

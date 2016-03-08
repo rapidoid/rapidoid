@@ -65,11 +65,11 @@ public class HttpRenderTest extends HttpTestCommons {
 			return resp.view("view1").mvc(true);
 		});
 
-		On.get("/piece").render((Resp resp, Screen screen) -> {
-			resp.screen().title("my-title");
+		On.get("/piece").render((Resp respo, Screen screen) -> {
+			respo.screen().title("my-title");
 			screen.brand(GUI.span(GUI.fa("cog"), "The Brand!"));
-			resp.model().put("x", 12345);
-			return resp;
+			respo.model().put("x", 12345);
+			return respo;
 		});
 
 		On.get("/defaults").render((Req req) -> req);
@@ -82,6 +82,8 @@ public class HttpRenderTest extends HttpTestCommons {
 		onlyGet("/views/sub");
 		onlyGet("/piece");
 		onlyGet("/defaults");
+
+		verifyRoutes();
 	}
 
 }

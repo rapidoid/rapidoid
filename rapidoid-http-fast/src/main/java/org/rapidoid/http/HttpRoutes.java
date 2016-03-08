@@ -37,13 +37,12 @@ import org.rapidoid.http.handler.ParamsAwareReqHandler;
 import org.rapidoid.http.handler.StaticResourcesHandler;
 import org.rapidoid.http.impl.HandlerMatch;
 import org.rapidoid.http.impl.HandlerMatchWithParams;
+import org.rapidoid.http.impl.RouteImpl;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
@@ -87,6 +86,8 @@ public class HttpRoutes {
 
 	volatile HttpHandler staticResourcesHandler;
 
+	private final Set<Route> routes = Coll.synchronizedSet();
+
 	public HttpRoutes(Customization customization) {
 		this.customization = customization;
 		staticResourcesHandler = new StaticResourcesHandler(customization);
@@ -95,6 +96,8 @@ public class HttpRoutes {
 	private void register(HttpVerb verb, String path, HttpHandler handler) {
 		boolean isPattern = isPattern(path);
 		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
+
+		routes.add(new RouteImpl(verb, path, handler));
 
 		switch (verb) {
 			case GET:
@@ -183,6 +186,8 @@ public class HttpRoutes {
 	private void deregister(HttpVerb verb, String path) {
 		boolean isPattern = isPattern(path);
 		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
+
+		routes.remove(new RouteImpl(verb, path, null));
 
 		switch (verb) {
 			case GET:
@@ -419,12 +424,14 @@ public class HttpRoutes {
 			Log.info("Deregistering handler", "verbs", verbs, "path", path);
 		}
 
-		for (String verb : verbs.split(",")) {
+		for (String vrb : verbs.split(",")) {
+			HttpVerb verb = HttpVerb.from(vrb);
+
 			if (add) {
-				deregister(HttpVerb.from(verb), path);
-				register(HttpVerb.from(verb), path, handler);
+				deregister(verb, path);
+				register(verb, path, handler);
 			} else {
-				deregister(HttpVerb.from(verb), path);
+				deregister(verb, path);
 			}
 		}
 	}
@@ -450,6 +457,12 @@ public class HttpRoutes {
 		paternTraceHandlers.clear();
 
 		staticResourcesHandler = new StaticResourcesHandler(customization);
+
+		routes.clear();
+	}
+
+	public Set<Route> all() {
+		return Collections.unmodifiableSet(routes);
 	}
 
 }

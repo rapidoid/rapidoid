@@ -1,0 +1,8 @@
+Route GET /view1 : html((Req, Resp) -> ...)
+Route GET /view2 : render((Req, Resp) -> ...)
+Route POST /view2 : render((Req, Resp) -> ...)
+Route GET /view3 : render((Req, Resp) -> ...)
+Route GET /views/sub : html((Req, Resp) -> ...)
+Route GET /abc : html((Req, Resp) -> ...)
+Route GET /piece : render((Resp respo, Screen screen) -> ...)
+Route GET /defaults : render((Req) -> ...)
