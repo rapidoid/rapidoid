@@ -20,6 +20,7 @@ import org.rapidoid.html.*;
 import org.rapidoid.html.customtag.ColspanTag;
 import org.rapidoid.html.tag.*;
 import org.rapidoid.lambda.Calc;
+import org.rapidoid.lambda.ToMap;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
@@ -738,18 +739,29 @@ public abstract class BootstrapWidgets extends HTML {
 		if (item instanceof Var<?>) {
 			Var<?> var = (Var<?>) item;
 			return display(var.get());
+
 		} else if (item instanceof Iterable) {
 			Iterable<?> iter = (Iterable<?>) item;
 			return display(iter.iterator());
+
 		} else if (item instanceof Object[]) {
 			Object[] arr = (Object[]) item;
 			return display(U.iterator(arr));
+
+		} else if (item instanceof Map<?, ?>) {
+			Map<?, ?> map = (Map<?, ?>) item;
+			return grid(map);
+
+		} else if (item instanceof ToMap<?, ?>) {
+			Map<?, ?> map = ((ToMap<?, ?>) item).toMap();
+			return grid(map);
+
 		} else if (item instanceof TagWidget) {
 			TagWidget<Object> widget = (TagWidget<Object>) item;
 			return widget.render(null);
 		}
 
-		return isEntity(item) ? a(item).href(urlFor(item)) : Cls.str(item);
+		return isEntity(item) ? a(item).href(urlFor(item)) : Cls.isBean(item) ? GUI.show(item) : Cls.str(item);
 	}
 
 	private static Object display(Iterator<?> it) {

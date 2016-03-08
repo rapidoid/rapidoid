@@ -22,6 +22,7 @@ package org.rapidoid.config;
 
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Coll;
+import org.rapidoid.lambda.ToMap;
 import org.rapidoid.u.U;
 import org.rapidoid.value.Value;
 import org.rapidoid.value.Values;
@@ -35,7 +36,7 @@ import java.util.Map;
  * @author Nikolche Mihajlovski
  * @since 4.1.0
  */
-public class Config {
+public class Config implements ToMap<String, Object> {
 
 	private final Map<String, Object> properties;
 
@@ -138,6 +139,7 @@ public class Config {
 		return Boolean.TRUE.equals(Cls.convert(value, Boolean.class));
 	}
 
+	@Override
 	public Map<String, Object> toMap() {
 		return Collections.unmodifiableMap(asMap());
 	}

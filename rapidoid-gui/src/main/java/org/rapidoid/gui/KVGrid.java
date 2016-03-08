@@ -53,11 +53,15 @@ public class KVGrid extends AbstractWidget {
 			Object key = e.getKey();
 			if (keyView != null) {
 				key = Lmbd.eval(keyView, key);
+			} else {
+				key = GUI.display(key);
 			}
 
 			Object val = e.getValue();
 			if (valueView != null) {
 				val = Lmbd.eval(valueView, val);
+			} else {
+				val = GUI.display(val);
 			}
 
 			Tag tr = val != null ? tr(td(key), td(val)) : tr(td(key).colspan("2"));

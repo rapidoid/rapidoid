@@ -94,6 +94,7 @@ public class TagRenderer {
 		} else if (content instanceof Object[]) {
 			join((Object[]) content, level, inline, extra, out);
 			return;
+
 		} else if (content instanceof Collection<?>) {
 			join((Collection<?>) content, level, inline, extra, out);
 			return;
@@ -104,6 +105,9 @@ public class TagRenderer {
 	}
 
 	protected void join(Collection<?> items, int level, boolean inline, Object extra, OutputStream out) {
+		if (level > 500) {
+			return;
+		}
 		for (Object item : items) {
 			if (!inline) {
 				write(out, Constants.CR_LF);
