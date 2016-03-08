@@ -26,29 +26,36 @@ import org.rapidoid.http.HttpIO;
 import org.rapidoid.http.HttpStatus;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.RouteOptions;
+import org.rapidoid.io.Res;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public class FastStaticHttpHandler extends AbstractFastHttpHandler {
+public class ResourceHttpHandler extends AbstractHttpHandler {
 
-	private final byte[] response;
+	private final Res resource;
 
-	public FastStaticHttpHandler(RouteOptions options, byte[] response) {
+	public ResourceHttpHandler(RouteOptions options, Res resource) {
 		super(options);
-		this.response = response;
+		this.resource = resource;
 	}
 
 	@Override
 	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
-		HttpIO.write200(ctx, isKeepAlive, contentType, response);
-		return HttpStatus.DONE;
+		byte[] bytes = resource.getBytesOrNull();
+
+		if (bytes != null) {
+			HttpIO.write200(ctx, isKeepAlive, contentType, bytes);
+			return HttpStatus.DONE;
+		} else {
+			return HttpStatus.NOT_FOUND;
+		}
 	}
 
 	@Override
 	public String toString() {
-		return U.frmt("() -> (static response of %s bytes)", response.length);
+		return U.frmt("() -> (resource %s)", resource.getName());
 	}
 
 }

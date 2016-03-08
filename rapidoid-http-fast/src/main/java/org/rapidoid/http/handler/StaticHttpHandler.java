@@ -22,51 +22,33 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.HttpWrapper;
+import org.rapidoid.http.HttpIO;
+import org.rapidoid.http.HttpStatus;
+import org.rapidoid.http.Req;
 import org.rapidoid.http.RouteOptions;
-
-import java.util.Map;
+import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public abstract class AbstractFastHttpHandler implements FastHttpHandler {
+public class StaticHttpHandler extends AbstractHttpHandler {
 
-	protected final RouteOptions options;
+	private final byte[] response;
 
-	protected final MediaType contentType;
-
-	protected final HttpWrapper[] wrappers;
-
-	public AbstractFastHttpHandler(RouteOptions options) {
-		this.options = options;
-		this.contentType = options.contentType;
-		this.wrappers = options.wrappers.toArray(new HttpWrapper[options.wrappers.size()]);
+	public StaticHttpHandler(RouteOptions options, byte[] response) {
+		super(options);
+		this.response = response;
 	}
 
 	@Override
-	public boolean needsParams() {
-		return false;
+	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
+		HttpIO.write200(ctx, isKeepAlive, contentType, response);
+		return HttpStatus.DONE;
 	}
 
 	@Override
-	public MediaType contentType() {
-		return contentType;
-	}
-
-	@Override
-	public Map<String, String> getParams() {
-		return null;
-	}
-
-	@Override
-	public FastHttpHandler getHandler() {
-		return this;
-	}
-
-	@Override
-	public RouteOptions options() {
-		return options;
+	public String toString() {
+		return U.frmt("() -> (static response of %s bytes)", response.length);
 	}
 
 }

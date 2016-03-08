@@ -37,7 +37,7 @@ import java.util.concurrent.Future;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public abstract class AbstractAsyncHttpHandler extends AbstractFastHttpHandler {
+public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 
 	private static final String CTX_TAG_HANDLER = "handler";
 

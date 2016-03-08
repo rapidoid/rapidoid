@@ -26,10 +26,10 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Err;
 import org.rapidoid.http.*;
 import org.rapidoid.http.handler.lambda.*;
-import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqHandler;
-import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqRespHandler;
-import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareRespHandler;
-import org.rapidoid.http.handler.optimized.FastCallableHttpHandler;
+import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqHandler;
+import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqRespHandler;
+import org.rapidoid.http.handler.optimized.DelegatingParamsAwareRespHandler;
+import org.rapidoid.http.handler.optimized.CallableHttpHandler;
 import org.rapidoid.lambda.*;
 
 import java.lang.reflect.Method;
@@ -39,12 +39,12 @@ import java.util.concurrent.Callable;
 @Since("5.1.0")
 public class HttpHandlers {
 
-	public static FastHttpHandler from(FastHttp http, NParamLambda handler, RouteOptions options) {
+	public static HttpHandler from(FastHttp http, NParamLambda handler, RouteOptions options) {
 		if (handler instanceof ReqHandler) {
-			return new DelegatingFastParamsAwareReqHandler(http, options, (ReqHandler) handler);
+			return new DelegatingParamsAwareReqHandler(http, options, (ReqHandler) handler);
 
 		} else if (handler instanceof ReqRespHandler) {
-			return new DelegatingFastParamsAwareReqRespHandler(http, options, (ReqRespHandler) handler);
+			return new DelegatingParamsAwareReqRespHandler(http, options, (ReqRespHandler) handler);
 
 		} else if (handler instanceof OneParamLambda) {
 
@@ -53,9 +53,9 @@ public class HttpHandlers {
 			Class<?> paramType = method.getParameterTypes()[0];
 
 			if (paramType.equals(Req.class)) {
-				return new DelegatingFastParamsAwareReqHandler(http, options, lambda);
+				return new DelegatingParamsAwareReqHandler(http, options, lambda);
 			} else if (paramType.equals(Resp.class)) {
-				return new DelegatingFastParamsAwareRespHandler(http, options, lambda);
+				return new DelegatingParamsAwareRespHandler(http, options, lambda);
 			} else {
 				return new OneParamLambdaHandler(http, options, lambda);
 			}
@@ -68,7 +68,7 @@ public class HttpHandlers {
 			Class<?> param2Type = method.getParameterTypes()[1];
 
 			if (param1Type.equals(Req.class) && param2Type.equals(Resp.class)) {
-				return new DelegatingFastParamsAwareReqRespHandler(http, options, lambda);
+				return new DelegatingParamsAwareReqRespHandler(http, options, lambda);
 			} else {
 				return new TwoParamLambdaHandler(http, options, (TwoParamLambda) handler);
 			}
@@ -94,7 +94,7 @@ public class HttpHandlers {
 	}
 
 	public static void register(FastHttp http, String verb, String path, RouteOptions options, byte[] response) {
-		http.on(verb, path, new FastStaticHttpHandler(options, response));
+		http.on(verb, path, new StaticHttpHandler(options, response));
 	}
 
 	public static void registerPredefined(FastHttp http, String verb, String path, RouteOptions options, Object response) {
@@ -103,11 +103,11 @@ public class HttpHandlers {
 
 	@SuppressWarnings("unchecked")
 	public static void register(FastHttp http, String verb, String path, RouteOptions options, Callable<?> handler) {
-		http.on(verb, path, new FastCallableHttpHandler(http, options, (Callable<Object>) handler));
+		http.on(verb, path, new CallableHttpHandler(http, options, (Callable<Object>) handler));
 	}
 
 	public static void register(FastHttp http, String verb, String path, RouteOptions options, NParamLambda lambda) {
-		FastHttpHandler handler = HttpHandlers.from(http, lambda, options);
+		HttpHandler handler = HttpHandlers.from(http, lambda, options);
 		http.on(verb, path, handler);
 	}
 

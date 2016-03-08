@@ -1,8 +1,8 @@
-package org.rapidoid.http.handler.optimized;
+package org.rapidoid.http.handler;
 
 /*
  * #%L
- * rapidoid-http-server
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -24,32 +24,24 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.Resp;
+import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.RouteOptions;
-import org.rapidoid.http.handler.AbstractAsyncHttpHandler;
-import org.rapidoid.lambda.TwoParamLambda;
 import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DelegatingFastParamsAwareReqRespHandler extends AbstractAsyncHttpHandler {
+public class ParamsAwareReqHandler extends AbstractAsyncHttpHandler {
 
-	private final TwoParamLambda<Object, Req, Resp> handler;
+	private final ReqHandler handler;
 
-	public DelegatingFastParamsAwareReqRespHandler(FastHttp http, RouteOptions options, TwoParamLambda<?, ?, ?> handler) {
+	public ParamsAwareReqHandler(FastHttp http, RouteOptions options, ReqHandler handler) {
 		super(http, options);
-		this.handler = U.cast(handler);
+		this.handler = handler;
 	}
 
 	@Override
-	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
-		return handler.execute(req, req.response());
-	}
-
-	@Override
-	public String toString() {
-		return "(Req, Resp) -> ...";
+	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
+		return handler.execute(req);
 	}
 
 }

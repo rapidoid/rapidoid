@@ -32,9 +32,9 @@ import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Str;
 import org.rapidoid.data.Range;
 import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.handler.FastHttpHandler;
-import org.rapidoid.http.handler.FastParamsAwareReqHandler;
-import org.rapidoid.http.handler.FastStaticResourcesHandler;
+import org.rapidoid.http.handler.HttpHandler;
+import org.rapidoid.http.handler.ParamsAwareReqHandler;
+import org.rapidoid.http.handler.StaticResourcesHandler;
 import org.rapidoid.http.impl.HandlerMatch;
 import org.rapidoid.http.impl.HandlerMatchWithParams;
 import org.rapidoid.log.Log;
@@ -60,39 +60,39 @@ public class HttpRoutes {
 	private static final byte[] _HEAD = Constants.HEAD.getBytes();
 	private static final byte[] _TRACE = Constants.TRACE.getBytes();
 
-	final BufMap<FastHttpHandler> getHandlers = new BufMapImpl<FastHttpHandler>();
-	final BufMap<FastHttpHandler> postHandlers = new BufMapImpl<FastHttpHandler>();
-	final BufMap<FastHttpHandler> putHandlers = new BufMapImpl<FastHttpHandler>();
-	final BufMap<FastHttpHandler> deleteHandlers = new BufMapImpl<FastHttpHandler>();
-	final BufMap<FastHttpHandler> patchHandlers = new BufMapImpl<FastHttpHandler>();
-	final BufMap<FastHttpHandler> optionsHandlers = new BufMapImpl<FastHttpHandler>();
-	final BufMap<FastHttpHandler> headHandlers = new BufMapImpl<FastHttpHandler>();
-	final BufMap<FastHttpHandler> traceHandlers = new BufMapImpl<FastHttpHandler>();
+	final BufMap<HttpHandler> getHandlers = new BufMapImpl<HttpHandler>();
+	final BufMap<HttpHandler> postHandlers = new BufMapImpl<HttpHandler>();
+	final BufMap<HttpHandler> putHandlers = new BufMapImpl<HttpHandler>();
+	final BufMap<HttpHandler> deleteHandlers = new BufMapImpl<HttpHandler>();
+	final BufMap<HttpHandler> patchHandlers = new BufMapImpl<HttpHandler>();
+	final BufMap<HttpHandler> optionsHandlers = new BufMapImpl<HttpHandler>();
+	final BufMap<HttpHandler> headHandlers = new BufMapImpl<HttpHandler>();
+	final BufMap<HttpHandler> traceHandlers = new BufMapImpl<HttpHandler>();
 
-	final Map<PathPattern, FastHttpHandler> paternGetHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
-	final Map<PathPattern, FastHttpHandler> paternPostHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
-	final Map<PathPattern, FastHttpHandler> paternPutHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
-	final Map<PathPattern, FastHttpHandler> paternDeleteHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
-	final Map<PathPattern, FastHttpHandler> paternPatchHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
-	final Map<PathPattern, FastHttpHandler> paternOptionsHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
-	final Map<PathPattern, FastHttpHandler> paternHeadHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
-	final Map<PathPattern, FastHttpHandler> paternTraceHandlers = new LinkedHashMap<PathPattern, FastHttpHandler>();
+	final Map<PathPattern, HttpHandler> paternGetHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> paternPostHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> paternPutHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> paternDeleteHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> paternPatchHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> paternOptionsHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> paternHeadHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
+	final Map<PathPattern, HttpHandler> paternTraceHandlers = new LinkedHashMap<PathPattern, HttpHandler>();
 
 	private final Customization customization;
 
 	private volatile byte[] path1, path2, path3;
-	private volatile FastHttpHandler handler1, handler2, handler3;
+	private volatile HttpHandler handler1, handler2, handler3;
 
-	final List<FastHttpHandler> genericHandlers = Coll.synchronizedList();
+	final List<HttpHandler> genericHandlers = Coll.synchronizedList();
 
-	volatile FastHttpHandler staticResourcesHandler;
+	volatile HttpHandler staticResourcesHandler;
 
 	public HttpRoutes(Customization customization) {
 		this.customization = customization;
-		staticResourcesHandler = new FastStaticResourcesHandler(customization);
+		staticResourcesHandler = new StaticResourcesHandler(customization);
 	}
 
-	private void register(HttpVerb verb, String path, FastHttpHandler handler) {
+	private void register(HttpVerb verb, String path, HttpHandler handler) {
 		boolean isPattern = isPattern(path);
 		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
 
@@ -271,11 +271,11 @@ public class HttpRoutes {
 		return PATTERN_PATTERN.matcher(path).find();
 	}
 
-	public void addGenericHandler(FastHttpHandler handler) {
+	public void addGenericHandler(HttpHandler handler) {
 		genericHandlers.add(handler);
 	}
 
-	public void removeGenericHandler(FastHttpHandler handler) {
+	public void removeGenericHandler(HttpHandler handler) {
 		genericHandlers.remove(handler);
 	}
 
@@ -370,8 +370,8 @@ public class HttpRoutes {
 		return null; // no handler
 	}
 
-	private HandlerMatch matchByPattern(Map<PathPattern, FastHttpHandler> handlers, String path) {
-		for (Map.Entry<PathPattern, FastHttpHandler> e : handlers.entrySet()) {
+	private HandlerMatch matchByPattern(Map<PathPattern, HttpHandler> handlers, String path) {
+		for (Map.Entry<PathPattern, HttpHandler> e : handlers.entrySet()) {
 
 			PathPattern pattern = e.getKey();
 			Map<String, String> params = pattern.match(path);
@@ -384,7 +384,7 @@ public class HttpRoutes {
 		return null;
 	}
 
-	public synchronized void on(String verb, String path, FastHttpHandler handler) {
+	public synchronized void on(String verb, String path, HttpHandler handler) {
 		addOrRemove(true, verb, path, handler);
 	}
 
@@ -392,15 +392,15 @@ public class HttpRoutes {
 		addOrRemove(true, verb, path, handler(handler, new RouteOptions()));
 	}
 
-	public FastHttpHandler handler(ReqHandler reqHandler, RouteOptions options) {
-		return new FastParamsAwareReqHandler(null, options, reqHandler);
+	public HttpHandler handler(ReqHandler reqHandler, RouteOptions options) {
+		return new ParamsAwareReqHandler(null, options, reqHandler);
 	}
 
 	public synchronized void remove(String verb, String path) {
 		addOrRemove(false, verb, path, null);
 	}
 
-	private void addOrRemove(boolean add, String verbs, String path, FastHttpHandler handler) {
+	private void addOrRemove(boolean add, String verbs, String path, HttpHandler handler) {
 		U.notNull(verbs, "HTTP verbs");
 		U.notNull(path, "HTTP path");
 
@@ -449,7 +449,7 @@ public class HttpRoutes {
 		paternHeadHandlers.clear();
 		paternTraceHandlers.clear();
 
-		staticResourcesHandler = new FastStaticResourcesHandler(customization);
+		staticResourcesHandler = new StaticResourcesHandler(customization);
 	}
 
 }

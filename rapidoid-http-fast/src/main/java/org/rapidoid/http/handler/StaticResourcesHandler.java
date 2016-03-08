@@ -31,11 +31,11 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
-public class FastStaticResourcesHandler extends AbstractFastHttpHandler {
+public class StaticResourcesHandler extends AbstractHttpHandler {
 
 	private final Customization customization;
 
-	public FastStaticResourcesHandler(Customization customization) {
+	public StaticResourcesHandler(Customization customization) {
 		super(new RouteOptions());
 		this.customization = customization;
 	}

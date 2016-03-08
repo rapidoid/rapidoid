@@ -1,8 +1,8 @@
-package org.rapidoid.http.handler;
+package org.rapidoid.httpfast;
 
 /*
  * #%L
- * rapidoid-http-fast
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,28 +20,42 @@ package org.rapidoid.http.handler;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Config;
 import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpTestCommons;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
-import org.rapidoid.http.RouteOptions;
-import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.net.Server;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class FastParamsAwareReqHandler extends AbstractAsyncHttpHandler {
+public class HttpHandlerTest extends HttpTestCommons {
 
-	private final ReqHandler handler;
+	@Test
+	public void testFastHttpHandler() {
+		FastHttp http = new FastHttp(new Customization("example", new Config()));
 
-	public FastParamsAwareReqHandler(FastHttp http, RouteOptions options, ReqHandler handler) {
-		super(http, options);
-		this.handler = handler;
-	}
+		http.on("get", "/abc", new ReqHandler() {
+			@Override
+			public Object execute(Req req) throws Exception {
+				return req.data();
+			}
+		});
 
-	@Override
-	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
-		return handler.execute(req);
+		http.on("get,post", "/xyz", req -> U.list(req.uri(), req.data()));
+
+		Server server = http.listen(7779);
+
+		onlyGet(7779, "/abc?x=1&y=foo");
+
+		getAndPost(7779, "/xyz?aa=foo&bb=bar&c=true");
+
+		server.shutdown();
 	}
 
 }

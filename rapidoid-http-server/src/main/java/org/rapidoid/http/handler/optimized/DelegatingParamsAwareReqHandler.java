@@ -24,7 +24,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.Resp;
 import org.rapidoid.http.RouteOptions;
 import org.rapidoid.http.handler.AbstractAsyncHttpHandler;
 import org.rapidoid.lambda.OneParamLambda;
@@ -33,23 +32,22 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DelegatingFastParamsAwareRespHandler extends AbstractAsyncHttpHandler {
+public class DelegatingParamsAwareReqHandler extends AbstractAsyncHttpHandler {
 
-	private final OneParamLambda<Object, Resp> handler;
+	private final OneParamLambda<Object, Req> handler;
 
-	public DelegatingFastParamsAwareRespHandler(FastHttp http, RouteOptions options, OneParamLambda<?, ?> handler) {
+	public DelegatingParamsAwareReqHandler(FastHttp http, RouteOptions options, OneParamLambda<?, ?> handler) {
 		super(http, options);
 		this.handler = U.cast(handler);
 	}
 
 	@Override
 	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
-		return handler.execute(req.response());
+		return handler.execute(req);
 	}
 
 	@Override
 	public String toString() {
-		return "(Resp) -> ...";
+		return "(Req) -> ...";
 	}
-
 }

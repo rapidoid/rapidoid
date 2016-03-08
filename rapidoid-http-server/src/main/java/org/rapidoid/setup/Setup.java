@@ -12,9 +12,9 @@ import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.handler.FastHttpHandler;
-import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqHandler;
-import org.rapidoid.http.handler.optimized.DelegatingFastParamsAwareReqRespHandler;
+import org.rapidoid.http.handler.HttpHandler;
+import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqHandler;
+import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqRespHandler;
 import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
@@ -236,17 +236,17 @@ public class Setup implements Constants {
 
 	public Setup req(ReqHandler handler) {
 		activate();
-		routes.addGenericHandler(new DelegatingFastParamsAwareReqHandler(http, opts(), handler));
+		routes.addGenericHandler(new DelegatingParamsAwareReqHandler(http, opts(), handler));
 		return this;
 	}
 
 	public Setup req(ReqRespHandler handler) {
 		activate();
-		routes.addGenericHandler(new DelegatingFastParamsAwareReqRespHandler(http, opts(), handler));
+		routes.addGenericHandler(new DelegatingParamsAwareReqRespHandler(http, opts(), handler));
 		return this;
 	}
 
-	public Setup req(FastHttpHandler handler) {
+	public Setup req(HttpHandler handler) {
 		activate();
 		routes.addGenericHandler(handler);
 		return this;

@@ -22,40 +22,51 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HttpIO;
-import org.rapidoid.http.HttpStatus;
-import org.rapidoid.http.Req;
+import org.rapidoid.commons.MediaType;
+import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.RouteOptions;
-import org.rapidoid.io.Res;
-import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.u.U;
+
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public class FastResourceHttpHandler extends AbstractFastHttpHandler {
+public abstract class AbstractHttpHandler implements HttpHandler {
 
-	private final Res resource;
+	protected final RouteOptions options;
 
-	public FastResourceHttpHandler(RouteOptions options, Res resource) {
-		super(options);
-		this.resource = resource;
+	protected final MediaType contentType;
+
+	protected final HttpWrapper[] wrappers;
+
+	public AbstractHttpHandler(RouteOptions options) {
+		this.options = options;
+		this.contentType = options.contentType;
+		this.wrappers = options.wrappers.toArray(new HttpWrapper[options.wrappers.size()]);
 	}
 
 	@Override
-	public HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra) {
-		byte[] bytes = resource.getBytesOrNull();
-
-		if (bytes != null) {
-			HttpIO.write200(ctx, isKeepAlive, contentType, bytes);
-			return HttpStatus.DONE;
-		} else {
-			return HttpStatus.NOT_FOUND;
-		}
+	public boolean needsParams() {
+		return false;
 	}
 
 	@Override
-	public String toString() {
-		return U.frmt("() -> (resource %s)", resource.getName());
+	public MediaType contentType() {
+		return contentType;
+	}
+
+	@Override
+	public Map<String, String> getParams() {
+		return null;
+	}
+
+	@Override
+	public HttpHandler getHandler() {
+		return this;
+	}
+
+	@Override
+	public RouteOptions options() {
+		return options;
 	}
 
 }

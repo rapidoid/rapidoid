@@ -30,7 +30,7 @@ import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.handler.FastHttpHandler;
+import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.impl.HandlerMatch;
 import org.rapidoid.http.processor.AbstractHttpProcessor;
 import org.rapidoid.io.FileContent;
@@ -67,7 +67,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		this(new HttpRoutes(customization), customization);
 	}
 
-	public synchronized void on(String verb, String path, FastHttpHandler handler) {
+	public synchronized void on(String verb, String path, HttpHandler handler) {
 		routes.on(verb, path, handler);
 	}
 
@@ -96,7 +96,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		HttpStatus status = HttpStatus.NOT_FOUND;
 		HandlerMatch match = routes.findHandler(buf, isGet, xverb, xpath);
 
-		FastHttpHandler handler = match != null ? match.getHandler() : null;
+		HttpHandler handler = match != null ? match.getHandler() : null;
 		boolean noReq = (handler != null && !handler.needsParams());
 
 		ReqImpl req = null;
@@ -214,7 +214,7 @@ public class FastHttp extends AbstractHttpProcessor {
 	}
 
 	private HttpStatus tryGenericHandlers(Channel channel, boolean isKeepAlive, Req req) {
-		for (FastHttpHandler handler : routes.genericHandlers) {
+		for (HttpHandler handler : routes.genericHandlers) {
 
 			HttpStatus status = handler.handle(channel, isKeepAlive, req, null);
 
@@ -231,17 +231,17 @@ public class FastHttp extends AbstractHttpProcessor {
 		customization.reset();
 	}
 
-	public void notFound(Channel ctx, boolean isKeepAlive, FastHttpHandler fromHandler, Req req) {
-		List<FastHttpHandler> genericHandlers = routes.genericHandlers;
+	public void notFound(Channel ctx, boolean isKeepAlive, HttpHandler fromHandler, Req req) {
+		List<HttpHandler> genericHandlers = routes.genericHandlers;
 		int count = genericHandlers.size();
 
 		HttpStatus status = HttpStatus.NOT_FOUND;
 
 		for (int i = 0; i < count; i++) {
-			FastHttpHandler handler = genericHandlers.get(i);
+			HttpHandler handler = genericHandlers.get(i);
 			if (handler == fromHandler) {
 				if (i < count - 1) {
-					FastHttpHandler nextHandler = genericHandlers.get(i + 1);
+					HttpHandler nextHandler = genericHandlers.get(i + 1);
 					status = nextHandler.handle(ctx, isKeepAlive, req, null);
 					break;
 				}

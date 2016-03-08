@@ -1,8 +1,8 @@
-package org.rapidoid.httpfast;
+package org.rapidoid.http.handler.optimized;
 
 /*
  * #%L
- * rapidoid-integration-tests
+ * rapidoid-http-server
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,42 +20,36 @@ package org.rapidoid.httpfast;
  * #L%
  */
 
-import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Config;
 import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpTestCommons;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.ReqHandler;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.net.Server;
+import org.rapidoid.http.Resp;
+import org.rapidoid.http.RouteOptions;
+import org.rapidoid.http.handler.AbstractAsyncHttpHandler;
+import org.rapidoid.lambda.TwoParamLambda;
+import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class FastHttpHandlerTest extends HttpTestCommons {
+public class DelegatingParamsAwareReqRespHandler extends AbstractAsyncHttpHandler {
 
-	@Test
-	public void testFastHttpHandler() {
-		FastHttp http = new FastHttp(new Customization("example", new Config()));
+	private final TwoParamLambda<Object, Req, Resp> handler;
 
-		http.on("get", "/abc", new ReqHandler() {
-			@Override
-			public Object execute(Req req) throws Exception {
-				return req.data();
-			}
-		});
+	public DelegatingParamsAwareReqRespHandler(FastHttp http, RouteOptions options, TwoParamLambda<?, ?, ?> handler) {
+		super(http, options);
+		this.handler = U.cast(handler);
+	}
 
-		http.on("get,post", "/xyz", req -> U.list(req.uri(), req.data()));
+	@Override
+	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
+		return handler.execute(req, req.response());
+	}
 
-		Server server = http.listen(7779);
-
-		onlyGet(7779, "/abc?x=1&y=foo");
-
-		getAndPost(7779, "/xyz?aa=foo&bb=bar&c=true");
-
-		server.shutdown();
+	@Override
+	public String toString() {
+		return "(Req, Resp) -> ...";
 	}
 
 }

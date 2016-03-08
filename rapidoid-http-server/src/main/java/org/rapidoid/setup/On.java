@@ -28,7 +28,7 @@ import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.handler.FastHttpHandler;
+import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.ioc.IoCContext;
 
@@ -88,7 +88,7 @@ public class On {
 		return SETUP.req(handler);
 	}
 
-	public static synchronized Setup req(FastHttpHandler handler) {
+	public static synchronized Setup req(HttpHandler handler) {
 		return SETUP.req(handler);
 	}
 

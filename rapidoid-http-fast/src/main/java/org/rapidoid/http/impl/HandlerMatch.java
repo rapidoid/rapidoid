@@ -22,7 +22,7 @@ package org.rapidoid.http.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.handler.FastHttpHandler;
+import org.rapidoid.http.handler.HttpHandler;
 
 import java.util.Map;
 
@@ -30,7 +30,7 @@ import java.util.Map;
 @Since("5.1.0")
 public interface HandlerMatch {
 
-	FastHttpHandler getHandler();
+	HttpHandler getHandler();
 
 	Map<String, String> getParams();
 

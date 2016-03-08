@@ -1,8 +1,8 @@
-package org.rapidoid.http.handler;
+package org.rapidoid.http.handler.optimized;
 
 /*
  * #%L
- * rapidoid-http-fast
+ * rapidoid-http-server
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -22,23 +22,33 @@ package org.rapidoid.http.handler;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.HttpStatus;
+import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.RouteOptions;
-import org.rapidoid.http.impl.HandlerMatch;
+import org.rapidoid.http.handler.AbstractAsyncHttpHandler;
 import org.rapidoid.net.abstracts.Channel;
+
+import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public interface FastHttpHandler extends HandlerMatch {
+public class CallableHttpHandler extends AbstractAsyncHttpHandler {
 
-	HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra);
+	private final Callable<Object> handler;
 
-	boolean needsParams();
+	public CallableHttpHandler(FastHttp http, RouteOptions options, Callable<Object> handler) {
+		super(http, options);
+		this.handler = handler;
+	}
 
-	MediaType contentType();
+	@Override
+	protected Object handleReq(Channel ctx, boolean isKeepAlive, Req req, Object extra) throws Exception {
+		return handler.call();
+	}
 
-	RouteOptions options();
+	@Override
+	public String toString() {
+		return "() -> ...";
+	}
 
 }

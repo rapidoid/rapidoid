@@ -1,8 +1,8 @@
-package org.rapidoid.http.handler.optimized;
+package org.rapidoid.http.handler;
 
 /*
  * #%L
- * rapidoid-http-server
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -22,32 +22,23 @@ package org.rapidoid.http.handler.optimized;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.FastHttp;
+import org.rapidoid.commons.MediaType;
+import org.rapidoid.http.HttpStatus;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.RouteOptions;
-import org.rapidoid.http.handler.AbstractAsyncHttpHandler;
-import org.rapidoid.lambda.OneParamLambda;
+import org.rapidoid.http.impl.HandlerMatch;
 import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("5.1.0")
-public class DelegatingFastParamsAwareReqHandler extends AbstractAsyncHttpHandler {
+@Since("4.3.0")
+public interface HttpHandler extends HandlerMatch {
 
-	private final OneParamLambda<Object, Req> handler;
+	HttpStatus handle(Channel ctx, boolean isKeepAlive, Req req, Object extra);
 
-	public DelegatingFastParamsAwareReqHandler(FastHttp http, RouteOptions options, OneParamLambda<?, ?> handler) {
-		super(http, options);
-		this.handler = U.cast(handler);
-	}
+	boolean needsParams();
 
-	@Override
-	protected Object handleReq(Channel channel, boolean isKeepAlive, Req req, Object extra) throws Exception {
-		return handler.execute(req);
-	}
+	MediaType contentType();
 
-	@Override
-	public String toString() {
-		return "(Req) -> ...";
-	}
+	RouteOptions options();
+
 }
