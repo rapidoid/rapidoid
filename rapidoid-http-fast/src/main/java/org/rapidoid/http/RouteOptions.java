@@ -27,13 +27,12 @@ import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.u.U;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class RouteOptions {
+public class RouteOptions implements RouteConfig {
 
 	public volatile MediaType contentType = MediaType.HTML_UTF_8;
 
@@ -41,25 +40,11 @@ public class RouteOptions {
 
 	public volatile boolean mvc;
 
-	public volatile TransactionMode tx;
+	public volatile TransactionMode transactionMode;
 
 	public final Set<String> roles = Coll.synchronizedSet();
 
 	public final List<HttpWrapper> wrappers = Coll.synchronizedList();
-
-	public RouteOptions wrap(HttpWrapper[] wrappers) {
-		if (U.notEmpty(wrappers)) {
-			Collections.addAll(this.wrappers, wrappers);
-		}
-
-		return this;
-	}
-
-	public RouteOptions roles(Set<String> roles) {
-		this.roles.addAll(roles);
-
-		return this;
-	}
 
 	@Override
 	public String toString() {
@@ -67,14 +52,76 @@ public class RouteOptions {
 		return prefix + "{" +
 				(contentType != null ? "contentType=" + contentType.info() : "") +
 				(view != null ? ", view='" + view + '\'' : "") +
-				(tx != null ? ", tx='" + tx + '\'' : "") +
+				(transactionMode != null ? ", transactionMode='" + transactionMode + '\'' : "") +
 				(U.notEmpty(roles) ? ", roles=" + roles : "") +
 				(U.notEmpty(wrappers) ? ", wrappers=" + wrappers : "") +
 				'}';
 	}
 
-	public RouteOptions render() {
-		this.mvc = true;
+	@Override
+	public MediaType contentType() {
+		return contentType;
+	}
+
+	@Override
+	public RouteOptions contentType(MediaType contentType) {
+		this.contentType = contentType;
 		return this;
 	}
+
+	@Override
+	public String view() {
+		return view;
+	}
+
+	@Override
+	public RouteOptions view(String view) {
+		this.view = view;
+		return this;
+	}
+
+	@Override
+	public boolean mvc() {
+		return mvc;
+	}
+
+	@Override
+	public RouteOptions mvc(boolean mvc) {
+		this.mvc = mvc;
+		return this;
+	}
+
+	@Override
+	public TransactionMode transactionMode() {
+		return transactionMode;
+	}
+
+	@Override
+	public RouteOptions transactionMode(TransactionMode transactionMode) {
+		this.transactionMode = transactionMode;
+		return this;
+	}
+
+	@Override
+	public Set<String> roles() {
+		return roles;
+	}
+
+	@Override
+	public RouteOptions roles(Set<String> roles) {
+		Coll.assign(this.roles, roles);
+		return this;
+	}
+
+	@Override
+	public List<HttpWrapper> wrappers() {
+		return wrappers;
+	}
+
+	@Override
+	public RouteOptions wrap(HttpWrapper[] wrappers) {
+		Coll.assign(this.wrappers, wrappers);
+		return this;
+	}
+
 }

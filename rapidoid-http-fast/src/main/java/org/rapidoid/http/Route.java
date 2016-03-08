@@ -34,4 +34,6 @@ public interface Route {
 
 	HttpHandler handler();
 
+	RouteConfig config();
+
 }

@@ -102,8 +102,8 @@ public class HttpUtils implements HttpMetadata {
 		return req.verb().equalsIgnoreCase(POST);
 	}
 
-	public static String resName(Req req) {
-		String resourceName = req.path().substring(1);
+	public static String resName(String path) {
+		String resourceName = path.substring(1);
 
 		if (resourceName.isEmpty()) {
 			resourceName = "index";
@@ -117,7 +117,11 @@ public class HttpUtils implements HttpMetadata {
 	}
 
 	public static String verbAndResourceName(Req req) {
-		return req.verb().toUpperCase() + "/" + resName(req);
+		return req.verb().toUpperCase() + "/" + resName(req.path());
+	}
+
+	public static String defaultView(String path) {
+		return resName(path);
 	}
 
 	public static boolean hasExtension(String name) {
@@ -157,7 +161,7 @@ public class HttpUtils implements HttpMetadata {
 	}
 
 	public static Res staticPage(Req req, String... possibleLocations) {
-		String resName = resName(req);
+		String resName = resName(req.path());
 
 		if (hasExtension(resName)) {
 			return staticResource(resName, possibleLocations);

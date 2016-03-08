@@ -307,7 +307,7 @@ public class OnRoute {
 	}
 
 	private RouteOptions renderOpts() {
-		return opts(MediaType.HTML_UTF_8).render();
+		return opts(MediaType.HTML_UTF_8).mvc(true);
 	}
 
 	private RouteOptions opts(MediaType contentType) {
@@ -333,7 +333,7 @@ public class OnRoute {
 	}
 
 	public OnRoute tx(TransactionMode txMode) {
-		options.tx = txMode;
+		options.transactionMode = txMode;
 		return this;
 	}
 }

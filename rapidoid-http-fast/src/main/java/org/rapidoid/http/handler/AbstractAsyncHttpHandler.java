@@ -102,7 +102,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 
 		req.response().view(options.view).contentType(options.contentType).mvc(options.mvc);
 
-		TransactionMode txMode = options.tx; // null means no TX
+		TransactionMode txMode = options.transactionMode; // null means no TX
 
 		if (txMode == TransactionMode.AUTO) {
 			txMode = HttpUtils.isGetReq(req) ? TransactionMode.READ_ONLY : TransactionMode.READ_WRITE;

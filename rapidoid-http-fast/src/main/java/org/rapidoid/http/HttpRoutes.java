@@ -97,7 +97,7 @@ public class HttpRoutes {
 		boolean isPattern = isPattern(path);
 		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
 
-		routes.add(new RouteImpl(verb, path, handler));
+		routes.add(new RouteImpl(verb, path, handler, handler.options()));
 
 		switch (verb) {
 			case GET:
@@ -187,7 +187,7 @@ public class HttpRoutes {
 		boolean isPattern = isPattern(path);
 		PathPattern pathPattern = isPattern ? PathPattern.from(path) : null;
 
-		routes.remove(new RouteImpl(verb, path, null));
+		routes.remove(new RouteImpl(verb, path, null, null));
 
 		switch (verb) {
 			case GET:

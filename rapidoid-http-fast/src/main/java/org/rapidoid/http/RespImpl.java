@@ -238,7 +238,7 @@ public class RespImpl implements Resp, Screen {
 
 	@Override
 	public synchronized String view() {
-		return view != null ? view : HttpUtils.resName(req);
+		return view != null ? view : HttpUtils.defaultView(req.path());
 	}
 
 	@Override

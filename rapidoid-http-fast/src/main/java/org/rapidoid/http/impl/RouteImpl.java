@@ -24,6 +24,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpVerb;
 import org.rapidoid.http.Route;
+import org.rapidoid.http.RouteConfig;
+import org.rapidoid.http.RouteOptions;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.u.U;
 
@@ -37,10 +39,13 @@ public class RouteImpl implements Route {
 
 	private HttpHandler handler;
 
-	public RouteImpl(HttpVerb verb, String path, HttpHandler handler) {
+	private RouteOptions options;
+
+	public RouteImpl(HttpVerb verb, String path, HttpHandler handler, RouteOptions options) {
 		this.verb = verb;
 		this.path = path;
 		this.handler = handler;
+		this.options = options;
 	}
 
 	@Override
@@ -56,6 +61,11 @@ public class RouteImpl implements Route {
 	@Override
 	public HttpHandler handler() {
 		return handler;
+	}
+
+	@Override
+	public RouteConfig config() {
+		return options;
 	}
 
 	@Override
