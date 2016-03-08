@@ -20,6 +20,7 @@ package org.rapidoid.annotation;
  * #L%
  */
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -30,6 +31,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
+@Documented
 public @interface GET {
 
 	/**

@@ -20,6 +20,7 @@ package org.rapidoid.annotation;
  * #L%
  */
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -30,6 +31,7 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 @Retention(SOURCE)
 @Authors("Nikolche Mihajlovski")
 @Since("2.1.0")
+@Documented
 public @interface Contributors {
 
 	String[] value();
