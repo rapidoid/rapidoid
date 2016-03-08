@@ -45,7 +45,7 @@ public class PredefinedResponseHandler extends AbstractAsyncHttpHandler {
 
 	@Override
 	public String toString() {
-		return "() -> (predefined response)";
+		return contentTypeInfo("() -> (predefined response)");
 	}
 
 }

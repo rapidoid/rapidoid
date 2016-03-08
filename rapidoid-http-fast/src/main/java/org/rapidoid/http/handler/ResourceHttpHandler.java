@@ -55,7 +55,7 @@ public class ResourceHttpHandler extends AbstractHttpHandler {
 
 	@Override
 	public String toString() {
-		return U.frmt("() -> (resource %s)", resource.getName());
+		return contentTypeInfo(U.frmt("() -> (resource %s)", resource.getName()));
 	}
 
 }

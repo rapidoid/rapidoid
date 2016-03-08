@@ -37,7 +37,7 @@ public abstract class NParamLambdaHandler extends NParamMethodHandler {
 
 	@Override
 	public String toString() {
-		return paramsToString() + " -> ...";
+		return contentTypeInfo(paramsToString() + " -> ...");
 	}
 
 }

@@ -48,7 +48,7 @@ public class StaticHttpHandler extends AbstractHttpHandler {
 
 	@Override
 	public String toString() {
-		return U.frmt("() -> (static response of %s bytes)", response.length);
+		return contentTypeInfo(U.frmt("() -> (static response of %s bytes)", response.length));
 	}
 
 }

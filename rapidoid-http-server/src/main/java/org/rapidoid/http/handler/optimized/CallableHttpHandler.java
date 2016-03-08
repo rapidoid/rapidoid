@@ -48,7 +48,7 @@ public class CallableHttpHandler extends AbstractAsyncHttpHandler {
 
 	@Override
 	public String toString() {
-		return "() -> ...";
+		return contentTypeInfo("() -> ...");
 	}
 
 }

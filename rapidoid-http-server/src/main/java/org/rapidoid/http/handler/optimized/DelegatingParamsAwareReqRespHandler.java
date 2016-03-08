@@ -49,7 +49,7 @@ public class DelegatingParamsAwareReqRespHandler extends AbstractAsyncHttpHandle
 
 	@Override
 	public String toString() {
-		return "(Req, Resp) -> ...";
+		return contentTypeInfo("(Req, Resp) -> ...");
 	}
 
 }

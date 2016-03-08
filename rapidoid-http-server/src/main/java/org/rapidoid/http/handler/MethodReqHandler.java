@@ -57,7 +57,7 @@ public class MethodReqHandler extends NParamMethodHandler {
 
 	@Override
 	public String toString() {
-		return method.getDeclaringClass().getSimpleName() + "#" + method.getName() + paramsToString();
+		return contentTypeInfo(method.getDeclaringClass().getSimpleName() + "#" + method.getName() + paramsToString());
 	}
 
 }

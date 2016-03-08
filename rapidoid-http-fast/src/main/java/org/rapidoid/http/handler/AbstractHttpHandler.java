@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.RouteOptions;
+import org.rapidoid.u.U;
 
 import java.util.Map;
 
@@ -69,4 +70,24 @@ public abstract class AbstractHttpHandler implements HttpHandler {
 		return options;
 	}
 
+	protected String contentTypeInfo(String inside) {
+		String type;
+		if (contentType == MediaType.HTML_UTF_8) {
+			type = options.mvc ? "render" : "html";
+
+		} else if (contentType == MediaType.JSON_UTF_8) {
+			type = "json";
+
+		} else if (contentType == MediaType.PLAIN_TEXT_UTF_8) {
+			type = "plain";
+
+		} else if (contentType == MediaType.BINARY) {
+			type = "binary";
+
+		} else {
+			return inside;
+		}
+
+		return U.frmt("%s(%s)", type, inside);
+	}
 }
