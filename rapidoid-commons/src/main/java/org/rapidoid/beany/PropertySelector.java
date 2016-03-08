@@ -26,11 +26,14 @@ import org.rapidoid.lambda.Predicate;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public interface PropertySelector extends Predicate<Prop>, Comparator<Prop>, Serializable {
 
-	String[] requiredProperties();
+	Set<String> include();
+
+	Set<String> exclude();
 
 }

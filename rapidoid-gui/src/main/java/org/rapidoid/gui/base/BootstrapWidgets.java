@@ -407,6 +407,12 @@ public abstract class BootstrapWidgets extends HTML {
 		return grid(type, U.array(items), sortOrder, pageSize, properties);
 	}
 
+	public static <T> Grid grid(Iterable<T> items, String... properties) {
+		Iterator<T> it = items.iterator();
+		Class<? extends Object> type = it.hasNext() ? it.next().getClass() : Object.class;
+		return grid(type, U.array(items), null, -1, properties);
+	}
+
 	public static Grid grid(Items items, String sortOrder, int pageSize, String... properties) {
 		return Cls.customizable(Grid.class, items, sortOrder, pageSize, properties);
 	}

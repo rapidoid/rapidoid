@@ -49,7 +49,7 @@ public interface Items extends IModel, Iterable<Item> {
 
 	int size();
 
-	List<Property> properties(Object... properties);
+	List<Property> properties(String... properties);
 
 	boolean fitsIn(Item item);
 

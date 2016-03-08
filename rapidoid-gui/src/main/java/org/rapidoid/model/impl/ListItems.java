@@ -104,7 +104,7 @@ public class ListItems extends AbstractModel implements Items {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Property> properties(Object... properties) {
+	public List<Property> properties(String... properties) {
 		return Collections.EMPTY_LIST;
 	}
 

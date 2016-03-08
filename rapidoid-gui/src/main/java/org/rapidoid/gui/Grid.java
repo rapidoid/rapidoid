@@ -41,7 +41,7 @@ public class Grid extends AbstractWidget {
 
 	private String orderBy = "id";
 	private int pageSize = 10;
-	private Object[] columns = {};
+	private String[] columns = {};
 	private String rowCmd;
 
 	public Grid(Items items, String sortOrder, int pageSize, String... columns) {
@@ -194,7 +194,7 @@ public class Grid extends AbstractWidget {
 		return this;
 	}
 
-	public Grid columns(Object... columns) {
+	public Grid columns(String... columns) {
 		this.columns = columns;
 		return this;
 	}

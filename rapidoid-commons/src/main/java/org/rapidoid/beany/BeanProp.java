@@ -26,6 +26,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.commons.Err;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 
 import java.lang.annotation.Annotation;
@@ -166,8 +167,13 @@ public class BeanProp implements Prop {
 				getter.setAccessible(true);
 				return (T) getter.invoke(target);
 			}
+
 		} catch (Exception e) {
-			throw U.rte(e);
+			if (UTILS.rootCause(e) instanceof UnsupportedOperationException) {
+				return null;
+			} else {
+				throw U.rte(e);
+			}
 		}
 	}
 

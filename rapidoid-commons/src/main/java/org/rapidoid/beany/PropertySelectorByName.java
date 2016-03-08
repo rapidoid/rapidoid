@@ -22,8 +22,10 @@ package org.rapidoid.beany;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
 
 import java.util.Arrays;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -33,13 +35,24 @@ public abstract class PropertySelectorByName implements PropertySelector {
 
 	private final String[] propertyNames;
 
+	private final Set<String> exclude;
+
+	private final Set<String> include;
+
 	public PropertySelectorByName(String... propertyNames) {
 		this.propertyNames = propertyNames;
+		this.exclude = excluding(propertyNames);
+		this.include = including(propertyNames);
 	}
 
 	@Override
-	public String[] requiredProperties() {
-		return propertyNames;
+	public Set<String> include() {
+		return include;
+	}
+
+	@Override
+	public Set<String> exclude() {
+		return exclude;
 	}
 
 	@Override
@@ -64,9 +77,37 @@ public abstract class PropertySelectorByName implements PropertySelector {
 		if (getClass() != obj.getClass())
 			return false;
 		PropertySelectorByName other = (PropertySelectorByName) obj;
-		if (!Arrays.equals(propertyNames, other.propertyNames))
-			return false;
-		return true;
+		return Arrays.equals(propertyNames, other.propertyNames);
+	}
+
+	static Set<String> excluding(Object[] properties) {
+		Set<String> excluding = U.set();
+
+		for (Object prop : properties) {
+			if (prop instanceof String) {
+				String strProp = (String) prop;
+				if (strProp.startsWith("-")) {
+					excluding.add(strProp.substring(1));
+				}
+			}
+		}
+
+		return excluding;
+	}
+
+	static Set<String> including(Object[] properties) {
+		Set<String> including = U.set();
+
+		for (Object prop : properties) {
+			if (prop instanceof String) {
+				String strProp = (String) prop;
+				if (!strProp.startsWith("-")) {
+					including.add(strProp);
+				}
+			}
+		}
+
+		return including;
 	}
 
 }

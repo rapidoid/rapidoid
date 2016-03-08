@@ -83,7 +83,7 @@ public class Models {
 	}
 
 	public static List<Property> propertiesOf(Object target, String... propertyNames) {
-		return properties(Beany.propertiesOf(target).select(new ModelPropertySelector() {
+		return properties(Beany.propertiesOf(target).select(new ModelPropertySelector(propertyNames) {
 			@Override
 			public boolean eval(Prop prop) throws Exception {
 				return isReadable(prop);

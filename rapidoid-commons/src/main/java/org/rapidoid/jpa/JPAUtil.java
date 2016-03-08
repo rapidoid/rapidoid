@@ -3,9 +3,6 @@ package org.rapidoid.jpa;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
-import org.rapidoid.beany.Prop;
-import org.rapidoid.beany.PropertyFilter;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Err;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.job.Jobs;
@@ -18,11 +15,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.regex.Pattern;
 
 /*
  * #%L
@@ -47,16 +42,6 @@ import java.util.regex.Pattern;
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class JPAUtil {
-
-	private static final Pattern P_WORD = Pattern.compile("\\w+");
-
-	@SuppressWarnings("serial")
-	public static final PropertyFilter SEARCHABLE_PROPS = new PropertyFilter() {
-
-		public boolean eval(Prop prop) throws Exception {
-			return Cls.isAssignableTo(prop.getType(), Number.class, String.class, Boolean.class, Enum.class, Date.class);
-		}
-	};
 
 	private final EntityManager em;
 

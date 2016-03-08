@@ -66,7 +66,8 @@ public abstract class AbstractItem extends AbstractModel implements Item {
 		}
 
 		Prop prop = Beany.property(value, property, true);
-		return prop.get(value);
+
+			return prop.get(value);
 	}
 
 	@Override

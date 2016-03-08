@@ -67,6 +67,16 @@ public class Coll {
 		}
 	}
 
+	public static <T> void assign(Collection<? super T> destination, T[] source) {
+		Err.argMust(destination != null, "destination cannot be null!");
+
+		destination.clear();
+
+		if (source != null) {
+			Collections.addAll(destination, source);
+		}
+	}
+
 	public static <K, V> void assign(Map<K, V> destination, Map<? extends K, ? extends V> source) {
 		Err.argMust(destination != null, "destination cannot be null!");
 

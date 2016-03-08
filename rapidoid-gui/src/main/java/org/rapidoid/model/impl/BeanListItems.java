@@ -44,8 +44,8 @@ public class BeanListItems<T> extends ListItems {
 	}
 
 	@Override
-	public List<Property> properties(Object... properties) {
-		return properties.length == 0 ? inferProperties() : filterProperties(properties);
+	public List<Property> properties(String... properties) {
+		return U.isEmpty(properties) ? inferProperties() : filterProperties(properties);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -59,26 +59,13 @@ public class BeanListItems<T> extends ListItems {
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<Property> filterProperties(Object[] properties) {
-		if (isEmpty()) {
+	private List<Property> filterProperties(String[] properties) {
+		if (isEmpty() || U.isEmpty(properties)) {
 			return Collections.EMPTY_LIST;
 		}
 
-		List<Property> props = U.list();
-
 		Object item0 = get(0).value();
-		for (Object prop : properties) {
-			if (prop instanceof String) {
-				String strProp = (String) prop;
-				props.add(Models.propertyOf(Cls.of(item0), strProp));
-			} else if (prop instanceof Property) {
-				props.add((Property) prop);
-			} else {
-				throw U.rte("Invalid property: %s!", prop);
-			}
-		}
-
-		return props;
+		return Models.propertiesOf(item0, properties);
 	}
 
 	@Override

@@ -2,6 +2,9 @@ package org.rapidoid.beany;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
+import java.util.Set;
 
 /*
  * #%L
@@ -29,8 +32,13 @@ import org.rapidoid.annotation.Since;
 public abstract class PropertyFilter implements PropertySelector {
 
 	@Override
-	public String[] requiredProperties() {
-		return null;
+	public Set<String> include() {
+		return U.set();
+	}
+
+	@Override
+	public Set<String> exclude() {
+		return U.set();
 	}
 
 	@Override

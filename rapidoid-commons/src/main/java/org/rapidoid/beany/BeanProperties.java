@@ -53,21 +53,24 @@ public class BeanProperties implements Iterable<Prop> {
 				@Override
 				public BeanProperties map(PropertySelector selector) throws Exception {
 
-					String[] propertyNames = selector.requiredProperties();
-					List<Prop> selected = new ArrayList<Prop>(20);
+					Set<String> include = selector.include();
+					Set<String> exclude = selector.exclude();
 
-					if (!U.isEmpty(propertyNames)) {
-						for (String propName : propertyNames) {
-							Prop prop = map.get(propName);
-							U.must(prop != null, "Cannot find property '%s'!", propName);
-							if (Lmbd.eval(selector, prop)) {
-								selected.add(prop);
-							}
+					List<Prop> selected = new ArrayList<Prop>(10);
+
+					for (String propName : include) {
+						Prop prop = map.get(propName);
+						U.must(prop != null, "Cannot find property '%s'!", propName);
+
+						if (!veto(prop) && Lmbd.eval(selector, prop) && Lmbd.eval(selector, prop)) {
+							selected.add(prop);
 						}
-					} else {
-						for (Entry<String, Prop> e : map.entrySet()) {
-							if (Lmbd.eval(selector, e.getValue())) {
-								selected.add(e.getValue());
+					}
+
+					if (U.notEmpty(exclude) || U.isEmpty(include)) {
+						for (Prop prop : map.values()) {
+							if (!veto(prop) && !selected.contains(prop) && !exclude.contains(prop.getName()) && Lmbd.eval(selector, prop)) {
+								selected.add(prop);
 							}
 						}
 					}
@@ -77,6 +80,10 @@ public class BeanProperties implements Iterable<Prop> {
 					return from(selected);
 				}
 			});
+
+	private boolean veto(Prop prop) {
+		return prop.getName().equalsIgnoreCase("clone");
+	}
 
 	public BeanProperties(Map<String, ? extends Prop> properties) {
 		this.map = Collections.unmodifiableMap(properties);
