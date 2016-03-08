@@ -23,5 +23,5 @@ package org.rapidoid.annotation;
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
 public enum TransactionMode {
-	READ_ONLY, READ_WRITE, AUTO
+	READ_ONLY, READ_WRITE, AUTO, NONE
 }

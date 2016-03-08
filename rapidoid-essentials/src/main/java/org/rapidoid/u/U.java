@@ -350,6 +350,10 @@ public class U {
 		return a == null ? b == null : a.equals(b);
 	}
 
+	public static boolean neq(Object a, Object b) {
+		return !eq(a, b);
+	}
+
 	public static RuntimeException rte(String message) {
 		return new RuntimeException(message);
 	}

@@ -146,4 +146,9 @@ public class AutoExpandingMap<K, V> implements Map<K, V> {
 		return target.containsValue(o);
 	}
 
+	@Override
+	public String toString() {
+		return target.toString();
+	}
+
 }

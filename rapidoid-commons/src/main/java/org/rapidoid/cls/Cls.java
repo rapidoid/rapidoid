@@ -872,8 +872,7 @@ public class Cls {
 	public static boolean isBeanType(Class<?> clazz) {
 		return kindOf(clazz) == TypeKind.UNKNOWN && !clazz.isAnnotation() && !clazz.isEnum() && !clazz.isInterface()
 				&& !(Collection.class.isAssignableFrom(clazz)) && !(Map.class.isAssignableFrom(clazz))
-				&& !(Object[].class.isAssignableFrom(clazz)) && !clazz.getPackage().getName().startsWith("java.")
-				&& !clazz.getPackage().getName().startsWith("javax.");
+				&& !(Object[].class.isAssignableFrom(clazz)) && !Beany.propertiesOf(clazz).isEmpty();
 	}
 
 	public static boolean isBean(Object target) {
