@@ -17,6 +17,7 @@ import org.rapidoid.gui.var.LocalVar;
 import org.rapidoid.html.*;
 import org.rapidoid.html.customtag.ColspanTag;
 import org.rapidoid.html.tag.*;
+import org.rapidoid.http.HttpVerb;
 import org.rapidoid.lambda.Calc;
 import org.rapidoid.lambda.ToMap;
 import org.rapidoid.model.Item;
@@ -888,6 +889,32 @@ public abstract class BootstrapWidgets extends HTML {
 	public static String getCommand() {
 		IReqInfo req = ReqInfo.get();
 		return !req.isGetReq() ? (String) req.posted().get("_cmd") : null;
+	}
+
+	public static Tag verb(HttpVerb verb) {
+		Tag tag = span(verb);
+		switch (verb) {
+			case GET:
+				tag = tag.class_("label label-success");
+				break;
+
+			case POST:
+				tag = tag.class_("label label-primary");
+				break;
+
+			case PUT:
+				tag = tag.class_("label label-warning");
+				break;
+
+			case DELETE:
+				tag = tag.class_("label label-danger");
+				break;
+
+			default:
+				tag = tag.class_("label label-default");
+				break;
+		}
+		return tag;
 	}
 
 	public static Tag tableRow(Object... cellContents) {
