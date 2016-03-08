@@ -35,6 +35,7 @@ public class RapidoidInitializer {
 			Log.info("Starting Rapidoid...", "version", RapidoidInfo.version(), "working dir", System.getProperty("user.dir"));
 
 			Cls.getClassIfExists("org.rapidoid.web.RapidoidWebModule");
+			Cls.getClassIfExists("org.rapidoid.insight.Metrics");
 		}
 	}
 
