@@ -25,10 +25,12 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.data.YAML;
 import org.rapidoid.io.Res;
+import org.rapidoid.templates.Templates;
 import org.rapidoid.u.U;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -89,4 +91,18 @@ public class PageMenu {
 		return list;
 	}
 
+	public void renderContentTemplates(Map<String, Object> model) {
+		for (PageMenuItem item : items) {
+
+			if (item.getCaption().contains("{{")) {
+				item.setCaption(Templates.fromString(item.getCaption()).render(model));
+			}
+
+			if (item.getSubmenu() != null) {
+				for (PageSubMenuItem subItem : item.getSubmenu().getItems()) {
+					subItem.setCaption(Templates.fromString(subItem.getCaption()).render(model));
+				}
+			}
+		}
+	}
 }

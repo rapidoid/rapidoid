@@ -5,7 +5,9 @@ app:
   title: 'App'
   search: false
   cdn: auto
-  menu: {}
+  menu:
+    '{{#username}}<i class="fa fa-user"></i> <b>{{username}}</b>{{/username}}(right)':
+      Logout: /_logout
 
 dev:
   port: 7777
@@ -17,6 +19,8 @@ dev:
   menu:
     Routes: /
     Config: /config
+    '<i class="fa fa-user"></i> <b>{{username}}</b>(right)':
+      logged-in?Logout: /_logout
 
 admin:
   port: 9999
@@ -37,6 +41,8 @@ admin:
       Runtime: /jmx/runtime
       Classes: /jmx/classes
       Compilation: /jmx/compilation
+    '<i class="fa fa-user"></i> <b>{{username}}</b>(right)':
+      logged-in?Logout: /_logout
 
 jdbc:
   driver: org.hsqldb.jdbc.JDBCDriver

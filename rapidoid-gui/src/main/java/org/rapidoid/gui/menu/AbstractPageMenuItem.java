@@ -112,4 +112,8 @@ public abstract class AbstractPageMenuItem {
 		this.divider = divider;
 	}
 
+	public boolean isVisible() {
+		return U.notEmpty(caption);
+	}
+
 }

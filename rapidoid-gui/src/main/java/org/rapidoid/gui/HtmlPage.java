@@ -85,12 +85,17 @@ public class HtmlPage extends AbstractWidget {
 
 	@Override
 	protected Tag render() {
-		String html;
+		Map<String, Object> model = pageModel();
 
+		if (menu != null) {
+			menu.renderContentTemplates(model);
+		}
+
+		String html;
 		if (ReqInfo.get().isGetReq()) {
-			html = fullTemplate().render(pageModel());
+			html = fullTemplate().render(model);
 		} else {
-			html = ajaxTemplate().render(pageModel());
+			html = ajaxTemplate().render(model);
 		}
 
 		return hardcoded(html);
