@@ -84,7 +84,7 @@ public class ParamRetrievers {
 			throw U.rte("The 'File' parameter type is not supported (yet). Try using the 'byte[]' parameter type!");
 
 		} else {
-			if (Cls.isBeanType(type)) {
+			if (Cls.isAppBeanType(type)) {
 				return new BeanParamRetriever(customization, type, name);
 
 			} else if (Cls.kindOf(type).isConcrete()) {

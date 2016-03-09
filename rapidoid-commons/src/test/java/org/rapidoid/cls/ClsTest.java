@@ -2,10 +2,18 @@ package org.rapidoid.cls;
 
 import org.junit.Test;
 import org.rapidoid.annotation.*;
+import org.rapidoid.http.HttpVerb;
+import org.rapidoid.ioc.Logger;
+import org.rapidoid.ioc.db.Database;
+import org.rapidoid.ioc.db.Table;
+import org.rapidoid.ioc.db.Transactor;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /*
  * #%L
@@ -30,6 +38,23 @@ import java.lang.reflect.Method;
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class ClsTest extends AbstractCommonsTest {
+
+	@Test
+	public void testIsBeanType() {
+		isTrue(Cls.isBeanType(Foo.class));
+		isTrue(Cls.isBeanType(Logger.class));
+		isTrue(Cls.isBeanType(Database.class));
+		isTrue(Cls.isBeanType(Table.class));
+		isTrue(Cls.isBeanType(Transactor.class));
+
+		isFalse(Cls.isBeanType(Object.class));
+		isFalse(false);
+		isFalse(Cls.isBeanType(HttpVerb.class));
+		isFalse(Cls.isBeanType(Runnable.class));
+		isFalse(Cls.isBeanType(ArrayList.class));
+		isFalse(Cls.isBeanType(HashSet.class));
+		isFalse(Cls.isBeanType(HashMap.class));
+	}
 
 	@Test
 	public void testInstanceMethodParams() {

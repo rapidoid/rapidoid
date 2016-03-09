@@ -34,7 +34,10 @@ import org.rapidoid.util.UTILS;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -79,12 +82,12 @@ public class IoCContextImpl implements IoCContext {
 
 	@Override
 	public synchronized void manage(Object... classesOrInstances) {
-		List<Class<?>> autoCreate = new ArrayList<Class<?>>();
+		List<Class<?>> autoCreate = U.list();
 
 		for (Object classOrInstance : classesOrInstances) {
 
 			boolean isClass = isClass(classOrInstance);
-			Class<?> clazz = isClass ? (Class<?>) classOrInstance : classOrInstance.getClass();
+			Class<?> clazz = Cls.toClass(classOrInstance);
 
 			for (Class<?> interfacee : Cls.getImplementedInterfaces(clazz)) {
 				addProvider(interfacee, classOrInstance);
@@ -174,7 +177,7 @@ public class IoCContextImpl implements IoCContext {
 			instance = provideInstanceByType(type, properties);
 		}
 
-		if (instance == null && Cls.isBeanType(type)) {
+		if (instance == null && Cls.isAppBeanType(type)) {
 			instance = provideNewInstanceOf(type, properties);
 		}
 
@@ -188,7 +191,7 @@ public class IoCContextImpl implements IoCContext {
 			}
 		}
 
-		return Cls.isBean(instance) ? register(instance, properties) : null;
+		return Cls.isAppBean(instance) ? register(instance, properties) : null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -328,7 +331,7 @@ public class IoCContextImpl implements IoCContext {
 	}
 
 	private <T> T register(T target, Map<String, Object> properties) {
-		U.must(Cls.isBean(target), "Not a bean: %s", target);
+		U.must(Cls.isAppBean(target), "Not a bean: %s", target);
 
 		if (!isManaged(target)) {
 			add(target);

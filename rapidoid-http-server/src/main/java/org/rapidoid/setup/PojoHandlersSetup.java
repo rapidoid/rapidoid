@@ -84,7 +84,7 @@ public class PojoHandlersSetup {
 			clazz = bean.getClass();
 		}
 
-		if (!Cls.isBeanType(clazz)) {
+		if (!Cls.isAppBeanType(clazz)) {
 			throw new RuntimeException("Expected a bean, but found value of type: " + clazz.getName());
 		}
 

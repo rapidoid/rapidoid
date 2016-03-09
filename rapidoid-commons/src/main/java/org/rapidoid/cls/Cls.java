@@ -703,6 +703,10 @@ public class Cls {
 		return JRE_CLASS_PATTERN.matcher(canonicalClassName).matches();
 	}
 
+	public static boolean isJREType(Class<?> type) {
+		return isJREClass(type.getName());
+	}
+
 	@SuppressWarnings("unchecked")
 	public static <T> Class<T> getWrapperClass(Class<T> c) {
 		U.must(c.isPrimitive());
@@ -870,13 +874,21 @@ public class Cls {
 	}
 
 	public static boolean isBeanType(Class<?> clazz) {
-		return kindOf(clazz) == TypeKind.UNKNOWN && !clazz.isAnnotation() && !clazz.isEnum() && !clazz.isInterface()
+		return clazz != null && clazz != Object.class && kindOf(clazz) == TypeKind.UNKNOWN && !clazz.isAnnotation() && !clazz.isEnum() && !clazz.isInterface()
 				&& !(Collection.class.isAssignableFrom(clazz)) && !(Map.class.isAssignableFrom(clazz))
-				&& !(Object[].class.isAssignableFrom(clazz)) && !Beany.propertiesOf(clazz).isEmpty();
+				&& !(Object[].class.isAssignableFrom(clazz));
+	}
+
+	public static boolean isAppBeanType(Class<?> clazz) {
+		return isBeanType(clazz) && !isJREType(clazz);
 	}
 
 	public static boolean isBean(Object target) {
 		return target != null && isBeanType(target.getClass());
+	}
+
+	public static boolean isAppBean(Object target) {
+		return target != null && isAppBeanType(target.getClass());
 	}
 
 	public static <T, T2> T struct(Class<T> clazz1, Class<T2> clazz2, Object obj) {
