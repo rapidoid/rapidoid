@@ -36,21 +36,28 @@ public class Dates {
 
 	protected static final Calendar CALENDAR = Calendar.getInstance();
 
-	/* RFC 1123 date-time format, e.g. Sun, 07 Sep 2014 00:17:29 GMT */
-	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
-	private static final Date CURR_DATE = new Date();
-	private static byte[] CURR_DATE_BYTES;
-	private static long updateCurrDateAfter = 0;
+	public static final TimeZone UTC = TimeZone.getTimeZone("UTC");
 
-	private static TimeZone utc = TimeZone.getTimeZone("UTC");
+	public static final TimeZone GMT = TimeZone.getTimeZone("GMT");
+
+	private static volatile long updateCurrDateAfter = 0;
+
+	private static volatile byte[] CURR_DATE_BYTES;
 
 	public static byte[] getDateTimeBytes() {
 		long time = System.currentTimeMillis();
 
 		// avoid synchronization for better performance
 		if (time > updateCurrDateAfter) {
-			CURR_DATE.setTime(time);
-			CURR_DATE_BYTES = DATE_FORMAT.format(CURR_DATE).getBytes();
+
+			// RFC 1123 date-time format, e.g. Sun, 07 Sep 2014 00:17:29 GMT
+			DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
+			dateFormat.setTimeZone(GMT);
+
+			Date date = new Date();
+			date.setTime(time);
+
+			CURR_DATE_BYTES = dateFormat.format(date).getBytes();
 			updateCurrDateAfter = time + 1000;
 		}
 
@@ -111,13 +118,13 @@ public class Dates {
 
 	public static String str(Date date) {
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-		df.setTimeZone(utc);
+		df.setTimeZone(UTC);
 		return df.format(date);
 	}
 
 	public static String iso(Date date) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-		df.setTimeZone(utc);
+		df.setTimeZone(UTC);
 		return df.format(date);
 	}
 
