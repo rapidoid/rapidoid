@@ -30,6 +30,7 @@ import org.rapidoid.u.U;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
+import java.lang.management.ThreadMXBean;
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
@@ -43,9 +44,15 @@ public class Metrics implements Runnable {
 	public static final TimeSeries MEM_USED = new TimeSeries();
 	public static final TimeSeries MEM_TOTAL = new TimeSeries();
 
+	public static final TimeSeries NUM_THREADS = new TimeSeries();
+	public static final TimeSeries NUM_FILE_DESC = new TimeSeries();
+
 	private static volatile OperatingSystemMXBean os;
 	private static volatile Method sysCpuM;
 	private static volatile Method procCpuM;
+	private static volatile Method openFileDescriptorCount;
+
+	private static volatile ThreadMXBean threads;
 
 	static {
 		Log.info("Initializing metrics");
@@ -53,6 +60,9 @@ public class Metrics implements Runnable {
 		os = ManagementFactory.getOperatingSystemMXBean();
 		sysCpuM = Cls.findMethod(os.getClass(), "getSystemCpuLoad");
 		procCpuM = Cls.findMethod(os.getClass(), "getProcessCpuLoad");
+		openFileDescriptorCount = Cls.findMethod(os.getClass(), "getOpenFileDescriptorCount");
+
+		threads = ManagementFactory.getThreadMXBean();
 
 		Jobs.every(1, TimeUnit.SECONDS).run(new Metrics());
 	}
@@ -72,12 +82,18 @@ public class Metrics implements Runnable {
 		MEM_USED.put(U.time(), usedMem / megs);
 
 		if (sysCpuM != null) {
-			SYSTEM_CPU.put(U.time(), (Double) Cls.invoke(sysCpuM, os));
+			SYSTEM_CPU.put(U.time(), ((Number) Cls.invoke(sysCpuM, os)));
 		}
 
 		if (procCpuM != null) {
-			PROCESS_CPU.put(U.time(), (Double) Cls.invoke(procCpuM, os));
+			PROCESS_CPU.put(U.time(), (Number) Cls.invoke(procCpuM, os));
 		}
+
+		if (openFileDescriptorCount != null) {
+			NUM_FILE_DESC.put(U.time(), (Number) Cls.invoke(openFileDescriptorCount, os));
+		}
+
+		NUM_THREADS.put(U.time(), threads.getThreadCount());
 	}
 
 }

@@ -34,8 +34,8 @@ public class TimeSeries {
 
 	private final NavigableMap<Long, Double> values = Collections.synchronizedNavigableMap(new TreeMap<Long, Double>());
 
-	public void put(long timestamp, double value) {
-		values.put(timestamp, value);
+	public void put(long timestamp, Number value) {
+		values.put(timestamp, value.doubleValue());
 	}
 
 	public NavigableMap<Long, Double> values() {
