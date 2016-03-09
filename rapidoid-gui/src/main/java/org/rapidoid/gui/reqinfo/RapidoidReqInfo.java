@@ -24,7 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Current;
 import org.rapidoid.http.Req;
-import org.rapidoid.io.FileContent;
+import org.rapidoid.io.Upload;
 
 import java.util.List;
 import java.util.Map;
@@ -70,7 +70,7 @@ public class RapidoidReqInfo extends AbstractReqInfo {
 	}
 
 	@Override
-	public Map<String, List<FileContent>> files() {
+	public Map<String, List<Upload>> files() {
 		return req().files();
 	}
 

@@ -33,7 +33,7 @@ import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.impl.HandlerMatch;
 import org.rapidoid.http.processor.AbstractHttpProcessor;
-import org.rapidoid.io.FileContent;
+import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
@@ -120,7 +120,7 @@ public class FastHttp extends AbstractHttpProcessor {
 
 			byte[] body;
 			Map<String, Object> posted;
-			Map<String, List<FileContent>> files;
+			Map<String, List<Upload>> files;
 
 			if (!isGet && !xbody.isEmpty()) {
 				KeyValueRanges postedKV = helper.pairs3.reset();

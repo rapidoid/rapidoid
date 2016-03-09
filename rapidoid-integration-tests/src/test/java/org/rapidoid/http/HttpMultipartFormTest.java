@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.crypto.Crypto;
-import org.rapidoid.io.FileContent;
+import org.rapidoid.io.Upload;
 import org.rapidoid.io.IO;
 import org.rapidoid.u.U;
 
@@ -43,10 +43,10 @@ public class HttpMultipartFormTest extends HttpTestCommons {
 		String hash2 = Crypto.md5(IO.loadBytes("test2.txt"));
 		String hash3 = Crypto.md5("");
 
-		FileContent file1 = FileContent.from("test1.txt");
-		FileContent file2 = FileContent.from("test2.txt");
+		Upload file1 = Upload.from("test1.txt");
+		Upload file2 = Upload.from("test2.txt");
 
-		Map<String, List<FileContent>> files = U.map("f1", U.list(file1), "f2", U.list(file2));
+		Map<String, List<Upload>> files = U.map("f1", U.list(file1), "f2", U.list(file2));
 
 		String res = HTTP.post(localhost("/upload"))
 				.header("Cookie", "COOKIE1=a")
@@ -68,11 +68,11 @@ public class HttpMultipartFormTest extends HttpTestCommons {
 		String hash2 = Crypto.md5(IO.loadBytes("test2.txt"));
 		String hash3 = Crypto.md5(IO.loadBytes("rabbit.jpg"));
 
-		FileContent file1 = FileContent.from("test1.txt");
-		FileContent file2 = FileContent.from("test2.txt");
-		FileContent file3 = FileContent.from("rabbit.jpg");
+		Upload file1 = Upload.from("test1.txt");
+		Upload file2 = Upload.from("test2.txt");
+		Upload file3 = Upload.from("rabbit.jpg");
 
-		Map<String, List<FileContent>> files = U.map("f1", U.list(file1), "f2", U.list(file2), "f3", U.list(file3));
+		Map<String, List<Upload>> files = U.map("f1", U.list(file1), "f2", U.list(file2), "f3", U.list(file3));
 
 		String res = HTTP.post(localhost("/upload"))
 				.cookies(cookies)

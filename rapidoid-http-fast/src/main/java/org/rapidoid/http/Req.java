@@ -22,7 +22,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.io.FileContent;
+import org.rapidoid.io.Upload;
 
 import java.io.Serializable;
 import java.util.List;
@@ -150,29 +150,29 @@ public interface Req {
 	 */
 	<T extends Serializable> T posted(String name, T defaultValue);
 
-	/* POSTED FILES IN THE REQUEST BODY: */
+	/* UPLOADED FILES IN THE REQUEST BODY: */
 
 	/**
-	 * Gets the <b>posted files</b> from the HTTP request body.
+	 * Gets the <b>uploaded files</b> from the HTTP request body.
 	 */
-	Map<String, List<FileContent>> files();
+	Map<String, List<Upload>> files();
 
 	/**
-	 * Returns the <b>posted files</b> with the specified form parameter name (not filename) from the HTTP request body,
+	 * Returns the <b>uploaded files</b> with the specified form parameter name (not filename) from the HTTP request body,
 	 * or throws a runtime exception if not found.
 	 */
-	List<FileContent> files(String name);
+	List<Upload> files(String name);
 
 	/**
 	 * Returns exactly one <b>posted file</b> with the specified form parameter name (not filename) from the HTTP request body,
 	 * or throws a runtime exception if not found.
 	 */
-	FileContent file(String name);
+	Upload file(String name);
 
-	/* REQUEST DATA PARAMETERS (URL PARAMETERS + POSTED PARAMETERS + POSTED FILES): */
+	/* REQUEST DATA PARAMETERS (URL PARAMETERS + POSTED PARAMETERS + UPLOADED FILES): */
 
 	/**
-	 * Gets the <b>data parameters (URL parameters + posted parameters + posted files)</b> of the HTTP request.
+	 * Gets the <b>data parameters (URL parameters + posted parameters + uploaded files)</b> of the HTTP request.
 	 */
 	Map<String, Object> data();
 

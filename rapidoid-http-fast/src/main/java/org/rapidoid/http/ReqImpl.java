@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.MediaType;
-import org.rapidoid.io.FileContent;
+import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
@@ -64,7 +64,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	private final Map<String, Object> posted;
 
-	private final Map<String, List<FileContent>> files;
+	private final Map<String, List<Upload>> files;
 
 	private final Map<String, Object> attrs = Collections.synchronizedMap(new HashMap<String, Object>());
 
@@ -90,7 +90,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
 	               String query, byte[] body, Map<String, String> params, Map<String, String> headers,
-	               Map<String, String> cookies, Map<String, Object> posted, Map<String, List<FileContent>> files,
+	               Map<String, String> cookies, Map<String, Object> posted, Map<String, List<Upload>> files,
 	               MediaType defaultContentType) {
 
 		this.http = http;
@@ -185,7 +185,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	}
 
 	@Override
-	public Map<String, List<FileContent>> files() {
+	public Map<String, List<Upload>> files() {
 		return files;
 	}
 
@@ -257,13 +257,13 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	}
 
 	@Override
-	public List<FileContent> files(String name) {
+	public List<Upload> files(String name) {
 		return U.notNull(files().get(name), "FILES[%s]", name);
 	}
 
 	@Override
-	public FileContent file(String name) {
-		List<FileContent> uploads = files(name);
+	public Upload file(String name) {
+		List<Upload> uploads = files(name);
 
 		U.must(uploads.size() == 1, "Expected exactly 1 uploaded file for parameter '%s', but found %s!", name, uploads.size());
 

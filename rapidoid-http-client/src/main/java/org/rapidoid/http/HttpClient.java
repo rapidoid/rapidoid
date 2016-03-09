@@ -27,7 +27,7 @@ import org.rapidoid.commons.Coll;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.concurrent.Future;
 import org.rapidoid.data.JSON;
-import org.rapidoid.io.FileContent;
+import org.rapidoid.io.Upload;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -49,7 +49,7 @@ public class HttpClient {
 
 	private final Map<String, Object> data = Coll.synchronizedMap();
 
-	private final Map<String, List<FileContent>> files = Coll.synchronizedMap();
+	private final Map<String, List<Upload>> files = Coll.synchronizedMap();
 
 	private volatile String contentType = null;
 
@@ -137,12 +137,12 @@ public class HttpClient {
 		return this.data;
 	}
 
-	public HttpClient files(Map<String, List<FileContent>> files) {
+	public HttpClient files(Map<String, List<Upload>> files) {
 		Coll.assign(this.files, files);
 		return this;
 	}
 
-	public Map<String, List<FileContent>> files() {
+	public Map<String, List<Upload>> files() {
 		return this.files;
 	}
 
@@ -287,7 +287,7 @@ public class HttpClient {
 		return this;
 	}
 
-	public HttpClient file(String name, List<FileContent> files) {
+	public HttpClient file(String name, List<Upload> files) {
 		files().put(name, files);
 		return this;
 	}

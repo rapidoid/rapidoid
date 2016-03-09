@@ -25,13 +25,13 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class FileContent {
+public class Upload {
 
 	private final String filename;
 
 	private final byte[] content;
 
-	public FileContent(String filename, byte[] content) {
+	public Upload(String filename, byte[] content) {
 		this.filename = filename;
 		this.content = content;
 	}
@@ -44,8 +44,8 @@ public class FileContent {
 		return content;
 	}
 
-	public static FileContent from(String filename) {
-		return new FileContent(filename, IO.loadBytes(filename));
+	public static Upload from(String filename) {
+		return new Upload(filename, IO.loadBytes(filename));
 	}
 
 }

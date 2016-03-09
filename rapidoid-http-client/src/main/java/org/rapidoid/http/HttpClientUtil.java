@@ -43,7 +43,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Str;
 import org.rapidoid.concurrent.*;
-import org.rapidoid.io.FileContent;
+import org.rapidoid.io.Upload;
 import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -126,7 +126,7 @@ public class HttpClientUtil {
 
 		Map<String, String> headers = U.safe(config.headers());
 		Map<String, Object> data = U.safe(config.data());
-		Map<String, List<FileContent>> files = U.safe(config.files());
+		Map<String, List<Upload>> files = U.safe(config.files());
 
 		String url = config.url();
 
@@ -193,8 +193,8 @@ public class HttpClientUtil {
 
 				MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 
-				for (Map.Entry<String, List<FileContent>> entry : files.entrySet()) {
-					for (FileContent file : entry.getValue()) {
+				for (Map.Entry<String, List<Upload>> entry : files.entrySet()) {
+					for (Upload file : entry.getValue()) {
 						builder = builder.addBinaryBody(entry.getKey(), file.content(), ContentType.DEFAULT_BINARY, file.filename());
 					}
 				}

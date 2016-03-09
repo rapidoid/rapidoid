@@ -22,7 +22,7 @@ package org.rapidoid.gui.reqinfo;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.io.FileContent;
+import org.rapidoid.io.Upload;
 
 import java.util.Collections;
 import java.util.List;
@@ -83,7 +83,7 @@ public class NoReqInfo extends AbstractReqInfo {
 	}
 
 	@Override
-	public Map<String, List<FileContent>> files() {
+	public Map<String, List<Upload>> files() {
 		return EMPTY;
 	}
 

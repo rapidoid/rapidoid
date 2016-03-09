@@ -23,7 +23,7 @@ package org.rapidoid.http;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.RapidoidInitializer;
-import org.rapidoid.io.FileContent;
+import org.rapidoid.io.Upload;
 
 import java.util.List;
 import java.util.Map;
@@ -98,7 +98,7 @@ public class HTTP {
 		return new HttpClient().data(data);
 	}
 
-	public static HttpClient files(Map<String, List<FileContent>> files) {
+	public static HttpClient files(Map<String, List<Upload>> files) {
 		return new HttpClient().files(files);
 	}
 
