@@ -28,6 +28,7 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.http.Screen;
 import org.rapidoid.http.customize.Customization;
+import org.rapidoid.io.Upload;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
@@ -76,6 +77,12 @@ public class ParamRetrievers {
 
 		} else if (type.equals(byte[][].class)) {
 			return new ByteArraysParamRetriever(type, name);
+
+		} else if (type.equals(Upload.class)) {
+			return new UploadParamRetriever(type, name);
+
+		} else if (type.equals(Upload[].class)) {
+			return new UploadsParamRetriever(type, name);
 
 		} else if (type.equals(Object.class)) {
 			throw U.rte("The 'Object' parameter type is too generic and not supported. Please use more specific parameter type!");
