@@ -932,10 +932,12 @@ public abstract class BootstrapWidgets extends HTML {
 
 		NavigableMap<Long, Double> values = ts.values();
 
-		for (Map.Entry<Long, Double> e : values.entrySet()) {
-			Date date = new Date(e.getKey());
-			Map<String, ?> point = U.map("date", Dates.iso(date), "values", e.getValue());
-			points.add(point);
+		synchronized (values) {
+			for (Map.Entry<Long, Double> e : values.entrySet()) {
+				Date date = new Date(e.getKey());
+				Map<String, ?> point = U.map("date", Dates.iso(date), "values", e.getValue());
+				points.add(point);
+			}
 		}
 
 		Map<String, ?> model = U.map("points", points, "names", U.list(title), "title", title, "id", ID_GEN.incrementAndGet());
