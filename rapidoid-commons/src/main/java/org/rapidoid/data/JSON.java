@@ -2,6 +2,8 @@ package org.rapidoid.data;
 
 import com.fasterxml.jackson.core.Base64Variants;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -53,6 +55,12 @@ public class JSON {
 		mapper.setBase64Variant(Base64Variants.MODIFIED_FOR_URL);
 		mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
 		mapper.registerModule(new AfterburnerModule());
+
+		DefaultPrettyPrinter pp = new DefaultPrettyPrinter();
+		pp = pp.withObjectIndenter(new DefaultIndenter("  ", "\n"));
+
+		mapper.setDefaultPrettyPrinter(pp);
+
 		return mapper;
 	}
 
