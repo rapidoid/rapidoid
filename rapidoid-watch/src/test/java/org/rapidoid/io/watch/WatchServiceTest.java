@@ -28,6 +28,7 @@ import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,7 +68,7 @@ public class WatchServiceTest extends TestCommons {
 
 		// CREATE FILE a.tmp
 
-		String fileA = tmpPath + "/a.tmp";
+		String fileA = UTILS.path(tmpPath, "a.tmp");
 		IO.save(fileA, "aa");
 
 		giveItTimeToRefresh();
@@ -78,7 +79,7 @@ public class WatchServiceTest extends TestCommons {
 
 		// CREATE FILE b.tmp
 
-		String fileB = tmpPath + "/b.tmp";
+		String fileB = UTILS.path(tmpPath, "b.tmp");
 		IO.save(fileB, "bb");
 
 		giveItTimeToRefresh();
@@ -89,7 +90,7 @@ public class WatchServiceTest extends TestCommons {
 
 		// CREATE FOLDER ccc
 
-		String dirC = tmpPath + "/ccc";
+		String dirC = UTILS.path(tmpPath, "ccc");
 		isTrue(new File(dirC).mkdir());
 
 		giveItTimeToRefresh();
@@ -117,7 +118,7 @@ public class WatchServiceTest extends TestCommons {
 
 		// CREATE FILE ccc/x.tmp
 
-		String fileX = tmpPath + "/ccc/x.tmp";
+		String fileX = UTILS.path(tmpPath, "ccc", "x.tmp");
 		IO.save(fileX, "x");
 
 		giveItTimeToRefresh();
