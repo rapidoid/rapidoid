@@ -69,6 +69,8 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 			return HttpStatus.DONE;
 		}
 
+		U.notNull(txMode, "transactionMode");
+
 		try {
 			ctx.async();
 			execHandlerJob(ctx, isKeepAlive, req, extra, txMode, username, roles);
@@ -102,7 +104,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 
 		req.response().view(options.view).contentType(options.contentType).mvc(options.mvc);
 
-		TransactionMode txMode = options.transactionMode; // null means no TX
+		TransactionMode txMode = U.or(options.transactionMode, TransactionMode.NONE);
 
 		if (txMode == TransactionMode.AUTO) {
 			txMode = HttpUtils.isGetReq(req) ? TransactionMode.READ_ONLY : TransactionMode.READ_WRITE;
@@ -161,7 +163,7 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 	}
 
 	private Runnable txWrap(final TransactionMode txMode, final Runnable handleRequest) {
-		if (txMode != null) {
+		if (txMode != null && txMode != TransactionMode.NONE) {
 
 			return new Runnable() {
 				@Override

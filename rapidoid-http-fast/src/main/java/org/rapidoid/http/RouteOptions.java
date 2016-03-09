@@ -40,7 +40,7 @@ public class RouteOptions implements RouteConfig {
 
 	public volatile boolean mvc;
 
-	public volatile TransactionMode transactionMode;
+	public volatile TransactionMode transactionMode = TransactionMode.NONE;
 
 	public final Set<String> roles = Coll.synchronizedSet();
 
