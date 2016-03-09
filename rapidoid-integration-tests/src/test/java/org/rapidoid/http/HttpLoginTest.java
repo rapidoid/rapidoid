@@ -52,7 +52,7 @@ public class HttpLoginTest extends HttpTestCommons {
 			return U.list(Current.username(), Current.roles());
 		});
 
-		multiThreaded(200, 1000, this::randomUserLogin);
+		multiThreaded(50, 200, this::randomUserLogin);
 	}
 
 	private void randomUserLogin() {
@@ -75,6 +75,7 @@ public class HttpLoginTest extends HttpTestCommons {
 	}
 
 	private void loginFlow(String user, String pass, List<String> expectedRoles) {
+		HttpClient anonymous = HTTP.reuseConnections(true).dontClose();
 		HttpClient client = HTTP.keepCookies(true).reuseConnections(true).dontClose();
 
 		List<Object> notLoggedIn = U.list(false, null, U.list());
@@ -91,23 +92,23 @@ public class HttpLoginTest extends HttpTestCommons {
 
 		eq(client.post(localhost(U.frmt("/mylogin?user=%s&pass=%s", user, pass))).parse(), loggedIn);
 
-		verifyAnonymousAccessDenied();
+		verifyAccessDenied(anonymous);
 		verifyAccessGranted(user, client);
 
 		eq(client.get(localhost("/user")).parse(), U.list(user, expectedRoles));
 
-		verifyAnonymousAccessDenied();
+		verifyAccessDenied(anonymous);
 		verifyAccessGranted(user, client);
 
 		eq(client.post(localhost("/mylogin?user=a3&pass=b")).parse(), U.list(false, user, expectedRoles));
 
-		verifyAnonymousAccessDenied();
+		verifyAccessDenied(anonymous);
 		verifyAccessGranted(user, client);
 
 		eq(client.get(localhost("/user")).parse(), U.list(user, expectedRoles));
 		eq(client.post(localhost("/mylogout")).parse(), U.list(null, U.list()));
 
-		verifyAnonymousAccessDenied();
+		verifyAccessDenied(anonymous);
 		verifyLoggedOut(client);
 
 		eq(client.get(localhost("/user")).parse(), U.list(null, U.list()));
@@ -116,10 +117,7 @@ public class HttpLoginTest extends HttpTestCommons {
 		verifyLoggedOut(client);
 
 		client.close();
-	}
-
-	private void verifyAnonymousAccessDenied() {
-		onlyGet("/profile");
+		anonymous.close();
 	}
 
 	private void verifyAccessGranted(String user, HttpClient client) {
