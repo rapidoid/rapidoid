@@ -15,18 +15,28 @@ dev:
   search: false
   cdn: auto
   menu:
-    Home: /
+    Routes: /
     Config: /config
 
 admin:
   port: 9999
   address: 0.0.0.0
-  brand: '<i class="fa fa-edit"></i> Admin Center'
+  brand: '<i class="fa fa-dashboard"></i> Admin Center'
   title: 'Admin Center'
   search: false
   cdn: auto
   menu:
-    Home: /
+    Overview: /
+    Routes: /routes
+    JMX:
+      Memory pool: /jmx/mempool
+      Threads: /jmx/threads
+      OS: /jmx/os
+      Garbage collection: /jmx/gc
+      Memory: /jmx/memory
+      Runtime: /jmx/runtime
+      Classes: /jmx/classes
+      Compilation: /jmx/compilation
 
 jdbc:
   driver: org.hsqldb.jdbc.JDBCDriver

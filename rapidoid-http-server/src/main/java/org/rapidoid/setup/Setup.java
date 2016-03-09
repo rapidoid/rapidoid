@@ -109,6 +109,7 @@ public class Setup implements Constants {
 	private volatile boolean listening;
 	private volatile Server server;
 	private volatile boolean activated;
+	private volatile boolean withGoodies = true;
 
 	public static Setup create(String name) {
 		IoCContext ioc = IoC.createContext().name(name);
@@ -152,6 +153,8 @@ public class Setup implements Constants {
 
 	public synchronized Server listen() {
 		if (!listening && !restarted) {
+
+			Cls.getClassIfExists("org.rapidoid.goodies.RapidoidGoodiesModule");
 
 			inferCallers();
 
@@ -315,6 +318,7 @@ public class Setup implements Constants {
 		processor = null;
 		activated = false;
 		ioCContext.reset();
+		withGoodies = true;
 	}
 
 	public Server server() {
@@ -460,6 +464,15 @@ public class Setup implements Constants {
 
 	private RouteOptions opts() {
 		return new RouteOptions().wrap(wrappers);
+	}
+
+	public boolean withGoodies() {
+		return withGoodies;
+	}
+
+	public Setup withGoodies(boolean withGoodies) {
+		this.withGoodies = withGoodies;
+		return this;
 	}
 
 }
