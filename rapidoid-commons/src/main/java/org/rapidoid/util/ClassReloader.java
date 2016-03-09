@@ -105,7 +105,7 @@ public class ClassReloader extends ClassLoader {
 	public Class<?> loadClass(String classname) throws ClassNotFoundException {
 		Log.debug("Loading class", "name", classname);
 
-		if (names.contains(classname) || (!classname.startsWith("org.rapidoid.") && !Cls.isJREClass(classname)
+		if (names.contains(classname) || (!Cls.isRapidoidClass(classname) && !Cls.isJREClass(classname)
 				&& findOnClasspath(classname) != null)) {
 
 			try {

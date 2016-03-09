@@ -6,6 +6,7 @@ import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.commons.*;
+import org.rapidoid.io.IO;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
@@ -50,6 +51,8 @@ public class Cls {
 	private static final Map<Class<?>, Class<?>> PRIMITIVE_WRAPPERS = U.map(boolean.class, Boolean.class, byte.class,
 			Byte.class, char.class, Character.class, double.class, Double.class, float.class, Float.class, int.class,
 			Integer.class, long.class, Long.class, short.class, Short.class, void.class, Void.class);
+
+	private static Set<String> RAPIDOID_CLASSES = U.set(IO.loadLines("rapidoid-classes.txt"));
 
 	private static final Object[] EMPTY_ARRAY = {};
 
@@ -701,6 +704,14 @@ public class Cls {
 
 	public static boolean isJREClass(String canonicalClassName) {
 		return JRE_CLASS_PATTERN.matcher(canonicalClassName).matches();
+	}
+
+	public static boolean isRapidoidClass(String canonicalClassName) {
+		return RAPIDOID_CLASSES.contains(canonicalClassName);
+	}
+
+	public static boolean isRapidoidClass(Class<?> clazz) {
+		return isRapidoidClass(clazz.getName());
 	}
 
 	public static boolean isJREType(Class<?> type) {
