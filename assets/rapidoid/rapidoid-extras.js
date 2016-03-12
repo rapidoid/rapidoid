@@ -1,3 +1,7 @@
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+})
+
 /* Rapidoid Extras */
 Rapidoid = (function() {
 

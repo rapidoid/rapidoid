@@ -217,12 +217,7 @@ public class Field extends AbstractWidget {
 
 	protected Tag readonly(Object item) {
 		Object display = display(item);
-
-		if (display instanceof Tag) {
-			return (Tag) display;
-		} else {
-			return span(display).class_("display-wrap");
-		}
+		return div(display).class_("display-wrap");
 	}
 
 	protected Object checkboxesInput(String name, Collection<?> options, Var<?> var) {

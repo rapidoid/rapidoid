@@ -736,6 +736,8 @@ public abstract class BootstrapWidgets extends HTML {
 
 	@SuppressWarnings("unchecked")
 	public static Object display(Object item) {
+		if (item == null) return N_A;
+
 		if (item instanceof Var<?>) {
 			Var<?> var = (Var<?>) item;
 			return display(var.get());

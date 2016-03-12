@@ -46,6 +46,17 @@
     {{/visible}}
     {{/menu.leftItems}}
 
+    {{?username}}
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+            <a><i class="fa fa-user"></i> ${username}</a>
+        </li>
+        <li class="dropdown">
+            <a href="/_logout" data-toggle="tooltip" data-placement="right" title="Logout"><i class="fa fa-sign-out"></i></a>
+        </li>
+    </ul>
+    {{/username}}
+
     {{#menu.rightItemsReversed}}
     {{#visible}}
     <ul class="nav navbar-nav navbar-right">

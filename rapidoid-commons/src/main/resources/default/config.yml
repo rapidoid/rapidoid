@@ -17,8 +17,6 @@ dev:
   menu:
     Routes: /
     Config: /config
-    '{{?username}}<i class="fa fa-user"></i> <b>${username}</b>{{/username}}(right)':
-      logged-in?Logout: /_logout
 
 admin:
   port: 9999
@@ -39,8 +37,11 @@ admin:
       Runtime: /jmx/runtime
       Classes: /jmx/classes
       Compilation: /jmx/compilation
-    '{{?username}}<i class="fa fa-user"></i> <b>${username}</b>{{/username}}(right)':
-      logged-in?Logout: /_logout
+
+access:
+  grant:
+    administrator: /.*
+
 
 jdbc:
   driver: org.hsqldb.jdbc.JDBCDriver

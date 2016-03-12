@@ -70,7 +70,7 @@ public class RenderCtxImpl implements RenderCtx {
 			return (Object[]) val;
 
 		} else {
-			return val != null && val != Boolean.FALSE ? U.array(val) : U.array();
+			return val != null && !Boolean.FALSE.equals(val) ? U.array(val) : U.array();
 		}
 	}
 
@@ -98,12 +98,12 @@ public class RenderCtxImpl implements RenderCtx {
 
 	@Override
 	public void push(int index, Object v) {
-		if (v != Boolean.TRUE) model.add(v);
+		if (!Boolean.TRUE.equals(v)) model.add(v);
 	}
 
 	@Override
 	public void pop(int index, Object v) {
-		if (v != Boolean.TRUE) {
+		if (!Boolean.TRUE.equals(v)) {
 			Object del = model.remove(model.size() - 1);
 			U.must(del == v);
 		}
@@ -119,7 +119,7 @@ public class RenderCtxImpl implements RenderCtx {
 		Object val = get(name);
 
 		return val != null
-				&& val != Boolean.FALSE
+				&& !Boolean.FALSE.equals(val)
 				&& (!Coll.isCollection(val) || !U.isEmpty((Collection<?>) val))
 				&& (!Coll.isMap(val) || !U.isEmpty((Map<?, ?>) val));
 	}
@@ -149,6 +149,7 @@ public class RenderCtxImpl implements RenderCtx {
 			}
 
 		} else {
+
 			Prop prop = Beany.property(model, name, false);
 
 			if (prop != null) {

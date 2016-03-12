@@ -297,8 +297,9 @@ i.btn-close:hover {
 	padding-right: 2px;
 	border-width: 1px;
 	border-radius: 3px;
-	border-style: dotted;
-	border-color: #CCC;
+	border-style: solid;
+	border-color: #DDD;
+	background-color: rgba(230, 230, 235, 0.3);
 }
 
 /***** Multi-line value display  *****/

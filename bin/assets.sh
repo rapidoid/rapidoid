@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-DISTRO=rapidoid-html/src/main/resources/rapidoid/static
+DISTRO=rapidoid-html/src/main/resources/default/static
 DISTRO_JS=$DISTRO/rapidoid.min.js
 DISTRO_CSS=$DISTRO/rapidoid.min.css
 
@@ -31,7 +31,7 @@ ls -l $DISTRO_CSS
 DOCS=../rapidoid.github.io/
 cp $DISTRO_JS $DOCS/rapidoid.min.js
 cp $DISTRO_CSS $DOCS/rapidoid.min.css
-cp rapidoid-html/src/main/resources/rapidoid/static/bootstrap/css/theme-default.css $DOCS/theme-default.css
+cp rapidoid-html/src/main/resources/default/static/bootstrap/css/theme-default.css $DOCS/theme-default.css
 
 echo
 echo

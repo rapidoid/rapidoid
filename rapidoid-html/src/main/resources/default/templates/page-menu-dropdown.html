@@ -3,15 +3,14 @@
     {{#submenu}}
     <ul role="menu" class="dropdown-menu">
         {{#items}}
-        {{#visible}}
-        {{#javascript}}
-        <li><a onclick="${javascript}" href="javascript:void(0);">{{#icon}}<span class="${icon}"></span>&nbsp;
-            {{/icon}}@{caption}</a></li>
+        {{?visible}}
+        {{?javascript}}
+        <li><a onclick="${javascript}" href="javascript:void(0);">{{?icon}}<i class="${icon}"></i>&nbsp; {{/icon}}@{caption}</a></li>
         {{/javascript}}
-        {{#target}}
+        {{?target}}
         <li><a href="${target}">{{#icon}}<span class="${icon}"></span>&nbsp; {{/icon}}@{caption}</a></li>
         {{/target}}
-        {{#divider}}
+        {{?divider}}
         <li class="divider"></li>
         {{/divider}}
         {{/visible}}
