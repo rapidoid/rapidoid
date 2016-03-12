@@ -349,30 +349,36 @@ public class RespImpl implements Resp, Screen {
 	}
 
 	private byte[] render() {
+		if (content != null) {
+			model().put("content", content);
+		}
+
 		ViewRenderer viewRenderer = req.http().custom().viewRenderer();
 		U.must(viewRenderer != null, "A view renderer wasn't configured!");
 
 		PageRenderer pageRenderer = req.http().custom().pageRenderer();
 		U.must(pageRenderer != null, "A page renderer wasn't configured!");
 
+		boolean rendered;
+		String viewName = view();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		boolean rendered = false;
+		Object[] renderModel = content != null ? new Object[]{model, content} : new Object[]{model};
 
 		try {
-			rendered = viewRenderer.render(req, this, out);
+			rendered = viewRenderer.render(viewName, renderModel, out);
 		} catch (Throwable e) {
-			throw U.rte("Error while rendering view: " + view(), e);
+			throw U.rte("Error while rendering view: " + viewName, e);
 		}
 
-		String content = rendered ? new String(out.toByteArray()) : null;
+		String renderResult = rendered ? new String(out.toByteArray()) : null;
 
-		if (content == null) {
+		if (renderResult == null) {
 			Object cnt = U.or(content(), "");
-			content = new String(HttpUtils.responseToBytes(cnt, MediaType.HTML_UTF_8, null));
+			renderResult = new String(HttpUtils.responseToBytes(cnt, MediaType.HTML_UTF_8, null));
 		}
 
 		try {
-			Object result = U.or(pageRenderer.renderPage(req, this, content), "");
+			Object result = U.or(pageRenderer.renderPage(req, this, renderResult), "");
 			return HttpUtils.responseToBytes(result, MediaType.HTML_UTF_8, null);
 
 		} catch (Exception e) {

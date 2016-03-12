@@ -23,19 +23,22 @@ package org.rapidoid.test;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.HttpTestCommons;
 import org.rapidoid.integrate.Integrate;
-import org.rapidoid.integrate.MustacheViewRenderer;
+import org.rapidoid.setup.On;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class MustacheViewRendererTest extends TestCommons {
+public class MustacheViewRendererTest extends HttpTestCommons {
 
 	@Test
 	public void testTemplateLoading() {
-		MustacheViewRenderer renderer = Integrate.mustacheViewRenderer();
-		// FIXME
-//		Template templ = Templates.fromFile("templ1.html");
-//		eq(templ.render(U.map("x", "123")), "A:123:B:OK:C");
+		On.custom().viewRenderer(Integrate.mustacheViewRenderer());
+
+		On.get("/").view("mtmpl").render(() -> U.map("x", "foo", "y", "bar"));
+
+		onlyGet("/");
 	}
 
 }

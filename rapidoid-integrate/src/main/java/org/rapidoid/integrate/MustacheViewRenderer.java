@@ -25,8 +25,6 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.Resp;
 import org.rapidoid.http.customize.ViewRenderer;
 import org.rapidoid.io.Res;
 import org.rapidoid.render.Templates;
@@ -41,15 +39,15 @@ public class MustacheViewRenderer implements ViewRenderer {
 	private final MustacheFactory mf = new DefaultMustacheFactory();
 
 	@Override
-	public boolean render(Req req, Resp resp, OutputStream out) throws Exception {
-		Res template = Templates.resource(resp.view() + ".html");
+	public boolean render(String viewName, Object[] model, OutputStream out) throws Exception {
+		Res template = Templates.resource(viewName + ".html");
 
 		if (!template.exists()) {
 			return false;
 		}
 
 		Mustache mustache = mf.compile(template.getFileName());
-		mustache.execute(new PrintWriter(out), resp.model()).flush();
+		mustache.execute(new PrintWriter(out), model).flush();
 
 		return true;
 	}
