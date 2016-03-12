@@ -636,6 +636,10 @@ public class UTILS implements Constants {
 		return s;
 	}
 
+	public static String refinePath(String path) {
+		return path(path.split("/"));
+	}
+
 	public static int countNonNull(Object... values) {
 		int n = 0;
 

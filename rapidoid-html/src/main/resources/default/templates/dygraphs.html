@@ -1,0 +1,14 @@
+<div id="dygraph-${id}" class="rapidoid-dygraph"></div>
+
+<script>
+ new Dygraph(document.getElementById("dygraph-${id}"),
+              [
+{{#points}}
+                [new Date("${date}"), ${values}],
+{{/points}}
+              ],
+              {
+                title: '${title}',
+                labels: [ "Date"{{#names}}, "${.}"{{/names}} ]
+              });
+</script>

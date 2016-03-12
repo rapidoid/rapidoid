@@ -28,6 +28,7 @@ import org.rapidoid.commons.MediaType;
 import org.rapidoid.data.JSON;
 import org.rapidoid.data.Range;
 import org.rapidoid.http.customize.ErrorHandler;
+import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.util.Constants;
@@ -173,7 +174,7 @@ public class HttpIO {
 
 	public static void write404(Channel ctx, boolean isKeepAlive) {
 		startResponse(ctx, 404, isKeepAlive, MediaType.HTML_UTF_8);
-		writeContentLengthAndBody(ctx, HttpUtils.page("404").getBytes());
+		writeContentLengthAndBody(ctx, Res.from("404.html", "pages", "default/pages").getBytes());
 	}
 
 }

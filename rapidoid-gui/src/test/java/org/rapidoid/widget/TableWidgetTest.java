@@ -23,10 +23,11 @@ package org.rapidoid.widget;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.Grid;
-import org.rapidoid.gui.base.BootstrapWidgets;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -42,17 +43,10 @@ public class TableWidgetTest extends WidgetTestCommons {
 
 		Items items = Models.beanItemsInfer(john, rambo);
 
-		Grid table = BootstrapWidgets.grid(items, null, 10);
-		print(table);
+		Grid table = GUI.grid(items, null, 10);
+		verifyGUI("persons-grid", table);
 
-		hasRegex(table, "<th[^>]*?>Name</th>");
-		hasRegex(table, "<th[^>]*?>Age</th>");
-
-		hasRegex(table, "<td[^>]*?>John</td>");
-		hasRegex(table, "<td[^>]*?>20</td>");
-
-		hasRegex(table, "<td[^>]*?>Rambo</td>");
-		hasRegex(table, "<td[^>]*?>50</td>");
+		verifyGUI("map-grid", GUI.grid(U.map("name", "Foo", "year", "2016")));
 	}
 
 }

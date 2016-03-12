@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.data.YAML;
 import org.rapidoid.io.Res;
-import org.rapidoid.templates.Templates;
+import org.rapidoid.render.Templates;
 import org.rapidoid.u.U;
 
 import java.util.Collections;
@@ -94,7 +94,7 @@ public class PageMenu {
 	public void renderContentTemplates(Map<String, Object> model) {
 		for (PageMenuItem item : items) {
 
-			if (item.getCaption().contains("{{")) {
+			if (item.getCaption().contains("{")) {
 				item.setCaption(Templates.fromString(item.getCaption()).render(model));
 			}
 

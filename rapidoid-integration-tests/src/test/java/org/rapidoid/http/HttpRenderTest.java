@@ -25,7 +25,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.setup.On;
-import org.rapidoid.web.MustacheViewRenderer;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")
@@ -33,11 +32,6 @@ public class HttpRenderTest extends HttpTestCommons {
 
 	@Test
 	public void testRender() {
-
-		On.custom().viewRenderer((req, resp, out) -> resp.content("this will be overwritten"));
-
-		On.custom().viewRenderer(new MustacheViewRenderer(On.custom()));
-
 		On.get("/view1").html((Req req, Resp resp) -> {
 			return resp.mvc(true);
 		});

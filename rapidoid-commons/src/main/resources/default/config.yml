@@ -5,9 +5,7 @@ app:
   title: 'App'
   search: false
   cdn: auto
-  menu:
-    '{{#username}}<i class="fa fa-user"></i> <b>{{username}}</b>{{/username}}(right)':
-      Logout: /_logout
+  menu: {}
 
 dev:
   port: 7777
@@ -19,7 +17,7 @@ dev:
   menu:
     Routes: /
     Config: /config
-    '<i class="fa fa-user"></i> <b>{{username}}</b>(right)':
+    '{{?username}}<i class="fa fa-user"></i> <b>${username}</b>{{/username}}(right)':
       logged-in?Logout: /_logout
 
 admin:
@@ -41,7 +39,7 @@ admin:
       Runtime: /jmx/runtime
       Classes: /jmx/classes
       Compilation: /jmx/compilation
-    '<i class="fa fa-user"></i> <b>{{username}}</b>(right)':
+    '{{?username}}<i class="fa fa-user"></i> <b>${username}</b>{{/username}}(right)':
       logged-in?Logout: /_logout
 
 jdbc:

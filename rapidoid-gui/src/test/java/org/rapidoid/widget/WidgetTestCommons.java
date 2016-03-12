@@ -24,6 +24,8 @@ import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.reqinfo.MockReqInfo;
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagWidget;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.var.Var;
 
@@ -62,6 +64,14 @@ public class WidgetTestCommons extends TestCommons {
 
 	protected void eq(Var<?> var, Object value) {
 		eq(var.get(), value);
+	}
+
+	protected void verifyGUI(String name, TagWidget widget) {
+		verify(name, widget.toString());
+	}
+
+	protected void verifyGUI(String name, Tag tag) {
+		verify(name, tag.toString());
 	}
 
 }

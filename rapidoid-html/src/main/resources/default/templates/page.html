@@ -1,0 +1,42 @@
+{{^embedded}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>${title}</title>
+
+{{#full}}
+{{>page-full}}
+{{/full}}
+
+{{#maps}}
+<script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+{{/maps}}
+
+{{^cdn}}
+<link href="/bootstrap/css/bootstrap-3.3.5.min.css" rel="stylesheet">
+<link href="/font-awesome/css/font-awesome-4.4.0.min.css" rel="stylesheet">
+<link href="/rapidoid.min.css" rel="stylesheet">
+{{/cdn}}
+{{#cdn}}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="//cdn.jsdelivr.net/rapidoid/${version}/rapidoid.min.css" rel="stylesheet">
+{{/cdn}}
+
+<link href="/app.css" rel="stylesheet">
+{{#_css}}<link href="/${req.name}.css" rel="stylesheet">{{/_css}}
+<link href="/img/favicon.png" rel="shortcut icon">
+<link href="/bootstrap/css/theme-default.css" type="text/css" rel="stylesheet" />
+
+{{>page-head}}
+</head>
+
+{{>page-body}}
+
+</html>
+{{/embedded}}{{#embedded}}{{>page-embedded}}{{/embedded}}

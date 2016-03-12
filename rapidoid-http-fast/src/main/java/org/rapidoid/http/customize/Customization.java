@@ -29,7 +29,7 @@ import org.rapidoid.config.Config;
 @Since("5.1.0")
 public class Customization {
 
-	public static final String[] DEFAULT_STATIC_FILES_LOCATIONS = {"static", "rapidoid/static"};
+	public static final String[] DEFAULT_STATIC_FILES_LOCATIONS = {"static", "public", "default/static", "default/public"};
 
 	private static final String MUSTACHE_RENDERER = "org.rapidoid.web.MustacheViewRenderer";
 
@@ -64,7 +64,7 @@ public class Customization {
 	public void reset() {
 		staticFilesPath = DEFAULT_STATIC_FILES_LOCATIONS;
 		errorHandler = new DefaultErrorHandler();
-		viewRenderer = optionalViewRenderer();
+		viewRenderer = new DefaultViewRenderer();
 		pageRenderer = optionalPageRenderer();
 		jsonResponseRenderer = new DefaultJsonResponseRenderer();
 		beanParameterFactory = new DefaultBeanParameterFactory();

@@ -38,6 +38,28 @@ public class Str {
 	private static final Pattern CAMEL_SPLITTER_PATTERN = Pattern
 			.compile("(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
 
+	private static final String[][] XML_ESCAPE = {
+			{"&", "&amp;"},
+			{"\"", "&quot;"},
+			{"<", "&lt;"},
+			{">", "&gt;"},
+	};
+
+	private static final String[][] HTML_ESCAPE = {
+			{"&", "&amp;"},
+			{"\"", "&quot;"},
+			{"'", "&#39;"},
+			{"<", "&lt;"},
+			{">", "&gt;"},
+	};
+
+	private static final String[][] JAVA_ESCAPE = {
+			{"\n", "\\\\n"},
+			{"\r", "\\\\r"},
+			{"\t", "\\\\t"},
+			{"\"", "\\\\\""},
+	};
+
 	private Str() {
 	}
 
@@ -163,22 +185,34 @@ public class Str {
 
 	public static String cutToFirst(String s, String delimiter) {
 		int pos = s.indexOf(delimiter);
-		return pos >= 0 ? s.substring(0, pos) : s;
+		return pos >= 0 ? s.substring(0, pos) : null;
 	}
 
 	public static String cutToLast(String s, String delimiter) {
 		int pos = s.lastIndexOf(delimiter);
-		return pos >= 0 ? s.substring(0, pos) : s;
+		return pos >= 0 ? s.substring(0, pos) : null;
 	}
 
 	public static String cutFromFirst(String s, String delimiter) {
 		int pos = s.indexOf(delimiter);
-		return pos >= 0 ? s.substring(pos + delimiter.length()) : s;
+		return pos >= 0 ? s.substring(pos + delimiter.length()) : null;
 	}
 
 	public static String cutFromLast(String s, String delimiter) {
 		int pos = s.lastIndexOf(delimiter);
-		return pos >= 0 ? s.substring(pos + delimiter.length()) : s;
+		return pos >= 0 ? s.substring(pos + delimiter.length()) : null;
+	}
+
+	public static String xmlEscape(String s) {
+		return Str.replace(s, XML_ESCAPE);
+	}
+
+	public static String htmlEscape(String s) {
+		return Str.replace(s, HTML_ESCAPE);
+	}
+
+	public static String javaEscape(String s) {
+		return Str.replace(s, JAVA_ESCAPE);
 	}
 
 }

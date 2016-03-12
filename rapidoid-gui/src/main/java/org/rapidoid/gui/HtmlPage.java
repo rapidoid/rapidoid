@@ -29,8 +29,8 @@ import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.html.Tag;
-import org.rapidoid.templates.ITemplate;
-import org.rapidoid.templates.Templates;
+import org.rapidoid.render.Template;
+import org.rapidoid.render.Templates;
 import org.rapidoid.u.U;
 
 import java.util.Map;
@@ -40,16 +40,16 @@ import java.util.Set;
 @Since("5.0.0")
 public class HtmlPage extends AbstractWidget {
 
-	private static volatile ITemplate PAGE_TEMPLATE;
+	private static volatile Template PAGE_TEMPLATE;
 
-	private static volatile ITemplate PAGE_CONTENT_TEMPLATE;
+	private static volatile Template PAGE_CONTENT_TEMPLATE;
 
-	private static ITemplate fullTemplate() {
+	private static Template fullTemplate() {
 		initTemplates();
 		return PAGE_TEMPLATE;
 	}
 
-	private static ITemplate ajaxTemplate() {
+	private static Template ajaxTemplate() {
 		initTemplates();
 		return PAGE_CONTENT_TEMPLATE;
 	}

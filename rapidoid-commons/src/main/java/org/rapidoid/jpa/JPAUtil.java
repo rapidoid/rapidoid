@@ -151,8 +151,10 @@ public class JPAUtil {
 
 	public <T> List<T> getAll(Class<T> clazz) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
+
 		CriteriaQuery<T> query = cb.createQuery(clazz);
 		CriteriaQuery<T> all = query.select(query.from(clazz));
+
 		return em.createQuery(all).getResultList();
 	}
 

@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 3789
+Content-Length: 3792
 
 <!DOCTYPE html>
 <html lang="en">
@@ -26,7 +26,7 @@ Content-Length: 3789
 <link href="/img/favicon.png" rel="shortcut icon">
 <link href="/bootstrap/css/theme-default.css" type="text/css" rel="stylesheet" />
 
-<!-- CREATE A RESOURCE FILE "partials/page-head.html" TO REPLACE THIS LINE -->
+<!-- CREATE A RESOURCE FILE "templates/page-head.html" TO REPLACE THIS LINE -->
 </head>
 
 <body class="rapidoid" ng-controller="Main" ng-app="app">
@@ -82,7 +82,7 @@ Content-Length: 3789
 
 
 
-    <!-- CREATE A RESOURCE FILE "partials/navbar-custom.html" TO REPLACE THIS LINE -->
+    <!-- CREATE A RESOURCE FILE "templates/navbar-custom.html" TO REPLACE THIS LINE -->
 
     
 
@@ -110,7 +110,7 @@ my-title:12345
 <script src="/app.js"></script>
 
 
-<!-- CREATE A RESOURCE FILE "partials/page-tail.html" TO REPLACE THIS LINE -->
+<!-- CREATE A RESOURCE FILE "templates/page-tail.html" TO REPLACE THIS LINE -->
 
 </body>
 

@@ -1,0 +1,61 @@
+<div id="collapsable" class="collapse navbar-collapse">
+
+    {{#dev}}
+    <ul class="nav navbar-nav navbar-left">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i></a>
+            <ul role="menu" class="dropdown-menu">
+                <li><a onclick="swal({ title: 'Dev-mode menu!', text: 'This menu is visible only in DEV mode.', type: 'info'});" href="javascript:void(0);" style="color: #777;">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-info fa-stack-1x fa-inverse"></i>
+                    </span>
+                    &nbsp; Running in Dev mode!</a>
+                </li>
+                <li><a href="http://localhost:8888">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-home fa-stack-1x fa-inverse"></i>
+                    </span>
+                    &nbsp; Application Home</a>
+                </li>
+                <li><a href="http://localhost:7777">
+                    <span class="fa-stack fa-lg" style="color: #7a7;">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-code fa-stack-1x fa-inverse"></i>
+                    </span>
+                    &nbsp; Dev Center</a>
+                </li>
+                <li><a href="http://localhost:9999">
+                    <span class="fa-stack fa-lg" style="color: #a77;">
+                        <i class="fa fa-circle fa-stack-2x"></i>
+                        <i class="fa fa-dashboard fa-stack-1x fa-inverse"></i>
+                    </span>
+                    &nbsp; Admin Center</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    {{/dev}}
+
+    {{#menu.leftItems}}
+    {{#visible}}
+    <ul class="nav navbar-nav navbar-left">
+{{>page-menu-dropdown}}
+    </ul>
+    {{/visible}}
+    {{/menu.leftItems}}
+
+    {{#menu.rightItemsReversed}}
+    {{#visible}}
+    <ul class="nav navbar-nav navbar-right">
+{{>page-menu-dropdown}}
+    </ul>
+    {{/visible}}
+    {{/menu.rightItemsReversed}}
+
+    {{>navbar-custom}}
+
+    {{#search}}{{>page-search}}{{/search}}
+
+</div>

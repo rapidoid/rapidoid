@@ -31,6 +31,6 @@ import java.io.OutputStream;
 @Since("5.0.11")
 public interface ViewRenderer {
 
-	void render(Req req, Resp resp, OutputStream out) throws Exception;
+	boolean render(Req req, Resp resp, OutputStream out) throws Exception;
 
 }

@@ -350,24 +350,23 @@ public class RespImpl implements Resp, Screen {
 
 	private byte[] render() {
 		ViewRenderer viewRenderer = req.http().custom().viewRenderer();
-//		U.must(viewRenderer != null, "A view renderer wasn't configured!");
+		U.must(viewRenderer != null, "A view renderer wasn't configured!");
 
 		PageRenderer pageRenderer = req.http().custom().pageRenderer();
 		U.must(pageRenderer != null, "A page renderer wasn't configured!");
 
-		String content;
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		boolean rendered = false;
 
-		if (viewRenderer != null && HttpUtils.page(view()).exists()) {
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			rendered = viewRenderer.render(req, this, out);
+		} catch (Throwable e) {
+			throw U.rte("Error while rendering view: " + view(), e);
+		}
 
-			try {
-				viewRenderer.render(req, this, out);
-			} catch (Throwable e) {
-				throw U.rte("Error while rendering view: " + view(), e);
-			}
+		String content = rendered ? new String(out.toByteArray()) : null;
 
-			content = new String(out.toByteArray());
-		} else {
+		if (content == null) {
 			Object cnt = U.or(content(), "");
 			content = new String(HttpUtils.responseToBytes(cnt, MediaType.HTML_UTF_8, null));
 		}

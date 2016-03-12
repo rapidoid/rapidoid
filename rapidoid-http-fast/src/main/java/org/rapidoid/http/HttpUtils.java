@@ -285,8 +285,4 @@ public class HttpUtils implements HttpMetadata {
 		}
 	}
 
-	public static Res page(String page) {
-		return Res.from(page + ".html", "pages", "default/pages");
-	}
-
 }

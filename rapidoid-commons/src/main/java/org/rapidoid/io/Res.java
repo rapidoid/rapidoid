@@ -102,6 +102,10 @@ public class Res {
 	}
 
 	private static Res create(String filename, String... possibleLocations) {
+		for (int i = 0; i < possibleLocations.length; i++) {
+			possibleLocations[i] = UTILS.refinePath(possibleLocations[i]);
+		}
+
 		ResKey key = new ResKey(filename, possibleLocations);
 
 		Res cachedFile = FILES.get(key);

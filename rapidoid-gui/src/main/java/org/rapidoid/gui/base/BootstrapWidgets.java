@@ -24,7 +24,7 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
-import org.rapidoid.templates.Templates;
+import org.rapidoid.render.Templates;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
@@ -761,7 +761,16 @@ public abstract class BootstrapWidgets extends HTML {
 			return widget.render(null);
 		}
 
-		return isEntity(item) ? a(item).href(urlFor(item)) : Cls.isBean(item) ? GUI.show(item) : Cls.str(item);
+		if (isEntity(item)) {
+			return a(escape(item.toString())).href(urlFor(item));
+		}
+
+		if (Cls.isBean(item)) return GUI.show(item);
+
+		String str = Cls.str(item);
+		Tag tag = hardcoded(escape(str));
+
+		return (str.contains("{") || str.contains("}")) ? span(tag).is("ng-non-bindable", true) : tag;
 	}
 
 	private static Object display(Iterator<?> it) {
@@ -769,7 +778,7 @@ public abstract class BootstrapWidgets extends HTML {
 		Tag wrap = div();
 
 		while (it.hasNext()) {
-			Object item = (Object) it.next();
+			Object item = it.next();
 			wrap = wrap.append(div(icon, " ", display(item)).class_("value-line"));
 		}
 

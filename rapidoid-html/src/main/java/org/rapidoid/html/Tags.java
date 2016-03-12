@@ -39,13 +39,6 @@ import java.util.Collection;
 @Since("2.0.0")
 public class Tags extends BasicUtils {
 
-	private static final String[][] XML_ESCAPE = {
-			{"&", "&amp;"},
-			{"\"", "&quot;"},
-			{"<", "&lt;"},
-			{">", "&gt;"},
-	};
-
 	public static <T> Var<T> var(String name, T value) {
 		return Vars.var(name, value);
 	}
@@ -59,7 +52,7 @@ public class Tags extends BasicUtils {
 	}
 
 	public static String escape(String s) {
-		return Str.replace(s, XML_ESCAPE);
+		return Str.xmlEscape(s);
 	}
 
 	public static void traverse(Object contents, TagProcessor<Tag> processor) {
