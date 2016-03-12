@@ -44,6 +44,16 @@
 			<version>2.3.2</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- INTEGRATIONS -->
+
+		<dependency>
+			<groupId>com.github.spullara.mustache.java</groupId>
+			<artifactId>compiler</artifactId>
+			<version>0.9.1</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
