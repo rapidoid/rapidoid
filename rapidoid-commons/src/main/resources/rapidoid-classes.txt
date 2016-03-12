@@ -245,6 +245,7 @@ org.rapidoid.http.customize.DefaultErrorHandler
 org.rapidoid.http.customize.DefaultJsonResponseRenderer
 org.rapidoid.http.customize.DefaultLoginProvider
 org.rapidoid.http.customize.DefaultRolesProvider
+org.rapidoid.http.customize.DefaultViewRenderer
 org.rapidoid.http.customize.ErrorHandler
 org.rapidoid.http.customize.JsonResponseRenderer
 org.rapidoid.http.customize.LoginProvider
@@ -339,6 +340,8 @@ org.rapidoid.insight.Measure
 org.rapidoid.insight.Metrics
 org.rapidoid.insight.PercentMeasure
 org.rapidoid.insight.StatsMeasure
+org.rapidoid.integrate.Integrate
+org.rapidoid.integrate.MustacheViewRenderer
 org.rapidoid.ioc.ClassMetadata
 org.rapidoid.ioc.IoC
 org.rapidoid.ioc.IoCContext
@@ -444,6 +447,18 @@ org.rapidoid.pool.Pools
 org.rapidoid.pool.SynchronizedArrayPool
 org.rapidoid.pool.SynchronizedPool
 org.rapidoid.pool.ThreadSafeArrayPool
+org.rapidoid.render.RapidoidTemplate
+org.rapidoid.render.Render
+org.rapidoid.render.RenderCtx
+org.rapidoid.render.RenderCtxImpl
+org.rapidoid.render.RenderDSL
+org.rapidoid.render.Template
+org.rapidoid.render.TemplateCompiler
+org.rapidoid.render.TemplateParser
+org.rapidoid.render.TemplateRenderer
+org.rapidoid.render.Templates
+org.rapidoid.render.TemplateToCode
+org.rapidoid.render.XNode
 org.rapidoid.scan.ClasspathUtil
 org.rapidoid.scan.Scan
 org.rapidoid.scan.ScanParams
@@ -484,12 +499,6 @@ org.rapidoid.sql.JDBC
 org.rapidoid.sql.JdbcClient
 org.rapidoid.sql.JDBCConfig
 org.rapidoid.sql.NoConnectionPool
-org.rapidoid.templates.CustomObjectHandler
-org.rapidoid.templates.ITemplate
-org.rapidoid.templates.MustacheFileTemplate
-org.rapidoid.templates.MustacheStringTemplate
-org.rapidoid.templates.RapidoidMustacheFactory
-org.rapidoid.templates.Templates
 org.rapidoid.test.TestCommons
 org.rapidoid.util.AbstractMapImpl
 org.rapidoid.util.Bufs
@@ -525,7 +534,6 @@ org.rapidoid.var.impl.SimpleVar
 org.rapidoid.var.Var
 org.rapidoid.var.Vars
 org.rapidoid.web.DefaultPageRenderer
-org.rapidoid.web.MustacheViewRenderer
 org.rapidoid.web.Rapidoid
 org.rapidoid.web.RapidoidWebModule
 org.rapidoid.web.StandAlone
