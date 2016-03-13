@@ -109,7 +109,7 @@ public class Setup implements Constants {
 	private volatile boolean listening;
 	private volatile Server server;
 	private volatile boolean activated;
-	private volatile boolean withGoodies = true;
+	private volatile boolean goodies = true;
 
 	public static Setup create(String name) {
 		IoCContext ioc = IoC.createContext().name(name);
@@ -154,8 +154,6 @@ public class Setup implements Constants {
 	public synchronized Server listen() {
 		if (!listening && !restarted) {
 
-			Cls.getClassIfExists("org.rapidoid.goodies.RapidoidGoodiesModule");
-
 			inferCallers();
 
 			if (setupType != ServerSetupType.DEV || Env.dev()) {
@@ -181,10 +179,26 @@ public class Setup implements Constants {
 	}
 
 	private synchronized void activate() {
-		if (!activated && !restarted) {
-			activated = true;
+		if (activated) {
+			return;
+		}
+		activated = true;
+
+		if (!restarted) {
 			listen();
 		}
+
+		bootstrapGoodies();
+
+		if (this == ON) {
+			DEV.activate();
+			ADMIN.activate();
+		}
+	}
+
+	private void bootstrapGoodies() {
+		Class<?> goodiesClass = Cls.getClassIfExists("org.rapidoid.goodies.RapidoidGoodiesModule");
+		if (goodiesClass != null) Cls.newInstance(goodiesClass, this);
 	}
 
 	public OnRoute route(String verb, String path) {
@@ -318,7 +332,7 @@ public class Setup implements Constants {
 		processor = null;
 		activated = false;
 		ioCContext.reset();
-		withGoodies = true;
+		goodies = true;
 	}
 
 	public Server server() {
@@ -424,6 +438,7 @@ public class Setup implements Constants {
 		for (Setup setup : instances()) {
 			setup.http.resetConfig();
 			setup.wrappers = null;
+			setup.activated = false;
 		}
 
 		loader = Reload.createClassLoader();
@@ -466,13 +481,16 @@ public class Setup implements Constants {
 		return new RouteOptions().wrap(wrappers);
 	}
 
-	public boolean withGoodies() {
-		return withGoodies;
+	public boolean goodies() {
+		return goodies;
 	}
 
-	public Setup withGoodies(boolean withGoodies) {
-		this.withGoodies = withGoodies;
+	public Setup goodies(boolean goodies) {
+		this.goodies = goodies;
 		return this;
 	}
 
+	public String name() {
+		return name;
+	}
 }

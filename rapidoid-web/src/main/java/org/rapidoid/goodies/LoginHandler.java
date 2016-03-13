@@ -22,14 +22,19 @@ package org.rapidoid.goodies;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.Setup;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.Resp;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class RapidoidGoodiesModule {
+public class LoginHandler implements ReqRespHandler {
 
-	public RapidoidGoodiesModule(Setup setup) {
-		Goodies.bootstrap(setup);
+	@Override
+	public Object execute(Req req, Resp resp) throws Exception {
+		String username = req.data("username");
+		String password = req.data("password");
+		return resp.login(username, password);
 	}
 
 }

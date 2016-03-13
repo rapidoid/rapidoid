@@ -22,6 +22,10 @@ package org.rapidoid.goodies;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
+import org.rapidoid.setup.Admin;
+import org.rapidoid.setup.Dev;
+import org.rapidoid.setup.Setup;
 
 import java.lang.management.ManagementFactory;
 
@@ -63,6 +67,56 @@ public class Goodies {
 
 	public static GraphsHandler graphs() {
 		return new GraphsHandler();
+	}
+
+	public static LoginHandler login() {
+		return new LoginHandler();
+	}
+
+	public static LogoutHandler logout() {
+		return new LogoutHandler();
+	}
+
+	private static ConfigHandler config() {
+		return new ConfigHandler();
+	}
+
+	private static RoutesHandler routes() {
+		return new RoutesHandler();
+	}
+
+	public static void bootstrap(Setup setup) {
+
+		if (!setup.goodies()) {
+			Log.warn("Goodies are disabled for setup: " + setup.name());
+			return;
+		}
+
+		if (setup == Dev.setup()) {
+			Log.info("Activating Dev goodies");
+
+			setup.page("/").render(Goodies.routes());
+			setup.page("/config").render(Goodies.config());
+		}
+
+		if (setup == Admin.setup()) {
+			Log.info("Activating Admin goodies");
+
+			setup.page("/").render(Goodies.graphs());
+			setup.page("/routes").render(Goodies.routes());
+
+			setup.page("/jmx/memory").render(Goodies.memory());
+			setup.page("/jmx/mempool").render(Goodies.memoryPool());
+			setup.page("/jmx/classes").render(Goodies.classes());
+			setup.page("/jmx/os").render(Goodies.os());
+			setup.page("/jmx/threads").render(Goodies.threads());
+			setup.page("/jmx/compilation").render(Goodies.compilation());
+			setup.page("/jmx/runtime").render(Goodies.runtime());
+			setup.page("/jmx/gc").render(Goodies.gc());
+		}
+
+		setup.post("/_login").json(Goodies.login());
+		setup.get("/_logout").json(Goodies.logout());
 	}
 
 }
