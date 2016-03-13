@@ -46,12 +46,13 @@ public class OnRoute {
 
 	private final String path;
 
-	private final RouteOptions options = new RouteOptions();
+	private final RouteOptions options;
 
-	public OnRoute(FastHttp http, String verb, String path) {
+	public OnRoute(FastHttp http, RouteOptions defaults, String verb, String path) {
 		this.http = http;
 		this.verb = verb;
 		this.path = path;
+		this.options = defaults.copy();
 	}
 
 	/* PLAIN */
@@ -311,7 +312,7 @@ public class OnRoute {
 	}
 
 	private RouteOptions opts(MediaType contentType) {
-		options.contentType = contentType;
+		options.contentType(contentType);
 		return options;
 	}
 
@@ -328,12 +329,12 @@ public class OnRoute {
 	}
 
 	public OnRoute view(String viewName) {
-		options.view = viewName;
+		options.view(viewName);
 		return this;
 	}
 
 	public OnRoute tx(TransactionMode txMode) {
-		options.transactionMode = txMode;
+		options.transactionMode(txMode);
 		return this;
 	}
 }

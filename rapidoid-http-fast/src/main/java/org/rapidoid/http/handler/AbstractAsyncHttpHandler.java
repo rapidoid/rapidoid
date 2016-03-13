@@ -98,13 +98,13 @@ public abstract class AbstractAsyncHttpHandler extends AbstractHttpHandler {
 
 	private TransactionMode before(final Req req, String username, Set<String> roles) {
 
-		if (U.notEmpty(options.roles) && !Secure.hasAnyRole(username, roles, options.roles)) {
+		if (U.notEmpty(options.roles()) && !Secure.hasAnyRole(username, roles, options.roles())) {
 			throw new SecurityException("The user doesn't have the required roles!");
 		}
 
-		req.response().view(options.view).contentType(options.contentType).mvc(options.mvc);
+		req.response().view(options.view()).contentType(options.contentType()).mvc(options.mvc());
 
-		TransactionMode txMode = U.or(options.transactionMode, TransactionMode.NONE);
+		TransactionMode txMode = U.or(options.transactionMode(), TransactionMode.NONE);
 
 		if (txMode == TransactionMode.AUTO) {
 			txMode = HttpUtils.isGetReq(req) ? TransactionMode.READ_ONLY : TransactionMode.READ_WRITE;

@@ -2,7 +2,7 @@ package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-http-fast
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,39 +20,24 @@ package org.rapidoid.http;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.commons.MediaType;
-
-import java.util.Set;
+import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public interface RouteConfig {
+public class HttpWrapTest extends HttpTestCommons {
 
-	MediaType contentType();
+	@Test
+	public void testWrap() {
+		On.defaults().wrap((req, invocation) -> invocation.invokeAndTransformResult(x -> x + "!"));
+		On.defaults().contentType(MediaType.BINARY);
 
-	RouteConfig contentType(MediaType contentType);
+		On.get("/").html(() -> "a");
 
-	String view();
-
-	RouteOptions view(String view);
-
-	boolean mvc();
-
-	RouteOptions mvc(boolean mvc);
-
-	TransactionMode transactionMode();
-
-	RouteOptions transactionMode(TransactionMode transactionMode);
-
-	Set<String> roles();
-
-	RouteOptions roles(Set<String> roles);
-
-	HttpWrapper[] wrappers();
-
-	RouteOptions wrap(HttpWrapper... wrappers);
+		onlyGet("/");
+	}
 
 }

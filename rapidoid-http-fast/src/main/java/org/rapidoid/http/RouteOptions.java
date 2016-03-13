@@ -34,17 +34,17 @@ import java.util.Set;
 @Since("5.1.0")
 public class RouteOptions implements RouteConfig {
 
-	public volatile MediaType contentType = MediaType.HTML_UTF_8;
+	private volatile MediaType contentType = MediaType.HTML_UTF_8;
 
-	public volatile String view;
+	private volatile String view;
 
-	public volatile boolean mvc;
+	private volatile boolean mvc;
 
-	public volatile TransactionMode transactionMode = TransactionMode.NONE;
+	private volatile TransactionMode transactionMode = TransactionMode.NONE;
 
-	public final Set<String> roles = Coll.synchronizedSet();
+	private final Set<String> roles = Coll.synchronizedSet();
 
-	public final List<HttpWrapper> wrappers = Coll.synchronizedList();
+	private final List<HttpWrapper> wrappers = Coll.synchronizedList();
 
 	@Override
 	public String toString() {
@@ -114,14 +114,26 @@ public class RouteOptions implements RouteConfig {
 	}
 
 	@Override
-	public List<HttpWrapper> wrappers() {
-		return wrappers;
+	public HttpWrapper[] wrappers() {
+		return wrappers.toArray(new HttpWrapper[wrappers.size()]);
 	}
 
 	@Override
-	public RouteOptions wrap(HttpWrapper[] wrappers) {
+	public RouteOptions wrap(HttpWrapper... wrappers) {
 		Coll.assign(this.wrappers, wrappers);
 		return this;
 	}
 
+	public RouteOptions copy() {
+		RouteOptions copy = new RouteOptions();
+
+		copy.contentType(contentType());
+		copy.view(view());
+		copy.mvc(mvc());
+		copy.transactionMode(transactionMode());
+		copy.roles(roles());
+		copy.wrap(wrappers());
+
+		return copy;
+	}
 }

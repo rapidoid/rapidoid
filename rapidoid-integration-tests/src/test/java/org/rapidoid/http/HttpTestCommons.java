@@ -66,7 +66,7 @@ public abstract class HttpTestCommons extends TestCommons {
 		Setup.resetGlobalState();
 		OnChanges.ignore();
 
-		On.setup().http().resetConfig();
+		On.setup().resetWithoutRestart();
 		On.setup().listen();
 
 		Setup.resetGlobalState();

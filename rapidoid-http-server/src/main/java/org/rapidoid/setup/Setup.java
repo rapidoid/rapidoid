@@ -98,12 +98,12 @@ public class Setup implements Constants {
 	private final Customization customization;
 	private final HttpRoutes routes;
 	private final FastHttp http;
+	private volatile RouteOptions defaults = new RouteOptions();
 
 	private volatile Integer port;
 	private volatile String address = "0.0.0.0";
 	private volatile String[] path;
 
-	private volatile HttpWrapper[] wrappers;
 	private volatile HttpProcessor processor;
 
 	private volatile boolean listening;
@@ -203,52 +203,52 @@ public class Setup implements Constants {
 
 	public OnRoute route(String verb, String path) {
 		activate();
-		return new OnRoute(http, verb.toUpperCase(), path).wrap(wrappers);
+		return new OnRoute(http, defaults, verb.toUpperCase(), path);
 	}
 
 	public OnRoute get(String path) {
 		activate();
-		return new OnRoute(http, GET, path).wrap(wrappers);
+		return new OnRoute(http, defaults, GET, path);
 	}
 
 	public OnRoute post(String path) {
 		activate();
-		return new OnRoute(http, POST, path).wrap(wrappers);
+		return new OnRoute(http, defaults, POST, path);
 	}
 
 	public OnRoute put(String path) {
 		activate();
-		return new OnRoute(http, PUT, path).wrap(wrappers);
+		return new OnRoute(http, defaults, PUT, path);
 	}
 
 	public OnRoute delete(String path) {
 		activate();
-		return new OnRoute(http, DELETE, path).wrap(wrappers);
+		return new OnRoute(http, defaults, DELETE, path);
 	}
 
 	public OnRoute patch(String path) {
 		activate();
-		return new OnRoute(http, PATCH, path).wrap(wrappers);
+		return new OnRoute(http, defaults, PATCH, path);
 	}
 
 	public OnRoute options(String path) {
 		activate();
-		return new OnRoute(http, OPTIONS, path).wrap(wrappers);
+		return new OnRoute(http, defaults, OPTIONS, path);
 	}
 
 	public OnRoute head(String path) {
 		activate();
-		return new OnRoute(http, HEAD, path).wrap(wrappers);
+		return new OnRoute(http, defaults, HEAD, path);
 	}
 
 	public OnRoute trace(String path) {
 		activate();
-		return new OnRoute(http, TRACE, path).wrap(wrappers);
+		return new OnRoute(http, defaults, TRACE, path);
 	}
 
 	public OnRoute page(String path) {
 		activate();
-		return new OnRoute(http, GET_OR_POST, path).wrap(wrappers);
+		return new OnRoute(http, defaults, GET_OR_POST, path);
 	}
 
 	public Setup req(ReqHandler handler) {
@@ -293,11 +293,6 @@ public class Setup implements Constants {
 		return this;
 	}
 
-	public Setup wrap(HttpWrapper... wrappers) {
-		this.wrappers = wrappers;
-		return this;
-	}
-
 	public Setup processor(HttpProcessor processor) {
 		U.must(!listening, "The server was already initialized!");
 		this.processor = processor;
@@ -325,7 +320,6 @@ public class Setup implements Constants {
 	public void reset() {
 		http.resetConfig();
 		listening = false;
-		wrappers = null;
 		port = null;
 		address = null;
 		path = null;
@@ -333,6 +327,7 @@ public class Setup implements Constants {
 		activated = false;
 		ioCContext.reset();
 		goodies = true;
+		defaults = new RouteOptions();
 	}
 
 	public Server server() {
@@ -427,9 +422,7 @@ public class Setup implements Constants {
 	private static void restartApp() {
 		U.notNull(mainClassName, "Cannot restart, the main class is unknown!");
 
-		Log.info("---------------------------------");
-		Log.info("Restarting the web application...");
-		Log.info("---------------------------------");
+		UTILS.logSection("Restarting the web application...");
 
 		restarted = true;
 
@@ -437,7 +430,7 @@ public class Setup implements Constants {
 
 		for (Setup setup : instances()) {
 			setup.http.resetConfig();
-			setup.wrappers = null;
+			setup.defaults = new RouteOptions();
 			setup.activated = false;
 		}
 
@@ -478,7 +471,7 @@ public class Setup implements Constants {
 	}
 
 	private RouteOptions opts() {
-		return new RouteOptions().wrap(wrappers);
+		return new RouteOptions();
 	}
 
 	public boolean goodies() {
@@ -492,5 +485,16 @@ public class Setup implements Constants {
 
 	public String name() {
 		return name;
+	}
+
+	public RouteOptions defaults() {
+		return defaults;
+	}
+
+	public void resetWithoutRestart() {
+		http().resetConfig();
+		path((String[]) null);
+		defaults = new RouteOptions();
+		attributes().clear();
 	}
 }
