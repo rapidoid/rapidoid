@@ -158,6 +158,8 @@ org.rapidoid.goodies.ConfigHandler
 org.rapidoid.goodies.DetailsHandler
 org.rapidoid.goodies.Goodies
 org.rapidoid.goodies.GraphsHandler
+org.rapidoid.goodies.LoginHandler
+org.rapidoid.goodies.LogoutHandler
 org.rapidoid.goodies.MultiDetailsHandler
 org.rapidoid.goodies.RapidoidGoodiesModule
 org.rapidoid.goodies.RoutesHandler
