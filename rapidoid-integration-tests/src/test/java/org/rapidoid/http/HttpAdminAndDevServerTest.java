@@ -38,7 +38,7 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 	@Test
 	public void testAdminAndDevServer() {
 		On.get("/a").html((Req x) -> "default " + x.uri());
-		Admin.get("/a").html((Req x) -> "admin " + x.uri());
+		Admin.get("/a").json((Req x) -> "admin " + x.uri());
 		Dev.get("/a").json((Req req, Resp resp) -> "dev " + req.uri());
 
 		onlyGet("/a"); // default server

@@ -24,6 +24,7 @@ import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
 import org.rapidoid.scan.ClasspathUtil;
+import org.rapidoid.security.Roles;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Reload;
@@ -145,6 +146,7 @@ public class Setup implements Constants {
 		restarted = false;
 		loader = Setup.class.getClassLoader();
 		dirty = false;
+		ADMIN.defaults().roles(Roles.ADMINISTRATOR);
 	}
 
 	public FastHttp http() {
@@ -497,5 +499,7 @@ public class Setup implements Constants {
 		path((String[]) null);
 		defaults = new RouteOptions();
 		attributes().clear();
+		ADMIN.defaults().roles(Roles.ADMINISTRATOR);
 	}
+
 }
