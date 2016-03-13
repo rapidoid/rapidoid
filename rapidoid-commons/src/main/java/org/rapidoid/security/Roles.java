@@ -29,7 +29,7 @@ public class Roles {
 
 	public static final String ANYBODY = "anybody";
 
-	public static final String ADMIN = "admin";
+	public static final String ADMINISTRATOR = "administrator";
 
 	public static final String MANAGER = "manager";
 

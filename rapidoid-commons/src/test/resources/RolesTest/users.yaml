@@ -3,7 +3,7 @@ niko:
   password: easy
   roles:
     - owner
-    - admin
+    - administrator
     - moderator
 
 chuck:

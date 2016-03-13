@@ -40,15 +40,15 @@ public class RoleBasedSecurityTest extends SecurityTestCommons {
 
 	@Test
 	public void testAdminRoleCheck() {
-		isFalse(Secure.isAdmin(null, roles(null)));
-		isFalse(Secure.isAdmin("", roles("")));
-		isFalse(Secure.isAdmin("abc", roles("abc")));
-		isFalse(Secure.isAdmin("mng1", roles("mng1")));
-		isFalse(Secure.isAdmin("mod1", roles("mod1")));
-		isFalse(Secure.isAdmin("mod2", roles("mod2")));
+		isFalse(Secure.isAdministrator(null, roles(null)));
+		isFalse(Secure.isAdministrator("", roles("")));
+		isFalse(Secure.isAdministrator("abc", roles("abc")));
+		isFalse(Secure.isAdministrator("mng1", roles("mng1")));
+		isFalse(Secure.isAdministrator("mod1", roles("mod1")));
+		isFalse(Secure.isAdministrator("mod2", roles("mod2")));
 
-		isTrue(Secure.isAdmin("adm1", roles("adm1")));
-		isTrue(Secure.isAdmin("adm2", roles("adm2")));
+		isTrue(Secure.isAdministrator("adm1", roles("adm1")));
+		isTrue(Secure.isAdministrator("adm2", roles("adm2")));
 	}
 
 	@Test

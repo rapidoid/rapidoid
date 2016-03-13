@@ -1,8 +1,8 @@
 adm1:
-  roles: admin
+  roles: administrator
 
 adm2:
-  roles: admin
+  roles: administrator
 
 mng1:
   roles: manager

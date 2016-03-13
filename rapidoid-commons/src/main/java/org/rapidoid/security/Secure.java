@@ -274,7 +274,7 @@ public class Secure implements Constants {
 			Class<? extends Annotation> type = ann.annotationType();
 
 			if (type.equals(Administrator.class)) {
-				roles.add(Roles.ADMIN);
+				roles.add(Roles.ADMINISTRATOR);
 			} else if (type.equals(Manager.class)) {
 				roles.add(Roles.MANAGER);
 			} else if (type.equals(Moderator.class)) {
@@ -353,8 +353,8 @@ public class Secure implements Constants {
 		return false;
 	}
 
-	public static boolean isAdmin(String username, Set<String> roles) {
-		return hasRole(username, roles, Roles.ADMIN, null, null);
+	public static boolean isAdministrator(String username, Set<String> roles) {
+		return hasRole(username, roles, Roles.ADMINISTRATOR, null, null);
 	}
 
 	public static boolean isManager(String username, Set<String> roles) {

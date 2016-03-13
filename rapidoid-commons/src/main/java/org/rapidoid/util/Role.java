@@ -31,7 +31,7 @@ public interface Role {
 
 	String GUEST = "GUEST";
 
-	String ADMIN = "ADMIN";
+	String ADMIN = "ADMINISTRATOR";
 
 	String MANAGER = "MANAGER";
 
