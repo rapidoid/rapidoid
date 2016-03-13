@@ -28,4 +28,6 @@ import org.rapidoid.lambda.TwoParamLambda;
 @Since("5.0.11")
 public interface ReqRespHandler extends TwoParamLambda<Object, Req, Resp> {
 
+	Object execute(Req req, Resp resp) throws Exception;
+
 }

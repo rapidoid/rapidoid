@@ -28,4 +28,6 @@ import org.rapidoid.lambda.OneParamLambda;
 @Since("5.0.2")
 public interface ReqHandler extends OneParamLambda<Object, Req> {
 
+	Object execute(Req req) throws Exception;
+
 }
