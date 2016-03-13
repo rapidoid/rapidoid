@@ -193,6 +193,7 @@ public class Setup implements Constants {
 		if (this == ON) {
 			DEV.activate();
 			ADMIN.activate();
+			UTILS.logSection("User-specified handlers:");
 		}
 	}
 

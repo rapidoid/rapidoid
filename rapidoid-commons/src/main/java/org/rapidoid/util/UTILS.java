@@ -723,4 +723,10 @@ public class UTILS implements Constants {
 		return b + 128;
 	}
 
+	public static void logSection(String msg) {
+		Log.info("---------------------------------");
+		Log.info(msg);
+		Log.info("---------------------------------");
+	}
+
 }

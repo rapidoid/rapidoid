@@ -25,7 +25,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.Dev;
+import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
+import org.rapidoid.util.UTILS;
 
 import java.lang.management.ManagementFactory;
 
@@ -92,15 +94,19 @@ public class Goodies {
 			return;
 		}
 
+		if (setup == On.setup()) {
+			UTILS.logSection("Registering App goodies:");
+		}
+
 		if (setup == Dev.setup()) {
-			Log.info("Activating Dev goodies");
+			UTILS.logSection("Registering Dev goodies:");
 
 			setup.page("/").render(Goodies.routes());
 			setup.page("/config").render(Goodies.config());
 		}
 
 		if (setup == Admin.setup()) {
-			Log.info("Activating Admin goodies");
+			UTILS.logSection("Registering Admin goodies:");
 
 			setup.page("/").render(Goodies.graphs());
 			setup.page("/routes").render(Goodies.routes());
