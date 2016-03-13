@@ -78,7 +78,7 @@ public class Log {
 
 		for (int i = 2; i < trace.length; i++) {
 			String cls = trace[i].getClassName();
-			if (!cls.startsWith(Log.class.getCanonicalName())) {
+			if (!cls.startsWith(Log.class.getCanonicalName()) && !cls.startsWith("org.rapidoid.util.UTILS")) {
 				return cls;
 			}
 		}

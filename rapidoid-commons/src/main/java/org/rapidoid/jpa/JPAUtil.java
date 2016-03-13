@@ -3,9 +3,6 @@ package org.rapidoid.jpa;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
-import org.rapidoid.commons.Err;
-import org.rapidoid.concurrent.Callback;
-import org.rapidoid.job.Jobs;
 import org.rapidoid.u.U;
 
 import javax.persistence.EntityManager;
@@ -17,7 +14,6 @@ import javax.persistence.metamodel.Metamodel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
 
 /*
  * #%L
@@ -49,18 +45,21 @@ public class JPAUtil {
 		this.em = em;
 	}
 
-	public Object persist(Object record) {
-		Object id = Beany.getIdIfExists(record);
+	public Object save(Object entity) {
+		Object id = Beany.getIdIfExists(entity);
+
 		if (id == null) {
-			return insert(record);
+			return insert(entity);
+
 		} else {
-			update(id, record);
+			update(entity);
 			return id;
 		}
 	}
 
-	public void update(Object record) {
-		update(Beany.getId(record), record);
+	public void update(Object entity) {
+		ensureNotInReadOnlyTransation();
+		em.persist(entity);
 	}
 
 	public <E> List<E> getAll(Class<E> clazz, List<String> ids) {
@@ -73,22 +72,14 @@ public class JPAUtil {
 		return results;
 	}
 
-	public <E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
-		return U.page(getAll(clazz), pageNumber, pageSize);
-	}
-
 	public <E> E get(Class<E> clazz, Object id) {
-		E entity = getIfExists(clazz, id);
+		E entity = find(clazz, id);
 
 		if (entity == null) {
 			throw U.rte("Cannot find entity with ID=%s", id);
 		}
 
 		return entity;
-	}
-
-	public <RESULT> RESULT sql(String sql, Object... args) {
-		throw Err.notSupported();
 	}
 
 	public Object insert(Object entity) {
@@ -124,13 +115,7 @@ public class JPAUtil {
 		}
 	}
 
-	public void update(Object id, Object entity) {
-		ensureNotInReadOnlyTransation();
-		Beany.setId(entity, id);
-		em.persist(entity);
-	}
-
-	public <T> T getIfExists(Class<T> clazz, Object id) {
+	public <T> T find(Class<T> clazz, Object id) {
 		return em.find(clazz, id);
 	}
 
@@ -162,20 +147,25 @@ public class JPAUtil {
 		em.refresh(entity);
 	}
 
+	public void merge(Object entity) {
+		em.merge(entity);
+	}
+
 	public <E> void delete(Class<E> clazz, Object id) {
 		ensureNotInReadOnlyTransation();
 		em.remove(get(clazz, id));
 	}
 
-	public void delete(Object record) {
+	public void delete(Object entity) {
 		ensureNotInReadOnlyTransation();
-		em.remove(record);
+		em.remove(entity);
 	}
 
-	public void transaction(final Runnable action, boolean readonly) {
+	public void transaction(Runnable action, boolean readOnly) {
 		final EntityTransaction tx = em.getTransaction();
+		U.notNull(tx, "transaction");
 
-		if (readonly) {
+		if (readOnly) {
 			runTxReadOnly(action, tx);
 		} else {
 			runTxRW(action, tx);
@@ -220,17 +210,6 @@ public class JPAUtil {
 		if (!txWasActive) {
 			tx.commit();
 		}
-	}
-
-	public void transaction(final Runnable tx, final boolean readonly, final Callback<Void> callback) {
-		Jobs.execute(new Callable<Void>() {
-
-			public Void call() throws Exception {
-				transaction(tx, readonly);
-				return null;
-			}
-
-		}, callback);
 	}
 
 	private void ensureNotInReadOnlyTransation() {

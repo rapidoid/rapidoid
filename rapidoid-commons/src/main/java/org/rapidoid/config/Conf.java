@@ -47,10 +47,12 @@ public class Conf {
 	public static final Config USERS = section("users");
 	public static final Config JDBC = section("jdbc");
 	public static final Config JOBS = section("jobs");
-	public static final Config MENU = section("menu");
+	public static final Config HIBERNATE = section("hibernate");
 
+	public static final Config MENU = section("menu");
 	public static final Config APP = section("app");
 	public static final Config ADMIN = section("admin");
+
 	public static final Config DEV = section("dev");
 
 	static {

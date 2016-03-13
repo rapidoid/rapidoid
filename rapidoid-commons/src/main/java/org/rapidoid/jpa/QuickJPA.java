@@ -27,17 +27,16 @@ import org.hibernate.jpa.boot.internal.SettingsImpl;
 import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Env;
+import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.PersisterProvider;
-import org.rapidoid.io.IO;
 import org.rapidoid.log.Log;
 import org.rapidoid.scan.Scan;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 @Authors("Nikolche Mihajlovski")
@@ -56,6 +55,7 @@ public class QuickJPA implements PersisterProvider {
 		org.hibernate.cfg.AnnotationConfiguration cfg = new org.hibernate.cfg.AnnotationConfiguration();
 
 		List<Class<?>> entityTypes = Scan.annotated(Entity.class).in(path).loadAll();
+
 		for (Class<?> entityType : entityTypes) {
 			cfg.addAnnotatedClass(entityType);
 		}
@@ -66,40 +66,26 @@ public class QuickJPA implements PersisterProvider {
 			}
 		}
 
-		Log.info("Found JPA Entities", "entities", entityTypes);
+		UTILS.logSection("Total " + entityTypes.size() + " JPA Entities:");
+		for (Class<?> entityType : entityTypes) {
+			Log.info("Entity", "package", entityType.getPackage().getName(), "name", entityType.getSimpleName());
+		}
 
-		cfg.addProperties(hibernateProperties());
+		UTILS.logSection("Hibernate properties:");
+		Properties props = hibernateProperties();
+		cfg.addProperties(props);
+		UTILS.logProperties(props);
+
+		UTILS.logSection("Starting Hibernate:");
 		SessionFactory sf = cfg.buildSessionFactory();
-
 		SessionFactoryImplementor sfi = (SessionFactoryImplementor) sf;
-
 		SettingsImpl settings = new SettingsImpl();
 
 		return new EntityManagerFactoryImpl("pu", sfi, settings, U.map(), cfg);
 	}
 
 	public static Properties hibernateProperties() {
-
-		Properties properties = new Properties();
-		Map<String, String> props;
-
-		if (Env.production()) {
-			props = IO.loadMap("hibernate-prod.properties");
-			if (props == null) {
-				props = IO.loadMap("hibernate-prod.default.properties");
-			}
-		} else {
-			props = IO.loadMap("hibernate-dev.properties");
-			if (props == null) {
-				props = IO.loadMap("hibernate-dev.default.properties");
-			}
-		}
-
-		if (props != null) {
-			properties.putAll(props);
-		}
-
-		return properties;
+		return Conf.HIBERNATE.toProperties();
 	}
 
 	@SuppressWarnings("unchecked")

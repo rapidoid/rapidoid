@@ -46,7 +46,7 @@ public abstract class AbstractItem extends AbstractModel implements Item {
 
 	@Override
 	public String id() {
-		return Beany.getIdIfExists(value);
+		return Cls.convert(Beany.getIdIfExists(value), String.class);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public abstract class AbstractItem extends AbstractModel implements Item {
 
 		Prop prop = Beany.property(value, property, true);
 
-			return prop.get(value);
+		return prop.get(value);
 	}
 
 	@Override

@@ -77,3 +77,21 @@ jobs:
     threads: 64
   scheduler:
     threads: 64
+
+hibernate:
+  dialect: org.hibernate.dialect.H2Dialect
+  connection:
+    driver_class: org.h2.Driver
+    username: sa
+    password: ''
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+  hbm2ddl:
+    auto: create
+  format_sql: false
+  show_sql: true
+  c3p0:
+    min_size: 5
+    max_size: 100
+    timeout: 300
+    max_statements: 50
+    idle_test_period: 100

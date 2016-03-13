@@ -3,9 +3,10 @@ package org.rapidoid.jpa;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.concurrent.Callback;
+import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -35,39 +36,25 @@ import java.util.List;
 public class JPA {
 
 	public static EntityManager em() {
-		return Ctxs.ctx().persister();
+		Ctx ctx = Ctxs.get();
+		U.must(ctx != null, "Must be inside JPA transaction!");
+		return ctx.persister();
 	}
 
 	public static JPAUtil with(EntityManager em) {
 		return JPAUtil.with(em);
 	}
 
-	public static Object persist(Object record) {
-		return with(em()).persist(record);
+	public static <E> E get(Class<E> clazz, Object id) {
+		return with(em()).get(clazz, id);
 	}
 
-	public static <E> List<E> getAll() {
+	public static <T> T find(Class<T> clazz, Object id) {
+		return with(em()).find(clazz, id);
+	}
+
+	public static <E> List<E> getAllEntities() {
 		return with(em()).getAll();
-	}
-
-	public static void update(Object id, Object entity) {
-		with(em()).update(id, entity);
-	}
-
-	public static void update(Object record) {
-		with(em()).update(record);
-	}
-
-	public static <T> T getIfExists(Class<T> clazz, Object id) {
-		return with(em()).getIfExists(clazz, id);
-	}
-
-	public static void transaction(Runnable action, boolean readonly) {
-		with(em()).transaction(action, readonly);
-	}
-
-	public static void transaction(Runnable tx, boolean readonly, Callback<Void> callback) {
-		with(em()).transaction(tx, readonly, callback);
 	}
 
 	public static <E> List<E> getAll(Class<E> clazz, List<String> ids) {
@@ -78,38 +65,70 @@ public class JPA {
 		return with(em()).getAll(clazz);
 	}
 
-	public static void refresh(Object entity) {
-		with(em()).refresh(entity);
-	}
-
-	public static <RESULT> RESULT sql(String sql, Object... args) {
-		return with(em()).sql(sql, args);
-	}
-
-	public static void delete(Object record) {
-		with(em()).delete(record);
+	public static Object save(Object record) {
+		return with(em()).save(record);
 	}
 
 	public static Object insert(Object entity) {
 		return with(em()).insert(entity);
 	}
 
-	public static <E> List<E> getAll(Class<E> clazz, int pageNumber, int pageSize) {
-		return with(em()).getAll(clazz, pageNumber, pageSize);
+	public static void update(Object record) {
+		with(em()).update(record);
+	}
+
+	public static void delete(Object record) {
+		with(em()).delete(record);
 	}
 
 	public static <E> void delete(Class<E> clazz, Object id) {
 		with(em()).delete(clazz, id);
 	}
 
-	public static <E> E get(Class<E> clazz, Object id) {
-		return with(em()).get(clazz, id);
+	public static void refresh(Object entity) {
+		with(em()).refresh(entity);
+	}
+
+	public static void merge(Object entity) {
+		with(em()).merge(entity);
+	}
+
+	public static void transaction(Runnable action) {
+		tx(action, false);
+	}
+
+	public static void transactionReadOnly(Runnable action) {
+		tx(action, true);
+	}
+
+	private static void tx(Runnable action, boolean readOnly) {
+		Ctx ctx = Ctxs.get();
+		boolean newContext = ctx == null;
+
+		if (newContext) {
+			ctx = Ctxs.open("transaction");
+		}
+
+		try {
+			EntityManager em = ctx.persister();
+			with(em).transaction(action, readOnly);
+
+		} finally {
+			if (newContext) {
+				Ctxs.close();
+			}
+		}
+	}
+
+	public static void flush() {
+		em().flush();
 	}
 
 	public static void bootstrap(String[] path, Class<?>... entities) {
 		if (Cls.exists("org.hibernate.cfg.Configuration")) {
-			Log.info("Bootstrapping JPA (Hibernate)");
+			UTILS.logSection("Bootstrapping JPA (Hibernate)...");
 			Ctxs.setPersisterProvider(new QuickJPA(QuickJPA.emf(path, entities)));
+			UTILS.logSection("JPA (Hibernate) is ready.");
 		}
 	}
 

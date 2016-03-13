@@ -4,6 +4,7 @@ import org.rapidoid.u.U;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 
 /*
  * #%L
@@ -69,8 +70,8 @@ public abstract class DAO<E> {
 		return JPA.insert(record);
 	}
 
-	public void update(Object id, E record) {
-		JPA.update(id, record);
+	public void update(E record) {
+		JPA.update(record);
 	}
 
 	public void deleteById(Object id) {
@@ -85,12 +86,8 @@ public abstract class DAO<E> {
 		return JPA.get(clazz, id);
 	}
 
-	public Iterable<E> all() {
+	public List<E> all() {
 		return JPA.getAll(clazz);
-	}
-
-	public Iterable<E> page(int page) {
-		return JPA.getAll(clazz, page, 20);
 	}
 
 }

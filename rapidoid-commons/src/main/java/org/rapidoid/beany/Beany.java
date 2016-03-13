@@ -405,27 +405,29 @@ public class Beany {
 		setId(obj, "" + id);
 	}
 
-	public static String getId(Object obj) {
-		return getPropValueOfType(obj, "id", String.class);
+	public static Object getId(Object obj) {
+		return getPropValueOfType(obj, "id", Object.class);
 	}
 
 	public static long getLongId(Object obj) {
 		return getPropValueOfType(obj, "id", Long.class);
 	}
 
-	public static String getIdIfExists(Object obj) {
-		return getPropValueOfType(obj, "id", String.class, null);
+	public static Object getIdIfExists(Object obj) {
+		return getPropValueOfType(obj, "id", Object.class, null);
 	}
 
 	public static Long getLongIdIfExists(Object obj) {
 		return getPropValueOfType(obj, "id", Long.class, null);
 	}
 
-	public static String[] getIds(Object... objs) {
-		String[] ids = new String[objs.length];
+	public static Object[] getIds(Object... objs) {
+		Object[] ids = new String[objs.length];
+
 		for (int i = 0; i < objs.length; i++) {
 			ids[i] = getId(objs[i]);
 		}
+
 		return ids;
 	}
 

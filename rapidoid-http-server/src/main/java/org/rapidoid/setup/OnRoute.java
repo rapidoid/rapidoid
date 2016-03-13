@@ -336,4 +336,9 @@ public class OnRoute {
 		options.transactionMode(txMode);
 		return this;
 	}
+
+	public OnRoute tx() {
+		return tx(TransactionMode.AUTO);
+	}
+
 }

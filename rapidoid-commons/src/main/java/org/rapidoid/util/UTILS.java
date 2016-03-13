@@ -51,6 +51,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.concurrent.*;
 
 @Authors("Nikolche Mihajlovski")
@@ -727,6 +728,12 @@ public class UTILS implements Constants {
 		Log.info("---------------------------------");
 		Log.info(msg);
 		Log.info("---------------------------------");
+	}
+
+	public static void logProperties(Properties props) {
+		for (Entry<Object, Object> p : props.entrySet()) {
+			Log.info("Hibernate property", String.valueOf(p.getKey()), p.getValue());
+		}
 	}
 
 }

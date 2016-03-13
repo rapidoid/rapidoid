@@ -27,10 +27,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.value.Value;
 import org.rapidoid.value.Values;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Nikolche Mihajlovski
@@ -296,4 +293,35 @@ public class Config implements ToMap<String, Object> {
 		return baseKeys;
 	}
 
+	public Map<String, String> toFlatMap() {
+		Map<String, String> flatMap = U.map();
+		Map<String, Object> map = toMap();
+
+		traverseToFlat(map, U.list(keys()), flatMap);
+
+		return flatMap;
+	}
+
+	private static void traverseToFlat(Map<String, Object> map, List<String> keys, Map<String, String> flatMap) {
+		for (Map.Entry<String, Object> e : map.entrySet()) {
+			String key = e.getKey();
+			Object val = e.getValue();
+
+			if (val instanceof Map<?, ?>) {
+				Map<String, Object> mapVal = (Map<String, Object>) val;
+				List<String> keys2 = U.list(keys);
+				keys2.add(key);
+				traverseToFlat(mapVal, keys2, flatMap);
+
+			} else {
+				flatMap.put(U.join(".", keys) + "." + key, String.valueOf(val));
+			}
+		}
+	}
+
+	public Properties toProperties() {
+		Properties props = new Properties();
+		props.putAll(toFlatMap());
+		return props;
+	}
 }

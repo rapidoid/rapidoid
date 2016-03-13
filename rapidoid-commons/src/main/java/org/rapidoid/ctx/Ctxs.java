@@ -106,6 +106,7 @@ public class Ctxs {
 	}
 
 	public static Object createPersister() {
+		U.notNull(persisterProvider, "Ctxs.persisterProvider");
 		return persisterProvider.openPersister();
 	}
 

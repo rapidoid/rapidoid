@@ -3,14 +3,9 @@ package org.rapidoid.jpa;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.fluent.Do;
 import org.rapidoid.http.HttpTestCommons;
-import org.rapidoid.job.Jobs;
+import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
-
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 /*
  * #%L
@@ -34,50 +29,29 @@ import java.util.concurrent.CountDownLatch;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JPATest extends HttpTestCommons {
+public class HttpTransactionTest extends HttpTestCommons {
 
 	@Test
-	public void testBasicCRUD() {
+	public void testWebTx() {
 		String[] path = {JPATest.class.getPackage().getName()};
 		JPA.bootstrap(path);
 
-		Book b1 = new Book("book 1");
-		Book b2 = new Book("book 2");
-		Movie m1 = new Movie("movie 1");
+		On.get("/allBooks").json(() -> JPA.getAll(Book.class));
+		On.post("/books").json((Book b) -> JPA.insert(b));
 
-		CountDownLatch latch = new CountDownLatch(1);
-
-		Jobs.execute(() -> {
-			JPA.transaction(() -> {
-				JPA.insert(b1);
-				JPA.insert(b2);
-				JPA.insert(m1);
-				JPA.em().flush();
-			});
-
-			latch.countDown();
+		On.post("/del").tx().json((Long id) -> {
+			JPA.delete(Book.class, id);
+			JPA.flush(); // optional
+			return U.list("DEL " + id, JPA.getAllEntities());
 		});
 
-		UTILS.wait(latch);
+		postData("/books?title=a", U.map("title", "My Book 1"));
+		postData("/books?title=b", U.map("title", "My Book 2"));
 
-		CountDownLatch latch2 = new CountDownLatch(1);
+		onlyGet("/allBooks");
 
-		Jobs.execute(() -> {
-			JPA.transaction(() -> {
-				eq(JPA.getAllEntities().size(), 3);
-
-				List<Book> books = JPA.getAll(Book.class);
-				eq(Do.map(books).to(Book::getTitle), U.list("book 1", "book 2"));
-
-				List<Movie> movies = JPA.getAll(Movie.class);
-				eq(Do.map(movies).to(Movie::getTitle), U.list("movie 1"));
-
-			});
-
-			latch2.countDown();
-		});
-
-		UTILS.wait(latch2);
+		onlyPost("/del?id=1");
+		onlyPost("/del?id=2");
 	}
 
 }
