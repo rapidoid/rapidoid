@@ -108,7 +108,7 @@ public class RouteOptions implements RouteConfig {
 	}
 
 	@Override
-	public RouteOptions roles(Set<String> roles) {
+	public RouteOptions roles(String... roles) {
 		Coll.assign(this.roles, roles);
 		return this;
 	}
@@ -131,7 +131,7 @@ public class RouteOptions implements RouteConfig {
 		copy.view(view());
 		copy.mvc(mvc());
 		copy.transactionMode(transactionMode());
-		copy.roles(roles());
+		copy.roles(roles.toArray(new String[roles.size()]));
 		copy.wrap(wrappers());
 
 		return copy;

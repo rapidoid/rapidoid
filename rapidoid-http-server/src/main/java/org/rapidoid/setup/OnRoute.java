@@ -29,7 +29,6 @@ import org.rapidoid.http.HttpWrapper;
 import org.rapidoid.http.RouteOptions;
 import org.rapidoid.http.handler.HttpHandlers;
 import org.rapidoid.lambda.*;
-import org.rapidoid.u.U;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -324,7 +323,7 @@ public class OnRoute {
 	}
 
 	public OnRoute roles(String... roles) {
-		options.roles(U.set(roles));
+		options.roles(roles);
 		return this;
 	}
 
