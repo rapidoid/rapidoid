@@ -64,7 +64,7 @@ public class DefaultPageRenderer implements PageRenderer {
 	public Object renderPage(Req req, Resp resp, String content) throws Exception {
 		U.notNull(content, "page content");
 
-		if (isFullPage(content)) return content;
+		if (isFullPage(req, content)) return content;
 
 		Screen screen = resp.screen();
 		HtmlPage page = GUI.page(GUI.hardcoded(content));
@@ -102,8 +102,8 @@ public class DefaultPageRenderer implements PageRenderer {
 		return page;
 	}
 
-	private boolean isFullPage(String content) {
-		return FULL_PAGE_PATTERN.matcher(content).find();
+	private boolean isFullPage(Req req, String content) {
+		return (req.attr("_embedded", false) && content.startsWith("<!--EMBEDDED-->")) || FULL_PAGE_PATTERN.matcher(content).find();
 	}
 
 }
