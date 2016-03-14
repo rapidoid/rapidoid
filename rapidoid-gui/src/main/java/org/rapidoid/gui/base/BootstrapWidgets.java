@@ -4,7 +4,6 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.cls.TypeKind;
 import org.rapidoid.commons.*;
 import org.rapidoid.config.Conf;
 import org.rapidoid.gui.*;
@@ -548,10 +547,17 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static boolean isEntity(Object obj) {
-		return Cls.kindOf(obj) == TypeKind.UNKNOWN && !obj.getClass().isEnum() && Beany.hasProperty(obj, "id");
+		return Cls.isAppBean(obj)
+				&& !(obj instanceof Tag)
+				&& !(obj instanceof AbstractWidget)
+				&& Beany.hasProperty(obj, "id");
 	}
 
 	public static String urlFor(Object entity) {
+		if (!isEntity(entity)) {
+			return "";
+		}
+
 		Object id = Beany.getIdIfExists(entity);
 		if (id != null) {
 			String className = Cls.entityName(entity);
@@ -767,12 +773,18 @@ public abstract class BootstrapWidgets extends HTML {
 			return a(escape(item.toString())).href(urlFor(item));
 		}
 
-		if (Cls.isBean(item)) return GUI.show(item);
+		if (isBean(item)) return GUI.show(item);
 
 		String str = Cls.str(item);
 		Tag tag = hardcoded(escape(str));
 
 		return (str.contains("{") || str.contains("}")) ? span(tag).is("ng-non-bindable", true) : tag;
+	}
+
+	private static boolean isBean(Object obj) {
+		return Cls.isBean(obj)
+				&& !(obj instanceof Tag)
+				&& !(obj instanceof AbstractWidget);
 	}
 
 	private static Object display(Iterator<?> it) {
