@@ -138,7 +138,7 @@ public class Log {
 	private static void printKeyValue(Appendable out, String key, Object value) throws IOException {
 		out.append(" | ");
 		out.append(key);
-		out.append("=");
+		out.append(" = ");
 		out.append(printable(value));
 
 		if (value instanceof Throwable) {

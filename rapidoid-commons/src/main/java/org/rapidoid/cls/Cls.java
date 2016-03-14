@@ -885,8 +885,12 @@ public class Cls {
 	}
 
 	public static boolean isBeanType(Class<?> clazz) {
-		return clazz != null && clazz != Object.class && kindOf(clazz) == TypeKind.UNKNOWN && !clazz.isAnnotation() && !clazz.isEnum() && !clazz.isInterface()
-				&& !(Collection.class.isAssignableFrom(clazz)) && !(Map.class.isAssignableFrom(clazz))
+		return clazz != null && clazz != Object.class && kindOf(clazz) == TypeKind.UNKNOWN
+				&& !clazz.isAnnotation()
+				&& !clazz.isEnum()
+				&& !clazz.isInterface()
+				&& !(Collection.class.isAssignableFrom(clazz))
+				&& !(Map.class.isAssignableFrom(clazz))
 				&& !(Object[].class.isAssignableFrom(clazz));
 	}
 
