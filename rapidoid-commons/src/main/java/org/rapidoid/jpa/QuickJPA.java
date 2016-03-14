@@ -66,6 +66,11 @@ public class QuickJPA implements PersisterProvider {
 			}
 		}
 
+		if (entityTypes.isEmpty()) {
+			UTILS.logSection("Didn't find JPA entities, canceling JPA/Hibernate setup!");
+			return null;
+		}
+
 		UTILS.logSection("Total " + entityTypes.size() + " JPA Entities:");
 		for (Class<?> entityType : entityTypes) {
 			Log.info("Entity", "package", entityType.getPackage().getName(), "name", entityType.getSimpleName());

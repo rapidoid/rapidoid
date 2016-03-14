@@ -28,6 +28,7 @@ import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.io.*;
+import java.lang.management.ManagementFactory;
 import java.net.URL;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -59,7 +60,7 @@ public abstract class TestCommons {
 	@Before
 	public void init() {
 		System.out.println("--------------------------------------------------------------------------------");
-		System.out.println("TEST " + getClass().getCanonicalName());
+		System.out.println(" @" + ManagementFactory.getRuntimeMXBean().getName() + " TEST " + getClass().getCanonicalName());
 		System.out.println("--------------------------------------------------------------------------------");
 
 		hasError = false;

@@ -24,6 +24,8 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.log.Log;
 
+import java.lang.management.ManagementFactory;
+
 public class RapidoidInitializer {
 
 	private static volatile boolean initialized;
@@ -32,7 +34,11 @@ public class RapidoidInitializer {
 		if (!initialized) {
 			initialized = true;
 
-			Log.info("Starting Rapidoid...", "version", RapidoidInfo.version(), "working dir", System.getProperty("user.dir"));
+			String ver = RapidoidInfo.version();
+			String proc = ManagementFactory.getRuntimeMXBean().getName();
+			String dir = System.getProperty("user.dir");
+
+			Log.info("Starting Rapidoid...", "version", ver, "process", proc, "working dir", dir);
 
 			Cls.getClassIfExists("org.rapidoid.web.RapidoidWebModule");
 			Cls.getClassIfExists("org.rapidoid.insight.Metrics");
