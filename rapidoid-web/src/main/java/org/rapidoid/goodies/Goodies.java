@@ -23,6 +23,7 @@ package org.rapidoid.goodies;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
+import org.rapidoid.security.Roles;
 import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.Dev;
 import org.rapidoid.setup.On;
@@ -121,8 +122,8 @@ public class Goodies {
 			setup.page("/jmx/gc").render(Goodies.gc());
 		}
 
-		setup.post("/_login").json(Goodies.login());
-		setup.get("/_logout").json(Goodies.logout());
+		setup.post("/_login").roles().json(Goodies.login());
+		setup.get("/_logout").roles(Roles.LOGGED_IN).json(Goodies.logout());
 	}
 
 }
