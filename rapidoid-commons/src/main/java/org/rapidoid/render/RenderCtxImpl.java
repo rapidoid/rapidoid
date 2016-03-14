@@ -98,12 +98,12 @@ public class RenderCtxImpl implements RenderCtx {
 
 	@Override
 	public void push(int index, Object v) {
-		if (!Boolean.TRUE.equals(v)) model.add(v);
+		if (v != null && !Boolean.TRUE.equals(v)) model.add(v);
 	}
 
 	@Override
 	public void pop(int index, Object v) {
-		if (!Boolean.TRUE.equals(v)) {
+		if (v != null && !Boolean.TRUE.equals(v)) {
 			Object del = model.remove(model.size() - 1);
 			U.must(del == v);
 		}
@@ -125,37 +125,37 @@ public class RenderCtxImpl implements RenderCtx {
 	}
 
 	private Object get(String name) {
+		return propOf(name, model.toArray());
+	}
+
+	private static Object propOf(String name, Object[] scope) {
 		int p = name.indexOf(".");
 
 		if (p > 0) {
-			Object first = get(name.substring(0, p));
-			return propOf(name.substring(p + 1), first);
+			Object first = propOf(name.substring(0, p), scope);
+			return propOf(name.substring(p + 1), new Object[]{first});
 		}
 
-		for (int i = model.size() - 1; i >= 0; i--) {
-			Object val = propOf(name, model.get(i));
-			if (val != null) return val;
-		}
+		for (int i = scope.length - 1; i >= 0; i--) {
+			Object x = scope[i];
+			if (x != null) {
+				if (x instanceof Map<?, ?>) {
+					Map<?, ?> map = (Map<?, ?>) x;
 
-		return null;
-	}
+					if (map.containsKey(name)) {
+						return map.get(name);
+					}
 
-	private Object propOf(String name, Object model) {
-		if (model instanceof Map<?, ?>) {
-			Map<?, ?> map = (Map<?, ?>) model;
-			Object val = map.get(name);
-			if (val != null) {
-				return val;
-			}
+				} else {
+					Prop prop = Beany.property(x, name, false);
 
-		} else {
-
-			Prop prop = Beany.property(model, name, false);
-
-			if (prop != null) {
-				return prop.get(model);
+					if (prop != null) {
+						return prop.get(x);
+					}
+				}
 			}
 		}
+
 		return null;
 	}
 
