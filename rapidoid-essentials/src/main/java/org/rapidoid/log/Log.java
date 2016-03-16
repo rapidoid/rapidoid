@@ -20,6 +20,7 @@ package org.rapidoid.log;
  * #L%
  */
 
+import org.rapidoid.u.U;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.NOPLogger;
@@ -136,6 +137,14 @@ public class Log {
 	}
 
 	private static void printKeyValue(Appendable out, String key, Object value) throws IOException {
+		if (key.equalsIgnoreCase("password") || key.endsWith("password")) {
+			if (value instanceof String) {
+				if (U.notEmpty((String) value)) {
+					value = "*****";
+				}
+			}
+		}
+
 		out.append(" | ");
 		out.append(key);
 		out.append(" = ");
