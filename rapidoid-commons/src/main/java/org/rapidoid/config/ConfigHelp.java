@@ -35,7 +35,7 @@ public class ConfigHelp {
 			show("  java -cp <yourapp>.jar com.yourapp.Main [option1 option2 ...]");
 
 			show("\nExample:");
-			show("  java -cp <yourapp>.jar com.yourapp.Main port=9090 address=127.0.0.1 cpus=2 workers=4 nodelay");
+			show("  java -cp <yourapp>.jar com.yourapp.Main app.port=9090 app.address=127.0.0.1 production secret=my-secret");
 
 			show("\nAvailable options:");
 

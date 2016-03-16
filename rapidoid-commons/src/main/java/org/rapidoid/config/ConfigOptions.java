@@ -35,17 +35,25 @@ public class ConfigOptions {
 	private static List<ConfigOption> configOptions() {
 		List<ConfigOption> opts = U.list();
 
-		opts.add(opt("mode=(dev|production)", "configure DEV or PRODUCTION mode", "auto-detected"));
-		opts.add(opt("secret=<SECRET>", "configure app-specific secret token for encryption", null));
-		opts.add(opt("port=<P>", "listen at port P", 8888));
-		opts.add(opt("address=<ADDR>", "listen at address ADDR", "0.0.0.0"));
+		opts.add(opt("dev", "configure DEV mode", "auto-detected"));
+		opts.add(opt("production", "configure PRODUCTION mode", "auto-detected"));
+		opts.add(opt("secret=<SECRET>", "configure app-specific secret token for encryption", "(random)"));
+
+		opts.add(opt("app.port=<P>", "the default (App) server will listen at port P", 8888));
+		opts.add(opt("app.address=<ADDR>", "the default (App) server will listen at address ADDR", "0.0.0.0"));
+
+		opts.add(opt("dev.port=<P>", "the Dev server will listen at port P", 7777));
+		opts.add(opt("dev.address=<ADDR>", "the Dev server will listen at address ADDR", "127.0.0.1"));
+
+		opts.add(opt("admin.port=<P>", "the Admin server will listen at port P", 9999));
+		opts.add(opt("admin.address=<ADDR>", "the Admin server will listen at address ADDR", "0.0.0.0"));
+
 		// opts.add(opt("stateless", "Run in stateless mode, session becomes cookiepack", false));
-		opts.add(opt("threads=<T>", "start T threads for the job executor service", 100));
 		opts.add(opt("cpus=<C>", "optimize for C number of CPUs", "the actual number of the CPUs"));
-		opts.add(opt("workers=<W>", "start W number of I/O workers", "the configured number of CPUs - cpus options"));
-		opts.add(opt("nodelay", "set the TCP_NODELAY flag to disable Nagle's algorithm", false));
-		opts.add(opt("blockingAccept", "accept connection in BLOCKING mode", false));
-		opts.add(opt("bufSizeKB=<SIZE>", "TCP socket buffer size in KB", 16));
+//		opts.add(opt("workers=<W>", "start W number of I/O workers", "the configured number of CPUs - cpus options"));
+//		opts.add(opt("nodelay", "set the TCP_NODELAY flag to disable Nagle's algorithm", false));
+//		opts.add(opt("blockingAccept", "accept connection in BLOCKING mode", false));
+//		opts.add(opt("bufSizeKB=<SIZE>", "TCP socket buffer size in KB", 16));
 
 		return opts;
 	}
