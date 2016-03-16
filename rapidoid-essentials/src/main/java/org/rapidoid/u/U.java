@@ -590,14 +590,14 @@ public class U {
 		return (T) value;
 	}
 
-	public static <T> List<List<T>> split(Iterable<T> coll, int segmentSize) {
+	public static <T> List<List<T>> groupsOf(int groupSize, Iterable<T> items) {
 		List<List<T>> segments = list();
-		Iterator<T> it = coll.iterator();
+		Iterator<T> it = items.iterator();
 
 		while (it.hasNext()) {
 			List<T> segment = list();
 
-			for (int i = 0; i < segmentSize; i++) {
+			for (int i = 0; i < groupSize; i++) {
 				if (it.hasNext()) {
 					segment.add(it.next());
 				}
@@ -607,6 +607,10 @@ public class U {
 		}
 
 		return segments;
+	}
+
+	public static <T> List<List<T>> groupsOf(int groupSize, T... items) {
+		return groupsOf(groupSize, list(items));
 	}
 
 }

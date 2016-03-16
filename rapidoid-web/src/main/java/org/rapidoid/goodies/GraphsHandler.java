@@ -42,7 +42,7 @@ public class GraphsHandler extends GUI implements Callable<Object> {
 		Map<String, TimeSeries> metrics = Metrics.all();
 
 		synchronized (metrics) {
-			for (List<Map.Entry<String, TimeSeries>> group : U.split(metrics.entrySet(), 2)) {
+			for (List<Map.Entry<String, TimeSeries>> group : U.groupsOf(2, metrics.entrySet())) {
 				Tag row = row();
 
 				for (Map.Entry<String, TimeSeries> e : group) {
