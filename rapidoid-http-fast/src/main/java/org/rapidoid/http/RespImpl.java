@@ -441,4 +441,26 @@ public class RespImpl implements Resp, Screen {
 		return (Boolean) model().get("cdn");
 	}
 
+	@Override
+	public Screen navbar(boolean navbar) {
+		model().put("navbar", navbar);
+		return this;
+	}
+
+	@Override
+	public Boolean navbar() {
+		return (Boolean) model().get("navbar");
+	}
+
+	@Override
+	public Screen fluid(boolean fluid) {
+		model().put("fluid", fluid);
+		return this;
+	}
+
+	@Override
+	public Boolean fluid() {
+		return (Boolean) model().get("fluid");
+	}
+
 }

@@ -50,6 +50,8 @@ public class DefaultPageRenderer implements PageRenderer {
 	private final Value<String> brand;
 	private final Value<Boolean> search;
 	private final Value<String> cdn;
+	private final Value<Boolean> navbar;
+	private final Value<Boolean> fluid;
 
 	public DefaultPageRenderer(Customization customization) {
 		this.customization = customization;
@@ -58,6 +60,8 @@ public class DefaultPageRenderer implements PageRenderer {
 		brand = config.entry("brand").str();
 		search = config.entry("search").bool();
 		cdn = config.entry("cdn").str();
+		navbar = config.entry("navbar").bool();
+		fluid = config.entry("fluid").bool();
 	}
 
 	@Override
@@ -85,6 +89,18 @@ public class DefaultPageRenderer implements PageRenderer {
 			page.search(screen.search());
 		} else {
 			page.search(search.get());
+		}
+
+		if (screen.navbar() != null) {
+			page.navbar(screen.navbar());
+		} else {
+			page.navbar(navbar.get());
+		}
+
+		if (screen.fluid() != null) {
+			page.fluid(screen.fluid());
+		} else {
+			page.fluid(fluid.get());
 		}
 
 		if (screen.cdn() != null) {

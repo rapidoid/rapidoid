@@ -89,4 +89,28 @@ public interface Screen {
 	 */
 	Boolean cdn();
 
+	/**
+	 * Sets the "<b>navbar</b>" attribute in the MVC model of the response, used for GUI screen rendering.<br>
+	 * Equivalent to <code>model().put("navbar", navbar)</code>.
+	 */
+	Screen navbar(boolean navbar);
+
+	/**
+	 * Gets the "<b>navbar</b>" attribute from the MVC model of the response, used for GUI screen rendering.<br>
+	 * Equivalent to <code>model().get("navbar")</code>.
+	 */
+	Boolean navbar();
+
+	/**
+	 * Sets the "<b>fluid</b>" attribute in the MVC model of the response, used for GUI screen rendering.<br>
+	 * Equivalent to <code>model().put("fluid", fluid)</code>.
+	 */
+	Screen fluid(boolean fluid);
+
+	/**
+	 * Gets the "<b>fluid</b>" attribute from the MVC model of the response, used for GUI screen rendering.<br>
+	 * Equivalent to <code>model().get("fluid")</code>.
+	 */
+	Boolean fluid();
+
 }
