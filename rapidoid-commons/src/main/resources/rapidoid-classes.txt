@@ -88,8 +88,10 @@ org.rapidoid.commons.JS
 org.rapidoid.commons.MediaType
 org.rapidoid.commons.RapidoidInfo
 org.rapidoid.commons.Rnd
+org.rapidoid.commons.Stats
 org.rapidoid.commons.Str
 org.rapidoid.commons.TimeSeries
+org.rapidoid.commons.TSValue
 org.rapidoid.concurrent.Callback
 org.rapidoid.concurrent.Callbacks
 org.rapidoid.concurrent.Future
@@ -157,6 +159,7 @@ org.rapidoid.fluent.utils.StreamUtils
 org.rapidoid.goodies.ConfigHandler
 org.rapidoid.goodies.DetailsHandler
 org.rapidoid.goodies.Goodies
+org.rapidoid.goodies.GraphDataHandler
 org.rapidoid.goodies.GraphsHandler
 org.rapidoid.goodies.LoginHandler
 org.rapidoid.goodies.LogoutHandler
