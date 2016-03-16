@@ -590,4 +590,23 @@ public class U {
 		return (T) value;
 	}
 
+	public static <T> List<List<T>> split(Iterable<T> coll, int segmentSize) {
+		List<List<T>> segments = list();
+		Iterator<T> it = coll.iterator();
+
+		while (it.hasNext()) {
+			List<T> segment = list();
+
+			for (int i = 0; i < segmentSize; i++) {
+				if (it.hasNext()) {
+					segment.add(it.next());
+				}
+			}
+
+			segments.add(segment);
+		}
+
+		return segments;
+	}
+
 }

@@ -1,14 +1,31 @@
 <div id="dygraph-${id}" class="rapidoid-dygraph"></div>
-
 <script>
- new Dygraph(document.getElementById("dygraph-${id}"),
-              [
+function updateGraph${id}() {
+ function D(x) { return new Date(x); }
+ if (Dygraph !== undefined) {
+  var dygraph${id} = new Dygraph(document.getElementById("dygraph-${id}"), [
 {{#points}}
-                [new Date("${date}"), ${values}],
+[D(${date}),${values}],
 {{/points}}
-              ],
-              {
-                title: '${title}',
-                labels: [ "Date"{{#names}}, "${.}"{{/names}} ]
-              });
+  ], {
+    title: '${title}',
+    labels: [ "Date"{{#names}}, "${.}"{{/names}} ],
+    zoomCallback : function(minDate, maxDate, yRange) {
+        var uri = '/_graphs/${uri}?from=' + minDate + '&to=' + maxDate;
+        $R.get(uri, function(resp) {
+          var data = [];
+          for (var k in resp) {
+            data.push([new Date(new Date(parseInt(k))), resp[k]]);
+          }
+          dygraph${id}.updateOptions( { 'file': data } );
+        });
+    }
+  });
+
+ } else {
+   setTimeout(updateGraph${id}, 50);
+ }
+}
+setTimeout(updateGraph${id}, 50);
+
 </script>

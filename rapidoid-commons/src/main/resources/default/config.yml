@@ -16,6 +16,7 @@ dev:
   cdn: auto
   menu:
     Routes: /
+    Metrics: /metrics
     Config: /config
 
 admin:

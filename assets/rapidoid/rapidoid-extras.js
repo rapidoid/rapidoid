@@ -150,3 +150,26 @@ Rapidoid = (function() {
     };
 
 })();
+
+$R = (function() {
+
+    function get(url, onDone) {
+        return $.get(url).done(onDone).fail(function(data) {
+            swal("Communication error!", "Couldn't connect to the server!", "error");
+            console.log(data);
+        });
+    }
+
+    function post(url, data, onDone) {
+        return $.post(url, data).done(onDone).fail(function(data) {
+            swal("Communication error!", "Couldn't connect to the server!", "error");
+            console.log(data);
+        });
+    }
+
+    return {
+            get : get,
+            post : post
+    };
+
+})();

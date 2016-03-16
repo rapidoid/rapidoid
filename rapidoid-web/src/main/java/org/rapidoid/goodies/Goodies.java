@@ -72,6 +72,10 @@ public class Goodies {
 		return new GraphsHandler();
 	}
 
+	public static GraphDataHandler graphData() {
+		return new GraphDataHandler();
+	}
+
 	public static LoginHandler login() {
 		return new LoginHandler();
 	}
@@ -103,7 +107,10 @@ public class Goodies {
 			UTILS.logSection("Registering Dev goodies:");
 
 			setup.page("/").render(Goodies.routes());
+			setup.page("/metrics").render(Goodies.graphs());
 			setup.page("/config").render(Goodies.config());
+
+			setup.get("/_graphs/{id:.*}").json(Goodies.graphData());
 		}
 
 		if (setup == Admin.setup()) {
@@ -120,6 +127,8 @@ public class Goodies {
 			setup.page("/jmx/compilation").render(Goodies.compilation());
 			setup.page("/jmx/runtime").render(Goodies.runtime());
 			setup.page("/jmx/gc").render(Goodies.gc());
+
+			setup.get("/_graphs/{id:.*}").json(Goodies.graphData());
 		}
 
 		setup.post("/_login").roles().json(Goodies.login());

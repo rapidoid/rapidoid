@@ -4,7 +4,10 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.*;
+import org.rapidoid.commons.AnyObj;
+import org.rapidoid.commons.Rnd;
+import org.rapidoid.commons.Str;
+import org.rapidoid.commons.TimeSeries;
 import org.rapidoid.config.Conf;
 import org.rapidoid.gui.*;
 import org.rapidoid.gui.reqinfo.IReqInfo;
@@ -30,7 +33,7 @@ import org.rapidoid.var.Var;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 /*
  * #%L
@@ -90,7 +93,7 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static final Btn EDIT = cmd("^Edit");
 
-	public static final AtomicInteger ID_GEN = new AtomicInteger();
+	private static final AtomicLong ID_GEN = new AtomicLong();
 
 	public static TableTag table_(Object... contents) {
 		return table(contents).class_("table table-striped table-hover");
@@ -742,6 +745,10 @@ public abstract class BootstrapWidgets extends HTML {
 
 	@SuppressWarnings("unchecked")
 	public static Object display(Object item) {
+		if (item instanceof Tag) {
+			return item;
+		}
+
 		if (item == null) return N_A;
 
 		if (item instanceof Var<?>) {
@@ -950,20 +957,21 @@ public abstract class BootstrapWidgets extends HTML {
 		return row;
 	}
 
-	public static Object dygraph(String title, TimeSeries ts) {
+	public static long newId() {
+		return ID_GEN.incrementAndGet();
+	}
+
+	public static Object dygraph(String uri, TimeSeries ts) {
 		List<Object> points = U.list();
 
-		NavigableMap<Long, Double> values = ts.values();
+		NavigableMap<Long, Double> values = ts.overview();
 
-		synchronized (values) {
-			for (Map.Entry<Long, Double> e : values.entrySet()) {
-				Date date = new Date(e.getKey());
-				Map<String, ?> point = U.map("date", Dates.iso(date), "values", e.getValue());
-				points.add(point);
-			}
+		for (Map.Entry<Long, Double> e : values.entrySet()) {
+			Map<String, ?> point = U.map("date", e.getKey(), "values", e.getValue());
+			points.add(point);
 		}
 
-		Map<String, ?> model = U.map("points", points, "names", U.list(title), "title", title, "id", ID_GEN.incrementAndGet());
+		Map<String, ?> model = U.map("points", points, "names", U.list(ts.title()), "title", ts.title(), "id", newId(), "uri", Str.triml(uri, "/"));
 		Tag graph = hardcoded(Templates.fromFile("dygraphs.html").render(model));
 
 		return div(graph);

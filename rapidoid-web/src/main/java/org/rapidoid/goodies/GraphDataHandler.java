@@ -23,39 +23,28 @@ package org.rapidoid.goodies;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.TimeSeries;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.html.Tag;
+import org.rapidoid.http.Req;
 import org.rapidoid.insight.Metrics;
-import org.rapidoid.u.U;
+import org.rapidoid.lambda.FourParamLambda;
 
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
+import java.util.Collections;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class GraphsHandler extends GUI implements Callable<Object> {
+public class GraphDataHandler implements FourParamLambda<Object, Req, Double, Double, String> {
 
 	@Override
-	public Object call() throws Exception {
-		List<Tag> rows = U.list();
-		Map<String, TimeSeries> metrics = Metrics.all();
+	public Object execute(Req req, Double from, Double to, String id) throws Exception {
+		TimeSeries metrics = Metrics.get(id);
 
-		synchronized (metrics) {
-			for (List<Map.Entry<String, TimeSeries>> group : U.split(metrics.entrySet(), 2)) {
-				Tag row = row();
-
-				for (Map.Entry<String, TimeSeries> e : group) {
-					String uri = e.getKey();
-					TimeSeries ts = e.getValue();
-					row = row.append(col6(dygraph(uri, ts)));
-				}
-
-				rows.add(row);
-			}
+		if (metrics == null) {
+			return Collections.emptyMap();
 		}
 
-		return multi(rows.toArray());
+		long fromT = from.longValue();
+		long toT = to.longValue();
+
+		return metrics.overview(fromT, toT);
 	}
 
 }

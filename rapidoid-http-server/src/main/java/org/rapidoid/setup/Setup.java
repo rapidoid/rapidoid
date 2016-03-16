@@ -16,6 +16,7 @@ import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqHandler;
 import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqRespHandler;
 import org.rapidoid.http.processor.HttpProcessor;
+import org.rapidoid.io.Res;
 import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.job.Jobs;
@@ -433,6 +434,8 @@ public class Setup implements Constants {
 		restarted = true;
 
 		Conf.reload();
+
+		Res.reset();
 
 		for (Setup setup : instances()) {
 			setup.http.resetConfig();
