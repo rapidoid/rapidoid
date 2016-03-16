@@ -299,4 +299,9 @@ public class Res {
 	public String getFileName() {
 		return cachedFileName;
 	}
+
+	public static void reset() {
+		FILES.clear();
+	}
+
 }
