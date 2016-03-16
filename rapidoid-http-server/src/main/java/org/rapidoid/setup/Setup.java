@@ -373,6 +373,10 @@ public class Setup implements Constants {
 	}
 
 	public Setup args(String... args) {
+		if (this == ON) {
+			Conf.args(args);
+		}
+
 		config.args(args);
 		return this;
 	}

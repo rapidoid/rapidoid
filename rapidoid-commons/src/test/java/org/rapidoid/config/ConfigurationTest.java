@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Env;
 import org.rapidoid.test.AbstractCommonsTest;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -56,6 +57,18 @@ public class ConfigurationTest extends AbstractCommonsTest {
 	private void checkDefaults() {
 		eq(Conf.APP.entry("port").or(0).longValue(), 8888);
 		eq(Conf.APP.entry("address").str().getOrNull(), "0.0.0.0");
+	}
+
+	@Test
+	public void testProfiles() {
+		Conf.args("port=12345", "profiles=mysql,prod");
+
+		eq(Env.profiles(), U.set("mysql", "prod"));
+
+		isFalse(Env.dev());
+		isTrue(Env.production());
+
+		checkDefaults();
 	}
 
 }

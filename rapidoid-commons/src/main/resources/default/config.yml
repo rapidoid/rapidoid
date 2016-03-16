@@ -45,17 +45,6 @@ admin:
       Classes: /jmx/classes
       Compilation: /jmx/compilation
 
-access:
-  grant:
-    administrator: /.*
-
-
-jdbc:
-  driver: org.hsqldb.jdbc.JDBCDriver
-  url: jdbc:hsqldb:mem:db
-  username: sa
-  password: ''
-
 jpa: {}
 
 hibernate: {}
@@ -86,16 +75,6 @@ jobs:
     threads: 64
 
 hibernate:
-  dialect: org.hibernate.dialect.H2Dialect
-  connection:
-    driver_class: org.h2.Driver
-    username: sa
-    password: ''
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
-  hbm2ddl:
-    auto: create
-  format_sql: false
-  show_sql: true
   c3p0:
     min_size: 5
     max_size: 100

@@ -38,7 +38,7 @@ public class RapidoidInitializer {
 			String proc = ManagementFactory.getRuntimeMXBean().getName();
 			String dir = System.getProperty("user.dir");
 
-			Log.info("Starting Rapidoid...", "version", ver, "process", proc, "working dir", dir);
+			Log.info("Starting Rapidoid...", "version", ver, "process", proc, "dir", dir);
 
 			Cls.getClassIfExists("org.rapidoid.web.RapidoidWebModule");
 			Cls.getClassIfExists("org.rapidoid.insight.Metrics");

@@ -21,6 +21,7 @@ package org.rapidoid.config;
  */
 
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.lambda.ToMap;
 import org.rapidoid.u.U;
@@ -269,12 +270,18 @@ public class Config implements ToMap<String, Object> {
 				String[] parts = arg.split("=", 2);
 
 				if (parts.length > 1) {
-					set(parts[0], parts[1]);
+					setNested(parts[0], parts[1]);
 				} else {
-					set(parts[0], true);
+					setNested(parts[0], true);
 				}
 			}
 		}
+	}
+
+	private void setNested(String key, Object value) {
+		String[] keys = key.split("\\.");
+		Config cfg = keys.length > 1 ? sub(Arr.sub(keys, 0, -1)) : this;
+		cfg.set(U.last(keys), value);
 	}
 
 	public String[] getArgs() {

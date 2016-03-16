@@ -25,16 +25,28 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.scan.ClasspathUtil;
 
+import java.util.Set;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class Env {
 
+	private static final Set<String> PROFILES = Coll.synchronizedSet();
+
 	public static boolean production() {
-		return Conf.ROOT.is("production");
+		return Conf.ROOT.is("production") || Conf.ROOT.is("prod") || profile("production") || profile("prod");
 	}
 
 	public static boolean dev() {
 		return !production() && !ClasspathUtil.getClasspathFolders().isEmpty();
+	}
+
+	public static Set<String> profiles() {
+		return PROFILES;
+	}
+
+	private static boolean profile(String profileName) {
+		return PROFILES.contains(profileName);
 	}
 
 }

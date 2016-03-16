@@ -1,0 +1,6 @@
+hibernate:
+  format_sql: true
+  show_sql: true
+
+c3p0:
+  debug: true

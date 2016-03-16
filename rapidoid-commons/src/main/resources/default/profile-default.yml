@@ -1,0 +1,15 @@
+jdbc:
+  driver: org.h2.Driver
+  url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+  username: sa
+  password: ''
+
+hibernate:
+  dialect: org.hibernate.dialect.H2Dialect
+  connection:
+    driver_class: org.h2.Driver
+    username: sa
+    password: ''
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+  hbm2ddl:
+    auto: create

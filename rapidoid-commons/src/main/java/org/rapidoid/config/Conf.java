@@ -1,10 +1,13 @@
 package org.rapidoid.config;
 
 import org.rapidoid.commons.Coll;
+import org.rapidoid.commons.Env;
 import org.rapidoid.lambda.Mapper;
+import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -65,6 +68,26 @@ public class Conf {
 	public static synchronized void args(String... args) {
 		ConfigHelp.processHelp(args);
 		ROOT.args(args);
+
+		String profiles = ROOT.entry("profiles").str().getOrNull();
+
+		if (profiles != null) {
+			Collections.addAll(Env.profiles(), profiles.split("\\s*\\,\\s*"));
+			Log.info("Configuring active profiles", "profiles", Env.profiles());
+			reload();
+		} else {
+			if (Env.profiles().isEmpty()) {
+				Env.profiles().add("default");
+				Log.info("No profiles were specified, configuring the 'default' profile", "profiles", Env.profiles());
+				reload();
+			}
+		}
+	}
+
+	public static synchronized void profiles(String... profiles) {
+		Coll.assign(Env.profiles(), profiles);
+		Log.info("Overriding active profiles", "profiles", Env.profiles());
+		reload();
 	}
 
 	public static boolean micro() {
@@ -106,8 +129,20 @@ public class Conf {
 		List<List<String>> detached = ConfigUtil.untrack();
 
 		reset();
+
 		ConfigUtil.load(UTILS.path("default", "config.y?ml"), ROOT);
+
+		for (String profile : Env.profiles()) {
+			ConfigUtil.load(UTILS.path("default", U.frmt("profile-%s.y?ml", profile)), ROOT);
+		}
+
+		ConfigUtil.load(UTILS.path(path, "application.y?ml"), ROOT);
 		ConfigUtil.load(UTILS.path(path, "config.y?ml"), ROOT);
+
+		for (String profile : Env.profiles()) {
+			ConfigUtil.load(UTILS.path(path, U.frmt("application-%s.y?ml", profile)), ROOT);
+			ConfigUtil.load(UTILS.path(path, U.frmt("profile-%s.y?ml", profile)), ROOT);
+		}
 
 		for (Config sub : SECTIONS.values()) {
 			ConfigUtil.load(filename(sub.keys()), sub);
