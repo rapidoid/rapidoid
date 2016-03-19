@@ -25,14 +25,18 @@ import org.junit.Before;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Arr;
+import org.rapidoid.commons.Env;
 import org.rapidoid.config.Conf;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.io.IO;
+import org.rapidoid.io.Res;
 import org.rapidoid.ioc.IoC;
+import org.rapidoid.jpa.JPA;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.*;
+import org.rapidoid.sql.JDBC;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
 
@@ -58,6 +62,11 @@ public abstract class HttpTestCommons extends TestCommons {
 
 		System.out.println("--- STARTING SERVER ---");
 
+		Env.profiles().clear();
+		Env.profiles().add("default");
+
+		JPA.entities().clear();
+		Res.reset();
 		Conf.reset();
 		Conf.setPath(getTestName());
 		Log.setLogLevel(LogLevel.INFO);
@@ -65,6 +74,8 @@ public abstract class HttpTestCommons extends TestCommons {
 
 		Setup.resetGlobalState();
 		OnChanges.ignore();
+
+		JDBC.execute("DROP ALL OBJECTS");
 
 		On.setup().resetWithoutRestart();
 		On.setup().listen();
