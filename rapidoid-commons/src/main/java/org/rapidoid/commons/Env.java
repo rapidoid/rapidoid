@@ -31,7 +31,7 @@ import java.util.Set;
 @Since("5.1.0")
 public class Env {
 
-	private static final Set<String> PROFILES = Coll.synchronizedSet();
+	private static final Set<String> PROFILES = Coll.synchronizedSet("default");
 
 	public static boolean production() {
 		return Conf.ROOT.is("production") || Conf.ROOT.is("prod") || profile("production") || profile("prod");
@@ -42,6 +42,9 @@ public class Env {
 	}
 
 	public static Set<String> profiles() {
+		if (dev()) {
+			PROFILES.add("dev");
+		}
 		return PROFILES;
 	}
 

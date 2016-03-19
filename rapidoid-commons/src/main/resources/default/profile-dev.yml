@@ -1,5 +1,5 @@
 hibernate:
-  format_sql: true
+  format_sql: false
   show_sql: true
 
 c3p0:
