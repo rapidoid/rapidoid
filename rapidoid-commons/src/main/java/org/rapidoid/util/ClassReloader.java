@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.io.IO;
+import org.rapidoid.jpa.JPA;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
@@ -54,18 +55,26 @@ public class ClassReloader extends ClassLoader {
 		String filename = getClassFilename(name);
 
 		if (filename != null) {
-			Log.debug("Hot swap", "file", filename);
-			return reload(name, filename);
+			try {
+				return super.findClass(name);
+
+			} catch (ClassNotFoundException e) {
+				Log.debug("Hot swap", "file", filename);
+				return reload(name, filename);
+			}
 		} else {
 			return super.findClass(name);
 		}
 	}
 
 	private Class<?> reload(String name, String filename) throws ClassNotFoundException {
+		Log.debug("Reloading class", "name", name, "filename", filename);
+
 		for (int i = 0; i < 100; i++) {
 			try {
 				byte[] classData = IO.loadBytes(filename);
 				return defineClass(name, classData, 0, classData.length);
+
 			} catch (ClassFormatError e) {
 				// wait some time and retry again...
 				U.sleep(50);
@@ -85,10 +94,10 @@ public class ClassReloader extends ClassLoader {
 
 	private String findOnClasspath(String name) {
 		for (String dir : classpath) {
-			File ff = new File(dir, getClassRelativePath(name));
+			File classFile = new File(dir, getClassRelativePath(name));
 
-			if (ff.exists()) {
-				return ff.getAbsolutePath();
+			if (classFile.exists()) {
+				return classFile.getAbsolutePath();
 			}
 		}
 		return null;
@@ -105,16 +114,24 @@ public class ClassReloader extends ClassLoader {
 	public Class<?> loadClass(String classname) throws ClassNotFoundException {
 		Log.debug("Loading class", "name", classname);
 
+		Class<?> cls = findLoadedClass(classname);
+
+		if (cls != null) {
+			return cls;
+		}
+
 		if (names.contains(classname) || (!Cls.isRapidoidClass(classname) && !Cls.isJREClass(classname)
-				&& findOnClasspath(classname) != null)) {
+				&& !JPA.entities().contains(classname) && findOnClasspath(classname) != null)) {
 
 			try {
 				return findClass(classname);
+
 			} catch (ClassNotFoundException e) {
 				Class<?> fallbackClass = super.loadClass(classname);
 				Log.debug("Couldn't reload class, fallback load", "name", classname);
 				return fallbackClass;
 			}
+
 		} else {
 			return super.loadClass(classname);
 		}
