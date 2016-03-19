@@ -371,7 +371,10 @@ org.rapidoid.job.ContextPreservingJobWrapper
 org.rapidoid.job.Jobs
 org.rapidoid.job.JobsDSL
 org.rapidoid.job.PredefinedContextJobWrapper
+org.rapidoid.jpa.CustomDescriptor
+org.rapidoid.jpa.CustomHibernatePersistenceProvider
 org.rapidoid.jpa.DAO
+org.rapidoid.jpa.EMFUtil
 org.rapidoid.jpa.JPA
 org.rapidoid.jpa.JPAUtil
 org.rapidoid.jpa.QuickJPA
