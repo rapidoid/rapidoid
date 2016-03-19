@@ -20,77 +20,26 @@ package org.rapidoid.jpa;
  * #L%
  */
 
-import org.hibernate.SessionFactory;
-import org.hibernate.ejb.HibernateEntityManagerFactory;
-import org.hibernate.engine.spi.SessionFactoryImplementor;
-import org.hibernate.jpa.boot.internal.SettingsImpl;
-import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.PersisterProvider;
-import org.rapidoid.log.Log;
-import org.rapidoid.scan.Scan;
-import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
 
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
-import java.util.Properties;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
 @SuppressWarnings("deprecation")
 public class QuickJPA implements PersisterProvider {
 
-	private final org.hibernate.ejb.HibernateEntityManagerFactory emf;
+	private final EntityManagerFactory emf;
 
-	public QuickJPA(HibernateEntityManagerFactory emf) {
+	private final List<String> entityTypes;
+
+	public QuickJPA(EntityManagerFactory emf, List<String> entityTypes) {
 		this.emf = emf;
-	}
-
-	public static synchronized org.hibernate.ejb.HibernateEntityManagerFactory emf(String path[], Class<?>... entities) {
-
-		org.hibernate.cfg.AnnotationConfiguration cfg = new org.hibernate.cfg.AnnotationConfiguration();
-
-		List<Class<?>> entityTypes = Scan.annotated(Entity.class).in(path).loadAll();
-
-		for (Class<?> entityType : entityTypes) {
-			cfg.addAnnotatedClass(entityType);
-		}
-
-		for (Class<?> entityType : entities) {
-			if (!entityTypes.contains(entityType)) {
-				cfg.addAnnotatedClass(entityType);
-			}
-		}
-
-		if (entityTypes.isEmpty()) {
-			UTILS.logSection("Didn't find JPA entities, canceling JPA/Hibernate setup!");
-			return null;
-		}
-
-		UTILS.logSection("Total " + entityTypes.size() + " JPA Entities:");
-		for (Class<?> entityType : entityTypes) {
-			Log.info("Entity", "package", entityType.getPackage().getName(), "name", entityType.getSimpleName());
-		}
-
-		UTILS.logSection("Hibernate properties:");
-		Properties props = hibernateProperties();
-		cfg.addProperties(props);
-		UTILS.logProperties(props);
-
-		UTILS.logSection("Starting Hibernate:");
-		SessionFactory sf = cfg.buildSessionFactory();
-		SessionFactoryImplementor sfi = (SessionFactoryImplementor) sf;
-		SettingsImpl settings = new SettingsImpl();
-
-		return new EntityManagerFactoryImpl("pu", sfi, settings, U.map(), cfg);
-	}
-
-	public static Properties hibernateProperties() {
-		return Conf.HIBERNATE.toProperties();
+		this.entityTypes = entityTypes;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -105,4 +54,11 @@ public class QuickJPA implements PersisterProvider {
 		em.close();
 	}
 
+	public EntityManagerFactory emf() {
+		return emf;
+	}
+
+	public List<String> entityTypes() {
+		return entityTypes;
+	}
 }

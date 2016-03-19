@@ -3,13 +3,16 @@ package org.rapidoid.jpa;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Properties;
 
 /*
  * #%L
@@ -34,6 +37,8 @@ import java.util.List;
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class JPA {
+
+	private static final List<String> entities = U.list();
 
 	public static EntityManager em() {
 		Ctx ctx = Ctxs.get();
@@ -124,12 +129,54 @@ public class JPA {
 		em().flush();
 	}
 
-	public static void bootstrap(String[] path, Class<?>... entities) {
-		if (Cls.exists("org.hibernate.cfg.Configuration")) {
+	public static QuickJPA bootstrap(String[] path, Class<?>... providedEntities) {
+		if (Cls.exists("org.hibernate.cfg.Configuration") && entities.isEmpty()) {
 			UTILS.logSection("Bootstrapping JPA (Hibernate)...");
-			Ctxs.setPersisterProvider(new QuickJPA(QuickJPA.emf(path, entities)));
+
+			List<String> entityTypes = EMFUtil.createEMF(path, providedEntities);
+
+			if (entityTypes.isEmpty()) {
+				UTILS.logSection("Didn't find JPA providedEntities, canceling JPA/Hibernate setup!");
+				return null;
+			}
+
+			UTILS.logSection("Hibernate properties:");
+			Properties props = EMFUtil.hibernateProperties();
+			UTILS.logProperties(props);
+
+			UTILS.logSection("Starting Hibernate:");
+
+			CustomHibernatePersistenceProvider provider = new CustomHibernatePersistenceProvider();
+			provider.names().addAll(entityTypes);
+
+			EntityManagerFactory emf = provider.createEntityManagerFactory("pu", props);
+
+			QuickJPA jpa = new QuickJPA(emf, entityTypes);
+			Ctxs.setPersisterProvider(jpa);
+
 			UTILS.logSection("JPA (Hibernate) is ready.");
+
+			Coll.assign(entities, entityTypes);
+			return jpa;
+		} else {
+			return null;
 		}
+	}
+
+	public static List<String> entities() {
+		return entities;
+	}
+
+	public static boolean isLoaded(Object entity) {
+		return with(em()).isLoaded(entity);
+	}
+
+	public static boolean isLoaded(Object entity, String attribute) {
+		return with(em()).isLoaded(entity, attribute);
+	}
+
+	public static Object getIdentifier(Object entity) {
+		return with(em()).getIdentifier(entity);
 	}
 
 }

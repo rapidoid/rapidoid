@@ -73,13 +73,7 @@ public class JPAUtil {
 	}
 
 	public <E> E get(Class<E> clazz, Object id) {
-		E entity = find(clazz, id);
-
-		if (entity == null) {
-			throw U.rte("Cannot find entity with ID=%s", id);
-		}
-
-		return entity;
+		return em.getReference(clazz, id);
 	}
 
 	public Object insert(Object entity) {
@@ -219,6 +213,18 @@ public class JPAUtil {
 
 	public static JPAUtil with(EntityManager em) {
 		return new JPAUtil(em);
+	}
+
+	public boolean isLoaded(Object entity) {
+		return em.getEntityManagerFactory().getPersistenceUnitUtil().isLoaded(entity);
+	}
+
+	public boolean isLoaded(Object entity, String attribute) {
+		return em.getEntityManagerFactory().getPersistenceUnitUtil().isLoaded(entity, attribute);
+	}
+
+	public Object getIdentifier(Object entity) {
+		return em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entity);
 	}
 
 }
