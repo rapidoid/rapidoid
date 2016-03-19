@@ -7,7 +7,6 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.UTILS;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -72,7 +71,7 @@ public class Conf {
 		String profiles = ROOT.entry("profiles").str().getOrNull();
 
 		if (profiles != null) {
-			Collections.addAll(Env.profiles(), profiles.split("\\s*\\,\\s*"));
+			Coll.assign(Env.profiles(), profiles.split("\\s*\\,\\s*"));
 			Log.info("Configuring active profiles", "profiles", Env.profiles());
 			reload();
 		} else {
