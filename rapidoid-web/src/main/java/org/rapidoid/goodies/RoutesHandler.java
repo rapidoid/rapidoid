@@ -53,13 +53,14 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 		});
 
 		List<Object> rows = U.list();
-		rows.add(tr(th("Verb"), th("Path"), th("Content type"), th("MVC"), th("View name"), th("Handler")));
+		rows.add(tr(th("Verb"), th("Path"), th("Content type"), th("MVC"), th("View name"), th("Roles"), th("Handler")));
 
 		for (Route route : routes) {
 			RouteConfig config = route.config();
 
 			Tag verb = td(verb(route.verb()));
 			Tag path = td(route.path());
+			Tag roles = td(config.roles());
 			Tag hnd = td(route.handler());
 
 			Tag ctype = td(config.contentType().info());
@@ -69,7 +70,7 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 
 			Tag mvc = td(config.mvc() ? "Yes" : "No");
 
-			rows.add(tr(verb, path, ctype, mvc, view, hnd));
+			rows.add(tr(verb, path, ctype, mvc, view, roles, hnd));
 		}
 
 		return div(h2("Application routes:"), table_(rows));
