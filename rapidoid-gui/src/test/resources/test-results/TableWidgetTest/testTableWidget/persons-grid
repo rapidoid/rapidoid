@@ -9,12 +9,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr onclick="Rapidoid.goAt('/person/1');" class="pointer">
+        <tr onclick="Rapidoid.goAt('');" class="pointer">
           <td>1</td>
           <td>John</td>
           <td>20</td>
         </tr>
-        <tr onclick="Rapidoid.goAt('/person/2');" class="pointer">
+        <tr onclick="Rapidoid.goAt('');" class="pointer">
           <td>2</td>
           <td>Rambo</td>
           <td>50</td>

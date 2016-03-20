@@ -35,7 +35,7 @@ public class Btn extends AbstractCommand<Btn> {
 
 	private String kind = "default";
 
-	private String linkTo;
+	private String href;
 
 	private String class_;
 
@@ -45,8 +45,8 @@ public class Btn extends AbstractCommand<Btn> {
 
 		String cls = U.or(class_, "btn btn-" + kind);
 
-		if (linkTo != null) {
-			return a(contents).href(linkTo).class_(cls);
+		if (href != null) {
+			return a(contents).href(href).class_(cls);
 		}
 
 		ButtonTag btn = button(contents).type("button").class_(cls);
@@ -101,12 +101,12 @@ public class Btn extends AbstractCommand<Btn> {
 		return this;
 	}
 
-	public String linkTo() {
-		return linkTo;
+	public String href() {
+		return href;
 	}
 
-	public Btn linkTo(String linkTo) {
-		this.linkTo = linkTo;
+	public Btn href(String linkTo) {
+		this.href = linkTo;
 		return this;
 	}
 

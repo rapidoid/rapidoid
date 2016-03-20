@@ -373,7 +373,7 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static Btn navigate(String cmd) {
 		String caption = Str.capitalized(cmd);
-		return btn(caption).linkTo(cmd);
+		return btn(caption).href(cmd);
 	}
 
 	public static Btn[] cmds(String... commands) {

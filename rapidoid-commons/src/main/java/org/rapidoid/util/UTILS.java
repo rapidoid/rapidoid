@@ -748,7 +748,7 @@ public class UTILS implements Constants {
 
 		if (id != null) {
 			String name = Str.camelToSnake(English.plural(Cls.entityName(entity)));
-			String frm = Conf.ROOT.is("generate") ? "%s%s.html" : "/%s/%s";
+			String frm = Conf.ROOT.is("generate") ? "%s%s.html" : "/%s/%s/view";
 			return U.frmt(frm, name, id);
 
 		} else {

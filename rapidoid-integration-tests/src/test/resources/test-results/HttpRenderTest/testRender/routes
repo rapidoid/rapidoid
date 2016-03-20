@@ -1,3 +1,5 @@
+Route POST /_login : json((Req, Resp) -> ...)
+Route GET /_logout : json((Req, Resp) -> ...)
 Route GET /view1 : html((Req, Resp) -> ...)
 Route GET /view2 : render((Req, Resp) -> ...)
 Route POST /view2 : render((Req, Resp) -> ...)
