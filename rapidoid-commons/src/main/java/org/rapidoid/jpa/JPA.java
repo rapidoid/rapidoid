@@ -12,6 +12,7 @@ import org.rapidoid.util.UTILS;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /*
@@ -181,6 +182,10 @@ public class JPA {
 
 	public static <T> List<T> jpql(String jpql, Object... args) {
 		return with(em()).jpql(jpql, args);
+	}
+
+	public static <T> List<T> jpql(String jpql, Map<String, ?> namedArgs, Object... args) {
+		return with(em()).jpql(jpql, namedArgs, args);
 	}
 
 	public static boolean isEntity(Object obj) {
