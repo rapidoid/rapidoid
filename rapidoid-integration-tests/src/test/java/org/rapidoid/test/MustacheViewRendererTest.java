@@ -36,7 +36,7 @@ public class MustacheViewRendererTest extends HttpTestCommons {
 	public void testTemplateLoading() {
 		On.custom().viewRenderer(Integrate.mustacheViewRenderer());
 
-		On.get("/").view("mtmpl").render(() -> U.map("x", "foo", "y", "bar"));
+		On.get("/").view("mtmpl").mvc(() -> U.map("x", "foo", "y", "bar"));
 
 		onlyGet("/");
 	}

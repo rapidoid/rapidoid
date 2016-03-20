@@ -36,12 +36,12 @@ public class HttpRenderTest extends HttpTestCommons {
 			return resp.mvc(true);
 		});
 
-		On.page("/view2").render((Req req, Resp resp) -> {
+		On.page("/view2").mvc((Req req, Resp resp) -> {
 			resp.model().put("x", 12345);
 			return req;
 		});
 
-		On.get("/view3").view("view1").render((Req req, Resp resp) -> {
+		On.get("/view3").view("view1").mvc((Req req, Resp resp) -> {
 			resp.model().put("msg", "custom view: 1");
 			return req;
 		});
@@ -59,14 +59,14 @@ public class HttpRenderTest extends HttpTestCommons {
 			return resp.view("view1").mvc(true);
 		});
 
-		On.get("/piece").render((Resp respo, Screen screen) -> {
+		On.get("/piece").mvc((Resp respo, Screen screen) -> {
 			respo.screen().title("my-title");
 			screen.brand(GUI.span(GUI.fa("cog"), "The Brand!"));
 			respo.model().put("x", 12345);
 			return respo;
 		});
 
-		On.get("/defaults").render((Req req) -> req);
+		On.get("/defaults").mvc((Req req) -> req);
 
 		onlyGet("/view1");
 		getAndPost("/view2");

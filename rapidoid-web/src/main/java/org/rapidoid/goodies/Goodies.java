@@ -106,9 +106,9 @@ public class Goodies {
 		if (setup == Dev.setup()) {
 			UTILS.logSection("Registering Dev goodies:");
 
-			setup.page("/").render(Goodies.routes());
-			setup.page("/metrics").render(Goodies.graphs());
-			setup.page("/config").render(Goodies.config());
+			setup.page("/").mvc(Goodies.routes());
+			setup.page("/metrics").mvc(Goodies.graphs());
+			setup.page("/config").mvc(Goodies.config());
 
 			setup.get("/_graphs/{id:.*}").json(Goodies.graphData());
 		}
@@ -116,17 +116,17 @@ public class Goodies {
 		if (setup == Admin.setup()) {
 			UTILS.logSection("Registering Admin goodies:");
 
-			setup.page("/").render(Goodies.graphs());
-			setup.page("/routes").render(Goodies.routes());
+			setup.page("/").mvc(Goodies.graphs());
+			setup.page("/routes").mvc(Goodies.routes());
 
-			setup.page("/jmx/memory").render(Goodies.memory());
-			setup.page("/jmx/mempool").render(Goodies.memoryPool());
-			setup.page("/jmx/classes").render(Goodies.classes());
-			setup.page("/jmx/os").render(Goodies.os());
-			setup.page("/jmx/threads").render(Goodies.threads());
-			setup.page("/jmx/compilation").render(Goodies.compilation());
-			setup.page("/jmx/runtime").render(Goodies.runtime());
-			setup.page("/jmx/gc").render(Goodies.gc());
+			setup.page("/jmx/memory").mvc(Goodies.memory());
+			setup.page("/jmx/mempool").mvc(Goodies.memoryPool());
+			setup.page("/jmx/classes").mvc(Goodies.classes());
+			setup.page("/jmx/os").mvc(Goodies.os());
+			setup.page("/jmx/threads").mvc(Goodies.threads());
+			setup.page("/jmx/compilation").mvc(Goodies.compilation());
+			setup.page("/jmx/runtime").mvc(Goodies.runtime());
+			setup.page("/jmx/gc").mvc(Goodies.gc());
 
 			setup.get("/_graphs/{id:.*}").json(Goodies.graphData());
 		}

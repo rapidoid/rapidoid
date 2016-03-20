@@ -246,10 +246,10 @@ public class X {
 		On.delete(uri + "/{id}").tx().json(X.delete(entityType));
 
 		// GUI
-		On.page(uri + "/manage").render(X.manage(entityType));
-		On.page(uri + "/add").tx().render(X.add(entityType));
-		On.page(uri + "/{id}/view").tx().render(X.view(entityType));
-		On.page(uri + "/{id}/edit").tx().render(X.edit(entityType));
+		On.page(uri + "/manage").mvc(X.manage(entityType));
+		On.page(uri + "/add").tx().mvc(X.add(entityType));
+		On.page(uri + "/{id}/view").tx().mvc(X.view(entityType));
+		On.page(uri + "/{id}/edit").tx().mvc(X.edit(entityType));
 	}
 
 	public static void scaffold(Class<?>... entityTypes) {

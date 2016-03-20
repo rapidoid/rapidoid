@@ -166,7 +166,7 @@ public class PojoHandlersSetup {
 					if (page.raw()) {
 						route.html(method, bean);
 					} else {
-						route.render(method, bean);
+						route.mvc(method, bean);
 					}
 
 				} else {

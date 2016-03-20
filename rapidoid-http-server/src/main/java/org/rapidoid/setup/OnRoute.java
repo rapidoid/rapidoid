@@ -240,51 +240,51 @@ public class OnRoute {
 
 	/* GUI */
 
-	public void render(String response) {
+	public void mvc(String response) {
 		HttpHandlers.registerPredefined(http, verb, path, renderOpts(), response);
 	}
 
-	public void render(Collection<?> response) {
+	public void mvc(Collection<?> response) {
 		HttpHandlers.registerPredefined(http, verb, path, renderOpts(), response);
 	}
 
-	public void render(Map<?, ?> response) {
+	public void mvc(Map<?, ?> response) {
 		HttpHandlers.registerPredefined(http, verb, path, renderOpts(), response);
 	}
 
-	public <T> void render(Callable<T> handler) {
+	public <T> void mvc(Callable<T> handler) {
 		HttpHandlers.register(http, verb, path, renderOpts(), handler);
 	}
 
-	public void render(Method method, Object instance) {
+	public void mvc(Method method, Object instance) {
 		HttpHandlers.register(http, verb, path, renderOpts(), method, instance);
 	}
 
-	public void render(OneParamLambda<?, ?> handler) {
+	public void mvc(OneParamLambda<?, ?> handler) {
 		HttpHandlers.register(http, verb, path, renderOpts(), handler);
 	}
 
-	public void render(TwoParamLambda<?, ?, ?> handler) {
+	public void mvc(TwoParamLambda<?, ?, ?> handler) {
 		HttpHandlers.register(http, verb, path, renderOpts(), handler);
 	}
 
-	public void render(ThreeParamLambda<?, ?, ?, ?> handler) {
+	public void mvc(ThreeParamLambda<?, ?, ?, ?> handler) {
 		HttpHandlers.register(http, verb, path, renderOpts(), handler);
 	}
 
-	public void render(FourParamLambda<?, ?, ?, ?, ?> handler) {
+	public void mvc(FourParamLambda<?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(http, verb, path, renderOpts(), handler);
 	}
 
-	public void render(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+	public void mvc(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(http, verb, path, renderOpts(), handler);
 	}
 
-	public void render(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+	public void mvc(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(http, verb, path, renderOpts(), handler);
 	}
 
-	public void render(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+	public void mvc(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
 		HttpHandlers.register(http, verb, path, renderOpts(), handler);
 	}
 	
