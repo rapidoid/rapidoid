@@ -51,6 +51,10 @@ public class JPA {
 		return JPAUtil.with(em);
 	}
 
+	public static <E> E ref(Class<E> clazz, Object id) {
+		return with(em()).ref(clazz, id);
+	}
+
 	public static <E> E get(Class<E> clazz, Object id) {
 		return with(em()).get(clazz, id);
 	}

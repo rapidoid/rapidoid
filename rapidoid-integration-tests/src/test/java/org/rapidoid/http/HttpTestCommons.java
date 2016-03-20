@@ -196,6 +196,10 @@ public abstract class HttpTestCommons extends TestCommons {
 		notFoundExcept(port, uri, "GET", "POST");
 	}
 
+	protected void getReq(String uri) {
+		testReq(DEFAULT_PORT, "GET", uri, null);
+	}
+
 	protected void postData(String uri, Map<String, ?> data) {
 		testReq(DEFAULT_PORT, "POST", uri, data);
 	}
@@ -223,6 +227,10 @@ public abstract class HttpTestCommons extends TestCommons {
 	private void onlyReq(int port, String verb, String uri, Map<String, ?> data) {
 		testReq(port, verb, uri, data);
 		notFoundExcept(port, uri, verb);
+	}
+
+	protected void deleteReq(String uri) {
+		testReq(DEFAULT_PORT, "DELETE", uri, null);
 	}
 
 	protected void notFoundExcept(String uri, String... exceptVerbs) {

@@ -77,6 +77,12 @@ public class JPAUtil {
 	}
 
 	public <E> E get(Class<E> clazz, Object id) {
+		E entity = find(clazz, id);
+		U.must(entity != null, "Cannot find %s with ID=%s", clazz.getSimpleName(), id);
+		return entity;
+	}
+
+	public <E> E ref(Class<E> clazz, Object id) {
 		return em.getReference(clazz, id);
 	}
 

@@ -529,6 +529,7 @@ org.rapidoid.util.SimplePersisterProvider
 org.rapidoid.util.SuccessException
 org.rapidoid.util.Usage
 org.rapidoid.util.UTILS
+org.rapidoid.util.X
 org.rapidoid.u.U
 org.rapidoid.value.SimpleValueStore
 org.rapidoid.value.Value
