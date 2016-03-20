@@ -131,6 +131,11 @@ public interface Req {
 	 */
 	String param(String name, String defaultValue);
 
+	/**
+	 * Returns a new instance of the specified bean type, with properties initialized from the <b>URL parameters</b> of the HTTP request.
+	 */
+	<T> T param(Class<T> beanType);
+
 	/* POSTED PARAMETERS IN THE REQUEST BODY: */
 
 	/**
@@ -149,6 +154,11 @@ public interface Req {
 	 * value, if it is not found.
 	 */
 	<T extends Serializable> T posted(String name, T defaultValue);
+
+	/**
+	 * Returns a new instance of the specified bean type, with properties initialized from the <b>posted parameters</b> of the HTTP request.
+	 */
+	<T> T posted(Class<T> beanType);
 
 	/* UPLOADED FILES IN THE REQUEST BODY: */
 
@@ -187,6 +197,11 @@ public interface Req {
 	 * if it is not found.
 	 */
 	<T> T data(String name, T defaultValue);
+
+	/**
+	 * Returns a new instance of the specified bean type, with properties initialized from the <b>data parameters</b> of the HTTP request.
+	 */
+	<T> T data(Class<T> beanType);
 
 	/* EXTRA ATTRIBUTES ATTACHED TO THE REQUEST: */
 

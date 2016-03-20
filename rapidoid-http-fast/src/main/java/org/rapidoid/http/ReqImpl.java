@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.MediaType;
+import org.rapidoid.commons.Str;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
@@ -226,6 +227,11 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	}
 
 	@Override
+	public <T> T param(Class<T> beanType) {
+		return beanFrom(beanType, params());
+	}
+
+	@Override
 	public String header(String name) {
 		return U.notNull(headers().get(name), "HEADERS[%s]", name);
 	}
@@ -254,6 +260,11 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	@Override
 	public <T extends Serializable> T posted(String name, T defaultValue) {
 		return withDefault(posted().get(name), defaultValue);
+	}
+
+	@Override
+	public <T> T posted(Class<T> beanType) {
+		return beanFrom(beanType, posted());
 	}
 
 	@Override
@@ -308,6 +319,20 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		}
 
 		return withDefault(value, defaultValue);
+	}
+
+	@Override
+	public <T> T data(Class<T> beanType) {
+		return beanFrom(beanType, data());
+	}
+
+	private <T> T beanFrom(Class<T> beanType, Map<String, ?> properties) {
+		String paramName = Str.uncapitalized(beanType.getSimpleName());
+		try {
+			return (T) http.custom().beanParameterFactory().getParamValue(this, beanType, paramName, (Map<String, Object>) properties);
+		} catch (Exception e) {
+			throw new RuntimeException("Couldn't instantiate a bean of type: " + beanType.getName());
+		}
 	}
 
 	@Override

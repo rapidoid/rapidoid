@@ -72,7 +72,7 @@ public class CustomizationTest extends HttpTestCommons {
 
 		// customization
 		ObjectMapper mapper = new ObjectMapper();
-		On.custom().beanParameterFactory((req, type, name) -> mapper.convertValue(req.posted(), type));
+		On.custom().beanParameterFactory((req, type, name, props) -> mapper.convertValue(req.posted(), type));
 
 		// after customization
 		onlyPost("/aa?id=3", U.map("the-name", "three"));

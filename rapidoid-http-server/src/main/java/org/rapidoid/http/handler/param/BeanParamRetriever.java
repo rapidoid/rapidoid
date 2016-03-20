@@ -43,7 +43,7 @@ public class BeanParamRetriever implements ParamRetriever {
 	@Override
 	public Object getParamValue(Req req) {
 		try {
-			return customization.beanParameterFactory().getParamValue(req, type, name);
+			return customization.beanParameterFactory().getParamValue(req, type, name, req.data());
 		} catch (Exception e) {
 			throw U.rte(e);
 		}

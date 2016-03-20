@@ -24,10 +24,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.Req;
 
+import java.util.Map;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public interface BeanParameterFactory {
 
-	Object getParamValue(Req req, Class<?> paramType, String paramName) throws Exception;
+	Object getParamValue(Req req, Class<?> paramType, String paramName, Map<String, Object> properties) throws Exception;
 
 }

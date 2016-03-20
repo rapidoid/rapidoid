@@ -25,13 +25,15 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.Req;
 
+import java.util.Map;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class DefaultBeanParameterFactory implements BeanParameterFactory {
 
 	@Override
-	public Object getParamValue(Req req, Class<?> paramType, String paramName) throws Exception {
-		return JSON.MAPPER.convertValue(req.data(), paramType);
+	public Object getParamValue(Req req, Class<?> paramType, String paramName, Map<String, Object> properties) throws Exception {
+		return JSON.MAPPER.convertValue(properties, paramType);
 	}
 
 }
