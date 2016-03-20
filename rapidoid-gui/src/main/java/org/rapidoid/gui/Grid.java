@@ -29,6 +29,7 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.var.Var;
 
 import java.util.List;
@@ -164,7 +165,7 @@ public class Grid extends AbstractWidget {
 	}
 
 	protected String onClickScript(Item item) {
-		String js = U.frmt("Rapidoid.goAt('%s');", urlFor(item.value()));
+		String js = U.frmt("Rapidoid.goAt('%s');", UTILS.uriFor(item.value()));
 		return js;
 	}
 

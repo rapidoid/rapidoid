@@ -70,4 +70,31 @@ public class StrTest extends AbstractCommonsTest {
 		eq(Str.cutFromLast("a.b.c", "-"), null);
 	}
 
+	@Test
+	public void testCamelSplit() {
+		eq(Str.camelSplit("bookTitle"), new String[]{"book", "Title"});
+		eq(Str.camelSplit("BookTitle"), new String[]{"Book", "Title"});
+		eq(Str.camelSplit("MyFoo"), new String[]{"My", "Foo"});
+		eq(Str.camelSplit("Foo"), new String[]{"Foo"});
+		eq(Str.camelSplit("bar"), new String[]{"bar"});
+		eq(Str.camelSplit("ABC"), new String[]{"ABC"});
+		eq(Str.camelSplit("myID"), new String[]{"my", "ID"});
+		eq(Str.camelSplit("xID2"), new String[]{"x", "ID", "2"});
+		eq(Str.camelSplit("date1"), new String[]{"date", "1"});
+		eq(Str.camelSplit("myDate2"), new String[]{"my", "Date", "2"});
+	}
+
+	@Test
+	public void testCamelToSnake() {
+		eq(Str.camelToSnake("bookTitle"), "book_title");
+		eq(Str.camelToSnake("BookTitle"), "book_title");
+		eq(Str.camelToSnake("Foo"), "foo");
+		eq(Str.camelToSnake("bar"), "bar");
+		eq(Str.camelToSnake("ABC"), "abc");
+		eq(Str.camelToSnake("myID"), "my_id");
+		eq(Str.camelToSnake("xID2"), "x_id_2");
+		eq(Str.camelToSnake("date1"), "date_1");
+		eq(Str.camelToSnake("myDate2"), "my_date_2");
+	}
+
 }

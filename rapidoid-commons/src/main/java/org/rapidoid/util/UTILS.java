@@ -27,12 +27,15 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Arr;
+import org.rapidoid.commons.English;
 import org.rapidoid.commons.Str;
+import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.insight.Insights;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
+import org.rapidoid.jpa.JPA;
 import org.rapidoid.lambda.Dynamic;
 import org.rapidoid.lambda.F2;
 import org.rapidoid.lambda.Lmbd;
@@ -733,6 +736,23 @@ public class UTILS implements Constants {
 	public static void logProperties(Properties props) {
 		for (Entry<Object, Object> p : props.entrySet()) {
 			Log.info("Hibernate property", String.valueOf(p.getKey()), p.getValue());
+		}
+	}
+
+	public static String uriFor(Object entity) {
+		if (!JPA.isEntity(entity)) {
+			return "";
+		}
+
+		Object id = JPA.getIdentifier(entity);
+
+		if (id != null) {
+			String name = Str.camelToSnake(English.plural(Cls.entityName(entity)));
+			String frm = Conf.ROOT.is("generate") ? "%s%s.html" : "/%s/%s";
+			return U.frmt(frm, name, id);
+
+		} else {
+			return "";
 		}
 	}
 

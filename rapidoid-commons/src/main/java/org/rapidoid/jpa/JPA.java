@@ -182,4 +182,9 @@ public class JPA {
 	public static <T> List<T> jpql(String jpql, Object... args) {
 		return with(em()).jpql(jpql, args);
 	}
+
+	public static boolean isEntity(Object obj) {
+		return obj != null && entities().contains(obj.getClass().getName());
+	}
+
 }

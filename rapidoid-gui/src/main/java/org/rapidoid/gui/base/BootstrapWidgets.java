@@ -8,7 +8,6 @@ import org.rapidoid.commons.AnyObj;
 import org.rapidoid.commons.Rnd;
 import org.rapidoid.commons.Str;
 import org.rapidoid.commons.TimeSeries;
-import org.rapidoid.config.Conf;
 import org.rapidoid.gui.*;
 import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
@@ -20,6 +19,7 @@ import org.rapidoid.html.*;
 import org.rapidoid.html.customtag.ColspanTag;
 import org.rapidoid.html.tag.*;
 import org.rapidoid.http.HttpVerb;
+import org.rapidoid.jpa.JPA;
 import org.rapidoid.lambda.Calc;
 import org.rapidoid.lambda.ToMap;
 import org.rapidoid.model.Item;
@@ -513,7 +513,7 @@ public abstract class BootstrapWidgets extends HTML {
 
 		for (Object result : found) {
 			Object id = Beany.getId(result);
-			String url = urlFor(result);
+			String url = UTILS.uriFor(result);
 
 			Tag left = h6("(ID", NBSP, "=", NBSP, id, ")");
 			Object header = span(result.getClass().getSimpleName());
@@ -547,28 +547,6 @@ public abstract class BootstrapWidgets extends HTML {
 		var.set(pageN);
 
 		return var;
-	}
-
-	public static boolean isEntity(Object obj) {
-		return Cls.isAppBean(obj)
-				&& !(obj instanceof Tag)
-				&& !(obj instanceof AbstractWidget)
-				&& Beany.hasProperty(obj, "id");
-	}
-
-	public static String urlFor(Object entity) {
-		if (!isEntity(entity)) {
-			return "";
-		}
-
-		Object id = Beany.getIdIfExists(entity);
-		if (id != null) {
-			String className = Cls.entityName(entity);
-			String frm = Conf.ROOT.is("generate") ? "%s%s.html" : "/%s/%s";
-			return U.frmt(frm, Str.uncapitalized(className), id);
-		} else {
-			return "";
-		}
 	}
 
 	public static Object highlight(String text) {
@@ -776,8 +754,8 @@ public abstract class BootstrapWidgets extends HTML {
 			return widget.render(null);
 		}
 
-		if (isEntity(item)) {
-			return a(escape(item.toString())).href(urlFor(item));
+		if (JPA.isEntity(item)) {
+			return a(escape(item.toString())).href(UTILS.uriFor(item));
 		}
 
 		if (isBean(item)) return GUI.show(item);

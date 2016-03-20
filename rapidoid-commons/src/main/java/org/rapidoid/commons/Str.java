@@ -35,8 +35,9 @@ public class Str {
 
 	// regex taken from
 	// http://stackoverflow.com/questions/2559759/how-do-i-convert-camelcase-into-human-readable-names-in-java
-	private static final Pattern CAMEL_SPLITTER_PATTERN = Pattern
-			.compile("(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
+	public static final String CAMEL_REGEX = "(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])";
+
+	private static final Pattern CAMEL_SPLITTER_PATTERN = Pattern.compile(CAMEL_REGEX);
 
 	private static final String[][] XML_ESCAPE = {
 			{"&", "&amp;"},
@@ -63,12 +64,12 @@ public class Str {
 	private Str() {
 	}
 
-	public static String camelSplit(String s) {
-		return CAMEL_SPLITTER_PATTERN.matcher(s).replaceAll(" ");
+	public static String[] camelSplit(String s) {
+		return s.split(CAMEL_REGEX);
 	}
 
 	public static String camelPhrase(String s) {
-		return capitalized(camelSplit(s).toLowerCase());
+		return capitalized(U.join(" ", camelSplit(s)).toLowerCase());
 	}
 
 	public static String replace(String s, String[][] repls) {
@@ -213,6 +214,10 @@ public class Str {
 
 	public static String javaEscape(String s) {
 		return Str.replace(s, JAVA_ESCAPE);
+	}
+
+	public static String camelToSnake(String s) {
+		return U.join("_", Str.camelSplit(s)).toLowerCase();
 	}
 
 }
