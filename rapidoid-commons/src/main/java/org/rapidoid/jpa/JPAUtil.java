@@ -7,6 +7,7 @@ import org.rapidoid.u.U;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.EntityType;
@@ -225,6 +226,16 @@ public class JPAUtil {
 
 	public Object getIdentifier(Object entity) {
 		return em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entity);
+	}
+
+	public <T> List<T> jpql(String jpql, Object... args) {
+		Query q = JPA.em().createQuery(jpql);
+
+		for (int i = 0; i < args.length; i++) {
+			q.setParameter(i + 1, args[i]);
+		}
+
+		return q.getResultList();
 	}
 
 }

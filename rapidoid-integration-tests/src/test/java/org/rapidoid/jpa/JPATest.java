@@ -58,6 +58,8 @@ public class JPATest extends HttpTestCommons {
 
 			List<Movie> movies = JPA.getAll(Movie.class);
 			eq(Do.map(movies).to(Movie::getTitle), U.list("movie 1"));
+
+			eq(JPA.jpql("select title from Book where id = ?1", 2L), U.list("book 2"));
 		}));
 
 		eq(Jobs.errorCounter().get(), 0);
