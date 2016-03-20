@@ -370,55 +370,59 @@ public class U {
 		return rte(frmt(message, args));
 	}
 
-	public static boolean must(boolean expectedCondition, String message) {
-		if (!expectedCondition) {
-			throw rte(message);
-		}
-		return true;
-	}
-
 	public static RuntimeException rte(String message, Throwable cause, Object... args) {
 		return rte(frmt(message, args), cause);
 	}
 
+	public static IllegalArgumentException illegal(String message, Object... args) {
+		return new IllegalArgumentException(frmt(message, args));
+	}
+
+	public static boolean must(boolean expectedCondition, String message) {
+		if (!expectedCondition) {
+			throw illegal(message);
+		}
+		return true;
+	}
+
 	public static boolean must(boolean expectedCondition) {
 		if (!expectedCondition) {
-			throw rte("Expectation failed!");
+			throw illegal("Expectation failed!");
 		}
 		return true;
 	}
 
 	public static boolean must(boolean expectedCondition, String message, long arg) {
 		if (!expectedCondition) {
-			throw rte(message, arg);
+			throw illegal(message, arg);
 		}
 		return true;
 	}
 
 	public static boolean must(boolean expectedCondition, String message, Object arg) {
 		if (!expectedCondition) {
-			throw rte(message, str(arg));
+			throw illegal(message, str(arg));
 		}
 		return true;
 	}
 
 	public static boolean must(boolean expectedCondition, String message, Object arg1, Object arg2) {
 		if (!expectedCondition) {
-			throw rte(message, str(arg1), str(arg2));
+			throw illegal(message, str(arg1), str(arg2));
 		}
 		return true;
 	}
 
 	public static boolean must(boolean expectedCondition, String message, Object arg1, Object arg2, Object arg3) {
 		if (!expectedCondition) {
-			throw rte(message, str(arg1), str(arg2), str(arg3));
+			throw illegal(message, str(arg1), str(arg2), str(arg3));
 		}
 		return true;
 	}
 
 	public static <T> T notNull(T value, String msgOrDesc, Object... descArgs) {
 		if (value == null) {
-			throw rte("%s must NOT be null!", frmt(msgOrDesc, descArgs));
+			throw illegal("%s must NOT be null!", frmt(msgOrDesc, descArgs));
 		}
 
 		return value;
