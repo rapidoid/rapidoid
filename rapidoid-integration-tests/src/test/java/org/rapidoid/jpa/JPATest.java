@@ -7,10 +7,8 @@ import org.rapidoid.fluent.Do;
 import org.rapidoid.http.HttpTestCommons;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
 
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 /*
  * #%L
@@ -41,43 +39,28 @@ public class JPATest extends HttpTestCommons {
 		String[] path = {JPATest.class.getPackage().getName()};
 		JPA.bootstrap(path);
 
-		Book b1 = new Book("book 1");
-		Book b2 = new Book("book 2");
-		Movie m1 = new Movie("movie 1");
+		Jobs.executeAndWait(() -> JPA.transaction(() -> {
+			Book b1 = new Book("book 1");
+			Book b2 = new Book("book 2");
+			Movie m1 = new Movie("movie 1");
 
-		CountDownLatch latch = new CountDownLatch(1);
+			JPA.insert(b1);
+			JPA.insert(b2);
+			JPA.insert(m1);
+			JPA.em().flush(); // not actually required
+		}));
 
-		Jobs.execute(() -> {
-			JPA.transaction(() -> {
-				JPA.insert(b1);
-				JPA.insert(b2);
-				JPA.insert(m1);
-				JPA.em().flush();
-			});
+		Jobs.executeAndWait(() -> JPA.transaction(() -> {
+			eq(JPA.getAllEntities().size(), 3);
 
-			latch.countDown();
-		});
+			List<Book> books = JPA.getAll(Book.class);
+			eq(Do.map(books).to(Book::getTitle), U.list("book 1", "book 2"));
 
-		UTILS.wait(latch);
+			List<Movie> movies = JPA.getAll(Movie.class);
+			eq(Do.map(movies).to(Movie::getTitle), U.list("movie 1"));
+		}));
 
-		CountDownLatch latch2 = new CountDownLatch(1);
-
-		Jobs.execute(() -> {
-			JPA.transaction(() -> {
-				eq(JPA.getAllEntities().size(), 3);
-
-				List<Book> books = JPA.getAll(Book.class);
-				eq(Do.map(books).to(Book::getTitle), U.list("book 1", "book 2"));
-
-				List<Movie> movies = JPA.getAll(Movie.class);
-				eq(Do.map(movies).to(Movie::getTitle), U.list("movie 1"));
-
-			});
-
-			latch2.countDown();
-		});
-
-		UTILS.wait(latch2);
+		eq(Jobs.errorCounter().get(), 0);
 	}
 
 }

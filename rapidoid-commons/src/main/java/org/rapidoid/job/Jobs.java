@@ -30,14 +30,18 @@ import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.WithContext;
+import org.rapidoid.u.U;
 
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class Jobs {
 
 	public static final Config JOBS = Conf.JOBS;
+
+	private static final AtomicLong errorCounter = new AtomicLong();
 
 	static {
 		RapidoidInitializer.initialize();
@@ -95,14 +99,23 @@ public class Jobs {
 	}
 
 	public static void execute(Runnable job) {
-		executor().execute(wrap(job));
+		ContextPreservingJobWrapper jobWrapper = wrap(job);
+		executor().execute(jobWrapper);
+	}
+
+	public static void executeAndWait(Runnable job) {
+		ContextPreservingJobWrapper jobWrapper = wrap(job);
+		executor().execute(jobWrapper);
+		while (!jobWrapper.isDone()) {
+			U.sleep(10);
+		}
 	}
 
 	public static <T> void execute(Callable<T> job, Callback<T> callback) {
 		execute(callbackJob(job, callback));
 	}
 
-	public static Runnable wrap(Runnable job) {
+	public static ContextPreservingJobWrapper wrap(Runnable job) {
 		Ctx ctx = Ctxs.get();
 
 		if (ctx != null) {
@@ -145,6 +158,10 @@ public class Jobs {
 
 	public static JobsDSL every(long period, TimeUnit unit) {
 		return new JobsDSL(-1, period, unit);
+	}
+
+	public static AtomicLong errorCounter() {
+		return errorCounter;
 	}
 
 }

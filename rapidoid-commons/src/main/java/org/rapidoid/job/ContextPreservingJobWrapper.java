@@ -35,6 +35,8 @@ public class ContextPreservingJobWrapper implements Runnable {
 
 	private final Ctx ctx;
 
+	private volatile boolean done;
+
 	public ContextPreservingJobWrapper(Runnable job, Ctx ctx) {
 		this.job = job;
 		this.ctx = ctx;
@@ -42,30 +44,43 @@ public class ContextPreservingJobWrapper implements Runnable {
 
 	@Override
 	public void run() {
-		U.must(!Ctxs.hasContext(), "Detected context leak!");
-
 		try {
-			if (ctx != null) {
-				// U.must(ctx.app() != null, "Application wasn't attached to the context: %s", ctx);
-				Ctxs.attach(ctx);
-			} else {
-				Ctxs.open("job");
-				Log.debug("Opening new context");
+
+			U.must(!Ctxs.hasContext(), "Detected context leak!");
+
+			try {
+				if (ctx != null) {
+					// U.must(ctx.app() != null, "Application wasn't attached to the context: %s", ctx);
+					Ctxs.attach(ctx);
+				} else {
+					Ctxs.open("job");
+					Log.debug("Opening new context");
+				}
+
+			} catch (Throwable e) {
+				Jobs.errorCounter().incrementAndGet();
+				Log.error("Job context initialization failed!", e);
+				throw U.rte("Job context initialization failed!", e);
 			}
 
-		} catch (Throwable e) {
-			Log.error("Job context initialization failed!", e);
-			throw U.rte("Job context initialization failed!", e);
-		}
+			try {
+				job.run();
 
-		try {
-			job.run();
-		} catch (Throwable e) {
-			Log.error("Job execution failed!", e);
-			throw U.rte("Job execution failed!", e);
+			} catch (Throwable e) {
+				Jobs.errorCounter().incrementAndGet();
+				Log.error("Job execution failed!", e);
+				throw U.rte("Job execution failed!", e);
+			} finally {
+				Ctxs.close();
+			}
+
 		} finally {
-			Ctxs.close();
+			done = true;
 		}
+	}
+
+	public boolean isDone() {
+		return done;
 	}
 
 }
