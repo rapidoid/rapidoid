@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 3748
+Content-Length: 3712
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +13,6 @@ Content-Length: 3748
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>App</title>
 
 
 
@@ -95,7 +94,6 @@ Content-Length: 3748
 
 <div class="container">
 
-    <h1>App</h1>
 
 
 

@@ -2,7 +2,6 @@ app:
   port: 8888
   address: 0.0.0.0
   brand: 'App'
-  title: 'App'
   search: false
   navbar: true
   fluid: false
@@ -13,7 +12,6 @@ dev:
   port: 7777
   address: 127.0.0.1
   brand: '<i class="fa fa-code"></i> Dev Center'
-  title: 'Dev Center'
   search: false
   navbar: true
   fluid: false
@@ -27,7 +25,6 @@ admin:
   port: 9999
   address: 0.0.0.0
   brand: '<i class="fa fa-dashboard"></i> Admin Center'
-  title: 'Admin Center'
   search: false
   navbar: true
   fluid: false

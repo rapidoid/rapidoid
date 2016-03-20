@@ -76,7 +76,7 @@ public class DefaultPageRenderer implements PageRenderer {
 		if (screen.title() != null) {
 			page.title(screen.title());
 		} else {
-			page.title(title.get());
+			page.title(title.getOrNull());
 		}
 
 		if (screen.brand() != null) {
