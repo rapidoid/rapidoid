@@ -26,6 +26,7 @@ import org.rapidoid.gui.GUI;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.http.HttpUtils;
+import org.rapidoid.http.HttpVerb;
 import org.rapidoid.http.Route;
 import org.rapidoid.http.RouteConfig;
 import org.rapidoid.setup.Admin;
@@ -35,6 +36,7 @@ import org.rapidoid.u.U;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -55,6 +57,42 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 	private TableTag routesOf(Setup setup) {
 		List<Route> routes = U.list(setup.getRoutes().all());
 
+		sortRoutes(routes);
+
+		List<Object> rows = U.list();
+		rows.add(tr(th("Verb"), th("Path"), th("Sector"), th("Content type"), th("MVC"), th("View name"), th("Roles"), th("Handler")));
+
+		while (!routes.isEmpty()) {
+			Route route = U.first(routes);
+			List<HttpVerb> verbs = U.list(route.verb());
+
+			Iterator<Route> it = routes.iterator();
+			while (it.hasNext()) {
+				Route other = it.next();
+
+				if (route == other) {
+					it.remove();
+				} else if (sameTarget(route, other)) {
+					verbs.add(other.verb());
+					it.remove();
+				}
+			}
+
+			rows.add(routeRow(route, verbs));
+		}
+
+
+		return table_(rows);
+	}
+
+	private boolean sameTarget(Route a, Route b) {
+		return !a.verb().equals(b.verb())
+				&& a.path().equals(b.path())
+				&& a.handler() == b.handler()
+				&& a.config().equals(b.config());
+	}
+
+	private void sortRoutes(List<Route> routes) {
 		Collections.sort(routes, new Comparator<Route>() {
 			@Override
 			public int compare(Route a, Route b) {
@@ -63,30 +101,29 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 				return cmpByPath != 0 ? cmpByPath : a.verb().compareTo(b.verb());
 			}
 		});
+	}
 
-		List<Object> rows = U.list();
-		rows.add(tr(th("Verb"), th("Path"), th("Sector"), th("Content type"), th("MVC"), th("View name"), th("Roles"), th("Handler")));
+	private Tag routeRow(Route route, List<HttpVerb> verbs) {
+		RouteConfig config = route.config();
 
-		for (Route route : routes) {
-			RouteConfig config = route.config();
-
-			Tag verb = td(verb(route.verb()));
-			Tag path = td(route.path());
-			Tag sector = td(config.sector());
-			Tag roles = td(config.roles());
-			Tag hnd = td(route.handler());
-
-			Tag ctype = td(config.contentType().info());
-
-			String viewName = config.mvc() ? viewName(route, config) : "";
-			Tag view = td(viewName);
-
-			Tag mvc = td(config.mvc() ? "Yes" : "No");
-
-			rows.add(tr(verb, path, sector, ctype, mvc, view, roles, hnd));
+		Tag verb = td();
+		for (HttpVerb vrb : verbs) {
+			verb = verb.append(verb(vrb));
 		}
 
-		return table_(rows);
+		Tag path = td(route.path());
+		Tag sector = td(config.sector());
+		Tag roles = td(config.roles());
+		Tag hnd = td(route.handler());
+
+		Tag ctype = td(config.contentType().info());
+
+		String viewName = config.mvc() ? viewName(route, config) : "";
+		Tag view = td(viewName);
+
+		Tag mvc = td(config.mvc() ? "Yes" : "No");
+
+		return tr(verb, path, sector, ctype, mvc, view, roles, hnd);
 	}
 
 	private String viewName(Route route, RouteConfig config) {

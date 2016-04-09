@@ -150,4 +150,32 @@ public class RouteOptions implements RouteConfig {
 
 		return copy;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		RouteOptions that = (RouteOptions) o;
+
+		if (mvc != that.mvc) return false;
+		if (contentType != null ? !contentType.equals(that.contentType) : that.contentType != null) return false;
+		if (view != null ? !view.equals(that.view) : that.view != null) return false;
+		if (sector != null ? !sector.equals(that.sector) : that.sector != null) return false;
+		if (transactionMode != that.transactionMode) return false;
+		if (roles != null ? !roles.equals(that.roles) : that.roles != null) return false;
+		return wrappers != null ? wrappers.equals(that.wrappers) : that.wrappers == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = contentType != null ? contentType.hashCode() : 0;
+		result = 31 * result + (view != null ? view.hashCode() : 0);
+		result = 31 * result + (mvc ? 1 : 0);
+		result = 31 * result + (sector != null ? sector.hashCode() : 0);
+		result = 31 * result + (transactionMode != null ? transactionMode.hashCode() : 0);
+		result = 31 * result + (roles != null ? roles.hashCode() : 0);
+		result = 31 * result + (wrappers != null ? wrappers.hashCode() : 0);
+		return result;
+	}
 }
