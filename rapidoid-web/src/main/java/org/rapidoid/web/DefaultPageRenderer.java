@@ -35,7 +35,6 @@ import org.rapidoid.http.customize.PageRenderer;
 import org.rapidoid.u.U;
 import org.rapidoid.value.Value;
 
-import java.util.Map;
 import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
@@ -112,8 +111,9 @@ public class DefaultPageRenderer implements PageRenderer {
 			}
 		}
 
-		Map<String, Object> menu = customization.config().sub("menu").toMap();
-		page = page.menu(PageMenu.from(menu));
+		Config cgf = customization.config();
+		page.menu(PageMenu.from(cgf.sub("menu").toMap()));
+		page.home(cgf.entry("home").str().or("/"));
 
 		return page;
 	}

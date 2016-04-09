@@ -62,6 +62,8 @@ public class HtmlPage extends AbstractWidget {
 		}
 	}
 
+	private volatile String home;
+
 	private volatile Object brand;
 
 	private volatile String title;
@@ -109,13 +111,12 @@ public class HtmlPage extends AbstractWidget {
 
 		model.put("dev", Env.dev());
 
-		model.put("host", req.host());
-
 		int appPort = Conf.APP.entry("port").num().or(8888);
-		int adminPort = Conf.ADMIN.entry("port").num().or(8888);
-		String adminUrl = adminPort == appPort ? "/_" : "http://" + req.host().split(":")[0] + ":" + adminPort + "/_";
+		int adminPort = Conf.ADMIN.entry("port").num().or(0);
+		String adminUrl = adminPort <= 0 || adminPort == appPort ? "/_" : "http://" + req.host().split(":")[0] + ":" + adminPort + "/_";
 		model.put("adminUrl", adminUrl);
 
+		model.put("host", req.host());
 		model.put("verb", req.verb());
 		model.put("uri", req.uri());
 		model.put("path", req.path());
@@ -130,7 +131,7 @@ public class HtmlPage extends AbstractWidget {
 		}
 
 		model.put("content", multi((Object[]) content));
-		model.put("home", "/");
+		model.put("home", home);
 		model.put("brand", brand);
 		model.put("title", title);
 		model.put("menu", menu);
@@ -144,6 +145,15 @@ public class HtmlPage extends AbstractWidget {
 		model.put("cdn", cdn);
 
 		return model;
+	}
+
+	public String home() {
+		return home;
+	}
+
+	public HtmlPage home(String homeURI) {
+		this.home = homeURI;
+		return this;
 	}
 
 	public Object brand() {
