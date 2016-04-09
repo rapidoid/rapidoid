@@ -6,32 +6,48 @@ app:
   navbar: true
   fluid: false
   cdn: auto
+  home: /
   menu: {}
 
 admin:
   port: 0
   address: 0.0.0.0
-  brand: '<i class="fa fa-dashboard"></i> Admin Center'
+  brand: '<i class="fa fa-dashboard"></i> Admin'
   search: false
   navbar: true
   fluid: false
   cdn: auto
+  home: /_
   menu:
-    Overview: /
-    Routes: /routes
+    Overview: /_
+    Routes: /_routes
+    Config: /_config
+    Metrics: /_metrics
     JMX:
-      Memory pool: /jmx/mempool
-      Threads: /jmx/threads
-      OS: /jmx/os
-      Garbage collection: /jmx/gc
-      Memory: /jmx/memory
-      Runtime: /jmx/runtime
-      Classes: /jmx/classes
-      Compilation: /jmx/compilation
+      Memory pool: /_jmx/mempool
+      Threads: /_jmx/threads
+      Operating system: /_jmx/os
+      Garbage collection: /_jmx/gc
+      Memory: /_jmx/memory
+      Runtime: /_jmx/runtime
+      Classes: /_jmx/classes
+      Compilation: /_jmx/compilation
 
-jpa: {}
+users: {}
 
-hibernate: {}
+jobs:
+  executor:
+    threads: 64
+  scheduler:
+    threads: 64
+
+hibernate:
+  c3p0:
+    min_size: 5
+    max_size: 100
+    timeout: 300
+    max_statements: 50
+    idle_test_period: 100
 
 oauth:
   google:
@@ -49,19 +65,3 @@ oauth:
   linkedin:
     clientId: YOUR_LINKEDIN_CLIENT_ID_HERE
     clientSecret: YOUR_LINKEDIN_CLIENT_SECRET_HERE
-
-users: {}
-
-jobs:
-  executor:
-    threads: 64
-  scheduler:
-    threads: 64
-
-hibernate:
-  c3p0:
-    min_size: 5
-    max_size: 100
-    timeout: 300
-    max_statements: 50
-    idle_test_period: 100
