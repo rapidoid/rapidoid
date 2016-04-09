@@ -61,10 +61,9 @@ import java.util.Map;
 public class Setup implements Constants {
 
 	static final Setup ON = new Setup("app", "0.0.0.0", 8888, ServerSetupType.DEFAULT, IoC.defaultContext(), Conf.APP);
-	static final Setup ADMIN = new Setup("admin", "0.0.0.0", 9999, ServerSetupType.ADMIN, IoC.createContext().name("admin"), Conf.ADMIN);
-	static final Setup DEV = new Setup("dev", "127.0.0.1", 7777, ServerSetupType.DEV, IoC.createContext().name("dev"), Conf.DEV);
+	static final Setup ADMIN = new Setup("admin", "0.0.0.0", 0, ServerSetupType.ADMIN, IoC.defaultContext(), Conf.ADMIN);
 
-	private static final List<Setup> instances = Coll.synchronizedList(ON, ADMIN, DEV);
+	private static final List<Setup> instances = Coll.synchronizedList(ON, ADMIN);
 
 	static {
 		RapidoidInitializer.initialize();
@@ -151,7 +150,7 @@ public class Setup implements Constants {
 	}
 
 	public FastHttp http() {
-		return http;
+		return delegateAdminToApp() ? ON.http() : http;
 	}
 
 	public synchronized Server listen() {
@@ -159,26 +158,30 @@ public class Setup implements Constants {
 
 			inferCallers();
 
-			if (setupType != ServerSetupType.DEV || Env.dev()) {
-				listening = true;
+			listening = true;
 
-				this.address = U.or(this.address, config.entry("address").or(defaultAddress));
-				this.port = U.or(this.port, config.entry("port").or(defaultPort));
+			this.address = U.or(this.address, config.entry("address").or(defaultAddress));
+			this.port = U.or(this.port, config.entry("port").or(defaultPort));
 
-				HttpProcessor proc = processor != null ? processor : http;
+			HttpProcessor proc = processor != null ? processor : http();
 
-				if (Env.dev() && !OnChanges.isIgnored()) {
-					proc = new AppRestartProcessor(this, proc);
-					OnChanges.byDefaultRestart();
-				}
+			if (Env.dev() && !OnChanges.isIgnored()) {
+				proc = new AppRestartProcessor(this, proc);
+				OnChanges.byDefaultRestart();
+			}
 
+			if (!delegateAdminToApp()) {
 				server = proc.listen(address, port);
 			} else {
-				Log.warn("The application is NOT running in dev mode, so the DEV server is automatically disabled.");
+				server = ON.server();
 			}
 		}
 
 		return server;
+	}
+
+	private boolean delegateAdminToApp() {
+		return this == ADMIN && Conf.ADMIN.entry("port").num().get().intValue() == 0;
 	}
 
 	private synchronized void activate() {
@@ -194,7 +197,6 @@ public class Setup implements Constants {
 		bootstrapGoodies();
 
 		if (this == ON) {
-			DEV.activate();
 			ADMIN.activate();
 			UTILS.logSection("User-specified handlers:");
 		}
@@ -207,63 +209,63 @@ public class Setup implements Constants {
 
 	public OnRoute route(String verb, String path) {
 		activate();
-		return new OnRoute(http, defaults, verb.toUpperCase(), path);
+		return new OnRoute(http(), defaults, verb.toUpperCase(), path);
 	}
 
 	public OnRoute get(String path) {
 		activate();
-		return new OnRoute(http, defaults, GET, path);
+		return new OnRoute(http(), defaults, GET, path);
 	}
 
 	public OnRoute post(String path) {
 		activate();
-		return new OnRoute(http, defaults, POST, path);
+		return new OnRoute(http(), defaults, POST, path);
 	}
 
 	public OnRoute put(String path) {
 		activate();
-		return new OnRoute(http, defaults, PUT, path);
+		return new OnRoute(http(), defaults, PUT, path);
 	}
 
 	public OnRoute delete(String path) {
 		activate();
-		return new OnRoute(http, defaults, DELETE, path);
+		return new OnRoute(http(), defaults, DELETE, path);
 	}
 
 	public OnRoute patch(String path) {
 		activate();
-		return new OnRoute(http, defaults, PATCH, path);
+		return new OnRoute(http(), defaults, PATCH, path);
 	}
 
 	public OnRoute options(String path) {
 		activate();
-		return new OnRoute(http, defaults, OPTIONS, path);
+		return new OnRoute(http(), defaults, OPTIONS, path);
 	}
 
 	public OnRoute head(String path) {
 		activate();
-		return new OnRoute(http, defaults, HEAD, path);
+		return new OnRoute(http(), defaults, HEAD, path);
 	}
 
 	public OnRoute trace(String path) {
 		activate();
-		return new OnRoute(http, defaults, TRACE, path);
+		return new OnRoute(http(), defaults, TRACE, path);
 	}
 
 	public OnRoute page(String path) {
 		activate();
-		return new OnRoute(http, defaults, GET_OR_POST, path);
+		return new OnRoute(http(), defaults, GET_OR_POST, path);
 	}
 
 	public Setup req(ReqHandler handler) {
 		activate();
-		routes.addGenericHandler(new DelegatingParamsAwareReqHandler(http, opts(), handler));
+		routes.addGenericHandler(new DelegatingParamsAwareReqHandler(http(), opts(), handler));
 		return this;
 	}
 
 	public Setup req(ReqRespHandler handler) {
 		activate();
-		routes.addGenericHandler(new DelegatingParamsAwareReqRespHandler(http, opts(), handler));
+		routes.addGenericHandler(new DelegatingParamsAwareReqRespHandler(http(), opts(), handler));
 		return this;
 	}
 
@@ -305,7 +307,7 @@ public class Setup implements Constants {
 
 	public Setup shutdown() {
 		reset();
-		if (this.server != null) {
+		if (this.server != null && !delegateAdminToApp()) {
 			this.server.shutdown();
 			this.server = null;
 		}
@@ -314,7 +316,7 @@ public class Setup implements Constants {
 
 	public Setup halt() {
 		reset();
-		if (this.server != null) {
+		if (this.server != null && !delegateAdminToApp()) {
 			this.server.halt();
 			this.server = null;
 		}
@@ -322,7 +324,7 @@ public class Setup implements Constants {
 	}
 
 	public void reset() {
-		http.resetConfig();
+		http().resetConfig();
 		listening = false;
 		port = null;
 		address = null;
@@ -339,7 +341,7 @@ public class Setup implements Constants {
 	}
 
 	public Map<String, Object> attributes() {
-		return http.attributes();
+		return http().attributes();
 	}
 
 	public Setup path(String... path) {
@@ -442,7 +444,7 @@ public class Setup implements Constants {
 		Res.reset();
 
 		for (Setup setup : instances()) {
-			setup.http.resetConfig();
+			setup.http().resetConfig();
 			setup.defaults = new RouteOptions();
 			setup.activated = false;
 		}

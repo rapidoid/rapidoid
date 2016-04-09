@@ -25,25 +25,19 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.setup.Admin;
-import org.rapidoid.setup.Dev;
 import org.rapidoid.setup.On;
-import org.rapidoid.util.UTILS;
-
-import java.net.ConnectException;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class HttpAdminAndDevServerTest extends HttpTestCommons {
 
 	@Test
-	public void testAdminAndDevServer() {
+	public void testAdminOnAppServer() {
 		On.get("/a").html((Req x) -> "default " + x.uri());
-		Admin.get("/a").json((Req x) -> "admin " + x.uri());
-		Dev.get("/a").json((Req req, Resp resp) -> "dev " + req.uri());
+		Admin.get("/b").json((Req x) -> "admin " + x.uri());
 
-		onlyGet("/a"); // default server
-		onlyGet(9999, "/a"); // admin server
-		onlyGet(7777, "/a"); // dev server
+		onlyGet("/a"); // app
+		onlyGet("/b"); // admin
 	}
 
 	@Test
@@ -53,35 +47,10 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 		Conf.section("admin").set("port", port);
 
 		Admin.get("/myadmin").html((Req x) -> "admin " + x.uri());
+		On.get("/c").html((Req x) -> "app " + x.uri());
 
+		onlyGet("/c"); // app
 		onlyGet(port, "/myadmin");
-	}
-
-	@Test
-	public void testDevServerConfig() {
-		int port = 30000;
-
-		Conf.section("dev").set("port", port);
-
-		Dev.get("/mydev").html((Req x) -> "dev " + x.uri());
-
-		onlyGet(port, "/mydev");
-	}
-
-	@Test
-	public void testDevServerInProduction() {
-		Conf.ROOT.set("production", true);
-
-		Dev.get("/nodev").json((Req x) -> "This should be disabled!");
-
-		try {
-			notFound(7777, "/nodev");
-
-			fail("Expected exception!");
-		} catch (Exception e) {
-			Throwable cause = UTILS.rootCause(e);
-			isTrue(cause instanceof ConnectException);
-		}
 	}
 
 }

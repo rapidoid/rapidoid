@@ -548,6 +548,10 @@ public abstract class TestCommons {
 		}
 	}
 
+	protected void verify(String actual) {
+		verify("result", actual);
+	}
+
 	protected void verifyCase(String info, String actual, String testCaseName) {
 		String s = File.separator;
 		String resname = TEST_RESULTS_FOLDER + s + getTestName() + s + getTestMethodName() + s + testCaseName;
@@ -576,10 +580,6 @@ public abstract class TestCommons {
 			String expected = bytes != null ? new String(bytes) : "";
 			check(info, actual, expected);
 		}
-	}
-
-	protected void verify(String actual) {
-		verify("result", actual);
 	}
 
 	protected void verify(String name, String actual) {

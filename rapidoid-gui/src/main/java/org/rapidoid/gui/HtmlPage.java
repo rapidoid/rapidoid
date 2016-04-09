@@ -24,6 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Env;
 import org.rapidoid.commons.RapidoidInfo;
+import org.rapidoid.config.Conf;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.gui.reqinfo.IReqInfo;
@@ -108,8 +109,14 @@ public class HtmlPage extends AbstractWidget {
 
 		model.put("dev", Env.dev());
 
-		model.put("verb", req.verb());
 		model.put("host", req.host());
+
+		int appPort = Conf.APP.entry("port").num().or(8888);
+		int adminPort = Conf.ADMIN.entry("port").num().or(8888);
+		String adminUrl = adminPort == appPort ? "/_" : "http://" + req.host().split(":")[0] + ":" + adminPort + "/_";
+		model.put("adminUrl", adminUrl);
+
+		model.put("verb", req.verb());
 		model.put("uri", req.uri());
 		model.put("path", req.path());
 

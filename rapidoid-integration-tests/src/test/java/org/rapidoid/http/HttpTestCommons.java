@@ -100,7 +100,6 @@ public abstract class HttpTestCommons extends TestCommons {
 		System.out.println("--- STOPPING SERVER ---");
 
 		Admin.setup().shutdown();
-		Dev.setup().shutdown();
 
 		System.out.println("--- SERVER STOPPED ---");
 	}

@@ -25,7 +25,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.log.Log;
 import org.rapidoid.security.Roles;
 import org.rapidoid.setup.Admin;
-import org.rapidoid.setup.Dev;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.util.UTILS;
@@ -92,6 +91,10 @@ public class Goodies {
 		return new RoutesHandler();
 	}
 
+	private static DashboardHandler dashboard() {
+		return new DashboardHandler();
+	}
+
 	public static void bootstrap(Setup setup) {
 
 		if (!setup.goodies()) {
@@ -103,31 +106,24 @@ public class Goodies {
 			UTILS.logSection("Registering App goodies:");
 		}
 
-		if (setup == Dev.setup()) {
-			UTILS.logSection("Registering Dev goodies:");
-
-			setup.page("/").mvc(Goodies.routes());
-			setup.page("/metrics").mvc(Goodies.graphs());
-			setup.page("/config").mvc(Goodies.config());
-
-			setup.get("/_graphs/{id:.*}").json(Goodies.graphData());
-		}
-
 		if (setup == Admin.setup()) {
 			UTILS.logSection("Registering Admin goodies:");
 
-			setup.page("/").mvc(Goodies.graphs());
-			setup.page("/routes").mvc(Goodies.routes());
+			setup.page("/_").mvc(Goodies.routes());
 
-			setup.page("/jmx/memory").mvc(Goodies.memory());
-			setup.page("/jmx/mempool").mvc(Goodies.memoryPool());
-			setup.page("/jmx/classes").mvc(Goodies.classes());
-			setup.page("/jmx/os").mvc(Goodies.os());
-			setup.page("/jmx/threads").mvc(Goodies.threads());
-			setup.page("/jmx/compilation").mvc(Goodies.compilation());
-			setup.page("/jmx/runtime").mvc(Goodies.runtime());
-			setup.page("/jmx/gc").mvc(Goodies.gc());
+			setup.page("/_routes").mvc(Goodies.routes());
+			setup.page("/_config").mvc(Goodies.config());
 
+			setup.page("/_jmx/memory").mvc(Goodies.memory());
+			setup.page("/_jmx/mempool").mvc(Goodies.memoryPool());
+			setup.page("/_jmx/classes").mvc(Goodies.classes());
+			setup.page("/_jmx/os").mvc(Goodies.os());
+			setup.page("/_jmx/threads").mvc(Goodies.threads());
+			setup.page("/_jmx/compilation").mvc(Goodies.compilation());
+			setup.page("/_jmx/runtime").mvc(Goodies.runtime());
+			setup.page("/_jmx/gc").mvc(Goodies.gc());
+
+			setup.page("/_metrics").mvc(Goodies.graphs());
 			setup.get("/_graphs/{id:.*}").json(Goodies.graphData());
 		}
 

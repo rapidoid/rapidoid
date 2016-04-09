@@ -21,5 +21,5 @@ package org.rapidoid.setup;
  */
 
 public enum ServerSetupType {
-	DEFAULT, ADMIN, DEV, CUSTOM;
+	DEFAULT, ADMIN, CUSTOM;
 }

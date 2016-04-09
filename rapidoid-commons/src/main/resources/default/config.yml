@@ -8,21 +8,8 @@ app:
   cdn: auto
   menu: {}
 
-dev:
-  port: 7777
-  address: 127.0.0.1
-  brand: '<i class="fa fa-code"></i> Dev Center'
-  search: false
-  navbar: true
-  fluid: false
-  cdn: auto
-  menu:
-    Routes: /
-    Metrics: /metrics
-    Config: /config
-
 admin:
-  port: 9999
+  port: 0
   address: 0.0.0.0
   brand: '<i class="fa fa-dashboard"></i> Admin Center'
   search: false
