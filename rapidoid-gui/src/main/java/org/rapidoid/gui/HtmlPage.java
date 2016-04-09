@@ -116,6 +116,8 @@ public class HtmlPage extends AbstractWidget {
 		String adminUrl = adminPort <= 0 || adminPort == appPort ? "/_" : "http://" + req.host().split(":")[0] + ":" + adminPort + "/_";
 		model.put("adminUrl", adminUrl);
 
+		model.put("admin", "admin".equalsIgnoreCase(req.sector()));
+
 		model.put("host", req.host());
 		model.put("verb", req.verb());
 		model.put("uri", req.uri());
