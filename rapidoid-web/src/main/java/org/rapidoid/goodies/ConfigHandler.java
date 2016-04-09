@@ -44,7 +44,7 @@ public class ConfigHandler extends GUI implements Callable<Object> {
 			String key = entry.getKey();
 			Object section = entry.getValue();
 
-			grids.add(h4(span(key).class_("label label-" + styleOf(key))));
+			grids.add(h4(span(key).class_("label " + styleOf(key))));
 
 			if (section instanceof Map<?, ?>) {
 				grids.add(grid((Map<?, ?>) section));
@@ -58,22 +58,37 @@ public class ConfigHandler extends GUI implements Callable<Object> {
 
 	private String styleOf(String key) {
 		if (U.eq(key, "app")) {
-			return "primary";
+			return "label-primary";
 
 		} else if (U.eq(key, "dev")) {
-			return "success";
+			return "label-success";
 
 		} else if (U.eq(key, "admin")) {
-			return "danger";
-
-		} else if (U.eq(key, "dev")) {
-			return "success";
+			return "label-danger";
 
 		} else if (U.eq(key, "users")) {
-			return "warning";
+			return "bg-sandy";
+
+		} else if (U.eq(key, "jpa")) {
+			return "bg-purple";
+
+		} else if (U.eq(key, "hibernate")) {
+			return "bg-sky";
+
+		} else if (U.eq(key, "c3p0")) {
+			return "bg-teal";
+
+		} else if (U.eq(key, "jdbc")) {
+			return "bg-pink";
+
+		} else if (U.eq(key, "jobs")) {
+			return "bg-steel";
+
+		} else if (U.eq(key, "oauth")) {
+			return "bg-salmon";
 
 		} else {
-			return "default";
+			return "bg-metal";
 		}
 	}
 
