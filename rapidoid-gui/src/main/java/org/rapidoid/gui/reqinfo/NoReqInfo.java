@@ -112,4 +112,9 @@ public class NoReqInfo extends AbstractReqInfo {
 		return Collections.EMPTY_SET;
 	}
 
+	@Override
+	public String sector() {
+		return "app";
+	}
+
 }

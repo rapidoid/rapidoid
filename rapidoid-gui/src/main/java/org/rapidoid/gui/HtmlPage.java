@@ -120,6 +120,7 @@ public class HtmlPage extends AbstractWidget {
 		model.put("verb", req.verb());
 		model.put("uri", req.uri());
 		model.put("path", req.path());
+		model.put("sector", req.sector());
 
 		model.put("username", req.username());
 

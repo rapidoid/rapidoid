@@ -40,6 +40,8 @@ public class RouteOptions implements RouteConfig {
 
 	private volatile boolean mvc;
 
+	private volatile String sector;
+
 	private volatile TransactionMode transactionMode = TransactionMode.NONE;
 
 	private final Set<String> roles = Coll.synchronizedSet();
@@ -124,6 +126,17 @@ public class RouteOptions implements RouteConfig {
 		return this;
 	}
 
+	@Override
+	public String sector() {
+		return sector;
+	}
+
+	@Override
+	public RouteOptions sector(String sector) {
+		this.sector = sector;
+		return this;
+	}
+
 	public RouteOptions copy() {
 		RouteOptions copy = new RouteOptions();
 
@@ -133,6 +146,7 @@ public class RouteOptions implements RouteConfig {
 		copy.transactionMode(transactionMode());
 		copy.roles(roles.toArray(new String[roles.size()]));
 		copy.wrap(wrappers());
+		copy.sector(sector());
 
 		return copy;
 	}

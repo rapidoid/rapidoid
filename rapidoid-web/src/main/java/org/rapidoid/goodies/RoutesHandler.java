@@ -24,10 +24,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.html.Tag;
+import org.rapidoid.html.tag.TableTag;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Route;
 import org.rapidoid.http.RouteConfig;
+import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.On;
+import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
 
 import java.util.Collections;
@@ -41,7 +44,16 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 
 	@Override
 	public Object call() throws Exception {
-		List<Route> routes = U.list(On.routes().all());
+		List<Object> routes = U.list();
+
+		routes.add(div(h2("Application routes:"), routesOf(On.setup())));
+		routes.add(div(h2("Admin routes:"), routesOf(Admin.setup())));
+
+		return multi(routes);
+	}
+
+	private TableTag routesOf(Setup setup) {
+		List<Route> routes = U.list(setup.getRoutes().all());
 
 		Collections.sort(routes, new Comparator<Route>() {
 			@Override
@@ -53,13 +65,14 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 		});
 
 		List<Object> rows = U.list();
-		rows.add(tr(th("Verb"), th("Path"), th("Content type"), th("MVC"), th("View name"), th("Roles"), th("Handler")));
+		rows.add(tr(th("Verb"), th("Path"), th("Sector"), th("Content type"), th("MVC"), th("View name"), th("Roles"), th("Handler")));
 
 		for (Route route : routes) {
 			RouteConfig config = route.config();
 
 			Tag verb = td(verb(route.verb()));
 			Tag path = td(route.path());
+			Tag sector = td(config.sector());
 			Tag roles = td(config.roles());
 			Tag hnd = td(route.handler());
 
@@ -70,10 +83,10 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 
 			Tag mvc = td(config.mvc() ? "Yes" : "No");
 
-			rows.add(tr(verb, path, ctype, mvc, view, roles, hnd));
+			rows.add(tr(verb, path, sector, ctype, mvc, view, roles, hnd));
 		}
 
-		return div(h2("Application routes:"), table_(rows));
+		return table_(rows);
 	}
 
 	private String viewName(Route route, RouteConfig config) {

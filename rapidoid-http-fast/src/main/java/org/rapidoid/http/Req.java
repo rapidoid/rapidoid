@@ -98,6 +98,18 @@ public interface Req {
 	Req host(String host);
 
 	/**
+	 * Gets the name of the <b>application sector</b> handling the request. <br>
+	 * The default sector name is <code>app</code> for the <code>On</code> API, and <code>admin</code> for the <code>Admin</code> API.
+	 */
+	String sector();
+
+	/**
+	 * Overwrites the name of the <b>application sector</b> handling the request. <br>
+	 * The default sector name is <code>app</code> for the <code>On</code> API, and <code>admin</code> for the <code>Admin</code> API.
+	 */
+	Req sector(String sector);
+
+	/**
 	 * Gets the <b>IP address</b> of the HTTP client sending the request.
 	 */
 	String clientIpAddress();

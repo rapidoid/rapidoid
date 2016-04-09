@@ -108,4 +108,9 @@ public class RapidoidReqInfo extends AbstractReqInfo {
 		return Current.roles();
 	}
 
+	@Override
+	public String sector() {
+		return req().sector();
+	}
+
 }

@@ -60,8 +60,8 @@ import java.util.Map;
 @Since("5.1.0")
 public class Setup implements Constants {
 
-	static final Setup ON = new Setup("app", "0.0.0.0", 8888, ServerSetupType.DEFAULT, IoC.defaultContext(), Conf.APP);
-	static final Setup ADMIN = new Setup("admin", "0.0.0.0", 0, ServerSetupType.ADMIN, IoC.defaultContext(), Conf.ADMIN);
+	static final Setup ON = new Setup("app", "0.0.0.0", 8888, IoC.defaultContext(), Conf.APP);
+	static final Setup ADMIN = new Setup("admin", "0.0.0.0", 0, IoC.defaultContext(), Conf.ADMIN);
 
 	private static final List<Setup> instances = Coll.synchronizedList(ON, ADMIN);
 
@@ -92,7 +92,6 @@ public class Setup implements Constants {
 
 	private final String defaultAddress;
 	private final int defaultPort;
-	private final ServerSetupType setupType;
 
 	private final IoCContext ioCContext;
 
@@ -115,7 +114,7 @@ public class Setup implements Constants {
 	public static Setup create(String name) {
 		IoCContext ioc = IoC.createContext().name(name);
 		Config config = Conf.section(name);
-		Setup setup = new Setup(name, "0.0.0.0", 8888, ServerSetupType.CUSTOM, ioc, config);
+		Setup setup = new Setup(name, "0.0.0.0", 8888, ioc, config);
 		instances.add(setup);
 		return setup;
 	}
@@ -125,19 +124,20 @@ public class Setup implements Constants {
 		instances.remove(this);
 	}
 
-	public Setup(String name, String defaultAddress, int defaultPort, ServerSetupType setupType, IoCContext ioCContext, Config config) {
+	private Setup(String name, String defaultAddress, int defaultPort, IoCContext ioCContext, Config config) {
 		this.name = name;
 
 		this.defaultAddress = defaultAddress;
 		this.defaultPort = defaultPort;
 
-		this.setupType = setupType;
 		this.ioCContext = ioCContext;
 
 		this.config = config;
 		this.customization = new Customization(name, config);
 		this.routes = new HttpRoutes(customization);
 		this.http = new FastHttp(routes, customization);
+
+		this.defaults.sector(name);
 	}
 
 	public static void resetGlobalState() {
@@ -146,7 +146,7 @@ public class Setup implements Constants {
 		restarted = false;
 		loader = Setup.class.getClassLoader();
 		dirty = false;
-		ADMIN.defaults().roles(Roles.ADMINISTRATOR);
+		initSetupDefaults();
 	}
 
 	public FastHttp http() {
@@ -334,6 +334,7 @@ public class Setup implements Constants {
 		ioCContext.reset();
 		goodies = true;
 		defaults = new RouteOptions();
+		defaults().sector(name);
 	}
 
 	public Server server() {
@@ -446,12 +447,13 @@ public class Setup implements Constants {
 		for (Setup setup : instances()) {
 			setup.http().resetConfig();
 			setup.defaults = new RouteOptions();
+			setup.defaults.sector(setup.name);
 			setup.activated = false;
 			setup.path((String[]) null);
 			setup.attributes().clear();
 		}
 
-		ADMIN.defaults().roles(Roles.ADMINISTRATOR);
+		initSetupDefaults();
 
 		loader = Reload.createClassLoader();
 		ClasspathUtil.setDefaultClassLoader(loader);
@@ -471,6 +473,10 @@ public class Setup implements Constants {
 		Cls.invoke(main, null, new Object[]{args});
 
 		Log.info("Successfully restarted the application!");
+	}
+
+	private static void initSetupDefaults() {
+		ADMIN.defaults().roles(Roles.ADMINISTRATOR);
 	}
 
 	public static List<Setup> instances() {
@@ -515,7 +521,7 @@ public class Setup implements Constants {
 		path((String[]) null);
 		defaults = new RouteOptions();
 		attributes().clear();
-		ADMIN.defaults().roles(Roles.ADMINISTRATOR);
+		initSetupDefaults();
 	}
 
 }

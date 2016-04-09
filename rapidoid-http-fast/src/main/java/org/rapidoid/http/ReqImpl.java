@@ -75,6 +75,8 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	private volatile RespImpl response;
 
+	private volatile String sector;
+
 	private volatile boolean rendering;
 
 	private volatile int posConLen;
@@ -92,7 +94,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
 	               String query, byte[] body, Map<String, String> params, Map<String, String> headers,
 	               Map<String, String> cookies, Map<String, Object> posted, Map<String, List<Upload>> files,
-	               MediaType defaultContentType) {
+	               MediaType defaultContentType, String sector) {
 
 		this.http = http;
 		this.channel = channel;
@@ -108,6 +110,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		this.posted = posted;
 		this.files = files;
 		this.defaultContentType = defaultContentType;
+		this.sector = sector;
 	}
 
 	@Override
@@ -637,6 +640,17 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	public <T extends Serializable> T cookiepack(String name, T defaultValue) {
 		Serializable value = hasCookiepack() ? cookiepack().get(name) : null;
 		return withDefault(value, defaultValue);
+	}
+
+	@Override
+	public String sector() {
+		return sector;
+	}
+
+	@Override
+	public Req sector(String sector) {
+		this.sector = sector;
+		return this;
 	}
 
 	@Override
