@@ -43,7 +43,7 @@ public interface Req {
 	String verb();
 
 	/**
-	 * Sets the <b>verb</b> of the HTTP request.
+	 * Overwrites the <b>verb</b> of the HTTP request.
 	 */
 	Req verb(String verb);
 
@@ -53,7 +53,7 @@ public interface Req {
 	String uri();
 
 	/**
-	 * Sets the <b>uri</b> of the HTTP request.
+	 * Overwrites the <b>uri</b> of the HTTP request.
 	 */
 	Req uri(String uri);
 
@@ -63,7 +63,7 @@ public interface Req {
 	String path();
 
 	/**
-	 * Sets the <b>path</b> of the HTTP request.
+	 * Overwrites the <b>path</b> of the HTTP request.
 	 */
 	Req path(String path);
 
@@ -73,7 +73,7 @@ public interface Req {
 	String query();
 
 	/**
-	 * Sets the <b>query</b> of the HTTP request.
+	 * Overwrites the <b>query</b> of the HTTP request.
 	 */
 	Req query(String query);
 
@@ -83,7 +83,7 @@ public interface Req {
 	byte[] body();
 
 	/**
-	 * Sets the <b>raw body data</b> of the HTTP request.
+	 * Overwrites the <b>raw body data</b> of the HTTP request.
 	 */
 	Req body(byte[] body);
 
@@ -93,7 +93,7 @@ public interface Req {
 	String host();
 
 	/**
-	 * Sets the value of the <b>Host header</b> of the HTTP request.
+	 * Overwrites the value of the <b>Host header</b> of the HTTP request.
 	 */
 	Req host(String host);
 
