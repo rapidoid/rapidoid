@@ -405,3 +405,37 @@ div.rapidoid-card h6.rapidoid-card-caption {
 width: 100% !important;
     font-size:12px !important;
 }
+
+/***** Background colors */
+.bg-sky {
+    background-color: #3498db;
+}
+
+.bg-purple {
+    background-color: #9b59b6;
+}
+
+.bg-teal {
+    background-color: #008080;
+}
+
+.bg-pink {
+    background-color: #EE82EE;
+}
+
+.bg-steel {
+    background-color: #4682B4;
+}
+
+.bg-salmon {
+    background-color: #FA8072;
+}
+
+.bg-sandy {
+    background-color: #F4A460;
+}
+
+.bg-metal {
+    background-color: #95a5a6;
+}
+
