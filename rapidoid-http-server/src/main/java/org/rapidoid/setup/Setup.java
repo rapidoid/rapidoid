@@ -447,7 +447,11 @@ public class Setup implements Constants {
 			setup.http().resetConfig();
 			setup.defaults = new RouteOptions();
 			setup.activated = false;
+			setup.path((String[]) null);
+			setup.attributes().clear();
 		}
+
+		ADMIN.defaults().roles(Roles.ADMINISTRATOR);
 
 		loader = Reload.createClassLoader();
 		ClasspathUtil.setDefaultClassLoader(loader);
