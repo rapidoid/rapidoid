@@ -3,12 +3,11 @@
     {{#dev}}
     {{!embedded}}
     <ul class="nav navbar-nav navbar-right">
-            <a href="${adminUrl}" data-toggle="tooltip" data-placement="right" title="Admin Center">
-                    <span class="fa-stack fa-lg">
-                        <i class="fa fa-circle fa-stack-2x"></i>
-                        <i class="fa fa-dashboard fa-stack-1x fa-inverse"></i>
-                    </span>
+        <li>
+            <a href="${adminUrl}" data-toggle="tooltip" data-placement="bottom" title="Admin Center">
+                <i class="fa fa-dashboard" style="color: #3bb9ff;"></i>
             </a>
+        </li>
     </ul>
     {{/embedded}}
     {{/dev}}
@@ -23,11 +22,11 @@
 
     {{?username}}
     <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-            <a><i class="fa fa-user"></i> ${username}</a>
+        <li>
+            <a href="/profile" data-toggle="tooltip" data-placement="bottom" title="My profile"><i class="fa fa-user"></i> ${username}</a>
         </li>
-        <li class="dropdown">
-            <a href="/_logout" data-toggle="tooltip" data-placement="right" title="Logout"><i class="fa fa-sign-out"></i></a>
+        <li>
+            <a href="/_logout" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="fa fa-sign-out"></i></a>
         </li>
     </ul>
     {{/username}}
