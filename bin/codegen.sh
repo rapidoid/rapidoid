@@ -1,6 +1,5 @@
-echo Copying On to Dev and Admin
+echo Copying On into Admin
 
-cp rapidoid-http-server/src/main/java/org/rapidoid/setup/On.java rapidoid-http-server/src/main/java/org/rapidoid/setup/Dev.java
 cp rapidoid-http-server/src/main/java/org/rapidoid/setup/On.java rapidoid-http-server/src/main/java/org/rapidoid/setup/Admin.java
 
 perl -pi -e 's/\bON\b/ADMIN/' rapidoid-http-server/src/main/java/org/rapidoid/setup/Admin.java
