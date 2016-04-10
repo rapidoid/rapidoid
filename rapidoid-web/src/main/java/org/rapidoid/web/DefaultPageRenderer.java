@@ -44,23 +44,31 @@ public class DefaultPageRenderer implements PageRenderer {
 	private static final Pattern FULL_PAGE_PATTERN = Pattern.compile("(?s)^\\s*<(!DOCTYPE\\s+html|html)>");
 
 	private final Customization customization;
+	private final Config cfg;
+	private final Config sectors;
 
+	private final Value<String> home;
 	private final Value<String> title;
 	private final Value<String> brand;
 	private final Value<Boolean> search;
 	private final Value<String> cdn;
 	private final Value<Boolean> navbar;
 	private final Value<Boolean> fluid;
+	private final Config menu;
 
 	public DefaultPageRenderer(Customization customization) {
 		this.customization = customization;
-		Config config = customization.config();
-		title = config.entry("title").str();
-		brand = config.entry("brand").str();
-		search = config.entry("search").bool();
-		cdn = config.entry("cdn").str();
-		navbar = config.entry("navbar").bool();
-		fluid = config.entry("fluid").bool();
+		this.cfg = customization.appConfig();
+		this.sectors = cfg.sub("sectors");
+
+		this.home = cfg.entry("home").str();
+		this.title = cfg.entry("title").str();
+		this.brand = cfg.entry("brand").str();
+		this.search = cfg.entry("search").bool();
+		this.cdn = cfg.entry("cdn").str();
+		this.navbar = cfg.entry("navbar").bool();
+		this.fluid = cfg.entry("fluid").bool();
+		this.menu = cfg.sub("menu");
 	}
 
 	@Override
@@ -72,48 +80,52 @@ public class DefaultPageRenderer implements PageRenderer {
 		Screen screen = resp.screen();
 		HtmlPage page = GUI.page(GUI.hardcoded(content));
 
+		Config sector = sectors.sub(U.or(req.sector(), "app"));
+
 		if (screen.title() != null) {
 			page.title(screen.title());
 		} else {
-			page.title(title.getOrNull());
+			page.title(sector.entry("title").str().orElse(title).getOrNull());
 		}
 
 		if (screen.brand() != null) {
 			page.brand(screen.brand());
 		} else {
-			page.brand(GUI.hardcoded(brand.get()));
+			page.brand(GUI.hardcoded(sector.entry("brand").str().orElse(brand).getOrNull()));
 		}
 
 		if (screen.search() != null) {
 			page.search(screen.search());
 		} else {
-			page.search(search.get());
+			page.search(sector.entry("search").bool().orElse(search).getOrNull());
 		}
 
 		if (screen.navbar() != null) {
 			page.navbar(screen.navbar());
 		} else {
-			page.navbar(navbar.get());
+			page.navbar(sector.entry("navbar").bool().orElse(navbar).getOrNull());
 		}
 
 		if (screen.fluid() != null) {
 			page.fluid(screen.fluid());
 		} else {
-			page.fluid(fluid.get());
+			page.fluid(sector.entry("fluid").bool().orElse(fluid).getOrNull());
 		}
 
 		if (screen.cdn() != null) {
 			page.cdn(screen.cdn());
 		} else {
-			String cdnS = cdn.get();
+			String cdnS = sector.entry("cdn").str().orElse(cdn).getOrNull();
 			if (!"auto".equalsIgnoreCase(cdnS)) {
-				page.search(Cls.bool(cdnS));
+				page.cdn(Cls.bool(cdnS));
 			}
 		}
 
-		Config cgf = customization.config();
-		page.menu(PageMenu.from(cgf.sub("menu").toMap()));
-		page.home(cgf.entry("home").str().or("/"));
+		page.home(sector.entry("home").str().orElse(home).or("/"));
+
+		Config appMenu = sector.has("menu") ? sector.sub("menu") : menu;
+
+		page.menu(PageMenu.from(appMenu.toMap()));
 
 		return page;
 	}
