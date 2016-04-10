@@ -91,8 +91,8 @@ public class Goodies {
 		return new RoutesHandler();
 	}
 
-	private static DashboardHandler dashboard() {
-		return new DashboardHandler();
+	public static OverviewHandler overview() {
+		return new OverviewHandler();
 	}
 
 	public static void bootstrap(Setup setup) {
@@ -109,7 +109,7 @@ public class Goodies {
 		if (setup == Admin.setup()) {
 			UTILS.logSection("Registering Admin goodies:");
 
-			setup.page("/_").mvc(Goodies.routes());
+			setup.page("/_").mvc(Goodies.overview());
 
 			setup.page("/_routes").mvc(Goodies.routes());
 			setup.page("/_config").mvc(Goodies.config());
