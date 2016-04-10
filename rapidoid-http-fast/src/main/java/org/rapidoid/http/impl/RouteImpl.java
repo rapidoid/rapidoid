@@ -82,7 +82,7 @@ public class RouteImpl implements Route {
 
 	@Override
 	public String toString() {
-		return U.frmt("Route %s %s : %s", verb, path, handler);
+		return U.frmt("Route %s %s [sector %s]: %s", verb, path, config().sector(), handler);
 	}
 
 	@Override

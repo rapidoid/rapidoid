@@ -60,8 +60,8 @@ import java.util.Map;
 @Since("5.1.0")
 public class Setup implements Constants {
 
-	static final Setup ON = new Setup("app", "0.0.0.0", 8888, IoC.defaultContext(), Conf.APP, Conf.ON);
-	static final Setup ADMIN = new Setup("admin", "0.0.0.0", 0, IoC.defaultContext(), Conf.APP, Conf.ADMIN);
+	static final Setup ON = new Setup("app", "main", "0.0.0.0", 8888, IoC.defaultContext(), Conf.APP, Conf.ON);
+	static final Setup ADMIN = new Setup("admin", "admin", "0.0.0.0", 0, IoC.defaultContext(), Conf.APP, Conf.ADMIN);
 
 	private static final List<Setup> instances = Coll.synchronizedList(ON, ADMIN);
 
@@ -88,6 +88,7 @@ public class Setup implements Constants {
 	}
 
 	private final String name;
+	private final String sector;
 	private final Config appConfig;
 	private final Config serverConfig;
 
@@ -115,7 +116,7 @@ public class Setup implements Constants {
 	public static Setup create(String name) {
 		IoCContext ioc = IoC.createContext().name(name);
 		Config config = Conf.section(name);
-		Setup setup = new Setup(name, "0.0.0.0", 8888, ioc, config, config);
+		Setup setup = new Setup(name, "main", "0.0.0.0", 8888, ioc, config, config);
 		instances.add(setup);
 		return setup;
 	}
@@ -125,8 +126,9 @@ public class Setup implements Constants {
 		instances.remove(this);
 	}
 
-	private Setup(String name, String defaultAddress, int defaultPort, IoCContext ioCContext, Config appConfig, Config serverConfig) {
+	private Setup(String name, String sector, String defaultAddress, int defaultPort, IoCContext ioCContext, Config appConfig, Config serverConfig) {
 		this.name = name;
+		this.sector = sector;
 
 		this.defaultAddress = defaultAddress;
 		this.defaultPort = defaultPort;
@@ -140,7 +142,7 @@ public class Setup implements Constants {
 		this.routes = new HttpRoutes(customization);
 		this.http = new FastHttp(routes, customization);
 
-		this.defaults.sector(name);
+		this.defaults.sector(sector);
 	}
 
 	public static void resetGlobalState() {
@@ -337,7 +339,7 @@ public class Setup implements Constants {
 		ioCContext.reset();
 		goodies = true;
 		defaults = new RouteOptions();
-		defaults().sector(name);
+		defaults().sector(sector);
 	}
 
 	public Server server() {
@@ -450,7 +452,7 @@ public class Setup implements Constants {
 		for (Setup setup : instances()) {
 			setup.http().resetConfig();
 			setup.defaults = new RouteOptions();
-			setup.defaults.sector(setup.name);
+			setup.defaults.sector(setup.sector);
 			setup.activated = false;
 			setup.path((String[]) null);
 			setup.attributes().clear();
@@ -523,6 +525,7 @@ public class Setup implements Constants {
 		http().resetConfig();
 		path((String[]) null);
 		defaults = new RouteOptions();
+		defaults.sector(sector);
 		attributes().clear();
 		initSetupDefaults();
 	}

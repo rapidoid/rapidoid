@@ -1,1 +1,1 @@
-Route GET /inc : json(AbcCtrl#inc(Integer x))
+Route GET /inc [sector main]: json(AbcCtrl#inc(Integer x))

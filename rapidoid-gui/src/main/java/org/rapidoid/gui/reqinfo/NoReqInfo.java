@@ -114,7 +114,7 @@ public class NoReqInfo extends AbstractReqInfo {
 
 	@Override
 	public String sector() {
-		return "app";
+		return "main";
 	}
 
 }

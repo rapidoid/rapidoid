@@ -39,7 +39,7 @@ public class MockReqInfo extends AbstractReqInfo {
 
 	private String host = "localhost";
 
-	private String sector = "app";
+	private String sector = "main";
 
 	private Map<String, Object> data = U.map();
 

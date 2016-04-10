@@ -146,7 +146,7 @@ public class FastHttp extends AbstractHttpProcessor {
 			String uri = xuri.str(buf);
 			String path = UTILS.urlDecode(xpath.str(buf));
 			String query = UTILS.urlDecode(xquery.str(buf));
-			String sector = null;
+			String sector = "main";
 
 			if (handler != null) {
 				contentType = handler.contentType();
