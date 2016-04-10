@@ -25,27 +25,19 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public interface Value<T> {
+public class OrValue<T> extends AbstractDecoratorValue<T, T> {
 
-	T get();
+	private final Value<T> alternative;
 
-	Value<T> orElse(Value<T> alternative);
+	public OrValue(Value<T> src, Value<T> alternative) {
+		super(src);
+		this.alternative = alternative;
+	}
 
-	<K> K or(K alternative);
+	@Override
+	protected T retrieve() {
+		T val = src.getOrNull();
+		return val != null ? val : alternative.getOrNull();
+	}
 
-	<K> Value<K> to(Class<K> type);
-
-	void set(T value);
-
-	boolean exists();
-
-	Value<String> str();
-
-	Value<Long> num();
-
-	Value<Boolean> bool();
-
-	T getOrNull();
-
-	String desc();
 }

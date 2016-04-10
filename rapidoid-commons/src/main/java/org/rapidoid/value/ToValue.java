@@ -2,6 +2,7 @@ package org.rapidoid.value;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 
 /*
  * #%L
@@ -25,27 +26,18 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public interface Value<T> {
+public class ToValue<T> extends AbstractDecoratorValue<Object, T> {
 
-	T get();
+	private final Class<T> type;
 
-	Value<T> orElse(Value<T> alternative);
+	public ToValue(Value<?> src, Class<T> type) {
+		super((Value<Object>) src);
+		this.type = type;
+	}
 
-	<K> K or(K alternative);
+	@Override
+	protected T retrieve() {
+		return Cls.convert(src.getOrNull(), type);
+	}
 
-	<K> Value<K> to(Class<K> type);
-
-	void set(T value);
-
-	boolean exists();
-
-	Value<String> str();
-
-	Value<Long> num();
-
-	Value<Boolean> bool();
-
-	T getOrNull();
-
-	String desc();
 }

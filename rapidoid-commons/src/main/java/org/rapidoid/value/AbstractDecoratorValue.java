@@ -25,27 +25,17 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public interface Value<T> {
+public abstract class AbstractDecoratorValue<SRC, T> extends AbstractValue<T> {
 
-	T get();
+	protected final Value<SRC> src;
 
-	Value<T> orElse(Value<T> alternative);
+	public AbstractDecoratorValue(Value<SRC> src) {
+		this.src = src;
+	}
 
-	<K> K or(K alternative);
+	@Override
+	public String desc() {
+		return src.desc();
+	}
 
-	<K> Value<K> to(Class<K> type);
-
-	void set(T value);
-
-	boolean exists();
-
-	Value<String> str();
-
-	Value<Long> num();
-
-	Value<Boolean> bool();
-
-	T getOrNull();
-
-	String desc();
 }

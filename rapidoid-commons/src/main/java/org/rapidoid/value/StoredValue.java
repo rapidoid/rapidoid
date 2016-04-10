@@ -25,27 +25,26 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public interface Value<T> {
+public class StoredValue<T> extends AbstractValue<T> {
 
-	T get();
+	private final ValueStore<T> store;
 
-	Value<T> orElse(Value<T> alternative);
+	public StoredValue(ValueStore<T> store) {
+		this.store = store;
+	}
 
-	<K> K or(K alternative);
+	@Override
+	protected T retrieve() {
+		return store.get();
+	}
 
-	<K> Value<K> to(Class<K> type);
+	@Override
+	protected void store(T value) {
+		store.set(value);
+	}
 
-	void set(T value);
-
-	boolean exists();
-
-	Value<String> str();
-
-	Value<Long> num();
-
-	Value<Boolean> bool();
-
-	T getOrNull();
-
-	String desc();
+	@Override
+	public String desc() {
+		return store.desc();
+	}
 }

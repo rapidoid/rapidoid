@@ -28,7 +28,7 @@ import org.rapidoid.annotation.Since;
 public class Values {
 
 	public static <T> Value<T> wrap(ValueStore<T> store) {
-		return new ValueImpl<T>(store);
+		return new StoredValue<T>(store);
 	}
 
 	public static <T> Value<T> of(T value) {
