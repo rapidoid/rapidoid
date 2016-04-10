@@ -27,7 +27,6 @@ import org.rapidoid.config.Config;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.HttpTestCommons;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.net.Server;
 import org.rapidoid.u.U;
@@ -38,14 +37,9 @@ public class HttpHandlerTest extends HttpTestCommons {
 
 	@Test
 	public void testFastHttpHandler() {
-		FastHttp http = new FastHttp(new Customization("example", new Config()));
+		FastHttp http = new FastHttp(new Customization("example", new Config(), new Config()));
 
-		http.on("get", "/abc", new ReqHandler() {
-			@Override
-			public Object execute(Req req) throws Exception {
-				return req.data();
-			}
-		});
+		http.on("get", "/abc", Req::data);
 
 		http.on("get,post", "/xyz", req -> U.list(req.uri(), req.data()));
 
