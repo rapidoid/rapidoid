@@ -199,8 +199,6 @@ public class Setup implements Constants {
 			listen();
 		}
 
-		bootstrapGoodies();
-
 		if (this == ON) {
 			ADMIN.activate();
 			UTILS.logSection("User-specified handlers:");
@@ -391,6 +389,9 @@ public class Setup implements Constants {
 
 	public Setup bootstrap(String... args) {
 		this.args(args);
+
+		bootstrapGoodies();
+
 		beans(annotated(Controller.class).in(path()).loadAll().toArray());
 
 		Class<Object> entityClass = Cls.getClassIfExists("javax.persistence.Entity");
