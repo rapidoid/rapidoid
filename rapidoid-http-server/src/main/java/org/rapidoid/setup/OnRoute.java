@@ -341,4 +341,9 @@ public class OnRoute {
 		return tx(TransactionMode.AUTO);
 	}
 
+	public OnRoute sector(String sector) {
+		options.sector(sector);
+		return this;
+	}
+
 }

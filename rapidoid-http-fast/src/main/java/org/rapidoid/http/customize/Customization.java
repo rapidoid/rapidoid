@@ -37,7 +37,9 @@ public class Customization {
 
 	private final String name;
 
-	private final Config config;
+	private final Config appConfig;
+
+	private final Config serverConfig;
 
 	private volatile String[] staticFilesPath;
 
@@ -55,9 +57,10 @@ public class Customization {
 
 	private volatile RolesProvider rolesProvider;
 
-	public Customization(String name, Config config) {
+	public Customization(String name, Config appConfig, Config serverConfig) {
 		this.name = name;
-		this.config = config;
+		this.appConfig = appConfig;
+		this.serverConfig = serverConfig;
 		reset();
 	}
 
@@ -152,8 +155,11 @@ public class Customization {
 		return name;
 	}
 
-	public Config config() {
-		return config;
+	public Config appConfig() {
+		return appConfig;
 	}
 
+	public Config serverConfig() {
+		return serverConfig;
+	}
 }

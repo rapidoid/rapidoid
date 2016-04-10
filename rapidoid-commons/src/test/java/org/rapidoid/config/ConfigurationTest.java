@@ -55,8 +55,8 @@ public class ConfigurationTest extends AbstractCommonsTest {
 	}
 
 	private void checkDefaults() {
-		eq(Conf.APP.entry("port").or(0).longValue(), 8888);
-		eq(Conf.APP.entry("address").str().getOrNull(), "0.0.0.0");
+		eq(Conf.ON.entry("port").or(0).longValue(), 8888);
+		eq(Conf.ON.entry("address").str().getOrNull(), "0.0.0.0");
 	}
 
 	@Test

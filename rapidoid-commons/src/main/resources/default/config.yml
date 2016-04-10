@@ -1,37 +1,38 @@
-app:
+on:
   port: 8888
   address: 0.0.0.0
-  brand: 'App'
-  search: false
-  navbar: true
-  fluid: false
-  cdn: auto
-  home: /
-  menu: {}
 
 admin:
   port: 0
   address: 0.0.0.0
-  brand: '<i class="fa fa-dashboard"></i> Admin'
+
+app:
+  domain: ''
+  brand: App
   search: false
   navbar: true
   fluid: false
-  cdn: auto
-  home: /_
-  menu:
-    Overview: /_
-    Routes: /_routes
-    Config: /_config
-    Metrics: /_metrics
-    JMX:
-      Memory pool: /_jmx/mempool
-      Threads: /_jmx/threads
-      Operating system: /_jmx/os
-      Garbage collection: /_jmx/gc
-      Memory: /_jmx/memory
-      Runtime: /_jmx/runtime
-      Classes: /_jmx/classes
-      Compilation: /_jmx/compilation
+  cdn: auto # in DEV mode is false, in PRODUCTION is true
+  home: /
+  menu: {}
+  sectors:
+    admin:
+      brand: '<i class="fa fa-dashboard"></i> Admin'
+      home: /_
+      menu:
+        Overview: /_
+        Routes: /_routes
+        Config: /_config
+        Metrics: /_metrics
+        JMX:
+          Memory pool: /_jmx/mempool
+          JVM Threads: /_jmx/threads
+          Operating system: /_jmx/os
+          Garbage collection: /_jmx/gc
+          Memory: /_jmx/memory
+          Runtime: /_jmx/runtime
+          Classes: /_jmx/classes
+          Compilation: /_jmx/compilation
 
 users: {}
 

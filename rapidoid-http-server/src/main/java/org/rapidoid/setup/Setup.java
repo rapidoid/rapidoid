@@ -60,8 +60,8 @@ import java.util.Map;
 @Since("5.1.0")
 public class Setup implements Constants {
 
-	static final Setup ON = new Setup("app", "0.0.0.0", 8888, IoC.defaultContext(), Conf.APP);
-	static final Setup ADMIN = new Setup("admin", "0.0.0.0", 0, IoC.defaultContext(), Conf.ADMIN);
+	static final Setup ON = new Setup("app", "0.0.0.0", 8888, IoC.defaultContext(), Conf.APP, Conf.ON);
+	static final Setup ADMIN = new Setup("admin", "0.0.0.0", 0, IoC.defaultContext(), Conf.APP, Conf.ADMIN);
 
 	private static final List<Setup> instances = Coll.synchronizedList(ON, ADMIN);
 
@@ -88,7 +88,8 @@ public class Setup implements Constants {
 	}
 
 	private final String name;
-	private final Config config;
+	private final Config appConfig;
+	private final Config serverConfig;
 
 	private final String defaultAddress;
 	private final int defaultPort;
@@ -114,7 +115,7 @@ public class Setup implements Constants {
 	public static Setup create(String name) {
 		IoCContext ioc = IoC.createContext().name(name);
 		Config config = Conf.section(name);
-		Setup setup = new Setup(name, "0.0.0.0", 8888, ioc, config);
+		Setup setup = new Setup(name, "0.0.0.0", 8888, ioc, config, config);
 		instances.add(setup);
 		return setup;
 	}
@@ -124,7 +125,7 @@ public class Setup implements Constants {
 		instances.remove(this);
 	}
 
-	private Setup(String name, String defaultAddress, int defaultPort, IoCContext ioCContext, Config config) {
+	private Setup(String name, String defaultAddress, int defaultPort, IoCContext ioCContext, Config appConfig, Config serverConfig) {
 		this.name = name;
 
 		this.defaultAddress = defaultAddress;
@@ -132,8 +133,10 @@ public class Setup implements Constants {
 
 		this.ioCContext = ioCContext;
 
-		this.config = config;
-		this.customization = new Customization(name, config);
+		this.appConfig = appConfig;
+		this.serverConfig = serverConfig;
+
+		this.customization = new Customization(name, appConfig, serverConfig);
 		this.routes = new HttpRoutes(customization);
 		this.http = new FastHttp(routes, customization);
 
@@ -160,8 +163,8 @@ public class Setup implements Constants {
 
 			listening = true;
 
-			this.address = U.or(this.address, config.entry("address").or(defaultAddress));
-			this.port = U.or(this.port, config.entry("port").or(defaultPort));
+			this.address = U.or(this.address, serverConfig.entry("address").or(defaultAddress));
+			this.port = U.or(this.port, serverConfig.entry("port").or(defaultPort));
 
 			HttpProcessor proc = processor != null ? processor : http();
 
@@ -380,7 +383,7 @@ public class Setup implements Constants {
 			Conf.args(args);
 		}
 
-		config.args(args);
+		serverConfig.args(args);
 		return this;
 	}
 
@@ -484,7 +487,7 @@ public class Setup implements Constants {
 	}
 
 	public Config config() {
-		return config;
+		return serverConfig;
 	}
 
 	public Customization custom() {
