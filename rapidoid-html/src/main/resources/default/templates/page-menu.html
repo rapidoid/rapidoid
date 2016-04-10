@@ -1,8 +1,8 @@
 <div id="collapsable" class="collapse navbar-collapse">
 
     {{?dev}}
-    {{!admin}}
     {{!embedded}}
+    {{!admin}}
     <ul class="nav navbar-nav navbar-right">
         <li>
             <a href="${adminUrl}" data-toggle="tooltip" data-placement="bottom" title="Admin Center">
@@ -10,9 +10,21 @@
             </a>
         </li>
     </ul>
+    {{/admin}}
+    {{/embedded}}
+    {{/dev}}
+
+    {{?admin}}
+    {{!embedded}}
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            <a href="${appUrl}" data-toggle="tooltip" data-placement="bottom" title="App Home">
+                <i class="fa fa-home" style="color: #3bb9ff;"></i>
+            </a>
+        </li>
+    </ul>
     {{/embedded}}
     {{/admin}}
-    {{/dev}}
 
     {{#menu.leftItems}}
     {{#visible}}

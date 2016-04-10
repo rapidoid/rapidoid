@@ -63,23 +63,14 @@ public class HtmlPage extends AbstractWidget {
 	}
 
 	private volatile String home;
-
 	private volatile Object brand;
-
 	private volatile String title;
-
 	private volatile Object content;
-
 	private volatile PageMenu menu;
-
 	private volatile boolean embedded;
-
 	private volatile boolean search;
-
 	private volatile boolean navbar = true;
-
 	private volatile boolean fluid;
-
 	private volatile boolean cdn = !Env.dev();
 
 	public HtmlPage(Object content) {
@@ -111,9 +102,15 @@ public class HtmlPage extends AbstractWidget {
 
 		model.put("dev", Env.dev());
 
-		int appPort = Conf.APP.entry("port").num().or(8888);
+		int appPort = Conf.ON.entry("port").num().or(8888);
 		int adminPort = Conf.ADMIN.entry("port").num().or(0);
-		String adminUrl = adminPort <= 0 || adminPort == appPort ? "/_" : "http://" + req.host().split(":")[0] + ":" + adminPort + "/_";
+		boolean appAndAdminOnSamePort = adminPort <= 0 || adminPort == appPort;
+
+		String hostname = req.host().split(":")[0];
+		String appUrl = appAndAdminOnSamePort ? "/" : "http://" + hostname + ":" + appPort + "/";
+		String adminUrl = appAndAdminOnSamePort ? "/_" : "http://" + hostname + ":" + adminPort + "/_";
+
+		model.put("appUrl", appUrl);
 		model.put("adminUrl", adminUrl);
 
 		model.put("admin", "admin".equalsIgnoreCase(req.sector()));
