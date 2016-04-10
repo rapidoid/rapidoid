@@ -60,7 +60,7 @@ public class ConfigHandler extends GUI implements Callable<Object> {
 		if (U.eq(key, "app")) {
 			return "label-primary";
 
-		} else if (U.eq(key, "dev")) {
+		} else if (U.eq(key, "on")) {
 			return "label-success";
 
 		} else if (U.eq(key, "admin")) {

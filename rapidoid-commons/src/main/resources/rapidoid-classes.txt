@@ -164,6 +164,7 @@ org.rapidoid.goodies.GraphsHandler
 org.rapidoid.goodies.LoginHandler
 org.rapidoid.goodies.LogoutHandler
 org.rapidoid.goodies.MultiDetailsHandler
+org.rapidoid.goodies.OverviewHandler
 org.rapidoid.goodies.RapidoidGoodiesModule
 org.rapidoid.goodies.RoutesHandler
 org.rapidoid.gui.base.AbstractCommand
@@ -492,13 +493,11 @@ org.rapidoid.serialize.TypeSpecificDeserializer
 org.rapidoid.serialize.TypeSpecificSerializer
 org.rapidoid.setup.Admin
 org.rapidoid.setup.AppRestartProcessor
-org.rapidoid.setup.Dev
 org.rapidoid.setup.On
 org.rapidoid.setup.OnAnnotated
 org.rapidoid.setup.OnChanges
 org.rapidoid.setup.OnRoute
 org.rapidoid.setup.PojoHandlersSetup
-org.rapidoid.setup.ServerSetupType
 org.rapidoid.setup.Setup
 org.rapidoid.setup.WatchForChanges
 org.rapidoid.sql.C3P0ConnectionPool
@@ -529,11 +528,14 @@ org.rapidoid.util.SimplePersisterProvider
 org.rapidoid.util.SuccessException
 org.rapidoid.util.Usage
 org.rapidoid.util.UTILS
-org.rapidoid.util.X
 org.rapidoid.u.U
+org.rapidoid.value.AbstractDecoratorValue
+org.rapidoid.value.AbstractValue
+org.rapidoid.value.OrValue
 org.rapidoid.value.SimpleValueStore
+org.rapidoid.value.StoredValue
+org.rapidoid.value.ToValue
 org.rapidoid.value.Value
-org.rapidoid.value.ValueImpl
 org.rapidoid.value.Values
 org.rapidoid.value.ValueStore
 org.rapidoid.var.impl.AbstractVar
@@ -546,6 +548,7 @@ org.rapidoid.web.DefaultPageRenderer
 org.rapidoid.web.Rapidoid
 org.rapidoid.web.RapidoidWebModule
 org.rapidoid.web.StandAlone
+org.rapidoid.web.X
 org.rapidoid.wrap.BoolWrap
 org.rapidoid.wrap.CharWrap
 org.rapidoid.wrap.DoubleWrap
