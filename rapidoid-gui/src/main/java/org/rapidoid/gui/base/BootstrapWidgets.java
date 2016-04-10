@@ -939,20 +939,25 @@ public abstract class BootstrapWidgets extends HTML {
 		return ID_GEN.incrementAndGet();
 	}
 
-	public static Object dygraph(String uri, TimeSeries ts) {
+	public static Object dygraph(String uri, TimeSeries ts, String divClass) {
 		List<Object> points = U.list();
 
 		NavigableMap<Long, Double> values = ts.overview();
 
 		for (Map.Entry<Long, Double> e : values.entrySet()) {
-			Map<String, ?> point = U.map("date", e.getKey(), "values", e.getValue());
-			points.add(point);
+			points.add(U.map("date", e.getKey(), "values", e.getValue()));
 		}
 
-		Map<String, ?> model = U.map("points", points, "names", U.list(ts.title()), "title", ts.title(), "id", newId(), "uri", Str.triml(uri, "/"));
+		Map<String, ?> model = U.map("points", points, "names", U.list(ts.title()), "title", ts.title(),
+				"id", newId(), "class", divClass, "uri", Str.triml(uri, "/"));
+
 		Tag graph = hardcoded(Templates.fromFile("dygraphs.html").render(model));
 
 		return div(graph);
+	}
+
+	public static Object dygraph(String uri, TimeSeries ts) {
+		return dygraph(uri, ts, "rapidoid-dygraph");
 	}
 
 }

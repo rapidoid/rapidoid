@@ -388,6 +388,12 @@ div.rapidoid-card h6.rapidoid-card-caption {
 
 /***** Dygraphs *****/
 
+.rapidoid-dygraph-small {
+    width: 100% !important;
+    margin: 0px !important;
+    height: 150px;
+}
+
 .rapidoid-dygraph {
     width: 100% !important;
     margin: 0px !important;
@@ -402,8 +408,12 @@ div.rapidoid-card h6.rapidoid-card-caption {
 }
 
 .dygraph-legend {
-width: 100% !important;
+    width: 100% !important;
     font-size:12px !important;
+}
+
+.dygraph-title {
+    font-size:16px !important;
 }
 
 /***** Background colors */

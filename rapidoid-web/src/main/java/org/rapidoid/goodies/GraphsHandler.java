@@ -38,24 +38,31 @@ public class GraphsHandler extends GUI implements Callable<Object> {
 
 	@Override
 	public Object call() throws Exception {
+		return multi(graphs(2));
+	}
+
+	public static Object graphs(int perRow) {
 		List<Tag> rows = U.list();
 		Map<String, TimeSeries> metrics = Metrics.all();
 
 		synchronized (metrics) {
-			for (List<Map.Entry<String, TimeSeries>> group : U.groupsOf(2, metrics.entrySet())) {
+			for (List<Map.Entry<String, TimeSeries>> group : U.groupsOf(perRow, metrics.entrySet())) {
 				Tag row = row();
 
 				for (Map.Entry<String, TimeSeries> e : group) {
 					String uri = e.getKey();
 					TimeSeries ts = e.getValue();
-					row = row.append(col6(dygraph(uri, ts)));
+
+					int cols = 12 / perRow;
+					String divClass = cols <= 4 ? "rapidoid-dygraph-small" : "rapidoid-dygraph";
+					row = row.append(col_(cols, dygraph(uri, ts, divClass)));
 				}
 
 				rows.add(row);
 			}
 		}
 
-		return multi(rows.toArray());
+		return rows;
 	}
 
 }
