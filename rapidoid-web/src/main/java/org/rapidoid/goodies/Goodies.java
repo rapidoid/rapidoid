@@ -48,7 +48,7 @@ public class Goodies {
 	}
 
 	public static DetailsHandler threads() {
-		return new DetailsHandler("Threads", ManagementFactory.getThreadMXBean(), "-objectName", "-allThreadIds");
+		return new DetailsHandler("JVM Threads", ManagementFactory.getThreadMXBean(), "-objectName", "-allThreadIds");
 	}
 
 	public static DetailsHandler compilation() {
@@ -83,11 +83,11 @@ public class Goodies {
 		return new LogoutHandler();
 	}
 
-	private static ConfigHandler config() {
+	public static ConfigHandler config() {
 		return new ConfigHandler();
 	}
 
-	private static RoutesHandler routes() {
+	public static RoutesHandler routes() {
 		return new RoutesHandler();
 	}
 

@@ -92,7 +92,7 @@ public class OAuthTokenHandler implements ReqHandler {
 			Log.debug("OAuth validated", "popup", popup);
 
 			String domain = oauthDomain.getOrNull();
-			String redirectUrl = domain != null ? domain + callbackPath : HttpUtils.constructUrl(req, callbackPath);
+			String redirectUrl = U.notEmpty(domain)? domain + callbackPath : HttpUtils.constructUrl(req, callbackPath);
 
 			TokenRequestBuilder reqBuilder = OAuthClientRequest.tokenLocation(provider.getTokenEndpoint())
 					.setGrantType(GrantType.AUTHORIZATION_CODE).setClientId(id).setClientSecret(secret)

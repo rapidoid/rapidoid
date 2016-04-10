@@ -46,11 +46,9 @@ public class OAuth {
 
 	private static OAuthStateCheck STATE_CHECK;
 
-	private static final Config APP = Conf.APP;
-
 	private static final Config OAUTH = Conf.OAUTH;
 
-	private static final Value<String> DOMAIN = APP.entry("domain").str();
+	private static final Value<String> DOMAIN = Conf.APP.entry("domain").str();
 
 	public static void register(Setup setup, OAuthProvider... providers) {
 		register(setup, new DefaultOAuthStateCheck(), providers);
@@ -114,7 +112,7 @@ public class OAuth {
 
 		boolean popup = req.param("popup", null) != null;
 
-		String redirectUrl = oauthDomain != null ? oauthDomain + callbackPath : HttpUtils.constructUrl(req,
+		String redirectUrl = U.notEmpty(oauthDomain) ? oauthDomain + callbackPath : HttpUtils.constructUrl(req,
 				callbackPath);
 
 		String statePrefix = popup ? "P" : "N";
