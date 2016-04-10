@@ -17,8 +17,8 @@ Content-Length: 2370
 
 
 
-<link href="/bootstrap/css/bootstrap-3.3.5.min.css" rel="stylesheet">
-<link href="/font-awesome/css/font-awesome-4.4.0.min.css" rel="stylesheet">
+<link href="/bootstrap/css/bootstrap-3.3.6.min.css" rel="stylesheet">
+<link href="/font-awesome/css/font-awesome-4.5.0.min.css" rel="stylesheet">
 <link href="/rapidoid.min.css" rel="stylesheet">
 
 <link href="/app.css" rel="stylesheet">
@@ -79,9 +79,9 @@ my-title:12345
 
 <div compile="ajaxBodyContent" ng-if="ajaxBodyContent"></div>
 
-<script src="/jquery-2.1.4.min.js"></script>
-<script src="/bootstrap/js/bootstrap-3.3.5.min.js"></script>
-<script src="/angular-1.4.3.min.js"></script>
+<script src="/jquery-2.2.3.min.js"></script>
+<script src="/bootstrap/js/bootstrap-3.3.6.min.js"></script>
+<script src="/angular-1.5.3.min.js"></script>
 <script src="/rapidoid.min.js"></script>
 
 <script src="/app.js"></script>

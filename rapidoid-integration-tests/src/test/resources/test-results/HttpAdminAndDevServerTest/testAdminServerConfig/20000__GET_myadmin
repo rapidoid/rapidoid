@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 3080
+Content-Length: 3148
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,9 +15,9 @@ Content-Length: 3080
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="login.css" rel="stylesheet">
+    <link href="/bootstrap/css/bootstrap-3.3.6.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome-4.5.0.min.css" rel="stylesheet">
+    <link href="/login.css" rel="stylesheet">
 
 </head>
 
@@ -60,6 +60,10 @@ Content-Length: 3080
                             <p>new user? <a href="#">create new account</a></p>
                         </div>
                         -->
+                        <br>
+                        <p>
+                            <a href="/" class="btn btn-default btn-xs pull-right">Home page</a>
+                        </p>
                     </form>
                 </div>
                 <!-- end:Main Form -->
@@ -69,9 +73,9 @@ Content-Length: 3080
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-<script src="login.js"></script>
+<script src="/jquery-2.2.3.min.js"></script>
+<script src="/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="/login.js"></script>
 
 </body>
 </html>
