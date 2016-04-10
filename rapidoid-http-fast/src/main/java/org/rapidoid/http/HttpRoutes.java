@@ -465,4 +465,30 @@ public class HttpRoutes {
 		return Collections.unmodifiableSet(routes);
 	}
 
+	public Set<Route> allAdmin() {
+		Set<Route> routes = U.set(all());
+
+		for (Iterator<Route> it = routes.iterator(); it.hasNext(); ) {
+			Route route = it.next();
+			if (!route.config().sector().equalsIgnoreCase("admin")) {
+				it.remove();
+			}
+		}
+
+		return routes;
+	}
+
+	public Set<Route> allNonAdmin() {
+		Set<Route> routes = U.set(all());
+
+		for (Iterator<Route> it = routes.iterator(); it.hasNext(); ) {
+			Route route = it.next();
+			if (route.config().sector().equalsIgnoreCase("admin")) {
+				it.remove();
+			}
+		}
+
+		return routes;
+	}
+
 }

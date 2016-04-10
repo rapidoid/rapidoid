@@ -31,13 +31,9 @@ import org.rapidoid.http.Route;
 import org.rapidoid.http.RouteConfig;
 import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.On;
-import org.rapidoid.setup.Setup;
 import org.rapidoid.u.U;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
@@ -48,15 +44,19 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 	public Object call() throws Exception {
 		List<Object> routes = U.list();
 
-		routes.add(div(h2("Application routes:"), routesOf(On.setup())));
-		routes.add(div(h2("Admin routes:"), routesOf(Admin.setup())));
+		Set<Route> appRoutes = On.setup().getRoutes().allNonAdmin();
+
+		Set<Route> adminRoutes = On.setup().getRoutes().allAdmin();
+		adminRoutes.addAll(Admin.setup().getRoutes().allAdmin());
+
+		routes.add(div(h2("Application routes:"), routesOf(appRoutes)));
+		routes.add(div(h2("Admin routes:"), routesOf(adminRoutes)));
 
 		return multi(routes);
 	}
 
-	private TableTag routesOf(Setup setup) {
-		List<Route> routes = U.list(setup.getRoutes().all());
-
+	public static TableTag routesOf(Set<Route> httpRoutes) {
+		List<Route> routes = U.list(httpRoutes);
 		sortRoutes(routes);
 
 		List<Object> rows = U.list();
@@ -85,25 +85,26 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 		return table_(rows);
 	}
 
-	private boolean sameTarget(Route a, Route b) {
+	private static boolean sameTarget(Route a, Route b) {
 		return !a.verb().equals(b.verb())
 				&& a.path().equals(b.path())
 				&& a.handler() == b.handler()
 				&& a.config().equals(b.config());
 	}
 
-	private void sortRoutes(List<Route> routes) {
+	private static void sortRoutes(List<Route> routes) {
 		Collections.sort(routes, new Comparator<Route>() {
+
 			@Override
 			public int compare(Route a, Route b) {
 				int cmpByPath = a.path().compareTo(b.path());
-
 				return cmpByPath != 0 ? cmpByPath : a.verb().compareTo(b.verb());
 			}
+
 		});
 	}
 
-	private Tag routeRow(Route route, List<HttpVerb> verbs) {
+	private static Tag routeRow(Route route, List<HttpVerb> verbs) {
 		RouteConfig config = route.config();
 
 		Tag verb = td();
@@ -121,12 +122,12 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 		String viewName = config.mvc() ? viewName(route, config) : "";
 		Tag view = td(viewName);
 
-		Tag mvc = td(config.mvc() ? "Yes" : "No");
+		Tag mvc = td(config.mvc() ? fa("check") : "");
 
 		return tr(verb, path, sector, ctype, mvc, view, roles, hnd);
 	}
 
-	private String viewName(Route route, RouteConfig config) {
+	private static String viewName(Route route, RouteConfig config) {
 		return config.view() != null ? config.view() : HttpUtils.defaultView(route.path());
 	}
 
