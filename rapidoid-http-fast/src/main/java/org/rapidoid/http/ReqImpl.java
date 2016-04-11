@@ -75,7 +75,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	private volatile RespImpl response;
 
-	private volatile String sector;
+	private volatile String sector = "main";
 
 	private volatile boolean rendering;
 

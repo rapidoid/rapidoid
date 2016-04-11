@@ -49,8 +49,8 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 		Set<Route> adminRoutes = On.setup().getRoutes().allAdmin();
 		adminRoutes.addAll(Admin.setup().getRoutes().allAdmin());
 
-		routes.add(div(h2("Application routes:"), routesOf(appRoutes)));
-		routes.add(div(h2("Admin routes:"), routesOf(adminRoutes)));
+		routes.add(div(h3("Application routes:"), routesOf(appRoutes)));
+		routes.add(div(h3("Admin routes:"), routesOf(adminRoutes)));
 
 		return multi(routes);
 	}

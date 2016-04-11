@@ -80,7 +80,7 @@ public class DefaultPageRenderer implements PageRenderer {
 		Screen screen = resp.screen();
 		HtmlPage page = GUI.page(GUI.hardcoded(content));
 
-		Config sector = sectors.sub(U.or(req.sector(), "main"));
+		Config sector = sectors.sub(req.sector());
 
 		if (screen.title() != null) {
 			page.title(screen.title());

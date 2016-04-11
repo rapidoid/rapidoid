@@ -79,13 +79,13 @@ public class ConfigHandler extends GUI implements Callable<Object> {
 			return "bg-teal";
 
 		} else if (U.eq(key, "jdbc")) {
-			return "bg-pink";
+			return "bg-salmon";
 
 		} else if (U.eq(key, "jobs")) {
 			return "bg-steel";
 
 		} else if (U.eq(key, "oauth")) {
-			return "bg-salmon";
+			return "bg-pink";
 
 		} else {
 			return "bg-metal";

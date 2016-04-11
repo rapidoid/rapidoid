@@ -99,13 +99,13 @@ public interface Req {
 
 	/**
 	 * Gets the name of the <b>application sector</b> handling the request. <br>
-	 * The default sector name is <code>app</code> for the <code>On</code> API, and <code>admin</code> for the <code>Admin</code> API.
+	 * The default sector name is <code>main</code> for the <code>On</code> API, and <code>admin</code> for the <code>Admin</code> API.
 	 */
 	String sector();
 
 	/**
 	 * Overwrites the name of the <b>application sector</b> handling the request. <br>
-	 * The default sector name is <code>app</code> for the <code>On</code> API, and <code>admin</code> for the <code>Admin</code> API.
+	 * The default sector name is <code>main</code> for the <code>On</code> API, and <code>admin</code> for the <code>Admin</code> API.
 	 */
 	Req sector(String sector);
 
