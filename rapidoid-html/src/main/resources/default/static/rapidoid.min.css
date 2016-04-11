@@ -1042,9 +1042,9 @@ div.gmap-default {
 	height: 400px;
 }
 
-/***** Removing the outline of the nav tabs */
-.nav-tabs>.active>a, .nav-tabs>.active>a:hover {
-	outline: none;
+/***** Removing the outline of the nav tabs and buttons */
+.btn, .btn:focus, .nav-tabs>.active>a, .nav-tabs>.active>a:hover {
+	outline: none !important;
 }
 
 /***** Hover effect for close (e.g. "x") buttons */
