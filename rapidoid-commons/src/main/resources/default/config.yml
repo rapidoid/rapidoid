@@ -21,6 +21,7 @@ app:
       home: /_
       menu:
         Overview: /_
+        Data: /_data
         Routes: /_routes
         Config: /_config
         Metrics: /_metrics

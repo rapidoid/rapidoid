@@ -22,12 +22,15 @@ package org.rapidoid.goodies;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.jpa.JPA;
 import org.rapidoid.log.Log;
 import org.rapidoid.security.Roles;
 import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.util.UTILS;
+import org.rapidoid.web.X;
 
 import java.lang.management.ManagementFactory;
 
@@ -87,6 +90,10 @@ public class Goodies {
 		return new ConfigHandler();
 	}
 
+	public static DataHandler data() {
+		return new DataHandler();
+	}
+
 	public static RoutesHandler routes() {
 		return new RoutesHandler();
 	}
@@ -110,6 +117,14 @@ public class Goodies {
 			UTILS.logSection("Registering Admin goodies:");
 
 			setup.page("/_").mvc(Goodies.overview());
+
+			setup.page("/_data").mvc(Goodies.data());
+
+			for (String entityType : JPA.entities()) {
+				Class<Object> type = Cls.getClassIfExists(entityType);
+				String uri = "/_" + UTILS.typeUri(type).substring(1);
+				X.scaffold(setup, uri, type);
+			}
 
 			setup.page("/_routes").mvc(Goodies.routes());
 			setup.page("/_config").mvc(Goodies.config());

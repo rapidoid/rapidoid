@@ -45,6 +45,17 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<!-- OPTIONAL -->
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>4.3.10.Final</version>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- TEST -->
+
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-test-commons</artifactId>
