@@ -25,6 +25,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.TdTag;
+import org.rapidoid.lambda.Lmbd;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
@@ -44,6 +46,8 @@ public class Grid extends AbstractWidget {
 	private int pageSize = 10;
 	private String[] columns = {};
 	private String rowCmd;
+
+	private Mapper<Object, String> toUri;
 
 	public Grid(Items items, String sortOrder, int pageSize, String... columns) {
 		this.items = items;
@@ -129,7 +133,7 @@ public class Grid extends AbstractWidget {
 					sortIcon = fa("sort-amount-asc");
 				}
 
-				if (order != null && currentOrder.equals("-" + prop.name())) {
+				if (currentOrder.equals("-" + prop.name())) {
 					sortIcon = fa("sort-amount-desc");
 				}
 
@@ -165,8 +169,8 @@ public class Grid extends AbstractWidget {
 	}
 
 	protected String onClickScript(Item item) {
-		String js = U.frmt("Rapidoid.goAt('%s');", UTILS.uriFor(item.value()));
-		return js;
+		String uri = toUri != null ? Lmbd.eval(toUri, item.value()) : UTILS.uriFor(item.value());
+		return U.frmt("Rapidoid.goAt('%s');", uri);
 	}
 
 	protected TdTag cell(Object value) {
@@ -209,4 +213,12 @@ public class Grid extends AbstractWidget {
 		return this;
 	}
 
+	public Mapper<Object, String> toUri() {
+		return toUri;
+	}
+
+	public Grid toUri(Mapper<Object, String> toUri) {
+		this.toUri = toUri;
+		return this;
+	}
 }
