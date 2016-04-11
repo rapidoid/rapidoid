@@ -80,6 +80,10 @@ public class JPA {
 		return with(em()).getAll(clazz);
 	}
 
+	public static long count(Class<?> clazz) {
+		return with(em()).count(clazz);
+	}
+
 	public static Object save(Object record) {
 		return with(em()).save(record);
 	}

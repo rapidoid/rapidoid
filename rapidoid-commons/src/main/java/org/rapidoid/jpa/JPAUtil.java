@@ -13,11 +13,9 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Metamodel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /*
  * #%L
@@ -148,6 +146,15 @@ public class JPAUtil {
 		return em.createQuery(all).getResultList();
 	}
 
+	public long count(Class<?> clazz) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+
+		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+		cq.select(cb.count(cq.from(clazz)));
+
+		return em.createQuery(cq).getSingleResult();
+	}
+
 	public void refresh(Object entity) {
 		em.refresh(entity);
 	}
@@ -258,5 +265,4 @@ public class JPAUtil {
 
 		return q.getResultList();
 	}
-
 }
