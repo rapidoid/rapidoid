@@ -123,14 +123,15 @@ public class JPAUtil {
 		return em.find(clazz, id);
 	}
 
+	public List<EntityType<?>> getEntityTypes() {
+		return U.list(em.getMetamodel().getEntities());
+	}
+
 	@SuppressWarnings("unchecked")
 	public <E> List<E> getAll() {
 		List<E> all = U.list();
 
-		Metamodel metamodel = em.getMetamodel();
-		Set<EntityType<?>> entityTypes = metamodel.getEntities();
-
-		for (EntityType<?> entityType : entityTypes) {
+		for (EntityType<?> entityType : getEntityTypes()) {
 			List<E> entities = (List<E>) getAll(entityType.getJavaType());
 			all.addAll(entities);
 		}

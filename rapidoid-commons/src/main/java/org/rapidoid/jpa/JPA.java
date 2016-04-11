@@ -11,6 +11,7 @@ import org.rapidoid.util.UTILS;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.metamodel.EntityType;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -65,6 +66,10 @@ public class JPA {
 
 	public static <E> List<E> getAllEntities() {
 		return with(em()).getAll();
+	}
+
+	public static List<EntityType<?>> getEntityTypes() {
+		return with(em()).getEntityTypes();
 	}
 
 	public static <E> List<E> getAll(Class<E> clazz, List<String> ids) {
