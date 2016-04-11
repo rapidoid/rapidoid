@@ -66,7 +66,7 @@ public class Customization {
 
 	public void reset() {
 		staticFilesPath = DEFAULT_STATIC_FILES_LOCATIONS;
-		errorHandler = new DefaultErrorHandler();
+		errorHandler = new DefaultErrorHandler(this);
 		viewRenderer = new DefaultViewRenderer();
 		pageRenderer = optionalPageRenderer();
 		jsonResponseRenderer = new DefaultJsonResponseRenderer();

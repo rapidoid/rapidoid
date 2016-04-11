@@ -23,16 +23,26 @@ package org.rapidoid.http.customize;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
+import org.rapidoid.config.Config;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.log.Log;
+import org.rapidoid.value.Value;
 
 import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 public class DefaultErrorHandler implements ErrorHandler {
+
+	private final Config sectors;
+	private final Value<String> home;
+
+	public DefaultErrorHandler(Customization customization) {
+		this.sectors = customization.appConfig().sub("sectors");
+		this.home = customization.appConfig().sub("app").entry("home").str();
+	}
 
 	@Override
 	public Object handleError(Req req, Resp resp, Throwable error) {
@@ -50,16 +60,21 @@ public class DefaultErrorHandler implements ErrorHandler {
 			return HttpUtils.getErrorMessage(resp, error);
 
 		} else {
-			return page(resp, error);
+			return page(req, resp, error);
 		}
 	}
 
-	private Object page(Resp resp, Throwable error) {
+	private Object page(Req req, Resp resp, Throwable error) {
 		if (error instanceof SecurityException) {
 			return resp.code(403).view("login").mvc(true);
 		} else {
+
+			Config sector = sectors.sub(req.sector());
+
 			Map<String, ?> errorInfo = HttpUtils.getErrorInfo(resp, error);
 			resp.model().put("error", errorInfo);
+			resp.model().put("home", sector.entry("home").str().orElse(home).or("/"));
+
 			return resp.mvc(true).view("error");
 		}
 	}
