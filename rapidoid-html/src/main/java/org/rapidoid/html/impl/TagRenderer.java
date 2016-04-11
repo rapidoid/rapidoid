@@ -46,7 +46,7 @@ public class TagRenderer {
 
 	private static final byte[] COMMA_SEP = ", ".getBytes();
 	private static final byte[] INDENT = "  ".getBytes();
-	private static final byte[] EMIT = "_emit('".getBytes();
+	private static final byte[] EMIT = "_emit($event, '".getBytes();
 	private static final byte[] EMIT_SEP = "', [".getBytes();
 	private static final byte[] EMIT_CLOSE = "])".getBytes();
 	private static final byte[] _H = " _h=\"".getBytes();

@@ -35,7 +35,7 @@ public abstract class AbstractCommand<W extends AbstractCommand<?>> extends Abst
 
 	private String[] cmdArgs;
 
-	private Runnable handler;
+	protected Runnable handler;
 
 	private boolean handled;
 

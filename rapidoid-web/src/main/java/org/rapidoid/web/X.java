@@ -34,9 +34,12 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
 import org.rapidoid.jpa.JPA;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.setup.On;
+import org.rapidoid.setup.Setup;
 import org.rapidoid.sql.JDBC;
 import org.rapidoid.u.U;
+import org.rapidoid.util.UTILS;
 
 import java.util.Map;
 
@@ -116,7 +119,7 @@ public class X {
 		};
 	}
 
-	public static ReqRespHandler manage(final Class<?> entityType) {
+	public static ReqRespHandler manage(final Class<?> entityType, final String baseUri) {
 		return new ReqRespHandler() {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
@@ -124,15 +127,21 @@ public class X {
 					resp.screen().title("Manage " + English.plural(name(entityType)));
 				}
 
-				Grid grid = GUI.grid(JPA.getAll(entityType));
-				Btn add = GUI.btn("Add " + name(entityType)).href(uri(entityType) + "/add");
+				Grid grid = GUI.grid(JPA.getAll(entityType)).toUri(new Mapper<Object, String>() {
+					@Override
+					public String map(Object target) throws Exception {
+						return UTILS.uri(UTILS.uriFor(baseUri, target), "view");
+					}
+				});
+
+				Btn add = GUI.btn("Add " + name(entityType)).go(baseUri + "/add");
 
 				return GUI.multi(grid, add);
 			}
 		};
 	}
 
-	public static ReqRespHandler add(final Class<?> entityType) {
+	public static ReqRespHandler add(final Class<?> entityType, final String baseUri) {
 		return new ReqRespHandler() {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
@@ -142,15 +151,15 @@ public class X {
 					resp.screen().title("Add " + name(entityType));
 				}
 
-				Btn save = btnSave(entity);
-				Btn cancel = GUI.btn("Cancel").href(uri(entityType) + "/manage");
+				Btn save = btnSave(entity).go(baseUri + "/manage");
+				Btn cancel = GUI.btn("Cancel").go(baseUri + "/manage");
 
 				return GUI.create(entity).buttons(save, cancel);
 			}
 		};
 	}
 
-	public static ReqRespHandler view(final Class<?> entityType) {
+	public static ReqRespHandler view(final Class<?> entityType, final String baseUri) {
 		final Class<?> idType = idType(entityType);
 
 		return new ReqRespHandler() {
@@ -164,27 +173,28 @@ public class X {
 					return null;
 				}
 
+				String name = name(entityType);
+
 				if (resp.screen().title() == null) {
-					resp.screen().title(name(entityType) + " Details");
+					resp.screen().title(name + " Details");
 				}
 
-				Btn edit = GUI.btn("Edit").href(uri(entity) + "/edit");
-				Btn all = GUI.btn("View all").href(uri(entityType) + "/manage");
+				final Btn edit = GUI.btn("Edit").go(uri(baseUri, entity) + "/edit");
+				Btn all = GUI.btn("View all").go(baseUri + "/manage");
 
-				Btn del = GUI.btn("Delete").danger().onClick(new Runnable() {
+				Btn del = GUI.btn("Delete").danger().go(baseUri + "/manage").onClick(new Runnable() {
 					@Override
 					public void run() {
 						JPA.delete(entity);
-						resp.redirect(uri(entityType));
 					}
-				});
+				}).confirm("Do you really want to delete the " + name + "?");
 
 				return GUI.show(entity).buttons(edit, all, del);
 			}
 		};
 	}
 
-	public static ReqRespHandler edit(final Class<?> entityType) {
+	public static ReqRespHandler edit(final Class<?> entityType, final String baseUri) {
 		return new ReqRespHandler() {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
@@ -200,9 +210,10 @@ public class X {
 					resp.screen().title("Edit " + name(entityType));
 				}
 
-				Btn cancel = GUI.btn("Cancel").href(uri(entity) + "/view");
+				Btn save = btnSave(entity).go(baseUri + "/manage");
+				Btn cancel = GUI.btn("Cancel").go(uri(baseUri, entity) + "/view");
 
-				return GUI.edit(entity).buttons(btnSave(entity), cancel);
+				return GUI.edit(entity).buttons(save, cancel);
 			}
 		};
 	}
@@ -225,39 +236,48 @@ public class X {
 		return idProp.getType();
 	}
 
-	public static String uri(Class<?> entityType) {
-		return "/" + English.plural(Str.uncapitalized(entityType.getSimpleName()));
-	}
-
-	public static String uri(Object entity) {
-		return uri(entity.getClass()) + "/" + JPA.getIdentifier(entity);
+	public static String uri(String baseUri, Object entity) {
+		return UTILS.uriFor(baseUri, entity);
 	}
 
 	public static void scaffold(String uri, Class<?> entityType) {
-		JPA.bootstrap(On.path(), entityType);
-		uri = Str.trimr(uri, "/");
+		scaffold(On.setup(), uri, entityType);
+	}
 
-		// RESTful services
-		On.get(uri).json(X.index(entityType));
-		On.get(uri + "/{id}").json(X.read(entityType));
+	public static void scaffold(Setup setup, String uri, Class<?> entityType) {
+		JPA.bootstrap(setup.path(), entityType);
 
-		On.post(uri).tx().json(X.insert(entityType));
-		On.put(uri + "/{id}").tx().json(X.update(entityType));
-		On.delete(uri + "/{id}").tx().json(X.delete(entityType));
-
-		// GUI
-		On.page(uri + "/manage").mvc(X.manage(entityType));
-		On.page(uri + "/add").tx().mvc(X.add(entityType));
-		On.page(uri + "/{id}/view").tx().mvc(X.view(entityType));
-		On.page(uri + "/{id}/edit").tx().mvc(X.edit(entityType));
+		scaffoldEntity(setup, uri, entityType);
 	}
 
 	public static void scaffold(Class<?>... entityTypes) {
-		JPA.bootstrap(On.path(), entityTypes);
+		scaffold(On.setup(), entityTypes);
+	}
+
+	public static void scaffold(Setup setup, Class<?>... entityTypes) {
+		JPA.bootstrap(setup.path(), entityTypes);
+
 		for (Class<?> entityType : entityTypes) {
-			String uri = "/" + English.plural(Str.uncapitalized(entityType.getSimpleName()));
-			scaffold(uri, entityType);
+			scaffoldEntity(setup, UTILS.typeUri(entityType), entityType);
 		}
+	}
+
+	private static void scaffoldEntity(Setup setup, String baseUri, Class<?> entityType) {
+		baseUri = Str.trimr(baseUri, "/");
+
+		// RESTful services
+		setup.get(baseUri).json(X.index(entityType));
+		setup.get(baseUri + "/{id}").json(X.read(entityType));
+
+		setup.post(baseUri).tx().json(X.insert(entityType));
+		setup.put(baseUri + "/{id}").tx().json(X.update(entityType));
+		setup.delete(baseUri + "/{id}").tx().json(X.delete(entityType));
+
+		// GUI
+		setup.page(baseUri + "/manage").mvc(X.manage(entityType, baseUri));
+		setup.page(baseUri + "/add").tx().mvc(X.add(entityType, baseUri));
+		setup.page(baseUri + "/{id}/view").tx().mvc(X.view(entityType, baseUri));
+		setup.page(baseUri + "/{id}/edit").tx().mvc(X.edit(entityType, baseUri));
 	}
 
 }

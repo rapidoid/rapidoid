@@ -35,9 +35,11 @@ public class Btn extends AbstractCommand<Btn> {
 
 	private String kind = "default";
 
-	private String href;
+	private String go;
 
 	private String class_;
+
+	private String confirm;
 
 	@Override
 	protected Tag render() {
@@ -45,14 +47,22 @@ public class Btn extends AbstractCommand<Btn> {
 
 		String cls = U.or(class_, "btn btn-" + kind);
 
-		if (href != null) {
-			return a(contents).href(href).class_(cls);
+		if (go != null && handler == null && confirm() == null) {
+			return a(contents).href(go).class_(cls);
 		}
 
 		ButtonTag btn = button(contents).type("button").class_(cls);
 
 		if (command() != null) {
 			btn = btn.cmd(command(), cmdArgs());
+		}
+
+		if (confirm() != null) {
+			btn = btn.attr("data-confirm", confirm());
+		}
+
+		if (go() != null) {
+			btn = btn.attr("data-go", go());
 		}
 
 		return btn;
@@ -101,12 +111,12 @@ public class Btn extends AbstractCommand<Btn> {
 		return this;
 	}
 
-	public String href() {
-		return href;
+	public String go() {
+		return go;
 	}
 
-	public Btn href(String linkTo) {
-		this.href = linkTo;
+	public Btn go(String linkTo) {
+		this.go = linkTo;
 		return this;
 	}
 
@@ -124,4 +134,12 @@ public class Btn extends AbstractCommand<Btn> {
 		return this;
 	}
 
+	public String confirm() {
+		return confirm;
+	}
+
+	public Btn confirm(String confirm) {
+		this.confirm = confirm;
+		return this;
+	}
 }

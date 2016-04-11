@@ -373,7 +373,7 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static Btn navigate(String cmd) {
 		String caption = Str.capitalized(cmd);
-		return btn(caption).href(cmd);
+		return btn(caption).go(cmd);
 	}
 
 	public static Btn[] cmds(String... commands) {
@@ -513,11 +513,11 @@ public abstract class BootstrapWidgets extends HTML {
 
 		for (Object result : found) {
 			Object id = Beany.getId(result);
-			String url = UTILS.uriFor(result);
+			String uri = UTILS.uriFor(result);
 
 			Tag left = h6("(ID", NBSP, "=", NBSP, id, ")");
 			Object header = span(result.getClass().getSimpleName());
-			items[ind++] = media(left, header, small(Beany.beanToNiceText(result, true)), url);
+			items[ind++] = media(left, header, small(Beany.beanToNiceText(result, true)), uri);
 		}
 
 		return items;

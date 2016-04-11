@@ -739,21 +739,25 @@ public class UTILS implements Constants {
 		}
 	}
 
-	public static String uriFor(Object entity) {
-		if (!JPA.isEntity(entity)) {
+	public static String uriFor(Object target) {
+		if (!JPA.isEntity(target)) {
 			return "";
 		}
 
-		Object id = JPA.getIdentifier(entity);
+		return uriFor(typeUri(target.getClass()), target);
+	}
 
-		if (id != null) {
-			String name = Str.camelToSnake(English.plural(Cls.entityName(entity)));
-			String frm = Conf.ROOT.is("generate") ? "%s%s.html" : "/%s/%s/view";
-			return U.frmt(frm, name, id);
-
-		} else {
+	public static String uriFor(String baseUri, Object target) {
+		if (!JPA.isEntity(target)) {
 			return "";
 		}
+
+		Object id = JPA.getIdentifier(target);
+		return id != null ? uri(baseUri, id + "") : "";
+	}
+
+	public static String typeUri(Class<?> entityType) {
+		return "/" + English.plural(Str.uncapitalized(entityType.getSimpleName()));
 	}
 
 }

@@ -1,6 +1,33 @@
 Rapidoid.initializer(function($scope) {
 
-    $scope._emit = function(eventId, eventArgs) {
+    $scope._emit = function(event, eventId, eventArgs) {
+
+        var btn = $(event.currentTarget);
+        var confirm = btn.data("confirm");
+
+        if (confirm) {
+            swal({
+              title: "Are you sure?",
+              text: confirm,
+              type: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "Yes!",
+              closeOnConfirm: true
+            }, function(){
+               doEmit(event, eventId, eventArgs);
+            });
+
+        } else {
+            doEmit(event, eventId, eventArgs);
+        }
+
+    };
+
+    function doEmit(event, eventId, eventArgs) {
+
+        var btn = $(event.currentTarget);
+        var go = btn.data("go");
 
         eventId = eventId || 'bind';
         eventArgs = eventArgs || [];
@@ -45,6 +72,11 @@ Rapidoid.initializer(function($scope) {
 
         $.post(window.location.href, inputs).done(function(data) {
 
+            if (go) {
+                Rapidoid.goAt(go);
+                return;
+            }
+
             if (typeof data === 'string' || data instanceof String) {
                 $scope.ajaxBodyContent = data;
                 $scope.$apply();
@@ -52,7 +84,7 @@ Rapidoid.initializer(function($scope) {
             }
 
             if (data._redirect_) {
-                _goAt(data._redirect_);
+                Rapidoid.goAt(data._redirect_);
                 return;
             }
 
@@ -75,6 +107,7 @@ Rapidoid.initializer(function($scope) {
                         }
                     }
                 }
+
             } else {
                 if (data._sel_ === undefined) {
                     swal("Application error!", "The command couldn't be executed!", "error");
@@ -90,10 +123,11 @@ Rapidoid.initializer(function($scope) {
                     }
                 }
             }
+
         }).fail(function(data) {
             swal("Communication error!", "Couldn't connect to the server!", "error");
             console.log(data);
         });
-    };
+    }
 
 });
