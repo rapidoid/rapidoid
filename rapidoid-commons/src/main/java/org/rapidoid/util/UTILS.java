@@ -29,7 +29,6 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.English;
 import org.rapidoid.commons.Str;
-import org.rapidoid.config.Conf;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.insight.Insights;
@@ -424,26 +423,11 @@ public class UTILS implements Constants {
 		return thread;
 	}
 
-	public static boolean isRapidoidType(Class<?> clazz) {
-		try {
-			for (Class<?> c = clazz; c != Object.class; c = c.getSuperclass()) {
-				String pkg = c.getCanonicalName();
-				if (pkg.startsWith("org.rapidoid.") || pkg.startsWith("org.rapidoidx.")) {
-					return !pkg.startsWith("org.rapidoid.docs.");
-				}
-			}
-		} catch (Exception e) {
-			throw U.rte(e);
-		}
-
-		return false;
-	}
-
-	public static Class<?> getCallingClassOf(Class<?>... ignoreClasses) {
+	public static Class<?> getCallingClass(Class<?>... ignoreClasses) {
 		return inferCaller(ignoreClasses);
 	}
 
-	public static String getCallingPackageOf(Class<?>... ignoreClasses) {
+	public static String getCallingPackage(Class<?>... ignoreClasses) {
 		Class<?> callerCls = inferCaller(ignoreClasses);
 
 		if (callerCls != null) {
@@ -451,6 +435,28 @@ public class UTILS implements Constants {
 		} else {
 			throw U.rte("Couldn't infer the caller!");
 		}
+	}
+
+	private static Class<?> inferCaller(Class<?>... ignoreClasses) {
+		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+
+		// skip the first 2 elements:
+		// [0] java.lang.Thread.getStackTrace
+		// [1] THIS METHOD
+
+		for (int i = 2; i < trace.length; i++) {
+			String cls = trace[i].getClassName();
+			if (!Cls.isRapidoidClass(cls) && !Cls.isJREClass(cls) && !shouldIgnore(cls, ignoreClasses)) {
+				try {
+					return Class.forName(cls);
+				} catch (ClassNotFoundException e) {
+					Log.error("Couldn't load the caller class!", e);
+					return null;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	public static Class<?> getCallingMainClass() {
@@ -463,7 +469,7 @@ public class UTILS implements Constants {
 		for (int i = 2; i < trace.length; i++) {
 			String cls = trace[i].getClassName();
 
-			if (U.eq(trace[i].getMethodName(), "main")) {
+			if (!Cls.isRapidoidClass(cls) && !Cls.isJREClass(cls) && U.eq(trace[i].getMethodName(), "main")) {
 				Class<?> clazz = Cls.getClassIfExists(cls);
 				if (clazz != null) {
 					Method main = Cls.findMethod(clazz, "main", String[].class);
@@ -474,29 +480,6 @@ public class UTILS implements Constants {
 							return clazz;
 						}
 					}
-				}
-			}
-		}
-
-		return null;
-	}
-
-	private static Class<?> inferCaller(Class<?>... ignoreClasses) {
-		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
-
-		// skip the first 3 elements:
-		// [0] java.lang.Thread.getStackTrace
-		// [1] THIS METHOD
-		// [2] UTILS#getCallingPackageOf or UTILS#getCallingClassOf
-
-		for (int i = 3; i < trace.length; i++) {
-			String cls = trace[i].getClassName();
-			if (!shouldIgnore(cls, ignoreClasses)) {
-				try {
-					return Class.forName(cls);
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-					return null;
 				}
 			}
 		}

@@ -365,7 +365,7 @@ public class Setup implements Constants {
 
 	private static void inferCallers() {
 		if (!restarted && appPkgName == null && mainClassName == null) {
-			String pkg = UTILS.getCallingPackageOf(Setup.class, On.class, Setup.class);
+			String pkg = UTILS.getCallingPackage();
 
 			appPkgName = pkg;
 
