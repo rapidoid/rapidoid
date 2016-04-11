@@ -390,14 +390,14 @@ public class Setup implements Constants {
 	public Setup bootstrap(String... args) {
 		this.args(args);
 
-		bootstrapGoodies();
-
-		beans(annotated(Controller.class).in(path()).loadAll().toArray());
-
 		Class<Object> entityClass = Cls.getClassIfExists("javax.persistence.Entity");
 		if (entityClass != null) {
 			JPA.bootstrap(path());
 		}
+
+		bootstrapGoodies();
+
+		beans(annotated(Controller.class).in(path()).loadAll().toArray());
 
 		Log.info("Completed bootstrap", "context", getIoCContext());
 		return this;
