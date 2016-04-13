@@ -157,6 +157,7 @@ org.rapidoid.fluent.To
 org.rapidoid.fluent.utils.Lambdas
 org.rapidoid.fluent.utils.StreamUtils
 org.rapidoid.goodies.ConfigHandler
+org.rapidoid.goodies.DataHandler
 org.rapidoid.goodies.DetailsHandler
 org.rapidoid.goodies.Goodies
 org.rapidoid.goodies.GraphDataHandler
@@ -372,6 +373,7 @@ org.rapidoid.job.ContextPreservingJobWrapper
 org.rapidoid.job.Jobs
 org.rapidoid.job.JobsDSL
 org.rapidoid.job.PredefinedContextJobWrapper
+org.rapidoid.jpa.AbstractEntity
 org.rapidoid.jpa.CustomDescriptor
 org.rapidoid.jpa.CustomHibernatePersistenceProvider
 org.rapidoid.jpa.DAO
@@ -529,6 +531,7 @@ org.rapidoid.util.SuccessException
 org.rapidoid.util.Usage
 org.rapidoid.util.UTILS
 org.rapidoid.u.U
+org.rapidoid.validation.Validators
 org.rapidoid.value.AbstractDecoratorValue
 org.rapidoid.value.AbstractValue
 org.rapidoid.value.OrValue
