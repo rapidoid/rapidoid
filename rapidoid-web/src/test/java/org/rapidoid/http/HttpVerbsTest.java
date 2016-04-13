@@ -31,14 +31,14 @@ public class HttpVerbsTest extends HttpTestCommons {
 
 	@Test
 	public void testHttpVerbs() {
-		On.get("/testGet").plain("get:success");
-		On.post("/testPost").plain("post:success");
-		On.put("/testPut").plain("put:success");
-		On.delete("/testDelete").plain("delete:success");
-		On.patch("/testPatch").plain("patch:success");
-		On.options("/testOptions").plain("options:success");
-		On.head("/testHead").plain(""); // no body for the HEAD verb
-		On.trace("/testTrace").plain("trace:success");
+		On.get("/testGet").html("get:success");
+		On.post("/testPost").html("post:success");
+		On.put("/testPut").html("put:success");
+		On.delete("/testDelete").html("delete:success");
+		On.patch("/testPatch").html("patch:success");
+		On.options("/testOptions").html("options:success");
+		On.head("/testHead").html(""); // no body for the HEAD verb
+		On.trace("/testTrace").html("trace:success");
 
 		eq(HTTP.get("http://localhost:8888/testGet").fetch(), "get:success");
 		eq(HTTP.post("http://localhost:8888/testPost").fetch(), "post:success");

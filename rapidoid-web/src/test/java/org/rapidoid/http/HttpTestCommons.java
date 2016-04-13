@@ -79,8 +79,6 @@ public abstract class HttpTestCommons extends TestCommons {
 		Setup.resetGlobalState();
 		OnChanges.ignore();
 
-		JDBC.execute("DROP ALL OBJECTS");
-
 		On.setup().resetWithoutRestart();
 		On.setup().listen();
 
@@ -112,30 +110,6 @@ public abstract class HttpTestCommons extends TestCommons {
 
 	protected String localhost(int port, String uri) {
 		return "http://localhost:" + port + uri;
-	}
-
-	protected void defaultServerSetup() {
-		On.get("/echo").serve((Req x) -> {
-			x.response().contentType(MediaType.PLAIN_TEXT_UTF_8);
-			return x.verb() + ":" + x.path() + ":" + x.query();
-		});
-
-		On.get("/hello").html("Hello");
-
-		On.post("/upload").serve((Req x) -> {
-			Log.info("Uploaded files", "files", x.files().keySet());
-
-			x.response().contentType(MediaType.PLAIN_TEXT_UTF_8);
-
-			boolean hasF3 = x.files().containsKey("f3");
-
-			return U.join(":", x.cookies().get("foo"), x.cookies().get("COOKIE1"), x.posted().get("a"), x.files().size(),
-					Crypto.md5(x.file("f1").content()),
-					Crypto.md5(x.files().get("f2").get(0).content()),
-					Crypto.md5(hasF3 ? x.file("f3").content() : new byte[0]));
-		});
-
-		On.req((Req x) -> x.response().html(U.join(":", x.verb(), x.path(), x.query())));
 	}
 
 	protected String resourceMD5(String filename) throws IOException, URISyntaxException {
