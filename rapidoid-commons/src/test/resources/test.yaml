@@ -1,5 +1,5 @@
 aa : 1
 bb : 2am
 cc:
- x : y
- z : n
+ x : true
+ z : false
