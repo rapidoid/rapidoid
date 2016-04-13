@@ -45,6 +45,18 @@
 			<artifactId>hibernate-c3p0</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>javax.el-api</artifactId>
+			<version>${el.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.web</groupId>
+			<artifactId>javax.el</artifactId>
+			<version>${el.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-test-commons</artifactId>
