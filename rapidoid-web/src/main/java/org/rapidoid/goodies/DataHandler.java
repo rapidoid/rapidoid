@@ -22,13 +22,12 @@ package org.rapidoid.goodies;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.English;
-import org.rapidoid.commons.Str;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.Grid;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import javax.persistence.metamodel.EntityType;
 import java.util.List;
@@ -65,7 +64,7 @@ public class DataHandler extends GUI implements Callable<Object> {
 			Class<?> javaType = type.getJavaType();
 
 			long count = JPA.count(javaType);
-			String idType = type.getIdType().getJavaType().getSimpleName();
+			String idType = type.getIdType() != null ? type.getIdType().getJavaType().getSimpleName() : "";
 			Object superType = type.getSupertype() != null ? type.getSupertype().getJavaType().getSimpleName() : "";
 
 			records.add(U.map("type", type.getName(), "extends", superType, "ID Type", idType, "count", count));
