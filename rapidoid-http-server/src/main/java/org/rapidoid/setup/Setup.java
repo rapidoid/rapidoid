@@ -28,8 +28,8 @@ import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.security.Roles;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.Reload;
 import org.rapidoid.util.Msc;
+import org.rapidoid.util.Reload;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

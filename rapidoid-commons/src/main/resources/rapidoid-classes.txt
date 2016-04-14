@@ -382,8 +382,8 @@ org.rapidoid.jpa.CustomHibernatePersistenceProvider
 org.rapidoid.jpa.DAO
 org.rapidoid.jpa.EMFUtil
 org.rapidoid.jpa.JPA
+org.rapidoid.jpa.JPAPersisterProvider
 org.rapidoid.jpa.JPAUtil
-org.rapidoid.jpa.QuickJPA
 org.rapidoid.lambda.Calc
 org.rapidoid.lambda.Dynamic
 org.rapidoid.lambda.F2

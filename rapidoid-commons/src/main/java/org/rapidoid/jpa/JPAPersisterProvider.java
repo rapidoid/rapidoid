@@ -23,28 +23,21 @@ package org.rapidoid.jpa;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.PersisterProvider;
+import org.rapidoid.u.U;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
-@Since("3.0.0")
+@Since("5.1.0")
 @SuppressWarnings("deprecation")
-public class QuickJPA implements PersisterProvider {
-
-	private final EntityManagerFactory emf;
-
-	private final List<String> entityTypes;
-
-	public QuickJPA(EntityManagerFactory emf, List<String> entityTypes) {
-		this.emf = emf;
-		this.entityTypes = entityTypes;
-	}
+public class JPAPersisterProvider implements PersisterProvider {
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <P> P openPersister() {
+		EntityManagerFactory emf = JPA.emf();
+		U.notNull(emf, "JPA.emf");
 		return (P) emf.createEntityManager();
 	}
 
@@ -54,11 +47,4 @@ public class QuickJPA implements PersisterProvider {
 		em.close();
 	}
 
-	public EntityManagerFactory emf() {
-		return emf;
-	}
-
-	public List<String> entityTypes() {
-		return entityTypes;
-	}
 }

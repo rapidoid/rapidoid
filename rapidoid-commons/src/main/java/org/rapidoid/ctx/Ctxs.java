@@ -3,6 +3,7 @@ package org.rapidoid.ctx;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Coll;
+import org.rapidoid.jpa.JPAPersisterProvider;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
@@ -32,7 +33,7 @@ public class Ctxs {
 
 	private static final ThreadLocal<Ctx> CTXS = new ThreadLocal<Ctx>();
 
-	private static volatile PersisterProvider persisterProvider = null;
+	private static volatile PersisterProvider persisterProvider = new JPAPersisterProvider();
 
 	private Ctxs() {
 	}
@@ -114,6 +115,5 @@ public class Ctxs {
 		U.notNull(persisterProvider, "Ctxs.persisterProvider");
 		persisterProvider.closePersister(persister);
 	}
-
 
 }

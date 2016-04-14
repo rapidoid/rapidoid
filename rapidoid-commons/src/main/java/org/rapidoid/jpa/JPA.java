@@ -40,6 +40,8 @@ import java.util.Properties;
 @Since("5.1.0")
 public class JPA {
 
+	private static volatile EntityManagerFactory emf;
+
 	private static final List<String> entities = U.list();
 
 	public static EntityManager em() {
@@ -143,7 +145,7 @@ public class JPA {
 		em().flush();
 	}
 
-	public static QuickJPA bootstrap(String[] path, Class<?>... providedEntities) {
+	public static void bootstrap(String[] path, Class<?>... providedEntities) {
 		if (Cls.exists("org.hibernate.cfg.Configuration") && entities.isEmpty()) {
 			Msc.logSection("Bootstrapping JPA (Hibernate)...");
 
@@ -151,7 +153,6 @@ public class JPA {
 
 			if (entityTypes.isEmpty()) {
 				Msc.logSection("Didn't find JPA providedEntities, canceling JPA/Hibernate setup!");
-				return null;
 			}
 
 			Msc.logSection("Hibernate properties:");
@@ -164,16 +165,11 @@ public class JPA {
 			provider.names().addAll(entityTypes);
 
 			EntityManagerFactory emf = provider.createEntityManagerFactory("pu", props);
-
-			QuickJPA jpa = new QuickJPA(emf, entityTypes);
-			Ctxs.setPersisterProvider(jpa);
+			JPA.emf(emf);
 
 			Msc.logSection("JPA (Hibernate) is ready.");
 
 			Coll.assign(entities, entityTypes);
-			return jpa;
-		} else {
-			return null;
 		}
 	}
 
@@ -205,4 +201,11 @@ public class JPA {
 		return obj != null && entities().contains(obj.getClass().getName());
 	}
 
+	public static EntityManagerFactory emf() {
+		return emf;
+	}
+
+	public static void emf(EntityManagerFactory emf) {
+		JPA.emf = emf;
+	}
 }
