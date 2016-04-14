@@ -1,0 +1,43 @@
+HTTP/1.1 500 Internal Server Error
+Connection: keep-alive
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 1606
+
+<!DOCTYPE html>
+<html lang="en">
+<!-- Derived from: http://bootsnipp.com/snippets/featured/simple-404-not-found-page (Copyright (c) 2013 Bootsnipp.com, MIT license, see http://bootsnipp.com/license) -->
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="/bootstrap/css/bootstrap-3.3.6.min.css" rel="stylesheet">
+    <link href="/font-awesome/css/font-awesome-4.5.0.min.css" rel="stylesheet">
+    <link href="/rapidoid.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-squares container">
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div style="padding: 30px 0px; text-align: center;">
+            <br>
+            <div style="border: none 1px #aaa; border-radius: 25px; padding: 10px; background-color:rgba(0, 0, 0, 0.05);">
+                <h1><i class="fa fa-warning" style="color: #955; padding-bottom: 23px;"></i> <span style="font-family: 'Times New Roman', Times, serif;">Internal Server Error!</span></h1>
+                <h4 style="font-family: 'Times New Roman', Times, serif;">ERROR CODE: 500</h4>
+                <h4 style="font-family: 'Times New Roman', Times, serif;">Invalid!</h4>
+                <div style="margin-top: 35px; margin-bottom: 15px;">
+                    <a href="/" class="btn" style="background-color: #FFF;"><span class="fa fa-home"></span> Home page</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+
+</body>
+</html>

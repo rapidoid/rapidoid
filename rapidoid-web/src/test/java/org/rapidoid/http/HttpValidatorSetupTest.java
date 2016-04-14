@@ -1,11 +1,8 @@
-package org.rapidoid.util;
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
+package org.rapidoid.http;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-web
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -23,20 +20,18 @@ import org.rapidoid.annotation.Since;
  * #L%
  */
 
-@SuppressWarnings("serial")
+import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.setup.On;
+
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class OptimisticConcurrencyControlException extends RuntimeException {
+@Since("5.1.0")
+public class HttpValidatorSetupTest extends HttpTestCommons {
 
-	private final long recordId;
-
-	public OptimisticConcurrencyControlException(String msg, long recordId) {
-		super(msg);
-		this.recordId = recordId;
-	}
-
-	public long getRecordId() {
-		return recordId;
+	@Test
+	public void testHttpServer() throws Exception {
+		On.custom().validator().validate(new Object());
 	}
 
 }

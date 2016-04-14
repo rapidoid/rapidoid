@@ -1,8 +1,8 @@
-package org.rapidoid.validation;
+package org.rapidoid.http.customize;
 
 /*
  * #%L
- * rapidoid-commons
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -22,37 +22,11 @@ package org.rapidoid.validation;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
-import javax.validation.*;
-import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Validators {
+public interface BeanValidator {
 
-	private static final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-
-	private static final Validator validator = factory.getValidator();
-
-	public static ValidatorFactory factory() {
-		return factory;
-	}
-
-	public static Validator get() {
-		return validator;
-	}
-
-	public static <T> Set<ConstraintViolation<T>> getViolations(T bean) {
-		return validator.validate(bean);
-	}
-
-	public static void validate(Object bean) {
-		Set<ConstraintViolation<Object>> violations = getViolations(bean);
-
-		if (U.notEmpty(violations)) {
-			throw new ConstraintViolationException(violations);
-		}
-	}
+	void validate(Object bean) throws RuntimeException;
 
 }

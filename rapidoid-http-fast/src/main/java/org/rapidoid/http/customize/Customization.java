@@ -31,8 +31,6 @@ public class Customization {
 
 	public static final String[] DEFAULT_STATIC_FILES_LOCATIONS = {"static", "public", "default/static", "default/public"};
 
-	private static final String MUSTACHE_RENDERER = "org.rapidoid.web.MustacheViewRenderer";
-
 	private static final String PAGE_RENDERER = "org.rapidoid.web.DefaultPageRenderer";
 
 	private final String name;
@@ -57,6 +55,8 @@ public class Customization {
 
 	private volatile RolesProvider rolesProvider;
 
+	private volatile BeanValidator validator;
+
 	public Customization(String name, Config appConfig, Config serverConfig) {
 		this.name = name;
 		this.appConfig = appConfig;
@@ -73,12 +73,7 @@ public class Customization {
 		beanParameterFactory = new DefaultBeanParameterFactory();
 		loginProvider = new DefaultLoginProvider();
 		rolesProvider = new DefaultRolesProvider();
-	}
-
-	protected ViewRenderer optionalViewRenderer() {
-		Class<?> rendererCls = Cls.getClassIfExists(MUSTACHE_RENDERER);
-
-		return rendererCls != null ? (ViewRenderer) Cls.newInstance(rendererCls, this) : null;
+		validator = new DefaultBeanValidator();
 	}
 
 	protected PageRenderer optionalPageRenderer() {
@@ -161,5 +156,13 @@ public class Customization {
 
 	public Config serverConfig() {
 		return serverConfig;
+	}
+
+	public BeanValidator validator() {
+		return validator;
+	}
+
+	public void validator(BeanValidator validator) {
+		this.validator = validator;
 	}
 }

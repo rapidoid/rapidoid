@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.test.TestCommons;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.Set;
 
 /*
@@ -46,7 +47,7 @@ public class BeanValidationTest extends TestCommons {
 	public void testSize() {
 		Thing thing = new Thing("foo", "ab");
 
-		Set<ConstraintViolation<Thing>> violations = Validators.validate(thing);
+		Set<ConstraintViolation<Thing>> violations = Validators.getViolations(thing);
 
 		eq(violations.size(), 1);
 		eq(violations.iterator().next().getMessage(), "size must be between 3 and 5");
@@ -59,6 +60,11 @@ public class BeanValidationTest extends TestCommons {
 		Set<ConstraintViolation<Thing>> violations = Validators.get().validate(thing);
 
 		eq(violations.size(), 0);
+	}
+
+	@Test(expected = ConstraintViolationException.class)
+	public void testValidationException() {
+		Validators.validate(new Thing(null, "ab"));
 	}
 
 }

@@ -1,0 +1,8 @@
+HTTP/1.1 422 Unprocesssable Entity
+Connection: keep-alive
+Server: Rapidoid
+Date: XXXXX GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 100
+
+{"error":"Validation failed: Foo.num (may not be null)","code":422,"status":"Unprocesssable Entity"}

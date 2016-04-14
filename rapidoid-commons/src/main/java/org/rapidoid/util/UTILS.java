@@ -26,7 +26,7 @@ import org.rapidoid.activity.RapidoidThreadFactory;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Arr;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.English;
 import org.rapidoid.commons.Str;
 import org.rapidoid.ctx.Ctx;
@@ -41,7 +41,10 @@ import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.validation.InvalidData;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.*;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -50,15 +53,20 @@ import java.lang.reflect.Proxy;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.concurrent.*;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class UTILS implements Constants {
+
+	public static final Set<String> SPECIAL_ERRORS = Coll.synchronizedSet(
+			SecurityException.class.getName(),
+			InvalidData.class.getName(),
+			"javax.validation.ConstraintViolationException",
+			"javax.validation.ValidationException"
+	);
 
 	public static final Mapper<Object, Object> TRANSFORM_TO_STRING = new Mapper<Object, Object>() {
 		@Override
@@ -313,9 +321,9 @@ public class UTILS implements Constants {
 		D.print(U.frmt("%s %s in %s ms (%s/sec)", count, info, delta, freq));
 	}
 
-	public static Throwable rootCause(Throwable e, Class<?>... interestingErrorTypes) {
+	public static Throwable rootCause(Throwable e) {
 		while (e.getCause() != null) {
-			if (U.notEmpty(interestingErrorTypes) && Arr.contains(interestingErrorTypes, e.getClass())) {
+			if (SPECIAL_ERRORS.contains(e.getClass().getName())) {
 				return e;
 			}
 			e = e.getCause();
@@ -743,4 +751,59 @@ public class UTILS implements Constants {
 		return "/" + English.plural(Str.uncapitalized(entityType.getSimpleName()));
 	}
 
+	public static boolean hasValidation() {
+		return Cls.exists("javax.validation.Validation");
+	}
+
+	public static boolean isValidationError(Throwable error) {
+		return (error instanceof InvalidData) || error.getClass().getName().startsWith("javax.validation.");
+	}
+
+	public static ErrCodeAndMsg getErrorCodeAndMsg(Throwable err) {
+		Throwable cause = rootCause(err);
+
+		int code;
+		String defaultMsg;
+		String msg = cause.getMessage();
+
+		if (cause instanceof SecurityException) {
+			code = 403;
+			defaultMsg = "Access Denied!";
+
+		} else if (UTILS.isValidationError(cause)) {
+			code = 422;
+			defaultMsg = "Validation Error!";
+
+			if (cause.getClass().getName().equals("javax.validation.ConstraintViolationException")) {
+				Set<ConstraintViolation<?>> violations = ((ConstraintViolationException) cause).getConstraintViolations();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("Validation failed: ");
+
+				for (Iterator<ConstraintViolation<?>> it = U.safe(violations).iterator(); it.hasNext(); ) {
+					ConstraintViolation<?> v = it.next();
+
+					sb.append(v.getRootBeanClass().getSimpleName());
+					sb.append(".");
+					sb.append(v.getPropertyPath());
+					sb.append(" (");
+					sb.append(v.getMessage());
+					sb.append(")");
+
+					if (it.hasNext()) {
+						sb.append(", ");
+					}
+				}
+
+				msg = sb.toString();
+			}
+
+		} else {
+			code = 500;
+			defaultMsg = "Internal Server Error!";
+		}
+
+		msg = U.or(msg, defaultMsg);
+		return new ErrCodeAndMsg(code, msg);
+	}
 }

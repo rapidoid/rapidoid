@@ -32,21 +32,31 @@ public class BeanParamRetriever implements ParamRetriever {
 
 	private final Customization customization;
 	private final Class<?> type;
+	private final boolean validate;
 	private final String name;
 
-	public BeanParamRetriever(Customization customization, Class<?> type, String name) {
+	public BeanParamRetriever(Customization customization, Class<?> type, String name, boolean validate) {
 		this.customization = customization;
 		this.type = type;
 		this.name = name;
+		this.validate = validate;
 	}
 
 	@Override
 	public Object getParamValue(Req req) {
+		Object bean;
+
 		try {
-			return customization.beanParameterFactory().getParamValue(req, type, name, req.data());
+			bean = customization.beanParameterFactory().getParamValue(req, type, name, req.data());
 		} catch (Exception e) {
 			throw U.rte(e);
 		}
+
+		if (validate) {
+			customization.validator().validate(bean);
+		}
+
+		return bean;
 	}
 
 }

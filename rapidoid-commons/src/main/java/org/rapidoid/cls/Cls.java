@@ -1116,4 +1116,8 @@ public class Cls {
 		return (classOrInstance instanceof Class<?>) ? ((Class<?>) classOrInstance) : classOrInstance.getClass();
 	}
 
+	public static boolean isAnnotated(Class<?> type, Class<? extends Annotation> annotation) {
+		return type.getAnnotation(annotation) != null;
+	}
+
 }

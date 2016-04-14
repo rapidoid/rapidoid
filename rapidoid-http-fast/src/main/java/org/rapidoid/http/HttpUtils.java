@@ -30,6 +30,7 @@ import org.rapidoid.http.customize.JsonResponseRenderer;
 import org.rapidoid.io.Res;
 import org.rapidoid.serialize.Serialize;
 import org.rapidoid.u.U;
+import org.rapidoid.util.ErrCodeAndMsg;
 import org.rapidoid.util.UTILS;
 
 import javax.xml.bind.DatatypeConverter;
@@ -176,26 +177,14 @@ public class HttpUtils implements HttpMetadata {
 		}
 	}
 
-	public static String getErrorMessage(Resp resp, Throwable err) {
-		Throwable cause = UTILS.rootCause(err, SecurityException.class);
-
-		int code;
-		String msg;
-
-		if (cause instanceof SecurityException) {
-			code = 403;
-			msg = "Access Denied!";
-		} else {
-			code = 500;
-			msg = "Internal Server Error!";
-		}
-
-		resp.code(code);
-		return U.or(cause.getMessage(), msg);
+	public static String getErrorMessageAndSetCode(Resp resp, Throwable err) {
+		ErrCodeAndMsg codeAndMsg = UTILS.getErrorCodeAndMsg(err);
+		resp.code(codeAndMsg.code());
+		return codeAndMsg.msg();
 	}
 
 	public static Map<String, ?> getErrorInfo(Resp resp, Throwable error) {
-		String errorMessage = getErrorMessage(resp, error);
+		String errorMessage = getErrorMessageAndSetCode(resp, error);
 		return U.map("error", errorMessage, "code", resp.code(), "status", HttpResponseCodes.status(resp.code()));
 	}
 

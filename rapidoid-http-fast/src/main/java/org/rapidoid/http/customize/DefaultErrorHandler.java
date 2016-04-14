@@ -28,6 +28,7 @@ import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.log.Log;
+import org.rapidoid.util.UTILS;
 import org.rapidoid.value.Value;
 
 import java.util.Map;
@@ -47,17 +48,26 @@ public class DefaultErrorHandler implements ErrorHandler {
 	@Override
 	public Object handleError(Req req, Resp resp, Throwable error) {
 
-		if (error instanceof SecurityException) {
-			Log.warn("Access denied for request: " + req, "client", req.clientIpAddress());
+		boolean validation = UTILS.isValidationError(error);
+
+		if (!validation) {
+			if (error instanceof SecurityException) {
+				Log.warn("Access denied for request: " + req, "client", req.clientIpAddress());
+			} else {
+				Log.error("Error occurred when handling request: " + req, error);
+			}
 		} else {
-			Log.error("Error occurred when handling request: " + req, error);
+			Log.debug("Validation error when handling request: " + req);
+			if (Log.isDebugEnabled()) {
+				error.printStackTrace();
+			}
 		}
 
 		if (resp.contentType() == MediaType.JSON_UTF_8) {
 			return HttpUtils.getErrorInfo(resp, error);
 
 		} else if (resp.contentType() == MediaType.PLAIN_TEXT_UTF_8) {
-			return HttpUtils.getErrorMessage(resp, error);
+			return HttpUtils.getErrorMessageAndSetCode(resp, error);
 
 		} else {
 			return page(req, resp, error);

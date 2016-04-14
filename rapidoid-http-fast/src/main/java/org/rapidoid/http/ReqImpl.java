@@ -506,7 +506,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 			} catch (Exception e1) {
 				Log.error("Internal rendering error!", e1);
-				return HttpUtils.getErrorMessage(response, e1).getBytes();
+				return HttpUtils.getErrorMessageAndSetCode(response, e1).getBytes();
 			}
 		}
 	}

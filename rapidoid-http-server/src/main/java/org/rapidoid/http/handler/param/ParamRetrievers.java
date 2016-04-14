@@ -44,6 +44,7 @@ public class ParamRetrievers {
 		Cookie cookie = Metadata.get(annotations, Cookie.class);
 		Header header = Metadata.get(annotations, Header.class);
 		Param param = Metadata.get(annotations, Param.class);
+		Valid valid = Metadata.get(annotations, Valid.class);
 
 		int annotationsCount = UTILS.countNonNull(cookie, header, param);
 		U.must(annotationsCount <= 1, "Expected maximum one of the @Cookie, @Header, @Param, @P annotations on the same parameter!");
@@ -92,7 +93,7 @@ public class ParamRetrievers {
 
 		} else {
 			if (Cls.isAppBeanType(type)) {
-				return new BeanParamRetriever(customization, type, name);
+				return new BeanParamRetriever(customization, type, name, valid != null);
 
 			} else if (Cls.kindOf(type).isConcrete()) {
 				return new DataParamRetriever(type, name);
