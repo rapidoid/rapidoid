@@ -40,6 +40,7 @@ org.rapidoid.annotation.ToString
 org.rapidoid.annotation.TRACE
 org.rapidoid.annotation.Transaction
 org.rapidoid.annotation.TransactionMode
+org.rapidoid.annotation.Valid
 org.rapidoid.beany.AnnotatedPropertyFilter
 org.rapidoid.beany.BeanProp
 org.rapidoid.beany.BeanProperties
@@ -246,8 +247,10 @@ org.rapidoid.html.tag.TextareaTag
 org.rapidoid.html.tag.ThTag
 org.rapidoid.html.TagWidget
 org.rapidoid.http.customize.BeanParameterFactory
+org.rapidoid.http.customize.BeanValidator
 org.rapidoid.http.customize.Customization
 org.rapidoid.http.customize.DefaultBeanParameterFactory
+org.rapidoid.http.customize.DefaultBeanValidator
 org.rapidoid.http.customize.DefaultErrorHandler
 org.rapidoid.http.customize.DefaultJsonResponseRenderer
 org.rapidoid.http.customize.DefaultLoginProvider
@@ -515,9 +518,9 @@ org.rapidoid.util.ClassReloader
 org.rapidoid.util.CommonWords
 org.rapidoid.util.Constants
 org.rapidoid.util.D
+org.rapidoid.util.ErrCodeAndMsg
 org.rapidoid.util.MapEntry
 org.rapidoid.util.NullOutputStream
-org.rapidoid.util.OptimisticConcurrencyControlException
 org.rapidoid.util.RapidoidProcess
 org.rapidoid.util.Reload
 org.rapidoid.util.Resetable
@@ -531,6 +534,7 @@ org.rapidoid.util.SuccessException
 org.rapidoid.util.Usage
 org.rapidoid.util.UTILS
 org.rapidoid.u.U
+org.rapidoid.validation.InvalidData
 org.rapidoid.validation.Validators
 org.rapidoid.value.AbstractDecoratorValue
 org.rapidoid.value.AbstractValue
