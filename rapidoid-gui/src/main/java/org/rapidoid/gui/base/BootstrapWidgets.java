@@ -721,8 +721,16 @@ public abstract class BootstrapWidgets extends HTML {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static Object display(Object item) {
+		try {
+			return _display(item);
+		} catch (Exception e) {
+			return N_A;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Object _display(Object item) {
 		if (item instanceof Tag) {
 			return item;
 		}
@@ -755,10 +763,12 @@ public abstract class BootstrapWidgets extends HTML {
 		}
 
 		if (JPA.isEntity(item)) {
-			return a(escape(item.toString())).href(Msc.uriFor(item));
+			return a(escape(item.toString())).href(Msc.uriFor(item) + "/view");
 		}
 
-		if (isBean(item)) return GUI.show(item);
+		if (isBean(item)) {
+			return GUI.show(item);
+		}
 
 		String str = Cls.str(item);
 		Tag tag = hardcoded(escape(str));
