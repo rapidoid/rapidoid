@@ -885,7 +885,10 @@ public class Cls {
 	}
 
 	public static boolean isBeanType(Class<?> clazz) {
-		return clazz != null && clazz != Object.class && kindOf(clazz) == TypeKind.UNKNOWN
+		return clazz != null && clazz != Object.class
+				&& kindOf(clazz) == TypeKind.UNKNOWN
+				&& (!clazz.getName().startsWith("java.") || clazz.getName().startsWith("java.lang.management."))
+				&& (!clazz.getName().startsWith("javax.") || clazz.getName().startsWith("javax.management."))
 				&& !clazz.isAnnotation()
 				&& !clazz.isEnum()
 				&& !clazz.isInterface()
