@@ -22,8 +22,6 @@ package org.rapidoid.web;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.Beany;
-import org.rapidoid.beany.Prop;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.English;
 import org.rapidoid.commons.Str;
@@ -41,6 +39,7 @@ import org.rapidoid.sql.JDBC;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
+import javax.persistence.metamodel.EntityType;
 import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
@@ -232,8 +231,13 @@ public class X {
 	}
 
 	private static Class<?> idType(Class<?> entityType) {
-		Prop idProp = Beany.property(entityType, "id", true);
-		return idProp.getType();
+		for (EntityType<?> t : JPA.getEntityTypes()) {
+			if (t.getJavaType().equals(entityType)) {
+				return t.getIdType() != null ? t.getIdType().getJavaType() : null;
+			}
+		}
+
+		return null;
 	}
 
 	public static String uri(String baseUri, Object entity) {

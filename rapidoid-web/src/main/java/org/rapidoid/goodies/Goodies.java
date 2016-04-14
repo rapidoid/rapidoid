@@ -22,7 +22,6 @@ package org.rapidoid.goodies;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.log.Log;
 import org.rapidoid.security.Roles;
@@ -120,8 +119,7 @@ public class Goodies {
 
 			setup.page("/_data").mvc(Goodies.data());
 
-			for (String entityType : JPA.entities()) {
-				Class<Object> type = Cls.getClassIfExists(entityType);
+			for (Class<?> type : JPA.getEntityJavaTypes()) {
 				String uri = "/_" + Msc.typeUri(type).substring(1);
 				X.scaffold(setup, uri, type);
 			}

@@ -32,7 +32,7 @@ import org.rapidoid.crypto.Crypto;
 import org.rapidoid.io.IO;
 import org.rapidoid.io.Res;
 import org.rapidoid.ioc.IoC;
-import org.rapidoid.jpa.JPA;
+import org.rapidoid.jpa.JPAUtil;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 import org.rapidoid.scan.ClasspathUtil;
@@ -69,7 +69,7 @@ public abstract class HttpTestCommons extends TestCommons {
 		Env.profiles().clear();
 		Env.profiles().add("default");
 
-		JPA.entities().clear();
+		JPAUtil.reset();
 		Res.reset();
 		Conf.reset();
 		Conf.setPath(getTestName());

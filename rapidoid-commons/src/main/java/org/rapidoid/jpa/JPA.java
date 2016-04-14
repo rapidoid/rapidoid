@@ -2,19 +2,14 @@ package org.rapidoid.jpa;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Coll;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.metamodel.EntityType;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /*
  * #%L
@@ -40,22 +35,12 @@ import java.util.Properties;
 @Since("5.1.0")
 public class JPA {
 
-	private static volatile EntityManagerFactory emf;
-
-	private static final List<String> entities = U.list();
-
 	public static EntityManager em() {
-		Ctx ctx = Ctxs.get();
-		if (ctx != null) {
-			return (EntityManager) ctx.persister();
-		} else {
-			U.notNull(emf, "JPA.emf");
-			return emf.createEntityManager();
-		}
+		return JPAUtil.em();
 	}
 
-	public static JPAUtil with(EntityManager em) {
-		return JPAUtil.with(em);
+	public static EM with(EntityManager em) {
+		return new EM(em);
 	}
 
 	public static <E> E ref(Class<E> clazz, Object id) {
@@ -72,10 +57,6 @@ public class JPA {
 
 	public static <E> List<E> getAllEntities() {
 		return with(em()).getAll();
-	}
-
-	public static List<EntityType<?>> getEntityTypes() {
-		return with(em()).getEntityTypes();
 	}
 
 	public static <E> List<E> getAll(Class<E> clazz, List<String> ids) {
@@ -150,35 +131,7 @@ public class JPA {
 	}
 
 	public static void bootstrap(String[] path, Class<?>... providedEntities) {
-		if (Cls.exists("org.hibernate.cfg.Configuration") && entities.isEmpty()) {
-			Msc.logSection("Bootstrapping JPA (Hibernate)...");
-
-			List<String> entityTypes = EMFUtil.createEMF(path, providedEntities);
-
-			if (entityTypes.isEmpty()) {
-				Msc.logSection("Didn't find JPA providedEntities, canceling JPA/Hibernate setup!");
-			}
-
-			Msc.logSection("Hibernate properties:");
-			Properties props = EMFUtil.hibernateProperties();
-			Msc.logProperties(props);
-
-			Msc.logSection("Starting Hibernate:");
-
-			CustomHibernatePersistenceProvider provider = new CustomHibernatePersistenceProvider();
-			provider.names().addAll(entityTypes);
-
-			EntityManagerFactory emf = provider.createEntityManagerFactory("pu", props);
-			JPA.emf(emf);
-
-			Msc.logSection("JPA (Hibernate) is ready.");
-
-			Coll.assign(entities, entityTypes);
-		}
-	}
-
-	public static List<String> entities() {
-		return entities;
+		JPAUtil.bootstrap(path, providedEntities);
 	}
 
 	public static boolean isLoaded(Object entity) {
@@ -202,14 +155,31 @@ public class JPA {
 	}
 
 	public static boolean isEntity(Object obj) {
-		return obj != null && entities().contains(obj.getClass().getName());
+		return JPAUtil.isEntity(obj);
+	}
+
+	public static List<EntityType<?>> getEntityTypes() {
+		return with(em()).getEntityTypes();
+	}
+
+	public static List<String> entities() {
+		return JPAUtil.entities;
+	}
+
+	public static List<Class<?>> getEntityJavaTypes() {
+		return JPAUtil.entityJavaTypes;
 	}
 
 	public static EntityManagerFactory emf() {
-		return emf;
+		return JPAUtil.emf;
 	}
 
 	public static void emf(EntityManagerFactory emf) {
-		JPA.emf = emf;
+		JPAUtil.emf(emf);
 	}
+
+	public static <T> T unproxy(T entity) {
+		return JPAUtil.unproxy(entity);
+	}
+
 }
