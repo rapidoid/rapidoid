@@ -23,17 +23,16 @@ package org.rapidoid.gui;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.html.tag.TdTag;
-import org.rapidoid.model.Items;
 
 // TODO use grid decorator instead
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class HighlightGrid extends Grid {
 
-	private String regex;
+	private volatile String regex;
 
-	public HighlightGrid(Items items, String sortOrder, int pageSize, String... properties) {
-		super(items, sortOrder, pageSize, properties);
+	public String regex() {
+		return regex;
 	}
 
 	public Grid regex(String regex) {

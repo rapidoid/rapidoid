@@ -417,7 +417,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static Grid grid(Items items, String sortOrder, int pageSize, String... properties) {
-		return Cls.customizable(Grid.class, items, sortOrder, pageSize, properties);
+		return Cls.customizable(Grid.class).items(items).orderBy(sortOrder).pageSize(pageSize).columns(properties);
 	}
 
 	public static <T> KVGrid grid(Map<?, ?> map) {

@@ -40,21 +40,14 @@ import java.util.List;
 @Since("2.0.0")
 public class Grid extends AbstractWidget {
 
-	private final Items items;
+	private volatile Items items;
 
-	private String orderBy = "id";
-	private int pageSize = 10;
-	private String[] columns = {};
-	private String rowCmd;
+	private volatile String orderBy = "id";
+	private volatile int pageSize = 10;
+	private volatile String[] columns = {};
+	private volatile String rowCmd;
 
-	private Mapper<Object, String> toUri;
-
-	public Grid(Items items, String sortOrder, int pageSize, String... columns) {
-		this.items = items;
-		this.orderBy = sortOrder;
-		this.pageSize = pageSize;
-		this.columns = columns;
-	}
+	private volatile Mapper<Object, String> toUri;
 
 	@Override
 	protected Tag render() {
@@ -177,16 +170,17 @@ public class Grid extends AbstractWidget {
 		return td(value);
 	}
 
+	public Items items() {
+		return items;
+	}
+
+	public Grid items(Items items) {
+		this.items = items;
+		return this;
+	}
+
 	public String orderBy() {
 		return orderBy;
-	}
-
-	public int pageSize() {
-		return pageSize;
-	}
-
-	public Object[] columns() {
-		return columns;
 	}
 
 	public Grid orderBy(String orderBy) {
@@ -194,12 +188,20 @@ public class Grid extends AbstractWidget {
 		return this;
 	}
 
+	public int pageSize() {
+		return pageSize;
+	}
+
 	public Grid pageSize(int pageSize) {
 		this.pageSize = pageSize;
 		return this;
 	}
 
-	public Grid columns(String... columns) {
+	public String[] columns() {
+		return columns;
+	}
+
+	public Grid columns(String[] columns) {
 		this.columns = columns;
 		return this;
 	}
