@@ -50,6 +50,8 @@ public class IoCContextImpl implements IoCContext {
 
 	private volatile IoCState state = new IoCState();
 
+	private volatile BeanProvider beanProvider;
+
 	private final Map<Class<?>, ClassMetadata> metadata = Coll
 			.autoExpandingMap(new Mapper<Class<?>, ClassMetadata>() {
 				@Override
@@ -74,6 +76,7 @@ public class IoCContextImpl implements IoCContext {
 		Log.info("Resetting IoC context", "context", this);
 		state.reset();
 		metadata.clear();
+		beanProvider = null;
 	}
 
 	private ClassMetadata meta(Class<?> type) {
@@ -175,6 +178,11 @@ public class IoCContextImpl implements IoCContext {
 
 		if (instance == null) {
 			instance = provideInstanceByType(type, properties);
+		}
+
+		BeanProvider provider = this.beanProvider;
+		if (instance == null && provider != null) {
+			instance = provider.getBean(type, name);
 		}
 
 		if (instance == null && Cls.isAppBeanType(type)) {
@@ -472,6 +480,11 @@ public class IoCContextImpl implements IoCContext {
 
 	public synchronized void rollback(IoCState backup) {
 		this.state = backup;
+	}
+
+	@Override
+	public void beanProvider(BeanProvider beanProvider) {
+		this.beanProvider = beanProvider;
 	}
 
 	@Override

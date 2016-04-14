@@ -352,6 +352,7 @@ org.rapidoid.insight.PercentMeasure
 org.rapidoid.insight.StatsMeasure
 org.rapidoid.integrate.Integrate
 org.rapidoid.integrate.MustacheViewRenderer
+org.rapidoid.ioc.BeanProvider
 org.rapidoid.ioc.ClassMetadata
 org.rapidoid.ioc.IoC
 org.rapidoid.ioc.IoCContext
@@ -380,6 +381,7 @@ org.rapidoid.jpa.AbstractEntity
 org.rapidoid.jpa.CustomDescriptor
 org.rapidoid.jpa.CustomHibernatePersistenceProvider
 org.rapidoid.jpa.DAO
+org.rapidoid.jpa.EM
 org.rapidoid.jpa.EMFUtil
 org.rapidoid.jpa.JPA
 org.rapidoid.jpa.JPAPersisterProvider
@@ -531,6 +533,7 @@ org.rapidoid.util.SimpleHashTable
 org.rapidoid.util.SimpleList
 org.rapidoid.util.SimpleMap
 org.rapidoid.util.SimplePersisterProvider
+org.rapidoid.util.SpringIntegrator
 org.rapidoid.util.SuccessException
 org.rapidoid.util.Usage
 org.rapidoid.u.U

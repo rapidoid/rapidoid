@@ -192,6 +192,18 @@ public class IoCContextWrapper implements IoCContext {
 	}
 
 	@Override
+	public synchronized void beanProvider(BeanProvider beanProvider) {
+		IoCState backup = context.backup();
+
+		try {
+			context.beanProvider(beanProvider);
+		} catch (RuntimeException e) {
+			context.rollback(backup);
+			throw e;
+		}
+	}
+
+	@Override
 	public String toString() {
 		return context.toString();
 	}

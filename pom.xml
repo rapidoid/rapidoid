@@ -72,6 +72,7 @@
 		<h2.version>1.4.187</h2.version>
 		<hsqldb.version>2.3.3</hsqldb.version>
 
+		<spring.version>4.2.5.RELEASE</spring.version>
 		<oltu.version>1.0.1</oltu.version>
 		<mustache.java.version>0.9.1</mustache.java.version>
 	</properties>
