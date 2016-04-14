@@ -23,7 +23,7 @@ package org.rapidoid.serialize;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.TypeKind;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.nio.ByteBuffer;
 
@@ -33,16 +33,16 @@ public class Ser {
 
 	protected static void writeNum(ByteBuffer buf, int len) {
 		if (len < 255) {
-			buf.put(UTILS.sbyte(len));
+			buf.put(Msc.sbyte(len));
 
 		} else {
-			buf.put(UTILS.sbyte(255));
+			buf.put(Msc.sbyte(255));
 			buf.putInt(len);
 		}
 	}
 
 	protected static int readNum(ByteBuffer buf) {
-		int len = UTILS.ubyte(buf.get());
+		int len = Msc.ubyte(buf.get());
 
 		if (len == 255) {
 			len = buf.getInt();

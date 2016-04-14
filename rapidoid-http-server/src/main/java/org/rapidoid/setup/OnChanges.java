@@ -24,7 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Env;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -42,7 +42,7 @@ public class OnChanges {
 			ignore = false;
 
 			if (Env.dev()) {
-				if (UTILS.withWatchModule()) {
+				if (Msc.withWatchModule()) {
 					WatchForChanges.activate();
 				} else {
 					Log.warn("Cannot watch for class changes, the rapidoid-watch module is missing!");

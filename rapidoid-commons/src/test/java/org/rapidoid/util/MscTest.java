@@ -26,20 +26,20 @@ import org.rapidoid.test.TestCommons;
 import java.io.File;
 import java.util.concurrent.Callable;
 
-public class UTILSTest extends TestCommons {
+public class MscTest extends TestCommons {
 
 	@Test
 	public void testExists() {
-		isFalse(UTILS.exists(null));
+		isFalse(Msc.exists(null));
 
-		isFalse(UTILS.exists(new Callable<Object>() {
+		isFalse(Msc.exists(new Callable<Object>() {
 			@Override
 			public Object call() throws Exception {
 				return null;
 			}
 		}));
 
-		isFalse(UTILS.exists(new Callable<Object>() {
+		isFalse(Msc.exists(new Callable<Object>() {
 			@SuppressWarnings("null")
 			@Override
 			public Object call() throws Exception {
@@ -48,7 +48,7 @@ public class UTILSTest extends TestCommons {
 			}
 		}));
 
-		isTrue(UTILS.exists(new Callable<Object>() {
+		isTrue(Msc.exists(new Callable<Object>() {
 			@Override
 			public Object call() throws Exception {
 				String s = "abc";
@@ -59,27 +59,27 @@ public class UTILSTest extends TestCommons {
 
 	@Test
 	public void testUri() {
-		eq(UTILS.uri(""), "/");
-		eq(UTILS.uri("", "a"), "/a");
-		eq(UTILS.uri("b", ""), "/b");
-		eq(UTILS.uri("/", "x"), "/x");
-		eq(UTILS.uri("/", "/x"), "/x");
-		eq(UTILS.uri("/ab\\", "cd\\"), "/ab/cd");
-		eq(UTILS.uri("/ab", "/cd/"), "/ab/cd");
-		eq(UTILS.uri("/ab/", "/cd/"), "/ab/cd");
-		eq(UTILS.uri("x", "123", "w"), "/x/123/w");
+		eq(Msc.uri(""), "/");
+		eq(Msc.uri("", "a"), "/a");
+		eq(Msc.uri("b", ""), "/b");
+		eq(Msc.uri("/", "x"), "/x");
+		eq(Msc.uri("/", "/x"), "/x");
+		eq(Msc.uri("/ab\\", "cd\\"), "/ab/cd");
+		eq(Msc.uri("/ab", "/cd/"), "/ab/cd");
+		eq(Msc.uri("/ab/", "/cd/"), "/ab/cd");
+		eq(Msc.uri("x", "123", "w"), "/x/123/w");
 	}
 
 	@Test
 	public void testPath() {
-		eq(UTILS.path(""), "");
-		eq(UTILS.path("", "a"), "a");
-		eq(UTILS.path("b", ""), "b");
-		eq(UTILS.path("x", "y"), "x" + File.separator + "y");
+		eq(Msc.path(""), "");
+		eq(Msc.path("", "a"), "a");
+		eq(Msc.path("b", ""), "b");
+		eq(Msc.path("x", "y"), "x" + File.separator + "y");
 
 		String abcd = "/ab" + File.separator + "cd";
-		eq(UTILS.path("/ab\\", "cd\\"), abcd);
-		eq(UTILS.path("/ab/", "cd"), abcd);
+		eq(Msc.path("/ab\\", "cd\\"), abcd);
+		eq(Msc.path("/ab/", "cd"), abcd);
 	}
 
 }

@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Deep;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.util.Map;
 import java.util.Set;
@@ -61,10 +61,10 @@ public class IoCState {
 	}
 
 	public synchronized Map<String, Object> info() {
-		return U.map("Provided classes", Deep.copyOf(providedClasses, UTILS.TRANSFORM_TO_SIMPLE_CLASS_NAME),
-				"Provided instances", Deep.copyOf(providedInstances, UTILS.TRANSFORM_TO_SIMPLE_CLASS_NAME),
-				"Managed instances", Deep.copyOf(instances, UTILS.TRANSFORM_TO_SIMPLE_CLASS_NAME),
-				"By type", Deep.copyOf(providersByType, UTILS.TRANSFORM_TO_SIMPLE_CLASS_NAME));
+		return U.map("Provided classes", Deep.copyOf(providedClasses, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME),
+				"Provided instances", Deep.copyOf(providedInstances, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME),
+				"Managed instances", Deep.copyOf(instances, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME),
+				"By type", Deep.copyOf(providersByType, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME));
 	}
 
 }

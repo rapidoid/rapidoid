@@ -5,7 +5,7 @@ import org.rapidoid.commons.Env;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.util.List;
 import java.util.Map;
@@ -129,18 +129,18 @@ public class Conf {
 
 		reset();
 
-		ConfigUtil.load(UTILS.path("default", "config.y?ml"), ROOT);
+		ConfigUtil.load(Msc.path("default", "config.y?ml"), ROOT);
 
 		for (String profile : Env.profiles()) {
-			ConfigUtil.load(UTILS.path("default", U.frmt("profile-%s.y?ml", profile)), ROOT);
+			ConfigUtil.load(Msc.path("default", U.frmt("profile-%s.y?ml", profile)), ROOT);
 		}
 
-		ConfigUtil.load(UTILS.path(path, "application.y?ml"), ROOT);
-		ConfigUtil.load(UTILS.path(path, "config.y?ml"), ROOT);
+		ConfigUtil.load(Msc.path(path, "application.y?ml"), ROOT);
+		ConfigUtil.load(Msc.path(path, "config.y?ml"), ROOT);
 
 		for (String profile : Env.profiles()) {
-			ConfigUtil.load(UTILS.path(path, U.frmt("application-%s.y?ml", profile)), ROOT);
-			ConfigUtil.load(UTILS.path(path, U.frmt("profile-%s.y?ml", profile)), ROOT);
+			ConfigUtil.load(Msc.path(path, U.frmt("application-%s.y?ml", profile)), ROOT);
+			ConfigUtil.load(Msc.path(path, U.frmt("profile-%s.y?ml", profile)), ROOT);
 		}
 
 		for (Config sub : SECTIONS.values()) {
@@ -162,7 +162,7 @@ public class Conf {
 	private static String filename(List<String> keys) {
 		U.must(keys.size() < 2);
 		String configName = keys.isEmpty() ? "config" : keys.get(0);
-		return UTILS.path(path, configName + ".y?ml");
+		return Msc.path(path, configName + ".y?ml");
 	}
 
 }

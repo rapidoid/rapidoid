@@ -31,7 +31,7 @@ import org.rapidoid.io.Res;
 import org.rapidoid.serialize.Serialize;
 import org.rapidoid.u.U;
 import org.rapidoid.util.ErrCodeAndMsg;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayOutputStream;
@@ -178,7 +178,7 @@ public class HttpUtils implements HttpMetadata {
 	}
 
 	public static String getErrorMessageAndSetCode(Resp resp, Throwable err) {
-		ErrCodeAndMsg codeAndMsg = UTILS.getErrorCodeAndMsg(err);
+		ErrCodeAndMsg codeAndMsg = Msc.getErrorCodeAndMsg(err);
 		resp.code(codeAndMsg.code());
 		return codeAndMsg.msg();
 	}
@@ -254,7 +254,7 @@ public class HttpUtils implements HttpMetadata {
 
 			return out.toByteArray();
 		} else {
-			return UTILS.toBytes(result);
+			return Msc.toBytes(result);
 		}
 	}
 

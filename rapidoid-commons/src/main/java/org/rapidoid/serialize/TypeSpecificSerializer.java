@@ -26,7 +26,7 @@ import org.rapidoid.cls.AbstractTypeSpecificVisitor;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -42,7 +42,7 @@ public class TypeSpecificSerializer extends AbstractTypeSpecificVisitor<ByteBuff
 	@Override
 	public Void dispatch(ByteBuffer buf, Object value) {
 		TypeKind kind = Cls.kindOf(value);
-		buf.put(UTILS.sbyte(Ser.code(kind)));
+		buf.put(Msc.sbyte(Ser.code(kind)));
 		return dispatch(buf, kind, value);
 	}
 

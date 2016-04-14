@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.util.Map;
 
@@ -123,10 +123,10 @@ public class KeyValueRanges {
 			String val = values[i].str(src.bytes());
 
 			if (urlDecodeKeys) {
-				key = UTILS.urlDecode(key);
+				key = Msc.urlDecode(key);
 			}
 			if (urlDecodeVals) {
-				val = UTILS.urlDecode(val);
+				val = Msc.urlDecode(val);
 			}
 
 			dest.put(key, val);
@@ -147,7 +147,7 @@ public class KeyValueRanges {
 			byte[] val = values[i].bytes(src);
 
 			if (urlDecodeKeys) {
-				key = UTILS.urlDecode(key);
+				key = Msc.urlDecode(key);
 			}
 
 			map.put(key, val);

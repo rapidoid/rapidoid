@@ -5,7 +5,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.io.File;
 import java.io.Reader;
@@ -103,7 +103,7 @@ public class Res {
 
 	private static Res create(String filename, String... possibleLocations) {
 		for (int i = 0; i < possibleLocations.length; i++) {
-			possibleLocations[i] = UTILS.refinePath(possibleLocations[i]);
+			possibleLocations[i] = Msc.refinePath(possibleLocations[i]);
 		}
 
 		ResKey key = new ResKey(filename, possibleLocations);
@@ -156,7 +156,7 @@ public class Res {
 
 				} else {
 					for (String location : possibleLocations) {
-						String filename = UTILS.path(location, name);
+						String filename = Msc.path(location, name);
 
 						Log.trace("Trying to load the resource", "name", name, "location", location, "filename", filename);
 

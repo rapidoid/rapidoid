@@ -27,7 +27,7 @@ import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.net.impl.RapidoidHelper;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 import org.rapidoid.wrap.BoolWrap;
 
 @Authors("Nikolche Mihajlovski")
@@ -63,7 +63,7 @@ public class HttpParserPerfTest {
 		final Range body = ranges[ranges.length - 6];
 
 		for (int i = 0; i < 10; i++) {
-			UTILS.benchmark("parse", 3000000, new Runnable() {
+			Msc.benchmark("parse", 3000000, new Runnable() {
 				int n;
 
 				@Override

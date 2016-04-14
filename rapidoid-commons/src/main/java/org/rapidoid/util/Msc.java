@@ -59,7 +59,7 @@ import java.util.concurrent.*;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class UTILS implements Constants {
+public class Msc implements Constants {
 
 	public static final Set<String> SPECIAL_ERRORS = Coll.synchronizedSet(
 			SecurityException.class.getName(),
@@ -95,7 +95,7 @@ public class UTILS implements Constants {
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(8,
 			new RapidoidThreadFactory("utils"));
 
-	private UTILS() {
+	private Msc() {
 	}
 
 	public static byte[] serialize(Object value) {
@@ -770,7 +770,7 @@ public class UTILS implements Constants {
 			code = 403;
 			defaultMsg = "Access Denied!";
 
-		} else if (UTILS.isValidationError(cause)) {
+		} else if (Msc.isValidationError(cause)) {
 			code = 422;
 			defaultMsg = "Validation Error!";
 

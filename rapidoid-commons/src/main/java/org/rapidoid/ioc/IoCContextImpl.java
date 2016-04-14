@@ -30,7 +30,7 @@ import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -476,6 +476,6 @@ public class IoCContextImpl implements IoCContext {
 
 	@Override
 	public String toString() {
-		return Deep.copyOf(state.instances, UTILS.TRANSFORM_TO_SIMPLE_CLASS_NAME).toString();
+		return Deep.copyOf(state.instances, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME).toString();
 	}
 }

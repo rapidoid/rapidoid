@@ -27,7 +27,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -50,9 +50,9 @@ public class MicroServicesTest extends HttpTestCommons {
 
 		int count = 10000;
 		final CountDownLatch latch = new CountDownLatch(count);
-		UTILS.startMeasure();
+		Msc.startMeasure();
 
-		RapidoidThread loop = UTILS.loop(new Runnable() {
+		RapidoidThread loop = Msc.loop(new Runnable() {
 			@Override
 			public void run() {
 				System.out.println(latch);
@@ -82,8 +82,8 @@ public class MicroServicesTest extends HttpTestCommons {
 			}
 		}
 
-		UTILS.wait(latch);
-		UTILS.endMeasure(count, "calls");
+		Msc.wait(latch);
+		Msc.endMeasure(count, "calls");
 
 		loop.interrupt();
 	}

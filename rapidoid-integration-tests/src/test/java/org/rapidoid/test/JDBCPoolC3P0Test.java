@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.sql.JDBC;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.util.Map;
 
@@ -44,11 +44,11 @@ public class JDBCPoolC3P0Test extends TestCommons {
 
 		final Map<String, ?> expected = U.map("id", 123, "name", "xyz");
 
-		UTILS.benchmarkMT(100, "select", 100000, new Runnable() {
+		Msc.benchmarkMT(100, "select", 100000, new Runnable() {
 			@Override
 			public void run() {
 				Map<String, Object> record = U.single(JDBC.query("select id, name from abc"));
-				record = UTILS.lowercase(record);
+				record = Msc.lowercase(record);
 				eq(record, expected);
 			}
 		});
@@ -67,11 +67,11 @@ public class JDBCPoolC3P0Test extends TestCommons {
 
 		final Map<String, ?> expected = U.map("id", 123, "name", "xyz");
 
-		UTILS.benchmarkMT(100, "select", 100000, new Runnable() {
+		Msc.benchmarkMT(100, "select", 100000, new Runnable() {
 			@Override
 			public void run() {
 				Map<String, Object> record = U.single(JDBC.query("select id, name from abc"));
-				record = UTILS.lowercase(record);
+				record = Msc.lowercase(record);
 				eq(record, expected);
 			}
 		});

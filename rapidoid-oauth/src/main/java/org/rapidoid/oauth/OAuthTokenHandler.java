@@ -40,7 +40,7 @@ import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 import org.rapidoid.value.Value;
 
 import java.util.Map;
@@ -104,7 +104,7 @@ public class OAuthTokenHandler implements ReqHandler {
 
 			String accessToken = token(request, oAuthClient);
 
-			String profileUrl = UTILS.fillIn(provider.getProfileEndpoint(), "token", accessToken);
+			String profileUrl = Msc.fillIn(provider.getProfileEndpoint(), "token", accessToken);
 
 			OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(profileUrl).setAccessToken(
 					accessToken).buildQueryMessage();

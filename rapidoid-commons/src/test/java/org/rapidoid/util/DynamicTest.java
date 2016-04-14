@@ -43,8 +43,8 @@ public class DynamicTest extends TestCommons {
 			}
 		};
 
-		EgInterface dyn = UTILS.dynamic(EgInterface.class, dynamic);
-		EgInterface dyn2 = UTILS.dynamic(EgInterface.class, dynamic);
+		EgInterface dyn = Msc.dynamic(EgInterface.class, dynamic);
+		EgInterface dyn2 = Msc.dynamic(EgInterface.class, dynamic);
 
 		isTrue(dyn != dyn2);
 

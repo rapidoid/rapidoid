@@ -30,7 +30,7 @@ import org.rapidoid.http.Screen;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.io.Upload;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
@@ -46,7 +46,7 @@ public class ParamRetrievers {
 		Param param = Metadata.get(annotations, Param.class);
 		Valid valid = Metadata.get(annotations, Valid.class);
 
-		int annotationsCount = UTILS.countNonNull(cookie, header, param);
+		int annotationsCount = Msc.countNonNull(cookie, header, param);
 		U.must(annotationsCount <= 1, "Expected maximum one of the @Cookie, @Header, @Param, @P annotations on the same parameter!");
 
 		if (annotationsCount == 1) {

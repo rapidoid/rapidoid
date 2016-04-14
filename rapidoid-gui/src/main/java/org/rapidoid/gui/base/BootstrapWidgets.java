@@ -28,7 +28,7 @@ import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.render.Templates;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 import org.rapidoid.var.Var;
 
 import java.io.Serializable;
@@ -513,7 +513,7 @@ public abstract class BootstrapWidgets extends HTML {
 
 		for (Object result : found) {
 			Object id = Beany.getId(result);
-			String uri = UTILS.uriFor(result);
+			String uri = Msc.uriFor(result);
 
 			Tag left = h6("(ID", NBSP, "=", NBSP, id, ")");
 			Object header = span(result.getClass().getSimpleName());
@@ -755,7 +755,7 @@ public abstract class BootstrapWidgets extends HTML {
 		}
 
 		if (JPA.isEntity(item)) {
-			return a(escape(item.toString())).href(UTILS.uriFor(item));
+			return a(escape(item.toString())).href(Msc.uriFor(item));
 		}
 
 		if (isBean(item)) return GUI.show(item);
@@ -827,7 +827,7 @@ public abstract class BootstrapWidgets extends HTML {
 		List<Object> list = U.list();
 
 		for (Object value : values) {
-			if (UTILS.isArray(value) && !hasGUIElements(value)) {
+			if (Msc.isArray(value) && !hasGUIElements(value)) {
 				value = U.str(value);
 			}
 			if (value == null || value instanceof Iterable<?>) {

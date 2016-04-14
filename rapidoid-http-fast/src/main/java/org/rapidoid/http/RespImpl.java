@@ -30,7 +30,7 @@ import org.rapidoid.http.customize.PageRenderer;
 import org.rapidoid.http.customize.RolesProvider;
 import org.rapidoid.http.customize.ViewRenderer;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -337,7 +337,7 @@ public class RespImpl implements Resp, Screen {
 			return serializeResponseContent();
 
 		} else if (body() != null) {
-			return UTILS.toBytes(body());
+			return Msc.toBytes(body());
 
 		} else {
 			throw U.rte("There's nothing to render!");

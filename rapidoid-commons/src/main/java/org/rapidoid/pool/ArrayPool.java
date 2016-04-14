@@ -23,7 +23,7 @@ package org.rapidoid.pool;
 import org.rapidoid.insight.AbstractInsightful;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.util.concurrent.Callable;
 
@@ -73,7 +73,7 @@ public class ArrayPool<T> extends AbstractInsightful implements Pool<T> {
 			int newSize = free.length * expandFactor;
 			Log.info("The pool wasn't big enough, expanding...", "name", getName(), "old size", free.length,
 					"new size", newSize);
-			free = UTILS.expand(free, expandFactor);
+			free = Msc.expand(free, expandFactor);
 		}
 
 		free[freeN++] = obj;

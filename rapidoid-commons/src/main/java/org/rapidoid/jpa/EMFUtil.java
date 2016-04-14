@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
 import org.rapidoid.scan.Scan;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import javax.persistence.Entity;
 import java.util.List;
@@ -46,7 +46,7 @@ public class EMFUtil {
 			}
 		}
 
-		UTILS.logSection("Total " + entityTypes.size() + " JPA Entities:");
+		Msc.logSection("Total " + entityTypes.size() + " JPA Entities:");
 		for (String entityType : entityTypes) {
 			Log.info("Entity", "type", entityType);
 		}

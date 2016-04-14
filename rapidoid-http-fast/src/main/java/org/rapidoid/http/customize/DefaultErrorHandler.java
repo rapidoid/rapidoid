@@ -28,7 +28,7 @@ import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.log.Log;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 import org.rapidoid.value.Value;
 
 import java.util.Map;
@@ -48,7 +48,7 @@ public class DefaultErrorHandler implements ErrorHandler {
 	@Override
 	public Object handleError(Req req, Resp resp, Throwable error) {
 
-		boolean validation = UTILS.isValidationError(error);
+		boolean validation = Msc.isValidationError(error);
 
 		if (!validation) {
 			if (error instanceof SecurityException) {

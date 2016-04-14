@@ -32,7 +32,7 @@ import org.rapidoid.pool.Pool;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.D;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 import org.rapidoid.wrap.IntWrap;
 
 import java.io.IOException;
@@ -178,7 +178,7 @@ public class MultiBuf implements Buf, Constants {
 
 	private void expandUnit() {
 		if (bufN == bufs.length) {
-			bufs = UTILS.expand(bufs, 2);
+			bufs = Msc.expand(bufs, 2);
 		}
 
 		bufs[bufN] = bufPool.get();

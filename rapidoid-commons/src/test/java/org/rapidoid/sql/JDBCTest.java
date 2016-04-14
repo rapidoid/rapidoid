@@ -24,7 +24,7 @@ import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
 import org.junit.Test;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.util.List;
 import java.util.Map;
@@ -91,8 +91,8 @@ public class JDBCTest extends TestCommons {
 		System.out.println(rows);
 
 		eq(rows.size(), 2);
-		eq(UTILS.lowercase(rows.get(0)), U.map("id", 10, "title", "rambo"));
-		eq(UTILS.lowercase(rows.get(1)), U.map("id", 20, "title", "hackers"));
+		eq(Msc.lowercase(rows.get(0)), U.map("id", 10, "title", "rambo"));
+		eq(Msc.lowercase(rows.get(1)), U.map("id", 20, "title", "hackers"));
 	}
 
 }

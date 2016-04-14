@@ -29,7 +29,7 @@ import org.rapidoid.security.Roles;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Reload;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -201,7 +201,7 @@ public class Setup implements Constants {
 
 		if (this == ON) {
 			ADMIN.activate();
-			UTILS.logSection("User-specified handlers:");
+			Msc.logSection("User-specified handlers:");
 		}
 	}
 
@@ -365,12 +365,12 @@ public class Setup implements Constants {
 
 	private static void inferCallers() {
 		if (!restarted && appPkgName == null && mainClassName == null) {
-			String pkg = UTILS.getCallingPackage();
+			String pkg = Msc.getCallingPackage();
 
 			appPkgName = pkg;
 
 			if (mainClassName == null) {
-				Class<?> mainClass = UTILS.getCallingMainClass();
+				Class<?> mainClass = Msc.getCallingMainClass();
 				mainClassName = mainClass != null ? mainClass.getName() : null;
 			}
 
@@ -442,7 +442,7 @@ public class Setup implements Constants {
 	private static void restartApp() {
 		U.notNull(mainClassName, "Cannot restart, the main class is unknown!");
 
-		UTILS.logSection("Restarting the web application...");
+		Msc.logSection("Restarting the web application...");
 
 		restarted = true;
 

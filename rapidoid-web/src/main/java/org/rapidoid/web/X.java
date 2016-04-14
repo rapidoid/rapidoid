@@ -39,7 +39,7 @@ import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.sql.JDBC;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.util.Map;
 
@@ -130,7 +130,7 @@ public class X {
 				Grid grid = GUI.grid(JPA.getAll(entityType)).toUri(new Mapper<Object, String>() {
 					@Override
 					public String map(Object target) throws Exception {
-						return UTILS.uri(UTILS.uriFor(baseUri, target), "view");
+						return Msc.uri(Msc.uriFor(baseUri, target), "view");
 					}
 				});
 
@@ -237,7 +237,7 @@ public class X {
 	}
 
 	public static String uri(String baseUri, Object entity) {
-		return UTILS.uriFor(baseUri, entity);
+		return Msc.uriFor(baseUri, entity);
 	}
 
 	public static void scaffold(String uri, Class<?> entityType) {
@@ -258,7 +258,7 @@ public class X {
 		JPA.bootstrap(setup.path(), entityTypes);
 
 		for (Class<?> entityType : entityTypes) {
-			scaffoldEntity(setup, UTILS.typeUri(entityType), entityType);
+			scaffoldEntity(setup, Msc.typeUri(entityType), entityType);
 		}
 	}
 

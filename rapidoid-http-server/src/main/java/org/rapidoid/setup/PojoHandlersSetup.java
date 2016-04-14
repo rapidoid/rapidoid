@@ -28,7 +28,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.security.Secure;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -262,7 +262,7 @@ public class PojoHandlersSetup {
 
 	private String pathOf(Method method, String ctxPath, String uri) {
 		String path = !U.isEmpty(uri) ? uri : method.getName();
-		return UTILS.uri(ctxPath, path);
+		return Msc.uri(ctxPath, path);
 	}
 
 }

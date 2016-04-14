@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.AbstractTypeSpecificFactory;
 import org.rapidoid.cls.TypeKind;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -40,7 +40,7 @@ public class TypeSpecificDeserializer extends AbstractTypeSpecificFactory<ByteBu
 
 	@Override
 	public Object create(ByteBuffer buf) {
-		TypeKind kind = Ser.kind(UTILS.ubyte(buf.get()));
+		TypeKind kind = Ser.kind(Msc.ubyte(buf.get()));
 		return super.create(buf, kind);
 	}
 

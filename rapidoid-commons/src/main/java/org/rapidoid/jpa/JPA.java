@@ -7,7 +7,7 @@ import org.rapidoid.commons.Coll;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -145,20 +145,20 @@ public class JPA {
 
 	public static QuickJPA bootstrap(String[] path, Class<?>... providedEntities) {
 		if (Cls.exists("org.hibernate.cfg.Configuration") && entities.isEmpty()) {
-			UTILS.logSection("Bootstrapping JPA (Hibernate)...");
+			Msc.logSection("Bootstrapping JPA (Hibernate)...");
 
 			List<String> entityTypes = EMFUtil.createEMF(path, providedEntities);
 
 			if (entityTypes.isEmpty()) {
-				UTILS.logSection("Didn't find JPA providedEntities, canceling JPA/Hibernate setup!");
+				Msc.logSection("Didn't find JPA providedEntities, canceling JPA/Hibernate setup!");
 				return null;
 			}
 
-			UTILS.logSection("Hibernate properties:");
+			Msc.logSection("Hibernate properties:");
 			Properties props = EMFUtil.hibernateProperties();
-			UTILS.logProperties(props);
+			Msc.logProperties(props);
 
-			UTILS.logSection("Starting Hibernate:");
+			Msc.logSection("Starting Hibernate:");
 
 			CustomHibernatePersistenceProvider provider = new CustomHibernatePersistenceProvider();
 			provider.names().addAll(entityTypes);
@@ -168,7 +168,7 @@ public class JPA {
 			QuickJPA jpa = new QuickJPA(emf, entityTypes);
 			Ctxs.setPersisterProvider(jpa);
 
-			UTILS.logSection("JPA (Hibernate) is ready.");
+			Msc.logSection("JPA (Hibernate) is ready.");
 
 			Coll.assign(entities, entityTypes);
 			return jpa;

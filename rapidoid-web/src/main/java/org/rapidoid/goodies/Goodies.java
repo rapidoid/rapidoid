@@ -29,7 +29,7 @@ import org.rapidoid.security.Roles;
 import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 import org.rapidoid.web.X;
 
 import java.lang.management.ManagementFactory;
@@ -110,11 +110,11 @@ public class Goodies {
 		}
 
 		if (setup == On.setup()) {
-			UTILS.logSection("Registering App goodies:");
+			Msc.logSection("Registering App goodies:");
 		}
 
 		if (setup == Admin.setup()) {
-			UTILS.logSection("Registering Admin goodies:");
+			Msc.logSection("Registering Admin goodies:");
 
 			setup.page("/_").mvc(Goodies.overview());
 
@@ -122,7 +122,7 @@ public class Goodies {
 
 			for (String entityType : JPA.entities()) {
 				Class<Object> type = Cls.getClassIfExists(entityType);
-				String uri = "/_" + UTILS.typeUri(type).substring(1);
+				String uri = "/_" + Msc.typeUri(type).substring(1);
 				X.scaffold(setup, uri, type);
 			}
 

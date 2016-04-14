@@ -31,7 +31,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.io.Serializable;
 import java.util.*;
@@ -475,7 +475,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		HttpUtils.postProcessResponse(response);
 
 		if (response.raw() != null) {
-			byte[] bytes = UTILS.toBytes(response.raw());
+			byte[] bytes = Msc.toBytes(response.raw());
 			channel.write(bytes);
 			completed = true;
 

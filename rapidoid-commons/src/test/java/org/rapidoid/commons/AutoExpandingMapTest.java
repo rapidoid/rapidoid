@@ -26,7 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -42,7 +42,7 @@ public class AutoExpandingMapTest extends AbstractCommonsTest {
 
 		final int k = 1000;
 
-		UTILS.benchmarkMT(200, "gets", 100000000, new Runnable() {
+		Msc.benchmarkMT(200, "gets", 100000000, new Runnable() {
 			@Override
 			public void run() {
 				int rnd = Rnd.rnd(k);

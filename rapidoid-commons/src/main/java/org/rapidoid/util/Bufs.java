@@ -76,7 +76,7 @@ public class Bufs {
 		int[] ubytes = new int[bytes.length];
 
 		for (int i = 0; i < bytes.length; i++) {
-			ubytes[i] = UTILS.ubyte(bytes[i]);
+			ubytes[i] = Msc.ubyte(bytes[i]);
 		}
 
 		return ubytes;

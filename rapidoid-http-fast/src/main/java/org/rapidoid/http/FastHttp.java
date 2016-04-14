@@ -38,7 +38,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -144,8 +144,8 @@ public class FastHttp extends AbstractHttpProcessor {
 
 			String verb = xverb.str(buf);
 			String uri = xuri.str(buf);
-			String path = UTILS.urlDecode(xpath.str(buf));
-			String query = UTILS.urlDecode(xquery.str(buf));
+			String path = Msc.urlDecode(xpath.str(buf));
+			String query = Msc.urlDecode(xquery.str(buf));
 			String sector = "main";
 
 			if (handler != null) {

@@ -31,7 +31,7 @@ import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
 import org.rapidoid.model.Property;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 import org.rapidoid.var.Var;
 
 import java.util.List;
@@ -169,7 +169,7 @@ public class Grid extends AbstractWidget {
 	}
 
 	protected String onClickScript(Item item) {
-		String uri = toUri != null ? Lmbd.eval(toUri, item.value()) : UTILS.uriFor(item.value());
+		String uri = toUri != null ? Lmbd.eval(toUri, item.value()) : Msc.uriFor(item.value());
 		return U.frmt("Rapidoid.goAt('%s');", uri);
 	}
 

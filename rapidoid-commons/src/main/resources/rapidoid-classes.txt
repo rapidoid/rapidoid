@@ -520,6 +520,7 @@ org.rapidoid.util.Constants
 org.rapidoid.util.D
 org.rapidoid.util.ErrCodeAndMsg
 org.rapidoid.util.MapEntry
+org.rapidoid.util.Msc
 org.rapidoid.util.NullOutputStream
 org.rapidoid.util.RapidoidProcess
 org.rapidoid.util.Reload
@@ -532,7 +533,6 @@ org.rapidoid.util.SimpleMap
 org.rapidoid.util.SimplePersisterProvider
 org.rapidoid.util.SuccessException
 org.rapidoid.util.Usage
-org.rapidoid.util.UTILS
 org.rapidoid.u.U
 org.rapidoid.validation.InvalidData
 org.rapidoid.validation.Validators

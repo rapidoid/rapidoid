@@ -23,7 +23,7 @@ package org.rapidoid.commons;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
-import org.rapidoid.util.UTILS;
+import org.rapidoid.util.Msc;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,7 +48,7 @@ public class AnyObj {
 	public static Object include(Object arrOrColl, Object item) {
 		if (arrOrColl instanceof Object[]) {
 			Object[] arr = (Object[]) arrOrColl;
-			return Arr.indexOf(arr, item) < 0 ? UTILS.expand(arr, item) : arr;
+			return Arr.indexOf(arr, item) < 0 ? Msc.expand(arr, item) : arr;
 		} else if (arrOrColl instanceof Collection<?>) {
 			Collection<Object> coll = (Collection<Object>) arrOrColl;
 			if (!coll.contains(item)) {
@@ -65,7 +65,7 @@ public class AnyObj {
 		if (arrOrColl instanceof Object[]) {
 			Object[] arr = (Object[]) arrOrColl;
 			int ind = Arr.indexOf(arr, item);
-			return ind >= 0 ? UTILS.deleteAt(arr, ind) : arr;
+			return ind >= 0 ? Msc.deleteAt(arr, ind) : arr;
 		} else if (arrOrColl instanceof Collection<?>) {
 			Collection<Object> coll = (Collection<Object>) arrOrColl;
 			if (coll.contains(item)) {
