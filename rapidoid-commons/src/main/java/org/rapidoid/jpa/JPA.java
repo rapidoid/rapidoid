@@ -46,8 +46,12 @@ public class JPA {
 
 	public static EntityManager em() {
 		Ctx ctx = Ctxs.get();
-		U.must(ctx != null, "Must be inside JPA transaction!");
-		return ctx.persister();
+		if (ctx != null) {
+			return (EntityManager) ctx.persister();
+		} else {
+			U.notNull(emf, "JPA.emf");
+			return emf.createEntityManager();
+		}
 	}
 
 	public static JPAUtil with(EntityManager em) {
