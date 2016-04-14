@@ -124,6 +124,18 @@ public class Admin {
 		return SETUP.bootstrap(args);
 	}
 
+	public static Setup bootstrapJPA() {
+		return SETUP.bootstrapJPA();
+	}
+
+	public static Setup bootstrapGoodies() {
+		return SETUP.bootstrapGoodies();
+	}
+
+	public static Setup bootstrapControllers() {
+		return SETUP.bootstrapControllers();
+	}
+
 	@SuppressWarnings({"varargs"})
 	public static OnAnnotated annotated(Class<? extends Annotation>... annotated) {
 		return SETUP.annotated(annotated);

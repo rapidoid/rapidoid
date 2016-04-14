@@ -205,11 +205,6 @@ public class Setup implements Constants {
 		}
 	}
 
-	private void bootstrapGoodies() {
-		Class<?> goodiesClass = Cls.getClassIfExists("org.rapidoid.goodies.RapidoidGoodiesModule");
-		if (goodiesClass != null) Cls.newInstance(goodiesClass, this);
-	}
-
 	public OnRoute route(String verb, String path) {
 		activate();
 		return new OnRoute(http(), defaults, verb.toUpperCase(), path);
@@ -390,16 +385,32 @@ public class Setup implements Constants {
 	public Setup bootstrap(String... args) {
 		this.args(args);
 
-		Class<Object> entityClass = Cls.getClassIfExists("javax.persistence.Entity");
-		if (entityClass != null) {
+		bootstrapJPA();
+		bootstrapGoodies();
+		bootstrapControllers();
+
+		Log.info("Completed bootstrap", "context", getIoCContext());
+		return this;
+	}
+
+	public Setup bootstrapJPA() {
+		if (Msc.hasJPA()) {
 			JPA.bootstrap(path());
 		}
 
-		bootstrapGoodies();
+		return this;
+	}
 
+	public Setup bootstrapControllers() {
 		beans(annotated(Controller.class).in(path()).loadAll().toArray());
+		return this;
+	}
 
-		Log.info("Completed bootstrap", "context", getIoCContext());
+	public Setup bootstrapGoodies() {
+		Class<?> goodiesClass = Cls.getClassIfExists("org.rapidoid.goodies.RapidoidGoodiesModule");
+
+		if (goodiesClass != null) Cls.newInstance(goodiesClass, this);
+
 		return this;
 	}
 

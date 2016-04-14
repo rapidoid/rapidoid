@@ -755,6 +755,10 @@ public class Msc implements Constants {
 		return Cls.exists("javax.validation.Validation");
 	}
 
+	public static boolean hasJPA() {
+		return Cls.exists("javax.persistence.Entity");
+	}
+
 	public static boolean isValidationError(Throwable error) {
 		return (error instanceof InvalidData) || error.getClass().getName().startsWith("javax.validation.");
 	}
