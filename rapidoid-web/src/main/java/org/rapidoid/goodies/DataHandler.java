@@ -49,7 +49,7 @@ public class DataHandler extends GUI implements Callable<Object> {
 			@Override
 			public String map(Object src) throws Exception {
 				Map<String, ?> row = U.cast(src);
-				return "/_" + English.plural(Str.uncapitalized(row.get("type") + "")) + "/manage";
+				return "/_" + Msc.typeUri(row.get("type") + "") + "/manage";
 			}
 		});
 

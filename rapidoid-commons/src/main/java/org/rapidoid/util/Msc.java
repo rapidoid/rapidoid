@@ -748,7 +748,11 @@ public class Msc implements Constants {
 	}
 
 	public static String typeUri(Class<?> entityType) {
-		return "/" + English.plural(Str.uncapitalized(entityType.getSimpleName()));
+		return typeUri(entityType.getSimpleName());
+	}
+
+	public static String typeUri(String entityType) {
+		return "/" + English.plural(Str.uncapitalized(entityType)).toLowerCase();
 	}
 
 	public static boolean hasValidation() {
