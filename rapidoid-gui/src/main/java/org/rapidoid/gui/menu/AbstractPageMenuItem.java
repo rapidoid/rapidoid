@@ -41,6 +41,8 @@ public abstract class AbstractPageMenuItem {
 
 	protected boolean divider = false;
 
+	protected boolean active = false;
+
 	protected final Map<String, Object> extra;
 
 	public AbstractPageMenuItem(String caption, Object target, Map<String, Object> extra) {
@@ -108,6 +110,10 @@ public abstract class AbstractPageMenuItem {
 		return divider;
 	}
 
+	public boolean isActive() {
+		return active;
+	}
+
 	public void setDivider(boolean divider) {
 		this.divider = divider;
 	}
@@ -116,4 +122,7 @@ public abstract class AbstractPageMenuItem {
 		return U.notEmpty(caption);
 	}
 
+	void setActiveUri(String uri) {
+		active = U.eq(uri, target);
+	}
 }

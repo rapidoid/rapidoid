@@ -72,4 +72,12 @@ public class PageMenuItem extends AbstractPageMenuItem {
 				+ ", javascript=" + javascript + ", icon=" + icon + ", divider=" + divider + ", extra=" + extra + "]";
 	}
 
+	@Override
+	void setActiveUri(String uri) {
+		super.setActiveUri(uri);
+
+		if (submenu != null) {
+			submenu.setActiveUri(uri);
+		}
+	}
 }

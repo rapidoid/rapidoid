@@ -44,4 +44,9 @@ public class PageSubMenu {
 		return items;
 	}
 
+	public void setActiveUri(String uri) {
+		for (PageSubMenuItem item : items) {
+			item.setActiveUri(uri);
+		}
+	}
 }

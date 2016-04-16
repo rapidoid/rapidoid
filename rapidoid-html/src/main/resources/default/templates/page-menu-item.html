@@ -1,4 +1,4 @@
-<li class="dropdown">
+<li class="{{?submenu}}dropdown{{/submenu}}{{?active}} active{{/active}}">
     <a href="${target||#}" {{?submenu}} class="dropdown-toggle" data-toggle="dropdown"{{/submenu}}>@{caption}{{?submenu}}<span class="caret"></span>{{/submenu}}</a>
     {{#submenu}}
     <ul role="menu" class="dropdown-menu">

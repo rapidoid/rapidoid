@@ -38,12 +38,28 @@ public class PageMenu {
 
 	private final List<PageMenuItem> items;
 
+	private volatile String uri;
+
 	public PageMenu(List<PageMenuItem> items) {
 		this.items = items;
 	}
 
-	public List<PageMenuItem> getItems() {
+	public List<PageMenuItem> items() {
 		return items;
+	}
+
+	public String uri() {
+		return uri;
+	}
+
+	public PageMenu uri(String uri) {
+		this.uri = uri;
+
+		for (PageMenuItem item : items) {
+			item.setActiveUri(uri);
+		}
+
+		return this;
 	}
 
 	@Override

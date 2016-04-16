@@ -44,13 +44,13 @@ public class PageMenuTest extends TestCommons {
 		PageMenu menu = PageMenu.from(data);
 		System.out.println(menu);
 
-		eq(menu.getItems().size(), 2);
+		eq(menu.items().size(), 2);
 
-		PageMenuItem item1 = menu.getItems().get(0);
+		PageMenuItem item1 = menu.items().get(0);
 		eq(item1.getCaption(), "item1");
 		eq(item1.getTarget(), "aaa");
 
-		PageMenuItem item2 = menu.getItems().get(1);
+		PageMenuItem item2 = menu.items().get(1);
 		eq(item2.getCaption(), "item2");
 		isNull(item2.getTarget());
 

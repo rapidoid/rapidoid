@@ -125,7 +125,7 @@ public class DefaultPageRenderer implements PageRenderer {
 
 		Config appMenu = sector.has("menu") ? sector.sub("menu") : menu;
 
-		page.menu(PageMenu.from(appMenu.toMap()));
+		page.menu(PageMenu.from(appMenu.toMap()).uri(req.path()));
 
 		return page;
 	}
