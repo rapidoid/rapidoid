@@ -2,7 +2,6 @@ package org.rapidoid.jpa;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.u.U;
 
@@ -48,7 +47,7 @@ public class EM {
 	}
 
 	public Object save(Object entity) {
-		Object id = Beany.getIdIfExists(entity);
+		Object id = getIdentifier(entity);
 
 		if (id == null) {
 			return insert(entity);
@@ -99,7 +98,7 @@ public class EM {
 			em.persist(entity);
 			em.flush();
 
-			Object id = Beany.getId(entity);
+			Object id = getIdentifier(entity);
 
 			if (!txWasActive) {
 				tx.commit();
