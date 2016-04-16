@@ -35,6 +35,7 @@ public class IoCContextWrapper implements IoCContext {
 
 	IoCContextWrapper(IoCContextImpl context) {
 		this.context = context;
+		context.wrapper(this);
 	}
 
 	@Override

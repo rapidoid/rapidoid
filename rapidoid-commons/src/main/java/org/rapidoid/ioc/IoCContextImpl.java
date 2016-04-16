@@ -26,12 +26,16 @@ import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Deep;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
+import org.rapidoid.jpa.SharedContextAwareEntityManagerProxy;
+import org.rapidoid.jpa.SharedEntityManagerFactoryProxy;
 import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Iterator;
@@ -51,6 +55,8 @@ public class IoCContextImpl implements IoCContext {
 	private volatile IoCState state = new IoCState();
 
 	private volatile BeanProvider beanProvider;
+
+	private volatile IoCContextWrapper wrapper;
 
 	private final Map<Class<?>, ClassMetadata> metadata = Coll
 			.autoExpandingMap(new Mapper<Class<?>, ClassMetadata>() {
@@ -170,9 +176,10 @@ public class IoCContextImpl implements IoCContext {
 
 	private <T> T provideIoCInstanceOf(Object target, Class<T> type, String name,
 	                                   Map<String, Object> properties, boolean optional) {
-		T instance = null;
 
-		if (name != null) {
+		T instance = (T) provideSpecialInstance(type, name);
+
+		if (instance == null && name != null) {
 			instance = provideInstanceByName(target, type, name, properties);
 		}
 
@@ -249,6 +256,23 @@ public class IoCContextImpl implements IoCContext {
 
 	private boolean isClass(Object obj) {
 		return obj instanceof Class;
+	}
+
+	private Object provideSpecialInstance(Class<?> type, String name) {
+
+		if (type.equals(IoCContext.class)) {
+			return U.or(wrapper, this);
+		}
+
+		if (type.equals(EntityManagerFactory.class)) {
+			return SharedEntityManagerFactoryProxy.INSTANCE;
+		}
+
+		if (type.equals(EntityManager.class)) {
+			return SharedContextAwareEntityManagerProxy.INSTANCE;
+		}
+
+		return null;
 	}
 
 	private <T> T provideInstanceByName(Object target, Class<T> type, String name, Map<String, Object> properties) {
@@ -490,5 +514,9 @@ public class IoCContextImpl implements IoCContext {
 	@Override
 	public String toString() {
 		return Deep.copyOf(state.instances, Msc.TRANSFORM_TO_SIMPLE_CLASS_NAME).toString();
+	}
+
+	void wrapper(IoCContextWrapper wrapper) {
+		this.wrapper = wrapper;
 	}
 }

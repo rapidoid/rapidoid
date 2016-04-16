@@ -386,6 +386,8 @@ org.rapidoid.jpa.EMFUtil
 org.rapidoid.jpa.JPA
 org.rapidoid.jpa.JPAPersisterProvider
 org.rapidoid.jpa.JPAUtil
+org.rapidoid.jpa.SharedContextAwareEntityManagerProxy
+org.rapidoid.jpa.SharedEntityManagerFactoryProxy
 org.rapidoid.lambda.Calc
 org.rapidoid.lambda.Dynamic
 org.rapidoid.lambda.F2

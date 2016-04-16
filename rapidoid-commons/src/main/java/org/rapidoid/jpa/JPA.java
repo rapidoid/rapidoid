@@ -39,6 +39,10 @@ public class JPA {
 		return JPAUtil.em();
 	}
 
+	public static EntityManager currentEM() {
+		return JPAUtil.currentEntityManager();
+	}
+
 	public static EM with(EntityManager em) {
 		return new EM(em);
 	}

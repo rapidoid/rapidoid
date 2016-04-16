@@ -54,12 +54,16 @@ public class JPAUtil {
 	public static EntityManager em() {
 		Ctx ctx = Ctxs.get();
 		if (ctx != null) {
-			return (EntityManager) ctx.persister();
+			return ctx.persister();
 		} else {
 			EntityManagerFactory emf = JPAUtil.emf;
 			U.notNull(emf, "JPA.emf");
 			return emf.createEntityManager();
 		}
+	}
+
+	public static EntityManager currentEntityManager() {
+		return Ctxs.ctx().persister();
 	}
 
 	public static void bootstrap(String[] path, Class<?>... providedEntities) {

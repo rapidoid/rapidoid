@@ -46,7 +46,7 @@ public class Ctxs {
 		Ctx ctx = get();
 
 		if (ctx == null) {
-			throw new IllegalStateException("App ctx wasn't set!");
+			throw new IllegalStateException("No context is available!");
 		}
 
 		return ctx;
