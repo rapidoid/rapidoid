@@ -141,7 +141,7 @@ public class PojoHandlersSetup {
 	private void registerOrDeregister(boolean register, Object bean, String ctxPath, Method method) {
 
 		Transaction transaction = method.getAnnotation(Transaction.class);
-		TransactionMode txMode = transaction != null ? transaction.value() : null;
+		TransactionMode tx = transaction != null ? transaction.value() : null;
 
 		Set<String> rolesAllowed = Secure.getRolesAllowed(method);
 		String[] roles = rolesAllowed.toArray(new String[rolesAllowed.size()]);
@@ -153,11 +153,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					OnRoute route = setup.page(path).roles(roles);
-
-					if (txMode != null) {
-						route.tx(txMode);
-					}
+					OnRoute route = route(setup.page(path).roles(roles), tx);
 
 					if (U.notEmpty(page.view())) {
 						route.view(page.view());
@@ -177,7 +173,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					setup.get(path).json(method, bean);
+					route(setup.get(path), tx).json(method, bean);
 				} else {
 					setup.deregister(Constants.GET, path);
 				}
@@ -186,7 +182,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					setup.post(path).json(method, bean);
+					route(setup.post(path), tx).json(method, bean);
 				} else {
 					setup.deregister(Constants.POST, path);
 				}
@@ -195,7 +191,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					setup.put(path).json(method, bean);
+					route(setup.put(path), tx).json(method, bean);
 				} else {
 					setup.deregister(Constants.PUT, path);
 				}
@@ -204,7 +200,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					setup.delete(path).json(method, bean);
+					route(setup.delete(path), tx).json(method, bean);
 				} else {
 					setup.deregister(Constants.DELETE, path);
 				}
@@ -213,7 +209,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					setup.patch(path).json(method, bean);
+					route(setup.patch(path), tx).json(method, bean);
 				} else {
 					setup.deregister(Constants.PATCH, path);
 				}
@@ -222,7 +218,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					setup.options(path).json(method, bean);
+					route(setup.options(path), tx).json(method, bean);
 				} else {
 					setup.deregister(Constants.OPTIONS, path);
 				}
@@ -231,7 +227,7 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					setup.head(path).json(method, bean);
+					route(setup.head(path), tx).json(method, bean);
 				} else {
 					setup.deregister(Constants.HEAD, path);
 				}
@@ -240,12 +236,20 @@ public class PojoHandlersSetup {
 				String path = pathOf(method, ctxPath, uriOf(ann));
 
 				if (register) {
-					setup.trace(path).json(method, bean);
+					route(setup.trace(path), tx).json(method, bean);
 				} else {
 					setup.deregister(Constants.TRACE, path);
 				}
 			}
 		}
+	}
+
+	private OnRoute route(OnRoute route, TransactionMode tx) {
+		if (tx != null) {
+			route.tx(tx);
+		}
+
+		return route;
 	}
 
 	private String uriOf(Annotation ann) {
