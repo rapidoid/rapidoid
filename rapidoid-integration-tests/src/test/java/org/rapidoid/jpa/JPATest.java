@@ -36,8 +36,7 @@ public class JPATest extends HttpTestCommons {
 
 	@Test
 	public void testBasicCRUD() {
-		String[] path = {JPATest.class.getPackage().getName()};
-		JPA.bootstrap(path);
+		JPA.bootstrap(path());
 
 		Jobs.executeAndWait(() -> JPA.transaction(() -> {
 			Book b1 = new Book("book 1");

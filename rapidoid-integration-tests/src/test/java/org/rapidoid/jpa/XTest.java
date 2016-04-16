@@ -33,8 +33,7 @@ public class XTest extends HttpTestCommons {
 
 	@Test
 	public void testXQueries() {
-		String[] path = {XTest.class.getPackage().getName()};
-		JPA.bootstrap(path);
+		JPA.bootstrap(path());
 		X.scaffold(Book.class);
 
 		getReq("/books?a");

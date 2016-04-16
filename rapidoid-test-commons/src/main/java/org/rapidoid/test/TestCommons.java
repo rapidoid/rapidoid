@@ -586,4 +586,8 @@ public abstract class TestCommons {
 		verifyCase(name, actual, name);
 	}
 
+	protected String[] path() {
+		return new String[]{getClass().getPackage().getName()};
+	}
+
 }

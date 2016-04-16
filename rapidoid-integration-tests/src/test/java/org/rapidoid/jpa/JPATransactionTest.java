@@ -33,8 +33,7 @@ public class JPATransactionTest extends HttpTestCommons {
 
 	@Test
 	public void testBasicCRUD() {
-		String[] path = {JPATransactionTest.class.getPackage().getName()};
-		JPA.bootstrap(path);
+		JPA.bootstrap(path());
 
 		JPA.transaction(this::insertData);
 

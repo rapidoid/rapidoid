@@ -33,8 +33,7 @@ public class HttpTransactionTest extends HttpTestCommons {
 
 	@Test
 	public void testWebTx() {
-		String[] path = {JPATest.class.getPackage().getName()};
-		JPA.bootstrap(path);
+		JPA.bootstrap(path());
 
 		On.get("/allBooks").json(() -> JPA.getAll(Book.class));
 		On.post("/books").json((Book b) -> JPA.insert(b));
