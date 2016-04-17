@@ -1,5 +1,24 @@
 package org.rapidoid.beany;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.cls.TypeKind;
+import org.rapidoid.commons.Err;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+import org.rapidoid.var.Var;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,27 +39,9 @@ package org.rapidoid.beany;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.cls.TypeKind;
-import org.rapidoid.commons.Err;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-import org.rapidoid.var.Var;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class BeanProp implements Prop {
+public class BeanProp extends RapidoidThing implements Prop {
 
 	private final String name;
 

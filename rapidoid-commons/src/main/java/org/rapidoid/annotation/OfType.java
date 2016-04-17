@@ -1,5 +1,11 @@
 package org.rapidoid.annotation;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.PARAMETER;
+
 /*
  * #%L
  * rapidoid-commons
@@ -19,12 +25,6 @@ package org.rapidoid.annotation;
  * limitations under the License.
  * #L%
  */
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.PARAMETER;
 
 @Target({PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)

@@ -1,5 +1,15 @@
 package org.rapidoid.gui;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.base.AbstractWidget;
+import org.rapidoid.html.Tag;
+import org.rapidoid.u.U;
+
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /*
  * #%L
  * rapidoid-gui
@@ -19,16 +29,6 @@ package org.rapidoid.gui;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.base.AbstractWidget;
-import org.rapidoid.html.Tag;
-import org.rapidoid.u.U;
-
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

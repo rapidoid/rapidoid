@@ -1,5 +1,23 @@
 package org.rapidoid.web;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.config.Config;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.gui.HtmlPage;
+import org.rapidoid.gui.menu.PageMenu;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.Resp;
+import org.rapidoid.http.Screen;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.customize.PageRenderer;
+import org.rapidoid.u.U;
+import org.rapidoid.value.Value;
+
+import java.util.regex.Pattern;
+
 /*
  * #%L
  * rapidoid-web
@@ -20,26 +38,9 @@ package org.rapidoid.web;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.config.Config;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.gui.HtmlPage;
-import org.rapidoid.gui.menu.PageMenu;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.Resp;
-import org.rapidoid.http.Screen;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.customize.PageRenderer;
-import org.rapidoid.u.U;
-import org.rapidoid.value.Value;
-
-import java.util.regex.Pattern;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DefaultPageRenderer implements PageRenderer {
+public class DefaultPageRenderer extends RapidoidThing implements PageRenderer {
 
 	private static final Pattern FULL_PAGE_PATTERN = Pattern.compile("(?s)^\\s*<(!DOCTYPE\\s+html|html)>");
 

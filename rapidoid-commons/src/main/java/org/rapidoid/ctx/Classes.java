@@ -1,5 +1,14 @@
 package org.rapidoid.ctx;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.beany.Metadata;
+import org.rapidoid.u.U;
+
+import java.lang.annotation.Annotation;
+import java.util.LinkedHashMap;
+import java.util.List;
+
 /*
  * #%L
  * rapidoid-commons
@@ -19,15 +28,6 @@ package org.rapidoid.ctx;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.Metadata;
-import org.rapidoid.u.U;
-
-import java.lang.annotation.Annotation;
-import java.util.LinkedHashMap;
-import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.1.0")

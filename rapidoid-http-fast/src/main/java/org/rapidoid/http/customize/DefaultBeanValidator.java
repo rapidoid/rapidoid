@@ -1,5 +1,11 @@
 package org.rapidoid.http.customize;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.util.Msc;
+import org.rapidoid.validation.Validators;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -20,14 +26,9 @@ package org.rapidoid.http.customize;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.util.Msc;
-import org.rapidoid.validation.Validators;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DefaultBeanValidator implements BeanValidator {
+public class DefaultBeanValidator extends RapidoidThing implements BeanValidator {
 
 	private final boolean supported = Msc.hasValidation();
 

@@ -1,5 +1,17 @@
 package org.rapidoid.http;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.Buf;
+import org.rapidoid.data.Range;
+import org.rapidoid.data.Ranges;
+import org.rapidoid.http.processor.HttpProcessor;
+import org.rapidoid.net.Protocol;
+import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.net.impl.RapidoidHelper;
+import org.rapidoid.wrap.BoolWrap;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -20,20 +32,9 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.Buf;
-import org.rapidoid.data.Range;
-import org.rapidoid.data.Ranges;
-import org.rapidoid.http.processor.HttpProcessor;
-import org.rapidoid.net.Protocol;
-import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.net.impl.RapidoidHelper;
-import org.rapidoid.wrap.BoolWrap;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class FastHttpProtocol implements Protocol {
+public class FastHttpProtocol extends RapidoidThing implements Protocol {
 
 	private static final HttpParser HTTP_PARSER = new HttpParser();
 

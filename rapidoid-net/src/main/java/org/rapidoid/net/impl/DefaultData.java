@@ -1,5 +1,12 @@
 package org.rapidoid.net.impl;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.BufProvider;
+import org.rapidoid.data.Data;
+import org.rapidoid.data.Range;
+
 /*
  * #%L
  * rapidoid-net
@@ -20,15 +27,9 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.BufProvider;
-import org.rapidoid.data.Data;
-import org.rapidoid.data.Range;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class DefaultData implements Data {
+public class DefaultData extends RapidoidThing implements Data {
 
 	private final BufProvider src;
 

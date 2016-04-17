@@ -1,5 +1,13 @@
 package org.rapidoid.gui.base;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.html.TagWidget;
+import org.rapidoid.html.impl.TagRenderer;
+import org.rapidoid.util.Constants;
+
+import java.util.UUID;
+
 /*
  * #%L
  * rapidoid-gui
@@ -19,14 +27,6 @@ package org.rapidoid.gui.base;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.html.TagWidget;
-import org.rapidoid.html.impl.TagRenderer;
-import org.rapidoid.util.Constants;
-
-import java.util.UUID;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

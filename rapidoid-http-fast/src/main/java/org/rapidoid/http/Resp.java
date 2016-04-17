@@ -1,5 +1,13 @@
 package org.rapidoid.http;
 
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.MediaType;
+
+import java.io.File;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -19,14 +27,6 @@ package org.rapidoid.http;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
-
-import java.io.File;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.util.Map;
 
 /**
  * HTTP Response API.

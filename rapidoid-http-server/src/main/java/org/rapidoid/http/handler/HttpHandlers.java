@@ -1,5 +1,21 @@
 package org.rapidoid.http.handler;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Err;
+import org.rapidoid.http.*;
+import org.rapidoid.http.handler.lambda.*;
+import org.rapidoid.http.handler.optimized.CallableHttpHandler;
+import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqHandler;
+import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqRespHandler;
+import org.rapidoid.http.handler.optimized.DelegatingParamsAwareRespHandler;
+import org.rapidoid.lambda.*;
+
+import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
+
 /*
  * #%L
  * rapidoid-http-server
@@ -20,24 +36,9 @@ package org.rapidoid.http.handler;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Err;
-import org.rapidoid.http.*;
-import org.rapidoid.http.handler.lambda.*;
-import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqHandler;
-import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqRespHandler;
-import org.rapidoid.http.handler.optimized.DelegatingParamsAwareRespHandler;
-import org.rapidoid.http.handler.optimized.CallableHttpHandler;
-import org.rapidoid.lambda.*;
-
-import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HttpHandlers {
+public class HttpHandlers extends RapidoidThing {
 
 	public static HttpHandler from(FastHttp http, NParamLambda handler, RouteOptions options) {
 		if (handler instanceof ReqHandler) {

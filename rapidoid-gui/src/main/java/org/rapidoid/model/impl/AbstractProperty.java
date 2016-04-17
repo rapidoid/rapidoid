@@ -20,8 +20,9 @@ package org.rapidoid.model.impl;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.model.Property;
 
-public abstract class AbstractProperty implements Property {
+public abstract class AbstractProperty extends RapidoidThing implements Property {
 
 }

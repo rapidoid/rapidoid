@@ -1,5 +1,9 @@
 package org.rapidoid.net;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 /*
  * #%L
  * rapidoid-net
@@ -20,12 +24,9 @@ package org.rapidoid.net;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class TCP {
+public class TCP extends RapidoidThing {
 
 	public static ServerBuilder server() {
 		return new ServerBuilder();

@@ -1,5 +1,10 @@
 package org.rapidoid.http;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -20,13 +25,9 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.2")
-public class HttpResponseCodes {
+public class HttpResponseCodes extends RapidoidThing {
 
 	private static final String[] RESPONSE_CODES = {"100 Continue", "101 Switching Protocols", "200 OK",
 			"201 Created", "202 Accepted", "203 Non-Authoritative Information", "204 No Content", "205 Reset Content",

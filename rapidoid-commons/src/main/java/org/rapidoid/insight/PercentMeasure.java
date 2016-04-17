@@ -1,5 +1,11 @@
 package org.rapidoid.insight;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,14 +26,9 @@ package org.rapidoid.insight;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.util.concurrent.atomic.AtomicInteger;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class PercentMeasure implements Measure {
+public class PercentMeasure extends RapidoidThing implements Measure {
 
 	private final AtomicInteger total = new AtomicInteger();
 

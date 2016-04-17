@@ -1,5 +1,12 @@
 package org.rapidoid.http.impl;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.handler.HttpHandler;
+
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -20,15 +27,9 @@ package org.rapidoid.http.impl;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.handler.HttpHandler;
-
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HandlerMatchWithParams implements HandlerMatch {
+public class HandlerMatchWithParams extends RapidoidThing implements HandlerMatch {
 
 	public final HttpHandler handler;
 

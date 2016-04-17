@@ -1,5 +1,22 @@
 package org.rapidoid.setup;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.*;
+import org.rapidoid.beany.Metadata;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.ioc.IoCContext;
+import org.rapidoid.log.Log;
+import org.rapidoid.security.Secure;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Constants;
+import org.rapidoid.util.Msc;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.List;
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-http-server
@@ -20,25 +37,9 @@ package org.rapidoid.setup;
  * #L%
  */
 
-import org.rapidoid.annotation.*;
-import org.rapidoid.beany.Metadata;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.ioc.IoCContext;
-import org.rapidoid.log.Log;
-import org.rapidoid.security.Secure;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Constants;
-import org.rapidoid.util.Msc;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.List;
-import java.util.Set;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class PojoHandlersSetup {
+public class PojoHandlersSetup extends RapidoidThing {
 
 	private static final Set<String> CONTROLLER_ANNOTATIONS = U.set(
 			Page.class.getName(), GET.class.getName(), POST.class.getName(),

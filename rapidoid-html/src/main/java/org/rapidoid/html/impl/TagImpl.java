@@ -1,5 +1,21 @@
 package org.rapidoid.html.impl;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.AnyObj;
+import org.rapidoid.commons.Err;
+import org.rapidoid.html.Cmd;
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.Tags;
+import org.rapidoid.u.U;
+import org.rapidoid.var.Var;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-html
@@ -19,22 +35,6 @@ package org.rapidoid.html.impl;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.AnyObj;
-import org.rapidoid.commons.Err;
-import org.rapidoid.html.Cmd;
-import org.rapidoid.html.Tag;
-import org.rapidoid.html.Tags;
-import org.rapidoid.u.U;
-import org.rapidoid.var.Var;
-
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

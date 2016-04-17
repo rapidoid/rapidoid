@@ -1,5 +1,13 @@
 package org.rapidoid.commons;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
+import javax.script.*;
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,16 +28,9 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
-import javax.script.*;
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")
-public class JS {
+public class JS extends RapidoidThing {
 
 	public static <T> T eval(String js) throws ScriptException {
 		return eval(js, null);

@@ -1,5 +1,19 @@
 package org.rapidoid.buffer;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.bytes.Bytes;
+import org.rapidoid.data.Range;
+import org.rapidoid.data.Ranges;
+import org.rapidoid.wrap.IntWrap;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
+
 /*
  * #%L
  * rapidoid-buffer
@@ -20,22 +34,9 @@ package org.rapidoid.buffer;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.bytes.Bytes;
-import org.rapidoid.data.Range;
-import org.rapidoid.data.Ranges;
-import org.rapidoid.wrap.IntWrap;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.WritableByteChannel;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class SynchronizedBuf implements Buf {
+public class SynchronizedBuf extends RapidoidThing implements Buf {
 
 	private final Buf buf;
 

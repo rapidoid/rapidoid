@@ -1,5 +1,32 @@
 package org.rapidoid.oauth;
 
+import org.apache.oltu.oauth2.client.OAuthClient;
+import org.apache.oltu.oauth2.client.URLConnectionClient;
+import org.apache.oltu.oauth2.client.request.OAuthBearerClientRequest;
+import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
+import org.apache.oltu.oauth2.client.request.OAuthClientRequest.TokenRequestBuilder;
+import org.apache.oltu.oauth2.client.response.GitHubTokenResponse;
+import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
+import org.apache.oltu.oauth2.client.response.OAuthResourceResponse;
+import org.apache.oltu.oauth2.common.message.types.GrantType;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.ctx.UserInfo;
+import org.rapidoid.data.JSON;
+import org.rapidoid.http.HttpUtils;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+import org.rapidoid.value.Value;
+
+import java.util.Map;
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-oauth
@@ -20,35 +47,9 @@ package org.rapidoid.oauth;
  * #L%
  */
 
-import org.apache.oltu.oauth2.client.OAuthClient;
-import org.apache.oltu.oauth2.client.URLConnectionClient;
-import org.apache.oltu.oauth2.client.request.OAuthBearerClientRequest;
-import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
-import org.apache.oltu.oauth2.client.request.OAuthClientRequest.TokenRequestBuilder;
-import org.apache.oltu.oauth2.client.response.GitHubTokenResponse;
-import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
-import org.apache.oltu.oauth2.client.response.OAuthResourceResponse;
-import org.apache.oltu.oauth2.common.message.types.GrantType;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.ctx.UserInfo;
-import org.rapidoid.data.JSON;
-import org.rapidoid.http.HttpUtils;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.ReqHandler;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-import org.rapidoid.value.Value;
-
-import java.util.Map;
-import java.util.Set;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class OAuthTokenHandler implements ReqHandler {
+public class OAuthTokenHandler extends RapidoidThing implements ReqHandler {
 
 	private final OAuthProvider provider;
 	private final Customization customization;

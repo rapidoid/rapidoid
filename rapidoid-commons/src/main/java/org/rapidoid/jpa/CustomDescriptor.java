@@ -1,5 +1,17 @@
 package org.rapidoid.jpa;
 
+import org.hibernate.jpa.boot.spi.PersistenceUnitDescriptor;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import javax.persistence.SharedCacheMode;
+import javax.persistence.ValidationMode;
+import javax.persistence.spi.PersistenceUnitTransactionType;
+import java.net.URL;
+import java.util.List;
+import java.util.Properties;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,20 +32,9 @@ package org.rapidoid.jpa;
  * #L%
  */
 
-import org.hibernate.jpa.boot.spi.PersistenceUnitDescriptor;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import javax.persistence.SharedCacheMode;
-import javax.persistence.ValidationMode;
-import javax.persistence.spi.PersistenceUnitTransactionType;
-import java.net.URL;
-import java.util.List;
-import java.util.Properties;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class CustomDescriptor implements PersistenceUnitDescriptor {
+public class CustomDescriptor extends RapidoidThing implements PersistenceUnitDescriptor {
 
 	private final PersistenceUnitDescriptor descriptor;
 

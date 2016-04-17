@@ -1,5 +1,11 @@
 package org.rapidoid.oauth;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.setup.On;
+import org.rapidoid.setup.Setup;
+
 /*
  * #%L
  * rapidoid-oauth
@@ -20,14 +26,9 @@ package org.rapidoid.oauth;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.On;
-import org.rapidoid.setup.Setup;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class OAuthDemo {
+public class OAuthDemo extends RapidoidThing {
 
 	public static void main(String[] args) {
 		Setup setup = On.setup();

@@ -1,5 +1,6 @@
 package org.rapidoid.config;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.commons.Str;
 import org.rapidoid.u.U;
 
@@ -27,7 +28,7 @@ import org.rapidoid.u.U;
  * @author Nikolche Mihajlovski
  * @since 5.0.2
  */
-public class ConfigHelp {
+public class ConfigHelp extends RapidoidThing {
 
 	public static void processHelp(Object[] args) {
 		if (args != null && args.length == 1 && args[0].equals("--help")) {

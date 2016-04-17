@@ -20,12 +20,13 @@ package org.rapidoid.gui.reqinfo;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")
-public abstract class AbstractReqInfo implements IReqInfo {
+public abstract class AbstractReqInfo extends RapidoidThing implements IReqInfo {
 
 	@Override
 	public boolean isGetReq() {

@@ -1,5 +1,11 @@
 package org.rapidoid.ioc;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,14 +26,9 @@ package org.rapidoid.ioc;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class IoC {
+public class IoC extends RapidoidThing {
 
 	private static final IoCContext DEFAULT_CONTEXT = createContext();
 

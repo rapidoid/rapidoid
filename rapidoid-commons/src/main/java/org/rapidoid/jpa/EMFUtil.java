@@ -1,5 +1,17 @@
 package org.rapidoid.jpa;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
+import org.rapidoid.log.Log;
+import org.rapidoid.scan.Scan;
+import org.rapidoid.util.Msc;
+
+import javax.persistence.Entity;
+import java.util.List;
+import java.util.Properties;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,20 +32,9 @@ package org.rapidoid.jpa;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.log.Log;
-import org.rapidoid.scan.Scan;
-import org.rapidoid.util.Msc;
-
-import javax.persistence.Entity;
-import java.util.List;
-import java.util.Properties;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class EMFUtil {
+public class EMFUtil extends RapidoidThing {
 
 	public static synchronized List<String> createEMF(String path[], Class<?>... entities) {
 

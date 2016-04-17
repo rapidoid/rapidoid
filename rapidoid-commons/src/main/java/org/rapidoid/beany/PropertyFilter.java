@@ -1,5 +1,6 @@
 package org.rapidoid.beany;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
@@ -29,7 +30,7 @@ import java.util.Set;
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class PropertyFilter implements PropertySelector {
+public abstract class PropertyFilter extends RapidoidThing implements PropertySelector {
 
 	@Override
 	public Set<String> include() {

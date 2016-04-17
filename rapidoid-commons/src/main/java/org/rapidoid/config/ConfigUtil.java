@@ -1,5 +1,17 @@
 package org.rapidoid.config;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Str;
+import org.rapidoid.data.YAML;
+import org.rapidoid.io.Res;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
+import java.util.List;
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,20 +32,9 @@ package org.rapidoid.config;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Str;
-import org.rapidoid.data.YAML;
-import org.rapidoid.io.Res;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-
-import java.util.List;
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class ConfigUtil {
+public class ConfigUtil extends RapidoidThing {
 
 	private static final ConfigParser YAML_PARSER = new ConfigParser() {
 		@SuppressWarnings("unchecked")

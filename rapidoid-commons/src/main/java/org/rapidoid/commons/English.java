@@ -1,5 +1,16 @@
 package org.rapidoid.commons;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.Properties;
+import java.util.regex.Pattern;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,19 +31,9 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-
-import java.io.IOException;
-import java.util.Map;
-import java.util.Properties;
-import java.util.regex.Pattern;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class English {
+public class English extends RapidoidThing {
 
 	private static final Pattern PLURAL1 = Pattern.compile(".*(s|x|z|ch|sh)$");
 	private static final Pattern PLURAL1U = Pattern.compile(".*(S|X|Z|CH|SH)$");

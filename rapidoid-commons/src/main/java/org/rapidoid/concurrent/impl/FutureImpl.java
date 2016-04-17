@@ -1,5 +1,12 @@
 package org.rapidoid.concurrent.impl;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.commons.Err;
+import org.rapidoid.concurrent.Future;
+import org.rapidoid.u.U;
+
+import java.util.concurrent.TimeoutException;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,17 +27,11 @@ package org.rapidoid.concurrent.impl;
  * #L%
  */
 
-import org.rapidoid.commons.Err;
-import org.rapidoid.concurrent.Future;
-import org.rapidoid.u.U;
-
-import java.util.concurrent.TimeoutException;
-
 /**
  * @author Nikolche Mihajlovski
  * @since 4.1.0
  */
-public class FutureImpl<T> implements Future<T> {
+public class FutureImpl<T> extends RapidoidThing implements Future<T> {
 
 	private volatile boolean done;
 

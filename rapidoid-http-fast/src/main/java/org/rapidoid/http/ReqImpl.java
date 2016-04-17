@@ -1,5 +1,24 @@
 package org.rapidoid.http;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.Buf;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.MediaType;
+import org.rapidoid.commons.Str;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.io.Upload;
+import org.rapidoid.log.Log;
+import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Constants;
+import org.rapidoid.util.Msc;
+
+import java.io.Serializable;
+import java.util.*;
+import java.util.Map.Entry;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -20,27 +39,9 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.Buf;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.MediaType;
-import org.rapidoid.commons.Str;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.io.Upload;
-import org.rapidoid.log.Log;
-import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Constants;
-import org.rapidoid.util.Msc;
-
-import java.io.Serializable;
-import java.util.*;
-import java.util.Map.Entry;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.2")
-public class ReqImpl implements Req, Constants, HttpMetadata {
+public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetadata {
 
 	private final FastHttp http;
 

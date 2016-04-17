@@ -1,5 +1,17 @@
 package org.rapidoid.net.impl;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.Buf;
+import org.rapidoid.buffer.BufProvider;
+import org.rapidoid.data.Data;
+import org.rapidoid.data.KeyValueRanges;
+import org.rapidoid.data.MultiData;
+import org.rapidoid.data.Range;
+
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-net
@@ -20,20 +32,9 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.Buf;
-import org.rapidoid.buffer.BufProvider;
-import org.rapidoid.data.Data;
-import org.rapidoid.data.KeyValueRanges;
-import org.rapidoid.data.MultiData;
-import org.rapidoid.data.Range;
-
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class DefaultMultiData implements MultiData {
+public class DefaultMultiData extends RapidoidThing implements MultiData {
 
 	private final BufProvider src;
 

@@ -1,5 +1,6 @@
 package org.rapidoid.setup;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.Since;
@@ -58,7 +59,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Setup implements Constants {
+public class Setup extends RapidoidThing implements Constants {
 
 	static final Setup ON = new Setup("app", "main", "0.0.0.0", 8888, IoC.defaultContext(), Conf.APP, Conf.ON);
 	static final Setup ADMIN = new Setup("admin", "admin", "0.0.0.0", 0, IoC.defaultContext(), Conf.APP, Conf.ADMIN);

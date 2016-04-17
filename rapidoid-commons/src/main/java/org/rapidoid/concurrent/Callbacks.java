@@ -1,5 +1,6 @@
 package org.rapidoid.concurrent;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 
@@ -29,7 +30,7 @@ import java.util.concurrent.CountDownLatch;
  * @author Nikolche Mihajlovski
  * @since 4.1.0
  */
-public class Callbacks {
+public class Callbacks extends RapidoidThing {
 
 	public static <T> void done(Callback<T> callback, T result, Throwable error) {
 		if (callback != null) {

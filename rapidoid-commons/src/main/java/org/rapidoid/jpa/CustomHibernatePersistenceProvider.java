@@ -1,5 +1,16 @@
 package org.rapidoid.jpa;
 
+import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
+import org.hibernate.jpa.boot.spi.PersistenceUnitDescriptor;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.scan.ClasspathUtil;
+import org.rapidoid.u.U;
+
+import java.util.List;
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-commons
@@ -19,17 +30,6 @@ package org.rapidoid.jpa;
  * limitations under the License.
  * #L%
  */
-
-import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
-import org.hibernate.jpa.boot.spi.PersistenceUnitDescriptor;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.scan.ClasspathUtil;
-import org.rapidoid.u.U;
-
-import java.util.List;
-import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

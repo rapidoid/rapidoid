@@ -1,5 +1,14 @@
 package org.rapidoid.ioc;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.*;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.util.Msc;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.List;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,17 +29,9 @@ package org.rapidoid.ioc;
  * #L%
  */
 
-import org.rapidoid.annotation.*;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.util.Msc;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.util.List;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class ClassMetadata {
+public class ClassMetadata extends RapidoidThing {
 
 	final Class<?> clazz;
 

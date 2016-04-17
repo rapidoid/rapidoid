@@ -1,5 +1,6 @@
 package org.rapidoid.cls;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
@@ -25,7 +26,7 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class InterceptorProxy {
+public class InterceptorProxy extends RapidoidThing {
 
 	private final String description;
 

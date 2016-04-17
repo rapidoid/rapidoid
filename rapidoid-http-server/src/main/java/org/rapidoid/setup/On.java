@@ -1,5 +1,20 @@
 package org.rapidoid.setup;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Config;
+import org.rapidoid.http.HttpRoutes;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.RouteOptions;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.handler.HttpHandler;
+import org.rapidoid.http.processor.HttpProcessor;
+import org.rapidoid.ioc.IoCContext;
+
+import java.lang.annotation.Annotation;
+
 /*
  * #%L
  * rapidoid-http-server
@@ -20,23 +35,9 @@ package org.rapidoid.setup;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Config;
-import org.rapidoid.http.HttpRoutes;
-import org.rapidoid.http.ReqHandler;
-import org.rapidoid.http.ReqRespHandler;
-import org.rapidoid.http.RouteOptions;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.http.handler.HttpHandler;
-import org.rapidoid.http.processor.HttpProcessor;
-import org.rapidoid.ioc.IoCContext;
-
-import java.lang.annotation.Annotation;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public class On {
+public class On extends RapidoidThing {
 
 	private static final Setup SETUP = Setup.ON;
 

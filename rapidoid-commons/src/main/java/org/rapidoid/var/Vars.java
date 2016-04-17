@@ -1,5 +1,6 @@
 package org.rapidoid.var;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.var.impl.MandatoryVar;
@@ -27,7 +28,7 @@ import org.rapidoid.var.impl.SimpleVar;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Vars {
+public class Vars extends RapidoidThing {
 
 	public static <T> Var<T> var(String name, T value) {
 		return new SimpleVar<T>(name, value);

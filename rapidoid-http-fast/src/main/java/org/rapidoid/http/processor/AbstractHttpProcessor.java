@@ -20,6 +20,7 @@ package org.rapidoid.http.processor;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.http.FastHttpProtocol;
@@ -29,7 +30,7 @@ import org.rapidoid.net.TCP;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public abstract class AbstractHttpProcessor implements HttpProcessor, HttpMetadata {
+public abstract class AbstractHttpProcessor extends RapidoidThing implements HttpProcessor, HttpMetadata {
 
 	protected final HttpProcessor next;
 

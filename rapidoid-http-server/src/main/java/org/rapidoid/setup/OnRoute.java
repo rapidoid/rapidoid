@@ -1,5 +1,19 @@
 package org.rapidoid.setup;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.TransactionMode;
+import org.rapidoid.commons.MediaType;
+import org.rapidoid.http.*;
+import org.rapidoid.http.handler.HttpHandlers;
+import org.rapidoid.lambda.*;
+
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.Callable;
+
 /*
  * #%L
  * rapidoid-http-server
@@ -20,22 +34,9 @@ package org.rapidoid.setup;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.TransactionMode;
-import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.*;
-import org.rapidoid.http.handler.HttpHandlers;
-import org.rapidoid.lambda.*;
-
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.Callable;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public class OnRoute {
+public class OnRoute extends RapidoidThing {
 
 	private final FastHttp http;
 

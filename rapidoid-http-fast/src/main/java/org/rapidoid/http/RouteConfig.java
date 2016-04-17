@@ -1,5 +1,12 @@
 package org.rapidoid.http;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.TransactionMode;
+import org.rapidoid.commons.MediaType;
+
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -19,13 +26,6 @@ package org.rapidoid.http;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.TransactionMode;
-import org.rapidoid.commons.MediaType;
-
-import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

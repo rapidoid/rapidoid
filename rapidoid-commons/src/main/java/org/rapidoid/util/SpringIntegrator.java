@@ -1,5 +1,21 @@
 package org.rapidoid.util;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Env;
+import org.rapidoid.ioc.BeanProvider;
+import org.rapidoid.ioc.IoC;
+import org.rapidoid.jpa.JPA;
+import org.rapidoid.u.U;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.persistence.EntityManagerFactory;
+import java.util.Collections;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,25 +36,10 @@ package org.rapidoid.util;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Env;
-import org.rapidoid.ioc.BeanProvider;
-import org.rapidoid.ioc.IoC;
-import org.rapidoid.jpa.JPA;
-import org.rapidoid.u.U;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.persistence.EntityManagerFactory;
-import java.util.Collections;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 @Component
-public abstract class SpringIntegrator implements Runnable, BeanProvider {
+public abstract class SpringIntegrator extends RapidoidThing implements Runnable, BeanProvider {
 
 	@Resource
 	private ConfigurableApplicationContext ctx;

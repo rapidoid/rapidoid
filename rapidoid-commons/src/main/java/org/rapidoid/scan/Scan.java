@@ -1,5 +1,12 @@
 package org.rapidoid.scan;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.lang.annotation.Annotation;
+import java.util.List;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,15 +27,9 @@ package org.rapidoid.scan;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.lang.annotation.Annotation;
-import java.util.List;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.5.0")
-public class Scan {
+public class Scan extends RapidoidThing {
 
 	public static ScanParams in(String... packages) {
 		return new ScanParams().in(packages);

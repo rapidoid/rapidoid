@@ -465,6 +465,7 @@ org.rapidoid.pool.Pools
 org.rapidoid.pool.SynchronizedArrayPool
 org.rapidoid.pool.SynchronizedPool
 org.rapidoid.pool.ThreadSafeArrayPool
+org.rapidoid.RapidoidThing
 org.rapidoid.render.RapidoidTemplate
 org.rapidoid.render.Render
 org.rapidoid.render.RenderCtx

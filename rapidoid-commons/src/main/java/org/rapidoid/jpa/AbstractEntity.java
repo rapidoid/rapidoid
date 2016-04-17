@@ -1,5 +1,13 @@
 package org.rapidoid.jpa;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,17 +28,10 @@ package org.rapidoid.jpa;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-
 @MappedSuperclass
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public abstract class AbstractEntity {
+public abstract class AbstractEntity extends RapidoidThing {
 
 	@Id
 	@GeneratedValue

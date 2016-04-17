@@ -1,5 +1,11 @@
 package org.rapidoid.http.handler.param;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+import org.rapidoid.io.Upload;
+
 /*
  * #%L
  * rapidoid-http-server
@@ -20,14 +26,9 @@ package org.rapidoid.http.handler.param;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-import org.rapidoid.io.Upload;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class UploadParamRetriever implements ParamRetriever {
+public class UploadParamRetriever extends RapidoidThing implements ParamRetriever {
 
 	private final Class<?> type;
 	private final String name;

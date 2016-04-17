@@ -1,5 +1,15 @@
 package org.rapidoid.sql;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
+import java.beans.PropertyVetoException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,18 +30,9 @@ package org.rapidoid.sql;
  * #L%
  */
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
-import java.beans.PropertyVetoException;
-import java.sql.Connection;
-import java.sql.SQLException;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class C3P0ConnectionPool implements ConnectionPool {
+public class C3P0ConnectionPool extends RapidoidThing implements ConnectionPool {
 
 	private final ComboPooledDataSource pool = new ComboPooledDataSource();
 

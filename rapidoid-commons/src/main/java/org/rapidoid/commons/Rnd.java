@@ -1,5 +1,11 @@
 package org.rapidoid.commons;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.util.Random;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,14 +26,9 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.util.Random;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Rnd {
+public class Rnd extends RapidoidThing {
 
 	protected static final Random RND = new Random();
 

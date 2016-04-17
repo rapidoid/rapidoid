@@ -1,5 +1,10 @@
 package org.rapidoid.web;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.setup.On;
+
 /*
  * #%L
  * rapidoid-http-server
@@ -20,13 +25,9 @@ package org.rapidoid.web;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.On;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")
-public class Rapidoid {
+public class Rapidoid extends RapidoidThing {
 
 	private Rapidoid() {
 	}

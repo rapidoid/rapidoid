@@ -1,5 +1,6 @@
 package org.rapidoid.insight;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
@@ -27,7 +28,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class StatsMeasure implements Measure {
+public class StatsMeasure extends RapidoidThing implements Measure {
 
 	private long min;
 	private long max;

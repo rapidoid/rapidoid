@@ -1,5 +1,11 @@
 package org.rapidoid.gui.menu;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.util.List;
+
 /*
  * #%L
  * rapidoid-gui
@@ -20,14 +26,9 @@ package org.rapidoid.gui.menu;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.util.List;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class PageSubMenu {
+public class PageSubMenu extends RapidoidThing {
 
 	private final List<PageSubMenuItem> items;
 

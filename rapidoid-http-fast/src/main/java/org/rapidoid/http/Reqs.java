@@ -1,5 +1,10 @@
 package org.rapidoid.http;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctxs;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -20,13 +25,9 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctxs;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.2")
-public class Reqs {
+public class Reqs extends RapidoidThing {
 
 	public static Req req() {
 		return Ctxs.ctx().exchange();

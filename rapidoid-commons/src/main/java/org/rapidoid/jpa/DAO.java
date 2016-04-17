@@ -1,5 +1,6 @@
 package org.rapidoid.jpa;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.u.U;
 
 import java.lang.reflect.ParameterizedType;
@@ -30,7 +31,7 @@ import java.util.List;
  * @author Nikolche Mihajlovski
  * @since 2.0.0
  */
-public abstract class DAO<E> {
+public abstract class DAO<E> extends RapidoidThing {
 
 	private final Class<E> clazz;
 

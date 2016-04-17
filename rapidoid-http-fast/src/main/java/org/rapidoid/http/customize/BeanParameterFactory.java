@@ -1,5 +1,11 @@
 package org.rapidoid.http.customize;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -19,12 +25,6 @@ package org.rapidoid.http.customize;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-
-import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

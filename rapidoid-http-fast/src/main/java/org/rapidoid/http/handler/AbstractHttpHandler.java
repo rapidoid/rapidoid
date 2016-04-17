@@ -1,5 +1,15 @@
 package org.rapidoid.http.handler;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.MediaType;
+import org.rapidoid.http.HttpWrapper;
+import org.rapidoid.http.RouteOptions;
+import org.rapidoid.u.U;
+
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -20,18 +30,9 @@ package org.rapidoid.http.handler;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.MediaType;
-import org.rapidoid.http.HttpWrapper;
-import org.rapidoid.http.RouteOptions;
-import org.rapidoid.u.U;
-
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")
-public abstract class AbstractHttpHandler implements HttpHandler {
+public abstract class AbstractHttpHandler extends RapidoidThing implements HttpHandler {
 
 	protected final RouteOptions options;
 

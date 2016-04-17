@@ -1,5 +1,6 @@
 package org.rapidoid.bytes;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
@@ -25,7 +26,7 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class ByteArrayBytes implements Bytes {
+public class ByteArrayBytes extends RapidoidThing implements Bytes {
 
 	private final byte[] bytes;
 

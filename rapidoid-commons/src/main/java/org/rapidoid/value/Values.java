@@ -1,5 +1,9 @@
 package org.rapidoid.value;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,12 +24,9 @@ package org.rapidoid.value;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Values {
+public class Values extends RapidoidThing {
 
 	public static <T> Value<T> wrap(ValueStore<T> store) {
 		return new StoredValue<T>(store);

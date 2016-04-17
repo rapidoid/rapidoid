@@ -1,5 +1,13 @@
 package org.rapidoid.ctx;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.job.Jobs;
+
+import java.util.Map;
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,16 +28,9 @@ package org.rapidoid.ctx;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.job.Jobs;
-
-import java.util.Map;
-import java.util.Set;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.5.0")
-public class WithContext {
+public class WithContext extends RapidoidThing {
 
 	private volatile String tag;
 

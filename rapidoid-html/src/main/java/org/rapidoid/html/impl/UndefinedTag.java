@@ -1,5 +1,13 @@
 package org.rapidoid.html.impl;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagProcessor;
+import org.rapidoid.var.Var;
+
 /*
  * #%L
  * rapidoid-html
@@ -20,16 +28,9 @@ package org.rapidoid.html.impl;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Err;
-import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagProcessor;
-import org.rapidoid.var.Var;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class UndefinedTag implements Tag {
+public class UndefinedTag extends RapidoidThing implements Tag {
 
 	@Override
 	public Object contents() {

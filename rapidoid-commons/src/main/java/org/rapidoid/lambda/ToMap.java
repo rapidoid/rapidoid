@@ -1,5 +1,10 @@
 package org.rapidoid.lambda;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-commons
@@ -19,11 +24,6 @@ package org.rapidoid.lambda;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

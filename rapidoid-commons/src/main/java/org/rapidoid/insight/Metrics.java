@@ -1,5 +1,22 @@
 package org.rapidoid.insight;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Coll;
+import org.rapidoid.commons.TimeSeries;
+import org.rapidoid.job.Jobs;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
+import java.lang.management.ThreadMXBean;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,25 +37,9 @@ package org.rapidoid.insight;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Coll;
-import org.rapidoid.commons.TimeSeries;
-import org.rapidoid.job.Jobs;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-
-import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
-import java.lang.management.ThreadMXBean;
-import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Metrics implements Runnable {
+public class Metrics extends RapidoidThing implements Runnable {
 
 	public static final Map<String, TimeSeries> METRICS = Coll.synchronizedMap();
 

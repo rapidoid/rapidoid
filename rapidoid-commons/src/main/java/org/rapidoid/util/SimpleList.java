@@ -1,5 +1,12 @@
 package org.rapidoid.util;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
+
+import java.util.Arrays;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,15 +27,9 @@ package org.rapidoid.util;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Err;
-
-import java.util.Arrays;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class SimpleList<T> {
+public class SimpleList<T> extends RapidoidThing {
 
 	public T[] array;
 

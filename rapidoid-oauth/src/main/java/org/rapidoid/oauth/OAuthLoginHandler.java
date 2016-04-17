@@ -1,5 +1,12 @@
 package org.rapidoid.oauth;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.value.Value;
+
 /*
  * #%L
  * rapidoid-oauth
@@ -20,15 +27,9 @@ package org.rapidoid.oauth;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.ReqHandler;
-import org.rapidoid.value.Value;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class OAuthLoginHandler implements ReqHandler {
+public class OAuthLoginHandler extends RapidoidThing implements ReqHandler {
 
 	private final OAuthProvider provider;
 	private final Value<String> domain;

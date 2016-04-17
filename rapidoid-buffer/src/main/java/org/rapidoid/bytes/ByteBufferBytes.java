@@ -1,5 +1,11 @@
 package org.rapidoid.bytes;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.nio.ByteBuffer;
+
 /*
  * #%L
  * rapidoid-buffer
@@ -20,14 +26,9 @@ package org.rapidoid.bytes;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.nio.ByteBuffer;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class ByteBufferBytes implements Bytes {
+public class ByteBufferBytes extends RapidoidThing implements Bytes {
 
 	private ByteBuffer buf;
 

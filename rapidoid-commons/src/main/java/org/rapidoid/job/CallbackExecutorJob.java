@@ -1,5 +1,10 @@
 package org.rapidoid.job;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,13 +25,9 @@ package org.rapidoid.job;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Callback;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class CallbackExecutorJob<T> implements Runnable {
+public class CallbackExecutorJob<T> extends RapidoidThing implements Runnable {
 
 	private final Callback<T> callback;
 	private final T result;

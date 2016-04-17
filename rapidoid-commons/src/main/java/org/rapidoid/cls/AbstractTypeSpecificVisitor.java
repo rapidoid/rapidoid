@@ -1,5 +1,16 @@
 package org.rapidoid.cls;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
+import org.rapidoid.u.U;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,19 +31,9 @@ package org.rapidoid.cls;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Err;
-import org.rapidoid.u.U;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public abstract class AbstractTypeSpecificVisitor<T, R> implements TypeSpecificVisitor<T, R> {
+public abstract class AbstractTypeSpecificVisitor<T, R> extends RapidoidThing implements TypeSpecificVisitor<T, R> {
 
 	protected R dispatch(T context, TypeKind kind, Object value) {
 		switch (kind) {

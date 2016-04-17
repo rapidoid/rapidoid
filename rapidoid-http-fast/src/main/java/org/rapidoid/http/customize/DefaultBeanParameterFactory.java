@@ -1,5 +1,13 @@
 package org.rapidoid.http.customize;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.data.JSON;
+import org.rapidoid.http.Req;
+
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -20,16 +28,9 @@ package org.rapidoid.http.customize;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.data.JSON;
-import org.rapidoid.http.Req;
-
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DefaultBeanParameterFactory implements BeanParameterFactory {
+public class DefaultBeanParameterFactory extends RapidoidThing implements BeanParameterFactory {
 
 	@Override
 	public Object getParamValue(Req req, Class<?> paramType, String paramName, Map<String, Object> properties) throws Exception {

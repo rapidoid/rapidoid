@@ -1,5 +1,10 @@
 package org.rapidoid.buffer;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.bytes.Bytes;
+
 /*
  * #%L
  * rapidoid-buffer
@@ -20,13 +25,9 @@ package org.rapidoid.buffer;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.bytes.Bytes;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class BufBytes implements Bytes {
+public class BufBytes extends RapidoidThing implements Bytes {
 
 	private final Buf buf;
 

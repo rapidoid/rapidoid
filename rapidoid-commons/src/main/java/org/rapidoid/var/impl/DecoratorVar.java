@@ -1,5 +1,12 @@
 package org.rapidoid.var.impl;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.var.Var;
+
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,15 +27,9 @@ package org.rapidoid.var.impl;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.var.Var;
-
-import java.util.Set;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public abstract class DecoratorVar<T> implements Var<T> {
+public abstract class DecoratorVar<T> extends RapidoidThing implements Var<T> {
 
 	protected final Var<T> var;
 

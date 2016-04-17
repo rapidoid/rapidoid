@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
+import org.rapidoid.RapidoidThing;
 
 import java.io.OutputStream;
 import java.util.Map;
@@ -36,7 +37,7 @@ import java.util.Map;
  * @author Nikolche Mihajlovski
  * @since 2.0.0
  */
-public class JSON {
+public class JSON extends RapidoidThing {
 
 	public static final ObjectMapper MAPPER = mapper();
 

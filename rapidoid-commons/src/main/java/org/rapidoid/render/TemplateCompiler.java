@@ -1,5 +1,13 @@
 package org.rapidoid.render;
 
+import javassist.*;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,16 +28,9 @@ package org.rapidoid.render;
  * #L%
  */
 
-import javassist.*;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
-import java.util.concurrent.atomic.AtomicInteger;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class TemplateCompiler {
+public class TemplateCompiler extends RapidoidThing {
 
 	public static final AtomicInteger ID_GEN = new AtomicInteger();
 

@@ -1,5 +1,6 @@
 package org.rapidoid.util;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.ctx.PersisterProvider;
 import org.rapidoid.log.Log;
 
@@ -23,7 +24,7 @@ import org.rapidoid.log.Log;
  * #L%
  */
 
-public class SimplePersisterProvider implements PersisterProvider {
+public class SimplePersisterProvider extends RapidoidThing implements PersisterProvider {
 
 	private final Object persistor;
 

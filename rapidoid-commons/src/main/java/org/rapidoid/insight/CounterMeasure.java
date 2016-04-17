@@ -1,5 +1,11 @@
 package org.rapidoid.insight;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,14 +26,9 @@ package org.rapidoid.insight;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.util.concurrent.atomic.AtomicInteger;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class CounterMeasure implements Measure {
+public class CounterMeasure extends RapidoidThing implements Measure {
 
 	private AtomicInteger counter = new AtomicInteger();
 

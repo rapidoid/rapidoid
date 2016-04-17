@@ -1,5 +1,6 @@
 package org.rapidoid.gui;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.base.BootstrapWidgets;
@@ -34,7 +35,7 @@ import org.rapidoid.html.Tag;
  */
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
-public final class FA {
+public final class FA extends RapidoidThing {
 
 	private FA() {
 	}

@@ -1,5 +1,12 @@
 package org.rapidoid.goodies;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.GUI;
+
+import java.util.List;
+import java.util.concurrent.Callable;
+
 /*
  * #%L
  * rapidoid-web
@@ -19,13 +26,6 @@ package org.rapidoid.goodies;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.GUI;
-
-import java.util.List;
-import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

@@ -1,5 +1,7 @@
 package org.rapidoid.data;
 
+import org.rapidoid.RapidoidThing;
+
 /*
  * #%L
  * rapidoid-commons
@@ -24,7 +26,7 @@ package org.rapidoid.data;
  * @author Nikolche Mihajlovski
  * @since 4.4.0
  */
-public class Parse {
+public class Parse extends RapidoidThing {
 
 	enum DataFormat {
 		JSON, XML, YAML

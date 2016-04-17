@@ -1,5 +1,13 @@
 package org.rapidoid.beany;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
+import java.util.Arrays;
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,16 +28,9 @@ package org.rapidoid.beany;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
-import java.util.Arrays;
-import java.util.Set;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class PropertySelectorByName implements PropertySelector {
+public abstract class PropertySelectorByName extends RapidoidThing implements PropertySelector {
 
 	private static final long serialVersionUID = 7826078564960583655L;
 

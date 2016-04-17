@@ -1,5 +1,10 @@
 package org.rapidoid.render;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.io.OutputStream;
+
 /*
  * #%L
  * rapidoid-commons
@@ -19,11 +24,6 @@ package org.rapidoid.render;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.io.OutputStream;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

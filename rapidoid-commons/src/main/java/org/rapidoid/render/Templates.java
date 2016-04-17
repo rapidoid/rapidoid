@@ -1,5 +1,14 @@
 package org.rapidoid.render;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Coll;
+import org.rapidoid.io.Res;
+import org.rapidoid.lambda.Mapper;
+
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,17 +29,9 @@ package org.rapidoid.render;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Coll;
-import org.rapidoid.io.Res;
-import org.rapidoid.lambda.Mapper;
-
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class Templates {
+public class Templates extends RapidoidThing {
 
 	private static final Map<String, TemplateRenderer> TEMPLATES = Coll.autoExpandingMap(new Mapper<String, TemplateRenderer>() {
 		@Override

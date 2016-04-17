@@ -1,5 +1,6 @@
 package org.rapidoid.insight;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.commons.Coll;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import java.util.Map;
  * @author Nikolche Mihajlovski
  * @since 4.1.0
  */
-public class Insights {
+public class Insights extends RapidoidThing {
 
 	private static final Map<String, List<Insightful>> RESOURCES = Coll.autoExpandingMap(ArrayList.class);
 

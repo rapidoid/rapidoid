@@ -1,5 +1,14 @@
 package org.rapidoid.cls;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.Arrays;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,15 +29,7 @@ package org.rapidoid.cls;
  * #L%
  */
 
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.Arrays;
-
-public class Proxies {
+public class Proxies extends RapidoidThing {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T createProxy(InvocationHandler handler, Class<?>... interfaces) {

@@ -1,5 +1,6 @@
 package org.rapidoid.security;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Coll;
@@ -33,7 +34,7 @@ import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Auth {
+public class Auth extends RapidoidThing {
 
 	@SuppressWarnings("unchecked")
 	public static Set<String> getRolesFor(String username) {

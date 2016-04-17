@@ -1,5 +1,10 @@
 package org.rapidoid.html;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.html.impl.TagRenderer;
+
 /*
  * #%L
  * rapidoid-html
@@ -20,13 +25,9 @@ package org.rapidoid.html;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.html.impl.TagRenderer;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class ElementGroup {
+public class ElementGroup extends RapidoidThing {
 
 	private final Object[] elements;
 

@@ -1,5 +1,6 @@
 package org.rapidoid.oauth;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
@@ -25,7 +26,7 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class OAuthProvider {
+public class OAuthProvider extends RapidoidThing {
 
 	public static OAuthProvider GOOGLE = new OAuthProvider("Google", "https://accounts.google.com/o/oauth2/auth",
 			"https://accounts.google.com/o/oauth2/token", "https://www.googleapis.com/oauth2/v1/userinfo", "profile",

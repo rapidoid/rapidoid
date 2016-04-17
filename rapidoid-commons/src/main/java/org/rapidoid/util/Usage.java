@@ -1,5 +1,10 @@
 package org.rapidoid.util;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,13 +25,9 @@ package org.rapidoid.util;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.2.0")
-public class Usage {
+public class Usage extends RapidoidThing {
 
 	private static volatile long lastAppUsedOn = U.time();
 

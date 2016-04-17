@@ -1,5 +1,6 @@
 package org.rapidoid.concurrent;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.concurrent.impl.FutureImpl;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
@@ -30,7 +31,7 @@ import java.util.concurrent.TimeoutException;
  * @author Nikolche Mihajlovski
  * @since 4.1.0
  */
-public class Futures {
+public class Futures extends RapidoidThing {
 
 	public static <FROM, TO> Future<TO> mapping(final Future<FROM> future, final Mapper<FROM, TO> mapper) {
 		return new FutureImpl<TO>() {

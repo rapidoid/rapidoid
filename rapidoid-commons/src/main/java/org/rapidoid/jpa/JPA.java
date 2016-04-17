@@ -1,5 +1,6 @@
 package org.rapidoid.jpa;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Ctx;
@@ -33,7 +34,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JPA {
+public class JPA extends RapidoidThing {
 
 	public static EntityManager em() {
 		return JPAUtil.em();

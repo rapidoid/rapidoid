@@ -1,5 +1,18 @@
 package org.rapidoid.goodies;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.gui.Grid;
+import org.rapidoid.jpa.JPA;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.u.U;
+
+import javax.persistence.metamodel.EntityType;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+
 /*
  * #%L
  * rapidoid-web
@@ -19,19 +32,6 @@ package org.rapidoid.goodies;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.gui.Grid;
-import org.rapidoid.jpa.JPA;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.u.U;
-
-import javax.persistence.metamodel.EntityType;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

@@ -1,5 +1,13 @@
 package org.rapidoid.setup;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.io.watch.FilesystemChangeListener;
+import org.rapidoid.io.watch.Watch;
+import org.rapidoid.log.Log;
+import org.rapidoid.scan.ClasspathUtil;
+
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-http-server
@@ -20,14 +28,7 @@ package org.rapidoid.setup;
  * #L%
  */
 
-import org.rapidoid.io.watch.FilesystemChangeListener;
-import org.rapidoid.io.watch.Watch;
-import org.rapidoid.log.Log;
-import org.rapidoid.scan.ClasspathUtil;
-
-import java.util.Set;
-
-public class WatchForChanges {
+public class WatchForChanges extends RapidoidThing {
 
 	public static void activate() {
 		Set<String> classpathFolders = ClasspathUtil.getClasspathFolders();

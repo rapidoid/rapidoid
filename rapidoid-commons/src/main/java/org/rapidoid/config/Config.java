@@ -1,5 +1,16 @@
 package org.rapidoid.config;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Arr;
+import org.rapidoid.commons.Coll;
+import org.rapidoid.lambda.ToMap;
+import org.rapidoid.u.U;
+import org.rapidoid.value.Value;
+import org.rapidoid.value.Values;
+
+import java.util.*;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,21 +31,11 @@ package org.rapidoid.config;
  * #L%
  */
 
-import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Arr;
-import org.rapidoid.commons.Coll;
-import org.rapidoid.lambda.ToMap;
-import org.rapidoid.u.U;
-import org.rapidoid.value.Value;
-import org.rapidoid.value.Values;
-
-import java.util.*;
-
 /**
  * @author Nikolche Mihajlovski
  * @since 4.1.0
  */
-public class Config implements ToMap<String, Object> {
+public class Config extends RapidoidThing implements ToMap<String, Object> {
 
 	private final Map<String, Object> properties;
 

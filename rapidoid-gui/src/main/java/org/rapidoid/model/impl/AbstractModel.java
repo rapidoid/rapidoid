@@ -1,5 +1,15 @@
 package org.rapidoid.model.impl;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.model.IModel;
+import org.rapidoid.u.U;
+import org.rapidoid.var.Var;
+import org.rapidoid.var.Vars;
+
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-gui
@@ -20,18 +30,9 @@ package org.rapidoid.model.impl;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.model.IModel;
-import org.rapidoid.u.U;
-import org.rapidoid.var.Var;
-import org.rapidoid.var.Vars;
-
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class AbstractModel implements IModel {
+public abstract class AbstractModel extends RapidoidThing implements IModel {
 
 	private static final long serialVersionUID = -7147599758816052755L;
 

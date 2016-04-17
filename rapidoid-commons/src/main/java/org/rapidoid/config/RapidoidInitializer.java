@@ -1,5 +1,12 @@
 package org.rapidoid.config;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.RapidoidInfo;
+import org.rapidoid.log.Log;
+
+import java.lang.management.ManagementFactory;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,13 +27,7 @@ package org.rapidoid.config;
  * #L%
  */
 
-import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.RapidoidInfo;
-import org.rapidoid.log.Log;
-
-import java.lang.management.ManagementFactory;
-
-public class RapidoidInitializer {
+public class RapidoidInitializer extends RapidoidThing {
 
 	private static volatile boolean initialized;
 

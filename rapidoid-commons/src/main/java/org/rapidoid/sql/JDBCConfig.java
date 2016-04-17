@@ -1,5 +1,13 @@
 package org.rapidoid.sql;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
+import org.rapidoid.u.U;
+import org.rapidoid.value.Value;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,16 +28,9 @@ package org.rapidoid.sql;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.config.Config;
-import org.rapidoid.u.U;
-import org.rapidoid.value.Value;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class JDBCConfig {
+public class JDBCConfig extends RapidoidThing {
 
 	private static final Config JDBC = Conf.JDBC;
 

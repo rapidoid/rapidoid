@@ -20,6 +20,7 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -29,7 +30,7 @@ import org.rapidoid.pool.Pool;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class ExchangeProtocol<T extends DefaultExchange<?>> implements Protocol, CtxListener {
+public abstract class ExchangeProtocol<T extends DefaultExchange<?>> extends RapidoidThing implements Protocol, CtxListener {
 
 	private final Class<T> exchangeType;
 	private final boolean useExchangePool;

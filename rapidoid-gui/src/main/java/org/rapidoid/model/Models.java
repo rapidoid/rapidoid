@@ -1,5 +1,22 @@
 package org.rapidoid.model;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.beany.BeanProperties;
+import org.rapidoid.beany.Beany;
+import org.rapidoid.beany.Prop;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.lambda.Calc;
+import org.rapidoid.model.impl.*;
+import org.rapidoid.u.U;
+import org.rapidoid.var.Var;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-gui
@@ -20,26 +37,10 @@ package org.rapidoid.model;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.BeanProperties;
-import org.rapidoid.beany.Beany;
-import org.rapidoid.beany.Prop;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.lambda.Calc;
-import org.rapidoid.model.impl.*;
-import org.rapidoid.u.U;
-import org.rapidoid.var.Var;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 @SuppressWarnings("serial")
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Models {
+public class Models extends RapidoidThing {
 
 	private static final Set<String> SPECIAL_PROPERTIES = U.set("id", "version", "createdby", "createdon",
 			"lastupdatedby", "lastupdatedon");

@@ -1,5 +1,14 @@
 package org.rapidoid.jpa;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.PersisterProvider;
+import org.rapidoid.u.U;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,18 +29,10 @@ package org.rapidoid.jpa;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.PersisterProvider;
-import org.rapidoid.u.U;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
 @SuppressWarnings("deprecation")
-public class JPAPersisterProvider implements PersisterProvider {
+public class JPAPersisterProvider extends RapidoidThing implements PersisterProvider {
 
 	@SuppressWarnings("unchecked")
 	@Override

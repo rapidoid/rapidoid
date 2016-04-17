@@ -1,5 +1,21 @@
 package org.rapidoid.html.impl;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Special;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.cls.Proxies;
+import org.rapidoid.commons.Str;
+import org.rapidoid.html.SpecificTag;
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagBase;
+import org.rapidoid.u.U;
+
+import java.io.Serializable;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+
 /*
  * #%L
  * rapidoid-html
@@ -20,24 +36,9 @@ package org.rapidoid.html.impl;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.Special;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.cls.Proxies;
-import org.rapidoid.commons.Str;
-import org.rapidoid.html.SpecificTag;
-import org.rapidoid.html.Tag;
-import org.rapidoid.html.TagBase;
-import org.rapidoid.u.U;
-
-import java.io.Serializable;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class TagProxy implements InvocationHandler, Serializable {
+public class TagProxy extends RapidoidThing implements InvocationHandler, Serializable {
 
 	private static final long serialVersionUID = 8876053750757191711L;
 

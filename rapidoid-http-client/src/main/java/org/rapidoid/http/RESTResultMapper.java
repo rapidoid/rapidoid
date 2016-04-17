@@ -1,5 +1,9 @@
 package org.rapidoid.http;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.data.Parse;
+import org.rapidoid.lambda.Mapper;
+
 /*
  * #%L
  * rapidoid-http-client
@@ -20,10 +24,7 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.data.Parse;
-import org.rapidoid.lambda.Mapper;
-
-public class RESTResultMapper<T> implements Mapper<byte[], T> {
+public class RESTResultMapper<T> extends RapidoidThing implements Mapper<byte[], T> {
 
 	private final Class<T> resultType;
 

@@ -1,5 +1,20 @@
 package org.rapidoid.http.handler;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.TransactionMode;
+import org.rapidoid.ctx.With;
+import org.rapidoid.http.*;
+import org.rapidoid.jpa.JPA;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.security.Secure;
+import org.rapidoid.u.U;
+
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.Future;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -19,21 +34,6 @@ package org.rapidoid.http.handler;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.annotation.TransactionMode;
-import org.rapidoid.ctx.With;
-import org.rapidoid.http.*;
-import org.rapidoid.jpa.JPA;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.security.Secure;
-import org.rapidoid.u.U;
-
-import java.util.Collections;
-import java.util.Set;
-import java.util.concurrent.Future;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.3.0")

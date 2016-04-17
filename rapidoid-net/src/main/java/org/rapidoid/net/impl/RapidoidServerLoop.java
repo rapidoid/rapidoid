@@ -1,5 +1,22 @@
 package org.rapidoid.net.impl;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Rnd;
+import org.rapidoid.config.Conf;
+import org.rapidoid.log.Log;
+import org.rapidoid.net.Protocol;
+import org.rapidoid.net.Server;
+import org.rapidoid.net.TCPServerInfo;
+import org.rapidoid.u.U;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.nio.channels.*;
+import java.util.Iterator;
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-net
@@ -19,23 +36,6 @@ package org.rapidoid.net.impl;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Rnd;
-import org.rapidoid.config.Conf;
-import org.rapidoid.log.Log;
-import org.rapidoid.net.Protocol;
-import org.rapidoid.net.Server;
-import org.rapidoid.net.TCPServerInfo;
-import org.rapidoid.u.U;
-
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.nio.channels.*;
-import java.util.Iterator;
-import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

@@ -1,5 +1,6 @@
 package org.rapidoid.config;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Env;
 import org.rapidoid.lambda.Mapper;
@@ -34,7 +35,7 @@ import java.util.Map;
  * @author Nikolche Mihajlovski
  * @since 2.0.0
  */
-public class Conf {
+public class Conf extends RapidoidThing {
 
 	private static final Map<String, Config> SECTIONS = Coll.autoExpandingMap(new Mapper<String, Config>() {
 		@Override

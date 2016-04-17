@@ -1,5 +1,6 @@
 package org.rapidoid.insight;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.log.Log;
 
 /*
@@ -26,7 +27,7 @@ import org.rapidoid.log.Log;
  * @author Nikolche Mihajlovski
  * @since 4.1.0
  */
-public abstract class AbstractInsightful implements Insightful {
+public abstract class AbstractInsightful extends RapidoidThing implements Insightful {
 
 	private final String kind;
 

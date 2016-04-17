@@ -1,5 +1,12 @@
 package org.rapidoid.setup;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Env;
+import org.rapidoid.log.Log;
+import org.rapidoid.util.Msc;
+
 /*
  * #%L
  * rapidoid-http-server
@@ -20,15 +27,9 @@ package org.rapidoid.setup;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Env;
-import org.rapidoid.log.Log;
-import org.rapidoid.util.Msc;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class OnChanges {
+public class OnChanges extends RapidoidThing {
 
 	static volatile boolean initialized;
 	static volatile boolean ignore;

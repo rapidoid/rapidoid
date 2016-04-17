@@ -1,5 +1,9 @@
 package org.rapidoid.io;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,12 +24,9 @@ package org.rapidoid.io;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Upload {
+public class Upload extends RapidoidThing {
 
 	private final String filename;
 

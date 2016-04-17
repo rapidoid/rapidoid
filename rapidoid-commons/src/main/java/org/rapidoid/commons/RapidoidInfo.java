@@ -1,5 +1,14 @@
 package org.rapidoid.commons;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,17 +29,9 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")
-public class RapidoidInfo {
+public class RapidoidInfo extends RapidoidThing {
 
 	private static final Properties PROPS = new Properties();
 

@@ -1,5 +1,10 @@
 package org.rapidoid.util;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,13 +25,9 @@ package org.rapidoid.util;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.2")
-public abstract class AbstractMapImpl<K, V> implements SimpleMap<K, V> {
+public abstract class AbstractMapImpl<K, V> extends RapidoidThing implements SimpleMap<K, V> {
 
 	protected final SimpleHashTable<MapEntry<K, V>> entries;
 

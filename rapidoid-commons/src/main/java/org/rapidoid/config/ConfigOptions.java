@@ -1,5 +1,6 @@
 package org.rapidoid.config;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -28,7 +29,7 @@ import java.util.List;
  * @author Nikolche Mihajlovski
  * @since 5.0.2
  */
-public class ConfigOptions {
+public class ConfigOptions extends RapidoidThing {
 
 	public static final List<ConfigOption> ALL = configOptions();
 

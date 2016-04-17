@@ -1,5 +1,21 @@
 package org.rapidoid.goodies;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.http.HttpUtils;
+import org.rapidoid.jpa.JPA;
+import org.rapidoid.log.Log;
+import org.rapidoid.security.Roles;
+import org.rapidoid.setup.Admin;
+import org.rapidoid.setup.On;
+import org.rapidoid.setup.Setup;
+import org.rapidoid.util.Msc;
+import org.rapidoid.web.X;
+
+import java.lang.management.ManagementFactory;
+
 /*
  * #%L
  * rapidoid-web
@@ -20,24 +36,9 @@ package org.rapidoid.goodies;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.http.HttpUtils;
-import org.rapidoid.jpa.JPA;
-import org.rapidoid.log.Log;
-import org.rapidoid.security.Roles;
-import org.rapidoid.setup.Admin;
-import org.rapidoid.setup.On;
-import org.rapidoid.setup.Setup;
-import org.rapidoid.util.Msc;
-import org.rapidoid.web.X;
-
-import java.lang.management.ManagementFactory;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Goodies {
+public class Goodies extends RapidoidThing {
 
 	public static MultiDetailsHandler memoryPool() {
 		return new MultiDetailsHandler("Memory pool", ManagementFactory.getMemoryPoolMXBeans(), "name", "type", "memoryManagerNames", "usage", "peakUsage", "collectionUsage");

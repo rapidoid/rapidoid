@@ -1,5 +1,6 @@
 package org.rapidoid.http;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -35,7 +36,7 @@ import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class PathPattern {
+public class PathPattern extends RapidoidThing {
 
 	static final Pattern PATH_PARAM_REGEX = Pattern.compile("\\{([^\\}]+)\\}");
 

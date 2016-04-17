@@ -1,5 +1,17 @@
 package org.rapidoid.util;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,20 +32,9 @@ package org.rapidoid.util;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class RapidoidProcess {
+public class RapidoidProcess extends RapidoidThing {
 
 	private final String[] command;
 

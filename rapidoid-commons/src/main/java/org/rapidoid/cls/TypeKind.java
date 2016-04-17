@@ -1,5 +1,12 @@
 package org.rapidoid.cls;
 
+import org.rapidoid.u.U;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-commons
@@ -19,13 +26,6 @@ package org.rapidoid.cls;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.u.U;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 interface TypeConstants {
 

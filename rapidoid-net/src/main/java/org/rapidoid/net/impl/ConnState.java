@@ -1,5 +1,12 @@
 package org.rapidoid.net.impl;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.util.Resetable;
+
+import java.util.List;
+
 /*
  * #%L
  * rapidoid-net
@@ -20,15 +27,9 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.util.Resetable;
-
-import java.util.List;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class ConnState implements Resetable {
+public class ConnState extends RapidoidThing implements Resetable {
 
 	public volatile long n;
 

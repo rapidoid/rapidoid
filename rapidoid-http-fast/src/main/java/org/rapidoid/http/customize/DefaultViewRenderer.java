@@ -1,5 +1,13 @@
 package org.rapidoid.http.customize;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.io.Res;
+import org.rapidoid.render.Templates;
+
+import java.io.OutputStream;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -20,16 +28,9 @@ package org.rapidoid.http.customize;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.io.Res;
-import org.rapidoid.render.Templates;
-
-import java.io.OutputStream;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DefaultViewRenderer implements ViewRenderer {
+public class DefaultViewRenderer extends RapidoidThing implements ViewRenderer {
 
 	@Override
 	public boolean render(String viewName, Object[] model, OutputStream out) throws Exception {

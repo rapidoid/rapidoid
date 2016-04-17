@@ -1,5 +1,14 @@
 package org.rapidoid.commons;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+
+import java.util.Collection;
+import java.util.List;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,17 +29,9 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-
-import java.util.Collection;
-import java.util.List;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")
-public class AnyObj {
+public class AnyObj extends RapidoidThing {
 
 	public static boolean contains(Object arrOrColl, Object value) {
 		if (arrOrColl instanceof Object[]) {

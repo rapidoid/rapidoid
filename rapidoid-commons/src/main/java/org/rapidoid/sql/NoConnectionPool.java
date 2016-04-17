@@ -1,5 +1,12 @@
 package org.rapidoid.sql;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,15 +27,9 @@ package org.rapidoid.sql;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class NoConnectionPool implements ConnectionPool {
+public class NoConnectionPool extends RapidoidThing implements ConnectionPool {
 
 	@Override
 	public Connection getConnection(String jdbcUrl) throws SQLException {

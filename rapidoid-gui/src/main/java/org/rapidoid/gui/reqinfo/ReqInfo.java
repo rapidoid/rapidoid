@@ -1,5 +1,10 @@
 package org.rapidoid.gui.reqinfo;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+
 /*
  * #%L
  * rapidoid-gui
@@ -20,13 +25,9 @@ package org.rapidoid.gui.reqinfo;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")
-public class ReqInfo {
+public class ReqInfo extends RapidoidThing {
 
 	private static final NoReqInfo NO_REQ_INFO = new NoReqInfo();
 

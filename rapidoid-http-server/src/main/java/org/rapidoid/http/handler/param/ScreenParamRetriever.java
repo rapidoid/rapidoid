@@ -1,5 +1,10 @@
 package org.rapidoid.http.handler.param;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+
 /*
  * #%L
  * rapidoid-http-server
@@ -20,13 +25,9 @@ package org.rapidoid.http.handler.param;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class ScreenParamRetriever implements ParamRetriever {
+public class ScreenParamRetriever extends RapidoidThing implements ParamRetriever {
 
 	@Override
 	public Object getParamValue(Req req) {

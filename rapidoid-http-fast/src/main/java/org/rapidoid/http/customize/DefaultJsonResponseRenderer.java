@@ -1,5 +1,12 @@
 package org.rapidoid.http.customize;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.data.JSON;
+
+import java.io.OutputStream;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -20,15 +27,9 @@ package org.rapidoid.http.customize;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.data.JSON;
-
-import java.io.OutputStream;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DefaultJsonResponseRenderer implements JsonResponseRenderer {
+public class DefaultJsonResponseRenderer extends RapidoidThing implements JsonResponseRenderer {
 
 	@Override
 	public void renderJson(Object value, OutputStream out) {

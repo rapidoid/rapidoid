@@ -1,5 +1,15 @@
 package org.rapidoid.commons;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.u.U;
+
+import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,18 +30,9 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.u.U;
-
-import java.util.Iterator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.4")
-public class Str {
+public class Str extends RapidoidThing {
 
 	// regex taken from
 	// http://stackoverflow.com/questions/2559759/how-do-i-convert-camelcase-into-human-readable-names-in-java

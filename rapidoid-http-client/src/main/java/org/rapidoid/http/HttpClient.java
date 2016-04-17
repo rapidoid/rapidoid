@@ -1,5 +1,19 @@
 package org.rapidoid.http;
 
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Coll;
+import org.rapidoid.concurrent.Callback;
+import org.rapidoid.concurrent.Future;
+import org.rapidoid.data.JSON;
+import org.rapidoid.io.Upload;
+import org.rapidoid.u.U;
+
+import java.util.List;
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-http-client
@@ -20,22 +34,9 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Coll;
-import org.rapidoid.concurrent.Callback;
-import org.rapidoid.concurrent.Future;
-import org.rapidoid.data.JSON;
-import org.rapidoid.io.Upload;
-import org.rapidoid.u.U;
-
-import java.util.List;
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HttpClient {
+public class HttpClient extends RapidoidThing {
 
 	private volatile HttpVerb verb = null;
 

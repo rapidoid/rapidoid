@@ -1,5 +1,23 @@
 package org.rapidoid.gui;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Env;
+import org.rapidoid.commons.RapidoidInfo;
+import org.rapidoid.config.Conf;
+import org.rapidoid.gui.base.AbstractWidget;
+import org.rapidoid.gui.menu.PageMenu;
+import org.rapidoid.gui.reqinfo.IReqInfo;
+import org.rapidoid.gui.reqinfo.ReqInfo;
+import org.rapidoid.html.Tag;
+import org.rapidoid.render.Template;
+import org.rapidoid.render.Templates;
+import org.rapidoid.u.U;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-gui
@@ -19,24 +37,6 @@ package org.rapidoid.gui;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Env;
-import org.rapidoid.commons.RapidoidInfo;
-import org.rapidoid.config.Conf;
-import org.rapidoid.gui.base.AbstractWidget;
-import org.rapidoid.gui.menu.PageMenu;
-import org.rapidoid.gui.reqinfo.IReqInfo;
-import org.rapidoid.gui.reqinfo.ReqInfo;
-import org.rapidoid.html.Tag;
-import org.rapidoid.render.Template;
-import org.rapidoid.render.Templates;
-import org.rapidoid.u.U;
-
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")

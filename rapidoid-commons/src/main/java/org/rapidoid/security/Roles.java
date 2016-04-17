@@ -1,5 +1,6 @@
 package org.rapidoid.security;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
@@ -25,7 +26,7 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")
-public class Roles {
+public class Roles extends RapidoidThing {
 
 	public static final String ANYBODY = "anybody";
 

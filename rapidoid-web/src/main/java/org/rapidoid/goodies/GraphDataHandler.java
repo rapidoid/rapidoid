@@ -1,5 +1,15 @@
 package org.rapidoid.goodies;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.TimeSeries;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.http.Req;
+import org.rapidoid.insight.Metrics;
+import org.rapidoid.lambda.FourParamLambda;
+
+import java.util.Collections;
+
 /*
  * #%L
  * rapidoid-web
@@ -20,18 +30,9 @@ package org.rapidoid.goodies;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.TimeSeries;
-import org.rapidoid.http.Req;
-import org.rapidoid.insight.Metrics;
-import org.rapidoid.lambda.FourParamLambda;
-
-import java.util.Collections;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class GraphDataHandler implements FourParamLambda<Object, Req, Double, Double, String> {
+public class GraphDataHandler extends GUI implements FourParamLambda<Object, Req, Double, Double, String> {
 
 	@Override
 	public Object execute(Req req, Double from, Double to, String id) throws Exception {

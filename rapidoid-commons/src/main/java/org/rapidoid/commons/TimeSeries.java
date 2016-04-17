@@ -1,5 +1,12 @@
 package org.rapidoid.commons;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
+import java.util.*;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,15 +27,9 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
-import java.util.*;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class TimeSeries {
+public class TimeSeries extends RapidoidThing {
 
 	private static final int OVERVIEW_SIZE_THRESHOLD = 120;
 

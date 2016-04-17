@@ -1,5 +1,12 @@
 package org.rapidoid.model.impl;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.model.Item;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
+
 /*
  * #%L
  * rapidoid-gui
@@ -19,13 +26,6 @@ package org.rapidoid.model.impl;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.model.Item;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.ParameterizedType;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.2.0")

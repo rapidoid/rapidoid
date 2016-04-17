@@ -1,5 +1,12 @@
 package org.rapidoid.io.watch;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
+
+import java.util.Queue;
+
 /*
  * #%L
  * rapidoid-watch
@@ -20,15 +27,9 @@ package org.rapidoid.io.watch;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
-
-import java.util.Queue;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class FilesystemChangeQueueListener implements FilesystemChangeListener {
+public class FilesystemChangeQueueListener extends RapidoidThing implements FilesystemChangeListener {
 
 	private final Queue<String> created;
 	private final Queue<String> modified;

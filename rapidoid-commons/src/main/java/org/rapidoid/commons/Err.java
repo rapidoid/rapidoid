@@ -1,5 +1,10 @@
 package org.rapidoid.commons;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,13 +25,9 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Err {
+public class Err extends RapidoidThing {
 
 	public static final String MSG_INTENTIONAL = "Intentional error!";
 

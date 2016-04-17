@@ -22,6 +22,7 @@ package org.rapidoid.oauth;
 
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
@@ -37,7 +38,7 @@ import org.rapidoid.value.Value;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class OAuth {
+public class OAuth extends RapidoidThing {
 
 	static final String NO_ID = "NO-CLIENT-ID-CONFIGURED";
 	static final String NO_SECRET = "NO-CLIENT-SECRET-CONFIGURED";

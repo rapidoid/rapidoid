@@ -1,5 +1,11 @@
 package org.rapidoid.beany;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
+
 /*
  * #%L
  * rapidoid-commons
@@ -19,12 +25,6 @@ package org.rapidoid.beany;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.io.Serializable;
-import java.lang.annotation.Annotation;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

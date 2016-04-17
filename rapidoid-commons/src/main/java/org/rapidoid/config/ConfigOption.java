@@ -1,5 +1,7 @@
 package org.rapidoid.config;
 
+import org.rapidoid.RapidoidThing;
+
 /*
  * #%L
  * rapidoid-commons
@@ -24,7 +26,7 @@ package org.rapidoid.config;
  * @author Nikolche Mihajlovski
  * @since 5.0.2
  */
-public class ConfigOption {
+public class ConfigOption extends RapidoidThing {
 
 	public final String name;
 

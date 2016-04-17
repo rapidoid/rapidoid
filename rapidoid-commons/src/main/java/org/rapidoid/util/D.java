@@ -1,5 +1,6 @@
 package org.rapidoid.util;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
@@ -29,7 +30,7 @@ import java.util.Map.Entry;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.4.0")
-public class D {
+public class D extends RapidoidThing {
 
 	private D() {
 	}

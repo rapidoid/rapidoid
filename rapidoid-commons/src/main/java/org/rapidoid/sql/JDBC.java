@@ -1,5 +1,14 @@
 package org.rapidoid.sql;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
+import java.sql.*;
+import java.util.List;
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,17 +29,9 @@ package org.rapidoid.sql;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
-import java.sql.*;
-import java.util.List;
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class JDBC {
+public class JDBC extends RapidoidThing {
 
 	private static volatile JdbcClient DEFAULT;
 

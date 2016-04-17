@@ -1,5 +1,14 @@
 package org.rapidoid.jpa;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.metamodel.Metamodel;
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,17 +29,9 @@ package org.rapidoid.jpa;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.metamodel.Metamodel;
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class SharedEntityManagerFactoryProxy implements EntityManagerFactory {
+public class SharedEntityManagerFactoryProxy extends RapidoidThing implements EntityManagerFactory {
 
 	public static final SharedEntityManagerFactoryProxy INSTANCE = new SharedEntityManagerFactoryProxy();
 

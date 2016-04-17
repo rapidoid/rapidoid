@@ -1,5 +1,6 @@
 package org.rapidoid.concurrent;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.concurrent.impl.PromiseImpl;
 
 /*
@@ -26,7 +27,7 @@ import org.rapidoid.concurrent.impl.PromiseImpl;
  * @author Nikolche Mihajlovski
  * @since 4.1.0
  */
-public class Promises {
+public class Promises extends RapidoidThing {
 
 	public static <T> Promise<T> create() {
 		return new PromiseImpl<T>();

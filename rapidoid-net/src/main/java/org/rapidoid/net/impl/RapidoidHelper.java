@@ -1,5 +1,18 @@
 package org.rapidoid.net.impl;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.data.KeyValueRanges;
+import org.rapidoid.data.Ranges;
+import org.rapidoid.pool.Pool;
+import org.rapidoid.pool.Pools;
+import org.rapidoid.wrap.*;
+
+import java.util.Random;
+import java.util.concurrent.Callable;
+
 /*
  * #%L
  * rapidoid-net
@@ -20,18 +33,6 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.data.KeyValueRanges;
-import org.rapidoid.data.Ranges;
-import org.rapidoid.pool.Pool;
-import org.rapidoid.pool.Pools;
-import org.rapidoid.wrap.*;
-
-import java.util.Random;
-import java.util.concurrent.Callable;
-
 /**
  * Helpers are instantiated per worker node (for thread-safe use), so they contain various data structures that can be
  * used as temporary data holders when implementing protocols, to avoid instantiating objects for each protocol
@@ -39,7 +40,7 @@ import java.util.concurrent.Callable;
  */
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class RapidoidHelper {
+public class RapidoidHelper extends RapidoidThing {
 
 	public final Random RND = new Random();
 

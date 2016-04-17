@@ -1,5 +1,12 @@
 package org.rapidoid.activity;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicLong;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,15 +27,9 @@ package org.rapidoid.activity;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicLong;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class RapidoidThreadFactory implements ThreadFactory {
+public class RapidoidThreadFactory extends RapidoidThing implements ThreadFactory {
 
 	private final String name;
 

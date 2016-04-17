@@ -1,5 +1,42 @@
 package org.rapidoid.http;
 
+import org.apache.http.*;
+import org.apache.http.client.RedirectStrategy;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.*;
+import org.apache.http.concurrent.FutureCallback;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.DefaultConnectionReuseStrategy;
+import org.apache.http.impl.NoConnectionReuseStrategy;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.DefaultRedirectStrategy;
+import org.apache.http.impl.cookie.BasicClientCookie;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.nio.entity.NByteArrayEntity;
+import org.apache.http.protocol.HttpContext;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.activity.RapidoidThreadFactory;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
+import org.rapidoid.commons.Str;
+import org.rapidoid.concurrent.*;
+import org.rapidoid.io.IO;
+import org.rapidoid.io.Upload;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CancellationException;
+
 /*
  * #%L
  * rapidoid-http-client
@@ -20,45 +57,9 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.apache.http.*;
-import org.apache.http.client.RedirectStrategy;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.*;
-import org.apache.http.concurrent.FutureCallback;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.DefaultConnectionReuseStrategy;
-import org.apache.http.impl.NoConnectionReuseStrategy;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.DefaultRedirectStrategy;
-import org.apache.http.impl.cookie.BasicClientCookie;
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
-import org.apache.http.impl.nio.client.HttpAsyncClients;
-import org.apache.http.nio.entity.NByteArrayEntity;
-import org.apache.http.protocol.HttpContext;
-import org.rapidoid.activity.RapidoidThreadFactory;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Err;
-import org.rapidoid.commons.Str;
-import org.rapidoid.concurrent.*;
-import org.rapidoid.io.Upload;
-import org.rapidoid.io.IO;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CancellationException;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HttpClientUtil {
+public class HttpClientUtil extends RapidoidThing {
 
 	private static final RedirectStrategy NO_REDIRECTS = new RedirectStrategy() {
 		@Override

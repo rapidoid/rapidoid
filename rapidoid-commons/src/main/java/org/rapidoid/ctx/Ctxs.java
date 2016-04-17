@@ -1,5 +1,6 @@
 package org.rapidoid.ctx;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Coll;
@@ -29,7 +30,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class Ctxs {
+public class Ctxs extends RapidoidThing {
 
 	private static final ThreadLocal<Ctx> CTXS = new ThreadLocal<Ctx>();
 

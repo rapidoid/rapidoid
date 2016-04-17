@@ -1,5 +1,15 @@
 package org.rapidoid.io;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Err;
+import org.rapidoid.lambda.Lmbd;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.lambda.Predicate;
+
+import java.security.SecureClassLoader;
+
 /*
  * #%L
  * rapidoid-commons
@@ -19,16 +29,6 @@ package org.rapidoid.io;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Err;
-import org.rapidoid.lambda.Lmbd;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.lambda.Predicate;
-
-import java.security.SecureClassLoader;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

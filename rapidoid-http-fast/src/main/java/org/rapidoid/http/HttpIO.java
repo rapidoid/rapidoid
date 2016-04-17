@@ -1,5 +1,19 @@
 package org.rapidoid.http;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.Buf;
+import org.rapidoid.commons.Dates;
+import org.rapidoid.commons.MediaType;
+import org.rapidoid.data.JSON;
+import org.rapidoid.data.Range;
+import org.rapidoid.http.customize.ErrorHandler;
+import org.rapidoid.io.Res;
+import org.rapidoid.log.Log;
+import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.util.Constants;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -20,22 +34,9 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.Buf;
-import org.rapidoid.commons.Dates;
-import org.rapidoid.commons.MediaType;
-import org.rapidoid.data.JSON;
-import org.rapidoid.data.Range;
-import org.rapidoid.http.customize.ErrorHandler;
-import org.rapidoid.io.Res;
-import org.rapidoid.log.Log;
-import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.util.Constants;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HttpIO {
+public class HttpIO extends RapidoidThing {
 
 	public static final byte[] HTTP_200_OK = "HTTP/1.1 200 OK\r\n".getBytes();
 

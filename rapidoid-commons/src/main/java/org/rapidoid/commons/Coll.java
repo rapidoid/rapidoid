@@ -1,5 +1,14 @@
 package org.rapidoid.commons;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.Mapper;
+import org.rapidoid.u.U;
+
+import java.util.*;
+import java.util.concurrent.*;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,17 +29,9 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.lambda.Mapper;
-import org.rapidoid.u.U;
-
-import java.util.*;
-import java.util.concurrent.*;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Coll {
+public class Coll extends RapidoidThing {
 	@SuppressWarnings("unchecked")
 	public static <T> Set<T> synchronizedSet(T... values) {
 		return (Set<T>) Collections.synchronizedSet(U.set(values));

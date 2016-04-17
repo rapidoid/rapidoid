@@ -1,5 +1,19 @@
 package org.rapidoid.io;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Str;
+import org.rapidoid.u.U;
+
+import java.io.*;
+import java.net.URL;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileChannel.MapMode;
+import java.util.List;
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,22 +34,9 @@ package org.rapidoid.io;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Str;
-import org.rapidoid.u.U;
-
-import java.io.*;
-import java.net.URL;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileChannel.MapMode;
-import java.util.List;
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class IO {
+public class IO extends RapidoidThing {
 
 	public static URL resource(String filename) {
 		return classLoader().getResource(filename);

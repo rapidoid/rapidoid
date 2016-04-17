@@ -1,5 +1,11 @@
 package org.rapidoid.config;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+import org.rapidoid.value.ValueStore;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,14 +26,9 @@ package org.rapidoid.config;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-import org.rapidoid.value.ValueStore;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class ConfigValueStore<T> implements ValueStore<T> {
+public class ConfigValueStore<T> extends RapidoidThing implements ValueStore<T> {
 
 	private final Config config;
 

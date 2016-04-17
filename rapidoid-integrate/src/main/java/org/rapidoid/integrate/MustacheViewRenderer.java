@@ -1,5 +1,18 @@
 package org.rapidoid.integrate;
 
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.customize.ViewRenderer;
+import org.rapidoid.io.Res;
+import org.rapidoid.render.Templates;
+
+import java.io.OutputStream;
+import java.io.PrintWriter;
+
 /*
  * #%L
  * rapidoid-integrate
@@ -20,21 +33,9 @@ package org.rapidoid.integrate;
  * #L%
  */
 
-import com.github.mustachejava.DefaultMustacheFactory;
-import com.github.mustachejava.Mustache;
-import com.github.mustachejava.MustacheFactory;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.customize.ViewRenderer;
-import org.rapidoid.io.Res;
-import org.rapidoid.render.Templates;
-
-import java.io.OutputStream;
-import java.io.PrintWriter;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class MustacheViewRenderer implements ViewRenderer {
+public class MustacheViewRenderer extends RapidoidThing implements ViewRenderer {
 
 	private final MustacheFactory mf = new DefaultMustacheFactory();
 

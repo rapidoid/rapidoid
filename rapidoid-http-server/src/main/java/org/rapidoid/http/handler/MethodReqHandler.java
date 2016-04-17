@@ -1,5 +1,17 @@
 package org.rapidoid.http.handler;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.RouteOptions;
+import org.rapidoid.http.handler.lambda.NParamMethodHandler;
+import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.u.U;
+
+import java.lang.reflect.Method;
+
 /*
  * #%L
  * rapidoid-http-server
@@ -19,18 +31,6 @@ package org.rapidoid.http.handler;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.RouteOptions;
-import org.rapidoid.http.handler.lambda.NParamMethodHandler;
-import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.u.U;
-
-import java.lang.reflect.Method;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

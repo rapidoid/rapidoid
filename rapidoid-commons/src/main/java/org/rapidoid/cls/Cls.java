@@ -4,6 +4,7 @@ import javassist.*;
 import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.commons.*;
 import org.rapidoid.io.IO;
@@ -43,7 +44,7 @@ import java.util.regex.Pattern;
  * @author Nikolche Mihajlovski
  * @since 2.0.0
  */
-public class Cls {
+public class Cls extends RapidoidThing {
 
 	private static Pattern JRE_CLASS_PATTERN = Pattern
 			.compile("^(java|javax|javafx|com\\.sun|sun|com\\.oracle|oracle|jdk|org\\.omg|org\\.w3c).*");
@@ -708,6 +709,10 @@ public class Cls {
 
 	public static boolean isRapidoidClass(String canonicalClassName) {
 		return RAPIDOID_CLASSES.contains(canonicalClassName);
+	}
+
+	public static Set<String> getRapidoidClasses() {
+		return RAPIDOID_CLASSES;
 	}
 
 	public static boolean isRapidoidClass(Class<?> clazz) {

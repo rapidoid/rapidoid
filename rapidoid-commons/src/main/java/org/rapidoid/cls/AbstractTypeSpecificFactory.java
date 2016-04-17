@@ -1,5 +1,11 @@
 package org.rapidoid.cls;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
+import org.rapidoid.u.U;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,14 +26,9 @@ package org.rapidoid.cls;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Err;
-import org.rapidoid.u.U;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public abstract class AbstractTypeSpecificFactory<T> implements TypeSpecificFactory<T> {
+public abstract class AbstractTypeSpecificFactory<T> extends RapidoidThing implements TypeSpecificFactory<T> {
 
 	protected Object create(T context, TypeKind kind) {
 		switch (kind) {

@@ -1,5 +1,6 @@
 package org.rapidoid.io;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Coll;
@@ -38,7 +39,7 @@ import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class Res {
+public class Res extends RapidoidThing {
 
 	private static final ConcurrentMap<ResKey, Res> FILES = Coll.concurrentMap();
 

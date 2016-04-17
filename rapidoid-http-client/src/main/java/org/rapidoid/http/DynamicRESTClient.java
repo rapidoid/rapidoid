@@ -1,5 +1,21 @@
 package org.rapidoid.http;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.OfType;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.beany.Metadata;
+import org.rapidoid.commons.Arr;
+import org.rapidoid.concurrent.Callback;
+import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
+import org.rapidoid.lambda.Dynamic;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Constants;
+
+import java.lang.reflect.Method;
+import java.util.concurrent.Future;
+
 /*
  * #%L
  * rapidoid-http-client
@@ -20,24 +36,9 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.OfType;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.beany.Metadata;
-import org.rapidoid.commons.Arr;
-import org.rapidoid.concurrent.Callback;
-import org.rapidoid.config.Conf;
-import org.rapidoid.config.Config;
-import org.rapidoid.lambda.Dynamic;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Constants;
-
-import java.lang.reflect.Method;
-import java.util.concurrent.Future;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.4.0")
-public class DynamicRESTClient implements Dynamic, Constants {
+public class DynamicRESTClient extends RapidoidThing implements Dynamic, Constants {
 
 	private final Class<?> clientInterface;
 

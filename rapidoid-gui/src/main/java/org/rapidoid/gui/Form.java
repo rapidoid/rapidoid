@@ -1,5 +1,22 @@
 package org.rapidoid.gui;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.AnyObj;
+import org.rapidoid.commons.Err;
+import org.rapidoid.gui.base.AbstractWidget;
+import org.rapidoid.html.FieldType;
+import org.rapidoid.html.FormLayout;
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.tag.FormTag;
+import org.rapidoid.model.Item;
+import org.rapidoid.model.Property;
+import org.rapidoid.u.U;
+import org.rapidoid.var.Var;
+
+import java.util.Collection;
+import java.util.List;
+
 /*
  * #%L
  * rapidoid-gui
@@ -19,23 +36,6 @@ package org.rapidoid.gui;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.AnyObj;
-import org.rapidoid.commons.Err;
-import org.rapidoid.gui.base.AbstractWidget;
-import org.rapidoid.html.FieldType;
-import org.rapidoid.html.FormLayout;
-import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.FormTag;
-import org.rapidoid.model.Item;
-import org.rapidoid.model.Property;
-import org.rapidoid.u.U;
-import org.rapidoid.var.Var;
-
-import java.util.Collection;
-import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

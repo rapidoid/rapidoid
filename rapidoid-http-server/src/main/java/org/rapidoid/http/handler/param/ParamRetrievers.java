@@ -1,5 +1,21 @@
 package org.rapidoid.http.handler.param;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.*;
+import org.rapidoid.beany.Metadata;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.Err;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.Resp;
+import org.rapidoid.http.Screen;
+import org.rapidoid.http.customize.Customization;
+import org.rapidoid.io.Upload;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+
+import java.io.File;
+import java.lang.annotation.Annotation;
+
 /*
  * #%L
  * rapidoid-http-server
@@ -20,24 +36,9 @@ package org.rapidoid.http.handler.param;
  * #L%
  */
 
-import org.rapidoid.annotation.*;
-import org.rapidoid.beany.Metadata;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.Err;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.Resp;
-import org.rapidoid.http.Screen;
-import org.rapidoid.http.customize.Customization;
-import org.rapidoid.io.Upload;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-
-import java.io.File;
-import java.lang.annotation.Annotation;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class ParamRetrievers {
+public class ParamRetrievers extends RapidoidThing {
 
 	public static ParamRetriever createParamRetriever(Customization customization, Class<?> type, String name, Annotation[] annotations) {
 

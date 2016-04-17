@@ -1,5 +1,6 @@
 package org.rapidoid.ctx;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Coll;
@@ -30,7 +31,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Ctx implements CtxMetadata {
+public class Ctx extends RapidoidThing implements CtxMetadata {
 
 	private static final AtomicLong ID_COUNTER = new AtomicLong();
 

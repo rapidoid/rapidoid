@@ -1,5 +1,21 @@
 package org.rapidoid.job;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.activity.RapidoidThreadFactory;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.concurrent.Callback;
+import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
+import org.rapidoid.config.RapidoidInitializer;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.ctx.WithContext;
+import org.rapidoid.u.U;
+
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicLong;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,24 +36,9 @@ package org.rapidoid.job;
  * #L%
  */
 
-import org.rapidoid.activity.RapidoidThreadFactory;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.concurrent.Callback;
-import org.rapidoid.config.Conf;
-import org.rapidoid.config.Config;
-import org.rapidoid.config.RapidoidInitializer;
-import org.rapidoid.ctx.Ctx;
-import org.rapidoid.ctx.Ctxs;
-import org.rapidoid.ctx.WithContext;
-import org.rapidoid.u.U;
-
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicLong;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class Jobs {
+public class Jobs extends RapidoidThing {
 
 	public static final Config JOBS = Conf.JOBS;
 

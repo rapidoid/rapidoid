@@ -1,5 +1,15 @@
 package org.rapidoid.setup;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.lambda.Operation;
+import org.rapidoid.log.Log;
+import org.rapidoid.scan.Scan;
+
+import java.lang.annotation.Annotation;
+import java.util.List;
+
 /*
  * #%L
  * rapidoid-http-server
@@ -20,18 +30,9 @@ package org.rapidoid.setup;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.lambda.Operation;
-import org.rapidoid.log.Log;
-import org.rapidoid.scan.Scan;
-
-import java.lang.annotation.Annotation;
-import java.util.List;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class OnAnnotated {
+public class OnAnnotated extends RapidoidThing {
 
 	private final Class<? extends Annotation>[] annotated;
 

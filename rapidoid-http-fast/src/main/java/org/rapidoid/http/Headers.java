@@ -1,5 +1,9 @@
 package org.rapidoid.http;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -20,12 +24,9 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Headers {
+public class Headers extends RapidoidThing {
 
 	public static final String CONTENT_TYPE = "Content-Type";
 	public static final String CONTENT_DISPOSITION = "Content-Disposition";

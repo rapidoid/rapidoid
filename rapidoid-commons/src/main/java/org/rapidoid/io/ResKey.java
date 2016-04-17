@@ -1,5 +1,11 @@
 package org.rapidoid.io;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.util.Arrays;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,14 +26,9 @@ package org.rapidoid.io;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.util.Arrays;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")
-public class ResKey {
+public class ResKey extends RapidoidThing {
 
 	final String filename;
 	final String[] possibleLocations;

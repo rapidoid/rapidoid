@@ -1,5 +1,10 @@
 package org.rapidoid.http.customize;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.security.Auth;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -20,13 +25,9 @@ package org.rapidoid.http.customize;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.security.Auth;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DefaultLoginProvider implements LoginProvider {
+public class DefaultLoginProvider extends RapidoidThing implements LoginProvider {
 
 	@Override
 	public boolean login(String username, String password) {

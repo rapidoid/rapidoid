@@ -1,5 +1,6 @@
 package org.rapidoid.net.impl;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.net.abstracts.Channel;
@@ -26,7 +27,7 @@ import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class IgnorantConnectionListener implements CtxListener {
+public class IgnorantConnectionListener extends RapidoidThing implements CtxListener {
 
 	@Override
 	public void onDone(Channel conn, Object tag) {

@@ -1,5 +1,9 @@
 package org.rapidoid.util;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,12 +24,9 @@ package org.rapidoid.util;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class ErrCodeAndMsg {
+public class ErrCodeAndMsg extends RapidoidThing {
 
 	private final int code;
 	private final String msg;

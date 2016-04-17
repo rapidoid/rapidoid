@@ -1,5 +1,15 @@
 package org.rapidoid.http;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
+import org.rapidoid.concurrent.Callback;
+import org.rapidoid.concurrent.Future;
+import org.rapidoid.config.Config;
+import org.rapidoid.config.RapidoidInitializer;
+import org.rapidoid.util.Msc;
+
 /*
  * #%L
  * rapidoid-http-client
@@ -20,18 +30,9 @@ package org.rapidoid.http;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Err;
-import org.rapidoid.concurrent.Callback;
-import org.rapidoid.concurrent.Future;
-import org.rapidoid.config.Config;
-import org.rapidoid.config.RapidoidInitializer;
-import org.rapidoid.util.Msc;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public class REST {
+public class REST extends RapidoidThing {
 
 	static {
 		RapidoidInitializer.initialize();

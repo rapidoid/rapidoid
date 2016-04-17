@@ -1,5 +1,13 @@
 package org.rapidoid.gui.menu;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.u.U;
+
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-gui
@@ -20,16 +28,9 @@ package org.rapidoid.gui.menu;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.u.U;
-
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
-public abstract class AbstractPageMenuItem {
+public abstract class AbstractPageMenuItem extends RapidoidThing {
 
 	protected String caption;
 

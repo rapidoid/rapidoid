@@ -1,5 +1,10 @@
 package org.rapidoid.goodies;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.setup.Setup;
+
 /*
  * #%L
  * rapidoid-web
@@ -20,13 +25,9 @@ package org.rapidoid.goodies;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.Setup;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class RapidoidGoodiesModule {
+public class RapidoidGoodiesModule extends RapidoidThing {
 
 	public RapidoidGoodiesModule(Setup setup) {
 		Goodies.bootstrap(setup);

@@ -1,5 +1,19 @@
 package org.rapidoid.io.watch;
 
+import org.rapidoid.activity.AbstractLoopThread;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Reload;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /*
  * #%L
  * rapidoid-watch
@@ -19,20 +33,6 @@ package org.rapidoid.io.watch;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.activity.AbstractLoopThread;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Reload;
-
-import java.io.File;
-import java.util.Collection;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

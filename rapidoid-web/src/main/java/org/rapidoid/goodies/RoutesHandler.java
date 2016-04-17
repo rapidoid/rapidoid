@@ -1,5 +1,21 @@
 package org.rapidoid.goodies;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.tag.TableTag;
+import org.rapidoid.http.HttpUtils;
+import org.rapidoid.http.HttpVerb;
+import org.rapidoid.http.Route;
+import org.rapidoid.http.RouteConfig;
+import org.rapidoid.setup.Admin;
+import org.rapidoid.setup.On;
+import org.rapidoid.u.U;
+
+import java.util.*;
+import java.util.concurrent.Callable;
+
 /*
  * #%L
  * rapidoid-web
@@ -19,22 +35,6 @@ package org.rapidoid.goodies;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.html.Tag;
-import org.rapidoid.html.tag.TableTag;
-import org.rapidoid.http.HttpUtils;
-import org.rapidoid.http.HttpVerb;
-import org.rapidoid.http.Route;
-import org.rapidoid.http.RouteConfig;
-import org.rapidoid.setup.Admin;
-import org.rapidoid.setup.On;
-import org.rapidoid.u.U;
-
-import java.util.*;
-import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")

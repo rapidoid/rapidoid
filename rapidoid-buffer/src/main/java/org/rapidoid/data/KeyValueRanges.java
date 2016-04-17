@@ -1,5 +1,15 @@
 package org.rapidoid.data;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.Buf;
+import org.rapidoid.bytes.BytesUtil;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
+
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-buffer
@@ -20,18 +30,9 @@ package org.rapidoid.data;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.Buf;
-import org.rapidoid.bytes.BytesUtil;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
-
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class KeyValueRanges {
+public class KeyValueRanges extends RapidoidThing {
 
 	public final Range[] keys;
 

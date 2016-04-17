@@ -1,5 +1,7 @@
 package org.rapidoid.pool;
 
+import org.rapidoid.RapidoidThing;
+
 import java.util.concurrent.Callable;
 
 /*
@@ -26,7 +28,7 @@ import java.util.concurrent.Callable;
  * @author Nikolche Mihajlovski
  * @since 4.1.0
  */
-public class Pools {
+public class Pools extends RapidoidThing {
 
 	public static <T> Pool<T> create(String name, Callable<T> factory, int capacity) {
 		return new SynchronizedArrayPool<T>(name, factory, capacity);

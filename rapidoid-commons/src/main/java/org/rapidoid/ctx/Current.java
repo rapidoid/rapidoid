@@ -1,5 +1,12 @@
 package org.rapidoid.ctx;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
+
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,15 +27,9 @@ package org.rapidoid.ctx;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.u.U;
-
-import java.util.Set;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Current {
+public class Current extends RapidoidThing {
 
 	public static boolean hasContext() {
 		return Ctxs.get() != null;

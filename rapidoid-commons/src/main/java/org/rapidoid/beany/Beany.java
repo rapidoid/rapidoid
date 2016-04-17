@@ -1,5 +1,6 @@
 package org.rapidoid.beany;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.ToString;
@@ -42,7 +43,7 @@ import java.util.Map.Entry;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Beany {
+public class Beany extends RapidoidThing {
 
 	private static final String GETTER = "^(get|is)[A-Z].*";
 

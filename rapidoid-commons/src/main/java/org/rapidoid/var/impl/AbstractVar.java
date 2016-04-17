@@ -1,5 +1,14 @@
 package org.rapidoid.var.impl;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Coll;
+import org.rapidoid.u.U;
+import org.rapidoid.var.Var;
+
+import java.util.Set;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,17 +29,9 @@ package org.rapidoid.var.impl;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Coll;
-import org.rapidoid.u.U;
-import org.rapidoid.var.Var;
-
-import java.util.Set;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class AbstractVar<T> implements Var<T> {
+public abstract class AbstractVar<T> extends RapidoidThing implements Var<T> {
 
 	private static final long serialVersionUID = 6006051524799076017L;
 

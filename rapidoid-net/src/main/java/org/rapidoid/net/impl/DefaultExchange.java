@@ -1,5 +1,22 @@
 package org.rapidoid.net.impl;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.buffer.Buf;
+import org.rapidoid.buffer.BufProvider;
+import org.rapidoid.data.*;
+import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.net.abstracts.ProtocolContext;
+import org.rapidoid.u.U;
+import org.rapidoid.util.Constants;
+import org.rapidoid.util.Resetable;
+
+import java.io.File;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.util.concurrent.atomic.AtomicLong;
+
 /*
  * #%L
  * rapidoid-net
@@ -20,25 +37,9 @@ package org.rapidoid.net.impl;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.buffer.Buf;
-import org.rapidoid.buffer.BufProvider;
-import org.rapidoid.data.*;
-import org.rapidoid.net.abstracts.Channel;
-import org.rapidoid.net.abstracts.ProtocolContext;
-import org.rapidoid.u.U;
-import org.rapidoid.util.Constants;
-import org.rapidoid.util.Resetable;
-
-import java.io.File;
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.util.concurrent.atomic.AtomicLong;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class DefaultExchange<T> implements ProtocolContext<T>, BufProvider, Resetable, Constants {
+public abstract class DefaultExchange<T> extends RapidoidThing implements ProtocolContext<T>, BufProvider, Resetable, Constants {
 
 	protected Channel conn;
 

@@ -1,5 +1,12 @@
 package org.rapidoid.goodies;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.ReqRespHandler;
+import org.rapidoid.http.Resp;
+
 /*
  * #%L
  * rapidoid-web
@@ -20,15 +27,9 @@ package org.rapidoid.goodies;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.ReqRespHandler;
-import org.rapidoid.http.Resp;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class LoginHandler implements ReqRespHandler {
+public class LoginHandler extends RapidoidThing implements ReqRespHandler {
 
 	@Override
 	public Object execute(Req req, Resp resp) throws Exception {

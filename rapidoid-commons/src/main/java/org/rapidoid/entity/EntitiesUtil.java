@@ -1,5 +1,6 @@
 package org.rapidoid.entity;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.DbEntity;
 import org.rapidoid.annotation.Scaffold;
@@ -34,7 +35,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class EntitiesUtil {
+public class EntitiesUtil extends RapidoidThing {
 
 	@SuppressWarnings("unchecked")
 	public static synchronized <E> Class<E> getEntityType(String simpleTypeName) {

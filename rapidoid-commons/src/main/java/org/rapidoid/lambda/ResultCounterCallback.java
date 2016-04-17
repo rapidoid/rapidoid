@@ -1,5 +1,6 @@
 package org.rapidoid.lambda;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.concurrent.Callback;
@@ -31,7 +32,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Authors("Nikolche Mihajlovski")
 @Since("3.0.0")
-public class ResultCounterCallback<T> implements Callback<T> {
+public class ResultCounterCallback<T> extends RapidoidThing implements Callback<T> {
 
 	// FIXME refactor the built-in callbacks using decorators
 

@@ -1,6 +1,7 @@
 package org.rapidoid.jpa;
 
 import org.hibernate.proxy.HibernateProxy;
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -37,7 +38,7 @@ import java.util.Properties;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JPAUtil {
+public class JPAUtil extends RapidoidThing {
 
 	static volatile EntityManagerFactory emf;
 

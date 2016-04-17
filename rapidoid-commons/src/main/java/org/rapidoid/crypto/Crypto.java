@@ -1,5 +1,22 @@
 package org.rapidoid.crypto;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.config.Conf;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,25 +37,9 @@ package org.rapidoid.crypto;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.config.Conf;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
-import java.security.InvalidKeyException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.UUID;
-
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")
-public class Crypto {
+public class Crypto extends RapidoidThing {
 
 	private static final String RANDOM_SECRET = UUID.randomUUID().toString();
 	private static boolean warnedRandomSecret;

@@ -1,5 +1,14 @@
 package org.rapidoid.commons;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.lambda.Mapper;
+
+import java.util.Collection;
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,17 +29,9 @@ package org.rapidoid.commons;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.lambda.Mapper;
-
-import java.util.Collection;
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Deep {
+public class Deep extends RapidoidThing {
 
 	@SuppressWarnings("unchecked")
 	public static Object copyOf(Object source, Mapper<Object, ?> transformation) {

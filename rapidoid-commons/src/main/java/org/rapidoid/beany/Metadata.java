@@ -1,5 +1,6 @@
 package org.rapidoid.beany;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -31,7 +32,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Metadata {
+public class Metadata extends RapidoidThing {
 
 	public static Map<Class<?>, Annotation> classAnnotations(Class<?> clazz) {
 		clazz = Cls.unproxy(clazz);

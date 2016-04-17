@@ -1,5 +1,18 @@
 package org.rapidoid.jpa;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.metamodel.Metamodel;
+import java.util.List;
+import java.util.Map;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,21 +33,9 @@ package org.rapidoid.jpa;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.metamodel.Metamodel;
-import java.util.List;
-import java.util.Map;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class SharedContextAwareEntityManagerProxy implements EntityManager {
+public class SharedContextAwareEntityManagerProxy extends RapidoidThing implements EntityManager {
 
 	public static final SharedContextAwareEntityManagerProxy INSTANCE = new SharedContextAwareEntityManagerProxy();
 

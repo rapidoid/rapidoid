@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
+import org.rapidoid.RapidoidThing;
 
 import java.io.OutputStream;
 import java.util.Map;
@@ -34,7 +35,7 @@ import java.util.Map;
  * @author Nikolche Mihajlovski
  * @since 4.1.0
  */
-public class YAML {
+public class YAML extends RapidoidThing {
 
 	public static final ObjectMapper MAPPER = mapper();
 

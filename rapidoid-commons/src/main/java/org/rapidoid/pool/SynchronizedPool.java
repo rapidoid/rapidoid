@@ -20,11 +20,13 @@ package org.rapidoid.pool;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
+
 /**
  * @author Nikolche Mihajlovski
  * @since 4.1.0
  */
-public class SynchronizedPool<T> implements Pool<T> {
+public class SynchronizedPool<T> extends RapidoidThing implements Pool<T> {
 
 	private final Pool<T> pool;
 

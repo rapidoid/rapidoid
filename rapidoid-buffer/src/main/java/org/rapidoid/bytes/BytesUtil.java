@@ -1,5 +1,15 @@
 package org.rapidoid.bytes;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Err;
+import org.rapidoid.data.Range;
+import org.rapidoid.data.Ranges;
+import org.rapidoid.util.Constants;
+import org.rapidoid.util.Msc;
+import org.rapidoid.wrap.IntWrap;
+
 /*
  * #%L
  * rapidoid-buffer
@@ -20,18 +30,9 @@ package org.rapidoid.bytes;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Err;
-import org.rapidoid.data.Range;
-import org.rapidoid.data.Ranges;
-import org.rapidoid.util.Constants;
-import org.rapidoid.util.Msc;
-import org.rapidoid.wrap.IntWrap;
-
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class BytesUtil implements Constants {
+public class BytesUtil extends RapidoidThing implements Constants {
 
 	public static final byte[] CHARS_SWITCH_CASE = new byte[128];
 

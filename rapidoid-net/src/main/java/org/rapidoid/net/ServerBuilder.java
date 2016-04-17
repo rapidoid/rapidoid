@@ -1,5 +1,11 @@
 package org.rapidoid.net;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.net.impl.RapidoidHelper;
+import org.rapidoid.net.impl.RapidoidServerLoop;
+
 /*
  * #%L
  * rapidoid-net
@@ -20,14 +26,9 @@ package org.rapidoid.net;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.net.impl.RapidoidHelper;
-import org.rapidoid.net.impl.RapidoidServerLoop;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class ServerBuilder {
+public class ServerBuilder extends RapidoidThing {
 
 	private volatile String address = "0.0.0.0";
 

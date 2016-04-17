@@ -1,5 +1,14 @@
 package org.rapidoid.data;
 
+import org.rapidoid.RapidoidThing;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+
 /*
  * #%L
  * rapidoid-commons
@@ -20,18 +29,11 @@ package org.rapidoid.data;
  * #L%
  */
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-
 /**
  * @author Nikolche Mihajlovski
  * @since 4.4.0
  */
-public class XML {
+public class XML extends RapidoidThing {
 
 	private XML() {
 	}

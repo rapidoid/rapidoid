@@ -1,5 +1,10 @@
 package org.rapidoid.model;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.util.List;
+
 /*
  * #%L
  * rapidoid-gui
@@ -19,11 +24,6 @@ package org.rapidoid.model;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-
-import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")

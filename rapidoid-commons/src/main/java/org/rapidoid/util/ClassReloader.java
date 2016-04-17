@@ -1,5 +1,19 @@
 package org.rapidoid.util;
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
+import org.rapidoid.io.IO;
+import org.rapidoid.jpa.JPA;
+import org.rapidoid.log.Log;
+import org.rapidoid.u.U;
+
+import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.List;
+
 /*
  * #%L
  * rapidoid-commons
@@ -19,20 +33,6 @@ package org.rapidoid.util;
  * limitations under the License.
  * #L%
  */
-
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
-import org.rapidoid.io.IO;
-import org.rapidoid.jpa.JPA;
-import org.rapidoid.log.Log;
-import org.rapidoid.u.U;
-
-import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Collection;
-import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")

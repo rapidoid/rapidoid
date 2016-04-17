@@ -1,5 +1,15 @@
 package org.rapidoid.http.impl;
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.HttpVerb;
+import org.rapidoid.http.Route;
+import org.rapidoid.http.RouteConfig;
+import org.rapidoid.http.RouteOptions;
+import org.rapidoid.http.handler.HttpHandler;
+import org.rapidoid.u.U;
+
 /*
  * #%L
  * rapidoid-http-fast
@@ -20,18 +30,9 @@ package org.rapidoid.http.impl;
  * #L%
  */
 
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HttpVerb;
-import org.rapidoid.http.Route;
-import org.rapidoid.http.RouteConfig;
-import org.rapidoid.http.RouteOptions;
-import org.rapidoid.http.handler.HttpHandler;
-import org.rapidoid.u.U;
-
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class RouteImpl implements Route {
+public class RouteImpl extends RapidoidThing implements Route {
 
 	private HttpVerb verb;
 
