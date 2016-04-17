@@ -49,8 +49,17 @@ public class Env extends RapidoidThing {
 		return PROFILES;
 	}
 
-	private static boolean profile(String profileName) {
+	public static boolean profile(String profileName) {
 		return PROFILES.contains(profileName);
+	}
+
+	public static boolean hasAnyProfile(String... profileNames) {
+		for (String profileName : profileNames) {
+			if (profile(profileName)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

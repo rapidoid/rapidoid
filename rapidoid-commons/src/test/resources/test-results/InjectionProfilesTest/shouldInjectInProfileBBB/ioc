@@ -1,0 +1,10 @@
+{
+  "Provided classes" : [ "BazB" ],
+  "Provided instances" : [ ],
+  "Managed instances" : [ "BazWrapper@", "BazB@" ],
+  "By type" : {
+    "Callable" : [ "BazB", "BazB@" ],
+    "BazWrapper" : [ "BazWrapper@" ],
+    "BazB" : [ "BazB@" ]
+  }
+}

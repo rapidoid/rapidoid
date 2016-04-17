@@ -54,4 +54,13 @@ public abstract class AbstractCommonsTest extends TestCommons {
 		verify(name, IoC.defaultContext().info());
 	}
 
+	protected void noIocBean(Class<?> clazz) {
+		try {
+			IoC.singleton(clazz);
+			fail("Expected IoC exception for class: " + clazz);
+		} catch (RuntimeException e) {
+			// ok
+		}
+	}
+
 }

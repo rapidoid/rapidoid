@@ -5,6 +5,7 @@ import org.rapidoid.annotation.*;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Deep;
+import org.rapidoid.commons.Env;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.jpa.SharedContextAwareEntityManagerProxy;
@@ -99,32 +100,40 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 			boolean isClass = isClass(classOrInstance);
 			Class<?> clazz = Cls.toClass(classOrInstance);
 
-			for (Class<?> interfacee : Cls.getImplementedInterfaces(clazz)) {
-				addProvider(interfacee, classOrInstance);
-			}
+			if (matchingProfile(clazz)) {
 
-			if (isClass) {
-				Log.debug("configuring managed class", "class", classOrInstance);
-				state.providedClasses.add(clazz);
-
-				if (!clazz.isInterface() && !clazz.isEnum() && !clazz.isAnnotation()) {
-					// if the class is annotated, auto-create an instance
-					if (clazz.getAnnotation(Autocreate.class) != null) {
-						autoCreate.add(clazz);
-					}
+				for (Class<?> interfacee : Cls.getImplementedInterfaces(clazz)) {
+					addProvider(interfacee, classOrInstance);
 				}
-			} else {
-				Object instance = classOrInstance;
-				Log.debug("configuring provided instance", "instance", instance);
-				addProvider(clazz, instance);
-				state.providedInstances.add(instance);
-				state.instances.add(instance);
+
+				if (isClass) {
+					Log.debug("configuring managed class", "class", classOrInstance);
+					state.providedClasses.add(clazz);
+
+					if (!clazz.isInterface() && !clazz.isEnum() && !clazz.isAnnotation()) {
+						// if the class is annotated, auto-create an instance
+						if (clazz.getAnnotation(Autocreate.class) != null) {
+							autoCreate.add(clazz);
+						}
+					}
+				} else {
+					Object instance = classOrInstance;
+					Log.debug("configuring provided instance", "instance", instance);
+					addProvider(clazz, instance);
+					state.providedInstances.add(instance);
+					state.instances.add(instance);
+				}
 			}
 		}
 
 		for (Class<?> clazz : autoCreate) {
 			singleton(clazz);
 		}
+	}
+
+	private boolean matchingProfile(Class<?> clazz) {
+		Profiles profiles = clazz.getAnnotation(Profiles.class);
+		return profiles == null || Env.hasAnyProfile(profiles.value());
 	}
 
 	private void addProvider(Class<?> type, Object provider) {
@@ -214,10 +223,12 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 	private <T> T provideNewInstanceOf(Class<T> type, Map<String, Object> properties) {
 		// instantiation if it's real class
 		if (!type.isInterface() && !type.isEnum() && !type.isAnnotation()) {
-			return register(Cls.newInstance(type, properties), properties);
-		} else {
-			return null;
+			if (matchingProfile(type)) {
+				return register(Cls.newInstance(type, properties), properties);
+			}
 		}
+
+		return null;
 	}
 
 	private <T> T provideInstanceByType(Class<T> type, Map<String, Object> properties) {
