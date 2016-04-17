@@ -16,7 +16,7 @@ app:
   contextPath: /
   home: /
   menu: {}
-  sectors:
+  segments:
     admin:
       contextPath: /_
       home: /_

@@ -88,7 +88,7 @@ public class Setup implements Constants {
 	}
 
 	private final String name;
-	private final String sector;
+	private final String segment;
 	private final Config appConfig;
 	private final Config serverConfig;
 
@@ -126,9 +126,9 @@ public class Setup implements Constants {
 		instances.remove(this);
 	}
 
-	private Setup(String name, String sector, String defaultAddress, int defaultPort, IoCContext ioCContext, Config appConfig, Config serverConfig) {
+	private Setup(String name, String segment, String defaultAddress, int defaultPort, IoCContext ioCContext, Config appConfig, Config serverConfig) {
 		this.name = name;
-		this.sector = sector;
+		this.segment = segment;
 
 		this.defaultAddress = defaultAddress;
 		this.defaultPort = defaultPort;
@@ -142,7 +142,7 @@ public class Setup implements Constants {
 		this.routes = new HttpRoutes(customization);
 		this.http = new FastHttp(routes, customization);
 
-		this.defaults.sector(sector);
+		this.defaults.segment(segment);
 	}
 
 	public static void resetGlobalState() {
@@ -340,7 +340,7 @@ public class Setup implements Constants {
 		ioCContext.reset();
 		goodies = true;
 		defaults = new RouteOptions();
-		defaults().sector(sector);
+		defaults().segment(segment);
 	}
 
 	public Server server() {
@@ -472,7 +472,7 @@ public class Setup implements Constants {
 		for (Setup setup : instances()) {
 			setup.http().resetConfig();
 			setup.defaults = new RouteOptions();
-			setup.defaults.sector(setup.sector);
+			setup.defaults.segment(setup.segment);
 			setup.activated = false;
 			setup.path((String[]) null);
 			setup.attributes().clear();
@@ -545,12 +545,12 @@ public class Setup implements Constants {
 		http().resetConfig();
 		path((String[]) null);
 		defaults = new RouteOptions();
-		defaults.sector(sector);
+		defaults.segment(segment);
 		attributes().clear();
 		initSetupDefaults();
 	}
 
-	public String sector() {
-		return sector;
+	public String segment() {
+		return segment;
 	}
 }

@@ -472,7 +472,7 @@ public class HttpRoutes {
 
 		for (Iterator<Route> it = routes.iterator(); it.hasNext(); ) {
 			Route route = it.next();
-			if (!route.config().sector().equalsIgnoreCase("admin")) {
+			if (!route.config().segment().equalsIgnoreCase("admin")) {
 				it.remove();
 			}
 		}
@@ -485,7 +485,7 @@ public class HttpRoutes {
 
 		for (Iterator<Route> it = routes.iterator(); it.hasNext(); ) {
 			Route route = it.next();
-			if (route.config().sector().equalsIgnoreCase("admin")) {
+			if (route.config().segment().equalsIgnoreCase("admin")) {
 				it.remove();
 			}
 		}

@@ -317,8 +317,8 @@ public class OnRoute {
 		return tx(TransactionMode.AUTO);
 	}
 
-	public OnRoute sector(String sector) {
-		options.sector(sector);
+	public OnRoute segment(String segment) {
+		options.segment(segment);
 		return this;
 	}
 

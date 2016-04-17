@@ -114,13 +114,13 @@ public class HtmlPage extends AbstractWidget {
 		model.put("appUrl", appUrl);
 		model.put("adminUrl", adminUrl);
 
-		model.put("admin", "admin".equalsIgnoreCase(req.sector()));
+		model.put("admin", "admin".equalsIgnoreCase(req.segment()));
 
 		model.put("host", req.host());
 		model.put("verb", req.verb());
 		model.put("uri", req.uri());
 		model.put("path", req.path());
-		model.put("sector", req.sector());
+		model.put("segment", req.segment());
 
 		model.put("username", req.username());
 
@@ -151,7 +151,7 @@ public class HtmlPage extends AbstractWidget {
 
 		has.put("role", has(req.roles()));
 		has.put("path", has(req.path().replace('/', '_')));
-		has.put("sector", has(req.sector()));
+		has.put("segment", has(req.segment()));
 
 		return has;
 	}

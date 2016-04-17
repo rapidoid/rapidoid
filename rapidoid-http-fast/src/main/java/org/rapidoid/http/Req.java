@@ -98,25 +98,25 @@ public interface Req {
 	Req host(String host);
 
 	/**
-	 * Gets the name of the <b>application sector</b> handling the request. <br>
-	 * The default sector name is <code>main</code> for the <code>On</code> API, and <code>admin</code> for the <code>Admin</code> API.
+	 * Gets the name of the <b>application segment</b> handling the request. <br>
+	 * The default segment name is <code>main</code> for the <code>On</code> API, and <code>admin</code> for the <code>Admin</code> API.
 	 */
-	String sector();
+	String segment();
 
 	/**
-	 * Overwrites the name of the <b>application sector</b> handling the request. <br>
-	 * The default sector name is <code>main</code> for the <code>On</code> API, and <code>admin</code> for the <code>Admin</code> API.
+	 * Overwrites the name of the <b>application segment</b> handling the request. <br>
+	 * The default segment name is <code>main</code> for the <code>On</code> API, and <code>admin</code> for the <code>Admin</code> API.
 	 */
-	Req sector(String sector);
+	Req segment(String segment);
 
 	/**
-	 * Gets the <b>context path</b> of the application sector handling the request. <br>
+	 * Gets the <b>context path</b> of the application segment handling the request. <br>
 	 * The default context path is <code>/</code> for the <code>On</code> API, and <code>/_</code> for the <code>Admin</code> API.
 	 */
 	String contextPath();
 
 	/**
-	 * Overwrites the <b>context path</b> of the application sector handling the request. <br>
+	 * Overwrites the <b>context path</b> of the application segment handling the request. <br>
 	 * The default context path is <code>/</code> for the <code>On</code> API, and <code>/_</code> for the <code>Admin</code> API.
 	 */
 	Req contextPath(String contextPath);

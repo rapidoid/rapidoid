@@ -37,11 +37,11 @@ import java.util.Map;
 @Since("5.1.0")
 public class DefaultErrorHandler implements ErrorHandler {
 
-	private final Config sectors;
+	private final Config segments;
 	private final Value<String> home;
 
 	public DefaultErrorHandler(Customization customization) {
-		this.sectors = customization.appConfig().sub("sectors");
+		this.segments = customization.appConfig().sub("segments");
 		this.home = customization.appConfig().sub("app").entry("home").str();
 	}
 
@@ -79,11 +79,11 @@ public class DefaultErrorHandler implements ErrorHandler {
 			return resp.code(403).view("login").mvc(true);
 		} else {
 
-			Config sector = sectors.sub(req.sector());
+			Config segment = segments.sub(req.segment());
 
 			Map<String, ?> errorInfo = HttpUtils.getErrorInfo(resp, error);
 			resp.model().put("error", errorInfo);
-			resp.model().put("home", sector.entry("home").str().orElse(home).or("/"));
+			resp.model().put("home", segment.entry("home").str().orElse(home).or("/"));
 
 			return resp.mvc(true).view("error");
 		}

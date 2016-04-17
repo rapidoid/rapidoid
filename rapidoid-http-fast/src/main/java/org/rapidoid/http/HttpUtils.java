@@ -287,11 +287,11 @@ public class HttpUtils implements HttpMetadata {
 		}
 	}
 
-	public static String getContextPath(Customization customization, String sector) {
+	public static String getContextPath(Customization customization, String segment) {
 		Config cfg = customization.appConfig();
 
-		if (sector != null) {
-			cfg = cfg.sub("sectors", sector);
+		if (segment != null) {
+			cfg = cfg.sub("segments", segment);
 		}
 
 		return cfg.entry("contextPath").or("/");

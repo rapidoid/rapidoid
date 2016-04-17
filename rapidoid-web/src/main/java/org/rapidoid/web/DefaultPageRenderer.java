@@ -45,7 +45,7 @@ public class DefaultPageRenderer implements PageRenderer {
 
 	private final Customization customization;
 	private final Config cfg;
-	private final Config sectors;
+	private final Config segments;
 
 	private final Value<String> home;
 	private final Value<String> title;
@@ -59,7 +59,7 @@ public class DefaultPageRenderer implements PageRenderer {
 	public DefaultPageRenderer(Customization customization) {
 		this.customization = customization;
 		this.cfg = customization.appConfig();
-		this.sectors = cfg.sub("sectors");
+		this.segments = cfg.sub("segments");
 
 		this.home = cfg.entry("home").str();
 		this.title = cfg.entry("title").str();
@@ -80,50 +80,50 @@ public class DefaultPageRenderer implements PageRenderer {
 		Screen screen = resp.screen();
 		HtmlPage page = GUI.page(GUI.hardcoded(content));
 
-		Config sector = sectors.sub(req.sector());
+		Config segment = segments.sub(req.segment());
 
 		if (screen.title() != null) {
 			page.title(screen.title());
 		} else {
-			page.title(sector.entry("title").str().orElse(title).getOrNull());
+			page.title(segment.entry("title").str().orElse(title).getOrNull());
 		}
 
 		if (screen.brand() != null) {
 			page.brand(screen.brand());
 		} else {
-			page.brand(GUI.hardcoded(sector.entry("brand").str().orElse(brand).getOrNull()));
+			page.brand(GUI.hardcoded(segment.entry("brand").str().orElse(brand).getOrNull()));
 		}
 
 		if (screen.search() != null) {
 			page.search(screen.search());
 		} else {
-			page.search(sector.entry("search").bool().orElse(search).getOrNull());
+			page.search(segment.entry("search").bool().orElse(search).getOrNull());
 		}
 
 		if (screen.navbar() != null) {
 			page.navbar(screen.navbar());
 		} else {
-			page.navbar(sector.entry("navbar").bool().orElse(navbar).getOrNull());
+			page.navbar(segment.entry("navbar").bool().orElse(navbar).getOrNull());
 		}
 
 		if (screen.fluid() != null) {
 			page.fluid(screen.fluid());
 		} else {
-			page.fluid(sector.entry("fluid").bool().orElse(fluid).getOrNull());
+			page.fluid(segment.entry("fluid").bool().orElse(fluid).getOrNull());
 		}
 
 		if (screen.cdn() != null) {
 			page.cdn(screen.cdn());
 		} else {
-			String cdnS = sector.entry("cdn").str().orElse(cdn).getOrNull();
+			String cdnS = segment.entry("cdn").str().orElse(cdn).getOrNull();
 			if (!"auto".equalsIgnoreCase(cdnS)) {
 				page.cdn(Cls.bool(cdnS));
 			}
 		}
 
-		page.home(sector.entry("home").str().orElse(home).or("/"));
+		page.home(segment.entry("home").str().orElse(home).or("/"));
 
-		Config appMenu = sector.has("menu") ? sector.sub("menu") : menu;
+		Config appMenu = segment.has("menu") ? segment.sub("menu") : menu;
 
 		page.menu(PageMenu.from(appMenu.toMap()).uri(req.path()));
 

@@ -55,7 +55,7 @@ public interface RouteConfig {
 
 	RouteOptions wrap(HttpWrapper... wrappers);
 
-	String sector();
+	String segment();
 
-	RouteOptions sector(String sector);
+	RouteOptions segment(String segment);
 }

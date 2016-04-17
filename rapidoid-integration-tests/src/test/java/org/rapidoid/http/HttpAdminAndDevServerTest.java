@@ -48,8 +48,8 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 	}
 
 	private void sameSetup() {
-		On.get("/a").html((Req x) -> "default " + U.join(":", x.uri(), x.sector(), x.contextPath()));
-		Admin.get("/b").roles().json((Req x) -> "admin " + U.join(":", x.uri(), x.sector(), x.contextPath()));
+		On.get("/a").html((Req x) -> "default " + U.join(":", x.uri(), x.segment(), x.contextPath()));
+		Admin.get("/b").roles().json((Req x) -> "admin " + U.join(":", x.uri(), x.segment(), x.contextPath()));
 		Admin.get("/c").json((Req x) -> "unauthorized");
 		Admin.get("/d").html((Req x) -> "unauthorized");
 	}

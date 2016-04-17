@@ -1,2 +1,2 @@
-Route GET /foo [sector main]: html((Req req, Integer x) -> ...)
-Route POST /foo [sector main]: html((Req req, Integer x) -> ...)
+Route GET /foo [segment main]: html((Req req, Integer x) -> ...)
+Route POST /foo [segment main]: html((Req req, Integer x) -> ...)

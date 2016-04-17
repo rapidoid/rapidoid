@@ -60,7 +60,7 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 		sortRoutes(routes);
 
 		List<Object> rows = U.list();
-		rows.add(tr(th("Verb"), th("Path"), th("Sector"), th("Content type"), th("MVC"), th("View name"), th("Roles"), th("Handler")));
+		rows.add(tr(th("Verb"), th("Path"), th("Segment"), th("Content type"), th("MVC"), th("View name"), th("Roles"), th("Handler")));
 
 		while (!routes.isEmpty()) {
 			Route route = U.first(routes);
@@ -113,7 +113,7 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 		}
 
 		Tag path = td(route.path());
-		Tag sector = td(config.sector());
+		Tag segment = td(config.segment());
 		Tag roles = td(config.roles());
 		Tag hnd = td(route.handler());
 
@@ -124,7 +124,7 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 
 		Tag mvc = td(config.mvc() ? fa("check") : "");
 
-		return tr(verb, path, sector, ctype, mvc, view, roles, hnd);
+		return tr(verb, path, segment, ctype, mvc, view, roles, hnd);
 	}
 
 	private static String viewName(Route route, RouteConfig config) {

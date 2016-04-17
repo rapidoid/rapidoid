@@ -146,11 +146,11 @@ public class FastHttp extends AbstractHttpProcessor {
 			String uri = xuri.str(buf);
 			String path = Msc.urlDecode(xpath.str(buf));
 			String query = Msc.urlDecode(xquery.str(buf));
-			String sector = "main";
+			String segment = "main";
 
 			if (handler != null) {
 				contentType = handler.contentType();
-				sector = handler.options().sector();
+				segment = handler.options().segment();
 			}
 
 			params = Collections.synchronizedMap(params);
@@ -158,7 +158,7 @@ public class FastHttp extends AbstractHttpProcessor {
 			cookies = Collections.synchronizedMap(cookies);
 
 			req = new ReqImpl(this, channel, isKeepAlive, verb, uri, path, query, body, params, headers, cookies,
-					posted, files, contentType, sector, customization);
+					posted, files, contentType, segment, customization);
 
 			if (!attributes.isEmpty()) {
 				req.attrs().putAll(attributes);

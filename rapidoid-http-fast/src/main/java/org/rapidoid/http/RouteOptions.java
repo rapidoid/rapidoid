@@ -40,7 +40,7 @@ public class RouteOptions implements RouteConfig {
 
 	private volatile boolean mvc;
 
-	private volatile String sector;
+	private volatile String segment;
 
 	private volatile TransactionMode transactionMode = TransactionMode.NONE;
 
@@ -127,13 +127,13 @@ public class RouteOptions implements RouteConfig {
 	}
 
 	@Override
-	public String sector() {
-		return sector;
+	public String segment() {
+		return segment;
 	}
 
 	@Override
-	public RouteOptions sector(String sector) {
-		this.sector = sector;
+	public RouteOptions segment(String segment) {
+		this.segment = segment;
 		return this;
 	}
 
@@ -146,7 +146,7 @@ public class RouteOptions implements RouteConfig {
 		copy.transactionMode(transactionMode());
 		copy.roles(roles.toArray(new String[roles.size()]));
 		copy.wrap(wrappers());
-		copy.sector(sector());
+		copy.segment(segment());
 
 		return copy;
 	}
@@ -161,7 +161,7 @@ public class RouteOptions implements RouteConfig {
 		if (mvc != that.mvc) return false;
 		if (contentType != null ? !contentType.equals(that.contentType) : that.contentType != null) return false;
 		if (view != null ? !view.equals(that.view) : that.view != null) return false;
-		if (sector != null ? !sector.equals(that.sector) : that.sector != null) return false;
+		if (segment != null ? !segment.equals(that.segment) : that.segment != null) return false;
 		if (transactionMode != that.transactionMode) return false;
 		if (roles != null ? !roles.equals(that.roles) : that.roles != null) return false;
 		return wrappers != null ? wrappers.equals(that.wrappers) : that.wrappers == null;
@@ -172,7 +172,7 @@ public class RouteOptions implements RouteConfig {
 		int result = contentType != null ? contentType.hashCode() : 0;
 		result = 31 * result + (view != null ? view.hashCode() : 0);
 		result = 31 * result + (mvc ? 1 : 0);
-		result = 31 * result + (sector != null ? sector.hashCode() : 0);
+		result = 31 * result + (segment != null ? segment.hashCode() : 0);
 		result = 31 * result + (transactionMode != null ? transactionMode.hashCode() : 0);
 		result = 31 * result + (roles != null ? roles.hashCode() : 0);
 		result = 31 * result + (wrappers != null ? wrappers.hashCode() : 0);

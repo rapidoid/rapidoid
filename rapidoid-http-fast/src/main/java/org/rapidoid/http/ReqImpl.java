@@ -56,7 +56,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	private volatile String query;
 
-	private volatile String sector = "main";
+	private volatile String segment = "main";
 
 	private volatile String contextPath;
 
@@ -99,7 +99,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
 	               String query, byte[] body, Map<String, String> params, Map<String, String> headers,
 	               Map<String, String> cookies, Map<String, Object> posted, Map<String, List<Upload>> files,
-	               MediaType defaultContentType, String sector, Customization customization) {
+	               MediaType defaultContentType, String segment, Customization customization) {
 
 		this.http = http;
 		this.channel = channel;
@@ -115,7 +115,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		this.posted = posted;
 		this.files = files;
 		this.defaultContentType = defaultContentType;
-		this.sector = sector;
+		this.segment = segment;
 		this.customization = customization;
 	}
 
@@ -650,13 +650,13 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	}
 
 	@Override
-	public String sector() {
-		return sector;
+	public String segment() {
+		return segment;
 	}
 
 	@Override
-	public Req sector(String sector) {
-		this.sector = sector;
+	public Req segment(String segment) {
+		this.segment = segment;
 		return this;
 	}
 
@@ -665,7 +665,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		if (contextPath == null) {
 			synchronized (this) {
 				if (contextPath == null) {
-					contextPath = HttpUtils.getContextPath(customization, sector());
+					contextPath = HttpUtils.getContextPath(customization, segment());
 				}
 			}
 		}

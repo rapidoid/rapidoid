@@ -123,7 +123,7 @@ public class Goodies {
 
 			for (Class<?> type : JPA.getEntityJavaTypes()) {
 				String uri = GUI.typeUri(type);
-				String contextPath = HttpUtils.getContextPath(setup.custom(), setup.sector());
+				String contextPath = HttpUtils.getContextPath(setup.custom(), setup.segment());
 				X.scaffold(setup, Msc.uri(contextPath, uri), type);
 			}
 
