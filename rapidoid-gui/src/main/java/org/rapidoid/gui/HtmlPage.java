@@ -34,6 +34,7 @@ import org.rapidoid.render.Template;
 import org.rapidoid.render.Templates;
 import org.rapidoid.u.U;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -126,9 +127,7 @@ public class HtmlPage extends AbstractWidget {
 		Set<String> roles = req.roles();
 		model.put("roles", roles);
 
-		for (String role : U.safe(roles)) {
-			model.put("role_" + role, true);
-		}
+		model.put("has", has(req));
 
 		model.put("content", multi((Object[]) content));
 		model.put("home", home);
@@ -145,6 +144,30 @@ public class HtmlPage extends AbstractWidget {
 		model.put("cdn", cdn);
 
 		return model;
+	}
+
+	private Map<String, Object> has(IReqInfo req) {
+		Map<String, Object> has = U.map();
+
+		has.put("role", has(req.roles()));
+		has.put("path", has(req.path().replace('/', '_')));
+		has.put("sector", has(req.sector()));
+
+		return has;
+	}
+
+	private Object has(Collection<String> flags) {
+		Map<String, Object> has = U.map();
+
+		for (String flag : U.safe(flags)) {
+			has.put(flag, true);
+		}
+
+		return has;
+	}
+
+	private Object has(String... flags) {
+		return has(U.list(flags));
 	}
 
 	public String home() {

@@ -334,6 +334,10 @@ public class U {
 		return set != null ? set : U.<T>set();
 	}
 
+	public static <T> Collection<T> safe(Collection<T> coll) {
+		return coll != null ? coll : U.<T>list();
+	}
+
 	public static <K, V> Map<K, V> safe(Map<K, V> map) {
 		return map != null ? map : U.<K, V>map();
 	}
