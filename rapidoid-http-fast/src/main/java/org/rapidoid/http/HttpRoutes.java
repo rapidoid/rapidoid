@@ -409,6 +409,8 @@ public class HttpRoutes {
 		U.notNull(verbs, "HTTP verbs");
 		U.notNull(path, "HTTP path");
 
+		U.must(path.startsWith("/"), "The URI must start with '/', but found: '%s'", path);
+
 		if (add) {
 			U.notNull(handler, "HTTP handler");
 		}

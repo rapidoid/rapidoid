@@ -4,10 +4,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.AnyObj;
-import org.rapidoid.commons.Rnd;
-import org.rapidoid.commons.Str;
-import org.rapidoid.commons.TimeSeries;
+import org.rapidoid.commons.*;
 import org.rapidoid.gui.*;
 import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
@@ -513,7 +510,7 @@ public abstract class BootstrapWidgets extends HTML {
 
 		for (Object result : found) {
 			Object id = Beany.getId(result);
-			String uri = Msc.uriFor(result);
+			String uri = uriFor(result);
 
 			Tag left = h6("(ID", NBSP, "=", NBSP, id, ")");
 			Object header = span(result.getClass().getSimpleName());
@@ -763,7 +760,7 @@ public abstract class BootstrapWidgets extends HTML {
 		}
 
 		if (JPA.isEntity(item)) {
-			return a(escape(item.toString())).href(Msc.uriFor(item) + "/view");
+			return a(escape(item.toString())).href(uriFor(item) + "/view");
 		}
 
 		if (isBean(item)) {
@@ -968,6 +965,33 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static Object dygraph(String uri, TimeSeries ts) {
 		return dygraph(uri, ts, "rapidoid-dygraph");
+	}
+
+	public static String uriFor(Object target) {
+		if (!JPA.isEntity(target)) {
+			return "";
+		}
+
+		return uriFor(typeUri(target.getClass()), target);
+	}
+
+	public static String uriFor(String baseUri, Object target) {
+		if (!JPA.isEntity(target)) {
+			return "";
+		}
+
+		Object id = JPA.getIdentifier(target);
+		return id != null ? Msc.uri(baseUri, id + "") : "";
+	}
+
+	public static String typeUri(Class<?> entityType) {
+		return typeUri(entityType.getSimpleName());
+	}
+
+	public static String typeUri(String entityType) {
+		String contextPath = ReqInfo.get().contextPath();
+		String typeUri = English.plural(Str.uncapitalized(entityType)).toLowerCase();
+		return Msc.uri(contextPath, typeUri);
 	}
 
 }

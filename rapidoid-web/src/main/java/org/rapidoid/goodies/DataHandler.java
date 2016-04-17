@@ -27,7 +27,6 @@ import org.rapidoid.gui.Grid;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 
 import javax.persistence.metamodel.EntityType;
 import java.util.List;
@@ -48,7 +47,7 @@ public class DataHandler extends GUI implements Callable<Object> {
 			@Override
 			public String map(Object src) throws Exception {
 				Map<String, ?> row = U.cast(src);
-				return "/_" + Msc.typeUri(row.get("type") + "") + "/manage";
+				return GUI.typeUri(row.get("type") + "") + "/manage";
 			}
 		});
 

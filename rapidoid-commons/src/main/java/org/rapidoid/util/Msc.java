@@ -730,31 +730,6 @@ public class Msc implements Constants {
 		}
 	}
 
-	public static String uriFor(Object target) {
-		if (!JPA.isEntity(target)) {
-			return "";
-		}
-
-		return uriFor(typeUri(target.getClass()), target);
-	}
-
-	public static String uriFor(String baseUri, Object target) {
-		if (!JPA.isEntity(target)) {
-			return "";
-		}
-
-		Object id = JPA.getIdentifier(target);
-		return id != null ? uri(baseUri, id + "") : "";
-	}
-
-	public static String typeUri(Class<?> entityType) {
-		return typeUri(entityType.getSimpleName());
-	}
-
-	public static String typeUri(String entityType) {
-		return "/" + English.plural(Str.uncapitalized(entityType)).toLowerCase();
-	}
-
 	public static boolean hasValidation() {
 		return Cls.exists("javax.validation.Validation");
 	}

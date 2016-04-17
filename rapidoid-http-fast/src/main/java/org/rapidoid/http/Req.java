@@ -110,6 +110,18 @@ public interface Req {
 	Req sector(String sector);
 
 	/**
+	 * Gets the <b>context path</b> of the application sector handling the request. <br>
+	 * The default context path is <code>/</code> for the <code>On</code> API, and <code>/_</code> for the <code>Admin</code> API.
+	 */
+	String contextPath();
+
+	/**
+	 * Overwrites the <b>context path</b> of the application sector handling the request. <br>
+	 * The default context path is <code>/</code> for the <code>On</code> API, and <code>/_</code> for the <code>Admin</code> API.
+	 */
+	Req contextPath(String contextPath);
+
+	/**
 	 * Gets the <b>IP address</b> of the HTTP client sending the request.
 	 */
 	String clientIpAddress();

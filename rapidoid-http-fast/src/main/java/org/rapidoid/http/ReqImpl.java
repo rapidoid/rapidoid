@@ -26,6 +26,7 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.commons.Str;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
@@ -55,6 +56,10 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	private volatile String query;
 
+	private volatile String sector = "main";
+
+	private volatile String contextPath;
+
 	private volatile byte[] body;
 
 	private final Map<String, String> params;
@@ -75,8 +80,6 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	private volatile RespImpl response;
 
-	private volatile String sector = "main";
-
 	private volatile boolean rendering;
 
 	private volatile int posConLen;
@@ -91,10 +94,12 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 
 	private final MediaType defaultContentType;
 
+	private final Customization customization;
+
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
 	               String query, byte[] body, Map<String, String> params, Map<String, String> headers,
 	               Map<String, String> cookies, Map<String, Object> posted, Map<String, List<Upload>> files,
-	               MediaType defaultContentType, String sector) {
+	               MediaType defaultContentType, String sector, Customization customization) {
 
 		this.http = http;
 		this.channel = channel;
@@ -111,6 +116,7 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 		this.files = files;
 		this.defaultContentType = defaultContentType;
 		this.sector = sector;
+		this.customization = customization;
 	}
 
 	@Override
@@ -618,7 +624,8 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 					try {
 						cpack = HttpUtils.initAndDeserializeCookiePack(this);
 					} catch (Exception e) {
-						Log.warn("Cookie-pack deserialization error! Maybe the secret was changed?", e);
+						Log.warn("Cookie-pack deserialization error! Maybe the secret was changed?");
+						Log.debug("Cookie-pack deserialization error!", e);
 					}
 
 					cookiepack = Collections.synchronizedMap(U.safe(cpack));
@@ -650,6 +657,24 @@ public class ReqImpl implements Req, Constants, HttpMetadata {
 	@Override
 	public Req sector(String sector) {
 		this.sector = sector;
+		return this;
+	}
+
+	@Override
+	public String contextPath() {
+		if (contextPath == null) {
+			synchronized (this) {
+				if (contextPath == null) {
+					contextPath = HttpUtils.getContextPath(customization, sector());
+				}
+			}
+		}
+		return contextPath;
+	}
+
+	@Override
+	public Req contextPath(String contextPath) {
+		this.contextPath = contextPath;
 		return this;
 	}
 

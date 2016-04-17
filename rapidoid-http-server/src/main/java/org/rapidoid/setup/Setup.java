@@ -186,7 +186,15 @@ public class Setup implements Constants {
 	}
 
 	private boolean delegateAdminToApp() {
-		return this == ADMIN && Conf.ADMIN.entry("port").num().get().intValue() == 0;
+		return isAdmin() && Conf.ADMIN.entry("port").num().get().intValue() == 0;
+	}
+
+	private boolean isAdmin() {
+		return this == ADMIN;
+	}
+
+	private boolean isOn() {
+		return this == ON;
 	}
 
 	private synchronized void activate() {
@@ -199,7 +207,7 @@ public class Setup implements Constants {
 			listen();
 		}
 
-		if (this == ON) {
+		if (isOn()) {
 			ADMIN.activate();
 			Msc.logSection("User-specified handlers:");
 		}
@@ -374,7 +382,7 @@ public class Setup implements Constants {
 	}
 
 	public Setup args(String... args) {
-		if (this == ON) {
+		if (isOn()) {
 			Conf.args(args);
 		}
 
@@ -542,4 +550,7 @@ public class Setup implements Constants {
 		initSetupDefaults();
 	}
 
+	public String sector() {
+		return sector;
+	}
 }

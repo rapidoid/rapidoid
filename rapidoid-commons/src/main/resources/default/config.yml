@@ -13,27 +13,29 @@ app:
   navbar: true
   fluid: false
   cdn: auto # in DEV mode is false, in PRODUCTION is true
+  contextPath: /
   home: /
   menu: {}
   sectors:
     admin:
-      brand: '<i class="fa fa-dashboard"></i> Admin'
+      contextPath: /_
       home: /_
+      brand: '<i class="fa fa-dashboard"></i> Admin'
       menu:
         Overview: /_
-        Data: /_data
-        Routes: /_routes
-        Config: /_config
-        Metrics: /_metrics
+        Data: /_/data
+        Routes: /_/routes
+        Config: /_/config
+        Metrics: /_/metrics
         JMX:
-          Memory pool: /_jmx/mempool
-          JVM Threads: /_jmx/threads
-          Operating system: /_jmx/os
-          Garbage collection: /_jmx/gc
-          Memory: /_jmx/memory
-          Runtime: /_jmx/runtime
-          Classes: /_jmx/classes
-          Compilation: /_jmx/compilation
+          Memory pool: /_/jmx/mempool
+          JVM Threads: /_/jmx/threads
+          Operating system: /_/jmx/os
+          Garbage collection: /_/jmx/gc
+          Memory: /_/jmx/memory
+          Runtime: /_/jmx/runtime
+          Classes: /_/jmx/classes
+          Compilation: /_/jmx/compilation
 
 users: {}
 

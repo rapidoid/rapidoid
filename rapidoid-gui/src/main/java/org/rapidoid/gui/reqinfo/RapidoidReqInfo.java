@@ -113,4 +113,9 @@ public class RapidoidReqInfo extends AbstractReqInfo {
 		return req().sector();
 	}
 
+	@Override
+	public String contextPath() {
+		return req().contextPath();
+	}
+
 }

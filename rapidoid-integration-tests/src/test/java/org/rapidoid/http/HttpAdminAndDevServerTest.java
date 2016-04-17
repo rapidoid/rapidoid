@@ -26,6 +26,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.On;
+import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
@@ -33,24 +34,31 @@ public class HttpAdminAndDevServerTest extends HttpTestCommons {
 
 	@Test
 	public void testAdminOnAppServer() {
-		On.get("/a").html((Req x) -> "default " + x.uri());
-		Admin.get("/b").json((Req x) -> "admin " + x.uri());
-
-		onlyGet("/a"); // app
-		onlyGet("/b"); // admin
+		sameSetup();
+		sameRequests(8888);
 	}
 
 	@Test
 	public void testAdminServerConfig() {
 		int port = 20000;
-
 		Conf.section("admin").set("port", port);
 
-		Admin.get("/myadmin").html((Req x) -> "admin " + x.uri());
-		On.get("/c").html((Req x) -> "app " + x.uri());
+		sameSetup();
+		sameRequests(port);
+	}
 
-		onlyGet("/c"); // app
-		onlyGet(port, "/myadmin");
+	private void sameSetup() {
+		On.get("/a").html((Req x) -> "default " + U.join(":", x.uri(), x.sector(), x.contextPath()));
+		Admin.get("/b").roles().json((Req x) -> "admin " + U.join(":", x.uri(), x.sector(), x.contextPath()));
+		Admin.get("/c").json((Req x) -> "unauthorized");
+		Admin.get("/d").html((Req x) -> "unauthorized");
+	}
+
+	private void sameRequests(int port) {
+		onlyGet("/a"); // app
+		onlyGet(port, "/b"); // admin
+		onlyGet(port, "/c"); // admin - unauthorized
+		onlyGet(port, "/d"); // admin - unauthorized
 	}
 
 }

@@ -25,7 +25,9 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
+import org.rapidoid.config.Config;
 import org.rapidoid.crypto.Crypto;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.JsonResponseRenderer;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
@@ -285,4 +287,13 @@ public class HttpUtils implements HttpMetadata {
 		}
 	}
 
+	public static String getContextPath(Customization customization, String sector) {
+		Config cfg = customization.appConfig();
+
+		if (sector != null) {
+			cfg = cfg.sub("sectors", sector);
+		}
+
+		return cfg.entry("contextPath").or("/");
+	}
 }

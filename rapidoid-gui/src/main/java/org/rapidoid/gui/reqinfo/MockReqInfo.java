@@ -41,6 +41,8 @@ public class MockReqInfo extends AbstractReqInfo {
 
 	private String sector = "main";
 
+	private String contextPath = "/";
+
 	private Map<String, Object> data = U.map();
 
 	private Map<String, String> params = U.map();
@@ -208,6 +210,21 @@ public class MockReqInfo extends AbstractReqInfo {
 		return sector;
 	}
 
+	public MockReqInfo sector(String sector) {
+		this.sector = sector;
+		return this;
+	}
+
+	@Override
+	public String contextPath() {
+		return contextPath;
+	}
+
+	public MockReqInfo contextPath(String contextPath) {
+		this.contextPath = contextPath;
+		return this;
+	}
+
 	@Override
 	public String toString() {
 		final int maxLen = 10;
@@ -216,6 +233,7 @@ public class MockReqInfo extends AbstractReqInfo {
 				+ ", uri=" + uri
 				+ ", host=" + host
 				+ ", sector=" + sector
+				+ ", contextPath=" + contextPath
 				+ ", data=" + (data != null ? toString(data.entrySet(), maxLen) : null)
 				+ ", params=" + (params != null ? toString(params.entrySet(), maxLen) : null)
 				+ ", posted=" + (posted != null ? toString(posted.entrySet(), maxLen) : null)

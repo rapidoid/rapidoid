@@ -129,7 +129,7 @@ public class X {
 				Grid grid = GUI.grid(JPA.getAll(entityType)).toUri(new Mapper<Object, String>() {
 					@Override
 					public String map(Object target) throws Exception {
-						return Msc.uri(Msc.uriFor(baseUri, target), "view");
+						return Msc.uri(GUI.uriFor(baseUri, target), "view");
 					}
 				});
 
@@ -241,7 +241,7 @@ public class X {
 	}
 
 	public static String uri(String baseUri, Object entity) {
-		return Msc.uriFor(baseUri, entity);
+		return GUI.uriFor(baseUri, entity);
 	}
 
 	public static void scaffold(String uri, Class<?> entityType) {
@@ -262,12 +262,14 @@ public class X {
 		JPA.bootstrap(setup.path(), entityTypes);
 
 		for (Class<?> entityType : entityTypes) {
-			scaffoldEntity(setup, Msc.typeUri(entityType), entityType);
+			scaffoldEntity(setup, GUI.typeUri(entityType), entityType);
 		}
 	}
 
 	private static void scaffoldEntity(Setup setup, String baseUri, Class<?> entityType) {
-		baseUri = Str.trimr(baseUri, "/");
+		if (baseUri.length() > 1) {
+			baseUri = Str.trimr(baseUri, "/");
+		}
 
 		// RESTful services
 		setup.get(baseUri).json(X.index(entityType));

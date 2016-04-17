@@ -117,4 +117,9 @@ public class NoReqInfo extends AbstractReqInfo {
 		return "main";
 	}
 
+	@Override
+	public String contextPath() {
+		return "/";
+	}
+
 }
