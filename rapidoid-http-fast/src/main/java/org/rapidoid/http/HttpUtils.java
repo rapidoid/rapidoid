@@ -28,6 +28,7 @@ import org.rapidoid.config.Conf;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.http.customize.JsonResponseRenderer;
 import org.rapidoid.io.Res;
+import org.rapidoid.lambda.Mapper;
 import org.rapidoid.serialize.Serialize;
 import org.rapidoid.u.U;
 import org.rapidoid.util.ErrCodeAndMsg;
@@ -50,6 +51,13 @@ public class HttpUtils implements HttpMetadata {
 	private static final byte[] EMPTY_RESPONSE = {};
 
 	public static final String _USER = "_USER";
+
+	private static final Mapper<String[], String> PATH_PARAM_EXTRACTOR = new Mapper<String[], String>() {
+		@Override
+		public String map(String[] src) throws Exception {
+			return src[1].split(":", 2)[0];
+		}
+	};
 
 	public static String[] pathSegments(Req req) {
 		return Str.triml(req.path(), "/").split("/");
@@ -104,17 +112,20 @@ public class HttpUtils implements HttpMetadata {
 	}
 
 	public static String resName(String path) {
-		String resourceName = path.substring(1);
 
-		if (resourceName.isEmpty()) {
-			resourceName = "index";
+		String res = Str.replace(path, PathPattern.PATH_PARAM_REGEX, PATH_PARAM_EXTRACTOR);
+
+		res = Str.triml(res, "/");
+
+		if (res.isEmpty()) {
+			res = "index";
 		} else {
-			if (resourceName.endsWith(".html")) {
-				resourceName = Str.sub(resourceName, 0, -5);
+			if (res.endsWith(".html")) {
+				res = Str.sub(res, 0, -5);
 			}
 		}
 
-		return resourceName;
+		return res;
 	}
 
 	public static String verbAndResourceName(Req req) {

@@ -82,9 +82,12 @@ public class Str {
 	}
 
 	public static String replace(String s, String regex, Mapper<String[], String> replacer) {
+		return replace(s, Pattern.compile(regex), replacer);
+	}
+
+	public static String replace(String s, Pattern regex, Mapper<String[], String> replacer) {
 		StringBuffer output = new StringBuffer();
-		Pattern p = Pattern.compile(regex);
-		Matcher matcher = p.matcher(s);
+		Matcher matcher = regex.matcher(s);
 
 		while (matcher.find()) {
 			int len = matcher.groupCount() + 1;
