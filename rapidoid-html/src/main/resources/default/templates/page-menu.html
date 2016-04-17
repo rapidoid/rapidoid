@@ -36,7 +36,7 @@
 
     {{?username}}
     <ul class="nav navbar-nav navbar-right">
-        <li>
+        <li{{?has.path._profile}} class="active"{{/has.path._profile}}>
             <a href="/profile" data-toggle="tooltip" data-placement="bottom" title="My profile"><i class="fa fa-user"></i> ${username}</a>
         </li>
         <li>
