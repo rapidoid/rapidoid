@@ -303,16 +303,7 @@ public class Log {
 		return level.ordinal() >= LOG_LEVEL.ordinal();
 	}
 
-	public static void warn(String msg, Throwable error) {
-		warn(msg, "message", error.getMessage());
-	}
-
-	public static void error(String msg, Throwable error) {
-		error(msg, "message", error.getMessage());
-		error.printStackTrace();
-	}
-
-	/* AUTOMATICALLY GENERATED: */
+	/* TRACE */
 
 	public static void trace(String msg) {
 		log(LEVEL_TRACE, msg, null, null, null, null, null, null, null, null, null, null, 0);
@@ -341,6 +332,15 @@ public class Log {
 		log(LEVEL_TRACE, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
 	}
 
+	public static void trace(String msg, Throwable err) {
+		if (isTraceEnabled()) {
+			trace(msg, "message", err.getMessage());
+			err.printStackTrace();
+		}
+	}
+
+	/* DEBUG */
+
 	public static void debug(String msg) {
 		log(LEVEL_DEBUG, msg, null, null, null, null, null, null, null, null, null, null, 0);
 	}
@@ -367,6 +367,15 @@ public class Log {
 	                         Object value3, String key4, Object value4, String key5, Object value5) {
 		log(LEVEL_DEBUG, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
 	}
+
+	public static void debug(String msg, Throwable err) {
+		if (isDebugEnabled()) {
+			debug(msg, "message", err.getMessage());
+			err.printStackTrace();
+		}
+	}
+
+	/* INFO */
 
 	public static void info(String msg) {
 		log(LEVEL_INFO, msg, null, null, null, null, null, null, null, null, null, null, 0);
@@ -395,6 +404,15 @@ public class Log {
 		log(LEVEL_INFO, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
 	}
 
+	public static void info(String msg, Throwable err) {
+		if (isInfoEnabled()) {
+			info(msg, "message", err.getMessage());
+			err.printStackTrace();
+		}
+	}
+
+	/* WARN */
+
 	public static void warn(String msg) {
 		log(LEVEL_WARN, msg, null, null, null, null, null, null, null, null, null, null, 0);
 	}
@@ -422,6 +440,15 @@ public class Log {
 		log(LEVEL_WARN, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
 	}
 
+	public static void warn(String msg, Throwable err) {
+		if (isWarnEnabled()) {
+			warn(msg, "message", err.getMessage());
+			err.printStackTrace();
+		}
+	}
+
+	/* ERROR */
+
 	public static void error(String msg) {
 		log(LEVEL_ERROR, msg, null, null, null, null, null, null, null, null, null, null, 0);
 	}
@@ -447,6 +474,13 @@ public class Log {
 	public static void error(String msg, String key1, Object value1, String key2, Object value2, String key3,
 	                         Object value3, String key4, Object value4, String key5, Object value5) {
 		log(LEVEL_ERROR, msg, key1, value1, key2, value2, key3, value3, key4, value4, key5, value5, 5);
+	}
+
+	public static void error(String msg, Throwable err) {
+		if (isErrorEnabled()) {
+			error(msg, "message", err.getMessage());
+			err.printStackTrace();
+		}
 	}
 
 }
