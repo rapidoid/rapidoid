@@ -849,6 +849,14 @@ public class Cls {
 		}
 	}
 
+	public static <T> Class<T> get(String className) {
+		try {
+			return (Class<T>) Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			throw U.rte(e);
+		}
+	}
+
 	public static Class<?> unproxy(Class<?> cls) {
 		if (Proxy.class.isAssignableFrom(cls)) {
 			for (Class<?> interf : cls.getInterfaces()) {

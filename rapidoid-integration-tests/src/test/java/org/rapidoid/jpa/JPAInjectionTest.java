@@ -63,7 +63,7 @@ class MyCtrl {
 	@Inject
 	private IoCContext ioc;
 
-	@Inject
+	@javax.inject.Inject
 	private EntityManager em;
 
 	@Inject

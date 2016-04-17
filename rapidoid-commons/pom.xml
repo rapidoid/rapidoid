@@ -65,6 +65,12 @@
 			<version>${spring.version}</version>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
+			<optional>true</optional>
+		</dependency>
 
 		<!-- TEST -->
 
