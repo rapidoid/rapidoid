@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 3148
+Content-Length: 3087
 
 <!DOCTYPE html>
 <html lang="en">
@@ -74,7 +74,6 @@ Content-Length: 3148
 </div>
 
 <script src="/jquery-2.2.3.min.js"></script>
-<script src="/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="/login.js"></script>
 
 </body>
