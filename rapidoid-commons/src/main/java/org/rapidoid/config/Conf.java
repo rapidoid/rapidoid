@@ -59,7 +59,6 @@ public class Conf extends RapidoidThing {
 	public static final Config ADMIN = section("admin");
 
 	static {
-		RapidoidInitializer.initialize();
 		reload();
 	}
 
