@@ -2,6 +2,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.customize.Customization;
 import org.rapidoid.io.Upload;
 
 import java.io.Serializable;
@@ -368,5 +369,15 @@ public interface Req {
 	 * Has the request handling and response construction finished?
 	 */
 	boolean isDone();
+
+	/**
+	 * Provides access to the <b>HTTP routes</b> of the web application setup.
+	 */
+	HttpRoutes routes();
+
+	/**
+	 * Provides access to the <b>customization</b> of the web application setup.
+	 */
+	Customization custom();
 
 }

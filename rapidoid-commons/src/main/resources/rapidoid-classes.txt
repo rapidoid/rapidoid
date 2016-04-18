@@ -314,6 +314,7 @@ org.rapidoid.http.HttpMetadata
 org.rapidoid.http.HttpParser
 org.rapidoid.http.HttpResponseCodes
 org.rapidoid.http.HttpRoutes
+org.rapidoid.http.HttpRoutesImpl
 org.rapidoid.http.HttpStatus
 org.rapidoid.http.HttpUtils
 org.rapidoid.http.HttpVerb

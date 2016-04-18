@@ -51,20 +51,20 @@ public class FastHttp extends AbstractHttpProcessor {
 
 	private static final HttpParser HTTP_PARSER = new HttpParser();
 
-	private final HttpRoutes routes;
+	private final HttpRoutesImpl routes;
 	private final Customization customization;
 
 	private final Map<String, Object> attributes = Coll.synchronizedMap();
 	private final Map<String, Map<String, Serializable>> sessions = Coll.mapOfMaps();
 
-	public FastHttp(HttpRoutes routes, Customization customization) {
+	public FastHttp(HttpRoutesImpl routes) {
 		super(null);
 		this.routes = routes;
-		this.customization = customization;
+		this.customization = routes.custom();
 	}
 
 	public FastHttp(Customization customization) {
-		this(new HttpRoutes(customization), customization);
+		this(new HttpRoutesImpl(customization));
 	}
 
 	public synchronized void on(String verb, String path, HttpHandler handler) {
@@ -158,7 +158,7 @@ public class FastHttp extends AbstractHttpProcessor {
 			cookies = Collections.synchronizedMap(cookies);
 
 			req = new ReqImpl(this, channel, isKeepAlive, verb, uri, path, query, body, params, headers, cookies,
-					posted, files, contentType, segment, customization);
+					posted, files, contentType, segment, routes);
 
 			if (!attributes.isEmpty()) {
 				req.attrs().putAll(attributes);
@@ -268,7 +268,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		return customization;
 	}
 
-	public HttpRoutes getRoutes() {
+	public HttpRoutesImpl getRoutes() {
 		return routes;
 	}
 

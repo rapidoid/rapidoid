@@ -44,10 +44,10 @@ public class RoutesHandler extends GUI implements Callable<Object> {
 	public Object call() throws Exception {
 		List<Object> routes = U.list();
 
-		Set<Route> appRoutes = On.setup().getRoutes().allNonAdmin();
+		Set<Route> appRoutes = On.setup().routes().allNonAdmin();
 
-		Set<Route> adminRoutes = On.setup().getRoutes().allAdmin();
-		adminRoutes.addAll(Admin.setup().getRoutes().allAdmin());
+		Set<Route> adminRoutes = On.setup().routes().allAdmin();
+		adminRoutes.addAll(Admin.setup().routes().allAdmin());
 
 		routes.add(div(h3("Application routes:"), routesOf(appRoutes)));
 		routes.add(div(h3("Admin routes:"), routesOf(adminRoutes)));

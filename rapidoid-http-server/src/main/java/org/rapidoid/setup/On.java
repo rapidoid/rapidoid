@@ -167,7 +167,7 @@ public class On extends RapidoidThing {
 	}
 
 	public static HttpRoutes routes() {
-		return SETUP.getRoutes();
+		return SETUP.routes();
 	}
 
 	public static RouteOptions defaults() {

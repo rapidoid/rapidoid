@@ -95,12 +95,12 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	private final MediaType defaultContentType;
 
-	private final Customization customization;
+	private final HttpRoutesImpl routes;
 
 	public ReqImpl(FastHttp http, Channel channel, boolean isKeepAlive, String verb, String uri, String path,
 	               String query, byte[] body, Map<String, String> params, Map<String, String> headers,
 	               Map<String, String> cookies, Map<String, Object> posted, Map<String, List<Upload>> files,
-	               MediaType defaultContentType, String segment, Customization customization) {
+	               MediaType defaultContentType, String segment, HttpRoutesImpl routes) {
 
 		this.http = http;
 		this.channel = channel;
@@ -117,7 +117,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		this.files = files;
 		this.defaultContentType = defaultContentType;
 		this.segment = segment;
-		this.customization = customization;
+		this.routes = routes;
 	}
 
 	@Override
@@ -556,6 +556,16 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	}
 
 	@Override
+	public HttpRoutes routes() {
+		return routes;
+	}
+
+	@Override
+	public Customization custom() {
+		return routes.custom();
+	}
+
+	@Override
 	public Req async() {
 		this.async = true;
 		return this;
@@ -666,7 +676,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		if (contextPath == null) {
 			synchronized (this) {
 				if (contextPath == null) {
-					contextPath = HttpUtils.getContextPath(customization, segment());
+					contextPath = HttpUtils.getContextPath(routes.custom(), segment());
 				}
 			}
 		}

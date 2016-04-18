@@ -99,7 +99,7 @@ public class Setup extends RapidoidThing implements Constants {
 	private final IoCContext ioCContext;
 
 	private final Customization customization;
-	private final HttpRoutes routes;
+	private final HttpRoutesImpl routes;
 	private final FastHttp http;
 	private volatile RouteOptions defaults = new RouteOptions();
 
@@ -140,8 +140,8 @@ public class Setup extends RapidoidThing implements Constants {
 		this.serverConfig = serverConfig;
 
 		this.customization = new Customization(name, appConfig, serverConfig);
-		this.routes = new HttpRoutes(customization);
-		this.http = new FastHttp(routes, customization);
+		this.routes = new HttpRoutesImpl(customization);
+		this.http = new FastHttp(routes);
 
 		this.defaults.segment(segment);
 	}
@@ -517,7 +517,7 @@ public class Setup extends RapidoidThing implements Constants {
 		return customization;
 	}
 
-	public HttpRoutes getRoutes() {
+	public HttpRoutes routes() {
 		return routes;
 	}
 

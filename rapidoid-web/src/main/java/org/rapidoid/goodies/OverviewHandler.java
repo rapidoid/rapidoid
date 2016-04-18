@@ -39,7 +39,7 @@ public class OverviewHandler extends GUI implements Callable<Object> {
 
 		info.add(GraphsHandler.graphs(3));
 
-		info.add(div(h3("Application routes:"), RoutesHandler.routesOf(On.setup().getRoutes().allNonAdmin())));
+		info.add(div(h3("Application routes:"), RoutesHandler.routesOf(On.setup().routes().allNonAdmin())));
 
 		return multi(info);
 	}
