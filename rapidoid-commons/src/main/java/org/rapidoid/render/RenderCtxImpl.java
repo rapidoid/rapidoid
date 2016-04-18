@@ -147,6 +147,11 @@ public class RenderCtxImpl extends RapidoidThing implements RenderCtx {
 						return map.get(name);
 					}
 
+				} else if (x instanceof Getter) {
+					Getter getter = (Getter) x;
+
+					return getter.get(name);
+
 				} else {
 					Prop prop = Beany.property(x, name, false);
 
