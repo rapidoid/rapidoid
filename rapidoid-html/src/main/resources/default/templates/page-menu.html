@@ -36,8 +36,10 @@
 
     {{?username}}
     <ul class="nav navbar-nav navbar-right">
-        <li{{?has.path._profile}} class="active"{{/has.path._profile}}>
-            <a href="/profile" data-toggle="tooltip" data-placement="bottom" title="My profile"><i class="fa fa-user"></i> ${username}</a>
+        <li{{?has.path.$profile}} class="active"{{/has.path.$profile}}>
+        <a {{?has.page.$profile}}href="/profile" data-toggle="tooltip" data-placement="bottom" title="My profile"{{/has.page.$profile}}{{!has.page.$profile}}href="#"{{/has.page.$profile}}>
+            <i class="fa fa-user"></i> ${username}
+        </a>
         </li>
         <li>
             <a href="/_logout" data-toggle="tooltip" data-placement="bottom" title="Logout"><i class="fa fa-sign-out"></i></a>
