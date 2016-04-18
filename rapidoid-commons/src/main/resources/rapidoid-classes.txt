@@ -29,6 +29,7 @@ org.rapidoid.annotation.Page
 org.rapidoid.annotation.Param
 org.rapidoid.annotation.PATCH
 org.rapidoid.annotation.POST
+org.rapidoid.annotation.Profiles
 org.rapidoid.annotation.Programmatic
 org.rapidoid.annotation.PUT
 org.rapidoid.annotation.Rel
@@ -185,6 +186,7 @@ org.rapidoid.gui.GUI
 org.rapidoid.gui.Highlight
 org.rapidoid.gui.HighlightGrid
 org.rapidoid.gui.HtmlPage
+org.rapidoid.gui.HtmlPageUtils
 org.rapidoid.gui.I18N
 org.rapidoid.gui.KVGrid
 org.rapidoid.gui.Layout

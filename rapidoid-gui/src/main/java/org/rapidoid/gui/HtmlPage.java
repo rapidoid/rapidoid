@@ -14,7 +14,6 @@ import org.rapidoid.render.Template;
 import org.rapidoid.render.Templates;
 import org.rapidoid.u.U;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -132,25 +131,12 @@ public class HtmlPage extends AbstractWidget {
 	private Map<String, Object> has(IReqInfo req) {
 		Map<String, Object> has = U.map();
 
-		has.put("role", has(req.roles()));
-		has.put("path", has(req.path().replace('/', '_')));
-		has.put("segment", has(req.segment()));
+		has.put("role", HtmlPageUtils.HAS_ROLE);
+		has.put("path", HtmlPageUtils.HAS_PATH);
+		has.put("segment", HtmlPageUtils.HAS_SEGMENT);
+		has.put("page", HtmlPageUtils.HAS_PAGE);
 
 		return has;
-	}
-
-	private Object has(Collection<String> flags) {
-		Map<String, Object> has = U.map();
-
-		for (String flag : U.safe(flags)) {
-			has.put(flag, true);
-		}
-
-		return has;
-	}
-
-	private Object has(String... flags) {
-		return has(U.list(flags));
 	}
 
 	public String home() {
@@ -240,4 +226,5 @@ public class HtmlPage extends AbstractWidget {
 		this.fluid = fluid;
 		return this;
 	}
+
 }
