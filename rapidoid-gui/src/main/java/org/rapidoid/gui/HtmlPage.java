@@ -42,26 +42,9 @@ import java.util.Set;
 @Since("5.0.0")
 public class HtmlPage extends AbstractWidget {
 
-	private static volatile Template PAGE_TEMPLATE;
+	private static volatile Template PAGE_TEMPLATE = Templates.fromFile("page.html");
 
-	private static volatile Template PAGE_CONTENT_TEMPLATE;
-
-	private static Template fullTemplate() {
-		initTemplates();
-		return PAGE_TEMPLATE;
-	}
-
-	private static Template ajaxTemplate() {
-		initTemplates();
-		return PAGE_CONTENT_TEMPLATE;
-	}
-
-	private static void initTemplates() {
-		if (PAGE_TEMPLATE == null || PAGE_CONTENT_TEMPLATE == null) {
-			PAGE_TEMPLATE = Templates.fromFile("page.html");
-			PAGE_CONTENT_TEMPLATE = Templates.fromFile("page-ajax.html");
-		}
-	}
+	private static volatile Template PAGE_AJAX_TEMPLATE = Templates.fromFile("page-ajax.html");
 
 	private volatile String home;
 	private volatile Object brand;
@@ -88,9 +71,9 @@ public class HtmlPage extends AbstractWidget {
 
 		String html;
 		if (ReqInfo.get().isGetReq()) {
-			html = fullTemplate().render(model);
+			html = PAGE_TEMPLATE.render(model);
 		} else {
-			html = ajaxTemplate().render(model);
+			html = PAGE_AJAX_TEMPLATE.render(model);
 		}
 
 		return hardcoded(html);

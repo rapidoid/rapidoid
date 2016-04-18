@@ -9,9 +9,10 @@ import org.rapidoid.commons.MediaType;
 import org.rapidoid.data.JSON;
 import org.rapidoid.data.Range;
 import org.rapidoid.http.customize.ErrorHandler;
-import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.render.Template;
+import org.rapidoid.render.Templates;
 import org.rapidoid.util.Constants;
 
 /*
@@ -60,6 +61,8 @@ public class HttpIO extends RapidoidThing {
 	private static final byte[] DATE_IS = "Date: ".getBytes();
 
 	private static final byte[][] CONTENT_LENGTHS = new byte[CONTENT_LENGTHS_SIZE][];
+
+	public static final Template PAGE_404 = Templates.fromFile("404.html");
 
 	static {
 		for (int len = 0; len < CONTENT_LENGTHS.length; len++) {
@@ -175,7 +178,7 @@ public class HttpIO extends RapidoidThing {
 
 	public static void write404(Channel ctx, boolean isKeepAlive) {
 		startResponse(ctx, 404, isKeepAlive, MediaType.HTML_UTF_8);
-		writeContentLengthAndBody(ctx, Res.from("404.html", "pages", "default/pages").getBytes());
+		writeContentLengthAndBody(ctx, PAGE_404.render().getBytes());
 	}
 
 }
