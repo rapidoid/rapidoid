@@ -226,13 +226,11 @@ i.btn-close:hover {
 }
 
 .eg_title {
-	padding-bottom: 5px !important;
-	padding-top: 5px !important;
-	padding-left: 10px !important;
-	padding-right: 10px !important;
-	background: #DDE !important;
+	padding: 2px 5px !important;
+	background: #DDD !important;
 	font-size: 13px !important;
 	color: #333 !important;
+	font-weight: bold;
 }
 
 ._code_linecomm {
