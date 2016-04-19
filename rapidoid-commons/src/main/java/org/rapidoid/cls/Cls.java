@@ -1056,11 +1056,15 @@ public class Cls extends RapidoidThing {
 		}
 
 		if (defaultNames) {
+			boolean useIndexMapping;
 			CtMethod cm;
+
 			try {
 				ClassPool cp = new ClassPool();
 				cp.insertClassPath(new ClassClassPath(method.getDeclaringClass()));
 				CtClass cc = cp.get(method.getDeclaringClass().getName());
+
+				useIndexMapping = cc.getClassFile().getMajorVersion() >= 52;
 
 				CtClass[] params = new CtClass[paramTypes.length];
 				for (int i = 0; i < params.length; i++) {
@@ -1083,6 +1087,10 @@ public class Cls extends RapidoidThing {
 
 			for (int i = 0; i < attr.tableLength(); i++) {
 				int index = i - offset;
+				if (useIndexMapping) {
+					index = attr.index(index);
+				}
+
 				String var = attr.variableName(i);
 
 				if (index >= 0 && index < names.length) {
