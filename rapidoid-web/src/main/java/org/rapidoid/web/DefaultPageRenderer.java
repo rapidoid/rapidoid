@@ -89,34 +89,36 @@ public class DefaultPageRenderer extends RapidoidThing implements PageRenderer {
 			page.title(segment.entry("title").str().orElse(title).getOrNull());
 		}
 
+		Object brand;
 		if (screen.brand() != null) {
-			page.brand(screen.brand());
+			brand = screen.brand();
 		} else {
-			page.brand(GUI.hardcoded(segment.entry("brand").str().orElse(brand).getOrNull()));
+			brand = segment.entry("brand").str().orElse(this.brand).getOrNull();
 		}
+		page.brand(U.or(brand, ""));
 
 		if (screen.search() != null) {
 			page.search(screen.search());
 		} else {
-			page.search(segment.entry("search").bool().orElse(search).getOrNull());
+			page.search(segment.entry("search").bool().orElse(search).or(false));
 		}
 
 		if (screen.navbar() != null) {
 			page.navbar(screen.navbar());
 		} else {
-			page.navbar(segment.entry("navbar").bool().orElse(navbar).getOrNull());
+			page.navbar(segment.entry("navbar").bool().orElse(navbar).or(brand != null));
 		}
 
 		if (screen.fluid() != null) {
 			page.fluid(screen.fluid());
 		} else {
-			page.fluid(segment.entry("fluid").bool().orElse(fluid).getOrNull());
+			page.fluid(segment.entry("fluid").bool().orElse(fluid).or(false));
 		}
 
 		if (screen.cdn() != null) {
 			page.cdn(screen.cdn());
 		} else {
-			String cdnS = segment.entry("cdn").str().orElse(cdn).getOrNull();
+			String cdnS = segment.entry("cdn").str().orElse(cdn).or("auto");
 			if (!"auto".equalsIgnoreCase(cdnS)) {
 				page.cdn(Cls.bool(cdnS));
 			}

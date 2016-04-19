@@ -187,7 +187,7 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	private boolean delegateAdminToApp() {
-		return isAdmin() && Conf.ADMIN.entry("port").num().get().intValue() == 0;
+		return isAdmin() && Conf.ADMIN.entry("port").or(0) == 0;
 	}
 
 	private boolean isAdmin() {
