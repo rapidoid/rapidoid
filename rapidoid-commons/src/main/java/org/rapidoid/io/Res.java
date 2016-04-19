@@ -45,7 +45,9 @@ public class Res extends RapidoidThing {
 
 	public static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(1);
 
-	public static final String[] DEFAULT_LOCATIONS = {""};
+	private static final String[] DEFAULT_LOCATIONS = {""};
+
+	private static volatile String ROOT = "";
 
 	private final String name;
 
@@ -98,6 +100,17 @@ public class Res extends RapidoidThing {
 
 		U.must(!U.isEmpty(filename), "Resource filename must be specified!");
 		U.must(!file.isAbsolute(), "Expected relative filename!");
+
+		if (U.notEmpty(ROOT)) {
+			String[] loc = new String[possibleLocations.length * 2];
+
+			for (int i = 0; i < possibleLocations.length; i++) {
+				loc[2 * i] = Msc.path(ROOT, possibleLocations[i]);
+				loc[2 * i + 1] = possibleLocations[i];
+			}
+
+			possibleLocations = loc;
+		}
 
 		return create(filename, possibleLocations);
 	}
@@ -305,4 +318,11 @@ public class Res extends RapidoidThing {
 		FILES.clear();
 	}
 
+	public static String root() {
+		return ROOT;
+	}
+
+	public static void root(String root) {
+		Res.ROOT = root;
+	}
 }
