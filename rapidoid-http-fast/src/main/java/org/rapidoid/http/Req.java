@@ -370,6 +370,8 @@ public interface Req {
 	 */
 	boolean isDone();
 
+	/* WEB APPLICATION SETUP: */
+
 	/**
 	 * Provides access to the <b>HTTP routes</b> of the web application setup.
 	 */

@@ -105,7 +105,7 @@ public class Str extends RapidoidThing {
 				throw U.rte(e);
 			}
 
-			matcher.appendReplacement(output, U.str(value));
+			matcher.appendReplacement(output, U.str(value).replace("$", "\\$"));
 		}
 
 		matcher.appendTail(output);
