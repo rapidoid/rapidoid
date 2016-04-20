@@ -80,11 +80,12 @@ public class DefaultErrorHandler extends RapidoidThing implements ErrorHandler {
 			return resp.code(403).view("login").mvc(true);
 		} else {
 
-			Config segment = segments.sub(req.segment());
+			String seg = req.segment();
+			String homeUri = seg != null ? segments.sub(seg).entry("home").str().orElse(this.home).or("/") : "/";
 
 			Map<String, ?> errorInfo = HttpUtils.getErrorInfo(resp, error);
 			resp.model().put("error", errorInfo);
-			resp.model().put("home", segment.entry("home").str().orElse(home).or("/"));
+			resp.model().put("home", homeUri);
 
 			return resp.mvc(true).view("error");
 		}
