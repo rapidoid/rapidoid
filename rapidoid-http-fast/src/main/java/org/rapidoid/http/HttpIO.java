@@ -54,7 +54,7 @@ public class HttpIO extends RapidoidThing {
 
 	private static final byte[] CONTENT_LENGTH_IS = "Content-Length: ".getBytes();
 
-	static final byte[] CONTENT_LENGTH_UNKNOWN = "Content-Length:           ".getBytes();
+	static final byte[] CONTENT_LENGTH_UNKNOWN = "Content-Length: 0000000000".getBytes();
 
 	private static final int CONTENT_LENGTHS_SIZE = 5000;
 
