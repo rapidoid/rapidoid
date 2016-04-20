@@ -76,16 +76,16 @@ public class JPA extends RapidoidThing {
 		return with(em()).count(clazz);
 	}
 
-	public static Object save(Object record) {
+	public static <E> E save(E record) {
 		return with(em()).save(record);
 	}
 
-	public static Object insert(Object entity) {
+	public static <E> E insert(E entity) {
 		return with(em()).insert(entity);
 	}
 
-	public static void update(Object record) {
-		with(em()).update(record);
+	public static <E> E update(E record) {
+		return with(em()).update(record);
 	}
 
 	public static void delete(Object record) {
@@ -102,6 +102,10 @@ public class JPA extends RapidoidThing {
 
 	public static void merge(Object entity) {
 		with(em()).merge(entity);
+	}
+
+	public static void detach(Object entity) {
+		with(em()).detach(entity);
 	}
 
 	public static void transaction(Runnable action) {

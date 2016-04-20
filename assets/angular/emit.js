@@ -1,5 +1,7 @@
 Rapidoid.initializer(function($scope) {
 
+    var reqId = 0;
+
     $scope._emit = function(event, eventId, eventArgs) {
 
         var btn = $(event.currentTarget);
@@ -25,6 +27,8 @@ Rapidoid.initializer(function($scope) {
     };
 
     function doEmit(event, eventId, eventArgs) {
+
+        reqId++;
 
         var btn = $(event.currentTarget);
         var go = btn.data("go");
@@ -74,14 +78,15 @@ Rapidoid.initializer(function($scope) {
 
         $.post(window.location.href, inputs).done(function(data) {
 
-            if (go) {
-                Rapidoid.goAt(go);
-                return;
-            }
-
             if (typeof data === 'string' || data instanceof String) {
-                $scope.ajaxBodyContent = data;
-                $scope.$apply();
+
+                if (go && data.indexOf('class="field-error"') < 0) {
+                    Rapidoid.goAt(go);
+                } else {
+                    $scope.ajaxBodyContent = data + '<!--' + reqId + '-->';
+                    $scope.$apply();
+                }
+
                 return;
             }
 
@@ -128,7 +133,11 @@ Rapidoid.initializer(function($scope) {
 
         }).fail(function(data) {
             $('i:last-child', btn).remove();
-            swal("Communication error!", "Couldn't connect to the server!", "error");
+
+            var title = "Server error: " + data.status + "!";
+            var msg = data.statusText;
+
+            swal(title, msg, "error");
             console.log(data);
         });
     }

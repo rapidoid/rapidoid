@@ -2,6 +2,7 @@ package org.rapidoid.gui.base;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.u.U;
 
@@ -35,7 +36,11 @@ public abstract class AbstractCommand<W extends AbstractCommand<?>> extends Abst
 
 	private String[] cmdArgs;
 
-	protected Runnable handler;
+	private Runnable handler;
+
+	private Runnable handlerOnSuccess;
+
+	private Runnable handlerOnError;
 
 	private boolean handled;
 
@@ -58,7 +63,7 @@ public abstract class AbstractCommand<W extends AbstractCommand<?>> extends Abst
 	}
 
 	protected void handleEventIfMatching() {
-		if (!handled && handler != null && command != null) {
+		if (!handled && hasHandler() && command != null) {
 			if (!ReqInfo.get().isGetReq()) {
 				String event = (String) ReqInfo.get().posted().get("_cmd");
 
@@ -71,9 +76,29 @@ public abstract class AbstractCommand<W extends AbstractCommand<?>> extends Abst
 
 					if (Arrays.equals(args, cmdArgs)) {
 						handled = true;
-						handler.run();
+						handleAction();
 					}
 				}
+			}
+		}
+	}
+
+	protected boolean hasHandler() {
+		return handler != null || handlerOnSuccess != null || handlerOnError != null;
+	}
+
+	private void handleAction() {
+		if (handler != null) {
+			handler.run();
+		}
+
+		if (!GUI.hasValidationErrors()) {
+			if (handlerOnSuccess != null) {
+				handlerOnSuccess.run();
+			}
+		} else {
+			if (handlerOnError != null) {
+				handlerOnError.run();
 			}
 		}
 	}
@@ -86,8 +111,30 @@ public abstract class AbstractCommand<W extends AbstractCommand<?>> extends Abst
 		return cmdArgs;
 	}
 
-	protected void setHandler(Runnable handler) {
-		this.handler = handler;
+	protected Runnable handler() {
+		return handler;
 	}
 
+	protected AbstractCommand handler(Runnable handler) {
+		this.handler = handler;
+		return this;
+	}
+
+	protected Runnable handlerOnSuccess() {
+		return handlerOnSuccess;
+	}
+
+	protected AbstractCommand handlerOnSuccess(Runnable handlerOnSuccess) {
+		this.handlerOnSuccess = handlerOnSuccess;
+		return this;
+	}
+
+	protected Runnable handlerOnError() {
+		return handlerOnError;
+	}
+
+	protected AbstractCommand handlerOnError(Runnable handlerOnError) {
+		this.handlerOnError = handlerOnError;
+		return this;
+	}
 }

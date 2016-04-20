@@ -206,6 +206,8 @@ public class X extends RapidoidThing {
 					return null;
 				}
 
+				JPA.detach(entity);
+
 				if (resp.screen().title() == null) {
 					resp.screen().title("Edit " + name(entityType));
 				}
@@ -219,7 +221,7 @@ public class X extends RapidoidThing {
 	}
 
 	public static Btn btnSave(final Object entity) {
-		return GUI.btn("Save").primary().onClick(new Runnable() {
+		return GUI.btn("Save").primary().onSuccess(new Runnable() {
 			@Override
 			public void run() {
 				JPA.save(entity);

@@ -994,4 +994,11 @@ public abstract class BootstrapWidgets extends HTML {
 		return Msc.uri(contextPath, typeUri);
 	}
 
+	public static void markValidationErrors() {
+		ReqInfo.get().attrs().put("has-validation-errors", true);
+	}
+
+	public static boolean hasValidationErrors() {
+		return Boolean.TRUE.equals(ReqInfo.get().attrs().get("has-validation-errors"));
+	}
 }

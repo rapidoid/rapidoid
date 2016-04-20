@@ -3,15 +3,15 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 760
+Content-Length: 872
 
 <form class="" role="form">
-  <div class="form-group">
+  <div class="form-group with-validation-errors" data-has-validation-errors="yes">
     <label>Name: </label>
     <input _h="name" type="text" class="form-control" value="" name="name">
     <span class="field-error">Non-empty value is required!</span>
   </div>
-  <div class="form-group">
+  <div class="form-group with-validation-errors" data-has-validation-errors="yes">
     <label>Age: </label>
     <input _h="age" type="text" class="form-control" value="" name="age">
     <span class="field-error">Non-empty value is required!</span>

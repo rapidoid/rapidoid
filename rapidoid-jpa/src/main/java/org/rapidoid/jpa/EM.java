@@ -47,21 +47,57 @@ public class EM extends RapidoidThing {
 		this.em = em;
 	}
 
-	public Object save(Object entity) {
+	public <E> E save(E entity) {
 		Object id = getIdentifier(entity);
 
 		if (id == null) {
 			return insert(entity);
 
 		} else {
-			update(entity);
-			return id;
+			return update(entity);
 		}
 	}
 
-	public void update(Object entity) {
+	public <E> E insert(E entity) {
 		ensureNotInReadOnlyTransation();
-		em.persist(entity);
+
+		EntityTransaction tx = em.getTransaction();
+
+		boolean txWasActive = tx.isActive();
+
+		if (!txWasActive) {
+			tx.begin();
+		}
+
+		try {
+			em.persist(entity);
+			em.flush();
+
+			if (!txWasActive) {
+				tx.commit();
+			}
+
+			return entity;
+
+		} catch (Throwable e) {
+			if (!txWasActive) {
+				if (tx.isActive()) {
+					tx.rollback();
+				}
+			}
+			throw U.rte("Transaction execution error, rolled back!", e);
+		}
+	}
+
+	public <E> E update(E entity) {
+		ensureNotInReadOnlyTransation();
+
+		if (em.contains(entity)) {
+			em.persist(entity);
+			return entity;
+		} else {
+			return em.merge(entity);
+		}
 	}
 
 	public <E> List<E> getAll(Class<E> clazz, List<String> ids) {
@@ -82,39 +118,6 @@ public class EM extends RapidoidThing {
 
 	public <E> E ref(Class<E> clazz, Object id) {
 		return em.getReference(clazz, id);
-	}
-
-	public Object insert(Object entity) {
-		ensureNotInReadOnlyTransation();
-
-		EntityTransaction tx = em.getTransaction();
-
-		boolean txWasActive = tx.isActive();
-
-		if (!txWasActive) {
-			tx.begin();
-		}
-
-		try {
-			em.persist(entity);
-			em.flush();
-
-			Object id = getIdentifier(entity);
-
-			if (!txWasActive) {
-				tx.commit();
-			}
-
-			return id;
-
-		} catch (Throwable e) {
-			if (!txWasActive) {
-				if (tx.isActive()) {
-					tx.rollback();
-				}
-			}
-			throw U.rte("Transaction execution error, rolled back!", e);
-		}
 	}
 
 	public <T> T find(Class<T> clazz, Object id) {
@@ -161,6 +164,10 @@ public class EM extends RapidoidThing {
 
 	public void merge(Object entity) {
 		em.merge(entity);
+	}
+
+	public void detach(Object entity) {
+		em.detach(entity);
 	}
 
 	public <E> void delete(Class<E> clazz, Object id) {

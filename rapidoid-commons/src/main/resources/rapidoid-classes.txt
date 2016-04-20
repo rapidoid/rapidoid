@@ -168,6 +168,7 @@ org.rapidoid.goodies.MultiDetailsHandler
 org.rapidoid.goodies.OverviewHandler
 org.rapidoid.goodies.RapidoidGoodiesModule
 org.rapidoid.goodies.RoutesHandler
+org.rapidoid.goodies.X
 org.rapidoid.gui.base.AbstractCommand
 org.rapidoid.gui.base.AbstractWidget
 org.rapidoid.gui.base.BootstrapWidgets
@@ -565,7 +566,6 @@ org.rapidoid.web.DefaultPageRenderer
 org.rapidoid.web.Rapidoid
 org.rapidoid.web.RapidoidWebModule
 org.rapidoid.web.StandAlone
-org.rapidoid.web.X
 org.rapidoid.wrap.BoolWrap
 org.rapidoid.wrap.CharWrap
 org.rapidoid.wrap.DoubleWrap

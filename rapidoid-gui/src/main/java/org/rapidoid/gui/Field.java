@@ -28,7 +28,6 @@ import org.rapidoid.var.Vars;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
 
 /*
  * #%L
@@ -176,11 +175,16 @@ public class Field extends AbstractWidget {
 			inputWrap = layout == FormLayout.HORIZONTAL ? div(inp).class_("col-sm-8") : inp;
 		}
 
-		Set<String> fieldErrors = var.errors();
-		Tag err = U.notEmpty(fieldErrors) ? span(U.join(", ", fieldErrors)).class_("field-error") : null;
+		boolean hasErrors = U.notEmpty(var.errors());
+		Tag err = hasErrors ? span(U.join(", ", var.errors())).class_("field-error") : null;
 
 		Tag group = lbl != null ? div(lbl, inputWrap, err) : div(inputWrap, err);
-		group = group.class_("form-group");
+		group = group.class_(hasErrors ? "form-group with-validation-errors" : "form-group");
+
+		if (hasErrors) {
+			group = group.attr("data-has-validation-errors", "yes");
+			GUI.markValidationErrors();
+		}
 
 		return group;
 	}

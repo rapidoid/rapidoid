@@ -47,7 +47,7 @@ public class Btn extends AbstractCommand<Btn> {
 
 		String cls = U.or(class_, "btn btn-" + kind);
 
-		if (go != null && handler == null && confirm() == null) {
+		if (go != null && !hasHandler() && confirm() == null) {
 			return a(contents).href(go).class_(cls);
 		}
 
@@ -130,7 +130,17 @@ public class Btn extends AbstractCommand<Btn> {
 	}
 
 	public Btn onClick(Runnable onClickHandler) {
-		setHandler(onClickHandler);
+		handler(onClickHandler);
+		return this;
+	}
+
+	public Btn onSuccess(Runnable onSuccessHandler) {
+		handlerOnSuccess(onSuccessHandler);
+		return this;
+	}
+
+	public Btn onError(Runnable onErrorHandler) {
+		handlerOnError(onErrorHandler);
 		return this;
 	}
 
