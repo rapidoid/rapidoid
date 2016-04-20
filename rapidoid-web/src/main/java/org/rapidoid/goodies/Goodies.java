@@ -12,7 +12,6 @@ import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.util.Msc;
-import org.rapidoid.web.X;
 
 import java.lang.management.ManagementFactory;
 

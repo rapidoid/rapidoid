@@ -1,4 +1,4 @@
-package org.rapidoid.web;
+package org.rapidoid.goodies;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
