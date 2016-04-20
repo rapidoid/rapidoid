@@ -299,4 +299,8 @@ public class IO extends RapidoidThing {
 		}
 	}
 
+	public static void write(OutputStream out, String content) {
+		write(out, content.getBytes());
+	}
+
 }

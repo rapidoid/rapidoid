@@ -45,10 +45,10 @@ public class AsyncHttpServerTest extends IntegrationTestCommons {
 			U.must(req.isAsync());
 
 			Jobs.schedule(() -> {
-				IO.write(req.response().out(), "O".getBytes());
+				IO.write(req.response().out(), "O");
 
 				Jobs.schedule(() -> {
-					IO.write(req.response().out(), "K".getBytes());
+					IO.write(req.response().out(), "K");
 					req.done();
 				}, 1, TimeUnit.SECONDS);
 
@@ -59,6 +59,24 @@ public class AsyncHttpServerTest extends IntegrationTestCommons {
 
 		eq(HTTP.get("http://localhost:8888/").fetch(), "OK");
 		eq(HTTP.post("http://localhost:8888/").fetch(), "OK");
+	}
+
+	@Test
+	public void testAsyncHttpServer2() {
+		On.req(req -> {
+			return Jobs.after(1, TimeUnit.SECONDS).run(() -> {
+				IO.write(req.response().out(), "A");
+
+				Jobs.after(1, TimeUnit.SECONDS).run(() -> {
+					IO.write(req.response().out(), "SYNC");
+					req.done();
+				});
+
+			});
+		});
+
+		eq(HTTP.get("http://localhost:8888/").fetch(), "ASYNC");
+		eq(HTTP.post("http://localhost:8888/").fetch(), "ASYNC");
 	}
 
 }
