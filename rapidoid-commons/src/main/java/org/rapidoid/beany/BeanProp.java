@@ -336,8 +336,7 @@ public class BeanProp extends RapidoidThing implements Prop {
 				throw Err.notExpected();
 			}
 		} catch (Exception e) {
-			throw U.rte("Cannot set %s %s.%s = %s (%s)", e, getType(), getDeclaringType(), getName(), value,
-					Cls.of(value));
+			throw U.rte("Invalid value for '%s'!", getName());
 		}
 	}
 

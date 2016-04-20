@@ -28,6 +28,7 @@ import org.rapidoid.var.Vars;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 /*
  * #%L
@@ -90,8 +91,13 @@ public class Field extends AbstractWidget {
 		this.desc = U.or(prop.caption(), name);
 		this.type = mode != FormMode.SHOW ? getPropertyFieldType(prop) : FieldType.LABEL;
 		this.options = getPropertyOptions(prop);
-		this.required = Metadata.get(prop.annotations(), Required.class) != null;
+		this.required = isFieldRequired(prop);
 		this.var = initVar(item, prop);
+	}
+
+	protected boolean isFieldRequired(Property prop) {
+		return prop.type().isPrimitive()
+				|| Metadata.has(prop.annotations(), Required.class);
 	}
 
 	private Var<Object> initVar(Item item, Property prop) {
@@ -170,9 +176,12 @@ public class Field extends AbstractWidget {
 			inputWrap = layout == FormLayout.HORIZONTAL ? div(inp).class_("col-sm-8") : inp;
 		}
 
-		Tag err = span(U.join(", ", var.errors())).class_("field-error");
+		Set<String> fieldErrors = var.errors();
+		Tag err = U.notEmpty(fieldErrors) ? span(U.join(", ", fieldErrors)).class_("field-error") : null;
+
 		Tag group = lbl != null ? div(lbl, inputWrap, err) : div(inputWrap, err);
 		group = group.class_("form-group");
+
 		return group;
 	}
 

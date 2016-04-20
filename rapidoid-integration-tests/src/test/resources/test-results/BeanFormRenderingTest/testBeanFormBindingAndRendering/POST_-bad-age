@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 415
+Content-Length: 690
 
 <form class="" role="form">
   <div class="form-group">
@@ -14,6 +14,14 @@ Content-Length: 415
     <label>Age: </label>
     <input _h="age" type="text" class="form-control" value="123f" name="age">
     <span class="field-error">Invalid number!</span>
+  </div>
+  <div class="form-group">
+    <label>X: </label>
+    <input _h="x" type="text" class="form-control" value="" name="x">
+  </div>
+  <div class="form-group">
+    <label>Desc: </label>
+    <input _h="desc" type="text" class="form-control" value="" name="desc">
   </div>
   <div class="form-group"></div>
 </form>

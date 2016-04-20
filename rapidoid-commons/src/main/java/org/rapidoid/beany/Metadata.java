@@ -108,4 +108,9 @@ public class Metadata extends RapidoidThing {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static boolean has(Annotation[] annotations, Class<? extends Annotation> annotationClass) {
+		return get(annotations, annotationClass) != null;
+	}
+
 }
