@@ -17,12 +17,8 @@ org.rapidoid.annotation.DELETE
 org.rapidoid.annotation.GET
 org.rapidoid.annotation.HEAD
 org.rapidoid.annotation.Header
-org.rapidoid.annotation.Init
-org.rapidoid.annotation.Inject
-org.rapidoid.annotation.Local
 org.rapidoid.annotation.Mixin
 org.rapidoid.annotation.OfType
-org.rapidoid.annotation.Optional
 org.rapidoid.annotation.OPTIONS
 org.rapidoid.annotation.Order
 org.rapidoid.annotation.Page
@@ -33,8 +29,8 @@ org.rapidoid.annotation.Profiles
 org.rapidoid.annotation.Programmatic
 org.rapidoid.annotation.PUT
 org.rapidoid.annotation.Rel
+org.rapidoid.annotation.Required
 org.rapidoid.annotation.Scaffold
-org.rapidoid.annotation.Session
 org.rapidoid.annotation.Since
 org.rapidoid.annotation.Special
 org.rapidoid.annotation.ToString
@@ -42,6 +38,7 @@ org.rapidoid.annotation.TRACE
 org.rapidoid.annotation.Transaction
 org.rapidoid.annotation.TransactionMode
 org.rapidoid.annotation.Valid
+org.rapidoid.annotation.Wired
 org.rapidoid.beany.AnnotatedPropertyFilter
 org.rapidoid.beany.BeanProp
 org.rapidoid.beany.BeanProperties
