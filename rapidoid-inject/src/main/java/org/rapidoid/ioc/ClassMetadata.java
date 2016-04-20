@@ -7,6 +7,7 @@ import org.rapidoid.annotation.Wired;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.util.Msc;
 
+import javax.annotation.Resource;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
@@ -41,7 +42,9 @@ public class ClassMetadata extends RapidoidThing {
 
 	public ClassMetadata(Class<?> clazz) {
 		this.clazz = clazz;
+
 		this.injectableFields = Cls.getFieldsAnnotated(clazz, Wired.class);
+		this.injectableFields.addAll(Cls.getFieldsAnnotated(clazz, Resource.class));
 
 		if (Msc.hasInject()) {
 			Class<Annotation> javaxInject = Cls.get("javax.inject.Inject");

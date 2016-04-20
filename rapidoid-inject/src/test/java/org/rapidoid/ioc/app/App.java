@@ -20,7 +20,10 @@ package org.rapidoid.ioc.app;
  * #L%
  */
 
-import org.rapidoid.annotation.*;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Autocreate;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Wired;
 import org.rapidoid.ioc.Logger;
 
 import javax.annotation.PostConstruct;

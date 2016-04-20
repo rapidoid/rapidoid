@@ -341,7 +341,8 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 	}
 
 	private boolean isInjectOptional(Field field) {
-		return field.getAnnotation(Wired.class) != null;
+		Wired wired = field.getAnnotation(Wired.class);
+		return wired != null && wired.optional();
 	}
 
 	private <T> void invokePostConstruct(T target) {
