@@ -34,7 +34,7 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.10")
-public class HttpPojoControllerTest extends HttpTestCommons {
+public class HttpPojoControllerTest extends IntegrationTestCommons {
 
 	@Test
 	public void testPojoHandlers() {

@@ -28,7 +28,7 @@ import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.10")
-public class HttpErrorTest extends HttpTestCommons {
+public class HttpErrorTest extends IntegrationTestCommons {
 
 	@Test
 	public void testWithHandlerException() {

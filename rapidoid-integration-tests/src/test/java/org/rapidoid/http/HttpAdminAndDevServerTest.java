@@ -30,7 +30,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HttpAdminAndDevServerTest extends HttpTestCommons {
+public class HttpAdminAndDevServerTest extends IntegrationTestCommons {
 
 	@Test
 	public void testAdminOnAppServer() {

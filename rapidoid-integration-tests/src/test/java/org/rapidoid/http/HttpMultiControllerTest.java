@@ -28,7 +28,7 @@ import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")
-public class HttpMultiControllerTest extends HttpTestCommons {
+public class HttpMultiControllerTest extends IntegrationTestCommons {
 
 	@Test
 	public void testSequentialControllerRegistration() {

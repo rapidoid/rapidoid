@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")
-public class HttpHtmlApiTest extends HttpTestCommons {
+public class HttpHtmlApiTest extends IntegrationTestCommons {
 
 	@Test
 	public void test01() {

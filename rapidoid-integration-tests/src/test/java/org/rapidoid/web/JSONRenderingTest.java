@@ -24,12 +24,12 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.domain.Movie;
-import org.rapidoid.http.HttpTestCommons;
+import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JSONRenderingTest extends HttpTestCommons {
+public class JSONRenderingTest extends IntegrationTestCommons {
 
 	@Test
 	public void testJSONRendering() {

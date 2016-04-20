@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Config;
 import org.rapidoid.http.FastHttp;
-import org.rapidoid.http.HttpTestCommons;
+import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.net.Server;
@@ -33,7 +33,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HttpHandlerTest extends HttpTestCommons {
+public class HttpHandlerTest extends IntegrationTestCommons {
 
 	@Test
 	public void testFastHttpHandler() {

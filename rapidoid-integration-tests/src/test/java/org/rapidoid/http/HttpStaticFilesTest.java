@@ -27,7 +27,7 @@ import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")
-public class HttpStaticFilesTest extends HttpTestCommons {
+public class HttpStaticFilesTest extends IntegrationTestCommons {
 
 	@Test
 	public void serveStaticFiles() {

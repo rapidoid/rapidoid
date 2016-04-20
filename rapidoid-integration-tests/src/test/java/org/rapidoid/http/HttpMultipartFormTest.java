@@ -33,7 +33,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class HttpMultipartFormTest extends HttpTestCommons {
+public class HttpMultipartFormTest extends IntegrationTestCommons {
 
 	@Test
 	public void shouldHandleUploads() throws Throwable {

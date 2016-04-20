@@ -30,7 +30,7 @@ import java.nio.charset.Charset;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class HttpServerUTF8Test extends HttpTestCommons {
+public class HttpServerUTF8Test extends IntegrationTestCommons {
 
 	@Test
 	public void shouldHandleUTF8() {

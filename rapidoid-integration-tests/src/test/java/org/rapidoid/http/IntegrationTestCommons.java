@@ -50,8 +50,8 @@ import java.util.List;
 import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public abstract class HttpTestCommons extends TestCommons {
+@Since("5.1.0")
+public abstract class IntegrationTestCommons extends TestCommons {
 
 	// FIXME HEAD
 	private static final List<String> HTTP_VERBS = U.list("GET", "DELETE", "OPTIONS", "TRACE", "POST", "PUT", "PATCH");

@@ -22,7 +22,7 @@ package org.rapidoid.validation;
 
 import org.junit.Test;
 import org.rapidoid.annotation.*;
-import org.rapidoid.http.HttpTestCommons;
+import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.jpa.AbstractEntity;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.setup.On;
@@ -34,7 +34,7 @@ import javax.validation.constraints.NotNull;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HttpBeanValidationTest extends HttpTestCommons {
+public class HttpBeanValidationTest extends IntegrationTestCommons {
 
 	@Test
 	public void testValidation() {

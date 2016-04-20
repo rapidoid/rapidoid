@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class WithContextTest extends HttpTestCommons {
+public class WithContextTest extends IntegrationTestCommons {
 
 	public static final int JOB_COUNT = 1000;
 

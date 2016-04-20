@@ -24,13 +24,13 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
-import org.rapidoid.http.HttpTestCommons;
+import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class WidgetRenderingTest extends HttpTestCommons {
+public class WidgetRenderingTest extends IntegrationTestCommons {
 
 	@Test
 	public void testFormBindingAndRendering() {

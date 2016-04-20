@@ -2,7 +2,7 @@ package org.rapidoid.jpa;
 
 import org.junit.Test;
 import org.rapidoid.annotation.*;
-import org.rapidoid.http.HttpTestCommons;
+import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.ioc.IoCContext;
@@ -35,7 +35,7 @@ import javax.persistence.EntityManagerFactory;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JPAInjectionTest extends HttpTestCommons {
+public class JPAInjectionTest extends IntegrationTestCommons {
 
 	@Test
 	public void testJPAInjection() {

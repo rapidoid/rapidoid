@@ -28,7 +28,7 @@ import org.rapidoid.util.Bufs;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")
-public class HttpFullRawResponseTest extends HttpTestCommons {
+public class HttpFullRawResponseTest extends IntegrationTestCommons {
 
 	public static final String BYTES_RESPONSE = "HTTP/1.1 200 OK\nContent-Length: 5\n\nbytes";
 

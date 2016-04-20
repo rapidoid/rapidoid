@@ -23,14 +23,14 @@ package org.rapidoid.test;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.http.HttpTestCommons;
+import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.integrate.Integrate;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class MustacheViewRendererTest extends HttpTestCommons {
+public class MustacheViewRendererTest extends IntegrationTestCommons {
 
 	@Test
 	public void testTemplateLoading() {

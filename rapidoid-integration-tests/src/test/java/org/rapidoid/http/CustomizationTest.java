@@ -32,7 +32,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class CustomizationTest extends HttpTestCommons {
+public class CustomizationTest extends IntegrationTestCommons {
 
 	@Test
 	public void testSerializationConfig() {

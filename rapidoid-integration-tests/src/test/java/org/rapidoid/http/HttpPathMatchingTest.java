@@ -27,7 +27,7 @@ import org.rapidoid.setup.On;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class HttpPathMatchingTest extends HttpTestCommons {
+public class HttpPathMatchingTest extends IntegrationTestCommons {
 
 	@Test
 	public void testHttpPathMatching() {
