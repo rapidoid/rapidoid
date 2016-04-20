@@ -1,8 +1,8 @@
 package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Optional;
 import org.rapidoid.annotation.Programmatic;
+import org.rapidoid.annotation.Required;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.beany.Metadata;
@@ -90,7 +90,7 @@ public class Field extends AbstractWidget {
 		this.desc = U.or(prop.caption(), name);
 		this.type = mode != FormMode.SHOW ? getPropertyFieldType(prop) : FieldType.LABEL;
 		this.options = getPropertyOptions(prop);
-		this.required = Metadata.get(prop.annotations(), Optional.class) == null;
+		this.required = Metadata.get(prop.annotations(), Required.class) != null;
 		this.var = initVar(item, prop);
 	}
 

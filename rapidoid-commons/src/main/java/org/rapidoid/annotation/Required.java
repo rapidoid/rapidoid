@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({FIELD, METHOD})
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public @interface Optional {
+@Since("5.1.0")
+public @interface Required {
 
 }
