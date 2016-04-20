@@ -4,7 +4,6 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Coll;
-import org.rapidoid.jpa.JPAPersisterProvider;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 
@@ -34,7 +33,7 @@ public class Ctxs extends RapidoidThing {
 
 	private static final ThreadLocal<Ctx> CTXS = new ThreadLocal<Ctx>();
 
-	private static volatile PersisterProvider persisterProvider = new JPAPersisterProvider();
+	private static volatile PersisterProvider persisterProvider;
 
 	private Ctxs() {
 	}

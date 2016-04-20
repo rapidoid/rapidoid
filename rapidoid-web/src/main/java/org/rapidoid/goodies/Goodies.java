@@ -120,12 +120,8 @@ public class Goodies extends RapidoidThing {
 
 			setup.page("/_/").mvc(Goodies.overview());
 
-			setup.page("/_/data").mvc(Goodies.data());
-
-			for (Class<?> type : JPA.getEntityJavaTypes()) {
-				String uri = GUI.typeUri(type);
-				String contextPath = HttpUtils.getContextPath(setup.custom(), setup.segment());
-				X.scaffold(setup, Msc.uri(contextPath, uri), type);
+			if (Msc.hasJPA()) {
+				jpaGoodies(setup);
 			}
 
 			setup.page("/_/routes").mvc(Goodies.routes());
@@ -146,6 +142,16 @@ public class Goodies extends RapidoidThing {
 
 		setup.post("/_login").roles().json(Goodies.login());
 		setup.get("/_logout").roles(Roles.LOGGED_IN).json(Goodies.logout());
+	}
+
+	private static void jpaGoodies(Setup setup) {
+		setup.page("/_/data").mvc(Goodies.data());
+
+		for (Class<?> type : JPA.getEntityJavaTypes()) {
+			String uri = GUI.typeUri(type);
+			String contextPath = HttpUtils.getContextPath(setup.custom(), setup.segment());
+			X.scaffold(setup, Msc.uri(contextPath, uri), type);
+		}
 	}
 
 }

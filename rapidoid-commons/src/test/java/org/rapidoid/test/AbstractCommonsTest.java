@@ -25,7 +25,6 @@ import org.rapidoid.commons.Env;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.JSON;
 import org.rapidoid.io.Res;
-import org.rapidoid.ioc.IoC;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogLevel;
 
@@ -37,30 +36,12 @@ public abstract class AbstractCommonsTest extends TestCommons {
 		Conf.reset();
 		Conf.setPath(getTestName());
 		Log.setLogLevel(LogLevel.INFO);
-		IoC.defaultContext().reset();
 		Env.profiles().clear();
 		Env.profiles().add("default");
 	}
 
 	protected void verify(String name, Object actual) {
 		super.verifyCase(name, JSON.prettify(actual), name);
-	}
-
-	protected void verifyIoC() {
-		verify("ioc", IoC.defaultContext().info());
-	}
-
-	protected void verifyIoC(String name) {
-		verify(name, IoC.defaultContext().info());
-	}
-
-	protected void noIocBean(Class<?> clazz) {
-		try {
-			IoC.singleton(clazz);
-			fail("Expected IoC exception for class: " + clazz);
-		} catch (RuntimeException e) {
-			// ok
-		}
 	}
 
 }

@@ -10,6 +10,7 @@ import org.rapidoid.commons.Env;
 import org.rapidoid.config.Conf;
 import org.rapidoid.config.Config;
 import org.rapidoid.config.RapidoidInitializer;
+import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.data.JSON;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
@@ -22,15 +23,16 @@ import org.rapidoid.ioc.IoC;
 import org.rapidoid.ioc.IoCContext;
 import org.rapidoid.job.Jobs;
 import org.rapidoid.jpa.JPA;
+import org.rapidoid.jpa.JPAPersisterProvider;
 import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
+import org.rapidoid.reload.Reload;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.security.Roles;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Msc;
-import org.rapidoid.util.Reload;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -75,6 +77,10 @@ public class Setup extends RapidoidThing implements Constants {
 				JSON.warmup();
 			}
 		});
+
+		if (Ctxs.getPersisterProvider() == null) {
+			Ctxs.setPersisterProvider(new JPAPersisterProvider());
+		}
 	}
 
 	private static volatile String mainClassName;

@@ -4,10 +4,6 @@ import org.junit.Test;
 import org.rapidoid.annotation.*;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.http.HttpVerb;
-import org.rapidoid.ioc.Logger;
-import org.rapidoid.ioc.db.Database;
-import org.rapidoid.ioc.db.Table;
-import org.rapidoid.ioc.db.Transactor;
 import org.rapidoid.test.AbstractCommonsTest;
 import org.rapidoid.test.TestCommons;
 import org.rapidoid.u.U;
@@ -44,10 +40,6 @@ public class ClsTest extends AbstractCommonsTest {
 	@Test
 	public void testIsBeanType() {
 		isTrue(Cls.isBeanType(Foo.class));
-		isTrue(Cls.isBeanType(Logger.class));
-		isTrue(Cls.isBeanType(Database.class));
-		isTrue(Cls.isBeanType(Table.class));
-		isTrue(Cls.isBeanType(Transactor.class));
 
 		isFalse(Cls.isBeanType(Object.class));
 		isFalse(Cls.isBeanType(HttpVerb.class));
@@ -60,10 +52,6 @@ public class ClsTest extends AbstractCommonsTest {
 	@Test
 	public void testIsRapidoidClass() {
 		isFalse(Cls.isRapidoidClass(Foo.class));
-		isFalse(Cls.isRapidoidClass(Logger.class));
-		isFalse(Cls.isRapidoidClass(Database.class));
-		isFalse(Cls.isRapidoidClass(Table.class));
-		isFalse(Cls.isRapidoidClass(Transactor.class));
 		isFalse(Cls.isRapidoidClass(Object.class));
 		isFalse(Cls.isRapidoidClass(Runnable.class));
 		isFalse(Cls.isRapidoidClass(ArrayList.class));
