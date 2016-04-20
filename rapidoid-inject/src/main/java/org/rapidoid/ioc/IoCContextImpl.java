@@ -338,26 +338,6 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 				Cls.setFieldValue(target, field.getName(), value);
 			}
 		}
-
-		for (Field field : meta(target.getClass()).sessionFields) {
-
-			Object value = provideSessionValue(target, field.getType(), field.getName(), session);
-
-			if (value != null) {
-				Log.debug("Injecting session field value", "target", target, "field", field.getName(), "value", value);
-				Cls.setFieldValue(target, field.getName(), value);
-			}
-		}
-
-		for (Field field : meta(target.getClass()).localFields) {
-
-			Object value = provideBindValue(target, field.getType(), field.getName(), locals);
-
-			if (value != null) {
-				Log.debug("Injecting bind field value", "target", target, "field", field.getName(), "value", value);
-				Cls.setFieldValue(target, field.getName(), value);
-			}
-		}
 	}
 
 	private boolean isInjectOptional(Field field) {

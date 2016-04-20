@@ -1,7 +1,9 @@
 package org.rapidoid.ioc;
 
 import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.*;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.Wired;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.util.Msc;
 
@@ -37,15 +39,9 @@ public class ClassMetadata extends RapidoidThing {
 
 	final List<Field> injectableFields;
 
-	final List<Field> sessionFields;
-
-	final List<Field> localFields;
-
 	public ClassMetadata(Class<?> clazz) {
 		this.clazz = clazz;
-		this.injectableFields = Cls.getFieldsAnnotated(clazz, Inject.class);
-		this.sessionFields = Cls.getFieldsAnnotated(clazz, Session.class);
-		this.localFields = Cls.getFieldsAnnotated(clazz, Local.class);
+		this.injectableFields = Cls.getFieldsAnnotated(clazz, Wired.class);
 
 		if (Msc.hasInject()) {
 			Class<Annotation> javaxInject = Cls.get("javax.inject.Inject");
