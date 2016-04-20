@@ -91,7 +91,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 
 		Log.debug("Processing bean", "class", clazz, "instance", bean);
 
-		List<String> componentPaths = getComponentNames(clazz);
+		List<String> componentPaths = getControllerUris(clazz);
 
 		for (String ctxPath : componentPaths) {
 			for (Method method : Cls.getMethods(clazz)) {
@@ -129,7 +129,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 		return false;
 	}
 
-	protected List<String> getComponentNames(Class<?> component) {
+	protected List<String> getControllerUris(Class<?> component) {
 		Controller controller = Metadata.classAnnotation(component, Controller.class);
 
 		if (controller != null) {

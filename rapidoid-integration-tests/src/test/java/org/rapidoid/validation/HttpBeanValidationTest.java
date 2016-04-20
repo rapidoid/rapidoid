@@ -86,7 +86,7 @@ class Foo extends AbstractEntity {
 	public Long num;
 }
 
-@Controller
+@Service
 class FooService {
 
 	@GET

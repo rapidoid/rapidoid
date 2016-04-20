@@ -3,6 +3,7 @@ package org.rapidoid.setup;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Controller;
+import org.rapidoid.annotation.Service;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Coll;
@@ -417,7 +418,14 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	public Setup bootstrapControllers() {
-		beans(annotated(Controller.class).in(path()).loadAll().toArray());
+		List<Class<? extends Annotation>> annotated = U.list(Controller.class, Service.class);
+
+		if (Msc.hasInject()) {
+			annotated.add(Cls.<Annotation>get("javax.inject.Named"));
+			annotated.add(Cls.<Annotation>get("javax.inject.Singleton"));
+		}
+
+		beans(annotated(annotated.toArray(new Class[annotated.size()])).in(path()).loadAll().toArray());
 		return this;
 	}
 

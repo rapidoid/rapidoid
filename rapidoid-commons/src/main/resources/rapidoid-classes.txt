@@ -31,6 +31,7 @@ org.rapidoid.annotation.PUT
 org.rapidoid.annotation.Rel
 org.rapidoid.annotation.Required
 org.rapidoid.annotation.Scaffold
+org.rapidoid.annotation.Service
 org.rapidoid.annotation.Since
 org.rapidoid.annotation.Special
 org.rapidoid.annotation.ToString
