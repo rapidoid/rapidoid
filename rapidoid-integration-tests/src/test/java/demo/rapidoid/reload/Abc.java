@@ -22,12 +22,12 @@ package demo.rapidoid.reload;
 
 import org.rapidoid.annotation.Controller;
 import org.rapidoid.annotation.GET;
-import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.Wired;
 
 @Controller
 public class Abc {
 
-	@Inject
+	@Wired
 	private Foo foo;
 
 	@GET("/")

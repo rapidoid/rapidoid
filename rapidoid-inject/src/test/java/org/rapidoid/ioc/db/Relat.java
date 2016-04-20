@@ -21,12 +21,12 @@ package org.rapidoid.ioc.db;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.Wired;
 import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class Relat {
-	@Inject
+	@Wired
 	Database db;
 }

@@ -60,13 +60,13 @@ public class JPAInjectionTest extends IntegrationTestCommons {
 @Controller
 class MyCtrl {
 
-	@Inject
+	@Wired
 	private IoCContext ioc;
 
 	@javax.inject.Inject
 	private EntityManager em;
 
-	@Inject
+	@Wired
 	private EntityManagerFactory emf;
 
 	@GET

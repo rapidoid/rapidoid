@@ -21,7 +21,7 @@ package org.rapidoid.ioc.db;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.Wired;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ioc.IoC;
 
@@ -31,7 +31,7 @@ import java.util.Map;
 @Since("2.0.0")
 public class Database {
 
-	@Inject
+	@Wired
 	Transactor transactor;
 
 	final Map<String, Table> tables = IoC.defaultContext().autoExpandingInjectingMap(Table.class);

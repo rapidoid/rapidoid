@@ -23,6 +23,10 @@ package org.rapidoid.ioc.app;
 import org.rapidoid.annotation.*;
 import org.rapidoid.ioc.Logger;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.inject.Inject;
+
 @Autocreate
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
@@ -33,16 +37,16 @@ public class App {
 	@Inject
 	Logger logger;
 
-	@Inject
+	@Wired
 	PersonService personService;
 
-	@Inject
+	@Resource
 	PersonServiceImpl personService2;
 
-	@Inject
+	@Wired
 	BookService bookService;
 
-	@Init
+	@PostConstruct
 	public void callThisWhenReady() {
 		READY = true;
 	}

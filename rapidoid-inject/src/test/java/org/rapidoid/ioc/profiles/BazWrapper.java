@@ -21,7 +21,7 @@ package org.rapidoid.ioc.profiles;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.Wired;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.u.U;
 
@@ -31,7 +31,7 @@ import java.util.concurrent.Callable;
 @Since("5.1.0")
 public class BazWrapper {
 
-	@Inject
+	@Wired
 	private Callable<String> baz;
 
 	public String str() {

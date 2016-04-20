@@ -14,6 +14,7 @@ import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Iterator;
@@ -360,12 +361,11 @@ public class IoCContextImpl extends RapidoidThing implements IoCContext {
 	}
 
 	private boolean isInjectOptional(Field field) {
-		Inject inject = field.getAnnotation(Inject.class);
-		return inject != null && inject.optional();
+		return field.getAnnotation(Wired.class) != null;
 	}
 
 	private <T> void invokePostConstruct(T target) {
-		List<Method> methods = Cls.getMethodsAnnotated(target.getClass(), Init.class);
+		List<Method> methods = Cls.getMethodsAnnotated(target.getClass(), PostConstruct.class);
 
 		for (Method method : methods) {
 			Cls.invoke(method, target);

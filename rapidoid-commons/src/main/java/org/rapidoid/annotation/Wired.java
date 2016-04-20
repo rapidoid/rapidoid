@@ -3,7 +3,7 @@ package org.rapidoid.annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /*
@@ -26,9 +26,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * #L%
  */
 
-@Target({METHOD})
+@Target({FIELD})
 @Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public @interface Init {
+@Since("5.1.0")
+public @interface Wired {
+
+	boolean optional() default false;
+
 }

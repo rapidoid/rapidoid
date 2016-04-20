@@ -21,7 +21,7 @@ package org.rapidoid.ioc;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.Wired;
 import org.rapidoid.annotation.Since;
 
 import java.util.concurrent.Callable;
@@ -30,7 +30,7 @@ import java.util.concurrent.Callable;
 @Since("2.0.0")
 public class Bar {
 
-	@Inject
+	@Wired
 	Callable<String> callable;
 
 }

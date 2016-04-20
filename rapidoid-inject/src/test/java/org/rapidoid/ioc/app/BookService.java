@@ -21,16 +21,16 @@ package org.rapidoid.ioc.app;
  */
 
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.Wired;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ioc.Logger;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class BookService {
-	@Inject
+	@Wired
 	BookDao dao;
 
-	@Inject
+	@Wired
 	Logger logger;
 }

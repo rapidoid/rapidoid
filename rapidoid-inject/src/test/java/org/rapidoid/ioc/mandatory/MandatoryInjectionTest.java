@@ -22,7 +22,7 @@ package org.rapidoid.ioc.mandatory;
 
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Inject;
+import org.rapidoid.annotation.Wired;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ioc.AbstractInjectTest;
 import org.rapidoid.ioc.IoC;
@@ -92,17 +92,17 @@ public class MandatoryInjectionTest extends AbstractInjectTest {
 }
 
 class Foo {
-	@Inject
+	@Wired
 	Runnable runnable;
 }
 
 class Bar {
-	@Inject
+	@Wired
 	Foo foo;
 }
 
 class Baz {
-	@Inject
+	@Wired
 	Bar bar;
 }
 
