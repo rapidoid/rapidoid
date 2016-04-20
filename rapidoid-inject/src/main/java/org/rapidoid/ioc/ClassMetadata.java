@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Wired;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
 import javax.annotation.Resource;
@@ -49,6 +50,17 @@ public class ClassMetadata extends RapidoidThing {
 		if (Msc.hasInject()) {
 			Class<Annotation> javaxInject = Cls.get("javax.inject.Inject");
 			this.injectableFields.addAll(Cls.getFieldsAnnotated(clazz, javaxInject));
+		}
+
+		if (Msc.hasJPA()) {
+			Class<Annotation> javaxPersistenceContext = Cls.get("javax.persistence.PersistenceContext");
+			List<Field> emFields = Cls.getFieldsAnnotated(clazz, javaxPersistenceContext);
+
+			for (Field emField : emFields) {
+				U.must(emField.getType().getName().equals("javax.persistence.EntityManager"), "Expected EntityManager type!");
+			}
+
+			this.injectableFields.addAll(emFields);
 		}
 	}
 

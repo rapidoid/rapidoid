@@ -12,6 +12,7 @@ import org.rapidoid.u.U;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 
 /*
  * #%L
@@ -65,6 +66,9 @@ class MyCtrl {
 
 	@javax.inject.Inject
 	private EntityManager em;
+
+	@PersistenceContext
+	private EntityManager em2;
 
 	@Wired
 	private EntityManagerFactory emf;
@@ -123,10 +127,12 @@ class MyCtrl {
 	private void checkInjected() {
 		U.notNull(emf, "emf");
 		U.notNull(em, "em");
+		U.notNull(em2, "em2");
 		U.notNull(ioc, "ioc");
 
 		U.must(emf == SharedEntityManagerFactoryProxy.INSTANCE, "wrong emf");
 		U.must(em == SharedContextAwareEntityManagerProxy.INSTANCE, "wrong em");
+		U.must(em == em2, "different EMs!");
 
 		U.must(ioc.singleton(MyCtrl.class) == this);
 		U.must(ioc.singleton(EntityManager.class) == em);
