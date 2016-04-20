@@ -215,7 +215,61 @@ public class OnRoute extends RapidoidThing {
 		HttpHandlers.register(http, verb, path, jsonOpts(), handler);
 	}
 
-	/* GUI */
+	/* PLAIN */
+
+	public void plain(String response) {
+		plain(response.getBytes());
+	}
+
+	public void plain(byte[] response) {
+		HttpHandlers.register(http, verb, path, plainOpts(), response);
+	}
+
+	public <T> void plain(Callable<T> handler) {
+		HttpHandlers.register(http, verb, path, plainOpts(), handler);
+	}
+
+	public void plain(Method method, Object instance) {
+		HttpHandlers.register(http, verb, path, plainOpts(), method, instance);
+	}
+
+	public void plain(ReqHandler handler) {
+		HttpHandlers.register(http, verb, path, plainOpts(), handler);
+	}
+
+	public void plain(ReqRespHandler handler) {
+		HttpHandlers.register(http, verb, path, plainOpts(), handler);
+	}
+
+	public void plain(OneParamLambda<?, ?> handler) {
+		HttpHandlers.register(http, verb, path, plainOpts(), handler);
+	}
+
+	public void plain(TwoParamLambda<?, ?, ?> handler) {
+		HttpHandlers.register(http, verb, path, plainOpts(), handler);
+	}
+
+	public void plain(ThreeParamLambda<?, ?, ?, ?> handler) {
+		HttpHandlers.register(http, verb, path, plainOpts(), handler);
+	}
+
+	public void plain(FourParamLambda<?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(http, verb, path, plainOpts(), handler);
+	}
+
+	public void plain(FiveParamLambda<?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(http, verb, path, plainOpts(), handler);
+	}
+
+	public void plain(SixParamLambda<?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(http, verb, path, plainOpts(), handler);
+	}
+
+	public void plain(SevenParamLambda<?, ?, ?, ?, ?, ?, ?, ?> handler) {
+		HttpHandlers.register(http, verb, path, plainOpts(), handler);
+	}
+
+	/* MVC */
 
 	public void mvc(String response) {
 		HttpHandlers.registerPredefined(http, verb, path, mvcOpts(), response);
@@ -281,6 +335,10 @@ public class OnRoute extends RapidoidThing {
 
 	private RouteOptions jsonOpts() {
 		return opts(MediaType.JSON_UTF_8);
+	}
+
+	private RouteOptions plainOpts() {
+		return opts(MediaType.PLAIN_TEXT_UTF_8);
 	}
 
 	private RouteOptions mvcOpts() {

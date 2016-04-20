@@ -122,10 +122,8 @@ public abstract class IntegrationTestCommons extends TestCommons {
 
 		On.get("/hello").html("Hello");
 
-		On.post("/upload").serve((Req x) -> {
+		On.post("/upload").plain((Req x) -> {
 			Log.info("Uploaded files", "files", x.files().keySet());
-
-			x.response().contentType(MediaType.PLAIN_TEXT_UTF_8);
 
 			boolean hasF3 = x.files().containsKey("f3");
 
