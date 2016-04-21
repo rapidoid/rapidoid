@@ -455,7 +455,7 @@ public class Setup extends RapidoidThing implements Constants {
 		return ioCContext;
 	}
 
-	static void notifyChanges() {
+	public static void notifyChanges() {
 		if (!dirty) {
 			dirty = true;
 			Log.info("Detected class or resource changes");

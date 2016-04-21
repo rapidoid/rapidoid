@@ -436,4 +436,10 @@ public class ClasspathUtil extends RapidoidThing {
 		return classes;
 	}
 
+	public static Class<?> loadFromJar(String clsName, String jar, ClassLoader classLoader) throws Exception {
+		URL url = new File(jar).toURI().toURL();
+		URLClassLoader child = new URLClassLoader(new URL[]{url}, classLoader);
+		return Class.forName(clsName, true, child);
+	}
+
 }
