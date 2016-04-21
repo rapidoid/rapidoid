@@ -38,6 +38,7 @@ app:
           Compilation: /_/jmx/compilation
         Details:
           Classpath: /_/classpath
+        Deploy: /_/deploy
 
 users: {}
 

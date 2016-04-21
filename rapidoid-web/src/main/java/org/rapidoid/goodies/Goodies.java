@@ -107,6 +107,14 @@ public class Goodies extends RapidoidThing {
 		return new ClasspathHandler();
 	}
 
+	public static DeployHandler deploy() {
+		return new DeployHandler();
+	}
+
+	public static JarUploadHandler jarUpload() {
+		return new JarUploadHandler();
+	}
+
 	public static void bootstrap(Setup setup) {
 
 		if (!setup.goodies()) {
@@ -141,7 +149,10 @@ public class Goodies extends RapidoidThing {
 
 			setup.page("/_/metrics").mvc(Goodies.graphs());
 			setup.get("/_/graphs/{id:.*}").json(Goodies.graphData());
+
 			setup.get("/_/classpath").mvc(Goodies.classpath());
+			setup.get("/_/deploy").mvc(Goodies.deploy());
+			setup.post("/_/upload-jar").json(Goodies.jarUpload());
 		}
 
 		setup.post("/_login").roles().json(Goodies.login());
