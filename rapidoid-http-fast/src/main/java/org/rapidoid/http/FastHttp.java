@@ -115,8 +115,8 @@ public class FastHttp extends AbstractHttpProcessor {
 			}
 
 			HTTP_PARSER.parseHeadersIntoKV(buf, hdrs, headersKV, cookiesKV, helper);
-			Map<String, String> headers = U.cast(headersKV.toMap(buf, true, true));
-			Map<String, String> cookies = U.cast(cookiesKV.toMap(buf, true, true));
+			Map<String, String> headers = U.cast(headersKV.toMap(buf, false, false));
+			Map<String, String> cookies = U.cast(cookiesKV.toMap(buf, false, false));
 
 			byte[] body;
 			Map<String, Object> posted;
