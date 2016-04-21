@@ -7,6 +7,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.English;
 import org.rapidoid.commons.Str;
 import org.rapidoid.gui.Btn;
+import org.rapidoid.gui.Form;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.Grid;
 import org.rapidoid.http.Req;
@@ -166,8 +167,9 @@ public class X extends RapidoidThing {
 			@Override
 			public Object execute(Req req, final Resp resp) throws Exception {
 
-				Object id = Cls.convert(req.param("id"), idType);
+				final Object id = Cls.convert(req.param("id"), idType);
 				final Object entity = JPA.find(entityType, id);
+				JPA.detach(entity);
 
 				if (entity == null) {
 					return null;
@@ -180,16 +182,21 @@ public class X extends RapidoidThing {
 				}
 
 				final Btn edit = GUI.btn("Edit").go(uri(baseUri, entity) + "/edit");
+
 				Btn all = GUI.btn("View all").go(baseUri + "/manage");
 
-				Btn del = GUI.btn("Delete").danger().go(baseUri + "/manage").onClick(new Runnable() {
+				Btn del = btnDelete().go(baseUri + "/manage").onClick(new Runnable() {
 					@Override
 					public void run() {
-						JPA.delete(entity);
+						JPA.delete(entityType, id);
 					}
 				}).confirm("Do you really want to delete the " + name + "?");
 
-				return !del.clicked() ? GUI.show(entity).buttons(edit, all, del) : "The data was deleted.";
+				Form form = GUI.show(entity).buttons(edit, all, del).visible(!del.clicked());
+
+				Object msg = del.clicked() ? GUI.div("The data was deleted.") : "";
+
+				return GUI.multi(form, msg);
 			}
 		};
 	}
@@ -227,6 +234,10 @@ public class X extends RapidoidThing {
 				JPA.save(entity);
 			}
 		});
+	}
+
+	public static Btn btnDelete() {
+		return GUI.btn("Delete").danger().confirm("Do you really want to delete the data?");
 	}
 
 	private static String name(Class<?> entityType) {
