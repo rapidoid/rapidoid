@@ -1,7 +1,7 @@
 package com.example;
 
 import org.rapidoid.http.Req;
-import org.rapidoid.http.fast.On;
+import org.rapidoid.setup.On;
 
 public class Main {
 
