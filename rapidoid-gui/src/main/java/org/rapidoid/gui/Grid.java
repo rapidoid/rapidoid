@@ -44,6 +44,7 @@ public class Grid extends AbstractWidget {
 	private volatile String orderBy = "id";
 	private volatile int pageSize = 10;
 	private volatile String[] columns = {};
+	private volatile String[] headers = {};
 	private volatile String rowCmd;
 
 	private volatile Mapper<Object, String> toUri;
@@ -113,12 +114,15 @@ public class Grid extends AbstractWidget {
 	protected Tag tableHeader(final List<Property> props, Var<String> order) {
 		Tag header = tr();
 
-		for (Property prop : props) {
+		for (int i = 0; i < props.size(); i++) {
+			Property prop = props.get(i);
 			Tag sortIcon = null;
+
+			String caption = U.notEmpty(headers) && headers.length > i ? headers[i] : null;
+			caption = U.or(caption, prop.caption());
 
 			Object sort;
 			if (order != null) {
-
 				String currentOrder = order.get();
 
 				if (currentOrder.equals(prop.name())) {
@@ -129,9 +133,9 @@ public class Grid extends AbstractWidget {
 					sortIcon = fa("sort-amount-desc");
 				}
 
-				sort = a_void(prop.caption(), " ", sortIcon).cmd("_sort", order, prop.name());
+				sort = a_void(caption, " ", sortIcon).cmd("_sort", order, prop.name());
 			} else {
-				sort = prop.caption();
+				sort = caption;
 			}
 
 			header = header.append(th(sort));
@@ -203,7 +207,7 @@ public class Grid extends AbstractWidget {
 		return columns;
 	}
 
-	public Grid columns(String[] columns) {
+	public Grid columns(String... columns) {
 		this.columns = columns;
 		return this;
 	}
@@ -223,6 +227,15 @@ public class Grid extends AbstractWidget {
 
 	public Grid toUri(Mapper<Object, String> toUri) {
 		this.toUri = toUri;
+		return this;
+	}
+
+	public String[] headers() {
+		return headers;
+	}
+
+	public Grid headers(String... headers) {
+		this.headers = headers;
 		return this;
 	}
 }
