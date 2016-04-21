@@ -189,7 +189,7 @@ public class X extends RapidoidThing {
 					}
 				}).confirm("Do you really want to delete the " + name + "?");
 
-				return GUI.show(entity).buttons(edit, all, del);
+				return !del.clicked() ? GUI.show(entity).buttons(edit, all, del) : "The data was deleted.";
 			}
 		};
 	}

@@ -3,6 +3,7 @@ package org.rapidoid.gui.base;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
+import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.u.U;
 
@@ -62,23 +63,33 @@ public abstract class AbstractCommand<W extends AbstractCommand<?>> extends Abst
 		return strs;
 	}
 
-	protected void handleEventIfMatching() {
-		if (!handled && hasHandler() && command != null) {
-			if (!ReqInfo.get().isGetReq()) {
-				String event = (String) ReqInfo.get().posted().get("_cmd");
+	public boolean clicked() {
+		if (command != null) {
+			IReqInfo req = ReqInfo.get();
 
-				if (!U.isEmpty(event) && U.eq(event, command)) {
+			if (!req.isGetReq()) {
+				String event = (String) req.posted().get("_cmd");
 
+				if (U.notEmpty(event) && U.eq(event, command)) {
 					Object[] args = new Object[cmdArgs.length];
+
 					for (int i = 0; i < args.length; i++) {
-						args[i] = U.or(ReqInfo.get().posted().get("_" + i), "");
+						args[i] = U.or(req.posted().get("_" + i), "");
 					}
 
-					if (Arrays.equals(args, cmdArgs)) {
-						handled = true;
-						handleAction();
-					}
+					return Arrays.equals(args, cmdArgs);
 				}
+			}
+		}
+
+		return false;
+	}
+
+	protected void handleEventIfMatching() {
+		if (!handled && hasHandler()) {
+			if (clicked()) {
+				handled = true;
+				handleAction();
 			}
 		}
 	}
