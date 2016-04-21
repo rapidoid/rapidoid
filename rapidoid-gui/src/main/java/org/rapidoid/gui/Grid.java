@@ -64,7 +64,7 @@ public class Grid extends AbstractWidget {
 		String currentOrder = orderBy;
 
 		if (ordered) {
-			order = local("_order_" + widgetId(), orderBy);
+			order = GUI.local("_order_" + widgetId(), orderBy);
 			currentOrder = order.get();
 			slice = slice.orderedBy(currentOrder);
 		}
@@ -73,13 +73,13 @@ public class Grid extends AbstractWidget {
 		Var<Integer> pageNumber = null;
 
 		if (paging) {
-			pageNumber = local("_page_" + widgetId(), 1, 1, pages);
+			pageNumber = GUI.local("_page_" + widgetId(), 1, 1, pages);
 			slice = getPage(slice, pageNumber.get());
 		}
 
 		Tag header = tableHeader(props, order);
 		Tag body = tableBody(props, slice);
-		Pager pager = paging ? pager(1, pages, pageNumber) : noPager();
+		Pager pager = paging ? GUI.pager(1, pages, pageNumber) : noPager();
 
 		return fullTable(header, body, pager);
 	}
@@ -89,7 +89,7 @@ public class Grid extends AbstractWidget {
 	}
 
 	protected Tag fullTable(Tag header, Tag body, Pager pager) {
-		return row(table_(thead(header), body), pager);
+		return GUI.row(GUI.table_(GUI.thead(header), body), pager);
 	}
 
 	protected Items getPage(Items items, Integer pageN) {
@@ -102,7 +102,7 @@ public class Grid extends AbstractWidget {
 	}
 
 	protected Tag tableBody(final List<Property> props, Items pageOrAll) {
-		Tag body = tbody();
+		Tag body = GUI.tbody();
 
 		for (Item item : pageOrAll) {
 			Tag row = itemRow(props, item);
@@ -126,14 +126,14 @@ public class Grid extends AbstractWidget {
 				String currentOrder = order.get();
 
 				if (currentOrder.equals(prop.name())) {
-					sortIcon = fa("sort-amount-asc");
+					sortIcon = GUI.fa("sort-amount-asc");
 				}
 
 				if (currentOrder.equals("-" + prop.name())) {
-					sortIcon = fa("sort-amount-desc");
+					sortIcon = GUI.fa("sort-amount-desc");
 				}
 
-				sort = a_void(caption, " ", sortIcon).cmd("_sort", order, prop.name());
+				sort = GUI.a_void(caption, " ", sortIcon).cmd("_sort", order, prop.name());
 			} else {
 				sort = caption;
 			}
@@ -149,7 +149,7 @@ public class Grid extends AbstractWidget {
 		for (Property prop : properties) {
 			Object value = prop.get(item);
 			value = U.or(value, "");
-			row = row.append(cell(display(value)));
+			row = row.append(cell(GUI.display(value)));
 		}
 
 		if (rowCmd != null) {

@@ -46,7 +46,7 @@ public class VStream extends AbstractWidget {
 		Tag columns = div(tmpla).class_("col-md-{{12 / cols}}").attr("ng-repeat", "colN in [] | rangex:0:cols");
 		Tag tmpl = div(columns).attr("ng-repeat", "rowN in items | rowCount:cols").class_("row row-separated-mini");
 
-		Tag loading = row("Loading data...").attr("ng-show", "stream.busy");
+		Tag loading = GUI.row("Loading data...").attr("ng-show", "stream.busy");
 
 		Tag scroll = infiniteScroll(tmpl, loading);
 

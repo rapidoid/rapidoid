@@ -54,7 +54,7 @@ public class Snippet extends AbstractWidget {
 
 	@Override
 	protected Tag render() {
-		return hardcoded("<pre class=\"code-snippet\">" + prettify() + "</pre>");
+		return GUI.hardcoded("<pre class=\"code-snippet\">" + prettify() + "</pre>");
 	}
 
 	public static String prettify(String sourceCode, boolean escape) {

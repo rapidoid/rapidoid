@@ -64,7 +64,7 @@ public class Pager extends AbstractWidget {
 		Tag nextLi = pageN < to ? li(next) : li(next.cmd(null)).class_("disabled");
 		Tag lastLi = pageN < to ? li(last) : li(last.cmd(null)).class_("disabled");
 
-		Tag pagination = nav(ul_li(firstLi, prevLi, currentLi, nextLi, lastLi).class_("pagination"));
+		Tag pagination = GUI.nav(GUI.ul_li(firstLi, prevLi, currentLi, nextLi, lastLi).class_("pagination"));
 		return div(pagination).class_("pull-right");
 	}
 
@@ -73,27 +73,27 @@ public class Pager extends AbstractWidget {
 	}
 
 	protected Tag first() {
-		Tag firstIcon = span(LAQUO).attr("aria-hidden", "true");
-		return a_void(firstIcon, span("First").class_("sr-only"));
+		Tag firstIcon = span(GUI.LAQUO).attr("aria-hidden", "true");
+		return GUI.a_void(firstIcon, span("First").class_("sr-only"));
 	}
 
 	protected Tag prev() {
-		Tag prevIcon = span(LT).attr("aria-hidden", "true");
-		return a_void(prevIcon, span("Previous").class_("sr-only"));
+		Tag prevIcon = span(GUI.LT).attr("aria-hidden", "true");
+		return GUI.a_void(prevIcon, span("Previous").class_("sr-only"));
 	}
 
 	protected Tag current() {
-		return a_void("Page ", pageNumber(), " of " + to);
+		return GUI.a_void("Page ", pageNumber(), " of " + to);
 	}
 
 	protected Tag next() {
-		Tag nextIcon = span(GT).attr("aria-hidden", "true");
-		return a_void(nextIcon, span("Next").class_("sr-only"));
+		Tag nextIcon = span(GUI.GT).attr("aria-hidden", "true");
+		return GUI.a_void(nextIcon, span("Next").class_("sr-only"));
 	}
 
 	protected Tag last() {
-		Tag lastIcon = span(RAQUO).attr("aria-hidden", "true");
-		return a_void(lastIcon, span("Last").class_("sr-only"));
+		Tag lastIcon = span(GUI.RAQUO).attr("aria-hidden", "true");
+		return GUI.a_void(lastIcon, span("Last").class_("sr-only"));
 	}
 
 }

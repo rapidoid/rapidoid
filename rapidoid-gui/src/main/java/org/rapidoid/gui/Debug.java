@@ -31,15 +31,15 @@ public class Debug extends AbstractWidget {
 
 	@Override
 	protected Object render() {
-		return multi(sessionPanel(), localPanel());
+		return GUI.multi(sessionPanel(), localPanel());
 	}
 
 	protected Panel sessionPanel() {
-		return panel(grid(ReqInfo.get().params())).header("URL parameters");
+		return GUI.panel(GUI.grid(ReqInfo.get().params())).header("URL parameters");
 	}
 
 	protected Panel localPanel() {
-		return panel(grid(ReqInfo.get().posted())).header("Posted data");
+		return GUI.panel(GUI.grid(ReqInfo.get().posted())).header("Posted data");
 	}
 
 }

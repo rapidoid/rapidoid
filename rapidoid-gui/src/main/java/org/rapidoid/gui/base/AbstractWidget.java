@@ -1,9 +1,14 @@
 package org.rapidoid.gui.base;
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.impl.TagRenderer;
+import org.rapidoid.html.tag.TdTag;
+import org.rapidoid.html.tag.ThTag;
 import org.rapidoid.util.Constants;
 
 import java.util.UUID;
@@ -30,7 +35,7 @@ import java.util.UUID;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class AbstractWidget extends BootstrapWidgets implements TagWidget<Object>, Constants {
+public abstract class AbstractWidget extends RapidoidThing implements TagWidget<Object>, Constants {
 
 	private Object extra;
 
@@ -50,6 +55,30 @@ public abstract class AbstractWidget extends BootstrapWidgets implements TagWidg
 	@Override
 	public String toString() {
 		return TagRenderer.get().toHTML(this, extra);
+	}
+
+	protected static Tag div(Object... contents) {
+		return GUI.div(contents);
+	}
+
+	protected static Tag span(Object... contents) {
+		return GUI.span(contents);
+	}
+
+	protected static Tag li(Object... contents) {
+		return GUI.li(contents);
+	}
+
+	protected static Tag tr(Object... contents) {
+		return GUI.tr(contents);
+	}
+
+	protected static TdTag td(Object... contents) {
+		return GUI.td(contents);
+	}
+
+	protected static ThTag th(Object... contents) {
+		return GUI.th(contents);
 	}
 
 }

@@ -134,7 +134,7 @@ public class Form extends AbstractWidget {
 
 		for (int i = 0; i < propN; i++) {
 			Property prop = props.get(i);
-			Field field = field(mode, layout, item, prop);
+			Field field = GUI.field(mode, layout, item, prop);
 			fields.add(field);
 		}
 	}
@@ -183,7 +183,7 @@ public class Form extends AbstractWidget {
 	}
 
 	protected Tag noFormFields() {
-		return h4("Insufficient permissions!");
+		return GUI.h4("Insufficient permissions!");
 	}
 
 	protected Field getField(int index) {
@@ -197,7 +197,7 @@ public class Form extends AbstractWidget {
 	}
 
 	protected FormTag emptyForm() {
-		return form().class_(formLayoutClass(layout)).role("form");
+		return GUI.form().class_(formLayoutClass(layout)).role("form");
 	}
 
 	protected Tag formButtons() {

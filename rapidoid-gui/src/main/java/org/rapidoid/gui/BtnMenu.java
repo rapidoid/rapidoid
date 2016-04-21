@@ -1,8 +1,8 @@
 package org.rapidoid.gui;
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.Tag;
 import org.rapidoid.u.U;
 
@@ -31,9 +31,9 @@ import java.util.Map;
  * #L%
  */
 
-@Authors({ "Marjan Ilievski", "Nikolche Mihajlovski" })
+@Authors({"Marjan Ilievski", "Nikolche Mihajlovski"})
 @Since("5.0.11")
-public class BtnMenu extends RapidoidThing {
+public class BtnMenu extends AbstractWidget {
 
 	private String title;
 
@@ -53,7 +53,7 @@ public class BtnMenu extends RapidoidThing {
 	}
 
 	private Tag generateButtonHtmlContent() {
-		Tag span = GUI.span().class_("caret");
+		Tag span = span().class_("caret");
 		return GUI.button().type("button").class_("btn btn-default dropdown-toggle").attr("data-toggle", "dropdown")
 				.attr("aria-haspopup", "true").attr("aria-expanded", "false").contents(title + " ", span);
 	}
@@ -62,12 +62,12 @@ public class BtnMenu extends RapidoidThing {
 		if (!menuItems.get(0).isEmpty()) {
 			List<Tag> content = U.list();
 
-			for (Iterator<Map<Object, String>> iterator = menuItems.iterator(); iterator.hasNext();) {
+			for (Iterator<Map<Object, String>> iterator = menuItems.iterator(); iterator.hasNext(); ) {
 
 				generateMenuItems(content, iterator);
 
 				if (iterator.hasNext()) {
-					content.add(GUI.li().role("separator").class_("divider"));
+					content.add(li().role("separator").class_("divider"));
 				}
 			}
 
@@ -80,7 +80,7 @@ public class BtnMenu extends RapidoidThing {
 	private void generateMenuItems(List<Tag> content, Iterator<Map<Object, String>> subMenuIterator) {
 		for (Map.Entry<Object, String> menuItem : subMenuIterator.next().entrySet()) {
 			Tag a = GUI.a().href(menuItem.getValue()).contents(menuItem.getKey());
-			Tag li = GUI.li().contents(a);
+			Tag li = li().contents(a);
 			content.add(li);
 		}
 	}
@@ -95,7 +95,7 @@ public class BtnMenu extends RapidoidThing {
 		content.add(generateButtonHtmlContent());
 		Tag menuContent = generateMenuHtmlContent();
 		content.add(menuContent);
-		return GUI.div().class_("btn-group").contents(content).toString();
+		return div().class_("btn-group").contents(content).toString();
 	}
 
 	public String title() {

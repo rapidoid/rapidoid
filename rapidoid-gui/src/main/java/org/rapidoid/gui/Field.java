@@ -112,7 +112,7 @@ public class Field extends AbstractWidget {
 		}
 
 		IReqInfo req = ReqInfo.get();
-		if (!req.isGetReq() && !REFRESH.command().equals(getCommand())) {
+		if (!req.isGetReq() && !GUI.REFRESH.command().equals(GUI.getCommand())) {
 			var = new PostedDataVar<Object>(var);
 			var.set(req.posted().get(varName));
 		}
@@ -150,7 +150,7 @@ public class Field extends AbstractWidget {
 				lbl = null;
 			}
 
-			inp = div(label(inp, desc)).class_("checkbox");
+			inp = div(GUI.label(inp, desc)).class_("checkbox");
 
 			inputWrap = layout == FormLayout.HORIZONTAL ? div(inp).class_("col-sm-offset-4 col-sm-8") : inp;
 
@@ -158,10 +158,10 @@ public class Field extends AbstractWidget {
 			if (label == null) {
 				// if it doesn't have custom label
 				if (layout != FormLayout.INLINE) {
-					lbl = label(desc);
+					lbl = GUI.label(desc);
 				} else {
 					if (type == FieldType.RADIOS) {
-						lbl = label(desc);
+						lbl = GUI.label(desc);
 					} else {
 						lbl = null;
 					}
@@ -229,53 +229,53 @@ public class Field extends AbstractWidget {
 	}
 
 	protected Tag readonly(Object item) {
-		Object display = display(item);
+		Object display = GUI.display(item);
 		return div(display).class_("display-wrap");
 	}
 
 	protected Object checkboxesInput(String name, Collection<?> options, Var<?> var) {
-		return checkboxes(name, options, var);
+		return GUI.checkboxes(name, options, var);
 	}
 
 	protected Object radiosInput(String name, Collection<?> options, Var<?> var) {
-		return radios(name, options, var);
+		return GUI.radios(name, options, var);
 	}
 
 	protected Object multiSelectInput(String name, Collection<?> options, Var<?> var) {
-		return multiSelect(options, var).name(name);
+		return GUI.multiSelect(options, var).name(name);
 	}
 
 	protected Object dropdownInput(String name, Collection<?> options, Var<?> var) {
-		return dropdown(options, var).name(name);
+		return GUI.dropdown(options, var).name(name);
 	}
 
 	protected Object checkboxInput(String name, Var<?> var) {
-		return checkbox(var).name(name);
+		return GUI.checkbox(var).name(name);
 	}
 
 	protected Object textareaInput(String name, String desc, Var<?> var) {
-		TextareaTag textarea = txtbig(var).name(name);
+		TextareaTag textarea = GUI.txtbig(var).name(name);
 		textarea = layout == FormLayout.INLINE ? textarea.placeholder(desc) : textarea;
 		return textarea;
 	}
 
 	protected Object emailInput(String name, String desc, Var<?> var) {
 		InputTag input;
-		input = email(var).name(name);
+		input = GUI.email(var).name(name);
 		input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
 		return input;
 	}
 
 	protected Object passwordInput(String name, String desc, Var<?> var) {
 		InputTag input;
-		input = password(var).name(name);
+		input = GUI.password(var).name(name);
 		input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
 		return input;
 	}
 
 	protected Object textInput(String name, String desc, Var<?> var) {
 		InputTag input;
-		input = txt(var).name(name);
+		input = GUI.txt(var).name(name);
 		input = layout == FormLayout.INLINE ? input.placeholder(desc) : input;
 		return input;
 	}

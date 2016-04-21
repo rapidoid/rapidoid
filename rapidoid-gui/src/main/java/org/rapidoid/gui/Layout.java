@@ -40,7 +40,7 @@ public class Layout extends AbstractWidget {
 	protected Object render() {
 		List<Tag> rows = U.list();
 
-		Tag row = row().class_("row row-separated");
+		Tag row = GUI.row().class_("row row-separated");
 
 		int n = 0;
 		int colSize = 12 / cols;
@@ -50,9 +50,9 @@ public class Layout extends AbstractWidget {
 			if (n == cols + 1) {
 				n = 1;
 				rows.add(row);
-				row = row().class_("row row-separated");
+				row = GUI.row().class_("row row-separated");
 			}
-			row = row.append(col_(colSize, item));
+			row = row.append(GUI.col_(colSize, item));
 		}
 
 		if (!row.isEmpty()) {

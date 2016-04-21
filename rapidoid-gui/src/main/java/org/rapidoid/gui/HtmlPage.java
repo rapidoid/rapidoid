@@ -48,7 +48,7 @@ public class HtmlPage extends AbstractWidget {
 	private volatile String home;
 	private volatile Object brand;
 	private volatile String title;
-	private volatile Object content;
+	private volatile Object[] content;
 	private volatile PageMenu menu;
 	private volatile boolean embedded;
 	private volatile boolean search;
@@ -56,7 +56,7 @@ public class HtmlPage extends AbstractWidget {
 	private volatile boolean fluid;
 	private volatile boolean cdn = !Env.dev();
 
-	public HtmlPage(Object content) {
+	public HtmlPage(Object[] content) {
 		this.content = content;
 	}
 
@@ -75,7 +75,7 @@ public class HtmlPage extends AbstractWidget {
 			html = PAGE_AJAX_TEMPLATE.render(model);
 		}
 
-		return hardcoded(html);
+		return GUI.hardcoded(html);
 	}
 
 	private Map<String, Object> pageModel() {
@@ -111,7 +111,7 @@ public class HtmlPage extends AbstractWidget {
 
 		model.put("has", has(req));
 
-		model.put("content", multi((Object[]) content));
+		model.put("content", GUI.multi((Object[]) content));
 		model.put("home", home);
 		model.put("brand", brand);
 		model.put("title", title);
@@ -166,11 +166,11 @@ public class HtmlPage extends AbstractWidget {
 		return this;
 	}
 
-	public Object content() {
+	public Object[] content() {
 		return content;
 	}
 
-	public HtmlPage content(Object content) {
+	public HtmlPage content(Object[] content) {
 		this.content = content;
 		return this;
 	}

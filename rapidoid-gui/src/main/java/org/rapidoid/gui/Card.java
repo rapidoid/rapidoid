@@ -38,8 +38,8 @@ public class Card extends AbstractWidget {
 
 	@Override
 	protected Object render() {
-		Tag caption = h6(header).class_("rapidoid-card-caption");
-		Tag right = !U.isEmpty(controls) ? right(spaced(controls)) : null;
+		Tag caption = GUI.h6(header).class_("rapidoid-card-caption");
+		Tag right = !U.isEmpty(controls) ? GUI.right(GUI.spaced(controls)) : null;
 		Tag header = div(right, caption).class_("rapidoid-card-header");
 
 		Tag cont = div(contents).class_("rapidoid-card-content");

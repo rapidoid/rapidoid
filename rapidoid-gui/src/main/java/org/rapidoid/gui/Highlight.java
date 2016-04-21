@@ -60,7 +60,7 @@ public class Highlight extends AbstractWidget {
 		while (m.find()) {
 			String match = m.group();
 			parts.add(text.substring(end, m.start()));
-			parts.add(highlight(match));
+			parts.add(GUI.highlight(match));
 			end = m.end();
 		}
 

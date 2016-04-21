@@ -43,7 +43,7 @@ public class HighlightGrid extends Grid {
 	@Override
 	protected TdTag cell(Object value) {
 		String s = String.valueOf(value);
-		return super.cell(highlight(s, regex));
+		return super.cell(GUI.highlight(s, regex));
 	}
 
 }
