@@ -3,12 +3,8 @@ package org.rapidoid.gui;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Current;
 import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
-import org.rapidoid.http.HttpVerb;
-import org.rapidoid.http.Req;
-import org.rapidoid.http.Route;
 import org.rapidoid.render.Getter;
 
 /*
@@ -37,8 +33,8 @@ public class HtmlPageUtils extends RapidoidThing {
 
 	static final Getter HAS_PAGE = new Getter() {
 		@Override
-		public Object get(String name) {
-			return HtmlPageUtils.hasPage(name);
+		public Object get(String page) {
+			return ReqInfo.get().hasRoute("get", strToUri(page));
 		}
 	};
 
@@ -63,24 +59,6 @@ public class HtmlPageUtils extends RapidoidThing {
 		}
 	};
 
-	private static String uriToStr(String path) {
-		return path.replace('/', '$');
-	}
-
-	static Object hasPage(String name) {
-		Req reqq = Current.request();
-
-		if (reqq != null) {
-			for (Route route : reqq.routes().all()) {
-				if (route.verb() == HttpVerb.GET && uriToStr(route.path()).equals(name)) {
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
 	static boolean hasRole(String role) {
 		IReqInfo req = ReqInfo.get();
 		return req.roles().contains(role);
@@ -94,6 +72,14 @@ public class HtmlPageUtils extends RapidoidThing {
 	static boolean hasSegment(String segment) {
 		IReqInfo req = ReqInfo.get();
 		return req.segment().equals(segment);
+	}
+
+	private static String uriToStr(String path) {
+		return path.replace('/', '$');
+	}
+
+	private static String strToUri(String path) {
+		return path.replace('$', '/');
 	}
 
 }

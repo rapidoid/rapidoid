@@ -203,7 +203,6 @@ org.rapidoid.gui.reqinfo.AbstractReqInfo
 org.rapidoid.gui.reqinfo.IReqInfo
 org.rapidoid.gui.reqinfo.MockReqInfo
 org.rapidoid.gui.reqinfo.NoReqInfo
-org.rapidoid.gui.reqinfo.RapidoidReqInfo
 org.rapidoid.gui.reqinfo.ReqInfo
 org.rapidoid.gui.Snippet
 org.rapidoid.gui.var.ArrayContainerVar
@@ -325,6 +324,7 @@ org.rapidoid.http.HttpVerb
 org.rapidoid.http.HttpWrapper
 org.rapidoid.http.impl.HandlerMatch
 org.rapidoid.http.impl.HandlerMatchWithParams
+org.rapidoid.http.impl.RapidoidReqInfo
 org.rapidoid.http.impl.RouteImpl
 org.rapidoid.http.PathPattern
 org.rapidoid.http.processor.AbstractHttpProcessor

@@ -45,7 +45,7 @@ public class ReqInfo extends RapidoidThing {
 
 	private static IReqInfo createInfo() {
 		if (Cls.exists(RAPIDOID_CTX)) {
-			return new RapidoidReqInfo();
+			return (IReqInfo) Cls.newInstance(Cls.get("org.rapidoid.http.impl.RapidoidReqInfo"));
 		}
 
 		return NO_REQ_INFO;

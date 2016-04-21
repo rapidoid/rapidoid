@@ -220,6 +220,11 @@ public class MockReqInfo extends AbstractReqInfo {
 		return contextPath;
 	}
 
+	@Override
+	public boolean hasRoute(String verb, String uri) {
+		return false;
+	}
+
 	public MockReqInfo contextPath(String contextPath) {
 		this.contextPath = contextPath;
 		return this;

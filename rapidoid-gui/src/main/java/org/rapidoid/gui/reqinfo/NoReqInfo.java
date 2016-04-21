@@ -122,4 +122,9 @@ public class NoReqInfo extends AbstractReqInfo {
 		return "/";
 	}
 
+	@Override
+	public boolean hasRoute(String verb, String uri) {
+		return false;
+	}
+
 }

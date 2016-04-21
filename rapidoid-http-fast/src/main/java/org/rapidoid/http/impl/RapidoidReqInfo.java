@@ -1,9 +1,11 @@
-package org.rapidoid.gui.reqinfo;
+package org.rapidoid.http.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Current;
+import org.rapidoid.gui.reqinfo.AbstractReqInfo;
 import org.rapidoid.http.Req;
+import org.rapidoid.http.Route;
 import org.rapidoid.io.Upload;
 
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.Set;
 
 /*
  * #%L
- * rapidoid-gui
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -116,6 +118,21 @@ public class RapidoidReqInfo extends AbstractReqInfo {
 	@Override
 	public String contextPath() {
 		return req().contextPath();
+	}
+
+	@Override
+	public boolean hasRoute(String verb, String uri) {
+		Req reqq = Current.request();
+
+		if (reqq != null) {
+			for (Route route : reqq.routes().all()) {
+				if (route.verb().name().equalsIgnoreCase(verb) && route.path().equals(uri)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 }

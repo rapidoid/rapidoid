@@ -16,7 +16,6 @@ import org.rapidoid.html.*;
 import org.rapidoid.html.customtag.ColspanTag;
 import org.rapidoid.html.tag.*;
 import org.rapidoid.http.HttpVerb;
-import org.rapidoid.jpa.JPA;
 import org.rapidoid.lambda.Calc;
 import org.rapidoid.lambda.ToMap;
 import org.rapidoid.model.Item;
@@ -759,7 +758,7 @@ public abstract class BootstrapWidgets extends HTML {
 			return widget.render(null);
 		}
 
-		if (JPA.isEntity(item)) {
+		if (isEntity(item)) {
 			return a(escape(item.toString())).href(uriFor(item) + "/view");
 		}
 
@@ -968,7 +967,7 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static String uriFor(Object target) {
-		if (!JPA.isEntity(target)) {
+		if (!isEntity(target)) {
 			return "";
 		}
 
@@ -976,11 +975,11 @@ public abstract class BootstrapWidgets extends HTML {
 	}
 
 	public static String uriFor(String baseUri, Object target) {
-		if (!JPA.isEntity(target)) {
+		if (!isEntity(target)) {
 			return "";
 		}
 
-		Object id = JPA.getIdentifier(target);
+		Object id = getIdentifier(target);
 		return id != null ? Msc.uri(baseUri, id + "") : "";
 	}
 
@@ -1000,5 +999,13 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static boolean hasValidationErrors() {
 		return Boolean.TRUE.equals(ReqInfo.get().attrs().get("has-validation-errors"));
+	}
+
+	private static boolean isEntity(Object item) {
+		return false; // FIXME
+	}
+
+	private static Object getIdentifier(Object bean) {
+		return null; // FIXME
 	}
 }

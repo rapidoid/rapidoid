@@ -32,6 +32,18 @@
 			<artifactId>rapidoid-inject</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<!-- OPTIONAL -->
+
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-gui</artifactId>
+			<version>${project.version}</version>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- TEST -->
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpasyncclient</artifactId>

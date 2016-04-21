@@ -65,4 +65,7 @@ public interface IReqInfo {
 	String segment();
 
 	String contextPath();
+
+	boolean hasRoute(String verb, String uri);
+
 }
