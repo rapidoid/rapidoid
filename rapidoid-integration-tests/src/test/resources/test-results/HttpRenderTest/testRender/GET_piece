@@ -31,6 +31,14 @@ Content-Length: 2231
 
 <body class="rapidoid" ng-controller="Main" ng-app="app">
 
+<script src="/jquery-2.2.3.min.js"></script>
+<script src="/bootstrap/js/bootstrap-3.3.6.min.js"></script>
+<script src="/angular-1.5.3.min.js"></script>
+<script src="/rapidoid.min.js"></script>
+
+<script src="/app.js"></script>
+
+
 <div ng-if="!ajaxBodyContent">
 <nav role="navigation" class="navbar navbar-default">
     <div class="container">
@@ -78,14 +86,6 @@ my-title:12345
 </div>
 
 <div compile="ajaxBodyContent" ng-if="ajaxBodyContent"></div>
-
-<script src="/jquery-2.2.3.min.js"></script>
-<script src="/bootstrap/js/bootstrap-3.3.6.min.js"></script>
-<script src="/angular-1.5.3.min.js"></script>
-<script src="/rapidoid.min.js"></script>
-
-<script src="/app.js"></script>
-
 
 <!-- CREATE A RESOURCE FILE "templates/page-tail.html" TO REPLACE THIS LINE -->
 
