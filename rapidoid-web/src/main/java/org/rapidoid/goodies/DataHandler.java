@@ -53,7 +53,7 @@ public class DataHandler extends GUI implements Callable<Object> {
 
 		data.add(div(h3("Database records:"), grid));
 
-		return multi(data);
+		return data;
 	}
 
 	private List<Map<String, ?>> recordsInfo() {

@@ -747,6 +747,10 @@ public class Msc extends RapidoidThing implements Constants {
 		return Cls.exists("org.rapidoid.jpa.JPA");
 	}
 
+	public static boolean hasRapidoidGUI() {
+		return Cls.exists("org.rapidoid.gui.GUI");
+	}
+
 	public static boolean hasInject() {
 		return Cls.exists("javax.inject.Inject");
 	}

@@ -38,7 +38,7 @@ public class GraphsHandler extends GUI implements Callable<Object> {
 
 	@Override
 	public Object call() throws Exception {
-		return multi(graphs(2));
+		return graphs(2);
 	}
 
 	public static Object graphs(int perRow) {

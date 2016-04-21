@@ -40,7 +40,9 @@ public class DeployHandler extends GUI implements Callable<Object> {
 		info.add(div(h3("Upload an application JAR to re-deploy:"),
 				hardcoded("<form action=\"/_/upload-jar\" class=\"dropzone\" id=\"jar-upload\"></form>")));
 
-		return multi(info, grid(ReqInfo.get().cookies()));
+		info.add(grid(ReqInfo.get().cookies()));
+
+		return info;
 	}
 
 }

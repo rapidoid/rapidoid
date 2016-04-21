@@ -42,7 +42,7 @@ public class ClasspathHandler extends GUI implements Callable<Object> {
 
 		info.add(div(h3("Application classpath:"), grid));
 
-		return multi(info);
+		return info;
 	}
 
 }

@@ -3,6 +3,7 @@ package org.rapidoid.http;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
@@ -17,10 +18,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /*
  * #%L
@@ -350,8 +348,11 @@ public class RespImpl extends RapidoidThing implements Resp, Screen {
 	}
 
 	private byte[] render() {
+		Object guiContent = null;
+
 		if (content != null) {
-			model().put("content", content);
+			content = wrapGuiContent(content);
+			model.put("content", content);
 		}
 
 		ViewRenderer viewRenderer = req.http().custom().viewRenderer();
@@ -385,6 +386,25 @@ public class RespImpl extends RapidoidThing implements Resp, Screen {
 		} catch (Exception e) {
 			throw U.rte("Error while rendering page!", e);
 		}
+	}
+
+	private Object wrapGuiContent(Object content) {
+		if (Msc.hasRapidoidGUI()) {
+			Object[] items = null;
+
+			if (content instanceof Collection<?>) {
+				items = U.array((Collection<?>) content);
+
+			} else if (content instanceof Object[]) {
+				items = (Object[]) content;
+			}
+
+			if (items != null) {
+				return Cls.newInstance(Cls.get("org.rapidoid.html.ElementGroup"), new Object[]{items});
+			}
+		}
+
+		return content;
 	}
 
 	@Override
