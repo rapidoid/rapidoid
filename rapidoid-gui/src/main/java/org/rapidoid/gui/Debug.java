@@ -27,7 +27,7 @@ import org.rapidoid.gui.reqinfo.ReqInfo;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.1")
-public class Debug extends AbstractWidget {
+public class Debug extends AbstractWidget<Debug> {
 
 	@Override
 	protected Object render() {

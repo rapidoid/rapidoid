@@ -33,7 +33,7 @@ import java.util.Map;
 
 @Authors({"Marjan Ilievski", "Nikolche Mihajlovski"})
 @Since("5.0.11")
-public class BtnMenu extends AbstractWidget {
+public class BtnMenu extends AbstractWidget<BtnMenu> {
 
 	private String title;
 

@@ -28,7 +28,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.4.0")
-public class Card extends AbstractWidget {
+public class Card extends AbstractWidget<Card> {
 
 	private Object[] contents = {};
 

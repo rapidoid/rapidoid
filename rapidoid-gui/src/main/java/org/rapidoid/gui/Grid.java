@@ -37,7 +37,7 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Grid extends AbstractWidget {
+public class Grid extends AbstractWidget<Grid> {
 
 	private volatile Items items;
 

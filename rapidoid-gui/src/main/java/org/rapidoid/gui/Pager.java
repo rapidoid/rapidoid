@@ -28,7 +28,7 @@ import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Pager extends AbstractWidget {
+public class Pager extends AbstractWidget<Pager> {
 
 	private int from;
 	private int to;

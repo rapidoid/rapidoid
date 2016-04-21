@@ -39,7 +39,7 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Form extends AbstractWidget {
+public class Form extends AbstractWidget<Form> {
 
 	protected final Item item;
 	protected final FormMode mode;

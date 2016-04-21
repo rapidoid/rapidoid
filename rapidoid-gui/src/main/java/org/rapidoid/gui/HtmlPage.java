@@ -39,7 +39,7 @@ import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
-public class HtmlPage extends AbstractWidget {
+public class HtmlPage extends AbstractWidget<HtmlPage> {
 
 	private static volatile Template PAGE_TEMPLATE = Templates.fromFile("page.html");
 

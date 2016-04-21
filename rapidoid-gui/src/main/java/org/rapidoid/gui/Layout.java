@@ -30,7 +30,7 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
-public class Layout extends AbstractWidget {
+public class Layout extends AbstractWidget<Layout> {
 
 	private Object[] contents = {};
 

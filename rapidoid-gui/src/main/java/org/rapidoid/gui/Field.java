@@ -51,7 +51,7 @@ import java.util.Collections;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Field extends AbstractWidget {
+public class Field extends AbstractWidget<Field> {
 
 	protected FormMode mode;
 	protected Property prop;

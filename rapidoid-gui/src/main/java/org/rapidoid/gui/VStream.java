@@ -30,7 +30,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
-public class VStream extends AbstractWidget {
+public class VStream extends AbstractWidget<VStream> {
 
 	private Object template;
 

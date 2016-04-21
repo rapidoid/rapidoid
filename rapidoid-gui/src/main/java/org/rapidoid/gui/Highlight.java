@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Highlight extends AbstractWidget {
+public class Highlight extends AbstractWidget<Highlight> {
 
 	private String text;
 	private String regex;

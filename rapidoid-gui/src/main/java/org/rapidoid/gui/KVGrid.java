@@ -33,7 +33,7 @@ import java.util.Map.Entry;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.4.0")
-public class KVGrid extends AbstractWidget {
+public class KVGrid extends AbstractWidget<KVGrid> {
 
 	private final String[] headers = {"Key", "Value"};
 

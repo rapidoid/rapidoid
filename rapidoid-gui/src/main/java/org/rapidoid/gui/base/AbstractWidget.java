@@ -35,21 +35,40 @@ import java.util.UUID;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public abstract class AbstractWidget extends RapidoidThing implements TagWidget<Object>, Constants {
+public abstract class AbstractWidget<W extends AbstractWidget<?>> extends RapidoidThing implements TagWidget<Object>, Constants {
 
 	private Object extra;
 
 	protected abstract Object render();
 
+	private volatile boolean visible = true;
+
 	@Override
 	public final Object render(Object extra) {
 		this.extra = extra;
 		// TODO ignore the exchange?
-		return render();
+
+		Object rendered = render();
+
+		if (!visible) {
+			rendered.toString(); // to process events
+			return "";
+		}
+
+		return rendered;
 	}
 
 	public String widgetId() {
 		return getClass().getSimpleName() + "-" + UUID.randomUUID();
+	}
+
+	public boolean visible() {
+		return visible;
+	}
+
+	public W visible(boolean visible) {
+		this.visible = visible;
+		return (W) this;
 	}
 
 	@Override

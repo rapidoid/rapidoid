@@ -31,7 +31,7 @@ import java.util.Arrays;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.2.0")
-public abstract class AbstractCommand<W extends AbstractCommand<?>> extends AbstractWidget {
+public abstract class AbstractCommand<W extends AbstractCommand<?>> extends AbstractWidget<W> {
 
 	private String command;
 

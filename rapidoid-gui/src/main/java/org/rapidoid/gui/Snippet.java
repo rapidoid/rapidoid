@@ -30,7 +30,7 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.3.0")
-public class Snippet extends AbstractWidget {
+public class Snippet extends AbstractWidget<Snippet> {
 
 	private static final String JAVA_KEYWORDS = "abstract|continue|for|new|switch|assert|default|goto|package|synchronized|do|if|private|this|break|implements|protected|throw|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|try|final|interface|static|class|finally|strictfp|volatile|const|native|super|while";
 

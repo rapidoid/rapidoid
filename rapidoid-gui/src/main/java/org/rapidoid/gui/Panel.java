@@ -27,7 +27,7 @@ import org.rapidoid.html.Tag;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.2.0")
-public class Panel extends AbstractWidget {
+public class Panel extends AbstractWidget<Panel> {
 
 	private Object header;
 	private Object content;
