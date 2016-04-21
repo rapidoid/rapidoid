@@ -150,19 +150,22 @@ public class Grid extends AbstractWidget {
 
 		if (rowCmd != null) {
 			row = row.cmd(rowCmd, item.value());
+			row = row.class_("pointer");
+
 		} else {
 			String js = onClickScript(item);
-			row = row.onclick(js);
+			if (U.notEmpty(js)) {
+				row = row.onclick(js);
+				row = row.class_("pointer");
+			}
 		}
-
-		row = row.class_("pointer");
 
 		return row;
 	}
 
 	protected String onClickScript(Item item) {
 		String uri = toUri != null ? Lmbd.eval(toUri, item.value()) : GUI.uriFor(item.value());
-		return U.frmt("Rapidoid.goAt('%s');", uri);
+		return U.notEmpty(uri) ? U.frmt("Rapidoid.goAt('%s');", uri) : null;
 	}
 
 	protected TdTag cell(Object value) {
