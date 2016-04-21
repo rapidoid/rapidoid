@@ -36,6 +36,8 @@ app:
           Runtime: /_/jmx/runtime
           Classes: /_/jmx/classes
           Compilation: /_/jmx/compilation
+        Details:
+          Classpath: /_/classpath
 
 users: {}
 

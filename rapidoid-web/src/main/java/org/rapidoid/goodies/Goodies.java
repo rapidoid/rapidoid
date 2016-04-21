@@ -103,6 +103,10 @@ public class Goodies extends RapidoidThing {
 		return new OverviewHandler();
 	}
 
+	public static ClasspathHandler classpath() {
+		return new ClasspathHandler();
+	}
+
 	public static void bootstrap(Setup setup) {
 
 		if (!setup.goodies()) {
@@ -137,6 +141,7 @@ public class Goodies extends RapidoidThing {
 
 			setup.page("/_/metrics").mvc(Goodies.graphs());
 			setup.get("/_/graphs/{id:.*}").json(Goodies.graphData());
+			setup.get("/_/classpath").mvc(Goodies.classpath());
 		}
 
 		setup.post("/_login").roles().json(Goodies.login());

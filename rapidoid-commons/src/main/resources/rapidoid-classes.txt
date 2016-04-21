@@ -156,6 +156,7 @@ org.rapidoid.fluent.New
 org.rapidoid.fluent.To
 org.rapidoid.fluent.utils.Lambdas
 org.rapidoid.fluent.utils.StreamUtils
+org.rapidoid.goodies.ClasspathHandler
 org.rapidoid.goodies.ConfigHandler
 org.rapidoid.goodies.DataHandler
 org.rapidoid.goodies.DetailsHandler
