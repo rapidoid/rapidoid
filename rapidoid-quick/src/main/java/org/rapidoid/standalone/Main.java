@@ -1,14 +1,8 @@
-package org.rapidoid.web;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.RapidoidInfo;
-import org.rapidoid.setup.On;
+package org.rapidoid.standalone;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-quick
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -26,13 +20,17 @@ import org.rapidoid.setup.On;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.web.Rapidoid;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class StandAlone extends RapidoidThing {
+public class Main extends RapidoidThing {
 
 	public static void main(String[] args) {
-		On.get("/_ping").html("pong!");
-		On.get("/_version").json(RapidoidInfo.version());
+		Rapidoid.run(args);
 	}
 
 }

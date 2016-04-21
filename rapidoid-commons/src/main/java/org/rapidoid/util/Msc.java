@@ -444,6 +444,11 @@ public class Msc extends RapidoidThing implements Constants {
 		}
 	}
 
+	private static boolean couldBeCaller(String cls) {
+		boolean special = cls.equals("org.rapidoid.standalone.Main");
+		return special || (!Cls.isRapidoidClass(cls) && !Cls.isJREClass(cls) && !Cls.isIdeOrToolClass(cls));
+	}
+
 	private static Class<?> inferCaller(Class<?>... ignoreClasses) {
 		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
 
@@ -453,7 +458,7 @@ public class Msc extends RapidoidThing implements Constants {
 
 		for (int i = 2; i < trace.length; i++) {
 			String cls = trace[i].getClassName();
-			if (!Cls.isRapidoidClass(cls) && !Cls.isJREClass(cls) && !shouldIgnore(cls, ignoreClasses)) {
+			if (couldBeCaller(cls) && !shouldIgnore(cls, ignoreClasses)) {
 				try {
 					return Class.forName(cls);
 				} catch (ClassNotFoundException e) {
@@ -476,8 +481,9 @@ public class Msc extends RapidoidThing implements Constants {
 		for (int i = 2; i < trace.length; i++) {
 			String cls = trace[i].getClassName();
 
-			if (!Cls.isRapidoidClass(cls) && !Cls.isJREClass(cls) && U.eq(trace[i].getMethodName(), "main")) {
+			if (couldBeCaller(cls) && U.eq(trace[i].getMethodName(), "main")) {
 				Class<?> clazz = Cls.getClassIfExists(cls);
+
 				if (clazz != null) {
 					Method main = Cls.findMethod(clazz, "main", String[].class);
 					if (main != null && main.getReturnType() == void.class

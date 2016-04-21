@@ -525,6 +525,7 @@ org.rapidoid.sql.JDBC
 org.rapidoid.sql.JdbcClient
 org.rapidoid.sql.JDBCConfig
 org.rapidoid.sql.NoConnectionPool
+org.rapidoid.standalone.Main
 org.rapidoid.test.TestCommons
 org.rapidoid.util.AbstractMapImpl
 org.rapidoid.util.Bufs
@@ -566,7 +567,6 @@ org.rapidoid.var.Vars
 org.rapidoid.web.DefaultPageRenderer
 org.rapidoid.web.Rapidoid
 org.rapidoid.web.RapidoidWebModule
-org.rapidoid.web.StandAlone
 org.rapidoid.wrap.BoolWrap
 org.rapidoid.wrap.CharWrap
 org.rapidoid.wrap.DoubleWrap

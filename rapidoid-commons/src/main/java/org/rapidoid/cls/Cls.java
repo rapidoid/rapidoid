@@ -703,12 +703,16 @@ public class Cls extends RapidoidThing {
 		return (type instanceof ParameterizedType) ? ((ParameterizedType) type) : null;
 	}
 
-	public static boolean isJREClass(String canonicalClassName) {
-		return JRE_CLASS_PATTERN.matcher(canonicalClassName).matches();
+	public static boolean isJREClass(String className) {
+		return JRE_CLASS_PATTERN.matcher(className).matches();
 	}
 
-	public static boolean isRapidoidClass(String canonicalClassName) {
-		return RAPIDOID_CLASSES.contains(canonicalClassName);
+	public static boolean isRapidoidClass(String className) {
+		return RAPIDOID_CLASSES.contains(className);
+	}
+
+	public static boolean isIdeOrToolClass(String className) {
+		return className.startsWith("com.intellij.rt.execution.");
 	}
 
 	public static Set<String> getRapidoidClasses() {

@@ -286,7 +286,7 @@
 									</descriptorRefs>
 									<archive>
 										<manifest>
-											<mainClass>org.rapidoid.web.StandAlone</mainClass>
+											<mainClass>org.rapidoid.standalone.Main</mainClass>
 										</manifest>
 									</archive>
 								</configuration>
