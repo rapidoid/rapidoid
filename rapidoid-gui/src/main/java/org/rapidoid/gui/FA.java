@@ -51,7 +51,11 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag ALIGN_RIGHT = GUI.fa("align-right");
 
+	public static final Tag AMAZON = GUI.fa("amazon");
+
 	public static final Tag AMBULANCE = GUI.fa("ambulance");
+
+	public static final Tag AMERICAN_SIGN_LANGUAGE_INTERPRETING = GUI.fa("american-sign-language-interpreting");
 
 	public static final Tag ANCHOR = GUI.fa("anchor");
 
@@ -103,6 +107,8 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag ARROW_RIGHT = GUI.fa("arrow-right");
 
+	public static final Tag ARROW_UP = GUI.fa("arrow-up");
+
 	public static final Tag ARROWS = GUI.fa("arrows");
 
 	public static final Tag ARROWS_ALT = GUI.fa("arrows-alt");
@@ -111,15 +117,21 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag ARROWS_V = GUI.fa("arrows-v");
 
-	public static final Tag ARROW_UP = GUI.fa("arrow-up");
+	public static final Tag ASL_INTERPRETING = GUI.fa("asl-interpreting");
+
+	public static final Tag ASSISTIVE_LISTENING_SYSTEMS = GUI.fa("assistive-listening-systems");
 
 	public static final Tag ASTERISK = GUI.fa("asterisk");
 
 	public static final Tag AT = GUI.fa("at");
 
+	public static final Tag AUDIO_DESCRIPTION = GUI.fa("audio-description");
+
 	public static final Tag AUTOMOBILE = GUI.fa("automobile");
 
 	public static final Tag BACKWARD = GUI.fa("backward");
+
+	public static final Tag BALANCE_SCALE = GUI.fa("balance-scale");
 
 	public static final Tag BAN = GUI.fa("ban");
 
@@ -132,6 +144,26 @@ public final class FA extends RapidoidThing {
 	public static final Tag BARCODE = GUI.fa("barcode");
 
 	public static final Tag BARS = GUI.fa("bars");
+
+	public static final Tag BATTERY_0 = GUI.fa("battery-0");
+
+	public static final Tag BATTERY_1 = GUI.fa("battery-1");
+
+	public static final Tag BATTERY_2 = GUI.fa("battery-2");
+
+	public static final Tag BATTERY_3 = GUI.fa("battery-3");
+
+	public static final Tag BATTERY_4 = GUI.fa("battery-4");
+
+	public static final Tag BATTERY_EMPTY = GUI.fa("battery-empty");
+
+	public static final Tag BATTERY_FULL = GUI.fa("battery-full");
+
+	public static final Tag BATTERY_HALF = GUI.fa("battery-half");
+
+	public static final Tag BATTERY_QUARTER = GUI.fa("battery-quarter");
+
+	public static final Tag BATTERY_THREE_QUARTERS = GUI.fa("battery-three-quarters");
 
 	public static final Tag BED = GUI.fa("bed");
 
@@ -161,6 +193,14 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag BITCOIN = GUI.fa("bitcoin");
 
+	public static final Tag BLACK_TIE = GUI.fa("black-tie");
+
+	public static final Tag BLIND = GUI.fa("blind");
+
+	public static final Tag BLUETOOTH = GUI.fa("bluetooth");
+
+	public static final Tag BLUETOOTH_B = GUI.fa("bluetooth-b");
+
 	public static final Tag BOLD = GUI.fa("bold");
 
 	public static final Tag BOLT = GUI.fa("bolt");
@@ -172,6 +212,8 @@ public final class FA extends RapidoidThing {
 	public static final Tag BOOKMARK = GUI.fa("bookmark");
 
 	public static final Tag BOOKMARK_O = GUI.fa("bookmark-o");
+
+	public static final Tag BRAILLE = GUI.fa("braille");
 
 	public static final Tag BRIEFCASE = GUI.fa("briefcase");
 
@@ -197,7 +239,15 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag CALENDAR = GUI.fa("calendar");
 
+	public static final Tag CALENDAR_CHECK_O = GUI.fa("calendar-check-o");
+
+	public static final Tag CALENDAR_MINUS_O = GUI.fa("calendar-minus-o");
+
 	public static final Tag CALENDAR_O = GUI.fa("calendar-o");
+
+	public static final Tag CALENDAR_PLUS_O = GUI.fa("calendar-plus-o");
+
+	public static final Tag CALENDAR_TIMES_O = GUI.fa("calendar-times-o");
 
 	public static final Tag CAMERA = GUI.fa("camera");
 
@@ -229,7 +279,11 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag CC_AMEX = GUI.fa("cc-amex");
 
+	public static final Tag CC_DINERS_CLUB = GUI.fa("cc-diners-club");
+
 	public static final Tag CC_DISCOVER = GUI.fa("cc-discover");
+
+	public static final Tag CC_JCB = GUI.fa("cc-jcb");
 
 	public static final Tag CC_MASTERCARD = GUI.fa("cc-mastercard");
 
@@ -273,6 +327,8 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag CHILD = GUI.fa("child");
 
+	public static final Tag CHROME = GUI.fa("chrome");
+
 	public static final Tag CIRCLE = GUI.fa("circle");
 
 	public static final Tag CIRCLE_O = GUI.fa("circle-o");
@@ -284,6 +340,8 @@ public final class FA extends RapidoidThing {
 	public static final Tag CLIPBOARD = GUI.fa("clipboard");
 
 	public static final Tag CLOCK_O = GUI.fa("clock-o");
+
+	public static final Tag CLONE = GUI.fa("clone");
 
 	public static final Tag CLOSE = GUI.fa("close");
 
@@ -301,6 +359,8 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag CODEPEN = GUI.fa("codepen");
 
+	public static final Tag CODIEPIE = GUI.fa("codiepie");
+
 	public static final Tag COFFEE = GUI.fa("coffee");
 
 	public static final Tag COG = GUI.fa("cog");
@@ -313,6 +373,10 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag COMMENT_O = GUI.fa("comment-o");
 
+	public static final Tag COMMENTING = GUI.fa("commenting");
+
+	public static final Tag COMMENTING_O = GUI.fa("commenting-o");
+
 	public static final Tag COMMENTS = GUI.fa("comments");
 
 	public static final Tag COMMENTS_O = GUI.fa("comments-o");
@@ -323,11 +387,17 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag CONNECTDEVELOP = GUI.fa("connectdevelop");
 
+	public static final Tag CONTAO = GUI.fa("contao");
+
 	public static final Tag COPY = GUI.fa("copy");
 
 	public static final Tag COPYRIGHT = GUI.fa("copyright");
 
+	public static final Tag CREATIVE_COMMONS = GUI.fa("creative-commons");
+
 	public static final Tag CREDIT_CARD = GUI.fa("credit-card");
+
+	public static final Tag CREDIT_CARD_ALT = GUI.fa("credit-card-alt");
 
 	public static final Tag CROP = GUI.fa("crop");
 
@@ -348,6 +418,10 @@ public final class FA extends RapidoidThing {
 	public static final Tag DASHCUBE = GUI.fa("dashcube");
 
 	public static final Tag DATABASE = GUI.fa("database");
+
+	public static final Tag DEAF = GUI.fa("deaf");
+
+	public static final Tag DEAFNESS = GUI.fa("deafness");
 
 	public static final Tag DEDENT = GUI.fa("dedent");
 
@@ -373,6 +447,8 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag DRUPAL = GUI.fa("drupal");
 
+	public static final Tag EDGE = GUI.fa("edge");
+
 	public static final Tag EDIT = GUI.fa("edit");
 
 	public static final Tag EJECT = GUI.fa("eject");
@@ -388,6 +464,8 @@ public final class FA extends RapidoidThing {
 	public static final Tag ENVELOPE_O = GUI.fa("envelope-o");
 
 	public static final Tag ENVELOPE_SQUARE = GUI.fa("envelope-square");
+
+	public static final Tag ENVIRA = GUI.fa("envira");
 
 	public static final Tag ERASER = GUI.fa("eraser");
 
@@ -405,15 +483,17 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag EXPAND = GUI.fa("expand");
 
+	public static final Tag EXPEDITEDSSL = GUI.fa("expeditedssl");
+
 	public static final Tag EXTERNAL_LINK = GUI.fa("external-link");
 
 	public static final Tag EXTERNAL_LINK_SQUARE = GUI.fa("external-link-square");
 
 	public static final Tag EYE = GUI.fa("eye");
 
-	public static final Tag EYEDROPPER = GUI.fa("eyedropper");
-
 	public static final Tag EYE_SLASH = GUI.fa("eye-slash");
+
+	public static final Tag EYEDROPPER = GUI.fa("eyedropper");
 
 	public static final Tag FACEBOOK = GUI.fa("facebook");
 
@@ -428,6 +508,8 @@ public final class FA extends RapidoidThing {
 	public static final Tag FAST_FORWARD = GUI.fa("fast-forward");
 
 	public static final Tag FAX = GUI.fa("fax");
+
+	public static final Tag FEED = GUI.fa("feed");
 
 	public static final Tag FEMALE = GUI.fa("female");
 
@@ -457,8 +539,6 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag FILE_POWERPOINT_O = GUI.fa("file-powerpoint-o");
 
-	public static final Tag FILES_O = GUI.fa("files-o");
-
 	public static final Tag FILE_SOUND_O = GUI.fa("file-sound-o");
 
 	public static final Tag FILE_TEXT = GUI.fa("file-text");
@@ -471,6 +551,8 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag FILE_ZIP_O = GUI.fa("file-zip-o");
 
+	public static final Tag FILES_O = GUI.fa("files-o");
+
 	public static final Tag FILM = GUI.fa("film");
 
 	public static final Tag FILTER = GUI.fa("filter");
@@ -478,6 +560,8 @@ public final class FA extends RapidoidThing {
 	public static final Tag FIRE = GUI.fa("fire");
 
 	public static final Tag FIRE_EXTINGUISHER = GUI.fa("fire-extinguisher");
+
+	public static final Tag FIREFOX = GUI.fa("firefox");
 
 	public static final Tag FLAG = GUI.fa("flag");
 
@@ -503,6 +587,10 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag FONT = GUI.fa("font");
 
+	public static final Tag FONTICONS = GUI.fa("fonticons");
+
+	public static final Tag FORT_AWESOME = GUI.fa("fort-awesome");
+
 	public static final Tag FORUMBEE = GUI.fa("forumbee");
 
 	public static final Tag FORWARD = GUI.fa("forward");
@@ -527,9 +615,17 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag GENDERLESS = GUI.fa("genderless");
 
+	public static final Tag GET_POCKET = GUI.fa("get-pocket");
+
+	public static final Tag GG = GUI.fa("gg");
+
+	public static final Tag GG_CIRCLE = GUI.fa("gg-circle");
+
 	public static final Tag GIFT = GUI.fa("gift");
 
 	public static final Tag GIT = GUI.fa("git");
+
+	public static final Tag GIT_SQUARE = GUI.fa("git-square");
 
 	public static final Tag GITHUB = GUI.fa("github");
 
@@ -537,11 +633,15 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag GITHUB_SQUARE = GUI.fa("github-square");
 
-	public static final Tag GIT_SQUARE = GUI.fa("git-square");
+	public static final Tag GITLAB = GUI.fa("gitlab");
 
 	public static final Tag GITTIP = GUI.fa("gittip");
 
 	public static final Tag GLASS = GUI.fa("glass");
+
+	public static final Tag GLIDE = GUI.fa("glide");
+
+	public static final Tag GLIDE_G = GUI.fa("glide-g");
 
 	public static final Tag GLOBE = GUI.fa("globe");
 
@@ -559,7 +659,13 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag GROUP = GUI.fa("group");
 
+	public static final Tag H_SQUARE = GUI.fa("h-square");
+
 	public static final Tag HACKER_NEWS = GUI.fa("hacker-news");
+
+	public static final Tag HAND_GRAB_O = GUI.fa("hand-grab-o");
+
+	public static final Tag HAND_LIZARD_O = GUI.fa("hand-lizard-o");
 
 	public static final Tag HAND_O_DOWN = GUI.fa("hand-o-down");
 
@@ -569,6 +675,24 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag HAND_O_UP = GUI.fa("hand-o-up");
 
+	public static final Tag HAND_PAPER_O = GUI.fa("hand-paper-o");
+
+	public static final Tag HAND_PEACE_O = GUI.fa("hand-peace-o");
+
+	public static final Tag HAND_POINTER_O = GUI.fa("hand-pointer-o");
+
+	public static final Tag HAND_ROCK_O = GUI.fa("hand-rock-o");
+
+	public static final Tag HAND_SCISSORS_O = GUI.fa("hand-scissors-o");
+
+	public static final Tag HAND_SPOCK_O = GUI.fa("hand-spock-o");
+
+	public static final Tag HAND_STOP_O = GUI.fa("hand-stop-o");
+
+	public static final Tag HARD_OF_HEARING = GUI.fa("hard-of-hearing");
+
+	public static final Tag HASHTAG = GUI.fa("hashtag");
+
 	public static final Tag HDD_O = GUI.fa("hdd-o");
 
 	public static final Tag HEADER = GUI.fa("header");
@@ -577,9 +701,9 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag HEART = GUI.fa("heart");
 
-	public static final Tag HEARTBEAT = GUI.fa("heartbeat");
-
 	public static final Tag HEART_O = GUI.fa("heart-o");
+
+	public static final Tag HEARTBEAT = GUI.fa("heartbeat");
 
 	public static final Tag HISTORY = GUI.fa("history");
 
@@ -589,9 +713,27 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag HOTEL = GUI.fa("hotel");
 
-	public static final Tag H_SQUARE = GUI.fa("h-square");
+	public static final Tag HOURGLASS = GUI.fa("hourglass");
+
+	public static final Tag HOURGLASS_1 = GUI.fa("hourglass-1");
+
+	public static final Tag HOURGLASS_2 = GUI.fa("hourglass-2");
+
+	public static final Tag HOURGLASS_3 = GUI.fa("hourglass-3");
+
+	public static final Tag HOURGLASS_END = GUI.fa("hourglass-end");
+
+	public static final Tag HOURGLASS_HALF = GUI.fa("hourglass-half");
+
+	public static final Tag HOURGLASS_O = GUI.fa("hourglass-o");
+
+	public static final Tag HOURGLASS_START = GUI.fa("hourglass-start");
+
+	public static final Tag HOUZZ = GUI.fa("houzz");
 
 	public static final Tag HTML5 = GUI.fa("html5");
+
+	public static final Tag I_CURSOR = GUI.fa("i-cursor");
 
 	public static final Tag ILS = GUI.fa("ils");
 
@@ -600,6 +742,8 @@ public final class FA extends RapidoidThing {
 	public static final Tag INBOX = GUI.fa("inbox");
 
 	public static final Tag INDENT = GUI.fa("indent");
+
+	public static final Tag INDUSTRY = GUI.fa("industry");
 
 	public static final Tag INFO = GUI.fa("info");
 
@@ -610,6 +754,10 @@ public final class FA extends RapidoidThing {
 	public static final Tag INSTAGRAM = GUI.fa("instagram");
 
 	public static final Tag INSTITUTION = GUI.fa("institution");
+
+	public static final Tag INTERNET_EXPLORER = GUI.fa("internet-explorer");
+
+	public static final Tag INTERSEX = GUI.fa("intersex");
 
 	public static final Tag IOXHOST = GUI.fa("ioxhost");
 
@@ -687,6 +835,8 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag LONG_ARROW_UP = GUI.fa("long-arrow-up");
 
+	public static final Tag LOW_VISION = GUI.fa("low-vision");
+
 	public static final Tag MAGIC = GUI.fa("magic");
 
 	public static final Tag MAGNET = GUI.fa("magnet");
@@ -699,7 +849,15 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag MALE = GUI.fa("male");
 
+	public static final Tag MAP = GUI.fa("map");
+
 	public static final Tag MAP_MARKER = GUI.fa("map-marker");
+
+	public static final Tag MAP_O = GUI.fa("map-o");
+
+	public static final Tag MAP_PIN = GUI.fa("map-pin");
+
+	public static final Tag MAP_SIGNS = GUI.fa("map-signs");
 
 	public static final Tag MARS = GUI.fa("mars");
 
@@ -735,9 +893,13 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag MINUS_SQUARE_O = GUI.fa("minus-square-o");
 
+	public static final Tag MIXCLOUD = GUI.fa("mixcloud");
+
 	public static final Tag MOBILE = GUI.fa("mobile");
 
 	public static final Tag MOBILE_PHONE = GUI.fa("mobile-phone");
+
+	public static final Tag MODX = GUI.fa("modx");
 
 	public static final Tag MONEY = GUI.fa("money");
 
@@ -747,6 +909,8 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag MOTORCYCLE = GUI.fa("motorcycle");
 
+	public static final Tag MOUSE_POINTER = GUI.fa("mouse-pointer");
+
 	public static final Tag MUSIC = GUI.fa("music");
 
 	public static final Tag NAVICON = GUI.fa("navicon");
@@ -755,7 +919,21 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag NEWSPAPER_O = GUI.fa("newspaper-o");
 
+	public static final Tag OBJECT_GROUP = GUI.fa("object-group");
+
+	public static final Tag OBJECT_UNGROUP = GUI.fa("object-ungroup");
+
+	public static final Tag ODNOKLASSNIKI = GUI.fa("odnoklassniki");
+
+	public static final Tag ODNOKLASSNIKI_SQUARE = GUI.fa("odnoklassniki-square");
+
+	public static final Tag OPENCART = GUI.fa("opencart");
+
 	public static final Tag OPENID = GUI.fa("openid");
+
+	public static final Tag OPERA = GUI.fa("opera");
+
+	public static final Tag OPTIN_MONSTER = GUI.fa("optin-monster");
 
 	public static final Tag OUTDENT = GUI.fa("outdent");
 
@@ -763,17 +941,21 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag PAINT_BRUSH = GUI.fa("paint-brush");
 
-	public static final Tag PAPERCLIP = GUI.fa("paperclip");
-
 	public static final Tag PAPER_PLANE = GUI.fa("paper-plane");
 
 	public static final Tag PAPER_PLANE_O = GUI.fa("paper-plane-o");
+
+	public static final Tag PAPERCLIP = GUI.fa("paperclip");
 
 	public static final Tag PARAGRAPH = GUI.fa("paragraph");
 
 	public static final Tag PASTE = GUI.fa("paste");
 
 	public static final Tag PAUSE = GUI.fa("pause");
+
+	public static final Tag PAUSE_CIRCLE = GUI.fa("pause-circle");
+
+	public static final Tag PAUSE_CIRCLE_O = GUI.fa("pause-circle-o");
 
 	public static final Tag PAW = GUI.fa("paw");
 
@@ -784,6 +966,8 @@ public final class FA extends RapidoidThing {
 	public static final Tag PENCIL_SQUARE = GUI.fa("pencil-square");
 
 	public static final Tag PENCIL_SQUARE_O = GUI.fa("pencil-square-o");
+
+	public static final Tag PERCENT = GUI.fa("percent");
 
 	public static final Tag PHONE = GUI.fa("phone");
 
@@ -827,6 +1011,8 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag PRINT = GUI.fa("print");
 
+	public static final Tag PRODUCT_HUNT = GUI.fa("product-hunt");
+
 	public static final Tag PUZZLE_PIECE = GUI.fa("puzzle-piece");
 
 	public static final Tag QQ = GUI.fa("qq");
@@ -836,6 +1022,8 @@ public final class FA extends RapidoidThing {
 	public static final Tag QUESTION = GUI.fa("question");
 
 	public static final Tag QUESTION_CIRCLE = GUI.fa("question-circle");
+
+	public static final Tag QUESTION_CIRCLE_O = GUI.fa("question-circle-o");
 
 	public static final Tag QUOTE_LEFT = GUI.fa("quote-left");
 
@@ -851,9 +1039,13 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag REDDIT = GUI.fa("reddit");
 
+	public static final Tag REDDIT_ALIEN = GUI.fa("reddit-alien");
+
 	public static final Tag REDDIT_SQUARE = GUI.fa("reddit-square");
 
 	public static final Tag REFRESH = GUI.fa("refresh");
+
+	public static final Tag REGISTERED = GUI.fa("registered");
 
 	public static final Tag REMOVE = GUI.fa("remove");
 
@@ -891,9 +1083,13 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag RUPEE = GUI.fa("rupee");
 
+	public static final Tag SAFARI = GUI.fa("safari");
+
 	public static final Tag SAVE = GUI.fa("save");
 
 	public static final Tag SCISSORS = GUI.fa("scissors");
+
+	public static final Tag SCRIBD = GUI.fa("scribd");
 
 	public static final Tag SEARCH = GUI.fa("search");
 
@@ -929,13 +1125,21 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag SHIRTSINBULK = GUI.fa("shirtsinbulk");
 
-	public static final Tag SHOPPING_CART = GUI.fa("shopping-cart");
+	public static final Tag SHOPPING_BAG = GUI.fa("shopping-bag");
 
-	public static final Tag SIGNAL = GUI.fa("signal");
+	public static final Tag SHOPPING_BASKET = GUI.fa("shopping-basket");
+
+	public static final Tag SHOPPING_CART = GUI.fa("shopping-cart");
 
 	public static final Tag SIGN_IN = GUI.fa("sign-in");
 
+	public static final Tag SIGN_LANGUAGE = GUI.fa("sign-language");
+
 	public static final Tag SIGN_OUT = GUI.fa("sign-out");
+
+	public static final Tag SIGNAL = GUI.fa("signal");
+
+	public static final Tag SIGNING = GUI.fa("signing");
 
 	public static final Tag SIMPLYBUILT = GUI.fa("simplybuilt");
 
@@ -952,6 +1156,12 @@ public final class FA extends RapidoidThing {
 	public static final Tag SLIDESHARE = GUI.fa("slideshare");
 
 	public static final Tag SMILE_O = GUI.fa("smile-o");
+
+	public static final Tag SNAPCHAT = GUI.fa("snapchat");
+
+	public static final Tag SNAPCHAT_GHOST = GUI.fa("snapchat-ghost");
+
+	public static final Tag SNAPCHAT_SQUARE = GUI.fa("snapchat-square");
 
 	public static final Tag SOCCER_BALL_O = GUI.fa("soccer-ball-o");
 
@@ -1017,7 +1227,15 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag STETHOSCOPE = GUI.fa("stethoscope");
 
+	public static final Tag STICKY_NOTE = GUI.fa("sticky-note");
+
+	public static final Tag STICKY_NOTE_O = GUI.fa("sticky-note-o");
+
 	public static final Tag STOP = GUI.fa("stop");
+
+	public static final Tag STOP_CIRCLE = GUI.fa("stop-circle");
+
+	public static final Tag STOP_CIRCLE_O = GUI.fa("stop-circle-o");
 
 	public static final Tag STREET_VIEW = GUI.fa("street-view");
 
@@ -1053,6 +1271,8 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag TAXI = GUI.fa("taxi");
 
+	public static final Tag TELEVISION = GUI.fa("television");
+
 	public static final Tag TENCENT_WEIBO = GUI.fa("tencent-weibo");
 
 	public static final Tag TERMINAL = GUI.fa("terminal");
@@ -1067,6 +1287,8 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag TH_LIST = GUI.fa("th-list");
 
+	public static final Tag THUMB_TACK = GUI.fa("thumb-tack");
+
 	public static final Tag THUMBS_DOWN = GUI.fa("thumbs-down");
 
 	public static final Tag THUMBS_O_DOWN = GUI.fa("thumbs-o-down");
@@ -1074,8 +1296,6 @@ public final class FA extends RapidoidThing {
 	public static final Tag THUMBS_O_UP = GUI.fa("thumbs-o-up");
 
 	public static final Tag THUMBS_UP = GUI.fa("thumbs-up");
-
-	public static final Tag THUMB_TACK = GUI.fa("thumb-tack");
 
 	public static final Tag TICKET = GUI.fa("ticket");
 
@@ -1099,6 +1319,8 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag TOGGLE_UP = GUI.fa("toggle-up");
 
+	public static final Tag TRADEMARK = GUI.fa("trademark");
+
 	public static final Tag TRAIN = GUI.fa("train");
 
 	public static final Tag TRANSGENDER = GUI.fa("transgender");
@@ -1112,6 +1334,8 @@ public final class FA extends RapidoidThing {
 	public static final Tag TREE = GUI.fa("tree");
 
 	public static final Tag TRELLO = GUI.fa("trello");
+
+	public static final Tag TRIPADVISOR = GUI.fa("tripadvisor");
 
 	public static final Tag TROPHY = GUI.fa("trophy");
 
@@ -1127,6 +1351,8 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag TURKISH_LIRA = GUI.fa("turkish-lira");
 
+	public static final Tag TV = GUI.fa("tv");
+
 	public static final Tag TWITCH = GUI.fa("twitch");
 
 	public static final Tag TWITTER = GUI.fa("twitter");
@@ -1138,6 +1364,8 @@ public final class FA extends RapidoidThing {
 	public static final Tag UNDERLINE = GUI.fa("underline");
 
 	public static final Tag UNDO = GUI.fa("undo");
+
+	public static final Tag UNIVERSAL_ACCESS = GUI.fa("universal-access");
 
 	public static final Tag UNIVERSITY = GUI.fa("university");
 
@@ -1151,6 +1379,8 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag UPLOAD = GUI.fa("upload");
 
+	public static final Tag USB = GUI.fa("usb");
+
 	public static final Tag USD = GUI.fa("usd");
 
 	public static final Tag USER = GUI.fa("user");
@@ -1159,11 +1389,11 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag USER_PLUS = GUI.fa("user-plus");
 
-	public static final Tag USERS = GUI.fa("users");
-
 	public static final Tag USER_SECRET = GUI.fa("user-secret");
 
 	public static final Tag USER_TIMES = GUI.fa("user-times");
+
+	public static final Tag USERS = GUI.fa("users");
 
 	public static final Tag VENUS = GUI.fa("venus");
 
@@ -1173,13 +1403,21 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag VIACOIN = GUI.fa("viacoin");
 
+	public static final Tag VIADEO = GUI.fa("viadeo");
+
+	public static final Tag VIADEO_SQUARE = GUI.fa("viadeo-square");
+
 	public static final Tag VIDEO_CAMERA = GUI.fa("video-camera");
+
+	public static final Tag VIMEO = GUI.fa("vimeo");
 
 	public static final Tag VIMEO_SQUARE = GUI.fa("vimeo-square");
 
 	public static final Tag VINE = GUI.fa("vine");
 
 	public static final Tag VK = GUI.fa("vk");
+
+	public static final Tag VOLUME_CONTROL_PHONE = GUI.fa("volume-control-phone");
 
 	public static final Tag VOLUME_DOWN = GUI.fa("volume-down");
 
@@ -1199,7 +1437,11 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag WHEELCHAIR = GUI.fa("wheelchair");
 
+	public static final Tag WHEELCHAIR_ALT = GUI.fa("wheelchair-alt");
+
 	public static final Tag WIFI = GUI.fa("wifi");
+
+	public static final Tag WIKIPEDIA_W = GUI.fa("wikipedia-w");
 
 	public static final Tag WINDOWS = GUI.fa("windows");
 
@@ -1207,13 +1449,25 @@ public final class FA extends RapidoidThing {
 
 	public static final Tag WORDPRESS = GUI.fa("wordpress");
 
+	public static final Tag WPBEGINNER = GUI.fa("wpbeginner");
+
+	public static final Tag WPFORMS = GUI.fa("wpforms");
+
 	public static final Tag WRENCH = GUI.fa("wrench");
 
 	public static final Tag XING = GUI.fa("xing");
 
 	public static final Tag XING_SQUARE = GUI.fa("xing-square");
 
+	public static final Tag Y_COMBINATOR = GUI.fa("y-combinator");
+
+	public static final Tag Y_COMBINATOR_SQUARE = GUI.fa("y-combinator-square");
+
 	public static final Tag YAHOO = GUI.fa("yahoo");
+
+	public static final Tag YC = GUI.fa("yc");
+
+	public static final Tag YC_SQUARE = GUI.fa("yc-square");
 
 	public static final Tag YELP = GUI.fa("yelp");
 
