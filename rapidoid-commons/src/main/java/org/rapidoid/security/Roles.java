@@ -36,7 +36,7 @@ public class Roles extends RapidoidThing {
 
 	public static final String MODERATOR = "moderator";
 
-	public static final String LOGGED_IN = "logged-in";
+	public static final String LOGGED_IN = "logged_in";
 
 	public static final String OWNER = "owner";
 
