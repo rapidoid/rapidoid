@@ -1,13 +1,13 @@
 {
   "Provided classes" : [ "App", "PersonServiceImpl" ],
   "Provided instances" : [ ],
-  "Managed instances" : [ "App@", "PersonServiceImpl@", "Logger@", "BookService@", "BookDao@" ],
+  "Managed instances" : [ "org.rapidoid.ioc.app.App@", "org.rapidoid.ioc.app.PersonServiceImpl@", "org.rapidoid.ioc.Logger@", "org.rapidoid.ioc.app.BookService@", "org.rapidoid.ioc.app.BookDao@" ],
   "By type" : {
-    "PersonService" : [ "PersonServiceImpl", "PersonServiceImpl@" ],
-    "App" : [ "App@" ],
-    "PersonServiceImpl" : [ "PersonServiceImpl@" ],
-    "Logger" : [ "Logger@" ],
-    "BookService" : [ "BookService@" ],
-    "BookDao" : [ "BookDao@" ]
+    "PersonService" : [ "PersonServiceImpl", "org.rapidoid.ioc.app.PersonServiceImpl@" ],
+    "App" : [ "org.rapidoid.ioc.app.App@" ],
+    "PersonServiceImpl" : [ "org.rapidoid.ioc.app.PersonServiceImpl@" ],
+    "Logger" : [ "org.rapidoid.ioc.Logger@" ],
+    "BookService" : [ "org.rapidoid.ioc.app.BookService@" ],
+    "BookDao" : [ "org.rapidoid.ioc.app.BookDao@" ]
   }
 }

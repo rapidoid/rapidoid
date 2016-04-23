@@ -1,10 +1,10 @@
 {
   "Provided classes" : [ "BazB" ],
   "Provided instances" : [ ],
-  "Managed instances" : [ "BazWrapper@", "BazB@" ],
+  "Managed instances" : [ "org.rapidoid.ioc.profiles.BazWrapper@", "org.rapidoid.ioc.profiles.BazB@" ],
   "By type" : {
-    "Callable" : [ "BazB", "BazB@" ],
-    "BazWrapper" : [ "BazWrapper@" ],
-    "BazB" : [ "BazB@" ]
+    "Callable" : [ "BazB", "org.rapidoid.ioc.profiles.BazB@" ],
+    "BazWrapper" : [ "org.rapidoid.ioc.profiles.BazWrapper@" ],
+    "BazB" : [ "org.rapidoid.ioc.profiles.BazB@" ]
   }
 }

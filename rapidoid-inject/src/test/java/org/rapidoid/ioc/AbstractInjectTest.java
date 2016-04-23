@@ -43,7 +43,8 @@ public abstract class AbstractInjectTest extends TestCommons {
 	}
 
 	protected void verify(String name, Object actual) {
-		super.verifyCase(name, JSON.prettify(actual), name);
+		String json = JSON.prettify(actual).replaceAll("@\\w+", "@");
+		super.verifyCase(name, json, name);
 	}
 
 	protected void verifyIoC() {
