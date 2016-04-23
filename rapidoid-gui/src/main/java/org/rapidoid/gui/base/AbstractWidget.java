@@ -4,9 +4,12 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
+import org.rapidoid.gui.reqinfo.IReqInfo;
+import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.impl.TagRenderer;
+import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.TdTag;
 import org.rapidoid.html.tag.ThTag;
 import org.rapidoid.util.Constants;
@@ -76,6 +79,10 @@ public abstract class AbstractWidget<W extends AbstractWidget<?>> extends Rapido
 		return TagRenderer.get().toHTML(this, extra);
 	}
 
+	protected IReqInfo req() {
+		return ReqInfo.get();
+	}
+
 	protected static Tag div(Object... contents) {
 		return GUI.div(contents);
 	}
@@ -98,6 +105,10 @@ public abstract class AbstractWidget<W extends AbstractWidget<?>> extends Rapido
 
 	protected static ThTag th(Object... contents) {
 		return GUI.th(contents);
+	}
+
+	protected static ATag a(Object... contents) {
+		return GUI.a(contents);
 	}
 
 }

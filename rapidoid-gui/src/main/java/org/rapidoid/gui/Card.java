@@ -30,11 +30,11 @@ import org.rapidoid.u.U;
 @Since("2.4.0")
 public class Card extends AbstractWidget<Card> {
 
-	private Object[] contents = {};
+	protected volatile Object[] contents = {};
 
-	private Object[] controls = {};
+	protected volatile Object[] controls = {};
 
-	private Object header;
+	protected volatile Object header;
 
 	@Override
 	protected Object render() {

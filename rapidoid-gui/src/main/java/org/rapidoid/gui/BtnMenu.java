@@ -79,7 +79,7 @@ public class BtnMenu extends AbstractWidget<BtnMenu> {
 
 	private void generateMenuItems(List<Tag> content, Iterator<Map<Object, String>> subMenuIterator) {
 		for (Map.Entry<Object, String> menuItem : subMenuIterator.next().entrySet()) {
-			Tag a = GUI.a().href(menuItem.getValue()).contents(menuItem.getKey());
+			Tag a = a().href(menuItem.getValue()).contents(menuItem.getKey());
 			Tag li = li().contents(a);
 			content.add(li);
 		}

@@ -5,16 +5,13 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.AnyObj;
 import org.rapidoid.commons.Err;
 import org.rapidoid.gui.base.AbstractWidget;
-import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.FormTag;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Property;
 import org.rapidoid.u.U;
-import org.rapidoid.var.Var;
 
-import java.util.Collection;
 import java.util.List;
 
 /*
@@ -57,20 +54,6 @@ public class Form extends AbstractWidget<Form> {
 		this.mode = mode;
 		this.item = item;
 		init(item, properties);
-	}
-
-	public Form(FormMode mode, FormLayout layout, String[] fieldNames, String[] fieldLabels, FieldType[] fieldTypes,
-	            Collection<?>[] options, Var<?>[] vars, Btn[] buttons) {
-		this.mode = mode;
-		this.item = null;
-		this.layout = layout;
-
-		for (int i = 0; i < fieldNames.length; i++) {
-			fields.add(new Field(mode, layout, null, fieldNames[i], fieldLabels[i], fieldTypes[i], options[i], true,
-					vars[i]));
-		}
-
-		this.buttons = AnyObj.withoutNulls(buttons);
 	}
 
 	/* FIELD */
@@ -116,12 +99,12 @@ public class Form extends AbstractWidget<Form> {
 	/* OTHER */
 
 	public Form add(Field field) {
-		if (field.getMode() == null) {
-			field.setMode(mode);
+		if (field.mode() == null) {
+			field.mode(mode);
 		}
 
-		if (field.getLayout() == null) {
-			field.setLayout(layout);
+		if (field.layout() == null) {
+			field.layout(layout);
 		}
 
 		fields.add(field);
@@ -134,7 +117,7 @@ public class Form extends AbstractWidget<Form> {
 
 		for (int i = 0; i < propN; i++) {
 			Property prop = props.get(i);
-			Field field = GUI.field(mode, layout, item, prop);
+			Field field = GUI.field(item, prop).mode(mode).layout(layout);
 			fields.add(field);
 		}
 	}

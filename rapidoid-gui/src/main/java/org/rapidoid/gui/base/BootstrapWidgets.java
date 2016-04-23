@@ -12,7 +12,9 @@ import org.rapidoid.gui.var.ArrayContainerVar;
 import org.rapidoid.gui.var.CollectionContainerVar;
 import org.rapidoid.gui.var.EqualityVar;
 import org.rapidoid.gui.var.LocalVar;
-import org.rapidoid.html.*;
+import org.rapidoid.html.HTML;
+import org.rapidoid.html.Tag;
+import org.rapidoid.html.TagWidget;
 import org.rapidoid.html.customtag.ColspanTag;
 import org.rapidoid.html.tag.*;
 import org.rapidoid.http.HttpVerb;
@@ -434,13 +436,12 @@ public abstract class BootstrapWidgets extends HTML {
 		return grids;
 	}
 
-	public static Pager pager(int from, int to, Var<Integer> pageNumber) {
-		return Cls.customizable(Pager.class, from, to, pageNumber);
+	public static Pager pager() {
+		return Cls.customizable(Pager.class);
 	}
 
-	public static Form form_(FormLayout layout, String[] fieldsNames, String[] fieldsDesc, FieldType[] fieldTypes,
-	                         Object[][] options, Var<?>[] vars, Btn[] buttons) {
-		return Cls.customizable(Form.class, layout, fieldsNames, fieldsDesc, fieldTypes, options, vars, buttons);
+	public static Pager pager(int from, int to, Var<Integer> pageNumber) {
+		return pager().from(from).to(to).value(pageNumber);
 	}
 
 	public static Form show(Object bean, String... properties) {
@@ -470,13 +471,8 @@ public abstract class BootstrapWidgets extends HTML {
 		return new Form(FormMode.CREATE, item, properties);
 	}
 
-	public static Field field(FormMode mode, FormLayout layout, Property prop, String name, String desc,
-	                          FieldType type, Collection<?> options, boolean required, Var<?> var) {
-		return new Field(mode, layout, prop, name, desc, type, options, required, var);
-	}
-
-	public static Field field(FormMode mode, FormLayout layout, Item item, Property prop) {
-		return new Field(mode, layout, item, prop);
+	public static Field field(Item item, Property prop) {
+		return new Field(item, prop);
 	}
 
 	public static <T> Property prop(String name, Calc<T> calc) {
@@ -485,10 +481,6 @@ public abstract class BootstrapWidgets extends HTML {
 
 	public static Item item(Object value) {
 		return Models.item(value);
-	}
-
-	public static <T> Items beanItems(Class<T> beanType, T... beans) {
-		return Models.beanItems(beanType, beans);
 	}
 
 	public static Tag media(Object left, Object title, Object body, String targetUrl) {
@@ -931,11 +923,11 @@ public abstract class BootstrapWidgets extends HTML {
 		return tag;
 	}
 
-	public static Tag tableRow(Object... cellContents) {
+	public static Tag trTd(Object... cells) {
 		Tag row = tr();
 
-		for (Object content : cellContents) {
-			row = row.append(td(content));
+		for (Object cell : cells) {
+			row = row.append(td(cell));
 		}
 
 		return row;

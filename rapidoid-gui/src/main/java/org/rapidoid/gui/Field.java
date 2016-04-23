@@ -53,38 +53,20 @@ import java.util.Collections;
 @Since("2.0.0")
 public class Field extends AbstractWidget<Field> {
 
-	protected FormMode mode;
-	protected Property prop;
-	protected FormLayout layout = FormLayout.VERTICAL;
-	protected String name;
-	protected String desc;
-	protected FieldType type;
-	protected Collection<?> options;
-	protected boolean required;
-	protected Var<Object> var;
+	protected volatile FormMode mode = FormMode.EDIT;
+	protected volatile Property prop;
+	protected volatile FormLayout layout = FormLayout.VERTICAL;
+	protected volatile String name;
+	protected volatile String desc;
+	protected volatile FieldType type;
+	protected volatile Collection<?> options;
+	protected volatile boolean required;
+	protected volatile Var<Object> var;
+	protected volatile Tag content;
+	protected volatile Tag label;
+	protected volatile Tag input;
 
-	// fully customize: label OR input OR content (label+input)
-	protected Tag content;
-	protected Tag label;
-	protected Tag input;
-
-	public Field(FormMode mode, FormLayout layout, Property prop, String name, String desc, FieldType type,
-	             Collection<?> options, boolean required, Var<?> var) {
-
-		this.mode = U.or(mode, FormMode.EDIT);
-		this.layout = layout;
-		this.prop = prop;
-		this.name = name;
-		this.desc = U.or(desc, name);
-		this.type = type;
-		this.options = options;
-		this.required = required;
-		this.var = (Var<Object>) var;
-	}
-
-	public Field(FormMode mode, FormLayout layout, Item item, Property prop) {
-		this.mode = U.or(mode, FormMode.EDIT);
-		this.layout = layout;
+	public Field(Item item, Property prop) {
 		this.prop = prop;
 		this.name = prop.name();
 		this.desc = U.or(prop.caption(), name);
@@ -371,105 +353,116 @@ public class Field extends AbstractWidget<Field> {
 		}
 	}
 
-	public FormMode getMode() {
-		return mode;
-	}
-
-	public void setMode(FormMode mode) {
-		this.mode = mode;
-	}
-
-	public Property getProp() {
-		return prop;
-	}
-
-	public void setProp(Property prop) {
-		this.prop = prop;
-	}
-
-	public FormLayout getLayout() {
-		return layout;
-	}
-
-	public void setLayout(FormLayout layout) {
-		this.layout = layout;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDesc() {
-		return desc;
-	}
-
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
-
-	public FieldType getType() {
-		return type;
-	}
-
-	public void setType(FieldType type) {
-		this.type = type;
-	}
-
-	public Collection<?> getOptions() {
-		return options;
-	}
-
-	public void setOptions(Collection<?> options) {
-		this.options = options;
-	}
-
-	public boolean isRequired() {
-		return required;
-	}
-
-	public void setRequired(boolean required) {
-		this.required = required;
-	}
-
-	public Var<Object> getVar() {
-		return var;
-	}
-
-	public void setVar(Var<?> var) {
-		this.var = (Var<Object>) var;
-	}
-
-	public Tag getContent() {
-		return content;
-	}
-
-	public void setContent(Tag content) {
-		this.content = content;
-	}
-
-	public Tag getLabel() {
-		return label;
-	}
-
-	public void setLabel(Tag label) {
-		this.label = label;
-	}
-
-	public Tag getInput() {
-		return input;
-	}
-
-	public void setInput(Tag input) {
-		this.input = input;
-	}
-
 	public static String propVarName(Object target, String name) {
 		// TODO in future complex names might be constructed
 		return name;
 	}
 
+	public FormMode mode() {
+		return mode;
+	}
+
+	public Field mode(FormMode mode) {
+		this.mode = mode;
+		return this;
+	}
+
+	public Property prop() {
+		return prop;
+	}
+
+	public Field prop(Property prop) {
+		this.prop = prop;
+		return this;
+	}
+
+	public FormLayout layout() {
+		return layout;
+	}
+
+	public Field layout(FormLayout layout) {
+		this.layout = layout;
+		return this;
+	}
+
+	public String name() {
+		return name;
+	}
+
+	public Field name(String name) {
+		this.name = name;
+		return this;
+	}
+
+	public String desc() {
+		return desc;
+	}
+
+	public Field desc(String desc) {
+		this.desc = desc;
+		return this;
+	}
+
+	public FieldType type() {
+		return type;
+	}
+
+	public Field type(FieldType type) {
+		this.type = type;
+		return this;
+	}
+
+	public Collection<?> options() {
+		return options;
+	}
+
+	public Field options(Collection<?> options) {
+		this.options = options;
+		return this;
+	}
+
+	public boolean required() {
+		return required;
+	}
+
+	public Field required(boolean required) {
+		this.required = required;
+		return this;
+	}
+
+	public Var<Object> var() {
+		return var;
+	}
+
+	public Field var(Var<Object> var) {
+		this.var = var;
+		return this;
+	}
+
+	public Tag content() {
+		return content;
+	}
+
+	public Field content(Tag content) {
+		this.content = content;
+		return this;
+	}
+
+	public Tag label() {
+		return label;
+	}
+
+	public Field label(Tag label) {
+		this.label = label;
+		return this;
+	}
+
+	public Tag input() {
+		return input;
+	}
+
+	public Field input(Tag input) {
+		this.input = input;
+		return this;
+	}
 }

@@ -48,7 +48,7 @@ public class Btn extends AbstractCommand<Btn> {
 		String cls = U.or(class_, "btn btn-" + kind);
 
 		if (go != null && !hasHandler() && confirm() == null) {
-			return GUI.a(contents).href(go).class_(cls);
+			return a(contents).href(go).class_(cls);
 		}
 
 		ButtonTag btn = GUI.button(contents).type("button").class_(cls);

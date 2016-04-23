@@ -2,6 +2,7 @@ package org.rapidoid.gui.var;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.u.U;
 
@@ -46,7 +47,7 @@ public class LocalVar<T extends Serializable> extends WidgetVar<T> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public T get() {
-		return (T) U.or(ReqInfo.get().posted().get(localKey), defaultValue);
+		return (T) Cls.convert(U.or(ReqInfo.get().posted().get(localKey), defaultValue), Cls.of(defaultValue));
 	}
 
 	@Override

@@ -30,23 +30,17 @@ import org.rapidoid.var.Var;
 @Since("2.0.0")
 public class Pager extends AbstractWidget<Pager> {
 
-	private int from;
-	private int to;
-	private Var<Integer> pageNumber;
-
-	public Pager(int from, int to, Var<Integer> pageNumber) {
-		this.from = from;
-		this.to = to;
-		this.pageNumber = pageNumber;
-	}
+	private volatile int from;
+	private volatile int to;
+	private volatile Var<Integer> value;
 
 	@Override
 	protected Tag render() {
-		Tag first = first().cmd("_set", pageNumber, from);
-		Tag prev = prev().cmd("_dec", pageNumber, 1);
+		Tag first = first().cmd("_set", value, from);
+		Tag prev = prev().cmd("_dec", value, 1);
 		Tag current = current();
-		Tag next = next().cmd("_inc", pageNumber, 1);
-		Tag last = last().cmd("_set", pageNumber, to);
+		Tag next = next().cmd("_inc", value, 1);
+		Tag last = last().cmd("_set", value, to);
 
 		return shouldDisplay() ? pagination(first, prev, current, next, last) : div();
 	}
@@ -69,7 +63,7 @@ public class Pager extends AbstractWidget<Pager> {
 	}
 
 	protected int pageNumber() {
-		return pageNumber.get();
+		return value.get();
 	}
 
 	protected Tag first() {
@@ -96,4 +90,30 @@ public class Pager extends AbstractWidget<Pager> {
 		return GUI.a_void(lastIcon, span("Last").class_("sr-only"));
 	}
 
+	public int from() {
+		return from;
+	}
+
+	public Pager from(int from) {
+		this.from = from;
+		return this;
+	}
+
+	public int to() {
+		return to;
+	}
+
+	public Pager to(int to) {
+		this.to = to;
+		return this;
+	}
+
+	public Var<Integer> value() {
+		return value;
+	}
+
+	public Pager value(Var<Integer> value) {
+		this.value = value;
+		return this;
+	}
 }
