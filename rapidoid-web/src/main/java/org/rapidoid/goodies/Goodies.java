@@ -89,8 +89,8 @@ public class Goodies extends RapidoidThing {
 		return new ConfigHandler();
 	}
 
-	public static DataHandler data() {
-		return new DataHandler();
+	public static EntitiesHandler entities() {
+		return new EntitiesHandler();
 	}
 
 	public static RoutesHandler routes() {
@@ -171,7 +171,7 @@ public class Goodies extends RapidoidThing {
 	}
 
 	private static void jpaGoodies(Setup setup) {
-		setup.page("/_/data").mvc(Goodies.data());
+		setup.page("/_/entities").mvc(Goodies.entities());
 
 		for (Class<?> type : JPA.getEntityJavaTypes()) {
 			String uri = GUI.typeUri(type);

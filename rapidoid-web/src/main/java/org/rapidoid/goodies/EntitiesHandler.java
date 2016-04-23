@@ -35,7 +35,7 @@ import java.util.concurrent.Callable;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class DataHandler extends GUI implements Callable<Object> {
+public class EntitiesHandler extends GUI implements Callable<Object> {
 
 	@Override
 	public Object call() throws Exception {

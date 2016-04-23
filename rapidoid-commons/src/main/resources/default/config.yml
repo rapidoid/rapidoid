@@ -23,10 +23,16 @@ app:
       brand: '<i class="fa fa-dashboard"></i> Admin'
       menu:
         Overview: /_
-        Data: /_/data
-        Routes: /_/routes
-        Config: /_/config
-        Metrics: /_/metrics
+        Application:
+          Routes: /_/routes
+          Beans: /_/beans
+          Configuration: /_/config
+          Deploy: /_/deploy
+        Data:
+          Entities: /_/entities
+        Details:
+          Metrics: /_/metrics
+          Classpath: /_/classpath
         JMX:
           Memory pool: /_/jmx/mempool
           JVM Threads: /_/jmx/threads
@@ -36,9 +42,6 @@ app:
           Runtime: /_/jmx/runtime
           Classes: /_/jmx/classes
           Compilation: /_/jmx/compilation
-        Details:
-          Classpath: /_/classpath
-        Deploy: /_/deploy
 
 users: {}
 
