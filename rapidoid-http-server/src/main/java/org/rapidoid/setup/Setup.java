@@ -408,7 +408,7 @@ public class Setup extends RapidoidThing implements Constants {
 
 		bootstrapGoodies();
 
-		Log.info("Completed bootstrap", "context", getIoCContext());
+		Log.info("Completed bootstrap", "context", iocContext());
 		return this;
 	}
 
@@ -454,7 +454,7 @@ public class Setup extends RapidoidThing implements Constants {
 		return this;
 	}
 
-	public IoCContext getIoCContext() {
+	public IoCContext iocContext() {
 		return ioCContext;
 	}
 
@@ -484,10 +484,10 @@ public class Setup extends RapidoidThing implements Constants {
 		restarted = true;
 
 		Conf.reload();
-
 		Res.reset();
 
 		for (Setup setup : instances()) {
+			setup.iocContext().reset();
 			setup.http().resetConfig();
 			setup.defaults = new RouteOptions();
 			setup.defaults.segment(setup.segment);
@@ -560,6 +560,7 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	public void resetWithoutRestart() {
+		ioCContext.reset();
 		http().resetConfig();
 		path((String[]) null);
 		defaults = new RouteOptions();

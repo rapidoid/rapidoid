@@ -163,7 +163,7 @@ public class Admin extends RapidoidThing {
 	}
 
 	public static IoCContext context() {
-		return SETUP.getIoCContext();
+		return SETUP.iocContext();
 	}
 
 	public static HttpRoutes routes() {

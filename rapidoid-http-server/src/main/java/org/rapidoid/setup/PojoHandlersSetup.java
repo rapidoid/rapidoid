@@ -80,7 +80,7 @@ public class PojoHandlersSetup extends RapidoidThing {
 	private void processBean(boolean register, Object bean) {
 		Class<?> clazz;
 		U.notNull(bean, "bean");
-		IoCContext context = setup.getIoCContext();
+		IoCContext context = setup.iocContext();
 
 		if (bean instanceof Class<?>) {
 			clazz = (Class<?>) bean;

@@ -85,7 +85,7 @@ public class Msc extends RapidoidThing implements Constants {
 			if (src instanceof Class<?>) {
 				return ((Class<?>) src).getSimpleName();
 			} else {
-				return src.getClass().getSimpleName() + "@";
+				return src.toString();
 			}
 		}
 	};
