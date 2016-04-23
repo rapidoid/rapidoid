@@ -401,9 +401,12 @@ public class Setup extends RapidoidThing implements Constants {
 	public Setup bootstrap(String... args) {
 		this.args(args);
 
-		bootstrapJPA();
+		if (!isAdmin()) {
+			bootstrapJPA();
+			bootstrapControllers();
+		}
+
 		bootstrapGoodies();
-		bootstrapControllers();
 
 		Log.info("Completed bootstrap", "context", getIoCContext());
 		return this;
