@@ -436,12 +436,8 @@ public abstract class BootstrapWidgets extends HTML {
 		return grids;
 	}
 
-	public static Pager pager() {
-		return Cls.customizable(Pager.class);
-	}
-
-	public static Pager pager(int from, int to, Var<Integer> pageNumber) {
-		return pager().from(from).to(to).value(pageNumber);
+	public static Pager pager(String param) {
+		return Cls.customizable(Pager.class, param);
 	}
 
 	public static Form show(Object bean, String... properties) {
@@ -531,7 +527,7 @@ public abstract class BootstrapWidgets extends HTML {
 		Var<Integer> var = local(name, defaultValue);
 
 		// TODO put the constraints into the variable implementation
-		Integer pageN = U.bounded(min, var.get(), max);
+		Integer pageN = U.bounds(min, var.get(), max);
 		var.set(pageN);
 
 		return var;
@@ -999,5 +995,27 @@ public abstract class BootstrapWidgets extends HTML {
 
 	private static Object getIdentifier(Object bean) {
 		return null; // FIXME
+	}
+
+	public static String uri(String path, Map<String, String> query) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(path);
+
+		boolean first = true;
+		for (Map.Entry<String, String> e : query.entrySet()) {
+			if (first) {
+				sb.append("?");
+				first = false;
+			} else {
+				sb.append("&");
+			}
+
+			sb.append(Msc.urlEncode(e.getKey()));
+			sb.append("=");
+			sb.append(Msc.urlEncode(e.getValue()));
+		}
+
+		return sb.toString();
 	}
 }

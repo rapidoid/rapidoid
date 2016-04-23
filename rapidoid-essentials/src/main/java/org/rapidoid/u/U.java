@@ -294,6 +294,14 @@ public class U {
 		return value != null ? value : fallback;
 	}
 
+	public static <T> T or(T value, T fallback1, T fallback2) {
+		return value != null ? value : fallback1 != null ? fallback1 : fallback2;
+	}
+
+	public static <T> T or(T value, T fallback1, T fallback2, T fallback3) {
+		return value != null ? value : fallback1 != null ? fallback1 : fallback2 != null ? fallback2 : fallback3;
+	}
+
 	public static String safe(String s) {
 		return or(s, "");
 	}
@@ -513,7 +521,7 @@ public class U {
 		return Integer.parseInt(s);
 	}
 
-	public static int bounded(int min, int value, int max) {
+	public static int bounds(int min, int value, int max) {
 		return Math.min(Math.max(min, value), max);
 	}
 
@@ -565,8 +573,8 @@ public class U {
 		// TODO more efficient implementation
 		List<T> list = list(items);
 
-		fromIndex = bounded(0, fromIndex, list.size());
-		toIndex = bounded(fromIndex, toIndex, list.size());
+		fromIndex = bounds(0, fromIndex, list.size());
+		toIndex = bounds(fromIndex, toIndex, list.size());
 
 		return list(list.subList(fromIndex, toIndex));
 	}

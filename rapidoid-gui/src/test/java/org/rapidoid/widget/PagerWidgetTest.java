@@ -20,49 +20,26 @@ package org.rapidoid.widget;
  * #L%
  */
 
+import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.Pager;
-import org.rapidoid.gui.base.BootstrapWidgets;
-import org.rapidoid.var.Var;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class PagerWidgetTest extends WidgetTestCommons {
 
-	// @Test
-	public void testPagerWidget() {
+	@Test
+	public void testPager() {
+		Pager p1 = GUI.pager("x").min(5).max(10);
+		verify("5-to-10", p1.toString());
 
-		// FIXME: find the event numbers to be able to emit events
+		Pager p2 = GUI.pager("x").min(5).max(10).initial(7);
+		verify("5-to-10-init-7", p2.toString());
 
-		Var<Integer> pageN = BootstrapWidgets.var("page", 3);
-
-		Pager pager = BootstrapWidgets.pager(1, 7, pageN);
-		print(pager);
-
-		eq(pageN.get().intValue(), 3);
-		has(pager, "Page 3 of 7");
-
-		// ctx.getEventCmd(6); // first
-
-		eq(pageN, 1);
-		has(pager, "Page 1 of 7");
-
-		// ctx.getEventCmd(20); // last
-
-		eq(pageN, 7);
-		has(pager, "Page 7 of 7");
-
-		// ctx.getEventCmd(10); // prev
-		// ctx.getEventCmd(10); // prev
-
-		eq(pageN, 5);
-		has(pager, "Page 5 of 7");
-
-		// ctx.getEventCmd(16); // next
-
-		eq(pageN, 6);
-		has(pager, "Page 6 of 7");
+		Pager p3 = GUI.pager("x").min(1).max(3).right(true);
+		verify("1-to-3-right", p3.toString());
 	}
 
 }

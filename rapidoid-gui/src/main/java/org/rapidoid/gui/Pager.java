@@ -22,98 +22,139 @@ package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.gui.base.AbstractWidget;
+import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.html.Tag;
-import org.rapidoid.var.Var;
+import org.rapidoid.html.tag.ATag;
+import org.rapidoid.u.U;
+
+import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
 public class Pager extends AbstractWidget<Pager> {
 
-	private volatile int from;
-	private volatile int to;
-	private volatile Var<Integer> value;
+	private final String param;
+
+	private volatile int min;
+	private volatile int max;
+	private volatile boolean right;
+	private volatile Integer initial;
+
+	public Pager(String param) {
+		this.param = param;
+	}
 
 	@Override
 	protected Tag render() {
-		Tag first = first().cmd("_set", value, from);
-		Tag prev = prev().cmd("_dec", value, 1);
-		Tag current = current();
-		Tag next = next().cmd("_inc", value, 1);
-		Tag last = last().cmd("_set", value, to);
+		return shouldDisplay() ? pagination() : div();
+	}
 
-		return shouldDisplay() ? pagination(first, prev, current, next, last) : div();
+	protected String pageUri(int pageN) {
+		IReqInfo req = req();
+
+		Map<String, String> query = U.map(req.params());
+		query.put(param, pageN + "");
+
+		return GUI.uri(req.path(), query);
 	}
 
 	protected boolean shouldDisplay() {
-		return to > 1;
+		return U.neq(min, max);
 	}
 
-	protected Tag pagination(Tag first, Tag prev, Tag current, Tag next, Tag last) {
+	protected Tag pagination() {
 		int pageN = pageNumber();
 
-		Tag firstLi = pageN > from ? li(first) : li(first.cmd(null)).class_("disabled");
-		Tag prevLi = pageN > from ? li(prev) : li(prev.cmd(null)).class_("disabled");
+		ATag first = first().href(pageUri(min));
+		ATag prev = prev().href(pageUri(pageN - 1));
+		ATag current = current();
+		ATag next = next().href(pageUri(pageN + 1));
+		ATag last = last().href(pageUri(max));
+
+		Tag firstLi = pageN > min ? li(first) : li(first.href(null)).class_("disabled");
+		Tag prevLi = pageN > min ? li(prev) : li(prev.href(null)).class_("disabled");
 		Tag currentLi = li(current);
-		Tag nextLi = pageN < to ? li(next) : li(next.cmd(null)).class_("disabled");
-		Tag lastLi = pageN < to ? li(last) : li(last.cmd(null)).class_("disabled");
+		Tag nextLi = pageN < max ? li(next) : li(next.href(null)).class_("disabled");
+		Tag lastLi = pageN < max ? li(last) : li(last.href(null)).class_("disabled");
 
 		Tag pagination = GUI.nav(GUI.ul_li(firstLi, prevLi, currentLi, nextLi, lastLi).class_("pagination"));
-		return div(pagination).class_("pull-right");
+
+		if (right) {
+			pagination = div(pagination).class_("pull-right");
+		}
+
+		return pagination;
 	}
 
 	protected int pageNumber() {
-		return value.get();
+		Integer pageNum = Cls.convert(req().params().get(param), Integer.class);
+		int value = U.or(pageNum, initial, min, 1);
+		return U.bounds(min, value, max);
 	}
 
-	protected Tag first() {
+	protected ATag first() {
 		Tag firstIcon = span(GUI.LAQUO).attr("aria-hidden", "true");
-		return GUI.a_void(firstIcon, span("First").class_("sr-only"));
+		return a(firstIcon, span("First").class_("sr-only"));
 	}
 
-	protected Tag prev() {
+	protected ATag prev() {
 		Tag prevIcon = span(GUI.LT).attr("aria-hidden", "true");
-		return GUI.a_void(prevIcon, span("Previous").class_("sr-only"));
+		return a(prevIcon, span("Previous").class_("sr-only"));
 	}
 
-	protected Tag current() {
-		return GUI.a_void("Page ", pageNumber(), " of " + to);
+	protected ATag current() {
+		return GUI.a_void("Page ", pageNumber(), " of " + max);
 	}
 
-	protected Tag next() {
+	protected ATag next() {
 		Tag nextIcon = span(GUI.GT).attr("aria-hidden", "true");
-		return GUI.a_void(nextIcon, span("Next").class_("sr-only"));
+		return a(nextIcon, span("Next").class_("sr-only"));
 	}
 
-	protected Tag last() {
+	protected ATag last() {
 		Tag lastIcon = span(GUI.RAQUO).attr("aria-hidden", "true");
-		return GUI.a_void(lastIcon, span("Last").class_("sr-only"));
+		return a(lastIcon, span("Last").class_("sr-only"));
 	}
 
-	public int from() {
-		return from;
+	public String param() {
+		return param;
 	}
 
-	public Pager from(int from) {
-		this.from = from;
+	public int min() {
+		return min;
+	}
+
+	public Pager min(int min) {
+		this.min = min;
 		return this;
 	}
 
-	public int to() {
-		return to;
+	public int max() {
+		return max;
 	}
 
-	public Pager to(int to) {
-		this.to = to;
+	public Pager max(int max) {
+		this.max = max;
 		return this;
 	}
 
-	public Var<Integer> value() {
-		return value;
+	public boolean right() {
+		return right;
 	}
 
-	public Pager value(Var<Integer> value) {
-		this.value = value;
+	public Pager right(boolean right) {
+		this.right = right;
+		return this;
+	}
+
+	public Integer initial() {
+		return initial;
+	}
+
+	public Pager initial(Integer initial) {
+		this.initial = initial;
 		return this;
 	}
 }

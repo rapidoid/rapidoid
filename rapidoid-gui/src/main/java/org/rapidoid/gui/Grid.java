@@ -79,7 +79,7 @@ public class Grid extends AbstractWidget<Grid> {
 
 		Tag header = tableHeader(props, order);
 		Tag body = tableBody(props, slice);
-		Pager pager = paging ? GUI.pager(1, pages, pageNumber) : noPager();
+		Pager pager = paging ? GUI.pager(pageNumber.name()).min(1).max(pages) : noPager();
 
 		return fullTable(header, body, pager);
 	}

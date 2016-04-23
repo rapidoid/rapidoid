@@ -31,6 +31,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.net.Socket;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.Map.Entry;
@@ -290,6 +291,14 @@ public class Msc extends RapidoidThing implements Constants {
 
 	public static void benchmarkMT(int threadsN, final String name, final int count, final Runnable runnable) {
 		benchmarkMT(threadsN, name, count, null, runnable);
+	}
+
+	public static String urlEncode(String value) {
+		try {
+			return URLEncoder.encode(value, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw U.rte(e);
+		}
 	}
 
 	public static String urlDecode(String value) {
