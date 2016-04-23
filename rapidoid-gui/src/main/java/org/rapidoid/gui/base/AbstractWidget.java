@@ -79,7 +79,7 @@ public abstract class AbstractWidget<W extends AbstractWidget<?>> extends Rapido
 		return TagRenderer.get().toHTML(this, extra);
 	}
 
-	protected IReqInfo req() {
+	protected static IReqInfo req() {
 		return ReqInfo.get();
 	}
 

@@ -11,7 +11,6 @@ import org.rapidoid.cls.TypeKind;
 import org.rapidoid.commons.Err;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.reqinfo.IReqInfo;
-import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.gui.var.PostedDataVar;
 import org.rapidoid.html.FieldType;
 import org.rapidoid.html.FormLayout;
@@ -54,34 +53,28 @@ import java.util.Collections;
 public class Field extends AbstractWidget<Field> {
 
 	protected volatile FormMode mode = FormMode.EDIT;
+	protected volatile Item item;
 	protected volatile Property prop;
 	protected volatile FormLayout layout = FormLayout.VERTICAL;
 	protected volatile String name;
 	protected volatile String desc;
 	protected volatile FieldType type;
 	protected volatile Collection<?> options;
-	protected volatile boolean required;
-	protected volatile Var<Object> var;
+	protected volatile Boolean required;
 	protected volatile Tag content;
 	protected volatile Tag label;
 	protected volatile Tag input;
 
 	public Field(Item item, Property prop) {
+		this.item = item;
 		this.prop = prop;
-		this.name = prop.name();
-		this.desc = U.or(prop.caption(), name);
-		this.type = mode != FormMode.SHOW ? getPropertyFieldType(prop) : FieldType.LABEL;
-		this.options = getPropertyOptions(prop);
-		this.required = isFieldRequired(prop);
-		this.var = initVar(item, prop);
 	}
 
 	protected boolean isFieldRequired(Property prop) {
-		return prop.type().isPrimitive()
-				|| Metadata.has(prop.annotations(), Required.class);
+		return prop.type().isPrimitive() || Metadata.has(prop.annotations(), Required.class);
 	}
 
-	private Var<Object> initVar(Item item, Property prop) {
+	private static Var<Object> initVar(Item item, Property prop, FormMode mode, boolean required) {
 		Object target = U.or(item.value(), item);
 		String varName = propVarName(target, prop.name());
 
@@ -93,7 +86,7 @@ public class Field extends AbstractWidget<Field> {
 			}
 		}
 
-		IReqInfo req = ReqInfo.get();
+		IReqInfo req = req();
 		if (!req.isGetReq() && !GUI.REFRESH.command().equals(GUI.getCommand())) {
 			var = new PostedDataVar<Object>(var);
 			var.set(req.posted().get(varName));
@@ -115,7 +108,28 @@ public class Field extends AbstractWidget<Field> {
 		}
 	}
 
-	protected Tag field(String name, String desc, FieldType type, Collection<?> options, Var<?> var) {
+	protected Tag field() {
+
+		String name = this.prop.name();
+		String desc = U.or(this.desc, prop.caption(), name);
+
+		FieldType type = this.type;
+		if (type == null) {
+			type = mode != FormMode.SHOW ? getPropertyFieldType(prop) : FieldType.LABEL;
+		}
+
+		Collection<?> options = this.options;
+		if (options == null) {
+			options = getPropertyOptions(prop);
+		}
+
+		Boolean required = this.required();
+		if (required == null) {
+			required = isFieldRequired(prop);
+		}
+
+		Var<Object> var = initVar(item, prop, mode, required);
+
 		desc = U.or(desc, name) + ": ";
 
 		Object inp = input == null ? input_(name, desc, type, options, var) : input;
@@ -272,7 +286,7 @@ public class Field extends AbstractWidget<Field> {
 			return null;
 		}
 
-		return field(name, desc, type, options, var);
+		return field();
 	}
 
 	protected boolean isFieldProgrammatic() {
@@ -421,21 +435,12 @@ public class Field extends AbstractWidget<Field> {
 		return this;
 	}
 
-	public boolean required() {
+	public Boolean required() {
 		return required;
 	}
 
-	public Field required(boolean required) {
+	public Field required(Boolean required) {
 		this.required = required;
-		return this;
-	}
-
-	public Var<Object> var() {
-		return var;
-	}
-
-	public Field var(Var<Object> var) {
-		this.var = var;
 		return this;
 	}
 

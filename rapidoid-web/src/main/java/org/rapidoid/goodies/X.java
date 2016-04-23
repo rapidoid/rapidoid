@@ -169,11 +169,12 @@ public class X extends RapidoidThing {
 
 				final Object id = Cls.convert(req.param("id"), idType);
 				final Object entity = JPA.find(entityType, id);
-				JPA.detach(entity);
 
 				if (entity == null) {
 					return null;
 				}
+
+				JPA.detach(entity);
 
 				String name = name(entityType);
 

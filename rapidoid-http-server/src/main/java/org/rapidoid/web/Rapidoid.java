@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.setup.Admin;
 import org.rapidoid.setup.On;
+import org.rapidoid.util.Msc;
 
 /*
  * #%L
@@ -36,6 +37,7 @@ public class Rapidoid extends RapidoidThing {
 	public static void run(String... args) {
 		On.bootstrap(args);
 		Admin.bootstrap(args);
+		Msc.logSection("Rapidoid bootstrap completed");
 	}
 
 }

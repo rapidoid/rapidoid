@@ -767,12 +767,11 @@ public abstract class GUI extends HTML {
 	}
 
 	private static Object display(Iterator<?> it) {
-		Tag icon = fa("circle-o");
 		Tag wrap = div();
 
 		while (it.hasNext()) {
 			Object item = it.next();
-			wrap = wrap.append(div(icon, " ", display(item)).class_("value-line"));
+			wrap = wrap.append(div(FA.CIRCLE_O, NBSP, display(item)).class_("value-line"));
 		}
 
 		if (wrap.isEmpty()) {
