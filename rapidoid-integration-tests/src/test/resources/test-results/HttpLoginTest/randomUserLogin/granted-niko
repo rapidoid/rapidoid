@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: application/json; charset=utf-8
-Set-Cookie: COOKIEPACK=mtwtUnzH1IsCSBFMmqyGnpZJW1qgchL$rAovPs9Sn1Y=; path=/
+Set-Cookie: COOKIEPACK=mtwtUnzH1IsCSBFMmqyGnpZJW1qgchL$rAovPs9Sn1Y=; path=/; HttpOnly
 Content-Length: 6
 
 "niko"

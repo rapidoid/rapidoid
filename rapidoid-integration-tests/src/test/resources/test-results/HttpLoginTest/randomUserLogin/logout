@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: application/json; charset=utf-8
-Set-Cookie: COOKIEPACK=; path=/
+Set-Cookie: COOKIEPACK=; path=/; HttpOnly
 Content-Length: 85
 
 {"error":"The user doesn't have the required roles!","code":403,"status":"Forbidden"}

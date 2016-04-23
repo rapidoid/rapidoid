@@ -90,7 +90,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 				cookie = "";
 			}
 
-			setCookie(req, COOKIEPACK_COOKIE, cookie, "path=/");
+			setCookie(req, COOKIEPACK_COOKIE, cookie, "path=/; HttpOnly");
 		}
 	}
 
