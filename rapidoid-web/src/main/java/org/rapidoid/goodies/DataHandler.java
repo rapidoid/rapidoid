@@ -39,21 +39,27 @@ public class DataHandler extends GUI implements Callable<Object> {
 
 	@Override
 	public Object call() throws Exception {
-		List<Object> data = U.list();
+		if (JPA.isActive()) {
 
-		Grid grid = GUI.grid(recordsInfo());
+			List<Object> data = U.list();
 
-		grid.toUri(new Mapper<Object, String>() {
-			@Override
-			public String map(Object src) throws Exception {
-				Map<String, ?> row = U.cast(src);
-				return GUI.typeUri(row.get("type") + "") + "/manage";
-			}
-		});
+			Grid grid = GUI.grid(recordsInfo());
 
-		data.add(div(h3("Database records:"), grid));
+			grid.toUri(new Mapper<Object, String>() {
+				@Override
+				public String map(Object src) throws Exception {
+					Map<String, ?> row = U.cast(src);
+					return GUI.typeUri(row.get("type") + "") + "/manage";
+				}
+			});
 
-		return data;
+			data.add(div(h3("Database records:"), grid));
+
+			return data;
+
+		} else {
+			return h3("Rapidoid JPA is not enabled!");
+		}
 	}
 
 	private List<Map<String, ?>> recordsInfo() {
