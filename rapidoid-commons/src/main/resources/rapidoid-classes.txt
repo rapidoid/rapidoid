@@ -174,7 +174,6 @@ org.rapidoid.goodies.RoutesHandler
 org.rapidoid.goodies.X
 org.rapidoid.gui.base.AbstractCommand
 org.rapidoid.gui.base.AbstractWidget
-org.rapidoid.gui.base.BootstrapWidgets
 org.rapidoid.gui.Btn
 org.rapidoid.gui.BtnMenu
 org.rapidoid.gui.Card
