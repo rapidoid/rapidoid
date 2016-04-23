@@ -197,11 +197,11 @@ public class Setup extends RapidoidThing implements Constants {
 		return isAdmin() && Conf.ADMIN.entry("port").or(0) == 0;
 	}
 
-	private boolean isAdmin() {
+	public boolean isAdmin() {
 		return this == ADMIN;
 	}
 
-	private boolean isOn() {
+	public boolean isApp() {
 		return this == ON;
 	}
 
@@ -215,7 +215,7 @@ public class Setup extends RapidoidThing implements Constants {
 			listen();
 		}
 
-		if (isOn()) {
+		if (isApp()) {
 			ADMIN.activate();
 			Msc.logSection("User-specified handlers:");
 		}
@@ -390,7 +390,7 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	public Setup args(String... args) {
-		if (isOn()) {
+		if (isApp()) {
 			Conf.args(args);
 		}
 

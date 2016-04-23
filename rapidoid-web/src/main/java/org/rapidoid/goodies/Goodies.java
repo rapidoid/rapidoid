@@ -8,8 +8,6 @@ import org.rapidoid.http.HttpUtils;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.log.Log;
 import org.rapidoid.security.Roles;
-import org.rapidoid.setup.Admin;
-import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.util.Msc;
 
@@ -116,44 +114,57 @@ public class Goodies extends RapidoidThing {
 	}
 
 	public static void bootstrap(Setup setup) {
+		if (setup.isAdmin()) {
+			bootstrapAdminGoodies(setup);
+		} else if (setup.isApp()) {
+			bootstrapAppGoodies(setup);
+		}
+	}
 
+	public static void bootstrapAppGoodies(Setup setup) {
 		if (!setup.goodies()) {
 			Log.warn("Goodies are disabled for setup: " + setup.name());
 			return;
 		}
 
-		if (setup == On.setup()) {
-			Msc.logSection("Registering App goodies:");
+		Msc.logSection("Registering App goodies:");
+
+		setup.post("/_login").roles().json(Goodies.login());
+		setup.get("/_logout").roles(Roles.LOGGED_IN).json(Goodies.logout());
+	}
+
+	public static void bootstrapAdminGoodies(Setup setup) {
+		if (!setup.goodies()) {
+			Log.warn("Goodies are disabled for setup: " + setup.name());
+			return;
 		}
 
-		if (setup == Admin.setup()) {
-			Msc.logSection("Registering Admin goodies:");
+		Msc.logSection("Registering Admin goodies:");
 
-			setup.page("/_/").mvc(Goodies.overview());
+		setup.page("/_/").mvc(Goodies.overview());
 
-			if (Msc.hasJPA()) {
-				jpaGoodies(setup);
-			}
-
-			setup.page("/_/routes").mvc(Goodies.routes());
-			setup.page("/_/config").mvc(Goodies.config());
-
-			setup.page("/_/jmx/memory").mvc(Goodies.memory());
-			setup.page("/_/jmx/mempool").mvc(Goodies.memoryPool());
-			setup.page("/_/jmx/classes").mvc(Goodies.classes());
-			setup.page("/_/jmx/os").mvc(Goodies.os());
-			setup.page("/_/jmx/threads").mvc(Goodies.threads());
-			setup.page("/_/jmx/compilation").mvc(Goodies.compilation());
-			setup.page("/_/jmx/runtime").mvc(Goodies.runtime());
-			setup.page("/_/jmx/gc").mvc(Goodies.gc());
-
-			setup.page("/_/metrics").mvc(Goodies.graphs());
-			setup.get("/_/graphs/{id:.*}").json(Goodies.graphData());
-
-			setup.get("/_/classpath").mvc(Goodies.classpath());
-			setup.get("/_/deploy").mvc(Goodies.deploy());
-			setup.post("/_/upload-jar").json(Goodies.jarUpload());
+		if (Msc.hasJPA()) {
+			jpaGoodies(setup);
 		}
+
+		setup.page("/_/routes").mvc(Goodies.routes());
+		setup.page("/_/config").mvc(Goodies.config());
+
+		setup.page("/_/jmx/memory").mvc(Goodies.memory());
+		setup.page("/_/jmx/mempool").mvc(Goodies.memoryPool());
+		setup.page("/_/jmx/classes").mvc(Goodies.classes());
+		setup.page("/_/jmx/os").mvc(Goodies.os());
+		setup.page("/_/jmx/threads").mvc(Goodies.threads());
+		setup.page("/_/jmx/compilation").mvc(Goodies.compilation());
+		setup.page("/_/jmx/runtime").mvc(Goodies.runtime());
+		setup.page("/_/jmx/gc").mvc(Goodies.gc());
+
+		setup.page("/_/metrics").mvc(Goodies.graphs());
+		setup.get("/_/graphs/{id:.*}").json(Goodies.graphData());
+
+		setup.get("/_/classpath").mvc(Goodies.classpath());
+		setup.get("/_/deploy").mvc(Goodies.deploy());
+		setup.post("/_/upload-jar").json(Goodies.jarUpload());
 
 		setup.post("/_login").roles().json(Goodies.login());
 		setup.get("/_logout").roles(Roles.LOGGED_IN).json(Goodies.logout());

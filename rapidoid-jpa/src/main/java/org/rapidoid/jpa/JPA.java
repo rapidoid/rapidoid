@@ -191,4 +191,7 @@ public class JPA extends RapidoidThing {
 		return JPAUtil.unproxy(entity);
 	}
 
+	public static boolean isActive() {
+		return JPAUtil.emf() != null;
+	}
 }

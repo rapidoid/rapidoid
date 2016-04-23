@@ -47,9 +47,11 @@ public class EMFUtil extends RapidoidThing {
 			}
 		}
 
-		Msc.logSection("Total " + entityTypes.size() + " JPA Entities:");
-		for (String entityType : entityTypes) {
-			Log.info("Entity", "type", entityType);
+		if (!entityTypes.isEmpty()) {
+			Msc.logSection("Total " + entityTypes.size() + " JPA Entities:");
+			for (String entityType : entityTypes) {
+				Log.info("Entity", "type", entityType);
+			}
 		}
 
 		return entityTypes;

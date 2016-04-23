@@ -7,6 +7,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
@@ -74,7 +75,8 @@ public class JPAUtil extends RapidoidThing {
 			List<String> entityTypes = EMFUtil.createEMF(path, providedEntities);
 
 			if (entityTypes.isEmpty()) {
-				Msc.logSection("Didn't find JPA providedEntities, canceling JPA/Hibernate setup!");
+				Log.info("Didn't find JPA entities, canceling JPA/Hibernate setup!");
+				return;
 			}
 
 			Msc.logSection("Hibernate properties:");
