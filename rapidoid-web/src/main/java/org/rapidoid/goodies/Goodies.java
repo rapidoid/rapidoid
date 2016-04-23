@@ -97,6 +97,10 @@ public class Goodies extends RapidoidThing {
 		return new RoutesHandler();
 	}
 
+	public static BeansHandler beans() {
+		return new BeansHandler();
+	}
+
 	public static OverviewHandler overview() {
 		return new OverviewHandler();
 	}
@@ -148,6 +152,7 @@ public class Goodies extends RapidoidThing {
 		}
 
 		setup.page("/_/routes").mvc(Goodies.routes());
+		setup.page("/_/beans").mvc(Goodies.beans());
 		setup.page("/_/config").mvc(Goodies.config());
 
 		setup.page("/_/jmx/memory").mvc(Goodies.memory());

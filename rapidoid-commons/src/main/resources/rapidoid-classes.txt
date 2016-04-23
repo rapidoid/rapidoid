@@ -156,11 +156,12 @@ org.rapidoid.fluent.New
 org.rapidoid.fluent.To
 org.rapidoid.fluent.utils.Lambdas
 org.rapidoid.fluent.utils.StreamUtils
+org.rapidoid.goodies.BeansHandler
 org.rapidoid.goodies.ClasspathHandler
 org.rapidoid.goodies.ConfigHandler
-org.rapidoid.goodies.DataHandler
 org.rapidoid.goodies.DeployHandler
 org.rapidoid.goodies.DetailsHandler
+org.rapidoid.goodies.EntitiesHandler
 org.rapidoid.goodies.Goodies
 org.rapidoid.goodies.GraphDataHandler
 org.rapidoid.goodies.GraphsHandler
