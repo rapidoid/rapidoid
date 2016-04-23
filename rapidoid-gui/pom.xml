@@ -22,6 +22,17 @@
 			<artifactId>rapidoid-render</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<!-- OPTIONAL -->
+
+		<dependency>
+			<groupId>org.rapidoid</groupId>
+			<artifactId>rapidoid-jpa</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- TEST -->
+
 		<dependency>
 			<groupId>org.rapidoid</groupId>
 			<artifactId>rapidoid-test-commons</artifactId>

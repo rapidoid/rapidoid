@@ -185,6 +185,7 @@ org.rapidoid.gui.Form
 org.rapidoid.gui.FormMode
 org.rapidoid.gui.Grid
 org.rapidoid.gui.GUI
+org.rapidoid.gui.GuiJpaUtil
 org.rapidoid.gui.Highlight
 org.rapidoid.gui.HighlightGrid
 org.rapidoid.gui.HtmlPage

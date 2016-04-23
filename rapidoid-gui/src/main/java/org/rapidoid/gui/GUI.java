@@ -520,7 +520,7 @@ public abstract class GUI extends HTML {
 	}
 
 	public static <T extends Serializable> Var<T> local(String name, T defaultValue) {
-		return new LocalVar<T>(name, defaultValue, ReqInfo.get().isGetReq());
+		return new LocalVar<T>(name, defaultValue, req().isGetReq());
 	}
 
 	public static Var<Integer> local(String name, int defaultValue, int min, int max) {
@@ -857,9 +857,9 @@ public abstract class GUI extends HTML {
 		String varName = container.name() + "[" + itemId + "]";
 
 		if (arrOrColl instanceof Collection) {
-			return new CollectionContainerVar(varName, (Var<Collection<Object>>) container, item, ReqInfo.get().isGetReq());
+			return new CollectionContainerVar(varName, (Var<Collection<Object>>) container, item, req().isGetReq());
 		} else {
-			return new ArrayContainerVar(varName, (Var<Object>) container, item, ReqInfo.get().isGetReq());
+			return new ArrayContainerVar(varName, (Var<Object>) container, item, req().isGetReq());
 		}
 	}
 
@@ -867,7 +867,7 @@ public abstract class GUI extends HTML {
 	public static Var<Boolean> varEq(Var<?> var, Object item) {
 		Object itemId = Beany.hasProperty(item, "id") ? Beany.getIdIfExists(item) : String.valueOf(item);
 		String varName = var.name() + "[" + itemId + "]";
-		return new EqualityVar(varName, (Var<Object>) var, item, ReqInfo.get().isGetReq());
+		return new EqualityVar(varName, (Var<Object>) var, item, req().isGetReq());
 	}
 
 	public static Object i18n(String multiLanguageText, Object... formatArgs) {
@@ -889,7 +889,7 @@ public abstract class GUI extends HTML {
 	}
 
 	public static String getCommand() {
-		IReqInfo req = ReqInfo.get();
+		IReqInfo req = req();
 		return !req.isGetReq() ? (String) req.posted().get("_cmd") : null;
 	}
 
@@ -976,25 +976,29 @@ public abstract class GUI extends HTML {
 	}
 
 	public static String typeUri(String entityType) {
-		String contextPath = ReqInfo.get().contextPath();
+		String contextPath = req().contextPath();
 		String typeUri = English.plural(Str.uncapitalized(entityType)).toLowerCase();
 		return Msc.uri(contextPath, typeUri);
 	}
 
+	private static IReqInfo req() {
+		return ReqInfo.get();
+	}
+
 	public static void markValidationErrors() {
-		ReqInfo.get().attrs().put("has-validation-errors", true);
+		req().attrs().put("has-validation-errors", true);
 	}
 
 	public static boolean hasValidationErrors() {
-		return Boolean.TRUE.equals(ReqInfo.get().attrs().get("has-validation-errors"));
+		return Boolean.TRUE.equals(req().attrs().get("has-validation-errors"));
 	}
 
 	private static boolean isEntity(Object item) {
-		return false; // FIXME
+		return Msc.hasRapidoidJPA() && GuiJpaUtil.isEntity(item);
 	}
 
 	private static Object getIdentifier(Object bean) {
-		return null; // FIXME
+		return Msc.hasRapidoidJPA() ? GuiJpaUtil.getIdentifier(bean) : null;
 	}
 
 	public static String uri(String path, Map<String, String> query) {
