@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
+import org.rapidoid.http.impl.HttpParser;
 import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;

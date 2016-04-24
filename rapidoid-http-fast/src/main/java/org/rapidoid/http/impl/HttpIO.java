@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.http.impl;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
@@ -8,6 +8,10 @@ import org.rapidoid.commons.Dates;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.data.JSON;
 import org.rapidoid.data.Range;
+import org.rapidoid.http.HttpResponseCodes;
+import org.rapidoid.http.HttpUtils;
+import org.rapidoid.http.Req;
+import org.rapidoid.http.Resp;
 import org.rapidoid.http.customize.ErrorHandler;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
@@ -169,6 +173,10 @@ public class HttpIO extends RapidoidThing {
 		int contentLength = posAfter - posBefore;
 
 		out.putNumAsText(posConLen, contentLength, false);
+	}
+
+	public static void writeContentLengthUnknown(Channel channel) {
+		channel.write(HttpIO.CONTENT_LENGTH_UNKNOWN);
 	}
 
 	public static void done(Channel ctx, boolean isKeepAlive) {

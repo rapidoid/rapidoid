@@ -28,6 +28,7 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.Range;
+import org.rapidoid.http.impl.HttpParser;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.test.TestCommons;

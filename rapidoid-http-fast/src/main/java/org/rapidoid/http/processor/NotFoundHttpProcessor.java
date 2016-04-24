@@ -24,7 +24,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
-import org.rapidoid.http.HttpIO;
+import org.rapidoid.http.impl.HttpIO;
 import org.rapidoid.net.abstracts.Channel;
 
 @Authors("Nikolche Mihajlovski")

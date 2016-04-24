@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
-import org.rapidoid.http.RouteOptions;
+import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.http.handler.AbstractAsyncHttpHandler;
 import org.rapidoid.lambda.TwoParamLambda;
 import org.rapidoid.net.abstracts.Channel;

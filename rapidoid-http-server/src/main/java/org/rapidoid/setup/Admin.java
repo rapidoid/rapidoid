@@ -7,7 +7,7 @@ import org.rapidoid.config.Config;
 import org.rapidoid.http.HttpRoutes;
 import org.rapidoid.http.ReqHandler;
 import org.rapidoid.http.ReqRespHandler;
-import org.rapidoid.http.RouteOptions;
+import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.processor.HttpProcessor;

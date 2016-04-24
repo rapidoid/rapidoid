@@ -7,6 +7,7 @@ import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.*;
 import org.rapidoid.http.handler.HttpHandlers;
+import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.lambda.*;
 
 import java.lang.reflect.Method;

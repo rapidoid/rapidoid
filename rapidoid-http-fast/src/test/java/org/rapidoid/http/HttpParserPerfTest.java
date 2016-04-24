@@ -26,6 +26,7 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
+import org.rapidoid.http.impl.HttpParser;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.Msc;
 import org.rapidoid.wrap.BoolWrap;

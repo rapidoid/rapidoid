@@ -28,6 +28,7 @@ import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.config.Conf;
 import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
+import org.rapidoid.http.impl.HttpParser;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.TCP;
 import org.rapidoid.net.abstracts.Channel;

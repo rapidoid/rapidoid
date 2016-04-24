@@ -25,6 +25,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
+import org.rapidoid.http.impl.HttpIO;
+import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.io.Res;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.u.U;

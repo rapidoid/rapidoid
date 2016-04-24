@@ -6,7 +6,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.http.FastHttp;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.RouteOptions;
+import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.http.handler.AbstractAsyncHttpHandler;
 import org.rapidoid.http.handler.param.ParamRetriever;
 import org.rapidoid.http.handler.param.ParamRetrievers;

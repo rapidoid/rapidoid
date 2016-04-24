@@ -10,6 +10,7 @@ import org.rapidoid.config.Config;
 import org.rapidoid.crypto.Crypto;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.customize.JsonResponseRenderer;
+import org.rapidoid.http.impl.PathPattern;
 import org.rapidoid.io.Res;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.serialize.Serialize;

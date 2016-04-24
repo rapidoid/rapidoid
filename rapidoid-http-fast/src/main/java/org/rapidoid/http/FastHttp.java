@@ -11,7 +11,7 @@ import org.rapidoid.data.Range;
 import org.rapidoid.data.Ranges;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
-import org.rapidoid.http.impl.HandlerMatch;
+import org.rapidoid.http.impl.*;
 import org.rapidoid.http.processor.AbstractHttpProcessor;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
@@ -216,7 +216,7 @@ public class FastHttp extends AbstractHttpProcessor {
 	}
 
 	private HttpStatus tryGenericHandlers(Channel channel, boolean isKeepAlive, Req req) {
-		for (HttpHandler handler : routes.genericHandlers) {
+		for (HttpHandler handler : routes.genericHandlers()) {
 
 			HttpStatus status = handler.handle(channel, isKeepAlive, req, null);
 
@@ -234,7 +234,7 @@ public class FastHttp extends AbstractHttpProcessor {
 	}
 
 	public void notFound(Channel ctx, boolean isKeepAlive, HttpHandler fromHandler, Req req) {
-		List<HttpHandler> genericHandlers = routes.genericHandlers;
+		List<HttpHandler> genericHandlers = routes.genericHandlers();
 		int count = genericHandlers.size();
 
 		HttpStatus status = HttpStatus.NOT_FOUND;

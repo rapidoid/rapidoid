@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.http.impl;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
@@ -7,6 +7,7 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.commons.Str;
+import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
@@ -384,7 +385,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return response;
 	}
 
-	void startRendering(int code, boolean unknownContentLength) {
+	public void startRendering(int code, boolean unknownContentLength) {
 		if (!isRendering()) {
 			synchronized (this) {
 				if (!isRendering()) {
@@ -418,7 +419,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 		if (unknownContentLength) {
 			Buf out = channel.output();
-			channel.write(HttpIO.CONTENT_LENGTH_UNKNOWN);
+			HttpIO.writeContentLengthUnknown(channel);
 
 			posConLen = out.size();
 			channel.write(CR_LF);
@@ -694,11 +695,11 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return verb() + " " + uri();
 	}
 
-	Channel channel() {
+	public Channel channel() {
 		return channel;
 	}
 
-	FastHttp http() {
+	public FastHttp http() {
 		return http;
 	}
 

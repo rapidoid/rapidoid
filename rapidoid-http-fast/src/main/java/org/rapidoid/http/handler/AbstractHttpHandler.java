@@ -5,7 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.http.HttpWrapper;
-import org.rapidoid.http.RouteOptions;
+import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.u.U;
 
 import java.util.Map;

@@ -11,6 +11,7 @@ import org.rapidoid.http.handler.optimized.CallableHttpHandler;
 import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqHandler;
 import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqRespHandler;
 import org.rapidoid.http.handler.optimized.DelegatingParamsAwareRespHandler;
+import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.lambda.*;
 
 import java.lang.reflect.Method;

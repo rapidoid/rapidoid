@@ -6,7 +6,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.http.HttpVerb;
 import org.rapidoid.http.Route;
 import org.rapidoid.http.RouteConfig;
-import org.rapidoid.http.RouteOptions;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.u.U;
 

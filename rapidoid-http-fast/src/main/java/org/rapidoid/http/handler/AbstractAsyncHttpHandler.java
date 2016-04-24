@@ -5,6 +5,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.ctx.With;
 import org.rapidoid.http.*;
+import org.rapidoid.http.impl.HttpIO;
+import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.jpa.JPA;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.net.abstracts.Channel;

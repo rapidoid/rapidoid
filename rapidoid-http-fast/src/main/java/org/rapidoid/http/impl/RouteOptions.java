@@ -1,4 +1,4 @@
-package org.rapidoid.http;
+package org.rapidoid.http.impl;
 
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
@@ -6,6 +6,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.TransactionMode;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.MediaType;
+import org.rapidoid.http.HttpWrapper;
+import org.rapidoid.http.RouteConfig;
 import org.rapidoid.u.U;
 
 import java.util.List;

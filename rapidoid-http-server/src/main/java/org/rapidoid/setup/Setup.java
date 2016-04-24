@@ -18,6 +18,8 @@ import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqHandler;
 import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqRespHandler;
+import org.rapidoid.http.impl.HttpRoutesImpl;
+import org.rapidoid.http.impl.RouteOptions;
 import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.io.Res;
 import org.rapidoid.ioc.IoC;
