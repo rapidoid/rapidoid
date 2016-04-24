@@ -1,10 +1,5 @@
 package org.rapidoid.http;
 
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Ctxs;
-
 /*
  * #%L
  * rapidoid-http-fast
@@ -25,11 +20,43 @@ import org.rapidoid.ctx.Ctxs;
  * #L%
  */
 
-@Authors("Nikolche Mihajlovski")
-@Since("5.0.2")
-public class Reqs extends RapidoidThing {
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.ctx.Ctx;
+import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.ctx.UserInfo;
+import org.rapidoid.u.U;
 
-	public static Req req() {
+import java.util.Set;
+
+@Authors("Nikolche Mihajlovski")
+@Since("5.1.0")
+public class Current extends RapidoidThing {
+
+	public static boolean hasContext() {
+		return Ctxs.get() != null;
+	}
+
+	public static UserInfo user() {
+		Ctx ctx = Ctxs.get();
+		UserInfo user = ctx != null ? ctx.user() : null;
+		return U.or(user, UserInfo.ANONYMOUS);
+	}
+
+	public static boolean isLoggedIn() {
+		return user().username != null;
+	}
+
+	public static String username() {
+		return user().username;
+	}
+
+	public static Set<String> roles() {
+		return user().roles;
+	}
+
+	public static Req request() {
 		return Ctxs.ctx().exchange();
 	}
 

@@ -59,7 +59,7 @@ public class DynamicClientTest extends IntegrationTestCommons {
 				Jobs.schedule(new Runnable() {
 					@Override
 					public void run() {
-						U.must(Reqs.req() == req);
+						U.must(Current.request() == req);
 						Resp resp = req.response();
 						resp.content(req.data()).done();
 					}

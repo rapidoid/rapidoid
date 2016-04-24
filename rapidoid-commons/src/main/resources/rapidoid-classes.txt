@@ -250,6 +250,7 @@ org.rapidoid.html.tag.TdTag
 org.rapidoid.html.tag.TextareaTag
 org.rapidoid.html.tag.ThTag
 org.rapidoid.html.TagWidget
+org.rapidoid.http.Current
 org.rapidoid.http.customize.BeanParameterFactory
 org.rapidoid.http.customize.BeanValidator
 org.rapidoid.http.customize.Customization
@@ -340,7 +341,6 @@ org.rapidoid.http.Redirect
 org.rapidoid.http.Req
 org.rapidoid.http.ReqHandler
 org.rapidoid.http.ReqRespHandler
-org.rapidoid.http.Reqs
 org.rapidoid.http.Resp
 org.rapidoid.http.REST
 org.rapidoid.http.RESTClient
