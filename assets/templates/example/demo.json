@@ -1,8 +1,0 @@
-{
-    "items" : [ {
-        "name" : "First item"
-    }, {
-        "name" : "Second item",
-        "style": true
-    } ]
-}
