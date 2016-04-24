@@ -190,7 +190,7 @@
 						<canUpdateCopyright>true</canUpdateCopyright>
 						<canUpdateDescription>true</canUpdateDescription>
 						<includes>
-							<include>**/*.java</include>
+							<include>org.rapidoid.**/*.java</include>
 						</includes>
 					</configuration>
 					<executions>
