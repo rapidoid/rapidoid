@@ -3,6 +3,7 @@
     {{?dev}}
     {{!embedded}}
     {{!admin}}
+    {{?adminUrl}}
     <ul class="nav navbar-nav navbar-right">
         <li>
             <a href="${adminUrl}" data-toggle="tooltip" data-placement="bottom" title="Admin Center">
@@ -10,12 +11,14 @@
             </a>
         </li>
     </ul>
+    {{/adminUrl}}
     {{/admin}}
     {{/embedded}}
     {{/dev}}
 
     {{?admin}}
     {{!embedded}}
+    {{?appUrl}}
     <ul class="nav navbar-nav navbar-right">
         <li>
             <a href="${appUrl}" data-toggle="tooltip" data-placement="bottom" title="App Home">
@@ -23,6 +26,7 @@
             </a>
         </li>
     </ul>
+    {{/appUrl}}
     {{/embedded}}
     {{/admin}}
 

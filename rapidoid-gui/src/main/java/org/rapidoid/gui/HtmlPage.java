@@ -89,12 +89,14 @@ public class HtmlPage extends AbstractWidget<HtmlPage> {
 		int adminPort = Conf.ADMIN.entry("port").num().or(0);
 		boolean appAndAdminOnSamePort = adminPort <= 0 || adminPort == appPort;
 
-		String hostname = req.host().split(":")[0];
-		String appUrl = appAndAdminOnSamePort ? "/" : "http://" + hostname + ":" + appPort + "/";
-		String adminUrl = appAndAdminOnSamePort ? "/_" : "http://" + hostname + ":" + adminPort + "/_";
+		if (U.notEmpty(req.host())) {
+			String hostname = req.host().split(":")[0];
+			String appUrl = appAndAdminOnSamePort ? "/" : "http://" + hostname + ":" + appPort + "/";
+			String adminUrl = appAndAdminOnSamePort ? "/_" : "http://" + hostname + ":" + adminPort + "/_";
 
-		model.put("appUrl", appUrl);
-		model.put("adminUrl", adminUrl);
+			model.put("appUrl", appUrl);
+			model.put("adminUrl", adminUrl);
+		}
 
 		model.put("admin", "admin".equalsIgnoreCase(req.segment()));
 
