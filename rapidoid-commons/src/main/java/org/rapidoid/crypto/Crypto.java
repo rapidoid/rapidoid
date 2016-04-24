@@ -12,10 +12,11 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.UUID;
+import java.security.SecureRandom;
 
 /*
  * #%L
@@ -41,7 +42,10 @@ import java.util.UUID;
 @Since("4.0.0")
 public class Crypto extends RapidoidThing {
 
-	private static final String RANDOM_SECRET = UUID.randomUUID().toString();
+	public static final SecureRandom RANDOM = new SecureRandom();
+
+	private static volatile String RANDOM_SECRET;
+
 	private static boolean warnedRandomSecret;
 
 	public static MessageDigest digest(String algorithm) {
@@ -118,6 +122,10 @@ public class Crypto extends RapidoidThing {
 		String secret = Conf.secret();
 
 		if (secret == null) {
+			if (RANDOM_SECRET == null) {
+				RANDOM_SECRET = randomStr(32);
+			}
+
 			secret = RANDOM_SECRET;
 
 			if (!warnedRandomSecret) {
@@ -127,6 +135,16 @@ public class Crypto extends RapidoidThing {
 		}
 
 		return secret;
+	}
+
+	public static byte[] randomBytes(int byteCount) {
+		byte[] bytes = new byte[byteCount];
+		RANDOM.nextBytes(bytes);
+		return bytes;
+	}
+
+	public static String randomStr(int byteCount) {
+		return DatatypeConverter.printHexBinary(randomBytes(byteCount));
 	}
 
 	public static byte[] aes(byte[] key, byte[] data, boolean encrypt) {
