@@ -20,6 +20,7 @@ package org.rapidoid.http.impl;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
@@ -36,7 +37,7 @@ import java.util.Collection;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class ResponseRenderer {
+public class ResponseRenderer extends RapidoidThing {
 
 	public static byte[] render(ReqImpl req, Resp resp) {
 
