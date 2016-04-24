@@ -29,7 +29,7 @@ import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Current extends RapidoidThing {
+public class Contextual extends RapidoidThing {
 
 	public static boolean hasContext() {
 		return Ctxs.get() != null;

@@ -23,7 +23,7 @@ package org.rapidoid.web;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Current;
+import org.rapidoid.ctx.Contextual;
 import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.http.Req;
 import org.rapidoid.setup.On;
@@ -35,17 +35,17 @@ public class HttpContextTest extends IntegrationTestCommons {
 	@Test
 	public void testContextIsInitialized() {
 		On.page("/a").html((Req req) -> {
-			isTrue(Current.hasContext());
-			isTrue(Current.request() == req);
-			return Current.request().toString();
+			isTrue(Contextual.hasContext());
+			isTrue(Contextual.request() == req);
+			return Contextual.request().toString();
 		});
 
 		getAndPost("/a");
 
 		On.get("/b").json(() -> {
-			isTrue(Current.hasContext());
-			notNull(Current.request());
-			return Current.request().toString();
+			isTrue(Contextual.hasContext());
+			notNull(Contextual.request());
+			return Contextual.request().toString();
 		});
 
 		onlyGet("/b");

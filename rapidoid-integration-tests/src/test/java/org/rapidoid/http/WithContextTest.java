@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
-import org.rapidoid.ctx.Current;
+import org.rapidoid.ctx.Contextual;
 import org.rapidoid.ctx.With;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
@@ -76,7 +76,7 @@ public class WithContextTest extends IntegrationTestCommons {
 	}
 
 	private String ctxInfo() {
-		return U.join(":", Current.username(), Current.roles(), Current.isLoggedIn());
+		return U.join(":", Contextual.username(), Contextual.roles(), Contextual.isLoggedIn());
 	}
 
 }

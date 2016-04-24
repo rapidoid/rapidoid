@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Rnd;
-import org.rapidoid.ctx.Current;
+import org.rapidoid.ctx.Contextual;
 import org.rapidoid.security.Roles;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
@@ -38,18 +38,18 @@ public class HttpLoginTest extends IntegrationTestCommons {
 
 	@Test
 	public void testLogin() {
-		On.get("/user").json(() -> U.list(Current.username(), Current.roles()));
+		On.get("/user").json(() -> U.list(Contextual.username(), Contextual.roles()));
 
-		On.get("/profile").roles(Roles.LOGGED_IN).json(Current::username);
+		On.get("/profile").roles(Roles.LOGGED_IN).json(Contextual::username);
 
 		On.post("/mylogin").json((Resp resp, String user, String pass) -> {
 			boolean success = resp.login(user, pass);
-			return U.list(success, Current.username(), Current.roles());
+			return U.list(success, Contextual.username(), Contextual.roles());
 		});
 
 		On.post("/mylogout").json((Resp resp, String user, String pass) -> {
 			resp.logout();
-			return U.list(Current.username(), Current.roles());
+			return U.list(Contextual.username(), Contextual.roles());
 		});
 
 		multiThreaded(50, 200, this::randomUserLogin);

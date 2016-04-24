@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
 @Since("5.1.0")
 public class PathPattern extends RapidoidThing {
 
-	static final Pattern PATH_PARAM_REGEX = Pattern.compile("\\{([^\\}]+)\\}");
+	public static final Pattern PATH_PARAM_REGEX = Pattern.compile("\\{([^\\}]+)\\}");
 
 	private static final Pattern PATH_PARAM_PARTS = Pattern.compile("(\\w+)(?::(.+))?");
 

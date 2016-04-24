@@ -2,7 +2,7 @@ package org.rapidoid.http.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.Current;
+import org.rapidoid.ctx.Contextual;
 import org.rapidoid.gui.reqinfo.AbstractReqInfo;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Route;
@@ -93,21 +93,21 @@ public class RapidoidReqInfo extends AbstractReqInfo {
 
 	@Override
 	public boolean exists() {
-		return Current.hasContext();
+		return Contextual.hasContext();
 	}
 
 	private Req req() {
-		return Current.request();
+		return Contextual.request();
 	}
 
 	@Override
 	public String username() {
-		return Current.username();
+		return Contextual.username();
 	}
 
 	@Override
 	public Set<String> roles() {
-		return Current.roles();
+		return Contextual.roles();
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public class RapidoidReqInfo extends AbstractReqInfo {
 
 	@Override
 	public boolean hasRoute(String verb, String uri) {
-		Req reqq = Current.request();
+		Req reqq = Contextual.request();
 
 		if (reqq != null) {
 			for (Route route : reqq.routes().all()) {
