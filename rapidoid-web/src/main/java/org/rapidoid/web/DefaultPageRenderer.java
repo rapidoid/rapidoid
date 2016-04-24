@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
 @Since("5.1.0")
 public class DefaultPageRenderer extends RapidoidThing implements PageRenderer {
 
-	private static final Pattern FULL_PAGE_PATTERN = Pattern.compile("(?s)^\\s*<(!DOCTYPE\\s+html|html)>");
+	private static final Pattern FULL_PAGE_PATTERN = Pattern.compile("(?s)^(?:\\s*(<!--(?:.*?)-->)*?)*?<(!DOCTYPE\\s+html|html)>");
 
 	private final Customization customization;
 	private final Config cfg;
