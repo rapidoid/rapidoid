@@ -93,10 +93,6 @@ public class Conf extends RapidoidThing {
 		return ROOT.is("micro");
 	}
 
-	public static String secret() {
-		return ROOT.entry("secret").str().getOrNull();
-	}
-
 	public static void reset() {
 		ROOT.clear();
 	}

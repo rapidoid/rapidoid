@@ -23,6 +23,7 @@ package org.rapidoid.test;
 import org.junit.Before;
 import org.rapidoid.commons.Env;
 import org.rapidoid.config.Conf;
+import org.rapidoid.crypto.Crypto;
 import org.rapidoid.data.JSON;
 import org.rapidoid.io.Res;
 import org.rapidoid.log.Log;
@@ -33,6 +34,7 @@ public abstract class AbstractCommonsTest extends TestCommons {
 	@Before
 	public void openContext() {
 		Res.reset();
+		Crypto.reset();
 		Conf.reset();
 		Conf.setPath(getTestName());
 		Log.setLogLevel(LogLevel.INFO);

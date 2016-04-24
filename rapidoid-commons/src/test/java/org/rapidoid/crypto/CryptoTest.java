@@ -40,12 +40,14 @@ public class CryptoTest extends AbstractCommonsTest {
 	}
 
 	@Test
-	public void testSecret() {
+	public void testRandomSecret() {
 		notNull(Crypto.secret());
 		isTrue(Crypto.secret() == Crypto.secret());
-
 		isTrue(U.notEmpty(Crypto.secret()));
+	}
 
+	@Test
+	public void testSpecifiedSecret() {
 		Conf.args("secret=mysecret");
 		eq(Crypto.secret(), "mysecret");
 	}

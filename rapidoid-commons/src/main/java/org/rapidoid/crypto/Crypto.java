@@ -44,9 +44,14 @@ public class Crypto extends RapidoidThing {
 
 	public static final SecureRandom RANDOM = new SecureRandom();
 
-	private static volatile String RANDOM_SECRET;
+	private static volatile byte[] appSecretBytes;
 
-	private static boolean warnedRandomSecret;
+	private static volatile String appSecret;
+
+	public static void reset() {
+		appSecretBytes = null;
+		appSecret = null;
+	}
 
 	public static MessageDigest digest(String algorithm) {
 		try {
@@ -119,22 +124,37 @@ public class Crypto extends RapidoidThing {
 	}
 
 	public static synchronized String secret() {
-		String secret = Conf.secret();
-
-		if (secret == null) {
-			if (RANDOM_SECRET == null) {
-				RANDOM_SECRET = randomStr(32);
-			}
-
-			secret = RANDOM_SECRET;
-
-			if (!warnedRandomSecret) {
-				Log.warn("Application secret was not specified, using random secret!");
-				warnedRandomSecret = true;
-			}
+		if (appSecret == null) {
+			initSecret();
 		}
 
-		return secret;
+		U.notNull(appSecret, "app secret");
+		return appSecret;
+	}
+
+	public static synchronized byte[] secretBytes() {
+		if (appSecretBytes == null) {
+			initSecret();
+		}
+
+		U.notNull(appSecretBytes, "app secret bytes");
+		return appSecretBytes;
+	}
+
+	private static synchronized void initSecret() {
+		String secret = Conf.ROOT.entry("secret").str().getOrNull();
+
+		if (secret == null) {
+			Log.warn("Application secret was not specified, generating random secret!");
+
+			appSecretBytes = new byte[64];
+			RANDOM.nextBytes(appSecretBytes);
+			appSecret = DatatypeConverter.printHexBinary(appSecretBytes);
+
+		} else {
+			appSecret = secret;
+			appSecretBytes = appSecret.getBytes();
+		}
 	}
 
 	public static byte[] randomBytes(int byteCount) {
@@ -169,22 +189,22 @@ public class Crypto extends RapidoidThing {
 		return enc;
 	}
 
-	public static byte[] encrypt(String secret, byte[] dataToEncrypt) {
-		byte[] key = md5Bytes(secret.getBytes());
+	public static byte[] encrypt(byte[] secret, byte[] dataToEncrypt) {
+		byte[] key = md5Bytes(secret);
 		return aes(key, dataToEncrypt, true);
 	}
 
-	public static byte[] decrypt(String secret, byte[] dataToDecrypt) {
-		byte[] key = md5Bytes(secret.getBytes());
+	public static byte[] decrypt(byte[] secret, byte[] dataToDecrypt) {
+		byte[] key = md5Bytes(secret);
 		return aes(key, dataToDecrypt, false);
 	}
 
 	public static byte[] encrypt(byte[] dataToEncrypt) {
-		return encrypt(secret(), dataToEncrypt);
+		return encrypt(secretBytes(), dataToEncrypt);
 	}
 
 	public static byte[] decrypt(byte[] dataToDecrypt) {
-		return decrypt(secret(), dataToDecrypt);
+		return decrypt(secretBytes(), dataToDecrypt);
 	}
 
 }
