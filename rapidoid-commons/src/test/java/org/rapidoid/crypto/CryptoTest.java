@@ -26,7 +26,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
 import org.rapidoid.test.AbstractCommonsTest;
-import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.0.0")
@@ -41,15 +40,14 @@ public class CryptoTest extends AbstractCommonsTest {
 
 	@Test
 	public void testRandomSecret() {
-		notNull(Crypto.secret());
-		isTrue(Crypto.secret() == Crypto.secret());
-		isTrue(U.notEmpty(Crypto.secret()));
+		notNull(Crypto.getSecretKey());
+		neq(Str.toHex(Crypto.getSecretKey()), "3CDB902856D13CC88139DD290822DA99E85242F16E575E73ED7953208B88B045");
 	}
 
 	@Test
 	public void testSpecifiedSecret() {
 		Conf.args("secret=mysecret");
-		eq(Crypto.secret(), "mysecret");
+		eq(Str.toHex(Crypto.getSecretKey()), "3CDB902856D13CC88139DD290822DA99E85242F16E575E73ED7953208B88B045");
 	}
 
 	@Test
@@ -81,11 +79,28 @@ public class CryptoTest extends AbstractCommonsTest {
 	}
 
 	@Test
-	public void testEncrypt() {
+	public void testEncryptWithAppSecret() throws Exception {
 		for (int i = 0; i < 10000; i++) {
-			String msg1 = Str.mul("x", i);
+			String msg1 = "" + i;
+
 			byte[] enc = Crypto.encrypt(msg1.getBytes());
 			byte[] dec = Crypto.decrypt(enc);
+
+			String msg2 = new String(dec);
+			eq(msg2, msg1);
+		}
+	}
+
+	@Test
+	public void testEncryptWithCustomPassword() throws Exception {
+		byte[] key = Crypto.pbkdf2("pass");
+
+		for (int i = 0; i < 10000; i++) {
+			String msg1 = "" + i;
+
+			byte[] enc = Crypto.encrypt(msg1.getBytes(), key);
+			byte[] dec = Crypto.decrypt(enc, key);
+
 			String msg2 = new String(dec);
 			eq(msg2, msg1);
 		}

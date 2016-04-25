@@ -1,8 +1,10 @@
 package org.rapidoid.crypto;
 
+import org.netnix.AES;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Str;
 import org.rapidoid.config.Conf;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
@@ -44,13 +46,14 @@ public class Crypto extends RapidoidThing {
 
 	public static final SecureRandom RANDOM = new SecureRandom();
 
-	private static volatile byte[] appSecretBytes;
+	private static volatile byte[] secretKey;
 
-	private static volatile String appSecret;
+	private static final byte[] DEFAULT_PBKDF2_SALT = new byte[]{
+			0, -3, -76, 48, 23, 1, 43, -41, -120, 45, -92, -113, -100, 70, -68, -46, 96, -93, 15, 99
+	};
 
 	public static void reset() {
-		appSecretBytes = null;
-		appSecret = null;
+		secretKey = null;
 	}
 
 	public static MessageDigest digest(String algorithm) {
@@ -123,22 +126,13 @@ public class Crypto extends RapidoidThing {
 		return sha512(data.getBytes());
 	}
 
-	public static synchronized String secret() {
-		if (appSecret == null) {
+	public static synchronized byte[] getSecretKey() {
+		if (secretKey == null) {
 			initSecret();
 		}
 
-		U.notNull(appSecret, "app secret");
-		return appSecret;
-	}
-
-	public static synchronized byte[] secretBytes() {
-		if (appSecretBytes == null) {
-			initSecret();
-		}
-
-		U.notNull(appSecretBytes, "app secret bytes");
-		return appSecretBytes;
+		U.notNull(secretKey, "app secret key");
+		return secretKey;
 	}
 
 	private static synchronized void initSecret() {
@@ -147,13 +141,12 @@ public class Crypto extends RapidoidThing {
 		if (secret == null) {
 			Log.warn("Application secret was not specified, generating random secret!");
 
-			appSecretBytes = new byte[64];
-			RANDOM.nextBytes(appSecretBytes);
-			appSecret = DatatypeConverter.printHexBinary(appSecretBytes);
+			byte[] rnd = new byte[128];
+			RANDOM.nextBytes(rnd);
+			secretKey = Crypto.pbkdf2(Str.toHex(rnd));
 
 		} else {
-			appSecret = secret;
-			appSecretBytes = appSecret.getBytes();
+			secretKey = Crypto.pbkdf2(secret);
 		}
 	}
 
@@ -189,22 +182,40 @@ public class Crypto extends RapidoidThing {
 		return enc;
 	}
 
-	public static byte[] encrypt(byte[] secret, byte[] dataToEncrypt) {
-		byte[] key = md5Bytes(secret);
-		return aes(key, dataToEncrypt, true);
+	public static byte[] encrypt(byte[] data, byte[] secret) {
+		try {
+			return AES.encrypt(data, secret);
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
 	}
 
-	public static byte[] decrypt(byte[] secret, byte[] dataToDecrypt) {
-		byte[] key = md5Bytes(secret);
-		return aes(key, dataToDecrypt, false);
+	public static byte[] decrypt(byte[] data, byte[] secret) {
+		try {
+			return AES.decrypt(data, secret);
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
 	}
 
-	public static byte[] encrypt(byte[] dataToEncrypt) {
-		return encrypt(secretBytes(), dataToEncrypt);
+	public static byte[] encrypt(byte[] data) {
+		return encrypt(data, getSecretKey());
 	}
 
-	public static byte[] decrypt(byte[] dataToDecrypt) {
-		return decrypt(secretBytes(), dataToDecrypt);
+	public static byte[] decrypt(byte[] data) {
+		return decrypt(data, getSecretKey());
+	}
+
+	public static byte[] pbkdf2(String password, byte[] salt, int iterations, int length) {
+		try {
+			return AES.generateKey(password, salt, iterations, length);
+		} catch (Exception e) {
+			throw U.rte(e);
+		}
+	}
+
+	public static byte[] pbkdf2(String password) {
+		return pbkdf2(password, DEFAULT_PBKDF2_SALT, 100000, 256);
 	}
 
 }
