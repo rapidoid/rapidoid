@@ -14,7 +14,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package aes.util;
+package org.netnix;
 
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
