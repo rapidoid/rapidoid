@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: application/json; charset=utf-8
-Set-Cookie: COOKIEPACK=vEQMGrsV$JsjG5PW6ddbgz5I8nCQbj3vl17cbCifBx8=; path=/; HttpOnly
+Set-Cookie: COOKIEPACK=...; path=/; HttpOnly
 Content-Length: 7
 
 "chuck"
