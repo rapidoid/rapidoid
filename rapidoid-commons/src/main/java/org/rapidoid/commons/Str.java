@@ -6,6 +6,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.u.U;
 
+import javax.xml.bind.DatatypeConverter;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -222,6 +223,22 @@ public class Str extends RapidoidThing {
 
 	public static String camelToSnake(String s) {
 		return U.join("_", Str.camelSplit(s)).toLowerCase();
+	}
+
+	public static String toHex(byte[] data) {
+		return DatatypeConverter.printHexBinary(data);
+	}
+
+	public static byte[] fromHex(String hex) {
+		return DatatypeConverter.parseHexBinary(hex);
+	}
+
+	public static String toBase64(byte[] data) {
+		return DatatypeConverter.printHexBinary(data);
+	}
+
+	public static byte[] fromBase64(String base64) {
+		return DatatypeConverter.parseBase64Binary(base64);
 	}
 
 }

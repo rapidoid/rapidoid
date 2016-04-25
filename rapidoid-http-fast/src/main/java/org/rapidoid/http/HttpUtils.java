@@ -18,7 +18,6 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.ErrCodeAndMsg;
 import org.rapidoid.util.Msc;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.Serializable;
@@ -72,7 +71,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		String cookiepack = req.cookie(COOKIEPACK_COOKIE, null);
 
 		if (!U.isEmpty(cookiepack)) {
-			byte[] decoded = DatatypeConverter.parseBase64Binary(cookiepack.replace('$', '+'));
+			byte[] decoded = Str.fromBase64(cookiepack.replace('$', '+'));
 			byte[] cookiepackDecrypted = Crypto.decrypt(decoded);
 			return (Map<String, Serializable>) Serialize.deserialize(cookiepackDecrypted);
 		} else {
@@ -86,7 +85,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 			if (!cookiepack.isEmpty()) {
 				byte[] cookiepackBytes = serializeCookiepack(cookiepack);
 				byte[] cookiepackEncrypted = Crypto.encrypt(cookiepackBytes);
-				cookie = DatatypeConverter.printBase64Binary(cookiepackEncrypted).replace('+', '$');
+				cookie = Str.toBase64(cookiepackEncrypted).replace('+', '$');
 			} else {
 				cookie = "";
 			}
