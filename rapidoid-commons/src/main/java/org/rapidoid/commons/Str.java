@@ -234,7 +234,7 @@ public class Str extends RapidoidThing {
 	}
 
 	public static String toBase64(byte[] data) {
-		return DatatypeConverter.printHexBinary(data);
+		return DatatypeConverter.printBase64Binary(data);
 	}
 
 	public static byte[] fromBase64(String base64) {
