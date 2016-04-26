@@ -58,6 +58,8 @@ public interface ProtocolContext<T> {
 
 	long requestId();
 
+	void setRequest(IRequest request);
+
 	/* PROTOCOL */
 
 	boolean isInitial();

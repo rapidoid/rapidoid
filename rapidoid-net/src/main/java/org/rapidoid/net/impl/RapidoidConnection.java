@@ -8,6 +8,7 @@ import org.rapidoid.buffer.BufGroup;
 import org.rapidoid.data.JSON;
 import org.rapidoid.net.Protocol;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.net.abstracts.IRequest;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Resetable;
@@ -87,6 +88,8 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	volatile long requestId;
 
+	volatile IRequest request;
+
 	public RapidoidConnection(RapidoidWorker worker, BufGroup bufs) {
 		this.worker = worker;
 		this.input = bufs.newBuf("input#" + connId());
@@ -96,6 +99,12 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 
 	@Override
 	public synchronized void reset() {
+		IRequest req = request;
+		if (req != null) {
+			req.stop();
+			request = null;
+		}
+
 		key = null;
 		closed = true;
 		closing = false;
@@ -367,6 +376,11 @@ public class RapidoidConnection extends RapidoidThing implements Resetable, Chan
 	@Override
 	public long requestId() {
 		return requestId;
+	}
+
+	@Override
+	public void setRequest(IRequest request) {
+		this.request = request;
 	}
 
 }

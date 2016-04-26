@@ -163,6 +163,8 @@ public class FastHttp extends AbstractHttpProcessor {
 			if (!attributes.isEmpty()) {
 				req.attrs().putAll(attributes);
 			}
+
+			channel.setRequest(req);
 		}
 
 		try {
@@ -189,7 +191,9 @@ public class FastHttp extends AbstractHttpProcessor {
 
 	private boolean handleError(Channel channel, boolean isKeepAlive, ReqImpl req, MediaType contentType, Throwable e) {
 		if (req != null) {
-			HttpIO.errorAndDone(req, e, customization.errorHandler());
+			if (!req.isStopped()) {
+				HttpIO.errorAndDone(req, e, customization.errorHandler());
+			}
 			return true;
 
 		} else {

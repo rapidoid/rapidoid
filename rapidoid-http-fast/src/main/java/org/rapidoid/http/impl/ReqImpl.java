@@ -12,6 +12,7 @@ import org.rapidoid.http.customize.Customization;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
+import org.rapidoid.net.abstracts.IRequest;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Msc;
@@ -42,11 +43,13 @@ import java.util.Map.Entry;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.2")
-public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetadata {
+public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetadata, IRequest {
 
 	private final FastHttp http;
 
 	private final Channel channel;
+
+	private volatile boolean stopped = false;
 
 	private volatile boolean isKeepAlive;
 
@@ -437,7 +440,10 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		int posAfter = out.size();
 		int contentLength = posAfter - posBefore;
 
-		out.putNumAsText(posConLen, contentLength, false);
+		if (!stopped && out.size() > 0) {
+			out.putNumAsText(posConLen, contentLength, false);
+		}
+
 		completed = true;
 	}
 
@@ -455,6 +461,10 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	}
 
 	private void onDone() {
+		if (stopped) {
+			return;
+		}
+
 		if (!rendering) {
 			renderResponseOrError();
 		}
@@ -703,4 +713,13 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return http;
 	}
 
+	@Override
+	public void stop() {
+		this.stopped = true;
+	}
+
+	@Override
+	public boolean isStopped() {
+		return stopped;
+	}
 }

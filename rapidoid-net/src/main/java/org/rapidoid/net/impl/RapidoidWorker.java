@@ -267,13 +267,11 @@ public class RapidoidWorker extends AbstractEventLoop<RapidoidWorker> {
 				if (attachment instanceof RapidoidConnection) {
 					RapidoidConnection conn = (RapidoidConnection) attachment;
 
-					if (conn != null) {
-						if (!conn.closed) {
-							Log.trace("Closing connection", "connection", conn);
-							assert conn.key == key;
-							conn.reset();
-							connections.release(conn);
-						}
+					if (!conn.closed) {
+						Log.trace("Closing connection", "connection", conn);
+						assert conn.key == key;
+						conn.reset();
+						connections.release(conn);
 					}
 				}
 			}
