@@ -25,10 +25,12 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.GET;
 import org.rapidoid.annotation.Page;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.GUI;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.io.IO;
 import org.rapidoid.setup.On;
+import org.rapidoid.u.U;
 import org.rapidoid.web.Rapidoid;
 
 @Authors("Nikolche Mihajlovski")
@@ -44,7 +46,7 @@ public class Demo extends RapidoidThing {
 
 			@Page("/hey")
 			public Object home(Req req) {
-				return "Hey: " + req.uri();
+				return U.list(GUI.grid(req.headers()), GUI.grid(req.data()));
 			}
 
 			@GET
