@@ -211,7 +211,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	@Override
 	public String host() {
-		return header(HttpHeaders.HOST.name());
+		return header(HttpHeaders.HOST.name(), null);
 	}
 
 	@Override
