@@ -424,7 +424,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 			Buf out = channel.output();
 			HttpIO.writeContentLengthUnknown(channel);
 
-			posConLen = out.size();
+			posConLen = out.size() - 1;
 			channel.write(CR_LF);
 
 			// finishing the headers

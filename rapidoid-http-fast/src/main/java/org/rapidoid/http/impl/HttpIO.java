@@ -159,7 +159,7 @@ public class HttpIO extends RapidoidThing {
 
 		ctx.write(CONTENT_LENGTH_UNKNOWN);
 
-		int posConLen = out.size();
+		int posConLen = out.size() - 1;
 		ctx.write(Constants.CR_LF);
 
 		// finishing the headers
