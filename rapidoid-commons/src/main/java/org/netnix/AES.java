@@ -30,6 +30,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 @Authors({"Chris Mason", "Nikolche Mihajlovski"})
@@ -41,6 +42,19 @@ public class AES {
 	private static final String HMAC_SHA_256 = "HmacSHA256";
 	private static final String AES_CTR_NO_PADDING = "AES/CTR/NoPadding";
 
+	public static final int AES_KEY_LENGTH = calcAESKeyLength();
+
+	private static int calcAESKeyLength() {
+		int maxKeyLen;
+		try {
+			maxKeyLen = Cipher.getMaxAllowedKeyLength("AES");
+		} catch (NoSuchAlgorithmException e) {
+			throw U.rte(e);
+		}
+
+		return maxKeyLen > 256 ? 256 : 128;
+	}
+
 	public static byte[] generateKey(String password, byte[] salt, int iterations, int length) throws Exception {
 		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
 		PBEKeySpec ks = new PBEKeySpec(password.toCharArray(), salt, iterations, length);
@@ -49,7 +63,7 @@ public class AES {
 
 	public static byte[] encrypt(byte[] data, byte[] secret) throws Exception {
 		byte[] aesSalt = randomSalt();
-		byte[] aesKey = hkdf(secret, aesSalt, 256);
+		byte[] aesKey = hkdf(secret, aesSalt, AES_KEY_LENGTH);
 		SecretKeySpec aesKeySpec = new SecretKeySpec(aesKey, "AES");
 
 		Cipher cipher = Cipher.getInstance(AES_CTR_NO_PADDING);
@@ -89,7 +103,7 @@ public class AES {
 		byte[] expectedHmac = m.doFinal(encrypted);
 
 		if (MessageDigest.isEqual(hmac, expectedHmac)) {
-			byte[] decrKey = hkdf(secret, aesSalt, 256);
+			byte[] decrKey = hkdf(secret, aesSalt, AES_KEY_LENGTH);
 			SecretKeySpec dekrKeySpec = new SecretKeySpec(decrKey, "AES");
 
 			Cipher cipher = Cipher.getInstance(AES_CTR_NO_PADDING);
