@@ -534,6 +534,7 @@ org.rapidoid.sql.NoConnectionPool
 org.rapidoid.standalone.Main
 org.rapidoid.test.TestCommons
 org.rapidoid.util.AbstractMapImpl
+org.rapidoid.util.AnsiColor
 org.rapidoid.util.Bufs
 org.rapidoid.util.CommonWords
 org.rapidoid.util.Constants
