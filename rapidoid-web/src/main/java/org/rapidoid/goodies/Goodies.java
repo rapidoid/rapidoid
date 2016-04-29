@@ -121,6 +121,10 @@ public class Goodies extends RapidoidThing {
 		return new JarUploadHandler();
 	}
 
+	public static TerminateHandler terminate() {
+		return new TerminateHandler();
+	}
+
 	public static void bootstrap(Setup setup) {
 		if (setup.isAdmin()) {
 			bootstrapAdminGoodies(setup);
@@ -174,6 +178,7 @@ public class Goodies extends RapidoidThing {
 		setup.get("/_/classpath").mvc(Goodies.classpath());
 		setup.get("/_/deploy").mvc(Goodies.deploy());
 		setup.post("/_/upload-jar").json(Goodies.jarUpload());
+		setup.page("/_/terminate").mvc(Goodies.terminate());
 
 		setup.post("/_login").roles().json(Goodies.login());
 		setup.get("/_logout").roles(Roles.LOGGED_IN).json(Goodies.logout());

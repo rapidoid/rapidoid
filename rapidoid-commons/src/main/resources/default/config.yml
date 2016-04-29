@@ -28,6 +28,7 @@ app:
           Beans: /_/beans
           Configuration: /_/config
           Deploy: /_/deploy
+          Terminate / Restart: /_/terminate
         Data:
           Entities: /_/entities
         Details:

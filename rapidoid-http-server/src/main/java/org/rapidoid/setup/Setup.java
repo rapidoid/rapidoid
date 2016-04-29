@@ -13,7 +13,10 @@ import org.rapidoid.config.Config;
 import org.rapidoid.config.RapidoidInitializer;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.data.JSON;
-import org.rapidoid.http.*;
+import org.rapidoid.http.FastHttp;
+import org.rapidoid.http.HttpRoutes;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.handler.optimized.DelegatingParamsAwareReqHandler;
@@ -574,4 +577,21 @@ public class Setup extends RapidoidThing implements Constants {
 	public String segment() {
 		return segment;
 	}
+
+	public static void haltAll() {
+		for (Setup setup : instances()) {
+			setup.halt();
+		}
+
+		System.exit(0);
+	}
+
+	public static void shutdownAll() {
+		for (Setup setup : instances()) {
+			setup.shutdown();
+		}
+
+		System.exit(0);
+	}
+
 }
