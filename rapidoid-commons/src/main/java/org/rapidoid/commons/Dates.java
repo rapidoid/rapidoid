@@ -129,4 +129,24 @@ public class Dates extends RapidoidThing {
 		return df.format(date);
 	}
 
+	private static SimpleDateFormat frmt(String frmt) {
+		return new SimpleDateFormat(frmt);
+	}
+
+	public static String day() {
+		return frmt("yyyy-MM-dd").format(U.time());
+	}
+
+	public static String hour() {
+		return frmt("yyyy-MM-dd-HH").format(U.time());
+	}
+
+	public static String minute() {
+		return frmt("yyyy-MM-dd-HH-mm").format(U.time());
+	}
+
+	public static String second() {
+		return frmt("yyyy-MM-dd-HH-mm-ss").format(U.time());
+	}
+
 }
