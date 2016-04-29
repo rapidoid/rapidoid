@@ -84,8 +84,11 @@ org.rapidoid.commons.Deep
 org.rapidoid.commons.English
 org.rapidoid.commons.Env
 org.rapidoid.commons.Err
+org.rapidoid.commons.IRange
 org.rapidoid.commons.JS
 org.rapidoid.commons.MediaType
+org.rapidoid.commons.Range
+org.rapidoid.commons.RangeImpl
 org.rapidoid.commons.RapidoidInfo
 org.rapidoid.commons.Rnd
 org.rapidoid.commons.Stats
@@ -394,8 +397,6 @@ org.rapidoid.jpa.DAO
 org.rapidoid.jpa.EM
 org.rapidoid.jpa.EMFUtil
 org.rapidoid.jpa.JPA
-org.rapidoid.jpa.JpaPage
-org.rapidoid.jpa.JpaPageImpl
 org.rapidoid.jpa.JPAPersisterProvider
 org.rapidoid.jpa.JPAUtil
 org.rapidoid.jpa.SharedContextAwareEntityManagerProxy

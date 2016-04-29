@@ -5,13 +5,14 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.English;
+import org.rapidoid.commons.IRange;
+import org.rapidoid.commons.Range;
 import org.rapidoid.commons.Str;
 import org.rapidoid.gui.*;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
 import org.rapidoid.jpa.JPA;
-import org.rapidoid.jpa.JpaPage;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
@@ -63,7 +64,7 @@ public class X extends RapidoidThing {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
 				Map<String, Object> namedArgs = req != null ? req.data() : null;
-				return JPA.jpql(jpql, JpaPage.ALL, namedArgs, args);
+				return JPA.jpql(jpql, Range.UNLIMITED, namedArgs, args);
 			}
 		};
 	}
@@ -132,8 +133,8 @@ public class X extends RapidoidThing {
 				int pages = (int) Math.ceil(count / (double) pageSize);
 				int page = U.or(Cls.convert(req.params().get("page"), Integer.class), 1);
 
-				JpaPage jpaPage = JPA.page((page - 1) * pageSize, page * pageSize);
-				List<?> records = JPA.getAll(entityType, jpaPage);
+				IRange range = Range.of((page - 1) * pageSize, pageSize);
+				List<?> records = JPA.getAll(entityType, range);
 
 				Grid grid = GUI.grid(records).toUri(new Mapper<Object, String>() {
 					@Override

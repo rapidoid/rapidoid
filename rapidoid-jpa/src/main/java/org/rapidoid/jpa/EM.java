@@ -4,6 +4,8 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
+import org.rapidoid.commons.IRange;
+import org.rapidoid.commons.Range;
 import org.rapidoid.u.U;
 
 import javax.persistence.*;
@@ -130,31 +132,37 @@ public class EM extends RapidoidThing {
 		List<E> all = U.list();
 
 		for (EntityType<?> entityType : getEntityTypes()) {
-			List<E> entities = (List<E>) getAll(entityType.getJavaType(), JpaPage.ALL);
+			List<E> entities = (List<E>) getAll(entityType.getJavaType(), Range.UNLIMITED);
 			all.addAll(entities);
 		}
 
 		return all;
 	}
 
-	public <T> List<T> getAll(Class<T> clazz, JpaPage page) {
+	public <T> List<T> getAll(Class<T> clazz, IRange range) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 
 		CriteriaQuery<T> query = cb.createQuery(clazz);
 		CriteriaQuery<T> all = query.select(query.from(clazz));
 
-		return find(all, page);
+		return find(all, range);
 	}
 
-	public <T> List<T> find(CriteriaQuery<T> criteria, JpaPage page) {
+	public <T> List<T> find(CriteriaQuery<T> criteria, IRange range) {
+		U.notNull(criteria, "criteria");
+		U.notNull(range, "range");
+
 		TypedQuery<T> q = em.createQuery(criteria);
-		return find(q, page);
+		return find(q, range);
 	}
 
-	public <T> List<T> find(Query query, JpaPage page) {
-		if (page != null) {
-			query.setFirstResult(page.from());
-			query.setMaxResults(page.to() - page.from());
+	public <T> List<T> find(Query query, IRange range) {
+		U.notNull(query, "query");
+		U.notNull(range, "range");
+
+		if (range != Range.UNLIMITED) {
+			query.setFirstResult(range.start());
+			query.setMaxResults(range.length());
 		}
 
 		return query.getResultList();
@@ -259,11 +267,11 @@ public class EM extends RapidoidThing {
 		return em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entity);
 	}
 
-	public <T> List<T> jpql(String jpql, JpaPage page, Object... args) {
-		return jpql(jpql, page, null, args);
+	public <T> List<T> jpql(String jpql, IRange range, Object... args) {
+		return jpql(jpql, range, null, args);
 	}
 
-	public <T> List<T> jpql(String jpql, JpaPage page, Map<String, ?> namedArgs, Object... args) {
+	public <T> List<T> jpql(String jpql, IRange range, Map<String, ?> namedArgs, Object... args) {
 		Query q = JPA.em().createQuery(jpql);
 
 		for (int i = 0; i < args.length; i++) {
@@ -277,7 +285,7 @@ public class EM extends RapidoidThing {
 			}
 		}
 
-		return find(q, page);
+		return find(q, range);
 	}
 
 }

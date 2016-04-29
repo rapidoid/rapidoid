@@ -3,6 +3,8 @@ package org.rapidoid.jpa;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.IRange;
+import org.rapidoid.commons.Range;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
 
@@ -70,19 +72,19 @@ public class JPA extends RapidoidThing {
 	}
 
 	public static <T> List<T> getAll(Class<T> clazz) {
-		return with(em()).getAll(clazz, JpaPage.ALL);
+		return with(em()).getAll(clazz, Range.UNLIMITED);
 	}
 
-	public static <T> List<T> getAll(Class<T> clazz, JpaPage page) {
-		return with(em()).getAll(clazz, page);
+	public static <T> List<T> getAll(Class<T> clazz, IRange range) {
+		return with(em()).getAll(clazz, range);
 	}
 
 	public static <T> List<T> find(CriteriaQuery<T> criteria) {
 		return with(em()).find(criteria, null);
 	}
 
-	public static <T> List<T> find(CriteriaQuery<T> criteria, JpaPage page) {
-		return with(em()).find(criteria, page);
+	public static <T> List<T> find(CriteriaQuery<T> criteria, IRange range) {
+		return with(em()).find(criteria, range);
 	}
 
 	public static long count(Class<?> clazz) {
@@ -168,12 +170,12 @@ public class JPA extends RapidoidThing {
 		return with(em()).getIdentifier(entity);
 	}
 
-	public static <T> List<T> jpql(String jpql, JpaPage page, Object... args) {
-		return with(em()).jpql(jpql, page, args);
+	public static <T> List<T> jpql(String jpql, IRange range, Object... args) {
+		return with(em()).jpql(jpql, range, args);
 	}
 
-	public static <T> List<T> jpql(String jpql, JpaPage page, Map<String, ?> namedArgs, Object... args) {
-		return with(em()).jpql(jpql, page, namedArgs, args);
+	public static <T> List<T> jpql(String jpql, IRange range, Map<String, ?> namedArgs, Object... args) {
+		return with(em()).jpql(jpql, range, namedArgs, args);
 	}
 
 	public static boolean isEntity(Object obj) {
@@ -206,10 +208,6 @@ public class JPA extends RapidoidThing {
 
 	public static boolean isActive() {
 		return JPAUtil.emf() != null;
-	}
-
-	public static JpaPage page(int from, int to) {
-		return JPAUtil.page(from, to);
 	}
 
 }

@@ -6,7 +6,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Range;
 import org.rapidoid.fluent.Do;
 import org.rapidoid.http.IntegrationTestCommons;
-import org.rapidoid.job.Jobs;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -33,36 +32,37 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JPATest extends IntegrationTestCommons {
+public class JPAPagingTest extends IntegrationTestCommons {
 
 	@Test
-	public void testBasicCRUD() {
+	public void testPaging() {
 		JPA.bootstrap(path());
 
-		JPA.transaction(() -> {
-			Book b1 = new Book("book 1");
-			Book b2 = new Book("book 2");
-			Movie m1 = new Movie("movie 1");
+		int total = 15;
 
-			JPA.insert(b1);
-			JPA.insert(b2);
-			JPA.insert(m1);
-			JPA.em().flush(); // not actually required
+		JPA.transaction(() -> {
+			for (int i = 0; i < total; i++) {
+				Book book = JPA.insert(new Book("b" + i));
+				notNull(book.getId());
+			}
 		});
 
 		JPA.transaction(() -> {
-			eq(JPA.getAllEntities().size(), 3);
+			eq(JPA.getAllEntities().size(), total);
+			eq(JPA.count(Book.class), total);
 
-			List<Book> books = JPA.getAll(Book.class);
-			eq(Do.map(books).to(Book::getTitle), U.list("book 1", "book 2"));
+			eq(JPA.getAll(Book.class).size(), total);
 
-			List<Movie> movies = JPA.getAll(Movie.class);
-			eq(Do.map(movies).to(Movie::getTitle), U.list("movie 1"));
+			List<Book> first3 = JPA.getAll(Book.class, Range.of(0, 3));
+			eq(first3.size(), 3);
+			eq(Do.map(first3).to(Book::getTitle), U.list("b0", "b1", "b2"));
 
-			eq(JPA.jpql("select title from Book where id = ?1", Range.UNLIMITED, 2L), U.list("book 2"));
+			List<Book> next5 = JPA.getAll(Book.class, Range.of(3, 5));
+			eq(Do.map(next5).to(Book::getTitle), U.list("b3", "b4", "b5", "b6", "b7"));
+
+			List<Book> last2 = JPA.getAll(Book.class, Range.of(13, 2));
+			eq(Do.map(last2).to(Book::getTitle), U.list("b13", "b14"));
 		});
-
-		eq(Jobs.errorCounter().get(), 0);
 	}
 
 }
