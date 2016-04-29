@@ -41,6 +41,8 @@ import java.lang.management.ManagementFactory;
 @Since("5.1.0")
 public class Goodies extends RapidoidThing {
 
+	private static volatile String generatedAdminPassword;
+
 	public static MultiDetailsHandler memoryPool() {
 		return new MultiDetailsHandler("Memory pool", ManagementFactory.getMemoryPoolMXBeans(), "name", "type", "memoryManagerNames", "usage", "peakUsage", "collectionUsage");
 	}
@@ -184,12 +186,20 @@ public class Goodies extends RapidoidThing {
 		setup.get("/_logout").roles(Roles.LOGGED_IN).json(Goodies.logout());
 
 		if (Env.dev() && Conf.USERS.isEmpty()) {
-			String pass = Crypto.randomStr(16);
+			String pass = generatedAdminPassword();
 			Config admin = Conf.USERS.sub("admin");
 			admin.set("roles", "administrator");
 			admin.set("password", pass);
 			Msc.logSection("ADMIN CREDENTIALS: username = admin, password = " + pass);
 		}
+	}
+
+	public static synchronized String generatedAdminPassword() {
+		if (generatedAdminPassword == null) {
+			generatedAdminPassword = Crypto.randomStr(16);
+		}
+
+		return generatedAdminPassword;
 	}
 
 	private static void jpaGoodies(Setup setup) {
