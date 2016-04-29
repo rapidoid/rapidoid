@@ -33,7 +33,7 @@
     {{#menu.leftItems}}
     {{#visible}}
     <ul class="nav navbar-nav navbar-left">
-{{>page-menu-item}}
+{{>page-segments/page-menu-item}}
     </ul>
     {{/visible}}
     {{/menu.leftItems}}
@@ -54,13 +54,13 @@
     {{#menu.rightItemsReversed}}
     {{#visible}}
     <ul class="nav navbar-nav navbar-right">
-{{>page-menu-item}}
+{{>page-segments/page-menu-item}}
     </ul>
     {{/visible}}
     {{/menu.rightItemsReversed}}
 
     {{>navbar-custom}}
 
-    {{#search}}{{>page-search}}{{/search}}
+    {{#search}}{{>page-segments/page-search}}{{/search}}
 
 </div>

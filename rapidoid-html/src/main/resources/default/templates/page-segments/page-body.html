@@ -17,11 +17,11 @@
 {{#_js}}<script src="/${req.name}.js"></script>{{/_js}}
 
 <div ng-if="!ajaxBodyContent">
-{{>page-content}}
+{{>page-segments/page-content}}
 </div>
 
 <div compile="ajaxBodyContent" ng-if="ajaxBodyContent"></div>
 
-{{>page-tail}}
+{{>page-segments/page-tail}}
 
 </body>

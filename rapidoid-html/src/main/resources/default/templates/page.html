@@ -12,7 +12,7 @@
 {{/title}}
 
 {{#full}}
-{{>page-full}}
+{{>page-segments/page-full}}
 {{/full}}
 
 {{#maps}}
@@ -35,10 +35,10 @@
 <link href="/img/favicon.png" rel="shortcut icon">
 <link href="/bootstrap/css/theme-default.css" type="text/css" rel="stylesheet" />
 
-{{>page-head}}
+{{>page-segments/page-head}}
 </head>
 
-{{>page-body}}
+{{>page-segments/page-body}}
 
 </html>
-{{/embedded}}{{?embedded}}{{>page-embedded}}{{/embedded}}
+{{/embedded}}{{?embedded}}{{>page-segments/page-embedded}}{{/embedded}}
