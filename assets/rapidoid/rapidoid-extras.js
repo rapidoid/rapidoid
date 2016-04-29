@@ -1,5 +1,25 @@
 $(function () {
   $('[data-toggle="tooltip"]').tooltip();
+
+  $('.copy-snippet').prepend('<button class="btn btn-default pull-right" data-copy-to-clipboard><i class="fa fa-copy"></i></button>');
+
+  var clipboard = new Clipboard('[data-copy-to-clipboard]',{
+    target:function(trigger){
+      return trigger.nextElementSibling;
+    }
+  });
+
+  clipboard.on('success', function(e){
+    e.clearSelection();
+
+    $(e.trigger).tooltip({'title': 'Copied!'});
+    $(e.trigger).tooltip('show');
+
+    setTimeout(function() {
+        $(e.trigger).tooltip('destroy');
+    }, 500);
+  });
+
 })
 
 /* Rapidoid Extras */

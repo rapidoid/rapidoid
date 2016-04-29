@@ -1022,4 +1022,8 @@ public abstract class GUI extends HTML {
 		return sb.toString();
 	}
 
+	public static Tag copy(Object... content) {
+		return div(content).class_("copy-snippet");
+	}
+
 }
