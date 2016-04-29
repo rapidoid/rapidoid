@@ -68,10 +68,14 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 	@SuppressWarnings("unchecked")
 	public static Map<String, Serializable> initAndDeserializeCookiePack(Req req) {
-		String cookiepack = req.cookie(COOKIEPACK_COOKIE, null);
+		String cookiepack = req.cookie(COOKIEPACK, null);
+
+		if (U.isEmpty(cookiepack)) {
+			cookiepack = req.data(TOKEN, null);
+		}
 
 		if (!U.isEmpty(cookiepack)) {
-			byte[] decoded = Str.fromBase64(cookiepack.replace('$', '+'));
+			byte[] decoded = Str.fromBase64(cookiepack.replace('$', '+').replace('_', '/'));
 			byte[] cookiepackDecrypted = Crypto.decrypt(decoded);
 			return (Map<String, Serializable>) Serialize.deserialize(cookiepackDecrypted);
 		} else {
@@ -85,12 +89,12 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 			if (!cookiepack.isEmpty()) {
 				byte[] cookiepackBytes = serializeCookiepack(cookiepack);
 				byte[] cookiepackEncrypted = Crypto.encrypt(cookiepackBytes);
-				cookie = Str.toBase64(cookiepackEncrypted).replace('+', '$');
+				cookie = Str.toBase64(cookiepackEncrypted).replace('+', '$').replace('/', '_');
 			} else {
 				cookie = "";
 			}
 
-			setCookie(req, COOKIEPACK_COOKIE, cookie, "path=/; HttpOnly");
+			setCookie(req, COOKIEPACK, cookie, "path=/; HttpOnly");
 		}
 	}
 

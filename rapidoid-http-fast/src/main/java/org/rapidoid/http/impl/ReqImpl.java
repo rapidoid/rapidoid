@@ -633,7 +633,7 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 
 	@Override
 	public boolean hasCookiepack() {
-		return cookie(COOKIEPACK_COOKIE, null) != null;
+		return cookie(COOKIEPACK, null) != null || data(TOKEN, null) != null;
 	}
 
 	@Override
