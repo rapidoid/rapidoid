@@ -34,19 +34,19 @@ import java.util.Map;
 @Since("2.0.0")
 public class KeyValueRanges extends RapidoidThing {
 
-	public final Range[] keys;
+	public final BufRange[] keys;
 
-	public final Range[] values;
+	public final BufRange[] values;
 
 	public int count;
 
 	public KeyValueRanges(int capacity) {
-		this.keys = new Range[capacity];
-		this.values = new Range[capacity];
+		this.keys = new BufRange[capacity];
+		this.values = new BufRange[capacity];
 
 		for (int i = 0; i < capacity; i++) {
-			keys[i] = new Range();
-			values[i] = new Range();
+			keys[i] = new BufRange();
+			values[i] = new BufRange();
 			keys[i].reset();
 			values[i].reset();
 		}
@@ -62,7 +62,7 @@ public class KeyValueRanges extends RapidoidThing {
 		return this;
 	}
 
-	public Range get(Buf buf, byte[] key, boolean caseSensitive) {
+	public BufRange get(Buf buf, byte[] key, boolean caseSensitive) {
 		for (int i = 0; i < count; i++) {
 			if (BytesUtil.matches(buf.bytes(), keys[i], key, caseSensitive)) {
 				return values[i];

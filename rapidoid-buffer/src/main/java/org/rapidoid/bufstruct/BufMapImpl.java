@@ -25,7 +25,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
-import org.rapidoid.data.Range;
+import org.rapidoid.data.BufRange;
 import org.rapidoid.util.AbstractMapImpl;
 import org.rapidoid.util.MapEntry;
 import org.rapidoid.util.SimpleList;
@@ -44,10 +44,10 @@ public class BufMapImpl<T> extends AbstractMapImpl<byte[], T> implements BufMap<
 
 	private long hash(String key) {
 		Bytes bytes = BytesUtil.from(key);
-		return hash(bytes, Range.fromTo(0, bytes.limit()));
+		return hash(bytes, BufRange.fromTo(0, bytes.limit()));
 	}
 
-	private long hash(Bytes bytes, Range key) {
+	private long hash(Bytes bytes, BufRange key) {
 		int prefix = BytesUtil.getIntPrefixOf(bytes, key.start, key.limit());
 		return prefix * 17 + key.length * 19 + bytes.get(key.last());
 	}
@@ -63,7 +63,7 @@ public class BufMapImpl<T> extends AbstractMapImpl<byte[], T> implements BufMap<
 	}
 
 	@Override
-	public T get(Buf buf, Range key) {
+	public T get(Buf buf, BufRange key) {
 		long hash = hash(buf.bytes(), key);
 
 		SimpleList<MapEntry<byte[], T>> candidates = entries.bucket(hash);

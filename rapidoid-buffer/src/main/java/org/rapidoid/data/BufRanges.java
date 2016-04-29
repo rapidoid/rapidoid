@@ -33,22 +33,22 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Ranges extends RapidoidThing {
+public class BufRanges extends RapidoidThing {
 
-	public final Range[] ranges;
+	public final BufRange[] ranges;
 
 	public int count;
 
-	public Ranges(int capacity) {
-		this.ranges = new Range[capacity];
+	public BufRanges(int capacity) {
+		this.ranges = new BufRange[capacity];
 
 		for (int i = 0; i < capacity; i++) {
-			ranges[i] = new Range();
+			ranges[i] = new BufRange();
 			ranges[i].reset();
 		}
 	}
 
-	public Ranges reset() {
+	public BufRanges reset() {
 		for (int i = 0; i < count; i++) {
 			ranges[i].reset();
 		}
@@ -57,7 +57,7 @@ public class Ranges extends RapidoidThing {
 		return this;
 	}
 
-	public Range getByPrefix(Bytes bytes, byte[] prefix, boolean caseSensitive) {
+	public BufRange getByPrefix(Bytes bytes, byte[] prefix, boolean caseSensitive) {
 		return BytesUtil.getByPrefix(bytes, this, prefix, caseSensitive);
 	}
 
@@ -148,16 +148,16 @@ public class Ranges extends RapidoidThing {
 		return sb.toString();
 	}
 
-	public Range get(int index) {
+	public BufRange get(int index) {
 		assert index >= 0 && index < count;
 		return ranges[index];
 	}
 
-	public Range first() {
+	public BufRange first() {
 		return get(0);
 	}
 
-	public Range last() {
+	public BufRange last() {
 		return get(count - 1);
 	}
 

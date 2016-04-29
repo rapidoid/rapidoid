@@ -5,7 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.data.KeyValueRanges;
-import org.rapidoid.data.Ranges;
+import org.rapidoid.data.BufRanges;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.pool.Pools;
 import org.rapidoid.wrap.*;
@@ -60,15 +60,15 @@ public class RapidoidHelper extends RapidoidThing {
 
 	public final KeyValueRanges pairs5 = new KeyValueRanges(100);
 
-	public final Ranges ranges1 = new Ranges(100);
+	public final BufRanges ranges1 = new BufRanges(100);
 
-	public final Ranges ranges2 = new Ranges(100);
+	public final BufRanges ranges2 = new BufRanges(100);
 
-	public final Ranges ranges3 = new Ranges(100);
+	public final BufRanges ranges3 = new BufRanges(100);
 
-	public final Ranges ranges4 = new Ranges(100);
+	public final BufRanges ranges4 = new BufRanges(100);
 
-	public final Ranges ranges5 = new Ranges(100);
+	public final BufRanges ranges5 = new BufRanges(100);
 
 	public final BoolWrap[] booleans = new BoolWrap[100];
 

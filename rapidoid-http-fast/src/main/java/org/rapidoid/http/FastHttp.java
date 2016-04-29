@@ -7,8 +7,8 @@ import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.data.KeyValueRanges;
-import org.rapidoid.data.Range;
-import org.rapidoid.data.Ranges;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.BufRanges;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.impl.*;
@@ -77,8 +77,8 @@ public class FastHttp extends AbstractHttpProcessor {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void onRequest(Channel channel, boolean isGet, boolean isKeepAlive, Range xbody, Range xverb, Range xuri,
-	                      Range xpath, Range xquery, Range xprotocol, Ranges hdrs) {
+	public void onRequest(Channel channel, boolean isGet, boolean isKeepAlive, BufRange xbody, BufRange xverb, BufRange xuri,
+	                      BufRange xpath, BufRange xquery, BufRange xprotocol, BufRanges hdrs) {
 
 		RapidoidHelper helper = channel.helper();
 		Buf buf = channel.input();
@@ -207,7 +207,7 @@ public class FastHttp extends AbstractHttpProcessor {
 		return false;
 	}
 
-	private static String validateRequest(Buf input, Range verb, Range uri) {
+	private static String validateRequest(Buf input, BufRange verb, BufRange uri) {
 		if (verb.isEmpty()) {
 			return "HTTP verb cannot be empty!";
 		}

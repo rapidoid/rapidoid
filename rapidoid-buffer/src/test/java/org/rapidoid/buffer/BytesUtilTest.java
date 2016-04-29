@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.BytesUtil;
-import org.rapidoid.data.Range;
+import org.rapidoid.data.BufRange;
 
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
@@ -64,7 +64,7 @@ public class BytesUtilTest extends BufferTestCommons {
 
 	private boolean isValid(String uri) {
 		Buf buf = buf(uri);
-		Range uriRange = Range.fromTo(0, buf.size());
+		BufRange uriRange = BufRange.fromTo(0, buf.size());
 		return BytesUtil.isValidURI(buf.bytes(), uriRange);
 	}
 

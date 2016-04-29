@@ -7,7 +7,7 @@ import org.rapidoid.buffer.Buf;
 import org.rapidoid.commons.Dates;
 import org.rapidoid.commons.MediaType;
 import org.rapidoid.data.JSON;
-import org.rapidoid.data.Range;
+import org.rapidoid.data.BufRange;
 import org.rapidoid.http.HttpResponseCodes;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
@@ -79,7 +79,7 @@ public class HttpIO extends RapidoidThing {
 	private HttpIO() {
 	}
 
-	public static void removeTrailingSlash(Buf buf, Range range) {
+	public static void removeTrailingSlash(Buf buf, BufRange range) {
 		if (range.length > 1 && buf.get(range.last()) == '/') {
 			range.length--;
 		}

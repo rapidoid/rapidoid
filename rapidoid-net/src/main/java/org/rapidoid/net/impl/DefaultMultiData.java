@@ -8,7 +8,7 @@ import org.rapidoid.buffer.BufProvider;
 import org.rapidoid.data.Data;
 import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.MultiData;
-import org.rapidoid.data.Range;
+import org.rapidoid.data.BufRange;
 
 import java.util.Map;
 
@@ -75,7 +75,7 @@ public class DefaultMultiData extends RapidoidThing implements MultiData {
 	@Override
 	public Data get_(String name) {
 		Buf buf = src.buffer();
-		Range range = ranges.get(buf, name.getBytes(), false);
+		BufRange range = ranges.get(buf, name.getBytes(), false);
 		return range != null ? new DecodedData(src, range) : null;
 	}
 

@@ -7,8 +7,8 @@ import org.rapidoid.bytes.ByteBufferBytes;
 import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Err;
-import org.rapidoid.data.Range;
-import org.rapidoid.data.Ranges;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.BufRanges;
 import org.rapidoid.pool.Pool;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
@@ -48,7 +48,7 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 
 	private final byte[] HELPER = new byte[20];
 
-	private final Range HELPER_RANGE = new Range();
+	private final BufRange HELPER_RANGE = new BufRange();
 
 	private static final int TO_BYTES = 1;
 
@@ -370,7 +370,7 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 	}
 
 	@Override
-	public String get(Range range) {
+	public String get(BufRange range) {
 		assert invariant(false);
 
 		if (range.isEmpty()) {
@@ -387,7 +387,7 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 	}
 
 	@Override
-	public void get(Range range, byte[] dest, int offset) {
+	public void get(BufRange range, byte[] dest, int offset) {
 		assert invariant(false);
 
 		int total = readAll(dest, offset, range.start, range.length);
@@ -396,7 +396,7 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 		assert invariant(false);
 	}
 
-	private int writeToHelper(Range range) {
+	private int writeToHelper(BufRange range) {
 		assert invariant(false);
 		return readAll(HELPER, 0, range.start, range.length);
 	}
@@ -766,7 +766,7 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 	}
 
 	@Override
-	public long getN(Range range) {
+	public long getN(BufRange range) {
 		assert invariant(false);
 
 		assert range.length >= 1;
@@ -972,7 +972,7 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 	}
 
 	@Override
-	public void upto(byte value, Range range) {
+	public void upto(byte value, BufRange range) {
 		assert invariant(false);
 
 		range.starts(_position);
@@ -999,7 +999,7 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 	}
 
 	@Override
-	public void scanUntil(byte value, Range range) {
+	public void scanUntil(byte value, BufRange range) {
 		assert invariant(false);
 
 		requireRemaining(1);
@@ -1078,7 +1078,7 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 	}
 
 	@Override
-	public void scanWhile(byte value, Range range) {
+	public void scanWhile(byte value, BufRange range) {
 		assert invariant(false);
 
 		requireRemaining(1);
@@ -1229,7 +1229,7 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 
 	@Override
 	public String asText() {
-		return get(new Range(0, size()));
+		return get(new BufRange(0, size()));
 	}
 
 	@Override
@@ -1239,7 +1239,7 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 	}
 
 	@Override
-	public void scanLn(Range line) {
+	public void scanLn(BufRange line) {
 		assert invariant(false);
 		int pos = BytesUtil.parseLine(bytes(), line, position(), size());
 
@@ -1253,7 +1253,7 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 	}
 
 	@Override
-	public void scanLnLn(Ranges lines) {
+	public void scanLnLn(BufRanges lines) {
 		assert invariant(false);
 
 		int pos = BytesUtil.parseLines(bytes(), lines, position(), size());
@@ -1268,7 +1268,7 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 	}
 
 	@Override
-	public void scanN(int count, Range range) {
+	public void scanN(int count, BufRange range) {
 		assert invariant(false);
 
 		get(_position + count - 1);
@@ -1313,7 +1313,7 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 	}
 
 	@Override
-	public void scanTo(byte sep, Range range, boolean failOnLimit) {
+	public void scanTo(byte sep, BufRange range, boolean failOnLimit) {
 		assert invariant(false);
 
 		int pos = BytesUtil.find(bytes(), _position, _limit, sep, true);
@@ -1333,7 +1333,7 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 	}
 
 	@Override
-	public int scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit) {
+	public int scanTo(byte sep1, byte sep2, BufRange range, boolean failOnLimit) {
 		assert invariant(false);
 
 		int pos1 = BytesUtil.find(bytes(), _position, _limit, sep1, true);
@@ -1372,13 +1372,13 @@ public class MultiBuf extends RapidoidThing implements Buf, Constants {
 		}
 	}
 
-	private void consumeAndSkip(int toPos, Range range, int skip) {
+	private void consumeAndSkip(int toPos, BufRange range, int skip) {
 		range.setInterval(_position, toPos);
 		_position = toPos + skip;
 	}
 
 	@Override
-	public void scanLnLn(Ranges ranges, IntWrap result, byte end1, byte end2) {
+	public void scanLnLn(BufRanges ranges, IntWrap result, byte end1, byte end2) {
 		assert invariant(false);
 
 		int nextPos = BytesUtil.parseLines(bytes(), ranges, result, _position, _limit, end1, end2);

@@ -5,7 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.BufProvider;
 import org.rapidoid.data.Data;
-import org.rapidoid.data.Range;
+import org.rapidoid.data.BufRange;
 import org.rapidoid.util.Msc;
 
 /*
@@ -34,11 +34,11 @@ public class DecodedData extends RapidoidThing implements Data {
 
 	private final BufProvider src;
 
-	private final Range range;
+	private final BufRange range;
 
 	private String value;
 
-	public DecodedData(BufProvider src, Range range) {
+	public DecodedData(BufProvider src, BufRange range) {
 		this.src = src;
 		this.range = range;
 	}
@@ -53,7 +53,7 @@ public class DecodedData extends RapidoidThing implements Data {
 	}
 
 	@Override
-	public Range range() {
+	public BufRange range() {
 		return range;
 	}
 

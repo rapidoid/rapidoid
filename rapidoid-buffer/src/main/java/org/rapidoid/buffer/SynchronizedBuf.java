@@ -4,8 +4,8 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.Bytes;
-import org.rapidoid.data.Range;
-import org.rapidoid.data.Ranges;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.BufRanges;
 import org.rapidoid.wrap.IntWrap;
 
 import java.io.IOException;
@@ -140,12 +140,12 @@ public class SynchronizedBuf extends RapidoidThing implements Buf {
 	}
 
 	@Override
-	public synchronized String get(Range range) {
+	public synchronized String get(BufRange range) {
 		return buf.get(range);
 	}
 
 	@Override
-	public synchronized long getN(Range range) {
+	public synchronized long getN(BufRange range) {
 		return buf.getN(range);
 	}
 
@@ -170,7 +170,7 @@ public class SynchronizedBuf extends RapidoidThing implements Buf {
 	}
 
 	@Override
-	public synchronized void get(Range range, byte[] dest, int offset) {
+	public synchronized void get(BufRange range, byte[] dest, int offset) {
 		buf.get(range, dest, offset);
 	}
 
@@ -220,7 +220,7 @@ public class SynchronizedBuf extends RapidoidThing implements Buf {
 	}
 
 	@Override
-	public synchronized void upto(byte value, Range range) {
+	public synchronized void upto(byte value, BufRange range) {
 		buf.upto(value, range);
 	}
 
@@ -230,12 +230,12 @@ public class SynchronizedBuf extends RapidoidThing implements Buf {
 	}
 
 	@Override
-	public synchronized void scanUntil(byte value, Range range) {
+	public synchronized void scanUntil(byte value, BufRange range) {
 		buf.scanUntil(value, range);
 	}
 
 	@Override
-	public synchronized void scanWhile(byte value, Range range) {
+	public synchronized void scanWhile(byte value, BufRange range) {
 		buf.scanWhile(value, range);
 	}
 
@@ -280,17 +280,17 @@ public class SynchronizedBuf extends RapidoidThing implements Buf {
 	}
 
 	@Override
-	public synchronized void scanLn(Range range) {
+	public synchronized void scanLn(BufRange range) {
 		buf.scanLn(range);
 	}
 
 	@Override
-	public synchronized void scanLnLn(Ranges ranges) {
+	public synchronized void scanLnLn(BufRanges ranges) {
 		buf.scanLnLn(ranges);
 	}
 
 	@Override
-	public synchronized void scanN(int count, Range range) {
+	public synchronized void scanN(int count, BufRange range) {
 		buf.scanN(count, range);
 	}
 
@@ -310,17 +310,17 @@ public class SynchronizedBuf extends RapidoidThing implements Buf {
 	}
 
 	@Override
-	public synchronized void scanTo(byte sep, Range range, boolean failOnLimit) {
+	public synchronized void scanTo(byte sep, BufRange range, boolean failOnLimit) {
 		buf.scanTo(sep, range, failOnLimit);
 	}
 
 	@Override
-	public synchronized int scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit) {
+	public synchronized int scanTo(byte sep1, byte sep2, BufRange range, boolean failOnLimit) {
 		return buf.scanTo(sep1, sep2, range, failOnLimit);
 	}
 
 	@Override
-	public synchronized void scanLnLn(Ranges ranges, IntWrap result, byte end1, byte end2) {
+	public synchronized void scanLnLn(BufRanges ranges, IntWrap result, byte end1, byte end2) {
 		buf.scanLnLn(ranges, result, end1, end2);
 	}
 

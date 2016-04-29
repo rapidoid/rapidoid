@@ -4,8 +4,8 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
-import org.rapidoid.data.Range;
-import org.rapidoid.data.Ranges;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.BufRanges;
 import org.rapidoid.util.Constants;
 import org.rapidoid.util.Msc;
 import org.rapidoid.wrap.IntWrap;
@@ -62,7 +62,7 @@ public class BytesUtil extends RapidoidThing implements Constants {
 		return new StringBytes(s);
 	}
 
-	public static int parseLines(Bytes bytes, Ranges lines, IntWrap res, int start, int limit, byte end1, byte end2) {
+	public static int parseLines(Bytes bytes, BufRanges lines, IntWrap res, int start, int limit, byte end1, byte end2) {
 		byte b0 = 0, b1 = 0, b2 = 0, b3 = 0;
 		int ret = -1;
 		res.value = NOT_FOUND;
@@ -103,7 +103,7 @@ public class BytesUtil extends RapidoidThing implements Constants {
 		return ret;
 	}
 
-	public static int parseLines(Bytes bytes, Ranges lines, int start, int limit) {
+	public static int parseLines(Bytes bytes, BufRanges lines, int start, int limit) {
 		byte b0 = 0, b1 = 0;
 		int ret = -1;
 
@@ -135,7 +135,7 @@ public class BytesUtil extends RapidoidThing implements Constants {
 		return ret;
 	}
 
-	public static int parseLine(Bytes bytes, Range line, int start, int limit) {
+	public static int parseLine(Bytes bytes, BufRange line, int start, int limit) {
 		byte b0 = 0, b1 = 0;
 		int ret = -1;
 
@@ -162,7 +162,7 @@ public class BytesUtil extends RapidoidThing implements Constants {
 		return ret;
 	}
 
-	public static Range getByPrefix(Bytes bytes, Ranges ranges, byte[] prefix, boolean caseSensitive) {
+	public static BufRange getByPrefix(Bytes bytes, BufRanges ranges, byte[] prefix, boolean caseSensitive) {
 		for (int i = 0; i < ranges.count; i++) {
 			if (startsWith(bytes, ranges.ranges[i], prefix, caseSensitive)) {
 				return ranges.ranges[i];
@@ -171,11 +171,11 @@ public class BytesUtil extends RapidoidThing implements Constants {
 		return null;
 	}
 
-	public static String get(Bytes bytes, Range range) {
+	public static String get(Bytes bytes, BufRange range) {
 		return new String(getBytes(bytes, range));
 	}
 
-	public static byte[] getBytes(Bytes bytes, Range range) {
+	public static byte[] getBytes(Bytes bytes, BufRange range) {
 		byte[] byteArr = new byte[range.length];
 		for (int i = 0; i < byteArr.length; i++) {
 			byteArr[i] = bytes.get(range.start + i);
@@ -301,7 +301,7 @@ public class BytesUtil extends RapidoidThing implements Constants {
 		return -1;
 	}
 
-	public static boolean matches(Bytes bytes, Range target, byte[] match, boolean caseSensitive) {
+	public static boolean matches(Bytes bytes, BufRange target, byte[] match, boolean caseSensitive) {
 
 		if (target.length != match.length || target.start < 0 || target.last() >= bytes.limit()) {
 			return false;
@@ -312,7 +312,7 @@ public class BytesUtil extends RapidoidThing implements Constants {
 		return result;
 	}
 
-	public static boolean startsWith(Bytes bytes, Range target, byte[] match, boolean caseSensitive) {
+	public static boolean startsWith(Bytes bytes, BufRange target, byte[] match, boolean caseSensitive) {
 
 		if (target.length < match.length || target.start < 0 || target.last() >= bytes.limit()) {
 			return false;
@@ -323,7 +323,7 @@ public class BytesUtil extends RapidoidThing implements Constants {
 		return result;
 	}
 
-	public static boolean containsAt(Bytes bytes, Range target, int offset, byte[] match, boolean caseSensitive) {
+	public static boolean containsAt(Bytes bytes, BufRange target, int offset, byte[] match, boolean caseSensitive) {
 
 		if (offset < 0 || target.length < offset + match.length || target.start < 0 || target.last() >= bytes.limit()) {
 			return false;
@@ -334,7 +334,7 @@ public class BytesUtil extends RapidoidThing implements Constants {
 		return result;
 	}
 
-	public static void trim(Bytes bytes, Range target) {
+	public static void trim(Bytes bytes, BufRange target) {
 
 		int start = target.start;
 		int len = target.length;
@@ -357,7 +357,7 @@ public class BytesUtil extends RapidoidThing implements Constants {
 		target.length = finish - start + 1;
 	}
 
-	public static boolean split(Bytes bytes, Range target, byte sep, Range before, Range after, boolean trimParts) {
+	public static boolean split(Bytes bytes, BufRange target, byte sep, BufRange before, BufRange after, boolean trimParts) {
 
 		int pos = find(bytes, target.start, target.limit(), sep, true);
 
@@ -389,7 +389,7 @@ public class BytesUtil extends RapidoidThing implements Constants {
 	 * reached and separator not found. If the prefix is matched, the negative of the position is returned, to mark the
 	 * prefix match. Duplicated code for performance reasons.
 	 */
-	public static int scanUntilAndMatchPrefix(Bytes bytes, Range result, byte separator, int fromPos, int toPos,
+	public static int scanUntilAndMatchPrefix(Bytes bytes, BufRange result, byte separator, int fromPos, int toPos,
 	                                          int searchPrefix) {
 
 		byte b0, b1, b2, b3;
@@ -464,7 +464,7 @@ public class BytesUtil extends RapidoidThing implements Constants {
 	 * limit is reached and separator not found. If the prefix is matched, the negative of the position is returned, to
 	 * mark the prefix match. Duplicated code for performance reasons.
 	 */
-	public static int scanLnAndMatchPrefix(Bytes bytes, Range result, int fromPos, int toPos, int searchPrefix) {
+	public static int scanLnAndMatchPrefix(Bytes bytes, BufRange result, int fromPos, int toPos, int searchPrefix) {
 
 		byte b0, b1, b2, b3;
 
@@ -550,7 +550,7 @@ public class BytesUtil extends RapidoidThing implements Constants {
 		return NOT_FOUND;
 	}
 
-	public static boolean isValidURI(Bytes bytes, Range uri) {
+	public static boolean isValidURI(Bytes bytes, BufRange uri) {
 		int start = uri.start;
 		int len = uri.length;
 		int last = uri.last();

@@ -21,19 +21,19 @@ package org.rapidoid.http;
  */
 
 import org.rapidoid.data.KeyValueRanges;
-import org.rapidoid.data.Range;
-import org.rapidoid.data.Ranges;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.BufRanges;
 import org.rapidoid.wrap.BoolWrap;
 
 public class ReqData {
 
-	final Range rUri = new Range();
-	final Range rVerb = new Range();
-	final Range rPath = new Range();
-	final Range rQuery = new Range();
-	final Range rProtocol = new Range();
+	final BufRange rUri = new BufRange();
+	final BufRange rVerb = new BufRange();
+	final BufRange rPath = new BufRange();
+	final BufRange rQuery = new BufRange();
+	final BufRange rProtocol = new BufRange();
 
-	final Ranges headers = new Ranges(50);
+	final BufRanges headers = new BufRanges(50);
 
 	final KeyValueRanges params = new KeyValueRanges(50);
 	final KeyValueRanges headersKV = new KeyValueRanges(50);
@@ -43,7 +43,7 @@ public class ReqData {
 	final KeyValueRanges posted = new KeyValueRanges(50);
 	final KeyValueRanges files = new KeyValueRanges(50);
 
-	final Range rBody = new Range();
+	final BufRange rBody = new BufRange();
 
 	final BoolWrap isGet = new BoolWrap();
 	final BoolWrap isKeepAlive = new BoolWrap();

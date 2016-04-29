@@ -10,8 +10,8 @@ import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Err;
 import org.rapidoid.data.JSON;
 import org.rapidoid.data.KeyValueRanges;
-import org.rapidoid.data.Range;
-import org.rapidoid.data.Ranges;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.BufRanges;
 import org.rapidoid.http.HttpContentType;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
@@ -92,8 +92,8 @@ public class HttpParser extends RapidoidThing implements Constants {
 
 	private static final byte[] GET = "GET".getBytes();
 
-	public void parse(Buf buf, BoolWrap isGet, BoolWrap isKeepAlive, Range body, Range verb, Range uri, Range path,
-	                  Range query, Range protocol, Ranges headers, RapidoidHelper helper) {
+	public void parse(Buf buf, BoolWrap isGet, BoolWrap isKeepAlive, BufRange body, BufRange verb, BufRange uri, BufRange path,
+	                  BufRange query, BufRange protocol, BufRanges headers, RapidoidHelper helper) {
 
 		Bytes bytes = buf.bytes();
 
@@ -123,22 +123,22 @@ public class HttpParser extends RapidoidThing implements Constants {
 		}
 	}
 
-	private boolean isConnectionHeader(Bytes bytes, Ranges headers, RapidoidHelper helper, int possibleConnectionHeaderPos) {
-		Range maybeConnHdr = headers.get(possibleConnectionHeaderPos);
+	private boolean isConnectionHeader(Bytes bytes, BufRanges headers, RapidoidHelper helper, int possibleConnectionHeaderPos) {
+		BufRange maybeConnHdr = headers.get(possibleConnectionHeaderPos);
 
 		if (BytesUtil.startsWith(bytes, maybeConnHdr, CONNECTION, true)) {
 			return true;
 		}
 
-		Range connHdr = headers.getByPrefix(bytes, CONNECTION, false);
+		BufRange connHdr = headers.getByPrefix(bytes, CONNECTION, false);
 		return connHdr == null || getKeepAliveValue(bytes, connHdr, helper);
 	}
 
-	private boolean getKeepAliveValue(Bytes bytes, Range connHdr, RapidoidHelper helper) {
+	private boolean getKeepAliveValue(Bytes bytes, BufRange connHdr, RapidoidHelper helper) {
 		assert bytes != null;
 		assert connHdr != null;
 
-		Range connVal = helper.ranges5.ranges[3];
+		BufRange connVal = helper.ranges5.ranges[3];
 
 		connVal.setInterval(connHdr.start + CONNECTION.length, connHdr.limit());
 		BytesUtil.trim(bytes, connVal);
@@ -146,11 +146,11 @@ public class HttpParser extends RapidoidThing implements Constants {
 		return BytesUtil.matches(bytes, connVal, KEEP_ALIVE, false);
 	}
 
-	private void parseBody(Buf buf, Range body, Ranges headers, RapidoidHelper helper) {
-		Range clen = headers.getByPrefix(buf.bytes(), CONTENT_LENGTH, false);
+	private void parseBody(Buf buf, BufRange body, BufRanges headers, RapidoidHelper helper) {
+		BufRange clen = headers.getByPrefix(buf.bytes(), CONTENT_LENGTH, false);
 
 		if (clen != null) {
-			Range clenValue = helper.ranges5.ranges[helper.ranges5.ranges.length - 1];
+			BufRange clenValue = helper.ranges5.ranges[helper.ranges5.ranges.length - 1];
 			clenValue.setInterval(clen.start + CONTENT_LENGTH.length, clen.limit());
 			BytesUtil.trim(buf.bytes(), clenValue);
 			long len = buf.getN(clenValue);
@@ -162,11 +162,11 @@ public class HttpParser extends RapidoidThing implements Constants {
 		}
 	}
 
-	public void parseParams(Buf buf, KeyValueRanges params, Range range) {
+	public void parseParams(Buf buf, KeyValueRanges params, BufRange range) {
 		parseURLEncodedKV(buf, params, range);
 	}
 
-	private void parseURLEncodedKV(Buf buf, KeyValueRanges params, Range body) {
+	private void parseURLEncodedKV(Buf buf, KeyValueRanges params, BufRange body) {
 		int pos = buf.position();
 		int limit = buf.limit();
 
@@ -192,7 +192,7 @@ public class HttpParser extends RapidoidThing implements Constants {
 		buf.position(from);
 		buf.limit(to);
 
-		Ranges headers = helper.ranges2.reset();
+		BufRanges headers = helper.ranges2.reset();
 		buf.scanLnLn(headers);
 
 		parseHeadersIntoKV(buf, headers, headersKV, null, helper);
@@ -205,16 +205,16 @@ public class HttpParser extends RapidoidThing implements Constants {
 		return bodyPos;
 	}
 
-	public void parseHeadersIntoKV(Buf buf, Ranges headers, KeyValueRanges headersKV, KeyValueRanges cookies,
+	public void parseHeadersIntoKV(Buf buf, BufRanges headers, KeyValueRanges headersKV, KeyValueRanges cookies,
 	                               RapidoidHelper helper) {
 
-		Range cookie = helper.ranges5.ranges[0];
+		BufRange cookie = helper.ranges5.ranges[0];
 
 		for (int i = 0; i < headers.count; i++) {
-			Range hdr = headers.ranges[i];
+			BufRange hdr = headers.ranges[i];
 			int ind = headersKV.add();
-			Range key = headersKV.keys[ind];
-			Range val = headersKV.values[ind];
+			BufRange key = headersKV.keys[ind];
+			BufRange val = headersKV.values[ind];
 
 			assert !hdr.isEmpty();
 
@@ -236,14 +236,14 @@ public class HttpParser extends RapidoidThing implements Constants {
 	/**
 	 * @return <code>false</code> if JSON data was posted, so it wasn't completely parsed.
 	 */
-	public boolean parseBody(Buf src, KeyValueRanges headers, Range body, KeyValueRanges data,
+	public boolean parseBody(Buf src, KeyValueRanges headers, BufRange body, KeyValueRanges data,
 	                         Map<String, List<Upload>> files, RapidoidHelper helper) {
 
 		if (body.isEmpty()) {
 			return true;
 		}
 
-		Range multipartBoundary = helper.ranges5.ranges[0];
+		BufRange multipartBoundary = helper.ranges5.ranges[0];
 
 		HttpContentType contentType = getContentType(src, headers, multipartBoundary);
 
@@ -286,14 +286,14 @@ public class HttpParser extends RapidoidThing implements Constants {
 		}
 	}
 
-	private void detectMultipartBoundary(Buf src, Range body, Range multipartBoundary) {
+	private void detectMultipartBoundary(Buf src, BufRange body, BufRange multipartBoundary) {
 		BytesUtil.parseLine(src.bytes(), multipartBoundary, body.start, body.limit());
 		multipartBoundary.strip(2, 0);
 	}
 
 	/* http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4.2 */
-	private void parseMultiParts(Buf src, Range body, KeyValueRanges data, Map<String, List<Upload>> files,
-	                             Range multipartBoundary, RapidoidHelper helper) {
+	private void parseMultiParts(Buf src, BufRange body, KeyValueRanges data, Map<String, List<Upload>> files,
+	                             BufRange multipartBoundary, RapidoidHelper helper) {
 
 		int start = body.start;
 		int limit = body.limit();
@@ -320,24 +320,24 @@ public class HttpParser extends RapidoidThing implements Constants {
 		}
 	}
 
-	private void parseMultiPart(Buf src, Range body, KeyValueRanges data, Map<String, List<Upload>> files,
-	                            Range multipartBoundary, RapidoidHelper helper, int from, int to) {
+	private void parseMultiPart(Buf src, BufRange body, KeyValueRanges data, Map<String, List<Upload>> files,
+	                            BufRange multipartBoundary, RapidoidHelper helper, int from, int to) {
 
 		KeyValueRanges headers = helper.pairs.reset();
-		Range partBody = helper.ranges4.ranges[0];
-		Range contType = helper.ranges4.ranges[1];
-		Range contEnc = helper.ranges4.ranges[2];
-		Range dispo1 = helper.ranges4.ranges[3];
-		Range dispo2 = helper.ranges4.ranges[4];
-		Range name = helper.ranges4.ranges[5];
-		Range filename = helper.ranges4.ranges[6];
-		Range charset = helper.ranges4.ranges[7];
+		BufRange partBody = helper.ranges4.ranges[0];
+		BufRange contType = helper.ranges4.ranges[1];
+		BufRange contEnc = helper.ranges4.ranges[2];
+		BufRange dispo1 = helper.ranges4.ranges[3];
+		BufRange dispo2 = helper.ranges4.ranges[4];
+		BufRange name = helper.ranges4.ranges[5];
+		BufRange filename = helper.ranges4.ranges[6];
+		BufRange charset = helper.ranges4.ranges[7];
 
 		int bodyPos = parseHeaders(src, from, to, headers, helper);
 		partBody.setInterval(bodyPos, to);
 
 		// form-data; name="a" | form-data; name="f2"; filename="test2.txt"
-		Range disposition = headers.get(src, CONTENT_DISPOSITION, false);
+		BufRange disposition = headers.get(src, CONTENT_DISPOSITION, false);
 
 		if (BytesUtil.startsWith(src.bytes(), disposition, FORM_DATA, false)) {
 			disposition.strip(FORM_DATA.length, 0);
@@ -358,7 +358,7 @@ public class HttpParser extends RapidoidThing implements Constants {
 		// | multipart/mixed; boundary=BbC04y | application/pdf |
 		// application/vnd.oasis.opendocument.text | image/gif |
 		// video/mp4; codecs="avc1.640028 | DEFAULT=text/plain
-		Range contentType = headers.get(src, CONTENT_TYPE, false);
+		BufRange contentType = headers.get(src, CONTENT_TYPE, false);
 
 		charset.reset();
 		contType.reset();
@@ -380,7 +380,7 @@ public class HttpParser extends RapidoidThing implements Constants {
 		}
 
 		// (OPTIONAL) e.g. 7bit | 8bit | binary | DEFAULT=7bit
-		Range encoding = headers.get(src, CONTENT_TRANSFER_ENCODING, false);
+		BufRange encoding = headers.get(src, CONTENT_TRANSFER_ENCODING, false);
 
 		if (encoding != null) {
 			boolean validEncoding = BytesUtil.matches(src.bytes(), encoding, _7BIT, false)
@@ -401,7 +401,7 @@ public class HttpParser extends RapidoidThing implements Constants {
 		}
 	}
 
-	private boolean parseDisposition(Buf src, Range dispoA, Range dispoB, Range name, Range filename) {
+	private boolean parseDisposition(Buf src, BufRange dispoA, BufRange dispoB, BufRange name, BufRange filename) {
 		if (BytesUtil.startsWith(src.bytes(), dispoA, NAME_EQ, false)) {
 
 			name.assign(dispoA);
@@ -424,8 +424,8 @@ public class HttpParser extends RapidoidThing implements Constants {
 		return false;
 	}
 
-	private HttpContentType getContentType(Buf buf, KeyValueRanges headers, Range multipartBoundary) {
-		Range contType = headers.get(buf, CONTENT_TYPE, false);
+	private HttpContentType getContentType(Buf buf, KeyValueRanges headers, BufRange multipartBoundary) {
+		BufRange contType = headers.get(buf, CONTENT_TYPE, false);
 
 		if (contType != null) {
 
@@ -463,7 +463,7 @@ public class HttpParser extends RapidoidThing implements Constants {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void parsePosted(Buf input, KeyValueRanges headersKV, Range rBody, KeyValueRanges posted,
+	public void parsePosted(Buf input, KeyValueRanges headersKV, BufRange rBody, KeyValueRanges posted,
 	                        Map<String, List<Upload>> files, RapidoidHelper helper, Map<String, Object> dest) {
 
 		boolean completed = parseBody(input, headersKV, rBody, posted, files, helper);

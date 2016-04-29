@@ -3,8 +3,8 @@ package org.rapidoid.buffer;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.Bytes;
-import org.rapidoid.data.Range;
-import org.rapidoid.data.Ranges;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.BufRanges;
 import org.rapidoid.wrap.IntWrap;
 
 import java.io.IOException;
@@ -77,9 +77,9 @@ public interface Buf {
 
 	void clear();
 
-	String get(Range range);
+	String get(BufRange range);
 
-	long getN(Range range);
+	long getN(BufRange range);
 
 	boolean isSingle();
 
@@ -89,7 +89,7 @@ public interface Buf {
 
 	int putNumAsText(int position, long num, boolean forward);
 
-	void get(Range range, byte[] dest, int offset);
+	void get(BufRange range, byte[] dest, int offset);
 
 	byte next();
 
@@ -109,13 +109,13 @@ public interface Buf {
 
 	void limit(int limit);
 
-	void upto(byte value, Range range);
+	void upto(byte value, BufRange range);
 
 	ByteBuffer exposed();
 
-	void scanUntil(byte value, Range range);
+	void scanUntil(byte value, BufRange range);
 
-	void scanWhile(byte value, Range range);
+	void scanWhile(byte value, BufRange range);
 
 	void skip(int count);
 
@@ -133,11 +133,11 @@ public interface Buf {
 
 	Bytes bytes();
 
-	void scanLn(Range range);
+	void scanLn(BufRange range);
 
-	void scanLnLn(Ranges ranges);
+	void scanLnLn(BufRanges ranges);
 
-	void scanN(int count, Range range);
+	void scanN(int count, BufRange range);
 
 	String readLn();
 
@@ -145,11 +145,11 @@ public interface Buf {
 
 	byte[] readNbytes(int count);
 
-	void scanTo(byte sep, Range range, boolean failOnLimit);
+	void scanTo(byte sep, BufRange range, boolean failOnLimit);
 
-	int scanTo(byte sep1, byte sep2, Range range, boolean failOnLimit);
+	int scanTo(byte sep1, byte sep2, BufRange range, boolean failOnLimit);
 
-	void scanLnLn(Ranges ranges, IntWrap result, byte end1, byte end2);
+	void scanLnLn(BufRanges ranges, IntWrap result, byte end1, byte end2);
 
 	void setReadOnly(boolean readOnly);
 

@@ -11,7 +11,7 @@ import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Str;
-import org.rapidoid.data.Range;
+import org.rapidoid.data.BufRange;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
@@ -285,7 +285,7 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		genericHandlers.remove(handler);
 	}
 
-	public HandlerMatch findHandler(Buf buf, boolean isGet, Range verb, Range path) {
+	public HandlerMatch findHandler(Buf buf, boolean isGet, BufRange verb, BufRange path) {
 		Bytes bytes = buf.bytes();
 
 		if (isGet) {

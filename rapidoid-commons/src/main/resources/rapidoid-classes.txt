@@ -120,13 +120,13 @@ org.rapidoid.ctx.UserInfo
 org.rapidoid.ctx.With
 org.rapidoid.ctx.WithContext
 org.rapidoid.data.BinaryMultiData
+org.rapidoid.data.BufRange
+org.rapidoid.data.BufRanges
 org.rapidoid.data.Data
 org.rapidoid.data.JSON
 org.rapidoid.data.KeyValueRanges
 org.rapidoid.data.MultiData
 org.rapidoid.data.Parse
-org.rapidoid.data.Range
-org.rapidoid.data.Ranges
 org.rapidoid.data.XML
 org.rapidoid.data.YAML
 org.rapidoid.entity.EntitiesUtil

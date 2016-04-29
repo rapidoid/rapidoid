@@ -3,7 +3,7 @@ package org.rapidoid.buffer;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.data.KeyValueRanges;
-import org.rapidoid.data.Range;
+import org.rapidoid.data.BufRange;
 import org.rapidoid.test.TestCommons;
 
 import java.nio.ByteBuffer;
@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 @Since("2.0.0")
 public class BufferTestCommons extends TestCommons {
 
-	protected void eq(String whole, Range range, String expected) {
+	protected void eq(String whole, BufRange range, String expected) {
 		eq(range.get(whole), expected);
 	}
 
@@ -40,19 +40,19 @@ public class BufferTestCommons extends TestCommons {
 		eq(keysAndValues.length % 2, 0);
 		eq(ranges.count, keysAndValues.length / 2);
 		for (int i = 0; i < ranges.count; i++) {
-			Range key = ranges.keys[i];
-			Range value = ranges.values[i];
+			BufRange key = ranges.keys[i];
+			BufRange value = ranges.values[i];
 			eq(whole, key, keysAndValues[i * 2]);
 			eq(whole, value, keysAndValues[i * 2 + 1]);
 		}
 	}
 
-	protected void eq(Range range, int start, int length) {
+	protected void eq(BufRange range, int start, int length) {
 		eq(range.start, start);
 		eq(range.length, length);
 	}
 
-	protected void isNone(Range range) {
+	protected void isNone(BufRange range) {
 		eq(range.start, -1);
 		eq(range.length, 0);
 	}
@@ -78,7 +78,7 @@ public class BufferTestCommons extends TestCommons {
 
 		for (int len = 2; len < 10; len++) {
 			for (int p = 0; p <= buf.size() - len; p++) {
-				String sub = buf.get(new Range(p, len));
+				String sub = buf.get(new BufRange(p, len));
 				eq(sub, expected.substring(p, p + len));
 			}
 		}

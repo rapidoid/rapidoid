@@ -24,8 +24,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.buffer.BufGroup;
-import org.rapidoid.data.Range;
-import org.rapidoid.data.Ranges;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.BufRanges;
 import org.rapidoid.http.impl.HttpParser;
 import org.rapidoid.net.impl.RapidoidHelper;
 import org.rapidoid.util.Msc;
@@ -42,7 +42,7 @@ public class HttpParserPerfTest {
 	static String REQ3 = "DELETE /ff?ba=fg F|AAAAA: aaa=2|AAAAA: aaa=2|AAAAA: aaa=2|Content-Length:0|AAAAA: aaa=2|AAAAA: aaa=2|Connection: keep-alive|AAAAA: aaa=2||";
 	static String REQ4 = "PUT /books MY-PROTOCOL|Conf:|Set-Cookie: aaa=2|Set-Cookie: aaa=2|Content-Length:10|Set-Cookie: aaa=2|Set-Cookie: aaa=2|Set-Cookie: aaa=2||abcdefghij";
 
-	protected static final Ranges helpers = new Ranges(100);
+	protected static final BufRanges helpers = new BufRanges(100);
 
 	public static void main(String[] args) {
 
@@ -50,18 +50,18 @@ public class HttpParserPerfTest {
 		final Buf[] reqs = {r(REQ1), r(REQ2), r(REQ3), r(REQ4)};
 		final RapidoidHelper helper = new RapidoidHelper(null);
 
-		Range[] ranges = helper.ranges1.ranges;
-		final Ranges headers = helper.ranges2;
+		BufRange[] ranges = helper.ranges1.ranges;
+		final BufRanges headers = helper.ranges2;
 
 		final BoolWrap isGet = helper.booleans[0];
 		final BoolWrap isKeepAlive = helper.booleans[1];
 
-		final Range verb = ranges[ranges.length - 1];
-		final Range uri = ranges[ranges.length - 2];
-		final Range path = ranges[ranges.length - 3];
-		final Range query = ranges[ranges.length - 4];
-		final Range protocol = ranges[ranges.length - 5];
-		final Range body = ranges[ranges.length - 6];
+		final BufRange verb = ranges[ranges.length - 1];
+		final BufRange uri = ranges[ranges.length - 2];
+		final BufRange path = ranges[ranges.length - 3];
+		final BufRange query = ranges[ranges.length - 4];
+		final BufRange protocol = ranges[ranges.length - 5];
+		final BufRange body = ranges[ranges.length - 6];
 
 		for (int i = 0; i < 10; i++) {
 			Msc.benchmark("parse", 3000000, new Runnable() {

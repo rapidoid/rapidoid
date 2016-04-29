@@ -29,7 +29,7 @@ public interface Data {
 
 	String get();
 
-	Range range();
+	BufRange range();
 
 	void reset();
 

@@ -164,11 +164,11 @@ public abstract class DefaultExchange<T> extends RapidoidThing implements Protoc
 		return conn.connId();
 	}
 
-	protected Data data(Range range) {
+	protected Data data(BufRange range) {
 		return new DefaultData(this, range);
 	}
 
-	protected Data decodedData(Range range) {
+	protected Data decodedData(BufRange range) {
 		return new DecodedData(this, range);
 	}
 

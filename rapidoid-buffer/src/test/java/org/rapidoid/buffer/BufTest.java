@@ -26,8 +26,8 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Rnd;
 import org.rapidoid.commons.Str;
-import org.rapidoid.data.Range;
-import org.rapidoid.data.Ranges;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.BufRanges;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
 
@@ -162,12 +162,12 @@ public class BufTest extends BufferTestCommons implements Constants {
 		buf.append("5a1234567890fg-3450fg0x45g-3");
 		buf.setReadOnly(true);
 
-		eq(buf.getN(new Range(0, 1)), 5);
-		eq(buf.getN(new Range(2, 10)), 1234567890);
-		eq(buf.getN(new Range(14, 5)), -3450);
-		eq(buf.getN(new Range(21, 1)), 0);
-		eq(buf.getN(new Range(23, 2)), 45);
-		eq(buf.getN(new Range(26, 2)), -3);
+		eq(buf.getN(new BufRange(0, 1)), 5);
+		eq(buf.getN(new BufRange(2, 10)), 1234567890);
+		eq(buf.getN(new BufRange(14, 5)), -3450);
+		eq(buf.getN(new BufRange(21, 1)), 0);
+		eq(buf.getN(new BufRange(23, 2)), 45);
+		eq(buf.getN(new BufRange(26, 2)), -3);
 	}
 
 	@Test
@@ -209,7 +209,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 		buf.position(0);
 		buf.limit(buf.size());
 
-		Range range = new Range();
+		BufRange range = new BufRange();
 
 		buf.scanUntil(SPACE, range);
 		eq(buf.get(range), "first");
@@ -246,7 +246,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 		buf.position(0);
 		buf.limit(buf.size());
 
-		Range range = new Range();
+		BufRange range = new BufRange();
 
 		buf.scanUntil(COL, range);
 		eq(buf.get(range), "abc");
@@ -267,7 +267,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 	@Test
 	public void testScanUntilAndMatchPrefix() {
 		final int NO_PREFIX = 0;
-		Range range = new Range();
+		BufRange range = new BufRange();
 
 		eq(BytesUtil.scanUntilAndMatchPrefix(BytesUtil.from("\n"), range, LF, 0, 0, NO_PREFIX), 1);
 		eq(range, 0, 0);
@@ -318,9 +318,9 @@ public class BufTest extends BufferTestCommons implements Constants {
 			buf.position(0);
 			buf.limit(buf.size());
 
-			Range verb = new Range();
-			Range uri = new Range();
-			Range protocol = new Range();
+			BufRange verb = new BufRange();
+			BufRange uri = new BufRange();
+			BufRange protocol = new BufRange();
 
 			buf.scanUntil(SPACE, verb);
 			eq(s, verb, "GET");
@@ -331,7 +331,7 @@ public class BufTest extends BufferTestCommons implements Constants {
 			buf.scanLn(protocol);
 			eq(s, protocol, "H");
 
-			Ranges headers = new Ranges(10);
+			BufRanges headers = new BufRanges(10);
 			buf.scanLnLn(headers.reset());
 
 			eq(headers.count, 2);

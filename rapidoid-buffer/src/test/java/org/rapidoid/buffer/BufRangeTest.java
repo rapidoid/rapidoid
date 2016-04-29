@@ -23,15 +23,15 @@ package org.rapidoid.buffer;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.data.Range;
+import org.rapidoid.data.BufRange;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class RangeTest extends BufferTestCommons {
+public class BufRangeTest extends BufferTestCommons {
 
 	@Test
 	public void shouldBackupAndRestore() {
-		Range range = new Range(10, 3);
+		BufRange range = new BufRange(10, 3);
 		eq(range, 10, 3);
 
 		long backup = range.backup();
@@ -45,7 +45,7 @@ public class RangeTest extends BufferTestCommons {
 
 	@Test
 	public void statisticalTest() {
-		Range rng = new Range();
+		BufRange rng = new BufRange();
 		isTrue(rng.isEmpty());
 
 		int[] borders = {Integer.MIN_VALUE, -1111, -1, 0, 1, 1111, Integer.MAX_VALUE};
@@ -61,7 +61,7 @@ public class RangeTest extends BufferTestCommons {
 		}
 	}
 
-	private void check(Range rng, int a, int b) {
+	private void check(BufRange rng, int a, int b) {
 		rng.set(a, b);
 
 		eq(rng, a, b);

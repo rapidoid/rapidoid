@@ -22,8 +22,8 @@ package org.rapidoid.setup;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.data.Range;
-import org.rapidoid.data.Ranges;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.BufRanges;
 import org.rapidoid.http.processor.AbstractHttpProcessor;
 import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.net.abstracts.Channel;
@@ -37,8 +37,8 @@ public class AppRestartProcessor extends AbstractHttpProcessor {
 	}
 
 	@Override
-	public void onRequest(Channel channel, boolean isGet, boolean isKeepAlive, Range body,
-	                      Range verb, Range uri, Range path, Range query, Range protocol, Ranges headers) {
+	public void onRequest(Channel channel, boolean isGet, boolean isKeepAlive, BufRange body,
+	                      BufRange verb, BufRange uri, BufRange path, BufRange query, BufRange protocol, BufRanges headers) {
 
 		Setup.restartIfDirty();
 

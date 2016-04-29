@@ -4,8 +4,8 @@ import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
-import org.rapidoid.data.Range;
-import org.rapidoid.data.Ranges;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.BufRanges;
 import org.rapidoid.http.impl.HttpParser;
 import org.rapidoid.http.processor.HttpProcessor;
 import org.rapidoid.net.Protocol;
@@ -54,18 +54,18 @@ public class FastHttpProtocol extends RapidoidThing implements Protocol {
 		Buf buf = channel.input();
 		RapidoidHelper helper = channel.helper();
 
-		Range[] ranges = helper.ranges1.ranges;
-		Ranges headers = helper.ranges2;
+		BufRange[] ranges = helper.ranges1.ranges;
+		BufRanges headers = helper.ranges2;
 
 		BoolWrap isGet = helper.booleans[0];
 		BoolWrap isKeepAlive = helper.booleans[1];
 
-		Range verb = ranges[ranges.length - 1];
-		Range uri = ranges[ranges.length - 2];
-		Range path = ranges[ranges.length - 3];
-		Range query = ranges[ranges.length - 4];
-		Range protocol = ranges[ranges.length - 5];
-		Range body = ranges[ranges.length - 6];
+		BufRange verb = ranges[ranges.length - 1];
+		BufRange uri = ranges[ranges.length - 2];
+		BufRange path = ranges[ranges.length - 3];
+		BufRange query = ranges[ranges.length - 4];
+		BufRange protocol = ranges[ranges.length - 5];
+		BufRange body = ranges[ranges.length - 6];
 
 		HTTP_PARSER.parse(buf, isGet, isKeepAlive, body, verb, uri, path, query, protocol, headers, helper);
 

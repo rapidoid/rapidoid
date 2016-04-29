@@ -3,7 +3,7 @@ package org.rapidoid.bufstruct;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
-import org.rapidoid.data.Range;
+import org.rapidoid.data.BufRange;
 
 /*
  * #%L
@@ -33,7 +33,7 @@ public interface BufMap<T> {
 
 	void setDefaultValue(T value);
 
-	T get(Buf buf, Range key);
+	T get(Buf buf, BufRange key);
 
 	boolean remove(String key);
 

@@ -30,23 +30,23 @@ import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
 @Since("2.0.0")
-public class Range extends RapidoidThing {
+public class BufRange extends RapidoidThing {
 
-	public static final Range NONE = new Range();
+	public static final BufRange NONE = new BufRange();
 
 	public int start = -1;
 
 	public int length = 0;
 
-	public Range() {
+	public BufRange() {
 	}
 
-	public Range(int start, int length) {
+	public BufRange(int start, int length) {
 		this.start = start;
 		this.length = length;
 	}
 
-	public Range reset() {
+	public BufRange reset() {
 		start = -1;
 		length = 0;
 		return this;
@@ -127,10 +127,10 @@ public class Range extends RapidoidThing {
 		return st == start;
 	}
 
-	public static Range fromTo(int from, int to) {
+	public static BufRange fromTo(int from, int to) {
 		U.must(from <= to, "Invalid range!");
 
-		return new Range(from, to - from);
+		return new BufRange(from, to - from);
 	}
 
 	public String str(Buf buf) {
@@ -141,7 +141,7 @@ public class Range extends RapidoidThing {
 		return BytesUtil.get(bytes, this);
 	}
 
-	public void assign(Range range) {
+	public void assign(BufRange range) {
 		set(range.start, range.length);
 	}
 

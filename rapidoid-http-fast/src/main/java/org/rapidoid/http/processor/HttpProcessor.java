@@ -22,8 +22,8 @@ package org.rapidoid.http.processor;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.data.Range;
-import org.rapidoid.data.Ranges;
+import org.rapidoid.data.BufRange;
+import org.rapidoid.data.BufRanges;
 import org.rapidoid.net.Server;
 import org.rapidoid.net.abstracts.Channel;
 import org.rapidoid.util.Constants;
@@ -32,8 +32,8 @@ import org.rapidoid.util.Constants;
 @Since("5.1.0")
 public interface HttpProcessor extends Constants {
 
-	void onRequest(Channel channel, boolean isGet, boolean isKeepAlive, Range body,
-	               Range verb, Range uri, Range path, Range query, Range protocol, Ranges headers);
+	void onRequest(Channel channel, boolean isGet, boolean isKeepAlive, BufRange body,
+	               BufRange verb, BufRange uri, BufRange path, BufRange query, BufRange protocol, BufRanges headers);
 
 	Server listen(String address, int port);
 
