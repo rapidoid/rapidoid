@@ -179,7 +179,7 @@ public class Goodies extends RapidoidThing {
 
 		setup.get("/_/classpath").mvc(Goodies.classpath());
 		setup.get("/_/deploy").mvc(Goodies.deploy());
-		setup.post("/_/upload-jar").json(Goodies.jarUpload());
+		setup.post("/_/jar").json(Goodies.jarUpload());
 		setup.page("/_/terminate").mvc(Goodies.terminate());
 
 		setup.post("/_login").roles().json(Goodies.login());

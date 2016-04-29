@@ -4,6 +4,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.config.Conf;
 import org.rapidoid.gui.GUI;
+import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 
@@ -42,7 +43,9 @@ public class OverviewHandler extends GUI implements Callable<Object> {
 		info.add(h3(center("Application info:")));
 
 		Map<String, Object> appInfo = U.map();
-		appInfo.put("Application path (packages)", On.path());
+
+		appInfo.put("Application JAR", ClasspathUtil.appJar());
+		appInfo.put("Application path (root packages)", On.path());
 		appInfo.put("Command line arguments", Conf.ROOT.getArgs());
 
 		info.add(grid(appInfo));

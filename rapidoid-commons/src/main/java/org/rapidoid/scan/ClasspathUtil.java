@@ -47,6 +47,8 @@ public class ClasspathUtil extends RapidoidThing {
 
 	private static final Set<String> CLASSPATH = new TreeSet<String>();
 
+	private static volatile String appJar;
+
 	private static volatile String rootPackage = null;
 
 	private static volatile ClassLoader defaultClassLoader = ClasspathUtil.class.getClassLoader();
@@ -56,6 +58,7 @@ public class ClasspathUtil extends RapidoidThing {
 
 	public static synchronized void reset() {
 		CLASSPATH.clear();
+		appJar = null;
 	}
 
 	public static synchronized List<File> files(String packageName, Predicate<File> filter) {
@@ -365,6 +368,12 @@ public class ClasspathUtil extends RapidoidThing {
 				String path = Str.trimr(url.getPath(), '/');
 				CLASSPATH.add(new File(path).getAbsolutePath());
 			}
+
+			for (String cp : CLASSPATH) {
+				if (cp.endsWith("/app.jar") || cp.endsWith("\\app.jar")) {
+					appJar = cp;
+				}
+			}
 		}
 
 		return CLASSPATH;
@@ -442,4 +451,16 @@ public class ClasspathUtil extends RapidoidThing {
 		return Class.forName(clsName, true, child);
 	}
 
+	public static boolean hasAppJar() {
+		getClasspath(); // init
+		return appJar != null;
+	}
+
+	public static String appJar() {
+		return appJar;
+	}
+
+	public static void appJar(String appJar) {
+		ClasspathUtil.appJar = appJar;
+	}
 }

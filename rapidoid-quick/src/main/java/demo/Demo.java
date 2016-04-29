@@ -29,6 +29,7 @@ import org.rapidoid.gui.GUI;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 import org.rapidoid.io.IO;
+import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.setup.On;
 import org.rapidoid.u.U;
 import org.rapidoid.web.Rapidoid;
@@ -38,6 +39,7 @@ import org.rapidoid.web.Rapidoid;
 public class Demo extends RapidoidThing {
 
 	public static void main(String[] args) {
+		ClasspathUtil.appJar("/tmp/app.jar");
 		Rapidoid.run(args);
 
 		On.get("/").plain("Hello, world!");

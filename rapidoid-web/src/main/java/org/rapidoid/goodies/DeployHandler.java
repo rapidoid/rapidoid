@@ -4,6 +4,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.reqinfo.ReqInfo;
+import org.rapidoid.http.HttpVerb;
+import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 
 import java.util.List;
@@ -37,10 +39,26 @@ public class DeployHandler extends GUI implements Callable<Object> {
 	public Object call() throws Exception {
 		List<Object> info = U.list();
 
-		info.add(div(h3("Upload an application JAR to re-deploy:"),
-				hardcoded("<form action=\"/_/upload-jar\" class=\"dropzone\" id=\"jar-upload\"></form>")));
+		if (ClasspathUtil.hasAppJar()) {
 
-		info.add(grid(ReqInfo.get().cookies()));
+			info.add(h2("Upload an application JAR to re-deploy:"));
+			info.add(hardcoded("<form action=\"/_/jar\" class=\"dropzone\" id=\"jar-upload\"></form>"));
+
+			String token = U.or(ReqInfo.get().cookies().get("COOKIEPACK"), "");
+
+			info.add(h2("HTTP API for Deployment:"));
+			info.add(h4(verb(HttpVerb.POST), b(" http://your-app-domain/_/jar?_token=<token>")));
+			info.add(h4(b("POST DATA: file=<your-jar>")));
+
+			info.add(h2("Building and deploying with Maven:"));
+			String cmd = "mvn clean package && cp target/*.jar target/_app_.jar && curl -F 'file=@target/_app_.jar' 'http://localhost:8888/_/jar?_token=" + token + "'";
+
+			info.add(h6(copy(b(cmd))));
+
+		} else {
+			info.add(h3(WARN, " No ", b("app.jar"), " file was configured on the classpath, so application deployment is disabled!"));
+			info.add(h4("Application deployment works by uploading a JAR which overwrites the file 'app.jar', and restarting the application."));
+		}
 
 		return info;
 	}

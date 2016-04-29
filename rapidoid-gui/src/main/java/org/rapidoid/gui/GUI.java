@@ -91,6 +91,8 @@ public abstract class GUI extends HTML {
 
 	public static final Btn EDIT = cmd("^Edit");
 
+	public static final Tag WARN = FA.WARNING.style("color: #955; padding-bottom: 23px;");
+
 	private static final AtomicLong ID_GEN = new AtomicLong();
 
 	public static TableTag table_(Object... contents) {

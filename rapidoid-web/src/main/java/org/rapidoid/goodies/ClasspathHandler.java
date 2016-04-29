@@ -3,7 +3,6 @@ package org.rapidoid.goodies;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
-import org.rapidoid.gui.Grid;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 
@@ -38,9 +37,21 @@ public class ClasspathHandler extends GUI implements Callable<Object> {
 	public Object call() throws Exception {
 		List<Object> info = U.list();
 
-		Grid grid = grid(ClasspathUtil.getClasspathJars()).columns("trim").headers("Classpath entries");
+		info.add(h3("Application JAR:"));
 
-		info.add(div(h3("Application classpath:"), grid));
+		if (ClasspathUtil.hasAppJar()) {
+			info.add(h4(ClasspathUtil.appJar()));
+		} else {
+			info.add(h4(WARN, " No ", b("app.jar"), " file was configured on the classpath!"));
+		}
+
+		info.add(h3("Classpath folders:"));
+
+		info.add(grid(ClasspathUtil.getClasspathFolders()).columns("trim").headers("Classpath entries (folders)"));
+
+		info.add(h3("Classpath JARs:"));
+
+		info.add(grid(ClasspathUtil.getClasspathJars()).columns("trim").headers("Classpath entries (JARs)"));
 
 		return info;
 	}

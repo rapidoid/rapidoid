@@ -5,8 +5,11 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqHandler;
+import org.rapidoid.io.IO;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
+import org.rapidoid.scan.ClasspathUtil;
+import org.rapidoid.util.AnsiColor;
 
 /*
  * #%L
@@ -34,10 +37,22 @@ public class JarUploadHandler extends GUI implements ReqHandler {
 
 	@Override
 	public Object execute(Req req) throws Exception {
-		Upload jar = req.file("file");
-		//IO.save("....../app.jar", jar.content());
-		Log.info("Saved new JAR", "size", jar.content().length);
-		return "ok";
+		String appJar = ClasspathUtil.appJar();
+
+		if (appJar != null) {
+			Upload jar = req.file("file");
+			IO.save(appJar, jar.content());
+			Log.info("Saved new JAR", "size", jar.content().length);
+
+			if (req.header("User-Agent", "").toLowerCase().startsWith("curl/")) {
+				return req.response().plain(AnsiColor.green("Successfully uploaded the JAR.\n"));
+			} else {
+				return "OK";
+			}
+
+		} else {
+			return "Not possible!";
+		}
 	}
 
 }
