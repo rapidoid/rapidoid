@@ -525,6 +525,10 @@ public class U {
 		return Math.min(Math.max(min, value), max);
 	}
 
+	public static long bounds(long min, long value, long max) {
+		return Math.min(Math.max(min, value), max);
+	}
+
 	public static <T> T single(Iterable<T> coll) {
 		Iterator<T> it = coll.iterator();
 		must(it.hasNext(), "Expected exactly 1 item, but didn't find any!");

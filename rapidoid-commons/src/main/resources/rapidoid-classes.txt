@@ -394,6 +394,8 @@ org.rapidoid.jpa.DAO
 org.rapidoid.jpa.EM
 org.rapidoid.jpa.EMFUtil
 org.rapidoid.jpa.JPA
+org.rapidoid.jpa.JpaPage
+org.rapidoid.jpa.JpaPageImpl
 org.rapidoid.jpa.JPAPersisterProvider
 org.rapidoid.jpa.JPAUtil
 org.rapidoid.jpa.SharedContextAwareEntityManagerProxy

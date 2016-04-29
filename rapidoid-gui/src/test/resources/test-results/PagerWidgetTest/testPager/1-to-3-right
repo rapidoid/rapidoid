@@ -1,4 +1,4 @@
-<div class="pull-right">
+<span class="pull-right">
   <nav>
     <ul class="pagination">
       <li class="disabled">
@@ -30,4 +30,4 @@
       </li>
     </ul>
   </nav>
-</div>
+</span>

@@ -142,4 +142,7 @@ public class JPAUtil extends RapidoidThing {
 		return emf;
 	}
 
+	public static JpaPage page(int from, int to) {
+		return new JpaPageImpl(from, to);
+	}
 }

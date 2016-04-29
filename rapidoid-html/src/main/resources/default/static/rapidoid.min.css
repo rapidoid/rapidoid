@@ -1385,6 +1385,11 @@ div.rapidoid-card h6.rapidoid-card-caption {
 	margin: 0px;
 }
 
+/***** Pagination *****/
+ul.pagination {
+  margin: 0px !important;
+}
+
 /***** Card widget *****/
 .bg-squares {
 	background-image:

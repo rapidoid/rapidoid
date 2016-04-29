@@ -6,14 +6,12 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.English;
 import org.rapidoid.commons.Str;
-import org.rapidoid.gui.Btn;
-import org.rapidoid.gui.Form;
-import org.rapidoid.gui.GUI;
-import org.rapidoid.gui.Grid;
+import org.rapidoid.gui.*;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
 import org.rapidoid.jpa.JPA;
+import org.rapidoid.jpa.JpaPage;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
@@ -22,6 +20,7 @@ import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
 import javax.persistence.metamodel.EntityType;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -64,7 +63,7 @@ public class X extends RapidoidThing {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
 				Map<String, Object> namedArgs = req != null ? req.data() : null;
-				return JPA.jpql(jpql, namedArgs, args);
+				return JPA.jpql(jpql, JpaPage.ALL, namedArgs, args);
 			}
 		};
 	}
@@ -128,16 +127,26 @@ public class X extends RapidoidThing {
 					resp.screen().title("Manage " + English.plural(name(entityType)));
 				}
 
-				Grid grid = GUI.grid(JPA.getAll(entityType)).toUri(new Mapper<Object, String>() {
+				long count = JPA.count(entityType);
+				int pageSize = 10;
+				int pages = (int) Math.ceil(count / (double) pageSize);
+				int page = U.or(Cls.convert(req.params().get("page"), Integer.class), 1);
+
+				JpaPage jpaPage = JPA.page((page - 1) * pageSize, page * pageSize);
+				List<?> records = JPA.getAll(entityType, jpaPage);
+
+				Grid grid = GUI.grid(records).toUri(new Mapper<Object, String>() {
 					@Override
 					public String map(Object target) throws Exception {
 						return Msc.uri(GUI.uriFor(baseUri, target), "view");
 					}
 				});
 
-				Btn add = GUI.btn("Add " + name(entityType)).go(baseUri + "/add");
+				Btn add = GUI.btn("Add " + name(entityType)).primary().go(baseUri + "/add");
 
-				return GUI.multi(grid, add);
+				Pager pager = GUI.pager("page").min(1).max(pages).right(true);
+
+				return GUI.multi(grid, GUI.div(pager, add));
 			}
 		};
 	}

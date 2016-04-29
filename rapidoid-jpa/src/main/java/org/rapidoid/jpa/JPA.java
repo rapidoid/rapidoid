@@ -8,6 +8,7 @@ import org.rapidoid.ctx.Ctxs;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.EntityType;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +70,19 @@ public class JPA extends RapidoidThing {
 	}
 
 	public static <T> List<T> getAll(Class<T> clazz) {
-		return with(em()).getAll(clazz);
+		return with(em()).getAll(clazz, JpaPage.ALL);
+	}
+
+	public static <T> List<T> getAll(Class<T> clazz, JpaPage page) {
+		return with(em()).getAll(clazz, page);
+	}
+
+	public static <T> List<T> find(CriteriaQuery<T> criteria) {
+		return with(em()).find(criteria, null);
+	}
+
+	public static <T> List<T> find(CriteriaQuery<T> criteria, JpaPage page) {
+		return with(em()).find(criteria, page);
 	}
 
 	public static long count(Class<?> clazz) {
@@ -155,12 +168,12 @@ public class JPA extends RapidoidThing {
 		return with(em()).getIdentifier(entity);
 	}
 
-	public static <T> List<T> jpql(String jpql, Object... args) {
-		return with(em()).jpql(jpql, args);
+	public static <T> List<T> jpql(String jpql, JpaPage page, Object... args) {
+		return with(em()).jpql(jpql, page, args);
 	}
 
-	public static <T> List<T> jpql(String jpql, Map<String, ?> namedArgs, Object... args) {
-		return with(em()).jpql(jpql, namedArgs, args);
+	public static <T> List<T> jpql(String jpql, JpaPage page, Map<String, ?> namedArgs, Object... args) {
+		return with(em()).jpql(jpql, page, namedArgs, args);
 	}
 
 	public static boolean isEntity(Object obj) {
@@ -194,4 +207,9 @@ public class JPA extends RapidoidThing {
 	public static boolean isActive() {
 		return JPAUtil.emf() != null;
 	}
+
+	public static JpaPage page(int from, int to) {
+		return JPAUtil.page(from, to);
+	}
+
 }

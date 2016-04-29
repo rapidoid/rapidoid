@@ -37,10 +37,10 @@ public class Pager extends AbstractWidget<Pager> {
 
 	private final String param;
 
-	private volatile int min;
-	private volatile int max;
+	private volatile long min;
+	private volatile long max;
 	private volatile boolean right;
-	private volatile Integer initial;
+	private volatile Long initial;
 
 	public Pager(String param) {
 		this.param = param;
@@ -51,7 +51,7 @@ public class Pager extends AbstractWidget<Pager> {
 		return shouldDisplay() ? pagination() : div();
 	}
 
-	protected String pageUri(int pageN) {
+	protected String pageUri(long pageN) {
 		IReqInfo req = req();
 
 		Map<String, String> query = U.map(req.params());
@@ -65,7 +65,7 @@ public class Pager extends AbstractWidget<Pager> {
 	}
 
 	protected Tag pagination() {
-		int pageN = pageNumber();
+		long pageN = pageNumber();
 
 		ATag first = first().href(pageUri(min));
 		ATag prev = prev().href(pageUri(pageN - 1));
@@ -82,15 +82,15 @@ public class Pager extends AbstractWidget<Pager> {
 		Tag pagination = GUI.nav(GUI.ul_li(firstLi, prevLi, currentLi, nextLi, lastLi).class_("pagination"));
 
 		if (right) {
-			pagination = div(pagination).class_("pull-right");
+			pagination = GUI.right(pagination);
 		}
 
 		return pagination;
 	}
 
-	protected int pageNumber() {
-		Integer pageNum = Cls.convert(req().params().get(param), Integer.class);
-		int value = U.or(pageNum, initial, min, 1);
+	protected long pageNumber() {
+		Long pageNum = Cls.convert(req().params().get(param), Long.class);
+		long value = U.or(pageNum, initial, min, 1L);
 		return U.bounds(min, value, max);
 	}
 
@@ -122,20 +122,20 @@ public class Pager extends AbstractWidget<Pager> {
 		return param;
 	}
 
-	public int min() {
+	public long min() {
 		return min;
 	}
 
-	public Pager min(int min) {
+	public Pager min(long min) {
 		this.min = min;
 		return this;
 	}
 
-	public int max() {
+	public long max() {
 		return max;
 	}
 
-	public Pager max(int max) {
+	public Pager max(long max) {
 		this.max = max;
 		return this;
 	}
@@ -149,11 +149,11 @@ public class Pager extends AbstractWidget<Pager> {
 		return this;
 	}
 
-	public Integer initial() {
+	public Long initial() {
 		return initial;
 	}
 
-	public Pager initial(Integer initial) {
+	public Pager initial(long initial) {
 		this.initial = initial;
 		return this;
 	}
