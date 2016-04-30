@@ -7,12 +7,10 @@ import org.rapidoid.u.U;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.EntityType;
 import java.util.List;
-import java.util.Map;
 
 /*
  * #%L
@@ -135,16 +133,6 @@ public class EM extends RapidoidThing {
 		return em.createQuery(cq).getSingleResult();
 	}
 
-	public long count(String jpql, Object... args) {
-		return count(jpql, null, args);
-	}
-
-	public long count(String jpql, Map<String, ?> namedArgs, Object... args) {
-		Query q = JPA.em().createQuery(jpql);
-		JPA.bind(q, namedArgs, args);
-		return (Long) q.getSingleResult();
-	}
-
 	public void refresh(Object entity) {
 		em.refresh(entity);
 	}
@@ -237,24 +225,6 @@ public class EM extends RapidoidThing {
 
 	public <T> Entities<T> find(CriteriaQuery<T> query) {
 		return new JPACriteriaQueryEntities<T>(query);
-	}
-
-	public <T> Entities<T> find(String jpql, Object... args) {
-		return find(jpql, null, args);
-	}
-
-	public <T> Entities<T> find(String jpql, Map<String, ?> namedArgs, Object... args) {
-		return new JPQLEntities<T>(jpql, namedArgs, args);
-	}
-
-	public <T> int execute(String jpql, Object... args) {
-		return execute(jpql, null, args);
-	}
-
-	public <T> int execute(String jpql, Map<String, ?> namedArgs, Object... args) {
-		Query q = JPA.em().createQuery(jpql);
-		JPA.bind(q, namedArgs, args);
-		return q.executeUpdate();
 	}
 
 	public <T> Entities<T> of(Class<T> clazz) {

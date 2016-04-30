@@ -22,15 +22,18 @@ package org.rapidoid.jpa;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.DataItems;
 
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public interface Entities<T> {
+public interface Entities<E> extends DataItems {
 
-	List<T> all();
+	@SuppressWarnings("unchecked")
+	List<E> all();
 
-	List<T> page(int start, int length);
+	@SuppressWarnings("unchecked")
+	List<E> page(int start, int length);
 
 }

@@ -105,6 +105,10 @@ public class JPA extends RapidoidThing {
 		em_().detach(entity);
 	}
 
+	public static void flush() {
+		em().flush();
+	}
+
 	public static void transaction(Runnable action) {
 		tx(action, false);
 	}
@@ -130,10 +134,6 @@ public class JPA extends RapidoidThing {
 				Ctxs.close();
 			}
 		}
-	}
-
-	public static void flush() {
-		em().flush();
 	}
 
 	public static void bootstrap(String[] path, Class<?>... providedEntities) {
@@ -198,46 +198,34 @@ public class JPA extends RapidoidThing {
 		return em_().count(clazz);
 	}
 
-	public static long count(String jpql, Object... args) {
-		return em_().count(jpql, args);
-	}
-
-	public static long count(String jpql, Map<String, ?> namedArgs, Object... args) {
-		return em_().count(jpql, namedArgs, args);
-	}
-
 	public static <T> Entities<T> find(CriteriaQuery<T> criteria) {
 		return em_().find(criteria);
 	}
 
-	public static <T> Entities<T> find(String jpql, Object... args) {
-		return em_().find(jpql, args);
-	}
-
-	public static <T> Entities<T> find(String jpql, Map<String, ?> namedArgs, Object... args) {
-		return em_().find(jpql, namedArgs, args);
-	}
-
-	public static int execute(String jpql, Object... args) {
-		return em_().execute(jpql, args);
-	}
-
-	public static int execute(String jpql, Map<String, ?> namedArgs, Object... args) {
-		return em_().execute(jpql, namedArgs, args);
-	}
-
 	public static void bind(Query query, Map<String, ?> namedArgs, Object... args) {
-		for (int i = 0; i < args.length; i++) {
-			query.setParameter(i + 1, args[i]);
-		}
-
-		for (Parameter<?> param : query.getParameters()) {
-			String name = param.getName();
-			if (U.notEmpty(name)) {
-				U.must(namedArgs != null && namedArgs.containsKey(name), "A named argument wasn't specified for the named JPQL parameter: %s", name);
-				query.setParameter(name, Cls.convert(namedArgs.get(name), param.getParameterType()));
+		if (args != null) {
+			for (int i = 0; i < args.length; i++) {
+				query.setParameter(i + 1, args[i]);
 			}
 		}
+
+		if (namedArgs != null) {
+			for (Parameter<?> param : query.getParameters()) {
+				String name = param.getName();
+				if (U.notEmpty(name)) {
+					U.must(namedArgs.containsKey(name), "A named argument wasn't specified for the named JPQL parameter: %s", name);
+					query.setParameter(name, Cls.convert(namedArgs.get(name), param.getParameterType()));
+				}
+			}
+		}
+	}
+
+	public static JPQL jpql(String jpql) {
+		return new JPQL(jpql);
+	}
+
+	public static JPQL jpql(String jpql, Object... args) {
+		return new JPQL(jpql).bind(args);
 	}
 
 }

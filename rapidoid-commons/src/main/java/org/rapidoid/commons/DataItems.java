@@ -1,8 +1,8 @@
-package org.rapidoid.jpa;
+package org.rapidoid.commons;
 
 /*
  * #%L
- * rapidoid-jpa
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,32 +20,17 @@ package org.rapidoid.jpa;
  * #L%
  */
 
-import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
-import javax.persistence.Query;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public abstract class AbstractJPAEntities<T> extends RapidoidThing implements Entities<T> {
+public interface DataItems {
 
-	@Override
-	public List<T> all() {
-		return query().getResultList();
-	}
+	<T> List<T> all();
 
-	@Override
-	public List<T> page(int start, int length) {
-		Query q = query();
-
-		q.setFirstResult(start);
-		q.setMaxResults(length);
-
-		return q.getResultList();
-	}
-
-	protected abstract Query query();
+	<T> List<T> page(int start, int length);
 
 }

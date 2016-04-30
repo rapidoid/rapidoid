@@ -13,6 +13,7 @@ import org.rapidoid.util.Msc;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.metamodel.EntityType;
 import java.util.List;
 import java.util.Properties;
@@ -140,6 +141,13 @@ public class JPAUtil extends RapidoidThing {
 
 	public static EntityManagerFactory emf() {
 		return emf;
+	}
+
+	static <T> List<T> getPage(Query q, int start, int length) {
+		q.setFirstResult(start);
+		q.setMaxResults(length);
+
+		return q.getResultList();
 	}
 
 }

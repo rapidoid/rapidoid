@@ -59,7 +59,7 @@ public class JPATest extends IntegrationTestCommons {
 			List<Movie> movies = JPA.of(Movie.class).all();
 			eq(Do.map(movies).to(Movie::getTitle), U.list("movie 1"));
 
-			eq(JPA.find("select title from Book where id = ?1", 2L).all(), U.list("book 2"));
+			eq(JPA.jpql("select title from Book where id = ?1", 2L).all(), U.list("book 2"));
 		});
 
 		eq(Jobs.errorCounter().get(), 0);

@@ -22,31 +22,16 @@ package org.rapidoid.jpa;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.DataItems;
 
-import javax.persistence.Query;
-import java.util.Map;
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JPQLEntities<T> extends AbstractJPAEntities<T> {
+public interface Results extends DataItems {
 
-	private final String jpql;
+	<T> List<T> all();
 
-	private final Map<String, ?> namedArgs;
-
-	private final Object[] args;
-
-	public JPQLEntities(String jpql, Map<String, ?> namedArgs, Object[] args) {
-		this.jpql = jpql;
-		this.namedArgs = namedArgs;
-		this.args = args;
-	}
-
-	@Override
-	protected Query query() {
-		Query q = JPA.em().createQuery(jpql);
-		JPA.bind(q, namedArgs, args);
-		return q;
-	}
+	<T> List<T> page(int start, int length);
 
 }

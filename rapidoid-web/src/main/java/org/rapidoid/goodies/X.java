@@ -64,7 +64,7 @@ public class X extends RapidoidThing {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
 				Map<String, Object> namedArgs = req != null ? req.data() : null;
-				return JPA.find(jpql, namedArgs, args).all();
+				return JPA.jpql(jpql).bind(namedArgs).bind(args).all();
 			}
 		};
 	}

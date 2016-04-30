@@ -20,15 +20,17 @@ package org.rapidoid.jpa;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
+import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JPACriteriaQueryEntities<T> extends AbstractJPAEntities<T> {
+public class JPACriteriaQueryEntities<T> extends RapidoidThing implements Entities<T> {
 
 	private final CriteriaQuery<T> criteria;
 
@@ -36,9 +38,19 @@ public class JPACriteriaQueryEntities<T> extends AbstractJPAEntities<T> {
 		this.criteria = criteria;
 	}
 
-	@Override
-	protected Query query() {
+	private Query query() {
 		return JPA.em().createQuery(this.criteria);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> all() {
+		return query().getResultList();
+	}
+
+	@Override
+	public List<T> page(int start, int length) {
+		return JPAUtil.getPage(query(), start, length);
 	}
 
 }

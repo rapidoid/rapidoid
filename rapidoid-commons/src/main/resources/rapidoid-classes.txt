@@ -79,6 +79,7 @@ org.rapidoid.commons.AnyObj
 org.rapidoid.commons.Arr
 org.rapidoid.commons.AutoExpandingMap
 org.rapidoid.commons.Coll
+org.rapidoid.commons.DataItems
 org.rapidoid.commons.Dates
 org.rapidoid.commons.Deep
 org.rapidoid.commons.English
@@ -390,7 +391,6 @@ org.rapidoid.job.Jobs
 org.rapidoid.job.JobsDSL
 org.rapidoid.job.PredefinedContextJobWrapper
 org.rapidoid.jpa.AbstractEntity
-org.rapidoid.jpa.AbstractJPAEntities
 org.rapidoid.jpa.CustomDescriptor
 org.rapidoid.jpa.CustomHibernatePersistenceProvider
 org.rapidoid.jpa.DAO
@@ -401,7 +401,8 @@ org.rapidoid.jpa.JPA
 org.rapidoid.jpa.JPACriteriaQueryEntities
 org.rapidoid.jpa.JPAPersisterProvider
 org.rapidoid.jpa.JPAUtil
-org.rapidoid.jpa.JPQLEntities
+org.rapidoid.jpa.JPQL
+org.rapidoid.jpa.Results
 org.rapidoid.jpa.SharedContextAwareEntityManagerProxy
 org.rapidoid.jpa.SharedEntityManagerFactoryProxy
 org.rapidoid.lambda.Calc
