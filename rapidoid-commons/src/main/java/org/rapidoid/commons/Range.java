@@ -26,12 +26,30 @@ import org.rapidoid.annotation.Since;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class Range extends RapidoidThing {
+public class Range extends RapidoidThing implements IRange {
 
-	public static final IRange UNLIMITED = of(0, Integer.MAX_VALUE);
+	public static final Range UNLIMITED = of(0, Integer.MAX_VALUE);
 
-	public static IRange of(int start, int length) {
-		return new RangeImpl(start, length);
+	public static Range of(int start, int length) {
+		return new Range(start, length);
+	}
+
+	private final int start;
+	private final int length;
+
+	private Range(int start, int length) {
+		this.start = start;
+		this.length = length;
+	}
+
+	@Override
+	public int start() {
+		return start;
+	}
+
+	@Override
+	public int length() {
+		return length;
 	}
 
 }
