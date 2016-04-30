@@ -35,7 +35,7 @@ public class HttpTransactionTest extends IntegrationTestCommons {
 	public void testWebTx() {
 		JPA.bootstrap(path());
 
-		On.get("/allBooks").json(() -> JPA.getAll(Book.class));
+		On.get("/allBooks").json(() -> JPA.of(Book.class).all());
 		On.post("/books").json((Book b) -> JPA.insert(b));
 
 		On.post("/del").tx().json((Long id) -> {

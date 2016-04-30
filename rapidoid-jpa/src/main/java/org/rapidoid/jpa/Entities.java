@@ -1,12 +1,5 @@
 package org.rapidoid.jpa;
 
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.PersisterProvider;
-
-import javax.persistence.EntityManager;
-
 /*
  * #%L
  * rapidoid-jpa
@@ -27,21 +20,17 @@ import javax.persistence.EntityManager;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import java.util.List;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-@SuppressWarnings("deprecation")
-public class JPAPersisterProvider extends RapidoidThing implements PersisterProvider {
+public interface Entities<T> {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <P> P openPersister() {
-		return (P) JPA.provideEmf().createEntityManager();
-	}
+	List<T> all();
 
-	@Override
-	public void closePersister(Object persister) {
-		EntityManager em = (EntityManager) persister;
-		em.close();
-	}
+	List<T> page(int start, int length);
 
 }

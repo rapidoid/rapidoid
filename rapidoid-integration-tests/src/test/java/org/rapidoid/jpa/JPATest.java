@@ -3,7 +3,6 @@ package org.rapidoid.jpa;
 import org.junit.Test;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Range;
 import org.rapidoid.fluent.Do;
 import org.rapidoid.http.IntegrationTestCommons;
 import org.rapidoid.job.Jobs;
@@ -47,19 +46,20 @@ public class JPATest extends IntegrationTestCommons {
 			JPA.insert(b1);
 			JPA.insert(b2);
 			JPA.insert(m1);
-			JPA.em().flush(); // not actually required
+
+			JPA.flush(); // not actually required
 		});
 
 		JPA.transaction(() -> {
 			eq(JPA.getAllEntities().size(), 3);
 
-			List<Book> books = JPA.getAll(Book.class);
+			List<Book> books = JPA.of(Book.class).all();
 			eq(Do.map(books).to(Book::getTitle), U.list("book 1", "book 2"));
 
-			List<Movie> movies = JPA.getAll(Movie.class);
+			List<Movie> movies = JPA.of(Movie.class).all();
 			eq(Do.map(movies).to(Movie::getTitle), U.list("movie 1"));
 
-			eq(JPA.jpql("select title from Book where id = ?1", Range.UNLIMITED, 2L), U.list("book 2"));
+			eq(JPA.find("select title from Book where id = ?1", 2L).all(), U.list("book 2"));
 		});
 
 		eq(Jobs.errorCounter().get(), 0);

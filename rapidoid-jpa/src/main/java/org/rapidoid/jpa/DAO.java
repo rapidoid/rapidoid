@@ -88,7 +88,7 @@ public abstract class DAO<E> extends RapidoidThing {
 	}
 
 	public List<E> all() {
-		return JPA.getAll(clazz);
+		return JPA.of(clazz).all();
 	}
 
 }

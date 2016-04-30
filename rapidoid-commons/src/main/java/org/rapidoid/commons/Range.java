@@ -28,8 +28,6 @@ import org.rapidoid.annotation.Since;
 @Since("5.1.0")
 public class Range extends RapidoidThing implements IRange {
 
-	public static final Range UNLIMITED = of(0, Integer.MAX_VALUE);
-
 	public static Range of(int start, int length) {
 		return new Range(start, length);
 	}

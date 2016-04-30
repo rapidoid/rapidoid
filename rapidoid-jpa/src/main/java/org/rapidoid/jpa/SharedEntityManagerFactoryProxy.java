@@ -39,7 +39,7 @@ public class SharedEntityManagerFactoryProxy extends RapidoidThing implements En
 	}
 
 	private EntityManagerFactory emf() {
-		return JPA.emf();
+		return JPA.provideEmf();
 	}
 
 	@Override

@@ -76,7 +76,7 @@ class MyCtrl {
 	@GET
 	public Object allBooks() {
 		checkInjected();
-		return JPA.getAll(Book.class);
+		return JPA.of(Book.class).all();
 	}
 
 	@POST("/books")
@@ -93,7 +93,7 @@ class MyCtrl {
 
 		U.must(!em.getTransaction().getRollbackOnly());
 
-		em.remove(JPA.find(Book.class, id));
+		em.remove(JPA.getIfExists(Book.class, id));
 		em.flush(); // optional
 
 		return U.list("DEL #" + id, JPA.getAllEntities().size() + " remaining");

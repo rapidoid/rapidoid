@@ -3,13 +3,15 @@ package org.rapidoid.jpa;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.IRange;
-import org.rapidoid.commons.Range;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.ctx.Ctx;
 import org.rapidoid.ctx.Ctxs;
+import org.rapidoid.u.U;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Parameter;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.EntityType;
 import java.util.List;
@@ -51,76 +53,56 @@ public class JPA extends RapidoidThing {
 		return new EM(em);
 	}
 
-	public static <E> E ref(Class<E> clazz, Object id) {
-		return with(em()).ref(clazz, id);
+	private static EM em_() {
+		return with(em());
+	}
+
+	public static <E> E reference(Class<E> clazz, Object id) {
+		return em_().reference(clazz, id);
 	}
 
 	public static <E> E get(Class<E> clazz, Object id) {
-		return with(em()).get(clazz, id);
+		return em_().get(clazz, id);
 	}
 
-	public static <T> T find(Class<T> clazz, Object id) {
-		return with(em()).find(clazz, id);
+	public static <T> T getIfExists(Class<T> clazz, Object id) {
+		return em_().getIfExists(clazz, id);
 	}
 
 	public static <E> List<E> getAllEntities() {
-		return with(em()).getAll();
-	}
-
-	public static <E> List<E> getAll(Class<E> clazz, List<String> ids) {
-		return with(em()).getAll(clazz, ids);
-	}
-
-	public static <T> List<T> getAll(Class<T> clazz) {
-		return with(em()).getAll(clazz, Range.UNLIMITED);
-	}
-
-	public static <T> List<T> getAll(Class<T> clazz, IRange range) {
-		return with(em()).getAll(clazz, range);
-	}
-
-	public static <T> List<T> find(CriteriaQuery<T> criteria) {
-		return with(em()).find(criteria, null);
-	}
-
-	public static <T> List<T> find(CriteriaQuery<T> criteria, IRange range) {
-		return with(em()).find(criteria, range);
-	}
-
-	public static long count(Class<?> clazz) {
-		return with(em()).count(clazz);
+		return em_().getAllEntities();
 	}
 
 	public static <E> E save(E record) {
-		return with(em()).save(record);
+		return em_().save(record);
 	}
 
 	public static <E> E insert(E entity) {
-		return with(em()).insert(entity);
+		return em_().insert(entity);
 	}
 
 	public static <E> E update(E record) {
-		return with(em()).update(record);
+		return em_().update(record);
 	}
 
 	public static void delete(Object record) {
-		with(em()).delete(record);
+		em_().delete(record);
 	}
 
 	public static <E> void delete(Class<E> clazz, Object id) {
-		with(em()).delete(clazz, id);
+		em_().delete(clazz, id);
 	}
 
 	public static void refresh(Object entity) {
-		with(em()).refresh(entity);
+		em_().refresh(entity);
 	}
 
 	public static void merge(Object entity) {
-		with(em()).merge(entity);
+		em_().merge(entity);
 	}
 
 	public static void detach(Object entity) {
-		with(em()).detach(entity);
+		em_().detach(entity);
 	}
 
 	public static void transaction(Runnable action) {
@@ -159,23 +141,15 @@ public class JPA extends RapidoidThing {
 	}
 
 	public static boolean isLoaded(Object entity) {
-		return with(em()).isLoaded(entity);
+		return em_().isLoaded(entity);
 	}
 
 	public static boolean isLoaded(Object entity, String attribute) {
-		return with(em()).isLoaded(entity, attribute);
+		return em_().isLoaded(entity, attribute);
 	}
 
 	public static Object getIdentifier(Object entity) {
-		return with(em()).getIdentifier(entity);
-	}
-
-	public static <T> List<T> jpql(String jpql, IRange range, Object... args) {
-		return with(em()).jpql(jpql, range, args);
-	}
-
-	public static <T> List<T> jpql(String jpql, IRange range, Map<String, ?> namedArgs, Object... args) {
-		return with(em()).jpql(jpql, range, namedArgs, args);
+		return em_().getIdentifier(entity);
 	}
 
 	public static boolean isEntity(Object obj) {
@@ -183,7 +157,7 @@ public class JPA extends RapidoidThing {
 	}
 
 	public static List<EntityType<?>> getEntityTypes() {
-		return with(em()).getEntityTypes();
+		return em_().getEntityTypes();
 	}
 
 	public static List<String> entities() {
@@ -194,11 +168,17 @@ public class JPA extends RapidoidThing {
 		return JPAUtil.entityJavaTypes;
 	}
 
-	public static EntityManagerFactory emf() {
+	public static EntityManagerFactory provideEmf() {
+		EntityManagerFactory emf = JPAUtil.emf;
+		U.notNull(emf, "JPA.emf");
+		return emf;
+	}
+
+	public static EntityManagerFactory getEmf() {
 		return JPAUtil.emf;
 	}
 
-	public static void emf(EntityManagerFactory emf) {
+	public static void setEmf(EntityManagerFactory emf) {
 		JPAUtil.emf(emf);
 	}
 
@@ -208,6 +188,56 @@ public class JPA extends RapidoidThing {
 
 	public static boolean isActive() {
 		return JPAUtil.emf() != null;
+	}
+
+	public static <T> Entities<T> of(Class<T> clazz) {
+		return em_().of(clazz);
+	}
+
+	public static long count(Class<?> clazz) {
+		return em_().count(clazz);
+	}
+
+	public static long count(String jpql, Object... args) {
+		return em_().count(jpql, args);
+	}
+
+	public static long count(String jpql, Map<String, ?> namedArgs, Object... args) {
+		return em_().count(jpql, namedArgs, args);
+	}
+
+	public static <T> Entities<T> find(CriteriaQuery<T> criteria) {
+		return em_().find(criteria);
+	}
+
+	public static <T> Entities<T> find(String jpql, Object... args) {
+		return em_().find(jpql, args);
+	}
+
+	public static <T> Entities<T> find(String jpql, Map<String, ?> namedArgs, Object... args) {
+		return em_().find(jpql, namedArgs, args);
+	}
+
+	public static int execute(String jpql, Object... args) {
+		return em_().execute(jpql, args);
+	}
+
+	public static int execute(String jpql, Map<String, ?> namedArgs, Object... args) {
+		return em_().execute(jpql, namedArgs, args);
+	}
+
+	public static void bind(Query query, Map<String, ?> namedArgs, Object... args) {
+		for (int i = 0; i < args.length; i++) {
+			query.setParameter(i + 1, args[i]);
+		}
+
+		for (Parameter<?> param : query.getParameters()) {
+			String name = param.getName();
+			if (U.notEmpty(name)) {
+				U.must(namedArgs != null && namedArgs.containsKey(name), "A named argument wasn't specified for the named JPQL parameter: %s", name);
+				query.setParameter(name, Cls.convert(namedArgs.get(name), param.getParameterType()));
+			}
+		}
 	}
 
 }

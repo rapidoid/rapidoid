@@ -53,7 +53,7 @@ public abstract class SpringIntegrator extends RapidoidThing implements Runnable
 			initProfiles();
 		}
 
-		if (useEmf() && JPA.emf() == null && Msc.hasJPA()) {
+		if (useEmf() && JPA.getEmf() == null && Msc.hasJPA()) {
 			initJPA();
 		}
 
@@ -77,7 +77,7 @@ public abstract class SpringIntegrator extends RapidoidThing implements Runnable
 			return;
 		}
 
-		JPA.emf(emf);
+		JPA.setEmf(emf);
 	}
 
 	protected void initBeans() {

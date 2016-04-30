@@ -48,10 +48,10 @@ public class JPATransactionTest extends IntegrationTestCommons {
 	private void checkData(int insertions) {
 		eq(JPA.getAllEntities().size(), 2 * insertions);
 
-		List<Book> books = JPA.getAll(Book.class);
+		List<Book> books = JPA.of(Book.class).all();
 		books.forEach(book -> eq(book.getTitle(), "book"));
 
-		List<Movie> movies = JPA.getAll(Movie.class);
+		List<Movie> movies = JPA.of(Movie.class).all();
 		movies.forEach(movie -> eq(movie.getTitle(), "movie"));
 	}
 

@@ -1,12 +1,5 @@
 package org.rapidoid.jpa;
 
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.ctx.PersisterProvider;
-
-import javax.persistence.EntityManager;
-
 /*
  * #%L
  * rapidoid-jpa
@@ -27,21 +20,25 @@ import javax.persistence.EntityManager;
  * #L%
  */
 
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-@SuppressWarnings("deprecation")
-public class JPAPersisterProvider extends RapidoidThing implements PersisterProvider {
+public class JPACriteriaQueryEntities<T> extends AbstractJPAEntities<T> {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <P> P openPersister() {
-		return (P) JPA.provideEmf().createEntityManager();
+	private final CriteriaQuery<T> criteria;
+
+	public JPACriteriaQueryEntities(CriteriaQuery<T> criteria) {
+		this.criteria = criteria;
 	}
 
 	@Override
-	public void closePersister(Object persister) {
-		EntityManager em = (EntityManager) persister;
-		em.close();
+	protected Query query() {
+		return JPA.em().createQuery(this.criteria);
 	}
 
 }

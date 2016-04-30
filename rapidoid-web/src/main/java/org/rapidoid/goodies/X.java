@@ -64,7 +64,7 @@ public class X extends RapidoidThing {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
 				Map<String, Object> namedArgs = req != null ? req.data() : null;
-				return JPA.jpql(jpql, Range.UNLIMITED, namedArgs, args);
+				return JPA.find(jpql, namedArgs, args).all();
 			}
 		};
 	}
@@ -73,7 +73,7 @@ public class X extends RapidoidThing {
 		return new ReqRespHandler() {
 			@Override
 			public Object execute(Req req, Resp resp) throws Exception {
-				return JPA.getAll(entityType);
+				return JPA.of(entityType).all();
 			}
 		};
 	}
@@ -134,7 +134,7 @@ public class X extends RapidoidThing {
 				int page = U.or(Cls.convert(req.params().get("page"), Integer.class), 1);
 
 				IRange range = Range.of((page - 1) * pageSize, pageSize);
-				List<?> records = JPA.getAll(entityType, range);
+				List<?> records = JPA.of(entityType).page(range.start(), range.length());
 
 				Grid grid = GUI.grid(records).toUri(new Mapper<Object, String>() {
 					@Override
@@ -178,7 +178,7 @@ public class X extends RapidoidThing {
 			public Object execute(Req req, final Resp resp) throws Exception {
 
 				final Object id = Cls.convert(req.param("id"), idType);
-				final Object entity = JPA.find(entityType, id);
+				final Object entity = JPA.getIfExists(entityType, id);
 
 				if (entity == null) {
 					return null;
@@ -218,7 +218,7 @@ public class X extends RapidoidThing {
 			public Object execute(Req req, Resp resp) throws Exception {
 
 				Object id = Cls.convert(req.param("id"), idType(entityType));
-				Object entity = JPA.find(entityType, id);
+				Object entity = JPA.getIfExists(entityType, id);
 
 				if (entity == null) {
 					return null;
