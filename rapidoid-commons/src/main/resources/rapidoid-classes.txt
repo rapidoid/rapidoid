@@ -425,6 +425,7 @@ org.rapidoid.lambda.ThreeParamLambda
 org.rapidoid.lambda.ToMap
 org.rapidoid.lambda.TwoParamLambda
 org.rapidoid.log.Log
+org.rapidoid.log.LogbackUtil
 org.rapidoid.log.LogHP
 org.rapidoid.log.LogLevel
 org.rapidoid.model.IModel

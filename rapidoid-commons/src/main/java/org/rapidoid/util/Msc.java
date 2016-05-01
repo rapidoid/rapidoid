@@ -764,6 +764,10 @@ public class Msc extends RapidoidThing implements Constants {
 		return Cls.exists("javax.inject.Inject");
 	}
 
+	public static boolean hasLogback() {
+		return Cls.exists("ch.qos.logback.classic.Logger");
+	}
+
 	public static boolean isValidationError(Throwable error) {
 		return (error instanceof InvalidData) || error.getClass().getName().startsWith("javax.validation.");
 	}

@@ -1,9 +1,13 @@
 package org.rapidoid.config;
 
 import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.log.Log;
+import org.rapidoid.log.LogbackUtil;
+import org.rapidoid.util.Msc;
 
 import java.lang.management.ManagementFactory;
 
@@ -27,6 +31,8 @@ import java.lang.management.ManagementFactory;
  * #L%
  */
 
+@Authors("Nikolche Mihajlovski")
+@Since("5.1.0")
 public class RapidoidInitializer extends RapidoidThing {
 
 	private static volatile boolean initialized;
@@ -40,6 +46,10 @@ public class RapidoidInitializer extends RapidoidThing {
 			String dir = System.getProperty("user.dir");
 
 			Log.info("Starting Rapidoid...", "version", ver, "process", proc, "dir", dir);
+
+			if (Msc.hasLogback()) {
+				LogbackUtil.setupLogger();
+			}
 
 			Cls.getClassIfExists("org.rapidoid.web.RapidoidWebModule");
 			Cls.getClassIfExists("org.rapidoid.insight.Metrics");

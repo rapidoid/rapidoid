@@ -5,7 +5,7 @@ import org.rapidoid.test.TestCommons;
 
 /*
  * #%L
- * rapidoid-essentials
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -27,33 +27,32 @@ import org.rapidoid.test.TestCommons;
  * @author Nikolche Mihajlovski
  * @since 3.0.0
  */
-public class LogTest extends TestCommons {
+public class LogHPTest extends TestCommons {
 
 	@Test
-	public void testLogLevel() {
-		Log.setLogLevel(LogLevel.TRACE);
+	public void testHPLoggingOverhead() {
 
-		isTrue(Log.isTraceEnabled());
-		isTrue(Log.isDebugEnabled());
-		isTrue(Log.isInfoEnabled());
-		isTrue(Log.isWarnEnabled());
-		isTrue(Log.isErrorEnabled());
+		// force real mutability of the log level field,
+		// to disable unrealistic compiler optimization
+		Log.setLogLevel(LogLevel.DEBUG);
+		LogHP.debug("some msg", "key1", "abccc", "key2", 2234);
 
 		Log.setLogLevel(LogLevel.INFO);
+		int total = 2000000000;
 
-		isFalse(Log.isTraceEnabled());
-		isFalse(Log.isDebugEnabled());
-		isTrue(Log.isInfoEnabled());
-		isTrue(Log.isWarnEnabled());
-		isTrue(Log.isErrorEnabled());
+		long before = System.currentTimeMillis();
 
-		Log.setLogLevel(LogLevel.ERROR);
+		for (int i = 0; i < total; i++) {
+			LogHP.debug("some msg", "key1", "abccc", "key2", i);
+		}
 
-		isFalse(Log.isTraceEnabled());
-		isFalse(Log.isDebugEnabled());
-		isFalse(Log.isInfoEnabled());
-		isFalse(Log.isWarnEnabled());
-		isTrue(Log.isErrorEnabled());
+		long ms = System.currentTimeMillis() - before;
+		long perMs = total / ms;
+
+		System.out.println(String.format("%d logging operations in %d ms (%d ops / ms)", total, ms, perMs));
+
+		// this is a risk for test failure on show machines, but it's useful
+		isTrue(perMs > 100000);
 	}
 
 }
