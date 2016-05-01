@@ -89,7 +89,7 @@ public class JPAUtil extends RapidoidThing {
 			CustomHibernatePersistenceProvider provider = new CustomHibernatePersistenceProvider();
 			provider.names().addAll(entityTypes);
 
-			EntityManagerFactory emf = provider.createEntityManagerFactory("pu", props);
+			EntityManagerFactory emf = provider.createEntityManagerFactory("rapidoid", props);
 			emf(emf);
 
 			Msc.logSection("JPA (Hibernate) is ready.");

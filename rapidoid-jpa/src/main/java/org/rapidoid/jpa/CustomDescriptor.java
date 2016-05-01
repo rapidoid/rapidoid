@@ -4,6 +4,7 @@ import org.hibernate.jpa.boot.spi.PersistenceUnitDescriptor;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.u.U;
 
 import javax.persistence.SharedCacheMode;
 import javax.persistence.ValidationMode;
@@ -43,7 +44,7 @@ public class CustomDescriptor extends RapidoidThing implements PersistenceUnitDe
 	public CustomDescriptor(PersistenceUnitDescriptor descriptor, List<String> names) {
 		this.descriptor = descriptor;
 		this.names = names;
-		this.names.addAll(descriptor.getManagedClassNames());
+		this.names.addAll(U.safe(descriptor.getManagedClassNames()));
 	}
 
 	@Override

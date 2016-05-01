@@ -1,6 +1,7 @@
 package org.rapidoid.jpa;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.hibernate.jpa.boot.internal.PersistenceUnitInfoDescriptor;
 import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
 import org.hibernate.jpa.boot.spi.PersistenceUnitDescriptor;
 import org.rapidoid.annotation.Authors;
@@ -8,6 +9,7 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.u.U;
 
+import javax.persistence.spi.PersistenceUnitInfo;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +43,13 @@ public class CustomHibernatePersistenceProvider extends HibernatePersistenceProv
 	protected EntityManagerFactoryBuilder getEntityManagerFactoryBuilder(PersistenceUnitDescriptor persistenceUnitDescriptor, Map integration, ClassLoader cl) {
 		CustomDescriptor descriptor = new CustomDescriptor(persistenceUnitDescriptor, names);
 		return super.getEntityManagerFactoryBuilder(descriptor, integration, ClasspathUtil.getDefaultClassLoader());
+	}
+
+	protected EntityManagerFactoryBuilder getEntityManagerFactoryBuilderOrNull(String persistenceUnitName, Map properties, ClassLoader providedClassLoader) {
+		PersistenceUnitInfo info = new RapidoidPersistenceUnitInfo();
+		PersistenceUnitInfoDescriptor persistenceUnit = new PersistenceUnitInfoDescriptor(info);
+		final Map integration = wrap(properties);
+		return getEntityManagerFactoryBuilder(persistenceUnit, integration, providedClassLoader);
 	}
 
 	public List<String> names() {
