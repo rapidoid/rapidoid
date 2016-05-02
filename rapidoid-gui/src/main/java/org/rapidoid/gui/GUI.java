@@ -969,7 +969,7 @@ public abstract class GUI extends HTML {
 		}
 
 		Object id = getIdentifier(target);
-		return id != null ? Msc.uri(baseUri, id + "") : "";
+		return id != null ? Msc.uri(baseUri, id + "", "view") : "";
 	}
 
 	public static String typeUri(Class<?> entityType) {
