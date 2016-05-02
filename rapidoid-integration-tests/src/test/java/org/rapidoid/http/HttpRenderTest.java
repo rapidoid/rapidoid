@@ -25,6 +25,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.setup.On;
+import org.rapidoid.web.Screen;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.11")

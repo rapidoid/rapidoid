@@ -7,11 +7,11 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Err;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
-import org.rapidoid.http.Screen;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.io.Upload;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.web.Screen;
 
 import java.io.File;
 import java.lang.annotation.Annotation;

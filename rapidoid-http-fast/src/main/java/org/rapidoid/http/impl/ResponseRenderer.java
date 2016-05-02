@@ -58,7 +58,7 @@ public class ResponseRenderer extends RapidoidThing {
 		boolean rendered;
 		String viewName = resp.view();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		Object[] renderModel = content != null ? new Object[]{resp.model(), content} : new Object[]{resp.model()};
+		Object[] renderModel = content != null ? new Object[]{resp.screen(), resp.model(), content} : new Object[]{resp.screen(), resp.model()};
 
 		try {
 			rendered = viewRenderer.render(viewName, renderModel, out);

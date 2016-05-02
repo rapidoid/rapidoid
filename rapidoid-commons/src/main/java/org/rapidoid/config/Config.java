@@ -1,6 +1,8 @@
 package org.rapidoid.config;
 
 import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Arr;
 import org.rapidoid.commons.Coll;
@@ -31,10 +33,8 @@ import java.util.*;
  * #L%
  */
 
-/**
- * @author Nikolche Mihajlovski
- * @since 4.1.0
- */
+@Authors("Nikolche Mihajlovski")
+@Since("4.1.0")
 public class Config extends RapidoidThing implements ToMap<String, Object> {
 
 	private final Map<String, Object> properties;
@@ -331,5 +331,9 @@ public class Config extends RapidoidThing implements ToMap<String, Object> {
 		Properties props = new Properties();
 		props.putAll(toFlatMap());
 		return props;
+	}
+
+	public ConfigAlternatives or(Config alternative) {
+		return new ConfigAlternatives(this, alternative);
 	}
 }

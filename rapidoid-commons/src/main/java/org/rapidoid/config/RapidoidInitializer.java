@@ -51,7 +51,6 @@ public class RapidoidInitializer extends RapidoidThing {
 				LogbackUtil.setupLogger();
 			}
 
-			Cls.getClassIfExists("org.rapidoid.web.RapidoidWebModule");
 			Cls.getClassIfExists("org.rapidoid.insight.Metrics");
 		}
 	}

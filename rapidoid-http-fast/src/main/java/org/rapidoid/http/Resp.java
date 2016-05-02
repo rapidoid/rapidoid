@@ -2,6 +2,7 @@ package org.rapidoid.http;
 
 import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.MediaType;
+import org.rapidoid.web.Screen;
 
 import java.io.File;
 import java.io.OutputStream;

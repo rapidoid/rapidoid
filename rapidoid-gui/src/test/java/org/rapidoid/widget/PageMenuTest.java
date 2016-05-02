@@ -30,6 +30,8 @@ import org.rapidoid.gui.menu.PageSubMenuItem;
 import org.rapidoid.io.Res;
 import org.rapidoid.test.TestCommons;
 
+import java.util.Map;
+
 @Authors("Nikolche Mihajlovski")
 @Since("4.1.0")
 public class PageMenuTest extends TestCommons {
@@ -38,7 +40,7 @@ public class PageMenuTest extends TestCommons {
 	public void shouldConstructAppMenu() {
 		Res res = Res.from("menu.yaml");
 
-		Object data = YAML.parse(res.getContent(), Object.class);
+		Map<String, ?> data = YAML.parse(res.getContent(), Map.class);
 		System.out.println(data);
 
 		PageMenu menu = PageMenu.from(data);

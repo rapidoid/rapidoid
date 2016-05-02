@@ -3,19 +3,21 @@ package org.rapidoid.http.impl;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.MediaType;
+import org.rapidoid.config.Config;
+import org.rapidoid.config.ConfigAlternatives;
 import org.rapidoid.ctx.Ctxs;
 import org.rapidoid.ctx.UserInfo;
 import org.rapidoid.http.HttpUtils;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
-import org.rapidoid.http.Screen;
 import org.rapidoid.http.customize.LoginProvider;
 import org.rapidoid.http.customize.RolesProvider;
-import org.rapidoid.http.impl.ReqImpl;
-import org.rapidoid.http.impl.ResponseRenderer;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
+import org.rapidoid.web.Screen;
+import org.rapidoid.web.ScreenBean;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -47,7 +49,7 @@ import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.x")
-public class RespImpl extends RapidoidThing implements Resp, Screen {
+public class RespImpl extends RapidoidThing implements Resp {
 
 	private final ReqImpl req;
 
@@ -76,6 +78,8 @@ public class RespImpl extends RapidoidThing implements Resp, Screen {
 	private volatile String view = null;
 
 	private volatile boolean mvc = false;
+
+	private volatile Screen screen;
 
 	public RespImpl(ReqImpl req) {
 		this.req = req;
@@ -300,7 +304,46 @@ public class RespImpl extends RapidoidThing implements Resp, Screen {
 
 	@Override
 	public Screen screen() {
-		return this;
+		if (screen == null) {
+			synchronized (this) {
+				if (screen == null) {
+					screen = createScreen();
+				}
+			}
+		}
+
+		return screen;
+	}
+
+	private Screen createScreen() {
+		Screen screen = Msc.hasRapidoidGUI() ? GUIUtil.newPage() : new ScreenBean();
+		initScreen(screen);
+		return screen;
+	}
+
+	private void initScreen(Screen screen) {
+		Config app = request().custom().appConfig();
+		Config segments = app.sub("segments");
+		Config segment = segments.sub(req.segment());
+		ConfigAlternatives cfg = segment.or(app);
+
+		Object brand = cfg.entry("brand").str().getOrNull();
+		screen.brand(U.or(brand, ""));
+		screen.title(cfg.entry("title").str().getOrNull());
+		screen.home(cfg.entry("home").str().or("/"));
+
+		screen.search(cfg.entry("search").bool().or(false));
+		screen.navbar(cfg.entry("navbar").bool().or(brand != null));
+		screen.fluid(cfg.entry("fluid").bool().or(false));
+
+		String cdn = cfg.entry("cdn").str().or("auto");
+		if (!"auto".equalsIgnoreCase(cdn)) {
+			screen.cdn(Cls.bool(cdn));
+		}
+
+		if (cfg.has("menu")) {
+			screen.menu(cfg.sub("menu").toMap());
+		}
 	}
 
 	@Override
@@ -350,83 +393,6 @@ public class RespImpl extends RapidoidThing implements Resp, Screen {
 
 	private byte[] serializeResponseContent() {
 		return HttpUtils.responseToBytes(content(), contentType(), req.http().custom().jsonResponseRenderer());
-	}
-
-	@Override
-	public Screen title(String title) {
-		model().put("title", title);
-		return this;
-	}
-
-	@Override
-	public String title() {
-		return (String) model().get("title");
-	}
-
-	@Override
-	public Screen brand(Object brand) {
-		model().put("brand", brand);
-		return this;
-	}
-
-	@Override
-	public Object brand() {
-		return model().get("brand");
-	}
-
-	@Override
-	public Screen menu(Object menu) {
-		model().put("menu", menu);
-		return this;
-	}
-
-	@Override
-	public Object menu() {
-		return model().get("menu");
-	}
-
-	@Override
-	public Screen search(boolean search) {
-		model().put("search", search);
-		return this;
-	}
-
-	@Override
-	public Boolean search() {
-		return (Boolean) model().get("search");
-	}
-
-	@Override
-	public Screen cdn(boolean cdn) {
-		model().put("cdn", cdn);
-		return this;
-	}
-
-	@Override
-	public Boolean cdn() {
-		return (Boolean) model().get("cdn");
-	}
-
-	@Override
-	public Screen navbar(boolean navbar) {
-		model().put("navbar", navbar);
-		return this;
-	}
-
-	@Override
-	public Boolean navbar() {
-		return (Boolean) model().get("navbar");
-	}
-
-	@Override
-	public Screen fluid(boolean fluid) {
-		model().put("fluid", fluid);
-		return this;
-	}
-
-	@Override
-	public Boolean fluid() {
-		return (Boolean) model().get("fluid");
 	}
 
 }

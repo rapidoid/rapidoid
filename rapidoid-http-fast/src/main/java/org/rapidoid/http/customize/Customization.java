@@ -3,7 +3,6 @@ package org.rapidoid.http.customize;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.config.Config;
 
 /*
@@ -31,8 +30,6 @@ import org.rapidoid.config.Config;
 public class Customization extends RapidoidThing {
 
 	public static final String[] DEFAULT_STATIC_FILES_LOCATIONS = {"static", "public", "default/static", "default/public"};
-
-	private static final String PAGE_RENDERER = "org.rapidoid.web.DefaultPageRenderer";
 
 	private final String name;
 
@@ -69,18 +66,12 @@ public class Customization extends RapidoidThing {
 		staticFilesPath = DEFAULT_STATIC_FILES_LOCATIONS;
 		errorHandler = new DefaultErrorHandler(this);
 		viewRenderer = new DefaultViewRenderer();
-		pageRenderer = optionalPageRenderer();
+		pageRenderer = new DefaultPageRenderer();
 		jsonResponseRenderer = new DefaultJsonResponseRenderer();
 		beanParameterFactory = new DefaultBeanParameterFactory();
 		loginProvider = new DefaultLoginProvider();
 		rolesProvider = new DefaultRolesProvider();
 		validator = new DefaultBeanValidator();
-	}
-
-	protected PageRenderer optionalPageRenderer() {
-		Class<?> rendererCls = Cls.getClassIfExists(PAGE_RENDERER);
-
-		return rendererCls != null ? (PageRenderer) Cls.newInstance(rendererCls, this) : null;
 	}
 
 	public void staticFilesPath(String... staticFilesPath) {

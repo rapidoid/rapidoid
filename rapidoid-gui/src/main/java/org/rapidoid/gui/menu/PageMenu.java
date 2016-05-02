@@ -68,13 +68,14 @@ public class PageMenu extends RapidoidThing {
 		return U.join("\n", items);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static PageMenu parse(String filename) {
 		byte[] yaml = Res.from(filename).getBytesOrNull();
-		Object data = yaml != null ? YAML.parse(yaml, Object.class) : null;
+		Map<String, ?> data = yaml != null ? YAML.parse(yaml, Map.class) : null;
 		return from(data);
 	}
 
-	public static PageMenu from(Object data) {
+	public static PageMenu from(Map<String, ?> data) {
 		return Cls.struct(PageMenu.class, PageMenuItem.class, U.or(data, U.map()));
 	}
 

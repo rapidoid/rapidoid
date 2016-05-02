@@ -2,19 +2,17 @@ package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Env;
 import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.config.Conf;
-import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
-import org.rapidoid.html.Tag;
 import org.rapidoid.http.HttpVerb;
 import org.rapidoid.render.Template;
 import org.rapidoid.render.Templates;
 import org.rapidoid.u.U;
+import org.rapidoid.web.ScreenBean;
 
 import java.util.Map;
 import java.util.Set;
@@ -41,7 +39,7 @@ import java.util.Set;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.0.0")
-public class HtmlPage extends AbstractWidget<HtmlPage> {
+public class HtmlPage extends ScreenBean {
 
 	public static volatile String commonJs = "/application.js";
 	public static volatile String commonCss = "/application.css";
@@ -50,30 +48,16 @@ public class HtmlPage extends AbstractWidget<HtmlPage> {
 
 	private static volatile Template PAGE_AJAX_TEMPLATE = Templates.fromFile("page-ajax.html");
 
-	private volatile String home;
-	private volatile Object brand;
-	private volatile String title;
-	private volatile Object[] content;
-	private volatile PageMenu menu;
-	private volatile boolean embedded;
-	private volatile boolean search;
-	private volatile boolean navbar = true;
-	private volatile boolean fluid;
-	private volatile boolean cdn = !Env.dev();
-
-	private final Set<String> js = Coll.synchronizedSet();
-	private final Set<String> css = Coll.synchronizedSet();
-
 	public HtmlPage(Object[] content) {
-		this.content = content;
+		content(content);
 	}
 
 	@Override
-	protected Tag render() {
+	public String render() {
 		Map<String, Object> model = pageModel();
 
-		if (menu != null) {
-			menu.renderContentTemplates(model);
+		if (menu() != null) {
+			PageMenu.from(menu()).renderContentTemplates(model);
 		}
 
 		String html;
@@ -83,7 +67,7 @@ public class HtmlPage extends AbstractWidget<HtmlPage> {
 			html = PAGE_AJAX_TEMPLATE.render(model);
 		}
 
-		return GUI.hardcoded(html);
+		return html;
 	}
 
 	private Map<String, Object> pageModel() {
@@ -121,19 +105,19 @@ public class HtmlPage extends AbstractWidget<HtmlPage> {
 
 		model.put("has", has());
 
-		model.put("content", GUI.multi((Object[]) content));
-		model.put("home", home);
-		model.put("brand", brand);
-		model.put("title", title);
-		model.put("menu", menu);
+		model.put("content", GUI.multi(content()));
+		model.put("home", home());
+		model.put("brand", brand());
+		model.put("title", title());
+		model.put("menu", PageMenu.from(menu()));
 
 		model.put("version", RapidoidInfo.version());
-		model.put("embedded", embedded || req.attrs().get("_embedded") != null);
+		model.put("embedded", embedded() || req.attrs().get("_embedded") != null);
 
-		model.put("search", search);
-		model.put("navbar", navbar);
-		model.put("fluid", fluid);
-		model.put("cdn", cdn);
+		model.put("search", search());
+		model.put("navbar", navbar());
+		model.put("fluid", fluid());
+		model.put("cdn", cdn());
 
 		setupAssets(req, model);
 
@@ -144,27 +128,27 @@ public class HtmlPage extends AbstractWidget<HtmlPage> {
 		String view = req.view();
 
 		if (req.hasRoute(HttpVerb.GET, commonJs)) {
-			js.add(commonJs);
+			js().add(commonJs);
 		}
 
 		if (req.hasRoute(HttpVerb.GET, commonCss)) {
-			css.add(commonCss);
+			css().add(commonCss);
 		}
 
 		if (U.notEmpty(view)) {
 			String pageJs = "/" + view + ".js";
 			if (req.hasRoute(HttpVerb.GET, pageJs)) {
-				js.add(pageJs);
+				js().add(pageJs);
 			}
 
 			String pageCss = "/" + view + ".css";
 			if (req.hasRoute(HttpVerb.GET, pageCss)) {
-				css.add(pageCss);
+				css().add(pageCss);
 			}
 		}
 
-		model.put("js", js);
-		model.put("css", css);
+		model.put("js", js());
+		model.put("css", css());
 	}
 
 	private Map<String, Object> has() {
@@ -176,94 +160,6 @@ public class HtmlPage extends AbstractWidget<HtmlPage> {
 		has.put("page", HtmlPageUtils.HAS_PAGE);
 
 		return has;
-	}
-
-	public String home() {
-		return home;
-	}
-
-	public HtmlPage home(String homeURI) {
-		this.home = homeURI;
-		return this;
-	}
-
-	public Object brand() {
-		return brand;
-	}
-
-	public HtmlPage brand(Object brand) {
-		this.brand = brand;
-		return this;
-	}
-
-	public String title() {
-		return title;
-	}
-
-	public HtmlPage title(String title) {
-		this.title = title;
-		return this;
-	}
-
-	public Object[] content() {
-		return content;
-	}
-
-	public HtmlPage content(Object[] content) {
-		this.content = content;
-		return this;
-	}
-
-	public PageMenu menu() {
-		return menu;
-	}
-
-	public HtmlPage menu(PageMenu menu) {
-		this.menu = menu;
-		return this;
-	}
-
-	public boolean embedded() {
-		return embedded;
-	}
-
-	public HtmlPage embedded(boolean embedded) {
-		this.embedded = embedded;
-		return this;
-	}
-
-	public boolean search() {
-		return search;
-	}
-
-	public void search(boolean search) {
-		this.search = search;
-	}
-
-	public boolean cdn() {
-		return cdn;
-	}
-
-	public void cdn(boolean cdn) {
-		this.cdn = cdn;
-	}
-
-	public boolean navbar() {
-		return navbar;
-	}
-
-	public HtmlPage navbar(boolean navbar) {
-		this.navbar = navbar;
-		return this;
-	}
-
-	public boolean fluid() {
-		return fluid;
-	}
-
-	public HtmlPage fluid(boolean fluid) {
-		this.fluid = fluid;
-		return this;
 	}
 
 	public static String commonJs() {

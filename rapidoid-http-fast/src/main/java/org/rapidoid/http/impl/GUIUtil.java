@@ -1,13 +1,8 @@
-package org.rapidoid.web;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.log.Log;
+package org.rapidoid.http.impl;
 
 /*
  * #%L
- * rapidoid-web
+ * rapidoid-http-fast
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -25,12 +20,18 @@ import org.rapidoid.log.Log;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.gui.GUI;
+import org.rapidoid.web.Screen;
+
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class RapidoidWebModule extends RapidoidThing {
+public class GUIUtil extends RapidoidThing {
 
-	static {
-		Log.info("Initializing the Rapidoid Web module");
+	public static Screen newPage() {
+		return GUI.page();
 	}
 
 }
