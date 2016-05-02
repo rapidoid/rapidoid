@@ -56,4 +56,7 @@ public class Templates extends RapidoidThing {
 		return fromFile(template.getFileName());
 	}
 
+	public static void reset() {
+		TEMPLATES.clear();
+	}
 }

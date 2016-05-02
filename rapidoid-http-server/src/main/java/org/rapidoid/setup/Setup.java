@@ -34,6 +34,7 @@ import org.rapidoid.lambda.NParamLambda;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.Server;
 import org.rapidoid.reload.Reload;
+import org.rapidoid.render.Templates;
 import org.rapidoid.scan.ClasspathUtil;
 import org.rapidoid.security.Roles;
 import org.rapidoid.u.U;
@@ -490,6 +491,7 @@ public class Setup extends RapidoidThing implements Constants {
 
 		Conf.reload();
 		Res.reset();
+		Templates.reset();
 
 		for (Setup setup : instances()) {
 			setup.iocContext().reset();
