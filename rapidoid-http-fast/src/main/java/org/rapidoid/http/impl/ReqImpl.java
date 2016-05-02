@@ -9,6 +9,7 @@ import org.rapidoid.commons.MediaType;
 import org.rapidoid.commons.Str;
 import org.rapidoid.http.*;
 import org.rapidoid.http.customize.Customization;
+import org.rapidoid.io.Res;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
 import org.rapidoid.net.abstracts.Channel;
@@ -721,5 +722,25 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 	@Override
 	public boolean isStopped() {
 		return stopped;
+	}
+
+	public boolean hasRoute(HttpVerb verb, String uri) {
+		if (verb == HttpVerb.GET) {
+			String[] staticFilesLocations = custom().staticFilesPath();
+			if (U.notEmpty(staticFilesLocations)) {
+				String filename = Str.triml(uri, '/');
+				if (Res.from(filename, staticFilesLocations).exists()) {
+					return true;
+				}
+			}
+		}
+
+		for (Route route : routes().all()) {
+			if (route.verb().equals(verb) && route.path().equals(uri)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

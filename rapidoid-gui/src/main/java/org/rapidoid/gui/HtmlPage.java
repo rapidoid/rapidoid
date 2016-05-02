@@ -2,6 +2,7 @@ package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Env;
 import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.config.Conf;
@@ -10,6 +11,7 @@ import org.rapidoid.gui.menu.PageMenu;
 import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
 import org.rapidoid.html.Tag;
+import org.rapidoid.http.HttpVerb;
 import org.rapidoid.render.Template;
 import org.rapidoid.render.Templates;
 import org.rapidoid.u.U;
@@ -41,6 +43,9 @@ import java.util.Set;
 @Since("5.0.0")
 public class HtmlPage extends AbstractWidget<HtmlPage> {
 
+	public static volatile String commonJs = "/application.js";
+	public static volatile String commonCss = "/application.css";
+
 	private static volatile Template PAGE_TEMPLATE = Templates.fromFile("page.html");
 
 	private static volatile Template PAGE_AJAX_TEMPLATE = Templates.fromFile("page-ajax.html");
@@ -55,6 +60,9 @@ public class HtmlPage extends AbstractWidget<HtmlPage> {
 	private volatile boolean navbar = true;
 	private volatile boolean fluid;
 	private volatile boolean cdn = !Env.dev();
+
+	private final Set<String> js = Coll.synchronizedSet();
+	private final Set<String> css = Coll.synchronizedSet();
 
 	public HtmlPage(Object[] content) {
 		this.content = content;
@@ -111,7 +119,7 @@ public class HtmlPage extends AbstractWidget<HtmlPage> {
 		Set<String> roles = req.roles();
 		model.put("roles", roles);
 
-		model.put("has", has(req));
+		model.put("has", has());
 
 		model.put("content", GUI.multi((Object[]) content));
 		model.put("home", home);
@@ -127,10 +135,39 @@ public class HtmlPage extends AbstractWidget<HtmlPage> {
 		model.put("fluid", fluid);
 		model.put("cdn", cdn);
 
+		setupAssets(req, model);
+
 		return model;
 	}
 
-	private Map<String, Object> has(IReqInfo req) {
+	private void setupAssets(IReqInfo req, Map<String, Object> model) {
+		String view = req.view();
+
+		if (req.hasRoute(HttpVerb.GET, commonJs)) {
+			js.add(commonJs);
+		}
+
+		if (req.hasRoute(HttpVerb.GET, commonCss)) {
+			css.add(commonCss);
+		}
+
+		if (U.notEmpty(view)) {
+			String pageJs = "/" + view + ".js";
+			if (req.hasRoute(HttpVerb.GET, pageJs)) {
+				js.add(pageJs);
+			}
+
+			String pageCss = "/" + view + ".css";
+			if (req.hasRoute(HttpVerb.GET, pageCss)) {
+				css.add(pageCss);
+			}
+		}
+
+		model.put("js", js);
+		model.put("css", css);
+	}
+
+	private Map<String, Object> has() {
 		Map<String, Object> has = U.map();
 
 		has.put("role", HtmlPageUtils.HAS_ROLE);
@@ -229,4 +266,19 @@ public class HtmlPage extends AbstractWidget<HtmlPage> {
 		return this;
 	}
 
+	public static String commonJs() {
+		return commonJs;
+	}
+
+	public static void commonJs(String commonJs) {
+		HtmlPage.commonJs = commonJs;
+	}
+
+	public static String commonCss() {
+		return commonCss;
+	}
+
+	public static void commonCss(String commonCss) {
+		HtmlPage.commonCss = commonCss;
+	}
 }

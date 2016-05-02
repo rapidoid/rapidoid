@@ -30,8 +30,10 @@
 <link href="//cdn.jsdelivr.net/rapidoid/${version}/rapidoid.min.css" rel="stylesheet">
 {{/cdn}}
 
-<link href="/app.css" rel="stylesheet">
-{{#_css}}<link href="/${req.name}.css" rel="stylesheet">{{/_css}}
+{{#css}}
+<link href="${.}" rel="stylesheet">
+{{/css}}
+
 <link href="/img/favicon.png" rel="shortcut icon">
 <link href="/bootstrap/css/theme-default.css" type="text/css" rel="stylesheet" />
 

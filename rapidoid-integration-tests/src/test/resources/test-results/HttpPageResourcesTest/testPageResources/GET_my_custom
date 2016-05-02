@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 2246
+Content-Length: 2234
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +13,6 @@ Content-Length: 2246
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>my-title</title>
 
 
 
@@ -22,6 +21,7 @@ Content-Length: 2246
 <link href="/rapidoid.min.css" rel="stylesheet">
 
 <link href="/application.css" rel="stylesheet">
+<link href="/my/custom.css" rel="stylesheet">
 
 <link href="/img/favicon.png" rel="shortcut icon">
 <link href="/bootstrap/css/theme-default.css" type="text/css" rel="stylesheet" />
@@ -37,6 +37,7 @@ Content-Length: 2246
 <script src="/rapidoid.min.js"></script>
 
 <script src="/application.js"></script>
+<script src="/my/custom.js"></script>
 
 <div ng-if="!ajaxBodyContent">
 <nav role="navigation" class="navbar navbar-default">
@@ -46,7 +47,7 @@ Content-Length: 2246
             <button data-target="#collapsable" class="navbar-toggle collapsed" data-toggle="collapse" type="button">
                 <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/"><span><i class="fa fa-cog"></i>The Brand!</span></a>
+            <a class="navbar-brand" href="/">App</a>
         </div>
 
 <div id="collapsable" class="collapse navbar-collapse">
@@ -75,10 +76,9 @@ Content-Length: 2246
 
 <div class="container">
 
-    <h1>my-title</h1>
 
 
-my-title:12345
+My custom
 </div>
 
 

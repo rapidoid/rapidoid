@@ -2,6 +2,7 @@ package org.rapidoid.gui.reqinfo;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.http.HttpVerb;
 import org.rapidoid.io.Upload;
 
 import java.util.Collections;
@@ -123,8 +124,13 @@ public class NoReqInfo extends AbstractReqInfo {
 	}
 
 	@Override
-	public boolean hasRoute(String verb, String uri) {
+	public boolean hasRoute(HttpVerb verb, String uri) {
 		return false;
+	}
+
+	@Override
+	public String view() {
+		return null;
 	}
 
 }

@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 2126
+Content-Length: 2141
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +20,7 @@ Content-Length: 2126
 <link href="/font-awesome/css/font-awesome-4.5.0.min.css" rel="stylesheet">
 <link href="/rapidoid.min.css" rel="stylesheet">
 
-<link href="/app.css" rel="stylesheet">
+<link href="/application.css" rel="stylesheet">
 
 <link href="/img/favicon.png" rel="shortcut icon">
 <link href="/bootstrap/css/theme-default.css" type="text/css" rel="stylesheet" />
@@ -35,8 +35,7 @@ Content-Length: 2126
 <script src="/angular-1.5.3.min.js"></script>
 <script src="/rapidoid.min.js"></script>
 
-<script src="/app.js"></script>
-
+<script src="/application.js"></script>
 
 <div ng-if="!ajaxBodyContent">
 <nav role="navigation" class="navbar navbar-default">

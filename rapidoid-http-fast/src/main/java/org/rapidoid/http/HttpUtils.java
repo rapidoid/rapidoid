@@ -175,15 +175,11 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 		return value;
 	}
 
-	public static Res staticResource(String filename, String... possibleLocations) {
-		return Res.from(filename, possibleLocations);
-	}
-
 	public static Res staticPage(Req req, String... possibleLocations) {
 		String resName = resName(req.path());
 
 		if (hasExtension(resName)) {
-			return staticResource(resName, possibleLocations);
+			return Res.from(resName, possibleLocations);
 		} else {
 			Res res = Res.from(resName, possibleLocations);
 

@@ -1,0 +1,4 @@
+Route GET /custom-page [segment main]: render((Req) -> ...)
+Route POST /custom-page [segment main]: render((Req) -> ...)
+Route GET /my/custom [segment main]: render(() -> ...)
+Route POST /my/custom [segment main]: render(() -> ...)

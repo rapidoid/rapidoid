@@ -5,6 +5,7 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
+import org.rapidoid.http.HttpVerb;
 import org.rapidoid.render.Getter;
 
 /*
@@ -34,7 +35,7 @@ public class HtmlPageUtils extends RapidoidThing {
 	static final Getter HAS_PAGE = new Getter() {
 		@Override
 		public Object get(String page) {
-			return ReqInfo.get().hasRoute("get", strToUri(page));
+			return ReqInfo.get().hasRoute(HttpVerb.GET, strToUri(page));
 		}
 	};
 

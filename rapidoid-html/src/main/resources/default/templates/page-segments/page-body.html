@@ -13,8 +13,9 @@
 <script src="//cdn.jsdelivr.net/rapidoid/${version}/rapidoid.min.js"></script>
 {{/cdn}}
 
-<script src="/app.js"></script>
-{{#_js}}<script src="/${req.name}.js"></script>{{/_js}}
+{{#js}}
+<script src="${.}"></script>
+{{/js}}
 
 <div ng-if="!ajaxBodyContent">
 {{>page-segments/page-content}}

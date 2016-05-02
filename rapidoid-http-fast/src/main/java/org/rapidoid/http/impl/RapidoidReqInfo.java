@@ -4,8 +4,8 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.ctx.Contextual;
 import org.rapidoid.gui.reqinfo.AbstractReqInfo;
+import org.rapidoid.http.HttpVerb;
 import org.rapidoid.http.Req;
-import org.rapidoid.http.Route;
 import org.rapidoid.io.Upload;
 
 import java.util.List;
@@ -96,10 +96,6 @@ public class RapidoidReqInfo extends AbstractReqInfo {
 		return Contextual.hasContext();
 	}
 
-	private Req req() {
-		return Contextual.request();
-	}
-
 	@Override
 	public String username() {
 		return Contextual.username();
@@ -121,18 +117,18 @@ public class RapidoidReqInfo extends AbstractReqInfo {
 	}
 
 	@Override
-	public boolean hasRoute(String verb, String uri) {
-		Req reqq = Contextual.request();
+	public String view() {
+		return req().response().view();
+	}
 
-		if (reqq != null) {
-			for (Route route : reqq.routes().all()) {
-				if (route.verb().name().equalsIgnoreCase(verb) && route.path().equals(uri)) {
-					return true;
-				}
-			}
-		}
+	@Override
+	public boolean hasRoute(HttpVerb verb, String uri) {
+		ReqImpl reqq = (ReqImpl) req();
+		return reqq.hasRoute(verb, uri);
+	}
 
-		return false;
+	private Req req() {
+		return Contextual.request();
 	}
 
 }
