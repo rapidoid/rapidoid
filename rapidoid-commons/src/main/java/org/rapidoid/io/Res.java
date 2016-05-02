@@ -314,8 +314,15 @@ public class Res extends RapidoidThing {
 		return cachedFileName;
 	}
 
-	public static void reset() {
+	public static synchronized void reset() {
+		for (Res res : FILES.values()) {
+			res.invalidate();
+		}
 		FILES.clear();
+	}
+
+	public void invalidate() {
+		lastUpdatedOn = 0;
 	}
 
 	public static String root() {
