@@ -819,4 +819,20 @@ public class Msc extends RapidoidThing implements Constants {
 		msg = U.or(msg, defaultMsg);
 		return new ErrCodeAndMsg(code, msg);
 	}
+
+	public static <T> List<T> range(Iterable<T> items, int fromIndex, int toIndex) {
+		// TODO more efficient implementation
+		List<T> list = U.list(items);
+
+		fromIndex = U.limit(0, fromIndex, list.size());
+		toIndex = U.limit(fromIndex, toIndex, list.size());
+
+		return U.list(list.subList(fromIndex, toIndex));
+	}
+
+	public static <T> List<T> page(Iterable<T> items, int page, int pageSize) {
+		return range(items, (page - 1) * pageSize, page * pageSize);
+	}
+
+
 }

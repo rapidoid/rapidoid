@@ -354,10 +354,6 @@ public class U {
 		return System.currentTimeMillis();
 	}
 
-	public static boolean xor(boolean a, boolean b) {
-		return a && !b || b && !a;
-	}
-
 	public static boolean eq(Object a, Object b) {
 		return a == null ? b == null : a.equals(b);
 	}
@@ -521,11 +517,11 @@ public class U {
 		return Integer.parseInt(s);
 	}
 
-	public static int bounds(int min, int value, int max) {
+	public static int limit(int min, int value, int max) {
 		return Math.min(Math.max(min, value), max);
 	}
 
-	public static long bounds(long min, long value, long max) {
+	public static long limit(long min, long value, long max) {
 		return Math.min(Math.max(min, value), max);
 	}
 
@@ -571,20 +567,6 @@ public class U {
 		} else {
 			return ((Comparable<T>) val1).compareTo(val2);
 		}
-	}
-
-	public static <T> List<T> range(Iterable<T> items, int fromIndex, int toIndex) {
-		// TODO more efficient implementation
-		List<T> list = list(items);
-
-		fromIndex = bounds(0, fromIndex, list.size());
-		toIndex = bounds(fromIndex, toIndex, list.size());
-
-		return list(list.subList(fromIndex, toIndex));
-	}
-
-	public static <T> List<T> page(Iterable<T> items, int page, int pageSize) {
-		return range(items, (page - 1) * pageSize, page * pageSize);
 	}
 
 	/**

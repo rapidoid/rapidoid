@@ -86,14 +86,6 @@ public class UTest extends TestCommons {
 	}
 
 	@Test
-	public void testXor() {
-		eq(U.xor(true, true), false);
-		eq(U.xor(true, false), true);
-		eq(U.xor(false, true), true);
-		eq(U.xor(false, false), false);
-	}
-
-	@Test
 	public void testEq() {
 		isTrue(U.eq("2", "2"));
 		isFalse(U.eq("2", "3"));

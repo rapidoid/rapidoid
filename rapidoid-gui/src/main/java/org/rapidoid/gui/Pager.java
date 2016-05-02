@@ -91,7 +91,7 @@ public class Pager extends AbstractWidget<Pager> {
 	protected long pageNumber() {
 		Long pageNum = Cls.convert(req().params().get(param), Long.class);
 		long value = U.or(pageNum, initial, min, 1L);
-		return U.bounds(min, value, max);
+		return U.limit(min, value, max);
 	}
 
 	protected ATag first() {

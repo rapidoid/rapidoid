@@ -529,7 +529,7 @@ public abstract class GUI extends HTML {
 		Var<Integer> var = local(name, defaultValue);
 
 		// TODO put the constraints into the variable implementation
-		Integer pageN = U.bounds(min, var.get(), max);
+		Integer pageN = U.limit(min, var.get(), max);
 		var.set(pageN);
 
 		return var;
