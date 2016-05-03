@@ -8,6 +8,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
+import org.rapidoid.u.U;
 
 import java.util.Collections;
 import java.util.List;
@@ -41,6 +42,7 @@ public abstract class AbstractItem extends AbstractModel implements Item {
 	protected final Object value;
 
 	public AbstractItem(Object value) {
+		U.notNull(value, "item value");
 		this.value = value;
 	}
 

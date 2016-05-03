@@ -73,4 +73,10 @@ public class BeanListItems<T> extends ListItems {
 		return super.fitsIn(item) && (beanType == null || Cls.instanceOf(item.value(), beanType));
 	}
 
+	@Override
+	public Item ifFitsIn(Item item) {
+		U.must(fitsIn(item), "The item doesn't fit in the items, expected type '%s' but found: %s", beanType, Cls.of(item.value()));
+		return item;
+	}
+
 }

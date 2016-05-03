@@ -9,10 +9,12 @@ import org.rapidoid.lambda.Lmbd;
 import org.rapidoid.lambda.Mapper;
 import org.rapidoid.model.Item;
 import org.rapidoid.model.Items;
+import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 
+import java.util.Iterator;
 import java.util.List;
 
 /*
@@ -39,9 +41,9 @@ import java.util.List;
 @Since("2.0.0")
 public class Grid extends AbstractWidget<Grid> {
 
-	private volatile Items items;
+	private volatile Iterable<?> items;
 
-	private volatile String orderBy = "id";
+	private volatile String orderBy;
 	private volatile int pageSize = 10;
 	private volatile String[] columns = {};
 	private volatile String[] headers = {};
@@ -51,15 +53,26 @@ public class Grid extends AbstractWidget<Grid> {
 
 	@Override
 	protected Tag render() {
-		final List<Property> props = items.properties(columns);
 
-		int total = items.size();
+		Iterator<?> it = items.iterator();
+		Class<?> type = it.hasNext() ? it.next().getClass() : Object.class;
+
+		Items itemsModel;
+		if (items instanceof Items) {
+			itemsModel = (Items) items;
+		} else {
+			itemsModel = Models.beanItems(type, U.array(items));
+		}
+
+		final List<Property> props = itemsModel.properties(columns);
+
+		int total = itemsModel.size();
 		int pages = (int) Math.ceil(total / (double) pageSize);
 
 		boolean ordered = !U.isEmpty(orderBy);
 		Var<String> order = null;
 
-		Items slice = items;
+		Items slice = itemsModel;
 
 		String currentOrder = orderBy;
 
@@ -176,11 +189,11 @@ public class Grid extends AbstractWidget<Grid> {
 		return td(value);
 	}
 
-	public Items items() {
+	public Iterable<?> items() {
 		return items;
 	}
 
-	public Grid items(Items items) {
+	public Grid items(Iterable<?> items) {
 		this.items = items;
 		return this;
 	}

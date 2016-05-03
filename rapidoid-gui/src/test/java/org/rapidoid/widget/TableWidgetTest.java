@@ -43,7 +43,7 @@ public class TableWidgetTest extends WidgetTestCommons {
 
 		Items items = Models.beanItemsInfer(john, rambo);
 
-		Grid table = GUI.grid(items, null, 10);
+		Grid table = GUI.grid(items).pageSize(10);
 		verifyGUI("persons-grid", table);
 
 		verifyGUI("map-grid", GUI.grid(U.map("name", "Foo", "year", "2016")));

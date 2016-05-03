@@ -113,8 +113,8 @@ public class ListItems extends AbstractModel implements Items {
 		return item.value() != null;
 	}
 
-	protected final Item ifFitsIn(Item item) {
-		U.must(fitsIn(item), "This item doesn't fit in the items: %s", item);
+	public Item ifFitsIn(Item item) {
+		U.must(fitsIn(item), "The item '%s' doesn't fit in the items: %s", item, this);
 		return item;
 	}
 

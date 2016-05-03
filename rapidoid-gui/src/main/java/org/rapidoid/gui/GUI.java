@@ -41,7 +41,6 @@ import org.rapidoid.http.HttpVerb;
 import org.rapidoid.lambda.Calc;
 import org.rapidoid.lambda.ToMap;
 import org.rapidoid.model.Item;
-import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.render.Templates;
@@ -402,22 +401,8 @@ public abstract class GUI extends HTML {
 		return Cls.customizable(HtmlPage.class, new Object[]{AnyObj.flat(contents)});
 	}
 
-	public static <T> Grid grid(Class<T> type, Object[] items, String sortOrder, int pageSize, String... properties) {
-		return grid(Models.beanItems(type, items), sortOrder, pageSize, properties);
-	}
-
-	public static <T> Grid grid(Class<T> type, Iterable<T> items, String sortOrder, int pageSize, String... properties) {
-		return grid(type, U.array(items), sortOrder, pageSize, properties);
-	}
-
-	public static <T> Grid grid(Iterable<T> items, String... properties) {
-		Iterator<T> it = items.iterator();
-		Class<? extends Object> type = it.hasNext() ? it.next().getClass() : Object.class;
-		return grid(type, U.array(items), null, -1, properties);
-	}
-
-	public static Grid grid(Items items, String sortOrder, int pageSize, String... properties) {
-		return Cls.customizable(Grid.class).items(items).orderBy(sortOrder).pageSize(pageSize).columns(properties);
+	public static <T> Grid grid(Iterable<T> items) {
+		return Cls.customizable(Grid.class).items(items);
 	}
 
 	public static <T> KVGrid grid(Map<?, ?> map) {
