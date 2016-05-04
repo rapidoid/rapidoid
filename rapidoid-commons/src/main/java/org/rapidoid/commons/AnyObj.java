@@ -37,9 +37,14 @@ public class AnyObj extends RapidoidThing {
 		if (arrOrColl instanceof Object[]) {
 			Object[] arr = (Object[]) arrOrColl;
 			return Arr.indexOf(arr, value) >= 0;
+
 		} else if (arrOrColl instanceof Collection<?>) {
 			Collection<?> coll = (Collection<?>) arrOrColl;
 			return coll.contains(value);
+
+		} else if (arrOrColl == null) {
+			return false;
+
 		} else {
 			throw Err.illegalArg("Expected array or collection, but found: %s", U.str(arrOrColl));
 		}
