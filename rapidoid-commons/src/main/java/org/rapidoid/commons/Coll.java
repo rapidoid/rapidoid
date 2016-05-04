@@ -299,6 +299,7 @@ public class Coll extends RapidoidThing {
 		}
 
 		List<?> list = (items instanceof List<?>) ? (List<?>) items : U.list(items);
+		to = Math.min(to, list.size());
 		return U.cast(list.subList(from, to));
 	}
 
