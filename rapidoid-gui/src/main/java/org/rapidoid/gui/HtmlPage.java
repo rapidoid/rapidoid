@@ -109,7 +109,10 @@ public class HtmlPage extends ScreenBean {
 		model.put("home", home());
 		model.put("brand", brand());
 		model.put("title", title());
-		model.put("menu", PageMenu.from(menu()));
+
+		PageMenu pageMenu = PageMenu.from(menu());
+		pageMenu.uri(req.path());
+		model.put("menu", pageMenu);
 
 		model.put("version", RapidoidInfo.version());
 		model.put("embedded", embedded() || req.attrs().get("_embedded") != null);
