@@ -37,10 +37,11 @@ public class Pager extends AbstractWidget<Pager> {
 
 	private final String param;
 
-	private volatile long min;
-	private volatile long max;
+	private volatile Integer min;
+	private volatile Integer max;
+	private volatile Integer initial;
+
 	private volatile boolean right;
-	private volatile Long initial;
 
 	public Pager(String param) {
 		this.param = param;
@@ -51,7 +52,7 @@ public class Pager extends AbstractWidget<Pager> {
 		return shouldDisplay() ? pagination() : div();
 	}
 
-	protected String pageUri(long pageN) {
+	protected String pageUri(int pageN) {
 		IReqInfo req = req();
 
 		Map<String, String> query = U.map(req.params());
@@ -65,19 +66,28 @@ public class Pager extends AbstractWidget<Pager> {
 	}
 
 	protected Tag pagination() {
-		long pageN = pageNumber();
+		int pageN = pageNumber();
 
-		ATag first = first().href(pageUri(min));
+		Tag firstLi = null;
+		if (min != null) {
+			ATag first = first().href(pageUri(min));
+			firstLi = pageN > min ? li(first) : li(first.href(null)).class_("disabled");
+		}
+
+		Tag lastLi = null;
+		if (max != null) {
+			ATag last = last().href(pageUri(max));
+			lastLi = pageN < max ? li(last) : li(last.href(null)).class_("disabled");
+		}
+
 		ATag prev = prev().href(pageUri(pageN - 1));
-		ATag current = current();
-		ATag next = next().href(pageUri(pageN + 1));
-		ATag last = last().href(pageUri(max));
+		Tag prevLi = min == null || pageN > min ? li(prev) : li(prev.href(null)).class_("disabled");
 
-		Tag firstLi = pageN > min ? li(first) : li(first.href(null)).class_("disabled");
-		Tag prevLi = pageN > min ? li(prev) : li(prev.href(null)).class_("disabled");
+		ATag current = current();
 		Tag currentLi = li(current);
-		Tag nextLi = pageN < max ? li(next) : li(next.href(null)).class_("disabled");
-		Tag lastLi = pageN < max ? li(last) : li(last.href(null)).class_("disabled");
+
+		ATag next = next().href(pageUri(pageN + 1));
+		Tag nextLi = max == null || pageN < max ? li(next) : li(next.href(null)).class_("disabled");
 
 		Tag pagination = GUI.nav(GUI.ul_li(firstLi, prevLi, currentLi, nextLi, lastLi).class_("pagination"));
 
@@ -88,10 +98,19 @@ public class Pager extends AbstractWidget<Pager> {
 		return pagination;
 	}
 
-	protected long pageNumber() {
-		Long pageNum = Cls.convert(req().params().get(param), Long.class);
-		long value = U.or(pageNum, initial, min, 1L);
-		return U.limit(min, value, max);
+	protected int pageNumber() {
+		Integer pageNum = Cls.convert(req().params().get(param), Integer.class);
+		int value = U.or(pageNum, initial, min, 1);
+
+		if (min != null) {
+			value = Math.max(min, value);
+		}
+
+		if (max != null) {
+			value = Math.min(max, value);
+		}
+
+		return value;
 	}
 
 	protected ATag first() {
@@ -105,7 +124,13 @@ public class Pager extends AbstractWidget<Pager> {
 	}
 
 	protected ATag current() {
-		return GUI.a_void("Page ", pageNumber(), " of " + max);
+		String pageInfo = "Page " + pageNumber();
+
+		if (max != null) {
+			pageInfo += " of " + max;
+		}
+
+		return GUI.a_void(pageInfo);
 	}
 
 	protected ATag next() {
@@ -122,20 +147,20 @@ public class Pager extends AbstractWidget<Pager> {
 		return param;
 	}
 
-	public long min() {
+	public int min() {
 		return min;
 	}
 
-	public Pager min(long min) {
+	public Pager min(int min) {
 		this.min = min;
 		return this;
 	}
 
-	public long max() {
+	public int max() {
 		return max;
 	}
 
-	public Pager max(long max) {
+	public Pager max(int max) {
 		this.max = max;
 		return this;
 	}
@@ -149,11 +174,11 @@ public class Pager extends AbstractWidget<Pager> {
 		return this;
 	}
 
-	public Long initial() {
+	public Integer initial() {
 		return initial;
 	}
 
-	public Pager initial(long initial) {
+	public Pager initial(int initial) {
 		this.initial = initial;
 		return this;
 	}
