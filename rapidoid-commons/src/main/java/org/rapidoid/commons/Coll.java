@@ -286,7 +286,7 @@ public class Coll extends RapidoidThing {
 		});
 	}
 
-	public static <T> Iterable<T> range(Iterable<T> items, int from, int to) {
+	public static <T> List<T> range(Iterable<T> items, int from, int to) {
 		U.must(from <= to, "'from' must be <= 'to'!");
 
 		if (from == to) {

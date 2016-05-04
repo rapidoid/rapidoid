@@ -47,11 +47,11 @@ public class ClasspathHandler extends GUI implements Callable<Object> {
 
 		info.add(h3("Classpath folders:"));
 
-		info.add(grid(ClasspathUtil.getClasspathFolders()).columns("trim").headers("Classpath entries (folders)"));
+		info.add(grid(ClasspathUtil.getClasspathFolders()).columns("trim").headers("Classpath entries (folders)").pageSize(0));
 
 		info.add(h3("Classpath JARs:"));
 
-		info.add(grid(ClasspathUtil.getClasspathJars()).columns("trim").headers("Classpath entries (JARs)"));
+		info.add(grid(ClasspathUtil.getClasspathJars()).columns("trim").headers("Classpath entries (JARs)").pageSize(0));
 
 		return info;
 	}

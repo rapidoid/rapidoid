@@ -25,13 +25,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.gui.GUI;
 import org.rapidoid.gui.Grid;
-import org.rapidoid.model.Items;
-import org.rapidoid.model.Models;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.0.0")
-public class TableWidgetTest extends WidgetTestCommons {
+@Since("5.1.0")
+public class GridWidgetTest extends WidgetTestCommons {
 
 	@Test
 	public void testTableWidget() {
@@ -41,9 +39,7 @@ public class TableWidgetTest extends WidgetTestCommons {
 		Person rambo = new Person("Rambo", 50);
 		rambo.id = 2;
 
-		Items items = Models.beanItemsInfer(john, rambo);
-
-		Grid table = GUI.grid(items).pageSize(10);
+		Grid table = GUI.grid(U.list(john, rambo)).pageSize(10);
 		verifyGUI("persons-grid", table);
 
 		verifyGUI("map-grid", GUI.grid(U.map("name", "Foo", "year", "2016")));

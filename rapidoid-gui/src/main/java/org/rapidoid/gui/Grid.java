@@ -2,6 +2,7 @@ package org.rapidoid.gui;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.Coll;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.tag.TdTag;
@@ -12,7 +13,9 @@ import org.rapidoid.model.Items;
 import org.rapidoid.model.Models;
 import org.rapidoid.model.Property;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 import org.rapidoid.var.Var;
+import org.rapidoid.wrap.BoolWrap;
 
 import java.util.Iterator;
 import java.util.List;
@@ -52,49 +55,74 @@ public class Grid extends AbstractWidget<Grid> {
 	private volatile Mapper<Object, String> toUri;
 
 	@Override
-	protected Tag render() {
+	protected Object render() {
 
-		Iterator<?> it = items.iterator();
-		Class<?> type = it.hasNext() ? it.next().getClass() : Object.class;
+		Pager pager = noPager();
+		boolean paging = pageSize > 0;
+		Iterable<?> rows;
+
+		BoolWrap isLastPage = new BoolWrap();
+
+		if (paging) {
+			String pageParam = "_p" + seq("pager");
+			pager = GUI.pager(pageParam).min(1);
+
+			Integer size = Coll.getSizeOrNull(items);
+
+			if (size != null) {
+				int pages = (int) Math.ceil(size / (double) pageSize);
+				pager.max(pages);
+			}
+
+			rows = Msc.getPage(items, pager.pageNumber(), pageSize, size, isLastPage);
+
+		} else {
+			rows = items;
+		}
+
+		return renderGridPage(pager, rows, isLastPage.value);
+	}
+
+	private Object renderGridPage(Pager pager, Iterable<?> rows, boolean isLastPage) {
+		Iterator<?> it = rows.iterator();
+		boolean hasData = it.hasNext();
+
+		if (isLastPage || !hasData) {
+			pager.max(pager.pageNumber());
+		}
+
+		if (!hasData) {
+			return U.list(noDataAvailable(), pager); // no data
+		}
+
+		Class<?> type = it.next().getClass();
 
 		Items itemsModel;
-		if (items instanceof Items) {
-			itemsModel = (Items) items;
+		if (rows instanceof Items) {
+			itemsModel = (Items) rows;
 		} else {
-			itemsModel = Models.beanItems(type, U.array(items));
+			itemsModel = Models.beanItems(type, U.array(rows));
 		}
 
 		final List<Property> props = itemsModel.properties(columns);
-
-		int total = itemsModel.size();
-		int pages = (int) Math.ceil(total / (double) pageSize);
-
 		boolean ordered = !U.isEmpty(orderBy);
 		Var<String> order = null;
-
-		Items slice = itemsModel;
-
 		String currentOrder = orderBy;
 
 		if (ordered) {
-			order = GUI.local("_order_" + widgetId(), orderBy);
+			order = GUI.local("_o" + seq("order"), orderBy);
 			currentOrder = order.get();
-			slice = slice.orderedBy(currentOrder);
-		}
-
-		boolean paging = pageSize > 0;
-		Var<Integer> pageNumber = null;
-
-		if (paging) {
-			pageNumber = GUI.local("_page_" + widgetId(), 1, 1, pages);
-			slice = getPage(slice, pageNumber.get());
+			itemsModel = itemsModel.orderedBy(currentOrder);
 		}
 
 		Tag header = tableHeader(props, order);
-		Tag body = tableBody(props, slice);
-		Pager pager = paging ? GUI.pager(pageNumber.name()).min(1).max(pages) : noPager();
+		Tag body = tableBody(props, itemsModel);
 
 		return fullTable(header, body, pager);
+	}
+
+	protected Tag noDataAvailable() {
+		return GUI.h4("No data available!");
 	}
 
 	protected Pager noPager() {
@@ -103,15 +131,6 @@ public class Grid extends AbstractWidget<Grid> {
 
 	protected Tag fullTable(Tag header, Tag body, Pager pager) {
 		return GUI.row(GUI.table_(GUI.thead(header), body), pager);
-	}
-
-	protected Items getPage(Items items, Integer pageN) {
-		Items pageOrAll;
-		int pageFrom = Math.max((pageN - 1) * pageSize, 0);
-		int pageTo = Math.min((pageN) * pageSize, items.size());
-
-		pageOrAll = items.range(pageFrom, pageTo);
-		return pageOrAll;
 	}
 
 	protected Tag tableBody(final List<Property> props, Items pageOrAll) {
@@ -181,7 +200,16 @@ public class Grid extends AbstractWidget<Grid> {
 	}
 
 	protected String onClickScript(Item item) {
-		String uri = toUri != null ? Lmbd.eval(toUri, item.value()) : GUI.uriFor(item.value());
+		String uri;
+		if (toUri != null) {
+			uri = Lmbd.eval(toUri, item.value());
+		} else {
+			uri = GUI.uriFor(item.value());
+			if (U.notEmpty(uri)) {
+				uri = Msc.uri(uri, "view");
+			}
+		}
+
 		return U.notEmpty(uri) ? U.frmt("Rapidoid.goAt('%s');", uri) : null;
 	}
 
@@ -194,6 +222,7 @@ public class Grid extends AbstractWidget<Grid> {
 	}
 
 	public Grid items(Iterable<?> items) {
+		U.must(!(items instanceof Items));
 		this.items = items;
 		return this;
 	}

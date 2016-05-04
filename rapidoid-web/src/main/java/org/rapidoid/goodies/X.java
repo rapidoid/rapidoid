@@ -13,12 +13,10 @@ import org.rapidoid.http.Req;
 import org.rapidoid.http.ReqRespHandler;
 import org.rapidoid.http.Resp;
 import org.rapidoid.jpa.JPA;
-import org.rapidoid.lambda.Mapper;
 import org.rapidoid.setup.On;
 import org.rapidoid.setup.Setup;
 import org.rapidoid.sql.JDBC;
 import org.rapidoid.u.U;
-import org.rapidoid.util.Msc;
 
 import javax.persistence.metamodel.EntityType;
 import java.util.List;
@@ -136,12 +134,7 @@ public class X extends RapidoidThing {
 				IRange range = Range.of((page - 1) * pageSize, pageSize);
 				List<?> records = JPA.of(entityType).page(range.start(), range.length());
 
-				Grid grid = GUI.grid(records).toUri(new Mapper<Object, String>() {
-					@Override
-					public String map(Object target) throws Exception {
-						return Msc.uri(GUI.uriFor(baseUri, target), "view");
-					}
-				});
+				Grid grid = GUI.grid(records);
 
 				Btn add = GUI.btn("Add " + name(entityType)).primary().go(baseUri + "/add");
 

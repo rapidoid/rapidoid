@@ -12,9 +12,8 @@ import org.rapidoid.html.impl.TagRenderer;
 import org.rapidoid.html.tag.ATag;
 import org.rapidoid.html.tag.TdTag;
 import org.rapidoid.html.tag.ThTag;
+import org.rapidoid.u.U;
 import org.rapidoid.util.Constants;
-
-import java.util.UUID;
 
 /*
  * #%L
@@ -62,7 +61,18 @@ public abstract class AbstractWidget<W extends AbstractWidget<?>> extends Rapido
 	}
 
 	public String widgetId() {
-		return getClass().getSimpleName() + "-" + UUID.randomUUID();
+		String type = getClass().getSimpleName().toLowerCase();
+		return type + seq(type);
+	}
+
+	public String seq(String seqName) {
+		String seq = "__seq_" + seqName;
+		int seqNum = (Integer) U.or(req().attrs().get(seq), 0);
+
+		seqNum++;
+		req().attrs().put(seq, seqNum);
+
+		return "" + seqNum;
 	}
 
 	public boolean visible() {

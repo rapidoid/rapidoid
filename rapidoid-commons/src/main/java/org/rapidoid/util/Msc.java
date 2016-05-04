@@ -21,6 +21,7 @@ import org.rapidoid.lambda.Mapper;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
 import org.rapidoid.validation.InvalidData;
+import org.rapidoid.wrap.BoolWrap;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -820,19 +821,26 @@ public class Msc extends RapidoidThing implements Constants {
 		return new ErrCodeAndMsg(code, msg);
 	}
 
-	public static <T> List<T> range(Iterable<T> items, int fromIndex, int toIndex) {
-		// TODO more efficient implementation
-		List<T> list = U.list(items);
-
-		fromIndex = U.limit(0, fromIndex, list.size());
-		toIndex = U.limit(fromIndex, toIndex, list.size());
-
-		return U.list(list.subList(fromIndex, toIndex));
-	}
-
 	public static <T> List<T> page(Iterable<T> items, int page, int pageSize) {
-		return range(items, (page - 1) * pageSize, page * pageSize);
+		return Coll.range(items, (page - 1) * pageSize, page * pageSize);
 	}
 
+	public static List<?> getPage(Iterable<?> items, int page, int pageSize, Integer size, BoolWrap isLastPage) {
+		int pageFrom = Math.max((page - 1) * pageSize, 0);
+		int pageTo = (page) * pageSize + 1;
+
+		if (size != null) {
+			pageTo = Math.min(pageTo, size);
+		}
+
+		List<?> range = Coll.range(items, pageFrom, pageTo);
+		isLastPage.value = range.size() < pageSize + 1;
+
+		if (!isLastPage.value && !range.isEmpty()) {
+			range.remove(range.size() - 1);
+		}
+
+		return range; // 1 item extra, to test if there are more results
+	}
 
 }

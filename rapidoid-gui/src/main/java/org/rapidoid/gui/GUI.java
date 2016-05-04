@@ -401,7 +401,7 @@ public abstract class GUI extends HTML {
 		return Cls.customizable(HtmlPage.class, new Object[]{AnyObj.flat(contents)});
 	}
 
-	public static <T> Grid grid(Iterable<T> items) {
+	public static Grid grid(Iterable<?> items) {
 		return Cls.customizable(Grid.class).items(items);
 	}
 
@@ -954,7 +954,7 @@ public abstract class GUI extends HTML {
 		}
 
 		Object id = getIdentifier(target);
-		return id != null ? Msc.uri(baseUri, id + "", "view") : "";
+		return id != null ? Msc.uri(baseUri, id + "") : "";
 	}
 
 	public static String typeUri(Class<?> entityType) {
