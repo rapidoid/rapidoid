@@ -104,11 +104,13 @@ severe|Severe|SEVERE
  }
  */
 
+import org.rapidoid.RapidoidThing;
+
 /**
  * @author Nikolche Mihajlovski
  * @since 3.0.0
  */
-public class LogHP {
+public class LogHP extends RapidoidThing {
 
 	private LogHP() {
 	}

@@ -20,6 +20,7 @@ package org.rapidoid.commons;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 
@@ -28,7 +29,7 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class PagingIterator implements Iterator {
+public class PagingIterator extends RapidoidThing implements Iterator {
 
 	private final DataItems items;
 
