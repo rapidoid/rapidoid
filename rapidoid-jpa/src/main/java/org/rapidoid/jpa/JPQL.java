@@ -23,6 +23,7 @@ package org.rapidoid.jpa;
 import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
+import org.rapidoid.commons.AbstractDataItems;
 import org.rapidoid.u.U;
 
 import javax.persistence.Query;
@@ -31,7 +32,7 @@ import java.util.Map;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JPQL extends RapidoidThing implements Results {
+public class JPQL extends AbstractDataItems implements Results {
 
 	private final String jpql;
 

@@ -1,8 +1,8 @@
-package org.rapidoid.jpa;
+package org.rapidoid.commons;
 
 /*
  * #%L
- * rapidoid-jpa
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -22,36 +22,44 @@ package org.rapidoid.jpa;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.AbstractDataItems;
 
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaQuery;
+import java.util.Iterator;
 import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JPACriteriaQueryEntities<T> extends AbstractDataItems implements Entities<T> {
+public class PagingIterator implements Iterator {
 
-	private final CriteriaQuery<T> criteria;
+	private final DataItems items;
 
-	public JPACriteriaQueryEntities(CriteriaQuery<T> criteria) {
-		this.criteria = criteria;
+	private List<?> page;
+
+	private int offset;
+	private int pageLength;
+	private int index;
+
+	public PagingIterator(DataItems items) {
+		this(items, 100);
 	}
 
-	private Query query() {
-		return JPA.em().createQuery(this.criteria);
+	public PagingIterator(DataItems items, int pageLength) {
+		this.items = items;
+		this.pageLength = pageLength;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> all() {
-		return query().getResultList();
+	public boolean hasNext() {
+		if (page == null || index >= page.size()) {
+			page = items.page(offset, pageLength);
+			offset += page.size();
+			index = 0;
+		}
+
+		return index < page.size();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> page(int start, int length) {
-		return JPAUtil.getPage(query(), start, length);
+	public Object next() {
+		return page.get(index++);
 	}
-
 }

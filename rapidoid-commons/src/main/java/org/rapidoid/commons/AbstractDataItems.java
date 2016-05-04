@@ -1,8 +1,8 @@
-package org.rapidoid.jpa;
+package org.rapidoid.commons;
 
 /*
  * #%L
- * rapidoid-jpa
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -20,38 +20,19 @@ package org.rapidoid.jpa;
  * #L%
  */
 
+import org.rapidoid.RapidoidThing;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.commons.AbstractDataItems;
 
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaQuery;
-import java.util.List;
+import java.util.Iterator;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public class JPACriteriaQueryEntities<T> extends AbstractDataItems implements Entities<T> {
+public abstract class AbstractDataItems extends RapidoidThing implements DataItems {
 
-	private final CriteriaQuery<T> criteria;
-
-	public JPACriteriaQueryEntities(CriteriaQuery<T> criteria) {
-		this.criteria = criteria;
-	}
-
-	private Query query() {
-		return JPA.em().createQuery(this.criteria);
-	}
-
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> all() {
-		return query().getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<T> page(int start, int length) {
-		return JPAUtil.getPage(query(), start, length);
+	public Iterator iterator() {
+		return new PagingIterator(this);
 	}
 
 }

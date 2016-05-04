@@ -75,6 +75,7 @@ org.rapidoid.cls.Proxies
 org.rapidoid.cls.TypeKind
 org.rapidoid.cls.TypeSpecificFactory
 org.rapidoid.cls.TypeSpecificVisitor
+org.rapidoid.commons.AbstractDataItems
 org.rapidoid.commons.AnyObj
 org.rapidoid.commons.Arr
 org.rapidoid.commons.AutoExpandingMap
@@ -88,6 +89,7 @@ org.rapidoid.commons.Err
 org.rapidoid.commons.IRange
 org.rapidoid.commons.JS
 org.rapidoid.commons.MediaType
+org.rapidoid.commons.PagingIterator
 org.rapidoid.commons.Range
 org.rapidoid.commons.RapidoidInfo
 org.rapidoid.commons.Rnd

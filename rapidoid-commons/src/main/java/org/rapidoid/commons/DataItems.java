@@ -27,7 +27,7 @@ import java.util.List;
 
 @Authors("Nikolche Mihajlovski")
 @Since("5.1.0")
-public interface DataItems {
+public interface DataItems extends Iterable {
 
 	<T> List<T> all();
 

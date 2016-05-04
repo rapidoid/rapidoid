@@ -285,4 +285,25 @@ public class Coll extends RapidoidThing {
 
 		});
 	}
+
+	public static <T> Iterable<T> range(Iterable<T> items, int from, int to) {
+		U.must(from <= to, "'from' must be <= 'to'!");
+
+		if (from == to) {
+			return Collections.emptyList();
+		}
+
+		if (items instanceof DataItems) {
+			DataItems dataItems = (DataItems) items;
+			return dataItems.page(from, to - from);
+		}
+
+		List<?> list = (items instanceof List<?>) ? (List<?>) items : U.list(items);
+		return U.cast(list.subList(from, to));
+	}
+
+	public static Integer getSizeOrNull(Iterable<?> items) {
+		return (items instanceof Collection<?>) ? ((Collection<?>) items).size() : null;
+	}
+
 }
