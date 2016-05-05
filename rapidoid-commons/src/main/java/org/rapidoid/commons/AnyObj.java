@@ -46,7 +46,7 @@ public class AnyObj extends RapidoidThing {
 			return false;
 
 		} else {
-			throw Err.illegalArg("Expected array or collection, but found: %s", U.str(arrOrColl));
+			return U.eq(arrOrColl, value);
 		}
 	}
 

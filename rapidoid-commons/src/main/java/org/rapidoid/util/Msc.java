@@ -544,7 +544,7 @@ public class Msc extends RapidoidThing implements Constants {
 		} else {
 
 			// this might be a Widget, so rendering it requires double toString:
-			U.str(obj); // 1. data binding and event processing
+//			U.str(obj); // 1. data binding and event processing
 			return U.str(obj).getBytes(); // 2. actual rendering
 		}
 	}

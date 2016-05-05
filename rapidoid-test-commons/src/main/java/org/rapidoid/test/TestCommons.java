@@ -558,21 +558,23 @@ public abstract class TestCommons {
 		String filename = "src" + s + "test" + s + "resources" + s + resname;
 
 		if (ADJUST_RESULTS) {
-			File testDir = new File(filename).getParentFile();
+			synchronized (this) {
+				File testDir = new File(filename).getParentFile();
 
-			if (!testDir.exists()) {
-				if (!testDir.mkdirs()) {
-					throw new RuntimeException("Couldn't create the test result folder: " + testDir.getAbsolutePath());
+				if (!testDir.exists()) {
+					if (!testDir.mkdirs()) {
+						throw new RuntimeException("Couldn't create the test result folder: " + testDir.getAbsolutePath());
+					}
 				}
-			}
 
-			FileOutputStream out;
-			try {
-				out = new FileOutputStream(filename);
-				out.write(actual.getBytes());
-				out.close();
-			} catch (IOException e) {
-				throw new RuntimeException(e);
+				FileOutputStream out;
+				try {
+					out = new FileOutputStream(filename);
+					out.write(actual.getBytes());
+					out.close();
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 			}
 
 		} else {

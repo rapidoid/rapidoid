@@ -2,14 +2,11 @@ package org.rapidoid.html.impl;
 
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
-import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.AnyObj;
 import org.rapidoid.commons.Err;
 import org.rapidoid.html.Cmd;
 import org.rapidoid.html.Tag;
-import org.rapidoid.html.Tags;
 import org.rapidoid.u.U;
-import org.rapidoid.var.Var;
 
 import java.io.Serializable;
 import java.util.List;
@@ -59,8 +56,6 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 	String _h = null;
 
 	Tag proxy;
-
-	Var<Object> binding;
 
 	Cmd cmd;
 
@@ -114,7 +109,6 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 		Tag _copy = TagProxy.create(clazz, name, contents.toArray());
 		TagImpl impl = impl(_copy);
 
-		impl.binding = binding;
 		impl._h = _h;
 		impl.cmd = cmd;
 		impl.attrs.putAll(attrs);
@@ -166,9 +160,6 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 
 	@Override
 	public String attr(String attr) {
-		if (attr.equals("value") && binding != null) {
-			return Cls.str(binding.get());
-		}
 		return attrs.get(attr);
 	}
 
@@ -213,17 +204,6 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 
 	public String hnd() {
 		return _h;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> Tag var(Var<T> var) {
-		Tag _copy = (Tag) Tags.withValue(proxy, var.get());
-		TagImpl impl = impl(_copy);
-
-		impl.binding = (Var<Object>) var;
-
-		return _copy;
 	}
 
 	@Override

@@ -80,11 +80,13 @@ public class TagRenderer extends RapidoidThing {
 			ConstantTag constantTag = ((ConstantTag) content);
 			write(out, constantTag.bytes());
 			return;
+
 		} else if (content instanceof Tag) {
 			Tag tag = (Tag) content;
 			TagInternals tagi = (TagInternals) tag;
 			str(tagi.base(), level, inline, extra, out);
 			return;
+
 		} else if (content instanceof TagWidget) {
 			TagWidget<Object> widget = (TagWidget<Object>) content;
 			Object widgetContent = widget.render(extra);
@@ -92,6 +94,7 @@ public class TagRenderer extends RapidoidThing {
 				str(widgetContent, level, inline, extra, out);
 			}
 			return;
+
 		} else if (content instanceof Object[]) {
 			join((Object[]) content, level, inline, extra, out);
 			return;
@@ -128,10 +131,6 @@ public class TagRenderer extends RapidoidThing {
 
 	public void str(TagImpl tag, int level, boolean inline, Object extra, OutputStream out) {
 
-		if (tag.binding != null) {
-			tag._h = tag.binding.name();
-		}
-
 		String name = HTML.escape(tag.name);
 		List<Object> contents = tag.contents;
 
@@ -150,30 +149,11 @@ public class TagRenderer extends RapidoidThing {
 			String attr = e.getKey();
 			String value = e.getValue();
 
-			if (tag.binding != null && attr.equals("value")) {
-				value = tag.attr(attr);
-			}
-
 			writeAttr(tag, out, attr, value);
 		}
 
 		for (String attr : tag.battrs) {
-			if (tag.binding == null || (!attr.equals("checked") && !attr.equals("selected"))) {
-				writeBAttr(out, attr);
-			}
-		}
-
-		if (tag.binding != null) {
-			Object b = tag.binding.get();
-			if (b instanceof Boolean) {
-				if ((Boolean) b) {
-					if (tag.name.equals("option")) {
-						writeBAttr(out, "selected");
-					} else if (tag.name.equals("input")) {
-						writeBAttr(out, "checked");
-					}
-				}
-			}
+			writeBAttr(out, attr);
 		}
 
 		if (tag.cmd != null) {

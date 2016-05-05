@@ -3,7 +3,6 @@ package org.rapidoid.html;
 import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.annotation.Special;
-import org.rapidoid.var.Var;
 
 /*
  * #%L
@@ -49,9 +48,6 @@ public interface SpecificTag<TAG extends SpecificTag<?>> extends Tag {
 
 	@Special
 	TAG is(String attr, boolean value);
-
-	@Special
-	<T> TAG var(Var<T> var);
 
 	@Special
 	TAG cmd(String cmd, Object... args);

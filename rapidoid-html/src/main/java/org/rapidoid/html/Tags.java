@@ -6,10 +6,6 @@ import org.rapidoid.commons.Str;
 import org.rapidoid.html.impl.ConstantTag;
 import org.rapidoid.html.impl.TagProxy;
 import org.rapidoid.html.impl.UndefinedTag;
-import org.rapidoid.html.tag.InputTag;
-import org.rapidoid.html.tag.OptionTag;
-import org.rapidoid.html.tag.TextareaTag;
-import org.rapidoid.u.U;
 import org.rapidoid.var.Var;
 import org.rapidoid.var.Vars;
 
@@ -81,27 +77,6 @@ public class Tags extends BasicUtils {
 			for (Object cont : coll) {
 				traverse(cont, processor);
 			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T extends Tag> T withValue(T tag, Object value) {
-
-		if (tag instanceof InputTag) {
-			InputTag input = (InputTag) tag;
-			if ("checkbox".equals(input.type()) || "radio".equals(input.type())) {
-				return (T) input.checked(value != null ? bool(value) : false);
-			} else {
-				return (T) input.value(value != null ? str(value) : "");
-			}
-		} else if (tag instanceof TextareaTag) {
-			TextareaTag textArea = (TextareaTag) tag;
-			return (T) textArea.contents(value != null ? str(value) : "");
-		} else if (tag instanceof OptionTag) {
-			OptionTag optionTag = (OptionTag) tag;
-			return (T) optionTag.selected(value != null ? bool(value) : false);
-		} else {
-			throw U.rte("Cannot set value to a '%s' tag!", ((Tag) tag).tagKind());
 		}
 	}
 

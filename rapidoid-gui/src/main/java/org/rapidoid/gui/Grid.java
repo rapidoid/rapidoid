@@ -110,7 +110,7 @@ public class Grid extends AbstractWidget<Grid> {
 		String currentOrder = orderBy;
 
 		if (ordered) {
-			order = GUI.local("_o" + seq("order"), orderBy);
+			order = GUI.var("_o" + seq("order"), orderBy);
 			currentOrder = order.get();
 			itemsModel = itemsModel.orderedBy(currentOrder);
 		}

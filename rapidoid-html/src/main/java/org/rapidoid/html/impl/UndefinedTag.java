@@ -6,7 +6,6 @@ import org.rapidoid.annotation.Since;
 import org.rapidoid.commons.Err;
 import org.rapidoid.html.Tag;
 import org.rapidoid.html.TagProcessor;
-import org.rapidoid.var.Var;
 
 /*
  * #%L
@@ -173,11 +172,6 @@ public class UndefinedTag extends RapidoidThing implements Tag {
 
 	@Override
 	public Tag onclick(String onclick) {
-		throw Err.notExpected();
-	}
-
-	@Override
-	public <T> Tag var(Var<T> var) {
 		throw Err.notExpected();
 	}
 

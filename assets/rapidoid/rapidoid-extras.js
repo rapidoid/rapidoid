@@ -1,27 +1,3 @@
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip();
-
-  $('.copy-snippet').prepend('<button class="btn btn-default pull-right" data-copy-to-clipboard><i class="fa fa-copy"></i></button>');
-
-  var clipboard = new Clipboard('[data-copy-to-clipboard]',{
-    target:function(trigger){
-      return trigger.nextElementSibling;
-    }
-  });
-
-  clipboard.on('success', function(e){
-    e.clearSelection();
-
-    $(e.trigger).tooltip({'title': 'Copied!'});
-    $(e.trigger).tooltip('show');
-
-    setTimeout(function() {
-        $(e.trigger).tooltip('destroy');
-    }, 500);
-  });
-
-})
-
 /* Rapidoid Extras */
 Rapidoid = (function() {
 
@@ -34,6 +10,37 @@ Rapidoid = (function() {
     // document.write('<link href="/bootstrap/css/theme-' + theme + '.css"
     // rel="stylesheet">');
     // }
+
+    function _init() {
+        $(function () {
+
+          $('[data-toggle="tooltip"]').tooltip();
+
+          $('.pretty').each(function() {
+            $(this).prettyCheckable({ color: 'blue' });
+          });
+
+          $('.copy-snippet').prepend('<button class="btn btn-default pull-right" data-copy-to-clipboard><i class="fa fa-copy"></i></button>');
+
+          var clipboard = new Clipboard('[data-copy-to-clipboard]',{
+            target:function(trigger){
+              return trigger.nextElementSibling;
+            }
+          });
+
+          clipboard.on('success', function(e){
+            e.clearSelection();
+
+            $(e.trigger).tooltip({'title': 'Copied!'});
+            $(e.trigger).tooltip('show');
+
+            setTimeout(function() {
+                $(e.trigger).tooltip('destroy');
+            }, 500);
+          });
+
+        });
+    }
 
     function _goAt(url) {
         window.location.href = url;
@@ -162,6 +169,7 @@ Rapidoid = (function() {
         logout : _logout,
         popup : _popup,
         modal : _modal,
+        init : _init,
 
         createApp : createApp,
         initializer : initializer,

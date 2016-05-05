@@ -24,13 +24,13 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.beany.Beany;
 import org.rapidoid.cls.Cls;
-import org.rapidoid.commons.*;
+import org.rapidoid.commons.AnyObj;
+import org.rapidoid.commons.English;
+import org.rapidoid.commons.Str;
+import org.rapidoid.commons.TimeSeries;
 import org.rapidoid.gui.base.AbstractWidget;
 import org.rapidoid.gui.reqinfo.IReqInfo;
 import org.rapidoid.gui.reqinfo.ReqInfo;
-import org.rapidoid.gui.var.ArrayContainerVar;
-import org.rapidoid.gui.var.CollectionContainerVar;
-import org.rapidoid.gui.var.EqualityVar;
 import org.rapidoid.gui.var.LocalVar;
 import org.rapidoid.html.HTML;
 import org.rapidoid.html.Tag;
@@ -494,30 +494,12 @@ public abstract class GUI extends HTML {
 		return items;
 	}
 
-	public static <T extends Serializable> Var<T> providedVar(String name, T defaultValue) {
-		return local(name, defaultValue);
-	}
-
 	public static <T extends Serializable> Var<T> var(String name, T defaultValue) {
-		return providedVar(name, defaultValue);
+		return new LocalVar<T>(name, defaultValue);
 	}
 
 	public static <T extends Serializable> Var<T> var(String name) {
 		return var(name, null);
-	}
-
-	public static <T extends Serializable> Var<T> local(String name, T defaultValue) {
-		return new LocalVar<T>(name, defaultValue, req().isGetReq());
-	}
-
-	public static Var<Integer> local(String name, int defaultValue, int min, int max) {
-		Var<Integer> var = local(name, defaultValue);
-
-		// TODO put the constraints into the variable implementation
-		Integer pageN = U.limit(min, var.get(), max);
-		var.set(pageN);
-
-		return var;
 	}
 
 	public static Object highlight(String text) {
@@ -529,7 +511,7 @@ public abstract class GUI extends HTML {
 	}
 
 	public static InputTag email(Var<?> var) {
-		return input().type("email").class_("form-control").var(var);
+		return input().type("email").class_("form-control").value(str(var.get()));
 	}
 
 	public static InputTag email(String var) {
@@ -537,11 +519,11 @@ public abstract class GUI extends HTML {
 	}
 
 	public static InputTag email(String var, String defaultValue) {
-		return email(providedVar(var, defaultValue));
+		return email(var(var, defaultValue));
 	}
 
 	public static InputTag password(Var<?> var) {
-		return input().type("password").class_("form-control").var(var);
+		return input().type("password").name(var.name()).class_("form-control").value(str(var.get()));
 	}
 
 	public static InputTag password(String var) {
@@ -549,11 +531,11 @@ public abstract class GUI extends HTML {
 	}
 
 	public static InputTag password(String var, String defaultValue) {
-		return password(providedVar(var, defaultValue));
+		return password(var(var, defaultValue));
 	}
 
 	public static InputTag txt(Var<?> var) {
-		return input().type("text").class_("form-control").var(var);
+		return input().type("text").name(var.name()).class_("form-control").value(str(var.get()));
 	}
 
 	public static InputTag txt(String var) {
@@ -561,11 +543,11 @@ public abstract class GUI extends HTML {
 	}
 
 	public static InputTag txt(String var, String defaultValue) {
-		return txt(providedVar(var, defaultValue));
+		return txt(var(var, defaultValue));
 	}
 
 	public static TextareaTag txtbig(Var<?> var) {
-		return textarea().class_("form-control").var(var);
+		return textarea().class_("form-control").contents(str(var.get()));
 	}
 
 	public static TextareaTag txtbig(String var) {
@@ -573,11 +555,16 @@ public abstract class GUI extends HTML {
 	}
 
 	public static TextareaTag txtbig(String var, String defaultValue) {
-		return txtbig(providedVar(var, defaultValue));
+		return txtbig(var(var, defaultValue));
 	}
 
 	public static InputTag checkbox(Var<?> var) {
-		return input().type("checkbox").var(var);
+		String value = str(var.get());
+		return input().type("checkbox").name(var.name()).value(value).checked(has(var, value));
+	}
+
+	private static boolean has(Var<?> var, String value) {
+		return AnyObj.contains(var.get(), value);
 	}
 
 	public static InputTag checkbox(String var) {
@@ -585,7 +572,7 @@ public abstract class GUI extends HTML {
 	}
 
 	public static InputTag checkbox(String var, boolean defaultValue) {
-		return checkbox(providedVar(var, defaultValue));
+		return checkbox(var(var, defaultValue));
 	}
 
 	public static SelectTag dropdown(Collection<?> options, Var<?> var) {
@@ -593,8 +580,8 @@ public abstract class GUI extends HTML {
 		SelectTag dropdown = select().class_("form-control").multiple(false);
 
 		for (Object opt : options) {
-			Var<Boolean> optVar = varEq(var, opt);
-			OptionTag op = option(opt).value(str(opt)).var(optVar);
+			String value = str(var.get());
+			OptionTag op = option(opt).value(str(opt)).value(value);
 			dropdown = dropdown.append(op);
 		}
 
@@ -606,16 +593,16 @@ public abstract class GUI extends HTML {
 	}
 
 	public static SelectTag dropdown(Collection<?> options, String var, Object defaultValue) {
-		return dropdown(options, providedVar(var, serializable(defaultValue)));
+		return dropdown(options, var(var, serializable(defaultValue)));
 	}
 
 	public static SelectTag multiSelect(Collection<?> options, Var<?> var) {
 		U.notNull(options, "multi-select options");
-		SelectTag select = select().class_("form-control").multiple(true);
+		SelectTag select = select().name(var.name()).class_("form-control").multiple(true);
 
 		for (Object opt : options) {
-			Var<Boolean> optVar = varHas(var, opt);
-			OptionTag op = option(opt).value(str(opt)).var(optVar);
+			String value = str(opt);
+			OptionTag op = option(opt).value(value).selected(has(var, value));
 			select = select.append(op);
 		}
 
@@ -627,7 +614,7 @@ public abstract class GUI extends HTML {
 	}
 
 	public static SelectTag multiSelect(Collection<?> options, String var, Collection<?> defaultValue) {
-		return multiSelect(options, providedVar(var, serializable(defaultValue)));
+		return multiSelect(options, var(var, serializable(defaultValue)));
 	}
 
 	public static Tag[] radios(String name, Collection<?> options, Var<?> var) {
@@ -636,24 +623,16 @@ public abstract class GUI extends HTML {
 
 		int i = 0;
 		for (Object opt : options) {
-			Var<Boolean> optVar = varEq(var, opt);
-			InputTag radio = input().type("radio").name(name).value(str(opt)).var(optVar);
-			radios[i] = label(radio, opt).class_("radio-inline");
+			String value = str(opt);
+			InputTag radio = input().type("radio").class_("pretty").attr("data-label", value).name(name).value(value).checked(U.eq(var.get(), value));
+			radios[i] = radio; // label(radio, opt).class_("radio-inline");
 			i++;
 		}
 		return radios;
 	}
 
 	public static Tag[] radios(Collection<?> options, Var<?> var) {
-		return radios(Rnd.rndStr(30), options, var);
-	}
-
-	public static Tag[] radios(Collection<?> options, String var) {
-		return radios(options, var, null);
-	}
-
-	public static Tag[] radios(Collection<?> options, String var, Object defaultValue) {
-		return radios(options, providedVar(var, serializable(defaultValue)));
+		return radios(var.name(), options, var);
 	}
 
 	public static Tag[] checkboxes(String name, Collection<?> options, Var<?> var) {
@@ -662,9 +641,10 @@ public abstract class GUI extends HTML {
 
 		int i = 0;
 		for (Object opt : options) {
-			Var<Boolean> optVar = varHas(var, opt);
-			InputTag cc = input().type("checkbox").name(name).value(str(opt)).var(optVar);
-			checkboxes[i] = label(cc, opt).class_("radio-checkbox");
+			String value = str(opt);
+			InputTag cc = input().type("checkbox").attr("data-label", value)
+					.class_("pretty").name(name).value(value).checked(has(var, value));
+			checkboxes[i] = cc; //label(cc, opt).class_("radio-checkbox");
 			i++;
 		}
 
@@ -672,7 +652,7 @@ public abstract class GUI extends HTML {
 	}
 
 	public static Tag[] checkboxes(Collection<?> options, Var<?> var) {
-		return checkboxes(Rnd.rndStr(30), options, var);
+		return checkboxes(var.name(), options, var);
 	}
 
 	public static Tag[] checkboxes(Collection<?> options, String var) {
@@ -680,7 +660,7 @@ public abstract class GUI extends HTML {
 	}
 
 	public static Tag[] checkboxes(Collection<?> options, String var, Collection<?> defaultValue) {
-		return checkboxes(options, providedVar(var, serializable(defaultValue)));
+		return checkboxes(options, var(var, serializable(defaultValue)));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -741,7 +721,7 @@ public abstract class GUI extends HTML {
 			return GUI.show(item);
 		}
 
-		String str = Cls.str(item);
+		String str = str(item);
 		Tag tag = hardcoded(escape(str));
 
 		return (str.contains("{") || str.contains("}")) ? span(tag).is("ng-non-bindable", true) : tag;
@@ -833,27 +813,6 @@ public abstract class GUI extends HTML {
 
 	public static Card card(Object... contents) {
 		return Cls.customizable(Card.class).contents(contents);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Var<Boolean> varHas(Var<?> container, Object item) {
-		Object arrOrColl = container.get();
-
-		Object itemId = Beany.hasProperty(item, "id") ? Beany.getIdIfExists(item) : String.valueOf(item);
-		String varName = container.name() + "[" + itemId + "]";
-
-		if (arrOrColl instanceof Collection) {
-			return new CollectionContainerVar(varName, (Var<Collection<Object>>) container, item, req().isGetReq());
-		} else {
-			return new ArrayContainerVar(varName, (Var<Object>) container, item, req().isGetReq());
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Var<Boolean> varEq(Var<?> var, Object item) {
-		Object itemId = Beany.hasProperty(item, "id") ? Beany.getIdIfExists(item) : String.valueOf(item);
-		String varName = var.name() + "[" + itemId + "]";
-		return new EqualityVar(varName, (Var<Object>) var, item, req().isGetReq());
 	}
 
 	public static Object i18n(String multiLanguageText, Object... formatArgs) {

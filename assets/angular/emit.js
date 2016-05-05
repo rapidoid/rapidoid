@@ -41,29 +41,39 @@ Rapidoid.initializer(function($scope) {
         var inputs = {};
         for (var i = 0; i < x.length; i++) {
             var t = $(x[i]);
-            var _h = t.attr('_h') || t.attr('id') || t.attr('name');
+            var _h = t.attr('_h') || t.attr('name') || t.attr('id');
 
             if (_h) {
                 var val;
+                var type = t.prop('type');
 
-                if (t.prop('type') == 'checkbox' || t.prop('type') == 'radio') {
-                    val = t.prop('checked');
+                if (type == 'radio') {
+                    if (t.prop('checked')) {
+                        inputs[_h] = t.val();
+                    }
+
+                } else if (type == 'checkbox') {
+                    if (t.prop('checked')) {
+                        if (inputs[_h] === undefined) {
+                            inputs[_h] = [];
+                        }
+                        inputs[_h].push(t.val());
+                    }
+
                 } else {
-                    val = t.val();
+                    inputs[_h] = t.val();
                 }
-
-                inputs[_h] = val;
             }
         }
 
-        x = document.querySelectorAll("option");
+        x = document.querySelectorAll("select");
 
         for (var i = 0; i < x.length; i++) {
             var t = $(x[i]);
             var _h = t.attr('_h') || t.attr('id') || t.attr('name');
 
             if (_h) {
-                inputs[_h] = t.prop('selected');
+                inputs[_h] = t.val();
             }
         }
 

@@ -213,9 +213,6 @@ org.rapidoid.gui.reqinfo.MockReqInfo
 org.rapidoid.gui.reqinfo.NoReqInfo
 org.rapidoid.gui.reqinfo.ReqInfo
 org.rapidoid.gui.Snippet
-org.rapidoid.gui.var.ArrayContainerVar
-org.rapidoid.gui.var.CollectionContainerVar
-org.rapidoid.gui.var.EqualityVar
 org.rapidoid.gui.var.LocalVar
 org.rapidoid.gui.var.PostedDataVar
 org.rapidoid.gui.var.WidgetVar

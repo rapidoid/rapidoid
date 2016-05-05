@@ -33,11 +33,8 @@ public abstract class WidgetVar<T extends Serializable> extends AbstractVar<T> {
 
 	private static final long serialVersionUID = 2761159925375675659L;
 
-	protected boolean initial;
-
-	public WidgetVar(String name, boolean initial) {
+	public WidgetVar(String name) {
 		super(name);
-		this.initial = initial;
 	}
 
 	protected boolean getBool() {

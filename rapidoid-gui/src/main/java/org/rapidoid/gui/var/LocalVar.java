@@ -38,8 +38,8 @@ public class LocalVar<T extends Serializable> extends WidgetVar<T> {
 
 	private final T defaultValue;
 
-	public LocalVar(String localKey, T defaultValue, boolean initial) {
-		super(localKey, initial);
+	public LocalVar(String localKey, T defaultValue) {
+		super(localKey);
 		this.localKey = localKey;
 		this.defaultValue = defaultValue;
 	}

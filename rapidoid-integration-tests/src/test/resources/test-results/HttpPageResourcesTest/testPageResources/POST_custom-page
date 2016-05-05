@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 982
+Content-Length: 1017
 
 
 <nav role="navigation" class="navbar navbar-default">
@@ -47,4 +47,6 @@ Content-Length: 982
 Custom page
 </div>
 
+
+<script>Rapidoid.init();</script>
 

@@ -3,7 +3,7 @@ Connection: keep-alive
 Server: Rapidoid
 Date: XXXXX GMT
 Content-Type: text/html; charset=utf-8
-Content-Length: 2240
+Content-Length: 2275
 
 <!DOCTYPE html>
 <html lang="en">
@@ -87,6 +87,8 @@ Custom page
 <div compile="ajaxBodyContent" ng-if="ajaxBodyContent"></div>
 
 <!-- CREATE A RESOURCE FILE "templates/page-tail.html" TO REPLACE THIS LINE -->
+
+<script>Rapidoid.init();</script>
 
 </body>
 
