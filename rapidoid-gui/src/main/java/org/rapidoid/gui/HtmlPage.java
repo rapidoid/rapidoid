@@ -14,6 +14,7 @@ import org.rapidoid.render.Templates;
 import org.rapidoid.u.U;
 import org.rapidoid.web.ScreenBean;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -70,12 +71,11 @@ public class HtmlPage extends ScreenBean {
 		return html;
 	}
 
+	@SuppressWarnings("unchecked")
 	private Map<String, Object> pageModel() {
 		IReqInfo req = ReqInfo.get();
 
 		Map<String, Object> model = U.map(req.data());
-
-		model.put("dev", Env.dev());
 
 		int appPort = Conf.ON.entry("port").num().or(8888);
 		int adminPort = Conf.ADMIN.entry("port").num().or(0);
@@ -90,6 +90,7 @@ public class HtmlPage extends ScreenBean {
 			model.put("adminUrl", adminUrl);
 		}
 
+		model.put("dev", Env.dev());
 		model.put("admin", "admin".equalsIgnoreCase(req.segment()));
 
 		model.put("host", req.host());
@@ -121,6 +122,22 @@ public class HtmlPage extends ScreenBean {
 		model.put("navbar", navbar());
 		model.put("fluid", fluid());
 		model.put("cdn", cdn());
+
+		List<String> assets = (List<String>) Conf.APP.entry("assets").getOrNull();
+
+		if (U.notEmpty(assets)) {
+			for (String asset : assets) {
+				String res = asset.toLowerCase();
+
+				if (res.endsWith(".js")) {
+					js().add(res);
+				} else if (res.endsWith(".css")) {
+					css().add(res);
+				} else {
+					throw U.rte("Expected .css or .js asset, but found: " + res);
+				}
+			}
+		}
 
 		setupAssets(req, model);
 
