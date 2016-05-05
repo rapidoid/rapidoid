@@ -8,10 +8,10 @@ import org.rapidoid.bytes.Bytes;
 import org.rapidoid.bytes.BytesUtil;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Err;
-import org.rapidoid.data.JSON;
-import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.data.BufRange;
 import org.rapidoid.data.BufRanges;
+import org.rapidoid.data.JSON;
+import org.rapidoid.data.KeyValueRanges;
 import org.rapidoid.http.HttpContentType;
 import org.rapidoid.io.Upload;
 import org.rapidoid.log.Log;
@@ -268,9 +268,13 @@ public class HttpParser extends RapidoidThing implements Constants {
 				return true;
 
 			case FORM_URLENCODED:
-				// if (src.get(body.start) != '{') {
-				parseURLEncodedKV(src, data, body);
-				return true;
+				byte bodyStart = src.get(body.start);
+				if (bodyStart != '{' && bodyStart != '[') {
+					parseURLEncodedKV(src, data, body);
+					return true;
+				} else {
+					return false;
+				}
 
 			case JSON:
 				return false;
@@ -468,8 +472,7 @@ public class HttpParser extends RapidoidThing implements Constants {
 
 		boolean completed = parseBody(input, headersKV, rBody, posted, files, helper);
 
-		Map<String, String> urlEncodedParamsDest = U.cast(dest);
-		posted.toMap(input, true, true, urlEncodedParamsDest);
+		posted.toUrlEncodedParams(input, dest);
 
 		if (!completed && !rBody.isEmpty()) {
 			Map<String, Object> jsonData = JSON.parse(input.get(rBody), Map.class);

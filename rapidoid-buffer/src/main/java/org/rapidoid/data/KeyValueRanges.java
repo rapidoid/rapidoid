@@ -5,9 +5,11 @@ import org.rapidoid.annotation.Authors;
 import org.rapidoid.annotation.Since;
 import org.rapidoid.buffer.Buf;
 import org.rapidoid.bytes.BytesUtil;
+import org.rapidoid.commons.Str;
 import org.rapidoid.u.U;
 import org.rapidoid.util.Msc;
 
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -138,6 +140,32 @@ public class KeyValueRanges extends RapidoidThing {
 		Map<String, String> map = U.map();
 		toMap(src, urlDecodeKeys, urlDecodeVals, map);
 		return map;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void toUrlEncodedParams(Buf src, Map<String, Object> params) {
+		for (int i = 0; i < count; i++) {
+			String key = keys[i].str(src.bytes());
+			String val = values[i].str(src.bytes());
+
+			key = Msc.urlDecode(key);
+			val = Msc.urlDecode(val);
+
+			if (key.endsWith("[]")) {
+				key = Str.sub(key, 0, -2);
+				List<String> list = (List<String>) params.get(key);
+
+				if (list == null) {
+					list = U.list();
+					params.put(key, list);
+				}
+
+				list.add(val);
+
+			} else {
+				params.put(key, val);
+			}
+		}
 	}
 
 	public Map<String, byte[]> toBinaryMap(Buf src, boolean urlDecodeKeys) {
