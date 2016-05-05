@@ -56,9 +56,17 @@ public class AES {
 	}
 
 	public static byte[] generateKey(String password, byte[] salt, int iterations, int length) throws Exception {
-		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+		SecretKeyFactory skf = getPBKDFInstance();
 		PBEKeySpec ks = new PBEKeySpec(password.toCharArray(), salt, iterations, length);
 		return skf.generateSecret(ks).getEncoded();
+	}
+
+	private static SecretKeyFactory getPBKDFInstance() throws NoSuchAlgorithmException {
+		try {
+			return SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+		} catch (NoSuchAlgorithmException e) {
+			return SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+		}
 	}
 
 	public static byte[] encrypt(byte[] data, byte[] secret) throws Exception {

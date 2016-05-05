@@ -47,7 +47,8 @@ public class CryptoTest extends AbstractCommonsTest {
 	@Test
 	public void testSpecifiedSecret() {
 		Conf.args("secret=mysecret");
-		eq(Str.toHex(Crypto.getSecretKey()), "3CDB902856D13CC88139DD290822DA99E85242F16E575E73ED7953208B88B045");
+		String key = Str.toHex(Crypto.getSecretKey());
+		isTrue(key.equals("DCE88CB5E440BC26D371D64E55DBB67832BBB44C2887BEE9C1DF17F88BC1764B") || key.equals("3CDB902856D13CC88139DD290822DA99E85242F16E575E73ED7953208B88B045"));
 	}
 
 	@Test

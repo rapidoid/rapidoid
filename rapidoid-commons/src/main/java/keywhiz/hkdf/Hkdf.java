@@ -145,7 +145,7 @@ public class Hkdf {
 
 		byte[] hashRound = new byte[0];
 
-		ByteBuffer generatedBytes = ByteBuffer.allocate(Math.multiplyExact(n, hashLen));
+		ByteBuffer generatedBytes = ByteBuffer.allocate(n * hashLen);
 		Mac mac = initMac(key);
 		for (int roundNum = 1; roundNum <= n; roundNum++) {
 			mac.reset();

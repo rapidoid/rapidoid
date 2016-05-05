@@ -63,4 +63,10 @@ public class PagingIterator extends RapidoidThing implements Iterator {
 	public Object next() {
 		return page.get(index++);
 	}
+
+	@Override
+	public void remove() {
+		throw new UnsupportedOperationException("remove");
+	}
+
 }

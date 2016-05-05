@@ -36,7 +36,7 @@ public class JSTest extends AbstractCommonsTest {
 
 	@Test
 	public void testEvalJS() throws ScriptException {
-		eq(JS.eval("1 + 2"), 3);
+		eq(((Number) JS.eval("1 + 2")).intValue(), 3);
 		eq(JS.eval("1 + 'ab'"), "1ab");
 		eq(JS.eval("(function (x) { return x.toUpperCase(); })('abc')"), "ABC");
 		eq(JS.eval("x + y + y.length", U.map("x", "10", "y", "abcd")), "10abcd4");
@@ -44,7 +44,7 @@ public class JSTest extends AbstractCommonsTest {
 
 	@Test
 	public void testCompileJS() throws ScriptException {
-		eq(JS.compile("1 + 2").eval(), 3);
+		eq(((Number) JS.compile("1 + 2").eval()).intValue(), 3);
 		eq(JS.compile("1 + 'ab'").eval(), "1ab");
 
 		Map<String, Object> map = U.cast(U.map("U", new U()));
