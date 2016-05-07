@@ -44,19 +44,9 @@ public interface Req {
 	String verb();
 
 	/**
-	 * Overwrites the <b>verb</b> of the HTTP request.
-	 */
-	Req verb(String verb);
-
-	/**
 	 * Gets the <b>uri</b> of the HTTP request.
 	 */
 	String uri();
-
-	/**
-	 * Overwrites the <b>uri</b> of the HTTP request.
-	 */
-	Req uri(String uri);
 
 	/**
 	 * Gets the <b>path</b> of the HTTP request.
@@ -64,19 +54,9 @@ public interface Req {
 	String path();
 
 	/**
-	 * Overwrites the <b>path</b> of the HTTP request.
-	 */
-	Req path(String path);
-
-	/**
 	 * Gets the <b>query</b> of the HTTP request.
 	 */
 	String query();
-
-	/**
-	 * Overwrites the <b>query</b> of the HTTP request.
-	 */
-	Req query(String query);
 
 	/**
 	 * Gets the <b>raw body data</b> of the HTTP request.
@@ -84,19 +64,9 @@ public interface Req {
 	byte[] body();
 
 	/**
-	 * Overwrites the <b>raw body data</b> of the HTTP request.
-	 */
-	Req body(byte[] body);
-
-	/**
 	 * Gets the value of the <b>Host header</b> of the HTTP request.
 	 */
 	String host();
-
-	/**
-	 * Overwrites the value of the <b>Host header</b> of the HTTP request.
-	 */
-	Req host(String host);
 
 	/**
 	 * Gets the name of the <b>application segment</b> handling the request. <br>
@@ -105,22 +75,10 @@ public interface Req {
 	String segment();
 
 	/**
-	 * Overwrites the name of the <b>application segment</b> handling the request. <br>
-	 * The default segment name is <code>main</code> for the <code>On</code> API, and <code>admin</code> for the <code>Admin</code> API.
-	 */
-	Req segment(String segment);
-
-	/**
 	 * Gets the <b>context path</b> of the application segment handling the request. <br>
 	 * The default context path is <code>/</code> for the <code>On</code> API, and <code>/_</code> for the <code>Admin</code> API.
 	 */
 	String contextPath();
-
-	/**
-	 * Overwrites the <b>context path</b> of the application segment handling the request. <br>
-	 * The default context path is <code>/</code> for the <code>On</code> API, and <code>/_</code> for the <code>Admin</code> API.
-	 */
-	Req contextPath(String contextPath);
 
 	/**
 	 * Gets the <b>IP address</b> of the HTTP client sending the request.

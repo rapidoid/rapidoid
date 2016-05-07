@@ -130,7 +130,6 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return verb;
 	}
 
-	@Override
 	public Req verb(String verb) {
 		this.verb = verb;
 		return this;
@@ -141,7 +140,6 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return uri;
 	}
 
-	@Override
 	public Req uri(String uri) {
 		this.uri = uri;
 		return this;
@@ -152,7 +150,6 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return path;
 	}
 
-	@Override
 	public Req path(String path) {
 		this.path = path;
 		return this;
@@ -163,7 +160,6 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return query;
 	}
 
-	@Override
 	public Req query(String query) {
 		this.query = query;
 		return this;
@@ -174,7 +170,6 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return body;
 	}
 
-	@Override
 	public Req body(byte[] body) {
 		this.body = body;
 		return this;
@@ -215,7 +210,6 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return header(HttpHeaders.HOST.name(), null);
 	}
 
-	@Override
 	public Req host(String host) {
 		headers().put(HttpHeaders.HOST.name(), host);
 		return this;
@@ -677,7 +671,6 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return segment;
 	}
 
-	@Override
 	public Req segment(String segment) {
 		this.segment = segment;
 		return this;
@@ -695,7 +688,6 @@ public class ReqImpl extends RapidoidThing implements Req, Constants, HttpMetada
 		return contextPath;
 	}
 
-	@Override
 	public Req contextPath(String contextPath) {
 		this.contextPath = contextPath;
 		return this;
