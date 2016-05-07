@@ -12,6 +12,7 @@ import org.rapidoid.jpa.JPA;
 import org.rapidoid.log.Log;
 import org.rapidoid.security.Roles;
 import org.rapidoid.setup.Setup;
+import org.rapidoid.util.AnsiColor;
 import org.rapidoid.util.Msc;
 
 import java.lang.management.ManagementFactory;
@@ -189,7 +190,7 @@ public class Goodies extends RapidoidThing {
 			Config admin = Conf.USERS.sub("admin");
 			admin.set("roles", "administrator");
 			admin.set("password", pass);
-			Msc.logSection("ADMIN CREDENTIALS: username = admin, password = " + pass);
+			Msc.logSection("ADMIN CREDENTIALS: username = " + AnsiColor.darkGray("admin") + ", password = " + AnsiColor.darkGray(pass));
 		}
 	}
 

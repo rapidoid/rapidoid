@@ -9,6 +9,7 @@ import org.rapidoid.net.Protocol;
 import org.rapidoid.net.Server;
 import org.rapidoid.net.TCPServerInfo;
 import org.rapidoid.u.U;
+import org.rapidoid.util.AnsiColor;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -137,7 +138,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 				serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 			}
 
-			Log.info("Server started", "address", address, "port", port, "I/O workers", workers, "accept", blockingInfo);
+			Log.info(AnsiColor.blue("Server started"), "address", AnsiColor.darkGray(address), "port", AnsiColor.darkGray("" + port), "I/O workers", workers, "accept", blockingInfo);
 
 			initWorkers();
 

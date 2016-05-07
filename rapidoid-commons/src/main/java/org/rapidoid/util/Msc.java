@@ -734,9 +734,9 @@ public class Msc extends RapidoidThing implements Constants {
 	}
 
 	public static void logSection(String msg) {
-		Log.info(Str.mul("-", msg.length()));
+		Log.info(AnsiColor.darkGray(Str.mul("-", msg.length())));
 		Log.info(msg);
-		Log.info(Str.mul("-", msg.length()));
+		Log.info(AnsiColor.darkGray(Str.mul("-", msg.length())));
 	}
 
 	public static void logProperties(Properties props) {

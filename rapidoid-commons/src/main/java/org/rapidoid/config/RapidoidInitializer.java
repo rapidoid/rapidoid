@@ -7,6 +7,7 @@ import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.RapidoidInfo;
 import org.rapidoid.log.Log;
 import org.rapidoid.log.LogbackUtil;
+import org.rapidoid.util.AnsiColor;
 import org.rapidoid.util.Msc;
 
 import java.lang.management.ManagementFactory;
@@ -45,7 +46,7 @@ public class RapidoidInitializer extends RapidoidThing {
 			String proc = ManagementFactory.getRuntimeMXBean().getName();
 			String dir = System.getProperty("user.dir");
 
-			Log.info("Starting Rapidoid...", "version", ver, "process", proc, "dir", dir);
+			Log.info(AnsiColor.blue("Starting Rapidoid..."), "version", ver, "process", proc, "dir", dir);
 
 			if (Msc.hasLogback()) {
 				LogbackUtil.setupLogger();
