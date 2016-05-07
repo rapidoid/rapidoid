@@ -450,13 +450,12 @@ public class Msc extends RapidoidThing implements Constants {
 		if (callerCls != null) {
 			return callerCls.getPackage() != null ? callerCls.getPackage().getName() : "";
 		} else {
-			throw U.rte("Couldn't infer the caller!");
+			return null;
 		}
 	}
 
 	private static boolean couldBeCaller(String cls) {
-		boolean special = cls.equals("org.rapidoid.standalone.Main");
-		return special || (!Cls.isRapidoidClass(cls) && !Cls.isJREClass(cls) && !Cls.isIdeOrToolClass(cls));
+		return !Cls.isRapidoidClass(cls) && !Cls.isJREClass(cls) && !Cls.isIdeOrToolClass(cls);
 	}
 
 	private static Class<?> inferCaller(Class<?>... ignoreClasses) {
@@ -841,6 +840,13 @@ public class Msc extends RapidoidThing implements Constants {
 		}
 
 		return range; // 1 item extra, to test if there are more results
+	}
+
+	public static void invokeMain(Class<?> clazz, String[] args) {
+		Method main = Cls.getMethod(clazz, "main", String[].class);
+		U.must(main.getReturnType() == void.class);
+
+		Cls.invokeStatic(main, new Object[]{args});
 	}
 
 }

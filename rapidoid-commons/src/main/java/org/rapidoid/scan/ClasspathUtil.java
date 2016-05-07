@@ -201,7 +201,7 @@ public class ClasspathUtil extends RapidoidThing {
 	}
 
 	private static boolean shouldScanJAR(String jar) {
-		return true;
+		return !hasAppJar() || U.eq(jar, appJar);
 	}
 
 	private static void getClassesFromDir(Collection<String> classes, File root, File dir, String pkg, Pattern regex,
@@ -462,5 +462,6 @@ public class ClasspathUtil extends RapidoidThing {
 
 	public static void appJar(String appJar) {
 		ClasspathUtil.appJar = appJar;
+		Log.info("Setting application JAR", "appJar", appJar, "exists", new File(appJar).exists());
 	}
 }

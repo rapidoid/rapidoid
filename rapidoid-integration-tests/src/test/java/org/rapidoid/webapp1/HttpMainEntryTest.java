@@ -1,15 +1,8 @@
-package org.rapidoid.web;
-
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.Admin;
-import org.rapidoid.setup.On;
-import org.rapidoid.util.Msc;
+package org.rapidoid.webapp1;
 
 /*
  * #%L
- * rapidoid-http-server
+ * rapidoid-integration-tests
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -27,24 +20,32 @@ import org.rapidoid.util.Msc;
  * #L%
  */
 
+import org.junit.Test;
+import org.rapidoid.annotation.Authors;
+import org.rapidoid.annotation.Main;
+import org.rapidoid.annotation.Since;
+import org.rapidoid.http.IntegrationTestCommons;
+import org.rapidoid.setup.On;
+
 @Authors("Nikolche Mihajlovski")
-@Since("4.0.0")
-public class Rapidoid extends RapidoidThing {
+@Since("5.1.0")
+public class HttpMainEntryTest extends IntegrationTestCommons {
 
-	private static boolean initialized;
+	@Test
+	public void testSequentialControllerRegistration() {
+		On.path(path());
+		On.bootstrapComponents();
+		On.get("/a").plain("A");
 
-	private Rapidoid() {
+		onlyGet("/a");
+		onlyGet("/b");
 	}
 
-	public static synchronized void run(String... args) {
-		if (!initialized) {
-			initialized = true;
+}
 
-			On.bootstrap(args);
-			Admin.bootstrap(args);
-
-			Msc.logSection("Rapidoid bootstrap completed");
-		}
+@Main
+class EntryPoint {
+	public static void main(String[] args) {
+		On.get("/b").plain("B");
 	}
-
 }

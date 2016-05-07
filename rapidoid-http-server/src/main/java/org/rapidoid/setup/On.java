@@ -133,8 +133,8 @@ public class On extends RapidoidThing {
 		return SETUP.bootstrapGoodies();
 	}
 
-	public static Setup bootstrapControllers() {
-		return SETUP.bootstrapControllers();
+	public static Setup bootstrapComponents() {
+		return SETUP.bootstrapComponents();
 	}
 
 	@SuppressWarnings({"varargs"})

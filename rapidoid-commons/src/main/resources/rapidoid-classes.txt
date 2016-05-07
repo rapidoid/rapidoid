@@ -17,6 +17,7 @@ org.rapidoid.annotation.DELETE
 org.rapidoid.annotation.GET
 org.rapidoid.annotation.HEAD
 org.rapidoid.annotation.Header
+org.rapidoid.annotation.Main
 org.rapidoid.annotation.Mixin
 org.rapidoid.annotation.OfType
 org.rapidoid.annotation.OPTIONS

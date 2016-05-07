@@ -1,10 +1,7 @@
 package org.rapidoid.setup;
 
 import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Controller;
-import org.rapidoid.annotation.Service;
-import org.rapidoid.annotation.Since;
+import org.rapidoid.annotation.*;
 import org.rapidoid.cls.Cls;
 import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Env;
@@ -42,7 +39,6 @@ import org.rapidoid.util.Constants;
 import org.rapidoid.util.Msc;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
@@ -126,6 +122,10 @@ public class Setup extends RapidoidThing implements Constants {
 	private volatile Server server;
 	private volatile boolean activated;
 	private volatile boolean goodies = true;
+
+	private volatile boolean bootstrapedComponents;
+	private volatile boolean bootstrapedJPA;
+	private volatile boolean bootstrapedGoodies;
 
 	public static Setup create(String name) {
 		IoCContext ioc = IoC.createContext().name(name);
@@ -223,7 +223,6 @@ public class Setup extends RapidoidThing implements Constants {
 
 		if (isApp()) {
 			ADMIN.activate();
-			Msc.logSection("User-specified handlers:");
 		}
 	}
 
@@ -306,7 +305,21 @@ public class Setup extends RapidoidThing implements Constants {
 
 		PojoHandlersSetup.from(this, beans).register();
 
+		invokeMainComponents(beans);
+
 		return this;
+	}
+
+	private void invokeMainComponents(Object[] beans) {
+		for (Object bean : beans) {
+			if (bean instanceof Class<?>) {
+				Class<?> clazz = (Class<?>) bean;
+				if (Cls.isAnnotated(clazz, Main.class)) {
+					Msc.logSection("Invoking @Main component: " + clazz.getName());
+					Msc.invokeMain(clazz, Conf.ROOT.getArgs());
+				}
+			}
+		}
 	}
 
 	public Setup port(int port) {
@@ -355,6 +368,10 @@ public class Setup extends RapidoidThing implements Constants {
 		goodies = true;
 		defaults = new RouteOptions();
 		defaults().segment(segment);
+
+		bootstrapedJPA = false;
+		bootstrapedComponents = false;
+		bootstrapedGoodies = false;
 	}
 
 	public Server server() {
@@ -391,7 +408,9 @@ public class Setup extends RapidoidThing implements Constants {
 				mainClassName = mainClass != null ? mainClass.getName() : null;
 			}
 
-			Log.info("Inferring application root", "main class", mainClassName, "app package", pkg);
+			if (mainClassName != null || pkg != null) {
+				Log.info("Inferring application root", "main class", mainClassName, "app package", pkg);
+			}
 		}
 	}
 
@@ -407,18 +426,32 @@ public class Setup extends RapidoidThing implements Constants {
 	public Setup bootstrap(String... args) {
 		this.args(args);
 
+		setupConfig();
+
 		if (!isAdmin()) {
 			bootstrapJPA();
-			bootstrapControllers();
+			bootstrapComponents();
 		}
 
 		bootstrapGoodies();
 
-		Log.info("Completed bootstrap", "context", iocContext());
+		Log.info("Completed bootstrap", "IoC context", iocContext());
 		return this;
 	}
 
+	private void setupConfig() {
+		String appJar = Conf.APP.entry("jar").str().getOrNull();
+		if (U.notEmpty(appJar)) {
+			ClasspathUtil.appJar(appJar);
+		}
+	}
+
 	public Setup bootstrapJPA() {
+		if (bootstrapedJPA) {
+			return this;
+		}
+		bootstrapedJPA = true;
+
 		if (Msc.hasJPA()) {
 			JPA.bootstrap(path());
 		}
@@ -426,8 +459,14 @@ public class Setup extends RapidoidThing implements Constants {
 		return this;
 	}
 
-	public Setup bootstrapControllers() {
-		List<Class<? extends Annotation>> annotated = U.list(Controller.class, Service.class);
+	@SuppressWarnings("unchecked")
+	public Setup bootstrapComponents() {
+		if (bootstrapedComponents) {
+			return this;
+		}
+		bootstrapedComponents = true;
+
+		List<Class<? extends Annotation>> annotated = U.list(Controller.class, Service.class, Main.class);
 
 		if (Msc.hasInject()) {
 			annotated.add(Cls.<Annotation>get("javax.inject.Named"));
@@ -439,6 +478,11 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	public Setup bootstrapGoodies() {
+		if (bootstrapedGoodies) {
+			return this;
+		}
+		bootstrapedGoodies = true;
+
 		Class<?> goodiesClass = Cls.getClassIfExists("org.rapidoid.goodies.RapidoidGoodiesModule");
 
 		if (goodiesClass != null) Cls.newInstance(goodiesClass, this);
@@ -516,11 +560,7 @@ public class Setup extends RapidoidThing implements Constants {
 			return;
 		}
 
-		Method main = Cls.getMethod(entry, "main", String[].class);
-		U.must(main.getReturnType() == void.class);
-
-		String[] args = Conf.ROOT.getArgs();
-		Cls.invoke(main, null, new Object[]{args});
+		Msc.invokeMain(entry, Conf.ROOT.getArgs());
 
 		Log.info("Successfully restarted the application!");
 	}
@@ -567,6 +607,10 @@ public class Setup extends RapidoidThing implements Constants {
 	}
 
 	public void resetWithoutRestart() {
+		bootstrapedJPA = false;
+		bootstrapedComponents = false;
+		bootstrapedGoodies = false;
+
 		ioCContext.reset();
 		http().resetConfig();
 		path((String[]) null);

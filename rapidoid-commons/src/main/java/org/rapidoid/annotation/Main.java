@@ -1,15 +1,15 @@
-package org.rapidoid.web;
+package org.rapidoid.annotation;
 
-import org.rapidoid.RapidoidThing;
-import org.rapidoid.annotation.Authors;
-import org.rapidoid.annotation.Since;
-import org.rapidoid.setup.Admin;
-import org.rapidoid.setup.On;
-import org.rapidoid.util.Msc;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /*
  * #%L
- * rapidoid-http-server
+ * rapidoid-commons
  * %%
  * Copyright (C) 2014 - 2016 Nikolche Mihajlovski and contributors
  * %%
@@ -27,24 +27,11 @@ import org.rapidoid.util.Msc;
  * #L%
  */
 
+@Target({TYPE})
+@Retention(RUNTIME)
 @Authors("Nikolche Mihajlovski")
-@Since("4.0.0")
-public class Rapidoid extends RapidoidThing {
-
-	private static boolean initialized;
-
-	private Rapidoid() {
-	}
-
-	public static synchronized void run(String... args) {
-		if (!initialized) {
-			initialized = true;
-
-			On.bootstrap(args);
-			Admin.bootstrap(args);
-
-			Msc.logSection("Rapidoid bootstrap completed");
-		}
-	}
+@Since("5.1.0")
+@Documented
+public @interface Main {
 
 }

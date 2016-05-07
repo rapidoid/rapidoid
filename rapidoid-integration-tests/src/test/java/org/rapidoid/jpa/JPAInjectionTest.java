@@ -41,7 +41,7 @@ public class JPAInjectionTest extends IntegrationTestCommons {
 	@Test
 	public void testJPAInjection() {
 		JPA.bootstrap(path());
-		On.path(path()).bootstrapControllers();
+		On.path(path()).bootstrapComponents();
 
 		postData("/books?title=a", U.map("title", "My Book 1"));
 		postData("/books?title=b", U.map("title", "My Book 2"));
