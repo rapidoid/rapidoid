@@ -29,7 +29,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
@@ -70,7 +69,7 @@ public class AES {
 	}
 
 	public static byte[] encrypt(byte[] data, byte[] secret) throws Exception {
-		byte[] aesSalt = randomSalt();
+		byte[] aesSalt = Crypto.randomSalt();
 		byte[] aesKey = hkdf(secret, aesSalt, AES_KEY_LENGTH);
 		SecretKeySpec aesKeySpec = new SecretKeySpec(aesKey, "AES");
 
@@ -78,7 +77,7 @@ public class AES {
 		cipher.init(Cipher.ENCRYPT_MODE, aesKeySpec, new IvParameterSpec(new byte[16]));
 		byte[] encrypted = cipher.doFinal(data);
 
-		byte[] hmacSalt = randomSalt();
+		byte[] hmacSalt = Crypto.randomSalt();
 		byte[] hmacKey = hkdf(secret, hmacSalt, 160);
 		SecretKeySpec hmacKeySpec = new SecretKeySpec(hmacKey, HMAC_SHA_256);
 
@@ -110,7 +109,7 @@ public class AES {
 		m.init(hmacKeySpec);
 		byte[] expectedHmac = m.doFinal(encrypted);
 
-		if (MessageDigest.isEqual(hmac, expectedHmac)) {
+		if (Arrays.equals(hmac, expectedHmac)) {
 			byte[] decrKey = hkdf(secret, aesSalt, AES_KEY_LENGTH);
 			SecretKeySpec dekrKeySpec = new SecretKeySpec(decrKey, "AES");
 
@@ -126,12 +125,6 @@ public class AES {
 	private static byte[] hkdf(byte[] secret, byte[] salt, int bitLength) {
 		SecretKeySpec key = new SecretKeySpec(secret, HMAC_SHA_256);
 		return HKDF.expand(key, salt, bitLength / 8);
-	}
-
-	private static byte[] randomSalt() {
-		byte[] salt = new byte[20];
-		Crypto.RANDOM.nextBytes(salt);
-		return salt;
 	}
 
 }

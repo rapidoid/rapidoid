@@ -19,6 +19,7 @@ import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 /*
  * #%L
@@ -216,6 +217,36 @@ public class Crypto extends RapidoidThing {
 
 	public static byte[] pbkdf2(String password) {
 		return pbkdf2(password, DEFAULT_PBKDF2_SALT, 100000, 256);
+	}
+
+	public static String passwordHash(String password) {
+		byte[] salt = randomSalt();
+		return passwordHash(password, salt);
+	}
+
+	private static String passwordHash(String password, byte[] salt) {
+		byte[] hash = pbkdf2(password, salt, 100000, 256);
+		return Str.toBase64(hash) + "$" + Str.toBase64(salt);
+	}
+
+	public static boolean passwordMatches(String password, String saltedHash) {
+		String[] parts = saltedHash.split("\\$");
+
+		if (parts.length != 2) {
+			return false;
+		}
+
+		byte[] expectedHash = Str.fromBase64(parts[0]);
+		byte[] salt = Str.fromBase64(parts[1]);
+
+		byte[] realHash = pbkdf2(password, salt, 100000, 256);
+		return Arrays.equals(expectedHash, realHash);
+	}
+
+	public static byte[] randomSalt() {
+		byte[] salt = new byte[20];
+		Crypto.RANDOM.nextBytes(salt);
+		return salt;
 	}
 
 }

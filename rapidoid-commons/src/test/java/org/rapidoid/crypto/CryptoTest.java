@@ -80,7 +80,7 @@ public class CryptoTest extends AbstractCommonsTest {
 	}
 
 	@Test
-	public void testEncryptWithAppSecret() throws Exception {
+	public void testEncryptWithAppSecret() {
 		for (int i = 0; i < 10000; i++) {
 			String msg1 = "" + i;
 
@@ -93,7 +93,7 @@ public class CryptoTest extends AbstractCommonsTest {
 	}
 
 	@Test
-	public void testEncryptWithCustomPassword() throws Exception {
+	public void testEncryptWithCustomPassword() {
 		byte[] key = Crypto.pbkdf2("pass");
 
 		for (int i = 0; i < 10000; i++) {
@@ -104,6 +104,17 @@ public class CryptoTest extends AbstractCommonsTest {
 
 			String msg2 = new String(dec);
 			eq(msg2, msg1);
+		}
+	}
+
+	@Test
+	public void testPasswordHash() {
+		for (int i = 0; i < 100; i++) {
+			String pass = "" + i;
+			String hash = Crypto.passwordHash(pass);
+
+			isTrue(Crypto.passwordMatches(pass, hash));
+			isFalse(Crypto.passwordMatches(pass + "?", hash));
 		}
 	}
 
