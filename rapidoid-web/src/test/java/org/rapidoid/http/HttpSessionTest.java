@@ -32,16 +32,16 @@ public class HttpSessionTest extends HttpTestCommons {
 
 	@Test
 	public void testHttpSession() {
-		On.req(new ReqHandler() {
+		On.req(new ReqRespHandler() {
 			@Override
-			public Object execute(Req req) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				Log.info("Session", "ID", req.sessionId(), "data", req.session());
 
 				int n = req.session("n", 0) + 1;
-				req.session().put("n", n);
+				resp.session("n", n);
 
 				int m = req.session("m", 10) + 1;
-				req.session().put("m", m);
+				resp.session("m", m);
 
 				return n + ":" + m;
 			}

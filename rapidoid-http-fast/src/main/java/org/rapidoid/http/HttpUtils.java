@@ -94,7 +94,7 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 				cookie = "";
 			}
 
-			setCookie(req, COOKIEPACK, cookie, "path=/; HttpOnly");
+			req.response().cookie(COOKIEPACK, cookie, "path=/", "HttpOnly");
 		}
 	}
 
@@ -160,19 +160,6 @@ public class HttpUtils extends RapidoidThing implements HttpMetadata {
 
 	public static void setContentType(Resp resp, MediaType mediaType) {
 		resp.contentType(mediaType);
-	}
-
-	public static void setCookie(Req req, String name, String value, String... extras) {
-		value = cookieValueWithExtras(value, extras);
-		req.response().cookies().put(name, value);
-	}
-
-	public static String cookieValueWithExtras(String value, String... extras) {
-		if (extras.length > 0) {
-			value += "; " + U.join("; ", extras);
-		}
-
-		return value;
 	}
 
 	public static Res staticPage(Req req, String... possibleLocations) {

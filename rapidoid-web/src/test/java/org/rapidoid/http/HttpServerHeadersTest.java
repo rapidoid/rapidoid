@@ -56,15 +56,15 @@ public class HttpServerHeadersTest extends HttpTestCommons {
 			}
 		});
 
-		On.get("/session").html(new ReqHandler() {
+		On.get("/session").html(new ReqRespHandler() {
 			@Override
-			public Object execute(Req x) {
+			public Object execute(Req x, Resp resp) {
 				if (x.cookie("ses", null) == null) {
-					x.cookies().put("ses", "023B");
+					resp.cookie("ses", "023B");
 				}
-				x.cookies().put("key" + Rnd.rnd(100), "val" + Rnd.rnd(100));
+				resp.cookie("key" + Rnd.rnd(100), "val" + Rnd.rnd(100));
 
-				return x.response().html("oki");
+				return resp.html("oki");
 			}
 		});
 

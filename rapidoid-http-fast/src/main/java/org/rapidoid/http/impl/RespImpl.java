@@ -21,6 +21,7 @@ import org.rapidoid.web.ScreenBean;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.HashMap;
@@ -153,8 +154,46 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	@Override
+	public Resp header(String name, String value) {
+		headers().put(name, value);
+		return this;
+	}
+
+	@Override
 	public Map<String, String> cookies() {
 		return isReadOnly() ? Collections.unmodifiableMap(this.cookies) : this.cookies;
+	}
+
+	@Override
+	public Resp cookie(String name, String value, String... extras) {
+		if (U.notEmpty(extras)) {
+			value += "; " + U.join("; ", extras);
+		}
+
+		cookies().put(name, value);
+		return this;
+	}
+
+	@Override
+	public Map<String, Serializable> session() {
+		return request().session();
+	}
+
+	@Override
+	public Resp session(String name, Serializable value) {
+		session().put(name, value);
+		return this;
+	}
+
+	@Override
+	public Map<String, Serializable> cookiepack() {
+		return request().cookiepack();
+	}
+
+	@Override
+	public Resp cookiepack(String name, Serializable value) {
+		cookiepack().put(name, value);
+		return this;
 	}
 
 	@Override
@@ -220,8 +259,9 @@ public class RespImpl extends RapidoidThing implements Resp {
 	}
 
 	@Override
-	public Req done() {
-		return req.done();
+	public Resp done() {
+		req.done();
+		return this;
 	}
 
 	@Override

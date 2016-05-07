@@ -130,8 +130,7 @@ public class ClasspathUtil extends RapidoidThing {
 		AtomicInteger searched = new AtomicInteger();
 		List<String> classes = U.list();
 
-		for (int i = 0; i < pkgs.length; i++) {
-			String pkg = pkgs[i];
+		for (String pkg : pkgs) {
 			classes.addAll(retrieveClasses(pkg, params.annotated(), pattern, params.classLoader(), searched));
 		}
 

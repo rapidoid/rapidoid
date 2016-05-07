@@ -32,16 +32,16 @@ public class HttpCookiepackTest extends HttpTestCommons {
 
 	@Test
 	public void testHttpCookiepack() {
-		On.req(new ReqHandler() {
+		On.req(new ReqRespHandler() {
 			@Override
-			public Object execute(Req req) throws Exception {
+			public Object execute(Req req, Resp resp) throws Exception {
 				Log.info("Cookiepack", "data", req.cookiepack());
 
 				int n = req.cookiepack("n", 0) + 1;
-				req.cookiepack().put("n", n);
+				resp.cookiepack("n", n);
 
 				int m = req.cookiepack("m", 10) + 1;
-				req.cookiepack().put("m", m);
+				resp.cookiepack("m", m);
 
 				return n + ":" + m;
 			}

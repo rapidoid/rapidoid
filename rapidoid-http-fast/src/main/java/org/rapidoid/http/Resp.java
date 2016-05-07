@@ -6,6 +6,7 @@ import org.rapidoid.web.Screen;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Map;
 
@@ -146,9 +147,39 @@ public interface Resp {
 	Map<String, String> headers();
 
 	/**
+	 * Sets a <b>header</b> of the HTTP response.
+	 */
+	Resp header(String name, String value);
+
+	/**
 	 * Provides <b>read/write access</b> to the <b>cookies</b> of the HTTP response.
 	 */
 	Map<String, String> cookies();
+
+	/**
+	 * Sets a <b>cookie</b> of the HTTP response.
+	 */
+	Resp cookie(String name, String value, String... extras);
+
+	/**
+	 * Provides <b>read/write access</b> to the <b>server-side session attributes</b> of the HTTP request.
+	 */
+	Map<String, Serializable> session();
+
+	/**
+	 * Sets a <b>session attribute</b> of the HTTP response.
+	 */
+	Resp session(String name, Serializable value);
+
+	/**
+	 * Provides <b>read/write access</b> to the <b>cookie-persisted session attributes</b> of the HTTP request.
+	 */
+	Map<String, Serializable> cookiepack();
+
+	/**
+	 * Sets a <b>cookiepack attribute</b> of the HTTP response.
+	 */
+	Resp cookiepack(String name, Serializable value);
 
 	/**
 	 * Provides <b>read/write access</b> to the <b>model</b> (M from MVC) that will be rendered by the view renderer.
@@ -159,7 +190,7 @@ public interface Resp {
 	 * Informs the HTTP server that the asynchronous handling has finished and the response is complete.<br>
 	 * <i>Alias</i> to <code>request().done()</code>.
 	 */
-	Req done();
+	Resp done();
 
 	/**
 	 * Sets the <b><code>Content-Type: text/plain; charset=utf-8</code> header and the content</b> of the HTTP response. <br>
@@ -213,8 +244,8 @@ public interface Resp {
 
 	/**
 	 * Initiates a user login process with the specified <b>username</b> and <b>password</b>.<br>
-	 * Returns information whether the login was successful. After a successful login, the username will be persisted
-	 * in the cookie-pack.
+	 * After a successful login, the username will be persisted in the cookie-pack.<br>
+	 * Returns information whether the login was successful
 	 */
 	boolean login(String username, String password);
 
@@ -224,7 +255,7 @@ public interface Resp {
 	void logout();
 
 	/**
-	 * Provides a convenient access to some common GUI screen attributes of the underlying MVC model: <code>Resp#model()</code>.
+	 * Provides access to the screen model for custom (MVC) page rendering.
 	 */
 	Screen screen();
 
