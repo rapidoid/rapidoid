@@ -137,6 +137,11 @@ public class Log {
 	}
 
 	private static void printKeyValue(Appendable out, String key, Object value) throws IOException {
+		boolean bold = key.endsWith("!");
+		if (bold) {
+			key = key.substring(0, key.length() - 1);
+		}
+
 		if (key.equalsIgnoreCase("password") || key.endsWith("password")) {
 			if (value instanceof String) {
 				if (U.notEmpty((String) value)) {
@@ -148,7 +153,14 @@ public class Log {
 		out.append(" | ");
 		out.append(key);
 		out.append(" = ");
+
+		if (bold) {
+			out.append("\33[1m");
+		}
 		out.append(printable(value));
+		if (bold) {
+			out.append("\33[0m");
+		}
 
 		if (value instanceof Throwable) {
 			Throwable err = (Throwable) value;

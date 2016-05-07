@@ -12,14 +12,16 @@ import org.rapidoid.commons.Coll;
 import org.rapidoid.commons.Err;
 import org.rapidoid.commons.Str;
 import org.rapidoid.data.BufRange;
-import org.rapidoid.http.*;
+import org.rapidoid.http.HttpRoutes;
+import org.rapidoid.http.HttpVerb;
+import org.rapidoid.http.ReqHandler;
+import org.rapidoid.http.Route;
 import org.rapidoid.http.customize.Customization;
 import org.rapidoid.http.handler.HttpHandler;
 import org.rapidoid.http.handler.ParamsAwareReqHandler;
 import org.rapidoid.http.handler.StaticResourcesHandler;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
-import org.rapidoid.util.AnsiColor;
 import org.rapidoid.util.Constants;
 
 import java.util.*;
@@ -426,12 +428,10 @@ public class HttpRoutesImpl extends RapidoidThing implements HttpRoutes {
 		}
 
 		if (add) {
-			Log.info("Registering handler", "setup", this.customization.name(),
-					"verbs", AnsiColor.blue(verbs),
-					"path", AnsiColor.purple(path),
+			Log.info("Registering handler", "setup", this.customization.name(), "verbs!", verbs, "path!", path,
 					"options", handler.options(), "handler", handler);
 		} else {
-			Log.info("Deregistering handler", "setup", this.customization.name(), "verbs", verbs, "path", path);
+			Log.info("Deregistering handler", "setup", this.customization.name(), "verbs!", verbs, "path!", path);
 		}
 
 		for (String vrb : verbs.split(",")) {

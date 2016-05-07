@@ -10,6 +10,7 @@ import org.rapidoid.commons.Str;
 import org.rapidoid.lambda.Predicate;
 import org.rapidoid.log.Log;
 import org.rapidoid.u.U;
+import org.rapidoid.util.Msc;
 
 import java.io.*;
 import java.lang.annotation.Annotation;
@@ -118,9 +119,13 @@ public class ClasspathUtil extends RapidoidThing {
 		long startingAt = U.time();
 
 		String regex = params.matching();
-		Pattern pattern = regex != null ? Pattern.compile(regex) : null;
+		Pattern pattern = U.notEmpty(regex) ? Pattern.compile(regex) : null;
 
-		Log.info("Scanning classpath", "annotated", Arrays.toString(params.annotated()), "packages", Arrays.toString(pkgs), "matching", regex);
+		if (regex != null) {
+			Log.info("Scanning classpath", "annotated!", Msc.annotations(params.annotated()), "packages!", Arrays.toString(pkgs), "matching!", regex);
+		} else {
+			Log.info("Scanning classpath", "annotated!", Msc.annotations(params.annotated()), "packages!", Arrays.toString(pkgs));
+		}
 
 		AtomicInteger searched = new AtomicInteger();
 		List<String> classes = U.list();
@@ -131,7 +136,7 @@ public class ClasspathUtil extends RapidoidThing {
 		}
 
 		long timeMs = U.time() - startingAt;
-		Log.info("Finished classpath scan", "time", timeMs + "ms", "searched", searched.get(), "found", classes.size());
+		Log.info("Finished classpath scan", "time", timeMs + "ms", "searched", searched.get(), "found!", Msc.classNames(classes));
 
 		return classes;
 	}

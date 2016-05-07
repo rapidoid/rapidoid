@@ -28,6 +28,10 @@ import org.rapidoid.annotation.Since;
 @Since("5.1.0")
 public class AnsiColor extends RapidoidThing {
 
+	public static String bold(String text) {
+		return "\33[1m" + text + "\33[0m";
+	}
+
 	public static String black(String text) {
 		return "\33[0;30m" + text + "\33[0m";
 	}

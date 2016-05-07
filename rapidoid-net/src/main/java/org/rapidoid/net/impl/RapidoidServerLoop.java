@@ -138,7 +138,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 				serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 			}
 
-			Log.info(AnsiColor.blue("Server started"), "address", AnsiColor.darkGray(address), "port", AnsiColor.darkGray("" + port), "I/O workers", workers, "accept", blockingInfo);
+			Log.info(AnsiColor.bold("Server started"), "address!", address, "port!", port, "I/O workers", workers, "accept", blockingInfo);
 
 			initWorkers();
 
@@ -198,7 +198,7 @@ public class RapidoidServerLoop extends AbstractLoop<Server> implements Server, 
 		}
 
 		super.shutdown();
-		Log.info("The server is down.");
+		Log.info(AnsiColor.bold("The server is down."));
 		return this;
 	}
 

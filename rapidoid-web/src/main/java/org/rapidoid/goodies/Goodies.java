@@ -190,7 +190,7 @@ public class Goodies extends RapidoidThing {
 			Config admin = Conf.USERS.sub("admin");
 			admin.set("roles", "administrator");
 			admin.set("password", pass);
-			Msc.logSection("ADMIN CREDENTIALS: username = " + AnsiColor.darkGray("admin") + ", password = " + AnsiColor.darkGray(pass));
+			Msc.logSection("ADMIN CREDENTIALS: username = " + AnsiColor.bold("admin") + ", password = " + AnsiColor.bold(pass));
 		}
 	}
 

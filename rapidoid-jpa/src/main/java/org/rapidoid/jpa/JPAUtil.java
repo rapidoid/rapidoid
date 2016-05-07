@@ -80,9 +80,9 @@ public class JPAUtil extends RapidoidThing {
 				return;
 			}
 
-			Msc.logSection("Hibernate properties:");
+//			Msc.logSection("Hibernate properties:");
 			Properties props = EMFUtil.hibernateProperties();
-			Msc.logProperties(props);
+//			Msc.logProperties(props);
 
 			Msc.logSection("Starting Hibernate:");
 

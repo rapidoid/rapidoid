@@ -26,6 +26,7 @@ import org.rapidoid.wrap.BoolWrap;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.io.*;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -733,9 +734,9 @@ public class Msc extends RapidoidThing implements Constants {
 	}
 
 	public static void logSection(String msg) {
-		Log.info(AnsiColor.darkGray(Str.mul("-", msg.length())));
+		Log.info(AnsiColor.bold(Str.mul("-", msg.length())));
 		Log.info(msg);
-		Log.info(AnsiColor.darkGray(Str.mul("-", msg.length())));
+		Log.info(AnsiColor.bold(Str.mul("-", msg.length())));
 	}
 
 	public static void logProperties(Properties props) {
@@ -848,5 +849,68 @@ public class Msc extends RapidoidThing implements Constants {
 
 		Cls.invokeStatic(main, new Object[]{args});
 	}
+
+	public static String annotations(Class<? extends Annotation>[] annotations) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+
+		if (annotations != null) {
+			for (int i = 0; i < annotations.length; i++) {
+				if (i > 0) {
+					sb.append(", ");
+				}
+				sb.append("@");
+				sb.append(annotations[i].getSimpleName());
+			}
+		}
+
+		sb.append("]");
+		return sb.toString();
+	}
+
+	public static String classes(List<Class<?>> classes) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+
+		if (classes != null) {
+			for (int i = 0; i < classes.size(); i++) {
+				if (i > 0) {
+					sb.append(", ");
+				}
+				sb.append(classes.get(i).getSimpleName());
+
+				if (i >= 100) {
+					sb.append("...");
+					break;
+				}
+			}
+		}
+
+		sb.append("]");
+		return sb.toString();
+	}
+
+	public static String classNames(List<String> classes) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+
+		if (classes != null) {
+			for (int i = 0; i < classes.size(); i++) {
+				if (i > 0) {
+					sb.append(", ");
+				}
+				sb.append(U.last(classes.get(i).split("\\.")));
+
+				if (i >= 100) {
+					sb.append("...");
+					break;
+				}
+			}
+		}
+
+		sb.append("]");
+		return sb.toString();
+	}
+
 
 }

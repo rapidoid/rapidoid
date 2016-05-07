@@ -409,7 +409,7 @@ public class Setup extends RapidoidThing implements Constants {
 			}
 
 			if (mainClassName != null || pkg != null) {
-				Log.info("Inferring application root", "main class", mainClassName, "app package", pkg);
+				Log.info("Inferring application root", "main!", mainClassName, "package!", pkg);
 			}
 		}
 	}
