@@ -174,6 +174,16 @@ public class TagImpl extends UndefinedTag implements TagInternals, Serializable 
 	}
 
 	@Override
+	public Tag data(String dataAttr, String value) {
+		return attr("data-" + dataAttr, value);
+	}
+
+	@Override
+	public Tag ng(String ngAttr, String value) {
+		return attr("ng-" + ngAttr, value);
+	}
+
+	@Override
 	public boolean is(String attr) {
 		return battrs.contains(attr);
 	}
