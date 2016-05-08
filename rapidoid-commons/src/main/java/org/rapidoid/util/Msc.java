@@ -912,5 +912,12 @@ public class Msc extends RapidoidThing implements Constants {
 		return sb.toString();
 	}
 
+	public static String textToId(String s) {
+		s = s.replaceAll("[^0-9A-Za-z]+", "-");
+		s = Str.triml(s, "-");
+		s = Str.trimr(s, "-");
+		s = s.toLowerCase();
+		return s;
+	}
 
 }
