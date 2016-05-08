@@ -776,14 +776,14 @@ public abstract class GUI extends HTML {
 	}
 
 	public static Snippet snippet(String code) {
-		return new Snippet(code);
+		return Cls.customizable(Snippet.class, code);
 	}
 
-	public static VStream stream(Object ngTemplate) {
-		return Cls.customizable(VStream.class).template(ngTemplate);
+	public static InfiniteStream infinite() {
+		return Cls.customizable(InfiniteStream.class);
 	}
 
-	public static Object values(Object... values) {
+	public static Layout values(Object... values) {
 		List<Object> list = U.list();
 
 		for (Object value : values) {

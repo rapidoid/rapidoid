@@ -199,6 +199,7 @@ org.rapidoid.gui.HighlightGrid
 org.rapidoid.gui.HtmlPage
 org.rapidoid.gui.HtmlPageUtils
 org.rapidoid.gui.I18N
+org.rapidoid.gui.InfiniteStream
 org.rapidoid.gui.KVGrid
 org.rapidoid.gui.Layout
 org.rapidoid.gui.menu.AbstractPageMenuItem
@@ -217,7 +218,6 @@ org.rapidoid.gui.Snippet
 org.rapidoid.gui.var.LocalVar
 org.rapidoid.gui.var.PostedDataVar
 org.rapidoid.gui.var.WidgetVar
-org.rapidoid.gui.VStream
 org.rapidoid.html.BasicUtils
 org.rapidoid.html.Cmd
 org.rapidoid.html.CustomTag

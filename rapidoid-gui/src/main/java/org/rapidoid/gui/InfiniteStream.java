@@ -29,8 +29,8 @@ import org.rapidoid.html.Tag;
 import org.rapidoid.u.U;
 
 @Authors("Nikolche Mihajlovski")
-@Since("2.3.0")
-public class VStream extends AbstractWidget<VStream> {
+@Since("5.1.0")
+public class InfiniteStream extends AbstractWidget<InfiniteStream> {
 
 	private volatile Object template;
 
@@ -92,7 +92,7 @@ public class VStream extends AbstractWidget<VStream> {
 		return template;
 	}
 
-	public VStream template(Object template) {
+	public InfiniteStream template(Object template) {
 		this.template = template;
 		return this;
 	}
@@ -101,7 +101,7 @@ public class VStream extends AbstractWidget<VStream> {
 		return dataUrl;
 	}
 
-	public VStream dataUrl(String dataUrl) {
+	public InfiniteStream dataUrl(String dataUrl) {
 		this.dataUrl = dataUrl;
 		return this;
 	}
@@ -110,7 +110,7 @@ public class VStream extends AbstractWidget<VStream> {
 		return cols;
 	}
 
-	public VStream cols(int cols) {
+	public InfiniteStream cols(int cols) {
 		this.cols = cols;
 		return this;
 	}
@@ -119,7 +119,7 @@ public class VStream extends AbstractWidget<VStream> {
 		return rowClass;
 	}
 
-	public VStream rowClass(String rowClass) {
+	public InfiniteStream rowClass(String rowClass) {
 		this.rowClass = rowClass;
 		return this;
 	}
