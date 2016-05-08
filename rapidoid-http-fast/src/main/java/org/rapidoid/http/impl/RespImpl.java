@@ -292,6 +292,7 @@ public class RespImpl extends RapidoidThing implements Resp {
 	@Override
 	public synchronized Resp view(String view) {
 		this.view = view;
+		this.mvc(true);
 		return this;
 	}
 
